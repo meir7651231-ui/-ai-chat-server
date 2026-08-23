@@ -3,7 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-const NEW = new URL('./new/', import.meta.url).pathname;
+const NEW = process.argv[2] || new URL('./new/', import.meta.url).pathname;
 if (!fs.existsSync(NEW)) { console.log('✓ חוק-החוזה: העץ החדש טרם קיים'); process.exit(0); }
 let fail = 0, tested = 0;
 (function walk(d) { for (const e of fs.readdirSync(d, { withFileTypes: true })) {

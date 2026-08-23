@@ -7,4 +7,4 @@
 - `new/boxes/` — קופסאות-החיבורים (החיווט)
 - `machtzev/` — מנוע החילוץ והמשטרה (מקור-האמת המלא + המרשם: בריפו maor-system, ענף claude/mah-kora-0by8kw)
 
-בדיקת-הכול: `node machtzev/wiring-check.mjs && node machtzev/contract-check.mjs`
+בדיקת-הכול: `node machtzev/wiring-check.mjs ./new && node machtzev/contract-check.mjs ./new`
