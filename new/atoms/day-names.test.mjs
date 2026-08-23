@@ -1,0 +1,11 @@
+import { DAY_NAMES } from './day-names.mjs';
+let f = 0;
+const eq = (g, w, m) => { if (JSON.stringify(g) !== JSON.stringify(w)) { console.error(`✗ ${m}: ${JSON.stringify(g)} ≠ ${JSON.stringify(w)}`); f = 1; } };
+eq(DAY_NAMES.length, 6, 'length');
+eq(DAY_NAMES[0], 'ראשון', '[0]');
+eq(DAY_NAMES[1], 'שני', '[1]');
+eq(DAY_NAMES[4], 'חמישי', '[4]');
+eq(DAY_NAMES[5], 'שישי', '[5]');
+eq(DAY_NAMES, ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי'], 'המערך המלא');
+if (f) process.exit(1);
+console.log('✓ day-names: 6 דוגמאות-חוזה — ירוק');

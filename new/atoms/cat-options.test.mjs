@@ -1,0 +1,11 @@
+import { CAT_OPTIONS as C } from './cat-options.mjs';
+let f = 0;
+const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
+ok(C.length === 9, 'אורך ' + C.length + ' ≠ 9');
+ok(C[0] === 'מלאכה', "[0] ≠ 'מלאכה'");
+ok(C[3] === 'ספורט', "[3] ≠ 'ספורט'");
+ok(C[8] === 'קהילה', "[8] ≠ 'קהילה'");
+ok(C.includes('קולינרי'), "חסר 'קולינרי'");
+ok(new Set(C).size === C.length, 'כפילות ברשימה');
+if (f) process.exit(1);
+console.log('✓ cat-options: 6 דוגמאות-חוזה — ירוק');

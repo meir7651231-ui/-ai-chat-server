@@ -1,0 +1,11 @@
+import { ABSENCE_REASON_CHIPS as C } from './absence-reason-chips.mjs';
+let f = 0;
+const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
+ok(C.length === 5, 'אורך ' + C.length + ' ≠ 5');
+ok(C[0] === 'מחלה', "[0] ≠ 'מחלה'");
+ok(C[1] === 'אירוע משפחתי', "[1] ≠ 'אירוע משפחתי'");
+ok(C[4] === 'מזג אוויר', "[4] ≠ 'מזג אוויר'");
+ok(C.includes('נסיעה'), "חסר 'נסיעה'");
+ok(new Set(C).size === C.length, 'כפילות ברשימה');
+if (f) process.exit(1);
+console.log('✓ absence-reason-chips: 6 דוגמאות-חוזה — ירוק');
