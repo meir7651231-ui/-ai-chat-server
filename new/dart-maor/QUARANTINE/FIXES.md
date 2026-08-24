@@ -21,3 +21,7 @@
 השקע `_toLocaleString` עשה `.toString()` ⇒ `'₪-1'` בלי הסימן. גם `-0.5`: JS `₪‎-0` מול Dart `₪0`.
 **הבאג עבר את הזהב ואת האימות-העוין** — רק הפאזר-המכני (סריקת שליליים) תפס.
 **תיקון:** השקע `_toLocaleString` חייב לחקות פורמט-he-IL: סימן-RTL + עיגול-סימן-אפס.
+
+## apply-meta-partial — null מול undefined (תפס: אימות-עוין)
+‏Dart `if (v == null) return` מבלבל JS `undefined` עם JSON `null`. JS מדלג רק על undefined,
+אז null-מפורש (ניקוי-שדה מ-Firestore) כן-מוקצה. **תיקון:** `if (!meta.containsKey(k)) return;`.
