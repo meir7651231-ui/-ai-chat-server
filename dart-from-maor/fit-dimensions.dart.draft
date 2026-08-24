@@ -1,0 +1,5 @@
+dynamic fitDimensions(dynamic w, dynamic h, dynamic max) {
+  if ((w <= 0 || h <= 0)) return {'w': 0, 'h': 0};
+  var scale = min(1, max / max(w, h));
+  return {'w': max(1, _round(w * scale)), 'h': max(1, _round(h * scale))};
+}

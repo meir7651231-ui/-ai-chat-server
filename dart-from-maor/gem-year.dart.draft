@@ -1,0 +1,3 @@
+dynamic gemYear(dynamic y, dynamic gem) {
+  return gem(+y % 1000);
+}

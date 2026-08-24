@@ -1,0 +1,3 @@
+dynamic grandTotal(dynamic boxes, dynamic boxTotal) {
+  return boxes.fold(0, (a, b) => a + boxTotal(b));
+}
