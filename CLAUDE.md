@@ -30,6 +30,7 @@ node machtzev/run.mjs --fast      # משטרה בלבד
 node machtzev/factory/gen-wires.mjs <genesis> maor    # חציבת-טיוטות
 node machtzev/promote-auto.mjs    # (בגנסיס) קידום-חינם: צילום/Golden
 node machtzev/gen-wiring-doc.mjs  # (בגנסיס) חילול מפת-החיווט
+node machtzev/box-coverage.mjs    # (בגנסיס) מד-מוכנות-קופסאות ⇒ box-drafts/READINESS.md
 ```
 מרשם-האטומים: maor-system/machtzev/registry/ · טיוטות: quarry/ · תוכניות-קופסה: box-drafts/
 

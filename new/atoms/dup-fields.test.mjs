@@ -1,0 +1,15 @@
+import { DUP_FIELDS } from './dup-fields.mjs';
+let f = 0;
+const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
+const by = (k) => DUP_FIELDS.find((d) => d.key === k);
+ok(DUP_FIELDS.length === 18, '18 שדות');
+ok(DUP_FIELDS[0].key === 'name' && DUP_FIELDS[0].label === 'שם משפחה', 'שדה ראשון name/שם משפחה');
+ok(DUP_FIELDS[17].key === 'notes', 'שדה אחרון notes');
+ok(by('name').get({ name: 'כהן' }) === 'כהן', "get name על {name:'כהן'} ⇒ 'כהן'");
+ok(by('phone').get({}) === '', 'get phone על {} ⇒ ריק');
+ok(by('kidsHome').get({ kidsHome: 3 }) === '3', 'kidsHome 3 ⇒ "3"');
+ok(by('kidsHome').get({ kidsHome: 0 }) === '0', 'kidsHome 0 ⇒ "0" (אפס אינו ריק)');
+ok(by('kidsMarried').get({}) === '', 'kidsMarried חסר ⇒ ריק');
+ok(new Set(DUP_FIELDS.map((d) => d.key)).size === 18, 'אין כפילויות-key');
+if (f) process.exit(1);
+console.log('✓ dup-fields: 9 דוגמאות-חוזה — ירוק');
