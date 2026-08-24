@@ -11,6 +11,8 @@ const ROOT = new URL('..', import.meta.url).pathname;
 const atoms = new Set(fs.readdirSync(ROOT + 'new/atoms').map(f => f.replace(/\..*$/, '')));
 const quarry = new Set(fs.readdirSync(ROOT + 'quarry').map(f => f.replace(/@.*$/, '')));
 // טיוטות שהוכרעו כחיווט-קופסה (מדף io-wiring — סוף ריקון-המחצבה 24.8)
+// אליאסים מדדופ-המדף (הכרעה 5): שם-ישן ⇒ קנוני. החוט קיים, רק התוכנית לא עודכנה.
+const DEDUP_ALIAS = { gem: 'gematria', 'local-iso': 'iso-local', localIso: 'iso-local' };
 const IO_DRAFTS = new Set(fs.existsSync(ROOT + 'box-drafts/io-wiring')
   ? fs.readdirSync(ROOT + 'box-drafts/io-wiring').filter(f => f.endsWith('.mjs')).map(f => f.replace(/@.*$/, '').replace(/_/g, '-'))
   : []);
@@ -23,6 +25,7 @@ const LAW6 = new Set(['SUPER_ADMIN_EMAILS']); // זהות/סודות — חוק-
 const CLUSTERED = new Set(['termOf','normalizeSite','normalizeConfig','employeeSignUpError','resolveOrgConfig','orgSlugFromUrl','SIZE_LABELS','receiptHtml','VERTICAL_PACKS','DEFAULT_LOCK_ZONES','LOCK_ZONES']);
 
 const names = (w) => {
+  if (DEDUP_ALIAS[w]) w = DEDUP_ALIAS[w];
   const out = new Set();
   if (/^[A-Z0-9_]+$/.test(w)) { out.add(w.toLowerCase()); out.add(w.toLowerCase().replace(/_/g, '-')); }
   else { out.add(w.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()); }
