@@ -1,8 +1,36 @@
-/** 🪨 טיוטת-חוט (דרגת-מחצבה) · buildIcs — חולל אוטומטית, טרם-קודם לדרגת-חוזה.
- *  מוצא: maor/src/lib/ics.ts:96-132 (37 שורות) · תורגם TS→JS מכונה.
- *  שקעים-מועמדים (קריאות-חוץ שצריכות הזרקה): buildIcs, icsEscape, stampUtc, isNaN, getTime, basicLocal, basicDate, nextIso, flatMap
- *  קידום: לכתוב <שם>.contract.md + <שם>.test.mjs ← להעביר ל-new/atoms/. */
-export function buildIcs(occurrences, calName, now) {
+/** חוט · build-ics — בניית קובץ ICS ‏(RFC 5545) שלם ממופעים קונקרטיים.
+ *  חוזה: build-ics.contract.md · שקעים: icsEscape, foldIcsLine
+ *  חולץ כלשונו מ-maor/src/lib/ics.ts:96-132; העוזרים הפרטיים של הקובץ
+ *  (basicDate · basicLocal · stampUtc · nextIso) נשארו בקובץ — עוזר-פנימי. */
+
+/** YYYYMMDD מ-ISO. */
+function basicDate(iso) {
+    return iso.replace(/-/g, '');
+}
+
+/** תאריך+שעה מקומיים בפורמט בסיסי צף: YYYYMMDDTHHMMSS. */
+function basicLocal(d) {
+    const p = (n, w = 2) => String(n).padStart(w, '0');
+    return (String(d.getFullYear()) + p(d.getMonth() + 1) + p(d.getDate()) +
+        'T' + p(d.getHours()) + p(d.getMinutes()) + p(d.getSeconds()));
+}
+
+/** DTSTAMP ב-UTC: YYYYMMDDTHHMMSSZ. */
+function stampUtc(now) {
+    const p = (n) => String(n).padStart(2, '0');
+    return (String(now.getUTCFullYear()) + p(now.getUTCMonth() + 1) + p(now.getUTCDate()) +
+        'T' + p(now.getUTCHours()) + p(now.getUTCMinutes()) + p(now.getUTCSeconds()) + 'Z');
+}
+
+/** יום-המחרת של ISO (ל-DTEND של אירוע יום-שלם). */
+function nextIso(iso) {
+    const d = new Date(iso + 'T12:00:00');
+    d.setDate(d.getDate() + 1);
+    const p = (n) => String(n).padStart(2, '0');
+    return String(d.getFullYear()) + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+}
+
+export function buildIcs(occurrences, calName, now, icsEscape, foldIcsLine) {
     const lines = [
         'BEGIN:VCALENDAR',
         'VERSION:2.0',
@@ -40,4 +68,3 @@ export function buildIcs(occurrences, calName, now) {
     lines.push('END:VCALENDAR');
     return lines.flatMap(foldIcsLine).join('\r\n') + '\r\n';
 }
-/** הורדת קובץ ICS — mime יומן, בלי BOM (בניגוד ל-CSV — יומנים לא אוהבים BOM). */

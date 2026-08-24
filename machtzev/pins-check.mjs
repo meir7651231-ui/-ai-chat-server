@@ -6,7 +6,7 @@ import fs from 'node:fs';
 import crypto from 'node:crypto';
 const ROOT = new URL('..', import.meta.url).pathname;
 const PINNED = ['LAW.md', 'machtzev/wiring-check.mjs', 'machtzev/contract-check.mjs',
-  'machtzev/quarry-check.mjs', 'machtzev/police-selftest.mjs', 'machtzev/mutation-check.mjs', 'machtzev/pins-check.mjs'];
+  'machtzev/quarry-check.mjs', 'machtzev/police-selftest.mjs', 'machtzev/mutation-check.mjs', 'machtzev/police.mjs', 'machtzev/gates.tsv', 'machtzev/pins-check.mjs'];
 const PIN_FILE = ROOT + 'machtzev/pins.sha256';
 const hash = (f) => crypto.createHash('sha256').update(fs.readFileSync(ROOT + f)).digest('hex').slice(0, 16);
 if (process.argv[2] === '--write') {

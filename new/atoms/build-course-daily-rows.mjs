@@ -1,8 +1,21 @@
-/** 🪨 טיוטת-חוט (דרגת-מחצבה) · buildCourseDailyRows — חולל אוטומטית, טרם-קודם לדרגת-חוזה.
- *  מוצא: maor/src/lib/courseDaily.ts:23-92 (70 שורות) · תורגם TS→JS מכונה.
- *  שקעים-מועמדים (קריאות-חוץ שצריכות הזרקה): buildCourseDailyRows, termOf, setDate, getDate, isoOf, getDay, hebDateFull, fmtD
- *  קידום: לכתוב <שם>.contract.md + <שם>.test.mjs ← להעביר ל-new/atoms/. */
-export function buildCourseDailyRows(c, db, config) {
+/** חוט · build-course-daily-rows — דו"ח נוכחות יומי מפורט לחוג, מפגש-מפגש.
+ *  חוזה: build-course-daily-rows.contract.md · שקעים: termOf, hebDateFull
+ *  חולץ כלשונו מ-maor/src/lib/courseDaily.ts:23-92; העוזרים הפרטיים של הקובץ
+ *  (DAY_NAMES · isoOf · fmtD) נשארו בקובץ — עוזר-פנימי, לא import. */
+
+const DAY_NAMES = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+
+function isoOf(d) {
+    const p2 = (n) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}`;
+}
+
+function fmtD(iso) {
+    const [y, m, d] = iso.split('-');
+    return `${d}/${m}/${y}`;
+}
+
+export function buildCourseDailyRows(c, db, config, termOf, hebDateFull) {
     const T = (k, fb) => (config ? termOf(config, k, fb) : fb);
     const rows = [
         ['תאריך עברי', 'תאריך לועזי', 'יום', 'קבוצה/שעה', 'סטטוס יום', 'תלמידה פעילה', T('entity.family', 'משפחה'), 'סטטוס נוכחות'],
