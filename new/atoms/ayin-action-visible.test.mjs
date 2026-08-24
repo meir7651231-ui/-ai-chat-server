@@ -1,0 +1,12 @@
+import { ayinActionVisible } from './ayin-action-visible.mjs';
+let f = 0;
+const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
+ok(ayinActionVisible({ stage: 'done', names: [{ name: 'א' }] }) === false, 'done ⇒ false');
+ok(ayinActionVisible({ stage: 'new', names: [] }) === false, 'new בלי שמות ⇒ false');
+ok(ayinActionVisible({ stage: 'new', names: [{ name: 'א' }] }) === true, 'new עם שם ⇒ true');
+ok(ayinActionVisible({ stage: 'eyes', names: [{ eyes: '' }, {}] }) === false, 'eyes ריק/undefined ⇒ false');
+ok(ayinActionVisible({ stage: 'eyes', names: [{ eyes: 0 }] }) === true, 'eyes=0 ⇒ true');
+ok(ayinActionVisible({ stage: 'lead', names: [] }) === true, 'lead ⇒ true');
+ok(ayinActionVisible({ stage: 'answer', names: [] }) === true, 'answer ⇒ true');
+if (f) process.exit(1);
+console.log('✓ ayin-action-visible: 7 דוגמאות-חוזה — ירוק');
