@@ -1,8 +1,7 @@
-/** 🪨 טיוטת-חוט (דרגת-מחצבה) · planSupporterImport — חולל אוטומטית, טרם-קודם לדרגת-חוזה.
- *  מוצא: maor/src/components/supporters/lib.ts:598-636 (39 שורות) · תורגם TS→JS מכונה.
- *  שקעים-מועמדים (קריאות-חוץ שצריכות הזרקה): planSupporterImport, normName, fillEmpty
- *  קידום: לכתוב <שם>.contract.md + <שם>.test.mjs ← להעביר ל-new/atoms/. */
-export function planSupporterImport(rows, existing) {
+/** חוט · plan-supporter-import — תכנון ייבוא-תומכות (עדכון-או-הוספה לפי שם מנורמל).
+ *  חוזה: plan-supporter-import.contract.md · שקעים: normName, fillEmpty
+ *  חולץ כלשונו מ-maor/src/components/supporters/lib.ts:598-636 (קריאות-השכן שוקעו). */
+export function planSupporterImport(rows, existing, normName, fillEmpty) {
     const byName = new Map();
     for (const sp of existing)
         byName.set(normName(sp.name), sp.id);
@@ -38,5 +37,3 @@ export function planSupporterImport(rows, existing) {
     }
     return { updates, inserts };
 }
-/** החלת שורת ייבוא על תומכת קיימת — ערך לא-ריק בשורה דורס, אחרת נשמר הקיים.
- *  היסטוריה (9.8): מיזוג אידמפוטנטי — בלי קבלות, בלי נגיעה במונים. */

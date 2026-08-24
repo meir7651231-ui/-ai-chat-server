@@ -1,0 +1,15 @@
+import { productAssignments } from './product-assignments.mjs';
+const a1 = { id: 'a1', productId: 'p1' };
+const a2 = { id: 'a2', productId: 'p2' };
+const a3 = { id: 'a3', productId: 'p1' };
+const all = [a1, a2, a3];
+const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+let f = 0;
+const chk = (got, want, label) => { if (!eq(got, want)) { console.error(`✗ ${label}: ${JSON.stringify(got)} ≠ ${JSON.stringify(want)}`); f = 1; } };
+chk(productAssignments(all, 'p1'), [a1, a3], 'p1 — סדר-מקור');
+chk(productAssignments(all, 'p2'), [a2], 'p2');
+chk(productAssignments(all, 'p9'), [], 'p9 — אין התאמות');
+chk(productAssignments([], 'p1'), [], 'מערך ריק');
+chk(productAssignments([{ id: 'x', productId: 1 }], '1'), [], 'התאמה קפדנית === (מחרוזת≠מספר)');
+if (f) process.exit(1);
+console.log('✓ product-assignments: 5 דוגמאות-חוזה — ירוק');

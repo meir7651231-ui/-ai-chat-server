@@ -1,8 +1,9 @@
-/** 🪨 טיוטת-חוט (דרגת-מחצבה) · previewTelephony — חולל אוטומטית, טרם-קודם לדרגת-חוזה.
- *  מוצא: maor/src/components/telephony/lib.ts:133-185 (53 שורות) · תורגם TS→JS מכונה.
- *  שקעים-מועמדים (קריאות-חוץ שצריכות הזרקה): previewTelephony, telephonyToTenant, anchorToday, validateTenant, buildTenant, explainCall, trustReport
- *  קידום: לכתוב <שם>.contract.md + <שם>.test.mjs ← להעביר ל-new/atoms/. */
-export function previewTelephony(tc, orgName, tenantId) {
+/** חוט · preview-telephony — תצוגה-מקדימה חיה לקונפיג-טלפוניה (סימולטור+דוח-אמון).
+ *  חוזה: preview-telephony.contract.md
+ *  שקעים: telephonyToTenant, anchorToday, validateTenant, buildTenant, explainCall, trustReport
+ *  חולץ כלשונו מ-maor/src/components/telephony/lib.ts:133-185 (קריאות-השכן שוקעו;
+ *  anchorToday הפרטי — מקור אי-הדטרמיניזם — הוזרק אף הוא). */
+export function previewTelephony(tc, orgName, tenantId, telephonyToTenant, anchorToday, validateTenant, buildTenant, explainCall, trustReport) {
     const raw = telephonyToTenant(tc, orgName, tenantId);
     const anchor = anchorToday();
     const opts = { anchorDate: anchor, calendarWindow: 400 };
@@ -36,9 +37,3 @@ export function previewTelephony(tc, orgName, tenantId) {
     }
     return { ok: true, errors: [], warnings: built.warnings || v.warnings || [], rows, trust, files: built.files || null };
 }
-/**
- * הסגירה ההלכתית הבאה (שבת/יו״ט) בחלון 10 הימים הקרובים — לווידג'ט-הבית
- * "זמני שבת/חג". רץ על מנוע-הזמנים הטהור (NOAA, חישוב-מקומי בלבד — downstream,
- * אין ספק/שירות). דורש עיר-עוגן; בלי telephony ⇒ null (אין נ״צ). דטרמיניסטי.
- * @param config קונפיג-הארגון (config.telephony.city) @param todayIso עוגן היום
- */
