@@ -2,7 +2,7 @@
 > **מחולל אוטומטית מה-imports — אל תערוך ידנית** (`node machtzev/gen-wiring-doc.mjs`).
 > כל קופסה: אילו חוטים היא מחווטת + ההכרעה-החתומה שלה (מהחוזה) + הזהב שלה.
 
-**מלאי:** 663 אטומים · 44 קופסאות · מחווטים: 398/663 (60%)
+**מלאי:** 663 אטומים · 45 קופסאות · מחווטים: 442/663 (67%)
 
 ## #a11y
 הקופסה של סולם-הגופן ומתגי-הנגישות (P2 פער 31) — זום 0.8–1.6 בצעדי 0.1
@@ -32,6 +32,11 @@
 ## #cloud-merge
 קופסת-החיבורים של צד-הקבלה בסנכרון-הענן — מחווטת 4 חוטים טהורים
 - **חוטים (5):** entity-collections · sanitize-incoming · merge-donations-preserving · apply-entity-partial · apply-meta-partial
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #components-courses
+הקופסה של מודול-החוגים — מחווטת את חוטי `courses/lib.ts` (ימים, מפגשים,
+- **חוטים (60):** fmt-date · iso-today · iso-local · default-course-dates · presents-in-month · course-date-error · age-of · term-of · norm-search · day-names · day-letters · sessions-of · groups-hint-from-audience · courses-of-teacher · rooms-now · group-label-of · group-remap-on-removal · group-options-of · plan-word · price-suffix · model-meta · weeks-per-month · pricing-terms · term-label · lessons-in-term · lesson-price-for-tier · lesson-tier-options · weighted-quote · enrollment-quote · paid-of · pay-bal · enrollment-paid-status · enroll-count · duplicate-course · pending-makeups · waitlist-for · next-session-date · sheet-roster · sheet-summary · other · other-label · add-teacher · cat-options · semester-options · pay-methods · tints · enroll-status-meta · plan-label-of · chip-style · grade-order · grade-index · grade-fits · course-fits-member · schedule-clash-text · enroll-new-family · offer-new-family · resolve-enroll-family · punch-confirm-ms · punch-confirm-step · wheel-index-under-pointer
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
 ## #custom-export
@@ -224,5 +229,5 @@
 - **חוטים (7):** task-identity · open-tasks-for · done-today-for · task-overdue · task-stats-for · overdue-contact-task-drafts · pri-labels
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
-## אטומים-במלאי (טרם-חווטו): 265
+## אטומים-במלאי (טרם-חווטו): 221
 _ההתקדמות האמיתית = אחוז-המחווט (L10)._
