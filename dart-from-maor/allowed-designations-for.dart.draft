@@ -1,0 +1,5 @@
+dynamic allowedDesignationsFor(dynamic email, dynamic org, dynamic isOrgManager, dynamic overrideOf) {
+  if (isOrgManager(email, org)) return null;
+  var d = overrideOf(email, org).designations;
+  return d && d.length ? d : null;
+}
