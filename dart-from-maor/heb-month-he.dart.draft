@@ -1,0 +1,2 @@
+var fmtHM = Intl.DateTimeFormat('he-u-ca-hebrew', {'month': 'long'});
+dynamic hebMonthHe(dynamic d) => ((d.millisecondsSinceEpoch).isNaN ? '' : fmtHM.format(d));

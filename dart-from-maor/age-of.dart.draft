@@ -1,0 +1,10 @@
+dynamic ageOf(dynamic birth, dynamic now) {
+  if (_falsy(birth)) return null;
+  var d = DateTime.parse(birth.sublist(0, 10) + 'T12:00:00');
+  if ((d.millisecondsSinceEpoch).isNaN) return null;
+  var n = now;
+  var a = n.year - d.year;
+  var md = (n.month - 1) - (d.month - 1);
+  if ((md < 0 || (md == 0 && n.day < d.day))) a--;
+  return a;
+}

@@ -1,0 +1,11 @@
+dynamic gem(dynamic n) {
+  n = _floor(+n);
+  if ((!_isFinite(n) || n <= 0)) return '';
+  var U = ['', 'א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט'];
+  var T = ['', 'י', 'כ', 'ל', 'מ', 'נ', 'ס', 'ע', 'פ', 'צ'];
+  var H = ['', 'ק', 'ר', 'ש', 'ת', 'תק', 'תר', 'תש', 'תת', 'תתק'];
+  var s = (H[_floor(n / 100)] ?? '');
+  var r = n % 100;
+  if (r == 15) s += 'טו'; else if (r == 16) s += 'טז'; else s += T[_floor(r / 10)] + U[r % 10];
+  return s.length == 1 ? s + '׳' : s.sublist(0, -1) + '״' + s.sublist(-1);
+}

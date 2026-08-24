@@ -1,0 +1,1 @@
+var DEFAULT_LOCK_ZONES = ['wizard', 'settings'];

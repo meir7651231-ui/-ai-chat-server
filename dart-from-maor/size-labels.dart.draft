@@ -1,0 +1,1 @@
+var SIZE_LABELS = {'small': 'קטן', 'medium': 'בינוני', 'large': 'גדול'};

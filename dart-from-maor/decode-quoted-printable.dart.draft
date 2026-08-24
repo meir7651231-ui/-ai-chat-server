@@ -1,0 +1,77 @@
+dynamic decodeQuotedPrintable(dynamic s) {
+  var bytes = [];
+  for (var i = 0; i < s.length; i++) {
+  var ch = s[i];
+  if (ch == '=' && i + 2 < s.length && HEX2.test(s.sublist(i + 1, i + 3))) {
+  bytes.add(int.tryParse(s.sublist(i + 1, i + 3).toString()) ?? 0);
+  i += 2;
+} else {
+  var cp = s.codeUnitAt(i);
+  bytes.add(cp <= 255 ? cp : 63);
+}
+}
+  try {
+  return TextDecoder('utf-8').decode(Uint8Array(bytes));
+} catch (_) {
+  return s;
+}
+}
+dynamic unfoldLines(dynamic text) {
+  var raw = text.replaceFirst(RegExp(r'\r\n'), '
+').replaceFirst(RegExp(r'\r'), '
+').split('
+');
+  var out = [];
+  var qpActive = false;
+  for (final line in raw) {
+  if (out.length && ((line.startsWith(' ') ?? line.startsWith('	')))) {
+  out[out.length - 1] += line.sublist(1);
+  if (!out[out.length - 1].endsWith('=')) qpActive = false;
+  continue;
+}
+  if (out.length && qpActive && out[out.length - 1].endsWith('=')) {
+  out[out.length - 1] = out[out.length - 1].sublist(0, -1) + line;
+  if (!out[out.length - 1].endsWith('=')) qpActive = false;
+  continue;
+}
+  out.add(line);
+  qpActive = RegExp(r'ENCODING=QUOTED-PRINTABLE').test(line) && line.endsWith('=');
+}
+  return out;
+}
+dynamic splitProperty(dynamic line) {
+  var colon = line.indexOf(':');
+  if (colon < 0) return null;
+  var head = line.sublist(0, colon);
+  var value = line.sublist(colon + 1);
+  var segs = head.split(';');
+  var name = ((segs.shift() ?? '')).trim().toUpperCase();
+  if (_falsy(name)) return null;
+  return {'name': name, 'params': segs, 'value': value};
+}
+dynamic hasParam(dynamic params, dynamic token) => params.any((p) => p.toUpperCase().contains(token));
+dynamic decodeValue(dynamic value, dynamic params) {
+  return hasParam(params, 'QUOTED-PRINTABLE') ? decodeQuotedPrintable(value) : value;
+}
+var PHONE_LABELS = {'CELL': 'נייד', 'HOME': 'בית', 'WORK': 'עבודה', 'FAX': 'פקס', 'MAIN': 'ראשי', 'VOICE': '', 'PREF': ''};
+dynamic phoneLabel(dynamic params) {
+  for (final p in params) {
+  var up = p.toUpperCase();
+  if (up.startsWith('X-CUSTOM')) {
+  var inner = p.sublist(p.indexOf('(') + 1, p.lastIndexOf(')'));
+  var parts = inner.split(',');
+  var last = (parts[parts.length - 1] ?? '');
+  var decoded = RegExp(r'=[0-9A-Fa-f]{2}').test(last) ? decodeQuotedPrintable(last) : last;
+  if (decoded.trim()) return decoded.trim();
+}
+}
+  for (final p in params) {
+  var key = p.toUpperCase().trim();
+  if (key in PHONE_LABELS && PHONE_LABELS[key]) return PHONE_LABELS[key];
+}
+  return '';
+}
+dynamic joinAddress(dynamic value, dynamic params) {
+  var decoded = decodeValue(value, params);
+  return decoded.split(';').map((s) => s.trim()).toList().where(Boolean).join(', ');
+}

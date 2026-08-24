@@ -1,0 +1,4 @@
+dynamic shekel(dynamic n) {
+  return '₪' + _round(n)function toLocaleString() { [native code] };
+}
+var PRICES_LS_KEY = 'maor_prices';
