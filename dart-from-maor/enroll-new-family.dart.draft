@@ -1,0 +1,7 @@
+var ENROLL_NEW_FAMILY = '__new';
+dynamic normSearch(dynamic t) {
+  return (t ?? '').toString().toLowerCase().replaceFirst(RegExp(r'[֑-ׇ]'), '').replaceFirst(RegExp(r'[ךםןףץ]'), (ch) => ({'ך': 'כ', 'ם': 'מ', 'ן': 'נ', 'ף': 'פ', 'ץ': 'צ'})[ch]).replaceFirst(RegExp(r'['"׳״\-–._]'), '').trim();
+}
+dynamic normNameLocal(dynamic s) {
+  return normSearch(s).replaceFirst(RegExp(r'\s'), '');
+}

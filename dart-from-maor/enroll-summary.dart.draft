@@ -1,0 +1,8 @@
+var STATUS_LABEL = {'active': 'פעיל', 'paused': 'מושהה', 'ended': 'הסתיים', 'wait': 'רשימת-המתנה'};
+dynamic enrollSummary(dynamic e, dynamic payBal, dynamic paidOf) {
+  var presents = ((e.presents ?? [])).length;
+  var absences = ((e.absences ?? [])).length;
+  var noshow = ((e.absences ?? [])).where((a) => a.noshow).length;
+  var lastPresent = ((((e.presents ?? [])).sublist()..sort()).sublist(-1)[0] ?? '');
+  return {'presents': presents, 'absences': absences, 'noshow': noshow, 'balance': payBal(e), 'paid': paidOf(e), 'statusLabel': (STATUS_LABEL[e.status] ?? ''), 'lastPresent': lastPresent};
+}
