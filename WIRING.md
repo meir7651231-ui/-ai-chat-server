@@ -2,7 +2,7 @@
 > **מחולל אוטומטית מה-imports — אל תערוך ידנית** (`node machtzev/gen-wiring-doc.mjs`).
 > כל קופסה: אילו חוטים היא מחווטת + ההכרעה-החתומה שלה (מהחוזה) + הזהב שלה.
 
-**מלאי:** 664 אטומים · 59 קופסאות · מחווטים: 536/664 (81%)
+**מלאי:** 665 אטומים · 62 קופסאות · מחווטים: 603/665 (91%)
 
 ## #a11y
 הקופסה של סולם-הגופן ומתגי-הנגישות (P2 פער 31) — זום 0.8–1.6 בצעדי 0.1
@@ -137,6 +137,21 @@
 ## #lib-ai
 קופסת הרחבת 🤖 `ai` ("עד-המפתח") — כל מה שהיה מולחם ב-`maor/src/lib/ai.ts`
 - **חוטים (2):** thanks-prompt · ask-claude
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #lib-cloud-config
+
+- **חוטים (37):** platform-orgs · platform-requests · platform-leads · support-chats · team-chats · org-secret-keys · support-msg-max · fetch-org-cloud-config · watch-org-cloud-config · write-org-cloud-doc · write-org-cloud-config · write-org-secrets · read-org-secrets-meta · delete-org-request · write-org-request · fetch-org-requests · find-member-org-slugs · fetch-all-orgs · write-org-join-request · fetch-org-join-requests · delete-org-join-request · delete-org-member-config · clear-employee-field · add-org-member · remove-org-member · delete-org-completely · write-org-lead · fetch-org-leads · send-support-message · send-support-reply · watch-support-messages · watch-support-thread-meta · watch-all-support-threads · mark-support-read · send-team-message · watch-team-messages · sanitize-support-text
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #lib-cloud
+לוח-החיבורים של `maor/src/lib/cloud.ts` (770ש). כל 36 חוטי-הענן
+- **חוטים (27):** set-cloud-scope · set-allowed-purposes · col-path · meta-path · env-path · donations-path · entity-collections · encrypt-doc · decrypt-doc · shared-sup-key · shared-purpose-key · sup-keyed-cols · sup-key-of · sup-key-map-of · doc-skey · strip-audit-meta · strip-sup-key · sup-allowed-keys · don-allowed-keys · full-db-diff · cloud-db · sign-out-cloud · push-diff · read-cloud-envelope · write-cloud-envelope · encrypt-existing-cloud · migrate-supporters-to-keyed
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #lib-config
+
+- **חוטים (27):** module-on · feature-on · donation-split-on · sup-enforce-on · integration-on · telephony-on · integration-setting · safe-https-url · term-of · normalize-telephony · make-normalize-site · make-normalize-config · public-site-on · role-of · teacher-id-of · is-admin-user · can-granted-action · is-super-admin · sign-up-error · employee-sign-up-error · cloud-cfg-cache-key · resolve-org-config · org-slug-from-url · is-safe-accent · default-favicon · favicon-data-uri · apply-config
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
 ## #lib-crypto
@@ -299,5 +314,5 @@
 - **חוטים (7):** task-identity · open-tasks-for · done-today-for · task-overdue · task-stats-for · overdue-contact-task-drafts · pri-labels
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
-## אטומים-במלאי (טרם-חווטו): 128
+## אטומים-במלאי (טרם-חווטו): 62
 _ההתקדמות האמיתית = אחוז-המחווט (L10)._
