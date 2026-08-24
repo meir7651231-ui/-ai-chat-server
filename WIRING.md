@@ -2,16 +2,26 @@
 > **מחולל אוטומטית מה-imports — אל תערוך ידנית** (`node machtzev/gen-wiring-doc.mjs`).
 > כל קופסה: אילו חוטים היא מחווטת + ההכרעה-החתומה שלה (מהחוזה) + הזהב שלה.
 
-**מלאי:** 663 אטומים · 45 קופסאות · מחווטים: 442/663 (67%)
+**מלאי:** 664 אטומים · 59 קופסאות · מחווטים: 536/664 (81%)
 
 ## #a11y
 הקופסה של סולם-הגופן ומתגי-הנגישות (P2 פער 31) — זום 0.8–1.6 בצעדי 0.1
 - **חוטים (7):** scale-min · scale-max · scale-step · a11y-fab-toggles · clamp-scale · step-scale · parse-acc
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
+## #annual-report
+הקופסה של `lib/annualReport.ts` (ROADMAP-100 ‏#4) — מסמך-ריכוז של
+- **חוטים (5):** donation-years · donations-of-year · annual-report-lines · annual-all-lines · guard-export
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
 ## #audit
 
 - **חוטים (11):** audit-cat-colors · audit-categories · phone-issue · run-audit · audit-report-lines · term-of · norm-name · norm-search · valid-israeli-id · age-of · supporter-aggregates
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #ayin
+קופסת-החיווט של מודול-העין — כל הלוגיקה הטהורה של `feature supporters.ayin`
+- **חוטים (32):** ayin-stages · stage-label · feat-label · item-label · unit-label · stage-index · next-stage · revert-patch · norm-name · ayin-active · eyes-total · boq-line-amount · boq-total · time-hours-total · time-cost-total · mat-cost-total · names-to-template-lines · template-lines-to-names · ayin-action-visible · ayin-advance-label · plan-ayin-advance · plan-add-name · ayin-daily-rows · ayin-all-rows · ayin-board-items · filter-ayin-board · ayin-sheet-header · ayin-sheet-rows · parse-ayin-sheet · apply-ayin-sheet · term-of · norm-search
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
 ## #caller-id
@@ -37,6 +47,11 @@
 ## #components-courses
 הקופסה של מודול-החוגים — מחווטת את חוטי `courses/lib.ts` (ימים, מפגשים,
 - **חוטים (60):** fmt-date · iso-today · iso-local · default-course-dates · presents-in-month · course-date-error · age-of · term-of · norm-search · day-names · day-letters · sessions-of · groups-hint-from-audience · courses-of-teacher · rooms-now · group-label-of · group-remap-on-removal · group-options-of · plan-word · price-suffix · model-meta · weeks-per-month · pricing-terms · term-label · lessons-in-term · lesson-price-for-tier · lesson-tier-options · weighted-quote · enrollment-quote · paid-of · pay-bal · enrollment-paid-status · enroll-count · duplicate-course · pending-makeups · waitlist-for · next-session-date · sheet-roster · sheet-summary · other · other-label · add-teacher · cat-options · semester-options · pay-methods · tints · enroll-status-meta · plan-label-of · chip-style · grade-order · grade-index · grade-fits · course-fits-member · schedule-clash-text · enroll-new-family · offer-new-family · resolve-enroll-family · punch-confirm-ms · punch-confirm-step · wheel-index-under-pointer
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #csvx
+קופסת עזרי-ה-CSV המשותפים — ייצוא (בריחת-תא + הגנת-הזרקה + BOM),
+- **חוטים (7):** csv-escape · to-csv · decode-csv-buffer · read-csv-file-text · parse-csv · parse-any-date · guard-export
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
 ## #custom-export
@@ -114,9 +129,39 @@
 - **חוטים (4):** mint-feed-token · read-ics-feed-token · publish-ics-feed · ics-feed-url
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
+## #image-pick
+שתי זרימות של פיצ׳ר-הגלריה/ההטמעה, מחווטות במקום אחד:
+- **חוטים (3):** max-upload-bytes · max-embed-bytes · read-file-as-data-url
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #lib-ai
+קופסת הרחבת 🤖 `ai` ("עד-המפתח") — כל מה שהיה מולחם ב-`maor/src/lib/ai.ts`
+- **חוטים (2):** thanks-prompt · ask-claude
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
 ## #lib-crypto
 ספריית ההצפנה-במנוחה (opt-in) של מאור — AES-GCM 256 עם DEK
 - **חוטים (7):** gen-recovery-key · encrypt-db · is-encrypted · open-dek · decrypt-db · reencrypt-db · rewrap-password
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #lib-ics
+קופסת-החיווט של `maor/src/lib/ics.ts` — ‏4 חוטי-הפורמט של קובץ-היומן
+- **חוטים (4):** ics-escape · fold-ics-line · build-ics · guard-export
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #lib-lock
+קופסת נעילת-ה-PIN של maor — מה שהיה מולחם ב-`src/lib/lock.ts`
+- **חוטים (6):** lock-zones · default-lock-zones · lock-key · is-valid-pin · hash-pin · verify-pin
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #lib-nedarim-sync
+מנוע-הסנכרון נדרים→מאור (כיוון-נכנס) — מתאים כל תורם/עסקה לכרטיס-התומך
+- **חוטים (19):** norm-id · norm-phone · norm-search · name-sort-key · clearing-providers · provider-clearer · charge-to-hist · charge-dedup-key · with-nedarim-hok · detect-recurring-hok · candidate-supporters-for-charge · fill-card-from-charge · attach-charge-to · relabel-hist-by-txn · repair-cards-from-rows · strong-match-for-charge · auto-match-charges · attach-charges-bulk · plan-nedarim-sync
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #lib-pwa
+קופסת-החיבורים של מודול ה-PWA — רישום service-worker, זיהוי מצב-התקנה,
+- **חוטים (4):** install-available · prompt-install · is-ios · feature-on
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
 ## #names-export
@@ -129,6 +174,11 @@
 - **חוטים (5):** same-loc · push-nav · push-recent · nav-hist-max · recent-max
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
+## #net-check
+הקופסה של מאבחן-החסימות — בודקת מהדפדפן אילו נקודות-קצה נגישות
+- **חוטים (2):** run-net-check · net-check-script
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
 ## #photo-gallery
 
 - **חוטים (7):** photo-max · photo-max-dim · photo-max-len · can-add-photo · is-data-image · fit-dimensions · sanitize-photos
@@ -137,6 +187,21 @@
 ## #platform
 
 - **חוטים (24):** slugify · is-valid-slug · all-modules · module-labels · all-off-config · org-link · norm-email · gen-join-code · org-join-link · org-join-full-code · parse-join-full-code · is-org-manager · org-enabled-modules · org-enabled-features · is-member · override-of · grantable-staff-features · is-grantable-feature · effective-config-for · allowed-designations-for · can-issue-receipt · approve-member · set-employee-override · remove-member
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #pricing
+מחווטת את מנוע-התמחור המלא של המטמיע — טבלת-מחירי-ברירת-מחדל,
+- **חוטים (6):** default-prices · size-labels · normalize-prices · compute-quote · shekel · all-modules
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #public-site
+מנוע האתר-הציבורי (טהור, בלי store/DOM) — פותר טקסט רב-לשוני,
+- **חוטים (11):** is-rtl-lang · coral-palette · site-palette · site-vocab · resolve-localized · site-langs · site-ui · site-ui-labels · site-campaign-progress · has-public-site · site-donate-url
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #receipt
+מסירת-קבלה שלמה — התוכן הטהור (שורות/HTML/קוד-אימות/פורמט) + נתיבי-המסירה
+- **חוטים (12):** receipt-verify-code · receipt-lines · receipt-html · receipt-fmt-of · deliver-receipt · heb-date-full · feature-on · module-on · gematria · gem-year · heb-parts · guard-export
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
 ## #reenroll
@@ -172,6 +237,11 @@
 ## #sup-partition
 שכבה טהורה שאוכפת ייעוד-פר-תורם (`forWho`) בשכבת-הנתונים — מזריקה
 - **חוטים (8):** shared-sup-key · sup-key-of · sup-keyed-cols · doc-skey · sup-key-map-of · sup-allowed-keys · strip-sup-key · strip-audit-meta
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #support-chat
+
+- **חוטים (9):** support-msg-max · sanitize-support-text · is-sendable-support-text · sort-support-msgs · support-msg-time · support-day-label · support-preview · support-unread · sort-team-msgs
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
 ## #supporters
@@ -229,5 +299,5 @@
 - **חוטים (7):** task-identity · open-tasks-for · done-today-for · task-overdue · task-stats-for · overdue-contact-task-drafts · pri-labels
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
-## אטומים-במלאי (טרם-חווטו): 221
+## אטומים-במלאי (טרם-חווטו): 128
 _ההתקדמות האמיתית = אחוז-המחווט (L10)._

@@ -1,0 +1,74 @@
+/** קופסת-חיבורים · תמחור (lib-pricing) — מחווטת את חוטי-התמחור. חוזה: pricing.contract.md
+ *  זה המקום היחיד שבו חוטי-התמחור נפגשים (חוקי-החשמלאי, LAW.md).
+ *  מוצא: maor/src/lib/pricing.ts (גרף-הקריאות המלא). */
+import { defaultPrices } from '../atoms/default-prices.mjs';
+import { SIZE_LABELS } from '../atoms/size-labels.mjs';
+import { normalizePrices } from '../atoms/normalize-prices.mjs';
+import { computeQuote } from '../atoms/compute-quote.mjs';
+import { shekel } from '../atoms/shekel.mjs';
+import { ALL_MODULES } from '../atoms/all-modules.mjs';
+
+// ── שקעי-הכרעה (מילון-הקופסה — נתון-בעלים עריך, חי כאן ולא באטומים) ──
+// מחירי-ברירת-המחדל להרחבות (maor/src/lib/pricing.ts:36-49) — placeholder עריך
+// שהבעלים דורס באשף. המפתחות = INTEGRATION_LABELS.
+const DEFAULT_INTEGRATION_PRICES = {
+  receipts: 60, // קבלות §46 אוטומטיות — ערך-ציות גבוה
+  payments: 90, // סליקה והוראות-קבע
+  whatsapp: 50,
+  sms: 40, // דמי-מודול (עלות-הודעה בפועל נגבית בנפרד)
+  phone: 90, // טלפוניה/מרכזייה
+  gcal: 30,
+  drive: 30,
+  sheets: 40,
+  maps: 40,
+  esign: 60, // חתימה דיגיטלית
+  ai: 120, // עוזר-חכם — פרימיום
+  campaign: 60,
+};
+
+// מפתח-האחסון המקומי (maor/src/lib/pricing.ts:192) — הכרעת-הקופסה, לא של החוטים.
+const PRICES_LS_KEY = 'maor_prices';
+
+// ── החיווט ──
+// טבלת-ברירת-המחדל המלאה: החוט defaultPrices מקבל את מילון-ההרחבות כשקע.
+// (זה ה-DEFAULT_PRICES של המקור — pricing.ts:57-74.)
+export const DEFAULT_PRICES = defaultPrices(DEFAULT_INTEGRATION_PRICES);
+
+// תוויות-הגודל — מוגשות כמו-שהן מהאטום (pricing.ts:76-80).
+export const sizeLabels = SIZE_LABELS;
+
+// עיצוב-שקל — מוגש כמו-שהוא מהאטום (pricing.ts:188-190).
+export { shekel };
+
+// נירמול טבלת-מחירים לא-אמינה: החוט normalizePrices מקבל את שלוש טבלאות-הידע
+// כשקעים (pricing.ts:122-146). ALL_MODULES מהאטום; DEFAULT_PRICES/מילון-ההרחבות
+// מהחיווט לעיל.
+export const normalize = (raw) =>
+  normalizePrices(raw, ALL_MODULES, DEFAULT_PRICES, DEFAULT_INTEGRATION_PRICES);
+
+// חישוב הצעת-מחיר: החוט computeQuote מקבל את ALL_MODULES כשקע (pricing.ts:152-185).
+// nameOf היה כבר פרמטר במקור (מכבד termOf של הלקוח).
+export const quote = (cfg, size, prices, nameOf, addons = [], mode = 'subscription') =>
+  computeQuote(cfg, size, prices, nameOf, ALL_MODULES, addons, mode);
+
+// ── שקעי-IO (localStorage — פרמטרים-מוזרקים, לא מימוש) ──
+// קריאת טבלת-המחירים השמורה (מכשיר-המטמיע), או ברירת-המחדל (pricing.ts:194-202).
+// getItem(key)⇒string|null — שקע-הקריאה המוזרק (במקור: localStorage.getItem).
+export function readPrices(getItem) {
+  try {
+    const raw = getItem(PRICES_LS_KEY);
+    return raw ? normalize(JSON.parse(raw)) : { ...DEFAULT_PRICES };
+  } catch {
+    return { ...DEFAULT_PRICES };
+  }
+}
+
+// שמירת טבלת-המחירים (מקומית — לא בקונפיג-הלקוח, לא בענן) (pricing.ts:205-211).
+// setItem(key,value)⇒void — שקע-הכתיבה המוזרק (במקור: localStorage.setItem).
+export function writePrices(setItem, p) {
+  try {
+    setItem(PRICES_LS_KEY, JSON.stringify(p));
+  } catch {
+    /* localStorage חסום — המחירים יחזיקו עד רענון */
+  }
+}
