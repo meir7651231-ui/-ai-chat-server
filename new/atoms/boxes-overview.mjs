@@ -1,8 +1,7 @@
-/** 🪨 טיוטת-חוט (דרגת-מחצבה) · boxesOverview — חולל אוטומטית, טרם-קודם לדרגת-חוזה.
- *  מוצא: maor/src/components/tzedaka/lib.ts:203-232 (30 שורות) · תורגם TS→JS מכונה.
- *  שקעים-מועמדים (קריאות-חוץ שצריכות הזרקה): boxesOverview, lastCollectionIso, boxTotal, smartFilter, parseInt
- *  קידום: לכתוב <שם>.contract.md + <שם>.test.mjs ← להעביר ל-new/atoms/. */
-export function boxesOverview(db, q, status, sort) {
+/** חוט · boxes-overview — מבט "כל הקופות" עם חיפוש/סינון/מיון.
+ *  חוזה: boxes-overview.contract.md · שקעים: lastCollectionIso, boxTotal, smartFilter
+ *  חולץ כלשונו מ-maor/src/components/tzedaka/lib.ts:203-232 (קריאות-השכן שוקעו). */
+export function boxesOverview(db, q, status, sort, lastCollectionIso, boxTotal, smartFilter) {
     let rows = db.tzBoxes.map((box) => ({
         box,
         coordName: db.tzCoordinators.find((c) => c.id === box.coordinatorId)?.name ?? '',
@@ -26,4 +25,3 @@ export function boxesOverview(db, q, status, sort) {
     };
     return [...rows].sort(cmp[sort]);
 }
-/** סינון היסטוריית ריקונים — טווח תאריכים (כוללני, dateInRange המשותף) + מבצע. */
