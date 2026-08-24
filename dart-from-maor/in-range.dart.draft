@@ -1,0 +1,6 @@
+dynamic inRange(dynamic iso, dynamic r) {
+  if (_falsy(iso)) return false;
+  if (r.from && iso < r.from) return false;
+  if (r.to && iso > r.to) return false;
+  return true;
+}

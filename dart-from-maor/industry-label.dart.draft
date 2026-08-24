@@ -1,0 +1,3 @@
+dynamic industryLabel(dynamic id, dynamic industries) {
+  return ((industries.firstWhere((i) => i.id == id).label ?? id) ?? '—');
+}

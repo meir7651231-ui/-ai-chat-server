@@ -1,0 +1,8 @@
+dynamic hokRecordedThisMonth(dynamic sp, dynamic todayIso, dynamic hokCat) {
+  if (_falsy(sp.hok)) return false;
+  var month = todayIso.sublist(0, 7);
+  var hok = sp.hok;
+  var inDonations = sp.donations.any((d) => d.date.startsWith(month) && ((d.cat == hokCat || (d.amount == hok.amount && ((d.cur ?? '₪')) == hok.cur))));
+  if (inDonations) return true;
+  return ((sp.hist ?? [])).any((h) => ((h.d ?? '')).startsWith(month) && (((h.clearer == 'נדרים' || h.clearer == 'סולה') || (h.a == hok.amount && ((h.c ?? '₪')) == hok.cur))));
+}

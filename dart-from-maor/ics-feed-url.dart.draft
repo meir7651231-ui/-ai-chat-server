@@ -1,0 +1,3 @@
+dynamic icsFeedUrl(dynamic projectId, dynamic slug, dynamic token) {
+  return 'https://us-central1-' + projectId + '.cloudfunctions.net/icsFeed?org=' + encodeURIComponent(slug) + '&key=' + token;
+}

@@ -1,0 +1,7 @@
+dynamic hokMonthlyTotal(dynamic supporters, dynamic usdRate, dynamic todayIso, dynamic hokEffectivelyActive) {
+  dynamic active(dynamic sp) => (todayIso ? hokEffectivelyActive(sp, todayIso) : _falsy(_falsy(sp.hok.active)));
+  return _round(supporters.fold(0, (a, sp) {
+  if ((!active(sp) || _falsy(sp.hok))) return a;
+  return a + (sp.hok.cur == '$' ? sp.hok.amount * usdRate : sp.hok.amount);
+}));
+}
