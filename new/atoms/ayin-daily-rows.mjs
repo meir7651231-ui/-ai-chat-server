@@ -1,8 +1,7 @@
-/** 🪨 טיוטת-חוט (דרגת-מחצבה) · ayinDailyRows — חולל אוטומטית, טרם-קודם לדרגת-חוזה.
- *  מוצא: maor/src/lib/ayin.ts:249-295 (47 שורות) · תורגם TS→JS מכונה.
- *  שקעים-מועמדים (קריאות-חוץ שצריכות הזרקה): ayinDailyRows, unitLabel, itemLabel, emptyAyin, eyesTotal, stageLabel, fmtD
- *  קידום: לכתוב <שם>.contract.md + <שם>.test.mjs ← להעביר ל-new/atoms/. */
-export function ayinDailyRows(cfg, supporters, todayIso) {
+/** חוט · ayin-daily-rows — שורות הדוח-היומי של מעקב-הטיפול.
+ *  חוזה: ayin-daily-rows.contract.md · שקעים: unitLabel, itemLabel, emptyAyin, eyesTotal, stageLabel
+ *  חולץ כלשונו מ-maor/src/lib/ayin.ts:249-295 (קריאות-השכן שוקעו). */
+export function ayinDailyRows(cfg, supporters, todayIso, unitLabel, itemLabel, emptyAyin, eyesTotal, stageLabel) {
     const unit = unitLabel(cfg);
     const item = itemLabel(cfg);
     const rows = [
@@ -40,9 +39,3 @@ function fmtD(iso) {
     const [y, m, d] = iso.split('-');
     return `${d}/${m}/${y}`;
 }
-/**
- * דוח מלא של כל השמות (למשל שמות-לתפילה) בכרטיסי מעקב-הטיפול — שורה פר-שם,
- * להורדת-מנהל בסגנון דוחות-התרומות (בקשת-בעלים 19.8 פריט א'). כולל תורם/ת,
- * טלפון, שם, כמות (עיניים), הערה, סטטוס-טיפול ושלב. מכבד את הרשאת-הייעוד
- * (המסננים בקריאה). ayin חלקי (לגאסי/ענן) ממוזג עם emptyAyin (הגנת-קריסה).
- */
