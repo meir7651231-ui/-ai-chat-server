@@ -1,5 +1,6 @@
 /** חוט · decode-quoted-printable — קודם אוטומטית (אפיון-Golden). חוזה: decode-quoted-printable.contract.md */
 export function decodeQuotedPrintable(s) {
+    const HEX2 = /^[0-9A-Fa-f]{2}$/; // הוטמע: קבוע-שכן מ-vcardImport.ts:33 (הפאזר תפס חסר-הזרקה)
     const bytes = [];
     for (let i = 0; i < s.length; i++) {
         const ch = s[i];
