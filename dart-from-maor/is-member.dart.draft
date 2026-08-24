@@ -1,0 +1,5 @@
+dynamic isMember(dynamic email, dynamic org, dynamic normEmail, dynamic isOrgManager) {
+  var e = normEmail(email);
+  if (isOrgManager(e, org)) return true;
+  return ((org.members ?? [])).map((m) => m.trim().toLowerCase()).toList().contains(e);
+}

@@ -1,0 +1,3 @@
+dynamic isEncDoc(dynamic d) {
+  return _falsy(_falsy(d)) && d is Map && d.enc is String && d.iv is String;
+}

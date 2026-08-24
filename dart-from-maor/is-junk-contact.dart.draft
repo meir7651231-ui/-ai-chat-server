@@ -1,0 +1,5 @@
+dynamic isJunkContact(dynamic c, dynamic digitsOnly) {
+  if (!c.fullName.trim()) return true;
+  var realPhone = c.phones.any((p) => digitsOnly(p.value).length >= 5);
+  return _falsy(realPhone) && c.emails.length == 0;
+}

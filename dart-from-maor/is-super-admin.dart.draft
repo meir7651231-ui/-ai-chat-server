@@ -1,0 +1,4 @@
+dynamic isSuperAdmin(dynamic email, dynamic superAdminEmails) {
+  var e = ((email ?? '')).trim().toLowerCase();
+  return _falsy(_falsy(e)) && superAdminEmails.contains(e);
+}

@@ -1,0 +1,4 @@
+dynamic integrationSetting(dynamic cfg, dynamic key, dynamic field) {
+  var v = cfg.integrations[key][field];
+  return v is String ? v.trim() : '';
+}
