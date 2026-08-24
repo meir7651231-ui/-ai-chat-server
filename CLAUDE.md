@@ -32,6 +32,7 @@ node machtzev/factory/gen-wires.mjs <genesis> maor    # חציבת-טיוטות
 node machtzev/promote-auto.mjs    # (בגנסיס) קידום-חינם: צילום/Golden
 node machtzev/gen-wiring-doc.mjs  # (בגנסיס) חילול מפת-החיווט
 node machtzev/box-coverage.mjs    # (בגנסיס) מד-מוכנות-קופסאות ⇒ box-drafts/READINESS.md
+node machtzev/dedup-atoms.mjs     # (בגנסיס) בודק-כפליות-מדף (הכרעה 5): גוף/שם/מוצא — אחרי כל גל
 ```
 מרשם-האטומים: maor-system/machtzev/registry/ · טיוטות: quarry/ · תוכניות-קופסה: box-drafts/
 
