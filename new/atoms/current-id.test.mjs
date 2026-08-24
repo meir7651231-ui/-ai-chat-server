@@ -1,0 +1,10 @@
+import { currentId } from './current-id.mjs';
+let f = 0;
+const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
+const c = { queue: ['a', 'b', 'c'] };
+chk('1 חזית', currentId(c) === 'a');
+chk('2 יחיד', currentId({ queue: ['x'] }) === 'x');
+chk('3 ריק ⇒ null', currentId({ queue: [] }) === null);
+chk('4 התור לא השתנה', c.queue.length === 3 && c.queue[0] === 'a');
+if (f) process.exit(1);
+console.log('✓ current-id: 4 דוגמאות-חוזה — ירוק');
