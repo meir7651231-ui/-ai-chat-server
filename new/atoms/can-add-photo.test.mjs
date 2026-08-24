@@ -1,0 +1,11 @@
+import { canAddPhoto } from './can-add-photo.mjs';
+let f = 0;
+const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
+ok(canAddPhoto(undefined) === true, 'undefined ≠ true');
+ok(canAddPhoto([]) === true, '[] ≠ true');
+ok(canAddPhoto(['a', 'b', 'c', 'd']) === true, 'אורך-4 ≠ true');
+ok(canAddPhoto(['a', 'b', 'c', 'd', 'e']) === false, 'אורך-5 ≠ false');
+ok(canAddPhoto(['a', 'b'], 2) === false, 'photoMax=2 לא כובד');
+ok(canAddPhoto(null) === true, 'null ≠ true');
+if (f) process.exit(1);
+console.log('✓ can-add-photo: 6 דוגמאות-חוזה — ירוק');
