@@ -1,0 +1,7 @@
+dynamic ayinActionVisible(dynamic a) {
+  var st = a.stage;
+  if (st == 'done') return false;
+  if (st == 'new') return a.names.length > 0;
+  if (st == 'eyes') return a.names.any((n) => n.eyes != '' && n.eyes != null);
+  return true;
+}

@@ -1,0 +1,3 @@
+var AUDIT_CATEGORIES = ['כפילות', 'ת"ז', 'טלפון', 'אימייל', 'כתובת', 'לוגיקה', 'ילדים', 'קשר'];
+var EMAIL_RE = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]{2,}$');
+dynamic digits(dynamic x) => ((x ?? '')).replaceFirst(RegExp(r'\D'), '');
