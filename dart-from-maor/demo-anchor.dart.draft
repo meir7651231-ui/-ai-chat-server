@@ -1,0 +1,18 @@
+var DEMO_ANCHOR = '2026-08-02';
+dynamic daysBetween(dynamic fromIso, dynamic toIso) {
+  var a = DateTime.parse(fromIso + 'T12:00:00').millisecondsSinceEpoch;
+  var b = DateTime.parse(toIso + 'T12:00:00').millisecondsSinceEpoch;
+  if (((a).isNaN ?? (b).isNaN)) return 0;
+  return _round((b - a) / 86400000);
+}
+dynamic isoLocal(dynamic d) {
+  dynamic p2(dynamic n) => n.toString()._padStart(2, '0');
+  return '${d.year}-${p2((d.month - 1) + 1)}-${p2(d.day)}';
+}
+dynamic shift(dynamic iso, dynamic days) {
+  if ((_falsy(iso) || !RegExp(r'^\d{4}-\d{2}-\d{2}').test(iso))) return iso;
+  var d = DateTime.parse(iso.sublist(0, 10) + 'T12:00:00');
+  if ((d.millisecondsSinceEpoch).isNaN) return iso;
+  d.setDate(d.day + days);
+  return isoLocal(d);
+}

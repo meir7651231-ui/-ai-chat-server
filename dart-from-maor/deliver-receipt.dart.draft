@@ -1,0 +1,3 @@
+dynamic deliverReceipt(dynamic o, dynamic fmt, dynamic printReceipt, dynamic downloadReceipt) {
+  if (fmt == 'pdf') printReceipt(o); else downloadReceipt(o);
+}

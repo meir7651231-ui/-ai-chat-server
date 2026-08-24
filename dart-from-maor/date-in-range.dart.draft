@@ -1,0 +1,3 @@
+dynamic dateInRange(dynamic iso, dynamic fromIso, dynamic toIso) {
+  return ((_falsy(fromIso) || iso >= fromIso)) && ((_falsy(toIso) || iso <= toIso));
+}

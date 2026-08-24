@@ -1,0 +1,3 @@
+dynamic defaultPrices(dynamic integrationPrices) {
+  return {'base': 290, 'modules': {'families': 0, 'calendar': 0, 'courses': 120, 'diary': 70, 'supporters': 180, 'reports': 60, 'tzedaka': 90, 'shop': 90, 'shop7': 80}, 'integrations': integrationPrices, 'sizeMult': {'small': 1, 'medium': 1.6, 'large': 2.4}, 'setup': 1500, 'enterprise': {'oneTime': 55000, 'annualMaintenance': 9000}};
+}
