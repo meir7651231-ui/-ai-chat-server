@@ -1,0 +1,11 @@
+import { exportAllowed } from './export-allowed.mjs';
+let f = 0;
+const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
+ok(exportAllowed(false) === true, 'לא-חסום ⇒ חייב true');
+ok(exportAllowed(true) === false, 'חסום ⇒ חייב false');
+ok(exportAllowed(undefined) === true, 'חסר-דגל ⇒ חייב true (חסר=מותר)');
+ok(exportAllowed(null) === true, 'null ⇒ חייב true');
+const r5 = exportAllowed(0);
+ok(r5 === true && typeof r5 === 'boolean', '0 ⇒ true בוליאני אמיתי');
+if (f) process.exit(1);
+console.log('✓ export-allowed: 5 דוגמאות-חוזה — ירוק');

@@ -1,0 +1,11 @@
+import { eyesTotal } from './eyes-total.mjs';
+let f = 0;
+const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
+ok(eyesTotal({ names: [] }) === 0, 'ריק ⇒ 0');
+ok(eyesTotal({ names: [{ eyes: 3 }, { eyes: 2 }] }) === 5, '3+2 ⇒ 5');
+ok(eyesTotal({ names: [{ eyes: '4' }] }) === 4, "'4' ⇒ 4 (כפייה-מספרית)");
+ok(eyesTotal({ names: [{}, { eyes: 'שטויות' }, { eyes: 2 }] }) === 2, 'חסר/שבור ⇒ 0');
+ok(eyesTotal({ names: [{ eyes: 0.5 }, { eyes: 1.5 }] }) === 2, 'שברים ⇒ 2');
+ok(eyesTotal({ names: [{ eyes: -1 }, { eyes: 5 }] }) === 4, 'שלילי לא מסונן ⇒ 4');
+if (f) process.exit(1);
+console.log('✓ eyes-total: 6 דוגמאות-חוזה — ירוק');

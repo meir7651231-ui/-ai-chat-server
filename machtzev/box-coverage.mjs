@@ -23,6 +23,8 @@ const names = (w) => {
   if (/^[A-Z0-9_]+$/.test(w)) { out.add(w.toLowerCase()); out.add(w.toLowerCase().replace(/_/g, '-')); }
   else { out.add(w.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()); }
   out.add(w.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()); // הנוסחה המדויקת של מכונת-החוטים (גם על UPPER: a11-y_fab_toggles)
+  // שקילות _↔- (המחצבה שומרת snake, הקידום מוציא kebab; וגם המנגלה a11-y)
+  for (const n of [...out]) { out.add(n.replace(/_/g, '-')); out.add(n.replace(/-/g, '_')); }
   return [...out];
 };
 
