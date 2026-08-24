@@ -34,7 +34,8 @@ node machtzev/promote-auto.mjs    # (בגנסיס) קידום-חינם: צילו
 node machtzev/gen-wiring-doc.mjs  # (בגנסיס) חילול מפת-החיווט
 node machtzev/box-coverage.mjs    # (בגנסיס) מד-מוכנות-קופסאות ⇒ box-drafts/READINESS.md
 node machtzev/dedup-atoms.mjs     # (בגנסיס) בודק-כפליות-מדף (הכרעה 5): גוף/שם/מוצא — אחרי כל גל
-node machtzev/dedup-cross.mjs     # (בגנסיס) בודק-כפליות חוצה-מערכות: מאור-JS מול בנייה-חכמה-Dart (ליבה-אימפריאלית)
+node machtzev/dedup-cross.mjs     # (בגנסיס) כפליות חוצה-מערכות לפי-שם (מאור-JS מול בנייה-חכמה-Dart)
+node machtzev/dedup-cross-dart.mjs # (בגנסיס) כפליות חוצה-ענפים לפי-גוף (Dart↔Dart) — ליבה-אימפריאלית, אחרי המרת-מאור
 ```
 מרשם-האטומים: maor-system/machtzev/registry/ · טיוטות: quarry/ · תוכניות-קופסה: box-drafts/
 
