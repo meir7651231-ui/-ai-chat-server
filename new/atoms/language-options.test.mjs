@@ -1,0 +1,11 @@
+import { LANGUAGE_OPTIONS as L } from './language-options.mjs';
+let f = 0;
+const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
+ok(L.length === 5, 'אורך ' + L.length + ' ≠ 5');
+ok(L[0] === 'עברית', "[0] ≠ 'עברית'");
+ok(L[1] === 'יידיש', "[1] ≠ 'יידיש'");
+ok(L[4] === 'אנגלית', "[4] ≠ 'אנגלית'");
+ok(L.includes('רוסית'), "חסר 'רוסית'");
+ok(new Set(L).size === L.length, 'כפילות ברשימה');
+if (f) process.exit(1);
+console.log('✓ language-options: 6 דוגמאות-חוזה — ירוק');

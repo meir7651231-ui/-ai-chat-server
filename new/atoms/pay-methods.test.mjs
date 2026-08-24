@@ -1,0 +1,12 @@
+import { PAY_METHODS as P } from './pay-methods.mjs';
+let f = 0;
+const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
+ok(P.length === 5, 'אורך ' + P.length + ' ≠ 5');
+ok(P[0] === 'מזומן', "[0] ≠ 'מזומן'");
+ok(P[1] === 'העברה בנקאית', "[1] ≠ 'העברה בנקאית'");
+ok(P[2] === "צ'ק", "[2] ≠ \"צ'ק\"");
+ok(P[4] === 'ביט', "[4] ≠ 'ביט'");
+ok(P.includes('אשראי'), "חסר 'אשראי'");
+ok(new Set(P).size === P.length, 'כפילות ברשימה');
+if (f) process.exit(1);
+console.log('✓ pay-methods: 7 דוגמאות-חוזה — ירוק');

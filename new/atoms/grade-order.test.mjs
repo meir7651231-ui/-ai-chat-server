@@ -1,0 +1,12 @@
+import { GRADE_ORDER } from './grade-order.mjs';
+let f = 0;
+const eq = (g, w, m) => { if (JSON.stringify(g) !== JSON.stringify(w)) { console.error(`✗ ${m}: ${JSON.stringify(g)} ≠ ${JSON.stringify(w)}`); f = 1; } };
+eq(GRADE_ORDER.length, 13, 'length');
+eq(GRADE_ORDER[0], 'גן', '[0]');
+eq(GRADE_ORDER[1], 'א', '[1]');
+eq(GRADE_ORDER[12], 'יב', '[12]');
+eq(GRADE_ORDER.indexOf('ז'), 7, "indexOf('ז')");
+eq(GRADE_ORDER, ['גן', 'א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט', 'י', 'יא', 'יב'], 'המערך המלא');
+eq(new Set(GRADE_ORDER).size, GRADE_ORDER.length, 'אין כפילויות');
+if (f) process.exit(1);
+console.log('✓ grade-order: 7 דוגמאות-חוזה — ירוק');

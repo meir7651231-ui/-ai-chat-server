@@ -1,0 +1,10 @@
+import { SCALE_STEP } from './scale-step.mjs';
+let f = 0;
+const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
+ok(SCALE_STEP === 0.1, 'הערך ' + SCALE_STEP + ' ≠ 0.1');
+ok(Number.isFinite(SCALE_STEP), 'לא מספר סופי');
+ok(SCALE_STEP > 0, 'לא חיובי');
+ok(SCALE_STEP < 1, 'לא קטן מ-1');
+ok(Math.round((1.6 - 0.8) / SCALE_STEP) === 8, 'הטווח 0.8–1.6 אינו 8 צעדים');
+if (f) process.exit(1);
+console.log('✓ scale-step: 5 דוגמאות-חוזה — ירוק');

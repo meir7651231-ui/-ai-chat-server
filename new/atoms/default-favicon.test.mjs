@@ -1,0 +1,11 @@
+import { DEFAULT_FAVICON as F } from './default-favicon.mjs';
+let f = 0;
+const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
+ok(F.startsWith('data:image/svg+xml,'), 'לא מתחיל ב-data:image/svg+xml,');
+ok(F.includes("viewBox='0 0 100 100'"), 'אין viewBox 0 0 100 100');
+ok(F.includes('%23f3c76b') && F.includes('%23b45309'), 'חסר מילוי-זהב/חום');
+ok(F.split('<circle').length - 1 === 2, 'לא בדיוק 2 עיגולים');
+ok(F.includes("r='38'") && F.includes("r='20'"), 'רדיוסים 38/20 חסרים');
+ok(F === "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='38' fill='%23f3c76b'/><circle cx='50' cy='50' r='20' fill='%23b45309'/></svg>", 'הערך המלא לא ביט-זהה');
+if (f) process.exit(1);
+console.log('✓ default-favicon: 6 דוגמאות-חוזה — ירוק');

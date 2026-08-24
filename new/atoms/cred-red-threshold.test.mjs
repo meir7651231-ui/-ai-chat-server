@@ -1,0 +1,10 @@
+import { CRED_RED_THRESHOLD as T } from './cred-red-threshold.mjs';
+let f = 0;
+const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
+ok(T === 500, 'הערך ' + T + ' ≠ 500');
+ok(Number.isInteger(T), 'לא מספר-שלם');
+ok(T > 0, 'לא חיובי');
+ok(499 < T, '499 לא מתחת לסף');
+ok(!(500 < T), '500 מתחת לסף (על-הסף = לא-red)');
+if (f) process.exit(1);
+console.log('✓ cred-red-threshold: 5 דוגמאות-חוזה — ירוק');

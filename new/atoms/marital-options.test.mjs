@@ -1,0 +1,11 @@
+import { MARITAL_OPTIONS as M } from './marital-options.mjs';
+let f = 0;
+const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
+ok(M.length === 4, 'אורך ' + M.length + ' ≠ 4');
+ok(M[0] === 'נשואים', "[0] ≠ 'נשואים'");
+ok(M[2] === 'אלמן/ה', "[2] ≠ 'אלמן/ה'");
+ok(M[3] === 'פרודים', "[3] ≠ 'פרודים'");
+ok(M.includes('גרושים'), "חסר 'גרושים'");
+ok(new Set(M).size === M.length, 'כפילות ברשימה');
+if (f) process.exit(1);
+console.log('✓ marital-options: 6 דוגמאות-חוזה — ירוק');

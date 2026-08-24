@@ -1,0 +1,11 @@
+import { PLATFORM_REQUESTS } from './platform-requests.mjs';
+let f = 0;
+const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
+ok(PLATFORM_REQUESTS === 'platformRequests', 'הערך ' + PLATFORM_REQUESTS + " ≠ 'platformRequests'");
+ok(typeof PLATFORM_REQUESTS === 'string', 'לא מחרוזת');
+ok(PLATFORM_REQUESTS.length === 16, 'האורך ' + PLATFORM_REQUESTS.length + ' ≠ 16');
+ok(!PLATFORM_REQUESTS.includes('/'), "מכיל '/' — לא אוסף-שורש יחיד-מקטע");
+ok(PLATFORM_REQUESTS + '/u1' === 'platformRequests/u1', 'הרכבת-נתיב-מסמך שבורה');
+ok(PLATFORM_REQUESTS !== 'platformOrgs', 'מתנגש עם אוסף-הארגונים');
+if (f) process.exit(1);
+console.log('✓ platform-requests: 6 דוגמאות-חוזה — ירוק');

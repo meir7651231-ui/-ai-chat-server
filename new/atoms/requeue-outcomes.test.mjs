@@ -1,0 +1,11 @@
+import { REQUEUE_OUTCOMES as R } from './requeue-outcomes.mjs';
+let f = 0;
+const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
+ok(R.length === 2, 'האורך ' + R.length + ' ≠ 2');
+ok(R[0] === 'noanswer', "[0] " + R[0] + " ≠ 'noanswer'");
+ok(R[1] === 'skip', "[1] " + R[1] + " ≠ 'skip'");
+ok(R.includes('noanswer'), "לא מכיל 'noanswer'");
+ok(R.includes('skip'), "לא מכיל 'skip'");
+ok(!R.includes('donated'), "מכיל 'donated' — תוצאה סופית ברשימת-החזרה");
+if (f) process.exit(1);
+console.log('✓ requeue-outcomes: 6 דוגמאות-חוזה — ירוק');

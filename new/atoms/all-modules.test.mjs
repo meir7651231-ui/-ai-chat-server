@@ -1,0 +1,12 @@
+import { ALL_MODULES } from './all-modules.mjs';
+let f = 0;
+const eq = (g, w, m) => { if (JSON.stringify(g) !== JSON.stringify(w)) { console.error(`✗ ${m}: ${JSON.stringify(g)} ≠ ${JSON.stringify(w)}`); f = 1; } };
+eq(ALL_MODULES.length, 9, 'length');
+eq(ALL_MODULES[0], 'families', '[0]');
+eq(ALL_MODULES[8], 'shop7', '[8]');
+eq(ALL_MODULES.includes('tzedaka'), true, "includes('tzedaka')");
+eq(ALL_MODULES.includes('home'), false, "includes('home')");
+eq(ALL_MODULES, ['families', 'courses', 'calendar', 'diary', 'supporters', 'reports', 'tzedaka', 'shop', 'shop7'], 'המערך המלא');
+eq(new Set(ALL_MODULES).size, ALL_MODULES.length, 'אין כפילויות');
+if (f) process.exit(1);
+console.log('✓ all-modules: 7 דוגמאות-חוזה — ירוק');

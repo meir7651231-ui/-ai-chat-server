@@ -1,0 +1,10 @@
+import { PLATFORM_ORGS } from './platform-orgs.mjs';
+let f = 0;
+const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
+ok(PLATFORM_ORGS === 'platformOrgs', 'הערך ' + PLATFORM_ORGS + " ≠ 'platformOrgs'");
+ok(typeof PLATFORM_ORGS === 'string', 'לא מחרוזת');
+ok(PLATFORM_ORGS.length === 12, 'האורך ' + PLATFORM_ORGS.length + ' ≠ 12');
+ok(!PLATFORM_ORGS.includes('/'), "מכיל '/' — לא אוסף-שורש יחיד-מקטע");
+ok(PLATFORM_ORGS + '/demo' === 'platformOrgs/demo', 'הרכבת-נתיב-מסמך שבורה');
+if (f) process.exit(1);
+console.log('✓ platform-orgs: 5 דוגמאות-חוזה — ירוק');

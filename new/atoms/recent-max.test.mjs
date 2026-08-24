@@ -1,0 +1,10 @@
+import { RECENT_MAX } from './recent-max.mjs';
+let f = 0;
+const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
+ok(RECENT_MAX === 6, 'הערך ' + RECENT_MAX + ' ≠ 6');
+ok(Number.isInteger(RECENT_MAX), 'לא מספר-שלם');
+ok(RECENT_MAX > 0, 'לא חיובי');
+ok(['a','b','c','d','e','f','g'].slice(0, RECENT_MAX).length === 6, 'חיתוך 7 לתקרה ≠ 6');
+ok(['a','b','c','d','e'].slice(0, RECENT_MAX).length === 5, 'חיתוך 5 לתקרה ≠ 5 (התקרה ממלאה?)');
+if (f) process.exit(1);
+console.log('✓ recent-max: 5 דוגמאות-חוזה — ירוק');
