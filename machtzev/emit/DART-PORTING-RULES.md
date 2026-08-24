@@ -7,7 +7,7 @@
    JS `=== undefined` לא. ⇒ `!map.containsKey(k)` במקום `v == null`.
 3. **24:00 / תאריך-מגלגל** (build-ics): `new Date('T24:00')` תקין ב-V8 (מחרת); Dart-guard דוחה.
    ⇒ לשקף סמנטיקת-Date של JS, לא משמר-טווח.
-4. **חודש-מחוץ-לטווח** (age-of): `DateTime.tryParse('2000-13-01')` מגלגל; JS null.
+4. **תאריך-מגלגל** (age-of/default-course-dates): JS מחזיר Invalid רק לחודש 13/00 ויום 00, אבל **יום-גולש** (2026-02-30) JS מגלגל לחודש-הבא (תקין)! ‏Dart round-trip-guard דוחה⇒נפילה. גלישת-יום היא משפחת-באג חוזרת.
    ⇒ regex `^\d{4}-\d{2}-\d{2}` + round-trip לפני קבלה.
 5. **substring שלילי** (gematria): JS `slice(0,-1)` סלחן; Dart `substring(0,-1)` זורק.
    ⇒ בדיקת-אורך לפני, או לוגיקת-slice בטוחה.
