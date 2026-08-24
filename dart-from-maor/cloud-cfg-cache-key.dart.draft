@@ -1,0 +1,3 @@
+dynamic cloudCfgCacheKey(dynamic slug) {
+  return 'maor_cloudcfg:' + slug;
+}

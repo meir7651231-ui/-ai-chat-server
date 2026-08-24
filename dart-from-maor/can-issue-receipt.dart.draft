@@ -1,0 +1,3 @@
+dynamic canIssueReceipt(dynamic p) {
+  return (((p.superAdmin ?? p.isManager) || p.cloudRoot) || _falsy(p.cloudConnected));
+}

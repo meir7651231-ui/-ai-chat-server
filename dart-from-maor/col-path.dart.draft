@@ -1,0 +1,3 @@
+dynamic colPath(dynamic slug, dynamic cloudRoot, dynamic col) {
+  return cloudRoot ? col : 'orgs/' + slug + '/' + col;
+}

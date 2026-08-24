@@ -1,0 +1,6 @@
+dynamic chargeDedupKey(dynamic charge) {
+  var txn = ((charge.txnId ?? '')).trim();
+  if (txn) return 'txn:' + txn;
+  var ref = ((charge.reference ?? '')).trim();
+  return ref ? 'ref:' + ref : '';
+}

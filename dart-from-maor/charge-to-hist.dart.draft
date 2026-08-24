@@ -1,0 +1,14 @@
+dynamic chargeToHist(dynamic charge, dynamic curOf, dynamic providerClearer) {
+  var h = {'d': (((charge.d ?? ((charge.at ?? '')).sublist(0, 10)) || '')).trim(), 'a': charge.amount, 'c': curOf(charge), 'clearer': providerClearer(charge.provider)};
+  var ref = ((charge.reference ?? '')).trim();
+  var txn = ((charge.txnId ?? '')).trim();
+  var rec = ((charge.receipt ?? '')).trim();
+  var l4 = ((charge.last4 ?? '')).trim();
+  var keva = ((charge.kevaId ?? '')).trim();
+  if (ref) h.ref = ref;
+  if (txn) h.txn = txn;
+  if (rec) h.receipt = rec;
+  if (l4) h.last4 = l4;
+  if (keva) h.kevaId = keva;
+  return h;
+}
