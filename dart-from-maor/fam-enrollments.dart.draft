@@ -1,0 +1,4 @@
+dynamic famEnrollments(dynamic db, dynamic fam) {
+  var ids = <dynamic>{...fam.members.map((m) => m.id).toList()};
+  return db.enrollments.where((e) => ids.has(e.memberId));
+}

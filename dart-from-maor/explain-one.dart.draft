@@ -1,0 +1,7 @@
+dynamic explainOne(dynamic tc, dynamic orgName, dynamic tenantId, dynamic call, dynamic telephonyToTenant, dynamic validateTenant, dynamic explainCall, dynamic anchorToday) {
+  var raw = telephonyToTenant(tc, orgName, tenantId);
+  var v = validateTenant(raw);
+  if (_falsy(v.ok)) return {'summary': '⚠️ תצורה לא-תקינה: ' + v.errors.join(' · '), 'outcome': 'invalid', 'reason': ''};
+  var e = explainCall(v.tenant, call, {'anchorDate': anchorToday(), 'calendarWindow': 400});
+  return {'summary': e.summary, 'outcome': e.outcome, 'reason': e.reason};
+}

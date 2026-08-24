@@ -1,0 +1,8 @@
+dynamic excelSerialToIso(dynamic serial) {
+  if ((!isFinite(serial) || serial < 1)) return '';
+  var dt = DateTime.parse(_round((serial - 25569) * 86400000));
+  if ((dt.millisecondsSinceEpoch).isNaN) return '';
+  var mo = dt.getUTCMonth() + 1.toString()._padStart(2, '0');
+  var da = dt.getUTCDate().toString()._padStart(2, '0');
+  return '${dt.getUTCFullYear()}-${mo}-${da}';
+}
