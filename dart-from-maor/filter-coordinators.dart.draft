@@ -1,0 +1,6 @@
+dynamic filterCoordinators(dynamic coords, dynamic boxes, dynamic q, dynamic onlyActive, dynamic sort, dynamic smartFilter, dynamic coordinatorTotal, dynamic coordinatorLastCollection) {
+  var base = onlyActive ? coords.where((c) => c.active) : [...coords];
+  var list = smartFilter(q, base, (c) => [c.name, ...c.name.split(RegExp(r'\s+'))]);
+  var cmp = {'name': (a, b) => a.name.localeCompare(b.name, 'he'), 'score': (a, b) => b.score - a.score, 'total': (a, b) => coordinatorTotal(boxes, b.id) - coordinatorTotal(boxes, a.id), 'stale': (a, b) => coordinatorLastCollection(boxes, a.id).localeCompare(coordinatorLastCollection(boxes, b.id))};
+  return ([...list]..sort(cmp[sort]));
+}

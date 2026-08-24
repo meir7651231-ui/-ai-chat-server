@@ -1,0 +1,27 @@
+dynamic findCaller(dynamic db, dynamic raw, dynamic phoneKey) {
+  var key = phoneKey(raw);
+  if (key.length < 6) return null;
+  dynamic hit(dynamic p) => _falsy(_falsy(p)) && phoneKey(p) == key;
+  for (final f in db.families) {
+  if ((hit(f.phone) ?? hit(f.phone2))) {
+  return {'kind': 'family', 'name': f.name, 'phone': (f.phone ?? f.phone2), 'id': f.id, 'view': 'families', 'famId': f.id};
+}
+}
+  for (final f in db.families) {
+  for (final m in (f.members ?? [])) {
+  if ((hit(m.phone) ?? hit(m.phone2))) {
+  return {'kind': 'member', 'name': m.first + ' · ' + f.name, 'phone': (m.phone ?? m.phone2), 'id': m.id, 'view': 'families', 'famId': f.id};
+}
+}
+}
+  for (final s in db.supporters) {
+  if (hit(s.phone)) return {'kind': 'supporter', 'name': s.name, 'phone': s.phone, 'id': s.id, 'view': 'supporters'};
+}
+  for (final v in (db.volunteers ?? [])) {
+  if (hit(v.phone)) return {'kind': 'volunteer', 'name': v.name, 'phone': v.phone, 'id': v.id, 'view': 'shop7'};
+}
+  for (final c in (db.tzCoordinators ?? [])) {
+  if (hit(c.phone)) return {'kind': 'coordinator', 'name': c.name, 'phone': c.phone, 'id': c.id, 'view': 'tzedaka'};
+}
+  return null;
+}

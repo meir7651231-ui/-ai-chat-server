@@ -1,0 +1,5 @@
+dynamic filterDeliveries(dynamic rows, dynamic q, dynamic smartFilter) {
+  if (!q.trim()) return rows;
+  dynamic statusLabel(dynamic status) => status == 'pickup' ? 'איסוף' : status == 'enroute' ? 'בדרך' : 'נמסר';
+  return smartFilter(q, rows, (r) => [r.familyName, r.volunteerName, statusLabel(r.status)]);
+}

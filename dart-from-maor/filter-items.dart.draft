@@ -1,0 +1,12 @@
+dynamic filterItems(dynamic db, dynamic q, dynamic stockState, dynamic itemRemaining, dynamic smartFilter) {
+  var list = [...db.shopItems];
+  if (stockState) {
+  list = list.where((i) {
+  var rem = itemRemaining(db, i.id);
+  if (stockState == 'untracked') return rem == null;
+  if (stockState == 'out') return rem == 0;
+  return rem != null && rem > 0 && rem <= 2;
+});
+}
+  return smartFilter(q, list, (i) => [i.name, ...i.name.split(RegExp(r'\s+'))]);
+}

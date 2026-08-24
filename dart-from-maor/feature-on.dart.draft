@@ -1,0 +1,11 @@
+dynamic featureOn(dynamic cfg, dynamic key, dynamic navModuleKeys, dynamic moduleOn) {
+  var parts = key.split('.');
+  for (var i = 1; i <= parts.length; i++) {
+  if (cfg.features[parts.sublist(0, i).join('.')] == false) return false;
+}
+  var prefix = (parts[0] ?? '');
+  if (navModuleKeys.contains(prefix) && !moduleOn(cfg, prefix)) {
+  return false;
+}
+  return true;
+}

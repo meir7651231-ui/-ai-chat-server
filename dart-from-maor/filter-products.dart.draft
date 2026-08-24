@@ -1,0 +1,4 @@
+dynamic filterProducts(dynamic products, dynamic q, dynamic onlyActive, dynamic smartFilter) {
+  var base = onlyActive ? products.where((p) => p.active) : [...products];
+  return smartFilter(q, base, (p) => [p.name, p.desc]);
+}
