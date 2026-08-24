@@ -1,8 +1,8 @@
-/** 🪨 טיוטת-חוט (דרגת-מחצבה) · candidateSupportersForCharge — חולל אוטומטית, טרם-קודם לדרגת-חוזה.
- *  מוצא: maor/src/lib/nedarimSync.ts:279-302 (24 שורות) · תורגם TS→JS מכונה.
- *  שקעים-מועמדים (קריאות-חוץ שצריכות הזרקה): candidateSupportersForCharge, keysOf, nameSortKey
- *  קידום: לכתוב <שם>.contract.md + <שם>.test.mjs ← להעביר ל-new/atoms/. */
-export function candidateSupportersForCharge(charge, supporters, limit = 8) {
+/** חוט · candidate-supporters-for-charge — מועמדים לשיוך עסקה לכרטיס-תורם.
+ *  חוזה: candidate-supporters-for-charge.contract.md
+ *  חולץ כלשונו מ-maor/src/lib/nedarimSync.ts:279-302; השכנים keysOf +
+ *  nameSortKey הוזרקו כשקעים (חוק-1 — אפס import פנימי). */
+export function candidateSupportersForCharge(charge, supporters, limit = 8, keysOf, nameSortKey) {
     const ck = new Set(keysOf({ extId: charge.toremId, zeout: charge.zeout, phone: charge.phone, email: charge.email }));
     const cName = nameSortKey(charge.name || '');
     const scored = [];
@@ -29,6 +29,3 @@ export function candidateSupportersForCharge(charge, supporters, limit = 8) {
     scored.sort((a, b) => b.score - a.score);
     return scored.slice(0, limit).map((x) => x.sp);
 }
-/** 🧲 מילוי-אם-ריק (23.8, בקשת-הבעלים "שם יכנס לשם, טלפון לטלפון, הכל במקום"):
- *  פרטי-הקשר שהעסקה נושאת נכנסים לשדות-הכרטיס **הריקים** — לעולם לא דורסים
- *  ערך קיים (הכרטיס = מקור-האמת; העסקה רק משלימה חוסרים). */
