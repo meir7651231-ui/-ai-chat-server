@@ -1,0 +1,10 @@
+import { SUPPORT_MSG_MAX } from './support-msg-max.mjs';
+let f = 0;
+const chk = (name, ok) => { if (!ok) { console.error('✗ ' + name); f = 1; } };
+chk('ערך ביט-זהה 2000', SUPPORT_MSG_MAX === 2000);
+chk('מספר שלם', Number.isInteger(SUPPORT_MSG_MAX));
+chk('חיובי', SUPPORT_MSG_MAX > 0);
+chk('אורך 2001 נחתך ל-2000', 'א'.repeat(2001).slice(0, SUPPORT_MSG_MAX).length === 2000);
+const exact = 'ב'.repeat(2000);
+chk('אורך 2000 עובר בשלמות', exact.slice(0, SUPPORT_MSG_MAX) === exact);
+if (f) process.exit(1); console.log('✓ support-msg-max: 5 דוגמאות-חוזה — ירוק');

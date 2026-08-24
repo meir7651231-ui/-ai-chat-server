@@ -6,10 +6,12 @@ import { execFileSync } from 'node:child_process';
 const NEW = process.argv[2] || new URL('./new/', import.meta.url).pathname;
 if (!fs.existsSync(NEW)) { console.log('✓ חוק-החוזה: העץ החדש טרם קיים'); process.exit(0); }
 let fail = 0, tested = 0;
+const PII = /[a-zA-Z0-9._%+-]+@(gmail|walla|outlook|yahoo|hotmail)\.[a-z.]+|AIzaSy[A-Za-z0-9_-]{20,}|BEGIN [A-Z ]*PRIVATE KEY/;
 (function walk(d) { for (const e of fs.readdirSync(d, { withFileTypes: true })) {
   const f = path.join(d, e.name);
   if (e.isDirectory()) { walk(f); continue; }
   if (!/\.mjs$/.test(e.name) || /\.test\.mjs$/.test(e.name)) continue;
+  { const t = fs.readFileSync(f, 'utf8'); if (PII.test(t)) { console.error('🚨 חוק-6: זהות/סוד בתוך אטום: ' + path.relative(NEW, f)); fail = 1; continue; } }
   const base = f.replace(/\.mjs$/, '');
   const contract = base + '.contract.md', test = base + '.test.mjs';
   const rel = path.relative(NEW, f);
