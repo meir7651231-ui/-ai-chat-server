@@ -1,0 +1,6 @@
+dynamic callStats(dynamic calls) {
+  var list = (calls ?? []);
+  var noanswer = 0;
+  for (final c in list) if (c.outcome == 'noanswer') noanswer++;
+  return {'total': list.length, 'last': list.length ? list[list.length - 1].at : '', 'noanswer': noanswer};
+}

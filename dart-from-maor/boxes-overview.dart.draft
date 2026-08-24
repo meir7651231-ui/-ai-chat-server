@@ -1,0 +1,7 @@
+dynamic boxesOverview(dynamic db, dynamic q, dynamic status, dynamic sort, dynamic lastCollectionIso, dynamic boxTotal, dynamic smartFilter) {
+  var rows = db.tzBoxes.map((box) => ({'box': box, 'coordName': (db.tzCoordinators.firstWhere((c) => c.id == box.coordinatorId).name ?? ''), 'famName': (db.families.firstWhere((f) => f.id == box.famId).name ?? ''), 'last': lastCollectionIso(box), 'total': boxTotal(box)})).toList();
+  if (status) rows = rows.where((r) => r.box.status == status);
+  rows = smartFilter(q, rows, (r) => ['#' + r.box.num, r.box.num, r.coordName, ...r.coordName.split(RegExp(r'\s+')), r.famName]);
+  var cmp = {'num': (a, b) => ((int.tryParse(a.box.num.toString()) ?? 0 ?? 0)) - ((int.tryParse(b.box.num.toString()) ?? 0 ?? 0)), 'lastCollection': (a, b) => a.last.localeCompare(b.last), 'total': (a, b) => b.total - a.total};
+  return ([...rows]..sort(cmp[sort]));
+}

@@ -1,0 +1,3 @@
+dynamic boqTotal(dynamic a, dynamic boqLineAmount) {
+  return a.names.fold(0, (t, n) => t + boqLineAmount(n));
+}
