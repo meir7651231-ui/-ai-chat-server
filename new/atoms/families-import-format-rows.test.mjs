@@ -13,8 +13,9 @@ const fam2 = { name: 'כהן', fatherId: '123', phone: '050', mother: 'רחל', 
 eq(familiesImportFormatRows({ families: [fam2] })[1],
   ['כהן', '123', '050', 'רחל', '456', '052', 'צפת', 'הר', '', '', 'חסידי', '', 'הערה'], 'שורת-משפחה שגויה');
 
-// 3) 'אלמנה' ⇒ 'אלמן' (הכלה)
-eq(familiesImportFormatRows({ families: [{ maritalStatus: 'אלמנה' }] })[1][9], 'אלמן', 'אלמנה לא זוהתה');
+// 3) הכלה: 'אלמן ל"ע' ⇒ 'אלמן'; 'אלמנה' (נו"ן רגילה) ⇒ '' — כלשון-המקור
+eq(familiesImportFormatRows({ families: [{ maritalStatus: 'אלמן ל"ע' }] })[1][9], 'אלמן', 'הכלת-אלמן לא זוהתה');
+eq(familiesImportFormatRows({ families: [{ maritalStatus: 'אלמנה' }] })[1][9], '', 'אלמנה נתפסה בטעות (נו"ן סופית)');
 
 // 4) maritalStatus חסר ⇒ '' בלי קריסה
 eq(familiesImportFormatRows({ families: [{}] })[1][9], '', 'חסר-סטטוס קרס/שגוי');
