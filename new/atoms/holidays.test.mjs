@@ -1,0 +1,12 @@
+import { HOLIDAYS } from './holidays.mjs';
+let f = 0;
+const chk = (name, cond) => { if (!cond) { console.error(`✗ ${name}`); f = 1; } };
+chk('1 יום-כיפור', HOLIDAYS['Tishri 10'] === 'יום כיפור');
+chk('2 פורים בשני האדרים', HOLIDAYS['Adar 14'] === 'פורים' && HOLIDAYS['Adar II 14'] === 'פורים');
+const hanuka = ['Kislev 25', 'Kislev 26', 'Kislev 27', 'Kislev 28', 'Kislev 29', 'Kislev 30', 'Tevet 1', 'Tevet 2'];
+chk('3 חנוכה 8 רשומות', hanuka.every((k) => HOLIDAYS[k] === 'חנוכה'));
+chk('4 ג-טבת לא במפה', HOLIDAYS['Tevet 3'] === undefined);
+chk('5 בדיוק 33 מפתחות', Object.keys(HOLIDAYS).length === 33);
+chk('6 פורים-קטן', HOLIDAYS['Adar I 14'] === 'פורים קטן');
+if (f) process.exit(1);
+console.log('✓ holidays: 6 דוגמאות-חוזה — ירוק');
