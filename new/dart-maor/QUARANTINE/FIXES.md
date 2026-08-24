@@ -25,3 +25,7 @@
 ## apply-meta-partial — null מול undefined (תפס: אימות-עוין)
 ‏Dart `if (v == null) return` מבלבל JS `undefined` עם JSON `null`. JS מדלג רק על undefined,
 אז null-מפורש (ניקוי-שדה מ-Firestore) כן-מוקצה. **תיקון:** `if (!meta.containsKey(k)) return;`.
+
+## build-ics — 24:00 גלגול-חצות (תפס: אימות-עוין)
+‏JS `new Date('...T24:00:00')` תקין ב-V8 (מגלגל למחרת 00:00), אך Dart-guard `hh<24` דוחה
+⇒ נפילה לאירוע-יום-שלם במקום שעתי. **תיקון:** לשקף סמנטיקת-Date של JS (קבל 24:00), לא משמר-טווח.
