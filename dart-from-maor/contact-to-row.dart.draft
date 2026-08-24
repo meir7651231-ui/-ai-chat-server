@@ -1,0 +1,4 @@
+dynamic contactToRow(dynamic c) {
+  var notes = [c.org ? '🏢 ' + c.org : '', c.title, c.note].where(Boolean).join(' · ');
+  return {'name': c.fullName.trim(), 'phone': (c.phones[0].value ?? ''), 'phone2': (c.phones[1].value ?? ''), 'email': (c.emails[0] ?? ''), 'address': c.address, 'notes': notes};
+}

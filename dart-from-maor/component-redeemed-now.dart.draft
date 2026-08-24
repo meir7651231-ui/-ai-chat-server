@@ -1,0 +1,10 @@
+dynamic componentRedeemedNow(dynamic db, dynamic a, dynamic comp, dynamic holidays, dynamic itemOf, dynamic holidayAllowed, dynamic assignmentRedeemed) {
+  if (holidays) {
+  var ri = itemOf(db, comp);
+  if (ri.kind == 'holidayGift') {
+  var next = holidays.firstWhere((h) => holidayAllowed(ri, h.name));
+  if (next) return assignmentRedeemed(a, comp.id, next);
+}
+}
+  return assignmentRedeemed(a, comp.id);
+}

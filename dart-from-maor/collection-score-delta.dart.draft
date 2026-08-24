@@ -1,0 +1,9 @@
+dynamic collectionScoreDelta(dynamic box, dynamic date, dynamic amount, dynamic lastCollectionIso, [dynamic rules = {'emptyPts': 10, 'ilsPerPoint': 50, 'streakDays': 60, 'streakPts': 5}]) {
+  var pts = rules.emptyPts + _floor(amount / rules.ilsPerPoint);
+  var prev = lastCollectionIso(box);
+  if (prev) {
+  var days = _round((DateTime.parse(date + 'T12:00:00').millisecondsSinceEpoch - DateTime.parse(prev + 'T12:00:00').millisecondsSinceEpoch) / 86400000);
+  if (days >= 0 && days <= rules.streakDays) pts += rules.streakPts;
+}
+  return pts;
+}
