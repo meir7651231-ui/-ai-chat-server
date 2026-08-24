@@ -2,7 +2,7 @@
 > **מחולל אוטומטית מה-imports — אל תערוך ידנית** (`node machtzev/gen-wiring-doc.mjs`).
 > כל קופסה: אילו חוטים היא מחווטת + ההכרעה-החתומה שלה (מהחוזה) + הזהב שלה.
 
-**מלאי:** 663 אטומים · 34 קופסאות · מחווטים: 219/663 (33%)
+**מלאי:** 663 אטומים · 44 קופסאות · מחווטים: 398/663 (60%)
 
 ## #a11y
 הקופסה של סולם-הגופן ומתגי-הנגישות (P2 פער 31) — זום 0.8–1.6 בצעדי 0.1
@@ -54,6 +54,16 @@
 - **חוטים (14):** requeue-outcomes · terminal-outcomes · outcome-labels · start-campaign · current-id · apply-outcome · progress · is-done · undo-last · call-log-cap · append-call · pop-call · call-stats · campaign-csv-rows
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
+## #diary
+
+- **חוטים (22):** fmt-date · iso-local · iso-today · week-day-names · pad2 · time-to-min · min-to-hm · group-label-of · absence-reason-chips · makeup-eligibility · block-reason · build-slots · enrollments-for-session · weekly-room-sessions · inactive-room-courses · chip-style · room-info-label · heb-parts · holidays · sessions-of · term-of · plan-word
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #distribution
+מודול מתנדבים · יום-חלוקה · מסירות. מחווט את 14 חוטי-SHOP7 במקום אחד.
+- **חוטים (12):** advance-status · deliveries-of-day · deliveries-of-volunteer · eligible-assignments-for-day · day-progress · volunteer-load-hint · deliveries-of-family · pending-deliveries-today · delivery-list-lines · deliveries-csv-rows · volunteer-route-stops · term-of
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
 ## #donation-partition
 שכבת-פיצול-תרומות (מסלול-B) — פירוק `Supporter.donations[]` למסמכי-ענן
 - **חוטים (6):** shared-purpose-key · purpose-key-of · don-allowed-keys · explode-supporter · reassemble-donations · donation-partition-diff
@@ -67,6 +77,11 @@
 ## #export-rows
 
 - **חוטים (9):** families-import-format-rows · supporters-import-format-rows · events-csv-rows · term-of · heb-date-full · gematria · gem-year · heb-parts · ev-meta
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #families
+
+- **חוטים (22):** fmt-date · iso-today · iso-local · age-of · status-meta · cred-red-threshold · cred-help-text · tier-of · fam-enrollments · fam-live-enrollments · finder-axes · finder-axis-value · finder-matches · num-match · fam-history-of · marital-options · language-options · other · other-label · chip-style · marital-chip-style · term-of
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
 ## #guide
@@ -114,10 +129,30 @@
 - **חוטים (7):** photo-max · photo-max-dim · photo-max-len · can-add-photo · is-data-image · fit-dimensions · sanitize-photos
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
+## #platform
+
+- **חוטים (24):** slugify · is-valid-slug · all-modules · module-labels · all-off-config · org-link · norm-email · gen-join-code · org-join-link · org-join-full-code · parse-join-full-code · is-org-manager · org-enabled-modules · org-enabled-features · is-member · override-of · grantable-staff-features · is-grantable-feature · effective-config-for · allowed-designations-for · can-issue-receipt · approve-member · set-employee-override · remove-member
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #reenroll
+
+- **חוטים (16):** academic-year-label · next-year-dates · renew-of · is-renewed · enroll-summary · build-reenroll-rows · reenroll-counts · renew-targets · fresh-next-year-enrollment · next-year-course-draft · student-history · student-history-text · reenroll-csv-rows · reenroll-list-text · pay-bal · paid-of
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #reports
+
+- **חוטים (12):** fmt-date · in-range · range-label · paid-of · round2 · paid-in-range · balance-of · month-key · month-label · name-index · status-label · count-by
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
 ## #search
 חיפוש-חכם מלא: נרמול עברי + תעתיקים (עברית/אנגלית/רוסית/כינויים) +
 - **חוטים (11):** levenshtein · norm-search · xlat · rule-exact · rule-prefix · rule-plural · rule-contains · rule-skeleton · rule-typo · smart-score · smart-filter
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ✅
+
+## #shop
+מחווטת את 31 חוטי-מודול-החנות לכדי ה-API של העמודה. מקור-האמת:
+- **חוטים (35):** live-redemptions · item-of · holiday-allowed · item-remaining · effective-price · max-discount-pct · upcoming-holidays · holiday-names · assignment-redeemed · component-remaining · coupon-expiry · shop-holiday-due-days · needs-care-shop · shop-expiry-warn-days · expiring-intakes · upcoming-meetings · given-value · collected-paid · subsidy-total · product-assignments · component-redeemed-now · filter-assignments · filter-products · filter-items · filter-redemptions · intake-log · eligible-families · distribution-list-lines · redemptions-csv-rows · beneficiary-label · component-counts · term-of · date-in-range · heb-parts · iso-local
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
 ## #signup-wizard
 הקופסה של אשף-ההרשמה 5-השלבים של אורביט (SIGNUP3): תחום → גודל →
@@ -134,6 +169,16 @@
 - **חוטים (8):** shared-sup-key · sup-key-of · sup-keyed-cols · doc-skey · sup-key-map-of · sup-allowed-keys · strip-sup-key · strip-audit-meta
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
+## #supporters
+
+- **חוטים (45):** fmt-date · supporter-purposes · supporter-visible-for-designations · all-donation-purposes · sup-ils · sup-usd · sup-count · sup-last · sup-last-in-period · sup-total-ils · sup-score · sup-tier · tier-order · sup-score-bins · sup-avg-don · sup12m · chip-style · fix-phone · total-label · sup-don-events · personal-cal-entries · org-cal-entries · don-cal-month-line · norm-name · sup-name-keys · excel-serial-to-iso · parse-supporter-grid · parse-supporter-csv · apply-ayin-names · merge-hist · plan-supporter-import · merge-supporter-row · new-supporter-from-row · hok-cat · hok-effectively-active · hok-recorded-this-month · hok-due · hok-monthly-total · hok-method-label · term-of · norm-search · format-israeli-phone · parse-any-date · parse-csv · plan-add-name
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #telephony
+הגשר בין אשף-ההקמה של מאור למנוע-הטלפוניה הטהור. ממיר שדות-אשף
+- **חוטים (6):** empty-telephony-config · to-tenant-id · telephony-to-tenant · preview-telephony · next-closure · explain-one
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
 ## #templates
 הקופסה של `maor/src/lib/templates.ts` (ROADMAP-100 ‏#12) — נוסחי-הוואטסאפ
 - **חוטים (3):** template-defs · template-keys · render-template
@@ -147,6 +192,11 @@
 ## #tour
 הסיור-המודרך (spotlight) על המסכים האמיתיים — תסריט-הלגאסי מילה-במילה,
 - **חוטים (5):** tour-stop-label · tour-steps · tour-advance · spotlight-box · term-of
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #tzedaka
+קופסת-החיווט של מנוע קופות-הצדקה. כל 19 החוטים של
+- **חוטים (23):** tz-score-rules · tz-stale-days · last-collection-iso · collection-score-delta · box-total · coordinator-boxes · coordinator-total · grand-total · campaign-total · stale-boxes · needs-care-tzedaka · leaderboard · campaign-progress · filter-coordinators · boxes-overview · filter-collections · coordinator-print-lines · collections-csv-rows · build-tz-grid · term-of · date-in-range · iso-local · week-day-names
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
 ## #validate
@@ -174,5 +224,5 @@
 - **חוטים (7):** task-identity · open-tasks-for · done-today-for · task-overdue · task-stats-for · overdue-contact-task-drafts · pri-labels
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
-## אטומים-במלאי (טרם-חווטו): 444
+## אטומים-במלאי (טרם-חווטו): 265
 _ההתקדמות האמיתית = אחוז-המחווט (L10)._
