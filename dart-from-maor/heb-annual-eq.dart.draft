@@ -1,0 +1,21 @@
+dynamic isAdar(dynamic m) {
+  return ((m == 'Adar' || m == 'Adar I') || m == 'Adar II');
+}
+dynamic hebAnnualEq(dynamic anchor, dynamic query, dynamic scanHebYear) {
+  if (anchor.day == 30 && query.day == 1 && query.year) {
+  var undefined = scanHebYear(query.year);
+  var qi = seq.indexOf(query.month);
+  var prev = qi > 0 ? seq[qi - 1] : null;
+  var prevMatches = (prev == anchor.month || (anchor.month == 'Adar I' && prev == 'Adar'));
+  if (prev && prevMatches && !has30.has(prev)) return true;
+}
+  if (anchor.day != query.day) return false;
+  if ((isAdar(anchor.month) ?? isAdar(query.month))) {
+  if ((!isAdar(anchor.month) || !isAdar(query.month))) return false;
+  if (query.month == 'Adar') return true;
+  if (query.month == 'Adar II') return (anchor.month == 'Adar' || anchor.month == 'Adar II');
+  if (query.month == 'Adar I') return anchor.month == 'Adar I';
+  return false;
+}
+  return anchor.month == query.month;
+}

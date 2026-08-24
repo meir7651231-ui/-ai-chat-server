@@ -1,0 +1,3 @@
+dynamic hebYearNow(dynamic hebParts, dynamic now) {
+  return hebParts(now).year;
+}

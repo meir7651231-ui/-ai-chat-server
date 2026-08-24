@@ -1,0 +1,5 @@
+dynamic hebToIso(dynamic day, dynamic monthHe, dynamic hebYear, dynamic monthEnOf, dynamic hebToIsoEn) {
+  var en = monthEnOf(monthHe);
+  if (_falsy(en)) return null;
+  return hebToIsoEn(day, en, hebYear);
+}

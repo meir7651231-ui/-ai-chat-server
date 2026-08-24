@@ -1,0 +1,7 @@
+dynamic guardExport(dynamic blocked, dynamic notify) {
+  if (blocked) {
+  notify();
+  return false;
+}
+  return true;
+}
