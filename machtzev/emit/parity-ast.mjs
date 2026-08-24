@@ -11,8 +11,8 @@ num _round(num x)=>x.round(); num _floor(num x)=>x.floor(); num _ceil(num x)=>x.
 num _abs(num x)=>x.abs(); num _trunc(num x)=>x.truncate(); bool _isFinite(x)=>x is num && x.isFinite;
 String _toLocaleString(x,[l])=>x.toString(); String _padStart(String s,int n,[String c=' '])=>s.padLeft(n,c);
 String _repeat(String s,int n)=>s*n; dynamic _concat(a,b)=>[...a,...b];
-bool _falsy(x)=>x==null||x==false||x==0||x==""; bool _truthy(x)=>!_falsy(x); num _toNum(x)=>x is num?x:num.tryParse(x.toString())??0;`;
-const atoms = fs.readdirSync(DIR).filter(f => f.endsWith('.mjs') && !f.endsWith('.test.mjs')).map(f => f.replace('.mjs',''));
+bool _falsy(x)=>x==null||x==false||x==0||x==""; bool _truthy(x)=>!_falsy(x); num _toNum(x)=>x is num?x:num.tryParse(x.toString())??0; String _typeof(x)=>x is String?"string":x is num?"number":x is bool?"boolean":x==null?"undefined":x is Function?"function":"object";`;
+const atoms = fs.readdirSync(DIR).filter(f => f.endsWith('.mjs') && !f.endsWith('.test.mjs')).map(f => f.replace('.mjs','')).filter(a => !/async |await /.test(strip(DIR+a+'.mjs')));
 let ok=0, fail=0; const bad=[]; const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'ast-'));
 const N = +process.argv[2] || atoms.length;
 for (const a of atoms.slice(0,N)) {

@@ -50,6 +50,19 @@ function gen(n) {
       return `for (${init}; ${n.condition ? expr(n.condition) : ''}; ${n.incrementor ? expr(n.incrementor) : ''}) ${gen(n.statement)}`;
     }
     case K.WhileStatement: return `while (${expr(n.expression)}) ${gen(n.statement)}`;
+    case K.TryStatement: {
+      let r = `try ${gen(n.tryBlock)}`;
+      if (n.catchClause) r += ` catch (${n.catchClause.variableDeclaration ? n.catchClause.variableDeclaration.name.text : '_'}) ${gen(n.catchClause.block)}`;
+      if (n.finallyBlock) r += ` finally ${gen(n.finallyBlock)}`;
+      return r;
+    }
+    case K.SwitchStatement: {
+      const cs = n.caseBlock.clauses.map(c => c.kind === K.DefaultClause
+        ? `default:\n${c.statements.map(gen).join('\n')}`
+        : `case ${expr(c.expression)}:\n${c.statements.map(gen).join('\n')}`).join('\n');
+      return `switch (${expr(n.expression)}) {\n${cs}\n}`;
+    }
+    case K.EmptyStatement: return ';';
     case K.VariableDeclarationList: return n.declarations.map(d => `var ${d.name.text} = ${expr(d.initializer)};`).join(' ');
     default: return expr(n) + (n.kind === K.ExpressionStatement ? ';' : '');
   }
@@ -81,6 +94,12 @@ function expr(n) {
       return ts.tokenToString(n.operator) + expr(n.operand);
     case K.BinaryExpression: {
       const op = n.operatorToken.kind;
+      // typeof x === 'string'|'number'|'boolean'|'object'|'function'|'undefined'
+      const TM = { string: 'String', number: 'num', boolean: 'bool', object: 'Map', function: 'Function', undefined: 'Null' };
+      const tof = (side, other, neg) => side.kind === K.TypeOfExpression && other.kind === K.StringLiteral
+        ? `${neg ? '!(' : ''}${expr(side.expression)} is ${TM[other.text] || 'dynamic'}${neg ? ')' : ''}` : null;
+      if ([K.EqualsEqualsEqualsToken, K.EqualsEqualsToken].includes(op)) { const t = tof(n.left, n.right) || tof(n.right, n.left); if (t) return t; }
+      if ([K.ExclamationEqualsEqualsToken, K.ExclamationEqualsToken].includes(op)) { const t = tof(n.left, n.right, true) || tof(n.right, n.left, true); if (t) return t; }
       const l = expr(n.left), r = expr(n.right);
       if (op === K.BarBarToken) {
         const boolish = (x) => [K.BinaryExpression, K.PrefixUnaryExpression, K.ParenthesizedExpression].includes(x.kind)
@@ -119,10 +138,19 @@ function expr(n) {
           return `${obj}.fold(${expr(n.arguments[1])}, ${expr(n.arguments[0])})`;
         if (m === 'map') return `${obj}.map(${n.arguments.map(expr).join(', ')}).toList()`;
         if (m === 'toLocaleString') return `_toLocaleString(${obj}${n.arguments.length ? ', ' + n.arguments.map(expr).join(', ') : ''})`; // שקע — פורמט-מקומי
+        if (m === 'charCodeAt') return `${obj}.codeUnitAt(${n.arguments.map(expr).join(', ')})`;
+        if (m === 'substring' || m === 'substr') return `${obj}.substring(${n.arguments.map(expr).join(', ')})`;
+        if (m === 'indexOf') return `${obj}.indexOf(${n.arguments.map(expr).join(', ')})`;
+        if (m === 'toFixed') return `${obj}.toStringAsFixed(${n.arguments.map(expr).join(', ')})`;
+        if (m === 'sort') return `(${obj}..sort(${n.arguments.map(expr).join(', ')}))`;
+        if (m === 'flat') return `${obj}.expand((x) => x is List ? x : [x]).toList()`;
+        if (m === 'flatMap') return `${obj}.expand(${n.arguments.map(expr).join(', ')}).toList()`;
         const dm = STD[m] || m;
         return `${obj}.${dm}(${n.arguments.map(expr).join(', ')})`;
       }
       if (callee.kind === K.Identifier) {
+        if (callee.text === 'parseInt') return `int.tryParse(${expr(n.arguments[0])}.toString()) ?? 0`;
+        if (callee.text === 'parseFloat') return `double.tryParse(${expr(n.arguments[0])}.toString()) ?? 0`;
         if (callee.text === 'String') return `${expr(n.arguments[0])}.toString()`;
         if (callee.text === 'Number') return `_toNum(${expr(n.arguments[0])})`;
         if (callee.text === 'Boolean') return `_truthy(${expr(n.arguments[0])})`;
@@ -142,6 +170,8 @@ function expr(n) {
       const mm = n.text.match(/^\/([^]*)\/([gimsuy]*)$/);
       return `RegExp(r'${mm[1]}')`;
     }
+    case K.TypeOfExpression: return `_typeof(${expr(n.expression)})`;
+    case K.VoidExpression: return 'null';
     case K.SpreadElement: return `...${expr(n.expression)}`;
     case K.PostfixUnaryExpression: return expr(n.operand) + ts.tokenToString(n.operator);
     case K.ArrowFunction: case K.FunctionExpression: {
