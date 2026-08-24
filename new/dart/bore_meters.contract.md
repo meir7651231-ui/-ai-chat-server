@@ -1,8 +1,8 @@
 # חוזה · `boreMeters` (Dart)
 
-מקור-אמת (קדוש, חוק-4): `buildsmart/app_flutter/lib/logic/pressure_drop.dart:73-90`
-(‏`_boreMeters`). המפה-שקע: `lib/data/lipskey_verified_connections.dart:32-35`
-(‏`kBspInchToMm`). טיפוסי-הקלט: `EndType` (:24), `ConnectorEnd` (:43).
+מקור-אמת (קדוש, חוק-4): `buildsmart/app_flutter/lib/logic/pressure_drop.dart:72-93`
+(‏`_boreMeters`). המפה-שקע: const-מקומית `inchToMm` ב-`pressure_drop.dart:85-88`.
+טיפוסי-הקלט: `EndType` (`lipskey_verified_connections.dart:24`), `ConnectorEnd` (:32).
 
 ## חתימה
 ```dart
@@ -13,7 +13,7 @@ double? boreMeters(ConnectorEnd e, {required Map<String, int> bspInchToMm})
 - `e.type` — ‏`EndType` (6 ערכים סגורים: hdpeCompression · pexPress · copperPress ·
   bspMale · bspFemale · drainOpening).
 - `e.size` — מחרוזת-מידה. עבור DN: ספרה שלמה ("32"). עבור BSP: אינץ׳ עם/בלי `"` ("1/2\"").
-- `bspInchToMm` — **שקע** (חוק-3): מפת אינץ׳→מ״מ. ערכי-המקור (‏:32-35):
+- `bspInchToMm` — **שקע** (חוק-3): מפת אינץ׳→מ״מ. ערכי-המקור (‏pressure_drop.dart:85-88):
   `{'1/4':8, '3/8':10, '1/2':15, '3/4':20, '1':25, '1-1/4':32, '1-1/2':40, '2':50, '2-1/2':65}`.
 
 ## פלט / התנהגות (עוגני-שורה)

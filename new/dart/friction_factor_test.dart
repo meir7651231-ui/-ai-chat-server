@@ -1,6 +1,6 @@
 // 🧪 בדיקת-אטום · frictionFactor — מוכיחה בדיוק את דוגמאות-החוזה (חוק-4, דיבר 12).
 // מייבאת אך ורק את האטום-שלה (חוק-4): friction_factor.dart. שום אטום אחר.
-// pow025 המוזרק כאן = מימוש-Newton verbatim מהמקור (pressure_drop.dart:327-341) —
+// pow025 המוזרק כאן = מימוש-Newton verbatim מהמקור (pressure_drop.dart:325-339) —
 //   כדי שהענף הטורבולנטי ישוחזר ביט-בביט (כולל חוסר-הדיוק המכוון של Newton-5).
 // הרצה: dart run --enable-asserts friction_factor_test.dart  ⇒  exit 0.
 
@@ -8,7 +8,7 @@ import 'friction_factor.dart';
 
 // --- מימוש-השקע verbatim מהמקור (לצורך הבדיקה בלבד; לא אטום מיובא) ---
 double _srcSqrt(double x) {
-  // Newton's method, 5 iterations — verbatim pressure_drop.dart:334-341.
+  // Newton's method, 5 iterations — verbatim pressure_drop.dart:332-339.
   var r = x / 2;
   for (var i = 0; i < 5; i++) {
     r = 0.5 * (r + x / r);
@@ -17,7 +17,7 @@ double _srcSqrt(double x) {
 }
 
 double _srcPow025(double x) {
-  // verbatim pressure_drop.dart:327-332.
+  // verbatim pressure_drop.dart:325-330.
   final s = x > 0 ? x : 1e-9;
   final r1 = _srcSqrt(s);
   return _srcSqrt(r1);

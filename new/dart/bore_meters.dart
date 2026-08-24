@@ -1,9 +1,9 @@
 // ⚛️ אטום-Dart (דרגת-חוזה) · boreMeters
 // מוצא: buildsmart/app_flutter/lib/logic/pressure_drop.dart:73-90 (חוק-4 — התנהגות זהה, לא-משופרת).
-// טוהר: פונקציית top-level עצמאית, אפס import (רק שפה/סטנדרט). הקריאה-לשכן `kBspInchToMm`
-//        (const ממ-lipskey_verified_connections.dart) הופכה לשקע-פרמטר `bspInchToMm` (חוק-3).
-// טיפוסי-הקלט EndType/ConnectorEnd מוגדרים מקומית כערכי-קלט טהורים (מקור: אותו קובץ-מוצא,
-//        lib/data/lipskey_verified_connections.dart:24 — enum, :43 — class), אפס תלות בשכן.
+// טוהר: פונקציית top-level עצמאית, אפס import (רק שפה/סטנדרט). ה-const-המקומית `inchToMm`
+//        (pressure_drop.dart:85-88) הופכה לשקע-פרמטר `bspInchToMm` (חוק-3).
+// טיפוסי-הקלט EndType/ConnectorEnd מוגדרים מקומית כערכי-קלט טהורים (מקור:
+//        lib/data/lipskey_verified_connections.dart:24 — enum, :32 — class), אפס תלות בשכן.
 //
 // קלט:  e            — קצה-מחבר: e.type (EndType) + e.size (String, "32" או '1/2"').
 //       bspInchToMm  — שקע: מפת אינץ׳-BSP → קוטר-פנימי במ״מ (מקור-אמת יחיד).
@@ -12,7 +12,7 @@
 /// מערכת-הקצה — הועתק verbatim מ-lipskey_verified_connections.dart:24 (חוק-4).
 enum EndType { hdpeCompression, pexPress, copperPress, bspMale, bspFemale, drainOpening }
 
-/// קצה-מחבר — צורת-קלט טהורה (type + size), verbatim מ-:43.
+/// קצה-מחבר — צורת-קלט טהורה (type + size), verbatim מ-:32.
 class ConnectorEnd {
   final EndType type;
   final String size;

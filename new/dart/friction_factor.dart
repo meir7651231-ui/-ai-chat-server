@@ -1,6 +1,6 @@
 // ⚛️ אטום-חוט Dart · frictionFactor — מקדם-חיכוך Darcy מודע-ריינולדס למים בצינור חלק.
-// מוצא (קדוש, חוק-4): buildsmart/app_flutter/lib/logic/pressure_drop.dart:319-325 (_frictionFactor).
-// טוהר (חוק-1): אפס import; אפס תלות-אטום. קריאת-השכן _pow025 (pressure_drop.dart:327) הפכה
+// מוצא (קדוש, חוק-4): buildsmart/app_flutter/lib/logic/pressure_drop.dart:317-323 (_frictionFactor).
+// טוהר (חוק-1): אפס import; אפס תלות-אטום. קריאת-השכן _pow025 (call:322, def pressure_drop.dart:325) הפכה
 //   לשקע-מוזרק [pow025] (חוק-3) — האטום לא יודע איך מחשבים x^0.25, רק שהוא מקבל חוט כזה.
 // התנהגות משומרת ביט-בביט מהמקור (חוק-4 — לא "משפרים"): הסף 100 (מתחת ⇒ 0.64), טווח
 //   לאמינרי 64/Re, וברז Blasius 0.316/pow025(Re). אי-הרציפות ב-Re=2300 נשמרת כמות-שהיא.
