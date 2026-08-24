@@ -63,3 +63,4 @@ for (const f of atoms) {
 }
 console.log(`🔎 סורק-הפניות-חופשיות: ${atoms.length} אטומים · ${bad} עם הפניה-חופשית חשודה`);
 hits.forEach(h => console.log('  🚨 ' + h));
+if (process.argv.includes('--gate')) process.exit(bad > 0 ? 1 : 0);
