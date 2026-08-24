@@ -1,8 +1,8 @@
-/** 🪨 טיוטת-חוט (דרגת-מחצבה) · findCaller — חולל אוטומטית, טרם-קודם לדרגת-חוזה.
- *  מוצא: maor/src/lib/callerId.ts:70-112 (43 שורות) · תורגם TS→JS מכונה.
- *  שקעים-מועמדים (קריאות-חוץ שצריכות הזרקה): findCaller, phoneKey
- *  קידום: לכתוב <שם>.contract.md + <שם>.test.mjs ← להעביר ל-new/atoms/. */
-export function findCaller(db, raw) {
+/** חוט · find-caller — זיהוי-מתקשר לפי מספר: משפחה→בן-משפחה→תורם→מתנדב→רכז.
+ *  חוזה: find-caller.contract.md
+ *  חולץ כלשונו מ-maor/src/lib/callerId.ts:70-112 (תורגם TS→JS);
+ *  השכן phoneKey הוזרק כשקע (חוק-1 — אפס import פנימי). */
+export function findCaller(db, raw, phoneKey) {
     const key = phoneKey(raw);
     if (key.length < 6)
         return null; // קצר מדי = לא בר-התאמה בטוחה (הימנעות מ-false-positive)

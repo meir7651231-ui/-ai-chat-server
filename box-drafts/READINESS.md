@@ -8,7 +8,7 @@
 | components-families | 20 | 13 | 7 | 0 | 0 | 0 | — | 🟡 |
 | components-platform | 24 | 12 | 12 | 0 | 0 | 0 | — | 🟡 |
 | components-reports | 13 | 8 | 5 | 0 | 0 | 0 | — | 🟡 |
-| components-shop | 31 | 13 | 18 | 0 | 0 | 0 | — | 🟡 |
+| components-shop | 31 | 17 | 14 | 0 | 0 | 0 | — | 🟡 |
 | components-shop7 | 14 | 11 | 3 | 0 | 0 | 0 | — | 🟡 |
 | components-supporters | 41 | 15 | 26 | 0 | 0 | 0 | — | 🟡 |
 | components-telephony | 6 | 3 | 3 | 0 | 0 | 0 | — | 🟡 |
@@ -17,19 +17,19 @@
 | lib-ai | 4 | 1 | 1 | 0 | 2 | 0 | — | 🟡 |
 | lib-annualReport | 5 | 4 | 0 | 0 | 1 | 0 | — | 🟡 |
 | lib-audit | 5 | 3 | 2 | 0 | 0 | 0 | — | 🟡 |
-| lib-ayin | 30 | 15 | 15 | 0 | 0 | 0 | — | 🟡 |
-| lib-callerId | 4 | 3 | 1 | 0 | 0 | 0 | — | 🟡 |
+| lib-ayin | 30 | 16 | 14 | 0 | 0 | 0 | — | 🟡 |
+| lib-callerId | 4 | 4 | 0 | 0 | 0 | 0 | — | 🟢 מוכנה |
 | lib-cloud-diff | 11 | 8 | 3 | 0 | 0 | 0 | — | 🟡 |
 | lib-cloud-merge | 4 | 2 | 2 | 0 | 0 | 0 | — | 🟡 |
-| lib-cloud | 36 | 4 | 31 | 0 | 1 | 0 | — | 🟡 |
-| lib-cloudConfig | 35 | 13 | 22 | 0 | 0 | 0 | — | 🟡 |
+| lib-cloud | 36 | 5 | 30 | 0 | 1 | 0 | — | 🟡 |
+| lib-cloudConfig | 35 | 16 | 19 | 0 | 0 | 0 | — | 🟡 |
 | lib-cloudCrypto | 5 | 3 | 2 | 0 | 0 | 0 | — | 🟡 |
 | lib-config | 36 | 13 | 13 | 2 | 8 | 0 | — | 🟡 |
 | lib-crypto | 7 | 2 | 5 | 0 | 0 | 0 | — | 🟡 |
 | lib-csvx | 7 | 5 | 1 | 0 | 1 | 0 | — | 🟡 |
 | lib-customExport | 3 | 2 | 1 | 0 | 0 | 0 | — | 🟡 |
 | lib-date-util | 4 | 1 | 3 | 0 | 0 | 0 | — | 🟡 |
-| lib-dedup | 13 | 5 | 8 | 0 | 0 | 0 | — | 🟡 |
+| lib-dedup | 13 | 6 | 7 | 0 | 0 | 0 | — | 🟡 |
 | lib-dialer | 14 | 10 | 4 | 0 | 0 | 0 | — | 🟡 |
 | lib-donationPartition | 6 | 4 | 2 | 0 | 0 | 0 | — | 🟡 |
 | lib-exportGate | 3 | 1 | 2 | 0 | 0 | 0 | — | 🟡 |
@@ -42,7 +42,7 @@
 | lib-imagePick | 4 | 2 | 1 | 0 | 1 | 0 | — | 🟡 |
 | lib-lock | 8 | 3 | 3 | 0 | 2 | 0 | — | 🟡 |
 | lib-navhist | 5 | 2 | 3 | 0 | 0 | 0 | — | 🟡 |
-| lib-nedarimSync | 15 | 8 | 7 | 0 | 0 | 0 | — | 🟡 |
+| lib-nedarimSync | 15 | 9 | 6 | 0 | 0 | 0 | — | 🟡 |
 | lib-netcheck | 3 | 1 | 1 | 0 | 1 | 0 | — | 🟡 |
 | lib-photoGallery | 7 | 4 | 3 | 0 | 0 | 0 | — | 🟡 |
 | lib-pricing | 7 | 4 | 1 | 0 | 2 | 0 | — | 🟡 |
@@ -63,4 +63,4 @@
 | lib-wa | 5 | 2 | 3 | 0 | 0 | 0 | — | 🟡 |
 | lib-worktasks | 7 | 3 | 4 | 0 | 0 | 0 | — | 🟡 |
 
-**1/60 קופסאות מוכנות-לחיווט · 0 חורי-כיסוי (אזעקה אם >0 אחרי מחצבה-ריקה)**
+**2/60 קופסאות מוכנות-לחיווט · 0 חורי-כיסוי (אזעקה אם >0 אחרי מחצבה-ריקה)**

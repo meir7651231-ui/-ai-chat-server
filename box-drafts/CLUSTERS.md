@@ -5,7 +5,7 @@
 
 ## אשכול-הקונפיג (src/lib/config.ts) — הליבה של White-label
 - ~~`termOf`~~ ✅ קודם (term-of — טהור-נקי; הטווח ברישום היה מזוהם)
-- `normalizeSite` · `normalizeConfig` — חיטוי-קונפיג (allowlists מאטומי-נתונים) — **נותרו** (גדולים, עבודת-יד/גל)
+- ~~`normalizeSite`~~ ✅ (make-normalize-site — מפעל, שקעי safeHttpsUrl+SITE_LANGS) · ~~`normalizeConfig`~~ ✅ (make-normalize-config — מפעל, 7 שקעים)
 - ~~`employeeSignUpError`~~ ✅ · ~~`resolveOrgConfig`~~ ✅ (שקע normalizeConfig) · ~~`orgSlugFromUrl`~~ ✅ (search⇒פרמטר)
 - ⚠️ `SUPER_ADMIN_EMAILS` נשאר בחוץ (חוק-6) — בקופסה יוזרק כערך-הצבה
 
