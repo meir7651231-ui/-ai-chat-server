@@ -2,7 +2,7 @@
 export function stripAuditMeta(meta) {
     if (!('audit' in meta))
         return meta;
-    const { audit: _a, ...rest } = meta;
-    void _a;
+    const rest = { ...meta };
+    delete rest.audit;
     return rest;
 }

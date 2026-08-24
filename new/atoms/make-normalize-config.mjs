@@ -9,6 +9,13 @@
 export function makeNormalizeConfig(deps) {
   const { DEFAULT_CONFIG, INTEGRATION_KEYS, INTEGRATION_SETTING_KEYS, MOTION_KEYS, TEMPLATE_KEYS, normalizeSite, normalizeTelephony } = deps;
   "use strict";
+  /** צבע-CSS בטוח בלבד (hex/rgb/hsl/keyword) — חוסם הזרקת url() וכו' ל-`--accent`.
+   *  מוצא: maor/src/lib/config.ts:866-872 כלשונו (פונקציה-טהורה קטנה ⇒ מוטמעת, חוק-1). */
+  function isSafeAccent(a) {
+      return (/^#([0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(a) ||
+          /^(?:rgb|rgba|hsl|hsla)\([0-9.,%\s/]+\)$/i.test(a) ||
+          /^[a-zA-Z]{3,20}$/.test(a));
+  }
   /** נרמול שדה ה-firebase — נשמר רק אם ארבעת שדות החובה הם מחרוזות לא-ריקות. */
   function normalizeFirebase(raw) {
       if (!raw || typeof raw !== 'object' || Array.isArray(raw))

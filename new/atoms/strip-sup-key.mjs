@@ -2,8 +2,8 @@
 export function stripSupKey(data) {
     if (!('skey' in data))
         return data;
-    const { skey: _s, ...rest } = data;
-    void _s;
+    const rest = { ...data };
+    delete rest.skey;
     return rest;
 }
 /**
