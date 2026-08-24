@@ -13,5 +13,6 @@
    (‏toISOString ב-UTC+3 היה מחזיר "2026-08-23")
 4. ‏now=new Date(2026,11,31,23,59) ⇒ "2026-12-31"
 5. בלי now (ברירת-מחדל): הפלט = ‏isoLocal(עכשיו) — תואם ‎/^\d{4}-\d{2}-\d{2}$/‎.
-**מוצא:** ‏maor/src/lib/date-util.ts:9-13 (המקור); עותקים-עוטפים ביט-זהים ב-5 מודולים —
-courses/diary/families/reports/supporters (‏lib.ts) — כפילות-6 שאוחדה לחוט-יחיד.
+**מוצא:** ‏maor/src/lib/date-util.ts:9-11 (המקור); עותקים-עוטפים זהים-התנהגותית ב-5 מודולים —
+courses/families/reports/supporters (‏lib.ts, עטיפה ישירה על isoToday מ-date-util) +
+diary (‏lib.ts, דרך localIso⇒isoLocal — טקסט שונה, התנהגות זהה) — כפילות-6 שאוחדה לחוט-יחיד.

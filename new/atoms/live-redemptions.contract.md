@@ -13,5 +13,5 @@
 4. אף אחד לא מבוטל ([{id:'r1'},{id:'r2'}]) ⇒ שניהם — אברי-הפלט הם אותן
    רפרנסות (filter לא מעתיק)
 5. ‏voidedAt:'' (falsy) ⇒ המימוש נחשב חי
-**מוצא:** maor/src/components/shop/lib.ts:26-28 (‏liveRedemptions),
+**מוצא:** maor/src/components/shop/lib.ts:25-27 (‏liveRedemptions),
 חולץ כלשונו — אפס שקעים.

@@ -1,0 +1,13 @@
+/** חוט · thanks-prompt — בונה-פרומפט למכתב-תודה-לתורם; שורות-רשות רק כשהשדה מסופק.
+ *  חוזה: thanks-prompt.contract.md
+ *  חולץ כלשונו מ-maor/src/lib/ai.ts:46-60. */
+export function thanksPrompt(inp) {
+  return [
+    'כתוב מכתב תודה קצר (4-6 שורות), חם ואישי, בעברית, מארגון "' + (inp.orgName || 'הארגון') + '"',
+    'לתורם/ת בשם "' + inp.supporterName + '" על תרומה של ' + inp.lastAmount + '.',
+    inp.designation ? 'התרומה יועדה ל: ' + inp.designation + '.' : '',
+    inp.totalSoFar ? 'סה"כ תרומותיו/ה עד כה: ' + inp.totalSoFar + ' — אפשר לרמוז לנאמנות בעדינות.' : '',
+    'בלי הגזמות, בלי סופרלטיבים ריקים, בלי לציין סכומים מעבר לנאמר. לסיים בברכה חמה.',
+    'להחזיר את המכתב בלבד — בלי הקדמות.',
+  ].filter(Boolean).join('\n');
+}

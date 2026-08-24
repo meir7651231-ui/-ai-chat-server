@@ -12,5 +12,5 @@
 3. ‏new Date(2025,11,31,23,59) ⇒ "2025-12-31" — מקומי, בלי הזחת-UTC
 4. השקע נקרא בדיוק פעם אחת, עם אותו ‏d, והפלט הוא בדיוק ערך-ההחזרה שלו
    (שקע-דמה ‏()=>'X' ⇒ 'X')
-**מוצא:** maor/src/components/diary/lib.ts:25-27 (‏localIso); השכן ‏isoLocal
+**מוצא:** maor/src/components/diary/lib.ts:24-26 (‏localIso); השכן ‏isoLocal
 מ-date-util הפך לשקע (חוק-1).

@@ -14,5 +14,5 @@
 4. ‏db={attnDone:{b:0}} ⇒ שלושתן — ערך falsy אינו "טופל"
 5. השקע נקרא בדיוק עם ‏(db,todayIso,config) שהאטום קיבל — פס-העברה שקוף
 6. השקע מחזיר [] ⇒ []
-**מוצא:** maor/src/components/shop8/lib.ts:141-144 (‏liveSuggestions);
+**מוצא:** maor/src/components/shop8/lib.ts:140-143 (‏liveSuggestions);
 השכן ‏suggestions הפך לשקע (חוק-1).

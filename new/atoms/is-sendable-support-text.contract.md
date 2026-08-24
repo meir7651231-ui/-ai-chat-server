@@ -9,5 +9,5 @@
 ‏'שלום'→true · ‏'  היי  '→true (רווחי-קצה לא פוסלים) · ‏''→false ·
 ‏'   '→false (רק-רווחים ⇒ ריק אחרי ניקוי) · ‏'\n\t'→false ·
 עם שקע-זקיף ‏()=>'' ⇒ ‏'שלום'→false (האטום סומך על השקע בלבד — חוק-5)
-**מוצא:** maor/src/lib/supportChat.ts:41-44 (‏isSendableSupportText — "האם
+**מוצא:** maor/src/lib/supportChat.ts:40-43 (‏isSendableSupportText — "האם
 הטקסט שליח (לא-ריק אחרי ניקוי)"). השכן sanitizeSupportText הפך לשקע (חוק-1).

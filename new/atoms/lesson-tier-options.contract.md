@@ -14,5 +14,5 @@
 5. ‏{lessonPrice:100, lessonPrice1:80, lessonPrice2:60, lessonPrice3:40} ⇒
    4 שורות בסדר ‏''→'1'→'2'→'3'
 6. ‏{lessonPrice:100, lessonPrice2:0} ⇒ שורה אחת — מחיר-רמה 0 = falsy, לא נכנס
-**מוצא:** maor/src/components/courses/lib.ts:271-277 (‏lessonTierOptions),
+**מוצא:** maor/src/components/courses/lib.ts:270-276 (‏lessonTierOptions),
 חולץ כלשונו — אפס שקעים.

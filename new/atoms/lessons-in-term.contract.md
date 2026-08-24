@@ -15,4 +15,4 @@
 6. ‏(99,'week','once') ⇒ 1 — חד-פעמי מתעלם מתדירות
 7. ‏(NaN,'week','weekly') ⇒ 0 · ‏(-3,'week','weekly') ⇒ 0 · ‏term לא-מוכר ⇒ 0
 **מוצא:** maor/src/components/courses/lib.ts:213 (‏WEEKS_PER_MONTH) +
-237-260 (‏lessonsInTerm), חולץ כלשונו — אפס שקעים.
+236-259 (‏lessonsInTerm), חולץ כלשונו — אפס שקעים.

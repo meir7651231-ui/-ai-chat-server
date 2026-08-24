@@ -16,5 +16,5 @@
    ‏+ kevaId → true (גם חיוב-סולה נחשב "חיות"; האחרון קובע).
 7. ‏kevaId + ‏hist=[{clearer:'אשראי',d:'2026-08-01'},{clearer:'נדרים',d:'2026-03-01'}]
    → false (חיוב שאינו נדרים/סולה לא מחיה; הנדרים האחרון לפני 5 חודשים).
-**מוצא:** maor/src/components/supporters/lib.ts:694-707 (‏hokEffectivelyActive, תיקון 20.8)
-+ ‏monthsAgoIso הפרטי (שם:687-692) שהוטמע כלשונו.
+**מוצא:** maor/src/components/supporters/lib.ts:694-704 (‏hokEffectivelyActive, תיקון 20.8)
++ ‏monthsAgoIso הפרטי (שם:682-687) שהוטמע כלשונו.

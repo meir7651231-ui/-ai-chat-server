@@ -12,5 +12,5 @@
 3. ‏'supporters.export' ⇒ false — דגל רגיל (הגבלה-בלבד).
 4. ‏'' ⇒ false — ריק לעולם אינו ברשימה.
 5. ‏'Supporters.Delete' ⇒ false — הקבוצה רגישת-רישיות, אין נירמול.
-**מוצא:** maor/src/components/platform/lib.ts:194-204 (‏isGrantableFeature,
+**מוצא:** maor/src/components/platform/lib.ts:194-196 (‏isGrantableFeature,
 היררכיית ORGADMIN). השכן GRANTABLE_STAFF_FEATURES הפך לשקע (חוק-1).

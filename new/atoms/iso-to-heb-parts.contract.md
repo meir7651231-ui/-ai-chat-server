@@ -18,5 +18,5 @@
 ‏'שטויות'→null (תבנית) · ‏'2026-8-6'→null (בלי ריפוד — נכשל ב-regex) ·
 ‏'9999-99-99'→null (עובר-regex אך ‏Date לא-חוקי) ·
 חודש שהשקע לא מכיר (‏monthHeOf⇒'') ⇒ null
-**מוצא:** maor/src/lib/hebdate.ts:107-116 (‏isoToHebParts — "לועזי→עברי").
+**מוצא:** maor/src/lib/hebdate.ts:106-115 (‏isoToHebParts — "לועזי→עברי").
 השכנים hebParts (‏hebrew.ts) ו-monthHeOf הפכו לשקעים (חוק-1).

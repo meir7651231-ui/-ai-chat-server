@@ -1,6 +1,6 @@
 /** חוט · lesson-tier-options — אופציות רמות-ההנחה פר-שיעור לבורר.
  *  חוזה: lesson-tier-options.contract.md
- *  חולץ כלשונו מ-maor/src/components/courses/lib.ts:271-277 — אפס שקעים. */
+ *  חולץ כלשונו מ-maor/src/components/courses/lib.ts:270-276 — אפס שקעים. */
 export function lessonTierOptions(c) {
     const out = [{ v: '', t: 'מחיר מלא · ₪' + (c.lessonPrice || 0) }];
     if (c.lessonPrice1)

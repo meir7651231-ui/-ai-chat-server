@@ -6,5 +6,5 @@
 **דוגמאות מחייבות:**
 ‏'he'→true · ‏'yi'→true · ‏'en'→false · ‏'fr'→true (הכלל עיוור — כל מה
 שאינו 'en' נחשב RTL) · ‏''→true (מחרוזת-ריקה ≠ 'en')
-**מוצא:** maor/src/lib/publicSite.ts:34-36 (‏isRtlLang — "האם השפה כותבת
+**מוצא:** maor/src/lib/publicSite.ts:34-37 (‏isRtlLang — "האם השפה כותבת
 מימין-לשמאל"). טהור-מלידה, אפס שקעים.

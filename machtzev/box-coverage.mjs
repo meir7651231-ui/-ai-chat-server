@@ -10,6 +10,10 @@ import fs from 'node:fs';
 const ROOT = new URL('..', import.meta.url).pathname;
 const atoms = new Set(fs.readdirSync(ROOT + 'new/atoms').map(f => f.replace(/\..*$/, '')));
 const quarry = new Set(fs.readdirSync(ROOT + 'quarry').map(f => f.replace(/@.*$/, '')));
+// טיוטות שהוכרעו כחיווט-קופסה (מדף io-wiring — סוף ריקון-המחצבה 24.8)
+const IO_DRAFTS = new Set(fs.existsSync(ROOT + 'box-drafts/io-wiring')
+  ? fs.readdirSync(ROOT + 'box-drafts/io-wiring').filter(f => f.endsWith('.mjs')).map(f => f.replace(/@.*$/, '').replace(/_/g, '-'))
+  : []);
 
 // גבולות-IO ידועים (הכרעה: אלה חיווט-קופסה — שקעים מוזרקים, לא אטומים)
 const IO_RE = /^(download|print|apply|register|init|pick|read|write|save|clear|load)[A-Z]/;
@@ -36,8 +40,11 @@ for (const bd of fs.readdirSync(ROOT + 'box-drafts').filter(f => f.endsWith('.bo
   let have = 0, inq = 0, clustered = 0; const io = [], law6 = [], missing = [];
   for (const w of wires) {
     const ns = names(w);
-    if (ns.some(n => atoms.has(n))) have++;
+    // גם שם-מפורק-בהתנגשות: <שם>-<סיומת-הקופסה> (needs-care-shop)
+    const suffixed = ns.map(n => n + '-' + box.split('-').pop());
+    if (ns.some(n => atoms.has(n)) || suffixed.some(n => atoms.has(n))) have++;
     else if (ns.some(n => quarry.has(n))) inq++;
+    else if (ns.some(n => IO_DRAFTS.has(n))) io.push(w);
     else if (LAW6.has(w)) law6.push(w);
     else if (IO_RE.test(w) || IO_NAMES.has(w)) io.push(w);
     else if (CLUSTERED.has(w)) clustered++;

@@ -15,5 +15,5 @@
 5. עם todayIso='2026-08-24' והשקע-מהחוזה: ‏[{hok:{active:true,amount:200,cur:'₪',kevaId:'פג'}},
    ‏{hok:{active:true,amount:50,cur:'₪'}}] → 50 (הפגה מנוכה); אותה רשימה **בלי** todayIso → 250
    (בלי ניכוי — השקע לא נקרא).
-**מוצא:** maor/src/components/supporters/lib.ts:736-744 (‏hokMonthlyTotal). השכן
+**מוצא:** maor/src/components/supporters/lib.ts:734-742 (‏hokMonthlyTotal). השכן
 hokEffectivelyActive הפך לשקע (חוק-1 — אפס import פנימי).

@@ -1,6 +1,6 @@
 /** חוט · lessons-in-term — מספר-שיעורים בתקופת-תמחור לפי תדירות.
  *  חוזה: lessons-in-term.contract.md
- *  חולץ כלשונו מ-maor/src/components/courses/lib.ts:213+237-260;
+ *  חולץ כלשונו מ-maor/src/components/courses/lib.ts:213+236-259;
  *  הקבוע-השכן WEEKS_PER_MONTH הוגדר מקומית (ערך, לא import — חוק-1). */
 export const WEEKS_PER_MONTH = 52 / 12;
 

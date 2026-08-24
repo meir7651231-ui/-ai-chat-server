@@ -13,5 +13,5 @@
 3. ‏D={hok:{active:true}} (בלי day) עם A ⇒ ‏[A,D] → ‏[D,A] (חסר-day ⇒ 0 ⇒ ראשון).
 4. ‏[] → ‏[] (ריק בטוח).
 5. מערך-הקלט לא משתנה: אחרי הקריאה ‏[A,B,C] נשאר בסדרו המקורי (filter יוצר עותק — המיון על העותק).
-**מוצא:** maor/src/components/supporters/lib.ts:728-732 (‏hokDue). השכנים
+**מוצא:** maor/src/components/supporters/lib.ts:726-730 (‏hokDue). השכנים
 hokEffectivelyActive + hokRecordedThisMonth הפכו לשקעים (חוק-1 — אפס import פנימי).

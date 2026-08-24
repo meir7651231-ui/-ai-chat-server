@@ -1,6 +1,6 @@
 /** חוט · hok-effectively-active — האם הו"ק אפקטיבית-פעילה. חוזה: hok-effectively-active.contract.md
- *  חולץ כלשונו מ-maor/src/components/supporters/lib.ts:694-707; העוזר-הפרטי
- *  monthsAgoIso (שם:687-692) הוטמע כלשונו — לא שקע. */
+ *  חולץ כלשונו מ-maor/src/components/supporters/lib.ts:694-704; העוזר-הפרטי
+ *  monthsAgoIso (שם:682-687) הוטמע כלשונו — לא שקע. */
 
 /** חודשים-אזרחיים מאז תאריך-ISO עד היום (0 = אותו חודש). ריק ⇒ Infinity. */
 function monthsAgoIso(iso, todayIso) {

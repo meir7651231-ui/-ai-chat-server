@@ -11,5 +11,5 @@
 4. ‏(c0,'') ⇒ 100 — מחיר מלא
 5. ‏({lessonPrice:100, lessonPrice1:0},'1') ⇒ 100 — מחיר-רמה 0 = falsy ⇒ מלא
 6. ‏({},'2') ⇒ 0 — אין שום מחיר
-**מוצא:** maor/src/components/courses/lib.ts:263-268 (‏lessonPriceForTier),
+**מוצא:** maor/src/components/courses/lib.ts:262-267 (‏lessonPriceForTier),
 חולץ כלשונו — אפס שקעים.
