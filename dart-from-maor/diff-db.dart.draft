@@ -1,0 +1,24 @@
+dynamic diffDb(dynamic prev, dynamic next, dynamic entityCollections, dynamic metaKeys, dynamic sameJson, dynamic metaOf) {
+  var sets = [];
+  var deletes = [];
+  for (final col in entityCollections) {
+  var prevList = prev[col];
+  var nextList = next[col];
+  if (prevList == nextList) continue;
+  var prevById = <dynamic, dynamic>{};
+  for (final item in nextList) {
+  var old = prevById.get(item.id);
+  prevById.delete(item.id);
+  if ((_falsy(old) || !sameJson(old, item))) sets.add({'col': col, 'id': item.id, 'data': item});
+}
+  for (final id in prevById.keys()) deletes.add({'col': col, 'id': id});
+}
+  var meta = null;
+  for (final k in metaKeys) {
+  if (!sameJson(prev[k], next[k])) {
+  meta = metaOf(next);
+  break;
+}
+}
+  return {'sets': sets, 'deletes': deletes, 'meta': meta};
+}

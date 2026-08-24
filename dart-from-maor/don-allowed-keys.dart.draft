@@ -1,0 +1,4 @@
+dynamic donAllowedKeys(dynamic allowed, dynamic sharedPurposeKey) {
+  var clean = [...<dynamic>{...allowed.map((s) => s.trim()).toList().where(Boolean)}].sublist(0, 29);
+  return [...clean, sharedPurposeKey];
+}

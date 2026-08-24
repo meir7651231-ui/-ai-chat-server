@@ -1,0 +1,3 @@
+dynamic donationSplitOn(dynamic cfg) {
+  return cfg.donationSplit == true;
+}
