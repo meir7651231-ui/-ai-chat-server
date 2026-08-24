@@ -2,7 +2,7 @@
 > **מחולל אוטומטית מה-imports — אל תערוך ידנית** (`node machtzev/gen-wiring-doc.mjs`).
 > כל קופסה: אילו חוטים היא מחווטת + ההכרעה-החתומה שלה (מהחוזה) + הזהב שלה.
 
-**מלאי:** 663 אטומים · 22 קופסאות · מחווטים: 128/663 (19%)
+**מלאי:** 663 אטומים · 34 קופסאות · מחווטים: 219/663 (33%)
 
 ## #a11y
 הקופסה של סולם-הגופן ומתגי-הנגישות (P2 פער 31) — זום 0.8–1.6 בצעדי 0.1
@@ -19,6 +19,21 @@
 - **חוטים (5):** phone-key · find-caller · caller-kind-label · family-context · term-of
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
+## #cloud-crypto
+הקופסה שמחווטת את מנוע הצפנת-הענן הדורמנטית של מאור — הצפנה/פענוח
+- **חוטים (6):** is-enc-doc · encrypt-doc · decrypt-doc · create-cloud-key · open-cloud-key · is-encrypted
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #cloud-diff
+המנוע-הטהור שמחשב מה לדחוף ל-Firestore — מודל: אוסף פר-סוג-ישות
+- **חוטים (11):** entity-collections · col-path · meta-path · env-path · donations-col · donations-path · strip-supporter-donations · meta-of · diff-db · full-db-diff · empty-diff
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #cloud-merge
+קופסת-החיבורים של צד-הקבלה בסנכרון-הענן — מחווטת 4 חוטים טהורים
+- **חוטים (5):** entity-collections · sanitize-incoming · merge-donations-preserving · apply-entity-partial · apply-meta-partial
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
 ## #custom-export
 הקופסה של מסך "דו"ח מותאם" — יעד (חוגים/אירועים/תומכות) + טווח-תאריכים
 - **חוטים (26):** exp-field-defs · override-column · build-custom-export · feature-on · module-on · term-of · feat-label · item-label · unit-label · stage-label · sessions-of · enroll-count · heb-parts · heb-annual-eq · heb-date-full · gematria · gem-year · sup-count · sup-ils · sup-usd · sup-last · sup-total-ils · sup-score · sup-tier · ev-meta · day-names
@@ -27,6 +42,21 @@
 ## #date-util
 הקופסה של ‏maor/src/lib/date-util.ts — ארבעת חוטי-התאריך מחווטים
 - **חוטים (4):** iso-local · iso-today · iso-days-ago · date-in-range
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #dedup
+זיהוי כפילויות ומיזוגן — משפחות ותורמים — בשמירה מלאה של נתונים
+- **חוטים (17):** norm-phone · norm-id · find-duplicate-groups · merge-families · dup-fields · dup-field-value · merge-families-by-fields · find-supporter-dup-groups · merge-supporter-into · merge-supporters-group · sup-dup-fields · sup-dup-field-value · merge-supporters-by-fields · merge-hist · photo-max · name-sort-key · norm-search
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #dialer
+מכונת-המצב של קמפיין-שיחות מ-`maor/src/lib/dialer.ts` — תור לפי-סדר,
+- **חוטים (14):** requeue-outcomes · terminal-outcomes · outcome-labels · start-campaign · current-id · apply-outcome · progress · is-done · undo-last · call-log-cap · append-call · pop-call · call-stats · campaign-csv-rows
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #donation-partition
+שכבת-פיצול-תרומות (מסלול-B) — פירוק `Supporter.donations[]` למסמכי-ענן
+- **חוטים (6):** shared-purpose-key · purpose-key-of · don-allowed-keys · explode-supporter · reassemble-donations · donation-partition-diff
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
 ## #export-gate
@@ -59,6 +89,16 @@
 - **חוטים (9):** gematria · gem-year · adar-norm · heb-annual-eq · heb-parts · heb-parts-of-iso · heb-date-full · holidays · holiday-of
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
+## #ics-feed
+מנוי-יומן חי (הרחבת gcal, 9.8) — במקום קובץ-ICS חד-פעמי, המערכת
+- **חוטים (4):** mint-feed-token · read-ics-feed-token · publish-ics-feed · ics-feed-url
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #lib-crypto
+ספריית ההצפנה-במנוחה (opt-in) של מאור — AES-GCM 256 עם DEK
+- **חוטים (7):** gen-recovery-key · encrypt-db · is-encrypted · open-dek · decrypt-db · reencrypt-db · rewrap-password
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
 ## #names-export
 הקופסה של הכפתור מהדוגמה — "⬇ ייצוא CSV" ממסך מעקב-הטיפול.
 - **חוטים (3):** csv-escape · to-csv · is-admin
@@ -67,6 +107,11 @@
 ## #navhist
 הקופסה של פיצ'ר `shell.navhist` (P1.5) — מחסנית "↩ חזרה" של 20 צעדים
 - **חוטים (5):** same-loc · push-nav · push-recent · nav-hist-max · recent-max
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #photo-gallery
+
+- **חוטים (7):** photo-max · photo-max-dim · photo-max-len · can-add-photo · is-data-image · fit-dimensions · sanitize-photos
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
 ## #search
@@ -82,6 +127,11 @@
 ## #smtp-url
 הלקוח מקליד כתובת-מייל + סיסמת-אפליקציה — הקופסה מרכיבה לבד את
 - **חוטים (3):** smtp-hosts · smtp-host-for · compose-smtp-url
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #sup-partition
+שכבה טהורה שאוכפת ייעוד-פר-תורם (`forWho`) בשכבת-הנתונים — מזריקה
+- **חוטים (8):** shared-sup-key · sup-key-of · sup-keyed-cols · doc-skey · sup-key-map-of · sup-allowed-keys · strip-sup-key · strip-audit-meta
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
 ## #templates
@@ -104,6 +154,11 @@
 - **חוטים (6):** valid-israeli-id · normalize-phone · format-israeli-phone · norm-search · norm-name · name-sort-key
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
+## #vcard-import
+
+- **חוטים (4):** parse-vcards · is-junk-contact · importable-contacts · contact-to-row
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
 ## #vertical-packs
 
 - **חוטים (3):** vertical-packs · commercial-off · apply-vertical-pack
@@ -114,5 +169,10 @@
 - **חוטים (7):** wa-digits · wa-link · wa-delivery-text · wa-payment-text · wa-birthday-text · render-template · template-defs
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
-## אטומים-במלאי (טרם-חווטו): 535
+## #worktasks
+מנוע משימות-העבודה (WORKPREP) — סינון-פר-עובדת, מיון-עדיפות,
+- **חוטים (7):** task-identity · open-tasks-for · done-today-for · task-overdue · task-stats-for · overdue-contact-task-drafts · pri-labels
+- 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## אטומים-במלאי (טרם-חווטו): 444
 _ההתקדמות האמיתית = אחוז-המחווט (L10)._
