@@ -1,11 +1,10 @@
-/** 🪨 טיוטת-חוט (דרגת-מחצבה) · diffDb — חולל אוטומטית, טרם-קודם לדרגת-חוזה.
- *  מוצא: maor/src/lib/cloud-diff.ts:147-172 (26 שורות) · תורגם TS→JS מכונה.
- *  שקעים-מועמדים (קריאות-חוץ שצריכות הזרקה): diffDb, sameJson, metaOf
- *  קידום: לכתוב <שם>.contract.md + <שם>.test.mjs ← להעביר ל-new/atoms/. */
-export function diffDb(prev, next) {
+/** חוט · diff-db — השוואת שני מצבי-DB לסט-פעולות מינימלי (sets/deletes/meta).
+ *  חוזה: diff-db.contract.md · שקעים: entityCollections, metaKeys, sameJson, metaOf
+ *  חולץ כלשונו מ-maor/src/lib/cloud-diff.ts:147-172 (קריאות-השכן שוקעו). */
+export function diffDb(prev, next, entityCollections, metaKeys, sameJson, metaOf) {
     const sets = [];
     const deletes = [];
-    for (const col of ENTITY_COLLECTIONS) {
+    for (const col of entityCollections) {
         const prevList = prev[col];
         const nextList = next[col];
         if (prevList === nextList)
@@ -21,7 +20,7 @@ export function diffDb(prev, next) {
             deletes.push({ col, id });
     }
     let meta = null;
-    for (const k of META_KEYS) {
+    for (const k of metaKeys) {
         if (!sameJson(prev[k], next[k])) {
             meta = metaOf(next);
             break;
@@ -29,4 +28,3 @@ export function diffDb(prev, next) {
     }
     return { sets, deletes, meta };
 }
-/** ה-DB המלא כ-diff — להעלאה ראשונה של נתונים מקומיים לפרויקט ענן ריק. */

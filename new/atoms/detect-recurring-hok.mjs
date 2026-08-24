@@ -1,14 +1,13 @@
-/** 🪨 טיוטת-חוט (דרגת-מחצבה) · detectRecurringHok — חולל אוטומטית, טרם-קודם לדרגת-חוזה.
- *  מוצא: maor/src/lib/nedarimSync.ts:236-278 (43 שורות) · תורגם TS→JS מכונה.
- *  שקעים-מועמדים (קריאות-חוץ שצריכות הזרקה): detectRecurringHok, modeStr, modeOf, monthsAgo
- *  קידום: לכתוב <שם>.contract.md + <שם>.test.mjs ← להעביר ל-new/atoms/. */
-export function detectRecurringHok(supporters, todayIso, minMonths = 3) {
+/** חוט · detect-recurring-hok — זיהוי הוראות-קבע מתבנית-ה-hist ומילוי משבצת-ההו"ק.
+ *  חוזה: detect-recurring-hok.contract.md · שקעים: clearingProviders, modeStr, modeOf, monthsAgo
+ *  חולץ כלשונו מ-maor/src/lib/nedarimSync.ts:236-278 (קריאות-השכן שוקעו). */
+export function detectRecurringHok(supporters, todayIso, minMonths = 3, clearingProviders, modeStr, modeOf, monthsAgo) {
     let detected = 0;
     const out = supporters.map((sp) => {
         if (sp.hok && !sp.hok.kevaId)
             return sp; // הו"ק ידני — לא נוגעים
         // 🐛 נחיל-סולה C7: המנוע היה עיוור לסולה — 552 חיובים דולריים חוזרים לא מילאו הו"ק.
-        const nd = (sp.hist ?? []).filter((h) => CLEARING_PROVIDERS.includes(h.clearer || '') && h.a > 0 && !!h.d);
+        const nd = (sp.hist ?? []).filter((h) => clearingProviders.includes(h.clearer || '') && h.a > 0 && !!h.d);
         if (!nd.length)
             return sp;
         // חיוב עם kevaId ⇒ הו"ק **ודאי** (גם חיוב-בודד). אחרת ⇒ תבנית: חיובי-נדרים
@@ -41,8 +40,3 @@ export function detectRecurringHok(supporters, todayIso, minMonths = 3) {
     });
     return { supporters: out, detected };
 }
-/* ── שיוך-ידני של תשלום-נכנס לכרטיס (בסגנון בדיקת-הכפילויות, 19.8.2026) ──
-   כשהסנכרון-האוטומטי לא הצליח להתאים עסקה (שם שונה/חסר), המזכירה בוחרת ידנית
-   את הכרטיס. אותם מפתחות-שיוך של המנוע — כדי להציע מועמדים חכמים. טהור. */
-/** מועמדים לשיוך עסקה לכרטיס — לפי מפתח-חזק (ToremId/ת"ז/טלפון/אימייל) או שם
- *  חסין-סדר (≥2 מילים). ממוין: מפתח-חזק קודם, שם אחרון. עד `limit`. */
