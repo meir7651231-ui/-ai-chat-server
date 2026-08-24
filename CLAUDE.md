@@ -28,7 +28,8 @@ node machtzev/police.mjs          # לסוף-גל: + selftest + mutation (דקו
 ```bash
 node machtzev/run.mjs             # (במאור) מפקד+מחלצים+זיקוק+משטרה — פר-גל
 node machtzev/run.mjs --fast      # משטרה בלבד
-node machtzev/factory/gen-wires.mjs <genesis> maor    # חציבת-טיוטות
+node machtzev/factory/gen-wires.mjs <genesis> maor    # חציבת-טיוטות (TS→JS)
+node machtzev/factory/gen-wires-dart.mjs <genesis>    # חציבת-טיוטות-Dart מ-app_flutter (בנייה-חכמה החי)
 node machtzev/promote-auto.mjs    # (בגנסיס) קידום-חינם: צילום/Golden
 node machtzev/gen-wiring-doc.mjs  # (בגנסיס) חילול מפת-החיווט
 node machtzev/box-coverage.mjs    # (בגנסיס) מד-מוכנות-קופסאות ⇒ box-drafts/READINESS.md
