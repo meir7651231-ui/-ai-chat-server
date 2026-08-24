@@ -15,5 +15,14 @@ if (search('', fam, gt).length !== 4) { console.error('✗ ריקה מחזירה
 const SCORE_CASES = [['כהן','כהן',100],['כה','כהן',80],['חוגים','חוג',70],['הן','כהן',62],['דויד','דוד',58],['כוהן','כהן',58],['golstein','goldstein',48],['xyz','כהן',0],['','כהן',0]];
 for (const [q, t, w] of SCORE_CASES) { const g = score(q, [t]); if (g !== w) { console.error(`✗ score("${q}","${t}") = ${g} ≠ ${w}`); f = 1; } }
 if (!expand('כהן').includes('cohen')) { console.error('✗ expand'); f = 1; }
+
+/* 🛡 מגן-הכרעה (דפוס הגנת-מקור של maor): סדר-הקסקדה = הכרעת-הדירוג — חתום. */
+import { readFileSync } from 'node:fs';
+const boxSrc = readFileSync(new URL('./search.mjs', import.meta.url), 'utf8');
+const cascade = boxSrc.match(/CASCADE = \[([\s\S]*?)\]/)?.[1] || '';
+const order = ['ruleExact', 'rulePrefix', 'rulePlural', 'ruleContains', 'ruleSkeleton', 'ruleTypo'];
+let pos = -1;
+for (const r of order) { const i = cascade.indexOf(r); if (i <= pos) { console.error('✗ מגן-הכרעה: סדר-הקסקדה השתנה — ' + r); f = 1; break; } pos = i; }
+if (!/הסדר הזה הוא \*המשמעות\*/.test(boxSrc)) { console.error('✗ מגן: הערת-ההכרעה נמחקה'); f = 1; }
 if (f) process.exit(1);
 console.log('✓ קופסת-חיפוש: 7 תרחישי-קצה דרך כל 6 החוטים — ירוק');

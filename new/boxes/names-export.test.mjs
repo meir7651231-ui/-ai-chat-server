@@ -10,5 +10,10 @@ const no = exportNames({ rows, userEmail: 'x@y.com', adminEmails: ['a@b.com'] })
 if (no.allowed || no.content) { console.error('✗ לא-מנהל קיבל תוכן'); f = 1; }
 const local = exportNames({ rows, userEmail: null, adminEmails: [] });
 if (!local.allowed) { console.error('✗ מצב-מקומי'); f = 1; }
+
+/* 🛡 מגן-הכרעה: שער-ההרשאה לפני ייצור-התוכן — סדר-החיווט חתום. */
+import { readFileSync } from 'node:fs';
+const src = readFileSync(new URL('./names-export.mjs', import.meta.url), 'utf8');
+if (src.indexOf('isAdmin(') > src.indexOf('toCsv(')) { console.error('✗ מגן: התוכן נבנה לפני שער-ההרשאה'); f = 1; }
 if (f) process.exit(1);
 console.log('✓ קופסת-הכפתור: הרשאה+הגנת-הזרקה+BOM — 3 תרחישי-קצה ירוקים');

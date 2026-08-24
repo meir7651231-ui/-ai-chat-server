@@ -15,5 +15,11 @@ const diff = light.split('\n').filter((l, i) => l !== pink.split('\n')[i]).lengt
 if (diff !== uses) { console.error(`✗ השתנו שורות שלא-קשורות (${diff}≠${uses})`); f = 1; }
 try { cssFor('neon'); console.error('✗ מצב-לא-מוכר לא זרק'); f = 1; } catch {}
 try { cssFor('light', undefined); } catch { console.error('✗ ברירת-מחדל נשברה'); f = 1; }
+
+/* 🛡 מגן-הכרעה: תפר-כפתור-הצבע ({ ...PALETTE, ...overrides }) + שוויון-תפקידים אור/חושך. */
+import { readFileSync } from 'node:fs';
+const src = readFileSync(new URL('./theme.mjs', import.meta.url), 'utf8');
+if (!src.includes('{ ...PALETTE, ...overrides }')) { console.error('✗ מגן: תפר-כפתור-הצבע שונה'); f = 1; }
+if (Object.keys(WIRING.light).join() !== Object.keys(WIRING.dark).join()) { console.error('✗ מגן: מצבים לא-סימטריים בתפקידים'); f = 1; }
 if (f) process.exit(1);
 console.log(`✓ קופסת-ערכה: ${roles} תפקידים × 2 מצבים · כפתור-הצבע: פיגמנט-אחד ⇒ ${uses} תפקידים התחלפו, אפס זליגה`);
