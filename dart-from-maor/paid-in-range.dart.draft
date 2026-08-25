@@ -1,0 +1,3 @@
+dynamic paidInRange(dynamic e, dynamic r, dynamic inRange) {
+  return ((e.payments ?? [])).where((p) => inRange(p.date, r)).fold(0, (a, p) => a + (_isFinite(p.amount) ? p.amount : 0));
+}

@@ -1,0 +1,45 @@
+dynamic parseCsv(dynamic text) {
+  var t = text.replaceFirst(RegExp(r'^\uFEFF'), '');
+  var nl = t.indexOf('
+');
+  var firstLine = nl < 0 ? t : t.sublist(0, nl);
+  var delim = (firstLine.split('	').length - 1) > (firstLine.split(',').length - 1) ? '	' : ',';
+  var rows = [];
+  var row = [];
+  var cur = '';
+  var q = false;
+  for (var i = 0; i < t.length; i++) {
+  var ch = t[i];
+  if (q) {
+  if (ch == '"' && t[i + 1] == '"') {
+  cur += '"';
+  i++;
+} else if (ch == '"' && ((((i + 1 >= t.length || t[i + 1] == delim) || t[i + 1] == '
+') || t[i + 1] == ''))) {
+  q = false;
+} else {
+  cur += ch;
+}
+} else if (ch == '"' && cur == '') {
+  q = true;
+} else if (ch == delim) {
+  row.add(cur);
+  cur = '';
+} else if ((ch == '
+' || ch == '')) {
+  if (ch == '' && t[i + 1] == '
+') i++;
+  row.add(cur);
+  cur = '';
+  if (row.any((c) => c.trim() != '')) rows.add(row);
+  row = [];
+} else {
+  cur += ch;
+}
+}
+  if ((cur != '' || row.length)) {
+  row.add(cur);
+  if (row.any((c) => c.trim() != '')) rows.add(row);
+}
+  return rows;
+}
