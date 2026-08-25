@@ -1,0 +1,10 @@
+dynamic safeHttpsUrl(dynamic raw) {
+  var t = ((raw ?? '')).trim();
+  if (_falsy(t)) return null;
+  try {
+  var u = URL(t);
+  return u.protocol == 'https:' ? ufunction toString() { [native code] } : null;
+} catch (_) {
+  return null;
+}
+}

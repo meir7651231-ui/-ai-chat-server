@@ -1,0 +1,1 @@
+dynamic rulePrefix(dynamic nq, dynamic nt) => (nt.startsWith(nq) ? 80 : null);
