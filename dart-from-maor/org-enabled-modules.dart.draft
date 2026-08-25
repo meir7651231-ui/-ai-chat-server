@@ -1,0 +1,3 @@
+dynamic orgEnabledModules(dynamic orgConfig, dynamic allModules) {
+  return allModules.where((m) => orgConfig.modules[m] != false);
+}

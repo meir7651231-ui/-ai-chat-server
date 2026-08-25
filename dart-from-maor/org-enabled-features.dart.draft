@@ -1,0 +1,9 @@
+dynamic orgEnabledFeatures(dynamic orgConfig, dynamic features, dynamic allModules, dynamic orgEnabledModules) {
+  var enabledMods = <dynamic>{...orgEnabledModules(orgConfig, allModules)};
+  return features.where((f) {
+  var isRealModule = allModules.contains(f.module);
+  if (isRealModule && !enabledMods.has(f.module)) return false;
+  if (f.optIn == true) return orgConfig.features[f.key] == true;
+  return orgConfig.features[f.key] != false;
+});
+}
