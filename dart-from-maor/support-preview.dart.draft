@@ -1,0 +1,4 @@
+dynamic supportPreview(dynamic text, [dynamic max = 40]) {
+  var t = ((text ?? '')).replaceFirst(RegExp(r'\s+'), ' ').trim();
+  return t.length > max ? t.sublist(0, max - 1) + '…' : t;
+}

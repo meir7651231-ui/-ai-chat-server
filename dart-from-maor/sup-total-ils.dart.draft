@@ -1,0 +1,3 @@
+dynamic supTotalIls(dynamic sp, [dynamic rate = 3.7], dynamic supIls, dynamic supUsd) {
+  return supIls(sp) + supUsd(sp) * rate;
+}

@@ -1,0 +1,3 @@
+dynamic taskOverdue(dynamic t, dynamic todayIso) {
+  return _falsy(t.doneAt) && _falsy(_falsy(t.due)) && t.due < todayIso;
+}

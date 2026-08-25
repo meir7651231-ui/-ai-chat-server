@@ -1,0 +1,3 @@
+dynamic timeHoursTotal(dynamic a) {
+  return ((a.time ?? [])).fold(0, (t, e) => t + ((+e.hours || 0)));
+}

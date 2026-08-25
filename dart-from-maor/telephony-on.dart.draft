@@ -1,0 +1,3 @@
+dynamic telephonyOn(dynamic cfg) {
+  return cfg.telephony.enabled == true;
+}
