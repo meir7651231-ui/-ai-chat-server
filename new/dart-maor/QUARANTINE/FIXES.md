@@ -81,3 +81,33 @@ double שלם-ערך ≥2^63: ‏Dart `truncate()` מרווה ל-int64-max. ‏s
 ## run-audit — שלוש סטיות: ‏reduce על שדה-חסר (כלל-2) · שרשור-מחרוזת ב-reduce · ‏null⇒'undefined'
 ‏(1) ‏payments:[{amount:300},{}] ⇒ ‏JS ‏NaN (אפס-ממצא) מול ‏Dart ‏null⇒0 (ממצא-שווא). ‏(2) ‏amount:"100" ⇒ ‏JS שרשור "0100" מול Dart פרסינג 100. ‏(3) ‏amount:null מפורש ⇒ ‏JS ‏'null' מול ‏Dart ‏'undefined' (המיפוי-הגורף שגוי ל-null-בנתונים).
 **תיקון:** ‏reduce נאמן-JS (חסר⇒NaN, מחרוזת⇒שרשור) + ‏_jsStr מבחין null-מפורש מ-חסר.
+
+## אצווה #21 (25.8 לילה) — 7 הסגרים
+
+## sanitize-photos — קוארציית-ארגומנטים של slice/השוואה (כלל-15 החדש)
+‏photoMax="3" (מחרוזת): ‏JS ‏ToIntegerOrInfinity("3")=3 ⇒ חיתוך-ל-3; ‏Dart ממפה לא-num ל-0 ⇒ []. גם ‏photoMaxLen="6" (קוארציה-בהשוואה) וגם ‏{length:5} (קריאת-length על אובייקט) ו-raw=[null] (‏JS זורק, ‏Dart שקט).
+**תיקון:** ‏_jsSlice0/_lenOf לפי כלל-15 — ‏ToNumber על ארגומנטים, ‏.length דוק-טייפינג, זריקה-נאמנה על null.
+
+## sanitize-support-text — ‏null↔undefined בארגומנט-slice (כלל-2)
+‏supportMsgMax=null מפורש: ‏JS ‏slice(0,null) ⇒ ‏ToIntegerOrInfinity(null)=0 ⇒ ''; ‏Dart ממפה null⇒עד-הסוף.
+**תיקון:** ‏_jsSliceEnd: ‏end==null ⇒ 0 (ברירת-המחדל 2000 חלה רק על "לא-הועבר").
+
+## schedule-clash-text — אינדוקס-מערך במחרוזת-קנונית (כלל-15)
+‏day='1': ‏JS ‏dayNames['1']≡dayNames[1] ⇒ 'שני'; ‏Dart ‏_atIdx דורש int ⇒ 'undefined'.
+**תיקון:** ‏_atIdx מקבל מחרוזת-קנונית (‏int.tryParse + ‏round-trip).
+
+## segula-reminders — ‏setDate עם שבר-שלילי + ‏NaN + חודש-13 (כלל-4)
+‏trunc(25+(−2.9))=22 ‏(JS) ≠ ‏25+trunc(−2.9)=23 ‏(Dart); ‏NaN ⇒ ‏JS שורות-NaN מול ‏Dart זריקה; "2026-13-05" ⇒ ‏JS ‏Invalid מול ‏Dart נרמול.
+**תיקון:** לחשב ‏trunc על-הסכום; לגדר NaN; ‏regex+round-trip לפי כלל-4.
+
+## segula-title — ‏_jsStr חלקי בטווח 2^53–1e21 (כלל-12)
+‏day=1e20 ⇒ ‏Dart מדפיס "…000.0" מול ‏JS "…000". התנאי ‏<2^53 נוקשה — ‏2^53 עצמו כ-double נופל לענף-הרע.
+**תיקון:** יישום כלל-12 מלא (פריסה-מרופדת-אפסים עד 1e21, ‏≤ בגבול).
+
+## set-audit-context — ‏toLowerCase צ'רוקי (הרחבת כלל-13)
+‏"ᏣᎳᎩ" (U+13E3…): ‏JS ⇒ קטנות (U+ABB3…); ‏Dart ⇒ ללא-שינוי. ‏_jsLower מכיר רק İ/Σ.
+**תיקון:** הרחבת-הטבלה: ‏U+13A0–U+13F5 ⇒ ‏+0x97D0 (וכלל: מיפוי-מלא, לא נקודתי).
+
+## set-employee-override — סדר-מפתחות-JS (כלל-14 החדש)
+מפתחות דמויי-שלם ("2","10") ממוינים מספרית-קודם ב-JS; ‏Dart משמר סדר-הכנסה ⇒ ‏JSON שונה. בדומיין-אמיתי (מיילים עם @) לא מתממש — אך חוק-4 מחייב.
+**תיקון:** עטיפת-מפה שממיינת מפתחות-שלמים-קנוניים קודם (או הכרעת-בעלים על צמצום-טיפוס).
