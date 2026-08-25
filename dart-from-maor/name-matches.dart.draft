@@ -1,0 +1,13 @@
+dynamic nameMatches(dynamic a, dynamic b, dynamic normName) {
+  var na = normName(a);
+  var nb = normName(b);
+  if ((_falsy(na) || _falsy(nb))) return false;
+  if (na == nb) return true;
+  var wa = <dynamic>{...na.split(' ').where((w) => w.length >= 2)};
+  var wb = <dynamic>{...nb.split(' ').where((w) => w.length >= 2)};
+  if ((wa.size == 0 || wb.size == 0)) return false;
+  var overlap = 0;
+  for (final w in wa) if (wb.has(w)) overlap++;
+  var need = wa.size == 1 && wb.size == 1 ? 1 : 2;
+  return overlap >= need;
+}

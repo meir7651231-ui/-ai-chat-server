@@ -1,0 +1,19 @@
+dynamic needsCare(dynamic db, dynamic todayIso, dynamic config, dynamic sockets) {
+  var undefined = sockets;
+  var boxTerm = config ? termOf(config, 'entity.tzBox', 'קופה') : 'קופה';
+  var out = [];
+  for (final b in staleBoxes(db.tzBoxes, todayIso)) {
+  var last = lastCollectionIso(b);
+  out.add({'kind': 'stale', 'id': b.id, 'label': boxTerm + ' ' + b.num + ' לא רוקנה מזמן', 'hint': last ? 'ריקון אחרון: ' + last : 'מעולם לא רוקנה (מאז ' + ((b.since ?? '—')) + ')'});
+}
+  for (final b in db.tzBoxes.where((x) => x.status == 'lost')) out.add({'kind': 'lost', 'id': b.id, 'label': boxTerm + ' ' + b.num + ' מסומנת כאבודה', 'hint': 'לברר או להוציא משימוש'});
+  for (final c in db.tzCoordinators.where((x) => _falsy(x.active))) {
+  var holding = coordinatorBoxes(db.tzBoxes, c.id).where((b) => b.status == 'home').length;
+  if (holding) out.add({'kind': 'inactiveCoord', 'id': c.id, 'label': c.name + ' אינו פעיל אך עדיין עם ' + holding + ' קופות בבתים', 'hint': 'להעביר לרכז אחר או להחזיר למשרד'});
+}
+  var soon = DateTime.parse(todayIso + 'T12:00:00');
+  soon.setDate(soon.day + 14);
+  var soonIso = isoOf(soon);
+  for (final p in db.tzCampaigns.where((x) => x.active && x.end && x.end >= todayIso && x.end <= soonIso)) out.add({'kind': 'campaignEnding', 'id': p.id, 'label': 'המבצע "' + p.name + '" מסתיים ב-' + p.end, 'hint': 'לסכם ולסגור'});
+  return out;
+}
