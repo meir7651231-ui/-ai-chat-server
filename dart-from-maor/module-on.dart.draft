@@ -1,0 +1,3 @@
+dynamic moduleOn(dynamic cfg, dynamic m) {
+  return cfg.modules[m] != false;
+}

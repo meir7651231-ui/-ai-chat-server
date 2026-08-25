@@ -1,0 +1,3 @@
+dynamic metaPath(dynamic slug, dynamic cloudRoot) {
+  return cloudRoot ? 'meta/org' : 'orgs/' + slug + '/meta/org';
+}

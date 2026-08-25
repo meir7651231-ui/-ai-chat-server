@@ -1,0 +1,3 @@
+dynamic monthKey(dynamic iso) {
+  return iso.sublist(0, 7);
+}

@@ -1,0 +1,5 @@
+dynamic nameIndex(dynamic db, dynamic allMembers) {
+  var map = <dynamic, dynamic>{};
+  for (final m in allMembers(db)) map.set(m.id, m);
+  return map;
+}
