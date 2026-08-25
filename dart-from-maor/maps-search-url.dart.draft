@@ -1,0 +1,8 @@
+dynamic cleanStop(dynamic s) {
+  return ((s ?? '')).replaceFirst(RegExp(r'\|'), ' ').trim();
+}
+dynamic mapsSearchUrl(dynamic address, [dynamic city = '']) {
+  var q = [address, city].map(cleanStop).toList().where(Boolean).join(', ');
+  if (_falsy(q)) return null;
+  return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
+}

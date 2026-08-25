@@ -1,0 +1,6 @@
+dynamic makeupEligibility(dynamic kind, dynamic justified, dynamic rawHrs) {
+  if (kind == 'noshow') return {'eligible': false, 'dropsPunch': true};
+  var earlyCancel = rawHrs != null && rawHrs >= 48;
+  var eligible = (justified ?? earlyCancel);
+  return {'eligible': eligible, 'dropsPunch': _falsy(eligible)};
+}

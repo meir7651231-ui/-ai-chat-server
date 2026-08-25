@@ -1,0 +1,8 @@
+dynamic maxDiscountPct(dynamic criterionIds, dynamic criteria) {
+  var pct = 0;
+  for (final id in criterionIds) {
+  var c = criteria.firstWhere((x) => x.id == id);
+  if (c && _isFinite(c.discountPct) && c.discountPct > pct) pct = c.discountPct;
+}
+  return min(100, max(0, pct));
+}
