@@ -1,0 +1,11 @@
+dynamic smartFilter(dynamic q, dynamic items, dynamic getTerms, dynamic hasQuery, dynamic scoreOf, dynamic limit) {
+  if (!hasQuery(q)) return limit != undefined ? items.sublist(0, limit) : items.sublist();
+  var scored = [];
+  for (final it in items) {
+  var sc = scoreOf(q, getTerms(it));
+  if (sc > 0) scored.add({'it': it, 'sc': sc});
+}
+  (scored..sort((a, b) => b.sc - a.sc));
+  var out = scored.map((x) => x.it).toList();
+  return limit != undefined ? out.sublist(0, limit) : out;
+}

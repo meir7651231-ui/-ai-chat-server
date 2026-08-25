@@ -1,0 +1,3 @@
+dynamic sheetSummary(dynamic roster, dynamic dateIso) {
+  return {'present': roster.where((e) => ((e.presents ?? [])).contains(dateIso)).length, 'total': roster.length};
+}

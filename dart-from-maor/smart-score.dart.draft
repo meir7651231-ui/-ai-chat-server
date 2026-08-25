@@ -1,0 +1,31 @@
+dynamic smartScore(dynamic q, dynamic terms, dynamic norm, dynamic expand, dynamic score) {
+  var toks = norm(q).split(RegExp(r'\s+')).where(Boolean);
+  if (_falsy(toks.length)) return 0;
+  var phrase = 0;
+  if (toks.length > 1) {
+  for (final exp in expand(q.trim(), norm)) {
+  for (final term in terms) {
+  phrase = max(phrase, score(exp, term));
+  if (phrase >= 100) break;
+}
+  if (phrase >= 100) break;
+}
+}
+  var total = 0;
+  for (final tok in toks) {
+  var best = 0;
+  for (final exp in expand(tok, norm)) {
+  for (final term in terms) {
+  best = max(best, score(exp, term));
+  if (best >= 100) break;
+}
+  if (best >= 100) break;
+}
+  if (_falsy(best)) {
+  total = 0;
+  break;
+}
+  total += best;
+}
+  return max(total, phrase);
+}

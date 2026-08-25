@@ -1,0 +1,7 @@
+dynamic siteDonateUrl(dynamic config) {
+  var direct = config.site.donateUrl;
+  if (direct is String && direct) return direct;
+  var pay = config.integrations.payments;
+  var payUrl = pay && pay.payUrl is String ? pay.payUrl : '';
+  return (payUrl ?? null);
+}

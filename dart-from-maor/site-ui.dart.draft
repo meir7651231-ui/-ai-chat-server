@@ -1,0 +1,3 @@
+dynamic siteUi(dynamic lang, dynamic key, dynamic uiLabels) {
+  return ((((uiLabels[lang] ?? uiLabels.he))[key] ?? uiLabels.he[key]) ?? '');
+}
