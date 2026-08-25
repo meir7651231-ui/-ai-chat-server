@@ -1,0 +1,3 @@
+dynamic liveRedemptions(dynamic a) {
+  return a.redemptions.where((r) => _falsy(r.voidedAt));
+}

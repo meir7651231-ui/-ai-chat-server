@@ -1,0 +1,18 @@
+dynamic levenshtein(dynamic a, dynamic b) {
+  var la = a.length;
+  var lb = b.length;
+  if (_falsy(la)) return lb;
+  if (_falsy(lb)) return la;
+  var dp = [];
+  for (var j = 0; j <= lb; j++) dp[j] = j;
+  for (var i = 1; i <= la; i++) {
+  var prev = dp[0];
+  dp[0] = i;
+  for (var j = 1; j <= lb; j++) {
+  var tmp = dp[j];
+  dp[j] = min(dp[j] + 1, dp[j - 1] + 1, prev + (a[i - 1] == b[j - 1] ? 0 : 1));
+  prev = tmp;
+}
+}
+  return dp[lb];
+}
