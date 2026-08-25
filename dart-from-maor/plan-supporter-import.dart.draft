@@ -1,0 +1,30 @@
+dynamic planSupporterImport(dynamic rows, dynamic existing, dynamic normName, dynamic fillEmpty) {
+  var byName = <dynamic, dynamic>{};
+  for (final sp in existing) byName.set(normName(sp.name), sp.id);
+  var updates = [];
+  var updateIdx = <dynamic, dynamic>{};
+  var inserts = [];
+  var insertIdx = <dynamic, dynamic>{};
+  for (final r in rows) {
+  var nm = r.name.trim();
+  if (_falsy(nm)) continue;
+  var key = normName(nm);
+  var existId = byName.get(key);
+  if (existId) {
+  var ui = updateIdx.get(existId);
+  if (ui != null) updates[ui] = {'id': existId, 'row': fillEmpty(updates[ui].row, r)}; else {
+  updateIdx.set(existId, updates.length);
+  updates.add({'id': existId, 'row': r});
+}
+  continue;
+}
+  var idx = insertIdx.get(key);
+  if (idx != null) {
+  inserts[idx] = fillEmpty(inserts[idx], r);
+  continue;
+}
+  insertIdx.set(key, inserts.length);
+  inserts.add(r);
+}
+  return {'updates': updates, 'inserts': inserts};
+}

@@ -1,0 +1,8 @@
+dynamic planLabelOf(dynamic e, dynamic planWord, dynamic payBal) {
+  var s = e.plan == 'punch' ? 'כרטיסייה · ' + e.purchased : planWord(e.plan);
+  if (e.status == 'paused') s += ' · מוקפא ⏸'; else if (e.status == 'ended') s += ' · הסתיים';
+  if (e.absences.length) s += ' · ' + e.absences.length + ' חיס׳';
+  var bal = payBal(e);
+  if (bal > 0) s += ' · 💳 ₪' + bal;
+  return s;
+}
