@@ -125,11 +125,11 @@ void main() {
       deepEq(
           parseAyinSheet([
             header,
-            ['רחל כהן', 'משה בן שרה', '7', 'כן', 'שולם', 'הערה', 'עופרת']
+            ['רחל כהן', 'משה בן שרה', '7', 'כן', 'שולם', 'הערה', 'לא']
           ], sups, normName),
           {
             'upds': [
-              {'supporterId': 's1', 'nameId': 'n1', 'eyes': 7, 'done': true, 'paid': true, 'answer': 'הערה', 'lead': true}
+              {'supporterId': 's1', 'nameId': 'n1', 'eyes': 7, 'done': true, 'paid': true, 'answer': 'הערה', 'lead': false}
             ],
             'miss': 0
           }),
