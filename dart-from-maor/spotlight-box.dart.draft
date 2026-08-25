@@ -1,0 +1,6 @@
+dynamic spotlightBox(dynamic rect, dynamic vw, dynamic vh, [dynamic pad = 10]) {
+  if (((_falsy(rect) || rect.width <= 0) || rect.height <= 0)) return null;
+  var left = max(0, rect.left - pad);
+  var top = max(0, rect.top - pad);
+  return {'left': left, 'top': top, 'width': min(vw - left, rect.width + pad * 2), 'height': min(vh - top, rect.height + pad * 2)};
+}
