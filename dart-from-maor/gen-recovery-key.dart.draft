@@ -1,0 +1,8 @@
+dynamic genRecoveryKey(dynamic rand) {
+  var ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  var bytes = rand(24);
+  var chars = [...bytes].map((b) => ALPHABET[b % ALPHABET.length]).toList();
+  var groups = [];
+  for (var i = 0; i < chars.length; i += 4) groups.add(chars.sublist(i, i + 4).join(''));
+  return groups.join('-');
+}
