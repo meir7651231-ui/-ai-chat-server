@@ -1,0 +1,23 @@
+dynamic warehouseOverview(dynamic warehouse, dynamic supporters, dynamic norm) {
+  var used = <dynamic, dynamic>{};
+  for (final sp in supporters) {
+  var mat = sp.ayin.mat;
+  if ((_falsy(mat) || _falsy(mat.length))) continue;
+  var perName = <dynamic, dynamic>{};
+  for (final m in mat) {
+  var k = norm(m.name);
+  if (_falsy(k)) continue;
+  perName.set(k, ((perName.get(k) ?? 0)) + ((+m.qty || 0)));
+}
+  for (final undefined in perName) {
+  if (qty <= 0) continue;
+  used.set(k, [...((used.get(k) ?? [])), {'id': sp.id, 'name': sp.name, 'qty': qty}]);
+}
+}
+  return warehouse.map((item) {
+  var rows = (used.get(norm(item.name)) ?? []);
+  var allocated = rows.fold(0, (a, r) => a + r.qty);
+  var remaining = ((+item.qty || 0)) - allocated;
+  return {'item': item, 'allocated': allocated, 'remaining': remaining, 'short': remaining < 0, 'byProject': ([...rows]..sort((a, b) => b.qty - a.qty))};
+}).toList();
+}
