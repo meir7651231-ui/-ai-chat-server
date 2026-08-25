@@ -1,0 +1,3 @@
+dynamic segulaTitle(dynamic name, dynamic r, dynamic target) {
+  return (r.final ? '🎯 סיום סגולה' : '🕯 סגולה') + ' — ' + ((name ?? '')) + ' · יום ' + r.day + '/' + target;
+}

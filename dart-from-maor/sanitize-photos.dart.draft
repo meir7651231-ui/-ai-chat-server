@@ -1,0 +1,4 @@
+dynamic sanitizePhotos(dynamic raw, dynamic isDataImage, [dynamic photoMaxLen = 460000], [dynamic photoMax = 5]) {
+  if (!(raw is List)) return [];
+  return raw.where((x) => isDataImage(x) && x.length <= photoMaxLen).sublist(0, photoMax);
+}
