@@ -55,3 +55,29 @@
 הוספת `+ (e.carryBalance||0)` ל-mjs+dart+test (8 דוגמאות; carryBalance חסר=0 ⇒
 5 הדוגמאות הישנות ביט-זהות) + עדכון contract. JS+Dart-gold ירוקים. הוחזר לחוזה.
 **מסקנה:** לא רק ההמרה נבדקת — המאמת-העוין תופס גם אטומי-JS שהתיישנו מול הפיוניר.
+
+## גל #20 (25.8 ערב) — 6 הסגרים מהאימות-העוין
+
+## model-meta — רוויית-int64 בהמרת-מספר-למחרוזת (משפחת _jsStr — כלל-12 החדש)
+double שלם-ערך ≥2^63: ‏Dart `truncate()` מרווה ל-int64-max. ‏size=1e21 ⇒ JS "1e+21" מול Dart "9223372036854775807"; ‏1e19 ⇒ JS עשרוני-מלא מול Dart רווי.
+**תיקון:** ‏_jsStr לפי כלל-12 — ‏shortest-round-trip של JS: ‏<1e21 עשרוני-מלא, ‏≥1e21 כתיב-מעריכי; לגדר טווח לפני truncate.
+
+## name-index — מפתח-Map ‏null↔undefined (כלל-2)
+חבר עם ‏id:null + חבר חסר-שדה-id: ‏JS Map מבחין (2 רשומות), ‏Dart מתמוטט למפתח-אחד ⇒ רשומה אובדת מהאינדקס.
+**תיקון:** ייצוג-מפתח שמבחין חסר מ-null (‏sentinel לחסר או containsKey-קדם).
+
+## role-of — ‏toLowerCase יוניקוד İ (כלל-13 החדש)
+‏"İ" (U+0130): ‏JS ⇒ "i̇" (2 יחידות), ‏Dart ⇒ "i". אימייל-אדמין עם İ לא מזוהה ⇒ ‏admin⇒staff.
+**תיקון:** שקע-lowercase תואם-JS (טבלת-חריגים İ/I-עם-נקודה) לפי כלל-13.
+
+## room-info-label — פריסה-עשרונית מול shortest-round-trip (כלל-12)
+דאבלים שלמים 2^53<v<1e21: ‏toStringAsFixed(0) מדפיס פריסה מדויקת (…683968) מול JS מרופד-אפסים (…680000).
+**תיקון:** ‏_jsStr לענף-השלמים = ‏shortest-repr של JS (toString מדעי + ריפוד-אפסים כש-exp<21).
+
+## rooms-now — ‏roomId null↔undefined בהשוואת-דילוג (כלל-2)
+חדר בלי-id מול חוג עם ‏roomId:null: ‏JS ‏null!==undefined ⇒ מדלג (חדר פנוי); ‏Dart ‏null==null ⇒ בוחן (חדר תפוס).
+**תיקון:** הבחנת ‏containsKey מ-null מפורש בשני צדי-ההשוואה.
+
+## run-audit — שלוש סטיות: ‏reduce על שדה-חסר (כלל-2) · שרשור-מחרוזת ב-reduce · ‏null⇒'undefined'
+‏(1) ‏payments:[{amount:300},{}] ⇒ ‏JS ‏NaN (אפס-ממצא) מול ‏Dart ‏null⇒0 (ממצא-שווא). ‏(2) ‏amount:"100" ⇒ ‏JS שרשור "0100" מול Dart פרסינג 100. ‏(3) ‏amount:null מפורש ⇒ ‏JS ‏'null' מול ‏Dart ‏'undefined' (המיפוי-הגורף שגוי ל-null-בנתונים).
+**תיקון:** ‏reduce נאמן-JS (חסר⇒NaN, מחרוזת⇒שרשור) + ‏_jsStr מבחין null-מפורש מ-חסר.
