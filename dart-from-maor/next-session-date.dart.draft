@@ -1,0 +1,13 @@
+dynamic nextSessionDate(dynamic c, [dynamic now = DateTime.now()], dynamic sessionsOf) {
+  var n = now;
+  var best = null;
+  for (final ss in sessionsOf(c)) {
+  var t = ((ss.time ?? '17:00')).split(':');
+  var d = DateTime.parse(n.year, (n.month - 1), n.day, +t[0], (+((t[1] ?? 0)) || 0));
+  var add = (ss.day - d.weekday % 7 + 7) % 7;
+  if (add == 0 && d <= n) add = 7;
+  d.setDate(d.day + add);
+  if ((_falsy(best) || d < best)) best = d;
+}
+  return best;
+}

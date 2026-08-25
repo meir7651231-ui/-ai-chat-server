@@ -1,0 +1,6 @@
+dynamic nextAcademicYearLabel(dynamic startIso, dynamic atNoon, dynamic gemYear, dynamic hebPartsOfIso) {
+  if (_falsy(startIso)) return '';
+  var d = atNoon(startIso);
+  var yy = (d.month - 1) >= 8 ? d.year : d.year - 1;
+  return gemYear(hebPartsOfIso('${yy + 1}-12-31').year);
+}

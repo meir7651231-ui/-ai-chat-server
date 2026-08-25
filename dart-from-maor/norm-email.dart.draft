@@ -1,0 +1,3 @@
+dynamic normEmail(dynamic email) {
+  return email.trim().toLowerCase();
+}

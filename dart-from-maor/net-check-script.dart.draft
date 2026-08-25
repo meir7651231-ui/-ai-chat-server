@@ -1,0 +1,6 @@
+dynamic netCheckScript(dynamic results) {
+  var blocked = results.where((r) => _falsy(r.ok));
+  if (_falsy(blocked.length)) return '';
+  return ['שלום, אני משתמש/ת במערכת ניהול לעמותה לצורכי עבודה,', 'ואבקש לפתוח את הכתובות הבאות (כלי-עבודה, ללא תוכן גולשים):', ...blocked.map((r) => '• ' + r.domain).toList(), 'תודה רבה!'].join('
+');
+}
