@@ -1,0 +1,1 @@
+dynamic ruleContains(dynamic nq, dynamic nt) => (nq.length >= 2 && nt.contains(nq) ? 62 : null);

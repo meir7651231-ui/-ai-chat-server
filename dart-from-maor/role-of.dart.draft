@@ -1,0 +1,8 @@
+dynamic roleOf(dynamic config, dynamic email) {
+  var e = ((email ?? '')).trim().toLowerCase();
+  if (_falsy(e)) return 'staff';
+  if (config.adminEmails.any((a) => a.trim().toLowerCase() == e)) return 'admin';
+  var teachers = config.roles.teachers;
+  if (teachers && (teachers as Map).keys.toList().any((k) => k.trim().toLowerCase() == e)) return 'teacher';
+  return 'staff';
+}
