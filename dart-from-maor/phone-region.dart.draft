@@ -1,0 +1,11 @@
+dynamic phoneRegion(dynamic raw) {
+  var s = ((raw ?? '')).replaceFirst(RegExp(r'[^\d+]'), '');
+  if (_falsy(s)) return 'il';
+  if (RegExp(r'^(\+?972|00972)').test(s)) return 'il';
+  if (RegExp(r'^\+').test(s)) return 'intl';
+  if (RegExp(r'^00').test(s)) return 'intl';
+  var d = s.replaceFirst(RegExp(r'\D'), '');
+  if (RegExp(r'^0\d{8,9}$').test(d)) return 'il';
+  if (RegExp(r'^5\d{8}$').test(d)) return 'il';
+  return 'intl';
+}

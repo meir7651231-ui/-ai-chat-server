@@ -1,0 +1,12 @@
+dynamic pendingMakeups(dynamic enrollments, dynamic courseId) {
+  var out = [];
+  for (final e in enrollments) {
+  if ((e.status == 'ended' || e.status == 'wait')) continue;
+  if (courseId && e.courseId != courseId) continue;
+  for (final a in e.absences) {
+  if (_falsy(a.makeup)) continue;
+  out.add({'enrollmentId': e.id, 'memberId': e.memberId, 'courseId': e.courseId, 'date': a.date, 'reason': a.reason, 'makeupDate': a.makeupDate});
+}
+}
+  return (out..sort((x, y) => ((x.makeupDate ? 1 : 0) - (y.makeupDate ? 1 : 0) ?? x.date.localeCompare(y.date))));
+}
