@@ -1,0 +1,6 @@
+dynamic readIcsFeedToken(dynamic slug, dynamic fs) {
+  var undefined = fs;
+  var snap = /*?AwaitExpression?*/;
+  var d = snap.exists() ? snap.data() : null;
+  return d && d.token is String && d.token ? d.token : null;
+}
