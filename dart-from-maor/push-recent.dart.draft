@@ -1,0 +1,4 @@
+var RECENT_MAX = 6;
+dynamic pushRecent(dynamic ids, dynamic id) {
+  return [id, ...ids.where((x) => x != id)].sublist(0, RECENT_MAX);
+}

@@ -1,0 +1,8 @@
+var PUNCH_CONFIRM_MS = 3000;
+dynamic punchConfirmStep(dynamic confirmOn, dynamic armed, dynamic enrollmentId, dynamic now) {
+  if (_falsy(confirmOn)) return {'fire': true, 'next': null};
+  if (armed && armed.id == enrollmentId && now - armed.armedAt <= PUNCH_CONFIRM_MS) {
+  return {'fire': true, 'next': null};
+}
+  return {'fire': false, 'next': {'id': enrollmentId, 'armedAt': now}};
+}
