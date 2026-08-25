@@ -1,0 +1,87 @@
+# 🤝 מסירה · לולאת-המרת-Dart (מצב: 25.8.2026, 279/~504 אטומי-מאור)
+> **סוכן ממשיך: קרא את זה במלואו, ואז את `CLAUDE.md` + `machtzev/emit/DART-PORTING-RULES.md`.
+> אל תמציא — כל הפקודות כאן verbatim. עבוד על ענף `claude/mah-kora-0by8kw` בלבד.**
+
+## 1. מה עושים ולמה (במשפט)
+ממירים את קטלוג-מאור מ-JavaScript (`new/atoms/*.mjs`) ל-Dart (`new/dart-maor/*.dart`),
+כדי שקטלוג-האימפריה יהיה בשפה-אחת (Dart) → קופסה תחבר מאור+בנייה-חכמה → אפליקציית-טלפון
+ניטיבית + web-דרך-מנוע-פליטה. **הכרעת-בעלים 15: כל הלוגיקה ל-Dart לפני שכבת-המסכים.**
+
+## 2. הכלים (קיימים, אל תבנה מחדש)
+- **Dart SDK:** `/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/dart-sdk/bin/dart`
+  (אם נמחק — הורד מחדש: ‏`curl -fsSL https://storage.googleapis.com/dart-archive/channels/stable/release/3.5.4/sdk/dartsdk-linux-x64-release.zip`)
+- **מנוע-פליטה AST:** `node machtzev/emit/ast-js-to-dart.mjs <atom.mjs>` — טיוטת-Dart אוטומטית.
+- **פאזר-דיפרנציאלי:** `node machtzev/emit/fuzz-parity.mjs '[["atom-name","num"|"str"]]'` — JS↔Dart על קלטי-קצה.
+- **סורק-הפניות:** `node machtzev/emit/free-ref-scan.mjs` — שער-משטרה 7 (אפס-הפניה-חופשית).
+- **משטרה:** `node machtzev/police.mjs --fast` — **חובה ירוקה לפני כל commit** (7 שערים).
+- **דדופ:** `node machtzev/dedup-atoms.mjs` (מדף) · `node machtzev/dedup-cross-dart.mjs` (מאור↔בנייה-חכמה).
+- **11 כללי-המרה שנלמדו-בדם:** `machtzev/emit/DART-PORTING-RULES.md` — הסוכן-הממיר חייב לכבד.
+
+## 3. הזרימה — נחיל אחד לכל אצווה (16 אטומים)
+**הסקריפט:** `/root/.claude/projects/-home-user--ai-chat-server/2d086046-4b60-52a1-9aee-58e2962b1958/workflows/scripts/js-to-dart-flow-wf_1c82c1dd-347.js`
+כל אטום עובר: **מנוע-AST טיוטה → סוכן מלטש (מחיל 11 הכללים) → זהב (dart --enable-asserts) → אימות-עוין**.
+
+### שלב א׳ — הכן אצווה (בחר 16 אטומי-מאור טהורים שטרם-מומרו):
+```bash
+cd /home/user/-ai-chat-server
+done=$(ls new/dart-maor/*.dart 2>/dev/null|grep -v _test|sed 's#.*/##;s#.dart##'; ls new/dart-maor/QUARANTINE/*.dart 2>/dev/null|grep -v _test|sed 's#.*/##;s#.dart##'; ls dart-from-maor/*.draft 2>/dev/null|sed 's#.*/##;s#.dart.draft##')
+picked=""; c=0
+for f in $(ls new/atoms/*.mjs|grep -v test|sed 's#.*/##;s#.mjs##'); do
+  echo "$done"|grep -qxF "$f" && continue
+  grep -qE 'crypto|fetch|navigator|localStorage|document|await|onSnapshot|requireDb' new/atoms/$f.mjs && continue
+  grep -q 'export function\|=> ' new/atoms/$f.mjs || continue
+  [ -f "new/atoms/$f.test.mjs" ] || continue
+  node machtzev/emit/ast-js-to-dart.mjs new/atoms/$f.mjs > dart-from-maor/$f.dart.draft 2>/dev/null
+  picked="$picked $f"; c=$((c+1)); [ $c -ge 16 ] && break
+done
+git add dart-from-maor; git commit -q -m "אצווה · טיוטות"; git push -q -u origin claude/mah-kora-0by8kw
+echo "$picked"|tr ' ' '\n'|grep .|python3 -c "import sys,json;print(json.dumps([l.strip() for l in sys.stdin]))"
+```
+### שלב ב׳ — שגר את הנחיל (Workflow tool):
+`Workflow({ scriptPath: "<הסקריפט-למעלה>", args: [<16-השמות-מהפלט>] })`
+
+### שלב ג׳ — כשהנחיל נוחת (task-notification עם go/nogo):
+```bash
+DART=/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/dart-sdk/bin/dart
+# 1) קבע כל GO ירוק:
+for a in <שמות-ה-GO>; do
+  [ -f "new/dart-maor/${a}_test.dart" ] && $DART run --enable-asserts "new/dart-maor/${a}_test.dart" >/dev/null 2>&1 \
+    && git add "new/dart-maor/$a.dart" "new/dart-maor/${a}_test.dart"
+done
+# 2) לכל NO-GO — קרא את הסיבה:
+#    • אם "האטום תקין, הבדיקה חלשה" (join'' וכו') ⇒ חזק את הבדיקה (אורך+איבר-איבר, כלל-8), הרץ, קבע.
+#    • אם "האטום שגוי" (סטיית-התנהגות) ⇒ הסגר: mv ל-new/dart-maor/QUARANTINE/, הוסף שורה ל-QUARANTINE/FIXES.md.
+#      אם הבאג מערכתי (חוזר) ⇒ הוסף כלל ל-DART-PORTING-RULES.md + הזרם לפרומפט-הסקריפט.
+# 3) שערים + קיבוע:
+node machtzev/emit/free-ref-scan.mjs   # חייב "0 עם הפניה"
+node machtzev/police.mjs --fast        # חייב "המשטרה ירוקה — 7/7"
+git commit -q -m "אצווה N Dart · X GO"; git push -q -u origin claude/mah-kora-0by8kw
+# 4) חזור לשלב א׳ לאצווה הבאה + תזמן ScheduleWakeup ~35 דק כרשת-ביטחון.
+```
+
+## 4. חוקי-ברזל (L14 + חוקי-החשמלאי)
+- **קבע רק שלשה שלמה-וירוקה** (`.dart`+`_test.dart` שעובר dart-test). לעולם לא באמצע-כתיבה.
+- **התנהגות זהה-ביט למקור** (חוק-4). אם הפורט סוטה — הסגר, אל תשנה את המקור.
+- **אטום = פונקציית-top-level, אפס-import פנימי.** שכן ⇒ שקע-פרמטר או הטמעה.
+- **commit+push אחרי כל אצווה.** אף פעם לא להשאיר עץ מלוכלך.
+- **מסווג-Bash נתקע לפעמים** ⇒ נסה-שוב או המתן; קריאה תמיד עובדת.
+
+## 5. מצב מדויק (עדכן בכל אצווה)
+- מאור-Dart בחוזה: **279** · בהסגר: **11** · נותרו-להמרה (טהורים): **~225**
+- אטומי-נתונים (const): ~83 — ניתן להמיר מכנית (JSON→Dart const), לא צריך נחיל.
+- גבול-IO: ~74 — לא-המרה, שקעים בשכבת-הקופסה.
+- **בנייה-חכמה: 197 חוטי-Dart ב-`dart-quarry/`** — כבר Dart! רק צריך contract+`_test.dart` ⇒ `new/dart/`
+  (בלי מנוע-פליטה — הם כבר בשפה). זה הבא-בתור כשמאור-הטהורים נגמרים.
+
+## 6. סדר-העבודה (מה-אחרי-מה)
+1. **סיים 225 אטומי-מאור הטהורים** (~14 אצוות).
+2. **המר 83 אטומי-הנתונים** (מכני/סקריפט).
+3. **קדם 197 חוטי-בנייה-חכמה** ל-Dart-חוזה (חוזה+בדיקה, הם כבר Dart).
+4. **תקן 11 המוסגרים** (לפי QUARANTINE/FIXES.md).
+5. **הרץ dedup-cross-dart** — עכשיו יימצא ליבה-אימפריאלית (יכולות משותפות מאור↔בנייה-חכמה).
+6. רק אז: **שכבת-המסכים** (הכרעה-15) → זהב-מלא → cutover (בעלים) → המחולל.
+
+## 7. אסור (הכרעות-בעלים)
+- אין push ל-main של הריפואים הישנים בלי אישור-בעלים.
+- אין להתחיל מסכים לפני שכל הלוגיקה מומרת (הכרעה 15).
+- זהות/סודות = שקע-הצבה, לעולם לא אטום (חוק-6).
