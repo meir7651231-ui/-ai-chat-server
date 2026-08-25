@@ -1,0 +1,3 @@
+dynamic overrideOf(dynamic email, dynamic org, dynamic normEmail) {
+  return (org.memberConfigs[normEmail(email)] ?? {});
+}

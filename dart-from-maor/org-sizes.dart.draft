@@ -1,0 +1,1 @@
+var ORG_SIZES = [{'id': 'small', 'label': 'קטן', 'sub': 'עד 5 אנשי צוות'}, {'id': 'medium', 'label': 'בינוני', 'sub': '5–20 אנשי צוות'}, {'id': 'large', 'label': 'גדול', 'sub': '20+ אנשי צוות'}];

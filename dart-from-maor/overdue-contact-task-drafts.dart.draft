@@ -1,0 +1,5 @@
+dynamic overdueContactTaskDrafts(dynamic supporters, dynamic existing, dynamic assignee, dynamic todayIso, dynamic taskIdentity) {
+  var me = taskIdentity(assignee);
+  var already = <dynamic>{...existing.where((t) => _falsy(t.doneAt) && taskIdentity(t.assignee) == me && t.ref.kind == 'supporter').map((t) => t.ref.id).toList()};
+  return supporters.where((sp) => sp.nextDate && sp.nextDate <= todayIso && !already.has(sp.id)).map((sp) => ({'assignee': me, 'title': '📞 להתקשר — ' + sp.name, 'ref': {'kind': 'supporter', 'id': sp.id}, 'pri': 1, 'due': todayIso})).toList();
+}
