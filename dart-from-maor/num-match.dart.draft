@@ -1,0 +1,10 @@
+dynamic numMatch(dynamic q, dynamic n) {
+  q = (q ?? '').toString().trim();
+  if (_falsy(q)) return true;
+  var m = q.match(RegExp(r'^(\d+)\s*\+$'));
+  if (m) return n >= +m[1];
+  m = q.match(RegExp(r'^(\d+)\s*-\s*(\d+)$'));
+  if (m) return n >= +m[1] && n <= +m[2];
+  if (RegExp(r'^\d+$').test(q)) return n == +q;
+  return true;
+}
