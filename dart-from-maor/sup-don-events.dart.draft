@@ -1,0 +1,15 @@
+dynamic supDonEvents(dynamic sp, dynamic term) {
+  dynamic T(dynamic k, dynamic fb) => (term ? term(k, fb) : fb);
+  var out = ((sp.donations ?? [])).map((d) => ({'date': d.date, 'amount': d.amount, 'cur': (d.cur ?? '₪'), 'src': 'קבלה ' + d.rid, 'rid': d.rid})).toList();
+  for (final h in (sp.hist ?? [])) {
+  var meta = [h.receipt && 'קבלה ' + h.receipt, h.txn && 'עסקה ' + h.txn, h.ref && 'אסמכתא ' + h.ref, h.brand, h.last4 && '•' + h.last4, h.clearer, h.pays && h.pays > 1 && h.pays + ' תשלומים', h.status].where(Boolean).join(' · ');
+  var label = h.clearer ? T('entity.donation', 'תרומה') : 'מהקובץ ההיסטורי';
+  out.add({'date': h.d, 'amount': h.a, 'cur': (h.c ?? '₪'), 'src': label + (meta ? ' · ' + meta : '')});
+}
+  if (_falsy(((sp.hist ?? [])).length)) {
+  var seen = <dynamic>{...out.map((x) => x.date).toList()};
+  if (sp.first && !seen.has(sp.first)) out.add({'date': sp.first, 'amount': 0, 'cur': '', 'src': T('entity.donation', 'תרומה') + ' ראשונה (מהקובץ)'});
+  if (sp.last && sp.last != sp.first && !seen.has(sp.last)) out.add({'date': sp.last, 'amount': 0, 'cur': '', 'src': T('entity.donation', 'תרומה') + ' אחרונה (מהקובץ)'});
+}
+  return (out..sort((a, b) => b.date.toString().localeCompare(a.date.toString())));
+}

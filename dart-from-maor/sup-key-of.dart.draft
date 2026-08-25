@@ -1,0 +1,4 @@
+dynamic supKeyOf(dynamic sp, dynamic sharedSupKey) {
+  var f = ((sp.forWho ?? '')).trim();
+  return (f ?? sharedSupKey);
+}

@@ -1,0 +1,11 @@
+dynamic supScore(dynamic sp, [dynamic rate = 3.7], dynamic nowMs, dynamic supTotalIls, dynamic supLast, dynamic supCount) {
+  var now = (nowMs ?? Date.now());
+  var tot = supTotalIls(sp, rate);
+  var last = supLast(sp);
+  var cnt = supCount(sp);
+  var days = last ? _floor((now - DateTime.parse(last + 'T12:00:00').millisecondsSinceEpoch) / 86400000) : 9999;
+  var R = days <= 30 ? 350 : days <= 90 ? 280 : days <= 180 ? 200 : days <= 365 ? 120 : 40;
+  var F = cnt >= 10 ? 300 : cnt >= 5 ? 230 : cnt >= 3 ? 160 : cnt >= 2 ? 100 : 50;
+  var M = tot >= 5000 ? 350 : tot >= 2000 ? 280 : tot >= 1000 ? 210 : tot >= 500 ? 140 : tot >= 100 ? 80 : 40;
+  return R + F + M;
+}
