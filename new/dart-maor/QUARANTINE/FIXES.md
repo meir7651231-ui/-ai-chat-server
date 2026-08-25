@@ -111,3 +111,23 @@ double שלם-ערך ≥2^63: ‏Dart `truncate()` מרווה ל-int64-max. ‏s
 ## set-employee-override — סדר-מפתחות-JS (כלל-14 החדש)
 מפתחות דמויי-שלם ("2","10") ממוינים מספרית-קודם ב-JS; ‏Dart משמר סדר-הכנסה ⇒ ‏JSON שונה. בדומיין-אמיתי (מיילים עם @) לא מתממש — אך חוק-4 מחייב.
 **תיקון:** עטיפת-מפה שממיינת מפתחות-שלמים-קנוניים קודם (או הכרעת-בעלים על צמצום-טיפוס).
+
+## אצווה #22 (25.8 לילה) — 6 הסגרים
+
+## sheet-roster — ‏courseId חסר מול null (כלל-2)
+‏enrollments=[{n:1},{courseId:null}] + courseId=null: ‏JS מחריג שורה-חסרת-מפתח, ‏Dart כולל. **תיקון:** containsKey כש-הארגומנט null.
+
+## site-campaign-progress — ‏Date.parse צורות-קצרות
+‏V8 מקבל "2027"/"2026-05" (⇒1.1/יום-1); הפורט דרש 10-תווים ⇒ daysLeft:null. **תיקון:** לקבל אורך 4/7.
+
+## site-donate-url — ריכוך-יתר על config=null
+‏JS זורק TypeError (config.site לא-משורשר-אופציונלית); הפורט ריכך ל-null. **תיקון:** זריקה נאמנת בגישות-העליונות (דפוס _get-הזורק).
+
+## size-label — ‏id=null מול שדה-חסר (כלל-2)
+‏JS ‏s.id===null לא תופס חסר ⇒ "—"; ‏Dart ‏null==null ⇒ "X". **תיקון:** containsKey('id').
+
+## smtp-host-for — ‏trim של NEL ‏U+0085 (חוק-16 החדש)
+‏Dart ‏trim גוזם ‏U+0085 (Unicode WS); ‏JS לא (אינו ב-ECMAScript WS) ⇒ ‏"user@gmail.com" עם NEL: ‏JS "" מול Dart "smtp.gmail.com:465". **תיקון:** שקע-trim נאמן-ECMAScript.
+
+## sort-support-msgs — קומפרטור לא-טרנזיטיבי (‏at מעורב-טיפוסים)
+עם ערכי-at הטרוגניים (מספר+מחרוזת-לא-מספרית) ⇒ NaN בקומפרטור ⇒ הפלט תלוי-אלגוריתם (‏TimSort-V8 מול מיון-Dart) — ‏13/750 סטיות בסריקה ממצה. בקלטים הומוגניים — זהה מלא. **דורש הכרעת-בעלים:** לצמצם-טיפוס בחוזה (at אחיד) או לחקות TimSort.
