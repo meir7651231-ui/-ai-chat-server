@@ -148,3 +148,11 @@ double שלם-ערך ≥2^63: ‏Dart `truncate()` מרווה ל-int64-max. ‏s
 
 ## sup-don-events · sup-dup-field-value — ‏tryParse גוזם-בעצמו (חוק-18 החדש)
 ‏num/double.tryParse של Dart גוזם רווחי-יוניקוד (‏U+0085!) גם אחרי ‏_jsTrim נאמן ⇒ שומר-ה-ES נעקף. **תיקון:** אימות-דקדוק-מספר-ES ‏(regex) לפני tryParse, או דחיית מחרוזת עם רווח-כלשהו אחרי ‏_jsTrim.
+
+## גל #25–#26 (26.8 לפנות-בוקר, מתכונת-חסכונית) — 9 הסגרים
+כולן משפחות-מוכרות; המאמת-החסכוני (≤10 קלטים, harness-אחד) תפס את כולן:
+- **to-tenant-id · task-identity · teacher-id-of** — חוק-13 (İ/ς/צ'רוקי — מיפוי-מלא): לשאוב _toLowerJs מ-task-identity.dart ולהרחיב ל-Final_Sigma.
+- **tour-advance · template-lines-to-names** — חוק-17 (float64): ‏toDouble() בחיבור/פרסינג-כמות.
+- **time-cost-total · time-hours-total · teacher-id-of** — חוק-18 (‏tryParse גוזם NEL): דקדוק-ES לפני tryParse.
+- **support-day-label** — פרסור-V8: שנה-מורחבת ‏+002026 מתקבלת ⇒ להרחיב regex.
+- **support-msg-time** — פרסור-V8: ‏T24+שבר נחסם · שבר>9-ספרות מותר · ‏±275760 גבול-TimeClip · ‏offset≤23:59 ⇒ 4 גידורים.
