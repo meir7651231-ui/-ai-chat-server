@@ -1,0 +1,3 @@
+dynamic productAssignments(dynamic assignments, dynamic productId) {
+  return assignments.where((a) => a.productId == productId);
+}

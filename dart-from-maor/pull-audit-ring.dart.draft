@@ -1,0 +1,12 @@
+var AUDIT_CAP = 500;
+dynamic pullAuditRing(dynamic dek, dynamic auditReadable, dynamic db, dynamic scopedCol, dynamic fs, dynamic decryptDoc) {
+  if (_falsy(auditReadable)) return null;
+  var snap = /*?AwaitExpression?*/;
+  var all = [];
+  for (final d in snap.docs) {
+  var data = dek ? /*?AwaitExpression?*/ : d.data();
+  if ((data.entries is List)) all.add(...data.entries);
+}
+  (all..sort((a, b) => (a.at < b.at ? -1 : a.at > b.at ? 1 : 0)));
+  return all.sublist(-AUDIT_CAP);
+}

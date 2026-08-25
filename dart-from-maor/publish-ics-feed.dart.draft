@@ -1,0 +1,10 @@
+var MAX_ICS_BYTES = 900000;
+dynamic publishIcsFeed(dynamic slug, dynamic ics, dynamic opts, dynamic sockets) {
+  var undefined = sockets;
+  if (TextEncoder().encode(ics).length > MAX_ICS_BYTES) {
+  throw Error('לוח-השנה גדול מדי לפרסום כפיד — פנו לתמיכה');
+}
+  var token = ((opts.rotate ? null : /*?AwaitExpression?*/) ?? mintToken());
+  /*?AwaitExpression?*/;
+  return token;
+}
