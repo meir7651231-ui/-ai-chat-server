@@ -32,7 +32,7 @@ void main() {
     assert(got!.length == vals.length,
         'אורך-צבעים ל-"$key" סטה: ${got.length} מול ${vals.length}');
     for (var j = 0; j < vals.length; j++) {
-      assert(got[j] == vals[j], 'צבע $j ל-"$key" סטה: "${got[j]}" מול "${vals[j]}"');
+      assert(got![j] == vals[j], 'צבע $j ל-"$key" סטה: "${got[j]}" מול "${vals[j]}"');
     }
   }
 
