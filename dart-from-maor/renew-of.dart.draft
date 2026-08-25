@@ -1,0 +1,3 @@
+dynamic renewOf(dynamic e) {
+  return (e.renew ?? '');
+}

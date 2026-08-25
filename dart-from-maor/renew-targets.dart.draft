@@ -1,0 +1,3 @@
+dynamic renewTargets(dynamic rows) {
+  return rows.where((r) => r.decision == 'yes' && _falsy(r.renewed));
+}
