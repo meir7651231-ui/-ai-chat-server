@@ -1,0 +1,45 @@
+dynamic parseXlsxSheet(dynamic bytes, dynamic unzipSync, dynamic strFromU8, dynamic readSharedStrings, dynamic colRefToIndex, dynamic unescapeXml) {
+  var files = ;
+  try {
+  files = unzipSync(bytes);
+} catch (_) {
+  return [];
+}
+  var shared = files['xl/sharedStrings.xml'] ? readSharedStrings(strFromU8(files['xl/sharedStrings.xml'])) : [];
+  var sheetPath = ((files as Map).keys.toList().where((n) => RegExp(r'^xl\/worksheets\/sheet\d+\.xml$').test(n))..sort())[0];
+  if (_falsy(sheetPath)) return [];
+  var xml = strFromU8(files[sheetPath]);
+  var rows = [];
+  var rowRe = RegExp(r'<row\b[^>]*>([\s\S]*?)<\/row>');
+  var rm = ;
+  while ((rm = rowRe.exec(xml))) {
+  var cells = [];
+  var cRe = RegExp(r'<c\b([^>]*?)(?:\/>|>([\s\S]*?)<\/c>)');
+  var cm = ;
+  var auto = 0;
+  while ((cm = cRe.exec(rm[1]))) {
+  var attrs = cm[1];
+  var inner = (cm[2] ?? '');
+  var refM = RegExp(r'r="([A-Z]+\d+)"').exec(attrs);
+  var idx = refM ? colRefToIndex(refM[1]) : auto;
+  var tM = RegExp(r't="([^"]+)"').exec(attrs);
+  var t = tM ? tM[1] : '';
+  var val = '';
+  if (t == 'inlineStr') {
+  var isRe = RegExp(r'<t[^>]*>([\s\S]*?)<\/t>');
+  var im = ;
+  while ((im = isRe.exec(inner))) val += im[1];
+  val = unescapeXml(val);
+} else {
+  var vM = RegExp(r'<v>([\s\S]*?)<\/v>').exec(inner);
+  var raw = vM ? vM[1] : '';
+  val = t == 's' ? ((shared[_toNum(raw)] ?? '')) : unescapeXml(raw);
+}
+  while (cells.length < idx) cells.add('');
+  cells[idx] = val;
+  auto = idx + 1;
+}
+  rows.add(cells);
+}
+  return rows;
+}
