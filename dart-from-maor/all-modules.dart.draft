@@ -1,0 +1,1 @@
+var ALL_MODULES = ['families', 'courses', 'calendar', 'diary', 'supporters', 'reports', 'tzedaka', 'shop', 'shop7'];
