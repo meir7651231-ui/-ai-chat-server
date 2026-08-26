@@ -32,3 +32,21 @@ lib-ai·lib-cloud·lib-cloud-config·lib-crypto·lib-lock·lib-pwa·net-check·p
 
 ## שער
 `dart analyze` נקי בכל 51 · כל ה-proofs ירוקים · משטרה 7/7 + mutation 708/708.
+
+## עדכון · שלב-האטומים (המשך "תתפתח")
+- **pricing שוחרר (52):** האטום `normalize-prices` (טהור) הומר ל-Dart בית-אקסקט
+  (+golden 6 דוגמאות), והקופסה נבנתה — הוכחת-חוצה-שפות 37 טענות זהה-ביט.
+- **המסקנה על ~9 הנותרות — גבול-הפלטפורמה (חוק-6), לא-פער:** כל האטומים החסרים
+  שלהן הם IO טהור — WebCrypto (encrypt/decrypt-doc, encrypt-db, hash/verify-pin,
+  open-dek, rewrap-password), Firestore (‏27 אטומי lib-cloud-config: fetch/write/
+  watch), DOM (read-csv-file-text, read-file-as-data-url), רשת (ask-claude,
+  run-net-check), PWA (is-ios, prompt-install). הם **לא-דטרמיניסטיים** (IV אקראי,
+  snapshots חיים) ו**פלטפורמתיים** (WebCrypto≠Flutter-crypto, DOM≠Flutter).
+  לכן אינם אטומים-חוצי-שפות — הם **חיווט-הצבה בלוח-האם**, מיושמים פר-פלטפורמה
+  (דפדפן: WebCrypto/Firebase-JS · Flutter: pointycastle/cloud_firestore) ומוכחים
+  פר-מערכת, לא ב-golden חוצה-שפות. זהו הגבול הנכון, לא חוב.
+
+## שורה-תחתונה
+**כל שכבת-הלוגיקה-הטהורה = דו-לשונית מלאה (52 קופסאות).** מה שנשאר ב-JS-בלבד הוא
+בדיוק ה-IO שאמור להיות פר-פלטפורמה. החזון "שתי המערכות על אותה קופסה" הושג
+במלואו עבור כל מה שאפשר וראוי שיהיה זהה-ביט.
