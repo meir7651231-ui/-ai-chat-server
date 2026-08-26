@@ -1,0 +1,201 @@
+<title>Orbit · Genesis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@700;900&family=Heebo:wght@300;400;700&family=Sora:wght@700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{--gold:#ffd24a;--violet:#a78bff;--cyan:#3ad0ff;--ink:#eef0ff;--faint:#6b6fa0;
+    --wm:'Sora',system-ui,sans-serif;--body:'Heebo',system-ui,sans-serif;--display:'Frank Ruhl Libre',serif;--mono:'IBM Plex Mono',monospace}
+  *{margin:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:#03040c;color:var(--ink);font-family:var(--body);overflow:hidden;direction:rtl}
+  #c{position:fixed;inset:0;width:100%;height:100%;display:block;cursor:crosshair}
+  .ui{position:fixed;inset:0;pointer-events:none;display:flex;flex-direction:column;justify-content:space-between;padding:30px 34px;z-index:2}
+  .top{display:flex;justify-content:space-between;align-items:center}
+  .brand{font-family:var(--wm);font-weight:800;letter-spacing:.14em;font-size:1.1rem;color:var(--ink);opacity:.9;
+    display:flex;align-items:center;gap:10px}
+  .brand .o{position:relative;width:20px;height:20px}
+  .brand .o::before{content:"";position:absolute;inset:0;border:1.5px solid var(--violet);border-radius:50%;opacity:.6}
+  .brand .o::after{content:"";position:absolute;top:-2px;left:50%;width:5px;height:5px;margin-left:-2.5px;background:var(--gold);
+    border-radius:50%;box-shadow:0 0 9px var(--gold);transform-origin:0 12px;animation:sp 4s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .tagwrap{position:fixed;inset:0;display:grid;place-items:center;pointer-events:none;z-index:1}
+  .tag{text-align:center;opacity:0;transform:translateY(14px);transition:opacity 1s,transform 1s}
+  .tag.show{opacity:1;transform:none}
+  .tag .k{font-family:var(--mono);font-size:.74rem;letter-spacing:.36em;text-transform:uppercase;color:var(--cyan)}
+  .tag .h{font-family:var(--display);font-weight:900;font-size:clamp(1.4rem,3.6vw,2.4rem);margin-top:10px;
+    text-shadow:0 4px 40px rgba(0,0,0,.7)}
+  .foot{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.72rem;
+    letter-spacing:.06em;color:var(--faint)}
+  .foot .hint b{color:var(--violet)}
+  .cta{pointer-events:auto;font-family:var(--body);font-weight:700;font-size:.95rem;color:#0a0a16;padding:11px 24px;border-radius:999px;
+    background:linear-gradient(120deg,#ffe089,var(--gold));text-decoration:none;transition:transform .18s,box-shadow .3s}
+  .cta:hover{transform:translateY(-2px);box-shadow:0 14px 36px -12px rgba(255,210,74,.55)}
+  .loading{position:fixed;inset:0;display:grid;place-items:center;background:#03040c;z-index:5;transition:opacity .8s}
+  .loading.gone{opacity:0;pointer-events:none}
+  .loading .l{font-family:var(--mono);font-size:.8rem;letter-spacing:.3em;color:var(--faint);text-transform:uppercase}
+  @media (prefers-reduced-motion:reduce){.brand .o::after{animation:none}}
+</style>
+
+<canvas id="c"></canvas>
+<div class="tagwrap"><div class="tag" id="tag"><div class="k" id="tagk">Orbit</div><div class="h" id="tagh"></div></div></div>
+<div class="ui">
+  <div class="top">
+    <div class="brand"><span class="o"></span>ORBIT</div>
+    <a class="cta" href="#" onclick="return false">פתחו אתר →</a>
+  </div>
+  <div class="foot">
+    <div class="hint"><b>הזיזו</b> את העכבר · <b>לחצו</b> להאיץ</div>
+    <div>WebGL · 12K particles · genesis</div>
+  </div>
+</div>
+<div class="loading" id="load"><div class="l">Orbit · מתעורר…</div></div>
+
+<script>
+(function(){
+  const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const cv=document.getElementById('c'), load=document.getElementById('load');
+  const tag=document.getElementById('tag'), tagh=document.getElementById('tagh'), tagk=document.getElementById('tagk');
+  let gl; try{gl=cv.getContext('webgl',{antialias:true,alpha:false,premultipliedAlpha:false});}catch(e){}
+  if(!gl){ load.querySelector('.l').textContent='WebGL לא נתמך בדפדפן'; return; }
+
+  const N=11000;
+
+  /* ---------- shape samplers (return Float32Array N*2 in world units) ---------- */
+  const off=document.createElement('canvas'), ox=off.getContext('2d');
+  function sampleText(txt,font,squash){
+    off.width=1000; off.height=340; ox.clearRect(0,0,1000,340);
+    ox.fillStyle='#fff'; ox.textAlign='center'; ox.textBaseline='middle';
+    ox.font=font; ox.fillText(txt,500,170);
+    const d=ox.getImageData(0,0,1000,340).data, pts=[];
+    for(let y=0;y<340;y+=3)for(let x=0;x<1000;x+=3){ if(d[(y*1000+x)*4+3]>128){
+      pts.push([ (x-500)/340*1.15*(squash||1), -(y-170)/340*1.15 ]); } }
+    return resample(pts);
+  }
+  function orbitRings(){
+    const pts=[];
+    for(let i=0;i<N;i++){
+      const r=Math.random();
+      if(r<0.12){ const a=Math.random()*6.283,rr=Math.random()*0.12; pts.push([Math.cos(a)*rr,Math.sin(a)*rr*0.9]); } // core
+      else{ const ring=r<0.56?0:1; const a=Math.random()*6.283;
+        const R=ring?0.92:0.6, tilt=ring?0.32:0.62;
+        let x=Math.cos(a)*R, y=Math.sin(a)*R*tilt;
+        if(ring){const rot=0.5; const nx=x*Math.cos(rot)-y*Math.sin(rot),ny=x*Math.sin(rot)+y*Math.cos(rot);x=nx;y=ny;}
+        x+=(Math.random()-.5)*0.02; y+=(Math.random()-.5)*0.02; pts.push([x,y]); }
+    }
+    return f32(pts);
+  }
+  function resample(pts){ // to exactly N with light jitter, shuffled
+    if(!pts.length) return new Float32Array(N*2);
+    for(let i=pts.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;const t=pts[i];pts[i]=pts[j];pts[j]=t;}
+    const out=new Float32Array(N*2);
+    for(let i=0;i<N;i++){const p=pts[i%pts.length];out[i*2]=p[0]+(Math.random()-.5)*0.006;out[i*2+1]=p[1]+(Math.random()-.5)*0.006;}
+    return out;
+  }
+  function f32(pts){const out=new Float32Array(N*2);for(let i=0;i<N;i++){out[i*2]=pts[i][0];out[i*2+1]=pts[i][1];}return out;}
+
+  const SH=[
+    sampleText('ORBIT','800 210px Sora, sans-serif'),
+    orbitRings(),
+    sampleText('אורביט','900 200px Heebo, sans-serif',1),
+  ];
+  const TAGS=[
+    ['Orbit','אתר-ניהול מלא. חי בתוך דקות.'],
+    ['One brain','מוח אחד מריץ את כל הארגון.'],
+    ['אורביט','בחרו תחום — וקבלו אתר משלכם.'],
+  ];
+
+  /* per-particle seed + color (color from ORBIT x-gradient, fixed across morphs) */
+  const seed=new Float32Array(N), colA=new Float32Array(N*3);
+  const pal=[[0.55,0.42,1.0],[0.23,0.82,1.0],[1.0,0.82,0.28]]; // violet, cyan, gold
+  for(let i=0;i<N;i++){ seed[i]=Math.random();
+    const t=(SH[0][i*2]+1.3)/2.6; // 0..1 across width
+    let c; if(t<0.5){const k=t/0.5;c=[pal[0][0]+(pal[1][0]-pal[0][0])*k,pal[0][1]+(pal[1][1]-pal[0][1])*k,pal[0][2]+(pal[1][2]-pal[0][2])*k];}
+    else{const k=(t-0.5)/0.5;c=[pal[1][0]+(pal[2][0]-pal[1][0])*k,pal[1][1]+(pal[2][1]-pal[1][1])*k,pal[1][2]+(pal[2][2]-pal[1][2])*k];}
+    colA[i*3]=c[0];colA[i*3+1]=c[1];colA[i*3+2]=c[2];
+  }
+
+  /* ---------- GL ---------- */
+  function mk(t,s){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);
+    if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))console.warn(gl.getShaderInfoLog(o));return o;}
+  const P=gl.createProgram();
+  gl.attachShader(P,mk(gl.VERTEX_SHADER,`
+    attribute vec2 aFrom;attribute vec2 aTo;attribute float aSeed;attribute vec3 aCol;
+    uniform float uMix;uniform float uT;uniform float uAspect;uniform vec2 uMouse;uniform float uBurst;uniform float uPx;
+    varying vec3 vCol;varying float vA;
+    void main(){
+      float m=clamp((uMix - aSeed*0.4)/0.6, 0.0, 1.0);
+      m=m*m*(3.0-2.0*m);
+      vec2 p=mix(aFrom,aTo,m);
+      float s=aSeed*6.283;
+      p+=vec2(sin(uT*0.7+s),cos(uT*0.6+s*1.3))*0.006*(0.4+0.6*aSeed);   // shimmer
+      p+=normalize(p+0.0001)*uBurst*(0.3+aSeed*0.7);                     // click burst
+      vec2 mp=vec2(uMouse.x*uAspect,uMouse.y);
+      vec2 pp=vec2(p.x*uAspect,p.y);
+      vec2 d=pp-mp; float dl=length(d);
+      if(dl<0.32){ p+=normalize(vec2(d.x/uAspect,d.y))*(0.32-dl)*0.9; }  // mouse repel
+      gl_Position=vec4(p.x/uAspect,p.y,0.0,1.0);
+      float tw=0.6+0.4*sin(uT*2.0+s);
+      gl_PointSize=(1.6+2.4*aSeed)*tw*uPx;
+      vCol=aCol; vA=0.5+0.5*tw;
+    }`));
+  gl.attachShader(P,mk(gl.FRAGMENT_SHADER,`
+    precision mediump float;varying vec3 vCol;varying float vA;
+    void main(){float d=length(gl_PointCoord-0.5);if(d>0.5)discard;
+      float a=smoothstep(0.5,0.0,d);gl_FragColor=vec4(vCol*(0.7+vA),a*0.85);}`));
+  gl.linkProgram(P);
+  if(!gl.getProgramParameter(P,gl.LINK_STATUS)){console.warn('link',gl.getProgramInfoLog(P));load.querySelector('.l').textContent='שגיאת-שיידר';return;}
+  gl.useProgram(P);
+
+  const bFrom=gl.createBuffer(), bTo=gl.createBuffer(), bSeed=gl.createBuffer(), bCol=gl.createBuffer();
+  function up(buf,data){gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.bufferData(gl.ARRAY_BUFFER,data,gl.STATIC_DRAW);}
+  up(bFrom,SH[0]); up(bTo,SH[0]); up(bSeed,seed); up(bCol,colA);
+  const aFrom=gl.getAttribLocation(P,'aFrom'),aTo=gl.getAttribLocation(P,'aTo'),
+        aSeed=gl.getAttribLocation(P,'aSeed'),aCol=gl.getAttribLocation(P,'aCol');
+  function bind(buf,loc,n){gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,n,gl.FLOAT,false,0,0);}
+  const uMix=gl.getUniformLocation(P,'uMix'),uT=gl.getUniformLocation(P,'uT'),uAspect=gl.getUniformLocation(P,'uAspect'),
+        uMouse=gl.getUniformLocation(P,'uMouse'),uBurst=gl.getUniformLocation(P,'uBurst'),uPx=gl.getUniformLocation(P,'uPx');
+
+  gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA,gl.ONE); gl.disable(gl.DEPTH_TEST);
+
+  let DPR,W,H;
+  function resize(){DPR=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;
+    cv.width=W*DPR;cv.height=H*DPR;gl.viewport(0,0,cv.width,cv.height);}
+  addEventListener('resize',resize);resize();
+
+  let mouse=[0,0];
+  addEventListener('pointermove',e=>{mouse=[(e.clientX/innerWidth-0.5)*2, -(e.clientY/innerHeight-0.5)*2];});
+  let burst=0;
+  addEventListener('pointerdown',()=>{burst=0.5;});
+
+  /* morph state machine */
+  let cur=0, mix=1, phase='hold', hold=0;
+  setTag(0);
+  function setTag(i){ tagk.textContent=TAGS[i][0]; tagh.textContent=TAGS[i][1]; tag.classList.add('show'); }
+  function startMorph(){
+    const nxt=(cur+1)%SH.length;
+    up(bFrom,SH[cur]); up(bTo,SH[nxt]);
+    mix=0; phase='morph'; tag.classList.remove('show');
+    pendingNext=nxt;
+  }
+  let pendingNext=0;
+
+  const t0=Date.now();
+  setTimeout(()=>load.classList.add('gone'),600);
+  function frame(){
+    const T=(Date.now()-t0)/1000;
+    // timeline
+    if(phase==='hold'){ hold+=1/60; if(hold> (reduce?9999:2.6)){hold=0;startMorph();} }
+    else{ mix+=reduce?1:0.012; if(mix>=1){mix=1;cur=pendingNext;phase='hold';setTag(cur);} }
+    burst*=0.90;
+
+    gl.clearColor(0.011,0.015,0.047,1); gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.useProgram(P);
+    bind(bFrom,aFrom,2);bind(bTo,aTo,2);bind(bSeed,aSeed,1);bind(bCol,aCol,3);
+    gl.uniform1f(uMix,mix);gl.uniform1f(uT,T);gl.uniform1f(uAspect,W/H);
+    gl.uniform2f(uMouse,mouse[0],mouse[1]);gl.uniform1f(uBurst,burst);gl.uniform1f(uPx,DPR);
+    gl.drawArrays(gl.POINTS,0,N);
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+</script>
