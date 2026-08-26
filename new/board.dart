@@ -17,6 +17,9 @@ import 'dart-boxes/audit.dart' as auditBox;
 import 'dart-boxes/date-util.dart' as dateUtilBox;
 // ── דומיין-בנייה-חכמה (buildsmart) — נכנס לאותו לוח-אם מאוחד ──
 import 'dart-boxes/bs-matching.dart' as bsMatching;
+import 'dart-boxes/bs-workflow.dart' as bsWorkflow;
+import 'dart-boxes/bs-actions.dart' as bsActions;
+import 'dart-boxes/bs-assistant.dart' as bsAssistant;
 
 class Board {
   final Map<String, dynamic> config;
@@ -108,6 +111,22 @@ class Board {
     }
     return out;
   }
+
+  // ── ⚙️ בנייה-חכמה: מנוע-workflow — קידום-שלב לפי מפתח (intake→prep→…→done) ──
+  String? bsWorkflowNextStage(String key) {
+    final stage = bsWorkflow.wfStageFromKey(key);
+    if (stage == null) return null;
+    final next = bsWorkflow.wfNextStage(stage);
+    return next == null ? null : bsWorkflow.wfStageKey(next);
+  }
+
+  // ── 🎯 בנייה-חכמה: טווח-יעד לפעולה (all/screen/single/every/actionable) ──
+  String bsScopeHe(String token) => bsActions.scopeHe(token);
+  String bsScopeLabel(String scope) => bsActions.scopeLabel(scope);
+
+  // ── 🤖 בנייה-חכמה: ניתוב-כוונה — תשובת-משתמש → קטגוריה (קופיילוט-עברית) ──
+  String? bsAssistantCategory(String reply, List<String> categories) =>
+      bsAssistant.matchAssistantCategory(reply, categories);
 }
 
 Board makeBoard({Map<String, dynamic>? config, String Function()? clockIso, num rate = 3.7}) {

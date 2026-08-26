@@ -133,6 +133,12 @@ void main() {
   ok('גשר-איחוד: fuzzy-בנייה-חכמה תופס כפילות-שם ב-נתוני-מאור', pairs.any((p) => p.contains('p1') && p.contains('p2')));
   ok('גשר-איחוד: שם-רחוק לא-מזווג', !pairs.any((p) => p.contains('p3')));
 
+  // 16) ⚙️🎯🤖 שלוש קופסאות-בנייה-חכמה נוספות על אותו לוח
+  ok('bs-workflow: קידום-שלב intake→prep', board.bsWorkflowNextStage('intake') == 'prep');
+  ok('bs-workflow: done⇒אין-הבא', board.bsWorkflowNextStage('done') == null);
+  ok('bs-actions: טווח-יעד he', board.bsScopeHe('all').isNotEmpty);
+  ok('bs-assistant: ניתוב-כוונה', board.bsAssistantCategory('משלוחים', ['משלוחים', 'לקוחות']) == 'משלוחים');
+
   if (fails > 0) { print('❌ לוח-האם (Dart): $fails אי-התאמות'); throw StateError('board dart proof failed'); }
-  print('✓ לוח-האם המאוחד (Dart): $n טענות — 12 קופסאות-מאור + 1 קופסת-בנייה-חכמה על אותו לוח · מחוברים יחד');
+  print('✓ לוח-האם המאוחד (Dart): $n טענות — 12 קופסאות-מאור + 4 קופסאות-בנייה-חכמה על אותו לוח · מחוברים יחד');
 }
