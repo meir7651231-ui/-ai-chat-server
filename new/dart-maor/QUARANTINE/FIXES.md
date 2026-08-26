@@ -156,3 +156,7 @@ double שלם-ערך ≥2^63: ‏Dart `truncate()` מרווה ל-int64-max. ‏s
 - **time-cost-total · time-hours-total · teacher-id-of** — חוק-18 (‏tryParse גוזם NEL): דקדוק-ES לפני tryParse.
 - **support-day-label** — פרסור-V8: שנה-מורחבת ‏+002026 מתקבלת ⇒ להרחיב regex.
 - **support-msg-time** — פרסור-V8: ‏T24+שבר נחסם · שבר>9-ספרות מותר · ‏±275760 גבול-TimeClip · ‏offset≤23:59 ⇒ 4 גידורים.
+
+## גל #27–#28 (26.8, מתכונת-היברידית) — 2 הסגרים (אומתו ב-verify-only על Opus)
+- **wa-payment-text** — חוק-17+12: ‏balance=-0.5 ⇒ Math.round=-0 (JS '‎-0') מול Dart +0.0⇒'0'; ‏1e21 ⇒ ‏d.toInt() נחתך ל-int64-max. תיקון: ‏_jsAdd/toDouble + שימור-סימן-אפס-שלילי + _heIlInt דרך shortest-round-trip.
+- **waitlist-for** — ‏localeCompare מול compareTo: ‏['B','a'] ⇒ JS [a,B] מול Dart [B,a]. תיקון: שקע-קולציה מודע-locale (או decorate לפי normalize).
