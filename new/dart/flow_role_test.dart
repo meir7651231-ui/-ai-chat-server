@@ -2,34 +2,31 @@
 // הרצה: dart run --enable-asserts new/dart/flow_role_test.dart
 import 'flow_role.dart';
 
+// שקע kHotWaterAccessorySkus (מקור:312) — קבוצת-בדיקה.
+const _hw = {'HW-PUMP-25', 'HW-TEE-RECIRC'};
+
+FlowRole _r(String sku, String cat) =>
+    flowRole(sku, cat, hotWaterAccessorySkus: _hw);
+
 void _eq(FlowRole got, FlowRole want, String label) {
   if (got != want) throw StateError('FAIL [$label]: got=$got want=$want');
 }
 
 void main() {
   var n = 0;
+  // accessory SKU (מקור:301-308) — גובר על כל קטגוריה.
+  _eq(_r('HW-INSUL', 'צינורות'), FlowRole.accessory, '1 accessory sku'); n++;
+  _eq(_r('77701185', 'ברזי מעבר'), FlowRole.accessory, '2 hanger sku');  n++;
+  // אביזר-מים-חמים דרך השקע.
+  _eq(_r('HW-PUMP-25', 'צינורות'), FlowRole.accessory, '3 hw-acc socket'); n++;
+  // קטגוריה מבנית ⇒ accessory.
+  _eq(_r('X', 'חבקי תליה'), FlowRole.accessory, '4 structural');         n++;
+  // קטגוריית-קבוע ⇒ fixture.
+  _eq(_r('X', 'אסלות וכיורים'), FlowRole.fixture, '5 fixture');           n++;
+  // כל השאר ⇒ connector.
+  _eq(_r('X', 'אביזרי נחושת'), FlowRole.connector, '6 connector');        n++;
+  _eq(_r('X', 'ברכיים'), FlowRole.connector, '7 elbow connector');        n++;
 
-  const accSku = {'A1'};
-  const hwSku = {'HW1'};
-  const structural = {'תמיכה'};
-  const fixture = {'אסלות וכיורים'};
-  const terminal = {'סיפונים'};
-
-  FlowRole fr(String sku, String cat) => flowRole(sku, cat,
-      accessorySkus: accSku,
-      hotWaterAccessorySkus: hwSku,
-      structuralCats: structural,
-      fixtureCats: fixture,
-      terminalCats: terminal);
-
-  _eq(fr('A1', 'סיפונים'), FlowRole.accessory, '1 sku over terminal'); n++;
-  _eq(fr('HW1', 'אסלות וכיורים'), FlowRole.accessory, '2 hw sku over fixture'); n++;
-  _eq(fr('X', 'תמיכה'), FlowRole.accessory, '3 structural'); n++;
-  _eq(fr('X', 'אסלות וכיורים'), FlowRole.fixture, '4 fixture'); n++;
-  _eq(fr('X', 'סיפונים'), FlowRole.fixture, '5 terminal'); n++;
-  _eq(fr('X', 'מחברי HDPE'), FlowRole.connector, '6 default connector'); n++;
-
-  assert(fr('A1', 'x') == FlowRole.accessory, 'assert-live guard');
-
+  assert(_r('HW-INSUL', 'צינורות') == FlowRole.accessory, 'assert-live guard');
   print('OK flowRole: $n asserts passed');
 }

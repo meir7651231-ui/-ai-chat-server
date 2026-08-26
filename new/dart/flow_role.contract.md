@@ -1,54 +1,33 @@
-# חוזה · `flowRole` (Dart)
+# חוזה · flowRole
 
-מקור-אמת (קדוש, חוק-4): `buildsmart/app_flutter/lib/logic/install_engine.dart:479-494`
-(‏`flowRole`). ה-enum `FlowRole` (accessory/fixture/connector) הוטבע inline verbatim
-(חוק-1). הקלט `LipskeyCatalogProduct` צומצם לשדות `sku`+`categoryHe` (חוק-3/6). חמש
-קבוצות-הסיווג הפכו לשקעים (חוק-3 — דאטה מוזרקת בקופסה).
+**מוצא:** `buildsmart/app_flutter/lib/logic/install_engine.dart:310-317` (verbatim, חוק-4).
+עוגן enum: `:295` `enum FlowRole { connector, fixture, accessory }`.
 
 ## חתימה
 ```dart
-enum FlowRole { accessory, fixture, connector }
-
+enum FlowRole { connector, fixture, accessory }
 FlowRole flowRole(String sku, String categoryHe, {
-  required Set<String> accessorySkus,
-  required Set<String> hotWaterAccessorySkus,
-  required Set<String> structuralCats,
-  required Set<String> fixtureCats,
-  required Set<String> terminalCats,
-})
+  Set<String> hotWaterAccessorySkus = const {},
+});
 ```
 
 ## קלט
-- `sku`, `categoryHe` — במקור `p.sku` / `p.categoryHe`.
-- 5 שקעי-`Set<String>` — במקור const-ים (`_accessorySkus`, `kHotWaterAccessorySkus`,
-  `_structuralCats`, `_fixtureCats`, `_terminalCats`).
+- `sku` — SKU המוצר (`p.sku`).
+- `categoryHe` — קטגוריית-המוצר (`p.categoryHe`).
+- `hotWaterAccessorySkus` — שקע: מגלם `kHotWaterAccessorySkus` (מקור:312); ברירת-מחדל `{}`.
 
-## פלט / התנהגות (עוגני-שורה) — קסקדה, הסדר קדוש
-1. `install_engine.dart:480-481` — `accessorySkus.contains(sku) || hotWaterAccessorySkus.contains(sku)`
-   ⇒ `FlowRole.accessory` (בדיקת-sku ראשונה, גוברת).
-2. `install_engine.dart:483` — `structuralCats.contains(categoryHe)` ⇒ `FlowRole.accessory`.
-3. `install_engine.dart:486-488` — `fixtureCats.contains(c) || terminalCats.contains(c)`
-   ⇒ `FlowRole.fixture`.
-4. `install_engine.dart:490` — אחרת ⇒ `FlowRole.connector`.
+## פלט
+`FlowRole` — קסקדה (מקור:311-316): SKU-אביזר / מבני ⇒ `accessory`; קבוע ⇒ `fixture`; אחרת ⇒ `connector`.
 
-## דוגמאות מספריות
-שקעים לבדיקה: `accessorySkus={A1}`, `hotWaterAccessorySkus={HW1}`,
-`structuralCats={'תמיכה'}`, `fixtureCats={'אסלות וכיורים'}`, `terminalCats={'סיפונים'}`.
+## התנהגות
+`_accessorySkus`(:301-308) ∪ שקע ⇒ accessory · `_structuralCats`(:268-271) ⇒ accessory · `_fixtureCats`(:263-267) ⇒ fixture · else connector.
 
-| # | sku | categoryHe | ⇒ | נימוק |
-|---|-----|-----------|---|-------|
-| 1 | `'A1'` | `'סיפונים'` | accessory | sku ב-accessorySkus (גובר על terminal) |
-| 2 | `'HW1'` | `'אסלות וכיורים'` | accessory | sku ב-hotWater (גובר על fixture) |
-| 3 | `'X'` | `'תמיכה'` | accessory | structuralCat |
-| 4 | `'X'` | `'אסלות וכיורים'` | fixture | fixtureCat |
-| 5 | `'X'` | `'סיפונים'` | fixture | terminalCat |
-| 6 | `'X'` | `'מחברי HDPE'` | connector | אף קבוצה ⇒ ברירת-מחדל |
-
-## שקעים
-- 5 קבוצות-הסיווג — הזרקת-דאטה (חוק-3/5). הבדיקה מזריקה קבוצות סינתטיות מינימליות
-  המדגימות כל ענף-קסקדה + את קדימות-ה-sku על הקטגוריה.
-
-## DoD (פקודה+פלט-צפוי — דיבר 12)
-```
-dart run --enable-asserts new/dart/flow_role_test.dart  ⇒ exit 0 + "OK flowRole: N asserts passed"
-```
+## דוגמאות (עוגן install_engine.dart:310-317)
+| # | sku | categoryHe | hwAcc | פלט |
+|---|-----|------------|-------|-----|
+| 1 | HW-INSUL | צינורות | {} | accessory (sku) |
+| 2 | 77701185 | ברזי מעבר | {} | accessory (מתלה) |
+| 3 | HW-PUMP-25 | צינורות | {HW-PUMP-25} | accessory (שקע) |
+| 4 | X | חבקי תליה | {} | accessory (מבני) |
+| 5 | X | אסלות וכיורים | {} | fixture |
+| 6 | X | אביזרי נחושת | {} | connector |

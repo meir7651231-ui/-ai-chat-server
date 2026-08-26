@@ -1,22 +1,23 @@
 // ⚛️ אטום-Dart (דרגת-חוזה) · isFitting
-// תפקיד: האם המוצר הוא אביזר-חיבור (fitting) — לפי קטגוריה ב-_fittingCats, או (כשקטלוג-החברה פעיל)
-//        לפי productType ב-fittingTypes.
-// מוצא: buildsmart/app_flutter/lib/logic/install_engine.dart:816-851 (‏isFitting; חוק-4 — התנהגות-הטיוטה).
-// טוהר: פונקציית top-level עצמאית, אפס import (dart:core בלבד).
-//        · ה-const `_fittingCats` הוטבע inline verbatim (install_engine.dart:615-621 — עוגן חי, אומת).
-//        · הדגל-הגלובלי `companyCatalogActive` (state חיצוני) קופל לשקע-bool (חוק-3/חוק-6).
-//        · הקריאות-לשדה p.categoryHe/p.productType קופלו לשקעי-מחרוזת (LipskeyCatalogProduct גדול, לא-inline).
-//        · ה-const `_fittingTypes` (הסעיף השני) **אינו-בר-שחזור** — הטיוטה מפנה אליו אך אין לו הגדרה במקור-החי
-//          (grep ב-install_engine.dart ריק; ה-isFitting החי :622 בעל-סעיף-יחיד) ⇒ סוקק כ-`fittingTypes` (דיבר-9).
-//        האחים _pipeCats/_isPipe/isPipe (:624+) — לא נקראים ⇒ לא-הוטבעו.
+// מוצא: buildsmart/app_flutter/lib/logic/install_engine.dart:615-622
+//        (‏_fittingCats + isFitting; חוק-4 — התנהגות זהה בדיוק, לא-משופרת).
+//        אימות-עוגן: ‏install_engine.dart:622 = `bool isFitting(p) =>
+//        _fittingCats.contains(p.categoryHe);` — סעיף-יחיד, ללא companyCatalog.
+// טוהר: פונקציית top-level עצמאית, אפס import פנימי (רק שפה/סטנדרט).
+//       ‏_fittingCats = דאטה-קבוע פנימי של האטום (רשימת-קטגוריות, לא הקשר/זהות/סוד).
 //
-// קלט:  categoryHe          — שקע: קטגוריית-המוצר (במקור p.categoryHe).
-//        productType         — שקע: סוג-המוצר (במקור p.productType; nullable).
-//        companyCatalogActive — שקע: דגל קטלוג-חברה פעיל (state חיצוני).
-//        fittingTypes        — שקע: סוגי-אביזר (const _fittingTypes בלתי-בר-שחזור).
-// פלט:  bool — _fittingCats מכיל categoryHe, או (companyCatalogActive ∧ fittingTypes מכיל productType).
+// אין שקע: האטום קורא אך ורק את `p.categoryHe` — מועבר ישירות כ-String.
+//   (במקור `isFitting(LipskeyCatalogProduct p) => _fittingCats.contains(p.categoryHe)`).
+//
+// התנהגות (מקור:622): קטגוריות מחבר/מתאם טהורות — פטמות, בושינגים, מצמדים,
+//   ברכיים, אטמים, קטעי-צינור. אלה מה שאינסטלטור מוסיף *רק* לגישור-פער, ולכן
+//   מותרים כמילוי-אוטומטי; התקנים תפקודיים (ברזים/מחלקים/משאבות) אינם כאן.
+//
+// קלט:  categoryHe — קטגוריית-המוצר בעברית (‏p.categoryHe).
+// פלט:  bool — האם המוצר הוא אביזר-מחבר (fitting).
 
-// עוגן חי — install_engine.dart:615-621 (verbatim).
+/// Pure connector/adapter categories — nipples, bushings, couplers, elbows,
+/// gaskets, pipe segments (verbatim: install_engine.dart:615-620).
 const _fittingCats = {
   'אביזרי נחושת', 'אביזרי תבריג', 'מחברי HDPE', 'מחברי NTM', 'אביזרי שקע-תקע',
   'ברכיים', 'מסעפים וחיבורי אסלה', 'אטמים ופקקים', 'מצמדים וצינורות', 'צינורות',
@@ -24,14 +25,4 @@ const _fittingCats = {
   'פקקים וצינורות', 'זקיף אסלה',
 };
 
-/// True iff the product is a connector/fitting. Behaviour of install_engine.dart:816-851
-/// with `_fittingCats` inlined, and the company-catalog flag + product fields +
-/// the unrecoverable `_fittingTypes` const injected as sockets (law-3/דיבר-9).
-bool isFitting({
-  required String categoryHe,
-  required String? productType,
-  required bool companyCatalogActive,
-  required Set<String> fittingTypes,
-}) =>
-    _fittingCats.contains(categoryHe) ||
-    (companyCatalogActive && fittingTypes.contains(productType));
+bool isFitting(String categoryHe) => _fittingCats.contains(categoryHe);

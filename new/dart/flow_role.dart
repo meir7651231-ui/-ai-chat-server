@@ -1,38 +1,65 @@
 // ⚛️ אטום-Dart (דרגת-חוזה) · flowRole
-// מוצא: buildsmart/app_flutter/lib/logic/install_engine.dart:479-494 (‏flowRole; חוק-4).
-// טוהר: פונקציית top-level עצמאית, אפס import. ה-enum-השכן `FlowRole` (3 ערכים) הוטבע
-//        inline verbatim (חוק-1: טיפוס-שכן-קטן ⇒ הטבעה). הקלט `LipskeyCatalogProduct p`
-//        צומצם לשני השדות בהם נגע הגוף — `sku` ו-`categoryHe` — כשני פרמטרים (חוק-3/6:
-//        טיפוס-שכן-גדול לא נגרר). חמש קבוצות-ה-const (`_accessorySkus`,
-//        `kHotWaterAccessorySkus`, `_structuralCats`, `_fixtureCats`, `_terminalCats`)
-//        הופכו לשקעי-פרמטר (חוק-3) — ערכיהן דאטה, מוזרקת בקופסה.
+// מוצא: buildsmart/app_flutter/lib/logic/install_engine.dart:310-317
+//        (‏flowRole; חוק-4 — התנהגות זהה בדיוק, לא-משופרת).
+//        אימות-עוגן: ‏install_engine.dart:310 = `FlowRole flowRole(p) {` וגוף :311-316.
+// טוהר: פונקציית top-level עצמאית, אפס import פנימי (רק שפה/סטנדרט).
+//       ‏enum FlowRole (מחזיק-פלט טהור) מוגדר מקומית (מקור:295).
+//       ‏_accessorySkus (מקור:301-308) · _fixtureCats (263-267) · _structuralCats
+//       (268-271) = דאטה-קבוע פנימי (רשימות-SKU/קטגוריות, לא הקשר/זהות/סוד).
 //
-// קלט:  sku, categoryHe        — שדות-המוצר (במקור p.sku / p.categoryHe).
-//       accessorySkus …        — 5 קבוצות-סיווג (שקעים).
-// פלט:  FlowRole — accessory / fixture / connector, לפי קסקדת-הסיווג.
+// שקע שהוזרק (קריאה-לשכן ⇒ פרמטר-שקע · חוק-3, דיבר-3):
+//   • `kHotWaterAccessorySkus`  (install_engine.dart:312, מיובא מ-lipskey_hotwater.dart)
+//     — קבוצת-ה-SKU של אביזרי-מים-חמים מוזרקת כשקע `hotWaterAccessorySkus`
+//       (ברירת-מחדל {} — ריק ⇒ ללא-אביזרי-מים-חמים).
+//
+// התנהגות (מקור:311-316):
+//   • accessory — SKU ברשימת-אביזרים או ברשימת-אביזרי-מים-חמים, או קטגוריה מבנית:
+//                 מתלים/חבקים/עוגנים/כלים — לעולם לא מחבר-זרימה.
+//   • fixture   — קטגוריית-קבוע (אסלות/כיורים/מערכות-אמבטיה): התקן-קצה בלבד.
+//   • connector — כל השאר: צינורות/אביזרים/פטמות/מתאמים/ברזים — הזרימה עוברת בהם.
+//
+// קלט:  sku                     — SKU המוצר (‏p.sku).
+//       categoryHe              — קטגוריית-המוצר בעברית (‏p.categoryHe).
+//       hotWaterAccessorySkus   — שקע: קבוצת-SKU אביזרי-מים-חמים (ברירת-מחדל {}).
+// פלט:  FlowRole — connector / fixture / accessory.
 
-/// Flow role of a product. Verbatim behaviour of install_engine.dart:479-494
-/// with the FlowRole enum inlined and the 5 classifier sets injected.
-enum FlowRole { accessory, fixture, connector }
+/// A product's role in a flow path (verbatim order: install_engine.dart:295).
+enum FlowRole { connector, fixture, accessory }
+
+/// Individual non-flow products inside otherwise-flow categories
+/// (verbatim: install_engine.dart:301-308).
+const _accessorySkus = {
+  'HW-INSUL', 'HW-CLIP', 'HW-SEALANT', // בידוד / חבק / איטום PTFE
+  '77000026', '77000027', '77980000', '77980001', // אקדחי מים/אצבע לגינה (קצה)
+  '77701185', // מתלה מתכוונן
+  '77772604', '77772605', // סטי הידוק לברז פרח
+  '777M1802', '777M1807', // מנגנוני הדחה (פנים-קבועה)
+  '777A5034', '77772410', '77772412', '77772415', // דיורי פיה (קצה)
+};
+
+/// Fixture categories — terminal devices (verbatim: install_engine.dart:263-267).
+const _fixtureCats = {
+  'אסלות וכיורים', 'מושבי אסלה', 'אביזרי אסלה', 'מערכות אמבטיה', 'ערכות רחצה',
+  'חלקים סניטריים', 'אביזרי חדר רחצה', 'התקנה נמוכה', 'התקנה גבוהה',
+  'התקנה צמודה', 'דיורים ופיות',
+};
+
+/// Structural categories — hangers/clamps/tools (verbatim: install_engine.dart:268-271).
+const _structuralCats = {
+  'חבקי תליה', 'חבקי צינור', 'עוגנים ובנדים', 'כלי עבודה', 'מצופים',
+  'ידיות אחיזה', 'ארונות מחלק',
+};
 
 FlowRole flowRole(
   String sku,
   String categoryHe, {
-  required Set<String> accessorySkus,
-  required Set<String> hotWaterAccessorySkus,
-  required Set<String> structuralCats,
-  required Set<String> fixtureCats,
-  required Set<String> terminalCats,
+  Set<String> hotWaterAccessorySkus = const {},
 }) {
-  if (accessorySkus.contains(sku) || hotWaterAccessorySkus.contains(sku)) {
+  if (_accessorySkus.contains(sku) || hotWaterAccessorySkus.contains(sku)) {
     return FlowRole.accessory;
   }
   final c = categoryHe;
-  if (structuralCats.contains(c)) return FlowRole.accessory;
-  // A fixture OR a terminal device (trap / floor drain / draw-off tap) is an
-  // endpoint-only flow node — never an auto-inserted mid-line connector.
-  if (fixtureCats.contains(c) || terminalCats.contains(c)) {
-    return FlowRole.fixture;
-  }
+  if (_structuralCats.contains(c)) return FlowRole.accessory;
+  if (_fixtureCats.contains(c)) return FlowRole.fixture;
   return FlowRole.connector;
 }

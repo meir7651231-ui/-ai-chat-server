@@ -1,6 +1,6 @@
 # חוזה · `pathCost` (Dart)
 
-מקור-אמת (קדוש, חוק-4): `buildsmart/app_flutter/lib/logic/install_engine.dart:670-676`
+מקור-אמת (קדוש, חוק-4): `buildsmart/app_flutter/lib/logic/install_engine.dart:496-502`
 (‏`_pathCost`, פרטי-במקור). מקודם ל-public (כלל-הגלגול). סוכם עלות-קשת על-פני
 נתיב-מוצרים; משמש את `findAlternativePaths` (Yen) לדירוג-חלופות.
 
