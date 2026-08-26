@@ -129,7 +129,10 @@ Set<pds.WaterSystem> productDivisionSystems(
 /// האם המוצר עומד בטמפרטורת-הקו [tempC]: אין דירוג ([maxTempC]==null) ⇒ תמיד true;
 /// אחרת tempC <= maxTempC.
 bool productSuitableForTemp(int tempC, {required int? maxTempC}) =>
-    pst.productSuitableForTemp(tempC, maxTempC: maxTempC);
+    // האטום עבר לצורת-שקע-פונקציה (maxTempCOf); הקופסה מזריקה את הערך הסקלרי.
+    // התנהגות זהה-ביט: t==null ⇒ true, אחרת tempC ≤ t.
+    pst.productSuitableForTemp<Object?>(null, tempC,
+        maxTempCOf: (_) => maxTempC?.toDouble());
 
 // ── מגן-סחף לטיפוס-האדפטר (הכרעת-קופסה 2) — נצרך ע"י הפרוף לאימות שוויון-אורך ה-enums ──
 int get configOpKindCount => ke.ConfigOpKind.values.length;

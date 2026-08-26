@@ -175,10 +175,10 @@ void main() {
   //   תצורת-היברידית: הכל דלוק — מערכת אחת מלאה.
   final hybrid = makeBoard(clockIso: () => '2026-08-24', config: {
     'slug': 'hybrid',
-    'features': {'bs.fuzzy': true, 'bs.workflow': true, 'bs.projects': true, 'bs.studio': true, 'bs.security': true, 'bs.config': true, 'bs.actions': true, 'bs.assistant': true},
+    'features': {'bs.fuzzy': true, 'bs.workflow': true, 'bs.projects': true, 'bs.studio': true, 'bs.security': true, 'bs.config': true, 'bs.actions': true, 'bs.assistant': true, 'bs.pipe': true},
   });
   ok('היברידי: גם מאור וגם בנייה-חכמה דולקים', hybrid.lit('supporters.cockpit') && hybrid.lit('bs.workflow'));
-  ok('היברידי: קטלוג-מלא דולק (15)', hybrid.capabilities().length == 15);
+  ok('היברידי: קטלוג-מלא דולק (כל)', hybrid.capabilities().length == Board.capabilityCatalog.length);
   // אותו קוד-לוח בדיוק — רק ה-config משנה מה דולק.
   ok('מערכת-אחת: אותו לוח, config שונה ⇒ תצורה שונה',
       amuta.capabilities().length < hybrid.capabilities().length && binyan.lit('bs.projects') && !amuta.lit('bs.projects'));
@@ -186,7 +186,7 @@ void main() {
   // 21) 🎛️ חוגה גרנולרית — הכל / חצי / רבע / כל כמות, והדולקות עובדות יחד
   Board withCaps(Iterable<String> caps) => makeBoard(clockIso: () => '2026-08-24', config: Board.configFor(caps));
   // כל (15):
-  ok('חוגה: הכל דלוק (15)', withCaps(Board.capabilityCatalog).capabilities().length == 15);
+  ok('חוגה: הכל דלוק (כל)', withCaps(Board.capabilityCatalog).capabilities().length == Board.capabilityCatalog.length);
   // חצי (בדיוק 7):
   final halfCaps = Board.capabilityCatalog.take(7).toList();
   ok('חוגה: חצי דלוק (7)', withCaps(halfCaps).capabilities().length == 7);
@@ -227,7 +227,7 @@ void main() {
       wChesed.cockpitKpis(sups)['total'] == 4 &&
       wChesed.fuzzyDupPairs([{'id': 'p1', 'name': 'משהכהן'}, {'id': 'p2', 'name': 'משהכוהן'}]).isNotEmpty);
   // full — הכל
-  ok('אשף/full: הכל (15)', fromPack('full').capabilities().length == 15);
+  ok('אשף/full: הכל (כל)', fromPack('full').capabilities().length == Board.capabilityCatalog.length);
   // 🎛️ החוגה מעל האשף: החבילה + דיוק ידני (add/remove)
   ok('אשף+חוגה: עמותה + הדלקת bs.fuzzy', fromPack('amuta', add: ['bs.fuzzy']).lit('bs.fuzzy'));
   ok('אשף+חוגה: בנייה − כיבוי bs.studio', !fromPack('binyan', remove: ['bs.studio']).lit('bs.studio'));

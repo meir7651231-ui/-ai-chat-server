@@ -46,7 +46,7 @@ class Board {
     'supporters.cockpit', 'families', 'diary', 'reports', 'audit', 'wa', 'hebrew',
     // בנייה-חכמה (opt-in — חסר-דגל = כבוי, רק true מדליק; כמו הרחבות-מאור):
     'bs.fuzzy', 'bs.workflow', 'bs.actions', 'bs.assistant',
-    'bs.projects', 'bs.studio', 'bs.security', 'bs.config',
+    'bs.projects', 'bs.studio', 'bs.security', 'bs.config', 'bs.pipe',
   ];
   // יכולת דולקת? מאור-ליבה דרך featureOn (חסר=דלוק); בנייה-חכמה = opt-in מפורש (רק true).
   bool lit(String cap) => cap.startsWith('bs.')
@@ -67,7 +67,7 @@ class Board {
   //   מערכת אחת: בוחר תחום, מקבל חבילה; ואז מדייק בחוגה (add/remove) כמה שרוצה.
   static final Map<String, List<String>> verticalPacks = {
     'amuta': ['supporters.cockpit', 'families', 'diary', 'reports', 'audit', 'wa', 'hebrew'],
-    'binyan': ['bs.projects', 'bs.studio', 'bs.workflow', 'bs.actions', 'bs.security', 'bs.config'],
+    'binyan': ['bs.projects', 'bs.studio', 'bs.workflow', 'bs.actions', 'bs.security', 'bs.config', 'bs.pipe'],
     'digital': ['bs.studio', 'bs.workflow', 'bs.actions', 'bs.assistant', 'bs.fuzzy'],
     'chesed-plus': ['supporters.cockpit', 'families', 'audit', 'wa', 'hebrew', 'bs.fuzzy', 'bs.assistant'],
     'full': [...capabilityCatalog],
