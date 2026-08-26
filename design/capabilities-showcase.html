@@ -1,0 +1,352 @@
+<title>מאור · חדר-הראווה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;900&family=Heebo:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root{
+    --space:#0a0b16; --space-2:#0d0f1e; --panel:#141626; --panel-2:#1b1e33;
+    --line:#272a45; --ink:#eceefc; --muted:#8a8fb5; --faint:#5b5f82;
+    --gold:#f5c451; --gold-soft:#ffdf8a; --violet:#7c5cff; --violet-soft:#a78bff;
+    --good:#4fd1a1; --warn:#f6b95a; --crit:#ff6b8b;
+    --display:'Frank Ruhl Libre',Georgia,serif;
+    --body:'Heebo',system-ui,sans-serif;
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --r:18px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--space); color:var(--ink);
+    font-family:var(--body); font-weight:300; line-height:1.7;
+    direction:rtl; -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:1120px; margin:0 auto; padding:0 24px}
+  .eyebrow{
+    font-family:var(--mono); font-size:.72rem; letter-spacing:.28em;
+    text-transform:uppercase; color:var(--violet-soft); font-weight:500;
+  }
+
+  /* ── HERO ── */
+  .hero{position:relative; min-height:96vh; display:grid; place-items:center; isolation:isolate}
+  #sky{position:absolute; inset:0; width:100%; height:100%; z-index:-1; display:block}
+  .hero::after{ /* vignette so type stays legible over the field */
+    content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+    background:radial-gradient(120% 90% at 70% 30%, transparent 30%, var(--space) 82%);
+  }
+  .hero-inner{text-align:center; padding:120px 24px; max-width:900px}
+  .hero h1{
+    font-family:var(--display); font-weight:900; margin:.3em 0 .2em;
+    font-size:clamp(2.8rem,8vw,6rem); line-height:1.02; text-wrap:balance;
+    letter-spacing:-.01em;
+  }
+  .hero h1 .lit{
+    background:linear-gradient(120deg,var(--gold-soft),var(--gold) 55%,#e9a93a);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    text-shadow:0 0 42px rgba(245,196,81,.28);
+  }
+  .hero p{
+    color:var(--muted); font-size:clamp(1.05rem,2.2vw,1.35rem);
+    max-width:34ch; margin:0 auto; font-weight:300;
+  }
+  .badges{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:32px}
+  .badge{
+    font-family:var(--mono); font-size:.74rem; letter-spacing:.04em;
+    padding:8px 14px; border:1px solid var(--line); border-radius:999px;
+    color:var(--ink); background:rgba(20,22,38,.55); backdrop-filter:blur(6px);
+  }
+  .badge b{color:var(--gold); font-weight:500}
+  .scroll-cue{position:absolute; bottom:26px; left:50%; transform:translateX(-50%);
+    font-family:var(--mono); font-size:.68rem; letter-spacing:.2em; color:var(--faint);
+    animation:bob 2.4s ease-in-out infinite}
+  @keyframes bob{50%{transform:translate(-50%,8px)}}
+
+  /* ── SECTION scaffolding ── */
+  section{padding:96px 0; position:relative}
+  .head{max-width:640px; margin-bottom:48px}
+  .head h2{font-family:var(--display); font-weight:700; font-size:clamp(1.9rem,4vw,2.9rem);
+    margin:.35em 0 .25em; line-height:1.1; text-wrap:balance}
+  .head p{color:var(--muted); margin:0; font-size:1.05rem}
+
+  /* ── CAPABILITY CARDS ── */
+  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px}
+  .card{
+    position:relative; background:linear-gradient(180deg,var(--panel),var(--space-2));
+    border:1px solid var(--line); border-radius:var(--r); padding:26px;
+    overflow:hidden; transition:border-color .4s, transform .4s;
+    transform-style:preserve-3d;
+  }
+  .card:hover{border-color:var(--violet)}
+  .card .k{font-family:var(--mono); font-size:.72rem; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--faint)}
+  .card h3{font-family:var(--display); font-weight:700; font-size:1.35rem; margin:6px 0 8px}
+  .card p{color:var(--muted); font-size:.95rem; margin:0}
+  .stage{margin:18px 0 4px; height:132px; border-radius:12px; overflow:hidden;
+    background:radial-gradient(120% 120% at 30% 0%, #191c30, #0c0e1c);
+    border:1px solid var(--line); position:relative}
+
+  /* demo: motion — orbiting dots */
+  .orbits{position:absolute; inset:0; display:grid; place-items:center}
+  .orbit{position:absolute; border:1px solid rgba(124,92,255,.22); border-radius:50%}
+  .o1{width:52px;height:52px} .o2{width:92px;height:92px} .o3{width:132px;height:132px}
+  .planet{position:absolute; top:50%; left:50%; width:9px; height:9px; margin:-4.5px;
+    border-radius:50%; background:var(--gold); box-shadow:0 0 12px var(--gold)}
+  .spin1{animation:orb 3.2s linear infinite} .spin2{animation:orb 5.4s linear infinite reverse}
+  .spin3{animation:orb 8s linear infinite}
+  @keyframes orb{to{transform:rotate(360deg)}}
+  .arm{position:absolute; top:50%; left:50%; transform-origin:0 0}
+  .core{position:absolute; top:50%; left:50%; width:16px;height:16px;margin:-8px;border-radius:50%;
+    background:radial-gradient(circle,var(--gold-soft),var(--gold)); box-shadow:0 0 26px var(--gold)}
+
+  /* demo: tokens — swatch ramp */
+  .ramp{position:absolute; inset:0; display:grid; grid-template-columns:repeat(6,1fr)}
+  .ramp span{display:block}
+  .tok-label{position:absolute; inset:auto 0 0 0; font-family:var(--mono); font-size:.66rem;
+    color:var(--ink); padding:6px 10px; background:linear-gradient(transparent,rgba(0,0,0,.6))}
+
+  /* demo: typography */
+  .typo{position:absolute; inset:0; display:grid; place-items:center; text-align:center}
+  .typo .big{font-family:var(--display); font-weight:900; font-size:2.6rem; line-height:1;
+    background:linear-gradient(120deg,var(--violet-soft),var(--gold)); -webkit-background-clip:text;
+    background-clip:text; color:transparent}
+  .typo .small{font-family:var(--mono); font-size:.66rem; letter-spacing:.2em; color:var(--faint); margin-top:8px}
+
+  /* demo: generative canvas */
+  .stage canvas{display:block; width:100%; height:100%}
+
+  /* demo: 3d tilt card */
+  #tiltCard{transition:transform .1s linear}
+  .tiltface{position:absolute; inset:0; display:grid; place-items:center;
+    background:conic-gradient(from 210deg at 60% 40%, #1a1d33, #23264a, #14162a, #1a1d33);
+  }
+  .tiltface .chip{font-family:var(--display); font-weight:900; font-size:2rem;
+    color:var(--gold); text-shadow:0 6px 30px rgba(0,0,0,.6); transform:translateZ(40px)}
+
+  /* ── VERTICALS ── */
+  .verticals{display:flex; gap:12px; flex-wrap:wrap}
+  .vt{
+    flex:1 1 148px; min-width:148px; border-radius:14px; padding:18px;
+    border:1px solid var(--line); position:relative; overflow:hidden; cursor:default;
+    transition:transform .35s;
+  }
+  .vt:hover{transform:translateY(-6px)}
+  .vt .emoji{font-size:1.5rem}
+  .vt .nm{font-family:var(--display); font-weight:700; margin-top:8px; font-size:1.05rem; color:#fff}
+  .vt .tg{font-family:var(--mono); font-size:.66rem; letter-spacing:.1em; color:rgba(255,255,255,.66); margin-top:2px}
+  .vt::before{content:""; position:absolute; inset:0; opacity:.9; z-index:-1}
+
+  /* ── FOOTER ── */
+  footer{padding:64px 0 90px; border-top:1px solid var(--line); color:var(--muted)}
+  footer .wrap{display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; align-items:center}
+  footer b{color:var(--ink); font-weight:500}
+  .note{font-family:var(--mono); font-size:.72rem; color:var(--faint); letter-spacing:.04em}
+
+  .reveal{opacity:0; transform:translateY(24px); transition:opacity .8s, transform .8s}
+  .reveal.in{opacity:1; transform:none}
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important; transition:none!important}
+    .reveal{opacity:1; transform:none}
+  }
+</style>
+
+<div class="hero">
+  <canvas id="sky"></canvas>
+  <div class="hero-inner">
+    <span class="eyebrow">חדר-הראווה · יכולות עיצוב</span>
+    <h1>מה אני יכול<br><span class="lit">לבנות לך</span></h1>
+    <p>כל אלמנט בעמוד הזה נבנה חי — טיפוגרפיה, מושן, גנרטיבי, תלת-ממד וזהות-מותג. זו הדגמה, לא תמונה.</p>
+    <div class="badges">
+      <span class="badge">✦ <b>גנרטיבי</b> · Canvas</span>
+      <span class="badge">◐ <b>מושן</b> · CSS + JS</span>
+      <span class="badge">◈ <b>תלת-ממד</b></span>
+      <span class="badge">▦ <b>טוקנים</b></span>
+      <span class="badge">✎ <b>טיפוגרפיה</b></span>
+    </div>
+  </div>
+  <div class="scroll-cue">גלול ↓</div>
+</div>
+
+<section class="wrap">
+  <div class="head reveal">
+    <span class="eyebrow">5 יכולות · הדגמה חיה</span>
+    <h2>כל כרטיס מדגים יכולת אחת — פועלת ממש כאן</h2>
+    <p>אותה רמת-גימור שתקבל במסך-ההרשמה, בגלקסיית-התורמים, בנחיתה או בכל משטח שנבחר.</p>
+  </div>
+
+  <div class="grid">
+    <div class="card reveal">
+      <div class="stage"><canvas id="gen"></canvas></div>
+      <div class="k">Generative · p5-style</div>
+      <h3>אמנות אלגוריתמית</h3>
+      <p>שדה-חלקיקים חי שנוצר בקוד — בסיס לגלקסיית-התורמים ולרקעים הקוסמיים.</p>
+    </div>
+
+    <div class="card reveal">
+      <div class="stage">
+        <div class="orbits">
+          <div class="orbit o1"></div><div class="orbit o2"></div><div class="orbit o3"></div>
+          <div class="core"></div>
+          <div class="arm spin1"><div class="planet"></div></div>
+          <div class="arm spin2"><div class="planet"></div></div>
+          <div class="arm spin3"><div class="planet"></div></div>
+        </div>
+      </div>
+      <div class="k">Motion · orchestrated</div>
+      <h3>מושן ומיקרו-אינטראקציות</h3>
+      <p>מסלולים מתוזמנים — כמו כדור-המוח בהרשמה, מכבד prefers-reduced-motion.</p>
+    </div>
+
+    <div class="card reveal">
+      <div class="stage" id="tiltCard">
+        <div class="tiltface"><span class="chip">◈ 3D</span></div>
+      </div>
+      <div class="k">3D · הזז את העכבר</div>
+      <h3>עומק תלת-ממדי</h3>
+      <p>הטיה מגיבה-לעכבר. הבסיס ל-Three.js / react-three-fiber על משטחים אמיתיים.</p>
+    </div>
+
+    <div class="card reveal">
+      <div class="stage">
+        <div class="ramp">
+          <span style="background:#0d0f1e"></span><span style="background:#1b1e33"></span>
+          <span style="background:#3a2f6e"></span><span style="background:#7c5cff"></span>
+          <span style="background:#e9a93a"></span><span style="background:#f5c451"></span>
+        </div>
+        <div class="tok-label">--space → --violet → --gold</div>
+      </div>
+      <div class="k">Design tokens</div>
+      <h3>מערכת-טוקנים</h3>
+      <p>צבע, טיפוגרפיה ומרווח כמערכת-אמת אחת — פר-ורטיקל, עקבי בכל מסך.</p>
+    </div>
+
+    <div class="card reveal">
+      <div class="stage">
+        <div class="typo">
+          <div>
+            <div class="big">אֱמֶת</div>
+            <div class="small">FRANK RUHL · HEEBO · PLEX MONO</div>
+          </div>
+        </div>
+      </div>
+      <div class="k">Typography</div>
+      <h3>זיווג-גופנים עברי</h3>
+      <p>שילוב אופייני של תצוגה-סריף וגוף-סאנס — האישיות של העמוד.</p>
+    </div>
+
+    <div class="card reveal">
+      <div class="stage">
+        <div class="typo"><div>
+          <div class="big" style="background:linear-gradient(120deg,#4fd1a1,#7c5cff);-webkit-background-clip:text;background-clip:text;color:transparent">A → B</div>
+          <div class="small">REVEAL · TILT · HOVER · SCROLL</div>
+        </div></div>
+      </div>
+      <div class="k">Composition</div>
+      <h3>הרכבה וזרימה</h3>
+      <p>חשיפה-בגלילה, היררכיה, ריתמוס — כל החלקים מתחברים למשטח אחד.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="head reveal">
+    <span class="eyebrow">זהות · 6 מתוך 13 ורטיקלים</span>
+    <h2>זהות-מותג מלאה שמתחלפת עם הוורטיקל</h2>
+    <p>ערכה · צבע · אמוג'י · תנועה — כל חבילה עם שפה משלה. ‏חסד נשאר קלאסי, ביט-זהה ללקוח-החי.</p>
+  </div>
+  <div class="verticals reveal" id="verts"></div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <div style="font-family:var(--display);font-weight:700;color:var(--ink);font-size:1.15rem">מאור · המחצב</div>
+      <div class="note">כל היכולות מוכנות. בוחרים משטח — ומתחילים.</div>
+    </div>
+    <div class="note">Frank Ruhl Libre · Heebo · IBM Plex Mono · Canvas 2D · CSS 3D</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  /* ── HERO: gravitational constellation ── */
+  const sky = document.getElementById('sky'), sx = sky.getContext('2d');
+  let W,H,stars,mouse={x:-999,y:-999};
+  function size(c){ const r=c.getBoundingClientRect(), d=Math.min(devicePixelRatio||1,2);
+    c.width=r.width*d; c.height=r.height*d; return {w:r.width,h:r.height,d}; }
+  function initSky(){ const s=size(sky); W=s.w; H=s.h; sx.setTransform(s.d,0,0,s.d,0,0);
+    const n=Math.min(120, Math.floor(W*H/9000)); stars=[];
+    for(let i=0;i<n;i++) stars.push({x:Math.random()*W,y:Math.random()*H,
+      vx:(Math.random()-.5)*.15,vy:(Math.random()-.5)*.15,r:Math.random()*1.6+.4,
+      h:Math.random()<.15?'g':'v'}); }
+  function drawSky(){
+    sx.clearRect(0,0,W,H);
+    for(const s of stars){
+      // gentle drift + cursor gravity
+      const dx=mouse.x-s.x, dy=mouse.y-s.y, d2=dx*dx+dy*dy;
+      if(d2<26000){ const f=(1-d2/26000)*.9; s.vx+=dx/Math.sqrt(d2+1)*f*.05; s.vy+=dy/Math.sqrt(d2+1)*f*.05; }
+      s.vx*=.96; s.vy*=.96; s.x+=s.vx; s.y+=s.vy;
+      if(s.x<0)s.x+=W; if(s.x>W)s.x-=W; if(s.y<0)s.y+=H; if(s.y>H)s.y-=H;
+    }
+    // links
+    for(let i=0;i<stars.length;i++)for(let j=i+1;j<stars.length;j++){
+      const a=stars[i],b=stars[j],dx=a.x-b.x,dy=a.y-b.y,d=dx*dx+dy*dy;
+      if(d<12000){ const o=(1-d/12000)*.22; sx.strokeStyle='rgba(124,92,255,'+o+')';
+        sx.lineWidth=.6; sx.beginPath(); sx.moveTo(a.x,a.y); sx.lineTo(b.x,b.y); sx.stroke(); }
+    }
+    for(const s of stars){ sx.beginPath(); sx.arc(s.x,s.y,s.r,0,7);
+      sx.fillStyle=s.h==='g'?'rgba(245,196,81,.9)':'rgba(190,178,255,.85)'; sx.fill(); }
+    if(!reduce) requestAnimationFrame(drawSky);
+  }
+  addEventListener('resize',()=>{initSky();});
+  addEventListener('pointermove',e=>{const r=sky.getBoundingClientRect(); mouse.x=e.clientX-r.left; mouse.y=e.clientY-r.top;});
+  initSky(); drawSky();
+
+  /* ── CARD: generative flow field ── */
+  const gc=document.getElementById('gen'), gx=gc.getContext('2d');
+  const gs=size(gc); gc.width=gs.w*gs.d; gc.height=gs.h*gs.d; gx.setTransform(gs.d,0,0,gs.d,0,0);
+  const gw=gs.w, gh=gs.h; let pts=[]; for(let i=0;i<60;i++)pts.push({x:Math.random()*gw,y:Math.random()*gh});
+  let t=0;
+  function flow(){
+    gx.fillStyle='rgba(12,14,28,.10)'; gx.fillRect(0,0,gw,gh);
+    for(const p of pts){
+      const a=(Math.sin(p.x*.02+t)+Math.cos(p.y*.02-t))*Math.PI;
+      p.x+=Math.cos(a)*1.1; p.y+=Math.sin(a)*1.1;
+      if(p.x<0||p.x>gw||p.y<0||p.y>gh){p.x=Math.random()*gw;p.y=Math.random()*gh;}
+      gx.fillStyle= Math.random()<.5?'rgba(245,196,81,.7)':'rgba(167,139,255,.7)';
+      gx.fillRect(p.x,p.y,1.5,1.5);
+    }
+    t+=.01; if(!reduce) requestAnimationFrame(flow);
+  }
+  gx.fillStyle='#0c0e1c'; gx.fillRect(0,0,gw,gh); flow();
+
+  /* ── CARD: 3D tilt ── */
+  const tc=document.getElementById('tiltCard');
+  if(!reduce) tc.addEventListener('pointermove',e=>{
+    const r=tc.getBoundingClientRect(); const px=(e.clientX-r.left)/r.width-.5, py=(e.clientY-r.top)/r.height-.5;
+    tc.style.transform=`perspective(600px) rotateY(${px*22}deg) rotateX(${-py*22}deg)`;
+  });
+  tc.addEventListener('pointerleave',()=>tc.style.transform='');
+
+  /* ── VERTICALS ── */
+  const V=[
+    {nm:'אור-ראשון',tg:'חסד · קלאסי',e:'🕯️',c:'#3a2f6e',a:'#f5c451'},
+    {nm:'דיגיטל',tg:'סטודיו · אפליקציות',e:'💻',c:'#0e2a3a',a:'#38bdf8'},
+    {nm:'בנייה',tg:'אתרי-בנייה',e:'🏗️',c:'#3a2a0e',a:'#f6b95a'},
+    {nm:'סטודיו',tg:'פרויקטים',e:'🏢',c:'#241a3a',a:'#a78bff'},
+    {nm:'קופת-צדקה',tg:'רכזים · ריקונים',e:'💰',c:'#0e3a24',a:'#4fd1a1'},
+    {nm:'חנות',tg:'קטלוג · מימושים',e:'🛍️',c:'#3a0e2a',a:'#ff6b8b'},
+  ];
+  document.getElementById('verts').innerHTML=V.map(v=>
+    `<div class="vt" style="--a:${v.a}"><div class="emoji">${v.e}</div>
+      <div class="nm">${v.nm}</div><div class="tg">${v.tg}</div>
+      <style>.vt:nth-child(${V.indexOf(v)+1})::before{background:radial-gradient(120% 120% at 20% 0%, ${v.c}, #0d0f1e)}
+      .vt:nth-child(${V.indexOf(v)+1}){border-color:${v.a}33}</style></div>`).join('');
+
+  /* ── scroll reveal ── */
+  const io=new IntersectionObserver((es)=>es.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in')}),{threshold:.15});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+})();
+</script>
