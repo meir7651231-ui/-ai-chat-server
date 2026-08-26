@@ -72,3 +72,15 @@ sup-last/sup-usd). כלומר הם שקעים-מוכרים: בפירוק, הזר
 **לקח-לולאה (ננעל):** test של אטום **אסור** לייבא אטום-אח (חוק-חיווט) — כל השקעים/האחים מוטבעים inline כ-doubles בבדיקה; ה-Golden נלכד מהרצת-חיווט-אמיתי ואז ננעל.
 
 **שלב-ב (המרה JS→Dart) — טרם התחיל.** כל 34 האטומים ממתינים להמרה+אימות-עוין מול Node.
+
+---
+## ✅ סגירה — שלב-ב (המרת Dart) גמור
+**41/41 אטומי-JS הומרו ל-Dart ביט-מדויק** — כולם `dart analyze` נקי + `dart run --enable-asserts` ירוק (Dart≡JS≡Node), משטרה 7/7 פר-נחיתה, על origin:
+- cockpit 12 · intel 7 · segments 2 · portfolio 3 · commands 2 · constellation 1 · dialer 7 · nedarim-דלתא 7.
+- מאור-Dart: 625 → **666 אטומים**. dedup-atoms: 0 תאומי-מוצא · dedup-cross-dart: אפס חפיפה חוצה-ענפים.
+
+**ביצוע:** אטום-פיילוט אחד ידני (cockpit-days-since) לשחזור-הפייפליין, ואז 3 נחילי-Dart במקביל (≤3, כהוראת-ההנדאוף); כל אטום אומת עצמאית על-ידי המפקד לפני commit.
+
+**נקודות-המרה שננעלו (js-compat):** `Math.round`⇒`(x+0.5).floor()` (חצי-כלפי-+∞ נאמן-JS) · `toISOString`⇒UTC (`toUtc().toIso8601String()`) עם `toInt()` = ToInteger · `toLocaleString`⇒קיבוץ-אלפים inline · `hash01` FNV-1a ⇒ uint32 מפורש (`&0xFFFFFFFF`) · `Math.log10`⇒`log(x)/ln10` (אומת זהה-ביט) · `List.sort` לא-יציב ⇒ שובר-שוויון אינדקס-מקורי (מול Array.sort יציב) · שקעים ⇒ פרמטרי-Function (ערבוב אופציונלי-מיקומי+named אסור ⇒ named-with-default) · num== ב-_deepEq לשמירת int↔double.
+
+**הבא בתור:** 173 טיוטות בנייה-חכמה ב-dart-quarry (dart-promote.js).
