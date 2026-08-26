@@ -6,18 +6,18 @@
 ///  · `String(x ?? '')` ⇒ שקע `_jsStrOrEmpty` (null/undefined⇒'', מספר-שלם בלי נקודה כמו JS).
 ///  · truthiness `if(id)` / `|| '(ללא שם)'` ⇒ בדיקת-מחרוזת-ריקה מפורשת (כלל-7).
 ///  · Set/List טהורים; db לא-מוטבל (keep/drop רשימות-חדשות).
-Map<String, dynamic> planDemoCleanup(Map db, Map demoDb) {
+Map<String, dynamic> planDemoCleanup(Map db, Map demoDb, {required Map<String, dynamic> fpFields}) {
   final cleaned = Map<String, dynamic>.from(db);
   final removed = <String, dynamic>{};
   // ids של ישויות-אב שהוסרו — לצורך מפל
   final removedIds = <String, Set<String>>{};
   final removedMemberIds = <String>{};
 
-  for (final ent in _fpFields.keys) {
+  for (final ent in fpFields.keys) {
     final cur = db[ent];
     final demo = demoDb[ent];
     if (cur is! List || demo is! List || demo.isEmpty) continue;
-    final fields = _fpFields[ent]!;
+    final fields = fpFields[ent]!;
     final demoFps = <String>{for (final r in demo) _fingerprint(r, fields)};
     final keep = <dynamic>[];
     final drop = <dynamic>[];
@@ -102,28 +102,7 @@ Map<String, dynamic> planDemoCleanup(Map db, Map demoDb) {
 }
 
 /// שדות-זיהוי יציבים פר-ישות (בלי id/תאריכים/מערכים-מקוננים/מונים).
-/// Map של Dart שומר על סדר-הכנסה ⇒ ROOT_ENTITIES = _fpFields.keys (זהה ל-Object.keys).
-const Map<String, List<String>> _fpFields = {
-  'families': ['name', 'father', 'mother', 'phone', 'phone2', 'city', 'address', 'email'],
-  'supporters': ['name', 'phone', 'email', 'idNum', 'cat', 'forWho'],
-  'courses': ['name', 'description', 'price', 'price1', 'price2'],
-  'teachers': ['name', 'phone', 'email', 'idNum', 'specialty'],
-  'rooms': ['name', 'location', 'cap'],
-  'events': ['title', 'type', 'customType', 'notes', 'price', 'time'],
-  'volunteers': ['name', 'phone', 'area'],
-  'distributionDays': ['title', 'note'],
-  'tzCoordinators': ['name', 'phone'],
-  'tzCampaigns': ['name', 'title', 'goal'],
-  'tzEvents': ['title', 'name', 'notes'],
-  'shopItems': ['name', 'kind', 'value', 'basePrice'],
-  'shopStores': ['name', 'phone', 'address'],
-  'shopCriteria': ['name', 'label', 'desc'],
-  'shopProducts': ['name', 'title', 'kind'],
-  'shopEvents': ['title', 'name', 'notes'],
-  'shopIntakes': ['name', 'note'],
-  'tasks': ['title', 'note', 'desc'],
-  'warehouse': ['name', 'sku', 'note'],
-};
+/// Map של Dart שומר על סדר-הכנסה ⇒ ROOT_ENTITIES = fpFields.keys (זהה ל-Object.keys).
 
 /// מפריד-השדות במקור: בייט SOH (0x01), לא מחרוזת-ריקה.
 const String _sep = '';

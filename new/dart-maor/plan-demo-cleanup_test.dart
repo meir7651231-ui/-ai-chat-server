@@ -1,3 +1,4 @@
+import '../dart-data-maor/plan-demo-cleanup.dart';
 // רתמת-זהב · plan-demo-cleanup — אותן 10 דוגמאות-חוזה בדיוק
 // מ-new/atoms/plan-demo-cleanup.test.mjs. עובר ⇒ Dart ≡ JS.
 // הרצה: dart run --enable-asserts plan-demo-cleanup_test.dart
@@ -79,7 +80,7 @@ void main() {
     ],
   };
 
-  final r = planDemoCleanup(db, demoDb);
+  final r = planDemoCleanup(db, demoDb, fpFields: kFpFields);
   final removed = r['removed'] as Map;
   final cleaned = r['cleaned'] as Map;
 
@@ -104,7 +105,7 @@ void main() {
       'db המקורי לא שונה (אימוטביליות)');
 
   // demoDb ריק ⇒ אפס הסרות:
-  final r2 = planDemoCleanup(db, {});
+  final r2 = planDemoCleanup(db, {}, fpFields: kFpFields);
   ok(r2['total'] == 0 && (r2['removed'] as Map).isEmpty,
       'demoDb ריק ⇒ total=0, removed={}');
 
