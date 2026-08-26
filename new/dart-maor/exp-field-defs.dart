@@ -33,85 +33,85 @@ List<Map<String, String>> expFieldDefs<C>(
   String Function(C) featLabel,
   String Function(C) itemLabel,
   String Function(C) unitLabel,
-) {
+ {required String Function(String) term}) {
   final full = featureOn(cfg, 'reports.custom.full');
   if (target == 'courses') {
     if (!full) {
       return [
-        {'key': 'name', 'label': 'שם החוג'},
-        {'key': 'teacher', 'label': 'מורה + טלפון'},
-        {'key': 'model', 'label': 'מסלול ומחיר'},
-        {'key': 'occ', 'label': 'תפוסה'},
-        {'key': 'students', 'label': 'רשימת ' + termOf(cfg, 'entity.students', 'תלמידים')},
-        {'key': 'pays', 'label': 'תשלומים בטווח'},
-        {'key': 'abs', 'label': 'חיסורים בטווח'},
+        {'key': 'name', 'label': term('shm-hchvg')},
+        {'key': 'teacher', 'label': term('mvrh-tlpvn')},
+        {'key': 'model', 'label': term('mslvl-vmchyr')},
+        {'key': 'occ', 'label': term('tpvsh')},
+        {'key': 'students', 'label': term('rshymt') + termOf(cfg, 'entity.students', 'תלמידים')},
+        {'key': 'pays', 'label': term('tshlvmym-btvvch')},
+        {'key': 'abs', 'label': term('chysvrym-btvvch')},
       ];
     }
     return [
-      {'key': 'name', 'label': 'שם ה' + termOf(cfg, 'entity.course', 'חוג')},
-      {'key': 'teacher', 'label': termOf(cfg, 'entity.teacher', 'מורה') + ' + טלפון'},
-      {'key': 'grade', 'label': 'כיתות'},
-      {'key': 'audience', 'label': 'קהל יעד'},
+      {'key': 'name', 'label': term('shm-h') + termOf(cfg, 'entity.course', 'חוג')},
+      {'key': 'teacher', 'label': termOf(cfg, 'entity.teacher', 'מורה') + term('tlpvn')},
+      {'key': 'grade', 'label': term('kytvt')},
+      {'key': 'audience', 'label': term('khl-yad')},
       {'key': 'room', 'label': termOf(cfg, 'entity.room', 'חדר')},
-      {'key': 'schedule', 'label': 'יום ושעה'},
-      {'key': 'model', 'label': 'מסלול ומחיר'},
-      {'key': 'occ', 'label': 'תפוסה'},
-      {'key': 'students', 'label': 'רשימת ' + termOf(cfg, 'entity.students', 'תלמידים')},
-      {'key': 'studentsFull', 'label': termOf(cfg, 'entity.students', 'תלמידים') + ' + טלפון + יתרה'},
-      {'key': 'pays', 'label': 'תשלומים בטווח'},
-      {'key': 'revenue', 'label': 'סה"כ הכנסות'},
-      {'key': 'abs', 'label': 'חיסורים בטווח'},
-      {'key': 'notes', 'label': 'הערות'},
+      {'key': 'schedule', 'label': term('yvm-vshah')},
+      {'key': 'model', 'label': term('mslvl-vmchyr')},
+      {'key': 'occ', 'label': term('tpvsh')},
+      {'key': 'students', 'label': term('rshymt') + termOf(cfg, 'entity.students', 'תלמידים')},
+      {'key': 'studentsFull', 'label': termOf(cfg, 'entity.students', 'תלמידים') + term('tlpvn-ytrh')},
+      {'key': 'pays', 'label': term('tshlvmym-btvvch')},
+      {'key': 'revenue', 'label': term('shk-hknsvt')},
+      {'key': 'abs', 'label': term('chysvrym-btvvch')},
+      {'key': 'notes', 'label': term('harvt')},
     ];
   }
   if (target == 'events') {
     return [
-      {'key': 'title', 'label': 'כותרת'},
-      {'key': 'type', 'label': 'סוג אירוע'},
-      {'key': 'hdate', 'label': 'תאריך עברי'},
-      {'key': 'gdate', 'label': 'תאריך לועזי'},
-      {'key': 'time', 'label': 'שעה'},
+      {'key': 'title', 'label': term('kvtrt')},
+      {'key': 'type', 'label': term('svg-ayrva')},
+      {'key': 'hdate', 'label': term('taryk-abry')},
+      {'key': 'gdate', 'label': term('taryk-lvazy')},
+      {'key': 'time', 'label': term('shah')},
       {'key': 'fam', 'label': termOf(cfg, 'entity.family', 'משפחה')},
-      {'key': 'notes', 'label': 'הערות'},
-      {'key': 'done', 'label': 'בוצע'},
+      {'key': 'notes', 'label': term('harvt')},
+      {'key': 'done', 'label': term('bvtsa')},
     ];
   }
   final ayinOn = featureOn(cfg, 'supporters.ayin');
   if (!full) {
     final defs = <Map<String, String>>[
-      {'key': 'name', 'label': 'שם'},
-      {'key': 'phone', 'label': 'טלפון'},
-      {'key': 'email', 'label': 'אימייל'},
-      {'key': 'dons', 'label': termOf(cfg, 'entity.donations', 'תרומות') + ' בטווח (מספר + סכום)'},
+      {'key': 'name', 'label': term('shm')},
+      {'key': 'phone', 'label': term('t22')},
+      {'key': 'email', 'label': term('aymyyl')},
+      {'key': 'dons', 'label': termOf(cfg, 'entity.donations', 'תרומות') + term('btvvch-mspr-skvm')},
     ];
     if (ayinOn) {
-      defs.add({'key': 'stage', 'label': 'שלב ' + featLabel(cfg)});
+      defs.add({'key': 'stage', 'label': term('shlb') + featLabel(cfg)});
       defs.add({'key': 'names', 'label': itemLabel(cfg) + ' + ' + unitLabel(cfg)});
-      defs.add({'key': 'answers', 'label': 'תשובות/הערות בטווח'});
-      defs.add({'key': 'next', 'label': 'תאריך יעד לקשר'});
+      defs.add({'key': 'answers', 'label': term('tshvbvtharvt-btvvch')});
+      defs.add({'key': 'next', 'label': term('taryk-yad-lkshr')});
     }
     return defs;
   }
   final defs = <Map<String, String>>[
-    {'key': 'name', 'label': 'שם'},
-    {'key': 'phone', 'label': 'טלפון'},
-    {'key': 'email', 'label': 'אימייל'},
-    {'key': 'address', 'label': 'כתובת'},
-    {'key': 'city', 'label': 'עיר'},
-    {'key': 'cat', 'label': 'קטגוריה'},
-    {'key': 'forWho', 'label': 'עבור מי'},
-    {'key': 'dons', 'label': termOf(cfg, 'entity.donations', 'תרומות') + ' בטווח (מספר + סכום)'},
-    {'key': 'donsAll', 'label': 'סה"כ ' + termOf(cfg, 'entity.donations', 'תרומות') + ' (כל הזמן)'},
-    {'key': 'tier', 'label': 'דירוג'},
+    {'key': 'name', 'label': term('shm')},
+    {'key': 'phone', 'label': term('t22')},
+    {'key': 'email', 'label': term('aymyyl')},
+    {'key': 'address', 'label': term('ktvbt')},
+    {'key': 'city', 'label': term('ayr')},
+    {'key': 'cat', 'label': term('ktgvryh')},
+    {'key': 'forWho', 'label': term('abvr-my')},
+    {'key': 'dons', 'label': termOf(cfg, 'entity.donations', 'תרומות') + term('btvvch-mspr-skvm')},
+    {'key': 'donsAll', 'label': term('shk') + termOf(cfg, 'entity.donations', 'תרומות') + term('kl-hzmn')},
+    {'key': 'tier', 'label': term('dyrvg')},
   ];
   if (ayinOn) {
-    defs.add({'key': 'stage', 'label': 'שלב ' + featLabel(cfg)});
+    defs.add({'key': 'stage', 'label': term('shlb') + featLabel(cfg)});
     defs.add({'key': 'names', 'label': itemLabel(cfg) + ' + ' + unitLabel(cfg)});
-    defs.add({'key': 'eyesTotal', 'label': 'סה"כ ' + unitLabel(cfg)});
-    defs.add({'key': 'paid', 'label': 'שולם'});
-    defs.add({'key': 'answers', 'label': 'תשובות/הערות בטווח'});
-    defs.add({'key': 'next', 'label': 'תאריך יעד לקשר'});
+    defs.add({'key': 'eyesTotal', 'label': term('shk') + unitLabel(cfg)});
+    defs.add({'key': 'paid', 'label': term('shvlm')});
+    defs.add({'key': 'answers', 'label': term('tshvbvtharvt-btvvch')});
+    defs.add({'key': 'next', 'label': term('taryk-yad-lkshr')});
   }
-  defs.add({'key': 'notes', 'label': 'הערות'});
+  defs.add({'key': 'notes', 'label': term('harvt')});
   return defs;
 }

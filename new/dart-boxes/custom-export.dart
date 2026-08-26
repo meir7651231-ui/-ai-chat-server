@@ -1,3 +1,4 @@
+import '../dart-data-maor/exp-field-defs-terms.dart';
 import '../dart-data-maor/stage-label.dart';
 // 📦 קופסת-חיבורים · דו"ח מותאם (Dart) — מחווטת 26 אטומי-Dart. מקבילה ל-new/boxes/custom-export.mjs.
 // חוזה משותף: new/boxes/custom-export.contract.md · מקור-האמת (L4): maor/src/lib/customExport.ts.
@@ -125,7 +126,7 @@ bool _hebAnnualEq(dynamic anchor, dynamic query) {
 // ── החשיפה (חתימות-המקור) ──────────────────────────────────────────────────
 /// הגדרות-שדות (key+label) של הדו"ח המותאם לפי יעד: חוגים / אירועים / תומכות.
 List<Map<String, String>> expFieldDefs(dynamic cfg, String target) =>
-    efd.expFieldDefs<dynamic>(cfg, target, _featureOn, _termOfS, _featLabel, _itemLabel, _unitLabel);
+    efd.expFieldDefs<dynamic>(cfg, target, _featureOn, _termOfS, _featLabel, _itemLabel, _unitLabel, term: (k)=>kTerms[k]!);
 
 /// דריסת עמודה בשורות (כותרת חסינה, אי-מוטציה, colIdx<0 ⇒ כניסה-כיציאה).
 List<dynamic> overrideColumn(List<dynamic> rows, int colIdx, Map overrides) =>

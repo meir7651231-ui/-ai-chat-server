@@ -1,3 +1,4 @@
+import '../dart-data-maor/exp-field-defs-terms.dart';
 // בדיקת-חוזה (רתמת-זהב) · expFieldDefs — מייבאת אך ורק את האטום-שלה (חוק-4).
 // דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/exp-field-defs.test.mjs
 // (אותם קלטים→פלטים). שקעי-הבדיקה נאמנים למקור (config.ts / ayin.ts):
@@ -38,7 +39,7 @@ List<Map<String, String>> _call(Cfg cfg, String target) => expFieldDefs<Cfg>(
       _featLabel,
       _itemLabel,
       _unitLabel,
-    );
+     term: (k)=>kTerms[k]!);
 
 String _keys(List<Map<String, String>> a) => a.map((x) => x['key']).join(',');
 
