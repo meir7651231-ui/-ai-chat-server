@@ -14,9 +14,13 @@
 // - חוק-2: ‏`'audit' in meta` של JS = בדיקת-קיום-מפתח, תופס גם audit:null/undefined
 //   מפורשים ⇒ ‏`containsKey('audit')`, לעולם לא ‏`meta['audit'] == null`.
 // - חוק-14: ‏`{...meta}` של JS מעתיק מפתחות בסדר-האנומרציה של JS — מפתחות
-//   דמויי-שלם-קנוני ("0","2","10") ממוינים מספרית-קודם, השאר בסדר-הכנסה.
+//   דמויי-array-index ("0","2","10") ממוינים מספרית-קודם, השאר בסדר-הכנסה.
 //   ‏Dart Map = סדר-הכנסה בלבד ⇒ עוזר ‏_jsOrderedKeys משחזר את הסדר.
 // - מערך-JS: ‏`'audit' in []` = false ⇒ מוחזר כמו-שהוא (זהות). ב-Dart: ‏List ⇒ meta.
+//
+// 🔧 תיקון-הסגר (FIXES.md · "סף-אינדקס מדויק"): JS ממיין-קודם רק array-indices
+//    בטווח 0..2^32−2 (=4294967294). "4294967295" ומעלה = סדר-הכנסה. הסף השגוי
+//    היה 2^53−1 ⇒ "4294967295" מוין בטעות. הסף המתוקן: n ≤ 4294967294.
 
 /// Removes the `'audit'` key from a meta object. Key absent ⇒ the very same
 /// object is returned (reference identity, like the JS source); key present ⇒
@@ -33,18 +37,18 @@ dynamic stripAuditMeta(dynamic meta) {
   return rest;
 }
 
-/// חוק-14: מפתח דמוי-שלם-קנוני של JS (canonical numeric string, ‏0..2^53-1,
-/// בלי אפסים-מובילים) — ממוין מספרית לפני שאר-המפתחות באנומרציה.
+/// חוק-14: מפתח דמוי-array-index של JS (canonical numeric string בטווח
+/// 0..2^32−2, בלי אפסים-מובילים) — ממוין מספרית לפני שאר-המפתחות באנומרציה.
 bool _isJsIntegerKey(dynamic k) {
   if (k is! String || k.isEmpty) return false;
   if (k == '0') return true;
   if (k.codeUnitAt(0) == 0x30) return false; // אפס-מוביל ⇒ לא-קנוני
   final n = int.tryParse(k);
-  if (n == null || n < 0 || n > 9007199254740991) return false;
+  if (n == null || n < 0 || n > 4294967294) return false; // סף array-index: 2^32−2
   return k == n.toString();
 }
 
-/// סדר-מפתחות-JS: שלמים-קנוניים ממוינים-מספרית קודם, השאר בסדר-הכנסה (חוק-14).
+/// סדר-מפתחות-JS: array-indices ממוינים-מספרית קודם, השאר בסדר-הכנסה (חוק-14).
 List<dynamic> _jsOrderedKeys(Map m) {
   final ints = <String>[];
   final rest = <dynamic>[];

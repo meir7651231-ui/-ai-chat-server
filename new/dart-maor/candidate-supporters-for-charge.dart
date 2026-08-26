@@ -5,22 +5,15 @@
 // תפקיד: מדרג תומכים כמועמדים לחיוב-סנכרון לפי מפתחות-התאמה משותפים —
 //        ext:(5) > id:(4) > ph:(3) > em:(2); ואם אין מפתח-משותף אך השם דו-מילתי
 //        ותואם (חסין-סדר) — ניקוד-שם (1). מוחזרים ה-limit הגבוהים, ממוינים יורד.
+//
+// 🔧 תיקון-הסגר (גל #20): Dart `List.sort` אינו-יציב ל-≥32 איברים (quicksort);
+//    JS `Array.sort` יציב-לפי-תקן. שוויון-ציון ב-≥32 מועמדים ⇒ סדר שונה ⇒ קבוצת-מועמדים
+//    שונה אחרי slice(limit). התיקון (כלל-מערכתי decorate-sort-undecorate): נשמר אינדקס-מקורי
+//    בכל רשומה כשובר-שוויון — שוויון-ציון נפתר לפי סדר-ההוספה, בדיוק כמו מיון-יציב.
+//
 // שקעים (חוק-1, הוזרקו כפרמטרים — במקור קריאות-שכן keysOf + nameSortKey):
 //   · keysOf({extId?, idNum?, zeout?, phone?, email?}) → List<String> (מפתחות בקידומת-חוזק).
 //   · nameSortKey(name?) → String (טוקנים ממוינים; ריק אם אין שם).
-// קלט: charge ({toremId?, zeout?, phone?, email?, name?}) · supporters[] ({extId?, idNum?, phone?, email?, name?}) ·
-//      limit (ברירת-מחדל 8) · keysOf · nameSortKey.
-// פלט: List של אובייקטי-התומך עצמם (אותה רפרנס), עד limit, מדורגים יורד.
-//
-// הערות-המרה (מקור→Dart):
-//  · אובייקטי-JS (charge, sp) ⇒ Map<String, Object?>; גישת-שדה .toremId ⇒ ['toremId'].
-//  · Set של JS ⇒ Set<String>; ck.has(k) ⇒ ck.contains(k).
-//  · truthiness: `!score` ⇒ `score == 0`; `if (score)` ⇒ `score != 0`;
-//    `cName && cName.includes(' ')` ⇒ `cName.isNotEmpty && cName.contains(' ')`
-//    (במקור cName הוא מחרוזת; falsy = ריק).
-//  · limit היה פרמטר-אמצע-עם-ברירת-מחדל לפני keysOf/nameSortKey — לא-חוקי כאופציונלי-מיקומי
-//    לפני חובה ב-Dart; הועבר לפרמטר-named `{int limit = 8}` — התנהגות זהה, סדר-קריאה בלבד השתנה.
-//  · אין locale/פורמט/getMonth. `var scored` → `final` (הרשימה מוטבילת-תוכן, לא-מוקצית-מחדש).
 
 import 'dart:math' show max;
 
@@ -41,6 +34,7 @@ List<Map<String, Object?>> candidateSupportersForCharge(
   };
   final cName = nameSortKey(charge['name'] ?? '');
   final scored = <Map<String, Object?>>[];
+  var idx = 0;
   for (final sp in supporters) {
     final sk = keysOf({
       'extId': sp['extId'],
@@ -67,9 +61,15 @@ List<Map<String, Object?>> candidateSupportersForCharge(
         nameSortKey(sp['name']) == cName) {
       score = 1;
     }
-    if (score != 0) scored.add({'sp': sp, 'score': score});
+    // decorate: אינדקס-מקורי כשובר-שוויון ⇒ מיון-יציב זהה-JS.
+    if (score != 0) scored.add({'sp': sp, 'score': score, 'idx': idx});
+    idx++;
   }
-  scored.sort((a, b) => (b['score'] as int) - (a['score'] as int));
+  scored.sort((a, b) {
+    final ds = (b['score'] as int) - (a['score'] as int);
+    if (ds != 0) return ds;
+    return (a['idx'] as int) - (b['idx'] as int);
+  });
   final end = scored.length < limit ? scored.length : limit;
   return scored
       .sublist(0, end)

@@ -166,3 +166,8 @@ double שלם-ערך ≥2^63: ‏Dart `truncate()` מרווה ל-int64-max. ‏s
 - **wa-payment-text** — פורמט he-IL של שלילי-אלפים (LRM U+200E) — צריך שקע-Intl.NumberFormat (לא בספרייה עדיין).
 - **apply-meta-partial** — null↔חסר כש-db חסר-המפתח: המיפוי-הגורף מפתח-חסר⇒'null' מזהה שוב עם null-מפורש; דורש הבחנה מבנית (לא jsStr).
 - **template-lines-to-names** — eyes/rate שלם-double בטווח [9.2e18,1e21): _jsNumJson של-הסוכן ממיר ל-int רק <int64; חייב jsStr המאומת (toStringAsFixed בלי .0). לשחרר עם jsStr verbatim.
+
+## גל-שחרור-תאריכים (26.8) — 3 נותרו בהסגר
+- **support-msg-time** — TimeClip ±275760 עם שבר-מילישנייה: הגידור מתעלם משבר-השנייה בגבול; דורש טיפול-שבר-בגבול-TimeClip.
+- **run-audit** — קוארציית 0b/0o בבדיקת-סכום: השתמש _jsToNum במקום _jsStrToNum המלא; להחליף ל-jsStrToNum (מכיר בינארי/אוקטלי).
+- **waitlist-for** — localeCompare אמיתי (enrolledAt מחרוזת-חופשית בחוזה): דורש שקע-קולציה מודע-locale (לא בספרייה).

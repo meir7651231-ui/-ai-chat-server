@@ -8,17 +8,9 @@
 // קלט:  n — num (שלם/עשרוני/NaN/Infinity). מעל 999 (מאות≥10) המאות נבלעות ל-''.
 // פלט:  String — הגימטריה; קלט לא-חוקי (לא-סופי / ≤0 אחרי רצפה) ⇒ ''.
 //
-// הערות-המרה (מקור-JS → Dart), נקודות שהמנוע היה מפספס:
-//  1. truthiness: ב-JS `H[Math.floor(n/100)] || ''` נותן '' גם כשהאינדקס חורג
-//     (undefined) וגם כש-H[0]==='' (falsy). ב-Dart: בדיקת-גבול מפורשת + H[0]=''
-//     ממילא ''. שקול-ביט.
-//  2. Math.floor(+n) על NaN/Infinity נותן ערך לא-סופי ⇒ Number.isFinite=false ⇒ ''.
-//     ב-Dart `.floor()` על NaN/Infinity זורק — לכן מגן isNaN/isInfinite לפני .floor().
-//  3. אינדוּקס-מערך: `~/` (חלוקה-שלמה) במקום Math.floor(a/b); `%` זהה לחיוביים.
-//  4. אורך/חיתוך: JS String.length וה-slice הם על code-units של UTF-16; אותיות-עברית
-//     והגרש/גרשיים כולם ב-BMP (code-unit יחיד), ולכן String.length ו-substring
-//     ב-Dart (גם UTF-16) שקולים ביט-אחר-ביט.
-//  5. מוטביליות: `s` הוא var (מצטבר); הטבלאות U/T/H הן final const.
+// ⚠️ תיקון-הסגר: ‏n≥1000 כפולת-100 ⇒ s ריק. ‏JS `s.slice(0,-1)` ו-`s.slice(-1)`
+//    על מחרוזת-ריקה מחזירים '' בשלווה (⇒ הפלט '״'); ‏Dart `s.substring(0, -1)`
+//    זורק RangeError. התיקון: לוגיקת-slice בטוחה שמחקה את JS (בדיקת-אורך לפני חיתוך).
 
 /// Hebrew gematria of a positive number (verbatim behaviour of the JS source
 /// new/atoms/gematria.mjs). Non-finite or non-positive input yields `''`.
@@ -42,7 +34,10 @@ String gem(num n) {
   } else {
     s += t[r ~/ 10] + u[r % 10];
   }
-  return s.length == 1
-      ? '$s׳'
-      : s.substring(0, s.length - 1) + '״' + s.substring(s.length - 1);
+
+  if (s.length == 1) return '$s׳';
+  // JS: s.slice(0,-1) + '״' + s.slice(-1). על s ריק ⇒ '' + '״' + '' = '״'.
+  final head = s.length >= 2 ? s.substring(0, s.length - 1) : '';
+  final last = s.isEmpty ? '' : s.substring(s.length - 1);
+  return '$head״$last';
 }

@@ -5,15 +5,12 @@
 //        המקור (basicDate · basicLocal · stampUtc · nextIso) נשארים כאן — עוזר-פנימי.
 // שקעים (חוק-3): icsEscape · foldIcsLine מוזרקים כפרמטרי-פונקציה.
 //
-// הערות-המרה (מקור-JS → Dart; כל אחת סטייה-אילו-לא-תוקנה):
-//   • getMonth 0↔1: ה-JS מוסיף +1 ל-getMonth()/getUTCMonth() (0-בסיס); ב-Dart
-//     DateTime.month כבר 1-בסיס — בלי +1.
-//   • truthiness: `oc.time &&` / `if (oc.notes)` — מחרוזת-ריקה/חסר falsy ב-JS ⇒
-//     ב-Dart בדיקת `!= null && isNotEmpty`.
-//   • Invalid-Date: `new Date('...T25:00:00')` ⇒ NaN ב-JS; DateTime.tryParse ב-Dart
-//     *סלחני* וגולל ל-25:00⇒01:00-למחרת. כדי לשמר את הנפילה-הבטוחה ליום-שלם, מאמתים
-//     טווח שעה<24 ודקה<60 (שקול-ה-isNaN לקלט HH:MM שעבר את הרגקס).
-//   • locale/פורמט: אין — הפורמט קבוע (basic ICS), לא תלוי-locale.
+// 🐛 תיקון-הסגר (24:00 — תפס אימות-עוין): המקור מפרסר את השעה עם `new Date(...)`
+//    ומוודא `!Number.isNaN(getTime())`. ‏V8 מקבל '24:00' (⇒ מחרת 00:00) אך דוחה
+//    '24:01'/'25:00'/'12:60'. ה-guard הישן `hh<24 && mm<60` דחה 24:00 בטעות ⇒ נפילה
+//    שגויה ליום-שלם. התיקון: הזרקת `_parseV8Local` (העתק מ-machtzev/emit/js-compat)
+//    שמחקה במדויק את `new Date("YYYY-MM-DDThh:mm:00")` — כולל שעה-24⇒מחרת. חוק-1:
+//    אטום לא-מייבא — העוזר מוזרק INLINE בקידומת _.
 
 String _basicDate(String iso) => iso.replaceAll('-', '');
 
@@ -38,6 +35,28 @@ String _nextIso(String iso) {
   return n.year.toString() + '-' + _p(n.month) + '-' + _p(n.day);
 }
 
+/// חוקים 3+4 · parseV8Local — מחקה `new Date("YYYY-MM-DDThh:mm:ss")` של V8 (מקומי,
+/// בלי אזור-זמן). מחזיר DateTime (מקומי) או null (≡ Invalid Date/NaN).
+/// (הועתק verbatim מ-machtzev/emit/js-compat-reference.dart — חוק-1: אטום לא-מייבא.)
+DateTime? _parseV8Local(String iso) {
+  final m = RegExp(r'^([+-]?\d{4,6})-(\d{2})-(\d{2})(?:[T ](\d{2}):(\d{2})(?::(\d{2})(?:\.\d+)?)?)?$')
+      .firstMatch(iso);
+  if (m == null) return null;
+  final year = int.parse(m.group(1)!);
+  final mon = int.parse(m.group(2)!);
+  final day = int.parse(m.group(3)!);
+  final hour = m.group(4) != null ? int.parse(m.group(4)!) : 0;
+  final min = m.group(5) != null ? int.parse(m.group(5)!) : 0;
+  final sec = m.group(6) != null ? int.parse(m.group(6)!) : 0;
+  // אימות-טווח נאמן-V8: חודש 1–12 · יום 1–31 · שעה 0–24 · דקה/שנייה 0–59.
+  if (mon < 1 || mon > 12) return null;
+  if (day < 1 || day > 31) return null;
+  if (hour > 24 || min > 59 || sec > 59) return null;
+  if (hour == 24 && (min != 0 || sec != 0)) return null;
+  // בנייה: DateTime של Dart מגלגל גלישת-יום כמו JS (Feb 30 ⇒ Mar 2), ושעה-24 ⇒ מחרת.
+  return DateTime(year, mon, day, hour, min, sec);
+}
+
 String buildIcs(
   List<Map<String, String?>> occurrences,
   String calName,
@@ -60,15 +79,12 @@ String buildIcs(
     lines.add('UID:' + icsEscape(oc['uid'] ?? ''));
     lines.add('DTSTAMP:' + stamp);
     // שעה שאינה HH:MM תקין ⇒ Invalid Date ⇒ נפילה בטוחה ליום-שלם (ביקורת 4.8 · נחיל 13.8).
+    // המקור: /^\d{2}:\d{2}$/ ואז new Date(...)+isNaN. `_parseV8Local` = אותה סמנטיקה
+    // בדיוק (24:00⇒מחרת · 24:01/25:00/12:60⇒null). לא guard-hh<24 השבור.
     final time = oc['time'];
     DateTime? parsedStart;
     if (time != null && time.isNotEmpty && timeRe.hasMatch(time)) {
-      final hh = int.parse(time.substring(0, 2));
-      final mm = int.parse(time.substring(3, 5));
-      // שקול-ה-isNaN של ה-JS: הרגקס לבד לא חוסם 25:00/12:60.
-      if (hh < 24 && mm < 60) {
-        parsedStart = DateTime.tryParse((oc['date'] ?? '') + 'T' + time + ':00');
-      }
+      parsedStart = _parseV8Local((oc['date'] ?? '') + 'T' + time + ':00');
     }
     if (parsedStart != null) {
       final end = parsedStart.add(const Duration(milliseconds: 3600000)); // שעה — כולל גלגול-חצות

@@ -6,24 +6,29 @@
 // ‏nowMs מוזרק (שקע-זמן — אפס DateTime.now, טהור/בדיק). אפס-import (dart-core בלבד).
 // אובייקט-JS ⇒ Map (מוסכמת-ההמרה); ‏c?.goal ⇒ גישת-Map בטוחה-null.
 //
-// הערות-המרה (DART-PORTING-RULES):
-// - חוק-7 (truthiness): ‏`if (c?.end)` ו-`c?.currency || '₪'` ⇒ עוזר ‏_truthy
-//   (‏'' ריק/0/NaN/false/null = שקר, כמו JS; ‏`??` של הטיוטה היה שוגה על '').
-// - חוק-5 (slice): ‏`end.slice(0,10)` סלחן-לקצר ⇒ בדיקת-אורך לפני substring.
-// - חוק-4 (תאריך-מגלגל): ‏Date.parse של V8 על 'YYYY-MM-DDT00:00:00' —
-//   צורה קשיחה ‎\d{4}-\d{2}-\d{2}‎ בלבד; חודש 01–12 ויום 01–31 לקסיקלית
-//   (13/00 ויום 00/32+ ⇒ NaN), אבל יום-גולש-בלוח (2026-09-31) *מתגלגל* קדימה
-//   (⇒ 1.10) — אומת מול node. ‏DateTime(y,m,d) של Dart מגלגל זהה. חצות-*מקומי*
-//   בשתי השפות ⇒ ההפרש חסין-אזור. תאריך-שבור ⇒ null (מקביל ל-NaN) ⇒ daysLeft null.
+// 🔧 תיקון-הסגר (FIXES: "Date.parse צורות-קצרות"):
+//   ‏JS מבצע `Date.parse(c.end.slice(0,10) + 'T00:00:00')`. ‏V8 מקבל *חלק-תאריך
+//   חלקי* לצד ה-T ובודה חודש/יום חסרים ל-1, בפרשנות *מקומית*:
+//     "2027"        → "2027T00:00:00"        ⇒ חצות-מקומי 2027-01-01
+//     "2026-05"     → "2026-05T00:00:00"     ⇒ חצות-מקומי 2026-05-01
+//     "2026-09-11"  → "2026-09-11T00:00:00"  ⇒ חצות-מקומי 2026-09-11
+//   הטיוטה השבורה דרשה אורך-10 בדיוק ⇒ צורות 4/7 החזירו null ⇒ daysLeft:null שגוי.
+//   התיקון: הפרסר מקבל את שלוש הצורות ‏YYYY / YYYY-MM / YYYY-MM-DD (אחרי slice(0,10)),
+//   בודה חודש/יום חסרים ל-1, מאמת חודש 01–12 ויום 01–31 לקסיקלית (13/00/32+ ⇒ null),
+//   ובונה DateTime מקומי (מגלגל-יום כמו V8: 2026-09-31 ⇒ 1.10). אומת מול node ב-TZ שונה.
+//
+// הערות-המרה נוספות (DART-PORTING-RULES):
+// - חוק-7 (truthiness): ‏`if (c?.end)` ו-`c?.currency || '₪'` ⇒ עוזר ‏_jsTruthy
+//   (‏'' ריק/0/NaN/false/null = שקר, כמו JS; ‏`??` היה שוגה על '').
 // - ‏Math.round/ceil/min/max של JS מחלחלים NaN ואינסוף; ‏round/ceil של Dart זורקים
-//   על NaN/אינסוף ⇒ עוזרים ‏_jsRound/_jsCeil/_jsMin/_jsMax נאמני-JS.
-//   (ל-x≥0 ‏Math.round(חצי-מעלה) ≡ ‏round של Dart — היחס כאן אף-פעם לא שלילי.)
+//   עליהם ⇒ עוזרים ‏_jsRound/_jsCeil/_jsMin/_jsMax נאמני-JS.
 
-/// truthiness של JS: null/false/0/-0/NaN/'' ⇒ שקר; כל השאר אמת.
-bool _truthy(dynamic v) {
-  if (v == null) return false;
-  if (v is bool) return v;
-  if (v is num) return !(v == 0 || v.isNaN);
+/// truthiness של JS (מוזרק inline מ-js-compat-reference · jsTruthy):
+/// null/false/0/-0/NaN/'' ⇒ שקר; כל השאר אמת.
+bool _jsTruthy(dynamic v) {
+  if (v == null || v == false) return false;
+  if (v == true) return true;
+  if (v is num) return v != 0 && !v.isNaN;
   if (v is String) return v.isNotEmpty;
   return true;
 }
@@ -52,17 +57,23 @@ num _jsMax(num a, num b) {
   return a > b ? a : b;
 }
 
-/// ‏Date.parse('<10-תווים>T00:00:00') של V8 — חצות-מקומי של חלק-התאריך.
+/// ‏Date.parse('<חלק-תאריך>T00:00:00') של V8 — חצות-מקומי, בדיית-חודש/יום ל-1.
+/// מקבל את הצורות שאחרי slice(0,10): YYYY (4) · YYYY-MM (7) · YYYY-MM-DD (10).
 /// מחזיר מילישניות-מאז-אפוך, או null (מקביל ל-NaN של JS) על צורה שבורה.
-/// אומת מול node: צורה קשיחה בלבד; חודש 00/13+ ויום 00/32+ ⇒ NaN;
-/// יום-גולש-בלוח (למשל 31.9) מתגלגל קדימה — DateTime של Dart מגלגל זהה.
 num? _parseLocalMidnightMs(String s) {
-  if (s.length != 10) return null;
-  final re = RegExp(r'^\d{4}-\d{2}-\d{2}$');
-  if (!re.hasMatch(s)) return null;
-  final y = int.parse(s.substring(0, 4));
-  final m = int.parse(s.substring(5, 7));
-  final d = int.parse(s.substring(8, 10));
+  int y, m = 1, d = 1;
+  if (RegExp(r'^\d{4}$').hasMatch(s)) {
+    y = int.parse(s);
+  } else if (RegExp(r'^\d{4}-\d{2}$').hasMatch(s)) {
+    y = int.parse(s.substring(0, 4));
+    m = int.parse(s.substring(5, 7));
+  } else if (RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(s)) {
+    y = int.parse(s.substring(0, 4));
+    m = int.parse(s.substring(5, 7));
+    d = int.parse(s.substring(8, 10));
+  } else {
+    return null;
+  }
   if (m < 1 || m > 12 || d < 1 || d > 31) return null;
   return DateTime(y, m, d).millisecondsSinceEpoch; // מקומי, מגלגל-יום כמו V8
 }
@@ -78,7 +89,7 @@ Map<String, dynamic> campaignProgress(dynamic c, dynamic nowMs) {
       goal > 0 ? _jsMax(0, _jsMin(100, _jsRound((raised / goal) * 100))) : 0;
   num? daysLeft;
   final end = c == null ? null : c['end'];
-  if (_truthy(end)) {
+  if (_jsTruthy(end)) {
     // חצות-מקומי של יום-היעד (חלק-התאריך בלבד) — ספירת ימים קלנדרית: מ-1.9 ל-11.9
     // = 10 (ולא 11 שנוצר מחישוב סוף-יום). עבר ⇒ 0.
     final s = end as String; // JS היה זורק TypeError על .slice של לא-מחרוזת
@@ -93,7 +104,7 @@ Map<String, dynamic> campaignProgress(dynamic c, dynamic nowMs) {
     'goal': goal,
     'raised': raised,
     'pct': pct,
-    'currency': _truthy(cur) ? cur : '₪',
+    'currency': _jsTruthy(cur) ? cur : '₪',
     'daysLeft': daysLeft,
     'show': goal > 0,
   };
