@@ -1,35 +1,36 @@
-# חוזה · `isDirectionalDevice` (Dart)
+# חוזה · isDirectionalDevice
 
-מקור-אמת (קדוש, חוק-4): `buildsmart/app_flutter/lib/logic/install_engine.dart:171-180`
-(‏`_isDirectionalDevice`). `p.categoryHe`/`p.nameHe` קופלו לשקעי-מחרוזת (חוק-3;
-LipskeyCatalogProduct טיפוס-שכן גדול, לא-inline).
+**מוצא (קדוש, L4):** `install_engine.dart:171-175` (origin/main, `_isDirectionalDevice`, verbatim).
 
 ## חתימה
 ```dart
-bool isDirectionalDevice({required String categoryHe, required String nameHe})
+class DevicePart { final String categoryHe; final String nameHe;
+    const DevicePart({this.categoryHe = '', this.nameHe = ''}); }
+bool isDirectionalDevice(DevicePart p);
 ```
 
-## פלט / התנהגות (עוגני-שורה)
-- `:172` — `categoryHe == 'אל חזור' ⇒ true` (קיצור-דרך מיידי).
-- `:173` — `n = nameHe.replaceAll('-', '').replaceAll(' ', '')` (הסרת מקפים ורווחים).
-- `:174` — `n.contains('אלחזור') || n.contains('אלחוזר')`.
+## קלט
+- `p` — `DevicePart`: `categoryHe` · `nameHe` (שני השדות שהגוף קורא).
 
-## דוגמאות מספריות
-| # | categoryHe | nameHe | ⇒ | סיבה |
-|---|-----------|--------|---|------|
-| 1 | `'אל חזור'` | `''` | `true` | קטגוריה (‏:172) |
-| 2 | `'ברזים'` | `'שסתום אל-חזור'` | `true` | 'אל-חזור'→'אלחזור' לאחר-נרמול |
-| 3 | `'ברזים'` | `'אל חוזר קפיצי'` | `true` | 'אל חוזר'→'אלחוזר' |
-| 4 | `'ברזים'` | `'ברז כדורי'` | `false` | לא-קטגוריה ולא-שם |
-| 5 | `'אל חזור '` (רווח-נספח) | `'x'` | `false` | קטגוריה != התאמה-מדויקת; שם לא-מכיל |
-| 6 | `'ברזים'` | `'א-ל-ח-ז-ו-ר'` | `true` | מקפים מוסרים ⇒ 'אלחזור' |
-| 7 | `'ברזים'` | `'אלחוזר'` | `true` | ישיר |
+## פלט
+`bool` — `categoryHe=='אל חזור' || nameHe(מנוקה).contains('אלחזור'|'אלחוזר')`.
 
-## שקעים
-- `categoryHe` · `nameHe` — הזרקת-שדות (חוק-3).
-- `String.replaceAll`, `String.contains` — שפה/סטנדרט.
+## התנהגות (עוגני-שורה למקור)
+1. `categoryHe == 'אל חזור'` ⇒ `true` (install_engine.dart:172).
+2. אחרת: `nameHe` מנוקה מ-`'-'` ו-`' '` (install_engine.dart:173), ומכיל `'אלחזור'` **או** `'אלחוזר'` ⇒ `true` (:174).
+3. אחרת ⇒ `false`.
 
-## DoD
-```
-dart run --enable-asserts new/dart/is_directional_device_test.dart  ⇒ exit 0 + "OK isDirectionalDevice: N asserts passed"
-```
+## דוגמאות מספריות (מוכחות ב-is_directional_device_test.dart)
+| # | categoryHe | nameHe | פלט | עוגן |
+|---|-----------|--------|-----|------|
+| 1 | 'אל חזור' | '' | `true` | :172 |
+| 2 | 'אביזרי נחושת' | 'שסתום אל-חזור נחושת' | `true` (ניקוי '-') | :173-174 |
+| 3 | 'אביזרי נחושת' | 'שסתום אל חוזר' | `true` (ניקוי רווח) | :173-174 |
+| 4 | 'ברזי מעבר' | 'ברז כדורי' | `false` | :175 |
+| 5 | 'אל-חזור' (עם מקף) | '' | `false` (קטגוריה חייבת רווח מדויק) | :172,175 |
+| 6 | '' | 'אלחזור' | `true` (רצוף) | :174 |
+
+## עדשה-עוינת (קלטי-קצה — CURRICULUM #6)
+- הקטגוריה מושווית מחרוזת-מדויקת 'אל חזור' (רווח, לא מקף) — #5 עם מקף אינו תופס בענף-הקטגוריה.
+- ענף-השם עמיד למקף/רווח: 'אל-חזור' ו-'אל חוזר' שניהם נתפסים אחרי הניקוי (#2,#3).
+- ברירות-המחדל '' לשני השדות ⇒ מוצר-לא-מזוהה ⇒ `false`.

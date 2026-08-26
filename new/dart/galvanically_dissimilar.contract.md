@@ -1,35 +1,36 @@
-# חוזה · `galvanicallyDissimilar` (Dart)
+# חוזה · galvanicallyDissimilar
 
-מקור-אמת (קדוש, חוק-4): `buildsmart/app_flutter/lib/logic/install_engine.dart:158-170`
-(‏`_galvanicallyDissimilar`). ה-const-האחיות `copperGroup`/`ironGroup` הוטבעו inline verbatim.
+**מוצא (קדוש, L4):** `install_engine.dart:158-164` (origin/main, `_galvanicallyDissimilar`, verbatim).
 
 ## חתימה
 ```dart
-bool galvanicallyDissimilar(Iterable<String> mats)
+bool galvanicallyDissimilar(Iterable<String> mats);
 ```
 
-## פלט / התנהגות (עוגני-שורה)
-- `install_engine.dart:159` — `const copperGroup = {'נחושת', 'פליז'}`.
-- `:160` — `const ironGroup = {'פלדה', 'נירוסטה'}`.
-- `:161` — `s = mats.toSet()`.
-- `:162-163` — `s.intersection(copperGroup).isNotEmpty && s.intersection(ironGroup).isNotEmpty`.
+## קלט
+- `mats` — Iterable&lt;String&gt; של תוויות-חומר.
 
-## דוגמאות מספריות
-| # | mats | ⇒ | סיבה |
-|---|------|---|------|
-| 1 | `['נחושת', 'פלדה']` | `true` | נחושת∩ ∧ פלדה∩ |
-| 2 | `['פליז', 'נירוסטה']` | `true` | פליז∈copper ∧ נירוסטה∈iron |
-| 3 | `['נחושת', 'פליז']` | `false` | רק copper |
-| 4 | `['פלדה', 'נירוסטה']` | `false` | רק iron |
-| 5 | `[]` | `false` | ריק |
-| 6 | `['PVC', 'HDPE']` | `false` | אף קבוצה |
-| 7 | `['נחושת', 'נחושת', 'פלדה']` | `true` | כפילות מכווצת, עדיין דו-קבוצתי |
-| 8 | `['נחושת']` | `false` | חסר צד-ברזל |
+## פלט
+`bool` — `s∩{נחושת,פליז} ≠ ∅ && s∩{פלדה,נירוסטה} ≠ ∅` (s = mats.toSet()).
 
-## שקעים
-- אין. `toSet`/`intersection`/`isNotEmpty` — שפה/סטנדרט; הקבוצות const מוטבע.
+## התנהגות (עוגני-שורה למקור)
+1. חצייה קבוצת-נחושת(נחושת/פליז) ↔ קבוצת-ברזל(פלדה/נירוסטה) ⇒ `true` (install_engine.dart:162-163).
+2. אותה-קבוצה בלבד (נחושת↔פליז, פלדה↔נירוסטה) ⇒ `false`.
+3. חומר יחיד / קבוצה-אחת בלבד / חומרים לא-מתכתיים (PEX/HDPE) ⇒ `false`.
 
-## DoD
-```
-dart run --enable-asserts new/dart/galvanically_dissimilar_test.dart  ⇒ exit 0 + "OK galvanicallyDissimilar: N asserts passed"
-```
+## דוגמאות מספריות (מוכחות ב-galvanically_dissimilar_test.dart)
+| # | mats | פלט | עוגן |
+|---|------|-----|------|
+| 1 | {נחושת, פליז} | `false` (אותה קבוצה) | :159,162 |
+| 2 | {נחושת, פלדה} | `true` | :162-163 |
+| 3 | {פליז, פלדה} | `true` (פליז=קבוצת-נחושת) | :162-163 |
+| 4 | {נחושת, נירוסטה} | `true` | :162-163 |
+| 5 | {פלדה, נירוסטה} | `false` (אותה קבוצה-ברזל) | :160,163 |
+| 6 | {נחושת} | `false` (קבוצה-אחת) | :162 |
+| 7 | {PEX, HDPE} | `false` (לא-מתכת) | :162-163 |
+| 8 | {} (ריק) | `false` | :162 |
+
+## עדשה-עוינת (קלטי-קצה — CURRICULUM #6)
+- התיקון המהותי: פליז↔פלדה = `true` (#3), נחושת↔פליז = `false` (#1) — הקודמת דרשה 'נחושת' ⇒ פספסה #3 וסימנה #1.
+- נירוסטה נכללת בקבוצת-הברזל (#4) — הקודמת השמיטה אותה.
+- שתי הקבוצות חייבות להיות נוכחות ב-AND; קבוצה-אחת בלבד ⇒ `false` (#5,#6).

@@ -1,15 +1,21 @@
 // ⚛️ אטום-Dart (דרגת-חוזה) · galvanicallyDissimilar
-// תפקיד: האם אוסף-חומרים מכיל צימוד-מתכות בלתי-דומה (נחושת/פליז יחד עם פלדה/נירוסטה) — מחייב מפריד דיאלקטרי.
-// מוצא: buildsmart/app_flutter/lib/logic/install_engine.dart:158-170 (‏_galvanicallyDissimilar; חוק-4).
-// טוהר: פונקציית top-level עצמאית, אפס import (dart:core בלבד). שתי ה-const-האחיות (copperGroup/ironGroup)
-//        הוטבעו inline verbatim מגוף-הטיוטה. `Iterable.toSet`/`Set.intersection`/`isNotEmpty` = שפה/סטנדרט.
-//        פרטי-במקור (`_`) ⇒ פורסם public. האח _isDirectionalDevice (:171) — לא נקרא ⇒ לא-הוטבע.
+// מוצא: install_engine.dart:158-164 (origin/main — ‏_galvanicallyDissimilar; חוק-4, verbatim).
+// טוהר: פונקציית top-level עצמאית, אפס import פנימי (רק שפה/סטנדרט — Set.intersection).
+//       שתי קבוצות-החומרים (copperGroup/ironGroup) = דאטה-קבוע פנימי (מונחי-חומר, לא סוד).
 //
-// קלט:  mats — אוסף שמות-חומרים (Iterable<String>; כפילויות מותרות, מכווצות ל-Set).
-// פלט:  bool — true אם קיים לפחות חומר-נחושתי ולפחות חומר-ברזלי באוסף.
+// אין שקע: הפונקציה טהורה לחלוטין — קלט Iterable<String> של תוויות-חומר, פלט bool.
+//
+// התנהגות (מקור:158-164): קורוזיה גלוונית מחייבת רקורד-דיאלקטרי **רק** בין קבוצות-
+//   מתכת שונות: קבוצת-נחושת (נחושת/פליז) מול קבוצת-ברזל (פלדה/נירוסטה). מפגש
+//   באותה-קבוצה (נחושת↔פליז) בטוח-גלוונית ואסור לסמן. מחזיר true רק כששתי הקבוצות
+//   נוכחות ב-[mats]. (מתקן את הקודמת שדרשה 'נחושת' ספציפית — פספסה פליז↔פלדה —
+//   והשמיטה נירוסטה כליל.)
+//
+// קלט:  mats — Iterable<String> של תוויות-חומר (HDPE/PEX/נחושת/פליז/פלדה/נירוסטה…).
+// פלט:  bool — האם יש חצייה בין קבוצת-נחושת לקבוצת-ברזל.
 
-/// True iff the material set couples a copper-family metal with an iron-family
-/// metal (needs a dielectric union). Verbatim of install_engine.dart:158-170.
+/// True only when [mats] contains BOTH a copper-group metal (נחושת/פליז) and an
+/// iron-group metal (פלדה/נירוסטה) — verbatim install_engine.dart:158-164.
 bool galvanicallyDissimilar(Iterable<String> mats) {
   const copperGroup = {'נחושת', 'פליז'};
   const ironGroup = {'פלדה', 'נירוסטה'};

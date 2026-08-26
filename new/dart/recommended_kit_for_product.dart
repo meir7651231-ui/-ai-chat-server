@@ -1,17 +1,18 @@
 // ⚛️ אטום-Dart (דרגת-חוזה) · recommendedKitForProduct
-// מוצא: buildsmart/app_flutter/lib/logic/install_kit.dart:42-124
+// מוצא: buildsmart/app_flutter/lib/logic/install_kit.dart:42-149
 //        (‏recommendedKitForProduct; חוק-4 — התנהגות זהה בדיוק, לא-משופרת).
 // טוהר: פונקציית top-level עצמאית, אפס import פנימי (רק dart:core).
 //
 // שקעים שהוזרקו (קריאה-לשכן ⇒ מחזיק-קלט / מפה-מוזרקת · חוק-1/3, דיבר-3):
 //   • `kVerifiedSpecs[p.sku]` (install_kit.dart:43) ⇒ **שקע-פרמטר** `verifiedSpecs`
 //     — מפה `Map<String, KitSpec>` מוזרקת, ברירת-מחדל ריקה (`const {}`).
-//   • שדות LipskeyCatalogProduct — נקראים רק `sku`/`brand`/`dims`
-//     (install_kit.dart:43,48,50) ⇒ מוחזקים ב-`KitProduct` (מחזיק-קלט טהור).
-//   • שדות VerifiedSpec — נקראים רק `material`/`ends` (install_kit.dart:49,91) ⇒
-//     `KitSpec`; שדות ConnectorEnd — רק `type`/`size` (install_kit.dart:92-93) ⇒ `KitEnd`.
+//   • שדות LipskeyCatalogProduct — נקראים `sku`/`brand`/`dims`/`categoryHe`
+//     (install_kit.dart:43,48,50 · ענף-חוליות :91,92,93) ⇒ מוחזקים ב-`KitProduct`
+//     (מחזיק-קלט טהור). ‏dims נקרא בשני מפתחות: `'dn נומינלי'` (PPR, :50) · `'DN'` (חוליות, :92).
+//   • שדות VerifiedSpec — נקראים רק `material`/`ends` (install_kit.dart:49,116) ⇒
+//     `KitSpec`; שדות ConnectorEnd — רק `type`/`size` (install_kit.dart:117-118) ⇒ `KitEnd`.
 //
-// קלט:  p             — KitProduct (sku · brand · dims?).
+// קלט:  p             — KitProduct (sku · brand · dims? · categoryHe).
 //       verifiedSpecs — שקע: Map<String, KitSpec>. חסר-מפתח ⇒ null.
 // פלט:  List<KitItem> — ערכת-התקנה מומלצת למוצר-יחיד (מנוקה-כפילויות).
 
@@ -32,12 +33,19 @@ class KitSpec {
   const KitSpec({required this.material, this.ends = const []});
 }
 
-/// מחזיק-קלט טהור: רק sku/brand/dims הנקראים (install_kit.dart:43,48,50).
+/// מחזיק-קלט טהור: רק sku/brand/dims/categoryHe הנקראים
+/// (install_kit.dart:43,48,50 · ענף-חוליות :92,93).
 class KitProduct {
   final String sku;
   final String brand;
   final Map<String, dynamic>? dims;
-  const KitProduct({required this.sku, this.brand = '', this.dims});
+  final String categoryHe;
+  const KitProduct({
+    required this.sku,
+    this.brand = '',
+    this.dims,
+    this.categoryHe = '',
+  });
 }
 
 enum KitKind { tool, sealant, safety }
@@ -64,7 +72,7 @@ class KitItem {
       };
 }
 
-/// ערכת-התקנה למוצר-יחיד — verbatim install_kit.dart:42-124.
+/// ערכת-התקנה למוצר-יחיד — verbatim install_kit.dart:42-149.
 List<KitItem> recommendedKitForProduct(
   KitProduct p, {
   Map<String, KitSpec> verifiedSpecs = const {},
@@ -108,6 +116,31 @@ List<KitItem> recommendedKitForProduct(
         kind: KitKind.tool,
         label: 'עט סימון עומק',
         reason: 'סימון עומק ההחדרה לשקע על הצינור',
+        severity: Severity.recommended,
+      ),
+    ];
+  }
+  // Huliot SmartLock — PP drainage with snap-fit/bayonet nuts. The system is
+  // intentionally tool-light (a single bayonet wrench tightens every nut), but
+  // pipe segments still need a clean perpendicular cut and the field uses a
+  // dedicated cutter rather than a generic saw. Size-bucket the wrench by DN.
+  if (p.brand == 'חוליות') {
+    final dn = double.tryParse(p.dims?['DN']?.toString() ?? '') ?? 0;
+    final isPipe = p.categoryHe.contains('צינור');
+    final wrenchLabel = dn <= 40
+        ? 'מפתח לאום SmartLock 32-40 (מק"ט 61040360)'
+        : 'מפתח לאום SmartLock 50-63 (מק"ט 61060560)';
+    return [
+      if (isPipe)
+        const KitItem(
+          kind: KitKind.tool,
+          label: 'חותך צינורות SmartLock',
+          reason: 'חיתוך ניצב ונקי לצינור PP במידות 32-63',
+        ),
+      KitItem(
+        kind: KitKind.tool,
+        label: wrenchLabel,
+        reason: 'הידוק/שחרור אום SmartLock — מפתח ייעודי מבטיח מומנט נכון',
         severity: Severity.recommended,
       ),
     ];

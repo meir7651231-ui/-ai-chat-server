@@ -69,5 +69,22 @@ void main() {
   assert(r7.length == 1);
   assert(r7[0].label == 'מכווץ PEX (Crimper) ל-16');
 
-  print('recommendedKitForProduct OK — 7/7 contract examples proven');
+  // #8 — שער-חוליות: brand='חוליות', DN=40, קטגוריית-צינור ⇒ חותך(required)+מפתח(recommended).
+  final r8 = recommendedKitForProduct(const KitProduct(
+      sku: 'H1', brand: 'חוליות', dims: {'DN': 40}, categoryHe: 'צינור ביוב'));
+  assert(r8.length == 2);
+  assert(r8[0].label == 'חותך צינורות SmartLock');
+  assert(r8[0].kind == KitKind.tool);
+  assert(r8[0].severity == Severity.required);
+  assert(r8[1].label == 'מפתח לאום SmartLock 32-40 (מק"ט 61040360)');
+  assert(r8[1].severity == Severity.recommended);
+
+  // #9 — שער-חוליות: DN=63, קטגוריה לא-צינור ⇒ פריט-מפתח 50-63 יחיד (אין חותך).
+  final r9 = recommendedKitForProduct(const KitProduct(
+      sku: 'H2', brand: 'חוליות', dims: {'DN': 63}, categoryHe: 'אביזר'));
+  assert(r9.length == 1);
+  assert(r9[0].label == 'מפתח לאום SmartLock 50-63 (מק"ט 61060560)');
+  assert(r9[0].severity == Severity.recommended);
+
+  print('recommendedKitForProduct OK — 9/9 contract examples proven');
 }

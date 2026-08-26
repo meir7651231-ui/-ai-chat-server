@@ -1,8 +1,8 @@
 // בדיקת-חוזה · lineComplianceChecklist — מייבאת אך ורק את האטום-שלה (חוק-4).
-// הרצה: dart run --enable-asserts new/dart/line_compliance_checklist_test.dart
+// DoD (דיבר-12): dart run --enable-asserts new/dart/line_compliance_checklist_test.dart ⇒ exit 0.
 import 'line_compliance_checklist.dart';
 
-// שקעי-הבדיקה: materialOf (מקור:116) ו-isSupplySku (=lineIsSupply, מקור:156).
+// שקעי-הבדיקה: materialOf (מקור:61,242) ו-isSupplySku (=lineIsSupply, מקור:75-76,282).
 String? _matOf(String sku) => _mats[sku];
 bool _supOf(String sku) => _supply.contains(sku);
 
@@ -21,6 +21,14 @@ LineCheck? _byLabel(List<LineCheck> l, String label) {
   return null;
 }
 
+// עזר: מוצא פריט לפי-קידומת-תווית (לבדיקות-כיוון עם שם דינמי).
+LineCheck? _byPrefix(List<LineCheck> l, String prefix) {
+  for (final c in l) {
+    if (c.label.startsWith(prefix)) return c;
+  }
+  return null;
+}
+
 void _eqi(int got, int want, String label) {
   if (got != want) throw StateError('FAIL [$label]: got=$got want=$want');
 }
@@ -34,6 +42,12 @@ void _has(List<LineCheck> l, String label, bool sat, CheckSeverity sev,
   }
   if (c.severity != sev) {
     throw StateError('FAIL [$tag]: "$label" sev=${c.severity} want=$sev');
+  }
+}
+
+void _absent(List<LineCheck> l, String label, String tag) {
+  if (_byLabel(l, label) != null) {
+    throw StateError('FAIL [$tag]: "$label" must be absent');
   }
 }
 
@@ -84,10 +98,7 @@ void main() {
   _supply = {};
   r = _run([const ChainPart('DRAIN-1', 'סיפונים')], 20, {});
   _eqi(r.length, 2, '4 drainage: only clip+seal'); n++;
-  if (_byLabel(r, 'ברז ניתוק לתחזוקה') != null) {
-    throw StateError('FAIL 4: drainage must not get isolation check');
-  }
-  n++;
+  _absent(r, 'ברז ניתוק לתחזוקה', '4 no-isolation'); n++;
 
   // ── תרחיש 5: אביזרים מאושרים (acc) בקו-חם ──────────────────────────────
   _mats = {};
@@ -98,20 +109,76 @@ void main() {
   _has(r, 'חבקים/תמיכת צנרת', true, CheckSeverity.info, '5 clip-sat'); n++;
   _has(r, 'איטום מעברים (Press/PTFE/O-ring)', true, CheckSeverity.info, '5 seal-sat'); n++;
 
-  // ── תרחיש 6: מתכות שונות (נחושת+פליז) ⇒ רקורד דיאלקטרי ─────────────────
+  // ── תרחיש 6: נחושת+פליז = **אותה קבוצה גלוונית** ⇒ אין רקורד (תיקון-main) ─
+  // ‏main:158-164 — נחושת/פליז שתיהן קבוצת-נחושת; ללא קבוצת-ברזל ⇒ dissimilar=false.
   _mats = {'CU': 'נחושת', 'BR': 'פליז'};
   _supply = {};
   r = _run([
     const ChainPart('CU', 'אביזרי נחושת'),
     const ChainPart('BR', 'ברזי מעבר'),
   ], 20, {});
-  _has(r, 'רקורד דיאלקטרי', false, CheckSeverity.critical, '6 dielectric'); n++;
+  _absent(r, 'רקורד דיאלקטרי', '6 same-group ⇒ no dielectric'); n++;
+
+  // ── תרחיש 6b: נחושת+פלדה = קבוצות-שונות ⇒ רקורד דיאלקטרי present ─────────
+  _mats = {'CU': 'נחושת', 'ST': 'פלדה'};
+  _supply = {};
+  r = _run([
+    const ChainPart('CU', 'אביזרי נחושת'),
+    const ChainPart('ST', 'ברזי מעבר'),
+  ], 20, {});
+  _has(r, 'רקורד דיאלקטרי', false, CheckSeverity.critical, '6b dielectric-present'); n++;
 
   // ── תרחיש 7: PEX ⇒ מפצה-התפשטות ───────────────────────────────────────
   _mats = {'PX': 'PEX'};
   _supply = {};
   r = _run([const ChainPart('PX', 'מחברי NTM')], 20, {});
   _has(r, 'מפצה התפשטות PEX', false, CheckSeverity.warning, '7 pex-exp'); n++;
+
+  // ── תרחיש 8: ברז-גן על קו-אספקה ⇒ שובר-ואקום (חדש ב-main:298-302) ──────
+  _mats = {};
+  _supply = {'HW-BALL-1'};
+  r = _run([
+    const ChainPart('HW-BALL-1', 'ברזי מעבר'),
+    const ChainPart('GARDEN-1', 'ברזי גן'),
+  ], 20, {});
+  _has(r, 'שובר-ואקום למניעת זרימה-חוזרת', false, CheckSeverity.warning,
+      '8 vacuum-breaker'); n++;
+  // ברז-גן ללא-אספקה ⇒ אין שובר-ואקום (התנאי isSupply && hasGardenOutlet).
+  _supply = {};
+  r = _run([const ChainPart('GARDEN-1', 'ברזי גן')], 20, {});
+  _absent(r, 'שובר-ואקום למניעת זרימה-חוזרת', '8b no-supply ⇒ no vacuum-breaker'); n++;
+
+  // ── תרחיש 9: שסתום חד-כיווני (categoryHe='אל חזור') ⇒ בדיקת-כיוון (חדש :307-312) ─
+  _mats = {};
+  _supply = {'HW-BALL-1'};
+  r = _run([
+    const ChainPart('HW-BALL-1', 'ברזי מעבר', nameHe: 'ברז כדורי'),
+    const ChainPart('CHK-1', 'אל חזור', nameHe: 'שסתום אלחזור 1"'),
+    const ChainPart('HW-PUMP-40', 'מנגנונים', nameHe: 'משאבה'),
+  ], 20, {});
+  final dir = _byPrefix(r, 'כיוון התקנה:');
+  if (dir == null) throw StateError('FAIL 9: missing directional check');
+  if (dir.severity != CheckSeverity.warning) {
+    throw StateError('FAIL 9: directional sev=${dir.severity}');
+  }
+  if (dir.label != 'כיוון התקנה: שסתום אלחזור 1"') {
+    throw StateError('FAIL 9: label="${dir.label}"');
+  }
+  // ה-context ממקם בין השכנים (main:184).
+  if (!dir.why.contains('בין "ברז כדורי" ל-"משאבה"')) {
+    throw StateError('FAIL 9: why="${dir.why}"');
+  }
+  n++;
+
+  // ── תרחיש 9b: זיהוי-כיוון לפי-שם (nameHe מכיל 'אל-חזור') גם ללא-קטגוריה ──
+  _mats = {};
+  _supply = {};
+  r = _run([const ChainPart('X', 'אביזרי נחושת', nameHe: 'שסתום אל-חזור נחושת')],
+      20, {});
+  if (_byPrefix(r, 'כיוון התקנה:') == null) {
+    throw StateError('FAIL 9b: name-based directional not detected');
+  }
+  n++;
 
   assert(_run([const ChainPart('DRAIN-1', 'סיפונים')], 20, {}).length == 2,
       'assert-live guard');
