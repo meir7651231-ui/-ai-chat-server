@@ -69,5 +69,22 @@ void main() {
   if (got != want) {
     throw StateError('✗ commands-build-commands\n$got\n≠\n$want');
   }
-  print('✓ commands-build-commands (Dart): Golden — ירוק');
+
+  // ratchet · באג-חוצה-שפות: ‏JS `ctx.dedupCount > 0` על undefined ⇒ false (לא זורק);
+  // הפורט הקודם `(x as num) > 0` זרק על null. נאמן: ctx בלי dedupCount ⇒ בלי cmd:dedup.
+  final noDedup = buildCommands(<String, dynamic>{
+    'supporters': [
+      {'id': '1', 'name': 'אבי', 'phone': '050'},
+      {'id': '2', 'name': '', 'phone': ''},
+    ],
+    'supporterTerm': 'תורם/ת',
+  });
+  if (noDedup.any((c) => c['id'] == 'cmd:dedup')) {
+    throw StateError('✗ commands-build-commands: dedupCount חסר לא אמור לייצר cmd:dedup');
+  }
+  if (noDedup.length != 3) {
+    throw StateError('✗ commands-build-commands: ctx-רזה ⇒ צפוי 3 (add+2 כרטיסים), התקבל ${noDedup.length}');
+  }
+
+  print('✓ commands-build-commands (Dart): Golden + ratchet dedup-חסר — ירוק');
 }

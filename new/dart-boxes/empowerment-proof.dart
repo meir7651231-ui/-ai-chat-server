@@ -90,8 +90,8 @@ void main() {
   chk('donorConstellation-N', B.donorConstellation(sups, today).length, 4);
 
   // ── פיקוד ──
-  // ctx: dedupCount מסופק (הפורט ל-Dart קורא as num; ה-JS סובל undefined). התוצאה זהה: 5.
-  chk('buildCommands-N', B.buildCommands({'supporters': sups, 'dedupCount': 0}).length, 5);
+  // קלט זהה-בדיוק ל-JS ({supporters} בלבד) — האטום תוקן לטפל ב-dedupCount חסר כמו JS.
+  chk('buildCommands-N', B.buildCommands({'supporters': sups}).length, 5);
 
   if (fails > 0) {
     print('❌ קופסת-ההעצמה (Dart): $fails אי-התאמות מול golden ה-JS');

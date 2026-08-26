@@ -66,7 +66,10 @@ List<Map<String, dynamic>> buildCommands(Map<String, dynamic> ctx) {
       'keywords': 'דוח מותאם ייצוא טווח report export',
     });
   }
-  if ((ctx['dedupCount'] as num) > 0) {
+  // ‏JS: `ctx.dedupCount > 0` — `undefined/null > 0` ⇒ false (לא זורק). ‏Dart נאמן:
+  // `is num && > 0` (dedupCount = ‏.length ⇒ תמיד מספר או חסר; אין מסלול-מחרוזת).
+  final dedupCount = ctx['dedupCount'];
+  if (dedupCount is num && dedupCount > 0) {
     push({
       'id': 'cmd:dedup',
       'kind': 'dedup',
