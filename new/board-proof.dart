@@ -158,6 +158,31 @@ void main() {
   ok('עצמאות-בנייה-חכמה: הדומיין חי לבד',
       board.bsFuzzyMatch('shalom', 'shalim') && board.bsWorkflowNextStage('intake') == 'prep' && board.bsValidEmail('a@b.co'));
 
+  // 20) 🔦 מערכת אחת, מדליקים מה שרוצים — אותו לוח, 3 תצורות שונות
+  //   תצורת-עמותה: רק יכולות-מאור דולקות (בנייה-חכמה כבוי by-default).
+  final amuta = makeBoard(clockIso: () => '2026-08-24', config: {'slug': 'amuta'});
+  ok('עמותה: מאור דלוק', amuta.lit('supporters.cockpit') && amuta.lit('families'));
+  ok('עמותה: בנייה-חכמה כבוי (opt-in)', !amuta.lit('bs.workflow') && !amuta.lit('bs.projects'));
+
+  //   תצורת-בנייה: מדליקים בנייה-חכמה, מכבים מודולי-מאור מיותרים.
+  final binyan = makeBoard(clockIso: () => '2026-08-24', config: {
+    'slug': 'binyan',
+    'features': {'bs.workflow': true, 'bs.projects': true, 'bs.actions': true, 'supporters.cockpit': false, 'families': false},
+  });
+  ok('בנייה: בנייה-חכמה דלוק', binyan.lit('bs.workflow') && binyan.lit('bs.projects'));
+  ok('בנייה: מודולי-מאור כובו', !binyan.lit('supporters.cockpit') && !binyan.lit('families'));
+
+  //   תצורת-היברידית: הכל דלוק — מערכת אחת מלאה.
+  final hybrid = makeBoard(clockIso: () => '2026-08-24', config: {
+    'slug': 'hybrid',
+    'features': {'bs.fuzzy': true, 'bs.workflow': true, 'bs.projects': true, 'bs.studio': true, 'bs.security': true, 'bs.config': true, 'bs.actions': true, 'bs.assistant': true},
+  });
+  ok('היברידי: גם מאור וגם בנייה-חכמה דולקים', hybrid.lit('supporters.cockpit') && hybrid.lit('bs.workflow'));
+  ok('היברידי: קטלוג-מלא דולק (15)', hybrid.capabilities().length == 15);
+  // אותו קוד-לוח בדיוק — רק ה-config משנה מה דולק.
+  ok('מערכת-אחת: אותו לוח, config שונה ⇒ תצורה שונה',
+      amuta.capabilities().length < hybrid.capabilities().length && binyan.lit('bs.projects') && !amuta.lit('bs.projects'));
+
   if (fails > 0) { print('❌ לוח-האם (Dart): $fails אי-התאמות'); throw StateError('board dart proof failed'); }
   print('✓ לוח-האם המאוחד (Dart): $n טענות — 12 קופסאות-מאור + 8 קופסאות-בנייה-חכמה על אותו לוח · מחוברים יחד');
 }

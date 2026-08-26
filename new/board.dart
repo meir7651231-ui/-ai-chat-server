@@ -39,6 +39,22 @@ class Board {
   dynamic term(String key, dynamic fb) => configBox.termOf(config, key, fb);
   bool feature(String key) => configBox.featureOn(config, key);
 
+  // ── 🔦 קטלוג-היכולות המאוחד — מאור + בנייה-חכמה = מערכת אחת. מדליקים דרך config.
+  //   מערכת אחת שמדליקים בה מה שרוצים: כל הצבה בוחרת אילו יכולות דולקות.
+  static const List<String> capabilityCatalog = [
+    // מאור (ליבה — חסר-דגל = דלוק, רק false מכבה):
+    'supporters.cockpit', 'families', 'diary', 'reports', 'audit', 'wa', 'hebrew',
+    // בנייה-חכמה (opt-in — חסר-דגל = כבוי, רק true מדליק; כמו הרחבות-מאור):
+    'bs.fuzzy', 'bs.workflow', 'bs.actions', 'bs.assistant',
+    'bs.projects', 'bs.studio', 'bs.security', 'bs.config',
+  ];
+  // יכולת דולקת? מאור-ליבה דרך featureOn (חסר=דלוק); בנייה-חכמה = opt-in מפורש (רק true).
+  bool lit(String cap) => cap.startsWith('bs.')
+      ? ((config['features'] as Map?)?[cap] == true)
+      : configBox.featureOn(config, cap);
+  // כל היכולות הדולקות בהצבה הזו — התצורה של "המערכת האחת".
+  List<String> capabilities() => capabilityCatalog.where(lit).toList();
+
   // ── supporters-box (אגרגטים + config/שעון מוזרקים) ──
   dynamic supIls(dynamic sp) => supportersBox.supIls(sp);
   dynamic supCount(dynamic sp) => supportersBox.supCount(sp);
