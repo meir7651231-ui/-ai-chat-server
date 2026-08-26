@@ -141,3 +141,27 @@ String jsStr(num n) {
   }
   return neg ? '-' + body : body;
 }
+
+/// חוקים 3+4 · parseV8Local — מחקה `new Date("YYYY-MM-DDThh:mm:ss")` של V8 (מקומי,
+/// בלי אזור-זמן). מחזיר DateTime (מקומי) או null (≡ Invalid Date/NaN). אומת מול Node:
+///  • יום-גולש מתגלגל (Feb 30 ⇒ Mar 2), אך רק אם day∈[1,31] month∈[1,12] (אחרת NaN).
+///  • T24:00:00 ⇒ מחרת 00:00. שנה-מורחבת ±YYYYYY. שבר-שניות מתקבל (נחתך).
+///  • אחרי הפרסינג: getFullYear=.year · getMonth=.month-1 · getDate=.day · getHours=.hour.
+DateTime? parseV8Local(String iso) {
+  final m = RegExp(r'^([+-]?\d{4,6})-(\d{2})-(\d{2})(?:[T ](\d{2}):(\d{2})(?::(\d{2})(?:\.\d+)?)?)?$')
+      .firstMatch(iso);
+  if (m == null) return null;
+  final year = int.parse(m.group(1)!);
+  final mon = int.parse(m.group(2)!);
+  final day = int.parse(m.group(3)!);
+  final hour = m.group(4) != null ? int.parse(m.group(4)!) : 0;
+  final min = m.group(5) != null ? int.parse(m.group(5)!) : 0;
+  final sec = m.group(6) != null ? int.parse(m.group(6)!) : 0;
+  // אימות-טווח נאמן-V8: חודש 1–12 · יום 1–31 · שעה 0–24 · דקה/שנייה 0–59.
+  if (mon < 1 || mon > 12) return null;
+  if (day < 1 || day > 31) return null;
+  if (hour > 24 || min > 59 || sec > 59) return null;
+  if (hour == 24 && (min != 0 || sec != 0)) return null;
+  // בנייה: DateTime של Dart מגלגל גלישת-יום כמו JS (Feb 30 ⇒ Mar 2), ושעה-24 ⇒ מחרת.
+  return DateTime(year, mon, day, hour, min, sec);
+}
