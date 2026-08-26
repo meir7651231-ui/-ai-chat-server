@@ -160,3 +160,9 @@ double שלם-ערך ≥2^63: ‏Dart `truncate()` מרווה ל-int64-max. ‏s
 ## גל #27–#28 (26.8, מתכונת-היברידית) — 2 הסגרים (אומתו ב-verify-only על Opus)
 - **wa-payment-text** — חוק-17+12: ‏balance=-0.5 ⇒ Math.round=-0 (JS '‎-0') מול Dart +0.0⇒'0'; ‏1e21 ⇒ ‏d.toInt() נחתך ל-int64-max. תיקון: ‏_jsAdd/toDouble + שימור-סימן-אפס-שלילי + _heIlInt דרך shortest-round-trip.
 - **waitlist-for** — ‏localeCompare מול compareTo: ‏['B','a'] ⇒ JS [a,B] מול Dart [B,a]. תיקון: שקע-קולציה מודע-locale (או decorate לפי normalize).
+
+## גל-שחרור (26.8) — 4 נותרו בהסגר לגל-חוזר
+- **set-audit-context** — צ'רוקי-משלים U+13F0–13F5; **הספרייה תוקנה** (js-compat jsLower) — לשחרר עם הגרסה-המעודכנת.
+- **wa-payment-text** — פורמט he-IL של שלילי-אלפים (LRM U+200E) — צריך שקע-Intl.NumberFormat (לא בספרייה עדיין).
+- **apply-meta-partial** — null↔חסר כש-db חסר-המפתח: המיפוי-הגורף מפתח-חסר⇒'null' מזהה שוב עם null-מפורש; דורש הבחנה מבנית (לא jsStr).
+- **template-lines-to-names** — eyes/rate שלם-double בטווח [9.2e18,1e21): _jsNumJson של-הסוכן ממיר ל-int רק <int64; חייב jsStr המאומת (toStringAsFixed בלי .0). לשחרר עם jsStr verbatim.
