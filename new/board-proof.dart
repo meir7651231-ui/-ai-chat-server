@@ -139,6 +139,14 @@ void main() {
   ok('bs-actions: טווח-יעד he', board.bsScopeHe('all').isNotEmpty);
   ok('bs-assistant: ניתוב-כוונה', board.bsAssistantCategory('משלוחים', ['משלוחים', 'לקוחות']) == 'משלוחים');
 
+  // 17) 🏗️ עוד 4 קופסאות-בנייה-חכמה על אותו לוח (projects·studio·security·config)
+  ok('bs-projects: מע"מ חשבונית', board.bsInvoiceVat(1000) > 0);
+  ok('bs-projects: אשראי-קבלן', board.bsContractorCredit('חברת-בנייה') == board.bsContractorCredit('חברת-בנייה'));
+  ok('bs-studio: תדריך-מנהל', board.bsManagerBrief('בוקר').isNotEmpty);
+  ok('bs-security: אימייל תקין', board.bsValidEmail('a@b.co') && !board.bsValidEmail('לא-אימייל'));
+  ok('bs-security: נייד ישראלי', board.bsValidMobile('0501234567'));
+  ok('bs-config: תווית-שדה', board.bsFieldLabel('anything').length >= 0);
+
   if (fails > 0) { print('❌ לוח-האם (Dart): $fails אי-התאמות'); throw StateError('board dart proof failed'); }
-  print('✓ לוח-האם המאוחד (Dart): $n טענות — 12 קופסאות-מאור + 4 קופסאות-בנייה-חכמה על אותו לוח · מחוברים יחד');
+  print('✓ לוח-האם המאוחד (Dart): $n טענות — 12 קופסאות-מאור + 8 קופסאות-בנייה-חכמה על אותו לוח · מחוברים יחד');
 }

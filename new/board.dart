@@ -20,6 +20,10 @@ import 'dart-boxes/bs-matching.dart' as bsMatching;
 import 'dart-boxes/bs-workflow.dart' as bsWorkflow;
 import 'dart-boxes/bs-actions.dart' as bsActions;
 import 'dart-boxes/bs-assistant.dart' as bsAssistant;
+import 'dart-boxes/bs-projects.dart' as bsProjects;
+import 'dart-boxes/bs-studio.dart' as bsStudio;
+import 'dart-boxes/bs-security.dart' as bsSecurity;
+import 'dart-boxes/bs-config.dart' as bsConfig;
 
 class Board {
   final Map<String, dynamic> config;
@@ -127,6 +131,20 @@ class Board {
   // ── 🤖 בנייה-חכמה: ניתוב-כוונה — תשובת-משתמש → קטגוריה (קופיילוט-עברית) ──
   String? bsAssistantCategory(String reply, List<String> categories) =>
       bsAssistant.matchAssistantCategory(reply, categories);
+
+  // ── 🏗️💰 בנייה-חכמה: תמחיר-פרויקט (חשבונית/מע"מ, אשראי-קבלן) ──
+  int bsInvoiceVat(int gross) => bsProjects.invoiceVatOf(gross);
+  int bsContractorCredit(String name) => bsProjects.contractorCredit(name);
+
+  // ── 🏢 בנייה-חכמה: קופיילוט-סטודיו (תדריך-בוקר למנהל) ──
+  String bsManagerBrief(String context) => bsStudio.managerMorningBriefPrompt(context);
+
+  // ── 🔐 בנייה-חכמה: ולידציה (אימייל/נייד ישראלי) ──
+  bool bsValidEmail(String input) => bsSecurity.validEmail(input);
+  bool bsValidMobile(String input) => bsSecurity.validIsraeliMobile(input);
+
+  // ── 🎛️ בנייה-חכמה: תווית-שדה-כלל בעברית ──
+  String bsFieldLabel(String id) => bsConfig.fieldLabelHe(id);
 }
 
 Board makeBoard({Map<String, dynamic>? config, String Function()? clockIso, num rate = 3.7}) {
