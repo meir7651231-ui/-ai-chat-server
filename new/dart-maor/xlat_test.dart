@@ -1,3 +1,4 @@
+import '../dart-data-maor/xlat.dart';
 // בדיקת-חוזה · xlat — מתרגמת את new/atoms/xlat.test.mjs אחד-לאחד (כלל-8: בלי join).
 // הרצה: dart run --enable-asserts new/dart-maor/xlat_test.dart ⇒ OK
 import 'xlat.dart';
@@ -13,14 +14,14 @@ dynamic norm(dynamic t) {
   return s.trim();
 }
 
-bool has(String q, String x) => expandQuery(q, norm).contains(x);
+bool has(String q, String x) => expandQuery(q, norm, xlatTable: kXlatTable).contains(x);
 
 void main() {
   if (!has('כהן', 'cohen') || !has('כהן', 'коэн')) throw StateError('כהן לא מתרחב');
   if (!has('cohen', 'כהן')) throw StateError('כיוון-הפוך נכשל');
   if (!has('משה', 'מוישי')) throw StateError('כינוי חסר');
-  if (expandQuery('xyz', norm).length != 1) throw StateError('לא-מוכר חייב להישאר לבד');
-  if (expandQuery('כהן', norm)[0] != 'כהן') throw StateError('המקור חייב להיות ראשון');
+  if (expandQuery('xyz', norm, xlatTable: kXlatTable).length != 1) throw StateError('לא-מוכר חייב להישאר לבד');
+  if (expandQuery('כהן', norm, xlatTable: kXlatTable)[0] != 'כהן') throw StateError('המקור חייב להיות ראשון');
   if (xlatTable.keys.length < 20) throw StateError('הטבלה נחתכה');
   print('OK xlat: 6 asserts passed (table: ${xlatTable.keys.length})');
 }
