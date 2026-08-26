@@ -50,6 +50,7 @@ import '../dart/pow025.dart' as pw;
 import '../dart/recommended_kit_for.dart' as rkf;
 import '../dart/recommended_kit_for_product.dart' as rkfp;
 import '../dart/estimate_price.dart' as ep;
+import '../dart-data/pipe-prices.dart' as pd; // דאטה — מוזרקת ע"י הקופסה למנוע-התמחיר
 import '../dart/can_connect.dart' as cc;
 import '../dart/connection_fail_reason.dart' as cfr;
 import '../dart/connection_method_label.dart' as cml;
@@ -435,7 +436,10 @@ class PipeBox {
 
   /// אומדן-מחיר מקורב (₪) לרשימת-מוצרים לפי-קטגוריה.
   ep.PriceEstimate priceEstimate(List<PipeProduct> items) =>
-      ep.estimatePrice<PipeProduct>(items, categoryHe: (p) => p.categoryHe);
+      ep.estimatePrice<PipeProduct>(items,
+          categoryHe: (p) => p.categoryHe,
+          priceTable: pd.kPipeCategoryPriceIls, // דאטה מוזרקת (dart-data/)
+          fallbackIls: pd.kPipeFallbackIls);
 
   // ═══ אשכול ד׳ · תאימות ══════════════════════════════════════════════════════
 

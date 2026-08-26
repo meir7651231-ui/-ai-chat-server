@@ -1,3 +1,5 @@
+> ♻️ **מנוע-נקי (הכרעת-בעלים "טהור כמו בתולה"):** הטבלה+fallback חולצו לדאטה מוזרקת (`priceTable`/`fallbackIls`). המנוע=מנגנון-בלבד; הדאטה ב-`dart-data/pipe-prices.dart`. התנהגות זהה-ביט כשמזריקים את טבלת-המקור+25.
+
 # חוזה · `estimatePrice` (Dart)
 
 מקור-אמת (קדוש, חוק-4): `buildsmart/app_flutter/lib/logic/price_estimate.dart:90-109`
