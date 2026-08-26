@@ -37,3 +37,13 @@
     ⇒ עוזר ‏_jsAdd (וחבריו) כופה ‏toDouble() בענף-המספרי. עידוני-חוקים קודמים: חוק-12 — בטווח ‏[2^53,1e21) ‏Dart מדפיס ‏".0" ⇒ לגזום; חוק-14 — הסף המדויק = ‏array-index ‏(n ≤ 4294967294), לא כל שלם-בטוח.
 18. **tryParse של Dart גוזם-רווחים-בעצמו** (sup-don-events/sup-dup-field-value — גל 23) ⚠️ מערכתי! ‏num/double/int.tryParse גוזמים קבוצת-רווחי-יוניקוד (כולל ‏U+0085/NEL) לפני-פרסינג — עוקפים כל ‏_jsTrim נאמן-ES שהופעל קודם.
     ⇒ אחרי ‏_jsTrim: לאמת דקדוק-מספר-ES בקפדנות (‏regex ‏^[+-]?(\d+\.?\d*|\.\d+)(e[+-]?\d+)?$|hex|oct|bin|Infinity) לפני ‏tryParse; מחרוזת שמכילה רווח-כלשהו אחרי הגיזום ⇒ ‏NaN.
+
+---
+## 🔑 js-compat-reference.dart (26.8) — ספריית-התאימות הקנונית
+`machtzev/emit/js-compat-reference.dart` — מימוש-אב מאומת-מול-Node של העוזרים
+שחוזרים ב-48 ההסגרים: `jsTruthy`/`jsFalsy` (7) · `jsTrim` (16, ES-ws בלי U+0085/180E) ·
+`jsLower` (13, İ+Final-Sigma+צ'רוקי) · `jsStrToNum`/`jsNum` (10+18, דקדוק-ES לפני parse) ·
+`jsAddNum` (17, float64) · `jsStr` (12, shortest-round-trip). **אינו import** (חוק-1 —
+אטום לא-מייבא): מזריקים את העוזר הרלוונטי **inline** לתוך האטום המשוחרר (עם קידומת `_`).
+אומת ביט-מול-Node על İ/ẞΣΑΣ/צ'רוקי/1e21/2×2^53/NEL — כולם זהים. זהו מקור-האמת
+לשחרור-ההסגר: כל אטום ב-QUARANTINE שנפילתו במשפחה 7/12/13/16/17/18 ⇒ inline מכאן.
