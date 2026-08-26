@@ -165,3 +165,21 @@ DateTime? parseV8Local(String iso) {
   // בנייה: DateTime של Dart מגלגל גלישת-יום כמו JS (Feb 30 ⇒ Mar 2), ושעה-24 ⇒ מחרת.
   return DateTime(year, mon, day, hour, min, sec);
 }
+
+/// חוק-6 · jsHeIlInt — מחקה `Math.round(n).toLocaleString('he-IL')` לשלמים.
+/// אומת מול Node: חיובי מקובץ-פסיקים (1,234,567); שלילי **וגם -0** ⇒
+/// U+200E (LRM) + '-' + מקובץ (‎-1,000 · ‎-0); אפס-חיובי ⇒ '0'.
+/// n מגיע כבר-מעוגל (הקורא עשה Math.round דרך jsRound). מזהה -0.0.
+String jsHeIlInt(num n) {
+  final neg = n < 0 || (n is double && n == 0 && n.isNegative);
+  final digits = jsStr(n < 0 ? -n : (n == 0 ? 0 : n)); // ספרות-abs (jsStr, בלי .0)
+  // קיבוץ-אלפים בפסיקים מהסוף
+  final buf = StringBuffer();
+  final len = digits.length;
+  for (var i = 0; i < len; i++) {
+    if (i > 0 && (len - i) % 3 == 0) buf.write(',');
+    buf.write(digits[i]);
+  }
+  final grouped = buf.toString();
+  return neg ? '‎-' + grouped : grouped;
+}
