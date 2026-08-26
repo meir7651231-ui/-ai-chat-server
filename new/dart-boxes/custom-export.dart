@@ -1,3 +1,4 @@
+import '../dart-data-maor/stage-label.dart';
 // 📦 קופסת-חיבורים · דו"ח מותאם (Dart) — מחווטת 26 אטומי-Dart. מקבילה ל-new/boxes/custom-export.mjs.
 // חוזה משותף: new/boxes/custom-export.contract.md · מקור-האמת (L4): maor/src/lib/customExport.ts.
 // זהו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart) מתחברות לאותה קופסה: אותם קלטים ⇒ אותו פלט.
@@ -164,7 +165,7 @@ List<List<String>> buildCustomExport(
       supUsd: (sp) => _jsNum(su.supUsd(sp)),
       supScore: supScore,
       supTier: (score) => st.supTier(score),
-      stageLabel: (c, stage) => sla.stageLabel(c, stage, tof.termOf) as String,
+      stageLabel: (c, stage) => sla.stageLabel(c, stage, tof.termOf, stageFallback: kStageFallback) as String,
       evMeta: em.evMeta,
       hebrewRecurring: HEBREW_RECURRING,
       dayNames: DAY_NAMES,

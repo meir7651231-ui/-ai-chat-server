@@ -14,28 +14,11 @@
 // `find` של JS מחזיר undefined באין-התאמה ⇒ כאן לולאה עם null (לא firstWhere
 // שזורק — סטיית-הטיוטה תוקנה). אין locale/לוח-חי/truthiness — טבלה סטטית בלבד.
 
-const List<List<String>> _months = [
-  ['Tishri', 'תשרי'],
-  ['Heshvan', 'חשוון'],
-  ['Kislev', 'כסלו'],
-  ['Tevet', 'טבת'],
-  ['Shevat', 'שבט'],
-  ['Adar', 'אדר'],
-  ['Adar I', 'אדר א׳'],
-  ['Adar II', 'אדר ב׳'],
-  ['Nisan', 'ניסן'],
-  ['Iyar', 'אייר'],
-  ['Sivan', 'סיוון'],
-  ['Tamuz', 'תמוז'],
-  ['Av', 'אב'],
-  ['Elul', 'אלול'],
-];
-
 /// Hebrew month label -> Intl English month name (calendar 'hebrew');
 /// unknown label -> null. Exact-character match (Hebrew geresh U+05F3 only).
 /// Verbatim behaviour of the JS source new/atoms/month-en-of.mjs.
-String? monthEnOf(dynamic he) {
-  for (final m in _months) {
+String? monthEnOf(dynamic he, {required List<dynamic> months}) {
+  for (final m in months) {
     if (m[1] == he) return m[0];
   }
   return null;

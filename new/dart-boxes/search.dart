@@ -5,6 +5,7 @@
 import '../dart-maor/levenshtein.dart' as lv;
 import '../dart-maor/norm-search.dart' as ns;
 import '../dart-maor/xlat.dart' as xl;
+import '../dart-data-maor/xlat.dart'; // דאטה — טבלת-התעתיקים מוזרקת למנוע
 import '../dart-maor/rule-exact.dart' as re;
 import '../dart-maor/rule-prefix.dart' as rp;
 import '../dart-maor/rule-plural.dart' as rpl;
@@ -34,7 +35,7 @@ int _wiredScore(dynamic q, dynamic term) {
   return 0;
 }
 
-List<dynamic> _wiredExpand(dynamic q, [dynamic norm]) => xl.expandQuery(q, norm ?? ns.normSearch);
+List<dynamic> _wiredExpand(dynamic q, [dynamic norm]) => xl.expandQuery(q, norm ?? ns.normSearch, xlatTable: kXlatTable);
 dynamic _wiredSmart(dynamic q, dynamic terms) =>
     ss.smartScore(q, terms, ns.normSearch, _wiredExpand, _wiredScore);
 

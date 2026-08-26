@@ -7,16 +7,9 @@
 // לכן null ⇔ מפתח-חסר בדיוק (חוק-2 לא נשבר — אין הבחנה אבודה).
 
 /// ברירות מחדל ניטרליות לתוויות השלבים (ניתנות לשינוי-שם באשף).
-const Map<String, String> _stageFallback = {
-  'new': 'חדש',
-  'lead': 'בהכנה',
-  'eyes': 'רישום',
-  'answer': 'מסירה',
-  'done': 'הושלם',
-};
 
 /// stageLabel(cfg, stage, termOf) — כמו ב-JS: המפתח מורכב 'ayin.stage.'+stage,
 /// וכל הכרעת-המונח אצל שקע-termOf(cfg, key, fallback).
-dynamic stageLabel(dynamic cfg, dynamic stage, dynamic termOf) {
-  return termOf(cfg, 'ayin.stage.' + (stage as String), _stageFallback[stage]);
+dynamic stageLabel(dynamic cfg, dynamic stage, dynamic termOf, {required Map<String, dynamic> stageFallback}) {
+  return termOf(cfg, 'ayin.stage.' + (stage as String), stageFallback[stage]);
 }

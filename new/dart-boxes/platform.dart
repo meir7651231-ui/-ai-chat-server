@@ -1,3 +1,4 @@
+import '../dart-data-maor/slugify.dart';
 // 📦 קופסת-חיבורים · platform (Dart) — מחווטת 24 אטומי-Dart. מקבילה ל-new/boxes/platform.mjs.
 // חוזה משותף: new/boxes/platform.contract.md. מקור-האמת: maor/src/components/platform/lib.ts.
 // זהו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart) מתחברות לאותה קופסה: אותם קלטים ⇒ אותו פלט.
@@ -53,7 +54,7 @@ Map<String, dynamic> _wiredOverrideOf(String email, Map<String, dynamic> org) =>
 List<String> _wiredOrgEnabledModules(Map orgConfig) => oem.orgEnabledModules(orgConfig, am.allModules);
 
 // ── החשיפה: חוטים טהורים נחשפים ישירות (מתאמי-טיפוס בלבד) ─────────────────────
-dynamic slugify(dynamic orgName, dynamic taken) => sl.slugify(orgName, taken);
+dynamic slugify(dynamic orgName, dynamic taken) => sl.slugify(orgName, taken, heb2lat: kHeb2lat);
 bool isValidSlug(String slug) => ivs.isValidSlug(slug);
 List<String> get ALL_MODULES => am.allModules; // ignore: non_constant_identifier_names
 Map<String, String> get MODULE_LABELS => ml.MODULE_LABELS; // ignore: non_constant_identifier_names

@@ -2,18 +2,7 @@
 // המרת-Dart זהה-ביט למקור new/atoms/ayin-sheet-rows.mjs (חולץ מ-maor/src/lib/ayin.ts:380-418).
 // הכותרת AYIN_SHEET_HEADER הוטבעה כאן (אפס import פנימי, חוק-1). דארט-ליבה בלבד.
 
-const List<String> ayinSheetHeader = [
-  'תומכת',
-  'טלפון',
-  'שם למסירה',
-  'כמה עיניים',
-  'נמסר (כן/לא)',
-  'שולם (כן/לא)',
-  'תשובה/הערה',
-  'עופרת בוצעה (כן/לא)',
-];
-
-List<List<String>> ayinSheetRows(List<dynamic> supporters) {
+List<List<String>> ayinSheetRows(List<dynamic> supporters, {required List<dynamic> ayinSheetHeader}) {
   final List<List<String>> rows = [
     [...ayinSheetHeader]
   ];

@@ -1,3 +1,4 @@
+import '../dart-data-maor/stage-label.dart';
 // בדיקת-חוזה (רתמת-זהב) · stageLabel — מייבאת אך ורק את האטום-שלה (חוק-4).
 // מתרגמת את כל 4 דוגמאות-החוזה (stage-label.contract.md) ואת בדיקת-ה-JS
 // (new/atoms/stage-label.test.mjs) ביט-אחר-ביט: מונח-ארגון גובר / נפילה /
@@ -22,14 +23,14 @@ void main() {
 
   // 1) מונח-ארגון גובר — השקע מחזיר 'ביצוע' (ורטיקל הסטודיו).
   {
-    final got = stageLabel(<String, dynamic>{}, 'eyes', (c, k, fb) => 'ביצוע');
+    final got = stageLabel(<String, dynamic>{}, 'eyes', (c, k, fb) => 'ביצוע', stageFallback: kStageFallback);
     _ok(got == 'ביצוע', "מונח-הארגון לא גבר (בפועל: $got)");
     n++;
   }
 
   // 2) נפילה לברירת-המחדל — cfg ריק ⇒ 'מסירה'.
   {
-    final got = stageLabel(<String, dynamic>{}, 'answer', _termOf);
+    final got = stageLabel(<String, dynamic>{}, 'answer', _termOf, stageFallback: kStageFallback);
     _ok(got == 'מסירה', "ברירת-המחדל של answer שגויה (בפועל: $got)");
     n++;
   }
@@ -44,7 +45,7 @@ void main() {
       'done': 'הושלם',
     };
     expected.forEach((stage, want) {
-      final got = stageLabel(<String, dynamic>{}, stage, _termOf);
+      final got = stageLabel(<String, dynamic>{}, stage, _termOf, stageFallback: kStageFallback);
       _ok(got == want, "$stage שגוי (בפועל: $got ≠ $want)");
     });
     n++;
@@ -60,7 +61,7 @@ void main() {
       calls++;
       got = [c, k, fb];
       return 'x';
-    });
+    }, stageFallback: kStageFallback);
     _ok(
         calls == 1 &&
             got != null &&

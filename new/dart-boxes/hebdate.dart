@@ -1,3 +1,4 @@
+import '../dart-data-maor/month-en-of.dart';
 // 📦 קופסת-חיבורים · hebdate (Dart) — שכבת קלט/תצוגה תאריך-עברי, מחווטת אטומי-Dart בלבד.
 // מקבילה זהת-ביט ל-new/boxes/hebdate.mjs. חוזה משותף: hebdate.contract.md · מקור-האמת (L4):
 // maor/src/lib/hebdate.ts. ההכרעות שחיות כאן (חיווט, לא אטום) זהות לקופסת-ה-JS:
@@ -45,7 +46,7 @@ String? hebToIsoEn(int day, String monthEn, int hebYear) {
 String monthHeOf(String en) => mho.monthHeOf(en);
 
 /// שם Intl של חודש לפי תווית עברית ('אב' → 'Av'), או null אם לא מוכר. (hebdate.ts:47-49)
-String? monthEnOf(String he) => meo.monthEnOf(he);
+String? monthEnOf(String he) => meo.monthEnOf(he, months: kMonths);
 
 /// השנה העברית של רגע נתון (ברירת-מחדל: עכשיו — כמו במקור). (hebdate.ts:52-54)
 int hebYearNow([DateTime? now]) => hyn.hebYearNow(_hebParts, now ?? DateTime.now());

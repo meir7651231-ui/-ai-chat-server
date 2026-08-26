@@ -1,3 +1,5 @@
+import '../dart-data-maor/stage-label.dart';
+import '../dart-data-maor/ayin-sheet-rows.dart';
 // 📦 קופסת-חיבורים · ayin (Dart) — מחווטת 30 אטומי-Dart + 2 שכנים (termOf/normSearch).
 // מקבילה ל-new/boxes/ayin.mjs. חוזה משותף: new/boxes/ayin.contract.md. מקור-האמת: maor/src/lib/ayin.ts.
 // זו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart) מתחברות לאותה קופסה: אותם קלטים ⇒ אותו פלט (ayin-proof.dart).
@@ -47,7 +49,7 @@ Map<String, dynamic> _cfgMap(dynamic cfg) => (cfg is Map) ? cfg.cast<String, dyn
 
 // ── החיווט ──
 // תוויות-העין: termOf האטום מחווט לכל אחת (הפער בין תצוגה למפתח-קבוע חי כאן).
-String stageLabel(dynamic cfg, dynamic stage) => sl.stageLabel(cfg, stage, tof.termOf) as String;
+String stageLabel(dynamic cfg, dynamic stage) => sl.stageLabel(cfg, stage, tof.termOf, stageFallback: kStageFallback) as String;
 String featLabel(dynamic cfg) => fl.featLabel(cfg, _termOfStr);
 String itemLabel(dynamic cfg) => il.itemLabel(_cfgMap(cfg), _termOfMap);
 String unitLabel(dynamic cfg) => ul.unitLabel(cfg, tof.termOf) as String;
@@ -126,7 +128,7 @@ List<Map<String, dynamic>> filterAyinBoard(dynamic items, dynamic q, dynamic sta
     );
 
 // גיליון-העיניים (round-trip): normName המחווט לפענוח; ייצוא/החלה טהורים.
-List<List<String>> ayinSheetRows(dynamic supporters) => asr.ayinSheetRows(supporters as List);
+List<List<String>> ayinSheetRows(dynamic supporters) => asr.ayinSheetRows(supporters as List, ayinSheetHeader: kAyinSheetHeader);
 Map<String, dynamic> parseAyinSheet(dynamic rows, dynamic supporters) =>
     pas.parseAyinSheet(rows as List, supporters as List, normName);
 Map<String, dynamic> applyAyinSheet(dynamic supporters, dynamic upds, dynamic today) =>

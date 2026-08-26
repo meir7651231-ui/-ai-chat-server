@@ -111,12 +111,12 @@ function addNamedParam(src, typeDecl, name) {
 }
 
 // מזריק arg-named לכל קריאות fn( ... ) במקור (התאמת-סוגריים).
-function injectNamedArg(src, fn, argName, argVal) {
+// dotted=true ⇒ רק קריאות-מנוקדות `alias.fn(` (קופסאות; מונע פגיעה בהגדרת-wrapper).
+function injectNamedArg(src, fn, argName, argVal, dotted = false) {
   let out = '', i = 0;
-  const call = new RegExp('\\b' + fn + '\\s*\\(', 'g');
+  const call = new RegExp((dotted ? '\\.\\s*' : '\\b') + fn + '\\s*\\(', 'g');
   let m;
   while ((m = call.exec(src)) !== null) {
-    // דלג על ההגדרה עצמה (אחריה { )
     let depth = 1, j = m.index + m[0].length, inStr = false, q = '';
     for (; j < src.length; j++) {
       const c = src[j];
@@ -126,7 +126,7 @@ function injectNamedArg(src, fn, argName, argVal) {
       else if (c === ')') { depth--; if (depth === 0) break; }
     }
     const after = src.slice(j + 1).replace(/^\s*/, '');
-    if (after.startsWith('{')) continue; // הגדרה, לא קריאה
+    if (!dotted && after.startsWith('{')) continue; // הגדרה, לא קריאה
     out += src.slice(i, j) + `, ${argName}: ${argVal}` + src[j];
     i = j + 1;
     call.lastIndex = i;
@@ -144,16 +144,21 @@ function extract(rel) {
   if (blocks.length !== 1) { console.log(`↷ דילוג ${rel}: ${blocks.length} בלוקים (המחלץ הבטוח = בלוק-יחיד).`); return false; }
   const b = blocks[0];
   if (b.name.startsWith('k') && /^k[A-Z]/.test(b.name)) { console.log(`↷ ${rel}: כבר-מחולץ (${b.name}).`); return false; }
-  // מגן-צרכנים: אטום שקופסה/לוח מייבאים — דילוג (המחלץ לא מחווט קופסאות; ידני).
+  // איסוף-צרכנים: קופסאות/לוח שמייבאים את האטום (יחוברו + יאומתו דרך ה-proof).
   const baseName = path.basename(rel).replace(/\.(dart|mjs)$/, '');
+  const consumers = []; // {abs, src0, proofAbs}
   for (const cdir of ['dart-boxes', '.']) {
     const cabs = path.join(ROOT, cdir);
     if (!fs.existsSync(cabs)) continue;
     for (const cf of fs.readdirSync(cabs)) {
-      if (!/\.(dart|mjs)$/.test(cf) || /_test|\.test\./.test(cf)) continue;
-      const csrc = fs.readFileSync(path.join(cabs, cf), 'utf8');
-      if (csrc.includes(`/${baseName}.dart'`) || csrc.includes(`/${baseName}.mjs'`)) {
-        console.log(`↷ ${rel}: צרכן קיים (${cdir}/${cf}) — דילוג (חיווט-ידני).`); return false;
+      if (!/\.(dart|mjs)$/.test(cf) || /_test|\.test\.|proof/.test(cf)) continue;
+      const cpath = path.join(cabs, cf);
+      const csrc = fs.readFileSync(cpath, 'utf8');
+      const m = new RegExp(`import ['"][^'"]*/${baseName}\\.(dart|mjs)['"](?:\\s+as\\s+(\\w+))?`).exec(csrc);
+      if (m) {
+        const proofCandidates = [cf.replace(/\.dart$/, '-proof.dart'), 'board-proof.dart'];
+        const proofs = proofCandidates.map(p => path.join(cabs, p)).filter(p => fs.existsSync(p));
+        consumers.push({ abs: cpath, src0: csrc, alias: m[2] || null, proofs });
       }
     }
   }
@@ -194,31 +199,41 @@ function extract(rel) {
   fs.writeFileSync(dataAbs, dataContent);
   fs.writeFileSync(abs, res.src);
 
-  // חיווט-הבדיקה: import הדאטה + הזרקת-arg לכל קריאה
+  const dataImport = cfg.lang === 'js'
+    ? `import { ${pub} } from '../${cfg.data}/${base}.mjs';\n`
+    : `import '../${cfg.data}/${base}.dart';\n`;
+
+  // חיווט-הבדיקה: import הדאטה + הזרקת-arg (bare — הבדיקה מייבאת ללא-alias)
   if (hasTest) {
-    let t = testSrc0;
-    const imp = cfg.lang === 'js'
-      ? `import { ${pub} } from '../${cfg.data}/${base}.mjs';\n`
-      : `import '../${cfg.data}/${base}.dart';\n`;
-    t = imp + t;
-    t = injectNamedArg(t, res.fn, paramName, pub);
-    fs.writeFileSync(testAbs, t);
+    fs.writeFileSync(testAbs, injectNamedArg(dataImport + testSrc0, res.fn, paramName, pub));
+  }
+  // חיווט-צרכנים: קופסאות/לוח — import הדאטה + הזרקה לקריאות alias.fn( (dotted)
+  for (const c of consumers) {
+    fs.writeFileSync(c.abs, injectNamedArg(dataImport + c.src0, res.fn, paramName, pub, true));
   }
 
-  // אימות ירוק-מלא (מנוע+בדיקה); כשל ⇒ החזרת-הכל
-  try {
-    if (cfg.lang === 'dart') {
-      execSync(`dart analyze ${abs} ${dataAbs}`, { cwd: path.join(ROOT, '..'), stdio: 'pipe' });
-      if (hasTest) execSync(`dart run --enable-asserts ${testAbs}`, { cwd: path.join(ROOT, '..'), stdio: 'pipe' });
-    } else if (hasTest) {
-      execSync(`node ${testAbs}`, { cwd: path.join(ROOT, '..'), stdio: 'pipe' });
-    }
-    console.log(`✅ ${rel} — מנוע-נקי · ${b.entries} ערכים ל-${dataRel}${hasTest ? ' · בדיקה ירוקה' : ' (אין בדיקה)'} · שקע: ${paramName}`);
-    return { ok: true, rel, dataRel, paramName, pub, entries: b.entries, hasConsumers: null };
-  } catch (e) {
+  const cwd = path.join(ROOT, '..');
+  const restore = () => {
     fs.writeFileSync(abs, src0); fs.rmSync(dataAbs, { force: true });
     if (hasTest) fs.writeFileSync(testAbs, testSrc0);
-    console.log(`↩ ${rel}: אימות נכשל — הוחזר לאחור (מנוע+דאטה+בדיקה).`);
+    for (const c of consumers) fs.writeFileSync(c.abs, c.src0);
+  };
+  try {
+    if (cfg.lang === 'dart') {
+      execSync(`dart analyze ${abs} ${dataAbs}`, { cwd, stdio: 'pipe' });
+      if (hasTest) execSync(`dart run --enable-asserts ${testAbs}`, { cwd, stdio: 'pipe' });
+      // הרצת ה-proofs של הצרכנים (ייחודי)
+      const proofs = [...new Set(consumers.flatMap(c => c.proofs))];
+      for (const p of proofs) execSync(`dart run --enable-asserts ${p}`, { cwd, stdio: 'pipe' });
+    } else if (hasTest) {
+      execSync(`node ${testAbs}`, { cwd, stdio: 'pipe' });
+    }
+    const cn = consumers.length;
+    console.log(`✅ ${rel} — מנוע-נקי · ${b.entries} ערכים ל-${dataRel}${hasTest ? ' · בדיקה ✓' : ''}${cn ? ` · ${cn} צרכנים חוברו ✓` : ''} · שקע: ${paramName}`);
+    return { ok: true, rel, dataRel, paramName, pub, entries: b.entries, consumers: consumers.length };
+  } catch (e) {
+    restore();
+    console.log(`↩ ${rel}: אימות נכשל — הוחזר לאחור (מנוע+דאטה+בדיקה+${consumers.length} צרכנים).`);
     return false;
   }
 }

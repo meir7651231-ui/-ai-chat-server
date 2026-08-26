@@ -1,3 +1,4 @@
+import '../dart-data-maor/ayin-sheet-rows.dart';
 // רתמת-הזהב · ayin-sheet-rows — בדיוק 5 דוגמאות-החוזה של new/atoms/ayin-sheet-rows.test.mjs.
 // עובר ⇒ Dart ≡ JS. הרצה: dart run --enable-asserts ayin-sheet-rows_test.dart
 
@@ -15,12 +16,12 @@ bool eq(List<List<String>> a, List<String> b, int i) {
 
 void main() {
   // דוגמה 1 — ריק ⇒ כותרת בלבד, 8 עמודות
-  final r1 = ayinSheetRows([]);
+  final r1 = ayinSheetRows([], ayinSheetHeader: kAyinSheetHeader);
   assert(r1.length == 1 && r1[0].length == 8 && eq(r1, ayinSheetHeader, 0),
       'דוגמה 1: ריק ⇒ כותרת בלבד');
 
   // דוגמה 2 — תומכת בלי ayin מדולגת
-  assert(ayinSheetRows([{'name': 'בלי-תיק'}]).length == 1,
+  assert(ayinSheetRows([{'name': 'בלי-תיק'}], ayinSheetHeader: kAyinSheetHeader).length == 1,
       'דוגמה 2: בלי ayin ⇒ מדולגת');
 
   // דוגמה 3 — שורה מלאה: פסיק→רווח, stage eyes ⇒ עופרת כן
@@ -39,7 +40,7 @@ void main() {
         ],
       },
     }
-  ]);
+  ], ayinSheetHeader: kAyinSheetHeader);
   assert(eq(r3, ['רות', '050-1', 'דוד', '3', 'כן', 'כן', 'שולם מזומן', 'כן'], 1),
       'דוגמה 3: ${r3.length > 1 ? r3[1] : 'חסר'}');
 
@@ -58,7 +59,7 @@ void main() {
         ],
       },
     }
-  ]);
+  ], ayinSheetHeader: kAyinSheetHeader);
   assert(eq(r4, ['לאה', '', 'יוסי', '0', 'לא', 'לא', 'אין מענה', 'לא'], 1),
       'דוגמה 4א: ${r4.length > 1 ? r4[1] : 'חסר'}');
   assert(eq(r4, ['לאה', '', 'מרים', '', 'לא', 'לא', 'אין מענה', 'לא'], 2),
@@ -80,7 +81,7 @@ void main() {
         ],
       },
     }
-  ]);
+  ], ayinSheetHeader: kAyinSheetHeader);
   assert(r5[1][6] == 'כן', 'דוגמה 5: answers[0] גוברת — ${r5[1][6]}');
 
   print('✓ ayin-sheet-rows (Dart): 5 דוגמאות-חוזה — ירוק');

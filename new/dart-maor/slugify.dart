@@ -26,23 +26,17 @@
 // אפס שקעים: אין לוח-עברי/Intl/locale (כלל-11 לא נדרש — התעתיק הוא טבלה מוטבעת).
 
 /// תעתיק אות עברית → לטינית (פשוט וצפוי — הבעלים עורך את התוצאה ממילא).
-const Map<String, String> _heb2lat = {
-  'א': 'a', 'ב': 'b', 'ג': 'g', 'ד': 'd', 'ה': 'h', 'ו': 'v', 'ז': 'z',
-  'ח': 'ch', 'ט': 't', 'י': 'y', 'כ': 'k', 'ך': 'k', 'ל': 'l', 'מ': 'm',
-  'ם': 'm', 'נ': 'n', 'ן': 'n', 'ס': 's', 'ע': 'a', 'פ': 'p', 'ף': 'p',
-  'צ': 'ts', 'ץ': 'ts', 'ק': 'k', 'ר': 'r', 'ש': 'sh', 'ת': 't',
-};
 
 /// עוזר מקומי: toLowerCase נאמן-JS (כלל-13) — U+0130 'İ' ⇒ 'i'+U+0307 לפני
 /// המיפוי-הפשוט של Dart, כך שהנקודה-העילית לא נבלעת.
 String _jsLower(String s) => s.replaceAll('İ', 'i̇').toLowerCase();
 
-dynamic slugify(dynamic orgName, dynamic taken) {
+dynamic slugify(dynamic orgName, dynamic taken, {required Map<String, dynamic> heb2lat}) {
   final lower = _jsLower((orgName as String).trim());
   final lat =
       lower.runes.map((r) {
         final ch = String.fromCharCode(r);
-        return _heb2lat[ch] ?? ch;
+        return heb2lat[ch] ?? ch;
       }).join('');
   var base = lat
       .replaceAll(RegExp(r'[^a-z0-9]+'), '-')
