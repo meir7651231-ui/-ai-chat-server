@@ -63,6 +63,22 @@ class Board {
     return {'slug': slug, 'features': features, ...?extra};
   }
 
+  // 🧙 האשף · חבילות-ורטיקל — תחום ⇒ חבילת-יכולות מוכנה (מדליקה אוטומטית).
+  //   מערכת אחת: בוחר תחום, מקבל חבילה; ואז מדייק בחוגה (add/remove) כמה שרוצה.
+  static final Map<String, List<String>> verticalPacks = {
+    'amuta': ['supporters.cockpit', 'families', 'diary', 'reports', 'audit', 'wa', 'hebrew'],
+    'binyan': ['bs.projects', 'bs.studio', 'bs.workflow', 'bs.actions', 'bs.security', 'bs.config'],
+    'digital': ['bs.studio', 'bs.workflow', 'bs.actions', 'bs.assistant', 'bs.fuzzy'],
+    'chesed-plus': ['supporters.cockpit', 'families', 'audit', 'wa', 'hebrew', 'bs.fuzzy', 'bs.assistant'],
+    'full': [...capabilityCatalog],
+  };
+
+  // האשף: בחר תחום ⇒ תצורה. add/remove = החוגה הגרנולרית מעל החבילה.
+  static Map<String, dynamic> assemble(String pack, {Iterable<String> add = const [], Iterable<String> remove = const []}) {
+    final caps = {...?verticalPacks[pack]}..addAll(add)..removeAll(remove);
+    return configFor(caps, slug: pack);
+  }
+
   // ── supporters-box (אגרגטים + config/שעון מוזרקים) ──
   dynamic supIls(dynamic sp) => supportersBox.supIls(sp);
   dynamic supCount(dynamic sp) => supportersBox.supCount(sp);

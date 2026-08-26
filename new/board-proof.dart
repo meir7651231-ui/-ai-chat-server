@@ -209,6 +209,29 @@ void main() {
   // מה שלא-דלוק ברבע — אכן כבוי (families/diary/wa...):
   ok('חוגה: הלא-נבחרים כבויים', !quarter.lit('families') && !quarter.lit('bs.projects') && !quarter.lit('wa'));
 
+  // 22) 🧙 האשף — בחר תחום ⇒ חבילת-יכולות נדלקת אוטומטית; ואז דייק בחוגה
+  Board fromPack(String pack, {List<String> add = const [], List<String> remove = const []}) =>
+      makeBoard(clockIso: () => '2026-08-24', config: Board.assemble(pack, add: add, remove: remove));
+
+  // עמותה: החבילה מדליקה את יכולות-מאור
+  final wAmuta = fromPack('amuta');
+  ok('אשף/עמותה: מאור נדלק', wAmuta.lit('supporters.cockpit') && wAmuta.lit('families') && !wAmuta.lit('bs.projects'));
+  // בנייה: החבילה מדליקה את יכולות-בנייה-חכמה
+  final wBinyan = fromPack('binyan');
+  ok('אשף/בנייה: בנייה-חכמה נדלק', wBinyan.lit('bs.projects') && wBinyan.lit('bs.workflow') && !wBinyan.lit('families'));
+  // דיגיטל/סטודיו
+  ok('אשף/דיגיטל', fromPack('digital').lit('bs.studio') && fromPack('digital').lit('bs.assistant'));
+  // חסד-פלוס: תערובת — מאור-ליבה + fuzzy/assistant של בנייה-חכמה עובדים יחד
+  final wChesed = fromPack('chesed-plus');
+  ok('אשף/חסד-פלוס: תערובת עובדת', wChesed.lit('supporters.cockpit') && wChesed.lit('bs.fuzzy') &&
+      wChesed.cockpitKpis(sups)['total'] == 4 &&
+      wChesed.fuzzyDupPairs([{'id': 'p1', 'name': 'משהכהן'}, {'id': 'p2', 'name': 'משהכוהן'}]).isNotEmpty);
+  // full — הכל
+  ok('אשף/full: הכל (15)', fromPack('full').capabilities().length == 15);
+  // 🎛️ החוגה מעל האשף: החבילה + דיוק ידני (add/remove)
+  ok('אשף+חוגה: עמותה + הדלקת bs.fuzzy', fromPack('amuta', add: ['bs.fuzzy']).lit('bs.fuzzy'));
+  ok('אשף+חוגה: בנייה − כיבוי bs.studio', !fromPack('binyan', remove: ['bs.studio']).lit('bs.studio'));
+
   if (fails > 0) { print('❌ לוח-האם (Dart): $fails אי-התאמות'); throw StateError('board dart proof failed'); }
   print('✓ לוח-האם המאוחד (Dart): $n טענות — 12 קופסאות-מאור + 8 קופסאות-בנייה-חכמה על אותו לוח · מחוברים יחד');
 }
