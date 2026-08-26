@@ -46,7 +46,9 @@ String jsLower(String s) {
       out.writeCharCode(0x69); // i
       out.writeCharCode(0x0307); // combining dot above
     } else if (c >= 0x13A0 && c <= 0x13EF) {
-      out.writeCharCode(c + 0x97D0); // Cherokee upper ⇒ lower
+      out.writeCharCode(c + 0x97D0); // Cherokee upper ⇒ lower (U+AB70–U+ABBF)
+    } else if (c >= 0x13F0 && c <= 0x13F5) {
+      out.writeCharCode(c + 0x08); // Cherokee supplement upper ⇒ lower (U+13F8–U+13FD)
     } else if (c == 0x03A3) {
       // Σ · Final_Sigma: קטנה-סופית ς אם אחריה אין תו-מילה (ותו-מילה לפניה)
       final prevWord = i > 0 && _isCased(runes[i - 1]);
