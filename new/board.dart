@@ -15,6 +15,8 @@ import 'dart-boxes/hebrew.dart' as hebrewBox;
 import 'dart-boxes/wa.dart' as waBox;
 import 'dart-boxes/audit.dart' as auditBox;
 import 'dart-boxes/date-util.dart' as dateUtilBox;
+// ── דומיין-בנייה-חכמה (buildsmart) — נכנס לאותו לוח-אם מאוחד ──
+import 'dart-boxes/bs-matching.dart' as bsMatching;
 
 class Board {
   final Map<String, dynamic> config;
@@ -84,6 +86,11 @@ class Board {
   List auditRun(dynamic db, [dynamic extra = true]) => auditBox.runAudit(db, today(), extra, config, todayDate());
   List<String> auditReport(Iterable<Map<String, String>> issues) =>
       auditBox.auditReportLines(config['orgName'] as String?, issues, dateUtilBox.isoLocal(todayDate()));
+
+  // ── 🏗️ פרוסת-בנייה-חכמה: התאמה-מטושטשת (bs-matching) — דומיין-בנייה על אותו לוח ──
+  bool bsFuzzyMatch(String query, String candidate) => bsMatching.fuzzyMatch(query, candidate);
+  bool bsFuzzyNameMatch(String query, String candidate) => bsMatching.fuzzyNameMatch(query, candidate);
+  int bsFuzzyScore(String query, String candidate) => bsMatching.fuzzyScore(query, candidate);
 }
 
 Board makeBoard({Map<String, dynamic>? config, String Function()? clockIso, num rate = 3.7}) {

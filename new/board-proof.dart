@@ -113,6 +113,16 @@ void main() {
   ok('audit.run תופס טלפון-כפול', auditIssues.any((i) => i['cat'] == 'כפילות' && (i['title'] as String).contains('משותף')));
   ok('audit.report עם שם-ארגון', board.auditReport(auditIssues.map((i) => (i as Map).map((k, v) => MapEntry(k.toString(), v.toString()))))[0].contains('ארגון-בדיקה'));
 
+  // 14) 🏗️ דומיין-בנייה-חכמה על אותו לוח-אם — מאור ובנייה-חכמה מחוברים יחד
+  ok('bs.fuzzyMatch זהה', board.bsFuzzyMatch('shalom', 'shalom'));
+  ok('bs.fuzzyMatch טעות-אחת', board.bsFuzzyMatch('shalom', 'shalim'));
+  ok('bs.fuzzyMatch רחוק ⇒ false', !board.bsFuzzyMatch('shalom', 'xyzqrt'));
+  ok('bs.fuzzyScore טעות-אחת ⇒ 1', board.bsFuzzyScore('shalom', 'shalim') == 1);
+  ok('bs.fuzzyNameMatch', board.bsFuzzyNameMatch('כהן', 'כהן'));
+  // האינטגרציה המאוחדת: אותו לוח מחזיר גם קוקפיט-מאור וגם התאמת-בנייה-חכמה
+  ok('לוח-מאוחד: מאור+בנייה-חכמה חיים יחד',
+      board.cockpitKpis(sups)['total'] == 4 && board.bsFuzzyMatch('shalom', 'shalim'));
+
   if (fails > 0) { print('❌ לוח-האם (Dart): $fails אי-התאמות'); throw StateError('board dart proof failed'); }
-  print('✓ לוח-האם (Dart): $n טענות — 12 קופסאות-מאור משולבות · שעון-יחיד-מקור · פלט זהה-ביט ל-JS');
+  print('✓ לוח-האם המאוחד (Dart): $n טענות — 12 קופסאות-מאור + 1 קופסת-בנייה-חכמה על אותו לוח · מחוברים יחד');
 }
