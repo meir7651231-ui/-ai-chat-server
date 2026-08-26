@@ -1,0 +1,232 @@
+<title>Orbit · הבטחה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@700;900&family=Heebo:wght@300;400;500;700&family=Sora:wght@700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{--core:#ffcf6b;--warm:#ffe6b0;--cold:#8ea6d8;--ink:#f4efe4;--muted:#c3bcd0;--faint:#7a7594;
+    --wm:'Sora',system-ui,sans-serif;--body:'Heebo',system-ui,sans-serif;--display:'Frank Ruhl Libre',serif;--mono:'IBM Plex Mono',monospace}
+  *{margin:0;box-sizing:border-box}html,body{height:100%}
+  body{background:#03040c;color:var(--ink);font-family:var(--body);font-weight:300;overflow:hidden;direction:rtl}
+  #c{position:fixed;inset:0;width:100%;height:100%;display:block}
+  .ui{position:fixed;inset:0;pointer-events:none;z-index:3;display:flex;flex-direction:column;justify-content:space-between;padding:28px 34px}
+  .top{display:flex;justify-content:space-between;align-items:center}
+  .brand{font-family:var(--wm);font-weight:800;letter-spacing:.15em;font-size:1.05rem;opacity:.9;display:flex;align-items:center;gap:9px}
+  .brand .o{position:relative;width:19px;height:19px}
+  .brand .o::before{content:"";position:absolute;inset:0;border:1.5px solid rgba(255,207,107,.5);border-radius:50%}
+  .brand .o::after{content:"";position:absolute;top:-2px;left:50%;width:5px;height:5px;margin-left:-2.5px;background:var(--core);border-radius:50%;box-shadow:0 0 9px var(--core);transform-origin:0 11.5px;animation:sp 5s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .replay{pointer-events:auto;cursor:pointer;font-family:var(--mono);font-size:.72rem;color:var(--faint);border:1px solid #23283f;
+    background:rgba(10,12,26,.5);border-radius:999px;padding:7px 14px;transition:all .2s}
+  .replay:hover{color:var(--ink);border-color:var(--core)}
+
+  .stage{position:fixed;inset:0;z-index:3;pointer-events:none;display:grid;place-items:center;padding:0 26px;text-align:center}
+  .msg{max-width:26ch}
+  .eyebrow{font-family:var(--mono);font-size:.74rem;letter-spacing:.34em;text-transform:uppercase;color:var(--cold);
+    opacity:0;transform:translateY(10px);transition:opacity .9s,transform .9s,color .9s}
+  .line{font-family:var(--display);font-weight:900;font-size:clamp(2.1rem,5.6vw,4.2rem);line-height:1.06;margin-top:14px;
+    text-shadow:0 8px 60px rgba(0,0,0,.9);opacity:0;transform:translateY(20px);transition:opacity 1s,transform 1s}
+  .line .lit{color:var(--core)}
+  .sub{font-family:var(--body);color:var(--muted);font-size:clamp(1rem,2vw,1.2rem);margin-top:16px;line-height:1.6;
+    opacity:0;transform:translateY(14px);transition:opacity 1s .12s,transform 1s .12s}
+  .cta-wrap{margin-top:28px;opacity:0;transform:translateY(14px);transition:opacity 1s,transform 1s;pointer-events:none}
+  .cta-wrap.on{pointer-events:auto}
+  .cta{display:inline-block;font-family:var(--body);font-weight:700;font-size:1.08rem;color:#241704;padding:15px 38px;border-radius:999px;
+    background:linear-gradient(120deg,var(--warm),#ffb03a);text-decoration:none;box-shadow:0 0 0 0 rgba(255,207,107,.5);animation:beat 2.4s ease-in-out infinite}
+  @keyframes beat{0%,100%{box-shadow:0 12px 40px -12px rgba(255,176,58,.5),0 0 0 0 rgba(255,207,107,.4)}50%{box-shadow:0 12px 40px -12px rgba(255,176,58,.7),0 0 0 16px rgba(255,207,107,0)}}
+  .cta-sub{font-family:var(--mono);font-size:.72rem;color:var(--faint);margin-top:12px;letter-spacing:.04em}
+  .show{opacity:1!important;transform:none!important}
+
+  .counter{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);z-index:3;display:flex;gap:30px;pointer-events:none;
+    opacity:0;transition:opacity 1s}
+  .counter.on{opacity:1}
+  .counter .b{text-align:center}
+  .counter .v{font-family:var(--wm);font-weight:800;font-size:1.6rem;font-variant-numeric:tabular-nums}
+  .counter .held .v{color:var(--core)}.counter .lost .v{color:#7fe0c0}
+  .counter .l{font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;color:var(--faint);text-transform:uppercase;margin-top:2px}
+
+  .loading{position:fixed;inset:0;display:grid;place-items:center;background:#03040c;z-index:6;transition:opacity 1s}
+  .loading.gone{opacity:0;pointer-events:none}
+  .loading .l{font-family:var(--mono);font-size:.8rem;letter-spacing:.34em;color:var(--faint);text-transform:uppercase;animation:pl 1.4s ease-in-out infinite}
+  @keyframes pl{50%{opacity:.4}}
+  @media (prefers-reduced-motion:reduce){.brand .o::after,.loading .l,.cta{animation:none}}
+</style>
+
+<canvas id="c"></canvas>
+<div class="ui">
+  <div class="top"><div class="brand"><span class="o"></span>ORBIT</div><span class="replay" id="replay">▷ הצג שוב</span></div>
+</div>
+<div class="stage"><div class="msg">
+  <div class="eyebrow" id="eb">לפני Orbit</div>
+  <div class="line" id="line">הכל על הכתפיים <span class="lit">שלך.</span></div>
+  <div class="sub" id="sub">פתקים, אקסלים, קבוצות-וואטסאפ. ואי-שם — משפחה אחת שעלולה להישכח.</div>
+  <div class="cta-wrap" id="ctaw"><a class="cta" href="#" onclick="return false">פתחו אתר משלכם →</a><div class="cta-sub">3 דקות · בלי מפתחים · בלי כרטיס-אשראי</div></div>
+</div></div>
+<div class="counter" id="counter">
+  <div class="b held"><div class="v" id="held">0</div><div class="l">מוחזקים</div></div>
+  <div class="b lost"><div class="v">0</div><div class="l">אבודים</div></div>
+</div>
+<div class="loading" id="load"><div class="l">Orbit · מתעורר…</div></div>
+
+<script>
+(function(){
+  const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const cv=document.getElementById('c'),load=document.getElementById('load');
+  let gl;try{gl=cv.getContext('webgl',{antialias:false,alpha:false,depth:false});}catch(e){}
+  if(!gl){load.querySelector('.l').textContent='WebGL לא נתמך';return;}
+
+  function ident(){const o=new Float32Array(16);o[0]=o[5]=o[10]=o[15]=1;return o;}
+  function mul(a,b){const o=new Float32Array(16);for(let c=0;c<4;c++)for(let r=0;r<4;r++){let s=0;for(let k=0;k<4;k++)s+=a[k*4+r]*b[c*4+k];o[c*4+r]=s;}return o;}
+  function persp(f,a,n,fr){const t=1/Math.tan(f/2),o=new Float32Array(16);o[0]=t/a;o[5]=t;o[10]=(fr+n)/(n-fr);o[11]=-1;o[14]=2*fr*n/(n-fr);return o;}
+  function tz(z){const o=ident();o[14]=z;return o;}
+  function rY(a){const c=Math.cos(a),s=Math.sin(a),o=ident();o[0]=c;o[2]=s;o[8]=-s;o[10]=c;return o;}
+  function rX(a){const c=Math.cos(a),s=Math.sin(a),o=ident();o[5]=c;o[6]=s;o[9]=-s;o[10]=c;return o;}
+  function mk(t,s){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))console.warn(gl.getShaderInfoLog(o));return o;}
+  function prog(v,f){const p=gl.createProgram();gl.attachShader(p,mk(gl.VERTEX_SHADER,v));gl.attachShader(p,mk(gl.FRAGMENT_SHADER,f));gl.linkProgram(p);if(!gl.getProgramParameter(p,gl.LINK_STATUS))console.warn(gl.getProgramInfoLog(p));return p;}
+  const FRAG=`precision mediump float;varying vec3 vCol;varying float vB;void main(){float d=length(gl_PointCoord-.5);if(d>.5)discard;float a=smoothstep(.5,0.,d);gl_FragColor=vec4(vCol*vB,a*.9);}`;
+
+  const HELD=6000;
+  const bCh=new Float32Array(HELD*3),bR=new Float32Array(HELD),bPh=new Float32Array(HELD),bSp=new Float32Array(HELD),bTl=new Float32Array(HELD*2),bWm=new Float32Array(HELD*3);
+  for(let i=0;i<HELD;i++){
+    // chaos: scattered cold cloud
+    const cr=2.3+Math.random()*1.8, ca=Math.random()*6.283, cel=(Math.random()-.5)*3.4;
+    bCh[i*3]=Math.cos(ca)*cr; bCh[i*3+1]=cel; bCh[i*3+2]=Math.sin(ca)*cr*0.9;
+    const shell=Math.random()**1.3,R=0.55+shell*1.7;
+    bR[i]=R; bPh[i]=Math.random()*6.283; bSp[i]=(Math.random()<.5?1:-1)*(0.5/Math.sqrt(R))*(0.8+Math.random()*0.4);
+    bTl[i*2]=Math.random()*3.14159; bTl[i*2+1]=Math.random()*6.283;
+    const t=(R-0.55)/1.7; bWm[i*3]=1.0; bWm[i*3+1]=0.86-0.12*t; bWm[i*3+2]=0.45-0.18*t;
+  }
+  const ORB=prog(`
+    attribute vec3 aChaos;attribute float aR,aPhase,aSpeed;attribute vec2 aTilt;attribute vec3 aWarm;
+    uniform mat4 uMVP;uniform float uT,uPx,uGather,uBurst;varying vec3 vCol;varying float vB;
+    void main(){
+      float ang=aPhase+uT*aSpeed;
+      vec3 o=vec3(cos(ang)*aR,0.,sin(ang)*aR);
+      float cx=cos(aTilt.x),sx=sin(aTilt.x);o=vec3(o.x,o.y*cx-o.z*sx,o.y*sx+o.z*cx);
+      float cz=cos(aTilt.y),sz=sin(aTilt.y);o=vec3(o.x*cz-o.y*sz,o.x*sz+o.y*cz,o.z);
+      vec3 ch=aChaos+vec3(sin(uT*.6+aChaos.y*2.),cos(uT*.5+aChaos.z*2.),sin(uT*.7+aChaos.x*2.))*0.16;
+      float g=clamp((uGather-(aPhase/6.283)*0.45)/0.6,0.,1.);g=g*g*(3.-2.*g);
+      vec3 p=mix(ch,o,g);
+      p+=normalize(p+0.001)*uBurst*0.25;
+      vec4 q=uMVP*vec4(p,1.);gl_Position=q;
+      gl_PointSize=clamp((1.1+aR*1.3)*uPx/q.w,1.,13.);
+      vCol=mix(vec3(0.34,0.42,0.66),aWarm,g);
+      vB=clamp(1.5/q.w,.3,1.7)*(0.55+0.45*g);}`,FRAG);
+  const oA={};['aChaos','aR','aPhase','aSpeed','aTilt','aWarm'].forEach(k=>oA[k]=gl.getAttribLocation(ORB,k));
+  const oU={};['uMVP','uT','uPx','uGather','uBurst'].forEach(k=>oU[k]=gl.getUniformLocation(ORB,k));
+  function buf(d){const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,d,gl.STATIC_DRAW);return b;}
+  const gCh=buf(bCh),gR=buf(bR),gPh=buf(bPh),gSp=buf(bSp),gTl=buf(bTl),gWm=buf(bWm);
+
+  // core (dynamic points)
+  const cPos=new Float32Array(12),cCol=new Float32Array(12),cSz=new Float32Array(4);
+  const bcP=gl.createBuffer(),bcC=gl.createBuffer(),bcS=gl.createBuffer();
+  const PT=prog(`attribute vec3 aPos;attribute vec3 aCol;attribute float aSize;uniform mat4 uMVP;uniform float uPx;varying vec3 vCol;varying float vB;
+    void main(){vec4 q=uMVP*vec4(aPos,1.);gl_Position=q;gl_PointSize=clamp(aSize*uPx/q.w,1.,80.);vCol=aCol;vB=clamp(1.6/q.w,.3,2.4);}`,FRAG);
+  const pA={};['aPos','aCol','aSize'].forEach(k=>pA[k]=gl.getAttribLocation(PT,k));
+  const pU={};['uMVP','uPx'].forEach(k=>pU[k]=gl.getUniformLocation(PT,k));
+
+  // bloom
+  function mkfbo(w,h){const t=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,t);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,w,h,0,gl.RGBA,gl.UNSIGNED_BYTE,null);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+    const f=gl.createFramebuffer();gl.bindFramebuffer(gl.FRAMEBUFFER,f);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,t,0);
+    return {t,f,ok:gl.checkFramebufferStatus(gl.FRAMEBUFFER)===gl.FRAMEBUFFER_COMPLETE};}
+  const QUAD='attribute vec2 p;varying vec2 vUv;void main(){vUv=p*.5+.5;gl_Position=vec4(p,0.,1.);}';
+  const BLUR=prog(QUAD,`precision mediump float;varying vec2 vUv;uniform sampler2D uTex;uniform vec2 uDir;
+    void main(){vec4 s=texture2D(uTex,vUv)*.227;s+=texture2D(uTex,vUv+uDir*1.384)*.316;s+=texture2D(uTex,vUv-uDir*1.384)*.316;
+      s+=texture2D(uTex,vUv+uDir*3.23)*.07;s+=texture2D(uTex,vUv-uDir*3.23)*.07;gl_FragColor=s;}`);
+  const bT=gl.getUniformLocation(BLUR,'uTex'),bD=gl.getUniformLocation(BLUR,'uDir'),bP=gl.getAttribLocation(BLUR,'p');
+  const COMP=prog(QUAD,`precision mediump float;varying vec2 vUv;uniform sampler2D uScene,uBloom;uniform float uInt;
+    void main(){vec3 c=texture2D(uScene,vUv).rgb+texture2D(uBloom,vUv).rgb*uInt;c=vec3(1.)-exp(-c*1.5);gl_FragColor=vec4(c,1.);}`);
+  const cS=gl.getUniformLocation(COMP,'uScene'),cB=gl.getUniformLocation(COMP,'uBloom'),cI=gl.getUniformLocation(COMP,'uInt'),cP=gl.getAttribLocation(COMP,'p');
+  const quad=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,quad);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  let SCENE,HA,HB,bloom=true,DPR,W,H,HW,HH;
+  function alloc(){DPR=Math.min(devicePixelRatio||1,1.6);W=Math.floor(innerWidth*DPR);H=Math.floor(innerHeight*DPR);HW=Math.max(2,W>>1);HH=Math.max(2,H>>1);cv.width=W;cv.height=H;
+    try{SCENE=mkfbo(W,H);HA=mkfbo(HW,HH);HB=mkfbo(HW,HH);bloom=SCENE.ok&&HA.ok&&HB.ok;}catch(e){bloom=false;}}
+  alloc();addEventListener('resize',alloc);
+  function fq(loc){gl.bindBuffer(gl.ARRAY_BUFFER,quad);gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);gl.drawArrays(gl.TRIANGLES,0,3);}
+
+  let ry=0,rx=-0.3,mx=0,my=0,burst=0;
+  addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5;});
+  cv.addEventListener('pointerdown',()=>{burst=Math.min(.6,burst+.4);});
+
+  function drawORB(mvp,T,gather){
+    gl.useProgram(ORB);
+    gl.bindBuffer(gl.ARRAY_BUFFER,gCh);gl.enableVertexAttribArray(oA.aChaos);gl.vertexAttribPointer(oA.aChaos,3,gl.FLOAT,false,0,0);
+    gl.bindBuffer(gl.ARRAY_BUFFER,gR);gl.enableVertexAttribArray(oA.aR);gl.vertexAttribPointer(oA.aR,1,gl.FLOAT,false,0,0);
+    gl.bindBuffer(gl.ARRAY_BUFFER,gPh);gl.enableVertexAttribArray(oA.aPhase);gl.vertexAttribPointer(oA.aPhase,1,gl.FLOAT,false,0,0);
+    gl.bindBuffer(gl.ARRAY_BUFFER,gSp);gl.enableVertexAttribArray(oA.aSpeed);gl.vertexAttribPointer(oA.aSpeed,1,gl.FLOAT,false,0,0);
+    gl.bindBuffer(gl.ARRAY_BUFFER,gTl);gl.enableVertexAttribArray(oA.aTilt);gl.vertexAttribPointer(oA.aTilt,2,gl.FLOAT,false,0,0);
+    gl.bindBuffer(gl.ARRAY_BUFFER,gWm);gl.enableVertexAttribArray(oA.aWarm);gl.vertexAttribPointer(oA.aWarm,3,gl.FLOAT,false,0,0);
+    gl.uniformMatrix4fv(oU.uMVP,false,mvp);gl.uniform1f(oU.uT,T);gl.uniform1f(oU.uPx,64*DPR);gl.uniform1f(oU.uGather,gather);gl.uniform1f(oU.uBurst,burst);
+    gl.drawArrays(gl.POINTS,0,HELD);
+  }
+  function drawCore(mvp,T,gather){
+    const b=gather*(1+0.1*Math.sin(T*1.5)+burst*0.5);
+    const S=[38*b,22*b,54*b,10*b],C=[[1,.86,.5],[1,.93,.66],[1,.8,.42],[1,.96,.8]];
+    for(let i=0;i<4;i++){cPos[i*3]=0;cPos[i*3+1]=0;cPos[i*3+2]=0;cCol[i*3]=C[i][0]*gather;cCol[i*3+1]=C[i][1]*gather;cCol[i*3+2]=C[i][2]*gather;cSz[i]=S[i];}
+    gl.bindBuffer(gl.ARRAY_BUFFER,bcP);gl.bufferData(gl.ARRAY_BUFFER,cPos,gl.DYNAMIC_DRAW);
+    gl.bindBuffer(gl.ARRAY_BUFFER,bcC);gl.bufferData(gl.ARRAY_BUFFER,cCol,gl.DYNAMIC_DRAW);
+    gl.bindBuffer(gl.ARRAY_BUFFER,bcS);gl.bufferData(gl.ARRAY_BUFFER,cSz,gl.DYNAMIC_DRAW);
+    gl.useProgram(PT);
+    gl.bindBuffer(gl.ARRAY_BUFFER,bcP);gl.enableVertexAttribArray(pA.aPos);gl.vertexAttribPointer(pA.aPos,3,gl.FLOAT,false,0,0);
+    gl.bindBuffer(gl.ARRAY_BUFFER,bcC);gl.enableVertexAttribArray(pA.aCol);gl.vertexAttribPointer(pA.aCol,3,gl.FLOAT,false,0,0);
+    gl.bindBuffer(gl.ARRAY_BUFFER,bcS);gl.enableVertexAttribArray(pA.aSize);gl.vertexAttribPointer(pA.aSize,1,gl.FLOAT,false,0,0);
+    gl.uniformMatrix4fv(pU.uMVP,false,mvp);gl.uniform1f(pU.uPx,64*DPR);
+    gl.drawArrays(gl.POINTS,0,4);
+  }
+
+  /* ---- narrative ---- */
+  const eb=document.getElementById('eb'),lineEl=document.getElementById('line'),sub=document.getElementById('sub'),
+        ctaw=document.getElementById('ctaw'),counter=document.getElementById('counter'),heldEl=document.getElementById('held');
+  const ACTS=[
+    {eb:'לפני Orbit', ec:'var(--cold)', line:'הכל על הכתפיים <span class="lit">שלך.</span>', sub:'פתקים, אקסלים, קבוצות-וואטסאפ. ואי-שם — משפחה אחת שעלולה להישכח.'},
+    {eb:'וברגע אחד', ec:'var(--warm)', line:'Orbit <span class="lit">אוסף</span> את הכל.', sub:'כל משפחה, כל תרומה, כל קבלה — נמשכת פנימה, למקום אחד.'},
+    {eb:'מעכשיו', ec:'var(--core)', line:'אף אחד <span class="lit">לא נופל.</span>', sub:'הכל מוחזק, מסודר, בהישג-יד. אתם נותנים — אנחנו מחזיקים את השאר.'},
+    {eb:'האתר שלכם מחכה', ec:'var(--core)', line:'<span class="lit">פתחו</span> עולם משלכם.', sub:'עמותה, עסק או סטודיו — מערכת-ניהול מלאה, חיה בדקות.', cta:true},
+  ];
+  let curAct=-1,narr=0,gather=0,heldShown=0;
+  function setAct(i){ if(i===curAct)return; curAct=i; const a=ACTS[i];
+    [eb,lineEl,sub].forEach(el=>el.classList.remove('show'));
+    setTimeout(()=>{ eb.textContent=a.eb; eb.style.color=a.ec; lineEl.innerHTML=a.line; sub.innerHTML=a.sub;
+      eb.classList.add('show'); lineEl.classList.add('show'); sub.classList.add('show');
+      ctaw.classList.toggle('on',!!a.cta); ctaw.classList.toggle('show',!!a.cta);
+      counter.classList.toggle('on', i>=2);
+    }, curAct<0?0:600);
+  }
+  document.getElementById('replay').addEventListener('click',()=>{narr=0;curAct=-1;heldShown=0;});
+
+  const t0=Date.now();let last=t0;
+  setTimeout(()=>load.classList.add('gone'),700);
+  function frame(){
+    const now=Date.now(),T=(now-t0)/1000,dt=Math.min(.05,(now-last)/1000);last=now;
+    if(!reduce)narr+=dt; else narr=20;
+    burst*=0.92;
+    // narrative timeline → gather + acts
+    if(narr<4.4){setAct(0);gather=0;}
+    else if(narr<9.6){setAct(1);gather=Math.min(1,(narr-4.4)/4.6);gather=gather*gather*(3-2*gather);}
+    else if(narr<14.2){setAct(2);gather=1;}
+    else{setAct(3);gather=1;}
+    if(curAct>=2 && heldShown<HELD){heldShown=Math.min(HELD,heldShown+90);heldEl.textContent=heldShown.toLocaleString('he-IL');}
+
+    ry+=0.0012+mx*.0004; rx+=((-0.3+my*.5)-rx)*.03; rx=Math.max(-1.2,Math.min(1.2,rx));
+    const dolly=-5.6+gather*1.4; // dolly in as it gathers
+    const mvp=mul(mul(mul(persp(.95,innerWidth/innerHeight,.1,20),tz(dolly)),rX(rx)),rY(ry));
+
+    function scene(){gl.clearColor(0.008,0.009,0.022,1);gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE);drawORB(mvp,T,gather);drawCore(mvp,T,gather);}
+    if(bloom){
+      gl.bindFramebuffer(gl.FRAMEBUFFER,SCENE.f);gl.viewport(0,0,W,H);scene();
+      gl.disable(gl.BLEND);gl.useProgram(BLUR);gl.activeTexture(gl.TEXTURE0);gl.uniform1i(bT,0);
+      gl.bindFramebuffer(gl.FRAMEBUFFER,HA.f);gl.viewport(0,0,HW,HH);gl.bindTexture(gl.TEXTURE_2D,SCENE.t);gl.uniform2f(bD,1/HW,0);fq(bP);
+      gl.bindFramebuffer(gl.FRAMEBUFFER,HB.f);gl.bindTexture(gl.TEXTURE_2D,HA.t);gl.uniform2f(bD,0,1/HH);fq(bP);
+      gl.bindFramebuffer(gl.FRAMEBUFFER,HA.f);gl.bindTexture(gl.TEXTURE_2D,HB.t);gl.uniform2f(bD,1/HW,0);fq(bP);
+      gl.bindFramebuffer(gl.FRAMEBUFFER,HB.f);gl.bindTexture(gl.TEXTURE_2D,HA.t);gl.uniform2f(bD,0,1/HH);fq(bP);
+      gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.viewport(0,0,W,H);
+      gl.useProgram(COMP);gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,SCENE.t);gl.uniform1i(cS,0);
+      gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,HB.t);gl.uniform1i(cB,1);gl.uniform1f(cI,1.5);fq(cP);
+    }else{gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.viewport(0,0,W,H);scene();}
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+</script>
