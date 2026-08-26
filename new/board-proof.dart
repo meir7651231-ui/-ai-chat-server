@@ -123,6 +123,16 @@ void main() {
   ok('לוח-מאוחד: מאור+בנייה-חכמה חיים יחד',
       board.cockpitKpis(sups)['total'] == 4 && board.bsFuzzyMatch('shalom', 'shalim'));
 
+  // 15) 🔗 גשר-האיחוד: נתוני-תומכים (מאור) + fuzzy (בנייה-חכמה) — כפילי-שם מטושטשים
+  final fuzzyDb = [
+    {'id': 'p1', 'name': 'משהכהן'},
+    {'id': 'p2', 'name': 'משהכוהן'}, // טעות-כתיב — התאמה-מדויקת מפספסת, fuzzy תופס
+    {'id': 'p3', 'name': 'שרהלוי'},
+  ];
+  final pairs = board.fuzzyDupPairs(fuzzyDb);
+  ok('גשר-איחוד: fuzzy-בנייה-חכמה תופס כפילות-שם ב-נתוני-מאור', pairs.any((p) => p.contains('p1') && p.contains('p2')));
+  ok('גשר-איחוד: שם-רחוק לא-מזווג', !pairs.any((p) => p.contains('p3')));
+
   if (fails > 0) { print('❌ לוח-האם (Dart): $fails אי-התאמות'); throw StateError('board dart proof failed'); }
   print('✓ לוח-האם המאוחד (Dart): $n טענות — 12 קופסאות-מאור + 1 קופסת-בנייה-חכמה על אותו לוח · מחוברים יחד');
 }

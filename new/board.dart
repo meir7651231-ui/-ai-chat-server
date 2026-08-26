@@ -91,6 +91,23 @@ class Board {
   bool bsFuzzyMatch(String query, String candidate) => bsMatching.fuzzyMatch(query, candidate);
   bool bsFuzzyNameMatch(String query, String candidate) => bsMatching.fuzzyNameMatch(query, candidate);
   int bsFuzzyScore(String query, String candidate) => bsMatching.fuzzyScore(query, candidate);
+
+  // ── 🔗 גשר-האיחוד: dedup-מאור (נתוני-התומכים) פוגש fuzzy-בנייה-חכמה (מנוע-ההתאמה).
+  //     מוצא זוגות-תומכים שֶׁשמותיהם מטושטשים-תואמים — כפילות שהתאמה-מדויקת מפספסת.
+  //     זו הפגישה האמיתית: יכולת-בנייה-חכמה משדרגת קופסת-מאור, על אותו לוח.
+  List<List<String>> fuzzyDupPairs(List<Map<String, dynamic>> sups) {
+    final out = <List<String>>[];
+    for (var i = 0; i < sups.length; i++) {
+      for (var j = i + 1; j < sups.length; j++) {
+        final a = (sups[i]['name'] ?? '').toString();
+        final b = (sups[j]['name'] ?? '').toString();
+        if (a.isNotEmpty && b.isNotEmpty && bsMatching.fuzzyNameMatch(a, b)) {
+          out.add([sups[i]['id'].toString(), sups[j]['id'].toString()]);
+        }
+      }
+    }
+    return out;
+  }
 }
 
 Board makeBoard({Map<String, dynamic>? config, String Function()? clockIso, num rate = 3.7}) {
