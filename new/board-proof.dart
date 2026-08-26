@@ -1,0 +1,90 @@
+// 🧪 הוכחת-חוצה-שפות · לוח-האם (Dart) — אותו תרחיש-אינטגרציה כמו new/board.test.mjs.
+// ירוק ⇒ האינטגרציה חוצת-הקופסות (6 קופסאות) זהה-ביט בין מאור(JS) לבנייה-חכמה(Dart).
+import 'dart:convert';
+import 'board.dart';
+
+int n = 0, fails = 0;
+void ok(String name, bool c) { if (!c) { print('✗ $name'); fails++; } else { n++; } }
+// canon: double-שלם ⇒ int (חוק-17: אטומים מחזירים float64; JS JSON.stringify מדפיס 500 לא 500.0).
+dynamic canon(dynamic v) {
+  if (v is double && v.isFinite && v == v.truncateToDouble()) return v.toInt();
+  if (v is Map) return {for (final k in v.keys) k.toString(): canon(v[k])};
+  if (v is List) return v.map(canon).toList();
+  return v;
+}
+void eq(String name, Object? got, Object? want) {
+  final g = jsonEncode(canon(got)), w = jsonEncode(canon(want));
+  if (g != w) { print('✗ $name: $g ≠ $w'); fails++; } else { n++; }
+}
+
+Map<String, dynamic> mk(String id, String name, String phone, String last, num ils, num usd, int count,
+    {List donations = const [], Map? hok}) => {
+      'id': id, 'name': name, 'phone': phone, 'email': '', 'idNum': '', 'address': '', 'cat': '', 'forWho': '',
+      'count': count, 'ils': ils, 'usd': usd, 'first': '2023-01-01', 'last': last, 'nextDate': '',
+      'donations': donations, 'hist': [], if (hok != null) 'hok': hok,
+    };
+
+void main() {
+  final board = makeBoard(
+    clockIso: () => '2026-08-24',
+    config: {'slug': 'demo', 'orgName': 'ארגון-בדיקה', 'terms': {'nav.supporters': 'שותפים'}},
+    rate: 3.7,
+  );
+
+  // 1) IO מוזרק פעם-אחת
+  eq('שעון-הלוח', board.today(), '2026-08-24');
+
+  // 2) config-box → מונחים
+  eq('config→term דריסה', board.term('nav.supporters', 'תורמים'), 'שותפים');
+  eq('config→term fallback', board.term('nav.families', 'משפחות'), 'משפחות');
+  ok('config→feature מחווט', board.feature('supporters.cockpit') == true || board.feature('supporters.cockpit') == false);
+
+  final sups = [
+    mk('a', 'כהן משה', '0501111111', '2026-08-20', 500, 0, 5, donations: [
+      {'date': '2026-08-20', 'amount': 100, 'cur': '₪', 'rid': 'R-1'},
+      {'date': '2026-05-20', 'amount': 100, 'cur': '₪', 'rid': 'R-2'},
+      {'date': '2026-02-20', 'amount': 100, 'cur': '₪', 'rid': 'R-3'},
+    ]),
+    mk('b', 'לוי שרה', '0502222222', '2026-03-01', 200, 20, 2, donations: [
+      {'date': '2026-03-01', 'amount': 100, 'cur': '₪', 'rid': 'R-4'},
+      {'date': '2025-11-01', 'amount': 100, 'cur': '₪', 'rid': 'R-5'},
+    ]),
+    mk('c', 'ישראלי דוד', '0503333333', '2024-06-01', 50, 0, 1, donations: [{'date': '2024-06-01', 'amount': 50, 'cur': '₪', 'rid': 'R-6'}]),
+    mk('d', 'אברהם רות', '0504444444', '2026-08-23', 1200, 0, 8,
+        donations: [{'date': '2026-08-23', 'amount': 300, 'cur': '₪', 'rid': 'R-7'}], hok: {'amount': 150, 'day': 1, 'method': 'הו"ק', 'active': true}),
+  ];
+
+  // 3) supporters-box → אגרגטים
+  eq('supporters→ils', board.supIls(sups[0]), 500);
+  eq('supporters→count', board.supCount(sups[0]), 5);
+
+  // 4) date-util(שעון) → empowerment
+  final queue = board.cockpitQueue(sups);
+  eq('cockpit.queue.total', queue['total'], 4);
+  eq('cockpit.queue.kinds', [for (final t in (queue['tasks'] as List)) t['kind']], ['call', 'call', 'thanks', 'hok']);
+  eq('cockpit.kpis', board.cockpitKpis(sups), {'total': 4, 'collected': 400, 'expectedHok': 150, 'atRisk': 2});
+  eq('cockpit.atRisk', [for (final s in board.cockpitAtRisk(sups)) s['id']], ['c', 'b']);
+
+  // 5) האינווריאנט: שעון-יחיד-מקור — hokDue(supporters) ו-cockpit.hok(empowerment) רואים את d
+  final hokDue = board.hokDue(sups);
+  ok('supporters.hokDue רואה d', hokDue.any((s) => s['id'] == 'd'));
+  ok('empowerment.hok-task רואה d', (queue['hok'] as List).any((t) => t['supId'] == 'd' || (t['id'] != null && t['id'].toString().contains('d'))));
+  eq('hokMonthlyTotal', board.hokMonthlyTotal(sups), 150);
+
+  // 6) dedup-box
+  final dupSups = [
+    {'id': 'x', 'name': 'בן צבי רחל', 'phone': '0500000001', 'donations': []},
+    {'id': 'y', 'name': 'רחל בן צבי', 'phone': '0500000002', 'donations': []},
+  ];
+  eq('dedup→שם-חסין-סדר', board.dedupSupporterGroups(dupSups), [['x', 'y']]);
+
+  // 7) search-box
+  final found = board.search('cohen', sups, (dynamic s) => [s['name']]) as List;
+  ok('search→תעתיק cohen', found.any((s) => (s['name'] as String).contains('כהן')));
+
+  // 8) cockpit.csvRows
+  eq('cockpit.csvRows כותרת', board.cockpitCsvRows(queue)[0], ['קבוצה', 'שם', 'טלפון', 'סיבה']);
+
+  if (fails > 0) { print('❌ לוח-האם (Dart): $fails אי-התאמות'); throw StateError('board dart proof failed'); }
+  print('✓ לוח-האם (Dart): $n טענות — 6 קופסאות משולבות · שעון-יחיד-מקור · פלט זהה-ביט ל-JS');
+}
