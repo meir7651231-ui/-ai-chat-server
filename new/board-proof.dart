@@ -85,6 +85,34 @@ void main() {
   // 8) cockpit.csvRows
   eq('cockpit.csvRows כותרת', board.cockpitCsvRows(queue)[0], ['קבוצה', 'שם', 'טלפון', 'סיבה']);
 
+  // 9) פרוסת-משפחות
+  ok('families.finderAxes דרך config', board.familiesFinderAxes().length >= 0);
+  ok('families.tier(score)⇒דרגה', (board.familiesTier(600) as Map)['key'] is String);
+  eq('families.age על שעון-הלוח', board.familiesAge('2000-08-24'), 26);
+
+  // 10) פרוסת-יומן: דין-תשעה-באב-נדחה
+  eq('diary.blockReason דין-הדחייה', board.diaryBlockReason(DateTime(2022, 8, 7, 12)), 'תשעה באב (נדחה)');
+
+  // 11) פרוסת-לוח-עברי
+  ok('hebrew.dateFull', board.hebrewDateFull('2026-08-24').isNotEmpty);
+  ok('hebrew.today על שעון-הלוח', board.hebrewToday().isNotEmpty);
+
+  // 12) פרוסת-וואטסאפ: config→שם-ארגון
+  ok('wa.link', (board.waLink('0501234567', 'שלום') as String).startsWith('https://wa.me/'));
+  ok('wa.delivery מזריק שם-ארגון', (board.waDelivery('כהן') as String).contains('ארגון-בדיקה'));
+
+  // 13) פרוסת-ביקורת: config+שעון מוזרקים
+  final auditDb = {
+    'families': [
+      {'id': 'f1', 'name': 'א', 'phone': '0501234567', 'status': 'active', 'city': 'צפת', 'address': 'רח 1', 'maritalStatus': 'נשואים', 'father': 'x', 'mother': 'y', 'members': []},
+      {'id': 'f2', 'name': 'ב', 'phone': '0501234567', 'status': 'active', 'city': 'צפת', 'address': 'רח 1', 'maritalStatus': 'נשואים', 'father': 'x', 'mother': 'y', 'members': []},
+    ],
+    'supporters': [], 'enrollments': [],
+  };
+  final auditIssues = board.auditRun(auditDb);
+  ok('audit.run תופס טלפון-כפול', auditIssues.any((i) => i['cat'] == 'כפילות' && (i['title'] as String).contains('משותף')));
+  ok('audit.report עם שם-ארגון', board.auditReport(auditIssues.map((i) => (i as Map).map((k, v) => MapEntry(k.toString(), v.toString()))))[0].contains('ארגון-בדיקה'));
+
   if (fails > 0) { print('❌ לוח-האם (Dart): $fails אי-התאמות'); throw StateError('board dart proof failed'); }
-  print('✓ לוח-האם (Dart): $n טענות — 6 קופסאות משולבות · שעון-יחיד-מקור · פלט זהה-ביט ל-JS');
+  print('✓ לוח-האם (Dart): $n טענות — 12 קופסאות-מאור משולבות · שעון-יחיד-מקור · פלט זהה-ביט ל-JS');
 }

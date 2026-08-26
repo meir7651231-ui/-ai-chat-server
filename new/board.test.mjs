@@ -71,6 +71,34 @@ ok(found.some((s) => s.name.includes('כהן')), 'search→תעתיק cohen');
 // ── 8) חיווט ייצוא: cockpit.csvRows על תור-הלוח ──
 eq(board.cockpit.csvRows(queue)[0], ['קבוצה', 'שם', 'טלפון', 'סיבה'], 'cockpit.csvRows כותרת');
 
+// ── 9) פרוסת-משפחות: config→צירי-מאתר · שעון→גיל ──
+ok(Array.isArray(board.families.finderAxes()), 'families.finderAxes דרך config');
+ok(typeof board.families.tier(600).key === 'string', 'families.tier(score)⇒דרגה');
+eq(board.families.age('2000-08-24'), 26, 'families.age על שעון-הלוח (2000→2026)');
+
+// ── 10) פרוסת-יומן: דין-תשעה-באב-נדחה (ט׳ באב בשבת ⇒ הצום י׳ באב) ──
+eq(board.diary.blockReason(new Date('2022-08-07T12:00:00')), 'תשעה באב (נדחה)', 'diary.blockReason דין-הדחייה');
+
+// ── 11) פרוסת-לוח-עברי ──
+ok(typeof board.hebrew.dateFull('2026-08-24') === 'string' && board.hebrew.dateFull('2026-08-24').length > 0, 'hebrew.dateFull');
+ok(board.hebrew.today().length > 0, 'hebrew.today על שעון-הלוח');
+
+// ── 12) פרוסת-וואטסאפ: config→שם-ארגון ──
+ok(board.wa.link('0501234567', 'שלום').startsWith('https://wa.me/'), 'wa.link');
+ok(board.wa.delivery('כהן').includes('ארגון-בדיקה'), 'wa.delivery מזריק את שם-הארגון מ-config');
+
+// ── 13) פרוסת-ביקורת: config+שעון מוזרקים לרנטגן-הנתונים ──
+const auditDb = {
+  families: [
+    { id: 'f1', name: 'א', phone: '0501234567', status: 'active', city: 'צפת', address: 'רח 1', maritalStatus: 'נשואים', father: 'x', mother: 'y', members: [] },
+    { id: 'f2', name: 'ב', phone: '0501234567', status: 'active', city: 'צפת', address: 'רח 1', maritalStatus: 'נשואים', father: 'x', mother: 'y', members: [] },
+  ],
+  supporters: [], enrollments: [],
+};
+const auditIssues = board.audit.run(auditDb);
+ok(auditIssues.some((i) => i.cat === 'כפילות' && i.title.includes('משותף')), 'audit.run תופס טלפון-כפול (שעון+config מהלוח)');
+ok(board.audit.report(auditIssues)[0].includes('ארגון-בדיקה'), 'audit.report עם שם-הארגון מ-config');
+
 /* 🛡 מגן-חוק-3: הלוח מייבא אך-ורק מ-./boxes/ (שום ./atoms, שום קופסה-לא-דרך-הלוח). */
 const src = readFileSync(new URL('./board.mjs', import.meta.url), 'utf8');
 for (const m of src.matchAll(/^import .*?from '([^']+)'/gm)) {
@@ -78,4 +106,4 @@ for (const m of src.matchAll(/^import .*?from '([^']+)'/gm)) {
 }
 ok(!/from '\.\/atoms\//.test(src), 'מגן: אין ייבוא-אטום-ישיר מהלוח (עקיפת-קופסה אסורה)');
 
-console.log(`✓ לוח-האם: ${n} טענות — 6 קופסאות משולבות · שעון-יחיד-מקור · קונפיג-מושחל · חוק-3 נאכף`);
+console.log(`✓ לוח-האם: ${n} טענות — 12 קופסאות-מאור משולבות (תורמים·קוקפיט·דדופ·חיפוש·משפחות·יומן·דוחות·עברי·וואטסאפ·ביקורת+) · שעון-יחיד-מקור · קונפיג-מושחל · חוק-3 נאכף`);

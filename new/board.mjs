@@ -13,6 +13,12 @@ import * as supportersBox from './boxes/supporters.mjs';
 import * as empowerment from './boxes/empowerment.mjs';
 import * as dedupBox from './boxes/dedup.mjs';
 import * as searchBox from './boxes/search.mjs';
+import * as familiesBox from './boxes/families.mjs';
+import * as diaryBox from './boxes/diary.mjs';
+import * as reportsBox from './boxes/reports.mjs';
+import * as hebrewBox from './boxes/hebrew.mjs';
+import * as waBox from './boxes/wa.mjs';
+import * as auditBox from './boxes/audit.mjs';
 
 /** מרכיב את הלוח מהצבה נתונה. placement = חיווט-הצבה (חוק-6):
  *  · config      — קונפיג-הארגון הגולמי (יעבור normalizeConfig של קופסת-config).
@@ -23,6 +29,8 @@ export function makeBoard(placement = {}) {
   const config = configBox.normalizeConfig(placement.config ?? {}) ?? { ...configBox.DEFAULT_CONFIG };
   const clockIso = placement.clockIso ?? (() => dateUtil.isoToday());
   const today = () => clockIso();
+  // שעון-כ-Date (נגזר משעון-הלוח) — לצרכני-Date (ageOf/holidayOf/runAudit). מקור-אמת יחיד.
+  const todayDate = () => new Date(today() + 'T12:00:00');
   const rate = placement.rate ?? 3.7;
 
   // ── חיווט חוצה-קופסתי: config-box → כל צרכני-המונחים ──
@@ -66,5 +74,49 @@ export function makeBoard(placement = {}) {
   };
   const search = (q, items, getTerms, limit) => searchBox.search(q, items, getTerms, limit);
 
-  return { config, today, rate, term, feature, sup, cockpit, dedup, search };
+  // ── פרוסת-משפחות: families-box (config→מונחים, שעון→גיל) ──
+  const families = {
+    tier: (score) => familiesBox.tierOf(score),
+    age: (birth) => familiesBox.ageOf(birth, todayDate()),
+    live: (db, fam) => familiesBox.famLiveEnrollments(db, fam),
+    finderAxes: () => familiesBox.finderAxes(config),
+    finderMatches: (db, locks) => familiesBox.finderMatches(db, locks),
+  };
+
+  // ── פרוסת-יומן-חדרים: diary-box (config→חדר-inline, שעון→תאריך) ──
+  const diary = {
+    blockReason: (d) => diaryBox.blockReason(d),
+    weeklySessions: (db, roomId, iso) => diaryBox.weeklyRoomSessions(db, roomId, iso),
+    slots: (db, room, iso, blocked, cleaningOn = true) => diaryBox.buildSlots(db, room, iso, blocked, config, cleaningOn),
+  };
+
+  // ── פרוסת-דוחות: reports-box (טהור; טווחי-תאריך) ──
+  const reports = {
+    inRange: reportsBox.inRange,
+    paidOf: reportsBox.paidOf,
+    balanceOf: reportsBox.balanceOf,
+    monthKey: reportsBox.monthKey,
+    monthLabel: reportsBox.monthLabel,
+  };
+
+  // ── פרוסת-לוח-עברי: hebrew-box ──
+  const hebrew = {
+    dateFull: (iso) => hebrewBox.hebDateFull(iso),
+    holiday: (d) => hebrewBox.holidayOf(d),
+    today: () => hebrewBox.hebDateFull(today()),
+  };
+
+  // ── פרוסת-וואטסאפ: wa-box (config→שם-ארגון) ──
+  const wa = {
+    link: (phone, text) => waBox.waLink(phone, text),
+    delivery: (famName) => waBox.waDeliveryText(config.orgName, famName, config),
+  };
+
+  // ── פרוסת-ביקורת: audit-box (config+שעון מוזרקים) ──
+  const audit = {
+    run: (db, extra = true) => auditBox.runAudit(db, today(), extra, config, todayDate()),
+    report: (issues) => auditBox.auditReportLines(config.orgName, issues, dateUtil.isoLocal(todayDate())),
+  };
+
+  return { config, today, rate, term, feature, sup, cockpit, dedup, search, families, diary, reports, hebrew, wa, audit };
 }
