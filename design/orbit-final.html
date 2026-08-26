@@ -69,6 +69,18 @@
   .ft .ic{font-size:1.4rem;flex:none;width:44px;height:44px;display:grid;place-items:center;border-radius:12px;background:#0e1327;border:1px solid var(--line2)}
   .ft h4{font-family:var(--body);font-weight:600;font-size:1.02rem;margin-bottom:2px}.ft p{color:var(--muted);font-size:.92rem}
   .ft.before{opacity:.7}.ft.before .ic{filter:grayscale(.6) opacity(.8)}.ft.after h4{color:var(--gold2)}
+  /* ---- caps section: shape-shifts per vertical (names + twin background) ---- */
+  #caps{position:relative;overflow:hidden}
+  .caps-picker{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:var(--s3) 0}
+  .cpk{font-family:var(--wm);font-size:.82rem;padding:7px 13px;border-radius:999px;border:1px solid var(--line2);background:rgba(20,26,51,.5);color:var(--muted);cursor:pointer;transition:.25s;display:inline-flex;gap:.42em;align-items:center;line-height:1}
+  .cpk:hover{color:var(--ink);border-color:color-mix(in srgb,var(--cpc) 60%,var(--line2))}
+  .cpk.on{color:#0e1122;background:linear-gradient(120deg,var(--cpc),color-mix(in srgb,var(--cpc) 62%,#fff));border-color:transparent;font-weight:600;box-shadow:0 8px 22px -10px color-mix(in srgb,var(--cpc) 70%,transparent)}
+  .caps-stage{position:relative;isolation:isolate;border-radius:calc(var(--r)*1.3);padding:var(--s4);overflow:hidden;
+    background:radial-gradient(85% 120% at 14% -6%, color-mix(in srgb,var(--cv) 22%,transparent), transparent 58%), radial-gradient(70% 90% at 100% 110%, color-mix(in srgb,var(--cv) 14%,transparent), transparent 60%), linear-gradient(158deg, color-mix(in srgb,var(--cv) 9%,var(--surface)), var(--bg2));
+    border:1px solid color-mix(in srgb,var(--cv) 32%,var(--line));transition:background .7s ease,border-color .7s ease}
+  .caps-stage .wm{position:absolute;inset-inline-start:-.08em;bottom:-.28em;z-index:-1;font-size:min(40vw,320px);line-height:1;opacity:.07;pointer-events:none;user-select:none;transition:opacity .5s}
+  @keyframes cardpop{0%{opacity:0;transform:translateY(14px) scale(.96);filter:blur(4px)}100%{opacity:1;transform:none;filter:blur(0)}}
+  .card.pop{animation:cardpop .5s cubic-bezier(.2,.75,.2,1) both}
   .cap-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s3)}
   @media(max-width:980px){.cap-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.cap-grid{grid-template-columns:1fr}}
   .card{padding:var(--s3);border:1px solid var(--line);border-radius:var(--r);background:linear-gradient(180deg,var(--surface),var(--bg2));transition:transform .35s,border-color .35s;position:relative;overflow:hidden}
@@ -213,8 +225,12 @@ body{background:#05060f}
 </div></div></section>
 
 <section id="caps"><div class="container">
-  <div class="sec-head reveal"><span class="eyebrow">מה מקבלים</span><h2>מערכת שלמה, מהיום הראשון.</h2><p>לא אתר-תדמית — מערכת-ניהול אמיתית. הכול מוכן, מגודר בדגלים, מותאם לתחום שלכם.</p></div>
-  <div class="cap-grid reveal stagger" id="caps-grid"></div>
+  <div class="sec-head reveal"><span class="eyebrow">מה מקבלים · <span id="caps-vlabel">עמותת חסד</span></span><h2>מערכת שלמה, מהיום הראשון.</h2><p>אותה מערכת — לובשת את השמות והרקע של כל תחום. בחרו תחום וראו מה מקבלים.</p></div>
+  <div class="caps-picker reveal" id="caps-picker"></div>
+  <div class="caps-stage reveal" id="caps-stage">
+    <span class="wm" id="caps-wm">🕊️</span>
+    <div class="cap-grid stagger" id="caps-grid"></div>
+  </div>
 </div></section>
 
 <section class="tint" id="gen"><div class="container">
@@ -264,11 +280,40 @@ body{background:#05060f}
   const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
   const nav=document.getElementById('nav');
   addEventListener('scroll',()=>nav.classList.toggle('solid',scrollY>30),{passive:true});
-  const CAPS=[['👨‍👩‍👧','משפחות','CRM מלא — פרטים, בני-משפחה, סטטוס וקשר.','#8ea2ff'],['💛','תרומות','רישום, מעקב והוראות-קבע. כל שקל במקומו.','#f2c14e'],
-    ['🧾','קבלות §46','קבלות-מס רציפות, חתומות, מוכנות לרו״ח.','#5fd6b0'],['📅','לוח עברי','לוח עברי-לועזי מלא, אירועים ותזכורות.','#c9a2ff'],
-    ['🚚','חלוקה','מתנדבים, ימי-חלוקה ומעקב-מסירות.','#7fd0e0'],['✨','תורמים','ניהול-תורמים, חלון-עבודה ומודיעין.','#ffb0d0'],
-    ['📊','דוחות','מבט-הנהלה, ייצוא וקבלות — חוצה-מודולים.','#ffcaa0'],['🔒','אבטחה','הצפנה, נעילת-PIN, גיבוי — הנתונים שלכם.','#9db4ff']];
-  document.getElementById('caps-grid').innerHTML=CAPS.map(c=>`<div class="card" style="--dot:${c[3]}"><span class="edge"></span><div class="ic">${c[0]}</div><h3>${c[1]}</h3><p>${c[2]}</p></div>`).join('');
+  // ---- "מה מקבלים" מתחלף פר-ורטיקל: כל תחום עם השמות והרקע התאומים ----
+  // כל ורטיקל: {אימוג'י-מותג, שם, צבע, 6 כרטיסי-יכולת עם מונחי-התחום}. השמות
+  // נגזרים מתיוג-המונחים ב-src/lib/verticalPacks.ts (nav.families/courses/ayin...).
+  const VCAPS=[
+    {e:'🕊️',name:'עמותת חסד',c:'#e8b64c',cards:[['👨‍👩‍👧','משפחות','CRM מלא — פרטים, בני-משפחה וקשר.'],['🎓','חוגים','שיבוצים ונוכחות (רושמים רק חיסורים).'],['💛','תרומות','רישום, מעקב והוראות-קבע.'],['🧾','קבלות §46','קבלות-מס רציפות, מוכנות לרו״ח.'],['🚚','חלוקה','מתנדבים, ימי-חלוקה ומסירות.'],['📅','לוח עברי','לוח עברי-לועזי מלא ותזכורות.']]},
+    {e:'💇',name:'קליניקה',c:'#e05a8f',cards:[['🧑‍⚕️','מטופלים','תיק-מטופל מלא ואנשי-קשר.'],['💆','חבילות טיפול','חבילות, מעקב וטיפולים.'],['🗓️','תורים','חדרי-טיפול ולוח-פגישות.'],['📋','פרוטוקול טיפול','ייעוץ → תוכנית → טיפול → מעקב.'],['🧾','תשלומים','קבלות, חבילות והתחשבנות.'],['🔔','תזכורות','מעקב מטופלים וזימון חוזר.']]},
+    {e:'🛍️',name:'חנות / קמעונאות',c:'#12b26f',cards:[['🧑‍🤝‍🧑','לקוחות','מועדון-לקוחות ואנשי-קשר.'],['🛒','מוצרים','קטלוג, מלאי ומחירים.'],['💳','הזמנות','רכישות, מימושים ומעקב.'],['🎁','נקודות נאמנות','מועדון, הטבות וקריטריונים.'],['🧾','קבלות','קבלות רציפות וחתומות.'],['📊','דוחות מכירה','מבט-הנהלה וייצוא.']]},
+    {e:'💼',name:'פרילנסר / שירותים',c:'#8b74ff',cards:[['🧑‍💼','לקוחות ולידים','CRM ומאגר-לידים.'],['🎯','משפך מכירות','פנייה → הצעה → מו״מ → נסגר.'],['📅','פגישות','לוח-פגישות ותיאום.'],['🧾','הצעות וקבלות','הצעות-מחיר וקבלות רציפות.'],['⏱️','שעתון','תיעוד-שעות ותמחיר.'],['📊','רווח פר-פרויקט','P&L: הצעה − עבודה.']]},
+    {e:'🏠',name:'השכרת חללים',c:'#14b8a6',cards:[['🧑','שוכרים','לקוחות חוזרים ואנשי-קשר.'],['🏠','לוח חללים','חדרי-ישיבות, סטודיו ואולמות.'],['📅','בקשות השכרה','פנייה → הצעה → חוזה → הושכר.'],['💰','תשלומים','גבייה, פיקדונות והתחשבנות.'],['📄','חוזים','חוזי-השכרה ואישורים.'],['📊','תפוסה','ניצול-חללים וזמינות.']]},
+    {e:'🚗',name:'צי רכב / השכרה',c:'#f0524a',cards:[['🧑','לקוחות ונהגים','מאגר-לקוחות ונהגים.'],['🚗','לוח רכבים','צי-הרכבים, ציוד וכלים.'],['📅','הזמנות רכב','בקשה → שריון → מסירה → הוחזר.'],['💰','תשלומי שכירות','גבייה, פיקדון והתחשבנות.'],['🔑','מסירה והחזרה','מעקב-מצב, דלק ונזקים.'],['📊','ניצול צי','זמינות ורווחיות-רכב.']]},
+    {e:'🔧',name:'מוסך / מעבדה',c:'#8ea3b8',cards:[['🧑','לקוחות','מאגר-לקוחות ורכבים/פריטים.'],['🚙','רכבים/פריטים','היסטוריית-טיפולים פר-פריט.'],['🔧','תהליך תיקון','קבלה → אבחון → תיקון → נמסר.'],['🛠️','עמדות עבודה','לוח-עמדות ותכנון-יום.'],['🧾','תשלומים','הצעות, קבלות והתחשבנות.'],['🔔','מוכן לאיסוף','עדכון-לקוח ומעקב.']]},
+    {e:'🏨',name:'אירוח / צימרים',c:'#d68526',cards:[['🧑','אורחים','מאגר-אורחים ואנשי-קשר.'],['🛏️','יחידות אירוח','צימרים, מלונית ואכסניה.'],['📅','הזמנות','זמינות, שריון וצ׳ק-אין/אאוט.'],['💰','תשלומים','גבייה, פיקדון וקבלות.'],['🧹','לוח תפוסה','ניקיון, תחזוקה וזמינות.'],['📊','דוחות','תפוסה, הכנסה וניצול.']]},
+    {e:'🧰',name:'גמ״ח ציוד',c:'#e8b64c',cards:[['🧑','שואלים','מאגר-שואלים ואנשי-קשר.'],['🧰','קטלוג ציוד','פריטים, מלאי וזמינות.'],['🔄','השאלות','השאלה → החזרה עם מעקב.'],['💛','תורמים','תורמי-ציוד וקבלות.'],['📅','לוח החזרות','תזכורות והחזרות באיחור.'],['🧾','קבלות','קבלות רציפות וחתומות.']]},
+    {e:'🪙',name:'מבצעי התרמה',c:'#e8b64c',cards:[['🧑','רכזים','רכזי-שטח ומתנדבים.'],['🪙','קופות','קופות-צדקה וריקונים.'],['📣','קמפיינים','מבצעי-התרמה ויעדים.'],['💛','תורמים','מאגר-תורמים והוראות-קבע.'],['🧾','קבלות §46','קבלות-מס רציפות.'],['📊','מבצעים','מעקב-יעדים וסיכום.']]},
+    {e:'💻',name:'סטודיו דיגיטל',c:'#6d7cff',cards:[['🧑‍💼','לקוחות','CRM ומאגר-לקוחות.'],['💻','פרויקטים','בריף → הצעה → ביצוע → מסירה.'],['🎯','משפך מכירות','לידים והצעות-מחיר.'],['⏱️','שעתון וחומרים','תיעוד-שעות ועלויות.'],['🧾','הצעות וקבלות','תבניות-הצעה וקבלות.'],['📊','P&L','רווח: הצעה − עבודה − חומרים.']]},
+    {e:'🏗️',name:'בנייה / קבלנות',c:'#f0982e',cards:[['🧑','לקוחות','מאגר-לקוחות ואנשי-קשר.'],['🏗️','אתרי בנייה','יומן-אתרים ושלבי-ביצוע.'],['📐','כתב-כמויות','BOQ, תמחיר וסיכום.'],['👷','קבלני-משנה','ניהול-ספקים ומעקב.'],['🧾','הצעות וקבלות','הצעות-מחיר וקבלות.'],['📊','רווח פר-אתר','P&L מרוכז פר-פרויקט.']]},
+    {e:'🏢',name:'סטודיו + בנייה',c:'#22b0f0',cards:[['🧑','לקוחות וספקים','CRM, לקוחות וקבלני-משנה.'],['🏢','פרויקטים','דיגיטל + בנייה — משולב.'],['📐','תמחיר ו-BOQ','כתב-כמויות ותמחיר-פרויקט.'],['⏱️','שעתון + חומרים','שעות, חומרים ועלויות.'],['🧾','הצעות וקבלות','תבניות-הצעה וקבלות.'],['📊','P&L מרוכז','רווח חוצה-פרויקטים.']]},
+  ];
+  const capGrid=document.getElementById('caps-grid'),capStage=document.getElementById('caps-stage'),capWm=document.getElementById('caps-wm'),capLabel=document.getElementById('caps-vlabel'),capPick=document.getElementById('caps-picker');
+  capPick.innerHTML=VCAPS.map((v,k)=>`<button class="cpk" data-k="${k}" style="--cpc:${v.c}"><span>${v.e}</span>${v.name}</button>`).join('');
+  function renderCaps(k){
+    const v=VCAPS[k];
+    capStage.style.setProperty('--cv',v.c);
+    capWm.textContent=v.e;capLabel.textContent=v.name;
+    capGrid.innerHTML=v.cards.map((c,j)=>`<div class="card pop" style="--dot:${v.c};animation-delay:${j*55}ms"><span class="edge"></span><div class="ic">${c[0]}</div><h3>${c[1]}</h3><p>${c[2]}</p></div>`).join('');
+    capPick.querySelectorAll('.cpk').forEach(b=>b.classList.toggle('on',+b.dataset.k===k));
+  }
+  let capI=0,capTimer=null,capSeen=false;
+  renderCaps(0);
+  const capReduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  function capStart(){if(capTimer||capReduce)return;capTimer=setInterval(()=>{capI=(capI+1)%VCAPS.length;renderCaps(capI);},3400);}
+  function capStop(){if(capTimer){clearInterval(capTimer);capTimer=null;}}
+  capPick.addEventListener('click',e=>{const b=e.target.closest('.cpk');if(!b)return;capStop();capI=+b.dataset.k;renderCaps(capI);});
+  new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){capSeen=true;capStart();}else capStop();}),{threshold:.25}).observe(document.getElementById('caps'));
   // 13 הורטיקלים האמיתיים (src/lib/verticalPacks.ts) — [אימוג'י, שם, תת-כותרת, צבע]
   const VERTS=[
     ['🕊️','עמותת חסד','גמ״ח · קופת צדקה','#e8b64c'],
