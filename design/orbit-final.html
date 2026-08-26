@@ -106,6 +106,48 @@
   .stagger.in>*:nth-child(2){animation-delay:.07s}.stagger.in>*:nth-child(3){animation-delay:.14s}.stagger.in>*:nth-child(4){animation-delay:.21s}.stagger.in>*:nth-child(5){animation-delay:.28s}.stagger.in>*:nth-child(6){animation-delay:.35s}.stagger.in>*:nth-child(7){animation-delay:.42s}.stagger.in>*:nth-child(8){animation-delay:.49s}
   @keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
   @media (prefers-reduced-motion:reduce){*{animation:none!important}.reveal{opacity:1;transform:none}.cap{opacity:1;transform:none}}
+
+/* ===== רקעים · עומק ואווירה ===== */
+body::after{content:"";position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.045;mix-blend-mode:soft-light;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+#promise{background:radial-gradient(70% 90% at 86% 4%, rgba(242,193,78,.07), transparent 56%), linear-gradient(180deg,var(--bg2),var(--bg))}
+#caps{position:relative;background:radial-gradient(60% 80% at 14% 2%, rgba(142,162,255,.06), transparent 52%), var(--bg)}
+#caps::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.6;
+  background-image:radial-gradient(rgba(255,255,255,.04) 1px, transparent 1px);background-size:26px 26px;
+  -webkit-mask-image:radial-gradient(78% 66% at 50% 34%,#000,transparent 76%);mask-image:radial-gradient(78% 66% at 50% 34%,#000,transparent 76%)}
+#caps .container{position:relative;z-index:1}
+#gen{background:radial-gradient(72% 90% at 50% -12%, rgba(242,193,78,.06), transparent 58%), linear-gradient(180deg,var(--bg2),var(--bg))}
+#how{background:radial-gradient(58% 80% at 92% 46%, rgba(95,214,176,.05), transparent 52%), var(--bg)}
+#verts{background:radial-gradient(58% 80% at 8% 18%, rgba(192,132,252,.06), transparent 52%), linear-gradient(180deg,var(--bg2),var(--bg))}
+.band{position:relative;overflow:hidden}
+.band::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(52% 130% at 50% 50%, rgba(242,193,78,.09), transparent 62%)}
+.band .container{position:relative;z-index:1}
+section + section::before{content:"";position:absolute;top:0;left:10%;right:10%;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent)}
+
+/* ===== מערכת-כפתורים ===== */
+.btn{position:relative;overflow:hidden;letter-spacing:.01em;transition:transform .18s,box-shadow .35s,border-color .25s,background .3s}
+.btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.btn:active{transform:translateY(0) scale(.97)}
+.btn-primary{box-shadow:0 10px 26px -12px rgba(232,160,58,.55), inset 0 1px 0 rgba(255,255,255,.45), inset 0 -3px 8px rgba(150,85,0,.26)}
+.btn-primary::after{content:"";position:absolute;top:0;left:-45%;width:42%;height:100%;pointer-events:none;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);transform:skewX(-18deg);transition:left .7s cubic-bezier(.2,.7,.2,1)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 46px -14px rgba(232,160,58,.68), inset 0 1px 0 rgba(255,255,255,.55), inset 0 -3px 8px rgba(150,85,0,.26)}
+.btn-primary:hover::after{left:125%}
+.btn-ghost:hover{transform:translateY(-2px);border-color:var(--indigo);background:linear-gradient(120deg,rgba(142,162,255,.15),rgba(95,214,176,.08))}
+/* generator build button — same refinement */
+.build{position:relative;overflow:hidden;transition:transform .18s,box-shadow .35s;box-shadow:0 10px 26px -12px rgba(232,160,58,.5), inset 0 1px 0 rgba(255,255,255,.4)}
+.build::after{content:"";position:absolute;top:0;left:-45%;width:42%;height:100%;pointer-events:none;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-18deg);transition:left .7s cubic-bezier(.2,.7,.2,1)}
+.build:hover::after{left:125%}
+.build:active{transform:scale(.97)}
+.build:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+/* chips + vchips — richer hover */
+.chip:hover,.vchip:hover{box-shadow:0 8px 22px -14px rgba(0,0,0,.7)}
+.vchip{position:relative;overflow:hidden}
+.vchip::before{content:"";position:absolute;inset:0;z-index:-1;opacity:0;transition:opacity .3s;background:radial-gradient(100% 140% at 12% 0%, color-mix(in srgb, var(--dot,#8ea2ff) 16%, transparent), transparent 70%)}
+.vchip:hover::before{opacity:1}
+/* nav cta gets the sheen too (it's .btn-primary already) */
+
 </style>
 
 <nav id="nav">
