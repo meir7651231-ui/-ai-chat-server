@@ -55,6 +55,14 @@ class Board {
   // כל היכולות הדולקות בהצבה הזו — התצורה של "המערכת האחת".
   List<String> capabilities() => capabilityCatalog.where(lit).toList();
 
+  // 🎛️ בונה-תצורה: מדליק **בדיוק** את היכולות הנבחרות (כיבוי-מפורש לכל היתר).
+  //   מאפשר להדליק הכל / חצי / רבע / כל כמות — חוגה גרנולרית אחת. הדולקות עובדות יחד.
+  static Map<String, dynamic> configFor(Iterable<String> lit, {String slug = 'custom', Map<String, dynamic>? extra}) {
+    final want = lit.toSet();
+    final features = <String, dynamic>{for (final cap in capabilityCatalog) cap: want.contains(cap)};
+    return {'slug': slug, 'features': features, ...?extra};
+  }
+
   // ── supporters-box (אגרגטים + config/שעון מוזרקים) ──
   dynamic supIls(dynamic sp) => supportersBox.supIls(sp);
   dynamic supCount(dynamic sp) => supportersBox.supCount(sp);

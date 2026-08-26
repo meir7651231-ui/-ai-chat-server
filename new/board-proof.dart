@@ -183,6 +183,32 @@ void main() {
   ok('מערכת-אחת: אותו לוח, config שונה ⇒ תצורה שונה',
       amuta.capabilities().length < hybrid.capabilities().length && binyan.lit('bs.projects') && !amuta.lit('bs.projects'));
 
+  // 21) 🎛️ חוגה גרנולרית — הכל / חצי / רבע / כל כמות, והדולקות עובדות יחד
+  Board withCaps(Iterable<String> caps) => makeBoard(clockIso: () => '2026-08-24', config: Board.configFor(caps));
+  // כל (15):
+  ok('חוגה: הכל דלוק (15)', withCaps(Board.capabilityCatalog).capabilities().length == 15);
+  // חצי (בדיוק 7):
+  final halfCaps = Board.capabilityCatalog.take(7).toList();
+  ok('חוגה: חצי דלוק (7)', withCaps(halfCaps).capabilities().length == 7);
+  // רבע (בדיוק 4) — תערובת מאור+בנייה-חכמה:
+  final quarterCaps = ['supporters.cockpit', 'audit', 'bs.fuzzy', 'bs.workflow'];
+  final quarter = withCaps(quarterCaps);
+  ok('חוגה: רבע דלוק (4)', quarter.capabilities().length == 4);
+  // אפס:
+  ok('חוגה: אפס דלוק', withCaps(const []).capabilities().isEmpty);
+  // כמות שרירותית (בדיוק 10):
+  ok('חוגה: כמות-שרירותית (10)', withCaps(Board.capabilityCatalog.take(10)).capabilities().length == 10);
+
+  // 🤝 הדולקות עובדות יחד — ברבע-הדלוק, מאור ובנייה-חכמה מתפקדים על אותו הקשר:
+  ok('עובדים-יחד: מאור(קוקפיט)+בנייה-חכמה(fuzzy+workflow) חיים בתערובת אחת',
+      quarter.lit('supporters.cockpit') && quarter.lit('bs.fuzzy') && quarter.lit('bs.workflow') &&
+      quarter.cockpitKpis(sups)['total'] == 4 &&
+      quarter.bsFuzzyMatch('shalom', 'shalim') &&
+      quarter.bsWorkflowNextStage('intake') == 'prep' &&
+      quarter.fuzzyDupPairs([{'id': 'p1', 'name': 'משהכהן'}, {'id': 'p2', 'name': 'משהכוהן'}]).isNotEmpty);
+  // מה שלא-דלוק ברבע — אכן כבוי (families/diary/wa...):
+  ok('חוגה: הלא-נבחרים כבויים', !quarter.lit('families') && !quarter.lit('bs.projects') && !quarter.lit('wa'));
+
   if (fails > 0) { print('❌ לוח-האם (Dart): $fails אי-התאמות'); throw StateError('board dart proof failed'); }
   print('✓ לוח-האם המאוחד (Dart): $n טענות — 12 קופסאות-מאור + 8 קופסאות-בנייה-חכמה על אותו לוח · מחוברים יחד');
 }
