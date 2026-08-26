@@ -24,6 +24,9 @@ import 'dart-boxes/bs-projects.dart' as bsProjects;
 import 'dart-boxes/bs-studio.dart' as bsStudio;
 import 'dart-boxes/bs-security.dart' as bsSecurity;
 import 'dart-boxes/bs-config.dart' as bsConfig;
+import 'dart-boxes/bs-pipe.dart' as bsPipe;
+// צורות-הנתונים של מנוע-הצנרת נחשפות דרך הלוח (המסך בונה PipeProduct ומזין).
+export 'dart-boxes/bs-pipe.dart' show PipeProduct, PipeBox, FlowRole, KitItem;
 
 class Board {
   final Map<String, dynamic> config;
@@ -185,6 +188,16 @@ class Board {
 
   // ── 🎛️ בנייה-חכמה: תווית-שדה-כלל בעברית ──
   String bsFieldLabel(String id) => bsConfig.fieldLabelHe(id);
+
+  // ── 🔧 בנייה-חכמה: מנוע-הצנרת (מסלול·לחץ·ערכה·תמחיר·צ׳קליסט) ──
+  //     PipeBox נבנה-מנתונים (specs+catalog מוזרקים ע"י המסך פעם-אחת); הלוח מספק
+  //     את המפעל המוכן. 38 אטומי-מנוע מחווטים בקופסה — הלוח רק חושף אותה.
+  bsPipe.PipeBox bsPipeBox({
+    required Map<String, dynamic> specs,
+    List<dynamic> catalog = const [],
+    bool companyCatalogActive = false,
+  }) =>
+      bsPipe.PipeBox(specs: specs, catalog: catalog, companyCatalogActive: companyCatalogActive);
 
   // ── 🔗↔ גשר-הדדי: מאור עוזר לבנייה-חכמה — חשבונית-בנייה-חכמה בתאריך-עברי-מאור.
   //     המקבילה ל-fuzzyDupPairs (בנייה-חכמה→מאור): כאן מאור→בנייה-חכמה. עזרה הדדית.

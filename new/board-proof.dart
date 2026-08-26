@@ -232,6 +232,17 @@ void main() {
   ok('אשף+חוגה: עמותה + הדלקת bs.fuzzy', fromPack('amuta', add: ['bs.fuzzy']).lit('bs.fuzzy'));
   ok('אשף+חוגה: בנייה − כיבוי bs.studio', !fromPack('binyan', remove: ['bs.studio']).lit('bs.studio'));
 
+  // 23) 🔧 מנוע-הצנרת חי על הלוח — הלוח מספק PipeBox מוכן, המסך מזין נתונים.
+  final pipe = fromPack('binyan').bsPipeBox(specs: const {}, catalog: const []);
+  ok('לוח→צנרת: flowRole(צינור) = connector',
+      pipe.flowRole(const PipeProduct(sku: 'x', categoryHe: 'צינורות PP')).name == 'connector');
+  ok('לוח→צנרת: flowRole(אסלה) = fixture',
+      pipe.flowRole(const PipeProduct(sku: 'x', categoryHe: 'אסלות וכיורים')).name == 'fixture');
+  ok('לוח→צנרת: canConnectPair חפיפת-גודל ⇒ true',
+      pipe.canConnectPair(const PipeProduct(sku: 'A', connectionSizes: ['20']),
+          const PipeProduct(sku: 'B', connectionSizes: ['20', '25'])));
+  ok('לוח→צנרת: bs.pipe דולק בחבילת-בנייה', fromPack('binyan').lit('bs.pipe'));
+
   if (fails > 0) { print('❌ לוח-האם (Dart): $fails אי-התאמות'); throw StateError('board dart proof failed'); }
-  print('✓ לוח-האם המאוחד (Dart): $n טענות — 12 קופסאות-מאור + 8 קופסאות-בנייה-חכמה על אותו לוח · מחוברים יחד');
+  print('✓ לוח-האם המאוחד (Dart): $n טענות — 12 קופסאות-מאור + 9 קופסאות-בנייה-חכמה על אותו לוח · מנוע-הצנרת חי · מחוברים יחד');
 }
