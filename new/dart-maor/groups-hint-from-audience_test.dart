@@ -1,3 +1,4 @@
+import '../dart-data-maor/groups-hint-from-audience-terms.dart';
 import 'groups-hint-from-audience.dart';
 
 /// רתמת-זהב: אותן 7 דוגמאות-חוזה בדיוק מ-new/atoms/groups-hint-from-audience.test.mjs.
@@ -16,7 +17,7 @@ void main() {
   for (final row in c) {
     final a = row[0] as String?;
     final w = row[1] as int?;
-    final g = groupsHintFromAudience(a);
+    final g = groupsHintFromAudience(a, term: (k)=>kTerms[k]!);
     if (g != w) {
       print('✗ "$a" ⇒ $g ≠ $w');
       f = 1;

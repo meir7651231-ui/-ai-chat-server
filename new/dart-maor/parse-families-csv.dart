@@ -32,25 +32,25 @@ Map<String, List> parseFamiliesCsv(
   String Function(dynamic) clean,
   String Function(dynamic) normName,
   String Function(dynamic) digits,
-) {
+ {required String Function(String) term}) {
   final List news = [];
   final List upds = [];
   for (final r in rows.sublist(1)) {
     var name = clean(r[0]);
-    if (_falsy(name) || name.contains('שם פרטי שם משפחה')) continue;
+    if (_falsy(name) || name.contains(term('shm-prty-shm-mshpchh'))) continue;
     var isFair = false;
-    if (RegExp('יריד חנוכה').hasMatch(name)) {
+    if (RegExp(term('yryd-chnvkh')).hasMatch(name)) {
       isFair = true;
-      name = clean(name.replaceAll(RegExp(r'-?\s*יריד חנוכה תשפ..?'), ''));
+      name = clean(name.replaceAll(RegExp(term('yryd-chnvkh-tshp')), ''));
     }
     name = clean(name.replaceFirst('#NAME?', ''));
     if (_falsy(name)) continue;
     var city = clean(r[6]);
-    if (city == 'רגיל') city = '';
-    if (city == 'ביתר' || city == 'ביתר עלית') city = 'ביתר עילית';
+    if (city == term('rgyl')) city = '';
+    if (city == term('bytr') || city == term('bytr-alyt')) city = term('bytr-aylyt');
     final noteRaw = _falsy(r[12]) ? '' : r[12].toString();
     final stc = clean(
-        RegExp(r'סטטוס:\s*([^\n]+)').firstMatch(noteRaw)?.group(1) ?? '');
+        RegExp(term('sttvs')).firstMatch(noteRaw)?.group(1) ?? '');
     final r9 = _falsy(r[9]) ? '' : r[9].toString();
     final community = clean(r[10]);
     final Map<String, dynamic> obj = {
@@ -64,15 +64,15 @@ Map<String, List> parseFamiliesCsv(
       'email': '',
       'address': clean([r[7], r[8]].map(clean).where((s) => !_falsy(s)).join(' ')),
       'city': city,
-      'status': stc.contains('לא פעיל') ? 'inactive' : 'active',
-      'maritalStatus': (stc.contains('אלמנ') || r9.contains('אלמן'))
-          ? 'אלמן/ה'
-          : stc.contains('גרוש')
-              ? 'גרושים'
-              : 'נשואים',
-      'language': 'עברית',
-      'community': _falsy(community) ? 'חסידי' : community,
-      'notes': isFair ? 'השתתפה ביריד חנוכה תשפ"ו' : '',
+      'status': stc.contains(term('la-payl')) ? 'inactive' : 'active',
+      'maritalStatus': (stc.contains(term('almn')) || r9.contains(term('t10')))
+          ? term('almnh')
+          : stc.contains(term('grvsh'))
+              ? term('grvshym')
+              : term('nshvaym'),
+      'language': term('abryt'),
+      'community': _falsy(community) ? term('chsydy') : community,
+      'notes': isFair ? term('hshttph-byryd-chnvkh-tshpv') : '',
     };
     dynamic ex;
     for (final f in existing) {

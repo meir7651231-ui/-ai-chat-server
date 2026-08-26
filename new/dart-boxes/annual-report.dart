@@ -1,3 +1,4 @@
+import '../dart-data-maor/annual-all-lines-terms.dart';
 // 📦 קופסת-חיבורים · דוח-שנתי-לתורם (Dart) — מחווטת 5 אטומי-Dart. מקבילה ל-new/boxes/annual-report.mjs.
 // חוזה משותף: new/boxes/annual-report.contract.md. מקור-האמת (L4): maor/src/lib/annualReport.ts
 // (5 חוטים) + exportGate.ts (השער). אותם 5 חוטים, אותו סדר-הצתה (שער-לפני-DOM), אותן ברירות.
@@ -62,7 +63,7 @@ List<String> allLines(
   List<Map<String, dynamic>> supporters, [
   dynamic site,
 ]) =>
-    aal.annualAllLines(orgName, orgTaxId, year, supporters, site, _ofYearSocket, reportLines);
+    aal.annualAllLines(orgName, orgTaxId, year, supporters, site, _ofYearSocket, reportLines, term: (k)=>kTerms[k]!);
 
 String reportText(List<String> lines) => bom + lines.join('\n');
 

@@ -1,3 +1,4 @@
+import '../dart-data-maor/parse-families-csv-terms.dart';
 // בדיקת-חוזה (רתמת-זהב) · parseFamiliesCsv — מייבאת אך ורק את האטום-שלה (חוק-4).
 // שבע דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/parse-families-csv.test.mjs
 // (אותם קלטים→פלטים; ה-asserts = מקור-אמת). אם עובר ⇒ Dart≡JS.
@@ -18,7 +19,7 @@ String _digits(dynamic x) =>
 const HDR = ['שם', 'ת"ז אב', 'טלפון', 'שם האם', 'ת"ז אם', 'טלפון2', 'עיר', 'כתובת', 'מס', 'רמז', 'קהילה', '', 'הערות'];
 
 Map<String, List> _run(List dataRows, [List existing = const []]) =>
-    parseFamiliesCsv([HDR, ...dataRows], existing, _clean, _normName, _digits);
+    parseFamiliesCsv([HDR, ...dataRows], existing, _clean, _normName, _digits, term: (k)=>kTerms[k]!);
 
 int _f = 0;
 void _ok(bool cond, String msg) {

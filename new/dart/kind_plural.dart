@@ -13,11 +13,11 @@
 enum ConfigOpKind { setText, setEmoji, setHidden, setOrder, setStyle, setAction }
 
 /// Hebrew plural noun per config-op kind. Verbatim of diff_preview.dart:151-164.
-String kindPlural(ConfigOpKind kind, bool styleAllColor) => switch (kind) {
-      ConfigOpKind.setText => 'טקסטים',
-      ConfigOpKind.setEmoji => 'אמוג׳ים',
-      ConfigOpKind.setHidden => 'הסתרות',
-      ConfigOpKind.setOrder => 'שינויי סדר',
-      ConfigOpKind.setStyle => styleAllColor ? 'צבעים' : 'עיצובים',
-      ConfigOpKind.setAction => 'פעולות',
+String kindPlural(ConfigOpKind kind, bool styleAllColor, {required String Function(String) term}) => switch (kind) {
+      ConfigOpKind.setText => term('tkstym'),
+      ConfigOpKind.setEmoji => term('amvgym'),
+      ConfigOpKind.setHidden => term('hstrvt'),
+      ConfigOpKind.setOrder => term('shynvyy-sdr'),
+      ConfigOpKind.setStyle => styleAllColor ? term('tsbaym') : term('aytsvbym'),
+      ConfigOpKind.setAction => term('pavlvt'),
     };

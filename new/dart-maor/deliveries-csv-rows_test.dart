@@ -1,3 +1,4 @@
+import '../dart-data-maor/deliveries-csv-rows-terms.dart';
 // בדיקת-חוזה (רתמת-זהב) · deliveriesCsvRows — מייבאת אך ורק את האטום-שלה (חוק-4).
 // דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/deliveries-csv-rows.test.mjs
 // (אותם קלטים→פלטים; השקעים: statusLabel כבמקור · termOf=(c,k,fb)=>c.terms?.[k]??fb):
@@ -51,7 +52,7 @@ void main() {
 
   // 1–3, 6) עם config ומונח-דריסה.
   final rows = deliveriesCsvRows(
-      _db, {'terms': {'entity.family': 'לקוח'}}, _termOf, _statusLabel);
+      _db, {'terms': {'entity.family': 'לקוח'}}, _termOf, _statusLabel, term: (k)=>kTerms[k]!);
   _eq(rows[0], ['תאריך', 'לקוח', 'כתובת', 'מתנדב', 'סטטוס', 'הערה'], '1 כותרת עם מונח');
   n++;
   _eq(rows[1], ['2026-08-01', 'כהן', 'הרצל 3, צפת', 'משה', 'איסוף', 'דחוף'], '2 שורה מלאה');
@@ -62,13 +63,13 @@ void main() {
   n++;
 
   // 4) בלי config — fallback, והשקע לא נקרא כלל (termOf שזורק לא מופעל).
-  final rows2 = deliveriesCsvRows(_db, null, _boom, _statusLabel);
+  final rows2 = deliveriesCsvRows(_db, null, _boom, _statusLabel, term: (k)=>kTerms[k]!);
   _eq(rows2[0], ['תאריך', 'משפחה', 'כתובת', 'מתנדב', 'סטטוס', 'הערה'], '4 כותרת ברירת-מחדל');
   n++;
 
   // 5) deliveries ריק ⇒ כותרת בלבד.
   final db3 = Map<String, dynamic>.from(_db)..['deliveries'] = <dynamic>[];
-  final rows3 = deliveriesCsvRows(db3, null, _boom, _statusLabel);
+  final rows3 = deliveriesCsvRows(db3, null, _boom, _statusLabel, term: (k)=>kTerms[k]!);
   if (rows3.length != 1) throw StateError('FAIL [5]: got ${rows3.length} rows, want 1');
   n++;
 

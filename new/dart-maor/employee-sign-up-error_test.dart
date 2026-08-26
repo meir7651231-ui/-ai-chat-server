@@ -1,3 +1,4 @@
+import '../dart-data-maor/employee-sign-up-error-terms.dart';
 // בדיקת-חוזה (רתמת-זהב) · employeeSignUpError — מייבאת אך ורק את האטום-שלה (חוק-4).
 // דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/employee-sign-up-error.test.mjs.
 // אם עובר ⇒ Dart≡JS.
@@ -20,41 +21,41 @@ void main() {
   const okCode = 'slug.777';
 
   // הכול תקין ⇒ ''
-  _eq(employeeSignUpError(okEmail, okPhone, okPass, okCode), '', '1 all-valid');
+  _eq(employeeSignUpError(okEmail, okPhone, okPass, okCode, term: (k)=>kTerms[k]!), '', '1 all-valid');
   n++;
 
   // מייל שבור
-  _eq(employeeSignUpError('bad', okPhone, okPass, okCode),
+  _eq(employeeSignUpError('bad', okPhone, okPass, okCode, term: (k)=>kTerms[k]!),
       'כתובת האימייל אינה תקינה', '2 bad-email');
   n++;
 
   // טלפון שבור
-  _eq(employeeSignUpError(okEmail, 'abc', okPass, okCode),
+  _eq(employeeSignUpError(okEmail, 'abc', okPass, okCode, term: (k)=>kTerms[k]!),
       'מספר טלפון תקין הוא שדה חובה', '3 bad-phone');
   n++;
 
   // סיסמה קצרה (5 תווים)
-  _eq(employeeSignUpError(okEmail, okPhone, '12345', okCode),
+  _eq(employeeSignUpError(okEmail, okPhone, '12345', okCode, term: (k)=>kTerms[k]!),
       'הסיסמה חייבת להיות לפחות 6 תווים', '4 short-password');
   n++;
 
   // קוד-הזמנה ריק (רווחים בלבד)
-  _eq(employeeSignUpError(okEmail, okPhone, okPass, '  '),
+  _eq(employeeSignUpError(okEmail, okPhone, okPass, '  ', term: (k)=>kTerms[k]!),
       'קוד-ההזמנה מהמנהל הוא שדה חובה', '5 blank-code');
   n++;
 
   // סדר: מייל-שבור + טלפון-שבור ⇒ שגיאת-המייל תחילה
-  _eq(employeeSignUpError('x', 'y', '1', ''),
+  _eq(employeeSignUpError('x', 'y', '1', '', term: (k)=>kTerms[k]!),
       'כתובת האימייל אינה תקינה', '6 order-email-first');
   n++;
 
   // טלפון בינלאומי עם + ⇒ תקין
-  _eq(employeeSignUpError(okEmail, '+972 50 123 4567', okPass, okCode),
+  _eq(employeeSignUpError(okEmail, '+972 50 123 4567', okPass, okCode, term: (k)=>kTerms[k]!),
       '', '7 intl-phone-plus');
   n++;
 
   // assert חי (חוק: --enable-asserts) — מוכיח שהמנגנון פעיל.
-  assert(employeeSignUpError(okEmail, okPhone, okPass, okCode) == '',
+  assert(employeeSignUpError(okEmail, okPhone, okPass, okCode, term: (k)=>kTerms[k]!) == '',
       'assert-live guard');
 
   print('OK employeeSignUpError: $n asserts passed');

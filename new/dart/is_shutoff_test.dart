@@ -1,9 +1,10 @@
+import '../dart-data/is_shutoff-terms.dart';
 // בדיקת-חוזה · isShutoff — מייבאת אך ורק את האטום-שלה (חוק-4).
 // הרצה: dart run --enable-asserts new/dart/is_shutoff_test.dart
 import 'is_shutoff.dart';
 
 bool _s(String sku, String? pt, String cat) =>
-    isShutoff(sku: sku, productType: pt, categoryHe: cat);
+    isShutoff(sku: sku, productType: pt, categoryHe: cat, term: (k)=>kTerms[k]!);
 
 void _eq(bool got, bool want, String label) {
   if (got != want) throw StateError('FAIL [$label]: got=$got want=$want');

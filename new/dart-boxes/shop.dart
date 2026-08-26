@@ -1,3 +1,4 @@
+import '../dart-data-maor/beneficiary-label-terms.dart';
 // 📦 קופסת-חיבורים · מודול-החנות (shop) (Dart) — מחווטת 35 אטומי-Dart. מקבילה ל-new/boxes/shop.mjs.
 // חוזה משותף: new/boxes/shop.contract.md. מקור-האמת: maor/src/components/shop/lib.ts.
 // זהו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart) מתחברות לאותה קופסה: אותם קלטים ⇒ אותו פלט.
@@ -91,7 +92,7 @@ final int SHOP_EXPIRY_WARN_DAYS = sewd.shopExpiryWarnDays; // ignore: non_consta
 
 /// תווית-מוטב — termOf (אטום) מחווט; נקרא רק כשיש config (כמו במקור).
 String beneficiaryLabel(Map<String, dynamic> db, Map<String, dynamic> a, [Map<String, dynamic>? config]) =>
-    bl.beneficiaryLabel(db, a, config, _termOf);
+    bl.beneficiaryLabel(db, a, config, _termOf, term: (k)=>kTerms[k]!);
 
 /// הנותר-במלאי של פריט-קטלוג — liveRedemptions מחווט פנימית.
 int? itemRemaining(Map<String, dynamic> db, String itemId) => ir.itemRemaining(db, itemId, _lr);

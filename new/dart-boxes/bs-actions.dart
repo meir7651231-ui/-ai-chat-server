@@ -1,3 +1,4 @@
+import '../dart-data/scope_he-terms.dart';
 // 📦 קופסת-חיבורים · bs-actions (בנייה-חכמה · סטודיו-הקופיילוט) — קטלוג-פעולות + סיווג-טווח.
 // מקור-האמת: buildsmart/app_flutter/lib/logic/studio/* (action_catalog · edit_prompt ·
 //   edit_intent · rules_model · registry_view) + logic/assistant_intent.
@@ -130,7 +131,7 @@ String scopeHe(String token) => sh.scopeHe(
       everyPrefix: _everyPrefix,
       screenPrefix: _screenPrefix,
       singlePrefix: _singlePrefix,
-    );
+     term: (k)=>kTerms[k]!);
 
 /// שורת-התצוגה 'מתוך: …' שלפני הדיף (all / מרחב / אלמנט-בודד / לא-מזוהה).
 String scopeLabel(String scope) => sl.scopeLabel(

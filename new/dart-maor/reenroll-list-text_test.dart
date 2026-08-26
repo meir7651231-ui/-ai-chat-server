@@ -1,3 +1,4 @@
+import '../dart-data-maor/reenroll-list-text-terms.dart';
 // בדיקת-חוזה (רתמת-זהב) · reenrollListText — מייבאת אך ורק את האטום-שלה (חוק-4).
 // שש דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/reenroll-list-text.test.mjs
 // (אותם קלטים→פלטים, מומרים ל-Map של Dart):
@@ -34,42 +35,42 @@ void main() {
 
   // 1) שורת r1.
   assert(
-    reenrollListText([r1]) == 'דוד · ציור — נוכחות 12, חיסורים 2 · ממשיך ✓נרשם',
-    'FAIL r1: ${reenrollListText([r1])}',
+    reenrollListText([r1], term: (k)=>kTerms[k]!) == 'דוד · ציור — נוכחות 12, חיסורים 2 · ממשיך ✓נרשם',
+    'FAIL r1: ${reenrollListText([r1], term: (k)=>kTerms[k]!)}',
   );
   n++;
 
   // 2) שורת r2 (decision חסר ⇒ טרם הוחלט; renewed:false ⇒ בלי ✓נרשם).
   assert(
-    reenrollListText([r2]) == 'רות · מוזיקה — נוכחות 0, חיסורים 5 · טרם הוחלט',
-    'FAIL r2: ${reenrollListText([r2])}',
+    reenrollListText([r2], term: (k)=>kTerms[k]!) == 'רות · מוזיקה — נוכחות 0, חיסורים 5 · טרם הוחלט',
+    'FAIL r2: ${reenrollListText([r2], term: (k)=>kTerms[k]!)}',
   );
   n++;
 
   // 3) decision 'no' ⇒ מסתיים ב-'· לא ממשיך'.
   assert(
-    reenrollListText([_with(r2, {'decision': 'no'})]).endsWith('· לא ממשיך'),
+    reenrollListText([_with(r2, {'decision': 'no'})], term: (k)=>kTerms[k]!).endsWith('· לא ממשיך'),
     "FAIL decision 'no'",
   );
   n++;
 
   // 4) decision 'hold' ⇒ מסתיים ב-'· בהמתנה'.
   assert(
-    reenrollListText([_with(r2, {'decision': 'hold'})]).endsWith('· בהמתנה'),
+    reenrollListText([_with(r2, {'decision': 'hold'})], term: (k)=>kTerms[k]!).endsWith('· בהמתנה'),
     "FAIL decision 'hold'",
   );
   n++;
 
   // 5) חיבור ב-'\n'.
-  final two = reenrollListText([r1, r2]);
+  final two = reenrollListText([r1, r2], term: (k)=>kTerms[k]!);
   assert(
-    two == reenrollListText([r1]) + '\n' + reenrollListText([r2]),
+    two == reenrollListText([r1], term: (k)=>kTerms[k]!) + '\n' + reenrollListText([r2], term: (k)=>kTerms[k]!),
     'FAIL חיבור \\n: $two',
   );
   n++;
 
   // 6) rows=[] ⇒ מחרוזת ריקה.
-  assert(reenrollListText([]) == '', 'FAIL rows=[] ⇒ ריק');
+  assert(reenrollListText([], term: (k)=>kTerms[k]!) == '', 'FAIL rows=[] ⇒ ריק');
   n++;
 
   print('OK reenrollListText: $n asserts passed');

@@ -17,16 +17,16 @@
 
 /// Enrollment-status chip label + colors — verbatim behavior of the JS source
 /// new/atoms/enroll-status-meta.mjs. Any unknown/absent status ⇒ "פעיל".
-Map<String, String> enrollStatusMeta(Map<String, dynamic> e) {
+Map<String, String> enrollStatusMeta(Map<String, dynamic> e, {required String Function(String) term}) {
   if (e['status'] == 'paused') {
-    return {'label': 'מוקפא', 'bg': '#fdf1d4', 'c': '#9a6414'};
+    return {'label': term('mvkpa'), 'bg': '#fdf1d4', 'c': '#9a6414'};
   }
   if (e['status'] == 'ended') {
-    return {'label': 'הסתיים', 'bg': '#eceae2', 'c': '#8b8474'};
+    return {'label': term('hstyym'), 'bg': '#eceae2', 'c': '#8b8474'};
   }
   // ⏳ רשימת-המתנה — קודם נפלה ל"פעיל" והטעתה (למשל בכרטיס ⚙ ניהול-שיבוץ)
   if (e['status'] == 'wait') {
-    return {'label': 'רשימת-המתנה ⏳', 'bg': '#e7edf5', 'c': '#3a5a86'};
+    return {'label': term('rshymthmtnh'), 'bg': '#e7edf5', 'c': '#3a5a86'};
   }
-  return {'label': 'פעיל', 'bg': '#e4f5ea', 'c': '#12803c'};
+  return {'label': term('payl'), 'bg': '#e4f5ea', 'c': '#12803c'};
 }

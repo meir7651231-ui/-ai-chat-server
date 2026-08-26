@@ -10,7 +10,7 @@
 
 /// verbatim attention_engine.dart:81-154 (עם termOf/הספים כשקעים).
 List<AttentionItem> attentionItems(
-  AttentionInput inp, {
+  AttentionInput inp, {required String Function(String) term, 
   required String Function(String key, String fallback) termOf,
   required int orderCritDays,
   required int approvalsCritCount,
@@ -18,7 +18,7 @@ List<AttentionItem> attentionItems(
   final out = <AttentionItem>[];
 
   final aging = [...inp.agingOrders]..sort((a, b) => b.ageDays - a.ageDays);
-  final tagOrder = termOf('attn.tag.order', 'הזמנה');
+  final tagOrder = termOf('attn.tag.order', term('hzmnh'));
   for (final o in aging.take(3)) {
     out.add(AttentionItem(
       key: 'order:${o.id}',
@@ -41,9 +41,9 @@ List<AttentionItem> attentionItems(
   if (inp.pendingApprovals > 0) {
     out.add(AttentionItem(
       key: 'approvals',
-      tag: termOf('attn.tag.approval', 'אישור'),
+      tag: termOf('attn.tag.approval', term('ayshvr')),
       title: inp.pendingApprovals == 1
-          ? 'משימה אחת ממתינה לאישור'
+          ? term('mshymh-acht-mmtynh-layshvr')
           : '${inp.pendingApprovals} משימות ממתינות לאישור',
       sev: inp.pendingApprovals >= approvalsCritCount
           ? AttentionSev.crit
@@ -55,9 +55,9 @@ List<AttentionItem> attentionItems(
   if (inp.pendingVacations > 0) {
     out.add(AttentionItem(
       key: 'vacations',
-      tag: termOf('attn.tag.vacation', 'חופשה'),
+      tag: termOf('attn.tag.vacation', term('chvpshh')),
       title: inp.pendingVacations == 1
-          ? 'בקשת חופשה אחת ממתינה'
+          ? term('bksht-chvpshh-acht-mmtynh')
           : '${inp.pendingVacations} בקשות חופשה ממתינות',
       sev: AttentionSev.warn,
       navTab: 3,
@@ -67,9 +67,9 @@ List<AttentionItem> attentionItems(
   if (inp.pendingAccountReqs > 0) {
     out.add(AttentionItem(
       key: 'accountReqs',
-      tag: termOf('attn.tag.account', 'חשבון'),
+      tag: termOf('attn.tag.account', term('chshbvn')),
       title: inp.pendingAccountReqs == 1
-          ? 'בקשת חשבון אחת ממתינה'
+          ? term('bksht-chshbvn-acht-mmtynh')
           : '${inp.pendingAccountReqs} בקשות חשבון ממתינות',
       sev: AttentionSev.warn,
       navTab: 3,

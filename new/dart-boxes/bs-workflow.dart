@@ -1,3 +1,4 @@
+import '../dart-data/wf_advance_label-terms.dart';
 // 📦 קופסת-חיבורים · bs-workflow (בנייה-חכמה) — מנוע-ה-workflow של הסטודיו (משפך-שלבים + כללי-סטודיו).
 // חוזה: מקור-האמת buildsmart/app_flutter/lib/logic/workflow_engine.dart + logic/studio/rules_model.dart.
 // זו קופסת-בנייה-חכמה שנייה (אחרי bs-matching) — מחווטת 10 אטומי-wf/rules מ-../dart/.
@@ -162,7 +163,7 @@ String wfAdvanceLabel<C>(
       cfg,
       _alCase(a),
       wfStageLabel: (C c, al.WfStage s) => wfStageLabel(c, _back(s.index), termOf: termOf),
-    );
+     term: (k)=>kTerms[k]!);
 
 /// תווית-עברית ל-id של טריגר/שדה-תנאי, או ה-id הגולמי כשאין.
 /// שקע-`triggers` = ידע-הקשר שנעדר מהמקור ⇒ נשאר פרמטר (הצרכן/קופסת-אב מזריקה).

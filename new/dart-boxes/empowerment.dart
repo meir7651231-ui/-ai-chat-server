@@ -1,3 +1,4 @@
+import '../dart-data-maor/cockpit-calls-terms.dart';
 // 📦 קופסת-חיבורים · שכבת-ההעצמה (Dart) — מחווטת 27 אטומי-Dart. מקבילה ל-new/boxes/empowerment.mjs.
 // חוזה משותף: new/boxes/empowerment.contract.md. אותם 27 חוטים, אותו סדר-הצתה, אותן ברירות-מחדל.
 // זהו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart) מתחברות לאותה קופסה: אותו fixture ⇒ אותו JSON.
@@ -109,7 +110,7 @@ Map<String, dynamic>? forecastFromScan(Map<String, dynamic> scan, String today) 
 
 // ── שכבה 3: מורכבי-על ──────────────────────────────────────────────────────
 List<Map<String, dynamic>> cockpitCalls(List sups, String today, [num rate = 3.7, int silentDays = 60]) =>
-    ca.cockpitCalls(sups, today, rate, silentDays, _ilsMap, _usdMap, _slMap, _dsSS, cockpitAtRisk);
+    ca.cockpitCalls(sups, today, rate, silentDays, _ilsMap, _usdMap, _slMap, _dsSS, cockpitAtRisk, term: (k)=>kTerms[k]!);
 List<Map<String, dynamic>> cockpitHokTasks(List sups, String today) =>
     htk.cockpitHokTasks(sups, today, _hokDue);
 List<Map<String, dynamic>> cockpitFeed(List sups, [int limit = 8]) =>

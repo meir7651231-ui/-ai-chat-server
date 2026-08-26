@@ -17,14 +17,14 @@
 /// Employee sign-up validation. Returns the first Hebrew error message in fixed
 /// order (email → phone → password → invite code), or '' when all valid.
 /// Verbatim behaviour of the JS source new/atoms/employee-sign-up-error.mjs.
-String employeeSignUpError(String email, String phone, String password, String code) {
+String employeeSignUpError(String email, String phone, String password, String code, {required String Function(String) term}) {
   if (!RegExp(r'^\S+@\S+\.\S+$').hasMatch(email.trim())) {
-    return 'כתובת האימייל אינה תקינה';
+    return term('ktvbt-haymyyl-aynh-tkynh');
   }
   if (!RegExp(r'^[\d+][\d\s-]{6,}$').hasMatch(phone.trim())) {
-    return 'מספר טלפון תקין הוא שדה חובה';
+    return term('mspr-tlpvn-tkyn-hva-shdh-chvbh');
   }
-  if (password.length < 6) return 'הסיסמה חייבת להיות לפחות 6 תווים';
-  if (code.trim().isEmpty) return 'קוד-ההזמנה מהמנהל הוא שדה חובה';
+  if (password.length < 6) return term('hsysmh-chyybt-lhyvt-lpchvt-tvvym');
+  if (code.trim().isEmpty) return term('kvdhhzmnh-mhmnhl-hva-shdh-chvbh');
   return '';
 }

@@ -1,3 +1,4 @@
+import '../dart-data-maor/integer-in-words-terms.dart';
 // רתמת-זהב · integer-in-words — assert-ים = דוגמאות-החוזה של בדיקת-ה-JS (זהות: אותם קלטים→פלטים).
 // השקעים (joinHeb · words0_999 · thousandWords) מקומיים לבדיקה, כלשון-המקור
 // (maor/src/lib/hebrewNumber.ts). אם עובר — Dart≡JS.
@@ -44,7 +45,7 @@ List<String> thousandWords(int th) {
   return ['${joinHeb(words0_999(th))} אלף'];
 }
 
-String? iw(num n) => integerInWords(n, joinHeb, words0_999, thousandWords);
+String? iw(num n) => integerInWords(n, joinHeb, words0_999, thousandWords, term: (k)=>kTerms[k]!);
 
 void main() {
   final cases = <(num, String?)>[

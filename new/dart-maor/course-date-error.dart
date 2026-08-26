@@ -6,7 +6,7 @@ String? courseDateError(
   String? end,
   Object? config,
   String Function(Object, String, String) termOf,
-) {
+ {required String Function(String) term}) {
   // JS: start && end && end < start — מחרוזת-ריקה/null = falsy;
   // end < start = השוואת-מחרוזת (ISO ⇒ סדר כרונולוגי, compareTo נאמן ל-<).
   if (start != null &&
@@ -17,10 +17,10 @@ String? courseDateError(
     // JS: config ? termOf(...) : 'חוג' — אובייקט truthy, undefined/null falsy;
     // short-circuit ⇒ termOf לא נקרא בלי config.
     final courseWord =
-        config != null ? termOf(config, 'entity.course', 'חוג') : 'חוג';
-    return 'תאריך הסיום מוקדם מתאריך ההתחלה — ה' +
+        config != null ? termOf(config, 'entity.course', 'חוג') : term('chvg');
+    return term('taryk-hsyvm-mvkdm-mtaryk-hhtchlh-h') +
         courseWord +
-        ' לא יופיע בלוח. תקנו את התאריכים';
+        term('la-yvpya-blvch-tknv-at-htarykym');
   }
   return null;
 }

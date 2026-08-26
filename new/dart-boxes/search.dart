@@ -1,3 +1,4 @@
+import '../dart-data-maor/rule-plural-terms.dart';
 // 📦 קופסת-חיבורים · חיפוש (Dart) — מחווטת 11 אטומי-Dart. מקבילה ל-new/boxes/search.mjs.
 // חוזה משותף: new/boxes/search.contract.md. הקסקדה (סדר-הכללים) = *המשמעות*, וחיה כאן
 // בלבד (הכרעת-בעלים, LAW חוק-5) — שינוי-דירוג = סידור-שורות, אפס נגיעה בכללים.
@@ -19,7 +20,7 @@ import '../dart-maor/smart-filter.dart' as sf;
 final List<int? Function(String, String)> _cascade = [
   (nq, nt) => re.ruleExact(nq, nt) as int?,
   (nq, nt) => rp.rulePrefix(nq, nt),
-  (nq, nt) => rpl.rulePlural(nq, nt),
+  (nq, nt) => rpl.rulePlural(nq, nt, term: (k)=>kTerms[k]!),
   (nq, nt) => rc.ruleContains(nq, nt),
   (nq, nt) => rs.ruleSkeleton(nq, nt) as int?,
   (nq, nt) => rt.ruleTypo(nq, nt, lv.levenshtein) as int?,

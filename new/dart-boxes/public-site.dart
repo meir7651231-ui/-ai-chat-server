@@ -1,3 +1,4 @@
+import '../dart-data-maor/site-vocab-terms.dart';
 // 📦 קופסת-חיבורים · public-site (lib-publicSite) · ליבה-טהורה (Dart) —
 // מקבילה זהה-ביט ל-new/boxes/public-site.mjs. חוזה משותף: public-site.contract.md.
 // מקור-האמת: maor/src/lib/publicSite.ts (11 חוטים).
@@ -28,7 +29,7 @@ final UI = sul.siteUiLabels; // ignore: non_constant_identifier_names
 // ── החיווט ─────────────────────────────────────────────────────────────────────
 bool isRtl(String lang) => irl.isRtlLang(lang);
 dynamic palette([dynamic accent]) => sp.sitePalette(accent, FALLBACK_PALETTE);
-dynamic vocab(dynamic commercial, dynamic lang) => sv.siteVocab(commercial, lang);
+dynamic vocab(dynamic commercial, dynamic lang) => sv.siteVocab(commercial, lang, term: (k)=>kTerms[k]!);
 String localize(dynamic t, dynamic lang) => rl.resolveLocalized(t, lang);
 dynamic langs(dynamic site) => sl.siteLangs(site, KNOWN_LANGS);
 dynamic ui(dynamic lang, dynamic key) => su.siteUi(lang, key, UI);

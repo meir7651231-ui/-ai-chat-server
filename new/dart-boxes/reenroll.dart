@@ -1,3 +1,4 @@
+import '../dart-data-maor/reenroll-list-text-terms.dart';
 // 📦 קופסת-חיבורים · reenroll — רישום-לשנה-הבאה (courses.reenroll). מחווטת 16 אטומי-Dart.
 // מקבילה ל-new/boxes/reenroll.mjs · חוזה: reenroll.contract.md · מקור-האמת (L4):
 // maor/src/components/courses/reenroll-lib.ts. זהו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart)
@@ -83,7 +84,7 @@ Map<String, Object?> freshNextYearEnrollment(
     fnye.freshNextYearEnrollment(src, targetCourseId, newId, todayIso, groupOverride);
 String studentHistoryText(List<dynamic> entries) => sht.studentHistoryText(entries);
 List<List<String>> reenrollCsvRows(List<Map<String, Object?>> rows) => rcr.reenrollCsvRows(rows);
-String reenrollListText(List<Map<String, dynamic>> rows) => rlt.reenrollListText(rows);
+String reenrollListText(List<Map<String, dynamic>> rows) => rlt.reenrollListText(rows, term: (k)=>kTerms[k]!);
 
 // ── מחווטים — השקעים (atNoon/toIso/payBal/paidOf/findMember) הולחמו פנימית ──────
 

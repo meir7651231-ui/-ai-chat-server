@@ -17,17 +17,17 @@ enum CriticalKind { confirmOrder, price }
 /// Classify an element as business-critical (order-confirmation / price control),
 /// else null. `id` is lower-cased before matching; `labelHe` matched as-is.
 /// confirmOrder takes precedence over price. Verbatim behaviour of edit_safety.dart:189-212.
-CriticalKind? criticalBusinessKind({required String id, required String labelHe}) {
+CriticalKind? criticalBusinessKind({required String Function(String) term, required String id, required String labelHe}) {
   final lid = id.toLowerCase();
   final label = labelHe;
   // (c) order-confirmation control — the plan's exact "אשר הזמנה" surface.
-  if (label.contains('אשר הזמנה') ||
+  if (label.contains(term('ashr-hzmnh')) ||
       lid.contains('confirmorder') ||
       lid.contains('approveorder')) {
     return CriticalKind.confirmOrder;
   }
   // (b) price control.
-  if (lid.contains('price') || label.contains('מחיר')) {
+  if (lid.contains('price') || label.contains(term('mchyr'))) {
     return CriticalKind.price;
   }
   return null;

@@ -56,7 +56,7 @@ class WfCase {
 /// תווית-כפתור-הקידום פר-שלב. verbatim workflow_engine.dart:164-191 (השכן כשקע).
 String wfAdvanceLabel<C>(
   C cfg,
-  WfCase a, {
+  WfCase a, {required String Function(String) term, 
   required String Function(C cfg, WfStage s) wfStageLabel,
 }) {
   switch (a.stage) {
@@ -69,7 +69,7 @@ String wfAdvanceLabel<C>(
     case WfStage.dispatch:
       return a.dispatchPushed
           ? '✓ ${wfStageLabel(cfg, WfStage.done)}'
-          : '📞 דחיפה ללוח';
+          : term('dchyph-llvch');
     case WfStage.done:
       return '';
   }

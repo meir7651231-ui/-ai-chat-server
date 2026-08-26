@@ -1,3 +1,4 @@
+import '../dart-data-maor/plan-word-terms.dart';
 // בדיקת-חוזה (רתמת-זהב) · planWord — מייבאת אך ורק את האטום-שלה (חוק-4).
 // חמש דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/plan-word.test.mjs:
 //   'punch'→'כרטיסייה' · 'half_year'→'מנוי חצי-שנתי' · 'year'→'מנוי שנתי' ·
@@ -19,7 +20,7 @@ void main() {
   for (final c in cases) {
     final input = c[0];
     final want = c[1];
-    final got = planWord(input);
+    final got = planWord(input, term: (k)=>kTerms[k]!);
     assert(got == want, "FAIL: '$input' ⇒ '$got' ≠ '$want'");
     n++;
   }

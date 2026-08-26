@@ -1,3 +1,4 @@
+import '../dart-data-maor/merge-families-terms.dart';
 import 'merge-families.dart';
 import 'dart:convert';
 
@@ -45,7 +46,7 @@ void main() {
     'createdAt': '2026-01-15', 'notes': 'ותיקה',
   };
   {
-    final out = mergeFamilies(keeper, [loser], normPhone, dedupById);
+    final out = mergeFamilies(keeper, [loser], normPhone, dedupById, term: (k)=>kTerms[k]!);
     ok(out['father'] == 'יוסף', "father לא הושלם ⇒ ${out['father']}");
     ok(out['phone'] == '050-1111111', "phone השומר לא נשמר ⇒ ${out['phone']}");
     ok(out['phone2'] == '0502222222', "phone2 לא מולא מטלפון-שונה ⇒ ${out['phone2']}");
@@ -62,7 +63,7 @@ void main() {
       {'id': 'a', 'status': 'pending'},
       [{'id': 'b', 'status': 'inactive'}, {'id': 'c', 'status': 'active'}],
       normPhone, dedupById,
-    );
+     term: (k)=>kTerms[k]!);
     ok(out['status'] == 'active', "דירוג-סטטוס שגוי ⇒ ${out['status']}");
   }
 
@@ -72,7 +73,7 @@ void main() {
       {'id': 'a', 'kidsHome': 2, 'fullSefach': false},
       [{'id': 'b', 'kidsHome': 5, 'fullSefach': true}],
       normPhone, dedupById,
-    );
+     term: (k)=>kTerms[k]!);
     ok(out['kidsHome'] == 5, "kidsHome לא מקסימום ⇒ ${out['kidsHome']}");
     ok(out['fullSefach'] == true, 'fullSefach לא OR');
   }
@@ -83,7 +84,7 @@ void main() {
       {'id': 'a', 'phone': '0501111111'},
       [{'id': 'b', 'phone': '050-111-1111'}],
       normPhone, dedupById,
-    );
+     term: (k)=>kTerms[k]!);
     ok(out['phone2'] == '', "phone2 מולא מטלפון זהה-מנורמל ⇒ ${out['phone2']}");
   }
 
@@ -93,7 +94,7 @@ void main() {
       {'id': 'a', 'notes': 'חשוב'},
       [{'id': 'b', 'name': 'לוי', 'notes': 'חשוב'}],
       normPhone, dedupById,
-    );
+     term: (k)=>kTerms[k]!);
     ok(out['notes'] == 'חשוב | מוזג: לוי', "הערות הוכפלו ⇒ ${out['notes']}");
   }
 

@@ -1,3 +1,4 @@
+import '../dart-data-maor/plan-word-terms.dart';
 // 📦 קופסת-חיבורים · diary (יומן-חדרים · Dart) — מחווטת אטומי-Dart בלבד.
 // מקבילה זהת-ביט ל-new/boxes/diary.mjs. חוזה משותף: diary.contract.md · מקור-האמת (L4):
 // maor-system/src/components/diary/lib.ts. זהו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart)
@@ -110,7 +111,7 @@ String planLabelOf(Map<String, dynamic> e) {
     final bal = rem < 0 ? 0 : rem;
     return 'כרטיסייה · יתרה $bal/${e['purchased']}';
   }
-  return pw.planWord(e['plan'] as String);
+  return pw.planWord(e['plan'] as String, term: (k)=>kTerms[k]!);
 }
 
 // ── הכרעת-קופסה: וריאנט-היומן של enrollStatusMeta (מקור: lib.ts:268-275) ──

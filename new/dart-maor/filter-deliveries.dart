@@ -21,13 +21,13 @@ dynamic filterDeliveries(
   dynamic rows,
   String q,
   dynamic Function(String, dynamic, List<dynamic> Function(dynamic)) smartFilter,
-) {
+ {required String Function(String) term}) {
   if (q.trim().isEmpty) return rows;
   String statusLabel(dynamic status) => status == 'pickup'
-      ? 'איסוף'
+      ? term('aysvf')
       : status == 'enroute'
-          ? 'בדרך'
-          : 'נמסר';
+          ? term('bdrk')
+          : term('nmsr');
   return smartFilter(q, rows, (r) {
     final m = r as Map;
     return [m['familyName'], m['volunteerName'], statusLabel(m['status'])];

@@ -1,3 +1,4 @@
+import '../dart-data-maor/filter-deliveries-terms.dart';
 // 🏅 רתמת-זהב · filterDeliveries — דוגמאות-החוזה זהות ביט-אחר-ביט לבדיקת-ה-JS
 // (new/atoms/filter-deliveries.test.mjs): 12 הקלטות-Golden (q ריק ⇒ rows כמות-שהם)
 // + שקע-smartFilter (statusLabel המוטמע). עובר ⇒ Dart ≡ JS (חוק-4).
@@ -26,7 +27,7 @@ void main() {
     '12',
   ];
   for (final r in goldRows) {
-    final got = filterDeliveries(r, '', neverFilter);
+    final got = filterDeliveries(r, '', neverFilter, term: (k)=>kTerms[k]!);
     assert(got == r, 'Golden · rows="$r" ⇒ $got ≠ $r');
   }
 
@@ -42,7 +43,7 @@ void main() {
         .toList();
   }
 
-  final gotSock = filterDeliveries(rows, 'איסוף', stubFilter) as List;
+  final gotSock = filterDeliveries(rows, 'איסוף', stubFilter, term: (k)=>kTerms[k]!) as List;
   assert(gotSock.length == 1 && identical(gotSock[0], rows[0]),
       'socket/statusLabel ⇒ $gotSock ≠ [rows[0]]');
 

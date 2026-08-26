@@ -1,3 +1,4 @@
+import '../dart-data/kind_plural-terms.dart';
 // 📦 קופסת-חיבורים · bs-studio (בנייה-חכמה · ניהול-סטודיו + פרומפטי-קופיילוט).
 // מקור-האמת: buildsmart/app_flutter/lib/logic/{studio/*, manager_copilot, intel/segments,
 //   tasks_gantt, system_division, install_engine}. מחווטת 10 אטומי-בנייה-חכמה מ-../dart/.
@@ -84,7 +85,7 @@ String kindEmoji(ke.ConfigOpKind kind) => ke.kindEmoji(kind);
 /// שם-עצם עברי ברבים לספירת-קבוצה פר-סוג-פעולה; setStyle=='צבעים' רק כש-[styleAllColor],
 /// אחרת 'עיצובים'. מותאם-טיפוס לאותו ConfigOpKind קנוני (הכרעת-קופסה 2).
 String kindPlural(ke.ConfigOpKind kind, bool styleAllColor) =>
-    kp.kindPlural(_toKp(kind), styleAllColor);
+    kp.kindPlural(_toKp(kind), styleAllColor, term: (k)=>kTerms[k]!);
 
 // ═══ אשכול ג׳ · קופיילוט-המנהל — פרומפטים ════════════════════════════════════════
 

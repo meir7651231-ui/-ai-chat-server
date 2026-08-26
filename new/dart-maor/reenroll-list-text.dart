@@ -20,17 +20,17 @@
 
 /// A printable reenrollment list — one line per student, joined by '\n'.
 /// Verbatim port of new/atoms/reenroll-list-text.mjs (`reenrollListText`).
-String reenrollListText(List<Map<String, dynamic>> rows) {
+String reenrollListText(List<Map<String, dynamic>> rows, {required String Function(String) term}) {
   String decWord(dynamic d) => d == 'yes'
-      ? 'ממשיך'
+      ? term('mmshyk')
       : d == 'no'
-          ? 'לא ממשיך'
+          ? term('la-mmshyk')
           : d == 'hold'
-              ? 'בהמתנה'
-              : 'טרם הוחלט';
+              ? term('bhmtnh')
+              : term('trm-hvchlt');
   return rows.map((r) {
     final summary = r['summary'] as Map;
-    final suffix = r['renewed'] == true ? ' ✓נרשם' : '';
+    final suffix = r['renewed'] == true ? term('nrshm') : '';
     return '${r['memberName']} · ${r['courseName']} — נוכחות ${summary['presents']}, '
             'חיסורים ${summary['absences']} · ${decWord(r['decision'])}' +
         suffix;

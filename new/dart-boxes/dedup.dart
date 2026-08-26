@@ -1,3 +1,4 @@
+import '../dart-data-maor/merge-families-terms.dart';
 // 📦 קופסת-חיבורים · dedup (Dart) — מחווטת 17 אטומי-Dart. מקבילה ל-new/boxes/dedup.mjs.
 // חוזה משותף: new/boxes/dedup.contract.md. מקור-האמת: maor/src/lib/dedup.ts.
 // זהו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart) מתחברות לאותה קופסה: אותם קלטים ⇒ אותו פלט.
@@ -84,7 +85,7 @@ List<List<String>> findDuplicateGroups(List families) =>
     fdg.findDuplicateGroups(families, _phonesOf, _nameCityKey);
 
 Map<String, dynamic> mergeFamilies(Map<String, dynamic> keeper, List<Map<String, dynamic>> losers) =>
-    mf.mergeFamilies(keeper, losers, np.normPhone, _dedupById);
+    mf.mergeFamilies(keeper, losers, np.normPhone, _dedupById, term: (k)=>kTerms[k]!);
 
 Map<String, dynamic> mergeFamiliesByFields(List fams, Map pick, Map edit) => mfbf.mergeFamiliesByFields(
       fams, pick, edit, {

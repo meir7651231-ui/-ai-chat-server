@@ -1,3 +1,4 @@
+import '../dart-data-maor/provider-clearer-terms.dart';
 // 📦 קופסת-חיבורים · lib-nedarim-sync (Dart) — מנוע-סנכרון נדרים→מאור (כיוון-נכנס).
 // מקבילה ל-new/boxes/lib-nedarim-sync.mjs · חוזה משותף: lib-nedarim-sync.contract.md.
 // מקור-האמת: maor/src/lib/nedarimSync.ts. זהו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart)
@@ -238,7 +239,7 @@ Map<String, dynamic> supFromCharge(Map<String, dynamic> c, int seq) {
 List<String> get clearingProviders => _cp.clearingProviders;
 
 /// תווית-סליקה לפי ספק-העסקה — re-export מהאטום (String? provider).
-String providerClearer(String? provider) => _pc.providerClearer(provider);
+String providerClearer(String? provider) => _pc.providerClearer(provider, term: (k)=>kTerms[k]!);
 
 /// מפתח-דדופ לעסקת-סליקה — האטום מקבל Map<String,String?>; הקופסה מיישרת מ-Map<String,dynamic>.
 String chargeDedupKey(Map<String, dynamic> charge) =>
@@ -252,7 +253,7 @@ _rhbt.RelabelResult relabelHistByTxn(List<dynamic> supporters, List<dynamic> txn
 Map<String, dynamic> chargeToHist(Map<String, dynamic> charge) => _cth.chargeToHist(
       charge,
       curOf,
-      (dynamic p) => _pc.providerClearer(p as String?),
+      (dynamic p) => _pc.providerClearer(p as String?, term: (k)=>kTerms[k]!),
     );
 
 /// מילוי משבצת-ההו"ק מחיוב-נדרים חוזר — האטום ב-Object?; הקופסה ממירה הלוך-ושוב.

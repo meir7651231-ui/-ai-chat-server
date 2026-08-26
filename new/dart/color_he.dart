@@ -5,13 +5,13 @@
 // טוהר: dart:core בלבד.
 
 /// token → שם-צבע עברי; token לא-מוכר ⇒ מוחזר כמות-שהוא. verbatim diff_preview.dart:196-206.
-String colorHe(String token) => switch (token) {
-      'success' => 'ירוק',
-      'danger' => 'אדום',
-      'warn' => 'כתום',
-      'muted' => 'אפור',
-      'ink' => 'כהה',
-      'brand' => 'מותג',
-      'brandDark' => 'מותג כהה',
+String colorHe(String token, {required String Function(String) term}) => switch (token) {
+      'success' => term('yrvk'),
+      'danger' => term('advm'),
+      'warn' => term('ktvm'),
+      'muted' => term('apvr'),
+      'ink' => term('khh'),
+      'brand' => term('mvtg'),
+      'brandDark' => term('mvtg-khh'),
       _ => token,
     };

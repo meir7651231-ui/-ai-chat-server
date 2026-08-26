@@ -27,7 +27,7 @@ String donCalMonthLine(
   bool Function(dynamic date) inMonth,
   Map? config,
   String Function(Map config, String key, String fallback)? termOf,
-) {
+ {required String Function(String) term}) {
   String t(String k, String fb) => config != null ? termOf!(config, k, fb) : fb;
   var mc = 0;
   num mi = 0;
@@ -42,14 +42,14 @@ String donCalMonthLine(
       mi += amount;
     }
   }
-  if (mc == 0) return 'אין ' + t('entity.donations', 'תרומות') + ' מתועדות בחודש זה';
+  if (mc == 0) return term('ayn') + t('entity.donations', term('trvmvt')) + term('mtvadvt-bchvdsh-zh');
   final sums = (mi != 0 ? '₪' + _heGroup(mi) : '') +
       (mi != 0 && mu != 0 ? ' + ' : '') +
       (mu != 0 ? '\$' + _heGroup(mu) : '');
   return '$mc ' +
-      t('entity.donations', 'תרומות') +
-      ' החודש · ' +
-      (sums.isEmpty ? 'סכומים מהקובץ ההיסטורי' : sums);
+      t('entity.donations', term('trvmvt')) +
+      term('hchvdsh') +
+      (sums.isEmpty ? term('skvmym-mhkvbts-hhystvry') : sums);
 }
 
 /// he-IL grouping (thousands separator = comma), mirroring Number.toLocaleString('he-IL')

@@ -22,11 +22,11 @@
 
 /// Where a directional device at [i] sits, named by its neighbours —
 /// verbatim install_engine.dart:181-188 (chain collapsed to its nameHe list).
-String directionalContext(List<String> names, int i) {
+String directionalContext(List<String> names, int i, {required String Function(String) term}) {
   final up = i > 0 ? names[i - 1] : null;
   final down = i < names.length - 1 ? names[i + 1] : null;
   if (up != null && down != null) return 'בין "$up" ל-"$down"';
   if (down != null) return 'בכניסת הקו (לפני "$down")';
   if (up != null) return 'ביציאת הקו (אחרי "$up")';
-  return 'בקו';
+  return term('bkv');
 }

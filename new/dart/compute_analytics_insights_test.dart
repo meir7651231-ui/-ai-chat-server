@@ -1,3 +1,4 @@
+import '../dart-data/compute_analytics_insights-terms.dart';
 // בדיקת-חוזה · computeAnalyticsInsights — מייבאת אך ורק את האטום-שלה (חוק-4).
 // הרצה: dart run --enable-asserts new/dart/compute_analytics_insights_test.dart
 import 'compute_analytics_insights.dart';
@@ -22,7 +23,7 @@ void main() {
     aiAlternatives: () => const [],
     kBudgetTotal: 0,
     kBudgetSpent: 0,
-  );
+   term: (k)=>kTerms[k]!);
   if (r.length != 1) throw StateError('FAIL [A len]: ${r.length}');
   _eqIns(r[0], '📊', 'ניצול תקציב: 0%', 'נותרו ₪0 מתוך ₪0', 'A budget');
   n++;
@@ -34,7 +35,7 @@ void main() {
     aiAlternatives: () => const [(save: 50), (save: 30)],
     kBudgetTotal: 1000,
     kBudgetSpent: 250,
-  );
+   term: (k)=>kTerms[k]!);
   if (r.length != 5) throw StateError('FAIL [B len]: ${r.length}');
   _eqIns(r[0], '📦', '2 הזמנות · ₪300 סה״כ רכש', 'מתוך מנוע ההזמנות המשותף', 'B0');
   _eqIns(r[1], '💵', 'שווי הזמנה ממוצע: ₪150', 'ממוצע על פני כל ההזמנות', 'B1');
@@ -50,7 +51,7 @@ void main() {
     aiAlternatives: () => const [],
     kBudgetTotal: 0,
     kBudgetSpent: 0,
-  );
+   term: (k)=>kTerms[k]!);
   if (r.length != 4) throw StateError('FAIL [C len]: ${r.length}');
   _eqIns(r[0], '📦', '1 הזמנות · ₪10 סה״כ רכש', 'מתוך מנוע ההזמנות המשותף', 'C0');
   _eqIns(r[2], '🚚', '1 הזמנות פתוחות · 0 סופקו', 'לפי שלב ההזמנה הנוכחי', 'C2');
@@ -62,7 +63,7 @@ void main() {
               fMoney: _money,
               aiAlternatives: () => const [],
               kBudgetTotal: 0,
-              kBudgetSpent: 0)
+              kBudgetSpent: 0, term: (k)=>kTerms[k]!)
           .length ==
       1, 'assert-live guard');
 

@@ -1,3 +1,4 @@
+import '../dart-data-maor/cockpit-calls-terms.dart';
 // רתמת-זהב · cockpit-calls — אותם קלטים/WANT של בדיקת-ה-JS. שקעים = doubles מקומיים
 // המשחזרים בדיוק את test-doubles של ה-JS (בלי import-אח — חוק-1).
 import 'dart:convert';
@@ -47,7 +48,7 @@ void main() {
   const want =
       '[{"id":"call:1","kind":"call","supId":"1","name":"אבי כהן","phone":"050","email":"a@x.com","reason":"יעד-קשר עבר לפני 6 יום","severity":"due","sort":1000006},{"id":"call:2","kind":"call","supId":"2","name":"דנה לוי","phone":"052","email":"","reason":"תורם/ת · שקט/ה 228 יום","severity":"risk","sort":228}]';
   final got = jsonEncode(
-      cockpitCalls(s, today, 3.7, 60, _supIls, _supUsd, _supLast, _daysSince, _atRisk));
+      cockpitCalls(s, today, 3.7, 60, _supIls, _supUsd, _supLast, _daysSince, _atRisk, term: (k)=>kTerms[k]!));
   assert(got == want, '✗ cockpit-calls\n$got\n≠\n$want');
   print('✓ cockpit-calls (Dart): Golden — ירוק');
 }

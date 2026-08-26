@@ -1,3 +1,4 @@
+import '../dart-data-maor/campaign-csv-rows-terms.dart';
 // 📦 קופסת-חיבורים · dialer (Dart) — מחווטת 14 אטומי-Dart. מקבילה ל-new/boxes/dialer.mjs.
 // חוזה משותף: new/boxes/dialer.contract.md. מקור-האמת: maor/src/lib/dialer.ts.
 // זהו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart) מתחברות לאותה קופסה: אותם קלטים ⇒ אותו פלט.
@@ -63,4 +64,4 @@ Map<String, dynamic> callStats(dynamic calls) => cs.callStats(calls);
 /// שורות-CSV לסיכום קמפיין — OUTCOME_LABELS מחווט; nameOf = שקע-הצרכן.
 List<List<String>> campaignCsvRows(
         Map<String, dynamic> c, String Function(dynamic) nameOf) =>
-    ccr.campaignCsvRows(c, nameOf, OUTCOME_LABELS);
+    ccr.campaignCsvRows(c, nameOf, OUTCOME_LABELS, term: (k)=>kTerms[k]!);

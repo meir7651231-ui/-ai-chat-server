@@ -1,3 +1,4 @@
+import '../dart-data-maor/holiday-of-terms.dart';
 // 📦 קופסת-חיבורים · hebrew (Dart) — הלוח העברי המלא, מחווטת אטומי-Dart בלבד.
 // מקבילה זהת-ביט ל-new/boxes/hebrew.mjs. חוזה משותף: hebrew.contract.md · מקור-האמת (L4):
 // maor/src/lib/hebrew.ts. זהו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart) מתחברות לאותה קופסה:
@@ -83,4 +84,4 @@ String hebDateFull(String? iso) => hdf.hebDateFull(iso, g.gem, gemYear, (DateTim
 const Map<String, String> HOLIDAYS = hol.HOLIDAYS; // ignore: constant_identifier_names
 
 /// שם החג/הצום בתאריך לועזי נתון, או null (דיני חנוכה-ח'/צום-נדחה/תענית-אסתר-מוקדמת).
-String? holidayOf(DateTime d) => ho.holidayOf(d, _hebPartsForHoliday, _scanForHoliday, hol.HOLIDAYS);
+String? holidayOf(DateTime d) => ho.holidayOf(d, _hebPartsForHoliday, _scanForHoliday, hol.HOLIDAYS, term: (k)=>kTerms[k]!);

@@ -1,3 +1,4 @@
+import '../dart-data-maor/beneficiary-label-terms.dart';
 import 'beneficiary-label.dart';
 
 /// רתמת-זהב: אותן 6 דוגמאות-חוזה בדיוק מ-new/atoms/beneficiary-label.test.mjs.
@@ -45,7 +46,7 @@ void main() {
     final a = row[0] as Map<String, dynamic>;
     final cfg = row[1] as Map<String, dynamic>?;
     final w = row[2] as String;
-    final g = beneficiaryLabel(db, a, cfg, termOf);
+    final g = beneficiaryLabel(db, a, cfg, termOf, term: (k)=>kTerms[k]!);
     if (g != w) {
       print('✗ $a + cfg=$cfg ⇒ "$g" ≠ "$w"');
       f = 1;

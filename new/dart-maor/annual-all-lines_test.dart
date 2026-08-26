@@ -1,3 +1,4 @@
+import '../dart-data-maor/annual-all-lines-terms.dart';
 // בדיקת-חוזה (רתמת-זהב) · annualAllLines — מייבאת אך ורק את האטום-שלה (חוק-4).
 // ארבע דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/annual-all-lines.test.mjs
 // (אותם קלטים→פלטים; השקעים: donationsOfYear=סינון-שנה לפי date · sectionMock=['['+name+']']):
@@ -44,7 +45,7 @@ void main() {
 
   // 1) שני מקטעים + מפריד-עמוד יחיד (ב עם תרומת-2025 בלבד דולג).
   final L = annualAllLines(
-      'מאור', '580123456', '2026', supporters, null, _donationsOfYear, _sectionMock);
+      'מאור', '580123456', '2026', supporters, null, _donationsOfYear, _sectionMock, term: (k)=>kTerms[k]!);
   _eq(L, ['[א]', '', '\f', '', '[ג]'], 'שני מקטעים + מפריד-עמוד');
   n++;
 
@@ -56,13 +57,13 @@ void main() {
 
   // 3) תורם יחיד ⇒ בלי מפריד.
   final one = annualAllLines(
-      'מאור', null, '2026', [supporters[0]], null, _donationsOfYear, _sectionMock);
+      'מאור', null, '2026', [supporters[0]], null, _donationsOfYear, _sectionMock, term: (k)=>kTerms[k]!);
   _eq(one, ['[א]'], 'תורם יחיד בלי מפריד');
   n++;
 
   // 4) אפס-מתאימים (2024) ⇒ שורת-הריק העברית.
   final none = annualAllLines(
-      'מאור', null, '2024', supporters, null, _donationsOfYear, _sectionMock);
+      'מאור', null, '2024', supporters, null, _donationsOfYear, _sectionMock, term: (k)=>kTerms[k]!);
   _eq(none, ['אין תורמים עם תרומות בשנת 2024.'], 'אפס-מתאימים');
   n++;
 

@@ -25,11 +25,11 @@
 /// per family in source order. Column 9 is 'אלמן' only when maritalStatus contains
 /// 'אלמן' (final-nun), otherwise empty. Verbatim port of
 /// new/atoms/families-import-format-rows.mjs (`familiesImportFormatRows`).
-List<List<dynamic>> familiesImportFormatRows(Map<String, dynamic> db) {
+List<List<dynamic>> familiesImportFormatRows(Map<String, dynamic> db, {required String Function(String) term}) {
   final rows = <List<dynamic>>[
     [
-      'שם', 'ת"ז אב', 'טלפון', 'שם האם', 'ת"ז אם', 'טלפון 2',
-      'עיר', 'כתובת', '', 'אלמן', 'קהילה', '', 'הערות',
+      term('shm'), term('tz-ab'), term('tlpvn'), term('shm-ham'), term('tz-am'), term('t5'),
+      term('ayr'), term('ktvbt'), '', term('almn'), term('khylh'), '', term('harvt'),
     ],
   ];
   final families = (db['families'] as Iterable?) ?? const [];
@@ -39,7 +39,7 @@ List<List<dynamic>> familiesImportFormatRows(Map<String, dynamic> db) {
     rows.add([
       fam['name'], fam['fatherId'], fam['phone'], fam['mother'],
       fam['motherId'], fam['phone2'], fam['city'], fam['address'], '',
-      maritalStatus.contains('אלמן') ? 'אלמן' : '',
+      maritalStatus.contains(term('almn')) ? term('almn') : '',
       fam['community'], '', fam['notes'],
     ]);
   }

@@ -30,7 +30,7 @@ List<List<String>> deliveriesCsvRows(
   dynamic config,
   String Function(dynamic config, String key, String fallback) termOf,
   String Function(dynamic status) statusLabel,
-) {
+ {required String Function(String) term}) {
   String t(String k, String fb) => config != null ? termOf(config, k, fb) : fb;
 
   Map<String, dynamic>? _find(String coll, String id) {
@@ -55,7 +55,7 @@ List<List<String>> deliveriesCsvRows(
 
   // גל ב׳: עמודת כתובת (שדרוג-פורמט מתועד)
   final rows = <List<String>>[
-    ['תאריך', t('entity.family', 'משפחה'), 'כתובת', 'מתנדב', 'סטטוס', 'הערה'],
+    [term('taryk'), t('entity.family', term('mshpchh')), term('ktvbt'), term('mtndb'), term('sttvs'), term('harh')],
   ];
   for (final d in (db['deliveries'] as List)) {
     final dm = (d as Map);

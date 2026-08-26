@@ -1,3 +1,4 @@
+import '../dart-data-maor/campaign-csv-rows-terms.dart';
 // בדיקת-חוזה (רתמת-זהב) · campaignCsvRows — מייבאת אך ורק את האטום-שלה (חוק-4).
 // דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/campaign-csv-rows.test.mjs:
 //   LABELS = { donated:'תרם/ה', noanswer:'לא ענה' }
@@ -33,7 +34,7 @@ void main() {
   // 1 · יומן ריק — כותרת בלבד.
   _ok(
     _eqRows(
-      campaignCsvRows({'log': []}, nameOf, labels),
+      campaignCsvRows({'log': []}, nameOf, labels, term: (k)=>kTerms[k]!),
       [
         ['שם', 'תוצאה', 'הערה', 'מתי'],
       ],
@@ -51,7 +52,7 @@ void main() {
   };
   _ok(
     _eqRows(
-      campaignCsvRows(c, nameOf, labels),
+      campaignCsvRows(c, nameOf, labels, term: (k)=>kTerms[k]!),
       [
         ['שם', 'תוצאה', 'הערה', 'מתי'],
         ['ראובן', 'תרם/ה', 'הבטיח 100', '2026-08-20'],
@@ -63,7 +64,7 @@ void main() {
   n++;
 
   // assert חי (חוק: --enable-asserts) — מוכיח שהמנגנון פעיל.
-  assert(campaignCsvRows({'log': []}, nameOf, labels).length == 1, 'assert-live guard');
+  assert(campaignCsvRows({'log': []}, nameOf, labels, term: (k)=>kTerms[k]!).length == 1, 'assert-live guard');
 
   print('OK campaignCsvRows: $n asserts passed');
 }

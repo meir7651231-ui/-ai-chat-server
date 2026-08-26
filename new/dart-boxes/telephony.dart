@@ -1,3 +1,4 @@
+import '../dart-data-maor/explain-one-terms.dart';
 // 📦 קופסת-חיבורים · telephony (Dart) — מחווטת 6 אטומי-Dart. מקבילה ל-new/boxes/telephony.mjs.
 // חוזה משותף: new/boxes/telephony.contract.md. אותם 6 חוטים, אותה הכרעת-חיווט חיה-בקופסה.
 // זהו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart) מתחברות לאותה קופסה: אותו fixture ⇒ אותו JSON.
@@ -53,7 +54,7 @@ Map<String, dynamic> explainOne(
     io['validateTenant'],
     io['explainCall'],
     io['anchorToday'],
-  );
+   term: (k)=>kTerms[k]!);
 }
 
 /// הסגירה ההלכתית הבאה (ווידג'ט-בית). io = {hebrewClosedWindows, CITIES}.

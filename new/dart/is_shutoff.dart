@@ -22,13 +22,13 @@ const _kIsolationValveSkus = {
 /// True iff the product is an isolation/shutoff valve. Verbatim predicate of
 /// install_engine.dart:841-848 with `_kIsolationValveSkus` inlined and the three
 /// product fields injected as sockets (law-3).
-bool isShutoff({
+bool isShutoff({required String Function(String) term, 
   required String sku,
   required String? productType,
   required String categoryHe,
 }) =>
     _kIsolationValveSkus.contains(sku) ||
-    ((productType == 'ברז' || productType == 'ברז גן') &&
-        (categoryHe == 'ברזי מעבר' ||
-            categoryHe == 'ברזי ניל' ||
-            categoryHe == 'ברזי דלי'));
+    ((productType == term('brz') || productType == term('brz-gn')) &&
+        (categoryHe == term('brzy-mabr') ||
+            categoryHe == term('brzy-nyl') ||
+            categoryHe == term('brzy-dly')));

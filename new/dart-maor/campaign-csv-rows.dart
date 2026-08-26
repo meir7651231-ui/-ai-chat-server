@@ -23,9 +23,9 @@ List<List<String>> campaignCsvRows(
   Map<String, dynamic> c,
   String Function(dynamic) nameOf,
   Map<dynamic, dynamic> outcomeLabels,
-) {
+ {required String Function(String) term}) {
   final List<List<String>> rows = [
-    ['שם', 'תוצאה', 'הערה', 'מתי'],
+    [term('shm'), term('tvtsah'), term('harh'), term('mty')],
   ];
   for (final e in (c['log'] as List)) {
     rows.add([

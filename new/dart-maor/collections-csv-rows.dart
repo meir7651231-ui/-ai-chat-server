@@ -28,11 +28,11 @@ List<List<Object>> collectionsCsvRows(
   Map<String, dynamic> db,
   Map<String, dynamic>? config,
   String Function(Map<String, dynamic> config, String key, String fallback) termOf,
-) {
+ {required String Function(String) term}) {
   String t(String k, String fb) => config != null ? termOf(config, k, fb) : fb;
 
   final List<List<Object>> rows = [
-    ['תאריך', 'רכז', 'קופה', t('entity.family', 'משפחה'), 'סכום', 'מבצע'],
+    [term('taryk'), term('rkz'), term('kvph'), t('entity.family', term('mshpchh')), term('skvm'), term('mbtsa')],
   ];
 
   for (final b in (db['tzBoxes'] as List)) {

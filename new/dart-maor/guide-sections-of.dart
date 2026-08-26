@@ -37,19 +37,19 @@ List<Map<String, dynamic>> guideSections(
   String Function(Map<String, dynamic> config, String key, String fallback)
       termOf,
   String Function(String s, String from, String to) swap,
-) {
+ {required String Function(String) term}) {
   String t(String k, String fb) => config != null ? termOf(config, k, fb) : fb;
 
   Map<String, dynamic> loc(Map<String, dynamic> s) {
     var title = s['title'] as String;
     var text = s['text'] as String;
-    if (title == 'כרטיס משפחה') title = 'כרטיס ' + t('entity.family', 'משפחה');
-    text = swap(text, 'חדרים חיים', t('entity.rooms', 'חדרים') + ' חיים');
-    text = swap(text, 'על חדר', 'על ' + t('entity.room', 'חדר'));
-    text = swap(text, 'בתוך חוג', 'בתוך ' + t('entity.course', 'חוג'));
-    text = swap(text, 'תדפיס למורה', 'תדפיס ל' + t('entity.teacher', 'מורה'));
-    text = swap(text, '＋ תרומה', '＋ ' + t('entity.donation', 'תרומה'));
-    text = swap(text, 'שיוך למשפחה', 'שיוך ל' + t('entity.family', 'משפחה'));
+    if (title == term('krtys-mshpchh')) title = term('krtys') + t('entity.family', term('mshpchh'));
+    text = swap(text, term('chdrym-chyym'), t('entity.rooms', term('chdrym')) + term('chyym'));
+    text = swap(text, term('al-chdr'), term('al') + t('entity.room', term('chdr')));
+    text = swap(text, term('btvk-chvg'), term('btvk') + t('entity.course', term('chvg')));
+    text = swap(text, term('tdpys-lmvrh'), term('tdpys-l') + t('entity.teacher', term('mvrh')));
+    text = swap(text, term('trvmh'), '＋ ' + t('entity.donation', term('t16')));
+    text = swap(text, term('shyvk-lmshpchh'), term('shyvk-l') + t('entity.family', term('mshpchh')));
     return title == s['title'] && text == s['text']
         ? s
         : {...s, 'title': title, 'text': text};

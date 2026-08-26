@@ -27,12 +27,12 @@ Map<String, dynamic> explainOne(
   dynamic validateTenant,
   dynamic explainCall,
   dynamic anchorToday,
-) {
+ {required String Function(String) term}) {
   final raw = telephonyToTenant(tc, orgName, tenantId);
   final v = validateTenant(raw);
   if (_falsy(v['ok'])) {
     return {
-      'summary': '⚠️ תצורה לא-תקינה: ' + (v['errors'] as List).join(' · '),
+      'summary': term('ttsvrh-latkynh') + (v['errors'] as List).join(' · '),
       'outcome': 'invalid',
       'reason': '',
     };

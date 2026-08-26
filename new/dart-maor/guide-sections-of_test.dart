@@ -1,3 +1,4 @@
+import '../dart-data-maor/guide-sections-of-terms.dart';
 // בדיקת-חוזה (רתמת-זהב) · guideSections — מייבאת אך ורק את האטום-שלה (חוק-4).
 // חמש דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/guide-sections-of.test.mjs:
 //   1. בלי config, הכול פעיל ⇒ [S1,S2,S3] מילה-במילה + זהות-אובייקט (identical).
@@ -45,7 +46,7 @@ void main() {
   bool allOn(String m) => true;
 
   // 1. בלי config — מילה-במילה + זהות-אובייקט (ratchet הלגאסי)
-  final r1 = guideSections(allOn, null, sections, termOf, swap);
+  final r1 = guideSections(allOn, null, sections, termOf, swap, term: (k)=>kTerms[k]!);
   _check(r1.length == 3, 'בלי config ⇒ 3 שורות');
   _check(identical(r1[0], S1) && identical(r1[1], S2) && identical(r1[2], S3),
       'שורה שלא השתנתה ⇒ אותה זהות (identical)');
@@ -55,32 +56,32 @@ void main() {
       'מילה-במילה');
 
   // 2. מודול כבוי מסונן; שורה בלי module נשארת
-  final r2 = guideSections((m) => m != 'courses', null, sections, termOf, swap);
+  final r2 = guideSections((m) => m != 'courses', null, sections, termOf, swap, term: (k)=>kTerms[k]!);
   _check(r2.length == 2 && identical(r2[0], S1) && identical(r2[1], S2),
       'courses כבוי ⇒ [S1,S2]');
 
   // 3. כותרת 'כרטיס משפחה' עוברת מונח
   final r3 = guideSections(allOn, {
     'terms': {'entity.family': 'לקוח'}
-  }, sections, termOf, swap);
+  }, sections, termOf, swap, term: (k)=>kTerms[k]!);
   _check(r3[1]['title'] == 'כרטיס לקוח', "entity.family='לקוח' ⇒ 'כרטיס לקוח'");
 
   // 4. החלפות-גוף: 'בתוך חוג' + 'תדפיס למורה'
   final r4 = guideSections(allOn, {
     'terms': {'entity.course': 'סדנה', 'entity.teacher': 'מדריכה'}
-  }, sections, termOf, swap);
+  }, sections, termOf, swap, term: (k)=>kTerms[k]!);
   _check(r4[2]['text'] == 'בתוך סדנה: שיבוץ, ⬇ תדפיס למדריכה.',
       "קורס='סדנה', מורה='מדריכה' ⇒ גוף S3 מתורגם");
 
   // 5. 'חדרים חיים' עובר entity.rooms
   final r5 = guideSections(allOn, {
     'terms': {'entity.rooms': 'אולמות'}
-  }, sections, termOf, swap);
+  }, sections, termOf, swap, term: (k)=>kTerms[k]!);
   _check(r5[0]['text'] == 'תקציר הבוקר, אולמות חיים וגרפים.',
       "rooms='אולמות' ⇒ 'אולמות חיים'");
 
   // assert חי (חוק: --enable-asserts) — מוכיח שהמנגנון פעיל.
-  assert(identical(guideSections(allOn, null, sections, termOf, swap)[0], S1),
+  assert(identical(guideSections(allOn, null, sections, termOf, swap, term: (k)=>kTerms[k]!)[0], S1),
       'assert-live guard');
 
   print('OK guideSections: 5 דוגמאות-חוזה — ירוק (סינון-מודולים + מונחים פר-עסק)');

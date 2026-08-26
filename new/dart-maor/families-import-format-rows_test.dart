@@ -1,3 +1,4 @@
+import '../dart-data-maor/families-import-format-rows-terms.dart';
 // בדיקת-חוזה (רתמת-זהב) · familiesImportFormatRows — מייבאת אך ורק את האטום-שלה (חוק-4).
 // חמש דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/families-import-format-rows.test.mjs
 // (אותם קלטים→פלטים; ערכי-JS הומרו למפות-Dart):
@@ -34,7 +35,7 @@ void main() {
   var n = 0;
 
   // 1) ריק ⇒ כותרת בלבד, 13 תאים.
-  final r1 = familiesImportFormatRows({'families': []});
+  final r1 = familiesImportFormatRows({'families': []}, term: (k)=>kTerms[k]!);
   _eq(r1, [hdr], 'כותרת שגויה');
   n++;
   if ((r1[0]).length != 13) throw StateError('FAIL: הכותרת אינה בת 13 תאים');
@@ -47,7 +48,7 @@ void main() {
     'maritalStatus': 'נשוי', 'community': 'חסידי', 'notes': 'הערה',
   };
   _eq(
-    familiesImportFormatRows({'families': [fam2]})[1],
+    familiesImportFormatRows({'families': [fam2]}, term: (k)=>kTerms[k]!)[1],
     ['כהן', '123', '050', 'רחל', '456', '052', 'צפת', 'הר', '', '', 'חסידי', '', 'הערה'],
     'שורת-משפחה שגויה',
   );
@@ -55,13 +56,13 @@ void main() {
 
   // 3) הכלה: 'אלמן ל"ע' ⇒ 'אלמן'; 'אלמנה' (נו"ן רגילה) ⇒ '' — כלשון-המקור.
   _eq(
-    familiesImportFormatRows({'families': [{'maritalStatus': 'אלמן ל"ע'}]})[1][9],
+    familiesImportFormatRows({'families': [{'maritalStatus': 'אלמן ל"ע'}]}, term: (k)=>kTerms[k]!)[1][9],
     'אלמן',
     'הכלת-אלמן לא זוהתה',
   );
   n++;
   _eq(
-    familiesImportFormatRows({'families': [{'maritalStatus': 'אלמנה'}]})[1][9],
+    familiesImportFormatRows({'families': [{'maritalStatus': 'אלמנה'}]}, term: (k)=>kTerms[k]!)[1][9],
     '',
     'אלמנה נתפסה בטעות (נו"ן סופית)',
   );
@@ -69,14 +70,14 @@ void main() {
 
   // 4) maritalStatus חסר ⇒ '' בלי קריסה.
   _eq(
-    familiesImportFormatRows({'families': [<String, dynamic>{}]})[1][9],
+    familiesImportFormatRows({'families': [<String, dynamic>{}]}, term: (k)=>kTerms[k]!)[1][9],
     '',
     'חסר-סטטוס קרס/שגוי',
   );
   n++;
 
   // 5) שתי משפחות ⇒ 3 שורות, סדר-המקור.
-  final r5 = familiesImportFormatRows({'families': [{'name': 'א'}, {'name': 'ב'}]});
+  final r5 = familiesImportFormatRows({'families': [{'name': 'א'}, {'name': 'ב'}]}, term: (k)=>kTerms[k]!);
   if (r5.length != 3 || r5[1][0] != 'א' || r5[2][0] != 'ב') {
     throw StateError('FAIL: סדר/מספר שורות שגוי');
   }
@@ -84,7 +85,7 @@ void main() {
 
   // assert חי (חוק: --enable-asserts) — מוכיח שהמנגנון פעיל.
   assert(
-    familiesImportFormatRows({'families': [{'maritalStatus': 'אלמן ל"ע'}]})[1][9] == 'אלמן',
+    familiesImportFormatRows({'families': [{'maritalStatus': 'אלמן ל"ע'}]}, term: (k)=>kTerms[k]!)[1][9] == 'אלמן',
     'assert-live guard',
   );
 

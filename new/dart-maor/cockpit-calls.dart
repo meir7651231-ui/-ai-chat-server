@@ -23,12 +23,12 @@ List<Map<String, dynamic>> cockpitCalls(
   String Function(Map) supLast,
   num Function(String, String) daysSince,
   List Function(List, String, int) cockpitAtRisk,
-) {
+ {required String Function(String) term}) {
   String valueTag(Map sp) {
     final ils = supIls(sp) + supUsd(sp) * rate;
-    if (ils >= 5000) return 'תורם/ת מרכזי/ת';
-    if (ils >= 1000) return 'תורם/ת מהותי/ת';
-    return 'תורם/ת';
+    if (ils >= 5000) return term('tvrmt-mrkzyt');
+    if (ils >= 1000) return term('tvrmt-mhvtyt');
+    return term('tvrmt');
   }
 
   final tasks = <Map<String, dynamic>>[];
@@ -45,7 +45,7 @@ List<Map<String, dynamic>> cockpitCalls(
       'name': sp['name'],
       'phone': (sp['phone'] == null || sp['phone'] == '') ? '' : sp['phone'],
       'email': (sp['email'] == null || sp['email'] == '') ? '' : sp['email'],
-      'reason': late <= 0 ? 'יעד-קשר להיום' : 'יעד-קשר עבר לפני ' + _numStr(late) + ' יום',
+      'reason': late <= 0 ? term('yadkshr-lhyvm') : term('yadkshr-abr-lpny') + _numStr(late) + term('yvm'),
       'severity': 'due',
       'sort': 1000000 + late,
     });
@@ -62,7 +62,7 @@ List<Map<String, dynamic>> cockpitCalls(
       'name': sp['name'],
       'phone': (sp['phone'] == null || sp['phone'] == '') ? '' : sp['phone'],
       'email': (sp['email'] == null || sp['email'] == '') ? '' : sp['email'],
-      'reason': valueTag(sp) + ' · שקט/ה ' + _numStr(silent) + ' יום',
+      'reason': valueTag(sp) + term('shkth') + _numStr(silent) + term('yvm'),
       'severity': 'risk',
       'sort': silent,
     });

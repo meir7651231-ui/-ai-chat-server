@@ -1,3 +1,4 @@
+import '../dart-data-maor/audit-report-lines-terms.dart';
 // 📦 קופסת-חיבורים · audit (Dart) — מחווטת אטומי-Dart. מקבילה ל-new/boxes/audit.mjs.
 // חוזה משותף: new/boxes/audit.contract.md. מקור-האמת: maor/src/lib/audit.ts.
 // זהו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart) מתחברות לאותה קופסה: אותם קלטים ⇒ אותו פלט.
@@ -30,7 +31,7 @@ const List<String> AUDIT_CATEGORIES = acat.auditCategories; // ignore: constant_
 String? phoneIssue(String? p) => pi.phoneIssue(p);
 
 List<String> auditReportLines(String? orgName, Iterable<Map<String, String>> issues, String nowLabel) =>
-    arl.auditReportLines(orgName, issues, nowLabel);
+    arl.auditReportLines(orgName, issues, nowLabel, term: (k)=>kTerms[k]!);
 
 // הכרעות-ברירת-המחדל חיות כאן, כלשון חתימת-המקור (audit.ts:78):
 // todayIso = '' (⇒ בדיקת יעד-הקשר מדולגת) · extra = true (הביקורת המורחבת דלוקה).

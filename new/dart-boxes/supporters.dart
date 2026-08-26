@@ -1,3 +1,4 @@
+import '../dart-data-maor/don-cal-month-line-terms.dart';
 // 📦 קופסת-חיבורים · תומכים (Dart) — מחווטת 45 אטומי-Dart. מקבילה ל-new/boxes/supporters.mjs.
 // חוזה משותף: new/boxes/supporters.contract.md. מקור-האמת: maor/src/components/supporters/lib.ts.
 // זהו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart) מתחברות לאותה קופסה: אותם קלטים ⇒ אותו פלט.
@@ -135,7 +136,7 @@ List<Map<String, dynamic>> orgCalEntries(List<Map<String, dynamic>> supporters) 
     oce.orgCalEntries(supporters, (s) => supDonEvents(s));
 String donCalMonthLine(Iterable entries, bool Function(dynamic date) inMonth, [Map? config]) =>
     dcml.donCalMonthLine(entries, inMonth, config,
-        (Map c, String k, String fb) => to.termOf(c, k, fb) as String);
+        (Map c, String k, String fb) => to.termOf(c, k, fb) as String, term: (k)=>kTerms[k]!);
 
 // ── ראוּת-רשימה פר-ייעוד (verbatim מ-lib.ts:81-91; מחווט מעל האטום-הבודד התקין) ──
 List<dynamic> visibleSupportersForDesignations(List<dynamic> supporters, dynamic allowed) {

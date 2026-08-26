@@ -1,3 +1,4 @@
+import '../dart-data-maor/collections-csv-rows-terms.dart';
 // 📦 קופסת-חיבורים · tzedaka (Dart) — מחווטת 22 אטומי-Dart. מקבילה ל-new/boxes/tzedaka.mjs.
 // חוזה משותף: new/boxes/tzedaka.contract.md · מקור-האמת (L4): maor/src/components/tzedaka/lib.ts.
 // זהו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart) מתחברות לאותה קופסה: אותם קלטים ⇒ אותו פלט.
@@ -157,7 +158,7 @@ List<String> coordinatorPrintLines(Map<String, dynamic> db, String coordinatorId
 /// מקור lib.ts:281-293.
 List<List<Object>> collectionsCsvRows(Map<String, dynamic> db,
         [Map<String, dynamic>? config]) =>
-    ccr.collectionsCsvRows(db, config, _termOf);
+    ccr.collectionsCsvRows(db, config, _termOf, term: (k)=>kTerms[k]!);
 
 /// מקור lib.ts:302-304 — buildMonthGrid (מנוע-הלוח) מוזרק מלוח-האם.
 dynamic buildTzGrid(

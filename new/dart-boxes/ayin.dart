@@ -1,3 +1,4 @@
+import '../dart-data-maor/ayin-advance-label-terms.dart';
 import '../dart-data-maor/stage-label.dart';
 import '../dart-data-maor/ayin-sheet-rows.dart';
 // 📦 קופסת-חיבורים · ayin (Dart) — מחווטת 30 אטומי-Dart + 2 שכנים (termOf/normSearch).
@@ -77,7 +78,7 @@ List<dynamic> templateLinesToNames(dynamic lines, dynamic nextId) => tltn.templa
 // הכפתור-החכם: התווית ל-stageLabel; התכנון לחבילת-6-השכנים.
 bool ayinActionVisible(dynamic a) => av.ayinActionVisible(_cfgMap(a));
 String ayinAdvanceLabel(dynamic cfg, dynamic a) =>
-    aal.ayinAdvanceLabel(cfg, _cfgMap(a), (c, st) => stageLabel(c, st));
+    aal.ayinAdvanceLabel(cfg, _cfgMap(a), (c, st) => stageLabel(c, st), term: (k)=>kTerms[k]!);
 dynamic planAyinAdvance(dynamic cfg, dynamic name, dynamic a) => pa.planAyinAdvance(
       cfg as Map,
       name as String,

@@ -20,8 +20,8 @@
 /// A provider containing 'sola' (case-insensitive, anywhere) yields 'סולה';
 /// everything else — including null and the empty string — yields 'נדרים'.
 /// Verbatim behaviour of the JS source `providerClearer`.
-String providerClearer(String? provider) {
+String providerClearer(String? provider, {required String Function(String) term}) {
   return RegExp('sola', caseSensitive: false).hasMatch(provider ?? '')
-      ? 'סולה'
-      : 'נדרים';
+      ? term('svlh')
+      : term('ndrym');
 }

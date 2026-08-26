@@ -1,3 +1,4 @@
+import '../dart-data-maor/collections-csv-rows-terms.dart';
 // בדיקת-חוזה (רתמת-זהב) · collectionsCsvRows — מייבאת אך ורק את האטום-שלה (חוק-4).
 // שש דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/collections-csv-rows.test.mjs
 // (אותם קלטים→פלטים; השקע termOf = (config,k,fb) => config.terms?.[k] ?? fb):
@@ -43,7 +44,7 @@ void main() {
   final List<Object> hdr = ['תאריך', 'רכז', 'קופה', 'משפחה', 'סכום', 'מבצע'];
 
   // 1 · db ריק, בלי config ⇒ כותרות-fallback בלבד.
-  var r = collectionsCsvRows(emptyDb, null, _termOf);
+  var r = collectionsCsvRows(emptyDb, null, _termOf, term: (k)=>kTerms[k]!);
   _ok(r.length == 1 && _eqRow(r[0], hdr), 'דוגמה 1: db ריק ≠ [HDR]');
   n++;
 
@@ -78,7 +79,7 @@ void main() {
       {'id': 'f1', 'name': 'כהן'},
     ],
   };
-  r = collectionsCsvRows(db, null, _termOf);
+  r = collectionsCsvRows(db, null, _termOf, term: (k)=>kTerms[k]!);
 
   // 2 · שורה פר-ריקון עם רכז+משפחה שנמצאו, בלי מבצע.
   _ok(_eqRow(r[1], ['2026-08-01', 'רבקה', '#3', 'כהן', 120, '']), 'דוגמה 2');
@@ -96,13 +97,13 @@ void main() {
   // 5 · מונח ארגוני דרך השקע ⇒ הכותרת הרביעית 'לקוח'.
   r = collectionsCsvRows(emptyDb, {
     'terms': {'entity.family': 'לקוח'},
-  }, _termOf);
+  }, _termOf, term: (k)=>kTerms[k]!);
   _ok(r[0][3] == 'לקוח', 'דוגמה 5: הכותרת הרביעית != לקוח');
   n++;
 
   // assert חי (חוק: --enable-asserts) — מוכיח שהמנגנון פעיל.
   assert(
-    collectionsCsvRows(emptyDb, null, _termOf).length == 1,
+    collectionsCsvRows(emptyDb, null, _termOf, term: (k)=>kTerms[k]!).length == 1,
     'assert-live guard',
   );
 

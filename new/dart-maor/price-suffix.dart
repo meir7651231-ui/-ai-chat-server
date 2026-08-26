@@ -4,12 +4,12 @@
 // הערת-המרה: המקור כולו שרשרת-טרנרים של השוואת-מחרוזת ל-`===`. ב-Dart `==` על String הוא
 //   שוויון-ערך (זהה ל-`===` של JS למחרוזות) ⇒ אין מלכודות locale/getMonth/truthiness/מוטביליות.
 //   ענף ברירת-המחדל ('לחודש') תופס כל ערך שאינו half_year/year/punch — כולל 'month'.
-String priceSuffix(String model) {
+String priceSuffix(String model, {required String Function(String) term}) {
   return model == 'half_year'
-      ? 'לחצי שנה'
+      ? term('lchtsy-shnh')
       : model == 'year'
-          ? 'לשנה'
+          ? term('lshnh')
           : model == 'punch'
               ? ''
-              : 'לחודש';
+              : term('lchvdsh');
 }

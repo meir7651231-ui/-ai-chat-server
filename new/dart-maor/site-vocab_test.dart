@@ -1,3 +1,4 @@
+import '../dart-data-maor/site-vocab-terms.dart';
 // רתמת-זהב · site-vocab — כל דוגמאות-החוזה + בדיקת-ה-JS (site-vocab.test.mjs), זהות.
 // השוואת-מפה = מפתחות (אורך + איבר-איבר, בסדר-הכנסה כמו JSON.stringify) + ערכים — כלל-8.
 import 'site-vocab.dart';
@@ -22,28 +23,28 @@ void _eqMap(String label, dynamic got, Map<String, dynamic> want) {
 
 void main() {
   // דוגמאות-חוזה 1–4 (זהות לבדיקת-ה-JS):
-  _eqMap("(false,'he')", siteVocab(false, 'he'), {
+  _eqMap("(false,'he')", siteVocab(false, 'he', term: (k)=>kTerms[k]!), {
     'heroCta': 'לתרומה עכשיו',
     'navCta': 'לתרומה ♡',
     'give': 'לתרומה ♡',
     'giveLabel': 'התרומה שלך',
     'commercial': false,
   });
-  _eqMap("(false,'en')", siteVocab(false, 'en'), {
+  _eqMap("(false,'en')", siteVocab(false, 'en', term: (k)=>kTerms[k]!), {
     'heroCta': 'Donate now',
     'navCta': 'Donate ♡',
     'give': 'Donate ♡',
     'giveLabel': 'Your gift',
     'commercial': false,
   });
-  _eqMap("(true,'he')", siteVocab(true, 'he'), {
+  _eqMap("(true,'he')", siteVocab(true, 'he', term: (k)=>kTerms[k]!), {
     'heroCta': 'צרו קשר',
     'navCta': 'צרו קשר',
     'give': 'צרו קשר',
     'giveLabel': 'הפנייה שלך',
     'commercial': true,
   });
-  _eqMap("(true,'en')", siteVocab(true, 'en'), {
+  _eqMap("(true,'en')", siteVocab(true, 'en', term: (k)=>kTerms[k]!), {
     'heroCta': 'Get in touch',
     'navCta': 'Contact',
     'give': 'Contact us',
@@ -51,8 +52,8 @@ void main() {
     'commercial': true,
   });
   // דוגמה 5: יידיש נופלת לעברית — זהה-ביט ל-(false,'he').
-  final he = siteVocab(false, 'he') as Map;
-  _eqMap("(false,'yi')≡(false,'he')", siteVocab(false, 'yi'),
+  final he = siteVocab(false, 'he', term: (k)=>kTerms[k]!) as Map;
+  _eqMap("(false,'yi')≡(false,'he')", siteVocab(false, 'yi', term: (k)=>kTerms[k]!),
       he.map((k, v) => MapEntry(k as String, v)));
   print('OK');
   print('✓ site-vocab (Dart): 5 דוגמאות-חוזה — ירוק');

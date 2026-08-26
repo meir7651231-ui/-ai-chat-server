@@ -17,7 +17,7 @@
 /// Morning-digest lines: an urgent roll-up (when any item is critical), pending
 /// approvals, pending vacations; if none ⇒ an "all clear" line. `attentionItems`
 /// injected, `AttentionSev.crit`→`crit`. Verbatim behaviour of attention_engine.dart:155-193.
-List<({String key, bool urgent, String text, int navTab})> digestLines({
+List<({String key, bool urgent, String text, int navTab})> digestLines({required String Function(String) term, 
   required int pendingApprovals,
   required int pendingVacations,
   required List<({bool crit, int navTab})> Function() attentionItems,
@@ -31,7 +31,7 @@ List<({String key, bool urgent, String text, int navTab})> digestLines({
       key: 'urgent',
       urgent: true,
       text: crit.length == 1
-          ? '⚠ פריט קריטי אחד דורש טיפול'
+          ? term('pryt-kryty-achd-dvrsh-typvl')
           : '⚠ ${crit.length} פריטים קריטיים דורשים טיפול',
       navTab: crit.first.navTab,
     ));
@@ -56,7 +56,7 @@ List<({String key, bool urgent, String text, int navTab})> digestLines({
     out.add((
       key: 'quiet',
       urgent: false,
-      text: 'הכל מעודכן — אין משימות דחופות הבוקר',
+      text: term('hkl-mavdkn-ayn-mshymvt-dchvpvt-hbvkr'),
       navTab: 0,
     ));
   }

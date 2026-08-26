@@ -1,3 +1,4 @@
+import '../dart-data-maor/segula-title-terms.dart';
 // בדיקת-חוזה · segula-title — 5 דוגמאות מ-new/atoms/segula-title.test.mjs
 // + רגרסיית-התיקון (FIXES.md): day=1e20 double ⇒ עשרוני-מלא בלי ".0".
 import 'segula-title.dart';
@@ -12,7 +13,7 @@ void main() {
   ];
   var fail = 0;
   for (final c in cases) {
-    final got = segulaTitle(c[0], c[1], c[2]);
+    final got = segulaTitle(c[0], c[1], c[2], term: (k)=>kTerms[k]!);
     if (got != c[3]) {
       print('✗ ${c.sublist(0, 3)} ⇒ $got ≠ ${c[3]}');
       fail = 1;
@@ -20,14 +21,14 @@ void main() {
   }
 
   // רגרסיה — הבאג שהוסגר: day=1e20 (double). JS: String(1e20)='100000000000000000000'.
-  final big = segulaTitle('דוד', {'day': 1e20, 'final': false}, 40);
+  final big = segulaTitle('דוד', {'day': 1e20, 'final': false}, 40, term: (k)=>kTerms[k]!);
   const bigWant = '🕯 סגולה — דוד · יום 100000000000000000000/40';
   if (big != bigWant) {
     print('✗ 1e20 ⇒ $big ≠ $bigWant');
     fail = 1;
   }
   // ≥1e21 ⇒ מעריכי כמו JS: String(1e21)='1e+21'.
-  final huge = segulaTitle('דוד', {'day': 1e21, 'final': false}, 40);
+  final huge = segulaTitle('דוד', {'day': 1e21, 'final': false}, 40, term: (k)=>kTerms[k]!);
   const hugeWant = '🕯 סגולה — דוד · יום 1e+21/40';
   if (huge != hugeWant) {
     print('✗ 1e21 ⇒ $huge ≠ $hugeWant');

@@ -6,15 +6,15 @@ String ayinAdvanceLabel(
   dynamic cfg,
   Map<String, dynamic> a,
   String Function(dynamic cfg, String st) stageLabel,
-) {
+ {required String Function(String) term}) {
   final st = a['stage'];
   if (st == 'new') return stageLabel(cfg, 'lead') + ' ←';
-  if (st == 'lead') return '✓ אישור — ' + stageLabel(cfg, 'lead');
+  if (st == 'lead') return term('ayshvr') + stageLabel(cfg, 'lead');
   if (st == 'eyes') return stageLabel(cfg, 'answer') + ' ←';
   if (st == 'answer') {
     return a['answerPushed'] == true
         ? '✓ ' + stageLabel(cfg, 'done')
-        : '📞 דחיפה ללוח';
+        : term('dchyph-llvch');
   }
   return '';
 }

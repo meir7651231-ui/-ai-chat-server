@@ -26,9 +26,9 @@ List<String> auditReportLines(
   String? orgName,
   Iterable<Map<String, String>> issues,
   String nowLabel,
-) {
-  final name = (orgName == null || orgName.isEmpty) ? 'מאור החסד' : orgName;
-  final L = <String>['דוח תקינות נתונים — ' + name, 'הופק: ' + nowLabel, ''];
+ {required String Function(String) term}) {
+  final name = (orgName == null || orgName.isEmpty) ? term('mavr-hchsd') : orgName;
+  final L = <String>[term('dvch-tkynvt-ntvnym') + name, term('hvpk') + nowLabel, ''];
   for (final i in issues) {
     L.add('[' + i['cat']! + '] ' + i['title']!);
   }

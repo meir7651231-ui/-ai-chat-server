@@ -7,7 +7,7 @@ String beneficiaryLabel(
   Map<String, dynamic> a,
   Map<String, dynamic>? config,
   String Function(Map<String, dynamic> config, String key, String fallback) termOf,
-) {
+ {required String Function(String) term}) {
   // T: config truthy ⇒ termOf, אחרת fallback (JS: config ? termOf(...) : fb).
   String t(String k, String fb) => config != null ? termOf(config, k, fb) : fb;
 
@@ -21,8 +21,8 @@ String beneficiaryLabel(
   }
 
   final famLabel = fam != null
-      ? '${t('entity.familyOf', 'משפחת')} ${fam['name']}'
-      : '${t('entity.family', 'משפחה')} לא ידועה';
+      ? '${t('entity.familyOf', term('mshpcht'))} ${fam['name']}'
+      : '${t('entity.family', term('mshpchh'))} לא ידועה';
 
   // !a.memberId (truthiness: undefined/'' ⇒ נסיגה) || !fam ⇒ החזרת התווית המשפחתית.
   final mid = a['memberId'];

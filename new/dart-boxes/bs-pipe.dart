@@ -1,3 +1,4 @@
+import '../dart-data/directional_context-terms.dart';
 // 📦 קופסת-חיבורים · bs-pipe (בנייה-חכמה · מנוע-הצנרת המלא: מסלול · לחץ · ערכה · תמחיר · תאימות · צ׳קליסט).
 // מקור-האמת: buildsmart/app_flutter/lib/logic/{install_engine, pressure_drop, install_kit,
 //   price_estimate}. מחווטת 38 אטומי-צנרת מ-../dart/ למנוע-שלם. אפס-import של קופסה-אחרת (חוק-2/3).
@@ -578,7 +579,7 @@ class PipeBox {
 
   /// ניסוח-מיקום של התקן חד-כיווני באינדקס [i] לפי-שכניו ([names]=שמות-השרשרת).
   String directionalContext(List<String> names, int i) =>
-      dc.directionalContext(names, i);
+      dc.directionalContext(names, i, term: (k)=>kTerms[k]!);
 
   // ═══ אשכול ז׳ · עוזרים ══════════════════════════════════════════════════════
 

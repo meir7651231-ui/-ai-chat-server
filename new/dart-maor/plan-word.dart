@@ -14,10 +14,10 @@
 //  • ענף ברירת-המחדל של הקסקדה מכסה כל קלט שאינו אחד משלושת הידועים.
 
 /// Course pricing-plan name (singular). Verbatim port of new/atoms/plan-word.mjs.
-String planWord(String model) => model == 'punch'
-    ? 'כרטיסייה'
+String planWord(String model, {required String Function(String) term}) => model == 'punch'
+    ? term('krtysyyh')
     : model == 'half_year'
-        ? 'מנוי חצי-שנתי'
+        ? term('mnvy-chtsyshnty')
         : model == 'year'
-            ? 'מנוי שנתי'
-            : 'מנוי חודשי';
+            ? term('mnvy-shnty')
+            : term('mnvy-chvdshy');

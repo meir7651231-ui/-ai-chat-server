@@ -1,3 +1,4 @@
+import '../dart-data-maor/guide-sections-of-terms.dart';
 // 📦 קופסת-חיבורים · המדריך המהיר 📖 (Dart) — מחווטת אטומי-Dart. מקבילה ל-new/boxes/guide.mjs.
 // חוזה משותף: new/boxes/guide.contract.md. מקור-האמת: maor/src/lib/guide.ts.
 // זהו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart) מתחברות לאותה קופסה: אותם קלטים ⇒ אותו פלט.
@@ -52,7 +53,7 @@ List<Map<String, dynamic>> guideSections(
   bool Function(String module) isModuleOn, [
   Map<String, dynamic>? config,
 ]) =>
-    gso.guideSections(isModuleOn, config, gsc.guideSections, _termOf, _swap);
+    gso.guideSections(isModuleOn, config, gsc.guideSections, _termOf, _swap, term: (k)=>kTerms[k]!);
 
 /// "המתכונים המהירים" ממותג-מחדש (guide.ts:121-134); בלי config = GUIDE_RECIPES מילה-במילה.
 String guideRecipes([Map<String, dynamic>? config]) {

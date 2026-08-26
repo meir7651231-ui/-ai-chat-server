@@ -1,3 +1,4 @@
+import '../dart-data-maor/don-cal-month-line-terms.dart';
 // בדיקת-חוזה (רתמת-זהב) · donCalMonthLine — מייבאת אך ורק את האטום-שלה (חוק-4).
 // שבע דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/don-cal-month-line.test.mjs
 // (אותם קלטים→פלטים). השקע inMonth = inAug ('2026-08'*); השקע termOf = cfg.terms[k] ?? fb.
@@ -32,7 +33,7 @@ void main() {
   var n = 0;
 
   // 1) ריק (בלי config ⇒ השקע termOf לא נקרא).
-  _eq(donCalMonthLine([], _inAug, null, null),
+  _eq(donCalMonthLine([], _inAug, null, null, term: (k)=>kTerms[k]!),
       'אין תרומות מתועדות בחודש זה', 'ריק');
   n++;
 
@@ -41,7 +42,7 @@ void main() {
     donCalMonthLine([
       {'date': '2026-08-05', 'amount': 100, 'cur': '₪'},
       {'date': '2026-08-10', 'amount': 50, 'cur': '\$'},
-    ], _inAug, null, null),
+    ], _inAug, null, null, term: (k)=>kTerms[k]!),
     '2 תרומות החודש · ₪100 + \$50',
     '₪+\$',
   );
@@ -51,7 +52,7 @@ void main() {
   _eq(
     donCalMonthLine([
       {'date': '2026-08-05', 'amount': 1234, 'cur': '₪'},
-    ], _inAug, null, null),
+    ], _inAug, null, null, term: (k)=>kTerms[k]!),
     '1 תרומות החודש · ₪1,234',
     'אלפים',
   );
@@ -61,7 +62,7 @@ void main() {
   _eq(
     donCalMonthLine([
       {'date': '2026-08-01', 'amount': 200, 'cur': '\$'},
-    ], _inAug, null, null),
+    ], _inAug, null, null, term: (k)=>kTerms[k]!),
     '1 תרומות החודש · \$200',
     '\$בלבד',
   );
@@ -71,7 +72,7 @@ void main() {
   _eq(
     donCalMonthLine([
       {'date': '2026-08-02', 'amount': 0, 'cur': ''},
-    ], _inAug, null, null),
+    ], _inAug, null, null, term: (k)=>kTerms[k]!),
     '1 תרומות החודש · סכומים מהקובץ ההיסטורי',
     'היסטורי',
   );
@@ -81,7 +82,7 @@ void main() {
   _eq(
     donCalMonthLine([
       {'date': '2026-07-05', 'amount': 100, 'cur': '₪'},
-    ], _inAug, null, null),
+    ], _inAug, null, null, term: (k)=>kTerms[k]!),
     'אין תרומות מתועדות בחודש זה',
     'מחוץ',
   );
@@ -91,7 +92,7 @@ void main() {
   _eq(
     donCalMonthLine([], _inAug, {
       'terms': {'entity.donations': 'נדבות'},
-    }, _termOf),
+    }, _termOf, term: (k)=>kTerms[k]!),
     'אין נדבות מתועדות בחודש זה',
     'termOf',
   );
@@ -101,7 +102,7 @@ void main() {
   assert(
     donCalMonthLine([
           {'date': '2026-08-05', 'amount': 1234, 'cur': '₪'},
-        ], _inAug, null, null) ==
+        ], _inAug, null, null, term: (k)=>kTerms[k]!) ==
         '1 תרומות החודש · ₪1,234',
     'assert-live guard',
   );

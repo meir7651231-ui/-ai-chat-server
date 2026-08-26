@@ -1,3 +1,4 @@
+import '../dart-data-maor/employee-sign-up-error-terms.dart';
 // 📦 קופסת-חיבורים · config · ליבה-טהורה (Dart) — מקבילה לחלק-הטהור של new/boxes/lib-config.mjs.
 // חוזה משותף: new/boxes/lib-config.contract.md. מקור-האמת: maor/src/lib/config.ts.
 // זהו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart) מתחברות לאותה קופסה: אותם קלטים ⇒ אותו פלט.
@@ -91,7 +92,7 @@ bool canGrantedAction(Map<String, dynamic> config, String email, bool isManager,
 String signUpError(String orgName, String contactName, String phone, String email, String password, String password2) =>
     sue.signUpError(orgName, contactName, phone, email, password, password2);
 String employeeSignUpError(String email, String phone, String password, String code) =>
-    ese.employeeSignUpError(email, phone, password, code);
+    ese.employeeSignUpError(email, phone, password, code, term: (k)=>kTerms[k]!);
 String cloudCfgCacheKey(String slug) => ccck.cloudCfgCacheKey(slug);
 bool isSuperAdmin(String? email, List<String> superAdminEmails) => isadm.isSuperAdmin(email, superAdminEmails);
 

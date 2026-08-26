@@ -1,3 +1,4 @@
+import '../dart-data/attention_items-terms.dart';
 // בדיקת-חוזה golden · attentionItems — מייבאת אך ורק את האטום-שלה (חוק-4).
 // הרצה: dart run --enable-asserts new/dart/attention_items_test.dart
 import 'attention_items.dart';
@@ -19,7 +20,7 @@ void main() {
     termOf: _term,
     orderCritDays: 14,
     approvalsCritCount: 3,
-  );
+   term: (k)=>kTerms[k]!);
   // 3 פרטניות + 1 צבירה = 4.
   if (r1.length != 4) throw StateError('FAIL 1 len ${r1.length}');
   // מיון ותק-יורד: B(20)>C(10)>A(5) — אבל crit-לפני-warn מזיז את B(crit,20>=14) לראש.
@@ -38,7 +39,7 @@ void main() {
     termOf: _term,
     orderCritDays: 14,
     approvalsCritCount: 3,
-  );
+   term: (k)=>kTerms[k]!);
   if (r2.length != 1) throw StateError('FAIL 2 len');
   if (r2[0].title != 'משימה אחת ממתינה לאישור') throw StateError('FAIL 2 title ${r2[0].title}');
   if (r2[0].sev != AttentionSev.warn) throw StateError('FAIL 2 sev');
@@ -50,7 +51,7 @@ void main() {
     termOf: _term,
     orderCritDays: 14,
     approvalsCritCount: 3,
-  );
+   term: (k)=>kTerms[k]!);
   if (r3[0].title != '5 משימות ממתינות לאישור') throw StateError('FAIL 3 title');
   if (r3[0].sev != AttentionSev.crit) throw StateError('FAIL 3 crit');
   n++;
@@ -61,7 +62,7 @@ void main() {
     termOf: _term,
     orderCritDays: 14,
     approvalsCritCount: 3,
-  );
+   term: (k)=>kTerms[k]!);
   if (r4.length != 2) throw StateError('FAIL 4 len');
   if (r4[0].title != '2 בקשות חופשה ממתינות') throw StateError('FAIL 4 vac');
   if (r4[1].title != 'בקשת חשבון אחת ממתינה') throw StateError('FAIL 4 acc');
@@ -76,7 +77,7 @@ void main() {
     termOf: _term,
     orderCritDays: 14,
     approvalsCritCount: 3,
-  );
+   term: (k)=>kTerms[k]!);
   // שניהם crit; סדר-המקור: order:X נבנה לפני approvals.
   if (r5[0].key != 'order:X' || r5[1].key != 'approvals') {
     throw StateError('FAIL 5 order ${r5.map((a) => a.key).toList()}');
@@ -84,7 +85,7 @@ void main() {
   n++;
 
   // — קלט ריק ⇒ רשימה ריקה —
-  if (attentionItems(const AttentionInput(), termOf: _term, orderCritDays: 14, approvalsCritCount: 3).isNotEmpty) {
+  if (attentionItems(const AttentionInput(), termOf: _term, orderCritDays: 14, approvalsCritCount: 3, term: (k)=>kTerms[k]!).isNotEmpty) {
     throw StateError('FAIL 6 empty');
   }
   n++;
@@ -95,11 +96,11 @@ void main() {
     termOf: _term,
     orderCritDays: 14,
     approvalsCritCount: 3,
-  );
+   term: (k)=>kTerms[k]!);
   if (r7[0].sev != AttentionSev.crit) throw StateError('FAIL 7 boundary');
   n++;
 
   assert(attentionItems(const AttentionInput(pendingApprovals: 1),
-      termOf: _term, orderCritDays: 14, approvalsCritCount: 3).length == 1, 'assert-live');
+      termOf: _term, orderCritDays: 14, approvalsCritCount: 3, term: (k)=>kTerms[k]!).length == 1, 'assert-live');
   print('OK attentionItems: $n asserts passed');
 }

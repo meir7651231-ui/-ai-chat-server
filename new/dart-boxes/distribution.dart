@@ -1,3 +1,4 @@
+import '../dart-data-maor/deliveries-csv-rows-terms.dart';
 // 📦 קופסת-חיבורים · חלוקה (SHOP7, Dart) — מחווטת 12 אטומי-Dart. מקבילה ל-new/boxes/distribution.mjs.
 // חוזה משותף: new/boxes/distribution.contract.md · מקור-האמת: maor/src/components/shop7/lib.ts.
 // זהו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart) מתחברות לאותה קופסה: אותם קלטים ⇒ אותו פלט.
@@ -62,7 +63,7 @@ List<String> listLines(List<dynamic> rows) => dll.deliveryListLines(rows.cast<Ma
 
 /// שורות-CSV של מסירות — termOf (אטום) + statusLabel (מילון-הקופסה) מחווטים פנימית.
 List<List<String>> csvRows(Map<String, dynamic> db, [dynamic config]) =>
-    dcr.deliveriesCsvRows(db, config, _termOfSock, statusLabel);
+    dcr.deliveriesCsvRows(db, config, _termOfSock, statusLabel, term: (k)=>kTerms[k]!);
 
 /// סינון מתנדבים — smartFilter הוא שקע-מוזרק (חוט מודול-החיפוש); בורר-השדות חי בקופסה.
 dynamic filterVolunteers(dynamic vols, dynamic q, Function smartFilter) {

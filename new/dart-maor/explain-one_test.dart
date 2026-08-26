@@ -1,3 +1,4 @@
+import '../dart-data-maor/explain-one-terms.dart';
 // בדיקת-חוזה (רתמת-זהב) · explainOne — מייבאת אך ורק את האטום-שלה (חוק-4).
 // חמש דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/explain-one.test.mjs:
 //   1) אימות-נכשל ⇒ הודעה מרוכזת {summary:'⚠️ תצורה לא-תקינה: אין שלוחות · חסר מספר', outcome:'invalid', reason:''}
@@ -51,7 +52,7 @@ void main() {
       anchorCalls++;
       return '2026-08-24';
     },
-  );
+   term: (k)=>kTerms[k]!);
   _ok(
     _eq(r1, {
       'summary': '⚠️ תצורה לא-תקינה: אין שלוחות · חסר מספר',
@@ -96,7 +97,7 @@ void main() {
       };
     },
     () => '2026-08-24',
-  );
+   term: (k)=>kTerms[k]!);
   _ok(
     _eq(r2, {
       'summary': 'ניתוב לשלוחה 1',

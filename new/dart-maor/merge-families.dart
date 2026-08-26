@@ -18,7 +18,7 @@ Map<String, dynamic> mergeFamilies(
   List<Map<String, dynamic>> losers,
   String Function(String) normPhone,
   List<dynamic> Function(List<dynamic>) dedupById,
-) {
+ {required String Function(String) term}) {
   final all = <Map<String, dynamic>>[keeper, ...losers];
 
   String firstNonEmpty(String? Function(Map<String, dynamic>) pick) {
@@ -91,7 +91,7 @@ Map<String, dynamic> mergeFamilies(
   ];
   final baseNotes = {...notesParts}.join(' · ');
   final notes = loserNames.isNotEmpty
-      ? ((baseNotes.isNotEmpty ? baseNotes + ' ' : '') + '| מוזג: ' + loserNames)
+      ? ((baseNotes.isNotEmpty ? baseNotes + ' ' : '') + term('mvzg') + loserNames)
       : baseNotes;
 
   num maxNum(String key) {

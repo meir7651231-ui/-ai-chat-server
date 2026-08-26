@@ -1,3 +1,4 @@
+import '../dart-data-maor/audit-report-lines-terms.dart';
 // בדיקת-חוזה (רתמת-זהב) · auditReportLines — מייבאת אך ורק את האטום-שלה (חוק-4).
 // ארבע דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/audit-report-lines.test.mjs
 // (אותם קלטים→פלטים; הממצא {cat,title} = Map<String,String>):
@@ -26,7 +27,7 @@ void main() {
     'מאור',
     [{'cat': 'כפילות', 'title': 'תומך כפול'}],
     '24.8.2026',
-  );
+   term: (k)=>kTerms[k]!);
   _eq(r1, [
     'דוח תקינות נתונים — מאור',
     'הופק: 24.8.2026',
@@ -38,14 +39,14 @@ void main() {
   n++;
 
   // 2) שם-ארגון ריק ⇒ ברירת-מחדל 'מאור החסד'.
-  final r2 = auditReportLines('', <Map<String, String>>[], 'x');
+  final r2 = auditReportLines('', <Map<String, String>>[], 'x', term: (k)=>kTerms[k]!);
   if (r2[0] != 'דוח תקינות נתונים — מאור החסד') {
     throw StateError('FAIL: ברירת-המחדל לא הופעלה — [${r2[0]}]');
   }
   n++;
 
   // 3) אפס ממצאים ⇒ אורך 3, שורה-3 ריקה.
-  final r3 = auditReportLines('א', <Map<String, String>>[], 'עכשיו');
+  final r3 = auditReportLines('א', <Map<String, String>>[], 'עכשיו', term: (k)=>kTerms[k]!);
   if (!(r3.length == 3 && r3[2] == '')) {
     throw StateError('FAIL: אפס-ממצאים מבנה שגוי (len=${r3.length})');
   }
@@ -56,7 +57,7 @@ void main() {
     {'cat': 'קבלות', 'title': 'פער רץ'},
     {'cat': 'תאריכים', 'title': 'עתידי'},
     {'cat': 'כפילות', 'title': 'שם כפול'},
-  ], 'ת');
+  ], 'ת', term: (k)=>kTerms[k]!);
   if (r4.length != 6) throw StateError('FAIL: 3 ממצאים אורך ≠ 6 (${r4.length})');
   n++;
   if (!(r4[3] == '[קבלות] פער רץ' &&
@@ -69,7 +70,7 @@ void main() {
   // assert חי (חוק: --enable-asserts) — מוכיח שהמנגנון פעיל.
   assert(
     auditReportLines('מאור', [{'cat': 'כפילות', 'title': 'תומך כפול'}],
-            '24.8.2026')[3] ==
+            '24.8.2026', term: (k)=>kTerms[k]!)[3] ==
         '[כפילות] תומך כפול',
     'assert-live guard',
   );

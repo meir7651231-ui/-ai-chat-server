@@ -1,3 +1,4 @@
+import '../dart-data/critical_business_kind-terms.dart';
 // 📦 קופסת-חיבורים · bs-projects (בנייה-חכמה) — תמחיר/פיננסים של פרויקטי-בנייה.
 // חוזה: מקור-האמת buildsmart/app_flutter/lib/logic (invoice · manager_dashboard ·
 //        install_engine · customer_score) + lib/domain/connection_schema.dart.
@@ -134,7 +135,7 @@ int criticalOpen<P>(
 /// סיווג רכיב-ממשק כ"קריטי-עסקית" (אישור-הזמנה / מחיר) לפי id+תווית, אחרת null.
 cbk.CriticalKind? criticalBusinessKind(
         {required String id, required String labelHe}) =>
-    cbk.criticalBusinessKind(id: id, labelHe: labelHe);
+    cbk.criticalBusinessKind(id: id, labelHe: labelHe, term: (k)=>kTerms[k]!);
 
 // ════════════════════════════════════════════════════════════════════════════════════
 // D · סכמת-חיבורים

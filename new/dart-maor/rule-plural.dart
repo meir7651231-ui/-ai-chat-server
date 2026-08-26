@@ -24,8 +24,8 @@
 /// >= 5 ending in 'ימ' or 'ות' has the suffix removed; if the normalised term
 /// equals the stem or starts with it => 70, otherwise null. Verbatim behaviour
 /// of the JS source new/atoms/rule-plural.mjs.
-int? rulePlural(String nq, String nt) {
-  if (nq.length >= 5 && (nq.endsWith('ימ') || nq.endsWith('ות'))) {
+int? rulePlural(String nq, String nt, {required String Function(String) term}) {
+  if (nq.length >= 5 && (nq.endsWith(term('ym')) || nq.endsWith(term('vt')))) {
     final stem = nq.substring(0, nq.length - 2);
     if (nt == stem || nt.startsWith(stem)) return 70;
   }

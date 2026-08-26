@@ -10,7 +10,7 @@
 
 /// True iff the product is a pipe (by product type). Verbatim of install_engine.dart:1198-1207
 /// with `p.productType` injected as the nullable `productType` socket (law-3).
-bool isPipeProductE(String? productType) {
+bool isPipeProductE(String? productType, {required String Function(String) term}) {
   final t = productType ?? '';
-  return t == 'צינור' || t == 'צנרת' || t == 'גמיש' || t == 'מאריך';
+  return t == term('tsynvr') || t == term('tsnrt') || t == term('gmysh') || t == term('maryk');
 }

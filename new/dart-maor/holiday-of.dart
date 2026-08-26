@@ -24,7 +24,7 @@ String? holidayOf(
   Map Function(DateTime d) hebParts,
   Map Function(dynamic year) scanHebYear,
   Map<String, String> holidays,
-) {
+ {required String Function(String) term}) {
   final p = hebParts(d);
   final month = p['month'];
   final day = p['day'];
@@ -32,7 +32,7 @@ String? holidayOf(
   // חנוכה יום ח' (ג' טבת): קיים רק בשנה שכסלו בה חסר (29). מלא ⇒ נגמרה בב' טבת.
   if (month == 'Tevet' && day == 3) {
     final has30 = scanHebYear(p['year'])['has30'] as Set;
-    return has30.contains('Kislev') ? null : 'חנוכה';
+    return has30.contains('Kislev') ? null : term('chnvkh');
   }
 
   final dow = d.weekday % 7; // JS getDay: 0=ראשון .. 6=שבת
@@ -40,15 +40,15 @@ String? holidayOf(
 
   // צום שחל בשבת ⇒ null (נדחה ליום ראשון).
   if (dow == 6 && (key == 'Tamuz 17' || key == 'Av 9')) return null;
-  if (dow == 0 && month == 'Tamuz' && day == 18) return 'צום י״ז בתמוז (נדחה)';
-  if (dow == 0 && month == 'Av' && day == 10) return 'תשעה באב (נדחה)';
+  if (dow == 0 && month == 'Tamuz' && day == 18) return term('tsvm-yz-btmvz-ndchh');
+  if (dow == 0 && month == 'Av' && day == 10) return term('tshah-bab-ndchh');
   // צום גדליה (ג' תשרי) שחל בשבת ⇒ נדחה לד' תשרי.
   if (dow == 6 && key == 'Tishri 3') return null;
-  if (dow == 0 && month == 'Tishri' && day == 4) return 'צום גדליה (נדחה)';
+  if (dow == 0 && month == 'Tishri' && day == 4) return term('tsvm-gdlyh-ndchh');
   // תענית אסתר (י"ג אדר/אדר-ב') שחלה בשבת ⇒ מוקדמת לחמישי י"א.
   if (dow == 6 && (key == 'Adar 13' || key == 'Adar II 13')) return null;
   if (dow == 4 && day == 11 && (month == 'Adar' || month == 'Adar II')) {
-    return 'תענית אסתר (מוקדם)';
+    return term('tanyt-astr-mvkdm');
   }
 
   return holidays[key];

@@ -1,3 +1,4 @@
+import '../dart-data/scope_he-terms.dart';
 // בדיקת-חוזה · scopeHe — מייבאת אך ורק את האטום-שלה (חוק-4).
 // הרצה: dart run --enable-asserts new/dart/scope_he_test.dart
 // הבדיקה מעבירה את אוצר-הטווחים במפורש (השקעים) — לא מסתמכת על ברירות-המחדל.
@@ -11,7 +12,7 @@ String _s(String t) => scopeHe(t,
     actionable: _act,
     everyPrefix: _every,
     screenPrefix: _screen,
-    singlePrefix: _single);
+    singlePrefix: _single, term: (k)=>kTerms[k]!);
 
 void _eq(String got, String want, String label) {
   if (got != want) throw StateError('FAIL [$label]: got="$got" want="$want"');

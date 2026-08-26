@@ -6,24 +6,24 @@
 // אנגלית רק כש-lang=='en' (השוואת-זהות כמו ===); כל שפה אחרת ⇒ עברית.
 // סדר-המפתחות במפה = סדר-ההכנסה של המקור (LinkedHashMap ≡ סדר-אובייקט-JS —
 // אין כאן מפתחות דמויי-שלם, כלל-14 לא נדרש).
-dynamic siteVocab(dynamic commercial, dynamic lang) {
+dynamic siteVocab(dynamic commercial, dynamic lang, {required String Function(String) term}) {
   final en = lang == 'en';
   // truthiness של JS על commercial (כלל-7): בחוזה commercial הוא boolean,
   // אך נשמרת סמנטיקת if(x) של JS לקצוות.
   if (_truthy(commercial)) {
     return {
-      'heroCta': en ? 'Get in touch' : 'צרו קשר',
-      'navCta': en ? 'Contact' : 'צרו קשר',
-      'give': en ? 'Contact us' : 'צרו קשר',
-      'giveLabel': en ? 'Your request' : 'הפנייה שלך',
+      'heroCta': en ? 'Get in touch' : term('tsrv-kshr'),
+      'navCta': en ? 'Contact' : term('tsrv-kshr'),
+      'give': en ? 'Contact us' : term('tsrv-kshr'),
+      'giveLabel': en ? 'Your request' : term('hpnyyh-shlk'),
       'commercial': true,
     };
   }
   return {
-    'heroCta': en ? 'Donate now' : 'לתרומה עכשיו',
-    'navCta': (en ? 'Donate' : 'לתרומה') + ' ♡',
-    'give': (en ? 'Donate' : 'לתרומה') + ' ♡',
-    'giveLabel': en ? 'Your gift' : 'התרומה שלך',
+    'heroCta': en ? 'Donate now' : term('ltrvmh-akshyv'),
+    'navCta': (en ? 'Donate' : term('ltrvmh')) + ' ♡',
+    'give': (en ? 'Donate' : term('ltrvmh')) + ' ♡',
+    'giveLabel': en ? 'Your gift' : term('htrvmh-shlk'),
     'commercial': false,
   };
 }

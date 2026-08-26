@@ -1,3 +1,4 @@
+import '../dart-data-maor/provider-clearer-terms.dart';
 // בדיקת-חוזה (רתמת-זהב) · providerClearer — מייבאת אך ורק את האטום-שלה (חוק-4).
 // שש דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/provider-clearer.test.mjs:
 //   'sola'⇒'סולה' · 'SolaPay'⇒'סולה' · 'nedarim'⇒'נדרים' ·
@@ -26,13 +27,13 @@ void main() {
   for (final c in cases) {
     final input = c[0] as String?;
     final want = c[1] as String;
-    final got = providerClearer(input);
+    final got = providerClearer(input, term: (k)=>kTerms[k]!);
     _ok(got == want, '${input == null ? 'null' : '"$input"'} ⇒ "$got" ≠ "$want"');
     n++;
   }
 
   // assert חי (חוק: --enable-asserts) — מוכיח שהמנגנון פעיל.
-  assert(providerClearer('SolaPay') == 'סולה', 'assert-live guard');
+  assert(providerClearer('SolaPay', term: (k)=>kTerms[k]!) == 'סולה', 'assert-live guard');
 
   print('OK providerClearer: $n asserts passed');
 }

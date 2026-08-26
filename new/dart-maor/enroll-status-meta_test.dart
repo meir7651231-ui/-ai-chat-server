@@ -1,3 +1,4 @@
+import '../dart-data-maor/enroll-status-meta-terms.dart';
 // בדיקת-חוזה (רתמת-זהב) · enrollStatusMeta — מייבאת אך ורק את האטום-שלה (חוק-4).
 // חמש דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/enroll-status-meta.test.mjs
 // (אותם קלטים→פלטים; הערכים הומרו ל-Dart). אם עובר ⇒ Dart≡JS.
@@ -22,7 +23,7 @@ void main() {
 
   // 1) מוקפא
   _eq(
-    enrollStatusMeta({'status': 'paused'}),
+    enrollStatusMeta({'status': 'paused'}, term: (k)=>kTerms[k]!),
     {'label': 'מוקפא', 'bg': '#fdf1d4', 'c': '#9a6414'},
     'מוקפא',
   );
@@ -30,7 +31,7 @@ void main() {
 
   // 2) הסתיים
   _eq(
-    enrollStatusMeta({'status': 'ended'}),
+    enrollStatusMeta({'status': 'ended'}, term: (k)=>kTerms[k]!),
     {'label': 'הסתיים', 'bg': '#eceae2', 'c': '#8b8474'},
     'הסתיים',
   );
@@ -38,7 +39,7 @@ void main() {
 
   // 3) רשימת-המתנה — תווית משלה (הבאג ההיסטורי: נפל ל"פעיל")
   _eq(
-    enrollStatusMeta({'status': 'wait'}),
+    enrollStatusMeta({'status': 'wait'}, term: (k)=>kTerms[k]!),
     {'label': 'רשימת-המתנה ⏳', 'bg': '#e7edf5', 'c': '#3a5a86'},
     'רשימת-המתנה',
   );
@@ -46,7 +47,7 @@ void main() {
 
   // 4) active מפורש ⇒ פעיל
   _eq(
-    enrollStatusMeta({'status': 'active'}),
+    enrollStatusMeta({'status': 'active'}, term: (k)=>kTerms[k]!),
     {'label': 'פעיל', 'bg': '#e4f5ea', 'c': '#12803c'},
     'פעיל',
   );
@@ -54,7 +55,7 @@ void main() {
 
   // 5) חסר-סטטוס ⇒ ברירת-מחדל פעיל (מפתח-חסר ⇒ null ⇒ נופל לסוף, כמו undefined ב-JS)
   _eq(
-    enrollStatusMeta({}),
+    enrollStatusMeta({}, term: (k)=>kTerms[k]!),
     {'label': 'פעיל', 'bg': '#e4f5ea', 'c': '#12803c'},
     'חסר-סטטוס ⇒ פעיל',
   );
@@ -62,7 +63,7 @@ void main() {
 
   // assert חי (חוק: --enable-asserts) — מוכיח שהמנגנון פעיל.
   assert(
-    enrollStatusMeta({'status': 'wait'})['label'] == 'רשימת-המתנה ⏳',
+    enrollStatusMeta({'status': 'wait'}, term: (k)=>kTerms[k]!)['label'] == 'רשימת-המתנה ⏳',
     'assert-live guard',
   );
 

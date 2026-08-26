@@ -1,3 +1,4 @@
+import '../dart-data-maor/families-import-format-rows-terms.dart';
 // 📦 קופסת-חיבורים · שורות-הייצוא (Dart) — מחווטת 9 אטומי-Dart. מקבילה ל-new/boxes/export-rows.mjs.
 // חוזה משותף: new/boxes/export-rows.contract.md. מקור-האמת: maor/src/lib/exportRows.ts.
 // זהו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart) מתחברות לאותה קופסה: אותם קלטים ⇒ אותו פלט.
@@ -27,7 +28,7 @@ String _hebFull(dynamic iso) =>
 // ── החשיפה ──────────────────────────────────────────────────────────────────
 /// משפחות בפורמט-הייבוא (13 עמודות) — חוט ישיר, בלי שקעים (כבמקור).
 List<List<dynamic>> familiesImportFormatRows(Map<String, dynamic> db) =>
-    fif.familiesImportFormatRows(db);
+    fif.familiesImportFormatRows(db, term: (k)=>kTerms[k]!);
 
 /// תומכות בפורמט-הייבוא (7 עמודות) — חוט ישיר, בלי שקעים (כבמקור).
 List<List<dynamic>> supportersImportFormatRows(Map<String, dynamic> db) =>

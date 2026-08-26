@@ -34,7 +34,7 @@ List<String> annualAllLines(
   dynamic site,
   List<dynamic> Function(dynamic donations, String year) donationsOfYear,
   List<String> Function(Map<String, dynamic> input) annualReportLines,
-) {
+ {required String Function(String) term}) {
   final out = <String>[];
   var count = 0;
   for (final sp in supporters) {
@@ -51,6 +51,6 @@ List<String> annualAllLines(
     }));
     count++;
   }
-  if (count == 0) out.add('אין תורמים עם תרומות בשנת ' + year + '.');
+  if (count == 0) out.add(term('ayn-tvrmym-am-trvmvt-bshnt') + year + '.');
   return out;
 }

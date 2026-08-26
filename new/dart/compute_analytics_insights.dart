@@ -20,7 +20,7 @@
 /// savings, budget utilisation. `fMoney`/`aiAlternatives`/budget consts injected.
 /// Verbatim behaviour of ai_hub_logic.dart:346-394.
 List<({String ic, String title, String sub})> computeAnalyticsInsights(
-  List<({int sum, bool isOpen})> orders, {
+  List<({int sum, bool isOpen})> orders, {required String Function(String) term, 
   required String Function(int) fMoney,
   required List<({int save})> Function() aiAlternatives,
   required int kBudgetTotal,
@@ -37,19 +37,19 @@ List<({String ic, String title, String sub})> computeAnalyticsInsights(
     out.add((
       ic: '📦',
       title: '$orderCount הזמנות · ${fMoney(totalSpend)} סה״כ רכש',
-      sub: 'מתוך מנוע ההזמנות המשותף',
+      sub: term('mtvk-mnva-hhzmnvt-hmshvtf'),
     ));
     final avg = (totalSpend / orderCount).round();
     out
       ..add((
         ic: '💵',
         title: 'שווי הזמנה ממוצע: ${fMoney(avg)}',
-        sub: 'ממוצע על פני כל ההזמנות',
+        sub: term('mmvtsa-al-pny-kl-hhzmnvt'),
       ))
       ..add((
         ic: '🚚',
         title: '$openCount הזמנות פתוחות · $deliveredCount סופקו',
-        sub: 'לפי שלב ההזמנה הנוכחי',
+        sub: term('lpy-shlb-hhzmnh-hnvkchy'),
       ));
   }
 
@@ -58,7 +58,7 @@ List<({String ic, String title, String sub})> computeAnalyticsInsights(
     out.add((
       ic: '💰',
       title: 'חיסכון אפשרי: ${fMoney(savings)}',
-      sub: 'מעבר למותגים זולים יותר באותו מוצר',
+      sub: term('mabr-lmvtgym-zvlym-yvtr-bavtv-mvtsr'),
     ));
   }
 

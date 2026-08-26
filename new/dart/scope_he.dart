@@ -16,15 +16,15 @@
 /// Verbatim branching of edit_intent.dart:565-579 with the scope vocabulary
 /// injected (its literal values are unrecoverable — representative defaults).
 String scopeHe(
-  String token, {
+  String token, {required String Function(String) term, 
   String all = 'all',
   String actionable = 'actionable',
   String everyPrefix = 'every:',
   String screenPrefix = 'screen:',
   String singlePrefix = 'element:',
 }) {
-  if (token == all) return 'כל האלמנטים';
-  if (token == actionable) return 'כל הכפתורים';
+  if (token == all) return term('kl-halmntym');
+  if (token == actionable) return term('kl-hkptvrym');
   if (token.startsWith(everyPrefix)) {
     return 'כל «${token.substring(everyPrefix.length)}»';
   }
@@ -34,5 +34,5 @@ String scopeHe(
   if (token.startsWith(singlePrefix)) {
     return 'האלמנט «${token.substring(singlePrefix.length)}»';
   }
-  return '(טווח לא מזוהה)';
+  return term('tvvch-la-mzvhh');
 }
