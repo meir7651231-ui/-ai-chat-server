@@ -56,3 +56,19 @@ sup-last/sup-usd). כלומר הם שקעים-מוכרים: בפירוק, הזר
 4. אחרי כל אטום-JS: המר ל-Dart עם אימות-עוין. commit+push.
 5. כשנגמר: `dedup-atoms` + `dedup-cross-dart` + עדכן HANDOFF-DART §5 + דוח CLOSED.
 6. רק אז חזור לבנייה-חכמה (173 טיוטות, dart-promote.js).
+
+---
+## 📈 התקדמות (עודכן — חידוש-לולאה)
+**שלב-א (פירוק TS→JS-atom) — 34/~41 אטומים נחתו, כולם Golden-ירוק + משטרה 7/7 + push:**
+- ✅ **cockpit** 12/12 (days-since·collected·progress·csv·work-list · at-risk·calls·thanks·hok-tasks·kpis·queue·feed)
+- ✅ **intel** 7/7 (day-diff·donor-scan·rfm·churn·forecast·trend·donor-intel)
+- ✅ **segments** 2/2 (segment-counts·match-segment)
+- ✅ **portfolio** 3/3 (portfolio-intel·tier-trend-counts·active-by-month)
+- ✅ **commands** 2/2 (build-commands·filter-commands)
+- ✅ **constellation** 1/1 (donor-constellation)
+- ✅ **dialer** 7/7 (start·current·apply·progress·isDone·undo·csv)
+- 🔻 **nedarimSync דלתא** — נותר: chargeToHist·chargeDedupKey·candidateSupportersForCharge·attachChargeTo·strongMatchForCharge·autoMatchCharges·attachChargesBulk (7). כבר-קיימים (לדדופ): detectRecurringHok·planNedarimSync·withNedarimHok. **שקעים חדשים נדרשים:** normId·normPhone (dedup) · nameSortKey·normSearch (validate) — לוודא שהם אטומי-Genesis לפני הזרקה. עוזרים-פרטיים משותפים: keysOf·curOf·histDedupKey (להטביע פר-אטום).
+
+**לקח-לולאה (ננעל):** test של אטום **אסור** לייבא אטום-אח (חוק-חיווט) — כל השקעים/האחים מוטבעים inline כ-doubles בבדיקה; ה-Golden נלכד מהרצת-חיווט-אמיתי ואז ננעל.
+
+**שלב-ב (המרה JS→Dart) — טרם התחיל.** כל 34 האטומים ממתינים להמרה+אימות-עוין מול Node.
