@@ -98,7 +98,10 @@ double _fromRadix(String digits, int radix) {
 
 /// חוק-10/17 · ToNumber כללי (כל טיפוס), במרחב-double של JS.
 double jsNum(dynamic v) {
-  if (v == null) return double.nan; // ‏Number(undefined)=NaN — כאן null≡undefined בהקשר-מספר
+  // ‏Number(null)=0 · ‏Number(undefined)=NaN. אך ב-JSON אין undefined ⇒ null-מפורש
+  // הוא תמיד JS-null ⇒ 0. מפתח-חסר (undefined ב-JS) מזוהה ב-containsKey **לפני**
+  // הקריאה (חוק-2), לכן null שמגיע לכאן = JS-null ⇒ 0. אומת מול Node (shekel(null)='₪0').
+  if (v == null) return 0.0;
   if (v is bool) return v ? 1.0 : 0.0;
   if (v is num) return v.toDouble();
   if (v is String) return jsStrToNum(v);
@@ -130,7 +133,9 @@ String jsStr(num n) {
     if (ad < _pow2_53) {
       body = ad.toInt().toString();
     } else {
-      body = ad.toStringAsFixed(0);
+      // ‏JS String() בטווח [2^53,1e21) = shortest-round-trip (‏…680000), **לא**
+      // פריסת-ה-double המדויקת (‏…683968). מרחיבים את ספרות-ה-shortest של Dart.
+      body = _expandIntFromDart(ad);
     }
   } else {
     // שבר או ≥1e21 — ה-toString של Dart כבר shortest-round-trip (זהה-ל-V8),
@@ -170,9 +175,51 @@ DateTime? parseV8Local(String iso) {
 /// אומת מול Node: חיובי מקובץ-פסיקים (1,234,567); שלילי **וגם -0** ⇒
 /// U+200E (LRM) + '-' + מקובץ (‎-1,000 · ‎-0); אפס-חיובי ⇒ '0'.
 /// n מגיע כבר-מעוגל (הקורא עשה Math.round דרך jsRound). מזהה -0.0.
+/// עזר · פורס shortest-round-trip של Dart (‏toString) לספרות-שלם מורחבות-מלא.
+/// **קריטי:** JS ‏String()/toLocaleString משתמשים בספרות ה-shortest-round-trip
+/// (‏1.2345678901234568e20 ⇒ "123456789012345680000"), **לא** בפריסת-ה-double
+/// המדויקת (‏…683968) שנותן toStringAsFixed. ‏Dart.toString נותן את אותן ספרות
+/// (‏shortest), רק בצורת מעריכי/‎.0 — כאן מרחיבים אותן לשלם מלא (מרפדים אפסים).
+/// הקלט מובטח שלם-ערך (‏ad == truncate); לכן אין שארית-שבר אחרי ההזזה.
+String _expandIntFromDart(double ad) {
+  var s = ad.toString(); // ad>0, שלם-ערך: "D", "D.0", "D.DDDe+XX"
+  var e = 0;
+  final ei = s.indexOf('e');
+  if (ei >= 0) {
+    e = int.parse(s.substring(ei + 1));
+    s = s.substring(0, ei);
+  }
+  String intp, frac;
+  final di = s.indexOf('.');
+  if (di >= 0) {
+    intp = s.substring(0, di);
+    frac = s.substring(di + 1);
+  } else {
+    intp = s;
+    frac = '';
+  }
+  if (frac == '0') frac = ''; // סמן-השלם של Dart
+  final digits = intp + frac;
+  final pointPos = intp.length + e; // ספרות לפני הנקודה אחרי ההזזה
+  if (pointPos >= digits.length) {
+    return digits + '0' * (pointPos - digits.length);
+  }
+  return digits.substring(0, pointPos); // מגן (לא-אמור לקרות לשלם-ערך)
+}
+
+/// עזר · ספרות-שלם מוחלטות מורחבות-מלא (בלי מעריכי/‎.0) — כפי ש-toLocaleString
+/// מרחיב גם ‏≥1e21 (‏String() של-JS היה נותן '1e+21', אך toLocaleString מרחיב).
+String _absIntDigits(num a) {
+  if (a is int) return a.abs().toString();
+  final d = (a as double).abs();
+  if (d == 0) return '0';
+  if (d < _pow2_53) return d.toInt().toString();
+  return _expandIntFromDart(d); // shortest-round-trip מורחב (לא פריסת-double מדויקת)
+}
+
 String jsHeIlInt(num n) {
   final neg = n < 0 || (n is double && n == 0 && n.isNegative);
-  final digits = jsStr(n < 0 ? -n : (n == 0 ? 0 : n)); // ספרות-abs (jsStr, בלי .0)
+  final digits = _absIntDigits(n < 0 ? -n : n); // ספרות-abs מורחבות-מלא (בלי מעריכי/‎.0)
   // קיבוץ-אלפים בפסיקים מהסוף
   final buf = StringBuffer();
   final len = digits.length;

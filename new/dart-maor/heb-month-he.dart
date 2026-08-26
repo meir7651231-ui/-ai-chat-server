@@ -5,6 +5,12 @@
 // Dershowitz–Reingold), והשמות זהים ביט-אחר-ביט לפלט Intl.
 // אפס import (dart-core בלבד). קלט לא-תקין (התאריך לא ניתן לבנייה) ⇒ '' — מקביל
 // ל-isNaN(d.getTime()) שמחזיר '' במקור.
+//
+// ⚠️ תיקון-הסגר (26.8): קירוב-השנה ב-_fixedToHebrew היה `floor(...) + 1` —
+// גבוה-בשנה-אחת מהקנוני של Dershowitz–Reingold (`floor(...)`), ולכן בערב-ר"ה
+// (יום אחרון לשנה, למשל 29 אלול 5784 = 2024-10-02) הקירוב קפץ ל-5785 ולולאת-
+// ההעלאה לא יכלה לתקן כלפי-מטה ⇒ 'תשרי' במקום 'אלול'. הקנוני מבטיח
+// floor(...) ≤ השנה-האמיתית, ולולאת-ההעלאה מטפסת לשנה הנכונה. הוסר ה-+1.
 
 const int _hebrewEpoch = -1373427; // RD של תשרי א׳ שנת א׳
 
@@ -97,7 +103,8 @@ int _gregorianToFixed(int year, int month, int day) {
 }
 
 List<int> _fixedToHebrew(int date) {
-  int year = ((98496 * (date - _hebrewEpoch)) ~/ 35975351) + 1;
+  // קנוני: קירוב תחתון (floor) שמובטח ≤ השנה-האמיתית, ואז טיפוס כלפי-מעלה.
+  int year = ((98496 * (date - _hebrewEpoch)) ~/ 35975351);
   while (_hebrewNewYear(year + 1) <= date) {
     year++;
   }

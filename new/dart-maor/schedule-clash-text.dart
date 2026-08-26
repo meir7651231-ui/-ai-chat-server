@@ -20,6 +20,10 @@
 //     לטווח ⇒ undefined ב-JS ⇒ 'undefined' (עוזר _atIdx) — לא זריקת-RangeError.
 //   · השוואות === של JS על יום/שעה/מזהים ⇒ == של Dart (String/int — זהה-התנהגות;
 //     '2' == 2 שקרי בשתי השפות).
+//   · ⚠ תיקון-הסגר (כלל-15): אינדוקס-מערך ב-JS ממיר את המפתח למחרוזת ⇒ dayNames['1']
+//     ≡ dayNames[1] ⇒ 'שני'; וכן day=1.0 (num שלם) ⇒ dayNames[1]. מפתח לא-קנוני
+//     ('01', '1.5') אינו אינדקס-מערך ⇒ undefined. _atIdx מקבל int, num-שלם,
+//     ומחרוזת-קנונית (int.tryParse + round-trip) — שאר הצורות ⇒ 'undefined'.
 
 /// truthiness של JS: false · null/undefined · 0/-0/NaN · '' ⇒ שקרי; כל השאר אמת.
 bool _truthy(dynamic v) {
@@ -36,13 +40,23 @@ String _concatStr(dynamic map, String key) {
   return v == null ? 'null' : v.toString();
 }
 
-/// אינדקס-מערך כפי ש-JS משרשר אותו: מחוץ-לטווח ⇒ 'undefined' (לא RangeError).
-String _atIdx(dynamic list, dynamic i) {
-  if (list is List && i is int && i >= 0 && i < list.length) {
-    final v = list[i];
-    return v == null ? 'null' : v.toString();
+/// אינדקס-מערך כפי ש-JS משרשר אותו: מחוץ-לטווח / מפתח-לא-קנוני ⇒ 'undefined'.
+/// JS ממיר את המפתח למחרוזת: מספר-שלם ('1'), num-שלם (1.0⇒'1') ומחרוזת-קנונית
+/// ('1' אך לא '01'/'1.5') = אינדקס-מערך; אחרת מאפיין-חסר ⇒ undefined.
+String _atIdx(dynamic list, dynamic idx) {
+  if (list is! List) return 'undefined';
+  int? i;
+  if (idx is int) {
+    i = idx;
+  } else if (idx is num) {
+    if (idx.isFinite && idx == idx.truncateToDouble()) i = idx.toInt();
+  } else if (idx is String) {
+    final n = int.tryParse(idx);
+    if (n != null && n.toString() == idx) i = n;
   }
-  return 'undefined';
+  if (i == null || i < 0 || i >= list.length) return 'undefined';
+  final v = list[i];
+  return v == null ? 'null' : v.toString();
 }
 
 /// אזהרת התנגשות-לו"ז או null — התנהגות זהה-ביט למקור-ה-JS.

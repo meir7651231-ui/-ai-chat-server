@@ -171,3 +171,17 @@ double שלם-ערך ≥2^63: ‏Dart `truncate()` מרווה ל-int64-max. ‏s
 - **support-msg-time** — TimeClip ±275760 עם שבר-מילישנייה: הגידור מתעלם משבר-השנייה בגבול; דורש טיפול-שבר-בגבול-TimeClip.
 - **run-audit** — קוארציית 0b/0o בבדיקת-סכום: השתמש _jsToNum במקום _jsStrToNum המלא; להחליף ל-jsStrToNum (מכיר בינארי/אוקטלי).
 - **waitlist-for** — localeCompare אמיתי (enrolledAt מחרוזת-חופשית בחוזה): דורש שקע-קולציה מודע-locale (לא בספרייה).
+
+## 🏁 סיום-מאור (26.8) — 9 האטומים האחרונים חזרו לחוזה · הסגר 10→1
+כל הלוגיקה-הטהורה של מאור הומרה ל-Dart שקולת-ביט. שוחררו (זהב + אימות-עוין מול Node):
+- **heb-parts · heb-month-he** — תוקן גלגול-השנה של Dershowitz–Reingold ל-canonical; אומת 0 סטיות מול Intl על 255K ימים.
+- **apply-meta-partial** — containsKey+סנטינל (null-מפורש↔מפתח-חסר).
+- **schedule-clash-text** — _atIdx מקבל מחרוזת-אינדקס-קנונית (כלל-15).
+- **suggestions** — jsStr המאומת (בלי ".0" בטווח [2^53,1e21)).
+- **support-msg-time** — V8 מגלגל יום-בטווח-[1,31] שחורג-מהחודש (Feb 29 בפשוטה ⇒ Mar 1); שונה מ-`day>_daysInMonth` ל-`day>31`. אומת מול Node.
+- **shekel · wa-payment-text** — **תוקן באג-שורש ב-js-compat-reference**: `jsHeIlInt`/`jsStr` השתמשו ב-`toStringAsFixed(0)` (פריסת-double מדויקת …683968) ובמעריכי ל-≥1e21, אך `toLocaleString`/`String()` = **shortest-round-trip** (…680000) ומרחיבים ≥1e21 לספרות-מלאות. נוסף `_expandIntFromDart` (מרחיב את shortest של Dart.toString). אומת מול Node על 1e21/1.5e21/…680000/-0.
+- **run-audit** — 3 סטיות: (1) `+` פולימורפי — reduce-הסכומים משרשר-מחרוזות כשאופרנד מחרוזתי (`0+"100"="0100"`), לא חיבור-מספרי; (2) null↔undefined ב-reduce — `0+null=0` (Number(null)=0) אך `0+undefined=NaN` (סנטינל דרך containsKey); (3) שרשור-property — `+d.amount` נותן 'null' ל-null-מפורש, 'undefined' למפתח-חסר. נוספו `_jsPlus`/`_jsGt`/`_numAdd`/`_jsConcat`/`_prop`. אומת מול Node על קורפוס-עוין מלא + 7 ratchet.
+- **תובנה מערכתית (js-compat-reference · jsNum):** ב-harness-JSON אין `undefined` ⇒ **null-מפורש הוא תמיד JS-null ⇒ Number(null)=0** (לא NaN); מפתח-חסר (undefined) מזוהה ב-containsKey **לפני** הקוארציה (חוק-2). תוקן `jsNum(null)=0` בספרייה.
+
+### 🔒 נותר בהסגר: 1 — אטום-שקע לגיטימי (לא כשל-המרה)
+- **waitlist-for** — `localeCompare` על `enrolledAt` (מחרוזת-חופשית בחוזה): קולציית-ICU מלאה אינה ניתנת-להטבעה כעוזר טהור (`['B','a']` ⇒ JS `[a,B]` מול Dart `[B,a]`). **מקבילה מדויקת ל-hebrew-calendar-socket** — דורש שקע-קולציה מוזרק, לא מימוש-פנימי. לנתונים-האמיתיים (חותמות-ISO) שקול-ביט; נשאר כאטום-שקע עד הכרעת-שקע-הקולציה. **מאור-הלוגיקה = גמור.**

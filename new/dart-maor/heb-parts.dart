@@ -2,7 +2,7 @@
 //    {day:int, month:String(אנגלי), year:int}.
 // מוצא: maor/src/lib/hebrew.ts (hebParts) · המקור: new/atoms/heb-parts.mjs.
 //        חוק-4 — התנהגות זהה-ביט למקור-ה-JS, לא-משופרת.
-// טוהר: פונקציית top-level עצמאית, אפס import (רק dart-core בלבד).
+// טוהר: פונקציית top-level עצמאית, אפס import (רק dart-core בלבד). חוק-1: אטום לא-מייבא.
 //
 // הערות-המרה (DART-PORTING-RULES) — המנוע לבדו לא הספיק כאן:
 // • המקור נשען על Intl.DateTimeFormat('en-u-ca-hebrew', {day,month:'long',year})
@@ -10,6 +10,12 @@
 //   ממומשת ידנית (Dershowitz–Reingold, זהה לאחות heb-date-full) ושמות-החודשים
 //   הם **האנגליים שפולט Intl** (Tishri/Heshvan/Adar I/Adar II/… — אומתו מול V8):
 //     חודש 12 במעוברת = 'Adar I' · 12 בפשוטה = 'Adar' · 13 = 'Adar II'.
+// • 🔧 תיקון-הסגר (heb-parts · גבול-שנה-עברית · ערב-ר"ה): גרסת-ה-QUARANTINE
+//   אמדה את השנה-העברית ב-`(… ~/ 35975351) + 1` ואז לולאת-`while` שרק **מגדילה**
+//   את year. אומדן שגלש למעלה (בערב-ר"ה, סוף אלול) לא תוקן לעולם ⇒ חודש נפתר
+//   בטעות ל-Tishri (month 7) עם day≤0. הקנוני של Dershowitz–Reingold קובע את
+//   year כ**חסם-תחתון מובטח** (`… - 1`) ואז מעלה. תוקן ל-`- 1`. אימות-זהב מול
+//   Intl: 1700–2400 (255,668 ימים) ⇒ 0 סטיות (לפני-כן 12 סטיות, כולן ערב-ר"ה).
 // • מגן-שבור (כלל-4 · כלל-7 truthiness): המקור `isNaN(d.getTime())` ⇒ חלקים בטוחים.
 //   ב-Dart אין "Invalid DateTime" — קלט-שבור מיוצג כ-null (כך גם השכן heb-parts-of-iso
 //   מזריק `DateTime.tryParse(...)` שמחזיר null על קלט-רע). d==null ⇒ {day:0,month:'',year:0}.
@@ -102,7 +108,9 @@ int _gregorianToFixed(int year, int month, int day) {
 }
 
 List<int> _fixedToHebrew(int date) {
-  int year = ((98496 * (date - _hebrewEpoch)) ~/ 35975351) + 1;
+  // חסם-תחתון מובטח (Dershowitz–Reingold): `- 1` ואז העלאה בלבד.
+  // תיקון-ההסגר: הגרסה השבורה השתמשה ב-`+ 1` ⇒ אומדן-יתר בערב-ר"ה לא תוקן.
+  int year = ((98496 * (date - _hebrewEpoch)) ~/ 35975351) - 1;
   while (_hebrewNewYear(year + 1) <= date) {
     year++;
   }

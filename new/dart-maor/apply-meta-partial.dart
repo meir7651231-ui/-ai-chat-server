@@ -10,12 +10,17 @@
 //       כשהערך המרוחק מספר-סופי גדול מהמקומי.
 //   אפס-שינויים ⇒ מוחזר אותו db (identical). ה-db הנכנס לעולם לא משוכתב.
 //
-// הערות-המרה (מקור→Dart), חוק-4:
-//   • JS `undefined` ⇒ Dart `null` (הקונבנציה): assign מדלג כש-v==null, כשם ש-JS
-//     מדלג כש-v===undefined. אין ב-Dart טיפוס-undefined; ערך-שדה חסר בקלט = null.
-//   • `JSON.stringify(a) !== JSON.stringify(b)` ⇒ `_jsonStr` — סריאליזציה קנונית
-//     תלוית-סדר-הכנסה (Dart LinkedHashMap שומר סדר כמו object של JS). NaN/Infinity
-//     ⇒ 'null' (כמו JSON.stringify); double שלם ⇒ ללא ".0" (3.0 ⇒ "3", כמו JS).
+// 🔧 תיקון-הסגר (null↔undefined + null↔מפתח-חסר): המקור JS מבחין בין
+//   `undefined` (מדולג) לבין JSON `null` (מוקצה — ניקוי-שדה מ-Firestore).
+//   ב-Dart אין `undefined`; הקונבנציה: JS-undefined ⇒ מפתח-חסר במפה; JS-null ⇒
+//   מפתח-קיים עם ערך null. לכן:
+//     • דילוג-undefined ⇒ `if (!meta.containsKey(k)) return;` (לא `v == null`).
+//     • ההשוואה מחקה `JSON.stringify(db[k]) !== JSON.stringify(v)`: ב-JS
+//       `JSON.stringify(undefined)` = הערך undefined (לא המחרוזת 'null'), ולכן
+//       db חסר-המפתח ≠ null-מפורש. הבחנה מבנית: db חסר-המפתח ⇒ סנטינל (Dart-null),
+//       שלעולם שונה מכל `_jsonStr` של ערך-קיים (כולל 'null'). לא מיפוי-גורף ל-'null'.
+//
+// הערות-המרה נוספות (מקור→Dart), חוק-4:
 //   • `v > db[k]` כש-db[k] חסר: ב-JS `n > undefined` = false. ב-Dart db[k] חסר = null;
 //     לכן משווים רק כאשר db[k] הוא num (אחרת דילוג = false), מקביל-התנהגות למקור.
 //   • `typeof v === 'number' && Number.isFinite(v)` ⇒ `v is num && v.isFinite`
@@ -32,11 +37,16 @@ Map<String, Object?> applyMetaPartial(
   final next = Map<String, Object?>.from(db);
   var changed = false;
 
-  // דין (א): הענן-מנצח. undefined(=null ב-Dart) מדולג; ערך שונה (JSON) נכתב.
+  // דין (א): הענן-מנצח. JS-undefined(=מפתח-חסר ב-Dart) מדולג; ערך שונה (JSON) נכתב.
   void assign(String k) {
+    if (!meta.containsKey(k)) return; // JS: `if (v === undefined) return;`
     final v = meta[k];
-    if (v == null) return; // JS: `if (v === undefined) return;`
-    if (_jsonStr(db[k]) != _jsonStr(v)) {
+    // JS: `JSON.stringify(db[k]) !== JSON.stringify(v)`.
+    // db חסר-המפתח ⇒ JSON.stringify(undefined) = undefined (הערך) ⇒ סנטינל null,
+    // ששונה מ-vStr (מחרוזת תמיד, כולל 'null'). db קיים-null ⇒ _jsonStr='null'.
+    final String? dbStr = db.containsKey(k) ? _jsonStr(db[k]) : null;
+    final String vStr = _jsonStr(v);
+    if (dbStr != vStr) {
       next[k] = v;
       changed = true;
     }
@@ -108,10 +118,22 @@ String _numStr(num v) {
   if (v is int) return v.toString();
   final d = v.toDouble();
   if (d.isNaN || d.isInfinite) return 'null';
-  if (d == d.truncateToDouble() && d.abs() < 1e21) {
-    return d.toInt().toString();
+  if (d == 0) return '0'; // כולל -0.0
+  final neg = d < 0;
+  final ad = neg ? -d : d;
+  String body;
+  if (ad == ad.truncateToDouble() && ad < 1e21) {
+    // שלם-ערך בטווח [1,1e21): עשרוני-מלא בלי ".0". <2^53 ⇒ int מדויק;
+    // מעל ⇒ toStringAsFixed(0) (כמו jsStr המאומת).
+    if (ad < 9007199254740992.0) {
+      body = ad.toInt().toString();
+    } else {
+      body = ad.toStringAsFixed(0);
+    }
+  } else {
+    body = ad.toString();
   }
-  return d.toString();
+  return neg ? '-$body' : body;
 }
 
 /// מחרוזת מצוטטת-JSON עם escaping תקני (תווים לא-ASCII נשמרים כמות-שהם).

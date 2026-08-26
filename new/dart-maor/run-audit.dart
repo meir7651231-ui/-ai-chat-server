@@ -257,7 +257,7 @@ List runAudit(dynamic db,
             f['id']);
       } else {
         final a = ageOf(m['birth']);
-        if (a != null && (_jsToNum(a) < 0 || _jsToNum(a) > 25)) {
+        if (a != null && (_jsNum(a) < 0 || _jsNum(a) > 25)) {
           add(
               'ילדים',
               _jsStr(T('entity.familyOf', 'משפחת')) +
@@ -322,11 +322,11 @@ List runAudit(dynamic db,
   for (final e
       in (db['enrollments'] is List) ? db['enrollments'] as List : []) {
     final pays = _truthy(e['payments']) ? e['payments'] as List : [];
-    num paid = 0; // reduce((a,x)=>a+x.amount, 0) — ‏null⇒0 · לא-מספר⇒NaN, כמו JS
+    dynamic paid = 0; // reduce((a,x)=>a+x.amount, 0) — `+` פולימורפי: מחרוזת⇒שרשור
     for (final x in pays) {
-      paid = paid + _jsToNum(x['amount']);
+      paid = _jsPlus(paid, _prop(x, 'amount')); // מפתח-חסר⇒undefined⇒NaN; מחרוזת⇒שרשור
     }
-    if (_truthy(e['totalDue']) && paid > _jsToNum(e['totalDue'])) {
+    if (_truthy(e['totalDue']) && _jsGt(paid, e['totalDue'])) {
       final fam = famByMember[e['memberId']];
       if (fam != null) {
         add(
@@ -335,9 +335,9 @@ List runAudit(dynamic db,
                 ' ' +
                 _jsStr(fam['name']) +
                 ': שולם ₪' +
-                _jsStr(paid) +
+                _jsConcat(paid) + // `+ paid` פולימורפי: מחרוזת נשמרת ('012')
                 ' — יותר מסה"כ העסקה (₪' +
-                _jsStr(e['totalDue']) +
+                _concatProp(e, 'totalDue') +
                 '). בדקו החזר או עדכנו את הסכום',
             fam['id']);
       }
@@ -429,12 +429,12 @@ List runAudit(dynamic db,
     if (_truthy(extra)) {
       for (final d
           in (sp['donations'] is List) ? sp['donations'] as List : []) {
-        if (!(_jsToNum(d['amount']) > 0)) {
+        if (!(_jsNum(d['amount']) > 0)) {
           issues.add({
             'cat': 'לוגיקה',
             'title': _jsStr(T('entity.donation', 'תרומה')) +
                 ' בסכום ' +
-                _jsStr(d['amount']) +
+                _concatProp(d, 'amount') + // null-מפורש⇒'null' · מפתח-חסר⇒'undefined'
                 ' אצל "' +
                 _jsStr(sp['name']) +
                 '" (' +
@@ -503,22 +503,108 @@ String _jsNumStr(num v) {
   return d.toString();
 }
 
-/// המרה-מספרית של JS (כלל-10): ‏null⇒0 · bool⇒1/0 · מחרוזת-ריקה⇒0 ·
-/// מחרוזת-רעה⇒NaN (‏tryParse — ‏num.parse של Dart זורק) · אחר⇒NaN.
-num _jsToNum(dynamic v) {
-  if (v is num) return v;
-  if (v == null) return 0;
-  if (v is bool) return v ? 1 : 0;
-  if (v is String) {
-    final s = v.trim();
-    if (s.isEmpty) return 0;
-    return num.tryParse(s) ?? double.nan;
+/// ⚙️ תיקון-הסגר (26.8, גל-שחרור-תאריכים): הקוארציה-המספרית של בדיקת-הסכום
+/// השתמשה ב-num.tryParse שאינו מכיר בינארי/אוקטלי (‏0b/0o) — ‏JS ‏Number('0b101')=5
+/// מול ‏Dart null⇒NaN, ‏ממצא-שווא. הוחלף ל-שקע jsStrToNum/jsNum המאומת מהספרייה
+/// (machtzev/emit/js-compat-reference.dart) — מוטבע כלשונו עם קידומת _ (חוק-1: אטום
+/// לא-מייבא). ‏jsNum מטפל גם ב-null⇒NaN (‏Number(undefined) — מפתח-חסר בנתונים).
+const Set<int> _esWs = {
+  0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x20, 0xA0, 0x1680,
+  0x2000, 0x2001, 0x2002, 0x2003, 0x2004, 0x2005, 0x2006, 0x2007,
+  0x2008, 0x2009, 0x200A, 0x2028, 0x2029, 0x202F, 0x205F, 0x3000, 0xFEFF,
+};
+
+String _jsTrim(String s) {
+  var start = 0, end = s.length;
+  while (start < end && _esWs.contains(s.codeUnitAt(start))) start++;
+  while (end > start && _esWs.contains(s.codeUnitAt(end - 1))) end--;
+  return s.substring(start, end);
+}
+
+/// ‏ToNumber של JS על מחרוזת (כלל-10/18): דקדוק-ES קפדני + הקסה/אוקטלי/בינארי.
+double _jsStrToNum(String raw) {
+  final s = _jsTrim(raw);
+  if (s.isEmpty) return 0.0;
+  if (s == 'Infinity' || s == '+Infinity') return double.infinity;
+  if (s == '-Infinity') return double.negativeInfinity;
+  if (RegExp(r'^0[xX][0-9a-fA-F]+$').hasMatch(s)) {
+    return _fromRadix(s.substring(2), 16);
   }
+  if (RegExp(r'^0[oO][0-7]+$').hasMatch(s)) return _fromRadix(s.substring(2), 8);
+  if (RegExp(r'^0[bB][01]+$').hasMatch(s)) return _fromRadix(s.substring(2), 2);
+  if (!RegExp(r'^[+-]?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$').hasMatch(s)) {
+    return double.nan;
+  }
+  return double.tryParse(s) ?? double.nan;
+}
+
+double _fromRadix(String digits, int radix) {
+  try {
+    return BigInt.parse(digits, radix: radix).toDouble();
+  } catch (_) {
+    return double.nan;
+  }
+}
+
+/// ‏ToNumber כללי (כל טיפוס) במרחב-double של JS (כלל-10/17): ‏null≡undefined⇒NaN.
+double _jsNum(dynamic v) {
+  if (v == null) return double.nan;
+  if (v is bool) return v ? 1.0 : 0.0;
+  if (v is num) return v.toDouble();
+  if (v is String) return _jsStrToNum(v);
   return double.nan;
 }
 
+/// סנטינל ל-undefined של JS (מפתח-חסר) — נבדל מ-null-מפורש (חוק-2). זהות-יחידה.
+const Object _undef = _Undef();
+
+class _Undef {
+  const _Undef();
+}
+
+/// ‏a['k'] של JS: קיים ⇒ הערך (null-מפורש נשמר); חסר ⇒ סנטינל-undefined.
+dynamic _prop(dynamic m, dynamic k) =>
+    (m is Map && m.containsKey(k)) ? m[k] : _undef;
+
+/// ‏String(x) לשרשור-אופרטור `+` של JS: **null-מפורש ⇒ 'null'** (בשונה מ-_jsStr
+/// שנותן 'undefined' למפתח-חסר); סנטינל-undefined ⇒ 'undefined'; מספר ⇒ בלי ‎.0.
+String _jsConcat(dynamic v) {
+  if (identical(v, _undef)) return 'undefined';
+  if (v == null) return 'null';
+  if (v is num) return _jsNumStr(v);
+  if (v is bool) return v ? 'true' : 'false';
+  return v.toString();
+}
+
+/// ‏שרשור-property של JS: ‏'…' + obj.key — מפתח-חסר⇒'undefined', null⇒'null'.
+String _concatProp(dynamic m, dynamic k) => _jsConcat(_prop(m, k));
+
+/// ToNumber בהקשר `+`/`>` שמבחין null↔undefined (חוק-2): **null-מפורש⇒0**
+/// (‏Number(null)=0 · ‏0+null=0), **סנטינל-undefined⇒NaN** (‏Number(undefined)).
+/// (_jsNum הכללי נותן null⇒NaN לשימושים אחרים; כאן ההבחנה קריטית ל-reduce.)
+double _numAdd(dynamic v) {
+  if (identical(v, _undef)) return double.nan;
+  if (v == null) return 0.0;
+  return _jsNum(v);
+}
+
+/// אופרטור `+` של JS (פולימורפי): מחרוזת באחד הצדדים ⇒ שרשור-מחרוזות
+/// (‏0 + '100' ⇒ '0100'); אחרת חיבור-מספרי float64 (‏undefined⇒NaN · null⇒0).
+/// (הערכים כאן פרימיטיביים כבר ⇒ ToPrimitive = זהות.)
+dynamic _jsPlus(dynamic a, dynamic b) {
+  if (a is String || b is String) return _jsConcat(a) + _jsConcat(b);
+  return _numAdd(a) + _numAdd(b);
+}
+
+/// אופרטור `>` של JS (השוואה-יחסית): שני-מחרוזות ⇒ קוד-UTF-16 (compareTo);
+/// אחרת ToNumber שני-הצדדים (‏'012'⇒12 · '00b101'⇒NaN⇒false · null⇒0). NaN⇒false.
+bool _jsGt(dynamic a, dynamic b) {
+  if (a is String && b is String) return a.compareTo(b) > 0;
+  return _numAdd(a) > _numAdd(b);
+}
+
 /// ‏(a||0) של JS ואז שימוש מספרי.
-num _orZeroNum(dynamic v) => _truthy(v) ? _jsToNum(v) : 0;
+num _orZeroNum(dynamic v) => _truthy(v) ? _jsNum(v) : 0;
 
 /// ‏(a||b) של JS — הערך עצמו, בלי המרה.
 dynamic _or(dynamic a, dynamic b) => _truthy(a) ? a : b;
@@ -526,7 +612,7 @@ dynamic _or(dynamic a, dynamic b) => _truthy(a) ? a : b;
 /// ‏a < b של JS: שתי מחרוזות ⇒ השוואת קוד-UTF-16 (compareTo זהה); אחרת מספרית.
 bool _jsLt(dynamic a, dynamic b) {
   if (a is String && b is String) return a.compareTo(b) < 0;
-  return _jsToNum(a) < _jsToNum(b);
+  return _jsNum(a) < _jsNum(b);
 }
 
 /// סדר-מפתחות של for-in על אובייקט-JS (ECMAScript): מפתחות-אינדקס-מערך

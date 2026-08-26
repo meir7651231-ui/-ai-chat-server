@@ -4,6 +4,8 @@
 /// כשקעים במפת-sockets — כמו הדה-סטרקטור בחתימת ה-JS (חוק-1: אפס import פנימי).
 /// ‏db/config = מבנים דינמיים (Map/List); ‏undefined מיוצג בהיעדר-מפתח (חוק-2).
 
+const int _pow2_53 = 9007199254740992; // 2^53 — גבול השלם-הבטוח של JS
+
 /// truthiness של JS (חוק-7): null/false/0/NaN/'' ⇒ falsy; כל אובייקט ⇒ truthy.
 bool _truthy(dynamic v) {
   if (v == null) return false;
@@ -13,32 +15,33 @@ bool _truthy(dynamic v) {
   return true;
 }
 
-/// ‏String(num) של JS — shortest-round-trip (חוק-12): שלם-בטוח ⇒ עשרוני;
-/// ‏2^53–1e21 ⇒ פריסה-מרופדת-אפסים; ‏≥1e21 ⇒ מעריכי; ‏-0 ⇒ '0'.
+/// ‏String(num) של JS — shortest-round-trip (חוק-12). מאומת מול js-compat jsStr:
+/// שלם-בטוח ⇒ בלי ".0"; טווח [2^53,1e21) ⇒ עשרוני-מלא **בלי ".0"** דרך
+/// toStringAsFixed(0) (התיקון להסגר — Dart פורס שם ".0" עשרוני, לא מדעי,
+/// והרג'קס-הישן שחיפש 'e+' פספס והחזיר את ה".0" בטעות); ‏≥1e21 ⇒ מעריכי;
+/// שבר ⇒ ה-toString הקצר של Dart; ‏-0 ⇒ '0'.
 String _jsNum(num v) {
   if (v is int) return v.toString();
   final d = v as double;
   if (d.isNaN) return 'NaN';
-  if (d.isInfinite) return d > 0 ? 'Infinity' : '-Infinity';
-  if (d == 0) return '0'; // גם ‎-0.0‎ — JS String(-0) === '0'
-  if (d == d.truncateToDouble() && d.abs() < 9007199254740992.0) {
-    return d.truncate().toString();
-  }
-  if (d == d.truncateToDouble() && d.abs() < 1e21) {
-    // Dart מדפיס מדעי בטווח הזה; JS פורס עשרוני מרופד-אפסים.
-    final s = d.toString();
-    final m = RegExp(r'^(-?)(\d)(?:\.(\d+))?e\+(\d+)$').firstMatch(s);
-    if (m != null) {
-      final sign = m.group(1)!;
-      final digits = m.group(2)! + (m.group(3) ?? '');
-      final exp = int.parse(m.group(4)!);
-      if (exp >= digits.length - 1) {
-        return sign + digits + '0' * (exp - digits.length + 1);
-      }
+  if (d == double.infinity) return 'Infinity';
+  if (d == double.negativeInfinity) return '-Infinity';
+  if (d == 0) return '0'; // כולל -0.0 — JS String(-0) === '0'
+  final neg = d < 0;
+  final ad = neg ? -d : d;
+  String body;
+  if (ad == ad.truncateToDouble() && ad < 1e21) {
+    // שלם-ערך בטווח [1, 1e21): עשרוני-מלא, בלי ".0".
+    if (ad < _pow2_53) {
+      body = ad.toInt().toString();
+    } else {
+      body = ad.toStringAsFixed(0); // אין ".0" — התיקון להסגר
     }
-    return s;
+  } else {
+    // שבר או ≥1e21 — ה-toString של Dart כבר shortest-round-trip (זהה-ל-V8).
+    body = ad.toString();
   }
-  return d.toString(); // ‏≥1e21: Dart וגם JS ⇒ '1e+21'
+  return neg ? '-' + body : body;
 }
 
 /// ToString של תבנית-מחרוזת JS (`${v}`).
@@ -56,6 +59,20 @@ String _strAt(dynamic obj, String key) {
   return 'undefined';
 }
 
+/// ‏trim בקבוצת-הרווחים של ECMAScript בלבד (חוק-16) — בלי U+0085/U+180E.
+/// מאומת מול js-compat jsTrim (codeUnit-set, לא literal-פריך).
+const Set<int> _esWs = {
+  0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x20, 0xA0, 0x1680,
+  0x2000, 0x2001, 0x2002, 0x2003, 0x2004, 0x2005, 0x2006, 0x2007,
+  0x2008, 0x2009, 0x200A, 0x2028, 0x2029, 0x202F, 0x205F, 0x3000, 0xFEFF,
+};
+String _jsTrim(String s) {
+  var start = 0, end = s.length;
+  while (start < end && _esWs.contains(s.codeUnitAt(start))) start++;
+  while (end > start && _esWs.contains(s.codeUnitAt(end - 1))) end--;
+  return s.substring(start, end);
+}
+
 /// ‏ToNumber של JS על ערך-מאפיין (חוק-15): null ⇒ 0 · bool ⇒ 0/1 ·
 /// מחרוזת-גזומה-ריקה ⇒ 0 · לא-מספר ⇒ NaN (num.tryParse, לא parse-זורק — חוק-10).
 num _jsToNum(dynamic v) {
@@ -70,15 +87,6 @@ num _jsToNum(dynamic v) {
     return num.tryParse(t) ?? double.nan;
   }
   return double.nan;
-}
-
-/// ‏trim בקבוצת-הרווחים של ECMAScript בלבד (חוק-16) — בלי U+0085/U+180E.
-const _esWs = '\t\n\x0B\f\r \u00A0\uFEFF\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029';
-String _jsTrim(String s) {
-  var start = 0, end = s.length;
-  while (start < end && _esWs.contains(s[start])) start++;
-  while (end > start && _esWs.contains(s[end - 1])) end--;
-  return s.substring(start, end);
 }
 
 /// ‏obj.key מספרי לחיסור: מפתח-חסר = undefined ⇒ NaN (חוק-2), אחרת ToNumber.
