@@ -306,7 +306,7 @@ body{background:#05060f}
   // אמנות-רקע גנרטיבית פר-תחום (canvas, בלי אימוג'י): מצב-ציור + פלטה. כל תחום = שפה חזותית משלו.
   // rays=קרני-אור-נותנות · aurora=גלי-זוהר · bloom=פריחת-אור · velocity=מהירות · neural=רשת-נתונים · build=מבנה-עולה
   const ART=[
-    {mode:'rays',     sky:['#4a3410','#140d05'], col:['#ffd36b','#ffb03a','#ff8a3a']}, // עמותת חסד
+    {mode:'chesed',   sky:['#4a3410','#150d05'], col:['#ffd88a','#ffbe5a','#e89838']}, // עמותת חסד — איור: ידיים חופנות לב
     {mode:'aurora',   sky:['#3a1330','#140611'], col:['#ff86c0','#c66cff','#ff6f9f']}, // קליניקה
     {mode:'bloom',    sky:['#0c3a26','#04140d'], col:['#48e39b','#8ef0b0','#2fd0a0']}, // חנות
     {mode:'neural',   sky:['#221148','#0b0620'], col:['#9a8bff','#6f7cff','#b0a0ff']}, // פרילנסר
@@ -341,7 +341,8 @@ body{background:#05060f}
     let s0=[74,52,16],s1=[20,13,5],ts0=s0.slice(),ts1=s1.slice();
     let P=[],P2=[];
     function seed(){P=[];P2=[];if(!W)return;
-      if(mode==='rays'){for(let i=0;i<62;i++)P.push({x:Math.random()*W,y:Math.random()*H,v:rnd(.2,.7),r:rnd(.6,2.2),ph:Math.random()*6.28,tw:rnd(.5,2)});}
+      if(mode==='chesed'){for(let i=0;i<28;i++)P.push({x:W*.5,y:rnd(30,200),v:rnd(.3,.8),r:rnd(1,2.6),ph:Math.random()*6.28,life:Math.random()});}
+      else if(mode==='rays'){for(let i=0;i<62;i++)P.push({x:Math.random()*W,y:Math.random()*H,v:rnd(.2,.7),r:rnd(.6,2.2),ph:Math.random()*6.28,tw:rnd(.5,2)});}
       else if(mode==='aurora'){for(let i=0;i<44;i++)P2.push({x:Math.random()*W,y:Math.random()*H,r:rnd(5,24),v:rnd(.05,.28),a:rnd(.03,.13)});}
       else if(mode==='bloom'){for(let i=0;i<26;i++)P.push({x:Math.random()*W,y:Math.random()*H,r:rnd(12,52),vx:rnd(-.2,.2),vy:rnd(-.4,-.1),a:rnd(.05,.16),c:COL[i%COL.length]});}
       else if(mode==='velocity'){for(let i=0;i<72;i++)P.push({a:Math.random()*6.28,d:rnd(.02,1.1),v:rnd(.004,.02),w:rnd(.4,1.6)});}
@@ -352,6 +353,39 @@ body{background:#05060f}
     window.__capsArt=function(art){mode=art.mode;COL=art.col.map(h2r);ts0=h2r(art.sky[0]);ts1=h2r(art.sky[1]);if(!W)size();else seed();};
     function lerp(a,b){for(let i=0;i<3;i++)a[i]+=(b[i]-a[i])*.05;}
     function rgba(c,a){return 'rgba('+(c[0]|0)+','+(c[1]|0)+','+(c[2]|0)+','+a+')';}
+    // ---- איור עמותת-חסד: ידיים חופנות לב-אור · קהילה · קשת-מחסה · גרעיני-חסד עולים ----
+    function heartPath(x,y,s){ctx.beginPath();ctx.moveTo(x,y+s*.38);ctx.bezierCurveTo(x+s*.62,y-s*.22,x+s*.55,y-s*.78,x,y-s*.34);ctx.bezierCurveTo(x-s*.55,y-s*.78,x-s*.62,y-s*.22,x,y+s*.38);ctx.closePath();}
+    function person(x,y,h,col,a){const w=h*.44;ctx.fillStyle=rgba(col,a);ctx.beginPath();ctx.moveTo(x-w/2,y);ctx.quadraticCurveTo(x-w/2,y-h*.58,x,y-h*.6);ctx.quadraticCurveTo(x+w/2,y-h*.58,x+w/2,y);ctx.closePath();ctx.fill();ctx.beginPath();ctx.arc(x,y-h*.76,h*.17,0,6.283);ctx.fill();}
+    function drawChesed(){
+      const S=Math.min(1.35,Math.max(.72,W/1000)),cx=W*.5,cy=132*S+34,hy=cy-54*S,dark=[26,15,5];
+      ctx.globalCompositeOperation='source-over';
+      // קהילה — צלליות עומדות יחד
+      const baseY=cy+104*S,gap=56*S;
+      for(let i=-2;i<=2;i++)person(cx+i*gap,baseY,(70+(i%2?0:12))*S,dark,.5-Math.abs(i)*.05);
+      // ידיים חופנות — שתי כפות שיוצרות עריסה
+      function palm(dir){const g=ctx.createLinearGradient(cx,cy-30*S,cx,cy+70*S);g.addColorStop(0,rgba(COL[1],.95));g.addColorStop(1,rgba(COL[2],.8));ctx.fillStyle=g;
+        ctx.beginPath();ctx.moveTo(cx,cy+66*S);
+        ctx.bezierCurveTo(cx+dir*34*S,cy+68*S,cx+dir*98*S,cy+42*S,cx+dir*104*S,cy-8*S);
+        ctx.bezierCurveTo(cx+dir*103*S,cy-22*S,cx+dir*86*S,cy-18*S,cx+dir*80*S,cy-4*S);
+        ctx.bezierCurveTo(cx+dir*44*S,cy+8*S,cx+dir*22*S,cy+22*S,cx,cy+36*S);ctx.closePath();ctx.fill();
+        ctx.strokeStyle=rgba(dark,.3);ctx.lineWidth=1.4*S;
+        for(let f=1;f<=3;f++){const fx=cx+dir*(30+f*17)*S;ctx.beginPath();ctx.moveTo(fx,cy-2*S);ctx.lineTo(fx-dir*4*S,cy+15*S);ctx.stroke();}}
+      palm(-1);palm(1);
+      ctx.globalCompositeOperation='lighter';
+      // קשת-מחסה זוהרת מעל
+      ctx.strokeStyle=rgba(COL[0],.16);ctx.lineWidth=9*S;ctx.beginPath();ctx.arc(cx,cy+118*S,236*S,Math.PI*1.16,Math.PI*1.84);ctx.stroke();
+      // זוהר רך מאחורי הלב + קרניים
+      const rg=ctx.createRadialGradient(cx,hy,0,cx,hy,160*S);rg.addColorStop(0,rgba(COL[1],.5));rg.addColorStop(.5,rgba(COL[0],.13));rg.addColorStop(1,rgba(COL[0],0));ctx.fillStyle=rg;ctx.fillRect(cx-170*S,hy-170*S,340*S,340*S);
+      for(let i=0;i<11;i++){const a=-1.5708+(i-5)*.2,l=128*S;ctx.strokeStyle=rgba(COL[0],.07);ctx.lineWidth=4*S;ctx.beginPath();ctx.moveTo(cx,hy);ctx.lineTo(cx+Math.cos(a)*l,hy+Math.sin(a)*l);ctx.stroke();}
+      // הלב — פועם
+      const pulse=1+.06*Math.sin(t*2.2),hs=54*S*pulse;
+      ctx.save();ctx.shadowColor=rgba(COL[1],.9);ctx.shadowBlur=34*S;heartPath(cx,hy,hs);
+      const hg=ctx.createLinearGradient(cx,hy-hs,cx,hy+hs);hg.addColorStop(0,'rgba(255,246,220,.98)');hg.addColorStop(1,rgba(COL[0],.95));ctx.fillStyle=hg;ctx.fill();ctx.restore();
+      // גרעיני-חסד עולים מהלב
+      for(const p of P){p.y-=p.v;p.x+=Math.sin(t*1.2+p.ph)*.4*S;p.life-=.006;if(p.life<=0||p.y<18){p.y=hy;p.x=cx+(Math.random()-.5)*22*S;p.life=1;}
+        ctx.globalAlpha=Math.max(0,p.life)*.8;ctx.fillStyle=rgba(COL[1],1);ctx.beginPath();ctx.arc(p.x,p.y,p.r*S,0,6.283);ctx.fill();}
+      ctx.globalAlpha=1;
+    }
     function drawRays(){const cx=W*.5,cy=H*1.02,N=16;
       for(let i=0;i<N;i++){const ang=-1.5708+(i-N/2)*.12+Math.sin(t*.15)*.05,len=H*1.35,w=8+6*Math.sin(t*.5+i),x2=cx+Math.cos(ang)*len,y2=cy+Math.sin(ang)*len;
         const gr=ctx.createLinearGradient(cx,cy,x2,y2);gr.addColorStop(0,rgba(COL[0],.10));gr.addColorStop(1,rgba(COL[0],0));ctx.strokeStyle=gr;ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(x2,y2);ctx.stroke();}
@@ -380,7 +414,7 @@ body{background:#05060f}
     function frame(){t+=reduce?0:.016;lerp(s0,ts0);lerp(s1,ts1);
       const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,rgba(s0,1));g.addColorStop(1,rgba(s1,1));ctx.globalCompositeOperation='source-over';ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
       ctx.globalCompositeOperation='lighter';
-      if(mode==='rays')drawRays();else if(mode==='aurora')drawAurora();else if(mode==='bloom')drawBloom();else if(mode==='velocity')drawVelocity();else if(mode==='neural')drawNeural();else if(mode==='build')drawBuild();
+      if(mode==='chesed')drawChesed();else if(mode==='rays')drawRays();else if(mode==='aurora')drawAurora();else if(mode==='bloom')drawBloom();else if(mode==='velocity')drawVelocity();else if(mode==='neural')drawNeural();else if(mode==='build')drawBuild();
       ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1;
       if(active)raf=requestAnimationFrame(frame);}
     window.__capsArtStart=function(){if(active)return;active=true;size();cancelAnimationFrame(raf);raf=requestAnimationFrame(frame);};
