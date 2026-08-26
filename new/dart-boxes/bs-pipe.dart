@@ -53,6 +53,7 @@ import '../dart/estimate_price.dart' as ep;
 import '../dart-data/pipe-prices.dart' as pd; // דאטה — מוזרקת ע"י הקופסה למנוע-התמחיר
 import '../dart/can_connect.dart' as cc;
 import '../dart/connection_fail_reason.dart' as cfr;
+import '../dart-data/connection-fail-labels.dart' as cfl; // דאטה — תוויות-כשל מוזרקות
 import '../dart/connection_method_label.dart' as cml;
 import '../dart/pipe_connection_dn.dart' as pcd;
 import '../dart/product_max_temp_c.dart' as pmt;
@@ -460,6 +461,7 @@ class PipeBox {
             connectionGender: b.connectionGender,
             connectionMethod: b.connectionMethod),
         verifiedOf: _cfrVerified,
+        labels: cfl.kConnectionFailLabelsHe, // דאטה מוזרקת (dart-data/)
       );
 
   cfr.VerifiedView? _cfrVerified(String sku) {

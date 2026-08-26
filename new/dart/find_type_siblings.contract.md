@@ -1,3 +1,5 @@
+> ♻️ **מנוע-נקי (הכרעת-בעלים "אפס-דאטה במנוע"):** מילון-אוצר-המילים חולץ לדאטה מוזרקת (7 שקעים). המנוע=מנגנון-בלבד; הדאטה ב-`dart-data/lipskey-vocab.dart` (משותף עם `findAttrSiblings`). התנהגות זהה-ביט כשמזריקים את vocab-המקור.
+
 # חוזה · `findTypeSiblings`
 
 ## תפקיד
@@ -10,14 +12,19 @@
 
 ## חתימה
 ```dart
-List<LipRow> findTypeSiblings(LipRow p, {required List<LipRow> catalog});
+List<LipRow> findTypeSiblings(LipRow p, {
+  required List<LipRow> catalog,
+  required List<String> models, types, subtypes, colors,   // ⇔ kLipskey*
+  required Set<String> pprMaterials, colorModifiers,        // ⇔ _kPprMaterials/_kColorModifiers
+  required String polyrollBrand,                            // ⇔ kPolyrollBrand
+});
 class LipRow { final String nameHe, brand, categoryHe; } // brand ברירת-מחדל 'ליפסקי'
 ```
 
-## שקע (הזרקת-שכן)
-`catalog` — הקטלוג הגלובלי `resolvedCatalogProducts` (:1984) הומר לפרמטר-שקע
-required. כל השאר (‏AttrKind · isSizeToken · _attrKindFor · _getCompoundType ·
-_leadingType · מילוני-האוצר · kPolyrollBrand) מוטבע verbatim — לוגיקת-הסיווג עצמה.
+## שקעים (קטלוג + 7 מילון) + מקור-הדאטה
+- `catalog` — הקטלוג הגלובלי `resolvedCatalogProducts` (:1984) ⇒ פרמטר-שקע required.
+- **7 שקעי-מילון** — אוצר-המילים חי ב-`dart-data/lipskey-vocab.dart` (משותף עם `findAttrSiblings`).
+  **מנגנון שנשאר במנוע:** ‏AttrKind · isSizeToken · _attrKindFor · _getCompoundType · _leadingType.
 
 ## התנהגות (מקריאת-הקוד)
 - `compound = _getCompoundType(p)`; ריק ⇒ `[p]` (:1973-1974).
@@ -52,3 +59,14 @@ P3= nameHe:'מצמד 20'       · brand:'פולירול' · cat:'PPR' → _leadi
 | 2 | `findTypeSiblings(A, [A,C])` | `[A]` — סוג יחיד בקטגוריה (≤1 מפתח) | :1990 |
 | 3 | `findTypeSiblings(E, [E,A])` | `[E]` — compound ריק | :1973-1974 |
 | 4 | `findTypeSiblings(P1, [P1,P2,P3])` | `[P1, P3]` — PPR מפתח לפי _leadingType ⇒ P2 מתקפל ל-'מתאם' | :1980-1981 |
+
+## מילון מוזרק בבדיקה + הוכחת-הזרקה
+הבדיקה מזריקה תת-קבוצת-מקור זעירה: `types=[מחסום,סיפון,מצמד,מתאם]` · `subtypes=[רצפה,עגול,כפול]` ·
+`pprMaterials={PPR,PPRCT}` · `colorModifiers={מוברש,מט}` · `polyrollBrand='פולירול'` (models/colors ריקים).
+**הדאטה-מוחלפת ⇒ הפלט-משתנה:** ד1 עם `subtypes=[רצפה,כפול]` (בלי 'עגול') ⇒ 'מחסום עגול' נעשה סוג-נפרד,
+והפלט `[A, B, C]` (3 פריטים) במקום `[A, B]`. מוכיח שהמילון מוזרק, לא צרוב.
+
+## DoD (דיבר 12)
+```
+dart run --enable-asserts new/dart/find_type_siblings_test.dart  ⇒ exit 0 + "OK findTypeSiblings: 5 asserts passed"
+```

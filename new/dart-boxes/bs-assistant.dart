@@ -18,6 +18,7 @@
 //     מרשומות-הערכה (recipes.key) לצורך matchAssistantRecipeKey.
 import '../dart/assistant_categories.dart' as ac;
 import '../dart/assistant_intent_prompt.dart' as aip;
+import '../dart-data/assistant-prompt-copy.dart' as apc; // דאטה — נוסחי-פרומפט מוזרקים
 import '../dart/match_assistant_category.dart' as mac;
 import '../dart/match_assistant_recipe_key.dart' as mark;
 
@@ -58,6 +59,7 @@ String assistantIntentPrompt(
       categories: categories,
       recipes: recipes,
       promptSafeText: _promptSafeText,
+      copy: apc.kAssistantIntentPromptCopyHe, // דאטה מוזרקת (dart-data/)
     );
 
 /// מקרקע [reply] לקטגוריה-אמת מתוך [categories] — מדויק-גובר, אחרת המוכל-הארוך; null אם אין.

@@ -1,3 +1,5 @@
+> ♻️ **מנוע-נקי (הכרעת-בעלים "אפס-דאטה במנוע"):** מילון-אוצר-המילים חולץ לדאטה מוזרקת (7 שקעים). המנוע=מנגנון-בלבד; הדאטה ב-`dart-data/lipskey-vocab.dart` (משותף עם `findTypeSiblings`). התנהגות זהה-ביט כשמזריקים את vocab-המקור.
+
 # חוזה · `findAttrSiblings`
 
 ## תפקיד
@@ -12,16 +14,22 @@
 
 ## חתימה
 ```dart
-List<LipRow> findAttrSiblings(LipRow p, String word, AttrKind kind,
-    {required List<LipRow> catalog});
+List<LipRow> findAttrSiblings(LipRow p, String word, AttrKind kind, {
+  required List<LipRow> catalog,
+  required List<String> models, types, subtypes, colors,   // ⇔ kLipskey*
+  required Set<String> pprMaterials, colorModifiers,        // ⇔ _kPprMaterials/_kColorModifiers
+  required String polyrollBrand,                            // ⇔ kPolyrollBrand
+});
 class LipRow { final String nameHe, brand, categoryHe; final Map<String,dynamic>? dims; }
 enum AttrKind { size, color, colorMod, model, subtype, type, material, pressure, sdr, maker }
 ```
 
-## שקע (הזרקת-שכן)
-`catalog` — הקטלוג הגלובלי `resolvedCatalogProducts` (:1850,1872,1888,1902) הומר
-לפרמטר-שקע required. שאר הלוגיקה (‏isSizeToken · _attrKindFor · _stripWordsOfKind ·
-_getCompoundType · עוזרי-היצרן · מילוני-האוצר · kPolyrollBrand) מוטבעת verbatim.
+## שקעים (קטלוג + 7 מילון) + מקור-הדאטה
+- `catalog` — הקטלוג הגלובלי `resolvedCatalogProducts` (:1850,1872,1888,1902) ⇒ פרמטר-שקע.
+- **7 שקעי-מילון** — כל אוצר-המילים (models/types/subtypes/colors/pprMaterials/colorModifiers/
+  polyrollBrand) חי ב-`dart-data/lipskey-vocab.dart` ומוזרק. **מנגנון שנשאר במנוע:** הנגזרות
+  `colorWords/modelWords/subtypeWords` (פיצול-מילים≥2) מחושבות במנוע מהרשימות המוזרקות, וכל
+  העוזרים (‏isSizeToken · _attrKindFor · _stripWordsOfKind · _getCompoundType · עוזרי-היצרן).
 
 ## הערת-verbatim
 הפרמטר `word` נשמר מהחתימה המקורית אך **אינו-נקרא** בגוף (:1839-1910) — קלט-רפאים;
@@ -76,4 +84,15 @@ findAttrSiblings(pp,'',size,[pp,qp1,qp2,qp3]) → ['מצמד 20','מצמד 25']
 **ד5 — מסגרת קצרה ⇒ [p]** (:1901):
 ```
 findAttrSiblings(LipRow(nameHe:'לבן'),'',color,[…]) → ['לבן']   (frame לאחר-הפשטה ריק, אורך<2)
+```
+
+## מילון מוזרק בבדיקה + הוכחת-הזרקה
+הבדיקה מזריקה תת-קבוצת-מקור זעירה: `models=[קיסר,דיור]` · `types=[מצמד]` · `colors=[לבן,שחור,אדום]` ·
+`pprMaterials={PPR,PPRCT}` · `colorModifiers={מוברש,מט}` · `polyrollBrand='פולירול'` (subtypes ריק).
+**הדאטה-מוחלפת ⇒ הפלט-משתנה:** ד1 עם `colors=[לבן,שחור]` (בלי 'אדום') ⇒ `['מחסום עגול לבן','מחסום עגול שחור']`
+בלבד — q2 יוצא. מוכיח שהמילון מוזרק, לא צרוב.
+
+## DoD (דיבר 12)
+```
+dart run --enable-asserts new/dart/find_attr_siblings_test.dart  ⇒ exit 0 + "OK findAttrSiblings: 6 asserts passed"
 ```

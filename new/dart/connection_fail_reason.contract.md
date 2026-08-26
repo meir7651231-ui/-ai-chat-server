@@ -1,12 +1,15 @@
+> ♻️ **מנוע-נקי (הכרעת-בעלים "אפס-דאטה במנוע"):** 18 תוויות-ההסבר חולצו לדאטה מוזרקת `labels` (`dart-data/connection-fail-labels.dart`). המנוע=קסקדת-החלטה בלבד; בונה כל הודעה מתבנית+טוקנים דרך `_fmt` ({0}/{1}). התנהגות זהה-ביט כשמזריקים את התוויות-המקוריות.
+
 # חוזה · connectionFailReason
 
 **מוצא (קדוש, L4):** `buildsmart/app_flutter/lib/logic/install_engine.dart:523-592`
-**אטום:** `new/dart/connection_fail_reason.dart` — `String connectionFailReason(InferPart a, InferPart b, {verifiedOf})`
+**אטום:** `new/dart/connection_fail_reason.dart` — `String connectionFailReason(InferPart a, InferPart b, {verifiedOf, required Map<String,String> labels})`
 
 ## קלט
 - `a`, `b` — `InferPart`: `sku` (String) · `connectionSizes` (List&lt;String&gt; גדלי-DN) · `connectionGender` (String? — 'male'/'female'/null) · `connectionMethod` (String? — 'thread'/'glue'/'electrofusion'/null). מקור-השדות: lipskey_catalog.dart:131/148/160.
 - `verifiedOf` — שקע `VerifiedView? Function(String sku)`, מייצג את `kVerifiedSpecs[sku]` (install_engine.dart:525). מחזיר `null` כשאין מפרט-מאומת ל-sku. חסר ⇒ `null` (name-inference).
 - `VerifiedView` — `ends` (List&lt;VerifiedEnd&gt;: `type` תג-מחרוזתי זהה-שם ל-EndType · `size`) + `material` (String). התגים הנקראים: `hdpeCompression` · `pexPress` · `copperPress` · `bspMale` · `bspFemale`.
+- `labels` — **שקע-required**: מפת-תוויות (⇔ `kConnectionFailLabelsHe`, 18 מפתחות). התבניות נושאות טוקני-`{0}`/`{1}` שהמנוע מחליף בערכים. תג-מפתח→תבנית: `sizeDiffDn`/`pexDiff`/`copperDiff`/`bothMaleVerified`/`bothFemaleVerified`/`threadSizeDiff`/`materialAdapter`/`noCommon`/`sizeUnknown`/`sizeDiff`/`genderUnknown`/`bothEnds`/`methodDiff`/`genderMale`/`genderFemale`/`methodThread`/`methodGlue`/`methodElse`. **הנחת-בטיחות:** ערכי-הטוקנים אינם מכילים `{n}` ⇒ אין החלפה-כפולה (זהה-ביט).
 
 ## פלט
 `String` — הסבר-עברית מדוע המוצרים אינם יכולים להתחבר.
@@ -59,3 +62,12 @@
 - **הדירוג קדוש (L18):** בדיקת זכר-זכר/נקבה-נקבה (#4/#5) קודמת לאי-התאמת-גודל-תבריג (#6/#7); שינוי-סדר = באג. #8 נבחר כך ש**כל** שערי-הגודל נכשלים (compr חופף) והחומר הוא שמפיל — מבודד את שלב-8.
 - **גדלים-ריקים חוסמים לפני חיתוך** (isEmpty לפני intersection, מונע חיתוך-ריק-כוזב) — #10.
 - **תווית-שיטת-ברירת-מחדל:** כל method שאינו 'thread'/'glue' ⇒ 'אלקטרו' (else-branch, לא רק 'electrofusion') — #16.
+
+## הזרקת-תוויות (הוכחת דאטה-מוזרקת · #19)
+הבדיקה מזריקה את התוויות-המקוריות verbatim ⇒ 17 דוגמאות-החוזה עוברות ביט-זהה. **הדאטה-מוחלפת ⇒ הפלט-משתנה:**
+עם `{..._labels, 'sizeDiff':'DIFF {0}/{1}'}` הקלט `sizes 20↔25` מחזיר `DIFF 20/25` במקום `גודל שונה: 20 ↔ 25` — מוכיח שהתוויות מוזרקות, לא צרובות.
+
+## DoD (דיבר 12)
+```
+dart run --enable-asserts new/dart/connection_fail_reason_test.dart  ⇒ exit 0 + "connectionFailReason OK — 19/19"
+```

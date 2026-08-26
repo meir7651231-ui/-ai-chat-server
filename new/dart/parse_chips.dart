@@ -1,162 +1,16 @@
-// ⚛️ אטום-Dart · parseChips
-// מוצא: buildsmart/app_flutter/lib/data/chip_hierarchy.dart:196-315
-//        (‏parseChips; טיפוס-הפלט ChipPath :154-194; חוק-2 — verbatim, לא-משופר).
-// טוהר: פונקציית top-level עצמאית, אפס import פנימי (רק dart:core — RegExp/split).
+// ⚛️ אטום-Dart · parseChips — מנוע-נקי (מנגנון-בלבד, אפס-דאטה · הכרעת-בעלים "אפס-דאטה במנוע").
+// מוצא: buildsmart/app_flutter/lib/data/chip_hierarchy.dart:196-315 (parseChips; טיפוס ChipPath :154-194; חוק-2).
+// טוהר-מוחלט: פונקציית top-level, אפס import, **אפס דאטה צרובה**. 12 מילוני-הסיווג חולצו
+// לדאטה חיה מחוץ למנוע (dart-data/chip-vocab.dart) ומוזרקים כ-12 שקעי-required:
+//   chipTypes · compoundTypes · level1Connection · level2Shape · level3Feature ·
+//   level4Thread · chipMaterial · chipUnits · l1Compounds · l2Compounds · l3Compounds · l4Compounds.
+// התנהגות זהה-ביט למקור כשמזריקים את מילוני-המקור (הבוקס מזריק את chip-vocab.dart).
+// נשמר במנוע (מנגנון/טיפוס, לא-דאטה): טיפוס-הפלט ChipPath + מתודת levelLabelOf — תוויות-רמה
+//   מבניות (חיבור/צורה/תכונה/תבריג/מידה) הצמודות 1:1 ל-5 הרמות של הטיפוס עצמו.
 //
-// הטבעות (חוק-3, דיבר-3):
-//   • מילוני-הסיווג (kChipTypes · _kCompoundTypes · kChipLevel1Connection ·
-//     kChipLevel2Shape · kChipLevel3Feature · kChipLevel4Thread · kChipMaterial ·
-//     _kChipUnits · _l1..._l4Compounds — chip_hierarchy.dart:7-148,317-399) מוטבעים
-//     verbatim: הם מילון-הפירוק של הלוגיקה עצמה (§21), לא קטלוג-ארגון מתחלף ⇒
-//     חלק מהאטום, לא שקע.
-//   • ChipPath = טיפוס-פלט טהור מקומי (dart:core בלבד), verbatim מ-:154-194.
-//
-// קלט:  nameHe — String (שם-מוצר בעברית).
+// קלט:  nameHe + 12 מילוני-הסיווג (שקעים).
 // פלט:  ChipPath — type + level1..level5 + leftover, לפי היררכיית-§21.
-const Set<String> kChipTypes = {
-  'ברך', 'מסעף', 'מצמד', 'מתאם', 'רוכב', 'ברז', 'צווארון', 'אוגן', 'פקק',
-  'אומגה', 'שרוול', 'צינור', 'מחבר', 'סעפת', 'לוחית',
-  // tool nouns — keep as standalone type
-  'מזוודת', 'פלטת', 'מכונת', 'מברגה', 'תותב', 'מקדח',
-  // Huliot SmartLock — drainage system types
-  'סיפון', 'מחסום', 'מאסף', 'אום', 'אטם', 'משפך', 'אביק', 'רוזטה', 'מבוא',
-  'מכלול', 'מצרה', 'חותך', 'מערכת', 'מצחיה', 'ונטיל', 'מפתח', 'חיבור',
-  'מאריך', 'הגבהה', 'מכסה', 'רשת', 'סט', 'פס',
-  // Lipski — additional drainage / shower system types (gate 117 follow-up)
-  'קולט', 'זרוע', 'פיה', 'כובע',
-};
 
-/// Compound types — checked BEFORE the single-token kChipTypes lookup so that
-/// `מיכל הדחה` becomes one type chip instead of `מיכל` (type) + `הדחה` (leftover).
-/// Lipski uses these for cisterns and seats. Polyroll/Huliot have none.
-const Set<String> _kCompoundTypes = {
-  'מיכל הדחה',
-  'מושב אסלה',
-};
-
-const Set<String> kChipLevel1Connection = {
-  'לריתוך', 'ריתוך', 'הברגה',
-  'ריתוך/הברגה', 'ריתוך/רקורד',
-  // EF compound: when we see 'חשמלי' adjacent we promote to "ריתוך חשמלי"
-  'חשמלי', 'אלקטרופיוזן',
-};
-
-const Set<String> kChipLevel2Shape = {
-  // Angles carry the degree symbol in this catalog (45° / 90°). The bare
-  // '45'/'90' are intentionally NOT here — those would collide with the
-  // diameters 45mm/90mm and steal them from the size slot.
-  '45°', '90°',
-  // Huliot SmartLock — drainage angles. 15°/30° = single-side elbows; 87.5°
-  // = telescopic elbow per the SmartLock catalog (pages 12, 15).
-  '15°', '30°', '87.5°',
-  // Lipski insertion bends — 87° is a distinct angle from Huliot's 87.5°.
-  '87°',
-  'מצרה', 'שווה', 'סמוי', 'פרפר', 'כדורי',
-  'מעבר', 'ישר', 'אלכסוני',
-  'בין', 'אוגנים', // compound "בין אוגנים"
-  'עגול', 'משושה', 'רקורד',
-  'פייזר', 'אספקת', 'מים', // pipe sub-types: "אספקת מים", "פייזר"
-  'מיזוג', 'אוויר',
-  // Huliot SmartLock shape qualifiers
-  'חלק', 'טלסקופית', 'גלילית', 'כפול', 'נפילה', 'קומקום',
-  'זווית', 'ריבועי', 'מוגבה', 'קבוע', 'זמני', 'אמריקאי',
-  'אוניברסלית',
-};
-
-const Set<String> kChipLevel3Feature = {
-  'משטח', 'ריסון', // "משטח ריסון"
-  'לנקודת', 'נקודת', 'למיקום',
-  'ללא', 'ידית',
-  'עם', 'מניעת', 'זרימה', 'חוזרת',
-  'כולל', 'אטם',
-  'ציפוי', 'כרום',
-  'מתוברג', 'מפורק', 'מפלסטיק', 'פוליפרופילן',
-  'קטנה', 'גדולה', 'קלה', 'שולחני',
-  'לעבודה', 'בגובה', '(לעבודה', 'בגובה)',
-  'לתיקון', 'חורים', 'לצינורות', 'לרוכבים', 'רוכב',
-  'למונים', 'פיגורות', 'לקטרים',
-  // ('מ"מ' moved to _kChipUnits — folded into the size chip, not a level-3 word)
-  'סופי', 'גשר',
-  'הולירומה', // sub-brand qualifier
-  'מצופה', 'פלדה', // for "אוגן פלדה מצופה PP"
-  'PP',
-  // ─── Huliot SmartLock features (qualifiers, suffixes, contexts) ─────────
-  // open/closed access
-  'סגור', 'פתוח',
-  // accessory targets ("ל…")
-  'לג\'וקר', 'למחסום/מאסף', 'למאסף', 'למחסום', 'לכיור', 'לאמבט', 'למזגן',
-  'למדיח', 'למכונת', 'לסיפון', 'לאגנית', 'לאביק', 'לברז', 'לסילוק',
-  // installation contexts
-  'מטבח', 'רחצה', 'כביסה', 'מדיח', 'כלים', 'מקלחת', 'אמבט',
-  // joiner words / connectors
-  'אורך', 'ארוך', 'קצר', 'קומפלט', 'משלימים', 'מדידה', 'יציאה', 'כניסה',
-  'חיבור', 'אקוסטית',
-  // catalog suffixes — model/series numbers + parens
-  'מספר', 'דגם', 'מערכת',
-  'AQUA', 'SLIM', 'SmartLock', 'Aqua', 'Slim',  // brand series identifiers
-  'מתאם', 'ניקוז',  'הורקה', 'תקע', 'ראש',
-  'ABS', 'TPE', 'SBR', 'PP+ABS',
-  // parens (size variants from catalog headers like (6) (1) (3) (4) (5))
-  '(1)', '(2)', '(3)', '(4)', '(5)', '(6)', '(8)', '(10)',
-  '(70)', '(17)', '(שרשרת+10)', '(ללא',
-  // colors / decorative
-  'ירוק', 'שחור', 'אפור', 'בז\'', 'לבן', 'כחול', 'נירוסטה', 'ניירוסטה',
-  'נילון', '66',
-  'ניקל', 'פסים', 'ריבועים', 'מלא/אריח', 'משפך)',
-  'אינטגרלי', '+',
-  // shape feminine forms / Huliot stragglers
-  'רבועה', 'כיור', 'זחיח', 'למבוא', 'קומפלקט',
-  // Type words that already-took-the-leading-type may appear again as features
-  // ('סט חיבור למדיח / מכונת כביסה' — type='סט', then 'מכונת' is a feature).
-  'מכונת', 'מצרה', 'סיפון', 'מחסום', 'מבוא', 'משפך',
-  // joiner/list words
-  'שרשרת', 'פקקים', 'ושבלונה', 'לאום',
-  '1¼', '1½', '½"',  // size variants seen as feature tokens
-  'J', 'H', 'Top', 'Floor',
-  // joker/SmartLock specific
-  'ג\'וקר',
-  // 2002 = bathtub drain model number
-  '2002',
-  // catalog row helpers (size pair label)
-  'דלוחין',
-  // ─── parser-aid vocab for Huliot ───────────────────────────────────────
-  'צינורות', 'קוטר',  // 'חותך צינורות קוטר 40' (אורך already above)
-  'מעביר', 'SL',  // 'אטם מעביר SL 40/32'
-  'מברזל', 'למעבר',  // 'אום מעבר מברזל'
-  'פתח', 'רבוע', 'לאריח',  // 'הגבהה פתח רבוע'
-  'מוגבהת', 'עגולה',  // 'רשת מוגבהת עגולה'
-  'אחד', '(צד', 'חלק)',  // '(צד אחד חלק)' tokenization with parens
-  // SmartLock-specific contexts
-  'נחושת',
-  // ─── Lipski — toilet-tank/seat model names (gate 117 follow-up) ─────────
-  'ספיר', 'ברקת', 'טופז', 'יהלום', 'טיטאן', 'כנרת',
-  'חרמון', 'אדיר', 'תבור', 'כרמל', 'הגייני',
-  // Lipski — tank/seat sub-features
-  'מונובלוק', 'משולב', 'טרמו', 'ULTRA',
-  // Lipski — bottle-trap qualifier
-  'תיקני', 'בודד', 'פרגמון',
-  // Lipski — trailing token after stripped parens "(מס. N)"
-  'מס.',
-  // Lipski — shower context (parallel to existing 'למזגן'/'למדיח'/etc.)
-  'למקלחת',
-};
-
-const Set<String> kChipLevel4Thread = {
-  'פ.פ', 'פ.ח', 'ח.ח', 'ח.פ',
-  'פנימי', 'חיצוני', 'תבריג',
-  'שקע', 'תקע',
-  'פנים', 'חוץ', // alternates
-};
-
-// Material tokens — shown as image badge, not in chip path.
-const Set<String> kChipMaterial = {'PPR', 'PPRCT', 'PP-RCT'};
-
-// Unit tokens — folded INTO the size chip rather than dropped or shown as a
-// standalone chip, so the size reads "20-63 מ"מ" and the full catalog name is
-// recoverable from the chips alone (E2E §21.B).
-const Set<String> _kChipUnits = {'מ"מ', 'מ”מ', 'mm'};
-
-/// Returns chip components per the §21 hierarchy.
 /// type: leading product noun (kChipTypes word).
 /// level1..level5: ordered chip tokens (level5 = the size).
 /// leftover: tokens the parser couldn't classify — should be empty.
@@ -202,7 +56,21 @@ class ChipPath {
   }
 }
 
-ChipPath parseChips(String nameHe) {
+ChipPath parseChips(
+  String nameHe, {
+  required Set<String> chipTypes,
+  required Set<String> compoundTypes,
+  required Set<String> level1Connection,
+  required Set<String> level2Shape,
+  required Set<String> level3Feature,
+  required Set<String> level4Thread,
+  required Set<String> chipMaterial,
+  required Set<String> chipUnits,
+  required Set<String> l1Compounds,
+  required Set<String> l2Compounds,
+  required Set<String> l3Compounds,
+  required Set<String> l4Compounds,
+}) {
   // Tokenize, keep size-tokens intact (e.g. "25x½\"", "63x32", "20×2.8").
   final tokens = nameHe.split(RegExp(r'\s+'))
       .where((t) => t.trim().isNotEmpty)
@@ -227,10 +95,10 @@ ChipPath parseChips(String nameHe) {
   List<List<String>> sortByLen(Set<String> src) =>
       (src.map((s) => s.split(' ')).toList())
         ..sort((a, b) => b.length.compareTo(a.length));
-  final l1c = sortByLen(_l1Compounds);
-  final l2c = sortByLen(_l2Compounds);
-  final l3c = sortByLen(_l3Compounds);
-  final l4c = sortByLen(_l4Compounds);
+  final l1c = sortByLen(l1Compounds);
+  final l2c = sortByLen(l2Compounds);
+  final l3c = sortByLen(l3Compounds);
+  final l4c = sortByLen(l4Compounds);
 
   int i = 0;
   while (i < tokens.length) {
@@ -240,14 +108,14 @@ ChipPath parseChips(String nameHe) {
     final t = (raw.startsWith('(') && raw.endsWith(')') && raw.length > 2)
         ? raw.substring(1, raw.length - 1)
         : raw;
-    if (kChipMaterial.contains(t)) { i++; continue; }
+    if (chipMaterial.contains(t)) { i++; continue; }
     // Compound-type lookahead (e.g. 'מיכל הדחה', 'מושב אסלה'). Must precede
     // the single-token type check so that the leading word doesn't grab
     // half the compound and leave the rest stranded as leftover.
     if (type == null) {
       String? hit;
       int hitLen = 0;
-      for (final ct in _kCompoundTypes) {
+      for (final ct in compoundTypes) {
         final parts = ct.split(' ');
         if (parts.length > tokens.length - i) continue;
         var ok = true;
@@ -258,12 +126,12 @@ ChipPath parseChips(String nameHe) {
       }
       if (hit != null) { type = hit; i += hitLen; continue; }
     }
-    if (type == null && kChipTypes.contains(t)) { type = t; i++; continue; }
+    if (type == null && chipTypes.contains(t)) { type = t; i++; continue; }
     // Size detection — but NOT for declared shape tokens that happen to start
     // with a digit (45° / 90°). Those are the elbow/tee ANGLE and belong in
     // level-2 (shape); letting sizeRe grab them would eat the angle and
     // silently drop the real diameter (e.g. "ברך 45° פ.פ 160" → 160 lost).
-    if (sizeRe.hasMatch(t) && !kChipLevel2Shape.contains(t)) {
+    if (sizeRe.hasMatch(t) && !level2Shape.contains(t)) {
       // First numeric → main size. Subsequent numerics → folded INTO the size
       // chip ("130 50/50/50" → "130 50/50/50") so the full catalog name stays
       // recoverable from the chips alone (E2E §21.B).
@@ -275,7 +143,7 @@ ChipPath parseChips(String nameHe) {
     // Unit token (מ"מ / mm) — fold it INTO the size chip instead of dropping
     // it or showing it standalone, so the size reads "20-63 מ"מ" and the full
     // catalog name stays recoverable from the chips alone (E2E §21.B).
-    if (_kChipUnits.contains(t)) {
+    if (chipUnits.contains(t)) {
       if (l5 != null) l5 = '$l5 $t';
       i++;
       continue;
@@ -304,10 +172,10 @@ ChipPath parseChips(String nameHe) {
     if (tryCompound(l4c, l4)) continue;
 
     // Single-token level lookups.
-    if (kChipLevel1Connection.contains(t)) { l1.add(t); i++; continue; }
-    if (kChipLevel2Shape.contains(t)) { l2.add(t); i++; continue; }
-    if (kChipLevel3Feature.contains(t)) { l3.add(t); i++; continue; }
-    if (kChipLevel4Thread.contains(t)) { l4.add(t); i++; continue; }
+    if (level1Connection.contains(t)) { l1.add(t); i++; continue; }
+    if (level2Shape.contains(t)) { l2.add(t); i++; continue; }
+    if (level3Feature.contains(t)) { l3.add(t); i++; continue; }
+    if (level4Thread.contains(t)) { l4.add(t); i++; continue; }
     leftover.add(t);
     i++;
   }
@@ -323,86 +191,3 @@ ChipPath parseChips(String nameHe) {
   );
 }
 
-const _l1Compounds = {
-  'ריתוך חשמלי', 'לריתוך חשמלי',
-  'לריתוך הברגה',
-};
-const _l2Compounds = {
-  'בין אוגנים', 'מעבר ישר', 'מיזוג אוויר', 'אספקת מים',
-};
-const _l3Compounds = {
-  'משטח ריסון', 'עם משטח ריסון',
-  'ללא ידית', 'לנקודת מים',
-  // "לוחית למיקום נקודת מים" — keep the whole positioning phrase as ONE chip
-  // so it reads in order; otherwise מים→L2, למיקום/נקודת→L3 and the breadcrumb
-  // scrambles to "מים ‹ למיקום ‹ נקודת".
-  'למיקום נקודת מים',
-  'עם מניעת זרימה חוזרת', 'עם מניעת זרימה', 'מניעת זרימה',
-  'ציפוי כרום', 'כולל אטם', 'מפלסטיק פוליפרופילן',
-  'לעבודה בגובה', 'לתיקון חורים',
-  'פלדה מצופה PP', 'פלדה מצופה',
-  'מכונת פיגורות', 'פיגורות שולחני', 'פיגורות קלה',
-  'לקטרים', 'מקדח לרוכבים', 'תותב ריתוך',
-  'לריתוך רוכב', 'עם רקורד',
-  '(לעבודה בגובה)',
-  // §22.E finish parentheticals (verbatim from catalog page headers — dashes
-  // are stripped by tokenizer so compound match expects tokens WITHOUT '-').
-  '(ציפוי כרום)',
-  '(ציפוי כרום ללא ידית)',
-  '(ציפוי כרום כולל ידית)',
-  // ─── Huliot SmartLock compounds (multi-word qualifiers from catalog) ───
-  'צד אחד חלק', 'צד אחד שקע תקע',
-  'AQUA SLIM', 'Aqua Slim',
-  'מערכת ניקוז',
-  'לכיור רחצה', 'לכיור מטבח', 'לכיור אמריקאי',
-  'למכונת כביסה', 'למדיח כלים', 'למדיח/מ.כביסה',
-  'עם כניסה למדיח/מ.כביסה', 'עם כניסה למדיח', 'עם כניסה למזגן',
-  'עם 2 מבואים צידיים', 'עם מבוא צידי וכניסה למ.כלים/מ.כביסה',
-  'עם יציאה למדיח', 'יציאה למדיח',
-  '+ צינור מדידה',
-  'מצרה (צד אחד חלק)', 'מצרה (צד אחד חלק) חיבור ברזל ופלסטיק',
-  'מתאם זווית - ג\'וקר', 'מתאם זווית',
-  'אום מעבר מברזל', 'אום מעבר מברזל למעבר מברזל',
-  'מתאם זחיח לכיור אמריקאי', 'מתאם זחיח',
-  'מבוא זחיח עם חיבור למזגן', 'מבוא זחיח',
-  'מאריך למבוא זחיח', 'ראש שקע תקע', 'ראש שקע תקע + אטם',
-  'מאסף קווי AQUA SLIM',
-  'סט פקקים לברז ושבלונה', 'סט פקקים לברז',
-  'מצחיה קומפלט לאביק לאמבט',
-  'מערכת ניקוז לאמבט',
-  // ─── Lipski — toilet-seat / gasket / trap compound features (gate 117) ─
-  'סגירה רכה', 'אנטי ונדליזם',
-  'ציר ניירוסטה', 'ציר פלסטיק',
-  'דו צדדי', 'חתך שטוח',
-  // "(מס. N)" — kitchen-sink trap variant marker; tokenizer keeps the parens
-  // attached so the compound walker sees `(מס.` + `N)` as two tokens.
-  '(מס. 1)', '(מס. 2)', '(מס. 3)', '(מס. 4)', '(מס. 5)',
-  '(מס. 6)', '(מס. 7)', '(מס. 8)', '(מס. 9)',
-  'ונטיל לכיור אמריקאי J', 'ונטיל לכיור אמריקאי',
-  'מחסום הורקה למכונת כביסה',
-  'סיפון הורקה קומפלקט J', 'סיפון הורקה קומפלקט',
-  'מחסום H למכונת כביסה',
-  'הגבהה אוניברסלית לאריח עם מכסה אטום מונע ריחות',
-  'הגבהה אוניברסלית לאריח', 'מכסה אטום מונע ריחות',
-  'אביזרים משלימים',
-  'דגם פסים', 'דגם ריבועים', 'דגם מלא/אריח',
-  'חיבור ברזל ופלסטיק', 'חיבור קצר לאגנית', 'חיבור ארוך לאגנית',
-  'סט חיבור למדיח / מכונת כביסה', 'סט חיבור למדיח',
-  'הגבהה פתח רבוע',
-  'מצרה לסיפון', 'ברך מצרה לסיפון',
-  'פקק לאביק', 'פקק לברז',
-  'מבוא לכיור אמריקאי', 'מבוא לכיור',
-  'מכלול לסיפון', 'צינור זחיח לסיפון',
-  'אטם מעביר SL',
-  'גומי אלסטומרי',
-  'מפתח לאום תבריג',
-  'Top Floor',
-  // catalog notes
-  '(ללא משפך)', '(שרשרת+10)', '(שחור)',
-  'מאסף נפילה',
-};
-const _l4Compounds = {
-  'שקע תקע', 'שקע-תקע',
-  'תבריג פנימי', 'תבריג חיצוני',
-  'תבריג פנים', 'תבריג חוץ',
-};
