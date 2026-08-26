@@ -147,6 +147,17 @@ void main() {
   ok('bs-security: נייד ישראלי', board.bsValidMobile('0501234567'));
   ok('bs-config: תווית-שדה', board.bsFieldLabel('anything').length >= 0);
 
+  // 18) 🔗↔ עזרה-הדדית: מאור עוזר לבנייה-חכמה (תאריך-עברי בחשבונית)
+  final invLine = board.bsInvoiceHebrewLine(1000, '2026-08-24');
+  ok('גשר-הפוך: חשבונית-בנייה-חכמה + תאריך-עברי-מאור', invLine.contains('מע"מ') && invLine.contains('חשבונית'));
+
+  // 19) 🧩 עצמאות: כל צד חי לבד (חוק-החשמלאי — קופסאות עצמאיות, נפגשות רק בלוח)
+  //   מאור-טהור: קוקפיט עובד בלי שום קריאת-בנייה-חכמה.
+  ok('עצמאות-מאור: הקוקפיט חי לבד', board.cockpitKpis(sups)['total'] == 4 && board.hebrewToday().isNotEmpty);
+  //   בנייה-חכמה-טהור: fuzzy+workflow+ולידציה עובדים בלי שום קריאת-מאור.
+  ok('עצמאות-בנייה-חכמה: הדומיין חי לבד',
+      board.bsFuzzyMatch('shalom', 'shalim') && board.bsWorkflowNextStage('intake') == 'prep' && board.bsValidEmail('a@b.co'));
+
   if (fails > 0) { print('❌ לוח-האם (Dart): $fails אי-התאמות'); throw StateError('board dart proof failed'); }
   print('✓ לוח-האם המאוחד (Dart): $n טענות — 12 קופסאות-מאור + 8 קופסאות-בנייה-חכמה על אותו לוח · מחוברים יחד');
 }

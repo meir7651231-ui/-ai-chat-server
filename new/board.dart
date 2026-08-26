@@ -145,6 +145,14 @@ class Board {
 
   // ── 🎛️ בנייה-חכמה: תווית-שדה-כלל בעברית ──
   String bsFieldLabel(String id) => bsConfig.fieldLabelHe(id);
+
+  // ── 🔗↔ גשר-הדדי: מאור עוזר לבנייה-חכמה — חשבונית-בנייה-חכמה בתאריך-עברי-מאור.
+  //     המקבילה ל-fuzzyDupPairs (בנייה-חכמה→מאור): כאן מאור→בנייה-חכמה. עזרה הדדית.
+  String bsInvoiceHebrewLine(int gross, String iso) {
+    final vat = bsProjects.invoiceVatOf(gross); // בנייה-חכמה: מע"מ
+    final heb = hebrewBox.hebDateFull(iso); // מאור: תאריך-עברי
+    return 'חשבונית · מע"מ ₪$vat · $heb';
+  }
 }
 
 Board makeBoard({Map<String, dynamic>? config, String Function()? clockIso, num rate = 3.7}) {
