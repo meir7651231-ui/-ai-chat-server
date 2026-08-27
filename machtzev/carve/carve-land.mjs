@@ -54,8 +54,10 @@ function landOne(r, seen) {
   // פסול: מתודת-override (לא אטום-עצמאי) · גוף-סטאב (קבוע ריק — אין מנגנון)
   if (/@override\b/.test(r.fnSource)) return { name: r.name, skip: '@override — לא אטום' };
   if (STUB.test(r.fnSource)) return { name: r.name, skip: 'סטאב — גוף-קבוע' };
-  const params = parseParams(r.fnSource);
+  const params = r.autoSocket ? r.origParams : parseParams(r.fnSource);
   if (params === null) return { name: r.name, skip: 'חתימה לא-טריוויאלית' };
+  const socketArgs = (r.autoSocket && r.socketMeta) ? r.socketMeta.map(s => `${s.name}: ${s.init}`).join(', ') : '';
+  const mkArgs = (c) => [c.map(v => v.d).join(', '), socketArgs].filter(Boolean).join(', ');
   const perParam = params.map(p => compat(p.type));
   if (perParam.some(x => x.length === 0)) return { name: r.name, skip: 'אין-קלט-סל' };
   const combos = [];
@@ -66,7 +68,7 @@ function landOne(r, seen) {
   const srcRef = r._srcRef || '(מקור)';
   fs.writeFileSync(atomAbs, atomFile(r, srcRef));
 
-  const callArgs = combos.map(c => c.map(v => v.d).join(', '));
+  const callArgs = combos.map(c => mkArgs(c));
   const harness = `import 'dart:convert';\nimport '${kb}.dart';\nvoid main(){\n${callArgs.map((a, i) => `  try { print(jsonEncode([${i}, (${r.name}(${a})).toString()])); } catch(e){ print(jsonEncode([${i}, {"__t":1}])); }`).join('\n')}\n}\n`;
   const harnessAbs = path.join(ROOT, 'dart', `_carve_h_${kb}.dart`);
   fs.writeFileSync(harnessAbs, harness);
@@ -85,7 +87,7 @@ function landOne(r, seen) {
 
   const esc = (s) => s.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\$/g, '\\$');
   const asserts = combos.map((c, i) => {
-    const call = `${r.name}(${c.map(v => v.d).join(', ')})`;
+    const call = `${r.name}(${mkArgs(c)})`;
     return outs[i] === '__THROW__'
       ? `  { var threw=false; try{ ${call}; }catch(_){threw=true;} if(!threw) throw StateError('FAIL #${i}: expected throw'); n++; }`
       : `  _eq((${call}).toString(), '${esc(outs[i])}', '#${i}'); n++;`;
@@ -103,7 +105,7 @@ function landOne(r, seen) {
 }
 
 const carved = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
-const trivial = carved.filter(r => r.ok && r.trivial);
+const trivial = carved.filter(r => r.ok && (r.trivial || r.autoSocket));
 const seen = new Set();
 let landed = 0, failed = 0, skipped = 0;
 for (const r of trivial) {
