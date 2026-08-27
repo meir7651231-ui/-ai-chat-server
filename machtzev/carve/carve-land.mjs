@@ -23,8 +23,15 @@ const kebab = (s) => s.replace(/([a-z0-9])([A-Z])/g, '$1_$2').replace(/^_+/, '')
 // גוף-סטאב: החזרת-קבוע ריקה-מתוכן (=> 0 / const {} / '' / null) — לא מנגנון
 const STUB = /=>\s*(?:const\s+)?(?:\{\s*\}|\[\s*\]|''|""|0|0\.0|null|-?\d+)\s*;?\s*$/;
 
+// ליטרל-דוגמה לטיפוס-אלמנט (לסינתזת-אוסף)
+const elemLit = (t) => ({ String: "'a'", int: '1', double: '1.5', num: '1', bool: 'true' }[t.replace(/\?$/, '')] ?? null);
 function compat(pt) {
   const nul = pt.endsWith('?'); const base = pt.replace(/\?$/, '');
+  // סינתזת-אוסף: List<X>/Set<X> ⇒ ריק + זוג-אלמנטים · Map<K,V> ⇒ ריק + זוג
+  const mL = base.match(/^(List|Set|Iterable)<(.+)>$/);
+  if (mL) { const el = elemLit(mL[2]); const c = mL[1] === 'List' ? '[]' : '{}'; const out = [{ d: `const <${mL[2]}>${c}`, t: base }]; if (el) out.push({ d: `const <${mL[2]}>${mL[1] === 'List' ? `[${el},${el}]` : `{${el}}`}`, t: base }); if (nul) out.push({ d: 'null', t: base }); return out; }
+  const mM = base.match(/^Map<\s*(.+?)\s*,\s*(.+)>$/);
+  if (mM) { const k = elemLit(mM[1]), v = elemLit(mM[2]); const out = [{ d: `const <${mM[1]}, ${mM[2]}>{}`, t: base }]; if (k && v) out.push({ d: `const <${mM[1]}, ${mM[2]}>{${k}: ${v}}`, t: base }); if (nul) out.push({ d: 'null', t: base }); return out; }
   return POOL.filter(v => {
     if (v.t === 'Null') return nul || base === 'Object' || base === 'dynamic';
     if (base === 'Object' || base === 'dynamic') return true;
