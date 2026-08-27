@@ -1,5 +1,5 @@
 // בדיקת-Golden · stringField — אפיון-חצב (חוק-4). מייבאת רק את האטום.
-import 'string-field.dart';
+import 'string_field.dart';
 void _eq(String got, String want, String lbl){ if(got!=want) throw StateError('FAIL [$lbl]: got=$got want=$want'); }
 void main(){
   var n=0;

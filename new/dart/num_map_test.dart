@@ -1,5 +1,5 @@
 // בדיקת-Golden · numMap — אפיון-חצב (חוק-4). מייבאת רק את האטום.
-import 'num-map.dart';
+import 'num_map.dart';
 void _eq(String got, String want, String lbl){ if(got!=want) throw StateError('FAIL [$lbl]: got=$got want=$want'); }
 void main(){
   var n=0;

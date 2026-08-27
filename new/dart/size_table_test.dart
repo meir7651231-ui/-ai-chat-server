@@ -1,5 +1,5 @@
 // בדיקת-Golden · sizeTable — אפיון-חצב (חוק-4). מייבאת רק את האטום.
-import 'size-table.dart';
+import 'size_table.dart';
 void _eq(String got, String want, String lbl){ if(got!=want) throw StateError('FAIL [$lbl]: got=$got want=$want'); }
 void main(){
   var n=0;
