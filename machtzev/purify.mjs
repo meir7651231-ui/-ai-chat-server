@@ -94,20 +94,37 @@ function pubName(n) { const b = n.replace(/^_/, ''); return 'k' + b[0].toUpperCa
 // מוסיף פרמטר-named-required לפונקציה top-level (השם זהה ל-const ⇒ גוף לא משתנה).
 // מחזיר {src, fn} — הקוד החדש ושם-הפונקציה (לחיווט הבדיקה).
 function addNamedParam(src, typeDecl, name) {
-  const re = /^([A-Za-z_][\w<>,?.\s]*?\s+([a-zA-Z_]\w*)\s*)\(([^;]*?)\)\s*\{/m;
-  const m = re.exec(src);
-  if (!m) return null;
-  const fn = m[2];
-  let params = m[3];
-  const decl = `required ${typeDecl} ${name}`;
-  let newParams;
-  if (/\{/.test(params)) {
-    newParams = params.replace(/\}(\s*)$/, `, ${decl},}$1`);
-    if (newParams === params) newParams = params.replace(/\{/, `{${decl}, `);
-  } else {
-    newParams = params.trim() ? `${params}, {${decl}}` : `{${decl}}`;
+  // מזהה פונקציית-top-level (עמודה-0) עם איזון-סוגריים אמיתי — תומך גוף-חץ (=>) ו-async,
+  // ופרמטרים מקוננים (String Function(String) x). מדלג על מילות-מפתח ומתודות-מחלקה (מוזחות).
+  const KW = new Set(['if','for','while','switch','return','const','final','var','class','enum','import','export','assert','new','void','get','set','typedef','extension','mixin','part']);
+  const re = /^(?:[A-Za-z_][\w<>,?.\s]*\s+)?([a-zA-Z_]\w*)\s*\(/gm;
+  let m;
+  while ((m = re.exec(src)) !== null) {
+    const fn = m[1];
+    if (KW.has(fn)) continue;
+    // איזון-סוגריים מה-( בסוף-ההתאמה (מדלג נכון על פרמטרים מקוננים)
+    let open = m.index + m[0].length - 1, depth = 0, j = open, inStr = false, q = '';
+    for (; j < src.length; j++) { const c = src[j];
+      if (inStr) { if (c === q && src[j-1] !== '\\') inStr = false; continue; }
+      if (c === '"' || c === "'") { inStr = true; q = c; continue; }
+      if (c === '(') depth++; else if (c === ')') { depth--; if (depth === 0) break; } }
+    if (j >= src.length) continue;
+    const close = j;
+    let k = close + 1; while (k < src.length && /\s/.test(src[k])) k++;
+    // אחרי ה-) חייב לבוא גוף-פונקציה: { , => , async/sync — אחרת זו קריאה/הצהרה, לא הגדרה
+    if (!(src[k] === '{' || src.startsWith('=>', k) || /^(async|sync)\b/.test(src.slice(k, k+8)))) continue;
+    const params = src.slice(open + 1, close);
+    const decl = `required ${typeDecl} ${name}`;
+    let newParams;
+    if (/\{/.test(params)) {
+      newParams = params.replace(/\}(\s*)$/, `, ${decl},}$1`);
+      if (newParams === params) newParams = params.replace(/\{/, `{${decl}, `);
+    } else {
+      newParams = params.trim() ? `${params}, {${decl}}` : `{${decl}}`;
+    }
+    return { src: src.slice(0, open + 1) + newParams + src.slice(close), fn };
   }
-  return { src: src.slice(0, m.index) + m[1] + '(' + newParams + ') {' + src.slice(m.index + m[0].length), fn };
+  return null;
 }
 
 // מזריק arg-named לכל קריאות fn( ... ) במקור (התאמת-סוגריים).
