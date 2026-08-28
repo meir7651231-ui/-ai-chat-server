@@ -24,11 +24,11 @@ enum WaterSystem { supply, drainage }
 /// Verified end-systems win when present & non-empty; else brand decides
 /// (פולירול ⇒ supply, otherwise ⇒ drainage — R8: don't guess).
 Set<WaterSystem> productDivisionSystems(
-  String brand, {
+  String brand, {required String Function(String) term, 
   required Set<WaterSystem>? verifiedEndSystems,
 }) {
   final ends = verifiedEndSystems;
   if (ends != null && ends.isNotEmpty) return ends;
-  if (brand == 'פולירול') return const {WaterSystem.supply};
+  if (brand == term('pvlyrvl')) return const {WaterSystem.supply};
   return const {WaterSystem.drainage};
 }

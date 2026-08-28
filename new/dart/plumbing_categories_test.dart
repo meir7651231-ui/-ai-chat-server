@@ -1,3 +1,4 @@
+import '../dart-data/plumbing_categories-terms.dart' as td_plumbing_categories;
 // בדיקת-חוזה · plumbingCategories — מוכיחה את דוגמאות-החוזה (חוק-4).
 // מייבאת אך ורק את האטום-שלה. הדאטה בבדיקה = תת-עץ verbatim מ-kCatalogTree
 // (buildsmart data/catalog_tree.dart:36-71, ענף ה-drainage) — התנהגות-אמת.
@@ -46,7 +47,7 @@ void main() {
     ),
   ];
   final out = plumbingCategories(tree,
-      categoryId: catId, tradeId: 'plumbing', uncategorizedCategoryId: uncat);
+      categoryId: catId, tradeId: 'plumbing', uncategorizedCategoryId: uncat, term: (k)=>td_plumbing_categories.kTerms[k]!);
 
   // 5 צמתים + דלי-fallback = 6
   _eq(out.length, 6, '#1 length'); n++;
@@ -90,7 +91,7 @@ void main() {
 
   // ── דוגמה 2 · עץ ריק ⇒ רק דלי-ה-fallback, sortIndex=0 ──
   final empty = plumbingCategories(const [],
-      categoryId: catId, tradeId: 'plumbing', uncategorizedCategoryId: uncat);
+      categoryId: catId, tradeId: 'plumbing', uncategorizedCategoryId: uncat, term: (k)=>td_plumbing_categories.kTerms[k]!);
   _eq(empty.length, 1, '#8 empty ⇒ 1'); n++;
   _eq(empty[0].id, uncat, '#8 empty id'); n++;
   _eq(empty[0].sortIndex, 0, '#8 empty sortIndex=0'); n++;
@@ -101,7 +102,7 @@ void main() {
     CatalogNode(id: 'a', title: 'איי', emoji: '🅐'),
   ];
   final s = plumbingCategories(zThenA,
-      categoryId: (k) => 't.$k', tradeId: 't', uncategorizedCategoryId: 't._u');
+      categoryId: (k) => 't.$k', tradeId: 't', uncategorizedCategoryId: 't._u', term: (k)=>td_plumbing_categories.kTerms[k]!);
   _eq(s.map((c) => c.id).join('|'), 't._u|t.a|t.z', '#9 sorted'); n++;
   _eq(s[1].sortIndex, 1, '#9 a נכנס שני ⇒ si=1 נשמר'); n++;
   _eq(s[2].sortIndex, 0, '#9 z נכנס ראשון ⇒ si=0 נשמר'); n++;
@@ -109,7 +110,7 @@ void main() {
 
   // דטרמיניזם: שתי קריאות ⇒ אותה סדרת-ids (המקור: "two calls must stay byte-equal").
   final again = plumbingCategories(tree,
-      categoryId: catId, tradeId: 'plumbing', uncategorizedCategoryId: uncat);
+      categoryId: catId, tradeId: 'plumbing', uncategorizedCategoryId: uncat, term: (k)=>td_plumbing_categories.kTerms[k]!);
   _eq(again.map((c) => '${c.id}/${c.sortIndex}').join('|'),
       out.map((c) => '${c.id}/${c.sortIndex}').join('|'), '#10 דטרמיניזם'); n++;
 

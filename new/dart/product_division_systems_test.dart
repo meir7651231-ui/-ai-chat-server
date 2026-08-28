@@ -1,3 +1,4 @@
+import '../dart-data/product_division_systems-terms.dart' as td_product_division_systems;
 // בדיקת-חוזה · productDivisionSystems — מייבאת אך ורק את האטום-שלה (חוק-4).
 // הרצה: dart run --enable-asserts new/dart/product_division_systems_test.dart
 import 'product_division_systems.dart';
@@ -12,35 +13,35 @@ void main() {
   var n = 0;
 
   // — מותג מכריע כשאין spec (null) —
-  _eqSet(productDivisionSystems('פולירול', verifiedEndSystems: null),
+  _eqSet(productDivisionSystems('פולירול', verifiedEndSystems: null, term: (k)=>td_product_division_systems.kTerms[k]!),
       {WaterSystem.supply}, '1 polirol'); n++;
-  _eqSet(productDivisionSystems('חוליות', verifiedEndSystems: null),
+  _eqSet(productDivisionSystems('חוליות', verifiedEndSystems: null, term: (k)=>td_product_division_systems.kTerms[k]!),
       {WaterSystem.drainage}, '2 default'); n++;
 
   // — spec לא-ריק גובר על הכול —
   _eqSet(
       productDivisionSystems('כלשהו',
-          verifiedEndSystems: {WaterSystem.supply, WaterSystem.drainage}),
+          verifiedEndSystems: {WaterSystem.supply, WaterSystem.drainage}, term: (k)=>td_product_division_systems.kTerms[k]!),
       {WaterSystem.supply, WaterSystem.drainage}, '3 spec-both'); n++;
-  _eqSet(productDivisionSystems('פולירול', verifiedEndSystems: {WaterSystem.drainage}),
+  _eqSet(productDivisionSystems('פולירול', verifiedEndSystems: {WaterSystem.drainage}, term: (k)=>td_product_division_systems.kTerms[k]!),
       {WaterSystem.drainage}, '4 spec-over-brand'); n++;
-  _eqSet(productDivisionSystems('x', verifiedEndSystems: {WaterSystem.supply}),
+  _eqSet(productDivisionSystems('x', verifiedEndSystems: {WaterSystem.supply}, term: (k)=>td_product_division_systems.kTerms[k]!),
       {WaterSystem.supply}, '9 spec-single'); n++;
 
   // — spec ריק ⇒ נופל לענף-המותג —
-  _eqSet(productDivisionSystems('כלשהו', verifiedEndSystems: {}),
+  _eqSet(productDivisionSystems('כלשהו', verifiedEndSystems: {}, term: (k)=>td_product_division_systems.kTerms[k]!),
       {WaterSystem.drainage}, '5 empty-spec-default'); n++;
-  _eqSet(productDivisionSystems('פולירול', verifiedEndSystems: {}),
+  _eqSet(productDivisionSystems('פולירול', verifiedEndSystems: {}, term: (k)=>td_product_division_systems.kTerms[k]!),
       {WaterSystem.supply}, '6 empty-spec-polirol'); n++;
 
   // — עדשה-עוינת: השוואת-מותג מדויקת —
-  _eqSet(productDivisionSystems('', verifiedEndSystems: null),
+  _eqSet(productDivisionSystems('', verifiedEndSystems: null, term: (k)=>td_product_division_systems.kTerms[k]!),
       {WaterSystem.drainage}, '7 empty-brand'); n++;
-  _eqSet(productDivisionSystems('פולירול ', verifiedEndSystems: null),
+  _eqSet(productDivisionSystems('פולירול ', verifiedEndSystems: null, term: (k)=>td_product_division_systems.kTerms[k]!),
       {WaterSystem.drainage}, '8 trailing-space'); n++;
 
   // assert חי (חוק: --enable-asserts) —
-  assert(productDivisionSystems('פולירול', verifiedEndSystems: null)
+  assert(productDivisionSystems('פולירול', verifiedEndSystems: null, term: (k)=>td_product_division_systems.kTerms[k]!)
       .contains(WaterSystem.supply), 'assert-live guard');
 
   print('OK productDivisionSystems: $n asserts passed');

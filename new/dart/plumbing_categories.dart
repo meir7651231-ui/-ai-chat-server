@@ -23,7 +23,7 @@
 /// DFS קדם-סדר; sortIndex = מקום-בין-האחים; דלי-fallback מצורף אחרון עם
 /// sortIndex=out.length (לפני-המיון — יציב); מיון סופי לפי id (דטרמיניזם).
 List<TradeCategory> plumbingCategories(
-  List<CatalogNode> catalogTree, {
+  List<CatalogNode> catalogTree, {required String Function(String) term, 
   required String Function(String key) categoryId,
   required String tradeId,
   required String uncategorizedCategoryId,
@@ -55,7 +55,7 @@ List<TradeCategory> plumbingCategories(
     TradeCategory(
       id: uncategorizedCategoryId,
       tradeId: tradeId,
-      titleHe: 'ללא קטגוריה',
+      titleHe: term('lla-ktgvryh'),
       emoji: '❓',
       parentId: null,
       sortIndex: out.length,

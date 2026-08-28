@@ -1,3 +1,4 @@
+import '../dart-data/wf_daily_rows-terms.dart' as td_wf_daily_rows;
 // בדיקת-אטום · wfDailyRows
 import 'wf_daily_rows.dart';
 
@@ -58,7 +59,7 @@ void main() {
     itemLabel: (_) => 'פריט',
     stageLabel: (_, s) => s.name,
     unitsTotal: (a) => a.names.length,
-  );
+   term: (k)=>td_wf_daily_rows.kTerms[k]!);
 
   // כותרת + e1 + e4 (e2/e3 מדולגים)
   assert(rows.length == 3, 'rows=${rows.length}');

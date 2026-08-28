@@ -3,5 +3,5 @@
 // טוהר: פונקציית top-level עצמאית, אפס-import (אומת ע"י פותר-המזהים).
 
 /// Display name — `שלום, {name}` strips the trailing ` (עובד)` (§4.2).
-String workerShortName(int worker, {required List<String> kWorkers}) =>
-    kWorkers[worker].replaceAll(' (עובד)', '');
+String workerShortName(int worker, {required String Function(String) term, required List<String> kWorkers}) =>
+    kWorkers[worker].replaceAll(term('avbd'), '');

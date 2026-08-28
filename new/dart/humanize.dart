@@ -4,10 +4,10 @@
 
 /// גיבוי לזנב-הארוך: מסיר סיומת '_screen', מחליף '_' ברווח, מקצץ. לעולם לא
 /// מחזיר מחרוזת ריקה (מזהה-ריק ⇒ 'מסך').
-String humanize(String screen) {
+String humanize(String screen, {required String Function(String) term}) {
   var s = screen.endsWith('_screen')
       ? screen.substring(0, screen.length - '_screen'.length)
       : screen;
   s = s.replaceAll('_', ' ').trim();
-  return s.isEmpty ? 'מסך' : s;
+  return s.isEmpty ? term('msk') : s;
 }

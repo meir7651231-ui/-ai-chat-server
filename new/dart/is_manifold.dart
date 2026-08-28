@@ -18,5 +18,5 @@ class LipskeyCatalogProduct {
 }
 
 /// זיהוי מחלק/סעפת לפי השם — שם-המוצר מכיל 'מחלק' או 'סעפת'.
-bool isManifold(LipskeyCatalogProduct p) =>
-    p.nameHe.contains('מחלק') || p.nameHe.contains('סעפת');
+bool isManifold(LipskeyCatalogProduct p, {required String Function(String) term}) =>
+    p.nameHe.contains(term('mchlk')) || p.nameHe.contains(term('sapt'));

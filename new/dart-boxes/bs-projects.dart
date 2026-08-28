@@ -1,3 +1,4 @@
+import '../dart-data/invoice_title-terms.dart' as td_invoice_title;
 import '../dart-data/critical_business_kind-terms.dart';
 // 📦 קופסת-חיבורים · bs-projects (בנייה-חכמה) — תמחיר/פיננסים של פרויקטי-בנייה.
 // חוזה: מקור-האמת buildsmart/app_flutter/lib/logic (invoice · manager_dashboard ·
@@ -45,7 +46,7 @@ const double _vatRate = 0.18;
 /// כותרת-מסמך: 'קבלה — <id>' כאשר receipt=true, אחרת 'חשבונית — <id>'.
 /// שקע-`orderId` = ידע-הקשר (במקור order.id) ⇒ נשאר פרמטר (חוק-3, הצרכן מזריק).
 String invoiceTitle(String orderId, {required bool receipt}) =>
-    it.invoiceTitle(orderId, receipt: receipt);
+    it.invoiceTitle(orderId, receipt: receipt, term: (k)=>td_invoice_title.kTerms[k]!);
 
 /// רכיב-המע"מ מסכום-ברוטו (כולל-מע"מ), לאחור. שקע-שיעור מחווט להכרעת-הקופסה `_vatRate`.
 int invoiceVatOf(int grossTotal) =>

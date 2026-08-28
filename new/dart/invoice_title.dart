@@ -11,5 +11,5 @@
 
 /// Invoice/receipt document title. Verbatim of invoice.dart:45-47 with `order.id`
 /// injected as the `orderId` socket (law-3; Order is a large neighbour type).
-String invoiceTitle(String orderId, {required bool receipt}) =>
-    '${receipt ? 'קבלה' : 'חשבונית'} — $orderId';
+String invoiceTitle(String orderId, {required String Function(String) term, required bool receipt}) =>
+    '${receipt ? term('kblh') : term('chshbvnyt')} — $orderId';

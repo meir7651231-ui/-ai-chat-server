@@ -48,7 +48,7 @@ class WfCase {
 List<List<Object>> wfDailyRows(
   OrgConfig cfg,
   List<({String name, String phone, WfCase? wf})> entities,
-  String todayIso, {
+  String todayIso, {required String Function(String) term, 
   required String Function(OrgConfig) unitLabel,
   required String Function(OrgConfig) itemLabel,
   required String Function(OrgConfig, WfStage) stageLabel,
@@ -57,7 +57,7 @@ List<List<Object>> wfDailyRows(
   final unit = unitLabel(cfg);
   final item = itemLabel(cfg);
   final rows = <List<Object>>[
-    ['שם', 'טלפון', '$unit היום', 'שלב', item, 'מתי לדבר שוב', 'הערה'],
+    [term('shm'), term('tlpvn'), '$unit היום', term('shlb'), item, term('mty-ldbr-shvb'), term('harh')],
   ];
   for (final e in entities) {
     final a = e.wf;

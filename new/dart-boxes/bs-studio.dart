@@ -1,3 +1,4 @@
+import '../dart-data/product_division_systems-terms.dart' as td_product_division_systems;
 import '../dart-data/kind_plural-terms.dart';
 // 📦 קופסת-חיבורים · bs-studio (בנייה-חכמה · ניהול-סטודיו + פרומפטי-קופיילוט).
 // מקור-האמת: buildsmart/app_flutter/lib/logic/{studio/*, manager_copilot, intel/segments,
@@ -125,7 +126,7 @@ Set<pds.WaterSystem> productDivisionSystems(
   String brand, {
   required Set<pds.WaterSystem>? verifiedEndSystems,
 }) =>
-    pds.productDivisionSystems(brand, verifiedEndSystems: verifiedEndSystems);
+    pds.productDivisionSystems(brand, verifiedEndSystems: verifiedEndSystems, term: (k)=>td_product_division_systems.kTerms[k]!);
 
 /// האם המוצר עומד בטמפרטורת-הקו [tempC]: אין דירוג ([maxTempC]==null) ⇒ תמיד true;
 /// אחרת tempC <= maxTempC.

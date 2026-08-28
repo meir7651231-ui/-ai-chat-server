@@ -15,9 +15,9 @@ class LipskeyCatalogProduct {
 final RegExp _kReducer = RegExp(r'(\d{2,3})\s*[×xX]\s*(\d{2,3})');
 
 /// הקוטר השני של מצרה (הקטן), או `null` אם לא דו-קוטרי.
-int? od2Of(LipskeyCatalogProduct p) {
+int? od2Of(LipskeyCatalogProduct p, {required String Function(String) term}) {
   final m = _kReducer.firstMatch(p.nameHe) ??
-      _kReducer.firstMatch(p.dims?['מידה']?.toString() ?? '');
+      _kReducer.firstMatch(p.dims?[term('mydh')]?.toString() ?? '');
   if (m == null || m.group(1) == m.group(2)) return null;
   return int.tryParse(m.group(2)!);
 }
