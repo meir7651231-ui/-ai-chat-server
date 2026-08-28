@@ -22,7 +22,7 @@
 
 /// היסטוריית-תלמיד/ה כטקסט קריא — שורה להשתתפות, לתדפיס/העתקה.
 /// התנהגות זהה-ביט למקור-ה-JS `studentHistoryText`.
-String studentHistoryText(List<dynamic> entries) {
+String studentHistoryText(List<dynamic> entries, {required String Function(String) term}) {
   return entries.map((hDyn) {
     final h = hDyn as Map;
     final yearLabel = _prop(h, 'yearLabel');
@@ -31,8 +31,8 @@ String studentHistoryText(List<dynamic> entries) {
     final grp = _jsTruthy(group) ? ' · ${_jsStr(group)}' : '';
     final summary = h['summary'] as Map;
     return '$yr${_jsStr(_prop(h, 'courseName'))}$grp'
-        ' — נוכחות ${_jsStr(_prop(summary, 'presents'))},'
-        ' חיסורים ${_jsStr(_prop(summary, 'absences'))}'
+        '${term('nvkchvt')}${_jsStr(_prop(summary, 'presents'))},'
+        '${term('chysvrym')}${_jsStr(_prop(summary, 'absences'))}'
         ' · ${_jsStr(_prop(summary, 'statusLabel'))}';
   }).join('\n');
 }

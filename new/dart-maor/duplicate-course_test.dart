@@ -1,3 +1,4 @@
+import '../dart-data-maor/duplicate-course-terms.dart' as td_duplicate_course;
 // בדיקת-חוזה (רתמת-זהב) · duplicateCourse — מייבאת אך ורק את האטום-שלה (חוק-4).
 // שש דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/duplicate-course.test.mjs
 // (אותם קלטים→פלטים). אם עובר ⇒ Dart≡JS.
@@ -23,7 +24,7 @@ void main() {
     'price': 120,
   };
   final d = duplicateCourse(
-      c, 'c2', {'start': '2026-09-01', 'end': '2027-01-31'});
+      c, 'c2', {'start': '2026-09-01', 'end': '2027-01-31'}, term: (k)=>td_duplicate_course.kTerms[k]!);
 
   _ok(d['id'] == 'c2', "id ⇒ 'c2'");
   _ok(d['name'] == 'ציור (עותק)', "name ⇒ 'ציור (עותק)'");
@@ -32,7 +33,7 @@ void main() {
   _ok(c['id'] == 'c1' && c['name'] == 'ציור' && c['start'] == '2026-01-01',
       'המקור לא השתנה (טהור)');
   _ok(
-      duplicateCourse(d, 'c3', {'start': '2027-02-01', 'end': '2027-06-30'})[
+      duplicateCourse(d, 'c3', {'start': '2027-02-01', 'end': '2027-06-30'}, term: (k)=>td_duplicate_course.kTerms[k]!)[
               'name'] ==
           'ציור (עותק) (עותק)',
       'שכפול-של-עותק מסומן פעמיים');

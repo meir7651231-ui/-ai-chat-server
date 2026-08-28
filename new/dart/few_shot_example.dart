@@ -12,13 +12,13 @@
 /// ONE valid few-shot op built from a REAL slice id (never invented).
 /// Verbatim behaviour of edit_prompt.dart `_fewShotExample` with the registry read injected.
 String? fewShotExample(
-  List<String> slice, {
+  List<String> slice, {required String Function(String) term, 
   required Iterable<String> Function(String id) propKeysFor,
 }) {
   if (slice.isEmpty) return null;
   for (final id in slice) {
     if (propKeysFor(id).contains('text')) {
-      return '[{"op":"setText","id":"$id","text":"טקסט לדוגמה"}]';
+      return '[{"op":"setText","id":"$id${term('tkst-ldvgmh')}';
     }
   }
   return '[{"op":"setHidden","id":"${slice.first}","hidden":false}]';

@@ -17,16 +17,16 @@
 /// Verbatim behaviour of diff_preview.dart:184-195 with the registry read, the
 /// `CfgStyle.colorToken` field, and `_colorHe` injected as slots.
 String styleHe(
-  String id, {
+  String id, {required String Function(String) term, 
   required String? colorToken,
   required List<String> Function(String id, String attr) allowedValues,
   required String Function(String) colorHe,
 }) {
   final token = colorToken;
-  if (token == null) return 'שינוי עיצוב: $id';
+  if (token == null) return '${term('shynvy-aytsvb')}$id';
   // §10 — precise only when the registry vouches for the token (skip when unknown).
   if (allowedValues(id, 'color').contains(token)) {
-    return 'שינוי צבע: $id ← ${colorHe(token)}';
+    return '${term('shynvy-tsba')}$id ← ${colorHe(token)}';
   }
-  return 'שינוי צבע: $id';
+  return '${term('shynvy-tsba')}$id';
 }

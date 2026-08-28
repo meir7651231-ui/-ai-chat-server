@@ -1,3 +1,4 @@
+import '../dart-data-maor/delivery-list-lines-terms.dart' as td_delivery_list_lines;
 import '../dart-data-maor/deliveries-csv-rows-terms.dart';
 // 📦 קופסת-חיבורים · חלוקה (SHOP7, Dart) — מחווטת 12 אטומי-Dart. מקבילה ל-new/boxes/distribution.mjs.
 // חוזה משותף: new/boxes/distribution.contract.md · מקור-האמת: maor/src/components/shop7/lib.ts.
@@ -59,7 +60,7 @@ Map<String, dynamic> loadHint(dynamic db, dynamic vol, dynamic dayId) =>
     vlh.volunteerLoadHint(db, vol, dayId, _dovSock);
 
 /// שורות-תדפיס יום-חלוקה — statusLabel (מילון-הקופסה) מחווט פנימית.
-List<String> listLines(List<dynamic> rows) => dll.deliveryListLines(rows.cast<Map<String, dynamic>>(), statusLabel);
+List<String> listLines(List<dynamic> rows) => dll.deliveryListLines(rows.cast<Map<String, dynamic>>(), statusLabel, term: (k)=>td_delivery_list_lines.kTerms[k]!);
 
 /// שורות-CSV של מסירות — termOf (אטום) + statusLabel (מילון-הקופסה) מחווטים פנימית.
 List<List<String>> csvRows(Map<String, dynamic> db, [dynamic config]) =>

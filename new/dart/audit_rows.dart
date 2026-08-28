@@ -52,7 +52,7 @@ class QualityReport {
 /// values are skipped. Verbatim behaviour of data_quality.dart:56-90 with the sibling
 /// `normName` injected (Law 1/3) and the neighbour types inlined.
 QualityReport auditRows(
-  List<QualityRow> rows, {
+  List<QualityRow> rows, {required String Function(String) term, 
   required String Function(String) normName,
 }) {
   final warnings = <QualityWarning>[];
@@ -66,7 +66,7 @@ QualityReport auditRows(
         warnings.add(QualityWarning(
           line: r.line,
           kind: 'dup-name',
-          message: 'פריט ${r.line} — שם זהה לפריט $first (מק"ט שונה): "${r.name}"',
+          message: '${term('pryt')}${r.line}${term('shm-zhh-lpryt')}$first${term('mkt-shvnh')}${r.name}"',
         ));
       } else {
         firstByName[nn] = r.line;
@@ -79,7 +79,7 @@ QualityReport auditRows(
         warnings.add(QualityWarning(
           line: r.line,
           kind: 'near-key',
-          message: 'פריט ${r.line} — מק"ט שונה רק ברישיות/רווח מפריט $first',
+          message: '${term('pryt')}${r.line}${term('mkt-shvnh-rk-bryshyvtrvvch-mpryt')}$first',
         ));
       } else {
         firstByKey[nk] = r.line;

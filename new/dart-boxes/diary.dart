@@ -1,3 +1,4 @@
+import '../dart-data-maor/group-label-of-terms.dart' as td_group_label_of;
 import '../dart-data-maor/absence-reason-chips-terms.dart' as td_absence_reason_chips;
 import '../dart-data-maor/plan-word-terms.dart';
 // 📦 קופסת-חיבורים · diary (יומן-חדרים · Dart) — מחווטת אטומי-Dart בלבד.
@@ -75,7 +76,7 @@ String fmtDate(String? iso) => fd.fmtDate(iso);
 List<String> get DAY_NAMES => wdn.dayNames; // ignore: non_constant_identifier_names
 String pad2(dynamic n) => p2.pad2(n);
 dynamic timeToMin(dynamic t) => ttm.timeToMin(t);
-String groupLabelOf(dynamic ss, int i) => glo.groupLabelOf(ss as Map, i);
+String groupLabelOf(dynamic ss, int i) => glo.groupLabelOf(ss as Map, i, term: (k)=>td_group_label_of.kTerms[k]!);
 List<String> get ABSENCE_REASON_CHIPS => arc.absenceReasonChips(term: (k)=>td_absence_reason_chips.kTerms[k]!); // ignore: non_constant_identifier_names
 Map<String, bool> makeupEligibility(String kind, bool justified, num? rawHrs) =>
     me.makeupEligibility(kind, justified, rawHrs);

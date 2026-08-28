@@ -1,3 +1,4 @@
+import '../dart-data/style_he-terms.dart' as td_style_he;
 // בדיקת-חוזה · styleHe — מייבאת אך ורק את האטום-שלה (חוק-4).
 // הרצה: dart run --enable-asserts new/dart/style_he_test.dart
 import 'style_he.dart';
@@ -10,7 +11,7 @@ String _colorHe(String token) =>
     const {'primary': 'ראשי', 'danger': 'אדום'}[token] ?? token;
 
 String _run(String id, String? token) =>
-    styleHe(id, colorToken: token, allowedValues: _allowed, colorHe: _colorHe);
+    styleHe(id, colorToken: token, allowedValues: _allowed, colorHe: _colorHe, term: (k)=>td_style_he.kTerms[k]!);
 
 void _eq(String got, String want, String label) {
   if (got != want) throw StateError('FAIL [$label]: got="$got" want="$want"');

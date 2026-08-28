@@ -1,3 +1,4 @@
+import '../dart-data-maor/gematria-terms.dart' as td_gematria;
 // 📦 קופסת-חיבורים · לוח עברי (Dart) — מחווטת 4 אטומי-Dart. מקבילה ל-new/boxes/hebrew-calendar.mjs.
 // חוזה משותף: new/boxes/hebrew-calendar.contract.md. מקור-האמת: maor/src/lib/hebrew.ts.
 // זהו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart) מתחברות לאותה קופסה: אותם קלטים ⇒ אותו פלט.
@@ -31,7 +32,7 @@ String fullDate(String? iso) {
   final p = hp.hebParts(d);
   final day = p['day'] as int;
   final year = p['year'] as int;
-  return '${g.gem(day)} ${hm.hebMonthHe(d)} ${g.gem(year % 1000)}';
+  return '${g.gem(day, term: (k)=>td_gematria.kTerms[k]!)} ${hm.hebMonthHe(d)} ${g.gem(year % 1000, term: (k)=>td_gematria.kTerms[k]!)}';
 }
 
 /// מפתח-חזרה-שנתית: "‹חודש-מנורמל-אדר› ‹יום›". חודש ריק (קלט שבור) ⇒ ''.

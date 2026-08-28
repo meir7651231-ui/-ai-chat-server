@@ -1,3 +1,4 @@
+import '../dart-data/branch_label-terms.dart' as td_branch_label;
 import '../dart-data/is_directional_device-terms.dart' as td_is_directional_device;
 import '../dart-data/directional_context-terms.dart';
 // 📦 קופסת-חיבורים · bs-pipe (בנייה-חכמה · מנוע-הצנרת המלא: מסלול · לחץ · ערכה · תמחיר · תאימות · צ׳קליסט).
@@ -585,7 +586,7 @@ class PipeBox {
   // ═══ אשכול ז׳ · עוזרים ══════════════════════════════════════════════════════
 
   /// תווית-אזור-ענף עברית לאינדקס [i] ('ענף א׳', 'ענף ב׳', …).
-  String branchLabel(int i) => bl.branchLabel(i, letters: _branchLetters);
+  String branchLabel(int i) => bl.branchLabel(i, letters: _branchLetters, term: (k)=>td_branch_label.kTerms[k]!);
 
   /// מוסיף יחידה של [p] ל-BOM: [items] (dedup לפי-sku) · [qty] (מונה) · [zones] (אזור→sku-ים).
   void bomAddItem<T>(

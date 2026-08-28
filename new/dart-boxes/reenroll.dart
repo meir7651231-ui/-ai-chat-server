@@ -1,3 +1,4 @@
+import '../dart-data-maor/student-history-text-terms.dart' as td_student_history_text;
 import '../dart-data-maor/reenroll-list-text-terms.dart';
 // 📦 קופסת-חיבורים · reenroll — רישום-לשנה-הבאה (courses.reenroll). מחווטת 16 אטומי-Dart.
 // מקבילה ל-new/boxes/reenroll.mjs · חוזה: reenroll.contract.md · מקור-האמת (L4):
@@ -82,7 +83,7 @@ Map<String, Object?> freshNextYearEnrollment(
         Map<String, Object?> src, String targetCourseId, String newId, String todayIso,
         [Object? groupOverride]) =>
     fnye.freshNextYearEnrollment(src, targetCourseId, newId, todayIso, groupOverride);
-String studentHistoryText(List<dynamic> entries) => sht.studentHistoryText(entries);
+String studentHistoryText(List<dynamic> entries) => sht.studentHistoryText(entries, term: (k)=>td_student_history_text.kTerms[k]!);
 List<List<String>> reenrollCsvRows(List<Map<String, Object?>> rows) => rcr.reenrollCsvRows(rows);
 String reenrollListText(List<Map<String, dynamic>> rows) => rlt.reenrollListText(rows, term: (k)=>kTerms[k]!);
 

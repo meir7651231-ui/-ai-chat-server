@@ -11,5 +11,5 @@
 
 /// Hebrew branch-zone label. `i < letters.length` ? `letters[i]` : one-based number.
 /// Verbatim behaviour of install_engine.dart:935-936 with the sibling const injected.
-String branchLabel(int i, {required List<String> letters}) =>
-    'ענף ${i < letters.length ? letters[i] : (i + 1).toString()}';
+String branchLabel(int i, {required String Function(String) term, required List<String> letters}) =>
+    '${term('anf')}${i < letters.length ? letters[i] : (i + 1).toString()}';

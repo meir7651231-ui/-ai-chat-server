@@ -1,3 +1,4 @@
+import '../dart-data-maor/gematria-terms.dart' as td_gematria;
 // 📦 קופסת-חיבורים · receipt (Dart) — מחווטת 12 אטומי-Dart. מקבילה ל-new/boxes/receipt.mjs.
 // חוזה משותף: new/boxes/receipt.contract.md · מקור-האמת (L4): maor/src/lib/receipt.ts.
 // זהו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart) מתחברות לאותה קופסה: אותם קלטים ⇒ אותו פלט.

@@ -17,4 +17,4 @@ class NoteOrder {
 }
 
 /// כותרת-המסמך לתעודת-משלוח — verbatim של delivery_note.dart:41.
-String deliveryNoteTitle(NoteOrder order) => 'תעודת משלוח — ${order.id}';
+String deliveryNoteTitle(NoteOrder order, {required String Function(String) term}) => '${term('tavdt-mshlvch')}${order.id}';

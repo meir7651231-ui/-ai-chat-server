@@ -1,3 +1,4 @@
+import '../dart-data/audit_rows-terms.dart' as td_audit_rows;
 // בדיקת-חוזה (golden-אפיון) · auditRows — מייבאת אך ורק את האטום-שלה (חוק-4).
 // הרצה: dart run --enable-asserts new/dart/audit_rows_test.dart  ⇒ exit 0
 //
@@ -26,7 +27,7 @@ void _eqS(String got, String want, String label) {
 }
 
 QualityReport _run(List<QualityRow> rows) =>
-    auditRows(rows, normName: _normName);
+    auditRows(rows, normName: _normName, term: (k)=>td_audit_rows.kTerms[k]!);
 
 void main() {
   var n = 0;

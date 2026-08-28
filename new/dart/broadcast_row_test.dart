@@ -1,3 +1,4 @@
+import '../dart-data/broadcast_row-terms.dart' as td_broadcast_row;
 // בדיקת-חוזה golden · broadcastRow — מייבאת אך ורק את האטום-שלה (חוק-4).
 // הרצה: dart run --enable-asserts new/dart/broadcast_row_test.dart
 import 'broadcast_row.dart';
@@ -21,7 +22,7 @@ String _plural(ConfigOpKind k, bool allColor) => switch (k) {
     };
 
 String _run(List<ConfigOp> ops) =>
-    broadcastRow(ops, kindEmoji: _emoji, kindPlural: _plural).text;
+    broadcastRow(ops, kindEmoji: _emoji, kindPlural: _plural, term: (k)=>td_broadcast_row.kTerms[k]!).text;
 
 void _eq(String got, String want, String label) {
   if (got != want) throw StateError('FAIL [$label]: got="$got" want="$want"');

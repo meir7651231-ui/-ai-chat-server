@@ -3,4 +3,4 @@
 // טוהר: פונקציית top-level עצמאית, אפס-import (אומת ע"י פותר-המזהים).
 
 /// The §9 advisory line: "כרגע N הזמנות תואמות".
-String advisoryHe(int matches) => 'כרגע $matches הזמנות תואמות';
+String advisoryHe(int matches, {required String Function(String) term}) => '${term('krga')}$matches${term('hzmnvt-tvamvt')}';

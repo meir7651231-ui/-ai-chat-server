@@ -14,10 +14,10 @@
 /// Verbatim behaviour of edit_safety.dart:373-376 with the two thresholds
 /// injected (their literal values are unrecoverable — inferred defaults).
 String? softBatchWarnHe(
-  int opCount, {
+  int opCount, {required String Function(String) term, 
   int softWarn = 5,
   int maxBatch = 20,
 }) =>
     (opCount >= softWarn && opCount <= maxBatch)
-        ? 'שים לב — $opCount פעולות בבת אחת. אפשר להמשיך, או לצמצם.'
+        ? '${term('shym-lb')}$opCount${term('pavlvt-bbt-acht-apshr-lhmshyk-av-ltsmtsm')}'
         : null;

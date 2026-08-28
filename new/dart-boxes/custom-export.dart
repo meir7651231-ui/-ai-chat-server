@@ -1,3 +1,4 @@
+import '../dart-data-maor/gematria-terms.dart' as td_gematria;
 import '../dart-data-maor/exp-field-defs-terms.dart';
 import '../dart-data-maor/stage-label.dart';
 // 📦 קופסת-חיבורים · דו"ח מותאם (Dart) — מחווטת 26 אטומי-Dart. מקבילה ל-new/boxes/custom-export.mjs.

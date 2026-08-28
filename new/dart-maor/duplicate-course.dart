@@ -23,11 +23,11 @@ Map<String, dynamic> duplicateCourse(
   Map<String, dynamic> c,
   String newId,
   Map<String, dynamic> dates,
-) {
+ {required String Function(String) term}) {
   return {
     ...c,
     'id': newId,
-    'name': '${c['name']} (עותק)',
+    'name': '${c['name']}${term('avtk')}',
     'start': dates['start'],
     'end': dates['end'],
   };

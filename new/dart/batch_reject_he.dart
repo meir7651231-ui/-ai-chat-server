@@ -6,5 +6,5 @@
 // טוהר: dart:core בלבד.
 
 /// הודעת-דחייה: '$count יעדים (מעל התקרה $maxBatch)'. verbatim edit_intent.dart:456-457.
-String batchRejectHe(int count, {required int maxBatch}) =>
-    'השינוי נרחב מדי — $count יעדים (מעל התקרה $maxBatch). צמצם את הטווח.';
+String batchRejectHe(int count, {required String Function(String) term, required int maxBatch}) =>
+    '${term('hshynvy-nrchb-mdy')}$count${term('yadym-mal-htkrh')}$maxBatch${term('tsmtsm-at-htvvch')}';

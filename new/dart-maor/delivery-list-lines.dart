@@ -6,7 +6,7 @@
 List<String> deliveryListLines(
   List<Map<String, dynamic>> rows,
   String Function(dynamic status) statusLabel,
-) {
+ {required String Function(String) term}) {
   final byVol = <dynamic, List<Map<String, dynamic>>>{};
   for (final r in rows) {
     final arr = byVol[r['volunteerName']] ?? <Map<String, dynamic>>[];
@@ -15,7 +15,7 @@ List<String> deliveryListLines(
   }
   final out = <String>[];
   byVol.forEach((volName, list) {
-    out.add('🦺 $volName (${list.length} מסירות)');
+    out.add('🦺 $volName (${list.length}${term('msyrvt')}');
     for (final r in list) {
       // truthiness של JS: מחרוזת ריקה/null = falsy ⇒ אין שרשור (כלל-7).
       final address = r['address'];

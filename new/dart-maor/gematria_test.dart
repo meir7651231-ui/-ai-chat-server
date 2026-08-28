@@ -1,4 +1,5 @@
-// בדיקת-חוזה לאטום gem (Dart). מראה חוזה = new/atoms/gematria.test.mjs.
+import '../dart-data-maor/gematria-terms.dart' as td_gematria;
+// בדיקת-חוזה לאטום gem (Dart, term: (k)=>td_gematria.kTerms[k]!). מראה חוזה = new/atoms/gematria.test.mjs.
 // כולל ratchet-הסגר: n≥1000 כפולת-100 ⇒ '״' (JS slice בטוח על מחרוזת ריקה).
 import 'gematria.dart';
 
@@ -18,17 +19,17 @@ void main() {
   for (final c in cases) {
     final a = c[0] as num;
     final w = c[1] as String;
-    final g = gem(a);
+    final g = gem(a, term: (k)=>td_gematria.kTerms[k]!);
     if (g != w) {
       fail = 1;
-      print('✗ gem($a) = "$g" ≠ "$w"');
+      print('✗ gem($a, term: (k)=>td_gematria.kTerms[k]!) = "$g" ≠ "$w"');
     }
   }
 
   // ratchet-הסגר: המקרה שהפיל את הפורט — s ריק ⇒ substring(0,-1) זרק RangeError.
-  assert(gem(1000) == '״', 'gem(1000) צריך "״" (JS slice בטוח), קיבל "${gem(1000)}"');
-  assert(gem(double.infinity) == '', 'Infinity ⇒ ""');
-  assert(gem(999) == 'תתקצ״ט', 'gem(999)="${gem(999)}"');
+  assert(gem(1000, term: (k)=>td_gematria.kTerms[k]!) == '״', 'gem(1000, term: (k)=>td_gematria.kTerms[k]!) צריך "״" (JS slice בטוח), קיבל "${gem(1000, term: (k)=>td_gematria.kTerms[k]!)}"');
+  assert(gem(double.infinity, term: (k)=>td_gematria.kTerms[k]!) == '', 'Infinity ⇒ ""');
+  assert(gem(999, term: (k)=>td_gematria.kTerms[k]!) == 'תתקצ״ט', 'gem(999, term: (k)=>td_gematria.kTerms[k]!)="${gem(999, term: (k)=>td_gematria.kTerms[k]!)}"');
 
   if (fail != 0) throw StateError('gematria: חוזה נכשל');
   print('✓ gematria: 9 דוגמאות-חוזה + ratchet-הסגר — ירוק');

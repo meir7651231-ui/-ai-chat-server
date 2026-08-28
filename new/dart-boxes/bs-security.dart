@@ -1,3 +1,4 @@
+import '../dart-data/audit_rows-terms.dart' as td_audit_rows;
 // 📦 קופסת-חיבורים · bs-security (בנייה-חכמה) — ולידציה · הרשאות · ביקורת.
 // מקור-האמת: buildsmart/app_flutter/lib/logic (input_validators · install_engine ·
 //   studio/component_palette · studio/rules_model · studio/edit_safety · data_quality).
@@ -137,4 +138,4 @@ String _normName(String s) => s
 /// סורק שורות-קטלוג לשמות-כפולים (מק"ט שונה) ומק"טים-כמעט-זהים (רישיות/רווח בלבד),
 /// עם שקע-הנרמול מחווט למדיניות-הקופסה. מחזיר QualityReport (אזהרות + מספר-שורות).
 QualityReport auditRows(List<QualityRow> rows) =>
-    ar.auditRows(rows, normName: _normName);
+    ar.auditRows(rows, normName: _normName, term: (k)=>td_audit_rows.kTerms[k]!);

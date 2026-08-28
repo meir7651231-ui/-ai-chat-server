@@ -1,3 +1,4 @@
+import '../dart-data-maor/gematria-terms.dart' as td_gematria;
 import '../dart-data-maor/holiday-of-terms.dart';
 // 📦 קופסת-חיבורים · hebrew (Dart) — הלוח העברי המלא, מחווטת אטומי-Dart בלבד.
 // מקבילה זהת-ביט ל-new/boxes/hebrew.mjs. חוזה משותף: hebrew.contract.md · מקור-האמת (L4):
@@ -55,7 +56,7 @@ Map _hebPartsForHoliday(DateTime d) => hp.hebParts(d);
 // ── חשיפה: שמות-המקור verbatim (חוק-7 — החלפה-הפיכה) ──
 
 /// גימטריה — מספר⇒אותיות עבריות (טו/טז, גרש/גרשיים). קלט לא-חוקי ⇒ ''.
-String gem(num n) => g.gem(n);
+String gem(num n) => g.gem(n, term: (k)=>td_gematria.kTerms[k]!);
 
 /// שנה עברית⇒גימטריה מקוצרת (mod 1000). מקבל int או String (ToNumber של JS).
 String gemYear(Object? y) => gy.gemYear(y, g.gem);

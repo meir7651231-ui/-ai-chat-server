@@ -1,3 +1,4 @@
+import '../dart-data/he_for_op-terms.dart' as td_he_for_op;
 // בדיקת-חוזה · heForOp — מייבאת אך ורק את האטום-שלה (חוק-4).
 // הרצה: dart run --enable-asserts new/dart/he_for_op_test.dart
 import 'he_for_op.dart';
@@ -10,7 +11,7 @@ String _styleHe(String id, OpStyle? s) => s?.colorToken == null
     ? 'שינוי עיצוב: $id'
     : 'שינוי צבע: $id ← ${s!.colorToken}';
 
-String _run(ConfigOp op) => heForOp(op, actionHe: _actionHe, styleHe: _styleHe);
+String _run(ConfigOp op) => heForOp(op, actionHe: _actionHe, styleHe: _styleHe, term: (k)=>td_he_for_op.kTerms[k]!);
 
 void _eq(String got, String want, String label) {
   if (got != want) throw StateError('FAIL [$label]: got="$got" want="$want"');

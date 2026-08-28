@@ -1,3 +1,4 @@
+import '../dart-data-maor/student-history-text-terms.dart' as td_student_history_text;
 // בדיקת-חוזה (רתמת-זהב) · studentHistoryText — מייבאת אך ורק את האטום-שלה (חוק-4).
 // חמש דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/student-history-text.test.mjs:
 //   1) רשומה מלאה               ⇒ '[2026/27] ציור · א — נוכחות 10, חיסורים 2 · פעיל'
@@ -35,23 +36,23 @@ void main() {
   };
 
   // 1) שורה מלאה.
-  _eq('דוגמה-1', studentHistoryText([full]),
+  _eq('דוגמה-1', studentHistoryText([full], term: (k)=>td_student_history_text.kTerms[k]!),
       '[2026/27] ציור · א — נוכחות 10, חיסורים 2 · פעיל');
   n++;
 
   // 2) בלי שנה ובלי קבוצה — אפס סוגריים/מפרידים יתומים.
-  _eq('דוגמה-2', studentHistoryText([bare]),
+  _eq('דוגמה-2', studentHistoryText([bare], term: (k)=>td_student_history_text.kTerms[k]!),
       'נגינה — נוכחות 0, חיסורים 0 · הסתיים');
   n++;
 
   // 3) שתי שורות ב-'\n', סדר-הקלט נשמר.
   _eq(
       'דוגמה-3',
-      studentHistoryText([full, bare]),
+      studentHistoryText([full, bare], term: (k)=>td_student_history_text.kTerms[k]!),
       '[2026/27] ציור · א — נוכחות 10, חיסורים 2 · פעיל\n'
       'נגינה — נוכחות 0, חיסורים 0 · הסתיים');
   // כלל-8: פירוק-שורות — אורך + איבר-איבר (לא השוואת-join).
-  final lines = studentHistoryText([full, bare]).split('\n');
+  final lines = studentHistoryText([full, bare], term: (k)=>td_student_history_text.kTerms[k]!).split('\n');
   _ok(lines.length == 2, 'דוגמה-3: מספר-שורות ${lines.length} ≠ 2');
   _eq('דוגמה-3 שורה-0', lines[0],
       '[2026/27] ציור · א — נוכחות 10, חיסורים 2 · פעיל');
@@ -59,7 +60,7 @@ void main() {
   n++;
 
   // 4) מערך ריק ⇒ מחרוזת ריקה.
-  _eq('דוגמה-4', studentHistoryText([]), '');
+  _eq('דוגמה-4', studentHistoryText([], term: (k)=>td_student_history_text.kTerms[k]!), '');
   n++;
 
   // 5) קבוצה בלי שנה.
@@ -72,12 +73,12 @@ void main() {
           'group': 'ב',
           'summary': {'presents': 3, 'absences': 1, 'statusLabel': 'מושהה'},
         }
-      ]),
+      ], term: (k)=>td_student_history_text.kTerms[k]!),
       'ציור · ב — נוכחות 3, חיסורים 1 · מושהה');
   n++;
 
   // assert חי (חוק: --enable-asserts) — מוכיח שהמנגנון פעיל.
-  assert(studentHistoryText([]) == '', 'assert-live guard');
+  assert(studentHistoryText([], term: (k)=>td_student_history_text.kTerms[k]!) == '', 'assert-live guard');
 
   print('OK studentHistoryText: $n contract examples passed');
 }

@@ -17,23 +17,23 @@
 
 /// verbatim diff_preview.dart:165-178 (‏actionHe/_styleHe כשקעים; טיפוסים מוטבעים).
 String heForOp(
-  ConfigOp op, {
+  ConfigOp op, {required String Function(String) term, 
   required String? Function(String kind) actionHe,
   required String Function(String id, OpStyle? style) styleHe,
 }) =>
     switch (op) {
-      SetText() => 'שינוי טקסט: ${op.id}',
-      SetEmoji() => 'שינוי אמוג׳י: ${op.id}',
+      SetText() => '${term('shynvy-tkst')}${op.id}',
+      SetEmoji() => '${term('shynvy-amvgy')}${op.id}',
       SetHidden(:final hidden) => hidden == null
-          ? 'שינוי נראות: ${op.id}'
-          : (hidden ? 'הסתרה: ${op.id}' : 'הצגה: ${op.id}'),
+          ? '${term('shynvy-nravt')}${op.id}'
+          : (hidden ? '${term('hstrh')}${op.id}' : '${term('htsgh')}${op.id}'),
       SetOrder(:final order) => order == null
-          ? 'שינוי סדר: ${op.id}'
-          : 'שינוי סדר: ${op.id} ← $order', // before→after: the new position
+          ? '${term('shynvy-sdr')}${op.id}'
+          : '${term('shynvy-sdr')}${op.id} ← $order', // before→after: the new position
       SetStyle(:final style) => styleHe(op.id, style),
       SetAction(:final action) => action == null
-          ? 'ניקוי פעולה: ${op.id}'
-          : 'פעולה: ${actionHe(action.kind) ?? action.kind}',
+          ? '${term('nykvy-pavlh')}${op.id}'
+          : '${term('pavlh')}${actionHe(action.kind) ?? action.kind}',
     };
 
 // — טיפוסי-שכן מוטבעים (מינימום-verbatim) —

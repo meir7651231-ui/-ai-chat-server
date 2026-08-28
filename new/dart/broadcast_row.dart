@@ -12,7 +12,7 @@
 
 /// verbatim diff_preview.dart:112-139 (kindEmoji/kindPlural כשקעים; enum/טיפוסים מוטבעים).
 DiffLine broadcastRow(
-  List<ConfigOp> ops, {
+  List<ConfigOp> ops, {required String Function(String) term, 
   required String Function(ConfigOpKind kind) kindEmoji,
   required String Function(ConfigOpKind kind, bool allColor) kindPlural,
 }) {
@@ -28,7 +28,7 @@ DiffLine broadcastRow(
   }
   // §4 — קבוצה מאותו-סוג מתמוטטת לסכום פשוט.
   if (counts.length == 1) {
-    return DiffLine('${ops.length} שינויים');
+    return DiffLine('${ops.length}${term('shynvyym')}');
   }
   // §9 — קיבוץ-לפי-סוג בסדר-ה-enum היציב.
   final frags = <String>[

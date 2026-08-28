@@ -1,8 +1,9 @@
+import '../dart-data/soft_batch_warn_he-terms.dart' as td_soft_batch_warn_he;
 // בדיקת-חוזה · softBatchWarnHe — מייבאת אך ורק את האטום-שלה (חוק-4).
 // הרצה: dart run --enable-asserts new/dart/soft_batch_warn_he_test.dart
 import 'soft_batch_warn_he.dart';
 
-String? _s(int c) => softBatchWarnHe(c, softWarn: 5, maxBatch: 20);
+String? _s(int c) => softBatchWarnHe(c, softWarn: 5, maxBatch: 20, term: (k)=>td_soft_batch_warn_he.kTerms[k]!);
 String _warn(int c) => 'שים לב — $c פעולות בבת אחת. אפשר להמשיך, או לצמצם.';
 
 void _eq(String? got, String? want, String label) {

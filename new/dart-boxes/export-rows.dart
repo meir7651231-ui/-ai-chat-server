@@ -1,3 +1,4 @@
+import '../dart-data-maor/gematria-terms.dart' as td_gematria;
 import '../dart-data-maor/supporters-import-format-rows-terms.dart' as td_supporters_import_format_rows;
 import '../dart-data-maor/families-import-format-rows-terms.dart';
 // 📦 קופסת-חיבורים · שורות-הייצוא (Dart) — מחווטת 9 אטומי-Dart. מקבילה ל-new/boxes/export-rows.mjs.

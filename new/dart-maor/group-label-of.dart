@@ -4,11 +4,11 @@
 // ⚠️ המקור משתמש ב-`||` (truthiness), לא `??` — מחרוזת-ריקה '' היא falsy ב-JS
 //    ⇒ {label:''} נופל ל"קבוצה N" (DART-PORTING-RULES §7). המנוע פלט `??` = שגוי.
 // אפס-import (dart-core בלבד).
-String groupLabelOf(Map ss, int i) {
+String groupLabelOf(Map ss, int i, {required String Function(String) term}) {
   final label = ss['label'];
   // JS truthiness: falsy = null/undefined/''/0/false ⇒ נופל ל-fallback הפוזיציוני
   if (label != null && label != '' && label != 0 && label != false) {
     return label.toString();
   }
-  return 'קבוצה ${i + 1}';
+  return '${term('kbvtsh')}${i + 1}';
 }
