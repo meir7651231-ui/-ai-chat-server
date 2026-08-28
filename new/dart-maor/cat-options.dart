@@ -1,3 +1,5 @@
+// ⚛️ אטום-Dart · CAT_OPTIONS — נורמל מ-const-דאטה לפונקציה (מנוע-טהור; העברית תחולץ למטרה).
+// ignore_for_file: non_constant_identifier_names
 // ⚛️ אטום-Dart (דרגת-חוזה) · CAT_OPTIONS — קטגוריות-חוגים לבורר.
 // מוצא: maor/src/components/courses/lib.ts · המקור: new/atoms/cat-options.mjs.
 // טוהר: קבוע top-level עצמאי, אפס import (רק שפה/סטנדרט: dart:core). חוק-4 —
@@ -14,14 +16,14 @@
 
 /// The nine fixed course-category options for the category picker, verbatim and
 /// in source order. Verbatim port of new/atoms/cat-options.mjs (`CAT_OPTIONS`).
-const List<String> CAT_OPTIONS = [
-  'מלאכה',
-  'אמנות',
-  'העשרה',
-  'ספורט',
-  'מוזיקה',
-  'רווחה',
-  'טיפוח',
-  'קולינרי',
-  'קהילה',
+List<String> CAT_OPTIONS({required String Function(String) term}) => [
+  term('mlakh'),
+  term('amnvt'),
+  term('hashrh'),
+  term('spvrt'),
+  term('mvzykh'),
+  term('rvvchh'),
+  term('typvch'),
+  term('kvlynry'),
+  term('khylh'),
 ];
