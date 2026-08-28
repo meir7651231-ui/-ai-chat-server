@@ -1,4 +1,5 @@
-// בדיקת-חוזה (רתמת-זהב) · absenceReasonChips — מייבאת אך ורק את האטום-שלה (חוק-4).
+import '../dart-data-maor/absence-reason-chips-terms.dart' as td_absence_reason_chips;
+// בדיקת-חוזה (רתמת-זהב) · absenceReasonChips(term: (k)=>td_absence_reason_chips.kTerms[k]!) — מייבאת אך ורק את האטום-שלה (חוק-4).
 // שש דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/absence-reason-chips.test.mjs:
 //   1) C.length === 5
 //   2) C[0] === 'מחלה'
@@ -12,7 +13,7 @@ import 'absence-reason-chips.dart';
 
 void main() {
   var n = 0;
-  final c = absenceReasonChips;
+  final c = absenceReasonChips(term: (k)=>td_absence_reason_chips.kTerms[k]!);
 
   // 1) אורך 5.
   assert(c.length == 5, 'FAIL: אורך ${c.length} ≠ 5');
@@ -38,5 +39,5 @@ void main() {
   assert(c.toSet().length == c.length, 'FAIL: כפילות ברשימה');
   n++;
 
-  print('OK absenceReasonChips: $n asserts passed');
+  print('OK absenceReasonChips(term: (k)=>td_absence_reason_chips.kTerms[k]!): $n asserts passed');
 }

@@ -1,3 +1,5 @@
+// ⚛️ אטום-Dart · absenceReasonChips — נורמל מ-const-דאטה לפונקציה (מנוע-טהור; העברית תחולץ למטרה).
+// ignore_for_file: non_constant_identifier_names
 // ⚛️ אטום-Dart (דרגת-חוזה) · absenceReasonChips — צ'יפי-נימוק לחיסור.
 // מוצא: maor/src/components/diary/lib.ts (שימש שני מודאלי-חיסור) · המקור: new/atoms/absence-reason-chips.mjs.
 // טוהר: getter top-level עצמאי, אפס import (רק שפה/סטנדרט: dart:core). חוק-4 — התנהגות
@@ -14,5 +16,4 @@
 
 /// The five fixed absence-reason chips, in source order.
 /// Verbatim port of new/atoms/absence-reason-chips.mjs (`ABSENCE_REASON_CHIPS`).
-List<String> get absenceReasonChips =>
-    const ['מחלה', 'אירוע משפחתי', 'שמחה', 'נסיעה', 'מזג אוויר'];
+List<String> absenceReasonChips({required String Function(String) term}) => [term('mchlh'), term('ayrva-mshpchty'), term('shmchh'), term('nsyah'), term('mzg-avvyr')];
