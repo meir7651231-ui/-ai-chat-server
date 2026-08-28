@@ -124,12 +124,14 @@
    "line": 125,
    "loc": 68,
    "pure": false,
+   "dataClean": false,
    "reads": [
     "screenSectionsProvider"
    ],
    "writes": [],
    "actions": [],
-   "strings": 3
+   "strings": 3,
+   "constData": 5
   },
   {
    "name": "_Pad",
@@ -137,10 +139,12 @@
    "line": 195,
    "loc": 9,
    "pure": true,
+   "dataClean": true,
    "reads": [],
    "writes": [],
    "actions": [],
-   "strings": 0
+   "strings": 0,
+   "constData": 0
   },
   {
    "name": "_SectionTitle",
@@ -148,10 +152,12 @@
    "line": 205,
    "loc": 16,
    "pure": true,
+   "dataClean": true,
    "reads": [],
    "writes": [],
    "actions": [],
-   "strings": 0
+   "strings": 0,
+   "constData": 0
   },
   {
    "name": "_MiniTile",
@@ -159,10 +165,12 @@
    "line": 223,
    "loc": 67,
    "pure": true,
+   "dataClean": true,
    "reads": [],
    "writes": [],
    "actions": [],
-   "strings": 0
+   "strings": 0,
+   "constData": 0
   },
   {
    "name": "_Departments",
@@ -170,6 +178,7 @@
    "line": 295,
    "loc": 60,
    "pure": false,
+   "dataClean": false,
    "reads": [
     "homeDepartmentProvider",
     "mainTabProvider"
@@ -179,7 +188,8 @@
     "mainTabProvider"
    ],
    "actions": [],
-   "strings": 3
+   "strings": 3,
+   "constData": 0
   },
   {
    "name": "_SmartTreeRow",
@@ -187,10 +197,12 @@
    "line": 357,
    "loc": 28,
    "pure": true,
+   "dataClean": false,
    "reads": [],
    "writes": [],
    "actions": [],
-   "strings": 1
+   "strings": 1,
+   "constData": 0
   },
   {
    "name": "_SmartTreeCard",
@@ -198,6 +210,7 @@
    "line": 386,
    "loc": 107,
    "pure": false,
+   "dataClean": false,
    "reads": [
     "smartCartProvider"
    ],
@@ -207,7 +220,8 @@
    "actions": [
     "fx:toast"
    ],
-   "strings": 4
+   "strings": 4,
+   "constData": 1
   },
   {
    "name": "_WorkPath",
@@ -215,10 +229,12 @@
    "line": 495,
    "loc": 65,
    "pure": true,
+   "dataClean": false,
    "reads": [],
    "writes": [],
    "actions": [],
-   "strings": 4
+   "strings": 4,
+   "constData": 0
   },
   {
    "name": "_QuickTools",
@@ -226,13 +242,15 @@
    "line": 562,
    "loc": 85,
    "pure": false,
+   "dataClean": false,
    "reads": [],
    "writes": [],
    "actions": [
     "call:openScanPlanSheet",
     "call:openSiteHub"
    ],
-   "strings": 9
+   "strings": 9,
+   "constData": 0
   },
   {
    "name": "_InstallStudioHero",
@@ -240,12 +258,14 @@
    "line": 649,
    "loc": 47,
    "pure": false,
+   "dataClean": false,
    "reads": [],
    "writes": [],
    "actions": [
     "nav:InstallStudioScreen"
    ],
-   "strings": 2
+   "strings": 2,
+   "constData": 0
   },
   {
    "name": "_SuperFinderOpen",
@@ -253,10 +273,12 @@
    "line": 704,
    "loc": 33,
    "pure": true,
+   "dataClean": false,
    "reads": [],
    "writes": [],
    "actions": [],
-   "strings": 1
+   "strings": 1,
+   "constData": 0
   },
   {
    "name": "_SuperFinderHero",
@@ -264,6 +286,7 @@
    "line": 744,
    "loc": 50,
    "pure": false,
+   "dataClean": false,
    "reads": [
     "catalogSectionProvider",
     "keyboardDiveQueryProvider",
@@ -275,7 +298,8 @@
     "mainTabProvider"
    ],
    "actions": [],
-   "strings": 3
+   "strings": 3,
+   "constData": 0
   },
   {
    "name": "_CatalogConfigOpen",
@@ -283,10 +307,12 @@
    "line": 801,
    "loc": 27,
    "pure": true,
+   "dataClean": true,
    "reads": [],
    "writes": [],
    "actions": [],
-   "strings": 0
+   "strings": 0,
+   "constData": 0
   },
   {
    "name": "_CatalogConfigHero",
@@ -294,12 +320,14 @@
    "line": 836,
    "loc": 46,
    "pure": false,
+   "dataClean": false,
    "reads": [],
    "writes": [],
    "actions": [
     "nav:CatalogConfigScreen"
    ],
-   "strings": 2
+   "strings": 2,
+   "constData": 0
   },
   {
    "name": "_InternalCardOpen",
@@ -307,10 +335,12 @@
    "line": 887,
    "loc": 37,
    "pure": true,
+   "dataClean": false,
    "reads": [],
    "writes": [],
    "actions": [],
-   "strings": 1
+   "strings": 1,
+   "constData": 0
   },
   {
    "name": "_InternalCardHero",
@@ -318,10 +348,12 @@
    "line": 929,
    "loc": 56,
    "pure": true,
+   "dataClean": false,
    "reads": [],
    "writes": [],
    "actions": [],
-   "strings": 3
+   "strings": 3,
+   "constData": 0
   },
   {
    "name": "_Favorites",
@@ -329,6 +361,7 @@
    "line": 987,
    "loc": 56,
    "pure": false,
+   "dataClean": false,
    "reads": [
     "catalogRepositoryProvider",
     "productFavoritesProvider"
@@ -337,7 +370,8 @@
    "actions": [
     "call:showLipskeyProductSheet"
    ],
-   "strings": 2
+   "strings": 2,
+   "constData": 0
   },
   {
    "name": "_RecentOrders",
@@ -345,12 +379,14 @@
    "line": 1045,
    "loc": 37,
    "pure": false,
+   "dataClean": false,
    "reads": [
     "sysOrdersProvider"
    ],
    "writes": [],
    "actions": [],
-   "strings": 2
+   "strings": 2,
+   "constData": 1
   },
   {
    "name": "_OrderCard",
@@ -358,10 +394,12 @@
    "line": 1083,
    "loc": 70,
    "pure": true,
+   "dataClean": false,
    "reads": [],
    "writes": [],
    "actions": [],
-   "strings": 1
+   "strings": 1,
+   "constData": 0
   },
   {
    "name": "_EmptyCard",
@@ -369,10 +407,12 @@
    "line": 1154,
    "loc": 21,
    "pure": true,
+   "dataClean": true,
    "reads": [],
    "writes": [],
    "actions": [],
-   "strings": 0
+   "strings": 0,
+   "constData": 0
   }
  ],
  "sectionMap": [

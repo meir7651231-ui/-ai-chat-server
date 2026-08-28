@@ -54,10 +54,12 @@ while ((m = widgetDecl.exec(src))) {
   ]);
   const strs = uniq([...body.matchAll(/'([^'\\]*[\u0590-\u05FF][^'\\]*)'/g)].map(x => x[1]));
   const hasToast = /toast|Toast/.test(body);
+  const constData = [...body.matchAll(/const\s+\w*\s*=?\s*[\[{]/g)].length;
   widgets.push({
     name: m[1], kind: m[2], line: lineAt(m.index), loc: body.split('\n').length,
     pure: reads.length + writes.length + navs.length === 0 && !hasToast,
-    reads, writes, actions: [...navs, ...(hasToast ? ['fx:toast'] : [])], strings: strs.length,
+    dataClean: strs.length === 0,            // 🧼 אפס-דאטה-צרובה (מונחים/תוכן) — הכרעת-הבעלים "אטומים נקיים"
+    reads, writes, actions: [...navs, ...(hasToast ? ['fx:toast'] : [])], strings: strs.length, constData,
   });
 }
 
@@ -105,7 +107,9 @@ console.log(`  ש0 פיגמנטים: ${pigments.tokens.length} טוקנים · �
 console.log(`  ש1 מונחים: ${heStrings.length} מחרוזות-עבריות`);
 console.log(`  ש2 אייקונים: ${icons.length} + ${glyphs.length} גליפים`);
 console.log(`  ש3 מועמדי-לוגיקה: ${logicCandidates.length} — ${logicCandidates.map(l => l.name).join(' · ')}`);
-console.log(`  ש4 חוטי-תצוגה טהורים: ${pure.length} — ${pure.map(w => w.name).join(' · ')}`);
+const clean = pure.filter(w => w.dataClean), dirty = pure.filter(w => !w.dataClean);
+console.log(`  ש4 חוטי-תצוגה טהורי-IO: ${pure.length} · מהם 🧼 נקיים-מדאטה: ${clean.length} — ${clean.map(w => w.name).join(' · ')}`);
+if (dirty.length) console.log(`     ⚠️ טהורי-IO אך עם דאטה-צרובה (${dirty.length}): ${dirty.map(w => w.name + '(' + w.strings + 'מח׳)').join(' · ')}`);
 console.log(`  ש5 סקציות/מחוברים: ${sections.length}`);
 for (const w of sections) console.log(`     ${w.name} (${w.loc}ש) ← קורא:[${w.reads.join(',')}] פועל:[${[...w.writes.map(x => 'set:' + x), ...w.actions].join(',')}]`);
 console.log(`  ש6 קומפוזר: ${composer.join(',') || '—'} · מיפוי-סקציות: ${sectionMap.length} · שערים: ${gates.join(' · ')}`);
