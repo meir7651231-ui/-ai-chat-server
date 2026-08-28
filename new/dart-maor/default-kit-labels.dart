@@ -1,3 +1,5 @@
+// ⚛️ אטום-Dart · defaultKitLabels — נורמל מ-const-דאטה לפונקציה (מנוע-טהור; העברית תחולץ למטרה).
+// ignore_for_file: non_constant_identifier_names
 // ⚛️ אטום-Dart (דרגת-חוזה) · DEFAULT_KIT_LABELS — תוויות-ברירת-מחדל לערכת-מסירה.
 // מוצא: אטום-קבוע (צילום-ערך) · המקור: new/atoms/default-kit-labels.mjs.
 // טוהר: קבוע top-level עצמאי, אפס import (רק שפה/סטנדרט: dart:core). חוק-4 —
@@ -14,10 +16,10 @@
 
 /// Default delivery-kit stage labels (five Hebrew strings, source order).
 /// Verbatim port of new/atoms/default-kit-labels.mjs (`DEFAULT_KIT_LABELS`).
-const List<String> defaultKitLabels = [
-  'הטמעת התוצר בסביבת-הלקוח',
-  'בדיקת-קבלה מול הלקוח',
-  'מסירת חומרי-הדרכה',
-  'גיבוי + הרשאות-גישה',
-  'חתימת-מסירה',
+List<String> defaultKitLabels({required String Function(String) term}) => [
+  term('htmat-htvtsr-bsbybthlkvch'),
+  term('bdyktkblh-mvl-hlkvch'),
+  term('msyrt-chvmryhdrkh'),
+  term('gybvy-hrshavtgyshh'),
+  term('chtymtmsyrh'),
 ];

@@ -1,3 +1,4 @@
+import '../dart-data-maor/default-kit-labels-terms.dart' as td_default_kit_labels;
 // בדיקת-חוזה (רתמת-זהב) · DEFAULT_KIT_LABELS — מייבאת אך ורק את האטום-שלה (חוק-4).
 // הצילום זהה ביט-אחר-ביט למקור-ה-JS new/atoms/default-kit-labels.test.mjs:
 //   JSON.stringify(DEFAULT_KIT_LABELS) === '["הטמעת התוצר בסביבת-הלקוח","בדיקת-קבלה מול
@@ -25,32 +26,32 @@ void main() {
     'גיבוי + הרשאות-גישה',
     'חתימת-מסירה',
   ];
-  _eq(defaultKitLabels, want, 'צילום-ערך מלא');
+  _eq(defaultKitLabels(term: (k)=>td_default_kit_labels.kTerms[k]!), want, 'צילום-ערך מלא');
   n++;
 
   // אורך — בדיוק 5.
-  if (defaultKitLabels.length != 5) {
-    throw StateError('FAIL: אורך=${defaultKitLabels.length}, צפוי 5');
+  if (defaultKitLabels(term: (k)=>td_default_kit_labels.kTerms[k]!).length != 5) {
+    throw StateError('FAIL: אורך=${defaultKitLabels(term: (k)=>td_default_kit_labels.kTerms[k]!).length}, צפוי 5');
   }
   n++;
 
   // איבר-איבר (מבחין גבול-איבר, לא רק join — עקרון-המוטציה).
-  if (defaultKitLabels[0] != 'הטמעת התוצר בסביבת-הלקוח') {
+  if (defaultKitLabels(term: (k)=>td_default_kit_labels.kTerms[k]!)[0] != 'הטמעת התוצר בסביבת-הלקוח') {
     throw StateError('FAIL: איבר 0');
   }
   n++;
-  if (defaultKitLabels[3] != 'גיבוי + הרשאות-גישה') {
+  if (defaultKitLabels(term: (k)=>td_default_kit_labels.kTerms[k]!)[3] != 'גיבוי + הרשאות-גישה') {
     throw StateError('FAIL: איבר 3 (עם +)');
   }
   n++;
-  if (defaultKitLabels[4] != 'חתימת-מסירה') {
+  if (defaultKitLabels(term: (k)=>td_default_kit_labels.kTerms[k]!)[4] != 'חתימת-מסירה') {
     throw StateError('FAIL: איבר 4');
   }
   n++;
 
   // assert חי (חוק: --enable-asserts) — מוכיח שהמנגנון פעיל.
   assert(
-    defaultKitLabels.join('|') ==
+    defaultKitLabels(term: (k)=>td_default_kit_labels.kTerms[k]!).join('|') ==
         'הטמעת התוצר בסביבת-הלקוח|בדיקת-קבלה מול הלקוח|מסירת חומרי-הדרכה|'
             'גיבוי + הרשאות-גישה|חתימת-מסירה',
     'assert-live guard',
