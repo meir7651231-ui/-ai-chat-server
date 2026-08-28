@@ -1,37 +1,41 @@
 # חוזה · `strList` (Dart)
 
-מקור-אמת (קדוש, חוק-4): `buildsmart/app_flutter/lib/domain/connection_schema.dart:33-34`
-(‏`_strList`, פרטי-במקור — גולגל לאטום top-level; גוף verbatim, הוסרה רק התחילית `_`).
+מקור-אמת (קדוש, חוק-4): `buildsmart/app_flutter/lib/domain/trade_schema.dart:36-37` (`_strList`).
+
+## תפקיד
+מפענח-סובלני של רשימת-מחרוזות מ-JSON-חופשי: מחזיר את איברי-המחרוזת של רשימה
+(שאר-הטיפוסים נשמטים), רשימה-ריקה כשהקלט אינו רשימה. לעולם לא זורק (סמנטיקת
+המפענחים-הסובלניים ב-trade_schema.dart:31-42 — "missing/wrong type → default").
 
 ## חתימה
 ```dart
 List<String> strList(Object? v)
 ```
 
-## קלט
-- `v` — ערך גולמי כלשהו (‏Object?), בד"כ תוצאת decode של JSON.
+## התנהגות (עוגן trade_schema.dart:36-37)
+`v is List ? v.whereType<String>().toList() : const []`
+- הקלט אינו `List` (null · num · String · Map · bool) ⇒ **`const []`**.
+- הקלט `List` ⇒ `whereType<String>()` — מסנן לאיברי-`String` בלבד, **בסדר-המקור**,
+  ואז `.toList()`. איברים לא-מחרוזתיים (num/null/Map/List-מקונן) נשמטים בשקט.
 
-## פלט / התנהגות (עוגני-שורה)
-- `connection_schema.dart:34` — `v is List ? v.whereType<String>().toList() : const []`:
-  - `v` הוא `List` ⇒ **רק** האיברים שהם `String`, בסדר-הופעה, כ-`List<String>` חדשה.
-  - איברים שאינם `String` (‏int/bool/null/Map/List מקונן) ⇒ **מסוננים החוצה**.
-  - `v` אינו `List` (‏null, מחרוזת, מספר, Map, …) ⇒ `const []` (רשימה-ריקה).
-
-## דוגמאות מספריות
+## דוגמאות-מחייבות
 | # | v | ⇒ |
 |---|---|---|
 | 1 | `null` | `[]` |
-| 2 | `'abc'` (מחרוזת, לא-List) | `[]` |
-| 3 | `42` | `[]` |
-| 4 | `['x', 'y']` | `['x', 'y']` |
-| 5 | `[1, 'a', true, 'b', null]` | `['a', 'b']` (רק המחרוזות) |
-| 6 | `[]` | `[]` |
-| 7 | `{'k': 'v'}` (Map) | `[]` (Map אינו List) |
+| 2 | `['a','b','c']` | `['a','b','c']` |
+| 3 | `['a', 1, 'b', null, 'c']` | `['a','b','c']` (לא-מחרוזת נשמט) |
+| 4 | `[]` | `[]` |
+| 5 | `[1, 2, 3]` | `[]` (אין מחרוזות) |
+| 6 | `'abc'` (String, לא List) | `[]` |
+| 7 | `42` | `[]` |
+| 8 | `{'a':'b'}` (Map) | `[]` |
+| 9 | `['', 'x']` | `['', 'x']` (מחרוזת-ריקה היא String תקין) |
+| 10 | `['a', ['b'], 'c']` | `['a','c']` (List-מקונן נשמט) |
 
 ## שקעים
-- אין. `is List`, `Iterable.whereType`, `.toList()` — dart:core בלבד.
+אין (dart:core בלבד — `List.whereType`/`Iterable.toList`).
 
-## DoD (פקודה+פלט-צפוי, לפני הקוד — דיבר 12)
+## DoD
 ```
 dart run --enable-asserts new/dart/str_list_test.dart  ⇒ exit 0 + "OK strList: N asserts passed"
 ```

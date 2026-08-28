@@ -1,13 +1,12 @@
 // ⚛️ אטום-Dart (דרגת-חוזה) · strList
-// מוצא: buildsmart/app_flutter/lib/domain/connection_schema.dart:33-34 (‏_strList; חוק-4).
-//        פרטי-במקור (`_`) — גולגל לאטום top-level testable, גוף verbatim (הוסר רק תחילית `_`).
-// טוהר: פונקציית top-level עצמאית, אפס import (רק dart:core). אין שכנים/const.
+// מוצא: buildsmart/app_flutter/lib/domain/trade_schema.dart:36-37 (`_strList`; פרטי-במקור;
+//        חוק-4 — התנהגות זהה, לא-משופרת). מקדם `_strList` ⇒ `strList` (דגם `_name⇒name`).
+// טוהר: פונקציית top-level עצמאית, dart:core בלבד — אפס import, אפס שקע, אפס שכן.
 //
-// קלט:  v — ערך-JSON גולמי כלשהו (Object?, בד"כ מ-decode).
-// פלט:  אם v הוא List ⇒ רק איברי-ה-String שבו, כרשימה (whereType<String>().toList()).
-//        אחרת (כולל null / לא-List) ⇒ רשימה-ריקה קבועה `const []`.
-
-/// The `String` elements of [v] when it is a `List`, else an empty list.
-/// Verbatim behaviour of connection_schema.dart:33-34.
+// תפקיד: מפענח-סובלני — מחזיר את איברי-המחרוזת של רשימה כלשהי (שאר-הטיפוסים נשמטים),
+//        או רשימה-ריקה כשהקלט אינו רשימה (null/מספר/מפה/…). לעולם לא זורק.
+//
+// קלט:  v — Object? כלשהו (מ-JSON-סובלני: null / List / כל-טיפוס-אחר).
+// פלט:  List<String> — איברי-המחרוזת בלבד, בסדר-המקור. אינו-רשימה ⇒ const [].
 List<String> strList(Object? v) =>
     v is List ? v.whereType<String>().toList() : const [];
