@@ -24,7 +24,7 @@ String? integerInWords(
       groups.add(term('shny-mylyvn'));
     } else {
       // איבר אחד — אותו באג-דפוס כמו באלפים ("שמונה עשר ומיליון")
-      groups.add('${joinHeb(words0_999(millions))} מיליון');
+      groups.add('${joinHeb(words0_999(millions))}${term('xi_mylyvn')}');
     }
   }
   if (thousands != 0) groups.addAll(thousandWords(thousands));

@@ -2,4 +2,5 @@
 const Map<String, String> kTerms = {
   'mshpcht': 'משפחת',
   'mshpchh': 'משפחה',
+  'xi_la-ydvah': ' לא ידועה',
 };

@@ -109,20 +109,20 @@ WfAdvancePlan? planWfAdvance<C>(
       return WfAdvancePlan(
         patch: a.copyWith(stage: WfStage.prep),
         event: (title: '$feat: ${stageLabel(cfg, WfStage.prep)} — $name (${a.names.length} $item)', done: false),
-        toast: 'נרשמו ${a.names.length} — נכנס ללוח: ${stageLabel(cfg, WfStage.prep)}',
+        toast: '${term('xi_nrshmv')}${a.names.length}${term('xi_nkns-llvch')}${stageLabel(cfg, WfStage.prep)}',
       );
     case WfStage.prep:
       return WfAdvancePlan(
         patch: a.copyWith(stage: WfStage.ready),
         event: (title: '$feat: ${stageLabel(cfg, WfStage.prep)} ✓ — $name', done: true),
-        toast: 'אושר — עכשיו: ${stageLabel(cfg, WfStage.ready)}',
+        toast: '${term('xi_avshr-akshyv')}${stageLabel(cfg, WfStage.ready)}',
       );
     case WfStage.ready:
       final units = unitsTotal(a);
       return WfAdvancePlan(
         patch: a.copyWith(stage: WfStage.dispatch),
         event: (title: '$feat: ${stageLabel(cfg, WfStage.dispatch)} — $name ($units $unit)', done: false),
-        toast: 'נרשם — נכנס ללוח: ${stageLabel(cfg, WfStage.dispatch)}',
+        toast: '${term('xi_nrshm-nkns-llvch')}${stageLabel(cfg, WfStage.dispatch)}',
       );
     case WfStage.dispatch:
       if (!a.dispatchPushed) {

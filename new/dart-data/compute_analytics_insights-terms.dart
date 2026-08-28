@@ -4,4 +4,13 @@ const Map<String, String> kTerms = {
   'mmvtsa-al-pny-kl-hhzmnvt': 'ממוצע על פני כל ההזמנות',
   'lpy-shlb-hhzmnh-hnvkchy': 'לפי שלב ההזמנה הנוכחי',
   'mabr-lmvtgym-zvlym-yvtr-bavtv-mvtsr': 'מעבר למותגים זולים יותר באותו מוצר',
+  'xi_hzmnvt': ' הזמנות · ',
+  'xi_shk-rksh': ' סה״כ רכש',
+  'xi_shvvy-hzmnh-mmvtsa': 'שווי הזמנה ממוצע: ',
+  'xi_hzmnvt-ptvchvt': ' הזמנות פתוחות · ',
+  'xi_svpkv': ' סופקו',
+  'xi_chyskvn-apshry': 'חיסכון אפשרי: ',
+  'xi_nytsvl-tktsyb': 'ניצול תקציב: ',
+  'xi_nvtrv': 'נותרו ',
+  'xi_mtvk': ' מתוך ',
 };

@@ -5,4 +5,5 @@ const Map<String, String> kTerms = {
   'shlb': 'שלב',
   'mty-ldbr-shvb': 'מתי לדבר שוב',
   'harh': 'הערה',
+  'xi_hyvm': ' היום',
 };

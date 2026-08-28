@@ -43,7 +43,27 @@ function purify(rel) {
   let res;
   try { res = runAst(abs); } catch (e) { console.log(`↩ ${rel}: AST נכשל — ${String(e.stderr||e).slice(0,120)}`); return false; }
   if (!res.ok) { console.log(`↷ ${rel}: ${res.reason}`); return false; }
-  if (res.hadTerm) { console.log(`↷ : כבר-נושא-term (טיפול-מיזוג נפרד).`); return false; }
+  if (res.hadTerm) {
+    // הפונקציה כבר נושאת term (טוהר-מוקדם). ממזג שמות-חדשים לקובץ-הקיים בלי לגעת בחיווט.
+    const dataRel = `${DATADIR[dir]}/${base}-terms.dart`;
+    const dataAbs = path.join(ROOT, dataRel);
+    if (!fs.existsSync(dataAbs)) { console.log(`↷ ${rel}: hadTerm אך אין קובץ-שמות למיזוג.`); return false; }
+    const dataSrc0 = fs.readFileSync(dataAbs, 'utf8');
+    const newEntries = Object.entries(res.terms)
+      .filter(([k]) => !new RegExp(`'${k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}'\\s*:`).test(dataSrc0))
+      .map(([k, v]) => `  '${k}': ${JSON.stringify(v).replace(/^"|"$/g, "'")},`);
+    const testAbs = path.join(ROOT, rel.replace(/\.dart$/, '_test.dart'));
+    const restore = () => { fs.writeFileSync(abs, src0); fs.writeFileSync(dataAbs, dataSrc0); };
+    fs.writeFileSync(abs, res.source);
+    if (newEntries.length) fs.writeFileSync(dataAbs, dataSrc0.replace(/\n\};\s*$/, `\n${newEntries.join('\n')}\n};\n`));
+    const cwd = path.join(ROOT, '..');
+    try {
+      execSync(`dart analyze ${abs} ${dataAbs}`, { cwd, env, stdio: 'pipe' });
+      if (fs.existsSync(testAbs)) execSync(`dart run --enable-asserts ${testAbs}`, { cwd, env, stdio: 'pipe' });
+      console.log(`✅ ${rel} — מיזוג-term · +${newEntries.length} שמות ל-${dataRel}`);
+      return true;
+    } catch (e) { const err = ((e.stdout?.toString() || '') + (e.stderr?.toString() || '') || String(e)).slice(0, 300); restore(); console.log(`↩ ${rel}: מיזוג נכשל — הוחזר.\n   ${err.replace(/\n/g, ' ')}`); return false; }
+  }
 
   const dataRel = `${DATADIR[dir]}/${base}-terms.dart`;
   const dataAbs = path.join(ROOT, dataRel);

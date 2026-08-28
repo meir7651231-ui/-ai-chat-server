@@ -2,4 +2,6 @@
 const Map<String, String> kTerms = {
   'mtvk-kl-halmntym': 'מתוך: כל האלמנטים',
   'mtvk-tvvch-la-mzvhh': 'מתוך: (טווח לא מזוהה)',
+  'xi_mtvk-mrchb': 'מתוך: מרחב «',
+  'xi_mtvk-halmnt': 'מתוך: האלמנט «',
 };

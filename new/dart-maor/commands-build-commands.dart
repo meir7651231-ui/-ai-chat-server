@@ -28,7 +28,7 @@ List<Map<String, dynamic>> buildCommands(Map<String, dynamic> ctx, {required Str
   push({
     'id': 'cmd:add',
     'kind': 'add',
-    'label': '➕ הוספת ${ctx['supporterTerm']}',
+    'label': '${term('xi_hvspt')}${ctx['supporterTerm']}',
     'group': term('pavlh'),
     'keywords': term('hvsph-chdsh-chdshh-tvrm'),
   });
@@ -73,7 +73,7 @@ List<Map<String, dynamic>> buildCommands(Map<String, dynamic> ctx, {required Str
     push({
       'id': 'cmd:dedup',
       'kind': 'dedup',
-      'label': '🔗 איחוד כפולים · ${ctx['dedupCount']}',
+      'label': '${term('xi_aychvd-kpvlym')}${ctx['dedupCount']}',
       'group': term('pavlh'),
       'keywords': term('kpvlym-myzvg-aychvd'),
     });

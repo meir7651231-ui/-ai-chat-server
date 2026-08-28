@@ -7,4 +7,11 @@ const Map<String, String> kTerms = {
   'bksht-chvpshh-acht-mmtynh': 'בקשת חופשה אחת ממתינה',
   'chshbvn': 'חשבון',
   'bksht-chshbvn-acht-mmtynh': 'בקשת חשבון אחת ממתינה',
+  'xi_hzmnh': 'הזמנה ',
+  'xi_mmtynh': ' ממתינה ',
+  'xi_ymym': ' ימים',
+  'xi_hzmnvt-nvspvt-mmtynvt': ' הזמנות נוספות ממתינות',
+  'xi_mshymvt-mmtynvt-layshvr': ' משימות ממתינות לאישור',
+  'xi_bkshvt-chvpshh-mmtynvt': ' בקשות חופשה ממתינות',
+  'xi_bkshvt-chshbvn-mmtynvt': ' בקשות חשבון ממתינות',
 };

@@ -18,7 +18,7 @@ String scopeTokenHe(
 }) {
   if (token == all) return term('kl-halmntym');
   if (token.startsWith(screenPrefix)) {
-    return 'מרחב «${token.substring(screenPrefix.length)}»';
+    return '${term('xi_mrchb')}${token.substring(screenPrefix.length)}»';
   }
   return token;
 }

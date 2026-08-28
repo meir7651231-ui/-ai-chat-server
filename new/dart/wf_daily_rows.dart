@@ -57,7 +57,7 @@ List<List<Object>> wfDailyRows(
   final unit = unitLabel(cfg);
   final item = itemLabel(cfg);
   final rows = <List<Object>>[
-    [term('shm'), term('tlpvn'), '$unit היום', term('shlb'), item, term('mty-ldbr-shvb'), term('harh')],
+    [term('shm'), term('tlpvn'), '$unit${term('xi_hyvm')}', term('shlb'), item, term('mty-ldbr-shvb'), term('harh')],
   ];
   for (final e in entities) {
     final a = e.wf;

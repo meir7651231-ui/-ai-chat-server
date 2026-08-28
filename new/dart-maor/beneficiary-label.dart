@@ -22,7 +22,7 @@ String beneficiaryLabel(
 
   final famLabel = fam != null
       ? '${t('entity.familyOf', term('mshpcht'))} ${fam['name']}'
-      : '${t('entity.family', term('mshpchh'))} לא ידועה';
+      : '${t('entity.family', term('mshpchh'))}${term('xi_la-ydvah')}';
 
   // !a.memberId (truthiness: undefined/'' ⇒ נסיגה) || !fam ⇒ החזרת התווית המשפחתית.
   final mid = a['memberId'];

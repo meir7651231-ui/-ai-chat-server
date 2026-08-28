@@ -25,8 +25,8 @@
 String directionalContext(List<String> names, int i, {required String Function(String) term}) {
   final up = i > 0 ? names[i - 1] : null;
   final down = i < names.length - 1 ? names[i + 1] : null;
-  if (up != null && down != null) return 'בין "$up" ל-"$down"';
-  if (down != null) return 'בכניסת הקו (לפני "$down")';
-  if (up != null) return 'ביציאת הקו (אחרי "$up")';
+  if (up != null && down != null) return '${term('xi_byn')}$up${term('xi_l')}$down"';
+  if (down != null) return '${term('xi_bknyst-hkv-lpny')}$down")';
+  if (up != null) return '${term('xi_bytsyat-hkv-achry')}$up")';
   return term('bkv');
 }

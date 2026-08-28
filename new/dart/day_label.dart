@@ -6,5 +6,5 @@ String dayLabel(int i, {required String Function(String) term}) => switch (i) {
       0 => term('hyvm'),
       1 => term('mchr'),
       2 => term('mchrtyym'),
-      _ => 'בעוד $i ימים',
+      _ => '${term('xi_bavd')}$i${term('xi_ymym')}',
     };

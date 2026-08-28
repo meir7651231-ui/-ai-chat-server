@@ -85,7 +85,7 @@ LipskeyCatalogProduct syntheticPipe(
             ));
     return LipskeyCatalogProduct(
       sku: sku,
-      nameHe: 'צינור $material DN$dn (לפי מטר)',
+      nameHe: '${term('xi_tsynvr')}$material DN$dn${term('xi_lpy-mtr')}',
       nameEn: '$material pipe DN$dn (cut to length)',
       categoryHe: term('tsynvrvt'),
       categoryEn: 'Pipes',

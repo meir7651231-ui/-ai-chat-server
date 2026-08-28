@@ -23,7 +23,7 @@ List<AttentionItem> attentionItems(
     out.add(AttentionItem(
       key: 'order:${o.id}',
       tag: tagOrder,
-      title: 'הזמנה ${o.id} ממתינה ${o.ageDays} ימים',
+      title: '${term('xi_hzmnh')}${o.id}${term('xi_mmtynh')}${o.ageDays}${term('xi_ymym')}',
       sev: o.ageDays >= orderCritDays ? AttentionSev.crit : AttentionSev.warn,
       navTab: 1,
     ));
@@ -32,7 +32,7 @@ List<AttentionItem> attentionItems(
     out.add(AttentionItem(
       key: 'order:more',
       tag: tagOrder,
-      title: '+${aging.length - 3} הזמנות נוספות ממתינות',
+      title: '+${aging.length - 3}${term('xi_hzmnvt-nvspvt-mmtynvt')}',
       sev: AttentionSev.warn,
       navTab: 1,
     ));
@@ -44,7 +44,7 @@ List<AttentionItem> attentionItems(
       tag: termOf('attn.tag.approval', term('ayshvr')),
       title: inp.pendingApprovals == 1
           ? term('mshymh-acht-mmtynh-layshvr')
-          : '${inp.pendingApprovals} משימות ממתינות לאישור',
+          : '${inp.pendingApprovals}${term('xi_mshymvt-mmtynvt-layshvr')}',
       sev: inp.pendingApprovals >= approvalsCritCount
           ? AttentionSev.crit
           : AttentionSev.warn,
@@ -58,7 +58,7 @@ List<AttentionItem> attentionItems(
       tag: termOf('attn.tag.vacation', term('chvpshh')),
       title: inp.pendingVacations == 1
           ? term('bksht-chvpshh-acht-mmtynh')
-          : '${inp.pendingVacations} בקשות חופשה ממתינות',
+          : '${inp.pendingVacations}${term('xi_bkshvt-chvpshh-mmtynvt')}',
       sev: AttentionSev.warn,
       navTab: 3,
     ));
@@ -70,7 +70,7 @@ List<AttentionItem> attentionItems(
       tag: termOf('attn.tag.account', term('chshbvn')),
       title: inp.pendingAccountReqs == 1
           ? term('bksht-chshbvn-acht-mmtynh')
-          : '${inp.pendingAccountReqs} בקשות חשבון ממתינות',
+          : '${inp.pendingAccountReqs}${term('xi_bkshvt-chshbvn-mmtynvt')}',
       sev: AttentionSev.warn,
       navTab: 3,
     ));

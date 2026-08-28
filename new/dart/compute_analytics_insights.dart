@@ -36,19 +36,19 @@ List<({String ic, String title, String sub})> computeAnalyticsInsights(
   if (orderCount > 0) {
     out.add((
       ic: '📦',
-      title: '$orderCount הזמנות · ${fMoney(totalSpend)} סה״כ רכש',
+      title: '$orderCount${term('xi_hzmnvt')}${fMoney(totalSpend)}${term('xi_shk-rksh')}',
       sub: term('mtvk-mnva-hhzmnvt-hmshvtf'),
     ));
     final avg = (totalSpend / orderCount).round();
     out
       ..add((
         ic: '💵',
-        title: 'שווי הזמנה ממוצע: ${fMoney(avg)}',
+        title: '${term('xi_shvvy-hzmnh-mmvtsa')}${fMoney(avg)}',
         sub: term('mmvtsa-al-pny-kl-hhzmnvt'),
       ))
       ..add((
         ic: '🚚',
-        title: '$openCount הזמנות פתוחות · $deliveredCount סופקו',
+        title: '$openCount${term('xi_hzmnvt-ptvchvt')}$deliveredCount${term('xi_svpkv')}',
         sub: term('lpy-shlb-hhzmnh-hnvkchy'),
       ));
   }
@@ -57,7 +57,7 @@ List<({String ic, String title, String sub})> computeAnalyticsInsights(
   if (savings > 0) {
     out.add((
       ic: '💰',
-      title: 'חיסכון אפשרי: ${fMoney(savings)}',
+      title: '${term('xi_chyskvn-apshry')}${fMoney(savings)}',
       sub: term('mabr-lmvtgym-zvlym-yvtr-bavtv-mvtsr'),
     ));
   }
@@ -67,8 +67,8 @@ List<({String ic, String title, String sub})> computeAnalyticsInsights(
   final budgetLeft = kBudgetTotal - kBudgetSpent;
   out.add((
     ic: '📊',
-    title: 'ניצול תקציב: $budgetPctValue%',
-    sub: 'נותרו ${fMoney(budgetLeft)} מתוך ${fMoney(kBudgetTotal)}',
+    title: '${term('xi_nytsvl-tktsyb')}$budgetPctValue%',
+    sub: '${term('xi_nvtrv')}${fMoney(budgetLeft)}${term('xi_mtvk')}${fMoney(kBudgetTotal)}',
   ));
 
   return out;

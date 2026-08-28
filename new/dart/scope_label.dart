@@ -19,10 +19,10 @@ String scopeLabel(
 }) {
   if (scope == all) return term('mtvk-kl-halmntym');
   if (scope.startsWith(screenPrefix)) {
-    return 'מתוך: מרחב «${scope.substring(screenPrefix.length)}»';
+    return '${term('xi_mtvk-mrchb')}${scope.substring(screenPrefix.length)}»';
   }
   if (scope.startsWith(singlePrefix)) {
-    return 'מתוך: האלמנט «${scope.substring(singlePrefix.length)}»';
+    return '${term('xi_mtvk-halmnt')}${scope.substring(singlePrefix.length)}»';
   }
   return term('mtvk-tvvch-la-mzvhh'); // defensive — an unrecognised scope
 }

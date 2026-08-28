@@ -19,4 +19,6 @@ const Map<String, String> kTerms = {
   'lla-shm': 'ללא שם',
   'ptycht-krtys': 'פתיחת כרטיס',
   'tvrm': 'תורם',
+  'xi_hvspt': '➕ הוספת ',
+  'xi_aychvd-kpvlym': '🔗 איחוד כפולים · ',
 };

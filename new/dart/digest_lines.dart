@@ -32,7 +32,7 @@ List<({String key, bool urgent, String text, int navTab})> digestLines({required
       urgent: true,
       text: crit.length == 1
           ? term('pryt-kryty-achd-dvrsh-typvl')
-          : '⚠ ${crit.length} פריטים קריטיים דורשים טיפול',
+          : '⚠ ${crit.length}${term('xi_prytym-krytyym-dvrshym-typvl')}',
       navTab: crit.first.navTab,
     ));
   }
@@ -40,7 +40,7 @@ List<({String key, bool urgent, String text, int navTab})> digestLines({required
     out.add((
       key: 'approvals',
       urgent: false,
-      text: '$pendingApprovals משימות ממתינות לאישור',
+      text: '$pendingApprovals${term('xi_mshymvt-mmtynvt-layshvr')}',
       navTab: 3,
     ));
   }
@@ -48,7 +48,7 @@ List<({String key, bool urgent, String text, int navTab})> digestLines({required
     out.add((
       key: 'vacations',
       urgent: false,
-      text: '$pendingVacations בקשות חופשה ממתינות',
+      text: '$pendingVacations${term('xi_bkshvt-chvpshh-mmtynvt')}',
       navTab: 3,
     ));
   }

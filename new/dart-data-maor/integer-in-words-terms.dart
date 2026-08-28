@@ -3,4 +3,5 @@ const Map<String, String> kTerms = {
   'aps': 'אפס',
   'mylyvn': 'מיליון',
   'shny-mylyvn': 'שני מיליון',
+  'xi_mylyvn': ' מיליון',
 };

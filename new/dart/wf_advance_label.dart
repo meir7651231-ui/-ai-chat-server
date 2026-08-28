@@ -63,7 +63,7 @@ String wfAdvanceLabel<C>(
     case WfStage.intake:
       return '${wfStageLabel(cfg, WfStage.prep)} ←';
     case WfStage.prep:
-      return '✓ אישור — ${wfStageLabel(cfg, WfStage.prep)}';
+      return '${term('xi_ayshvr')}${wfStageLabel(cfg, WfStage.prep)}';
     case WfStage.ready:
       return '${wfStageLabel(cfg, WfStage.dispatch)} ←';
     case WfStage.dispatch:

@@ -31,8 +31,8 @@ String reenrollListText(List<Map<String, dynamic>> rows, {required String Functi
   return rows.map((r) {
     final summary = r['summary'] as Map;
     final suffix = r['renewed'] == true ? term('nrshm') : '';
-    return '${r['memberName']} · ${r['courseName']} — נוכחות ${summary['presents']}, '
-            'חיסורים ${summary['absences']} · ${decWord(r['decision'])}' +
+    return '${r['memberName']} · ${r['courseName']}${term('xi_nvkchvt')}${summary['presents']}, '
+            '${term('xi_chysvrym')}${summary['absences']} · ${decWord(r['decision'])}' +
         suffix;
   }).join('\n');
 }

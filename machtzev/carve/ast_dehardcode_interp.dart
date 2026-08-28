@@ -83,7 +83,8 @@ void main(List<String> args){
   if(col.hits.isEmpty){ print(jsonEncode({'ok':false,'reason':'no raw hebrew in body'})); return; }
 
   final terms = <String,String>{}; final keyOf = <String,String>{}; final used=<String>{}; var i=0;
-  for(final h in col.hits){ if(keyOf.containsKey(h.value)) continue; var k=_slug(h.value); if(k==null||used.contains(k)) k='t${i}'; used.add(k); keyOf[h.value]=k; terms[k]=h.value; i++; }
+  // מפתחות עם קידומת 'xi_' — מונע התנגשות עם מפתחות מסלול-1 קיימים (בעת מיזוג לקובץ-שמות).
+  for(final h in col.hits){ if(keyOf.containsKey(h.value)) continue; final s=_slug(h.value); var k=(s==null)?'xi${i}':'xi_${s}'; if(used.contains(k)) k='xi${i}'; used.add(k); keyOf[h.value]=k; terms[k]=h.value; i++; }
 
   final edits = [...col.hits]..sort((a,b)=>b.offset-a.offset);
   var out = src;

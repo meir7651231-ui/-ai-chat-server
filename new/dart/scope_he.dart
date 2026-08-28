@@ -26,13 +26,13 @@ String scopeHe(
   if (token == all) return term('kl-halmntym');
   if (token == actionable) return term('kl-hkptvrym');
   if (token.startsWith(everyPrefix)) {
-    return 'כל «${token.substring(everyPrefix.length)}»';
+    return '${term('xi_kl')}${token.substring(everyPrefix.length)}»';
   }
   if (token.startsWith(screenPrefix)) {
-    return 'מסך «${token.substring(screenPrefix.length)}»';
+    return '${term('xi_msk')}${token.substring(screenPrefix.length)}»';
   }
   if (token.startsWith(singlePrefix)) {
-    return 'האלמנט «${token.substring(singlePrefix.length)}»';
+    return '${term('xi_halmnt')}${token.substring(singlePrefix.length)}»';
   }
   return term('tvvch-la-mzvhh');
 }

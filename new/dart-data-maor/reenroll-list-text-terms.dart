@@ -5,4 +5,6 @@ const Map<String, String> kTerms = {
   'bhmtnh': 'בהמתנה',
   'trm-hvchlt': 'טרם הוחלט',
   'nrshm': ' ✓נרשם',
+  'xi_nvkchvt': ' — נוכחות ',
+  'xi_chysvrym': 'חיסורים ',
 };
