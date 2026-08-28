@@ -1,40 +1,46 @@
 # חוזה · `matchClosed` (Dart)
 
-מקור-אמת (קדוש, חוק-4): `buildsmart/app_flutter/lib/logic/studio/registry_view.dart:237-260`
-(‏`_matchClosed`, private-במקור). קודם לפונקציה top-level ציבורית `matchClosed`.
+מקור-אמת (קדוש, חוק-4): `buildsmart/app_flutter/lib/logic/studio/rules_model.dart:180-200` (`_matchClosed`).
+דדופ (הכרעה-5): גוף-קוד זהה-ביט ב-`registry_view.dart:237-259` (רק הערות שונות) — אטום-אחד.
+
+## תפקיד
+פותר-קבוצה-סגורה: ממפה תשובת-מודל חופשית למפתח-אמת יחיד מתוך קבוצה-סגורה, או `null`
+(fail-closed). הבסיס ל-matchElementId/matchPropKey/matchValue/matchActionId/
+matchComponentType (חיווט-קופסה מעל האטום, כל אחד מזריק קבוצה-סגורה אחרת).
 
 ## חתימה
 ```dart
 String? matchClosed(Set<String> closed, String reply)
 ```
 
-## קלט
-- `closed` — קבוצה-סגורה של מפתחות-אמת (nav ids / action ids / prop keys …).
-- `reply` — תשובת-המודל הגולמית (עלולה לעטוף מפתח במרכאות/פרוזה).
+## התנהגות (עוגן rules_model.dart:180-200)
+1. `r = reply.trim()`. אם `r.isEmpty` ⇒ **`null`** (נכשל-סגור).
+2. **מדויק-קודם**: הלולאה הראשונה מחזירה `k` אם `r == k` (short-circuit — מפתח-מדויק
+   קצר לא מואפל ע"י מפתח-ארוך שמכיל אותו).
+3. **מוכל-הארוך-ביותר**: אחרת, מבין ה-`k` ש-`k.isNotEmpty && r.contains(k)` — נבחר
+   הארוך-ביותר (`k.length > best.length`, **strictly** ⇒ בשוויון-אורך נשמר הראשון-בסדר-האיטרציה).
+4. אין מוכל ⇒ **`null`**.
+- מפתח-ריק (`''`) נדחה תמיד ע"י `k.isNotEmpty` (מחרוזת-ריקה מוכלת בכול).
 
-## פלט / התנהגות (עוגני-שורה)
-- `:238` — `final r = reply.trim()`.
-- `:239` — `r.isEmpty ⇒ return null` (fail-closed מוקדם).
-- `:243-245` — **מעבר-מדויק ראשון**: קיים `k` עם `r == k` ⇒ מחזיר `k` מיד (short-circuit).
-- `:249-256` — **fallback המוכל-הארוך-ביותר**: מבין כל `k` ש-`k.isNotEmpty && r.contains(k)`,
-  מחזיר את בעל-האורך-המרבי; קשר ⇒ הראשון-שנסרק זוכה (‏`k.length > best.length` — חמור).
-- אין התאמה ⇒ `null`. לעולם לא זורק.
-
-## דוגמאות מספריות
-| # | closed | reply | ⇒ | סיבה |
-|---|--------|-------|---|------|
-| 1 | `{'a','b'}` | `'a'` | `'a'` | התאמה-מדויקת |
-| 2 | `{'faucet','kitchenFaucet'}` | `'kitchenFaucet'` | `'kitchenFaucet'` | מדויק גובר על התת-מחרוזת faucet |
-| 3 | `{'faucet','kitchenFaucet'}` | `'רוצה kitchenFaucet בבקשה'` | `'kitchenFaucet'` | מוכל-ארוך (12>6) |
-| 4 | `{'card','card.order'}` | `'"card.order"'` | `'card.order'` | מוכל-ארוך גובר על prefix |
-| 5 | `{'a','b'}` | `'   '` | `null` | ריק אחרי trim |
-| 6 | `{'a','b'}` | `'zzz'` | `null` | אין-התאמה |
-| 7 | `{'','x'}` | `'y'` | `null` | מפתח-ריק אינו מוכל (‏k.isNotEmpty) |
+## דוגמאות-מחייבות (Set = LinkedHashSet, סדר-הכנסה)
+| # | closed | reply | ⇒ | למה |
+|---|--------|-------|---|-----|
+| 1 | `{a,b}` | `''` | `null` | reply-ריק |
+| 2 | `{a,b}` | `'   '` | `null` | trim⇒ריק |
+| 3 | `{card, card.order}` | `'card'` | `'card'` | מדויק מנצח (לא card.order הארוך) |
+| 4 | `{faucet, kitchenFaucet}` | `'the kitchenFaucet pls'` | `'kitchenFaucet'` | מוכל-ארוך |
+| 5 | `{faucet, kitchenFaucet}` | `'the faucet pls'` | `'faucet'` | רק faucet מוכל |
+| 6 | `{a,b,c}` | `'xyz'` | `null` | אין מוכל |
+| 7 | `{}` | `'anything'` | `null` | קבוצה-ריקה |
+| 8 | `{'', abc}` | `'abc'` | `'abc'` | מפתח-ריק נדחה, abc מדויק |
+| 9 | `{ab, abcd}` | `'  abcd  '` | `'abcd'` | trim ואז מדויק |
+| 10 | `{xx, yy}` | `'zz xx yy'` | `'xx'` | שוויון-אורך (2,2) — הראשון-בסדר-הכנסה (xx) |
+| 11 | `{cat, category}` | `'pick category'` | `'category'` | ארוך-מוכל גובר על תת-מחרוזת cat |
 
 ## שקעים
-- אין. `closed` = פרמטר-נתון. `String.trim/contains`, `Set` iteration, `String.length` — שפה/סטנדרט.
+אין (dart:core בלבד — `String.trim`/`String.contains`/`Set` איטרציה).
 
-## DoD (דיבר 12)
+## DoD
 ```
 dart run --enable-asserts new/dart/match_closed_test.dart  ⇒ exit 0 + "OK matchClosed: N asserts passed"
 ```

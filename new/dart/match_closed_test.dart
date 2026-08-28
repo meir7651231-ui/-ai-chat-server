@@ -1,32 +1,31 @@
-// בדיקת-חוזה · matchClosed — מייבאת אך ורק את האטום-שלה (חוק-4).
+// בדיקת-חוזה golden · matchClosed — מייבאת אך ורק את האטום-שלה (חוק-4).
 // הרצה: dart run --enable-asserts new/dart/match_closed_test.dart
 import 'match_closed.dart';
 
 void _eq(String? got, String? want, String label) {
-  if (got != want) throw StateError('FAIL [$label]: got="$got" want="$want"');
+  if (got != want) throw StateError('FAIL [$label]: got=$got want=$want');
 }
 
 void main() {
   var n = 0;
+  _eq(matchClosed({'a', 'b'}, ''), null, '1 empty'); n++;
+  _eq(matchClosed({'a', 'b'}, '   '), null, '2 blank-trim'); n++;
+  _eq(matchClosed({'card', 'card.order'}, 'card'), 'card', '3 exact-wins'); n++;
+  _eq(matchClosed({'faucet', 'kitchenFaucet'}, 'the kitchenFaucet pls'),
+      'kitchenFaucet', '4 longest-contained'); n++;
+  _eq(matchClosed({'faucet', 'kitchenFaucet'}, 'the faucet pls'), 'faucet',
+      '5 only-faucet'); n++;
+  _eq(matchClosed({'a', 'b', 'c'}, 'xyz'), null, '6 none'); n++;
+  _eq(matchClosed(<String>{}, 'anything'), null, '7 empty-set'); n++;
+  _eq(matchClosed({'', 'abc'}, 'abc'), 'abc', '8 empty-key-rejected'); n++;
+  _eq(matchClosed({'ab', 'abcd'}, '  abcd  '), 'abcd', '9 trim-then-exact'); n++;
+  _eq(matchClosed({'xx', 'yy'}, 'zz xx yy'), 'xx', '10 tie-insertion-order'); n++;
+  _eq(matchClosed({'cat', 'category'}, 'pick category'), 'category',
+      '11 longer-beats-prefix'); n++;
+  // exact short-circuits even when a longer key also contains the reply
+  _eq(matchClosed({'go', 'goal'}, 'go'), 'go', '12 exact-short-circuit'); n++;
 
-  // — התאמה-מדויקת גוברת —
-  _eq(matchClosed({'a', 'b'}, 'a'), 'a', '1 exact'); n++;
-  _eq(matchClosed({'faucet', 'kitchenFaucet'}, 'kitchenFaucet'),
-      'kitchenFaucet', '2 exact-over-substring'); n++;
-
-  // — מוכל-ארוך-ביותר —
-  _eq(matchClosed({'faucet', 'kitchenFaucet'}, 'רוצה kitchenFaucet בבקשה'),
-      'kitchenFaucet', '3 longest-contained'); n++;
-  _eq(matchClosed({'card', 'card.order'}, '"card.order"'),
-      'card.order', '4 contained-over-prefix'); n++;
-
-  // — fail-closed —
-  _eq(matchClosed({'a', 'b'}, '   '), null, '5 blank'); n++;
-  _eq(matchClosed({'a', 'b'}, 'zzz'), null, '6 no-match'); n++;
-  _eq(matchClosed({'', 'x'}, 'y'), null, '7 empty-key-not-contained'); n++;
-
-  // assert חי — מוכיח שהמנגנון פעיל.
-  assert(matchClosed({'a'}, 'a') == 'a', 'assert-live guard');
-
+  assert(matchClosed({'kitchenFaucet', 'faucet'}, 'x kitchenFaucet') ==
+      'kitchenFaucet', 'assert-live');
   print('OK matchClosed: $n asserts passed');
 }
