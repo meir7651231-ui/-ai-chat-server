@@ -1,3 +1,4 @@
+import '../dart-data/role_floor_block-terms.dart' as td_role_floor_block;
 // בדיקת-חוזה · roleFloorBlock — מייבאת אך ורק את האטום-שלה (חוק-4).
 // הרצה: dart run --enable-asserts new/dart/role_floor_block_test.dart
 import 'role_floor_block.dart';
@@ -14,7 +15,7 @@ String? _s({
       isNavStructural: nav,
       persona: persona,
       contractorRole: 'contractor',
-    );
+     term: (k)=>td_role_floor_block.kTerms[k]!);
 
 void _eq(String? got, String? want, String label) {
   if (got != want) throw StateError('FAIL [$label]: got="$got" want="$want"');

@@ -18,7 +18,7 @@
 /// for (`persona == roleFloor`, roleFloor not the contractor).
 /// Verbatim behaviour of edit_safety.dart:226-249 with the descriptor fields,
 /// the nav-structural helper, and the contractor constant injected as sockets.
-String? roleFloorBlock({
+String? roleFloorBlock({required String Function(String) term, 
   required String labelHe,
   required String roleFloor,
   required bool isNavStructural,
@@ -29,18 +29,18 @@ String? roleFloorBlock({
   final isGlobal = persona == null || persona.isEmpty; // null = every persona
   if (isGlobal) {
     if (isNavStructural) {
-      return 'אי-אפשר להסתיר «$labelHe» מכל הפרסונות (כולל קבלן) — '
-          'רכיב ניווט חייב להישאר גלוי';
+      return '${term('xi_ayapshr-lhstyr')}$labelHe${term('xi_mkl-hprsvnvt-kvll-kbln')}'
+          '${term('xi_rkyb-nyvvt-chyyb-lhyshar-glvy')}';
     }
     if (floor != contractorRole) {
-      return 'אי-אפשר להסתיר «$labelHe» מכל הפרסונות — '
-          'הרכיב חייב להישאר גלוי לתפקיד «$floor»';
+      return '${term('xi_ayapshr-lhstyr')}$labelHe${term('xi_mkl-hprsvnvt')}'
+          '${term('xi_hrkyb-chyyb-lhyshar-glvy-ltpkyd')}$floor»';
     }
     return null; // a mundane, non-structural element MAY be hidden app-wide.
   }
   // SINGLE persona: legal unless we hide it from the very role it is critical for.
   if (persona == floor && floor != contractorRole) {
-    return 'אי-אפשר להסתיר «$labelHe» מהתפקיד «$floor» — קריטי לתפקיד זה';
+    return '${term('xi_ayapshr-lhstyr')}$labelHe${term('xi_mhtpkyd')}$floor${term('xi_kryty-ltpkyd-zh')}';
   }
   return null;
 }

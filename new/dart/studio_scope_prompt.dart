@@ -17,7 +17,7 @@
 /// utterance and the closed-set choice instruction.
 /// Verbatim behaviour of edit_prompt.dart:213-235 with the four neighbour deps injected.
 String studioScopePrompt(
-  String utterance, {
+  String utterance, {required String Function(String) term, 
   required String Function(String) safeText,
   required Set<String> Function() scopeTokens,
   required String Function(String) scopeTokenHe,
@@ -26,14 +26,14 @@ String studioScopePrompt(
   final safe = safeText(utterance);
   final tokens = scopeTokens().toList()..sort();
   final b = StringBuffer();
-  b.writeln('טווחי-עריכה זמינים (token = תיאור):');
+  b.writeln(term('xi_tvvchyarykh-zmynym-tyavr'));
   for (final t in tokens) {
     b.writeln('$t = ${scopeTokenHe(t)}');
   }
-  b.writeln('$singlePrefix<id> = אלמנט בודד (id אמיתי מהרישום)');
+  b.writeln('$singlePrefix${term('xi_almnt-bvdd-amyty-mhryshvm')}');
   b.writeln();
-  b.writeln('בקשת המנהל: "$safe".');
-  b.writeln('בחר token אחד בלבד מהרשימה הסגורה שמתאר את טווח-העריכה, או השב '
-      'AMBIGUOUS אם הבקשה אינה חד-משמעית. החזר שורה אחת: ה-token בלבד.');
+  b.writeln('${term('xi_bksht-hmnhl')}$safe".');
+  b.writeln('${term('xi_bchr-achd-blbd-mhrshymh-hsgvrh-shmtar-at-tvvchharykh-av-hshb')}'
+      '${term('xi_am-hbkshh-aynh-chdmshmayt-hchzr-shvrh-acht-h-blbd')}');
   return b.toString();
 }

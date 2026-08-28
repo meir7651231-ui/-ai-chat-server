@@ -1,3 +1,5 @@
+import '../dart-data/recommended_kit_for_product-terms.dart' as td_recommended_kit_for_product;
+import '../dart-data/estimate_pressure_drop-terms.dart' as td_estimate_pressure_drop;
 import '../dart-data/branch_label-terms.dart' as td_branch_label;
 import '../dart-data/is_directional_device-terms.dart' as td_is_directional_device;
 import '../dart-data/directional_context-terms.dart';
@@ -390,7 +392,7 @@ class PipeBox {
         minBoreOf: (p) => _minBoreMeters(p.sku),
         widerSiblingOf: (p) => widerSiblingOf(p),
         frictionFactor: (re) => ff.frictionFactor(re, pow025: pw.pow025),
-      );
+       term: (k)=>td_estimate_pressure_drop.kTerms[k]!);
 
   /// האח ה"רחב-הקטן-ביותר-שעדיין-עוזר" של [p] (אותו סוג/מותג/קטגוריה, קוטר גדול-יותר).
   PipeProduct? widerSiblingOf(PipeProduct p) => wso.widerSiblingOf<PipeProduct>(
@@ -429,7 +431,7 @@ class PipeBox {
         rkfp.KitProduct(
             sku: p.sku, brand: p.brand, dims: p.dims, categoryHe: p.categoryHe),
         verifiedSpecs: _kitSpecsP,
-      )
+       term: (k)=>td_recommended_kit_for_product.kTerms[k]!)
           .map((i) => rkf.KitItem(
                 kind: rkf.KitKind.values[i.kind.index],
                 label: i.label,

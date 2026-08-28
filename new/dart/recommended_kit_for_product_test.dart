@@ -1,3 +1,4 @@
+import '../dart-data/recommended_kit_for_product-terms.dart' as td_recommended_kit_for_product;
 // בדיקת-אטום · recommendedKitForProduct — מוכיחה בדיוק את דוגמאות החוזה.
 // DoD (דיבר-12): dart run --enable-asserts new/dart/recommended_kit_for_product_test.dart ⇒ exit 0 + "OK".
 // מייבאת אך-ורק את האטום-שלה (חוק-4).
@@ -5,7 +6,7 @@ import 'recommended_kit_for_product.dart';
 
 void main() {
   // #1 — שער-PPR דרך brand, dims=null ⇒ 6 פריטים, ליבלים ללא-קוטר.
-  final r1 = recommendedKitForProduct(const KitProduct(sku: 'A', brand: 'פולירול'));
+  final r1 = recommendedKitForProduct(const KitProduct(sku: 'A', brand: 'פולירול'), term: (k)=>td_recommended_kit_for_product.kTerms[k]!);
   assert(r1.length == 6);
   assert(r1[0].label == 'מצמד PPR (אביזר חיבור)');
   assert(r1[0].kind == KitKind.tool);
@@ -16,7 +17,7 @@ void main() {
 
   // #2 — שער-PPR עם dn=40 ⇒ הקוטר נכנס לליבלים.
   final r2 = recommendedKitForProduct(
-      const KitProduct(sku: 'A', brand: 'פולירול', dims: {'dn נומינלי': 40}));
+      const KitProduct(sku: 'A', brand: 'פולירול', dims: {'dn נומינלי': 40}), term: (k)=>td_recommended_kit_for_product.kTerms[k]!);
   assert(r2.length == 6);
   assert(r2[0].label == 'מצמד PPR 40 (אביזר חיבור)');
   assert(r2[2].label == 'תבנית/ראש ריתוך ⌀40 מ"מ');
@@ -25,12 +26,12 @@ void main() {
   final r3 = recommendedKitForProduct(
     const KitProduct(sku: 'S1', brand: 'x'),
     verifiedSpecs: const {'S1': KitSpec(material: 'PPR-100')},
-  );
+   term: (k)=>td_recommended_kit_for_product.kTerms[k]!);
   assert(r3.length == 6);
   assert(r3[0].label == 'מצמד PPR (אביזר חיבור)');
 
   // #4 — אין spec, brand רגיל ⇒ [] (const).
-  final r4 = recommendedKitForProduct(const KitProduct(sku: 'Z', brand: 'x'));
+  final r4 = recommendedKitForProduct(const KitProduct(sku: 'Z', brand: 'x'), term: (k)=>td_recommended_kit_for_product.kTerms[k]!);
   assert(r4.isEmpty);
 
   // #5 — שני קצוות-BSP ⇒ מפתח + ptfe (ptfe מנוקה-כפילות), אורך 2.
@@ -42,7 +43,7 @@ void main() {
         KitEnd(EndType.bspFemale, '1/2"'),
       ]),
     },
-  );
+   term: (k)=>td_recommended_kit_for_product.kTerms[k]!);
   assert(r5.length == 2);
   assert(r5[0].label == 'מפתח שוודי מתכוונן להברגה 1/2"');
   assert(r5[0].kind == KitKind.tool);
@@ -55,7 +56,7 @@ void main() {
     verifiedSpecs: const {
       'C': KitSpec(material: 'HDPE', ends: [KitEnd(EndType.hdpeCompression, '32')]),
     },
-  );
+   term: (k)=>td_recommended_kit_for_product.kTerms[k]!);
   assert(r6.length == 1);
   assert(r6[0].label == 'מפתח חבישה DN32 ל-HDPE');
 
@@ -65,13 +66,13 @@ void main() {
     verifiedSpecs: const {
       'D': KitSpec(material: 'PEX', ends: [KitEnd(EndType.pexPress, '16')]),
     },
-  );
+   term: (k)=>td_recommended_kit_for_product.kTerms[k]!);
   assert(r7.length == 1);
   assert(r7[0].label == 'מכווץ PEX (Crimper) ל-16');
 
   // #8 — שער-חוליות: brand='חוליות', DN=40, קטגוריית-צינור ⇒ חותך(required)+מפתח(recommended).
   final r8 = recommendedKitForProduct(const KitProduct(
-      sku: 'H1', brand: 'חוליות', dims: {'DN': 40}, categoryHe: 'צינור ביוב'));
+      sku: 'H1', brand: 'חוליות', dims: {'DN': 40}, categoryHe: 'צינור ביוב'), term: (k)=>td_recommended_kit_for_product.kTerms[k]!);
   assert(r8.length == 2);
   assert(r8[0].label == 'חותך צינורות SmartLock');
   assert(r8[0].kind == KitKind.tool);
@@ -81,7 +82,7 @@ void main() {
 
   // #9 — שער-חוליות: DN=63, קטגוריה לא-צינור ⇒ פריט-מפתח 50-63 יחיד (אין חותך).
   final r9 = recommendedKitForProduct(const KitProduct(
-      sku: 'H2', brand: 'חוליות', dims: {'DN': 63}, categoryHe: 'אביזר'));
+      sku: 'H2', brand: 'חוליות', dims: {'DN': 63}, categoryHe: 'אביזר'), term: (k)=>td_recommended_kit_for_product.kTerms[k]!);
   assert(r9.length == 1);
   assert(r9[0].label == 'מפתח לאום SmartLock 50-63 (מק"ט 61060560)');
   assert(r9[0].severity == Severity.recommended);

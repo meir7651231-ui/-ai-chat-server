@@ -13,11 +13,16 @@ final _heb = RegExp(r'[֐-׿]');
 const _t = {'א':'a','ב':'b','ג':'g','ד':'d','ה':'h','ו':'v','ז':'z','ח':'ch','ט':'t','י':'y','כ':'k','ך':'k','ל':'l','מ':'m','ם':'m','נ':'n','ן':'n','ס':'s','ע':'a','פ':'p','ף':'f','צ':'ts','ץ':'ts','ק':'k','ר':'r','ש':'sh','ת':'t',' ':'-'};
 String? _slug(String s){var o='';for(final c in s.split('')){o+=_t[c]??'';}o=o.replaceAll(RegExp('-+'),'-').replaceAll(RegExp(r'^-|-$'),'');return o.isEmpty?null:o;}
 
-class _Hit { final int offset,end; final String value; final bool interp; _Hit(this.offset,this.end,this.value,{this.interp=false}); }
+class _Hit { final int offset,end; final String value; final String mode; _Hit(this.offset,this.end,this.value,{this.mode='simple'}); }
 
-bool _inTopConst(AstNode node){
+// הקשר-const כלשהו (לא רק top-level): const-הצהרה · const-בנאי · ליטרל-const —
+// אינטרפולציית-term אינה קבועה, ולכן אסור לגעת שם.
+bool _inConst(AstNode node){
   for(AstNode? a=node; a!=null; a=a.parent){
     if(a is TopLevelVariableDeclaration && a.variables.isConst) return true;
+    if(a is VariableDeclarationList && a.isConst) return true;
+    if(a is InstanceCreationExpression && a.isConst) return true;
+    if(a is TypedLiteral && a.constKeyword != null) return true;
     if(a is FunctionDeclaration) break;
   }
   return false;
@@ -40,13 +45,15 @@ class _Collector extends RecursiveAstVisitor<void> {
       if(gp is FunctionExpressionInvocation){ final f=gp.function; if(f is SimpleIdentifier) name=f.name; }
       if(name=='termOf' && p.arguments.length>=3 && identical(p.arguments[2], node)) return;
     }
-    if(_inTopConst(node)) return;
-    hits.add(_Hit(node.offset, node.end, v));
+    if(_inConst(node)) return;
+    // ליטרל-פשוט בשרשור-סמוך (AdjacentStrings) חייב להישאר מחרוזת ⇒ '${term()}'.
+    final adjacent = node.parent is AdjacentStrings;
+    hits.add(_Hit(node.offset, node.end, v, mode: adjacent ? 'adjacent' : 'simple'));
   }
 
   @override
   void visitStringInterpolation(StringInterpolation node){
-    if(!_inTopConst(node)){
+    if(!_inConst(node)){
       // חשב אורך-תוחם פתיחה/סגירה (', ", ''' , """) — מחרוזת-מוטבעת אינה raw.
       final o = node.offset;
       final triple = src.startsWith("'''", o) || src.startsWith('"""', o);
@@ -59,7 +66,7 @@ class _Collector extends RecursiveAstVisitor<void> {
           if(_heb.hasMatch(v)){
             final innerStart = el.offset + (idx==0 ? delim : 0);
             final innerEnd = el.end - (idx==els.length-1 ? delim : 0);
-            if(innerEnd > innerStart) hits.add(_Hit(innerStart, innerEnd, v, interp:true));
+            if(innerEnd > innerStart) hits.add(_Hit(innerStart, innerEnd, v, mode:'interp'));
           }
         }
       }
@@ -89,7 +96,8 @@ void main(List<String> args){
   final edits = [...col.hits]..sort((a,b)=>b.offset-a.offset);
   var out = src;
   for(final h in edits){
-    final rep = h.interp ? "\${term('${keyOf[h.value]}')}" : "term('${keyOf[h.value]}')";
+    final key = keyOf[h.value];
+    final rep = h.mode=='interp' ? "\${term('$key')}" : h.mode=='adjacent' ? "'\${term('$key')}'" : "term('$key')";
     out = out.substring(0,h.offset) + rep + out.substring(h.end);
   }
 

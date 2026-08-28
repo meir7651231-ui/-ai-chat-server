@@ -6,10 +6,10 @@
 
 /// מחרוזת prompt לתדריך-בוקר: מצב-אמת [context] + הנחיית 3-4 נקודות-תבליט.
 /// verbatim manager_copilot.dart:109-116.
-String managerMorningBriefPrompt(String context) {
-  return 'מצב-העסק כעת (נתוני-אמת):\n$context\n\n'
-      'כתוב תדריך-בוקר קצר לבעלים: 3-4 נקודות-תבליט על מה שדורש תשומת-לב היום '
-      '(הזמנות תקועות/פתוחות, ניצול-אשראי גבוה, לקוח בולט). '
-      'אך ורק לפי הנתונים שלמעלה — בלי להמציא (אין נתוני-עבר/מגמה). '
-      'פתח ב-"☀️ תדריך-בוקר:".';
+String managerMorningBriefPrompt(String context, {required String Function(String) term}) {
+  return '${term('xi_mtsbhask-kat-ntvnyamt')}$context\n\n'
+      '${term('xi_ktvb-tdrykbvkr-ktsr-lbalym-nkvdvttblyt-al-mh-shdvrsh-tshvmtlb-hyvm')}'
+      '${term('xi_hzmnvt-tkvavtptvchvt-nytsvlashray-gbvh-lkvch-bvlt')}'
+      '${term('xi_ak-vrk-lpy-hntvnym-shlmalh-bly-lhmtsya-ayn-ntvnyabrmgmh')}'
+      '${term('xi_ptch-b-tdrykbvkr')}';
 }

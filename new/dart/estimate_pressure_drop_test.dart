@@ -1,3 +1,4 @@
+import '../dart-data/estimate_pressure_drop-terms.dart' as td_estimate_pressure_drop;
 // בדיקת-אטום · estimatePressureDrop — מוכיחה בדיוק את estimate_pressure_drop.contract.md.
 // DoD (דיבר-12): dart run --enable-asserts new/dart/estimate_pressure_drop_test.dart ⇒ exit 0.
 // מייבאת אך-ורק את האטום-שלה (חוק-4). השקעים מחווטים מקומית — פונקציית-החיכוך מגלמת
@@ -53,7 +54,7 @@ PressureDropResult<_P> _run(
     minBoreOf: (p) => p.bore,
     widerSiblingOf: (p) => _wider,
     frictionFactor: _frictionFactor,
-  );
+   term: (k)=>td_estimate_pressure_drop.kTerms[k]!);
 }
 
 void _near(double got, double want, String label) {

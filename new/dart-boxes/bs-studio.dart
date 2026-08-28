@@ -1,3 +1,6 @@
+import '../dart-data/studio_scope_prompt-terms.dart' as td_studio_scope_prompt;
+import '../dart-data/manager_morning_brief_prompt-terms.dart' as td_manager_morning_brief_prompt;
+import '../dart-data/manager_copilot_prompt-terms.dart' as td_manager_copilot_prompt;
 import '../dart-data/product_division_systems-terms.dart' as td_product_division_systems;
 import '../dart-data/kind_plural-terms.dart';
 // 📦 קופסת-חיבורים · bs-studio (בנייה-חכמה · ניהול-סטודיו + פרומפטי-קופיילוט).
@@ -76,7 +79,7 @@ String studioScopePrompt(
       scopeTokens: scopeTokens,
       scopeTokenHe: scopeTokenHe,
       singlePrefix: _singlePrefix,
-    );
+     term: (k)=>td_studio_scope_prompt.kTerms[k]!);
 
 // ═══ אשכול ב׳ · דיף-תצוגה — מונחי סוג-פעולת-קונפיג ═══════════════════════════════
 
@@ -97,11 +100,11 @@ String managerCopilotPrompt(
   String question, {
   required String Function(String text, {int maxLen}) promptSafeText,
 }) =>
-    mcp.managerCopilotPrompt(context, question, promptSafeText: promptSafeText);
+    mcp.managerCopilotPrompt(context, question, promptSafeText: promptSafeText, term: (k)=>td_manager_copilot_prompt.kTerms[k]!);
 
 /// פרומפט-תדריך-בוקר: מצב-אמת [context] + הנחיית 3-4 נקודות-תבליט (אפס-שקע).
 String managerMorningBriefPrompt(String context) =>
-    mmb.managerMorningBriefPrompt(context);
+    mmb.managerMorningBriefPrompt(context, term: (k)=>td_manager_morning_brief_prompt.kTerms[k]!);
 
 // ═══ אשכול ד׳ · אינטל-הסטודיו — קוהורטה + Gantt ══════════════════════════════════
 

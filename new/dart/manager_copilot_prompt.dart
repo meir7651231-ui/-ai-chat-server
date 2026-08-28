@@ -9,11 +9,11 @@
 /// verbatim manager_copilot.dart:101-108 (promptSafeText ⇒ שקע).
 String managerCopilotPrompt(
   String context,
-  String question, {
+  String question, {required String Function(String) term, 
   required String Function(String text, {int maxLen}) promptSafeText,
 }) {
   final q = promptSafeText(question, maxLen: 400);
-  return 'מצב-העסק כעת (נתוני-אמת):\n$context\n\n'
-      'שאלת-הבעלים: "$q"\n'
-      'ענה בעברית, אך ורק לפי הנתונים שלמעלה.';
+  return '${term('xi_mtsbhask-kat-ntvnyamt')}$context\n\n'
+      '${term('xi_shalthbalym')}$q"\n'
+      '${term('xi_anh-babryt-ak-vrk-lpy-hntvnym-shlmalh')}';
 }

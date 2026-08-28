@@ -74,7 +74,7 @@ class KitItem {
 
 /// ערכת-התקנה למוצר-יחיד — verbatim install_kit.dart:42-149.
 List<KitItem> recommendedKitForProduct(
-  KitProduct p, {
+  KitProduct p, {required String Function(String) term, 
   Map<String, KitSpec> verifiedSpecs = const {},
 }) {
   final spec = verifiedSpecs[p.sku];
@@ -82,14 +82,14 @@ List<KitItem> recommendedKitForProduct(
   // PPR product has a spec, so the gate now also accepts spec.material — both
   // paths return the welding kit (NOT a compression wrench, which would be
   // wrong for socket-fusion).
-  if (p.brand == 'פולירול' || (spec?.material.startsWith('PPR') ?? false)) {
-    final dn = p.dims?['dn נומינלי']?.toString() ?? '';
-    final ds = dn.isEmpty ? '' : ' ⌀$dn מ"מ';
+  if (p.brand == term('xi_pvlyrvl') || (spec?.material.startsWith('PPR') ?? false)) {
+    final dn = p.dims?[term('xi_nvmynly')]?.toString() ?? '';
+    final ds = dn.isEmpty ? '' : ' ⌀$dn${term('xi_mm')}';
     return [
       KitItem(
         kind: KitKind.tool,
-        label: 'מצמד PPR${dn.isEmpty ? '' : ' $dn'} (אביזר חיבור)',
-        reason: 'מאחד שני קטעי צינור בריתוך-שקע',
+        label: '${term('xi_mtsmd')}${dn.isEmpty ? '' : ' $dn'}${term('xi_abyzr-chybvr')}',
+        reason: term('xi_machd-shny-ktay-tsynvr-brytvkshka'),
       ),
       const KitItem(
         kind: KitKind.tool,
@@ -98,8 +98,8 @@ List<KitItem> recommendedKitForProduct(
       ),
       KitItem(
         kind: KitKind.tool,
-        label: 'תבנית/ראש ריתוך$ds',
-        reason: 'זוג תבניות (זכר+נקבה) לקוטר הצינור',
+        label: '${term('xi_tbnytrash-rytvk')}$ds',
+        reason: term('xi_zvg-tbnyvt-zkrnkbh-lkvtr-htsynvr'),
       ),
       const KitItem(
         kind: KitKind.tool,
@@ -124,12 +124,12 @@ List<KitItem> recommendedKitForProduct(
   // intentionally tool-light (a single bayonet wrench tightens every nut), but
   // pipe segments still need a clean perpendicular cut and the field uses a
   // dedicated cutter rather than a generic saw. Size-bucket the wrench by DN.
-  if (p.brand == 'חוליות') {
+  if (p.brand == term('xi_chvlyvt')) {
     final dn = double.tryParse(p.dims?['DN']?.toString() ?? '') ?? 0;
-    final isPipe = p.categoryHe.contains('צינור');
+    final isPipe = p.categoryHe.contains(term('xi_tsynvr'));
     final wrenchLabel = dn <= 40
-        ? 'מפתח לאום SmartLock 32-40 (מק"ט 61040360)'
-        : 'מפתח לאום SmartLock 50-63 (מק"ט 61060560)';
+        ? term('xi_mptch-lavm-mkt')
+        : term('xi11');
     return [
       if (isPipe)
         const KitItem(
@@ -140,7 +140,7 @@ List<KitItem> recommendedKitForProduct(
       KitItem(
         kind: KitKind.tool,
         label: wrenchLabel,
-        reason: 'הידוק/שחרור אום SmartLock — מפתח ייעודי מבטיח מומנט נכון',
+        reason: term('xi_hydvkshchrvr-avm-mptch-yyavdy-mbtych-mvmnt-nkvn'),
         severity: Severity.recommended,
       ),
     ];
@@ -153,8 +153,8 @@ List<KitItem> recommendedKitForProduct(
     if (e.type == EndType.bspMale || e.type == EndType.bspFemale) {
       add('wrench-bsp-${e.size}', KitItem(
         kind: KitKind.tool,
-        label: 'מפתח שוודי מתכוונן להברגה ${e.size}',
-        reason: 'הידוק החיבור עם הקצה הזה',
+        label: '${term('xi_mptch-shvvdy-mtkvvnn-lhbrgh')}${e.size}',
+        reason: term('xi_hydvk-hchybvr-am-hktsh-hzh'),
       ));
       add('ptfe', const KitItem(
         kind: KitKind.sealant,
@@ -164,20 +164,20 @@ List<KitItem> recommendedKitForProduct(
     } else if (e.type == EndType.hdpeCompression) {
       add('wrench-comp-${spec.material}-${e.size}', KitItem(
         kind: KitKind.tool,
-        label: 'מפתח חבישה DN${e.size} ל-${spec.material}',
-        reason: 'הידוק אום compression על צינור',
+        label: '${term('xi_mptch-chbyshh')}${e.size}${term('xi_l')}${spec.material}',
+        reason: term('xi_hydvk-avm-al-tsynvr'),
       ));
     } else if (e.type == EndType.pexPress) {
       add('crimper-pex-${e.size}', KitItem(
         kind: KitKind.tool,
-        label: 'מכווץ PEX (Crimper) ל-${e.size}',
-        reason: 'לחיצת שרוול על צינור PEX',
+        label: '${term('xi_mkvvts-l')}${e.size}',
+        reason: term('xi_lchytst-shrvvl-al-tsynvr'),
       ));
     } else if (e.type == EndType.copperPress) {
       add('press-cu-${e.size}', KitItem(
         kind: KitKind.tool,
-        label: 'כלי לחיצה לנחושת ${e.size}',
-        reason: 'לחיצת O-ring על צינור נחושת',
+        label: '${term('xi_kly-lchytsh-lnchvsht')}${e.size}',
+        reason: term('xi_lchytst-al-tsynvr-nchvsht'),
       ));
     }
   }

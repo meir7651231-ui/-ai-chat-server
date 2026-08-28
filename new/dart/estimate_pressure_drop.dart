@@ -125,7 +125,7 @@ class PressureDropResult<P> {
 
 /// Estimate pressure drop of a chain of plumbing products.
 PressureDropResult<P> estimatePressureDrop<P>(
-  List<P> chain, {
+  List<P> chain, {required String Function(String) term, 
   double pipeLengthMeters = 5.0,
   double flowRateLPS = 0.3,
   double verticalRiseMeters = 0.0,
@@ -184,11 +184,11 @@ PressureDropResult<P> estimatePressureDrop<P>(
   final wider = bottleneck == null ? null : widerSiblingOf(bottleneck);
   if (minBore * 1000 < 13 && flowRateLPS >= 0.3) {
     suggestions.add(FlowSuggestion<P>(
-      problem: 'צוואר-בקבוק — קוטר ${(minBore * 1000).toStringAsFixed(0)}mm '
-          'צר מדי לזרימה ${flowRateLPS.toStringAsFixed(1)} L/s',
+      problem: '${term('xi_tsvvarbkbvk-kvtr')}${(minBore * 1000).toStringAsFixed(0)}mm '
+          '${term('xi_tsr-mdy-lzrymh')}${flowRateLPS.toStringAsFixed(1)} L/s',
       solution: wider != null
-          ? 'החלף את "${nameHeOf(bottleneck!)}" ב-"${nameHeOf(wider)}"'
-          : 'החלף את "${bottleneck != null ? nameHeOf(bottleneck) : "המוצר הצר"}" במידה גדולה יותר',
+          ? '${term('xi_hchlf-at')}${nameHeOf(bottleneck!)}${term('xi_b')}${nameHeOf(wider)}"'
+          : '${term('xi_hchlf-at')}${bottleneck != null ? nameHeOf(bottleneck) : term('xi_hmvtsr-htsr')}${term('xi_bmydh-gdvlh-yvtr')}',
       actionKind: SuggestionKind.swap,
       replaceProduct: bottleneck,
     ));
@@ -196,10 +196,10 @@ PressureDropResult<P> estimatePressureDrop<P>(
     // High velocity even though bore isn't tiny — still suggest a wider variant
     suggestions.add(FlowSuggestion<P>(
       problem:
-          'מהירות זרימה ${v.toStringAsFixed(1)} מ"ש (מעל 2 מ"ש = רעש/קוויטציה)',
+          '${term('xi_mhyrvt-zrymh')}${v.toStringAsFixed(1)}${term('xi_msh-mal-msh-rashkvvyttsyh')}',
       solution: wider != null
-          ? 'הגדל את הקוטר: החלף "${nameHeOf(bottleneck)}" ב-"${nameHeOf(wider)}"'
-          : 'הגדל את הקוטר של "${nameHeOf(bottleneck)}"',
+          ? '${term('xi_hgdl-at-hkvtr-hchlf')}${nameHeOf(bottleneck)}${term('xi_b')}${nameHeOf(wider)}"'
+          : '${term('xi_hgdl-at-hkvtr-shl')}${nameHeOf(bottleneck)}"',
       actionKind: SuggestionKind.swap,
       replaceProduct: bottleneck,
     ));
@@ -208,9 +208,9 @@ PressureDropResult<P> estimatePressureDrop<P>(
   // ── ΔP over budget → suggest booster pump (catalog SKU placeholder) ──
   if (dropBar > 1.0) {
     suggestions.add(FlowSuggestion<P>(
-      problem: 'ירידת לחץ ${dropBar.toStringAsFixed(2)} בר — '
-          'מעל תקציב 1 בר. הברז יסבול מחוסר זרימה.',
-      solution: 'הוסף משאבת הגברה (booster) להעלאת לחץ הכניסה',
+      problem: '${term('xi_yrydt-lchts')}${dropBar.toStringAsFixed(2)}${term('xi_br')}'
+          '${term('xi_mal-tktsyb-br-hbrz-ysbvl-mchvsr-zrymh')}',
+      solution: term('xi_hvsf-mshabt-hgbrh-lhalat-lchts-hknysh'),
       actionKind: SuggestionKind.add,
       addProductSku: 'HW-PUMP-40',
     ));
@@ -219,9 +219,9 @@ PressureDropResult<P> estimatePressureDrop<P>(
   // ── Tall vertical rise → suggest booster + insulation ─────────────────
   if (verticalRiseMeters >= 10) {
     suggestions.add(FlowSuggestion<P>(
-      problem: 'עלייה אנכית ${verticalRiseMeters.toStringAsFixed(0)} מ׳ — '
-          '${(verticalRiseMeters * 0.098).toStringAsFixed(1)} בר אובדים על הגובה',
-      solution: 'הוסף משאבת הגברה לפני העלייה האנכית',
+      problem: '${term('xi_alyyh-ankyt')}${verticalRiseMeters.toStringAsFixed(0)}${term('xi_m')}'
+          '${(verticalRiseMeters * 0.098).toStringAsFixed(1)}${term('xi_br-avbdym-al-hgvbh')}',
+      solution: term('xi_hvsf-mshabt-hgbrh-lpny-halyyh-hankyt'),
       actionKind: SuggestionKind.add,
       addProductSku: 'HW-PUMP-40',
     ));
@@ -230,9 +230,9 @@ PressureDropResult<P> estimatePressureDrop<P>(
   // ── Laminar flow → suggest narrowing (the inverse problem) ───────────
   if (reynolds < 2300 && flowRateLPS >= 0.2 && bottleneck != null) {
     suggestions.add(FlowSuggestion<P>(
-      problem: 'זרימה לאמינרית (Re=${reynolds.toStringAsFixed(0)}) — '
-          'הקוטר גדול מהנדרש, מבזבז חומר',
-      solution: 'הקטן את הקוטר — בחר וריאנט צר יותר של "${nameHeOf(bottleneck)}"',
+      problem: '${term('xi_zrymh-lamynryt')}${reynolds.toStringAsFixed(0)}) — '
+          '${term('xi_hkvtr-gdvl-mhndrsh-mbzbz-chvmr')}',
+      solution: '${term('xi_hktn-at-hkvtr-bchr-vryant-tsr-yvtr-shl')}${nameHeOf(bottleneck)}"',
       actionKind: SuggestionKind.swap,
       replaceProduct: bottleneck,
     ));
@@ -243,8 +243,8 @@ PressureDropResult<P> estimatePressureDrop<P>(
     // המקור השתמש ב-const (P קונקרטי); בגנריקה <P> אסור const עם משתנה-טיפוס —
     // הוסר const (התאמת-גנריקה, ללא שינוי-התנהגות; ה-canonicalization בלבד נשמט). חוק-3.
     suggestions.add(FlowSuggestion<P>(
-      problem: 'הקו תקין',
-      solution: 'אין פעולות נדרשות לשיפור הזרימה',
+      problem: term('xi_hkv-tkyn'),
+      solution: term('xi_ayn-pavlvt-ndrshvt-lshypvr-hzrymh'),
       actionKind: SuggestionKind.ok,
     ));
   }

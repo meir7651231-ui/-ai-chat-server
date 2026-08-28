@@ -1,3 +1,4 @@
+import '../dart-data/studio_scope_prompt-terms.dart' as td_studio_scope_prompt;
 // בדיקת-חוזה · studioScopePrompt — מייבאת אך ורק את האטום-שלה (חוק-4).
 // הרצה: dart run --enable-asserts new/dart/studio_scope_prompt_test.dart
 import 'studio_scope_prompt.dart';
@@ -37,7 +38,7 @@ void main() {
     scopeTokenHe: (t) =>
         const {'scope:all': 'הכול', 'scope:screen:home': 'מסך הבית'}[t] ?? t,
     singlePrefix: 'scope:single:',
-  );
+   term: (k)=>td_studio_scope_prompt.kTerms[k]!);
   _eq(
     got1,
     _expected(
@@ -56,7 +57,7 @@ void main() {
     scopeTokens: () => {'zeta', 'alpha'},
     scopeTokenHe: (t) => t,
     singlePrefix: 'S:',
-  );
+   term: (k)=>td_studio_scope_prompt.kTerms[k]!);
   _eq(
     got2,
     _expected(const ['alpha = alpha', 'zeta = zeta'], 'S:', 'x'),
@@ -71,7 +72,7 @@ void main() {
     scopeTokens: () => {'only'},
     scopeTokenHe: (t) => 'תיאור',
     singlePrefix: 'p:',
-  );
+   term: (k)=>td_studio_scope_prompt.kTerms[k]!);
   _eq(got3, _expected(const ['only = תיאור'], 'p:', 'רק זה'), '3 single-token'); n++;
 
   // assert חי
@@ -79,7 +80,7 @@ void main() {
           safeText: (u) => u,
           scopeTokens: () => {'t'},
           scopeTokenHe: (t) => t,
-          singlePrefix: 'x:')
+          singlePrefix: 'x:', term: (k)=>td_studio_scope_prompt.kTerms[k]!)
       .contains('בקשת המנהל: "a".'), 'assert-live guard');
 
   print('OK studioScopePrompt: $n asserts passed');
