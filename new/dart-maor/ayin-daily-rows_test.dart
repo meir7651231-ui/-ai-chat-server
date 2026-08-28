@@ -1,3 +1,4 @@
+import '../dart-data-maor/ayin-daily-rows-terms.dart' as td_ayin_daily_rows;
 // בדיקת-חוזה (רתמת-זהב) · ayinDailyRows — מייבאת אך ורק את האטום-שלה (חוק-4).
 // דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/ayin-daily-rows.test.mjs:
 //   אורך=4 (לא-נגע-היום + בלי-ayin מדולגים) · כותרות · שורת-דוד (log-היום 3+2=5) ·
@@ -119,7 +120,7 @@ void main() {
     emptyAyin,
     eyesTotal,
     stageLabel,
-  );
+   term: (k)=>td_ayin_daily_rows.kTerms[k]!);
 
   _ok(rows.length == 4,
       'אורך ${rows.length} ≠ 4 (לא-נגע-היום + בלי-ayin לא-בדוח)');

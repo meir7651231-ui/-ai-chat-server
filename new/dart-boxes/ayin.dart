@@ -1,3 +1,6 @@
+import '../dart-data-maor/ayin-sheet-rows-terms.dart' as td_ayin_sheet_rows;
+import '../dart-data-maor/ayin-daily-rows-terms.dart' as td_ayin_daily_rows;
+import '../dart-data-maor/ayin-all-rows-terms.dart' as td_ayin_all_rows;
 import '../dart-data-maor/ayin-advance-label-terms.dart';
 import '../dart-data-maor/stage-label.dart';
 import '../dart-data-maor/ayin-sheet-rows.dart';
@@ -107,14 +110,14 @@ List<List<Object?>> ayinDailyRows(dynamic cfg, dynamic supporters, dynamic today
       emptyAyin,
       (m) => eyesTotal(m),
       (c, st) => stageLabel(c, st),
-    );
+     term: (k)=>td_ayin_daily_rows.kTerms[k]!);
 List<List<Object?>> ayinAllRows(dynamic cfg, dynamic supporters, Map Function() emptyAyin) => aar.ayinAllRows(
       cfg,
       supporters as List,
       (c) => unitLabel(c),
       emptyAyin,
       (c, st) => stageLabel(c, st),
-    );
+     term: (k)=>td_ayin_all_rows.kTerms[k]!);
 List<Map<String, Object?>> ayinBoardItems(dynamic supporters, Map Function() emptyAyin) => abi.ayinBoardItems(
       List<Object?>.from(supporters as List),
       () => emptyAyin().cast<String, Object?>(),
@@ -129,7 +132,7 @@ List<Map<String, dynamic>> filterAyinBoard(dynamic items, dynamic q, dynamic sta
     );
 
 // גיליון-העיניים (round-trip): normName המחווט לפענוח; ייצוא/החלה טהורים.
-List<List<String>> ayinSheetRows(dynamic supporters) => asr.ayinSheetRows(supporters as List, ayinSheetHeader: kAyinSheetHeader);
+List<List<String>> ayinSheetRows(dynamic supporters) => asr.ayinSheetRows(supporters as List, ayinSheetHeader: kAyinSheetHeader, term: (k)=>td_ayin_sheet_rows.kTerms[k]!);
 Map<String, dynamic> parseAyinSheet(dynamic rows, dynamic supporters) =>
     pas.parseAyinSheet(rows as List, supporters as List, normName);
 Map<String, dynamic> applyAyinSheet(dynamic supporters, dynamic upds, dynamic today) =>

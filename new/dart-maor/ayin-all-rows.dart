@@ -23,10 +23,10 @@ List<List<Object?>> ayinAllRows(
   String Function(Object? cfg) unitLabel,
   Map<dynamic, dynamic> Function() emptyAyin,
   String Function(Object? cfg, Object? stage) stageLabel,
-) {
+ {required String Function(String) term}) {
   final unit = unitLabel(cfg);
   final rows = <List<Object?>>[
-    ['תורם/ת', 'טלפון', 'שם', unit, 'הערה', 'סטטוס', 'שלב'],
+    [term('tvrmt'), term('tlpvn'), term('shm'), unit, term('harh'), term('sttvs'), term('shlb')],
   ];
   for (final sp in supporters) {
     final spm = sp as Map;
@@ -44,7 +44,7 @@ List<List<Object?>> ayinAllRows(
         n['name'],
         (eyes != '' && eyes != null) ? eyes : '',
         _jsTruthy(n['note']) ? n['note'] : '',
-        _jsTruthy(n['done']) ? 'טופל ✓' : 'ממתין',
+        _jsTruthy(n['done']) ? term('tvpl') : term('mmtyn'),
         stageLabel(cfg, a['stage']),
       ]);
     }

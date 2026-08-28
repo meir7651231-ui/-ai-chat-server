@@ -1,3 +1,4 @@
+import '../dart-data-maor/cockpit-feed-terms.dart' as td_cockpit_feed;
 // רתמת-זהב · cockpit-feed — אותם קלטים/WANT של בדיקת-ה-JS (שקע orgCalEntries מקומי).
 import 'dart:convert';
 import 'cockpit-feed.dart';
@@ -24,7 +25,7 @@ void main() {
   ];
   const want =
       '[{"id":"3:2026-08-25:0","date":"2026-08-25","who":"משה","what":"תרם/ה \$300","spId":"3"},{"id":"1:2026-08-24:1","date":"2026-08-24","who":"אבי כהן","what":"תרם/ה ₪100","spId":"1"},{"id":"2:2026-01-10:2","date":"2026-01-10","who":"דנה לוי","what":"תרם/ה ₪50","spId":"2"}]';
-  final got = jsonEncode(cockpitFeed(s, 8, _orgCalEntries));
+  final got = jsonEncode(cockpitFeed(s, 8, _orgCalEntries, term: (k)=>td_cockpit_feed.kTerms[k]!));
   assert(got == want, '✗ cockpit-feed\n$got\n≠\n$want');
   print('✓ cockpit-feed (Dart): Golden — ירוק');
 }

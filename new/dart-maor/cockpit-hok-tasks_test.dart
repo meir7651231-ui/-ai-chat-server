@@ -1,3 +1,4 @@
+import '../dart-data-maor/cockpit-hok-tasks-terms.dart' as td_cockpit_hok_tasks;
 // רתמת-זהב · cockpit-hok-tasks — אותם קלטים/WANT של בדיקת-ה-JS (שקע hokDue מקומי).
 import 'dart:convert';
 import 'cockpit-hok-tasks.dart';
@@ -16,7 +17,7 @@ void main() {
   ];
   const want =
       '[{"id":"hok:3","kind":"hok","supId":"3","name":"משה","phone":"","email":"","reason":"הו״ק ₪200 · יום 5 — טרם נרשם החודש","severity":"due","sort":95}]';
-  final got = jsonEncode(cockpitHokTasks(s, today, _hokDue));
+  final got = jsonEncode(cockpitHokTasks(s, today, _hokDue, term: (k)=>td_cockpit_hok_tasks.kTerms[k]!));
   assert(got == want, '✗ cockpit-hok-tasks\n$got\n≠\n$want');
   print('✓ cockpit-hok-tasks (Dart): Golden — ירוק');
 }

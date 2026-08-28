@@ -16,7 +16,7 @@
 /// Builds the ⌘K command list from context flags + one card per supporter.
 /// Pure (no sockets); `norm` is inlined. Verbatim port of
 /// new/atoms/commands-build-commands.mjs (`buildCommands`).
-List<Map<String, dynamic>> buildCommands(Map<String, dynamic> ctx) {
+List<Map<String, dynamic>> buildCommands(Map<String, dynamic> ctx, {required String Function(String) term}) {
   String norm(String s) =>
       s.toLowerCase().replaceAll(RegExp(r'\s+'), ' ').trim();
   final out = <Map<String, dynamic>>[];
@@ -29,41 +29,41 @@ List<Map<String, dynamic>> buildCommands(Map<String, dynamic> ctx) {
     'id': 'cmd:add',
     'kind': 'add',
     'label': '➕ הוספת ${ctx['supporterTerm']}',
-    'group': 'פעולה',
-    'keywords': 'הוספה חדש חדשה תורם add new',
+    'group': term('pavlh'),
+    'keywords': term('hvsph-chdsh-chdshh-tvrm'),
   });
   if (ctx['cockpitOn'] == true) {
     push({
       'id': 'cmd:work',
       'kind': 'work',
-      'label': '🎯 חלון העבודה',
-      'group': 'ניווט',
-      'keywords': 'קוקפיט משימות עבודה היום cockpit',
+      'label': term('chlvn-habvdh'),
+      'group': term('nyvvt'),
+      'keywords': term('kvkpyt-mshymvt-abvdh-hyvm'),
     });
     push({
       'id': 'cmd:data',
       'kind': 'data',
-      'label': '☰ מסך הנתונים',
-      'group': 'ניווט',
-      'keywords': 'טבלה נתונים רשימה סינון data',
+      'label': term('msk-hntvnym'),
+      'group': term('nyvvt'),
+      'keywords': term('tblh-ntvnym-rshymh-synvn'),
     });
   }
   if (ctx['importOn'] == true) {
     push({
       'id': 'cmd:import',
       'kind': 'import',
-      'label': '⬆ ייבוא מקובץ CSV',
-      'group': 'פעולה',
-      'keywords': 'ייבוא csv excel קובץ import',
+      'label': term('yybva-mkvbts'),
+      'group': term('pavlh'),
+      'keywords': term('yybva-kvbts'),
     });
   }
   if (ctx['customReportOn'] == true) {
     push({
       'id': 'cmd:customreport',
       'kind': 'customreport',
-      'label': '📊 דו״ח מותאם',
-      'group': 'פעולה',
-      'keywords': 'דוח מותאם ייצוא טווח report export',
+      'label': term('dvch-mvtam'),
+      'group': term('pavlh'),
+      'keywords': term('dvch-mvtam-yytsva-tvvch'),
     });
   }
   // ‏JS: `ctx.dedupCount > 0` — `undefined/null > 0` ⇒ false (לא זורק). ‏Dart נאמן:
@@ -74,24 +74,24 @@ List<Map<String, dynamic>> buildCommands(Map<String, dynamic> ctx) {
       'id': 'cmd:dedup',
       'kind': 'dedup',
       'label': '🔗 איחוד כפולים · ${ctx['dedupCount']}',
-      'group': 'פעולה',
-      'keywords': 'כפולים מיזוג איחוד dedup merge',
+      'group': term('pavlh'),
+      'keywords': term('kpvlym-myzvg-aychvd'),
     });
   }
   if (ctx['paymentsOn'] == true) {
     push({
       'id': 'cmd:incoming',
       'kind': 'incoming',
-      'label': '💰 תשלומים נכנסים',
-      'group': 'פעולה',
-      'keywords': 'תשלומים נכנסים סליקה payments',
+      'label': term('tshlvmym-nknsym'),
+      'group': term('pavlh'),
+      'keywords': term('tshlvmym-nknsym-slykh'),
     });
     push({
       'id': 'cmd:nedarim',
       'kind': 'nedarim',
-      'label': '🔄 סנכרון מנדרים',
-      'group': 'פעולה',
-      'keywords': 'נדרים סנכרון nedarim sync',
+      'label': term('snkrvn-mndrym'),
+      'group': term('pavlh'),
+      'keywords': term('ndrym-snkrvn'),
     });
   }
   for (final sp in (ctx['supporters'] as List)) {
@@ -101,9 +101,9 @@ List<Map<String, dynamic>> buildCommands(Map<String, dynamic> ctx) {
       'id': 'donor:${sp['id']}',
       'kind': 'openDonor',
       'arg': sp['id'],
-      'label': (name == null || name == '') ? 'ללא שם' : name,
-      'hint': 'פתיחת כרטיס',
-      'group': 'תורם',
+      'label': (name == null || name == '') ? term('lla-shm') : name,
+      'hint': term('ptycht-krtys'),
+      'group': term('tvrm'),
       'keywords':
           '${(name == null || name == '') ? '' : name} ${(phone == null || phone == '') ? '' : phone}',
     });

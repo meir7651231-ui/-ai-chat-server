@@ -27,11 +27,11 @@ List<List<Object?>> ayinDailyRows(
   Map<dynamic, dynamic> Function() emptyAyin,
   num Function(Map<dynamic, dynamic> a) eyesTotal,
   String Function(Object? cfg, Object? stage) stageLabel,
-) {
+ {required String Function(String) term}) {
   final unit = unitLabel(cfg);
   final item = itemLabel(cfg);
   final rows = <List<Object?>>[
-    ['שם', 'טלפון', '$unit היום', 'שלב', item, 'מתי לדבר שוב', 'הערה'],
+    [term('shm'), term('tlpvn'), '$unit היום', term('shlb'), item, term('mty-ldbr-shvb'), term('harh')],
   ];
 
   // touched = supporters.filter(sp => sp.ayin && (ayin.lastTouch===today || ayin.log?.some(l=>l.date===today)))

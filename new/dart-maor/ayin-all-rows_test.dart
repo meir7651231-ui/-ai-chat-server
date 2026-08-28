@@ -1,3 +1,4 @@
+import '../dart-data-maor/ayin-all-rows-terms.dart' as td_ayin_all_rows;
 // בדיקת-חוזה (רתמת-זהב) · ayinAllRows — מייבאת אך ורק את האטום-שלה (חוק-4).
 // דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/ayin-all-rows.test.mjs:
 //   אורך=4 (שם-רווחים + בלי-ayin מדולגים) · כותרות · שורת-משה · eyes:''⇒'' · eyes:0 נשמר.
@@ -62,7 +63,7 @@ void main() {
     {'name': 'בלי-ayin'},
   ];
 
-  final rows = ayinAllRows({}, supporters, unitLabel, emptyAyin, stageLabel);
+  final rows = ayinAllRows({}, supporters, unitLabel, emptyAyin, stageLabel, term: (k)=>td_ayin_all_rows.kTerms[k]!);
 
   _ok(rows.length == 4,
       'אורך ${rows.length} ≠ 4 (שם-רווחים + בלי-ayin מדולגים)'); n++;

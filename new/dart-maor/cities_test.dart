@@ -1,3 +1,4 @@
+import '../dart-data-maor/cities-terms.dart' as td_cities;
 // בדיקת-חוזה (רתמת-זהב) · cities — מייבאת אך ורק את האטום-שלה (חוק-4).
 // דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/cities.test.mjs:
 //   1) 10 מפתחות · כולל 'default'
@@ -15,7 +16,7 @@ void _ok(bool cond, String msg) {
 
 void main() {
   var n = 0;
-  final c = cities();
+  final c = cities(term: (k)=>td_cities.kTerms[k]!);
   final keys = c.keys.toList();
 
   // 1) מספר-מפתחות + נוכחות 'default'
@@ -48,7 +49,7 @@ void main() {
   });
 
   // assert חי (חוק: --enable-asserts) — מוכיח שהמנגנון פעיל.
-  assert(cities()['jerusalem']!['candle'] == 40, 'assert-live guard');
+  assert(cities(term: (k)=>td_cities.kTerms[k]!)['jerusalem']!['candle'] == 40, 'assert-live guard');
 
   print('OK cities: ${keys.length} ערים — $n asserts passed');
 }

@@ -17,7 +17,7 @@ List<Map<String, dynamic>> cockpitFeed(
   List supporters,
   int limit,
   List Function(List) orgCalEntries,
-) {
+ {required String Function(String) term}) {
   final entries = orgCalEntries(supporters).where((e) {
     final d = (e as Map)['date'];
     return d != null && d != '';
@@ -44,7 +44,7 @@ List<Map<String, dynamic>> cockpitFeed(
       'id': (e['spId'] ?? 'x').toString() + ':' + e['date'].toString() + ':' + i.toString(),
       'date': e['date'],
       'who': e['name'] ?? '',
-      'what': money.isNotEmpty ? 'תרם/ה ' + money : ((src == null || src == '') ? '' : src),
+      'what': money.isNotEmpty ? term('trmh') + money : ((src == null || src == '') ? '' : src),
       'spId': e['spId'],
     });
   }

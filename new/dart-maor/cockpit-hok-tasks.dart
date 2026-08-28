@@ -15,7 +15,7 @@ List<Map<String, dynamic>> cockpitHokTasks(
   List supporters,
   String todayIso,
   List Function(List, String) hokDue,
-) {
+ {required String Function(String) term}) {
   return hokDue(supporters, todayIso).map((s) {
     final sp = s as Map;
     final hok = sp['hok'] as Map;
@@ -31,7 +31,7 @@ List<Map<String, dynamic>> cockpitHokTasks(
       'name': sp['name'],
       'phone': (sp['phone'] == null || sp['phone'] == '') ? '' : sp['phone'],
       'email': (sp['email'] == null || sp['email'] == '') ? '' : sp['email'],
-      'reason': 'הו״ק ' + money + ' · יום ' + _dayStr(day) + ' — טרם נרשם החודש',
+      'reason': term('hvk') + money + term('yvm') + _dayStr(day) + term('trm-nrshm-hchvdsh'),
       'severity': 'due',
       'sort': 100 - dayVal,
     };

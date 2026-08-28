@@ -1,3 +1,4 @@
+import '../dart-data-maor/cockpit-thanks-terms.dart' as td_cockpit_thanks;
 // רתמת-זהב · cockpit-thanks — אותם קלטים/WANT של בדיקת-ה-JS (שקע daysSince מקומי).
 import 'dart:convert';
 import 'cockpit-thanks.dart';
@@ -21,7 +22,7 @@ void main() {
   ];
   const want =
       '[{"id":"thanks:3","kind":"thanks","supId":"3","name":"משה","phone":"","email":"","reason":"תרם/ה \$300 · לפני 1 יום","severity":"warm","sort":2},{"id":"thanks:1","kind":"thanks","supId":"1","name":"אבי כהן","phone":"050","email":"a@x.com","reason":"תרם/ה ₪100 · לפני 2 יום","severity":"warm","sort":1}]';
-  final got = jsonEncode(cockpitThanks(s, today, 3, _daysSince));
+  final got = jsonEncode(cockpitThanks(s, today, 3, _daysSince, term: (k)=>td_cockpit_thanks.kTerms[k]!));
   assert(got == want, '✗ cockpit-thanks\n$got\n≠\n$want');
   print('✓ cockpit-thanks (Dart): Golden — ירוק');
 }

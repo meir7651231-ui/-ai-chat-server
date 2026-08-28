@@ -1,3 +1,7 @@
+import '../dart-data-maor/commands-build-commands-terms.dart' as td_commands_build_commands;
+import '../dart-data-maor/cockpit-thanks-terms.dart' as td_cockpit_thanks;
+import '../dart-data-maor/cockpit-hok-tasks-terms.dart' as td_cockpit_hok_tasks;
+import '../dart-data-maor/cockpit-feed-terms.dart' as td_cockpit_feed;
 import '../dart-data-maor/cockpit-calls-terms.dart';
 // 📦 קופסת-חיבורים · שכבת-ההעצמה (Dart) — מחווטת 27 אטומי-Dart. מקבילה ל-new/boxes/empowerment.mjs.
 // חוזה משותף: new/boxes/empowerment.contract.md. אותם 27 חוטים, אותו סדר-הצתה, אותן ברירות-מחדל.
@@ -85,7 +89,7 @@ int cockpitCollectedThisMonth(List sups, String today, [num rate = 3.7]) =>
 Map<String, dynamic> cockpitProgress(Map queue, Set doneIds) => cp.cockpitProgress(queue, doneIds);
 List<List> cockpitCsvRows(Map queue) => ccr.cockpitCsvRows(queue);
 String cockpitWorkListText(Map queue) => cwl.cockpitWorkListText(queue);
-List<Map<String, dynamic>> buildCommands(Map<String, dynamic> ctx) => bc.buildCommands(ctx);
+List<Map<String, dynamic>> buildCommands(Map<String, dynamic> ctx) => bc.buildCommands(ctx, term: (k)=>td_commands_build_commands.kTerms[k]!);
 List<Map<String, dynamic>> filterCommands(List<Map<String, dynamic>> commands, String query, [int limit = 12]) =>
     flc.filterCommands(commands, query, limit);
 int supCount(dynamic sp) => sc.supCount(sp);
@@ -101,7 +105,7 @@ List orgCalEntries(List sups) => _orgCal(sups);
 List cockpitAtRisk(List sups, String today, [int silentDays = 60]) =>
     ar.cockpitAtRisk(sups, today, silentDays, _scMap, _slMap, _dsSS);
 List<Map<String, dynamic>> cockpitThanks(List sups, String today, [int windowDays = 3]) =>
-    th.cockpitThanks(sups, today, windowDays, _dsSS);
+    th.cockpitThanks(sups, today, windowDays, _dsSS, term: (k)=>td_cockpit_thanks.kTerms[k]!);
 Map<String, dynamic> rfmFromScan(Map<String, dynamic> scan, String today) =>
     rf.rfmFromScan(scan, today, _ddSS);
 num churnFromScan(Map<String, dynamic> scan, String today) => ch.churnFromScan(scan, today, _ddSS);
@@ -112,9 +116,9 @@ Map<String, dynamic>? forecastFromScan(Map<String, dynamic> scan, String today) 
 List<Map<String, dynamic>> cockpitCalls(List sups, String today, [num rate = 3.7, int silentDays = 60]) =>
     ca.cockpitCalls(sups, today, rate, silentDays, _ilsMap, _usdMap, _slMap, _dsSS, cockpitAtRisk, term: (k)=>kTerms[k]!);
 List<Map<String, dynamic>> cockpitHokTasks(List sups, String today) =>
-    htk.cockpitHokTasks(sups, today, _hokDue);
+    htk.cockpitHokTasks(sups, today, _hokDue, term: (k)=>td_cockpit_hok_tasks.kTerms[k]!);
 List<Map<String, dynamic>> cockpitFeed(List sups, [int limit = 8]) =>
-    fd.cockpitFeed(sups, limit, _orgCal);
+    fd.cockpitFeed(sups, limit, _orgCal, term: (k)=>td_cockpit_feed.kTerms[k]!);
 Map<String, dynamic> cockpitKpis(List sups, String today, [num rate = 3.7]) => kp.cockpitKpis(
       sups, today, rate,
       cctm.cockpitCollectedThisMonth,

@@ -19,7 +19,7 @@ List<Map<String, dynamic>> cockpitThanks(
   String todayIso,
   int windowDays,
   num Function(String, String) daysSince,
-) {
+ {required String Function(String) term}) {
   Map? latestDonation(Map sp) {
     Map? best;
     for (final dd in (sp['donations'] as List)) {
@@ -60,7 +60,7 @@ List<Map<String, dynamic>> cockpitThanks(
       'name': sp['name'],
       'phone': (sp['phone'] == null || sp['phone'] == '') ? '' : sp['phone'],
       'email': (sp['email'] == null || sp['email'] == '') ? '' : sp['email'],
-      'reason': 'תרם/ה ' + money + ' · ' + (ago <= 0 ? 'היום' : 'לפני ' + _numStr(ago) + ' יום'),
+      'reason': term('trmh') + money + ' · ' + (ago <= 0 ? term('hyvm') : term('lpny') + _numStr(ago) + term('yvm')),
       'severity': 'warm',
       'sort': windowDays - ago,
     });

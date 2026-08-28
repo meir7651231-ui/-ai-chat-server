@@ -1,3 +1,4 @@
+import '../dart-data-maor/commands-build-commands-terms.dart' as td_commands_build_commands;
 // רתמת-זהב · commands-build-commands — פלט מקודד JSON נאמן-JS מול WANT המדויק
 // מ-new/atoms/commands-build-commands.test.mjs (זהות: אותו CTX→אותו JSON.stringify).
 import 'commands-build-commands.dart';
@@ -65,7 +66,7 @@ void main() {
   };
   const want =
       '[{"id":"cmd:add","kind":"add","label":"➕ הוספת תורם/ת","group":"פעולה","keywords":"➕ הוספת תורם/ת הוספה חדש חדשה תורם add new"},{"id":"cmd:work","kind":"work","label":"🎯 חלון העבודה","group":"ניווט","keywords":"🎯 חלון העבודה קוקפיט משימות עבודה היום cockpit"},{"id":"cmd:data","kind":"data","label":"☰ מסך הנתונים","group":"ניווט","keywords":"☰ מסך הנתונים טבלה נתונים רשימה סינון data"},{"id":"cmd:import","kind":"import","label":"⬆ ייבוא מקובץ CSV","group":"פעולה","keywords":"⬆ ייבוא מקובץ csv ייבוא csv excel קובץ import"},{"id":"cmd:dedup","kind":"dedup","label":"🔗 איחוד כפולים · 2","group":"פעולה","keywords":"🔗 איחוד כפולים · 2 כפולים מיזוג איחוד dedup merge"},{"id":"donor:1","kind":"openDonor","arg":"1","label":"אבי","hint":"פתיחת כרטיס","group":"תורם","keywords":"אבי אבי 050"},{"id":"donor:2","kind":"openDonor","arg":"2","label":"ללא שם","hint":"פתיחת כרטיס","group":"תורם","keywords":"ללא שם"}]';
-  final got = _enc(buildCommands(ctx));
+  final got = _enc(buildCommands(ctx, term: (k)=>td_commands_build_commands.kTerms[k]!));
   if (got != want) {
     throw StateError('✗ commands-build-commands\n$got\n≠\n$want');
   }
@@ -78,7 +79,7 @@ void main() {
       {'id': '2', 'name': '', 'phone': ''},
     ],
     'supporterTerm': 'תורם/ת',
-  });
+  }, term: (k)=>td_commands_build_commands.kTerms[k]!);
   if (noDedup.any((c) => c['id'] == 'cmd:dedup')) {
     throw StateError('✗ commands-build-commands: dedupCount חסר לא אמור לייצר cmd:dedup');
   }

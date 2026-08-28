@@ -13,17 +13,17 @@
 
 /// Returns the anchor-cities table for zmanim (coords + candle-lighting minutes).
 /// Verbatim behaviour, no context knowledge (חוק-5). 'default' == Jerusalem coords.
-Map<String, Map<String, dynamic>> cities() {
+Map<String, Map<String, dynamic>> cities({required String Function(String) term}) {
   return {
-    'jerusalem': {'he': 'ירושלים', 'lat': 31.778, 'lon': 35.235, 'candle': 40},
-    'telaviv': {'he': 'תל אביב', 'lat': 32.083, 'lon': 34.800, 'candle': 18},
-    'bneibrak': {'he': 'בני ברק', 'lat': 32.083, 'lon': 34.833, 'candle': 22},
-    'haifa': {'he': 'חיפה', 'lat': 32.816, 'lon': 34.989, 'candle': 30},
-    'beitshemesh': {'he': 'בית שמש', 'lat': 31.750, 'lon': 34.988, 'candle': 25},
-    'ashdod': {'he': 'אשדוד', 'lat': 31.804, 'lon': 34.655, 'candle': 22},
-    'beersheva': {'he': 'באר שבע', 'lat': 31.252, 'lon': 34.791, 'candle': 22},
-    'netanya': {'he': 'נתניה', 'lat': 32.328, 'lon': 34.857, 'candle': 18},
-    'tzfat': {'he': 'צפת', 'lat': 32.965, 'lon': 35.496, 'candle': 30},
-    'default': {'he': 'ברירת-מחדל (ירושלים)', 'lat': 31.778, 'lon': 35.235, 'candle': 40},
+    'jerusalem': {'he': term('yrvshlym'), 'lat': 31.778, 'lon': 35.235, 'candle': 40},
+    'telaviv': {'he': term('tl-abyb'), 'lat': 32.083, 'lon': 34.800, 'candle': 18},
+    'bneibrak': {'he': term('bny-brk'), 'lat': 32.083, 'lon': 34.833, 'candle': 22},
+    'haifa': {'he': term('chyph'), 'lat': 32.816, 'lon': 34.989, 'candle': 30},
+    'beitshemesh': {'he': term('byt-shmsh'), 'lat': 31.750, 'lon': 34.988, 'candle': 25},
+    'ashdod': {'he': term('ashdvd'), 'lat': 31.804, 'lon': 34.655, 'candle': 22},
+    'beersheva': {'he': term('bar-shba'), 'lat': 31.252, 'lon': 34.791, 'candle': 22},
+    'netanya': {'he': term('ntnyh'), 'lat': 32.328, 'lon': 34.857, 'candle': 18},
+    'tzfat': {'he': term('tspt'), 'lat': 32.965, 'lon': 35.496, 'candle': 30},
+    'default': {'he': term('bryrtmchdl-yrvshlym'), 'lat': 31.778, 'lon': 35.235, 'candle': 40},
   };
 }
