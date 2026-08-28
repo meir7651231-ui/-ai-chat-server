@@ -1,0 +1,4 @@
+dynamic waHref(dynamic phone, dynamic text, dynamic appScheme, dynamic waAppLink, dynamic waLink) {
+  var href = appScheme ? waAppLink(phone, text) : waLink(phone, text);
+  return href ? {'href': href, 'app': appScheme} : null;
+}
