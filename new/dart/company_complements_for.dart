@@ -17,8 +17,8 @@ class LipskeyCatalogProduct {
 
 /// המשלימים של [p] הנפתרים מול [pool] — שומר-סדר, לא-ידוע נופל. טהור.
 List<LipskeyCatalogProduct> companyComplementsFor(
-    LipskeyCatalogProduct p, List<LipskeyCatalogProduct> pool) {
-  final cell = p.dims?['מוצרים משלימים'];
+    LipskeyCatalogProduct p, List<LipskeyCatalogProduct> pool, {required String Function(String) term}) {
+  final cell = p.dims?[term('mvtsrym-mshlymym')];
   if (cell is! String || cell.isEmpty) return const [];
   final out = <LipskeyCatalogProduct>[];
   for (final part in cell.split('|')) {

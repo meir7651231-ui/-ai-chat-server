@@ -1,3 +1,4 @@
+import '../dart-data-maor/supporters-import-format-rows-terms.dart' as td_supporters_import_format_rows;
 import '../dart-data-maor/families-import-format-rows-terms.dart';
 // 📦 קופסת-חיבורים · שורות-הייצוא (Dart) — מחווטת 9 אטומי-Dart. מקבילה ל-new/boxes/export-rows.mjs.
 // חוזה משותף: new/boxes/export-rows.contract.md. מקור-האמת: maor/src/lib/exportRows.ts.
@@ -32,7 +33,7 @@ List<List<dynamic>> familiesImportFormatRows(Map<String, dynamic> db) =>
 
 /// תומכות בפורמט-הייבוא (7 עמודות) — חוט ישיר, בלי שקעים (כבמקור).
 List<List<dynamic>> supportersImportFormatRows(Map<String, dynamic> db) =>
-    sif.supportersImportFormatRows(db);
+    sif.supportersImportFormatRows(db, term: (k)=>td_supporters_import_format_rows.kTerms[k]!);
 
 /// שורות ייצוא-CSV של האירועים (9 עמודות, ממוין לפי תאריך) — החוט מחווט
 /// עם termOf + שרשרת-התאריך-העברי + מילון-הסוגים (EV_META). config אופציונלי כבמקור.

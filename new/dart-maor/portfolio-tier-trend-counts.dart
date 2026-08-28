@@ -13,14 +13,14 @@
 /// (`tierTrendCounts`).
 List<Map<String, dynamic>> tierTrendCounts(
   List supporters,
-  String todayIso, {
+  String todayIso, {required String Function(String) term, 
   num rate = 3.7,
   required Map Function(dynamic, String, num, int) donorScan,
   required Map Function(Map, String) rfmFromScan,
   required Map Function(Map) trendFromScan,
   required Map Function(num) supTier,
 }) {
-  final order = ['זהב', 'כסף', 'ארד', 'רדומה'];
+  final order = [term('zhb'), term('ksf'), term('ard'), term('rdvmh')];
   final map = <String, Map<String, dynamic>>{};
   for (final t in order) {
     map[t] = {'tier': t, 'total': 0, 'rising': 0, 'falling': 0, 'stable': 0};

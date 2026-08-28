@@ -1,3 +1,4 @@
+import '../dart-data-maor/portfolio-tier-trend-counts-terms.dart' as td_portfolio_tier_trend_counts;
 // רתמת-זהב · portfolio-tier-trend-counts — פלט מקודד JSON נאמן-JS מול WANT המדויק
 // מ-new/atoms/portfolio-tier-trend-counts.test.mjs. שקעים-inline = פורט ביט-אחר-ביט של שקעי-ה-JS.
 import 'portfolio-tier-trend-counts.dart';
@@ -139,7 +140,7 @@ void main() {
     rfmFromScan: _rfmFromScan,
     trendFromScan: _trendFromScan,
     supTier: _supTier,
-  ));
+   term: (k)=>td_portfolio_tier_trend_counts.kTerms[k]!));
   if (got != want) {
     throw StateError('✗ portfolio-tier-trend-counts\n$got\n≠\n$want');
   }

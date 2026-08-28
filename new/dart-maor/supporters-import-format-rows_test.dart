@@ -1,3 +1,4 @@
+import '../dart-data-maor/supporters-import-format-rows-terms.dart' as td_supporters_import_format_rows;
 // בדיקת-חוזה (רתמת-זהב) · supportersImportFormatRows — מייבאת אך ורק את האטום-שלה (חוק-4).
 // ארבע דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/supporters-import-format-rows.test.mjs:
 //   1) {supporters:[]}            ⇒ שורה אחת — הכותרת בלבד.
@@ -28,7 +29,7 @@ void main() {
 
   // 1) ריק ⇒ כותרת בלבד.
   {
-    final r = supportersImportFormatRows(<String, dynamic>{'supporters': []});
+    final r = supportersImportFormatRows(<String, dynamic>{'supporters': []}, term: (k)=>td_supporters_import_format_rows.kTerms[k]!);
     if (r.length != 1) throw StateError('FAIL [דוגמה 1]: rows ${r.length} != 1');
     _rowEq(r[0], _header, 'דוגמה 1 · כותרת');
     n++;
@@ -48,7 +49,7 @@ void main() {
           'forWho': 'ישיבה',
         },
       ],
-    });
+    }, term: (k)=>td_supporters_import_format_rows.kTerms[k]!);
     if (r.length != 2) throw StateError('FAIL [דוגמה 2]: rows ${r.length} != 2');
     _rowEq(r[0], _header, 'דוגמה 2 · כותרת');
     _rowEq(
@@ -65,7 +66,7 @@ void main() {
       'supporters': [
         {'name': 'כהן'},
       ],
-    });
+    }, term: (k)=>td_supporters_import_format_rows.kTerms[k]!);
     if (r[1].length != 7) throw StateError('FAIL [דוגמה 3]: row len ${r[1].length} != 7');
     _rowEq(r[1], ['כהן', null, null, null, null, null, null], 'דוגמה 3 · null-ים');
     n++;
@@ -78,7 +79,7 @@ void main() {
         {'name': 'א'},
         {'name': 'ב'},
       ],
-    });
+    }, term: (k)=>td_supporters_import_format_rows.kTerms[k]!);
     if (r.length != 3) throw StateError('FAIL [דוגמה 4]: rows ${r.length} != 3');
     if (r[1][0] != 'א' || r[2][0] != 'ב') {
       throw StateError('FAIL [דוגמה 4]: order ${r[1][0]},${r[2][0]}');
@@ -88,7 +89,7 @@ void main() {
 
   // assert חי (חוק: --enable-asserts) — מוכיח שהמנגנון פעיל.
   assert(
-    supportersImportFormatRows(<String, dynamic>{'supporters': []})[0][3] == 'ת"ז',
+    supportersImportFormatRows(<String, dynamic>{'supporters': []}, term: (k)=>td_supporters_import_format_rows.kTerms[k]!)[0][3] == 'ת"ז',
     'assert-live guard',
   );
 

@@ -18,9 +18,9 @@
 /// then one 7-cell row per supporter in array order, field values passed through as-is
 /// (missing field ⇒ null, the JS `undefined`). Verbatim port of
 /// new/atoms/supporters-import-format-rows.mjs (`supportersImportFormatRows`).
-List<List<dynamic>> supportersImportFormatRows(Map<String, dynamic> db) {
+List<List<dynamic>> supportersImportFormatRows(Map<String, dynamic> db, {required String Function(String) term}) {
   final rows = <List<dynamic>>[
-    ['שם', 'טלפון', 'אימייל', 'ת"ז', 'כתובת', 'קטגוריה', 'עבור'],
+    [term('shm'), term('tlpvn'), term('aymyyl'), term('tz'), term('ktvbt'), term('ktgvryh'), term('abvr')],
   ];
   for (final sp in db['supporters'] as List) {
     final m = sp as Map<String, dynamic>;

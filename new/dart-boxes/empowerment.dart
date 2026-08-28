@@ -1,3 +1,4 @@
+import '../dart-data-maor/portfolio-tier-trend-counts-terms.dart' as td_portfolio_tier_trend_counts;
 import '../dart-data-maor/commands-build-commands-terms.dart' as td_commands_build_commands;
 import '../dart-data-maor/cockpit-thanks-terms.dart' as td_cockpit_thanks;
 import '../dart-data-maor/cockpit-hok-tasks-terms.dart' as td_cockpit_hok_tasks;
@@ -157,7 +158,7 @@ Map<String, dynamic> portfolioIntel(List sups, String today, [num rate = 3.7, in
 List<Map<String, dynamic>> tierTrendCounts(List sups, String today, [num rate = 3.7]) => ttc.tierTrendCounts(
       sups, today, rate: rate,
       donorScan: _scanLoose, rfmFromScan: _rfmLoose, trendFromScan: _trendLoose, supTier: _tier,
-    );
+     term: (k)=>td_portfolio_tier_trend_counts.kTerms[k]!);
 List<Map<String, dynamic>> donorConstellation(List sups, String today, [Map opts = const {}]) =>
     con.donorConstellation(
       sups, today, opts: opts,
