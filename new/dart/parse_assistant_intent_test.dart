@@ -1,3 +1,4 @@
+import '../dart-data/parse_assistant_intent-terms.dart' as td_parse_assistant_intent;
 // בדיקת-חוזה · parseAssistantIntent — מייבאת אך ורק את האטום-שלה (חוק-4).
 // הרצה: dart run --enable-asserts new/dart/parse_assistant_intent_test.dart
 // השקעים מוזרקים כמראות-זעירות של האחים (הקבוצה-הסגורה בבדיקה = דגימת-אמת).
@@ -54,7 +55,7 @@ AssistantIntent parse(String raw) => parseAssistantIntent(
       actionFromString: fakeActionFromString,
       matchCategory: fakeMatchCategory,
       matchRecipeKey: fakeMatchRecipeKey,
-    );
+     term: (k)=>td_parse_assistant_intent.kTerms[k]!);
 
 void _eq(
     AssistantIntent got, AssistantAction action, String key, String say,

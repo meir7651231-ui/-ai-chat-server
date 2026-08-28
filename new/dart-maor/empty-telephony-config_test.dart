@@ -1,10 +1,11 @@
+import '../dart-data-maor/empty-telephony-config-terms.dart' as td_empty_telephony_config;
 // רתמת-זהב · empty-telephony-config — Dart≡JS. אותם קלטים→פלטים כמו בדיקת-ה-JS.
 // דוגמת-החוזה: הגטר מוחזר פעמיים, פלט זהה-ביט לצילום.
 import 'empty-telephony-config.dart';
 
 void main() {
-  final a = emptyTelephonyConfig();
-  final b = emptyTelephonyConfig();
+  final a = emptyTelephonyConfig(term: (k)=>td_empty_telephony_config.kTerms[k]!);
+  final b = emptyTelephonyConfig(term: (k)=>td_empty_telephony_config.kTerms[k]!);
 
   // צילום-הגטר: כל שדה בדיוק כמו במחרוזת-ה-JSON של בדיקת-ה-JS.
   final numbers = a['numbers'] as List;

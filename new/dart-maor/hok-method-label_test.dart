@@ -1,3 +1,4 @@
+import '../dart-data-maor/hok-method-label-terms.dart' as td_hok_method_label;
 // רתמת-זהב · hok-method-label — assert-ים = דוגמאות-החוזה (הקלטות-Golden) של בדיקת-ה-JS (זהות).
 import 'hok-method-label.dart';
 
@@ -17,7 +18,7 @@ void main() {
     ['12', '12'],
   ];
   for (final c in cases) {
-    final got = hokMethodLabel(c[0]);
+    final got = hokMethodLabel(c[0], term: (k)=>td_hok_method_label.kTerms[k]!);
     assert(got == c[1], '✗ ${c[0]} ⇒ $got ≠ ${c[1]}');
   }
   print('✓ hok-method-label (Dart): ${cases.length} הקלטות-Golden — ירוק');

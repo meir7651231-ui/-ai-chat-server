@@ -92,7 +92,7 @@ class WfAdvancePlan {
 WfAdvancePlan? planWfAdvance<C>(
   C cfg,
   String name,
-  WfCase a, {
+  WfCase a, {required String Function(String) term, 
   required bool Function(WfCase) actionVisible,
   required String Function(C) featureLabel,
   required String Function(C) itemLabel,
@@ -129,13 +129,13 @@ WfAdvancePlan? planWfAdvance<C>(
         return WfAdvancePlan(
           patch: a.copyWith(dispatchPushed: true),
           event: (title: '$feat: ${stageLabel(cfg, WfStage.dispatch)} — $name', done: false),
-          toast: 'נמסר — נרשם בלוח היומי',
+          toast: term('nmsr-nrshm-blvch-hyvmy'),
         );
       }
       return WfAdvancePlan(
         patch: a.copyWith(stage: WfStage.done),
         event: (title: '$feat: ${stageLabel(cfg, WfStage.done)} — $name', done: true),
-        toast: 'הטיפול הושלם ✓',
+        toast: term('htypvl-hvshlm'),
       );
     case WfStage.done:
       return null;

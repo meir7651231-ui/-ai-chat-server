@@ -32,9 +32,9 @@ List<List<dynamic>> redemptionsCsvRows(
   dynamic config,
   String Function(Map<String, dynamic> db, dynamic a, dynamic config) beneficiaryLabel,
   dynamic Function(Map<String, dynamic> db, dynamic comp) itemOf,
-) {
+ {required String Function(String) term}) {
   final List<List<dynamic>> rows = [
-    ['תאריך', 'מוטב', 'פריט', 'חבילה', 'שולם', 'שווי', 'אישור', 'מבוטל'],
+    [term('taryk'), term('mvtb'), term('pryt'), term('chbylh'), term('shvlm'), term('shvvy'), term('ayshvr'), term('mbvtl')],
   ];
   for (final a in (db['shopAssignments'] as List)) {
     // product = db.shopProducts.find(p => p.id === a.productId) — undefined אם לא-נמצא.
@@ -65,7 +65,7 @@ List<List<dynamic>> redemptionsCsvRows(
         r['paid'],
         r['value'],
         r['rid'] ?? '',
-        _truthy(r['voidedAt']) ? 'בוטל ב-' + (r['voidedAt'] as String) : '',
+        _truthy(r['voidedAt']) ? term('bvtl-b') + (r['voidedAt'] as String) : '',
       ]);
     }
   }

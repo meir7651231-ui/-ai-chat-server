@@ -1,3 +1,4 @@
+import '../dart-data-maor/needs-care-tzedaka-terms.dart' as td_needs_care_tzedaka;
 import '../dart-data-maor/collections-csv-rows-terms.dart';
 // 📦 קופסת-חיבורים · tzedaka (Dart) — מחווטת 22 אטומי-Dart. מקבילה ל-new/boxes/tzedaka.mjs.
 // חוזה משותף: new/boxes/tzedaka.contract.md · מקור-האמת (L4): maor/src/components/tzedaka/lib.ts.
@@ -104,7 +105,7 @@ List<Map<String, dynamic>> needsCare(Map<String, dynamic> db, String todayIso,
       'lastCollectionIso': _lciDyn,
       'coordinatorBoxes': _cbList,
       'isoOf': _isoOf,
-    });
+    }, term: (k)=>td_needs_care_tzedaka.kTerms[k]!);
 
 /// מקור lib.ts:142-147.
 List<Map<String, dynamic>> leaderboard(List<dynamic> coordinators, List<dynamic> boxes) =>

@@ -1,3 +1,4 @@
+import '../dart-data/synthetic_pipe-terms.dart' as td_synthetic_pipe;
 import 'synthetic_pipe.dart';
 
 void _eq(Object? g, Object? w, String l) {
@@ -10,7 +11,7 @@ void main() {
   // 1) HDPE — מוצר + מפרט מלאים (install_engine.dart:1017-1039)
   final cache = <String, LipskeyCatalogProduct>{};
   final specs = <String, VerifiedSpec>{};
-  final p = syntheticPipe('HDPE', '32', pipeCache: cache, verifiedSpecs: specs);
+  final p = syntheticPipe('HDPE', '32', pipeCache: cache, verifiedSpecs: specs, term: (k)=>td_synthetic_pipe.kTerms[k]!);
   _eq(p.sku, 'PIPE-HDPE-32', '1-sku');
   n++;
   _eq(p.nameHe, 'צינור HDPE DN32 (לפי מטר)', '2-nameHe');
@@ -48,7 +49,7 @@ void main() {
   n++;
 
   // 2) לא-HDPE ⇒ maxTempC=95 (‏:1028)
-  final p2 = syntheticPipe('PEX', '25', pipeCache: cache, verifiedSpecs: specs);
+  final p2 = syntheticPipe('PEX', '25', pipeCache: cache, verifiedSpecs: specs, term: (k)=>td_synthetic_pipe.kTerms[k]!);
   _eq(p2.sku, 'PIPE-PEX-25', '18-sku2');
   n++;
   _eq(specs['PIPE-PEX-25']!.maxTempC, 95.0, '19-pex-95');
@@ -58,7 +59,7 @@ void main() {
 
   // 3) פגיעת-מטמון ⇒ אותו מופע, builder מדולג — verifiedSpecs לא נגוע (‏:1018 putIfAbsent)
   specs.remove('PIPE-HDPE-32'); // מדמה: המפרט נמחק אבל המוצר עדיין במטמון
-  final p3 = syntheticPipe('HDPE', '32', pipeCache: cache, verifiedSpecs: specs);
+  final p3 = syntheticPipe('HDPE', '32', pipeCache: cache, verifiedSpecs: specs, term: (k)=>td_synthetic_pipe.kTerms[k]!);
   _eq(identical(p3, p), true, '21-identical');
   n++;
   _eq(specs.containsKey('PIPE-HDPE-32'), false, '22-builder-skipped');
@@ -68,7 +69,7 @@ void main() {
   const preSpec = VerifiedSpec(
       sku: 'PIPE-CU-15', material: 'ידני', ends: [], maxTempC: 7);
   specs['PIPE-CU-15'] = preSpec;
-  final p4 = syntheticPipe('CU', '15', pipeCache: cache, verifiedSpecs: specs);
+  final p4 = syntheticPipe('CU', '15', pipeCache: cache, verifiedSpecs: specs, term: (k)=>td_synthetic_pipe.kTerms[k]!);
   _eq(p4.sku, 'PIPE-CU-15', '23-sku4');
   n++;
   _eq(identical(specs['PIPE-CU-15'], preSpec), true, '24-spec-not-overwritten');
@@ -78,7 +79,7 @@ void main() {
   final cache2 = <String, LipskeyCatalogProduct>{};
   final specs2 = <String, VerifiedSpec>{};
   final p5 =
-      syntheticPipe('PPR', '3/4"', pipeCache: cache2, verifiedSpecs: specs2);
+      syntheticPipe('PPR', '3/4"', pipeCache: cache2, verifiedSpecs: specs2, term: (k)=>td_synthetic_pipe.kTerms[k]!);
   _eq(p5.sku, 'PIPE-PPR-3/4"', '25-inch-sku');
   n++;
   _eq(p5.nameHe, 'צינור PPR DN3/4" (לפי מטר)', '26-inch-name');

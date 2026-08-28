@@ -47,7 +47,7 @@ class AssistantIntent {
 /// a plain `answer`. Never throws, never yields an un-validated action.
 /// verbatim assistant_intent.dart:170-213; שלושת-האחים מוזרקים כשקעים.
 AssistantIntent parseAssistantIntent(
-  String raw, {
+  String raw, {required String Function(String) term, 
   required AssistantAction? Function(String) actionFromString,
   required String? Function(String) matchCategory,
   required String? Function(String) matchRecipeKey,
@@ -76,7 +76,7 @@ AssistantIntent parseAssistantIntent(
       final cat = matchCategory(key); // closed-set validation
       if (cat == null) {
         return AssistantIntent.answer(
-            say.isNotEmpty ? say : 'לא הבנתי איזה מוצר — נסה לתאר אחרת.');
+            say.isNotEmpty ? say : term('la-hbnty-ayzh-mvtsr-nsh-ltar-achrt'));
       }
       return AssistantIntent(action: action, key: cat, say: say);
     }
@@ -84,7 +84,7 @@ AssistantIntent parseAssistantIntent(
       final recipe = matchRecipeKey(key); // closed-set validation
       if (recipe == null) {
         return AssistantIntent.answer(
-            say.isNotEmpty ? say : 'לא הבנתי איזו ערכה — נסה לתאר אחרת.');
+            say.isNotEmpty ? say : term('la-hbnty-ayzv-arkh-nsh-ltar-achrt'));
       }
       return AssistantIntent(action: action, key: recipe, say: say);
     }

@@ -12,17 +12,17 @@
 /// Verbatim branching of edit_prompt.dart:189-201 with the scope vocabulary
 /// injected (its literal values are unrecoverable — representative defaults).
 String scopeLabel(
-  String scope, {
+  String scope, {required String Function(String) term, 
   String all = 'all',
   String screenPrefix = 'screen:',
   String singlePrefix = 'element:',
 }) {
-  if (scope == all) return 'מתוך: כל האלמנטים';
+  if (scope == all) return term('mtvk-kl-halmntym');
   if (scope.startsWith(screenPrefix)) {
     return 'מתוך: מרחב «${scope.substring(screenPrefix.length)}»';
   }
   if (scope.startsWith(singlePrefix)) {
     return 'מתוך: האלמנט «${scope.substring(singlePrefix.length)}»';
   }
-  return 'מתוך: (טווח לא מזוהה)'; // defensive — an unrecognised scope
+  return term('mtvk-tvvch-la-mzvhh'); // defensive — an unrecognised scope
 }

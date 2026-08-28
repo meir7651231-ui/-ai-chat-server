@@ -1,3 +1,4 @@
+import '../dart-data-maor/sign-up-error-terms.dart' as td_sign_up_error;
 // 📦 קופסת-חיבורים · signup-wizard · ליבה-טהורה (Dart) — מקבילה ל-new/boxes/signup-wizard.mjs.
 // חוזה משותף: new/boxes/signup-wizard.contract.md. מקור-האמת: maor/src/lib/signupWizard.ts.
 // זו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart) מתחברות לאותה קופסה: אותם קלטים ⇒ אותו פלט.
@@ -38,7 +39,7 @@ dynamic wizardStepError(dynamic step, dynamic s) => wse.wizardStepError(
       step,
       s,
       (a, b, c, d, e, f) => sue.signUpError(
-          a as String, b as String, c as String, d as String, e as String, f as String),
+          a as String, b as String, c as String, d as String, e as String, f as String, term: (k)=>td_sign_up_error.kTerms[k]!),
     );
 
 // ── תוויות-תצוגה (לוח-הבקרה) — השקעים מחווטים לקבועי-הקופסה (signupWizard.ts:88-96). ──

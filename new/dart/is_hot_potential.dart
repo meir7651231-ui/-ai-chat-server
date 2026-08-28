@@ -16,16 +16,16 @@ class LipskeyCatalogProduct {
 }
 
 /// True אם [p] שייך לקטגוריית פוטנציאל-חם. טהור.
-bool isHotPotential(LipskeyCatalogProduct p) {
+bool isHotPotential(LipskeyCatalogProduct p, {required String Function(String) term}) {
   final cat = p.categoryHe;
-  return cat == 'מחלקים' ||
-      cat == 'ראשי מקלחת' ||
-      cat == 'מערכות אמבטיה' ||
-      cat == 'ערכות רחצה' ||
-      cat == 'ברזי אמבטיה' ||
-      cat == 'ברזי מקלחת' ||
-      cat == 'ברזי מטבח' ||
-      cat == 'ברזי קיר' ||
-      cat == 'ברזי כיור' ||
-      cat == 'מערכות שטיפה';
+  return cat == term('mchlkym') ||
+      cat == term('rashy-mklcht') ||
+      cat == term('markvt-ambtyh') ||
+      cat == term('arkvt-rchtsh') ||
+      cat == term('brzy-ambtyh') ||
+      cat == term('brzy-mklcht') ||
+      cat == term('brzy-mtbch') ||
+      cat == term('brzy-kyr') ||
+      cat == term('brzy-kyvr') ||
+      cat == term('markvt-shtyph');
 }

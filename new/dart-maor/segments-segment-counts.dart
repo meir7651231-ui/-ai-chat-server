@@ -18,7 +18,7 @@
 /// Verbatim port of segments-segment-counts.mjs (`segmentCounts`).
 List<Map<String, dynamic>> segmentCounts(
   List supporters,
-  String todayIso, {
+  String todayIso, {required String Function(String) term, 
   dynamic rate = 3.7,
   required List Function(List, String) cockpitAtRisk,
   required num Function(dynamic) supIls,
@@ -31,13 +31,13 @@ List<Map<String, dynamic>> segmentCounts(
   final segments = <Map<String, dynamic>>[
     {
       'key': 'atrisk',
-      'label': 'בסיכון נטישה',
+      'label': term('bsykvn-ntyshh'),
       'dot': '#b45309',
       'match': (dynamic sp) => false,
     },
     {
       'key': 'goldsilent',
-      'label': 'זהב · שקטים 60+ יום',
+      'label': term('zhb-shktym-yvm'),
       'dot': '#a05008',
       'match': (dynamic sp) =>
           totalIls(sp) >= goldIls &&
@@ -45,14 +45,14 @@ List<Map<String, dynamic>> segmentCounts(
     },
     {
       'key': 'hok',
-      'label': 'הו״ק פעילות',
+      'label': term('hvk-paylvt'),
       'dot': '#2e7d32',
       'match': (dynamic sp) =>
           sp['hok'] is Map && sp['hok']['active'] == true,
     },
     {
       'key': 'gave12m',
-      'label': 'תרמו ב-12 החודשים',
+      'label': term('trmv-b-hchvdshym'),
       'dot': '#1d4ed8',
       'match': (dynamic sp) {
         final last = supLast(sp);
@@ -63,7 +63,7 @@ List<Map<String, dynamic>> segmentCounts(
     },
     {
       'key': 'noemail',
-      'label': 'ללא אימייל',
+      'label': term('lla-aymyyl'),
       'dot': '#8a8172',
       'match': (dynamic sp) => sp['email'] == null || sp['email'] == '',
     },

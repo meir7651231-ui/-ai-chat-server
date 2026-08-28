@@ -27,7 +27,7 @@ Map<String, dynamic> previewTelephony(
   Map<String, dynamic> Function(dynamic, Map<String, dynamic>, Map<String, dynamic>)
       explainCall,
   Map<String, dynamic> Function(dynamic) trustReport,
-) {
+ {required String Function(String) term}) {
   final raw = telephonyToTenant(tc, orgName, tenantId);
   final anchor = anchorToday();
   final opts = <String, dynamic>{'anchorDate': anchor, 'calendarWindow': 400};
@@ -64,15 +64,15 @@ Map<String, dynamic> previewTelephony(
   // תרחישים מייצגים: יום-חול בשעות · יום-חול אחרי-שעות · שבת.
   final scenarios = <Map<String, dynamic>>[
     {
-      'when': 'יום שלישי 10:00 (בשעות)',
+      'when': term('yvm-shlyshy-bshavt'),
       'call': {'did': voiceDid, 'callerId': caller, 'dow': 2, 'hhmm': '10:00'},
     },
     {
-      'when': 'יום שלישי 20:00 (אחרי-שעות)',
+      'when': term('yvm-shlyshy-achryshavt'),
       'call': {'did': voiceDid, 'callerId': caller, 'dow': 2, 'hhmm': '20:00'},
     },
     {
-      'when': 'שבת 11:00',
+      'when': term('shbt'),
       'call': {'did': voiceDid, 'callerId': caller, 'dow': 6, 'hhmm': '11:00'},
     },
   ];

@@ -35,7 +35,7 @@ List<Map<String, dynamic>> needsCare(
   String todayIso,
   Map<String, dynamic>? config,
   Map<String, dynamic> sockets,
-) {
+ {required String Function(String) term}) {
   final termOf = sockets['termOf'];
   final staleBoxes = sockets['staleBoxes'];
   final lastCollectionIso = sockets['lastCollectionIso'];
@@ -43,7 +43,7 @@ List<Map<String, dynamic>> needsCare(
   final isoOf = sockets['isoOf'];
 
   final boxTerm =
-      config != null ? termOf(config, 'entity.tzBox', 'קופה') : 'קופה';
+      config != null ? termOf(config, 'entity.tzBox', 'קופה') : term('kvph');
   final out = <Map<String, dynamic>>[];
 
   for (final b in staleBoxes(db['tzBoxes'], todayIso)) {
@@ -51,10 +51,10 @@ List<Map<String, dynamic>> needsCare(
     out.add({
       'kind': 'stale',
       'id': b['id'],
-      'label': boxTerm + ' ' + b['num'].toString() + ' לא רוקנה מזמן',
+      'label': boxTerm + ' ' + b['num'].toString() + term('la-rvknh-mzmn'),
       'hint': _truthy(last)
-          ? 'ריקון אחרון: ' + last
-          : 'מעולם לא רוקנה (מאז ' +
+          ? term('rykvn-achrvn') + last
+          : term('mavlm-la-rvknh-maz') +
               (_truthy(b['since']) ? b['since'].toString() : '—') +
               ')',
     });
@@ -64,8 +64,8 @@ List<Map<String, dynamic>> needsCare(
     out.add({
       'kind': 'lost',
       'id': b['id'],
-      'label': boxTerm + ' ' + b['num'].toString() + ' מסומנת כאבודה',
-      'hint': 'לברר או להוציא משימוש',
+      'label': boxTerm + ' ' + b['num'].toString() + term('msvmnt-kabvdh'),
+      'hint': term('lbrr-av-lhvtsya-mshymvsh'),
     });
   }
 
@@ -78,10 +78,10 @@ List<Map<String, dynamic>> needsCare(
         'kind': 'inactiveCoord',
         'id': c['id'],
         'label': c['name'] +
-            ' אינו פעיל אך עדיין עם ' +
+            term('aynv-payl-ak-adyyn-am') +
             holding.toString() +
-            ' קופות בבתים',
-        'hint': 'להעביר לרכז אחר או להחזיר למשרד',
+            term('kvpvt-bbtym'),
+        'hint': term('lhabyr-lrkz-achr-av-lhchzyr-lmshrd'),
       });
     }
   }
@@ -98,8 +98,8 @@ List<Map<String, dynamic>> needsCare(
     out.add({
       'kind': 'campaignEnding',
       'id': p['id'],
-      'label': 'המבצע "' + p['name'] + '" מסתיים ב-' + p['end'],
-      'hint': 'לסכם ולסגור',
+      'label': term('hmbtsa') + p['name'] + term('mstyym-b') + p['end'],
+      'hint': term('lskm-vlsgvr'),
     });
   }
 

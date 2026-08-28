@@ -23,8 +23,8 @@ class DevicePart {
 }
 
 /// A one-way (directional) flow device — verbatim install_engine.dart:171-175.
-bool isDirectionalDevice(DevicePart p) {
-  if (p.categoryHe == 'אל חזור') return true;
+bool isDirectionalDevice(DevicePart p, {required String Function(String) term}) {
+  if (p.categoryHe == term('al-chzvr')) return true;
   final n = p.nameHe.replaceAll('-', '').replaceAll(' ', '');
-  return n.contains('אלחזור') || n.contains('אלחוזר');
+  return n.contains(term('alchzvr')) || n.contains(term('alchvzr'));
 }

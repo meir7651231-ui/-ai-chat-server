@@ -1,3 +1,4 @@
+import '../dart-data-maor/hok-method-label-terms.dart' as td_hok_method_label;
 import '../dart-data-maor/don-cal-month-line-terms.dart';
 // 📦 קופסת-חיבורים · תומכים (Dart) — מחווטת 45 אטומי-Dart. מקבילה ל-new/boxes/supporters.mjs.
 // חוזה משותף: new/boxes/supporters.contract.md. מקור-האמת: maor/src/components/supporters/lib.ts.
@@ -185,7 +186,7 @@ Map<String, dynamic> applyAyinNames(
 
 // ── הו"ק ─────────────────────────────────────────────────────────────────────
 String get hokCat => hc.hokCat;
-String hokMethodLabel(String m) => hml.hokMethodLabel(m);
+String hokMethodLabel(String m) => hml.hokMethodLabel(m, term: (k)=>td_hok_method_label.kTerms[k]!);
 bool hokEffectivelyActive(Map sp, String iso) =>
     hea.hokEffectivelyActive(sp.cast<String, Object?>(), iso);
 bool hokRecordedThisMonth(Map sp, String iso) =>

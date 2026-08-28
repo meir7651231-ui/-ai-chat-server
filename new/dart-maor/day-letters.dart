@@ -15,6 +15,6 @@
 /// The activity-day letters in Hebrew (index 0=Sunday … 5=Friday; no Saturday).
 /// Verbatim port of new/atoms/day-letters.mjs (`DAY_LETTERS`). Value only, no
 /// context knowledge (חוק-5). Each item is a Hebrew letter + geresh U+05F3 (׳).
-List<String> dayLetters() {
-  return ['א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳'];
+List<String> dayLetters({required String Function(String) term}) {
+  return [term('a'), term('b'), term('g'), term('d'), term('h'), term('v')];
 }

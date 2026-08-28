@@ -1,3 +1,5 @@
+import '../dart-data-maor/preview-telephony-terms.dart' as td_preview_telephony;
+import '../dart-data-maor/empty-telephony-config-terms.dart' as td_empty_telephony_config;
 import '../dart-data-maor/explain-one-terms.dart';
 // 📦 קופסת-חיבורים · telephony (Dart) — מחווטת 6 אטומי-Dart. מקבילה ל-new/boxes/telephony.mjs.
 // חוזה משותף: new/boxes/telephony.contract.md. אותם 6 חוטים, אותה הכרעת-חיווט חיה-בקופסה.
@@ -15,7 +17,7 @@ import '../dart-maor/next-closure.dart' as nc;
 import '../dart-maor/explain-one.dart' as eo;
 
 // ── החשיפה: חוטים טהורים (בלי שקע) עוברים כלשונם ──
-Map<String, dynamic> emptyTelephonyConfig() => etc.emptyTelephonyConfig();
+Map<String, dynamic> emptyTelephonyConfig() => etc.emptyTelephonyConfig(term: (k)=>td_empty_telephony_config.kTerms[k]!);
 dynamic toTenantId(dynamic slug, dynamic orgName) => tti.toTenantId(slug, orgName);
 Map<String, dynamic> telephonyToTenant(
         dynamic tc, dynamic orgName, dynamic tenantId) =>
@@ -41,7 +43,7 @@ Map<String, dynamic> previewTelephony(
     io['explainCall'] as Map<String, dynamic> Function(
         dynamic, Map<String, dynamic>, Map<String, dynamic>),
     io['trustReport'] as Map<String, dynamic> Function(dynamic),
-  );
+   term: (k)=>td_preview_telephony.kTerms[k]!);
 }
 
 /// תיאור-שיחה יחיד. io = {anchorToday, validateTenant, explainCall}.

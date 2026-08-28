@@ -1,3 +1,4 @@
+import '../dart-data-maor/needs-care-tzedaka-terms.dart' as td_needs_care_tzedaka;
 // 🏅 רתמת-זהב · needsCare — הרצה בפועל של דוגמאות-החוזה מ-needs-care-tzedaka.test.mjs.
 // אותם קלטים→פלטים בדיוק כמו בדיקת-ה-JS. ירוק (exit 0 עם --enable-asserts) ⇒ Dart ≡ JS.
 // הרצה: dart run --enable-asserts new/dart-maor/needs-care-tzedaka_test.dart
@@ -36,7 +37,7 @@ void main() {
       ...base,
       'staleBoxes': (a, x) => [b],
       'lastCollectionIso': (x) => '2026-01-01',
-    });
+    }, term: (k)=>td_needs_care_tzedaka.kTerms[k]!);
     assert(
         out.length == 1 &&
             out[0]['kind'] == 'stale' &&
@@ -50,12 +51,12 @@ void main() {
   {
     final b = {'id': 'b2', 'num': 5, 'since': '2025-05-01'};
     final out = needsCare({...emptyDb, 'tzBoxes': [b]}, TODAY, null,
-        {...base, 'staleBoxes': (a, x) => [b]});
+        {...base, 'staleBoxes': (a, x) => [b]}, term: (k)=>td_needs_care_tzedaka.kTerms[k]!);
     assert(out[0]['hint'] == 'מעולם לא רוקנה (מאז 2025-05-01)',
         'דוגמה 2א: ' + out[0]['hint']);
     final b2 = {'id': 'b3', 'num': 6};
     final out2 = needsCare({...emptyDb, 'tzBoxes': [b2]}, TODAY, null,
-        {...base, 'staleBoxes': (a, x) => [b2]});
+        {...base, 'staleBoxes': (a, x) => [b2]}, term: (k)=>td_needs_care_tzedaka.kTerms[k]!);
     assert(out2[0]['hint'] == 'מעולם לא רוקנה (מאז —)',
         'דוגמה 2ב: ' + out2[0]['hint']);
   }
@@ -66,7 +67,7 @@ void main() {
       ...emptyDb,
       'tzBoxes': [{'id': 'b7', 'num': 7, 'status': 'lost'}]
     };
-    final out = needsCare(db, TODAY, null, base);
+    final out = needsCare(db, TODAY, null, base, term: (k)=>td_needs_care_tzedaka.kTerms[k]!);
     assert(
         out.length == 1 &&
             out[0]['kind'] == 'lost' &&
@@ -86,7 +87,7 @@ void main() {
       ],
       'tzCoordinators': [{'id': 'c1', 'name': 'ראובן', 'active': false}],
     };
-    final out = needsCare(db, TODAY, null, base);
+    final out = needsCare(db, TODAY, null, base, term: (k)=>td_needs_care_tzedaka.kTerms[k]!);
     assert(
         out.length == 1 &&
             out[0]['kind'] == 'inactiveCoord' &&
@@ -95,7 +96,7 @@ void main() {
             out[0]['hint'] == 'להעביר לרכז אחר או להחזיר למשרד',
         'דוגמה 4א (inactiveCoord): ' + out.toString());
     final dbNone = {...db, 'tzBoxes': []};
-    assert(needsCare(dbNone, TODAY, null, base).isEmpty,
+    assert(needsCare(dbNone, TODAY, null, base, term: (k)=>td_needs_care_tzedaka.kTerms[k]!).isEmpty,
         'דוגמה 4ב: רכז בלי קופות-בבתים פלט התרעה');
   }
 
@@ -107,16 +108,16 @@ void main() {
             {'id': 'p1', 'name': 'אלול', 'active': active, 'end': end}
           ]
         };
-    final out = needsCare(mk('2026-09-01'), TODAY, null, base);
+    final out = needsCare(mk('2026-09-01'), TODAY, null, base, term: (k)=>td_needs_care_tzedaka.kTerms[k]!);
     assert(
         out.length == 1 &&
             out[0]['kind'] == 'campaignEnding' &&
             out[0]['label'] == 'המבצע "אלול" מסתיים ב-2026-09-01' &&
             out[0]['hint'] == 'לסכם ולסגור',
         'דוגמה 5א (campaignEnding): ' + out.toString());
-    assert(needsCare(mk('2026-09-20'), TODAY, null, base).isEmpty,
+    assert(needsCare(mk('2026-09-20'), TODAY, null, base, term: (k)=>td_needs_care_tzedaka.kTerms[k]!).isEmpty,
         'דוגמה 5ב: מעבר-לחלון נפלט');
-    assert(needsCare(mk('2026-09-01', false), TODAY, null, base).isEmpty,
+    assert(needsCare(mk('2026-09-01', false), TODAY, null, base, term: (k)=>td_needs_care_tzedaka.kTerms[k]!).isEmpty,
         'דוגמה 5ג: לא-פעיל נפלט');
   }
 
@@ -127,7 +128,7 @@ void main() {
       ...base,
       'staleBoxes': (a, x) => [b],
       'termOf': (cfg, key, fb) => 'קופסה',
-    });
+    }, term: (k)=>td_needs_care_tzedaka.kTerms[k]!);
     assert(out[0]['label'] == 'קופסה 3 לא רוקנה מזמן',
         'דוגמה 6 (termOf): ' + out[0]['label']);
   }

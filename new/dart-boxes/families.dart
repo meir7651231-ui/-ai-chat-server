@@ -1,3 +1,4 @@
+import '../dart-data-maor/tier-of-terms.dart' as td_tier_of;
 import '../dart-data-maor/finder-axes-terms.dart';
 // 📦 קופסת-חיבורים · families (Dart) — מחווטת 22 אטומי-Dart. מקבילה ל-new/boxes/families.mjs.
 // חוזה משותף: new/boxes/families.contract.md. מקור-האמת: maor/src/components/families/lib.ts.
@@ -41,7 +42,7 @@ String _termOfHist(dynamic c, dynamic k, dynamic fb) => tm.termOf(c, k, fb) as S
 // tierOf של האטום מחזיר {'key':.., 'label':..} כ-Map<String,String>; ה-socket מצפה
 // Map<String,dynamic> ⇒ Map.from מגשר את אי-שוויון-הגנריקה (invariant) בלי לגעת-בערך.
 Map<String, dynamic> _tierOfMap(num score) =>
-    Map<String, dynamic>.from(tof.tierOf(score, crt.CRED_RED_THRESHOLD) as Map);
+    Map<String, dynamic>.from(tof.tierOf(score, crt.CRED_RED_THRESHOLD, term: (k)=>td_tier_of.kTerms[k]!) as Map);
 // famEnrollments מחזיר List<Object?> (הפניות-רשומה); ה-socket של famLive מצפה
 // List<Map<String,dynamic>> ⇒ יישור-טיפוס (אותן הפניות בדיוק, סדר-מקור נשמר).
 List<Map<String, dynamic>> _famEnrollmentsForLive(dynamic db, dynamic fam) =>
@@ -50,7 +51,7 @@ List<Map<String, dynamic>> _famEnrollmentsForLive(dynamic db, dynamic fam) =>
 // ── החיווט (חוק-1: שכן ⇒ שקע-מוזרק; אפס import פנימי בין-אטומי) ──
 // tierOf במקור נקרא עם ארגומנט-יחיד ונשען על הקבוע-שכן CRED_RED_THRESHOLD.
 // הקופסה מלחימה את הסף פנימה כך שהחשיפה תואמת-מקור: tierOf(score).
-dynamic _wiredTierOf(dynamic score) => tof.tierOf(score, crt.CRED_RED_THRESHOLD);
+dynamic _wiredTierOf(dynamic score) => tof.tierOf(score, crt.CRED_RED_THRESHOLD, term: (k)=>td_tier_of.kTerms[k]!);
 
 List<Map<String, dynamic>> _wiredFamLive(dynamic db, dynamic fam) =>
     fle.famLiveEnrollments(db, fam, _famEnrollmentsForLive);

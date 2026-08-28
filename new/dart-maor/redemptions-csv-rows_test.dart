@@ -1,3 +1,4 @@
+import '../dart-data-maor/redemptions-csv-rows-terms.dart' as td_redemptions_csv_rows;
 // בדיקת-חוזה (רתמת-זהב) · redemptionsCsvRows — מייבאת אך ורק את האטום-שלה (חוק-4).
 // דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/redemptions-csv-rows.test.mjs:
 //   NAMES = { c1:'קופון מזון', c2:'מתנה' } · itemOf = (_db,comp) => {name: NAMES[comp.id] ?? ''}
@@ -65,7 +66,7 @@ void main() {
     ],
   };
 
-  final R = redemptionsCsvRows(db, null, beneficiaryLabel, itemOf);
+  final R = redemptionsCsvRows(db, null, beneficiaryLabel, itemOf, term: (k)=>td_redemptions_csv_rows.kTerms[k]!);
 
   // 1 · אורך=4 (כותרת + 3 מימושים).
   _ok(R.length == 4, 'דוגמה 1: אורך ${R.length} ≠ 4');
@@ -113,12 +114,12 @@ void main() {
     null,
     beneficiaryLabel,
     itemOf,
-  );
+   term: (k)=>td_redemptions_csv_rows.kTerms[k]!);
   _ok(E.length == 1, 'דוגמה 6: ריק אורך ${E.length} ≠ 1');
   n++;
 
   // assert חי (חוק: --enable-asserts) — מוכיח שהמנגנון פעיל.
-  assert(redemptionsCsvRows({'shopProducts': [], 'shopAssignments': []}, null, beneficiaryLabel, itemOf).length == 1, 'assert-live guard');
+  assert(redemptionsCsvRows({'shopProducts': [], 'shopAssignments': []}, null, beneficiaryLabel, itemOf, term: (k)=>td_redemptions_csv_rows.kTerms[k]!).length == 1, 'assert-live guard');
 
   print('OK redemptionsCsvRows: $n asserts passed');
 }

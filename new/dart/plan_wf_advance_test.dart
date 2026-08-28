@@ -1,3 +1,4 @@
+import '../dart-data/plan_wf_advance-terms.dart' as td_plan_wf_advance;
 // בדיקת-חוזה · planWfAdvance — מייבאת אך ורק את האטום-שלה (חוק-4).
 // הרצה: dart run --enable-asserts new/dart/plan_wf_advance_test.dart
 // הדוגמאות = טבלת-החוזה (plan_wf_advance.contract.md), מעוגנות ל-workflow_engine.dart:192-233.
@@ -43,7 +44,7 @@ WfAdvancePlan? _plan(WfCase a) => planWfAdvance(
       unitLabel: _unit,
       stageLabel: _stage,
       unitsTotal: _total,
-    );
+     term: (k)=>td_plan_wf_advance.kTerms[k]!);
 
 void _eq(Object? got, Object? want, String label) {
   if (got != want) throw StateError('FAIL [$label]: got="$got" want="$want"');
@@ -124,7 +125,7 @@ void main() {
     unitLabel: _unit,
     stageLabel: _stage,
     unitsTotal: _total,
-  );
+   term: (k)=>td_plan_wf_advance.kTerms[k]!);
   _eq(p10, null, '10 socket guard ⇒ null'); n++;
 
   assert(_plan(const WfCase(stage: WfStage.done)) == null, 'assert-live guard');

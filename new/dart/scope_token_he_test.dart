@@ -1,8 +1,9 @@
+import '../dart-data/scope_token_he-terms.dart' as td_scope_token_he;
 // בדיקת-חוזה · scopeTokenHe — מייבאת אך ורק את האטום-שלה (חוק-4).
 // הרצה: dart run --enable-asserts new/dart/scope_token_he_test.dart
 import 'scope_token_he.dart';
 
-String _s(String t) => scopeTokenHe(t, all: 'all', screenPrefix: 'screen:');
+String _s(String t) => scopeTokenHe(t, all: 'all', screenPrefix: 'screen:', term: (k)=>td_scope_token_he.kTerms[k]!);
 
 void _eq(String got, String want, String label) {
   if (got != want) throw StateError('FAIL [$label]: got="$got" want="$want"');

@@ -27,17 +27,17 @@
 /// (`^\S+@\S+\.\S+$` on trim), password >= 6, passwords match — and returns the
 /// FIRST Hebrew error message, or '' when everything is valid.
 String signUpError(String orgName, String contactName, String phone,
-    String email, String password, String password2) {
-  if (orgName.trim().isEmpty) return 'שם הארגון הוא שדה חובה';
+    String email, String password, String password2, {required String Function(String) term}) {
+  if (orgName.trim().isEmpty) return term('shm-hargvn-hva-shdh-chvbh');
   // הזרימה מבוססת שיחה חוזרת (עדכון פקודה 30.7) — איש קשר וטלפון חובה
-  if (contactName.trim().isEmpty) return 'שם איש הקשר הוא שדה חובה';
+  if (contactName.trim().isEmpty) return term('shm-aysh-hkshr-hva-shdh-chvbh');
   if (!RegExp(r'^[\d+][\d\s-]{6,}$').hasMatch(phone.trim())) {
-    return 'מספר טלפון תקין הוא שדה חובה — נחזור אליכם לאישור';
+    return term('mspr-tlpvn-tkyn-hva-shdh-chvbh-nchzvr-alykm-layshvr');
   }
   if (!RegExp(r'^\S+@\S+\.\S+$').hasMatch(email.trim())) {
-    return 'כתובת האימייל אינה תקינה';
+    return term('ktvbt-haymyyl-aynh-tkynh');
   }
-  if (password.length < 6) return 'הסיסמה חייבת להיות לפחות 6 תווים';
-  if (password != password2) return 'הסיסמאות אינן זהות';
+  if (password.length < 6) return term('hsysmh-chyybt-lhyvt-lpchvt-tvvym');
+  if (password != password2) return term('hsysmavt-aynn-zhvt');
   return '';
 }

@@ -16,11 +16,11 @@ class LipskeyCatalogProduct {
 }
 
 /// מספר פורטי-החיבור של [p] (= מספר קצות-שקע). טהור.
-int portCountFor(LipskeyCatalogProduct p) {
+int portCountFor(LipskeyCatalogProduct p, {required String Function(String) term}) {
   final t = p.productType ?? '';
-  if (t.contains('צינור')) return 2;
-  if (t.contains('פקק')) return 1;
-  if (t.contains('מסעף') || t.contains('רוכב')) return 3;
-  if (t.contains('אומגה')) return 2;
+  if (t.contains(term('tsynvr'))) return 2;
+  if (t.contains(term('pkk'))) return 1;
+  if (t.contains(term('msaf')) || t.contains(term('rvkb'))) return 3;
+  if (t.contains(term('avmgh'))) return 2;
   return 2; // elbow / coupler / adapter / valve / collar default
 }

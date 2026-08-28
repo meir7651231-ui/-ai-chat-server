@@ -1,3 +1,4 @@
+import '../dart-data-maor/segments-segment-counts-terms.dart' as td_segments_segment_counts;
 import '../dart-data-maor/portfolio-tier-trend-counts-terms.dart' as td_portfolio_tier_trend_counts;
 import '../dart-data-maor/commands-build-commands-terms.dart' as td_commands_build_commands;
 import '../dart-data-maor/cockpit-thanks-terms.dart' as td_cockpit_thanks;
@@ -142,7 +143,7 @@ Map<String, dynamic> donorIntel(Map<String, dynamic> sp, String today, [num rate
 List<Map<String, dynamic>> segmentCounts(List sups, String today, [num rate = 3.7]) => sgc.segmentCounts(
       sups, today, rate: rate,
       cockpitAtRisk: cockpitAtRisk, supIls: _ilsDyn, supUsd: _usdDyn, supLast: _slDyn, daysSince: _dsDS,
-    );
+     term: (k)=>td_segments_segment_counts.kTerms[k]!);
 bool matchSegment(dynamic sp, String key, List sups, String today, [num rate = 3.7]) => msg.matchSegment(
       sp, key, sups, today, rate: rate,
       cockpitAtRisk: cockpitAtRisk, supIls: _ilsDyn, supUsd: _usdDyn, supLast: _slDyn, daysSince: _dsDS,

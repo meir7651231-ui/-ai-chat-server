@@ -1,3 +1,4 @@
+import '../dart-data-maor/redemptions-csv-rows-terms.dart' as td_redemptions_csv_rows;
 import '../dart-data-maor/beneficiary-label-terms.dart';
 // 📦 קופסת-חיבורים · מודול-החנות (shop) (Dart) — מחווטת 35 אטומי-Dart. מקבילה ל-new/boxes/shop.mjs.
 // חוזה משותף: new/boxes/shop.contract.md. מקור-האמת: maor/src/components/shop/lib.ts.
@@ -144,7 +145,7 @@ List<String> distributionListLines(Map<String, dynamic> db, Object? productId, [
 
 /// שורות-CSV של מימושים — beneficiaryLabel + itemOf מחווטים פנימית.
 List<List<dynamic>> redemptionsCsvRows(Map<String, dynamic> db, [dynamic config]) =>
-    rcr.redemptionsCsvRows(db, config, _benLabel3, _itemOfDL);
+    rcr.redemptionsCsvRows(db, config, _benLabel3, _itemOfDL, term: (k)=>td_redemptions_csv_rows.kTerms[k]!);
 
 /// סינון-מימושים — dateInRange (אטום) מחווט פנימית.
 List<dynamic> filterRedemptions(Map<String, dynamic> a, String fromIso, String toIso, bool includeVoided) =>

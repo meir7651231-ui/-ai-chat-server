@@ -1,3 +1,4 @@
+import '../dart-data-maor/preview-telephony-terms.dart' as td_preview_telephony;
 // בדיקת-חוזה (רתמת-זהב) · previewTelephony — מייבאת אך ורק את האטום-שלה (חוק-4).
 // שש דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/preview-telephony.test.mjs:
 //   1) ולידציה-נכשלת ⇒ יציאה-מוקדמת · build/explain לא נקראים
@@ -97,7 +98,7 @@ Map<String, dynamic> _call(Map<String, dynamic> tc, _Sockets m) => previewTeleph
       m.buildTenant,
       m.explainCall,
       m.trustReport,
-    );
+     term: (k)=>td_preview_telephony.kTerms[k]!);
 
 final tcBase = {
   'numbers': [

@@ -129,5 +129,5 @@ const Map<String, String> kCategoryGroups = {
 
 /// קבוצת-הקטגוריה מול-הבעלים של [p] — מיפוי [kCategoryGroups], או 'אחר' לקטגוריה לא-ממופה.
 /// TOTAL: לעולם לא null/ריק. PURE.
-String groupOf(LipskeyCatalogProduct p) =>
-    kCategoryGroups[p.categoryHe] ?? 'אחר';
+String groupOf(LipskeyCatalogProduct p, {required String Function(String) term}) =>
+    kCategoryGroups[p.categoryHe] ?? term('achr');

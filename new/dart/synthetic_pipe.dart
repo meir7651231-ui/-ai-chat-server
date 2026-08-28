@@ -66,7 +66,7 @@ class LipskeyCatalogProduct {
 /// כדי שעוזרי-התאימות/תוויות יראו אותו — verbatim install_engine.dart:1016-1041.
 LipskeyCatalogProduct syntheticPipe(
   String material,
-  String dn, {
+  String dn, {required String Function(String) term, 
   required Map<String, LipskeyCatalogProduct> pipeCache,
   required Map<String, VerifiedSpec> verifiedSpecs,
 }) {
@@ -87,7 +87,7 @@ LipskeyCatalogProduct syntheticPipe(
       sku: sku,
       nameHe: 'צינור $material DN$dn (לפי מטר)',
       nameEn: '$material pipe DN$dn (cut to length)',
-      categoryHe: 'צינורות',
+      categoryHe: term('tsynvrvt'),
       categoryEn: 'Pipes',
       categoryEmoji: '📏',
       page: 0,

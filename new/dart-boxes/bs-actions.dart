@@ -1,3 +1,5 @@
+import '../dart-data/scope_label-terms.dart' as td_scope_label;
+import '../dart-data/scope_token_he-terms.dart' as td_scope_token_he;
 import '../dart-data/scope_he-terms.dart';
 // 📦 קופסת-חיבורים · bs-actions (בנייה-חכמה · סטודיו-הקופיילוט) — קטלוג-פעולות + סיווג-טווח.
 // מקור-האמת: buildsmart/app_flutter/lib/logic/studio/* (action_catalog · edit_prompt ·
@@ -139,11 +141,11 @@ String scopeLabel(String scope) => sl.scopeLabel(
       all: _scopeAll,
       screenPrefix: _screenPrefix,
       singlePrefix: _singlePrefix,
-    );
+     term: (k)=>td_scope_label.kTerms[k]!);
 
 /// תיאור-עברי קומפקטי לטוקן-טווח (all + מרחב מתורגמים; השאר fall-through verbatim).
 String scopeTokenHe(String token) => sth.scopeTokenHe(
       token,
       all: _scopeAll,
       screenPrefix: _screenPrefix,
-    );
+     term: (k)=>td_scope_token_he.kTerms[k]!);

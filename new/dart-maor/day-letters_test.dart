@@ -1,3 +1,4 @@
+import '../dart-data-maor/day-letters-terms.dart' as td_day_letters;
 // בדיקת-חוזה (רתמת-זהב) · dayLetters — מייבאת אך ורק את האטום-שלה (חוק-4).
 // דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/day-letters.test.mjs:
 //   1) DAY_LETTERS.length ⇒ 6
@@ -14,7 +15,7 @@ void _ok(bool cond, String msg) {
 
 void main() {
   var n = 0;
-  final d = dayLetters();
+  final d = dayLetters(term: (k)=>td_day_letters.kTerms[k]!);
   const want = ['א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳'];
   const geresh = '׳'; // ׳ גרש-עברי — לא apostrophe
 
@@ -51,7 +52,7 @@ void main() {
   }
 
   // assert חי (חוק: --enable-asserts) — מוכיח שהמנגנון פעיל.
-  assert(dayLetters().join('|') == 'א׳|ב׳|ג׳|ד׳|ה׳|ו׳', 'assert-live guard');
+  assert(dayLetters(term: (k)=>td_day_letters.kTerms[k]!).join('|') == 'א׳|ב׳|ג׳|ד׳|ה׳|ו׳', 'assert-live guard');
 
   print('OK dayLetters: $n asserts passed');
 }

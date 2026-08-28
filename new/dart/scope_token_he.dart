@@ -12,11 +12,11 @@
 /// translated; anything else falls through to the raw token verbatim.
 /// Verbatim branching of edit_prompt.dart:202-212 with the vocabulary injected.
 String scopeTokenHe(
-  String token, {
+  String token, {required String Function(String) term, 
   String all = 'all',
   String screenPrefix = 'screen:',
 }) {
-  if (token == all) return 'כל האלמנטים';
+  if (token == all) return term('kl-halmntym');
   if (token.startsWith(screenPrefix)) {
     return 'מרחב «${token.substring(screenPrefix.length)}»';
   }

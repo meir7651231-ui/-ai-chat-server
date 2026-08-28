@@ -1,3 +1,4 @@
+import '../dart-data/is_directional_device-terms.dart' as td_is_directional_device;
 import '../dart-data/directional_context-terms.dart';
 // 📦 קופסת-חיבורים · bs-pipe (בנייה-חכמה · מנוע-הצנרת המלא: מסלול · לחץ · ערכה · תמחיר · תאימות · צ׳קליסט).
 // מקור-האמת: buildsmart/app_flutter/lib/logic/{install_engine, pressure_drop, install_kit,
@@ -575,7 +576,7 @@ class PipeBox {
 
   /// האם המוצר הוא התקן חד-כיווני (שסתום אל-חזור).
   bool isDirectionalDevice(PipeProduct p) => idd.isDirectionalDevice(
-      idd.DevicePart(categoryHe: p.categoryHe, nameHe: p.nameHe));
+      idd.DevicePart(categoryHe: p.categoryHe, nameHe: p.nameHe), term: (k)=>td_is_directional_device.kTerms[k]!);
 
   /// ניסוח-מיקום של התקן חד-כיווני באינדקס [i] לפי-שכניו ([names]=שמות-השרשרת).
   String directionalContext(List<String> names, int i) =>

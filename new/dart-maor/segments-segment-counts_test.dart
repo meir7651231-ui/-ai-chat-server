@@ -1,3 +1,4 @@
+import '../dart-data-maor/segments-segment-counts-terms.dart' as td_segments_segment_counts;
 // רתמת-זהב · segments-segment-counts — הפלט מקודד ב-JSON נאמן-JS ומושווה ל-WANT המדויק
 // מ-new/atoms/segments-segment-counts.test.mjs (זהות: אותם קלטים→אותו JSON.stringify).
 // שקעים-inline מבונים = העתק ביט-אחר-ביט של שקעי-בדיקת-ה-JS (daysSince/supX/atRisk).
@@ -95,7 +96,7 @@ void main() {
     supUsd: _supUsd,
     supLast: _supLast,
     daysSince: _daysSince,
-  ));
+   term: (k)=>td_segments_segment_counts.kTerms[k]!));
   if (got != want) {
     throw StateError('✗ segments-segment-counts\n$got\n≠\n$want');
   }
