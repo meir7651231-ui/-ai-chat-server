@@ -1,3 +1,4 @@
+import '../dart-data-maor/audit-cat-colors-terms.dart' as td_audit_cat_colors;
 import '../dart-data-maor/audit-report-lines-terms.dart';
 // 📦 קופסת-חיבורים · audit (Dart) — מחווטת אטומי-Dart. מקבילה ל-new/boxes/audit.mjs.
 // חוזה משותף: new/boxes/audit.contract.md. מקור-האמת: maor/src/lib/audit.ts.
@@ -25,7 +26,7 @@ String _wiredNormName(dynamic t) => nn.normName(t, ns.normSearch);
 
 // ── ה-API הפומבי (ביט-זהה לחתימות audit.ts / audit.mjs) ──────────────────────
 // קבועי-התצוגה — חוטים בלי-שקעים, מוגשים כמות-שהם (החיווט: בחירת-האטום בלבד).
-final Map<String, List<String>> AUDIT_CAT_COLORS = acc.auditCatColors(); // ignore: non_constant_identifier_names
+final Map<String, List<String>> AUDIT_CAT_COLORS = acc.auditCatColors(term: (k)=>td_audit_cat_colors.kTerms[k]!); // ignore: non_constant_identifier_names
 const List<String> AUDIT_CATEGORIES = acat.auditCategories; // ignore: constant_identifier_names
 
 String? phoneIssue(String? p) => pi.phoneIssue(p);

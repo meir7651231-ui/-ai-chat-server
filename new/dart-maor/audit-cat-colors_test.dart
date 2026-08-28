@@ -1,3 +1,4 @@
+import '../dart-data-maor/audit-cat-colors-terms.dart' as td_audit_cat_colors;
 /// רתמת-זהב · audit-cat-colors — Dart≡JS.
 /// דוגמאות-החוזה = הצילום מ-new/atoms/audit-cat-colors.test.mjs (מקור-אמת).
 /// אם עובר: מפת-הצבעים ב-Dart זהה ביט-אחר-ביט למקור-ה-JS (כולל סדר-מפתחות).
@@ -16,7 +17,7 @@ void main() {
     ['קשר', ['#f6ead1', '#9a6414']],
   ];
 
-  final actual = auditCatColors();
+  final actual = auditCatColors(term: (k)=>td_audit_cat_colors.kTerms[k]!);
   final actualKeys = actual.keys.toList();
 
   // גודל וסדר-מפתחות זהים (JSON.stringify תלוי-סדר).

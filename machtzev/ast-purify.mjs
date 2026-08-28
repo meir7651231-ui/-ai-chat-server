@@ -22,7 +22,8 @@ function injectNamedArg(src, fn, val, dotted) {
     const after = src.slice(j+1).replace(/^\s*/, ''); if (!dotted && (after.startsWith('{') || after.startsWith('=>'))) continue;
     // זהירות מפסיק-נגרר קיים לפני ה-) ⇒ פסיק-כפול
     let b = j-1; while (b > m.index && /\s/.test(src[b])) b--;
-    const sep = src[b] === ',' ? ` term: ${val}` : `, term: ${val}`;
+    // אפס-ארגומנטים קיימים: `foo()` ⇒ `foo(term: …)` בלי פסיק-מוביל (תיקון-מנוע 28.8).
+    const sep = src[b] === '(' ? `term: ${val}` : src[b] === ',' ? ` term: ${val}` : `, term: ${val}`;
     out += src.slice(i, j) + sep + src[j]; i = j+1; re.lastIndex = i;
   }
   return out + src.slice(i);
@@ -65,8 +66,10 @@ function purify(rel) {
     }
   }
 
-  const imp = `import '../${DATADIR[dir]}/${base}-terms.dart';\n`;
-  const val = '(k)=>kTerms[k]!';
+  // ייבוא-terms ממופה-בכינוי ייחודי פר-אטום ⇒ אפס התנגשות-kTerms כשקופסה צורכת כמה מטוהרים (תיקון-מנוע 28.8).
+  const alias = 'td_' + base.replace(/[^a-z0-9]/gi, '_');
+  const imp = `import '../${DATADIR[dir]}/${base}-terms.dart' as ${alias};\n`;
+  const val = `(k)=>${alias}.kTerms[k]!`;
   fs.mkdirSync(path.dirname(dataAbs), { recursive: true });
   fs.writeFileSync(dataAbs, dataBody);
   fs.writeFileSync(abs, res.source);
