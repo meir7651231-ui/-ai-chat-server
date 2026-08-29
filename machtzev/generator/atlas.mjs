@@ -47,6 +47,7 @@ export function buildAtlas() {
         required: new Set([...namedPart.matchAll(/required\s+this\.(\w+)/g)].map(x => x[1])),
         named: new Set([...namedPart.matchAll(/this\.(\w+)/g)].map(x => x[1])),
         flexRoot: /return\s+(?:Expanded|Flexible)\s*\(/.test(body),   // בנוי-ל-Row: חייב הורה-flex
+        dirty: /['"][^'"\n]*[֐-׿]/.test(body),                        // חוב-טוהר: דאטה-עברי קשיח בגוף (הכרעה 16)
       });
     }
   }

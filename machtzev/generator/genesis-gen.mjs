@@ -33,6 +33,7 @@ const ROLE_RULES = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/roles.j
 const TOKEN_RULES = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/tokens.json'), 'utf8')).rules.map(r => ({ re: new RegExp(r.pattern, 'i'), token: r.token }));
 const roleOf = (cls) => ROLE_RULES.find(r => r.re.test(cls))?.role || 'other';
 const tokenFor = (n) => TOKEN_RULES.find(r => r.re.test(n)).token;
+const LOGIC_RULES = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/logic-lexicon.json'), 'utf8')).rules;
 let termKeyOf = new Map();
 try {
   for (const t of JSON.parse(fs.readFileSync(path.join(ROOT, 'screens-seed/terms-catalog.json'), 'utf8')).terms || [])
@@ -87,6 +88,7 @@ function pickAtom(part) {
     if (part.options?.length && [...a.types.entries()].some(([n, t]) => /^(options|items)$/.test(n) && /^List</.test(t))) score += 2;
     if (part.hero && /Hero/.test(a.cls)) score += 4;
     if (part.sub && a.types.has('sub')) score += 2;
+    if (a.dirty) score -= 3;                                          // חוב-טוהר ⇒ מעדיפים אטום נקי
     score -= widgetFills + 0.05 * (a.required.size + a.positional.length);
     if (score > bestScore) { bestScore = score; best = a; }
   }
@@ -103,6 +105,18 @@ function generate(slug, specText) {
     ? (first.includes(':') ? first.slice(first.indexOf(':') + 1) : first).split(',').map(s => s.trim()).filter(Boolean)
     : lines.slice(1);
   const parts = partTexts.map(parsePart);
+  // 🌉 גשר-הלוגיקה: חלק-'חישוב' ⇒ קריאה חיה לאטום-לוגיקה מהמדף (מוצג כמדד)
+  const logicImports = new Set();
+  for (const part of parts) {
+    if (part.role !== 'calc') continue;
+    const rule = LOGIC_RULES.find(r => part.txt.includes(r.match));
+    const fn = rule && atlas.functions.find(f => f.name === rule.fn);
+    if (rule && fn) {
+      part.calcExpr = rule.call;
+      part.role = 'stat';
+      logicImports.add(`import '../${fn.shelf.replace(/^new\//, '')}/${fn.file}';`);
+    } else part.role = 'row';                                         // אין-גשר ⇒ שורה כנה, לא המצאה
+  }
 
   const cls = 'Gen' + slug.replace(/(^|[_-])([a-z])/g, (_, __, c) => c.toUpperCase()) + 'Screen';
   const consts = [];
@@ -115,11 +129,12 @@ function generate(slug, specText) {
     return n;
   };
   const stateDecls = [];
-  const imports = new Set(["import 'package:flutter/material.dart';", "import '../dart-ui-bs/auto/bs_tokens.dart';", `import '../dart-data-bs/auto/gen_${slug}_content.dart';`]);
+  const imports = new Set(["import 'package:flutter/material.dart';", "import '../dart-ui-bs/auto/bs_tokens.dart';", `import '../dart-data-bs/auto/gen_${slug}_content.dart';`, ...logicImports]);
   let sIdx = 0;
 
   const fillProp = (a, name, part, shared) => {
     const t = (a.types.get(name) || 'String').replace(/\?$/, '');
+    if (part.calcExpr && name === 'value' && t === 'String') return { expr: part.calcExpr };   // 🌉 ערך-חי ממנוע-לוגיקה
     if (name === 'value' && part.value != null && t === 'String') return { expr: constFor(part.value, part.role + '_value') };
     if (name === 'value' && part.value != null && t === 'int') return { expr: String(parseInt(part.value.replace(/[^0-9]/g, ''))) };
     if (t === 'String' && /^(value|selected)$/.test(name)) { if (!shared.s) { shared.s = '_t' + (++sIdx); stateDecls.push(`String ${shared.s} = '';`); } return { expr: shared.s }; }
