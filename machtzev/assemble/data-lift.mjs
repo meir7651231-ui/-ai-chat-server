@@ -848,7 +848,7 @@ for (const L of [...liftedHashes.values()].sort((a, b) => a.pub.localeCompare(b.
   const file = path.join(OUT, snake(L.pub) + '.dart');
   if (fs.existsSync(file)) { skip('file-collision', L.id); continue; }
   let joined = L.joined.replaceAll(L.name, L.pub);
-  joined = joined.replace(/(\n)[ \t]*\/[ \t]*(?=\n)/g, '$1');
+  joined = joined.replace(/(\n)[ \t]*\/[ \t]*(?=\n|$)/g, '$1');
   for (const pn of L.privatized || []) if (!joined.includes('_' + pn)) joined = joined.replaceAll(pn, '_' + pn);
   // מחלקה עם חבר-מופשט (getter/מתודה בלי-גוף) חייבת abstract
   joined = joined.replace(/(^|\n)(class\s+\w+\s*\{[^}]*?\b\w[\w<>,? ]*\s+get\s+\w+\s*;)/g, (mm, a, b2) => a + 'abstract ' + b2);
