@@ -122,7 +122,7 @@ const gateFields = [...gates].sort().map(n => `  final bool ${n};`).join('\n');
 const paramFields = [...params.entries()].sort().map(([n, t]) => `  final ${t} ${n};`).join('\n');
 const ctorParams = [
   ...[...gates].sort().map(n => `required this.${n}`),
-  ...[...callbacks].sort().map(n => `required this.${n}`),
+  ...[...callbacks.keys()].sort().map(n => `required this.${n}`),
   ...[...params.keys()].sort().map(n => `required this.${n}`),
   'required this.t',
 ].join(', ');
