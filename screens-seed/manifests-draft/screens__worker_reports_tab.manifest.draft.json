@@ -1,0 +1,62 @@
+{
+ "screen": "worker_reports_tab",
+ "content": [
+  "auto/screens__worker_reports_tab_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "kpi_box",
+   "atom": "KpiBox",
+   "props": {
+    "label2": "$: kpi_box_label2",
+    "value": "?:String",
+    "label": "?:String",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "card",
+   "atom": "Card",
+   "props": {
+    "title": "?:String",
+    "titleId": "?:String?",
+    "children": "?:List<Widget>"
+   }
+  },
+  {
+   "id": "worker_reports_tab_kv_row",
+   "atom": "WorkerReportsTabKvRow",
+   "props": {
+    "label2": "$: worker_reports_tab_kv_row_label2",
+    "label": "?:String",
+    "value": "?:String",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "proof_thumb",
+   "atom": "ProofThumb",
+   "props": {
+    "title": "$: proof_thumb_title",
+    "body": "$: proof_thumb_body",
+    "label": "$: proof_thumb_label",
+    "onTap": "@:onTap",
+    "photo": "?:String?"
+   }
+  },
+  {
+   "id": "status_pill",
+   "atom": "StatusPill",
+   "props": {
+    "status": "?:String"
+   }
+  },
+  {
+   "id": "thumb_placeholder",
+   "atom": "ThumbPlaceholder",
+   "props": {
+    "glyph": "?:String"
+   }
+  }
+ ]
+}

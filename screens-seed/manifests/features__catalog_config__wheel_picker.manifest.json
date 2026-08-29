@@ -1,0 +1,11 @@
+{
+ "screen": "catalog_config_wheel_picker",
+ "content": [],
+ "sections": [
+  {
+   "id": "selection_band",
+   "atom": "SelectionBand",
+   "props": {}
+  }
+ ]
+}

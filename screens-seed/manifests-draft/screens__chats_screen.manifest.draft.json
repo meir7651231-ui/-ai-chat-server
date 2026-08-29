@@ -1,0 +1,17 @@
+{
+ "screen": "chats_screen",
+ "content": [
+  "auto/screens__chats_screen_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "pill",
+   "atom": "Pill",
+   "props": {
+    "label": "?:String",
+    "active": "?:bool",
+    "onTap": "@:onTap"
+   }
+  }
+ ]
+}

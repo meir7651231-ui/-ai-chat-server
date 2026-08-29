@@ -1,0 +1,23 @@
+{
+ "screen": "site_hub_screen",
+ "content": [],
+ "sections": [
+  {
+   "id": "hub_tile",
+   "atom": "HubTile",
+   "props": {
+    "ic": "?:String",
+    "t": "?:String",
+    "s": "?:String",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "site_server_note",
+   "atom": "SiteServerNote",
+   "props": {
+    "text": "?:String"
+   }
+  }
+ ]
+}

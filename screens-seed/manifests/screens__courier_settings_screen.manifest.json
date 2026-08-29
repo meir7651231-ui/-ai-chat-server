@@ -1,0 +1,23 @@
+{
+ "screen": "courier_settings_screen",
+ "content": [
+  "auto/screens__courier_settings_screen_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "courier_info_section",
+   "atom": "CourierInfoSection",
+   "props": {
+    "title": "$: courier_info_section_title",
+    "title2": "$: courier_info_section_title2",
+    "body": "$: courier_info_section_body",
+    "fallback": "$: courier_info_section_fallback",
+    "title3": "$: courier_info_section_title3",
+    "body2": "$: courier_info_section_body2",
+    "fallback2": "$: courier_info_section_fallback2",
+    "onTap": "@:onTap",
+    "onTap2": "@:onTap2"
+   }
+  }
+ ]
+}

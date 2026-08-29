@@ -1,0 +1,15 @@
+{
+ "screen": "lipskey_products_screen",
+ "content": [],
+ "sections": [
+  {
+   "id": "lens_group_header",
+   "atom": "LensGroupHeader",
+   "props": {
+    "title": "?:String",
+    "count": "?:int",
+    "smartTree": "?:bool"
+   }
+  }
+ ]
+}

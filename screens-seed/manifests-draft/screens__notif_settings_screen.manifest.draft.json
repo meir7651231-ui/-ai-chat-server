@@ -1,0 +1,55 @@
+{
+ "screen": "notif_settings_screen",
+ "content": [
+  "auto/screens__notif_settings_screen_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "quick_actions_section",
+   "atom": "QuickActionsSection",
+   "props": {
+    "title": "$: quick_actions_section_title",
+    "label": "$: quick_actions_section_label",
+    "label2": "$: quick_actions_section_label2",
+    "label3": "$: quick_actions_section_label3",
+    "label4": "$: quick_actions_section_label4",
+    "fallback": "$: quick_actions_section_fallback",
+    "fallback2": "$: quick_actions_section_fallback2",
+    "fallback3": "$: quick_actions_section_fallback3",
+    "fallback4": "$: quick_actions_section_fallback4",
+    "onTap": "@:onTap",
+    "onTap2": "@:onTap2",
+    "fallback5": "$: quick_actions_section_fallback5",
+    "onTap3": "@:onTap3",
+    "fallback6": "$: quick_actions_section_fallback6",
+    "fallback7": "$: quick_actions_section_fallback7",
+    "onTap4": "@:onTap4"
+   }
+  },
+  {
+   "id": "snooze_sheet",
+   "atom": "SnoozeSheet",
+   "props": {
+    "label": "$: snooze_sheet_label",
+    "label2": "$: snooze_sheet_label2",
+    "label3": "$: snooze_sheet_label3",
+    "label4": "$: snooze_sheet_label4",
+    "fallback": "$: snooze_sheet_fallback",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "notif_settings_switch_row",
+   "atom": "NotifSettingsSwitchRow",
+   "props": {
+    "fallback": "$: notif_settings_switch_row_fallback",
+    "fallback2": "$: notif_settings_switch_row_fallback2",
+    "label": "?:String",
+    "value": "?:bool",
+    "onChanged": "@:onChanged",
+    "requiresServer": "?:bool",
+    "underConstruction": "?:bool"
+   }
+  }
+ ]
+}

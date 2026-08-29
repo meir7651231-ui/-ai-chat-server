@@ -1,0 +1,25 @@
+{
+ "screen": "studio_panes_theme_pane",
+ "content": [
+  "auto/screens__studio__panes__theme_pane_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "label",
+   "atom": "Label",
+   "props": {
+    "text": "?:String"
+   }
+  },
+  {
+   "id": "swatch",
+   "atom": "Swatch",
+   "props": {
+    "label": "$: swatch_label",
+    "color": "#:color",
+    "selected": "?:bool",
+    "onTap": "@:onTap"
+   }
+  }
+ ]
+}

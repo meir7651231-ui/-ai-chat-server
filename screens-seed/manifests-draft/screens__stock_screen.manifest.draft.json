@@ -1,0 +1,28 @@
+{
+ "screen": "stock_screen",
+ "content": [
+  "auto/screens__stock_screen_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "stock_tab",
+   "atom": "StockTab",
+   "props": {
+    "label": "?:String",
+    "on": "?:bool",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "stock_row",
+   "atom": "StockRow",
+   "props": {
+    "label": "$: stock_row_label",
+    "label2": "$: stock_row_label2",
+    "name": "?:String",
+    "warehouse": "?:bool",
+    "onMove": "@:onMove"
+   }
+  }
+ ]
+}

@@ -1,0 +1,40 @@
+{
+ "screen": "catalog_settings_screen",
+ "content": [
+  "auto/screens__catalog_settings_screen_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "profile_row",
+   "atom": "ProfileRow",
+   "props": {
+    "fallback": "$: profile_row_fallback",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "ai_section",
+   "atom": "AiSection",
+   "props": {
+    "title": "$: ai_section_title",
+    "label": "$: ai_section_label",
+    "label2": "$: ai_section_label2",
+    "label3": "$: ai_section_label3",
+    "label4": "$: ai_section_label4",
+    "fallback": "$: ai_section_fallback",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "info_section",
+   "atom": "InfoSection",
+   "props": {
+    "title": "$: info_section_title",
+    "fallback": "$: info_section_fallback",
+    "fallback2": "$: info_section_fallback2",
+    "onTap": "@:onTap",
+    "onTap2": "@:onTap2"
+   }
+  }
+ ]
+}

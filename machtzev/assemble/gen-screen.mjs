@@ -97,7 +97,7 @@ ${imports.join('\n')}
 
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class ${cls}Tokens {
-  const ${cls}Tokens({${tokCtor}});
+  const ${cls}Tokens(${tokCtor ? '{' + tokCtor + '}' : ''});
 ${tokFields}
 }
 

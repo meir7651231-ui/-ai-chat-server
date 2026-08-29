@@ -1,0 +1,35 @@
+{
+ "screen": "store_settings_screen",
+ "content": [],
+ "sections": [
+  {
+   "id": "chat_settings_switch_row",
+   "atom": "ChatSettingsSwitchRow",
+   "props": {
+    "fallback": "?:String",
+    "label": "?:String",
+    "value": "?:bool",
+    "onChanged": "@:onChanged",
+    "underConstruction": "?:bool"
+   }
+  },
+  {
+   "id": "catalog_settings_placeholder_row",
+   "atom": "CatalogSettingsPlaceholderRow",
+   "props": {
+    "fallback": "?:String",
+    "onTap": "@:onTap",
+    "label": "?:String"
+   }
+  },
+  {
+   "id": "store_settings_action_row",
+   "atom": "StoreSettingsActionRow",
+   "props": {
+    "label": "?:String",
+    "buttonLabel": "?:String",
+    "onTap": "@:onTap"
+   }
+  }
+ ]
+}

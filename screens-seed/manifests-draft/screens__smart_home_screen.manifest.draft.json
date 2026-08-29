@@ -1,0 +1,13 @@
+{
+ "screen": "smart_home_screen",
+ "content": [],
+ "sections": [
+  {
+   "id": "pad",
+   "atom": "Pad",
+   "props": {
+    "child": "?:Widget"
+   }
+  }
+ ]
+}

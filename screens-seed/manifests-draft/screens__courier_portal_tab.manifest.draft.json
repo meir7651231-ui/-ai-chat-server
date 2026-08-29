@@ -1,0 +1,16 @@
+{
+ "screen": "courier_portal_tab",
+ "content": [
+  "auto/screens__courier_portal_tab_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "destination_card",
+   "atom": "DestinationCard",
+   "props": {
+    "fallback": "$: destination_card_fallback",
+    "haul": "?:String"
+   }
+  }
+ ]
+}

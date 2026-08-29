@@ -1,0 +1,117 @@
+{
+ "screen": "ai_hub_screen",
+ "content": [
+  "auto/screens__ai_hub_screen_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "ai_md_head",
+   "atom": "AiMdHead",
+   "props": {
+    "ic": "?:String",
+    "title": "?:String",
+    "sub": "?:String"
+   }
+  },
+  {
+   "id": "ai_fin_tile",
+   "atom": "AiFinTile",
+   "props": {
+    "ic": "?:String",
+    "title": "?:String",
+    "sub": "?:String",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "three_way",
+   "atom": "ThreeWay",
+   "props": {
+    "title": "$: three_way_title",
+    "sub": "$: three_way_sub",
+    "text": "$: three_way_text",
+    "pill": "$: three_way_pill",
+    "pill2": "$: three_way_pill2",
+    "label": "$: three_way_label",
+    "label2": "$: three_way_label2",
+    "label3": "$: three_way_label3",
+    "fallback": "$: three_way_fallback"
+   }
+  },
+  {
+   "id": "wear",
+   "atom": "Wear",
+   "props": {
+    "title": "$: wear_title",
+    "sub": "$: wear_sub",
+    "text": "$: wear_text",
+    "text2": "$: wear_text2",
+    "fallback": "$: wear_fallback"
+   }
+  },
+  {
+   "id": "ai_server_note",
+   "atom": "AiServerNote",
+   "props": {
+    "text": "?:String"
+   }
+  },
+  {
+   "id": "ai_card",
+   "atom": "AiCard",
+   "props": {
+    "child": "?:Widget",
+    "overdue": "?:bool"
+   }
+  },
+  {
+   "id": "ai_card_sub",
+   "atom": "AiCardSub",
+   "props": {
+    "text": "?:String"
+   }
+  },
+  {
+   "id": "ai_card_top",
+   "atom": "AiCardTop",
+   "props": {
+    "title": "?:String",
+    "pill": "?:String",
+    "danger": "?:bool"
+   }
+  },
+  {
+   "id": "ai_card_btn",
+   "atom": "AiCardBtn",
+   "props": {
+    "label": "?:String",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "three_col",
+   "atom": "ThreeCol",
+   "props": {
+    "label": "?:String",
+    "value": "?:String",
+    "bad": "?:bool"
+   }
+  },
+  {
+   "id": "ai_bar",
+   "atom": "AiBar",
+   "props": {
+    "pct": "?:int",
+    "danger": "?:bool"
+   }
+  },
+  {
+   "id": "ai_primary",
+   "atom": "AiPrimary",
+   "props": {
+    "label": "?:String",
+    "onTap": "@:onTap"
+   }
+  }
+ ]
+}

@@ -86,6 +86,9 @@ import crypto from 'node:crypto';
 stage('מנוע-המדף (shelf-lift)', () => run('machtzev/assemble/shelf-lift.mjs', [SCRATCH]).split('\n').find(l => l.includes('הורמו'))?.trim());
 stage('מנוע-הליטוש (data-lift)', () => run('machtzev/assemble/data-lift.mjs', [SCRATCH]).split('\n').find(l => l.includes('לוטשו'))?.trim());
 
+// ── 4ב½ · מנוע-המניפסטים: הוראות-הרכבה אוטומטיות לכל מסך ──
+stage('מנוע-המניפסטים (gen-manifest)', () => run('machtzev/assemble/gen-manifest.mjs', [SCRATCH]).split('\n').find(l => l.includes('שלמים'))?.trim());
+
 // ── 4ב · המנוע-המרכיב: מניפסטים ⇒ מסכים מחוללים ──
 stage('הרכבה-מחוללת (gen-screen)', () => {
   const mDir = path.join(ROOT, 'screens-seed/manifests');
