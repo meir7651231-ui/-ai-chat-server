@@ -1,0 +1,47 @@
+{
+ "TradePublishSheet": {
+  "addProps": [
+   {
+    "name": "t01",
+    "type": "String",
+    "replaces": "🚀 פרסום ענף"
+   },
+   {
+    "name": "lklQtgwryhYc2",
+    "type": "String",
+    "replaces": "לכל קטגוריה יש מוצר"
+   },
+   {
+    "name": "lklXyrWryant3",
+    "type": "String",
+    "replaces": "לכל ציר וריאנט יש ערכים"
+   },
+   {
+    "name": "ayKlljybwrYtw4",
+    "type": "String",
+    "replaces": "אין כלל-חיבור יתום"
+   },
+   {
+    "name": "klHmwxryMcwyky5",
+    "type": "String",
+    "replaces": "כל המוצרים משויכים לקטגוריה קיימת"
+   },
+   {
+    "name": "tplQtgwrywtCatslengthMwxr6",
+    "type": "String",
+    "replaces": "קטגוריות: ${cats.length} · מוצרים: ${products.length} · "
+   },
+   {
+    "name": "tplKllyRuleslength7",
+    "type": "String",
+    "replaces": "כללים: ${rules.length}"
+   },
+   {
+    "name": "frs8",
+    "type": "String",
+    "replaces": "פרסם"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

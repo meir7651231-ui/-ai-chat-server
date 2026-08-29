@@ -1,0 +1,179 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__worker_settings_screen.dart",
+ "lines": 405,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   12,
+   13,
+   15,
+   22
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ",\n          value: BsLang.en,\n          groupValue: settings.lang,\n          enabled: false,\n        ),\n      ],\n    );\n  }\n}\n\n/// One language radio row — disabled options carry the honest \"בקרוב\" badge.\nclass _LangOption extends StatelessWidget {\n  const _LangOption({\n    required this.label,\n    required this.value,\n    required this.groupValue,\n    this.onChanged,\n    this.enabled = true,\n  });\n\n  final String label;\n  final BsLang value;\n  final BsLang groupValue;\n  final ValueChanged<BsLang>? onChanged;\n  final bool enabled;\n\n  @override\n  Widget build(BuildContext context) {\n    return RadioListTile<BsLang>(\n      contentPadding: const EdgeInsets.symmetric(horizontal: 16),\n      title: Row(\n        children: [\n          Flexible(\n            child: Text(\n              label,\n              style: TextStyle(\n                color: enabled ? BsTokens.inkLight : BsTokens.mutedLight,\n              ),\n            ),\n          ),\n          if (!enabled) ...[\n            const SizedBox(width: 8),\n            const CfgText(\n              ",
+  "s full CatalogSettingsScreen).\n/// ONLY the worker-relevant areas: פרופיל-עובד · התראות (the existing\n/// [NotifSettingsScreen]) · אזור ושפה · ממשק ונגישות · מידע ([LegalScreen]).\n///\n/// The אזור-ושפה / ממשק-ונגישות rows mirror the contractor settings",
+  "אזור אישי",
+  "אזור ושפה",
+  "בינוני",
+  "בקרוב",
+  "גדול",
+  "גודל טקסט (כל האפליקציה)",
+  "הגדרות",
+  "הנפשות מופחתות (כל האפליקציה)",
+  "התראות",
+  "מדיניות פרטיות",
+  "מידע",
+  "ממשק ונגישות",
+  "ניגודיות גבוהה (כל האפליקציה)",
+  "עברית",
+  "פרופיל עובד",
+  "קטן",
+  "תנאי שימוש"
+ ],
+ "icons": [
+  "Icons.chevron_left"
+ ],
+ "glyphs": [
+  "🌐",
+  "📱",
+  "🔒",
+  "🔔",
+  "🦺",
+  "🪗"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "WorkerSettingsScreen",
+   "kind": "ConsumerWidget",
+   "line": 26,
+   "loc": 52,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "boardAuthProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "nav:WorkerSettingsScreen"
+   ],
+   "strings": 3,
+   "constData": 1
+  },
+  {
+   "name": "_NotifRow",
+   "kind": "StatelessWidget",
+   "line": 81,
+   "loc": 30,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_RegionSection",
+   "kind": "ConsumerWidget",
+   "line": 114,
+   "loc": 37,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "appSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_LangOption",
+   "kind": "StatelessWidget",
+   "line": 153,
+   "loc": 50,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_AccessibilitySection",
+   "kind": "ConsumerWidget",
+   "line": 206,
+   "loc": 72,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "catalogSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 7,
+   "constData": 1
+  },
+  {
+   "name": "_InfoSection",
+   "kind": "StatelessWidget",
+   "line": 281,
+   "loc": 35,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 3,
+   "constData": 0
+  },
+  {
+   "name": "_SectionCard",
+   "kind": "StatefulWidget",
+   "line": 329,
+   "loc": 14,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [
+  "_AccessibilitySection"
+ ],
+ "gates": [
+  "kKbGlobal"
+ ],
+ "board": {
+  "reads": [
+   "appSettingsProvider",
+   "boardAuthProvider",
+   "catalogSettingsProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:WorkerSettingsScreen"
+  ]
+ }
+}

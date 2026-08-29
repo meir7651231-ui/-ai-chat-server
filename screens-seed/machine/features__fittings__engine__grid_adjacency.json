@@ -1,0 +1,35 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__fittings__engine__grid_adjacency.dart",
+ "lines": 70,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [],
+ "icons": [],
+ "glyphs": [
+  "🧭"
+ ],
+ "logicCandidates": [
+  {
+   "name": "snapToGrid",
+   "line": 44
+  }
+ ],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kFittingEngine"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

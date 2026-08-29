@@ -1,0 +1,152 @@
+{
+ "_ClockCard": {
+  "addProps": [
+   {
+    "name": "today",
+    "type": "String",
+    "replaces": "היום"
+   },
+   {
+    "name": "knysh2",
+    "type": "String",
+    "replaces": "🟢 כניסה"
+   },
+   {
+    "name": "yxyah3",
+    "type": "String",
+    "replaces": "🔴 יציאה"
+   },
+   {
+    "name": "nrcmhNwkjwtLhyw4",
+    "type": "String",
+    "replaces": "✓ נרשמה נוכחות להיום"
+   },
+   {
+    "name": "knyshYxyah5",
+    "type": "String",
+    "replaces": "כניסה / יציאה"
+   },
+   {
+    "name": "rycwNwkjwtLjyxh6",
+    "type": "String",
+    "replaces": "רישום נוכחות: לחיצה ראשונה רושמת כניסה (ירוק), השנייה "
+   },
+   {
+    "name": "yxyahAdwLajr7",
+    "type": "String",
+    "replaces": "יציאה (אדום). לאחר השלמת היום הכפתור ננעל — משמרת אחת ליום."
+   },
+   {
+    "name": "knysh8",
+    "type": "String",
+    "replaces": "כניסה"
+   },
+   {
+    "name": "yxyah9",
+    "type": "String",
+    "replaces": "יציאה"
+   },
+   {
+    "name": "shkCewt10",
+    "type": "String",
+    "replaces": "סה\"כ שעות"
+   }
+  ],
+  "note": ""
+ },
+ "_MonthCard": {
+  "addProps": [
+   {
+    "name": "prev",
+    "type": "String",
+    "replaces": "‹ הקודם"
+   },
+   {
+    "name": "next",
+    "type": "String",
+    "replaces": "הבא ›"
+   },
+   {
+    "name": "empty",
+    "type": "String",
+    "replaces": "אין רישומי נוכחות בחודש זה"
+   },
+   {
+    "name": "monthTotal",
+    "type": "String",
+    "replaces": "סה\"כ חודשי"
+   },
+   {
+    "name": "jwdcQwd5",
+    "type": "String",
+    "replaces": "חודש קודם"
+   },
+   {
+    "name": "mxygAtTblt6",
+    "type": "String",
+    "replaces": "מציג את טבלת הנוכחות של החודש הקודם."
+   },
+   {
+    "name": "jwdcHba7",
+    "type": "String",
+    "replaces": "חודש הבא"
+   },
+   {
+    "name": "mxygAtTblt8",
+    "type": "String",
+    "replaces": "מציג את טבלת הנוכחות של החודש הבא — מושבת על החודש "
+   },
+   {
+    "name": "hnwkjyAyEtyd9",
+    "type": "String",
+    "replaces": "הנוכחי (אין עתיד)."
+   },
+   {
+    "name": "tary10",
+    "type": "String",
+    "replaces": "תאריך"
+   },
+   {
+    "name": "knysh11",
+    "type": "String",
+    "replaces": "כניסה"
+   },
+   {
+    "name": "yxyah12",
+    "type": "String",
+    "replaces": "יציאה"
+   },
+   {
+    "name": "shkCewt13",
+    "type": "String",
+    "replaces": "סה\"כ שעות"
+   },
+   {
+    "name": "tplDayslengthYmyFmtDurto14",
+    "type": "String",
+    "replaces": "${days.length} ימים · ${_fmtDur(total)} שעות"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_SendReportButton": {
+  "addProps": [
+   {
+    "name": "cljDwjNwkjwt1",
+    "type": "String",
+    "replaces": "שלח דוח נוכחות לחנות"
+   },
+   {
+    "name": "cwljLjnwtSykw2",
+    "type": "String",
+    "replaces": "שולח לחנות סיכום נוכחות חודשי (ימי עבודה + סה\"כ שעות) כהודעת "
+   },
+   {
+    "name": "xxatFemwNnel3",
+    "type": "String",
+    "replaces": "צ׳אט + פעמון. ננעל אחרי שליחה למניעת כפילות."
+   }
+  ],
+  "note": ""
+ }
+}

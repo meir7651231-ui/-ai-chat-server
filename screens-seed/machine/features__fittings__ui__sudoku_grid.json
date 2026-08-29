@@ -1,0 +1,103 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__fittings__ui__sudoku_grid.dart",
+ "lines": 513,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [
+   11,
+   12,
+   12.5,
+   13,
+   15,
+   22,
+   25,
+   28
+  ],
+  "fontWeights": [
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   12
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  "$free קצוות פנויים",
+  "${_placed.length} אביזרים בקו",
+  "s REAL mates (mapped to engine\n  /// elements) when seeded, else the generic od-50 demo palette.\n  late final List<RunElement> _candidates = _resolveCandidates();\n\n  List<RunElement> _resolveCandidates() {\n    final sp = widget.seedProduct;\n    if (sp != null) {\n      final mates = [\n        for (final m in compatibleProductsFor(sp)) runElementFor(m),\n      ].whereType<RunElement>().toList();\n      if (mates.isNotEmpty) return mates;\n    }\n    return _kCandidates;\n  }\n\n  List<GridCell> get _cells => [\n        for (final e in _placed.entries)\n          GridCell(e.key.$2, -e.key.$1, 0, e.value),\n      ];\n\n  List<RunElement> get _suggestions {\n    final a = _active;\n    if (a == null) return const [];\n    return gridSuggestionsAt(_cells, (a.$2, -a.$1, 0), _candidates);\n  }\n\n  void _tapEmpty(int r, int c) => setState(() => _active = (r, c));\n\n  void _place(RunElement el) {\n    final a = _active;\n    if (a == null) return;\n    setState(() {\n      _placed[a] = el;\n      _active = null;\n    });\n  }\n\n  void _snack(String msg) => ScaffoldMessenger.of(context)\n    ..clearSnackBars()\n    ..showSnackBar(SnackBar(content: Text(msg), duration: const Duration(seconds: 2)));\n\n  /// The placed fitting orthogonally adjacent to the active cell — the neighbour\n  /// the suggestions must mate (drives the \"מתחברות ל-…\" header, screenshot #6).\n  RunElement? get _activeNeighbour {\n    final a = _active;\n    if (a == null) return null;\n    for (final e in _placed.entries) {\n      if ((e.key.$1 - a.$1).abs() + (e.key.$2 - a.$2).abs() == 1) return e.value;\n    }\n    return null;\n  }\n\n  static String _odLabel(RunElement el) =>\n      el.od2 != null ? ",
+  "אין אביזר שמתחבר לשכן כאן",
+  "הקו: ${_placed.length} אביזרים · ${freeEndsOf(_cells).length} קצוות פנויים",
+  "הקש משבצת ריקה שכנה",
+  "נגעת במשבצת שמתחת ל־${famEmoji(n.family)} ${n.family.label}",
+  "קו סגור — אין קצוות פנויים",
+  "✅ השלם",
+  "💡 הצעות שמתחברות ל־${famEmoji(n.family)} ${n.family.label} ${n.od}",
+  "💡 מתחברים לשכן",
+  "🔍 בדיקה",
+  "🔗 קו",
+  "🧵 בניית הגריד"
+ ],
+ "icons": [
+  "Icons.check"
+ ],
+ "glyphs": [
+  "✅",
+  "✓",
+  "💡",
+  "📦",
+  "🔍",
+  "🔗",
+  "🔩",
+  "🔱",
+  "🔻",
+  "🚰",
+  "🦵",
+  "🧩",
+  "🧵",
+  "🧷"
+ ],
+ "logicCandidates": [
+  {
+   "name": "shouldRepaint",
+   "line": 52
+  },
+  {
+   "name": "_endOdMm",
+   "line": 69
+  },
+  {
+   "name": "_runElementFromEnds",
+   "line": 85
+  }
+ ],
+ "widgets": [
+  {
+   "name": "SudokuGrid",
+   "kind": "StatefulWidget",
+   "line": 136,
+   "loc": 27,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kBspInchToMm",
+  "kFittingEngine",
+  "kVerifiedSpecs"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

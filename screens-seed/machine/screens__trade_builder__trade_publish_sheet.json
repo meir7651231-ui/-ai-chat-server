@@ -1,0 +1,111 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__trade_builder__trade_publish_sheet.dart",
+ "lines": 302,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.dangerDark",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5",
+   "BsTokens.successDark"
+  ],
+  "themeSockets": [
+   "Theme.of",
+   "cfgRadius"
+  ],
+  "fontSizes": [
+   13,
+   14,
+   15,
+   18
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ";\n\n/// Rebuild a trade with the published flag flipped, preserving EVERY other\n/// authored field (nameHe, emoji, color, personaId, schemaVersion, brandIds —\n/// the domain type has no copyWith; the s45 _copy idiom).\nTrade _copy(Trade t, {bool? published}) => Trade(\n      id: t.id,\n      nameHe: t.nameHe,\n      emoji: t.emoji,\n      color: t.color,\n      personaId: t.personaId,\n      published: published ?? t.published,\n      schemaVersion: t.schemaVersion,\n      brandIds: t.brandIds,\n    );\n\n/// 🚀 פרסום ענף — the trade",
+  "אין כלל-חיבור יתום",
+  "כל המוצרים משויכים לקטגוריה קיימת",
+  "כללים: ${rules.length}",
+  "לכל ציר וריאנט יש ערכים",
+  "לכל קטגוריה יש מוצר",
+  "פרסם",
+  "קטגוריות: ${cats.length} · מוצרים: ${products.length} · ",
+  "קטגוריות: N · מוצרים: M ·\n// כללים: K",
+  "🚀 פרסום ענף"
+ ],
+ "icons": [],
+ "glyphs": [
+  "✓",
+  "✗",
+  "🚀"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "TradePublishSheet",
+   "kind": "ConsumerWidget",
+   "line": 60,
+   "loc": 161,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "tradesStoreProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 8,
+   "constData": 0
+  },
+  {
+   "name": "_CheckRow",
+   "kind": "StatelessWidget",
+   "line": 225,
+   "loc": 33,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_PillButton",
+   "kind": "StatelessWidget",
+   "line": 262,
+   "loc": 40,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [
+  "TradePublishSheet"
+ ],
+ "gates": [
+  "kTradeBuilderFlag"
+ ],
+ "board": {
+  "reads": [
+   "tradesStoreProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

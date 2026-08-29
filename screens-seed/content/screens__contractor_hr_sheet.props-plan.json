@@ -1,0 +1,117 @@
+{
+ "_VacationRow": {
+  "addProps": [
+   {
+    "name": "tplRequestworkerNameReques1",
+    "type": "String",
+    "replaces": "🦺 ${request.workerName} · ${request.range}"
+   },
+   {
+    "name": "acr2",
+    "type": "String",
+    "replaces": "✅ אשר"
+   },
+   {
+    "name": "djh3",
+    "type": "String",
+    "replaces": "❌ דחה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_StatusChip": {
+  "addProps": [
+   {
+    "name": "awcrh1",
+    "type": "String",
+    "replaces": "אושרה"
+   },
+   {
+    "name": "ndjth2",
+    "type": "String",
+    "replaces": "נדחתה"
+   }
+  ],
+  "note": ""
+ },
+ "_TrainingRow": {
+  "addProps": [
+   {
+    "name": "tplTrainingusernameTrainin1",
+    "type": "String",
+    "replaces": "🎓 ${training.username} · ${training.title}"
+   },
+   {
+    "name": "acr2",
+    "type": "String",
+    "replaces": "✅ אשר"
+   },
+   {
+    "name": "djh3",
+    "type": "String",
+    "replaces": "❌ דחה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_TrainingStatusChip": {
+  "addProps": [
+   {
+    "name": "awcr1",
+    "type": "String",
+    "replaces": "אושר"
+   },
+   {
+    "name": "ndjh2",
+    "type": "String",
+    "replaces": "נדחה"
+   },
+   {
+    "name": "mmty3",
+    "type": "String",
+    "replaces": "ממתין"
+   },
+   {
+    "name": "nrc4",
+    "type": "String",
+    "replaces": "נרשם"
+   }
+  ],
+  "note": ""
+ },
+ "_CertRow": {
+  "addProps": [
+   {
+    "name": "fgTwq1",
+    "type": "String",
+    "replaces": "🔴 פג תוקף"
+   },
+   {
+    "name": "fgBqrwb2",
+    "type": "String",
+    "replaces": "🟡 פג בקרוב"
+   },
+   {
+    "name": "btwq3",
+    "type": "String",
+    "replaces": "🟢 בתוקף"
+   },
+   {
+    "name": "tplCertusernameCertname4",
+    "type": "String",
+    "replaces": "📜 ${cert.username} · ${cert.name}"
+   },
+   {
+    "name": "tplCertissuerBtwqEd5",
+    "type": "String",
+    "replaces": "${cert.issuer} · בתוקף עד ${_fmtDate(cert.expiry)}"
+   },
+   {
+    "name": "tplBtwqEdFmtDatecertexpi6",
+    "type": "String",
+    "replaces": "בתוקף עד ${_fmtDate(cert.expiry)}"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

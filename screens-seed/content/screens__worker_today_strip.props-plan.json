@@ -1,0 +1,87 @@
+{
+ "WorkerTodayStrip": {
+  "addProps": [
+   {
+    "name": "title",
+    "type": "String",
+    "replaces": "📅 היום שלי"
+   },
+   {
+    "name": "empty",
+    "type": "String",
+    "replaces": "אין שלבי-יום מתוכננים עבורך בפרויקט"
+   },
+   {
+    "name": "alldone",
+    "type": "String",
+    "replaces": "✅ כל שלבי-היום שלך בפרויקט הושלמו"
+   },
+   {
+    "name": "tplDoneCountminelengthYmy4",
+    "type": "String",
+    "replaces": "$doneCount/${mine.length} ימים"
+   },
+   {
+    "name": "hyw5",
+    "type": "String",
+    "replaces": "היום"
+   },
+   {
+    "name": "tplCurrentdayTagSwmKhwcl6",
+    "type": "String",
+    "replaces": "✓ ${current.dayTag} סומן כהושלם"
+   },
+   {
+    "name": "hba7",
+    "type": "String",
+    "replaces": "הבא"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_StageRow": {
+  "addProps": [
+   {
+    "name": "clbHyw1",
+    "type": "String",
+    "replaces": "שלב היום"
+   },
+   {
+    "name": "ljyxhElClbhyw2",
+    "type": "String",
+    "replaces": "לחיצה על שלב-היום פותחת את פירוט המשימה שלו — שלבים "
+   },
+   {
+    "name": "whwrawtKftwrHsymw3",
+    "type": "String",
+    "replaces": "והוראות. כפתור הסימון (כבר עטוף) מסמן את היום כהושלם בתוכנית."
+   },
+   {
+    "name": "tplStagedayTagStagestepsle4",
+    "type": "String",
+    "replaces": "${stage.dayTag} · ${stage.steps.length} שלבים"
+   },
+   {
+    "name": "symwYwKhwcl5",
+    "type": "String",
+    "replaces": "סימון יום כהושלם"
+   },
+   {
+    "name": "msmAtYwHebwdh6",
+    "type": "String",
+    "replaces": "מסמן את יום-העבודה הנוכחי כהושלם בתוכנית הפרויקט — "
+   },
+   {
+    "name": "awtwSymwChqbl7",
+    "type": "String",
+    "replaces": "אותו סימון שהקבלן רואה במסך \"מאפס עד מסירה\"."
+   },
+   {
+    "name": "smChywHwcl8",
+    "type": "String",
+    "replaces": "סמן שהיום הושלם"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

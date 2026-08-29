@@ -1,0 +1,172 @@
+{
+ "CourierPortalTab": {
+  "addProps": [
+   {
+    "name": "t01",
+    "type": "String",
+    "replaces": "🧰 פורטל השליח"
+   },
+   {
+    "name": "t02",
+    "type": "String",
+    "replaces": "ניווט, צי רכב, צ׳אט ומעקב SLA"
+   },
+   {
+    "name": "klyHfwrtl3",
+    "type": "String",
+    "replaces": "כלי הפורטל"
+   },
+   {
+    "name": "cctKlyHclyj4",
+    "type": "String",
+    "replaces": "ששת כלי השליח: אישור מסירה · צ׳אט עם החנות · צי רכב · "
+   },
+   {
+    "name": "azwryHfxhNywwt5",
+    "type": "String",
+    "replaces": "אזורי הפצה · ניווט למשלוח · מעקב SLA. "
+   },
+   {
+    "name": "hqchElAryj6",
+    "type": "String",
+    "replaces": "הקשה על אריח פותחת את הכלי המתאים."
+   },
+   {
+    "name": "aycwrMsyrh7",
+    "type": "String",
+    "replaces": "📸 אישור מסירה"
+   },
+   {
+    "name": "PODXylw8",
+    "type": "String",
+    "replaces": "POD + צילום"
+   },
+   {
+    "name": "ayKrgeMclwj9",
+    "type": "String",
+    "replaces": "אין כרגע משלוח בידי השליח — POD זמין משלב האיסוף (לקיחה/בדרך)."
+   },
+   {
+    "name": "bjrMclwjFeyl10",
+    "type": "String",
+    "replaces": "בחר משלוח פעיל"
+   },
+   {
+    "name": "tplOidOwhoKOrderStageLabe11",
+    "type": "String",
+    "replaces": "📦 ${o.id} · ${o.who} · ${kOrderStageLabel[o.stage]}"
+   },
+   {
+    "name": "tplHicHnameTwsft12",
+    "type": "String",
+    "replaces": "${h.ic} ${h.name} · תוספת ${fMoney(h.extra)}"
+   },
+   {
+    "name": "tplZmynyHywKHaulAvailab13",
+    "type": "String",
+    "replaces": " · זמינים היום: ${kHaulAvailabilityDemo[h.id] ?? 0}"
+   },
+   {
+    "name": "zmynwtLhdgmhTwjl14",
+    "type": "String",
+    "replaces": "זמינות להדגמה — תוחלף בנתוני צי חיים עם חיבור השרת"
+   },
+   {
+    "name": "rkbyHxy15",
+    "type": "String",
+    "replaces": "רכבי הצי"
+   },
+   {
+    "name": "tplVnameVcapVstatus16",
+    "type": "String",
+    "replaces": "${v.name} · ${v.cap} · ${v.status} · נהג ${v.driver}"
+   },
+   {
+    "name": "ktwbwtMclwjFeylwt17",
+    "type": "String",
+    "replaces": "כתובות משלוח פעילות"
+   },
+   {
+    "name": "ayMclwjyFeyly18",
+    "type": "String",
+    "replaces": "✓ אין משלוחים פעילים כרגע"
+   },
+   {
+    "name": "tplOsiteOidKOrderStageLab19",
+    "type": "String",
+    "replaces": "📍 ${o.site} · ${o.id} · ${kOrderStageLabel[o.stage]}"
+   },
+   {
+    "name": "azwryCyrwt20",
+    "type": "String",
+    "replaces": "אזורי שירות"
+   },
+   {
+    "name": "tplZnameZetaMclwj21",
+    "type": "String",
+    "replaces": "${z.name} · ${z.eta} · משלוח ${fMoney(z.fee)}"
+   },
+   {
+    "name": "txwgtMfhJyh22",
+    "type": "String",
+    "replaces": "תצוגת מפה חיה תחובר עם חיבור השרת"
+   },
+   {
+    "name": "nywwtJyBmfwt23",
+    "type": "String",
+    "replaces": "ניווט חי במפות (Waze / Google Maps) יחובר עם חיבור השרת"
+   },
+   {
+    "name": "ayMclwjyFeyly24",
+    "type": "String",
+    "replaces": "✓ אין משלוחים פעילים לניווט כרגע"
+   },
+   {
+    "name": "tyymrySLAJyy25",
+    "type": "String",
+    "replaces": "טיימרי SLA חיים יחוברו עם חיבור השרת"
+   },
+   {
+    "name": "mclwjyFeyly26",
+    "type": "String",
+    "replaces": "משלוחים פעילים"
+   },
+   {
+    "name": "yedyAsfqhLfy27",
+    "type": "String",
+    "replaces": "יעדי אספקה לפי אזור"
+   },
+   {
+    "name": "tplZnameYedAsfqh28",
+    "type": "String",
+    "replaces": "${z.name} · יעד אספקה: ${z.eta}"
+   },
+   {
+    "name": "tplText29",
+    "type": "String",
+    "replaces": "🔌 $text"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_DestinationCard": {
+  "addProps": [
+   {
+    "name": "t03",
+    "type": "String",
+    "replaces": "🧭 פתח ניווט — יחובר עם חיבור השרת"
+   },
+   {
+    "name": "tplOrderidOrderwho2",
+    "type": "String",
+    "replaces": "📦 ${order.id} · ${order.who}"
+   },
+   {
+    "name": "tplOrdersite3",
+    "type": "String",
+    "replaces": "📍 ${order.site}"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

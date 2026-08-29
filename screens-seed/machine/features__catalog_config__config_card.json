@@ -1,0 +1,104 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__catalog_config__config_card.dart",
+ "lines": 686,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [
+   12,
+   13,
+   14,
+   17
+  ],
+  "fontWeights": [
+   "FontWeight.w800",
+   "FontWeight.w900"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "),\n                  child: _hero(),\n                ),\n              ),\n            ),\n            if (_usable.isNotEmpty)\n              Positioned(\n                left: 0,\n                right: 0,\n                bottom: 10,\n                child: Center(child: _valuesPill()),\n              ),\n          ],\n        ),\n      ),\n    );\n  }\n\n  /// The hero — the REAL per-selection image (swaps on every pick) FILLING the\n  /// square pad (BoxFit.contain), falling back to the big product emoji (never a\n  /// grey box · D.2).\n  Widget _hero() {\n    final asset = _resolvedImageAsset();\n    if (asset == null) {\n      return Center(child: _emoji());\n    }\n    return Center(\n      child: Image(\n        image: resolveProductImage(asset),\n        fit: BoxFit.contain,\n        errorBuilder: (context, error, stack) => _emoji(),\n      ),\n    );\n  }\n\n  Widget _emoji() => Text(\n        widget.schema.emoji,\n        style: const TextStyle(fontSize: _kEmojiSize, height: 1),\n      );\n\n  /// The RIGHT side wheel — the priority-1 chip (usually קוטר) as a FULL spinning\n  /// [WheelPicker] (owner: \"גלגל מלא\", not tap-by-tap). Each row is the bare\n  /// canonical DN (the `· ½\"` inch hint rides the values pill · keeps the slim\n  /// column readable); a fling settles on any value → [_select] updates the\n  /// image/name/pill. Empty ⇒ a fixed-width spacer so the image stays centred.\n  Widget _sideWheels(List<AttributeDef> attrs) {\n    if (attrs.isEmpty) {\n      return const SizedBox(width: _kWheelCol);\n    }\n    final attr = attrs.first;\n    return SizedBox(\n      width: _kWheelCol,\n      child: WheelPicker(\n        labelHe: attr.nameHe,\n        values: [for (final v in attr.values) v.canonical ?? v.labelHe],\n        selectedIndex: _selectedIndex(attr),\n        onSelected: (i) => _select(attr.id, _token(attr.values[i])),\n        kind: attr.kind,\n      ),\n    );\n  }\n\n  /// The LEFT כמות wheel — a FULL spinning [WheelPicker] 1…[_kMaxQty] (owner: a\n  /// flick reaches 56, not 55 taps). Settling on a row sets [_qty].\n  Widget _qtyWheel() {\n    return SizedBox(\n      width: _kWheelCol,\n      child: WheelPicker(\n        labelHe: ",
+  ");\n\n  /// The clean current-values pill embedded on the image (no arrows · owner).\n  Widget _valuesPill() {\n    // MATCH the brand palette (owner) — the same accent-orange as the selected wheel\n    // values + the הוסף-לסל CTA, white text; not the old dark-ink pill.\n    return Container(\n      padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 5),\n      decoration: BoxDecoration(\n        color: _cAccent,\n        borderRadius: BorderRadius.circular(999),\n      ),\n      child: Text(\n        _currentValues(),\n        maxLines: 1,\n        overflow: TextOverflow.ellipsis,\n        style: const TextStyle(\n          color: Colors.white,\n          fontSize: 12,\n          fontWeight: FontWeight.w800,\n        ),\n      ),\n    );\n  }\n\n  /// `.cols` — RIGHT קוטר wheel · a SQUARE centre image · LEFT כמות wheel, the wheels\n  /// vertically centred on the square (owner).\n  Widget _cols() {\n    return LayoutBuilder(\n      builder: (context, c) {\n        // A SQUARE centre image (owner: \"מרובע באמצע\"), ~20% smaller than the full\n        // available width; the side wheels are vertically CENTRED on it (owner:\n        // \"מרכז את אמצע הגלגלים ביחס אליו\") — IntrinsicHeight + center aligns the\n        // wheel columns",
+  "+ הוסף לסל",
+  "],\n        selectedIndex: (_qty - 1).clamp(0, _kMaxQty - 1),\n        onSelected: (i) => setState(() => _qty = i + 1),\n        kind: AttributeKind.dimension,\n      ),\n    );\n  }\n\n  /// The dedicated \"📄 פרטים\" affordance — a full-width, brand-accent-tinted button\n  /// under the image that opens the internal product sheet through the SAME\n  /// [ConfigCard.onOpenDetails] path as the centre-image tap. A clear, reliable\n  /// target the image",
+  "s CLEAN layout). ONE\n// StatefulWidget that renders ANY [ProductConfigSchema]: the FULL product name clean\n// ABOVE, then a row (RTL) of a קוטר wheel on the RIGHT · a SQUARE image in the CENTRE\n// · a כמות wheel on the LEFT. The IMAGE is the hero — dead-centre, never a grey box\n// (no file → the big product EMOJI). NO band / slider / bar (the forbidden sins).\n//\n//   • The centre image is a SQUARE (~20% under the available width); the side\n//     wheels are vertically CENTRED on it. Its ONLY overlay is a CLEAN value PILL\n//     embedded at the bottom — the current values (e.g. `DN50 · 16×1/2 · 15°`) in\n//     the brand accent, NO arrows and NO edge labels. The two axes SCROLL ON THE\n//     IMAGE: a ↕ drag cycles attribute[1], a ↔ drag attribute[2], swapping the photo\n//     and updating the pill (the image itself is the control).\n//   • The side wheels are TAPPABLE value stacks (mockup `.wheel`): the diameter\n//     attribute(s) on the RIGHT, qty on the LEFT — the centred value is\n//     highlighted brand-orange (bigger + bold), the rest dimmed.\n//   • Below: the two actions — הוסף-לסל (solid) + בנה-קו (outline). NO value line,\n//     NO \"הגלגלים של…\" hint (owner: clean).\n//\n// PER-PRODUCT, DATA-DRIVEN (plan 🫀): the SAME frame draws whatever the schema\n// declares — a manifold swaps the axes to ↕יציאות ↔צבע with the same קוטר+כמות\n// wheels; ZERO per-product code. The live selection is a `Map<String,String>`\n// keyed by [AttributeDef.id] (canonical tokens — the value the cart line carries),\n// seeded from each attribute",
+  "s PRODUCT\n  /// actually holds ([_cardChips]); a synthetic schema (no product) skips the\n  /// product-coherence gate. So קוטר leads the side wheel and the two image drags\n  /// cycle real variant axes, never a descriptive filter that leaves the SKU put.\n  List<AttributeDef> get _usable => <AttributeDef>[\n        for (final attr in widget.schema.attributes)\n          if (attr.values.isNotEmpty &&\n              _kConfigAxes.contains(attr.id) &&\n              (_cardProduct == null || (_cardChips[attr.id]?.isNotEmpty ?? false)))\n            attr,\n      ];\n\n  /// The wheel index for [attr] under the live selection — the position of the\n  /// value whose token matches, else 0 (tolerant — a stale pick never throws).\n  int _selectedIndex(AttributeDef attr) {\n    final token = _selection[attr.id];\n    for (var i = 0; i < attr.values.length; i++) {\n      if (_token(attr.values[i]) == token) {\n        return i;\n      }\n    }\n    return 0;\n  }\n\n  /// The label of [attr]",
+  "s base image asset (plan D · resolved through\n  /// [resolveProductImage]); the per-selection variant image wins over it, and the\n  /// family fallback / emoji win when both are absent (D.2 — never empty).\n  final String? imageAsset;\n\n  /// הוסף-לסל action. Null ⇒ the button is inert (no cart here).\n  final ConfigCardAction? onAddToCart;\n\n  /// בנה-קו action. Null ⇒ the button is inert.\n  final ConfigCardAction? onBuildLine;\n\n  /// פרטים — opens the internal product sheet for the current variant; null ⇒\n  /// the image tap is inert.\n  final ConfigCardAction? onOpenDetails;\n\n  @override\n  State<ConfigCard> createState() => _ConfigCardState();\n}\n\nclass _ConfigCardState extends State<ConfigCard> {\n  late Map<String, String> _selection;\n  late List<LipskeyCatalogProduct> _family;\n\n  /// The card",
+  "s chip-values — the axes IT actually carries. The card shows ONLY\n  /// these wheels (so a plain 50/50 elbow never sprouts a מעבר wheel from the group",
+  "s default, as before.\n  Map<String, String> _seed(ProductConfigSchema schema) {\n    final out = <String, String>{};\n    for (final attr in schema.attributes) {\n      if (attr.values.isEmpty) continue;\n      final pv = _cardChips[attr.id];\n      if (pv != null && pv.isNotEmpty) {\n        out[attr.id] = pv.first;\n      } else if (_cardProduct == null) {\n        out[attr.id] = _token(_defaultValue(attr));\n      }\n    }\n    return out;\n  }\n\n  /// The CONFIGURABLE axes — physical/variant properties a user actually dials to\n  /// pick a SKU (size · angle · length · ports · reducer · colour). EXCLUDES the\n  /// descriptive filters (סוג/שיטה/מין/מותג/יעד/תכולה): those describe WHAT the\n  /// product IS, don",
+  "s material — a PPR ברך shows only PPR sizes/angles, never\n  /// mixed with HDPE/נחושת). So the wheels + the drag variant-swap stay within one\n  /// material. Empty when the sku is not a live catalog product (a synthetic test\n  /// schema).\n  void _resolveFamily() {\n    for (final p in resolvedCatalogProducts) {\n      if (p.sku == widget.schema.sku) {\n        _cardProduct = p;\n        _cardChips = chipValuesOf(p);\n        final material = materialOf(p);\n        _family = [\n          for (final m in typeGroupOf(p, resolvedCatalogProducts))\n            if (materialOf(m) == material) m,\n        ];\n        _familyChips = [for (final m in _family) (m, chipValuesOf(m))];\n        return;\n      }\n    }\n    _cardProduct = null;\n    _cardChips = const {};\n    _family = const <LipskeyCatalogProduct>[];\n    _familyChips = const [];\n  }\n\n  /// The DEFAULT value of [attr] — the `sortIndex == 0` value, else the first\n  /// (guarded caller — only invoked for a non-empty [AttributeDef.values]).\n  AttributeValue _defaultValue(AttributeDef attr) {\n    for (final v in attr.values) {\n      if (v.sortIndex == 0) {\n        return v;\n      }\n    }\n    return attr.values.first;\n  }\n\n  /// The selection TOKEN for [v] — its canonical form, else the label (the value\n  /// the cart line stores; keeps a machine-stable pick where one exists).\n  String _token(AttributeValue v) => v.canonical ?? v.labelHe;\n\n  /// The initial selection — SEEDED from the card",
+  "s selection by [dir] (clamped to the ladder ends).\n  void _stepAxis(AttributeDef attr, int dir) {\n    final i = _selectedIndex(attr);\n    final next = (i + dir).clamp(0, attr.values.length - 1);\n    if (next != i) {\n      _select(attr.id, _token(attr.values[next]));\n    }\n  }\n\n  void _onVerticalDrag(DragUpdateDetails d, AttributeDef axis) {\n    _accV += d.delta.dy;\n    while (_accV <= -_kDragStep) {\n      _accV += _kDragStep;\n      _stepAxis(axis, 1); // drag up → next value\n    }\n    while (_accV >= _kDragStep) {\n      _accV -= _kDragStep;\n      _stepAxis(axis, -1);\n    }\n  }\n\n  void _onHorizontalDrag(DragUpdateDetails d, AttributeDef axis) {\n    _accH += d.delta.dx;\n    while (_accH <= -_kDragStep) {\n      _accH += _kDragStep;\n      _stepAxis(axis, 1); // drag left → next value\n    }\n    while (_accH >= _kDragStep) {\n      _accH -= _kDragStep;\n      _stepAxis(axis, -1);\n    }\n  }\n\n  void _onAddToCart() =>\n      widget.onAddToCart?.call(widget.schema, Map.of(_selection), _qty);\n\n  void _onBuildLine() =>\n      widget.onBuildLine?.call(widget.schema, Map.of(_selection), _qty);\n\n  /// פרטים — open the internal product sheet for the live variant. Shared by the\n  /// centre-image tap AND the dedicated \"📄 פרטים\" button so both routes carry the\n  /// identical (schema, selection, qty) snapshot.\n  void _onOpenDetails() =>\n      widget.onOpenDetails?.call(widget.schema, Map.of(_selection), _qty);\n\n  // ── the POSITIONAL wheel map (owner spec §6, taxonomy-ordered by the schema) ──\n  // The schema arrives priority-ordered (prioritizedSchema), so the slots are\n  // strictly positional: attr[0] = 🔩 side wheel A (right, usually קוטר) · attr[1]\n  // = 🥇 primary (↕ on the image) · attr[2] = 🥈 secondary (↔). qty is a fixed\n  // side wheel the card always adds. GRADUATED (§7): only the wheels that exist\n  // render; chips beyond the top 3 are dropped (the image can carry two axes).\n  AttributeDef? get _sideA => _usable.isNotEmpty ? _usable[0] : null;\n\n  /// The ↕ drag axis — the 2nd config axis, falling back to the 1st (קוטר) so a\n  /// vertical drag ALWAYS cycles a variant (owner: \"משיכה למעלה ולמטה משנים את\n  /// השם ואת התמונה\"), even on a product that carries only one axis.\n  AttributeDef? get _primary => _usable.length > 1\n      ? _usable[1]\n      : (_usable.isNotEmpty ? _usable[0] : null);\n\n  /// The ↔ drag axis — the 3rd config axis, falling back to the 1st (קוטר) so a\n  /// HORIZONTAL drag is never dead (owner: \"משיכה לימין ולשמאל משנים…\"): a\n  /// two-axis product drags diameter left/right and its 2nd axis up/down.\n  AttributeDef? get _secondary => _usable.length > 2\n      ? _usable[2]\n      : (_usable.isNotEmpty ? _usable[0] : null);\n\n  /// The RIGHT side wheel — the priority-1 chip alone (§6 · 🔩). Empty ⇒ a spacer.\n  List<AttributeDef> get _rightWheels =>\n      _sideA == null ? const <AttributeDef>[] : <AttributeDef>[_sideA!];\n\n  @override\n  Widget build(BuildContext context) {\n    // RTL is intrinsic to the card (the dive screen is RTL).\n    return Directionality(\n      textDirection: TextDirection.rtl,\n      child: Container(\n        margin: const EdgeInsets.symmetric(horizontal: 12),\n        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),\n        decoration: BoxDecoration(\n          color: _cCard,\n          borderRadius: BorderRadius.circular(_kCardRadius),\n          boxShadow: _kCardShadow,\n        ),\n        child: Column(\n          mainAxisSize: MainAxisSize.min,\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: [\n            // CLEAN layout (owner): full product name above; the side wheels\n            // (קוטר · כמות) STAY; a BIG centre image carrying only a clean\n            // current-value pill — no edge arrows/labels, no \"הגלגלים של…\" hint.\n            _fullName(),\n            const SizedBox(height: 10),\n            _cols(),\n            // A dedicated, clearly-labelled פרטים affordance under the image — the\n            // image tap alone was missable (owner: \"עלה לי רק החיצוני\"). Only when a\n            // details handler is wired (else no dead control).\n            if (widget.onOpenDetails != null) ...[\n              const SizedBox(height: 10),\n              _detailsButton(),\n            ],\n            const SizedBox(height: 12),\n            _actions(),\n          ],\n        ),\n      ),\n    );\n  }\n\n  /// The FULL product name, clean, above the image (owner). Reflects the live\n  /// selection",
+  "s two bottom actions (הוסף-לסל · בנה-קו). The dive\n/// screen wires these to `smartCart.add` / a \"בקרוב\" toast; null ⇒ the button is\n/// inert. [selection] is keyed by [AttributeDef.id] → the chosen canonical value.\ntypedef ConfigCardAction = void Function(\n  ProductConfigSchema schema,\n  Map<String, String> selection,\n  int qty,\n);\n\n// ── dive-bs2b palette (exact mockup hexes · 1:1 render) ───────────────────────\nconst Color _cCard = Color(0xFFFFFFFF); // --card\nconst Color _cInk = Color(0xFF232A33); // --ink\nconst Color _cLine = Color(0xFFECEEF2); // --line (secondary btn border)\nconst Color _cAccent = Color(0xFFEE6A2A); // --accent\nconst Color _cAccentSoft = Color(0x14EE6A2A); // accent @ 8% — פרטים button fill\nconst Color _cImgBg = Color(0xFFF5F7FA); // --imgbg (stage)\n\n/// The card",
+  "בנה קו",
+  "פרטים"
+ ],
+ "icons": [],
+ "glyphs": [
+  "📄",
+  "🔩",
+  "🥇",
+  "🥈",
+  "🫀"
+ ],
+ "logicCandidates": [
+  {
+   "name": "_selectedLabel",
+   "line": 263
+  },
+  {
+   "name": "_variant",
+   "line": 271
+  },
+  {
+   "name": "_resolvedImageAsset",
+   "line": 280
+  },
+  {
+   "name": "_select",
+   "line": 290
+  },
+  {
+   "name": "setState",
+   "line": 291
+  },
+  {
+   "name": "_stepAxis",
+   "line": 294
+  },
+  {
+   "name": "_onVerticalDrag",
+   "line": 302
+  },
+  {
+   "name": "_onHorizontalDrag",
+   "line": 314
+  }
+ ],
+ "widgets": [
+  {
+   "name": "ConfigCard",
+   "kind": "StatefulWidget",
+   "line": 86,
+   "loc": 31,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kCatalogConfig"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

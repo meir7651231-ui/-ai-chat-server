@@ -1,0 +1,47 @@
+{
+ "_ManagerScreensSheet": {
+  "addProps": [
+   {
+    "name": "t01",
+    "type": "String",
+    "replaces": "מעבר בין מסכים"
+   },
+   {
+    "name": "t02",
+    "type": "String",
+    "replaces": "צפייה בכל לוח של המערכת — חזרה לניהול בכל רגע."
+   },
+   {
+    "name": "txt3",
+    "type": "String",
+    "replaces": "🏪"
+   },
+   {
+    "name": "helatMwxrSfq4",
+    "type": "String",
+    "replaces": "העלאת מוצר (ספק)"
+   }
+  ],
+  "note": ""
+ },
+ "_ImpersonationFrame": {
+  "addProps": [
+   {
+    "name": "t03",
+    "type": "String",
+    "replaces": "חזרה לניהול"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "👔"
+   },
+   {
+    "name": "tplXfyyhKlabelMxb3",
+    "type": "String",
+    "replaces": "צפייה כ$label · מצב מנהל"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

@@ -1,0 +1,66 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__ring_dive__ring_dive_catalog.dart",
+ "lines": 252,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "16 מ\"מ",
+  "אפור",
+  "גודל",
+  "זווית",
+  "חומר",
+  "ירוק",
+  "ישר",
+  "כחול",
+  "כרום",
+  "לבן",
+  "מותג",
+  "מחלקה",
+  "נחושת",
+  "ניקל",
+  "ניקל מוברש",
+  "נירוסטה",
+  "סוג",
+  "פלדה",
+  "פליז",
+  "פקס",
+  "פרגמון",
+  "צבע",
+  "קטגוריה",
+  "קרמיקה",
+  "רב-שכבתי",
+  "שחור",
+  "שחור מט"
+ ],
+ "icons": [],
+ "glyphs": [],
+ "logicCandidates": [
+  {
+   "name": "_rank",
+   "line": 210
+  }
+ ],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kCatalogTree",
+  "kDeptCatHeadings",
+  "kDivePool",
+  "kRdAxes",
+  "kRdAxisLabel",
+  "kRdOrder"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

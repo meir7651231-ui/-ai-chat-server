@@ -1,0 +1,147 @@
+{
+ "_Header": {
+  "addProps": [
+   {
+    "name": "screenTitle",
+    "type": "String",
+    "replaces": "התראות"
+   },
+   {
+    "name": "tplUnreadJdcwt2",
+    "type": "String",
+    "replaces": "$unread חדשות"
+   },
+   {
+    "name": "smHklKnqra3",
+    "type": "String",
+    "replaces": "סמן הכל כנקרא"
+   },
+   {
+    "name": "nqhNqraw4",
+    "type": "String",
+    "replaces": "נקה נקראו"
+   },
+   {
+    "name": "nyqwyHtrawtCnqraw5",
+    "type": "String",
+    "replaces": "ניקוי התראות שנקראו?"
+   },
+   {
+    "name": "hhtrawtCnqrawYwsrw6",
+    "type": "String",
+    "replaces": "ההתראות שנקראו יוסרו מהרשימה לצמיתות."
+   },
+   {
+    "name": "nqh7",
+    "type": "String",
+    "replaces": "נקה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_NotifList": {
+  "addProps": [
+   {
+    "name": "snoozeTitle",
+    "type": "String",
+    "replaces": "התראות מושתקות"
+   },
+   {
+    "name": "quietTitle",
+    "type": "String",
+    "replaces": "שעות שקט פעילות"
+   },
+   {
+    "name": "quietSub",
+    "type": "String",
+    "replaces": "מושתק בשעות השקט"
+   },
+   {
+    "name": "emptyTitle",
+    "type": "String",
+    "replaces": "אין התראות"
+   },
+   {
+    "name": "emptySub",
+    "type": "String",
+    "replaces": "כשיהיו עדכונים — הם יופיעו כאן"
+   },
+   {
+    "name": "txt6",
+    "type": "String",
+    "replaces": "🔕"
+   },
+   {
+    "name": "tplMwctqEdUntilLabel7",
+    "type": "String",
+    "replaces": "מושתק עד $untilLabel"
+   },
+   {
+    "name": "txt8",
+    "type": "String",
+    "replaces": "🌙"
+   },
+   {
+    "name": "txt9",
+    "type": "String",
+    "replaces": "🔔"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_ShowMoreRow": {
+  "addProps": [
+   {
+    "name": "tplHxgEwdShowMorehiddenCo1",
+    "type": "String",
+    "replaces": "הצג עוד ${showMore.hiddenCount} ↓"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_DismissibleRow": {
+  "addProps": [
+   {
+    "name": "deletedToast",
+    "type": "String",
+    "replaces": "התראה נמחקה"
+   },
+   {
+    "name": "bytwl2",
+    "type": "String",
+    "replaces": "ביטול"
+   }
+  ],
+  "note": ""
+ },
+ "_NotifRow": {
+  "addProps": [
+   {
+    "name": "markRead",
+    "type": "String",
+    "replaces": "סמן כנקרא"
+   },
+   {
+    "name": "menuDelete",
+    "type": "String",
+    "replaces": "מחק"
+   },
+   {
+    "name": "mjyqtHtrah3",
+    "type": "String",
+    "replaces": "מחיקת התראה?"
+   },
+   {
+    "name": "hhtrahTymjqLxmytwt4",
+    "type": "String",
+    "replaces": "ההתראה תימחק לצמיתות."
+   },
+   {
+    "name": "ewqb5",
+    "type": "String",
+    "replaces": "עוקב ✓"
+   }
+  ],
+  "note": ""
+ }
+}

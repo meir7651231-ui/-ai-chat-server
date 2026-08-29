@@ -1,0 +1,22 @@
+{
+ "LineBuilderScreen": {
+  "addProps": [
+   {
+    "name": "bnhqwPreviewOfflive1",
+    "type": "String",
+    "replaces": "בנה-קו · preview (off-live)"
+   }
+  ],
+  "note": ""
+ },
+ "_LineSummary": {
+  "addProps": [
+   {
+    "name": "rxRyq1",
+    "type": "String",
+    "replaces": "רצף ריק"
+   }
+  ],
+  "note": ""
+ }
+}

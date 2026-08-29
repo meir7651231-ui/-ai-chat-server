@@ -1,0 +1,122 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__studio__studio_top_bar.dart",
+ "lines": 302,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.brandDark",
+   "BsTokens.danger",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.typeCaption",
+   "BsTokens.typeSubhead",
+   "BsTokens.warnText"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   18
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  "${_countFor(_viewAs)} יחולו",
+  "אין שינויים",
+  "בטל טיוטה",
+  "ביטול",
+  "הטיוטה תימחק. מה שכבר פורסם יישאר חי.",
+  "השאר",
+  "חנות",
+  "טיוטה · $count שינויים",
+  "לבטל $count שינויים בטיוטה?",
+  "מה שינית? (אופציונלי)",
+  "מנהל",
+  "מצב עריכה",
+  "סיים עריכה",
+  "עובד",
+  "עריכה ידנית",
+  "פרסום לכולם",
+  "פרסם",
+  "פרסם לכולם",
+  "צפה כפי ש-",
+  "קבלן",
+  "שליח",
+  "⚠️ ישפיע על כל המשתמשים — ${widget.count} שינויים."
+ ],
+ "icons": [
+  "Icons.edit_off_outlined",
+  "Icons.edit_outlined"
+ ],
+ "glyphs": [
+  "⚠"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "StudioTopBar",
+   "kind": "ConsumerWidget",
+   "line": 31,
+   "loc": 56,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "configStoreProvider",
+    "editModeProvider",
+    "studioCanEditProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 4,
+   "constData": 0
+  },
+  {
+   "name": "_DraftBadge",
+   "kind": "StatelessWidget",
+   "line": 88,
+   "loc": 27,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_PublishSheet",
+   "kind": "ConsumerStatefulWidget",
+   "line": 179,
+   "loc": 8,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [],
+ "board": {
+  "reads": [
+   "configStoreProvider",
+   "editModeProvider",
+   "studioCanEditProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

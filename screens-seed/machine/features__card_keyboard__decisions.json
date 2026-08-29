@@ -1,0 +1,40 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__card_keyboard__decisions.dart",
+ "lines": 81,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [],
+ "icons": [],
+ "glyphs": [],
+ "logicCandidates": [],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kCensusInputsAreCapabilityGated",
+  "kColorExclusionsAreComplementOfAllowlist",
+  "kIdentityScope",
+  "kMaterialIsGatedCoAxis",
+  "kMaxDiveTurns",
+  "kMaxHopsBetweenProducts",
+  "kMaxQuestions",
+  "kOpeningSurfaceIsSingleMouth",
+  "kReachAllowlist",
+  "kReachLowerBound",
+  "kReachUniverse",
+  "kReachUpperBound",
+  "kTrueColors"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

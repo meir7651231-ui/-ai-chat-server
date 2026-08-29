@@ -1,0 +1,152 @@
+{
+ "ProjectsScreen": {
+  "addProps": [
+   {
+    "name": "title",
+    "type": "String",
+    "replaces": "🏗️ הפרויקטים שלי"
+   },
+   {
+    "name": "exit",
+    "type": "String",
+    "replaces": "‹ יציאה"
+   },
+   {
+    "name": "newProject",
+    "type": "String",
+    "replaces": "פרויקט חדש"
+   },
+   {
+    "name": "emptyTitle",
+    "type": "String",
+    "replaces": "אין פרויקטים עדיין"
+   },
+   {
+    "name": "emptySub",
+    "type": "String",
+    "replaces": "צרו פרויקט חדש כדי לנהל סל, תקציב ומשימות לכל אתר"
+   },
+   {
+    "name": "emptyCta",
+    "type": "String",
+    "replaces": "פרויקט חדש"
+   },
+   {
+    "name": "tqxyb7",
+    "type": "String",
+    "replaces": "💰 תקציב"
+   },
+   {
+    "name": "mcymwt8",
+    "type": "String",
+    "replaces": "📋 משימות"
+   },
+   {
+    "name": "frwyqtJk9",
+    "type": "String",
+    "replaces": "🏗️ פרויקט חכם"
+   },
+   {
+    "name": "txt10",
+    "type": "String",
+    "replaces": "🏗️"
+   },
+   {
+    "name": "tplSlHfrwyqtPcartlength11",
+    "type": "String",
+    "replaces": "🛒 סל הפרויקט: ${p.cart.length} פריטים"
+   },
+   {
+    "name": "tplEbrtLfrwyqtPname12",
+    "type": "String",
+    "replaces": "עברת לפרויקט: ${p.name}"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_SiteCard": {
+  "addProps": [
+   {
+    "name": "statusHint",
+    "type": "String",
+    "replaces": "📊 הקש לסטטוס האתר המלא"
+   },
+   {
+    "name": "feylEkcyw2",
+    "type": "String",
+    "replaces": "פעיל עכשיו"
+   },
+   {
+    "name": "hjl3",
+    "type": "String",
+    "replaces": "החלף ›"
+   },
+   {
+    "name": "tplMnhlEbwdhProjectmanage4",
+    "type": "String",
+    "replaces": "👷 מנהל עבודה: ${project.manager}"
+   },
+   {
+    "name": "tplProjectcartlengthFryty5",
+    "type": "String",
+    "replaces": "🛒 ${project.cart.length} פריטים בעגלה ›"
+   },
+   {
+    "name": "tplProjecttreeCountExyMwx6",
+    "type": "String",
+    "replaces": "🌳 ${project.treeCount} עצי מוצרים ›"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_StatusSheet": {
+  "addProps": [
+   {
+    "name": "editHint",
+    "type": "String",
+    "replaces": "✏️ הקש לעריכת הפרטים"
+   },
+   {
+    "name": "editSite",
+    "type": "String",
+    "replaces": "✏️ עריכת פרטי האתר"
+   },
+   {
+    "name": "tplEbrtLfrwyqtPname3",
+    "type": "String",
+    "replaces": "עברת לפרויקט: ${p.name}"
+   },
+   {
+    "name": "atrFeylEkcyw4",
+    "type": "String",
+    "replaces": "🟢 אתר פעיל עכשיו"
+   },
+   {
+    "name": "laFeylHqc5",
+    "type": "String",
+    "replaces": "⚪ לא פעיל — הקש כדי להפעיל"
+   },
+   {
+    "name": "ktwbt6",
+    "type": "String",
+    "replaces": "📍 כתובת"
+   },
+   {
+    "name": "mnhlEbwdh7",
+    "type": "String",
+    "replaces": "👷 מנהל עבודה"
+   },
+   {
+    "name": "tplPcartlengthFrytyBeglh8",
+    "type": "String",
+    "replaces": "🛒 ${p.cart.length} פריטים בעגלה"
+   },
+   {
+    "name": "tplPtreeCountExyMwxry9",
+    "type": "String",
+    "replaces": "🌳 ${p.treeCount} עצי מוצרים בעבודה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

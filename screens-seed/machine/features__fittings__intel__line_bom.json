@@ -1,0 +1,40 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__fittings__intel__line_bom.dart",
+ "lines": 63,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [],
+ "icons": [],
+ "glyphs": [
+  "🔒",
+  "🧠"
+ ],
+ "logicCandidates": [
+  {
+   "name": "BomRow",
+   "line": 16,
+   "kind": "metrics-class"
+  },
+  {
+   "name": "LineBom",
+   "line": 25,
+   "kind": "metrics-class"
+  }
+ ],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

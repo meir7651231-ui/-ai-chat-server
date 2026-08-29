@@ -1,0 +1,49 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__card_keyboard__card_seed.dart",
+ "lines": 59,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "אפשרות",
+  "גודל",
+  "דגם",
+  "זווית",
+  "חומר",
+  "צבע"
+ ],
+ "icons": [],
+ "glyphs": [],
+ "logicCandidates": [
+  {
+   "name": "CardSeed",
+   "line": 11,
+   "kind": "metrics-class"
+  }
+ ],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kCategoryMouth",
+  "kCategorySeedAxis",
+  "kJobMouth",
+  "kJobSeedAxis",
+  "kMaterialMouth",
+  "kMaterialSeedAxis",
+  "kSeedAxisSentinels",
+  "kWordMouth",
+  "kWordSeedAxis"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

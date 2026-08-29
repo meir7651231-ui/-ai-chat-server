@@ -1,0 +1,37 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__ring_dive__ring_dive_flag.dart",
+ "lines": 31,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "\n    show kProfileAxisDive, kProfilePlainDive;\n\n/// Feature-flag name for the RingDive rotary product-finder (צלילת-טבעות).\n///\n/// RingDive is a NEW PRESENTATION of the SAME unified drill-down the smart\n/// keyboard renders (`card_engine.dart`) — the axis options ride a spinning\n/// knurled dial instead of a prediction row. A screen that drives it self-gates\n/// on this name via `ref.watch(featureFlagsProvider).contains(kRingDiveFlag)`,\n/// mirroring `kWordFinderFlag` / `kCardKeyboardFlag` exactly.\n///\n/// OFF by default (no operator `enable`, no demo define) → the dial renders\n/// nothing (a zero-height `SizedBox.shrink`) and the live app is byte-identical.\n/// The owner-gated cut-over is what eventually turns it on (see BUILD-PLAN.md).\nconst String kRingDiveFlag = "
+ ],
+ "icons": [],
+ "glyphs": [],
+ "logicCandidates": [],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kAxisDive",
+  "kCardKeyboardFlag",
+  "kPlainDive",
+  "kProfileAxisDive",
+  "kProfilePlainDive",
+  "kRingDive",
+  "kRingDiveFlag",
+  "kWordFinderFlag"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

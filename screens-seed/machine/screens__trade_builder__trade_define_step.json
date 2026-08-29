@@ -1,0 +1,118 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__trade_builder__trade_define_step.dart",
+ "lines": 314,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   13,
+   13.5,
+   14,
+   18
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   16
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  ";\n\n/// The emoji a trade falls back to when the אימוג׳י field is left empty.\nconst String _kDefaultTradeEmoji = ",
+  ";\n\n/// The fixed colour palette for a new trade — 6 predefined ARGB ints (the\n/// `Brand.color` format `Trade.color` matches): teal · blue · purple · green ·\n/// amber · the BuildSmart brand orange. The FIRST is the default selection.\nconst List<int> _kTradeColors = [\n  0xFF1F6F6B,\n  0xFF2C7BE5,\n  0xFF5A4A8C,\n  0xFF1F8A4C,\n  0xFFF2A516,\n  0xFFFF7A18,\n];\n\n/// 🏗️ הגדרת ענף — the trade-builder wizard",
+  "אימוג׳י",
+  "למשל: חשמל",
+  "פרסונה",
+  "צבע",
+  "צבע ${index + 1}",
+  "שם הענף",
+  "שמור טיוטה",
+  "🏗️ הגדרת ענף"
+ ],
+ "icons": [
+  "Icons.check"
+ ],
+ "glyphs": [
+  "🏗",
+  "🛠"
+ ],
+ "logicCandidates": [
+  {
+   "name": "setState",
+   "line": 188
+  },
+  {
+   "name": "setState",
+   "line": 209
+  }
+ ],
+ "widgets": [
+  {
+   "name": "TradeDefineStepScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 49,
+   "loc": 11,
+   "pure": false,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:TradeDefineStepScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_ColorSwatch",
+   "kind": "StatelessWidget",
+   "line": 229,
+   "loc": 41,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_SaveDraftButton",
+   "kind": "StatelessWidget",
+   "line": 274,
+   "loc": 40,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kPersonas",
+  "kTradeBuilderFlag"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:TradeDefineStepScreen"
+  ]
+ }
+}

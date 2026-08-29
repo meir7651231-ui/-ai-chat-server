@@ -1,0 +1,82 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__business_summary_screen.dart",
+ "lines": 154,
+ "pigments": {
+  "tokens": [
+   "BsTokens.bgLight",
+   "BsTokens.cardLight",
+   "BsTokens.divider",
+   "BsTokens.inkLight",
+   "BsTokens.mutedDark",
+   "BsTokens.mutedLight",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [],
+  "fontSizes": [
+   11,
+   13,
+   15,
+   18
+  ],
+  "fontWeights": [
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "אתה יועץ-עסקי מנוסה לאינסטלטור. אתה מנסח סיכום-עסקי קצר וברור מתובנות שכבר ",
+  "החיסכון-האפשרי והתקציב, ומה כדאי לשים לב אליו. השתמש אך ורק במספרים ",
+  "התובנות שחושבו:",
+  "חושבו. השתמש אך ורק במספרים שניתנו לך; לעולם אל תמציא, תשנה או תוסיף מספר.",
+  "נסח מהן סיכום-עסקי קצר וזורם בעברית (2–4 משפטים) — מצב ההזמנות, הכסף, ",
+  "שניתנו לך — אל תמציא, תשנה או תוסיף שום מספר.",
+  "⚙️ המספרים מנתוני-המערכת; ה-AI רק מנסח אותם לסיכום.",
+  "✨ סיכום עסקי",
+  "💡 הסיכום החכם דורש חיבור לשרת."
+ ],
+ "icons": [],
+ "glyphs": [
+  "⚙",
+  "✨",
+  "💡",
+  "📦"
+ ],
+ "logicCandidates": [
+  {
+   "name": "setState",
+   "line": 80
+  }
+ ],
+ "widgets": [
+  {
+   "name": "BusinessSummaryScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 39,
+   "loc": 15,
+   "pure": false,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:BusinessSummaryScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kClaudeAi"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:BusinessSummaryScreen"
+  ]
+ }
+}

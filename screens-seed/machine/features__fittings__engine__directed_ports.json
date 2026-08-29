@@ -1,0 +1,50 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__fittings__engine__directed_ports.dart",
+ "lines": 111,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ";\n\n/// פורט-חיבור עם כיוון-יציאה מרחבי במסגרת-המקומית של האביזר.\n@immutable\nclass DirectedPort {\n  const DirectedPort(this.od, this.dir);\n\n  /// הקוטר-החיצוני (מ\"מ) של הפורט הזה.\n  final int od;\n\n  /// הנורמל-היוצא (וקטור-יחידה) במסגרת-המקומית של האביזר.\n  final Vec3 dir;\n\n  @override\n  bool operator ==(Object other) =>\n      other is DirectedPort && other.od == od && other.dir == dir;\n\n  @override\n  int get hashCode => Object.hash(od, dir);\n\n  @override\n  String toString() => "
+ ],
+ "icons": [],
+ "glyphs": [
+  "🧭"
+ ],
+ "logicCandidates": [
+  {
+   "name": "toString",
+   "line": 37
+  },
+  {
+   "name": "_turnFor",
+   "line": 41
+  },
+  {
+   "name": "directedPortsOf",
+   "line": 79
+  },
+  {
+   "name": "DirectedPort",
+   "line": 21,
+   "kind": "metrics-class"
+  }
+ ],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kFittingEngine"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

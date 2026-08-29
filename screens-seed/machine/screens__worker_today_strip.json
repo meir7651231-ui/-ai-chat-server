@@ -1,0 +1,115 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__worker_today_strip.dart",
+ "lines": 259,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.brandDark",
+   "BsTokens.cardLight",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.radiusPill",
+   "BsTokens.space1",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4"
+  ],
+  "themeSockets": [],
+  "fontSizes": [
+   12,
+   12.5,
+   13,
+   13.5,
+   15
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   26
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  "$doneCount/${mine.length} ימים",
+  "${stage.dayTag} · ${stage.steps.length} שלבים",
+  "s FIRST unfinished day-stage in plan order and \"הבא\" the one after\n/// it, exactly the order the SmartProject screen walks. Marking a day done is\n/// the engine",
+  "s משימות tab: the SmartProject day-plan ([buildDayStages],\n/// the §7 engine) filtered to the LOGGED worker only ([DayStage.worker] ==\n/// the session",
+  "אותו סימון שהקבלן רואה במסך \"מאפס עד מסירה\".",
+  "אין שלבי-יום מתוכננים עבורך בפרויקט",
+  "הבא",
+  "היום",
+  "היום שלי",
+  "והוראות. כפתור הסימון (כבר עטוף) מסמן את היום כהושלם בתוכנית.",
+  "לחיצה על שלב-היום פותחת את פירוט המשימה שלו — שלבים ",
+  "מסמן את יום-העבודה הנוכחי כהושלם בתוכנית הפרויקט — ",
+  "סימון יום כהושלם",
+  "סמן שהיום הושלם",
+  "שלב היום",
+  "✅ כל שלבי-היום שלך בפרויקט הושלמו",
+  "✓ ${current.dayTag} סומן כהושלם",
+  "📅 היום שלי"
+ ],
+ "icons": [
+  "Icons.check_circle_outline"
+ ],
+ "glyphs": [
+  "✅",
+  "✓",
+  "📅"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "WorkerTodayStrip",
+   "kind": "ConsumerWidget",
+   "line": 23,
+   "loc": 103,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "smartProjectProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "fx:toast"
+   ],
+   "strings": 7,
+   "constData": 1
+  },
+  {
+   "name": "_StageRow",
+   "kind": "StatelessWidget",
+   "line": 130,
+   "loc": 129,
+   "pure": false,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "call:showWorkerTaskDetailSheet"
+   ],
+   "strings": 8,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kPersonaTasks",
+  "kWorkers"
+ ],
+ "board": {
+  "reads": [
+   "smartProjectProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": [
+   "call:showWorkerTaskDetailSheet",
+   "fx:toast"
+  ]
+ }
+}

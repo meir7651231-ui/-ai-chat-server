@@ -1,0 +1,140 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__worker_task_board_screen.dart",
+ "lines": 356,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.divider",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.radiusPill",
+   "BsTokens.space1",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   12.5,
+   13,
+   13.5,
+   14.5,
+   15,
+   20
+  ],
+  "fontWeights": [
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   22
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  " · סגור",
+  " · פתוח",
+  "${widget.title} · $count משימות",
+  ",\n      excludeSemantics: true,\n      child: InkWell(\n        // #114 dive — the existing #71 detail sheet (steps/הוראות/תמונה). This\n        // is the deepest REAL tier; no invented stage level.\n        onTap: () => showWorkerTaskDetailSheet(context, taskId: task.id),\n        child: Container(\n          constraints: const BoxConstraints(minHeight: 48),\n          padding: const EdgeInsets.all(BsTokens.space4),\n          child: Row(\n            children: [\n              Expanded(\n                child: Column(\n                  crossAxisAlignment: CrossAxisAlignment.start,\n                  children: [\n                    Text(\n                      task.name,\n                      style: const TextStyle(\n                        color: BsTokens.inkLight,\n                        fontWeight: FontWeight.w700,\n                        fontSize: 14.5,\n                      ),\n                    ),\n                    const SizedBox(height: BsTokens.space1),\n                    Text(\n                      ",
+  "` task lands in\n  /// בתור, never a group of its own; every task falls in exactly one group.\n  @visibleForTesting\n  static List<({String title, List<TaskItem> tasks})> groupByStatus(\n    List<TaskItem> tasks,\n  ) =>\n      [\n        for (final g in _groups)\n          (\n            title: g.title,\n            tasks: [\n              for (final t in tasks)\n                if (g.statuses.contains(t.status)) t,\n            ],\n          ),\n      ];\n\n  @override\n  Widget build(BuildContext context, WidgetRef ref) {\n    // 🔒 BOARD GATE (#66) — mirror every board screen: no worker session ⇒\n    // only the registration gate is built (the welcome screen in role mode).\n    final session = ref.watch(boardAuthProvider);\n    if (session == null || session.role != BoardRole.worker) {\n      return const WelcomeScreen(boardRole: BoardRole.worker);\n    }\n    final worker = workerIndexForSession(session);\n\n    // The logged worker",
+  "s approval) FOLD into בתור\n  /// — owner decision A5, NO separate group. Every engine status still maps to\n  /// exactly ONE group, so the group counts sum to the worker",
+  "s tasks out grouped by their live status, each\n/// group collapsible with a live count, so the worker can scan the whole\n/// pipeline and dive into any task.\n///\n/// 🔒 BOARD GATE (#66, חוק: מבחוץ לא רואים כלום): without a worker\n/// [BoardSession] the build returns ONLY the registration gate\n/// ([WelcomeScreen] in role mode) — no board content is constructed.\n///\n/// 🪜 DIVE — HONEST DEPTH: a task row dives via the existing\n/// [showWorkerTaskDetailSheet] (#71) — the task→steps level, which is the\n/// DEEPEST REAL tier. There is NO separate \"stage\" tier in the §6 model\n/// (`TaskItem` carries no stage), so none is invented here. Each card shows a\n/// real `doneSteps.length/steps.length` progress hint off the live engine.\n///\n/// LIVE: reads [tasksProvider] (the §6 engine) filtered to `t.worker == worker`.\n/// Empty groups render an honest empty line — never a fabricated row.\nclass WorkerTaskBoardScreen extends ConsumerWidget {\n  const WorkerTaskBoardScreen({super.key});\n\n  static Route<void> route() =>\n      MaterialPageRoute<void>(builder: (_) => const WorkerTaskBoardScreen());\n\n  /// The status groups, in the contract",
+  "s משימות tab. Where the\n/// journal home (`worker_app_screen.dart`) shows TODAY",
+  "אין משימות במצב זה",
+  "אין משימות משויכות אליך כרגע",
+  "אין שלבים מוגדרים",
+  "כל המשימות שלך — ${mine.length} סה\"כ, מקובצות לפי מצב",
+  "↩️ נדחו",
+  "⏳ בתור",
+  "✅ הושלמו",
+  "✓ $done/$total שלבים",
+  "📸 בבדיקה",
+  "🔨 פעילות",
+  "🗂️ לוח משימות מלא"
+ ],
+ "icons": [
+  "Icons.chevron_left",
+  "Icons.expand_less",
+  "Icons.expand_more"
+ ],
+ "glyphs": [
+  "✅",
+  "✓",
+  "📸",
+  "🔒",
+  "🔨",
+  "🕒",
+  "🗂",
+  "🪜"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "WorkerTaskBoardScreen",
+   "kind": "ConsumerWidget",
+   "line": 32,
+   "loc": 105,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "boardAuthProvider",
+    "tasksProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "nav:WorkerTaskBoardScreen"
+   ],
+   "strings": 11,
+   "constData": 0
+  },
+  {
+   "name": "_StatusGroup",
+   "kind": "StatefulWidget",
+   "line": 141,
+   "loc": 9,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_TaskRow",
+   "kind": "StatelessWidget",
+   "line": 269,
+   "loc": 87,
+   "pure": false,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "call:showWorkerTaskDetailSheet"
+   ],
+   "strings": 3,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [
+  "WorkerTaskBoardScreen"
+ ],
+ "gates": [],
+ "board": {
+  "reads": [
+   "boardAuthProvider",
+   "tasksProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": [
+   "call:showWorkerTaskDetailSheet",
+   "nav:WorkerTaskBoardScreen"
+  ]
+ }
+}

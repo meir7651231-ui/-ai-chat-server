@@ -1,0 +1,171 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__contractor_tools_sheets.dart",
+ "lines": 915,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.inkLight",
+   "BsTokens.space3"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   11,
+   12,
+   13,
+   14,
+   15,
+   17,
+   18,
+   24
+  ],
+  "fontWeights": [
+   "FontWeight.w500",
+   "FontWeight.w600",
+   "FontWeight.w700"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "${lines.length} פריטים · ההצעה הזולה ₪${groupThousands(total)}",
+  ",\n          productName: it.name,\n          productEmoji: it.emoji,\n          brandName: best.store,\n          brandPrice: best.price,\n          productQty: 1,\n          accessories: const [],\n        ),\n      );\n    }\n  }\n  return out;\n}\n\n/// (T3) \"סרוק תוכנית\" — pick a plan type → scan animation → detected zones with\n/// per-item store comparison → \"הוסף לסל\". R9-inline (modal sheet, no new route).\n/// Data verbatim from [kPlanTypes] (proto §9); scan is simulated (sim, not toast).\n/// [initialPlanKey] (menu leaf wiring) optionally auto-starts that plan",
+  ",\n        style: TextStyle(\n          fontSize: 12,\n          fontWeight: best ? FontWeight.w700 : FontWeight.w500,\n          color: best ? BsTokens.brand : const Color(0xFF555555),\n        ),\n      ),\n    );\n  }\n}\n\n/// (T3 · לוח-קבלן) Cart lines for a scanned plan type — each detected zone item\n/// at its cheapest partner-store offer (proto §9 `addScanToCart`). Pure → tested.\nList<SmartCartLine> scanPlanCartLines(PlanType plan) {\n  final out = <SmartCartLine>[];\n  for (final z in plan.zones) {\n    for (final it in z.items) {\n      if (it.stores.isEmpty) continue;\n      final best = it.stores[bestStore(it.stores)];\n      out.add(\n        SmartCartLine(\n          productKey: ",
+  ".\n    final sel = _selected;\n    final lines =\n        scanPlanCartLines(\n          p,\n        ).where((l) => sel == null || sel.contains(l.productKey)).toList();\n    if (lines.isEmpty) return; // guarded by the disabled button; defensive.\n    final cart = ref.read(smartCartProvider.notifier);\n    for (final l in lines) {\n      cart.add(l);\n    }\n    // Stay in context — do NOT yank the user to the Store tab. The live cart FAB\n    // (here, on the home shell, and on the AI hub) reflects the new count as\n    // the immediate feedback; the \"לאן לשלוח?\" first-add popup still fires.\n    Navigator.pop(context);\n    showToast(context, ",
+  ";\n\n/// Opens the 📐 \"סרוק תוכנית עבודה\" sheet. [planKey] (plumbing/electrical/\n/// architectural/finishing) optionally jumps straight into that plan",
+  "אין חלופות זולות כרגע.",
+  "אין מחירים להשוואה כרגע.",
+  "אשר את הבחירה — הוסף $selCount פריטים לסל",
+  "אשר הכל — הוסף ${lines.length} פריטים לסל",
+  "בחר סוג תוכנית לסריקה",
+  "המלצה: ${a.recName} · ₪${groupThousands(a.recPrice)}",
+  "ודאות ${z.conf}%",
+  "חיסכון ₪${groupThousands(a.savings)}",
+  "חלופה: ${a.altName} · ₪${groupThousands(a.altPrice)}",
+  "חפש מוצר…",
+  "לא נמצאו חלופות תואמות.",
+  "למה כדאי?",
+  "מותג חלופי זול יותר לאותו מוצר — אותה התקנה, פחות עלות.",
+  "מחירים מ-3 חנויות שותפות — הזול ביותר מסומן.",
+  "מנתח את תצורת הבנייה ומחלץ כמויות חומרים…",
+  "נקה",
+  "סגור",
+  "סרוק תוכנית אחרת",
+  "⚙️ בפרודקשן: השוואת-מחירים חיה מול מחירוני הספקים.",
+  "✓ זוהו ${p.zones.length} ${p.summaryUnit}",
+  "💡 חלופות זולות",
+  "💰 המחירים נמשכים מ-3 חנויות שותפות. ${AppBrand.name} בוחר אוטומטית את ההצעה המשתלמת ביותר לכל פריט.",
+  "📊 השוואת מחירים",
+  "📐 סרוק תוכנית עבודה"
+ ],
+ "icons": [
+  "Icons.chevron_left",
+  "Icons.close",
+  "Icons.search"
+ ],
+ "glyphs": [
+  "⚙",
+  "✓",
+  "💡",
+  "💰",
+  "📊",
+  "📐",
+  "🤔"
+ ],
+ "logicCandidates": [
+  {
+   "name": "dispose",
+   "line": 606
+  },
+  {
+   "name": "CheaperAlt",
+   "line": 106,
+   "kind": "metrics-class"
+  },
+  {
+   "name": "StoreCompareRow",
+   "line": 389,
+   "kind": "metrics-class"
+  }
+ ],
+ "widgets": [
+  {
+   "name": "_SheetHandle",
+   "kind": "StatelessWidget",
+   "line": 72,
+   "loc": 32,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_CheaperAlternativesSheet",
+   "kind": "StatefulWidget",
+   "line": 157,
+   "loc": 7,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_StorePriceComparisonSheet",
+   "kind": "StatelessWidget",
+   "line": 428,
+   "loc": 89,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 4,
+   "constData": 0
+  },
+  {
+   "name": "_StoreChip",
+   "kind": "StatelessWidget",
+   "line": 519,
+   "loc": 25,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_ScanPlanSheet",
+   "kind": "ConsumerStatefulWidget",
+   "line": 573,
+   "loc": 8,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kHomeProductBrands",
+  "kPlanTypes"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

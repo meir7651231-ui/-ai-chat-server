@@ -1,0 +1,122 @@
+{
+ "WorkerSettingsScreen": {
+  "addProps": [
+   {
+    "name": "settingsTitle",
+    "type": "String",
+    "replaces": "הגדרות"
+   }
+  ],
+  "note": ""
+ },
+ "_NotifRow": {
+  "addProps": [
+   {
+    "name": "notifications",
+    "type": "String",
+    "replaces": "התראות"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "🔔"
+   }
+  ],
+  "note": ""
+ },
+ "_RegionSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🌐"
+   },
+   {
+    "name": "azwrWcfh2",
+    "type": "String",
+    "replaces": "אזור ושפה"
+   },
+   {
+    "name": "ebryt3",
+    "type": "String",
+    "replaces": "עברית"
+   }
+  ],
+  "note": ""
+ },
+ "_LangOption": {
+  "addProps": [
+   {
+    "name": "comingSoon",
+    "type": "String",
+    "replaces": "בקרוב"
+   }
+  ],
+  "note": ""
+ },
+ "_AccessibilitySection": {
+  "addProps": [
+   {
+    "name": "textSize",
+    "type": "String",
+    "replaces": "גודל טקסט (כל האפליקציה)"
+   },
+   {
+    "name": "highContrast",
+    "type": "String",
+    "replaces": "ניגודיות גבוהה (כל האפליקציה)"
+   },
+   {
+    "name": "reducedMotion",
+    "type": "String",
+    "replaces": "הנפשות מופחתות (כל האפליקציה)"
+   },
+   {
+    "name": "txt4",
+    "type": "String",
+    "replaces": "📱"
+   },
+   {
+    "name": "mmcqWngycwt5",
+    "type": "String",
+    "replaces": "ממשק ונגישות"
+   },
+   {
+    "name": "qt6",
+    "type": "String",
+    "replaces": "קטן"
+   },
+   {
+    "name": "bynwny7",
+    "type": "String",
+    "replaces": "בינוני"
+   },
+   {
+    "name": "gdwl8",
+    "type": "String",
+    "replaces": "גדול"
+   }
+  ],
+  "note": ""
+ },
+ "_InfoSection": {
+  "addProps": [
+   {
+    "name": "terms",
+    "type": "String",
+    "replaces": "תנאי שימוש"
+   },
+   {
+    "name": "privacy",
+    "type": "String",
+    "replaces": "מדיניות פרטיות"
+   },
+   {
+    "name": "myde3",
+    "type": "String",
+    "replaces": "מידע"
+   }
+  ],
+  "note": ""
+ }
+}

@@ -1,0 +1,562 @@
+{
+ "HomeShell": {
+  "addProps": [
+   {
+    "name": "mqldtJkmh1",
+    "type": "String",
+    "replaces": "מקלדת חכמה"
+   },
+   {
+    "name": "byt2",
+    "type": "String",
+    "replaces": "בית"
+   },
+   {
+    "name": "slHqnyyh3",
+    "type": "String",
+    "replaces": "סל הקנייה"
+   },
+   {
+    "name": "hslHxMxyg4",
+    "type": "String",
+    "replaces": "הסל הצף מציג כמה פריטים נאספו. לחיצה עליו קופצת "
+   },
+   {
+    "name": "ljnwtEHsl5",
+    "type": "String",
+    "replaces": "לחנות עם הסל המסונן — משם ממשיכים להזמנה."
+   }
+  ],
+  "note": ""
+ },
+ "_HelpModeOverlay": {
+  "addProps": [
+   {
+    "name": "banner",
+    "type": "String",
+    "replaces": "מצב היכרות — לחצו על אלמנט מודגש כדי ללמוד מה הוא עושה"
+   },
+   {
+    "name": "xaMmxbHykrwt2",
+    "type": "String",
+    "replaces": "צא ממצב היכרות"
+   },
+   {
+    "name": "bmxbHykrwtLjxw3",
+    "type": "String",
+    "replaces": "במצב היכרות — לחצו על כפתור מודגש (📷 או הסל). "
+   },
+   {
+    "name": "awLyxyah4",
+    "type": "String",
+    "replaces": "✕ או 💡 ליציאה."
+   }
+  ],
+  "note": ""
+ },
+ "_CartChatBubble": {
+  "addProps": [
+   {
+    "name": "hsrHtrahZw1",
+    "type": "String",
+    "replaces": "הסר התראה זו"
+   },
+   {
+    "name": "hsr2",
+    "type": "String",
+    "replaces": "הסר"
+   }
+  ],
+  "note": ""
+ },
+ "_HomeAppBar": {
+  "addProps": [
+   {
+    "name": "hjlftLwjZhwt1",
+    "type": "String",
+    "replaces": "החלפת לוח / זהות"
+   },
+   {
+    "name": "ljyxhElHlwgw2",
+    "type": "String",
+    "replaces": "לחיצה על הלוגו פותחת את בורר התפקידים — מעבר בין "
+   },
+   {
+    "name": "lwjQblMnhl3",
+    "type": "String",
+    "replaces": "לוח קבלן · מנהל · חנות · שליח · עובד. כך עוברים בין "
+   },
+   {
+    "name": "swgyHmctmcyBaflyqxyh4",
+    "type": "String",
+    "replaces": "סוגי המשתמשים באפליקציה."
+   },
+   {
+    "name": "hfrwfylCly5",
+    "type": "String",
+    "replaces": "הפרופיל שלי"
+   },
+   {
+    "name": "fwtjKrtysFrwfyl6",
+    "type": "String",
+    "replaces": "פותח כרטיס פרופיל לקריאה — שם · מקצוע · "
+   },
+   {
+    "name": "ktwbtJfAyc7",
+    "type": "String",
+    "replaces": "כתובת · ח.פ. · איש קשר; ומשם \"ערוך פרופיל\" "
+   },
+   {
+    "name": "lerykhMlah8",
+    "type": "String",
+    "replaces": "לעריכה מלאה."
+   },
+   {
+    "name": "eJk9",
+    "type": "String",
+    "replaces": "עץ חכם"
+   },
+   {
+    "name": "eJkHwfel10",
+    "type": "String",
+    "replaces": "עץ חכם הופעל"
+   },
+   {
+    "name": "jyfwc11",
+    "type": "String",
+    "replaces": "חיפוש"
+   },
+   {
+    "name": "mjzyrAtCwrt12",
+    "type": "String",
+    "replaces": "מחזיר את שורת החיפוש של הטאב הפעיל (שנעלמה בגלילה) "
+   },
+   {
+    "name": "kdyLjfcMwxr13",
+    "type": "String",
+    "replaces": "כדי לחפש מוצר או פריט במהירות."
+   },
+   {
+    "name": "mxlmhSwrq14",
+    "type": "String",
+    "replaces": "מצלמה / סורק"
+   },
+   {
+    "name": "fwtjAtHswrq15",
+    "type": "String",
+    "replaces": "פותח את הסורק: צילום ברקוד או מק\"ט לזיהוי מוצר, "
+   },
+   {
+    "name": "awSryqtTwknyt16",
+    "type": "String",
+    "replaces": "או סריקת תוכנית כדי להפיק ממנה רשימת מוצרים — בלי להקליד ידנית."
+   },
+   {
+    "name": "mxlmh17",
+    "type": "String",
+    "replaces": "מצלמה"
+   },
+   {
+    "name": "tfrytHqtlwg18",
+    "type": "String",
+    "replaces": "תפריט הקטלוג"
+   },
+   {
+    "name": "klyNwsfyCl19",
+    "type": "String",
+    "replaces": "כלים נוספים של הקטלוג — בינה מלאכותית ואוטומציה, "
+   },
+   {
+    "name": "whgdrwtHaflyqxyh20",
+    "type": "String",
+    "replaces": "והגדרות האפליקציה."
+   },
+   {
+    "name": "tfrytHcyjwt21",
+    "type": "String",
+    "replaces": "תפריט השיחות"
+   },
+   {
+    "name": "klyLcyjwtFtyjt22",
+    "type": "String",
+    "replaces": "כלים לשיחות — פתיחת שיחה חדשה, ארכיון, "
+   },
+   {
+    "name": "whctqtKlHcyjwt23",
+    "type": "String",
+    "replaces": "והשתקת כל השיחות."
+   },
+   {
+    "name": "tfrytHhtrawt24",
+    "type": "String",
+    "replaces": "תפריט ההתראות"
+   },
+   {
+    "name": "klyLhtrawtSymw25",
+    "type": "String",
+    "replaces": "כלים להתראות — סימון הכל כנקרא, ניקוי הכל, "
+   },
+   {
+    "name": "whgdrwtHtrawt26",
+    "type": "String",
+    "replaces": "והגדרות התראות."
+   },
+   {
+    "name": "tfrytHjnwt27",
+    "type": "String",
+    "replaces": "תפריט החנות"
+   },
+   {
+    "name": "klyLjnwtHsl28",
+    "type": "String",
+    "replaces": "כלים לחנות — הסל שלי, ההזמנות, שירותים, והגדרות החנות."
+   },
+   {
+    "name": "mxbHykrwtLjyxh29",
+    "type": "String",
+    "replaces": "מצב היכרות (לחיצה ארוכה: סיור)"
+   }
+  ],
+  "note": ""
+ },
+ "_BottomNav": {
+  "addProps": [
+   {
+    "name": "byt1",
+    "type": "String",
+    "replaces": "בית"
+   },
+   {
+    "name": "mjlqwt2",
+    "type": "String",
+    "replaces": "מחלקות"
+   },
+   {
+    "name": "edkwny3",
+    "type": "String",
+    "replaces": "עדכונים"
+   },
+   {
+    "name": "jnwt4",
+    "type": "String",
+    "replaces": "חנות"
+   }
+  ],
+  "note": ""
+ },
+ "_CatalogMenuButton": {
+  "addProps": [
+   {
+    "name": "tfryt1",
+    "type": "String",
+    "replaces": "תפריט"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "🤖"
+   },
+   {
+    "name": "bynhMlakwtytWawtwmxyh3",
+    "type": "String",
+    "replaces": "בינה מלאכותית ואוטומציה"
+   },
+   {
+    "name": "hgdrwt4",
+    "type": "String",
+    "replaces": "הגדרות"
+   }
+  ],
+  "note": ""
+ },
+ "_ChatsMenuButton": {
+  "addProps": [
+   {
+    "name": "tfryt1",
+    "type": "String",
+    "replaces": "תפריט"
+   },
+   {
+    "name": "cyjhJdch2",
+    "type": "String",
+    "replaces": "שיחה חדשה"
+   },
+   {
+    "name": "txt3",
+    "type": "String",
+    "replaces": "🗂️"
+   },
+   {
+    "name": "arkywCyjwt4",
+    "type": "String",
+    "replaces": "ארכיון שיחות"
+   },
+   {
+    "name": "txt5",
+    "type": "String",
+    "replaces": "🔔"
+   },
+   {
+    "name": "txt6",
+    "type": "String",
+    "replaces": "🔇"
+   },
+   {
+    "name": "btlHctqtHkl7",
+    "type": "String",
+    "replaces": "בטל השתקת הכל"
+   },
+   {
+    "name": "hctqHkl8",
+    "type": "String",
+    "replaces": "השתק הכל"
+   },
+   {
+    "name": "hctqtKlHcyjwt9",
+    "type": "String",
+    "replaces": "השתקת כל השיחות?"
+   },
+   {
+    "name": "klHcyjwtYwctqw10",
+    "type": "String",
+    "replaces": "כל השיחות יושתקו עד לביטול ההשתקה."
+   },
+   {
+    "name": "hctq11",
+    "type": "String",
+    "replaces": "השתק"
+   },
+   {
+    "name": "hhctqhBwtlh12",
+    "type": "String",
+    "replaces": "ההשתקה בוטלה"
+   },
+   {
+    "name": "klHcyjwtHwctqw13",
+    "type": "String",
+    "replaces": "כל השיחות הושתקו"
+   }
+  ],
+  "note": ""
+ },
+ "_NotificationsMenuButton": {
+  "addProps": [
+   {
+    "name": "tfryt1",
+    "type": "String",
+    "replaces": "תפריט"
+   },
+   {
+    "name": "smHklKnqra2",
+    "type": "String",
+    "replaces": "סמן הכל כנקרא"
+   },
+   {
+    "name": "txt3",
+    "type": "String",
+    "replaces": "🗑️"
+   },
+   {
+    "name": "nqhHkl4",
+    "type": "String",
+    "replaces": "נקה הכל"
+   },
+   {
+    "name": "txt5",
+    "type": "String",
+    "replaces": "🔔"
+   },
+   {
+    "name": "hgdrwtHtrawt6",
+    "type": "String",
+    "replaces": "הגדרות התראות"
+   },
+   {
+    "name": "klHhtrawtSwmnw7",
+    "type": "String",
+    "replaces": "כל ההתראות סומנו כנקרא"
+   },
+   {
+    "name": "nyqwyKlHhtrawt8",
+    "type": "String",
+    "replaces": "ניקוי כל ההתראות?"
+   },
+   {
+    "name": "klHhtrawtYymjqw9",
+    "type": "String",
+    "replaces": "כל ההתראות יימחקו לצמיתות."
+   },
+   {
+    "name": "klHhtrawtNmjqw10",
+    "type": "String",
+    "replaces": "כל ההתראות נמחקו"
+   }
+  ],
+  "note": ""
+ },
+ "_StoreMenuButton": {
+  "addProps": [
+   {
+    "name": "tfryt1",
+    "type": "String",
+    "replaces": "תפריט"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "🛒"
+   },
+   {
+    "name": "hslCly3",
+    "type": "String",
+    "replaces": "הסל שלי"
+   },
+   {
+    "name": "txt4",
+    "type": "String",
+    "replaces": "📦"
+   },
+   {
+    "name": "hzmnwt5",
+    "type": "String",
+    "replaces": "הזמנות"
+   },
+   {
+    "name": "txt6",
+    "type": "String",
+    "replaces": "🔧"
+   },
+   {
+    "name": "cyrwty7",
+    "type": "String",
+    "replaces": "שירותים"
+   },
+   {
+    "name": "hgdrwt8",
+    "type": "String",
+    "replaces": "הגדרות"
+   }
+  ],
+  "note": ""
+ },
+ "_NewChatSheet": {
+  "addProps": [
+   {
+    "name": "title",
+    "type": "String",
+    "replaces": "✏️ שיחה חדשה"
+   },
+   {
+    "name": "subtitle",
+    "type": "String",
+    "replaces": "בחר סוג איש קשר"
+   },
+   {
+    "name": "empty",
+    "type": "String",
+    "replaces": "אין עדיין משתמשים"
+   },
+   {
+    "name": "txt4",
+    "type": "String",
+    "replaces": "👷"
+   },
+   {
+    "name": "qbl5",
+    "type": "String",
+    "replaces": "קבלן"
+   },
+   {
+    "name": "txt6",
+    "type": "String",
+    "replaces": "🏪"
+   },
+   {
+    "name": "sfq7",
+    "type": "String",
+    "replaces": "ספק"
+   },
+   {
+    "name": "txt8",
+    "type": "String",
+    "replaces": "🛵"
+   },
+   {
+    "name": "clyj9",
+    "type": "String",
+    "replaces": "שליח"
+   },
+   {
+    "name": "txt10",
+    "type": "String",
+    "replaces": "🦺"
+   },
+   {
+    "name": "ewbd11",
+    "type": "String",
+    "replaces": "עובד"
+   },
+   {
+    "name": "txt12",
+    "type": "String",
+    "replaces": "💬"
+   },
+   {
+    "name": "tmykh13",
+    "type": "String",
+    "replaces": "תמיכה"
+   }
+  ],
+  "note": ""
+ },
+ "_ProfileCard": {
+  "addProps": [
+   {
+    "name": "editCta",
+    "type": "String",
+    "replaces": "ערוך פרופיל"
+   },
+   {
+    "name": "awrj2",
+    "type": "String",
+    "replaces": "אורח"
+   },
+   {
+    "name": "sgwr3",
+    "type": "String",
+    "replaces": "סגור"
+   }
+  ],
+  "note": ""
+ },
+ "_RoleStatusChip": {
+  "addProps": [
+   {
+    "name": "drwcHrcmh1",
+    "type": "String",
+    "replaces": "דרוש הרשמה"
+   },
+   {
+    "name": "bthly2",
+    "type": "String",
+    "replaces": "בתהליך"
+   },
+   {
+    "name": "mawcr3",
+    "type": "String",
+    "replaces": "מאושר"
+   },
+   {
+    "name": "ndjh4",
+    "type": "String",
+    "replaces": "נדחה"
+   },
+   {
+    "name": "tplSttwsHrcmhLabel5",
+    "type": "String",
+    "replaces": "סטטוס הרשמה: $label"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

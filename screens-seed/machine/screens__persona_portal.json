@@ -1,0 +1,161 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__persona_portal.dart",
+ "lines": 413,
+ "pigments": {
+  "tokens": [
+   "BsTokens.bgLight",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   11.5,
+   12.5,
+   13,
+   13.5,
+   14.5,
+   19
+  ],
+  "fontWeights": [
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   20
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  "${t.min}+ יח׳ · ${t.discount}% הנחה",
+  "${tile.sub} — כלי זה יחובר בהמשך הפיתוח.",
+  "${v.name} · ${v.cap} · ${v.status} · נהג ${v.driver}",
+  "${z.name} · ${z.eta} · משלוח ${fMoney(z.fee)}",
+  "${z.name} · יעד אספקה: ${z.eta}",
+  "POD + צילום",
+  "s\n      // \"צ׳אט עם קבלן\" runs under the 🏪 store ([BsRole.store]); the courier\n      // portal",
+  "s\n/// \"פורטל השליח\" button). Each tile then opens its own [showPortalSheet].\nvoid showPersonaPortalGrid(\n  BuildContext context,\n  String head,\n  List<PortalTileData> tiles,\n) {\n  showModalBottomSheet<void>(\n    context: context,\n    isScrollControlled: true,\n    backgroundColor: Theme.of(context).colorScheme.surface,\n    shape: const RoundedRectangleBorder(\n      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),\n    ),\n    builder: (sheetCtx) => Directionality(\n      textDirection: TextDirection.rtl,\n      child: Padding(\n        padding: const EdgeInsets.fromLTRB(\n          BsTokens.space4,\n          BsTokens.space4,\n          BsTokens.space4,\n          BsTokens.space5,\n        ),\n        child: Column(\n          mainAxisSize: MainAxisSize.min,\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: [\n            Text(\n              head,\n              style: const TextStyle(\n                color: BsTokens.inkLight,\n                fontWeight: FontWeight.w800,\n                fontSize: 19,\n              ),\n            ),\n            const SizedBox(height: BsTokens.space3),\n            GridView.count(\n              shrinkWrap: true,\n              physics: const NeverScrollableScrollPhysics(),\n              crossAxisCount: 2,\n              mainAxisSpacing: BsTokens.space3,\n              crossAxisSpacing: BsTokens.space3,\n              childAspectRatio: 1.5,\n              children: [\n                for (final t in tiles)\n                  PortalTileButton(\n                    title: t.title,\n                    sub: t.sub,\n                    onTap: () => showPortalSheet(context, t),\n                  ),\n              ],\n            ),\n          ],\n        ),\n      ),\n    ),\n  );\n}\n\n/// Opens the info sheet for [tile]. Tall content scrolls (isScrollControlled +\n/// SingleChildScrollView) so it never clips.\nvoid showPortalSheet(BuildContext context, PortalTileData tile) {\n  showModalBottomSheet<void>(\n    context: context,\n    isScrollControlled: true,\n    backgroundColor: Theme.of(context).colorScheme.surface,\n    shape: const RoundedRectangleBorder(\n      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),\n    ),\n    builder: (_) => Directionality(\n      textDirection: TextDirection.rtl,\n      child: _PortalSheet(tile: tile),\n    ),\n  );\n}\n\nclass _PortalSheet extends ConsumerWidget {\n  const _PortalSheet({required this.tile});\n  final PortalTileData tile;\n\n  @override\n  Widget build(BuildContext context, WidgetRef ref) {\n    return Padding(\n      padding: const EdgeInsets.fromLTRB(\n        BsTokens.space4,\n        BsTokens.space4,\n        BsTokens.space4,\n        BsTokens.space5,\n      ),\n      child: SingleChildScrollView(\n        child: Column(\n          mainAxisSize: MainAxisSize.min,\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: [\n            Text(\n              tile.title,\n              style: const TextStyle(\n                color: BsTokens.inkLight,\n                fontWeight: FontWeight.w800,\n                fontSize: 19,\n              ),\n            ),\n            const SizedBox(height: 2),\n            Text(\n              tile.sub,\n              style: const TextStyle(color: BsTokens.mutedLight, fontSize: 13),\n            ),\n            const SizedBox(height: BsTokens.space4),\n            ..._content(context, ref),\n          ],\n        ),\n      ),\n    );\n  }\n\n  List<Widget> _content(BuildContext context, WidgetRef ref) {\n    switch (tile.kind) {\n      case PortalKind.ratings:\n        // fake-data-sweep: kSupplierRatings is a demo seed with no live source —\n        // gate the DATA rows together with the label (not just the note), so the\n        // review build never shows fake ratings; show an honest server-pending\n        // row instead of a blank sheet.\n        return [\n          if (!kHideUnderConstruction) ...[\n            for (final r in kSupplierRatings)\n              _row(",
+  "s active [persona] (🏪 store / 🛵 courier).\n///\n/// 🔒 ISOLATION (SPEC §2.5): the ONLY navigation is `push(ChatsScreen(persona:))`\n/// — that screen is a self-contained standalone Scaffold (\"שיחות\" + back→pop), so\n/// the back button returns to THIS portal; nothing here routes to home_shell, the\n/// role picker, or any other persona",
+  "s מלאי tab toggles.\n        final oos = ref.watch(storeOosProvider).toList()..sort();\n        if (oos.isEmpty) {\n          return [_row(",
+  "s מלאי tab); the 💬\n/// chat tiles open the shared cross-persona [ChatsScreen] for the portal",
+  "אוטומטי לפי מכירות",
+  "דירוגי ספקים חיים יתווספו עם חיבור השרת",
+  "הודעות פנימיות",
+  "זמני אספקה",
+  "מדרגות הנחה",
+  "מסלול לאתר",
+  "מפת אזורים",
+  "ניהול צי חי יתחבר עם חיבור השרת",
+  "נתוני הדגמה (seed מהפרוטוטייפ) — יוחלפו בנתונים חיים עם חיבור השרת",
+  "ציון וביצועים",
+  "רכבים וזמינות",
+  "תוויות למוצרים",
+  "⏱️ מעקב SLA",
+  "⚠️ ${oos.length} מוצרים אזלו מהמלאי",
+  "⭐ דירוג ספקים",
+  "🏷️ הפקת ברקודים",
+  "💬 צ׳אט עם חנות",
+  "💬 צ׳אט עם קבלן",
+  "📉 הנחות כמות",
+  "📸 אישור מסירה",
+  "🔄 עדכון מלאי",
+  "🗺️ אזורי הפצה",
+  "🚛 ניהול צי רכב",
+  "🚛 צי רכב",
+  "🧭 ניווט למשלוח"
+ ],
+ "icons": [
+  "Icons.chevron_left"
+ ],
+ "glyphs": [
+  "⚠",
+  "✓",
+  "❌",
+  "🏪",
+  "🏷",
+  "💬",
+  "📉",
+  "📸",
+  "🔄",
+  "🔒",
+  "🗺",
+  "🚛",
+  "🛵",
+  "🧭"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "PortalTileButton",
+   "kind": "StatelessWidget",
+   "line": 73,
+   "loc": 55,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_PortalSheet",
+   "kind": "ConsumerWidget",
+   "line": 205,
+   "loc": 141,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "storeOosProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 12,
+   "constData": 0
+  },
+  {
+   "name": "_ChatEntryRow",
+   "kind": "StatelessWidget",
+   "line": 355,
+   "loc": 58,
+   "pure": false,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:ChatsScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [
+  "_PortalSheet"
+ ],
+ "gates": [
+  "kBulkTiers",
+  "kCourierPortalTiles",
+  "kDistZones",
+  "kFleet",
+  "kHideUnderConstruction",
+  "kStorePortalTiles",
+  "kSupplierRatings"
+ ],
+ "board": {
+  "reads": [
+   "storeOosProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:ChatsScreen"
+  ]
+ }
+}

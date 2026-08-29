@@ -1,0 +1,82 @@
+{
+ "LipskeyProductsScreen": {
+  "addProps": [
+   {
+    "name": "tplTwxawtW1",
+    "type": "String",
+    "replaces": "תוצאות: $w"
+   },
+   {
+    "name": "tplProductslengthMwxry2",
+    "type": "String",
+    "replaces": "${products.length} מוצרים"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_LensGroupHeader": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🌳"
+   }
+  ],
+  "note": ""
+ },
+ "LipskeyProductGridCard": {
+  "addProps": [
+   {
+    "name": "priceBySupplierGrid",
+    "type": "String",
+    "replaces": "מחיר לפי ספק"
+   },
+   {
+    "name": "toCart",
+    "type": "String",
+    "replaces": "לסל"
+   },
+   {
+    "name": "bjrKmwt3",
+    "type": "String",
+    "replaces": "בחר כמות"
+   }
+  ],
+  "note": ""
+ },
+ "_StepBtn": {
+  "addProps": [
+   {
+    "name": "hwsKmwt1",
+    "type": "String",
+    "replaces": "הוסף כמות"
+   },
+   {
+    "name": "hfjtKmwt2",
+    "type": "String",
+    "replaces": "הפחת כמות"
+   }
+  ],
+  "note": ""
+ },
+ "_NameWords": {
+  "addProps": [
+   {
+    "name": "awr1",
+    "type": "String",
+    "replaces": "אורך"
+   }
+  ],
+  "note": ""
+ },
+ "_HierarchyChips": {
+  "addProps": [
+   {
+    "name": "sizeLabel",
+    "type": "String",
+    "replaces": "מידה"
+   }
+  ],
+  "note": ""
+ }
+}

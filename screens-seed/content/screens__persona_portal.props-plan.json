@@ -1,0 +1,62 @@
+{
+ "_PortalSheet": {
+  "addProps": [
+   {
+    "name": "tplRscoreRordersHzmnwt1",
+    "type": "String",
+    "replaces": "⭐ ${r.score} · ${r.orders} הזמנות · ${r.onTime}% בזמן"
+   },
+   {
+    "name": "ntwnyHdgmhSeed2",
+    "type": "String",
+    "replaces": "נתוני הדגמה (seed מהפרוטוטייפ) — יוחלפו בנתונים חיים עם חיבור השרת"
+   },
+   {
+    "name": "dyrwgySfqyJyy3",
+    "type": "String",
+    "replaces": "דירוגי ספקים חיים יתווספו עם חיבור השרת"
+   },
+   {
+    "name": "tplZnameZetaMclwj4",
+    "type": "String",
+    "replaces": "${z.name} · ${z.eta} · משלוח ${fMoney(z.fee)}"
+   },
+   {
+    "name": "tplZnameYedAsfqh5",
+    "type": "String",
+    "replaces": "${z.name} · יעד אספקה: ${z.eta}"
+   },
+   {
+    "name": "tplTminYjxTdiscount6",
+    "type": "String",
+    "replaces": "${t.min}+ יח׳ · ${t.discount}% הנחה"
+   },
+   {
+    "name": "tplVnameVcapVstatus7",
+    "type": "String",
+    "replaces": "${v.name} · ${v.cap} · ${v.status} · נהג ${v.driver}"
+   },
+   {
+    "name": "nyhwlXyJy8",
+    "type": "String",
+    "replaces": "ניהול צי חי יתחבר עם חיבור השרת"
+   },
+   {
+    "name": "klHmwxryZmyny9",
+    "type": "String",
+    "replaces": "✓ כל המוצרים זמינים במלאי"
+   },
+   {
+    "name": "tplOoslengthMwxryAzlw10",
+    "type": "String",
+    "replaces": "⚠️ ${oos.length} מוצרים אזלו מהמלאי"
+   },
+   {
+    "name": "tplTilesubKlyZh11",
+    "type": "String",
+    "replaces": "${tile.sub} — כלי זה יחובר בהמשך הפיתוח."
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

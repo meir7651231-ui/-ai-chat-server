@@ -1,0 +1,58 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens___size_norm.dart",
+ "lines": 365,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "\n  // 25 ס\"מ / 200 מ\"מ  (Hebrew unit suffixes)\n  r",
+  "$m מ׳",
+  "${_fmt(v)} מ\"מ",
+  "${_fmt(v)} ס\"מ",
+  "${m.toInt()} מ׳",
+  "(?<![A-Za-zא-ת])(XXL|XXS|XL|XS|S|M|L)(?![A-Za-zא-ת=])",
+  ",\n        family: SizeFamily.dnDiameter, mm: v,);\n  }\n  // mm — normalize the number so `020 מ\"מ` reads `20 מ\"מ`.\n  final mm = RegExp(r",
+  "25 ס\"מ",
+  "s UI is family-coherent — never alternating units.\nvoid sortSizeTokens(List<SizeToken> toks) {\n  int rank(SizeFamily f) {\n    final i = _kFamilyPrecedence.indexOf(f);\n    return i < 0 ? _kFamilyPrecedence.length : i;\n  }\n  toks.sort((a, b) {\n    final r = rank(a.family).compareTo(rank(b.family));\n    return r != 0 ? r : a.mm.compareTo(b.mm);\n  });\n}\n\n/// Length-only family rank: prefer cm (most product-like, compact), then\n/// meters. Used by [dedupLengthByMm] to collapse equivalent length\n/// representations (e.g. `15 ס\"מ` and `0.15 מ׳` are the same physical value\n/// and should not both be chips).\n///\n/// `mm` is deliberately EXCLUDED: an `mm` token is almost always a DIAMETER\n/// (a `250 מ\"מ` shower head) or a cross-dim OD (`16×20`, tokenized as `mm`),\n/// not a length. Collapsing by raw mm-value wrongly merged `250 מ\"מ` with\n/// `25 ס\"מ` and `16×20` with `16×16` (same first dim) into one chip — and\n/// because the per-product filter (`_productHasChip`) matches by exact label,\n/// every product carrying the collapsed-away label became unreachable by the\n/// surviving chip. Keeping mm out means each mm token stays its own chip.\nconst Map<SizeFamily, int> _kLengthFamilyRank = {\n  SizeFamily.cm: 0,\n  SizeFamily.meters: 1,\n};\n\n/// Collapse equivalent length tokens (same `mm`, length families) to a single\n/// representative — cm wins over meters wins over mm. Non-length families\n/// (diameter, angle) pass through untouched. Caller should still\n/// `sortSizeTokens` after if the input wasn",
+  "s mental anchor\n/// for fit; count breaks precedence-ties.\nSizeFamily? dominantFamily(List<SizeToken> toks) {\n  if (toks.isEmpty) return null;\n  final counts = <SizeFamily, int>{};\n  for (final t in toks) {\n    counts[t.family] = (counts[t.family] ?? 0) + 1;\n  }\n  SizeFamily? best;\n  var bestRank = 1 << 30;\n  var bestCount = -1;\n  counts.forEach((f, c) {\n    final r = _kFamilyPrecedence.indexOf(f);\n    final fr = r < 0 ? _kFamilyPrecedence.length : r;\n    if (fr < bestRank || (fr == bestRank && c > bestCount)) {\n      best = f;\n      bestRank = fr;\n      bestCount = c;\n    }\n  });\n  return best;\n}\n\n/// Letter clothing-style sizes (S / M / L …) that some products carry instead\n/// of a numeric size — e.g. clamp collars \"אקווה אוגן כפול M\". Ordered\n/// small→large for display. EXCLUDES the `L=` length prefix (e.g. gray pipe\n/// \"DN40 L=50 ס\"מ\" — that L is \"length\", not a size letter).\nconst List<String> kLetterSizeOrder = [",
+  "t (years, generic IDs).\n/// \"25 שנים אחריות\" must NOT become a 25 chip. We require an explicit unit\n/// glyph next to the number — so a bare integer in the name yields nothing.\nList<SizeToken> parseSizeTokens(String name) {\n  final out = <SizeToken>[];\n  for (final m in _kSizeRe.allMatches(name)) {\n    final raw = m.group(0)!.trim();\n    final folded = kInchPretty[raw] ?? raw;\n    final tok = _tokenize(folded);\n    if (tok == null) continue;\n    // Apply the canvaskit font fold to the FINAL tokenized label (`_tokenize`\n    // has already done the numeric cleanup like `020 מ\"מ` → `20 מ\"מ`).\n    final display = kHardToRenderFractions[tok.label] ?? tok.label;\n    out.add(display == tok.label\n        ? tok\n        : SizeToken(label: display, family: tok.family, mm: tok.mm),);\n  }\n  return out;\n}\n\n/// Angles as their own list — the chooser surfaces them only when sizes don",
+  "t meaningfully compare an inch diameter to a cm length.\nenum SizeFamily {\n  inchDiameter, // ½\" / 1\" / 1¼\"\n  dnDiameter,   // DN16 / DN40\n  mm,           // 200 מ\"מ\n  cm,           // 25 ס\"מ\n  meters,       // 0.5 מ׳ (catalog L (cm)/100)\n  angle,        // 45° / 90°  — surfaced as its own axis, never with sizes\n}\n\n@immutable\nclass SizeToken {\n  const SizeToken({required this.label, required this.family, required this.mm});\n\n  final String label;     // verbatim display, e.g. ",
+  "פקק שטוח 2⅜\""
+ ],
+ "icons": [],
+ "glyphs": [],
+ "logicCandidates": [
+  {
+   "name": "tokensFromDims",
+   "line": 214
+  },
+  {
+   "name": "dominantFamily",
+   "line": 296
+  },
+  {
+   "name": "SizeToken",
+   "line": 23,
+   "kind": "metrics-class"
+  }
+ ],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kHardToRenderFractions",
+  "kInchPretty",
+  "kLetterSizeOrder"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

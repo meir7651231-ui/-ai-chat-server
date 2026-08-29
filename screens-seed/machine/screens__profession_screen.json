@@ -1,0 +1,113 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__profession_screen.dart",
+ "lines": 190,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   12,
+   13,
+   14,
+   16,
+   24
+  ],
+  "fontWeights": [
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   28
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  ";\n\n/// Trades that have no real content yet — picking one leads to an honest\n/// \"בקרוב\" screen instead of an empty flow. Only אינסטלטור is fully built.\nconst Set<String> kComingSoonTrades = {",
+  "s `screen-profession`.\n/// Picking a trade saves it to the profile and advances to the onboarding step.\nclass ProfessionScreen extends ConsumerWidget {\n  const ProfessionScreen({super.key});\n\n  @override\n  Widget build(BuildContext context, WidgetRef ref) {\n    void pick(String name) {\n      // Trades without real content yet → honest \"בקרוב\" screen (keeps the\n      // user on the picker via back). Only אינסטלטור proceeds into the app.\n      if (kComingSoonTrades.contains(name)) {\n        Navigator.of(context).push(ComingSoonScreen.route(name));\n        return;\n      }\n      ref.read(userProfileProvider.notifier).setProfession(name);\n      ref.read(startupStepProvider.notifier).state = 2;\n    }\n\n    return Scaffold(\n      backgroundColor: Theme.of(context).scaffoldBackgroundColor,\n      body: HelpModeScaffold(\n        child: SafeArea(\n          child: Padding(\n          padding: const EdgeInsets.all(BsTokens.space5),\n          child: Column(\n            crossAxisAlignment: CrossAxisAlignment.stretch,\n            children: [\n              Row(\n                children: [\n                  HelpTarget(\n                    title: ",
+  "אינסטלטור",
+  "בחירת התחום \"${t.name}\" (${t.desc}). אמורה להתאים ",
+  "ברזים, אסלות, צנרת, חימום מים",
+  "חוזר אחורה למסך הקודם (מסך הפתיחה / ההרשמה).",
+  "חזור",
+  "חשמלאי",
+  "מה התחום שלך?",
+  "נקודות, לוחות, כבלים, גופי תאורה",
+  "נתאים לך את האפליקציה — קטלוג, כלים והמלצות לפי המקצוע",
+  "פרויקט שלם — מבנייה ועד גמר",
+  "קבלן שיפוצים",
+  "קטלוג/כלים/המלצות למקצוע — כרגע אינסטלטור פעיל, השאר בקרוב.",
+  "תוכל לשנות את הבחירה בכל עת מההגדרות"
+ ],
+ "icons": [
+  "Icons.chevron_left",
+  "Icons.chevron_right",
+  "Icons.electrical_services",
+  "Icons.handyman",
+  "Icons.plumbing"
+ ],
+ "glyphs": [],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "ProfessionScreen",
+   "kind": "ConsumerWidget",
+   "line": 37,
+   "loc": 93,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "startupStepProvider",
+    "userProfileProvider"
+   ],
+   "writes": [
+    "startupStepProvider",
+    "userProfileProvider"
+   ],
+   "actions": [],
+   "strings": 8,
+   "constData": 0
+  },
+  {
+   "name": "_TradeCard",
+   "kind": "StatelessWidget",
+   "line": 131,
+   "loc": 59,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [
+  "ProfessionScreen"
+ ],
+ "gates": [
+  "kComingSoonTrades",
+  "kTradeOptions"
+ ],
+ "board": {
+  "reads": [
+   "startupStepProvider",
+   "userProfileProvider"
+  ],
+  "writes": [
+   "startupStepProvider",
+   "userProfileProvider"
+  ],
+  "navsAndCalls": []
+ }
+}

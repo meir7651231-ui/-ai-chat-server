@@ -1,0 +1,272 @@
+{
+ "CourierProfileScreen": {
+  "addProps": [
+   {
+    "name": "title",
+    "type": "String",
+    "replaces": "פרופיל שליח"
+   }
+  ],
+  "note": ""
+ },
+ "CourierProfileBody": {
+  "addProps": [
+   {
+    "name": "statsHeading",
+    "type": "String",
+    "replaces": "מסירות — סטטיסטיקה"
+   },
+   {
+    "name": "settingsTitle",
+    "type": "String",
+    "replaces": "הגדרות שליח"
+   },
+   {
+    "name": "roleSwitchTitle",
+    "type": "String",
+    "replaces": "החלפת תפקיד"
+   },
+   {
+    "name": "roleSwitchSubtitle",
+    "type": "String",
+    "replaces": "מוגן בקוד"
+   },
+   {
+    "name": "logoutTitle",
+    "type": "String",
+    "replaces": "יציאה מהחשבון"
+   },
+   {
+    "name": "bdrMtayLrkb6",
+    "type": "String",
+    "replaces": "בדרך (מתאים לרכב) 🚚"
+   },
+   {
+    "name": "bdrKllHmerkt7",
+    "type": "String",
+    "replaces": "בדרך (כלל המערכת)"
+   },
+   {
+    "name": "nmsrwElydy8",
+    "type": "String",
+    "replaces": "נמסרו על-ידי ✅"
+   },
+   {
+    "name": "PODCly9",
+    "type": "String",
+    "replaces": "POD שלי 📸"
+   },
+   {
+    "name": "tplShxkErCnmsr10",
+    "type": "String",
+    "replaces": "סה״כ ערך שנמסר על-ידי: ${fMoney(stats.sum)}"
+   },
+   {
+    "name": "tplMsyrwtYcnwtLla11",
+    "type": "String",
+    "replaces": "מסירות ישנות ללא ייחוס אינן נספרות (${stats.unattributed})"
+   },
+   {
+    "name": "fwtjAtMs12",
+    "type": "String",
+    "replaces": "פותח את מסך ההגדרות — התראות, אזור ושפה, ממשק "
+   },
+   {
+    "name": "wngycwtWmydeMcfty13",
+    "type": "String",
+    "replaces": "ונגישות ומידע משפטי."
+   },
+   {
+    "name": "mebrLlwjCl14",
+    "type": "String",
+    "replaces": "מעבר ללוח של תפקיד אחר — מוגן בקוד מעבר. הזנת הקוד "
+   },
+   {
+    "name": "hnkwFwtjtAt15",
+    "type": "String",
+    "replaces": "הנכון פותחת את בורר התפקידים."
+   },
+   {
+    "name": "txt16",
+    "type": "String",
+    "replaces": "🔁"
+   },
+   {
+    "name": "mtntqMhjcbwWmjzyr17",
+    "type": "String",
+    "replaces": "מתנתק מהחשבון ומחזיר אותך למסך ההרשמה — פעולה עם "
+   },
+   {
+    "name": "aycwrCwnhMyxyah18",
+    "type": "String",
+    "replaces": "אישור. שונה מ-\"יציאה\" שב-AppBar של הלוח שרק חוזרת אחורה."
+   },
+   {
+    "name": "txt19",
+    "type": "String",
+    "replaces": "🚪"
+   },
+   {
+    "name": "yxyahMhjcbw20",
+    "type": "String",
+    "replaces": "יציאה מהחשבון?"
+   },
+   {
+    "name": "tnwtqMlwjHclyj21",
+    "type": "String",
+    "replaces": "תנותק מלוח השליח ותחזור למסך ההרשמה."
+   },
+   {
+    "name": "htntq22",
+    "type": "String",
+    "replaces": "התנתק"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_CourierIdentityCard": {
+  "addProps": [
+   {
+    "name": "demoChip",
+    "type": "String",
+    "replaces": "דמו"
+   },
+   {
+    "name": "tplProfilephone2",
+    "type": "String",
+    "replaces": "📞 ${profile.phone}"
+   },
+   {
+    "name": "tplSessionusernameClyj3",
+    "type": "String",
+    "replaces": "@${session.username} · שליח"
+   },
+   {
+    "name": "eryktFrwfyl4",
+    "type": "String",
+    "replaces": "עריכת פרופיל"
+   },
+   {
+    "name": "fwtjAtEwr5",
+    "type": "String",
+    "replaces": "פותח את עורך הפרופיל — שם-תצוגה, טלפון, סוג-רכב מועדף "
+   },
+   {
+    "name": "wtmwntfrwfylHcynwyyNc6",
+    "type": "String",
+    "replaces": "ותמונת-פרופיל. השינויים נשמרים בפרופיל שלך."
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_CourierAvatar": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🛵"
+   }
+  ],
+  "note": ""
+ },
+ "_CourierPersonalAreaCard": {
+  "addProps": [
+   {
+    "name": "attendanceTitle",
+    "type": "String",
+    "replaces": "נוכחות"
+   },
+   {
+    "name": "attendanceSubtitle",
+    "type": "String",
+    "replaces": "כניסה/יציאה ודוח חודשי"
+   },
+   {
+    "name": "formsTitle",
+    "type": "String",
+    "replaces": "טפסים"
+   },
+   {
+    "name": "formsSubtitle",
+    "type": "String",
+    "replaces": "טופס 101 · בקשת חופשה · אישור מחלה"
+   },
+   {
+    "name": "certsTitle",
+    "type": "String",
+    "replaces": "תעודות נהג"
+   },
+   {
+    "name": "certsSubtitle",
+    "type": "String",
+    "replaces": "רישיון נהיגה · ביטוח רכב · רישיון רכב"
+   },
+   {
+    "name": "payslipsTitle",
+    "type": "String",
+    "replaces": "תלושי שכר"
+   },
+   {
+    "name": "payslipsSubtitle",
+    "type": "String",
+    "replaces": "יחובר עם חיבור השרת"
+   },
+   {
+    "name": "fwtjAtMs9",
+    "type": "String",
+    "replaces": "פותח את מסך הנוכחות — רישום כניסה/יציאה, טבלה חודשית "
+   },
+   {
+    "name": "wclyjtDwjnwkjwtLjnwt10",
+    "type": "String",
+    "replaces": "ושליחת דוח-נוכחות לחנות."
+   },
+   {
+    "name": "txt11",
+    "type": "String",
+    "replaces": "🕐"
+   },
+   {
+    "name": "fwtjAtMrkz12",
+    "type": "String",
+    "replaces": "פותח את מרכז הטפסים — טופס 101, בקשת חופשה ואישור מחלה."
+   },
+   {
+    "name": "txt13",
+    "type": "String",
+    "replaces": "📄"
+   },
+   {
+    "name": "fwtjAtArnq14",
+    "type": "String",
+    "replaces": "פותח את ארנק תעודות-הנהג — רישיון נהיגה, ביטוח רכב "
+   },
+   {
+    "name": "wrycywRkbE15",
+    "type": "String",
+    "replaces": "ורישיון רכב עם תאריכי תוקף."
+   },
+   {
+    "name": "txt16",
+    "type": "String",
+    "replaces": "🪪"
+   },
+   {
+    "name": "fwtjAtGylyw17",
+    "type": "String",
+    "replaces": "פותח את גיליון תלושי-השכר — מוכן לשרת; התלושים יחוברו "
+   },
+   {
+    "name": "eJybwrHcrt18",
+    "type": "String",
+    "replaces": "עם חיבור השרת."
+   },
+   {
+    "name": "txt19",
+    "type": "String",
+    "replaces": "💰"
+   }
+  ],
+  "note": ""
+ }
+}

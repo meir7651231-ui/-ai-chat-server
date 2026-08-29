@@ -1,0 +1,50 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__word_finder__ai_interpret.dart",
+ "lines": 42,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "\n    show normalizeQuery;\n\n/// Everyday Hebrew filler the user wraps a request in (\"אני צריך משהו ל…\") that\n/// carries no product signal. Dropped before the query reaches resolveQuery, so a\n/// whole sentence narrows like its keywords would. WHOLE-TOKEN only — it never\n/// strips a prefix (בזווית stays intact) and keeps meaningful verbs/nouns.\nconst Set<String> kAiFillerWords = {\n  ",
+  "s 4th input. The user types a whole request (\"אני צריך משהו אדום\")\n// and SUBMITS it; the dive seeds from the interpreted query. The DEFAULT is OFFLINE\n// and pure (strip everyday Hebrew filler, then fold synonyms) — the contract",
+  "איזה",
+  "אפשר",
+  "את",
+  "בבקשה",
+  "הביא",
+  "זה",
+  "חפש",
+  "יש",
+  "כדי",
+  "לי",
+  "מצא",
+  "משהו",
+  "עם",
+  "צריך",
+  "צריכה",
+  "רוצה",
+  "של",
+  "תביא",
+  "תן"
+ ],
+ "icons": [],
+ "glyphs": [],
+ "logicCandidates": [],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kAiFillerWords"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

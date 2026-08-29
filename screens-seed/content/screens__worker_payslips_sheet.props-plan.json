@@ -1,0 +1,37 @@
+{
+ "_PayslipsSheetBody": {
+  "addProps": [
+   {
+    "name": "t01",
+    "type": "String",
+    "replaces": "💰 תלושי שכר"
+   },
+   {
+    "name": "sgwr2",
+    "type": "String",
+    "replaces": "סגור"
+   },
+   {
+    "name": "tlwcyHckrHamytyy3",
+    "type": "String",
+    "replaces": "🔌 תלושי השכר האמיתיים יחוברו עם חיבור השרת — "
+   },
+   {
+    "name": "hmsMwkWytmla4",
+    "type": "String",
+    "replaces": "המסך מוכן ויתמלא אוטומטית."
+   }
+  ],
+  "note": ""
+ },
+ "_MonthRow": {
+  "addProps": [
+   {
+    "name": "t02",
+    "type": "String",
+    "replaces": "יחובר עם חיבור השרת"
+   }
+  ],
+  "note": ""
+ }
+}

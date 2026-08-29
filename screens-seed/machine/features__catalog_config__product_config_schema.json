@@ -1,0 +1,87 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__catalog_config__product_config_schema.dart",
+ "lines": 403,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  " show immutable, listEquals;\n\n/// `tradeId` סינתטי ל-`AttributeDef`-ים שנגזרים מהמנוע/קטלוג (לא בבעלות Trade-משתמש).\nconst String kCatalogConfigTradeId = ",
+  " נפוצות (תכונת-קטלוג).\nAttributeDef _thread() => const AttributeDef(\n      id: ",
+  ",\n          sortIndex: i,\n        ),\n    ];\n\n/// ערכי-הקוטר **מטבלת-העומק של המנוע** (`kDepth`) — ממוינים. תבנית-הנסיגה (0.2)\n/// כשלמשפחה אין אחים באוכלוסייה. **נגזר מהמנוע**.\nList<AttributeValue> diameterValues() {\n  final ods = kDepth.keys.toList()..sort();\n  return _diameterValuesFromOds(ods);\n}\n\n/// יציאות-המחלק **האמיתיות** — ה-`dims[",
+  ",\n        sortIndex: i,\n      ),\n  ];\n}\n\n// ── תכונות-בסיס (גלגלים) — כל אחת עם ערכים (שומר: אין תכונה בלי ערכים) ──────────\n\n/// גלגל-קוטר. [values] = הסולם האגור (פאזה F); ברירת-מחדל = תבנית-המנוע (`kDepth`).\nAttributeDef _diameter({\n  String id = ",
+  ",\n        sortIndex: i,\n      ),\n  ];\n}\n\n/// צבעי-המחלק **האמיתיים** — ה-`color` הנבדלים (לא-ריקים) על-פני אֲחֵי-המחלק\n/// ב-[universe], בסדר-הופעה → **בחירת-צבע אמיתית** (כחול/אדום), לא ערך-יחיד-מנוון.\nList<AttributeValue> _colorValues(List<LipskeyCatalogProduct> universe) {\n  final seen = <String>{};\n  final out = <AttributeValue>[];\n  for (final peer in universe) {\n    if (!_isManifold(peer)) continue;\n    final c = peer.color;\n    if (c == null || c.isEmpty || !seen.add(c)) continue;\n    out.add(AttributeValue(id: ",
+  ",\n      kind: AttributeKind.choice,\n      required: true,\n      values: values,\n    );\n\n/// אורך-הזרוע (תכונת-קטלוג · ברירת-מחדל בינוני). ברירת-מחדל 3 אפשרויות.\nAttributeDef _length() => const AttributeDef(\n      id: ",
+  ",\n      kind: AttributeKind.number,\n      required: true,\n      values: values,\n    );\n\n/// גלגל-צבע — מופיע רק למוצר **שיש-לו-צבע** (`p.color`, לא-מומצא), ואז נושא את\n/// **בחירת-הצבעים האמיתית** של קבוצת-המחלקים ([_colorValues] — כחול/אדום),\n/// לא ערך-יחיד-מנוון. אין צבע-מוצר → הגלגל מושמט (שומר: אין תכונה בלי ערכים).\nAttributeDef? _colorAttr(\n  LipskeyCatalogProduct p,\n  List<LipskeyCatalogProduct> universe,\n) {\n  final own = p.color;\n  if (own == null || own.isEmpty) return null;\n  final aggregated = _colorValues(universe);\n  final values = aggregated.isNotEmpty\n      ? aggregated\n      : [AttributeValue(id: ",
+  ",\n    kind: AttributeKind.color,\n    values: values,\n  );\n}\n\n/// זיהוי מחלק (סעפת/מחלק) — לפי השם. מחלקים חיים תחת קטגוריית-צווארונים אך נבדלים\n/// בשם; לכן מיירטים אותם **לפני** נתיב-משפחת-המנוע (אחרת יקבלו סכמת-צווארון).\nbool _isManifold(LipskeyCatalogProduct p) =>\n    p.nameHe.contains(",
+  ", labelHe: c, canonical: c, sortIndex: out.length));\n  }\n  return out;\n}\n\n/// סולם-הקוטר האמיתי של [family] — ה-`odOf` הנבדלים על-פני אֲחֵי-המשפחה המדויקים\n/// ב-[universe]. נסיגה לתבנית-`kDepth` כשאין אחים (שומר M1: לעולם לא ריק).\nList<AttributeValue> _familyDiameterValues(\n  String family,\n  List<LipskeyCatalogProduct> universe,\n) {\n  final ods = _distinctOds(universe, (p) => familyOf(p) == family, odOf);\n  return ods.isEmpty ? diameterValues() : _diameterValuesFromOds(ods);\n}\n\n/// הקוטר-הקטן האמיתי של המצרה — ה-`od2Of` הנבדלים על-פני אֲחֵי-",
+  ", od2Of);\n  return ods.isEmpty ? diameterValues() : _diameterValuesFromOds(ods);\n}\n\n/// סולם-הקוטר של המחלקים — ה-`odOf` הנבדלים על-פני אֲחֵי-המחלק (`_isManifold`,\n/// שכן למחלק אין `familyOf`). נסיגה לתבנית כשאין OD-ים קריאים.\nList<AttributeValue> _manifoldDiameterValues(\n  List<LipskeyCatalogProduct> universe,\n) {\n  final ods = _distinctOds(universe, _isManifold, odOf);\n  return ods.isEmpty ? diameterValues() : _diameterValuesFromOds(ods);\n}\n\n/// הזוויות האמיתיות על-פני קבוצת-הברכיים כולה ב-[universe] (`familyOf` פותח\n/// ב-",
+  ", sortIndex: 1),\n];\n\n/// סכמת-ההגדרה של מוצר: התכונות (=הגלגלים) שהכרטיס-הגנרי מרנדר. תמונה/מחיר\n/// (פאזות D/E) מתווספים בהמשך. `attributes` = `AttributeDef` קיים (reuse).\n@immutable\nclass ProductConfigSchema {\n  const ProductConfigSchema({\n    required this.sku,\n    required this.nameHe,\n    required this.familyId,\n    required this.emoji,\n    required this.attributes,\n  });\n\n  final String sku;\n  final String nameHe;\n  final String familyId; // שם-משפחת-המנוע, או מחלקת-הקטלוג (fallback)\n  final String emoji;\n  final List<AttributeDef> attributes; // הגלגלים (פר-תכונה)\n\n  /// האם המוצר קיבל סכמה-נגזרת-ממנוע (יש לו לפחות תכונה אחת)?\n  bool get hasWheels => attributes.isNotEmpty;\n\n  @override\n  bool operator ==(Object other) =>\n      other is ProductConfigSchema &&\n      other.sku == sku &&\n      other.nameHe == nameHe &&\n      other.familyId == familyId &&\n      other.emoji == emoji &&\n      listEquals(other.attributes, attributes);\n\n  @override\n  int get hashCode =>\n      Object.hash(sku, nameHe, familyId, emoji, Object.hashAll(attributes));\n}\n\n// ── אגירת-ערכים (פאזה F) — ה-odOf/od2Of/הזוויות הנבדלים על-פני האוכלוסייה ───────\n\n/// ה-OD-ים הנבדלים (nulls מדולגים) על-פני חברי [universe] ש-[matches] מקבל,\n/// כפי ש-[reader] קורא אותם — ממוינים עולה. המנרמל המשותף (קוטר/קוטר-שני).\nList<int> _distinctOds(\n  List<LipskeyCatalogProduct> universe,\n  bool Function(LipskeyCatalogProduct) matches,\n  int? Function(LipskeyCatalogProduct) reader,\n) {\n  final set = <int>{};\n  for (final peer in universe) {\n    if (matches(peer)) {\n      final od = reader(peer);\n      if (od != null) {\n        set.add(od);\n      }\n    }\n  }\n  return set.toList()..sort();\n}\n\n/// ערכי-קוטר מרשימת-OD ממוינת → `AttributeValue`-ים (`od-N` · label/canonical `N`).\nList<AttributeValue> _diameterValuesFromOds(List<int> ods) => [\n      for (var i = 0; i < ods.length; i++)\n        AttributeValue(\n          id: ",
+  ", sortIndex: 2),\n      ],\n    );\n\n/// יציאות-המחלק — הגלגל נבנה מ-[values] **האמיתיות** ([_portValues]). תכונת-משפחה\n/// מוצהרת (לא שדה-דאטה-חדש).\nAttributeDef _ports(List<AttributeValue> values) => AttributeDef(\n      id: ",
+  ", המספר נקרא מהשם: ",
+  ". נסיגה\n/// לתבנית כשאין אחים דו-קוטריים.\nList<AttributeValue> _reducerSmallValues(List<LipskeyCatalogProduct> universe) {\n  final ods = _distinctOds(universe, (p) => familyOf(p) == ",
+  ";\n\n/// קידומת-הברך — `familyOf` מחזיר ",
+  "]` הנבדלות על-פני אֲחֵי-המחלק\n/// ([_isManifold]) ב-[universe], ממוינות מספרית. נסיגה לתבנית 1–4 כשאין דאטה\n/// (שומר M1: לעולם לא ריק). **נאגר מהדאטה** (פאזה F) — לא תבנית-1-4 גנרית.\nList<AttributeValue> _portValues(List<LipskeyCatalogProduct> universe) {\n  final set = <int>{};\n  for (final peer in universe) {\n    if (!_isManifold(peer)) continue;\n    final raw = peer.dims?[",
+  "אורך",
+  "ארוך",
+  "בינוני",
+  "ברז כדורי",
+  "ברך",
+  "ברך 45°",
+  "ברך 90°",
+  "זווית",
+  "יציאות",
+  "מ\"מ",
+  "מחלק",
+  "מסעף (טי)",
+  "מצמד",
+  "מצרה",
+  "מתאם תבריג",
+  "סעפת",
+  "פקק",
+  "צבע",
+  "צווארון",
+  "קוטר",
+  "קוטר גדול",
+  "קוטר קטן",
+  "קצר",
+  "רוכב",
+  "תבריג",
+  "→90) — ממוינות, ב-canonical נטול-° של\n/// המנוע. נסיגה לתבנית {45°,90°} כשאין ברכיים (שומר M1).\nList<AttributeValue> _angleValues(List<LipskeyCatalogProduct> universe) {\n  final degrees = <int>{};\n  for (final peer in universe) {\n    final family = familyOf(peer);\n    if (family == null || !family.startsWith(_kElbowPrefix)) {\n      continue;\n    }\n    final match = RegExp(r"
+ ],
+ "icons": [],
+ "glyphs": [
+  "★",
+  "🎨",
+  "📏",
+  "📐",
+  "🔀",
+  "🔒",
+  "🔩",
+  "🫀"
+ ],
+ "logicCandidates": [
+  {
+   "name": "_attributesForFamily",
+   "line": 328
+  }
+ ],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kCatalogConfig",
+  "kCatalogConfigTradeId",
+  "kDepth"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

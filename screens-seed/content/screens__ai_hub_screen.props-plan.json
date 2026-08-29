@@ -1,0 +1,407 @@
+{
+ "AIHubScreen": {
+  "addProps": [
+   {
+    "name": "t01",
+    "type": "String",
+    "replaces": "הדפדפן לא תומך בחיפוש קולי"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "🗣️"
+   },
+   {
+    "name": "tarEbwdhSl3",
+    "type": "String",
+    "replaces": "תאר עבודה → סל"
+   },
+   {
+    "name": "sfrMhXry4",
+    "type": "String",
+    "replaces": "ספר מה צריך, נבנה סל"
+   },
+   {
+    "name": "txt5",
+    "type": "String",
+    "replaces": "📦"
+   },
+   {
+    "name": "jyzwyMlay6",
+    "type": "String",
+    "replaces": "חיזוי מלאי"
+   },
+   {
+    "name": "mtyLhzmyCwb7",
+    "type": "String",
+    "replaces": "מתי להזמין שוב"
+   },
+   {
+    "name": "txt8",
+    "type": "String",
+    "replaces": "📷"
+   },
+   {
+    "name": "swrqBrqwd9",
+    "type": "String",
+    "replaces": "סורק ברקוד"
+   },
+   {
+    "name": "zyhwyMwxrMhyr10",
+    "type": "String",
+    "replaces": "זיהוי מוצר מהיר"
+   },
+   {
+    "name": "txt11",
+    "type": "String",
+    "replaces": "🎙️"
+   },
+   {
+    "name": "dybwrLmcymh12",
+    "type": "String",
+    "replaces": "דיבור למשימה"
+   },
+   {
+    "name": "yxyrtMcymhBqwl13",
+    "type": "String",
+    "replaces": "יצירת משימה בקול"
+   },
+   {
+    "name": "txt14",
+    "type": "String",
+    "replaces": "💡"
+   },
+   {
+    "name": "jlwfwtZwlwt15",
+    "type": "String",
+    "replaces": "חלופות זולות"
+   },
+   {
+    "name": "mwxryJlyfyy16",
+    "type": "String",
+    "replaces": "מוצרים חליפיים"
+   },
+   {
+    "name": "txt17",
+    "type": "String",
+    "replaces": "📐"
+   },
+   {
+    "name": "sryqtTwknywt18",
+    "type": "String",
+    "replaces": "סריקת תוכניות"
+   },
+   {
+    "name": "PDFRcymtJwmry19",
+    "type": "String",
+    "replaces": "PDF → רשימת חומרים"
+   },
+   {
+    "name": "txt20",
+    "type": "String",
+    "replaces": "🔗"
+   },
+   {
+    "name": "htamhMcwlct21",
+    "type": "String",
+    "replaces": "התאמה משולשת"
+   },
+   {
+    "name": "hzmnhtewdhjcbwnyt22",
+    "type": "String",
+    "replaces": "הזמנה·תעודה·חשבונית"
+   },
+   {
+    "name": "txt23",
+    "type": "String",
+    "replaces": "🌦️"
+   },
+   {
+    "name": "awtwmxyytMzgAwwyr24",
+    "type": "String",
+    "replaces": "אוטומציית מזג אוויר"
+   },
+   {
+    "name": "htrawtLfyTjzyt25",
+    "type": "String",
+    "replaces": "התראות לפי תחזית"
+   },
+   {
+    "name": "txt26",
+    "type": "String",
+    "replaces": "🔧"
+   },
+   {
+    "name": "zyhwyBlay27",
+    "type": "String",
+    "replaces": "זיהוי בלאי"
+   },
+   {
+    "name": "tjzwqtXywd28",
+    "type": "String",
+    "replaces": "תחזוקת ציוד"
+   },
+   {
+    "name": "txt29",
+    "type": "String",
+    "replaces": "📊"
+   },
+   {
+    "name": "AnalyticsJk30",
+    "type": "String",
+    "replaces": "Analytics חכם"
+   },
+   {
+    "name": "twbnwtWmgmwt31",
+    "type": "String",
+    "replaces": "תובנות ומגמות"
+   },
+   {
+    "name": "txt32",
+    "type": "String",
+    "replaces": "🤖"
+   },
+   {
+    "name": "ewzrJk33",
+    "type": "String",
+    "replaces": "עוזר חכם"
+   },
+   {
+    "name": "calAwtyKl34",
+    "type": "String",
+    "replaces": "שאל אותי כל דבר"
+   },
+   {
+    "name": "bynhMlakwtyt35",
+    "type": "String",
+    "replaces": "🤖 בינה מלאכותית"
+   },
+   {
+    "name": "bynhMlakwtytWawtwmxyh36",
+    "type": "String",
+    "replaces": "בינה מלאכותית ואוטומציה"
+   },
+   {
+    "name": "klyJkmyCjwsky37",
+    "type": "String",
+    "replaces": "כלים חכמים שחוסכים זמן וטעויות."
+   }
+  ],
+  "note": ""
+ },
+ "_AIFeatureScreen": {
+  "addProps": [
+   {
+    "name": "bynhMlakwtyt1",
+    "type": "String",
+    "replaces": "🤖 בינה מלאכותית"
+   }
+  ],
+  "note": ""
+ },
+ "_PredictStock": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "📦"
+   },
+   {
+    "name": "jyzwyMlay2",
+    "type": "String",
+    "replaces": "חיזוי מלאי"
+   },
+   {
+    "name": "jyzwyMtyKl3",
+    "type": "String",
+    "replaces": "חיזוי מתי כל חומר ייגמר — לפי קצב הצריכה באתר."
+   },
+   {
+    "name": "mjwcbMtwHystwryyt4",
+    "type": "String",
+    "replaces": "🧮 מחושב מתוך היסטוריית ההזמנות והעגלה החיה — קצב צריכה ומלאי נוכחי"
+   },
+   {
+    "name": "ayEdyyHystwryyt5",
+    "type": "String",
+    "replaces": "אין עדיין היסטוריית צריכה — בצע הזמנות כדי לקבל חיזוי מלאי"
+   },
+   {
+    "name": "tplEwdPdaysYmy6",
+    "type": "String",
+    "replaces": "}עוד ${p.days} ימים"
+   },
+   {
+    "name": "tplMlayPstockXrykh7",
+    "type": "String",
+    "replaces": "מלאי ${p.stock} · צריכה ${p.rate}/יום"
+   },
+   {
+    "name": "hzmEkcyw8",
+    "type": "String",
+    "replaces": "הזמן עכשיו"
+   },
+   {
+    "name": "mwmlAI9",
+    "type": "String",
+    "replaces": "מומלץ AI"
+   },
+   {
+    "name": "tplPnameNwsLsl10",
+    "type": "String",
+    "replaces": "${p.name} נוסף לסל"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_ThreeWay": {
+  "addProps": [
+   {
+    "name": "t02",
+    "type": "String",
+    "replaces": "נדרשת בדיקה — הסכומים אינם זהים"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "🔗"
+   },
+   {
+    "name": "htamhMcwlct3",
+    "type": "String",
+    "replaces": "התאמה משולשת"
+   },
+   {
+    "name": "hcwwahAwtwmtytHzmnh4",
+    "type": "String",
+    "replaces": "השוואה אוטומטית: הזמנה · תעודת משלוח · חשבונית."
+   },
+   {
+    "name": "bfrwdqcDwrcTewdwt5",
+    "type": "String",
+    "replaces": "⚙️ בפרודקשן: דורש תעודות משלוח וחשבוניות מהספק (מסמכים חיצוניים)"
+   },
+   {
+    "name": "tplDid6",
+    "type": "String",
+    "replaces": "📦 ${d.id}"
+   },
+   {
+    "name": "twa7",
+    "type": "String",
+    "replaces": "✓ תואם"
+   },
+   {
+    "name": "ayhtamh8",
+    "type": "String",
+    "replaces": "⚠️ אי-התאמה"
+   },
+   {
+    "name": "hzmnh9",
+    "type": "String",
+    "replaces": "הזמנה"
+   },
+   {
+    "name": "tewdh10",
+    "type": "String",
+    "replaces": "תעודה"
+   },
+   {
+    "name": "jcbwnyt11",
+    "type": "String",
+    "replaces": "חשבונית"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_Weather": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🌦️"
+   },
+   {
+    "name": "awtwmxyytMzgAwwyr2",
+    "type": "String",
+    "replaces": "אוטומציית מזג אוויר"
+   },
+   {
+    "name": "hmerktMtaymhAt3",
+    "type": "String",
+    "replaces": "המערכת מתאימה את לוח העבודה לתחזית."
+   },
+   {
+    "name": "tjzytOpenMeteoLfy4",
+    "type": "String",
+    "replaces": "🌦️ תחזית Open-Meteo · לפי מיקום המכשיר"
+   }
+  ],
+  "note": ""
+ },
+ "_Wear": {
+  "addProps": [
+   {
+    "name": "t03",
+    "type": "String",
+    "replaces": "מומלץ לתזמן תחזוקה"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "🔧"
+   },
+   {
+    "name": "zyhwyBlayXywd3",
+    "type": "String",
+    "replaces": "זיהוי בלאי ציוד"
+   },
+   {
+    "name": "nytwrCewtEbwdh4",
+    "type": "String",
+    "replaces": "ניטור שעות עבודה של הציוד והתראה לפני תקלה."
+   },
+   {
+    "name": "bfrwdqcJyycnyIoT5",
+    "type": "String",
+    "replaces": "⚙️ בפרודקשן: חיישני IoT וניטור צריכת חשמל בשרת"
+   },
+   {
+    "name": "tplGhoursGlifeCewt6",
+    "type": "String",
+    "replaces": "${g.hours} / ${g.life} שעות עבודה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_Analytics": {
+  "addProps": [
+   {
+    "name": "t04",
+    "type": "String",
+    "replaces": "סיכום בעברית"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "📊"
+   },
+   {
+    "name": "AnalyticsJk3",
+    "type": "String",
+    "replaces": "Analytics חכם"
+   },
+   {
+    "name": "twbnwtAwtwmtywtEl4",
+    "type": "String",
+    "replaces": "תובנות אוטומטיות על ההתנהלות באתר."
+   },
+   {
+    "name": "mjwcbMntwnyAmt5",
+    "type": "String",
+    "replaces": "🧮 מחושב מנתוני אמת — מנוע ההזמנות, התקציב והשוואת המחירים בקטלוג"
+   }
+  ],
+  "note": ""
+ }
+}

@@ -1,0 +1,167 @@
+{
+ "_FilterChipsRow": {
+  "addProps": [
+   {
+    "name": "hkl1",
+    "type": "String",
+    "replaces": "הכל"
+   },
+   {
+    "name": "nxygy2",
+    "type": "String",
+    "replaces": "👤 נציגים"
+   },
+   {
+    "name": "sfqy3",
+    "type": "String",
+    "replaces": "🏪 ספקים"
+   },
+   {
+    "name": "bwt4",
+    "type": "String",
+    "replaces": "🤖 בוט"
+   }
+  ],
+  "note": ""
+ },
+ "_ThreadList": {
+  "addProps": [
+   {
+    "name": "emptyTitle",
+    "type": "String",
+    "replaces": "אין שיחות"
+   },
+   {
+    "name": "emptyHint",
+    "type": "String",
+    "replaces": "כשיהיו שיחות — הן יופיעו כאן"
+   },
+   {
+    "name": "txt3",
+    "type": "String",
+    "replaces": "💬"
+   }
+  ],
+  "note": ""
+ },
+ "_DismissibleThread": {
+  "addProps": [
+   {
+    "name": "archivedSnack",
+    "type": "String",
+    "replaces": "שיחה הועברה לארכיון"
+   },
+   {
+    "name": "bytwl2",
+    "type": "String",
+    "replaces": "ביטול"
+   }
+  ],
+  "note": ""
+ },
+ "_DeliveryStatus": {
+  "addProps": [
+   {
+    "name": "retry",
+    "type": "String",
+    "replaces": "נסה שוב"
+   }
+  ],
+  "note": ""
+ },
+ "_TypingBubble": {
+  "addProps": [
+   {
+    "name": "typing",
+    "type": "String",
+    "replaces": "מקליד..."
+   }
+  ],
+  "note": ""
+ },
+ "_PrivacyNotice": {
+  "addProps": [
+   {
+    "name": "privacyNotice",
+    "type": "String",
+    "replaces": "🔒 ההודעות בשיחה זו מוצפנות מקצה לקצה. רק המשתתפים יכולים לקרוא אותן."
+   }
+  ],
+  "note": ""
+ },
+ "_InputBar": {
+  "addProps": [
+   {
+    "name": "cljHwdeh1",
+    "type": "String",
+    "replaces": "שלח הודעה"
+   },
+   {
+    "name": "hqlttHwdehQwlyt2",
+    "type": "String",
+    "replaces": "הקלטת הודעה קולית"
+   },
+   {
+    "name": "mxlmh3",
+    "type": "String",
+    "replaces": "מצלמה"
+   },
+   {
+    "name": "xyrw4",
+    "type": "String",
+    "replaces": "צירוף"
+   },
+   {
+    "name": "hwdeh5",
+    "type": "String",
+    "replaces": "הודעה"
+   },
+   {
+    "name": "aymwgxy6",
+    "type": "String",
+    "replaces": "אימוג׳י"
+   }
+  ],
+  "note": ""
+ },
+ "ChatsArchiveScreen": {
+  "addProps": [
+   {
+    "name": "archiveTitle",
+    "type": "String",
+    "replaces": "ארכיון שיחות"
+   },
+   {
+    "name": "archiveEmptyTitle",
+    "type": "String",
+    "replaces": "אין שיחות בארכיון"
+   },
+   {
+    "name": "archiveEmptyHint",
+    "type": "String",
+    "replaces": "החלק שיחה שמאלה כדי לארכב אותה"
+   },
+   {
+    "name": "jzrh4",
+    "type": "String",
+    "replaces": "חזרה"
+   }
+  ],
+  "note": ""
+ },
+ "_ArchivedRow": {
+  "addProps": [
+   {
+    "name": "cjzrMharkyw1",
+    "type": "String",
+    "replaces": "שחזר מהארכיון"
+   },
+   {
+    "name": "hcyjhCwjzrh2",
+    "type": "String",
+    "replaces": "השיחה שוחזרה"
+   }
+  ],
+  "note": ""
+ }
+}

@@ -1,0 +1,44 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__fittings__plan__deep_ends.dart",
+ "lines": 72,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ";\n\n/// חומר-הליבה של אביזר-ריתוך PP-R (מזהה-משפחה ב-`_materialsCompatible`).\nconst String kPprMaterial = ",
+  ";\n\n/// ספירת-שקעים פר-משפחת-מנוע (= מספר קצוות-הריתוך). מסעף/רוכב=3 · פקק=1 · השאר=2.\nconst Map<String, int> _kWeldSockets = {\n  ",
+  "`) — `directMatesWith`\n/// משווה raw-string, וכל ה-BSP הסטטיים נכתבים עם הסימן. בלי הסימן החיבור פשוט\n/// **לא נוצר** (false-negative בטוח, לעולם לא זיווג-שווא) — הנרמול מונע החמצה.\nString _canonBsp(String inch) {\n  final t = inch.trim();\n  return t.contains(",
+  "`); [male] = זכר/נקבה.\n/// כשאין נתוני-תבריג → מוחזר שקע-בלבד (honest-absent — לא ממציאים תבריג).\nList<ConnectorEnd> ppRThreadAdapterEnds(\n  int socketDn, {\n  String? threadInch,\n  bool? male,\n}) {\n  final ends = <ConnectorEnd>[_socket(socketDn)];\n  if (threadInch != null && male != null) {\n    ends.add(ConnectorEnd(\n        male ? EndType.bspMale : EndType.bspFemale, _canonBsp(threadInch),),);\n  }\n  return ends;\n}\n\n/// מבטיח את סימן-האינץ",
+  "ברז כדורי",
+  "ברך 45°",
+  "ברך 90°",
+  "ברך מחותכת",
+  "מסעף (טי)",
+  "מצרה",
+  "פקק",
+  "צווארון",
+  "רוכב"
+ ],
+ "icons": [],
+ "glyphs": [
+  "🔌"
+ ],
+ "logicCandidates": [],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kPprMaterial"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

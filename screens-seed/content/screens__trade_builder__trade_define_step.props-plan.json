@@ -1,0 +1,22 @@
+{
+ "_ColorSwatch": {
+  "addProps": [
+   {
+    "name": "tplXbeIndex11",
+    "type": "String",
+    "replaces": "צבע ${index + 1}"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_SaveDraftButton": {
+  "addProps": [
+   {
+    "name": "saveDraft",
+    "type": "String",
+    "replaces": "שמור טיוטה"
+   }
+  ],
+  "note": ""
+ }
+}

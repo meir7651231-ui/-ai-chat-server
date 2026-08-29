@@ -1,0 +1,17 @@
+{
+ "WordKeyboard": {
+  "addProps": [
+   {
+    "name": "hkl1",
+    "type": "String",
+    "replaces": "הכל"
+   },
+   {
+    "name": "hqldh2",
+    "type": "String",
+    "replaces": "הקלדה"
+   }
+  ],
+  "note": ""
+ }
+}

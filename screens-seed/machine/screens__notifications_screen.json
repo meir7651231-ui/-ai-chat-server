@@ -1,0 +1,299 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__notifications_screen.dart",
+ "lines": 1213,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.inkLight"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   18,
+   20,
+   24,
+   48
+  ],
+  "fontWeights": [
+   "FontWeight.w400",
+   "FontWeight.w600",
+   "FontWeight.w700"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   20,
+   26
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  " כבוי → חיווי ההתראות החדשות בתוך\n  // האפליקציה (בדג",
+  "$unread חדשות",
+  ");\nfinal notifExpandedGroupsProvider = StateProvider<Set<String>>((_) => {});\n\n// Derived provider — used by home_shell badge.\nfinal notifUnreadCountProvider = Provider<int>((ref) {\n  // ערוץ ",
+  "120 נקודות נוספו למועדון",
+  "s per-type toggles in settings.\n/// (orders/shipments/deals/price-drops → orders/shipments/deals/budget).\nSet<NotifSection> notifMutedSections(NotifSettings ns) => <NotifSection>{\n      if (!ns.typeOrders) NotifSection.orders,\n      if (!ns.typeShipments) NotifSection.shipments,\n      if (!ns.typeDeals) NotifSection.deals,\n      if (!ns.typePriceDrops) NotifSection.budget,\n    };\n\n/// Consecutive same-type runs of this length (or more) collapse behind \"הצג עוד\".\nconst int kNotifCollapseRunMin = 3;\nbool shouldCollapseNotifRun(int runLength) => runLength >= kNotifCollapseRunMin;\n\n/// Pure row-visibility predicate (regression-tested in test/gaps_test.dart).\nbool notifPasses({\n  required NotifSection type,\n  required String title,\n  required String preview,\n  required bool dismissed,\n  required NotifSection section,\n  required String query,\n  required Set<NotifSection> muted,\n}) {\n  if (dismissed) return false;\n  if (muted.contains(type)) return false;\n  if (section != NotifSection.all && type != section) return false;\n  if (query.isNotEmpty) {\n    final q = query.toLowerCase();\n    if (!title.toLowerCase().contains(q) && !preview.toLowerCase().contains(q)) {\n      return false;\n    }\n  }\n  return true;\n}\n\n/// Importance filter: \"all\" keeps everything; otherwise only high-priority rows.\nbool passesImportance(NotifImportance filter, bool highPriority) =>\n    filter == NotifImportance.all || highPriority;\n\nList<_Notif> _filtered({\n  required NotifSection section,\n  required Set<String> dismissedIds,\n  required String query,\n  required Set<NotifSection> mutedTypes,\n  required NotifImportance importance,\n}) =>\n    _activeNotifs\n        .where((n) =>\n            passesImportance(importance, n.highPriority) &&\n            notifPasses(\n              type: n.type,\n              title: n.title,\n              preview: n.preview,\n              dismissed: dismissedIds.contains(n.id),\n              section: section,\n              query: query,\n              muted: mutedTypes,\n            ))\n        .toList();\n\n// Inserts date-group headers and collapses consecutive same-type groups of ≥3.\n/// A date header is inserted whenever the group changes from the previous row.\nbool isNewDateGroup(String? current, String next) => next != current;\n\nList<Object> _withHeadersAndCollapse(\n  List<_Notif> notifs,\n  Set<String> expandedKeys,\n) {\n  final result = <Object>[];\n  String? currentDateGroup;\n  var i = 0;\n  while (i < notifs.length) {\n    final n = notifs[i];\n    if (isNewDateGroup(currentDateGroup, n.dateGroup)) {\n      currentDateGroup = n.dateGroup;\n      result.add(currentDateGroup);\n    }\n    final groupKey = ",
+  "אושרה ונמצאת בהכנה",
+  "אין התראות",
+  "אשר איסוף",
+  "אשר תדריך",
+  "אתמול",
+  "ביטול",
+  "ברזל 12mm · ₪4.20 → ₪3.85",
+  "דרגת סיכון עודכנה לאדום — קומה 3",
+  "ההתראה תימחק לצמיתות.",
+  "ההתראות שנקראו יוסרו מהרשימה לצמיתות.",
+  "הזמנה #1198",
+  "הזמנה #1234",
+  "היום",
+  "הצג עוד ${showMore.hiddenCount} ↓",
+  "התדריך אושר",
+  "התראה נמחקה",
+  "התראות",
+  "התראות מושתקות",
+  "התראות תקציב מופעלות אוטומטית בעת חציית הספים:",
+  "התראת בטיחות",
+  "התראת תקציב",
+  "חבילה ממתינה לאיסוף בחנות",
+  "חדשות",
+  "חריגת תקציב",
+  "טפל כעת",
+  "יגיע עד מחר 14:00",
+  "כשיהיו עדכונים — הם יופיעו כאן",
+  "לפני 3 שעות",
+  "לפני שעה",
+  "לפני שעתיים",
+  "מבצע שבועי",
+  "מוכנה לאיסוף — צור קשר עם הספק",
+  "מוקדם יותר",
+  "מושתק בשעות השקט",
+  "מושתק עד $untilLabel",
+  "מחיקת התראה?",
+  "מחק",
+  "מסלול עודכן — עצור בשוק עכו",
+  "משלוח #892",
+  "משלוח #893",
+  "משלוח #894",
+  "ניקוי התראות שנקראו?",
+  "נקה",
+  "נקה נקראו",
+  "סמן הכל כנקרא",
+  "סמן כנקרא",
+  "עדכון מחיר",
+  "עדכונים",
+  "עוקב ✓",
+  "עכשיו",
+  "עקוב",
+  "פרויקט A חרג ב-12% מהתקציב",
+  "פרטים",
+  "ציוד חשמל -15% עד יום ראשון",
+  "שעות שקט פעילות",
+  "תגמול נצבר",
+  "תדריך בטיחות יומי"
+ ],
+ "icons": [
+  "Icons.clear_all",
+  "Icons.delete_outline",
+  "Icons.done",
+  "Icons.done_all"
+ ],
+ "glyphs": [
+  "✓",
+  "🌙",
+  "🎁",
+  "💱",
+  "📦",
+  "🔔",
+  "🔕",
+  "🚛",
+  "🦺"
+ ],
+ "logicCandidates": [
+  {
+   "name": "isNewDateGroup",
+   "line": 356
+  },
+  {
+   "name": "_withHeadersAndCollapse",
+   "line": 358
+  },
+  {
+   "name": "setState",
+   "line": 488
+  },
+  {
+   "name": "_handleScroll",
+   "line": 492
+  },
+  {
+   "name": "_ShowMore",
+   "line": 129,
+   "kind": "metrics-class"
+  }
+ ],
+ "widgets": [
+  {
+   "name": "NotificationsScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 477,
+   "loc": 6,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_Header",
+   "kind": "ConsumerWidget",
+   "line": 541,
+   "loc": 82,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "notifDismissedIdsProvider",
+    "notifReadIdsProvider",
+    "notifUnreadCountProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 7,
+   "constData": 0
+  },
+  {
+   "name": "_NotifList",
+   "kind": "ConsumerWidget",
+   "line": 637,
+   "loc": 190,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "notifDismissedIdsProvider",
+    "notifExpandedGroupsProvider",
+    "notifSearchQueryProvider",
+    "notifSectionProvider",
+    "notifSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 6,
+   "constData": 0
+  },
+  {
+   "name": "_DateHeader",
+   "kind": "StatelessWidget",
+   "line": 828,
+   "loc": 21,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_ShowMoreRow",
+   "kind": "ConsumerWidget",
+   "line": 850,
+   "loc": 27,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "notifExpandedGroupsProvider"
+   ],
+   "writes": [
+    "notifExpandedGroupsProvider"
+   ],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_DismissibleRow",
+   "kind": "ConsumerWidget",
+   "line": 878,
+   "loc": 44,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "notifDismissedIdsProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "fx:toast"
+   ],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_NotifRow",
+   "kind": "ConsumerWidget",
+   "line": 923,
+   "loc": 290,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "mainTabProvider",
+    "notifDismissedIdsProvider",
+    "notifFollowedIdsProvider",
+    "notifReadIdsProvider",
+    "storeSectionProvider"
+   ],
+   "writes": [
+    "mainTabProvider",
+    "notifDismissedIdsProvider",
+    "notifReadIdsProvider",
+    "storeSectionProvider"
+   ],
+   "actions": [
+    "call:showNotifActionSheet"
+   ],
+   "strings": 7,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [
+  "_Header"
+ ],
+ "gates": [
+  "kBudgetThresholds",
+  "kNotifCollapseRunMin",
+  "kProfileEmptySeeds",
+  "kSafetyTips"
+ ],
+ "board": {
+  "reads": [
+   "mainTabProvider",
+   "notifDismissedIdsProvider",
+   "notifExpandedGroupsProvider",
+   "notifFollowedIdsProvider",
+   "notifReadIdsProvider",
+   "notifSearchQueryProvider",
+   "notifSectionProvider",
+   "notifSettingsProvider",
+   "notifUnreadCountProvider",
+   "storeSectionProvider"
+  ],
+  "writes": [
+   "mainTabProvider",
+   "notifDismissedIdsProvider",
+   "notifExpandedGroupsProvider",
+   "notifReadIdsProvider",
+   "storeSectionProvider"
+  ],
+  "navsAndCalls": [
+   "call:showNotifActionSheet",
+   "fx:toast"
+  ]
+ }
+}

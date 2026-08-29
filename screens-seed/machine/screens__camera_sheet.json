@@ -1,0 +1,180 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__camera_sheet.dart",
+ "lines": 661,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.radiusCard",
+   "BsTokens.radiusPill",
+   "BsTokens.space3"
+  ],
+  "themeSockets": [],
+  "fontSizes": [
+   9,
+   12,
+   13,
+   13.5,
+   14,
+   15,
+   16,
+   18,
+   52
+  ],
+  "fontWeights": [
+   "FontWeight.w400",
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   24,
+   26,
+   28,
+   96
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  "s context (captured before the pop) — the\n      // same pattern as _onDetect; toasting on `context` after popping this\n      // screen reaches a defunct element and silently drops (no \"נקלטה\").\n      final rootCtx = Navigator.of(context, rootNavigator: true).context;\n      Navigator.of(context).pop(dataUrl); // deliver the REAL capture\n      showToast(rootCtx, ",
+  "אין פלאש במכשיר",
+  "אישור",
+  "אישור מסירה",
+  "אתר A",
+  "ביטול",
+  "ברקוד",
+  "הפקת ברקוד",
+  "הקוד $code לא נמצא במק\"ט",
+  "חנות",
+  "כוון לאזור הצילום",
+  "כוון לברקוד",
+  "כוון לפריט",
+  "כל הגלריה",
+  "כלים",
+  "להשתמש בתמונה הזו?",
+  "לפני/אחרי",
+  "מהנדס",
+  "מלאי",
+  "משימה",
+  "משלוח",
+  "סגור",
+  "פותח…",
+  "פלאש",
+  "פרויקט",
+  "צילום משימה",
+  "צלם $label",
+  "צלם את המשימה",
+  "צלם הוכחת מסירה",
+  "תצוגה מדומה — תמונת דמו",
+  "תצוגה מקדימה: $label",
+  "📸 תצוגה מקדימה"
+ ],
+ "icons": [
+  "Icons.assignment_turned_in",
+  "Icons.broken_image_outlined",
+  "Icons.close",
+  "Icons.construction",
+  "Icons.engineering",
+  "Icons.flash_off",
+  "Icons.flash_on",
+  "Icons.handyman",
+  "Icons.home_work",
+  "Icons.inventory_",
+  "Icons.local_shipping",
+  "Icons.photo_library_outlined",
+  "Icons.storefront"
+ ],
+ "glyphs": [
+  "🏷",
+  "📷",
+  "📸"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "CameraScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 57,
+   "loc": 6,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_ShutterButton",
+   "kind": "StatelessWidget",
+   "line": 469,
+   "loc": 55,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_GalleryThumb",
+   "kind": "StatelessWidget",
+   "line": 527,
+   "loc": 43,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_GalleryAllBtn",
+   "kind": "StatelessWidget",
+   "line": 571,
+   "loc": 39,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_BarcodeReticle",
+   "kind": "StatelessWidget",
+   "line": 613,
+   "loc": 12,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_ModeFrame",
+   "kind": "StatelessWidget",
+   "line": 628,
+   "loc": 33,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

@@ -1,0 +1,65 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__intel__journey_labels.dart",
+ "lines": 116,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  " show IntelEvents;\n\n/// Upper bound on rows the journey timeline folds for one customer — keeps the\n/// read O(window) rather than O(all-history) (§4) even on a long-lived buffer.\nconst int kJourneyWindow = 50;\n\n/// Hebrew label for an intel event [name] — keyed by the `IntelEvents` wire\n/// constants (never a raw literal) so the timeline strings never drift from the\n/// taxonomy. Honors the step-99 spec labels verbatim (screen_view→\"צפייה במסך\",\n/// search_submit→\"חיפוש\", add_to_cart→\"הוספה לסל\", checkout_start→\"התחלת תשלום\",\n/// order_placed→\"הזמנה בוצעה\"). An unknown name falls back to the raw name (honest,\n/// never a crash).\nString intelEventHe(String name) => _he[name] ?? name;\n\nconst Map<String, String> _he = <String, String>{\n  IntelEvents.sessionStart: ",
+  "הוספה לסל",
+  "הזמנה בוצעה",
+  "התחלת תשלום",
+  "זיהוי",
+  "חיפוש",
+  "חיפוש ללא תוצאות",
+  "לפני ${d.inDays} ימ׳",
+  "לפני ${d.inHours} שע׳",
+  "לפני ${d.inMinutes} דק׳",
+  "לפני ${d.inSeconds < 0 ? 0 : d.inSeconds} שנ׳",
+  "סיום סשן",
+  "פעילות",
+  "צפייה במוצר",
+  "צפייה במסך",
+  "צפייה בסל",
+  "שלב בתשלום"
+ ],
+ "icons": [],
+ "glyphs": [
+  "⚪",
+  "✅",
+  "👁",
+  "💓",
+  "💳",
+  "📦",
+  "🔍",
+  "🚫",
+  "🛒",
+  "🟢",
+  "🧺",
+  "🧾",
+  "🪪"
+ ],
+ "logicCandidates": [
+  {
+   "name": "journeyRelTime",
+   "line": 108
+  }
+ ],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kJourneyWindow"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

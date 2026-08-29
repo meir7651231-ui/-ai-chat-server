@@ -1,0 +1,37 @@
+{
+ "_SheetHandle": {
+  "addProps": [
+   {
+    "name": "sgwr1",
+    "type": "String",
+    "replaces": "סגור"
+   }
+  ],
+  "note": ""
+ },
+ "_StorePriceComparisonSheet": {
+  "addProps": [
+   {
+    "name": "compareTitle",
+    "type": "String",
+    "replaces": "📊 השוואת מחירים"
+   },
+   {
+    "name": "compareSubtitle",
+    "type": "String",
+    "replaces": "מחירים מ-3 חנויות שותפות — הזול ביותר מסומן."
+   },
+   {
+    "name": "compareEmpty",
+    "type": "String",
+    "replaces": "אין מחירים להשוואה כרגע."
+   },
+   {
+    "name": "comparePricesNote",
+    "type": "String",
+    "replaces": "💰 המחירים נמשכים מ-3 חנויות שותפות. ${AppBrand.name} בוחר אוטומטית את ההצעה המשתלמת ביותר לכל פריט."
+   }
+  ],
+  "note": ""
+ }
+}

@@ -1,0 +1,96 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__studio__panes__find_replace_pane.dart",
+ "lines": 264,
+ "pigments": {
+  "tokens": [
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  " ($dropped נדחו — טקסט ארוך/לא תקין)",
+  "$count התאמות — החלפה רחבה, לסקור היטב לפני \"פרסם\".",
+  "(ריק)",
+  "s *name*). Each\n// hit previews labelHe + \"before → after\", with a per-hit checkbox so the owner\n// replaces selectively. \"החלף בנבחרים\" applies ALL chosen edits as a SINGLE\n// `applyOps` batch ⇒ one undo unit (R1-A3 · R2-#18), straight to the DRAFT —\n// nothing reaches users until \"פרסם לכולם\". kImmutable ids are read-only here too.\n// ─────────────────────────────────────────────────────────────────────────────\n\nimport ",
+  "אין התאמות ל־\"$query\".",
+  "הוחלפו $applied — בטיוטה. \"פרסם לכולם\" כדי לשדר לכל המשתמשים.",
+  "החלף בנבחרים ($selectedCount)",
+  "החלף ב…",
+  "הקלד טקסט לחיפוש על-פני הרכיבים שנערכו.",
+  "מ־${h.text} ל־${after.isEmpty ? ",
+  "מצא טקסט",
+  "רכיב קריטי — קריאה בלבד"
+ ],
+ "icons": [
+  "Icons.find_replace",
+  "Icons.search",
+  "Icons.warning_amber_rounded"
+ ],
+ "glyphs": [],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "FindReplacePane",
+   "kind": "ConsumerStatefulWidget",
+   "line": 20,
+   "loc": 6,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_Placeholder",
+   "kind": "StatelessWidget",
+   "line": 218,
+   "loc": 17,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_WideWarning",
+   "kind": "StatelessWidget",
+   "line": 236,
+   "loc": 28,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kImmutable"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

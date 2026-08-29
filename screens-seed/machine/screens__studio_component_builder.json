@@ -1,0 +1,133 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__studio_component_builder.dart",
+ "lines": 789,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.dangerDark",
+   "BsTokens.divider",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.warnText"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   11,
+   12,
+   13,
+   14,
+   16
+  ],
+  "fontWeights": [
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  " · 🔒 נעול",
+  "1 · בחר אלמנט",
+  "2 · בחר סוג עריכה",
+  "3 · אמוג׳י חדש",
+  "3 · טקסט חדש",
+  "3 · נראות",
+  "3 · פעולה (מתוך קטלוג הפעולות)",
+  "3 · צבע (מתוך הערכים החוקיים לרכיב)",
+  "3 · רכיב להוספה (תצוגה מקדימה — ללא op בגרסה זו)",
+  "s MVP — no-code editing that works with `kClaudeAi`\n// OFF (the builder NEVER reads `claudeGatewayProvider`; §8).\n//\n// THE FLOW (§2): pick an element id (over the frozen `ElementRegistryView`) → pick\n// an edit — a prop (text / emoji / style-color from `allowedValues`), visibility\n// (SetHidden), an action (from the step-72 `kActionCatalog`; typed-arg screens are\n// GREYED \"צריך פרמטרים — לא זמין\", R1-5 — never dropped), or a component (from the\n// step-73 `kComponentPalette`, validated for preview) → PREVIEW (validateSafe →\n// summarizeDiff, recomputed FREE on every change, §6) → CONFIRM (a single tracked\n// tap → P1 `applyOps` ONCE, R1-4) → UNDO/REDO (P1",
+  "s `ConfigOp` family is the 6 Set-axis ops — there is NO `AddComponent` variant.\n// So the component category is a GROUNDED, validated PREVIEW (over `validateAddCom\n// ponent`); placing a component applies once P1 exposes that op. text/emoji/\n// visibility produce ops that apply; style-color/action are grounded + previewed and\n// (on the seed registry, whose `allowedValues`/`allowedActions` are empty) safely\n// BLOCKED by `validateSafe` — the backstop working, surfaced as \"נחסמו K\" (§4).\n//\n// §10 draft badge: the Studio edits the DRAFT only; publish is a SEPARATE Pillar-1\n// gate, so a \"טיוטה\" badge is always shown. All colors from `BsTokens` (the color-\n// ratchet — zero raw hex literals). No Firebase, no gateway.\n// ─────────────────────────────────────────────────────────────────────────────\n\nimport ",
+  "s frozen family has no\n/// `AddComponent`, see the file header).\nenum _EditKind { text, emoji, color, visibility, action, component }\n\n/// A few REAL typed-arg screens (need per-screen args → out-of-v1). They are NOT in\n/// [kNavScreenIds]; the action-picker shows them GREYED \"צריך פרמטרים — לא זמין\"\n/// (R1-5) rather than dropping them silently. All three exist in the tree.\nconst List<String> _kTypedArgScreens = <String>[\n  ",
+  "אין ערכי צבע מוגדרים לרכיב זה (fail-closed).",
+  "אמוג׳י",
+  "אשר והחל בטיוטה ✓",
+  "בחר מסך-יעד (מסכי-פרמטר מאופרים — צריך פרמטרים):",
+  "בחר עריכה כדי לראות תצוגה מקדימה.",
+  "בחר רכיב לעריכה…",
+  "בטל (undo של Pillar 1)",
+  "בצע-שוב (redo של Pillar 1)",
+  "הדבק אמוג׳י…",
+  "הוחל — ${applied.length} שינוי בטיוטה ✓",
+  "הקלד טקסט…",
+  "הרכיב הנבחר",
+  "טיוטה",
+  "טיוטה · $dirtyCount",
+  "טקסט",
+  "יומן שינויים (תצוגה — מקור-האמת הוא undo של Pillar 1)",
+  "נראות",
+  "פעולה",
+  "צבע",
+  "צריך פרמטרים — לא זמין",
+  "רכיב",
+  "שינוי",
+  "✓ חוקי להוספה (יופעל עם שער ה-AddComponent של Pillar 1)",
+  "👁️ הצג",
+  "👁️ תצוגה מקדימה (לפני החלה)",
+  "🙈 הסתר",
+  "🛠️ בונה ידני — ללא מודל"
+ ],
+ "icons": [
+  "Icons.redo",
+  "Icons.undo"
+ ],
+ "glyphs": [
+  "⚙",
+  "⛔",
+  "✓",
+  "➕",
+  "🎨",
+  "👁",
+  "📝",
+  "🔒",
+  "😀",
+  "🙈",
+  "🛠"
+ ],
+ "logicCandidates": [
+  {
+   "name": "_buildOps",
+   "line": 156
+  },
+  {
+   "name": "_catAvailable",
+   "line": 361
+  }
+ ],
+ "widgets": [
+  {
+   "name": "StudioComponentBuilder",
+   "kind": "ConsumerStatefulWidget",
+   "line": 83,
+   "loc": 7,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kActionCatalog",
+  "kClaudeAi",
+  "kComponentPalette",
+  "kElementRegistry",
+  "kImmutable",
+  "kNavScreenIds"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

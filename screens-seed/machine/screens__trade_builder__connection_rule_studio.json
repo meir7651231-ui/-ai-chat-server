@@ -1,0 +1,205 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__trade_builder__connection_rule_studio.dart",
+ "lines": 818,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.dangerDark",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5",
+   "BsTokens.successDark"
+  ],
+  "themeSockets": [
+   "Theme.of",
+   "cfgRadius"
+  ],
+  "fontSizes": [
+   13.5,
+   14,
+   15,
+   16,
+   18,
+   20,
+   34
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   20
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  ") + 1);\n\n/// 🔌 כללי חיבור — the trade",
+  "אין עדיין מחברים",
+  "בדוק חיבור",
+  "הוסף מחבר",
+  "חיבור ${a.nameHe} אל ${b.nameHe}",
+  "חיבור <a> אל <b>",
+  "כלל חדש",
+  "כלל חיבור",
+  "לא מתחבר",
+  "למשל: …",
+  "מחבר א",
+  "מחבר ב",
+  "מחברים",
+  "מחק",
+  "מחק כלל",
+  "מטריצת חיבורים",
+  "סגור",
+  "ספסל בדיקה",
+  "שם מחבר",
+  "שמור",
+  "תווית שיטה",
+  "🔌 כללי חיבור"
+ ],
+ "icons": [
+  "Icons.delete_outline"
+ ],
+ "glyphs": [
+  "✓",
+  "🔌"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "ConnectionRuleStudioScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 63,
+   "loc": 13,
+   "pure": false,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:ConnectionRuleStudioScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_SectionHeader",
+   "kind": "StatelessWidget",
+   "line": 402,
+   "loc": 17,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_EmptyConnectors",
+   "kind": "StatelessWidget",
+   "line": 422,
+   "loc": 35,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_ConnectorTile",
+   "kind": "StatelessWidget",
+   "line": 460,
+   "loc": 67,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_Matrix",
+   "kind": "StatelessWidget",
+   "line": 533,
+   "loc": 52,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_MatrixCell",
+   "kind": "StatelessWidget",
+   "line": 588,
+   "loc": 47,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_MethodLabelDialog",
+   "kind": "StatefulWidget",
+   "line": 640,
+   "loc": 6,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_RuleInspectDialog",
+   "kind": "StatelessWidget",
+   "line": 716,
+   "loc": 58,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 3,
+   "constData": 0
+  },
+  {
+   "name": "_PillButton",
+   "kind": "StatelessWidget",
+   "line": 778,
+   "loc": 40,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kTradeBuilderFlag"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:ConnectionRuleStudioScreen"
+  ]
+ }
+}

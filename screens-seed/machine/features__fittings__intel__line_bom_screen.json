@@ -1,0 +1,90 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__fittings__intel__line_bom_screen.dart",
+ "lines": 137,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [
+   11,
+   13
+  ],
+  "fontWeights": [
+   "FontWeight.w700"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  " · ${bom.criticalOpen} בטיחות חסרים",
+  " · יש פערים",
+  ";\n\n/// מסך-היכולת \"כתב-כמויות\": רשימת-קנייה + סטטוס. מקבל BOM מוכן (או דמו).\nclass LineBomScreen extends StatelessWidget {\n  const LineBomScreen({this.bom, super.key});\n\n  final LineBom? bom;\n\n  static const LineBom _demo = LineBom(\n    rows: [\n      BomRow(",
+  "אין פריטים",
+  "ברז כדורי PPR 32",
+  "ברך PPR 90° 50",
+  "כתב-כמויות · preview (off-live)",
+  "מסעף PPR 50",
+  "מצמד PPR 50",
+  "מצרה PPR 50×32",
+  "סה״כ ${bom.totalPieces} פריטים",
+  "פקק PPR 32"
+ ],
+ "icons": [
+  "Icons.check_circle",
+  "Icons.warning_amber"
+ ],
+ "glyphs": [
+  "🔒",
+  "🧠"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "LineBomScreen",
+   "kind": "StatelessWidget",
+   "line": 11,
+   "loc": 60,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 8,
+   "constData": 0
+  },
+  {
+   "name": "_StatusBar",
+   "kind": "StatelessWidget",
+   "line": 72,
+   "loc": 28,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 3,
+   "constData": 0
+  },
+  {
+   "name": "_BomRowTile",
+   "kind": "StatelessWidget",
+   "line": 101,
+   "loc": 36,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

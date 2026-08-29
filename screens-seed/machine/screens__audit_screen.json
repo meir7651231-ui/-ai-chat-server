@@ -1,0 +1,102 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__audit_screen.dart",
+ "lines": 397,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.danger",
+   "BsTokens.inkLight"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   9,
+   10,
+   11,
+   13,
+   14,
+   16,
+   48
+  ],
+  "fontWeights": [
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [
+   "0.10",
+   "0.18",
+   "0.2",
+   "0.4"
+  ],
+  "iconSizes": [
+   18,
+   22
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  " (ריזרקולציה)",
+  "${r.criticalOpen} קריטי",
+  "${r.itemCount} פריטים",
+  ";\n// Live, in-app audit screen — generates 20 RANDOM installation scenarios\n// each run and shows the auto-built plan + compliance result for each.\n// Random anchors are sampled from the verified-spec catalog with bias\n// toward diversity (supply vs drainage, hot vs cold, different materials),\n// so every press of \"הרץ\" exercises a different slice of the engine.\n\nimport ",
+  "ΔP ${r.dropBar.toStringAsFixed(2)} בר",
+  "אודיט תרחישים",
+  "הקש \"⚡ הרץ 20 תרחישי בדיקה\" כדי להתחיל",
+  "חזרה",
+  "מריץ ${_results.length}/20…",
+  "עדיין לא הורצו בדיקות",
+  "⚡ הרץ 20 תרחישי בדיקה",
+  "❄ קר",
+  "🔥 חם"
+ ],
+ "icons": [
+  "Icons.arrow_back",
+  "Icons.check_circle",
+  "Icons.error",
+  "Icons.hourglass_top",
+  "Icons.inventory_",
+  "Icons.play_arrow_rounded",
+  "Icons.straighten",
+  "Icons.water_drop_outlined"
+ ],
+ "glyphs": [
+  "⚡",
+  "❄",
+  "🔥",
+  "🧪"
+ ],
+ "logicCandidates": [
+  {
+   "name": "_ScenarioResult",
+   "line": 24,
+   "kind": "metrics-class"
+  }
+ ],
+ "widgets": [
+  {
+   "name": "AuditScreen",
+   "kind": "StatefulWidget",
+   "line": 17,
+   "loc": 6,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kLipskeyCatalog",
+  "kVerifiedSpecs"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

@@ -1,0 +1,139 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__lipskey_brand_screen.dart",
+ "lines": 401,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.inkLight"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   10,
+   11,
+   12,
+   14,
+   16,
+   17,
+   22,
+   38
+  ],
+  "fontWeights": [
+   "FontWeight.bold",
+   "FontWeight.w700"
+  ],
+  "opacities": [
+   "0.25",
+   "0.4"
+  ],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "$catCount קטגוריות",
+  "$prodCount מוצרים",
+  "$totalProducts מוצרים · $totalCats קטגוריות",
+  "${products.length} מוצרים",
+  ";\n\n/// The catalog entries of [section] that have at least one product. Under\n/// [kHideUnderConstruction] the level-2 grid renders ONLY these — the empty\n/// brand categories (\"אמבט ואגנית\", \"מאספים וקולטים\") would otherwise show a\n/// dimmed \"בקרוב\" badge the App Store rejects. Reversible data filter (mirrors\n/// catalog_screen",
+  "אינסטלציה · סניטציה",
+  "בקרוב",
+  "חזרה",
+  "ליפסקי ברקן",
+  "ליפסקי ברקן · ${entries.length} קטגוריות"
+ ],
+ "icons": [
+  "Icons.arrow_forward"
+ ],
+ "glyphs": [
+  "🏭"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "LipskeyBrandScreen",
+   "kind": "StatelessWidget",
+   "line": 27,
+   "loc": 84,
+   "pure": false,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:LipskeyBrandScreen"
+   ],
+   "strings": 3,
+   "constData": 1
+  },
+  {
+   "name": "_BrandHeader",
+   "kind": "StatelessWidget",
+   "line": 112,
+   "loc": 46,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_SectionCard",
+   "kind": "StatelessWidget",
+   "line": 160,
+   "loc": 70,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "LipskeySectionScreen",
+   "kind": "StatelessWidget",
+   "line": 232,
+   "loc": 86,
+   "pure": false,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:LipskeySectionScreen"
+   ],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_CategoryCard",
+   "kind": "StatelessWidget",
+   "line": 320,
+   "loc": 81,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kCatalogProducts",
+  "kHideUnderConstruction",
+  "kLipskeyCatalog",
+  "kLipskeySections"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:LipskeyBrandScreen",
+   "nav:LipskeySectionScreen"
+  ]
+ }
+}

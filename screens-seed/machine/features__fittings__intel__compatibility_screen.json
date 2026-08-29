@@ -1,0 +1,78 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__fittings__intel__compatibility_screen.dart",
+ "lines": 109,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [
+   11,
+   14,
+   16
+  ],
+  "fontWeights": [
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ";\n\n/// מסך \"תאימות\": מוצר-נבחר + רשימת-האביזרים שמתחברים אליו (✓) / לא (✗ + סיבה).\nclass CompatibilityScreen extends StatelessWidget {\n  const CompatibilityScreen({\n    this.product = _demoProduct,\n    this.universe = _demoUniverse,\n    super.key,\n  });\n\n  final LipskeyCatalogProduct product;\n  final List<LipskeyCatalogProduct> universe;\n\n  static const _demoProduct =\n      LipskeyCatalogProduct(sku: ",
+  "אביזרי קצה HDPE",
+  "ברך 90° 32",
+  "מסעף 32",
+  "מצמד 32",
+  "מצמד 50",
+  "מתחבר-ל: ${product.nameHe}",
+  "תאימות-אביזרים · preview (off-live)"
+ ],
+ "icons": [],
+ "glyphs": [
+  "✓",
+  "✗",
+  "🔒",
+  "🔧",
+  "🛡",
+  "🧠"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "CompatibilityScreen",
+   "kind": "StatelessWidget",
+   "line": 13,
+   "loc": 54,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 7,
+   "constData": 1
+  },
+  {
+   "name": "_CompatRow",
+   "kind": "StatelessWidget",
+   "line": 68,
+   "loc": 41,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kStageBackground"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

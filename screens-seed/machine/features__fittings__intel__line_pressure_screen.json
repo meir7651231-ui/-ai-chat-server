@@ -1,0 +1,73 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__fittings__intel__line_pressure_screen.dart",
+ "lines": 100,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [
+   12,
+   13,
+   20,
+   30
+  ],
+  "fontWeights": [
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ";\n\n/// מסך \"נפילת-לחץ\": ΔP + צוואר-בקבוק + הצעות. מקבל תוכנית-קו מוכנה.\nclass LinePressureScreen extends StatelessWidget {\n  const LinePressureScreen({required this.plan, super.key});\n\n  final FittingLinePlan plan;\n\n  @override\n  Widget build(BuildContext context) {\n    final r = pressureDropForPlan(plan);\n    final over = r.exceedsBudget;\n    return Scaffold(\n      backgroundColor: kStageBackground,\n      appBar: AppBar(\n        backgroundColor: const Color(0xFF151F2A),\n        foregroundColor: Colors.white,\n        title: const Text(\n          ",
+  "K=${r.totalK.toStringAsFixed(2)} · אורך=${r.frictionMetres.toStringAsFixed(1)}מ׳ · ",
+  "אין הערות-זרימה — הקו בתקציב.",
+  "הצעות",
+  "צוואר-בקבוק: ${r.bottleneck!.nameHe}",
+  "קדח-מינ׳=${r.minBoreMm.toStringAsFixed(1)}מ״מ"
+ ],
+ "icons": [],
+ "glyphs": [
+  "🔒",
+  "🧠"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "LinePressureScreen",
+   "kind": "StatelessWidget",
+   "line": 13,
+   "loc": 72,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 6,
+   "constData": 0
+  },
+  {
+   "name": "_SuggestionTile",
+   "kind": "StatelessWidget",
+   "line": 86,
+   "loc": 14,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kStageBackground"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

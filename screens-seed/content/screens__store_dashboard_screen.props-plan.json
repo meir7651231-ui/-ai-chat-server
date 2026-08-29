@@ -1,0 +1,232 @@
+{
+ "_LogoPreview": {
+  "addProps": [
+   {
+    "name": "t06",
+    "type": "String",
+    "replaces": "אין לוגו עדיין — צלמו או העלו אחד"
+   }
+  ],
+  "note": ""
+ },
+ "_StoreNotifsBell": {
+  "addProps": [
+   {
+    "name": "htrawt1",
+    "type": "String",
+    "replaces": "התראות"
+   }
+  ],
+  "note": ""
+ },
+ "_StoreNotifsSheet": {
+  "addProps": [
+   {
+    "name": "t07",
+    "type": "String",
+    "replaces": "🔔 התראות"
+   },
+   {
+    "name": "t08",
+    "type": "String",
+    "replaces": "אין התראות עדיין.\\nדוחות מהשליח ועדכוני משלוחים יופיעו כאן."
+   },
+   {
+    "name": "t09",
+    "type": "String",
+    "replaces": "סמן הכל כנקרא"
+   },
+   {
+    "name": "t10",
+    "type": "String",
+    "replaces": "נקה הכל"
+   },
+   {
+    "name": "sgyrh5",
+    "type": "String",
+    "replaces": "סגירה"
+   },
+   {
+    "name": "lnqwtAtKl6",
+    "type": "String",
+    "replaces": "לנקות את כל ההתראות?"
+   },
+   {
+    "name": "klHhtrawtYymjqw7",
+    "type": "String",
+    "replaces": "כל ההתראות יימחקו — פעולה בלתי הפיכה."
+   },
+   {
+    "name": "nqh8",
+    "type": "String",
+    "replaces": "נקה"
+   }
+  ],
+  "note": ""
+ },
+ "_StoreNotifRow": {
+  "addProps": [
+   {
+    "name": "laNqra1",
+    "type": "String",
+    "replaces": "לא נקרא"
+   }
+  ],
+  "note": ""
+ },
+ "_StoreOrderCard": {
+  "addProps": [
+   {
+    "name": "t11",
+    "type": "String",
+    "replaces": "🕒 נדרש: בתיאום"
+   },
+   {
+    "name": "t12",
+    "type": "String",
+    "replaces": "✓ תיקון בוצע — בדוק שינויים"
+   },
+   {
+    "name": "frytJsr3",
+    "type": "String",
+    "replaces": "פריט חסר"
+   },
+   {
+    "name": "frytJsrAna4",
+    "type": "String",
+    "replaces": "⏳ פריט חסר — אנא המתן להחלטת הקבלן"
+   },
+   {
+    "name": "acrWqblLhknh5",
+    "type": "String",
+    "replaces": "✓ אשר וקבל להכנה"
+   },
+   {
+    "name": "smKmwkHebr6",
+    "type": "String",
+    "replaces": "📦 סמן כמוכן — העבר לשליח"
+   },
+   {
+    "name": "mswrLclyj7",
+    "type": "String",
+    "replaces": "🛵 מסור לשליח"
+   },
+   {
+    "name": "nmsrLclyj8",
+    "type": "String",
+    "replaces": "✓ נמסר לשליח"
+   },
+   {
+    "name": "tplHwkBfulfillmentsplitIn9",
+    "type": "String",
+    "replaces": " · 🚚 הוכן ב-${fulfillment.splitInto} חבילות"
+   },
+   {
+    "name": "tplOrderid10",
+    "type": "String",
+    "replaces": "📦 ${order.id}"
+   },
+   {
+    "name": "tplFulfillmentsplitInto11",
+    "type": "String",
+    "replaces": "🚚×${fulfillment.splitInto}"
+   },
+   {
+    "name": "tplOrderitemsFrytyFMoney12",
+    "type": "String",
+    "replaces": "${order.items} פריטים · ${fMoney(order.sum)} · הקש לתעודת ליקוט$splitTag"
+   },
+   {
+    "name": "msyrhLclyj13",
+    "type": "String",
+    "replaces": "מסירה לשליח?"
+   },
+   {
+    "name": "tplHhzmnhOrderidTymsr14",
+    "type": "String",
+    "replaces": "ההזמנה ${order.id} תימסר לשליח — פעולה סופית."
+   },
+   {
+    "name": "mswr15",
+    "type": "String",
+    "replaces": "מסור"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_DeliveredCard": {
+  "addProps": [
+   {
+    "name": "t13",
+    "type": "String",
+    "replaces": "נמסר ✓"
+   },
+   {
+    "name": "tplOrderid2",
+    "type": "String",
+    "replaces": "📦 ${order.id}"
+   },
+   {
+    "name": "tplOrderitemsFrytyFMoney3",
+    "type": "String",
+    "replaces": "${order.items} פריטים · ${fMoney(order.sum)} · הקש לתעודת ליקוט"
+   },
+   {
+    "name": "hxgAycwrMsyrh4",
+    "type": "String",
+    "replaces": "הצג אישור מסירה במסך מלא"
+   },
+   {
+    "name": "tplOrderidAycwrMsyrh5",
+    "type": "String",
+    "replaces": "📦 ${order.id} — אישור מסירה"
+   },
+   {
+    "name": "txt6",
+    "type": "String",
+    "replaces": "📷"
+   },
+   {
+    "name": "tplAycwrMsyrhNcmr7",
+    "type": "String",
+    "replaces": "📸 אישור מסירה נשמר ✓${signed ? "
+   },
+   {
+    "name": "llaPODLa8",
+    "type": "String",
+    "replaces": "ללא POD — לא צולם אישור מסירה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_StockRow": {
+  "addProps": [
+   {
+    "name": "tplMqtItemskuitemcategory1",
+    "type": "String",
+    "replaces": "🏷️ מק\"ט ${item.sku}${item.category != null ? "
+   },
+   {
+    "name": "llaMqtBqtlwg2",
+    "type": "String",
+    "replaces": "ללא מק\"ט בקטלוג"
+   },
+   {
+    "name": "zmyBmlay3",
+    "type": "String",
+    "replaces": "✅ זמין במלאי"
+   },
+   {
+    "name": "azlMhmlay4",
+    "type": "String",
+    "replaces": "❌ אזל מהמלאי"
+   },
+   {
+    "name": "hsrMwxr5",
+    "type": "String",
+    "replaces": "הסר מוצר"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

@@ -1,0 +1,57 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__barcode_scanner.dart",
+ "lines": 162,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.radiusCard",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3"
+  ],
+  "themeSockets": [],
+  "fontSizes": [
+   13.5,
+   14
+  ],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "s\n/// a primary device modal (like a file picker), not a feature view.\nclass BarcodeScanner extends StatefulWidget {\n  const BarcodeScanner({super.key});\n\n  @override\n  State<BarcodeScanner> createState() => _BarcodeScannerState();\n}\n\nclass _BarcodeScannerState extends State<BarcodeScanner> {\n  final MobileScannerController _ctl = MobileScannerController();\n  final TextEditingController _manualCtl = TextEditingController();\n  bool _done = false;\n\n  @override\n  void dispose() {\n    _ctl.dispose();\n    _manualCtl.dispose();\n    super.dispose();\n  }\n\n  void _onDetect(BarcodeCapture cap) {\n    if (_done) return;\n    final code = cap.barcodes.firstOrNull?.rawValue;\n    if (code == null || code.isEmpty) return;\n    _done = true;\n    Navigator.of(context).pop(code);\n  }\n\n  /// #1 — manual fallback: a typed מק\"ט pops through the SAME path as a\n  /// scanned barcode ([Navigator.pop] with the code String), so every caller\n  /// of [openBarcodeScanner] is unchanged. Critical on desktop web / denied\n  /// camera permission, where the camera feed never starts.\n  void _submitManual() {\n    if (_done) return;\n    final code = _manualCtl.text.trim();\n    if (code.isEmpty) return;\n    _done = true;\n    Navigator.of(context).pop(code);\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    return Scaffold(\n      backgroundColor: Colors.black,\n      appBar: AppBar(\n        backgroundColor: Colors.black,\n        title: CfgText(",
+  "הקלד מק\"ט ידנית",
+  "חפש לפי מק\"ט",
+  "סריקת ברקוד"
+ ],
+ "icons": [
+  "Icons.check",
+  "Icons.close"
+ ],
+ "glyphs": [],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "BarcodeScanner",
+   "kind": "StatefulWidget",
+   "line": 10,
+   "loc": 6,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

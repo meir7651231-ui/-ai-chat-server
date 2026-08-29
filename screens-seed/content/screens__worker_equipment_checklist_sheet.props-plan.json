@@ -1,0 +1,42 @@
+{
+ "_EquipmentRow": {
+  "addProps": [
+   {
+    "name": "jwbh1",
+    "type": "String",
+    "replaces": "חובה"
+   },
+   {
+    "name": "lmcymhAjt2",
+    "type": "String",
+    "replaces": "למשימה אחת"
+   },
+   {
+    "name": "tplLtaskCountMcymwt3",
+    "type": "String",
+    "replaces": "ל-$taskCount משימות"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_AvailabilityChip": {
+  "addProps": [
+   {
+    "name": "mjs1",
+    "type": "String",
+    "replaces": "🏬 מחסן"
+   },
+   {
+    "name": "atr2",
+    "type": "String",
+    "replaces": "🏗️ אתר"
+   },
+   {
+    "name": "zmynwtLaYdweh3",
+    "type": "String",
+    "replaces": "זמינות לא ידועה"
+   }
+  ],
+  "note": ""
+ }
+}

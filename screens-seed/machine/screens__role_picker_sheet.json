@@ -1,0 +1,118 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__role_picker_sheet.dart",
+ "lines": 276,
+ "pigments": {
+  "tokens": [
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   12.5,
+   13,
+   16,
+   20,
+   22
+  ],
+  "fontWeights": [
+   "FontWeight.w800",
+   "FontWeight.w900"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ") {\n              // Manager is a full role-app (the מרכז השליטה dashboard SHELL),\n              // not a BS-dial drill — mirror the worker→WorkerAppScreen pattern.\n              Navigator.of(context).pop();\n              _pushBoard(context, BoardRole.manager,\n                  (_) => const ManagerDashboardScreen());\n              return;\n            }\n            if (persona.id == ",
+  "בחר תפקיד כדי להיכנס",
+  "הזמנות נכנסות, מלאי החנות",
+  "הזמנת חומרים, מלאי, משימות",
+  "המשימות שהוקצו לי בשטח",
+  "מי אתה?",
+  "משלוחים ועדכוני סטטוס",
+  "ניהול מוצרים, חנויות, לקוחות"
+ ],
+ "icons": [
+  "Icons.chevron_left"
+ ],
+ "glyphs": [],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "_RolePickerCard",
+   "kind": "ConsumerWidget",
+   "line": 78,
+   "loc": 55,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 1
+  },
+  {
+   "name": "_RoleRow",
+   "kind": "ConsumerWidget",
+   "line": 134,
+   "loc": 108,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "activePersonaProvider"
+   ],
+   "writes": [
+    "activePersonaProvider"
+   ],
+   "actions": [
+    "nav:CourierDashboardScreen",
+    "nav:ManagerDashboardScreen",
+    "nav:StoreDashboardScreen",
+    "nav:WorkerAppScreen"
+   ],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_BoardGateRoute",
+   "kind": "ConsumerWidget",
+   "line": 263,
+   "loc": 13,
+   "pure": false,
+   "dataClean": true,
+   "reads": [
+    "boardAuthProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kPersonaDesc",
+  "kPersonas"
+ ],
+ "board": {
+  "reads": [
+   "activePersonaProvider",
+   "boardAuthProvider"
+  ],
+  "writes": [
+   "activePersonaProvider"
+  ],
+  "navsAndCalls": [
+   "nav:CourierDashboardScreen",
+   "nav:ManagerDashboardScreen",
+   "nav:StoreDashboardScreen",
+   "nav:WorkerAppScreen"
+  ]
+ }
+}

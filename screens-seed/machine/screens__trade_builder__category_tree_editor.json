@@ -1,0 +1,143 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__trade_builder__category_tree_editor.dart",
+ "lines": 576,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of",
+   "cfgRadius"
+  ],
+  "fontSizes": [
+   13.5,
+   14,
+   15,
+   16,
+   18,
+   20,
+   34
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   20
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  ");\n\n/// Rebuild a category with a new title / sortIndex, preserving EVERY other\n/// authored field (parentId, attributeSchemaIds, smartFixtureId — the domain\n/// type has no copyWith).\nTradeCategory _copy(TradeCategory c, {String? titleHe, int? sortIndex}) =>\n    TradeCategory(\n      id: c.id,\n      tradeId: c.tradeId,\n      titleHe: titleHe ?? c.titleHe,\n      emoji: c.emoji,\n      parentId: c.parentId,\n      sortIndex: sortIndex ?? c.sortIndex,\n      attributeSchemaIds: c.attributeSchemaIds,\n      smartFixtureId: c.smartFixtureId,\n    );\n\n/// 🗂️ עץ קטגוריות — the trade",
+  "אין עדיין קטגוריות",
+  "ביטול",
+  "הוסף קטגוריה",
+  "למשל: …",
+  "מאפיינים",
+  "מוצרים",
+  "מחק",
+  "שינוי שם",
+  "שם קטגוריה",
+  "שמור",
+  "🗂️ עץ קטגוריות"
+ ],
+ "icons": [
+  "Icons.delete_outline"
+ ],
+ "glyphs": [
+  "🏷",
+  "📁",
+  "📦",
+  "🗂"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "CategoryTreeEditorScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 59,
+   "loc": 13,
+   "pure": false,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:CategoryTreeEditorScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_EmptyCategories",
+   "kind": "StatelessWidget",
+   "line": 326,
+   "loc": 35,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_CategoryTile",
+   "kind": "StatelessWidget",
+   "line": 365,
+   "loc": 80,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_RenameCategoryDialog",
+   "kind": "StatefulWidget",
+   "line": 449,
+   "loc": 8,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_PillButton",
+   "kind": "StatelessWidget",
+   "line": 536,
+   "loc": 40,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kTradeBuilderFlag"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:CategoryTreeEditorScreen"
+  ]
+ }
+}

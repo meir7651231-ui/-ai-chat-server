@@ -1,0 +1,22 @@
+{
+ "StudioEntryCard": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🎨"
+   },
+   {
+    "name": "stwdywBta2",
+    "type": "String",
+    "replaces": "סטודיו (בטא)"
+   },
+   {
+    "name": "erwAtHaflyqxyh3",
+    "type": "String",
+    "replaces": "ערוך את האפליקציה — טקסטים · עיצוב · נראות"
+   }
+  ],
+  "note": ""
+ }
+}

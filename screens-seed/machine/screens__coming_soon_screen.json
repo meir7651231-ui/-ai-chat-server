@@ -1,0 +1,73 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__coming_soon_screen.dart",
+ "lines": 127,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.space2",
+   "BsTokens.space4",
+   "BsTokens.space5",
+   "BsTokens.space6"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   14,
+   15,
+   16,
+   20,
+   28,
+   64
+  ],
+  "fontWeights": [
+   "FontWeight.w800",
+   "FontWeight.w900"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ";\n\n/// \"בקרוב\" — an honest placeholder screen for a profession whose content\n/// isn",
+  "בקרוב",
+  "התוכן עבור $profession בהכנה",
+  "‹ חזור לבחירת מקצוע",
+  "‹ חזרה"
+ ],
+ "icons": [],
+ "glyphs": [
+  "🚧"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "ComingSoonScreen",
+   "kind": "StatelessWidget",
+   "line": 11,
+   "loc": 116,
+   "pure": false,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:ComingSoonScreen"
+   ],
+   "strings": 4,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:ComingSoonScreen"
+  ]
+ }
+}

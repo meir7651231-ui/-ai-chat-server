@@ -1,0 +1,317 @@
+{
+ "PersonaPickingSheet": {
+  "addProps": [
+   {
+    "name": "t01",
+    "type": "String",
+    "replaces": "אין הזמנות בקטגוריה זו ✓"
+   },
+   {
+    "name": "t02",
+    "type": "String",
+    "replaces": "📄 הצג תעודת משלוח"
+   },
+   {
+    "name": "t03",
+    "type": "String",
+    "replaces": "🛵 ההזמנה מוכנה — ממתינה לאיסוף השליח"
+   },
+   {
+    "name": "t04",
+    "type": "String",
+    "replaces": "סמן כל פריט כ\"לוקט\" או \"חסר\" כדי לסיים את ההכנה"
+   },
+   {
+    "name": "t05",
+    "type": "String",
+    "replaces": "תעודת משלוח"
+   },
+   {
+    "name": "tplOrderid6",
+    "type": "String",
+    "replaces": "📦 ${order.id}"
+   },
+   {
+    "name": "tplSttwsKOrderStageLabelor7",
+    "type": "String",
+    "replaces": "סטטוס: ${kOrderStageLabel[order.stage]}"
+   },
+   {
+    "name": "tplHandledlineslengthFryty8",
+    "type": "String",
+    "replaces": "$handled/${lines.length} פריטים טופלו"
+   },
+   {
+    "name": "frytJsrMmty9",
+    "type": "String",
+    "replaces": "⏳ פריט חסר — ממתין לבחירת הקבלן (החלפה / ביטול)"
+   },
+   {
+    "name": "tyqwBwxeHqbl10",
+    "type": "String",
+    "replaces": "✓ תיקון בוצע — הקבלן החליט, המשך בליקוט"
+   },
+   {
+    "name": "tplFmissingCountFrytyJsr11",
+    "type": "String",
+    "replaces": "⚠️ ${f.missingCount} פריטים חסרים — הקבלן עודכן"
+   },
+   {
+    "name": "tplHhzmnhMfwxltLfsplitInt12",
+    "type": "String",
+    "replaces": "🚚 ההזמנה מפוצלת ל-${f.splitInto} משלוחים — הכן כל קבוצה כחבילה נפרדת."
+   },
+   {
+    "name": "tplHhzmnhHwknhBg13",
+    "type": "String",
+    "replaces": "🚚 ההזמנה הוכנה ב-$g חבילות"
+   },
+   {
+    "name": "hfyxwlBwtlJbylh14",
+    "type": "String",
+    "replaces": "הפיצול בוטל — חבילה אחת"
+   },
+   {
+    "name": "hqblEwdkHhzmnh15",
+    "type": "String",
+    "replaces": "⏳ הקבלן עודכן — ההזמנה ממתינה להחלטתו (החלפה / הסרה / ביטול)"
+   },
+   {
+    "name": "tplMclwjGIdxslength16",
+    "type": "String",
+    "replaces": "📦 משלוח $g — ${idxs.length} פריטים"
+   },
+   {
+    "name": "tplBtyawOrdersiteHaulic17",
+    "type": "String",
+    "replaces": "🕒 בתיאום · 📍 ${order.site} · ${haul.ic} ${haul.name}"
+   },
+   {
+    "name": "acrWqblLhknh18",
+    "type": "String",
+    "replaces": "✓ אשר וקבל להכנה"
+   },
+   {
+    "name": "klHfrytyTwflw19",
+    "type": "String",
+    "replaces": "📦 כל הפריטים טופלו — סמן כמוכן"
+   },
+   {
+    "name": "smKmwkBkl20",
+    "type": "String",
+    "replaces": "סמן כמוכן בכל זאת"
+   },
+   {
+    "name": "hhzmnhMmtynhLhjltt21",
+    "type": "String",
+    "replaces": "⚠️ ההזמנה ממתינה להחלטת הקבלן על פריט חסר — לא ניתן להמשיך"
+   },
+   {
+    "name": "tplHhzmnhOrderidEwdknh22",
+    "type": "String",
+    "replaces": "ההזמנה ${order.id} עודכנה — מסונכרן עם השליח והמנהל ✓"
+   },
+   {
+    "name": "tplOsite23",
+    "type": "String",
+    "replaces": "📍 ${o.site}"
+   },
+   {
+    "name": "tplOitemsFrytyFMoneyosum24",
+    "type": "String",
+    "replaces": "${o.items} פריטים · ${fMoney(o.sum)}"
+   },
+   {
+    "name": "tplHwkBfsplitIntoJbylwt25",
+    "type": "String",
+    "replaces": "🚚 הוכן ב-${f.splitInto} חבילות"
+   },
+   {
+    "name": "txt26",
+    "type": "String",
+    "replaces": "🔁"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "ContractorMissingDecisionSheet": {
+  "addProps": [
+   {
+    "name": "t06",
+    "type": "String",
+    "replaces": "פריט חסר — נדרשת החלטה"
+   },
+   {
+    "name": "t07",
+    "type": "String",
+    "replaces": "ההזמנה אינה זמינה עוד"
+   },
+   {
+    "name": "sgwr3",
+    "type": "String",
+    "replaces": "סגור"
+   },
+   {
+    "name": "tplHzmnhOrderidOrdersite4",
+    "type": "String",
+    "replaces": "הזמנה: ${order.id} · ${order.site}"
+   },
+   {
+    "name": "hhjlthHtqblhHsfq5",
+    "type": "String",
+    "replaces": "✓ ההחלטה התקבלה — הספק ממשיך בליקוט (תיקון בוצע)"
+   },
+   {
+    "name": "hsfqExrAt6",
+    "type": "String",
+    "replaces": "הספק עצר את הליקוט — יש לבחור לכל פריט חסר: החלפה או הסרה, "
+   },
+   {
+    "name": "awLbtlAt7",
+    "type": "String",
+    "replaces": "או לבטל את ההזמנה כולה."
+   },
+   {
+    "name": "hhjlthNcljhLsfq8",
+    "type": "String",
+    "replaces": "🔁 ההחלטה נשלחה לספק — "
+   },
+   {
+    "name": "tplOrderlinesinameYwjlBm9",
+    "type": "String",
+    "replaces": "\"${order.lines[i].name}\" יוחלף במוצר חלופי"
+   },
+   {
+    "name": "tplHfrytOrderlinesinameHw10",
+    "type": "String",
+    "replaces": "הפריט \"${order.lines[i].name}\" הוסר — "
+   },
+   {
+    "name": "hsfqMmcyBlyqwt11",
+    "type": "String",
+    "replaces": "הספק ממשיך בליקוט"
+   },
+   {
+    "name": "bytwlHhzmnh12",
+    "type": "String",
+    "replaces": "ביטול ההזמנה"
+   },
+   {
+    "name": "tplHhzmnhOrderidTbwtl13",
+    "type": "String",
+    "replaces": "ההזמנה ${order.id} תבוטל כולה אצל הספק — "
+   },
+   {
+    "name": "fewlhBltyhfykh14",
+    "type": "String",
+    "replaces": "פעולה בלתי-הפיכה."
+   },
+   {
+    "name": "btlHzmnh15",
+    "type": "String",
+    "replaces": "בטל הזמנה"
+   },
+   {
+    "name": "hhzmnhBwtlhHsfq16",
+    "type": "String",
+    "replaces": "ההזמנה בוטלה — הספק עודכן"
+   },
+   {
+    "name": "bytwlHhzmnhKwlh17",
+    "type": "String",
+    "replaces": "🚫 ביטול ההזמנה כולה — בקרוב"
+   },
+   {
+    "name": "btlAtHhzmnh18",
+    "type": "String",
+    "replaces": "🚫 בטל את ההזמנה כולה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_DecisionLine": {
+  "addProps": [
+   {
+    "name": "t08",
+    "type": "String",
+    "replaces": "🔁 החלף מוצר"
+   },
+   {
+    "name": "t09",
+    "type": "String",
+    "replaces": "הסר מההזמנה"
+   },
+   {
+    "name": "tplKmwtQtyHsfq3",
+    "type": "String",
+    "replaces": "כמות: $qty · ⏳ הספק ממתין להחלטתך"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_PickLine": {
+  "addProps": [
+   {
+    "name": "t10",
+    "type": "String",
+    "replaces": "מוצר חלופי"
+   },
+   {
+    "name": "t11",
+    "type": "String",
+    "replaces": "חסר"
+   },
+   {
+    "name": "lwqt3",
+    "type": "String",
+    "replaces": "✓ לוקט"
+   },
+   {
+    "name": "jsr4",
+    "type": "String",
+    "replaces": "✕ חסר"
+   },
+   {
+    "name": "mmtyLbjyrtHqbl5",
+    "type": "String",
+    "replaces": "⏳ ממתין לבחירת הקבלן"
+   },
+   {
+    "name": "bwtlExyHqbl6",
+    "type": "String",
+    "replaces": "✕ בוטל ע״י הקבלן"
+   },
+   {
+    "name": "hwjlExyHqbl7",
+    "type": "String",
+    "replaces": "🔁 הוחלף ע״י הקבלן"
+   },
+   {
+    "name": "tplKmwtLlyqwtLineqty8",
+    "type": "String",
+    "replaces": "כמות לליקוט: ${line.qty}"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_SplitControl": {
+  "addProps": [
+   {
+    "name": "t12",
+    "type": "String",
+    "replaces": "🚚 פיצול משלוחים"
+   },
+   {
+    "name": "jbylhAjt2",
+    "type": "String",
+    "replaces": "חבילה אחת"
+   },
+   {
+    "name": "tplGJbylwt3",
+    "type": "String",
+    "replaces": "$g חבילות"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

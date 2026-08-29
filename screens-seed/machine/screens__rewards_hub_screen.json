@@ -1,0 +1,516 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__rewards_hub_screen.dart",
+ "lines": 1013,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.brandDark",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of",
+   "cfgRadius"
+  ],
+  "fontSizes": [
+   12,
+   13,
+   14,
+   16,
+   18,
+   20,
+   22,
+   24,
+   26,
+   30,
+   34
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  " (אתה)",
+  "${r.name} — ינוכו ${r.cost} מטבעות מהיתרה שלך.",
+  "${rw.challenges.length} פעילים",
+  "+${c.reward} BuildCoins — אתגר הושלם",
+  "+100 לכל הזמנה",
+  ";\n\n/// 🎮 מועדון BuildSmart — the rewards/loyalty hub (T3.G).\n///\n/// A faithful native port of proto Category H (`openRewardsHub` @21452 +\n/// `rwFeature` views @21497-21658). The proto opens an overlay grid of 7 tiles;\n/// each tile swaps a second overlay (`rwFeature`). Here the hub is a screen and\n/// each tile pushes the matching [_RewardsFeatureScreen]; all 7 features render\n/// their real content (challenges/leaderboard/green/coupons/referral/VIP/redeem)\n/// and the live coin/challenge mutations run through [rewardsProvider].\n///\n/// WIRE: reached via the home menu-dial settings tree (the מועדון leaves) and\n/// the profile card — see the WIRE notes in the agent report. The dial leaf\n/// should `Navigator.push(RewardsHubScreen.route())`.\nclass RewardsHubScreen extends ConsumerWidget {\n  const RewardsHubScreen({super.key});\n\n  static Route<void> route() =>\n      MaterialPageRoute<void>(builder: (_) => const RewardsHubScreen());\n\n  /// The 7 hub tiles — VERBATIM fn/ic/t from proto `items` @21464-21472.\n  static const List<({String id, String ic, String t, String s})> _tiles = [\n    (id: ",
+  "אין מספיק BuildCoins",
+  "אתגרים חודשיים",
+  "בנייה בת-קיימא",
+  "דירוג הקבלנים לפי BuildCoins החודש.",
+  "דרגות והטבות",
+  "הדירוג שלך",
+  "הזמן חבר",
+  "הזמן קבלן אחר — שניכם תרוויחו BuildCoins.",
+  "הזמנה ראשונה של החבר",
+  "החבר מקבל",
+  "החלף BuildCoins בפרסים אמיתיים.",
+  "החלף מטבעות בפרסים",
+  "היתרה שלך למימוש",
+  "המשך כדי להשלים את האתגר",
+  "הקופון נשמר לארנק שלך",
+  "השלם אתגרים וזכה ב-BuildCoins.",
+  "התחלה",
+  "חבר נרשם",
+  "חסרים ${r.cost - rw.coins} מטבעות",
+  "ככל שצוברים יותר — ההטבות גדלות.",
+  "כל האתגרים הושלמו 🎉",
+  "לוח המובילים",
+  "לוח מובילים",
+  "מבצעים בקרבת מקום",
+  "מבצעים זמינים מספקים בקרבת מקום אליך.",
+  "מועדון VIP",
+  "מימוש הטבות",
+  "מימוש פרס?",
+  "ממש",
+  "ממש עכשיו",
+  "פעילים",
+  "צבור מטבעות, השלם אתגרים וקבל הטבות.",
+  "קבל ${c.reward} מטבעות",
+  "קוד ההזמנה הועתק — שתף אותו עם חברים",
+  "קוד ההזמנה שלך",
+  "קופון ₪40",
+  "קופונים לפי מיקום",
+  "שמור קופון",
+  "תגי ירוק",
+  "תגים ירוקים שנצברו",
+  "תגים על בנייה בת-קיימא ושמירה על הסביבה.",
+  "‹ חזרה",
+  "⚙️ בפרודקשן: איתור לפי מיקום GPS בזמן אמת",
+  "⚙️ בפרודקשן: דירוג חי מהשרת — כאן מוצג לוח דמו",
+  "⚙️ בפרודקשן: קוד אישי לכל משתמש — כאן קוד דמו משותף",
+  "⚙️ בפרודקשן: תגים מנוטרים מהשרת — כאן נתוני דמו",
+  "🎁 ${r.name} מומש בהצלחה!",
+  "🎮 מועדון",
+  "💎 דרגת ${tier.name}${current ? ",
+  "📤 שתף את הקוד",
+  "🔥 רצף (דמו): $kLoginStreak ימים פעילים"
+ ],
+ "icons": [],
+ "glyphs": [
+  "⚙",
+  "✓",
+  "🌿",
+  "🎁",
+  "🎉",
+  "🎟",
+  "🎮",
+  "🎯",
+  "🏆",
+  "👥",
+  "💎",
+  "📍",
+  "📤",
+  "🔒",
+  "🔥",
+  "🥇",
+  "🥈",
+  "🥉",
+  "🪙"
+ ],
+ "logicCandidates": [
+  {
+   "name": "route",
+   "line": 107
+  }
+ ],
+ "widgets": [
+  {
+   "name": "RewardsHubScreen",
+   "kind": "ConsumerWidget",
+   "line": 27,
+   "loc": 74,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "rewardsProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "nav:RewardsHubScreen"
+   ],
+   "strings": 17,
+   "constData": 0
+  },
+  {
+   "name": "_RewardsFeatureScreen",
+   "kind": "ConsumerWidget",
+   "line": 103,
+   "loc": 38,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_Challenges",
+   "kind": "ConsumerWidget",
+   "line": 143,
+   "loc": 47,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "rewardsProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "fx:toast"
+   ],
+   "strings": 6,
+   "constData": 0
+  },
+  {
+   "name": "_Leaderboard",
+   "kind": "ConsumerWidget",
+   "line": 192,
+   "loc": 39,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "rewardsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 4,
+   "constData": 0
+  },
+  {
+   "name": "_Green",
+   "kind": "StatelessWidget",
+   "line": 233,
+   "loc": 27,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 4,
+   "constData": 0
+  },
+  {
+   "name": "_Coupons",
+   "kind": "StatelessWidget",
+   "line": 262,
+   "loc": 51,
+   "pure": false,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "fx:toast"
+   ],
+   "strings": 5,
+   "constData": 0
+  },
+  {
+   "name": "_Referral",
+   "kind": "StatelessWidget",
+   "line": 315,
+   "loc": 58,
+   "pure": false,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "fx:toast"
+   ],
+   "strings": 10,
+   "constData": 1
+  },
+  {
+   "name": "_Vip",
+   "kind": "ConsumerWidget",
+   "line": 375,
+   "loc": 26,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "rewardsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_Redeem",
+   "kind": "ConsumerWidget",
+   "line": 403,
+   "loc": 59,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "rewardsProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "fx:toast"
+   ],
+   "strings": 10,
+   "constData": 0
+  },
+  {
+   "name": "_MdHead",
+   "kind": "StatelessWidget",
+   "line": 492,
+   "loc": 28,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_CoinBanner",
+   "kind": "StatelessWidget",
+   "line": 521,
+   "loc": 42,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_FinTile",
+   "kind": "StatelessWidget",
+   "line": 564,
+   "loc": 51,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_CaCard",
+   "kind": "StatelessWidget",
+   "line": 616,
+   "loc": 22,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_CaTop",
+   "kind": "StatelessWidget",
+   "line": 639,
+   "loc": 28,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_Pill",
+   "kind": "StatelessWidget",
+   "line": 668,
+   "loc": 25,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_CaSub",
+   "kind": "StatelessWidget",
+   "line": 694,
+   "loc": 11,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_Bar",
+   "kind": "StatelessWidget",
+   "line": 706,
+   "loc": 18,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_CardBtn",
+   "kind": "StatelessWidget",
+   "line": 725,
+   "loc": 24,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_Primary",
+   "kind": "StatelessWidget",
+   "line": 750,
+   "loc": 25,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_LbRow",
+   "kind": "StatelessWidget",
+   "line": 776,
+   "loc": 55,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_BadgeRow",
+   "kind": "StatelessWidget",
+   "line": 832,
+   "loc": 44,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_VipCard",
+   "kind": "StatelessWidget",
+   "line": 877,
+   "loc": 41,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_Callout",
+   "kind": "StatelessWidget",
+   "line": 919,
+   "loc": 31,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_FinRow",
+   "kind": "StatelessWidget",
+   "line": 951,
+   "loc": 27,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_ServerNote",
+   "kind": "StatelessWidget",
+   "line": 979,
+   "loc": 18,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_Empty",
+   "kind": "StatelessWidget",
+   "line": 998,
+   "loc": 15,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [
+  "RewardsHubScreen",
+  "_Challenges",
+  "_Leaderboard",
+  "_Vip",
+  "_Redeem"
+ ],
+ "gates": [
+  "kGreenBadges",
+  "kHideUnderConstruction",
+  "kLocationCoupons",
+  "kLoginStreak",
+  "kReferralCode",
+  "kRewardsCatalog",
+  "kVipTiers"
+ ],
+ "board": {
+  "reads": [
+   "rewardsProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": [
+   "fx:toast",
+   "nav:RewardsHubScreen"
+  ]
+ }
+}

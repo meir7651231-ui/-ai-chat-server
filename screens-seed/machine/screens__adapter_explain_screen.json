@@ -1,0 +1,100 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__adapter_explain_screen.dart",
+ "lines": 235,
+ "pigments": {
+  "tokens": [
+   "BsTokens.dangerDark",
+   "BsTokens.divider",
+   "BsTokens.inkLight",
+   "BsTokens.mutedDark",
+   "BsTokens.mutedLight",
+   "BsTokens.space2",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   11,
+   12,
+   13,
+   15,
+   16,
+   18
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "אתה אינסטלטור-מומחה לחיבורים. אתה מסביר ברמת סוג-המתאם בלבד למה קצוות-חיבור ",
+  "הסבר לאינסטלטור בקצרה: (1) למה הקצוות האלה לא מתחברים ישירות לחיבור-תקני ",
+  "הקצוות שלו:",
+  "לא מתחברים ומה מגשר ביניהם. לעולם אל תמציא שם-מוצר, מק\"ט או מחיר.",
+  "מנתוני היבוא",
+  "מנתוני-המפרט-המאומת",
+  "מצמד קומפרסיה HDPE",
+  "מק\"ט או מחיר.",
+  "נפוץ, (2) איזה סוג-מתאם מגשר. דבר ברמת סוג-המתאם בלבד — אל תמציא שם-מוצר, ",
+  "פרס PEX",
+  "פרס נחושת",
+  "פתח ניקוז",
+  "תבריג חיצוני BSP",
+  "תבריג פנימי BSP",
+  "⚙️ הקצוות מנתוני-המפרט; ה-AI רק מסביר איזה סוג-מתאם מגשר.",
+  "💡 ההסבר החכם דורש חיבור לשרת.",
+  "🔌 איך לגשר?"
+ ],
+ "icons": [],
+ "glyphs": [
+  "⚙",
+  "💡",
+  "🔌"
+ ],
+ "logicCandidates": [
+  {
+   "name": "endTypeHe",
+   "line": 32
+  },
+  {
+   "name": "setState",
+   "line": 141
+  }
+ ],
+ "widgets": [
+  {
+   "name": "AdapterExplainScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 78,
+   "loc": 22,
+   "pure": false,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:AdapterExplainScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kClaudeAi",
+  "kCompanySpecSkus",
+  "kVerifiedSpecs"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:AdapterExplainScreen"
+  ]
+ }
+}

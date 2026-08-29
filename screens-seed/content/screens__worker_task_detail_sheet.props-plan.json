@@ -1,0 +1,17 @@
+{
+ "_KitRow": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🔧"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "🧴"
+   }
+  ],
+  "note": ""
+ }
+}

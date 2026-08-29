@@ -1,0 +1,32 @@
+{
+ "_DateField": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "📅"
+   }
+  ],
+  "note": ""
+ },
+ "_VacationRow": {
+  "addProps": [
+   {
+    "name": "awcrh1",
+    "type": "String",
+    "replaces": "✅ אושרה"
+   },
+   {
+    "name": "ndjth2",
+    "type": "String",
+    "replaces": "❌ נדחתה"
+   },
+   {
+    "name": "mmtynh3",
+    "type": "String",
+    "replaces": "⏳ ממתינה"
+   }
+  ],
+  "note": ""
+ }
+}

@@ -1,0 +1,408 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__store_settings_screen.dart",
+ "lines": 1135,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.dangerDark",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   12,
+   13,
+   14,
+   15,
+   22
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "$label — בבנייה",
+  ",\n                child: TextButton(\n                  onPressed: () => Navigator.pop(ctx, true),\n                  style: TextButton.styleFrom(\n                    // AA על רקע-דיאלוג לבן (redAccent=3.19:1 נכשל) — token חוזה 9.\n                    foregroundColor: BsTokens.dangerDark,\n                  ),\n                  child: const CfgText(",
+  "12 תשלומים",
+  "14 יום",
+  "3 תשלומים",
+  "30 יום",
+  "6 תשלומים",
+  "7 ימים",
+  "s persisted toggles have no engine yet — show an\n  // honest \"בבנייה\" subtitle and suppress the active-count badge (Wave 8 / D2).\n  final bool underConstruction;\n\n  // A row is a backend-blocked \"under construction\" placeholder when it is a\n  // _PlaceholderRow or an _Inert row flagged underConstruction. Single source of\n  // truth for both the active-count badge and the Apple-readiness hide-filter.\n  static bool _isUnderConstruction(Widget w) =>\n      w is _PlaceholderRow || (w is _Inert && (w as _Inert).underConstruction);\n\n  // Count only functional rows — exclude \"בבנייה\" placeholders.\n  int get _activeCount =>\n      children.where((w) => !_isUnderConstruction(w)).length;\n\n  // For Apple review (kHideUnderConstruction) we render only the functional\n  // rows; the placeholder rows stay defined in code (reversible) but are hidden.\n  List<Widget> get _visibleChildren =>\n      kHideUnderConstruction\n          ? children.where((w) => !_isUnderConstruction(w)).toList()\n          : children;\n\n  @override\n  Widget build(BuildContext context) {\n    // A whole section that is itself \"under construction\" — or one whose every\n    // row is a hidden placeholder — disappears entirely for Apple review.\n    if (kHideUnderConstruction &&\n        (underConstruction || _visibleChildren.isEmpty)) {\n      return const SizedBox.shrink();\n    }\n    return Card(\n      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),\n      color: Theme.of(context).colorScheme.surface,\n      elevation: 0,\n      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),\n      child: Theme(\n        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),\n        child: ExpansionTile(\n          tilePadding: const EdgeInsets.symmetric(horizontal: 16),\n          childrenPadding: const EdgeInsets.only(bottom: 8),\n          iconColor: Colors.black54,\n          collapsedIconColor: Colors.black54,\n          leading: Text(emoji, style: const TextStyle(fontSize: 22)),\n          // Count badge replaces the default expand chevron.\n          trailing:\n              (underConstruction || _activeCount == 0)\n                  ? null\n                  : Container(\n                    padding: const EdgeInsets.symmetric(\n                      horizontal: 8,\n                      vertical: 2,\n                    ),\n                    decoration: BoxDecoration(\n                      color: BsTokens.brand,\n                      borderRadius: BorderRadius.circular(11),\n                    ),\n                    child: Text(\n                      ",
+  "אזורי משלוח",
+  "אחריות מורחבת",
+  "אינגלי",
+  "איסוף עצמי כברירת מחדל",
+  "איפוס הגדרות?",
+  "איפוס לברירת מחדל",
+  "אישור ביומטרי לרכישה",
+  "אישור כפול לרכישה גדולה",
+  "אמצעי תשלום",
+  "אפס",
+  "אשראי ספק",
+  "בבנייה",
+  "בבנייה — ההגדרות נשמרות אך עדיין אינן משפיעות",
+  "בבנייה — עדיין לא משפיע",
+  "בוקר",
+  "ביט",
+  "ביטול",
+  "ברירת מחדל",
+  "גמיש",
+  "דירוג גבוה",
+  "דירוג מינימלי",
+  "הגדרות אופסו",
+  "הגדרות חנות",
+  "הוראות לשליח",
+  "הזמנות חוזרות",
+  "החיפוש הנוכחי בחנות יימחק.",
+  "החיפוש נוקה",
+  "היסטוריית רכישות",
+  "הסדר אשראי ספק",
+  "הערות למשלוח...",
+  "הצג מחירים כולל מע\"מ",
+  "הצגת מלאי",
+  "התראות חנות",
+  "התראות מבצעים",
+  "ח.פ. / ע.מ.",
+  "ח.פ. חייב להכיל 9 ספרות",
+  "חזר למלאי במועדפים",
+  "חלון זמן מועדף",
+  "חנויות מסומנות",
+  "חשבוניות ומס",
+  "ייעוץ טכני",
+  "ייצוא לרו\"ח",
+  "ירידת מחיר במועדפים",
+  "כל הגדרות החנות יוחזרו לברירת המחדל.",
+  "כרטיס אשראי",
+  "כרטיסים שמורים",
+  "כתובת ברירת מחדל",
+  "לאן לשלוח?",
+  "ללא סינון",
+  "מגבלת אשראי יומית (₪, 0=ללא)",
+  "מדיניות החזרות",
+  "מחיקת חיפושים",
+  "מחיקת חיפושים?",
+  "מחיר: זול → יקר",
+  "מחק",
+  "מטרי",
+  "מיון ברירת מחדל",
+  "מינימום הזמנה (₪)",
+  "מספר...",
+  "מרחק מקסימלי (ק\"מ, 0=ללא)",
+  "מרחק קרוב",
+  "משלוח בדרך",
+  "משלוח מהיר (תוך 4 שעות)",
+  "משלוח רגיל (יום-יומיים)",
+  "משלוחים וכתובות",
+  "סטטוס הזמנה",
+  "סל והזמנות",
+  "סף לאישור כפול (₪)",
+  "ספקים חסומים",
+  "ספקים מועדפים",
+  "ספקים מקומיים בלבד",
+  "ערב",
+  "פרטי עוסק/חברה",
+  "פרטיות ורכישות",
+  "צהריים",
+  "קבלות אוטומטיות",
+  "רחוב, מספר, עיר",
+  "רשימה",
+  "רשת",
+  "שירות ולוגיסטיקה",
+  "שיתוף סל עם צוות",
+  "שם עסק...",
+  "שמירת סל לפרויקט",
+  "שתף",
+  "ת\"א, רמת גן, הרצליה...",
+  "תצוגה (רשת / רשימה)",
+  "תצוגה ומיון",
+  "תשלום אחד",
+  "תשלומים (1/3/6/12)"
+ ],
+ "icons": [
+  "Icons.restart_alt"
+ ],
+ "glyphs": [
+  "★",
+  "⚡",
+  "🏪",
+  "💳",
+  "📊",
+  "📍",
+  "🔐",
+  "🔔",
+  "🛒",
+  "🟢",
+  "🧾"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "StoreSettingsScreen",
+   "kind": "ConsumerWidget",
+   "line": 20,
+   "loc": 102,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "storeSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "nav:StoreSettingsScreen",
+    "fx:toast"
+   ],
+   "strings": 8,
+   "constData": 1
+  },
+  {
+   "name": "_ShippingSection",
+   "kind": "ConsumerWidget",
+   "line": 125,
+   "loc": 69,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "storeSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "call:openShipToSheet"
+   ],
+   "strings": 14,
+   "constData": 1
+  },
+  {
+   "name": "_PaymentSection",
+   "kind": "ConsumerWidget",
+   "line": 197,
+   "loc": 55,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "storeSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 12,
+   "constData": 2
+  },
+  {
+   "name": "_InvoicesSection",
+   "kind": "ConsumerWidget",
+   "line": 255,
+   "loc": 66,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "storeSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 9,
+   "constData": 0
+  },
+  {
+   "name": "_NotificationsSection",
+   "kind": "ConsumerWidget",
+   "line": 324,
+   "loc": 55,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "storeSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 6,
+   "constData": 0
+  },
+  {
+   "name": "_CartSection",
+   "kind": "ConsumerWidget",
+   "line": 382,
+   "loc": 67,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "storeSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 8,
+   "constData": 0
+  },
+  {
+   "name": "_SuppliersSection",
+   "kind": "ConsumerWidget",
+   "line": 452,
+   "loc": 48,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "storeSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 7,
+   "constData": 1
+  },
+  {
+   "name": "_DisplaySection",
+   "kind": "ConsumerWidget",
+   "line": 503,
+   "loc": 66,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "storeSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 11,
+   "constData": 2
+  },
+  {
+   "name": "_LogisticsSection",
+   "kind": "ConsumerWidget",
+   "line": 572,
+   "loc": 53,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "storeSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 9,
+   "constData": 1
+  },
+  {
+   "name": "_PrivacySection",
+   "kind": "ConsumerWidget",
+   "line": 628,
+   "loc": 58,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "storeSearchQueryProvider",
+    "storeSettingsProvider"
+   ],
+   "writes": [
+    "storeSearchQueryProvider"
+   ],
+   "actions": [
+    "fx:toast"
+   ],
+   "strings": 9,
+   "constData": 0
+  },
+  {
+   "name": "_SectionTile",
+   "kind": "StatelessWidget",
+   "line": 689,
+   "loc": 104,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_SwitchRow",
+   "kind": "StatelessWidget",
+   "line": 800,
+   "loc": 33,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_InlineTextRow",
+   "kind": "StatefulWidget",
+   "line": 896,
+   "loc": 25,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_NumberRow",
+   "kind": "StatefulWidget",
+   "line": 989,
+   "loc": 17,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_PlaceholderRow",
+   "kind": "StatelessWidget",
+   "line": 1089,
+   "loc": 18,
+   "pure": false,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "fx:toast"
+   ],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_ActionRow",
+   "kind": "StatelessWidget",
+   "line": 1108,
+   "loc": 27,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kHideUnderConstruction",
+  "kKbGlobal"
+ ],
+ "board": {
+  "reads": [
+   "storeSearchQueryProvider",
+   "storeSettingsProvider"
+  ],
+  "writes": [
+   "storeSearchQueryProvider"
+  ],
+  "navsAndCalls": [
+   "call:openShipToSheet",
+   "fx:toast",
+   "nav:StoreSettingsScreen"
+  ]
+ }
+}

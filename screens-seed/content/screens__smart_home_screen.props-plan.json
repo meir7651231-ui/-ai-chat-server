@@ -1,0 +1,267 @@
+{
+ "_Departments": {
+  "addProps": [
+   {
+    "name": "mjlqwt1",
+    "type": "String",
+    "replaces": "מחלקות"
+   },
+   {
+    "name": "bqrwb2",
+    "type": "String",
+    "replaces": "בקרוב"
+   },
+   {
+    "name": "ewd3",
+    "type": "String",
+    "replaces": "עוד"
+   }
+  ],
+  "note": ""
+ },
+ "_SmartTreeRow": {
+  "addProps": [
+   {
+    "name": "eJkAynstlxyh1",
+    "type": "String",
+    "replaces": "🌳 עץ חכם — אינסטלציה"
+   }
+  ],
+  "note": ""
+ },
+ "_SmartTreeCard": {
+  "addProps": [
+   {
+    "name": "addToCart",
+    "type": "String",
+    "replaces": "הוסף לסל"
+   },
+   {
+    "name": "mjyrLfySfq2",
+    "type": "String",
+    "replaces": "מחיר לפי ספק"
+   },
+   {
+    "name": "tplPnameNwsLsl3",
+    "type": "String",
+    "replaces": "${p.name} נוסף לסל"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_WorkPath": {
+  "addProps": [
+   {
+    "name": "workpathBadge",
+    "type": "String",
+    "replaces": "🛁 חדש — מאפס עד גמר"
+   },
+   {
+    "name": "workpathTitle",
+    "type": "String",
+    "replaces": "גמר אמבטיה — מלווה אותך שלב-שלב"
+   },
+   {
+    "name": "workpathSub",
+    "type": "String",
+    "replaces": "4 שלבים בסדר הנכון. כל שלב: עץ מוצרים + חלון \"סדר הרכבה\"."
+   },
+   {
+    "name": "mslwlEbwdhJk4",
+    "type": "String",
+    "replaces": "מסלול עבודה חכם"
+   }
+  ],
+  "note": ""
+ },
+ "_QuickTools": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "📐"
+   },
+   {
+    "name": "srwqTwknytEbwdh2",
+    "type": "String",
+    "replaces": "סרוק תוכנית עבודה"
+   },
+   {
+    "name": "xlCrtwtAynstlxyh3",
+    "type": "String",
+    "replaces": "צלם שרטוט אינסטלציה — נזהה מה צריך להזמין"
+   },
+   {
+    "name": "txt4",
+    "type": "String",
+    "replaces": "📦"
+   },
+   {
+    "name": "hmlayCly5",
+    "type": "String",
+    "replaces": "המלאי שלי"
+   },
+   {
+    "name": "mhKbrYc6",
+    "type": "String",
+    "replaces": "מה כבר יש לך — במחסן ובאתר"
+   },
+   {
+    "name": "txt7",
+    "type": "String",
+    "replaces": "📋"
+   },
+   {
+    "name": "mcymwtHebwdh8",
+    "type": "String",
+    "replaces": "משימות העבודה"
+   },
+   {
+    "name": "jlqMcymwtLewbdy9",
+    "type": "String",
+    "replaces": "חלק משימות לעובדים ועקוב אחרי הביצוע"
+   },
+   {
+    "name": "klyMhyry10",
+    "type": "String",
+    "replaces": "כלים מהירים"
+   }
+  ],
+  "note": ""
+ },
+ "_InstallStudioHero": {
+  "addProps": [
+   {
+    "name": "installTitle",
+    "type": "String",
+    "replaces": "תכנון חיבור"
+   },
+   {
+    "name": "installSub",
+    "type": "String",
+    "replaces": "בחר מה לחבר — נכין רשימת קנייה תקנית ונבדוק את החיבור"
+   }
+  ],
+  "note": ""
+ },
+ "_SuperFinderOpen": {
+  "addProps": [
+   {
+    "name": "matrel1",
+    "type": "String",
+    "replaces": "🕸️ מאתר-על"
+   }
+  ],
+  "note": ""
+ },
+ "_SuperFinderHero": {
+  "addProps": [
+   {
+    "name": "matrel1",
+    "type": "String",
+    "replaces": "מאתר-על"
+   },
+   {
+    "name": "matrel2",
+    "type": "String",
+    "replaces": "🕸️ מאתר-על"
+   },
+   {
+    "name": "glgljyfwcelBjrMayzh3",
+    "type": "String",
+    "replaces": "גלגל-חיפוש-על — בחר מאיזה ציר להתחיל"
+   }
+  ],
+  "note": ""
+ },
+ "_CatalogConfigHero": {
+  "addProps": [
+   {
+    "name": "qtlwgMgdyr1",
+    "type": "String",
+    "replaces": "🎛️ קטלוג מגדיר"
+   },
+   {
+    "name": "krtyshgdrhLklMwxr2",
+    "type": "String",
+    "replaces": "כרטיס-הגדרה לכל מוצר — תמונה + גלגלים"
+   }
+  ],
+  "note": ""
+ },
+ "_InternalCardOpen": {
+  "addProps": [
+   {
+    "name": "krtysFnymy1",
+    "type": "String",
+    "replaces": "🃏 כרטיס פנימי"
+   }
+  ],
+  "note": ""
+ },
+ "_InternalCardHero": {
+  "addProps": [
+   {
+    "name": "krtysFnymy1",
+    "type": "String",
+    "replaces": "כרטיס פנימי"
+   },
+   {
+    "name": "krtysFnymy2",
+    "type": "String",
+    "replaces": "🃏 כרטיס פנימי"
+   },
+   {
+    "name": "klHmnweBmqw3",
+    "type": "String",
+    "replaces": "כל המנוע במקום אחד — 13 סקציות"
+   }
+  ],
+  "note": ""
+ },
+ "_Favorites": {
+  "addProps": [
+   {
+    "name": "mwedfy1",
+    "type": "String",
+    "replaces": "מועדפים"
+   },
+   {
+    "name": "edyyAyMwedfy2",
+    "type": "String",
+    "replaces": "עדיין אין מועדפים — סמן ☆ על מוצר והוא יופיע כאן."
+   }
+  ],
+  "note": ""
+ },
+ "_RecentOrders": {
+  "addProps": [
+   {
+    "name": "hzmnwtAjrwnwtLatr1",
+    "type": "String",
+    "replaces": "הזמנות אחרונות לאתר"
+   },
+   {
+    "name": "edyyAyHzmnwt2",
+    "type": "String",
+    "replaces": "עדיין אין הזמנות — לאחר הראשונה היא תופיע כאן."
+   }
+  ],
+  "note": ""
+ },
+ "_OrderCard": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "📦"
+   },
+   {
+    "name": "tplOrderitemsFryty2",
+    "type": "String",
+    "replaces": "${order.items} פריטים"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

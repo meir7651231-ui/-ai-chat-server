@@ -1,0 +1,51 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__word_finder__word_keyboard.dart",
+ "lines": 172,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.space1",
+   "BsTokens.surfaceMid"
+  ],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [
+   12
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  ";\n\n/// A keyboard of tappable Hebrew word suggestions, styled like `BsKeyboard`.\n///\n/// [words] are chunked into rows of [_wordsPerRow]; each renders as a plain\n/// (icon-free) [BsKey]. The [primary] word — matched by identity — is drawn in\n/// brand orange. When [showUtilityRow] is true (the default), a final utility\n/// row carries exactly two icon-free keys: `הכל` → [onAll] and `הקלדה` →\n/// [onType]. Surfaces with no skip/type affordance (e.g. the connections view)\n/// pass `showUtilityRow: false` so those would-be dead keys are not rendered.\nclass WordKeyboard extends StatelessWidget {\n  const WordKeyboard({\n    required this.words,\n    required this.onWordTap,\n    super.key,\n    this.onAll,\n    this.onType,\n    this.primary,\n    this.showUtilityRow = true,\n  });\n\n  /// The word suggestions to render, in order.\n  final List<WordKey> words;\n\n  /// Invoked with the tapped [WordKey].\n  final void Function(WordKey) onWordTap;\n\n  /// Fired by the `הכל` (\"all\") utility key.\n  final VoidCallback? onAll;\n\n  /// Fired by the `הקלדה` (\"type\") utility key.\n  final VoidCallback? onType;\n\n  /// When non-null and present in [words], this word renders with the brand\n  /// accent fill instead of the plain white key.\n  final WordKey? primary;\n\n  /// Whether to append the trailing `הכל` · `הקלדה` utility row. Defaults to\n  /// true (every existing call site keeps both keys). Pass false on surfaces\n  /// that have no skip-axis / emergency-type affordance — the connections view —\n  /// where those keys would be dead no-ops (their callbacks are unwired there).\n  final bool showUtilityRow;\n\n  /// Words per word-row before wrapping to the next row.\n  static const int _wordsPerRow = 3;\n\n  /// Builds one row of word keys: each gets an [Expanded] (uniform flex), with\n  /// [BsTokens.space1] gaps between keys — the BsKeyboard row idiom.\n  Widget _buildWordRow(List<WordKey> rowWords) {\n    final children = <Widget>[];\n    for (var i = 0; i < rowWords.length; i++) {\n      if (i > 0) children.add(const SizedBox(width: BsTokens.space1));\n      final word = rowWords[i];\n      final key = BsKey(\n        // KeyKind.letter → BsKey renders the label as plain text, no icon.\n        model: KbKey(word.label),\n        isAccent: identical(word, primary),\n        // Forward the optional product thumbnail. Null on every word / chip\n        // key (the default), so those keys stay plain text — only a final\n        // selection key (a product key with a real crop) draws a thumbnail.\n        // The trailing הכל/הקלדה utility row builds its own bare KbKeys and\n        // never passes this, so it always stays clean.\n        leadingImageAsset: word.imageAsset,\n        // Forward the optional a11y extras (swarm R8 / §5): a leading axis\n        // glyph + a Semantics override. Null on every word / product / utility\n        // key (the default), so those keys are byte-identical — only a merged\n        // card-keyboard chip sets them.\n        axisGlyph: word.axisGlyph,\n        semanticOverride: word.semanticLabel,\n        onTap: () => onWordTap(word),\n      );\n      children.add(\n        Expanded(\n          // P9.86 (#41): a DESTINATION key gets a small trailing north-east accent\n          // marking that it lands directly on a product. isDestination is false on\n          // every live word / chip / utility key (the default), so the un-accented\n          // branch is the EXACT same Expanded(child: BsKey) as before — byte-identical.\n          child: word.isDestination\n              ? Stack(\n                  clipBehavior: Clip.none,\n                  children: [\n                    key,\n                    const Positioned(\n                      top: 2,\n                      left: 2,\n                      child: Icon(Icons.north_east,\n                          size: 12, color: BsTokens.brand),\n                    ),\n                  ],\n                )\n              : key,\n        ),\n      );\n    }\n    return Row(children: children);\n  }\n\n  /// Builds the trailing utility row: `הכל` and `הקלדה`, both icon-free\n  /// (KeyKind.letter) keys routed to [onAll] / [onType].\n  Widget _buildUtilityRow() {\n    return Row(\n      children: [\n        Expanded(\n          child: BsKey(\n            model: const KbKey(",
+  "הקלדה"
+ ],
+ "icons": [
+  "Icons.north_east"
+ ],
+ "glyphs": [],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "WordKeyboard",
+   "kind": "StatelessWidget",
+   "line": 31,
+   "loc": 141,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

@@ -1,0 +1,22 @@
+{
+ "_RequestingAs": {
+  "addProps": [
+   {
+    "name": "mbqctBc1",
+    "type": "String",
+    "replaces": "מבקש/ת בשם"
+   }
+  ],
+  "note": ""
+ },
+ "_RoleRequestRow": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🪪"
+   }
+  ],
+  "note": ""
+ }
+}

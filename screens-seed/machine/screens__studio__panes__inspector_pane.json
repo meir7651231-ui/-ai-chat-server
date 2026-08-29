@@ -1,0 +1,66 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__studio__panes__inspector_pane.dart",
+ "lines": 190,
+ "pigments": {
+  "tokens": [
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5",
+   "BsTokens.typeCaption",
+   "BsTokens.typeSubhead"
+  ],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "(ברירת-מחדל — ${d.labelHe})",
+  "אמוג׳י",
+  "אפס רכיב לברירת-המחדל",
+  "בחר רכיב מהעץ כדי לערוך",
+  "טקסט",
+  "מוסתר",
+  "רכיב לא מוכר (אינו ברישום)",
+  "רכיב קריטי — לא ניתן להסתרה",
+  "תצוגה:"
+ ],
+ "icons": [
+  "Icons.restart_alt"
+ ],
+ "glyphs": [],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "InspectorPane",
+   "kind": "ConsumerStatefulWidget",
+   "line": 22,
+   "loc": 6,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kImmutable"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

@@ -1,0 +1,59 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__studio__panes__history_pane.dart",
+ "lines": 101,
+ "pigments": {
+  "tokens": [
+   "BsTokens.mutedLight",
+   "BsTokens.space5",
+   "BsTokens.typeCaption"
+  ],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "ביטול",
+  "בעלים",
+  "הגרסה תפורסם מחדש לכל המשתמשים כגרסה חדשה (ההיסטוריה נשמרת).",
+  "לשחזר גרסה זו?",
+  "עריכה",
+  "שחזר"
+ ],
+ "icons": [
+  "Icons.history"
+ ],
+ "glyphs": [],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "HistoryPane",
+   "kind": "ConsumerWidget",
+   "line": 18,
+   "loc": 77,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "configStoreProvider",
+    "studioOwnerEmailProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 6,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [],
+ "board": {
+  "reads": [
+   "configStoreProvider",
+   "studioOwnerEmailProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

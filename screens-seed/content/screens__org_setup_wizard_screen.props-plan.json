@@ -1,0 +1,107 @@
+{
+ "_WizardFindReplaceScreen": {
+  "addProps": [
+   {
+    "name": "mxaWhjlBtqsty1",
+    "type": "String",
+    "replaces": "מצא והחלף בטקסטים"
+   },
+   {
+    "name": "mxawhjlAc2",
+    "type": "String",
+    "replaces": "מצא-והחלף · אשף"
+   },
+   {
+    "name": "fwrsJyBkl3",
+    "type": "String",
+    "replaces": "פורסם — חי בכל האפליקציה ✓"
+   },
+   {
+    "name": "frsLkwlJy4",
+    "type": "String",
+    "replaces": "פרסם לכולם (חי)"
+   }
+  ],
+  "note": ""
+ },
+ "_WizardHistoryScreen": {
+  "addProps": [
+   {
+    "name": "grsawtWhystwryh1",
+    "type": "String",
+    "replaces": "גרסאות והיסטוריה"
+   }
+  ],
+  "note": ""
+ },
+ "_SectionManagerList": {
+  "addProps": [
+   {
+    "name": "afsSdrhstrh1",
+    "type": "String",
+    "replaces": "אפס סדר/הסתרה"
+   },
+   {
+    "name": "erwC2",
+    "type": "String",
+    "replaces": "ערוך שם"
+   },
+   {
+    "name": "erwSqxywt3",
+    "type": "String",
+    "replaces": "ערוך סקציות"
+   }
+  ],
+  "note": ""
+ },
+ "_ScreenManagerScreen": {
+  "addProps": [
+   {
+    "name": "nyhwlMsky1",
+    "type": "String",
+    "replaces": "ניהול מסכים"
+   }
+  ],
+  "note": ""
+ },
+ "_ScreenSectionEditor": {
+  "addProps": [
+   {
+    "name": "tplScreenemojiScreenlabelH1",
+    "type": "String",
+    "replaces": "${screen.emoji} ${screen.labelHe} — סקציות"
+   },
+   {
+    "name": "mqldt2",
+    "type": "String",
+    "replaces": "מקלדת"
+   },
+   {
+    "name": "erykthsqxywtTyftjKchms3",
+    "type": "String",
+    "replaces": "עריכת-הסקציות תיפתח כשהמסך יומר למבנה-סקציות (slice-5)."
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_ScreenKeyboardEditor": {
+  "addProps": [
+   {
+    "name": "tplMqldtScreenlabelHe1",
+    "type": "String",
+    "replaces": "⌨️ מקלדת · ${screen.labelHe}"
+   },
+   {
+    "name": "sdrWhstrAt2",
+    "type": "String",
+    "replaces": "סדר והסתר את אריחי-המקלדת של המסך. נשמר עכשיו; יחול על "
+   },
+   {
+    "name": "hmqldthxfhKctcwgrKKbGl3",
+    "type": "String",
+    "replaces": "המקלדת-הצפה כשתשוגר (kKbGlobal)."
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

@@ -1,0 +1,166 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__trade_builder__attribute_schema_editor.dart",
+ "lines": 627,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of",
+   "cfgRadius"
+  ],
+  "fontSizes": [
+   12,
+   12.5,
+   13,
+   13.5,
+   14,
+   15,
+   18,
+   20
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   20
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  "s tile and LIVE on the add-form\n// while the switch is on with zero staged values), an add-form (שם מאפיין ·\n// kind dropdown · a values builder with deletable chips · ציר וריאנט? switch\n// · הוסף מאפיין) writing\n// through `upsertAttribute` under a DETERMINISTIC slug id\n// ",
+  "אין עדיין מאפיינים",
+  "בדיקת פירוק שם",
+  "בחירה",
+  "הוסף מאפיין",
+  "הוסף ערך",
+  "הסר",
+  "חומר",
+  "טיוטה",
+  "טקסט חופשי",
+  "למשל: 16",
+  "מחק",
+  "מידה",
+  "מספר",
+  "סוג",
+  "ערך",
+  "פורסם",
+  "צבע",
+  "ציר וריאנט ללא ערכים",
+  "ציר וריאנט?",
+  "קוטר: 16",
+  "שם מאפיין",
+  "שם: ערך",
+  "🏷️ מאפיינים"
+ ],
+ "icons": [
+  "Icons.delete_outline"
+ ],
+ "glyphs": [
+  "🏷"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "AttributeSchemaEditorScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 65,
+   "loc": 13,
+   "pure": false,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:AttributeSchemaEditorScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_AttributeTile",
+   "kind": "StatelessWidget",
+   "line": 401,
+   "loc": 101,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_ValueChip",
+   "kind": "StatelessWidget",
+   "line": 504,
+   "loc": 25,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_WarnChip",
+   "kind": "StatelessWidget",
+   "line": 532,
+   "loc": 24,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_MatchChip",
+   "kind": "StatelessWidget",
+   "line": 559,
+   "loc": 24,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_PillButton",
+   "kind": "StatelessWidget",
+   "line": 587,
+   "loc": 40,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kTradeBuilderFlag"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:AttributeSchemaEditorScreen"
+  ]
+ }
+}

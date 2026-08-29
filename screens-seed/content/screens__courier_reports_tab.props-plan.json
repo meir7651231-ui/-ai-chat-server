@@ -1,0 +1,242 @@
+{
+ "CourierReportsTab": {
+  "addProps": [
+   {
+    "name": "title",
+    "type": "String",
+    "replaces": "📊 דוחות"
+   },
+   {
+    "name": "subtitle",
+    "type": "String",
+    "replaces": "נתונים חיים ממנוע ההזמנות המשותף — ללא המצאות"
+   },
+   {
+    "name": "t01",
+    "type": "String",
+    "replaces": "מסירות ישנות ללא ייחוס אינן נספרות"
+   },
+   {
+    "name": "t02",
+    "type": "String",
+    "replaces": "אין עדיין מדידות זמן — הזמן נמדד אוטומטית מרגע אישור האיסוף ועד המסירה ללקוח."
+   },
+   {
+    "name": "historyTitle",
+    "type": "String",
+    "replaces": "היסטוריית מסירות"
+   },
+   {
+    "name": "emptyTitle",
+    "type": "String",
+    "replaces": "אין עדיין מסירות שהושלמו"
+   },
+   {
+    "name": "t03",
+    "type": "String",
+    "replaces": "משלוח שיסומן \"נמסר ללקוח\" יופיע כאן"
+   },
+   {
+    "name": "sendReport",
+    "type": "String",
+    "replaces": "🏪 שלח דוח-יומי לחנות"
+   },
+   {
+    "name": "t04",
+    "type": "String",
+    "replaces": "נסח דוח עם AI"
+   },
+   {
+    "name": "t05",
+    "type": "String",
+    "replaces": "הדוח נשלח כהודעה אמיתית לשיחת \"חנות ליפסקי\" (מנוע הצ׳אט המשותף — החנות משתתפת בשיחה) + התראת-פעמון לחנות. מוני המסירות והערך מיוחסים לשליח המחובר בלבד, בלי המצאות."
+   },
+   {
+    "name": "tplStreakYmy11",
+    "type": "String",
+    "replaces": "$streak ימים"
+   },
+   {
+    "name": "nmsrw12",
+    "type": "String",
+    "replaces": "נמסרו ✅"
+   },
+   {
+    "name": "feyly13",
+    "type": "String",
+    "replaces": "פעילים 🚚"
+   },
+   {
+    "name": "POD14",
+    "type": "String",
+    "replaces": "POD 📸"
+   },
+   {
+    "name": "BuildCoinsMwedwMcwt15",
+    "type": "String",
+    "replaces": "BuildCoins (מועדון משותף) 🪙"
+   },
+   {
+    "name": "rxFeylwt16",
+    "type": "String",
+    "replaces": "רצף פעילות 🔥"
+   },
+   {
+    "name": "msyrhracwnh17",
+    "type": "String",
+    "replaces": "מסירה-ראשונה 🎯"
+   },
+   {
+    "name": "tplMtbewtMazOrgTermref18",
+    "type": "String",
+    "replaces": "מטבעות — מאזן ${orgTerm(ref, "
+   },
+   {
+    "name": "AppBrandclubHmcwtLkl19",
+    "type": "String",
+    "replaces": ", AppBrand.club)} המשותף לכל התפקידים במכשיר (אינו נצבר לשליח בנפרד); הרצף ו-% מסירה-ראשונה נמדדים מחותמות שעון-המשלוחים — עדיין אין מסירות שנמדדו."
+   },
+   {
+    "name": "tplAppBrandclubHmcwtLkl20",
+    "type": "String",
+    "replaces": ", AppBrand.club)} המשותף לכל התפקידים במכשיר (אינו נצבר לשליח בנפרד); הרצף נמדד מחותמות שעון-המשלוחים. מסירה-ראשונה: $firstAttempt מתוך ${measuredDelivered.length} מסירות שנמדדו — ללא ניסיון חוזר."
+   },
+   {
+    "name": "tplShxkErCnmsr21",
+    "type": "String",
+    "replaces": "סה״כ ערך שנמסר על-ידי: ${fMoney(deliveredSum)}"
+   },
+   {
+    "name": "msyrwtLfyYw22",
+    "type": "String",
+    "replaces": "📅 מסירות לפי יום"
+   },
+   {
+    "name": "ewdAyMsyrwt23",
+    "type": "String",
+    "replaces": "עוד אין מסירות שהושלמו — מסירה שתסומן \"נמסר ללקוח\" תופיע כאן."
+   },
+   {
+    "name": "ayMsyrwtCnmddw24",
+    "type": "String",
+    "replaces": "אין מסירות שנמדדו השבוע."
+   },
+   {
+    "name": "tplLlaJwtmtNoStamp25",
+    "type": "String",
+    "replaces": "🗓️ ללא חותמת: $noStamp ${noStamp == 1 ? "
+   },
+   {
+    "name": "msyrwt26",
+    "type": "String",
+    "replaces": "מסירות"
+   },
+   {
+    "name": "zmAyswMsyrh27",
+    "type": "String",
+    "replaces": "⏱️ זמן איסוף→מסירה"
+   },
+   {
+    "name": "tplMmwxeTimedlengthMsyrwt28",
+    "type": "String",
+    "replaces": "ממוצע (${timed.length} מסירות)"
+   },
+   {
+    "name": "tplOid29",
+    "type": "String",
+    "replaces": "📦 ${o.id}"
+   },
+   {
+    "name": "txt30",
+    "type": "String",
+    "replaces": "📭"
+   },
+   {
+    "name": "cljDwjywmyLjnwt31",
+    "type": "String",
+    "replaces": "שלח דוח-יומי לחנות"
+   },
+   {
+    "name": "cwljLjnwtSykw32",
+    "type": "String",
+    "replaces": "שולח לחנות סיכום יומי כהודעת צ׳אט אמיתית + התראת-פעמון: כמה משלוחים נמסרו על-ידך, פעילים, POD וערך כספי. המספרים מיוחסים לשליח המחובר בלבד."
+   },
+   {
+    "name": "cljDwjYwmy33",
+    "type": "String",
+    "replaces": "שלח דוח יומי לחנות"
+   },
+   {
+    "name": "ayClyjMjwbr34",
+    "type": "String",
+    "replaces": "אין שליח מחובר"
+   },
+   {
+    "name": "tplDwjywClyjSdisplayName35",
+    "type": "String",
+    "replaces": "דוח-יום — שליח ${s.displayName}"
+   },
+   {
+    "name": "tplNmsrwHywNmdd36",
+    "type": "String",
+    "replaces": "✅ נמסרו היום (נמדד): $deliveredToday"
+   },
+   {
+    "name": "tplShxkNmsrwElydy37",
+    "type": "String",
+    "replaces": "📦 סה״כ נמסרו על-ידי: ${mine.length}"
+   },
+   {
+    "name": "tplMclwjyFeylyKll38",
+    "type": "String",
+    "replaces": "🚚 משלוחים פעילים (כלל המערכת): $active"
+   },
+   {
+    "name": "tplPODClyPodCount39",
+    "type": "String",
+    "replaces": "📸 POD שלי: $podCount"
+   },
+   {
+    "name": "tplErCnmsrFMoneydelivere40",
+    "type": "String",
+    "replaces": "💰 ערך שנמסר: ${fMoney(deliveredSum)}"
+   },
+   {
+    "name": "ayClyjMjwbr41",
+    "type": "String",
+    "replaces": "אין שליח מחובר — הדוח לא נשלח"
+   },
+   {
+    "name": "tplErCnmsrElydy42",
+    "type": "String",
+    "replaces": "💰 ערך שנמסר על-ידי: ${fMoney(deliveredSum)}"
+   },
+   {
+    "name": "cyjtHjnwtLa43",
+    "type": "String",
+    "replaces": "שיחת החנות לא נמצאה — הדוח לא נשלח"
+   },
+   {
+    "name": "txt44",
+    "type": "String",
+    "replaces": "📋"
+   },
+   {
+    "name": "dwjYwmyMhclyj45",
+    "type": "String",
+    "replaces": "דוח יומי מהשליח 🛵"
+   },
+   {
+    "name": "tplSdisplayNameNmsrwElydw46",
+    "type": "String",
+    "replaces": "${s.displayName} — נמסרו על-ידו: ${mine.length} · פעילים: $active · ${fMoney(deliveredSum)}"
+   },
+   {
+    "name": "hdwjNcljLjnwt47",
+    "type": "String",
+    "replaces": "🏪 הדוח נשלח לחנות — שיחה + התראת-פעמון"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

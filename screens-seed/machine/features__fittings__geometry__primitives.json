@@ -1,0 +1,41 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__fittings__geometry__primitives.dart",
+ "lines": 127,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [],
+ "icons": [],
+ "glyphs": [
+  "🔌"
+ ],
+ "logicCandidates": [
+  {
+   "name": "revolve",
+   "line": 26
+  },
+  {
+   "name": "hexRod",
+   "line": 75
+  },
+  {
+   "name": "sphere",
+   "line": 102
+  }
+ ],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

@@ -1,0 +1,42 @@
+{
+ "_DefectRow": {
+  "addProps": [
+   {
+    "name": "tplDefectlocation1",
+    "type": "String",
+    "replaces": "🔧 ${defect.location}"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_AddDefectForm": {
+  "addProps": [
+   {
+    "name": "severity",
+    "type": "String",
+    "replaces": "חומרה"
+   },
+   {
+    "name": "mhHlyqwy2",
+    "type": "String",
+    "replaces": "מה הליקוי"
+   },
+   {
+    "name": "ldwgmhNzylhMtjt3",
+    "type": "String",
+    "replaces": "לדוגמה: נזילה מתחת לכיור"
+   },
+   {
+    "name": "myqwAwfxywnly4",
+    "type": "String",
+    "replaces": "מיקום (אופציונלי)"
+   },
+   {
+    "name": "ldwgmhAmbtyhRacyt5",
+    "type": "String",
+    "replaces": "לדוגמה: אמבטיה ראשית"
+   }
+  ],
+  "note": ""
+ }
+}

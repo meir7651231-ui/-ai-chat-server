@@ -1,0 +1,159 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__smart_project_screen.dart",
+ "lines": 512,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.brandDark",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of",
+   "cfgRadius"
+  ],
+  "fontSizes": [
+   11.5,
+   12,
+   12.5,
+   13,
+   13.5,
+   14,
+   14.5,
+   15,
+   16,
+   18,
+   20,
+   40
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   20
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  "$done מתוך $total ימים בוצעו · $pct%",
+  "${active.name} — מאפס עד מסירה",
+  "${stage.totalDays} ימי עבודה",
+  ";\n\n/// Open the פרויקט חכם screen — the wire target for `openSmartProject`.\nvoid openSmartProject(BuildContext context) =>\n    Navigator.of(context).push(SmartProjectScreen.route());\n\nclass SmartProjectScreen extends ConsumerStatefulWidget {\n  const SmartProjectScreen({super.key});\n\n  static Route<void> route() =>\n      MaterialPageRoute<void>(builder: (_) => const SmartProjectScreen());\n\n  @override\n  ConsumerState<SmartProjectScreen> createState() => _SmartProjectScreenState();\n}\n\nclass _SmartProjectScreenState extends ConsumerState<SmartProjectScreen> {\n  String? _expanded; // expanded day-stage key (proto `expandedStage`)\n  final _scroll = ScrollController();\n  final List<GlobalKey> _cardKeys = [];\n\n  @override\n  void dispose() {\n    _scroll.dispose();\n    super.dispose();\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final done = ref.watch(smartProjectProvider);\n    final progress = ref.watch(smartProjectProgressProvider);\n    final stages = buildDayStages();\n    final active = ref.watch(activeProjectProvider);\n    final title = active.name.isEmpty\n        ? ",
+  "אין ימי עבודה בתוכנית",
+  "בוצע",
+  "בחר יום",
+  "היקף",
+  "הסימון בוטל",
+  "יום ${i + 1} · ${stages[i].name}",
+  "יום עבודה סומן כבוצע",
+  "כשתוגדר תוכנית עבודה — ימי העבודה יופיעו כאן",
+  "לא בוצע",
+  "לא שובץ",
+  "עברת ליום ${i + 1}",
+  "עובד אחראי",
+  "שלבי ביצוע",
+  "‹ יציאה",
+  "↩ בטל סימון",
+  "✓ הושלם",
+  "✓ סמן יום כבוצע",
+  "🎉 כל ימי העבודה בוצעו — הפרויקט הושלם!",
+  "🏗️ פרויקט חכם",
+  "📅 בחר יום"
+ ],
+ "icons": [
+  "Icons.check_circle",
+  "Icons.expand_less",
+  "Icons.expand_more",
+  "Icons.radio_button_unchecked"
+ ],
+ "glyphs": [
+  "✓",
+  "🎉",
+  "🏗",
+  "📅",
+  "🗓"
+ ],
+ "logicCandidates": [
+  {
+   "name": "_jumpToDay",
+   "line": 236
+  }
+ ],
+ "widgets": [
+  {
+   "name": "SmartProjectScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 26,
+   "loc": 9,
+   "pure": false,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:SmartProjectScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_Hero",
+   "kind": "StatelessWidget",
+   "line": 249,
+   "loc": 51,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 1
+  },
+  {
+   "name": "_ProjectDone",
+   "kind": "StatelessWidget",
+   "line": 301,
+   "loc": 16,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_StageCard",
+   "kind": "StatelessWidget",
+   "line": 318,
+   "loc": 194,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 9,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kWorkers"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:SmartProjectScreen"
+  ]
+ }
+}

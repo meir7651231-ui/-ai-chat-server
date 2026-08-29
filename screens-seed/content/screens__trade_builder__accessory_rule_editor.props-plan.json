@@ -1,0 +1,37 @@
+{
+ "_EmptyAccessories": {
+  "addProps": [
+   {
+    "name": "t05",
+    "type": "String",
+    "replaces": "אין עדיין אביזרים"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "🧩"
+   }
+  ],
+  "note": ""
+ },
+ "_AccessoryTile": {
+  "addProps": [
+   {
+    "name": "mjq1",
+    "type": "String",
+    "replaces": "מחק"
+   }
+  ],
+  "note": ""
+ },
+ "_MustChip": {
+  "addProps": [
+   {
+    "name": "t06",
+    "type": "String",
+    "replaces": "חובה"
+   }
+  ],
+  "note": ""
+ }
+}

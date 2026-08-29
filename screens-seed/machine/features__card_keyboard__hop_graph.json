@@ -1,0 +1,40 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__card_keyboard__hop_graph.dart",
+ "lines": 284,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "אל חזור"
+ ],
+ "icons": [],
+ "glyphs": [],
+ "logicCandidates": [
+  {
+   "name": "crossesSystem",
+   "line": 50
+  },
+  {
+   "name": "_addHubEdges",
+   "line": 256
+  }
+ ],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kSmartProducts",
+  "kVerifiedSpecs"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

@@ -1,0 +1,100 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__card_keyboard__card_keyboard_screen.dart",
+ "lines": 675,
+ "pigments": {
+  "tokens": [
+   "BsTokens.inkLight",
+   "BsTokens.space2",
+   "BsTokens.space3"
+  ],
+  "themeSockets": [],
+  "fontSizes": [
+   16,
+   18
+  ],
+  "fontWeights": [
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "live-region בשינוי-קבוצה",
+  "אפשרות",
+  "הקלדה קולית אינה זמינה במכשיר הזה",
+  "התחל מחדש",
+  "חומר",
+  "חזרה",
+  "לא הצלחתי לשמוע — נסה שוב",
+  "לא נמצא מוצר מתאים — נסה שוב",
+  "מה אתה מחפש?",
+  "מה מתאים?",
+  "מילים",
+  "נחושת",
+  "עבודה",
+  "עוד…",
+  "פחות",
+  "קטגוריה"
+ ],
+ "icons": [
+  "Icons.architecture",
+  "Icons.arrow_forward",
+  "Icons.category_outlined",
+  "Icons.label_outline",
+  "Icons.palette_outlined",
+  "Icons.straighten",
+  "Icons.tag",
+  "Icons.tune"
+ ],
+ "glyphs": [],
+ "logicCandidates": [
+  {
+   "name": "_onOpeningQuery",
+   "line": 320
+  },
+  {
+   "name": "dispose",
+   "line": 377
+  }
+ ],
+ "widgets": [
+  {
+   "name": "CardKeyboardScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 120,
+   "loc": 41,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kCardKeyboardFlag",
+  "kCardMergedQuestion",
+  "kCategoryMouth",
+  "kDivePool",
+  "kFirstWordCount",
+  "kIsWeb",
+  "kJobMouth",
+  "kMaterialMouth",
+  "kOpeningSeedAxis",
+  "kPickProductQuestion",
+  "kUnifiedFinderFlag",
+  "kVoiceErrorMsg",
+  "kVoiceUnavailableMsg",
+  "kWordMouth"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

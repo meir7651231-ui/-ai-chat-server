@@ -1,0 +1,77 @@
+{
+ "ManagerProfileScreen": {
+  "addProps": [
+   {
+    "name": "t01",
+    "type": "String",
+    "replaces": "אזור אישי — מנהל המערכת"
+   }
+  ],
+  "note": ""
+ },
+ "_ManagerProfileBody": {
+  "addProps": [
+   {
+    "name": "t02",
+    "type": "String",
+    "replaces": "מצב הדגמה"
+   },
+   {
+    "name": "t03",
+    "type": "String",
+    "replaces": "הזמנות — סטטיסטיקה"
+   },
+   {
+    "name": "t04",
+    "type": "String",
+    "replaces": "הגדרות"
+   },
+   {
+    "name": "t05",
+    "type": "String",
+    "replaces": "מעבר בין מסכים"
+   },
+   {
+    "name": "t06",
+    "type": "String",
+    "replaces": "צפייה בכל לוח — מצב מנהל"
+   },
+   {
+    "name": "txt6",
+    "type": "String",
+    "replaces": "👔"
+   },
+   {
+    "name": "tplSessionusernameMnhlHme7",
+    "type": "String",
+    "replaces": "@${session.username} · מנהל המערכת"
+   },
+   {
+    "name": "feylwt8",
+    "type": "String",
+    "replaces": "פעילות 📋"
+   },
+   {
+    "name": "bdr9",
+    "type": "String",
+    "replaces": "בדרך 🚚"
+   },
+   {
+    "name": "nmsrw10",
+    "type": "String",
+    "replaces": "נמסרו ✅"
+   },
+   {
+    "name": "tplHknswtHywFeylwt11",
+    "type": "String",
+    "replaces": "הכנסות היום (פעילות): ${fMoney(revenue)}"
+   },
+   {
+    "name": "txt12",
+    "type": "String",
+    "replaces": "🖥️"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

@@ -1,0 +1,90 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__describe_to_cart_screen.dart",
+ "lines": 258,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.dangerDark",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   13,
+   14,
+   16,
+   18
+  ],
+  "fontWeights": [
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   19
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  "אם שום עבודה ברשימה לא מתאימה, החזר NONE.",
+  "אתה ממפה בקשת אינסטלטור לעבודה אחת מרשימה סגורה. החזר אך ורק key מהרשימה ",
+  "בחר את ה-key של העבודה האחת שהכי מתאימה לבקשה — מתוך הרשימה בלבד. ",
+  "הוסף ${_products.length} לסל",
+  "החזר אך ורק את ה-key (שורה אחת, ללא טקסט נוסף). ",
+  "זוהתה העבודה, אך לחלקיה עדיין אין מק\"ט מקושר.",
+  "לא זוהתה עבודה מתאימה — נסה לתאר אחרת.",
+  "לדוגמה: יש לי נזילה מתחת לכיור במטבח",
+  "מצא לי את הסל",
+  "משהו השתבש — נסה שוב.",
+  "נוספו ${_products.length} פריטים לסל ✓",
+  "ספר במילים שלך מה אתה צריך:",
+  "ר דורש חיבור לשרת.",
+  "שניתנה, או NONE. לעולם אל תמציא key ואל תכתוב שם-מוצר.",
+  "🗣️ תאר עבודה → סל"
+ ],
+ "icons": [
+  "Icons.shopping_cart"
+ ],
+ "glyphs": [
+  "✓",
+  "💡",
+  "🔎",
+  "🗣"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "DescribeToCartScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 77,
+   "loc": 9,
+   "pure": false,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:DescribeToCartScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kClaudeAi",
+  "kSmartProducts"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:DescribeToCartScreen"
+  ]
+ }
+}

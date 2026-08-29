@@ -1,0 +1,417 @@
+{
+ "_WeekStripCard": {
+  "addProps": [
+   {
+    "name": "journal",
+    "type": "String",
+    "replaces": "📅 היומן שלי"
+   },
+   {
+    "name": "fullMonth",
+    "type": "String",
+    "replaces": "חודש מלא ›"
+   },
+   {
+    "name": "a3",
+    "type": "String",
+    "replaces": "א"
+   },
+   {
+    "name": "b4",
+    "type": "String",
+    "replaces": "ב"
+   },
+   {
+    "name": "g5",
+    "type": "String",
+    "replaces": "ג"
+   },
+   {
+    "name": "d6",
+    "type": "String",
+    "replaces": "ד"
+   },
+   {
+    "name": "h7",
+    "type": "String",
+    "replaces": "ה"
+   },
+   {
+    "name": "w8",
+    "type": "String",
+    "replaces": "ו"
+   },
+   {
+    "name": "c9",
+    "type": "String",
+    "replaces": "ש"
+   },
+   {
+    "name": "jwdcMla10",
+    "type": "String",
+    "replaces": "חודש מלא"
+   },
+   {
+    "name": "fwtjAtLwjhnwkjwt11",
+    "type": "String",
+    "replaces": "פותח את לוח-הנוכחות החודשי המלא — כניסה/יציאה, מיקום "
+   },
+   {
+    "name": "wsykwEbwdhLklYw12",
+    "type": "String",
+    "replaces": "וסיכום-עבודה לכל יום בחודש."
+   }
+  ],
+  "note": ""
+ },
+ "_DayChip": {
+  "addProps": [
+   {
+    "name": "tplYwLabelDayNumisToday1",
+    "type": "String",
+    "replaces": "יום $label $dayNum${isToday ? "
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_DayAttendanceCard": {
+  "addProps": [
+   {
+    "name": "t01",
+    "type": "String",
+    "replaces": "✓ נרשמה נוכחות להיום"
+   },
+   {
+    "name": "t02",
+    "type": "String",
+    "replaces": "לא נרשמה נוכחות ביום זה"
+   },
+   {
+    "name": "knyshEMyqw3",
+    "type": "String",
+    "replaces": "🟢 כניסה עם מיקום"
+   },
+   {
+    "name": "yxyahEMyqw4",
+    "type": "String",
+    "replaces": "🔴 יציאה עם מיקום"
+   },
+   {
+    "name": "nwkjwtHyw5",
+    "type": "String",
+    "replaces": "🕐 נוכחות היום"
+   },
+   {
+    "name": "nwkjwt6",
+    "type": "String",
+    "replaces": "🕐 נוכחות"
+   },
+   {
+    "name": "knysh7",
+    "type": "String",
+    "replaces": "כניסה"
+   },
+   {
+    "name": "yxyah8",
+    "type": "String",
+    "replaces": "יציאה"
+   },
+   {
+    "name": "shk9",
+    "type": "String",
+    "replaces": "סה\"כ"
+   },
+   {
+    "name": "myqwHebwdh10",
+    "type": "String",
+    "replaces": "מיקום העבודה"
+   },
+   {
+    "name": "ncmrMmkcyrHGPS11",
+    "type": "String",
+    "replaces": "נשמר ממכשיר ה-GPS בעת רישום הכניסה. לחיצה פותחת ניווט "
+   },
+   {
+    "name": "bWazeAwBGoogle12",
+    "type": "String",
+    "replaces": "ב-Waze או ב-Google Maps אל מיקום העבודה."
+   },
+   {
+    "name": "ftjNywwtLmyqw13",
+    "type": "String",
+    "replaces": "פתח ניווט למיקום העבודה"
+   },
+   {
+    "name": "ayMyqwCmwr14",
+    "type": "String",
+    "replaces": "אין מיקום שמור"
+   },
+   {
+    "name": "myqwHebwdhNcmr15",
+    "type": "String",
+    "replaces": "מיקום העבודה נשמר — פתח ניווט"
+   },
+   {
+    "name": "laNcmrMyqw16",
+    "type": "String",
+    "replaces": "לא נשמר מיקום ליום זה"
+   },
+   {
+    "name": "nwkjwtEMyqw17",
+    "type": "String",
+    "replaces": "נוכחות עם מיקום"
+   },
+   {
+    "name": "rwcKnyshyxyahLhyw18",
+    "type": "String",
+    "replaces": "רושם כניסה/יציאה להיום ושומר את מיקום ה-GPS. אם המיקום "
+   },
+   {
+    "name": "aynwZmyHnwkjwt19",
+    "type": "String",
+    "replaces": "אינו זמין — הנוכחות נרשמת בלי מיקום, בלי המצאה."
+   }
+  ],
+  "note": ""
+ },
+ "_WorkerNav": {
+  "addProps": [
+   {
+    "name": "mcymwt1",
+    "type": "String",
+    "replaces": "משימות"
+   },
+   {
+    "name": "cyjwt2",
+    "type": "String",
+    "replaces": "שיחות"
+   },
+   {
+    "name": "dwjwt3",
+    "type": "String",
+    "replaces": "דוחות"
+   },
+   {
+    "name": "azwrAycy4",
+    "type": "String",
+    "replaces": "אזור אישי"
+   }
+  ],
+  "note": ""
+ },
+ "_SummaryCard": {
+  "addProps": [
+   {
+    "name": "t03",
+    "type": "String",
+    "replaces": "דמו"
+   },
+   {
+    "name": "ycLMcymh2",
+    "type": "String",
+    "replaces": "יש לך משימה פעילה"
+   },
+   {
+    "name": "ycMcymwtBtwr3",
+    "type": "String",
+    "replaces": "יש משימות בתור"
+   },
+   {
+    "name": "ayMcymwtFtwjwt4",
+    "type": "String",
+    "replaces": "אין משימות פתוחות"
+   },
+   {
+    "name": "tplClwName5",
+    "type": "String",
+    "replaces": "שלום, $name 👷"
+   },
+   {
+    "name": "feylh6",
+    "type": "String",
+    "replaces": "פעילה"
+   },
+   {
+    "name": "btwr7",
+    "type": "String",
+    "replaces": "בתור"
+   },
+   {
+    "name": "hwgcw8",
+    "type": "String",
+    "replaces": "הוגשו"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_Section": {
+  "addProps": [
+   {
+    "name": "krtysMcymh1",
+    "type": "String",
+    "replaces": "כרטיס משימה"
+   },
+   {
+    "name": "ljyxhElHkrtys2",
+    "type": "String",
+    "replaces": "לחיצה על הכרטיס פותחת את פירוט המשימה — שלבים, הוראות, "
+   },
+   {
+    "name": "mhLhbyaWdywwj3",
+    "type": "String",
+    "replaces": "\"מה להביא\" ודיווח ביצוע. כפתור \"שלח לאישור\" מגיש את "
+   },
+   {
+    "name": "hmcymhLaycwrHmnhl4",
+    "type": "String",
+    "replaces": "המשימה לאישור המנהל."
+   }
+  ],
+  "note": ""
+ },
+ "_TaskCard": {
+  "addProps": [
+   {
+    "name": "tplTaskdaysYmyTaskstepsl1",
+    "type": "String",
+    "replaces": "🕒 ${task.days} ימים · ${task.steps.length} שלבים"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_EquipmentButton": {
+  "addProps": [
+   {
+    "name": "checkEquipment",
+    "type": "String",
+    "replaces": "בדוק ציוד נדרש"
+   },
+   {
+    "name": "mrkzAtKl2",
+    "type": "String",
+    "replaces": "מרכז את כל הכלים והחומרים הדרושים למשימות הפעילות שלך לרשימה "
+   },
+   {
+    "name": "qlystMawgdLyw3",
+    "type": "String",
+    "replaces": "קליסט מאוגד ליום, שאפשר לסמן ולשלוח לקבלן."
+   },
+   {
+    "name": "txt4",
+    "type": "String",
+    "replaces": "🧰"
+   }
+  ],
+  "note": ""
+ },
+ "_EmployerStockButton": {
+  "addProps": [
+   {
+    "name": "employerStock",
+    "type": "String",
+    "replaces": "מלאי הקבלן"
+   },
+   {
+    "name": "mxygLxfyyhBlbd2",
+    "type": "String",
+    "replaces": "מציג לצפייה בלבד את מלאי הקבלן המעסיק — איזה פריט נמצא במחסן "
+   },
+   {
+    "name": "wayzhBatrAyn3",
+    "type": "String",
+    "replaces": "ואיזה באתר. אינך עורך מלאי זה; הוא של הקבלן."
+   },
+   {
+    "name": "txt4",
+    "type": "String",
+    "replaces": "📦"
+   }
+  ],
+  "note": ""
+ },
+ "_ProposeTaskButton": {
+  "addProps": [
+   {
+    "name": "addTask",
+    "type": "String",
+    "replaces": "הוסף משימה"
+   },
+   {
+    "name": "fwtjTwfsLhxet2",
+    "type": "String",
+    "replaces": "פותח טופס להצעת משימה חדשה לקבלן. המשימה שאתה מציע נשלחת "
+   },
+   {
+    "name": "lqblLaycwrWrq3",
+    "type": "String",
+    "replaces": "לקבלן לאישור, ורק לאחר שאישר אותה היא הופכת לפעילה אצלך."
+   }
+  ],
+  "note": ""
+ },
+ "_GanttButton": {
+  "addProps": [
+   {
+    "name": "gantt",
+    "type": "String",
+    "replaces": "גאנט משימות"
+   },
+   {
+    "name": "mxygLxfyyhBlbd2",
+    "type": "String",
+    "replaces": "מציג לצפייה בלבד את לוח-הזמנים של המשימות לפי תאריך-התחלה "
+   },
+   {
+    "name": "mtwzmHqblQwbe3",
+    "type": "String",
+    "replaces": "מתוזמן. הקבלן קובע את התאריכים; אתה רואה כאן את התזמון."
+   },
+   {
+    "name": "txt4",
+    "type": "String",
+    "replaces": "📊"
+   }
+  ],
+  "note": ""
+ },
+ "_DefectsButton": {
+  "addProps": [
+   {
+    "name": "defects",
+    "type": "String",
+    "replaces": "ליקויים"
+   },
+   {
+    "name": "fwtjTwfsLdywwj2",
+    "type": "String",
+    "replaces": "פותח טופס לדיווח על ליקוי שמצאת. הליקוי נשלח לקבלן לאישור, "
+   },
+   {
+    "name": "wbrgeCaycrAwtw3",
+    "type": "String",
+    "replaces": "וברגע שאישר אותו הוא נכנס לביצוע — בדיוק כמו משימה."
+   },
+   {
+    "name": "txt4",
+    "type": "String",
+    "replaces": "🔧"
+   }
+  ],
+  "note": ""
+ },
+ "_SubmitButton": {
+  "addProps": [
+   {
+    "name": "submit",
+    "type": "String",
+    "replaces": "📸 שלח לאישור"
+   },
+   {
+    "name": "cljLaycwr2",
+    "type": "String",
+    "replaces": "שלח לאישור"
+   }
+  ],
+  "note": ""
+ }
+}

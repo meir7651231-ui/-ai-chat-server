@@ -1,0 +1,52 @@
+// 📦 דאטה-תוכן (חולל ע"י screen-lift, הכרעה-11: מנוע-לא-נחיל) · screens__budget_screen
+// מוצא: screens__budget_screen.dart — כל מחרוזת-תוכן שהייתה צרובה ב-widget, ממופתחת פר-מנגנון.
+
+const budgetScreenContent = (
+  title: 'תקציב הפרויקט',
+  catHeader: 'פירוט הוצאות לפי קטגוריה',
+  add: '＋ הוסף',
+  noCats: 'אין קטגוריות עדיין — הקש "＋ הוסף" כדי להוסיף קטגוריה',
+  siteHeader: 'הוצאות לפי אתר',
+  noSites: 'אין אתרים פעילים — הוסיפו פרויקט במסך הפרויקטים',
+  editBudgetBtn: '✏️ עריכת התקציב',
+  editorTitle: 'עריכת תקציב',
+  save: 'שמירה',
+  removeExpense: '− הסר הוצאה',
+  addExpense: '＋ הוסף הוצאה',
+  saveCat: 'שמירה',
+  deleteCat: '🗑️ מחיקת קטגוריה',
+  jryghMhtqxyb14: 'חריגה מהתקציב',
+  mhtqxybNwxl15: 'מהתקציב נוצל',
+  hqcLerykh16: ' · הקש לעריכה',
+  tqxybKwll17: 'תקציב כולל',
+  hwxa18: 'הוצא',
+  ncar19: 'נשאר',
+  tplHhwxawtJrgwMhtqxyb20: '⚠️ ההוצאות חרגו מהתקציב ב-${_fmt(-b.left)}. כדאי לעדכן את התקציב או לבדוק הוצאות.',
+  ajrLlaFrwyqt21: 'אחר / ללא פרויקט',
+  mbwssElHhzmnwt22: 'מבוסס על ההזמנות בפועל לפי אתר.',
+  hntwnyLhmjchBgrsh23: '* הנתונים להמחשה — בגרסה המלאה יתבססו על ההזמנות וההוצאות בפועל של הלקוח.',
+  hwxaEdKh24: 'הוצא עד כה',
+  ycLhzyMsfry25: 'יש להזין מספרים תקינים',
+  htqxybEwdk26: 'התקציב עודכן',
+  hwsftHsrtHwxah27: 'הוספת / הסרת הוצאה (₪)',
+  ycLhzySkw28: 'יש להזין סכום',
+  tplNwsfhHwxahThousandsamt29: 'נוספה הוצאה: ₪${_thousands(amt)}',
+  tplHwsrhHwxahThousandsamt30: 'הוסרה הוצאה: ₪${_thousands(amt)}',
+  txt31: '📦',
+  qtgwryhJdch32: 'קטגוריה חדשה',
+  eryktQtgwryh33: 'עריכת קטגוריה',
+  cHqtgwryh34: 'שם הקטגוריה',
+  skw35: 'סכום (₪)',
+  ycLhzyC36: 'יש להזין שם קטגוריה',
+  ycLhzySkw37: 'יש להזין סכום תקין',
+  hqtgwryhNcmrh38: 'הקטגוריה נשמרה',
+  mjyqtQtgwryh39: 'מחיקת קטגוריה?',
+  hqtgwryhTymjqMhtqxyb40: 'הקטגוריה תימחק מהתקציב לצמיתות.',
+  mjq41: 'מחק',
+  hqtgwryhNmjqh42: 'הקטגוריה נמחקה',
+);
+
+const siteRowContent = (
+  tplName1: '🏗️ $name',
+);
+

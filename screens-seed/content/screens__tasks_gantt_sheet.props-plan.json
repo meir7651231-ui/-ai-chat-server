@@ -1,0 +1,52 @@
+{
+ "_TasksGanttSheet": {
+  "addProps": [
+   {
+    "name": "header",
+    "type": "String",
+    "replaces": "📊 גאנט משימות"
+   },
+   {
+    "name": "subtitle",
+    "type": "String",
+    "replaces": "לוח-הזמנים של המשימות לפי תאריך-התחלה מתוזמן (לצפייה בלבד)"
+   },
+   {
+    "name": "empty",
+    "type": "String",
+    "replaces": "אין משימות"
+   },
+   {
+    "name": "timeline",
+    "type": "String",
+    "replaces": "📊 לוח-זמנים (גאנט)"
+   },
+   {
+    "name": "unscheduledNote",
+    "type": "String",
+    "replaces": "משימות אלו לא ממוקמות על הציר — הקבלן יכול לשבץ להן תאריך התחלה."
+   },
+   {
+    "name": "sgwr6",
+    "type": "String",
+    "replaces": "סגור"
+   },
+   {
+    "name": "tplLlaTaryMtwzm7",
+    "type": "String",
+    "replaces": "🗓️ ללא תאריך מתוזמן (${layout.unscheduled.length})"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_GanttBarRow": {
+  "addProps": [
+   {
+    "name": "tplFmtDayMonthstartBarlenD1",
+    "type": "String",
+    "replaces": "${_fmtDayMonth(start)} · ${bar.lenDays} ימ׳"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

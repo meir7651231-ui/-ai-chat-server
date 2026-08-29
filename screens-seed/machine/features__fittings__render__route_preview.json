@@ -1,0 +1,83 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__fittings__render__route_preview.dart",
+ "lines": 208,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [
+   "FontWeight.w700"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ";\n\n/// צבע-בסיס פר-חומר (מוכפל בגורם-ההצללה פר-משולש). PP-R ירוק · צינור אפור · פליז.\nconst Color kPprColor = Color(0xFF3F8F46);\nconst Color kPipeColor = Color(0xFFAAB4BD);\nconst Color kBrassColor = Color(0xFFC9A24B);\n\n/// רקע-הבמה (כהה) — כדי שהצנרת הירוקה/פליז תבלוט.\nconst Color kStageBackground = Color(0xFF0E141C);\n\n/// צבע-הבסיס של חומר-חלק.\nColor colorForMaterial(PartMaterial mat) => switch (mat) {\n      PartMaterial.ppr => kPprColor,\n      PartMaterial.pipe => kPipeColor,\n      PartMaterial.brass => kBrassColor,\n    };\n\n/// צבע-ההיילייט (ברק) פר-חומר: דיאלקטרי → לבן · פליז → לבן-חמים (השתקפות מתכתית).\nColor _highlightForMaterial(PartMaterial mat) => switch (mat) {\n      PartMaterial.ppr => const Color(0xFFFFFFFF),\n      PartMaterial.pipe => const Color(0xFFFFFFFF),\n      PartMaterial.brass => const Color(0xFFFFF4D8),\n    };\n\n/// צייר-דק: מקבל חלקים-מוכנים (world-space, בעלי-חומר) + פרמטרי-מצלמה, מקרין ומצייר.\n/// כל הלוגיקה-הכבדה ב-`projectParts` הטהור (הנבדק-golden); כאן רק רקע + מילוי-משולשים.\nclass RoutePainter extends CustomPainter {\n  RoutePainter({\n    required this.parts,\n    required this.yaw,\n    required this.pitch,\n    required this.dist,\n    required this.target,\n    this.background = kStageBackground,\n  });\n\n  final List<WorldPart> parts;\n  final double yaw;\n  final double pitch;\n  final double dist;\n  final Vec3 target;\n  final Color background;\n\n  @override\n  void paint(Canvas canvas, Size size) {\n    if (size.isEmpty) return;\n    canvas.drawRect(Offset.zero & size, Paint()..color = background);\n    final proj = perspective(kDefaultFov, size.width / size.height, 0.1, 100000);\n    final eye = orbitEye(target, dist, yaw, pitch);\n    final view = lookAt(eye, target, const Vec3(0, 1, 0));\n    final tris = projectParts(parts, proj, view, eye, size);\n    final paint = Paint()..style = PaintingStyle.fill;\n    for (final t in tris) {\n      final base = colorForMaterial(t.mat);\n      final hl = _highlightForMaterial(t.mat);\n      final s = t.shade.clamp(0.0, 1.0);\n      final spec = t.specular.clamp(0.0, 1.0);\n      // צבע-סופי = בסיס·הצללה + היילייט·ספקולרי (מוגבל ל-255).\n      int ch(double baseC, double hlC) =>\n          (baseC * 255.0 * s + hlC * 255.0 * spec).clamp(0.0, 255.0).round();\n      paint.color = Color.fromARGB(\n        255,\n        ch(base.r, hl.r),\n        ch(base.g, hl.g),\n        ch(base.b, hl.b),\n      );\n      canvas.drawPath(\n        Path()\n          ..moveTo(t.a.dx, t.a.dy)\n          ..lineTo(t.b.dx, t.b.dy)\n          ..lineTo(t.c.dx, t.c.dy)\n          ..close(),\n        paint,\n      );\n    }\n  }\n\n  @override\n  bool shouldRepaint(RoutePainter old) =>\n      old.yaw != yaw ||\n      old.pitch != pitch ||\n      old.dist != dist ||\n      !identical(old.parts, parts) ||\n      old.background != background;\n}\n\n/// תצוגת-3D אינטראקטיבית של רצף-אביזרים: מסגור-אוטומטי מ-bbox + גרירה-לסיבוב +\n/// צביטה-לזום. **מגודר · off-live** — נבנה רק ב-build-preview.\nclass FittingPreview3d extends StatefulWidget {\n  const FittingPreview3d({required this.route, this.explode = 0, super.key});\n\n  final List<RunElement> route;\n\n  /// 💥 מרווח-פירוק (0=מורכב) — מרחיק את האביזרים להצגת-פירוק (יכולת exploded-view).\n  final double explode;\n\n  @override\n  State<FittingPreview3d> createState() => _FittingPreview3dState();\n}\n\nclass _FittingPreview3dState extends State<FittingPreview3d> {\n  late List<WorldPart> _parts;\n  late Vec3 _target;\n  late double _dist;\n  double _yaw = kDefaultYaw;\n  double _pitch = kDefaultPitch;\n  double _distAtGestureStart = 0;\n\n  @override\n  void initState() {\n    super.initState();\n    _rebuild();\n  }\n\n  @override\n  void didUpdateWidget(FittingPreview3d old) {\n    super.didUpdateWidget(old);\n    if (!identical(old.route, widget.route) || old.explode != widget.explode) {\n      _rebuild();\n    }\n  }\n\n  void _rebuild() {\n    _parts = assembleRoute(widget.route, explode: widget.explode);\n    final b = meshBounds(_parts.map((p) => p.mesh).toList());\n    _target = b.center;\n    _dist = b.radius * kFrameDistRatio * 2; // מרווח-נשימה סביב הרצף\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    return GestureDetector(\n      onScaleStart: (_) => _distAtGestureStart = _dist,\n      onScaleUpdate: (d) {\n        setState(() {\n          if (d.scale != 1.0) {\n            _dist = (_distAtGestureStart / d.scale).clamp(1.0, 1e7);\n          }\n          _yaw -= d.focalPointDelta.dx * 0.008;\n          _pitch = (_pitch + d.focalPointDelta.dy * 0.008).clamp(-1.2, 1.2);\n        });\n      },\n      child: CustomPaint(\n        painter: RoutePainter(\n          parts: _parts,\n          yaw: _yaw,\n          pitch: _pitch,\n          dist: _dist,\n          target: _target,\n        ),\n        size: Size.infinite,\n      ),\n    );\n  }\n}\n\n/// מסך-בדיקה מגודר ל-preview (off-live). רצף-ברירת-מחדל להדגמה. **צעד 43 = GO-בעלים.**\nclass FittingPreviewScreen extends StatelessWidget {\n  const FittingPreviewScreen({\n    this.route = _demoRoute,\n    super.key,\n  });\n\n  final List<RunElement> route;\n\n  static const List<RunElement> _demoRoute = [\n    RunElement(Family.coupler, 32),\n    RunElement(Family.elbow90, 32, dir: Dir.up),\n    RunElement(Family.coupler, 32),\n    RunElement(Family.elbow90, 32),\n    RunElement(Family.plug, 32),\n  ];\n\n  @override\n  Widget build(BuildContext context) {\n    return Scaffold(\n      backgroundColor: kStageBackground,\n      appBar: AppBar(\n        backgroundColor: const Color(0xFF151F2A),\n        foregroundColor: Colors.white,\n        title: const Text(\n          "
+ ],
+ "icons": [],
+ "glyphs": [
+  "💥",
+  "🔌",
+  "🔒"
+ ],
+ "logicCandidates": [
+  {
+   "name": "paint",
+   "line": 60
+  },
+  {
+   "name": "_rebuild",
+   "line": 138
+  },
+  {
+   "name": "setState",
+   "line": 150
+  }
+ ],
+ "widgets": [
+  {
+   "name": "FittingPreview3d",
+   "kind": "StatefulWidget",
+   "line": 105,
+   "loc": 11,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "FittingPreviewScreen",
+   "kind": "StatelessWidget",
+   "line": 174,
+   "loc": 34,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kBrassColor",
+  "kDefaultFov",
+  "kDefaultPitch",
+  "kDefaultYaw",
+  "kFrameDistRatio",
+  "kPipeColor",
+  "kPprColor",
+  "kStageBackground"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

@@ -1,0 +1,227 @@
+{
+ "IntelTab": {
+  "addProps": [
+   {
+    "name": "jyfwc1",
+    "type": "String",
+    "replaces": "חיפוש"
+   },
+   {
+    "name": "xfyyhBmwxr2",
+    "type": "String",
+    "replaces": "צפייה במוצר"
+   },
+   {
+    "name": "hwsfhLsl3",
+    "type": "String",
+    "replaces": "הוספה לסל"
+   },
+   {
+    "name": "xfyyhBsl4",
+    "type": "String",
+    "replaces": "צפייה בסל"
+   },
+   {
+    "name": "tclw5",
+    "type": "String",
+    "replaces": "תשלום"
+   },
+   {
+    "name": "hzmnh6",
+    "type": "String",
+    "replaces": "הזמנה"
+   }
+  ],
+  "note": ""
+ },
+ "_IntelIntro": {
+  "addProps": [
+   {
+    "name": "t01",
+    "type": "String",
+    "replaces": "📡 מודיעין לקוחות"
+   },
+   {
+    "name": "t02",
+    "type": "String",
+    "replaces": "משפך ההמרה, פלחי הלקוחות, שימור ומי מחובר כעת — חי מהמכשיר."
+   },
+   {
+    "name": "mwdyeyLqwjwt3",
+    "type": "String",
+    "replaces": "מודיעין לקוחות"
+   }
+  ],
+  "note": ""
+ },
+ "_FunnelCard": {
+  "addProps": [
+   {
+    "name": "mcfHmrh1",
+    "type": "String",
+    "replaces": "משפך המרה"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "🛒"
+   },
+   {
+    "name": "tplLabelsnameSreachedScny3",
+    "type": "String",
+    "replaces": "${_label(s.name)}: ${s.reached} סשנים, "
+   },
+   {
+    "name": "tplSconversionPctroundAjwz4",
+    "type": "String",
+    "replaces": "${s.conversionPct.round()} אחוז המרה"
+   },
+   {
+    "name": "hmrh5",
+    "type": "String",
+    "replaces": "המרה"
+   },
+   {
+    "name": "tplHncyrhHgdwlhLabeldropf6",
+    "type": "String",
+    "replaces": "הנשירה הגדולה: ${_label(drop.fromStage)} ← "
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_SegmentsCard": {
+  "addProps": [
+   {
+    "name": "fljyLqwjwt1",
+    "type": "String",
+    "replaces": "פלחי לקוחות"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "👥"
+   },
+   {
+    "name": "lqwjwt3",
+    "type": "String",
+    "replaces": "לקוחות"
+   },
+   {
+    "name": "hmyrw4",
+    "type": "String",
+    "replaces": "המירו"
+   },
+   {
+    "name": "tqyewt5",
+    "type": "String",
+    "replaces": "תקיעות"
+   },
+   {
+    "name": "tplPseudonymakey6",
+    "type": "String",
+    "replaces": "👤 ${_pseudonym(a.key)}"
+   },
+   {
+    "name": "tplAsessionsScny7",
+    "type": "String",
+    "replaces": "${a.sessions} סשנים"
+   },
+   {
+    "name": "hmyr8",
+    "type": "String",
+    "replaces": "המיר"
+   },
+   {
+    "name": "tqwe9",
+    "type": "String",
+    "replaces": "תקוע"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_RetentionCard": {
+  "addProps": [
+   {
+    "name": "cymwrLqwjwt1",
+    "type": "String",
+    "replaces": "שימור לקוחות"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "📈"
+   },
+   {
+    "name": "tplMjzwrDayccohortDayCsiz3",
+    "type": "String",
+    "replaces": "מחזור ${_day(c.cohortDay)}: ${c.size} לקוחות, "
+   },
+   {
+    "name": "tplCymwrYw14",
+    "type": "String",
+    "replaces": "שימור יום 1 ${c.retentionPct(1).round()} אחוז"
+   },
+   {
+    "name": "tplCsizeLqwjwt5",
+    "type": "String",
+    "replaces": "${c.size} לקוחות"
+   },
+   {
+    "name": "tplYw1CretentionPct1roun6",
+    "type": "String",
+    "replaces": "יום 1 · ${c.retentionPct(1).round()}%"
+   },
+   {
+    "name": "cymwrYw17",
+    "type": "String",
+    "replaces": "שימור יום 1"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_PresenceCard": {
+  "addProps": [
+   {
+    "name": "myMjwbrKet1",
+    "type": "String",
+    "replaces": "מי מחובר כעת"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "🟢"
+   },
+   {
+    "name": "aLqwjLa3",
+    "type": "String",
+    "replaces": "אף לקוח לא מחובר כעת"
+   },
+   {
+    "name": "tplMjwbrRnamedRname4",
+    "type": "String",
+    "replaces": "מחובר: ${r.named ? r.name! : _pseudonym(r.key)}"
+   },
+   {
+    "name": "tplBmsRscreen5",
+    "type": "String",
+    "replaces": ", במסך ${r.screen}"
+   },
+   {
+    "name": "tplPseudonymrkey6",
+    "type": "String",
+    "replaces": "👤 ${_pseudonym(r.key)}"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_EmptyLine": {
+  "addProps": [
+   {
+    "name": "ayNtwnyEdyy1",
+    "type": "String",
+    "replaces": "אין נתונים עדיין"
+   }
+  ],
+  "note": ""
+ }
+}

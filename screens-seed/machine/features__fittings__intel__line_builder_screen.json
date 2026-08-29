@@ -1,0 +1,73 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__fittings__intel__line_builder_screen.dart",
+ "lines": 106,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [
+   12
+  ],
+  "fontWeights": [
+   "FontWeight.w700"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ", fontWeight: FontWeight.w700),\n        ),\n      ),\n      body: Column(\n        children: [\n          _LineSummary(plan: p),\n          const Divider(height: 1, color: Color(0xFF26333F)),\n          Expanded(child: FittingPreview3d(route: p.route)),\n        ],\n      ),\n    );\n  }\n}\n\n/// שורת-סיכום: צ",
+  ";\n\n/// מסך-היכולת \"בנה-קו\": סיכום-רצף + 3D. מקבל תוכנית מוכנה (או רצף-דמו).\nclass LineBuilderScreen extends StatelessWidget {\n  const LineBuilderScreen({this.plan, super.key});\n\n  final FittingLinePlan? plan;\n\n  static final FittingLinePlan _demo = FittingLinePlan.fromRoute(const [\n    RunElement(Family.coupler, 50),\n    RunElement(Family.elbow90, 50, dir: Dir.up),\n    RunElement(Family.tee, 50),\n    RunElement(Family.reducer, 50, od2: 32),\n    RunElement(Family.valve, 32),\n    RunElement(Family.elbow90, 32, dir: Dir.down),\n    RunElement(Family.plug, 32),\n  ]);\n\n  @override\n  Widget build(BuildContext context) {\n    final p = plan ?? _demo;\n    return Scaffold(\n      backgroundColor: kStageBackground,\n      appBar: AppBar(\n        backgroundColor: const Color(0xFF151F2A),\n        foregroundColor: Colors.white,\n        title: const Text(\n          ",
+  "י-משפחה + קוטר). דאטה בלבד, אפס-חישוב חדש.\nclass _LineSummary extends StatelessWidget {\n  const _LineSummary({required this.plan});\n\n  final FittingLinePlan plan;\n\n  @override\n  Widget build(BuildContext context) {\n    return Container(\n      width: double.infinity,\n      color: const Color(0xFF151F2A),\n      padding: const EdgeInsets.all(12),\n      child: Directionality(\n        textDirection: TextDirection.rtl,\n        child: Wrap(\n          spacing: 8,\n          runSpacing: 8,\n          children: [\n            for (final el in plan.route)\n              Chip(\n                backgroundColor: const Color(0xFF23303D),\n                label: Text(\n                  ",
+  "רצף ריק"
+ ],
+ "icons": [],
+ "glyphs": [
+  "⚪",
+  "🔒",
+  "🔩",
+  "🔵",
+  "🔻",
+  "🧠",
+  "🪧"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "LineBuilderScreen",
+   "kind": "StatelessWidget",
+   "line": 15,
+   "loc": 38,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 1
+  },
+  {
+   "name": "_LineSummary",
+   "kind": "StatelessWidget",
+   "line": 55,
+   "loc": 39,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kFittingEngineIntel",
+  "kStageBackground"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

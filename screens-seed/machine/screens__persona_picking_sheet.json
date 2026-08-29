@@ -1,0 +1,242 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__persona_picking_sheet.dart",
+ "lines": 1200,
+ "pigments": {
+  "tokens": [
+   "BsTokens.bgLight",
+   "BsTokens.brand",
+   "BsTokens.brandDark",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   11,
+   12,
+   12.5,
+   13,
+   13.5,
+   14,
+   15,
+   18,
+   19,
+   20
+  ],
+  "fontWeights": [
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "\"${order.lines[i].name}\" יוחלף במוצר חלופי",
+  "$g חבילות",
+  "$handled/${lines.length} פריטים טופלו",
+  "${o.items} פריטים · ${fMoney(o.sum)}",
+  "או לבטל את ההזמנה כולה.",
+  "אין הזמנות בקטגוריה זו ✓",
+  "בטל הזמנה",
+  "ביטול ההזמנה",
+  "ההזמנה ${order.id} עודכנה — מסונכרן עם השליח והמנהל ✓",
+  "ההזמנה ${order.id} תבוטל כולה אצל הספק — ",
+  "ההזמנה אינה זמינה עוד",
+  "ההזמנה בוטלה — הספק עודכן",
+  "הוחלף/בוטל ע\"י הקבלן",
+  "הזמנה: ${order.id} · ${order.site}",
+  "הספק ממשיך בליקוט",
+  "הספק עצר את הליקוט — יש לבחור לכל פריט חסר: החלפה או הסרה, ",
+  "הסר מההזמנה",
+  "הפיצול בוטל — חבילה אחת",
+  "הפריט \"${order.lines[i].name}\" הוסר — ",
+  "חבילה אחת",
+  "חסר",
+  "כמות לליקוט: ${line.qty}",
+  "כמות: $qty · ⏳ הספק ממתין להחלטתך",
+  "מוצר חלופי",
+  "נדרשת החלטה",
+  "סגור",
+  "סטטוס: ${kOrderStageLabel[order.stage]}",
+  "סמן כל פריט כ\"לוקט\" או \"חסר\" כדי לסיים את ההכנה",
+  "סמן כמוכן בכל זאת",
+  "פעולה בלתי-הפיכה.",
+  "פריט חסר — נדרשת החלטה",
+  "תיקון בוצע",
+  "תעודת משלוח",
+  "⏳ הקבלן עודכן — ההזמנה ממתינה להחלטתו (החלפה / הסרה / ביטול)",
+  "⏳ ממתין לבחירת הקבלן",
+  "⏳ פריט חסר — ממתין לבחירת הקבלן (החלפה / ביטול)",
+  "⚠️ ${f.missingCount} פריטים חסרים — הקבלן עודכן",
+  "⚠️ ההזמנה ממתינה להחלטת הקבלן על פריט חסר — לא ניתן להמשיך",
+  "✓ אשר וקבל להכנה",
+  "✓ ההחלטה התקבלה — הספק ממשיך בליקוט (תיקון בוצע)",
+  "✓ לוקט",
+  "✓ תיקון בוצע — הקבלן החליט, המשך בליקוט",
+  "✕ בוטל ע״י הקבלן",
+  "✕ חסר",
+  "📄 הצג תעודת משלוח",
+  "📦 כל הפריטים טופלו — סמן כמוכן",
+  "📦 משלוח $g — ${idxs.length} פריטים",
+  "🔁 ההחלטה נשלחה לספק — ",
+  "🔁 הוחלף ע״י הקבלן",
+  "🔁 החלף מוצר",
+  "🕒 בתיאום · 📍 ${order.site} · ${haul.ic} ${haul.name}",
+  "🚚 ההזמנה הוכנה ב-$g חבילות",
+  "🚚 ההזמנה מפוצלת ל-${f.splitInto} משלוחים — הכן כל קבוצה כחבילה נפרדת.",
+  "🚚 הוכן ב-${f.splitInto} חבילות",
+  "🚚 פיצול משלוחים",
+  "🚫 בטל את ההזמנה כולה",
+  "🚫 ביטול ההזמנה כולה — בקרוב",
+  "🛵 ההזמנה מוכנה — ממתינה לאיסוף השליח"
+ ],
+ "icons": [
+  "Icons.close"
+ ],
+ "glyphs": [
+  "⚠",
+  "✓",
+  "✕",
+  "🏪",
+  "📄",
+  "📍",
+  "📦",
+  "🔁",
+  "🕒",
+  "🚚",
+  "🚫",
+  "🛵"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "PersonaPickingSheet",
+   "kind": "ConsumerWidget",
+   "line": 57,
+   "loc": 498,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "fulfillmentProvider",
+    "sysOrdersProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "call:showContractorMissingDecisionSheet",
+    "call:showModalBottomSheet",
+    "fx:toast"
+   ],
+   "strings": 24,
+   "constData": 0
+  },
+  {
+   "name": "ContractorMissingDecisionSheet",
+   "kind": "ConsumerWidget",
+   "line": 597,
+   "loc": 170,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "fulfillmentProvider",
+    "sysOrdersProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "fx:toast"
+   ],
+   "strings": 18,
+   "constData": 0
+  },
+  {
+   "name": "_DecisionLine",
+   "kind": "StatelessWidget",
+   "line": 789,
+   "loc": 106,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 3,
+   "constData": 0
+  },
+  {
+   "name": "_PickLine",
+   "kind": "StatelessWidget",
+   "line": 900,
+   "loc": 188,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 8,
+   "constData": 0
+  },
+  {
+   "name": "_SplitControl",
+   "kind": "StatelessWidget",
+   "line": 1089,
+   "loc": 63,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 3,
+   "constData": 1
+  },
+  {
+   "name": "_Banner",
+   "kind": "StatelessWidget",
+   "line": 1153,
+   "loc": 32,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_Grip",
+   "kind": "StatelessWidget",
+   "line": 1186,
+   "loc": 14,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kHideUnderConstruction",
+  "kOrderStageLabel"
+ ],
+ "board": {
+  "reads": [
+   "fulfillmentProvider",
+   "sysOrdersProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": [
+   "call:showContractorMissingDecisionSheet",
+   "call:showModalBottomSheet",
+   "fx:toast"
+  ]
+ }
+}

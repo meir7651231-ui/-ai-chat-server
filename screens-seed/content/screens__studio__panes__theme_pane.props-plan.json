@@ -1,0 +1,82 @@
+{
+ "ThemePane": {
+  "addProps": [
+   {
+    "name": "xbeMwtg1",
+    "type": "String",
+    "replaces": "צבע מותג"
+   },
+   {
+    "name": "tplEygwlFynwtCfgradiusrou2",
+    "type": "String",
+    "replaces": "עיגול פינות: ${cfg.radius.round()}"
+   },
+   {
+    "name": "tplEygwlFynwtVround3",
+    "type": "String",
+    "replaces": "עיגול פינות ${v.round()}"
+   },
+   {
+    "name": "tplGwdlGwfCfgfontScaleto4",
+    "type": "String",
+    "replaces": "גודל גופן: ×${cfg.fontScale.toStringAsFixed(2)}"
+   },
+   {
+    "name": "tplGwdlGwfFy5",
+    "type": "String",
+    "replaces": "גודל גופן פי ${v.toStringAsFixed(2)}"
+   },
+   {
+    "name": "txwghJyh6",
+    "type": "String",
+    "replaces": "תצוגה חיה"
+   },
+   {
+    "name": "afsEyxwbLbryrthmjdl7",
+    "type": "String",
+    "replaces": "אפס עיצוב לברירת-המחדל"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_Swatch": {
+  "addProps": [
+   {
+    "name": "xbeMwtg1",
+    "type": "String",
+    "replaces": "צבע מותג"
+   }
+  ],
+  "note": ""
+ },
+ "_ContrastWarning": {
+  "addProps": [
+   {
+    "name": "tqstLbEl1",
+    "type": "String",
+    "replaces": "טקסט לבן על הצבע הזה עלול להיות קשה לקריאה."
+   }
+  ],
+  "note": ""
+ },
+ "_Preview": {
+  "addProps": [
+   {
+    "name": "kwtrtLdwgmh1",
+    "type": "String",
+    "replaces": "כותרת לדוגמה"
+   },
+   {
+    "name": "kYyrahTqst2",
+    "type": "String",
+    "replaces": "כך ייראה טקסט גוף באפליקציה."
+   },
+   {
+    "name": "kftwrRacy3",
+    "type": "String",
+    "replaces": "כפתור ראשי"
+   }
+  ],
+  "note": ""
+ }
+}

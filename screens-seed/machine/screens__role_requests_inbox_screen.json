@@ -1,0 +1,124 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__role_requests_inbox_screen.dart",
+ "lines": 317,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   12.5,
+   13,
+   15,
+   16,
+   26
+  ],
+  "fontWeights": [
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   18,
+   54
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  "אין בקשות למחיקה",
+  "אין בקשות תפקיד ממתינות",
+  "אישור",
+  "בקשות תפקיד",
+  "דחייה",
+  "הבקשה נדחתה",
+  "הפעולה נכשלה — נסה שוב",
+  "לא ניתן לטעון בקשות כעת",
+  "למחוק את כל בקשות-התפקיד הממתינות? הפעולה בלתי-הפיכה.",
+  "מבקש/ת: ${persona?.title ?? role}",
+  "מחיקת כל הבקשות",
+  "מחק את כל הבקשות",
+  "מחק הכל",
+  "משתמש",
+  "נסח סיבת-דחייה",
+  "✓ התפקיד אושר",
+  "✓ נמחקו $n בקשות"
+ ],
+ "icons": [
+  "Icons.check",
+  "Icons.close",
+  "Icons.cloud_off",
+  "Icons.delete_sweep_outlined",
+  "Icons.inbox_outlined"
+ ],
+ "glyphs": [
+  "✓",
+  "✨",
+  "🪪"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "RoleRequestsInboxScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 25,
+   "loc": 11,
+   "pure": false,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:RoleRequestsInboxScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_RequestCard",
+   "kind": "StatelessWidget",
+   "line": 147,
+   "loc": 146,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "claudeGatewayProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 5,
+   "constData": 1
+  },
+  {
+   "name": "_Empty",
+   "kind": "StatelessWidget",
+   "line": 294,
+   "loc": 23,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kPersonas"
+ ],
+ "board": {
+  "reads": [
+   "claudeGatewayProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:RoleRequestsInboxScreen"
+  ]
+ }
+}

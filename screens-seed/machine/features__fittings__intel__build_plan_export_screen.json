@@ -1,0 +1,51 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__fittings__intel__build_plan_export_screen.dart",
+ "lines": 45,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [
+   14
+  ],
+  "fontWeights": [
+   "FontWeight.w700"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ";\n\n/// מסך \"ייצוא-מסמך\": טקסט-תוכנית-הבנייה, ניתן-לבחירה+העתקה.\nclass BuildPlanExportScreen extends StatelessWidget {\n  const BuildPlanExportScreen({required this.plan, super.key});\n\n  final FittingLinePlan plan;\n\n  @override\n  Widget build(BuildContext context) {\n    final doc = exportBuildPlanText(plan);\n    return Scaffold(\n      backgroundColor: kStageBackground,\n      appBar: AppBar(\n        backgroundColor: const Color(0xFF151F2A),\n        foregroundColor: Colors.white,\n        title: const Text(\n          "
+ ],
+ "icons": [],
+ "glyphs": [
+  "🔒",
+  "🧠"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "BuildPlanExportScreen",
+   "kind": "StatelessWidget",
+   "line": 13,
+   "loc": 32,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kStageBackground"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

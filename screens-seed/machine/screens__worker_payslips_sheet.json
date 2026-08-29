@@ -1,0 +1,100 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__worker_payslips_sheet.dart",
+ "lines": 198,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   11.5,
+   13,
+   14,
+   16
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   18
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  " state on every row. Real payslips\n/// REQUIRE the payroll server — no fake PDFs, no invented amounts (אין\n/// המצאות). SERVER-SWAP: each month row becomes a tappable payslip download\n/// once the payroll backend lands; the list/row layout below stays as-is.\nFuture<void> showWorkerPayslipsSheet(BuildContext context) {\n  return showModalBottomSheet<void>(\n    context: context,\n    backgroundColor: Theme.of(context).colorScheme.surface,\n    isScrollControlled: true,\n    shape: const RoundedRectangleBorder(\n      borderRadius:\n          BorderRadius.vertical(top: Radius.circular(BsTokens.radiusCard)),\n    ),\n    builder: (sheetCtx) => const Directionality(\n      textDirection: TextDirection.rtl,\n      child: _PayslipsSheetBody(),\n    ),\n  );\n}\n\n/// Hebrew month names (calendar labels, not business data).\nconst List<String> _kHebMonths = [\n  ",
+  ";\n\n/// 💰 תלושי שכר (cluster #85ח) — SERVER-READY sheet: the complete months UI\n/// with an honest ",
+  "אוגוסט",
+  "אוקטובר",
+  "אפריל",
+  "דצמבר",
+  "המסך מוכן ויתמלא אוטומטית.",
+  "יולי",
+  "יוני",
+  "יחובר עם חיבור השרת",
+  "מאי",
+  "מרץ",
+  "נובמבר",
+  "סגור",
+  "ספטמבר",
+  "פברואר",
+  "💰 תלושי שכר",
+  "🔌 תלושי השכר האמיתיים יחוברו עם חיבור השרת — "
+ ],
+ "icons": [
+  "Icons.close",
+  "Icons.lock_outline"
+ ],
+ "glyphs": [
+  "💰",
+  "🔌"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "_PayslipsSheetBody",
+   "kind": "StatelessWidget",
+   "line": 33,
+   "loc": 100,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 4,
+   "constData": 0
+  },
+  {
+   "name": "_MonthRow",
+   "kind": "StatelessWidget",
+   "line": 136,
+   "loc": 62,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

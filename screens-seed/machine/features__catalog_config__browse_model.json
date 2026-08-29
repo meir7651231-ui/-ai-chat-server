@@ -1,0 +1,66 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__catalog_config__browse_model.dart",
+ "lines": 439,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "]) {\n  final rep = _pickRep(group);\n  return ConfigTile(\n    sku: rep.sku,\n    nameHe: typeWordOf(rep),\n    emoji: tileEmoji(rep.categoryEmoji),\n    imageAsset: _repImage(rep),\n    materialHe: material,\n  );\n}\n\n/// The pilot section (plan phase F.1 · G): `אביזרי קצה וחיבורים` — the top-level\n/// `kCatalogTree` node with `id == ",
+  "` when the\n  /// product carries no detected material. The family rail pages by this — a\n  /// header swipe walks the materials (owner: \"מושך את הכותרת → סוג החומר\").\n  final String materialHe;\n\n  @override\n  bool operator ==(Object other) =>\n      other is ConfigTile &&\n      other.sku == sku &&\n      other.nameHe == nameHe &&\n      other.emoji == emoji &&\n      other.imageAsset == imageAsset &&\n      other.materialHe == materialHe;\n\n  @override\n  int get hashCode => Object.hash(sku, nameHe, emoji, imageAsset, materialHe);\n}\n\n/// A family = a catalog tree LEAF that carries a `lipskeyCategory`, with the\n/// products that map to it as [tiles]. \"משפחה פתוחה\" — its rail is always\n/// visible in the dive. Never built empty ([browseSection] drops 0-tile leaves).\n@immutable\nclass ConfigFamily {\n  const ConfigFamily({\n    required this.id,\n    required this.titleHe,\n    required this.emoji,\n    required this.tiles,\n    required this.productCount,\n  });\n\n  /// The source leaf",
+  "s\n/// wheels carry the variations (owner: \"הרַיל = סוגים, הכרטיס = וריאציות\"). Reuses\n/// the built variant engine — no new grouping, no name-heuristic. Groups keep\n/// first-appearance (catalog) order.\nList<ConfigTile> _collapseTiles(\n  List<LipskeyCatalogProduct> products,\n  String fallbackEmoji,\n) {\n  final groups = <String, List<LipskeyCatalogProduct>>{};\n  final order = <String>[];\n  for (final product in products) {\n    final key = productCanonicalKey(product);\n    final list = groups[key];\n    if (list == null) {\n      groups[key] = [product];\n      order.add(key);\n    } else {\n      list.add(product);\n    }\n  }\n  return [\n    for (final key in order) _tileForGroup(groups[key]!, fallbackEmoji),\n  ];\n}\n\n/// One tile for a collapsed variant group — sku + image from the first pictured\n/// member (else the first, plan D); label = the [productFrame] (falls back to the\n/// full name for a too-short frame); emoji = the member",
+  "s (material⋄type) group keys by material rank, STABLE within a\n/// material (first-appearance / catalog order kept) — so the rail reads\n/// PPR-tiles · HDPE-tiles · נחושת-tiles, grouped, as the owner asked.\nList<String> _byMaterialThenType(\n  List<String> keys,\n  Map<String, String> groupMaterial,\n) {\n  final indexed = [for (var i = 0; i < keys.length; i++) (i, keys[i])]\n    ..sort((a, b) {\n      final ra = _materialRank(groupMaterial[a.$2]!);\n      final rb = _materialRank(groupMaterial[b.$2]!);\n      return ra != rb ? ra.compareTo(rb) : a.$1.compareTo(b.$1);\n    });\n  return [for (final e in indexed) e.$2];\n}\n\n/// One tile per (material × TYPE) group — label = the [typeWordOf]; sku from the\n/// BRIGHTEST member ([_pickRep]); image = that photo unless genuinely black\n/// ([_repImage] → null ⇒ the emoji); [material] tags the tile for rail paging.\nConfigTile _typeTile(List<LipskeyCatalogProduct> group, [String material = ",
+  "s REPRESENTATIVE image (plan D · DERIVED, never hardcoded): the\n  /// first tile that carries a BRIGHT [ConfigTile.imageAsset] ([isBrightImage] ·\n  /// owner: never a black header), else the first with any image. So the family\n  /// sub-header shows a real, CLEAR product photo pulled from the live catalog — it\n  /// SURVIVES a catalog delete-and-reupload (there is NO family→image map, the north\n  /// star). null ⇒ no pictured product (→ the header falls back to [emoji]).\n  String? get representativeImage {\n    for (final tile in tiles) {\n      if (isBrightImage(tile.imageAsset)) {\n        return tile.imageAsset;\n      }\n    }\n    for (final tile in tiles) {\n      if (tile.imageAsset != null) {\n        return tile.imageAsset;\n      }\n    }\n    return null;\n  }\n\n  /// The sub-header badge — the total product count (all variations).\n  int get count => productCount;\n\n  /// The distinct MATERIALS in this family, in rail order (PPR · HDPE · נחושת · …,\n  /// the material-less group `",
+  "s canonical MATERIAL (PPR · HDPE · נחושת · …), or `",
+  "s open-rail dive (§המסך: section → families=מחלקות → אריחי-מוצר).\n// SSOT: knowledge/CATALOG-CONFIG-PLAN.md (§המסך, phase A).\n//\n// GROUNDED (build on the live code, don",
+  "s wheels carry the variations. This\n/// REPLACES the per-leaf tree walk against fragmentation (93 leaves → ~12 families).\n/// Family + type keep first-appearance (catalog) order.\nConfigBrowse browseAll(List<LipskeyCatalogProduct> products) {\n  // family -> ordered (material⋄type) group keys · groupKey -> products + material.\n  // A TYPE splits per MATERIAL (owner: header swipe = the material) — the same ברך\n  // becomes a PPR tile, an HDPE tile and a נחושת tile, and the rail orders them by\n  // material so paging the header walks PPR → HDPE → נחושת.\n  final familyGroups = <String, List<String>>{};\n  final byGroup = <String, List<LipskeyCatalogProduct>>{};\n  final groupMaterial = <String, String>{};\n  final familyOrder = <String>[];\n  final familyEmoji = <String, String>{};\n  for (final product in products) {\n    final family = familyGroupOf(product);\n    final material = materialOf(product);\n    final groupKey = ",
+  "אלומיניום",
+  "כל הקטלוג",
+  "נחושת",
+  "נירוסטה",
+  "פוליאתילן",
+  "פלדה",
+  "פליז",
+  "פקס",
+  "רב-שכבתי"
+ ],
+ "icons": [],
+ "glyphs": [
+  "📦",
+  "🗂",
+  "🛡"
+ ],
+ "logicCandidates": [
+  {
+   "name": "_pickRep",
+   "line": 34
+  },
+  {
+   "name": "_materialRank",
+   "line": 382
+  },
+  {
+   "name": "ConfigFamily",
+   "line": 124,
+   "kind": "metrics-class"
+  }
+ ],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kCatalogConfig",
+  "kCatalogRootNode",
+  "kCatalogTree"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

@@ -1,0 +1,154 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__worker_equipment_checklist_sheet.dart",
+ "lines": 595,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.brandDark",
+   "BsTokens.cardLight",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.radiusPill",
+   "BsTokens.space1",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4"
+  ],
+  "themeSockets": [],
+  "fontSizes": [
+   11,
+   12,
+   12.5,
+   13,
+   14,
+   18
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "s\n/// tasks, carrying its reason, severity (Hebrew string from\n/// [KitItem.severityHe]: חובה/מומלץ/אופציונלי) and the ids of every task that\n/// needs it (merged on dedup).\ntypedef DayEquipmentItem = ({\n  String label,\n  String reason,\n  String severity,\n  List<int> taskIds,\n});\n\n/// Numeric rank for a severity STRING (lower = more severe) — חובה<מומלץ<\n/// אופציונלי. Drives both the \"keep the most-severe occurrence\" merge in\n/// [equipmentForTasks] and the checklist sort in the sheet. An unknown string\n/// sorts last (defensive — every real KitItem maps to one of the three).\nint _severityRank(String severityHe) => switch (severityHe) {\n      ",
+  "s availability\n// (🏬 מחסן / 🏗️ אתר / זמינות לא ידועה) so \"do I have the gear?\" reads the\n// contractor",
+  "s current bucket\n// into one deduped \"ציוד נדרש להיום\" checklist.\n//\n// REUSE (no new logic): the source of every line is the SAME pair the detail\n// sheet uses — `productsForTask(t.id)` (task_skus_local.dart) →\n// `recommendedKitForProduct(p)` (install_kit.dart, KitItem{kind,label,reason,\n// severity}). Deduped by label across all tasks (a wrench two products both\n// need shows once), merging the contributing task ids and keeping the\n// most-severe occurrence. A task with NO SKU mapping (e.g. task 3 איטום — the\n// plumbing catalogs carry no waterproofing products) contributes nothing and is\n// listed honestly as \"אין רשימת ציוד\".\n//\n// HONESTY: the mapping is DEMO wiring (a manager does not attach products to a\n// task yet) — the sheet says so in a visible DEMO-SEED hint.\n//\n// E2 (#112) — reads the EMPLOYER",
+  "s stock\n/// availability for one equipment line: 🏬 מחסן (warehouse) / 🏗️ אתר (site) /\n/// ",
+  "אופציונלי",
+  "אין פריטי ציוד למשימות היום",
+  "אין פריטים מסומנים לשליחה",
+  "אין רשימת ציוד למשימות הנוכחיות",
+  "אין רשימת ציוד: ${t.name}",
+  "הצ׳אט עם הקבלן אינו זמין כרגע",
+  "זמינות לא ידועה",
+  "חובה",
+  "ל-$taskCount משימות",
+  "למשימה אחת",
+  "מומלץ",
+  "משימות ללא רשימת ציוד",
+  "סגור",
+  "סומנו $checkedCount מתוך ${_items.length} פריטים",
+  "ציוד נדרש להיום: ${picked.map((it) => it.label).join(",
+  "צ׳קליסט ציוד",
+  "רשימת הציוד נגזרת ממיפוי דמו של מוצרים למשימה — תחובר עם השרת",
+  "שלח רשימה לקבלן",
+  "✓ נשלח לקבלן",
+  "🏗️ אתר",
+  "🏬 מחסן",
+  "🧰 הרשימה נשלחה לקבלן",
+  "🧰 ציוד נדרש להיום"
+ ],
+ "icons": [
+  "Icons.close"
+ ],
+ "glyphs": [
+  "✓",
+  "✕",
+  "🏗",
+  "🏬",
+  "🧰"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "_EquipmentChecklistSheet",
+   "kind": "ConsumerStatefulWidget",
+   "line": 144,
+   "loc": 9,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_EquipmentRow",
+   "kind": "StatelessWidget",
+   "line": 375,
+   "loc": 107,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 3,
+   "constData": 0
+  },
+  {
+   "name": "_AvailabilityChip",
+   "kind": "StatelessWidget",
+   "line": 487,
+   "loc": 45,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 3,
+   "constData": 0
+  },
+  {
+   "name": "_SecH",
+   "kind": "StatelessWidget",
+   "line": 534,
+   "loc": 20,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_PrimaryBtn",
+   "kind": "StatelessWidget",
+   "line": 557,
+   "loc": 38,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kWorkerChatThreads",
+  "kWorkerContractorThreadId"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

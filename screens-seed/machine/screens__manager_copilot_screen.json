@@ -1,0 +1,141 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__manager_copilot_screen.dart",
+ "lines": 340,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.divider",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   12,
+   13,
+   14,
+   17,
+   18,
+   44
+  ],
+  "fontWeights": [
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "s AI analyst).\n//\n// The owner types (or taps a suggestion / \"תדריך-בוקר\") → we fold the LIVE engine\n// state (`managerAnalyticsProvider`/`managerCustomersProvider`/`ordersEngineProvider`)\n// into a GROUNDED snapshot (`buildManagerContext`) and hand it to Claude with a\n// \"reason over truth, never invent\" system prompt. Every number Claude sees is the\n// real business data; it only PHRASES the answer. Gated on a live gateway\n// (`claudeGatewayProvider`) — OFF → an honest \"requires connection\" state.\n//\n// Manager-only intelligence/oversight surface → governance-clean (no HR), additive,\n// zero-regression. Reached from the 📊 cockpit hero-card + the AppBar.\n// ─────────────────────────────────────────────────────────────────────────────\n\nimport ",
+  "או שאל:",
+  "אני קורא את ההזמנות, הלקוחות והאשראי החיים שלך ועונה מהמספרים האמיתיים.",
+  "לא הצלחתי לנסח תשובה — נסה לשאול אחרת.",
+  "משהו השתבש בחיבור — נסה שוב עוד רגע.",
+  "שאל אותי כל דבר על העסק שלך.",
+  "שאל את העסק שלך",
+  "שאל את העסק שלך…",
+  "שלח",
+  "תדריך-בוקר",
+  "☀️ תדריך-בוקר",
+  "💡 הקו-פיילוט החכם דורש חיבור לשרת.",
+  "🤖 קו-פיילוט"
+ ],
+ "icons": [
+  "Icons.arrow_upward_rounded"
+ ],
+ "glyphs": [
+  "☀",
+  "💡",
+  "📊",
+  "🤖"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "ManagerCopilotScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 30,
+   "loc": 9,
+   "pure": false,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:ManagerCopilotScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_Welcome",
+   "kind": "StatelessWidget",
+   "line": 187,
+   "loc": 54,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 4,
+   "constData": 0
+  },
+  {
+   "name": "_Bubble",
+   "kind": "StatelessWidget",
+   "line": 243,
+   "loc": 27,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_Typing",
+   "kind": "StatelessWidget",
+   "line": 271,
+   "loc": 17,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_InputBar",
+   "kind": "StatelessWidget",
+   "line": 289,
+   "loc": 51,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kManagerCopilotSuggestions",
+  "kManagerOrderFlow"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:ManagerCopilotScreen"
+  ]
+ }
+}

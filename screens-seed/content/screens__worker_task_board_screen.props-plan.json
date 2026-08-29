@@ -1,0 +1,67 @@
+{
+ "WorkerTaskBoardScreen": {
+  "addProps": [
+   {
+    "name": "boardTitle",
+    "type": "String",
+    "replaces": "🗂️ לוח משימות מלא"
+   },
+   {
+    "name": "feylwt2",
+    "type": "String",
+    "replaces": "🔨 פעילות"
+   },
+   {
+    "name": "ndjw3",
+    "type": "String",
+    "replaces": "↩️ נדחו"
+   },
+   {
+    "name": "btwr4",
+    "type": "String",
+    "replaces": "⏳ בתור"
+   },
+   {
+    "name": "bbdyqh5",
+    "type": "String",
+    "replaces": "📸 בבדיקה"
+   },
+   {
+    "name": "hwclmw6",
+    "type": "String",
+    "replaces": "✅ הושלמו"
+   },
+   {
+    "name": "ayMcymwtMcwykwt7",
+    "type": "String",
+    "replaces": "אין משימות משויכות אליך כרגע"
+   },
+   {
+    "name": "tplKlHmcymwtCl8",
+    "type": "String",
+    "replaces": "כל המשימות שלך — ${mine.length} סה\"כ, מקובצות לפי מצב"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_TaskRow": {
+  "addProps": [
+   {
+    "name": "ayClbyMwgdry1",
+    "type": "String",
+    "replaces": "אין שלבים מוגדרים"
+   },
+   {
+    "name": "tplDonetotalClby2",
+    "type": "String",
+    "replaces": "✓ $done/$total שלבים"
+   },
+   {
+    "name": "tplTaskdaysYmyProgressHi3",
+    "type": "String",
+    "replaces": "🕒 ${task.days} ימים · ${_progressHint()}"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

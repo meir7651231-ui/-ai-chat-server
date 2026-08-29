@@ -1,0 +1,122 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__role_request_sheet.dart",
+ "lines": 287,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brandDark",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   11,
+   11.5,
+   12,
+   12.5,
+   13,
+   14,
+   16,
+   19,
+   22
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700",
+   "FontWeight.w800",
+   "FontWeight.w900"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   20
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  "בחר תפקיד — הבקשה תישלח לאישור הגורם המתאים",
+  "הזמנות נכנסות, מלאי החנות",
+  "הזמנת חומרים, מלאי, משימות",
+  "המשימות שהוקצו לי בשטח",
+  "לא ניתן לשלוח בקשה כעת",
+  "מאושר ע״י חנות/ספק",
+  "מאושר ע״י מנהל",
+  "מאושר ע״י קבלן",
+  "מבקש/ת בשם",
+  "משלוחים ועדכוני סטטוס",
+  "✓ בקשתך נשלחה — ממתינה לאישור",
+  "🪪 בקשת תפקיד"
+ ],
+ "icons": [
+  "Icons.chevron_left",
+  "Icons.person_outline"
+ ],
+ "glyphs": [
+  "✓",
+  "🪪"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "_RoleRequestSheet",
+   "kind": "ConsumerStatefulWidget",
+   "line": 42,
+   "loc": 6,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_RequestingAs",
+   "kind": "ConsumerWidget",
+   "line": 145,
+   "loc": 56,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "authStateProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_RoleRequestRow",
+   "kind": "StatelessWidget",
+   "line": 202,
+   "loc": 85,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kPersonaDesc",
+  "kPersonas",
+  "kRequestableRoles",
+  "kRoleApproverHe"
+ ],
+ "board": {
+  "reads": [
+   "authStateProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

@@ -1,0 +1,92 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__suppliers_screen.dart",
+ "lines": 170,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brandDark",
+   "BsTokens.inkLight"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   12,
+   14,
+   15,
+   24,
+   40
+  ],
+  "fontWeights": [
+   "FontWeight.bold",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   22
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  "אין ספקים עדיין",
+  "אינסטלציה וסניטציה • $kLipskeyProductCount מוצרים",
+  "ליפסקי ברקן",
+  "ספקים ומותגים",
+  "ספקים ומותגים יופיעו כשקטלוג החברה ייטען",
+  "📦 טעינת קטלוג החברה"
+ ],
+ "icons": [
+  "Icons.chevron_left"
+ ],
+ "glyphs": [
+  "🏪",
+  "🏭",
+  "📦"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "SuppliersScreen",
+   "kind": "StatelessWidget",
+   "line": 14,
+   "loc": 84,
+   "pure": false,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "call:showCompanyCatalogImportSheet",
+    "nav:SuppliersScreen"
+   ],
+   "strings": 6,
+   "constData": 0
+  },
+  {
+   "name": "_SupplierTile",
+   "kind": "StatelessWidget",
+   "line": 99,
+   "loc": 71,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kKbGlobal",
+  "kLipskeyProductCount",
+  "kProfileEmptyCatalog"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "call:showCompanyCatalogImportSheet",
+   "nav:SuppliersScreen"
+  ]
+ }
+}

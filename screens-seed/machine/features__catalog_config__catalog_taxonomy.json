@@ -1,0 +1,38 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__catalog_config__catalog_taxonomy.dart",
+ "lines": 90,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "` when none is detected. The SINGLE derivation the\n/// browse rail groups by AND the config card scopes to, so a material tile and\n/// its card agree (owner: \"לפי הכותרת\" — filter to the current material).\nString materialOf(LipskeyCatalogProduct p) {\n  final m = materialOfEnriched(p);\n  return m == null ? ",
+  "s VARIANT\n/// family (every size/angle/… of the same type). The card resolves the centre image\n/// + name against this set as the selection changes, so a drag swaps the photo.\nList<LipskeyCatalogProduct> typeGroupOf(\n  LipskeyCatalogProduct p,\n  List<LipskeyCatalogProduct> universe,\n) {\n  final key = typeKeyOf(p);\n  return [\n    for (final m in universe)\n      if (typeKeyOf(m) == key) m,\n  ];\n}\n\n/// The canonical MATERIAL of [p] (PPR · HDPE · נחושת · …) via the finder",
+  "s alias map (synonym_bridge.\n//     kQuerySynonyms: מרפק→ברך, materials, …). So ברך/מרפק collapse to ONE tile,\n//     no page/pack in the key. Category fallback when the name has no token.\n//\n// GATING (byte-identical-off): pure, no `kCatalogConfig` branch; reachable only\n// through the gated dive screen ⇒ tree-shaken from a default (OFF) build.\n// ─────────────────────────────────────────────────────────────────────────────\n\nimport ",
+  "s own map (זווית→ברך, plural→singular מצרות→מצרה,\n/// tee-family→מסעף, coupler-family→מצמד); [kQuerySynonyms] is the query-bridge",
+  "אחר"
+ ],
+ "icons": [],
+ "glyphs": [],
+ "logicCandidates": [],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kBrandPrefixBlocklist",
+  "kCatalogConfig",
+  "kCategoryFallbackWord",
+  "kQuerySynonyms",
+  "kWordSynonyms"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

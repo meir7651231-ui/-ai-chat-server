@@ -1,0 +1,46 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__fittings__engine__models.dart",
+ "lines": 73,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ";\n\n/// עשר משפחות-המנוע החד/דו-קוטריות (§2) + ברך-מחותכת (טווח גדול, נבחרת בנפרד).\nenum Family {\n  coupler(",
+  "ברז כדורי",
+  "ברך 45°",
+  "ברך 90°",
+  "ברך מחותכת",
+  "מסעף (טי)",
+  "מצרה",
+  "מתאם תבריג",
+  "פקק",
+  "צווארון",
+  "רוכב"
+ ],
+ "icons": [],
+ "glyphs": [
+  "🔌"
+ ],
+ "logicCandidates": [
+  {
+   "name": "RunElement",
+   "line": 52,
+   "kind": "metrics-class"
+  }
+ ],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

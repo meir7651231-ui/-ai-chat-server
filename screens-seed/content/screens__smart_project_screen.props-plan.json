@@ -1,0 +1,72 @@
+{
+ "_Hero": {
+  "addProps": [
+   {
+    "name": "tplDoneMtwTotal1",
+    "type": "String",
+    "replaces": "$done מתוך $total ימים בוצעו · $pct%"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_ProjectDone": {
+  "addProps": [
+   {
+    "name": "t08",
+    "type": "String",
+    "replaces": "🎉 כל ימי העבודה בוצעו — הפרויקט הושלם!"
+   }
+  ],
+  "note": ""
+ },
+ "_StageCard": {
+  "addProps": [
+   {
+    "name": "t09",
+    "type": "String",
+    "replaces": "שלבי ביצוע"
+   },
+   {
+    "name": "laCwb2",
+    "type": "String",
+    "replaces": "לא שובץ"
+   },
+   {
+    "name": "bwxe3",
+    "type": "String",
+    "replaces": "בוצע"
+   },
+   {
+    "name": "laBwxe4",
+    "type": "String",
+    "replaces": "לא בוצע"
+   },
+   {
+    "name": "ewbdAjray5",
+    "type": "String",
+    "replaces": "עובד אחראי"
+   },
+   {
+    "name": "hyq6",
+    "type": "String",
+    "replaces": "היקף"
+   },
+   {
+    "name": "tplStagetotalDaysYmyEbwdh7",
+    "type": "String",
+    "replaces": "${stage.totalDays} ימי עבודה"
+   },
+   {
+    "name": "btlSymw8",
+    "type": "String",
+    "replaces": "↩ בטל סימון"
+   },
+   {
+    "name": "smYwKbwxe9",
+    "type": "String",
+    "replaces": "✓ סמן יום כבוצע"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

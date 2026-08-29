@@ -1,0 +1,89 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__quote_polish_screen.dart",
+ "lines": 192,
+ "pigments": {
+  "tokens": [
+   "BsTokens.divider",
+   "BsTokens.inkLight",
+   "BsTokens.mutedDark",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   11,
+   12,
+   15,
+   16,
+   18
+  ],
+  "fontWeights": [
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "אתה עוזר-מכירות מנוסה לאינסטלטור. אתה מנסח הצעות-מחיר מקצועיות ומשכנעות ",
+  "ההצעה המנוסחת הועתקה",
+  "הסעיפים בצורה ברורה, וסיום עם הזמנה מנומסת לאישור. שמור על כל מספר, מחיר ",
+  "העתק לשליחה",
+  "ומק\"ט בדיוק כפי שהם — אל תשנה, תוסיף או תמחק שום סכום/מחיר/פריט, ואל תמציא ",
+  "ללקוחות. שמור על כל מספר ומחיר בדיוק כפי שניתן לך; לעולם אל תשנה, תוסיף או ",
+  "נסח אותה מחדש כהודעה מקצועית ומנומסת ללקוח בעברית — פתיחה קצרה, פירוט ",
+  "פרטים שלא ניתנו לך.",
+  "תמציא מחיר, סכום או פריט.",
+  "⚙️ המספרים מנתוני-המערכת; ה-AI רק מנסח — לא משנה מחירים.",
+  "✨ הצעה מקצועית",
+  "💡 הניסוח המקצועי דורש חיבור לשרת."
+ ],
+ "icons": [],
+ "glyphs": [
+  "⚙",
+  "✨",
+  "💡",
+  "📋"
+ ],
+ "logicCandidates": [
+  {
+   "name": "setState",
+   "line": 89
+  }
+ ],
+ "widgets": [
+  {
+   "name": "QuotePolishScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 41,
+   "loc": 22,
+   "pure": false,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:QuotePolishScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kClaudeAi"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:QuotePolishScreen"
+  ]
+ }
+}

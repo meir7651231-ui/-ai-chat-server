@@ -1,0 +1,48 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__catalog_config__image_quality.dart",
+ "lines": 98,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "אטמים ופקקים",
+  "לבן"
+ ],
+ "icons": [],
+ "glyphs": [
+  "⚫",
+  "📦",
+  "🔲",
+  "🔳",
+  "🕳",
+  "🖤"
+ ],
+ "logicCandidates": [
+  {
+   "name": "_basename",
+   "line": 65
+  },
+  {
+   "name": "imageBrightness",
+   "line": 74
+  }
+ ],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kDarkFloor",
+  "kImageBrightness"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

@@ -1,0 +1,47 @@
+{
+ "CompatibilityScreen": {
+  "addProps": [
+   {
+    "name": "mxmd321",
+    "type": "String",
+    "replaces": "מצמד 32"
+   },
+   {
+    "name": "abyzryQxhHDPE2",
+    "type": "String",
+    "replaces": "אביזרי קצה HDPE"
+   },
+   {
+    "name": "txt3",
+    "type": "String",
+    "replaces": "🔧"
+   },
+   {
+    "name": "br90324",
+    "type": "String",
+    "replaces": "ברך 90° 32"
+   },
+   {
+    "name": "mse325",
+    "type": "String",
+    "replaces": "מסעף 32"
+   },
+   {
+    "name": "mxmd506",
+    "type": "String",
+    "replaces": "מצמד 50"
+   },
+   {
+    "name": "taymwtabyzryPreviewOf7",
+    "type": "String",
+    "replaces": "תאימות-אביזרים · preview (off-live)"
+   },
+   {
+    "name": "tplMtjbrlProductnameHe8",
+    "type": "String",
+    "replaces": "מתחבר-ל: ${product.nameHe}"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

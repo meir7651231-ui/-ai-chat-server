@@ -1,0 +1,280 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__intel__intel_tab.dart",
+ "lines": 675,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.dangerDark",
+   "BsTokens.divider",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space6",
+   "BsTokens.spaceHair",
+   "BsTokens.success",
+   "BsTokens.successDark",
+   "BsTokens.warnBright"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   11.5,
+   12,
+   12.5,
+   13,
+   13.5,
+   14,
+   15,
+   16,
+   18,
+   22
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "${_label(s.name)}: ${s.reached} סשנים, ",
+  "${a.sessions} סשנים",
+  "${c.size} לקוחות",
+  "${s.conversionPct.round()} אחוז המרה",
+  ", במסך ${r.screen}",
+  ";\n\n/// 📡 מודיעין לקוחות — the manager Live-Customer-Intelligence tab (step 98).\n/// A read-only, RTL, a11y surface over the four intel read providers. Const so it\n/// slots into the manager dashboard",
+  "אין נתונים עדיין",
+  "אף לקוח לא מחובר כעת",
+  "הוספה לסל",
+  "הזמנה",
+  "המיר",
+  "המירו",
+  "המרה",
+  "הנשירה הגדולה: ${_label(drop.fromStage)} ← ",
+  "חיפוש",
+  "יום 1 · ${c.retentionPct(1).round()}%",
+  "לפני ${d.inDays} ימ׳",
+  "לפני ${d.inHours} שע׳",
+  "לפני ${d.inMinutes} דק׳",
+  "לפני ${d.inSeconds < 0 ? 0 : d.inSeconds} שנ׳",
+  "לקוחות",
+  "מודיעין לקוחות",
+  "מחובר: ${r.named ? r.name! : _pseudonym(r.key)}",
+  "מחזור ${_day(c.cohortDay)}: ${c.size} לקוחות, ",
+  "מי מחובר כעת",
+  "משפך ההמרה, פלחי הלקוחות, שימור ומי מחובר כעת — חי מהמכשיר.",
+  "משפך המרה",
+  "פלחי לקוחות",
+  "צפייה במוצר",
+  "צפייה בסל",
+  "שימור יום 1",
+  "שימור יום 1 ${c.retentionPct(1).round()} אחוז",
+  "שימור לקוחות",
+  "תקוע",
+  "תקיעות",
+  "תשלום",
+  "📡 מודיעין לקוחות"
+ ],
+ "icons": [],
+ "glyphs": [
+  "⚠",
+  "✅",
+  "👤",
+  "👥",
+  "📈",
+  "📡",
+  "🛒",
+  "🟢"
+ ],
+ "logicCandidates": [
+  {
+   "name": "_relTime",
+   "line": 667
+  }
+ ],
+ "widgets": [
+  {
+   "name": "IntelTab",
+   "kind": "ConsumerWidget",
+   "line": 39,
+   "loc": 49,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "intelInsightsProvider",
+    "intelPresenceProvider",
+    "intelRetentionProvider",
+    "intelSegmentsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 6,
+   "constData": 0
+  },
+  {
+   "name": "_IntelIntro",
+   "kind": "StatelessWidget",
+   "line": 90,
+   "loc": 41,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 3,
+   "constData": 0
+  },
+  {
+   "name": "_FunnelCard",
+   "kind": "StatelessWidget",
+   "line": 136,
+   "loc": 84,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 5,
+   "constData": 0
+  },
+  {
+   "name": "_SegmentsCard",
+   "kind": "StatelessWidget",
+   "line": 225,
+   "loc": 75,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 7,
+   "constData": 0
+  },
+  {
+   "name": "_RetentionCard",
+   "kind": "StatelessWidget",
+   "line": 305,
+   "loc": 67,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 6,
+   "constData": 0
+  },
+  {
+   "name": "_PresenceCard",
+   "kind": "StatelessWidget",
+   "line": 378,
+   "loc": 66,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 4,
+   "constData": 0
+  },
+  {
+   "name": "_IntelCard",
+   "kind": "StatelessWidget",
+   "line": 450,
+   "loc": 52,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_IntelStat",
+   "kind": "StatelessWidget",
+   "line": 505,
+   "loc": 58,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_IntelBar",
+   "kind": "StatelessWidget",
+   "line": 566,
+   "loc": 27,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_IntelPill",
+   "kind": "StatelessWidget",
+   "line": 596,
+   "loc": 28,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_LiveDot",
+   "kind": "StatelessWidget",
+   "line": 626,
+   "loc": 15,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_EmptyLine",
+   "kind": "StatelessWidget",
+   "line": 643,
+   "loc": 13,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kIntelLive"
+ ],
+ "board": {
+  "reads": [
+   "intelInsightsProvider",
+   "intelPresenceProvider",
+   "intelRetentionProvider",
+   "intelSegmentsProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

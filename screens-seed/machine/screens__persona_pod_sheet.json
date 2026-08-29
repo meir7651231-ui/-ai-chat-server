@@ -1,0 +1,121 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__persona_pod_sheet.dart",
+ "lines": 412,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5",
+   "BsTokens.successDark"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   12.5,
+   13,
+   13.5,
+   14,
+   18,
+   19,
+   40,
+   48
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ",\n              style: const TextStyle(\n                color: BsTokens.inkLight,\n                fontSize: 13.5,\n              ),\n            ),\n            const SizedBox(height: BsTokens.space3),\n\n            // Signature status pill (proto `נחתם ✓`/`ממתין`).\n            // Directional start (gate #62 idiom) — not a physical centerRight.\n            Align(\n              alignment: AlignmentDirectional.centerStart,\n              child: Container(\n                padding: const EdgeInsets.symmetric(\n                  horizontal: 12,\n                  vertical: 5,\n                ),\n                decoration: BoxDecoration(\n                  color: f.podSigned\n                      ? const Color(0xFFD7F5DF)\n                      : const Color(0xFFFFF4D6),\n                  borderRadius: BorderRadius.circular(BsTokens.radiusPill),\n                ),\n                child: Text(\n                  f.podSigned ? ",
+  "POD + צילום",
+  "אין צילום עדיין",
+  "אישור מסירה?",
+  "ההזמנה ${order.id} תסומן כנמסרה ללקוח — פעולה סופית.",
+  "ההזמנה לא נמצאה",
+  "החתימה לא נשמרה — נסה שוב",
+  "החתימה נשמרה ✍️",
+  "המשלוח ${order.id} עודכן — מסונכרן עם החנות והמנהל ✓",
+  "המשלוח נמסר — +$kCourierDeliveryCoins מטבעות",
+  "התמונה גדולה מדי — לא נשמרה",
+  "ייתכן שההזמנה הוסרה או שהמשלוח כבר נסגר — חזרו לרשימת המשלוחים",
+  "ממתין",
+  "נמסר",
+  "צילום המסירה נשמר 📸 — מוצג לחנות ולמנהל",
+  "✅ נמסר ללקוח",
+  "✍️ חתום מחדש",
+  "✍️ חתימה",
+  "📷 צלם מסירה",
+  "📷 צלם שוב",
+  "📸 אישור מסירה"
+ ],
+ "icons": [],
+ "glyphs": [
+  "✅",
+  "✍",
+  "✓",
+  "📦",
+  "📷",
+  "📸",
+  "🔔",
+  "🛵",
+  "🪙"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "PersonaPodSheet",
+   "kind": "ConsumerWidget",
+   "line": 70,
+   "loc": 342,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "boardAuthProvider",
+    "courierClockRepositoryProvider",
+    "fulfillmentProvider",
+    "rewardsProvider",
+    "sysOrdersProvider",
+    "workerNotifsProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "call:openSignaturePad",
+    "fx:toast"
+   ],
+   "strings": 21,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kCloudPhotos",
+  "kCourierDeliveryCoins"
+ ],
+ "board": {
+  "reads": [
+   "boardAuthProvider",
+   "courierClockRepositoryProvider",
+   "fulfillmentProvider",
+   "rewardsProvider",
+   "sysOrdersProvider",
+   "workerNotifsProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": [
+   "call:openSignaturePad",
+   "fx:toast"
+  ]
+ }
+}

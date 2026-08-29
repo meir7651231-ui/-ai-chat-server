@@ -1,0 +1,12 @@
+{
+ "RingDiveWheel": {
+  "addProps": [
+   {
+    "name": "swbbHqcLbjwr1",
+    "type": "String",
+    "replaces": "סובב · הקש לבחור"
+   }
+  ],
+  "note": ""
+ }
+}

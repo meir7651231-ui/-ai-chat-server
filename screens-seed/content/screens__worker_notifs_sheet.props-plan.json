@@ -1,0 +1,67 @@
+{
+ "WorkerNotifsBell": {
+  "addProps": [
+   {
+    "name": "htrawt1",
+    "type": "String",
+    "replaces": "התראות"
+   },
+   {
+    "name": "fwtjAtRcymt2",
+    "type": "String",
+    "replaces": "פותח את רשימת ההתראות שלך. התג האדום מציג כמה התראות לא-נקראו. "
+   },
+   {
+    "name": "mmwqBAppBarCl3",
+    "type": "String",
+    "replaces": "ממוקם ב-AppBar של הלוח שיש בו 💡, כך שניתן לעטיפה."
+   }
+  ],
+  "note": ""
+ },
+ "_WorkerNotifsSheet": {
+  "addProps": [
+   {
+    "name": "t01",
+    "type": "String",
+    "replaces": "🔔 התראות"
+   },
+   {
+    "name": "t02",
+    "type": "String",
+    "replaces": "אין התראות עדיין.\\nאישורים, החזרות לתיקון ומשימות חדשות יופיעו כאן."
+   },
+   {
+    "name": "t03",
+    "type": "String",
+    "replaces": "סמן הכל כנקרא"
+   },
+   {
+    "name": "t04",
+    "type": "String",
+    "replaces": "נקה הכל"
+   },
+   {
+    "name": "sgyrh5",
+    "type": "String",
+    "replaces": "סגירה"
+   },
+   {
+    "name": "lnqwtAtKl6",
+    "type": "String",
+    "replaces": "לנקות את כל ההתראות?"
+   },
+   {
+    "name": "klHhtrawtYymjqw7",
+    "type": "String",
+    "replaces": "כל ההתראות יימחקו — פעולה בלתי הפיכה."
+   },
+   {
+    "name": "nqh8",
+    "type": "String",
+    "replaces": "נקה"
+   }
+  ],
+  "note": ""
+ }
+}

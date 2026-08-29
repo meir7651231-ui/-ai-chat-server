@@ -1,0 +1,77 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__studio__studio_screen.dart",
+ "lines": 117,
+ "pigments": {
+  "tokens": [
+   "BsTokens.inkLight",
+   "BsTokens.space3"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [],
+  "fontWeights": [
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "גרסאות",
+  "היסטוריית גרסאות",
+  "מפקח",
+  "מפקח העריכה",
+  "מצא והחלף",
+  "סגור",
+  "עיצוב",
+  "עץ",
+  "עץ הרכיבים",
+  "ערכת נושא",
+  "🎨 סטודיו"
+ ],
+ "icons": [
+  "Icons.close"
+ ],
+ "glyphs": [
+  "🎨",
+  "🔎",
+  "🕘",
+  "🗂",
+  "🛠"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "StudioScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 23,
+   "loc": 14,
+   "pure": false,
+   "dataClean": true,
+   "reads": [
+    "studioCanEditProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "nav:StudioScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kStudioFlag"
+ ],
+ "board": {
+  "reads": [
+   "studioCanEditProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:StudioScreen"
+  ]
+ }
+}

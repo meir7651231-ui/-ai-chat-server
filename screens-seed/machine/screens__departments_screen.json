@@ -1,0 +1,229 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__departments_screen.dart",
+ "lines": 628,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.mutedLight",
+   "BsTokens.space1",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of",
+   "cfgRadius"
+  ],
+  "fontSizes": [
+   12,
+   13,
+   15,
+   18,
+   40,
+   48
+  ],
+  "fontWeights": [
+   "FontWeight.bold",
+   "FontWeight.w600",
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   16,
+   18,
+   40
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  ",\n      children: [for (final c in cats) leaf(c)],\n    ),\n  ];\n}\n\n/// Benzi #5 — when true, the open department shows ALL its products in one flat\n/// list (\"ברצף, ללא קשר לקטלוג\") instead of the catalog tree/finder navigation.\nfinal deptFlatProductsProvider = StateProvider<bool>((_) => false);\n\n/// Every product in a department",
+  "s **finder (בית)** scoped to its\n/// `WaterSystem`, so every browse section (finder / categories / tree / search)\n/// shows only that system",
+  "s first tab so the chrome (AppBar + bottom nav)\n/// stays put; tapping the מחלקות tab resets it.\nfinal homeDepartmentProvider = StateProvider<String?>((_) => null);\n\n/// Build a drill path for a tool department straight from its leaf `categoryHe`\n/// names — a synthetic node tree, so the department gathers categories that live\n/// in different branches (e.g. כלי עבודה + חותך צינורות). One category drills\n/// straight to its products; several show a row each, then drill to products.\n/// `_TreeDrill` only needs `lipskeyCategory` (leaf) / `children` (branch).\nList<CatalogNode> _toolDeptPath(String name, List<String> cats) {\n  CatalogNode leaf(String c) =>\n      CatalogNode(id: ",
+  "s spec (#2). Two are the clean-water/sewage\n  // division (`system`); two more (כלי עבודה) gather EVERY real tool category in\n  // the catalog (`toolCats` — leaf `categoryHe` names; a full audit of all 99\n  // categories found these are the only genuine tools). The rest stay\n  // placeholders until their catalog data exists (R8 — no data, no invention).\n  static const List<\n      ({\n        String name,\n        IconData icon,\n        bool live,\n        WaterSystem? system,\n        List<String>? toolCats,\n      })> departments = [\n    (name: ",
+  "t a plumbing system).\n            ref.read(catalogSystemFilterProvider.notifier).state = null;\n            ref.read(catalogTreePathProvider.notifier).state =\n                _toolDeptPath(dept.name, toolCats);\n          } else {\n            // Catalog department (ברזים/אינסטלציה — Benzi #1 reframed) → open the\n            // grouped headings (no water-system scope; clear any drill).\n            ref.read(catalogSystemFilterProvider.notifier).state = null;\n            ref.read(catalogTreePathProvider.notifier).state = const [];\n          }\n          ref.read(deptFlatProductsProvider.notifier).state = false;\n          ref.read(homeDepartmentProvider.notifier).state = dept.name;\n        },\n        child: Semantics(\n          label: dept.live ? dept.name : ",
+  "אין מחלקות עדיין — יופיעו עם טעינת קטלוג החברה",
+  "אין קטגוריות במחלקה זו",
+  "אספקה טכנית",
+  "בקרוב",
+  "ברזים וסניטריים",
+  "גבס ופרופילים",
+  "הקטגוריות יופיעו כאן כשיתווסף קטלוג למחלקה",
+  "חומרי בניין",
+  "חותך צינורות",
+  "חשמל",
+  "כל המוצרים",
+  "כל המחלקות",
+  "כלי עבודה",
+  "כלי עבודה חשמלי",
+  "כלי עבודה ידני",
+  "כלי ריתוך PPR",
+  "מחלקה",
+  "מחלקות",
+  "מים נקיים",
+  "צבע וכלים לצבע",
+  "קטלוג",
+  "שפכים"
+ ],
+ "icons": [
+  "Icons.account_tree_outlined",
+  "Icons.close",
+  "Icons.construction",
+  "Icons.electrical_services",
+  "Icons.format_paint",
+  "Icons.foundation",
+  "Icons.handyman",
+  "Icons.plumbing",
+  "Icons.settings_input_component",
+  "Icons.tune",
+  "Icons.view_column",
+  "Icons.view_list",
+  "Icons.water_drop"
+ ],
+ "glyphs": [
+  "💧",
+  "🗂",
+  "🟤",
+  "🧰"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "DepartmentsScreen",
+   "kind": "ConsumerWidget",
+   "line": 97,
+   "loc": 166,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "catalogTreePathProvider",
+    "deptFlatProductsProvider",
+    "homeDepartmentProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 15,
+   "constData": 0
+  },
+  {
+   "name": "_DeptTile",
+   "kind": "ConsumerWidget",
+   "line": 264,
+   "loc": 76,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "catalogSystemFilterProvider",
+    "catalogTreePathProvider",
+    "deptFlatProductsProvider",
+    "homeDepartmentProvider"
+   ],
+   "writes": [
+    "catalogSystemFilterProvider",
+    "catalogTreePathProvider",
+    "deptFlatProductsProvider",
+    "homeDepartmentProvider"
+   ],
+   "actions": [
+    "fx:toast"
+   ],
+   "strings": 2,
+   "constData": 1
+  },
+  {
+   "name": "_CompanyDeptTile",
+   "kind": "ConsumerWidget",
+   "line": 345,
+   "loc": 45,
+   "pure": false,
+   "dataClean": true,
+   "reads": [
+    "homeDepartmentProvider"
+   ],
+   "writes": [
+    "homeDepartmentProvider"
+   ],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_DeptScopeBar",
+   "kind": "ConsumerWidget",
+   "line": 394,
+   "loc": 112,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "catalogSystemFilterProvider",
+    "catalogTreePathProvider",
+    "deptFlatProductsProvider",
+    "homeDepartmentProvider"
+   ],
+   "writes": [
+    "catalogSystemFilterProvider",
+    "catalogTreePathProvider",
+    "deptFlatProductsProvider",
+    "homeDepartmentProvider"
+   ],
+   "actions": [],
+   "strings": 5,
+   "constData": 1
+  },
+  {
+   "name": "_DeptCatGroups",
+   "kind": "ConsumerWidget",
+   "line": 510,
+   "loc": 59,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 1
+  },
+  {
+   "name": "_CatGroupRow",
+   "kind": "ConsumerWidget",
+   "line": 570,
+   "loc": 58,
+   "pure": false,
+   "dataClean": true,
+   "reads": [
+    "catalogTreePathProvider"
+   ],
+   "writes": [
+    "catalogTreePathProvider"
+   ],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kCatalogProducts",
+  "kDeptCatHeadings",
+  "kProfileRawShell"
+ ],
+ "board": {
+  "reads": [
+   "catalogSystemFilterProvider",
+   "catalogTreePathProvider",
+   "deptFlatProductsProvider",
+   "homeDepartmentProvider"
+  ],
+  "writes": [
+   "catalogSystemFilterProvider",
+   "catalogTreePathProvider",
+   "deptFlatProductsProvider",
+   "homeDepartmentProvider"
+  ],
+  "navsAndCalls": [
+   "fx:toast"
+  ]
+ }
+}

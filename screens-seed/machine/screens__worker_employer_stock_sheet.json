@@ -1,0 +1,146 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__worker_employer_stock_sheet.dart",
+ "lines": 558,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.brandDark",
+   "BsTokens.dangerDark",
+   "BsTokens.divider",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.radiusPill",
+   "BsTokens.space1",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.successDark",
+   "BsTokens.warnText"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   12,
+   13,
+   14,
+   15,
+   16,
+   18
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "s `_sheetShell` (sheet rule F-46).\n//\n// Wave E3 — the worker also files a STRUCTURED material request to the\n// employing contractor from this sheet (\"🧱 בקש חומרים\"): free-text items\n// (one per line) + an optional note → `materialRequestsProvider.submit(...)`.\n// This is a REQUEST entity (`material_requests_engine.dart`), NOT a stock edit\n// — the worker stays read-only on stock. The worker",
+  "s stock (resolved via `session.employerId`). Builder E1b/E2 call\n/// this verbatim.\nFuture<void> showEmployerStockSheet(BuildContext context) {\n  return showModalBottomSheet<void>(\n    context: context,\n    isScrollControlled: true,\n    backgroundColor: Colors.transparent,\n    builder: (_) => const _EmployerStockSheet(),\n  );\n}\n\nclass _EmployerStockSheet extends ConsumerStatefulWidget {\n  const _EmployerStockSheet();\n\n  @override\n  ConsumerState<_EmployerStockSheet> createState() =>\n      _EmployerStockSheetState();\n}\n\nclass _EmployerStockSheetState extends ConsumerState<_EmployerStockSheet> {\n  /// The \"🧱 בקש חומרים\" input — one item per line + an optional note. Local\n  /// to the sheet (no provider): the worker types, presses send, the engine\n  /// owns the persisted request from there.\n  final TextEditingController _itemsCtrl = TextEditingController();\n  final TextEditingController _noteCtrl = TextEditingController();\n\n  /// Whether the request composer is expanded (collapsed by default so the\n  /// sheet still leads with the read-only stock — the E1 surface).\n  bool _composing = false;\n\n  @override\n  void dispose() {\n    _itemsCtrl.dispose();\n    _noteCtrl.dispose();\n    super.dispose();\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    // The Wave-0 employment link → the employer",
+  "בטל",
+  "בקש חומרים",
+  "הבקשה נשלחה לקבלן",
+  "הבקשות שלי",
+  "הוזמן",
+  "הערה (לא חובה)",
+  "הקבלן טרם שיתף מלאי",
+  "כתוב לפחות פריט אחד כדי לשלוח בקשה",
+  "כתוב פריט אחד בכל שורה. הבקשה נשלחת לקבלן המעסיק — לא משנה את המלאי.",
+  "לדוגמה: דחוף, נגמר באתר",
+  "ממתין",
+  "נדחה",
+  "סגור",
+  "סופק",
+  "רשימת המלאי תוצג כאן כשתחובר עם השרת.",
+  "שלח בקשה",
+  "תצוגה בלבד · ${items.length} פריטים",
+  "תצוגה בלבד — המלאי של הקבלן המעסיק",
+  "🏗️ אתר",
+  "🏬 מחסן",
+  "📦 מלאי הקבלן",
+  "🧱 בקשת חומרים מהקבלן"
+ ],
+ "icons": [
+  "Icons.close"
+ ],
+ "glyphs": [
+  "✕",
+  "🏗",
+  "🏬",
+  "📦",
+  "🧱"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "_EmployerStockSheet",
+   "kind": "ConsumerStatefulWidget",
+   "line": 42,
+   "loc": 7,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_StockRow",
+   "kind": "StatelessWidget",
+   "line": 274,
+   "loc": 56,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_RequestComposer",
+   "kind": "StatelessWidget",
+   "line": 335,
+   "loc": 130,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 7,
+   "constData": 0
+  },
+  {
+   "name": "_MyRequestRow",
+   "kind": "StatelessWidget",
+   "line": 469,
+   "loc": 89,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 4,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kMatReqDeclined",
+  "kMatReqOrdered",
+  "kMatReqRequested",
+  "kMatReqStatuses",
+  "kMatReqSupplied"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

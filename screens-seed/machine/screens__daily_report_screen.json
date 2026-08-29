@@ -1,0 +1,83 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__daily_report_screen.dart",
+ "lines": 190,
+ "pigments": {
+  "tokens": [
+   "BsTokens.divider",
+   "BsTokens.inkLight",
+   "BsTokens.mutedDark",
+   "BsTokens.space2",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   11,
+   13,
+   15,
+   16,
+   18
+  ],
+  "fontWeights": [
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "אתה עוזר שמנסח דוח-יום קצר ומקצועי מנתונים שכבר נרשמו. השתמש אך ורק במספרים ",
+  "הדוח הועתק",
+  "העתק לשליחה",
+  "השתמש אך ורק במספרים שניתנו לך — אל תמציא, תשנה או תוסיף שום מספר.",
+  "נסח מהם דוח-יום קצר וזורם בעברית (2–4 משפטים), מוכן לשליחה ללקוח/לחנות. ",
+  "שניתנו לך; לעולם אל תמציא, תשנה או תוסיף מספר.",
+  "⚙️ המספרים נרשמו במערכת; ה-AI רק מנסח אותם לדוח.",
+  "✨ ניסוח חכם",
+  "💡 ניסוח-הדוח החכם דורש חיבור לשרת."
+ ],
+ "icons": [],
+ "glyphs": [
+  "⚙",
+  "✨",
+  "💡",
+  "📋"
+ ],
+ "logicCandidates": [
+  {
+   "name": "setState",
+   "line": 92
+  }
+ ],
+ "widgets": [
+  {
+   "name": "DailyReportScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 44,
+   "loc": 22,
+   "pure": false,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:DailyReportScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kClaudeAi"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:DailyReportScreen"
+  ]
+ }
+}

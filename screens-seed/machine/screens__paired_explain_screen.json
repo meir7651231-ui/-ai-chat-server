@@ -1,0 +1,86 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__paired_explain_screen.dart",
+ "lines": 190,
+ "pigments": {
+  "tokens": [
+   "BsTokens.divider",
+   "BsTokens.inkLight",
+   "BsTokens.mutedDark",
+   "BsTokens.mutedLight",
+   "BsTokens.space2",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   11,
+   12,
+   13,
+   15,
+   16,
+   18
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "אתה אינסטלטור-מנטור. אתה מסביר בקצרה למה אביזרים משלימים נחוצים להתקנה, ",
+  "ברמת סוג-המוצר בלבד. לעולם אל תמציא שם-מוצר, מק\"ט או מחיר, ואל תוסיף פריטים ",
+  "הסבר לאינסטלטור, במשפט קצר לכל סוג, למה הוא נחוץ להתקנה של \"$product\", ",
+  "וסיים בשורת \"אל תשכח\" קצרה. דבר ברמת סוג-המוצר בלבד — אל תמציא שמות-מוצר, ",
+  "מותקן לרוב יחד עם:",
+  "מעבר לרשימה שניתנה לך.",
+  "מק\"טים או מחירים, ואל תוסיף סוגים שלא ברשימה.",
+  "⚙️ הרשימה מנתוני-הקטלוג; ה-AI רק מסביר למה כל אביזר נחוץ.",
+  "💡 ההסבר החכם דורש חיבור לשרת.",
+  "🧩 מה עוד צריך?"
+ ],
+ "icons": [],
+ "glyphs": [
+  "⚙",
+  "💡",
+  "🧩"
+ ],
+ "logicCandidates": [
+  {
+   "name": "setState",
+   "line": 94
+  }
+ ],
+ "widgets": [
+  {
+   "name": "PairedExplainScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 46,
+   "loc": 21,
+   "pure": false,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:PairedExplainScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kClaudeAi"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:PairedExplainScreen"
+  ]
+ }
+}

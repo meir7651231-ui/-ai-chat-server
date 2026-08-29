@@ -1,0 +1,1112 @@
+{
+ "ManagerDashboardScreen": {
+  "addProps": [
+   {
+    "name": "title",
+    "type": "String",
+    "replaces": "מרכז השליטה"
+   },
+   {
+    "name": "subtitle",
+    "type": "String",
+    "replaces": "מנהל המערכת"
+   },
+   {
+    "name": "exit",
+    "type": "String",
+    "replaces": "‹ יציאה"
+   },
+   {
+    "name": "cyjwt4",
+    "type": "String",
+    "replaces": "שיחות"
+   },
+   {
+    "name": "fwtjAtMrkz5",
+    "type": "String",
+    "replaces": "פותח את מרכז השיחות של מנהל המערכת — קריאה ומענה לשרשורי "
+   },
+   {
+    "name": "hxxatMwlEwbdy6",
+    "type": "String",
+    "replaces": "הצ׳אט מול עובדים, קבלנים, חנויות ושליחים. נפתח כמסך עצמאי "
+   },
+   {
+    "name": "wjwzrAjwrhLlwj7",
+    "type": "String",
+    "replaces": "וחוזר אחורה ללוח; אינו מתנתק ואינו מחליף תפקיד."
+   },
+   {
+    "name": "azwrAycy8",
+    "type": "String",
+    "replaces": "אזור אישי"
+   },
+   {
+    "name": "fwtjAtHazwr9",
+    "type": "String",
+    "replaces": "פותח את האזור האישי של מנהל המערכת: פרטי החשבון, סטטיסטיקת "
+   },
+   {
+    "name": "hzmnwtJyhWmebr10",
+    "type": "String",
+    "replaces": "הזמנות חיה, ומעבר להגדרות ולהחלפת תפקיד מוגנת בקוד."
+   },
+   {
+    "name": "frwfyl11",
+    "type": "String",
+    "replaces": "פרופיל"
+   },
+   {
+    "name": "hgdrwtHqtlwg12",
+    "type": "String",
+    "replaces": "הגדרות הקטלוג"
+   },
+   {
+    "name": "fwtjAtHgdrwt13",
+    "type": "String",
+    "replaces": "פותח את הגדרות הקטלוג והאפליקציה — שליטת No-Code על "
+   },
+   {
+    "name": "hfrmtryCklHqblny14",
+    "type": "String",
+    "replaces": "הפרמטרים שכל הקבלנים רואים."
+   },
+   {
+    "name": "hgdrwt15",
+    "type": "String",
+    "replaces": "הגדרות"
+   }
+  ],
+  "note": ""
+ },
+ "_LivePill": {
+  "addProps": [
+   {
+    "name": "jy1",
+    "type": "String",
+    "replaces": "חי"
+   },
+   {
+    "name": "mnwtq2",
+    "type": "String",
+    "replaces": "מנותק"
+   },
+   {
+    "name": "dmw3",
+    "type": "String",
+    "replaces": "דמו"
+   }
+  ],
+  "note": ""
+ },
+ "_CopilotHero": {
+  "addProps": [
+   {
+    "name": "title",
+    "type": "String",
+    "replaces": "שאל את העסק שלך"
+   },
+   {
+    "name": "qwfyylwtCalAt2",
+    "type": "String",
+    "replaces": "קו-פיילוט — שאל את העסק שלך"
+   },
+   {
+    "name": "txt3",
+    "type": "String",
+    "replaces": "🤖"
+   },
+   {
+    "name": "mhBwerMy4",
+    "type": "String",
+    "replaces": "מה בוער? מי הלקוח הכי שווה? — אני עונה מהנתונים החיים"
+   },
+   {
+    "name": "mwdyeyEsqyAIDwrc5",
+    "type": "String",
+    "replaces": "מודיעין-עסקי AI · דורש חיבור לשרת"
+   }
+  ],
+  "note": ""
+ },
+ "_StudioHero": {
+  "addProps": [
+   {
+    "name": "studioHeroTitle",
+    "type": "String",
+    "replaces": "סטודיו — ערוך את האפליקציה"
+   },
+   {
+    "name": "studioExperimentalBadge",
+    "type": "String",
+    "replaces": "ניסיוני"
+   },
+   {
+    "name": "txt3",
+    "type": "String",
+    "replaces": "🎬"
+   },
+   {
+    "name": "tarBebrytMh4",
+    "type": "String",
+    "replaces": "תאר בעברית מה לשנות — או בנה ידנית · אני עורך את הנתונים"
+   },
+   {
+    "name": "bnyyhYdnytEwbdt5",
+    "type": "String",
+    "replaces": "בנייה ידנית עובדת תמיד · העורך החכם דורש חיבור לשרת"
+   }
+  ],
+  "note": ""
+ },
+ "_AttentionCard": {
+  "addProps": [
+   {
+    "name": "dwrcTyfwl1",
+    "type": "String",
+    "replaces": "🔔 דורש טיפול"
+   }
+  ],
+  "note": ""
+ },
+ "_MetricGrid": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🚚"
+   },
+   {
+    "name": "hzmnwtFtwjwt2",
+    "type": "String",
+    "replaces": "הזמנות פתוחות"
+   },
+   {
+    "name": "txt3",
+    "type": "String",
+    "replaces": "📦"
+   },
+   {
+    "name": "mwxryBqtlwg4",
+    "type": "String",
+    "replaces": "מוצרים בקטלוג"
+   },
+   {
+    "name": "txt5",
+    "type": "String",
+    "replaces": "🧰"
+   },
+   {
+    "name": "abyzryNlwwy6",
+    "type": "String",
+    "replaces": "אביזרים נלווים"
+   },
+   {
+    "name": "zmynyKet7",
+    "type": "String",
+    "replaces": "זמינים כעת"
+   },
+   {
+    "name": "txt8",
+    "type": "String",
+    "replaces": "🏪"
+   },
+   {
+    "name": "jnwywtFeylwt9",
+    "type": "String",
+    "replaces": "חנויות פעילות"
+   }
+  ],
+  "note": ""
+ },
+ "_OrderPipeline": {
+  "addProps": [
+   {
+    "name": "title",
+    "type": "String",
+    "replaces": "צינור ההזמנות"
+   },
+   {
+    "name": "htqblh2",
+    "type": "String",
+    "replaces": "התקבלה"
+   },
+   {
+    "name": "bhknh3",
+    "type": "String",
+    "replaces": "בהכנה"
+   },
+   {
+    "name": "mwk4",
+    "type": "String",
+    "replaces": "מוכן"
+   },
+   {
+    "name": "nas5",
+    "type": "String",
+    "replaces": "נאסף"
+   },
+   {
+    "name": "bdr6",
+    "type": "String",
+    "replaces": "בדרך"
+   },
+   {
+    "name": "nmsr7",
+    "type": "String",
+    "replaces": "נמסר"
+   }
+  ],
+  "note": ""
+ },
+ "_OrderSummary": {
+  "addProps": [
+   {
+    "name": "hzmnwt1",
+    "type": "String",
+    "replaces": "הזמנות"
+   },
+   {
+    "name": "ftwjwt2",
+    "type": "String",
+    "replaces": "פתוחות"
+   },
+   {
+    "name": "mjzwr3",
+    "type": "String",
+    "replaces": "מחזור"
+   }
+  ],
+  "note": ""
+ },
+ "_OrderStageChips": {
+  "addProps": [
+   {
+    "name": "synwLfyClb1",
+    "type": "String",
+    "replaces": "סינון לפי שלב"
+   },
+   {
+    "name": "msnAtRcymt2",
+    "type": "String",
+    "replaces": "מסנן את רשימת ההזמנות לשלב שנבחר; ׳הכל׳ מציג את כולן. רק שלבים "
+   },
+   {
+    "name": "cycBhHzmnwt3",
+    "type": "String",
+    "replaces": "שיש בהם הזמנות מופיעים. סינון תצוגה בלבד — אינו משנה דאטה."
+   },
+   {
+    "name": "hkl4",
+    "type": "String",
+    "replaces": "הכל"
+   }
+  ],
+  "note": ""
+ },
+ "_OrderRow": {
+  "addProps": [
+   {
+    "name": "orderCompletedBadge",
+    "type": "String",
+    "replaces": "✓ הושלם"
+   },
+   {
+    "name": "tplOrderidOrderwhoStageLa2",
+    "type": "String",
+    "replaces": "📦 ${order.id} · ${order.who} · $stageLabel"
+   },
+   {
+    "name": "frtyHzmnh3",
+    "type": "String",
+    "replaces": "פרטי הזמנה"
+   },
+   {
+    "name": "fwtjAtGylyw4",
+    "type": "String",
+    "replaces": "פותח את גיליון פרטי ההזמנה: מעקב 6 שלבים, פריטים/סכום, "
+   },
+   {
+    "name": "qblAtrsttwsWfewltQydw5",
+    "type": "String",
+    "replaces": "קבלן/אתר/סטטוס ופעולת קידום שלב."
+   },
+   {
+    "name": "tplOrderid6",
+    "type": "String",
+    "replaces": "📦 ${order.id}"
+   },
+   {
+    "name": "tplOrderitemsFrytyGroupe7",
+    "type": "String",
+    "replaces": "${order.items} פריטים · ₪${_grouped(order.sum)}"
+   },
+   {
+    "name": "qdClbLhzmnh8",
+    "type": "String",
+    "replaces": "קדם שלב להזמנה"
+   },
+   {
+    "name": "mqdAtHhzmnh9",
+    "type": "String",
+    "replaces": "מקדם את ההזמנה לשלב הבא בצינור "
+   },
+   {
+    "name": "htqblhbhknhmwkNasBdrN10",
+    "type": "String",
+    "replaces": "(התקבלה→בהכנה→מוכן→נאסף→בדרך→נמסר). עקיפת-מנהל "
+   },
+   {
+    "name": "hmedkntMydAt11",
+    "type": "String",
+    "replaces": "המעדכנת מיד את כל הלוחות. הזמנה שנמסרה אינה ניתנת "
+   },
+   {
+    "name": "lqydw12",
+    "type": "String",
+    "replaces": "לקידום."
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_AdvanceButton": {
+  "addProps": [
+   {
+    "name": "advance",
+    "type": "String",
+    "replaces": "קדם שלב ›"
+   }
+  ],
+  "note": ""
+ },
+ "_OrderDetailSheet": {
+  "addProps": [
+   {
+    "name": "orderCompletedDelivered",
+    "type": "String",
+    "replaces": "✓ ההזמנה הושלמה ונמסרה"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "📦"
+   },
+   {
+    "name": "fryty3",
+    "type": "String",
+    "replaces": "פריטים"
+   },
+   {
+    "name": "skw4",
+    "type": "String",
+    "replaces": "סכום"
+   },
+   {
+    "name": "clb5",
+    "type": "String",
+    "replaces": "שלב"
+   },
+   {
+    "name": "qbl6",
+    "type": "String",
+    "replaces": "קבלן"
+   },
+   {
+    "name": "atr7",
+    "type": "String",
+    "replaces": "אתר"
+   },
+   {
+    "name": "sttws8",
+    "type": "String",
+    "replaces": "סטטוס"
+   },
+   {
+    "name": "tplQdLkOrderStageLabelnex9",
+    "type": "String",
+    "replaces": "קדם ל\"${_kOrderStageLabel[next] ?? next}\""
+   },
+   {
+    "name": "hdfshZmynhBdfdf10",
+    "type": "String",
+    "replaces": "הדפסה זמינה בדפדפן"
+   },
+   {
+    "name": "hfqJcbwnyt11",
+    "type": "String",
+    "replaces": "🧾 הפק חשבונית"
+   },
+   {
+    "name": "hfqQblh12",
+    "type": "String",
+    "replaces": "💵 הפק קבלה"
+   },
+   {
+    "name": "tewdtMclwj13",
+    "type": "String",
+    "replaces": "📦 תעודת משלוח"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_SheetAdvanceButton": {
+  "addProps": [
+   {
+    "name": "qdLclbHba1",
+    "type": "String",
+    "replaces": "קדם לשלב הבא"
+   },
+   {
+    "name": "mqdAtHhzmnh2",
+    "type": "String",
+    "replaces": "מקדם את ההזמנה לשלב הבא ישירות מתוך גיליון הפרטים. אותה עקיפת-מנהל "
+   },
+   {
+    "name": "kmwXqdClbx3",
+    "type": "String",
+    "replaces": "כמו ׳קדם שלב׳ ברשימה; השלב מתעדכן בכל הלוחות."
+   }
+  ],
+  "note": ""
+ },
+ "_CustomerSummary": {
+  "addProps": [
+   {
+    "name": "qblny1",
+    "type": "String",
+    "replaces": "קבלנים"
+   },
+   {
+    "name": "sRkc2",
+    "type": "String",
+    "replaces": "סך רכש"
+   },
+   {
+    "name": "nyxwlAcray3",
+    "type": "String",
+    "replaces": "ניצול אשראי"
+   }
+  ],
+  "note": ""
+ },
+ "_CustomerStatusChips": {
+  "addProps": [
+   {
+    "name": "feyl1",
+    "type": "String",
+    "replaces": "פעיל"
+   },
+   {
+    "name": "acrayGbwh2",
+    "type": "String",
+    "replaces": "אשראי גבוה"
+   },
+   {
+    "name": "synwQblny3",
+    "type": "String",
+    "replaces": "סינון קבלנים"
+   },
+   {
+    "name": "msnAtRcymt4",
+    "type": "String",
+    "replaces": "מסנן את רשימת הקבלנים לפי סטטוס אשראי (פעיל / אשראי גבוה); "
+   },
+   {
+    "name": "xhklxMxygAt5",
+    "type": "String",
+    "replaces": "׳הכל׳ מציג את כולם. סינון תצוגה בלבד."
+   },
+   {
+    "name": "hkl6",
+    "type": "String",
+    "replaces": "הכל"
+   }
+  ],
+  "note": ""
+ },
+ "_AccountFilterChips": {
+  "addProps": [
+   {
+    "name": "hkl1",
+    "type": "String",
+    "replaces": "הכל"
+   },
+   {
+    "name": "mmtyny2",
+    "type": "String",
+    "replaces": "ממתינים"
+   },
+   {
+    "name": "feyly3",
+    "type": "String",
+    "replaces": "פעילים"
+   },
+   {
+    "name": "lqwjwtBlbd4",
+    "type": "String",
+    "replaces": "לקוחות בלבד"
+   }
+  ],
+  "note": ""
+ },
+ "_RfmPill": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🔹"
+   },
+   {
+    "name": "bsykw2",
+    "type": "String",
+    "replaces": "בסיכון"
+   }
+  ],
+  "note": ""
+ },
+ "_CustomerCard": {
+  "addProps": [
+   {
+    "name": "tplCnameStatusLabel1",
+    "type": "String",
+    "replaces": "👷 ${c.name} · $statusLabel"
+   },
+   {
+    "name": "frtyQbl2",
+    "type": "String",
+    "replaces": "פרטי קבלן"
+   },
+   {
+    "name": "fwtjAtGylyw3",
+    "type": "String",
+    "replaces": "פותח את גיליון פרטי הקבלן: מסגרת אשראי, נוצל, יתרה זמינה, אתרי "
+   },
+   {
+    "name": "bnyyhWrcymtHhzmnwt4",
+    "type": "String",
+    "replaces": "בנייה ורשימת ההזמנות שלו. תצוגה בלבד."
+   },
+   {
+    "name": "txt5",
+    "type": "String",
+    "replaces": "👷"
+   },
+   {
+    "name": "tplCorderCountHzmnwtViews6",
+    "type": "String",
+    "replaces": "${c.orderCount} הזמנות · ${view.sites} אתרים"
+   },
+   {
+    "name": "acrayLaRcwmh7",
+    "type": "String",
+    "replaces": "אשראי: לא רשומה"
+   },
+   {
+    "name": "tplNyxwlAcrayGroupedctota8",
+    "type": "String",
+    "replaces": "ניצול אשראי: ₪${_grouped(c.totalSpend)} / ₪${_grouped(liveLimit)} ($pct%)"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_CreditBar": {
+  "addProps": [
+   {
+    "name": "tplNyxwlAcrayPct1",
+    "type": "String",
+    "replaces": "ניצול אשראי $pct%"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_CustomerDetailSheet": {
+  "addProps": [
+   {
+    "name": "creditExplainBtn",
+    "type": "String",
+    "replaces": "הסבר אשראי"
+   },
+   {
+    "name": "qblFeyl2",
+    "type": "String",
+    "replaces": "🟢 קבלן פעיל"
+   },
+   {
+    "name": "nyxwlAcrayGbwh3",
+    "type": "String",
+    "replaces": "⚠️ ניצול אשראי גבוה"
+   },
+   {
+    "name": "laFeyl4",
+    "type": "String",
+    "replaces": "לא פעיל"
+   },
+   {
+    "name": "txt5",
+    "type": "String",
+    "replaces": "👷"
+   },
+   {
+    "name": "hzmnwt6",
+    "type": "String",
+    "replaces": "הזמנות"
+   },
+   {
+    "name": "sRkc7",
+    "type": "String",
+    "replaces": "סך רכש"
+   },
+   {
+    "name": "acray8",
+    "type": "String",
+    "replaces": "אשראי"
+   },
+   {
+    "name": "msgrtAcray9",
+    "type": "String",
+    "replaces": "מסגרת אשראי"
+   },
+   {
+    "name": "laRcwmh10",
+    "type": "String",
+    "replaces": "לא רשומה"
+   },
+   {
+    "name": "nwxl11",
+    "type": "String",
+    "replaces": "נוצל"
+   },
+   {
+    "name": "ytrhZmynh12",
+    "type": "String",
+    "replaces": "יתרה זמינה"
+   },
+   {
+    "name": "atryBnyyh13",
+    "type": "String",
+    "replaces": "אתרי בנייה"
+   },
+   {
+    "name": "txt14",
+    "type": "String",
+    "replaces": "💳"
+   },
+   {
+    "name": "tplHhzmnwtClCname15",
+    "type": "String",
+    "replaces": "ההזמנות של ${c.name}"
+   },
+   {
+    "name": "tplOid16",
+    "type": "String",
+    "replaces": "📦 ${o.id}"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_ApprovalBadge": {
+  "addProps": [
+   {
+    "name": "mmty1",
+    "type": "String",
+    "replaces": "⏳ ממתין"
+   },
+   {
+    "name": "feyl2",
+    "type": "String",
+    "replaces": "✓ פעיל"
+   }
+  ],
+  "note": ""
+ },
+ "_PendingRow": {
+  "addProps": [
+   {
+    "name": "mmty1",
+    "type": "String",
+    "replaces": "⏳ ממתין"
+   }
+  ],
+  "note": ""
+ },
+ "JourneyTimeline": {
+  "addProps": [
+   {
+    "name": "journeyTitle",
+    "type": "String",
+    "replaces": "🧭 מסע הלקוח"
+   },
+   {
+    "name": "ayMzhhLqwj2",
+    "type": "String",
+    "replaces": "אין מזהה לקוח לשיוך — המסע יופיע כשייווצר מזהה יציב."
+   },
+   {
+    "name": "ayFeylwtMtwedt3",
+    "type": "String",
+    "replaces": "אין פעילות מתועדת ללקוח זה עדיין."
+   }
+  ],
+  "note": ""
+ },
+ "_SavedCustomerSection": {
+  "addProps": [
+   {
+    "name": "frtyLqwj1",
+    "type": "String",
+    "replaces": "פרטי לקוח"
+   },
+   {
+    "name": "tlfw2",
+    "type": "String",
+    "replaces": "טלפון"
+   },
+   {
+    "name": "myyl3",
+    "type": "String",
+    "replaces": "מייל"
+   },
+   {
+    "name": "herwt4",
+    "type": "String",
+    "replaces": "הערות"
+   },
+   {
+    "name": "ayFrtyLqwj5",
+    "type": "String",
+    "replaces": "אין פרטי לקוח שמורים עדיין"
+   },
+   {
+    "name": "hwsFrtyLqwj6",
+    "type": "String",
+    "replaces": "הוסף פרטי לקוח"
+   },
+   {
+    "name": "erwFrtyLqwj7",
+    "type": "String",
+    "replaces": "ערוך פרטי לקוח"
+   }
+  ],
+  "note": ""
+ },
+ "_JourneyRow": {
+  "addProps": [
+   {
+    "name": "tqwe1",
+    "type": "String",
+    "replaces": ", תקוע"
+   },
+   {
+    "name": "tqwe2",
+    "type": "String",
+    "replaces": "תקוע"
+   }
+  ],
+  "note": ""
+ },
+ "_ManageIntro": {
+  "addProps": [
+   {
+    "name": "intro",
+    "type": "String",
+    "replaces": "🛠️ שליטה מלאה על אפליקציית הקבלן — כל שינוי מתעדכן מיידית."
+   }
+  ],
+  "note": ""
+ },
+ "_ManageSection": {
+  "addProps": [
+   {
+    "name": "mqteNyhwl1",
+    "type": "String",
+    "replaces": "מקטע ניהול"
+   },
+   {
+    "name": "fwtjswgrMqteNyhwl2",
+    "type": "String",
+    "replaces": "פותח/סוגר מקטע ניהול באקורדיון (מקטע אחד פתוח בכל רגע). "
+   },
+   {
+    "name": "jlElKl3",
+    "type": "String",
+    "replaces": "חל על כל המקטעים: אישורי עובדים, בקשות חופשה, קטגוריות, "
+   },
+   {
+    "name": "hgdrwtAflyqxyhE4",
+    "type": "String",
+    "replaces": "הגדרות אפליקציה, עץ מוצרים, מותגים, בדיקות רגרסיה ושיוך "
+   },
+   {
+    "name": "tfqydy5",
+    "type": "String",
+    "replaces": "תפקידים."
+   }
+  ],
+  "note": ""
+ },
+ "_CountBadge": {
+  "addProps": [
+   {
+    "name": "tplMmtynyLaycwrCount1",
+    "type": "String",
+    "replaces": "ממתינים לאישור: $count"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_ApprovalsBody": {
+  "addProps": [
+   {
+    "name": "approvalsEmpty",
+    "type": "String",
+    "replaces": "🎉 אין משימות הממתינות לאישור."
+   }
+  ],
+  "note": ""
+ },
+ "_ApprovalRow": {
+  "addProps": [
+   {
+    "name": "tplKWorkerstaskworker0Tas1",
+    "type": "String",
+    "replaces": "🦺 ${kWorkers[(task.worker >= 0 && task.worker < kWorkers.length) ? task.worker : 0]} · 🕒 ${task.days} ימים · ${task.steps} שלבים"
+   },
+   {
+    "name": "acrMcymh2",
+    "type": "String",
+    "replaces": "אשר משימה"
+   },
+   {
+    "name": "macrMcymhCewbd3",
+    "type": "String",
+    "replaces": "מאשר משימה שעובד שלח לאישור: המשימה עוברת ל׳בוצע׳, מזכה "
+   },
+   {
+    "name": "mtbewtWcwljtHtrat4",
+    "type": "String",
+    "replaces": "מטבעות ושולחת התראת ✅ לעובד. כתיבה למנוע המשותף — "
+   },
+   {
+    "name": "nraytMydBlwj5",
+    "type": "String",
+    "replaces": "נראית מיד בלוח העובד."
+   },
+   {
+    "name": "acr6",
+    "type": "String",
+    "replaces": "✅ אשר"
+   },
+   {
+    "name": "djhMcymh7",
+    "type": "String",
+    "replaces": "דחה משימה"
+   },
+   {
+    "name": "dwjhMcymhCncljh8",
+    "type": "String",
+    "replaces": "דוחה משימה שנשלחה לאישור ומחזיר אותה לעובד עם סיבת "
+   },
+   {
+    "name": "djyyhHsybhWhsttws9",
+    "type": "String",
+    "replaces": "דחייה. הסיבה והסטטוס מתעדכנים מיד בלוח העובד."
+   },
+   {
+    "name": "djh10",
+    "type": "String",
+    "replaces": "↩️ דחה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_VacationsBody": {
+  "addProps": [
+   {
+    "name": "vacationsEmpty",
+    "type": "String",
+    "replaces": "אין בקשות חופשה."
+   }
+  ],
+  "note": ""
+ },
+ "_VacationRequestRow": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🛵"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "🦺"
+   },
+   {
+    "name": "awcrh3",
+    "type": "String",
+    "replaces": "אושרה"
+   },
+   {
+    "name": "ndjth4",
+    "type": "String",
+    "replaces": "נדחתה"
+   },
+   {
+    "name": "acrBqctJwfch5",
+    "type": "String",
+    "replaces": "אשר בקשת חופשה"
+   },
+   {
+    "name": "macrBqctJwfch6",
+    "type": "String",
+    "replaces": "מאשר בקשת חופשה שעובד/שליח הגיש: מעדכן את רשימת "
+   },
+   {
+    "name": "hbqcwtClwWcwlj7",
+    "type": "String",
+    "replaces": "הבקשות שלו ושולח התראה. הסטטוס מתעדכן מיד אצל המבקש."
+   },
+   {
+    "name": "acr8",
+    "type": "String",
+    "replaces": "✅ אשר"
+   },
+   {
+    "name": "djhBqctJwfch9",
+    "type": "String",
+    "replaces": "דחה בקשת חופשה"
+   },
+   {
+    "name": "dwjhAtBqct10",
+    "type": "String",
+    "replaces": "דוחה את בקשת החופשה ומעדכן את המבקש בהתראה. הסטטוס "
+   },
+   {
+    "name": "mtedkMydAxl11",
+    "type": "String",
+    "replaces": "מתעדכן מיד אצל העובד/שליח."
+   },
+   {
+    "name": "djh12",
+    "type": "String",
+    "replaces": "❌ דחה"
+   }
+  ],
+  "note": ""
+ },
+ "_CategoriesBody": {
+  "addProps": [
+   {
+    "name": "tplQtgwrywtFeylwtEntriesl1",
+    "type": "String",
+    "replaces": "קטגוריות פעילות (${entries.length})"
+   },
+   {
+    "name": "tplEvalueMwxry2",
+    "type": "String",
+    "replaces": "${e.value} מוצרים"
+   },
+   {
+    "name": "cynwyCQtgwryh3",
+    "type": "String",
+    "replaces": "שינוי שם קטגוריה מעדכן את כל המוצרים שבה."
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_AppSettingsBody": {
+  "addProps": [
+   {
+    "name": "twsftMclwjAqsfrs1",
+    "type": "String",
+    "replaces": "תוספת משלוח אקספרס"
+   },
+   {
+    "name": "msgrtAcrayLqbl2",
+    "type": "String",
+    "replaces": "מסגרת אשראי לקבלן"
+   },
+   {
+    "name": "cyewrMexm3",
+    "type": "String",
+    "replaces": "שיעור מע״מ"
+   },
+   {
+    "name": "tplHmexmQbweLfy4",
+    "type": "String",
+    "replaces": "המע״מ קבוע לפי חוק ($_vatPercent%). תוספת האקספרס והאשראי נראים מיד בעגלת הקבלן."
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_ProductTreeBody": {
+  "addProps": [
+   {
+    "name": "producttreeIntro",
+    "type": "String",
+    "replaces": "עריכת האביזרים המשלימים של כל מוצר — בחירת מוצר חושפת את עץ האביזרים שלו."
+   },
+   {
+    "name": "mwxryBe2",
+    "type": "String",
+    "replaces": "מוצרים בעץ"
+   },
+   {
+    "name": "qtgwrywt3",
+    "type": "String",
+    "replaces": "קטגוריות"
+   },
+   {
+    "name": "klMwxrNwca4",
+    "type": "String",
+    "replaces": "כל מוצר נושא עץ אביזרים משלימים (חובה / אופציונלי)."
+   }
+  ],
+  "note": ""
+ },
+ "_BrandsBody": {
+  "addProps": [
+   {
+    "name": "tplMwtgyKBrandslength1",
+    "type": "String",
+    "replaces": "מותגים (${kBrands.length})"
+   },
+   {
+    "name": "tplBproductCountMwxry2",
+    "type": "String",
+    "replaces": "${b.productCount} מוצרים"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_RegressionBody": {
+  "addProps": [
+   {
+    "name": "regressionIntro",
+    "type": "String",
+    "replaces": "הרצת חבילת בדיקות הרגרסיה המלאה (קטלוג · מאתר · מנוע תאימות · state · "
+   },
+   {
+    "name": "open",
+    "type": "String",
+    "replaces": "🔬 פתח מרכז בדיקות רגרסיה"
+   },
+   {
+    "name": "nywwtElHmkcyr3",
+    "type": "String",
+    "replaces": "ניווט) על המכשיר."
+   },
+   {
+    "name": "bdyqwtRgrsyh4",
+    "type": "String",
+    "replaces": "בדיקות רגרסיה"
+   },
+   {
+    "name": "fwtjAtMrkz5",
+    "type": "String",
+    "replaces": "פותח את מרכז בדיקות הרגרסיה (כלי פיתוח). קיים רק בבילד debug."
+   }
+  ],
+  "note": ""
+ }
+}

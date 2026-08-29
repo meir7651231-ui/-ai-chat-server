@@ -1,0 +1,87 @@
+{
+ "_StockRow": {
+  "addProps": [
+   {
+    "name": "mjs1",
+    "type": "String",
+    "replaces": "🏬 מחסן"
+   },
+   {
+    "name": "atr2",
+    "type": "String",
+    "replaces": "🏗️ אתר"
+   }
+  ],
+  "note": ""
+ },
+ "_RequestComposer": {
+  "addProps": [
+   {
+    "name": "t06",
+    "type": "String",
+    "replaces": "בקש חומרים"
+   },
+   {
+    "name": "t07",
+    "type": "String",
+    "replaces": "🧱 בקשת חומרים מהקבלן"
+   },
+   {
+    "name": "t08",
+    "type": "String",
+    "replaces": "כתוב פריט אחד בכל שורה. הבקשה נשלחת לקבלן המעסיק — לא משנה את המלאי."
+   },
+   {
+    "name": "t09",
+    "type": "String",
+    "replaces": "שלח בקשה"
+   },
+   {
+    "name": "t10",
+    "type": "String",
+    "replaces": "בטל"
+   },
+   {
+    "name": "txt6",
+    "type": "String",
+    "replaces": "🧱"
+   },
+   {
+    "name": "herhLaJwbh7",
+    "type": "String",
+    "replaces": "הערה (לא חובה)"
+   },
+   {
+    "name": "ldwgmhDjwNgmr8",
+    "type": "String",
+    "replaces": "לדוגמה: דחוף, נגמר באתר"
+   }
+  ],
+  "note": ""
+ },
+ "_MyRequestRow": {
+  "addProps": [
+   {
+    "name": "hwzm1",
+    "type": "String",
+    "replaces": "הוזמן"
+   },
+   {
+    "name": "swfq2",
+    "type": "String",
+    "replaces": "סופק"
+   },
+   {
+    "name": "ndjh3",
+    "type": "String",
+    "replaces": "נדחה"
+   },
+   {
+    "name": "mmty4",
+    "type": "String",
+    "replaces": "ממתין"
+   }
+  ],
+  "note": ""
+ }
+}

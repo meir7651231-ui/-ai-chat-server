@@ -1,0 +1,137 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__worker_notifs_sheet.dart",
+ "lines": 372,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.brandDark",
+   "BsTokens.danger",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.radiusPill",
+   "BsTokens.space1",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   10,
+   11,
+   12.5,
+   13,
+   13.5,
+   18,
+   20
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "התראות",
+  "כל ההתראות יימחקו — פעולה בלתי הפיכה.",
+  "לנקות את כל ההתראות?",
+  "לפני ${d.inDays} ימים",
+  "לפני ${d.inHours} שע׳",
+  "לפני ${d.inMinutes} דק׳",
+  "ממוקם ב-AppBar של הלוח שיש בו 💡, כך שניתן לעטיפה.",
+  "נקה",
+  "נקה הכל",
+  "סגירה",
+  "סמן הכל כנקרא",
+  "עכשיו",
+  "פותח את רשימת ההתראות שלך. התג האדום מציג כמה התראות לא-נקראו. ",
+  "צליל ורטט",
+  "🔔 התראות"
+ ],
+ "icons": [
+  "Icons.close",
+  "Icons.notifications_outlined"
+ ],
+ "glyphs": [
+  "💡",
+  "🔊",
+  "🔔"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "WorkerNotifsBell",
+   "kind": "ConsumerWidget",
+   "line": 32,
+   "loc": 62,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "currentWorkerUnreadCountProvider",
+    "notifSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "call:showWorkerNotifsSheet"
+   ],
+   "strings": 4,
+   "constData": 0
+  },
+  {
+   "name": "_WorkerNotifsSheet",
+   "kind": "ConsumerWidget",
+   "line": 105,
+   "loc": 182,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "boardAuthProvider",
+    "currentWorkerNotifsProvider",
+    "workerNotifsProvider",
+    "workerNotifsRepositoryProvider",
+    "workerNotifsServerProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 7,
+   "constData": 0
+  },
+  {
+   "name": "_NotifRow",
+   "kind": "StatelessWidget",
+   "line": 290,
+   "loc": 82,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [],
+ "board": {
+  "reads": [
+   "boardAuthProvider",
+   "currentWorkerNotifsProvider",
+   "currentWorkerUnreadCountProvider",
+   "notifSettingsProvider",
+   "workerNotifsProvider",
+   "workerNotifsRepositoryProvider",
+   "workerNotifsServerProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": [
+   "call:showWorkerNotifsSheet"
+  ]
+ }
+}

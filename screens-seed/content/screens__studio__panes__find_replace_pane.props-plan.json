@@ -1,0 +1,12 @@
+{
+ "_WideWarning": {
+  "addProps": [
+   {
+    "name": "tplCountHtamwtHjlfh1",
+    "type": "String",
+    "replaces": "$count התאמות — החלפה רחבה, לסקור היטב לפני \"פרסם\"."
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

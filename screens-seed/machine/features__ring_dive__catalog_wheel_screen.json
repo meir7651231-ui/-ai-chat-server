@@ -1,0 +1,115 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__ring_dive__catalog_wheel_screen.dart",
+ "lines": 860,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [
+   10.5,
+   11,
+   12,
+   12.5,
+   13,
+   14,
+   16,
+   18,
+   20,
+   30
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   16
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  "${catOptsFor(id, _cons, matched, matched).length} אפשרויות",
+  "${kSmartProducts.length} מתכונים",
+  ";\n\nclass CatalogWheelScreen extends StatefulWidget {\n  const CatalogWheelScreen({super.key});\n\n  @override\n  State<CatalogWheelScreen> createState() => _CatalogWheelScreenState();\n}\n\nclass _CatalogWheelScreenState extends State<CatalogWheelScreen> {\n  /// Chosen constraints: axisId → value.\n  final Map<String, String> _cons = <String, String>{};\n\n  /// Constraint order, so back removes the most-recent pick.\n  final List<String> _order = <String>[];\n\n  /// The axis we are currently picking a VALUE for; null = the axis selector.\n  String? _axis;\n\n  /// The user asked to see the remaining products (the \"📋 הצג\" option).\n  bool _showList = false;\n\n  /// Which page of a long wheel is showing. Every wheel caps at [_cap] slots; when\n  /// there are more options, the last slot is \"עוד…\" and tapping it advances one\n  /// page (cycling back to the start), so a wheel is NEVER more than [_cap] items —\n  /// the owner",
+  ";\n              return Row(\n                children: <Widget>[\n                  if (trail.isNotEmpty)\n                    Flexible(\n                      child: Text(\n                        trail,\n                        maxLines: 1,\n                        softWrap: false,\n                        overflow: TextOverflow.fade,\n                        style: const TextStyle(fontSize: 14),\n                      ),\n                    ),\n                  Text(leaf,\n                      style: const TextStyle(\n                          fontSize: 14, fontWeight: FontWeight.w600)),\n                ],\n              );\n            },\n          ),\n        ),\n        body: SafeArea(child: _body()),\n      ),\n    );\n  }\n\n  Widget _wheel(List<String> labels, List<String> subs, String hint,\n          ValueChanged<int> onSelect) =>\n      Center(\n        child: RingDiveWheel(\n          labels: labels,\n          sublabels: subs,\n          hubHint: hint,\n          onSelect: onSelect,\n        ),\n      );\n\n  /// A wheel over [items], NEVER more than [_cap] slots. When there are more, the\n  /// last slot is \"עוד…\" and tapping it pages forward (cycling back to the start),\n  /// so the wheel stays ≤ [_cap] — instead of dumping the whole list onto one wheel.\n  Widget _capped<T>(List<T> items, String Function(T) label, String hint,\n      void Function(T) pick) {\n    if (items.length <= _cap) {\n      return _wheel(<String>[for (final it in items) label(it)],\n          const <String>[], hint, (i) => pick(items[i]));\n    }\n    const per = _cap - 1; // 11 real options + 1 reserved \"עוד…\" slot\n    final pages = (items.length + per - 1) ~/ per;\n    final start = (_page % pages) * per;\n    final end = start + per < items.length ? start + per : items.length;\n    final slice = items.sublist(start, end);\n    final labels = <String>[for (final it in slice) label(it), ",
+  ";\n    if (sig != _lastSig) {\n      _lastSig = sig;\n      _resetCollapse();\n    }\n\n    // ── ENGINE 3 — the JOB path (recipe kits) ──────────────────────────────────\n    if (_jobMode) return _jobBody();\n\n    final matched = catMatching(_cons);\n\n    // \"+N עוד\" / \"📋 הצג\" → the full list. Checked BEFORE the value-wheel branch so\n    // the gallery",
+  "s \"pick which wheel to start from\" finder.\n//\n// Ring flow (a constraint engine, not a fixed tree — every door open):\n//   1) AXIS wheel  — \"ממה נתחיל?\" — every axis that still splits the pool\n//      (סוג · קוטר · אורך · מעבר · חומר · חדר · …). Spin, pick one.\n//   2) VALUE wheel — that axis",
+  "s COLLAPSED form: a compact 🎡 pill pinned at the top that names\n  /// what the wheel is choosing ([hint], e.g. \"איזה קוטר?\"). Tapping it scrolls the\n  /// gallery back to the top, which re-opens the full wheel.\n  Widget _collapsedPill(String hint) => Align(\n        alignment: Alignment.topCenter,\n        child: Padding(\n          padding: const EdgeInsets.only(top: 4),\n          child: Material(\n            color: Colors.transparent,\n            child: InkWell(\n              borderRadius: BorderRadius.circular(20),\n              onTap: () => _galScroll.animateTo(\n                0,\n                duration: const Duration(milliseconds: 260),\n                curve: Curves.easeOut,\n              ),\n              child: Container(\n                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),\n                decoration: BoxDecoration(\n                  color: const Color(0xFFFFF3E8),\n                  borderRadius: BorderRadius.circular(20),\n                  border: Border.all(color: const Color(0x33FF7A18)),\n                ),\n                child: Row(\n                  mainAxisSize: MainAxisSize.min,\n                  children: <Widget>[\n                    const Text(",
+  "s paging so the\n  /// value wheel + its trailing \"עוד…\" stay within [_cap] slots.\n  List<T> _pageOf<T>(List<T> items) {\n    if (items.length <= _cap) return items;\n    const per = _cap - 1;\n    final pages = (items.length + per - 1) ~/ per;\n    final start = (_page % pages) * per;\n    final end = start + per < items.length ? start + per : items.length;\n    return items.sublist(start, end);\n  }\n\n  /// A wheel with a LIVE product gallery beneath it. Spinning fires\n  /// [RingDiveWheel.onFocusChanged] → [_focus]; only the gallery (a\n  /// [ValueListenableBuilder]) rebuilds, showing [previewFor] of the focused\n  /// index — the wheel keeps its own rotation untouched.\n  Widget _wheelWithGallery({\n    required List<String> labels,\n    required List<String> subs,\n    required String hint,\n    required ValueChanged<int> onSelect,\n    required List<CatProduct> Function(int) previewFor,\n    required String Function(int) headline,\n    bool livePreview = true,\n  }) {\n    return LayoutBuilder(\n      builder: (context, constraints) {\n        // Keep the dial at its natural 340px when the viewport has room; on a short\n        // / landscape / split viewport shrink it (reserving room for the gallery) so\n        // the Column never overflows + zeroes the gallery below it. FittedBox routes\n        // hit-testing through its transform, so the wheel",
+  "s products in real time — and ONLY the\n  /// gallery rebuilds on a spin, never the wheel itself.\n  final ValueNotifier<int> _focus = ValueNotifier<int>(0);\n\n  /// Max thumbnails in the live gallery before a trailing \"+N\" tile (which opens\n  /// the full list) — so the grid never tries to lay out thousands of images.\n  static const int _galCap = 24;\n\n  /// The exact product set the \"+N עוד\" tile counted, so tapping it opens THAT set\n  /// even on the value wheel (where a bare _showList was swallowed by the _axis\n  /// early-return). Null → the current [_cons] match.\n  List<CatProduct>? _listSet;\n\n  /// Debounces the live gallery preview so a fast spin only previews the value the\n  /// wheel SETTLES on, not every crossed detent (which churned CDN fetches + janked\n  /// the spin). The wheel",
+  "איזה ${_ax(axisId).label}?",
+  "איזו עבודה תעשה?",
+  "איזו עבודה?",
+  "אין מוצרים תואמים",
+  "בחר את המדויק · ${products.length} מוצרים",
+  "הכול",
+  "המוצר שמצאנו:",
+  "הערכה המלאה · ${lines.length} חלקים",
+  "חזרה",
+  "כל המוצרים",
+  "לא נמצאו מוצרים",
+  "לבחירה ידנית",
+  "לפי מה עוד?",
+  "לפי עבודה",
+  "מוצרים תואמים",
+  "ממה נתחיל?",
+  "עוד…",
+  "צירים נוספים",
+  "תצוגה מקדימה · ${_ax(axisId).label}: ${catValueLabel(axisId, shown[f])}",
+  "📋 הצג ${matched.length}",
+  "🔧 לפי עבודה"
+ ],
+ "icons": [
+  "Icons.arrow_forward",
+  "Icons.chevron_left",
+  "Icons.keyboard_arrow_up"
+ ],
+ "glyphs": [
+  "🎡",
+  "💡",
+  "📋",
+  "🔧",
+  "🖼"
+ ],
+ "logicCandidates": [
+  {
+   "name": "_onGalScroll",
+   "line": 102
+  },
+  {
+   "name": "dispose",
+   "line": 121
+  },
+  {
+   "name": "setState",
+   "line": 282
+  }
+ ],
+ "widgets": [
+  {
+   "name": "CatalogWheelScreen",
+   "kind": "StatefulWidget",
+   "line": 28,
+   "loc": 6,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kAxisDive",
+  "kCatAxes",
+  "kSmartProducts"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

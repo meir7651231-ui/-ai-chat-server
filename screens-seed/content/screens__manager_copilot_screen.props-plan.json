@@ -1,0 +1,47 @@
+{
+ "_Welcome": {
+  "addProps": [
+   {
+    "name": "welcomeHeadline",
+    "type": "String",
+    "replaces": "שאל אותי כל דבר על העסק שלך."
+   },
+   {
+    "name": "welcomeSub",
+    "type": "String",
+    "replaces": "אני קורא את ההזמנות, הלקוחות והאשראי החיים שלך ועונה מהמספרים האמיתיים."
+   },
+   {
+    "name": "morningBrief",
+    "type": "String",
+    "replaces": "תדריך-בוקר"
+   },
+   {
+    "name": "orAsk",
+    "type": "String",
+    "replaces": "או שאל:"
+   },
+   {
+    "name": "txt5",
+    "type": "String",
+    "replaces": "🤖"
+   }
+  ],
+  "note": ""
+ },
+ "_InputBar": {
+  "addProps": [
+   {
+    "name": "calAtHesq1",
+    "type": "String",
+    "replaces": "שאל את העסק שלך…"
+   },
+   {
+    "name": "clj2",
+    "type": "String",
+    "replaces": "שלח"
+   }
+  ],
+  "note": ""
+ }
+}

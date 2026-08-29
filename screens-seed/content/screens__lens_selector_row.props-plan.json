@@ -1,0 +1,12 @@
+{
+ "LensSelectorRow": {
+  "addProps": [
+   {
+    "name": "sortBy",
+    "type": "String",
+    "replaces": "סדר לפי:"
+   }
+  ],
+  "note": ""
+ }
+}

@@ -1,0 +1,37 @@
+{
+ "BuildPlanScreen": {
+  "addProps": [
+   {
+    "name": "twknytbnyyhPreviewOffl1",
+    "type": "String",
+    "replaces": "תוכנית-בנייה · preview (off-live)"
+   },
+   {
+    "name": "ktbjytwAwrkyxynwrFrmr2",
+    "type": "String",
+    "replaces": "כתב-חיתוך (אורכי-צינור פר-מרווח)"
+   },
+   {
+    "name": "ayMrwwjyxynwrBrx3",
+    "type": "String",
+    "replaces": "אין מרווחי-צינור ברצף"
+   }
+  ],
+  "note": ""
+ },
+ "_CutTile": {
+  "addProps": [
+   {
+    "name": "tplSegcutLengthtoStringAsFi1",
+    "type": "String",
+    "replaces": "${seg.cutLength.toStringAsFixed(1)} מ״מ"
+   },
+   {
+    "name": "tplSegfromFamilyXynwrODse2",
+    "type": "String",
+    "replaces": "${seg.fromFamily} ← צינור OD${seg.od} → ${seg.toFamily}"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

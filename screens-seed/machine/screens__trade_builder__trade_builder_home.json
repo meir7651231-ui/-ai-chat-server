@@ -1,0 +1,159 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__trade_builder__trade_builder_home.dart",
+ "lines": 437,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of",
+   "cfgRadius"
+  ],
+  "fontSizes": [
+   12,
+   12.5,
+   14,
+   15,
+   18,
+   20,
+   34
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ";\n    }\n    return id;\n  }\n}\n\n/// The draft/published chip — the `_StagePill` idiom (a 12% colour wash with\n/// full-colour text): טיוטה = dark amber, פורסם = the ready-green.\nclass _StatusChip extends StatelessWidget {\n  const _StatusChip({required this.published});\n\n  final bool published;\n\n  @override\n  Widget build(BuildContext context) {\n    final color =\n        published ? const Color(0xFF1F8A4C) : const Color(0xFFB45309);\n    return Container(\n      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),\n      decoration: BoxDecoration(\n        color: color.withValues(alpha: 0.12),\n        borderRadius: BorderRadius.circular(BsTokens.radiusPill),\n      ),\n      child: Text(\n        published ? ",
+  "s step 1 — the define screen.\n          bottomNavigationBar: SafeArea(\n            child: Padding(\n              padding: const EdgeInsets.fromLTRB(\n                BsTokens.space4,\n                BsTokens.space2,\n                BsTokens.space4,\n                BsTokens.space4,\n              ),\n              // Standalone route (onContinue == null) ⇒ byte-identical: just the\n              // pinned add-action. Inside the unified setup host (onContinue set)\n              // ⇒ a second \"המשך להגדרת החברה\" button advances to the org wizard.\n              child: onContinue == null\n                  ? _AddTradeButton(\n                      onTap: () => Navigator.of(context)\n                          .push(TradeDefineStepScreen.route()),\n                    )\n                  : Column(\n                      mainAxisSize: MainAxisSize.min,\n                      children: [\n                        _AddTradeButton(\n                          onTap: () => Navigator.of(context)\n                              .push(TradeDefineStepScreen.route()),\n                        ),\n                        const SizedBox(height: BsTokens.space2),\n                        Semantics(\n                          button: true,\n                          label: ",
+  "אשף בניית ענף — שלב $_kWizardStep מתוך $_kWizardTotal",
+  "הגדרת הענף",
+  "הוסף ענף",
+  "המשך להגדרת החברה ←",
+  "טיוטה",
+  "עדיין אין ענפים — הוסף את הראשון",
+  "פורסם",
+  "פרסם",
+  "שלב 1 מתוך 6",
+  "🏗️ בונה ענפים"
+ ],
+ "icons": [],
+ "glyphs": [
+  "🏗",
+  "🚀",
+  "🛠",
+  "🧱"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "TradeBuilderHomeScreen",
+   "kind": "ConsumerWidget",
+   "line": 48,
+   "loc": 109,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "tradesStoreProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "nav:TradeBuilderHomeScreen"
+   ],
+   "strings": 3,
+   "constData": 0
+  },
+  {
+   "name": "_WizardHeader",
+   "kind": "StatelessWidget",
+   "line": 162,
+   "loc": 62,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 3,
+   "constData": 0
+  },
+  {
+   "name": "_EmptyTrades",
+   "kind": "StatelessWidget",
+   "line": 227,
+   "loc": 35,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_TradeTile",
+   "kind": "StatelessWidget",
+   "line": 266,
+   "loc": 101,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 3,
+   "constData": 0
+  },
+  {
+   "name": "_StatusChip",
+   "kind": "StatelessWidget",
+   "line": 370,
+   "loc": 26,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_AddTradeButton",
+   "kind": "StatelessWidget",
+   "line": 399,
+   "loc": 38,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [
+  "TradeBuilderHomeScreen"
+ ],
+ "gates": [
+  "kPersonas",
+  "kTradeBuilderFlag"
+ ],
+ "board": {
+  "reads": [
+   "tradesStoreProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:TradeBuilderHomeScreen"
+  ]
+ }
+}

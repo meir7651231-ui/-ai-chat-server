@@ -1,0 +1,12 @@
+{
+ "FittingPreviewScreen": {
+  "addProps": [
+   {
+    "name": "txwghTltmmdytPreview1",
+    "type": "String",
+    "replaces": "תצוגה תלת-ממדית · preview (off-live)"
+   }
+  ],
+  "note": ""
+ }
+}

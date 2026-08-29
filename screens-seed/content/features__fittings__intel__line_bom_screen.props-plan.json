@@ -1,0 +1,67 @@
+{
+ "LineBomScreen": {
+  "addProps": [
+   {
+    "name": "mxmdPPR501",
+    "type": "String",
+    "replaces": "מצמד PPR 50"
+   },
+   {
+    "name": "brPPR902",
+    "type": "String",
+    "replaces": "ברך PPR 90° 50"
+   },
+   {
+    "name": "msePPR503",
+    "type": "String",
+    "replaces": "מסעף PPR 50"
+   },
+   {
+    "name": "mxrhPPR50324",
+    "type": "String",
+    "replaces": "מצרה PPR 50×32"
+   },
+   {
+    "name": "brzKdwryPPR5",
+    "type": "String",
+    "replaces": "ברז כדורי PPR 32"
+   },
+   {
+    "name": "fqqPPR326",
+    "type": "String",
+    "replaces": "פקק PPR 32"
+   },
+   {
+    "name": "ktbkmwywtPreviewOffliv7",
+    "type": "String",
+    "replaces": "כתב-כמויות · preview (off-live)"
+   },
+   {
+    "name": "ayFryty8",
+    "type": "String",
+    "replaces": "אין פריטים"
+   }
+  ],
+  "note": ""
+ },
+ "_StatusBar": {
+  "addProps": [
+   {
+    "name": "tplShxkBomtotalPiecesFryt1",
+    "type": "String",
+    "replaces": "סה״כ ${bom.totalPieces} פריטים"
+   },
+   {
+    "name": "ycFery2",
+    "type": "String",
+    "replaces": " · יש פערים"
+   },
+   {
+    "name": "tplBomcriticalOpenBtyjwtJ3",
+    "type": "String",
+    "replaces": " · ${bom.criticalOpen} בטיחות חסרים"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

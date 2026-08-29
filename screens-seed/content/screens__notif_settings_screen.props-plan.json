@@ -1,0 +1,507 @@
+{
+ "NotifSettingsScreen": {
+  "addProps": [
+   {
+    "name": "t01",
+    "type": "String",
+    "replaces": "הגדרות התראות"
+   },
+   {
+    "name": "t02",
+    "type": "String",
+    "replaces": "איפוס הגדרות?"
+   },
+   {
+    "name": "t03",
+    "type": "String",
+    "replaces": "כל הגדרות ההתראות יוחזרו לברירת המחדל."
+   },
+   {
+    "name": "t04",
+    "type": "String",
+    "replaces": "ביטול"
+   },
+   {
+    "name": "t05",
+    "type": "String",
+    "replaces": "אפס"
+   },
+   {
+    "name": "ayfwsLbryrtMjdl6",
+    "type": "String",
+    "replaces": "איפוס לברירת מחדל"
+   },
+   {
+    "name": "hgdrwtAwfsw7",
+    "type": "String",
+    "replaces": "הגדרות אופסו"
+   }
+  ],
+  "note": ""
+ },
+ "_SnoozeBanner": {
+  "addProps": [
+   {
+    "name": "hctqhBwtlh1",
+    "type": "String",
+    "replaces": "השתקה בוטלה"
+   },
+   {
+    "name": "tplHtrawtMwctqwtEd2",
+    "type": "String",
+    "replaces": "התראות מושתקות עד $untilLabel"
+   },
+   {
+    "name": "hctqHtrawtZmnyt3",
+    "type": "String",
+    "replaces": "🔇 השתק התראות זמנית"
+   },
+   {
+    "name": "ljLbytwl4",
+    "type": "String",
+    "replaces": "לחץ לביטול"
+   },
+   {
+    "name": "bjrMcZm5",
+    "type": "String",
+    "replaces": "בחר משך זמן"
+   },
+   {
+    "name": "htrawtHwctqw6",
+    "type": "String",
+    "replaces": "התראות הושתקו"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_SnoozeSheet": {
+  "addProps": [
+   {
+    "name": "t06",
+    "type": "String",
+    "replaces": "🔇 השתק התראות"
+   },
+   {
+    "name": "15Dqwt2",
+    "type": "String",
+    "replaces": "15 דקות"
+   },
+   {
+    "name": "ceh3",
+    "type": "String",
+    "replaces": "שעה"
+   },
+   {
+    "name": "4Cewt4",
+    "type": "String",
+    "replaces": "4 שעות"
+   },
+   {
+    "name": "ywCl5",
+    "type": "String",
+    "replaces": "יום שלם"
+   }
+  ],
+  "note": ""
+ },
+ "_ChannelsSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "📱"
+   },
+   {
+    "name": "erwxyQblh2",
+    "type": "String",
+    "replaces": "ערוצי קבלה"
+   },
+   {
+    "name": "htrawtBtwHaflyqxyh3",
+    "type": "String",
+    "replaces": "התראות בתוך האפליקציה"
+   },
+   {
+    "name": "aymyyl4",
+    "type": "String",
+    "replaces": "אימייל"
+   }
+  ],
+  "note": ""
+ },
+ "_TypesSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🔔"
+   },
+   {
+    "name": "swgyHtrawt2",
+    "type": "String",
+    "replaces": "סוגי התראות"
+   },
+   {
+    "name": "htrawtTqxyb3",
+    "type": "String",
+    "replaces": "התראות תקציב"
+   },
+   {
+    "name": "mbxey4",
+    "type": "String",
+    "replaces": "מבצעים"
+   },
+   {
+    "name": "hxewtSfqy5",
+    "type": "String",
+    "replaces": "הצעות ספקים"
+   },
+   {
+    "name": "jzrLmlay6",
+    "type": "String",
+    "replaces": "חזר למלאי"
+   },
+   {
+    "name": "tzkwrwt7",
+    "type": "String",
+    "replaces": "תזכורות"
+   },
+   {
+    "name": "cyjwtJdcwt8",
+    "type": "String",
+    "replaces": "שיחות חדשות"
+   },
+   {
+    "name": "edkwnyFrwyqty9",
+    "type": "String",
+    "replaces": "עדכוני פרויקטים"
+   }
+  ],
+  "note": ""
+ },
+ "_QuietHoursSection": {
+  "addProps": [
+   {
+    "name": "cewtCqtDND1",
+    "type": "String",
+    "replaces": "שעות שקט (DND)"
+   },
+   {
+    "name": "hfelCewtCqt2",
+    "type": "String",
+    "replaces": "הפעל שעות שקט"
+   },
+   {
+    "name": "mtjylBceh3",
+    "type": "String",
+    "replaces": "מתחיל בשעה"
+   },
+   {
+    "name": "mstyyBceh4",
+    "type": "String",
+    "replaces": "מסתיים בשעה"
+   },
+   {
+    "name": "ymyCbtjg5",
+    "type": "String",
+    "replaces": "ימי שבת/חג"
+   },
+   {
+    "name": "twFgycwt6",
+    "type": "String",
+    "replaces": "תוך פגישות"
+   },
+   {
+    "name": "mxbNhygh7",
+    "type": "String",
+    "replaces": "מצב נהיגה"
+   }
+  ],
+  "note": ""
+ },
+ "_SoundSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🔊"
+   },
+   {
+    "name": "xlylWrtt2",
+    "type": "String",
+    "replaces": "צליל ורטט"
+   },
+   {
+    "name": "xlylMwfel3",
+    "type": "String",
+    "replaces": "צליל מופעל"
+   },
+   {
+    "name": "rtt4",
+    "type": "String",
+    "replaces": "רטט"
+   },
+   {
+    "name": "xlylyCwnyLfy5",
+    "type": "String",
+    "replaces": "צלילים שונים לפי סוג"
+   },
+   {
+    "name": "LEDAndrwayd6",
+    "type": "String",
+    "replaces": "LED (אנדרואיד)"
+   }
+  ],
+  "note": ""
+ },
+ "_ImportanceSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🎯"
+   },
+   {
+    "name": "jcybwtWsynw2",
+    "type": "String",
+    "replaces": "חשיבות וסינון"
+   },
+   {
+    "name": "rmtJcybwt3",
+    "type": "String",
+    "replaces": "רמת חשיבות"
+   },
+   {
+    "name": "hkl4",
+    "type": "String",
+    "replaces": "הכל"
+   },
+   {
+    "name": "jcwbwtBlbd5",
+    "type": "String",
+    "replaces": "חשובות בלבד"
+   },
+   {
+    "name": "4c6",
+    "type": "String",
+    "replaces": " / 4ש"
+   },
+   {
+    "name": "jsymtCwlj7",
+    "type": "String",
+    "replaces": "חסימת שולח"
+   }
+  ],
+  "note": ""
+ },
+ "_PersonaSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "👤"
+   },
+   {
+    "name": "lfyTfqyd2",
+    "type": "String",
+    "replaces": "לפי תפקיד"
+   },
+   {
+    "name": "qblHtrawtFrwyqt3",
+    "type": "String",
+    "replaces": "👷 קבלן — התראות פרויקט"
+   },
+   {
+    "name": "jnwtHzmnwtMlay4",
+    "type": "String",
+    "replaces": "🏪 חנות — הזמנות + מלאי"
+   },
+   {
+    "name": "clyjPickupActive5",
+    "type": "String",
+    "replaces": "🛵 שליח — pickup + active"
+   },
+   {
+    "name": "ewbdMcymwt6",
+    "type": "String",
+    "replaces": "🦺 עובד — משימות"
+   },
+   {
+    "name": "mnhlHmerktDcbwrd7",
+    "type": "String",
+    "replaces": "👔 מנהל המערכת — דשבורד"
+   }
+  ],
+  "note": ""
+ },
+ "_SummariesSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "📊"
+   },
+   {
+    "name": "sykwmyTqwftyy2",
+    "type": "String",
+    "replaces": "סיכומים תקופתיים"
+   },
+   {
+    "name": "sykwYwmy3",
+    "type": "String",
+    "replaces": "סיכום יומי"
+   },
+   {
+    "name": "cetClyjh4",
+    "type": "String",
+    "replaces": "שעת שליחה"
+   },
+   {
+    "name": "dwjBwqr5",
+    "type": "String",
+    "replaces": "דוח בוקר"
+   },
+   {
+    "name": "cetDwjBwqr6",
+    "type": "String",
+    "replaces": "שעת דוח בוקר"
+   },
+   {
+    "name": "sykwErb7",
+    "type": "String",
+    "replaces": "סיכום ערב"
+   },
+   {
+    "name": "cetSykwErb8",
+    "type": "String",
+    "replaces": "שעת סיכום ערב"
+   },
+   {
+    "name": "sykwCbweyRacw9",
+    "type": "String",
+    "replaces": "סיכום שבועי (ראשון)"
+   },
+   {
+    "name": "sykwJwdcy10",
+    "type": "String",
+    "replaces": "סיכום חודשי"
+   }
+  ],
+  "note": ""
+ },
+ "_LockScreenSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🔐"
+   },
+   {
+    "name": "frtywtBmsNewl2",
+    "type": "String",
+    "replaces": "פרטיות במסך נעול"
+   },
+   {
+    "name": "txwghBmsNewl3",
+    "type": "String",
+    "replaces": "תצוגה במסך נעול"
+   },
+   {
+    "name": "hxgTwkMla4",
+    "type": "String",
+    "replaces": "הצג תוכן מלא"
+   },
+   {
+    "name": "rqCHcwlj5",
+    "type": "String",
+    "replaces": "רק שם השולח"
+   },
+   {
+    "name": "hstrLjlwty6",
+    "type": "String",
+    "replaces": "הסתר לחלוטין"
+   },
+   {
+    "name": "aycwrBywmtryLftyjh7",
+    "type": "String",
+    "replaces": "אישור ביומטרי לפתיחה"
+   },
+   {
+    "name": "alTebrLcewRkb8",
+    "type": "String",
+    "replaces": "אל תעבר לשעון/רכב"
+   }
+  ],
+  "note": ""
+ },
+ "_QuickActionsSection": {
+  "addProps": [
+   {
+    "name": "fewlwtMhyrwt1",
+    "type": "String",
+    "replaces": "פעולות מהירות"
+   },
+   {
+    "name": "kftwryTgwbhBhtrah2",
+    "type": "String",
+    "replaces": "כפתורי תגובה בהתראה"
+   },
+   {
+    "name": "aycwrBlyFtyjt3",
+    "type": "String",
+    "replaces": "אישור בלי פתיחת אפליקציה"
+   },
+   {
+    "name": "djyyhMhyrh4",
+    "type": "String",
+    "replaces": "דחייה מהירה"
+   },
+   {
+    "name": "tcwbhYcyrh5",
+    "type": "String",
+    "replaces": "תשובה ישירה"
+   }
+  ],
+  "note": ""
+ },
+ "_SectionTile": {
+  "addProps": [
+   {
+    "name": "t07",
+    "type": "String",
+    "replaces": "בבנייה — ההגדרות נשמרות אך עדיין אינן משפיעות"
+   }
+  ],
+  "note": ""
+ },
+ "_SwitchRow": {
+  "addProps": [
+   {
+    "name": "t08",
+    "type": "String",
+    "replaces": "דורש חיבור שרת — לא זמין בגרסה זו"
+   },
+   {
+    "name": "t09",
+    "type": "String",
+    "replaces": "בבנייה — עדיין לא משפיע"
+   }
+  ],
+  "note": ""
+ },
+ "_PlaceholderRow": {
+  "addProps": [
+   {
+    "name": "t10",
+    "type": "String",
+    "replaces": "בבנייה"
+   },
+   {
+    "name": "tplLabelBbnyyh2",
+    "type": "String",
+    "replaces": "$label — בבנייה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

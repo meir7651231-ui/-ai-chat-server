@@ -1,0 +1,54 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__org_config_diag.dart",
+ "lines": 82,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "} דגל ORG_CONFIG (חמוש)",
+  "} דגל ORG_CONFIG_LIVE",
+  "מחובר כ: $email",
+  "— בדיקת-שרת דולגה (אין Firebase) —",
+  "⚠️ מנוי-חי כבוי — לא תקבל שינויי-אחרים חי (build ללא ORG_CONFIG_LIVE)",
+  "✅ Firebase מאותחל",
+  "✅ בעלים — מורשה לפרסם",
+  "✅ הכתיבה הגיעה לשרת ואומתה — פעיל אצל כולם עכשיו",
+  "✅ מנוי-חי פעיל — תקבל שינויים מאחרים חי",
+  "✅ פרסום מופעל — \"שמור\" יפרסם לשרת",
+  "❌ Firebase לא מאותחל בכלל",
+  "❌ הכתיבה לא נמצאה בשרת — נדחתה בשקט (בדוק בעלים/הרשאות)",
+  "❌ כתיבה/קריאה מהשרת נכשלה: $e",
+  "❌ לא בעלים — השרת ידחה את הכתיבה",
+  "❌ לא מחובר (אין email) — התחבר עם גוגל",
+  "❌ פרסום כבוי — ORG_CONFIG לא חמוש"
+ ],
+ "icons": [],
+ "glyphs": [
+  "⚠",
+  "✅",
+  "❌"
+ ],
+ "logicCandidates": [],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kOrgConfigFlag",
+  "kOrgConfigLive",
+  "kOrgConfigLiveCollection",
+  "kOrgConfigLiveDocId",
+  "kOrgConfigLiveField",
+  "kOwnerEmails"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

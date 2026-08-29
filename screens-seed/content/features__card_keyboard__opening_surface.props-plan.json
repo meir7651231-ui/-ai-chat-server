@@ -1,0 +1,27 @@
+{
+ "OpeningSurface": {
+  "addProps": [
+   {
+    "name": "hqldAwDbr1",
+    "type": "String",
+    "replaces": "הקלד או דבר…"
+   },
+   {
+    "name": "jyfwcQwly2",
+    "type": "String",
+    "replaces": "חיפוש קולי"
+   },
+   {
+    "name": "fjwt3",
+    "type": "String",
+    "replaces": "פחות"
+   },
+   {
+    "name": "ewd4",
+    "type": "String",
+    "replaces": "עוד…"
+   }
+  ],
+  "note": ""
+ }
+}

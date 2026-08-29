@@ -1,0 +1,22 @@
+{
+ "_TargetSubject": {
+  "addProps": [
+   {
+    "name": "tplName1",
+    "type": "String",
+    "replaces": "👤 $name"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_AssignButton": {
+  "addProps": [
+   {
+    "name": "t04",
+    "type": "String",
+    "replaces": "שייך תפקיד"
+   }
+  ],
+  "note": ""
+ }
+}

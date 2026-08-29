@@ -1,0 +1,142 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__login_sheet.dart",
+ "lines": 859,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.brandDark",
+   "BsTokens.cardLight",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [],
+  "fontSizes": [
+   13,
+   14,
+   15,
+   19
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   18,
+   28
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  "));\n    }\n  }\n\n  /// \"שכחתי סיסמה\" — send a reset email. The SAME neutral success toast shows\n  /// whether or not the email is registered (no account enumeration — a\n  /// `user-not-found` is folded into success); only real failures\n  /// (invalid-email / network / too-many) surface in Hebrew. Needs an email.\n  Future<void> _resetPassword() async {\n    if (!_emailAllowed) return; // no passwords ⇒ nothing to reset\n    final email = _email.text.trim();\n    if (email.isEmpty) {\n      showToast(context, ",
+  "));\n    }\n  }\n\n  /// server-gate-auth — CREATE a REAL Firebase account (\"צור חשבון\"). Success\n  /// lands on the auth stream (the ref.listen below pops the sheet), exactly\n  /// like sign-in; the honest errors (`email-already-in-use` / `weak-password`)\n  /// are Hebrew-toasted.\n  Future<void> _emailCreate() async {\n    if (!_emailAllowed) return; // LOCK 2 of 2 — see [_emailLogin]\n    final email = _email.text.trim();\n    final password = _password.text;\n    if (email.isEmpty || password.isEmpty) {\n      showToast(context, ",
+  ";\n  }\n  return null;\n}\n\n/// Opens the login sheet (phone-OTP primary, email fallback).\nFuture<void> showLoginSheet(BuildContext context) {\n  return showModalBottomSheet<void>(\n    context: context,\n    isScrollControlled: true,\n    backgroundColor: BsTokens.cardLight,\n    shape: const RoundedRectangleBorder(\n      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),\n    ),\n    builder: (ctx) => Padding(\n      // Keyboard inset — the fields stay visible while typing.\n      padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom),\n      child: const Directionality(\n        textDirection: TextDirection.rtl,\n        child: LoginSheet(),\n      ),\n    ),\n  );\n}\n\n/// Which of the three panes the sheet is showing.\nenum _LoginStep { phone, code, email }\n\nclass LoginSheet extends ConsumerStatefulWidget {\n  const LoginSheet({super.key});\n\n  @override\n  ConsumerState<LoginSheet> createState() => _LoginSheetState();\n}\n\nclass _LoginSheetState extends ConsumerState<LoginSheet> {\n  final TextEditingController _phone = TextEditingController();\n  final TextEditingController _code = TextEditingController();\n  final TextEditingController _email = TextEditingController();\n  final TextEditingController _password = TextEditingController();\n  // P2 — optional full name captured on the \"צור חשבון\" path (mirrored to the\n  // local profile → users/{uid}.displayName by the welcome flow",
+  "s \"כניסה עם אימייל\") and CREATE-account (true, the new\n  /// \"צור חשבון\" → `createUserWithEmailPassword`). Ephemeral UI state.\n  bool _emailCreateMode = false;\n  // #3 — true while a \"צור חשבון\" is in flight, so the auth-stream listener shows\n  // the email-verification notice (a verification mail was sent best-effort by\n  // createUserWithEmailPassword) instead of the generic sign-in toast.\n  bool _justCreated = false;\n  // Latches the one-time success toast+pop in the auth listener, so a later\n  // user→null→user transition on the same sheet can",
+  "s \"כניסה עם אימייל\") or CREATE a real Firebase account.\n        _primaryButton(\n          label: _emailCreateMode ? ",
+  "או בקוד ל-SMS",
+  "אימות וכניסה",
+  "אימייל",
+  "אימייל או סיסמה שגויים",
+  "אין חיבור לרשת — נסה שוב",
+  "אין לי חשבון — צור חשבון",
+  "אם קיים חשבון — נשלח אליו מייל לאיפוס הסיסמה",
+  "אני על אינטרנט מסונן (נטפרי/רימון)",
+  "אפשר לשלוח קוד חדש בעוד $remaining שניות",
+  "האימייל כבר רשום — התחברו במקום",
+  "ההתחברות נכשלה — נסה שוב",
+  "הזן אימייל וסיסמה",
+  "הזן את הקוד בן 6 הספרות שקיבלת ב-SMS",
+  "החלפת מספר",
+  "החשבון הושבת — פנה לתמיכה",
+  "המשך עם Google",
+  "הסיסמה חייבת לפחות 6 תווים",
+  "הסתר סיסמה",
+  "הפרטים כבר משויכים לחשבון אחר — התחברו איתם",
+  "הצג סיסמה",
+  "הקוד נשלח אל $_sentTo · תקף לכ-2 דקות",
+  "התחברת בהצלחה ✓",
+  "חזרה לכניסה עם טלפון",
+  "יותר מדי ניסיונות — נסה שוב מאוחר יותר",
+  "יצירת חשבון חדש עם אימייל וסיסמה",
+  "כבר יש לי חשבון — כניסה",
+  "כניסה עם אימייל",
+  "כניסה עם אימייל וסיסמה",
+  "כניסת Google נכשלה — נסה שוב",
+  "כתובת האימייל אינה תקינה",
+  "מטעמי אבטחה נדרשת התחברות מחדש — התחבר ונסה שוב",
+  "מספר הטלפון אינו תקין",
+  "מספר טלפון נייד",
+  "נשלח לך קוד אימות חד-פעמי ב-SMS",
+  "סיסמה",
+  "סיסמה (6+ תווים)",
+  "סיסמה חלשה (6+ תווים)",
+  "קוד אימות נשלח ב-SMS 📱",
+  "קוד בן 6 ספרות",
+  "קוד האימות שגוי — נסה שוב",
+  "קוד חדש נשלח ב-SMS 📱",
+  "שירות ההתחברות אינו זמין כרגע",
+  "שכחתי סיסמה",
+  "שלח קוד אימות",
+  "שליחת קוד חדש",
+  "שם מלא (לא חובה)",
+  "תוקף הקוד פג — שלח קוד חדש",
+  "✓ החשבון נוצר — שלחנו מייל אימות לכתובת, אַשרו אותו",
+  "✓ מצב אינטרנט מסונן פעיל — כניסה במייל וסיסמה",
+  "🔐 התחברות לחשבון"
+ ],
+ "icons": [
+  "Icons.alternate_email",
+  "Icons.g_mobiledata",
+  "Icons.lock_outline",
+  "Icons.person_outline",
+  "Icons.phone_iphone",
+  "Icons.shield",
+  "Icons.shield_outlined",
+  "Icons.sms_outlined",
+  "Icons.visibility",
+  "Icons.visibility_off"
+ ],
+ "glyphs": [
+  "✓",
+  "🌉",
+  "📱",
+  "🔐"
+ ],
+ "logicCandidates": [
+  {
+   "name": "normalizeIlPhone",
+   "line": 72
+  }
+ ],
+ "widgets": [
+  {
+   "name": "LoginSheet",
+   "kind": "ConsumerStatefulWidget",
+   "line": 111,
+   "loc": 6,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kEmailPasswordAuth"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

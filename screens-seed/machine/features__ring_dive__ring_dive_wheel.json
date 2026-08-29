@@ -1,0 +1,60 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__ring_dive__ring_dive_wheel.dart",
+ "lines": 289,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [
+   9,
+   11
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700",
+   "FontWeight.w900"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "סובב · הקש לבחור"
+ ],
+ "icons": [],
+ "glyphs": [],
+ "logicCandidates": [
+  {
+   "name": "_angleAt",
+   "line": 89
+  },
+  {
+   "name": "_onTap",
+   "line": 144
+  }
+ ],
+ "widgets": [
+  {
+   "name": "RingDiveWheel",
+   "kind": "StatefulWidget",
+   "line": 26,
+   "loc": 34,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kRingDiveFlag"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

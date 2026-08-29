@@ -1,0 +1,65 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__card_keyboard__find_keyboard_panel.dart",
+ "lines": 263,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   13,
+   14
+  ],
+  "fontWeights": [
+   "FontWeight.w400",
+   "FontWeight.w500"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   16
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  "אבג",
+  "בחר כדי לצמצם",
+  "בחר מוצר",
+  "הקש מקש — והוא יעלה לכאן",
+  "התחל שוב",
+  "חזרה",
+  "מצאתי — הקש לפתיחה"
+ ],
+ "icons": [
+  "Icons.arrow_forward",
+  "Icons.inventory_"
+ ],
+ "glyphs": [],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "FindKeyboardPanel",
+   "kind": "ConsumerStatefulWidget",
+   "line": 32,
+   "loc": 21,
+   "pure": false,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "call:showModalBottomSheet"
+   ],
+   "strings": 1,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "call:showModalBottomSheet"
+  ]
+ }
+}

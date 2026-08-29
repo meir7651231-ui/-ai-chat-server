@@ -1,0 +1,152 @@
+{
+ "DepartmentsScreen": {
+  "addProps": [
+   {
+    "name": "t01",
+    "type": "String",
+    "replaces": "מחלקות"
+   },
+   {
+    "name": "aynstlxyh2",
+    "type": "String",
+    "replaces": "אינסטלציה"
+   },
+   {
+    "name": "brzyWsnytryy3",
+    "type": "String",
+    "replaces": "ברזים וסניטריים"
+   },
+   {
+    "name": "jcml4",
+    "type": "String",
+    "replaces": "חשמל"
+   },
+   {
+    "name": "jwmryBnyy5",
+    "type": "String",
+    "replaces": "חומרי בניין"
+   },
+   {
+    "name": "klyEbwdhYdny6",
+    "type": "String",
+    "replaces": "כלי עבודה ידני"
+   },
+   {
+    "name": "klyEbwdh7",
+    "type": "String",
+    "replaces": "כלי עבודה"
+   },
+   {
+    "name": "jwtXynwrwt8",
+    "type": "String",
+    "replaces": "חותך צינורות"
+   },
+   {
+    "name": "klyEbwdhJcmly9",
+    "type": "String",
+    "replaces": "כלי עבודה חשמלי"
+   },
+   {
+    "name": "klyRytwPPR10",
+    "type": "String",
+    "replaces": "כלי ריתוך PPR"
+   },
+   {
+    "name": "xbeWklyLxbe11",
+    "type": "String",
+    "replaces": "צבע וכלים לצבע"
+   },
+   {
+    "name": "gbsWfrwfyly12",
+    "type": "String",
+    "replaces": "גבס ופרופילים"
+   },
+   {
+    "name": "asfqhTknyt13",
+    "type": "String",
+    "replaces": "אספקה טכנית"
+   },
+   {
+    "name": "mjlqh14",
+    "type": "String",
+    "replaces": "מחלקה"
+   },
+   {
+    "name": "txt15",
+    "type": "String",
+    "replaces": "🗂️"
+   },
+   {
+    "name": "ayMjlqwtEdyy16",
+    "type": "String",
+    "replaces": "אין מחלקות עדיין — יופיעו עם טעינת קטלוג החברה"
+   }
+  ],
+  "note": ""
+ },
+ "_DeptTile": {
+  "addProps": [
+   {
+    "name": "t02",
+    "type": "String",
+    "replaces": "בקרוב"
+   },
+   {
+    "name": "tplDeptnameBqrwb2",
+    "type": "String",
+    "replaces": "${dept.name} — בקרוב"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_DeptScopeBar": {
+  "addProps": [
+   {
+    "name": "t03",
+    "type": "String",
+    "replaces": "כל המחלקות"
+   },
+   {
+    "name": "myNqyy2",
+    "type": "String",
+    "replaces": "מים נקיים"
+   },
+   {
+    "name": "cfky3",
+    "type": "String",
+    "replaces": "שפכים"
+   },
+   {
+    "name": "qtlwg4",
+    "type": "String",
+    "replaces": "קטלוג"
+   },
+   {
+    "name": "klHmwxry5",
+    "type": "String",
+    "replaces": "כל המוצרים"
+   }
+  ],
+  "note": ""
+ },
+ "_DeptCatGroups": {
+  "addProps": [
+   {
+    "name": "t04",
+    "type": "String",
+    "replaces": "אין קטגוריות במחלקה זו"
+   },
+   {
+    "name": "t05",
+    "type": "String",
+    "replaces": "הקטגוריות יופיעו כאן כשיתווסף קטלוג למחלקה"
+   },
+   {
+    "name": "txt3",
+    "type": "String",
+    "replaces": "🗂️"
+   }
+  ],
+  "note": ""
+ }
+}

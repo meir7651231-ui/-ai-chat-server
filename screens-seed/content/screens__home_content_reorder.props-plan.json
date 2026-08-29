@@ -1,0 +1,47 @@
+{
+ "HomeContentReorder": {
+  "addProps": [
+   {
+    "name": "t01",
+    "type": "String",
+    "replaces": "🏠 תוכן הבית"
+   },
+   {
+    "name": "t02",
+    "type": "String",
+    "replaces": "‹ חזרה"
+   }
+  ],
+  "note": ""
+ },
+ "_SectionSlot": {
+  "addProps": [
+   {
+    "name": "grwrLsydwrMjdc1",
+    "type": "String",
+    "replaces": "גרור לסידור מחדש"
+   },
+   {
+    "name": "hxgSqxyh2",
+    "type": "String",
+    "replaces": "הצג סקציה"
+   },
+   {
+    "name": "hstrSqxyh3",
+    "type": "String",
+    "replaces": "הסתר סקציה"
+   },
+   {
+    "name": "hzzLmelh4",
+    "type": "String",
+    "replaces": "הזז למעלה"
+   },
+   {
+    "name": "hzzLmth5",
+    "type": "String",
+    "replaces": "הזז למטה"
+   }
+  ],
+  "note": ""
+ }
+}

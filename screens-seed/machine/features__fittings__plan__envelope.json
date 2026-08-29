@@ -1,0 +1,49 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__fittings__plan__envelope.dart",
+ "lines": 93,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  " show immutable;\n\n/// תיבת-חוסם אחידה לאביזר: אורך-ציר ראשי + קוטר-רדיאלי + היקף-משני אופציונלי\n/// (לזרוע-ברך / הסתעפות-טי / ידית-ברז) — מספיק לפריסת-3D ולבורר-מצלמה.\n@immutable\nclass Envelope {\n  const Envelope({\n    required this.axialLength,\n    required this.radialDiameter,\n    this.secondaryExtent,\n  });\n\n  /// האורך לאורך ציר-הזרימה הראשי (מ״מ).\n  final double axialLength;\n\n  /// הקוטר-החיצוני המרבי בחתך (מ״מ).\n  final double radialDiameter;\n\n  /// היקף-משני ניצב (זרוע-ברך `l` · גובה-הסתעפות `A` · גובה-ידית `h`) — `null`\n  /// למשפחה ישרה (מצמד/פקק/מצרה).\n  final double? secondaryExtent;\n\n  @override\n  bool operator ==(Object other) =>\n      other is Envelope &&\n      other.axialLength == axialLength &&\n      other.radialDiameter == radialDiameter &&\n      other.secondaryExtent == secondaryExtent;\n\n  @override\n  int get hashCode => Object.hash(axialLength, radialDiameter, secondaryExtent);\n\n  @override\n  String toString() =>\n      ",
+  "));\n    default:\n      return null;\n  }\n}\n\n/// המשפחות ש-`envelopeFor` יודע לחסום (מונע קריאת-`generate` שזורקת על לא-מוכר).\nconst Set<String> _kEnvelopeFamilies = {\n  ",
+  ": // ישר: אורך A, קוטר B\n      return _mk(f(",
+  ";\n}\n\n/// תיבת-החוסם של (family, od[, od2]) — נגזרת מאותיות `generate`. `null` כשאין\n/// מספיק אותיות (מחוץ-לתחום) — fallback, לעולם לא תיבה שגויה (M1).\nEnvelope? envelopeFor(String family, int od, {int? od2}) {\n  if (!_kEnvelopeFamilies.contains(family)) return null; // unknown → fallback\n  final d = generate(family, od, od2: od2);\n  double? f(String k) => d[k];\n\n  switch (family) {\n    case ",
+  "ברז כדורי",
+  "ברך 45°",
+  "ברך 90°",
+  "ברך מחותכת",
+  "מסעף (טי)",
+  "מצרה",
+  "מתאם תבריג",
+  "פקק",
+  "צווארון",
+  "רוכב"
+ ],
+ "icons": [],
+ "glyphs": [
+  "🔌"
+ ],
+ "logicCandidates": [
+  {
+   "name": "Envelope",
+   "line": 14,
+   "kind": "metrics-class"
+  }
+ ],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

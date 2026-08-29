@@ -1,0 +1,12 @@
+{
+ "BuildPlanExportScreen": {
+  "addProps": [
+   {
+    "name": "yyxwamsmPreviewOffliv1",
+    "type": "String",
+    "replaces": "ייצוא-מסמך · preview (off-live)"
+   }
+  ],
+  "note": ""
+ }
+}

@@ -1,0 +1,68 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__word_finder__narrow_axis.dart",
+ "lines": 153,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "t substitutes.\n/// Returns a deduped set; the family tag lets the chooser keep family-\n/// coherent ordering (no inch interleaved with cm).\nList<SizeToken> productSizeTokens(LipskeyCatalogProduct p) {\n  final out = <SizeToken>{...parseSizeTokens(p.nameHe)};\n  final d = p.dims;\n  if (d != null) out.addAll(tokensFromDims(d));\n  return out.toList();\n}\n\n/// Sorted, deduped chip list for the pool. Keeps every family the pool\n/// surfaces (mm + cm, inch + DN, …) but groups them so the row reads\n/// coherently: all mm in numeric order, THEN all cm in numeric order — never\n/// `200 · 25 · 250 · 30` interleaved. Length equivalents across cm/meters/mm\n/// collapse to one chip (e.g. `15 ס\"מ` ≡ `0.15 מ׳`).\nList<SizeToken> sizeTokensIn(List<LipskeyCatalogProduct> ps) {\n  final all = <SizeToken>{};\n  for (final p in ps) {\n    all.addAll(productSizeTokens(p));\n  }\n  final out = dedupLengthByMm(all.toList());\n  sortSizeTokens(out);\n  return out;\n}\n\n/// Angle chips for the pool (separate axis — used only when sizes don",
+  "אמריקאי",
+  "אפשרות",
+  "גודל",
+  "דגם",
+  "זווית",
+  "כביסה",
+  "לכיור",
+  "למדיח",
+  "למקלחת",
+  "מחסומי רצפה",
+  "מחסומים גלויים",
+  "מטבח",
+  "מכסה",
+  "מכסים ורשתות",
+  "מרובע",
+  "נחושת",
+  "ניקל",
+  "נסתר",
+  "סגור",
+  "עגול",
+  "פתוח",
+  "צבע",
+  "קומקום",
+  "רשת",
+  "שחור"
+ ],
+ "icons": [],
+ "glyphs": [],
+ "logicCandidates": [
+  {
+   "name": "wordOptions",
+   "line": 57
+  },
+  {
+   "name": "return",
+   "line": 121
+  },
+  {
+   "name": "productHasChip",
+   "line": 134
+  }
+ ],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kFinderFacets"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

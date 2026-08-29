@@ -1,0 +1,139 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__defects_sheet.dart",
+ "lines": 548,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.brandDark",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   11.5,
+   12.5,
+   13,
+   13.5,
+   14,
+   15,
+   16,
+   18
+  ],
+  "fontWeights": [
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ",\n                      style: const TextStyle(\n                        color: BsTokens.brandDark,\n                        fontWeight: FontWeight.w700,\n                        fontSize: 11.5,\n                      ),\n                    ),\n                  ),\n              ],\n            ),\n          ],\n        ],\n      ),\n    );\n  }\n}\n\n/// The role-aware add-form (one instance per session) — name (required) ·\n/// מיקום (optional) · חומרה (a segmented choice incl. an unspecified default) ·\n/// a brand-filled save. Bound to the State",
+  ";\n\n/// Open the shared ליקויים sheet — the wire target for the ",
+  "` to TaskItem + the `defectsProvider` kind-filter, and\n// the contractor/worker authoring rides the same createTask/proposeTask the\n// regular §6 tasks use). \"ליקויים same as משימות\" — a defect reuses the ENTIRE\n// task lifecycle, so this surface adds NO new approve/reject UI:\n//   • CONTRACTOR (the `manager`-role board that opens tasks_screen",
+  "s _contractorProposals), no separate approval here.\n//\n// PARALLEL to contractor_attendance_sheet.dart — same showXSheet +\n// DraggableScrollableSheet + RTL + grab-handle/header/close idiom — but the body\n// is a ConsumerStatefulWidget because the add-form owns TextEditingControllers\n// (disposed with the State). HONEST by construction: only defects that exist are\n// listed; 🔧 מיקום / a severity badge appear only when non-empty (never an\n// invented place/severity); an empty name is a no-op (no toast).\n//\n// SCOPING mirrors the existing idioms: the contractor sees this employer",
+  "s queue.\n//   • WORKER → \"➕ דווח ליקוי\" mints a `proposed` defect (proposeTask,\n//     kind:",
+  "אין ליקויים",
+  "בינוני",
+  "דווח ליקוי",
+  "דווח על ליקוי שמצאת — הוא יישלח לקבלן לאישור.",
+  "הליקוי דווח לקבלן לאישור 🔧",
+  "הליקוי נפתח 🔧",
+  "חומרה",
+  "חמור",
+  "לדוגמה: אמבטיה ראשית",
+  "לדוגמה: נזילה מתחת לכיור",
+  "מה הליקוי",
+  "מיקום (אופציונלי)",
+  "סגור",
+  "פתח ליקוי",
+  "פתח ליקוי ושייך אותו לעובד, ועקוב אחרי הליקויים הפתוחים.",
+  "קל",
+  "רשימת ליקויים",
+  "➕ דווח ליקוי",
+  "➕ פתח ליקוי",
+  "🔧 ליקויים"
+ ],
+ "icons": [
+  "Icons.close"
+ ],
+ "glyphs": [
+  "⚠",
+  "✕",
+  "➕",
+  "🔧"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "_DefectsSheet",
+   "kind": "ConsumerStatefulWidget",
+   "line": 59,
+   "loc": 6,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_DefectRow",
+   "kind": "StatelessWidget",
+   "line": 297,
+   "loc": 84,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_AddDefectForm",
+   "kind": "StatelessWidget",
+   "line": 387,
+   "loc": 117,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 5,
+   "constData": 0
+  },
+  {
+   "name": "_SeverityChip",
+   "kind": "StatelessWidget",
+   "line": 507,
+   "loc": 41,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kDemoContractorId",
+  "kTaskStatusLabel"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

@@ -1,0 +1,53 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__card_keyboard__opening_surface.dart",
+ "lines": 153,
+ "pigments": {
+  "tokens": [
+   "BsTokens.space1",
+   "BsTokens.space2"
+  ],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "הקלד או דבר…",
+  "חיפוש קולי",
+  "עוד…",
+  "פחות"
+ ],
+ "icons": [
+  "Icons.mic"
+ ],
+ "glyphs": [],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "OpeningSurface",
+   "kind": "StatelessWidget",
+   "line": 14,
+   "loc": 139,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 4,
+   "constData": 1
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kFirstWordCount",
+  "kOpeningSurfaceIsSingleMouth"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

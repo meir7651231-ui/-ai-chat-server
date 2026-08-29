@@ -1,0 +1,102 @@
+{
+ "StockScreen": {
+  "addProps": [
+   {
+    "name": "t01",
+    "type": "String",
+    "replaces": "המלאי שלי"
+   },
+   {
+    "name": "t02",
+    "type": "String",
+    "replaces": "📦 המלאי שלי"
+   },
+   {
+    "name": "t03",
+    "type": "String",
+    "replaces": "💡 כשתסמן פריט כ\"במחסן\" או \"באתר\" בעץ המוצרים — הוא יופיע כאן."
+   },
+   {
+    "name": "bqcwtJwmr4",
+    "type": "String",
+    "replaces": "בקשות חומר"
+   },
+   {
+    "name": "txt5",
+    "type": "String",
+    "replaces": "📥"
+   },
+   {
+    "name": "hmjs6",
+    "type": "String",
+    "replaces": "🏬 המחסן"
+   },
+   {
+    "name": "hatr7",
+    "type": "String",
+    "replaces": "🏗️ האתר"
+   },
+   {
+    "name": "txt8",
+    "type": "String",
+    "replaces": "📦"
+   },
+   {
+    "name": "hfrytHwebr9",
+    "type": "String",
+    "replaces": "הפריט הועבר"
+   }
+  ],
+  "note": ""
+ },
+ "_StockRow": {
+  "addProps": [
+   {
+    "name": "latr1",
+    "type": "String",
+    "replaces": "↦ לאתר"
+   },
+   {
+    "name": "lmjs2",
+    "type": "String",
+    "replaces": "↤ למחסן"
+   }
+  ],
+  "note": ""
+ },
+ "_Empty": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🏬"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "🏗️"
+   },
+   {
+    "name": "hmjsRyq3",
+    "type": "String",
+    "replaces": "המחסן ריק"
+   },
+   {
+    "name": "ayFrytyBatr4",
+    "type": "String",
+    "replaces": "אין פריטים באתר"
+   },
+   {
+    "name": "tplSmFrytyKwarehouse5",
+    "type": "String",
+    "replaces": "סמן פריטים כ\"${warehouse ? "
+   },
+   {
+    "name": "batr6",
+    "type": "String",
+    "replaces": "באתר"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

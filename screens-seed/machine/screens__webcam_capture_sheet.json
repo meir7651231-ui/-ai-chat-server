@@ -1,0 +1,66 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__webcam_capture_sheet.dart",
+ "lines": 281,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.radiusPill",
+   "BsTokens.space4"
+  ],
+  "themeSockets": [],
+  "fontSizes": [
+   18
+  ],
+  "fontWeights": [
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "אין גישה למצלמה",
+  "החלף מצלמה",
+  "סגור",
+  "צלם",
+  "📸 צלם"
+ ],
+ "icons": [
+  "Icons.cameraswitch_outlined",
+  "Icons.close"
+ ],
+ "glyphs": [
+  "📸"
+ ],
+ "logicCandidates": [
+  {
+   "name": "dispose",
+   "line": 73
+  }
+ ],
+ "widgets": [
+  {
+   "name": "WebcamCaptureScreen",
+   "kind": "StatefulWidget",
+   "line": 52,
+   "loc": 6,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kWebcamCancelled"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

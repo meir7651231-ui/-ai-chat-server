@@ -1,0 +1,182 @@
+{
+ "_ClockCard": {
+  "addProps": [
+   {
+    "name": "today",
+    "type": "String",
+    "replaces": "היום"
+   },
+   {
+    "name": "locRecorded",
+    "type": "String",
+    "replaces": "📍 מיקום נרשם"
+   },
+   {
+    "name": "knysh3",
+    "type": "String",
+    "replaces": "🟢 כניסה"
+   },
+   {
+    "name": "yxyah4",
+    "type": "String",
+    "replaces": "🔴 יציאה"
+   },
+   {
+    "name": "nrcmhNwkjwtLhyw5",
+    "type": "String",
+    "replaces": "✓ נרשמה נוכחות להיום"
+   },
+   {
+    "name": "knysh6",
+    "type": "String",
+    "replaces": "כניסה"
+   },
+   {
+    "name": "yxyah7",
+    "type": "String",
+    "replaces": "יציאה"
+   },
+   {
+    "name": "shkCewt8",
+    "type": "String",
+    "replaces": "סה\"כ שעות"
+   }
+  ],
+  "note": ""
+ },
+ "_CalendarCard": {
+  "addProps": [
+   {
+    "name": "prev",
+    "type": "String",
+    "replaces": "‹ הקודם"
+   },
+   {
+    "name": "next",
+    "type": "String",
+    "replaces": "הבא ›"
+   },
+   {
+    "name": "noRecords",
+    "type": "String",
+    "replaces": "אין רישומי נוכחות בחודש זה"
+   },
+   {
+    "name": "monthTotal",
+    "type": "String",
+    "replaces": "סה\"כ חודשי"
+   },
+   {
+    "name": "tplDayCountYmyFmtDurtota5",
+    "type": "String",
+    "replaces": "$dayCount ימים · ${_fmtDur(total)} שעות"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_DayCell": {
+  "addProps": [
+   {
+    "name": "tplYwDomWorked1",
+    "type": "String",
+    "replaces": "יום $dom, ${worked == null ? "
+   },
+   {
+    "name": "tplFmtDurworkedCewt2",
+    "type": "String",
+    "replaces": "${_fmtDur(worked)} שעות"
+   },
+   {
+    "name": "tplYwDomAy3",
+    "type": "String",
+    "replaces": "יום $dom, אין רישום"
+   },
+   {
+    "name": "txt4",
+    "type": "String",
+    "replaces": "📍"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_DayDetailSheet": {
+  "addProps": [
+   {
+    "name": "noLocDay",
+    "type": "String",
+    "replaces": "📍 לא נרשם מיקום ביום זה"
+   },
+   {
+    "name": "workSummary",
+    "type": "String",
+    "replaces": "סיכום עבודה יומי"
+   },
+   {
+    "name": "noWorkDay",
+    "type": "String",
+    "replaces": "אין פירוט-עבודה משויך ליום זה"
+   },
+   {
+    "name": "tplFmtDateKeyLongdaydate4",
+    "type": "String",
+    "replaces": "🗓️ ${_fmtDateKeyLong(day.date)}"
+   },
+   {
+    "name": "sgwr5",
+    "type": "String",
+    "replaces": "סגור"
+   },
+   {
+    "name": "knysh6",
+    "type": "String",
+    "replaces": "כניסה"
+   },
+   {
+    "name": "yxyah7",
+    "type": "String",
+    "replaces": "יציאה"
+   },
+   {
+    "name": "shkCewt8",
+    "type": "String",
+    "replaces": "סה\"כ שעות"
+   },
+   {
+    "name": "tplFmtDateKeyLongdaydateMy9",
+    "type": "String",
+    "replaces": "${_fmtDateKeyLong(day.date)} — מיקום כניסה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_LocationButton": {
+  "addProps": [
+   {
+    "name": "openNav",
+    "type": "String",
+    "replaces": "מיקום הכניסה — פתח ניווט"
+   },
+   {
+    "name": "ftjNywwtLmyqw2",
+    "type": "String",
+    "replaces": "פתח ניווט למיקום"
+   }
+  ],
+  "note": ""
+ },
+ "_WorkLine": {
+  "addProps": [
+   {
+    "name": "tplItemstepsDoneitemstepsTo1",
+    "type": "String",
+    "replaces": "${item.stepsDone}/${item.stepsTotal} שלבים"
+   },
+   {
+    "name": "htjylBywZh2",
+    "type": "String",
+    "replaces": "התחיל ביום זה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

@@ -1,0 +1,107 @@
+{
+ "DocsReadinessGate": {
+  "addProps": [
+   {
+    "name": "t01",
+    "type": "String",
+    "replaces": "🔒 מסמכים חסרים"
+   },
+   {
+    "name": "t02",
+    "type": "String",
+    "replaces": "‹ יציאה"
+   },
+   {
+    "name": "t03",
+    "type": "String",
+    "replaces": "🔒 מסמכים חסרים — לא ניתן להתחיל עבודה"
+   },
+   {
+    "name": "txt4",
+    "type": "String",
+    "replaces": "🔒"
+   },
+   {
+    "name": "kdyLhtjylLebwd5",
+    "type": "String",
+    "replaces": "כדי להתחיל לעבוד צריך להשלים את המסמכים הנדרשים ולוודא שהם בתוקף."
+   },
+   {
+    "name": "kdyLhtjylMcmrt6",
+    "type": "String",
+    "replaces": "כדי להתחיל משמרת צריך להשלים את תעודות-הנהג הנדרשות ולוודא שהן בתוקף."
+   },
+   {
+    "name": "jwsJwbhLhcly7",
+    "type": "String",
+    "replaces": "⛔ חוסם — חובה להשלים"
+   },
+   {
+    "name": "ayFrytyJwsmy8",
+    "type": "String",
+    "replaces": "אין פריטים חוסמים"
+   },
+   {
+    "name": "ltcwmtLbYfwg9",
+    "type": "String",
+    "replaces": "⚠️ לתשומת לבך — יפוג בקרוב"
+   },
+   {
+    "name": "mlajtwTwfs10110",
+    "type": "String",
+    "replaces": "📝 מלא/חתום טופס 101"
+   },
+   {
+    "name": "tyqBtyjwtTewdwt11",
+    "type": "String",
+    "replaces": "🦺 תיק בטיחות — תעודות"
+   },
+   {
+    "name": "tewdwtNhg12",
+    "type": "String",
+    "replaces": "🚗 תעודות נהג"
+   },
+   {
+    "name": "rcymtHmsmkyHndrcy13",
+    "type": "String",
+    "replaces": "ℹ️ רשימת המסמכים הנדרשים כאן היא כלל-הדגמה זמני. "
+   },
+   {
+    "name": "hmesyqYgdyrAt14",
+    "type": "String",
+    "replaces": "המעסיק יגדיר את רשימת המסמכים המחייבת בצד-השרת."
+   },
+   {
+    "name": "twfs10115",
+    "type": "String",
+    "replaces": "טופס 101"
+   },
+   {
+    "name": "tyqBtyjwt16",
+    "type": "String",
+    "replaces": "תיק בטיחות"
+   },
+   {
+    "name": "bdwqCwb17",
+    "type": "String",
+    "replaces": "בדוק שוב"
+   },
+   {
+    "name": "tewdwtNhg18",
+    "type": "String",
+    "replaces": "תעודות נהג"
+   }
+  ],
+  "note": ""
+ },
+ "_RecheckButton": {
+  "addProps": [
+   {
+    "name": "t04",
+    "type": "String",
+    "replaces": "🔄 בדוק שוב"
+   }
+  ],
+  "note": ""
+ }
+}

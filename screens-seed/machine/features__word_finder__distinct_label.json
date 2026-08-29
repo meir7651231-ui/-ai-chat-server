@@ -1,0 +1,42 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__word_finder__distinct_label.dart",
+ "lines": 319,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "\n    show quickLabel;\n\n// ── Reversible display-format defaults (OWNER-REVIEW) ───────────────────────\n//\n// These three constants are the ONLY display-format choices in this file. They\n// are reversible defaults the owner may reword/reorder without touching the\n// distinction LOGIC.\n\n/// OWNER-REVIEW: the separator between the base word and a distinguishing\n/// suffix (e.g. `ברז שחור`). A single space reads as plain language; change it\n/// to ",
+  "ברז"
+ ],
+ "icons": [],
+ "glyphs": [],
+ "logicCandidates": [
+  {
+   "name": "_axisValue",
+   "line": 176
+  },
+  {
+   "name": "_Row",
+   "line": 131,
+   "kind": "metrics-class"
+  }
+ ],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kDistinctAxisOrder",
+  "kLabelAxisSeparator"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

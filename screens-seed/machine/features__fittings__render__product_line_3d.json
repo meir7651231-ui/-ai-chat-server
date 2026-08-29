@@ -1,0 +1,48 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__fittings__render__product_line_3d.dart",
+ "lines": 57,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [],
+ "icons": [],
+ "glyphs": [
+  "🔒",
+  "🧊"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "ProductLine3D",
+   "kind": "StatelessWidget",
+   "line": 18,
+   "loc": 39,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kDefaultPitch",
+  "kDefaultYaw",
+  "kFrameDistRatio",
+  "kStageBackground"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

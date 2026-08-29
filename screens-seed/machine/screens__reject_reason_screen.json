@@ -1,0 +1,85 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__reject_reason_screen.dart",
+ "lines": 182,
+ "pigments": {
+  "tokens": [
+   "BsTokens.bgLight",
+   "BsTokens.cardLight",
+   "BsTokens.divider",
+   "BsTokens.inkLight",
+   "BsTokens.mutedDark",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [],
+  "fontSizes": [
+   11,
+   15,
+   18
+  ],
+  "fontWeights": [
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "אתה מנסח הודעת-דחייה מנומסת ומקצועית לבקשת-תפקיד. בחר סיבה כללית ומכובדת ",
+  "בהזמנה להגיש שוב בעתיד. אל תמציא עובדות ספציפיות על האדם — הישאר ",
+  "בקשת-תפקיד: ${widget.role}",
+  "ברמת-הקטגוריה בלבד.",
+  "האדם. קצר, מכבד, ומסתיים בהזמנה להגיש שוב.",
+  "המבקש",
+  "הנוסח הועתק",
+  "העתק",
+  "מתוך הקטגוריות שניתנו, נסח אותה בעדינות, ולעולם אל תמציא עובדות ספציפיות על ",
+  "נסח הודעת-דחייה קצרה, מנומסת ומקצועית בעברית, מופנית למבקש, שמסתיימת ",
+  "פרטים על המבקש.",
+  "⚙️ נוסח כללי ומכובד; ערוך לפי הצורך לפני שליחה. ה-AI לא ממציא ",
+  "✨ סיבת-דחייה",
+  "💡 ניסוח-הסיבה החכם דורש חיבור לשרת."
+ ],
+ "icons": [],
+ "glyphs": [
+  "⚙",
+  "✨",
+  "💡",
+  "📋"
+ ],
+ "logicCandidates": [
+  {
+   "name": "setState",
+   "line": 90
+  }
+ ],
+ "widgets": [
+  {
+   "name": "RejectReasonScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 50,
+   "loc": 14,
+   "pure": false,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:RejectReasonScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kClaudeAi"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:RejectReasonScreen"
+  ]
+ }
+}

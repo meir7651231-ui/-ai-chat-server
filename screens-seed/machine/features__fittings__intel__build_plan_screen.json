@@ -1,0 +1,69 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__fittings__intel__build_plan_screen.dart",
+ "lines": 115,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [
+   12,
+   13
+  ],
+  "fontWeights": [
+   "FontWeight.w700"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "${seg.cutLength.toStringAsFixed(1)} מ״מ",
+  "${seg.fromFamily} ← צינור OD${seg.od} → ${seg.toFamily}",
+  ";\n\n/// מסך \"תוכנית-בנייה\": 3D + סיכום-רצף + טבלת-כתב-חיתוך. מרחק-מרכזים נומינלי (מוגדר).\nclass BuildPlanScreen extends StatelessWidget {\n  const BuildPlanScreen({\n    this.route = _demoRoute,\n    this.nominalSpacing = 200,\n    super.key,\n  });\n\n  final List<RunElement> route;\n  final double nominalSpacing;\n\n  static const List<RunElement> _demoRoute = [\n    RunElement(Family.coupler, 50),\n    RunElement(Family.elbow90, 50, dir: Dir.up),\n    RunElement(Family.tee, 50),\n    RunElement(Family.reducer, 50, od2: 32),\n    RunElement(Family.coupler, 32),\n    RunElement(Family.elbow90, 32, dir: Dir.down),\n    RunElement(Family.plug, 32),\n  ];\n\n  @override\n  Widget build(BuildContext context) {\n    final cuts = cutListUniform(route, nominalSpacing);\n    return Scaffold(\n      backgroundColor: kStageBackground,\n      appBar: AppBar(\n        backgroundColor: const Color(0xFF151F2A),\n        foregroundColor: Colors.white,\n        title: const Text(\n          ",
+  "אין מרווחי-צינור ברצף",
+  "כתב-חיתוך (אורכי-צינור פר-מרווח)"
+ ],
+ "icons": [],
+ "glyphs": [
+  "🔒",
+  "🧠"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "BuildPlanScreen",
+   "kind": "StatelessWidget",
+   "line": 14,
+   "loc": 65,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 3,
+   "constData": 0
+  },
+  {
+   "name": "_CutTile",
+   "kind": "StatelessWidget",
+   "line": 80,
+   "loc": 35,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kStageBackground"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

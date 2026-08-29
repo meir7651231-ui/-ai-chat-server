@@ -1,0 +1,42 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__word_finder__synonym_bridge.dart",
+ "lines": 88,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "s text +\n// voice input (P4 step 54). kQuerySynonyms maps a typed/spoken alias to its\n// canonical token (a kMaterials key, a colour/finish, or an everyday noun like\n// מרפק→ברך). normalizeQuery folds them: LATIN aliases via an ASCII word-boundary\n// regex (so ",
+  "ברך",
+  "מרפק",
+  "נחושת",
+  "נירוסטה",
+  "פוליאתילן",
+  "פלדה",
+  "פליז",
+  "פקס",
+  "פקסגול",
+  "רב-שכבתי"
+ ],
+ "icons": [],
+ "glyphs": [],
+ "logicCandidates": [],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kDivePool",
+  "kMaterials",
+  "kQuerySynonyms"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

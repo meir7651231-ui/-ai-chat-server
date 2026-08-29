@@ -1,0 +1,362 @@
+{
+ "WorkerReportsTab": {
+  "addProps": [
+   {
+    "name": "title",
+    "type": "String",
+    "replaces": "📊 דוחות"
+   },
+   {
+    "name": "timeEmpty",
+    "type": "String",
+    "replaces": "אין עדיין מדידות זמן — הזמן נמדד אוטומטית מרגע תחילת משימה ועד אישורה."
+   },
+   {
+    "name": "areaNote",
+    "type": "String",
+    "replaces": "האזור נגזר משם המשימה (אין שדה אתר במנוע המשימות). שיוך לאתרי פרויקט אמיתיים יחובר עם חיבור השרת."
+   },
+   {
+    "name": "historyEmpty",
+    "type": "String",
+    "replaces": "עוד לא הגשת משימות לאישור — ההגשות שלך יופיעו כאן."
+   },
+   {
+    "name": "rejectionsEmpty",
+    "type": "String",
+    "replaces": "אין משימות שנדחו לתיקון."
+   },
+   {
+    "name": "sendDailyButton",
+    "type": "String",
+    "replaces": "💬 שלח דוח יומי לקבלן"
+   },
+   {
+    "name": "aiButton",
+    "type": "String",
+    "replaces": "נסח דוח עם AI"
+   },
+   {
+    "name": "sendNote",
+    "type": "String",
+    "replaces": "הדוח נשלח כהודעה אמיתית לשיחת הקבלן (טאב שיחות) — סיכום הסטטוסים הנוכחי, בלי המצאות."
+   },
+   {
+    "name": "tplStreakYmy9",
+    "type": "String",
+    "replaces": "$streak ימים"
+   },
+   {
+    "name": "tplNtwnyJyyMhmcymwt10",
+    "type": "String",
+    "replaces": "נתונים חיים מהמשימות של ${workerShortName(worker)} — ללא המצאות"
+   },
+   {
+    "name": "aycwrRacw11",
+    "type": "String",
+    "replaces": "אישור ראשון"
+   },
+   {
+    "name": "ajwzHhgcwtCawcrw12",
+    "type": "String",
+    "replaces": "אחוז ההגשות שאושרו בלי דחייה מתוך כלל ההגשות. לחיצה פותחת פירוט מלא של הנתון."
+   },
+   {
+    "name": "aycwrracw13",
+    "type": "String",
+    "replaces": "אישור-ראשון 🎯"
+   },
+   {
+    "name": "tplMazOrgTermref14",
+    "type": "String",
+    "replaces": "מאזן ${orgTerm(ref, "
+   },
+   {
+    "name": "AppBrandclubHmcwtLkl15",
+    "type": "String",
+    "replaces": ", AppBrand.club)} המשותף לכל התפקידים במכשיר (אינו נצבר לעובד בנפרד). לחיצה פותחת פירוט."
+   },
+   {
+    "name": "BuildCoinsMwedwMcwt16",
+    "type": "String",
+    "replaces": "BuildCoins (מועדון משותף) 🪙"
+   },
+   {
+    "name": "rxFeylwt17",
+    "type": "String",
+    "replaces": "רצף פעילות"
+   },
+   {
+    "name": "msfrHymyHrxwfy18",
+    "type": "String",
+    "replaces": "מספר הימים הרצופים עם פעילות לפי שעון-המשימות. לחיצה פותחת פירוט הרצף."
+   },
+   {
+    "name": "rxFeylwt19",
+    "type": "String",
+    "replaces": "רצף פעילות 🔥"
+   },
+   {
+    "name": "tplAycwrracwHgcwtCawcrw20",
+    "type": "String",
+    "replaces": "אישור-ראשון = הגשות שאושרו בלי דחייה מתוך כלל ההגשות — עדיין אין הגשות. מטבעות — מאזן ${orgTerm(ref, "
+   },
+   {
+    "name": "AppBrandclubHmcwtLkl21",
+    "type": "String",
+    "replaces": ", AppBrand.club)} המשותף לכל התפקידים במכשיר (אינו נצבר לעובד בנפרד); הרצף נמדד משעון המשימות (ימים רצופים עם פעילות)."
+   },
+   {
+    "name": "tplAycwrracwFirstPassMtw22",
+    "type": "String",
+    "replaces": "אישור-ראשון: $firstPass מתוך ${submitted.length} הגשות אושרו בלי דחייה. מטבעות — מאזן ${orgTerm(ref, "
+   },
+   {
+    "name": "sykwCbweyMcymwt23",
+    "type": "String",
+    "replaces": "📅 סיכום שבועי — משימות שאושרו"
+   },
+   {
+    "name": "ewdAyMcymwt24",
+    "type": "String",
+    "replaces": "עוד אין משימות שאושרו — משימה שתאושר תופיע כאן."
+   },
+   {
+    "name": "ayMcymwtCawcrw25",
+    "type": "String",
+    "replaces": "אין משימות שאושרו השבוע."
+   },
+   {
+    "name": "tplLlaTaryNoDate26",
+    "type": "String",
+    "replaces": "🗓️ ללא תאריך: $noDate ${noDate == 1 ? "
+   },
+   {
+    "name": "mcymwtCawcrw27",
+    "type": "String",
+    "replaces": "משימות שאושרו"
+   },
+   {
+    "name": "zmLklMcymh28",
+    "type": "String",
+    "replaces": "⏱️ זמן לכל משימה"
+   },
+   {
+    "name": "zmMcymh29",
+    "type": "String",
+    "replaces": "זמן משימה"
+   },
+   {
+    "name": "mxygAtMcHebwdh30",
+    "type": "String",
+    "replaces": "מציג את משך-העבודה שנמדד למשימה. לחיצה פותחת פירוט זמן מלא של המשימה."
+   },
+   {
+    "name": "tplBbyxweMazHhmmclocktids31",
+    "type": "String",
+    "replaces": "🔨 בביצוע מאז ${_hhmm(clock[t.id]!.startedAt!)}"
+   },
+   {
+    "name": "fyrwtLfyAzwr32",
+    "type": "String",
+    "replaces": "📍 פירוט לפי אזור עבודה"
+   },
+   {
+    "name": "azwrEbwdh33",
+    "type": "String",
+    "replaces": "אזור עבודה"
+   },
+   {
+    "name": "mskKmhMcymwt34",
+    "type": "String",
+    "replaces": "מסכם כמה משימות אושרו בכל אזור (הנגזר משם המשימה). לחיצה פותחת את המשימות באזור."
+   },
+   {
+    "name": "tplLengthevaluelengthAwcrw35",
+    "type": "String",
+    "replaces": ").length}/${e.value.length} אושרו"
+   },
+   {
+    "name": "tplHystwryytHgcwtSubmitte36",
+    "type": "String",
+    "replaces": "📋 היסטוריית הגשות (${submitted.length})"
+   },
+   {
+    "name": "tplDjywtLtyqwRejectedTas37",
+    "type": "String",
+    "replaces": "↩️ דחיות לתיקון (${rejectedTasks.length})"
+   },
+   {
+    "name": "sybtDjyyh38",
+    "type": "String",
+    "replaces": "סיבת דחייה"
+   },
+   {
+    "name": "ljyxhFwtjtAt39",
+    "type": "String",
+    "replaces": "לחיצה פותחת את סיבת הדחייה של המנהל ואת פרטי המשימה לתיקון."
+   },
+   {
+    "name": "tplTnameHxgSybt40",
+    "type": "String",
+    "replaces": "${t.name} — הצג סיבת דחייה"
+   },
+   {
+    "name": "tplSybtHmnhlRejectNotesti41",
+    "type": "String",
+    "replaces": "סיבת המנהל: \"${rejectNotes[t.id]}\""
+   },
+   {
+    "name": "hmnhlLaXyr42",
+    "type": "String",
+    "replaces": "המנהל לא צירף סיבה לדחייה."
+   },
+   {
+    "name": "cljDwjYwmy43",
+    "type": "String",
+    "replaces": "שלח דוח יומי לקבלן"
+   },
+   {
+    "name": "tplBtwrQueued44",
+    "type": "String",
+    "replaces": "⏳ בתור: $queued"
+   },
+   {
+    "name": "cyjtHqblLa45",
+    "type": "String",
+    "replaces": "שיחת הקבלן לא נמצאה — הדוח לא נשלח"
+   },
+   {
+    "name": "hdwjNcljLqbl46",
+    "type": "String",
+    "replaces": "💬 הדוח נשלח לקבלן — מופיע בטאב שיחות"
+   },
+   {
+    "name": "tplDwjywWorkerShortNamewo47",
+    "type": "String",
+    "replaces": "דוח-יום — ${workerShortName(worker)}"
+   },
+   {
+    "name": "tplAwcrwCount48",
+    "type": "String",
+    "replaces": "✅ אושרו: ${count("
+   },
+   {
+    "name": "tplHwgcwWmmtynwtLaycwr49",
+    "type": "String",
+    "replaces": "📸 הוגשו וממתינות לאישור: ${count("
+   },
+   {
+    "name": "tplNdjwLtyqwCount50",
+    "type": "String",
+    "replaces": "↩️ נדחו לתיקון: ${count("
+   },
+   {
+    "name": "tplBbyxweCount51",
+    "type": "String",
+    "replaces": "🔨 בביצוע: ${count("
+   },
+   {
+    "name": "tplBtwrCount52",
+    "type": "String",
+    "replaces": "⏳ בתור: ${count("
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_KpiBox": {
+  "addProps": [
+   {
+    "name": "tplLabelHxgFyrwt1",
+    "type": "String",
+    "replaces": "$label — הצג פירוט"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_KvRow": {
+  "addProps": [
+   {
+    "name": "tplLabelValueHxg1",
+    "type": "String",
+    "replaces": "$label, $value — הצג פירוט"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_BarColumn": {
+  "addProps": [
+   {
+    "name": "ywBgr1",
+    "type": "String",
+    "replaces": "יום בגרף"
+   },
+   {
+    "name": "ljyxhElEmwdtyw2",
+    "type": "String",
+    "replaces": "לחיצה על עמודת-יום פותחת את רשימת המשימות שאושרו באותו יום."
+   },
+   {
+    "name": "tplYwKDayLettersindexCou3",
+    "type": "String",
+    "replaces": "יום ${_kDayLetters[index]} — $count אושרו, הצג פירוט"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_HistoryRow": {
+  "addProps": [
+   {
+    "name": "photoError",
+    "type": "String",
+    "replaces": "📷 לא ניתן להציג את התמונה"
+   },
+   {
+    "name": "sgwr2",
+    "type": "String",
+    "replaces": "סגור"
+   },
+   {
+    "name": "frtyHgch3",
+    "type": "String",
+    "replaces": "פרטי הגשה"
+   },
+   {
+    "name": "ljyxhElCwrt4",
+    "type": "String",
+    "replaces": "לחיצה על שורת ההגשה פותחת את פירוט-ההגשה — מצב, זמן והערה."
+   },
+   {
+    "name": "tplTasknameHxgFrty5",
+    "type": "String",
+    "replaces": "${task.name} — הצג פרטי הגשה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_ProofThumb": {
+  "addProps": [
+   {
+    "name": "tmwntHwkjh1",
+    "type": "String",
+    "replaces": "תמונת הוכחה"
+   },
+   {
+    "name": "ljyxhElTmwnthhwkjh2",
+    "type": "String",
+    "replaces": "לחיצה על תמונת-ההוכחה הזעירה פותחת אותה במסך מלא עם זום."
+   },
+   {
+    "name": "hxgTmwntHwkjh3",
+    "type": "String",
+    "replaces": "הצג תמונת הוכחה במסך מלא"
+   },
+   {
+    "name": "txt4",
+    "type": "String",
+    "replaces": "📷"
+   }
+  ],
+  "note": ""
+ }
+}

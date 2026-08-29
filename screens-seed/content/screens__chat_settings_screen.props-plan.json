@@ -1,0 +1,622 @@
+{
+ "ChatSettingsScreen": {
+  "addProps": [
+   {
+    "name": "t01",
+    "type": "String",
+    "replaces": "הגדרות שיחות"
+   },
+   {
+    "name": "t02",
+    "type": "String",
+    "replaces": "איפוס הגדרות?"
+   },
+   {
+    "name": "t03",
+    "type": "String",
+    "replaces": "כל הגדרות השיחות יוחזרו לברירת המחדל."
+   },
+   {
+    "name": "t04",
+    "type": "String",
+    "replaces": "ביטול"
+   },
+   {
+    "name": "t05",
+    "type": "String",
+    "replaces": "אפס"
+   },
+   {
+    "name": "ayfwsLbryrtMjdl6",
+    "type": "String",
+    "replaces": "איפוס לברירת מחדל"
+   },
+   {
+    "name": "hgdrwtAwfsw7",
+    "type": "String",
+    "replaces": "הגדרות אופסו"
+   }
+  ],
+  "note": ""
+ },
+ "_QuickReplyBanner": {
+  "addProps": [
+   {
+    "name": "t06",
+    "type": "String",
+    "replaces": "תשובות מהירות"
+   },
+   {
+    "name": "t07",
+    "type": "String",
+    "replaces": "הבנתי"
+   },
+   {
+    "name": "t08",
+    "type": "String",
+    "replaces": "תשובות מהירות"
+   },
+   {
+    "name": "t09",
+    "type": "String",
+    "replaces": "ערוך"
+   },
+   {
+    "name": "bdrAly5",
+    "type": "String",
+    "replaces": "בדרך אליך 🚗"
+   },
+   {
+    "name": "aacrBqrwb6",
+    "type": "String",
+    "replaces": "אאשר בקרוב ✅"
+   },
+   {
+    "name": "qybltyTwdh7",
+    "type": "String",
+    "replaces": "קיבלתי, תודה 🙏"
+   },
+   {
+    "name": "njzwrAly8",
+    "type": "String",
+    "replaces": "נחזור אליך 📞"
+   },
+   {
+    "name": "htbnywtQbwewtBgrsh9",
+    "type": "String",
+    "replaces": "התבניות קבועות בגרסה זו. הקש על תבנית כדי להעתיק אותה — "
+   },
+   {
+    "name": "eryktTbnywtMwtamwt10",
+    "type": "String",
+    "replaces": "עריכת תבניות מותאמות אישית תתווסף בהמשך."
+   },
+   {
+    "name": "htbnytHwetqh11",
+    "type": "String",
+    "replaces": "התבנית הועתקה"
+   }
+  ],
+  "note": ""
+ },
+ "_PresenceSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "💬"
+   },
+   {
+    "name": "cyjwtWjywwy2",
+    "type": "String",
+    "replaces": "שיחות וחיווי"
+   },
+   {
+    "name": "aycwryQryah3",
+    "type": "String",
+    "replaces": "אישורי קריאה"
+   },
+   {
+    "name": "jywwyHqldh4",
+    "type": "String",
+    "replaces": "חיווי הקלדה"
+   },
+   {
+    "name": "txwghMqdymhBneylh5",
+    "type": "String",
+    "replaces": "תצוגה מקדימה בנעילה"
+   },
+   {
+    "name": "ftyjtCyjhMenh6",
+    "type": "String",
+    "replaces": "פתיחת שיחה (מענה ראשוני)"
+   },
+   {
+    "name": "zmMqwwAjrw7",
+    "type": "String",
+    "replaces": "זמן מקוון אחרון"
+   },
+   {
+    "name": "kwl8",
+    "type": "String",
+    "replaces": "כולם"
+   },
+   {
+    "name": "ancyQcr9",
+    "type": "String",
+    "replaces": "אנשי קשר"
+   },
+   {
+    "name": "aAjd10",
+    "type": "String",
+    "replaces": "אף אחד"
+   }
+  ],
+  "note": ""
+ },
+ "_ChatNotifSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🔔"
+   },
+   {
+    "name": "htrawtCyjh2",
+    "type": "String",
+    "replaces": "התראות שיחה"
+   },
+   {
+    "name": "xlxwlCyjhNknst3",
+    "type": "String",
+    "replaces": "צלצול שיחה נכנסת"
+   },
+   {
+    "name": "htratHwdehJdch4",
+    "type": "String",
+    "replaces": "התראת הודעה חדשה"
+   },
+   {
+    "name": "rtt5",
+    "type": "String",
+    "replaces": "רטט"
+   },
+   {
+    "name": "xlxwlLfyAyc6",
+    "type": "String",
+    "replaces": "צלצול לפי איש קשר"
+   },
+   {
+    "name": "hctqtCyjhSfxyfyt7",
+    "type": "String",
+    "replaces": "השתקת שיחה ספציפית"
+   }
+  ],
+  "note": ""
+ },
+ "_MediaSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🎙️"
+   },
+   {
+    "name": "mdyhWcme2",
+    "type": "String",
+    "replaces": "מדיה ושמע"
+   },
+   {
+    "name": "hwrdhAwtwmtyt3",
+    "type": "String",
+    "replaces": "הורדה אוטומטית"
+   },
+   {
+    "name": "WiFiBlbd4",
+    "type": "String",
+    "replaces": "WiFi בלבד"
+   },
+   {
+    "name": "WiFiSlwlry5",
+    "type": "String",
+    "replaces": "WiFi + סלולרי"
+   },
+   {
+    "name": "tmyd6",
+    "type": "String",
+    "replaces": "תמיד"
+   },
+   {
+    "name": "aFe7",
+    "type": "String",
+    "replaces": "אף פעם"
+   },
+   {
+    "name": "aykwtTmwnwtNcljwt8",
+    "type": "String",
+    "replaces": "איכות תמונות נשלחות"
+   },
+   {
+    "name": "mqwryt9",
+    "type": "String",
+    "replaces": "מקורית"
+   },
+   {
+    "name": "gbwhh10",
+    "type": "String",
+    "replaces": "גבוהה"
+   },
+   {
+    "name": "bynwnyt11",
+    "type": "String",
+    "replaces": "בינונית"
+   },
+   {
+    "name": "djystWydaw12",
+    "type": "String",
+    "replaces": "דחיסת וידאו"
+   },
+   {
+    "name": "nyhwlAjsw13",
+    "type": "String",
+    "replaces": "ניהול אחסון"
+   }
+  ],
+  "note": ""
+ },
+ "_ChatPrivacySection": {
+  "addProps": [
+   {
+    "name": "t10",
+    "type": "String",
+    "replaces": "מחיקת היסטוריית שיחות"
+   },
+   {
+    "name": "t11",
+    "type": "String",
+    "replaces": "היסטוריית השיחות תימחק והשיחות ייפתחו ריקות."
+   },
+   {
+    "name": "t12",
+    "type": "String",
+    "replaces": "ביטול"
+   },
+   {
+    "name": "t13",
+    "type": "String",
+    "replaces": "מחק"
+   },
+   {
+    "name": "txt5",
+    "type": "String",
+    "replaces": "👥"
+   },
+   {
+    "name": "frtywt6",
+    "type": "String",
+    "replaces": "פרטיות"
+   },
+   {
+    "name": "myYkwlLftwj7",
+    "type": "String",
+    "replaces": "מי יכול לפתוח שיחה"
+   },
+   {
+    "name": "kwl8",
+    "type": "String",
+    "replaces": "כולם"
+   },
+   {
+    "name": "ancyQcrBlbd9",
+    "type": "String",
+    "replaces": "אנשי קשר בלבד"
+   },
+   {
+    "name": "cmwryBlbd10",
+    "type": "String",
+    "replaces": "שמורים בלבד"
+   },
+   {
+    "name": "jsymtMctmcy11",
+    "type": "String",
+    "replaces": "חסימת משתמשים"
+   },
+   {
+    "name": "frtyHfrwfylTmwnh12",
+    "type": "String",
+    "replaces": "פרטי הפרופיל (תמונה / ביוגרפיה)"
+   },
+   {
+    "name": "mjyqtHystwryh13",
+    "type": "String",
+    "replaces": "מחיקת היסטוריה"
+   },
+   {
+    "name": "hhystwryhNmjqh14",
+    "type": "String",
+    "replaces": "ההיסטוריה נמחקה"
+   }
+  ],
+  "note": ""
+ },
+ "_BackupSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "💾"
+   },
+   {
+    "name": "gybwyWyyxwa2",
+    "type": "String",
+    "replaces": "גיבוי וייצוא"
+   },
+   {
+    "name": "gybwyLen3",
+    "type": "String",
+    "replaces": "גיבוי לענן"
+   },
+   {
+    "name": "tdyrwtGybwy4",
+    "type": "String",
+    "replaces": "תדירות גיבוי"
+   },
+   {
+    "name": "ywmy5",
+    "type": "String",
+    "replaces": "יומי"
+   },
+   {
+    "name": "cbwey6",
+    "type": "String",
+    "replaces": "שבועי"
+   },
+   {
+    "name": "jwdcy7",
+    "type": "String",
+    "replaces": "חודשי"
+   },
+   {
+    "name": "yyxwaHystwryhCSV8",
+    "type": "String",
+    "replaces": "ייצוא היסטוריה (CSV)"
+   },
+   {
+    "name": "mjyqtGybwyEn9",
+    "type": "String",
+    "replaces": "מחיקת גיבוי ענן"
+   }
+  ],
+  "note": ""
+ },
+ "_LangSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🌐"
+   },
+   {
+    "name": "cfhWtrgw2",
+    "type": "String",
+    "replaces": "שפה ותרגום"
+   },
+   {
+    "name": "cftMmcq3",
+    "type": "String",
+    "replaces": "שפת ממשק"
+   },
+   {
+    "name": "ebryt4",
+    "type": "String",
+    "replaces": "עברית"
+   },
+   {
+    "name": "erbyt5",
+    "type": "String",
+    "replaces": "ערבית"
+   },
+   {
+    "name": "anglyt6",
+    "type": "String",
+    "replaces": "אנגלית"
+   },
+   {
+    "name": "trgwAwtwmty7",
+    "type": "String",
+    "replaces": "תרגום אוטומטי"
+   },
+   {
+    "name": "cftMqldt8",
+    "type": "String",
+    "replaces": "שפת מקלדת"
+   }
+  ],
+  "note": ""
+ },
+ "_BusinessSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🏪"
+   },
+   {
+    "name": "cyjwtEsqywt2",
+    "type": "String",
+    "replaces": "שיחות עסקיות"
+   },
+   {
+    "name": "cewtFeylwtEsqyt3",
+    "type": "String",
+    "replaces": "שעות פעילות עסקית"
+   },
+   {
+    "name": "ftyjh4",
+    "type": "String",
+    "replaces": "פתיחה"
+   },
+   {
+    "name": "sgyrh5",
+    "type": "String",
+    "replaces": "סגירה"
+   },
+   {
+    "name": "hwdetMjwLcewt6",
+    "type": "String",
+    "replaces": "הודעת מחוץ לשעות"
+   },
+   {
+    "name": "anjnwSgwryNjzwr7",
+    "type": "String",
+    "replaces": "אנחנו סגורים, נחזור אליך בשעות הפעילות..."
+   },
+   {
+    "name": "qtlwgMwxryBcyjh8",
+    "type": "String",
+    "replaces": "קטלוג מוצרים בשיחה"
+   },
+   {
+    "name": "tclwMtwCyjh9",
+    "type": "String",
+    "replaces": "תשלום מתוך שיחה"
+   }
+  ],
+  "note": ""
+ },
+ "_BotSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🤖"
+   },
+   {
+    "name": "bwtWawtwmxyh2",
+    "type": "String",
+    "replaces": "בוט ואוטומציה"
+   },
+   {
+    "name": "bwtCalwtNfwxwt3",
+    "type": "String",
+    "replaces": "בוט שאלות נפוצות"
+   },
+   {
+    "name": "nytwbCyjwt4",
+    "type": "String",
+    "replaces": "ניתוב שיחות"
+   },
+   {
+    "name": "brktFtyjh5",
+    "type": "String",
+    "replaces": "ברכת פתיחה"
+   },
+   {
+    "name": "tqstHbrkh6",
+    "type": "String",
+    "replaces": "טקסט הברכה"
+   },
+   {
+    "name": "clwAyAfcr7",
+    "type": "String",
+    "replaces": "שלום! איך אפשר לעזור?"
+   },
+   {
+    "name": "tgwbhMjwLcewt8",
+    "type": "String",
+    "replaces": "תגובה מחוץ לשעות פעילות"
+   }
+  ],
+  "note": ""
+ },
+ "_ArchiveSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🗂️"
+   },
+   {
+    "name": "arkywWnyqyw2",
+    "type": "String",
+    "replaces": "ארכיון וניקיון"
+   },
+   {
+    "name": "arkwbAwtwmty3",
+    "type": "String",
+    "replaces": "ארכוב אוטומטי"
+   },
+   {
+    "name": "mjyqhAwtwmtyt4",
+    "type": "String",
+    "replaces": "מחיקה אוטומטית"
+   },
+   {
+    "name": "kbwy5",
+    "type": "String",
+    "replaces": "כבוי"
+   },
+   {
+    "name": "30Yw6",
+    "type": "String",
+    "replaces": "30 יום"
+   },
+   {
+    "name": "90Yw7",
+    "type": "String",
+    "replaces": "90 יום"
+   },
+   {
+    "name": "180Yw8",
+    "type": "String",
+    "replaces": "180 יום"
+   },
+   {
+    "name": "synwSfa9",
+    "type": "String",
+    "replaces": "סינון ספאם"
+   },
+   {
+    "name": "gybwyLfnyMjyqh10",
+    "type": "String",
+    "replaces": "גיבוי לפני מחיקה"
+   }
+  ],
+  "note": ""
+ },
+ "_SectionTile": {
+  "addProps": [
+   {
+    "name": "t14",
+    "type": "String",
+    "replaces": "בבנייה — ההגדרות נשמרות אך עדיין אינן משפיעות"
+   }
+  ],
+  "note": ""
+ },
+ "_SwitchRow": {
+  "addProps": [
+   {
+    "name": "t15",
+    "type": "String",
+    "replaces": "בבנייה — עדיין לא משפיע"
+   }
+  ],
+  "note": ""
+ },
+ "_PlaceholderRow": {
+  "addProps": [
+   {
+    "name": "t17",
+    "type": "String",
+    "replaces": "בבנייה"
+   },
+   {
+    "name": "tplLabelBbnyyh2",
+    "type": "String",
+    "replaces": "$label — בבנייה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

@@ -1,0 +1,17 @@
+{
+ "_AttributeTile": {
+  "addProps": [
+   {
+    "name": "mjq1",
+    "type": "String",
+    "replaces": "מחק"
+   },
+   {
+    "name": "xyrWryantLla2",
+    "type": "String",
+    "replaces": "ציר וריאנט ללא ערכים"
+   }
+  ],
+  "note": ""
+ }
+}

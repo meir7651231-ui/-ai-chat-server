@@ -1,0 +1,128 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__manager_profile_screen.dart",
+ "lines": 296,
+ "pigments": {
+  "tokens": [
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   12,
+   13,
+   13.5,
+   14,
+   17,
+   18,
+   20,
+   28
+  ],
+  "fontWeights": [
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ";\n\n/// מסך עצמאי (נדחף מאייקון הפרופיל ב-AppBar של מרכז השליטה).\nclass ManagerProfileScreen extends StatelessWidget {\n  const ManagerProfileScreen({super.key});\n\n  static Route<void> route() =>\n      MaterialPageRoute<void>(builder: (_) => const ManagerProfileScreen());\n\n  static final List<KbToolNode> _kbNodes = kbManagerProfileNodes();\n\n  @override\n  Widget build(BuildContext context) {\n    final Widget body = Directionality(\n      textDirection: TextDirection.rtl,\n      child: Scaffold(\n        backgroundColor: Theme.of(context).scaffoldBackgroundColor,\n        appBar: AppBar(\n          backgroundColor: Theme.of(context).colorScheme.surface,\n          elevation: 0,\n          title: CfgText(\n            ",
+  "@${session.username} · מנהל המערכת",
+  "אזור אישי — מנהל המערכת",
+  "בדרך 🚚",
+  "הגדרות",
+  "הזמנות — סטטיסטיקה",
+  "הכנסות היום (פעילות): ${fMoney(revenue)}",
+  "יציאה",
+  "מעבר בין מסכים",
+  "מצב הדגמה",
+  "נמסרו ✅",
+  "פעילות 📋",
+  "צפייה בכל לוח — מצב מנהל"
+ ],
+ "icons": [
+  "Icons.chevron_left"
+ ],
+ "glyphs": [
+  "⚙",
+  "✅",
+  "👔",
+  "📋",
+  "🖥",
+  "🚚"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "ManagerProfileScreen",
+   "kind": "StatelessWidget",
+   "line": 27,
+   "loc": 33,
+   "pure": false,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:ManagerProfileScreen"
+   ],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_ManagerProfileBody",
+   "kind": "ConsumerWidget",
+   "line": 62,
+   "loc": 188,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "boardAuthProvider",
+    "sysOrdersProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "call:showManagerScreensSheet"
+   ],
+   "strings": 10,
+   "constData": 1
+  },
+  {
+   "name": "_PStat",
+   "kind": "StatelessWidget",
+   "line": 252,
+   "loc": 44,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 1
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kHideUnderConstruction",
+  "kKbGlobal"
+ ],
+ "board": {
+  "reads": [
+   "boardAuthProvider",
+   "sysOrdersProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": [
+   "call:showManagerScreensSheet",
+   "nav:ManagerProfileScreen"
+  ]
+ }
+}

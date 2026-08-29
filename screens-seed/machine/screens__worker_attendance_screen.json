@@ -1,0 +1,280 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__worker_attendance_screen.dart",
+ "lines": 1078,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.brandDark",
+   "BsTokens.danger",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusPill",
+   "BsTokens.space1",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5",
+   "BsTokens.success",
+   "BsTokens.successDark"
+  ],
+  "themeSockets": [
+   "Theme.of",
+   "cfgRadius"
+  ],
+  "fontSizes": [
+   8,
+   9.5,
+   12,
+   13,
+   13.5,
+   14,
+   14.5,
+   15,
+   16,
+   17,
+   18
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700",
+   "FontWeight.w800",
+   "FontWeight.w900"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "$d ב${_kHebMonths[m - 1]} $y",
+  "$dayCount ימים · ${_fmtDur(total)} שעות",
+  "${_fmtDateKeyLong(day.date)} — מיקום כניסה",
+  "${_fmtDur(worked)} שעות",
+  "${item.stepsDone}/${item.stepsTotal} שלבים",
+  "${session.displayName}: ${monthDays.length} ימי עבודה, ",
+  ",\n                      style: TextStyle(fontSize: 8),\n                    ),\n                ],\n              ],\n            ),\n          ),\n        ),\n      ),\n    );\n  }\n}\n\n// ─── day-detail sheet ──────────────────────────────────────────────────────────\n\n/// The day drill-down: כניסה/יציאה+סה\"כ, the CLICKABLE location (contract 3 —\n/// [openNavSheet] to Waze / Google Maps; honestly hidden when no coordinate was\n/// recorded), and the HONEST per-day work summary from [tasksProvider].\nclass _DayDetailSheet extends StatelessWidget {\n  const _DayDetailSheet({required this.day, required this.work});\n\n  final AttendanceDay day;\n  final List<DayWorkItem> work;\n\n  @override\n  Widget build(BuildContext context) {\n    final inTs = day.inTs;\n    final outTs = day.outTs;\n    final worked = day.worked;\n    final loc = mapsQueryForDay(day);\n\n    return Directionality(\n      textDirection: TextDirection.rtl,\n      child: SafeArea(\n        top: false,\n        child: Container(\n          margin: const EdgeInsets.all(BsTokens.space2),\n          padding: const EdgeInsets.all(BsTokens.space4),\n          decoration: BoxDecoration(\n            color: Theme.of(context).colorScheme.surface,\n            borderRadius: BorderRadius.circular(cfgRadius(context)),\n          ),\n          child: Column(\n            mainAxisSize: MainAxisSize.min,\n            crossAxisAlignment: CrossAxisAlignment.stretch,\n            children: [\n              Row(\n                children: [\n                  Expanded(\n                    child: Text(\n                      ",
+  ";\n\n  bool get _viewingCurrentMonth {\n    final now = DateTime.now();\n    return _month.year == now.year && _month.month == now.month;\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    // 🔒 BOARD GATE (חוק: מבחוץ לא רואים כלום) — worker-board screen.\n    final session = ref.watch(boardAuthProvider);\n    if (session == null || session.role != BoardRole.worker) {\n      return const WelcomeScreen(boardRole: BoardRole.worker);\n    }\n    final username = session.username;\n    final workerIndex = workerIndexForSession(session);\n\n    final all = ref.watch(workerAttendanceProvider);\n    final tasks = ref.watch(tasksProvider);\n    final todayKey = attendanceDateKey(DateTime.now());\n    AttendanceDay? today;\n    for (final d in all) {\n      if (d.username == username && d.date == todayKey) {\n        today = d;\n        break;\n      }\n    }\n    final monthDays =\n        attendanceMonth(all, username, _month.year, _month.month);\n    final monthTotal = attendanceTotal(monthDays);\n    final sentThisMonth = _sentMonths.contains(_monthKey);\n\n    // Fast lookup: yyyy-MM-dd → that day",
+  ";\n\n/// `yyyy-MM-dd` → `d בMMMM yyyy` (the sheet",
+  ";\n\n/// 🕐 נוכחות (#105) — the worker",
+  "s status + the big state-aware action: כניסה (no open shift) →\n/// יציאה (clocked in) → an honestly-disabled \"נרשמה נוכחות להיום ✓\" once the\n/// day is complete (one shift per day). Both actions capture GPS (contract 4).\nclass _ClockCard extends StatelessWidget {\n  const _ClockCard({\n    required this.today,\n    required this.onClockIn,\n    required this.onClockOut,\n  });\n\n  final AttendanceDay? today;\n  final VoidCallback onClockIn;\n  final VoidCallback onClockOut;\n\n  @override\n  Widget build(BuildContext context) {\n    final inTs = today?.inTs;\n    final outTs = today?.outTs;\n    final worked = today?.worked;\n    final hasLoc = mapsQueryForDay(today ?? _emptyDay) != null;\n\n    final String label;\n    final Color color;\n    final VoidCallback? onTap;\n    if (inTs == null) {\n      label = ",
+  "s נוכחות at a glance; tapping a populated day opens a\n/// detail sheet with כניסה/יציאה+סה\"כ, a CLICKABLE location (contract 3:\n/// [openNavSheet] → Waze / Google Maps), and an HONEST per-day work summary\n/// derived from [tasksProvider] (which tasks were done/advanced that calendar\n/// day, matched by the task clock",
+  "א",
+  "אוגוסט",
+  "אוקטובר",
+  "אין כניסה פתוחה להיום",
+  "אין פירוט-עבודה משויך ליום זה",
+  "אין רישומי נוכחות בחודש זה",
+  "אין רישומים לשליחה בחודש זה",
+  "אפריל",
+  "ב",
+  "ג",
+  "ד",
+  "דצמבר",
+  "ה",
+  "הבא",
+  "הבא ›",
+  "הדוח נשלח ✓",
+  "היום",
+  "התחיל ביום זה",
+  "ו",
+  "יולי",
+  "יום $dom, ${worked == null ? ",
+  "יום $dom, אין רישום",
+  "יוני",
+  "ינואר",
+  "יציאה",
+  "כבר נרשמה כניסה להיום",
+  "כניסה",
+  "מאי",
+  "מיקום הכניסה — פתח ניווט",
+  "מיקום לא זמין — נרשמה כניסה ${_fmtTime(DateTime.now())} בלי מיקום",
+  "מרץ",
+  "נובמבר",
+  "סגור",
+  "סה\"כ ${_fmtDur(total)} שעות",
+  "סה\"כ חודשי",
+  "סה\"כ שעות",
+  "סיכום עבודה יומי",
+  "ספטמבר",
+  "פברואר",
+  "פתח ניווט למיקום",
+  "ש",
+  "שיחת הקבלן לא נמצאה — הדוח לא נשלח",
+  "שלח דוח נוכחות לקבלן",
+  "‹ הקודם",
+  "✓ נרשמה נוכחות להיום",
+  "📋 דוח נוכחות ${_month.month}/${_month.year} — ",
+  "📍 לא נרשם מיקום ביום זה",
+  "📍 מיקום נרשם",
+  "📨 דוח הנוכחות נשלח לקבלן בצ׳אט",
+  "📨 שלח דוח נוכחות לקבלן",
+  "🔴 יציאה",
+  "🔴 נרשמה יציאה ${_fmtTime(DateTime.now())}",
+  "🔴 נרשמה יציאה · סה\"כ היום ${_fmtDur(worked)} שעות",
+  "🕐 נוכחות",
+  "🟢 נרשמה כניסה ${_fmtTime(DateTime.now())} 📍"
+ ],
+ "icons": [
+  "Icons.close",
+  "Icons.navigation_outlined",
+  "Icons.place"
+ ],
+ "glyphs": [
+  "✓",
+  "✕",
+  "📋",
+  "📍",
+  "📨",
+  "🔒",
+  "🔴",
+  "🕐",
+  "🗓",
+  "🟢"
+ ],
+ "logicCandidates": [
+  {
+   "name": "_fmtDateKeyLong",
+   "line": 1068
+  },
+  {
+   "name": "DayWorkItem",
+   "line": 254,
+   "kind": "metrics-class"
+  }
+ ],
+ "widgets": [
+  {
+   "name": "WorkerAttendanceScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 37,
+   "loc": 10,
+   "pure": false,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:WorkerAttendanceScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_ClockCard",
+   "kind": "StatelessWidget",
+   "line": 324,
+   "loc": 134,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 8,
+   "constData": 1
+  },
+  {
+   "name": "_TodayStat",
+   "kind": "StatelessWidget",
+   "line": 463,
+   "loc": 28,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_CalendarCard",
+   "kind": "StatelessWidget",
+   "line": 505,
+   "loc": 179,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 6,
+   "constData": 1
+  },
+  {
+   "name": "_DayCell",
+   "kind": "StatelessWidget",
+   "line": 688,
+   "loc": 80,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 3,
+   "constData": 0
+  },
+  {
+   "name": "_DayDetailSheet",
+   "kind": "StatelessWidget",
+   "line": 774,
+   "loc": 118,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 8,
+   "constData": 0
+  },
+  {
+   "name": "_LocationButton",
+   "kind": "StatelessWidget",
+   "line": 894,
+   "loc": 55,
+   "pure": false,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "call:openNavSheet"
+   ],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_WorkLine",
+   "kind": "StatelessWidget",
+   "line": 953,
+   "loc": 57,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_SendReportButton",
+   "kind": "StatelessWidget",
+   "line": 1016,
+   "loc": 42,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kTaskStatusLabel"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "call:openNavSheet",
+   "nav:WorkerAttendanceScreen"
+  ]
+ }
+}

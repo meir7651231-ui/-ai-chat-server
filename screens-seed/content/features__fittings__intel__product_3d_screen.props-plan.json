@@ -1,0 +1,67 @@
+{
+ "Product3dScreen": {
+  "addProps": [
+   {
+    "name": "hxgBtltmmdPreview1",
+    "type": "String",
+    "replaces": "הצג בתלת-ממד · preview (off-live)"
+   },
+   {
+    "name": "habyzrAynwFrysbmnwe2",
+    "type": "String",
+    "replaces": "האביזר אינו פריס-במנוע (fallback לתמונה)"
+   }
+  ],
+  "note": ""
+ },
+ "_SpecPanel": {
+  "addProps": [
+   {
+    "name": "ayMfrtmnweLmwxr1",
+    "type": "String",
+    "replaces": "אין מפרט-מנוע למוצר זה"
+   },
+   {
+    "name": "tplMcfjhSfamilyQwtr2",
+    "type": "String",
+    "replaces": "משפחה: ${s.family} · קוטר: ${s.od}"
+   },
+   {
+    "name": "cytwtjybwr3",
+    "type": "String",
+    "replaces": "שיטות-חיבור"
+   },
+   {
+    "name": "rytwErkyyyjws4",
+    "type": "String",
+    "replaces": "ריתוך (ערכי-ייחוס)"
+   },
+   {
+    "name": "mjwLtblh5",
+    "type": "String",
+    "replaces": "מחוץ-לטבלה"
+   },
+   {
+    "name": "tplRacSweldheadTempCCSwel6",
+    "type": "String",
+    "replaces": "ראש ${s.weld!.headTempC}°C · ${s.weld!.caveat}"
+   },
+   {
+    "name": "btyjwtQwj7",
+    "type": "String",
+    "replaces": "בטיחות קו-חם"
+   },
+   {
+    "name": "landrctQwqr8",
+    "type": "String",
+    "replaces": "לא-נדרשת (קו-קר)"
+   },
+   {
+    "name": "tqny9",
+    "type": "String",
+    "replaces": "תקנים"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

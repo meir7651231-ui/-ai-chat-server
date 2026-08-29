@@ -1,0 +1,64 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__studio__studio_entry.dart",
+ "lines": 49,
+ "pigments": {
+  "tokens": [
+   "BsTokens.cardLight",
+   "BsTokens.space4"
+  ],
+  "themeSockets": [],
+  "fontSizes": [
+   24
+  ],
+  "fontWeights": [
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ";\n\n/// The owner-only \"🎨 סטודיו\" entry — hidden unless the viewer is the owner-manager.\nclass StudioEntryCard extends ConsumerWidget {\n  const StudioEntryCard({super.key});\n\n  @override\n  Widget build(BuildContext context, WidgetRef ref) {\n    if (!ref.watch(studioOwnerManagerProvider)) return const SizedBox.shrink();\n    return Padding(\n      padding: const EdgeInsets.only(bottom: BsTokens.space4),\n      child: Card(\n        color: BsTokens.cardLight,\n        child: ListTile(\n          leading: const Text(",
+  "סטודיו (בטא)",
+  "ערוך את האפליקציה — טקסטים · עיצוב · נראות"
+ ],
+ "icons": [
+  "Icons.chevron_left"
+ ],
+ "glyphs": [
+  "🎨"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "StudioEntryCard",
+   "kind": "ConsumerWidget",
+   "line": 20,
+   "loc": 29,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "featureFlagsProvider",
+    "studioOwnerManagerProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kStudio",
+  "kStudioFlagName"
+ ],
+ "board": {
+  "reads": [
+   "featureFlagsProvider",
+   "studioOwnerManagerProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

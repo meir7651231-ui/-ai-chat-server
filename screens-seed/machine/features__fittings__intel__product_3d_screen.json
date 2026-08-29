@@ -1,0 +1,77 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__fittings__intel__product_3d_screen.dart",
+ "lines": 122,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [
+   12,
+   13,
+   15
+  ],
+  "fontWeights": [
+   "FontWeight.w700"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ", color: Colors.white70),\n                    ),\n                  )\n                : FittingPreview3d(route: route),\n          ),\n          const Divider(height: 1, color: Color(0xFF26333F)),\n          Expanded(flex: 2, child: _SpecPanel(product: product, spec: spec)),\n        ],\n      ),\n    );\n  }\n}\n\n/// לוח-מפרט קריא: כותרת · מידות-מפתח · שיטות-חיבור · ריתוך(+caveat) · בטיחות · תקנים.\nclass _SpecPanel extends StatelessWidget {\n  const _SpecPanel({required this.product, required this.spec});\n\n  final LipskeyCatalogProduct product;\n  final BuildableSpec? spec;\n\n  @override\n  Widget build(BuildContext context) {\n    const label = TextStyle(fontFamily: ",
+  ";\n\n/// מסך \"הצג-בתלת-ממד\" למוצר בודד: 3D למעלה + לוח-מפרט למטה. אביזר לא-פריס-במנוע\n/// (`routeFromProducts` ריק) → מציג לוח-מפרט/הודעה בלי 3D, לעולם לא קורס (M1).\nclass Product3dScreen extends StatelessWidget {\n  const Product3dScreen({required this.product, this.tempC = 20, super.key});\n\n  final LipskeyCatalogProduct product;\n  final int tempC;\n\n  @override\n  Widget build(BuildContext context) {\n    final route = routeFromProducts([product]);\n    final family = familyOf(product);\n    final od = odOf(product);\n    final spec = (family != null && od != null)\n        ? buildableSpecFor(family, od, od2: od2Of(product), tempC: tempC)\n        : null;\n\n    return Scaffold(\n      backgroundColor: kStageBackground,\n      appBar: AppBar(\n        backgroundColor: const Color(0xFF151F2A),\n        foregroundColor: Colors.white,\n        title: const Text(\n          ",
+  "אין מפרט-מנוע למוצר זה",
+  "בטיחות קו-חם",
+  "האביזר אינו פריס-במנוע (fallback לתמונה)",
+  "לא-נדרשת (קו-קר)",
+  "מחוץ-לטבלה",
+  "משפחה: ${s.family} · קוטר: ${s.od}",
+  "ראש ${s.weld!.headTempC}°C · ${s.weld!.caveat}",
+  "ריתוך (ערכי-ייחוס)",
+  "שיטות-חיבור",
+  "תקנים"
+ ],
+ "icons": [],
+ "glyphs": [
+  "🔒",
+  "🧠"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "Product3dScreen",
+   "kind": "StatelessWidget",
+   "line": 17,
+   "loc": 45,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_SpecPanel",
+   "kind": "StatelessWidget",
+   "line": 64,
+   "loc": 58,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 9,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kStageBackground"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

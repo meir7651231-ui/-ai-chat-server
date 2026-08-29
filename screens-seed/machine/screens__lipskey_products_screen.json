@@ -1,0 +1,392 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__lipskey_products_screen.dart",
+ "lines": 2538,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.inkLight"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18,
+   22,
+   24,
+   36,
+   48,
+   96
+  ],
+  "fontWeights": [
+   "FontWeight.w400",
+   "FontWeight.w500",
+   "FontWeight.w600",
+   "FontWeight.w700",
+   "FontWeight.w800",
+   "FontWeight.w900"
+  ],
+  "opacities": [
+   "0.06",
+   "0.07",
+   "0.12",
+   "0.15",
+   "0.2",
+   "0.3",
+   "0.4",
+   "0.45",
+   "0.5",
+   "0.55",
+   "0.75"
+  ],
+  "iconSizes": [
+   13
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  "\"${p.nameHe}\" יוסר מהסל.",
+  "${products.length} מוצרים",
+  ")\n      .trim();\n}\n\n/// All individual words that appear in any attribute-value entry (including\n/// sub-words of multi-word entries such as \"מוברש\" from \"ניקל מוברש\").\n/// Used by [productListDedupeKey] so that \"שחור מט\" and \"שחור\" collapse to the\n/// same frame (both \"מט\" and \"שחור\" are stripped).\nfinal _kAttrWordSet = <String>{\n  for (final v in [...kLipskeyColors, ...kLipskeyModels, ...kLipskeySubtypes])\n    ...v.split(RegExp(r",
+  ")\n      .trim();\n}\n\n/// First kLipskeyTypes word as it appears in the name (left-to-right) — the real\n/// leading product type, unlike _getCompoundType which scans kLipskeyTypes in\n/// list-order and can grab a secondary word (רקורד/מצרה) in PPR fitting names.\nString _leadingType(LipskeyCatalogProduct p) {\n  for (final w in p.nameHe.split(RegExp(r",
+  "))\n          .where(isSizeToken)\n          .expand((w) => parseSizeTokens(w).map((t) => t.label))\n          .toSet();\n      for (final t in tokensFromDims(product.dims!)) {\n        if (t.family == SizeFamily.dnDiameter &&\n            !nameSizeLabels.contains(t.label)) {\n          chips.add(_grayInfoChip(t.label));\n        }\n      }\n    }\n\n    // Length — informational gray chip (e.g. \"4 מ׳\"), never pickable.\n    final length = product.dims?[",
+  "))\n        .any((w) => _attrKindFor(w) == kind);\n  }).toList();\n}\n\n/// Compound type of a product.\n/// Multi-word kLipskeyTypes entries (e.g. \"מוט מגבת\") are matched first via\n/// substring. Single-word entries follow the \"type + next unclassified word\"\n/// heuristic (e.g. \"ברז\" + \"נשלף\" → \"ברז נשלף\").\nString _getCompoundType(LipskeyCatalogProduct p) {\n  final name = p.nameHe;\n  final words = name.split(RegExp(r",
+  "))) {\n    if (kLipskeyTypes.contains(w)) return w;\n  }\n  return _getCompoundType(p);\n}\n\n/// Type siblings: one representative per distinct compound type in the same\n/// category. Type is the top-level dimension — no frame restriction needed.\nList<LipskeyCatalogProduct> findTypeSiblings(LipskeyCatalogProduct p) {\n  final compound = _getCompoundType(p);\n  if (compound.isEmpty) return [p];\n  // Same category only — no cross-product (pipe→valve→drill). For PPR, key by\n  // the LEADING type word (not _getCompoundType, which matches whichever\n  // kLipskeyTypes word comes first in list-order and so fragments e.g. \"מתאם …\n  // רקורד\" into fake types). This keeps real splits (collar↔flange) but collapses\n  // duplicates.\n  final ppr = p.brand == kPolyrollBrand;\n  String keyOf(LipskeyCatalogProduct q) => ppr ? _leadingType(q) : _getCompoundType(q);\n  final byCompound = <String, LipskeyCatalogProduct>{};\n  byCompound[keyOf(p)] = p;\n  for (final q in resolvedCatalogProducts) {\n    if (q.categoryHe != p.categoryHe) continue;\n    final qc = keyOf(q);\n    if (qc.isEmpty) continue;\n    if (!byCompound.containsKey(qc)) byCompound[qc] = q;\n  }\n  if (byCompound.length <= 1) return [p];\n  return byCompound.values.toList();\n}\n\n// ── name split into tappable chips: attribute chips (orange) + words (teal) ─\nclass _NameWords extends StatelessWidget {\n  const _NameWords({required this.product, this.onAttrTap, this.openKind});\n  final LipskeyCatalogProduct product;\n  /// Tap handler for any attribute chip. Receives the clicked word and its\n  /// kind so the card can cycle to the next sibling for that attribute.\n  final void Function(String word, AttrKind kind)? onAttrTap;\n  /// The attribute kind whose picker is currently open — that chip gets orange styling.\n  final AttrKind? openKind;\n\n  @override\n  Widget build(BuildContext context) {\n    // Strip wrapping punctuation so \"(סיפון)\" → \"סיפון\" instead of a green\n    // pill carrying the parens; drop fragments that become empty.\n    final words = product.nameHe\n        .split(RegExp(r",
+  ")).any(isSizeToken));\n    final dnInfoChips = (!pathHasSize && product.dims != null)\n        ? tokensFromDims(product.dims!)\n            .where((t) => t.family == SizeFamily.dnDiameter)\n            .map((t) => t.label)\n            .toList()\n        : const <String>[];\n    // §21.C — each chip is stacked: tiny grey label on top (חיבור / צורה /\n    // תכונה / תבריג / מידה) + the value pill below. The label makes the\n    // hierarchy visible at a glance — primary (חיבור) reads first in RTL,\n    // מידה reads last — and the separator stays at pill-level so the\n    // breadcrumb still flows.\n    return Wrap(\n      spacing: 4,\n      runSpacing: 4,\n      crossAxisAlignment: WrapCrossAlignment.end,\n      children: [\n        for (var j = 0; j < shown.length; j++) ...[\n          if (j > 0)\n            const Padding(\n              padding: EdgeInsets.only(left: 2, right: 2, bottom: 4),\n              child: Text(",
+  ")).toSet()\n        : <String>{};\n\n    // Multi-word subtypes for two-word chip detection (e.g. \"דו כיווני\").\n    final multiSubtypes = kLipskeySubtypes.where((s) => s.contains(",
+  ")).toSet();\n\n    final chips = <Widget>[];\n    final seen = <String>{}; // dedupe repeated chips (e.g. \"לחץ\"/\"יציאה\"/\"+\")\n    bool compoundEmitted = false;\n    int? afterSubtypeIdx; // where to slot the maker chip — right after פייזר\n    int i = 0;\n\n    while (i < words.length) {\n      final w = words[i];\n\n      // ── Compound type — emit ONCE as a single chip ──────────────────────\n      if (typeWords.contains(w)) {\n        if (!compoundEmitted && compound.isNotEmpty) {\n          compoundEmitted = true;\n          chips.add(_AttrChip(\n            word: compound,\n            kind: AttrKind.type,\n            product: product,\n            onTap: onAttrTap,\n            isOpen: openKind == AttrKind.type,\n          ));\n        }\n        // Skip all words that belong to this compound.\n        i++;\n        continue;\n      }\n\n      // ── Two-word subtype (e.g. \"דו כיווני\") ──────────────────────────────\n      if (i + 1 < words.length) {\n        final two = ",
+  ")).where((w) => w.length >= 2),\n};\n\n// Per-kind sub-word sets — used by _stripWordsOfKind to strip ALL sub-words\n// of a multi-word entry (e.g. \"מוברש\" from \"ניקל מוברש\") so that frames\n// match across all color variants of a product family.\nfinal _kColorWords = <String>{\n  for (final v in kLipskeyColors) ...v.split(RegExp(r",
+  "),\n                product: row.p,\n                categoryProducts: widget.products,\n                smartLens: row.lens == CatalogLens.smartTree,\n              );\n            },\n            childCount: items.length,\n          ),\n        ),\n        const SliverToBoxAdapter(\n          child: SizedBox(height: 24),\n        ),\n      ],\n    );\n  }\n}\n\n/// Section header for a lens group (title + product count). A 🌳 prefix marks\n/// smart-tree groups (a cue that each row opens the rich card via its own\n/// \"כרטיס חכם\" button) — the header itself is a plain label, not tappable.\nclass _LensGroupHeader extends StatelessWidget {\n  const _LensGroupHeader({\n    required this.title,\n    required this.count,\n    this.smartTree = false,\n  });\n\n  final String title;\n  final int count;\n  final bool smartTree;\n\n  @override\n  Widget build(BuildContext context) {\n    return Container(\n      width: double.infinity,\n      color: smartTree ? const Color(0xFFF0FBF4) : const Color(0xFFF7F7F8),\n      padding: const EdgeInsets.fromLTRB(14, 9, 14, 9),\n      child: Row(\n        children: [\n          if (smartTree) ...[\n            const Text(",
+  ").hasMatch(w)) return false; // non-size digit fragment, not a link\n  return true;\n}\n\n/// Kinds of attributes that are cyclable variants on a product card.\n/// [colorMod] is the finish/modifier word of a compound colour (e.g. \"מוברש\"\n/// from \"ניקל מוברש\") — shown as a separate chip from the base colour.\nenum AttrKind { size, color, colorMod, model, subtype, type, material, pressure, sdr, maker }\n\n/// PPR material grades — a critical chip for pipe systems (what the part is\n/// made of). Shown as a 🧪 chip distinct from colour/model.\n// PPR-only grades — NOT נחושת/פליז/PP (those are existing Lipskey color/subtype\n// words; reclassifying them would change Lipskey chips).\nconst _kPprMaterials = {",
+  ");\n\n  /// Finish modifier word (\"מוברש\", \"מט\") of [product], or null.\n  String? _colorModifier(LipskeyCatalogProduct product) {\n    final w = product.nameHe\n        .split(RegExp(r",
+  ",\n                  style: TextStyle(\n                      color: Color(0xFF8E8E93),\n                      fontSize: 13,\n                      fontWeight: FontWeight.w700)),\n            ),\n          Column(\n            mainAxisSize: MainAxisSize.min,\n            crossAxisAlignment: CrossAxisAlignment.center,\n            children: [\n              Text(\n                chips.levelLabelOf(shown[j].key),\n                style: const TextStyle(\n                  color: Color(0xFF8E8E93),\n                  fontSize: 9,\n                  fontWeight: FontWeight.w600,\n                  height: 1.0,\n                ),\n              ),\n              const SizedBox(height: 2),\n              _HierarchyChipPill(\n                word: shown[j].value,\n                isOpen: shown[j].key == openIndex,\n                onTap: onChipTap == null ? null : () => onChipTap!(shown[j].key),\n              ),\n            ],\n          ),\n        ],\n        // Informational dims-DN (covers/risers with no name size) — a stacked\n        // \"מידה\" label + gray pill, non-tappable (not a navigable level).\n        for (final dn in dnInfoChips)\n          Column(\n            mainAxisSize: MainAxisSize.min,\n            crossAxisAlignment: CrossAxisAlignment.center,\n            children: [\n              CfgText(\n                ",
+  ",\n    };\n\n/// Drop every word that belongs to [kind] from a name. What remains is the\n/// \"frame\" — the part of the name that should match between siblings.\n/// Uses per-kind sub-word sets so that modifier words like \"מוברש\" (part of\n/// \"זהב מוברש\" or \"ניקל מוברש\") are also stripped, giving consistent frames.\nString _stripWordsOfKind(String name, AttrKind kind) {\n  var result = name;\n  // Strip multi-word subtype/color entries first (e.g. \"דו כיווני\", \"ניקל מוברש\").\n  if (kind == AttrKind.subtype) {\n    for (final s in kLipskeySubtypes) {\n      if (s.contains(",
+  ";\n\n/// Category product list. Every product is a rich interactive card:\n/// image-tap → fullscreen · card-tap → full sheet · name-word → filtered list\n/// · SKU → copy · \"+\" → inline qty picker (no sheet) · ⓘ → full sheet.\nclass LipskeyProductsScreen extends StatelessWidget {\n  const LipskeyProductsScreen({\n    super.key,\n    required this.category,\n    required this.products,\n  });\n\n  final String category;\n  final List<LipskeyCatalogProduct> products;\n\n  static Route<void> route({\n    required String category,\n    required List<LipskeyCatalogProduct> products,\n  }) =>\n      MaterialPageRoute(\n        builder: (_) =>\n            LipskeyProductsScreen(category: category, products: products),\n      );\n\n  /// Open a filtered list of every catalog product whose name contains [word].\n  /// Uses the inverted word-index for exact-word hits (O(1)), with a substring\n  /// fallback for partial tokens (צעד 87).\n  static void openWordSearch(BuildContext context, String word) {\n    final w = word.trim();\n    if (w.isEmpty) return;\n    final hits = _wordHits(w);\n    if (hits.isEmpty) return;\n    Navigator.push(\n      context,\n      route(category: ",
+  ";\n\nList<LipskeyCatalogProduct> findAttrSiblings(\n  LipskeyCatalogProduct p,\n  String word,\n  AttrKind kind,\n) {\n  // Manufacturer: same spec from a different maker (cross-line, cross-category).\n  if (kind == AttrKind.maker) {\n    final sig = _makerSignature(p);\n    final seen = <String>{};\n    final res = <LipskeyCatalogProduct>[];\n    // stage-3.1 — follows the ACTIVE catalog source (v2-aware).\n    for (final q in resolvedCatalogProducts) {\n      if (q.brand != kPolyrollBrand || _makerSignature(q) != sig) continue;\n      final m = _makerOf(q);\n      if (m.isEmpty || !seen.add(m)) continue;\n      res.add(q);\n    }\n    return res.length <= 1 ? [p] : res;\n  }\n  // PPR: every chip is a pickable dimension. Scope = whole brand within the\n  // same product type, so the picker offers the real alternatives — material\n  // (PPR/PPRCT), line/subtype (פייזר ↔ אספקת מים), size, etc. — even across the\n  // separate per-line categories.\n  if (p.brand == kPolyrollBrand) {\n    final pType = _getCompoundType(p);\n    // Size is a within-line dimension: a faser pipe",
+  ";\n        if (multiSubtypes.contains(two)) {\n          if (seen.add(two)) {\n            chips.add(_AttrChip(\n              word: two,\n              kind: AttrKind.subtype,\n              product: product,\n              onTap: onAttrTap,\n              isOpen: openKind == AttrKind.subtype,\n            ));\n            afterSubtypeIdx = chips.length;\n          }\n          i += 2;\n          continue;\n        }\n      }\n\n      // ── Multi-word size token — `200 ס\"מ` / `300 מ׳` / `40 מ\"מ` ─────────\n      // Card used to split by whitespace and lose the unit suffix, so the\n      // chip read `200` while the finder filter read `200 ס\"מ` (P17). Look\n      // ahead: if joining `w` with the next word produces a finder size\n      // token, emit ONE chip and skip the consumed pair.\n      if (i + 1 < words.length) {\n        final two = ",
+  ";\n}\n\n/// External-card title. PPR/PPRCT is shown as a chip (not in the title), so for\n/// Polyroll we strip it from the תיאור/categoryHe fallback (e.g. \"מצמדים PPR\" →\n/// \"מצמדים\"). The internal sheet keeps it in the full name.\nString _externalTitle(LipskeyCatalogProduct p) {\n  if (p.brand == kPolyrollBrand) {\n    // Per §21: title = the singular type noun (`ברך`/`מסעף`/…). Drill-down\n    // qualifiers live in the chip breadcrumb instead.\n    final type = parseChips(p.nameHe).type;\n    if (type != null) return type;\n  }\n  final t = (p.dims?[",
+  ";\n}\n\n/// Find sibling products for a given attribute kind.\n///\n/// Model is top-level (chip 1): any product in the same category with a\n/// different model word qualifies — no frame matching needed.\n///\n/// Color / colorMod / subtype / size are frame-based (chip 2+): the frame\n/// (name minus words of [kind]) must match so that only same-type/same-model\n/// variants appear in the picker.\n/// Manufacturer (יצרן) of a Polyroll product — e.g. Heliroma / Aquatherm.\n/// Stored in dims (not the name), so the maker chip is synthetic.\nString _makerOf(LipskeyCatalogProduct p) =>\n    (p.dims?[",
+  "de קוטר חיצוני",
+  "dn נומינלי",
+  "s cart-driven state).\n      _open = false;\n      _qty = 1;\n      _unit = _Unit.single;\n    }\n  }\n\n  /// The attribute value(s) of [product] for the given [kind].\n  /// color    → base color only (modifier is a separate colorMod chip).\n  /// colorMod → modifier word or \"רגיל\".\n  /// others   → longest-match entry from the relevant list.\n  String _attrVal(LipskeyCatalogProduct product, AttrKind kind) {\n    if (kind == AttrKind.maker) return _makerOf(product);\n    if (kind == AttrKind.color) return _baseColor(product);\n    if (kind == AttrKind.colorMod) return _colorModifier(product) ?? ",
+  "s fixture instead of\n  /// the standard Lipskey sheet — and is labelled \"כרטיס חכם\".\n  final bool smartLens;\n  /// Every product in the same canonical-family (collapsed into this row).\n  /// When length > 1 the card shows a ↻ button to cycle through them.\n  final List<LipskeyCatalogProduct> familySiblings;\n  /// Called when the user taps an attribute chip and cycles to a new sibling.\n  /// The parent should update its swap state so the displayed product changes.\n  final void Function(LipskeyCatalogProduct next)? onCycle;\n\n  @override\n  ConsumerState<_ProductRow> createState() => _ProductRowState();\n}\n\nenum _Unit { single, pack, pallet }\n\nclass _ProductRowState extends ConsumerState<_ProductRow> {\n  bool _open = false;\n  int _qty = 1;\n  _Unit _unit = _Unit.single;\n  /// Cached in-cart state — written once per build() frame so _image() can\n  /// read the value without calling ref.watch again.\n  bool _inCart = false;\n  /// Local cycle state for standalone cards (when no onCycle parent callback).\n  LipskeyCatalogProduct? _localProduct;\n  /// Inline attribute picker state — non-null when picker is open.\n  AttrKind? _pickerKind;\n  List<LipskeyCatalogProduct>? _pickerSiblings;\n  /// PPR hierarchy picker: chip-index in the parsed path that",
+  "s parsed path. Returns siblings that match every chip\n  /// to the left and differ at chipIndex.\n  void _cycleHierarchy(int chipIndex) {\n    final path = parseChips(p.nameHe).path;\n    if (chipIndex >= path.length) return;\n    // Unified catalog so Huliot/PPR products find their own-brand siblings\n    // (kPolyrollCatalog excluded Huliot → dead picker — lesson T4).\n    final sibs = findHierarchySiblings(\n      p, chipIndex,\n      // T6.3: route through the catalog repository (same const `resolvedCatalogProducts`).\n      all: ref.read(catalogRepositoryProvider).allProducts(),\n      nameOf: (q) => q.nameHe,\n      brandOf: (q) => q.brand,\n    );\n    // Dedupe by value-at-chipIndex (keep first occurrence of each distinct value).\n    final byVal = <String, LipskeyCatalogProduct>{};\n    for (final q in sibs) {\n      final qp = parseChips(q.nameHe).path;\n      if (chipIndex >= qp.length) continue;\n      byVal.putIfAbsent(qp[chipIndex], () => q);\n    }\n    if (byVal.length <= 1) return;\n    setState(() {\n      if (_hPickerIndex == chipIndex) {\n        _hPickerIndex = null;\n        _hPickerTitle = null;\n        _pickerSiblings = null;\n        _pickerKind = null;\n      } else {\n        _pickerKind = null; // close any old kind-picker\n        _hPickerIndex = chipIndex;\n        _hPickerTitle = _hierarchyPickerTitle(chipIndex, path[chipIndex]);\n        _pickerSiblings = byVal.values.toList();\n      }\n    });\n  }\n\n  String _hierarchyPickerTitle(int chipIndex, String currentValue) {\n    // §21.C — name the dimension being picked (חיבור / צורה / תכונה / תבריג /\n    // מידה) so the user knows whether this is the primary, secondary or final\n    // filter. Without this the header read a generic \"בחר ערך\" and every chip\n    // looked the same — \"אני לא יודע מה הוא בורר ראשי ומה משני ומה אחרון\".\n    final label = parseChips(p.nameHe).levelLabelOf(chipIndex);\n    return label.isEmpty ? ",
+  "s path index.\n/// Display-only cleanup for a chip word: strips a wrapping parenthesis so a\n/// verbatim catalog finish like \"(ציפוי כרום - ללא ידית)\" reads as a clean\n/// breadcrumb chip. nameHe stays verbatim (R8) and the raw path is unchanged\n/// for the faceted-filter matching — this only affects the rendered label.\nString _chipDisplayLabel(String word) {\n  var w = word.trim();\n  if (w.startsWith(",
+  "t a number-bearing spec fragment (sizes are handled by\n/// [isSizeToken]; other digit tokens like \"2,4)\" / \"ו-3\" / \"L=50\" are noise).\nbool isLinkableWord(String w) {\n  if (w.length < 2) return false;\n  if (kSearchStopWords.contains(w)) return false;\n  if (isSizeToken(w)) return false; // styled as a size chip instead\n  if (RegExp(r",
+  "t have\n        // produced it). Guards against accidental merges like `25 שנים`.\n        if (twoTokens.length == 1 &&\n            twoTokens.first.label.endsWith(words[i + 1])) {\n          final label = twoTokens.first.label;\n          if (seen.add(label)) {\n            chips.add(_AttrChip(\n              word: label,\n              kind: AttrKind.size,\n              product: product,\n              onTap: onAttrTap,\n              isOpen: openKind == AttrKind.size,\n            ));\n          }\n          i += 2;\n          continue;\n        }\n      }\n\n      // ── Single-word attribute chip ───────────────────────────────────────\n      final kind = _attrKindFor(w);\n      // Cross-inch like `1/2\"×3/8\"` (a reducing tee) is one word that yields\n      // TWO finder tokens (`½\"` + `3/8\"`). Mirror that on the card so the\n      // user can filter by either dim — emit a chip per token.\n      if (kind == AttrKind.size) {\n        final tokens = parseSizeTokens(w);\n        if (tokens.length > 1) {\n          for (final t in tokens) {\n            if (seen.add(t.label)) {\n              chips.add(_AttrChip(\n                word: t.label,\n                kind: AttrKind.size,\n                product: product,\n                onTap: onAttrTap,\n                isOpen: openKind == AttrKind.size,\n              ));\n            }\n          }\n          i++;\n          continue;\n        }\n      }\n      if (!seen.add(w)) {\n        i++; // already shown this chip on this card — skip the duplicate\n        continue;\n      }\n      if (kind != null) {\n        chips.add(_AttrChip(\n          word: w,\n          kind: kind,\n          product: product,\n          onTap: onAttrTap,\n          isOpen: openKind == kind,\n        ));\n        if (kind == AttrKind.subtype) afterSubtypeIdx = chips.length;\n      } else if (isLinkableWord(w)) {\n        chips.add(GestureDetector(\n          onTap: () => LipskeyProductsScreen.openWordSearch(context, w),\n          child: Text(w,\n              style: const TextStyle(\n                  color: Color(0xFF3DD9B0),\n                  fontSize: 12,\n                  height: 1.3,\n                  decoration: TextDecoration.underline,\n                  decorationColor: Color(0x552A5E52))),\n        ));\n      } else {\n        chips.add(Text(w,\n            style: TextStyle(\n                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),\n                fontSize: 12,\n                height: 1.3)));\n      }\n      i++;\n    }\n\n    // Manufacturer chip — synthetic (value from dims, not the name). Slots right\n    // after the subtype (פייזר) chip; falls back to the end if there is none.\n    final maker = _makerOf(product);\n    if (maker.isNotEmpty) {\n      final makerChip = _AttrChip(\n        word: maker,\n        kind: AttrKind.maker,\n        product: product,\n        onTap: onAttrTap,\n        isOpen: openKind == AttrKind.maker,\n      );\n      if (afterSubtypeIdx != null && afterSubtypeIdx! <= chips.length) {\n        chips.insert(afterSubtypeIdx!, makerChip);\n      } else {\n        chips.add(makerChip);\n      }\n    }\n\n    // Diameter from dims (e.g. DN110) — informational gray chip. Many fittings\n    // (elbows, seals, covers) carry their bore ONLY in dims, never in the name,\n    // so without this the finder",
+  "t listed more than\n    // once (e.g. 3 sibling products that all read \"דו כיווני\" → one option).\n    final byVal = <String, LipskeyCatalogProduct>{};\n    for (final s in siblings) {\n      final v = _attrVal(s, kind);\n      byVal.putIfAbsent(v.isEmpty ? s.sku : v, () => s);\n    }\n    final unique = byVal.values.toList();\n    return _pickerShell(children: [\n      _pickerLabel(",
+  "};\n  return noise.contains(word.trim());\n}\n\nclass _HierarchyChips extends StatelessWidget {\n  const _HierarchyChips({required this.product, this.onChipTap, this.openIndex});\n  final LipskeyCatalogProduct product;\n  final void Function(int chipIndex)? onChipTap;\n  final int? openIndex;\n\n  @override\n  Widget build(BuildContext context) {\n    final chips = parseChips(product.nameHe);\n    final rawPath = chips.path;\n    // Render with the ORIGINAL index preserved (so a tap maps back to the\n    // right faceted-filter level), but skip noise chips (bare unit tokens like\n    // מ\"מ) and clean wrapping parens for display.\n    final shown = <MapEntry<int, String>>[];\n    for (var i = 0; i < rawPath.length; i++) {\n      if (_isNoiseChip(rawPath[i])) continue;\n      shown.add(MapEntry(i, _chipDisplayLabel(rawPath[i])));\n    }\n    if (shown.isEmpty) return const SizedBox.shrink();\n    // Dims-derived DN — only when the breadcrumb carries NO size of its own.\n    // Hierarchy products usually expose their size in the name (PPR `20`,\n    // חוליות `32`), but covers/risers/grates (e.g. הגבהה/מכסה/רשת) carry their\n    // bore ONLY in dims, so without this their card shows no size at all while\n    // the finder filters them by DN. Gated on \"no path size\" so a PPR valve\n    // (whose name already states the OD) never gets a second, possibly\n    // less-reliable, dims-DN chip. Sourced from tokensFromDims → matches the\n    // finder chip verbatim.\n    final pathHasSize =\n        rawPath.any((seg) => seg.split(RegExp(r",
+  "או",
+  "אין מוצרים להצגה",
+  "אישור — $sel",
+  "אל",
+  "ארגז",
+  "את",
+  "ב",
+  "באריזה",
+  "בודד",
+  "בחר $label:",
+  "בחר כמות",
+  "בחר סוג:",
+  "בחר ערך:",
+  "בחר צבע:",
+  "בלי",
+  "במשטח",
+  "גימור",
+  "דגם",
+  "ה",
+  "הוסף כמות",
+  "הוסף לסל",
+  "החלף וריאנט",
+  "הסר",
+  "הסר מהסל",
+  "הסרה מהסל?",
+  "העתק מק\"ט",
+  "הפחת כמות",
+  "ו",
+  "חוליות",
+  "חומר",
+  "יח",
+  "יחידות",
+  "יצרן",
+  "כ",
+  "כמות",
+  "כרטיס חכם",
+  "ל",
+  "לחץ",
+  "ליפסקי",
+  "ללא",
+  "לסל",
+  "מ",
+  "מ\"מ",
+  "מוברש",
+  "מחיר לפי ספק",
+  "מט",
+  "מידה",
+  "מס.",
+  "מק\"ט הועתק",
+  "משטח",
+  "מ׳",
+  "מ”מ",
+  "נסו לבחור קטגוריה אחרת בקטלוג",
+  "ס\"מ",
+  "סוג",
+  "על",
+  "עם",
+  "פרטים",
+  "צבע",
+  "קוטר חיצוני",
+  "של",
+  "תת-סוג"
+ ],
+ "icons": [
+  "Icons.add",
+  "Icons.expand_more",
+  "Icons.remove"
+ ],
+ "glyphs": [
+  "✓",
+  "✨",
+  "🌳",
+  "🎨",
+  "🏭",
+  "🏷",
+  "💧",
+  "📊",
+  "📋",
+  "📐",
+  "📦",
+  "🔧",
+  "🔵",
+  "🟢",
+  "🧪"
+ ],
+ "logicCandidates": [
+  {
+   "name": "_attrVal",
+   "line": 778
+  },
+  {
+   "name": "isSizeToken",
+   "line": 1658
+  },
+  {
+   "name": "_stripWordsOfKind",
+   "line": 1727
+  },
+  {
+   "name": "_makerOf",
+   "line": 1820
+  },
+  {
+   "name": "_nominalBore",
+   "line": 1824
+  },
+  {
+   "name": "_getCompoundType",
+   "line": 1915
+  },
+  {
+   "name": "_chipDisplayLabel",
+   "line": 2236
+  },
+  {
+   "name": "_firstSizeNum",
+   "line": 2531
+  }
+ ],
+ "widgets": [
+  {
+   "name": "LipskeyProductsScreen",
+   "kind": "StatelessWidget",
+   "line": 30,
+   "loc": 79,
+   "pure": false,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "call:openWordSearch",
+    "nav:LipskeyProductsScreen"
+   ],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "LipskeyProductsList",
+   "kind": "ConsumerStatefulWidget",
+   "line": 113,
+   "loc": 9,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_LensGroupHeader",
+   "kind": "StatelessWidget",
+   "line": 307,
+   "loc": 46,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "LipskeyProductCard",
+   "kind": "ConsumerWidget",
+   "line": 356,
+   "loc": 20,
+   "pure": false,
+   "dataClean": true,
+   "reads": [
+    "catalogSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "LipskeyProductGridCard",
+   "kind": "ConsumerWidget",
+   "line": 388,
+   "loc": 217,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "catalogSettingsProvider",
+    "smartCartProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "call:showLipskeyProductSheet"
+   ],
+   "strings": 3,
+   "constData": 1
+  },
+  {
+   "name": "_StepBtn",
+   "kind": "StatelessWidget",
+   "line": 606,
+   "loc": 41,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_ProductRow",
+   "kind": "ConsumerStatefulWidget",
+   "line": 703,
+   "loc": 27,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 1
+  },
+  {
+   "name": "_NameWords",
+   "kind": "StatelessWidget",
+   "line": 1995,
+   "loc": 212,
+   "pure": false,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "call:openKind",
+    "call:openWordSearch"
+   ],
+   "strings": 5,
+   "constData": 0
+  },
+  {
+   "name": "_HierarchyChips",
+   "kind": "StatelessWidget",
+   "line": 2252,
+   "loc": 102,
+   "pure": false,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "call:openIndex"
+   ],
+   "strings": 3,
+   "constData": 0
+  },
+  {
+   "name": "_HierarchyChipPill",
+   "kind": "StatelessWidget",
+   "line": 2355,
+   "loc": 41,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_AttrChip",
+   "kind": "StatelessWidget",
+   "line": 2397,
+   "loc": 100,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kLipskeyCatalog",
+  "kLipskeyColors",
+  "kLipskeyModels",
+  "kLipskeySubtypes",
+  "kLipskeyTypes",
+  "kPolyrollBrand",
+  "kPolyrollCatalog",
+  "kSearchStopWords"
+ ],
+ "board": {
+  "reads": [
+   "catalogSettingsProvider",
+   "smartCartProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": [
+   "call:openIndex",
+   "call:openKind",
+   "call:openWordSearch",
+   "call:showLipskeyProductSheet",
+   "nav:LipskeyProductsScreen"
+  ]
+ }
+}

@@ -1,0 +1,512 @@
+{
+ "_SiteScaffold": {
+  "addProps": [
+   {
+    "name": "back",
+    "type": "String",
+    "replaces": "‹ חזרה"
+   }
+  ],
+  "note": ""
+ },
+ "_SiteHubGrid": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "📋"
+   },
+   {
+    "name": "mcymwtXwwt2",
+    "type": "String",
+    "replaces": "משימות צוות"
+   },
+   {
+    "name": "yxyrtMcymwtWaycwryewbd3",
+    "type": "String",
+    "replaces": "יצירת משימות ואישורי-עובדים — קבלן"
+   },
+   {
+    "name": "txt4",
+    "type": "String",
+    "replaces": "📅"
+   },
+   {
+    "name": "trcyGant5",
+    "type": "String",
+    "replaces": "תרשים גאנט"
+   },
+   {
+    "name": "lwjZmnyAyntraqtyby6",
+    "type": "String",
+    "replaces": "לוח זמנים אינטראקטיבי"
+   },
+   {
+    "name": "txt7",
+    "type": "String",
+    "replaces": "🔧"
+   },
+   {
+    "name": "rcymtLyqwyy8",
+    "type": "String",
+    "replaces": "רשימת ליקויים"
+   },
+   {
+    "name": "txt9",
+    "type": "String",
+    "replaces": "🏢"
+   },
+   {
+    "name": "qwmhDyrhJdr10",
+    "type": "String",
+    "replaces": "קומה · דירה · חדר"
+   },
+   {
+    "name": "cywMcymwtLmyqw11",
+    "type": "String",
+    "replaces": "שיוך משימות למיקום"
+   },
+   {
+    "name": "txt12",
+    "type": "String",
+    "replaces": "📍"
+   },
+   {
+    "name": "nwkjwtGPS13",
+    "type": "String",
+    "replaces": "נוכחות GPS"
+   },
+   {
+    "name": "cewNwkjwt14",
+    "type": "String",
+    "replaces": "שעון נוכחות"
+   },
+   {
+    "name": "txt15",
+    "type": "String",
+    "replaces": "👷"
+   },
+   {
+    "name": "jwfcwtEwbdy16",
+    "type": "String",
+    "replaces": "חופשות עובדים"
+   },
+   {
+    "name": "aycwrJwfcwtWxwwt17",
+    "type": "String",
+    "replaces": "אישור חופשות וצוות"
+   },
+   {
+    "name": "txt18",
+    "type": "String",
+    "replaces": "📓"
+   },
+   {
+    "name": "ywmEbwdh19",
+    "type": "String",
+    "replaces": "יומן עבודה"
+   },
+   {
+    "name": "ywmYwmyDygytly20",
+    "type": "String",
+    "replaces": "יומן יומי דיגיטלי"
+   },
+   {
+    "name": "txt21",
+    "type": "String",
+    "replaces": "🦺"
+   },
+   {
+    "name": "htrawtBtyjwt22",
+    "type": "String",
+    "replaces": "התראות בטיחות"
+   },
+   {
+    "name": "tdryBtyjwtYwmy23",
+    "type": "String",
+    "replaces": "תדריך בטיחות יומי"
+   },
+   {
+    "name": "txt24",
+    "type": "String",
+    "replaces": "🔗"
+   },
+   {
+    "name": "tlwywtJwmry25",
+    "type": "String",
+    "replaces": "תלויות חומרים"
+   },
+   {
+    "name": "byMcymwt26",
+    "type": "String",
+    "replaces": "בין משימות"
+   },
+   {
+    "name": "txt27",
+    "type": "String",
+    "replaces": "📸"
+   },
+   {
+    "name": "xylwLfnyajry28",
+    "type": "String",
+    "replaces": "צילום לפני/אחרי"
+   },
+   {
+    "name": "tyewdHtqdmwt29",
+    "type": "String",
+    "replaces": "תיעוד התקדמות"
+   },
+   {
+    "name": "txt30",
+    "type": "String",
+    "replaces": "🔍"
+   },
+   {
+    "name": "byqwrwtMfqj31",
+    "type": "String",
+    "replaces": "ביקורות מפקח"
+   },
+   {
+    "name": "tzkwrwtByqwrt32",
+    "type": "String",
+    "replaces": "תזכורות ביקורת"
+   },
+   {
+    "name": "txt33",
+    "type": "String",
+    "replaces": "🗄️"
+   },
+   {
+    "name": "arkywFrwyqty34",
+    "type": "String",
+    "replaces": "ארכיון פרויקטים"
+   },
+   {
+    "name": "frwyqtyChwclmw35",
+    "type": "String",
+    "replaces": "פרויקטים שהושלמו"
+   },
+   {
+    "name": "nyhwlAtr36",
+    "type": "String",
+    "replaces": "🏗️ ניהול אתר"
+   },
+   {
+    "name": "txt37",
+    "type": "String",
+    "replaces": "🏗️"
+   },
+   {
+    "name": "nyhwlAtrHbnyyh38",
+    "type": "String",
+    "replaces": "ניהול אתר הבנייה"
+   },
+   {
+    "name": "klKlyHnyhwl39",
+    "type": "String",
+    "replaces": "כל כלי הניהול של אתר הבנייה במקום אחד."
+   }
+  ],
+  "note": ""
+ },
+ "_SiteLocations": {
+  "addProps": [
+   {
+    "name": "myqwmy1",
+    "type": "String",
+    "replaces": "🏢 מיקומים"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "🏢"
+   },
+   {
+    "name": "qwmhDyrhJdr3",
+    "type": "String",
+    "replaces": "קומה · דירה · חדר"
+   },
+   {
+    "name": "mbnhHatrHhyrrky4",
+    "type": "String",
+    "replaces": "מבנה האתר ההיררכי — לשיוך משימות למיקום מדויק."
+   },
+   {
+    "name": "bfrwdqcMbnhHatr5",
+    "type": "String",
+    "replaces": "⚙️ בפרודקשן: מבנה האתר מסונכרן מהשרת — כאן מבנה דמו"
+   },
+   {
+    "name": "tplFfloor6",
+    "type": "String",
+    "replaces": "🏢 ${f.floor}"
+   },
+   {
+    "name": "tplAn7",
+    "type": "String",
+    "replaces": "🚪 ${a.n}"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_SiteDiary": {
+  "addProps": [
+   {
+    "name": "ywm1",
+    "type": "String",
+    "replaces": "📓 יומן"
+   },
+   {
+    "name": "hwsRcwmh2",
+    "type": "String",
+    "replaces": "הוסף רשומה"
+   },
+   {
+    "name": "txt3",
+    "type": "String",
+    "replaces": "📓"
+   },
+   {
+    "name": "ywmEbwdhDygytly4",
+    "type": "String",
+    "replaces": "יומן עבודה דיגיטלי"
+   },
+   {
+    "name": "tyewdYwmyCl5",
+    "type": "String",
+    "replaces": "תיעוד יומי של ההתקדמות, כוח האדם והאירועים באתר."
+   },
+   {
+    "name": "rycwYwmLhyw6",
+    "type": "String",
+    "replaces": "+ רישום יומן להיום"
+   },
+   {
+    "name": "skHtqdmwtE7",
+    "type": "String",
+    "replaces": "✨ סכם התקדמות עם AI"
+   },
+   {
+    "name": "ayRycwmyBywm8",
+    "type": "String",
+    "replaces": "אין רישומים ביומן"
+   },
+   {
+    "name": "tplDdate9",
+    "type": "String",
+    "replaces": "📅 ${d.date}"
+   },
+   {
+    "name": "tplDworkersEwbdy10",
+    "type": "String",
+    "replaces": "${d.workers} עובדים"
+   },
+   {
+    "name": "tplMzgAwwyrDweather11",
+    "type": "String",
+    "replaces": "מזג אוויר: ${d.weather}"
+   },
+   {
+    "name": "sykwAtr12",
+    "type": "String",
+    "replaces": "סיכום אתר"
+   },
+   {
+    "name": "mhBwxeHyw13",
+    "type": "String",
+    "replaces": "מה בוצע היום באתר?"
+   },
+   {
+    "name": "yxyqtRxftQwmh14",
+    "type": "String",
+    "replaces": "יציקת רצפת קומה 3"
+   },
+   {
+    "name": "hws15",
+    "type": "String",
+    "replaces": "הוסף"
+   },
+   {
+    "name": "rycwNwsLywm16",
+    "type": "String",
+    "replaces": "רישום נוסף ליומן ✓"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_SiteDeps": {
+  "addProps": [
+   {
+    "name": "tlwywt1",
+    "type": "String",
+    "replaces": "🔗 תלויות"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "🔗"
+   },
+   {
+    "name": "tlwywtJwmryBy3",
+    "type": "String",
+    "replaces": "תלויות חומרים בין משימות"
+   },
+   {
+    "name": "mcymhLaYkwlh4",
+    "type": "String",
+    "replaces": "משימה לא יכולה להתחיל לפני שהמשימות התלויות הושלמו."
+   },
+   {
+    "name": "bfrwdqcTlwywtMjwcbwt5",
+    "type": "String",
+    "replaces": "⚙️ בפרודקשן: תלויות מחושבות מלוח המשימות החי — כאן נתוני דמו"
+   },
+   {
+    "name": "txt6",
+    "type": "String",
+    "replaces": "🟢 "
+   },
+   {
+    "name": "txt7",
+    "type": "String",
+    "replaces": "🔒 "
+   },
+   {
+    "name": "tplDwrcDneeds8",
+    "type": "String",
+    "replaces": "דורש: ${d.needs}"
+   },
+   {
+    "name": "mwkLhtjlh9",
+    "type": "String",
+    "replaces": "מוכן להתחלה"
+   },
+   {
+    "name": "mmtyLtlwywt10",
+    "type": "String",
+    "replaces": "ממתין לתלויות"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_SiteInspect": {
+  "addProps": [
+   {
+    "name": "byqwrwt1",
+    "type": "String",
+    "replaces": "🔍 ביקורות"
+   },
+   {
+    "name": "smChwcl2",
+    "type": "String",
+    "replaces": "סמן שהושלם"
+   },
+   {
+    "name": "txt3",
+    "type": "String",
+    "replaces": "🔍"
+   },
+   {
+    "name": "byqwrwtMfqj4",
+    "type": "String",
+    "replaces": "ביקורות מפקח"
+   },
+   {
+    "name": "tzkwrwtLbyqwrwtMfqj5",
+    "type": "String",
+    "replaces": "תזכורות לביקורות מפקח ורשויות."
+   },
+   {
+    "name": "tzmByqwrt6",
+    "type": "String",
+    "replaces": "+ תזמן ביקורת"
+   },
+   {
+    "name": "ayByqwrwtMtwzmnwt7",
+    "type": "String",
+    "replaces": "אין ביקורות מתוזמנות — הקש \"+ תזמן ביקורת\""
+   },
+   {
+    "name": "bwxeh8",
+    "type": "String",
+    "replaces": "בוצעה"
+   },
+   {
+    "name": "tplInsdue9",
+    "type": "String",
+    "replaces": "🗓️ ${ins.due}"
+   },
+   {
+    "name": "hbyqwrtBwxeh10",
+    "type": "String",
+    "replaces": "✓ הביקורת בוצעה"
+   },
+   {
+    "name": "smKbwxeh11",
+    "type": "String",
+    "replaces": "סמן כבוצעה"
+   },
+   {
+    "name": "tplHbyqwrtInsidSwmnh12",
+    "type": "String",
+    "replaces": "הביקורת ${ins.id} סומנה כבוצעה ✓"
+   },
+   {
+    "name": "swgHbyqwrt13",
+    "type": "String",
+    "replaces": "סוג הביקורת:"
+   },
+   {
+    "name": "byqwrtMhnds14",
+    "type": "String",
+    "replaces": "ביקורת מהנדס"
+   },
+   {
+    "name": "tzm15",
+    "type": "String",
+    "replaces": "תזמן"
+   },
+   {
+    "name": "byqwrtTwzmnh16",
+    "type": "String",
+    "replaces": "ביקורת תוזמנה ✓"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_SiteArchive": {
+  "addProps": [
+   {
+    "name": "arkyw1",
+    "type": "String",
+    "replaces": "🗄️ ארכיון"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "🗄️"
+   },
+   {
+    "name": "arkywFrwyqty3",
+    "type": "String",
+    "replaces": "ארכיון פרויקטים"
+   },
+   {
+    "name": "frwyqtyChwclmwLeyw4",
+    "type": "String",
+    "replaces": "פרויקטים שהושלמו — לעיון והפקת לקחים."
+   },
+   {
+    "name": "bfrwdqcArkywFrwyqty5",
+    "type": "String",
+    "replaces": "⚙️ בפרודקשן: ארכיון פרויקטים מהשרת — כאן נתוני דמו"
+   },
+   {
+    "name": "tplPyearPunitsYjxd6",
+    "type": "String",
+    "replaces": "📅 ${p.year} · ${p.units} יח״ד"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

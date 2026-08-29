@@ -1,0 +1,427 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__catalog_settings_screen.dart",
+ "lines": 1013,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.brandDark",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   12,
+   13,
+   14,
+   15,
+   22
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   20
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  " ק\"מ",
+  "$ דולר",
+  "$label — בבנייה",
+  ",\n                      style: const TextStyle(\n                        color: Colors.white,\n                        fontSize: 12,\n                        fontWeight: FontWeight.w700,\n                      ),\n                    ),\n                  ),\n          title: Text(\n            title,\n            style: const TextStyle(\n              color: BsTokens.inkLight,\n              fontSize: 15,\n              fontWeight: FontWeight.w600,\n            ),\n          ),\n          children: _visibleChildren,\n        ),\n      ),\n    );\n  }\n}\n\nclass _SwitchRow extends StatelessWidget {\n  const _SwitchRow({\n    required this.label,\n    required this.value,\n    required this.onChanged,\n  });\n\n  final String label;\n  final bool value;\n  final ValueChanged<bool> onChanged;\n\n  @override\n  Widget build(BuildContext context) {\n    return SwitchListTile(\n      contentPadding: const EdgeInsets.symmetric(horizontal: 16),\n      title: Text(label, style: const TextStyle(color: BsTokens.inkLight)),\n      value: value,\n      activeColor: BsTokens.brand,\n      onChanged: onChanged,\n    );\n  }\n}\n\nclass _RadioGroupRow<T> extends StatelessWidget {\n  const _RadioGroupRow({\n    required this.label,\n    required this.value,\n    required this.options,\n    required this.onChanged,\n  });\n\n  final String label;\n  final T value;\n  final List<_RadioOption<T>> options;\n  final ValueChanged<T> onChanged;\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      children: [\n        Padding(\n          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),\n          child: Text(\n            label,\n            style: const TextStyle(color: Colors.black54, fontSize: 13),\n          ),\n        ),\n        ...options.map((o) {\n          final enabled = o.enabled;\n          // Disabled options stay un-selectable and carry a \"בקרוב\" badge so\n          // the picker is honest about what is actually implemented.\n          return RadioListTile<T>(\n            contentPadding: const EdgeInsets.symmetric(horizontal: 16),\n            // Optional leading icon (e.g. grid/list view glyph) — null = no icon.\n            secondary:\n                o.icon == null\n                    ? null\n                    : Icon(\n                      o.icon,\n                      color: enabled ? BsTokens.inkLight : BsTokens.mutedLight,\n                    ),\n            title: Row(\n              children: [\n                Flexible(\n                  child: Text(\n                    o.label,\n                    // Per-option font size lets size pickers render their own\n                    // label at its own scale; defaults to the inherited size.\n                    style: TextStyle(\n                      color: enabled ? BsTokens.inkLight : BsTokens.mutedLight,\n                      fontSize: o.labelFontSize,\n                    ),\n                  ),\n                ),\n                if (!enabled) ...[\n                  const SizedBox(width: 8),\n                  const CfgText(\n                    ",
+  ",\n            ),\n          ],\n          onChanged: (v) => notifier.update((s) => s.copyWith(unit: v)),\n        ),\n        // Both rows control the SAME persisted dimension format\n        // ([decimalFormat]): \"פורמט מידות בכרטיס מוצר\" is the on-card view of it\n        // and \"פורמט הצגה\" the general display format. They share one source of\n        // truth so they can never drift, and both genuinely re-render the card.\n        _RadioGroupRow<CatalogDecimalFormat>(\n          label: ",
+  ";\n\n/// Full-screen Catalog settings — 9 categories, ~40 leaves.\n/// All 23 fields persisted via [catalogSettingsProvider].\nclass CatalogSettingsScreen extends ConsumerWidget {\n  const CatalogSettingsScreen({super.key, this.showProfileRow = true});\n\n  /// Whether to show the personal \"הפרופיל שלי\" row (→ contractor [ProfileScreen]).\n  /// Contractors see it (default true); the MANAGER opens the SAME No-Code\n  /// catalog/app admin WITHOUT it — a platform-admin must not land in a\n  /// contractor",
+  "אזור ושפה",
+  "איפוס הגדרות?",
+  "איפוס לברירת מחדל",
+  "אפס",
+  "בבנייה",
+  "בהיר",
+  "ביטול",
+  "בינה מלאכותית והמלצות",
+  "בינוני",
+  "בקרוב",
+  "ברירת מחדל",
+  "גדול",
+  "גודל טקסט (כל האפליקציה)",
+  "גודל תמונות",
+  "גרור לשנות את סדר המקטעים בבית",
+  "דירוג מינימלי",
+  "הגדרות",
+  "הגדרות אופסו",
+  "ההיסטוריה נוקתה",
+  "הוסף",
+  "היסטוריית החיפושים תימחק לצמיתות.",
+  "הכל",
+  "המלצות מבוססות בינה מלאכותית",
+  "הנפשות מופחתות (כל האפליקציה)",
+  "הפחת",
+  "הפרופיל שלי",
+  "הצג מחירים כולל מע\"מ",
+  "הצגת מחיר ליחידה",
+  "השוואת מחירים בין ספקים",
+  "התאמה לפי היסטוריית הזמנות",
+  "התראות",
+  "התראות קטלוג",
+  "התראות תקציב",
+  "חזר למלאי",
+  "חיפוש וסינון",
+  "חלופות זולות אוטומטיות",
+  "יחידות מידה",
+  "ירידת מחיר במועדפים",
+  "כהה",
+  "כל ההגדרות יוחזרו לברירת המחדל.",
+  "מבצעים והטבות",
+  "מדיניות פרטיות",
+  "מועדפים ורשימות",
+  "מוצרים חדשים בקטגוריה",
+  "מחירים ומטבע",
+  "מטבע",
+  "מטרי (מ\"מ / ס\"מ)",
+  "מידע",
+  "מיון ברירת מחדל",
+  "מלאי נמוך",
+  "ממשק ונגישות",
+  "מערכת מידה",
+  "מצב קומפקטי (כרטיסים קטנים)",
+  "מק\"ט",
+  "מרחק מקסימלי",
+  "ניגודיות גבוהה (כל האפליקציה)",
+  "ניקוי היסטוריה",
+  "ניקוי היסטוריית חיפוש?",
+  "נקה",
+  "סוג תצוגה",
+  "סידור מסך הבית",
+  "סינון לפי פרויקט פעיל",
+  "ספקים חסומים",
+  "ספקים מועדפים",
+  "ספקים מסומנים כמועדפים",
+  "ספקים מקומיים בלבד",
+  "סרגל מיון מהיר במוצרים",
+  "עברית",
+  "עמודות בתצוגת רשת",
+  "ערכת נושא",
+  "עשרוני (1.5)",
+  "פורמט הצגה",
+  "קטן",
+  "רדיוס חיפוש",
+  "רשימה (List)",
+  "רשת (Grid)",
+  "שבר (1½)",
+  "שם א-ת",
+  "שם ת-א",
+  "שמור היסטוריית חיפוש",
+  "שפה",
+  "תנאי שימוש",
+  "תצוגה ומיון",
+  "₪ שקל",
+  "€ אירו"
+ ],
+ "icons": [
+  "Icons.add",
+  "Icons.chevron_left",
+  "Icons.grid_view",
+  "Icons.remove",
+  "Icons.restart_alt",
+  "Icons.swap_vert",
+  "Icons.view_list_rounded"
+ ],
+ "glyphs": [
+  "⚙",
+  "🌐",
+  "🏪",
+  "👤",
+  "💰",
+  "📊",
+  "📏",
+  "📱",
+  "🔍",
+  "🔑",
+  "🔔",
+  "🟢",
+  "🤖"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "CatalogSettingsScreen",
+   "kind": "ConsumerWidget",
+   "line": 23,
+   "loc": 117,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "appSettingsProvider",
+    "catalogSettingsProvider",
+    "notifSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "nav:CatalogSettingsScreen",
+    "fx:toast"
+   ],
+   "strings": 7,
+   "constData": 0
+  },
+  {
+   "name": "_ProfileRow",
+   "kind": "StatelessWidget",
+   "line": 146,
+   "loc": 28,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_ThemeSection",
+   "kind": "ConsumerWidget",
+   "line": 177,
+   "loc": 107,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "appSettingsProvider",
+    "catalogProductSortProvider",
+    "catalogSettingsProvider"
+   ],
+   "writes": [
+    "catalogProductSortProvider"
+   ],
+   "actions": [],
+   "strings": 19,
+   "constData": 4
+  },
+  {
+   "name": "_NotificationsSection",
+   "kind": "ConsumerWidget",
+   "line": 287,
+   "loc": 53,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "catalogSettingsProvider",
+    "notifSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 8,
+   "constData": 0
+  },
+  {
+   "name": "_RegionSection",
+   "kind": "ConsumerWidget",
+   "line": 343,
+   "loc": 30,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "appSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 3,
+   "constData": 1
+  },
+  {
+   "name": "_SearchSection",
+   "kind": "ConsumerWidget",
+   "line": 376,
+   "loc": 49,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "catalogSettingsProvider",
+    "recentSearchesProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "fx:toast"
+   ],
+   "strings": 9,
+   "constData": 0
+  },
+  {
+   "name": "_PricesSection",
+   "kind": "ConsumerWidget",
+   "line": 432,
+   "loc": 47,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "catalogSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 8,
+   "constData": 1
+  },
+  {
+   "name": "_UnitsSection",
+   "kind": "ConsumerWidget",
+   "line": 491,
+   "loc": 63,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "catalogSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 7,
+   "constData": 3
+  },
+  {
+   "name": "_SuppliersSection",
+   "kind": "ConsumerWidget",
+   "line": 557,
+   "loc": 53,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "catalogSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 8,
+   "constData": 1
+  },
+  {
+   "name": "_AiSection",
+   "kind": "StatelessWidget",
+   "line": 613,
+   "loc": 17,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 5,
+   "constData": 0
+  },
+  {
+   "name": "_AccessibilitySection",
+   "kind": "ConsumerWidget",
+   "line": 633,
+   "loc": 51,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "catalogSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 8,
+   "constData": 1
+  },
+  {
+   "name": "_InfoSection",
+   "kind": "StatelessWidget",
+   "line": 687,
+   "loc": 39,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 3,
+   "constData": 0
+  },
+  {
+   "name": "_SectionTile",
+   "kind": "StatelessWidget",
+   "line": 729,
+   "loc": 77,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_SwitchRow",
+   "kind": "StatelessWidget",
+   "line": 807,
+   "loc": 22,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_PlaceholderRow",
+   "kind": "StatelessWidget",
+   "line": 927,
+   "loc": 18,
+   "pure": false,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "fx:toast"
+   ],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_NumberRow",
+   "kind": "StatelessWidget",
+   "line": 946,
+   "loc": 52,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_ActionRow",
+   "kind": "StatelessWidget",
+   "line": 999,
+   "loc": 14,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kHideUnderConstruction",
+  "kKbGlobal"
+ ],
+ "board": {
+  "reads": [
+   "appSettingsProvider",
+   "catalogProductSortProvider",
+   "catalogSettingsProvider",
+   "notifSettingsProvider",
+   "recentSearchesProvider"
+  ],
+  "writes": [
+   "catalogProductSortProvider"
+  ],
+  "navsAndCalls": [
+   "fx:toast",
+   "nav:CatalogSettingsScreen"
+  ]
+ }
+}

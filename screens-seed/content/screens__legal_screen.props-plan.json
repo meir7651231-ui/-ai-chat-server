@@ -1,0 +1,32 @@
+{
+ "_PlaceholderNotice": {
+  "addProps": [
+   {
+    "name": "frtyHjbrhHmwfyey1",
+    "type": "String",
+    "replaces": "פרטי החברה המופיעים במסמכים בסוגריים מרובעים — כגון "
+   },
+   {
+    "name": "cHjbrhYwclmw2",
+    "type": "String",
+    "replaces": "[שם החברה] — יושלמו לפני השקה מסחרית."
+   }
+  ],
+  "note": ""
+ },
+ "_SegmentedToggle": {
+  "addProps": [
+   {
+    "name": "tnayCymwc1",
+    "type": "String",
+    "replaces": "תנאי שימוש"
+   },
+   {
+    "name": "mdynywtFrtywt2",
+    "type": "String",
+    "replaces": "מדיניות פרטיות"
+   }
+  ],
+  "note": ""
+ }
+}

@@ -1,0 +1,27 @@
+{
+ "UpdatesScreen": {
+  "addProps": [
+   {
+    "name": "cyjwtAynFeylwt1",
+    "type": "String",
+    "replaces": "שיחות אינן פעילות בחברה זו"
+   }
+  ],
+  "note": ""
+ },
+ "_UpdatesToggle": {
+  "addProps": [
+   {
+    "name": "htrawt1",
+    "type": "String",
+    "replaces": "התראות"
+   },
+   {
+    "name": "cyjwt2",
+    "type": "String",
+    "replaces": "שיחות"
+   }
+  ],
+  "note": ""
+ }
+}

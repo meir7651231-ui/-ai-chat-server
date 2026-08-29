@@ -1,0 +1,105 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__ai_assistant_screen.dart",
+ "lines": 404,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   12,
+   13,
+   14,
+   15,
+   18,
+   40
+  ],
+  "fontWeights": [
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   18
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  "\"כמה נשאר בתקציב\" · \"תוסיף ערכה לסל\".",
+  "s REAL grounded tools\n// (\"תאר עבודה → סל\", the smart finder, the product card). So it reasons over\n// general trade knowledge but never claims app-specific data it doesn",
+  "t reach (\"שחור\" →\n        // \"נחושת\"). Prefer real NAME-matches; only when there are none fall back\n        // to the model",
+  "אפשר גם לבקש: \"תמצא לי ברז\" · \"מה מצב ההזמנות\" · ",
+  "הוסף ${t.kit.length} לסל",
+  "הרכבתי ערכה — להוסיף לסל?",
+  "כתוב הודעה…",
+  "לא הצלחתי להרכיב את הערכה — נסה לתאר אחרת.",
+  "לא הצלחתי לנסח תשובה — נסה לנסח אחרת.",
+  "מצאתי בקטגוריה \"${intent.key}\":",
+  "מצאתי עבור \"$userText\":",
+  "משהו השתבש בחיבור — נסה שוב עוד רגע.",
+  "נוספו ${kit.length} פריטים לסל ✓",
+  "שאל אותי כל דבר על אינסטלציה, רכש או עבודה.",
+  "שלח",
+  "✓ נוסף לסל",
+  "💡 העוזר החכם דורש חיבור לשרת.",
+  "📊 ההזמנות שלך:",
+  "📊 התקציב:",
+  "🤖 העוזר החכם"
+ ],
+ "icons": [
+  "Icons.add_shopping_cart",
+  "Icons.send"
+ ],
+ "glyphs": [
+  "✓",
+  "💡",
+  "📂",
+  "📊",
+  "🔎",
+  "🤖"
+ ],
+ "logicCandidates": [
+  {
+   "name": "AssistantTurn",
+   "line": 45,
+   "kind": "metrics-class"
+  }
+ ],
+ "widgets": [
+  {
+   "name": "AiAssistantScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 56,
+   "loc": 9,
+   "pure": false,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:AiAssistantScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kBotAutoReplies",
+  "kClaudeAi"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:AiAssistantScreen"
+  ]
+ }
+}

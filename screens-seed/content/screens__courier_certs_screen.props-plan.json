@@ -1,0 +1,212 @@
+{
+ "CourierCertsScreen": {
+  "addProps": [
+   {
+    "name": "title",
+    "type": "String",
+    "replaces": "🪪 תעודות נהג"
+   },
+   {
+    "name": "sheetTitle",
+    "type": "String",
+    "replaces": "🪪 הוספת תעודה"
+   },
+   {
+    "name": "quickFillHint",
+    "type": "String",
+    "replaces": "מילוי מהיר — ממלא את שם התעודה בלבד:"
+   },
+   {
+    "name": "attachPhoto",
+    "type": "String",
+    "replaces": "📷 צרף צילום תעודה (לא חובה)"
+   },
+   {
+    "name": "photoAttached",
+    "type": "String",
+    "replaces": "📷 צילום צורף ✓"
+   },
+   {
+    "name": "saveButton",
+    "type": "String",
+    "replaces": "💾 שמור תעודה"
+   },
+   {
+    "name": "mjyqtTewdh7",
+    "type": "String",
+    "replaces": "מחיקת תעודה?"
+   },
+   {
+    "name": "tplCertnameTymjqMharnq8",
+    "type": "String",
+    "replaces": "\"${cert.name}\" תימחק מהארנק לצמיתות."
+   },
+   {
+    "name": "mjq9",
+    "type": "String",
+    "replaces": "מחק"
+   },
+   {
+    "name": "htewdhNmjqh10",
+    "type": "String",
+    "replaces": "התעודה נמחקה"
+   },
+   {
+    "name": "naLmlaC11",
+    "type": "String",
+    "replaces": "נא למלא שם תעודה"
+   },
+   {
+    "name": "naLmlaMnfyq12",
+    "type": "String",
+    "replaces": "נא למלא מנפיק"
+   },
+   {
+    "name": "naLbjwrTwq13",
+    "type": "String",
+    "replaces": "נא לבחור תוקף"
+   },
+   {
+    "name": "htmwnhGdwlhMdy14",
+    "type": "String",
+    "replaces": "התמונה גדולה מדי — לא נשמרה"
+   },
+   {
+    "name": "sgwr15",
+    "type": "String",
+    "replaces": "סגור"
+   },
+   {
+    "name": "cHtewdhLmcl16",
+    "type": "String",
+    "replaces": "שם התעודה (למשל: רישיון נהיגה)"
+   },
+   {
+    "name": "mnfyqLmclMcrd17",
+    "type": "String",
+    "replaces": "מנפיק (למשל: משרד הרישוי)"
+   },
+   {
+    "name": "txt18",
+    "type": "String",
+    "replaces": "📅"
+   },
+   {
+    "name": "btwqEd19",
+    "type": "String",
+    "replaces": "בתוקף עד"
+   },
+   {
+    "name": "tplBtwqEdFmtDateexpiry20",
+    "type": "String",
+    "replaces": "בתוקף עד ${_fmtDate(expiry!)}"
+   },
+   {
+    "name": "hsrXylw21",
+    "type": "String",
+    "replaces": "הסר צילום"
+   },
+   {
+    "name": "htewdhNcmrhBarnq22",
+    "type": "String",
+    "replaces": "🪪 התעודה נשמרה בארנק"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_CertsCard": {
+  "addProps": [
+   {
+    "name": "empty",
+    "type": "String",
+    "replaces": "אין תעודות בארנק עדיין — הוסף את הראשונה."
+   },
+   {
+    "name": "addButton",
+    "type": "String",
+    "replaces": "➕ הוסף תעודה"
+   },
+   {
+    "name": "tplTewdwtNhgCertslength3",
+    "type": "String",
+    "replaces": "🪪 תעודות נהג (${certs.length})"
+   },
+   {
+    "name": "hwsftTewdh4",
+    "type": "String",
+    "replaces": "הוספת תעודה"
+   },
+   {
+    "name": "fwtjAtGylyw5",
+    "type": "String",
+    "replaces": "פותח את גיליון הוספת תעודת-נהג — שם, מנפיק, תוקף וצילום אופציונלי."
+   },
+   {
+    "name": "hwsTewdh6",
+    "type": "String",
+    "replaces": "הוסף תעודה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_CertRow": {
+  "addProps": [
+   {
+    "name": "fgTwq1",
+    "type": "String",
+    "replaces": "פג תוקף"
+   },
+   {
+    "name": "fgBqrwb2",
+    "type": "String",
+    "replaces": "פג בקרוב"
+   },
+   {
+    "name": "btwq3",
+    "type": "String",
+    "replaces": "בתוקף"
+   },
+   {
+    "name": "xfyyhBxylwHtewdh4",
+    "type": "String",
+    "replaces": "צפייה בצילום התעודה"
+   },
+   {
+    "name": "hqchElHtmwnh5",
+    "type": "String",
+    "replaces": "הקשה על התמונה פותחת את צילום-התעודה במסך מלא."
+   },
+   {
+    "name": "hxgXylwTewdh6",
+    "type": "String",
+    "replaces": "הצג צילום תעודה במסך מלא"
+   },
+   {
+    "name": "txt7",
+    "type": "String",
+    "replaces": "📷"
+   },
+   {
+    "name": "tplBtwqEdFmtDatecertexpi8",
+    "type": "String",
+    "replaces": "בתוקף עד ${_fmtDate(cert.expiry)}"
+   },
+   {
+    "name": "mjyqtTewdh9",
+    "type": "String",
+    "replaces": "מחיקת תעודה"
+   },
+   {
+    "name": "mwjqAtHtewdh10",
+    "type": "String",
+    "replaces": "מוחק את התעודה מהארנק לצמיתות (עם דיאלוג אישור)."
+   },
+   {
+    "name": "mjqTewdh11",
+    "type": "String",
+    "replaces": "מחק תעודה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

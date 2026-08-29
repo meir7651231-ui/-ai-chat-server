@@ -1,0 +1,404 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__notif_settings_screen.dart",
+ "lines": 1086,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   12,
+   13,
+   15,
+   18,
+   22
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   22
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  " + מונה ",
+  " / 4ש",
+  " ה",
+  "$label — בבנייה",
+  ")\n        // מושתק דרך notifUnreadCountProvider.\n        _SwitchRow(\n          label: ",
+  ") במקום\n        // מתג ששומר ערך בלי שום השפעה.\n        _SwitchRow(\n          label: ",
+  ",\n          value: settings.pushEnabled,\n          onChanged:\n              (v) => ref\n                  .read(notifSettingsProvider.notifier)\n                  .update((s) => s.copyWith(pushEnabled: v)),\n        ),\n        // ערוצים התלויים בשרת — מושבתים ביושר (",
+  "15 דקות",
+  "4 שעות",
+  ";\n\n/// Full-screen Notification settings — 9 categories, ~40 leaves.\n/// Most leaves are persisted via [notifSettingsProvider];\n/// OS-level quick actions show \"בבנייה\" toast on tap.\nclass NotifSettingsScreen extends ConsumerWidget {\n  const NotifSettingsScreen({super.key});\n\n  static Route<void> route() =>\n      MaterialPageRoute<void>(builder: (_) => const NotifSettingsScreen());\n\n  /// STABLE [KbScreen] tool list — built once so the floating-keyboard mirror\n  /// never re-registers on rebuild. Tree-shaken with the [KbScreen] path off-flag.\n  static final List<KbToolNode> _kbNodes = kbNotifSettingsNodes();\n\n  @override\n  Widget build(BuildContext context, WidgetRef ref) {\n    // KbScreen: while this pushed route is front-most under [kKbGlobal], the\n    // floating ▦ grid mirrors THIS screen",
+  "LED (אנדרואיד)",
+  "s persisted toggles have no engine yet — show an\n  // honest \"בבנייה\" subtitle and suppress the active-count badge (Wave 8 / D2).\n  final bool underConstruction;\n\n  // A row is a backend-blocked \"under construction\" placeholder when it is a\n  // _PlaceholderRow, a server-only channel, or an _Inert row flagged\n  // underConstruction. Single source of truth for the count badge AND the\n  // Apple-readiness hide-filter.\n  static bool _isUnderConstruction(Widget w) =>\n      w is _PlaceholderRow ||\n      (w is _SwitchRow && w.requiresServer) ||\n      (w is _Inert && (w as _Inert).underConstruction);\n\n  // Count only functional rows — exclude \"בבנייה\" placeholders and rows\n  // that require a server connection (honestly disabled in this build).\n  int get _activeCount =>\n      children.where((w) => !_isUnderConstruction(w)).length;\n\n  // For Apple review (kHideUnderConstruction) we render only the functional\n  // rows; the placeholder rows stay defined in code (reversible) but are hidden.\n  List<Widget> get _visibleChildren =>\n      kHideUnderConstruction\n          ? children.where((w) => !_isUnderConstruction(w)).toList()\n          : children;\n\n  @override\n  Widget build(BuildContext context) {\n    // A whole section that is itself \"under construction\" — or one whose every\n    // row is a hidden placeholder — disappears entirely for Apple review.\n    if (kHideUnderConstruction &&\n        (underConstruction || _visibleChildren.isEmpty)) {\n      return const SizedBox.shrink();\n    }\n    return Card(\n      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),\n      color: Theme.of(context).colorScheme.surface,\n      elevation: 0,\n      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),\n      child: Theme(\n        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),\n        child: ExpansionTile(\n          tilePadding: const EdgeInsets.symmetric(horizontal: 16),\n          childrenPadding: const EdgeInsets.only(bottom: 8),\n          iconColor: Colors.black54,\n          collapsedIconColor: Colors.black54,\n          leading: Text(emoji, style: const TextStyle(fontSize: 22)),\n          // Count badge replaces the default expand chevron.\n          trailing:\n              (underConstruction || _activeCount == 0)\n                  ? null\n                  : Container(\n                    padding: const EdgeInsets.symmetric(\n                      horizontal: 8,\n                      vertical: 2,\n                    ),\n                    decoration: BoxDecoration(\n                      color: BsTokens.brand,\n                      borderRadius: BorderRadius.circular(11),\n                    ),\n                    child: Text(\n                      ",
+  "איפוס הגדרות?",
+  "איפוס לברירת מחדל",
+  "אישור ביומטרי לפתיחה",
+  "אישור בלי פתיחת אפליקציה",
+  "אל תעבר לשעון/רכב",
+  "אפס",
+  "בבנייה",
+  "בבנייה — ההגדרות נשמרות אך עדיין אינן משפיעות",
+  "בבנייה — עדיין לא משפיע",
+  "בחר משך זמן",
+  "ביטול",
+  "דוח בוקר",
+  "דורש חיבור שרת",
+  "דורש חיבור שרת — לא זמין בגרסה זו",
+  "דחייה מהירה",
+  "הגדרות אופסו",
+  "הגדרות התראות",
+  "הזמנות",
+  "הכל",
+  "הסתר לחלוטין",
+  "הפעל שעות שקט",
+  "הצג תוכן מלא",
+  "הצעות ספקים",
+  "השתקה בוטלה",
+  "התראות",
+  "התראות הושתקו",
+  "התראות מושתקות עד $untilLabel",
+  "התראות תקציב",
+  "חזר למלאי",
+  "חסימת שולח",
+  "חריגת תקציב",
+  "חשובות בלבד",
+  "חשיבות וסינון",
+  "יום שלם",
+  "ימי שבת/חג",
+  "כל הגדרות ההתראות יוחזרו לברירת המחדל.",
+  "כפתורי תגובה בהתראה",
+  "לחץ לביטול",
+  "לפי תפקיד",
+  "מבצעים",
+  "מסתיים בשעה",
+  "מצב נהיגה",
+  "משלוחים",
+  "מתחיל בשעה",
+  "סוגי התראות",
+  "סיכום חודשי",
+  "סיכום יומי",
+  "סיכום ערב",
+  "סיכום שבועי (ראשון)",
+  "סיכומים תקופתיים",
+  "עדכוני פרויקטים",
+  "ערוצי קבלה",
+  "פעולות מהירות",
+  "פרטיות במסך נעול",
+  "צליל ורטט",
+  "צליל מופעל",
+  "צלילים שונים לפי סוג",
+  "קריטיות בלבד",
+  "רטט",
+  "רמת חשיבות",
+  "רק שם השולח",
+  "שיחות חדשות",
+  "שעה",
+  "שעות שקט (DND)",
+  "שעת דוח בוקר",
+  "שעת סיכום ערב",
+  "שעת שליחה",
+  "תוך פגישות",
+  "תזכורות",
+  "תצוגה במסך נעול",
+  "תשובה ישירה",
+  "🏪 חנות — הזמנות + מלאי",
+  "👔 מנהל המערכת — דשבורד",
+  "👷 קבלן — התראות פרויקט",
+  "🔇 השתק התראות",
+  "🔇 השתק התראות זמנית",
+  "🛵 שליח — pickup + active",
+  "🦺 עובד — משימות"
+ ],
+ "icons": [
+  "Icons.chevron_left",
+  "Icons.close",
+  "Icons.notifications_off",
+  "Icons.notifications_paused",
+  "Icons.restart_alt"
+ ],
+ "glyphs": [
+  "⚡",
+  "🎯",
+  "🏪",
+  "👔",
+  "👤",
+  "👷",
+  "📊",
+  "📦",
+  "📱",
+  "🔇",
+  "🔊",
+  "🔐",
+  "🔑",
+  "🔔",
+  "🛵",
+  "🟢",
+  "🦺"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "NotifSettingsScreen",
+   "kind": "ConsumerWidget",
+   "line": 17,
+   "loc": 102,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "notifSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "nav:NotifSettingsScreen",
+    "fx:toast"
+   ],
+   "strings": 7,
+   "constData": 1
+  },
+  {
+   "name": "_SnoozeBanner",
+   "kind": "ConsumerWidget",
+   "line": 122,
+   "loc": 86,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "notifSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "call:showModalBottomSheet",
+    "fx:toast"
+   ],
+   "strings": 6,
+   "constData": 0
+  },
+  {
+   "name": "_SnoozeSheet",
+   "kind": "StatelessWidget",
+   "line": 209,
+   "loc": 61,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 5,
+   "constData": 1
+  },
+  {
+   "name": "_ChannelsSection",
+   "kind": "ConsumerWidget",
+   "line": 273,
+   "loc": 54,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "notifSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 6,
+   "constData": 0
+  },
+  {
+   "name": "_TypesSection",
+   "kind": "ConsumerWidget",
+   "line": 330,
+   "loc": 83,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "notifSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 11,
+   "constData": 0
+  },
+  {
+   "name": "_QuietHoursSection",
+   "kind": "ConsumerWidget",
+   "line": 416,
+   "loc": 77,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "notifSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 7,
+   "constData": 0
+  },
+  {
+   "name": "_SoundSection",
+   "kind": "ConsumerWidget",
+   "line": 496,
+   "loc": 45,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "notifSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 6,
+   "constData": 0
+  },
+  {
+   "name": "_ImportanceSection",
+   "kind": "ConsumerWidget",
+   "line": 544,
+   "loc": 32,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "notifSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 7,
+   "constData": 1
+  },
+  {
+   "name": "_PersonaSection",
+   "kind": "ConsumerWidget",
+   "line": 579,
+   "loc": 63,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "notifSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 8,
+   "constData": 0
+  },
+  {
+   "name": "_SummariesSection",
+   "kind": "ConsumerWidget",
+   "line": 645,
+   "loc": 100,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "notifSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 9,
+   "constData": 0
+  },
+  {
+   "name": "_LockScreenSection",
+   "kind": "ConsumerWidget",
+   "line": 748,
+   "loc": 44,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "notifSettingsProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 7,
+   "constData": 1
+  },
+  {
+   "name": "_QuickActionsSection",
+   "kind": "StatelessWidget",
+   "line": 795,
+   "loc": 17,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 5,
+   "constData": 0
+  },
+  {
+   "name": "_SectionTile",
+   "kind": "StatelessWidget",
+   "line": 815,
+   "loc": 108,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_SwitchRow",
+   "kind": "StatelessWidget",
+   "line": 930,
+   "loc": 44,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 3,
+   "constData": 0
+  },
+  {
+   "name": "_TimeRow",
+   "kind": "StatelessWidget",
+   "line": 1020,
+   "loc": 47,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_PlaceholderRow",
+   "kind": "StatelessWidget",
+   "line": 1068,
+   "loc": 18,
+   "pure": false,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "fx:toast"
+   ],
+   "strings": 2,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kHideUnderConstruction",
+  "kKbGlobal"
+ ],
+ "board": {
+  "reads": [
+   "notifSettingsProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": [
+   "call:showModalBottomSheet",
+   "fx:toast",
+   "nav:NotifSettingsScreen"
+  ]
+ }
+}

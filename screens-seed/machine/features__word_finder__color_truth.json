@@ -1,0 +1,44 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__word_finder__color_truth.dart",
+ "lines": 30,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "\n    show colorOptions;\n\n/// The real product colours in the catalog. Metal finishes (זהב / כרום / נחושת /\n/// ניקל / נירוסטה …) are deliberately ABSENT — a finish, or the material itself,\n/// is never a colour and belongs on the material axis.\nconst Set<String> kTrueColors = {\n  ",
+  "אפור",
+  "גרפיטי",
+  "ירוק",
+  "כחול",
+  "כרום",
+  "כתום",
+  "לבן",
+  "מט שחור",
+  "נחושת",
+  "פרגמון",
+  "שחור",
+  "שחור ירוק",
+  "שחור מט"
+ ],
+ "icons": [],
+ "glyphs": [],
+ "logicCandidates": [],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kLipskeyColors",
+  "kTrueColors"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

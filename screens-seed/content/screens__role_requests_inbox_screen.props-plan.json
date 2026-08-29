@@ -1,0 +1,37 @@
+{
+ "_RequestCard": {
+  "addProps": [
+   {
+    "name": "t02",
+    "type": "String",
+    "replaces": "אישור"
+   },
+   {
+    "name": "t03",
+    "type": "String",
+    "replaces": "דחייה"
+   },
+   {
+    "name": "t04",
+    "type": "String",
+    "replaces": "נסח סיבת-דחייה"
+   },
+   {
+    "name": "mctmc4",
+    "type": "String",
+    "replaces": "משתמש"
+   },
+   {
+    "name": "txt5",
+    "type": "String",
+    "replaces": "🪪"
+   },
+   {
+    "name": "tplMbqctPersonatitleRole6",
+    "type": "String",
+    "replaces": "מבקש/ת: ${persona?.title ?? role}"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

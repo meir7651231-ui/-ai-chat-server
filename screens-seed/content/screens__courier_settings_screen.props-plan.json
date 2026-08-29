@@ -1,0 +1,192 @@
+{
+ "CourierSettingsScreen": {
+  "addProps": [
+   {
+    "name": "title",
+    "type": "String",
+    "replaces": "הגדרות שליח"
+   }
+  ],
+  "note": ""
+ },
+ "_CourierNotifSection": {
+  "addProps": [
+   {
+    "name": "mfeylyMkbySwgyHtrawt1",
+    "type": "String",
+    "replaces": "מפעילים/מכבים סוגי התראות: Push, עדכוני משלוחים, הודעות צ׳אט, "
+   },
+   {
+    "name": "cqtBzmNhygh2",
+    "type": "String",
+    "replaces": "שקט בזמן נהיגה, צליל ורטט. כל מתג נשמר מיד."
+   },
+   {
+    "name": "txt3",
+    "type": "String",
+    "replaces": "🔔"
+   },
+   {
+    "name": "htrawt4",
+    "type": "String",
+    "replaces": "התראות"
+   },
+   {
+    "name": "htrawtPush5",
+    "type": "String",
+    "replaces": "התראות Push"
+   },
+   {
+    "name": "edkwnyMclwjy6",
+    "type": "String",
+    "replaces": "עדכוני משלוחים"
+   },
+   {
+    "name": "hwdewtXxatJdcwt7",
+    "type": "String",
+    "replaces": "הודעות צ׳אט חדשות"
+   },
+   {
+    "name": "cqtBzmNhygh8",
+    "type": "String",
+    "replaces": "שקט בזמן נהיגה"
+   },
+   {
+    "name": "xlyl9",
+    "type": "String",
+    "replaces": "צליל"
+   },
+   {
+    "name": "rtt10",
+    "type": "String",
+    "replaces": "רטט"
+   }
+  ],
+  "note": ""
+ },
+ "_CourierRegionSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🌐"
+   },
+   {
+    "name": "azwrWcfh2",
+    "type": "String",
+    "replaces": "אזור ושפה"
+   },
+   {
+    "name": "bjyrtCfh3",
+    "type": "String",
+    "replaces": "בחירת שפה"
+   },
+   {
+    "name": "bwjrAtCft4",
+    "type": "String",
+    "replaces": "בוחר את שפת האפליקציה. כרגע רק עברית פעילה; "
+   },
+   {
+    "name": "erbytWanglytMswmnwt5",
+    "type": "String",
+    "replaces": "ערבית ואנגלית מסומנות \"בקרוב\"."
+   },
+   {
+    "name": "cfh6",
+    "type": "String",
+    "replaces": "שפה"
+   },
+   {
+    "name": "ebryt7",
+    "type": "String",
+    "replaces": "עברית"
+   }
+  ],
+  "note": ""
+ },
+ "_CourierAccessibilitySection": {
+  "addProps": [
+   {
+    "name": "cwltBgwdlHtqst1",
+    "type": "String",
+    "replaces": "שולט בגודל הטקסט, ניגודיות גבוהה והנפשות מופחתות — כלל-אפליקציה. "
+   },
+   {
+    "name": "klCynwyNcmr2",
+    "type": "String",
+    "replaces": "כל שינוי נשמר ומשפיע על כל הלוחות."
+   },
+   {
+    "name": "txt3",
+    "type": "String",
+    "replaces": "📱"
+   },
+   {
+    "name": "mmcqWngycwt4",
+    "type": "String",
+    "replaces": "ממשק ונגישות"
+   },
+   {
+    "name": "gwdlTqstKl5",
+    "type": "String",
+    "replaces": "גודל טקסט (כל האפליקציה)"
+   },
+   {
+    "name": "qt6",
+    "type": "String",
+    "replaces": "קטן"
+   },
+   {
+    "name": "bynwny7",
+    "type": "String",
+    "replaces": "בינוני"
+   },
+   {
+    "name": "gdwl8",
+    "type": "String",
+    "replaces": "גדול"
+   },
+   {
+    "name": "nygwdywtGbwhhKl9",
+    "type": "String",
+    "replaces": "ניגודיות גבוהה (כל האפליקציה)"
+   },
+   {
+    "name": "hnfcwtMwfjtwtKl10",
+    "type": "String",
+    "replaces": "הנפשות מופחתות (כל האפליקציה)"
+   }
+  ],
+  "note": ""
+ },
+ "_CourierInfoSection": {
+  "addProps": [
+   {
+    "name": "terms",
+    "type": "String",
+    "replaces": "תנאי שימוש"
+   },
+   {
+    "name": "privacy",
+    "type": "String",
+    "replaces": "מדיניות פרטיות"
+   },
+   {
+    "name": "myde3",
+    "type": "String",
+    "replaces": "מידע"
+   },
+   {
+    "name": "fwtjAtMsm4",
+    "type": "String",
+    "replaces": "פותח את מסמך תנאי-השימוש של האפליקציה."
+   },
+   {
+    "name": "fwtjAtMsm5",
+    "type": "String",
+    "replaces": "פותח את מסמך מדיניות-הפרטיות של האפליקציה."
+   }
+  ],
+  "note": ""
+ }
+}

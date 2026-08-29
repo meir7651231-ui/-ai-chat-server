@@ -1,0 +1,105 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__spec_copilot_screen.dart",
+ "lines": 253,
+ "pigments": {
+  "tokens": [
+   "BsTokens.danger",
+   "BsTokens.dangerDark",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.success",
+   "BsTokens.successDark"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   12.5,
+   13,
+   14,
+   15,
+   16,
+   18
+  ],
+  "fontWeights": [
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "s ONLY job is to PHRASE that\n// pre-computed verdict in a friendly Hebrew sentence, grounded on the verified\n// fields passed in the prompt — it never decides and never invents a number.\n//\n// Gated by `claudeGatewayProvider` (null unless `useFirebaseBackend && kClaudeAi`):\n// OFF → the deterministic verdict still shows, with an honest \"הסבר-AI דורש חיבור\"\n// note instead of the phrased explanation. So the demo/test build is unchanged.\n// ─────────────────────────────────────────────────────────────────────────────\n\nimport ",
+  "s spec was bridged from a company import (kCompanySpecSkus)\n/// rather than hand-verified — the wording must then say so, not claim \"מאומת\".\nbool _isCompanySpec(String sku) => kCompanySpecSkus.contains(sku);\n\n/// The verified temperature verdict for [product] at [tempC] — pure, the single\n/// source of truth (`VerifiedSpec.suitableForTemp`). `ok` is null when the product\n/// has no verified spec (we then can",
+  "אין מפרט מאומת למוצר זה — לא ניתן לקבוע.",
+  "אל תמציא נתונים ואל תסתור את התשובה הדטרמיניסטית.",
+  "אתה עוזר-מפרט לאינסטלטור. ענה במשפט אחד קצר בעברית בלבד, מבוסס אך ורק על ",
+  "דירוג-לחץ: ${spec.pressureRating}. ",
+  "הנתונים המאומתים שניתנו. לעולם אל תמציא מספרים ואל תסתור את התשובה הנתונה.",
+  "הסבר לי",
+  "השאלה: האם הוא מתאים לקו של $tempC°C? ",
+  "התשובה הדטרמיניסטית (חושבה מראש): ${ok ? ",
+  "טמפרטורת הקו:",
+  "טמפ׳ מקסימום לפי נתוני היבוא",
+  "טמפ׳-מקסימום מאומתת",
+  "לא",
+  "מוצר: ${product.nameHe}. חומר: ${spec.material}. ",
+  "מנסח הסבר…",
+  "נסה שוב",
+  "נסח את התשובה הזו במשפט אחד קצר וברור בעברית, כולל המספרים. ",
+  "✓ כן — מחזיק $_temp°C (מקס׳ לפי נתוני היבוא ${v.maxTempC!.toInt()}°C)",
+  "✓ כן — מחזיק $_temp°C (מקס׳ מאומת ${v.maxTempC!.toInt()}°C)",
+  "✗ לא — מעבר למקס׳ המאומת (${v.maxTempC!.toInt()}°C)",
+  "✗ לא — מעבר למקס׳ לפי נתוני היבוא (${v.maxTempC!.toInt()}°C)",
+  "🌡️ מתאים לתנאים שלי?",
+  "💡 הסבר-AI דורש חיבור לשרת."
+ ],
+ "icons": [],
+ "glyphs": [
+  "✓",
+  "✗",
+  "🌡",
+  "💡",
+  "🤖"
+ ],
+ "logicCandidates": [
+  {
+   "name": "setState",
+   "line": 106
+  }
+ ],
+ "widgets": [
+  {
+   "name": "SpecCopilotScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 66,
+   "loc": 13,
+   "pure": false,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:SpecCopilotScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kClaudeAi",
+  "kCompanySpecSkus",
+  "kVerifiedSpecs"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:SpecCopilotScreen"
+  ]
+ }
+}

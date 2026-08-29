@@ -1,0 +1,101 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__catalog_config__wheel_picker.dart",
+ "lines": 289,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.inkLight",
+   "BsTokens.microIn",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusPill",
+   "BsTokens.space1_5",
+   "BsTokens.space2",
+   "BsTokens.typeBody",
+   "BsTokens.typeLabel",
+   "BsTokens.typeSubhead"
+  ],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [
+   "FontWeight.w500",
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ";\n\n/// The pixel height of a single wheel row — the [ListWheelScrollView] itemExtent.\n/// Neighbours sit one extent above/below the centred pick.\nconst double _kItemExtent = 36;\n\n/// The wheel viewport height (~3.6 rows: one centred + dimmed neighbours).\nconst double _kWheelHeight = 132;\n\n/// The centred SELECTION BAND — a brand-tinted translucent fill (brand @ ~8%)\n/// with a rounded (radiusPill) brand hairline outline (brand @ ~40%). Const ARGB,\n/// so NO runtime opacity (very_good: no withOpacity).\nconst Color _kBandFill = Color(0x14FF7A18);\nconst Color _kBandLine = Color(0x66FF7A18);\n\n/// Colour-swatch palette for an [AttributeKind.color] wheel (plan 🫀). Const\n/// ARGB, keyed by the Hebrew colour name; an unknown name → a neutral swatch.\nconst Color _kSwatchBlue = Color(0xFF2563EB); // כחול\nconst Color _kSwatchRed = Color(0xFFDC2626); // אדום\nconst Color _kSwatchWhite = Color(0xFFECECEC); // לבן\nconst Color _kSwatchBlack = Color(0xFF222222); // שחור\nconst Color _kSwatchGray = Color(0xFF9AA0A6); // אפור\n\n/// The diameter of a colour-row swatch dot.\nconst double _kSwatchSize = 14;\n\n/// A wheel",
+  "s \"גלגל עם פס-בחירה\" ported onto Flutter",
+  "אדום",
+  "אפור",
+  "זווית",
+  "כחול",
+  "לבן",
+  "קוטר",
+  "שחור"
+ ],
+ "icons": [],
+ "glyphs": [
+  "🛡",
+  "🫀"
+ ],
+ "logicCandidates": [
+  {
+   "name": "_swatchColor",
+   "line": 272
+  }
+ ],
+ "widgets": [
+  {
+   "name": "WheelPicker",
+   "kind": "StatefulWidget",
+   "line": 60,
+   "loc": 29,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_SelectionBand",
+   "kind": "StatelessWidget",
+   "line": 212,
+   "loc": 16,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_ColorRow",
+   "kind": "StatelessWidget",
+   "line": 232,
+   "loc": 39,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kCatalogConfig"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

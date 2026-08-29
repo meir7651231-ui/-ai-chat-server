@@ -1,0 +1,87 @@
+{
+ "LipskeyBrandScreen": {
+  "addProps": [
+   {
+    "name": "appbarTitle",
+    "type": "String",
+    "replaces": "ליפסקי ברקן"
+   },
+   {
+    "name": "appbarSub",
+    "type": "String",
+    "replaces": "אינסטלציה · סניטציה"
+   },
+   {
+    "name": "jzrh3",
+    "type": "String",
+    "replaces": "חזרה"
+   }
+  ],
+  "note": ""
+ },
+ "_BrandHeader": {
+  "addProps": [
+   {
+    "name": "headerTitle",
+    "type": "String",
+    "replaces": "ליפסקי ברקן"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "🏭"
+   },
+   {
+    "name": "tplTotalProductsMwxryTot3",
+    "type": "String",
+    "replaces": "$totalProducts מוצרים · $totalCats קטגוריות"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_SectionCard": {
+  "addProps": [
+   {
+    "name": "tplProdCountMwxry1",
+    "type": "String",
+    "replaces": "$prodCount מוצרים"
+   },
+   {
+    "name": "tplCatCountQtgwrywt2",
+    "type": "String",
+    "replaces": "$catCount קטגוריות"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "LipskeySectionScreen": {
+  "addProps": [
+   {
+    "name": "jzrh1",
+    "type": "String",
+    "replaces": "חזרה"
+   },
+   {
+    "name": "tplLyfsqyBrqEntrieslengt2",
+    "type": "String",
+    "replaces": "ליפסקי ברקן · ${entries.length} קטגוריות"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_CategoryCard": {
+  "addProps": [
+   {
+    "name": "badgeSoon",
+    "type": "String",
+    "replaces": "בקרוב"
+   },
+   {
+    "name": "tplProductslengthMwxry2",
+    "type": "String",
+    "replaces": "${products.length} מוצרים"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

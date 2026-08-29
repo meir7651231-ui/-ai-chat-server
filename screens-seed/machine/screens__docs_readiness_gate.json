@@ -1,0 +1,144 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__docs_readiness_gate.dart",
+ "lines": 442,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.brandDark",
+   "BsTokens.danger",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5",
+   "BsTokens.warnBright"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   12.5,
+   13.5,
+   14,
+   15,
+   20,
+   48
+  ],
+  "fontWeights": [
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ";\n\n/// #101 · שער-מוכנות מסמכים (HARD gate) — the blocking screen the worker board\n/// (and the courier board) shows INSTEAD of their board content while the\n/// logged user",
+  "אין פריטים חוסמים",
+  "בדוק שוב",
+  "המעסיק יגדיר את רשימת המסמכים המחייבת בצד-השרת.",
+  "טופס 101",
+  "כדי להתחיל לעבוד צריך להשלים את המסמכים הנדרשים ולוודא שהם בתוקף.",
+  "כדי להתחיל משמרת צריך להשלים את תעודות-הנהג הנדרשות ולוודא שהן בתוקף.",
+  "תיק בטיחות",
+  "תעודות נהג",
+  "‹ יציאה",
+  "ℹ️ רשימת המסמכים הנדרשים כאן היא כלל-הדגמה זמני. ",
+  "⚠️ לתשומת לבך — יפוג בקרוב",
+  "⛔ חוסם — חובה להשלים",
+  "📝 מלא/חתום טופס 101",
+  "🔄 בדוק שוב",
+  "🔒 מסמכים חסרים",
+  "🔒 מסמכים חסרים — לא ניתן להתחיל עבודה",
+  "🚗 תעודות נהג",
+  "🦺 תיק בטיחות — תעודות"
+ ],
+ "icons": [
+  "Icons.badge_outlined",
+  "Icons.description_outlined",
+  "Icons.health_and_safety_outlined",
+  "Icons.refresh"
+ ],
+ "glyphs": [
+  "⚠",
+  "⛔",
+  "📝",
+  "🔄",
+  "🔒",
+  "🚗",
+  "🦺"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "DocsReadinessGate",
+   "kind": "ConsumerWidget",
+   "line": 32,
+   "loc": 222,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "boardAuthProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 18,
+   "constData": 0
+  },
+  {
+   "name": "_SectionCard",
+   "kind": "StatelessWidget",
+   "line": 257,
+   "loc": 83,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 1
+  },
+  {
+   "name": "_GateButton",
+   "kind": "StatelessWidget",
+   "line": 342,
+   "loc": 39,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_RecheckButton",
+   "kind": "ConsumerWidget",
+   "line": 386,
+   "loc": 56,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "boardAuthProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kKbGlobal"
+ ],
+ "board": {
+  "reads": [
+   "boardAuthProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

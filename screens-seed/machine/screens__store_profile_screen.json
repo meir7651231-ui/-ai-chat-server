@@ -1,0 +1,361 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__store_profile_screen.dart",
+ "lines": 1606,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.danger",
+   "BsTokens.dangerDark",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5",
+   "BsTokens.successDark",
+   "BsTokens.warnText"
+  ],
+  "themeSockets": [
+   "Theme.of",
+   "cfgRadius"
+  ],
+  "fontSizes": [
+   11,
+   11.5,
+   12,
+   12.5,
+   13,
+   13.5,
+   14,
+   14.5,
+   15,
+   16,
+   17,
+   18,
+   20
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   18
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  " = fallback כן (displayName של ה-session / seed החנות, F-20).\n            businessName: _name.text.trim(),\n            phone: phone,\n            address: _address.text.trim(),\n            businessId: bid,\n            logo: _logo,\n          ),\n        );\n    if (!mounted) return;\n    if (!ok) {\n      setState(() => _saving = false); // מאפשר retry עם תמונה קטנה יותר\n      showToast(context, ",
+  " אחיד, וכפתור ✏️ שפותח את sheet העריכה.\nclass _StoreIdentityCard extends StatelessWidget {\n  const _StoreIdentityCard({required this.session, required this.profile});\n\n  final BoardSession session;\n  final StoreProfile profile;\n\n  @override\n  Widget build(BuildContext context) {\n    // F-20 — שם-עסק override; ריק → displayName של ה-session (ליפסקי).\n    final name = profile.businessName.isNotEmpty\n        ? profile.businessName\n        : session.displayName;\n    final meta = [\n      if (profile.businessId.isNotEmpty) ",
+  " נעלם עם הסתרת האלמנט (לא שלד ריק).\n                        ",
+  "\"${cert.name}\" תימחק מהארנק לצמיתות.",
+  ") נזרק בבניית הטאב.\n      child: Material(\n        color: Theme.of(context).colorScheme.surface,\n        borderRadius: BorderRadius.circular(cfgRadius(context)),\n        clipBehavior: Clip.antiAlias,\n        child: Column(\n        children: [\n          ListTile(\n            leading: const Text(",
+  ");\n\n    return Container(\n      padding: const EdgeInsets.all(BsTokens.space4),\n      decoration: BoxDecoration(\n        color: Theme.of(context).colorScheme.surface,\n        borderRadius: BorderRadius.circular(cfgRadius(context)),\n        boxShadow: const [\n          BoxShadow(\n            color: Color(0x0F000000),\n            blurRadius: 8,\n            offset: Offset(0, 2),\n          ),\n        ],\n      ),\n      child: Row(\n        children: [\n          _StoreLogoAvatar(logo: profile.logo, size: 56),\n          const SizedBox(width: BsTokens.space3),\n          Expanded(\n            child: Column(\n              crossAxisAlignment: CrossAxisAlignment.start,\n              children: [\n                Row(\n                  children: [\n                    Flexible(\n                      child: Text(\n                        name,\n                        // F-41 — שם ארוך לא מנפח את הכרטיס.\n                        maxLines: 1,\n                        overflow: TextOverflow.ellipsis,\n                        style: const TextStyle(\n                          color: BsTokens.inkLight,\n                          fontWeight: FontWeight.w800,\n                          fontSize: 18,\n                        ),\n                      ),\n                    ),\n                    if (session.demo) ...[\n                      const SizedBox(width: BsTokens.space2),\n                      // צ",
+  ");\n      return; // ה-sheet נשאר פתוח\n    }\n    showToast(context, ",
+  ");\n    Navigator.of(context).pop();\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    // עטיפת RTL מפורשת — חוק ה-sheets (F-46).\n    return Directionality(\n      textDirection: TextDirection.rtl,\n      child: Padding(\n        // שומר את השדות מעל המקלדת.\n        padding:\n            EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),\n        child: Container(\n          decoration: BoxDecoration(\n            color: Theme.of(context).colorScheme.surface,\n            borderRadius: const BorderRadius.vertical(\n              top: Radius.circular(BsTokens.radiusCard),\n            ),\n          ),\n          child: SafeArea(\n            top: false,\n            child: SingleChildScrollView(\n              padding: const EdgeInsets.all(BsTokens.space4),\n              child: Column(\n                mainAxisSize: MainAxisSize.min,\n                crossAxisAlignment: CrossAxisAlignment.stretch,\n                children: [\n                  Row(\n                    children: [\n                      Expanded(\n                        child: CfgText(\n                          ",
+  ",\n                      errorText: _phoneError,\n                      border: const OutlineInputBorder(),\n                    ),\n                  ),\n                  const SizedBox(height: BsTokens.space3),\n                  // ── כתובת ──\n                  TextField(\n                    controller: _address,\n                    textInputAction: TextInputAction.next,\n                    decoration: const InputDecoration(\n                      labelText: ",
+  ",\n                    maxLines: 1,\n                    overflow: TextOverflow.ellipsis,\n                    style: const TextStyle(\n                      color: BsTokens.mutedLight,\n                      fontSize: 13,\n                    ),\n                  ),\n                ],\n                // 📞/💬 — call or WhatsApp this supplier (hidden when no phone).\n                ContactActions(phone: profile.phone),\n              ],\n            ),\n          ),\n          // #87.1 — פותח את עורך פרופיל-העסק (IconButton ≥48dp).\n          IconButton(\n            tooltip: ",
+  ",\n                  label: kOrderStageLabel[s]!,\n                ),\n            ],\n          ),\n          const SizedBox(height: BsTokens.space3),\n          // מחזור פעיל (new+preparing+ready) לצד מחזור שהושלם (delivered) —\n          // שניהם Σ של o.sum בלבד (שדה המנוע, orders_engine.dart:51).\n          Container(\n            width: double.infinity,\n            padding: const EdgeInsets.all(BsTokens.space3),\n            decoration: BoxDecoration(\n              color: Theme.of(context).colorScheme.surface,\n              borderRadius: BorderRadius.circular(12),\n              border: Border.all(color: const Color(0xFFEDEDED)),\n            ),\n            child: Column(\n              crossAxisAlignment: CrossAxisAlignment.start,\n              children: [\n                Text(\n                  ",
+  ",\n            icon: const Icon(Icons.edit_outlined, color: BsTokens.mutedLight),\n            onPressed: () =>\n                showStoreProfileEditSheet(context, session: session),\n          ),\n        ],\n      ),\n    );\n  }\n}\n\n/// אווטאר החנות — לוגו data-URL שמור (Image.memory בעיגול, פענוח הגנתי דרך\n/// decodeDataUrlPhoto) או דיסקת 🏪.\nclass _StoreLogoAvatar extends StatelessWidget {\n  const _StoreLogoAvatar({required this.logo, required this.size});\n\n  final String? logo;\n  final double size;\n\n  @override\n  Widget build(BuildContext context) {\n    // Dual-render (A14): data-URL מפוענח מקומית; כתובת `https://…` שהועלתה\n    // (kCloudPhotos ON) נטענת מ-R2 — שניהם דרך [imageProviderForRef]. F-43 —\n    // thumb מפוענח לגודל התצוגה (ResizeImage חל על data-URL ו-network כאחד).\n    final base = imageProviderForRef(logo);\n    if (base != null) {\n      final cacheW = (size * MediaQuery.devicePixelRatioOf(context)).round();\n      return ClipOval(\n        child: Image(\n          image: ResizeImage(base, width: cacheW),\n          width: size,\n          height: size,\n          fit: BoxFit.cover,\n          gaplessPlayback: true,\n          // payload פגום / טעינה שנכשלה → ברירת-המחדל, לעולם לא קריסה.\n          errorBuilder: (_, __, ___) => _fallback(),\n        ),\n      );\n    }\n    return _fallback();\n  }\n\n  Widget _fallback() => Container(\n        width: size,\n        height: size,\n        alignment: Alignment.center,\n        decoration: const BoxDecoration(\n          color: Color(0xFFFFF0E3),\n          shape: BoxShape.circle,\n        ),\n        // דקורטיבי: שם העסק המלא נקרא ממש לידו.\n        child: ExcludeSemantics(\n          child: Text(",
+  ", style: TextStyle(fontSize: size * 0.46)),\n        ),\n      );\n}\n\n// ─── store stats (#87.2) ─────────────────────────────────────────────────────\n\n/// סטטיסטיקת חנות חיה — ספירה לכל [OrderStage] (countAt) + מחזור פעיל ומחזור\n/// שנמסר, נגזרים מ-sysOrdersProvider בתוך הכרטיס עצמו (ConsumerWidget צר —\n/// F-44: הלוח לא נבנה מחדש על כל advance).\n///\n/// by-design (#87.2 / F-23): ללוח החנות הסטטיסטיקה כלל-חנותית — כל ההזמנות\n/// שייכות לחנות אחת (kStores.first); אין כאן צורך בסינון per-username\n/// (להבדיל מ-courier_profile, ראה Fulfillment.courierUser). אפס מספרים\n/// קשיחים — הכל מהמנוע החי.\nclass _StoreStatsCard extends ConsumerWidget {\n  const _StoreStatsCard();\n\n  @override\n  Widget build(BuildContext context, WidgetRef ref) {\n    final orders = ref.watch(sysOrdersProvider);\n\n    return Container(\n      padding: const EdgeInsets.all(BsTokens.space4),\n      decoration: BoxDecoration(\n        color: Theme.of(context).colorScheme.surface,\n        borderRadius: BorderRadius.circular(cfgRadius(context)),\n        boxShadow: const [\n          BoxShadow(\n            color: Color(0x0F000000),\n            blurRadius: 8,\n            offset: Offset(0, 2),\n          ),\n        ],\n      ),\n      child: Column(\n        crossAxisAlignment: CrossAxisAlignment.stretch,\n        children: [\n          CfgText(\n            ",
+  "9 ספרות...",
+  ";\n\n/// מסך עצמאי (נדחף מאייקון ה-person ב-AppBar של לוח הספק — F-19: לא עוד\n/// ProfileScreen של הקבלן).\nclass StoreProfileScreen extends ConsumerWidget {\n  const StoreProfileScreen({super.key});\n\n  static Route<void> route() =>\n      MaterialPageRoute<void>(builder: (_) => const StoreProfileScreen());\n\n  static final List<KbToolNode> _kbNodes = kbStoreProfileNodes();\n\n  @override\n  Widget build(BuildContext context, WidgetRef ref) {\n    // 🔒 BOARD GATE (חוק: מבחוץ לא רואים כלום) — אחרי logout/החלפת-תפקיד\n    // כשהמסך עדיין בערימה נבנה שער הרישום, לא קליפה ריקה (אידיום העובד).\n    final session = ref.watch(boardAuthProvider);\n    if (session == null || session.role != BoardRole.store) {\n      return const WelcomeScreen(boardRole: BoardRole.store);\n    }\n\n    final Widget body = Directionality(\n      textDirection: TextDirection.rtl,\n      child: Scaffold(\n        backgroundColor: Theme.of(context).scaffoldBackgroundColor,\n        appBar: AppBar(\n          backgroundColor: Theme.of(context).colorScheme.surface,\n          elevation: 0,\n          title: CfgText(\n            ",
+  "@${session.username} · ספק",
+  "@username · ספק",
+  "s personal area, in the\n// courier_profile_screen.dart pattern (standalone wrapper + embeddable body):\n//\n//   🏪 כרטיס-זהות     — business-profile overrides (storeProfileProvider,\n//                       bs.store-profile.v1, per-username) over the live\n//                       [BoardSession]; ✏️ opens the edit sheet (#87.1).\n//   📊 סטטיסטיקת חנות — live per-stage counts + active/delivered revenue off\n//                       sysOrdersProvider (#87.2) — store-wide BY DESIGN.\n//   אזור אישי         — פרופיל עסק · תעודות עסק (#87.3) · מסמכים (#87.4,\n//                       SERVER-READY sheet) — ListTile rows ≥48dp.\n//   פעולות            — ⚙️ הגדרות ספק (leaf — the settings screen must NOT\n//                       link back here, the F-11 loop rule) · 🚪 יציאה\n//                       (confirmDestructive → boardAuthProvider.logout()).\n//\n// [StoreCertsScreen] is COLOCATED here (the SupplierSettingsScreen-in-\n// store_dashboard_screen.dart precedent): the business-certificate wallet\n// reusing the shared cert model/notifier via storeCertsProvider\n// (bs.store-certs.v1) with the kStoreCertPresets quick-add chips.\n//\n// SERVER-SWAP: the business profile/certificates are local stores until the\n// backend lands (see state/store_profile_store.dart); the documents sheet is\n// SERVER-READY (no invented amounts).\n\nimport ",
+  "אזור אישי",
+  "אזור אישי — ספק",
+  "אין תעודות בארנק עדיין — הוסף את הראשונה.",
+  "אישי",
+  "בתוקף",
+  "בתוקף עד",
+  "בתוקף עד ${_fmtDate(cert.expiry)}",
+  "בתוקף עד ${_fmtDate(expiry!)}",
+  "דמו",
+  "הגדרות ספק",
+  "הוסף תעודה",
+  "הלוגו נשמר ✓",
+  "הסר לוגו",
+  "הסר צילום",
+  "הצג צילום תעודה במסך מלא",
+  "התמונה גדולה מדי — לא נשמרה",
+  "התנתק",
+  "התעודה נמחקה",
+  "ח.פ. / ע.מ. (אופציונלי)",
+  "ח.פ. חייב להכיל 9 ספרות",
+  "טלפון (אופציונלי)",
+  "יחובר עם חיבור השרת",
+  "יפ ",
+  "יפ ה",
+  "יציאה מהחשבון",
+  "יציאה מהחשבון?",
+  "לא נבחרה תמונה",
+  "מחיקת תעודה?",
+  "מחק",
+  "מחק תעודה",
+  "מנפיק (למשל: הרשות המקומית)",
+  "מסמכים",
+  "מספר נייד לא תקין — 10 ספרות, מתחיל ב-05",
+  "נא לבחור תוקף",
+  "נא למלא מנפיק",
+  "נא למלא שם תעודה",
+  "נשמרה",
+  "נתונים חיים ממנוע ההזמנות — כלל ההזמנות של החנות.",
+  "סגור",
+  "עריכת פרופיל עסק",
+  "עתיד בלבד",
+  "פג בקרוב",
+  "פג תוקף",
+  "פרופיל עסק",
+  "רחוב, מספר, עיר...",
+  "רישיון עסק · ביטוח עסק",
+  "שם העסק",
+  "שם העסק...",
+  "שם התעודה (למשל: רישיון עסק)",
+  "שם, טלפון, כתובת, ח.פ. ולוגו",
+  "שעות פעילות",
+  "תנותק מלוח חנות הספק ותחזור למסך ההרשמה.",
+  "תעודות עסק",
+  "✅ מחזור שנמסר: ${fMoney(orders.deliveredRevenue)}",
+  "✓ שמור פרופיל",
+  "➕ הוסף תעודה",
+  "💾 שמור תעודה",
+  "📊 סטטיסטיקת חנות",
+  "📷 החלף לוגו",
+  "📷 צילום צורף ✓",
+  "📷 צלם / העלה לוגו",
+  "📷 צרף צילום תעודה (לא חובה)",
+  "🪪 הוספת תעודה",
+  "🪪 התעודה נשמרה בארנק",
+  "🪪 תעודות עסק",
+  "🪪 תעודות עסק (${certs.length})"
+ ],
+ "icons": [
+  "Icons.chevron_left",
+  "Icons.close",
+  "Icons.delete_outline",
+  "Icons.edit_outlined"
+ ],
+ "glyphs": [
+  "⚙",
+  "✅",
+  "✏",
+  "✓",
+  "➕",
+  "🏪",
+  "💬",
+  "💰",
+  "💾",
+  "📅",
+  "📊",
+  "📍",
+  "📞",
+  "📷",
+  "🔒",
+  "🚪",
+  "🧾",
+  "🪪"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "StoreProfileScreen",
+   "kind": "ConsumerWidget",
+   "line": 54,
+   "loc": 40,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "boardAuthProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "nav:StoreProfileScreen"
+   ],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "StoreProfileBody",
+   "kind": "ConsumerWidget",
+   "line": 98,
+   "loc": 103,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "boardAuthProvider",
+    "storeProfileProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 5,
+   "constData": 0
+  },
+  {
+   "name": "_StoreIdentityCard",
+   "kind": "StatelessWidget",
+   "line": 207,
+   "loc": 132,
+   "pure": false,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "call:showStoreProfileEditSheet"
+   ],
+   "strings": 7,
+   "constData": 1
+  },
+  {
+   "name": "_StoreLogoAvatar",
+   "kind": "StatelessWidget",
+   "line": 342,
+   "loc": 43,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_StoreStatsCard",
+   "kind": "ConsumerWidget",
+   "line": 396,
+   "loc": 107,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "sysOrdersProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 5,
+   "constData": 3
+  },
+  {
+   "name": "_SStat",
+   "kind": "StatelessWidget",
+   "line": 505,
+   "loc": 40,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_StorePersonalAreaCard",
+   "kind": "StatelessWidget",
+   "line": 550,
+   "loc": 84,
+   "pure": false,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "call:showStoreDocumentsSheet",
+    "call:showStoreProfileEditSheet"
+   ],
+   "strings": 7,
+   "constData": 1
+  },
+  {
+   "name": "_EditStoreProfileSheet",
+   "kind": "ConsumerStatefulWidget",
+   "line": 655,
+   "loc": 9,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "StoreCertsScreen",
+   "kind": "ConsumerWidget",
+   "line": 953,
+   "loc": 422,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "boardAuthProvider",
+    "storeCertsProvider"
+   ],
+   "writes": [
+    "storeCertsProvider"
+   ],
+   "actions": [
+    "call:showModalBottomSheet",
+    "nav:StoreCertsScreen",
+    "fx:toast"
+   ],
+   "strings": 22,
+   "constData": 0
+  },
+  {
+   "name": "_StoreCertsCard",
+   "kind": "StatelessWidget",
+   "line": 1378,
+   "loc": 87,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 4,
+   "constData": 1
+  },
+  {
+   "name": "_StoreCertRow",
+   "kind": "StatelessWidget",
+   "line": 1469,
+   "loc": 135,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 6,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [
+  "_StoreStatsCard"
+ ],
+ "gates": [
+  "kCloudPhotos",
+  "kKbGlobal",
+  "kOrderStageLabel",
+  "kStoreCertPresets",
+  "kStores"
+ ],
+ "board": {
+  "reads": [
+   "boardAuthProvider",
+   "storeCertsProvider",
+   "storeProfileProvider",
+   "sysOrdersProvider"
+  ],
+  "writes": [
+   "storeCertsProvider"
+  ],
+  "navsAndCalls": [
+   "call:showModalBottomSheet",
+   "call:showStoreDocumentsSheet",
+   "call:showStoreProfileEditSheet",
+   "fx:toast",
+   "nav:StoreCertsScreen",
+   "nav:StoreProfileScreen"
+  ]
+ }
+}

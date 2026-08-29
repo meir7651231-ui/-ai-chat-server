@@ -1,0 +1,136 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__studio__panes__theme_pane.dart",
+ "lines": 264,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.inkLight",
+   "BsTokens.radiusCard",
+   "BsTokens.space1",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5",
+   "BsTokens.space6",
+   "BsTokens.typeBody",
+   "BsTokens.typeSubhead"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [],
+  "fontWeights": [
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   22
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  ";\n\nclass ThemePane extends ConsumerWidget {\n  const ThemePane({super.key});\n\n  /// Preset brand swatches (first = the current default). No external dep.\n  static const _swatches = <Color>[\n    BsTokens.brand, // ברירת-מחדל (כתום)\n    Color(0xFF2563EB), // כחול\n    Color(0xFF059669), // ירוק\n    Color(0xFFDC2626), // אדום\n    Color(0xFF7C3AED), // סגול\n    Color(0xFF0891B2), // טורקיז\n    Color(0xFFD97706), // ענבר\n    Color(0xFF334155), // פחם\n  ];\n\n  @override\n  Widget build(BuildContext context, WidgetRef ref) {\n    final cfg = ref.watch(configThemeProvider);\n    final notifier = ref.read(configStoreProvider.notifier);\n    final contrast = _contrastVsWhite(cfg.brand);\n    final lowContrast = contrast < 4.5;\n\n    return ListView(\n      padding: const EdgeInsets.all(BsTokens.space4),\n      children: [\n        const _Label(",
+  "אפס עיצוב לברירת-המחדל",
+  "גודל גופן פי ${v.toStringAsFixed(2)}",
+  "גודל גופן: ×${cfg.fontScale.toStringAsFixed(2)}",
+  "טקסט לבן על הצבע הזה עלול להיות קשה לקריאה.",
+  "כותרת לדוגמה",
+  "כך ייראה טקסט גוף באפליקציה.",
+  "כפתור ראשי",
+  "עיגול פינות ${v.round()}",
+  "עיגול פינות: ${cfg.radius.round()}",
+  "צבע מותג",
+  "תצוגה חיה"
+ ],
+ "icons": [
+  "Icons.check",
+  "Icons.restart_alt",
+  "Icons.warning_amber_rounded"
+ ],
+ "glyphs": [],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "ThemePane",
+   "kind": "ConsumerWidget",
+   "line": 23,
+   "loc": 80,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "configStoreProvider",
+    "configThemeProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 7,
+   "constData": 0
+  },
+  {
+   "name": "_Label",
+   "kind": "StatelessWidget",
+   "line": 107,
+   "loc": 18,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_Swatch",
+   "kind": "StatelessWidget",
+   "line": 126,
+   "loc": 38,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_ContrastWarning",
+   "kind": "StatelessWidget",
+   "line": 165,
+   "loc": 39,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_Preview",
+   "kind": "StatelessWidget",
+   "line": 207,
+   "loc": 57,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 3,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [
+  "ThemePane"
+ ],
+ "gates": [],
+ "board": {
+  "reads": [
+   "configStoreProvider",
+   "configThemeProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

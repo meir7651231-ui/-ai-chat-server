@@ -1,0 +1,123 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__contractor_material_requests_sheet.dart",
+ "lines": 316,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brandDark",
+   "BsTokens.dangerDark",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.radiusPill",
+   "BsTokens.space1",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5",
+   "BsTokens.successDark",
+   "BsTokens.warnText"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   11.5,
+   12.5,
+   13,
+   13.5,
+   14.5,
+   18
+  ],
+  "fontWeights": [
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "דחה",
+  "הוזמן",
+  "כשעובד ישלח בקשת חומרים — היא תופיע כאן ותוכל לעדכן את הסטטוס.",
+  "ללא פריטים",
+  "ממתין",
+  "נדחה",
+  "סגירה",
+  "סופק",
+  "סמן הוזמן",
+  "עובד",
+  "📥 בקשות חומר"
+ ],
+ "icons": [
+  "Icons.close"
+ ],
+ "glyphs": [
+  "👷",
+  "📝",
+  "📥"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "_ContractorMaterialRequestsSheet",
+   "kind": "ConsumerWidget",
+   "line": 64,
+   "loc": 90,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "materialRequestsProvider"
+   ],
+   "writes": [
+    "materialRequestsProvider"
+   ],
+   "actions": [],
+   "strings": 3,
+   "constData": 0
+  },
+  {
+   "name": "_RequestCard",
+   "kind": "StatelessWidget",
+   "line": 158,
+   "loc": 125,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 5,
+   "constData": 0
+  },
+  {
+   "name": "_ActionButton",
+   "kind": "StatelessWidget",
+   "line": 285,
+   "loc": 31,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kDemoContractorId",
+  "kMatReqDeclined",
+  "kMatReqOrdered",
+  "kMatReqRequested",
+  "kMatReqSupplied"
+ ],
+ "board": {
+  "reads": [
+   "materialRequestsProvider"
+  ],
+  "writes": [
+   "materialRequestsProvider"
+  ],
+  "navsAndCalls": []
+ }
+}

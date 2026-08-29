@@ -1,0 +1,12 @@
+{
+ "_HeaderCard": {
+  "addProps": [
+   {
+    "name": "awrj1",
+    "type": "String",
+    "replaces": "אורח"
+   }
+  ],
+  "note": ""
+ }
+}

@@ -1,0 +1,562 @@
+{
+ "CatalogSettingsScreen": {
+  "addProps": [
+   {
+    "name": "t01",
+    "type": "String",
+    "replaces": "הגדרות"
+   },
+   {
+    "name": "t02",
+    "type": "String",
+    "replaces": "איפוס הגדרות?"
+   },
+   {
+    "name": "t03",
+    "type": "String",
+    "replaces": "כל ההגדרות יוחזרו לברירת המחדל."
+   },
+   {
+    "name": "t04",
+    "type": "String",
+    "replaces": "ביטול"
+   },
+   {
+    "name": "t05",
+    "type": "String",
+    "replaces": "אפס"
+   },
+   {
+    "name": "ayfwsLbryrtMjdl6",
+    "type": "String",
+    "replaces": "איפוס לברירת מחדל"
+   },
+   {
+    "name": "hgdrwtAwfsw7",
+    "type": "String",
+    "replaces": "הגדרות אופסו"
+   }
+  ],
+  "note": ""
+ },
+ "_ProfileRow": {
+  "addProps": [
+   {
+    "name": "t06",
+    "type": "String",
+    "replaces": "הפרופיל שלי"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "👤"
+   }
+  ],
+  "note": ""
+ },
+ "_ThemeSection": {
+  "addProps": [
+   {
+    "name": "t07",
+    "type": "String",
+    "replaces": "סידור מסך הבית"
+   },
+   {
+    "name": "t08",
+    "type": "String",
+    "replaces": "גרור לשנות את סדר המקטעים בבית"
+   },
+   {
+    "name": "txt3",
+    "type": "String",
+    "replaces": "📊"
+   },
+   {
+    "name": "txwghWmyw4",
+    "type": "String",
+    "replaces": "תצוגה ומיון"
+   },
+   {
+    "name": "erktNwca5",
+    "type": "String",
+    "replaces": "ערכת נושא"
+   },
+   {
+    "name": "bhyr6",
+    "type": "String",
+    "replaces": "בהיר"
+   },
+   {
+    "name": "khh7",
+    "type": "String",
+    "replaces": "כהה"
+   },
+   {
+    "name": "swgTxwgh8",
+    "type": "String",
+    "replaces": "סוג תצוגה"
+   },
+   {
+    "name": "rctGrid9",
+    "type": "String",
+    "replaces": "רשת (Grid)"
+   },
+   {
+    "name": "rcymhList10",
+    "type": "String",
+    "replaces": "רשימה (List)"
+   },
+   {
+    "name": "mywBryrtMjdl11",
+    "type": "String",
+    "replaces": "מיון ברירת מחדל"
+   },
+   {
+    "name": "bryrtMjdl12",
+    "type": "String",
+    "replaces": "ברירת מחדל"
+   },
+   {
+    "name": "cAt13",
+    "type": "String",
+    "replaces": "שם א-ת"
+   },
+   {
+    "name": "cTa14",
+    "type": "String",
+    "replaces": "שם ת-א"
+   },
+   {
+    "name": "mqt15",
+    "type": "String",
+    "replaces": "מק\"ט"
+   },
+   {
+    "name": "emwdwtBtxwgtRct16",
+    "type": "String",
+    "replaces": "עמודות בתצוגת רשת"
+   },
+   {
+    "name": "gwdlTmwnwt17",
+    "type": "String",
+    "replaces": "גודל תמונות"
+   },
+   {
+    "name": "qt18",
+    "type": "String",
+    "replaces": "קטן"
+   },
+   {
+    "name": "bynwny19",
+    "type": "String",
+    "replaces": "בינוני"
+   },
+   {
+    "name": "gdwl20",
+    "type": "String",
+    "replaces": "גדול"
+   }
+  ],
+  "note": ""
+ },
+ "_NotificationsSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🔔"
+   },
+   {
+    "name": "htrawt2",
+    "type": "String",
+    "replaces": "התראות"
+   },
+   {
+    "name": "mbxeyWhtbwt3",
+    "type": "String",
+    "replaces": "מבצעים והטבות"
+   },
+   {
+    "name": "yrydtMjyrBmwedfy4",
+    "type": "String",
+    "replaces": "ירידת מחיר במועדפים"
+   },
+   {
+    "name": "jzrLmlay5",
+    "type": "String",
+    "replaces": "חזר למלאי"
+   },
+   {
+    "name": "mlayNmw6",
+    "type": "String",
+    "replaces": "מלאי נמוך"
+   },
+   {
+    "name": "mwxryJdcyBqtgwryh7",
+    "type": "String",
+    "replaces": "מוצרים חדשים בקטגוריה"
+   }
+  ],
+  "note": ""
+ },
+ "_RegionSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🌐"
+   },
+   {
+    "name": "azwrWcfh2",
+    "type": "String",
+    "replaces": "אזור ושפה"
+   },
+   {
+    "name": "cfh3",
+    "type": "String",
+    "replaces": "שפה"
+   },
+   {
+    "name": "ebryt4",
+    "type": "String",
+    "replaces": "עברית"
+   }
+  ],
+  "note": ""
+ },
+ "_SearchSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🔍"
+   },
+   {
+    "name": "jyfwcWsynw2",
+    "type": "String",
+    "replaces": "חיפוש וסינון"
+   },
+   {
+    "name": "cmwrHystwryytJyfwc3",
+    "type": "String",
+    "replaces": "שמור היסטוריית חיפוש"
+   },
+   {
+    "name": "srglMywMhyr4",
+    "type": "String",
+    "replaces": "סרגל מיון מהיר במוצרים"
+   },
+   {
+    "name": "rdywsJyfwc5",
+    "type": "String",
+    "replaces": "רדיוס חיפוש"
+   },
+   {
+    "name": "nyqwyHystwryh6",
+    "type": "String",
+    "replaces": "ניקוי היסטוריה"
+   },
+   {
+    "name": "nyqwyHystwryytJyfwc7",
+    "type": "String",
+    "replaces": "ניקוי היסטוריית חיפוש?"
+   },
+   {
+    "name": "hystwryytHjyfwcyTymjq8",
+    "type": "String",
+    "replaces": "היסטוריית החיפושים תימחק לצמיתות."
+   },
+   {
+    "name": "nqh9",
+    "type": "String",
+    "replaces": "נקה"
+   },
+   {
+    "name": "hhystwryhNwqth10",
+    "type": "String",
+    "replaces": "ההיסטוריה נוקתה"
+   }
+  ],
+  "note": ""
+ },
+ "_PricesSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "💰"
+   },
+   {
+    "name": "mjyryWmtbe2",
+    "type": "String",
+    "replaces": "מחירים ומטבע"
+   },
+   {
+    "name": "hxgMjyryKwll3",
+    "type": "String",
+    "replaces": "הצג מחירים כולל מע\"מ"
+   },
+   {
+    "name": "mtbe4",
+    "type": "String",
+    "replaces": "מטבע"
+   },
+   {
+    "name": "cql5",
+    "type": "String",
+    "replaces": "₪ שקל"
+   },
+   {
+    "name": "tplDwlr6",
+    "type": "String",
+    "replaces": "$ דולר"
+   },
+   {
+    "name": "ayrw7",
+    "type": "String",
+    "replaces": "€ אירו"
+   },
+   {
+    "name": "hxgtMjyrLyjydh8",
+    "type": "String",
+    "replaces": "הצגת מחיר ליחידה"
+   },
+   {
+    "name": "hcwwatMjyryBy9",
+    "type": "String",
+    "replaces": "השוואת מחירים בין ספקים"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_UnitsSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "📏"
+   },
+   {
+    "name": "yjydwtMydh2",
+    "type": "String",
+    "replaces": "יחידות מידה"
+   },
+   {
+    "name": "merktMydh3",
+    "type": "String",
+    "replaces": "מערכת מידה"
+   },
+   {
+    "name": "mtryMmSm4",
+    "type": "String",
+    "replaces": "מטרי (מ\"מ / ס\"מ)"
+   },
+   {
+    "name": "fwrmtMydwtBkrtys5",
+    "type": "String",
+    "replaces": "פורמט מידות בכרטיס מוצר"
+   },
+   {
+    "name": "ecrwny156",
+    "type": "String",
+    "replaces": "עשרוני (1.5)"
+   },
+   {
+    "name": "cbr17",
+    "type": "String",
+    "replaces": "שבר (1½)"
+   },
+   {
+    "name": "fwrmtHxgh8",
+    "type": "String",
+    "replaces": "פורמט הצגה"
+   }
+  ],
+  "note": ""
+ },
+ "_SuppliersSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🏪"
+   },
+   {
+    "name": "sfqyMwedfy2",
+    "type": "String",
+    "replaces": "ספקים מועדפים"
+   },
+   {
+    "name": "mrjqMqsymly3",
+    "type": "String",
+    "replaces": "מרחק מקסימלי"
+   },
+   {
+    "name": "qm4",
+    "type": "String",
+    "replaces": " ק\"מ"
+   },
+   {
+    "name": "dyrwgMynymly5",
+    "type": "String",
+    "replaces": "דירוג מינימלי"
+   },
+   {
+    "name": "hkl6",
+    "type": "String",
+    "replaces": "הכל"
+   },
+   {
+    "name": "sfqyMqwmyyBlbd7",
+    "type": "String",
+    "replaces": "ספקים מקומיים בלבד"
+   },
+   {
+    "name": "sfqyMswmnyKmwedfy8",
+    "type": "String",
+    "replaces": "ספקים מסומנים כמועדפים"
+   },
+   {
+    "name": "sfqyJswmy9",
+    "type": "String",
+    "replaces": "ספקים חסומים"
+   }
+  ],
+  "note": ""
+ },
+ "_AiSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🤖"
+   },
+   {
+    "name": "bynhMlakwtytWhmlxwt2",
+    "type": "String",
+    "replaces": "בינה מלאכותית והמלצות"
+   },
+   {
+    "name": "hmlxwtMbwsswtBynh3",
+    "type": "String",
+    "replaces": "המלצות מבוססות בינה מלאכותית"
+   },
+   {
+    "name": "htamhLfyHystwryyt4",
+    "type": "String",
+    "replaces": "התאמה לפי היסטוריית הזמנות"
+   },
+   {
+    "name": "synwLfyFrwyqt5",
+    "type": "String",
+    "replaces": "סינון לפי פרויקט פעיל"
+   },
+   {
+    "name": "jlwfwtZwlwtAwtwmtywt6",
+    "type": "String",
+    "replaces": "חלופות זולות אוטומטיות"
+   }
+  ],
+  "note": ""
+ },
+ "_AccessibilitySection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "📱"
+   },
+   {
+    "name": "mmcqWngycwt2",
+    "type": "String",
+    "replaces": "ממשק ונגישות"
+   },
+   {
+    "name": "mxbQwmfqtyKrtysy3",
+    "type": "String",
+    "replaces": "מצב קומפקטי (כרטיסים קטנים)"
+   },
+   {
+    "name": "gwdlTqstKl4",
+    "type": "String",
+    "replaces": "גודל טקסט (כל האפליקציה)"
+   },
+   {
+    "name": "qt5",
+    "type": "String",
+    "replaces": "קטן"
+   },
+   {
+    "name": "bynwny6",
+    "type": "String",
+    "replaces": "בינוני"
+   },
+   {
+    "name": "gdwl7",
+    "type": "String",
+    "replaces": "גדול"
+   },
+   {
+    "name": "nygwdywtGbwhhKl8",
+    "type": "String",
+    "replaces": "ניגודיות גבוהה (כל האפליקציה)"
+   },
+   {
+    "name": "hnfcwtMwfjtwtKl9",
+    "type": "String",
+    "replaces": "הנפשות מופחתות (כל האפליקציה)"
+   }
+  ],
+  "note": ""
+ },
+ "_InfoSection": {
+  "addProps": [
+   {
+    "name": "t09",
+    "type": "String",
+    "replaces": "תנאי שימוש"
+   },
+   {
+    "name": "t10",
+    "type": "String",
+    "replaces": "מדיניות פרטיות"
+   },
+   {
+    "name": "myde3",
+    "type": "String",
+    "replaces": "מידע"
+   }
+  ],
+  "note": ""
+ },
+ "_PlaceholderRow": {
+  "addProps": [
+   {
+    "name": "t12",
+    "type": "String",
+    "replaces": "בבנייה"
+   },
+   {
+    "name": "tplLabelBbnyyh2",
+    "type": "String",
+    "replaces": "$label — בבנייה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_NumberRow": {
+  "addProps": [
+   {
+    "name": "hfjt1",
+    "type": "String",
+    "replaces": "הפחת"
+   },
+   {
+    "name": "hws2",
+    "type": "String",
+    "replaces": "הוסף"
+   }
+  ],
+  "note": ""
+ }
+}

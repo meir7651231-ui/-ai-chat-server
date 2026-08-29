@@ -1,0 +1,342 @@
+{
+ "StoreProfileScreen": {
+  "addProps": [
+   {
+    "name": "appbarTitle",
+    "type": "String",
+    "replaces": "אזור אישי — ספק"
+   }
+  ],
+  "note": ""
+ },
+ "StoreProfileBody": {
+  "addProps": [
+   {
+    "name": "settingsRow",
+    "type": "String",
+    "replaces": "הגדרות ספק"
+   },
+   {
+    "name": "logoutRow",
+    "type": "String",
+    "replaces": "יציאה מהחשבון"
+   },
+   {
+    "name": "txt3",
+    "type": "String",
+    "replaces": "🚪"
+   },
+   {
+    "name": "yxyahMhjcbw4",
+    "type": "String",
+    "replaces": "יציאה מהחשבון?"
+   },
+   {
+    "name": "tnwtqMlwjJnwt5",
+    "type": "String",
+    "replaces": "תנותק מלוח חנות הספק ותחזור למסך ההרשמה."
+   },
+   {
+    "name": "htntq6",
+    "type": "String",
+    "replaces": "התנתק"
+   }
+  ],
+  "note": ""
+ },
+ "_StoreIdentityCard": {
+  "addProps": [
+   {
+    "name": "demoChip",
+    "type": "String",
+    "replaces": "דמו"
+   },
+   {
+    "name": "tplJfProfilebusinessId2",
+    "type": "String",
+    "replaces": "ח.פ. ${profile.businessId}"
+   },
+   {
+    "name": "tplProfilephone3",
+    "type": "String",
+    "replaces": "📞 ${profile.phone}"
+   },
+   {
+    "name": "tplSessionusernameSfq4",
+    "type": "String",
+    "replaces": "@${session.username} · ספק"
+   },
+   {
+    "name": "tplProfileaddress5",
+    "type": "String",
+    "replaces": "📍 ${profile.address}"
+   },
+   {
+    "name": "eryktFrwfylEsq6",
+    "type": "String",
+    "replaces": "עריכת פרופיל עסק"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_StoreLogoAvatar": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🏪"
+   }
+  ],
+  "note": ""
+ },
+ "_StoreStatsCard": {
+  "addProps": [
+   {
+    "name": "statsTitle",
+    "type": "String",
+    "replaces": "📊 סטטיסטיקת חנות"
+   },
+   {
+    "name": "statsNote",
+    "type": "String",
+    "replaces": "נתונים חיים ממנוע ההזמנות — כלל ההזמנות של החנות."
+   },
+   {
+    "name": "tplMjzwrFeylFMoneyorderst3",
+    "type": "String",
+    "replaces": "💰 מחזור פעיל: ${fMoney(orders.todayRevenue)}"
+   },
+   {
+    "name": "tplMjzwrCnmsrFMoneyorders4",
+    "type": "String",
+    "replaces": "✅ מחזור שנמסר: ${fMoney(orders.deliveredRevenue)}"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_StorePersonalAreaCard": {
+  "addProps": [
+   {
+    "name": "profileRow",
+    "type": "String",
+    "replaces": "פרופיל עסק"
+   },
+   {
+    "name": "profileRowSub",
+    "type": "String",
+    "replaces": "שם, טלפון, כתובת, ח.פ. ולוגו"
+   },
+   {
+    "name": "certsRow",
+    "type": "String",
+    "replaces": "תעודות עסק"
+   },
+   {
+    "name": "certsRowSub",
+    "type": "String",
+    "replaces": "רישיון עסק · ביטוח עסק"
+   },
+   {
+    "name": "docsRow",
+    "type": "String",
+    "replaces": "מסמכים"
+   },
+   {
+    "name": "docsRowSub",
+    "type": "String",
+    "replaces": "יחובר עם חיבור השרת"
+   },
+   {
+    "name": "txt7",
+    "type": "String",
+    "replaces": "🏪"
+   },
+   {
+    "name": "txt8",
+    "type": "String",
+    "replaces": "🪪"
+   },
+   {
+    "name": "txt9",
+    "type": "String",
+    "replaces": "🧾"
+   }
+  ],
+  "note": ""
+ },
+ "StoreCertsScreen": {
+  "addProps": [
+   {
+    "name": "certsScreenTitle",
+    "type": "String",
+    "replaces": "🪪 תעודות עסק"
+   },
+   {
+    "name": "addCertTitle",
+    "type": "String",
+    "replaces": "🪪 הוספת תעודה"
+   },
+   {
+    "name": "attachPhotoBtn",
+    "type": "String",
+    "replaces": "📷 צרף צילום תעודה (לא חובה)"
+   },
+   {
+    "name": "photoAttached",
+    "type": "String",
+    "replaces": "📷 צילום צורף ✓"
+   },
+   {
+    "name": "saveCertBtn",
+    "type": "String",
+    "replaces": "💾 שמור תעודה"
+   },
+   {
+    "name": "mjyqtTewdh6",
+    "type": "String",
+    "replaces": "מחיקת תעודה?"
+   },
+   {
+    "name": "tplCertnameTymjqMharnq7",
+    "type": "String",
+    "replaces": "\"${cert.name}\" תימחק מהארנק לצמיתות."
+   },
+   {
+    "name": "mjq8",
+    "type": "String",
+    "replaces": "מחק"
+   },
+   {
+    "name": "htewdhNmjqh9",
+    "type": "String",
+    "replaces": "התעודה נמחקה"
+   },
+   {
+    "name": "naLmlaC10",
+    "type": "String",
+    "replaces": "נא למלא שם תעודה"
+   },
+   {
+    "name": "naLmlaMnfyq11",
+    "type": "String",
+    "replaces": "נא למלא מנפיק"
+   },
+   {
+    "name": "naLbjwrTwq12",
+    "type": "String",
+    "replaces": "נא לבחור תוקף"
+   },
+   {
+    "name": "htmwnhGdwlhMdy13",
+    "type": "String",
+    "replaces": "התמונה גדולה מדי — לא נשמרה"
+   },
+   {
+    "name": "sgwr14",
+    "type": "String",
+    "replaces": "סגור"
+   },
+   {
+    "name": "cHtewdhLmcl15",
+    "type": "String",
+    "replaces": "שם התעודה (למשל: רישיון עסק)"
+   },
+   {
+    "name": "mnfyqLmclHrcwt16",
+    "type": "String",
+    "replaces": "מנפיק (למשל: הרשות המקומית)"
+   },
+   {
+    "name": "txt17",
+    "type": "String",
+    "replaces": "📅"
+   },
+   {
+    "name": "btwqEd18",
+    "type": "String",
+    "replaces": "בתוקף עד"
+   },
+   {
+    "name": "tplBtwqEdFmtDateexpiry19",
+    "type": "String",
+    "replaces": "בתוקף עד ${_fmtDate(expiry!)}"
+   },
+   {
+    "name": "hsrXylw20",
+    "type": "String",
+    "replaces": "הסר צילום"
+   },
+   {
+    "name": "htewdhNcmrhBarnq21",
+    "type": "String",
+    "replaces": "🪪 התעודה נשמרה בארנק"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_StoreCertsCard": {
+  "addProps": [
+   {
+    "name": "certsEmpty",
+    "type": "String",
+    "replaces": "אין תעודות בארנק עדיין — הוסף את הראשונה."
+   },
+   {
+    "name": "addCertBtn",
+    "type": "String",
+    "replaces": "➕ הוסף תעודה"
+   },
+   {
+    "name": "tplTewdwtEsqCertslength3",
+    "type": "String",
+    "replaces": "🪪 תעודות עסק (${certs.length})"
+   },
+   {
+    "name": "hwsTewdh4",
+    "type": "String",
+    "replaces": "הוסף תעודה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_StoreCertRow": {
+  "addProps": [
+   {
+    "name": "fgTwq1",
+    "type": "String",
+    "replaces": "פג תוקף"
+   },
+   {
+    "name": "fgBqrwb2",
+    "type": "String",
+    "replaces": "פג בקרוב"
+   },
+   {
+    "name": "btwq3",
+    "type": "String",
+    "replaces": "בתוקף"
+   },
+   {
+    "name": "hxgXylwTewdh4",
+    "type": "String",
+    "replaces": "הצג צילום תעודה במסך מלא"
+   },
+   {
+    "name": "txt5",
+    "type": "String",
+    "replaces": "📷"
+   },
+   {
+    "name": "tplBtwqEdFmtDatecertexpi6",
+    "type": "String",
+    "replaces": "בתוקף עד ${_fmtDate(cert.expiry)}"
+   },
+   {
+    "name": "mjqTewdh7",
+    "type": "String",
+    "replaces": "מחק תעודה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

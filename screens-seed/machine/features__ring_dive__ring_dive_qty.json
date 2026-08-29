@@ -1,0 +1,87 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__ring_dive__ring_dive_qty.dart",
+ "lines": 370,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [
+   9,
+   30
+  ],
+  "fontWeights": [
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "כמות"
+ ],
+ "icons": [],
+ "glyphs": [],
+ "logicCandidates": [
+  {
+   "name": "initState",
+   "line": 62
+  },
+  {
+   "name": "_focusIndex",
+   "line": 72
+  },
+  {
+   "name": "_angleDeg",
+   "line": 76
+  },
+  {
+   "name": "_distToCenter",
+   "line": 84
+  },
+  {
+   "name": "setState",
+   "line": 131
+  },
+  {
+   "name": "setState",
+   "line": 146
+  },
+  {
+   "name": "_rad",
+   "line": 242
+  },
+  {
+   "name": "_focusIndex",
+   "line": 244
+  },
+  {
+   "name": "paint",
+   "line": 247
+  }
+ ],
+ "widgets": [
+  {
+   "name": "RingDiveQty",
+   "kind": "StatefulWidget",
+   "line": 27,
+   "loc": 23,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kRingDiveFlag"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

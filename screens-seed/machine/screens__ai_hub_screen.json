@@ -1,0 +1,418 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__ai_hub_screen.dart",
+ "lines": 1033,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.brandDark",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of",
+   "cfgRadius"
+  ],
+  "fontSizes": [
+   12,
+   13,
+   14,
+   20,
+   26,
+   30
+  ],
+  "fontWeights": [
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "${g.hours} / ${g.life} שעות עבודה",
+  "${p.name} נוסף לסל",
+  ";\n\n/// 🤖 בינה מלאכותית ואוטומציה — the AI hub (T3.H).\n///\n/// Faithful native port of proto Category G (`openAIHub` @21123). Nine tools.\n/// Each is wired to REAL behaviour or honestly flagged:\n///   • 📷 ברקוד + 🎙️ דיבור = REAL — drive the catalog",
+  "Analytics חכם",
+  "PDF → רשימת חומרים",
+  "s own search-tools use).\n///   • 💡 חלופות זולות + 📐 סריקת תוכניות = REAL — open the canonical contractor\n///     sheets that COMPUTE over the live catalog price tiers / smart-cart.\n///   • 📦 חיזוי מלאי = REAL/COMPUTED — [computeStockForecast] over the live\n///     orders engine (consumption history) + cart (on-hand). No model.\n///   • 📊 Analytics חכם = REAL/COMPUTED — [computeAnalyticsInsights] over the\n///     live orders engine + budget + the real cheaper-alternatives scan.\n///   • 🔗 התאמה משולשת · 🌦️ מזג אוויר · 🔧 זיהוי בלאי = DEFERRED — each needs an\n///     EXTERNAL data source the app does not hold (supplier delivery-note &\n///     invoice documents · a weather-forecast API · IoT equipment-hour sensors),\n///     so they render a verbatim sample under an explicit \"⚙️ בפרודקשן\" note.\n///\n/// True while a [AIHubScreen._runVoice] recognition session is active — guards the\n/// stateless-widget 🎙️ tile against overlapping listens (module-level because the\n/// dispatch is a `static` method). Mirrors VoiceDictateButton",
+  "};\n\n  /// The DEFERRED (backend-blocked) tool ids — exposed for tests/guards.\n  static Set<String> get deferredToolIds => _deferredToolIds;\n\n  /// The tools a RAW company shell must not offer ([kProfileRawShell]) —\n  /// 💡 חלופות זולות + 📐 סריקת תוכניות claim partner-store prices, and a\n  /// company shell holds no price data (the imported catalog model carries\n  /// none); 📊 Analytics",
+  "}עוד ${p.days} ימים",
+  "אוטומציית מזג אוויר",
+  "אין עדיין היסטוריית צריכה — בצע הזמנות כדי לקבל חיזוי מלאי",
+  "בינה מלאכותית ואוטומציה",
+  "דיבור למשימה",
+  "הדפדפן לא תומך בחיפוש קולי",
+  "הזמן עכשיו",
+  "הזמנה",
+  "הזמנה·תעודה·חשבונית",
+  "המערכת מתאימה את לוח העבודה לתחזית.",
+  "השוואה אוטומטית: הזמנה · תעודת משלוח · חשבונית.",
+  "התאמה משולשת",
+  "התראות לפי תחזית",
+  "זיהוי בלאי",
+  "זיהוי בלאי ציוד",
+  "זיהוי מוצר מהיר",
+  "חיזוי מלאי",
+  "חיזוי מתי כל חומר ייגמר — לפי קצב הצריכה באתר.",
+  "חלופות זולות",
+  "חשבונית",
+  "יצירת משימה בקול",
+  "כלים חכמים שחוסכים זמן וטעויות.",
+  "מומלץ AI",
+  "מומלץ לתזמן תחזוקה",
+  "מוצרים חליפיים",
+  "מלאי ${p.stock} · צריכה ${p.rate}/יום",
+  "מתי להזמין שוב",
+  "נדרשת בדיקה — הסכומים אינם זהים",
+  "ניטור שעות עבודה של הציוד והתראה לפני תקלה.",
+  "סורק ברקוד",
+  "סיכום בעברית",
+  "ספר מה צריך, נבנה סל",
+  "סריקת תוכניות",
+  "עוזר חכם",
+  "שאל אותי כל דבר",
+  "תאר עבודה → סל",
+  "תובנות אוטומטיות על ההתנהלות באתר.",
+  "תובנות ומגמות",
+  "תחזוקת ציוד",
+  "תעודה",
+  "‹ חזרה",
+  "⚙️ בפרודקשן: דורש תעודות משלוח וחשבוניות מהספק (מסמכים חיצוניים)",
+  "⚙️ בפרודקשן: חיישני IoT וניטור צריכת חשמל בשרת",
+  "⚠️ אי-התאמה",
+  "✓ תואם",
+  "🌦️ תחזית Open-Meteo · לפי מיקום המכשיר",
+  "🤖 בינה מלאכותית",
+  "🧮 מחושב מנתוני אמת — מנוע ההזמנות, התקציב והשוואת המחירים בקטלוג",
+  "🧮 מחושב מתוך היסטוריית ההזמנות והעגלה החיה — קצב צריכה ומלאי נוכחי"
+ ],
+ "icons": [
+  "Icons.analytics_outlined",
+  "Icons.auto_awesome_outlined",
+  "Icons.cloud_outlined",
+  "Icons.handyman_outlined",
+  "Icons.inventory_",
+  "Icons.lightbulb_outline",
+  "Icons.link",
+  "Icons.mic_none_outlined",
+  "Icons.picture_as_pdf_outlined",
+  "Icons.qr_code_scanner",
+  "Icons.record_voice_over_outlined",
+  "Icons.smart_toy_outlined"
+ ],
+ "glyphs": [
+  "⚙",
+  "⚠",
+  "✓",
+  "✨",
+  "🌦",
+  "🎙",
+  "💡",
+  "📊",
+  "📐",
+  "📦",
+  "📷",
+  "🔑",
+  "🔗",
+  "🔧",
+  "🗣",
+  "🤖",
+  "🧮"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "AIHubScreen",
+   "kind": "ConsumerWidget",
+   "line": 66,
+   "loc": 261,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "mainTabProvider",
+    "searchQueryProvider",
+    "smartCartProvider"
+   ],
+   "writes": [
+    "mainTabProvider",
+    "searchQueryProvider"
+   ],
+   "actions": [
+    "call:openBarcodeScanner",
+    "call:openCheaperAlternativesSheet",
+    "call:openScanPlanSheet",
+    "call:showLipskeyProductSheet",
+    "nav:AIHubScreen"
+   ],
+   "strings": 27,
+   "constData": 0
+  },
+  {
+   "name": "_AIFeatureScreen",
+   "kind": "ConsumerWidget",
+   "line": 329,
+   "loc": 44,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "smartCartProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_PredictStock",
+   "kind": "ConsumerWidget",
+   "line": 379,
+   "loc": 74,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "ordersEngineProvider",
+    "smartCartProvider"
+   ],
+   "writes": [
+    "smartCartProvider"
+   ],
+   "actions": [
+    "fx:toast"
+   ],
+   "strings": 9,
+   "constData": 1
+  },
+  {
+   "name": "_ThreeWay",
+   "kind": "StatelessWidget",
+   "line": 461,
+   "loc": 68,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 9,
+   "constData": 0
+  },
+  {
+   "name": "_ThreeCol",
+   "kind": "StatelessWidget",
+   "line": 530,
+   "loc": 34,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_Weather",
+   "kind": "ConsumerWidget",
+   "line": 566,
+   "loc": 39,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "weatherForecastProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 3,
+   "constData": 0
+  },
+  {
+   "name": "_Wear",
+   "kind": "StatelessWidget",
+   "line": 607,
+   "loc": 50,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 5,
+   "constData": 0
+  },
+  {
+   "name": "_Analytics",
+   "kind": "ConsumerWidget",
+   "line": 662,
+   "loc": 66,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "claudeGatewayProvider",
+    "ordersEngineProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 4,
+   "constData": 0
+  },
+  {
+   "name": "AiMdHead",
+   "kind": "StatelessWidget",
+   "line": 758,
+   "loc": 36,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "AiFinTile",
+   "kind": "StatelessWidget",
+   "line": 795,
+   "loc": 57,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "AiCard",
+   "kind": "StatelessWidget",
+   "line": 853,
+   "loc": 22,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "AiCardTop",
+   "kind": "StatelessWidget",
+   "line": 876,
+   "loc": 47,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "AiCardSub",
+   "kind": "StatelessWidget",
+   "line": 924,
+   "loc": 11,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "AiBar",
+   "kind": "StatelessWidget",
+   "line": 936,
+   "loc": 21,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "AiCardBtn",
+   "kind": "StatelessWidget",
+   "line": 958,
+   "loc": 24,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "AiPrimary",
+   "kind": "StatelessWidget",
+   "line": 983,
+   "loc": 29,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "AiServerNote",
+   "kind": "StatelessWidget",
+   "line": 1013,
+   "loc": 20,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [
+  "_AIFeatureScreen",
+  "_PredictStock",
+  "_Weather",
+  "_Analytics"
+ ],
+ "gates": [
+  "kAiDeferredSearchTitles",
+  "kGear",
+  "kHideUnderConstruction",
+  "kHomeProductBrands",
+  "kKbGlobal",
+  "kProfileRawShell",
+  "kThreeWayDocs",
+  "kWeather"
+ ],
+ "board": {
+  "reads": [
+   "claudeGatewayProvider",
+   "mainTabProvider",
+   "ordersEngineProvider",
+   "searchQueryProvider",
+   "smartCartProvider",
+   "weatherForecastProvider"
+  ],
+  "writes": [
+   "mainTabProvider",
+   "searchQueryProvider",
+   "smartCartProvider"
+  ],
+  "navsAndCalls": [
+   "call:openBarcodeScanner",
+   "call:openCheaperAlternativesSheet",
+   "call:openScanPlanSheet",
+   "call:showLipskeyProductSheet",
+   "fx:toast",
+   "nav:AIHubScreen"
+  ]
+ }
+}

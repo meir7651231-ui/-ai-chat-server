@@ -1,0 +1,40 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__word_finder__size_equiv.dart",
+ "lines": 59,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "\n    show kBspInchToMm;\n\n/// Every inch body (the part before the `\"`/`׳`) the catalog or the contract\n/// uses, mapped to its [kBspInchToMm] key. Pretty glyphs (½) and the ASCII forms\n/// (1/2, 11/2) both land on the same key.\nconst Map<String, String> _kInchBodyToBspKey = {\n  ",
+  "מטר",
+  "מ׳",
+  "ס\"מ",
+  "ס״מ",
+  "׳"
+ ],
+ "icons": [],
+ "glyphs": [],
+ "logicCandidates": [
+  {
+   "name": "canonicalSize",
+   "line": 32
+  }
+ ],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kBspInchToMm"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

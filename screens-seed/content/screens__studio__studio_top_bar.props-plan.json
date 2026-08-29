@@ -1,0 +1,42 @@
+{
+ "StudioTopBar": {
+  "addProps": [
+   {
+    "name": "syyErykh1",
+    "type": "String",
+    "replaces": "סיים עריכה"
+   },
+   {
+    "name": "mxbErykh2",
+    "type": "String",
+    "replaces": "מצב עריכה"
+   },
+   {
+    "name": "btlTywth3",
+    "type": "String",
+    "replaces": "בטל טיוטה"
+   },
+   {
+    "name": "frsLkwl4",
+    "type": "String",
+    "replaces": "פרסם לכולם"
+   }
+  ],
+  "note": ""
+ },
+ "_DraftBadge": {
+  "addProps": [
+   {
+    "name": "tplTywthCountCynwyy1",
+    "type": "String",
+    "replaces": "טיוטה · $count שינויים"
+   },
+   {
+    "name": "ayCynwyy2",
+    "type": "String",
+    "replaces": "אין שינויים"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

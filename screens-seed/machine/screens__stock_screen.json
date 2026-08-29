@@ -1,0 +1,171 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__stock_screen.dart",
+ "lines": 402,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.inkLight"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   11,
+   12,
+   13,
+   14,
+   16,
+   20,
+   22,
+   48
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ", style: TextStyle(fontSize: 20)),\n          ),\n        ],\n      ),\n      body: Column(\n        children: [\n          // section title (📦 המלאי שלי)\n          Padding(\n            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),\n            child: Align(\n              alignment: AlignmentDirectional.centerStart,\n              child: CfgText(\n                ",
+  "אטם גומי לברז",
+  "איטום ההברגות",
+  "איטום סניטרי עמיד מים",
+  "אין פריטים באתר",
+  "באתר",
+  "בקשות חומר",
+  "ברגי קיבוע",
+  "ברז זוויתי לכיור 1/2\"",
+  "ברז ניל זוויתי 1/2\"",
+  "ברזי ניל זוויתיים",
+  "המחסן ריק",
+  "המלאי שלי",
+  "הפריט הועבר",
+  "חיבור הברז לקו המים",
+  "חיבור והסטה של הצנרת",
+  "מחברים וזוויות",
+  "מניעת נזילות בחיבור",
+  "סיליקון סניטרי",
+  "סיליקון סניטרי שקוף",
+  "סמן פריטים כ\"${warehouse ? ",
+  "סרט טפלון",
+  "סרט טפלון (גליל)",
+  "סרט טפלון לאיטום",
+  "קיבוע לקיר",
+  "↤ למחסן",
+  "↦ לאתר",
+  "🏗️ האתר",
+  "🏬 המחסן",
+  "💡 כשתסמן פריט כ\"במחסן\" או \"באתר\" בעץ המוצרים — הוא יופיע כאן.",
+  "📦 המלאי שלי"
+ ],
+ "icons": [],
+ "glyphs": [
+  "🏗",
+  "🏬",
+  "💡",
+  "📥",
+  "📦",
+  "🔧",
+  "🔩",
+  "🚰",
+  "🧴",
+  "🧵"
+ ],
+ "logicCandidates": [
+  {
+   "name": "_bindRemote",
+   "line": 61
+  },
+  {
+   "name": "dispose",
+   "line": 76
+  }
+ ],
+ "widgets": [
+  {
+   "name": "StockScreen",
+   "kind": "ConsumerWidget",
+   "line": 140,
+   "loc": 121,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "stockProvider",
+    "stockTabProvider"
+   ],
+   "writes": [
+    "stockTabProvider"
+   ],
+   "actions": [
+    "call:showContractorMaterialRequestsSheet",
+    "nav:StockScreen",
+    "fx:toast"
+   ],
+   "strings": 8,
+   "constData": 0
+  },
+  {
+   "name": "_StockTab",
+   "kind": "StatelessWidget",
+   "line": 262,
+   "loc": 32,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_StockRow",
+   "kind": "StatelessWidget",
+   "line": 295,
+   "loc": 69,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_Empty",
+   "kind": "StatelessWidget",
+   "line": 365,
+   "loc": 37,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 4,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [
+  "StockScreen"
+ ],
+ "gates": [
+  "kKbGlobal",
+  "kStockDemo"
+ ],
+ "board": {
+  "reads": [
+   "stockProvider",
+   "stockTabProvider"
+  ],
+  "writes": [
+   "stockTabProvider"
+  ],
+  "navsAndCalls": [
+   "call:showContractorMaterialRequestsSheet",
+   "fx:toast",
+   "nav:StockScreen"
+  ]
+ }
+}

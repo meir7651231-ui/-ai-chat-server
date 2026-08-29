@@ -1,0 +1,58 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__ring_dive__plain_dive_screen.dart",
+ "lines": 220,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [
+   11,
+   12.5,
+   15,
+   22
+  ],
+  "fontWeights": [
+   "FontWeight.w600"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "בחר את המדויק · ${products.length} אפשרויות",
+  "הכול",
+  "המוצר שמצאנו:",
+  "חזרה",
+  "לא נמצאו מוצרים",
+  "סובב · הקש לבחור"
+ ],
+ "icons": [
+  "Icons.arrow_forward"
+ ],
+ "glyphs": [],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "PlainDiveScreen",
+   "kind": "StatefulWidget",
+   "line": 19,
+   "loc": 6,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kPlainDive"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

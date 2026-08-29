@@ -1,0 +1,115 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__home_content_reorder.dart",
+ "lines": 285,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brandDark",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.space1",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space6"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   14,
+   18,
+   20
+  ],
+  "fontWeights": [
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   18
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  ";\n\n/// 🏠 תוכן-בית — the REORDERABLE home-content surface (settings → \"סידור מסך\n/// הבית\"). It previews the SAME wired smart-home sections the home actually\n/// renders (via [smartHomeSectionFor]) and lets the contractor reorder them\n/// (drag, or up/down), persisted via [homeContentOrderProvider]. Opened as a\n/// screen via [route] from settings.\nclass HomeContentReorder extends ConsumerWidget {\n  const HomeContentReorder({super.key, this.showAppBar = false});\n\n  /// When opened as a standalone screen we want a Scaffold + AppBar; when\n  /// embedded inside the existing home tab we render just the body.\n  final bool showAppBar;\n\n  static Route<void> route() => MaterialPageRoute<void>(\n        builder: (_) => const HomeContentReorder(showAppBar: true),\n      );\n\n  @override\n  Widget build(BuildContext context, WidgetRef ref) {\n    const body = _Body();\n    if (!showAppBar) return body;\n    return Directionality(\n      textDirection: TextDirection.rtl,\n      child: Scaffold(\n        backgroundColor: Theme.of(context).scaffoldBackgroundColor,\n        appBar: AppBar(\n          backgroundColor: Theme.of(context).colorScheme.surface,\n          elevation: 0,\n          automaticallyImplyLeading: false,\n          titleSpacing: BsTokens.space4,\n          title: CfgText(\n            ",
+  "איפוס",
+  "גרור לסידור מחדש",
+  "הזז למטה",
+  "הזז למעלה",
+  "הסדר וההסתרות אופסו לברירת מחדל",
+  "הסתר סקציה",
+  "הצג סקציה",
+  "מסך הבית שלי",
+  "סיום",
+  "שנה סדר",
+  "‹ חזרה",
+  "🏠 תוכן הבית"
+ ],
+ "icons": [
+  "Icons.check",
+  "Icons.drag_indicator",
+  "Icons.keyboard_arrow_down",
+  "Icons.keyboard_arrow_up",
+  "Icons.swap_vert",
+  "Icons.visibility_off_outlined",
+  "Icons.visibility_outlined"
+ ],
+ "glyphs": [
+  "🏠"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "HomeContentReorder",
+   "kind": "ConsumerWidget",
+   "line": 18,
+   "loc": 51,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_Body",
+   "kind": "ConsumerStatefulWidget",
+   "line": 70,
+   "loc": 6,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_SectionSlot",
+   "kind": "ConsumerWidget",
+   "line": 177,
+   "loc": 107,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 5,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kHomeScreenKey",
+  "kHomeSectionIds",
+  "kHomeSectionMeta"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

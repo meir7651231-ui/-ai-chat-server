@@ -1,0 +1,187 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__profile_screen.dart",
+ "lines": 620,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.brandDark",
+   "BsTokens.danger",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of",
+   "cfgRadius"
+  ],
+  "fontSizes": [
+   13,
+   14,
+   15,
+   16,
+   20,
+   22,
+   24
+  ],
+  "fontWeights": [
+   "FontWeight.w500",
+   "FontWeight.w700",
+   "FontWeight.w800",
+   "FontWeight.w900"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   28
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  ",\n                onTap: () =>\n                    Navigator.of(context).push(RewardsHubScreen.route()),\n              ),\n            // ── S1 חשבון — login (guest / signed out) vs. account actions.\n            //\n            // The test is \"is there a REAL person here\", not \"is there a user\".\n            // The server-catalog bootstrap signs every visitor in anonymously, so\n            // `auth.user == null` stopped being reachable the day the live build\n            // turned the backend on — which silently deleted the ONLY in-app way\n            // to log in, while showing a browsing GUEST the logout and\n            // delete-account rows for an account they do not have.\n            if (hasAuthGateway && !(auth.user?.isRealUser ?? false)) ...[\n              const SizedBox(height: BsTokens.space2),\n              _LinkRow(\n                label: ",
+  ";\n\n/// Primary dark text on the light theme (per the spec — no `inkLight` token).\nconst Color _ink = BsTokens.inkLight;\n\n/// 👤 הפרופיל שלי — the native home for the user",
+  "s ⚙️ → 👤 חשבון group: name + contact + profession,\n/// editable in place and persisted through [userProfileProvider]. Reached by\n/// tapping the user",
+  "אורח",
+  "אינסטלטור",
+  "ביטול",
+  "החשבון וכל הנתונים האישיים יימחקו לצמיתות. את הפעולה אי אפשר לבטל.",
+  "החשבון נמחק לצמיתות",
+  "הפרופיל נשמר",
+  "הפרופיל שלי",
+  "התנתקת מהחשבון",
+  "ח.פ. / עוסק מורשה",
+  "ח.פ. חייב להכיל 9 ספרות",
+  "ח.פ./עוסק מורשה",
+  "חשבון",
+  "חשמלאי",
+  "טלפון או אימייל",
+  "כתובת",
+  "כתובת / אזור",
+  "מחיקת חשבון",
+  "מחק לצמיתות",
+  "מספר נייד או אימייל לא תקינים",
+  "עוד",
+  "פרטים אישיים",
+  "קבלן שיפוצים",
+  "שם הקבלן",
+  "שם מלא",
+  "שמור",
+  "תחום מקצועי",
+  "📋 בקשות תפקיד",
+  "🔄 החלפת תפקיד",
+  "🗑️ מחיקת חשבון",
+  "🚪 התנתקות",
+  "🪪 בקשת תפקיד"
+ ],
+ "icons": [
+  "Icons.chevron_left",
+  "Icons.person"
+ ],
+ "glyphs": [
+  "⚙",
+  "🎮",
+  "👤",
+  "📋",
+  "🔄",
+  "🔐",
+  "🗑",
+  "🚪",
+  "🪪"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "ProfileScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 36,
+   "loc": 11,
+   "pure": false,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:ProfileScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_HeaderCard",
+   "kind": "StatelessWidget",
+   "line": 376,
+   "loc": 82,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_SectionLabel",
+   "kind": "StatelessWidget",
+   "line": 460,
+   "loc": 16,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_FieldLabel",
+   "kind": "StatelessWidget",
+   "line": 478,
+   "loc": 15,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_Field",
+   "kind": "StatelessWidget",
+   "line": 499,
+   "loc": 62,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_LinkRow",
+   "kind": "StatelessWidget",
+   "line": 568,
+   "loc": 52,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kKbGlobal"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:ProfileScreen"
+  ]
+ }
+}

@@ -1,0 +1,47 @@
+{
+ "ProfessionScreen": {
+  "addProps": [
+   {
+    "name": "t01",
+    "type": "String",
+    "replaces": "חזור"
+   },
+   {
+    "name": "t02",
+    "type": "String",
+    "replaces": "מה התחום שלך?"
+   },
+   {
+    "name": "t03",
+    "type": "String",
+    "replaces": "נתאים לך את האפליקציה — קטלוג, כלים והמלצות לפי המקצוע"
+   },
+   {
+    "name": "t04",
+    "type": "String",
+    "replaces": "תוכל לשנות את הבחירה בכל עת מההגדרות"
+   },
+   {
+    "name": "jzrh5",
+    "type": "String",
+    "replaces": "חזרה"
+   },
+   {
+    "name": "jwzrAjwrhLms6",
+    "type": "String",
+    "replaces": "חוזר אחורה למסך הקודם (מסך הפתיחה / ההרשמה)."
+   },
+   {
+    "name": "tplBjyrtHtjwTname7",
+    "type": "String",
+    "replaces": "בחירת התחום \"${t.name}\" (${t.desc}). אמורה להתאים "
+   },
+   {
+    "name": "qtlwgklyHmlxwtLmqxweK8",
+    "type": "String",
+    "replaces": "קטלוג/כלים/המלצות למקצוע — כרגע אינסטלטור פעיל, השאר בקרוב."
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

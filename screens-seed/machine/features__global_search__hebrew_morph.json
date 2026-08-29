@@ -1,0 +1,48 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__global_search__hebrew_morph.dart",
+ "lines": 62,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ");\n\n/// The fully-singular variant of [query] — EVERY plural word folded to its\n/// singular (the noun can sit anywhere: \"ברזים 16\" or \"16 ברזים\" or \"צינורות\n/// פקסגול\"). Returns an empty list when nothing productive applies (already\n/// singular, too short, blank) so the caller cleanly skips the rescue. Sizes and\n/// non-plural words pass through untouched. Deterministic; never returns [query]\n/// itself.\nList<String> hebrewSearchVariants(String query) {\n  final q = query.trim();\n  if (q.isEmpty) return const [];\n  var changed = false;\n  final singular = <String>[];\n  for (final w in q.split(_ws)) {\n    // The two productive masculine/feminine plural suffixes. Guard on length so a\n    // short word like \"מים\" (water — length 3) is never gutted to a stub.\n    if (w.length >= 4 && (w.endsWith(",
+  "s head word back into its singular so the\n// literal search still lands.\n//\n// RESCUE-ONLY by contract: the caller tries these variants ONLY after the literal\n// query has already returned zero results, so an over-eager singular can never\n// bury or reorder a real match — the worst case is that a variant also finds\n// nothing. That safety is why this can stay deliberately simple (just the two\n// productive plural suffixes + final-letter restoration) instead of a full\n// morphological analyser. Pure + deterministic → directly unit-testable.\n\n/// Non-final Hebrew letter → its word-FINAL form. Stripping a plural suffix\n/// exposes a letter that must take its final shape to match the singular in the\n/// catalog (\"אטמים\" → strip \"ים\" → \"אטמ\" → restore → \"אטם\").\nconst Map<String, String> _finalForm = {\n  ",
+  "ות",
+  "ך",
+  "ם",
+  "מ",
+  "ן",
+  "נ",
+  "ף",
+  "פ",
+  "ץ",
+  "צ"
+ ],
+ "icons": [],
+ "glyphs": [],
+ "logicCandidates": [
+  {
+   "name": "_restoreFinal",
+   "line": 24
+  },
+  {
+   "name": "hebrewSearchVariants",
+   "line": 39
+  }
+ ],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

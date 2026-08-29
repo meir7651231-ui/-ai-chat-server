@@ -1,0 +1,72 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__ring_dive__ring_dive_dial.dart",
+ "lines": 339,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [],
+ "icons": [],
+ "glyphs": [],
+ "logicCandidates": [
+  {
+   "name": "_rad",
+   "line": 100
+  },
+  {
+   "name": "paint",
+   "line": 103
+  },
+  {
+   "name": "_paintBezelPlate",
+   "line": 120
+  },
+  {
+   "name": "_paintTicks",
+   "line": 155
+  },
+  {
+   "name": "_paintLockedRings",
+   "line": 173
+  },
+  {
+   "name": "_paintWedge",
+   "line": 213
+  },
+  {
+   "name": "_paintLabels",
+   "line": 233
+  }
+ ],
+ "widgets": [
+  {
+   "name": "RingDiveDial",
+   "kind": "StatelessWidget",
+   "line": 34,
+   "loc": 38,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

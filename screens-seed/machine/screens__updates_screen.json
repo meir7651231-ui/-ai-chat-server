@@ -1,0 +1,91 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__updates_screen.dart",
+ "lines": 124,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand"
+  ],
+  "themeSockets": [],
+  "fontSizes": [
+   14
+  ],
+  "fontWeights": [
+   "FontWeight.w500",
+   "FontWeight.w700"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   18
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  ");\n    // Index safety: the שיחות pane sits at index 1, and external navigation\n    // (global search / keyboard destinations) may leave the provider at 1.\n    // With `chat` off the effective index is clamped to 0 (התראות) so the\n    // IndexedStack can never point at the hidden pane.\n    final sub = chatOn ? ref.watch(updatesSubTabProvider) : 0;\n    // PUSH-CHAT degrade: with `chat` off the שיחות pane never mounts, so its\n    // consumer (ChatsScreen — the chats_screen.dart consumePendingThread site)\n    // can",
+  ";\n\n/// Which sub-view the merged \"עדכונים\" tab shows: 0 = התראות, 1 = שיחות.\nfinal updatesSubTabProvider = StateProvider<int>((_) => 0);\n\n/// Benzi #3 — \"עדכונים\": the former התראות + שיחות tabs merged under ONE tab,\n/// with a top segmented toggle. Both existing screens are kept alive\n/// (`IndexedStack`) so their state (scroll / search / filters) survives a switch.\n/// When the org",
+  "t render at all — התראות fills the tab.\nclass UpdatesScreen extends ConsumerWidget {\n  const UpdatesScreen({super.key});\n\n  @override\n  Widget build(BuildContext context, WidgetRef ref) {\n    final chatOn = modOn(ref, ",
+  "התראות",
+  "שיחות",
+  "שיחות אינן פעילות בחברה זו"
+ ],
+ "icons": [
+  "Icons.chat_bubble_outline",
+  "Icons.notifications_outlined"
+ ],
+ "glyphs": [
+  "💬",
+  "🔔"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "UpdatesScreen",
+   "kind": "ConsumerWidget",
+   "line": 19,
+   "loc": 49,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "pendingPushThreadProvider",
+    "updatesSubTabProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "fx:toast"
+   ],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_UpdatesToggle",
+   "kind": "ConsumerWidget",
+   "line": 70,
+   "loc": 54,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "updatesSubTabProvider"
+   ],
+   "writes": [
+    "updatesSubTabProvider"
+   ],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [],
+ "board": {
+  "reads": [
+   "pendingPushThreadProvider",
+   "updatesSubTabProvider"
+  ],
+  "writes": [
+   "updatesSubTabProvider"
+  ],
+  "navsAndCalls": [
+   "fx:toast"
+  ]
+ }
+}

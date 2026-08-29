@@ -1,0 +1,33 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__catalog_config__catalog_config_flags.dart",
+ "lines": 8,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "ר חי בכל build. הדגל נותר **default-OFF** רק על **הראוט העצמאי**\n// (`CatalogConfigScreen.route`) + שער #128 (GATE_REGISTRY).\n// הפיצ"
+ ],
+ "icons": [],
+ "glyphs": [
+  "⚠",
+  "🎛"
+ ],
+ "logicCandidates": [],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kCatalogConfig"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

@@ -1,0 +1,37 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__fittings__intel__build_plan_export.dart",
+ "lines": 43,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "## כתב-חיתוך (מרחק-מרכזים ${spacing.toStringAsFixed(0)} מ״מ)",
+  "## רצף (${plan.route.length} אביזרים)",
+  "${c.cutLength.toStringAsFixed(1)} מ״מ",
+  "- ${c.fromFamily} → צינור OD${c.od} → ${c.toFamily}: ",
+  "- (אין מרווחי-צינור)",
+  "- (רצף ריק)",
+  ";\n\n/// מייצא תוכנית-קו למסמך-טקסט (Markdown-lite · עברית): כותרת · רצף-אביזרים ממוספר ·\n/// כתב-חיתוך פר-מרווח. מרחק-מרכזים [spacing] נומינלי. טהור · דטרמיניסטי.\nString exportBuildPlanText(FittingLinePlan plan, {double spacing = 200}) {\n  final b = StringBuffer()\n    ..writeln("
+ ],
+ "icons": [],
+ "glyphs": [
+  "🔒",
+  "🧠"
+ ],
+ "logicCandidates": [],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

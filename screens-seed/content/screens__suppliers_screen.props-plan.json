@@ -1,0 +1,47 @@
+{
+ "SuppliersScreen": {
+  "addProps": [
+   {
+    "name": "title",
+    "type": "String",
+    "replaces": "ספקים ומותגים"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "🏪"
+   },
+   {
+    "name": "aySfqyEdyy3",
+    "type": "String",
+    "replaces": "אין ספקים עדיין"
+   },
+   {
+    "name": "sfqyWmwtgyYwfyew4",
+    "type": "String",
+    "replaces": "ספקים ומותגים יופיעו כשקטלוג החברה ייטען"
+   },
+   {
+    "name": "teyntQtlwgHjbrh5",
+    "type": "String",
+    "replaces": "📦 טעינת קטלוג החברה"
+   },
+   {
+    "name": "txt6",
+    "type": "String",
+    "replaces": "🏭"
+   },
+   {
+    "name": "lyfsqyBrq7",
+    "type": "String",
+    "replaces": "ליפסקי ברקן"
+   },
+   {
+    "name": "tplAynstlxyhWsnytxyhKLips8",
+    "type": "String",
+    "replaces": "אינסטלציה וסניטציה • $kLipskeyProductCount מוצרים"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

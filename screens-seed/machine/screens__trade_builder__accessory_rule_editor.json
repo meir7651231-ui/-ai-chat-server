@@ -1,0 +1,161 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__trade_builder__accessory_rule_editor.dart",
+ "lines": 627,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.dangerDark",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of",
+   "cfgRadius"
+  ],
+  "fontSizes": [
+   12,
+   12.5,
+   13,
+   13.5,
+   14,
+   15,
+   18,
+   20,
+   34
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   20
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  ");\n\n/// 🧩 אביזרים — the trade",
+  "אין עדיין אביזרים",
+  "הוסף אביזר",
+  "חובה",
+  "חובה?",
+  "טיוטה",
+  "ללא",
+  "למה חשוב",
+  "למשל: …",
+  "מוצר מקושר",
+  "מחיר",
+  "מחיר לא תקין",
+  "מחק",
+  "קטגוריה",
+  "שם אביזר",
+  "🧩 אביזרים"
+ ],
+ "icons": [
+  "Icons.delete_outline"
+ ],
+ "glyphs": [
+  "🧩"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "AccessoryRuleEditorScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 58,
+   "loc": 13,
+   "pure": false,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:AccessoryRuleEditorScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_EmptyAccessories",
+   "kind": "StatelessWidget",
+   "line": 386,
+   "loc": 35,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_AccessoryTile",
+   "kind": "StatelessWidget",
+   "line": 425,
+   "loc": 105,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_MustChip",
+   "kind": "StatelessWidget",
+   "line": 535,
+   "loc": 24,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_PriceChip",
+   "kind": "StatelessWidget",
+   "line": 562,
+   "loc": 21,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_PillButton",
+   "kind": "StatelessWidget",
+   "line": 587,
+   "loc": 40,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kTradeBuilderFlag"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:AccessoryRuleEditorScreen"
+  ]
+ }
+}

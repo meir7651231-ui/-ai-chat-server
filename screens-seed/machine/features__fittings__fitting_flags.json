@@ -1,0 +1,34 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__fittings__fitting_flags.dart",
+ "lines": 15,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ");\n\n/// שכבת-ה-3D: layout (turtle) + geometry + render. web-first (פאזה C).\nconst bool kFittingEngine3d = bool.fromEnvironment(",
+  ");\n\n/// שכבת-האינטליגנציה: תכנון-חיבור/ניתוב/AI (פאזה D). מאומת ע\"י המנוע הדטרמיניסטי.\nconst bool kFittingEngineIntel = bool.fromEnvironment("
+ ],
+ "icons": [],
+ "glyphs": [
+  "🔌"
+ ],
+ "logicCandidates": [],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kFittingEngine",
+  "kFittingEngineIntel"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

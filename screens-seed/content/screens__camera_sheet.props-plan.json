@@ -1,0 +1,47 @@
+{
+ "_ShutterButton": {
+  "addProps": [
+   {
+    "name": "tplXlLabel1",
+    "type": "String",
+    "replaces": "צלם $label"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "📸"
+   },
+   {
+    "name": "fwtj3",
+    "type": "String",
+    "replaces": "פותח…"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_GalleryThumb": {
+  "addProps": [
+   {
+    "name": "tplTxwghMqdymhLabel1",
+    "type": "String",
+    "replaces": "תצוגה מקדימה: $label"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_GalleryAllBtn": {
+  "addProps": [
+   {
+    "name": "t06",
+    "type": "String",
+    "replaces": "כל\\nהגלריה"
+   },
+   {
+    "name": "klHglryh2",
+    "type": "String",
+    "replaces": "כל הגלריה"
+   }
+  ],
+  "note": ""
+ }
+}

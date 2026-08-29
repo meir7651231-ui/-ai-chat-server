@@ -1,0 +1,632 @@
+{
+ "_UnitToggle": {
+  "addProps": [
+   {
+    "name": "bwdd1",
+    "type": "String",
+    "replaces": "בודד"
+   },
+   {
+    "name": "argz2",
+    "type": "String",
+    "replaces": "ארגז"
+   },
+   {
+    "name": "mctj3",
+    "type": "String",
+    "replaces": "משטח"
+   }
+  ],
+  "note": ""
+ },
+ "_ZoomHint": {
+  "addProps": [
+   {
+    "name": "zoom",
+    "type": "String",
+    "replaces": "הגדלה"
+   }
+  ],
+  "note": ""
+ },
+ "_StripPanel": {
+  "addProps": [
+   {
+    "name": "mustSmartTree",
+    "type": "String",
+    "replaces": "חובה (עץ חכם)"
+   },
+   {
+    "name": "optionalSmartTree",
+    "type": "String",
+    "replaces": "אופציונלי (עץ חכם)"
+   },
+   {
+    "name": "toolsAuto",
+    "type": "String",
+    "replaces": "כלים ואיטומים (אוטומטי)"
+   },
+   {
+    "name": "mustBadge",
+    "type": "String",
+    "replaces": "חובה"
+   },
+   {
+    "name": "mustBadgeCompliance",
+    "type": "String",
+    "replaces": "חובה"
+   },
+   {
+    "name": "pprCaption",
+    "type": "String",
+    "replaces": "צנרת PPR לאספקת מים חמים וקרים"
+   },
+   {
+    "name": "smartlockCaption",
+    "type": "String",
+    "replaces": "SMART LOCK — מערכת דלוחין, צנרת ואביזרים מפוליפרופילן בקטרים 32-63 מ\"מ בצבע שחור"
+   },
+   {
+    "name": "perUnit",
+    "type": "String",
+    "replaces": "ליחידה"
+   },
+   {
+    "name": "estimateBadge",
+    "type": "String",
+    "replaces": "הערכה"
+   },
+   {
+    "name": "priceNote",
+    "type": "String",
+    "replaces": "הערכה לפי קטגוריה — מחיר אמיתי תלוי בספק, מותג ומידה ספציפית."
+   },
+   {
+    "name": "ayQbwxh11",
+    "type": "String",
+    "replaces": "אין קבוצה"
+   },
+   {
+    "name": "ayMwxryAjry12",
+    "type": "String",
+    "replaces": "אין מוצרים אחרים בקבוצה"
+   },
+   {
+    "name": "ayMfrtTwa13",
+    "type": "String",
+    "replaces": "אין מפרט תואם"
+   },
+   {
+    "name": "laNmxawMwxry14",
+    "type": "String",
+    "replaces": "לא נמצאו מוצרים שמשלימים את הקצוות"
+   },
+   {
+    "name": "lfyNtwnyHybwa15",
+    "type": "String",
+    "replaces": "לפי נתוני היבוא"
+   },
+   {
+    "name": "ayMwxryMclymy16",
+    "type": "String",
+    "replaces": "אין מוצרים משלימים"
+   },
+   {
+    "name": "fwlyrwl17",
+    "type": "String",
+    "replaces": "פולירול"
+   },
+   {
+    "name": "ayRcymtErkt18",
+    "type": "String",
+    "replaces": "אין רשימת ערכת התקנה"
+   },
+   {
+    "name": "twknytRytwCqeFlth19",
+    "type": "String",
+    "replaces": "תוכנית ריתוך-שקע (פלטה 260°C)"
+   },
+   {
+    "name": "tplDnEwmqWeld120",
+    "type": "String",
+    "replaces": "⌀$dn: עומק ${weld.$1} מ\"מ · חימום ${weld.$2} שנ׳ · קירור ${weld.$3} דק׳"
+   },
+   {
+    "name": "wdaFlthB260C21",
+    "type": "String",
+    "replaces": "ודא פלטה ב-260°C ותותבים מחוזקים"
+   },
+   {
+    "name": "hknsXynwrWabyzr22",
+    "type": "String",
+    "replaces": "הכנס צינור ואביזר לתותבים (נקבה+זכר)"
+   },
+   {
+    "name": "jmLfyHzm23",
+    "type": "String",
+    "replaces": "חמם לפי הזמן בטבלה, שלוף וחבר מיד עד הסימון"
+   },
+   {
+    "name": "hjzqMjwbryLla24",
+    "type": "String",
+    "replaces": "החזק מחוברים ללא סיבוב עד התקררות"
+   },
+   {
+    "name": "kly25",
+    "type": "String",
+    "replaces": "כלי"
+   },
+   {
+    "name": "aytw26",
+    "type": "String",
+    "replaces": "איטום"
+   },
+   {
+    "name": "btyjwt27",
+    "type": "String",
+    "replaces": "בטיחות"
+   },
+   {
+    "name": "ayWryantyNwsfy28",
+    "type": "String",
+    "replaces": "אין וריאנטים נוספים"
+   },
+   {
+    "name": "ayDrycwtTqynwt29",
+    "type": "String",
+    "replaces": "אין דרישות תקינות מיוחדות"
+   },
+   {
+    "name": "ayMfrtHndsy30",
+    "type": "String",
+    "replaces": "אין מפרט הנדסי מאומת"
+   },
+   {
+    "name": "jwmr31",
+    "type": "String",
+    "replaces": "חומר"
+   },
+   {
+    "name": "dyrwgLj32",
+    "type": "String",
+    "replaces": "דירוג לחץ"
+   },
+   {
+    "name": "ljEbwdh5033",
+    "type": "String",
+    "replaces": "לחץ עבודה (50 שנה)"
+   },
+   {
+    "name": "ljEbwdh34",
+    "type": "String",
+    "replaces": "לחץ עבודה"
+   },
+   {
+    "name": "merkt35",
+    "type": "String",
+    "replaces": "מערכת"
+   },
+   {
+    "name": "qwtrFnymy36",
+    "type": "String",
+    "replaces": "קוטר פנימי"
+   },
+   {
+    "name": "qxwwtJybwr37",
+    "type": "String",
+    "replaces": "קצוות חיבור"
+   },
+   {
+    "name": "jwlywt38",
+    "type": "String",
+    "replaces": "חוליות"
+   },
+   {
+    "name": "jwmrGl39",
+    "type": "String",
+    "replaces": "חומר גלם"
+   },
+   {
+    "name": "abyzryPPR40",
+    "type": "String",
+    "replaces": "אביזרים: PPR"
+   },
+   {
+    "name": "abyzryTbrygPPR41",
+    "type": "String",
+    "replaces": "אביזרי תבריג: PPR + פליז DZR"
+   },
+   {
+    "name": "ytrwnwt42",
+    "type": "String",
+    "replaces": "יתרונות"
+   },
+   {
+    "name": "hxnrtHyjydhLasfqt43",
+    "type": "String",
+    "replaces": "הצנרת היחידה לאספקת מים ההומוגנית בכל חלקיה לאחר ריתוך"
+   },
+   {
+    "name": "ayQwrwzyhWay44",
+    "type": "String",
+    "replaces": "אין קורוזיה ואין הצטברות אבנית בכל חלקי המערכת"
+   },
+   {
+    "name": "mqdJykwNmw45",
+    "type": "String",
+    "replaces": "מקדם חיכוך נמוך ביותר — נשארת נקייה לאורך שנים"
+   },
+   {
+    "name": "ayHqtntQwtr46",
+    "type": "String",
+    "replaces": "אין הקטנת קוטר בצינורות ובאביזרים לאחר החיבור"
+   },
+   {
+    "name": "emydwtMxwyntWarwkt47",
+    "type": "String",
+    "replaces": "עמידות מצוינת וארוכת טווח בלחצים גבוהים"
+   },
+   {
+    "name": "rmtAqwstyqhGbwhh48",
+    "type": "String",
+    "replaces": "רמת אקוסטיקה גבוהה"
+   },
+   {
+    "name": "xnrtQlhWnwjh49",
+    "type": "String",
+    "replaces": "צנרת קלה ונוחה לעבודה, מגוון אביזרים רחב"
+   },
+   {
+    "name": "mjbryHbrghMflyz50",
+    "type": "String",
+    "replaces": "מחברי הברגה מפליז DZR לסביבה קורוזיבית"
+   },
+   {
+    "name": "xynwrRbCkbty51",
+    "type": "String",
+    "replaces": "צינור רב שכבתי PPML-MD-S16"
+   },
+   {
+    "name": "ckbhJyxwnytFwlyfrwfyl52",
+    "type": "String",
+    "replaces": "שכבה חיצונית: פוליפרופילן שחור — מעכבת קרני UV"
+   },
+   {
+    "name": "ckbhAmxeytFwlyfrwfyl53",
+    "type": "String",
+    "replaces": "שכבה אמצעית: פוליפרופילן עם תרכובת מינרלית PPMD — בידוד אקוסטי"
+   },
+   {
+    "name": "ckbhFnymytFwlyfrwfyl54",
+    "type": "String",
+    "replaces": "שכבה פנימית: פוליפרופילן לבן — מאפשרת ניטור ובקרה חזותיים"
+   },
+   {
+    "name": "abyzryPPMDPP55",
+    "type": "String",
+    "replaces": "אביזרים: PPMD PP"
+   },
+   {
+    "name": "t56",
+    "type": "String",
+    "replaces": "ט"
+   },
+   {
+    "name": "atMerktAt57",
+    "type": "String",
+    "replaces": "אטם מערכת: אטם לחץ אלסטומרי TPE"
+   },
+   {
+    "name": "htqnhMhyrhWfcwth58",
+    "type": "String",
+    "replaces": "התקנה מהירה ופשוטה, אטם אינטגרלי באביזר"
+   },
+   {
+    "name": "atEmydLawr59",
+    "type": "String",
+    "replaces": "אטם עמיד לאורך זמן"
+   },
+   {
+    "name": "jwzqTbetyGbwh60",
+    "type": "String",
+    "replaces": "חוזק טבעתי גבוה"
+   },
+   {
+    "name": "emydwtKymytGbwhh61",
+    "type": "String",
+    "replaces": "עמידות כימית גבוהה"
+   },
+   {
+    "name": "qcyjwtWyxybwtGbwhy62",
+    "type": "String",
+    "replaces": "קשיחות ויציבות גבוהים"
+   },
+   {
+    "name": "emydwtBfnyFgyewt63",
+    "type": "String",
+    "replaces": "עמידות בפני פגיעות מכניות"
+   },
+   {
+    "name": "mwdwlAlstywtWaymfqt64",
+    "type": "String",
+    "replaces": "מודול אלסטיות ואימפקט גבוה"
+   },
+   {
+    "name": "fnyXynwrJlq65",
+    "type": "String",
+    "replaces": "פנים צינור חלק מאפשר זרימה נקיה"
+   },
+   {
+    "name": "twxawtXylwJdwt66",
+    "type": "String",
+    "replaces": "תוצאות צילום חדות במיוחד"
+   },
+   {
+    "name": "mywxrBycralBel67",
+    "type": "String",
+    "replaces": "מיוצר בישראל · בעל תו תקן ישראלי"
+   },
+   {
+    "name": "qyymwtAwrJyy68",
+    "type": "String",
+    "replaces": "קיימות (אורך חיים) ל-100 שנה"
+   },
+   {
+    "name": "cymwcBxynwrwtJlqy69",
+    "type": "String",
+    "replaces": "שימוש בצינורות חלקים"
+   },
+   {
+    "name": "ayXwrBhknt70",
+    "type": "String",
+    "replaces": "אין צורך בהכנת פאזה לצינור (נדרש לנקות גראדים) · אין צורך בשימוש בחומרי סיכה"
+   },
+   {
+    "name": "xnrtAqwstytLhfjtt71",
+    "type": "String",
+    "replaces": "צנרת אקוסטית להפחתת רעש"
+   },
+   {
+    "name": "xnrtEmydhBewmsy72",
+    "type": "String",
+    "replaces": "צנרת עמידה בעומסי כבידה ללא היווצרות בטן"
+   },
+   {
+    "name": "emydwtBtnayMzg73",
+    "type": "String",
+    "replaces": "עמידות בתנאי מזג אויר קשים"
+   },
+   {
+    "name": "tqynwt74",
+    "type": "String",
+    "replaces": "תקינות"
+   },
+   {
+    "name": "ty9581Hytr75",
+    "type": "String",
+    "replaces": "ת\"י 958-1 — היתר 737 (צנרת PP לסילוק שפכים חמים)"
+   },
+   {
+    "name": "ty712531Hytr76",
+    "type": "String",
+    "replaces": "ת\"י 71253-1 — היתר 114782 (מחסום ריחות מפלסטיק לרצפה)"
+   },
+   {
+    "name": "ty712532Mas77",
+    "type": "String",
+    "replaces": "ת\"י 71253-2 (מאסף מפלסטיק לרצפה ברצפה)"
+   },
+   {
+    "name": "ty5694Hytr78",
+    "type": "String",
+    "replaces": "ת\"י 5694 — היתר 114783 (אביזרי ניקוז לאמבט, מחסומים גלויה וסיפונים)"
+   },
+   {
+    "name": "ty14020Hytr79",
+    "type": "String",
+    "replaces": "ת\"י 14020 — היתר 70304 (תו ירוק למוצרי PP)"
+   },
+   {
+    "name": "tqBynlawmyEN145180",
+    "type": "String",
+    "replaces": "תקן בינלאומי EN-1451 · DIN 8078 · ISO 180"
+   },
+   {
+    "name": "1HknsAt81",
+    "type": "String",
+    "replaces": "1. הכנס את הצינור* או האביזר עד למעצור (*ללא גראדים)"
+   },
+   {
+    "name": "2HdqAt82",
+    "type": "String",
+    "replaces": "2. הדק את האום עד לנעילת השיניים"
+   },
+   {
+    "name": "wqr83",
+    "type": "String",
+    "replaces": "וקר"
+   },
+   {
+    "name": "wqrLabyzrHndrc84",
+    "type": "String",
+    "replaces": "וקר לאביזר הנדרש, ללא הידוק חיבור הסמארטלוק"
+   },
+   {
+    "name": "2HcjlAt85",
+    "type": "String",
+    "replaces": "2. השחל את האום והאטם הכדורי על הצינור"
+   },
+   {
+    "name": "4HdqAt86",
+    "type": "String",
+    "replaces": "4. הדק את אביזר הסמארט לוק"
+   },
+   {
+    "name": "hknsAtHfqq87",
+    "type": "String",
+    "replaces": "הכנס את הפקק שהמילה UP נמצאת בחלקו העליון וידית האחיזה נמצאת במצב אנכי"
+   },
+   {
+    "name": "hdqAtHaw88",
+    "type": "String",
+    "replaces": "הדק את האום עד נעילת השיניים"
+   },
+   {
+    "name": "htqnhYdnytCl89",
+    "type": "String",
+    "replaces": "התקנה ידנית של האום"
+   },
+   {
+    "name": "habyzryMgyeyKchawmy90",
+    "type": "String",
+    "replaces": "⚠️ האביזרים מגיעים כשהאומים מורכבים עליהם ומוכנים להתקנה. במצב שבו האום מופרד מהאביזר יכול להתקיים רק על ידי פתיחה מכוונת"
+   },
+   {
+    "name": "kwwAtHj91",
+    "type": "String",
+    "replaces": "כוון את החץ הירוק שעל האום מול השן הגדולה באביזר ← הברג את האום עד לשמיעת הקליק (מעבר מעל השן הגדולה)"
+   },
+   {
+    "name": "jytwyWnyqwy92",
+    "type": "String",
+    "replaces": "חיטוי וניקוי"
+   },
+   {
+    "name": "tkwnwtHnyqywNwbewt93",
+    "type": "String",
+    "replaces": "תכונות הניקיון נובעות משכבה פנימית פוליפרופילן לבן חלקה ⇒ ללא הצטברות זרימה חופשית"
+   },
+   {
+    "name": "laNdrcJytwy94",
+    "type": "String",
+    "replaces": "לא נדרש חיטוי שוטף — שטיפה במים בלבד ברוב המקרים"
+   },
+   {
+    "name": "ctyXwrwtJytwy95",
+    "type": "String",
+    "replaces": "שתי צורות חיטוי למערכות פולירול: תרמי וכימי"
+   },
+   {
+    "name": "jytwyTrmy96",
+    "type": "String",
+    "replaces": "חיטוי תרמי"
+   },
+   {
+    "name": "70CLmc3097",
+    "type": "String",
+    "replaces": "70°C למשך 30 דק׳ (טיפול בלגיונלה)"
+   },
+   {
+    "name": "nytBtmfxGbwhh98",
+    "type": "String",
+    "replaces": "ניתן בטמפ׳ גבוהה יותר לפי הטבלאות — ללא חריגה מהמרבי"
+   },
+   {
+    "name": "jytwyKymy99",
+    "type": "String",
+    "replaces": "חיטוי כימי"
+   },
+   {
+    "name": "klwrJwfcy50100",
+    "type": "String",
+    "replaces": "כלור חופשי 50 מ\"ג/ל׳ מעל 12 שעות — פעמיים בשנה"
+   },
+   {
+    "name": "jlwfhMyJmx101",
+    "type": "String",
+    "replaces": "חלופה: מי חמצן (H2O2) 150 מ\"ג/ל׳ למשך 24 שעות"
+   },
+   {
+    "name": "tmfxEd30C102",
+    "type": "String",
+    "replaces": "טמפ׳ עד 30°C בזמן החיטוי הכימי"
+   },
+   {
+    "name": "azhrwtJwlywt103",
+    "type": "String",
+    "replaces": "אזהרות (חוליות)"
+   },
+   {
+    "name": "aswrLbxeJytwy104",
+    "type": "String",
+    "replaces": "אסור לבצע חיטוי תרמי וכימי בו-זמנית"
+   },
+   {
+    "name": "aswrCymwcBklwr105",
+    "type": "String",
+    "replaces": "אסור שימוש בכלור דיאוקסיד במערכות PPR"
+   },
+   {
+    "name": "jytwyBklwrElwl106",
+    "type": "String",
+    "replaces": "חיטוי בכלור עלול לקצר את אורך חיי הצנרת"
+   },
+   {
+    "name": "ayHerktMjyr107",
+    "type": "String",
+    "replaces": "אין הערכת מחיר לקטגוריה זו"
+   },
+   {
+    "name": "tplLabel108",
+    "type": "String",
+    "replaces": "🔗 $label"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_InteractiveChips": {
+  "addProps": [
+   {
+    "name": "mwbrc1",
+    "type": "String",
+    "replaces": "מוברש"
+   },
+   {
+    "name": "mt2",
+    "type": "String",
+    "replaces": "מט"
+   },
+   {
+    "name": "l3",
+    "type": "String",
+    "replaces": "ל"
+   },
+   {
+    "name": "b4",
+    "type": "String",
+    "replaces": "ב"
+   },
+   {
+    "name": "swg5",
+    "type": "String",
+    "replaces": "סוג"
+   },
+   {
+    "name": "ttswg6",
+    "type": "String",
+    "replaces": "תת-סוג"
+   },
+   {
+    "name": "gwdl7",
+    "type": "String",
+    "replaces": "גודל"
+   },
+   {
+    "name": "xbe8",
+    "type": "String",
+    "replaces": "צבע"
+   },
+   {
+    "name": "dg9",
+    "type": "String",
+    "replaces": "דגם"
+   },
+   {
+    "name": "awr10",
+    "type": "String",
+    "replaces": "אורך"
+   }
+  ],
+  "note": ""
+ }
+}

@@ -1,0 +1,227 @@
+{
+ "BudgetScreen": {
+  "addProps": [
+   {
+    "name": "title",
+    "type": "String",
+    "replaces": "תקציב הפרויקט"
+   },
+   {
+    "name": "catHeader",
+    "type": "String",
+    "replaces": "פירוט הוצאות לפי קטגוריה"
+   },
+   {
+    "name": "add",
+    "type": "String",
+    "replaces": "＋ הוסף"
+   },
+   {
+    "name": "noCats",
+    "type": "String",
+    "replaces": "אין קטגוריות עדיין — הקש \"＋ הוסף\" כדי להוסיף קטגוריה"
+   },
+   {
+    "name": "siteHeader",
+    "type": "String",
+    "replaces": "הוצאות לפי אתר"
+   },
+   {
+    "name": "noSites",
+    "type": "String",
+    "replaces": "אין אתרים פעילים — הוסיפו פרויקט במסך הפרויקטים"
+   },
+   {
+    "name": "editBudgetBtn",
+    "type": "String",
+    "replaces": "✏️ עריכת התקציב"
+   },
+   {
+    "name": "editorTitle",
+    "type": "String",
+    "replaces": "עריכת תקציב"
+   },
+   {
+    "name": "save",
+    "type": "String",
+    "replaces": "שמירה"
+   },
+   {
+    "name": "removeExpense",
+    "type": "String",
+    "replaces": "− הסר הוצאה"
+   },
+   {
+    "name": "addExpense",
+    "type": "String",
+    "replaces": "＋ הוסף הוצאה"
+   },
+   {
+    "name": "saveCat",
+    "type": "String",
+    "replaces": "שמירה"
+   },
+   {
+    "name": "deleteCat",
+    "type": "String",
+    "replaces": "🗑️ מחיקת קטגוריה"
+   },
+   {
+    "name": "jryghMhtqxyb14",
+    "type": "String",
+    "replaces": "חריגה מהתקציב"
+   },
+   {
+    "name": "mhtqxybNwxl15",
+    "type": "String",
+    "replaces": "מהתקציב נוצל"
+   },
+   {
+    "name": "hqcLerykh16",
+    "type": "String",
+    "replaces": " · הקש לעריכה"
+   },
+   {
+    "name": "tqxybKwll17",
+    "type": "String",
+    "replaces": "תקציב כולל"
+   },
+   {
+    "name": "hwxa18",
+    "type": "String",
+    "replaces": "הוצא"
+   },
+   {
+    "name": "ncar19",
+    "type": "String",
+    "replaces": "נשאר"
+   },
+   {
+    "name": "tplHhwxawtJrgwMhtqxyb20",
+    "type": "String",
+    "replaces": "⚠️ ההוצאות חרגו מהתקציב ב-${_fmt(-b.left)}. כדאי לעדכן את התקציב או לבדוק הוצאות."
+   },
+   {
+    "name": "ajrLlaFrwyqt21",
+    "type": "String",
+    "replaces": "אחר / ללא פרויקט"
+   },
+   {
+    "name": "mbwssElHhzmnwt22",
+    "type": "String",
+    "replaces": "מבוסס על ההזמנות בפועל לפי אתר."
+   },
+   {
+    "name": "hntwnyLhmjchBgrsh23",
+    "type": "String",
+    "replaces": "* הנתונים להמחשה — בגרסה המלאה יתבססו על ההזמנות וההוצאות בפועל של הלקוח."
+   },
+   {
+    "name": "hwxaEdKh24",
+    "type": "String",
+    "replaces": "הוצא עד כה"
+   },
+   {
+    "name": "ycLhzyMsfry25",
+    "type": "String",
+    "replaces": "יש להזין מספרים תקינים"
+   },
+   {
+    "name": "htqxybEwdk26",
+    "type": "String",
+    "replaces": "התקציב עודכן"
+   },
+   {
+    "name": "hwsftHsrtHwxah27",
+    "type": "String",
+    "replaces": "הוספת / הסרת הוצאה (₪)"
+   },
+   {
+    "name": "ycLhzySkw28",
+    "type": "String",
+    "replaces": "יש להזין סכום"
+   },
+   {
+    "name": "tplNwsfhHwxahThousandsamt29",
+    "type": "String",
+    "replaces": "נוספה הוצאה: ₪${_thousands(amt)}"
+   },
+   {
+    "name": "tplHwsrhHwxahThousandsamt30",
+    "type": "String",
+    "replaces": "הוסרה הוצאה: ₪${_thousands(amt)}"
+   },
+   {
+    "name": "txt31",
+    "type": "String",
+    "replaces": "📦"
+   },
+   {
+    "name": "qtgwryhJdch32",
+    "type": "String",
+    "replaces": "קטגוריה חדשה"
+   },
+   {
+    "name": "eryktQtgwryh33",
+    "type": "String",
+    "replaces": "עריכת קטגוריה"
+   },
+   {
+    "name": "cHqtgwryh34",
+    "type": "String",
+    "replaces": "שם הקטגוריה"
+   },
+   {
+    "name": "skw35",
+    "type": "String",
+    "replaces": "סכום (₪)"
+   },
+   {
+    "name": "ycLhzyC36",
+    "type": "String",
+    "replaces": "יש להזין שם קטגוריה"
+   },
+   {
+    "name": "ycLhzySkw37",
+    "type": "String",
+    "replaces": "יש להזין סכום תקין"
+   },
+   {
+    "name": "hqtgwryhNcmrh38",
+    "type": "String",
+    "replaces": "הקטגוריה נשמרה"
+   },
+   {
+    "name": "mjyqtQtgwryh39",
+    "type": "String",
+    "replaces": "מחיקת קטגוריה?"
+   },
+   {
+    "name": "hqtgwryhTymjqMhtqxyb40",
+    "type": "String",
+    "replaces": "הקטגוריה תימחק מהתקציב לצמיתות."
+   },
+   {
+    "name": "mjq41",
+    "type": "String",
+    "replaces": "מחק"
+   },
+   {
+    "name": "hqtgwryhNmjqh42",
+    "type": "String",
+    "replaces": "הקטגוריה נמחקה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_SiteRow": {
+  "addProps": [
+   {
+    "name": "tplName1",
+    "type": "String",
+    "replaces": "🏗️ $name"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

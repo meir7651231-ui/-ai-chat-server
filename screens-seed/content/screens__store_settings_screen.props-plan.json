@@ -1,0 +1,577 @@
+{
+ "StoreSettingsScreen": {
+  "addProps": [
+   {
+    "name": "screenTitle",
+    "type": "String",
+    "replaces": "הגדרות חנות"
+   },
+   {
+    "name": "resetTitle",
+    "type": "String",
+    "replaces": "איפוס הגדרות?"
+   },
+   {
+    "name": "resetBody",
+    "type": "String",
+    "replaces": "כל הגדרות החנות יוחזרו לברירת המחדל."
+   },
+   {
+    "name": "cancel",
+    "type": "String",
+    "replaces": "ביטול"
+   },
+   {
+    "name": "resetOk",
+    "type": "String",
+    "replaces": "אפס"
+   },
+   {
+    "name": "ayfwsLbryrtMjdl6",
+    "type": "String",
+    "replaces": "איפוס לברירת מחדל"
+   },
+   {
+    "name": "hgdrwtAwfsw7",
+    "type": "String",
+    "replaces": "הגדרות אופסו"
+   }
+  ],
+  "note": ""
+ },
+ "_ShippingSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "📍"
+   },
+   {
+    "name": "mclwjyWktwbwt2",
+    "type": "String",
+    "replaces": "משלוחים וכתובות"
+   },
+   {
+    "name": "ktwbtBryrtMjdl3",
+    "type": "String",
+    "replaces": "כתובת ברירת מחדל"
+   },
+   {
+    "name": "rjwbMsfrEyr4",
+    "type": "String",
+    "replaces": "רחוב, מספר, עיר"
+   },
+   {
+    "name": "jlwZmMwed5",
+    "type": "String",
+    "replaces": "חלון זמן מועדף"
+   },
+   {
+    "name": "bwqr6",
+    "type": "String",
+    "replaces": "בוקר"
+   },
+   {
+    "name": "xhryy7",
+    "type": "String",
+    "replaces": "צהריים"
+   },
+   {
+    "name": "erb8",
+    "type": "String",
+    "replaces": "ערב"
+   },
+   {
+    "name": "gmyc9",
+    "type": "String",
+    "replaces": "גמיש"
+   },
+   {
+    "name": "azwryMclwj10",
+    "type": "String",
+    "replaces": "אזורי משלוח"
+   },
+   {
+    "name": "taRmtG11",
+    "type": "String",
+    "replaces": "ת\"א, רמת גן, הרצליה..."
+   },
+   {
+    "name": "hwrawtLclyj12",
+    "type": "String",
+    "replaces": "הוראות לשליח"
+   },
+   {
+    "name": "herwtLmclwj13",
+    "type": "String",
+    "replaces": "הערות למשלוח..."
+   },
+   {
+    "name": "ayswExmyKbryrt14",
+    "type": "String",
+    "replaces": "איסוף עצמי כברירת מחדל"
+   }
+  ],
+  "note": ""
+ },
+ "_PaymentSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "💳"
+   },
+   {
+    "name": "amxeyTclw2",
+    "type": "String",
+    "replaces": "אמצעי תשלום"
+   },
+   {
+    "name": "bryrtMjdl3",
+    "type": "String",
+    "replaces": "ברירת מחדל"
+   },
+   {
+    "name": "krtysAcray4",
+    "type": "String",
+    "replaces": "כרטיס אשראי"
+   },
+   {
+    "name": "byt5",
+    "type": "String",
+    "replaces": "ביט"
+   },
+   {
+    "name": "acraySfq6",
+    "type": "String",
+    "replaces": "אשראי ספק"
+   },
+   {
+    "name": "krtysyCmwry7",
+    "type": "String",
+    "replaces": "כרטיסים שמורים"
+   },
+   {
+    "name": "tclwmy136128",
+    "type": "String",
+    "replaces": "תשלומים (1/3/6/12)"
+   },
+   {
+    "name": "tclwAjd9",
+    "type": "String",
+    "replaces": "תשלום אחד"
+   },
+   {
+    "name": "3Tclwmy10",
+    "type": "String",
+    "replaces": "3 תשלומים"
+   },
+   {
+    "name": "6Tclwmy11",
+    "type": "String",
+    "replaces": "6 תשלומים"
+   },
+   {
+    "name": "12Tclwmy12",
+    "type": "String",
+    "replaces": "12 תשלומים"
+   },
+   {
+    "name": "hsdrAcraySfq13",
+    "type": "String",
+    "replaces": "הסדר אשראי ספק"
+   }
+  ],
+  "note": ""
+ },
+ "_InvoicesSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🧾"
+   },
+   {
+    "name": "jcbwnywtWms2",
+    "type": "String",
+    "replaces": "חשבוניות ומס"
+   },
+   {
+    "name": "hxgMjyryKwll3",
+    "type": "String",
+    "replaces": "הצג מחירים כולל מע\"מ"
+   },
+   {
+    "name": "frtyEwsqjbrh4",
+    "type": "String",
+    "replaces": "פרטי עוסק/חברה"
+   },
+   {
+    "name": "cEsq5",
+    "type": "String",
+    "replaces": "שם עסק..."
+   },
+   {
+    "name": "jfEm6",
+    "type": "String",
+    "replaces": "ח.פ. / ע.מ."
+   },
+   {
+    "name": "msfr7",
+    "type": "String",
+    "replaces": "מספר..."
+   },
+   {
+    "name": "jfJyybLhkyl8",
+    "type": "String",
+    "replaces": "ח.פ. חייב להכיל 9 ספרות"
+   },
+   {
+    "name": "yyxwaLrwj9",
+    "type": "String",
+    "replaces": "ייצוא לרו\"ח"
+   },
+   {
+    "name": "qblwtAwtwmtywt10",
+    "type": "String",
+    "replaces": "קבלות אוטומטיות"
+   }
+  ],
+  "note": ""
+ },
+ "_NotificationsSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🔔"
+   },
+   {
+    "name": "htrawtJnwt2",
+    "type": "String",
+    "replaces": "התראות חנות"
+   },
+   {
+    "name": "htrawtMbxey3",
+    "type": "String",
+    "replaces": "התראות מבצעים"
+   },
+   {
+    "name": "jzrLmlayBmwedfy4",
+    "type": "String",
+    "replaces": "חזר למלאי במועדפים"
+   },
+   {
+    "name": "yrydtMjyrBmwedfy5",
+    "type": "String",
+    "replaces": "ירידת מחיר במועדפים"
+   },
+   {
+    "name": "sttwsHzmnh6",
+    "type": "String",
+    "replaces": "סטטוס הזמנה"
+   },
+   {
+    "name": "mclwjBdr7",
+    "type": "String",
+    "replaces": "משלוח בדרך"
+   }
+  ],
+  "note": ""
+ },
+ "_CartSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🛒"
+   },
+   {
+    "name": "slWhzmnwt2",
+    "type": "String",
+    "replaces": "סל והזמנות"
+   },
+   {
+    "name": "mynymwHzmnh3",
+    "type": "String",
+    "replaces": "מינימום הזמנה (₪)"
+   },
+   {
+    "name": "aycwrKfwlLrkych4",
+    "type": "String",
+    "replaces": "אישור כפול לרכישה גדולה"
+   },
+   {
+    "name": "sLaycwrKfwl5",
+    "type": "String",
+    "replaces": "סף לאישור כפול (₪)"
+   },
+   {
+    "name": "hzmnwtJwzrwt6",
+    "type": "String",
+    "replaces": "הזמנות חוזרות"
+   },
+   {
+    "name": "cytwSlE7",
+    "type": "String",
+    "replaces": "שיתוף סל עם צוות"
+   },
+   {
+    "name": "cmyrtSlLfrwyqt8",
+    "type": "String",
+    "replaces": "שמירת סל לפרויקט"
+   }
+  ],
+  "note": ""
+ },
+ "_SuppliersSection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🏪"
+   },
+   {
+    "name": "sfqyMwedfy2",
+    "type": "String",
+    "replaces": "ספקים מועדפים"
+   },
+   {
+    "name": "jnwywtMswmnwt3",
+    "type": "String",
+    "replaces": "חנויות מסומנות"
+   },
+   {
+    "name": "sfqyJswmy4",
+    "type": "String",
+    "replaces": "ספקים חסומים"
+   },
+   {
+    "name": "mrjqMqsymlyQm5",
+    "type": "String",
+    "replaces": "מרחק מקסימלי (ק\"מ, 0=ללא)"
+   },
+   {
+    "name": "dyrwgMynymly6",
+    "type": "String",
+    "replaces": "דירוג מינימלי"
+   },
+   {
+    "name": "llaSynw7",
+    "type": "String",
+    "replaces": "ללא סינון"
+   },
+   {
+    "name": "sfqyMqwmyyBlbd8",
+    "type": "String",
+    "replaces": "ספקים מקומיים בלבד"
+   }
+  ],
+  "note": ""
+ },
+ "_DisplaySection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "📊"
+   },
+   {
+    "name": "txwghWmyw2",
+    "type": "String",
+    "replaces": "תצוגה ומיון"
+   },
+   {
+    "name": "mywBryrtMjdl3",
+    "type": "String",
+    "replaces": "מיון ברירת מחדל"
+   },
+   {
+    "name": "mjyrZwlYqr4",
+    "type": "String",
+    "replaces": "מחיר: זול → יקר"
+   },
+   {
+    "name": "dyrwgGbwh5",
+    "type": "String",
+    "replaces": "דירוג גבוה"
+   },
+   {
+    "name": "mrjqQrwb6",
+    "type": "String",
+    "replaces": "מרחק קרוב"
+   },
+   {
+    "name": "txwghRctRcymh7",
+    "type": "String",
+    "replaces": "תצוגה (רשת / רשימה)"
+   },
+   {
+    "name": "rcymh8",
+    "type": "String",
+    "replaces": "רשימה"
+   },
+   {
+    "name": "rct9",
+    "type": "String",
+    "replaces": "רשת"
+   },
+   {
+    "name": "mtry10",
+    "type": "String",
+    "replaces": "מטרי"
+   },
+   {
+    "name": "ayngly11",
+    "type": "String",
+    "replaces": "אינגלי"
+   },
+   {
+    "name": "hxgtMlay12",
+    "type": "String",
+    "replaces": "הצגת מלאי"
+   }
+  ],
+  "note": ""
+ },
+ "_LogisticsSection": {
+  "addProps": [
+   {
+    "name": "cyrwtWlwgystyqh1",
+    "type": "String",
+    "replaces": "שירות ולוגיסטיקה"
+   },
+   {
+    "name": "mclwjMhyrTw2",
+    "type": "String",
+    "replaces": "משלוח מהיר (תוך 4 שעות)"
+   },
+   {
+    "name": "mclwjRgylYwYwmyy3",
+    "type": "String",
+    "replaces": "משלוח רגיל (יום-יומיים)"
+   },
+   {
+    "name": "yyewTkny4",
+    "type": "String",
+    "replaces": "ייעוץ טכני"
+   },
+   {
+    "name": "mdynywtHjzrwt5",
+    "type": "String",
+    "replaces": "מדיניות החזרות"
+   },
+   {
+    "name": "7Ymy6",
+    "type": "String",
+    "replaces": "7 ימים"
+   },
+   {
+    "name": "14Yw7",
+    "type": "String",
+    "replaces": "14 יום"
+   },
+   {
+    "name": "30Yw8",
+    "type": "String",
+    "replaces": "30 יום"
+   },
+   {
+    "name": "ajrywtMwrjbt9",
+    "type": "String",
+    "replaces": "אחריות מורחבת"
+   }
+  ],
+  "note": ""
+ },
+ "_PrivacySection": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🔐"
+   },
+   {
+    "name": "frtywtWrkycwt2",
+    "type": "String",
+    "replaces": "פרטיות ורכישות"
+   },
+   {
+    "name": "hystwryytRkycwt3",
+    "type": "String",
+    "replaces": "היסטוריית רכישות"
+   },
+   {
+    "name": "mjyqtJyfwcy4",
+    "type": "String",
+    "replaces": "מחיקת חיפושים"
+   },
+   {
+    "name": "mjq5",
+    "type": "String",
+    "replaces": "מחק"
+   },
+   {
+    "name": "mjyqtJyfwcy6",
+    "type": "String",
+    "replaces": "מחיקת חיפושים?"
+   },
+   {
+    "name": "hjyfwcHnwkjyBjnwt7",
+    "type": "String",
+    "replaces": "החיפוש הנוכחי בחנות יימחק."
+   },
+   {
+    "name": "hjyfwcNwqh8",
+    "type": "String",
+    "replaces": "החיפוש נוקה"
+   },
+   {
+    "name": "aycwrBywmtryLrkych9",
+    "type": "String",
+    "replaces": "אישור ביומטרי לרכישה"
+   },
+   {
+    "name": "mgbltAcrayYwmyt10",
+    "type": "String",
+    "replaces": "מגבלת אשראי יומית (₪, 0=ללא)"
+   }
+  ],
+  "note": ""
+ },
+ "_SectionTile": {
+  "addProps": [
+   {
+    "name": "sectionWip",
+    "type": "String",
+    "replaces": "בבנייה — ההגדרות נשמרות אך עדיין אינן משפיעות"
+   }
+  ],
+  "note": ""
+ },
+ "_SwitchRow": {
+  "addProps": [
+   {
+    "name": "switchWip",
+    "type": "String",
+    "replaces": "בבנייה — עדיין לא משפיע"
+   }
+  ],
+  "note": ""
+ },
+ "_PlaceholderRow": {
+  "addProps": [
+   {
+    "name": "placeholderWip",
+    "type": "String",
+    "replaces": "בבנייה"
+   },
+   {
+    "name": "tplLabelBbnyyh2",
+    "type": "String",
+    "replaces": "$label — בבנייה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

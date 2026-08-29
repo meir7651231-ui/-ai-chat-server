@@ -1,0 +1,93 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__credit_explain_screen.dart",
+ "lines": 241,
+ "pigments": {
+  "tokens": [
+   "BsTokens.divider",
+   "BsTokens.inkLight",
+   "BsTokens.mutedDark",
+   "BsTokens.mutedLight",
+   "BsTokens.space2",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   11,
+   13,
+   14,
+   15,
+   16,
+   18
+  ],
+  "fontWeights": [
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "אי-אפשר לומר כמה מהמסגרת נוצל. אל תעריך, אל תשער ואל תרמוז מהי המסגרת, ",
+  "אתה יועץ-אשראי מנוסה למנהל-רכש. אתה מסביר בקצרה ובכנות מה משמעות ניצול-האשראי ",
+  "במספרים שניתנו לך — אל תמציא, תשנה או תוסיף שום מספר.",
+  "הסבר למנהל ב-2–3 משפטים בעברית מה המשמעות של ניצול-האשראי הזה — האם הלקוח ",
+  "ואל תמליץ אם לאשר הזמנה. השתמש אך ורק במספר שניתן לך.",
+  "יתרה",
+  "כתוב למנהל 2–3 משפטים בעברית. פתח בכך שאין מסגרת-אשראי רשומה ולכן ",
+  "לא רשומה",
+  "מסגרת",
+  "מסגרת-אשראי: ₪$creditLimit · נוצל: ₪$used · יתרה: ₪$balance · ",
+  "נוצל",
+  "ניצול",
+  "קרוב לתקרה או פנוי, ומה כדאי לשקול לפני אישור הזמנה נוספת. השתמש אך ורק ",
+  "של לקוח. השתמש אך ורק במספרים שניתנו לך; לעולם אל תמציא, תשנה או תוסיף מספר.",
+  "⚙️ המספרים מנתוני-המערכת; ה-AI רק מסביר אותם.",
+  "💡 ההסבר החכם דורש חיבור לשרת.",
+  "💳 הסבר אשראי"
+ ],
+ "icons": [],
+ "glyphs": [
+  "⚙",
+  "💡",
+  "💳"
+ ],
+ "logicCandidates": [
+  {
+   "name": "setState",
+   "line": 137
+  }
+ ],
+ "widgets": [
+  {
+   "name": "CreditExplainScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 69,
+   "loc": 36,
+   "pure": false,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:CreditExplainScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kClaudeAi"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:CreditExplainScreen"
+  ]
+ }
+}

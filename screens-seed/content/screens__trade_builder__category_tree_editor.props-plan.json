@@ -1,0 +1,27 @@
+{
+ "_EmptyCategories": {
+  "addProps": [
+   {
+    "name": "t02",
+    "type": "String",
+    "replaces": "אין עדיין קטגוריות"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "🗂️"
+   }
+  ],
+  "note": ""
+ },
+ "_CategoryTile": {
+  "addProps": [
+   {
+    "name": "mjq1",
+    "type": "String",
+    "replaces": "מחק"
+   }
+  ],
+  "note": ""
+ }
+}

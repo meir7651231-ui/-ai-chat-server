@@ -1,0 +1,86 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__fittings__engine__fitting_dims.dart",
+ "lines": 215,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  " as math;\n\n/// SDR (Standard Dimension Ratio) לפי PN. PN20 ⇒ SDR 6.\nconst Map<int, double> kSdr = {20: 6.0, 16: 7.4, 10: 11.0};\n\n/// עומק-שקע (ריתוך) — טבלת DIN 8077. ידע הנדסי, לא נתוני-קטלוג.\nconst Map<int, double> kDepth = {\n  20: 14.5, 25: 16.0, 32: 18.0, 40: 20.5, 50: 23.5,\n  63: 27.5, 75: 30.0, 90: 33.0, 110: 37.0, 125: 40.0,\n};\n\n/// עיגול לספרה-עשרונית אחת, **זהה ל-Python `round(x, 1)`** — half-to-even על\n/// *הערך-האמיתי* של ה-double. מאומת golden 1:1 מול `pure_engine.py` (140 שורות).\n///\n/// למה לא `x*10`/`toStringAsFixed(1)`: הכפל ב-10 הופך ערך כמו 26.7/2=13.34999… ל-\n/// תיקו-שקרי (133.5) ומעגל להיפך; `toStringAsFixed(1)` סוטה מ-half-even על עשרות\n/// ערכים. הפתרון: הרחבה ל-15 ספרות (נאמנה לערך-האמיתי) + עיגול-לזוגי ידני מדויק.\ndouble r1(double x) {\n  final neg = x.isNegative;\n  final ax = neg ? -x : x;\n  // 18 ספרות — נאמן ל*צד* של הערך-האמיתי מול גבול-ה-.05 לכל גודל כאן (ulp ≪ 1e-13\n  // עד ~1200). 15 היה מעט-מדי: 26.7/2=13.34999…964 (מתחת ל-13.35) עוגל שקרית ל-13.350.\n  final s = ax.toStringAsFixed(18);\n  final dot = s.indexOf(",
+  ")!; // בברך קוראים לקוטר-החוץ D\n  return b;\n}\n\nMap<String, double> tee(int od) {\n  final b = base(od);\n  final f = b[",
+  ");\n  var intVal = int.parse(s.substring(0, dot));\n  final frac = s.substring(dot + 1);\n  var keep = frac.codeUnitAt(0) - 48; // הספרה הנשמרת (עשירית)\n  final firstDrop = frac.codeUnitAt(1) - 48; // הספרה שמחליטה\n  var restNonZero = false;\n  for (var i = 2; i < frac.length; i++) {\n    if (frac.codeUnitAt(i) != 48) {\n      restNonZero = true;\n      break;\n    }\n  }\n  final roundUp = firstDrop > 5 ||\n      (firstDrop == 5 && restNonZero) ||\n      (firstDrop == 5 && !restNonZero && keep.isOdd); // תיקו → לזוגי\n  if (roundUp && ++keep == 10) {\n    keep = 0;\n    intVal += 1;\n  }\n  final v = intVal + keep / 10.0;\n  return neg ? -v : v;\n}\n\n/// הבסיס האוניברסלי — כל אביזר-ריתוך. מקביל ל-`base(od, pn)` ב-Python.\n/// מפה עם סדר-הכנסה זהה למקור (`OD·wall·ID·B·C·F`).\nMap<String, double> base(int od, {int pn = 20}) {\n  final wall = od / kSdr[pn]!;\n  return {\n    ",
+  ": kDepth[od] ?? double.nan, // עומק-שקע (ריתוך)\n  };\n}\n\n// ===== צורה פר-משפחה (z = מרכז→פנים, מגיאומטריה) =====\n\nMap<String, double> coupler(int od) {\n  final b = base(od);\n  b[",
+  ": r1(0.986 * d),\n    };\n\n/// בורר-דיאגרמה: משפחה × טווח-גודל → קונסטרוקציה.\nMap<String, double> elbowAuto(int d, {int angle = 90}) =>\n    d >= 160 ? miteredElbow(d) : elbow(d, angle: angle);\n\ndouble _rad(num deg) => deg * math.pi / 180.0;\n\n/// שמות-המשפחות החד-קוטריות — זהים למפתחות `ENGINE` ב-`pure_engine.py`.\n/// (מצרה דו-קוטרית + ברך-מחותכת אינן כאן — נבחרות דרך `generate`.)\nconst List<String> kFittingFamilies = [\n  ",
+  ": r1(od * (1 + 2 / 6)), // קוטר-חוץ (PN20)\n    ",
+  ": r1(od * 0.97), // קדח-שקע (הצינור נכנס)\n    ",
+  ": r1(od - 2 * wall), // קדח-זרימה\n    ",
+  "] = r1(2 * (z + f)); // רוחב-הרַץ\n  b[",
+  "] = r1(f + od * 0.3); // מרכז-המשושה\n  b[",
+  "] = r1(hex * 0.87); // מפתח-על-שטוחים\n  b[",
+  "] = r1(od * 0.4); // אורך-הכיפה\n  return b;\n}\n\nMap<String, double> saddle(int od) {\n  final b = base(od);\n  final f = b[",
+  "] = r1(od * 0.6); // עובי-האוגן\n  return b;\n}\n\n/// מצרה (d1×d2) — קומפוזיציה: כל צד לפי חוקי-הבסיס של הקוטר שלו.\nMap<String, double> reducer(int d1, int d2) {\n  final s1 = base(d1);\n  final s2 = base(d2);\n  return {\n    ",
+  "] = r1(od * 0.64); // מרכז-לפנים\n  b[",
+  "] = r1(od * 0.67); // קדח-הכדור ≈ DN\n  b[",
+  "] = r1(od * 0.9); // אורך-התבריג\n  b[",
+  "] = r1(od * 1.05); // מרכז-לפנים\n  b[",
+  "] = r1(od * 1.05); // קוטר-חיצוני של התבריג\n  b[",
+  "] = r1(od * 1.15); // קוטר-צוואר\n  b[",
+  "] = r1(od * 1.333); // קוטר-חוץ של שקע-ההסתעפות\n  b[",
+  "] = r1(od * 1.478); // אורך-כולל\n  b[",
+  "] = r1(od * 1.6); // קוטר-גוף\n  b.remove(",
+  "] = r1(od * 1.619); // קוטר-אוגן חיצוני\n  b[",
+  "] = r1(od * 2); // קוטר הצינור-הראשי\n  b[",
+  "] = r1(od * 2.9); // גובה (גוף+ידית)\n  return b;\n}\n\nMap<String, double> plug(int od) {\n  final b = base(od);\n  b[",
+  "]! + 2); // 2 שקעים + מעצור-מרכז\n  return b;\n}\n\nMap<String, double> elbow(int od, {int angle = 90}) {\n  final b = base(od);\n  final f = b[",
+  "]! + 3), // שני שקעים + מעבר\n  };\n}\n\n/// ברך מחותכת גדולה (מודל B, 160–400) — מגזרים = יחס נקי לרדיוס-הכיפוף (∝d).\nMap<String, double> miteredElbow(int d) => {\n      ",
+  "]! + od * 0.4); // אורך-כולל\n  b[",
+  "]! / 2); // גובה-ההסתעפות\n  return b;\n}\n\nMap<String, double> adapter(int od) {\n  final b = base(od);\n  final f = b[",
+  "]! / 2); // מרכז-לפנים ≈ רדיוס-החוץ\n  b[",
+  "]!); // גובה-ההסתעפות\n  return b;\n}\n\nMap<String, double> collar(int od) {\n  final b = base(od)..remove(",
+  "]!); // מרכז-לקצה = עומק + z\n  b[",
+  "]!); // מרכז-לקצה-שקע\n  b[",
+  "]!); // שקע→קצה-תבריג\n  return b;\n}\n\nMap<String, double> valve(int od) {\n  final b = base(od);\n  final f = b[",
+  "]!;\n  final hex = r1(od * 1.95); // מפתח-על-פינות\n  b[",
+  "]!;\n  final r = 0.52 * od; // רדיוס-כיפוף (short radius)\n  b[",
+  "ברז כדורי",
+  "ברך 45°",
+  "ברך 90°",
+  "ברך מחותכת",
+  "מסעף (טי)",
+  "מצמד",
+  "מצרה",
+  "מתאם תבריג",
+  "פקק",
+  "צווארון",
+  "רוכב"
+ ],
+ "icons": [],
+ "glyphs": [
+  "⚠",
+  "🔌"
+ ],
+ "logicCandidates": [
+  {
+   "name": "r1",
+   "line": 26
+  }
+ ],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kDepth",
+  "kFittingFamilies",
+  "kSdr"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

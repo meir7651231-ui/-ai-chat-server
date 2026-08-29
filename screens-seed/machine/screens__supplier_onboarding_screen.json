@@ -1,0 +1,80 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__supplier_onboarding_screen.dart",
+ "lines": 280,
+ "pigments": {
+  "tokens": [
+   "BsTokens.bgLight",
+   "BsTokens.brand",
+   "BsTokens.brandDark",
+   "BsTokens.dangerDark",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.successDark"
+  ],
+  "themeSockets": [],
+  "fontSizes": [
+   12,
+   13,
+   14,
+   16
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ",\n          ),\n);\n\n/// 🏪 העלאת מוצר — the supplier self-onboarding form (Pillar catalog-to-server · C4.1).\nclass SupplierOnboardingScreen extends ConsumerStatefulWidget {\n  const SupplierOnboardingScreen({required this.storeId, super.key});\n\n  /// The store this supplier submits for (stamped on every draft + inventory row).\n  final String storeId;\n\n  static Route<void> route(String storeId) => MaterialPageRoute<void>(\n    builder: (_) => SupplierOnboardingScreen(storeId: storeId),\n  );\n\n  @override\n  ConsumerState<SupplierOnboardingScreen> createState() =>\n      _SupplierOnboardingState();\n}\n\nclass _SupplierOnboardingState extends ConsumerState<SupplierOnboardingScreen> {\n  final _sku = TextEditingController();\n  final _nameHe = TextEditingController();\n  final _nameEn = TextEditingController();\n  final _categoryHe = TextEditingController();\n  final _brand = TextEditingController();\n  final _color = TextEditingController();\n  final _barcode = TextEditingController();\n  final _price = TextEditingController();\n  final _stock = TextEditingController();\n\n  List<String> _errors = const [];\n  bool _submitting = false;\n  bool _done = false;\n\n  @override\n  void dispose() {\n    for (final c in [\n      _sku,\n      _nameHe,\n      _nameEn,\n      _categoryHe,\n      _brand,\n      _color,\n      _barcode,\n      _price,\n      _stock,\n    ]) {\n      c.dispose();\n    }\n    super.dispose();\n  }\n\n  /// The current form as a draft (rebuilt each frame so the facet preview is live).\n  SupplierDraft get _draft => SupplierDraft(\n    storeId: widget.storeId,\n    sku: _sku.text.trim(),\n    nameHe: _nameHe.text.trim(),\n    categoryHe: _categoryHe.text.trim(),\n    nameEn: _nameEn.text.trim(),\n    brand: _brand.text.trim(),\n    color: _color.text.trim().isEmpty ? null : _color.text.trim(),\n    barcode: _barcode.text.trim().isEmpty ? null : _barcode.text.trim(),\n    price: num.tryParse(_price.text.trim()),\n    stock: int.tryParse(_stock.text.trim()),\n  );\n\n  Future<void> _submit() async {\n    final draft = _draft;\n    final v = validateDraft(draft, const <String>{});\n    if (!v.ok) {\n      setState(() => _errors = v.errors);\n      return;\n    }\n    setState(() {\n      _errors = const [];\n      _submitting = true;\n    });\n    try {\n      await ref.read(supplierSubmitProvider)(draft);\n      if (!mounted) return;\n      setState(() {\n        _submitting = false;\n        _done = true;\n      });\n    } on Object catch (_) {\n      if (!mounted) return;\n      setState(() {\n        _submitting = false;\n        _errors = const [",
+  "ברקוד",
+  "המוצר נשלח · ${_sku.text.trim()}",
+  "העלאת מוצר",
+  "מאפיינים מזוהים אוטומטית",
+  "מותג",
+  "מחיר (₪)",
+  "מלאי",
+  "מק\"ט",
+  "צבע",
+  "קטגוריה",
+  "שולח…",
+  "שלח מוצר",
+  "שם (אנגלית)",
+  "שם (עברית)"
+ ],
+ "icons": [],
+ "glyphs": [
+  "🏪"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "SupplierOnboardingScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 37,
+   "loc": 14,
+   "pure": false,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:SupplierOnboardingScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kTradeImportFlag"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:SupplierOnboardingScreen"
+  ]
+ }
+}

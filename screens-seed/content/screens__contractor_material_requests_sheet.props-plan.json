@@ -1,0 +1,67 @@
+{
+ "_ContractorMaterialRequestsSheet": {
+  "addProps": [
+   {
+    "name": "t01",
+    "type": "String",
+    "replaces": "📥 בקשות חומר"
+   },
+   {
+    "name": "t02",
+    "type": "String",
+    "replaces": "אין בקשות חומר עדיין.\\n"
+   },
+   {
+    "name": "sgyrh3",
+    "type": "String",
+    "replaces": "סגירה"
+   },
+   {
+    "name": "kcewbdYcljBqct4",
+    "type": "String",
+    "replaces": "כשעובד ישלח בקשת חומרים — היא תופיע כאן ותוכל לעדכן את הסטטוס."
+   }
+  ],
+  "note": ""
+ },
+ "_RequestCard": {
+  "addProps": [
+   {
+    "name": "t03",
+    "type": "String",
+    "replaces": "ללא פריטים"
+   },
+   {
+    "name": "ewbd2",
+    "type": "String",
+    "replaces": "עובד"
+   },
+   {
+    "name": "txt3",
+    "type": "String",
+    "replaces": "👷"
+   },
+   {
+    "name": "tplRequestnote4",
+    "type": "String",
+    "replaces": "📝 ${request.note}"
+   },
+   {
+    "name": "smHwzm5",
+    "type": "String",
+    "replaces": "סמן הוזמן"
+   },
+   {
+    "name": "swfq6",
+    "type": "String",
+    "replaces": "סופק"
+   },
+   {
+    "name": "djh7",
+    "type": "String",
+    "replaces": "דחה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

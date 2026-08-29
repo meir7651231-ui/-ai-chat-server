@@ -1,0 +1,327 @@
+{
+ "WorkerSafetyScreen": {
+  "addProps": [
+   {
+    "name": "appbarTitle",
+    "type": "String",
+    "replaces": "🛡️ תיק בטיחות"
+   },
+   {
+    "name": "addTrainingTitle",
+    "type": "String",
+    "replaces": "🎓 הוספת הדרכה"
+   },
+   {
+    "name": "attachDoc",
+    "type": "String",
+    "replaces": "📄 צרף מסמך הדרכה (לא חובה)"
+   },
+   {
+    "name": "docAttached",
+    "type": "String",
+    "replaces": "📄 מסמך צורף ✓"
+   },
+   {
+    "name": "saveTraining",
+    "type": "String",
+    "replaces": "💾 שמור הדרכה"
+   },
+   {
+    "name": "addCertTitle",
+    "type": "String",
+    "replaces": "🪪 הוספת תעודה"
+   },
+   {
+    "name": "attachPhoto",
+    "type": "String",
+    "replaces": "📷 צרף צילום תעודה (לא חובה)"
+   },
+   {
+    "name": "photoAttached",
+    "type": "String",
+    "replaces": "📷 צילום צורף ✓"
+   },
+   {
+    "name": "saveCert",
+    "type": "String",
+    "replaces": "💾 שמור תעודה"
+   },
+   {
+    "name": "mjyqtTewdh10",
+    "type": "String",
+    "replaces": "מחיקת תעודה?"
+   },
+   {
+    "name": "tplCertnameTymjqMharnq11",
+    "type": "String",
+    "replaces": "\"${cert.name}\" תימחק מהארנק לצמיתות."
+   },
+   {
+    "name": "mjq12",
+    "type": "String",
+    "replaces": "מחק"
+   },
+   {
+    "name": "htewdhNmjqh13",
+    "type": "String",
+    "replaces": "התעודה נמחקה"
+   },
+   {
+    "name": "mjyqtHdrkh14",
+    "type": "String",
+    "replaces": "מחיקת הדרכה?"
+   },
+   {
+    "name": "tplTtitleTymjqMhrycw15",
+    "type": "String",
+    "replaces": "\"${t.title}\" תימחק מהרישום לצמיתות."
+   },
+   {
+    "name": "hhdrkhNmjqh16",
+    "type": "String",
+    "replaces": "ההדרכה נמחקה"
+   },
+   {
+    "name": "mmwnhBtyjwt17",
+    "type": "String",
+    "replaces": "ממונה בטיחות"
+   },
+   {
+    "name": "naLmlaC18",
+    "type": "String",
+    "replaces": "נא למלא שם הדרכה"
+   },
+   {
+    "name": "naLbjwrTary19",
+    "type": "String",
+    "replaces": "נא לבחור תאריך"
+   },
+   {
+    "name": "hmsmGdwlMdy20",
+    "type": "String",
+    "replaces": "המסמך גדול מדי — לא נשמר"
+   },
+   {
+    "name": "sgwr21",
+    "type": "String",
+    "replaces": "סגור"
+   },
+   {
+    "name": "cHhdrkhLmcl22",
+    "type": "String",
+    "replaces": "שם ההדרכה (למשל: עבודה בגובה)"
+   },
+   {
+    "name": "mdryMnfyq23",
+    "type": "String",
+    "replaces": "מדריך/מנפיק"
+   },
+   {
+    "name": "txt24",
+    "type": "String",
+    "replaces": "📅"
+   },
+   {
+    "name": "taryHhdrkh25",
+    "type": "String",
+    "replaces": "תאריך ההדרכה"
+   },
+   {
+    "name": "tplTaryFmtDatedate26",
+    "type": "String",
+    "replaces": "תאריך: ${_fmtDate(date!)}"
+   },
+   {
+    "name": "hsrMsm27",
+    "type": "String",
+    "replaces": "הסר מסמך"
+   },
+   {
+    "name": "hhdrkhNcmrh28",
+    "type": "String",
+    "replaces": "🎓 ההדרכה נשמרה"
+   },
+   {
+    "name": "naLmlaC29",
+    "type": "String",
+    "replaces": "נא למלא שם תעודה"
+   },
+   {
+    "name": "naLmlaMnfyq30",
+    "type": "String",
+    "replaces": "נא למלא מנפיק"
+   },
+   {
+    "name": "naLbjwrTwq31",
+    "type": "String",
+    "replaces": "נא לבחור תוקף"
+   },
+   {
+    "name": "htmwnhGdwlhMdy32",
+    "type": "String",
+    "replaces": "התמונה גדולה מדי — לא נשמרה"
+   },
+   {
+    "name": "cHtewdhLmcl33",
+    "type": "String",
+    "replaces": "שם התעודה (למשל: עבודה בגובה)"
+   },
+   {
+    "name": "mnfyqLmclMcrd34",
+    "type": "String",
+    "replaces": "מנפיק (למשל: משרד העבודה)"
+   },
+   {
+    "name": "btwqEd35",
+    "type": "String",
+    "replaces": "בתוקף עד"
+   },
+   {
+    "name": "tplBtwqEdFmtDateexpiry36",
+    "type": "String",
+    "replaces": "בתוקף עד ${_fmtDate(expiry!)}"
+   },
+   {
+    "name": "hsrXylw37",
+    "type": "String",
+    "replaces": "הסר צילום"
+   },
+   {
+    "name": "htewdhNcmrhBarnq38",
+    "type": "String",
+    "replaces": "🪪 התעודה נשמרה בארנק"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_TrainingsCard": {
+  "addProps": [
+   {
+    "name": "noTrainings",
+    "type": "String",
+    "replaces": "אין הדרכות רשומות עדיין — הוסף את הראשונה."
+   },
+   {
+    "name": "demoHint",
+    "type": "String",
+    "replaces": "נתוני דמו — רישום הדרכות אמיתי יחובר עם חיבור השרת."
+   },
+   {
+    "name": "addTrainingBtn",
+    "type": "String",
+    "replaces": "➕ הוסף הדרכה"
+   },
+   {
+    "name": "tplHdrkwtCebrtyTrainingsl4",
+    "type": "String",
+    "replaces": "🎓 הדרכות שעברתי (${trainings.length})"
+   },
+   {
+    "name": "hwsHdrkh5",
+    "type": "String",
+    "replaces": "הוסף הדרכה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_TrainingRow": {
+  "addProps": [
+   {
+    "name": "awcr1",
+    "type": "String",
+    "replaces": "אושר"
+   },
+   {
+    "name": "mmtyLaycwr2",
+    "type": "String",
+    "replaces": "ממתין לאישור"
+   },
+   {
+    "name": "nrc3",
+    "type": "String",
+    "replaces": "נרשם"
+   },
+   {
+    "name": "xfhBmsm4",
+    "type": "String",
+    "replaces": "צפה במסמך"
+   },
+   {
+    "name": "cljLaycwr5",
+    "type": "String",
+    "replaces": "שלח לאישור"
+   },
+   {
+    "name": "mjqHdrkh6",
+    "type": "String",
+    "replaces": "מחק הדרכה"
+   }
+  ],
+  "note": ""
+ },
+ "_CertsCard": {
+  "addProps": [
+   {
+    "name": "noCerts",
+    "type": "String",
+    "replaces": "אין תעודות בארנק עדיין — הוסף את הראשונה."
+   },
+   {
+    "name": "addCertBtn",
+    "type": "String",
+    "replaces": "➕ הוסף תעודה"
+   },
+   {
+    "name": "tplTewdwtMqxweywtCertslen3",
+    "type": "String",
+    "replaces": "🪪 תעודות מקצועיות (${certs.length})"
+   },
+   {
+    "name": "hwsTewdh4",
+    "type": "String",
+    "replaces": "הוסף תעודה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_CertRow": {
+  "addProps": [
+   {
+    "name": "fgTwq1",
+    "type": "String",
+    "replaces": "פג תוקף"
+   },
+   {
+    "name": "fgBqrwb2",
+    "type": "String",
+    "replaces": "פג בקרוב"
+   },
+   {
+    "name": "btwq3",
+    "type": "String",
+    "replaces": "בתוקף"
+   },
+   {
+    "name": "hxgXylwTewdh4",
+    "type": "String",
+    "replaces": "הצג צילום תעודה במסך מלא"
+   },
+   {
+    "name": "txt5",
+    "type": "String",
+    "replaces": "📷"
+   },
+   {
+    "name": "tplBtwqEdFmtDatecertexpi6",
+    "type": "String",
+    "replaces": "בתוקף עד ${_fmtDate(cert.expiry)}"
+   },
+   {
+    "name": "mjqTewdh7",
+    "type": "String",
+    "replaces": "מחק תעודה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

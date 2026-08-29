@@ -1,0 +1,147 @@
+{
+ "_FinanceHubGrid": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "📊"
+   },
+   {
+    "name": "mrkzFynnsy2",
+    "type": "String",
+    "replaces": "מרכז פיננסים"
+   },
+   {
+    "name": "nyhwlFynnsyMla3",
+    "type": "String",
+    "replaces": "ניהול פיננסי מלא של הפרויקט — תקציב, תשלומים, אישורים ודוחות."
+   }
+  ],
+  "note": ""
+ },
+ "_PayOpt": {
+  "addProps": [
+   {
+    "name": "mcwlBklAb1",
+    "type": "String",
+    "replaces": "משולם בכל אבן דרך"
+   },
+   {
+    "name": "tclwMyydy2",
+    "type": "String",
+    "replaces": "תשלום מיידי"
+   },
+   {
+    "name": "tplHtclwMtbxeTermdays3",
+    "type": "String",
+    "replaces": "התשלום מתבצע ${term.days} יום מקבלת החשבונית"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_SubRow": {
+  "addProps": [
+   {
+    "name": "tplNwxlFMoneysubspentMtw1",
+    "type": "String",
+    "replaces": "נוצל ${fMoney(sub.spent)} מתוך ${fMoney(sub.allocated)}"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_ApprovalCard": {
+  "addProps": [
+   {
+    "name": "approve",
+    "type": "String",
+    "replaces": "אשר"
+   },
+   {
+    "name": "reject",
+    "type": "String",
+    "replaces": "דחה"
+   },
+   {
+    "name": "mmty3",
+    "type": "String",
+    "replaces": "ממתין"
+   },
+   {
+    "name": "ndjh4",
+    "type": "String",
+    "replaces": "נדחה"
+   },
+   {
+    "name": "tplFMoneyitemamountMbqcIt5",
+    "type": "String",
+    "replaces": "${fMoney(item.amount)} · מבקש: ${item.by}"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_PenaltyCard": {
+  "addProps": [
+   {
+    "name": "tplPdaysYmyAyjwr1",
+    "type": "String",
+    "replaces": "${p.days} ימי איחור · ${fMoney(p.perDay)} ליום · 📅 ${p.createdAt}"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_FinReportView": {
+  "addProps": [
+   {
+    "name": "reportAppbar",
+    "type": "String",
+    "replaces": "דוח פיננסי — ${AppBrand.name}"
+   },
+   {
+    "name": "print",
+    "type": "String",
+    "replaces": "הדפסה"
+   },
+   {
+    "name": "reportTitle",
+    "type": "String",
+    "replaces": "${AppBrand.name} — דוח פיננסי לפרויקט"
+   },
+   {
+    "name": "tplTaryHfqhToday4",
+    "type": "String",
+    "replaces": "תאריך הפקה: $today"
+   },
+   {
+    "name": "tmxytTqxyb5",
+    "type": "String",
+    "replaces": "תמצית תקציב"
+   },
+   {
+    "name": "tqxybKwll6",
+    "type": "String",
+    "replaces": "תקציב כולל"
+   },
+   {
+    "name": "hwxawtBfwel7",
+    "type": "String",
+    "replaces": "הוצאות בפועל"
+   },
+   {
+    "name": "ytrh8",
+    "type": "String",
+    "replaces": "יתרה"
+   },
+   {
+    "name": "fyrwtLfySeyfy9",
+    "type": "String",
+    "replaces": "פירוט לפי סעיפים"
+   },
+   {
+    "name": "tplHwfqElYdy10",
+    "type": "String",
+    "replaces": "הופק על ידי מערכת ${orgTerm(ref, "
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

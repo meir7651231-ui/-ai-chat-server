@@ -1,0 +1,517 @@
+{
+ "RewardsHubScreen": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🎯"
+   },
+   {
+    "name": "atgryJwdcyy2",
+    "type": "String",
+    "replaces": "אתגרים חודשיים"
+   },
+   {
+    "name": "feyly3",
+    "type": "String",
+    "replaces": "פעילים"
+   },
+   {
+    "name": "txt4",
+    "type": "String",
+    "replaces": "🏆"
+   },
+   {
+    "name": "lwjMwbyly5",
+    "type": "String",
+    "replaces": "לוח מובילים"
+   },
+   {
+    "name": "hdyrwgCl6",
+    "type": "String",
+    "replaces": "הדירוג שלך"
+   },
+   {
+    "name": "txt7",
+    "type": "String",
+    "replaces": "🌿"
+   },
+   {
+    "name": "tgyYrwq8",
+    "type": "String",
+    "replaces": "תגי ירוק"
+   },
+   {
+    "name": "bnyyhBtqyyma9",
+    "type": "String",
+    "replaces": "בנייה בת-קיימא"
+   },
+   {
+    "name": "txt10",
+    "type": "String",
+    "replaces": "📍"
+   },
+   {
+    "name": "qwfwnyLfyMyqw11",
+    "type": "String",
+    "replaces": "קופונים לפי מיקום"
+   },
+   {
+    "name": "mbxeyBqrbtMqw12",
+    "type": "String",
+    "replaces": "מבצעים בקרבת מקום"
+   },
+   {
+    "name": "txt13",
+    "type": "String",
+    "replaces": "👥"
+   },
+   {
+    "name": "hzmJbr14",
+    "type": "String",
+    "replaces": "הזמן חבר"
+   },
+   {
+    "name": "100LklHzmnh15",
+    "type": "String",
+    "replaces": "+100 לכל הזמנה"
+   },
+   {
+    "name": "txt16",
+    "type": "String",
+    "replaces": "💎"
+   },
+   {
+    "name": "mwedwVIP17",
+    "type": "String",
+    "replaces": "מועדון VIP"
+   },
+   {
+    "name": "drgwtWhtbwt18",
+    "type": "String",
+    "replaces": "דרגות והטבות"
+   },
+   {
+    "name": "txt19",
+    "type": "String",
+    "replaces": "🎁"
+   },
+   {
+    "name": "mymwcHtbwt20",
+    "type": "String",
+    "replaces": "מימוש הטבות"
+   },
+   {
+    "name": "hjlMtbewtBfrsy21",
+    "type": "String",
+    "replaces": "החלף מטבעות בפרסים"
+   },
+   {
+    "name": "tplOrgTermref22",
+    "type": "String",
+    "replaces": "🎮 ${orgTerm(ref, "
+   },
+   {
+    "name": "txt23",
+    "type": "String",
+    "replaces": "🎮"
+   },
+   {
+    "name": "xbwrMtbewtHcl24",
+    "type": "String",
+    "replaces": "צבור מטבעות, השלם אתגרים וקבל הטבות."
+   },
+   {
+    "name": "tplRxDmwKLoginStreak25",
+    "type": "String",
+    "replaces": "🔥 רצף (דמו): $kLoginStreak ימים פעילים"
+   },
+   {
+    "name": "tplRwchallengeslengthFeyly26",
+    "type": "String",
+    "replaces": "${rw.challenges.length} פעילים"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_RewardsFeatureScreen": {
+  "addProps": [
+   {
+    "name": "mwedw1",
+    "type": "String",
+    "replaces": "🎮 מועדון"
+   }
+  ],
+  "note": ""
+ },
+ "_Challenges": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🎯"
+   },
+   {
+    "name": "atgryJwdcyy2",
+    "type": "String",
+    "replaces": "אתגרים חודשיים"
+   },
+   {
+    "name": "hclAtgryWzkh3",
+    "type": "String",
+    "replaces": "השלם אתגרים וזכה ב-BuildCoins."
+   },
+   {
+    "name": "klHatgryHwclmw4",
+    "type": "String",
+    "replaces": "כל האתגרים הושלמו 🎉"
+   },
+   {
+    "name": "tplCname5",
+    "type": "String",
+    "replaces": "🎯 ${c.name}"
+   },
+   {
+    "name": "tplCreward6",
+    "type": "String",
+    "replaces": "🪙 ${c.reward}"
+   },
+   {
+    "name": "tplQblCrewardMtbewt7",
+    "type": "String",
+    "replaces": "קבל ${c.reward} מטבעות"
+   },
+   {
+    "name": "tplCrewardBuildCoinsAtgr8",
+    "type": "String",
+    "replaces": "+${c.reward} BuildCoins — אתגר הושלם"
+   },
+   {
+    "name": "hmcKdyLhcly9",
+    "type": "String",
+    "replaces": "המשך כדי להשלים את האתגר"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_Leaderboard": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🏆"
+   },
+   {
+    "name": "lwjHmwbyly2",
+    "type": "String",
+    "replaces": "לוח המובילים"
+   },
+   {
+    "name": "dyrwgHqblnyLfy3",
+    "type": "String",
+    "replaces": "דירוג הקבלנים לפי BuildCoins החודש."
+   },
+   {
+    "name": "bfrwdqcDyrwgJy4",
+    "type": "String",
+    "replaces": "⚙️ בפרודקשן: דירוג חי מהשרת — כאן מוצג לוח דמו"
+   },
+   {
+    "name": "txt5",
+    "type": "String",
+    "replaces": "🥇"
+   },
+   {
+    "name": "txt6",
+    "type": "String",
+    "replaces": "🥈"
+   },
+   {
+    "name": "txt7",
+    "type": "String",
+    "replaces": "🥉"
+   },
+   {
+    "name": "ath8",
+    "type": "String",
+    "replaces": " (אתה)"
+   }
+  ],
+  "note": ""
+ },
+ "_Green": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🌿"
+   },
+   {
+    "name": "tgyYrwq2",
+    "type": "String",
+    "replaces": "תגי ירוק"
+   },
+   {
+    "name": "tgyElBnyyh3",
+    "type": "String",
+    "replaces": "תגים על בנייה בת-קיימא ושמירה על הסביבה."
+   },
+   {
+    "name": "bfrwdqcTgyMnwtry4",
+    "type": "String",
+    "replaces": "⚙️ בפרודקשן: תגים מנוטרים מהשרת — כאן נתוני דמו"
+   },
+   {
+    "name": "tgyYrwqyCnxbrw5",
+    "type": "String",
+    "replaces": "תגים ירוקים שנצברו"
+   }
+  ],
+  "note": ""
+ },
+ "_Coupons": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "📍"
+   },
+   {
+    "name": "qwfwnyLfyMyqw2",
+    "type": "String",
+    "replaces": "קופונים לפי מיקום"
+   },
+   {
+    "name": "mbxeyZmynyMsfqy3",
+    "type": "String",
+    "replaces": "מבצעים זמינים מספקים בקרבת מקום אליך."
+   },
+   {
+    "name": "bfrwdqcAytwrLfy4",
+    "type": "String",
+    "replaces": "⚙️ בפרודקשן: איתור לפי מיקום GPS בזמן אמת"
+   },
+   {
+    "name": "tplCdeal5",
+    "type": "String",
+    "replaces": "🎟️ ${c.deal}"
+   },
+   {
+    "name": "cmwrQwfw6",
+    "type": "String",
+    "replaces": "שמור קופון"
+   },
+   {
+    "name": "hqwfwNcmrLarnq7",
+    "type": "String",
+    "replaces": "הקופון נשמר לארנק שלך"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_Referral": {
+  "addProps": [
+   {
+    "name": "t01",
+    "type": "String",
+    "replaces": "קוד ההזמנה שלך"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "👥"
+   },
+   {
+    "name": "hzmJbr3",
+    "type": "String",
+    "replaces": "הזמן חבר"
+   },
+   {
+    "name": "hzmQblAjr4",
+    "type": "String",
+    "replaces": "הזמן קבלן אחר — שניכם תרוויחו BuildCoins."
+   },
+   {
+    "name": "bfrwdqcQwdAycy5",
+    "type": "String",
+    "replaces": "⚙️ בפרודקשן: קוד אישי לכל משתמש — כאן קוד דמו משותף"
+   },
+   {
+    "name": "jbrNrc6",
+    "type": "String",
+    "replaces": "חבר נרשם"
+   },
+   {
+    "name": "507",
+    "type": "String",
+    "replaces": "+50 🪙"
+   },
+   {
+    "name": "hzmnhRacwnhCl8",
+    "type": "String",
+    "replaces": "הזמנה ראשונה של החבר"
+   },
+   {
+    "name": "1009",
+    "type": "String",
+    "replaces": "+100 🪙"
+   },
+   {
+    "name": "hjbrMqbl10",
+    "type": "String",
+    "replaces": "החבר מקבל"
+   },
+   {
+    "name": "qwfw4011",
+    "type": "String",
+    "replaces": "קופון ₪40"
+   },
+   {
+    "name": "ctAtHqwd12",
+    "type": "String",
+    "replaces": "📤 שתף את הקוד"
+   },
+   {
+    "name": "qwdHhzmnhHwetq13",
+    "type": "String",
+    "replaces": "קוד ההזמנה הועתק — שתף אותו עם חברים"
+   }
+  ],
+  "note": ""
+ },
+ "_Vip": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "💎"
+   },
+   {
+    "name": "mwedwVIP2",
+    "type": "String",
+    "replaces": "מועדון VIP"
+   },
+   {
+    "name": "kklCxwbryYwtr3",
+    "type": "String",
+    "replaces": "ככל שצוברים יותר — ההטבות גדלות."
+   }
+  ],
+  "note": ""
+ },
+ "_Redeem": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🎁"
+   },
+   {
+    "name": "mymwcHtbwt2",
+    "type": "String",
+    "replaces": "מימוש הטבות"
+   },
+   {
+    "name": "hjlBuildCoinsBfrsy3",
+    "type": "String",
+    "replaces": "החלף BuildCoins בפרסים אמיתיים."
+   },
+   {
+    "name": "hytrhClLmymwc4",
+    "type": "String",
+    "replaces": "היתרה שלך למימוש"
+   },
+   {
+    "name": "tplRcost5",
+    "type": "String",
+    "replaces": "🪙 ${r.cost}"
+   },
+   {
+    "name": "mmcEkcyw6",
+    "type": "String",
+    "replaces": "ממש עכשיו"
+   },
+   {
+    "name": "mymwcFrs7",
+    "type": "String",
+    "replaces": "מימוש פרס?"
+   },
+   {
+    "name": "tplRnameYnwkwRcost8",
+    "type": "String",
+    "replaces": "${r.name} — ינוכו ${r.cost} מטבעות מהיתרה שלך."
+   },
+   {
+    "name": "mmc9",
+    "type": "String",
+    "replaces": "ממש"
+   },
+   {
+    "name": "tplRnameMwmcBhxljh10",
+    "type": "String",
+    "replaces": "🎁 ${r.name} מומש בהצלחה!"
+   },
+   {
+    "name": "ayMsfyqBuildCoins11",
+    "type": "String",
+    "replaces": "אין מספיק BuildCoins"
+   },
+   {
+    "name": "tplJsryRcostRwcoins12",
+    "type": "String",
+    "replaces": "חסרים ${r.cost - rw.coins} מטבעות"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_CoinBanner": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🪙"
+   }
+  ],
+  "note": ""
+ },
+ "_LbRow": {
+  "addProps": [
+   {
+    "name": "tplCoins1",
+    "type": "String",
+    "replaces": "🪙 $coins"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_BadgeRow": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🔒"
+   }
+  ],
+  "note": ""
+ },
+ "_VipCard": {
+  "addProps": [
+   {
+    "name": "tplDrgtTiernamecurrent1",
+    "type": "String",
+    "replaces": "💎 דרגת ${tier.name}${current ? "
+   },
+   {
+    "name": "htjlh2",
+    "type": "String",
+    "replaces": "התחלה"
+   },
+   {
+    "name": "tplTiermin3",
+    "type": "String",
+    "replaces": "${tier.min}+ 🪙"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

@@ -1,0 +1,90 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__alt_explain_screen.dart",
+ "lines": 218,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.divider",
+   "BsTokens.inkLight",
+   "BsTokens.mutedDark",
+   "BsTokens.mutedLight",
+   "BsTokens.space2",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   11,
+   13,
+   14,
+   15,
+   16,
+   18
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "(אחריות / זמינות / טיב-החומר). אל תמציא מפרטים, מספרים או שמות-מוצר שלא ",
+  "אתה יועץ-רכש מנוסה לאינסטלטורים. אתה מסביר בקצרה ובכנות tradeoff בין מותגים ",
+  "המלצה: ${widget.recName} · ₪${widget.recPrice}",
+  "הסבר לאינסטלטור, ב-2–3 משפטים קצרים בעברית, למה $altName יכול להיות החלפה ",
+  "חיסכון ₪${widget.savings}",
+  "חלופה: ${widget.altName} · ₪${widget.altPrice}",
+  "לאותו מוצר. לעולם אל תמציא מפרט, מספר או שם-מוצר שלא ניתן לך, ואל תטען שהזול ",
+  "ניתנו לך, ואל תבטיח שהזול תמיד עדיף.",
+  "סבירה ל-$recName לאותו מוצר, ומה הדבר האחד שכדאי לוודא לפני שקונים את הזול ",
+  "תמיד עדיף — תן לקבלן להחליט.",
+  "⚙️ המחירים מתוך נתוני-הקטלוג; ה-AI רק מנסח את ההשוואה.",
+  "💡 ההסבר החכם דורש חיבור לשרת.",
+  "💡 למה החלופה שווה?"
+ ],
+ "icons": [],
+ "glyphs": [
+  "⚙",
+  "💡"
+ ],
+ "logicCandidates": [
+  {
+   "name": "setState",
+   "line": 122
+  }
+ ],
+ "widgets": [
+  {
+   "name": "AltExplainScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 51,
+   "loc": 38,
+   "pure": false,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:AltExplainScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kClaudeAi"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:AltExplainScreen"
+  ]
+ }
+}

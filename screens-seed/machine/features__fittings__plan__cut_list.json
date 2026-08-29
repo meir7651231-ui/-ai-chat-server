@@ -1,0 +1,37 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__fittings__plan__cut_list.dart",
+ "lines": 42,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  ";\n\n/// המשפחות שהניכוי מוגדר-להן חד-משמעית (אביזרי-רַץ סימטריים).\nconst Set<String> _kCutFamilies = {",
+  "];\n  if (f == null || f.isNaN) return null; // OD מחוץ-לטבלה → fallback\n  switch (family) {\n    case ",
+  "]; // = l − F, כבר golden\n    case ",
+  "` (הסתעפות).\ndouble? cutDeductionFor(String family, int od, {String socket = ",
+  "` (רַץ · ברירת-מחדל) או `",
+  "ברך 45°",
+  "מסעף (טי)",
+  "מצמד"
+ ],
+ "icons": [],
+ "glyphs": [
+  "🔌"
+ ],
+ "logicCandidates": [],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

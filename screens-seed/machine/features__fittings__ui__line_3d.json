@@ -1,0 +1,56 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__fittings__ui__line_3d.dart",
+ "lines": 121,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [
+   13
+  ],
+  "fontWeights": [
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "s-algorithm, 3 פאות מוצללות). מגודר `kFittingEngine`.\n\nimport ",
+  "📦 סודוקו תלת-ממד — הקו זורם ב-6 כיוונים · הטי מסתעף לעומק"
+ ],
+ "icons": [],
+ "glyphs": [
+  "📦"
+ ],
+ "logicCandidates": [
+  {
+   "name": "paint",
+   "line": 60
+  }
+ ],
+ "widgets": [
+  {
+   "name": "Line3DView",
+   "kind": "StatelessWidget",
+   "line": 20,
+   "loc": 30,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kFittingEngine"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

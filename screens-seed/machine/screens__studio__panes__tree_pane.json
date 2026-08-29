@@ -1,0 +1,63 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__studio__panes__tree_pane.dart",
+ "lines": 194,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.surfaceMid",
+   "BsTokens.typeCaption",
+   "BsTokens.warnText"
+  ],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "אין רכיבים",
+  "חיפוש רכיב…",
+  "טרם חובר"
+ ],
+ "icons": [
+  "Icons.search"
+ ],
+ "glyphs": [
+  "🗂"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "TreePane",
+   "kind": "ConsumerStatefulWidget",
+   "line": 17,
+   "loc": 6,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kStudioPersonaHe",
+  "kStudioPersonas"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

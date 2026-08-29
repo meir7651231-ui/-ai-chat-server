@@ -1,0 +1,37 @@
+{
+ "HistoryPane": {
+  "addProps": [
+   {
+    "name": "erykh1",
+    "type": "String",
+    "replaces": "עריכה"
+   },
+   {
+    "name": "bely2",
+    "type": "String",
+    "replaces": "בעלים"
+   },
+   {
+    "name": "cjzr3",
+    "type": "String",
+    "replaces": "שחזר"
+   },
+   {
+    "name": "lcjzrGrshZw4",
+    "type": "String",
+    "replaces": "לשחזר גרסה זו?"
+   },
+   {
+    "name": "hgrshTfwrsMjdc5",
+    "type": "String",
+    "replaces": "הגרסה תפורסם מחדש לכל המשתמשים כגרסה חדשה (ההיסטוריה נשמרת)."
+   },
+   {
+    "name": "bytwl6",
+    "type": "String",
+    "replaces": "ביטול"
+   }
+  ],
+  "note": ""
+ }
+}

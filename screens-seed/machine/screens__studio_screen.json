@@ -1,0 +1,127 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__studio_screen.dart",
+ "lines": 606,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.cardLight",
+   "BsTokens.dangerDark",
+   "BsTokens.divider",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   12,
+   13,
+   13.5,
+   15,
+   18
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "s explicit confirm-tap, guarded by a tracked single-tap turn (mirror of\n/// `studio_component_builder.dart:108-112`) so a double-tap can never write twice. The\n/// `|| _loading` guard + a `mounted`-check after EVERY await close the stale-response\n/// race (`describe_to_cart_screen.dart:104`), and a 200-empty reply is an honest retry,\n/// never an empty box (`reject_reason_screen.dart:92-93`).\nclass _CoEditorPane extends ConsumerStatefulWidget {\n  const _CoEditorPane({required this.ai});\n\n  final bool ai;\n\n  @override\n  ConsumerState<_CoEditorPane> createState() => _CoEditorPaneState();\n}\n\nclass _CoEditorPaneState extends ConsumerState<_CoEditorPane> {\n  // The frozen grounding source (R1-2) — the SAME registry `parseConfigEdit` /\n  // `validateSafe` / `summarizeDiff` use, so the model can only ever NAME real ids.\n  final RegistryView _registry = ElementRegistryView.builtIn();\n  final TextEditingController _controller = TextEditingController();\n\n  bool _loading = false;\n\n  // An honest off-path line (ambiguous / empty / truncated / \"מה התכוונת\" / failed);\n  // [_messageIsError] reddens the hard failures and keeps the soft \"didn",
+  "s loading-disable, so a mid-flight re-submit could overwrite a newer\n    // preview); the debounce keeps a tap-burst under the 40/min server cap (§10).\n    if (gw == null || text.isEmpty || _loading) return;\n    final now = DateTime.now();\n    if (_lastSubmit != null &&\n        now.difference(_lastSubmit!) < const Duration(milliseconds: 400)) {\n      return;\n    }\n    _lastSubmit = now;\n    FocusScope.of(context).unfocus();\n    setState(() {\n      _loading = true;\n      _clearResult();\n    });\n    try {\n      // Stage-A — the model NAMES one closed scope token; `classifyScope` grounds it\n      // to a real token, or null (AMBIGUOUS → \"צריך הבהרה\", never a guess — R1-7). The\n      // utterance is folded + capped by `promptSafeText` INSIDE `studioScopePrompt`\n      // (edit_prompt.dart:214) — the injection-lever defense (§7.9).\n      final scopeRes = await gw.ask(\n        prompt: studioScopePrompt(_registry, text),\n        maxTokens: kStudioEditMaxTokens,\n      );\n      if (!mounted) return;\n      final scope = classifyScope(scopeRes.text, _registry);\n      if (scope == null) {\n        setState(() {\n          _loading = false;\n          _message =\n              ",
+  "s own guard, `manager_dashboard_screen.dart:87`), not an error page.\n//   • §4 off-state — the 🤖 co-editor pane shows an honest [AiOffState] when the\n//     Claude gateway is null (`studioCoEditorProvider.ai == false`).\n//   • §8/§9 always-works — the 🛠️ manual-builder pane needs NO gateway, so it is\n//     ALWAYS usable; the deep-link (the default tab) opens it FIRST (the path that\n//     never disappoints), and the hero carries an \"ניסיוני\" badge.\n//\n// NOTE: intentionally distinct from the Pillar-1 owner Studio in\n// `screens/studio/studio_screen.dart` (same simple name, different library — the\n// two are never co-imported, so there is no name clash).\n// ─────────────────────────────────────────────────────────────────────────────\n\nimport ",
+  "אשר והחל בטיוטה ✓",
+  "בונה ידני",
+  "הוחל — ${verdict.applied.length} שינוי בטיוטה ✓",
+  "כללים",
+  "לא הצלחתי לבנות את השינוי, נסה שוב",
+  "לא התקבלה תשובה מהשרת — נסה שוב.",
+  "לדוגמה: שנה את הכיתוב של כפתור ההזמנה ל\"הזמן עכשיו\"",
+  "מה התכוונת? ${parsed.dropped} חלקים לא הובנו — נסה לנסח מחדש.",
+  "מה התכוונת? לא זוהה שינוי מתאים — נסה לנסח מחדש.",
+  "משהו השתבש — נסה שוב.",
+  "מתוך: ${scopeHe(scope)}",
+  "נסח שינוי לתצוגה מקדימה",
+  "עורך-שפה",
+  "ערוך את האפליקציה — עורך ניסיוני",
+  "🎬 סטודיו",
+  "👁️ תצוגה מקדימה (לפני החלה)",
+  "💡 העורך החכם דורש חיבור לשרת. בינתיים — הבנייה הידנית עובדת תמיד.",
+  "🤖 תאר בעברית מה לשנות. אכין תצוגה מקדימה — שום דבר לא ישתנה עד שתאשר."
+ ],
+ "icons": [],
+ "glyphs": [
+  "⛔",
+  "✓",
+  "🎬",
+  "👁",
+  "💡",
+  "🔒",
+  "🛠",
+  "🤖"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "StudioScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 60,
+   "loc": 12,
+   "pure": false,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "nav:StudioScreen"
+   ],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_StudioTabs",
+   "kind": "StatelessWidget",
+   "line": 155,
+   "loc": 75,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 3,
+   "constData": 0
+  },
+  {
+   "name": "_CoEditorPane",
+   "kind": "ConsumerStatefulWidget",
+   "line": 252,
+   "loc": 8,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kStudioEditMaxTokens"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "nav:StudioScreen"
+  ]
+ }
+}

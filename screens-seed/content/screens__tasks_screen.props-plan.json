@@ -1,0 +1,107 @@
+{
+ "_LogButton": {
+  "addProps": [
+   {
+    "name": "logBtn",
+    "type": "String",
+    "replaces": "📅 יומן עבודה — מה בוצע בכל יום"
+   }
+  ],
+  "note": ""
+ },
+ "_NewTaskButton": {
+  "addProps": [
+   {
+    "name": "newTask",
+    "type": "String",
+    "replaces": "＋ משימה חדשה"
+   }
+  ],
+  "note": ""
+ },
+ "_ApprovalCard": {
+  "addProps": [
+   {
+    "name": "approvalReject",
+    "type": "String",
+    "replaces": "↩️ החזר לתיקון"
+   },
+   {
+    "name": "tplWorkerLabelMmtyLaycwr2",
+    "type": "String",
+    "replaces": "👷 $workerLabel · 📸 ממתין לאישור"
+   },
+   {
+    "name": "acr3",
+    "type": "String",
+    "replaces": "✅ אשר"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_ProposalCard": {
+  "addProps": [
+   {
+    "name": "proposalReject",
+    "type": "String",
+    "replaces": "❌ דחה"
+   },
+   {
+    "name": "tplWorkerLabelDaysYmy2",
+    "type": "String",
+    "replaces": "👷 $workerLabel · ⏱️ $days ימים · 📝 ממתין לאישורך"
+   },
+   {
+    "name": "acr3",
+    "type": "String",
+    "replaces": "✅ אשר"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_Card": {
+  "addProps": [
+   {
+    "name": "edit",
+    "type": "String",
+    "replaces": "✏️ ערוך"
+   },
+   {
+    "name": "tplWktaskworkerTaskstepsle2",
+    "type": "String",
+    "replaces": "👷 ${_wk(task.worker)} · 📋 ${task.steps.length} שלבים · ⏱️ ${task.days} ימים"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_WorkLogSheet": {
+  "addProps": [
+   {
+    "name": "worklogTitle",
+    "type": "String",
+    "replaces": "יומן עבודה"
+   },
+   {
+    "name": "worklogSub",
+    "type": "String",
+    "replaces": "סיכום יומי — מה בוצע בפרויקט"
+   },
+   {
+    "name": "tplDaydate3",
+    "type": "String",
+    "replaces": "📅 ${day.date}"
+   },
+   {
+    "name": "tplDoneCountMcymwtHwclmw4",
+    "type": "String",
+    "replaces": "$doneCount משימות הושלמו"
+   },
+   {
+    "name": "tplItworker5",
+    "type": "String",
+    "replaces": "👷 ${it.worker}"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

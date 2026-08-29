@@ -1,0 +1,407 @@
+{
+ "_CardView": {
+  "addProps": [
+   {
+    "name": "ngyehBLa1",
+    "type": "String",
+    "replaces": "נגיעה ב📋 (לא קופץ) — המפרט/תקן/אזהרה מחליף את התמונה "
+   },
+   {
+    "name": "bmqwTabyLmebr2",
+    "type": "String",
+    "replaces": "במקום · טאבים למעבר"
+   },
+   {
+    "name": "tplMcykhToRight3",
+    "type": "String",
+    "replaces": "משיכה ${toRight ? "
+   },
+   {
+    "name": "cmalh4",
+    "type": "String",
+    "replaces": "שמאלה"
+   },
+   {
+    "name": "tplMhMtjbrLxd5",
+    "type": "String",
+    "replaces": " מה מתחבר לצד ${toRight ? "
+   },
+   {
+    "name": "cmal6",
+    "type": "String",
+    "replaces": "שמאל"
+   },
+   {
+    "name": "mfrt7",
+    "type": "String",
+    "replaces": "מפרט · "
+   },
+   {
+    "name": "jzwrMqxtMwtbe8",
+    "type": "String",
+    "replaces": " חזור · מק״ט מוטבע על התמונה · נגיעה=גלריה"
+   },
+   {
+    "name": "txt9",
+    "type": "String",
+    "replaces": "📋"
+   },
+   {
+    "name": "br10",
+    "type": "String",
+    "replaces": "ברך"
+   },
+   {
+    "name": "zwwyt11",
+    "type": "String",
+    "replaces": "זווית"
+   },
+   {
+    "name": "txt12",
+    "type": "String",
+    "replaces": "🦵"
+   },
+   {
+    "name": "mse13",
+    "type": "String",
+    "replaces": "מסעף"
+   },
+   {
+    "name": "hstefwt14",
+    "type": "String",
+    "replaces": "הסתעפות"
+   },
+   {
+    "name": "txt15",
+    "type": "String",
+    "replaces": "🔱"
+   },
+   {
+    "name": "xynwr16",
+    "type": "String",
+    "replaces": "צינור"
+   },
+   {
+    "name": "xnrt17",
+    "type": "String",
+    "replaces": "צנרת"
+   },
+   {
+    "name": "txt18",
+    "type": "String",
+    "replaces": "🟫"
+   },
+   {
+    "name": "mxrh19",
+    "type": "String",
+    "replaces": "מצרה"
+   },
+   {
+    "name": "txt20",
+    "type": "String",
+    "replaces": "🔻"
+   },
+   {
+    "name": "nyfl21",
+    "type": "String",
+    "replaces": "ניפל"
+   },
+   {
+    "name": "txt22",
+    "type": "String",
+    "replaces": "🔗"
+   },
+   {
+    "name": "fqq23",
+    "type": "String",
+    "replaces": "פקק"
+   },
+   {
+    "name": "mxmd24",
+    "type": "String",
+    "replaces": "מצמד"
+   },
+   {
+    "name": "mjbr25",
+    "type": "String",
+    "replaces": "מחבר"
+   },
+   {
+    "name": "mwfh26",
+    "type": "String",
+    "replaces": "מופה"
+   },
+   {
+    "name": "txt27",
+    "type": "String",
+    "replaces": "🧷"
+   },
+   {
+    "name": "aw28",
+    "type": "String",
+    "replaces": "אום"
+   },
+   {
+    "name": "txt29",
+    "type": "String",
+    "replaces": "🔩"
+   },
+   {
+    "name": "mhMtjbrLxd30",
+    "type": "String",
+    "replaces": "מה מתחבר לצד שמאל"
+   },
+   {
+    "name": "mhMtjbrLxd31",
+    "type": "String",
+    "replaces": "מה מתחבר לצד ימין"
+   },
+   {
+    "name": "tplLabelHjlq32",
+    "type": "String",
+    "replaces": "🔗 $label · החלק ↔"
+   },
+   {
+    "name": "ayTwaYcyr33",
+    "type": "String",
+    "replaces": "אין תואם ישיר"
+   },
+   {
+    "name": "tplDnMxm34",
+    "type": "String",
+    "replaces": "$dn מ״מ"
+   },
+   {
+    "name": "hjlqAwHqc35",
+    "type": "String",
+    "replaces": "החלק או הקש נקודה להחלפת מידה"
+   },
+   {
+    "name": "txt36",
+    "type": "String",
+    "replaces": "📐"
+   },
+   {
+    "name": "mfrt37",
+    "type": "String",
+    "replaces": "מפרט"
+   },
+   {
+    "name": "tq38",
+    "type": "String",
+    "replaces": "תקן"
+   },
+   {
+    "name": "azhrh39",
+    "type": "String",
+    "replaces": "אזהרה"
+   },
+   {
+    "name": "txt40",
+    "type": "String",
+    "replaces": "🧱"
+   },
+   {
+    "name": "jwmr41",
+    "type": "String",
+    "replaces": "חומר"
+   },
+   {
+    "name": "txt42",
+    "type": "String",
+    "replaces": "🌡️"
+   },
+   {
+    "name": "tmfx43",
+    "type": "String",
+    "replaces": "טמפ׳"
+   },
+   {
+    "name": "ayNtwny44",
+    "type": "String",
+    "replaces": "אין נתונים"
+   },
+   {
+    "name": "txt45",
+    "type": "String",
+    "replaces": "🎛️"
+   },
+   {
+    "name": "hgdrh46",
+    "type": "String",
+    "replaces": "הגדרה"
+   },
+   {
+    "name": "glgly47",
+    "type": "String",
+    "replaces": "גלגלים"
+   },
+   {
+    "name": "qwtrZwwytAwr48",
+    "type": "String",
+    "replaces": "קוטר · זווית · אורך · כמות"
+   },
+   {
+    "name": "symw49",
+    "type": "String",
+    "replaces": "סימון"
+   },
+   {
+    "name": "txt50",
+    "type": "String",
+    "replaces": "🧩"
+   },
+   {
+    "name": "wryanty51",
+    "type": "String",
+    "replaces": "וריאנטים"
+   },
+   {
+    "name": "mtjbrLx52",
+    "type": "String",
+    "replaces": "מתחבר ל־"
+   },
+   {
+    "name": "tplMhCmtjbrLmydh53",
+    "type": "String",
+    "replaces": "מה שמתחבר למידה $dn:"
+   },
+   {
+    "name": "hwrawtjybwr54",
+    "type": "String",
+    "replaces": "הוראות-חיבור"
+   },
+   {
+    "name": "txt55",
+    "type": "String",
+    "replaces": "🛠️"
+   },
+   {
+    "name": "clbyHtqnh56",
+    "type": "String",
+    "replaces": "שלבי התקנה"
+   },
+   {
+    "name": "tplKitmustJwbh57",
+    "type": "String",
+    "replaces": "${kit.must} חובה"
+   },
+   {
+    "name": "tplKitoptionalAwfxyh58",
+    "type": "String",
+    "replaces": "${kit.optional} אופציה"
+   },
+   {
+    "name": "tplKittoolsKly59",
+    "type": "String",
+    "replaces": "${kit.tools} כלים"
+   },
+   {
+    "name": "txt60",
+    "type": "String",
+    "replaces": "🧰"
+   },
+   {
+    "name": "erktAbyzry61",
+    "type": "String",
+    "replaces": "ערכת אביזרים"
+   },
+   {
+    "name": "mfrtJwmry62",
+    "type": "String",
+    "replaces": "מפרט חומרים"
+   },
+   {
+    "name": "mfrtHndsy63",
+    "type": "String",
+    "replaces": "מפרט הנדסי"
+   },
+   {
+    "name": "tmfrtwrh64",
+    "type": "String",
+    "replaces": "טמפרטורה"
+   },
+   {
+    "name": "tplEdSpecmaxTempCroundC65",
+    "type": "String",
+    "replaces": "עד ${spec.maxTempC.round()}°C"
+   },
+   {
+    "name": "drycwtTqynwt66",
+    "type": "String",
+    "replaces": "דרישות תקינות"
+   },
+   {
+    "name": "azhrwt67",
+    "type": "String",
+    "replaces": "אזהרות"
+   },
+   {
+    "name": "abyzryMclymy68",
+    "type": "String",
+    "replaces": "אביזרים משלימים"
+   },
+   {
+    "name": "txt69",
+    "type": "String",
+    "replaces": "💰"
+   },
+   {
+    "name": "herktMjyr70",
+    "type": "String",
+    "replaces": "הערכת מחיר"
+   },
+   {
+    "name": "tplHerkhLfyQtgwryh71",
+    "type": "String",
+    "replaces": "הערכה לפי קטגוריה · ${formatCatalogPrice(base, s)}"
+   },
+   {
+    "name": "tplShxkFormatCatalogPricel72",
+    "type": "String",
+    "replaces": "סה״כ ${formatCatalogPrice(lineTotal, s)}"
+   },
+   {
+    "name": "yjydh73",
+    "type": "String",
+    "replaces": "יחידה"
+   },
+   {
+    "name": "kmwt74",
+    "type": "String",
+    "replaces": "כמות"
+   },
+   {
+    "name": "acr75",
+    "type": "String",
+    "replaces": "אשר"
+   },
+   {
+    "name": "hwsLsl76",
+    "type": "String",
+    "replaces": "הוסף לסל"
+   },
+   {
+    "name": "tplNwsfwQtyUnitKey77",
+    "type": "String",
+    "replaces": "נוספו $qty × $unitKey לסל"
+   },
+   {
+    "name": "nwsLsl78",
+    "type": "String",
+    "replaces": "נוסף לסל"
+   },
+   {
+    "name": "hajrwMwdgcHqc79",
+    "type": "String",
+    "replaces": "האחרון מודגש · הקש עיגול=בחירה · הקש מודגש=הסרה · +=הוספה"
+   },
+   {
+    "name": "txt80",
+    "type": "String",
+    "replaces": "📦"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

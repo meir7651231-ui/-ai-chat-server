@@ -1,0 +1,187 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__regression_panel_screen.dart",
+ "lines": 368,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.danger",
+   "BsTokens.inkLight",
+   "BsTokens.success"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   10,
+   11,
+   12,
+   13,
+   15,
+   16
+  ],
+  "fontWeights": [
+   "FontWeight.w400",
+   "FontWeight.w600",
+   "FontWeight.w700"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "בודק קטלוג · chips · מאתר · מנוע תאימות/התקנה · state · ניווט · wiring",
+  "הגדרות",
+  "הכל",
+  "התנהגות",
+  "זהויות",
+  "טאבים",
+  "כפתורים",
+  "מוצרים",
+  "מנוע",
+  "סנכרון",
+  "עצים",
+  "ציפיתי: ${check.expected} · קיבלתי: ${check.got ?? \"—\"}",
+  "קטלוג",
+  "↻ הרץ שוב",
+  "⏳ מריץ את הבדיקות... רגע",
+  "▶ הרץ בדיקת רגרסיה מלאה",
+  "✅ כל הבדיקות עברו (${summary.passed}/${summary.total})",
+  "❌ נמצאו ${summary.failed} כשלים",
+  "🔬 מרכז בדיקות רגרסיה"
+ ],
+ "icons": [],
+ "glyphs": [
+  "✅",
+  "✓",
+  "✗",
+  "❌",
+  "🔬"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "RegressionPanelScreen",
+   "kind": "ConsumerWidget",
+   "line": 10,
+   "loc": 53,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "filteredResultsProvider",
+    "filteredSummaryProvider",
+    "regressionFilterProvider",
+    "regressionStatusProvider",
+    "summaryByCategoryProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "nav:RegressionPanelScreen"
+   ],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_RunButton",
+   "kind": "StatelessWidget",
+   "line": 64,
+   "loc": 34,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 3,
+   "constData": 0
+  },
+  {
+   "name": "_SummaryCard",
+   "kind": "StatelessWidget",
+   "line": 99,
+   "loc": 48,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_FilterRow",
+   "kind": "ConsumerWidget",
+   "line": 148,
+   "loc": 38,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "regressionFilterProvider"
+   ],
+   "writes": [
+    "regressionFilterProvider"
+   ],
+   "actions": [],
+   "strings": 11,
+   "constData": 0
+  },
+  {
+   "name": "_Pill",
+   "kind": "StatelessWidget",
+   "line": 187,
+   "loc": 31,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_ResultCard",
+   "kind": "StatelessWidget",
+   "line": 219,
+   "loc": 91,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_CheckRow",
+   "kind": "StatelessWidget",
+   "line": 311,
+   "loc": 57,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [
+  "RegressionPanelScreen",
+  "_FilterRow"
+ ],
+ "gates": [],
+ "board": {
+  "reads": [
+   "filteredResultsProvider",
+   "filteredSummaryProvider",
+   "regressionFilterProvider",
+   "regressionStatusProvider",
+   "summaryByCategoryProvider"
+  ],
+  "writes": [
+   "regressionFilterProvider"
+  ],
+  "navsAndCalls": [
+   "nav:RegressionPanelScreen"
+  ]
+ }
+}

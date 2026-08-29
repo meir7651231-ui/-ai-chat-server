@@ -1,0 +1,197 @@
+{
+ "_VehicleButton": {
+  "addProps": [
+   {
+    "name": "preferred",
+    "type": "String",
+    "replaces": "★ מועדף"
+   }
+  ],
+  "note": ""
+ },
+ "_CourierJobCard": {
+  "addProps": [
+   {
+    "name": "mmtyLmsyrhMhjnwt1",
+    "type": "String",
+    "replaces": "⏳ ממתין למסירה מהחנות"
+   },
+   {
+    "name": "asftyMhjnwt2",
+    "type": "String",
+    "replaces": "📦 אספתי מהחנות"
+   },
+   {
+    "name": "nmsrLlqwj3",
+    "type": "String",
+    "replaces": "✅ נמסר ללקוח"
+   },
+   {
+    "name": "frtyHmclwj4",
+    "type": "String",
+    "replaces": "פרטי המשלוח"
+   },
+   {
+    "name": "hqchElHkrtys5",
+    "type": "String",
+    "replaces": "הקשה על הכרטיס פותחת את גיליון פירוט המשלוח: רשימת הפריטים, לקוח, כתובת, סכום ומסלול ההזמנה, עם קיצורי קידום ו-POD."
+   },
+   {
+    "name": "tplOrderid6",
+    "type": "String",
+    "replaces": "📦 ${order.id}"
+   },
+   {
+    "name": "tplSplitInto7",
+    "type": "String",
+    "replaces": "🚚×$splitInto"
+   },
+   {
+    "name": "tplOrderwho8",
+    "type": "String",
+    "replaces": "👤 ${order.who}"
+   },
+   {
+    "name": "tplOrdersite9",
+    "type": "String",
+    "replaces": "📍 ${order.site}"
+   },
+   {
+    "name": "tplNdrcBtyawHaulic10",
+    "type": "String",
+    "replaces": "🕒 נדרש: בתיאום · ${haul.ic} ${haul.name}"
+   },
+   {
+    "name": "tplOrderitemsFrytyFMoney11",
+    "type": "String",
+    "replaces": "${order.items} פריטים · ${fMoney(order.sum)} · הקש לפרטים"
+   },
+   {
+    "name": "qydwHmclwj12",
+    "type": "String",
+    "replaces": "קידום המשלוח"
+   },
+   {
+    "name": "lqyjh13",
+    "type": "String",
+    "replaces": "לקיחה"
+   },
+   {
+    "name": "asftyMhjnwt14",
+    "type": "String",
+    "replaces": "אספתי מהחנות"
+   },
+   {
+    "name": "bdr15",
+    "type": "String",
+    "replaces": "בדרך"
+   },
+   {
+    "name": "nmsrLlqwj16",
+    "type": "String",
+    "replaces": "נמסר ללקוח"
+   },
+   {
+    "name": "laysw17",
+    "type": "String",
+    "replaces": "לאיסוף"
+   },
+   {
+    "name": "aycwrMsyrhPOD18",
+    "type": "String",
+    "replaces": "אישור מסירה (POD)"
+   },
+   {
+    "name": "fwtjAtGylyw19",
+    "type": "String",
+    "replaces": "פותח את גיליון צילום אישור-המסירה — צילום הלקוח/המשלוח שנשמר כהוכחת מסירה. מופיע רק משלב האיסוף ואילך (כשהמשלוח כבר בידיך)."
+   },
+   {
+    "name": "aycwrMsyrhNcmr20",
+    "type": "String",
+    "replaces": "📸 אישור מסירה · נשמר ✓"
+   },
+   {
+    "name": "aycwrMsyrh21",
+    "type": "String",
+    "replaces": "📸 אישור מסירה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_Tracker": {
+  "addProps": [
+   {
+    "name": "aysw1",
+    "type": "String",
+    "replaces": "איסוף"
+   },
+   {
+    "name": "bdr2",
+    "type": "String",
+    "replaces": "בדרך"
+   },
+   {
+    "name": "nmsr3",
+    "type": "String",
+    "replaces": "נמסר"
+   }
+  ],
+  "note": ""
+ },
+ "_CourierNotifsBell": {
+  "addProps": [
+   {
+    "name": "htrawt1",
+    "type": "String",
+    "replaces": "התראות"
+   }
+  ],
+  "note": ""
+ },
+ "_CourierNotifsSheet": {
+  "addProps": [
+   {
+    "name": "title",
+    "type": "String",
+    "replaces": "🔔 התראות"
+   },
+   {
+    "name": "empty",
+    "type": "String",
+    "replaces": "אין התראות עדיין.\\nמשלוחים חדשים שנמסרים לידיך ומסירות שהשלמת יופיעו כאן."
+   },
+   {
+    "name": "markAll",
+    "type": "String",
+    "replaces": "סמן הכל כנקרא"
+   },
+   {
+    "name": "clearAll",
+    "type": "String",
+    "replaces": "נקה הכל"
+   },
+   {
+    "name": "sgyrh5",
+    "type": "String",
+    "replaces": "סגירה"
+   },
+   {
+    "name": "lnqwtAtKl6",
+    "type": "String",
+    "replaces": "לנקות את כל ההתראות?"
+   },
+   {
+    "name": "klHhtrawtYymjqw7",
+    "type": "String",
+    "replaces": "כל ההתראות יימחקו — פעולה בלתי הפיכה."
+   },
+   {
+    "name": "nqh8",
+    "type": "String",
+    "replaces": "נקה"
+   }
+  ],
+  "note": ""
+ }
+}

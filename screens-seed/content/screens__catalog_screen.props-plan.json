@@ -1,0 +1,537 @@
+{
+ "_DiveResultsView": {
+  "addProps": [
+   {
+    "name": "t14",
+    "type": "String",
+    "replaces": "אין תוצאות תואמות"
+   },
+   {
+    "name": "t15",
+    "type": "String",
+    "replaces": "אין מוצרים תואמים"
+   }
+  ],
+  "note": ""
+ },
+ "GlobalSearchResultsView": {
+  "addProps": [
+   {
+    "name": "t16",
+    "type": "String",
+    "replaces": "אין תוצאות תואמות"
+   },
+   {
+    "name": "t17",
+    "type": "String",
+    "replaces": "אין מוצרים תואמים"
+   }
+  ],
+  "note": ""
+ },
+ "_GlobalDiveTile": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🧾"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "👤"
+   },
+   {
+    "name": "txt3",
+    "type": "String",
+    "replaces": "💬"
+   },
+   {
+    "name": "txt4",
+    "type": "String",
+    "replaces": "🔔"
+   },
+   {
+    "name": "hzmnh5",
+    "type": "String",
+    "replaces": "הזמנה"
+   },
+   {
+    "name": "mcymh6",
+    "type": "String",
+    "replaces": "משימה"
+   },
+   {
+    "name": "lqwj7",
+    "type": "String",
+    "replaces": "לקוח"
+   },
+   {
+    "name": "cyjh8",
+    "type": "String",
+    "replaces": "שיחה"
+   },
+   {
+    "name": "htrah9",
+    "type": "String",
+    "replaces": "התראה"
+   },
+   {
+    "name": "txt10",
+    "type": "String",
+    "replaces": "🔎"
+   }
+  ],
+  "note": ""
+ },
+ "_DiveEntryTile": {
+  "addProps": [
+   {
+    "name": "tnayCymwc1",
+    "type": "String",
+    "replaces": "תנאי שימוש"
+   },
+   {
+    "name": "mdynywtFrtywt2",
+    "type": "String",
+    "replaces": "מדיניות פרטיות"
+   }
+  ],
+  "note": ""
+ },
+ "_CatalogBody": {
+  "addProps": [
+   {
+    "name": "byt1",
+    "type": "String",
+    "replaces": "בית"
+   },
+   {
+    "name": "matr2",
+    "type": "String",
+    "replaces": "מאתר"
+   },
+   {
+    "name": "matrel3",
+    "type": "String",
+    "replaces": "מאתר-על"
+   },
+   {
+    "name": "matrFcwt4",
+    "type": "String",
+    "replaces": "מאתר פשוט"
+   },
+   {
+    "name": "matrJk5",
+    "type": "String",
+    "replaces": "מאתר חכם"
+   },
+   {
+    "name": "mqldtJkmh6",
+    "type": "String",
+    "replaces": "מקלדת חכמה"
+   },
+   {
+    "name": "eJk7",
+    "type": "String",
+    "replaces": "עץ חכם"
+   },
+   {
+    "name": "qtgwrywt8",
+    "type": "String",
+    "replaces": "קטגוריות"
+   },
+   {
+    "name": "mwedfy9",
+    "type": "String",
+    "replaces": "מועדפים"
+   },
+   {
+    "name": "jyfwcyAjrwny10",
+    "type": "String",
+    "replaces": "חיפושים אחרונים"
+   },
+   {
+    "name": "tknwJybwr11",
+    "type": "String",
+    "replaces": "תכנון חיבור"
+   },
+   {
+    "name": "wryanty12",
+    "type": "String",
+    "replaces": "וריאנטים"
+   },
+   {
+    "name": "txt13",
+    "type": "String",
+    "replaces": "📋"
+   }
+  ],
+  "note": ""
+ },
+ "_SectionHeader": {
+  "addProps": [
+   {
+    "name": "erykh1",
+    "type": "String",
+    "replaces": "עריכה"
+   }
+  ],
+  "note": ""
+ },
+ "_EmptySection": {
+  "addProps": [
+   {
+    "name": "t18",
+    "type": "String",
+    "replaces": "אין פריטים להצגה.\\nפתחו את ניהול הרשימות והקישו ✏️ כדי לבחור פריטים."
+   }
+  ],
+  "note": ""
+ },
+ "_CatalogRow": {
+  "addProps": [
+   {
+    "name": "bqrwb1",
+    "type": "String",
+    "replaces": "בקרוב"
+   }
+  ],
+  "note": ""
+ },
+ "_TreeDrill": {
+  "addProps": [
+   {
+    "name": "tplLaNmxawTwxawt1",
+    "type": "String",
+    "replaces": "לא נמצאו תוצאות עבור \"$query\""
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_FacetRow": {
+  "addProps": [
+   {
+    "name": "tplCountMwxry1",
+    "type": "String",
+    "replaces": "$count מוצרים"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_ProductsHeader": {
+  "addProps": [
+   {
+    "name": "t19",
+    "type": "String",
+    "replaces": "מוצרים"
+   },
+   {
+    "name": "t20",
+    "type": "String",
+    "replaces": "מיון לפי"
+   }
+  ],
+  "note": ""
+ },
+ "_TreeComingSoon": {
+  "addProps": [
+   {
+    "name": "t21",
+    "type": "String",
+    "replaces": "בקרוב"
+   },
+   {
+    "name": "t22",
+    "type": "String",
+    "replaces": "הקטגוריה הזו בבנייה — תת-קטגוריות ומוצרים יתווספו בקרוב."
+   }
+  ],
+  "note": ""
+ },
+ "_SmartTreeCatList": {
+  "addProps": [
+   {
+    "name": "brzyWkywry1",
+    "type": "String",
+    "replaces": "ברזים וכיורים"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "🚰"
+   },
+   {
+    "name": "aslwt3",
+    "type": "String",
+    "replaces": "אסלות"
+   },
+   {
+    "name": "txt4",
+    "type": "String",
+    "replaces": "🚽"
+   },
+   {
+    "name": "mqljwtWambtywt5",
+    "type": "String",
+    "replaces": "מקלחות ואמבטיות"
+   },
+   {
+    "name": "txt6",
+    "type": "String",
+    "replaces": "🚿"
+   },
+   {
+    "name": "jymwMy7",
+    "type": "String",
+    "replaces": "חימום מים"
+   },
+   {
+    "name": "mtbj8",
+    "type": "String",
+    "replaces": "מטבח"
+   },
+   {
+    "name": "txt9",
+    "type": "String",
+    "replaces": "🍽️"
+   },
+   {
+    "name": "nyqwzWxnrt10",
+    "type": "String",
+    "replaces": "ניקוז וצנרת"
+   },
+   {
+    "name": "txt11",
+    "type": "String",
+    "replaces": "🕳️"
+   },
+   {
+    "name": "gwfyTbrwah12",
+    "type": "String",
+    "replaces": "גופי תברואה"
+   },
+   {
+    "name": "txt13",
+    "type": "String",
+    "replaces": "🚾"
+   },
+   {
+    "name": "bnyyhWmjyxwt14",
+    "type": "String",
+    "replaces": "בנייה ומחיצות"
+   },
+   {
+    "name": "txt15",
+    "type": "String",
+    "replaces": "🧱"
+   },
+   {
+    "name": "gmr16",
+    "type": "String",
+    "replaces": "גמר"
+   },
+   {
+    "name": "txt17",
+    "type": "String",
+    "replaces": "🎨"
+   },
+   {
+    "name": "abyzryQxhWjybwry18",
+    "type": "String",
+    "replaces": "אביזרי קצה וחיבורים"
+   },
+   {
+    "name": "txt19",
+    "type": "String",
+    "replaces": "🔗"
+   },
+   {
+    "name": "txt20",
+    "type": "String",
+    "replaces": "📦"
+   },
+   {
+    "name": "tplCountMwxryBe21",
+    "type": "String",
+    "replaces": "$count מוצרים בעץ"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_SavedVersionChip": {
+  "addProps": [
+   {
+    "name": "teyntGrshHjl1",
+    "type": "String",
+    "replaces": "טעינת גרסה — החלף למותג השמור"
+   },
+   {
+    "name": "tplTeGrshLabel2",
+    "type": "String",
+    "replaces": "טען גרסה $label"
+   },
+   {
+    "name": "mjqGrsh3",
+    "type": "String",
+    "replaces": "מחק גרסה"
+   },
+   {
+    "name": "tplMjqGrshLabel4",
+    "type": "String",
+    "replaces": "מחק גרסה $label"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_AccRow": {
+  "addProps": [
+   {
+    "name": "mydeElHabyzr1",
+    "type": "String",
+    "replaces": "מידע על האביזר"
+   },
+   {
+    "name": "lfySfq2",
+    "type": "String",
+    "replaces": "לפי ספק"
+   }
+  ],
+  "note": ""
+ },
+ "_MiniQtyBtn": {
+  "addProps": [
+   {
+    "name": "hwsKmwt1",
+    "type": "String",
+    "replaces": "הוסף כמות"
+   },
+   {
+    "name": "hfjtKmwt2",
+    "type": "String",
+    "replaces": "הפחת כמות"
+   }
+  ],
+  "note": ""
+ },
+ "_FavoritesSection": {
+  "addProps": [
+   {
+    "name": "mwedfy1",
+    "type": "String",
+    "replaces": "מועדפים"
+   },
+   {
+    "name": "tplProductslengthMwedfy2",
+    "type": "String",
+    "replaces": "${products.length} מועדפים"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_RecentSearchesSection": {
+  "addProps": [
+   {
+    "name": "clearAll",
+    "type": "String",
+    "replaces": "נקה הכל"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "🕐"
+   },
+   {
+    "name": "jyfwcyAjrwny3",
+    "type": "String",
+    "replaces": "חיפושים אחרונים"
+   },
+   {
+    "name": "tplItemslengthJyfwcyAjrw4",
+    "type": "String",
+    "replaces": "${items.length} חיפושים אחרונים"
+   },
+   {
+    "name": "nyqwyKlHjyfwcy5",
+    "type": "String",
+    "replaces": "ניקוי כל החיפושים?"
+   },
+   {
+    "name": "klHystwryytHjyfwcy6",
+    "type": "String",
+    "replaces": "כל היסטוריית החיפושים תימחק."
+   },
+   {
+    "name": "hsr7",
+    "type": "String",
+    "replaces": "הסר"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_VariantsSection": {
+  "addProps": [
+   {
+    "name": "t40",
+    "type": "String",
+    "replaces": "אין משפחות וריאנטים"
+   },
+   {
+    "name": "laMswwg2",
+    "type": "String",
+    "replaces": "(לא מסווג)"
+   },
+   {
+    "name": "tplFamilieslengthMcfjwtWr3",
+    "type": "String",
+    "replaces": "${families.length} משפחות וריאנטים"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_SizeSortAxisRow": {
+  "addProps": [
+   {
+    "name": "t41",
+    "type": "String",
+    "replaces": "מיון לפי:"
+   }
+  ],
+  "note": ""
+ },
+ "_VariantFamilyView": {
+  "addProps": [
+   {
+    "name": "jzrh1",
+    "type": "String",
+    "replaces": "חזרה"
+   },
+   {
+    "name": "tplFamilycountWryantyKAt2",
+    "type": "String",
+    "replaces": "${family.count} וריאנטים · ${kAttrKindLabel[family.kind]} שונה · [${family.categoryHe} / ${family.brand}]"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_CompanyCatalogImportCard": {
+  "addProps": [
+   {
+    "name": "teyntQtlwgHjbrh1",
+    "type": "String",
+    "replaces": "📦 טעינת קטלוג החברה"
+   },
+   {
+    "name": "tplNtenwResolvedCatalogPro2",
+    "type": "String",
+    "replaces": "נטענו ${resolvedCatalogProducts.length} מוצרים"
+   },
+   {
+    "name": "hwrydwTbnytMlaw3",
+    "type": "String",
+    "replaces": "הורידו תבנית, מלאו והעלו — והאפליקציה תעבוד על הקטלוג שלכם"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

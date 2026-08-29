@@ -1,0 +1,107 @@
+{
+ "TradeBuilderHomeScreen": {
+  "addProps": [
+   {
+    "name": "title",
+    "type": "String",
+    "replaces": "🏗️ בונה ענפים"
+   },
+   {
+    "name": "hmcLhgdrtHjbrh2",
+    "type": "String",
+    "replaces": "המשך להגדרת החברה"
+   },
+   {
+    "name": "hmcLhgdrtHjbrh3",
+    "type": "String",
+    "replaces": "המשך להגדרת החברה ←"
+   }
+  ],
+  "note": ""
+ },
+ "_WizardHeader": {
+  "addProps": [
+   {
+    "name": "t01",
+    "type": "String",
+    "replaces": "שלב 1 מתוך 6"
+   },
+   {
+    "name": "t02",
+    "type": "String",
+    "replaces": "הגדרת הענף"
+   },
+   {
+    "name": "tplAcBnyytEn3",
+    "type": "String",
+    "replaces": "אשף בניית ענף — שלב $_kWizardStep מתוך $_kWizardTotal"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_EmptyTrades": {
+  "addProps": [
+   {
+    "name": "empty",
+    "type": "String",
+    "replaces": "עדיין אין ענפים — הוסף את הראשון"
+   },
+   {
+    "name": "txt2",
+    "type": "String",
+    "replaces": "🧱"
+   }
+  ],
+  "note": ""
+ },
+ "_TradeTile": {
+  "addProps": [
+   {
+    "name": "fwrs1",
+    "type": "String",
+    "replaces": "פורסם"
+   },
+   {
+    "name": "tywth2",
+    "type": "String",
+    "replaces": "טיוטה"
+   },
+   {
+    "name": "frs3",
+    "type": "String",
+    "replaces": "פרסם"
+   },
+   {
+    "name": "txt4",
+    "type": "String",
+    "replaces": "🚀"
+   }
+  ],
+  "note": ""
+ },
+ "_StatusChip": {
+  "addProps": [
+   {
+    "name": "fwrs1",
+    "type": "String",
+    "replaces": "פורסם"
+   },
+   {
+    "name": "tywth2",
+    "type": "String",
+    "replaces": "טיוטה"
+   }
+  ],
+  "note": ""
+ },
+ "_AddTradeButton": {
+  "addProps": [
+   {
+    "name": "add",
+    "type": "String",
+    "replaces": "הוסף ענף"
+   }
+  ],
+  "note": ""
+ }
+}

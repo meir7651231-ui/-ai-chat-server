@@ -1,0 +1,68 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__card_keyboard__card_engine.dart",
+ "lines": 463,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "אפשרות",
+  "גודל"
+ ],
+ "icons": [],
+ "glyphs": [],
+ "logicCandidates": [
+  {
+   "name": "softTilt",
+   "line": 396
+  },
+  {
+   "name": "_scoreAxis",
+   "line": 421
+  },
+  {
+   "name": "distinctCardCount",
+   "line": 434
+  },
+  {
+   "name": "representativeTake",
+   "line": 452
+  },
+  {
+   "name": "SignalChip",
+   "line": 51,
+   "kind": "metrics-class"
+  },
+  {
+   "name": "_AxisScore",
+   "line": 256,
+   "kind": "metrics-class"
+  }
+ ],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kCardKeyboardFlag",
+  "kCensusMemoEnabled",
+  "kFirstQuestion",
+  "kFirstWordCount",
+  "kMaxDiveTurns",
+  "kMergedAxisFloor",
+  "kMergedAxisMaxPerAxis",
+  "kMergedKeyCap",
+  "kShowProductsCap",
+  "kShowProductsThreshold",
+  "kSmartProducts"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

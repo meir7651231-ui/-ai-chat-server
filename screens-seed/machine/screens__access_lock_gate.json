@@ -1,0 +1,58 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__access_lock_gate.dart",
+ "lines": 192,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [
+   20
+  ],
+  "fontWeights": [
+   "FontWeight.bold"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   56
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  "הזן סיסמת גישה",
+  "כניסה",
+  "סיסמה",
+  "סיסמה שגויה"
+ ],
+ "icons": [
+  "Icons.key_outlined",
+  "Icons.lock_outline"
+ ],
+ "glyphs": [],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "AccessLockGate",
+   "kind": "ConsumerStatefulWidget",
+   "line": 35,
+   "loc": 8,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kAccessCachedHashKey",
+  "kAccessLock",
+  "kAccessUnlockedKey"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

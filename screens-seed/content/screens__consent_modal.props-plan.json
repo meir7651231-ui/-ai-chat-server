@@ -1,0 +1,47 @@
+{
+ "_ConsentDialog": {
+  "addProps": [
+   {
+    "name": "t01",
+    "type": "String",
+    "replaces": "שיפור השירות — נתוני שימוש"
+   },
+   {
+    "name": "t02",
+    "type": "String",
+    "replaces": "כדי לשפר את השירות נוכל לאסוף נתוני שימוש מצומצמים ולא-מזהים. "
+   },
+   {
+    "name": "t03",
+    "type": "String",
+    "replaces": "קראו את מדיניות הפרטיות המלאה"
+   },
+   {
+    "name": "t04",
+    "type": "String",
+    "replaces": "לא עכשיו"
+   },
+   {
+    "name": "t05",
+    "type": "String",
+    "replaces": "אני מסכים"
+   },
+   {
+    "name": "bryrthmjdlKbwyhCw6",
+    "type": "String",
+    "replaces": "ברירת-המחדל כבויה — שום נתון לא נשלח ללא הסכמתך. הנתונים נאספים "
+   },
+   {
+    "name": "bmkcyrWmcwdryAlynw7",
+    "type": "String",
+    "replaces": "במכשירך, ומשודרים אלינו רק לאחר הסכמתך המדעת. ניתן למשוך את "
+   },
+   {
+    "name": "hhskmhWljzwrLmxb8",
+    "type": "String",
+    "replaces": "ההסכמה ולחזור למצב הכבוי בכל עת בהגדרות › פרטיות."
+   }
+  ],
+  "note": ""
+ }
+}

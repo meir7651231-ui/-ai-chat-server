@@ -1,0 +1,51 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__catalog_config__variant_image.dart",
+ "lines": 148,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "ברך",
+  "ברך 90°",
+  "יציאות",
+  "מחלק",
+  "סעפת"
+ ],
+ "icons": [],
+ "glyphs": [],
+ "logicCandidates": [
+  {
+   "name": "_isManifold",
+   "line": 36
+  },
+  {
+   "name": "_inFamily",
+   "line": 42
+  },
+  {
+   "name": "_familyAngle",
+   "line": 49
+  },
+  {
+   "name": "_derivedValue",
+   "line": 61
+  }
+ ],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kCatalogConfig"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

@@ -1,0 +1,183 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__courier_certs_screen.dart",
+ "lines": 770,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.danger",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5",
+   "BsTokens.successDark",
+   "BsTokens.warnText"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   11.5,
+   12,
+   12.5,
+   13,
+   13.5,
+   14,
+   14.5,
+   15,
+   16
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   18
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  "\"${cert.name}\" תימחק מהארנק לצמיתות.",
+  ";\n\n/// 🪪 תעודות נהג (#86.4 · F-17) — the courier",
+  ";\n// CAM-cluster seam (#85ב): `pickTaskPhoto()` → data-URL String, or an honest\n// null on cancel/failure (no fake placeholder ever).\nimport ",
+  "אין תעודות בארנק עדיין — הוסף את הראשונה.",
+  "בתוקף",
+  "בתוקף עד",
+  "בתוקף עד ${_fmtDate(cert.expiry)}",
+  "בתוקף עד ${_fmtDate(expiry!)}",
+  "הוסף תעודה",
+  "הוספת תעודה",
+  "הסר",
+  "הסר צילום",
+  "הצג צילום תעודה במסך מלא",
+  "הקשה על התמונה פותחת את צילום-התעודה במסך מלא.",
+  "התמונה גדולה מדי — לא נשמרה",
+  "התעודה נמחקה",
+  "מוחק את התעודה מהארנק לצמיתות (עם דיאלוג אישור).",
+  "מחיקת תעודה",
+  "מחיקת תעודה?",
+  "מחק",
+  "מחק תעודה",
+  "מילוי מהיר — ממלא את שם התעודה בלבד:",
+  "מנפיק (למשל: משרד הרישוי)",
+  "נא לבחור תוקף",
+  "נא למלא מנפיק",
+  "נא למלא שם תעודה",
+  "סגור",
+  "פג בקרוב",
+  "פג תוקף",
+  "פותח את גיליון הוספת תעודת-נהג — שם, מנפיק, תוקף וצילום אופציונלי.",
+  "צפייה בצילום התעודה",
+  "שם התעודה (למשל: רישיון נהיגה)",
+  "שמור תעודה",
+  "➕ הוסף תעודה",
+  "💾 שמור תעודה",
+  "📷 צילום צורף ✓",
+  "📷 צרף צילום תעודה (לא חובה)",
+  "🪪 הוספת תעודה",
+  "🪪 התעודה נשמרה בארנק",
+  "🪪 תעודות נהג",
+  "🪪 תעודות נהג (${certs.length})"
+ ],
+ "icons": [
+  "Icons.close",
+  "Icons.delete_outline"
+ ],
+ "glyphs": [
+  "✓",
+  "➕",
+  "💾",
+  "📅",
+  "📷",
+  "🔒",
+  "🪪"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "CourierCertsScreen",
+   "kind": "ConsumerWidget",
+   "line": 31,
+   "loc": 438,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "boardAuthProvider",
+    "courierCertsProvider"
+   ],
+   "writes": [
+    "courierCertsProvider"
+   ],
+   "actions": [
+    "call:showModalBottomSheet",
+    "nav:CourierCertsScreen",
+    "fx:toast"
+   ],
+   "strings": 23,
+   "constData": 1
+  },
+  {
+   "name": "_PresetChip",
+   "kind": "StatelessWidget",
+   "line": 471,
+   "loc": 48,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_CertsCard",
+   "kind": "StatelessWidget",
+   "line": 522,
+   "loc": 92,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 6,
+   "constData": 1
+  },
+  {
+   "name": "_CertRow",
+   "kind": "StatelessWidget",
+   "line": 619,
+   "loc": 149,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 10,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kCourierCertPresets"
+ ],
+ "board": {
+  "reads": [
+   "boardAuthProvider",
+   "courierCertsProvider"
+  ],
+  "writes": [
+   "courierCertsProvider"
+  ],
+  "navsAndCalls": [
+   "call:showModalBottomSheet",
+   "fx:toast",
+   "nav:CourierCertsScreen"
+  ]
+ }
+}

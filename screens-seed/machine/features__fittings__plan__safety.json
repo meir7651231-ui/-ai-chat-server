@@ -1,0 +1,49 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__fittings__plan__safety.dart",
+ "lines": 85,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  " show immutable;\n\n/// סף קו-חם (°C) — זהה ל-`install_engine._kHotThresholdC`.\nconst int kHotLineThresholdC = 60;\n\n/// אזהרת-החובה (M5) — נלווית לכל המלצת-בטיחות, verbatim בכל פריט.\nconst String kSafetyCaveat =\n    ",
+  "PP-R מתפשט משמעותית יותר ממתכת בחום — לולאת/מפרק-התפשטות ותמיכות מתאימות.",
+  "` **וגם**\n  // `",
+  "` יזוהה כ-PP-R.\n  if (!material.replaceAll(",
+  "` — וה-faser הוא\n  // בדיוק צינור-הקו-החם. `==` היה משמיט בטיחות מקו-חם אמיתי (under-warning · תיקון\n  // מביקורת-היריב). המקף מנורמל כדי ש-`",
+  "בידוד תרמי",
+  "כלי-התפשטות (מיכל)",
+  "מגן אנטי-כוויה (TMV)",
+  "מוסמך בלבד, לפי התקן והקוד המקומי (ISO 15874 · DVS 2207-11).",
+  "מים ≥60°C — סיכון-כוויה בנקודות-השימוש; ברז-ערבוב תרמוסטטי.",
+  "פיצוי התפשטות-תרמית של הצינור",
+  "קו-אספקה חם ולחוץ — הגנה מפני עליית-לחץ עם החימום.",
+  "קו-חם סגור — נפח-המים גדל בחימום; מיכל-התפשטות סופג את העלייה.",
+  "קו-חם — הפחתת הפסדי-חום + מניעת כוויית-מגע במשטח החם.",
+  "שסתום ביטחון-לחץ (PRV)"
+ ],
+ "icons": [],
+ "glyphs": [
+  "⚠",
+  "🔌",
+  "🛡"
+ ],
+ "logicCandidates": [],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kHotLineThresholdC",
+  "kSafetyCaveat"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

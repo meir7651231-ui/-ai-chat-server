@@ -1,0 +1,37 @@
+{
+ "LinePressureScreen": {
+  "addProps": [
+   {
+    "name": "nfyltljPreviewOfflive1",
+    "type": "String",
+    "replaces": "נפילת-לחץ · preview (off-live)"
+   },
+   {
+    "name": "tplKrtotalKtoStringAsFixed22",
+    "type": "String",
+    "replaces": "K=${r.totalK.toStringAsFixed(2)} · אורך=${r.frictionMetres.toStringAsFixed(1)}מ׳ · "
+   },
+   {
+    "name": "tplQdjmynxrminBoreMmtoStrin3",
+    "type": "String",
+    "replaces": "קדח-מינ׳=${r.minBoreMm.toStringAsFixed(1)}מ״מ"
+   },
+   {
+    "name": "tplXwwarbqbwqRbottleneckna4",
+    "type": "String",
+    "replaces": "צוואר-בקבוק: ${r.bottleneck!.nameHe}"
+   },
+   {
+    "name": "hxewt5",
+    "type": "String",
+    "replaces": "הצעות"
+   },
+   {
+    "name": "ayHerwtzrymhHqw6",
+    "type": "String",
+    "replaces": "אין הערות-זרימה — הקו בתקציב."
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

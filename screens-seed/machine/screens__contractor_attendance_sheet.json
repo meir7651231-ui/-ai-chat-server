@@ -1,0 +1,135 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__contractor_attendance_sheet.dart",
+ "lines": 375,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brandDark",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5",
+   "BsTokens.successDark"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   12.5,
+   13,
+   13.5,
+   14,
+   16,
+   18
+  ],
+  "fontWeights": [
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "${_fmtDur(worked)} שעות",
+  "${day.username} — מיקום כניסה",
+  ",\n              child: _LocationPill(day: day),\n            ),\n          ],\n        ],\n      ),\n    );\n  }\n}\n\n/// One \"היום\" row — `🦺 username` + the day",
+  "s\n// on-site now and who has a record today; they do NOT edit attendance (the\n// worker owns their own clock-in/out, worker_attendance_screen.dart).\n//\n// Two sections:\n//   🟢 נוכחים עכשיו — the OPEN days (`clockedInNow`): clocked in, not out, today.\n//   היום           — every worker WITH a record today (open or closed shifts).\n//\n// HONEST by construction: only data that exists is shown. A still-open shift",
+  "אין נוכחות רשומה היום",
+  "אין עובדים מחותמים כרגע",
+  "היום",
+  "יציאה ${outTs == null ? ",
+  "כניסה ${_fmtTime(inTs)}",
+  "כניסה ${inTs == null ? ",
+  "כניסה —",
+  "מי מהעובדים שלך מחותם כרגע ומי נכח היום (לצפייה בלבד)",
+  "מיקום הכניסה — פתח ניווט",
+  "סגור",
+  "🕒 נוכחות עובדים",
+  "🟢 נוכחים עכשיו (${present.length})"
+ ],
+ "icons": [
+  "Icons.close",
+  "Icons.navigation_outlined",
+  "Icons.place"
+ ],
+ "glyphs": [
+  "✕",
+  "📍",
+  "🕒",
+  "🟢",
+  "🦺"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "_ContractorAttendanceSheet",
+   "kind": "ConsumerWidget",
+   "line": 44,
+   "loc": 147,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 7,
+   "constData": 0
+  },
+  {
+   "name": "_PresentRow",
+   "kind": "StatelessWidget",
+   "line": 195,
+   "loc": 56,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  },
+  {
+   "name": "_TodayRow",
+   "kind": "StatelessWidget",
+   "line": 256,
+   "loc": 55,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 3,
+   "constData": 0
+  },
+  {
+   "name": "_LocationPill",
+   "kind": "StatelessWidget",
+   "line": 316,
+   "loc": 47,
+   "pure": false,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [
+    "call:openNavSheet"
+   ],
+   "strings": 2,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kDemoContractorId"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": [
+   "call:openNavSheet"
+  ]
+ }
+}

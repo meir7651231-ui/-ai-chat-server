@@ -1,0 +1,146 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__word_finder__word_finder_screen.dart",
+ "lines": 1745,
+ "pigments": {
+  "tokens": [
+   "BsTokens.inkLight",
+   "BsTokens.space1",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.surfaceMid"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   13,
+   14,
+   15,
+   16,
+   18,
+   20
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  " key opens the \"מה מתחבר לזה\" view for the reached\n    // anchor (the representative the affordance was offered for). The connect key\n    // carries the literal ",
+  "(אין בקטלוג)",
+  "` — open the \"מה מתחבר לזה\" connections view;\n  ///  • `",
+  "name (אין בקטלוג)",
+  "s\n  /// heavy Riverpod deps (the same pattern as [currentQuestion]).\n  @visibleForTesting\n  List<LipskeyCatalogProduct> get connectionsShown {\n    final a = _connectionsAnchor;\n    return a == null ? const [] : connectionsFor(a);\n  }\n\n  /// @visibleForTesting — true while the connections view is active.\n  @visibleForTesting\n  bool get connectionsViewOpen => _connectionsAnchor != null;\n\n  /// @visibleForTesting — drive the \"מה מתחבר לזה\" entry directly (the affordance\n  /// is only rendered inside the ShowProducts keyboard, so a test reaches it\n  /// through this rather than synthesising a key tap).\n  @visibleForTesting\n  void showConnectionsForTest(LipskeyCatalogProduct anchor) =>\n      _showConnections(anchor);\n\n  /// @visibleForTesting — resolve a tapped product key against a supplied\n  /// [products] list using the SAME sku-keyed lookup the live [_onWordTap]\n  /// product branch uses ([_resolveBySku]). Lets a behavioral test seed a list\n  /// where two DISTINCT cards share a plain-word label and prove the tap reaches\n  /// the product by its unique sku payload — tapping the SECOND of a same-label\n  /// pair resolves to the SECOND product, not the first (the label-match bug\n  /// this fix removes). Routes through the one shared helper, so it cannot drift\n  /// from production resolution.\n  @visibleForTesting\n  LipskeyCatalogProduct? resolveTappedProductForTest(\n    List<LipskeyCatalogProduct> products,\n    WordKey key,\n  ) =>\n      _resolveBySku(products, key.payload);\n\n  /// Plain display label for a product key in a [ShowProducts] grid (and the\n  /// connections view) — the SHORT plain word `quickLabel(p)`, NOT the full\n  /// technical `nameHe` (full jargon violates the simplify-to-words vision; the\n  /// quick pad already buckets by this same derived word). NO icon (rendered via\n  /// the same icon-free `BsKey` idiom as word/chip keys).\n  ///\n  /// The label is display-only and intentionally NOT unique — two distinct skus\n  /// can share a plain word (e.g. ",
+  "s\n  /// product + alternatives, the SAME list `distinctSelectionLabels` labelled)\n  /// and open the existing product sheet with that list as its category context —\n  /// the SAME sku-keyed add-path the ShowProducts / connections terminus uses, so\n  /// the kit view adds NO new cart route. A no-op when the sku is not in\n  /// [contextList] (defensive — payload/state drift) or when the sheet is\n  /// suppressed in a behavioral test ([openSheetOnResolve] false).\n  void _onKitProductTap(WordKey key, List<LipskeyCatalogProduct> contextList) {\n    final picked = _resolveBySku(contextList, key.payload);\n    if (picked == null) return; // defensive — payload/state drift\n    if (openSheetOnResolve) {\n      showLipskeyProductSheet(context, picked, contextList);\n    }\n  }\n\n  /// `הכל` — skip the current axis (no narrowing). A genuine no-op for now: the\n  /// engine offers the best splitting axis, and \"all\" means \"don",
+  "s [_popStep] directly.\n  /// The `חזרה` control is hidden once the stack is empty, so a test that wants\n  /// to prove \"popping at an empty stack is a safe no-op\" cannot tap a button;\n  /// it calls this instead.\n  @visibleForTesting\n  void popStepForTest() => _popStep();\n\n  /// Reset every SUB-VIEW flag to closed in ONE place, so the [_subViewOpen]\n  /// sibling set (kit / connections / jobs) cannot drift: any new sub-view that\n  /// ORs into [_subViewOpen] adds its reset here once, and every full dive-reset\n  /// path ([_restart], [_submitQuery]) clears the whole set together. Field-only\n  /// (no setState) — callers already wrap their own setState.\n  void _resetSubViews() {\n    _kitRecipe = null;\n    _connectionsAnchor = null;\n    _jobsOpen = false;\n  }\n\n  /// Clear the whole dive — every answered step and any typed-query rank\n  /// context — back to the opening word question. Used by the empty-pool\n  /// empty-state",
+  "s `הקלדה` key reveals the real [BsKeyboard]\n// over a [TextField]; on submit the stack is cleared and the pool is re-seeded\n// by a catalog text query (`catalogProductMatchesQuery`). Typing is the escape\n// hatch only — the happy path is word → chip taps.\n\nimport ",
+  "s pool. Non-null only while\n  /// [_material] is set. Built ONCE when the material is PICKED (in the tap\n  /// handler / [pickMaterialForTest]) — NOT inside a getter/build: a fresh\n  /// `buildWordLexicon` over 111–774 products on every frame would jank. Cleared\n  /// (set null) whenever the material is cleared. The active-lexicon helper\n  /// ([_activeLexicon]) reads it so both [currentQuestion] and the tapped-noun\n  /// [resolveWord] resolve WITHIN the material pool.\n  WordLexicon? _materialLexicon;\n\n  /// Jobs-first entry (\"לפי עבודה\") view-state. False (default) → the opening\n  /// shows the ",
+  "s predicate holds.\n  final List<NewbieStep> stack = <NewbieStep>[];\n\n  /// Emergency typing controller. Non-null only while the `הקלדה` surface is\n  /// open; the real [BsKeyboard] inserts into it and submit re-seeds the pool.\n  TextEditingController? _typeController;\n\n  /// The active emergency-typed query, set by [_submitQuery]. Non-null only\n  /// while the dive is seeded by a typed query; it makes [_pool] rank the\n  /// re-seeded products DESCENDING by `searchRelevance`, so the most relevant\n  /// product is `pool.first` (what a [Resolve] returns / a list would show\n  /// first). Cleared whenever the stack is reset back to the word path.\n  // OWNER-REVIEW: ranking the typed-query pool by searchRelevance is a\n  // reversible default — drop this field (and the sort in `_pool`) to fall\n  // back to plain base-pool order.\n  String? _typedQuery;\n\n  /// 7th engine (\"מה מתחבר לזה\" / connection-planner) view-state. Non-null only\n  /// while the user is viewing the parts that connect to a reached anchor: it\n  /// holds the anchor whose connections are shown. When set, the keyboard area\n  /// renders the compatible parts (from [connectionsFor]) as plain product-keys\n  /// instead of the word/chip keyboard; tapping one opens the existing product\n  /// sheet (the same add-path as a reached product). Cleared by the back key and\n  /// by any dive reset. This is the MINIMAL surface — the polished anchor UX is\n  /// an OWNER-design decision (see the // OWNER-REVIEW affordance below).\n  LipskeyCatalogProduct? _connectionsAnchor;\n\n  /// 6th engine (\"מתכון העבודה\" / work-recipe) view-state. Non-null only while\n  /// the user is viewing the assembled KIT for a reached WORK-product: it holds\n  /// the [SmartProduct] recipe whose kit is shown. When set, the keyboard area\n  /// renders the per-accessory kit (from [assembleKit]) — each resolved line as\n  /// a product-key with its recommended product + collapsible alternatives, each\n  /// unmatched line as plain text — instead of the word/chip keyboard. Tapping a\n  /// product key opens the existing product sheet (the same add-path as a reached\n  /// product / connections part). Cleared by the back key and by any dive reset.\n  /// Mirrors [_connectionsAnchor] exactly; the polished kit UX is an OWNER-design\n  /// decision (see the // OWNER-REVIEW affordances below).\n  SmartProduct? _kitRecipe;\n\n  /// Opening word-list expansion. False (default) → the opening [AskWords] shows\n  /// only the top [kFirstWordCount] words by frequency plus a [kMoreWordsKey]\n  /// (",
+  "s scroll region only\n              // via this Column child (they are short, so they sit above the\n              // Expanded keyboard region).\n              if (showMaterialRow) _buildMaterialRow(),\n              if (showMaterialClear) _buildMaterialClear(),\n\n              // ── Jobs-first entry (\"לפי עבודה\") opening affordance ─────────\n              // Beside the material controls at the opening: a single icon-free\n              // key that opens the JOB LIST (the discoverable way into the recipe\n              // kit). Like the material row it is short and sits above the\n              // Expanded keyboard region; it renders ONLY at the opening (the\n              // showJobsEntry gate), and the list it opens then REPLACES the\n              // cascade keyboard in the Expanded region below.\n              if (showJobsEntry) _buildJobsEntry(),\n\n              // #ai-finder — opening affordance: a free-text \"תאר → מצא\" entry\n              // (Claude narrows the catalog by category). Same opening gate as\n              // the jobs/material affordances.\n              if (showJobsEntry) _buildAiFinderEntry(),\n\n              // The key region SCROLLS when its grid is taller than the\n              // viewport — a well-connected connections anchor (uncapped) or a\n              // full 24-word / 30-product grid on a short phone. The old\n              // `const Spacer()` + a non-scrolling Column threw a RenderFlex\n              // overflow (and crashed) on a normal-height device; the canonical\n              // audit caught it (the screen test masked it at 1080x2400).\n              // Expanded takes the remaining height; SingleChildScrollView lets\n              // the content exceed it gracefully.\n              Expanded(\n                child: SingleChildScrollView(\n                  child: _kitRecipe != null\n                      // ── 6th engine: work-recipe kit view (when open) ──────\n                      // Highest priority — a user inside the kit is deeper than\n                      // the connections / typing surfaces. Captured into a local\n                      // for null promotion.\n                      ? _buildKitView(_kitRecipe!)\n                      : _connectionsAnchor != null\n                      // ── 7th engine: connections view (when open) ──────────\n                      ? _buildConnectionsView()\n                      : _jobsOpen\n                          // ── Jobs-first entry: the JOB LIST (when open) ────\n                          // Below the kit/connections views (a job tap OPENS the\n                          // kit on top, and closing the kit returns here while the\n                          // list stays open), above the cascade — while open it\n                          // REPLACES the word keyboard, so the opening still has\n                          // exactly one WordKeyboard (zero while the list shows).\n                          ? _buildJobsView()\n                          : showEmptyState\n                          // ── Empty-pool dead-end → neutral empty-state ─────\n                          ? _buildEmptyState()\n                          : _typeController != null\n                              // ── Emergency typing surface (`הקלדה`) ────────\n                              ? Column(\n                                  mainAxisSize: MainAxisSize.min,\n                                  children: [\n                                    Padding(\n                                      padding: const EdgeInsets.symmetric(\n                                          horizontal: BsTokens.space2,\n                                          vertical: BsTokens.space1),\n                                      child: TextField(\n                                        controller: _typeController,\n                                        textDirection: TextDirection.rtl,\n                                        decoration: const InputDecoration(\n                                          hintText: ",
+  "s unique `.key` as its payload (the\n/// SAME sku-keyed-resolution philosophy the product keys use — resolve by a\n/// stable id, never by the display label), and this index resolves it back to\n/// the [SmartProduct] whose kit [_WordFinderScreenState._showKit] will show.\nfinal Map<String, SmartProduct> kJobByKey = {\n  for (final r in kSmartProducts) r.key: r,\n};\n\n// ── 6th engine (work-recipe / \"מתכון העבודה\") view-only copy ────────────────\n//\n// These three strings are the ONLY display copy the kit view adds. They live\n// here (not in the engine) because they are pure VIEW text — the same place\n// `_buildEmptyState` keeps its copy. All three are OWNER-REVIEW: reword freely;\n// the kit LOGIC (assembleKit / KitMatch) is untouched by a copy change.\n\n/// OWNER-REVIEW: the icon-free key that, on a reached WORK-product, builds and\n/// shows its recommended kit. Rendered via the same BsKey letter idiom as every\n/// other word/chip key (no icon).\nconst String kBuildKitKey = ",
+  "t reach without typing —\n/// `ניפל`, `רקורד`, `בושינג`). Tapping it shows EVERY lexicon word.\nconst String kMoreWordsKey = ",
+  "אטם דו צדדי",
+  "איזו עבודה?",
+  "אין בקטלוג",
+  "אפשרות",
+  "בנה לי את\n        // הערכה",
+  "בנה לי את\n  /// הערכה",
+  "בנה לי את הערכה",
+  "גודל",
+  "דגם",
+  "הקלדה",
+  "התחל מחדש",
+  "ונטיל",
+  "זווית",
+  "חזרה",
+  "חיפוש",
+  "כל החומרים",
+  "לא נמצא מוצר מתאים — נסה שוב",
+  "לא נמצאו תוצאות",
+  "לפי חומר",
+  "לפי עבודה",
+  "מה מתחבר לזה?",
+  "מוצר מתאים",
+  "נחושת",
+  "נחושת · ניפל · 1/2\"",
+  "נסה",
+  "נסו",
+  "עוד אפשרויות",
+  "עוד אפשרויות (3)",
+  "עוד אפשרויות (N)",
+  "עוד…",
+  "פחות",
+  "צבע",
+  "תאר במילים שלך → חיפוש חכם",
+  "תוצאות"
+ ],
+ "icons": [
+  "Icons.arrow_forward"
+ ],
+ "glyphs": [
+  "🗣"
+ ],
+ "logicCandidates": [
+  {
+   "name": "dispose",
+   "line": 355
+  },
+  {
+   "name": "setState",
+   "line": 769
+  },
+  {
+   "name": "setState",
+   "line": 873
+  }
+ ],
+ "widgets": [
+  {
+   "name": "WordFinderScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 164,
+   "loc": 11,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kAllMaterials",
+  "kBuildKitKey",
+  "kByJobLabel",
+  "kByMaterialLabel",
+  "kConnectionsHeader",
+  "kConnectionsKey",
+  "kDivePool",
+  "kFewerWordsKey",
+  "kFirstWordCount",
+  "kJobByKey",
+  "kJobsByName",
+  "kJobsHeader",
+  "kKitMoreOptions",
+  "kKitNotInCatalog",
+  "kMaterials",
+  "kMaterialsInDivePool",
+  "kMoreWordsKey",
+  "kNoConnections",
+  "kPickProductQuestion",
+  "kSmartProducts",
+  "kWordFinderFlag"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

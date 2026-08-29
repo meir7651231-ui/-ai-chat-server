@@ -1,0 +1,152 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__courier_portal_tab.dart",
+ "lines": 514,
+ "pigments": {
+  "tokens": [
+   "BsTokens.bgLight",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   11.5,
+   12.5,
+   13,
+   13.5,
+   14,
+   19,
+   22
+  ],
+  "fontWeights": [
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   20
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  " · זמינים היום: ${kHaulAvailabilityDemo[h.id] ?? 0}",
+  " → רשימת השיחות של לוח השליח (#75).\n        Navigator.of(context).push(\n          MaterialPageRoute<void>(\n            builder:\n                (_) => const ChatsScreen(\n                  persona: BsRole.courier,\n                  audience: ",
+  "${v.name} · ${v.cap} · ${v.status} · נהג ${v.driver}",
+  "${z.name} · ${z.eta} · משלוח ${fMoney(z.fee)}",
+  "${z.name} · יעד אספקה: ${z.eta}",
+  ")\n//   🚛 צי רכב      → גיליון מקומי: kHaulTypes + זמינות demo (SERVER-SWAP) + kFleet\n//   🗺️ אזורי הפצה  → רשימה מקומית מכתובות המשלוח האמיתיות + kDistZones (בלי מפה — ביושר)\n//   🧭 ניווט למשלוח → SERVER-READY: כרטיס יעד מלא + מצב כן \"יחובר עם חיבור השרת\"\n//   ⏱️ מעקב SLA    → SERVER-READY: פריסת טיימרים + יעדי kDistZones + אותו מצב כן\n//\n// אין המצאות: כל מספר/מחרוזת מגיעים מה-seeds הקיימים או מההזמנות החיות;\n// יכולות תלויות-שרת (ניווט במפות, SLA חי) מוצגות במצב כן — לא כהצלחה מזויפת\n// ולא כ-toast עירום.\n\nimport ",
+  ",\n                      style: const TextStyle(\n                        color: BsTokens.inkLight,\n                        fontSize: 13.5,\n                      ),\n                    ),\n                  ),\n                  // פריסת הטיימר מוכנה — הערך החי מגיע מהשרת (ביושר: ללא זיוף).\n                  const Text(\n                    ",
+  ",\n                ),\n          ),\n        );\n      case PortalKind.fleet:\n        _showFleetSheet(context, tile);\n      case PortalKind.zones:\n        _showZonesSheet(context, tile, active);\n      case PortalKind.nav:\n        _showNavSheet(context, tile, active);\n      case PortalKind.sla:\n        _showSlaSheet(context, tile, active);\n      // ratings/bulk/barcode/autoStock/chatContractor אינם בגריד השליח —\n      // fallback לגיליון המידע הכללי של persona_portal (לא אמור לקרות).\n      case PortalKind.ratings:\n      case PortalKind.bulk:\n      case PortalKind.barcode:\n      case PortalKind.autoStock:\n      case PortalKind.chatContractor:\n        showPortalSheet(context, tile);\n    }\n  }\n\n  // ── 📸 אישור מסירה — PersonaPodSheet עבור המשלוח הפעיל ─────────────────────\n  void _openPod(BuildContext context, List<SysOrder> orders) {\n    // POD רלוונטי רק להזמנות שבידי השליח (pickup/transit) — כמו בכרטיס.\n    final eligible =\n        orders\n            .where(\n              (o) =>\n                  o.stage == OrderStage.pickup || o.stage == OrderStage.transit,\n            )\n            .toList();\n    if (eligible.isEmpty) {\n      // ביושר: אין משלוח פעיל — לא מזייפים POD.\n      _sheet(context, ",
+  ",\n              style: const TextStyle(\n                color: BsTokens.mutedLight,\n                fontSize: 12.5,\n              ),\n            ),\n            const SizedBox(height: BsTokens.space2),\n            // SERVER-READY: הכפתור קיים ומעוצב אך מושבת בכנות — אין שרת ניווט.\n            FilledButton(\n              onPressed: null,\n              style: FilledButton.styleFrom(\n                padding: const EdgeInsets.symmetric(vertical: 10),\n                shape: RoundedRectangleBorder(\n                  borderRadius: BorderRadius.circular(BsTokens.radiusPill),\n                ),\n              ),\n              child: CfgText(\n                ",
+  ",\n          onTap: () {\n            Navigator.of(context).pop();\n            showPodSheet(context, o.id);\n          },\n        ),\n    ]);\n  }\n\n  // ── 🚛 צי רכב — kHaulTypes + זמינות demo + רכבי kFleet ─────────────────────\n  void _showFleetSheet(BuildContext context, PortalTileData tile) {\n    _sheet(context, tile.title, tile.sub, [\n      for (final h in kHaulTypes)\n        _row(\n          // fake-data-sweep: tier + price are real static config (keep, always);\n          // the demo \"זמינים היום\" availability is gated with its label below.\n          ",
+  ",\n        ),\n      // ביושר: הזמינות לעיל היא demo seed (SERVER-SWAP בקובץ זה). מוסתר\n      // ל-Apple review (אין הצגת \"הדגמה\"); הנתונים נשארים. הפיך.\n      if (!kHideUnderConstruction)\n        _note(",
+  ",\n      style: const TextStyle(\n        color: Color(0xFF8A6D00),\n        fontWeight: FontWeight.w700,\n        fontSize: 12.5,\n      ),\n    ),\n  );\n}\n\n/// כרטיס יעד לניווט — UI מלא ומוכן-לשרת; כפתור הניווט מושבת בכנות עד שיש שרת.\nclass _DestinationCard extends StatelessWidget {\n  const _DestinationCard({required this.order});\n  final SysOrder order;\n\n  @override\n  Widget build(BuildContext context) {\n    final haul = haulInfo(order.haul);\n    return Padding(\n      padding: const EdgeInsets.only(bottom: BsTokens.space2),\n      child: Container(\n        width: double.infinity,\n        padding: const EdgeInsets.all(BsTokens.space4),\n        decoration: BoxDecoration(\n          color: Theme.of(context).colorScheme.surface,\n          borderRadius: BorderRadius.circular(BsTokens.radiusCard),\n        ),\n        child: Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: [\n            Text(\n              ",
+  ": 1,\n};\n\n/// טאב הפורטל של לוח השליח (#72 טאב 2) — הגריד של [kCourierPortalTiles]\n/// כטאב קבוע, עם wiring פר-אריח (#74).\nclass CourierPortalTab extends ConsumerWidget {\n  const CourierPortalTab({super.key});\n\n  @override\n  Widget build(BuildContext context, WidgetRef ref) {\n    return ListView(\n      padding: const EdgeInsets.fromLTRB(\n        BsTokens.space4,\n        BsTokens.space4,\n        BsTokens.space4,\n        BsTokens.space5,\n      ),\n      children: [\n        CfgText(\n          ",
+  ";\n\n/// זמינות צי לפי סוג רכב — demo seed להמחשה בלבד (כמה רכבים מכל סוג פנויים\n/// היום). SERVER-SWAP: יוחלף בזמינות חיה ממערכת ניהול הצי עם חיבור השרת.\nconst Map<String, int> kHaulAvailabilityDemo = {\n  ",
+  "POD + צילום",
+  "אזורי הפצה · ניווט למשלוח · מעקב SLA. ",
+  "אזורי שירות",
+  "אין כרגע משלוח בידי השליח — POD זמין משלב האיסוף (לקיחה/בדרך).",
+  "בחר משלוח פעיל",
+  "הקשה על אריח פותחת את הכלי המתאים.",
+  "טיימרי SLA חיים יחוברו עם חיבור השרת",
+  "יעדי אספקה לפי אזור",
+  "כלי הפורטל",
+  "כתובות משלוח פעילות",
+  "משלוחים פעילים",
+  "ניווט חי במפות (Waze / Google Maps) יחובר עם חיבור השרת",
+  "ניווט, צי רכב, צ׳אט ומעקב SLA",
+  "רכבי הצי",
+  "ששת כלי השליח: אישור מסירה · צ׳אט עם החנות · צי רכב · ",
+  "תצוגת מפה חיה תחובר עם חיבור השרת",
+  "✓ אין משלוחים פעילים כרגע",
+  "✓ אין משלוחים פעילים לניווט כרגע",
+  "📸 אישור מסירה",
+  "🧭 פתח ניווט — יחובר עם חיבור השרת",
+  "🧰 פורטל השליח"
+ ],
+ "icons": [
+  "Icons.chevron_left"
+ ],
+ "glyphs": [
+  "✓",
+  "💬",
+  "📍",
+  "📦",
+  "📸",
+  "🔌",
+  "🔒",
+  "🗺",
+  "🚛",
+  "🧭",
+  "🧰"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "CourierPortalTab",
+   "kind": "ConsumerWidget",
+   "line": 40,
+   "loc": 411,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "sysOrdersProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "call:showModalBottomSheet",
+    "call:showPodSheet",
+    "call:showPortalSheet",
+    "nav:ChatsScreen"
+   ],
+   "strings": 29,
+   "constData": 1
+  },
+  {
+   "name": "_DestinationCard",
+   "kind": "StatelessWidget",
+   "line": 453,
+   "loc": 61,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 2,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [
+  "CourierPortalTab"
+ ],
+ "gates": [
+  "kCourierPortalTiles",
+  "kDistZones",
+  "kFleet",
+  "kHaulAvailabilityDemo",
+  "kHaulTypes",
+  "kHideUnderConstruction",
+  "kOrderStageLabel"
+ ],
+ "board": {
+  "reads": [
+   "sysOrdersProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": [
+   "call:showModalBottomSheet",
+   "call:showPodSheet",
+   "call:showPortalSheet",
+   "nav:ChatsScreen"
+  ]
+ }
+}

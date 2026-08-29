@@ -1,0 +1,37 @@
+{
+ "_StudioTabs": {
+  "addProps": [
+   {
+    "name": "txt1",
+    "type": "String",
+    "replaces": "🤖"
+   },
+   {
+    "name": "ewrCfh2",
+    "type": "String",
+    "replaces": "עורך-שפה"
+   },
+   {
+    "name": "txt3",
+    "type": "String",
+    "replaces": "🛠️"
+   },
+   {
+    "name": "bwnhYdny4",
+    "type": "String",
+    "replaces": "בונה ידני"
+   },
+   {
+    "name": "txt5",
+    "type": "String",
+    "replaces": "🔒"
+   },
+   {
+    "name": "klly6",
+    "type": "String",
+    "replaces": "כללים"
+   }
+  ],
+  "note": ""
+ }
+}

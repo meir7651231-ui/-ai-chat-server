@@ -1,0 +1,115 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__tasks_gantt_sheet.dart",
+ "lines": 396,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4",
+   "BsTokens.space5"
+  ],
+  "themeSockets": [
+   "Theme.of"
+  ],
+  "fontSizes": [
+   10,
+   12,
+   12.5,
+   13,
+   14,
+   16,
+   18
+  ],
+  "fontWeights": [
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "${_fmtDayMonth(start)} · ${bar.lenDays} ימ׳",
+  "s start date\n// from the authoring sheet (`_TaskAuthorSheet`), not here.\n//\n// HONEST by construction (אין-המצאות, R6/R8 — NEVER an invented date): only a\n// task with a real [TaskItem.scheduledStart] gets a bar, and the date shown on\n// each row IS that task",
+  "אין משימות",
+  "לוח-הזמנים של המשימות לפי תאריך-התחלה מתוזמן (לצפייה בלבד)",
+  "משימות אלו לא ממוקמות על הציר — הקבלן יכול לשבץ להן תאריך התחלה.",
+  "סגור",
+  "📊 גאנט משימות",
+  "📊 לוח-זמנים (גאנט)",
+  "🗓️ ללא תאריך מתוזמן (${layout.unscheduled.length})"
+ ],
+ "icons": [
+  "Icons.close"
+ ],
+ "glyphs": [
+  "✕",
+  "📊",
+  "🗓"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "_TasksGanttSheet",
+   "kind": "ConsumerWidget",
+   "line": 48,
+   "loc": 175,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "boardAuthProvider",
+    "tasksProvider"
+   ],
+   "writes": [],
+   "actions": [],
+   "strings": 7,
+   "constData": 0
+  },
+  {
+   "name": "_GanttBarRow",
+   "kind": "StatelessWidget",
+   "line": 230,
+   "loc": 117,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 1,
+   "constData": 0
+  },
+  {
+   "name": "_UnscheduledRow",
+   "kind": "StatelessWidget",
+   "line": 350,
+   "loc": 39,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [
+  "_TasksGanttSheet"
+ ],
+ "gates": [
+  "kDemoContractorId",
+  "kTaskStatusLabel"
+ ],
+ "board": {
+  "reads": [
+   "boardAuthProvider",
+   "tasksProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

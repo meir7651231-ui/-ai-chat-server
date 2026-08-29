@@ -1,0 +1,102 @@
+{
+ "_ContractorAttendanceSheet": {
+  "addProps": [
+   {
+    "name": "header",
+    "type": "String",
+    "replaces": "🕒 נוכחות עובדים"
+   },
+   {
+    "name": "subtitle",
+    "type": "String",
+    "replaces": "מי מהעובדים שלך מחותם כרגע ומי נכח היום (לצפייה בלבד)"
+   },
+   {
+    "name": "emptyPresent",
+    "type": "String",
+    "replaces": "אין עובדים מחותמים כרגע"
+   },
+   {
+    "name": "today",
+    "type": "String",
+    "replaces": "היום"
+   },
+   {
+    "name": "emptyToday",
+    "type": "String",
+    "replaces": "אין נוכחות רשומה היום"
+   },
+   {
+    "name": "sgwr6",
+    "type": "String",
+    "replaces": "סגור"
+   },
+   {
+    "name": "tplNwkjyEkcywPresentleng7",
+    "type": "String",
+    "replaces": "🟢 נוכחים עכשיו (${present.length})"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_PresentRow": {
+  "addProps": [
+   {
+    "name": "tplDayusername1",
+    "type": "String",
+    "replaces": "🟢 ${day.username}"
+   },
+   {
+    "name": "knysh2",
+    "type": "String",
+    "replaces": "כניסה —"
+   },
+   {
+    "name": "tplKnyshFmtTimeinTs3",
+    "type": "String",
+    "replaces": "כניסה ${_fmtTime(inTs)}"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_TodayRow": {
+  "addProps": [
+   {
+    "name": "tplDayusername1",
+    "type": "String",
+    "replaces": "🦺 ${day.username}"
+   },
+   {
+    "name": "tplFmtDurworkedCewt2",
+    "type": "String",
+    "replaces": "${_fmtDur(worked)} שעות"
+   },
+   {
+    "name": "tplKnyshInTsNull3",
+    "type": "String",
+    "replaces": "כניסה ${inTs == null ? "
+   },
+   {
+    "name": "tplYxyahOutTsNull4",
+    "type": "String",
+    "replaces": "יציאה ${outTs == null ? "
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_LocationPill": {
+  "addProps": [
+   {
+    "name": "location",
+    "type": "String",
+    "replaces": "מיקום הכניסה — פתח ניווט"
+   },
+   {
+    "name": "tplDayusernameMyqwKnysh2",
+    "type": "String",
+    "replaces": "${day.username} — מיקום כניסה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

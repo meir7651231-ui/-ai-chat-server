@@ -1,0 +1,92 @@
+{
+ "_SheetClose": {
+  "addProps": [
+   {
+    "name": "sgwr1",
+    "type": "String",
+    "replaces": "סגור"
+   }
+  ],
+  "note": ""
+ },
+ "_NodeRow": {
+  "addProps": [
+   {
+    "name": "hsrMwxr1",
+    "type": "String",
+    "replaces": "הסר מוצר"
+   }
+  ],
+  "note": ""
+ },
+ "_PipeLink": {
+  "addProps": [
+   {
+    "name": "ayJybwr1",
+    "type": "String",
+    "replaces": "⚠ אין חיבור"
+   },
+   {
+    "name": "mjwbr2",
+    "type": "String",
+    "replaces": "✓ מחובר"
+   }
+  ],
+  "note": ""
+ },
+ "_TutorialOverlay": {
+  "addProps": [
+   {
+    "name": "brwkyHbayLtknw1",
+    "type": "String",
+    "replaces": "ברוכים הבאים לתכנון חיבור"
+   },
+   {
+    "name": "3XedyLrcymt2",
+    "type": "String",
+    "replaces": "3 צעדים לרשימת קנייה מוכנה"
+   },
+   {
+    "name": "bjrMhAth3",
+    "type": "String",
+    "replaces": "בחר מה אתה מחבר"
+   },
+   {
+    "name": "brzMqljtCyrwty4",
+    "type": "String",
+    "replaces": "ברז, מקלחת, שירותים, גינה — לחץ על הקטגוריה הנכונה"
+   },
+   {
+    "name": "hws2Nqwdwt5",
+    "type": "String",
+    "replaces": "הוסף 2 נקודות לפחות"
+   },
+   {
+    "name": "knyshYxyahHmerkt6",
+    "type": "String",
+    "replaces": "כניסה + יציאה — המערכת ממלאת חיבורים אוטומטית"
+   },
+   {
+    "name": "qblRcymtQnyyh7",
+    "type": "String",
+    "replaces": "קבל רשימת קנייה"
+   },
+   {
+    "name": "cljLaynstltwrBWhatsApp8",
+    "type": "String",
+    "replaces": "שלח לאינסטלטור ב-WhatsApp, או הוסף ישירות לסל"
+   },
+   {
+    "name": "hbntyBwaNtjyl9",
+    "type": "String",
+    "replaces": "הבנתי — בוא נתחיל!"
+   },
+   {
+    "name": "dlg10",
+    "type": "String",
+    "replaces": "דלג"
+   }
+  ],
+  "note": ""
+ }
+}

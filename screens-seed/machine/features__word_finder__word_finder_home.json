@@ -1,0 +1,52 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__word_finder__word_finder_home.dart",
+ "lines": 166,
+ "pigments": {
+  "tokens": [
+   "BsTokens.space1",
+   "BsTokens.surfaceMid"
+  ],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "s `מצב רגיל` utility key flips back\n        // to the cascade via this callback.\n        QuickPadScreen(onSwitchMode: () => _setMode(_Mode.cascade)),\n      ],\n    );\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    // SELF-GATE first — render nothing unless the flag is on. Mirrors the\n    // `word_finder_screen.dart` / `quick_pad_screen.dart`\n    // `.contains(flag) → SizedBox.shrink` idiom.\n    final on = ref.watch(featureFlagsProvider).contains(kWordFinderFlag);\n    if (!on) return const SizedBox.shrink();\n\n    return Directionality(\n      textDirection: TextDirection.rtl,\n      child: Column(\n        crossAxisAlignment: CrossAxisAlignment.stretch,\n        children: [\n          // ── Toggle row: two plain-text segments, active one accented ──────\n          Material(\n            color: BsTokens.surfaceMid,\n            child: Padding(\n              padding: const EdgeInsets.all(BsTokens.space1),\n              child: Row(\n                children: [\n                  _segment(_cascadeLabel, _Mode.cascade),\n                  const SizedBox(width: BsTokens.space1),\n                  _segment(_quickPadLabel, _Mode.quickPad),\n                ],\n              ),\n            ),\n          ),\n\n          // ── Active surface — wrapped in Expanded so the child",
+  "s own `מצב רגיל` utility key, which calls back into the\n/// host to return to the cascade); the cascade screen has no switch affordance\n/// of its own.\nclass WordFinderHome extends ConsumerStatefulWidget {\n  const WordFinderHome({super.key});\n\n  @override\n  ConsumerState<WordFinderHome> createState() => _WordFinderHomeState();\n}\n\nclass _WordFinderHomeState extends ConsumerState<WordFinderHome> {\n  /// The active surface. Defaults to the newbie cascade (",
+  "המהיר שלי",
+  "חפש לי",
+  "מצא לי",
+  "מתחילים פשוט-לכולם"
+ ],
+ "icons": [],
+ "glyphs": [],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "WordFinderHome",
+   "kind": "ConsumerStatefulWidget",
+   "line": 58,
+   "loc": 6,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kWordFinderFlag"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

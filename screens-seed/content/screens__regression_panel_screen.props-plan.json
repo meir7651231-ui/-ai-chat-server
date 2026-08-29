@@ -1,0 +1,122 @@
+{
+ "RegressionPanelScreen": {
+  "addProps": [
+   {
+    "name": "t01",
+    "type": "String",
+    "replaces": "🔬 מרכז בדיקות רגרסיה"
+   },
+   {
+    "name": "t02",
+    "type": "String",
+    "replaces": "בודק קטלוג · chips · מאתר · מנוע תאימות/התקנה · state · ניווט · wiring"
+   }
+  ],
+  "note": ""
+ },
+ "_RunButton": {
+  "addProps": [
+   {
+    "name": "hrBdyqtRgrsyh1",
+    "type": "String",
+    "replaces": "▶ הרץ בדיקת רגרסיה מלאה"
+   },
+   {
+    "name": "mryAtHbdyqwt2",
+    "type": "String",
+    "replaces": "⏳ מריץ את הבדיקות... רגע"
+   },
+   {
+    "name": "hrCwb3",
+    "type": "String",
+    "replaces": "↻ הרץ שוב"
+   }
+  ],
+  "note": ""
+ },
+ "_SummaryCard": {
+  "addProps": [
+   {
+    "name": "tplKlHbdyqwtEbrw1",
+    "type": "String",
+    "replaces": "✅ כל הבדיקות עברו (${summary.passed}/${summary.total})"
+   },
+   {
+    "name": "tplNmxawSummaryfailedKcly2",
+    "type": "String",
+    "replaces": "❌ נמצאו ${summary.failed} כשלים"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_FilterRow": {
+  "addProps": [
+   {
+    "name": "hkl1",
+    "type": "String",
+    "replaces": "הכל"
+   },
+   {
+    "name": "qtlwg2",
+    "type": "String",
+    "replaces": "קטלוג"
+   },
+   {
+    "name": "snkrw3",
+    "type": "String",
+    "replaces": "סנכרון"
+   },
+   {
+    "name": "zhwywt4",
+    "type": "String",
+    "replaces": "זהויות"
+   },
+   {
+    "name": "exy5",
+    "type": "String",
+    "replaces": "עצים"
+   },
+   {
+    "name": "hgdrwt6",
+    "type": "String",
+    "replaces": "הגדרות"
+   },
+   {
+    "name": "taby7",
+    "type": "String",
+    "replaces": "טאבים"
+   },
+   {
+    "name": "kftwry8",
+    "type": "String",
+    "replaces": "כפתורים"
+   },
+   {
+    "name": "htnhgwt9",
+    "type": "String",
+    "replaces": "התנהגות"
+   },
+   {
+    "name": "mwxry10",
+    "type": "String",
+    "replaces": "מוצרים"
+   },
+   {
+    "name": "mnwe11",
+    "type": "String",
+    "replaces": "מנוע"
+   }
+  ],
+  "note": ""
+ },
+ "_CheckRow": {
+  "addProps": [
+   {
+    "name": "tplXyfytyCheckexpectedQyb1",
+    "type": "String",
+    "replaces": "ציפיתי: ${check.expected} · קיבלתי: ${check.got ?? \"—\"}"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

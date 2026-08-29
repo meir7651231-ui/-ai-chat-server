@@ -1,0 +1,45 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__fittings__layout__route_layout.dart",
+ "lines": 109,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  " show immutable;\n\n/// וקטור-3D immutable מינימלי (המתמטיקה של ה-turtle · לא תלוי-פלטפורמה).\n@immutable\nclass Vec3 {\n  const Vec3(this.x, this.y, this.z);\n  final double x;\n  final double y;\n  final double z;\n\n  Vec3 operator +(Vec3 o) => Vec3(x + o.x, y + o.y, z + o.z);\n  Vec3 operator -(Vec3 o) => Vec3(x - o.x, y - o.y, z - o.z);\n  Vec3 scale(double s) => Vec3(x * s, y * s, z * s);\n  double dot(Vec3 o) => x * o.x + y * o.y + z * o.z;\n  Vec3 cross(Vec3 o) =>\n      Vec3(y * o.z - z * o.y, z * o.x - x * o.z, x * o.y - y * o.x);\n  double get length => math.sqrt(dot(this));\n  Vec3 norm() {\n    final n = length;\n    return n == 0 ? this : scale(1 / n);\n  }\n\n  @override\n  bool operator ==(Object other) =>\n      other is Vec3 && other.x == x && other.y == y && other.z == z;\n  @override\n  int get hashCode => Object.hash(x, y, z);\n  @override\n  String toString() =>\n      "
+ ],
+ "icons": [],
+ "glyphs": [
+  "🔌"
+ ],
+ "logicCandidates": [
+  {
+   "name": "layoutRoute",
+   "line": 77
+  },
+  {
+   "name": "Vec3",
+   "line": 18,
+   "kind": "metrics-class"
+  },
+  {
+   "name": "Placement",
+   "line": 48,
+   "kind": "metrics-class"
+  }
+ ],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

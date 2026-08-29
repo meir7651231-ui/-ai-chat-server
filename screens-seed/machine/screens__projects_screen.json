@@ -1,0 +1,197 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__projects_screen.dart",
+ "lines": 698,
+ "pigments": {
+  "tokens": [
+   "BsTokens.brand",
+   "BsTokens.brandDark",
+   "BsTokens.inkLight",
+   "BsTokens.mutedLight",
+   "BsTokens.radiusCard",
+   "BsTokens.radiusPill",
+   "BsTokens.space2",
+   "BsTokens.space3",
+   "BsTokens.space4"
+  ],
+  "themeSockets": [
+   "Theme.of",
+   "cfgRadius"
+  ],
+  "fontSizes": [
+   12,
+   12.5,
+   13,
+   13.5,
+   14,
+   16,
+   18,
+   20,
+   48
+  ],
+  "fontWeights": [
+   "FontWeight.w600",
+   "FontWeight.w700",
+   "FontWeight.w800"
+  ],
+  "opacities": [],
+  "iconSizes": [
+   18
+  ],
+  "roleRecord": false
+ },
+ "terms": [
+  ";\n\n/// Open the פרויקטים screen — the wire target for `openProjects`.\nvoid openProjects(BuildContext context) =>\n    Navigator.of(context).push(ProjectsScreen.route());\n\nclass ProjectsScreen extends ConsumerWidget {\n  const ProjectsScreen({super.key});\n\n  static Route<void> route() =>\n      MaterialPageRoute<void>(builder: (_) => const ProjectsScreen());\n\n  static final List<KbToolNode> _kbNodes = kbProjectsNodes();\n\n  @override\n  Widget build(BuildContext context, WidgetRef ref) {\n    final state = ref.watch(projectsProvider);\n    final Widget body = Directionality(\n      textDirection: TextDirection.rtl,\n      child: Scaffold(\n        backgroundColor: Theme.of(context).scaffoldBackgroundColor,\n        appBar: AppBar(\n          backgroundColor: Theme.of(context).colorScheme.surface,\n          elevation: 0,\n          automaticallyImplyLeading: false,\n          titleSpacing: BsTokens.space4,\n          title: const CfgText(",
+  "s site list:\n// each site card shows name/addr/foreman + a cart/tree count, switches the\n// active project (switchProject), opens a full status snapshot, and edits the\n// site inline (saveSiteEdit). A \"+ פרויקט חדש\" sheet adds sites (saveProject).\n// All state is the live `projectsProvider` (active id + per-project cart\n// snapshot, see state/projects_engine.dart) — the orders-engine pattern.\n// Strings/numbers verbatim from the prototype (R6/R8).\n//\n// Entry: openProjects (the leaf action) → ProjectsScreen.route().\n//\n// CART-PER-PROJECT: switching stashes the outgoing project",
+  "אין פרויקטים עדיין",
+  "בטל שינויים",
+  "הוסף פרויקט",
+  "החלף ›",
+  "הפרויקט נוסף",
+  "השינויים שהזנת לא יישמרו.",
+  "יש להזין שם אתר",
+  "יש להזין שם פרויקט",
+  "כתובת",
+  "לבטל את השינויים?",
+  "מנהל עבודה",
+  "עברת לפרויקט: ${p.name}",
+  "עריכת פרטי האתר",
+  "פעיל עכשיו",
+  "פרויקט חדש",
+  "פרטי האתר עודכנו",
+  "צרו פרויקט חדש כדי לנהל סל, תקציב ומשימות לכל אתר",
+  "שם האתר",
+  "שמור",
+  "‹ יציאה",
+  "⚪ לא פעיל — הקש כדי להפעיל",
+  "✏️ הקש לעריכת הפרטים",
+  "✏️ עריכת פרטי האתר",
+  "🌳 ${p.treeCount} עצי מוצרים בעבודה",
+  "🌳 ${project.treeCount} עצי מוצרים ›",
+  "🏗️ הפרויקטים שלי",
+  "🏗️ פרויקט חכם",
+  "👷 מנהל עבודה",
+  "👷 מנהל עבודה: ${project.manager}",
+  "💰 תקציב",
+  "📊 הקש לסטטוס האתר המלא",
+  "📋 משימות",
+  "📍 כתובת",
+  "🛒 ${p.cart.length} פריטים בעגלה",
+  "🛒 ${project.cart.length} פריטים בעגלה ›",
+  "🛒 סל הפרויקט: ${p.cart.length} פריטים",
+  "🟢 אתר פעיל עכשיו"
+ ],
+ "icons": [
+  "Icons.add"
+ ],
+ "glyphs": [
+  "⚪",
+  "✏",
+  "🌳",
+  "🏗",
+  "👷",
+  "💰",
+  "📊",
+  "📋",
+  "📍",
+  "🛒",
+  "🟢"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "ProjectsScreen",
+   "kind": "ConsumerWidget",
+   "line": 39,
+   "loc": 179,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "projectsProvider",
+    "smartCartProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "call:showModalBottomSheet",
+    "nav:ProjectsScreen",
+    "fx:toast"
+   ],
+   "strings": 10,
+   "constData": 0
+  },
+  {
+   "name": "_SiteCard",
+   "kind": "StatelessWidget",
+   "line": 219,
+   "loc": 125,
+   "pure": true,
+   "dataClean": false,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 6,
+   "constData": 0
+  },
+  {
+   "name": "_LinkBtn",
+   "kind": "StatelessWidget",
+   "line": 345,
+   "loc": 25,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  },
+  {
+   "name": "_StatusSheet",
+   "kind": "ConsumerWidget",
+   "line": 372,
+   "loc": 172,
+   "pure": false,
+   "dataClean": false,
+   "reads": [
+    "projectsProvider",
+    "smartCartProvider"
+   ],
+   "writes": [],
+   "actions": [
+    "call:showModalBottomSheet",
+    "fx:toast"
+   ],
+   "strings": 9,
+   "constData": 0
+  },
+  {
+   "name": "_EditSheet",
+   "kind": "ConsumerStatefulWidget",
+   "line": 546,
+   "loc": 6,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kKbGlobal"
+ ],
+ "board": {
+  "reads": [
+   "projectsProvider",
+   "smartCartProvider"
+  ],
+  "writes": [],
+  "navsAndCalls": [
+   "call:showModalBottomSheet",
+   "fx:toast",
+   "nav:ProjectsScreen"
+  ]
+ }
+}

@@ -1,0 +1,40 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__card_keyboard__seed_sources.dart",
+ "lines": 104,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "אחר",
+  "עוד…"
+ ],
+ "icons": [],
+ "glyphs": [],
+ "logicCandidates": [],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kCategoryMouth",
+  "kCategorySeedAxis",
+  "kFirstWordCount",
+  "kJobMouth",
+  "kJobSeedAxis",
+  "kMaterialMouth",
+  "kMaterialSeedAxis",
+  "kSmartProducts",
+  "kWordMouth",
+  "kWordSeedAxis"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

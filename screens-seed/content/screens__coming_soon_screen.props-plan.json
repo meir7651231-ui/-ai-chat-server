@@ -1,0 +1,37 @@
+{
+ "ComingSoonScreen": {
+  "addProps": [
+   {
+    "name": "title",
+    "type": "String",
+    "replaces": "בקרוב"
+   },
+   {
+    "name": "back",
+    "type": "String",
+    "replaces": "‹ חזרה"
+   },
+   {
+    "name": "heading",
+    "type": "String",
+    "replaces": "בקרוב"
+   },
+   {
+    "name": "backToPicker",
+    "type": "String",
+    "replaces": "‹ חזור לבחירת מקצוע"
+   },
+   {
+    "name": "txt5",
+    "type": "String",
+    "replaces": "🚧"
+   },
+   {
+    "name": "tplHtwkEbwrProfession6",
+    "type": "String",
+    "replaces": "התוכן עבור $profession בהכנה"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ }
+}

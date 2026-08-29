@@ -1,0 +1,35 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/screens__keyboard_dept_deriver.dart",
+ "lines": 164,
+ "pigments": {
+  "tokens": [],
+  "themeSockets": [],
+  "fontSizes": [],
+  "fontWeights": [],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "s\n/// root predictions are unchanged from the existing tab-1 row. Each owns a real\n/// [KbDestination] in keyboard_destinations.dart (reusing `_openDepartment`), so\n/// tapping a chip navigates to that department exactly as a department tile does.\n///\n/// STATIC (no cap): these four are a FIXED set (like the 6 חנות service chips or\n/// the 6 עדכונים notif-type chips) — they ALWAYS all render. There is no dynamic\n/// list to cap here (the per-department PRODUCT content is the CATALOG phase, not\n/// this thin departments-entry scope).\n///\n// CRITICAL: These 4 labels MUST stay synchronized with: (1)\n// keyboard_destinations.dart _openDepartment destinations, (2)\n// departments_screen.dart departments list (live == true), (3)\n// floating_card_keyboard.dart labelsByTab[1] hardcoded. A rename in ANY source\n// breaks the other two. No shared const = no automatic sync. (Future: extract\n// these four into a single shared const so all sites derive from one source.)\nconst List<String> _kDeptLabels = <String>[\n  ",
+  "s [KbDestination.run] closures — those take a\n// `WidgetRef`/`BuildContext`, but they are supplied LATER, at tap time, by the\n// keyboard; the deriver only RESOLVES the destinations, it never invokes them or\n// reads providers itself.\n//\n// TYPE REUSE (plan invariant — do NOT duplicate): [KbPredRow] and\n// [KbUpdatesContext] are IMPORTED from keyboard_updates_deriver.dart (the SAME\n// carriers the store/updates derivers emit), so the keyboard adapter (`_rowFor`\n// field-for-field copy into `_PredRow`) is IDENTICAL for all three tabs — one\n// adapter, three derivers. This arm never POPULATES the dynamic `runByChip` map\n// (the department chips are static [KbDestination]s, like the עדכונים section\n// chips), so it does not even import `KbRunByChip` — the reused [KbPredRow]\n// defaults that map to const-empty. This file adds NO new carrier types; it only\n// adds the department arm.\n//\n// THE DISPATCH PATH (same as the עדכונים/חנות ROOTS). The four department chips\n// are REAL [KbDestination]s in `destByChip` (dispatch (ii) — the keyboard runs\n// the registry",
+  "s `_openDepartment` runs by label);\n///     tools: the department node-list ([kbDeptNodes] — עץ חכם / מאתר / מסלול\n///     עבודה). A tap on a department chip sets `homeDepartmentProvider` (+ tab 1 +\n///     catalog-drill reset) via the registry run; the keyboard keeps floating and\n///     the screen underneath opens that department. The four are static (always\n///     render, NO cap — like the 6 חנות service / 6 עדכונים notif chips).\nKbUpdatesContext deriveDeptContext(DeptLocation location) {\n  switch (location) {\n    // ── Root: the four department chips + department tools ─────────────────────\n    case DeptRoot():\n      final chips = <String>[];\n      final destByChip = <String, KbDestination>{};\n      // Raw shell: the four const departments are gated OUT of the registry\n      // (R6), so the by-construction guarantee below no longer holds there —\n      // the loud throw would crash the bare shell. The company",
+  "ברזים וסניטריים",
+  "כלי עבודה חשמלי",
+  "כלי עבודה ידני"
+ ],
+ "icons": [],
+ "glyphs": [],
+ "logicCandidates": [],
+ "widgets": [],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kProfileRawShell"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

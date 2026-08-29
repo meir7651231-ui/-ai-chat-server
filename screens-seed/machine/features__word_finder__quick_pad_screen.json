@@ -1,0 +1,61 @@
+{
+ "file": "/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens/features__word_finder__quick_pad_screen.dart",
+ "lines": 183,
+ "pigments": {
+  "tokens": [
+   "BsTokens.inkLight",
+   "BsTokens.space3",
+   "BsTokens.surfaceMid"
+  ],
+  "themeSockets": [],
+  "fontSizes": [
+   18
+  ],
+  "fontWeights": [
+   "FontWeight.w700"
+  ],
+  "opacities": [],
+  "iconSizes": [],
+  "roleRecord": false
+ },
+ "terms": [
+  "s `מצב רגיל` utility key — lets a host\n  /// flip back to the regular browsing mode. Null hides the key entirely.\n  final void Function()? onSwitchMode;\n\n  @override\n  ConsumerState<QuickPadScreen> createState() => _QuickPadScreenState();\n}\n\nclass _QuickPadScreenState extends ConsumerState<QuickPadScreen> {\n  /// The set of real `kDivePool` skus, computed ONCE per isolate — used to keep\n  /// only frequency keys that name an addable catalog product (the usage signal\n  /// is keyed by free-form text, not necessarily a sku).\n  static final Set<String> _poolSkus = {for (final p in kDivePool) p.sku};\n\n  /// Derive the frequent-sku list from `smartInputUsageProvider`: sort its\n  /// `frequencies` entries most-frequent first and keep ONLY keys that are real\n  /// `kDivePool` skus (drop free-form phrases). Returns `const []` when none\n  /// survive, so the engine falls back to favorites → recents cleanly.\n  List<String> _frequentSkus(SmartInputUsage usage) {\n    final entries = usage.frequencies.entries\n        .where((e) => _poolSkus.contains(e.key))\n        .toList()\n      ..sort((a, b) => b.value.compareTo(a.value)); // most-frequent first\n    if (entries.isEmpty) return const [];\n    return [for (final e in entries) e.key];\n  }\n\n  /// Add the tapped product (× [qty]) to the smart cart via the SAME\n  /// `SmartCartNotifier.add(SmartCartLine(...))` path the product sheet uses.\n  /// `brandPrice` is 0 (the catalog carries no price — the sheet defaults it to\n  /// 0 too) and there are no accessories on a quick-add line.\n  void _addToCart(LipskeyCatalogProduct p, int qty) {\n    ref.read(smartCartProvider.notifier).add(\n          SmartCartLine(\n            productKey: ",
+  "התחל",
+  "נוסף לסל ✓  ${quickLabel(p)} ×$qty",
+  "נוסף לסל ✓  ברך ×3",
+  "עדיין אין מועדפים — התחל לבחור מוצרים",
+  "תתחיל"
+ ],
+ "icons": [],
+ "glyphs": [
+  "✓"
+ ],
+ "logicCandidates": [],
+ "widgets": [
+  {
+   "name": "QuickPadScreen",
+   "kind": "ConsumerStatefulWidget",
+   "line": 46,
+   "loc": 10,
+   "pure": true,
+   "dataClean": true,
+   "reads": [],
+   "writes": [],
+   "actions": [],
+   "strings": 0,
+   "constData": 0
+  }
+ ],
+ "sectionMap": [],
+ "composer": [],
+ "gates": [
+  "kDivePool",
+  "kFirstQuestion",
+  "kWordFinderFlag"
+ ],
+ "board": {
+  "reads": [],
+  "writes": [],
+  "navsAndCalls": []
+ }
+}

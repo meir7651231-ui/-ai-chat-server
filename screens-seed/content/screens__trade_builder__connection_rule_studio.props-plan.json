@@ -1,0 +1,52 @@
+{
+ "_EmptyConnectors": {
+  "addProps": [
+   {
+    "name": "emptyConnectors",
+    "type": "String",
+    "replaces": "אין עדיין מחברים"
+   }
+  ],
+  "note": ""
+ },
+ "_ConnectorTile": {
+  "addProps": [
+   {
+    "name": "mjq1",
+    "type": "String",
+    "replaces": "מחק"
+   }
+  ],
+  "note": ""
+ },
+ "_MatrixCell": {
+  "addProps": [
+   {
+    "name": "tplJybwrAnameHeAl1",
+    "type": "String",
+    "replaces": "חיבור ${a.nameHe} אל ${b.nameHe}"
+   }
+  ],
+  "note": "תבניות-$: הקופסה מפרמטת, המנגנון מקבל מחרוזת-מוכנה"
+ },
+ "_RuleInspectDialog": {
+  "addProps": [
+   {
+    "name": "ruleTitle",
+    "type": "String",
+    "replaces": "כלל חיבור"
+   },
+   {
+    "name": "deleteRule",
+    "type": "String",
+    "replaces": "מחק כלל"
+   },
+   {
+    "name": "close",
+    "type": "String",
+    "replaces": "סגור"
+   }
+  ],
+  "note": ""
+ }
+}

@@ -1,0 +1,22 @@
+{
+ "_EmptyProducts": {
+  "addProps": [
+   {
+    "name": "t04",
+    "type": "String",
+    "replaces": "אין עדיין מוצרים"
+   }
+  ],
+  "note": ""
+ },
+ "_ProductTile": {
+  "addProps": [
+   {
+    "name": "mjq1",
+    "type": "String",
+    "replaces": "מחק"
+   }
+  ],
+  "note": ""
+ }
+}
