@@ -511,12 +511,6 @@
    "serves": 1
   },
   {
-   "atom": "MiniStatusPill",
-   "from": "screens__worker_report_drilldowns:_MiniStatusPill",
-   "kind": "Stateless",
-   "serves": 1
-  },
-  {
    "atom": "MiniTracker",
    "from": "screens__manager_dashboard_screen:_MiniTracker",
    "kind": "Stateless",
@@ -787,12 +781,6 @@
    "serves": 3
   },
   {
-   "atom": "StatusPill",
-   "from": "screens__worker_reports_tab:_StatusPill",
-   "kind": "Stateless",
-   "serves": 1
-  },
-  {
    "atom": "StockTab",
    "from": "screens__stock_screen:_StockTab",
    "kind": "צרור-2",
@@ -940,12 +928,6 @@
    "atom": "WorkerFormsPillButton",
    "from": "screens__worker_forms_screen:_PillButton",
    "kind": "Stateless",
-   "serves": 1
-  },
-  {
-   "atom": "WorkerPick",
-   "from": "screens__tasks_screen:_WorkerPick",
-   "kind": "צרור-2",
    "serves": 1
   },
   {
@@ -1145,6 +1127,11 @@
   ],
   "riverpod": [
    "screens__manager_dashboard_screen:_MetricTile"
+  ],
+  "project-const": [
+   "screens__tasks_screen:_WorkerPick⇒kWorkers",
+   "screens__worker_report_drilldowns:_MiniStatusPill⇒kTaskStatusLabel",
+   "screens__worker_reports_tab:_StatusPill⇒kTaskStatusLabel"
   ],
   "io-in-state": [
    "screens__welcome_screen:WelcomeScreen"

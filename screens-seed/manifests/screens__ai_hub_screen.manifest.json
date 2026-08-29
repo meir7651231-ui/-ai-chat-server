@@ -45,17 +45,6 @@
    }
   },
   {
-   "id": "wear",
-   "atom": "Wear",
-   "props": {
-    "title": "$: wear_title",
-    "sub": "$: wear_sub",
-    "text": "$: wear_text",
-    "text2": "$: wear_text2",
-    "fallback": "$: wear_fallback"
-   }
-  },
-  {
    "id": "ai_server_note",
    "atom": "AiServerNote",
    "props": {

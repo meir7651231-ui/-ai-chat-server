@@ -6,13 +6,6 @@
  "content": [],
  "sections": [
   {
-   "id": "mini_status_pill",
-   "atom": "MiniStatusPill",
-   "props": {
-    "status": "?:String"
-   }
-  },
-  {
    "id": "worker_equipment_checklist_sheet_sec_h",
    "atom": "WorkerEquipmentChecklistSheetSecH",
    "props": {

@@ -75,7 +75,7 @@
   },
   {
    "screen": "screens__courier_portal_tab",
-   "holes": 3
+   "holes": 2
   },
   {
    "screen": "screens__courier_profile_screen",
@@ -247,7 +247,7 @@
   },
   {
    "screen": "screens__tasks_screen",
-   "holes": 9,
+   "holes": 8,
    "flat": true
   },
   {
@@ -323,12 +323,12 @@
   },
   {
    "screen": "screens__worker_report_drilldowns",
-   "holes": 2,
+   "holes": 1,
    "flat": true
   },
   {
    "screen": "screens__worker_reports_tab",
-   "holes": 10
+   "holes": 9
   },
   {
    "screen": "screens__worker_safety_screen",
@@ -528,17 +528,17 @@
   "screens__org_config_diag"
  ],
  "holesByType": {
-  "int": 22,
+  "int": 21,
   "String": 60,
   "bool": 36,
   "Widget": 5,
   "TextEditingController": 4,
   "IconData": 7,
   "List<String>": 3,
-  "String?": 8,
+  "String?": 9,
   "int?": 2,
   "List<String>?": 1,
-  "List<Widget>": 7,
+  "List<Widget>": 8,
   "double": 1
  }
 }

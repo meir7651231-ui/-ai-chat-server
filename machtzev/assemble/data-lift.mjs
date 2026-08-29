@@ -65,6 +65,45 @@ function resolveFnImport(name) {
   return res;
 }
 const usedFnImports = new Set();
+
+// ── אינדקס-קבועים-ציבוריים + auto-import (קבוע עם עברית ⇒ דחייה — מועמד-תוכן) ──
+let projectConsts = new Map(); // name ⇒ 'origin/main:path'
+try {
+  const dump = execSync("git grep -nHE '^(const|final) ' origin/main -- app_flutter/lib", { cwd: BS, encoding: 'utf8', maxBuffer: 1 << 25 });
+  for (const line of dump.split('\n')) {
+    const m = line.match(/^([^:]+:[^:]+):\d+:(?:const|final)\s+(?:[A-Za-z_][\w<>,? ]*?\s+)?([a-zA-Z]\w*)\s*=/);
+    if (m && !projectConsts.has(m[2])) projectConsts.set(m[2], m[1]);
+  }
+} catch { }
+const constImportCache = new Map();
+function resolveConstImport(name) {
+  if (constImportCache.has(name)) return constImportCache.get(name);
+  let res = null;
+  const f = projectConsts.get(name);
+  if (f) {
+    try {
+      const src2 = execSync(`git show '${f.replace(/'/g, '')}'`, { cwd: BS, encoding: 'utf8', maxBuffer: 1 << 24 });
+      const dm = src2.match(new RegExp('(^|\\n)(const|final)\\s+(?:[A-Za-z_][\\w<>,? ]*?\\s+)?' + name + '\\s*='));
+      if (dm) {
+        const end = src2.indexOf(';', dm.index);
+        if (end > 0 && !/[֐-׿]/.test(src2.slice(dm.index, end)))
+          res = "import 'package:buildsmart/" + f.replace(/^origin\/main:app_flutter\/lib\//, '') + "';";
+      }
+    } catch { }
+  }
+  constImportCache.set(name, res);
+  return res;
+}
+/** מזהי-קבועים-פרויקטליים בגוף: null=הכול-פתיר · שם ⇒ לא-פתיר (עברית/לא-נמצא). */
+function unresolvedConst(code, declaredIn) {
+  for (const m of new Set([...code.matchAll(/(?<![.\w'])([a-z]\w{2,})\b/g)].map(x => x[1]))) {
+    if (!projectConsts.has(m)) continue;
+    if (new RegExp('(^|\\n)\\s*(static\\s+)?(const\\s+|final\\s+|late\\s+|var\\s+)?[A-Za-z_][\\w<>,?\\[\\] ]*\\s+' + m + '\\s*[=;,)({]').test(declaredIn)) continue;
+    if (!resolveConstImport(m)) return m;
+  }
+  return null;
+}
+
 const externalFn = (code) => {
   for (const m of new Set([...code.matchAll(/\b([a-z]\w+)\s*\(/g)].map(x => x[1]))) {
     if (!projectFns.has(m) || FOUNDATION_FN.has(m)) continue;
@@ -457,7 +496,7 @@ function injectProps(body, cls, allProps) {
 const propType = new Map(); // שם ⇒ טיפוס (ברירת-מחדל String)
 function threadProps(bundle) {
   let changed = true, guard = 0;
-  while (changed && guard++ < 12) {
+  while (changed && guard++ < 500) {
     changed = false;
     for (const holder of bundle) {
       for (const target of bundle) {
@@ -469,7 +508,18 @@ function threadProps(bundle) {
           let d = 0, j = scan.indexOf('(', m.index), open = j;
           for (; j < scan.length; j++) { const c = scan[j]; if (c === '(') d++; else if (c === ')') { d--; if (!d) break; } }
           const argText = scan.slice(open + 1, j);
-          const missing = target.allProps.filter(p => !new RegExp('\\b' + p + '\\s*:').test(argText));
+          // תוויות בעומק-0 בלבד (ארגומנט-מקונן אינו מספק את הקריאה-החיצונית!)
+          const given = new Set();
+          { let dep = 0, s0 = 0;
+            const seg = (a, b) => { const mm = argText.slice(a, b).match(/^\s*([a-zA-Z_]\w*)\s*:/); if (mm) given.add(mm[1]); };
+            for (let k2 = 0; k2 <= argText.length; k2++) {
+              const c2 = argText[k2];
+              if (c2 === '(' || c2 === '[' || c2 === '{') dep++;
+              else if (c2 === ')' || c2 === ']' || c2 === '}') dep--;
+              else if ((c2 === ',' && !dep) || k2 === argText.length) { seg(s0, k2); s0 = k2 + 1; }
+            }
+          }
+          const missing = target.allProps.filter(p => !given.has(p));
           if (!missing.length) continue;
           const insert = (argText.trim() ? ', ' : '') + missing.map(p => `${p}: ${p}`).join(', ');
           holder.out = holder.out.slice(0, j) + insert + holder.out.slice(j);
@@ -481,7 +531,7 @@ function threadProps(bundle) {
       if (changed) break;
     }
   }
-  return guard < 12;
+  return guard < 500;
 }
 
 // ── המעבר ──
@@ -586,6 +636,8 @@ for (const mf of fs.readdirSync(MACHINE).filter(f => f.endsWith('.json')).sort()
     for (const r of extraModels) modelCand.add(r);
     const exFn = externalFn(allRaw);
     if (exFn) { skip('project-fn', id + '⇒' + exFn); continue; }
+    const uc = unresolvedConst(allRaw, allRaw);
+    if (uc) { skip('project-const', id + '⇒' + uc); continue; }
 
     // ── שיטוח-מודלים (שורש-בלבד; מודל באח ⇒ עמוק) ──
     let dataProps = [];
@@ -772,6 +824,7 @@ for (const L of [...liftedHashes.values()].sort((a, b) => a.pub.localeCompare(b.
   let joined = L.joined.replaceAll(L.name, L.pub);
   for (const pn of L.privatized || []) if (!joined.includes('_' + pn)) joined = joined.replaceAll(pn, '_' + pn);
   const extras = inferImports(stripComments(joined));
+  for (const [cn2, imp] of constImportCache) if (imp && new RegExp("(?<![.\\w'])" + cn2 + '\\b').test(stripComments(joined)) && !extras.includes(imp)) extras.push(imp);
   for (const [cls, imp] of FOUNDATION) if (new RegExp('\\b' + cls + '\\b').test(stripComments(joined))) extras.unshift(imp);
   for (const [fn, imp] of FOUNDATION_FN) if (new RegExp('\\b' + fn + '\\s*\\(').test(stripComments(joined)) && !extras.includes(imp)) extras.push(imp);
   for (const [fn, imp] of fnImportCache) if (imp && new RegExp('\\b' + fn + '\\s*\\(').test(stripComments(joined)) && !extras.includes(imp)) extras.push(imp);

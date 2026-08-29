@@ -43,6 +43,45 @@ try {
   projectFns = new Set([...execSync("git grep -hE '^[A-Za-z][A-Za-z_<>,? ]+ [a-z][a-zA-Z0-9]+\\(' origin/main -- app_flutter/lib", { cwd: BS, encoding: 'utf8', maxBuffer: 1 << 24 })
     .matchAll(/ ([a-z]\w+)\(/g)].map(x => x[1]));
 } catch { }
+
+// ── אינדקס-קבועים-ציבוריים + auto-import (קבוע עם עברית ⇒ דחייה — מועמד-תוכן) ──
+let projectConsts = new Map(); // name ⇒ 'origin/main:path'
+try {
+  const dump = execSync("git grep -nHE '^(const|final) ' origin/main -- app_flutter/lib", { cwd: BS, encoding: 'utf8', maxBuffer: 1 << 25 });
+  for (const line of dump.split('\n')) {
+    const m = line.match(/^([^:]+:[^:]+):\d+:(?:const|final)\s+(?:[A-Za-z_][\w<>,? ]*?\s+)?([a-zA-Z]\w*)\s*=/);
+    if (m && !projectConsts.has(m[2])) projectConsts.set(m[2], m[1]);
+  }
+} catch { }
+const constImportCache = new Map();
+function resolveConstImport(name) {
+  if (constImportCache.has(name)) return constImportCache.get(name);
+  let res = null;
+  const f = projectConsts.get(name);
+  if (f) {
+    try {
+      const src2 = execSync(`git show '${f.replace(/'/g, '')}'`, { cwd: BS, encoding: 'utf8', maxBuffer: 1 << 24 });
+      const dm = src2.match(new RegExp('(^|\\n)(const|final)\\s+(?:[A-Za-z_][\\w<>,? ]*?\\s+)?' + name + '\\s*='));
+      if (dm) {
+        const end = src2.indexOf(';', dm.index);
+        if (end > 0 && !/[֐-׿]/.test(src2.slice(dm.index, end)))
+          res = "import 'package:buildsmart/" + f.replace(/^origin\/main:app_flutter\/lib\//, '') + "';";
+      }
+    } catch { }
+  }
+  constImportCache.set(name, res);
+  return res;
+}
+/** מזהי-קבועים-פרויקטליים בגוף: null=הכול-פתיר · שם ⇒ לא-פתיר (עברית/לא-נמצא). */
+function unresolvedConst(code, declaredIn) {
+  for (const m of new Set([...code.matchAll(/(?<![.\w'])([a-z]\w{2,})\b/g)].map(x => x[1]))) {
+    if (!projectConsts.has(m)) continue;
+    if (new RegExp('(^|\\n)\\s*(static\\s+)?(const\\s+|final\\s+|late\\s+|var\\s+)?[A-Za-z_][\\w<>,?\\[\\] ]*\\s+' + m + '\\s*[=;,)({]').test(declaredIn)) continue;
+    if (!resolveConstImport(m)) return m;
+  }
+  return null;
+}
+
 const externalFn = (code) => {
   for (const m of new Set([...code.matchAll(/\b([a-z]\w+)\s*\(/g)].map(x => x[1]))) {
     if (!projectFns.has(m) || FOUNDATION_FN.has(m)) continue;
@@ -159,6 +198,8 @@ for (const mf of maps) {
     if (RIVERPOD.test(allCode)) { skip('riverpod', id); continue; }
     const exFn = externalFn(allCode);
     if (exFn) { skip('project-fn', id + '⇒' + exFn); continue; }
+    const uc = unresolvedConst(allCode, allCode);
+    if (uc) { skip('project-const', id + '⇒' + uc); continue; }
     const needsTokens = /\bBsTokens\./.test(allCode);
     if (needsTokens && !hasTokensAtom) { skip('project-dep', id + '⇒BsTokens'); continue; }
 
@@ -186,6 +227,7 @@ for (const L of [...liftedHashes.values()].sort((a, b) => a.pub.localeCompare(b.
   for (const b of L.bundle) if (b.privatize && !joined.includes('_' + b.name)) joined = joined.replaceAll(b.name, '_' + b.name);
   if (L.stateful) joined = joined.replaceAll('_' + L.name.replace(/^_/, '') + 'State', '_' + L.pub + 'State');
   const extras = inferImports(stripComments(joined));
+  for (const [cn2, imp] of constImportCache) if (imp && new RegExp("(?<![.\\w'])" + cn2 + '\\b').test(stripComments(joined)) && !extras.includes(imp)) extras.push(imp);
   for (const [cls, imp] of FOUNDATION) if (new RegExp('\\b' + cls + '\\b').test(stripComments(joined))) extras.unshift(imp);
   for (const [fn, imp] of FOUNDATION_FN) if (new RegExp('\\b' + fn + '\\s*\\(').test(stripComments(joined)) && !extras.includes(imp)) extras.push(imp);
   const also = L.also.length ? `\n// משרת-גם (זהה-מבנית): ${L.also.join(' · ')}` : '';

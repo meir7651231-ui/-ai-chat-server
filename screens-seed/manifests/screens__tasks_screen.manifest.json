@@ -75,13 +75,6 @@
    }
   },
   {
-   "id": "worker_pick",
-   "atom": "WorkerPick",
-   "props": {
-    "selected": "?:int"
-   }
-  },
-  {
    "id": "primary_btn",
    "atom": "PrimaryBtn",
    "props": {
@@ -90,21 +83,12 @@
    }
   },
   {
-   "id": "tasks_card",
-   "atom": "TasksCard",
+   "id": "card",
+   "atom": "Card",
    "props": {
-    "fallback": "$: tasks_card_fallback",
-    "label": "$: tasks_card_label",
-    "label2": "$: tasks_card_label2",
-    "status": "?:String",
-    "name": "?:String",
-    "detail": "?:String",
-    "onTap": "~:",
-    "onEdit": "~:"
-   },
-   "repeat": {
-    "as": "t",
-    "item": "TasksCardItem"
+    "title": "?:String",
+    "titleId": "?:String?",
+    "children": "?:List<Widget>"
    }
   },
   {

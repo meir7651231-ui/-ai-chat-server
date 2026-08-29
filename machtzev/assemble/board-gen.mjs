@@ -27,6 +27,32 @@ for (const f of fs.readdirSync(SHELF, { recursive: true }).map(String)) {
   else if (om2) atomOrigin.set(cm[1], om2[1] + ':' + om2[2]);
 }
 
+// ── אינדקס מזהים-ציבוריים-פרויקטליים (פונקציות/קבועים עליונים) — פתירים-בלוח דרך imports ──
+import { execSync } from 'node:child_process';
+const BS = '/home/user/buildsmart';
+let projectPub = new Set();
+try {
+  const dump = execSync("git grep -hE '^(const|final|[A-Za-z][A-Za-z_<>,? ]+) k?[a-zA-Z][a-zA-Z0-9]*( =|\\()' origin/main -- app_flutter/lib", { cwd: BS, encoding: 'utf8', maxBuffer: 1 << 25 });
+  for (const m of dump.matchAll(/(?:^|\n)(?:const |final )?[A-Za-z_][\w<>,? ]*?\b([a-zA-Z]\w*)\s*(?:=|\()/g)) projectPub.add(m[1]);
+} catch { }
+const DART_OK = new Set(['context', 'ref', 'true', 'false', 'null', 'const', 'final', 'new', 'if', 'else', 'for', 'in', 'is', 'as', 'return', 'switch', 'case', 'await', 'async', 'toList', 'map', 'where', 'length', 'toString', 'print', 'var', 'this']);
+
+/** ביטוי פתיר-בלוח? כל מזהה חייב להיות: מוצהר-בביטוי · watch-var · ציבורי-פרויקטלי · Flutter (רישית) · ליבת-Dart. */
+function exprResolvable(expr, watchVars) {
+  const scan = maskLits(maskComments(expr));
+  if (/\bsetState\b|\bwidget\.|\b_\w/.test(scan)) return false;
+  const declared = new Set();
+  for (const m of scan.matchAll(/\(\s*([\w ,]+)\)\s*=>|\bfor\s*\(\s*(?:final|var)\s+(\w+)/g))
+    for (const v of (m[1] || m[2] || '').split(',')) declared.add(v.trim());
+  for (const m of scan.matchAll(/(?<![.\w'])([a-zA-Z_]\w*)\b(?!\s*:)/g)) {
+    const id = m[1];
+    if (/^[A-Z]/.test(id) || DART_OK.has(id) || declared.has(id) || watchVars.has(id)) continue;
+    if (projectPub.has(id)) continue;
+    return false;
+  }
+  return true;
+}
+
 // ── טוקני-BsTokens: שם ⇒ קבוע ──
 const bsTokens = new Set();
 try {
@@ -175,7 +201,8 @@ for (const mf of fs.readdirSync(MANIFESTS).filter(f => f.endsWith('.manifest.jso
         const fArgs = fields.map(k => `${k}: ${(la?.named[k] ?? 'null /* TODO-לוח */').trim()}`);
         const ln = sec.repeat.item.charAt(0).toLowerCase() + sec.repeat.item.slice(1) + 's';
         const le = lc.list.trim();
-        wires.set(ln, `${le}.map((${lc.as}) => ${sec.repeat.item}(${fArgs.join(', ')})).toList()`);
+        const full = `${le}.map((${lc.as}) => ${sec.repeat.item}(${fArgs.join(', ')})).toList()`;
+        if (exprResolvable(full, new Set([...watchLines.keys()]))) wires.set(ln, full);
       }
     }
     for (const [k, v] of Object.entries(sec.props || {})) {
@@ -183,7 +210,10 @@ for (const mf of fs.readdirSync(MANIFESTS).filter(f => f.endsWith('.manifest.jso
       const pname = v.startsWith('@:') ? v.slice(2).trim() : [...needP.keys()].find(n => n === k || n.startsWith(k)) || k;
       if (wires.has(pname)) continue;
       const e = resolve(k);
-      if (e) { if (/[֐-׿]/.test(e)) heb++; wires.set(pname, e); }
+      if (!e) continue;
+      if (!exprResolvable(e, new Set([...watchLines.keys()]))) continue;   // תלוי-הקשר ⇒ TODO כן
+      if (/[֐-׿]/.test(e)) heb++;
+      wires.set(pname, e);
     }
   }
 

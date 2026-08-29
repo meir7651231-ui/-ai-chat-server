@@ -47,13 +47,6 @@
    }
   },
   {
-   "id": "status_pill",
-   "atom": "StatusPill",
-   "props": {
-    "status": "?:String"
-   }
-  },
-  {
    "id": "thumb_placeholder",
    "atom": "ThumbPlaceholder",
    "props": {

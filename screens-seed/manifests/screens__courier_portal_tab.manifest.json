@@ -2,9 +2,7 @@
  "generated": true,
  "src": "screens__courier_portal_tab",
  "screen": "courier_portal_tab",
- "content": [
-  "auto/screens__courier_portal_tab_content.dart"
- ],
+ "content": [],
  "sections": [
   {
    "id": "portal_tile_button",
@@ -13,14 +11,6 @@
     "title": "?:String",
     "sub": "?:String",
     "onTap": "@:onTap"
-   }
-  },
-  {
-   "id": "destination_card",
-   "atom": "DestinationCard",
-   "props": {
-    "fallback": "$: destination_card_fallback",
-    "haul": "?:String"
    }
   }
  ]
