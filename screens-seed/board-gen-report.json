@@ -12,8 +12,8 @@
   },
   {
    "screen": "screens__ai_hub_screen",
-   "wired": 2,
-   "todo": 11
+   "wired": 0,
+   "todo": 4
   },
   {
    "screen": "screens__budget_screen",
@@ -43,7 +43,7 @@
   {
    "screen": "screens__chats_screen",
    "wired": 0,
-   "todo": 3
+   "todo": 11
   },
   {
    "screen": "screens__consent_modal",
@@ -92,7 +92,7 @@
   },
   {
    "screen": "screens__courier_profile_screen",
-   "wired": 0,
+   "wired": 4,
    "todo": 2
   },
   {
@@ -158,7 +158,7 @@
   {
    "screen": "screens__lipskey_products_screen",
    "wired": 1,
-   "todo": 8
+   "todo": 10
   },
   {
    "screen": "screens__manager_copilot_screen",
@@ -168,7 +168,7 @@
   {
    "screen": "screens__manager_dashboard_screen",
    "wired": 0,
-   "todo": 6
+   "todo": 19
   },
   {
    "screen": "screens__manager_profile_screen",
@@ -183,7 +183,7 @@
   {
    "screen": "screens__notif_settings_screen",
    "wired": 0,
-   "todo": 9
+   "todo": 1
   },
   {
    "screen": "screens__notifications_screen",
@@ -227,8 +227,8 @@
   },
   {
    "screen": "screens__site_hub_screen",
-   "wired": 1,
-   "todo": 1
+   "wired": 2,
+   "todo": 10
   },
   {
    "screen": "screens__smart_home_screen",
@@ -263,7 +263,7 @@
   {
    "screen": "screens__store_settings_screen",
    "wired": 1,
-   "todo": 11
+   "todo": 12
   },
   {
    "screen": "screens__studio__panes__find_replace_pane",
@@ -273,7 +273,7 @@
   {
    "screen": "screens__studio__panes__theme_pane",
    "wired": 1,
-   "todo": 1
+   "todo": 2
   },
   {
    "screen": "screens__studio__studio_top_bar",
@@ -318,7 +318,7 @@
   {
    "screen": "screens__trade_builder__trade_builder_home",
    "wired": 0,
-   "todo": 3
+   "todo": 2
   },
   {
    "screen": "screens__trade_builder__trade_define_step",
@@ -333,7 +333,7 @@
   {
    "screen": "screens__worker_app_screen",
    "wired": 1,
-   "todo": 13
+   "todo": 15
   },
   {
    "screen": "screens__worker_attendance_screen",
@@ -373,7 +373,7 @@
   {
    "screen": "screens__worker_reports_tab",
    "wired": 0,
-   "todo": 8
+   "todo": 6
   },
   {
    "screen": "screens__worker_safety_screen",
@@ -397,8 +397,8 @@
   }
  ],
  "totals": {
-  "wired": 48,
-  "todo": 398,
-  "hebInExpr": 16
+  "wired": 51,
+  "todo": 416,
+  "hebInExpr": 15
  }
 }

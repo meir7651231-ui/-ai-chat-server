@@ -2,6 +2,7 @@
  "generated": true,
  "src": "screens__manager_dashboard_screen",
  "screen": "manager_dashboard_screen",
+ "flat": true,
  "content": [
   "auto/screens__manager_dashboard_screen_content.dart",
   "screens__manager_dashboard_screen_content.dart"
@@ -69,6 +70,110 @@
     "label": "$: manager_dashboard_credit_bar_label",
     "pct": "?:int",
     "color": "#:color"
+   }
+  },
+  {
+   "id": "journey_empty",
+   "atom": "JourneyEmpty",
+   "props": {
+    "text": "$: managerShellContent.text"
+   }
+  },
+  {
+   "id": "manage_intro",
+   "atom": "ManageIntro",
+   "props": {
+    "fallback": "$: manage_intro_fallback"
+   }
+  },
+  {
+   "id": "manage_section",
+   "atom": "ManageSection",
+   "props": {
+    "title2": "$: manage_section_title2",
+    "body": "$: manage_section_body",
+    "label": "$: manage_section_label",
+    "sectionKey": "?:String",
+    "titleCfgId": "?:String",
+    "emoji": "?:String",
+    "title": "$: managerShellContent.title",
+    "sub": "?:String",
+    "open": "?:bool",
+    "onTap": "@:onTap",
+    "child": "?:Widget",
+    "badge": "?:int"
+   }
+  },
+  {
+   "id": "app_settings_body",
+   "atom": "AppSettingsBody",
+   "props": {
+    "label": "$: app_settings_body_label",
+    "label2": "$: app_settings_body_label2",
+    "label3": "$: app_settings_body_label3",
+    "text": "$: app_settings_body_text",
+    "text2": "$: app_settings_body_text2"
+   }
+  },
+  {
+   "id": "product_tree_body",
+   "atom": "ProductTreeBody",
+   "props": {
+    "fallback": "$: product_tree_body_fallback",
+    "label": "$: product_tree_body_label",
+    "label2": "$: product_tree_body_label2",
+    "text": "$: product_tree_body_text",
+    "categoryCount": "?:int",
+    "productCount": "?:int"
+   }
+  },
+  {
+   "id": "regression_body",
+   "atom": "RegressionBody",
+   "props": {
+    "fallback": "$: regression_body_fallback",
+    "title": "$: regression_body_title",
+    "body": "$: regression_body_body",
+    "fallback2": "$: regression_body_fallback2",
+    "onOpen": "@:onOpen"
+   }
+  },
+  {
+   "id": "manager_dashboard_count_badge",
+   "atom": "ManagerDashboardCountBadge",
+   "props": {
+    "label": "$: manager_dashboard_count_badge_label",
+    "count": "?:int"
+   }
+  },
+  {
+   "id": "approval_button",
+   "atom": "ApprovalButton",
+   "props": {
+    "label": "$: managerShellContent.label",
+    "color": "#:color",
+    "textColor": "#:textColor",
+    "bordered": "?:bool",
+    "onPressed": "@:onPressed"
+   }
+  },
+  {
+   "id": "manage_row",
+   "atom": "ManageRow",
+   "props": {
+    "label": "~:",
+    "value": "~:"
+   },
+   "repeat": {
+    "as": "e",
+    "item": "ManageRowItem"
+   }
+  },
+  {
+   "id": "manage_hint",
+   "atom": "ManageHint",
+   "props": {
+    "text": "$: managerShellContent.text"
    }
   }
  ]

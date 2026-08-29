@@ -16,16 +16,43 @@ export const IMPORT_RULES = [
 ];
 export const inferImports = (code) => IMPORT_RULES.filter(([re]) => re.test(code)).map(([, imp]) => imp);
 
-/** חילוץ-גוף מאוזן-סוגריים מודע-מחרוזות מ-startIdx (חוק-4: verbatim). */
-export function classBody(src, startIdx) {
-  let i = src.indexOf('{', startIdx); if (i < 0) return null;
-  let d = 0, j = i, inS = 0;
-  for (; j < src.length; j++) {
+/** סורק-Dart משותף: מפעיל callback(מצב, תו, אינדקס) — מודע-מחרוזות ואינטרפולציה-מקוננת. */
+export function dartScan(src, from, onChar) {
+  let mode = 0;                      // 0=קוד · 1='  · 2="
+  let raw = false; const rawStack = [];
+  const modeStack = []; const interpDepth = [];
+  let d = 0;
+  for (let j = from; j < src.length; j++) {
     const c = src[j];
-    if (inS) { if (c === '\\') j++; else if ((inS === 1 && c === "'") || (inS === 2 && c === '"')) inS = 0; continue; }
-    if (c === "'") inS = 1; else if (c === '"') inS = 2;
-    else if (c === '{') d++; else if (c === '}') { d--; if (!d) break; }
+    if (mode) {
+      if (!raw && c === '\\') { onChar(mode, c, j); j++; if (j < src.length) onChar(mode, src[j], j); continue; }
+      if (!raw && c === '$' && src[j + 1] === '{') { modeStack.push(mode); rawStack.push(raw); raw = false; mode = 0; onChar(1, c, j); j++; onChar(1, src[j], j); d++; interpDepth.push(d); continue; }
+      if ((mode === 1 && c === "'") || (mode === 2 && c === '"')) { const m0 = mode; mode = 0; raw = false; onChar(m0, c, j); continue; }
+      onChar(mode, c, j); continue;
+    }
+    if (c === '/' && src[j + 1] === '/') { while (j < src.length && src[j] !== '\n') { onChar(3, src[j], j); j++; } if (j < src.length) onChar(0, '\n', j); continue; }
+    if (c === '/' && src[j + 1] === '*') { onChar(3, c, j); j++; onChar(3, '*', j); j++; while (j < src.length - 1 && !(src[j] === '*' && src[j + 1] === '/')) { onChar(3, src[j], j); j++; } onChar(3, '*', j); j++; if (j < src.length) onChar(3, '/', j); continue; }
+    if (c === "'") { mode = 1; raw = /r$/.test(src.slice(Math.max(0, j - 1), j)) && !/[\w$]r$/.test(src.slice(Math.max(0, j - 2), j)); onChar(1, c, j); continue; }
+    if (c === '"') { mode = 2; raw = /r$/.test(src.slice(Math.max(0, j - 1), j)) && !/[\w$]r$/.test(src.slice(Math.max(0, j - 2), j)); onChar(2, c, j); continue; }
+    if (c === '{') { d++; onChar(0, c, j); continue; }
+    if (c === '}') {
+      d--;
+      if (interpDepth.length && d === interpDepth[interpDepth.length - 1] - 1) { interpDepth.pop(); mode = modeStack.pop(); raw = rawStack.pop(); onChar(1, c, j); continue; }
+      onChar(0, c, j);
+      if (onChar.stopAtZero && d <= 0) return j;
+      continue;
+    }
+    onChar(0, c, j);
   }
+  return -1;
+}
+
+/** חילוץ-גוף מאוזן-סוגריים מודע-מחרוזות-ואינטרפולציה מ-startIdx (חוק-4: verbatim). */
+export function classBody(src, startIdx) {
+  const i = src.indexOf('{', startIdx); if (i < 0) return null;
+  const fn = () => {}; fn.stopAtZero = true;
+  const j = dartScan(src, i, fn);
+  if (j < 0) return null;
   return src.slice(startIdx, j + 1);
 }
 
@@ -69,7 +96,39 @@ export const FOUNDATION_FN = new Map([
 ]);
 
 export const ANY_LIT_RE = /'(?:[^'\\\n]|\\.)*'/g;
-export const maskLits = (s) => s.replace(ANY_LIT_RE, (m) => "'" + 'x'.repeat(m.length - 2) + "'");
+export const maskLits = (src) => {
+  const out = src.split('');
+  let mode = 0, raw = false;
+  const X = (j) => { if (out[j] !== '\n') out[j] = 'x'; };
+  for (let j = 0; j < src.length; j++) {
+    const c = src[j];
+    if (mode) {
+      if (!raw && c === '\\') { X(j); j++; if (j < src.length) X(j); continue; }
+      if (!raw && c === '$' && src[j + 1] === '{') {
+        // אינטרפולציה — אטומה-כולה (עומק-סוגריים מודע-מחרוזות-פנימיות)
+        let d = 0, im = 0, ir = false;
+        for (; j < src.length; j++) {
+          const cc = src[j]; X(j);
+          if (im) {
+            if (!ir && cc === '\\') { j++; if (j < src.length) X(j); continue; }
+            if ((im === 1 && cc === "'") || (im === 2 && cc === '"')) im = 0;
+            continue;
+          }
+          if (cc === "'" || cc === '"') { im = cc === "'" ? 1 : 2; ir = src[j - 1] === 'r' && !/[\w$]/.test(src[j - 2] || ''); continue; }
+          if (cc === '{') d++;
+          else if (cc === '}') { d--; if (!d) break; }
+        }
+        continue;
+      }
+      if ((mode === 1 && c === "'") || (mode === 2 && c === '"')) { mode = 0; continue; }
+      X(j); continue;
+    }
+    if (c === '/' && src[j + 1] === '/') { while (j < src.length && src[j] !== '\n') { X(j); j++; } continue; }
+    if (c === '/' && src[j + 1] === '*') { X(j); j++; X(j); j++; while (j < src.length - 1 && !(src[j] === '*' && src[j + 1] === '/')) { X(j); j++; } X(j); if (j + 1 < src.length) X(j + 1); j++; continue; }
+    if (c === "'" || c === '"') { mode = c === "'" ? 1 : 2; raw = src[j - 1] === 'r' && !/[\w$]/.test(src[j - 2] || ''); continue; }
+  }
+  return out.join('');
+};
 
 /** ארגומנטי-קריאה גולמיים של widget החל-מ-from: {named, positional, index} או null. */
 export function parseCallArgs(src, widget, from = 0) {

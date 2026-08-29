@@ -31,15 +31,6 @@
     "fallback": "$: add_trade_button_fallback",
     "onTap": "@:onTap"
    }
-  },
-  {
-   "id": "trade_builder_trade_builder_home_status_chip",
-   "atom": "TradeBuilderTradeBuilderHomeStatusChip",
-   "props": {
-    "label": "$: trade_builder_trade_builder_home_status_chip_label",
-    "label2": "$: trade_builder_trade_builder_home_status_chip_label2",
-    "published": "?:bool"
-   }
   }
  ]
 }

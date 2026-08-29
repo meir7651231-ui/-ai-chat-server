@@ -8,6 +8,18 @@
  ],
  "sections": [
   {
+   "id": "worker_nav",
+   "atom": "WorkerNav",
+   "props": {
+    "label": "$: worker_nav_label",
+    "label2": "$: worker_nav_label2",
+    "label3": "$: worker_nav_label3",
+    "label4": "$: worker_nav_label4",
+    "currentIndex": "?:int",
+    "chatOn": "?:bool"
+   }
+  },
+  {
    "id": "summary_card",
    "atom": "SummaryCard",
    "props": {

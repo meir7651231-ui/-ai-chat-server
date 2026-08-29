@@ -2,6 +2,7 @@
  "generated": true,
  "src": "screens__lipskey_products_screen",
  "screen": "lipskey_products_screen",
+ "flat": true,
  "content": [],
  "sections": [
   {
@@ -23,6 +24,15 @@
     "label2": "?:String",
     "icon": "?:IconData",
     "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "hierarchy_chip_pill",
+   "atom": "HierarchyChipPill",
+   "props": {
+    "word": "?:String",
+    "onTap": "@:onTap",
+    "isOpen": "?:bool"
    }
   }
  ]

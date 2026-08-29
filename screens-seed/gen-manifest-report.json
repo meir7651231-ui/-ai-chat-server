@@ -1,10 +1,10 @@
 {
  "full": [
-  "features__catalog_config__wheel_picker",
   "screens__catalog_settings_screen",
   "screens__courier_certs_screen",
   "screens__courier_settings_screen",
-  "screens__intel__intel_tab"
+  "screens__intel__intel_tab",
+  "screens__notif_settings_screen"
  ],
  "draft": [
   {
@@ -13,8 +13,13 @@
    "flat": true
   },
   {
+   "screen": "features__catalog_config__wheel_picker",
+   "holes": 0,
+   "flat": true
+  },
+  {
    "screen": "screens__ai_hub_screen",
-   "holes": 15
+   "holes": 3
   },
   {
    "screen": "screens__budget_screen",
@@ -36,7 +41,8 @@
   },
   {
    "screen": "screens__chats_screen",
-   "holes": 2
+   "holes": 9,
+   "flat": true
   },
   {
    "screen": "screens__consent_modal",
@@ -131,7 +137,8 @@
   },
   {
    "screen": "screens__lipskey_products_screen",
-   "holes": 8
+   "holes": 10,
+   "flat": true
   },
   {
    "screen": "screens__manager_copilot_screen",
@@ -140,7 +147,8 @@
   },
   {
    "screen": "screens__manager_dashboard_screen",
-   "holes": 3
+   "holes": 14,
+   "flat": true
   },
   {
    "screen": "screens__manager_profile_screen",
@@ -149,11 +157,8 @@
   },
   {
    "screen": "screens__manager_role_assign_sheet",
-   "holes": 3
-  },
-  {
-   "screen": "screens__notif_settings_screen",
-   "holes": 4
+   "holes": 3,
+   "flat": true
   },
   {
    "screen": "screens__notifications_screen",
@@ -193,11 +198,13 @@
   },
   {
    "screen": "screens__site_hub_screen",
-   "holes": 1
+   "holes": 14,
+   "flat": true
   },
   {
    "screen": "screens__smart_home_screen",
-   "holes": 4
+   "holes": 4,
+   "flat": true
   },
   {
    "screen": "screens__smart_project_screen",
@@ -225,7 +232,8 @@
   },
   {
    "screen": "screens__store_settings_screen",
-   "holes": 16
+   "holes": 18,
+   "flat": true
   },
   {
    "screen": "screens__studio__panes__find_replace_pane",
@@ -234,7 +242,7 @@
   },
   {
    "screen": "screens__studio__panes__theme_pane",
-   "holes": 1
+   "holes": 2
   },
   {
    "screen": "screens__studio__studio_top_bar",
@@ -277,7 +285,7 @@
   },
   {
    "screen": "screens__trade_builder__trade_builder_home",
-   "holes": 2
+   "holes": 1
   },
   {
    "screen": "screens__trade_builder__trade_define_step",
@@ -290,7 +298,7 @@
   },
   {
    "screen": "screens__worker_app_screen",
-   "holes": 17,
+   "holes": 19,
    "flat": true
   },
   {
@@ -328,11 +336,12 @@
   },
   {
    "screen": "screens__worker_reports_tab",
-   "holes": 9
+   "holes": 7
   },
   {
    "screen": "screens__worker_safety_screen",
-   "holes": 2
+   "holes": 2,
+   "flat": true
   },
   {
    "screen": "screens__worker_settings_screen",
@@ -528,17 +537,17 @@
   "screens__org_config_diag"
  ],
  "holesByType": {
-  "int": 21,
+  "int": 20,
   "String": 60,
-  "bool": 36,
-  "Widget": 5,
-  "TextEditingController": 4,
-  "IconData": 7,
+  "Widget": 7,
+  "TextEditingController": 5,
+  "bool": 35,
+  "IconData": 8,
   "List<String>": 3,
   "String?": 9,
   "int?": 2,
   "List<String>?": 1,
-  "List<Widget>": 8,
-  "double": 1
+  "List<Widget>": 9,
+  "double": 2
  }
 }

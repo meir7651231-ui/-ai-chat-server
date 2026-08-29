@@ -34,24 +34,6 @@
     "value": "?:String",
     "onTap": "@:onTap"
    }
-  },
-  {
-   "id": "proof_thumb",
-   "atom": "ProofThumb",
-   "props": {
-    "title": "$: proof_thumb_title",
-    "body": "$: proof_thumb_body",
-    "label": "$: proof_thumb_label",
-    "onTap": "@:onTap",
-    "photo": "?:String?"
-   }
-  },
-  {
-   "id": "thumb_placeholder",
-   "atom": "ThumbPlaceholder",
-   "props": {
-    "glyph": "?:String"
-   }
   }
  ]
 }

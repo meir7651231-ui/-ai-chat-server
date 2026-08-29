@@ -2,6 +2,7 @@
  "generated": true,
  "src": "screens__worker_safety_screen",
  "screen": "worker_safety_screen",
+ "flat": true,
  "content": [],
  "sections": [
   {

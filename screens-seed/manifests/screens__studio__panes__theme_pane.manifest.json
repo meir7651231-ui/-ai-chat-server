@@ -26,6 +26,15 @@
     "as": "c",
     "item": "SwatchItem"
    }
+  },
+  {
+   "id": "contrast_warning",
+   "atom": "ContrastWarning",
+   "props": {
+    "label": "$: contrast_warning_label",
+    "label2": "$: contrast_warning_label2",
+    "ratio": "?:double"
+   }
   }
  ]
 }

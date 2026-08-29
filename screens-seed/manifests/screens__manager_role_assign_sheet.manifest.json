@@ -2,6 +2,7 @@
  "generated": true,
  "src": "screens__manager_role_assign_sheet",
  "screen": "manager_role_assign_sheet",
+ "flat": true,
  "content": [
   "auto/screens__manager_role_assign_sheet_content.dart"
  ],

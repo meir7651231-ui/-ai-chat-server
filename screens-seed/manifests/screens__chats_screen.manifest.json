@@ -2,6 +2,7 @@
  "generated": true,
  "src": "screens__chats_screen",
  "screen": "chats_screen",
+ "flat": true,
  "content": [
   "auto/screens__chats_screen_content.dart"
  ],
@@ -13,6 +14,47 @@
     "label": "?:String",
     "active": "?:bool",
     "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "privacy_notice",
+   "atom": "PrivacyNotice",
+   "props": {
+    "fallback": "$: privacy_notice_fallback"
+   }
+  },
+  {
+   "id": "date_chip",
+   "atom": "DateChip",
+   "props": {
+    "date": "?:String"
+   }
+  },
+  {
+   "id": "typing_bubble",
+   "atom": "TypingBubble",
+   "props": {
+    "fallback": "$: typing_bubble_fallback"
+   }
+  },
+  {
+   "id": "input_bar",
+   "atom": "InputBar",
+   "props": {
+    "hintText": "?:String",
+    "tooltip": "?:String",
+    "controller": "?:TextEditingController",
+    "enabled": "?:bool",
+    "onSend": "@:onSend"
+   }
+  },
+  {
+   "id": "circle_fab",
+   "atom": "CircleFab",
+   "props": {
+    "icon": "?:IconData",
+    "onTap": "@:onTap",
+    "semanticLabel": "?:String"
    }
   }
  ]

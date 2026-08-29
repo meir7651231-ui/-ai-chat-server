@@ -2,6 +2,7 @@
  "generated": true,
  "src": "features__catalog_config__wheel_picker",
  "screen": "catalog_config_wheel_picker",
+ "flat": true,
  "content": [],
  "sections": [
   {

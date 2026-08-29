@@ -2,6 +2,7 @@
  "generated": true,
  "src": "screens__smart_home_screen",
  "screen": "smart_home_screen",
+ "flat": true,
  "content": [],
  "sections": [
   {

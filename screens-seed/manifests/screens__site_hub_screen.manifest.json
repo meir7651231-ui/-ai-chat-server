@@ -2,8 +2,90 @@
  "generated": true,
  "src": "screens__site_hub_screen",
  "screen": "site_hub_screen",
+ "flat": true,
  "content": [],
  "sections": [
+  {
+   "id": "site_hub_md_head",
+   "atom": "SiteHubMdHead",
+   "props": {
+    "icon": "?:String",
+    "title": "?:String",
+    "sub": "?:String"
+   }
+  },
+  {
+   "id": "site_hub_ca_card",
+   "atom": "SiteHubCaCard",
+   "props": {
+    "child": "~:",
+    "overdue": "?:bool"
+   },
+   "repeat": {
+    "as": "p",
+    "item": "SiteHubCaCardItem"
+   }
+  },
+  {
+   "id": "site_hub_ca_primary",
+   "atom": "SiteHubCaPrimary",
+   "props": {
+    "label": "?:String",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "ca_sub_title",
+   "atom": "CaSubTitle",
+   "props": {
+    "text": "?:String"
+   }
+  },
+  {
+   "id": "site_hub_ca_empty",
+   "atom": "SiteHubCaEmpty",
+   "props": {
+    "text": "?:String"
+   }
+  },
+  {
+   "id": "site_server_note",
+   "atom": "SiteServerNote",
+   "props": {
+    "text": "?:String"
+   }
+  },
+  {
+   "id": "ca_pill",
+   "atom": "CaPill",
+   "props": {
+    "label": "?:String",
+    "done": "?:bool"
+   }
+  },
+  {
+   "id": "card_top",
+   "atom": "CardTop",
+   "props": {
+    "left": "?:String",
+    "trailing": "?:Widget"
+   }
+  },
+  {
+   "id": "site_hub_card_btn",
+   "atom": "SiteHubCardBtn",
+   "props": {
+    "label": "?:String",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "card_done",
+   "atom": "CardDone",
+   "props": {
+    "text": "?:String"
+   }
+  },
   {
    "id": "hub_tile",
    "atom": "HubTile",
@@ -16,13 +98,6 @@
    "repeat": {
     "as": "t",
     "item": "HubTileItem"
-   }
-  },
-  {
-   "id": "site_server_note",
-   "atom": "SiteServerNote",
-   "props": {
-    "text": "?:String"
    }
   }
  ]
