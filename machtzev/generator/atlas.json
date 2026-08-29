@@ -3,7 +3,9 @@
   "cls": "BareStat",
   "file": "bare_stat.dart",
   "props": [
+   "value",
    "label",
+   "inkColor",
    "mutedColor"
   ],
   "required": [
@@ -18,7 +20,10 @@
   "cls": "EmptyStateCard",
   "file": "empty_state_card.dart",
   "props": [
+   "glyph",
    "message",
+   "surfaceColor",
+   "mutedColor",
    "borderColor",
    "radius"
   ],
@@ -36,8 +41,13 @@
   "cls": "HeroCard",
   "file": "hero_card.dart",
   "props": [
+   "glyph",
+   "title",
    "sub",
    "onTap",
+   "cardColor",
+   "inkColor",
+   "mutedColor",
    "borderColor",
    "radius",
    "trailing"
@@ -59,9 +69,15 @@
   "cls": "OrderCard",
   "file": "order_card.dart",
   "props": [
+   "stageLabel",
+   "itemsLabel",
    "sumLabel",
    "onTap",
+   "cardColor",
+   "inkColor",
+   "mutedColor",
    "borderColor",
+   "radius",
    "width"
   ],
   "required": [
@@ -84,6 +100,9 @@
   "props": [
    "label",
    "onTap",
+   "brandColor",
+   "disabledColor",
+   "onAccentColor",
    "mutedColor",
    "pillRadius",
    "enabled"
@@ -103,8 +122,10 @@
   "cls": "PlaceholderRow",
   "file": "placeholder_row.dart",
   "props": [
+   "label",
    "badge",
    "onTap",
+   "inkColor",
    "mutedColor"
   ],
   "required": [
@@ -121,6 +142,9 @@
   "file": "quick_tools_list.dart",
   "props": [
    "tools",
+   "cardColor",
+   "inkColor",
+   "mutedColor",
    "borderColor",
    "radius"
   ],
@@ -138,7 +162,10 @@
   "cls": "StatTile",
   "file": "stat_tile.dart",
   "props": [
+   "value",
    "label",
+   "surfaceColor",
+   "inkColor",
    "mutedColor",
    "radius"
   ],
@@ -171,8 +198,12 @@
   "cls": "WorkPathCard",
   "file": "work_path_card.dart",
   "props": [
+   "badge",
+   "title",
    "sub",
+   "gradStart",
    "gradEnd",
+   "radius",
    "pillRadius"
   ],
   "required": [
@@ -4433,6 +4464,7 @@
   "props": [
    "icon",
    "badgeLabel",
+   "badgeFillColor",
    "badgeTextColor"
   ],
   "required": [
@@ -4447,13 +4479,24 @@
   "cls": "CartChatBubble",
   "file": "screens__home_shell/cart_chat_bubble.dart",
   "props": [
+   "emoji",
    "name",
    "attrs",
+   "priceLabel",
    "qtyLabel",
+   "onTap",
    "onClose",
+   "closeSemanticsLabel",
    "closeTooltip",
+   "bubbleColor",
+   "borderColor",
    "shadowColor",
+   "nameColor",
+   "mutedColor",
+   "priceColor",
    "editIconColor",
+   "closeFillColor",
+   "closeBorderColor",
    "closeIconColor"
   ],
   "required": [
@@ -4486,7 +4529,11 @@
    "heroTag",
    "onPressed",
    "countLabel",
+   "fillColor",
+   "ringColor",
    "iconColor",
+   "badgeFillColor",
+   "badgeBorderColor",
    "badgeTextColor"
   ],
   "required": [
@@ -4506,9 +4553,12 @@
   "cls": "DirectoryRow",
   "file": "screens__home_shell/directory_row.dart",
   "props": [
+   "emoji",
    "title",
    "subtitle",
    "onTap",
+   "inkColor",
+   "mutedColor",
    "trailingColor"
   ],
   "required": [
@@ -4528,7 +4578,9 @@
   "props": [
    "label",
    "onPressed",
+   "fillColor",
    "textColor",
+   "radius",
    "vPad",
    "labelSlot"
   ],
@@ -4550,7 +4602,12 @@
    "exitLabel",
    "onExit",
    "onScrimTap",
+   "bannerFillColor",
+   "bannerInkColor",
    "scrimColor",
+   "hPad",
+   "vPad",
+   "iconGap",
    "exitRadius",
    "bannerSlot"
   ],
@@ -4575,7 +4632,9 @@
   "props": [
    "icon",
    "value",
+   "iconColor",
    "textColor",
+   "vPad",
    "gap"
   ],
   "required": [
@@ -4592,6 +4651,7 @@
   "cls": "MenuRow",
   "file": "screens__home_shell/menu_row.dart",
   "props": [
+   "emoji",
    "label",
    "inkColor",
    "labelSlot"
@@ -4608,8 +4668,10 @@
   "file": "screens__home_shell/name_chip.dart",
   "props": [
    "label",
+   "semanticsLabel",
    "tooltip",
    "onTap",
+   "fillColor",
    "textColor"
   ],
   "required": [
@@ -4631,6 +4693,9 @@
    "fallbackIcon",
    "closeTooltip",
    "onClose",
+   "avatarFillColor",
+   "avatarInkColor",
+   "nameColor",
    "closeColor",
    "gap"
   ],
@@ -4671,6 +4736,8 @@
    "label",
    "semanticsLabel",
    "onTap",
+   "dotColor",
+   "textColor",
    "fillColor",
    "chipKey"
   ],
@@ -4688,9 +4755,11 @@
   "cls": "AccessoryRow",
   "file": "screens__lipskey_product_sheet/accessory_row.dart",
   "props": [
+   "emoji",
    "name",
    "inkColor",
    "badgeLabel",
+   "badgeBgColor",
    "badgeFgColor"
   ],
   "required": [
@@ -4720,11 +4789,13 @@
   "cls": "AttributeChip",
   "file": "screens__lipskey_product_sheet/attribute_chip.dart",
   "props": [
+   "label",
    "value",
    "color",
    "tappable",
    "active",
    "onTap",
+   "labelColor",
    "tapAccentColor"
   ],
   "required": [
@@ -4745,7 +4816,9 @@
   "props": [
    "onTap",
    "semanticLabel",
+   "bgColor",
    "iconColor",
+   "iconSize",
    "tapSize",
    "withTooltip"
   ],
@@ -4761,8 +4834,10 @@
   "cls": "EmojiSectionTitle",
   "file": "screens__lipskey_product_sheet/emoji_section_title.dart",
   "props": [
+   "emoji",
    "title",
    "subtitle",
+   "inkColor",
    "subtitleColor"
   ],
   "required": [
@@ -4826,10 +4901,15 @@
    "resetKey",
    "imageCount",
    "imageBuilder",
+   "onZoom",
    "onFlip",
    "pagerLabel",
    "flipLabel",
    "flipIcon",
+   "backgroundColor",
+   "flipBgColor",
+   "flipFgColor",
+   "pagerBgColor",
    "pagerFgColor",
    "backgroundOverlay",
    "cornerBadge",
@@ -4883,10 +4963,13 @@
   "cls": "InfoStripRow",
   "file": "screens__lipskey_product_sheet/info_strip_row.dart",
   "props": [
+   "emoji",
+   "label",
    "value",
    "tint",
    "expanded",
    "onTap",
+   "labelColor",
    "valueColor",
    "icon"
   ],
@@ -4907,6 +4990,7 @@
   "file": "screens__lipskey_product_sheet/inset_divider.dart",
   "props": [
    "color",
+   "indent",
    "endIndent",
    "thickness"
   ],
@@ -4919,10 +5003,20 @@
   "cls": "InstallStageRow",
   "file": "screens__lipskey_product_sheet/install_stage_row.dart",
   "props": [
+   "numberText",
+   "emoji",
+   "label",
    "desc",
+   "isActive",
    "isFinal",
    "onTap",
+   "finalColor",
+   "stepColor",
    "stepBaseColor",
+   "inkColor",
+   "descColor",
+   "idleBgColor",
+   "idleBorderColor",
    "chevronColor"
   ],
   "required": [
@@ -4951,6 +5045,9 @@
    "value",
    "isSelected",
    "onTap",
+   "accentColor",
+   "idleBgColor",
+   "idleBorderColor",
    "idleFgColor"
   ],
   "required": [
@@ -4969,6 +5066,7 @@
   "file": "screens__lipskey_product_sheet/picker_options_panel.dart",
   "props": [
    "children",
+   "bgColor",
    "borderColor"
   ],
   "required": [
@@ -4982,8 +5080,14 @@
   "cls": "PriceEstimatePanel",
   "file": "screens__lipskey_product_sheet/price_estimate_panel.dart",
   "props": [
+   "currencyText",
+   "amountText",
+   "badgeLabel",
    "noteText",
    "unitSuffixText",
+   "priceColor",
+   "badgeBgColor",
+   "badgeFgColor",
    "noteColor"
   ],
   "required": [
@@ -5003,11 +5107,23 @@
   "file": "screens__lipskey_product_sheet/product_mini_card.dart",
   "props": [
    "media",
+   "title",
    "skuLabel",
    "onTap",
+   "surfaceColor",
+   "borderColor",
+   "inkColor",
    "mutedColor",
+   "width",
+   "mediaHeight",
+   "radius",
+   "padding",
+   "titleFontSize",
+   "titleLineHeight",
+   "skuFontSize",
    "mediaGap",
    "linkChipLabel",
+   "linkChipBg",
    "linkChipFg",
    "titleExpanded",
    "skuGap"
@@ -5030,6 +5146,8 @@
   "props": [
    "qty",
    "onChanged",
+   "inkColor",
+   "borderColor",
    "surfaceColor"
   ],
   "required": [
@@ -5045,8 +5163,17 @@
   "cls": "RecommendedKitBanner",
   "file": "screens__lipskey_product_sheet/recommended_kit_banner.dart",
   "props": [
+   "leadingEmoji",
+   "title",
+   "subtitle",
    "buttonLabel",
-   "onPressed"
+   "onPressed",
+   "tintBgColor",
+   "tintBorderColor",
+   "buttonBgColor",
+   "buttonFgColor",
+   "titleColor",
+   "subtitleColor"
   ],
   "required": [
    "leadingEmoji",
@@ -5068,6 +5195,8 @@
   "file": "screens__lipskey_product_sheet/score_band_chip.dart",
   "props": [
    "text",
+   "bgColor",
+   "borderColor",
    "fgColor"
   ],
   "required": [
@@ -5083,6 +5212,9 @@
   "file": "screens__lipskey_product_sheet/sheet_drag_handle.dart",
   "props": [
    "color",
+   "width",
+   "height",
+   "topMargin",
    "bottomMargin"
   ],
   "required": [
@@ -5094,7 +5226,9 @@
   "cls": "SpecMonoRow",
   "file": "screens__lipskey_product_sheet/spec_mono_row.dart",
   "props": [
+   "label",
    "value",
+   "labelColor",
    "valueColor"
   ],
   "required": [
@@ -5109,7 +5243,10 @@
   "cls": "SpecRow",
   "file": "screens__lipskey_product_sheet/spec_row.dart",
   "props": [
+   "emoji",
+   "label",
    "value",
+   "labelColor",
    "valueColor"
   ],
   "required": [
@@ -5126,6 +5263,7 @@
   "file": "screens__lipskey_product_sheet/strip_group_card.dart",
   "props": [
    "children",
+   "surfaceColor",
    "borderColor"
   ],
   "required": [
@@ -5152,10 +5290,14 @@
   "cls": "TagDetailRow",
   "file": "screens__lipskey_product_sheet/tag_detail_row.dart",
   "props": [
+   "tagLabel",
+   "title",
    "reason",
    "tagColor",
    "tagFgColor",
+   "inkColor",
    "reasonColor",
+   "titleWeight",
    "tagWeight",
    "reasonHeight",
    "centerTag"
@@ -5174,7 +5316,11 @@
   "cls": "TintedBadgeRow",
   "file": "screens__lipskey_product_sheet/tinted_badge_row.dart",
   "props": [
+   "badgeText",
    "trailingText",
+   "badgeBgColor",
+   "badgeBorderColor",
+   "badgeFgColor",
    "trailingColor"
   ],
   "required": [
@@ -5191,8 +5337,13 @@
   "cls": "UnitSegmentToggle",
   "file": "screens__lipskey_product_sheet/unit_segment_toggle.dart",
   "props": [
+   "options",
    "selectedIndex",
    "onSelect",
+   "selectedBgColor",
+   "selectedFgColor",
+   "enabledFgColor",
+   "disabledFgColor",
    "borderColor"
   ],
   "required": [
@@ -5212,6 +5363,8 @@
   "file": "screens__lipskey_product_sheet/zoom_hint_badge.dart",
   "props": [
    "label",
+   "bgColor",
+   "borderColor",
    "fgColor",
    "icon"
   ],
@@ -5227,17 +5380,24 @@
   "cls": "AccordionSectionCard",
   "file": "screens__manager_dashboard_screen/accordion_section_card.dart",
   "props": [
+   "emoji",
+   "title",
    "sub",
    "expanded",
    "onTap",
    "child",
+   "surfaceColor",
+   "borderColor",
+   "inkColor",
    "mutedColor",
    "radius",
+   "headerPadding",
    "bodyPadding",
    "gap",
    "badge",
    "wrapHeader",
    "semanticsLabel",
+   "chevronExpanded",
    "chevronCollapsed"
   ],
   "required": [
@@ -5262,9 +5422,14 @@
   "cls": "ApprovalTaskCard",
   "file": "screens__manager_dashboard_screen/approval_task_card.dart",
   "props": [
+   "title",
+   "metaLabel",
    "note",
    "photo",
    "actions",
+   "surfaceColor",
+   "borderColor",
+   "inkColor",
    "mutedColor",
    "padding",
    "gap"
@@ -5286,10 +5451,12 @@
   "cls": "AttentionRow",
   "file": "screens__manager_dashboard_screen/attention_row.dart",
   "props": [
+   "tagLabel",
    "title",
    "accentColor",
    "onTap",
    "gap",
+   "tagFontSize",
    "titleFontSize"
   ],
   "required": [
@@ -5307,7 +5474,11 @@
   "cls": "BrandListRow",
   "file": "screens__manager_dashboard_screen/brand_list_row.dart",
   "props": [
+   "emoji",
+   "name",
+   "tagline",
    "countLabel",
+   "inkColor",
    "mutedColor",
    "gap"
   ],
@@ -5325,6 +5496,7 @@
   "file": "screens__manager_dashboard_screen/count_badge.dart",
   "props": [
    "text",
+   "fillColor",
    "textColor",
    "pillRadius",
    "semanticsLabel"
@@ -5342,7 +5514,9 @@
   "file": "screens__manager_dashboard_screen/credit_bar.dart",
   "props": [
    "fraction",
+   "color",
    "trackColor",
+   "pillRadius",
    "minHeight",
    "semanticsLabel"
   ],
@@ -5358,13 +5532,22 @@
   "cls": "CustomerCard",
   "file": "screens__manager_dashboard_screen/customer_card.dart",
   "props": [
+   "glyph",
+   "name",
+   "subLabel",
    "creditLine",
    "onTap",
+   "statusPill",
    "creditBar",
+   "badges",
    "scorePill",
+   "surfaceColor",
+   "borderColor",
+   "inkColor",
    "mutedColor",
    "radius",
    "padding",
+   "gap",
    "sectionGap",
    "semanticsLabel"
   ],
@@ -5394,6 +5577,10 @@
    "label",
    "selected",
    "onTap",
+   "activeFillColor",
+   "surfaceColor",
+   "activeTextColor",
+   "inkColor",
    "outlineColor",
    "pillRadius"
   ],
@@ -5414,8 +5601,11 @@
   "cls": "GradientHeroCard",
   "file": "screens__manager_dashboard_screen/gradient_hero_card.dart",
   "props": [
+   "glyph",
+   "title",
    "subtitle",
    "onTap",
+   "gradientStart",
    "gradientEnd",
    "radius",
    "gap",
@@ -5442,7 +5632,10 @@
   "file": "screens__manager_dashboard_screen/intro_banner.dart",
   "props": [
    "text",
+   "fillColor",
    "textColor",
+   "radius",
+   "fontSize",
    "lineHeight",
    "padding"
   ],
@@ -5459,9 +5652,15 @@
   "cls": "JourneyRow",
   "file": "screens__manager_dashboard_screen/journey_row.dart",
   "props": [
+   "emoji",
+   "label",
    "timeLabel",
+   "nodeColor",
+   "connectorColor",
+   "inkColor",
    "mutedColor",
    "isLast",
+   "gap",
    "rowGap",
    "stuckPill",
    "semanticsLabel"
@@ -5484,9 +5683,15 @@
   "cls": "LabelValueRow",
   "file": "screens__manager_dashboard_screen/label_value_row.dart",
   "props": [
+   "label",
    "value",
+   "labelColor",
    "valueColor",
+   "labelSize",
+   "valueSize",
+   "verticalPadding",
    "gap",
+   "labelWeight",
    "valueWeight",
    "flexibleValue",
    "alignTop"
@@ -5504,6 +5709,7 @@
   "file": "screens__manager_dashboard_screen/live_status_pill.dart",
   "props": [
    "text",
+   "textColor",
    "fillColor",
    "pillRadius",
    "horizontalPadding"
@@ -5521,7 +5727,12 @@
   "cls": "MetricTile",
   "file": "screens__manager_dashboard_screen/metric_tile.dart",
   "props": [
+   "emoji",
+   "value",
    "label",
+   "surfaceColor",
+   "borderColor",
+   "valueColor",
    "labelColor",
    "radius",
    "padding",
@@ -5549,6 +5760,7 @@
   "props": [
    "stageCount",
    "activeIndex",
+   "fillColor",
    "trackColor",
    "pillRadius"
   ],
@@ -5583,7 +5795,10 @@
   "file": "screens__manager_dashboard_screen/notice_bar.dart",
   "props": [
    "text",
+   "fillColor",
    "textColor",
+   "pillRadius",
+   "verticalPadding",
    "fontSize"
   ],
   "required": [
@@ -5603,8 +5818,13 @@
    "subLabel",
    "footerLabel",
    "onTap",
+   "stagePill",
+   "tracker",
    "trailing",
    "contact",
+   "surfaceColor",
+   "borderColor",
+   "inkColor",
    "mutedColor",
    "radius",
    "padding",
@@ -5635,8 +5855,11 @@
   "props": [
    "leading",
    "label",
+   "foregroundColor",
    "borderColor",
    "onPressed",
+   "verticalPadding",
+   "fontSize",
    "radius"
   ],
   "required": [
@@ -5653,7 +5876,11 @@
   "props": [
    "title",
    "children",
+   "surfaceColor",
+   "borderColor",
    "titleColor",
+   "radius",
+   "titleSize",
    "headerGap",
    "titleWeight",
    "padding",
@@ -5678,8 +5905,12 @@
   "cls": "PendingCheckRow",
   "file": "screens__manager_dashboard_screen/pending_check_row.dart",
   "props": [
+   "label",
    "tagLabel",
+   "tagColor",
+   "inkColor",
    "activeColor",
+   "checked",
    "enabled",
    "onChanged",
    "gap"
@@ -5703,8 +5934,12 @@
   "props": [
    "label",
    "onTap",
+   "fillColor",
    "textColor",
    "borderColor",
+   "pillRadius",
+   "fontSize",
+   "verticalPadding",
    "horizontalPadding",
    "centered"
   ],
@@ -5723,8 +5958,11 @@
   "cls": "ProgressStatRow",
   "file": "screens__manager_dashboard_screen/progress_stat_row.dart",
   "props": [
+   "label",
    "countLabel",
    "fraction",
+   "barColor",
+   "trackColor",
    "inkColor",
    "pillRadius",
    "bottomGap",
@@ -5747,8 +5985,12 @@
   "cls": "SegmentedPillToggle",
   "file": "screens__manager_dashboard_screen/segmented_pill_toggle.dart",
   "props": [
+   "items",
    "activeIndex",
    "onSelect",
+   "surfaceColor",
+   "activeFillColor",
+   "activeTextColor",
    "inkColor",
    "pillRadius",
    "halfGap",
@@ -5773,7 +6015,10 @@
   "cls": "SheetHeader",
   "file": "screens__manager_dashboard_screen/sheet_header.dart",
   "props": [
+   "glyph",
+   "title",
    "subtitle",
+   "titleColor",
    "subtitleColor",
    "gap"
   ],
@@ -5791,7 +6036,11 @@
   "cls": "SheetStatTile",
   "file": "screens__manager_dashboard_screen/sheet_stat_tile.dart",
   "props": [
+   "value",
    "label",
+   "surfaceColor",
+   "borderColor",
+   "valueColor",
    "labelColor",
    "verticalPadding"
   ],
@@ -5820,6 +6069,10 @@
   "cls": "SummaryStatStrip",
   "file": "screens__manager_dashboard_screen/summary_stat_strip.dart",
   "props": [
+   "stats",
+   "surfaceColor",
+   "borderColor",
+   "valueColor",
    "labelColor",
    "radius",
    "padding"
@@ -5841,6 +6094,10 @@
   "props": [
    "label",
    "color",
+   "fillAlpha",
+   "radius",
+   "fontSize",
+   "horizontalPadding",
    "verticalPadding",
    "fontWeight"
   ],
@@ -5873,8 +6130,13 @@
   "cls": "VacationRequestCard",
   "file": "screens__manager_dashboard_screen/vacation_request_card.dart",
   "props": [
+   "titleLabel",
    "reason",
+   "statusPill",
    "actions",
+   "surfaceColor",
+   "borderColor",
+   "inkColor",
    "mutedColor",
    "padding",
    "actionsGap"
@@ -5894,9 +6156,19 @@
   "cls": "CartItemRow",
   "file": "screens__store_screen/cart_item_row.dart",
   "props": [
+   "emoji",
+   "name",
+   "unitPriceLabel",
+   "qtyLabel",
+   "lineTotalLabel",
    "removeLabel",
    "onRemove",
+   "minusButton",
    "plusButton",
+   "surfaceColor",
+   "stepperColor",
+   "inkColor",
+   "mutedColor",
    "removeIconColor"
   ],
   "required": [
@@ -5922,7 +6194,11 @@
   "file": "screens__store_screen/cart_summary_card.dart",
   "props": [
    "lines",
+   "totalLabel",
    "totalValue",
+   "surfaceColor",
+   "inkColor",
+   "mutedColor",
    "dividerColor"
   ],
   "required": [
@@ -5940,8 +6216,11 @@
   "cls": "ContactTile",
   "file": "screens__store_screen/contact_tile.dart",
   "props": [
+   "avatar",
    "name",
    "onTap",
+   "avatarBgColor",
+   "inkColor",
    "trailingColor",
    "trailingIcon"
   ],
@@ -5960,9 +6239,15 @@
   "cls": "DeliveryOptionCard",
   "file": "screens__store_screen/delivery_option_card.dart",
   "props": [
+   "emoji",
+   "label",
    "feeLabel",
    "active",
    "onTap",
+   "accentColor",
+   "inkColor",
+   "mutedColor",
+   "idleBgColor",
    "idleBorderColor"
   ],
   "required": [
@@ -5987,6 +6272,7 @@
    "isFav",
    "onFavToggle",
    "child",
+   "backgroundColor",
    "favColor"
   ],
   "required": [
@@ -6003,12 +6289,22 @@
   "cls": "GridHubCard",
   "file": "screens__store_screen/grid_hub_card.dart",
   "props": [
+   "emoji",
+   "title",
    "preview",
    "badgeLabel",
    "isFav",
+   "favAddLabel",
    "favRemoveLabel",
+   "onFavToggle",
    "onTap",
+   "surfaceColor",
+   "borderColor",
+   "badgeColor",
    "badgeInkColor",
+   "inkColor",
+   "mutedColor",
+   "favActiveColor",
    "favIdleColor"
   ],
   "required": [
@@ -6052,9 +6348,14 @@
   "cls": "OrderListRow",
   "file": "screens__store_screen/order_list_row.dart",
   "props": [
+   "glyph",
+   "idLabel",
+   "timeLabel",
    "metaLabel",
    "stageChip",
    "onTap",
+   "circleColor",
+   "inkColor",
    "mutedColor"
   ],
   "required": [
@@ -6076,7 +6377,11 @@
   "props": [
    "steps",
    "currentIndex",
+   "accentColor",
+   "onAccentColor",
    "inkColor",
+   "idleLineColor",
+   "idleCircleColor",
    "idleInkColor"
   ],
   "required": [
@@ -6095,8 +6400,12 @@
   "cls": "OrdersHiddenNotice",
   "file": "screens__store_screen/orders_hidden_notice.dart",
   "props": [
+   "glyph",
+   "title",
+   "hint",
    "actionLabel",
    "onAction",
+   "inkColor",
    "mutedColor"
   ],
   "required": [
@@ -6114,9 +6423,14 @@
   "cls": "PaymentChip",
   "file": "screens__store_screen/payment_chip.dart",
   "props": [
+   "emoji",
    "label",
    "active",
    "onTap",
+   "activeColor",
+   "activeInkColor",
+   "idleColor",
+   "idleInkColor",
    "idleBorderColor"
   ],
   "required": [
@@ -6139,6 +6453,9 @@
    "label",
    "active",
    "onTap",
+   "activeColor",
+   "activeInkColor",
+   "idleColor",
    "idleInkColor"
   ],
   "required": [
@@ -6159,6 +6476,10 @@
    "icon",
    "label",
    "onTap",
+   "circleColor",
+   "iconColor",
+   "badgeColor",
+   "badgeInkColor",
    "labelColor",
    "badge"
   ],
@@ -6178,6 +6499,7 @@
   "cls": "SearchEmptyState",
   "file": "screens__store_screen/search_empty_state.dart",
   "props": [
+   "glyph",
    "message",
    "mutedColor"
   ],
@@ -6195,6 +6517,9 @@
    "label",
    "active",
    "onTap",
+   "activeColor",
+   "activeInkColor",
+   "idleColor",
    "idleInkColor"
   ],
   "required": [
@@ -6212,10 +6537,12 @@
   "cls": "ServiceTile",
   "file": "screens__store_screen/service_tile.dart",
   "props": [
+   "emoji",
    "label",
    "subLabel",
    "trailing",
    "onTap",
+   "labelColor",
    "subColor"
   ],
   "required": [
@@ -6242,8 +6569,10 @@
   "cls": "SheetScaffold",
   "file": "screens__store_screen/sheet_scaffold.dart",
   "props": [
+   "emoji",
    "title",
    "children",
+   "handleColor",
    "inkColor",
    "subtitle",
    "subtitleColor",
@@ -6262,6 +6591,7 @@
   "cls": "SheetTile",
   "file": "screens__store_screen/sheet_tile.dart",
   "props": [
+   "emoji",
    "label",
    "onTap",
    "inkColor"
@@ -6278,11 +6608,20 @@
   "cls": "SmartCartLineCard",
   "file": "screens__store_screen/smart_cart_line_card.dart",
   "props": [
+   "thumb",
    "stepper",
+   "titleLabel",
+   "brandName",
+   "totalLabel",
    "removeLabel",
    "onRemove",
    "accessories",
+   "surfaceColor",
+   "accentColor",
+   "inkColor",
    "mutedColor",
+   "accessoryInkColor",
+   "dividerColor",
    "removeIconColor"
   ],
   "required": [
@@ -6309,8 +6648,11 @@
   "file": "screens__store_screen/smart_qty_stepper.dart",
   "props": [
    "qty",
+   "onMinus",
    "onPlus",
+   "incrementLabel",
    "decrementLabel",
+   "accentColor",
    "inkColor"
   ],
   "required": [
@@ -6330,6 +6672,9 @@
   "props": [
    "label",
    "color",
+   "hPad",
+   "vPad",
+   "radius",
    "fontSize"
   ],
   "required": [
@@ -6348,6 +6693,7 @@
   "props": [
    "icon",
    "label",
+   "enabledColor",
    "disabledColor",
    "onTap"
   ],
@@ -6363,10 +6709,18 @@
   "cls": "StoreHubRow",
   "file": "screens__store_screen/store_hub_row.dart",
   "props": [
+   "emoji",
+   "title",
+   "preview",
    "timeLabel",
    "badgeLabel",
    "isFav",
    "onTap",
+   "circleColor",
+   "inkColor",
+   "mutedColor",
+   "accentColor",
+   "badgeInkColor",
    "favColor"
   ],
   "required": [
@@ -6402,7 +6756,9 @@
   "cls": "SummaryLine",
   "file": "screens__store_screen/summary_line.dart",
   "props": [
+   "label",
    "value",
+   "inkColor",
    "mutedColor",
    "bold"
   ],
@@ -6418,7 +6774,9 @@
   "cls": "SupplierHeader",
   "file": "screens__store_screen/supplier_header.dart",
   "props": [
+   "label",
    "leadTimeLabel",
+   "inkColor",
    "mutedColor"
   ],
   "required": [
@@ -6434,6 +6792,8 @@
   "file": "screens__store_screen/under_construction_badge.dart",
   "props": [
    "label",
+   "bgColor",
+   "borderColor",
    "inkColor"
   ],
   "required": [

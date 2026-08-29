@@ -32,9 +32,10 @@ for (const f of fs.readdirSync(SHELF, { recursive: true }).map(String)) {
   for (const cm of src.matchAll(/class\s+([A-Z][A-Za-z0-9]*)\s+extends\s+(?:StatelessWidget|StatefulWidget)\b/g)) {
     const cls = cm[1];
     const body = classBody(src, cm.index) || '';
-    // props: שדות-final (כולל טיפוסי-פונקציה/record)
+    // props: שדות-final — כולל טיפוסי-record מקוננים ורשימות-שמות (final Color a, b, c;)
     const types = new Map();
-    for (const fm of body.matchAll(/final\s+((?:\([^)]*\)\??|[A-Za-z_][\w<>,?() ]*?))\s+([a-zA-Z_]\w*)\s*;/g)) types.set(fm[2], fm[1].trim());
+    for (const fm of body.matchAll(/final\s+([^;=]+?)\s+([a-zA-Z_]\w*(?:\s*,\s*[a-zA-Z_]\w*)*)\s*;/g))
+      for (const nm of fm[2].split(',')) types.set(nm.trim(), fm[1].trim());
     // בנאי: מיקומיים + required
     const ctm = body.match(new RegExp('(?:const\\s+)?' + cls + '\\s*\\(([\\s\\S]*?)\\)\\s*[;:{]'));
     if (!ctm) continue;
@@ -59,10 +60,12 @@ const roleOf = (cls) =>
       : /Validated|TextRow|TextField|Input|Field/.test(cls) ? 'textfield'
         : /Button|Action/.test(cls) ? 'button'
           : /Banner/.test(cls) ? 'banner'
-            : /Radio|Segment/.test(cls) ? 'radio'
+            : /Radio|Segment|Toggle/.test(cls) ? 'radio'
               : /Slider/.test(cls) ? 'slider'
                 : /Chip/.test(cls) ? 'chip'
-                  : /Row|Tile/.test(cls) ? 'row' : 'other';
+                  : /Card/.test(cls) ? 'card'
+                    : /Header|Section|Title/.test(cls) ? 'header'
+                      : /Row|Tile/.test(cls) ? 'row' : 'other';
 
 // ── לקסיקון-הצורה: מילה-בעברית ⇒ תפקיד ──
 const LEXICON = new Map(Object.entries({
@@ -71,7 +74,10 @@ const LEXICON = new Map(Object.entries({
   'מספר': 'number', 'מונה': 'number', 'כמות': 'number',
   'כפתור': 'button', 'פעולה': 'button',
   'באנר': 'banner', 'הודעה': 'banner',
-  'בחירה': 'radio', 'רדיו': 'radio',
+  'בחירה': 'radio', 'רדיו': 'radio', 'בורר': 'radio',
+  'תגיות': 'chip', 'תגית': 'chip',
+  'כרטיס': 'card', 'אריח': 'card',
+  'כותרת': 'header', 'סקציה': 'header',
   'שורה': 'row',
 }));
 
@@ -88,10 +94,18 @@ function generate(slug, spec) {
   const [titleRaw, restRaw] = spec.includes(':') ? [spec.slice(0, spec.indexOf(':')), spec.slice(spec.indexOf(':') + 1)] : ['מסך חדש', spec];
   const title = titleRaw.trim();
   const parts = restRaw.split(',').map(s => s.trim()).filter(Boolean).map(txt => {
-    const words = txt.split(/\s+/);
+    // תחביר-אופציות: 'בחירה סוג עסק: קבלן / חנות / ספק' ⇒ label + options[]
+    let body = txt, options = null;
+    const ci = txt.indexOf(':');
+    if (ci > 0) { body = txt.slice(0, ci).trim(); options = txt.slice(ci + 1).split('/').map(s => s.trim()).filter(Boolean); }
+    // אימוג'י בבקשה ⇒ glyph של האטום (למשל 'מתג 🔔 קבלת התראות')
+    const em = body.match(/(\p{Extended_Pictographic}(?:️)?)/u);
+    const emoji = em ? em[1] : null;
+    if (emoji) body = body.replace(emoji, '').replace(/\s+/g, ' ').trim();
+    const words = body.split(/\s+/);
     const role = LEXICON.get(words[0]) || 'row';
-    const label = (LEXICON.has(words[0]) ? words.slice(1) : words).join(' ') || txt;
-    return { role, label, txt };
+    const label = (LEXICON.has(words[0]) ? words.slice(1) : words).join(' ') || body;
+    return { role, label, txt, options, emoji };
   });
 
   const pascal = slug.replace(/(^|[_-])([a-z])/g, (_, __, c) => c.toUpperCase());
@@ -109,11 +123,12 @@ function generate(slug, spec) {
   // מילוי prop; part=החלק; פותח מצב-משותף value/onChanged דרך shared
   const fillProp = (a, name, part, shared) => {
     const t = (a.types.get(name) || 'String').replace(/\?$/, '');
-    if (t === 'String' && name === 'value') { if (!shared.s) { shared.s = '_t' + (++sIdx); stateDecls.push(`String ${shared.s} = '';`); } return { expr: shared.s }; }
+    if (t === 'String' && /^(value|selected)$/.test(name)) { if (!shared.s) { shared.s = '_t' + (++sIdx); stateDecls.push(`String ${shared.s} = '';`); } return { expr: shared.s }; }
+    if (t === 'String' && /^(glyph|emoji|icon)$/.test(name)) return { expr: `'${part.emoji || '🔹'}'` };
     if (t === 'String') return { expr: constFor(part.label) };
     if (t === 'bool' && name === 'value') { if (!shared.b) { shared.b = '_v' + (++sIdx); stateDecls.push(`bool ${shared.b} = false;`); } return { expr: shared.b }; }
     if (t === 'bool') return { expr: 'false' };
-    if (t === 'int' && name === 'value') { if (!shared.i) { shared.i = '_n' + (++sIdx); stateDecls.push(`int ${shared.i} = 0;`); } return { expr: shared.i }; }
+    if (t === 'int' && /^(value|selectedIndex|activeIndex|selected)$/.test(name)) { if (!shared.i) { shared.i = '_n' + (++sIdx); stateDecls.push(`int ${shared.i} = 0;`); } return { expr: shared.i }; }
     if (t === 'int') return { expr: '0' };
     if (t === 'double') return { expr: /radius/i.test(name) ? '12' : '16' };
     if (t === 'Color') return { expr: tokenFor(name) };
@@ -123,7 +138,17 @@ function generate(slug, spec) {
     if (/^ValueChanged<bool>$|^void Function\(bool\)$/.test(t)) { if (!shared.b) { shared.b = '_v' + (++sIdx); stateDecls.push(`bool ${shared.b} = false;`); } return { expr: `(v) => setState(() => ${shared.b} = v)` }; }
     if (/^ValueChanged<int>$|^void Function\(int\)$/.test(t)) { if (!shared.i) { shared.i = '_n' + (++sIdx); stateDecls.push(`int ${shared.i} = 0;`); } return { expr: `(v) => setState(() => ${shared.i} = v)` }; }
     if (/^ValueChanged<String>$|^void Function\(String\)$/.test(t)) { if (!shared.s) { shared.s = '_t' + (++sIdx); stateDecls.push(`String ${shared.s} = '';`); } return { expr: `(v) => setState(() => ${shared.s} = v)` }; }
-    if (/^List<String>/.test(t)) return { expr: 'const <String>[]' };
+    if (/^List<String>/.test(t)) return { expr: part.options?.length ? `const <String>[${part.options.map(o => constFor(o)).join(', ')}]` : 'const <String>[]' };
+    // רשימת-record של אופציות (למשל List<({String label, bool enabled})>)
+    const rm2 = t.match(/^List<(\(\{[^}]*\}\))>$/);
+    if (rm2 && part.options?.length) {
+      const recT = rm2[1];
+      const fields2 = [...recT.matchAll(/(String|bool|int)\s+(\w+)/g)];
+      const items = part.options.map(o => '(' + fields2.map(([, ft, fn]) => `${fn}: ${ft === 'String' ? constFor(o) : ft === 'bool' ? 'true' : '0'}`).join(', ') + ')');
+      return { expr: `const <${recT}>[${items.join(', ')}]` };
+    }
+    if (t === 'Widget') return { expr: 'const SizedBox(height: 4)' };
+    if (/^List<Widget>/.test(t)) return { expr: 'const <Widget>[]' };
     return null;               // לא-ניתן-למילוי
   };
 
@@ -135,14 +160,18 @@ function generate(slug, spec) {
       const role = roleOf(a.cls);
       let score = role === part.role ? 5 : role === 'row' ? 1 : 0;
       if (score === 0) continue;
-      if (/^Settings|Row$/.test(a.cls) || /Settings/.test(a.cls)) score += 1;
-      // כל required חייב מילוי (בדיקה-יבשה, בלי לצרוך מונים)
-      let fillable = true;
+      if (/Settings/.test(a.cls)) score += 1;
+      // כל required חייב מילוי (בדיקה-יבשה, בלי לצרוך מונים); Widget-ריק נקנס — עדיף אטום פשוט
+      let fillable = true, widgetFills = 0;
       for (const rq of [...a.required, ...a.positional]) {
         const t = (a.types.get(rq) || '').replace(/\?$/, '');
+        if (/^Widget\b/.test(t) || /^List<Widget>/.test(t)) { widgetFills++; continue; }
+        if (/^List<\(\{/.test(t)) { if (!part.options?.length) { fillable = false; break; } continue; }
         if (!/^(String|bool|int|double|Color|IconData|TextEditingController|VoidCallback|void Function\(\)|ValueChanged<(bool|int|String)>|void Function\((bool|int|String)\)|List<String>)/.test(t)) { fillable = false; break; }
       }
       if (!fillable) continue;
+      if (part.options?.length && [...a.types.entries()].some(([n2, t2]) => /^(options|items)$/.test(n2) && /^List</.test(t2))) score += 2;
+      score -= widgetFills;
       score -= 0.05 * (a.required.size + a.positional.length);
       if (score > bestScore) { bestScore = score; best = a; }
     }
