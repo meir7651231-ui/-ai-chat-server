@@ -1,6 +1,7 @@
-// 🛗 הורם ע"י מנוע-המדף (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
-// מוצא: screens__rewards_hub_screen:_CoinBanner (בנייה-חכמה main)
+// 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
+// מוצא: screens__rewards_hub_screen:_CoinBanner (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import 'bs_tokens.dart';
 
 class CoinBanner extends StatelessWidget {
   const CoinBanner({required this.coins, required this.sub});

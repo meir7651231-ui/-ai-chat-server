@@ -1,6 +1,7 @@
-// 🛗 הורם ע"י מנוע-המדף (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
-// מוצא: screens__intel__intel_tab:_IntelPill (בנייה-חכמה main)
+// 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
+// מוצא: screens__intel__intel_tab:_IntelPill (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import 'bs_tokens.dart';
 
 class IntelPill extends StatelessWidget {
   const IntelPill({required this.label, required this.color});

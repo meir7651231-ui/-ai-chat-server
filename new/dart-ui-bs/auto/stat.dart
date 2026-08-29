@@ -1,7 +1,8 @@
-// 🛗 הורם ע"י מנוע-המדף (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
-// מוצא: screens__courier_dashboard_screen:_Stat (בנייה-חכמה main)
+// 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
+// מוצא: screens__courier_dashboard_screen:_Stat (בנייה-חכמה main) · Stateless
 // משרת-גם (זהה-מבנית): screens__courier_profile_screen:_PStat · screens__store_dashboard_screen:_Stat
 import 'package:flutter/material.dart';
+import 'bs_tokens.dart';
 
 class Stat extends StatelessWidget {
   const Stat({required this.value, required this.label});

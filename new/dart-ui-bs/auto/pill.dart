@@ -1,7 +1,8 @@
-// 🛗 הורם ע"י מנוע-המדף (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
-// מוצא: screens__chats_screen:_Pill (בנייה-חכמה main)
+// 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
+// מוצא: screens__chats_screen:_Pill (בנייה-חכמה main) · Stateless
 // משרת-גם (זהה-מבנית): screens__regression_panel_screen:_Pill
 import 'package:flutter/material.dart';
+import 'bs_tokens.dart';
 
 class Pill extends StatelessWidget {
   const Pill({required this.label, required this.active, required this.onTap});

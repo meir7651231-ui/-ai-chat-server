@@ -1,6 +1,7 @@
-// 🛗 הורם ע"י מנוע-המדף (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
-// מוצא: screens__worker_reports_tab:_StatusPill (בנייה-חכמה main)
+// 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
+// מוצא: screens__worker_reports_tab:_StatusPill (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import 'bs_tokens.dart';
 
 class StatusPill extends StatelessWidget {
   const StatusPill({required this.status});

@@ -1,6 +1,7 @@
-// 🛗 הורם ע"י מנוע-המדף (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
-// מוצא: screens__persona_picking_sheet:_Banner (בנייה-חכמה main)
+// 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
+// מוצא: screens__persona_picking_sheet:_Banner (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import 'bs_tokens.dart';
 
 class Banner extends StatelessWidget {
   const Banner({required this.text, required this.bg, required this.fg});

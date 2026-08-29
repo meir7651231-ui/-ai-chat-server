@@ -1,6 +1,7 @@
-// 🛗 הורם ע"י מנוע-המדף (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
-// מוצא: features__catalog_config__catalog_config_screen:_MaterialDots (בנייה-חכמה main)
+// 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
+// מוצא: features__catalog_config__catalog_config_screen:_MaterialDots (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
+import 'bs_tokens.dart';
 
 class MaterialDots extends StatelessWidget {
   const MaterialDots({required this.count, required this.index});

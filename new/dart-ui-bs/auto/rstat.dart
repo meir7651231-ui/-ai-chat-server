@@ -1,7 +1,8 @@
-// 🛗 הורם ע"י מנוע-המדף (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
-// מוצא: screens__courier_reports_tab:_RStat (בנייה-חכמה main)
+// 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
+// מוצא: screens__courier_reports_tab:_RStat (בנייה-חכמה main) · Stateless
 // משרת-גם (זהה-מבנית): screens__manager_profile_screen:_PStat
 import 'package:flutter/material.dart';
+import 'bs_tokens.dart';
 
 class RStat extends StatelessWidget {
   const RStat({required this.value, required this.label});

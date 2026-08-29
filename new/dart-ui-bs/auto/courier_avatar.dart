@@ -1,5 +1,5 @@
-// 🛗 הורם ע"י מנוע-המדף (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
-// מוצא: screens__courier_profile_screen:_CourierAvatar (בנייה-חכמה main)
+// 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
+// מוצא: screens__courier_profile_screen:_CourierAvatar (בנייה-חכמה main) · Stateless
 // משרת-גם (זהה-מבנית): screens__worker_profile_screen:_ProfileAvatar
 import 'package:flutter/material.dart';
 

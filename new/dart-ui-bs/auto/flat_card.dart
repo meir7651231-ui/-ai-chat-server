@@ -1,7 +1,8 @@
-// 🛗 הורם ע"י מנוע-המדף (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
-// מוצא: screens__courier_dashboard_screen:_FlatCard (בנייה-חכמה main)
+// 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
+// מוצא: screens__courier_dashboard_screen:_FlatCard (בנייה-חכמה main) · Stateless
 // משרת-גם (זהה-מבנית): screens__store_dashboard_screen:_FlatCard
 import 'package:flutter/material.dart';
+import 'bs_tokens.dart';
 
 class FlatCard extends StatelessWidget {
   const FlatCard({required this.child});

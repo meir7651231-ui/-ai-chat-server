@@ -1,7 +1,8 @@
-// 🛗 הורם ע"י מנוע-המדף (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
-// מוצא: screens__trade_builder__connection_rule_studio:_SectionHeader (בנייה-חכמה main)
+// 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
+// מוצא: screens__trade_builder__connection_rule_studio:_SectionHeader (בנייה-חכמה main) · Stateless
 // משרת-גם (זהה-מבנית): screens__trade_builder__product_authoring_screen:_SectionHeader
 import 'package:flutter/material.dart';
+import 'bs_tokens.dart';
 
 class SectionHeader extends StatelessWidget {
   const SectionHeader(this.title);

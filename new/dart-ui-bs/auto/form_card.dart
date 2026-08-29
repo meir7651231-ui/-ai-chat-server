@@ -1,7 +1,8 @@
-// 🛗 הורם ע"י מנוע-המדף (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
-// מוצא: screens__courier_forms_screen:_FormCard (בנייה-חכמה main)
+// 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
+// מוצא: screens__courier_forms_screen:_FormCard (בנייה-חכמה main) · Stateless
 // משרת-גם (זהה-מבנית): screens__worker_forms_screen:_FormCard
 import 'package:flutter/material.dart';
+import 'bs_tokens.dart';
 
 class FormCard extends StatelessWidget {
   const FormCard({required this.title, required this.children});

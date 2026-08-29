@@ -1,5 +1,5 @@
-// 🛗 הורם ע"י מנוע-המדף (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
-// מוצא: screens__store_profile_screen:_StoreLogoAvatar (בנייה-חכמה main)
+// 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
+// מוצא: screens__store_profile_screen:_StoreLogoAvatar (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
 
 class StoreLogoAvatar extends StatelessWidget {

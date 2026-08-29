@@ -1,5 +1,5 @@
-// 🛗 הורם ע"י מנוע-המדף (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
-// מוצא: screens__chats_screen:_DateChip (בנייה-חכמה main)
+// 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
+// מוצא: screens__chats_screen:_DateChip (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
 
 class DateChip extends StatelessWidget {

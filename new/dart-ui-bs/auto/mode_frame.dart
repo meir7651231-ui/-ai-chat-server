@@ -1,5 +1,5 @@
-// 🛗 הורם ע"י מנוע-המדף (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
-// מוצא: screens__camera_sheet:_ModeFrame (בנייה-חכמה main)
+// 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.
+// מוצא: screens__camera_sheet:_ModeFrame (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
 
 class ModeFrame extends StatelessWidget {

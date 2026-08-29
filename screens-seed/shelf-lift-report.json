@@ -3,706 +3,984 @@
   {
    "atom": "ActionButton",
    "from": "screens__contractor_material_requests_sheet:_ActionButton",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "ActionCard",
    "from": "screens__store_dashboard_screen:_ActionCard",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "ActionRow",
    "from": "screens__catalog_settings_screen:_ActionRow",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "AiBar",
    "from": "screens__ai_hub_screen:AiBar",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "AiCard",
    "from": "screens__ai_hub_screen:AiCard",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "AiCardBtn",
    "from": "screens__ai_hub_screen:AiCardBtn",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "AiCardSub",
    "from": "screens__ai_hub_screen:AiCardSub",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "AiCardTop",
    "from": "screens__ai_hub_screen:AiCardTop",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "AiFinTile",
    "from": "screens__ai_hub_screen:AiFinTile",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "AiMdHead",
    "from": "screens__ai_hub_screen:AiMdHead",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "AiPrimary",
    "from": "screens__ai_hub_screen:AiPrimary",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "AiServerNote",
    "from": "screens__ai_hub_screen:AiServerNote",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "ApprovalButton",
    "from": "screens__manager_dashboard_screen:_ApprovalButton",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "AxisChip",
    "from": "screens__catalog_screen:_AxisChip",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "Banner",
    "from": "screens__persona_picking_sheet:_Banner",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "Bar",
    "from": "screens__rewards_hub_screen:_Bar",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "BarcodeReticle",
    "from": "screens__camera_sheet:_BarcodeReticle",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "BigButton",
    "from": "screens__store_dashboard_screen:_BigButton",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "CaCard",
    "from": "screens__rewards_hub_screen:_CaCard",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "CaEmpty",
    "from": "screens__finance_hub_sheets:_CaEmpty",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "Callout",
    "from": "screens__rewards_hub_screen:_Callout",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "CaPill",
+   "from": "screens__site_hub_screen:_CaPill",
+   "kind": "צרור-2",
    "serves": 1
   },
   {
    "atom": "CaPrimary",
    "from": "screens__finance_hub_sheets:_CaPrimary",
-   "serves": 1
-  },
-  {
-   "atom": "Card",
-   "from": "screens__worker_reports_tab:_Card",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "CardBtn",
    "from": "screens__rewards_hub_screen:_CardBtn",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "CardDone",
+   "from": "screens__site_hub_screen:_CardDone",
+   "kind": "צרור-2",
    "serves": 1
   },
   {
    "atom": "CardTop",
    "from": "screens__site_hub_screen:_CardTop",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "CaSub",
    "from": "screens__rewards_hub_screen:_CaSub",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "CaSubTitle",
    "from": "screens__site_hub_screen:_CaSubTitle",
+   "kind": "Stateless",
    "serves": 1
   },
   {
-   "atom": "CatalogConfigOpen",
-   "from": "screens__smart_home_screen:_CatalogConfigOpen",
+   "atom": "CatalogConfigCatalogConfigCountBadge",
+   "from": "features__catalog_config__catalog_config_screen:_CountBadge",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "CatalogCountBadge",
+   "from": "screens__catalog_screen:_CountBadge",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "CaTop",
+   "from": "screens__rewards_hub_screen:_CaTop",
+   "kind": "צרור-2",
+   "serves": 1
+  },
+  {
+   "atom": "ChatSettingsActionRow",
+   "from": "screens__chat_settings_screen:_ActionRow",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "CheckRow",
    "from": "screens__trade_builder__trade_publish_sheet:_CheckRow",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "Chip",
    "from": "screens__store_dashboard_screen:_Chip",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "ChipScroll",
+   "from": "screens__finder_screen:_ChipScroll",
+   "kind": "Stateful+State",
    "serves": 1
   },
   {
    "atom": "ChipWrap",
    "from": "screens__catalog_screen:_ChipWrap",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "CircleFab",
    "from": "screens__chats_screen:_CircleFab",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "CoinBanner",
    "from": "screens__rewards_hub_screen:_CoinBanner",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "CourierAvatar",
    "from": "screens__courier_profile_screen:_CourierAvatar",
+   "kind": "Stateless",
    "serves": 2
   },
   {
    "atom": "DateChip",
    "from": "screens__chats_screen:_DateChip",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "DateHeader",
    "from": "screens__notifications_screen:_DateHeader",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "DecideButton",
    "from": "screens__contractor_hr_sheet:_DecideButton",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "Divider",
    "from": "screens__lipskey_product_sheet:_Divider",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "DoneAll",
    "from": "screens__tasks_screen:_DoneAll",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "Dot",
    "from": "screens__manager_dashboard_screen:_Dot",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "Empty",
    "from": "screens__rewards_hub_screen:_Empty",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "EmptyHint",
    "from": "screens__lipskey_product_sheet:_EmptyHint",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "FacetChip",
    "from": "screens__catalog_screen:_FacetChip",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "Field",
+   "from": "screens__budget_screen:_Field",
+   "kind": "צרור-3",
+   "serves": 1
+  },
+  {
+   "atom": "FieldLabel",
+   "from": "screens__profile_screen:_FieldLabel",
+   "kind": "צרור-2",
+   "serves": 1
+  },
+  {
+   "atom": "FinCallout",
+   "from": "screens__finance_hub_sheets:_FinCallout",
+   "kind": "צרור-2",
    "serves": 1
   },
   {
    "atom": "FinHead",
    "from": "screens__finance_hub_sheets:_FinHead",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "FinRow",
    "from": "screens__finance_hub_sheets:_FinRow",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "FinRows",
    "from": "screens__finance_hub_sheets:_FinRows",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "FinTile",
    "from": "screens__rewards_hub_screen:_FinTile",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "FlatCard",
    "from": "screens__courier_dashboard_screen:_FlatCard",
+   "kind": "Stateless",
    "serves": 2
   },
   {
    "atom": "FormCard",
    "from": "screens__courier_forms_screen:_FormCard",
+   "kind": "Stateless",
    "serves": 2
   },
   {
    "atom": "GateButton",
    "from": "screens__docs_readiness_gate:_GateButton",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "Grip",
    "from": "screens__persona_picking_sheet:_Grip",
+   "kind": "Stateless",
    "serves": 1
-  },
-  {
-   "atom": "GroupHeader",
-   "from": "screens__worker_report_drilldowns:_GroupHeader",
-   "serves": 2
   },
   {
    "atom": "HierarchyChipPill",
    "from": "screens__lipskey_products_screen:_HierarchyChipPill",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "HomeShellBadgedIcon",
+   "from": "screens__home_shell:_BadgedIcon",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "HubTile",
    "from": "screens__site_hub_screen:_HubTile",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "IntelBar",
    "from": "screens__intel__intel_tab:_IntelBar",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "IntelCard",
+   "from": "screens__intel__intel_tab:_IntelCard",
+   "kind": "צרור-2",
    "serves": 1
   },
   {
    "atom": "IntelPill",
    "from": "screens__intel__intel_tab:_IntelPill",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "IntelStat",
    "from": "screens__intel__intel_tab:_IntelStat",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "Intro",
    "from": "screens__tasks_screen:_Intro",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "JourneyEmpty",
    "from": "screens__manager_dashboard_screen:_JourneyEmpty",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "KvLine",
    "from": "screens__worker_report_drilldowns:_KvLine",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "KvRow",
    "from": "screens__courier_reports_tab:_KvRow",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "Label",
    "from": "screens__studio__panes__theme_pane:_Label",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "LbRow",
    "from": "screens__rewards_hub_screen:_LbRow",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "LensGroupHeader",
    "from": "screens__lipskey_products_screen:_LensGroupHeader",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "LinkBtn",
    "from": "screens__projects_screen:_LinkBtn",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "LiveDot",
    "from": "screens__intel__intel_tab:_LiveDot",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "ManageHint",
    "from": "screens__manager_dashboard_screen:_ManageHint",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "ManageRow",
    "from": "screens__manager_dashboard_screen:_ManageRow",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "MatchChip",
+   "from": "screens__trade_builder__attribute_schema_editor:_MatchChip",
+   "kind": "צרור-2",
    "serves": 1
   },
   {
    "atom": "MaterialDots",
    "from": "features__catalog_config__catalog_config_screen:_MaterialDots",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "MdHead",
    "from": "screens__rewards_hub_screen:_MdHead",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "MiniStatusPill",
    "from": "screens__worker_report_drilldowns:_MiniStatusPill",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "MiniTracker",
    "from": "screens__manager_dashboard_screen:_MiniTracker",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "ModeFrame",
    "from": "screens__camera_sheet:_ModeFrame",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "NumBox",
+   "from": "screens__budget_screen:_NumBox",
+   "kind": "צרור-3",
    "serves": 1
   },
   {
    "atom": "Pad",
    "from": "screens__smart_home_screen:_Pad",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "PickerOption",
    "from": "screens__lipskey_product_sheet:_PickerOption",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "Pill",
    "from": "screens__chats_screen:_Pill",
+   "kind": "Stateless",
    "serves": 2
   },
   {
    "atom": "PipelineRow",
    "from": "screens__manager_dashboard_screen:_PipelineRow",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "Placeholder",
    "from": "screens__studio__panes__find_replace_pane:_Placeholder",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "PortalTileButton",
    "from": "screens__persona_portal:PortalTileButton",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "PresetChip",
    "from": "screens__courier_certs_screen:_PresetChip",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "PriceChip",
    "from": "screens__trade_builder__accessory_rule_editor:_PriceChip",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "Primary",
    "from": "screens__rewards_hub_screen:_Primary",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "PrimaryBtn",
    "from": "screens__tasks_screen:_PrimaryBtn",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "ProductThumb",
    "from": "features__catalog_config__catalog_config_screen:_ProductThumb",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "ProposePrimaryBtn",
    "from": "screens__worker_app_screen:_ProposePrimaryBtn",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "ProposeSecH",
    "from": "screens__worker_app_screen:_ProposeSecH",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "QtyStepper",
    "from": "screens__lipskey_product_sheet:_QtyStepper",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "QuickAction",
    "from": "screens__store_screen:_QuickAction",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "RCard",
    "from": "screens__courier_reports_tab:_RCard",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "ReportH2",
+   "from": "screens__finance_hub_sheets:_ReportH2",
+   "kind": "צרור-2",
    "serves": 1
   },
   {
    "atom": "ReportTable",
    "from": "screens__finance_hub_sheets:_ReportTable",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "RewardsHubFinRow",
+   "from": "screens__rewards_hub_screen:_FinRow",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "RewardsHubPill",
+   "from": "screens__rewards_hub_screen:_Pill",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "RoleRequestsInboxEmpty",
+   "from": "screens__role_requests_inbox_screen:_Empty",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "RStat",
    "from": "screens__courier_reports_tab:_RStat",
+   "kind": "Stateless",
    "serves": 2
   },
   {
    "atom": "SecH",
    "from": "screens__tasks_screen:_SecH",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "SectionCard",
    "from": "screens__docs_readiness_gate:_SectionCard",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "SectionHeader",
    "from": "screens__trade_builder__connection_rule_studio:_SectionHeader",
+   "kind": "Stateless",
    "serves": 2
   },
   {
    "atom": "SectionLabel",
    "from": "screens__profile_screen:_SectionLabel",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "SectionTitle",
    "from": "screens__lipskey_product_sheet:_SectionTitle",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "SelectionBand",
+   "from": "features__catalog_config__wheel_picker:_SelectionBand",
+   "kind": "צרור-4",
    "serves": 1
   },
   {
    "atom": "SendReportButton",
    "from": "screens__worker_attendance_screen:_SendReportButton",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "ServerNote",
    "from": "screens__rewards_hub_screen:_ServerNote",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "SeverityChip",
    "from": "screens__defects_sheet:_SeverityChip",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "SheetSection",
    "from": "screens__catalog_screen:_SheetSection",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "SiteHubCaCard",
+   "from": "screens__site_hub_screen:_CaCard",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "SiteHubCaEmpty",
+   "from": "screens__site_hub_screen:_CaEmpty",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "SiteHubCaPrimary",
+   "from": "screens__site_hub_screen:_CaPrimary",
+   "kind": "צרור-2",
+   "serves": 1
+  },
+  {
+   "atom": "SiteHubCardBtn",
+   "from": "screens__site_hub_screen:_CardBtn",
+   "kind": "צרור-3",
+   "serves": 1
+  },
+  {
+   "atom": "SiteHubMdHead",
+   "from": "screens__site_hub_screen:_MdHead",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "SiteRow",
+   "from": "screens__budget_screen:_SiteRow",
+   "kind": "צרור-2",
    "serves": 1
   },
   {
    "atom": "SiteServerNote",
    "from": "screens__site_hub_screen:_SiteServerNote",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "SStat",
    "from": "screens__store_profile_screen:_SStat",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "StagePill",
    "from": "screens__manager_dashboard_screen:_StagePill",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "Stat",
    "from": "screens__courier_dashboard_screen:_Stat",
+   "kind": "Stateless",
    "serves": 3
   },
   {
    "atom": "StatusPill",
    "from": "screens__worker_reports_tab:_StatusPill",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "StockTab",
+   "from": "screens__stock_screen:_StockTab",
+   "kind": "צרור-2",
    "serves": 1
   },
   {
    "atom": "StoreLogoAvatar",
    "from": "screens__store_profile_screen:_StoreLogoAvatar",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "StorePill",
+   "from": "screens__store_screen:_Pill",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "StoreProjectChip",
+   "from": "screens__store_screen:_ProjectChip",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "StoreSettingsActionRow",
+   "from": "screens__store_settings_screen:_ActionRow",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "StoreSheetScaffold",
+   "from": "screens__store_screen:_SheetScaffold",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "StoreSummaryChip",
+   "from": "screens__store_screen:_SummaryChip",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "StoreSummaryLine",
+   "from": "screens__store_screen:_SummaryLine",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "SupplierTile",
    "from": "screens__suppliers_screen:_SupplierTile",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "SwitchRow",
    "from": "screens__catalog_settings_screen:_SwitchRow",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "TableRow",
    "from": "screens__courier_attendance_screen:_TableRow",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "Tappable",
    "from": "screens__budget_screen:_Tappable",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "TargetSubject",
    "from": "screens__manager_role_assign_sheet:_TargetSubject",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "ThreeCol",
    "from": "screens__ai_hub_screen:_ThreeCol",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "ThrRow",
    "from": "screens__finance_hub_sheets:_ThrRow",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "ThumbPlaceholder",
    "from": "screens__worker_reports_tab:_ThumbPlaceholder",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "TodayStat",
    "from": "screens__courier_attendance_screen:_TodayStat",
+   "kind": "Stateless",
    "serves": 3
+  },
+  {
+   "atom": "TradeBuilderAccessoryRuleEditorPillButton",
+   "from": "screens__trade_builder__accessory_rule_editor:_PillButton",
+   "kind": "Stateless",
+   "serves": 6
   },
   {
    "atom": "TrainingAction",
    "from": "screens__worker_safety_screen:_TrainingAction",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "Typing",
    "from": "screens__manager_copilot_screen:_Typing",
+   "kind": "Stateless",
    "serves": 1
   },
   {
    "atom": "ValueChip",
    "from": "screens__trade_builder__attribute_schema_editor:_ValueChip",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "WarnChip",
+   "from": "screens__trade_builder__attribute_schema_editor:_WarnChip",
+   "kind": "צרור-2",
+   "serves": 1
+  },
+  {
+   "atom": "WorkerAppStat",
+   "from": "screens__worker_app_screen:_Stat",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "WorkerEquipmentChecklistSheetPrimaryBtn",
+   "from": "screens__worker_equipment_checklist_sheet:_PrimaryBtn",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "WorkerEquipmentChecklistSheetSecH",
+   "from": "screens__worker_equipment_checklist_sheet:_SecH",
+   "kind": "Stateless",
+   "serves": 3
+  },
+  {
+   "atom": "WorkerFormsPillButton",
+   "from": "screens__worker_forms_screen:_PillButton",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "WorkerProfileStat",
+   "from": "screens__worker_profile_screen:_Stat",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "WorkerSettingsSectionCard",
+   "from": "screens__worker_settings_screen:_SectionCard",
+   "kind": "Stateful+State",
+   "serves": 1
+  },
+  {
+   "atom": "WorkerTaskDetailSheetPrimaryBtn",
+   "from": "screens__worker_task_detail_sheet:_PrimaryBtn",
+   "kind": "Stateless",
    "serves": 1
   }
  ],
  "skipped": {
-  "stateful": [
+  "dirty-state-body": [
    "features__card_keyboard__card_keyboard_screen:CardKeyboardScreen",
    "features__card_keyboard__find_keyboard_panel:FindKeyboardPanel",
    "features__catalog_config__catalog_config_screen:_FamilySection",
    "features__catalog_config__config_card:ConfigCard",
    "features__catalog_config__wheel_picker:WheelPicker",
    "features__fittings__intel__exploded_view_screen:ExplodedViewScreen",
-   "features__fittings__render__route_preview:FittingPreview3d",
    "features__fittings__ui__sudoku_grid:SudokuGrid",
    "features__internal_card__full_internal_card:FullInternalCard",
    "features__internal_card__full_internal_card:_InternalCardGallery",
    "features__ring_dive__catalog_wheel_screen:CatalogWheelScreen",
    "features__ring_dive__plain_dive_screen:PlainDiveScreen",
    "features__ring_dive__ring_dive_qty:RingDiveQty",
-   "features__ring_dive__ring_dive_screen:RingDiveScreen",
+   "features__ring_dive__ring_dive_wheel:RingDiveWheel",
    "features__word_finder__quick_pad_keyboard:QuickPadKeyboard",
    "features__word_finder__quick_pad_screen:QuickPadScreen",
-   "features__word_finder__word_finder_home:WordFinderHome",
-   "features__word_finder__word_finder_screen:WordFinderScreen",
-   "screens__access_lock_gate:AccessLockGate",
    "screens__audit_screen:AuditScreen",
    "screens__barcode_scanner:BarcodeScanner",
-   "screens__camera_sheet:CameraScreen",
-   "screens__catalog_screen:CatalogScreen",
-   "screens__catalog_screen:_ManageListsSheet",
-   "screens__catalog_screen:_ItemPickerSheet",
-   "screens__catalog_screen:_TreeDrillBar",
-   "screens__catalog_screen:_SmartProductSheet",
-   "screens__catalog_screen:_ExplodeChips",
-   "screens__catalog_screen:_DiagramFlow",
-   "screens__catalog_screen:_SizeFacetRow",
-   "screens__chat_settings_screen:_InlineTextRow",
    "screens__chats_screen:ChatsScreen",
-   "screens__chats_screen:_SearchBar",
-   "screens__chats_screen:_ChatPage",
-   "screens__company_catalog_import_sheet:_CompanyCatalogImportSheet",
-   "screens__contractor_hr_sheet:_ContractorHrSheet",
    "screens__contractor_tools_sheets:_CheaperAlternativesSheet",
-   "screens__contractor_tools_sheets:_ScanPlanSheet",
-   "screens__courier_profile_screen:_EditCourierProfileSheet",
    "screens__courier_profile_screen:_RoleSwitchCodeDialog",
    "screens__courier_reports_tab:_DeliveredCard",
-   "screens__customer_import_sheet:_CustomerImportSheet",
-   "screens__defects_sheet:_DefectsSheet",
    "screens__finance_hub_sheets:_PenaltyInput",
    "screens__finance_hub_sheets:_FxCalc",
-   "screens__finder_screen:FinderScreen",
-   "screens__finder_screen:_ChipScroll",
-   "screens__floating_card_keyboard:FloatingCardKeyboard",
-   "screens__home_content_reorder:_Body",
-   "screens__home_shell:_PulsingStatus",
-   "screens__install_studio_screen:InstallStudioScreen",
-   "screens__install_studio_screen:_BomSheet",
-   "screens__install_studio_screen:_ProductPicker",
-   "screens__lipskey_product_sheet:LipskeyProductSheet",
-   "screens__lipskey_product_sheet:_HeroImage",
+   "screens__legal_screen:LegalScreen",
    "screens__lipskey_product_sheet:_ProductSide",
    "screens__lipskey_product_sheet:_SpecSide",
-   "screens__lipskey_product_sheet:_QuickInfoStrips",
-   "screens__lipskey_product_sheet:_StripRow",
-   "screens__lipskey_products_screen:LipskeyProductsList",
-   "screens__lipskey_products_screen:_ProductRow",
-   "screens__login_sheet:LoginSheet",
-   "screens__manager_dashboard_screen:_MetricTile",
-   "screens__manager_dashboard_screen:_OrdersTab",
-   "screens__manager_dashboard_screen:_CustomersTab",
    "screens__manager_dashboard_screen:_CustomerChatButton",
-   "screens__manager_dashboard_screen:_CustomerActionRow",
-   "screens__manager_dashboard_screen:_PendingApprovalPanel",
-   "screens__manager_dashboard_screen:_SavedCustomerEditor",
-   "screens__manager_dashboard_screen:_ManageTab",
    "screens__manager_role_assign_sheet:ManagerRoleAssignSheet",
-   "screens__notifications_screen:NotificationsScreen",
-   "screens__onboarding_screen:OnboardingScreen",
-   "screens__org_setup_wizard_screen:_ElementInspectorSheet",
    "screens__org_setup_wizard_screen:_RenameDialog",
-   "screens__projects_screen:_EditSheet",
-   "screens__role_request_sheet:_RoleRequestSheet",
    "screens__site_hub_screen:_SiteSafety",
    "screens__site_hub_screen:_SitePhotos",
-   "screens__store_dashboard_screen:_AddProductSheet",
-   "screens__store_dashboard_screen:_ProfileField",
-   "screens__store_profile_screen:_EditStoreProfileSheet",
-   "screens__store_screen:StoreScreen",
-   "screens__store_screen:_StoreList",
-   "screens__store_screen:_CartView",
-   "screens__store_screen:_CheckoutButton",
-   "screens__store_screen:_CheckoutSheet",
    "screens__store_settings_screen:_InlineTextRow",
    "screens__store_settings_screen:_NumberRow",
-   "screens__studio__panes__find_replace_pane:FindReplacePane",
-   "screens__studio__panes__inspector_pane:InspectorPane",
-   "screens__studio__panes__tree_pane:TreePane",
-   "screens__studio__studio_top_bar:_PublishSheet",
-   "screens__studio_component_builder:StudioComponentBuilder",
-   "screens__studio_rules_screen:StudioRulesScreen",
-   "screens__studio_screen:_CoEditorPane",
-   "screens__tasks_screen:_TaskSheet",
+   "screens__tasks_screen:_Group",
    "screens__tasks_screen:_TaskAuthorSheet",
    "screens__trade_builder__category_tree_editor:_RenameCategoryDialog",
    "screens__trade_builder__connection_rule_studio:_MethodLabelDialog",
    "screens__webcam_capture_sheet:WebcamCaptureScreen",
-   "screens__welcome_screen:WelcomeScreen",
    "screens__worker_app_screen:_TasksTab",
    "screens__worker_app_screen:_ProposeTaskSheet",
-   "screens__worker_employer_stock_sheet:_EmployerStockSheet",
-   "screens__worker_equipment_checklist_sheet:_EquipmentChecklistSheet",
-   "screens__worker_profile_screen:_EditProfileSheet",
-   "screens__worker_settings_screen:_SectionCard",
-   "screens__worker_task_board_screen:_StatusGroup",
-   "screens__worker_task_detail_sheet:WorkerTaskDetailSheet"
+   "screens__worker_reports_tab:_WeekBars",
+   "screens__worker_task_board_screen:_StatusGroup"
   ],
   "model-prop": [
    "features__catalog_config__catalog_config_screen:_Tile",
@@ -710,105 +988,136 @@
    "features__fittings__intel__line_bom_screen:_BomRowTile",
    "features__fittings__intel__line_pressure_screen:_SuggestionTile",
    "features__fittings__render__product_line_3d:ProductLine3D",
+   "features__fittings__render__route_preview:FittingPreview3d",
    "screens__budget_screen:_CategoryRow",
-   "screens__budget_screen:_Field",
    "screens__catalog_screen:_FilteredCatalogList",
    "screens__catalog_screen:_TreeCatRow",
+   "screens__catalog_screen:_SmartProductSheet",
+   "screens__catalog_screen:_ExplodeChips",
+   "screens__catalog_screen:_DiagramFlow",
    "screens__catalog_screen:_StageCard",
+   "screens__catalog_screen:_SizeFacetRow",
    "screens__chat_settings_screen:_TimeRow",
+   "screens__chats_screen:_ChatPage",
    "screens__contractor_tools_sheets:_StoreChip",
    "screens__courier_dashboard_screen:_CourierNotifRow",
    "screens__courier_forms_screen:_DateField",
+   "screens__courier_profile_screen:_EditCourierProfileSheet",
    "screens__courier_reports_tab:_WeekBars",
    "screens__defects_sheet:_DefectRow",
    "screens__finance_hub_sheets:_FinTileButton",
+   "screens__install_studio_screen:_BomSheet",
+   "screens__install_studio_screen:_ProductPicker",
    "screens__lens_selector_row:_LensChip",
+   "screens__lipskey_product_sheet:LipskeyProductSheet",
    "screens__lipskey_product_sheet:_RelatedCard",
+   "screens__lipskey_product_sheet:_HeroImage",
    "screens__lipskey_product_sheet:_StageRow",
+   "screens__lipskey_product_sheet:_QuickInfoStrips",
+   "screens__lipskey_product_sheet:_StripRow",
+   "screens__lipskey_products_screen:LipskeyProductsList",
+   "screens__lipskey_products_screen:_ProductRow",
    "screens__lipskey_products_screen:_AttrChip",
    "screens__manager_copilot_screen:_Bubble",
    "screens__manager_dashboard_screen:_RoleBadge",
+   "screens__manager_dashboard_screen:_CustomerActionRow",
+   "screens__manager_dashboard_screen:_SavedCustomerEditor",
    "screens__manager_role_assign_sheet:_RoleChip",
    "screens__notif_settings_screen:_TimeRow",
    "screens__onboarding_screen:_SlideView",
+   "screens__org_setup_wizard_screen:_ElementInspectorSheet",
    "screens__profession_screen:_TradeCard",
    "screens__profile_screen:_Field",
    "screens__regression_panel_screen:_ResultCard",
    "screens__rewards_hub_screen:_BadgeRow",
+   "screens__store_dashboard_screen:_ProfileField",
+   "screens__store_profile_screen:_EditStoreProfileSheet",
    "screens__store_screen:_DismissibleStoreRow",
    "screens__store_screen:_PaymentChip",
    "screens__tasks_gantt_sheet:_UnscheduledRow",
    "screens__tasks_screen:_DirWorkerPick",
-   "screens__tasks_screen:_Group",
+   "screens__tasks_screen:_TaskSheet",
    "screens__trade_builder__connection_rule_studio:_Matrix",
+   "screens__worker_equipment_checklist_sheet:_EquipmentChecklistSheet",
    "screens__worker_forms_screen:_DateField",
    "screens__worker_notifs_sheet:_NotifRow",
-   "screens__worker_reports_tab:_WeekBars",
+   "screens__worker_profile_screen:_EditProfileSheet",
    "screens__worker_task_detail_sheet:_KitRow"
   ],
-  "name-collision": [
-   "features__catalog_config__catalog_config_screen:_CountBadge",
-   "screens__catalog_screen:_CountBadge",
-   "screens__chat_settings_screen:_ActionRow",
-   "screens__courier_forms_screen:_PillButton",
-   "screens__courier_settings_screen:_SwitchRow",
-   "screens__home_shell:_BadgedIcon",
-   "screens__home_shell:_MenuRow",
-   "screens__rewards_hub_screen:_Pill",
-   "screens__rewards_hub_screen:_FinRow",
-   "screens__role_requests_inbox_screen:_Empty",
-   "screens__site_hub_screen:_MdHead",
-   "screens__site_hub_screen:_CaCard",
-   "screens__site_hub_screen:_CaEmpty",
-   "screens__store_screen:_SummaryChip",
-   "screens__store_screen:_Pill",
-   "screens__store_screen:_SheetScaffold",
-   "screens__store_screen:_ProjectChip",
-   "screens__store_screen:_SummaryLine",
-   "screens__store_settings_screen:_ActionRow",
-   "screens__trade_builder__accessory_rule_editor:_PillButton",
-   "screens__trade_builder__attribute_schema_editor:_PillButton",
-   "screens__trade_builder__category_tree_editor:_PillButton",
-   "screens__trade_builder__connection_rule_studio:_PillButton",
-   "screens__trade_builder__product_authoring_screen:_PillButton",
-   "screens__trade_builder__trade_publish_sheet:_PillButton",
-   "screens__worker_app_screen:_Stat",
-   "screens__worker_equipment_checklist_sheet:_SecH",
-   "screens__worker_equipment_checklist_sheet:_PrimaryBtn",
-   "screens__worker_forms_screen:_PillButton",
-   "screens__worker_profile_screen:_Stat",
-   "screens__worker_task_detail_sheet:_PrimaryBtn"
+  "dirty-helper": [
+   "features__catalog_config__wheel_picker:_ColorRow",
+   "screens__manager_role_assign_sheet:_NoBackendBanner",
+   "screens__role_request_sheet:_RoleRequestRow",
+   "screens__tasks_screen:_WorkerPick"
   ],
   "private-dep": [
-   "features__catalog_config__wheel_picker:_SelectionBand",
-   "features__catalog_config__wheel_picker:_ColorRow",
-   "screens__budget_screen:_NumBox",
-   "screens__budget_screen:_SiteRow",
-   "screens__courier_settings_screen:_SectionTile",
-   "screens__finance_hub_sheets:_FinCallout",
-   "screens__finance_hub_sheets:_ReportH2",
-   "screens__manager_role_assign_sheet:_NoBackendBanner",
-   "screens__profile_screen:_FieldLabel",
-   "screens__profile_screen:_LinkRow",
-   "screens__role_request_sheet:_RoleRequestRow",
-   "screens__site_hub_screen:_CaPrimary",
-   "screens__site_hub_screen:_CaPill",
-   "screens__site_hub_screen:_CardBtn",
-   "screens__site_hub_screen:_CardDone",
-   "screens__smart_home_screen:_SectionTitle",
-   "screens__smart_home_screen:_MiniTile",
-   "screens__smart_home_screen:_EmptyCard",
-   "screens__stock_screen:_StockTab",
-   "screens__tasks_screen:_WorkerPick",
-   "screens__trade_builder__attribute_schema_editor:_WarnChip",
-   "screens__trade_builder__attribute_schema_editor:_MatchChip"
-  ],
-  "sibling-class": [
    "features__ring_dive__ring_dive_dial:RingDiveDial",
    "screens__catalog_settings_screen:_SectionTile",
-   "screens__intel__intel_tab:_IntelCard",
-   "screens__lipskey_product_sheet:_ChipPickerRow",
-   "screens__rewards_hub_screen:_CaTop"
+   "screens__chat_settings_screen:_InlineTextRow",
+   "screens__courier_settings_screen:_SectionTile",
+   "screens__floating_card_keyboard:FloatingCardKeyboard",
+   "screens__home_shell:_PulsingStatus",
+   "screens__install_studio_screen:InstallStudioScreen",
+   "screens__profile_screen:_LinkRow",
+   "screens__smart_home_screen:_SectionTitle",
+   "screens__smart_home_screen:_MiniTile",
+   "screens__smart_home_screen:_CatalogConfigOpen",
+   "screens__smart_home_screen:_EmptyCard"
+  ],
+  "dirty-sibling": [
+   "features__ring_dive__ring_dive_screen:RingDiveScreen",
+   "features__word_finder__word_finder_home:WordFinderHome",
+   "features__word_finder__word_finder_screen:WordFinderScreen",
+   "screens__access_lock_gate:AccessLockGate",
+   "screens__camera_sheet:CameraScreen",
+   "screens__catalog_screen:CatalogScreen",
+   "screens__catalog_screen:_ManageListsSheet",
+   "screens__catalog_screen:_ItemPickerSheet",
+   "screens__catalog_screen:_TreeDrillBar",
+   "screens__chats_screen:_SearchBar",
+   "screens__company_catalog_import_sheet:_CompanyCatalogImportSheet",
+   "screens__contractor_hr_sheet:_ContractorHrSheet",
+   "screens__contractor_tools_sheets:_ScanPlanSheet",
+   "screens__customer_import_sheet:_CustomerImportSheet",
+   "screens__defects_sheet:_DefectsSheet",
+   "screens__finder_screen:FinderScreen",
+   "screens__home_content_reorder:_Body",
+   "screens__login_sheet:LoginSheet",
+   "screens__manager_dashboard_screen:_OrdersTab",
+   "screens__manager_dashboard_screen:_CustomersTab",
+   "screens__manager_dashboard_screen:_PendingApprovalPanel",
+   "screens__manager_dashboard_screen:_ManageTab",
+   "screens__notifications_screen:NotificationsScreen",
+   "screens__onboarding_screen:OnboardingScreen",
+   "screens__projects_screen:_EditSheet",
+   "screens__role_request_sheet:_RoleRequestSheet",
+   "screens__store_dashboard_screen:_AddProductSheet",
+   "screens__store_screen:StoreScreen",
+   "screens__store_screen:_StoreList",
+   "screens__store_screen:_CartView",
+   "screens__store_screen:_CheckoutButton",
+   "screens__store_screen:_CheckoutSheet",
+   "screens__studio__panes__find_replace_pane:FindReplacePane",
+   "screens__studio__panes__inspector_pane:InspectorPane",
+   "screens__studio__panes__tree_pane:TreePane",
+   "screens__studio__studio_top_bar:_PublishSheet",
+   "screens__studio_component_builder:StudioComponentBuilder",
+   "screens__studio_rules_screen:StudioRulesScreen",
+   "screens__studio_screen:_CoEditorPane",
+   "screens__worker_employer_stock_sheet:_EmployerStockSheet",
+   "screens__worker_task_detail_sheet:WorkerTaskDetailSheet"
+  ],
+  "project-dep": [
+   "screens__courier_forms_screen:_PillButton⇒CfgVisible",
+   "screens__courier_settings_screen:_SwitchRow⇒CfgText",
+   "screens__home_shell:_MenuRow⇒CfgText",
+   "screens__lipskey_product_sheet:_ChipPickerRow⇒LipskeyCatalogProduct",
+   "screens__manager_dashboard_screen:_MetricTile⇒CfgText",
+   "screens__trade_builder__system_setup_host_screen:SystemSetupHostScreen⇒Route",
+   "screens__worker_reports_tab:_Card⇒CfgText"
+  ],
+  "io-in-state": [
+   "screens__welcome_screen:WelcomeScreen"
   ]
  }
 }
