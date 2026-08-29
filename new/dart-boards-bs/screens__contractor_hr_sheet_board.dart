@@ -20,12 +20,13 @@ class ContractorHrSheetBoard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ContractorHrSheetComposed(
-      onApprove: r.onApprove,
       onPressed: () {} /* TODO-לוח */,
       bordered: false /* TODO-לוח: bool */,
       label: '' /* TODO-לוח: String */,
       reason: r.reason,
       status: r.status,
+      vacationRowItems: requests.map((r) => VacationRowItem(onApprove: () =>
+                        _decide(context, ref, r, approve: true))).toList(),
       t: ContractorHrSheetTokens(color: const Color(0xFF223047) /* TODO-לוח: טוקן */, textColor: const Color(0xFF223047) /* TODO-לוח: טוקן */),
     );
   }

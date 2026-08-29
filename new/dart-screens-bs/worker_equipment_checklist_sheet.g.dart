@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../dart-ui-bs/auto/worker_equipment_checklist_sheet_primary_btn.dart';
 import '../dart-ui-bs/auto/worker_equipment_checklist_sheet_sec_h.dart';
 
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class WorkerEquipmentChecklistSheetTokens {
   const WorkerEquipmentChecklistSheetTokens();

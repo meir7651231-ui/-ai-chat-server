@@ -18,9 +18,13 @@
    "atom": "Swatch",
    "props": {
     "label": "$: swatch_label",
-    "color": "#:color",
-    "selected": "?:bool",
-    "onTap": "@:onTap"
+    "color": "~:",
+    "selected": "~:",
+    "onTap": "~:"
+   },
+   "repeat": {
+    "as": "c",
+    "item": "SwatchItem"
    }
   }
  ]

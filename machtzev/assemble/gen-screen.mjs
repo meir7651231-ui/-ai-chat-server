@@ -23,7 +23,8 @@ for (const f of fs.readdirSync(SHELF, { recursive: true }).map(String)) {
   const cm = src.match(/class\s+([A-Za-z0-9]+)\s+extends\s+(?:StatelessWidget|StatefulWidget)/);
   if (!cm) continue;
   const props = new Set([...src.matchAll(/this\.([a-zA-Z0-9]+)/g)].map(x => x[1]));
-  shelf[cm[1]] = { file: f, props };
+  const types = new Map([...src.matchAll(/final\s+([A-Za-z_][\w<>,? ]*?)\s+([a-zA-Z0-9_]+)\s*;/g)].map(x => [x[2], x[1].trim()]));
+  shelf[cm[1]] = { file: f, props, types };
 }
 // TitledSection נצרך אוטומטית ע"י `title` על סקציה
 if (!shelf.TitledSection) die('אין TitledSection במדף');
@@ -33,6 +34,7 @@ const tokens = new Map();   // name ⇒ dartType
 const callbacks = new Set();
 const gates = new Set();
 const params = new Map();   // חורי-נתוני-ריצה: name ⇒ type (הלוח מזרים)
+const itemClasses = new Map(); // 🔁 repeat: ItemClass ⇒ [{name,type}]
 function expr(v, scopeVar) {
   if (typeof v === 'number' || typeof v === 'boolean') return String(v);
   if (typeof v !== 'string') die('ערך-prop לא-נתמך: ' + JSON.stringify(v));
@@ -60,7 +62,17 @@ function sectionCode(s) {
   const scope = s.repeat?.as;
   for (const p of Object.keys(s.props || {}))
     if (!A.props.has(p)) die(`prop "${p}" לא-קיים בבנאי ${s.atom} — props-אמיתיים: ${[...A.props].join(',')}`);
+  const rptItem = s.repeat?.item;
+  if (rptItem) {
+    const fields = Object.entries(s.props || {}).filter(([, v]) => v === '~:')
+      .map(([k]) => ({ name: k, type: (A.types.get(k) || 'String').replace(/\?$/, '') }));
+    itemClasses.set(rptItem, fields);
+    const listName = rptItem.charAt(0).toLowerCase() + rptItem.slice(1) + 's';
+    params.set(listName, `List<${rptItem}>`);
+    s.repeat.in = '$: ' + listName;
+  }
   const propLines = Object.entries(s.props || {}).map(([k, v]) => {
+    if (v === '~:') return `${k}: ${s.repeat.as}.${k},`;
     if (typeof v === 'string' && v.startsWith('?:')) {
       const t = v.slice(2).trim() || 'String';
       let n = k; while (params.has(n) && params.get(n) !== t) n += '2';
@@ -107,6 +119,12 @@ const out = `// 🏗️ חולל ע"י המנוע-המרכיב (gen-screen) — 
 import 'package:flutter/material.dart';
 ${imports.join('\n')}
 
+${[...itemClasses.entries()].map(([ic, fs2]) => `/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class ${ic} {
+  const ${ic}({${fs2.map(f2 => 'required this.' + f2.name).join(', ')}});
+${fs2.map(f2 => `  final ${f2.type} ${f2.name};`).join('\n')}
+}
+`).join('\n')}
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class ${cls}Tokens {
   const ${cls}Tokens(${tokCtor ? '{' + tokCtor + '}' : ''});

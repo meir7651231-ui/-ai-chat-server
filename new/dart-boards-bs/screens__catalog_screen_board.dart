@@ -1,5 +1,5 @@
 // 🔌 חולל ע"י מחולל-הלוחות (board-gen) — הלוח = המקום-היחיד שנוגע-בחיווט (חוק-3).
-// מקור-החיווט: screens__catalog_screen.dart (בנייה-חכמה main) · מחווט: 16 · TODO: 8.
+// מקור-החיווט: screens__catalog_screen.dart (בנייה-חכמה main) · מחווט: 18 · TODO: 6.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
@@ -69,26 +69,55 @@ class CatalogScreenBoard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CatalogScreenComposed(
-      onDelete: () {} /* TODO-לוח */,
-      onLoad: () {} /* TODO-לוח */,
       onQtyChanged: a.onQtyChanged,
       onTap: () => showCompanyCatalogImportSheet(context),
       onToggle: a.onToggle,
       activeMatch: _activeStage != null
                           ? p.stages[_activeStage!].match
                           : null,
+      axisChipItems: SizeSortAxis.values.map((axis) => AxisChipItem(label: kSizeSortLabel[axis]!, isSelected: active == axis, onTap: () {
+              final wasActive = active == axis;
+              ref.read(variantsSizeSortAxisProvider.notifier).state = axis;
+              ref.read(variantsActiveSubGroupProvider.notifier).state = null;
+              final exp = ref.read(variantsValuesExpandedProvider.notifier);
+              exp.state = wasActive ? !exp.state : true;
+            })).toList(),
       child: null /* TODO-לוח: Widget */,
-      count: o.count,
-      desc: o.desc,
+      count: e.value,
       emoji: current.emoji,
       expanded: false /* TODO-לוח: bool */,
+      facetRowItems: options.map((o) => FacetRowItem(label: o.label, desc: o.desc, count: o.count, onTap: () => ref.read(catalogFacetProvider.notifier).state =
+                [...facetSel, o.label])).toList(),
       icon: Icons.remove,
-      isSelected: active == axis,
+      isSelected: selected.contains(key),
       label: active,
       name: a.name,
       options: const [] /* TODO-לוח: List<String> */,
       price: a.price,
       qty: _accQty[gi] ?? 1,
+      savedVersionChipItems: versions.map((v) => SavedVersionChipItem(label: v.label, onLoad: () {
+                                                final idx = widget
+                                                    .product.brands
+                                                    .indexWhere((b) =>
+                                                        b.name == v.brandName);
+                                                if (idx >= 0) {
+                                                  setState(() =>
+                                                      _selectedBrand = idx);
+                                                  ref
+                                                      .read(
+                                                          cardSelectionProvider
+                                                              .notifier)
+                                                      .setBrand(p.key,
+                                                          v.brandName);
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(SnackBar(
+                                                          content: Text(
+                                                              'נטען: "${v.label}"'),
+                                                          duration:
+                                                              const Duration(
+                                                                  seconds: 2)));
+                                                }
+                                              }, onDelete: () => notif.remove(v.id))).toList(),
       selected: _accSelected[gi] ?? false,
       selected2: false /* TODO-לוח: bool */,
       text: '' /* TODO-לוח: String */,

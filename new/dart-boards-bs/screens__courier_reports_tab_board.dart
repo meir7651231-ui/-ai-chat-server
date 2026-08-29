@@ -1,5 +1,5 @@
 // 🔌 חולל ע"י מחולל-הלוחות (board-gen) — הלוח = המקום-היחיד שנוגע-בחיווט (חוק-3).
-// מקור-החיווט: screens__courier_reports_tab.dart (בנייה-חכמה main) · מחווט: 3 · TODO: 1.
+// מקור-החיווט: screens__courier_reports_tab.dart (בנייה-חכמה main) · מחווט: 3 · TODO: 2.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:buildsmart/config/app_brand.dart';
@@ -54,6 +54,7 @@ class CourierReportsTabBoard extends ConsumerWidget {
               ],
             ],
           ],
+      kvRowItems: timed.map((o) => KvRowItem(label: '📦 ${o.id}', value: _fmtDuration(clock[o.id]!.pickupToDelivered!))).toList(),
       label: '' /* TODO-לוח: String */,
       title: [
             if (weekTotal == 0 && noStamp == 0)
@@ -81,7 +82,7 @@ class CourierReportsTabBoard extends ConsumerWidget {
               ],
             ],
           ].title,
-      value: _fmtDuration(avg!),
+      value: '' /* TODO-לוח: String */,
       t: CourierReportsTabTokens(),
     );
   }

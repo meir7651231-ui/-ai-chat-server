@@ -6,6 +6,15 @@ import '../dart-ui-bs/auto/link_btn.dart';
 import '../dart-ui-bs/auto/site_card.dart';
 import '../dart-data-bs/auto/screens__projects_screen_content.dart';
 
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class SiteCardItem {
+  const SiteCardItem({required this.isActive, required this.onSwitch, required this.onStatus, required this.onCart});
+  final bool isActive;
+  final VoidCallback onSwitch;
+  final VoidCallback onStatus;
+  final VoidCallback onCart;
+}
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class ProjectsScreenTokens {
   const ProjectsScreenTokens();
@@ -13,16 +22,13 @@ class ProjectsScreenTokens {
 }
 
 class ProjectsScreenComposed extends StatelessWidget {
-  const ProjectsScreenComposed({required this.onCart, required this.onStatus, required this.onSwitch, required this.onTap, required this.addr, required this.isActive, required this.label, required this.name, required this.t, super.key});
+  const ProjectsScreenComposed({required this.onTap, required this.addr, required this.label, required this.name, required this.siteCardItems, required this.t, super.key});
 
-  final VoidCallback onCart;
-  final VoidCallback onStatus;
-  final VoidCallback onSwitch;
   final VoidCallback onTap;
   final String addr;
-  final bool isActive;
   final String label;
   final String name;
+  final List<SiteCardItem> siteCardItems;
   final ProjectsScreenTokens t;
 
   @override
@@ -34,6 +40,7 @@ class ProjectsScreenComposed extends StatelessWidget {
             label: label,
             onTap: onTap,
           ),
+          for (final p in siteCardItems) ...[
           SiteCard(
             label: site_card_label,
             label2: site_card_label2,
@@ -43,11 +50,13 @@ class ProjectsScreenComposed extends StatelessWidget {
             fallback: site_card_fallback,
             name: name,
             addr: addr,
-            isActive: isActive,
-            onSwitch: onSwitch,
-            onStatus: onStatus,
-            onCart: onCart,
+            isActive: p.isActive,
+            onSwitch: p.onSwitch,
+            onStatus: p.onStatus,
+            onCart: p.onCart,
           ),
+          const SizedBox(height: 8),
+        ],
         ],
       );
 }

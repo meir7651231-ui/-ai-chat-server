@@ -1,5 +1,5 @@
 // 🔌 חולל ע"י מחולל-הלוחות (board-gen) — הלוח = המקום-היחיד שנוגע-בחיווט (חוק-3).
-// מקור-החיווט: screens__lipskey_product_sheet.dart (בנייה-חכמה main) · מחווט: 15 · TODO: 3.
+// מקור-החיווט: screens__lipskey_product_sheet.dart (בנייה-חכמה main) · מחווט: 14 · TODO: 3.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:buildsmart/theme/tokens.dart';
@@ -28,23 +28,23 @@ class LipskeyProductSheetBoard extends ConsumerWidget {
     return LipskeyProductSheetComposed(
       onChanged: () {} /* TODO-לוח */,
       onMarkDone: e.value.onMarkDone,
-      onTap: () =>
-                      showWorkerTaskDetailSheet(context, taskId: stage.taskId),
       body: e.value.body,
       body2: e.value.body2,
       emoji: '' /* TODO-לוח: String */,
       emphasized: e.value.emphasized,
-      isSelected: opt.$2.sku == currentSku,
       label: e.value.label,
       label2: e.value.label2,
       message: e.value.message,
       name: e.value.name,
+      pickerOptionItems: options.map((opt) => PickerOptionItem(value: opt.$1, isSelected: opt.$2.sku == currentSku, onTap: () => onSelect(opt.$2))).toList(),
       qty: _qty,
+      stageRowItems: .entries.map((e) => StageRowItem(onTap: () => setState(() =>
+                                _activeStage =
+                                    _activeStage == e.key ? null : e.key))).toList(),
       subtitle: '' /* TODO-לוח: String? */,
       tag: e.value.tag,
       text: 'אין קבוצה',
       title2: e.value.title2,
-      value: opt.$1,
       t: LipskeyProductSheetTokens(),
     );
   }

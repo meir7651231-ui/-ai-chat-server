@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../dart-ui-bs/auto/gate_button.dart';
 import '../dart-ui-bs/auto/section_card.dart';
 
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class DocsReadinessGateTokens {
   const DocsReadinessGateTokens({required this.accent});

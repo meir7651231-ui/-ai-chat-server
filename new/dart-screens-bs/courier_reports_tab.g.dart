@@ -6,6 +6,13 @@ import '../dart-ui-bs/auto/kv_row.dart';
 import '../dart-ui-bs/auto/rcard.dart';
 import '../dart-ui-bs/auto/rstat.dart';
 
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class KvRowItem {
+  const KvRowItem({required this.label, required this.value});
+  final String label;
+  final String value;
+}
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class CourierReportsTabTokens {
   const CourierReportsTabTokens();
@@ -13,10 +20,11 @@ class CourierReportsTabTokens {
 }
 
 class CourierReportsTabComposed extends StatelessWidget {
-  const CourierReportsTabComposed({required this.children, required this.label, required this.title, required this.value, required this.t, super.key});
+  const CourierReportsTabComposed({required this.children, required this.kvRowItems, required this.label, required this.title, required this.value, required this.t, super.key});
 
 
   final List<Widget> children;
+  final List<KvRowItem> kvRowItems;
   final String label;
   final String title;
   final String value;
@@ -35,10 +43,13 @@ class CourierReportsTabComposed extends StatelessWidget {
             title: title,
             children: children,
           ),
+          for (final o in kvRowItems) ...[
           KvRow(
-            label: label,
-            value: value,
+            label: o.label,
+            value: o.value,
           ),
+          const SizedBox(height: 8),
+        ],
         ],
       );
 }

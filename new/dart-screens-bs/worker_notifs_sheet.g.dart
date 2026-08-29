@@ -4,6 +4,12 @@
 import 'package:flutter/material.dart';
 import '../dart-ui-bs/auto/notif_row.dart';
 
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class NotifRowItem {
+  const NotifRowItem({required this.onTap});
+  final VoidCallback onTap;
+}
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class WorkerNotifsSheetTokens {
   const WorkerNotifsSheetTokens();
@@ -11,10 +17,11 @@ class WorkerNotifsSheetTokens {
 }
 
 class WorkerNotifsSheetComposed extends StatelessWidget {
-  const WorkerNotifsSheetComposed({required this.onTap, required this.fallback, required this.t, super.key});
+  const WorkerNotifsSheetComposed({required this.fallback, required this.notifRowItems, required this.t, super.key});
 
-  final VoidCallback onTap;
+
   final String fallback;
+  final List<NotifRowItem> notifRowItems;
   final WorkerNotifsSheetTokens t;
 
   @override
@@ -22,10 +29,13 @@ class WorkerNotifsSheetComposed extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 24),
         children: [
           const SizedBox(height: 8),
+          for (final n in notifRowItems) ...[
           NotifRow(
             fallback: fallback,
-            onTap: onTap,
+            onTap: n.onTap,
           ),
+          const SizedBox(height: 8),
+        ],
         ],
       );
 }

@@ -12,6 +12,14 @@ import '../dart-ui-bs/auto/stage_pill.dart';
 import '../dart-data-bs/auto/screens__manager_dashboard_screen_content.dart';
 import '../dart-data-bs/screens__manager_dashboard_screen_content.dart';
 
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class PipelineRowItem {
+  const PipelineRowItem({required this.label, required this.count, required this.color});
+  final String label;
+  final int count;
+  final Color color;
+}
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class ManagerDashboardScreenTokens {
   const ManagerDashboardScreenTokens({required this.color});
@@ -19,13 +27,13 @@ class ManagerDashboardScreenTokens {
 }
 
 class ManagerDashboardScreenComposed extends StatelessWidget {
-  const ManagerDashboardScreenComposed({required this.onPressed, required this.onTap, required this.count, required this.max, required this.pct, required this.stageIdx, required this.t, super.key});
+  const ManagerDashboardScreenComposed({required this.onPressed, required this.onTap, required this.max, required this.pct, required this.pipelineRowItems, required this.stageIdx, required this.t, super.key});
 
   final VoidCallback onPressed;
   final VoidCallback onTap;
-  final int count;
   final int max;
   final int pct;
+  final List<PipelineRowItem> pipelineRowItems;
   final int stageIdx;
   final ManagerDashboardScreenTokens t;
 
@@ -37,13 +45,16 @@ class ManagerDashboardScreenComposed extends StatelessWidget {
           Dot(
             color: t.color,
           ),
+          for (final stage in pipelineRowItems) ...[
           PipelineRow(
-            label: managerShellContent.label,
-            count: count,
+            label: stage.label,
+            count: stage.count,
             max: max,
-            color: t.color,
+            color: stage.color,
             onTap: onTap,
           ),
+          const SizedBox(height: 8),
+        ],
           StagePill(
             label: managerShellContent.label,
             color: t.color,

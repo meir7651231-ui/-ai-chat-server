@@ -8,6 +8,7 @@ import '../dart-ui-bs/titled_section.dart';
 import '../dart-ui-bs/work_path_card.dart';
 import '../dart-data-bs/home_content.dart';
 
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class ContractorHomeTokens {
   const ContractorHomeTokens({required this.border, required this.brand, required this.brandDark, required this.card, required this.ink, required this.muted, required this.radius});

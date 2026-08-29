@@ -7,6 +7,7 @@ import '../dart-ui-bs/auto/empty_state.dart';
 import '../dart-ui-bs/auto/material_dots.dart';
 import '../dart-data-bs/auto/features__catalog_config__catalog_config_screen_content.dart';
 
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class CatalogConfigCatalogConfigScreenTokens {
   const CatalogConfigCatalogConfigScreenTokens();

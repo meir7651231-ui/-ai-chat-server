@@ -4,6 +4,14 @@
 import 'package:flutter/material.dart';
 import '../dart-ui-bs/auto/portal_tile_button.dart';
 
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class PortalTileButtonItem {
+  const PortalTileButtonItem({required this.title, required this.sub, required this.onTap});
+  final String title;
+  final String sub;
+  final VoidCallback onTap;
+}
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class PersonaPortalTokens {
   const PersonaPortalTokens();
@@ -11,11 +19,10 @@ class PersonaPortalTokens {
 }
 
 class PersonaPortalComposed extends StatelessWidget {
-  const PersonaPortalComposed({required this.onTap, required this.sub, required this.title, required this.t, super.key});
+  const PersonaPortalComposed({required this.portalTileButtonItems, required this.t, super.key});
 
-  final VoidCallback onTap;
-  final String sub;
-  final String title;
+
+  final List<PortalTileButtonItem> portalTileButtonItems;
   final PersonaPortalTokens t;
 
   @override
@@ -23,11 +30,14 @@ class PersonaPortalComposed extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 24),
         children: [
           const SizedBox(height: 8),
+          for (final t in portalTileButtonItems) ...[
           PortalTileButton(
-            title: title,
-            sub: sub,
-            onTap: onTap,
+            title: t.title,
+            sub: t.sub,
+            onTap: t.onTap,
           ),
+          const SizedBox(height: 8),
+        ],
         ],
       );
 }

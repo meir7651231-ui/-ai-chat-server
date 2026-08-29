@@ -6,6 +6,7 @@ import '../dart-ui-bs/screens__chat_settings_screen/quick_reply_banner.dart';
 import '../dart-data-bs/auto/screens__chat_settings_screen_content.dart';
 import '../dart-data-bs/screens__chat_settings_screen_content.dart';
 
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class ChatSettingsScreenTokens {
   const ChatSettingsScreenTokens({required this.accentColor, required this.chipBorderColor, required this.chipFillColor, required this.inkColor});

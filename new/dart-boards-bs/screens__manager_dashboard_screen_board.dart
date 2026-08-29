@@ -43,9 +43,9 @@ class ManagerDashboardScreenBoard extends ConsumerWidget {
     return ManagerDashboardScreenComposed(
       onPressed: onAdvance,
       onTap: () {} /* TODO-לוח */,
-      count: byStage[stage] ?? 0,
       max: maxStage,
       pct: pct,
+      pipelineRowItems: kManagerOrderFlow.map((stage) => PipelineRowItem(label: _stageLabel[stage] ?? stage, count: byStage[stage] ?? 0, color: _stageColor[stage] ?? BsTokens.brand)).toList(),
       stageIdx: stageIdx,
       t: ManagerDashboardScreenTokens(color: const Color(0xFF223047) /* TODO-לוח: טוקן */),
     );

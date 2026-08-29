@@ -6,6 +6,7 @@ import '../dart-ui-bs/auto/color_swatch.dart';
 import '../dart-ui-bs/auto/save_draft_button.dart';
 import '../dart-data-bs/auto/screens__trade_builder__trade_define_step_content.dart';
 
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class TradeBuilderTradeDefineStepTokens {
   const TradeBuilderTradeDefineStepTokens();

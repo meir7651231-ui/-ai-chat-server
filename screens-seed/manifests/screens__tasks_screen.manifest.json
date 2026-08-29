@@ -44,10 +44,14 @@
     "label": "$: approval_card_label",
     "fallback": "$: approval_card_fallback",
     "label2": "$: approval_card_label2",
-    "name": "?:String",
-    "workerLabel": "?:String",
-    "onApprove": "@:onApprove",
-    "onReject": "@:onReject"
+    "name": "~:",
+    "workerLabel": "~:",
+    "onApprove": "~:",
+    "onReject": "~:"
+   },
+   "repeat": {
+    "as": "t",
+    "item": "ApprovalCardItem"
    }
   },
   {
@@ -57,13 +61,17 @@
     "label": "$: proposal_card_label",
     "fallback": "$: proposal_card_fallback",
     "label2": "$: proposal_card_label2",
-    "id": "?:int",
-    "name": "?:String",
+    "id": "~:",
+    "name": "~:",
     "detail": "?:String",
-    "workerLabel": "?:String",
-    "days": "?:int",
-    "onApprove": "@:onApprove",
-    "onReject": "@:onReject"
+    "workerLabel": "~:",
+    "days": "~:",
+    "onApprove": "~:",
+    "onReject": "~:"
+   },
+   "repeat": {
+    "as": "t",
+    "item": "ProposalCardItem"
    }
   },
   {
@@ -91,8 +99,12 @@
     "status": "?:String",
     "name": "?:String",
     "detail": "?:String",
-    "onTap": "@:onTap",
-    "onEdit": "@:onEdit"
+    "onTap": "~:",
+    "onEdit": "~:"
+   },
+   "repeat": {
+    "as": "t",
+    "item": "TasksCardItem"
    }
   },
   {

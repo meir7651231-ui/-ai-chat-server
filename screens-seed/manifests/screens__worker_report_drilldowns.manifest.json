@@ -23,8 +23,12 @@
    "id": "kv_line",
    "atom": "KvLine",
    "props": {
-    "label": "?:String",
-    "value": "?:String"
+    "label": "~:",
+    "value": "~:"
+   },
+   "repeat": {
+    "as": "c",
+    "item": "KvLineItem"
    }
   }
  ]

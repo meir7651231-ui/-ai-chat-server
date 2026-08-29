@@ -18,11 +18,15 @@
    "id": "pipeline_row",
    "atom": "PipelineRow",
    "props": {
-    "label": "$: managerShellContent.label",
-    "count": "?:int",
+    "label": "~:",
+    "count": "~:",
     "max": "?:int",
-    "color": "#:color",
+    "color": "~:",
     "onTap": "@:onTap"
+   },
+   "repeat": {
+    "as": "stage",
+    "item": "PipelineRowItem"
    }
   },
   {

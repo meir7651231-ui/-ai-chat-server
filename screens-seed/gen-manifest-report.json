@@ -2,6 +2,7 @@
  "full": [
   "features__catalog_config__wheel_picker",
   "screens__catalog_settings_screen",
+  "screens__courier_certs_screen",
   "screens__courier_settings_screen",
   "screens__intel__intel_tab"
  ],
@@ -13,7 +14,7 @@
   },
   {
    "screen": "screens__ai_hub_screen",
-   "holes": 20
+   "holes": 15
   },
   {
    "screen": "screens__budget_screen",
@@ -26,7 +27,7 @@
   },
   {
    "screen": "screens__catalog_screen",
-   "holes": 31,
+   "holes": 25,
    "flat": true
   },
   {
@@ -63,10 +64,6 @@
    "flat": true
   },
   {
-   "screen": "screens__courier_certs_screen",
-   "holes": 2
-  },
-  {
    "screen": "screens__courier_dashboard_screen",
    "holes": 7,
    "flat": true
@@ -87,7 +84,7 @@
   },
   {
    "screen": "screens__courier_reports_tab",
-   "holes": 6
+   "holes": 4
   },
   {
    "screen": "screens__defects_sheet",
@@ -100,7 +97,7 @@
   },
   {
    "screen": "screens__finance_hub_sheets",
-   "holes": 29,
+   "holes": 27,
    "flat": true
   },
   {
@@ -129,7 +126,7 @@
   },
   {
    "screen": "screens__lipskey_product_sheet",
-   "holes": 15,
+   "holes": 13,
    "flat": true
   },
   {
@@ -143,7 +140,7 @@
   },
   {
    "screen": "screens__manager_dashboard_screen",
-   "holes": 4
+   "holes": 3
   },
   {
    "screen": "screens__manager_profile_screen",
@@ -169,7 +166,7 @@
   },
   {
    "screen": "screens__persona_portal",
-   "holes": 2,
+   "holes": 0,
    "flat": true
   },
   {
@@ -179,7 +176,7 @@
   },
   {
    "screen": "screens__projects_screen",
-   "holes": 4
+   "holes": 3
   },
   {
    "screen": "screens__regression_panel_screen",
@@ -187,7 +184,7 @@
   },
   {
    "screen": "screens__rewards_hub_screen",
-   "holes": 8
+   "holes": 5
   },
   {
    "screen": "screens__role_requests_inbox_screen",
@@ -196,7 +193,7 @@
   },
   {
    "screen": "screens__site_hub_screen",
-   "holes": 4
+   "holes": 1
   },
   {
    "screen": "screens__smart_home_screen",
@@ -213,17 +210,17 @@
   },
   {
    "screen": "screens__store_dashboard_screen",
-   "holes": 11,
+   "holes": 9,
    "flat": true
   },
   {
    "screen": "screens__store_profile_screen",
-   "holes": 2,
+   "holes": 0,
    "flat": true
   },
   {
    "screen": "screens__store_screen",
-   "holes": 22,
+   "holes": 19,
    "flat": true
   },
   {
@@ -237,7 +234,7 @@
   },
   {
    "screen": "screens__studio__panes__theme_pane",
-   "holes": 2
+   "holes": 1
   },
   {
    "screen": "screens__studio__studio_top_bar",
@@ -250,7 +247,7 @@
   },
   {
    "screen": "screens__tasks_screen",
-   "holes": 15,
+   "holes": 9,
    "flat": true
   },
   {
@@ -260,7 +257,7 @@
   },
   {
    "screen": "screens__trade_builder__attribute_schema_editor",
-   "holes": 5,
+   "holes": 3,
    "flat": true
   },
   {
@@ -326,7 +323,7 @@
   },
   {
    "screen": "screens__worker_report_drilldowns",
-   "holes": 4,
+   "holes": 2,
    "flat": true
   },
   {
@@ -532,9 +529,9 @@
  ],
  "holesByType": {
   "int": 22,
-  "String": 63,
-  "Widget": 6,
-  "bool": 39,
+  "String": 60,
+  "bool": 36,
+  "Widget": 5,
   "TextEditingController": 4,
   "IconData": 7,
   "List<String>": 3,

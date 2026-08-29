@@ -6,6 +6,7 @@ import '../dart-ui-bs/auto/request_composer.dart';
 import '../dart-ui-bs/auto/worker_employer_stock_sheet_stock_row.dart';
 import '../dart-data-bs/auto/screens__worker_employer_stock_sheet_content.dart';
 
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class WorkerEmployerStockSheetTokens {
   const WorkerEmployerStockSheetTokens();

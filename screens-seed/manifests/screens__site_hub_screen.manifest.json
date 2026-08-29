@@ -8,10 +8,14 @@
    "id": "hub_tile",
    "atom": "HubTile",
    "props": {
-    "ic": "?:String",
-    "t": "?:String",
-    "s": "?:String",
-    "onTap": "@:onTap"
+    "ic": "~:",
+    "t": "~:",
+    "s": "~:",
+    "onTap": "~:"
+   },
+   "repeat": {
+    "as": "t",
+    "item": "HubTileItem"
    }
   },
   {

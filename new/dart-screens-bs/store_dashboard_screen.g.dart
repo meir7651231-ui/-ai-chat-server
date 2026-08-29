@@ -9,6 +9,14 @@ import '../dart-ui-bs/auto/flat_card.dart';
 import '../dart-ui-bs/auto/portal_tile_button.dart';
 import '../dart-ui-bs/auto/stat.dart';
 
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class PortalTileButtonItem {
+  const PortalTileButtonItem({required this.title, required this.sub, required this.onTap});
+  final String title;
+  final String sub;
+  final VoidCallback onTap;
+}
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class StoreDashboardScreenTokens {
   const StoreDashboardScreenTokens({required this.color});
@@ -16,13 +24,14 @@ class StoreDashboardScreenTokens {
 }
 
 class StoreDashboardScreenComposed extends StatelessWidget {
-  const StoreDashboardScreenComposed({required this.onTap, required this.badge, required this.child, required this.label, required this.on, required this.sub, required this.title, required this.value, required this.t, super.key});
+  const StoreDashboardScreenComposed({required this.onTap, required this.badge, required this.child, required this.label, required this.on, required this.portalTileButtonItems, required this.sub, required this.title, required this.value, required this.t, super.key});
 
   final VoidCallback onTap;
   final String badge;
   final Widget child;
   final String label;
   final bool on;
+  final List<PortalTileButtonItem> portalTileButtonItems;
   final String sub;
   final String title;
   final String value;
@@ -56,11 +65,14 @@ class StoreDashboardScreenComposed extends StatelessWidget {
             on: on,
             onTap: onTap,
           ),
+          for (final t in portalTileButtonItems) ...[
           PortalTileButton(
-            title: title,
-            sub: sub,
-            onTap: onTap,
+            title: t.title,
+            sub: t.sub,
+            onTap: t.onTap,
           ),
+          const SizedBox(height: 8),
+        ],
         ],
       );
 }

@@ -6,6 +6,7 @@ import '../dart-ui-bs/auto/pipe_link.dart';
 import '../dart-ui-bs/auto/sheet_close.dart';
 import '../dart-data-bs/auto/screens__install_studio_screen_content.dart';
 
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class InstallStudioScreenTokens {
   const InstallStudioScreenTokens({required this.from, required this.to});

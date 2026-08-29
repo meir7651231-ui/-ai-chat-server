@@ -16,6 +16,22 @@ import '../dart-ui-bs/auto/three_way.dart';
 import '../dart-ui-bs/auto/wear.dart';
 import '../dart-data-bs/auto/screens__ai_hub_screen_content.dart';
 
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class AiFinTileItem {
+  const AiFinTileItem({required this.ic, required this.title, required this.sub, required this.onTap});
+  final String ic;
+  final String title;
+  final String sub;
+  final VoidCallback onTap;
+}
+
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class AiCardItem {
+  const AiCardItem({required this.child, required this.overdue});
+  final Widget child;
+  final bool overdue;
+}
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class AiHubScreenTokens {
   const AiHubScreenTokens();
@@ -23,15 +39,15 @@ class AiHubScreenTokens {
 }
 
 class AiHubScreenComposed extends StatelessWidget {
-  const AiHubScreenComposed({required this.onTap, required this.bad, required this.child, required this.danger, required this.ic, required this.label, required this.overdue, required this.pct, required this.pill, required this.sub, required this.text, required this.title, required this.value, required this.t, super.key});
+  const AiHubScreenComposed({required this.onTap, required this.aiCardItems, required this.aiFinTileItems, required this.bad, required this.danger, required this.ic, required this.label, required this.pct, required this.pill, required this.sub, required this.text, required this.title, required this.value, required this.t, super.key});
 
   final VoidCallback onTap;
+  final List<AiCardItem> aiCardItems;
+  final List<AiFinTileItem> aiFinTileItems;
   final bool bad;
-  final Widget child;
   final bool danger;
   final String ic;
   final String label;
-  final bool overdue;
   final int pct;
   final String pill;
   final String sub;
@@ -50,12 +66,15 @@ class AiHubScreenComposed extends StatelessWidget {
             title: title,
             sub: sub,
           ),
+          for (final t in aiFinTileItems) ...[
           AiFinTile(
-            ic: ic,
-            title: title,
-            sub: sub,
-            onTap: onTap,
+            ic: t.ic,
+            title: t.title,
+            sub: t.sub,
+            onTap: t.onTap,
           ),
+          const SizedBox(height: 8),
+        ],
           ThreeWay(
             title: three_way_title,
             sub: three_way_sub,
@@ -77,10 +96,13 @@ class AiHubScreenComposed extends StatelessWidget {
           AiServerNote(
             text: text,
           ),
+          for (final p in aiCardItems) ...[
           AiCard(
-            child: child,
-            overdue: overdue,
+            child: p.child,
+            overdue: p.overdue,
           ),
+          const SizedBox(height: 8),
+        ],
           AiCardSub(
             text: text,
           ),

@@ -17,6 +17,20 @@ import '../dart-ui-bs/auto/summary_card.dart';
 import '../dart-data-bs/auto/screens__store_screen_content.dart';
 import '../dart-data-bs/screens__store_screen_content.dart';
 
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class StoreSupplierHeaderItem {
+  const StoreSupplierHeaderItem({required this.name});
+  final String name;
+}
+
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class StoreProjectChipItem {
+  const StoreProjectChipItem({required this.label, required this.active, required this.onTap});
+  final String label;
+  final bool active;
+  final VoidCallback onTap;
+}
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class StoreScreenTokens {
   const StoreScreenTokens({required this.color});
@@ -24,7 +38,7 @@ class StoreScreenTokens {
 }
 
 class StoreScreenComposed extends StatelessWidget {
-  const StoreScreenComposed({required this.onMinus, required this.onPlus, required this.onTap, required this.active, required this.badge, required this.bold, required this.children, required this.deliveryFee, required this.emoji, required this.icon, required this.label, required this.name, required this.qty, required this.query, required this.subtotal, required this.total, required this.value, required this.vat, required this.vatInclusive, required this.t, super.key});
+  const StoreScreenComposed({required this.onMinus, required this.onPlus, required this.onTap, required this.active, required this.badge, required this.bold, required this.children, required this.deliveryFee, required this.emoji, required this.icon, required this.label, required this.qty, required this.query, required this.storeProjectChipItems, required this.storeSupplierHeaderItems, required this.subtotal, required this.total, required this.value, required this.vat, required this.vatInclusive, required this.t, super.key});
 
   final VoidCallback onMinus;
   final VoidCallback onPlus;
@@ -37,9 +51,10 @@ class StoreScreenComposed extends StatelessWidget {
   final String emoji;
   final IconData icon;
   final String label;
-  final String name;
   final int qty;
   final String query;
+  final List<StoreProjectChipItem> storeProjectChipItems;
+  final List<StoreSupplierHeaderItem> storeSupplierHeaderItems;
   final int subtotal;
   final int total;
   final String value;
@@ -85,10 +100,13 @@ class StoreScreenComposed extends StatelessWidget {
             label2: store_empty_state_label2,
             query: query,
           ),
+          for (final entry in storeSupplierHeaderItems) ...[
           StoreSupplierHeader(
             fallback: store_supplier_header_fallback,
-            name: name,
+            name: entry.name,
           ),
+          const SizedBox(height: 8),
+        ],
           SummaryCard(
             label: summary_card_label,
             label2: summary_card_label2,
@@ -102,11 +120,14 @@ class StoreScreenComposed extends StatelessWidget {
             total: total,
             vatInclusive: vatInclusive,
           ),
+          for (final p in storeProjectChipItems) ...[
           StoreProjectChip(
-            label: label,
-            active: active,
-            onTap: onTap,
+            label: p.label,
+            active: p.active,
+            onTap: p.onTap,
           ),
+          const SizedBox(height: 8),
+        ],
           StoreSmartQtyStepper(
             message: store_smart_qty_stepper_message,
             message2: store_smart_qty_stepper_message2,

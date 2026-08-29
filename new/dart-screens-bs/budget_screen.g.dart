@@ -7,6 +7,7 @@ import '../dart-ui-bs/auto/num_box.dart';
 import '../dart-ui-bs/auto/site_row.dart';
 import '../dart-ui-bs/auto/tappable.dart';
 
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class BudgetScreenTokens {
   const BudgetScreenTokens({required this.color});

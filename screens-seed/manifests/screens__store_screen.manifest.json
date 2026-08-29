@@ -70,7 +70,11 @@
    "atom": "StoreSupplierHeader",
    "props": {
     "fallback": "$: store_supplier_header_fallback",
-    "name": "?:String"
+    "name": "~:"
+   },
+   "repeat": {
+    "as": "entry",
+    "item": "StoreSupplierHeaderItem"
    }
   },
   {
@@ -94,9 +98,13 @@
    "id": "store_project_chip",
    "atom": "StoreProjectChip",
    "props": {
-    "label": "?:String",
-    "active": "?:bool",
-    "onTap": "@:onTap"
+    "label": "~:",
+    "active": "~:",
+    "onTap": "~:"
+   },
+   "repeat": {
+    "as": "p",
+    "item": "StoreProjectChipItem"
    }
   },
   {

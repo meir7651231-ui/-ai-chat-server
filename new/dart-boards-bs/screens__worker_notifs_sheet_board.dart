@@ -18,7 +18,8 @@ class WorkerNotifsSheetBoard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return WorkerNotifsSheetComposed(
-      onTap: username == null || n.read
+      fallback: '' /* TODO-לוח: String */,
+      notifRowItems: notifs.map((n) => NotifRowItem(onTap: username == null || n.read
                                 ? null
                                 : () {
                                     // route by source: a SERVER bell → the repo;
@@ -30,8 +31,7 @@ class WorkerNotifsSheetBoard extends ConsumerWidget {
                                           .read(workerNotifsProvider.notifier)
                                           .markRead(username, n.id);
                                     }
-                                  },
-      fallback: '' /* TODO-לוח: String */,
+                                  })).toList(),
       t: WorkerNotifsSheetTokens(),
     );
   }

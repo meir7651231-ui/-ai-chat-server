@@ -8,6 +8,7 @@ import '../dart-ui-bs/auto/section_header.dart';
 import '../dart-ui-bs/auto/trade_builder_accessory_rule_editor_pill_button.dart';
 import '../dart-data-bs/auto/screens__trade_builder__product_authoring_screen_content.dart';
 
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class TradeBuilderProductAuthoringScreenTokens {
   const TradeBuilderProductAuthoringScreenTokens();

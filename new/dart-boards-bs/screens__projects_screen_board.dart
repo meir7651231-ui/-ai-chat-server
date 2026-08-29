@@ -1,5 +1,5 @@
 // 🔌 חולל ע"י מחולל-הלוחות (board-gen) — הלוח = המקום-היחיד שנוגע-בחיווט (חוק-3).
-// מקור-החיווט: screens__projects_screen.dart (בנייה-חכמה main) · מחווט: 6 · TODO: 2.
+// מקור-החיווט: screens__projects_screen.dart (בנייה-חכמה main) · מחווט: 3 · TODO: 2.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:buildsmart/screens/budget_screen.dart';
@@ -21,14 +21,14 @@ class ProjectsScreenBoard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ProjectsScreenComposed(
-      onCart: p.onCart,
-      onStatus: p.onStatus,
-      onSwitch: p.onSwitch,
       onTap: () {} /* TODO-לוח */,
       addr: p.addr,
-      isActive: p.id == state.activeId,
       label: '' /* TODO-לוח: String */,
       name: p.name,
+      siteCardItems: state.projects.map((p) => SiteCardItem(isActive: p.id == state.activeId, onSwitch: () => _switch(context, ref, p.id), onStatus: () => _statusSheet(context, ref, p.id), onCart: () {
+                    _switch(context, ref, p.id, silent: true);
+                    showToast(context, '🛒 סל הפרויקט: ${p.cart.length} פריטים');
+                  })).toList(),
       t: ProjectsScreenTokens(),
     );
   }

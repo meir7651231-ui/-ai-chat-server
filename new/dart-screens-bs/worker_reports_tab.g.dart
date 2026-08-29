@@ -10,6 +10,7 @@ import '../dart-ui-bs/auto/thumb_placeholder.dart';
 import '../dart-ui-bs/auto/worker_reports_tab_kv_row.dart';
 import '../dart-data-bs/auto/screens__worker_reports_tab_content.dart';
 
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class WorkerReportsTabTokens {
   const WorkerReportsTabTokens();

@@ -8,6 +8,7 @@ import '../dart-ui-bs/auto/store_settings_action_row.dart';
 import '../dart-ui-bs/screens__store_settings_screen/settings_number_row.dart';
 import '../dart-ui-bs/screens__store_settings_screen/settings_validated_text_row.dart';
 
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class StoreSettingsScreenTokens {
   const StoreSettingsScreenTokens({required this.cursorColor, required this.fieldWidth, required this.fillColor, required this.hintColor, required this.inkColor, required this.labelColor, required this.mutedColor});

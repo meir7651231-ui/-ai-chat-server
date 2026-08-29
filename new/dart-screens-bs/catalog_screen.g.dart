@@ -18,6 +18,31 @@ import '../dart-ui-bs/auto/tree_coming_soon.dart';
 import '../dart-ui-bs/auto/value_chip.dart';
 import '../dart-data-bs/auto/screens__catalog_screen_content.dart';
 
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class FacetRowItem {
+  const FacetRowItem({required this.label, required this.desc, required this.count, required this.onTap});
+  final String label;
+  final String desc;
+  final int count;
+  final VoidCallback onTap;
+}
+
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class SavedVersionChipItem {
+  const SavedVersionChipItem({required this.label, required this.onLoad, required this.onDelete});
+  final String label;
+  final VoidCallback onLoad;
+  final VoidCallback onDelete;
+}
+
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class AxisChipItem {
+  const AxisChipItem({required this.label, required this.isSelected, required this.onTap});
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+}
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class CatalogScreenTokens {
   const CatalogScreenTokens({required this.color});
@@ -25,19 +50,18 @@ class CatalogScreenTokens {
 }
 
 class CatalogScreenComposed extends StatelessWidget {
-  const CatalogScreenComposed({required this.onDelete, required this.onLoad, required this.onQtyChanged, required this.onTap, required this.onToggle, required this.activeMatch, required this.child, required this.count, required this.desc, required this.emoji, required this.expanded, required this.icon, required this.isSelected, required this.label, required this.name, required this.options, required this.price, required this.qty, required this.selected, required this.selected2, required this.text, required this.title, required this.value, required this.why, required this.t, super.key});
+  const CatalogScreenComposed({required this.onQtyChanged, required this.onTap, required this.onToggle, required this.activeMatch, required this.axisChipItems, required this.child, required this.count, required this.emoji, required this.expanded, required this.facetRowItems, required this.icon, required this.isSelected, required this.label, required this.name, required this.options, required this.price, required this.qty, required this.savedVersionChipItems, required this.selected, required this.selected2, required this.text, required this.title, required this.value, required this.why, required this.t, super.key});
 
-  final VoidCallback onDelete;
-  final VoidCallback onLoad;
   final VoidCallback onQtyChanged;
   final VoidCallback onTap;
   final VoidCallback onToggle;
   final List<String>? activeMatch;
+  final List<AxisChipItem> axisChipItems;
   final Widget child;
   final int count;
-  final String desc;
   final String emoji;
   final bool expanded;
+  final List<FacetRowItem> facetRowItems;
   final IconData icon;
   final bool isSelected;
   final String label;
@@ -45,6 +69,7 @@ class CatalogScreenComposed extends StatelessWidget {
   final List<String> options;
   final int? price;
   final int qty;
+  final List<SavedVersionChipItem> savedVersionChipItems;
   final String? selected;
   final bool selected2;
   final String text;
@@ -73,13 +98,16 @@ class CatalogScreenComposed extends StatelessWidget {
             emoji: emoji,
             label: label,
           ),
+          for (final o in facetRowItems) ...[
           FacetRow(
             label2: facet_row_label2,
-            label: label,
-            desc: desc,
-            count: count,
-            onTap: onTap,
+            label: o.label,
+            desc: o.desc,
+            count: o.count,
+            onTap: o.onTap,
           ),
+          const SizedBox(height: 8),
+        ],
           TreeComingSoon(
             fallback: tree_coming_soon_fallback,
             fallback2: tree_coming_soon_fallback2,
@@ -102,15 +130,18 @@ class CatalogScreenComposed extends StatelessWidget {
             options: options,
             selected: selected,
           ),
+          for (final v in savedVersionChipItems) ...[
           SavedVersionChip(
             message: saved_version_chip_message,
             label2: saved_version_chip_label2,
             message2: saved_version_chip_message2,
             label3: saved_version_chip_label3,
-            label: label,
-            onLoad: onLoad,
-            onDelete: onDelete,
+            label: v.label,
+            onLoad: v.onLoad,
+            onDelete: v.onDelete,
           ),
+          const SizedBox(height: 8),
+        ],
           AccRow(
             label: acc_row_label,
             label2: acc_row_label2,
@@ -136,11 +167,14 @@ class CatalogScreenComposed extends StatelessWidget {
           ValueChip(
             text: text,
           ),
+          for (final axis in axisChipItems) ...[
           AxisChip(
-            label: label,
-            isSelected: isSelected,
-            onTap: onTap,
+            label: axis.label,
+            isSelected: axis.isSelected,
+            onTap: axis.onTap,
           ),
+          const SizedBox(height: 8),
+        ],
           FacetChip(
             label: label,
             count: count,

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../dart-ui-bs/auto/pad.dart';
 import '../dart-ui-bs/auto/section_title.dart';
 
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class SmartHomeScreenTokens {
   const SmartHomeScreenTokens();

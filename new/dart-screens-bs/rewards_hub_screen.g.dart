@@ -7,6 +7,15 @@ import '../dart-ui-bs/auto/fin_tile.dart';
 import '../dart-ui-bs/auto/md_head.dart';
 import '../dart-data-bs/auto/screens__rewards_hub_screen_content.dart';
 
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class FinTileItem {
+  const FinTileItem({required this.ic, required this.title, required this.sub, required this.onTap});
+  final String ic;
+  final String title;
+  final String sub;
+  final VoidCallback onTap;
+}
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class RewardsHubScreenTokens {
   const RewardsHubScreenTokens();
@@ -14,10 +23,11 @@ class RewardsHubScreenTokens {
 }
 
 class RewardsHubScreenComposed extends StatelessWidget {
-  const RewardsHubScreenComposed({required this.onTap, required this.coins, required this.ic, required this.sub, required this.title, required this.t, super.key});
+  const RewardsHubScreenComposed({required this.coins, required this.finTileItems, required this.ic, required this.sub, required this.title, required this.t, super.key});
 
-  final VoidCallback onTap;
+
   final int coins;
+  final List<FinTileItem> finTileItems;
   final String ic;
   final String sub;
   final String title;
@@ -37,12 +47,15 @@ class RewardsHubScreenComposed extends StatelessWidget {
             coins: coins,
             sub: sub,
           ),
+          for (final t in finTileItems) ...[
           FinTile(
-            ic: ic,
-            title: title,
-            sub: sub,
-            onTap: onTap,
+            ic: t.ic,
+            title: t.title,
+            sub: t.sub,
+            onTap: t.onTap,
           ),
+          const SizedBox(height: 8),
+        ],
         ],
       );
 }

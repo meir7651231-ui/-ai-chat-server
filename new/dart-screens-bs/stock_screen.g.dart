@@ -6,6 +6,7 @@ import '../dart-ui-bs/auto/stock_row.dart';
 import '../dart-ui-bs/auto/stock_tab.dart';
 import '../dart-data-bs/auto/screens__stock_screen_content.dart';
 
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class StockScreenTokens {
   const StockScreenTokens();

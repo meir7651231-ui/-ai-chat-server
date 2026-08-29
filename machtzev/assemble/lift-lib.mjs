@@ -68,6 +68,46 @@ export const FOUNDATION_FN = new Map([
   ['cfgRadius', "import 'package:buildsmart/theme/config_theme.dart';"],
 ]);
 
+export const ANY_LIT_RE = /'(?:[^'\\\n]|\\.)*'/g;
+export const maskLits = (s) => s.replace(ANY_LIT_RE, (m) => "'" + 'x'.repeat(m.length - 2) + "'");
+
+/** ארגומנטי-קריאה גולמיים של widget החל-מ-from: {named, positional, index} או null. */
+export function parseCallArgs(src, widget, from = 0) {
+  const scan = maskLits(maskComments(src));
+  const re = new RegExp('(?<!class )\\b' + widget + '\\s*\\(', 'g');
+  re.lastIndex = from;
+  const m = re.exec(scan);
+  if (!m) return null;
+  let d = 0, j = scan.indexOf('(', m.index), open = j;
+  for (; j < scan.length; j++) { const c = scan[j]; if (c === '(' || c === '[' || c === '{') d++; else if (c === ')' || c === ']' || c === '}') { d--; if (!d) break; } }
+  const named = {}; const positional = [];
+  let s0 = open + 1, dep = 0;
+  const push = (a, b) => {
+    const raw = src.slice(a, b).trim();
+    if (!raw) return;
+    const nm = raw.match(/^([a-zA-Z_]\w*)\s*:\s*([\s\S]+)$/);
+    if (nm) named[nm[1]] = nm[2].trim(); else positional.push(raw);
+  };
+  for (let k = open + 1; k <= j; k++) {
+    const c = scan[k];
+    if (c === '(' || c === '[' || c === '{') dep++;
+    else if (c === ']' || c === '}') dep--;
+    else if (c === ')' && k < j) dep--;
+    else if ((c === ',' && !dep) || k === j) { push(s0, k); s0 = k + 1; }
+  }
+  return { named, positional, index: m.index };
+}
+
+/** הקשר-לולאה של widget: {list, as, callIndex} או null — map/collection-for. */
+export function loopContext(src, widget) {
+  const scan = maskLits(maskComments(src));
+  let m = new RegExp('([\\w.\\]\\[!?]+(?:\\([^()]*\\))?)\\.map\\(\\s*\\(\\s*(\\w+)\\s*\\)\\s*=>\\s*(?:const\\s+)?' + widget + '\\s*\\(', 'd').exec(scan);
+  if (m) return { list: src.slice(m.indices[1][0], m.indices[1][1]), as: m[2], callIndex: m.index + m[0].length - widget.length - 2 };
+  m = new RegExp('for\\s*\\(final\\s+(\\w+)\\s+in\\s+([^)]+)\\)\\s*(?:\\.\\.\\.)?\\s*\\[?\\s*(?:const\\s+)?' + widget + '\\s*\\(', 'd').exec(scan);
+  if (m) return { list: src.slice(m.indices[2][0], m.indices[2][1]).trim(), as: m[1], callIndex: m.index + m[0].length - widget.length - 2 };
+  return null;
+}
+
 export const snake = (n) => n.replace(/^_/, '').replace(/([a-z0-9])([A-Z])/g, '$1_$2').toLowerCase();
 export const screenPascal = (screen) => screen.replace(/^(screens|features)__/, '').replace(/_screen$/, '')
   .split(/__|_/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');

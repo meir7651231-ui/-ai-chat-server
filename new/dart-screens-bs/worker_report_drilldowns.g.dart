@@ -6,6 +6,13 @@ import '../dart-ui-bs/auto/kv_line.dart';
 import '../dart-ui-bs/auto/mini_status_pill.dart';
 import '../dart-ui-bs/auto/worker_equipment_checklist_sheet_sec_h.dart';
 
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class KvLineItem {
+  const KvLineItem({required this.label, required this.value});
+  final String label;
+  final String value;
+}
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class WorkerReportDrilldownsTokens {
   const WorkerReportDrilldownsTokens();
@@ -13,13 +20,12 @@ class WorkerReportDrilldownsTokens {
 }
 
 class WorkerReportDrilldownsComposed extends StatelessWidget {
-  const WorkerReportDrilldownsComposed({required this.label, required this.status, required this.text, required this.value, required this.t, super.key});
+  const WorkerReportDrilldownsComposed({required this.kvLineItems, required this.status, required this.text, required this.t, super.key});
 
 
-  final String label;
+  final List<KvLineItem> kvLineItems;
   final String status;
   final String text;
-  final String value;
   final WorkerReportDrilldownsTokens t;
 
   @override
@@ -33,10 +39,13 @@ class WorkerReportDrilldownsComposed extends StatelessWidget {
           WorkerEquipmentChecklistSheetSecH(
             text: text,
           ),
+          for (final c in kvLineItems) ...[
           KvLine(
-            label: label,
-            value: value,
+            label: c.label,
+            value: c.value,
           ),
+          const SizedBox(height: 8),
+        ],
         ],
       );
 }

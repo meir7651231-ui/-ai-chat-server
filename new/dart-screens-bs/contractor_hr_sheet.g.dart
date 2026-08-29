@@ -7,6 +7,12 @@ import '../dart-ui-bs/auto/status_chip.dart';
 import '../dart-ui-bs/auto/vacation_row.dart';
 import '../dart-data-bs/auto/screens__contractor_hr_sheet_content.dart';
 
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class VacationRowItem {
+  const VacationRowItem({required this.onApprove});
+  final VoidCallback onApprove;
+}
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class ContractorHrSheetTokens {
   const ContractorHrSheetTokens({required this.color, required this.textColor});
@@ -15,14 +21,14 @@ class ContractorHrSheetTokens {
 }
 
 class ContractorHrSheetComposed extends StatelessWidget {
-  const ContractorHrSheetComposed({required this.onApprove, required this.onPressed, required this.bordered, required this.label, required this.reason, required this.status, required this.t, super.key});
+  const ContractorHrSheetComposed({required this.onPressed, required this.bordered, required this.label, required this.reason, required this.status, required this.vacationRowItems, required this.t, super.key});
 
-  final VoidCallback onApprove;
   final VoidCallback onPressed;
   final bool bordered;
   final String label;
   final String reason;
   final String status;
+  final List<VacationRowItem> vacationRowItems;
   final ContractorHrSheetTokens t;
 
   @override
@@ -30,6 +36,7 @@ class ContractorHrSheetComposed extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 24),
         children: [
           const SizedBox(height: 8),
+          for (final r in vacationRowItems) ...[
           VacationRow(
             label: vacation_row_label,
             label2: vacation_row_label2,
@@ -37,8 +44,10 @@ class ContractorHrSheetComposed extends StatelessWidget {
             reason: reason,
             label3: vacation_row_label3,
             label4: vacation_row_label4,
-            onApprove: onApprove,
+            onApprove: r.onApprove,
           ),
+          const SizedBox(height: 8),
+        ],
           DecideButton(
             label: label,
             color: t.color,

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../dart-ui-bs/auto/intel_intro.dart';
 import '../dart-data-bs/auto/screens__intel__intel_tab_content.dart';
 
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class IntelIntelTabTokens {
   const IntelIntelTabTokens();

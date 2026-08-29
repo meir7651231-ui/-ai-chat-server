@@ -34,10 +34,14 @@
     "label2": "?:String",
     "message": "?:String",
     "name": "?:String",
-    "onTap": "@:onTap",
+    "onTap": "~:",
     "tag": "?:String",
     "emphasized": "?:bool",
     "onMarkDone": "@:onMarkDone"
+   },
+   "repeat": {
+    "as": "e",
+    "item": "StageRowItem"
    }
   },
   {
@@ -66,9 +70,13 @@
    "id": "picker_option",
    "atom": "PickerOption",
    "props": {
-    "value": "?:String",
-    "isSelected": "?:bool",
-    "onTap": "@:onTap"
+    "value": "~:",
+    "isSelected": "~:",
+    "onTap": "~:"
+   },
+   "repeat": {
+    "as": "opt",
+    "item": "PickerOptionItem"
    }
   }
  ]

@@ -9,8 +9,12 @@
    "id": "sstat",
    "atom": "SStat",
    "props": {
-    "value": "?:String",
-    "label": "?:String"
+    "value": "~:",
+    "label": "~:"
+   },
+   "repeat": {
+    "as": "s",
+    "item": "SStatItem"
    }
   }
  ]

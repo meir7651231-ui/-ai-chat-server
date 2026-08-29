@@ -6,17 +6,25 @@ import '../dart-ui-bs/auto/label.dart';
 import '../dart-ui-bs/auto/swatch.dart';
 import '../dart-data-bs/auto/screens__studio__panes__theme_pane_content.dart';
 
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class SwatchItem {
+  const SwatchItem({required this.color, required this.selected, required this.onTap});
+  final Color color;
+  final bool selected;
+  final VoidCallback onTap;
+}
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class StudioPanesThemePaneTokens {
-  const StudioPanesThemePaneTokens({required this.color});
-  final Color color;
+  const StudioPanesThemePaneTokens();
+
 }
 
 class StudioPanesThemePaneComposed extends StatelessWidget {
-  const StudioPanesThemePaneComposed({required this.onTap, required this.selected, required this.text, required this.t, super.key});
+  const StudioPanesThemePaneComposed({required this.swatchItems, required this.text, required this.t, super.key});
 
-  final VoidCallback onTap;
-  final bool selected;
+
+  final List<SwatchItem> swatchItems;
   final String text;
   final StudioPanesThemePaneTokens t;
 
@@ -28,12 +36,15 @@ class StudioPanesThemePaneComposed extends StatelessWidget {
           Label(
             text: text,
           ),
+          for (final c in swatchItems) ...[
           Swatch(
             label: swatch_label,
-            color: t.color,
-            selected: selected,
-            onTap: onTap,
+            color: c.color,
+            selected: c.selected,
+            onTap: c.onTap,
           ),
+          const SizedBox(height: 8),
+        ],
         ],
       );
 }

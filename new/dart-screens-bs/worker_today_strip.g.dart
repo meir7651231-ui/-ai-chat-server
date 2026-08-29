@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../dart-ui-bs/auto/stage_row.dart';
 import '../dart-data-bs/auto/screens__worker_today_strip_content.dart';
 
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class WorkerTodayStripTokens {
   const WorkerTodayStripTokens();

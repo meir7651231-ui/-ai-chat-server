@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import '../dart-ui-bs/auto/role_requests_inbox_empty.dart';
 
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class RoleRequestsInboxScreenTokens {
   const RoleRequestsInboxScreenTokens();

@@ -24,8 +24,12 @@
    "id": "kv_row",
    "atom": "KvRow",
    "props": {
-    "label": "?:String",
-    "value": "?:String"
+    "label": "~:",
+    "value": "~:"
+   },
+   "repeat": {
+    "as": "o",
+    "item": "KvRowItem"
    }
   }
  ]

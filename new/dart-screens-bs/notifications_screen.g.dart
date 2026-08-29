@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../dart-ui-bs/auto/date_header.dart';
 import '../dart-ui-bs/auto/notif_row.dart';
 
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class NotificationsScreenTokens {
   const NotificationsScreenTokens();

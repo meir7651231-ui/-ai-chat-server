@@ -52,9 +52,13 @@
    "id": "portal_tile_button",
    "atom": "PortalTileButton",
    "props": {
-    "title": "?:String",
-    "sub": "?:String",
-    "onTap": "@:onTap"
+    "title": "~:",
+    "sub": "~:",
+    "onTap": "~:"
+   },
+   "repeat": {
+    "as": "t",
+    "item": "PortalTileButtonItem"
    }
   }
  ]

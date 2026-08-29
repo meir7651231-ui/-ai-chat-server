@@ -25,14 +25,22 @@
    "id": "match_chip",
    "atom": "MatchChip",
    "props": {
-    "text": "?:String"
+    "text": "~:"
+   },
+   "repeat": {
+    "as": "m",
+    "item": "MatchChipItem"
    }
   },
   {
    "id": "value_chip",
    "atom": "ValueChip",
    "props": {
-    "text": "?:String"
+    "text": "~:"
+   },
+   "repeat": {
+    "as": "v",
+    "item": "ValueChipItem"
    }
   }
  ]

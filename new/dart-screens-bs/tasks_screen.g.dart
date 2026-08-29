@@ -14,6 +14,33 @@ import '../dart-ui-bs/auto/tasks_card.dart';
 import '../dart-ui-bs/auto/worker_pick.dart';
 import '../dart-data-bs/auto/screens__tasks_screen_content.dart';
 
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class ApprovalCardItem {
+  const ApprovalCardItem({required this.name, required this.workerLabel, required this.onApprove, required this.onReject});
+  final String name;
+  final String workerLabel;
+  final VoidCallback onApprove;
+  final VoidCallback onReject;
+}
+
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class ProposalCardItem {
+  const ProposalCardItem({required this.id, required this.name, required this.workerLabel, required this.days, required this.onApprove, required this.onReject});
+  final int id;
+  final String name;
+  final String workerLabel;
+  final int days;
+  final VoidCallback onApprove;
+  final VoidCallback onReject;
+}
+
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class TasksCardItem {
+  const TasksCardItem({required this.onTap, required this.onEdit});
+  final VoidCallback onTap;
+  final VoidCallback onEdit;
+}
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class TasksScreenTokens {
   const TasksScreenTokens();
@@ -21,21 +48,18 @@ class TasksScreenTokens {
 }
 
 class TasksScreenComposed extends StatelessWidget {
-  const TasksScreenComposed({required this.onApprove, required this.onEdit, required this.onReject, required this.onTap, required this.days, required this.detail, required this.id, required this.label, required this.name, required this.selected, required this.status, required this.text, required this.workerLabel, required this.t, super.key});
+  const TasksScreenComposed({required this.onTap, required this.approvalCardItems, required this.detail, required this.label, required this.name, required this.proposalCardItems, required this.selected, required this.status, required this.tasksCardItems, required this.text, required this.t, super.key});
 
-  final VoidCallback onApprove;
-  final VoidCallback onEdit;
-  final VoidCallback onReject;
   final VoidCallback onTap;
-  final int days;
+  final List<ApprovalCardItem> approvalCardItems;
   final String detail;
-  final int id;
   final String label;
   final String name;
+  final List<ProposalCardItem> proposalCardItems;
   final int selected;
   final String status;
+  final List<TasksCardItem> tasksCardItems;
   final String text;
-  final String workerLabel;
   final TasksScreenTokens t;
 
   @override
@@ -57,27 +81,33 @@ class TasksScreenComposed extends StatelessWidget {
           DoneAll(
             text: text,
           ),
+          for (final t in approvalCardItems) ...[
           ApprovalCard(
             label: approval_card_label,
             fallback: approval_card_fallback,
             label2: approval_card_label2,
-            name: name,
-            workerLabel: workerLabel,
-            onApprove: onApprove,
-            onReject: onReject,
+            name: t.name,
+            workerLabel: t.workerLabel,
+            onApprove: t.onApprove,
+            onReject: t.onReject,
           ),
+          const SizedBox(height: 8),
+        ],
+          for (final t in proposalCardItems) ...[
           ProposalCard(
             label: proposal_card_label,
             fallback: proposal_card_fallback,
             label2: proposal_card_label2,
-            id: id,
-            name: name,
+            id: t.id,
+            name: t.name,
             detail: detail,
-            workerLabel: workerLabel,
-            days: days,
-            onApprove: onApprove,
-            onReject: onReject,
+            workerLabel: t.workerLabel,
+            days: t.days,
+            onApprove: t.onApprove,
+            onReject: t.onReject,
           ),
+          const SizedBox(height: 8),
+        ],
           WorkerPick(
             selected: selected,
           ),
@@ -85,6 +115,7 @@ class TasksScreenComposed extends StatelessWidget {
             label: label,
             onTap: onTap,
           ),
+          for (final t in tasksCardItems) ...[
           TasksCard(
             fallback: tasks_card_fallback,
             label: tasks_card_label,
@@ -92,9 +123,11 @@ class TasksScreenComposed extends StatelessWidget {
             status: status,
             name: name,
             detail: detail,
-            onTap: onTap,
-            onEdit: onEdit,
+            onTap: t.onTap,
+            onEdit: t.onEdit,
           ),
+          const SizedBox(height: 8),
+        ],
           SecH(
             text: text,
           ),

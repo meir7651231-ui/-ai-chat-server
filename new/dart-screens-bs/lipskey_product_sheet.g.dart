@@ -12,6 +12,20 @@ import '../dart-ui-bs/auto/zoom_hint.dart';
 import '../dart-data-bs/auto/screens__lipskey_product_sheet_content.dart';
 import '../dart-data-bs/screens__lipskey_product_sheet_content.dart';
 
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class StageRowItem {
+  const StageRowItem({required this.onTap});
+  final VoidCallback onTap;
+}
+
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class PickerOptionItem {
+  const PickerOptionItem({required this.value, required this.isSelected, required this.onTap});
+  final String value;
+  final bool isSelected;
+  final VoidCallback onTap;
+}
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class LipskeyProductSheetTokens {
   const LipskeyProductSheetTokens();
@@ -19,26 +33,25 @@ class LipskeyProductSheetTokens {
 }
 
 class LipskeyProductSheetComposed extends StatelessWidget {
-  const LipskeyProductSheetComposed({required this.onChanged, required this.onMarkDone, required this.onTap, required this.body, required this.body2, required this.emoji, required this.emphasized, required this.isSelected, required this.label, required this.label2, required this.message, required this.name, required this.qty, required this.subtitle, required this.tag, required this.text, required this.title2, required this.value, required this.t, super.key});
+  const LipskeyProductSheetComposed({required this.onChanged, required this.onMarkDone, required this.body, required this.body2, required this.emoji, required this.emphasized, required this.label, required this.label2, required this.message, required this.name, required this.pickerOptionItems, required this.qty, required this.stageRowItems, required this.subtitle, required this.tag, required this.text, required this.title2, required this.t, super.key});
 
   final VoidCallback onChanged;
   final VoidCallback onMarkDone;
-  final VoidCallback onTap;
   final String body;
   final String body2;
   final String emoji;
   final bool emphasized;
-  final bool isSelected;
   final String label;
   final String label2;
   final String message;
   final String name;
+  final List<PickerOptionItem> pickerOptionItems;
   final int qty;
+  final List<StageRowItem> stageRowItems;
   final String? subtitle;
   final String tag;
   final String text;
   final String title2;
-  final String value;
   final LipskeyProductSheetTokens t;
 
   @override
@@ -54,6 +67,7 @@ class LipskeyProductSheetComposed extends StatelessWidget {
             title: sheetChrome.title,
             subtitle: subtitle,
           ),
+          for (final e in stageRowItems) ...[
           StageRow(
             title: sheetChrome.title,
             body: body,
@@ -63,11 +77,13 @@ class LipskeyProductSheetComposed extends StatelessWidget {
             label2: label2,
             message: message,
             name: name,
-            onTap: onTap,
+            onTap: e.onTap,
             tag: tag,
             emphasized: emphasized,
             onMarkDone: onMarkDone,
           ),
+          const SizedBox(height: 8),
+        ],
           QtyStepper(
             qty: qty,
             onChanged: onChanged,
@@ -78,11 +94,14 @@ class LipskeyProductSheetComposed extends StatelessWidget {
           EmptyHint(
             text: text,
           ),
+          for (final opt in pickerOptionItems) ...[
           PickerOption(
-            value: value,
-            isSelected: isSelected,
-            onTap: onTap,
+            value: opt.value,
+            isSelected: opt.isSelected,
+            onTap: opt.onTap,
           ),
+          const SizedBox(height: 8),
+        ],
         ],
       );
 }

@@ -1,5 +1,5 @@
 // 🔌 חולל ע"י מחולל-הלוחות (board-gen) — הלוח = המקום-היחיד שנוגע-בחיווט (חוק-3).
-// מקור-החיווט: screens__store_screen.dart (בנייה-חכמה main) · מחווט: 15 · TODO: 4.
+// מקור-החיווט: screens__store_screen.dart (בנייה-חכמה main) · מחווט: 17 · TODO: 3.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:buildsmart/config/app_brand.dart';
@@ -90,10 +90,11 @@ class StoreScreenBoard extends ConsumerWidget {
               )
               .toList().emoji,
       icon: Icons.favorite_border,
-      label: p,
-      name: '' /* TODO-לוח: String */,
+      label: vatInclusive ? 'סכום ביניים (ללא מע"מ)' : 'סכום ביניים',
       qty: line.productQty,
       query: query,
+      storeProjectChipItems: projects.map((p) => StoreProjectChipItem(label: p, active: p == selected, onTap: () => ref.read(cartProjectProvider.notifier).state = p)).toList(),
+      storeSupplierHeaderItems: grouped.entries.map((entry) => StoreSupplierHeaderItem(name: entry.key)).toList(),
       subtotal: subtotal,
       total: total,
       value: _price(vatInclusive ? subtotal - vat : subtotal),

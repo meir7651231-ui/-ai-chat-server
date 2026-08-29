@@ -17,7 +17,11 @@
     "reason": "?:String",
     "label3": "$: vacation_row_label3",
     "label4": "$: vacation_row_label4",
-    "onApprove": "@:onApprove"
+    "onApprove": "~:"
+   },
+   "repeat": {
+    "as": "r",
+    "item": "VacationRowItem"
    }
   },
   {

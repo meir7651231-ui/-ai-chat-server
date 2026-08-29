@@ -4,6 +4,14 @@
 import 'package:flutter/material.dart';
 import '../dart-ui-bs/auto/preset_chip.dart';
 
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class PresetChipItem {
+  const PresetChipItem({required this.label, required this.selected, required this.onTap});
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+}
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class CourierCertsScreenTokens {
   const CourierCertsScreenTokens();
@@ -11,11 +19,10 @@ class CourierCertsScreenTokens {
 }
 
 class CourierCertsScreenComposed extends StatelessWidget {
-  const CourierCertsScreenComposed({required this.onTap, required this.label, required this.selected, required this.t, super.key});
+  const CourierCertsScreenComposed({required this.presetChipItems, required this.t, super.key});
 
-  final VoidCallback onTap;
-  final String label;
-  final bool selected;
+
+  final List<PresetChipItem> presetChipItems;
   final CourierCertsScreenTokens t;
 
   @override
@@ -23,11 +30,14 @@ class CourierCertsScreenComposed extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 24),
         children: [
           const SizedBox(height: 8),
+          for (final p in presetChipItems) ...[
           PresetChip(
-            label: label,
-            selected: selected,
-            onTap: onTap,
+            label: p.label,
+            selected: p.selected,
+            onTap: p.onTap,
           ),
+          const SizedBox(height: 8),
+        ],
         ],
       );
 }

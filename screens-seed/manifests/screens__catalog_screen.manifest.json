@@ -39,10 +39,14 @@
    "atom": "FacetRow",
    "props": {
     "label2": "$: facet_row_label2",
-    "label": "?:String",
-    "desc": "?:String",
-    "count": "?:int",
-    "onTap": "@:onTap"
+    "label": "~:",
+    "desc": "~:",
+    "count": "~:",
+    "onTap": "~:"
+   },
+   "repeat": {
+    "as": "o",
+    "item": "FacetRowItem"
    }
   },
   {
@@ -91,9 +95,13 @@
     "label2": "$: saved_version_chip_label2",
     "message2": "$: saved_version_chip_message2",
     "label3": "$: saved_version_chip_label3",
-    "label": "?:String",
-    "onLoad": "@:onLoad",
-    "onDelete": "@:onDelete"
+    "label": "~:",
+    "onLoad": "~:",
+    "onDelete": "~:"
+   },
+   "repeat": {
+    "as": "v",
+    "item": "SavedVersionChipItem"
    }
   },
   {
@@ -137,9 +145,13 @@
    "id": "axis_chip",
    "atom": "AxisChip",
    "props": {
-    "label": "?:String",
-    "isSelected": "?:bool",
-    "onTap": "@:onTap"
+    "label": "~:",
+    "isSelected": "~:",
+    "onTap": "~:"
+   },
+   "repeat": {
+    "as": "axis",
+    "item": "AxisChipItem"
    }
   },
   {

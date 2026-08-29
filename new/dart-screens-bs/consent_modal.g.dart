@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../dart-ui-bs/auto/consent_dialog.dart';
 import '../dart-data-bs/auto/screens__consent_modal_content.dart';
 
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class ConsentModalTokens {
   const ConsentModalTokens();

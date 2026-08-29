@@ -27,10 +27,14 @@
    "id": "fin_tile",
    "atom": "FinTile",
    "props": {
-    "ic": "?:String",
-    "title": "?:String",
-    "sub": "?:String",
-    "onTap": "@:onTap"
+    "ic": "~:",
+    "title": "~:",
+    "sub": "~:",
+    "onTap": "~:"
+   },
+   "repeat": {
+    "as": "t",
+    "item": "FinTileItem"
    }
   }
  ]

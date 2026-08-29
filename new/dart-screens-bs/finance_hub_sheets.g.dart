@@ -17,6 +17,13 @@ import '../dart-ui-bs/auto/sub_row.dart';
 import '../dart-ui-bs/auto/thr_row.dart';
 import '../dart-data-bs/auto/screens__finance_hub_sheets_content.dart';
 
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class ThrRowItem {
+  const ThrRowItem({required this.label, required this.hit});
+  final String label;
+  final bool hit;
+}
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class FinanceHubSheetsTokens {
   const FinanceHubSheetsTokens({required this.valueColor});
@@ -24,7 +31,7 @@ class FinanceHubSheetsTokens {
 }
 
 class FinanceHubSheetsComposed extends StatelessWidget {
-  const FinanceHubSheetsComposed({required this.onApprove, required this.onReject, required this.onTap, required this.allocated, required this.amount, required this.big, required this.children, required this.fallback, required this.hit, required this.ic, required this.id, required this.label, required this.label2, required this.name, required this.note, required this.secondLabel, required this.secondValue, required this.spent, required this.sub, required this.text, required this.title, required this.value, required this.workerLabel, required this.t, super.key});
+  const FinanceHubSheetsComposed({required this.onApprove, required this.onReject, required this.onTap, required this.allocated, required this.amount, required this.big, required this.children, required this.fallback, required this.ic, required this.id, required this.label, required this.label2, required this.name, required this.note, required this.secondLabel, required this.secondValue, required this.spent, required this.sub, required this.text, required this.thrRowItems, required this.title, required this.value, required this.workerLabel, required this.t, super.key});
 
   final VoidCallback onApprove;
   final VoidCallback onReject;
@@ -34,7 +41,6 @@ class FinanceHubSheetsComposed extends StatelessWidget {
   final bool big;
   final List<Widget> children;
   final String fallback;
-  final bool hit;
   final String ic;
   final String id;
   final String label;
@@ -46,6 +52,7 @@ class FinanceHubSheetsComposed extends StatelessWidget {
   final int spent;
   final String sub;
   final String text;
+  final List<ThrRowItem> thrRowItems;
   final String title;
   final String value;
   final String workerLabel;
@@ -106,10 +113,13 @@ class FinanceHubSheetsComposed extends StatelessWidget {
             onApprove: onApprove,
             onReject: onReject,
           ),
+          for (final t in thrRowItems) ...[
           ThrRow(
-            label: label,
-            hit: hit,
+            label: t.label,
+            hit: t.hit,
           ),
+          const SizedBox(height: 8),
+        ],
           PenaltyCard(
             label: penalty_card_label,
             label2: penalty_card_label2,

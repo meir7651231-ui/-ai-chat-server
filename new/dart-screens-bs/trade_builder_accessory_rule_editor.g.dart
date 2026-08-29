@@ -9,6 +9,7 @@ import '../dart-ui-bs/auto/price_chip.dart';
 import '../dart-ui-bs/auto/trade_builder_accessory_rule_editor_pill_button.dart';
 import '../dart-data-bs/auto/screens__trade_builder__accessory_rule_editor_content.dart';
 
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class TradeBuilderAccessoryRuleEditorTokens {
   const TradeBuilderAccessoryRuleEditorTokens();

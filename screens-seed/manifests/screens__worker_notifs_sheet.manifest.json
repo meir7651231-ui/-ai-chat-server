@@ -9,7 +9,11 @@
    "atom": "NotifRow",
    "props": {
     "fallback": "?:String",
-    "onTap": "@:onTap"
+    "onTap": "~:"
+   },
+   "repeat": {
+    "as": "n",
+    "item": "NotifRowItem"
    }
   }
  ]

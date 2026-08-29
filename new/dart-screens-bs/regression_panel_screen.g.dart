@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../dart-ui-bs/auto/summary_card.dart';
 import '../dart-data-bs/auto/screens__regression_panel_screen_content.dart';
 
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class RegressionPanelScreenTokens {
   const RegressionPanelScreenTokens();

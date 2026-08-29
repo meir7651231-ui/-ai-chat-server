@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../dart-ui-bs/auto/placeholder_notice.dart';
 import '../dart-data-bs/auto/screens__legal_screen_content.dart';
 
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class LegalScreenTokens {
   const LegalScreenTokens();

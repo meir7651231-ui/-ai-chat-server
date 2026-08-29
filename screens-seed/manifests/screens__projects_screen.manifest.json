@@ -26,10 +26,14 @@
     "fallback": "$: site_card_fallback",
     "name": "?:String",
     "addr": "?:String",
-    "isActive": "?:bool",
-    "onSwitch": "@:onSwitch",
-    "onStatus": "@:onStatus",
-    "onCart": "@:onCart"
+    "isActive": "~:",
+    "onSwitch": "~:",
+    "onStatus": "~:",
+    "onCart": "~:"
+   },
+   "repeat": {
+    "as": "p",
+    "item": "SiteCardItem"
    }
   }
  ]

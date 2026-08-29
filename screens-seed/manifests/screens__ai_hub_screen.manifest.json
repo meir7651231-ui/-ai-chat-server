@@ -19,10 +19,14 @@
    "id": "ai_fin_tile",
    "atom": "AiFinTile",
    "props": {
-    "ic": "?:String",
-    "title": "?:String",
-    "sub": "?:String",
-    "onTap": "@:onTap"
+    "ic": "~:",
+    "title": "~:",
+    "sub": "~:",
+    "onTap": "~:"
+   },
+   "repeat": {
+    "as": "t",
+    "item": "AiFinTileItem"
    }
   },
   {
@@ -62,8 +66,12 @@
    "id": "ai_card",
    "atom": "AiCard",
    "props": {
-    "child": "?:Widget",
-    "overdue": "?:bool"
+    "child": "~:",
+    "overdue": "~:"
+   },
+   "repeat": {
+    "as": "p",
+    "item": "AiCardItem"
    }
   },
   {

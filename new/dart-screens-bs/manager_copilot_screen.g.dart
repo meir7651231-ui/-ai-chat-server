@@ -7,6 +7,7 @@ import '../dart-ui-bs/auto/typing.dart';
 import '../dart-ui-bs/auto/welcome.dart';
 import '../dart-data-bs/auto/screens__manager_copilot_screen_content.dart';
 
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class ManagerCopilotScreenTokens {
   const ManagerCopilotScreenTokens();

@@ -97,8 +97,12 @@
    "id": "thr_row",
    "atom": "ThrRow",
    "props": {
-    "label": "?:String",
-    "hit": "?:bool"
+    "label": "~:",
+    "hit": "~:"
+   },
+   "repeat": {
+    "as": "t",
+    "item": "ThrRowItem"
    }
   },
   {

@@ -5,6 +5,15 @@ import 'package:flutter/material.dart';
 import '../dart-ui-bs/auto/hub_tile.dart';
 import '../dart-ui-bs/auto/site_server_note.dart';
 
+/// שורת-נתונים לסקציית-repeat — הלוח ממפה את הרשימה-החיה לפריטים.
+class HubTileItem {
+  const HubTileItem({required this.ic, required this.t, required this.s, required this.onTap});
+  final String ic;
+  final String t;
+  final String s;
+  final VoidCallback onTap;
+}
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class SiteHubScreenTokens {
   const SiteHubScreenTokens();
@@ -12,12 +21,10 @@ class SiteHubScreenTokens {
 }
 
 class SiteHubScreenComposed extends StatelessWidget {
-  const SiteHubScreenComposed({required this.onTap, required this.ic, required this.s, required this.t, required this.text, required this.t, super.key});
+  const SiteHubScreenComposed({required this.hubTileItems, required this.text, required this.t, super.key});
 
-  final VoidCallback onTap;
-  final String ic;
-  final String s;
-  final String t;
+
+  final List<HubTileItem> hubTileItems;
   final String text;
   final SiteHubScreenTokens t;
 
@@ -26,12 +33,15 @@ class SiteHubScreenComposed extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 24),
         children: [
           const SizedBox(height: 8),
+          for (final t in hubTileItems) ...[
           HubTile(
-            ic: ic,
-            t: t,
-            s: s,
-            onTap: onTap,
+            ic: t.ic,
+            t: t.t,
+            s: t.s,
+            onTap: t.onTap,
           ),
+          const SizedBox(height: 8),
+        ],
           SiteServerNote(
             text: text,
           ),

@@ -6,6 +6,7 @@ import '../dart-ui-bs/auto/assign_button.dart';
 import '../dart-ui-bs/auto/target_subject.dart';
 import '../dart-data-bs/auto/screens__manager_role_assign_sheet_content.dart';
 
+
 /// טוקני-העיצוב שהמסך צורך — הלוח מזרים מקטלוג-הטוקנים.
 class ManagerRoleAssignSheetTokens {
   const ManagerRoleAssignSheetTokens();

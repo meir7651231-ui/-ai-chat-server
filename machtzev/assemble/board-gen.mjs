@@ -4,7 +4,7 @@
  *  שימוש: node board-gen.mjs [screens-dir] */
 import fs from 'node:fs';
 import path from 'node:path';
-import { classBody, stripComments, maskComments, snake } from './lift-lib.mjs';
+import { classBody, stripComments, maskComments, snake, loopContext, parseCallArgs } from './lift-lib.mjs';
 const ROOT = new URL('../../', import.meta.url).pathname;
 const SCRATCH = process.argv[2] || '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens';
 const SHELF = path.join(ROOT, 'new/dart-ui-bs');
@@ -128,8 +128,13 @@ for (const mf of fs.readdirSync(MANIFESTS).filter(f => f.endsWith('.manifest.jso
     for (const [k, v] of Object.entries(sec.props || {})) {
       if (typeof v !== 'string') continue;
       if (v.startsWith('?:')) { let n = k; const t = v.slice(2).trim() || 'String'; while (needP.has(n) && needP.get(n).t !== t) n += '2'; needP.set(n, { t, sec }); }
+      else if (v === '~:') { /* פר-פריט — מחווט דרך פרמטר-הרשימה */ }
       else if (v.startsWith('@:')) needCb.add(v.slice(2).trim());
       else if (v.startsWith('#:')) needTok.set(v.slice(2).trim(), /radius|size|width|height|space|pill/i.test(v.slice(2)) ? 'double' : 'Color');
+    }
+    if (sec.repeat?.item) {
+      const ln = sec.repeat.item.charAt(0).toLowerCase() + sec.repeat.item.slice(1) + 's';
+      needP.set(ln, { t: 'List<' + sec.repeat.item + '>', sec, isList: true });
     }
     if (sec.gate) needGates.add(sec.gate);
     if (sec.title && String(sec.title).startsWith('#:')) needTok.set('ink', 'Color');
@@ -161,6 +166,18 @@ for (const mf of fs.readdirSync(MANIFESTS).filter(f => f.endsWith('.manifest.jso
       }
       return null;
     };
+    if (sec.repeat?.item && origWidget) {
+      const lc = loopContext(src, origWidget) || loopContext(origSrc, origWidget);
+      const lcSrc = loopContext(src, origWidget) ? src : origSrc;
+      if (lc) {
+        const la = parseCallArgs(lcSrc, origWidget, Math.max(0, lc.callIndex - 2));
+        const fields = Object.entries(sec.props || {}).filter(([, v]) => v === '~:').map(([k]) => k);
+        const fArgs = fields.map(k => `${k}: ${(la?.named[k] ?? 'null /* TODO-לוח */').trim()}`);
+        const ln = sec.repeat.item.charAt(0).toLowerCase() + sec.repeat.item.slice(1) + 's';
+        const le = lc.list.trim();
+        wires.set(ln, `${le}.map((${lc.as}) => ${sec.repeat.item}(${fArgs.join(', ')})).toList()`);
+      }
+    }
     for (const [k, v] of Object.entries(sec.props || {})) {
       if (typeof v !== 'string' || (!v.startsWith('?:') && !v.startsWith('@:'))) continue;
       const pname = v.startsWith('@:') ? v.slice(2).trim() : [...needP.keys()].find(n => n === k || n.startsWith(k)) || k;

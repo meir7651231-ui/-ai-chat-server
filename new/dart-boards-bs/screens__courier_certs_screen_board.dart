@@ -1,5 +1,5 @@
 // 🔌 חולל ע"י מחולל-הלוחות (board-gen) — הלוח = המקום-היחיד שנוגע-בחיווט (חוק-3).
-// מקור-החיווט: screens__courier_certs_screen.dart (בנייה-חכמה main) · מחווט: 2 · TODO: 1.
+// מקור-החיווט: screens__courier_certs_screen.dart (בנייה-חכמה main) · מחווט: 1 · TODO: 0.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:buildsmart/screens/welcome_screen.dart';
@@ -22,9 +22,10 @@ class CourierCertsScreenBoard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CourierCertsScreenComposed(
-      onTap: () {} /* TODO-לוח */,
-      label: p,
-      selected: nameCtl.text.trim() == p,
+      presetChipItems: kCourierCertPresets.map((p) => PresetChipItem(label: p, selected: nameCtl.text.trim() == p, onTap: () => setSheetState(() {
+                                      nameCtl.text = p;
+                                      errName = null;
+                                    }))).toList(),
       t: CourierCertsScreenTokens(),
     );
   }

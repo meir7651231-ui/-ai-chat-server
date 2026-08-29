@@ -5,7 +5,7 @@
  *  שימוש: node gen-manifest.mjs [screens-dir] */
 import fs from 'node:fs';
 import path from 'node:path';
-import { classBody, stripComments, maskComments, snake } from './lift-lib.mjs';
+import { classBody, stripComments, maskComments, snake, loopContext, parseCallArgs } from './lift-lib.mjs';
 const ROOT = new URL('../../', import.meta.url).pathname;
 const SCRATCH = process.argv[2] || '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens';
 const SHELF = path.join(ROOT, 'new/dart-ui-bs');
@@ -111,6 +111,25 @@ for (const mf of fs.readdirSync(path.join(ROOT, 'screens-seed/machine')).filter(
   const sections = [];
   const consts = contentConsts.get(screen) || new Set();
   const rec = contentRecords.get(screen);
+  // 🔁 מנוע-ה-repeat: widget שמופע-בלולאה במקור ⇒ סקציית-repeat; prop תלוי-משתנה-הלולאה ⇒ פר-פריט (~:)
+  const buildSection = (o, origName) => {
+    const lc = loopContext(src, origName);
+    const args = lc ? parseCallArgs(src, origName, Math.max(0, lc.callIndex - 2)) : null;
+    const props = {};
+    for (const p of o.props) {
+      const argE = args ? (args.named[p.name] ?? null) : null;
+      if (lc && argE && new RegExp('\\b' + lc.as + '\\b').test(argE)) { props[p.name] = '~:'; continue; }
+      const cn = snake(o.atom) + '_' + snake(p.name);
+      if (consts.has(cn)) props[p.name] = '$: ' + cn;
+      else if (rec && rec.fields.has(p.name) && p.type.startsWith('String')) props[p.name] = '$: ' + rec.rec + '.' + p.name;
+      else if (isCb(p.type)) props[p.name] = '@:' + p.name;
+      else if (isTok(p.name, p.type)) props[p.name] = '#:' + p.name;
+      else { props[p.name] = '?:' + p.type; holes++; holeTypes.add(p.type); }
+    }
+    const sec = { id: snake(o.atom), atom: o.atom, props };
+    if (lc && Object.values(props).includes('~:')) sec.repeat = { as: lc.as, item: o.atom + 'Item' };
+    return sec;
+  };
   let holes = 0; const holeTypes = new Set(); const seenAtoms = new Set();
   for (const im of rootBody.matchAll(/\b(_?[A-Z]\w{2,})\s*\(/g)) {
     const n = im[1];
@@ -119,16 +138,7 @@ for (const mf of fs.readdirSync(path.join(ROOT, 'screens-seed/machine')).filter(
     if (!o) { const g = byWidgetName.get(n); if (g && new Set(g.map(x => x.atom)).size === 1) o = g[0]; }
     if (!o || seenAtoms.has(o.atom)) continue;
     seenAtoms.add(o.atom);
-    const props = {};
-    for (const p of o.props) {
-      const cn = snake(o.atom) + '_' + snake(p.name);
-      if (consts.has(cn)) props[p.name] = '$: ' + cn;
-      else if (rec && rec.fields.has(p.name) && p.type.startsWith('String')) props[p.name] = '$: ' + rec.rec + '.' + p.name;
-      else if (isCb(p.type)) props[p.name] = '@:' + p.name;
-      else if (isTok(p.name, p.type)) props[p.name] = '#:' + p.name;
-      else { props[p.name] = '?:' + p.type; holes++; holeTypes.add(p.type); }
-    }
-    sections.push({ id: snake(o.atom), atom: o.atom, props });
+    sections.push(buildSection(o, n));
   }
   let flat = false;
   if (!sections.length) {
@@ -139,16 +149,7 @@ for (const mf of fs.readdirSync(path.join(ROOT, 'screens-seed/machine')).filter(
       if (!o) { const g = byWidgetName.get(n); if (g && new Set(g.map(x => x.atom)).size === 1) o = g[0]; }
       if (!o || seenAtoms.has(o.atom)) continue;
       seenAtoms.add(o.atom); flat = true;
-      const props = {};
-      for (const p of o.props) {
-        const cn = snake(o.atom) + '_' + snake(p.name);
-        if (consts.has(cn)) props[p.name] = '$: ' + cn;
-        else if (rec && rec.fields.has(p.name) && p.type.startsWith('String')) props[p.name] = '$: ' + rec.rec + '.' + p.name;
-        else if (isCb(p.type)) props[p.name] = '@:' + p.name;
-        else if (isTok(p.name, p.type)) props[p.name] = '#:' + p.name;
-        else { props[p.name] = '?:' + p.type; holes++; holeTypes.add(p.type); }
-      }
-      sections.push({ id: snake(o.atom), atom: o.atom, props });
+      sections.push(buildSection(o, n));
     }
   }
   if (!sections.length) {
