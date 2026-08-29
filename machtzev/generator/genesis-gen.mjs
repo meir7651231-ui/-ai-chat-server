@@ -135,7 +135,7 @@ function generate(slug, spec) {
   const fillProp = (a, name, part, shared) => {
     const t = (a.types.get(name) || 'String').replace(/\?$/, '');
     if (t === 'String' && /^(value|selected)$/.test(name)) { if (!shared.s) { shared.s = '_t' + (++sIdx); stateDecls.push(`String ${shared.s} = '';`); } return { expr: shared.s }; }
-    if (t === 'String' && /^(glyph|emoji|icon)$/.test(name)) return { expr: `'${part.emoji || '🔹'}'` };
+    if (t === 'String' && /^(glyph|emoji|icon)$/.test(name)) return { expr: constFor(part.emoji || '🔹', part.role + '_glyph') };
     if (t === 'String') return { expr: constFor(part.label, part.role + '_' + snake(name)) };
     if (t === 'bool' && name === 'value') { if (!shared.b) { shared.b = '_v' + (++sIdx); stateDecls.push(`bool ${shared.b} = false;`); } return { expr: shared.b }; }
     if (t === 'bool') return { expr: 'false' };
@@ -256,6 +256,12 @@ ${calls.join('\n')}
   }
 }
 `;
+  // 🚨 שער-עצמי (הכרעה 16 'אין דאטה נקודה'): קוד-המסך נקי — אפס-עברית ואפס-אימוג'י מחוץ להערות;
+  // כל הדאטה חי רק בקובץ-התוכן. הפרה ⇒ המנוע נופל, לא כותב קובץ מלוכלך.
+  const codeOnly = stripComments(code);
+  if (/[֐-׿]/.test(codeOnly) || /\p{Extended_Pictographic}/u.test(codeOnly)) {
+    throw new Error(`🧬 ${slug}: עברית/אימוג'י דלפו לקוד-המסך — הפרת-טוהר (הדאטה חייב בקובץ-התוכן)`);
+  }
   fs.mkdirSync(OUT, { recursive: true });
   fs.writeFileSync(path.join(OUT, `gen_${slug}.dart`), code);
   console.log(`🧬 ${slug} · "${title}" · ${chosen.length}/${parts.length} חלקים ⇒ ${chosen.map(c => c.atom.cls).join(', ')}`);
