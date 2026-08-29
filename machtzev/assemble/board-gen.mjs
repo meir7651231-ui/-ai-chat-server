@@ -40,6 +40,31 @@ try {
   const dump2 = execSync("git grep -hE '^(const|final) ' origin/main -- app_flutter/lib", { cwd: BS, encoding: 'utf8', maxBuffer: 1 << 25 });
   for (const m of dump2.matchAll(/(?:^|\n)(?:const|final)\s+(?:[A-Za-z_][\w<>,? ]*?\s+)?([a-zA-Z]\w*)\s*=/g)) projectConsts.add(m[1]);
 } catch { }
+let projectClassFiles = new Map();
+try {
+  const dumpC = execSync("git grep -nHE 'class [A-Z][A-Za-z0-9_]*' origin/main -- app_flutter/lib", { cwd: BS, encoding: 'utf8', maxBuffer: 1 << 25 });
+  for (const line of dumpC.split('\n')) {
+    const m = line.match(/^([^:]+:[^:]+):\d+:.*class\s+([A-Z]\w*)/);
+    if (m && !projectClassFiles.has(m[2]) && !m[1].endsWith('.g.dart')) projectClassFiles.set(m[2], m[1].replace(/^origin\/main:app_flutter\/lib\//, ''));
+  }
+} catch { }
+let projectFnFiles = new Map();
+try {
+  const dumpF = execSync("git grep -nHE '^[A-Za-z][A-Za-z_<>,? ]+ [a-z][a-zA-Z0-9]*\\(' origin/main -- app_flutter/lib", { cwd: BS, encoding: 'utf8', maxBuffer: 1 << 25 });
+  for (const line of dumpF.split('\n')) {
+    const m = line.match(/^([^:]+:[^:]+):\d+:[A-Za-z][\w<>,? ]+ ([a-z]\w*)\(/);
+    if (m && !projectFnFiles.has(m[2]) && !m[1].endsWith('.g.dart')) projectFnFiles.set(m[2], m[1].replace(/^origin\/main:app_flutter\/lib\//, ''));
+  }
+} catch { }
+const existsCache = new Map();
+const existsInMain = (libPath) => {
+  if (existsCache.has(libPath)) return existsCache.get(libPath);
+  let ok = false;
+  try { execSync(`git cat-file -e 'origin/main:app_flutter/lib/${libPath.replace(/'/g, '')}'`, { cwd: BS }); ok = true; } catch { }
+  existsCache.set(libPath, ok);
+  return ok;
+};
+const GENERIC_IDS = new Set(['label', 'value', 'text', 'children', 'child', 'title', 'item', 'items', 'name', 'data']);
 const DART_OK = new Set(['context', 'ref', 'true', 'false', 'null', 'const', 'final', 'new', 'if', 'else', 'for', 'in', 'is', 'as', 'return', 'switch', 'case', 'await', 'async', 'toList', 'map', 'where', 'length', 'toString', 'print', 'var', 'this']);
 
 /** ביטוי פתיר-בלוח? כל מזהה חייב להיות: מוצהר-בביטוי · watch-var · ציבורי-פרויקטלי · Flutter (רישית) · ליבת-Dart. */
@@ -52,7 +77,10 @@ function exprResolvable(expr, watchVars) {
     for (const v of (m[1] || m[2] || '').split(',')) declared.add(v.trim());
   for (const m of scan.matchAll(/(?<![.\w'])([a-zA-Z_]\w*)\b(?!\s*:)/g)) {
     const id = m[1];
-    if (/^[A-Z]/.test(id) || DART_OK.has(id) || declared.has(id) || watchVars.has(id)) continue;
+    if (declared.has(id) || watchVars.has(id)) continue;
+    if (/^[A-Z]/.test(id)) continue;
+    if (DART_OK.has(id)) continue;
+    if (id.length <= 2 || GENERIC_IDS.has(id)) return false;   // מזהה-גנרי/קצר ⇒ הקשר-מקומי
     const isCall = scan.slice(m.index + id.length).match(/^\s*\(/);
     if (isCall && projectPub.has(id)) continue;
     if (projectConsts.has(id)) continue;
@@ -223,6 +251,7 @@ for (const mf of fs.readdirSync(MANIFESTS).filter(f => f.endsWith('.manifest.jso
       if (wires.has(pname)) continue;
       const e = resolve(k);
       if (!e) continue;
+      if (e.trim() === pname || e.trim() === k) continue;                  // הפניה-עצמית חסרת-פשר
       if (!exprResolvable(e, new Set([...watchLines.keys()]))) continue;   // תלוי-הקשר ⇒ TODO כן
       if (/[֐-׿]/.test(e)) heb++;
       wires.set(pname, e);
@@ -242,7 +271,26 @@ for (const mf of fs.readdirSync(MANIFESTS).filter(f => f.endsWith('.manifest.jso
     }
   }
   // הרכבת-הלוח
-  const pkgImports = [...new Set([selfImport, ...[...src.matchAll(/import 'package:[^']+';/g)].map(x => x[0])])];
+  const srcLibPath = srcScreen.replace(/__/g, '/') + '.dart';
+  const srcDir = srcLibPath.split('/').slice(0, -1).join('/');
+  const relImports = [...src.matchAll(/import '([^:'][^']*)';/g)].map(x => {
+    const parts = (srcDir ? srcDir + '/' : '') + x[1];
+    const seg = [];
+    for (const p of parts.split('/')) { if (p === '..') seg.pop(); else if (p !== '.') seg.push(p); }
+    return seg.join('/');
+  }).filter(p => existsInMain(p)).map(p => `import 'package:buildsmart/${p}';`);
+  const pkgImports = [...new Set([selfImport, ...relImports, ...[...src.matchAll(/import 'package:[^']+';/g)].map(x => x[0])])]
+    .filter(im => { const mm = im.match(/package:buildsmart\/([^']+)'/); return !mm || existsInMain(mm[1]); });
+  // auto-import: מחלקות/פונקציות-פרויקט שהחיווט צורך
+  const wireText = [...wires.values()].join('\n');
+  for (const m of new Set([...wireText.matchAll(/\b([A-Z]\w{2,})\b/g)].map(x => x[1]))) {
+    const f2 = projectClassFiles.get(m);
+    if (f2 && existsInMain(f2)) pkgImports.push(`import 'package:buildsmart/${f2}';`);
+  }
+  for (const m of new Set([...wireText.matchAll(/\b([a-z]\w{2,})\s*\(/g)].map(x => x[1]))) {
+    const f2 = projectFnFiles.get(m);
+    if (f2 && existsInMain(f2)) pkgImports.push(`import 'package:buildsmart/${f2}';`);
+  }
   const lines = [];
   for (const [v, pv] of watchLines) lines.push(`    final ${v} = ref.watch(${pv});`);
   const argLines = [];

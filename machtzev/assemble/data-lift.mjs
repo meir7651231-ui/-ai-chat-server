@@ -69,9 +69,9 @@ const usedFnImports = new Set();
 // ── אינדקס-קבועים-ציבוריים + auto-import (קבוע עם עברית ⇒ דחייה — מועמד-תוכן) ──
 let projectConsts = new Map(); // name ⇒ 'origin/main:path'
 try {
-  const dump = execSync("git grep -nHE '^(const|final) ' origin/main -- app_flutter/lib", { cwd: BS, encoding: 'utf8', maxBuffer: 1 << 25 });
+  const dump = execSync("git grep -nHE '^((const |final )?[A-Za-z_][A-Za-z0-9_<>, ?]* [a-z][a-zA-Z0-9]* ?=|[A-Za-z_][A-Za-z0-9_<>, ?]* get [a-z][a-zA-Z0-9]*)' origin/main -- app_flutter/lib", { cwd: BS, encoding: 'utf8', maxBuffer: 1 << 25 });
   for (const line of dump.split('\n')) {
-    const m = line.match(/^([^:]+:[^:]+):\d+:(?:const|final)\s+(?:[A-Za-z_][\w<>,? ]*?\s+)?([a-zA-Z]\w*)\s*=/);
+    const m = line.match(/^([^:]+:[^:]+):\d+:(?:const\s+|final\s+)?[A-Za-z_][\w<>,? ]*?\s([a-z]\w*)\s*=/) || line.match(/^([^:]+:[^:]+):\d+:(?:const|final)\s+([a-z]\w*)\s*=/) || line.match(/^([^:]+:[^:]+):\d+:[A-Za-z_][\w<>,? ]*?\sget\s+([a-z]\w*)/);
     if (m && !projectConsts.has(m[2])) projectConsts.set(m[2], m[1]);
   }
 } catch { }
@@ -83,7 +83,8 @@ function resolveConstImport(name) {
   if (f) {
     try {
       const src2 = execSync(`git show '${f.replace(/'/g, '')}'`, { cwd: BS, encoding: 'utf8', maxBuffer: 1 << 24 });
-      const dm = src2.match(new RegExp('(^|\\n)(const|final)\\s+(?:[A-Za-z_][\\w<>,? ]*?\\s+)?' + name + '\\s*='));
+      if (f.endsWith('.g.dart')) { constImportCache.set(name, null); return null; }
+      const dm = src2.match(new RegExp('(^|\\n)(?:const\\s+|final\\s+)?(?:[A-Za-z_][\\w<>,? ]*?\\s+)?(?:get\\s+)?' + name + '\\s*[={]'));
       if (dm) {
         const end = src2.indexOf(';', dm.index);
         if (end > 0 && !/[֐-׿]/.test(src2.slice(dm.index, end)))
@@ -464,6 +465,7 @@ function flattenModels(body, modelCand, existingProps) {
     }
     // טרנספורמציה: v.member ⇒ member · הסרת-ההצהרה · הסרת this.v מהבנאי
     out = out.replace(new RegExp('\\b' + v + '\\.([a-zA-Z_]\\w*)', 'g'), '$1');
+    out = out.replace(/\b(late\s+final|final|var)\s+(\w+)\s*=\s*\2\s*;/g, '$1 $2 = this.$2;');
     out = out.replace(new RegExp('\\s*final\\s+' + R + '\\??\\s+' + v + '\\s*;'), '');
     out = out.replace(new RegExp('(required\\s+)?this\\.' + v + '\\b\\s*,?'), '');
     out = out.replace(/\(\s*,/, '(').replace(/,\s*([})])/g, (s, g) => g === '}' ? ',}' : s).replace(/,\s*\)/, ')').replace(/\{\s*,/, '{');
@@ -846,6 +848,7 @@ for (const L of [...liftedHashes.values()].sort((a, b) => a.pub.localeCompare(b.
   const file = path.join(OUT, snake(L.pub) + '.dart');
   if (fs.existsSync(file)) { skip('file-collision', L.id); continue; }
   let joined = L.joined.replaceAll(L.name, L.pub);
+  joined = joined.replace(/(\n)[ \t]*\/[ \t]*(?=\n)/g, '$1');
   for (const pn of L.privatized || []) if (!joined.includes('_' + pn)) joined = joined.replaceAll(pn, '_' + pn);
   // מחלקה עם חבר-מופשט (getter/מתודה בלי-גוף) חייבת abstract
   joined = joined.replace(/(^|\n)(class\s+\w+\s*\{[^}]*?\b\w[\w<>,? ]*\s+get\s+\w+\s*;)/g, (mm, a, b2) => a + 'abstract ' + b2);
