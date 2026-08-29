@@ -24,7 +24,15 @@ for (const f of fs.readdirSync(SHELF, { recursive: true }).map(String)) {
   if (!cm) continue;
   const props = new Set([...src.matchAll(/this\.([a-zA-Z0-9]+)/g)].map(x => x[1]));
   const types = new Map([...src.matchAll(/final\s+([A-Za-z_][\w<>,? ]*?)\s+([a-zA-Z0-9_]+)\s*;/g)].map(x => [x[2], x[1].trim()]));
-  shelf[cm[1]] = { file: f, props, types };
+  // חתימת-הבנאי: מיקומיים (לפני '{') בסדרם · required-בשמות
+  let positional = [], requiredNamed = [];
+  const ctm = src.match(new RegExp('(?:const\\s+)?' + cm[1] + '\\s*\\(([^)]*)\\)', 's'));
+  if (ctm) {
+    const [posPart, namedPart = ''] = ctm[1].split('{');
+    positional = [...posPart.matchAll(/this\.(\w+)/g)].map(x => x[1]);
+    requiredNamed = [...namedPart.matchAll(/required\s+this\.(\w+)/g)].map(x => x[1]);
+  }
+  shelf[cm[1]] = { file: f, props, types, positional, requiredNamed };
 }
 // TitledSection נצרך אוטומטית ע"י `title` על סקציה
 if (!shelf.TitledSection) die('אין TitledSection במדף');
@@ -71,16 +79,21 @@ function sectionCode(s) {
     params.set(listName, `List<${rptItem}>`);
     s.repeat.in = '$: ' + listName;
   }
-  const propLines = Object.entries(s.props || {}).map(([k, v]) => {
-    if (v === '~:') return `${k}: ${s.repeat.as}.${k},`;
+  const valOf = (k, v) => {
+    if (v === '~:') return `${s.repeat.as}.${k}`;
     if (typeof v === 'string' && v.startsWith('?:')) {
       const t = v.slice(2).trim() || 'String';
       let n = k; while (params.has(n) && params.get(n) !== t) n += '2';
       params.set(n, t);
-      return `${k}: ${n},`;
+      return n;
     }
-    return `${k}: ${expr(v, scope)},`;
-  });
+    return expr(v, scope);
+  };
+  for (const rq of [...A.positional, ...A.requiredNamed])
+    if (!(rq in (s.props || {}))) die(`מניפסט-חסר: prop-חובה "${rq}" של ${s.atom} לא-סופק (סנכרן gen-manifest מול המדף)`);
+  const posLines = A.positional.map(k => `${valOf(k, s.props[k])},`);
+  const namedLines = Object.entries(s.props || {}).filter(([k]) => !A.positional.includes(k)).map(([k, v]) => `${k}: ${valOf(k, v)},`);
+  const propLines = [...posLines, ...namedLines];
   let w = `${s.atom}(\n            ${propLines.join('\n            ')}\n          )`;
   if (s.repeat) {
     const listE = expr(s.repeat.in, null);
