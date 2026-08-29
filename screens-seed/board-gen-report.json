@@ -122,8 +122,8 @@
   },
   {
    "screen": "screens__finance_hub_sheets",
-   "wired": 4,
-   "todo": 22
+   "wired": 1,
+   "todo": 25
   },
   {
    "screen": "screens__finder_screen",
@@ -232,8 +232,8 @@
   },
   {
    "screen": "screens__site_hub_screen",
-   "wired": 2,
-   "todo": 10
+   "wired": 0,
+   "todo": 12
   },
   {
    "screen": "screens__smart_home_screen",
@@ -257,13 +257,13 @@
   },
   {
    "screen": "screens__store_profile_screen",
-   "wired": 1,
-   "todo": 0
+   "wired": 0,
+   "todo": 1
   },
   {
    "screen": "screens__store_screen",
-   "wired": 2,
-   "todo": 18
+   "wired": 1,
+   "todo": 19
   },
   {
    "screen": "screens__store_settings_screen",
@@ -397,8 +397,8 @@
   }
  ],
  "totals": {
-  "wired": 50,
-  "todo": 413,
-  "hebInExpr": 15
+  "wired": 43,
+  "todo": 420,
+  "hebInExpr": 14
  }
 }

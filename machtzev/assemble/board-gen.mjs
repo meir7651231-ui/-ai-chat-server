@@ -4,7 +4,7 @@
  *  שימוש: node board-gen.mjs [screens-dir] */
 import fs from 'node:fs';
 import path from 'node:path';
-import { classBody, stripComments, maskComments, snake, loopContext, parseCallArgs } from './lift-lib.mjs';
+import { classBody, stripComments, maskComments, snake, loopContext, parseCallArgs, maskLitsKeepInterp } from './lift-lib.mjs';
 const ROOT = new URL('../../', import.meta.url).pathname;
 const SCRATCH = process.argv[2] || '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens';
 const SHELF = path.join(ROOT, 'new/dart-ui-bs');
@@ -70,8 +70,8 @@ const DART_OK = new Set(['context', 'ref', 'true', 'false', 'null', 'const', 'fi
 /** ביטוי פתיר-בלוח? כל מזהה חייב להיות: מוצהר-בביטוי · watch-var · ציבורי-פרויקטלי · Flutter (רישית) · ליבת-Dart. */
 let srcPublicsRef = new Set();
 function exprResolvable(expr, watchVars) {
-  const scan = maskLits(maskComments(expr));
-  if (/\bsetState\b|\bwidget\.|\b_\w/.test(scan)) return false;
+  const scan = maskLitsKeepInterp(expr);                    // עדשה-סמנטית: קוד-בתוך-\${} נסרק
+  if (/\bsetState\b|\bwidget\.|\bthis\.|\b_\w/.test(scan)) return false;
   const declared = new Set();
   for (const m of scan.matchAll(/\(\s*([\w ,]+)\)\s*=>|\bfor\s*\(\s*(?:final|var)\s+(\w+)/g))
     for (const v of (m[1] || m[2] || '').split(',')) declared.add(v.trim());
