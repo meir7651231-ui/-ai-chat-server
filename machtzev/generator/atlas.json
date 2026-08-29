@@ -1,8 +1,8 @@
 {
  "counts": {
   "widgets": 381,
-  "functions": 463,
-  "data": 662
+  "functions": 438,
+  "data": 663
  },
  "widgets": [
   {
@@ -7786,45 +7786,6 @@
    "shelf": "new/dart-maor"
   },
   {
-   "name": "courseFitsMember",
-   "sig": "bool courseFitsMember( dynamic c, dynamic gender, dynamic age, dynamic grade, dynamic gradeFits)",
-   "ret": "bool",
-   "params": [
-    {
-     "type": "dynamic",
-     "name": "c"
-    },
-    {
-     "type": "dynamic",
-     "name": "gender"
-    },
-    {
-     "type": "dynamic",
-     "name": "age"
-    },
-    {
-     "type": "dynamic",
-     "name": "grade"
-    },
-    {
-     "type": "dynamic",
-     "name": "gradeFits"
-    }
-   ],
-   "he": [
-    "חוט",
-    "תאמת",
-    "חוג",
-    "לחבר",
-    "מגדר",
-    "גיל",
-    "כיתה",
-    "חוזה"
-   ],
-   "file": "course-fits-member.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
    "name": "coursesOfTeacher",
    "sig": "dynamic coursesOfTeacher(dynamic courses, dynamic teacherId)",
    "ret": "dynamic",
@@ -8198,42 +8159,6 @@
     "יורד"
    ],
    "file": "donation-years.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
-   "name": "dupFieldValue",
-   "sig": "dynamic dupFieldValue(List fams, Map def, Map pick, Map edit)",
-   "ret": "dynamic",
-   "params": [
-    {
-     "type": "List",
-     "name": "fams"
-    },
-    {
-     "type": "Map",
-     "name": "def"
-    },
-    {
-     "type": "Map",
-     "name": "pick"
-    },
-    {
-     "type": "Map",
-     "name": "edit"
-    }
-   ],
-   "he": [
-    "חוט",
-    "ערך",
-    "שדה",
-    "נבחר",
-    "במיזוג",
-    "כפולים",
-    "ראשונה",
-    "עם",
-    "ערך"
-   ],
-   "file": "dup-field-value.dart",
    "shelf": "new/dart-maor"
   },
   {
@@ -10344,34 +10269,6 @@
    "shelf": "new/dart-maor"
   },
   {
-   "name": "monthEnOf",
-   "sig": "String? monthEnOf(dynamic he, {required List<dynamic> months})",
-   "ret": "String?",
-   "params": [
-    {
-     "type": "dynamic",
-     "name": "he"
-    },
-    {
-     "type": "{required List<dynamic> months}",
-     "name": ""
-    }
-   ],
-   "he": [
-    "אטום",
-    "דרגת",
-    "חוזה",
-    "תווית",
-    "עברית",
-    "של",
-    "חודש",
-    "עברי",
-    "שם"
-   ],
-   "file": "month-en-of.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
    "name": "monthHeOf",
    "sig": "String monthHeOf(dynamic en)",
    "ret": "String",
@@ -10413,55 +10310,6 @@
     "חודש"
    ],
    "file": "month-key.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
-   "name": "monthLabel",
-   "sig": "dynamic monthLabel(dynamic key)",
-   "ret": "dynamic",
-   "params": [
-    {
-     "type": "dynamic",
-     "name": "key"
-    }
-   ],
-   "he": [
-    "חוט",
-    "תווית",
-    "חודש",
-    "שנה",
-    "ממפתח",
-    "חוזה"
-   ],
-   "file": "month-label.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
-   "name": "nameIndex",
-   "sig": "dynamic nameIndex(dynamic db, dynamic allMembers)",
-   "ret": "dynamic",
-   "params": [
-    {
-     "type": "dynamic",
-     "name": "db"
-    },
-    {
-     "type": "dynamic",
-     "name": "allMembers"
-    }
-   ],
-   "he": [
-    "אטום",
-    "דרגת",
-    "חוזה",
-    "אינדקס",
-    "בני",
-    "משפחה",
-    "לפי",
-    "מזהה",
-    "לדוחות"
-   ],
-   "file": "name-index.dart",
    "shelf": "new/dart-maor"
   },
   {
@@ -11061,41 +10909,6 @@
    "shelf": "new/dart-maor"
   },
   {
-   "name": "planDemoCleanup",
-   "sig": "Map<String, dynamic> planDemoCleanup(Map db, Map demoDb, {required Map<String, dynamic> fpFields})",
-   "ret": "Map<String,",
-   "params": [
-    {
-     "type": "Map",
-     "name": "db"
-    },
-    {
-     "type": "Map",
-     "name": "demoDb"
-    },
-    {
-     "type": "{required Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic> fpFields}",
-     "name": ""
-    }
-   ],
-   "he": [
-    "חוט",
-    "תכנון",
-    "ניקוי",
-    "נתוני",
-    "דמו",
-    "שהתערבבו",
-    "בנתונים",
-    "אמיתיים"
-   ],
-   "file": "plan-demo-cleanup.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
    "name": "popCall",
    "sig": "dynamic popCall(dynamic calls)",
    "ret": "dynamic",
@@ -11141,35 +10954,6 @@
     "חודשי"
    ],
    "file": "presents-in-month.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
-   "name": "progress",
-   "sig": "Map<String, dynamic> progress(Map c, List requeueOutcomes)",
-   "ret": "Map<String,",
-   "params": [
-    {
-     "type": "Map",
-     "name": "c"
-    },
-    {
-     "type": "List",
-     "name": "requeueOutcomes"
-    }
-   ],
-   "he": [
-    "אטום",
-    "דרגת",
-    "חוזה",
-    "מדד",
-    "תקדמות",
-    "של",
-    "קמפיין",
-    "חיוג",
-    "חייגן",
-    "מונחה"
-   ],
-   "file": "progress.dart",
    "shelf": "new/dart-maor"
   },
   {
@@ -11283,54 +11067,6 @@
     "מסלול"
    ],
    "file": "purpose-key-of.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
-   "name": "pushAuditRing",
-   "sig": "Future<void> pushAuditRing( dynamic entries, dynamic dek, dynamic auditUid, dynamic db, dynamic scopedCol, dynamic fs, dynamic encryptDoc, )",
-   "ret": "Future<void>",
-   "params": [
-    {
-     "type": "dynamic",
-     "name": "entries"
-    },
-    {
-     "type": "dynamic",
-     "name": "dek"
-    },
-    {
-     "type": "dynamic",
-     "name": "auditUid"
-    },
-    {
-     "type": "dynamic",
-     "name": "db"
-    },
-    {
-     "type": "dynamic",
-     "name": "scopedCol"
-    },
-    {
-     "type": "dynamic",
-     "name": "fs"
-    },
-    {
-     "type": "dynamic",
-     "name": "encryptDoc"
-    }
-   ],
-   "he": [
-    "אטום",
-    "דרגת",
-    "חוזה",
-    "דחיפת",
-    "טבעת",
-    "לוג",
-    "של",
-    "מחובר",
-    "למסמכו"
-   ],
-   "file": "push-audit-ring.dart",
    "shelf": "new/dart-maor"
   },
   {
@@ -11607,36 +11343,6 @@
    "shelf": "new/dart-maor"
   },
   {
-   "name": "renewOf",
-   "sig": "Object renewOf(Map<String, dynamic> e)",
-   "ret": "Object",
-   "params": [
-    {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
-     "name": "e"
-    }
-   ],
-   "he": [
-    "אטום",
-    "דרגת",
-    "חוזה",
-    "חלטת",
-    "חידוש",
-    "נוכחית",
-    "של",
-    "שיבוץ",
-    "חסר",
-    "טרם",
-    "וחלט"
-   ],
-   "file": "renew-of.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
    "name": "renewTargets",
    "sig": "List<Map> renewTargets(List<Map> rows)",
    "ret": "List<Map>",
@@ -11720,34 +11426,6 @@
     "לשוני"
    ],
    "file": "resolve-localized.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
-   "name": "revertPatch",
-   "sig": "Map<String, dynamic> revertPatch(dynamic stage, dynamic stageIndex)",
-   "ret": "Map<String,",
-   "params": [
-    {
-     "type": "dynamic",
-     "name": "stage"
-    },
-    {
-     "type": "dynamic",
-     "name": "stageIndex"
-    }
-   ],
-   "he": [
-    "חוט",
-    "לחזרת",
-    "תיק",
-    "לשלב",
-    "קודם",
-    "לפני",
-    "ביטול",
-    "דגל",
-    "דחיפה"
-   ],
-   "file": "revert-patch.dart",
    "shelf": "new/dart-maor"
   },
   {
@@ -11908,37 +11586,6 @@
     "קריאה"
    ],
    "file": "rule-skeleton.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
-   "name": "ruleTypo",
-   "sig": "dynamic ruleTypo(dynamic nq, dynamic nt, dynamic distance)",
-   "ret": "dynamic",
-   "params": [
-    {
-     "type": "dynamic",
-     "name": "nq"
-    },
-    {
-     "type": "dynamic",
-     "name": "nt"
-    },
-    {
-     "type": "dynamic",
-     "name": "distance"
-    }
-   ],
-   "he": [
-    "אטום",
-    "דרגת",
-    "חוזה",
-    "כלל",
-    "ניקוד",
-    "סובלנות",
-    "שגיאות",
-    "כתיב"
-   ],
-   "file": "rule-typo.dart",
    "shelf": "new/dart-maor"
   },
   {
@@ -12487,33 +12134,6 @@
    "shelf": "new/dart-maor"
   },
   {
-   "name": "campaignProgress",
-   "sig": "Map<String, dynamic> campaignProgress(dynamic c, dynamic nowMs)",
-   "ret": "Map<String,",
-   "params": [
-    {
-     "type": "dynamic",
-     "name": "c"
-    },
-    {
-     "type": "dynamic",
-     "name": "nowMs"
-    }
-   ],
-   "he": [
-    "חוט",
-    "תקדמות",
-    "קמפיין",
-    "וספירה",
-    "לאחור",
-    "של",
-    "אתר",
-    "ציבורי"
-   ],
-   "file": "site-campaign-progress.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
    "name": "siteDonateUrl",
    "sig": "dynamic siteDonateUrl(dynamic config)",
    "ret": "dynamic",
@@ -12730,70 +12350,6 @@
     "ציון"
    ],
    "file": "smart-filter.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
-   "name": "smartScore",
-   "sig": "dynamic smartScore(dynamic q, dynamic terms, dynamic norm, dynamic expand, dynamic score)",
-   "ret": "dynamic",
-   "params": [
-    {
-     "type": "dynamic",
-     "name": "q"
-    },
-    {
-     "type": "dynamic",
-     "name": "terms"
-    },
-    {
-     "type": "dynamic",
-     "name": "norm"
-    },
-    {
-     "type": "dynamic",
-     "name": "expand"
-    },
-    {
-     "type": "dynamic",
-     "name": "score"
-    }
-   ],
-   "he": [
-    "אטום",
-    "דרגת",
-    "חוזה",
-    "ניקוד",
-    "רב",
-    "מילתי",
-    "עם",
-    "והרחבת",
-    "תעתיקים"
-   ],
-   "file": "smart-score.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
-   "name": "smtpHostFor",
-   "sig": "dynamic smtpHostFor(dynamic email)",
-   "ret": "dynamic",
-   "params": [
-    {
-     "type": "dynamic",
-     "name": "email"
-    }
-   ],
-   "he": [
-    "אטום",
-    "דרגת",
-    "חוזה",
-    "שרת",
-    "יציאה",
-    "לפי",
-    "דומיין",
-    "כתובת",
-    "מייל"
-   ],
-   "file": "smtp-host-for.dart",
    "shelf": "new/dart-maor"
   },
   {
@@ -13041,43 +12597,6 @@
    "shelf": "new/dart-maor"
   },
   {
-   "name": "stepScale",
-   "sig": "dynamic stepScale(dynamic v, dynamic dir, dynamic clampScale, [dynamic step = 0.1])",
-   "ret": "dynamic",
-   "params": [
-    {
-     "type": "dynamic",
-     "name": "v"
-    },
-    {
-     "type": "dynamic",
-     "name": "dir"
-    },
-    {
-     "type": "dynamic",
-     "name": "clampScale"
-    },
-    {
-     "type": "dynamic step = 0.1",
-     "name": ""
-    }
-   ],
-   "he": [
-    "אטום",
-    "דרגת",
-    "חוזה",
-    "צעד",
-    "זום",
-    "אחד",
-    "למעלה",
-    "למטה",
-    "עיגול",
-    "לעשירית"
-   ],
-   "file": "step-scale.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
    "name": "stripAuditMeta",
    "sig": "dynamic stripAuditMeta(dynamic meta)",
    "ret": "dynamic",
@@ -13139,36 +12658,6 @@
     "תומך"
    ],
    "file": "strip-supporter-donations.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
-   "name": "strongMatchForCharge",
-   "sig": "dynamic strongMatchForCharge(dynamic charge, dynamic supporters, dynamic keysOf)",
-   "ret": "dynamic",
-   "params": [
-    {
-     "type": "dynamic",
-     "name": "charge"
-    },
-    {
-     "type": "dynamic",
-     "name": "supporters"
-    },
-    {
-     "type": "dynamic",
-     "name": "keysOf"
-    }
-   ],
-   "he": [
-    "אטום",
-    "דרגת",
-    "חוזה",
-    "שיוך",
-    "אוטומטי",
-    "בטוח",
-    "של"
-   ],
-   "file": "strong-match-for-charge.dart",
    "shelf": "new/dart-maor"
   },
   {
@@ -13680,29 +13169,6 @@
    "shelf": "new/dart-maor"
   },
   {
-   "name": "supportPreview",
-   "sig": "dynamic supportPreview(dynamic text, [dynamic max = 40])",
-   "ret": "dynamic",
-   "params": [
-    {
-     "type": "dynamic",
-     "name": "text"
-    },
-    {
-     "type": "dynamic max = 40",
-     "name": ""
-    }
-   ],
-   "he": [
-    "חוט",
-    "ומר",
-    "זהה",
-    "ביט"
-   ],
-   "file": "support-preview.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
    "name": "supportUnread",
    "sig": "dynamic supportUnread(dynamic thread, dynamic side)",
    "ret": "dynamic",
@@ -13733,28 +13199,6 @@
     "חסר"
    ],
    "file": "support-unread.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
-   "name": "supporterAggregates",
-   "sig": "dynamic supporterAggregates(dynamic sp)",
-   "ret": "dynamic",
-   "params": [
-    {
-     "type": "dynamic",
-     "name": "sp"
-    }
-   ],
-   "he": [
-    "חוט",
-    "צבירת",
-    "קבלות",
-    "של",
-    "תורם",
-    "ממערך",
-    "בלבד"
-   ],
-   "file": "supporter-aggregates.dart",
    "shelf": "new/dart-maor"
   },
   {
@@ -13925,27 +13369,6 @@
     "אחרת"
    ],
    "file": "teacher-id-of.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
-   "name": "telHref",
-   "sig": "dynamic telHref(dynamic phone)",
-   "ret": "dynamic",
-   "params": [
-    {
-     "type": "dynamic",
-     "name": "phone"
-    }
-   ],
-   "he": [
-    "חוט",
-    "טלפון",
-    "שמור",
-    "לקישור",
-    "חיוג",
-    "חוזה"
-   ],
-   "file": "tel-href.dart",
    "shelf": "new/dart-maor"
   },
   {
@@ -14203,29 +13626,6 @@
    "shelf": "new/dart-maor"
   },
   {
-   "name": "toCsv",
-   "sig": "dynamic toCsv(dynamic rows, dynamic escape)",
-   "ret": "dynamic",
-   "params": [
-    {
-     "type": "dynamic",
-     "name": "rows"
-    },
-    {
-     "type": "dynamic",
-     "name": "escape"
-    }
-   ],
-   "he": [
-    "חוט",
-    "שורות",
-    "חוזה",
-    "שקע"
-   ],
-   "file": "to-csv.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
    "name": "toTenantId",
    "sig": "dynamic toTenantId(dynamic slug, dynamic orgName)",
    "ret": "dynamic",
@@ -14306,45 +13706,6 @@
     "חוזה"
    ],
    "file": "tour-steps.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
-   "name": "trustReport",
-   "sig": "Map<String, dynamic> trustReport(dynamic bundle, [dynamic opt = const <String, dynamic>{}, dynamic eng = const <String, dynamic>{}])",
-   "ret": "Map<String,",
-   "params": [
-    {
-     "type": "dynamic",
-     "name": "bundle"
-    },
-    {
-     "type": "dynamic opt = const <String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>{}",
-     "name": ""
-    },
-    {
-     "type": "dynamic eng = const <String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>{}",
-     "name": ""
-    }
-   ],
-   "he": [
-    "אטום",
-    "דרגת",
-    "חוזה",
-    "דוח",
-    "אמון",
-    "פר",
-    "עמותה",
-    "טלפוניה"
-   ],
-   "file": "trust-report.dart",
    "shelf": "new/dart-maor"
   },
   {
@@ -14495,95 +13856,6 @@
    "shelf": "new/dart-maor"
   },
   {
-   "name": "waDigits",
-   "sig": "dynamic waDigits(dynamic phone)",
-   "ret": "dynamic",
-   "params": [
-    {
-     "type": "dynamic",
-     "name": "phone"
-    }
-   ],
-   "he": [
-    "חוט",
-    "ומר",
-    "מקור"
-   ],
-   "file": "wa-digits.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
-   "name": "waLink",
-   "sig": "dynamic waLink(dynamic phone, dynamic text, dynamic waDigits)",
-   "ret": "dynamic",
-   "params": [
-    {
-     "type": "dynamic",
-     "name": "phone"
-    },
-    {
-     "type": "dynamic",
-     "name": "text"
-    },
-    {
-     "type": "dynamic",
-     "name": "waDigits"
-    }
-   ],
-   "he": [
-    "חוט",
-    "קישור",
-    "לפתיחת",
-    "שיחה",
-    "חוזה",
-    "שקע"
-   ],
-   "file": "wa-link.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
-   "name": "waPaymentText",
-   "sig": "dynamic waPaymentText(dynamic orgName, dynamic what, dynamic balance, dynamic cfg, dynamic renderTemplate, dynamic orgOf)",
-   "ret": "dynamic",
-   "params": [
-    {
-     "type": "dynamic",
-     "name": "orgName"
-    },
-    {
-     "type": "dynamic",
-     "name": "what"
-    },
-    {
-     "type": "dynamic",
-     "name": "balance"
-    },
-    {
-     "type": "dynamic",
-     "name": "cfg"
-    },
-    {
-     "type": "dynamic",
-     "name": "renderTemplate"
-    },
-    {
-     "type": "dynamic",
-     "name": "orgOf"
-    }
-   ],
-   "he": [
-    "חוט",
-    "נוסח",
-    "תזכורת",
-    "תשלום",
-    "ידידותית",
-    "חוגים",
-    "לוואטסאפ"
-   ],
-   "file": "wa-payment-text.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
    "name": "warehouseValue",
    "sig": "num warehouseValue(dynamic warehouse)",
    "ret": "num",
@@ -14605,43 +13877,6 @@
     "שלם"
    ],
    "file": "warehouse-value.dart",
-   "shelf": "new/dart-maor"
-  },
-  {
-   "name": "weightedQuote",
-   "sig": "Map<String, dynamic> weightedQuote( dynamic c, dynamic opts, dynamic lessonPriceForTier, dynamic lessonsInTerm)",
-   "ret": "Map<String,",
-   "params": [
-    {
-     "type": "dynamic",
-     "name": "c"
-    },
-    {
-     "type": "dynamic",
-     "name": "opts"
-    },
-    {
-     "type": "dynamic",
-     "name": "lessonPriceForTier"
-    },
-    {
-     "type": "dynamic",
-     "name": "lessonsInTerm"
-    }
-   ],
-   "he": [
-    "חוט",
-    "תמחור",
-    "משוקלל",
-    "שיעורים",
-    "מחיר",
-    "לשיעור",
-    "עיגול",
-    "חצי",
-    "שיעור",
-    "שקל"
-   ],
-   "file": "weighted-quote.dart",
    "shelf": "new/dart-maor"
   },
   {
@@ -19597,6 +18832,11 @@
   },
   {
    "name": "gen_entry_stat_label4",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_stat_label5",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
