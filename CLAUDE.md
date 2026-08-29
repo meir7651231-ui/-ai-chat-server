@@ -39,6 +39,9 @@ node machtzev/dedup-cross.mjs     # (בגנסיס) כפליות חוצה-מער�
 node machtzev/dedup-cross-dart.mjs # (בגנסיס) כפליות חוצה-ענפים לפי-גוף (Dart↔Dart) — ליבה-אימפריאלית, אחרי המרת-מאור
 ```
 מרשם-האטומים: maor-system/machtzev/registry/ · טיוטות: quarry/ · תוכניות-קופסה: box-drafts/
+🏁 **מבחן-הקומפילציה (שער-קבוע):** תוצרי-המנועים מוזרקים ל-buildsmart (ענף-העבודה,
+lib/genesis/) ו-workflow ‏genesis-compile מריץ flutter analyze — ירוק=אפס-errors.
+הושג 29.8: 265 אטומים · 80 מסכים-מורכבים · 79 לוחות — 1804⇒0 ב-8 סבבי-תיקון-מנוע (L25).
 
 ## 🌊 גלי-נחיל (קידום/קופסאות)
 פרומפט-גל = "לבש את המגילה: machtzev/AGENT-CODE.md. המשימה: …" + schema מובנה.
