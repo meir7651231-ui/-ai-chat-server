@@ -1,11 +1,11 @@
-// 🧽 לוטש ע"י מנוע-הליטוש (data-lift) — הדאטה הורמה ל-props, אל תערוך ידנית.
-// מוצא: screens__catalog_settings_screen:_NumberRow (בנייה-חכמה main) · 2 props: tooltip, tooltip2
+// 🧽 לוטש ע"י מנוע-המטרות (data-lift v2) — הדאטה הורמה ל-props לפי מטרתה, אל תערוך ידנית.
+// מוצא: screens__catalog_settings_screen:_NumberRow (בנייה-חכמה main) · צרור-1 · props-שורש: tooltip, tooltip2
 // התוכן: new/dart-data-bs/auto/screens__catalog_settings_screen_content.dart
 import 'package:flutter/material.dart';
 import 'bs_tokens.dart';
 
 class NumberRow extends StatelessWidget {
-  const NumberRow({required this.tooltip, required this.tooltip2, 
+  NumberRow({required this.tooltip, required this.tooltip2, 
     required this.label,
     required this.value,
     required this.min,

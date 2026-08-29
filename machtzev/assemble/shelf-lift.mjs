@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { okType, inferImports, classBody, stripComments, HEB_STR, IO_PAT, RIVERPOD, blind, snake, screenPascal, bodyIssue } from './lift-lib.mjs';
+import { okType, inferImports, classBody, stripComments, HEB_STR, IO_PAT, RIVERPOD, blind, snake, screenPascal, bodyIssue, FOUNDATION } from './lift-lib.mjs';
 const ROOT = new URL('../../', import.meta.url).pathname;
 const SCRATCH = process.argv[2] || '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens';
 const SHELF = path.join(ROOT, 'new/dart-ui-bs');
@@ -130,7 +130,7 @@ for (const mf of maps) {
           if (HEB_STR.test(stripComments(h)) || IO_PAT.test(stripComments(h))) { skip('dirty-helper', id); ok = false; break; }
           bundle.push({ name: r, body: h }); grew = true;
         } else if (/^_[A-Z]/.test(r)) { skip('private-dep', id); ok = false; break; }
-        else if (r !== 'BsTokens' && projectClasses.has(r)) { skip('project-dep', id + '⇒' + r); ok = false; break; }
+        else if (!FOUNDATION.has(r) && projectClasses.has(r)) { skip('project-dep', id + '⇒' + r); ok = false; break; }
       }
       if (!grew) break;
     }
@@ -163,7 +163,7 @@ for (const L of [...liftedHashes.values()].sort((a, b) => a.pub.localeCompare(b.
   joined = joined.replaceAll(L.name, L.pub);
   if (L.stateful) joined = joined.replaceAll('_' + L.name.replace(/^_/, '') + 'State', '_' + L.pub + 'State');
   const extras = inferImports(stripComments(joined));
-  if (L.needsTokens) extras.unshift("import 'bs_tokens.dart';");
+  for (const [cls, imp] of FOUNDATION) if (new RegExp('\\b' + cls + '\\b').test(stripComments(joined))) extras.unshift(imp);
   const also = L.also.length ? `\n// משרת-גם (זהה-מבנית): ${L.also.join(' · ')}` : '';
   const kind = L.stateful ? 'Stateful+State' : L.bundle.length > 1 ? `צרור-${L.bundle.length}` : 'Stateless';
   const code = `// 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.

@@ -1,11 +1,11 @@
-// 🧽 לוטש ע"י מנוע-הליטוש (data-lift) — הדאטה הורמה ל-props, אל תערוך ידנית.
-// מוצא: features__catalog_config__catalog_config_screen:_EmptyState (בנייה-חכמה main) · 1 props: label
+// 🧽 לוטש ע"י מנוע-המטרות (data-lift v2) — הדאטה הורמה ל-props לפי מטרתה, אל תערוך ידנית.
+// מוצא: features__catalog_config__catalog_config_screen:_EmptyState (בנייה-חכמה main) · צרור-1 · props-שורש: label
 // התוכן: new/dart-data-bs/auto/features__catalog_config__catalog_config_screen_content.dart
 import 'package:flutter/material.dart';
 import 'bs_tokens.dart';
 
 class EmptyState extends StatelessWidget {
-  const EmptyState({required this.label});
+  EmptyState({required this.label});
   final String label;
 
   @override

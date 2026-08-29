@@ -1,11 +1,11 @@
-// 🧽 לוטש ע"י מנוע-הליטוש (data-lift) — הדאטה הורמה ל-props, אל תערוך ידנית.
-// מוצא: screens__manager_copilot_screen:_InputBar (בנייה-חכמה main) · 2 props: hintText, tooltip
+// 🧽 לוטש ע"י מנוע-המטרות (data-lift v2) — הדאטה הורמה ל-props לפי מטרתה, אל תערוך ידנית.
+// מוצא: screens__manager_copilot_screen:_InputBar (בנייה-חכמה main) · צרור-1 · props-שורש: hintText, tooltip
 // התוכן: new/dart-data-bs/auto/screens__manager_copilot_screen_content.dart
 import 'package:flutter/material.dart';
 import 'bs_tokens.dart';
 
 class InputBar extends StatelessWidget {
-  const InputBar(
+  InputBar(
       {required this.hintText, required this.tooltip, required this.controller, required this.enabled, required this.onSend});
   final String hintText;
   final String tooltip;

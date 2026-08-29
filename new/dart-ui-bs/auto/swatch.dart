@@ -1,11 +1,11 @@
-// 🧽 לוטש ע"י מנוע-הליטוש (data-lift) — הדאטה הורמה ל-props, אל תערוך ידנית.
-// מוצא: screens__studio__panes__theme_pane:_Swatch (בנייה-חכמה main) · 1 props: label
+// 🧽 לוטש ע"י מנוע-המטרות (data-lift v2) — הדאטה הורמה ל-props לפי מטרתה, אל תערוך ידנית.
+// מוצא: screens__studio__panes__theme_pane:_Swatch (בנייה-חכמה main) · צרור-1 · props-שורש: label
 // התוכן: new/dart-data-bs/auto/screens__studio__panes__theme_pane_content.dart
 import 'package:flutter/material.dart';
 import 'bs_tokens.dart';
 
 class Swatch extends StatelessWidget {
-  const Swatch({required this.label, 
+  Swatch({required this.label, 
     required this.color,
     required this.selected,
     required this.onTap,

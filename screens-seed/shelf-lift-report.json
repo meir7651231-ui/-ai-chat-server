@@ -139,6 +139,12 @@
    "serves": 1
   },
   {
+   "atom": "Card",
+   "from": "screens__worker_reports_tab:_Card",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
    "atom": "CardBtn",
    "from": "screens__rewards_hub_screen:_CardBtn",
    "kind": "Stateless",
@@ -233,6 +239,18 @@
    "from": "screens__courier_profile_screen:_CourierAvatar",
    "kind": "Stateless",
    "serves": 2
+  },
+  {
+   "atom": "CourierFormsPillButton",
+   "from": "screens__courier_forms_screen:_PillButton",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "CourierSettingsSwitchRow",
+   "from": "screens__courier_settings_screen:_SwitchRow",
+   "kind": "Stateless",
+   "serves": 1
   },
   {
    "atom": "DateChip",
@@ -363,6 +381,12 @@
   {
    "atom": "HomeShellBadgedIcon",
    "from": "screens__home_shell:_BadgedIcon",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "HomeShellMenuRow",
+   "from": "screens__home_shell:_MenuRow",
    "kind": "Stateless",
    "serves": 1
   },
@@ -1108,13 +1132,11 @@
    "screens__worker_task_detail_sheet:WorkerTaskDetailSheet"
   ],
   "project-dep": [
-   "screens__courier_forms_screen:_PillButton⇒CfgVisible",
-   "screens__courier_settings_screen:_SwitchRow⇒CfgText",
-   "screens__home_shell:_MenuRow⇒CfgText",
    "screens__lipskey_product_sheet:_ChipPickerRow⇒LipskeyCatalogProduct",
-   "screens__manager_dashboard_screen:_MetricTile⇒CfgText",
-   "screens__trade_builder__system_setup_host_screen:SystemSetupHostScreen⇒Route",
-   "screens__worker_reports_tab:_Card⇒CfgText"
+   "screens__trade_builder__system_setup_host_screen:SystemSetupHostScreen⇒Route"
+  ],
+  "riverpod": [
+   "screens__manager_dashboard_screen:_MetricTile"
   ],
   "io-in-state": [
    "screens__welcome_screen:WelcomeScreen"

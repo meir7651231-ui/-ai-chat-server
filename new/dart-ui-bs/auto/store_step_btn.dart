@@ -1,11 +1,11 @@
-// 🧽 לוטש ע"י מנוע-הליטוש (data-lift) — הדאטה הורמה ל-props, אל תערוך ידנית.
-// מוצא: screens__store_screen:_StepBtn (בנייה-חכמה main) · 4 props: message, message2, label, label2
+// 🧽 לוטש ע"י מנוע-המטרות (data-lift v2) — הדאטה הורמה ל-props לפי מטרתה, אל תערוך ידנית.
+// מוצא: screens__store_screen:_StepBtn (בנייה-חכמה main) · צרור-1 · props-שורש: message, message2, label, label2
 // התוכן: new/dart-data-bs/auto/screens__store_screen_content.dart
 import 'package:flutter/material.dart';
 import 'bs_tokens.dart';
 
 class StoreStepBtn extends StatelessWidget {
-  const StoreStepBtn({required this.message, required this.message2, required this.label, required this.label2, required this.icon, this.onTap});
+  StoreStepBtn({required this.message, required this.message2, required this.label, required this.label2, required this.icon, this.onTap});
   final String message;
   final String message2;
   final String label;

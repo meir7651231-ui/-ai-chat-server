@@ -53,6 +53,15 @@ export const blind = (body, name) => crypto.createHash('sha1').update(
     .replace(/\b[0-9]+(\.[0-9]+)?\b/g, 'N').replaceAll(name, 'W').replace(/\s+/g, ' ')
 ).digest('hex').slice(0, 10);
 
+/** יסודות-בנייה-חכמה שאטום רשאי לצרוך: שקעי-סטודיו/עזרה + קטלוג-הפיגמנטים.
+ *  ‏import-היעד מוזרק בפליטה (האטומים מיועדים להידור בתוך buildsmart — חוק-7). */
+export const FOUNDATION = new Map([
+  ['BsTokens', "import 'bs_tokens.dart';"],
+  ['CfgText', "import 'package:buildsmart/widgets/studio/cfg_text.dart';"],
+  ['CfgVisible', "import 'package:buildsmart/widgets/studio/cfg_visible.dart';"],
+  ['HelpTarget', "import 'package:buildsmart/widgets/help_target.dart';"],
+]);
+
 export const snake = (n) => n.replace(/^_/, '').replace(/([a-z0-9])([A-Z])/g, '$1_$2').toLowerCase();
 export const screenPascal = (screen) => screen.replace(/^(screens|features)__/, '').replace(/_screen$/, '')
   .split(/__|_/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');

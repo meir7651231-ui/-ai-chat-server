@@ -1,11 +1,11 @@
-// 🧽 לוטש ע"י מנוע-הליטוש (data-lift) — הדאטה הורמה ל-props, אל תערוך ידנית.
-// מוצא: screens__store_screen:_SmartQtyStepper (בנייה-חכמה main) · 4 props: message, message2, label, label2
+// 🧽 לוטש ע"י מנוע-המטרות (data-lift v2) — הדאטה הורמה ל-props לפי מטרתה, אל תערוך ידנית.
+// מוצא: screens__store_screen:_SmartQtyStepper (בנייה-חכמה main) · צרור-1 · props-שורש: message, message2, label, label2
 // התוכן: new/dart-data-bs/auto/screens__store_screen_content.dart
 import 'package:flutter/material.dart';
 import 'bs_tokens.dart';
 
 class StoreSmartQtyStepper extends StatelessWidget {
-  const StoreSmartQtyStepper({required this.message, required this.message2, required this.label, required this.label2, 
+  StoreSmartQtyStepper({required this.message, required this.message2, required this.label, required this.label2, 
     required this.qty,
     required this.onMinus,
     required this.onPlus,

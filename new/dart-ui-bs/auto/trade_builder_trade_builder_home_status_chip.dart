@@ -1,11 +1,11 @@
-// 🧽 לוטש ע"י מנוע-הליטוש (data-lift) — הדאטה הורמה ל-props, אל תערוך ידנית.
-// מוצא: screens__trade_builder__trade_builder_home:_StatusChip (בנייה-חכמה main) · 2 props: label, label2
+// 🧽 לוטש ע"י מנוע-המטרות (data-lift v2) — הדאטה הורמה ל-props לפי מטרתה, אל תערוך ידנית.
+// מוצא: screens__trade_builder__trade_builder_home:_StatusChip (בנייה-חכמה main) · צרור-1 · props-שורש: label, label2
 // התוכן: new/dart-data-bs/auto/screens__trade_builder__trade_builder_home_content.dart
 import 'package:flutter/material.dart';
 import 'bs_tokens.dart';
 
 class TradeBuilderTradeBuilderHomeStatusChip extends StatelessWidget {
-  const TradeBuilderTradeBuilderHomeStatusChip({required this.label, required this.label2, required this.published});
+  TradeBuilderTradeBuilderHomeStatusChip({required this.label, required this.label2, required this.published});
   final String label;
   final String label2;
 

@@ -1,10 +1,10 @@
-// 🧽 לוטש ע"י מנוע-הליטוש (data-lift) — הדאטה הורמה ל-props, אל תערוך ידנית.
-// מוצא: screens__catalog_screen:_MiniQtyBtn (בנייה-חכמה main) · 2 props: label, label2
+// 🧽 לוטש ע"י מנוע-המטרות (data-lift v2) — הדאטה הורמה ל-props לפי מטרתה, אל תערוך ידנית.
+// מוצא: screens__catalog_screen:_MiniQtyBtn (בנייה-חכמה main) · צרור-1 · props-שורש: label, label2
 // התוכן: new/dart-data-bs/auto/screens__catalog_screen_content.dart
 import 'package:flutter/material.dart';
 
 class MiniQtyBtn extends StatelessWidget {
-  const MiniQtyBtn({required this.label, required this.label2, required this.icon, required this.onTap});
+  MiniQtyBtn({required this.label, required this.label2, required this.icon, required this.onTap});
   final String label;
   final String label2;
   final IconData icon;
