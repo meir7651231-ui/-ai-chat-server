@@ -14,8 +14,6 @@
   "roleRecord": false
  },
  "terms": [
-  " / a number), which a\n  /// screen reader would otherwise announce as \"minus sign\" / \"plus\" / a lone\n  /// digit with no idea what is being changed. Each is wrapped in a [Semantics]\n  /// node that NAMES the action and the product (e.g. \"הוסף אחד · <product>\")\n  /// and the qty readout exposes the count as a [Semantics.value]. The glyph",
-  "t run the count away; the\n/// matching lower floor is 1 (see [_QuickPadKeyboardState._decrement]).\nconst int kMaxQty = 99; // OWNER-REVIEW value\n\n/// A keyboard of product \"quantity keys\", styled like `BsKeyboard`.\n///\n/// [items] are chunked into rows of [_itemsPerRow]; each item is a column of\n/// (label key, qty stepper). Tapping the label key fires\n/// `onAdd(item, currentQty)`. The optional trailing utility key — `מצב רגיל`\n/// — fires [onSwitchMode]. No Material icons anywhere: the stepper uses the\n/// text glyphs ",
   "הוסף כמות · ${item.label}",
   "הפחת כמות · ${item.label}",
   "כמות",

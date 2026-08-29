@@ -36,6 +36,7 @@
   "roleRecord": false
  },
  "terms": [
+  "אין בקשות חומר עדיין.\\n",
   "דחה",
   "הוזמן",
   "כשעובד ישלח בקשת חומרים — היא תופיע כאן ותוכל לעדכן את הסטטוס.",
@@ -72,7 +73,7 @@
     "materialRequestsProvider"
    ],
    "actions": [],
-   "strings": 3,
+   "strings": 4,
    "constData": 0
   },
   {

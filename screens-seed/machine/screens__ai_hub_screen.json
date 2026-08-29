@@ -36,11 +36,8 @@
  "terms": [
   "${g.hours} / ${g.life} שעות עבודה",
   "${p.name} נוסף לסל",
-  ";\n\n/// 🤖 בינה מלאכותית ואוטומציה — the AI hub (T3.H).\n///\n/// Faithful native port of proto Category G (`openAIHub` @21123). Nine tools.\n/// Each is wired to REAL behaviour or honestly flagged:\n///   • 📷 ברקוד + 🎙️ דיבור = REAL — drive the catalog",
   "Analytics חכם",
   "PDF → רשימת חומרים",
-  "s own search-tools use).\n///   • 💡 חלופות זולות + 📐 סריקת תוכניות = REAL — open the canonical contractor\n///     sheets that COMPUTE over the live catalog price tiers / smart-cart.\n///   • 📦 חיזוי מלאי = REAL/COMPUTED — [computeStockForecast] over the live\n///     orders engine (consumption history) + cart (on-hand). No model.\n///   • 📊 Analytics חכם = REAL/COMPUTED — [computeAnalyticsInsights] over the\n///     live orders engine + budget + the real cheaper-alternatives scan.\n///   • 🔗 התאמה משולשת · 🌦️ מזג אוויר · 🔧 זיהוי בלאי = DEFERRED — each needs an\n///     EXTERNAL data source the app does not hold (supplier delivery-note &\n///     invoice documents · a weather-forecast API · IoT equipment-hour sensors),\n///     so they render a verbatim sample under an explicit \"⚙️ בפרודקשן\" note.\n///\n/// True while a [AIHubScreen._runVoice] recognition session is active — guards the\n/// stateless-widget 🎙️ tile against overlapping listens (module-level because the\n/// dispatch is a `static` method). Mirrors VoiceDictateButton",
-  "};\n\n  /// The DEFERRED (backend-blocked) tool ids — exposed for tests/guards.\n  static Set<String> get deferredToolIds => _deferredToolIds;\n\n  /// The tools a RAW company shell must not offer ([kProfileRawShell]) —\n  /// 💡 חלופות זולות + 📐 סריקת תוכניות claim partner-store prices, and a\n  /// company shell holds no price data (the imported catalog model carries\n  /// none); 📊 Analytics",
   "}עוד ${p.days} ימים",
   "אוטומציית מזג אוויר",
   "אין עדיין היסטוריית צריכה — בצע הזמנות כדי לקבל חיזוי מלאי",
@@ -149,7 +146,7 @@
     "call:showLipskeyProductSheet",
     "nav:AIHubScreen"
    ],
-   "strings": 27,
+   "strings": 26,
    "constData": 0
   },
   {

@@ -25,7 +25,6 @@
   " ($dropped נדחו — טקסט ארוך/לא תקין)",
   "$count התאמות — החלפה רחבה, לסקור היטב לפני \"פרסם\".",
   "(ריק)",
-  "s *name*). Each\n// hit previews labelHe + \"before → after\", with a per-hit checkbox so the owner\n// replaces selectively. \"החלף בנבחרים\" applies ALL chosen edits as a SINGLE\n// `applyOps` batch ⇒ one undo unit (R1-A3 · R2-#18), straight to the DRAFT —\n// nothing reaches users until \"פרסם לכולם\". kImmutable ids are read-only here too.\n// ─────────────────────────────────────────────────────────────────────────────\n\nimport ",
   "אין התאמות ל־\"$query\".",
   "הוחלפו $applied — בטיוטה. \"פרסם לכולם\" כדי לשדר לכל המשתמשים.",
   "החלף בנבחרים ($selectedCount)",
@@ -79,7 +78,7 @@
    "reads": [],
    "writes": [],
    "actions": [],
-   "strings": 1,
+   "strings": 2,
    "constData": 0
   }
  ],

@@ -35,7 +35,6 @@
   "roleRecord": false
  },
  "terms": [
-  ";\n\n/// #101 · שער-מוכנות מסמכים (HARD gate) — the blocking screen the worker board\n/// (and the courier board) shows INSTEAD of their board content while the\n/// logged user",
   "אין פריטים חוסמים",
   "בדוק שוב",
   "המעסיק יגדיר את רשימת המסמכים המחייבת בצד-השרת.",
@@ -84,7 +83,7 @@
    ],
    "writes": [],
    "actions": [],
-   "strings": 18,
+   "strings": 17,
    "constData": 0
   },
   {

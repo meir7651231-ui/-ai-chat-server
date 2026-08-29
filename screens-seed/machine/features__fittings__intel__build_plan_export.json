@@ -11,13 +11,13 @@
   "roleRecord": false
  },
  "terms": [
+  "# תוכנית-בנייה",
   "## כתב-חיתוך (מרחק-מרכזים ${spacing.toStringAsFixed(0)} מ״מ)",
   "## רצף (${plan.route.length} אביזרים)",
   "${c.cutLength.toStringAsFixed(1)} מ״מ",
   "- ${c.fromFamily} → צינור OD${c.od} → ${c.toFamily}: ",
   "- (אין מרווחי-צינור)",
-  "- (רצף ריק)",
-  ";\n\n/// מייצא תוכנית-קו למסמך-טקסט (Markdown-lite · עברית): כותרת · רצף-אביזרים ממוספר ·\n/// כתב-חיתוך פר-מרווח. מרחק-מרכזים [spacing] נומינלי. טהור · דטרמיניסטי.\nString exportBuildPlanText(FittingLinePlan plan, {double spacing = 200}) {\n  final b = StringBuffer()\n    ..writeln("
+  "- (רצף ריק)"
  ],
  "icons": [],
  "glyphs": [

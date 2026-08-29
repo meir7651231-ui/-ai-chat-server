@@ -37,7 +37,6 @@
   "roleRecord": false
  },
  "terms": [
-  ",\n              style: const TextStyle(\n                color: BsTokens.inkLight,\n                fontSize: 13.5,\n              ),\n            ),\n            const SizedBox(height: BsTokens.space3),\n\n            // Signature status pill (proto `נחתם ✓`/`ממתין`).\n            // Directional start (gate #62 idiom) — not a physical centerRight.\n            Align(\n              alignment: AlignmentDirectional.centerStart,\n              child: Container(\n                padding: const EdgeInsets.symmetric(\n                  horizontal: 12,\n                  vertical: 5,\n                ),\n                decoration: BoxDecoration(\n                  color: f.podSigned\n                      ? const Color(0xFFD7F5DF)\n                      : const Color(0xFFFFF4D6),\n                  borderRadius: BorderRadius.circular(BsTokens.radiusPill),\n                ),\n                child: Text(\n                  f.podSigned ? ",
   "POD + צילום",
   "אין צילום עדיין",
   "אישור מסירה?",
@@ -50,6 +49,7 @@
   "התמונה גדולה מדי — לא נשמרה",
   "ייתכן שההזמנה הוסרה או שהמשלוח כבר נסגר — חזרו לרשימת המשלוחים",
   "ממתין",
+  "נחתם ✓",
   "נמסר",
   "צילום המסירה נשמר 📸 — מוצג לחנות ולמנהל",
   "✅ נמסר ללקוח",

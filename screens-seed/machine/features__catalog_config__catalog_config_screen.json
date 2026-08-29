@@ -36,19 +36,9 @@
   "roleRecord": false
  },
  "terms": [
-  "s \"אין פריטים\" null-fallback state.\nclass _EmptyState extends StatelessWidget {\n  const _EmptyState();\n\n  @override\n  Widget build(BuildContext context) {\n    return const Center(\n      child: Column(\n        mainAxisSize: MainAxisSize.min,\n        children: [\n          Text(",
-  "s MATERIAL (owner: \"לפי הכותרת\") — the\n              // wheels list only this material",
-  "s [_CatalogConfigScreenState._expandedSku]; its browse data\n/// stays the pure [browseAll] projection of the whole catalog into clean families →\n/// type tiles. [onTapTile] is an OPTIONAL extra hook, fired alongside the toggle.\nclass CatalogConfigScreen extends ConsumerStatefulWidget {\n  const CatalogConfigScreen({\n    super.key,\n    this.onTapTile,\n    this.initialExpandedSku,\n  });\n\n  /// Optional extra tap hook, fired (in addition to toggling the inline card)\n  /// when a tile is tapped. Null ⇒ only the accordion toggles.\n  final void Function(ConfigTile tile)? onTapTile;\n\n  /// The sku whose inline config card starts OPEN (else all collapsed) — the\n  /// visual-verify entry uses it to render the accordion open in a static shot;\n  /// null in every production route.\n  final String? initialExpandedSku;\n\n  /// The ONLY route factory — GATED. Returns null when the flag is OFF, so there\n  /// is no live navigation path to this screen in a default (OFF) build.\n  static Route<void>? route({void Function(ConfigTile tile)? onTapTile}) {\n    if (!kCatalogConfig) {\n      return null;\n    }\n    return MaterialPageRoute<void>(\n      builder: (_) => CatalogConfigScreen(onTapTile: onTapTile),\n    );\n  }\n\n  @override\n  ConsumerState<CatalogConfigScreen> createState() =>\n      _CatalogConfigScreenState();\n}\n\nclass _CatalogConfigScreenState extends ConsumerState<CatalogConfigScreen> {\n  /// The sku of the tile whose config card is open (accordion), or null. Only one\n  /// card is open at a time; the rest of the rail stays visible (plan B.2).\n  String? _expandedSku;\n\n  @override\n  void initState() {\n    super.initState();\n    _expandedSku = widget.initialExpandedSku;\n  }\n\n  void _toggleTile(ConfigTile tile) {\n    widget.onTapTile?.call(tile);\n    setState(() {\n      _expandedSku = _expandedSku == tile.sku ? null : tile.sku;\n    });\n  }\n\n  /// PLAN E.1 · הוסף-לסל — add a [SmartCartLine] that CARRIES the chosen\n  /// [selection] (the configurator",
-  "s bug (\"עלה לי רק החיצוני לא הפנימי\": only the\n  /// external card came up, the internal sheet never did). So we fall back, in\n  /// order, to the family",
-  "s config\n/// card opens INLINE below the rail (accordion). A tile whose sku resolves to no\n/// catalog product (a stale/foreign sku) simply skips the card.\nclass _FamilySection extends StatefulWidget {\n  const _FamilySection({\n    required this.family,\n    required this.expandedSku,\n    required this.onToggle,\n    required this.onAddToCart,\n    required this.onBuildLine,\n    required this.onOpenDetails,\n  });\n\n  final ConfigFamily family;\n  final String? expandedSku;\n  final void Function(ConfigTile tile) onToggle;\n\n  /// Phase-E card actions, forwarded to the inline [ConfigCard] (הוסף-לסל /\n  /// בנה-קו / פרטים) — the screen owns them so it can reach the cart provider,\n  /// the toast, and the internal product sheet.\n  final ConfigCardAction onAddToCart;\n  final ConfigCardAction onBuildLine;\n  final ConfigCardAction onOpenDetails;\n\n  @override\n  State<_FamilySection> createState() => _FamilySectionState();\n}\n\nclass _FamilySectionState extends State<_FamilySection> {\n  /// Which MATERIAL page the family is on — a header swipe walks it (owner).\n  int _matIdx = 0;\n  double _accH = 0; // header-drag accumulator (px)\n\n  List<String> get _materials => widget.family.materials;\n\n  String get _material => _materials.isEmpty\n      ? ",
-  "s open-rail dive: section title → families פתוחות (header) → a\n// visible rail of product TILES. BuildSmart-dressed (RTL · orange · round ·\n// emoji). Phase B: tapping a tile TOGGLES a generic config CARD that opens INLINE\n// (accordion) under its rail while the rest of the rail stays visible (plan B.2);\n// the card",
-  "s real\n// catalog product. SSOT: knowledge/CATALOG-CONFIG-PLAN.md (§המסך, phase A/B).\n//\n// ⚠️ LIVE (owner \"תדליק\"): the home renders this screen as a section (smart_home_screen\n// · _CatalogConfigOpen) UNCONDITIONALLY, so it is compiled into every build (no longer\n// tree-shaken / byte-identical). [route] below stays gated on `kCatalogConfig` as a\n// secondary standalone entry the home embed does not use. Pilot section:\n// `אביזרי קצה וחיבורים` ([pilotSectionNode]).\n// ─────────────────────────────────────────────────────────────────────────────\n\nimport ",
-  "s sizes/angles (owner: \"לפי הכותרת\" — the card\n/// filters to the tapped tile",
-  "s wheels carry the\n    // variations (size/angle/color/…) of the tapped type.\n    final browse = browseAll(resolvedCatalogProducts);\n\n    return Directionality(\n      textDirection: TextDirection.rtl,\n      child: Scaffold(\n        backgroundColor: Theme.of(context).scaffoldBackgroundColor,\n        appBar: AppBar(\n          backgroundColor: Theme.of(context).scaffoldBackgroundColor,\n          elevation: 0,\n          scrolledUnderElevation: 2,\n          title: Text(\n            browse.titleHe,\n            style: const TextStyle(\n              color: BsTokens.brand,\n              fontWeight: FontWeight.w900,\n              fontSize: BsTokens.typeTitleMd,\n            ),\n          ),\n        ),\n        body: browse.families.isEmpty\n            ? const _EmptyState()\n            : ListView.builder(\n                // Bottom clearance so the LAST family (\"אחר\") scrolls clear of the\n                // home",
   "אין פריטים",
   "בקרוב",
   "כללי",
-  "לפי ספק",
   "נוסף לסל"
  ],
  "icons": [],
@@ -88,13 +78,11 @@
    "kind": "StatefulWidget",
    "line": 280,
    "loc": 24,
-   "pure": false,
+   "pure": true,
    "dataClean": true,
    "reads": [],
    "writes": [],
-   "actions": [
-    "fx:toast"
-   ],
+   "actions": [],
    "strings": 0,
    "constData": 0
   },
@@ -174,7 +162,6 @@
   "reads": [],
   "writes": [],
   "navsAndCalls": [
-   "fx:toast",
    "nav:CatalogConfigScreen"
   ]
  }

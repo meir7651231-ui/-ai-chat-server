@@ -39,7 +39,6 @@
   " (ריזרקולציה)",
   "${r.criticalOpen} קריטי",
   "${r.itemCount} פריטים",
-  ";\n// Live, in-app audit screen — generates 20 RANDOM installation scenarios\n// each run and shows the auto-built plan + compliance result for each.\n// Random anchors are sampled from the verified-spec catalog with bias\n// toward diversity (supply vs drainage, hot vs cold, different materials),\n// so every press of \"הרץ\" exercises a different slice of the engine.\n\nimport ",
   "ΔP ${r.dropBar.toStringAsFixed(2)} בר",
   "אודיט תרחישים",
   "הקש \"⚡ הרץ 20 תרחישי בדיקה\" כדי להתחיל",

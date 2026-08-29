@@ -11,7 +11,7 @@
   "roleRecord": false
  },
  "terms": [
-  "t substitutes.\n/// Returns a deduped set; the family tag lets the chooser keep family-\n/// coherent ordering (no inch interleaved with cm).\nList<SizeToken> productSizeTokens(LipskeyCatalogProduct p) {\n  final out = <SizeToken>{...parseSizeTokens(p.nameHe)};\n  final d = p.dims;\n  if (d != null) out.addAll(tokensFromDims(d));\n  return out.toList();\n}\n\n/// Sorted, deduped chip list for the pool. Keeps every family the pool\n/// surfaces (mm + cm, inch + DN, …) but groups them so the row reads\n/// coherently: all mm in numeric order, THEN all cm in numeric order — never\n/// `200 · 25 · 250 · 30` interleaved. Length equivalents across cm/meters/mm\n/// collapse to one chip (e.g. `15 ס\"מ` ≡ `0.15 מ׳`).\nList<SizeToken> sizeTokensIn(List<LipskeyCatalogProduct> ps) {\n  final all = <SizeToken>{};\n  for (final p in ps) {\n    all.addAll(productSizeTokens(p));\n  }\n  final out = dedupLengthByMm(all.toList());\n  sortSizeTokens(out);\n  return out;\n}\n\n/// Angle chips for the pool (separate axis — used only when sizes don",
+  "[\\s()\"׳/×,.+-]+",
   "אמריקאי",
   "אפשרות",
   "גודל",

@@ -10,9 +10,7 @@
   "iconSizes": [],
   "roleRecord": false
  },
- "terms": [
-  " show immutable;\n\n/// וקטור-3D immutable מינימלי (המתמטיקה של ה-turtle · לא תלוי-פלטפורמה).\n@immutable\nclass Vec3 {\n  const Vec3(this.x, this.y, this.z);\n  final double x;\n  final double y;\n  final double z;\n\n  Vec3 operator +(Vec3 o) => Vec3(x + o.x, y + o.y, z + o.z);\n  Vec3 operator -(Vec3 o) => Vec3(x - o.x, y - o.y, z - o.z);\n  Vec3 scale(double s) => Vec3(x * s, y * s, z * s);\n  double dot(Vec3 o) => x * o.x + y * o.y + z * o.z;\n  Vec3 cross(Vec3 o) =>\n      Vec3(y * o.z - z * o.y, z * o.x - x * o.z, x * o.y - y * o.x);\n  double get length => math.sqrt(dot(this));\n  Vec3 norm() {\n    final n = length;\n    return n == 0 ? this : scale(1 / n);\n  }\n\n  @override\n  bool operator ==(Object other) =>\n      other is Vec3 && other.x == x && other.y == y && other.z == z;\n  @override\n  int get hashCode => Object.hash(x, y, z);\n  @override\n  String toString() =>\n      "
- ],
+ "terms": [],
  "icons": [],
  "glyphs": [
   "🔌"

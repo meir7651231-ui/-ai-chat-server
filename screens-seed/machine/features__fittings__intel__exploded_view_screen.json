@@ -15,7 +15,7 @@
   "roleRecord": false
  },
  "terms": [
-  ";\n\n/// מסך \"מבט-פירוק\": 3D + סליידר-פיצוץ (💥). מפרק/מרכיב את הקו חזותית.\nclass ExplodedViewScreen extends StatefulWidget {\n  const ExplodedViewScreen({this.route = _demoRoute, super.key});\n\n  final List<RunElement> route;\n\n  static const List<RunElement> _demoRoute = [\n    RunElement(Family.coupler, 50),\n    RunElement(Family.elbow90, 50, dir: Dir.up),\n    RunElement(Family.tee, 50),\n    RunElement(Family.reducer, 50, od2: 32),\n    RunElement(Family.valve, 32),\n    RunElement(Family.plug, 32),\n  ];\n\n  @override\n  State<ExplodedViewScreen> createState() => _ExplodedViewScreenState();\n}\n\nclass _ExplodedViewScreenState extends State<ExplodedViewScreen> {\n  double _explode = 0;\n\n  @override\n  Widget build(BuildContext context) {\n    return Scaffold(\n      backgroundColor: kStageBackground,\n      appBar: AppBar(\n        backgroundColor: const Color(0xFF151F2A),\n        foregroundColor: Colors.white,\n        title: const Text(\n          ",
+  "מבט-פירוק · preview (off-live)",
   "💥 פירוק"
  ],
  "icons": [],

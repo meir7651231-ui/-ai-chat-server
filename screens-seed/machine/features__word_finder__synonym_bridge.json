@@ -11,7 +11,6 @@
   "roleRecord": false
  },
  "terms": [
-  "s text +\n// voice input (P4 step 54). kQuerySynonyms maps a typed/spoken alias to its\n// canonical token (a kMaterials key, a colour/finish, or an everyday noun like\n// מרפק→ברך). normalizeQuery folds them: LATIN aliases via an ASCII word-boundary\n// regex (so ",
   "ברך",
   "מרפק",
   "נחושת",

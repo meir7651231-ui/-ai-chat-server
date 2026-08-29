@@ -34,7 +34,6 @@
  },
  "terms": [
   "${_fmtDayMonth(start)} · ${bar.lenDays} ימ׳",
-  "s start date\n// from the authoring sheet (`_TaskAuthorSheet`), not here.\n//\n// HONEST by construction (אין-המצאות, R6/R8 — NEVER an invented date): only a\n// task with a real [TaskItem.scheduledStart] gets a bar, and the date shown on\n// each row IS that task",
   "אין משימות",
   "לוח-הזמנים של המשימות לפי תאריך-התחלה מתוזמן (לצפייה בלבד)",
   "משימות אלו לא ממוקמות על הציר — הקבלן יכול לשבץ להן תאריך התחלה.",

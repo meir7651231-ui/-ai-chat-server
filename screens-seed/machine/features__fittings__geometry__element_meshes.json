@@ -11,12 +11,11 @@
   "roleRecord": false
  },
  "terms": [
-  " show immutable;\n\n/// חומר-החלק — קובע צבע/הצללה אצל הצייר (PP-R ירוק · צינור אפור · פליז).\nenum PartMaterial { ppr, pipe, brass }\n\n/// תת-רשת של אביזר, כבר במסגרת-המקומית (מ״מ), עם חומר וסימון זרוע-הסתעפות.\n/// `branchAxis` ⇒ החלק נפרס לאורך ציר-ההסתעפות (B) ולא ציר-המעלה (U) — לטי/רוכב.\n@immutable\nclass ElementPart {\n  const ElementPart(this.mesh, this.mat, {this.branchAxis = false});\n  final Mesh mesh;\n  final PartMaterial mat;\n  final bool branchAxis;\n}\n\n/// גוף-האביזר: חלקיו + דלתות-הפריסה (`ex`/`ey`/`turn`) + סימון-קצה (`term`, פקק).\n/// זהה ל-`layoutDeltaFor` בדלתות — הגיאומטריה וההתקדמות נגזרות יחד (כמו gen3d).\n@immutable\nclass ElementMeshes {\n  const ElementMeshes(this.parts,\n      {required this.ex, required this.ey, required this.turn, this.term = false,});\n  final List<ElementPart> parts;\n  final double ex;\n  final double ey;\n  final double turn;\n  final bool term;\n}\n\n/// גוף-האביזר של (family, od[, od2]) — פורט 1:1 מ-`elemMeshes`. משפחה לא-נתמכת\n/// (ברך-מחותכת / לא-מוכר) → `null` (fallback · ה-assembler מדלג · M1).\nElementMeshes? elementMeshesFor(String family, int od, {int? od2}) {\n  if (!_kSupported.contains(family)) return null;\n  final g = generate(family, od, od2: od2);\n\n  if (family == ",
-  "]! / 2, bore), PartMaterial.ppr),\n      ],\n      ex: a + th,\n      ey: 0,\n      turn: 0,\n    );\n  }\n\n  return null; // unreachable (guarded by _kSupported)\n}\n\n/// צינור-מעבר בין שני קטרים (חיבור גדלים שונים) — פורט 1:1 מ-`taperGeom` (gen3d:174).\n/// `oA→oB` קוטר-חיצוני · דופן ≈ ⅙. משמש את ה-assembler לצנרת-הריתוך בין אביזרים.\nMesh taperGeom(double len, double oA, double oB) {\n  final rA = oA / 2 * 0.98;\n  final rB = oB / 2 * 0.98;\n  final iA = (oA - 2 * oA / 6) / 2;\n  final iB = (oB - 2 * oB / 6) / 2;\n  return revolve([\n    [0, rA],\n    [len * 0.4, rA],\n    [len * 0.6, rB],\n    [len, rB],\n    [len, iB],\n    [len * 0.6, iB],\n    [len * 0.4, iA],\n    [0, iA],\n  ], 48,);\n}\n\n/// צינור ישר (אותו קוטר) — לצנרת-מעבר של קוטר-אחיד. פורט מ-`pipe()` ב-gen3d:333.\nMesh straightPipe(double len, double od) =>\n    tube(0, len, od / 2 * 0.98, (od - 2 * od / 6) / 2);\n\n/// אורך-קצה (STUB) ואורך-צנרת-מעבר (PIPELEN) — verbatim מ-gen3d (`:331`).\nconst double kStubLen = 26;\nconst double kPipeLen = 58;\nconst double _kStub = kStubLen;\n\n/// המשפחות שיש להן גוף-אמת (זהה לקבוצת ה-turtle/envelope).\nconst Set<String> _kSupported = {\n  ",
   "ברז כדורי",
   "ברך 45°",
   "ברך 90°",
   "מסעף (טי)",
+  "מצמד",
   "מצרה",
   "מתאם תבריג",
   "פקק",

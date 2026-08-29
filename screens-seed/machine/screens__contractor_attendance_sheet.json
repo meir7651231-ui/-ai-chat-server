@@ -36,8 +36,6 @@
  "terms": [
   "${_fmtDur(worked)} שעות",
   "${day.username} — מיקום כניסה",
-  ",\n              child: _LocationPill(day: day),\n            ),\n          ],\n        ],\n      ),\n    );\n  }\n}\n\n/// One \"היום\" row — `🦺 username` + the day",
-  "s\n// on-site now and who has a record today; they do NOT edit attendance (the\n// worker owns their own clock-in/out, worker_attendance_screen.dart).\n//\n// Two sections:\n//   🟢 נוכחים עכשיו — the OPEN days (`clockedInNow`): clocked in, not out, today.\n//   היום           — every worker WITH a record today (open or closed shifts).\n//\n// HONEST by construction: only data that exists is shown. A still-open shift",
   "אין נוכחות רשומה היום",
   "אין עובדים מחותמים כרגע",
   "היום",

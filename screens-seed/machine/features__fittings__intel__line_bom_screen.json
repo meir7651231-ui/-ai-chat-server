@@ -18,7 +18,6 @@
  "terms": [
   " · ${bom.criticalOpen} בטיחות חסרים",
   " · יש פערים",
-  ";\n\n/// מסך-היכולת \"כתב-כמויות\": רשימת-קנייה + סטטוס. מקבל BOM מוכן (או דמו).\nclass LineBomScreen extends StatelessWidget {\n  const LineBomScreen({this.bom, super.key});\n\n  final LineBom? bom;\n\n  static const LineBom _demo = LineBom(\n    rows: [\n      BomRow(",
   "אין פריטים",
   "ברז כדורי PPR 32",
   "ברך PPR 90° 50",

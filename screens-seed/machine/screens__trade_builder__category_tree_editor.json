@@ -36,11 +36,9 @@
   "roleRecord": false
  },
  "terms": [
-  ");\n\n/// Rebuild a category with a new title / sortIndex, preserving EVERY other\n/// authored field (parentId, attributeSchemaIds, smartFixtureId — the domain\n/// type has no copyWith).\nTradeCategory _copy(TradeCategory c, {String? titleHe, int? sortIndex}) =>\n    TradeCategory(\n      id: c.id,\n      tradeId: c.tradeId,\n      titleHe: titleHe ?? c.titleHe,\n      emoji: c.emoji,\n      parentId: c.parentId,\n      sortIndex: sortIndex ?? c.sortIndex,\n      attributeSchemaIds: c.attributeSchemaIds,\n      smartFixtureId: c.smartFixtureId,\n    );\n\n/// 🗂️ עץ קטגוריות — the trade",
   "אין עדיין קטגוריות",
   "ביטול",
   "הוסף קטגוריה",
-  "למשל: …",
   "מאפיינים",
   "מוצרים",
   "מחק",

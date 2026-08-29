@@ -34,10 +34,6 @@
   "roleRecord": false
  },
  "terms": [
-  "),\n                controller: _valueController,\n                keyboardType: TextInputType.number,\n                textAlign: TextAlign.center,\n                onChanged: (_) => setState(() {}),\n                decoration: InputDecoration(\n                  isDense: true,\n                  filled: true,\n                  fillColor: Theme.of(context).colorScheme.surface,\n                  contentPadding: const EdgeInsets.symmetric(\n                    vertical: 10,\n                    horizontal: 8,\n                  ),\n                  border: OutlineInputBorder(\n                    borderRadius: BorderRadius.circular(BsTokens.radiusCard),\n                  ),\n                ),\n              ),\n            ),\n          ],\n        ),\n        const SizedBox(height: BsTokens.space4),\n\n        // ── פעולה (action — read-only selectable; mutating GREYED/deferred) ──\n        _sectionTitle(",
-  "),\n        const SizedBox(height: BsTokens.space2),\n        Wrap(\n          spacing: BsTokens.space2,\n          runSpacing: BsTokens.space2,\n          children: [\n            for (final t in kRuleTriggers)\n              _pill(\n                label: t.labelHe,\n                selected: _trigger == t.id,\n                onTap: () => setState(() => _trigger = t.id),\n              ),\n          ],\n        ),\n        const SizedBox(height: BsTokens.space4),\n\n        // ── תנאי (condition: field · op · value) ──\n        _sectionTitle(",
-  ";\n\n/// The 🔒 כללים tab pane — manual automation-rule builder + read-only advisory.\nclass StudioRulesScreen extends ConsumerStatefulWidget {\n  const StudioRulesScreen({super.key});\n\n  @override\n  ConsumerState<StudioRulesScreen> createState() => _StudioRulesScreenState();\n}\n\nclass _StudioRulesScreenState extends ConsumerState<StudioRulesScreen> {\n  // The composed rule",
-  "s frozen draft in Phase-1.\n  final List<Rule> _rules = <Rule>[];\n\n  @override\n  void dispose() {\n    _valueController.dispose();\n    super.dispose();\n  }\n\n  /// The rule the pickers currently compose, or null when the value is not numeric\n  /// (then the advisory shows a hint instead of a count). The selected action is\n  /// always a READ-ONLY one (mutating actions are not selectable — see the picker).\n  Rule? _composed() {\n    final value = num.tryParse(_valueController.text.trim());\n    if (value == null) return null;\n    return Rule(\n      trigger: _trigger,\n      condition: RuleCondition(field: _field, op: _op, value: value),\n      action: _action,\n    );\n  }\n\n  void _addRule() {\n    final rule = _composed();\n    if (rule == null || rule.isMutating) return; // Phase-1 adds read-only rules only.\n    setState(() => _rules.add(rule));\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    // READ-ONLY sources (the manager_copilot_screen.dart:53-64 read idiom). We\n    // WATCH the live list + analytics; we NEVER touch `.notifier`.\n    final orders = ref.watch(ordersEngineProvider);\n    final analytics = ref.watch(managerAnalyticsProvider);\n\n    final composed = _composed();\n    final matches = composed == null\n        ? null\n        : evalRuleAdvisory(composed, orders: orders, analytics: analytics);\n\n    return ListView(\n      padding: const EdgeInsets.all(BsTokens.space4),\n      children: [\n        _introNote(),\n        const SizedBox(height: BsTokens.space4),\n\n        // ── מתי (trigger) ──\n        _sectionTitle(",
   "הוסף כלל",
   "הזן ערך מספרי לתנאי כדי לראות תצוגה מקדימה.",
   "הכללים כאן קוראים בלבד ומתריעים; אינם משנים הזמנות.",
@@ -45,9 +41,12 @@
   "סופרים כמה פריטים תואמים כרגע ומתריעים. מחירים ופעולות-ליבה תמיד מוגנים; ",
   "פעולות משנות (סמן הזמנה · הצע הזמנה חוזרת) מוקפאות — ידרשו אישור מפורש. ",
   "פעולות שמשנות הזמנות מוקפאות עד אישור מפורש.",
+  "⚡ פעולה",
   "👁️ ${advisoryHe(matches)} — תצוגה מקדימה, לפני שמירה (קריאה בלבד).",
   "📋 כללים פעילים",
-  "🔒 כללי אוטומציה — מתי → תנאי → פעולה. בשלב זה הכללים קוראים בלבד: הם "
+  "📐 תנאי",
+  "🔒 כללי אוטומציה — מתי → תנאי → פעולה. בשלב זה הכללים קוראים בלבד: הם ",
+  "🔔 מתי"
  ],
  "icons": [
   "Icons.close"

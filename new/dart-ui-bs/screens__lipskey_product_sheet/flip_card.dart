@@ -1,10 +1,11 @@
-// 🧼 אטום · FlipCard — כרטיס-היפוך תלת-ממדי (rotateY) בין שני פנים.
-// מוצא: screens__lipskey_product_sheet.dart:1470-1557 (_HeroImage/_HeroImageState).
-// התרת-סבך: ref.read(catalogSettingsProvider).reducedMotion (שורה 1506) ⇒ prop
-// reducedMotion — הקופסה תזרים את הגדרת-הנגישות; true = קפיצה ישירה בלי אנימציה.
-// שני הפנים = builders שמקבלים flip() — הקופסה מרכיבה ImageFacePager לכל פנים.
-import 'package:flutter/material.dart';
+// 🧼 אטום · FlipCard — כרטיס מתהפך (סיבוב-Y תלת-ממדי 420ms easeInOut) בין שני
+// פנים. מוצא: :1470 (_HeroImage) — מנגנון-ההיפוך בלבד; הפנים עצמם מוזרקים
+// כ-builders שמקבלים את callback-ההיפוך.
+// התרת-סבך: reducedMotion היה ref.read(catalogSettingsProvider).reducedMotion
+// ⇒ prop bool (a11y: קפיצה ישירה לפן-היעד בלי אנימציה). הקופסה תזרים מההגדרות.
 import 'dart:math';
+
+import 'package:flutter/material.dart';
 
 class FlipCard extends StatefulWidget {
   const FlipCard({
@@ -12,21 +13,23 @@ class FlipCard extends StatefulWidget {
     required this.reducedMotion,
     required this.frontBuilder,
     required this.backBuilder,
-    this.duration = const Duration(milliseconds: 420),
     super.key,
   });
+
   final double height;
   final bool reducedMotion;
+
+  /// Builds the front face; call the provided callback to flip to the back.
   final Widget Function(BuildContext context, VoidCallback flip) frontBuilder;
+
+  /// Builds the back face; call the provided callback to flip to the front.
   final Widget Function(BuildContext context, VoidCallback flip) backBuilder;
-  final Duration duration;
 
   @override
   State<FlipCard> createState() => _FlipCardState();
 }
 
-class _FlipCardState extends State<FlipCard>
-    with SingleTickerProviderStateMixin {
+class _FlipCardState extends State<FlipCard> with SingleTickerProviderStateMixin {
   late final AnimationController _ctrl;
   late final Animation<double> _anim;
   bool _showBack = false;
@@ -34,7 +37,8 @@ class _FlipCardState extends State<FlipCard>
   @override
   void initState() {
     super.initState();
-    _ctrl = AnimationController(vsync: this, duration: widget.duration);
+    _ctrl = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 420));
     _anim = CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut);
   }
 

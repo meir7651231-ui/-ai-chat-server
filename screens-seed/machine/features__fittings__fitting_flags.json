@@ -10,10 +10,7 @@
   "iconSizes": [],
   "roleRecord": false
  },
- "terms": [
-  ");\n\n/// שכבת-ה-3D: layout (turtle) + geometry + render. web-first (פאזה C).\nconst bool kFittingEngine3d = bool.fromEnvironment(",
-  ");\n\n/// שכבת-האינטליגנציה: תכנון-חיבור/ניתוב/AI (פאזה D). מאומת ע\"י המנוע הדטרמיניסטי.\nconst bool kFittingEngineIntel = bool.fromEnvironment("
- ],
+ "terms": [],
  "icons": [],
  "glyphs": [
   "🔌"

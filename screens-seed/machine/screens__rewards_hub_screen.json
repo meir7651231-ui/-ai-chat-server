@@ -45,7 +45,6 @@
   "${rw.challenges.length} פעילים",
   "+${c.reward} BuildCoins — אתגר הושלם",
   "+100 לכל הזמנה",
-  ";\n\n/// 🎮 מועדון BuildSmart — the rewards/loyalty hub (T3.G).\n///\n/// A faithful native port of proto Category H (`openRewardsHub` @21452 +\n/// `rwFeature` views @21497-21658). The proto opens an overlay grid of 7 tiles;\n/// each tile swaps a second overlay (`rwFeature`). Here the hub is a screen and\n/// each tile pushes the matching [_RewardsFeatureScreen]; all 7 features render\n/// their real content (challenges/leaderboard/green/coupons/referral/VIP/redeem)\n/// and the live coin/challenge mutations run through [rewardsProvider].\n///\n/// WIRE: reached via the home menu-dial settings tree (the מועדון leaves) and\n/// the profile card — see the WIRE notes in the agent report. The dial leaf\n/// should `Navigator.push(RewardsHubScreen.route())`.\nclass RewardsHubScreen extends ConsumerWidget {\n  const RewardsHubScreen({super.key});\n\n  static Route<void> route() =>\n      MaterialPageRoute<void>(builder: (_) => const RewardsHubScreen());\n\n  /// The 7 hub tiles — VERBATIM fn/ic/t from proto `items` @21464-21472.\n  static const List<({String id, String ic, String t, String s})> _tiles = [\n    (id: ",
   "אין מספיק BuildCoins",
   "אתגרים חודשיים",
   "בנייה בת-קיימא",

@@ -31,8 +31,6 @@
   "roleRecord": false
  },
  "terms": [
-  ";\n\n/// The emoji a trade falls back to when the אימוג׳י field is left empty.\nconst String _kDefaultTradeEmoji = ",
-  ";\n\n/// The fixed colour palette for a new trade — 6 predefined ARGB ints (the\n/// `Brand.color` format `Trade.color` matches): teal · blue · purple · green ·\n/// amber · the BuildSmart brand orange. The FIRST is the default selection.\nconst List<int> _kTradeColors = [\n  0xFF1F6F6B,\n  0xFF2C7BE5,\n  0xFF5A4A8C,\n  0xFF1F8A4C,\n  0xFFF2A516,\n  0xFFFF7A18,\n];\n\n/// 🏗️ הגדרת ענף — the trade-builder wizard",
   "אימוג׳י",
   "למשל: חשמל",
   "פרסונה",

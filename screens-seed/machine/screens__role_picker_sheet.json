@@ -28,7 +28,6 @@
   "roleRecord": false
  },
  "terms": [
-  ") {\n              // Manager is a full role-app (the מרכז השליטה dashboard SHELL),\n              // not a BS-dial drill — mirror the worker→WorkerAppScreen pattern.\n              Navigator.of(context).pop();\n              _pushBoard(context, BoardRole.manager,\n                  (_) => const ManagerDashboardScreen());\n              return;\n            }\n            if (persona.id == ",
   "בחר תפקיד כדי להיכנס",
   "הזמנות נכנסות, מלאי החנות",
   "הזמנת חומרים, מלאי, משימות",
@@ -62,7 +61,7 @@
    "line": 134,
    "loc": 108,
    "pure": false,
-   "dataClean": false,
+   "dataClean": true,
    "reads": [
     "activePersonaProvider"
    ],
@@ -75,7 +74,7 @@
     "nav:StoreDashboardScreen",
     "nav:WorkerAppScreen"
    ],
-   "strings": 1,
+   "strings": 0,
    "constData": 0
   },
   {

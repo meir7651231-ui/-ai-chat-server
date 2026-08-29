@@ -10,9 +10,7 @@
   "iconSizes": [],
   "roleRecord": false
  },
- "terms": [
-  ");\n\n/// A raw diameter token — inch (`½\"`), DN (`DN40`), plastic OD (`20`/`110`), mm\n/// (`250 מ\"מ`), or a bare `odOf` integer — to its canonical `DN<n>` on the one\n/// ladder. Inch uses the bore table; every other number is treated as an OD and\n/// snaps to the nearest real rung. An unparseable token passes through unchanged\n/// (never blanks a wheel). Idempotent: `canonicalDn("
- ],
+ "terms": [],
  "icons": [],
  "glyphs": [],
  "logicCandidates": [],

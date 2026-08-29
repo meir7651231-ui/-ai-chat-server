@@ -10,9 +10,7 @@
   "iconSizes": [],
   "roleRecord": false
  },
- "terms": [
-  ";\n\n/// קצה-פנוי: פורט של [cell] הפונה בכיוון-הסריג [step] (od = [od]) שאין לו שכן\n/// מחובר — כלומר מקום פנוי להוסיף אליו אביזר.\n@immutable\nclass FreeEnd {\n  const FreeEnd(this.cell, this.step, this.od);\n\n  final GridCell cell;\n  final GridStep step;\n  final int od;\n\n  @override\n  bool operator ==(Object other) =>\n      other is FreeEnd &&\n      other.cell == cell &&\n      other.step == step &&\n      other.od == od;\n\n  @override\n  int get hashCode => Object.hash(cell, step, od);\n\n  @override\n  String toString() => "
- ],
+ "terms": [],
  "icons": [],
  "glyphs": [
   "🧩",

@@ -37,7 +37,6 @@
   "roleRecord": false
  },
  "terms": [
-  "s tile and LIVE on the add-form\n// while the switch is on with zero staged values), an add-form (שם מאפיין ·\n// kind dropdown · a values builder with deletable chips · ציר וריאנט? switch\n// · הוסף מאפיין) writing\n// through `upsertAttribute` under a DETERMINISTIC slug id\n// ",
   "אין עדיין מאפיינים",
   "בדיקת פירוק שם",
   "בחירה",
@@ -45,21 +44,16 @@
   "הוסף ערך",
   "הסר",
   "חומר",
-  "טיוטה",
   "טקסט חופשי",
-  "למשל: 16",
   "מחק",
   "מידה",
   "מספר",
   "סוג",
   "ערך",
-  "פורסם",
   "צבע",
   "ציר וריאנט ללא ערכים",
   "ציר וריאנט?",
-  "קוטר: 16",
   "שם מאפיין",
-  "שם: ערך",
   "🏷️ מאפיינים"
  ],
  "icons": [

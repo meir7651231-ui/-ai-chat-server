@@ -32,13 +32,12 @@
   "roleRecord": false
  },
  "terms": [
-  ";\n\n/// Trades that have no real content yet — picking one leads to an honest\n/// \"בקרוב\" screen instead of an empty flow. Only אינסטלטור is fully built.\nconst Set<String> kComingSoonTrades = {",
-  "s `screen-profession`.\n/// Picking a trade saves it to the profile and advances to the onboarding step.\nclass ProfessionScreen extends ConsumerWidget {\n  const ProfessionScreen({super.key});\n\n  @override\n  Widget build(BuildContext context, WidgetRef ref) {\n    void pick(String name) {\n      // Trades without real content yet → honest \"בקרוב\" screen (keeps the\n      // user on the picker via back). Only אינסטלטור proceeds into the app.\n      if (kComingSoonTrades.contains(name)) {\n        Navigator.of(context).push(ComingSoonScreen.route(name));\n        return;\n      }\n      ref.read(userProfileProvider.notifier).setProfession(name);\n      ref.read(startupStepProvider.notifier).state = 2;\n    }\n\n    return Scaffold(\n      backgroundColor: Theme.of(context).scaffoldBackgroundColor,\n      body: HelpModeScaffold(\n        child: SafeArea(\n          child: Padding(\n          padding: const EdgeInsets.all(BsTokens.space5),\n          child: Column(\n            crossAxisAlignment: CrossAxisAlignment.stretch,\n            children: [\n              Row(\n                children: [\n                  HelpTarget(\n                    title: ",
   "אינסטלטור",
   "בחירת התחום \"${t.name}\" (${t.desc}). אמורה להתאים ",
   "ברזים, אסלות, צנרת, חימום מים",
   "חוזר אחורה למסך הקודם (מסך הפתיחה / ההרשמה).",
   "חזור",
+  "חזרה",
   "חשמלאי",
   "מה התחום שלך?",
   "נקודות, לוחות, כבלים, גופי תאורה",

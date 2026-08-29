@@ -43,12 +43,6 @@
  },
  "terms": [
   "$doneCount משימות הושלמו",
-  "`) with ✅ אשר / ❌ דחה. SEPARATE from\n/// [_ApprovalCard] (the `",
-  "s\n  // task view — it now also AUTHORS tasks (＋ משימה חדשה / edit a card) and\n  // APPROVES submitted ones (the parallel contractor-approval block, on the\n  // same review queue the manager dashboard uses — _waveT2 PARKED decision).\n  List<Widget> _managerView(List<TaskItem> tasks) {\n    final review = tasks.where((t) => t.status == ",
-  "s \"אישורי עובדים (קבלן)\" section (Wave T2a) — a\n/// submitted task with אשר/דחה. Decisions run on the existing engine path\n/// (`approve`/`reject`) via the callbacks; this widget is presentation only.\nclass _ApprovalCard extends StatelessWidget {\n  const _ApprovalCard({\n    required this.name,\n    required this.workerLabel,\n    required this.onApprove,\n    required this.onReject,\n    super.key,\n  });\n  final String name;\n  final String workerLabel;\n  final VoidCallback onApprove;\n  final VoidCallback onReject;\n\n  @override\n  Widget build(BuildContext context) => Padding(\n        padding: const EdgeInsets.only(bottom: BsTokens.space2),\n        child: Material(\n          color: Theme.of(context).colorScheme.surface,\n          borderRadius: BorderRadius.circular(cfgRadius(context)),\n          elevation: 1,\n          shadowColor: Colors.black26,\n          child: Padding(\n            padding: const EdgeInsets.all(BsTokens.space4),\n            child: Column(\n              crossAxisAlignment: CrossAxisAlignment.start,\n              children: [\n                Text(name,\n                    style: const TextStyle(\n                        color: BsTokens.inkLight,\n                        fontWeight: FontWeight.w700,\n                        fontSize: 15)),\n                const SizedBox(height: 2),\n                Text(",
-  "s \"📝 משימות שהעובד הציע\" section (Wave G1c) — a\n/// worker-PROPOSED task (status `",
-  "s own אשר/דחה surface on\n      // the LIVE review queue (parallel to the manager dashboard",
-  "s queue tolerance (`|| employerId.isEmpty`) on both paths.\nString authoringEmployerId(WidgetRef ref) =>\n    (kTasksServer && useFirebaseBackend)\n        ? (ref.read(currentUidProvider) ?? kDemoContractorId)\n        : kDemoContractorId;\n\n/// Open the משימות screen — the wire target for `openTasks`.\nvoid openTasks(BuildContext context) =>\n    Navigator.of(context).push(TasksScreen.route());\n\n/// GLOBAL SEARCH (`kGlobalSearch`) — open a task",
   "אין משימות לצוות עדיין — משימות חדשות יופיעו כאן",
   "אישור המשימה?",
   "אשר",
@@ -106,6 +100,7 @@
   "❌ המשימה שהצעת \"${t.name}\" נדחתה",
   "❌ נדחתה הצעה: ${t.name}",
   "👷 $workerLabel · ⏱️ $days ימים · 📝 ממתין לאישורך",
+  "👷 $workerLabel · 📸 ממתין לאישור",
   "👷 ${_wk(task.worker)} · 📋 ${task.steps.length} שלבים · ⏱️ ${task.days} ימים",
   "📅 יומן עבודה — מה בוצע בכל יום",
   "📅 תאריך התחלה (לגאנט)",
@@ -221,7 +216,7 @@
    "reads": [],
    "writes": [],
    "actions": [],
-   "strings": 2,
+   "strings": 1,
    "constData": 0
   },
   {

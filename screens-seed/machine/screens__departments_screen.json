@@ -38,13 +38,10 @@
   "roleRecord": false
  },
  "terms": [
-  ",\n      children: [for (final c in cats) leaf(c)],\n    ),\n  ];\n}\n\n/// Benzi #5 — when true, the open department shows ALL its products in one flat\n/// list (\"ברצף, ללא קשר לקטלוג\") instead of the catalog tree/finder navigation.\nfinal deptFlatProductsProvider = StateProvider<bool>((_) => false);\n\n/// Every product in a department",
-  "s **finder (בית)** scoped to its\n/// `WaterSystem`, so every browse section (finder / categories / tree / search)\n/// shows only that system",
-  "s first tab so the chrome (AppBar + bottom nav)\n/// stays put; tapping the מחלקות tab resets it.\nfinal homeDepartmentProvider = StateProvider<String?>((_) => null);\n\n/// Build a drill path for a tool department straight from its leaf `categoryHe`\n/// names — a synthetic node tree, so the department gathers categories that live\n/// in different branches (e.g. כלי עבודה + חותך צינורות). One category drills\n/// straight to its products; several show a row each, then drill to products.\n/// `_TreeDrill` only needs `lipskeyCategory` (leaf) / `children` (branch).\nList<CatalogNode> _toolDeptPath(String name, List<String> cats) {\n  CatalogNode leaf(String c) =>\n      CatalogNode(id: ",
-  "s spec (#2). Two are the clean-water/sewage\n  // division (`system`); two more (כלי עבודה) gather EVERY real tool category in\n  // the catalog (`toolCats` — leaf `categoryHe` names; a full audit of all 99\n  // categories found these are the only genuine tools). The rest stay\n  // placeholders until their catalog data exists (R8 — no data, no invention).\n  static const List<\n      ({\n        String name,\n        IconData icon,\n        bool live,\n        WaterSystem? system,\n        List<String>? toolCats,\n      })> departments = [\n    (name: ",
-  "t a plumbing system).\n            ref.read(catalogSystemFilterProvider.notifier).state = null;\n            ref.read(catalogTreePathProvider.notifier).state =\n                _toolDeptPath(dept.name, toolCats);\n          } else {\n            // Catalog department (ברזים/אינסטלציה — Benzi #1 reframed) → open the\n            // grouped headings (no water-system scope; clear any drill).\n            ref.read(catalogSystemFilterProvider.notifier).state = null;\n            ref.read(catalogTreePathProvider.notifier).state = const [];\n          }\n          ref.read(deptFlatProductsProvider.notifier).state = false;\n          ref.read(homeDepartmentProvider.notifier).state = dept.name;\n        },\n        child: Semantics(\n          label: dept.live ? dept.name : ",
+  "${dept.name} — בקרוב",
   "אין מחלקות עדיין — יופיעו עם טעינת קטלוג החברה",
   "אין קטגוריות במחלקה זו",
+  "אינסטלציה",
   "אספקה טכנית",
   "בקרוב",
   "ברזים וסניטריים",

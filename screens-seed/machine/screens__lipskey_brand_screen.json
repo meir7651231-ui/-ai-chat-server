@@ -35,7 +35,6 @@
   "$prodCount מוצרים",
   "$totalProducts מוצרים · $totalCats קטגוריות",
   "${products.length} מוצרים",
-  ";\n\n/// The catalog entries of [section] that have at least one product. Under\n/// [kHideUnderConstruction] the level-2 grid renders ONLY these — the empty\n/// brand categories (\"אמבט ואגנית\", \"מאספים וקולטים\") would otherwise show a\n/// dimmed \"בקרוב\" badge the App Store rejects. Reversible data filter (mirrors\n/// catalog_screen",
   "אינסטלציה · סניטציה",
   "בקרוב",
   "חזרה",

@@ -17,7 +17,6 @@
   "roleRecord": false
  },
  "terms": [
-  ";\n\n/// Step 3 of the lens selector — the LIST-LEVEL view-axis control that lives\n/// OUTSIDE the product card. A row of chips (📂 קטגוריה / 🎚 וריאנטים / 🌳 עץ-חכם)\n/// that re-organises the product list it sits above. Only the lenses that are\n/// MEANINGFUL for [products] are shown (see [availableLensesForSet]) — a\n/// raw-parts list like copper fittings or PPR shows no 🌳, a single-category\n/// set shows nothing at all.\n///\n/// Reads/writes [catalogLensProvider]. Tapping a chip changes the active lens;\n/// the host list then renders `groupByLens(products, activeLens)`. This widget\n/// renders NOTHING when fewer than two lenses apply (a 1-option selector is\n/// noise), so the default category-only screens are visually unchanged.\nclass LensSelectorRow extends ConsumerWidget {\n  const LensSelectorRow({required this.products, super.key});\n\n  final List<LipskeyCatalogProduct> products;\n\n  @override\n  Widget build(BuildContext context, WidgetRef ref) {\n    final available = availableLensesForSet(products);\n    // A selector with one (or zero) option is noise — render nothing so the\n    // familiar category-only list is untouched.\n    if (available.length < 2) return const SizedBox.shrink();\n\n    final selected = ref.watch(catalogLensProvider);\n    final active = resolveActiveLens(selected, available);\n\n    return Padding(\n      padding: const EdgeInsets.fromLTRB(12, 8, 12, 4),\n      child: Row(\n        children: [\n          CfgText(\n            ",
   "סדר לפי:"
  ],
  "icons": [],

@@ -35,11 +35,6 @@
   "roleRecord": false
  },
  "terms": [
-  ",\n                      style: const TextStyle(\n                        color: BsTokens.brandDark,\n                        fontWeight: FontWeight.w700,\n                        fontSize: 11.5,\n                      ),\n                    ),\n                  ),\n              ],\n            ),\n          ],\n        ],\n      ),\n    );\n  }\n}\n\n/// The role-aware add-form (one instance per session) — name (required) ·\n/// מיקום (optional) · חומרה (a segmented choice incl. an unspecified default) ·\n/// a brand-filled save. Bound to the State",
-  ";\n\n/// Open the shared ליקויים sheet — the wire target for the ",
-  "` to TaskItem + the `defectsProvider` kind-filter, and\n// the contractor/worker authoring rides the same createTask/proposeTask the\n// regular §6 tasks use). \"ליקויים same as משימות\" — a defect reuses the ENTIRE\n// task lifecycle, so this surface adds NO new approve/reject UI:\n//   • CONTRACTOR (the `manager`-role board that opens tasks_screen",
-  "s _contractorProposals), no separate approval here.\n//\n// PARALLEL to contractor_attendance_sheet.dart — same showXSheet +\n// DraggableScrollableSheet + RTL + grab-handle/header/close idiom — but the body\n// is a ConsumerStatefulWidget because the add-form owns TextEditingControllers\n// (disposed with the State). HONEST by construction: only defects that exist are\n// listed; 🔧 מיקום / a severity badge appear only when non-empty (never an\n// invented place/severity); an empty name is a no-op (no toast).\n//\n// SCOPING mirrors the existing idioms: the contractor sees this employer",
-  "s queue.\n//   • WORKER → \"➕ דווח ליקוי\" mints a `proposed` defect (proposeTask,\n//     kind:",
   "אין ליקויים",
   "בינוני",
   "דווח ליקוי",

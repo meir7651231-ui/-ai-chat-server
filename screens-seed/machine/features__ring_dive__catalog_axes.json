@@ -11,9 +11,6 @@
   "roleRecord": false
  },
  "terms": [
-  ", <String>[groupOf(p)]);\n\n  // ── SIZE, split into the physical axes a plumber distinguishes — and the bore\n  //    itself split by MEASURING SYSTEM (owner: inch / DN / mm never share a wheel).\n  final diamInch = <String>{}; // ½\" / ¾\" / 2\"\n  final diamDn = <String>{}; //   DN40 / DN110\n  final diamMm = <String>{}; //   250 מ\"מ (shower heads etc.)\n  final length = <String>{}; //   50 ס\"מ / 3 מ׳ — how long\n  final transition = <String>{}; // 16×½ / 20×¾ — a reducer",
-  "s [rdAxesOf] (8 axes: world/cat/type/size/angle/color/\n// material/brand) and (1) SPLITS the single \"size\" axis into the distinct physical\n// axes a plumber actually means — קוטר (diameter) · אורך (length) · מעבר\n// (transition/reducer) — and (2) ADDS קבוצה · חדר · מין-חיבור · שיטה · תכולה.\n//\n// PURE + deterministic. Imported by nothing yet ⇒ inert (byte-identical) until a\n// screen reads it.\n\nimport ",
-  "s first\n      // (and its top-12 before \"עוד\") are the ones people actually reach for.\n      final c = counts[b]!.compareTo(counts[a]!);\n      if (c != 0) return c;\n      final ra = ord.indexOf(a);\n      final rb = ord.indexOf(b);\n      final x = (ra < 0 ? 999 : ra) - (rb < 0 ? 999 : rb);\n      return x != 0 ? x : a.compareTo(b);\n    });\n}\n\n/// ENGINE 1 — the \"easy path\" (info-gain). How much a single ring narrows the\n/// pool: the Shannon entropy of [axis]",
   "אורך",
   "הברגה",
   "הדבקה/הלחמה",

@@ -49,7 +49,6 @@
   "${c.size} לקוחות",
   "${s.conversionPct.round()} אחוז המרה",
   ", במסך ${r.screen}",
-  ";\n\n/// 📡 מודיעין לקוחות — the manager Live-Customer-Intelligence tab (step 98).\n/// A read-only, RTL, a11y surface over the four intel read providers. Const so it\n/// slots into the manager dashboard",
   "אין נתונים עדיין",
   "אף לקוח לא מחובר כעת",
   "הוספה לסל",

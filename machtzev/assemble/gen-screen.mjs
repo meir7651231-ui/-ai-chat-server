@@ -17,8 +17,8 @@ if (/[֐-׿]/.test(JSON.stringify(M.sections))) die('עברית-ליטרלית �
 // ── חובה 2: קריאת חתימות-המדף האמיתיות ──
 const SHELF = path.join(ROOT, 'new/dart-ui-bs');
 const shelf = {}; // ClassName ⇒ {file, props:Set, className}
-for (const f of fs.readdirSync(SHELF)) {
-  if (!f.endsWith('.dart')) continue;
+for (const f of fs.readdirSync(SHELF, { recursive: true }).map(String)) {
+  if (!f.endsWith('.dart') || !fs.statSync(path.join(SHELF, f)).isFile()) continue;
   const src = fs.readFileSync(path.join(SHELF, f), 'utf8');
   const cm = src.match(/class\s+([A-Za-z0-9]+)\s+extends\s+StatelessWidget/);
   if (!cm) continue;

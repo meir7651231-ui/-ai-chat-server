@@ -35,7 +35,9 @@ const pigments = {
 };
 
 // ── שכבה 1 · מונחים (מחרוזות עם עברית; אינטרפולציה ⇒ תבנית) ──
-const heStrings = uniq(grab("'([^'\\\\]*[\\u0590-\\u05FF][^'\\\\]*)'", 1));
+// קוד-בלבד + מודע-escapes (29.8): הערות אינן מונחים; \n בתוך מחרוזת אינו מסתור
+const srcCode = src.replace(/\/\*[\s\S]*?\*\//g, '').split('\n').filter(l => !l.trim().startsWith('//')).join('\n');
+const heStrings = uniq([...srcCode.matchAll(/'((?:[^'\\\n]|\\.)*[֐-׿](?:[^'\\\n]|\\.)*)'/g)].map(x => x[1]));
 
 // ── שכבה 2 · אייקונים + גליפים ──
 const icons = uniq(grab('Icons\\.[a-z_]+'));
@@ -46,15 +48,18 @@ const widgetDecl = /class\s+(_?[A-Za-z0-9]+)\s+extends\s+(StatelessWidget|Statef
 const widgets = []; let m;
 while ((m = widgetDecl.exec(src))) {
   const [body] = bodyOf(m.index);
-  const reads = uniq([...body.matchAll(/\b(?:watch|read)\(\s*([a-zA-Z0-9_]+Provider)/g)].map(x => x[1]));
-  const writes = uniq([...body.matchAll(/([a-zA-Z0-9_]+Provider)(?:\.notifier)?\)\s*\.(?:state\s*=|add\(|set[A-Z])/g)].map(x => x[1]));
+  // הסריקה על קוד-בלבד: הערות מוסרות (הערת-doc עם עברית-במרכאות ≠ דאטה; L1 29.8)
+  const code = body.replace(/\/\*[\s\S]*?\*\//g, '').split('\n').filter(l => !l.trim().startsWith('//')).join('\n');
+  const reads = uniq([...code.matchAll(/\b(?:watch|read)\(\s*([a-zA-Z0-9_]+Provider)/g)].map(x => x[1]));
+  const writes = uniq([...code.matchAll(/([a-zA-Z0-9_]+Provider)(?:\.notifier)?\)\s*\.(?:state\s*=|add\(|set[A-Z])/g)].map(x => x[1]));
   const navs = uniq([
-    ...[...body.matchAll(/=>\s*(?:const\s+)?([A-Z][A-Za-z0-9]+Screen)\(/g)].map(x => 'nav:' + x[1]),
-    ...[...body.matchAll(/\b(open[A-Z][A-Za-z0-9]*|show[A-Z][A-Za-z0-9]*Sheet)\b/g)].map(x => 'call:' + x[1]),
+    ...[...code.matchAll(/=>\s*(?:const\s+)?([A-Z][A-Za-z0-9]+Screen)\(/g)].map(x => 'nav:' + x[1]),
+    ...[...code.matchAll(/\b(open[A-Z][A-Za-z0-9]*|show[A-Z][A-Za-z0-9]*Sheet)\b/g)].map(x => 'call:' + x[1]),
   ]);
-  const strs = uniq([...body.matchAll(/'([^'\\]*[\u0590-\u05FF][^'\\]*)'/g)].map(x => x[1]));
-  const hasToast = /toast|Toast/.test(body);
-  const constData = [...body.matchAll(/const\s+\w*\s*=?\s*[\[{]/g)].length;
+  // מודע-escapes: מחרוזת עם \n/\' לא מתחמקת מהסורק (הבאג שנתפס ע"י shelf-lift 29.8)
+  const strs = uniq([...code.matchAll(/'((?:[^'\\\n]|\\.)*[֐-׿](?:[^'\\\n]|\\.)*)'/g), ...code.matchAll(/"((?:[^"\\\n]|\\.)*[֐-׿](?:[^"\\\n]|\\.)*)"/g)].map(x => x[1]));
+  const hasToast = /toast|Toast/.test(code);
+  const constData = [...code.matchAll(/const\s+\w*\s*=?\s*[\[{]/g)].length;
   widgets.push({
     name: m[1], kind: m[2], line: lineAt(m.index), loc: body.split('\n').length,
     pure: reads.length + writes.length + navs.length === 0 && !hasToast,

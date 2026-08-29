@@ -10,9 +10,7 @@
   "iconSizes": [],
   "roleRecord": false
  },
- "terms": [
-  ";\n\n/// פורט-חיבור עם כיוון-יציאה מרחבי במסגרת-המקומית של האביזר.\n@immutable\nclass DirectedPort {\n  const DirectedPort(this.od, this.dir);\n\n  /// הקוטר-החיצוני (מ\"מ) של הפורט הזה.\n  final int od;\n\n  /// הנורמל-היוצא (וקטור-יחידה) במסגרת-המקומית של האביזר.\n  final Vec3 dir;\n\n  @override\n  bool operator ==(Object other) =>\n      other is DirectedPort && other.od == od && other.dir == dir;\n\n  @override\n  int get hashCode => Object.hash(od, dir);\n\n  @override\n  String toString() => "
- ],
+ "terms": [],
  "icons": [],
  "glyphs": [
   "🧭"

@@ -44,23 +44,14 @@
   "roleRecord": false
  },
  "terms": [
-  "\n                          ? (\n                            emoji: m.emoji,\n                            title: m.title,\n                            preview: ordersPreview,\n                            time: m.time,\n                            badge: openOrdersCount,\n                          )\n                          : m,\n            )\n            .toList();\n    var items =\n        query.isEmpty\n            ? allItems\n            : allItems\n                .where(\n                  (item) =>\n                      item.title.toLowerCase().contains(query) ||\n                      item.preview.toLowerCase().contains(query),\n                )\n                .toList();\n\n    // Apple-readiness: the store hub mixes genuinely-wired tiles (🛒 cart / 📦\n    // orders) with placeholder tiles — some toast \"$title — בבנייה\" (_tapFor →\n    // null), others open the all-\"בבנייה\" service sheets (service-indexed).\n    // Hide BOTH placeholder kinds for review; the data lists stay intact\n    // (reversible). A tile survives only if it has a real non-service handler.\n    if (kHideUnderConstruction) {\n      items = [\n        for (final item in items)\n          if (_kServiceByEmoji[item.emoji] == null &&\n              _tapFor(context, ref, item, null) != null)\n            item,\n      ];\n    }\n\n    if (items.isEmpty) {\n      return _EmptyState(query: query);\n    }\n\n    if (isGrid) {\n      return GridView.builder(\n        key: ValueKey(",
-  " (store_settings → פרטיות) is\n/// OFF: the purchase history is hidden by the user",
   "$cartCount פריטים ממתינים לסיכום",
   "$label — בבנייה",
-  "$n פריטים",
   "${item.title} — בבנייה",
   "${list.items.length} פריטים",
   "${o.items} פריטים",
   "${r.label} — בבנייה",
   "(${_price(s.largeOrderThreshold)}). להמשיך?",
-  "),\n  ],\n  // ↩️ החזרה חדשה\n  [\n    (emoji: ",
-  "),\n  ],\n  // 💰 פקדונות\n  [\n    (emoji: ",
-  "),\n  ],\n  // 📨 מכרז ספקים\n  [\n    (emoji: ",
-  ");\n\n/// Benzi #4 — whether the one-time \"לאן לשלוח\" popup has already been shown. It\n/// pops up ONCE, the first time a product is added to the cart (the selection\n/// stage) — never at checkout.\n///\n/// Default **true** (mirrors `welcomeSeenProvider`) so widget tests never trip\n/// the popup; `main()` overrides it with the persisted value, where an absent\n/// key → `false` → a fresh install sees the popup on its first product.\nconst String kShipToPromptedKey = ",
-  ");\n          return int.tryParse(digits) ?? 0;\n        }\n        return parsePrice(a.total).compareTo(parsePrice(b.total));\n      });\n    }\n    // rating / distance: no meaningful equivalent for orders; preserve order.\n\n    final orders =\n        query.isEmpty\n            ? allOrders\n            : allOrders\n                .where(\n                  (o) =>\n                      o.id.toLowerCase().contains(query) ||\n                      o.items.toLowerCase().contains(query) ||\n                      o.stageLabel.toLowerCase().contains(query),\n                )\n                .toList();\n\n    if (orders.isEmpty) {\n      return _EmptyState(query: query);\n    }\n\n    return ListView.separated(\n      physics: const AlwaysScrollableScrollPhysics(),\n      itemCount: orders.length,\n      separatorBuilder:\n          (_, __) =>\n              const Divider(height: 1, indent: 76, color: Color(0xFFF5F5F5)),\n      itemBuilder: (context, i) => _OrderRow(order: orders[i]),\n    );\n  }\n}\n\n/// Shown in the הזמנות tab when ",
   "+ הוסף",
-  ",\n    badge: 0,\n  ),\n  // raw shell (kProfileRawShell): 📊 השוואת מחירים routes to the real\n  // partner-store comparison sheet, which narrates supplier prices that don",
   "2 כלים מושכרים עד 30.5",
   "2 כלים פעילים",
   "3 הצעות חדשות",
@@ -72,7 +63,6 @@
   "4 שעות",
   "5 גיליונות",
   "5 גיליונות זמינים להורדה",
-  "t be offered it at checkout. Off (the\n    // default) ⇒ the chip is removed from the selector entirely. The other\n    // methods (כרטיס/ביט) are always available. This is the live client effect\n    // of that toggle.\n    final supplierCreditEnabled = ref.watch(\n      storeSettingsProvider.select((s) => s.supplierCreditEnabled),\n    );\n    final options = [\n      for (final o in _kPaymentOptions)\n        if (o.method != CartPaymentMethod.supplierCredit ||\n            supplierCreditEnabled)\n          o,\n    ];\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.start,\n      children: [\n        const CfgText(\n          ",
   "אחים כהן",
   "אין הזמנות פעילות",
   "אין פריטים",
@@ -121,9 +111,7 @@
   "החזרה חדשה",
   "החשבון ממתין לאישור — אפשר לשלוח בקשת תפקיד",
   "היסטוריית הרכישות מוסתרת",
-  "היסטוריית רכישות",
   "הכל",
-  "הסדר אשראי ספק",
   "הסל נוקה",
   "הסל ריק",
   "הסל שלי",
@@ -149,8 +137,8 @@
   "כספים",
   "כרטיס",
   "כתובת / אתר העבודה",
-  "כתובת ברירת\n  // מחדל",
   "לא חובה — אפשר לאשר את ההזמנה גם בלי כתובת ולהשלים בהמשך.",
+  "לא נמצאו תוצאות\\nעבור \"$query\"",
   "לאן לשלוח?",
   "לוח עבודה",
   "לוח שנה",
@@ -187,6 +175,7 @@
   "סכום ביניים",
   "סכום ביניים (ללא מע\"מ)",
   "סכום ההזמנה ${_price(widget.total)} חורג מהסף שהגדרת ",
+  "סל ${AppBrand.name}:\\n$items\\n\\nסה״כ: ₪$total",
   "ספק A",
   "ספק B",
   "ספק C",
@@ -215,7 +204,6 @@
   "שיחה",
   "שיחה חדשה",
   "שיחה עם ${c.name} — בבנייה",
-  "שיתוף סל עם צוות",
   "שם הפרויקט",
   "שם הרשימה",
   "שם הרשימה לא יכול להיות ריק",
@@ -562,10 +550,9 @@
     "storeSectionProvider"
    ],
    "actions": [
-    "call:openOrdersCount",
-    "fx:toast"
+    "call:openOrdersCount"
    ],
-   "strings": 4,
+   "strings": 3,
    "constData": 0
   },
   {
@@ -621,7 +608,7 @@
    "reads": [],
    "writes": [],
    "actions": [],
-   "strings": 1,
+   "strings": 2,
    "constData": 0
   },
   {
@@ -825,7 +812,7 @@
     "cartPaymentProvider"
    ],
    "actions": [],
-   "strings": 4,
+   "strings": 1,
    "constData": 0
   },
   {
@@ -942,7 +929,7 @@
    "line": 3830,
    "loc": 60,
    "pure": false,
-   "dataClean": false,
+   "dataClean": true,
    "reads": [
     "storeOrdersProvider",
     "storeSearchQueryProvider",
@@ -950,7 +937,7 @@
    ],
    "writes": [],
    "actions": [],
-   "strings": 1,
+   "strings": 0,
    "constData": 0
   },
   {
@@ -965,7 +952,7 @@
    ],
    "writes": [],
    "actions": [],
-   "strings": 3,
+   "strings": 4,
    "constData": 0
   },
   {

@@ -33,8 +33,11 @@
  },
  "terms": [
   "\"כמה נשאר בתקציב\" · \"תוסיף ערכה לסל\".",
-  "s REAL grounded tools\n// (\"תאר עבודה → סל\", the smart finder, the product card). So it reasons over\n// general trade knowledge but never claims app-specific data it doesn",
-  "t reach (\"שחור\" →\n        // \"נחושת\"). Prefer real NAME-matches; only when there are none fall back\n        // to the model",
+  "$head\\n$label · ${products.length} מוצרים\\n$lines",
+  "$head\\n${products.length} פריטים:\\n$lines",
+  "$head\\n(אין הזמנות עדיין.)",
+  "$head\\n(אין נתוני תקציב.)",
+  "$head\\n(לא נמצאו מוצרים מתאימים כרגע.)",
   "אפשר גם לבקש: \"תמצא לי ברז\" · \"מה מצב ההזמנות\" · ",
   "הוסף ${t.kit.length} לסל",
   "הרכבתי ערכה — להוסיף לסל?",

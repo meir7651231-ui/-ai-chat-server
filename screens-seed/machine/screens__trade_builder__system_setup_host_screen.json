@@ -10,10 +10,7 @@
   "iconSizes": [],
   "roleRecord": false
  },
- "terms": [
-  ";\n\n/// 🔌 הקמת המערכת — the unified two-phase setup host (בונה-ענף → הגדרת-ארגון).\nclass SystemSetupHostScreen extends StatefulWidget {\n  const SystemSetupHostScreen({super.key});\n\n  static Route<void> route() => MaterialPageRoute<void>(\n        builder: (_) => const SystemSetupHostScreen(),\n      );\n\n  @override\n  State<SystemSetupHostScreen> createState() => _SystemSetupHostScreenState();\n}\n\nclass _SystemSetupHostScreenState extends State<SystemSetupHostScreen> {\n  /// 0 = build the trade (phase 1), 1 = configure the org (phase 2). Local\n  /// widget state; no engine/global write.\n  int _phase = 0;\n\n  @override\n  Widget build(BuildContext context) {\n    // A plain switch (NOT IndexedStack): phase-2 constructs on advance, so its\n    // initState reads orgConfigProvider fresh at entry (audited hazard #4).\n    switch (_phase) {\n      case 0:\n        // Phase 1 — build the trade. Its own Scaffold/AppBar/bottom-bar; the\n        // host only injects the \"המשך\" affordance via onContinue.\n        return TradeBuilderHomeScreen(\n          onContinue: () => setState(() => _phase = 1),\n        );\n      case 1:\n      default:\n        // Phase 2 — configure the org. Terminal phase: the manager exits via\n        // the wizard",
-  "s 🛠️ ניהול tab, gated by the\n// compile-const `kOrgConfigFlag` (armed in the live build, off in define-less\n// test builds ⇒ the manager tab stays byte-identical there). Phase-1 is pushed\n// DIRECTLY (the trade-builder screens do not self-gate), so `kTradeBuilder` stays\n// owner-staged-OFF and its pinned tests are untouched.\n// ─────────────────────────────────────────────────────────────────────────────\n\nimport "
- ],
+ "terms": [],
  "icons": [],
  "glyphs": [
   "🔌",

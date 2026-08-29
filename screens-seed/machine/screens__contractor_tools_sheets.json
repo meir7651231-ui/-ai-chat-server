@@ -31,10 +31,7 @@
  },
  "terms": [
   "${lines.length} פריטים · ההצעה הזולה ₪${groupThousands(total)}",
-  ",\n          productName: it.name,\n          productEmoji: it.emoji,\n          brandName: best.store,\n          brandPrice: best.price,\n          productQty: 1,\n          accessories: const [],\n        ),\n      );\n    }\n  }\n  return out;\n}\n\n/// (T3) \"סרוק תוכנית\" — pick a plan type → scan animation → detected zones with\n/// per-item store comparison → \"הוסף לסל\". R9-inline (modal sheet, no new route).\n/// Data verbatim from [kPlanTypes] (proto §9); scan is simulated (sim, not toast).\n/// [initialPlanKey] (menu leaf wiring) optionally auto-starts that plan",
-  ",\n        style: TextStyle(\n          fontSize: 12,\n          fontWeight: best ? FontWeight.w700 : FontWeight.w500,\n          color: best ? BsTokens.brand : const Color(0xFF555555),\n        ),\n      ),\n    );\n  }\n}\n\n/// (T3 · לוח-קבלן) Cart lines for a scanned plan type — each detected zone item\n/// at its cheapest partner-store offer (proto §9 `addScanToCart`). Pure → tested.\nList<SmartCartLine> scanPlanCartLines(PlanType plan) {\n  final out = <SmartCartLine>[];\n  for (final z in plan.zones) {\n    for (final it in z.items) {\n      if (it.stores.isEmpty) continue;\n      final best = it.stores[bestStore(it.stores)];\n      out.add(\n        SmartCartLine(\n          productKey: ",
-  ".\n    final sel = _selected;\n    final lines =\n        scanPlanCartLines(\n          p,\n        ).where((l) => sel == null || sel.contains(l.productKey)).toList();\n    if (lines.isEmpty) return; // guarded by the disabled button; defensive.\n    final cart = ref.read(smartCartProvider.notifier);\n    for (final l in lines) {\n      cart.add(l);\n    }\n    // Stay in context — do NOT yank the user to the Store tab. The live cart FAB\n    // (here, on the home shell, and on the AI hub) reflects the new count as\n    // the immediate feedback; the \"לאן לשלוח?\" first-add popup still fires.\n    Navigator.pop(context);\n    showToast(context, ",
-  ";\n\n/// Opens the 📐 \"סרוק תוכנית עבודה\" sheet. [planKey] (plumbing/electrical/\n/// architectural/finishing) optionally jumps straight into that plan",
+  "${lines.length} פריטים מהתוכנית נוספו לסל",
   "אין חלופות זולות כרגע.",
   "אין מחירים להשוואה כרגע.",
   "אשר את הבחירה — הוסף $selCount פריטים לסל",

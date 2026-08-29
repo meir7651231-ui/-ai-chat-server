@@ -49,24 +49,10 @@
   "roleRecord": false
  },
  "terms": [
-  " כשלא-נבחר/לא-מוכר — ערך persisted זר אסור\n  /// שייפול ל-[haulInfo], שממציא את kHaulTypes.first).\n  String _preferredHaul(BoardSession session) {\n    final p = ref.watch(\n      courierProfileProvider.select(\n        (m) => m[session.username]?.preferredHaul ?? ",
   "$toPickup משלוחים ממתינים לאיסוף · אסוף מהחנות כדי להתחיל",
   "${order.items} פריטים · ${fMoney(order.sum)} · הקש לפרטים",
-  ") was already emitted, so a\n/// reload (F5) or re-login never re-notifies the same real hand-off. אין\n/// המצאות: notifications derive only from actual engine stages (pickup/transit\n/// = the store really handed the shipment to the courier).\nconst String kCourierHandoffSeenKey = ",
-  ",\n                  style: const TextStyle(\n                    color: Colors.white,\n                    fontSize: 10,\n                    fontWeight: FontWeight.w800,\n                    height: 1.4,\n                  ),\n                ),\n              ),\n            ),\n        ],\n      ),\n    );\n  }\n}\n\n/// Opens the courier notifications sheet (list + mark-read + clear-all).\nFuture<void> showCourierNotifsSheet(BuildContext context) {\n  return showModalBottomSheet<void>(\n    context: context,\n    isScrollControlled: true,\n    backgroundColor: Colors.transparent,\n    builder: (_) => const _CourierNotifsSheet(),\n  );\n}\n\n/// The notifications sheet — style mirrors `_WorkerNotifsSheet` (#85ו: white\n/// card sheet, RTL, X close, ≥48dp rows); reads/mutates the courier",
-  ",\n          );\n    }\n    if (dirty) _persistHandoffSeen();\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    // חוק הלוחות (כלל 4 — \"מבחוץ לא רואים כלום\"): בלי session של שליח נבנה אך\n    // ורק שער הרישום (WelcomeScreen במצב-תפקיד) — אף widget מתוכן הלוח לא נבנה.\n    final session = ref.watch(boardAuthProvider);\n    if (session == null || session.role != BoardRole.courier) {\n      return const WelcomeScreen(boardRole: BoardRole.courier);\n    }\n\n    // 🔒 #101 — שער-מוכנות מסמכים (HARD gate): between the auth gate and the\n    // vehicle gate, block the board until the logged courier",
-  ",\n      ),\n    );\n    final greetName =\n        profileName.isNotEmpty ? profileName : session.displayName;\n\n    final jobs = orders.courierJobs(vehicle);\n    final toPickup = jobs.where((o) => o.stage == OrderStage.ready).length;\n    final onRoad =\n        jobs\n            .where(\n              (o) =>\n                  o.stage == OrderStage.pickup || o.stage == OrderStage.transit,\n            )\n            .length;\n    final delivered = orders.countAt(OrderStage.delivered);\n    final active = jobs.length;\n    // #76 — הסינון לפי רכב הוא אמיתי: משלוחים פעילים שהרכב הנבחר לא יכול\n    // לשאת לא נעלמים בשקט — הם מוצגים במקטע \"דורש רכב אחר\" בתחתית.\n    const activeStages = [\n      OrderStage.ready,\n      OrderStage.pickup,\n      OrderStage.transit,\n    ];\n    final otherVehicle =\n        orders\n            .where(\n              (o) =>\n                  activeStages.contains(o.stage) &&\n                  !vehicleCanCarry(vehicle, o.haul),\n            )\n            .toList();\n\n    return ListView(\n      padding: const EdgeInsets.fromLTRB(\n        BsTokens.space4,\n        BsTokens.space4,\n        BsTokens.space4,\n        BsTokens.space5,\n      ),\n      children: [\n        Text(\n          ",
-  ";\n\n/// #31 — \"מצב היכרות\" copy for the courier",
-  ";\n  }\n\n  Widget _tabBody(BoardSession session, String vehicle) {\n    switch (_tab) {\n      case 1:\n        return const CourierPortalTab();\n      case 2:\n        return const CourierReportsTab();\n      case 3:\n        // F-30 — רכב-המשמרת מועבר לפרופיל כדי שסטטיסטיקת \"בדרך\" תשחזר את\n        // סמנטיקת רכב-זכאי של טאב המשלוחים (חוזה 6 — null רק במסך העצמאי).\n        return CourierProfileBody(vehicle: vehicle);\n      default:\n        return _deliveriesTab(session, vehicle);\n    }\n  }\n\n  /// ה-AppBar המשותף ללוח ולשער-הרכב. Each persona reaches profile + settings\n  /// from its OWN dashboard — לשליח יש כעת מסכים ייעודיים (#73). RTL: actions\n  /// lay out leading→trailing, so this reads bell · profile · settings · exit\n  /// from the right. COURIER v2 ג — the 🔔 bell (unread badge) mirrors the\n  /// worker board",
-  "s \"מסור לשליח\" hand-off\n  /// happened) that was not notified yet appends a bell notification to the\n  /// logged courier",
-  "s `WorkerNotifsBell` (#85ו). IconButton\n/// keeps the ≥48dp target.\nclass _CourierNotifsBell extends ConsumerWidget {\n  const _CourierNotifsBell();\n\n  @override\n  Widget build(BuildContext context, WidgetRef ref) {\n    // 🔊 ",
-  "s deep-link re-evaluates and opens the board.\n    // [docsGateOverrideProvider] is the TEST SEAM (non-null forces the\n    // decision; board tests set true to bypass).\n    final ov = ref.watch(docsGateOverrideProvider);\n    final r = ref.watch(courierDocsReadyProvider(session.username));\n    final docsReady = ov ?? r.ready;\n    if (!docsReady) {\n      return DocsReadinessGate(role: BoardRole.courier, readiness: r);\n    }\n\n    // COURIER v2 ג — live hand-off watcher: a REAL ready→pickup advance by the\n    // store while this board is mounted lands as a 🔔 immediately (the\n    // mount-time sweep in [_loadHandoffSeen] covers off-screen hand-offs).\n    ref.listen<List<SysOrder>>(\n      sysOrdersProvider,\n      (_, next) => _sweepHandoffNotifs(next),\n    );\n\n    // F-30 — חיווט \"סוג רכב מועדף\" (#86.1) ↔ שער-הרכב: seed חד-פעמי מהפרופיל,\n    // רק כשהשליח טרם נגע בבורר וטרם נבחר רכב (אידיום ticket #24 — מגיב לעדכון\n    // ה-provider כשה-load נוחת, ובחירה ידנית טרייה לעולם לא נדרסת). id\n    // persisted לא-מוכר נדחה בכנות ב-[_preferredHaul] — בלי haulInfo fallback\n    // שממציא העדפה. הבחירה למשמרת נשארת אפמרלית by-design; אין כתיבה חזרה\n    // לפרופיל בלי פעולת-משתמש מפורשת.\n    final preferred = _preferredHaul(session);\n    if (!_vehicleTouched && _vehicle == null && preferred.isNotEmpty) {\n      _vehicle = preferred;\n    }\n\n    // #72 — הזרם אחרי כניסה: קודם בחירת \"הרכב שלי היום\" (אם טרם נבחר במשמרת\n    // הזו) → ואז הבית עם 4 הטאבים.\n    final vehicle = _vehicle;\n    if (vehicle == null) return _vehicleGate(preferred);\n\n    final Widget body = Directionality(\n      textDirection: TextDirection.rtl,\n      child: Scaffold(\n        backgroundColor: Theme.of(context).scaffoldBackgroundColor,\n        appBar: _appBar(),\n        body: _tabBody(session, vehicle),\n        // #31 — each tab wrapped in HelpTarget so help mode highlights it +\n        // pops a bubble out of the tab (consistent with the app-bar). Outside\n        // help mode the BottomNavCell",
-  "s full list, zero regression).\n  List<SysOrder> _scopeOrders(List<SysOrder> orders) {\n    final ids = ref.watch(visibleOrderIdsProvider);\n    if (ids == null) return orders;\n    return orders.where((o) => ids.contains(o.id)).toList();\n  }\n\n  // ── טאב 1 · משלוחים (ברירת המחדל — מונים + כרטיסי משלוח) ──────────────────\n  Widget _deliveriesTab(BoardSession session, String vehicle) {\n    final orders = _scopeOrders(ref.watch(sysOrdersProvider));\n    final haulName = haulInfo(vehicle).name;\n    // F-57 — מנוי יחיד על ה-side-car לכל הטאב (ערכי המפה מחזיקים POD\n    // data-URLs ענקיים; watch כפול בתוך לולאת הכרטיסים בנה מחדש את כל הטאב\n    // על כל מוטציית fulfillment).\n    final fulfillment = ref.watch(fulfillmentProvider);\n    final preferred = _preferredHaul(session);\n    // F-29 — הברכה מכבדת את ה-override מפרופיל-השליח (#86.1): שם מהפרופיל\n    // כשאינו ריק, אחרת displayName של ה-session (בלי המצאות).\n    final profileName = ref.watch(\n      courierProfileProvider.select(\n        (m) => m[session.username]?.displayName ?? ",
-  "s hands (pickup/transit)\n    // — proto §3.5 `courierPOD` lists transit/pickup orders.\n    final canPod =\n        order.stage == OrderStage.pickup || order.stage == OrderStage.transit;\n    final haul = haulInfo(order.haul);\n    final phase = _courierPhase(order.stage);\n    // Two-step hand-off: the store owns ready→pickup (\"מסור לשליח\"); the courier\n    // acts only once the order is handed to it — receive at `pickup`\n    // (\"אספתי מהחנות\" → transit), then deliver (→delivered). `ready` is view-only.\n    final actionLabel = switch (order.stage) {\n      OrderStage.ready => ",
-  "s rewards balance per DELIVERED\n/// shipment (COURIER v2 ב — awardCoins on delivered + bell). A fixed demo\n/// tariff mirroring `kTaskApprovalCoins` (tasks_engine.dart) — the real\n/// per-delivery value comes with the server; NEVER derived from the order sum.\nconst int kCourierDeliveryCoins = 20;\n\n/// SharedPreferences key (versioned `bs.*.v1`) — per-username set of order ids\n/// whose hand-off bell notification (",
-  "s task-approval award (#85ו).\n    ref.read(rewardsProvider.notifier).awardCoins(kCourierDeliveryCoins);\n    final s = ref.read(boardAuthProvider);\n    if (s != null && s.role == BoardRole.courier) {\n      // F-1 (#86.6) — רגע המסירה חותם את זהות השליח על רשומת ה-fulfillment\n      // (side-car בלבד — מנוע ההזמנות המשותף לא נגוע); זו נקודת-האמת לייחוס\n      // per-courier בפרופיל ובדוחות.\n      ref.read(fulfillmentProvider.notifier).stampCourier(o.id, s.username);\n      // 🔔 ",
-  "t double-notify a hand-off\n  /// that was already notified before the reload.\n  bool _handoffSeenLoaded = false;\n\n  @override\n  void initState() {\n    super.initState();\n    _loadHandoffSeen();\n  }\n\n  Future<void> _loadHandoffSeen() async {\n    try {\n      final prefs = await SharedPreferences.getInstance();\n      final raw = prefs.getString(kCourierHandoffSeenKey);\n      if (raw != null && raw.isNotEmpty) {\n        final m = jsonDecode(raw) as Map<String, dynamic>;\n        for (final e in m.entries) {\n          if (e.value is List) {\n            _handoffSeen[e.key] = {\n              for (final id in e.value as List)\n                if (id is String) id,\n            };\n          }\n        }\n      }\n    } on Object catch (_) {\n      // Corrupt/old payload — start empty (worst case: one repeat 🔔).\n    }\n    if (!mounted) return;\n    _handoffSeenLoaded = true;\n    // Catch hand-offs that happened while this board was not mounted (the\n    // store handed off, then the courier logged in).\n    _sweepHandoffNotifs(ref.read(sysOrdersProvider));\n  }\n\n  Future<void> _persistHandoffSeen() async {\n    try {\n      final prefs = await SharedPreferences.getInstance();\n      await prefs.setString(\n        kCourierHandoffSeenKey,\n        jsonEncode({\n          for (final e in _handoffSeen.entries) e.key: [...e.value],\n        }),\n      );\n    } on Object catch (_) {}\n  }\n\n  /// COURIER v2 ג — 🔔 ",
   "אזור אישי",
+  "אין התראות עדיין.\\nמשלוחים חדשים שנמסרים לידיך ומסירות שהשלמת יופיעו כאן.",
   "אין משלוחים שמתאימים ל${haulInfo(vehicle).ic} $haulName. נסה לבחור רכב גדול יותר.",
   "איסוף",
   "אישור מסירה (POD)",
@@ -94,9 +80,7 @@
   "הרכב שלי היום",
   "התנתקות מלאה נמצאת באזור האישי.",
   "התראות",
-  "התראות בתוך האפליקציה",
   "והמסירות שהשלמת. התג האדום מציין כמה לא נקראו.",
-  "יפ רכב, כך ש-load מאוחר של פרופיל-השליח לעולם לא דורס בחירה ידנית\n  /// טרייה. ה-seed מ\"סוג רכב מועדף\" רץ רק כשהדגל כבוי ו-[_vehicle] עוד null.\n  bool _vehicleTouched = false;\n\n  /// 0 משלוחים (ברירת המחדל) · 1 פורטל · 2 דוחות · 3 אזור אישי (#72).\n  int _tab = 0;\n\n  /// COURIER v2 ג — per-username order ids whose ",
   "יציאה",
   "יציאה מהלוח חזרה למסך הקודם — אינה מנתקת אותך מהחשבון; ",
   "כל ההתראות יימחקו — פעולה בלתי הפיכה.",
@@ -120,10 +104,11 @@
   "פעמון ההתראות — נפתח לרשימת המשלוחים שנמסרו לידיך מהחנות ",
   "פרופיל",
   "פרטי המשלוח",
-  "צליל ורטט",
   "קידום המשלוח",
   "שלו, ומשלוחים גדולים מדי יוצגו בנפרד תחת \"דורש רכב אחר\".",
+  "שלום $greetName 🛵",
   "‹ יציאה",
+  "⏳ ממתין למסירה מהחנות",
   "★ מועדף",
   "✅ נמסר ללקוח",
   "✓ אין משלוחים שמתאימים ל$haulName כרגע",
@@ -209,7 +194,7 @@
    "reads": [],
    "writes": [],
    "actions": [],
-   "strings": 17,
+   "strings": 18,
    "constData": 0
   },
   {
@@ -253,7 +238,7 @@
    "actions": [
     "call:showCourierNotifsSheet"
    ],
-   "strings": 2,
+   "strings": 1,
    "constData": 0
   },
   {
@@ -268,7 +253,7 @@
    ],
    "writes": [],
    "actions": [],
-   "strings": 7,
+   "strings": 8,
    "constData": 0
   },
   {

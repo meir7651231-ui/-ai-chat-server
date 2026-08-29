@@ -39,9 +39,6 @@
   "roleRecord": false
  },
  "terms": [
-  ",\n                onTap: () =>\n                    Navigator.of(context).push(RewardsHubScreen.route()),\n              ),\n            // ── S1 חשבון — login (guest / signed out) vs. account actions.\n            //\n            // The test is \"is there a REAL person here\", not \"is there a user\".\n            // The server-catalog bootstrap signs every visitor in anonymously, so\n            // `auth.user == null` stopped being reachable the day the live build\n            // turned the backend on — which silently deleted the ONLY in-app way\n            // to log in, while showing a browsing GUEST the logout and\n            // delete-account rows for an account they do not have.\n            if (hasAuthGateway && !(auth.user?.isRealUser ?? false)) ...[\n              const SizedBox(height: BsTokens.space2),\n              _LinkRow(\n                label: ",
-  ";\n\n/// Primary dark text on the light theme (per the spec — no `inkLight` token).\nconst Color _ink = BsTokens.inkLight;\n\n/// 👤 הפרופיל שלי — the native home for the user",
-  "s ⚙️ → 👤 חשבון group: name + contact + profession,\n/// editable in place and persisted through [userProfileProvider]. Reached by\n/// tapping the user",
   "אורח",
   "אינסטלטור",
   "ביטול",
@@ -70,6 +67,7 @@
   "תחום מקצועי",
   "📋 בקשות תפקיד",
   "🔄 החלפת תפקיד",
+  "🔐 התחברות לחשבון",
   "🗑️ מחיקת חשבון",
   "🚪 התנתקות",
   "🪪 בקשת תפקיד"

@@ -33,8 +33,6 @@
   "roleRecord": false
  },
  "terms": [
-  " state on\n/// every row. Real invoices / monthly reports REQUIRE the billing server —\n/// no fake PDFs, NO invented amounts, no invoice numbers (אין המצאות: not a\n/// single business field is rendered).\n///\n/// SERVER-SWAP: each month row becomes a tappable invoice / monthly-report\n/// download once the billing backend lands; the list/row layout below stays\n/// as-is.\nFuture<void> showStoreDocumentsSheet(BuildContext context) {\n  return showModalBottomSheet<void>(\n    context: context,\n    backgroundColor: Theme.of(context).colorScheme.surface,\n    isScrollControlled: true,\n    shape: const RoundedRectangleBorder(\n      borderRadius:\n          BorderRadius.vertical(top: Radius.circular(BsTokens.radiusCard)),\n    ),\n    // Explicit RTL on every modal sheet (the sheets convention, F-46).\n    builder: (sheetCtx) => const Directionality(\n      textDirection: TextDirection.rtl,\n      child: _DocumentsSheetBody(),\n    ),\n  );\n}\n\n/// Hebrew month names (calendar labels, not business data).\nconst List<String> _kHebMonths = [\n  ",
-  ";\n\n/// 🧾 מסמכים — חשבוניות ודוח חודשי (#87.4, F-24) — SERVER-READY sheet for the\n/// supplier board, in the exact honest pattern of `worker_payslips_sheet.dart`\n/// (which is untouchable + worded for payslips, so it cannot be reused here):\n/// the complete 12-month UI with an honest ",
   "אוגוסט",
   "אוקטובר",
   "אפריל",
@@ -43,6 +41,7 @@
   "יולי",
   "יוני",
   "יחובר עם חיבור השרת",
+  "ינואר",
   "מאי",
   "מרץ",
   "נובמבר",

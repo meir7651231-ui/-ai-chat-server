@@ -36,13 +36,10 @@
  "terms": [
   "$doneCount/${mine.length} ימים",
   "${stage.dayTag} · ${stage.steps.length} שלבים",
-  "s FIRST unfinished day-stage in plan order and \"הבא\" the one after\n/// it, exactly the order the SmartProject screen walks. Marking a day done is\n/// the engine",
-  "s משימות tab: the SmartProject day-plan ([buildDayStages],\n/// the §7 engine) filtered to the LOGGED worker only ([DayStage.worker] ==\n/// the session",
   "אותו סימון שהקבלן רואה במסך \"מאפס עד מסירה\".",
   "אין שלבי-יום מתוכננים עבורך בפרויקט",
   "הבא",
   "היום",
-  "היום שלי",
   "והוראות. כפתור הסימון (כבר עטוף) מסמן את היום כהושלם בתוכנית.",
   "לחיצה על שלב-היום פותחת את פירוט המשימה שלו — שלבים ",
   "מסמן את יום-העבודה הנוכחי כהושלם בתוכנית הפרויקט — ",
@@ -92,7 +89,7 @@
    "actions": [
     "call:showWorkerTaskDetailSheet"
    ],
-   "strings": 8,
+   "strings": 9,
    "constData": 0
   }
  ],

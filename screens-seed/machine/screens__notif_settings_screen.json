@@ -28,18 +28,12 @@
   "roleRecord": false
  },
  "terms": [
-  " + מונה ",
   " / 4ש",
-  " ה",
   "$label — בבנייה",
-  ")\n        // מושתק דרך notifUnreadCountProvider.\n        _SwitchRow(\n          label: ",
-  ") במקום\n        // מתג ששומר ערך בלי שום השפעה.\n        _SwitchRow(\n          label: ",
-  ",\n          value: settings.pushEnabled,\n          onChanged:\n              (v) => ref\n                  .read(notifSettingsProvider.notifier)\n                  .update((s) => s.copyWith(pushEnabled: v)),\n        ),\n        // ערוצים התלויים בשרת — מושבתים ביושר (",
   "15 דקות",
   "4 שעות",
-  ";\n\n/// Full-screen Notification settings — 9 categories, ~40 leaves.\n/// Most leaves are persisted via [notifSettingsProvider];\n/// OS-level quick actions show \"בבנייה\" toast on tap.\nclass NotifSettingsScreen extends ConsumerWidget {\n  const NotifSettingsScreen({super.key});\n\n  static Route<void> route() =>\n      MaterialPageRoute<void>(builder: (_) => const NotifSettingsScreen());\n\n  /// STABLE [KbScreen] tool list — built once so the floating-keyboard mirror\n  /// never re-registers on rebuild. Tree-shaken with the [KbScreen] path off-flag.\n  static final List<KbToolNode> _kbNodes = kbNotifSettingsNodes();\n\n  @override\n  Widget build(BuildContext context, WidgetRef ref) {\n    // KbScreen: while this pushed route is front-most under [kKbGlobal], the\n    // floating ▦ grid mirrors THIS screen",
   "LED (אנדרואיד)",
-  "s persisted toggles have no engine yet — show an\n  // honest \"בבנייה\" subtitle and suppress the active-count badge (Wave 8 / D2).\n  final bool underConstruction;\n\n  // A row is a backend-blocked \"under construction\" placeholder when it is a\n  // _PlaceholderRow, a server-only channel, or an _Inert row flagged\n  // underConstruction. Single source of truth for the count badge AND the\n  // Apple-readiness hide-filter.\n  static bool _isUnderConstruction(Widget w) =>\n      w is _PlaceholderRow ||\n      (w is _SwitchRow && w.requiresServer) ||\n      (w is _Inert && (w as _Inert).underConstruction);\n\n  // Count only functional rows — exclude \"בבנייה\" placeholders and rows\n  // that require a server connection (honestly disabled in this build).\n  int get _activeCount =>\n      children.where((w) => !_isUnderConstruction(w)).length;\n\n  // For Apple review (kHideUnderConstruction) we render only the functional\n  // rows; the placeholder rows stay defined in code (reversible) but are hidden.\n  List<Widget> get _visibleChildren =>\n      kHideUnderConstruction\n          ? children.where((w) => !_isUnderConstruction(w)).toList()\n          : children;\n\n  @override\n  Widget build(BuildContext context) {\n    // A whole section that is itself \"under construction\" — or one whose every\n    // row is a hidden placeholder — disappears entirely for Apple review.\n    if (kHideUnderConstruction &&\n        (underConstruction || _visibleChildren.isEmpty)) {\n      return const SizedBox.shrink();\n    }\n    return Card(\n      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),\n      color: Theme.of(context).colorScheme.surface,\n      elevation: 0,\n      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),\n      child: Theme(\n        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),\n        child: ExpansionTile(\n          tilePadding: const EdgeInsets.symmetric(horizontal: 16),\n          childrenPadding: const EdgeInsets.only(bottom: 8),\n          iconColor: Colors.black54,\n          collapsedIconColor: Colors.black54,\n          leading: Text(emoji, style: const TextStyle(fontSize: 22)),\n          // Count badge replaces the default expand chevron.\n          trailing:\n              (underConstruction || _activeCount == 0)\n                  ? null\n                  : Container(\n                    padding: const EdgeInsets.symmetric(\n                      horizontal: 8,\n                      vertical: 2,\n                    ),\n                    decoration: BoxDecoration(\n                      color: BsTokens.brand,\n                      borderRadius: BorderRadius.circular(11),\n                    ),\n                    child: Text(\n                      ",
+  "אימייל",
   "איפוס הגדרות?",
   "איפוס לברירת מחדל",
   "אישור ביומטרי לפתיחה",
@@ -52,25 +46,22 @@
   "בחר משך זמן",
   "ביטול",
   "דוח בוקר",
-  "דורש חיבור שרת",
   "דורש חיבור שרת — לא זמין בגרסה זו",
   "דחייה מהירה",
   "הגדרות אופסו",
   "הגדרות התראות",
-  "הזמנות",
   "הכל",
   "הסתר לחלוטין",
   "הפעל שעות שקט",
   "הצג תוכן מלא",
   "הצעות ספקים",
   "השתקה בוטלה",
-  "התראות",
+  "התראות בתוך האפליקציה",
   "התראות הושתקו",
   "התראות מושתקות עד $untilLabel",
   "התראות תקציב",
   "חזר למלאי",
   "חסימת שולח",
-  "חריגת תקציב",
   "חשובות בלבד",
   "חשיבות וסינון",
   "יום שלם",
@@ -82,7 +73,6 @@
   "מבצעים",
   "מסתיים בשעה",
   "מצב נהיגה",
-  "משלוחים",
   "מתחיל בשעה",
   "סוגי התראות",
   "סיכום חודשי",
@@ -97,7 +87,6 @@
   "צליל ורטט",
   "צליל מופעל",
   "צלילים שונים לפי סוג",
-  "קריטיות בלבד",
   "רטט",
   "רמת חשיבות",
   "רק שם השולח",
@@ -208,7 +197,7 @@
    ],
    "writes": [],
    "actions": [],
-   "strings": 6,
+   "strings": 3,
    "constData": 0
   },
   {
@@ -223,7 +212,7 @@
    ],
    "writes": [],
    "actions": [],
-   "strings": 11,
+   "strings": 8,
    "constData": 0
   },
   {
@@ -253,7 +242,7 @@
    ],
    "writes": [],
    "actions": [],
-   "strings": 6,
+   "strings": 5,
    "constData": 0
   },
   {
@@ -283,7 +272,7 @@
    ],
    "writes": [],
    "actions": [],
-   "strings": 8,
+   "strings": 6,
    "constData": 0
   },
   {
@@ -339,7 +328,7 @@
    "reads": [],
    "writes": [],
    "actions": [],
-   "strings": 2,
+   "strings": 1,
    "constData": 0
   },
   {
@@ -352,7 +341,7 @@
    "reads": [],
    "writes": [],
    "actions": [],
-   "strings": 3,
+   "strings": 2,
    "constData": 0
   },
   {

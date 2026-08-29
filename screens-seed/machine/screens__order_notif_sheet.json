@@ -16,7 +16,6 @@
   "roleRecord": false
  },
  "terms": [
-  ";\n\n/// 🔔 התראות הזמנות ומשלוחים — the ORDER/shipment notification toggles, surfaced\n/// IN the orders world (store_screen · 📦 הזמנות) per owner decision #52. Reads &\n/// writes the SAME [notifSettingsProvider] the settings screen uses — this is a\n/// RELOCATION of two controls (typeOrders + typeShipments), not a second store\n/// of state; every other notification setting stays in הגדרות › התראות.\nclass OrderNotifSheet extends ConsumerWidget {\n  const OrderNotifSheet({super.key});\n\n  @override\n  Widget build(BuildContext context, WidgetRef ref) {\n    final s = ref.watch(notifSettingsProvider);\n    final n = ref.read(notifSettingsProvider.notifier);\n    return Directionality(\n      textDirection: TextDirection.rtl,\n      child: SafeArea(\n        child: Column(\n          mainAxisSize: MainAxisSize.min,\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: [\n            Padding(\n              padding: const EdgeInsets.fromLTRB(20, 18, 20, 2),\n              child: CfgText(\n                ",
   "אישור · בהכנה · מוכן · שינוי סטטוס",
   "יצא לדרך · בדרך אליך · נמסר",
   "עדכוני הזמנות",

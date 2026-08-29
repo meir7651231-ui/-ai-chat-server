@@ -40,22 +40,16 @@
   "roleRecord": false
  },
  "terms": [
-  " (an upsert would silently overwrite that product). The\n  /// id is the typed מק\"ט VERBATIM (no slug — the sku IS the id); attributes\n  /// land keyed attributeDefId → valueId | free text, non-empty entries only.\n  void _add() {\n    final name = _name.text.trim();\n    final sku = _sku.text.trim();\n    final catId = _categoryId;\n    if (name.isEmpty || sku.isEmpty || catId == null) return;\n    final doc = ref.read(tradesStoreProvider);\n    if (!_cats(doc).any((c) => c.id == catId)) return;\n    if (doc.products.any((p) => p.id == sku)) {\n      setState(() => _skuTaken = true);\n      return;\n    }\n    final attrs = <String, String>{};\n    for (final d in _defs(doc)) {\n      if (d.values.isNotEmpty) {\n        final v = _attrChoice[d.id];\n        if (v != null && d.values.any((x) => x.id == v)) {\n          attrs[d.id] = v;\n        }\n      } else {\n        final t = _attrText[d.id]?.text.trim() ?? ",
-  ";\n\n/// 📦 מוצרים — the trade",
-  ";\n  }\n\n  /// Add from the form. Guards: empty name / empty מק\"ט / no category →\n  /// no-op; a מק\"ט already present in doc.products → no-op + the red\n  /// ",
   "אביזרים",
   "אין עדיין מוצרים",
-  "בדוק",
   "בדוק (dry-run)",
   "הדבק CSV",
   "הוסף מוצר",
   "הורד תבנית",
   "יובאו $_importedCount מוצרים",
-  "יובאו N מוצרים",
   "ייבא",
   "ייבוא מ-CSV",
   "כללי חיבור",
-  "למשל: …",
   "מחק",
   "מק\"ט",
   "מק\"ט כבר קיים",
@@ -63,10 +57,8 @@
   "קטגוריה",
   "שגיאות: ${report.errors.length}",
   "שורה ${e.rowIndex}: ${e.messageHe}",
-  "שורה R: <msg>",
   "שם מוצר",
   "תקינים: ${report.valid.length} · ",
-  "תקינים: N · שגיאות: M",
   "📦 מוצרים"
  ],
  "icons": [

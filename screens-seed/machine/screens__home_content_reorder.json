@@ -32,7 +32,6 @@
   "roleRecord": false
  },
  "terms": [
-  ";\n\n/// 🏠 תוכן-בית — the REORDERABLE home-content surface (settings → \"סידור מסך\n/// הבית\"). It previews the SAME wired smart-home sections the home actually\n/// renders (via [smartHomeSectionFor]) and lets the contractor reorder them\n/// (drag, or up/down), persisted via [homeContentOrderProvider]. Opened as a\n/// screen via [route] from settings.\nclass HomeContentReorder extends ConsumerWidget {\n  const HomeContentReorder({super.key, this.showAppBar = false});\n\n  /// When opened as a standalone screen we want a Scaffold + AppBar; when\n  /// embedded inside the existing home tab we render just the body.\n  final bool showAppBar;\n\n  static Route<void> route() => MaterialPageRoute<void>(\n        builder: (_) => const HomeContentReorder(showAppBar: true),\n      );\n\n  @override\n  Widget build(BuildContext context, WidgetRef ref) {\n    const body = _Body();\n    if (!showAppBar) return body;\n    return Directionality(\n      textDirection: TextDirection.rtl,\n      child: Scaffold(\n        backgroundColor: Theme.of(context).scaffoldBackgroundColor,\n        appBar: AppBar(\n          backgroundColor: Theme.of(context).colorScheme.surface,\n          elevation: 0,\n          automaticallyImplyLeading: false,\n          titleSpacing: BsTokens.space4,\n          title: CfgText(\n            ",
   "איפוס",
   "גרור לסידור מחדש",
   "הזז למטה",

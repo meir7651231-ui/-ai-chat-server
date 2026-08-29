@@ -45,8 +45,6 @@
  "terms": [
   "\"${cert.name}\" תימחק מהארנק לצמיתות.",
   "\"${t.title}\" תימחק מהרישום לצמיתות.",
-  ";\n\n/// 🛡️ תיק בטיחות (cluster #85ח) — two sections:\n///   1. הדרכות שעברתי — a real persisted training log ([workerTrainingsProvider],\n///      bs.worker-trainings.v1): the worker",
-  ";\n// CAM-cluster seam (#85ב): `pickTaskPhoto()` → data-URL String, or an honest\n// null on cancel/failure (no fake placeholder ever).\nimport ",
   "אושר",
   "אין הדרכות רשומות עדיין — הוסף את הראשונה.",
   "אין תעודות בארנק עדיין — הוסף את הראשונה.",
@@ -58,7 +56,6 @@
   "הוסף הדרכה",
   "הוסף תעודה",
   "המסמך גדול מדי — לא נשמר",
-  "הסר",
   "הסר מסמך",
   "הסר צילום",
   "הצג צילום תעודה במסך מלא",
@@ -87,8 +84,6 @@
   "שלח לאישור",
   "שם ההדרכה (למשל: עבודה בגובה)",
   "שם התעודה (למשל: עבודה בגובה)",
-  "שמור הדרכה",
-  "שמור תעודה",
   "תאריך ההדרכה",
   "תאריך: ${_fmtDate(date!)}",
   "➕ הוסף הדרכה",
@@ -150,7 +145,7 @@
     "nav:WorkerSafetyScreen",
     "fx:toast"
    ],
-   "strings": 40,
+   "strings": 37,
    "constData": 0
   },
   {

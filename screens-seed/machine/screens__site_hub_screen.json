@@ -50,10 +50,6 @@
   "${d.workers} עובדים",
   "+ רישום יומן להיום",
   "+ תזמן ביקורת",
-  "s OWN keyboard tools (live-mirror): its 12 tiles, so\n/// the floating keyboard MIRRORS \"ניהול אתר\" instead of the tab fallback. Built\n/// ONCE (stable list identity → KbScreen never re-pushes on rebuild). Actions\n/// reuse the same open-functions the tiles use, via the tool-dispatch context.\nfinal List<KbToolNode> kbSiteHubTools = <KbToolNode>[\n  KbToolNode.leaf(icon: Icons.assignment_outlined, label: ",
-  "s OWN keyboard tree — a 3-level browse into the site\n      // hierarchy (קומה → דירה → חדר), built inline from the const [kSiteTree].\n      // Room leaves are browse endpoints (a location, not an action) → NO-OP.\n      // `kKbGlobal ?` gate keeps flag-off byte-identical (tree not built when off).\n      kbTools: kKbGlobal ? _kbTree() : null,\n      icon: ",
-  "s `prompt(...)` becomes an AlertDialog with a\n// TextField (R: inline input). Returns the entered text, or null on cancel.\n// ─────────────────────────────────────────────────────────────────────────────\n\nFuture<String?> _promptInput(\n  BuildContext context, {\n  required String title,\n  required String initial,\n  required String okLabel,\n}) {\n  final ctrl = TextEditingController(text: initial);\n  return showDialog<String?>(\n    context: context,\n    builder: (ctx) => Directionality(\n      textDirection: TextDirection.rtl,\n      child: AlertDialog(\n        backgroundColor: Theme.of(ctx).colorScheme.surface,\n        title: Text(\n          title,\n          style: const TextStyle(color: BsTokens.inkLight, fontSize: 16),\n        ),\n        content: TextField(\n          controller: ctrl,\n          autofocus: true,\n          style: const TextStyle(color: BsTokens.inkLight),\n          textInputAction: TextInputAction.done,\n          onSubmitted: (v) => Navigator.of(ctx).pop(v),\n          decoration: const InputDecoration(border: OutlineInputBorder()),\n        ),\n        actions: [\n          // composite hide: whole ביטול button gone when hidden\n          // (dialog cancel → critical:false; the dialog stays dismissible).\n          CfgVisible(\n            ",
-  "s site functions (`openSiteHub` +\n// `siteGantt`…`siteArchive`, index.html:19856-20151). The proto renders each\n// tool into a `siteFeatureOverlay`; here every tool is a pushed route with the\n// shared shell, matching the existing courier/store-dashboard style (R: match\n// existing style). All strings + numbers are VERBATIM from the prototype (R6/R8).\n//\n// ENTRY POINTS (opened from the catalog ⋮ menu — `site_tasks` case in home_shell, calls openSiteHub):\n//   openSiteHub(ctx)        — the tile grid landing (proto openSiteHub @19858).\n//   _openGantt              📅  → LIVE showTasksGanttSheet (tasks_gantt_sheet.dart)\n//   _openDefects            🔧  → LIVE showDefectsSheet (defects_sheet.dart)\n//   _openAttend             📍  → LIVE showContractorAttendanceSheet (contractor_attendance_sheet.dart)\n//   _openHr                 👷  → LIVE showContractorHrSheet (contractor_hr_sheet.dart)\n//   openSiteLocations       T2.3 site-loc     🏢  [L19952]\n//   openSiteDiary           T2.5 site-diary   📓  [L20012]\n//   openSiteSafety          T2.6 site-safety  🦺  [L20041]\n//   openSiteDeps            T2.7 site-deps    🔗  [L20066]\n//   openSitePhotos          T2.8 site-photos  📸  [L20087]\n//   openSiteInspect         T2.9 site-inspect 🔍  [L20111]\n//   openSiteArchive         T2.10 site-archive 🗄️ [L20143]\n//\n// The Gantt/ליקויים/נוכחות tiles + the new HR tile are repointed to the LIVE\n// shared sheets (live tasksProvider / defectsProvider / attendanceForEmployer);\n// the old demo _SiteGantt / _SiteSnagging / _SiteAttendance screens were removed.\n// Mutable state (inspections · diary) lives in\n// `state/site_hub_state.dart`, seeded from the B0 consts in `data/phaseb_seeds`.\n\nimport ",
   "אחרי",
   "אין ביקורות מתוזמנות — הקש \"+ תזמן ביקורת\"",
   "אין רישומים ביומן",
@@ -95,6 +91,7 @@
   "מיקומים",
   "ממתין לתלויות",
   "משימה לא יכולה להתחיל לפני שהמשימות התלויות הושלמו.",
+  "משימות",
   "משימות צוות",
   "נוכחות",
   "נוכחות GPS",
@@ -118,7 +115,6 @@
   "תאריך: ${caToday()}",
   "תדריך בטיחות יומי",
   "תדריך בטיחות יומי — חובה לפני תחילת העבודה.",
-  "תדריך הבטיחות אושר",
   "תדריך הבטיחות אושר ✓",
   "תדריך היום",
   "תזכורות ביקורת",
@@ -382,8 +378,8 @@
    "reads": [],
    "writes": [],
    "actions": [],
-   "strings": 5,
-   "constData": 1
+   "strings": 4,
+   "constData": 0
   },
   {
    "name": "_SiteDiary",

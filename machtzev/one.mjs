@@ -82,6 +82,9 @@ stage('קטלוג-מונחים מאוחד', () => {
 });
 import crypto from 'node:crypto';
 
+// ── 4א · מנוע-המדף: הרמת widgets נקיים-מלידה, בלי-סוכן (הכרעה-11) ──
+stage('מנוע-המדף (shelf-lift)', () => run('machtzev/assemble/shelf-lift.mjs', [SCRATCH]).split('\n').find(l => l.includes('הורמו'))?.trim());
+
 // ── 4ב · המנוע-המרכיב: מניפסטים ⇒ מסכים מחוללים ──
 stage('הרכבה-מחוללת (gen-screen)', () => {
   const mDir = path.join(ROOT, 'screens-seed/manifests');

@@ -11,7 +11,6 @@
   "roleRecord": false
  },
  "terms": [
-  " show immutable;\n\n/// דלתת-פריסה של אביזר בודד ברצף ה-turtle: התקדמות-קדימה, התקדמות-על-הפנייה,\n/// זווית-פנייה (רדיאנים · 0 = ישר), וסימון-קצה (פקק סוגר את הרצף).\n@immutable\nclass LayoutDelta {\n  const LayoutDelta({\n    required this.ex,\n    this.ey = 0,\n    this.turn = 0,\n    this.terminal = false,\n  });\n\n  /// התקדמות לאורך ציר-הזרימה הנוכחי (מ״מ).\n  final double ex;\n\n  /// התקדמות על ציר-הפנייה (מ״מ) — לא-אפס רק לברך.\n  final double ey;\n\n  /// זווית-הפנייה (רדיאנים) — 0 לאביזר-ישר, π/2 / π/4 לברך.\n  final double turn;\n\n  /// פקק — סוגר את הרצף (אין המשך-צנרת אחריו).\n  final bool terminal;\n\n  @override\n  bool operator ==(Object other) =>\n      other is LayoutDelta &&\n      other.ex == ex &&\n      other.ey == ey &&\n      other.turn == turn &&\n      other.terminal == terminal;\n\n  @override\n  int get hashCode => Object.hash(ex, ey, turn, terminal);\n}\n\n/// המשפחות שה-turtle יודע לפרוס (מקבילות ל-`elemMeshes`).\nconst Set<String> _kLayoutFamilies = {\n  ",
   "ברז כדורי",
   "ברך 45°",
   "ברך 90°",

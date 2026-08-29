@@ -39,8 +39,6 @@
   "roleRecord": false
  },
  "terms": [
-  "s `_sheetShell` (sheet rule F-46).\n//\n// Wave E3 — the worker also files a STRUCTURED material request to the\n// employing contractor from this sheet (\"🧱 בקש חומרים\"): free-text items\n// (one per line) + an optional note → `materialRequestsProvider.submit(...)`.\n// This is a REQUEST entity (`material_requests_engine.dart`), NOT a stock edit\n// — the worker stays read-only on stock. The worker",
-  "s stock (resolved via `session.employerId`). Builder E1b/E2 call\n/// this verbatim.\nFuture<void> showEmployerStockSheet(BuildContext context) {\n  return showModalBottomSheet<void>(\n    context: context,\n    isScrollControlled: true,\n    backgroundColor: Colors.transparent,\n    builder: (_) => const _EmployerStockSheet(),\n  );\n}\n\nclass _EmployerStockSheet extends ConsumerStatefulWidget {\n  const _EmployerStockSheet();\n\n  @override\n  ConsumerState<_EmployerStockSheet> createState() =>\n      _EmployerStockSheetState();\n}\n\nclass _EmployerStockSheetState extends ConsumerState<_EmployerStockSheet> {\n  /// The \"🧱 בקש חומרים\" input — one item per line + an optional note. Local\n  /// to the sheet (no provider): the worker types, presses send, the engine\n  /// owns the persisted request from there.\n  final TextEditingController _itemsCtrl = TextEditingController();\n  final TextEditingController _noteCtrl = TextEditingController();\n\n  /// Whether the request composer is expanded (collapsed by default so the\n  /// sheet still leads with the read-only stock — the E1 surface).\n  bool _composing = false;\n\n  @override\n  void dispose() {\n    _itemsCtrl.dispose();\n    _noteCtrl.dispose();\n    super.dispose();\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    // The Wave-0 employment link → the employer",
   "בטל",
   "בקש חומרים",
   "הבקשה נשלחה לקבלן",
@@ -51,6 +49,7 @@
   "כתוב לפחות פריט אחד כדי לשלוח בקשה",
   "כתוב פריט אחד בכל שורה. הבקשה נשלחת לקבלן המעסיק — לא משנה את המלאי.",
   "לדוגמה: דחוף, נגמר באתר",
+  "לדוגמה:\\nסרט טפלון\\nברך 1/2 צול\\nאטם גומי",
   "ממתין",
   "נדחה",
   "סגור",
@@ -112,7 +111,7 @@
    "reads": [],
    "writes": [],
    "actions": [],
-   "strings": 7,
+   "strings": 8,
    "constData": 0
   },
   {

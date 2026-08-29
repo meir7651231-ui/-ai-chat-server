@@ -11,16 +11,14 @@
   "roleRecord": false
  },
  "terms": [
-  ");\n\n    case KbTool.menu:\n      // STEP B: תפריט is no longer a single destination — it is a BRANCH in the\n      // morph keyboard ([keyboard_tool_tree.dart]) whose children are the AI hub\n      // + settings (replacing the old `_openAppMenu` sheet). The morph keyboard\n      // never routes KbTool.menu here (it drills the branch instead); this case\n      // only fires from a legacy non-morph mount, where the menu has no single\n      // target, so we surface \"בקרוב\" rather than a guessed/half nav.\n      _comingSoon(context, ",
-  ");\n\n    case KbTool.quickTools:\n      // \"מהירים\" is a BRANCH in the morph tree (3 quick-action children). A\n      // legacy FLAT mount has nowhere to drill, so it surfaces \"בקרוב\" here.\n      _comingSoon(context, ",
-  ");\n\n    case KbTool.voice:\n      // \"קולי\" runs voice-to-text into the field — but that needs the field\n      // controller, which this fire-and-forget helper does not own. The real\n      // mic→insertAtCaret path lives in the FLOATING keyboard (it intercepts the\n      // voice-marked node); a legacy mount has no field, so \"בקרוב\" here.\n      _comingSoon(context, ",
-  ";\n\n/// Runs the real app action for a tapped keyboard tool tile.\n///\n/// [ref] drives the state-provider tools (tab / section / help mode); [context]\n/// drives the Navigator pushes and the \"בקרוב\" SnackBar. The `home` tools that\n/// land inside the catalog tab set the bottom-nav tab to 0 (catalog) AND the\n/// catalog section, mirroring how the catalog",
-  "s own navigation does (catalog_screen.dart:2534 sets tab 0).\nvoid _openCatalogSection(WidgetRef ref, String section) {\n  ref.read(mainTabProvider.notifier).state = 0;\n  ref.read(catalogSectionProvider.notifier).state = section;\n}\n\n/// Shows a transient \"בקרוב\" SnackBar for a not-yet-wired tool [label]. Used in\n/// place of any guessed/broken navigation.\nvoid _comingSoon(BuildContext context, String label) {\n  ScaffoldMessenger.of(context)\n    ..hideCurrentSnackBar()\n    ..showSnackBar(SnackBar(content: Text(",
-  "s own pills (store_screen.dart:38-41,676). The morph\n      // keyboard wires this in the tree; this case keeps a legacy mount correct.\n      ref.read(mainTabProvider.notifier).state = 3;\n      ref.read(storeSectionProvider.notifier).state = StoreSection.orders;\n\n    case KbTool.workRoute:\n      // \"מסלול\" still has no single nav target — the only surface\n      // (smart_home_screen.dart `_WorkPath`) is a display-only hero with no\n      // onTap. Deferred (both here AND in the morph tree) until one exists.\n      _comingSoon(context, ",
-  "t consume the result here yet — opening\n      // the scanner is the step-2 action.\n      Navigator.of(context).push(\n        MaterialPageRoute<String>(builder: (_) => const BarcodeScanner()),\n      );\n\n    // ── STEP D wired-or-deferred (legacy non-morph mount only) ───────────────\n    case KbTool.recentOrders:\n      // \"הזמנות\" → the store",
+  "$label — בקרוב",
   "מאתר",
+  "מהירים",
   "מועדפים",
-  "עץ חכם"
+  "מסלול",
+  "עץ חכם",
+  "קולי",
+  "תפריט"
  ],
  "icons": [],
  "glyphs": [],

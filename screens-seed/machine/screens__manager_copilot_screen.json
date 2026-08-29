@@ -32,7 +32,6 @@
   "roleRecord": false
  },
  "terms": [
-  "s AI analyst).\n//\n// The owner types (or taps a suggestion / \"תדריך-בוקר\") → we fold the LIVE engine\n// state (`managerAnalyticsProvider`/`managerCustomersProvider`/`ordersEngineProvider`)\n// into a GROUNDED snapshot (`buildManagerContext`) and hand it to Claude with a\n// \"reason over truth, never invent\" system prompt. Every number Claude sees is the\n// real business data; it only PHRASES the answer. Gated on a live gateway\n// (`claudeGatewayProvider`) — OFF → an honest \"requires connection\" state.\n//\n// Manager-only intelligence/oversight surface → governance-clean (no HR), additive,\n// zero-regression. Reached from the 📊 cockpit hero-card + the AppBar.\n// ─────────────────────────────────────────────────────────────────────────────\n\nimport ",
   "או שאל:",
   "אני קורא את ההזמנות, הלקוחות והאשראי החיים שלך ועונה מהמספרים האמיתיים.",
   "לא הצלחתי לנסח תשובה — נסה לשאול אחרת.",

@@ -11,8 +11,6 @@
   "roleRecord": false
  },
  "terms": [
-  " show immutable;\n\n/// תקני PP-R — verbatim מהמקור-המאומת `gen3d.html:422` (שלב 34).\nconst List<String> kPprStandards = [\n  ",
-  ",\n];\n\n/// שיטת-החיבור בקצה נתון (שלב 30) — נגזרת מסוג-הקצה.\nString connectionMethodFor(ConnectorEnd end) => switch (end.type) {\n      EndType.hdpeCompression => ",
   "Press / טבעת-כיווץ",
   "ברז כדורי",
   "ברך 45°",
@@ -26,6 +24,7 @@
   "פתח-ניקוז",
   "צווארון",
   "רוכב",
+  "ריתוך-שקע (סוקט-פיוז׳ן) 260°C",
   "תבריג BSP חיצוני (זכר)",
   "תבריג BSP פנימי (נקבה)"
  ],

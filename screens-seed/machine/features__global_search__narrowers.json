@@ -11,10 +11,7 @@
   "roleRecord": false
  },
  "terms": [
-  " — so numeric sizes (\"1/2\") and\n/// Hebrew abbreviations (\"ש״ת\", \"ח.פ.\") stay ONE token instead of shredding.\nfinal RegExp _sep = RegExp(r",
-  "s ENDS only (internal kept, so \"ש״ת\" and\n/// \"ח.פ\" survive): period · asterisk · hash · quote · apostrophe · geresh ·\n/// gershayim. Kills junk chips like \"מס.\" · \"*עם\" · a dangling inch-mark.\nconst String _edge = ",
-  "s own information-gain engine\n// ([cardKeyboardPredictions] → [offerQuestion]); these helpers add the CROSS-\n// DOMAIN half — next-words from the titles of the OTHER domains the query matches.\n//\n// NO-DEAD-END, PROVEN BY CONSTRUCTION: the keyboard appends a tapped word with a\n// space (`\"$query \"` → `\"$query $tok\"`), and the results panel matches an entity\n// title by CONTIGUOUS substring. So a cross-domain suggestion is safe ONLY if it\n// is the word that IMMEDIATELY FOLLOWS the query in a matching title — then\n// `\"$query $tok\"` is itself a substring of that title and the panel keeps ≥1\n// result. [crossDomainNextTokens] offers exactly those successor words (adversarial\n// swarm HIGH finding: a frequency-only picker dead-ended \"אברהם\"→\"משה\" because\n// names read first-last, never reversed). Ranked by how many titles share the\n// continuation (most common next word first).\n//\n// PURE: no widgets, no providers, nothing from lib/screens — directly unit-\n// testable, in the spirit of dive_pool.dart / word_lexicon.dart.\n// ─────────────────────────────────────────────────────────────────────────────\nlibrary;\n\n/// Token separators: whitespace · comma · middle-dot · parentheses · hyphen and\n/// en/em dashes. Deliberately NOT ",
-  "׳״"
+  ".*#\"\\'׳״"
  ],
  "icons": [],
  "glyphs": [],

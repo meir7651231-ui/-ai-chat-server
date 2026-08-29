@@ -18,7 +18,6 @@
   "roleRecord": false
  },
  "terms": [
-  ";\n\n/// מסך \"תאימות\": מוצר-נבחר + רשימת-האביזרים שמתחברים אליו (✓) / לא (✗ + סיבה).\nclass CompatibilityScreen extends StatelessWidget {\n  const CompatibilityScreen({\n    this.product = _demoProduct,\n    this.universe = _demoUniverse,\n    super.key,\n  });\n\n  final LipskeyCatalogProduct product;\n  final List<LipskeyCatalogProduct> universe;\n\n  static const _demoProduct =\n      LipskeyCatalogProduct(sku: ",
   "אביזרי קצה HDPE",
   "ברך 90° 32",
   "מסעף 32",

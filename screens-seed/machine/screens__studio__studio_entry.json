@@ -18,7 +18,6 @@
   "roleRecord": false
  },
  "terms": [
-  ";\n\n/// The owner-only \"🎨 סטודיו\" entry — hidden unless the viewer is the owner-manager.\nclass StudioEntryCard extends ConsumerWidget {\n  const StudioEntryCard({super.key});\n\n  @override\n  Widget build(BuildContext context, WidgetRef ref) {\n    if (!ref.watch(studioOwnerManagerProvider)) return const SizedBox.shrink();\n    return Padding(\n      padding: const EdgeInsets.only(bottom: BsTokens.space4),\n      child: Card(\n        color: BsTokens.cardLight,\n        child: ListTile(\n          leading: const Text(",
   "סטודיו (בטא)",
   "ערוך את האפליקציה — טקסטים · עיצוב · נראות"
  ],

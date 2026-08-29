@@ -1,6 +1,6 @@
 // 🧼 אטום · ZoomHintBadge — תג-רמז קטן: אייקון-זום + תווית על גלולה כהה.
 // מוצא: screens__lipskey_product_sheet.dart:1734-1758 (_ZoomHint).
-// התווית (t_e6b62d41? לא — t_e6ec4e84, cfg: lipskey_product_sheet.zoom) מוזרקת מ-content.
+// התווית (t_e6ec4e84 · cfg: lipskey_product_sheet.zoom) מוזרקת מ-content.
 import 'package:flutter/material.dart';
 
 class ZoomHintBadge extends StatelessWidget {

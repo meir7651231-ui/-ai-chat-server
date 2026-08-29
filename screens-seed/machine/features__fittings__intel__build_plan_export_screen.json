@@ -15,7 +15,7 @@
   "roleRecord": false
  },
  "terms": [
-  ";\n\n/// מסך \"ייצוא-מסמך\": טקסט-תוכנית-הבנייה, ניתן-לבחירה+העתקה.\nclass BuildPlanExportScreen extends StatelessWidget {\n  const BuildPlanExportScreen({required this.plan, super.key});\n\n  final FittingLinePlan plan;\n\n  @override\n  Widget build(BuildContext context) {\n    final doc = exportBuildPlanText(plan);\n    return Scaffold(\n      backgroundColor: kStageBackground,\n      appBar: AppBar(\n        backgroundColor: const Color(0xFF151F2A),\n        foregroundColor: Colors.white,\n        title: const Text(\n          "
+  "ייצוא-מסמך · preview (off-live)"
  ],
  "icons": [],
  "glyphs": [

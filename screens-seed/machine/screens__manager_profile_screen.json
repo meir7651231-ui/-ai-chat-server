@@ -34,14 +34,12 @@
   "roleRecord": false
  },
  "terms": [
-  ";\n\n/// מסך עצמאי (נדחף מאייקון הפרופיל ב-AppBar של מרכז השליטה).\nclass ManagerProfileScreen extends StatelessWidget {\n  const ManagerProfileScreen({super.key});\n\n  static Route<void> route() =>\n      MaterialPageRoute<void>(builder: (_) => const ManagerProfileScreen());\n\n  static final List<KbToolNode> _kbNodes = kbManagerProfileNodes();\n\n  @override\n  Widget build(BuildContext context) {\n    final Widget body = Directionality(\n      textDirection: TextDirection.rtl,\n      child: Scaffold(\n        backgroundColor: Theme.of(context).scaffoldBackgroundColor,\n        appBar: AppBar(\n          backgroundColor: Theme.of(context).colorScheme.surface,\n          elevation: 0,\n          title: CfgText(\n            ",
   "@${session.username} · מנהל המערכת",
   "אזור אישי — מנהל המערכת",
   "בדרך 🚚",
   "הגדרות",
   "הזמנות — סטטיסטיקה",
   "הכנסות היום (פעילות): ${fMoney(revenue)}",
-  "יציאה",
   "מעבר בין מסכים",
   "מצב הדגמה",
   "נמסרו ✅",

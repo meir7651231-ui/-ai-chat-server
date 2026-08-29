@@ -35,7 +35,6 @@
   "roleRecord": false
  },
  "terms": [
-  "s context (captured before the pop) — the\n      // same pattern as _onDetect; toasting on `context` after popping this\n      // screen reaches a defunct element and silently drops (no \"נקלטה\").\n      final rootCtx = Navigator.of(context, rootNavigator: true).context;\n      Navigator.of(context).pop(dataUrl); // deliver the REAL capture\n      showToast(rootCtx, ",
   "אין פלאש במכשיר",
   "אישור",
   "אישור מסירה",
@@ -49,6 +48,7 @@
   "כוון לברקוד",
   "כוון לפריט",
   "כל הגלריה",
+  "כל\\nהגלריה",
   "כלים",
   "להשתמש בתמונה הזו?",
   "לפני/אחרי",
@@ -66,6 +66,7 @@
   "צלם הוכחת מסירה",
   "תצוגה מדומה — תמונת דמו",
   "תצוגה מקדימה: $label",
+  "📸 התמונה נקלטה",
   "📸 תצוגה מקדימה"
  ],
  "icons": [
@@ -139,7 +140,7 @@
    "reads": [],
    "writes": [],
    "actions": [],
-   "strings": 1,
+   "strings": 2,
    "constData": 0
   },
   {

@@ -11,12 +11,8 @@
   "roleRecord": false
  },
  "terms": [
-  ";\n\n/// המשפחות שהניכוי מוגדר-להן חד-משמעית (אביזרי-רַץ סימטריים).\nconst Set<String> _kCutFamilies = {",
-  "];\n  if (f == null || f.isNaN) return null; // OD מחוץ-לטבלה → fallback\n  switch (family) {\n    case ",
-  "]; // = l − F, כבר golden\n    case ",
-  "` (הסתעפות).\ndouble? cutDeductionFor(String family, int od, {String socket = ",
-  "` (רַץ · ברירת-מחדל) או `",
   "ברך 45°",
+  "ברך 90°",
   "מסעף (טי)",
   "מצמד"
  ],

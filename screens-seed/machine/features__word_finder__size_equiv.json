@@ -11,7 +11,7 @@
   "roleRecord": false
  },
  "terms": [
-  "\n    show kBspInchToMm;\n\n/// Every inch body (the part before the `\"`/`׳`) the catalog or the contract\n/// uses, mapped to its [kBspInchToMm] key. Pretty glyphs (½) and the ASCII forms\n/// (1/2, 11/2) both land on the same key.\nconst Map<String, String> _kInchBodyToBspKey = {\n  ",
+  "^0*(\\d+)(?:\\.0+)? ?(?:mm|מ[\"״]מ)$",
   "מטר",
   "מ׳",
   "ס\"מ",

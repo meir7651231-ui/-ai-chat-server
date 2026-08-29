@@ -11,16 +11,14 @@
   "roleRecord": false
  },
  "terms": [
-  "\n    show colorOptions;\n\n/// The real product colours in the catalog. Metal finishes (זהב / כרום / נחושת /\n/// ניקל / נירוסטה …) are deliberately ABSENT — a finish, or the material itself,\n/// is never a colour and belongs on the material axis.\nconst Set<String> kTrueColors = {\n  ",
+  "אדום",
   "אפור",
   "גרפיטי",
   "ירוק",
   "כחול",
-  "כרום",
   "כתום",
   "לבן",
   "מט שחור",
-  "נחושת",
   "פרגמון",
   "שחור",
   "שחור ירוק",

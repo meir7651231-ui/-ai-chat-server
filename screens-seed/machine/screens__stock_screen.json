@@ -28,7 +28,6 @@
   "roleRecord": false
  },
  "terms": [
-  ", style: TextStyle(fontSize: 20)),\n          ),\n        ],\n      ),\n      body: Column(\n        children: [\n          // section title (📦 המלאי שלי)\n          Padding(\n            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),\n            child: Align(\n              alignment: AlignmentDirectional.centerStart,\n              child: CfgText(\n                ",
   "אטם גומי לברז",
   "איטום ההברגות",
   "איטום סניטרי עמיד מים",
@@ -103,7 +102,7 @@
     "nav:StockScreen",
     "fx:toast"
    ],
-   "strings": 8,
+   "strings": 9,
    "constData": 0
   },
   {
@@ -142,7 +141,7 @@
    "reads": [],
    "writes": [],
    "actions": [],
-   "strings": 4,
+   "strings": 5,
    "constData": 0
   }
  ],

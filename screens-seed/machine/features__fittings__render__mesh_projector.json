@@ -10,9 +10,7 @@
   "iconSizes": [],
   "roleRecord": false
  },
- "terms": [
-  "s algorithm) עם הצללת-Lambert דו-צדדית. הליבה-הטהורה\n// של ה-CustomPainter (הצייר עצמו = wrapper דק). מגודר · הכרטיס-החי לא-נגוע.\n//\n// הצללה: `N·L` עם `uLight=[0.5,0.9,0.55]` (gen3d:435) + היפוך-נורמל-לעבר-העין\n// (`if dot(N,V)<0: N=-N`, gen3d:252) — דו-צדדי כמו המקור. PBR-מלא = שיפור מאוחר.\n\nimport "
- ],
+ "terms": [],
  "icons": [],
  "glyphs": [
   "🔌"

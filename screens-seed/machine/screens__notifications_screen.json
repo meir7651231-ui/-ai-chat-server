@@ -34,11 +34,8 @@
   "roleRecord": false
  },
  "terms": [
-  " כבוי → חיווי ההתראות החדשות בתוך\n  // האפליקציה (בדג",
   "$unread חדשות",
-  ");\nfinal notifExpandedGroupsProvider = StateProvider<Set<String>>((_) => {});\n\n// Derived provider — used by home_shell badge.\nfinal notifUnreadCountProvider = Provider<int>((ref) {\n  // ערוץ ",
   "120 נקודות נוספו למועדון",
-  "s per-type toggles in settings.\n/// (orders/shipments/deals/price-drops → orders/shipments/deals/budget).\nSet<NotifSection> notifMutedSections(NotifSettings ns) => <NotifSection>{\n      if (!ns.typeOrders) NotifSection.orders,\n      if (!ns.typeShipments) NotifSection.shipments,\n      if (!ns.typeDeals) NotifSection.deals,\n      if (!ns.typePriceDrops) NotifSection.budget,\n    };\n\n/// Consecutive same-type runs of this length (or more) collapse behind \"הצג עוד\".\nconst int kNotifCollapseRunMin = 3;\nbool shouldCollapseNotifRun(int runLength) => runLength >= kNotifCollapseRunMin;\n\n/// Pure row-visibility predicate (regression-tested in test/gaps_test.dart).\nbool notifPasses({\n  required NotifSection type,\n  required String title,\n  required String preview,\n  required bool dismissed,\n  required NotifSection section,\n  required String query,\n  required Set<NotifSection> muted,\n}) {\n  if (dismissed) return false;\n  if (muted.contains(type)) return false;\n  if (section != NotifSection.all && type != section) return false;\n  if (query.isNotEmpty) {\n    final q = query.toLowerCase();\n    if (!title.toLowerCase().contains(q) && !preview.toLowerCase().contains(q)) {\n      return false;\n    }\n  }\n  return true;\n}\n\n/// Importance filter: \"all\" keeps everything; otherwise only high-priority rows.\nbool passesImportance(NotifImportance filter, bool highPriority) =>\n    filter == NotifImportance.all || highPriority;\n\nList<_Notif> _filtered({\n  required NotifSection section,\n  required Set<String> dismissedIds,\n  required String query,\n  required Set<NotifSection> mutedTypes,\n  required NotifImportance importance,\n}) =>\n    _activeNotifs\n        .where((n) =>\n            passesImportance(importance, n.highPriority) &&\n            notifPasses(\n              type: n.type,\n              title: n.title,\n              preview: n.preview,\n              dismissed: dismissedIds.contains(n.id),\n              section: section,\n              query: query,\n              muted: mutedTypes,\n            ))\n        .toList();\n\n// Inserts date-group headers and collapses consecutive same-type groups of ≥3.\n/// A date header is inserted whenever the group changes from the previous row.\nbool isNewDateGroup(String? current, String next) => next != current;\n\nList<Object> _withHeadersAndCollapse(\n  List<_Notif> notifs,\n  Set<String> expandedKeys,\n) {\n  final result = <Object>[];\n  String? currentDateGroup;\n  var i = 0;\n  while (i < notifs.length) {\n    final n = notifs[i];\n    if (isNewDateGroup(currentDateGroup, n.dateGroup)) {\n      currentDateGroup = n.dateGroup;\n      result.add(currentDateGroup);\n    }\n    final groupKey = ",
   "אושרה ונמצאת בהכנה",
   "אין התראות",
   "אשר איסוף",
@@ -61,7 +58,6 @@
   "התראת בטיחות",
   "התראת תקציב",
   "חבילה ממתינה לאיסוף בחנות",
-  "חדשות",
   "חריגת תקציב",
   "טפל כעת",
   "יגיע עד מחר 14:00",
@@ -86,7 +82,6 @@
   "סמן הכל כנקרא",
   "סמן כנקרא",
   "עדכון מחיר",
-  "עדכונים",
   "עוקב ✓",
   "עכשיו",
   "עקוב",
@@ -257,7 +252,7 @@
    "actions": [
     "call:showNotifActionSheet"
    ],
-   "strings": 7,
+   "strings": 5,
    "constData": 0
   }
  ],

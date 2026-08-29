@@ -31,8 +31,6 @@
   "roleRecord": false
  },
  "terms": [
-  "s last line opens only on\n      // `welcomeSeen`, and that flag is hand-flipped on the REGISTRATION path\n      // (`welcome_screen._finishAfterAuth`) — the login path never set it. So a\n      // fresh visitor (welcomeSeen absent ⇒ false) could verify an SMS code\n      // successfully and still land back on \"רישום ראשוני\". Anyone already\n      // authenticated has, by definition, finished the opening flow.\n      if (auth.user?.isRealUser ?? false) return const HomeShell();\n      // NOT a real person — an anonymous catalog guest, or nobody at all.\n      //\n      // The owner",
-  "s step-1 back still lands on welcome.\n      1 => kProfileRawShell ? const OnboardingScreen() : const ProfessionScreen(),\n      _ => const OnboardingScreen(),\n    };\n    // The whole opening flow lives on ONE route (the steps are provider\n    // state, not pushed routes), so an unguarded system/browser back would\n    // pop the only route and throw the user out of the app mid-registration.\n    // Intercept it: past the first step, back walks one step back\n    // (slides → profession → welcome); only on the welcome step does back\n    // actually leave. Side routes (ComingSoonScreen, the replayable tour)\n    // are their own routes and pop normally, untouched by this guard.\n    return PopScope<Object?>(\n      canPop: step == 0,\n      onPopInvokedWithResult: (didPop, _) {\n        if (didPop) return;\n        ref.read(startupStepProvider.notifier).state = step - 1;\n      },\n      child: child,\n    );\n  }\n}\n\n/// Opens the intro slides as a replayable tour — e.g. from the 💡 button in\n/// the home app-bar. Unlike the first-run flow, finishing just closes the\n/// route (it does NOT touch [welcomeSeenProvider]).\nFuture<void> showIntroTour(BuildContext context) {\n  return Navigator.of(context).push<void>(\n    MaterialPageRoute<void>(\n      fullscreenDialog: true,\n      builder: (_) => const OnboardingScreen(isTour: true),\n    ),\n  );\n}\n\n/// First-run welcome flow: swipeable slides + skip / next / get-started.\n/// In the first-run flow (`isTour: false`) completing/skipping flips\n/// [welcomeSeenProvider] (→ home) and persists it. As a replayable tour\n/// (`isTour: true`) it simply pops the route.\nclass OnboardingScreen extends ConsumerStatefulWidget {\n  const OnboardingScreen({super.key, this.isTour = false});\n\n  /// Replayable tour (pop on finish) vs the first-run flow (flip the gate).\n  final bool isTour;\n\n  @override\n  ConsumerState<OnboardingScreen> createState() => _OnboardingScreenState();\n}\n\nclass _OnboardingScreenState extends ConsumerState<OnboardingScreen> {\n  final PageController _controller = PageController();\n  int _page = 0;\n\n  @override\n  void dispose() {\n    _controller.dispose();\n    super.dispose();\n  }\n\n  void _finish() {\n    // As a replayable tour, finishing just closes the route.\n    if (widget.isTour) {\n      Navigator.of(context).pop();\n      return;\n    }\n    // First-run flow: flip the gate synchronously (instant → home), persist in\n    // the background.\n    ref.read(welcomeSeenProvider.notifier).state = true;\n    unawaited(persistWelcomeSeen());\n    // Rewind the opening step so a later sign-out re-opens the flow at the\n    // welcome/login screen (step 0), not the leftover slides (step 2) — which\n    // would loop \"בואו נתחיל\". Harmless on a fresh first run (already 0).\n    ref.read(startupStepProvider.notifier).state = 0;\n  }\n\n  void _next() {\n    if (_page >= kOnboardingSlides.length - 1) {\n      _finish();\n    } else {\n      _controller.nextPage(\n        duration: const Duration(milliseconds: 280),\n        curve: Curves.easeOut,\n      );\n    }\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final isLast = _page == kOnboardingSlides.length - 1;\n    final showHelp = !widget.isTour;\n    final helpMode = showHelp && ref.watch(helpModeProvider);\n    return Scaffold(\n      backgroundColor: BsTokens.bgLight,\n      body: Column(\n        children: [\n          if (helpMode) const HelpModeBanner(),\n          Expanded(\n            child: SafeArea(\n              child: Column(\n          children: [\n            Padding(\n              padding: const EdgeInsets.all(BsTokens.space3),\n              child: Row(\n                children: [\n                  HelpTarget(\n                    title: ",
   "בואו נתחיל",
   "בנה רשימת-חומרים עם \"תכנון חיבור\", הוסף לסל בכמות הנכונה, ",
   "ברוכים הבאים ל-${AppBrand.name}",
@@ -73,7 +71,7 @@
    "line": 65,
    "loc": 53,
    "pure": false,
-   "dataClean": false,
+   "dataClean": true,
    "reads": [
     "authStateProvider",
     "guestBrowsingProvider",
@@ -81,7 +79,7 @@
    ],
    "writes": [],
    "actions": [],
-   "strings": 1,
+   "strings": 0,
    "constData": 0
   },
   {

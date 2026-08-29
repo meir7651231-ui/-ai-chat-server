@@ -11,8 +11,7 @@
   "roleRecord": false
  },
  "terms": [
-  "\n    show quickLabel;\n\n// ── Reversible display-format defaults (OWNER-REVIEW) ───────────────────────\n//\n// These three constants are the ONLY display-format choices in this file. They\n// are reversible defaults the owner may reword/reorder without touching the\n// distinction LOGIC.\n\n/// OWNER-REVIEW: the separator between the base word and a distinguishing\n/// suffix (e.g. `ברז שחור`). A single space reads as plain language; change it\n/// to ",
-  "ברז"
+  "[\\s()\"׳/×,.+\\-]+"
  ],
  "icons": [],
  "glyphs": [],

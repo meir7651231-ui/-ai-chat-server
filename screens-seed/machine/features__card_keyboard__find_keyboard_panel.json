@@ -41,14 +41,12 @@
    "kind": "ConsumerStatefulWidget",
    "line": 32,
    "loc": 21,
-   "pure": false,
-   "dataClean": false,
+   "pure": true,
+   "dataClean": true,
    "reads": [],
    "writes": [],
-   "actions": [
-    "call:showModalBottomSheet"
-   ],
-   "strings": 1,
+   "actions": [],
+   "strings": 0,
    "constData": 0
   }
  ],
@@ -58,8 +56,6 @@
  "board": {
   "reads": [],
   "writes": [],
-  "navsAndCalls": [
-   "call:showModalBottomSheet"
-  ]
+  "navsAndCalls": []
  }
 }

@@ -32,8 +32,6 @@
   "roleRecord": false
  },
  "terms": [
-  "s ONLY job is to PHRASE that\n// pre-computed verdict in a friendly Hebrew sentence, grounded on the verified\n// fields passed in the prompt — it never decides and never invents a number.\n//\n// Gated by `claudeGatewayProvider` (null unless `useFirebaseBackend && kClaudeAi`):\n// OFF → the deterministic verdict still shows, with an honest \"הסבר-AI דורש חיבור\"\n// note instead of the phrased explanation. So the demo/test build is unchanged.\n// ─────────────────────────────────────────────────────────────────────────────\n\nimport ",
-  "s spec was bridged from a company import (kCompanySpecSkus)\n/// rather than hand-verified — the wording must then say so, not claim \"מאומת\".\nbool _isCompanySpec(String sku) => kCompanySpecSkus.contains(sku);\n\n/// The verified temperature verdict for [product] at [tempC] — pure, the single\n/// source of truth (`VerifiedSpec.suitableForTemp`). `ok` is null when the product\n/// has no verified spec (we then can",
   "אין מפרט מאומת למוצר זה — לא ניתן לקבוע.",
   "אל תמציא נתונים ואל תסתור את התשובה הדטרמיניסטית.",
   "אתה עוזר-מפרט לאינסטלטור. ענה במשפט אחד קצר בעברית בלבד, מבוסס אך ורק על ",

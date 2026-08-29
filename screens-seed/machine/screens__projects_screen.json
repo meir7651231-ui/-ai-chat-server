@@ -40,8 +40,6 @@
   "roleRecord": false
  },
  "terms": [
-  ";\n\n/// Open the פרויקטים screen — the wire target for `openProjects`.\nvoid openProjects(BuildContext context) =>\n    Navigator.of(context).push(ProjectsScreen.route());\n\nclass ProjectsScreen extends ConsumerWidget {\n  const ProjectsScreen({super.key});\n\n  static Route<void> route() =>\n      MaterialPageRoute<void>(builder: (_) => const ProjectsScreen());\n\n  static final List<KbToolNode> _kbNodes = kbProjectsNodes();\n\n  @override\n  Widget build(BuildContext context, WidgetRef ref) {\n    final state = ref.watch(projectsProvider);\n    final Widget body = Directionality(\n      textDirection: TextDirection.rtl,\n      child: Scaffold(\n        backgroundColor: Theme.of(context).scaffoldBackgroundColor,\n        appBar: AppBar(\n          backgroundColor: Theme.of(context).colorScheme.surface,\n          elevation: 0,\n          automaticallyImplyLeading: false,\n          titleSpacing: BsTokens.space4,\n          title: const CfgText(",
-  "s site list:\n// each site card shows name/addr/foreman + a cart/tree count, switches the\n// active project (switchProject), opens a full status snapshot, and edits the\n// site inline (saveSiteEdit). A \"+ פרויקט חדש\" sheet adds sites (saveProject).\n// All state is the live `projectsProvider` (active id + per-project cart\n// snapshot, see state/projects_engine.dart) — the orders-engine pattern.\n// Strings/numbers verbatim from the prototype (R6/R8).\n//\n// Entry: openProjects (the leaf action) → ProjectsScreen.route().\n//\n// CART-PER-PROJECT: switching stashes the outgoing project",
   "אין פרויקטים עדיין",
   "בטל שינויים",
   "הוסף פרויקט",

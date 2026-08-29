@@ -29,9 +29,7 @@
  },
  "terms": [
   " · הקש לעריכה",
-  ") + buf.toString();\n}\n\nconst _ink = BsTokens.inkLight;\nconst _muted = Color(0xFF888888);\nconst _ok = Color(0xFF2E9E5B);\nconst _danger = Color(0xFFE03131);\n\n// ─── screen: budget box → detail (openBudgetDetail :7189) ──────────────────────\n\n/// Build entry `openBudget` — the project/site budget box + tappable detail.\nclass BudgetScreen extends ConsumerWidget {\n  const BudgetScreen({super.key});\n\n  static Route<void> route() =>\n      MaterialPageRoute<void>(builder: (_) => const BudgetScreen());\n\n  @override\n  Widget build(BuildContext context, WidgetRef ref) {\n    final b = ref.watch(budgetProvider);\n    final over = b.left < 0;\n    final catTotal =\n        b.categories.fold<int>(0, (s, c) => s + c.amount).clamp(1, 1 << 30);\n    // T6.3 — the \"הוצאות לפי אתר\" rows iterate the project list through the\n    // server-ready site repository instead of the `kProjects` const directly.\n    // The local impl returns kProjects verbatim, so the rows + their weighted\n    // amounts are byte-identical; a future field-ops backend swaps in behind it.\n    final projects = ref.watch(siteRepositoryProvider).projects();\n\n    // #twin — \"הוצאות לפי אתר\": on the CONNECTED backend, sum the REAL orders by\n    // their site (orders stamp `site = active project name` at checkout, so they\n    // match the project rows). Demo/tests keep the illustrative weighting below\n    // (byte-identical — no real backend to fold), fulfilling the on-screen\n    // disclaimer",
   "* הנתונים להמחשה — בגרסה המלאה יתבססו על ההזמנות וההוצאות בפועל של הלקוח.",
-  ", 0)]);\n    _persist();\n    return state.categories.length - 1;\n  }\n\n  // deleteCategory(:7273) — keep at least one.\n  void deleteCategory(int i) {\n    if (state.categories.length <= 1) return;\n    final next = [...state.categories]..removeAt(i);\n    state = state.copyWith(categories: next);\n    _persist();\n  }\n}\n\nfinal budgetProvider =\n    StateNotifierProvider<BudgetNotifier, BudgetState>((ref) {\n  // Seeds from + persists through the finance repo (T6.2 seam): local → the const\n  // demo budget (byte-identical, ephemeral as always); connected → the HONEST\n  // persisted budget — empty until the user sets one (no fabricated demo money),\n  // round-tripped via `setBudget` and re-seeded when the snapshot lands. The\n  // screen renders an empty budget gracefully (the `b.categories.isEmpty` branch).\n  return BudgetNotifier(financeRepo());\n});\n\n// ─── helpers ──────────────────────────────────────────────────────────────────\n\n/// #twin — Σ orders by `site` (the connected per-site spend). Pure → testable.\nMap<String, int> budgetSpendBySite(List<Order> orders) {\n  final m = <String, int>{};\n  for (final o in orders) {\n    m[o.site] = (m[o.site] ?? 0) + o.sum;\n  }\n  return m;\n}\n\n/// #twin — the demo/illustrative per-site weight (decreasing by index): the\n/// verbatim shipped formula `spent*(count-index)/(count*(count+1)/2)`. Pure.\nnum illustrativeSiteSpend(num spent, int count, int index) =>\n    count <= 0 ? 0 : spent * (count - index) / (count * (count + 1) / 2);\n\n/// #twin — orders whose site matched NO project (the \"אחר / ללא פרויקט\" residual):\n/// Σ all orders − Σ orders that landed on a known project name. Pure → testable;\n/// the row only renders when this is `> 0`.\nint budgetResidualSpend(Map<String, int> spendBySite, Iterable<String> projectNames) =>\n    spendBySite.values.fold<int>(0, (s, v) => s + v) -\n    projectNames.fold<int>(0, (s, n) => s + (spendBySite[n] ?? 0));\n\nString _fmt(num n) {\n  final r = n.round();\n  // Sign before the ₪ symbol so a negative reads \"-₪3,150\", not \"₪-3,150\".\n  return ",
   "אחר / ללא פרויקט",
   "אין אתרים פעילים — הוסיפו פרויקט במסך הפרויקטים",
   "אין קטגוריות עדיין — הקש \"＋ הוסף\" כדי להוסיף קטגוריה",
@@ -49,7 +47,6 @@
   "יש להזין סכום",
   "יש להזין סכום תקין",
   "יש להזין שם קטגוריה",
-  "ללא פרויקט",
   "מבוסס על ההזמנות בפועל לפי אתר.",
   "מהתקציב נוצל",
   "מחיקת קטגוריה?",
@@ -138,13 +135,11 @@
     "budgetProvider"
    ],
    "actions": [
-    "call:openBudgetEditor",
-    "call:openCategoryEditor",
     "call:showModalBottomSheet",
     "nav:BudgetScreen",
     "fx:toast"
    ],
-   "strings": 41,
+   "strings": 40,
    "constData": 0
   },
   {
@@ -231,8 +226,6 @@
    "budgetProvider"
   ],
   "navsAndCalls": [
-   "call:openBudgetEditor",
-   "call:openCategoryEditor",
    "call:showModalBottomSheet",
    "fx:toast",
    "nav:BudgetScreen"

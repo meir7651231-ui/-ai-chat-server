@@ -30,10 +30,8 @@
   "180 יום",
   "30 יום",
   "90 יום",
-  ";\n\n/// Full-screen Chat settings — 9 categories, ~40 leaves.\n/// Active leaves persisted via [chatSettingsProvider];\n/// the rest show \"בבנייה\" toast on tap.\nclass ChatSettingsScreen extends ConsumerWidget {\n  const ChatSettingsScreen({super.key});\n\n  static Route<void> route() =>\n      MaterialPageRoute<void>(builder: (_) => const ChatSettingsScreen());\n\n  @override\n  Widget build(BuildContext context, WidgetRef ref) {\n    return Scaffold(\n      backgroundColor: Theme.of(context).scaffoldBackgroundColor,\n      appBar: AppBar(\n        backgroundColor: Theme.of(context).colorScheme.surface,\n        elevation: 0,\n        title: CfgText(\n          ",
   "WiFi + סלולרי",
   "WiFi בלבד",
-  "s persisted toggles have no engine yet — show an\n  // honest \"בבנייה\" subtitle and suppress the active-count badge (Wave 8 / D2).\n  final bool underConstruction;\n\n  // A row is a backend-blocked \"under construction\" placeholder when it is a\n  // _PlaceholderRow or an _Inert row flagged underConstruction. Single source of\n  // truth for both the active-count badge and the Apple-readiness hide-filter.\n  static bool _isUnderConstruction(Widget w) =>\n      w is _PlaceholderRow ||\n      (w is _Inert && (w as _Inert).underConstruction);\n\n  // Count only functional rows — exclude \"בבנייה\" placeholders.\n  int get _activeCount => children.where((w) => !_isUnderConstruction(w)).length;\n\n  // For Apple review (kHideUnderConstruction) we render only the functional\n  // rows; the placeholder rows stay defined in code (reversible) but are hidden.\n  List<Widget> get _visibleChildren => kHideUnderConstruction\n      ? children.where((w) => !_isUnderConstruction(w)).toList()\n      : children;\n\n  @override\n  Widget build(BuildContext context) {\n    // A whole section that is itself \"under construction\" — or one whose every\n    // row is a hidden placeholder — disappears entirely for Apple review.\n    if (kHideUnderConstruction &&\n        (underConstruction || _visibleChildren.isEmpty)) {\n      return const SizedBox.shrink();\n    }\n    return Card(\n      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),\n      color: Theme.of(context).colorScheme.surface,\n      elevation: 0,\n      shape: RoundedRectangleBorder(\n        borderRadius: BorderRadius.circular(12),\n      ),\n      child: Theme(\n        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),\n        child: ExpansionTile(\n          tilePadding: const EdgeInsets.symmetric(horizontal: 16),\n          childrenPadding: const EdgeInsets.only(bottom: 8),\n          iconColor: Colors.black54,\n          collapsedIconColor: Colors.black54,\n          leading: Text(emoji, style: const TextStyle(fontSize: 22)),\n          // Count badge replaces the default expand chevron.\n          trailing:\n              (underConstruction || _activeCount == 0)\n                  ? null\n                  : Container(\n                    padding: const EdgeInsets.symmetric(\n                      horizontal: 8,\n                      vertical: 2,\n                    ),\n                    decoration: BoxDecoration(\n                      color: BsTokens.brand,\n                      borderRadius: BorderRadius.circular(11),\n                    ),\n                    child: Text(\n                      ",
   "אאשר בקרוב ✅",
   "איכות תמונות נשלחות",
   "איפוס הגדרות?",
@@ -329,7 +327,7 @@
    "reads": [],
    "writes": [],
    "actions": [],
-   "strings": 2,
+   "strings": 1,
    "constData": 0
   },
   {
