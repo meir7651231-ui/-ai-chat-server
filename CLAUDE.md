@@ -24,8 +24,9 @@ node machtzev/police.mjs          # לסוף-גל: + selftest + mutation (דקו
 (pins.sha256; עדכון-שוטר = `node machtzev/pins-check.mjs --write` באותו commit).
 פסק-דין רק על עץ נח (L14). קופסה גמורה רק עם: חוטים+חוזים+בדיקות+מגן-הכרעה+רתמת-זהב.
 
-## 🏭 המפעל (המכונות — הכול ב-maor-system/machtzev, ענף הסשן)
+## 🏭 המפעל (המכונות)
 ```bash
+node machtzev/one.mjs             # ⚡ המנוע-האחד: רענון-מקור→פירוק-מסכים→דדופ→מונחים→הרכבה→טוהר→משטרה→ONE-STATUS.md (‏--full למשטרה-מלאה)
 node machtzev/run.mjs             # (במאור) מפקד+מחלצים+זיקוק+משטרה — פר-גל
 node machtzev/run.mjs --fast      # משטרה בלבד
 node machtzev/factory/gen-wires.mjs <genesis> maor    # חציבת-טיוטות (TS→JS)

@@ -2,7 +2,7 @@
 > **מחולל אוטומטית מה-imports — אל תערוך ידנית** (`node machtzev/gen-wiring-doc.mjs`).
 > כל קופסה: אילו חוטים היא מחווטת + ההכרעה-החתומה שלה (מהחוזה) + הזהב שלה.
 
-**מלאי:** 681 אטומים · 62 קופסאות · מחווטים: 603/681 (89%)
+**מלאי:** 712 אטומים · 63 קופסאות · מחווטים: 630/712 (88%)
 
 ## #a11y
 הקופסה של סולם-הגופן ומתגי-הנגישות (P2 פער 31) — זום 0.8–1.6 בצעדי 0.1
@@ -88,6 +88,11 @@
 שכבת-פיצול-תרומות (מסלול-B) — פירוק `Supporter.donations[]` למסמכי-ענן
 - **חוטים (6):** shared-purpose-key · purpose-key-of · don-allowed-keys · explode-supporter · reassemble-donations · donation-partition-diff
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #empowerment
+
+- **חוטים (39):** cockpit-days-since · cockpit-at-risk · cockpit-thanks · cockpit-calls · cockpit-hok-tasks · cockpit-feed · cockpit-kpis · cockpit-queue · cockpit-collected-this-month · cockpit-progress · cockpit-csv-rows · cockpit-work-list-text · intel-day-diff · intel-donor-scan · intel-rfm-from-scan · intel-churn-from-scan · intel-forecast-from-scan · intel-trend-from-scan · intel-donor-intel · segments-match-segment · segments-segment-counts · portfolio-active-by-month · portfolio-portfolio-intel · portfolio-tier-trend-counts · constellation-donor-constellation · commands-build-commands · commands-filter-commands · sup-count · sup-last · sup-ils · sup-usd · sup-tier · hok-due · hok-monthly-total · hok-effectively-active · hok-recorded-this-month · hok-cat · org-cal-entries · sup-don-events
+- 🛡 מגן-הכרעה: — · 🏆 רתמת-זהב: ⏳
 
 ## #export-gate
 נקודת-החנק היחידה לפני כל הורדה/הדפסה/העתקה (בקשת-בעלים 13.8
@@ -314,5 +319,5 @@
 - **חוטים (7):** task-identity · open-tasks-for · done-today-for · task-overdue · task-stats-for · overdue-contact-task-drafts · pri-labels
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
-## אטומים-במלאי (טרם-חווטו): 78
+## אטומים-במלאי (טרם-חווטו): 82
 _ההתקדמות האמיתית = אחוז-המחווט (L10)._
