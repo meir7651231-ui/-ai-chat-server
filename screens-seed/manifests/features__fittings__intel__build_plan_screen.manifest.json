@@ -1,0 +1,22 @@
+{
+ "generated": true,
+ "src": "features__fittings__intel__build_plan_screen",
+ "screen": "fittings_intel_build_plan_screen",
+ "content": [
+  "auto/features__fittings__intel__build_plan_screen_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "cut_tile",
+   "atom": "CutTile",
+   "props": {
+    "label": "$: cut_tile_label",
+    "label2": "$: cut_tile_label2",
+    "cutLength": "?:double",
+    "fromFamily": "?:String",
+    "od": "?:int",
+    "toFamily": "?:String"
+   }
+  }
+ ]
+}

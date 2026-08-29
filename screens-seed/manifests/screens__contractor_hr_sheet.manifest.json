@@ -14,7 +14,10 @@
     "label": "$: vacation_row_label",
     "label2": "$: vacation_row_label2",
     "status": "?:String",
+    "workerName": "?:String",
+    "range": "?:String",
     "reason": "?:String",
+    "id": "?:String",
     "label3": "$: vacation_row_label3",
     "label4": "$: vacation_row_label4",
     "onApprove": "~:"

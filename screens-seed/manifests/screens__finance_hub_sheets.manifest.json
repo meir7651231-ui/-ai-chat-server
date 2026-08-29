@@ -70,7 +70,9 @@
     "label": "$: sub_row_label",
     "label2": "$: sub_row_label2",
     "allocated": "?:int",
-    "spent": "?:int"
+    "spent": "?:int",
+    "ic": "?:String",
+    "name": "?:String"
    }
   },
   {
@@ -112,7 +114,10 @@
     "label": "$: penalty_card_label",
     "label2": "$: penalty_card_label2",
     "id": "?:String",
-    "amount": "?:int"
+    "amount": "?:int",
+    "days": "?:int",
+    "perDay": "?:int",
+    "createdAt": "?:String"
    }
   },
   {

@@ -30,7 +30,10 @@
     "label": "?:String",
     "label2": "?:String",
     "status": "?:String",
+    "workerName": "?:String",
+    "range": "?:String",
     "reason": "?:String",
+    "id": "?:String",
     "label3": "?:String",
     "label4": "?:String",
     "onApprove": "@:onApprove"

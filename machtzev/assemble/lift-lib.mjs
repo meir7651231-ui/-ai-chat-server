@@ -96,6 +96,38 @@ export const FOUNDATION_FN = new Map([
 ]);
 
 export const ANY_LIT_RE = /'(?:[^'\\\n]|\\.)*'/g;
+export const maskLitsKeepInterp = (src) => {
+  // כמו maskLits אך פנים-\${...} נשאר גלוי (קוד-אמיתי לסריקה סמנטית)
+  const out = src.split('');
+  let mode = 0, raw = false;
+  const X = (j) => { if (out[j] !== '\n') out[j] = 'x'; };
+  dartScan(src, 0, () => {});
+  let m2 = 0, r2 = false;
+  for (let j = 0; j < src.length; j++) {
+    const c = src[j];
+    if (m2) {
+      if (!r2 && c === '\\') { X(j); j++; if (j < src.length) X(j); continue; }
+      if (!r2 && c === '$' && src[j + 1] === '{') {
+        let d = 0, im = 0, ir = false;
+        for (; j < src.length; j++) {
+          const cc = src[j];
+          if (im) { if (!ir && cc === '\\') { X(j); j++; X(j); continue; } if ((im === 1 && cc === "'") || (im === 2 && cc === '"')) { im = 0; } else X(j); continue; }
+          if (cc === "'" || cc === '"') { im = cc === "'" ? 1 : 2; ir = src[j - 1] === 'r'; continue; }
+          if (cc === '{') d++;
+          else if (cc === '}') { d--; if (!d) break; }
+        }
+        continue;
+      }
+      if ((m2 === 1 && c === "'") || (m2 === 2 && c === '"')) { m2 = 0; continue; }
+      X(j); continue;
+    }
+    if (c === '/' && src[j + 1] === '/') { while (j < src.length && src[j] !== '\n') { X(j); j++; } continue; }
+    if (c === '/' && src[j + 1] === '*') { while (j < src.length - 1 && !(src[j] === '*' && src[j + 1] === '/')) { X(j); j++; } X(j); if (j + 1 < src.length) X(j + 1); j++; continue; }
+    if (c === "'" || c === '"') { m2 = c === "'" ? 1 : 2; r2 = src[j - 1] === 'r' && !/[\w$]/.test(src[j - 2] || ''); continue; }
+  }
+  return out.join('');
+};
+
 export const maskLits = (src) => {
   const out = src.split('');
   let mode = 0, raw = false;

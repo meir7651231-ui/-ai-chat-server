@@ -23,28 +23,6 @@
    }
   },
   {
-   "id": "stage_row",
-   "atom": "StageRow",
-   "props": {
-    "title": "$: sheetChrome.title",
-    "body": "?:String",
-    "label": "?:String",
-    "title2": "?:String",
-    "body2": "?:String",
-    "label2": "?:String",
-    "message": "?:String",
-    "name": "?:String",
-    "onTap": "~:",
-    "tag": "?:String",
-    "emphasized": "?:bool",
-    "onMarkDone": "@:onMarkDone"
-   },
-   "repeat": {
-    "as": "e",
-    "item": "StageRowItem"
-   }
-  },
-  {
    "id": "qty_stepper",
    "atom": "QtyStepper",
    "props": {

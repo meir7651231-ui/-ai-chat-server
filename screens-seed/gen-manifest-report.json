@@ -18,6 +18,10 @@
    "flat": true
   },
   {
+   "screen": "features__fittings__intel__build_plan_screen",
+   "holes": 4
+  },
+  {
    "screen": "screens__ai_hub_screen",
    "holes": 3
   },
@@ -51,7 +55,7 @@
   },
   {
    "screen": "screens__contractor_hr_sheet",
-   "holes": 5,
+   "holes": 8,
    "flat": true
   },
   {
@@ -76,7 +80,7 @@
   },
   {
    "screen": "screens__courier_forms_screen",
-   "holes": 11,
+   "holes": 14,
    "flat": true
   },
   {
@@ -103,7 +107,7 @@
   },
   {
    "screen": "screens__finance_hub_sheets",
-   "holes": 27,
+   "holes": 32,
    "flat": true
   },
   {
@@ -132,7 +136,7 @@
   },
   {
    "screen": "screens__lipskey_product_sheet",
-   "holes": 13,
+   "holes": 4,
    "flat": true
   },
   {
@@ -181,7 +185,7 @@
   },
   {
    "screen": "screens__projects_screen",
-   "holes": 3
+   "holes": 1
   },
   {
    "screen": "screens__regression_panel_screen",
@@ -318,7 +322,7 @@
   },
   {
    "screen": "screens__worker_forms_screen",
-   "holes": 10,
+   "holes": 13,
    "flat": true
   },
   {
@@ -351,10 +355,6 @@
    "screen": "screens__worker_task_detail_sheet",
    "holes": 2,
    "flat": true
-  },
-  {
-   "screen": "screens__worker_today_strip",
-   "holes": 3
   }
  ],
  "none": [
@@ -363,7 +363,6 @@
   "features__card_keyboard__opening_surface",
   "features__catalog_config__config_card",
   "features__fittings__intel__build_plan_export_screen",
-  "features__fittings__intel__build_plan_screen",
   "features__fittings__intel__compatibility_screen",
   "features__fittings__intel__exploded_view_screen",
   "features__fittings__intel__line_bom_screen",
@@ -435,7 +434,8 @@
   "screens__webcam_capture_sheet",
   "screens__welcome_screen",
   "screens__worker_payslips_sheet",
-  "screens__worker_task_board_screen"
+  "screens__worker_task_board_screen",
+  "screens__worker_today_strip"
  ],
  "notScreen": [
   "features__card_keyboard__card_engine",
@@ -537,17 +537,17 @@
   "screens__org_config_diag"
  ],
  "holesByType": {
-  "int": 20,
+  "int": 21,
+  "double": 3,
   "String": 60,
   "Widget": 7,
   "TextEditingController": 5,
-  "bool": 35,
+  "bool": 33,
   "IconData": 8,
   "List<String>": 3,
   "String?": 9,
   "int?": 2,
   "List<String>?": 1,
-  "List<Widget>": 9,
-  "double": 2
+  "List<Widget>": 9
  }
 }

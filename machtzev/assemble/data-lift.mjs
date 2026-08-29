@@ -9,7 +9,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync, execSync } from 'node:child_process';
-import { inferImports, classBody, stripComments, maskComments, HEB_STR, IO_PAT, RIVERPOD, blind, snake, screenPascal, okType, FOUNDATION, FOUNDATION_FN } from './lift-lib.mjs';
+import { inferImports, classBody, stripComments, maskComments, HEB_STR, IO_PAT, RIVERPOD, blind, snake, screenPascal, okType, FOUNDATION, FOUNDATION_FN, maskLitsKeepInterp } from './lift-lib.mjs';
 const ROOT = new URL('../../', import.meta.url).pathname;
 const SCRATCH = process.argv[2] || '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens';
 const SHELF = path.join(ROOT, 'new/dart-ui-bs');
@@ -444,7 +444,7 @@ function flattenModels(body, modelCand, existingProps) {
     if (!mf) return { fail: 'model-unknown' };
     // כל שימושי v: this.v (בנאי) · v.member בלבד; member = שדה/גטר פרימיטיבי
     const usedMembers = new Set();
-    const scan = maskLits(maskComments(out));
+    const scan = maskLitsKeepInterp(out);
     for (const um of [...scan.matchAll(new RegExp('\\b' + v + '\\b', 'g'))]) {
       const before = scan.slice(Math.max(0, um.index - 8), um.index);
       const after = scan.slice(um.index + v.length);
@@ -683,7 +683,7 @@ for (const mf of fs.readdirSync(MACHINE).filter(f => f.endsWith('.json')).sort()
       const allP = new Set(bundle.flatMap(b => b.allProps));
       for (const b of bundle) {
         if (b.helper) continue;
-        const sc = maskLits(maskComments(b.out));
+        const sc = maskLitsKeepInterp(b.out);
         for (const pn of allP) {
           if (b.allProps.includes(pn)) continue;
           if (!new RegExp('\\b' + pn + '\\b(?!\\s*:)').test(sc)) continue;   // תווית-ארגומנט אינה-שימוש
@@ -847,6 +847,8 @@ for (const L of [...liftedHashes.values()].sort((a, b) => a.pub.localeCompare(b.
   if (fs.existsSync(file)) { skip('file-collision', L.id); continue; }
   let joined = L.joined.replaceAll(L.name, L.pub);
   for (const pn of L.privatized || []) if (!joined.includes('_' + pn)) joined = joined.replaceAll(pn, '_' + pn);
+  // מחלקה עם חבר-מופשט (getter/מתודה בלי-גוף) חייבת abstract
+  joined = joined.replace(/(^|\n)(class\s+\w+\s*\{[^}]*?\b\w[\w<>,? ]*\s+get\s+\w+\s*;)/g, (mm, a, b2) => a + 'abstract ' + b2);
   const extras = inferImports(stripComments(joined));
   for (const [cn2, imp] of constImportCache) if (imp && new RegExp("(?<![.\\w'])" + cn2 + '\\b').test(stripComments(joined)) && !extras.includes(imp)) extras.push(imp);
   for (const [cls, imp] of FOUNDATION) if (new RegExp('\\b' + cls + '\\b').test(stripComments(joined))) extras.unshift(imp);
