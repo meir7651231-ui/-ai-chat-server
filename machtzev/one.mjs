@@ -82,6 +82,15 @@ stage('קטלוג-מונחים מאוחד', () => {
 });
 import crypto from 'node:crypto';
 
+// ── 4ב · המנוע-המרכיב: מניפסטים ⇒ מסכים מחוללים ──
+stage('הרכבה-מחוללת (gen-screen)', () => {
+  const mDir = path.join(ROOT, 'screens-seed/manifests');
+  if (!fs.existsSync(mDir)) return '0 מניפסטים';
+  let n = 0;
+  for (const f of fs.readdirSync(mDir)) if (f.endsWith('.manifest.json')) { run('machtzev/assemble/gen-screen.mjs', [path.join(mDir, f)]); n++; }
+  return n + ' מסכים הורכבו-ממניפסט';
+});
+
 // ── 5 · ביקורות-ההרכבה והטוהר (שערי-ratchet) ──
 stage('ביקורת-הרכבה (box-audit)', () => last(run('machtzev/assemble/box-audit.mjs', ['--gate'])));
 stage('טוהר-דאטה (purity-data)', () => last(run('machtzev/purity-data.mjs', ['--gate'])));

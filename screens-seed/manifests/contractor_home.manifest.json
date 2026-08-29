@@ -1,0 +1,39 @@
+{
+ "screen": "contractor_home",
+ "content": ["home_content.dart"],
+ "sections": [
+  {
+   "id": "workPath",
+   "title": "$: homeSectionTitles['workPath']!",
+   "atom": "WorkPathCard",
+   "gate": "workPathOn",
+   "props": {
+    "badge": "$: workPathContent.badge",
+    "title": "$: workPathContent.title",
+    "sub": "$: workPathContent.sub",
+    "gradStart": "#:brand", "gradEnd": "#:brandDark", "radius": "#:radius"
+   }
+  },
+  {
+   "id": "heroes",
+   "atom": "HeroCard",
+   "repeat": { "in": "$: homeHeroes", "as": "h" },
+   "props": {
+    "glyph": "$: h.glyph", "title": "$: h.title", "sub": "$: h.sub",
+    "onTap": "@:onHeroTap",
+    "cardColor": "#:card", "inkColor": "#:ink", "mutedColor": "#:muted",
+    "borderColor": "#:border", "radius": "#:radius"
+   }
+  },
+  {
+   "id": "emptyOrders",
+   "atom": "EmptyStateCard",
+   "gate": "showEmptyOrders",
+   "props": {
+    "glyph": "📦",
+    "message": "$: emptyStateTerms.noOrders",
+    "surfaceColor": "#:card", "mutedColor": "#:muted", "borderColor": "#:border", "radius": "#:radius"
+   }
+  }
+ ]
+}

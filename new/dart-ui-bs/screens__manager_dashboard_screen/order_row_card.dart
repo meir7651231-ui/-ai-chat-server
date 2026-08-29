@@ -15,13 +15,13 @@ class OrderRowCard extends StatelessWidget {
     this.contact, this.semanticsLabel, super.key,
   });
 
-  /// '📦 BS-1001' — מפורמט בקופסה.
+  /// כותרת-המזהה (glyph+id) — מפורמטת בקופסה מ-orderRowContent.idTpl.
   final String idLabel;
 
-  /// 'מי · אתר' — מפורמט בקופסה.
+  /// שורת מי·אתר — מפורמטת בקופסה.
   final String subLabel;
 
-  /// 'N פריטים · ₪X' — מפורמט בקופסה.
+  /// שורת פריטים·סכום — מפורמטת בקופסה מ-orderRowContent.footerTpl.
   final String footerLabel;
   final VoidCallback onTap;
 
