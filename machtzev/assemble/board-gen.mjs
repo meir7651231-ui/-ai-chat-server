@@ -48,6 +48,15 @@ try {
     if (m && !projectClassFiles.has(m[2]) && !m[1].endsWith('.g.dart')) projectClassFiles.set(m[2], m[1].replace(/^origin\/main:app_flutter\/lib\//, ''));
   }
 } catch { }
+// v2.1 · קובץ-הבית של כל קבוע-פרויקט — המאמת מקבל קבועים, אז הלוח חייב לייבא אותם (ניסיון-7: kDemoContractorId/providers בלי-import)
+let projectConstFiles = new Map();
+try {
+  const dumpK = execSync("git grep -nHE '^(const|final) ' origin/main -- app_flutter/lib", { cwd: BS, encoding: 'utf8', maxBuffer: 1 << 25 });
+  for (const line of dumpK.split('\n')) {
+    const m = line.match(/^([^:]+:[^:]+):\d+:(?:const|final)\s+(?:[A-Za-z_][\w<>,? ]*?\s+)?([a-zA-Z]\w*)\s*=/);
+    if (m && !projectConstFiles.has(m[2]) && !m[1].endsWith('.g.dart')) projectConstFiles.set(m[2], m[1].replace(/^origin\/main:app_flutter\/lib\//, ''));
+  }
+} catch { }
 let projectFnFiles = new Map();
 try {
   const dumpF = execSync("git grep -nHE '^[A-Za-z][A-Za-z_<>,? ]+ [a-z][a-zA-Z0-9]*\\(' origin/main -- app_flutter/lib", { cwd: BS, encoding: 'utf8', maxBuffer: 1 << 25 });
@@ -82,7 +91,8 @@ function exprScanIds(expr, watchVars, extras, stateful, collect) {
   for (const m of scan.matchAll(/\(\s*([\w ,]+)\)\s*=>|\bfor\s*\(\s*(?:final|var)\s+(\w+)|\b(?:final|var)\s+(\w+)\s*=/g))
     for (const v of (m[1] || m[2] || m[3] || '').split(',')) declared.add(v.trim());
   let ok = true;
-  for (const m of scan.matchAll(/(?<![.\w'$])([a-zA-Z_]\w*)\b(?!\s*:)/g)) {
+  // הלוקהביהיינד בלי-$ — ‏$label חייב-להיבדק (דליפת-'label' בניסיון-7); ‏\$ אמיתי ממוסך ממילא
+  for (const m of scan.matchAll(/(?<![.\w'])([a-zA-Z_]\w*)\b(?!\s*:)/g)) {
     const id = m[1];
     if (declared.has(id) || watchVars.has(id) || extras.has(id)) continue;
     if (stateful && id === 'setState') continue;
@@ -351,11 +361,21 @@ for (const mf of fs.readdirSync(MANIFESTS).filter(f => f.endsWith('.manifest.jso
     }
   }
 
-  // ולידציה-סופית (פיקספוינט): כל ביטוי חייב-להיפתר מול קבוצת-ה-watch הסופית
+  // v2.1 · מקומי-מורם שהמקור מסמן-כ-nullable (x?. / x == null / x!) ⇒ גישת-נקודה ישירה עליו
+  // נפסלת (הלוח איבד את שומר-ה-null של המקור — ניסיון-7: session.employerId על BoardSession?)
+  const nullableLocals = [...hoistLocals.keys()].filter(ln => new RegExp('\\b' + ln + '\\?\\.|\\b' + ln + '\\s*==\\s*null|\\b' + ln + '!').test(codeSrc));
+  const nullDot = (txt) => nullableLocals.some(ln => new RegExp('\\b' + ln + '\\.(?!\\.)').test(txt));
+  for (const [k2, e2] of [...wires]) if (nullDot(e2)) wires.delete(k2);
+  for (const [ln2, decl] of [...hoistLocals]) if (nullableLocals.includes(ln2) ? false : nullDot(decl)) { hoistLocals.delete(ln2); extras.delete(ln2); }
+
+  // ולידציה-סופית (פיקספוינט): כל ביטוי חייב-להיפתר מול קבוצת-ה-watch הסופית — כולל מקומיים-מורמים שנשמטו
   let shrunk = true;
   while (shrunk) {
     shrunk = false;
     const wv = new Set([...watchLines.keys()]);
+    for (const [ln2, decl] of [...hoistLocals]) {
+      if (!exprResolvable(decl, wv, new Set([...extras].filter(x => x !== ln2)), stateful)) { hoistLocals.delete(ln2); extras.delete(ln2); shrunk = true; }
+    }
     for (const [k2, e2] of [...wires]) {
       if (!exprResolvable(e2, wv, extras, stateful)) { wires.delete(k2); shrunk = true; }
     }
@@ -399,6 +419,11 @@ for (const mf of fs.readdirSync(MANIFESTS).filter(f => f.endsWith('.manifest.jso
   }
   for (const m of new Set([...wireText.matchAll(/\b([a-z]\w{2,})\s*\(/g)].map(x => x[1]))) {
     const f2 = projectFnFiles.get(m);
+    if (f2 && existsInMain(f2)) pkgImports.push(`import 'package:buildsmart/${f2}';`);
+  }
+  // v2.1 · imports לקבועי-פרויקט (כולל providers) שהחיווט/המצב-המורם צורכים
+  for (const m of new Set([...wireText.matchAll(/\b([a-z]\w{2,})\b/g)].map(x => x[1]))) {
+    const f2 = projectConstFiles.get(m);
     if (f2 && existsInMain(f2)) pkgImports.push(`import 'package:buildsmart/${f2}';`);
   }
   const lines = [];

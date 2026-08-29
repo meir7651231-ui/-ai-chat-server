@@ -267,8 +267,8 @@
   },
   {
    "screen": "screens__store_settings_screen",
-   "wired": 5,
-   "todo": 7
+   "wired": 4,
+   "todo": 8
   },
   {
    "screen": "screens__studio__panes__find_replace_pane",
@@ -397,8 +397,8 @@
   }
  ],
  "totals": {
-  "wired": 88,
-  "todo": 338,
-  "hebInExpr": 15
+  "wired": 87,
+  "todo": 339,
+  "hebInExpr": 14
  }
 }
