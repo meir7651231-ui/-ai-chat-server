@@ -2,6 +2,7 @@
 // מוצא: screens__stock_screen:_StockTab (בנייה-חכמה main) · צרור-2
 import 'package:flutter/material.dart';
 import 'bs_tokens.dart';
+import 'package:buildsmart/theme/app_theme.dart';
 
 class StockTab extends StatelessWidget {
   const StockTab({required this.label, required this.on, required this.onTap});

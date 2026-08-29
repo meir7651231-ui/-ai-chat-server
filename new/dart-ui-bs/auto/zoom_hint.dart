@@ -1,4 +1,4 @@
-// 🧽 לוטש ע"י מנוע-המטרות (data-lift v2) — הדאטה הורמה ל-props לפי מטרתה, אל תערוך ידנית.
+// 🧽 לוטש ע"י מנוע-המטרות (data-lift v3) — דאטה/מודל/תבנית הורמו ל-props לפי מטרתם, אל תערוך ידנית.
 // מוצא: screens__lipskey_product_sheet:_ZoomHint (בנייה-חכמה main) · צרור-1 · props-שורש: fallback
 // התוכן: new/dart-data-bs/auto/screens__lipskey_product_sheet_content.dart
 import 'package:flutter/material.dart';

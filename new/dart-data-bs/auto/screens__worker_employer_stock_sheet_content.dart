@@ -7,3 +7,5 @@ const String request_composer_label_text = 'הערה (לא חובה)';
 const String request_composer_hint_text2 = 'לדוגמה: דחוף, נגמר באתר';
 const String request_composer_fallback4 = 'שלח בקשה';
 const String request_composer_fallback5 = 'בטל';
+const String worker_employer_stock_sheet_stock_row_label = '🏬 מחסן';
+const String worker_employer_stock_sheet_stock_row_label2 = '🏗️ אתר';

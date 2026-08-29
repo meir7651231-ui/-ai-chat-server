@@ -1,4 +1,4 @@
-// 🧽 לוטש ע"י מנוע-המטרות (data-lift v2) — הדאטה הורמה ל-props לפי מטרתה, אל תערוך ידנית.
+// 🧽 לוטש ע"י מנוע-המטרות (data-lift v3) — דאטה/מודל/תבנית הורמו ל-props לפי מטרתם, אל תערוך ידנית.
 // מוצא: screens__catalog_settings_screen:_NumberRow (בנייה-חכמה main) · צרור-1 · props-שורש: tooltip, tooltip2
 // התוכן: new/dart-data-bs/auto/screens__catalog_settings_screen_content.dart
 import 'package:flutter/material.dart';

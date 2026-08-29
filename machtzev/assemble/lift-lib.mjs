@@ -62,6 +62,12 @@ export const FOUNDATION = new Map([
   ['HelpTarget', "import 'package:buildsmart/widgets/help_target.dart';"],
 ]);
 
+/** פונקציות-יסוד (theme-helpers) שאטום רשאי לקרוא — import-היעד מוזרק בפליטה. */
+export const FOUNDATION_FN = new Map([
+  ['bsOnAccent', "import 'package:buildsmart/theme/app_theme.dart';"],
+  ['cfgRadius', "import 'package:buildsmart/theme/config_theme.dart';"],
+]);
+
 export const snake = (n) => n.replace(/^_/, '').replace(/([a-z0-9])([A-Z])/g, '$1_$2').toLowerCase();
 export const screenPascal = (screen) => screen.replace(/^(screens|features)__/, '').replace(/_screen$/, '')
   .split(/__|_/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');

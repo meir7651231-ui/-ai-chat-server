@@ -1,6 +1,13 @@
 // 📦 דאטה · תוכן-שהורם ע"י data-lift מ-screens__manager_dashboard_screen — verbatim מהמקור, אל תערוך ידנית.
 const String advance_button_fallback = 'קדם שלב ›';
+const String brands_body_label = 'מותגים (';
+const String brands_body_label2 = ' מוצרים';
 const String manage_intro_fallback = '🛠️ שליטה מלאה על אפליקציית הקבלן — כל שינוי מתעדכן מיידית.';
+const String manager_dashboard_count_badge_label = 'ממתינים לאישור: ';
+const String manager_dashboard_credit_bar_label = 'ניצול אשראי ';
+const String manage_section_title2 = 'מקטע ניהול';
+const String manage_section_body = 'פותח/סוגר מקטע ניהול באקורדיון (מקטע אחד פתוח בכל רגע). חל על כל המקטעים: אישורי עובדים, בקשות חופשה, קטגוריות, הגדרות אפליקציה, עץ מוצרים, מותגים, בדיקות רגרסיה ושיוך תפקידים.';
+const String manage_section_label = 'ממתינים לאישור: ';
 const String product_tree_body_fallback = 'עריכת האביזרים המשלימים של כל מוצר — בחירת מוצר חושפת את עץ האביזרים שלו.';
 const String product_tree_body_label = 'מוצרים בעץ';
 const String product_tree_body_label2 = 'קטגוריות';

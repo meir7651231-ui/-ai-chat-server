@@ -2,6 +2,7 @@
 // מוצא: screens__finance_hub_sheets:_FinCallout (בנייה-חכמה main) · צרור-2
 import 'package:flutter/material.dart';
 import 'bs_tokens.dart';
+import 'package:buildsmart/theme/config_theme.dart';
 
 class FinCallout extends StatelessWidget {
   const FinCallout({

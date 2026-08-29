@@ -3,6 +3,7 @@
 // משרת-גם (זהה-מבנית): screens__trade_builder__attribute_schema_editor:_PillButton · screens__trade_builder__category_tree_editor:_PillButton · screens__trade_builder__connection_rule_studio:_PillButton · screens__trade_builder__product_authoring_screen:_PillButton · screens__trade_builder__trade_publish_sheet:_PillButton
 import 'package:flutter/material.dart';
 import 'bs_tokens.dart';
+import 'package:buildsmart/theme/app_theme.dart';
 
 class TradeBuilderAccessoryRuleEditorPillButton extends StatelessWidget {
   const TradeBuilderAccessoryRuleEditorPillButton({

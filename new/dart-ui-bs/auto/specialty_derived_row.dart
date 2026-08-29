@@ -1,4 +1,4 @@
-// 🧽 לוטש ע"י מנוע-המטרות (data-lift v2) — הדאטה הורמה ל-props לפי מטרתה, אל תערוך ידנית.
+// 🧽 לוטש ע"י מנוע-המטרות (data-lift v3) — דאטה/מודל/תבנית הורמו ל-props לפי מטרתם, אל תערוך ידנית.
 // מוצא: screens__worker_profile_screen:_SpecialtyDerivedRow (בנייה-חכמה main) · צרור-1 · props-שורש: fallback, label, fallback2
 // התוכן: new/dart-data-bs/auto/screens__worker_profile_screen_content.dart
 import 'package:flutter/material.dart';

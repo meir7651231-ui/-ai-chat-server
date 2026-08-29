@@ -1,14 +1,15 @@
 #!/usr/bin/env node
-/** 🧽 מחצב · מנוע-הליטוש v2 — "מנוע-המטרות" (data-lift) — חוזה: DATA-LIFT-CONTRACT.md.
- *  הכרעת-הבעלים 29.8: לא מחפשים *שם* — מחפשים את *המטרה* של כל מחרוזת-עברית:
- *  לאיזה פרמטר של איזה בנאי היא זורמת (לפי הגדרת-הבנאי האמיתית במקור), ומחליפים.
- *  כולל צרירת-משפחות: מחרוזת שזורמת ל-widget-אח ⇒ prop מושחל בשרשרת עד השורש.
+/** 🧽 מחצב · מנוע-המטרות v3 (data-lift) — חוזה: DATA-LIFT-CONTRACT.md.
+ *  הכרעות-הבעלים 29.8: (א) לא שם — *מטרה*: כל מחרוזת-עברית מוחלפת ב-prop על-שם
+ *  הפרמטר שאליו היא זורמת (אינדקס-בנאים אמיתי). (ב) *מטרת-הנתון*: widget תלוי-מודל
+ *  מפורק-הפוך — המנוע קורא אילו שדות נצרכים ומחליף את המודל ב-props על-שם השדות.
+ *  (ג) *תבנית*: 'סה"כ $x' מפורקת-הפוך — קטעי-העברית ⇒ props, החורים = מנגנון.
  *  כל ספק ⇒ דחייה-מנומקת. דטרמיניסטי. רץ אחרי shelf-lift (אותו מדף).
  *  שימוש: node data-lift.mjs [screens-dir] */
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync, execSync } from 'node:child_process';
-import { inferImports, classBody, stripComments, maskComments, HEB_STR, IO_PAT, RIVERPOD, blind, snake, screenPascal, okType, FOUNDATION } from './lift-lib.mjs';
+import { inferImports, classBody, stripComments, maskComments, HEB_STR, IO_PAT, RIVERPOD, blind, snake, screenPascal, okType, FOUNDATION, FOUNDATION_FN } from './lift-lib.mjs';
 const ROOT = new URL('../../', import.meta.url).pathname;
 const SCRATCH = process.argv[2] || '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens';
 const SHELF = path.join(ROOT, 'new/dart-ui-bs');
@@ -24,6 +25,51 @@ try {
     .matchAll(/class\s+([A-Za-z0-9_]+)/g)].map(x => x[1]));
   projectClasses.delete('BsTokens');
 } catch { }
+// אינדקס-פונקציות-הפרויקט (עליונות, lowercase) — קריאה לפונקציה-חיצונית-לא-יסוד ⇒ דחייה
+let projectFns = new Set();
+try {
+  projectFns = new Set([...execSync("git grep -hE '^[A-Za-z][A-Za-z_<>,? ]+ [a-z][a-zA-Z0-9]+\\(' origin/main -- app_flutter/lib", { cwd: BS, encoding: 'utf8', maxBuffer: 1 << 24 })
+    .matchAll(/ ([a-z]\w+)\(/g)].map(x => x[1]));
+} catch { }
+const externalFn = (code) => {
+  for (const m of new Set([...code.matchAll(/\b([a-z]\w+)\s*\(/g)].map(x => x[1]))) {
+    if (!projectFns.has(m) || FOUNDATION_FN.has(m)) continue;
+    if (new RegExp('(\\n|^)\\s*[A-Za-z_][\\w<>,? ]* ' + m + '\\(').test(code)) continue; // מוגדרת-בצרור
+    return m;
+  }
+  return null;
+};
+
+// ── אינדקס-שדות-מודל (עצלן+ממוזכר): מודל ⇒ Map(שדה/גטר ⇒ טיפוס) ──
+const PRIM = new Set(['String', 'int', 'double', 'bool', 'num']);
+const isPrim = (t) => PRIM.has((t || '').replace(/\?$/, '').trim());
+const modelFieldsCache = new Map();
+function modelFields(name) {
+  if (modelFieldsCache.has(name)) return modelFieldsCache.get(name);
+  let res = null;
+  try {
+    const hits = execSync(`git grep -lE 'class ${name}\\b' origin/main -- app_flutter/lib`, { cwd: BS, encoding: 'utf8' }).trim().split('\n').filter(Boolean);
+    for (const h of hits) {
+      const src = execSync(`git show '${h.replace(/'/g, '')}'`, { cwd: BS, encoding: 'utf8', maxBuffer: 1 << 24 });
+      const m = src.match(new RegExp('class\\s+' + name + '\\b[^{]*\\{'));
+      if (!m) continue;
+      const body = stripComments(classBody(src, m.index) || '');
+      if (!body) continue;
+      const f = new Map();
+      for (const fm of body.matchAll(/final\s+([A-Za-z_][\w<>,? ]*?)\s+([a-zA-Z_]\w*)\s*[;=]/g)) f.set(fm[2], fm[1].trim());
+      for (const gm of body.matchAll(/(?:^|\n)\s*([A-Za-z_][\w<>,? ]*?)\s+get\s+([a-zA-Z_]\w*)\s*(?:=>|\{)/g)) f.set(gm[2], gm[1].trim());
+      res = f; break;
+    }
+  } catch { }
+  modelFieldsCache.set(name, res);
+  return res;
+}
+
+// ── אידמפוטנטיות: פלטי-הריצה-הקודמת של המנוע-הזה נמחקים (לא-דדופ-עצמי) ──
+if (fs.existsSync(OUT)) for (const f of fs.readdirSync(OUT)) {
+  const p = path.join(OUT, f);
+  if (f.endsWith('.dart') && fs.readFileSync(p, 'utf8').includes('מנוע-המטרות')) fs.unlinkSync(p);
+}
 
 // ── מלאי-המדף (כולל auto/ של shelf-lift) ──
 const usedNames = new Set(); const shelfHashes = new Map();
@@ -39,9 +85,7 @@ for (const f of fs.readdirSync(SHELF, { recursive: true }).map(String)) {
 
 const ANY_LIT = /'(?:[^'\\\n]|\\.)*'/g;
 const maskLits = (s) => s.replace(ANY_LIT, (m) => "'" + 'x'.repeat(m.length - 2) + "'");
-// מטרות-Flutter מוכרות לפרמטר-מיקומי-ראשון (טבלה סגורה)
 const FLUTTER_POS = { Text: ['label'], SelectableText: ['label'], CfgText: ['id', 'fallback'] };
-
 
 // ── אינדקס-בנאים של קובץ: מחלקה ⇒ שמות-הפרמטרים-המיקומיים (המטרות) ──
 function ctorPositionals(name, body) {
@@ -83,7 +127,33 @@ function purposeOf(scan, litStart, ctorIndex) {
   return params?.[idx] || null;
 }
 
-// ── ליבת-ההרמה (per-body): עברית ⇒ props, שמות לפי מטרה ──
+/** פירוק-תבנית: value ⇒ [{t:'txt',s}|{t:'hole',s}] · null=עמוק-מדי. */
+function splitTemplate(v) {
+  const parts = []; let txt = '';
+  for (let i = 0; i < v.length; i++) {
+    const c = v[i];
+    if (c === '\\') { txt += c + (v[i + 1] || ''); i++; continue; }
+    if (c !== '$') { txt += c; continue; }
+    if (v[i + 1] === '{') {
+      let d = 0, j = i + 1;
+      for (; j < v.length; j++) { if (v[j] === "'") return null; if (v[j] === '{') d++; else if (v[j] === '}') { d--; if (!d) break; } }
+      if (d) return null;
+      const hole = v.slice(i, j + 1);
+      if (/[֐-׿]/.test(hole)) return null;
+      if (txt) parts.push({ t: 'txt', s: txt }); txt = '';
+      parts.push({ t: 'hole', s: hole }); i = j;
+    } else {
+      const im = v.slice(i + 1).match(/^[a-zA-Z_]\w*/);
+      if (!im) { txt += c; continue; }
+      if (txt) parts.push({ t: 'txt', s: txt }); txt = '';
+      parts.push({ t: 'hole', s: '$' + im[0] }); i += im[0].length;
+    }
+  }
+  if (txt) parts.push({ t: 'txt', s: txt });
+  return parts;
+}
+
+// ── ליבת-ההרמה (per-body): עברית ⇒ props לפי מטרה · תבניות מפורקות-הפוך ──
 function hoistStrings(body, ctorIndex, propBase) {
   const masked = maskComments(body);
   const scan = maskLits(masked);
@@ -96,11 +166,17 @@ function hoistStrings(body, ctorIndex, propBase) {
   const lits = runs.map(r => ({ ...r, value: r.parts.map(p => p.slice(1, -1)).join('') })).filter(r => /[֐-׿]/.test(r.value));
   if (!lits.length) return { out: body, props: [] };
 
-  const props = []; const seen = new Map(propBase);
+  const props = []; const edits = []; const seen = new Map(propBase);
+  const takeName = (name, isDefault) => {
+    let n = (seen.get(name) || 0) + 1;
+    const fieldRe = (p) => new RegExp('final\\s+[A-Za-z_][\\w<>?]*\\s+' + p + '\\s*;');
+    while (!isDefault && fieldRe(n === 1 ? name : name + n).test(body)) n++;
+    seen.set(name, n);
+    return n === 1 ? name : name + n;
+  };
   for (const m of lits) {
-    if (m.value.includes('$')) return { fail: 'interpolation' };
     if (/[=!]=\s*$/.test(scan.slice(0, m.start))) return { fail: 'logic-token' };
-    // הליכה-לאחור אל תחילת-הארגומנט
+    // מטרת-המחרוזת (זהה לרגיל ולתבנית)
     let d = 0, k = m.start - 1;
     for (; k >= 0; k--) {
       const c = scan[k];
@@ -118,19 +194,32 @@ function hoistStrings(body, ctorIndex, propBase) {
     else name = purposeOf(scan, m.start, ctorIndex);          // 🎯 מנוע-המטרות
     if (!name) return { fail: 'unnamed-string' };
     if (/=\s*$/.test(scan.slice(0, m.start)) && !isDefault) return { fail: 'default-param' };
-    let n = (seen.get(name) || 0) + 1;
-    const fieldRe = (p) => new RegExp('final\\s+[A-Za-z_][\\w<>?]*\\s+' + p + '\\s*;');
-    while (!isDefault && fieldRe(n === 1 ? name : name + n).test(body)) n++;
-    seen.set(name, n);
-    props.push({ prop: n === 1 ? name : name + n, value: m.value, start: m.start, len: m.end - m.start, isDefault });
+
+    if (m.value.includes('$')) {
+      // 🧩 תבנית: קטעי-עברית ⇒ props, החורים נשארים מנגנון
+      if (isDefault) return { fail: 'template-default' };
+      const parts = splitTemplate(m.value);
+      if (!parts) return { fail: 'template-deep' };
+      const rebuilt = parts.map(p => {
+        if (p.t === 'hole' || !/[֐-׿]/.test(p.s)) return p.s;
+        const prop = takeName(name, false);
+        props.push({ prop, value: p.s, isDefault: false });
+        return '${' + prop + '}';
+      }).join('');
+      edits.push({ start: m.start, len: m.end - m.start, text: "'" + rebuilt + "'" });
+    } else {
+      const prop = takeName(name, isDefault);
+      props.push({ prop, value: m.value, isDefault, start: m.start, len: m.end - m.start });
+      edits.push({ start: m.start, len: m.end - m.start, text: prop, isDefault });
+    }
   }
-  // החלפה מהסוף-להתחלה
+  // עריכות מהסוף-להתחלה
   let out = body;
-  for (const p of [...props].sort((a, b) => b.start - a.start)) {
-    if (p.isDefault) {
-      const eq = out.lastIndexOf('=', p.start);
-      out = out.slice(0, eq).replace(/\s+$/, '') + out.slice(p.start + p.len);
-    } else out = out.slice(0, p.start) + p.prop + out.slice(p.start + p.len);
+  for (const e of [...edits].sort((a, b) => b.start - a.start)) {
+    if (e.isDefault) {
+      const eq = out.lastIndexOf('=', e.start);
+      out = out.slice(0, eq).replace(/\s+$/, '') + out.slice(e.start + e.len);
+    } else out = out.slice(0, e.start) + e.text + out.slice(e.start + e.len);
   }
   for (const p of props.filter(x => x.isDefault))
     out = out.replace(new RegExp('([{,(]\\s*)this\\.' + p.prop + '\\b'), '$1required this.' + p.prop);
@@ -165,11 +254,54 @@ function stripConstOn(out, propNames) {
   return out;
 }
 
-// ── הזרקת בנאי+שדות למחלקה ──
+/** 🧬 שיטוח-מודל לפי-מטרה: `final R x;` + `x.field` ⇒ props על-שם-השדות. */
+function flattenModels(body, modelCand, existingProps) {
+  const dataProps = []; // {prop, type}
+  let out = body;
+  for (const R of modelCand) {
+    const code = stripComments(out);
+    if (!new RegExp('\\b' + R + '\\b').test(code)) continue;
+    const fdecl = code.match(new RegExp('final\\s+' + R + '\\??\\s+([a-zA-Z_]\\w*)\\s*;'));
+    if (!fdecl) return { fail: 'model-deep' };
+    const v = fdecl[1];
+    // ‏R מותר רק בהצהרה-הזו
+    if ((code.match(new RegExp('\\b' + R + '\\b', 'g')) || []).length > 1) return { fail: 'model-deep' };
+    const mf = modelFields(R);
+    if (!mf) return { fail: 'model-unknown' };
+    // כל שימושי v: this.v (בנאי) · v.member בלבד; member = שדה/גטר פרימיטיבי
+    const usedMembers = new Set();
+    const scan = maskLits(maskComments(out));
+    for (const um of [...scan.matchAll(new RegExp('\\b' + v + '\\b', 'g'))]) {
+      const before = scan.slice(Math.max(0, um.index - 8), um.index);
+      const after = scan.slice(um.index + v.length);
+      if (/this\.$/.test(before)) continue;                      // בנאי
+      if (new RegExp('final\\s+' + R + '\\??\\s+$').test(scan.slice(0, um.index))) continue; // הצהרה
+      const mm = after.match(/^\.([a-zA-Z_]\w*)/);
+      if (!mm) return { fail: 'model-deep' };                    // המודל עובר-הלאה גולמי
+      const t = mf.get(mm[1]);
+      if (!isPrim(t)) return { fail: 'model-deep' };             // שדה-לא-פרימיטיבי/מתודה
+      usedMembers.add(mm[1]);
+    }
+    if (!usedMembers.size) return { fail: 'model-deep' };
+    for (const mem of usedMembers) {
+      if (existingProps.has(mem)) return { fail: 'model-clash' };
+      dataProps.push({ prop: mem, type: mf.get(mem).trim() });
+      existingProps.add(mem);
+    }
+    // טרנספורמציה: v.member ⇒ member · הסרת-ההצהרה · הסרת this.v מהבנאי
+    out = out.replace(new RegExp('\\b' + v + '\\.([a-zA-Z_]\\w*)', 'g'), '$1');
+    out = out.replace(new RegExp('\\s*final\\s+' + R + '\\??\\s+' + v + '\\s*;'), '');
+    out = out.replace(new RegExp('(required\\s+)?this\\.' + v + '\\b\\s*,?'), '');
+    out = out.replace(/\(\s*,/, '(').replace(/,\s*([})])/g, (s, g) => g === '}' ? ',}' : s).replace(/,\s*\)/, ')').replace(/\{\s*,/, '{');
+  }
+  return { out, dataProps };
+}
+
+// ── הזרקת בנאי+שדות (טיפוסיים) ──
 function injectProps(body, cls, allProps) {
   const props = allProps.filter(p => !p.isDefault);
   if (!props.length) return body;
-  const decls = props.map(p => `  final String ${p.prop};`).join('\n');
+  const decls = props.map(p => `  final ${p.type || 'String'} ${p.prop};`).join('\n');
   const params = props.map(p => 'required this.' + p.prop).join(', ');
   const ctorRe = new RegExp('(const\\s+)?' + cls + '\\s*\\(');
   const cm = body.match(ctorRe);
@@ -194,27 +326,24 @@ function injectProps(body, cls, allProps) {
   return body.slice(0, openBrace + 1) + `\n  const ${cls}({${params}});\n` + decls + body.slice(openBrace + 1);
 }
 
-// ── השחלת-props במעלה-השרשרת: A ⇐מופע⇐ B ⇒ A מקבל את props-של-B ומעביר ──
+// ── השחלת-props במעלה-השרשרת ──
+const propType = new Map(); // שם ⇒ טיפוס (ברירת-מחדל String)
 function threadProps(bundle) {
-  // bundle: [{name, out, props(own)}] — root ראשון. מחזיר bundle עם passProps + call-sites מתוקנים.
   let changed = true, guard = 0;
-  while (changed && guard++ < 10) {
+  while (changed && guard++ < 12) {
     changed = false;
     for (const holder of bundle) {
       for (const target of bundle) {
-        if (target === holder || !target.allProps.length) continue;
+        if (target === holder || !target.allProps.length || target.helper) continue;
         const invRe = new RegExp('\\b' + target.name + '\\s*\\(', 'g');
         const scan = maskLits(maskComments(holder.out));
         for (const m of [...scan.matchAll(invRe)]) {
           if (/class\s+$/.test(scan.slice(Math.max(0, m.index - 8), m.index))) continue;
-          // אילו props כבר מסופקים בקריאה?
           let d = 0, j = scan.indexOf('(', m.index), open = j;
           for (; j < scan.length; j++) { const c = scan[j]; if (c === '(') d++; else if (c === ')') { d--; if (!d) break; } }
           const argText = scan.slice(open + 1, j);
           const missing = target.allProps.filter(p => !new RegExp('\\b' + p + '\\s*:').test(argText));
           if (!missing.length) continue;
-          // הוספת הארגומנטים החסרים (ערך = prop-של-holder באותו-שם);
-          // עריכה-אחת-לסיבוב — ה-while החיצוני סורק-מחדש (אינדקסים טריים)
           const insert = (argText.trim() ? ', ' : '') + missing.map(p => `${p}: ${p}`).join(', ');
           holder.out = holder.out.slice(0, j) + insert + holder.out.slice(j);
           for (const p of missing) if (!holder.allProps.includes(p)) { holder.allProps.push(p); holder.threaded.push(p); }
@@ -225,7 +354,7 @@ function threadProps(bundle) {
       if (changed) break;
     }
   }
-  return guard < 10;
+  return guard < 12;
 }
 
 // ── המעבר ──
@@ -250,6 +379,16 @@ for (const mf of fs.readdirSync(MACHINE).filter(f => f.endsWith('.json')).sort()
   }
   const ctorIndex = new Map();
   for (const [n, c] of classes) { const ps = ctorPositionals(n, c.body); if (ps) ctorIndex.set(n, ps); }
+  const helpers = new Map(); // _name ⇒ source (עוזרים-פרטיים עליונים)
+  for (const m of src.matchAll(/(?:^|\n)(?:const|final)\s+(?:[A-Za-z_<>\[\], ]+\s+)?(_[a-z]\w*)\s*=/g)) {
+    const line = src.indexOf(';', m.index);
+    if (line > 0 && line - m.index < 2000) helpers.set(m[1], src.slice(m.index, line + 1).trim());
+  }
+  for (const m of src.matchAll(/(?:^|\n)([A-Za-z_<>\[\], ]+\s+)?(_[a-z]\w*)\s*\([^)]*\)\s*(?:=>|\{)/g)) {
+    if (/\b(if|for|while|switch|catch|return)\b/.test(m[2])) continue;
+    const b = classBody(src, m.index);
+    if (b && b.split('\n').length <= 40) helpers.set(m[2], src.slice(m.index, m.index + src.slice(m.index).indexOf(b) + b.length).trim());
+  }
 
   for (const w of map.widgets || []) {
     const id = screen + ':' + w.name;
@@ -257,8 +396,9 @@ for (const mf of fs.readdirSync(MACHINE).filter(f => f.endsWith('.json')).sort()
     const main = classes.get(w.name);
     if (!main) { skip('no-decl', id); continue; }
 
-    // ── בניית-הצרור: השורש + סגירת-האחים (פרטיים; Stateless-טהורים; נקיים-או-מתלטשים) ──
+    // ── בניית-הצרור + איסוף מועמדי-מודל ──
     const bundle = [{ name: w.name, body: main.body }];
+    const modelCand = new Set();
     let ok = true, guard = 0;
     while (ok && guard++ < 6) {
       const inB = new Set(bundle.map(b => b.name));
@@ -267,43 +407,66 @@ for (const mf of fs.readdirSync(MACHINE).filter(f => f.endsWith('.json')).sort()
       for (const b of bundle) refs.delete(b.name);
       let grew = false;
       for (const r of refs) {
-        if (inB.has(r)) continue;
+        if (inB.has(r) || modelCand.has(r)) continue;
         if (classes.has(r)) {
           const wk = widgetKind.get(r);
           if (!r.startsWith('_') || bundle.length >= 6 || (wk && (wk.kind !== 'StatelessWidget' || !wk.pure))) { skip('sibling-class', id); ok = false; break; }
           bundle.push({ name: r, body: classes.get(r).body }); grew = true;
         } else if (/^_[a-z]/.test(r)) {
           const declared = new RegExp('(final|var|const|void|double|int|String|bool|Widget|Color|late)\\s+' + r + '\\b|[A-Za-z>]\\s+' + r + '\\s*\\(').test(code);
-          if (!declared) { skip('private-dep', id); ok = false; break; }
+          if (declared) continue;
+          if (!helpers.has(r) || bundle.length + 1 >= 8) { skip('private-dep', id); ok = false; break; }
+          const hsrc = helpers.get(r);
+          if (HEB_STR.test(stripComments(hsrc)) || IO_PAT.test(stripComments(hsrc))) { skip('dirty-helper', id); ok = false; break; }
+          bundle.push({ name: r, body: hsrc, helper: true }); grew = true;
         } else if (/^_[A-Z]/.test(r)) { skip('private-dep', id); ok = false; break; }
-        else if (!FOUNDATION.has(r) && projectClasses.has(r)) { skip('project-dep', id); ok = false; break; }
+        else if (!FOUNDATION.has(r) && projectClasses.has(r)) modelCand.add(r);  // 🧬 מועמד-שיטוח
       }
       if (!grew) break;
     }
     if (!ok) continue;
     const allRaw = stripComments(bundle.map(b => b.body).join('\n'));
     if (IO_PAT.test(allRaw) || RIVERPOD.test(allRaw)) { skip('io', id); continue; }
-    const fields = [...stripComments(main.body).matchAll(/final\s+([A-Za-z_][\w<>,\s]*\??)\s+[a-zA-Z_]\w*\s*;/g)].map(x => x[1].trim());
+    const exFn = externalFn(allRaw);
+    if (exFn) { skip('project-fn', id + '⇒' + exFn); continue; }
+
+    // ── שיטוח-מודלים (שורש-בלבד; מודל באח ⇒ עמוק) ──
+    let dataProps = [];
+    if (modelCand.size) {
+      const nonRoot = stripComments(bundle.slice(1).map(b => b.body).join('\n'));
+      if ([...modelCand].some(r => new RegExp('\\b' + r + '\\b').test(nonRoot))) { skip('model-deep', id); continue; }
+      const fl = flattenModels(bundle[0].body, modelCand, new Set());
+      if (fl.fail) { skip(fl.fail, id); continue; }
+      bundle[0].body = fl.out;
+      dataProps = fl.dataProps;
+    }
+    const fields = [...stripComments(bundle[0].body).matchAll(/final\s+([A-Za-z_][\w<>,\s]*\??)\s+[a-zA-Z_]\w*\s*;/g)].map(x => x[1].trim());
     if (fields.some(t => !okType(t))) { skip('model-prop', id); continue; }
 
-    // ── ליטוש כל גופי-הצרור (namespace-props משותף) ──
-    const propBase = new Map();
+    // ── ליטוש כל גופי-הצרור (namespace משותף; שמות-המודל שמורים) ──
+    const propBase = new Map(dataProps.map(p => [p.prop, 1]));
     let fail = null;
     for (const b of bundle) {
       const h = hoistStrings(b.body, ctorIndex, propBase);
       if (h.fail) { fail = h.fail; break; }
       b.out = h.out; b.props = h.props;
-      b.allProps = h.props.map(p => p.prop); b.threaded = [];
-      for (const p of h.props) propBase.set(p.prop.replace(/\d+$/, ''), Math.max(propBase.get(p.prop.replace(/\d+$/, '')) || 0, +(p.prop.match(/(\d+)$/)?.[1] || 1)));
+      b.allProps = h.props.filter(p => !p.isDefault).map(p => p.prop); b.threaded = [];
+      if (b === bundle[0]) b.allProps.push(...dataProps.map(p => p.prop));
+      for (const p of h.props) { propBase.set(p.prop.replace(/\d+$/, ''), Math.max(propBase.get(p.prop.replace(/\d+$/, '')) || 0, +(p.prop.match(/(\d+)$/)?.[1] || 1))); propType.set(p.prop, 'String'); }
     }
     if (fail) { skip(fail, id); continue; }
+    for (const p of dataProps) propType.set(p.prop, p.type);
     if (HEB_STR.test(stripComments(bundle.map(b => b.out).join('\n')))) { skip('hebrew-left', id); continue; }
 
-    // ── השחלת-props במעלה-השרשרת + הזרקת-בנאים ──
+    // ── השחלה + הזרקה ──
     if (!threadProps(bundle)) { skip('thread-cycle', id); continue; }
     let bad = false;
     for (const b of bundle) {
-      const inj = injectProps(b.out, b.name, [...b.props, ...b.threaded.map(p => ({ prop: p, isDefault: false }))]);
+      if (b.helper) { b.final = b.out; continue; }
+      const inj = injectProps(b.out, b.name, [
+        ...b.props, ...(b === bundle[0] ? dataProps : []),
+        ...b.threaded.map(p => ({ prop: p, type: propType.get(p) || 'String' })),
+      ]);
       if (!inj) { bad = true; break; }
       b.final = stripConstOn(inj, b.allProps);
     }
@@ -321,7 +484,7 @@ for (const mf of fs.readdirSync(MACHINE).filter(f => f.endsWith('.json')).sort()
     if (usedNames.has(pub)) { skip('name-collision', id); continue; }
     usedNames.add(pub);
     const allContent = bundle.flatMap(b => b.props.map(p => ({ prop: p.prop, value: p.value })));
-    liftedHashes.set(hash, { id, pub, screen, name: w.name, joined: joinedAll, content: allContent, nBundle: bundle.length, rootProps, also: [] });
+    liftedHashes.set(hash, { id, pub, screen, name: w.name, joined: joinedAll, content: allContent, nBundle: bundle.length, nData: dataProps.length, rootProps, also: [] });
   }
 }
 
@@ -332,9 +495,10 @@ for (const L of [...liftedHashes.values()].sort((a, b) => a.pub.localeCompare(b.
   let joined = L.joined.replaceAll(L.name, L.pub);
   const extras = inferImports(stripComments(joined));
   for (const [cls, imp] of FOUNDATION) if (new RegExp('\\b' + cls + '\\b').test(stripComments(joined))) extras.unshift(imp);
+  for (const [fn, imp] of FOUNDATION_FN) if (new RegExp('\\b' + fn + '\\s*\\(').test(stripComments(joined)) && !extras.includes(imp)) extras.push(imp);
   const also = L.also.length ? `\n// משרת-גם (זהה-מבנית): ${L.also.join(' · ')}` : '';
-  const code = `// 🧽 לוטש ע"י מנוע-המטרות (data-lift v2) — הדאטה הורמה ל-props לפי מטרתה, אל תערוך ידנית.
-// מוצא: ${L.id} (בנייה-חכמה main) · צרור-${L.nBundle} · props-שורש: ${L.rootProps.join(', ')}
+  const code = `// 🧽 לוטש ע"י מנוע-המטרות (data-lift v3) — דאטה/מודל/תבנית הורמו ל-props לפי מטרתם, אל תערוך ידנית.
+// מוצא: ${L.id} (בנייה-חכמה main) · צרור-${L.nBundle}${L.nData ? ` · מודל-שוטח: ${L.nData} שדות` : ''} · props-שורש: ${L.rootProps.join(', ')}
 // התוכן: new/dart-data-bs/auto/${L.screen}_content.dart${also}
 import 'package:flutter/material.dart';
 ${extras.join('\n')}${extras.length ? '\n' : ''}
@@ -346,7 +510,7 @@ ${joined}
     if (/⚠️ טהורי-IO אך עם דאטה-צרובה/.test(chk)) throw new Error('לא-dataClean');
     (contentByScreen.get(L.screen) ?? contentByScreen.set(L.screen, []).get(L.screen))
       .push(...L.content.map(p => `const String ${snake(L.pub)}_${snake(p.prop)} = '${p.value}';`));
-    report.lifted.push({ atom: L.pub, from: L.id, bundle: L.nBundle, props: L.content.length, serves: 1 + L.also.length });
+    report.lifted.push({ atom: L.pub, from: L.id, bundle: L.nBundle, props: L.content.length, model: L.nData, serves: 1 + L.also.length });
   } catch { fs.unlinkSync(file); skip('failed-self-gate', L.id); }
 }
 for (const [screen, lines] of [...contentByScreen.entries()].sort()) {
@@ -356,7 +520,8 @@ for (const [screen, lines] of [...contentByScreen.entries()].sort()) {
 
 const skippedN = Object.values(report.skipped).reduce((a, v) => a + v.length, 0);
 const strings = report.lifted.reduce((a, x) => a + x.props, 0);
+const modeled = report.lifted.filter(x => x.model).length;
 fs.writeFileSync(path.join(ROOT, 'screens-seed/data-lift-report.json'), JSON.stringify(report, null, 1));
-console.log(`🧽 מנוע-המטרות · לוטשו: ${report.lifted.length} widgets (${strings} מחרוזות⇒props · משרתים ${report.lifted.reduce((a, x) => a + x.serves, 0)}) · נדחו: ${skippedN}`);
+console.log(`🧽 מנוע-המטרות v3 · לוטשו: ${report.lifted.length} widgets (${strings} מחרוזות⇒props · ${modeled} משוטחי-מודל · משרתים ${report.lifted.reduce((a, x) => a + x.serves, 0)}) · נדחו: ${skippedN}`);
 for (const [why, ids] of Object.entries(report.skipped).sort((a, b) => b[1].length - a[1].length)) console.log(`   ⏭️ ${why}: ${ids.length}`);
 console.log('⇒ new/dart-ui-bs/auto/ + new/dart-data-bs/auto/ + screens-seed/data-lift-report.json');

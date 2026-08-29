@@ -2,6 +2,7 @@
 // מוצא: screens__ai_hub_screen:AiFinTile (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
 import 'bs_tokens.dart';
+import 'package:buildsmart/theme/config_theme.dart';
 
 class AiFinTile extends StatelessWidget {
   const AiFinTile({

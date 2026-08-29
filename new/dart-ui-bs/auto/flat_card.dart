@@ -3,6 +3,7 @@
 // משרת-גם (זהה-מבנית): screens__store_dashboard_screen:_FlatCard
 import 'package:flutter/material.dart';
 import 'bs_tokens.dart';
+import 'package:buildsmart/theme/config_theme.dart';
 
 class FlatCard extends StatelessWidget {
   const FlatCard({required this.child});

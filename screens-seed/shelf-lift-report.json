@@ -235,12 +235,6 @@
    "serves": 1
   },
   {
-   "atom": "CourierAvatar",
-   "from": "screens__courier_profile_screen:_CourierAvatar",
-   "kind": "Stateless",
-   "serves": 2
-  },
-  {
    "atom": "CourierFormsPillButton",
    "from": "screens__courier_forms_screen:_PillButton",
    "kind": "Stateless",
@@ -589,12 +583,6 @@
    "serves": 1
   },
   {
-   "atom": "ProductThumb",
-   "from": "features__catalog_config__catalog_config_screen:_ProductThumb",
-   "kind": "Stateless",
-   "serves": 1
-  },
-  {
    "atom": "ProposePrimaryBtn",
    "from": "screens__worker_app_screen:_ProposePrimaryBtn",
    "kind": "Stateless",
@@ -790,12 +778,6 @@
    "atom": "StockTab",
    "from": "screens__stock_screen:_StockTab",
    "kind": "צרור-2",
-   "serves": 1
-  },
-  {
-   "atom": "StoreLogoAvatar",
-   "from": "screens__store_profile_screen:_StoreLogoAvatar",
-   "kind": "Stateless",
    "serves": 1
   },
   {
@@ -1067,6 +1049,12 @@
    "screens__worker_notifs_sheet:_NotifRow",
    "screens__worker_profile_screen:_EditProfileSheet",
    "screens__worker_task_detail_sheet:_KitRow"
+  ],
+  "project-fn": [
+   "features__catalog_config__catalog_config_screen:_ProductThumb⇒resolveProductImage",
+   "screens__courier_profile_screen:_CourierAvatar⇒imageProviderForRef",
+   "screens__store_profile_screen:_StoreLogoAvatar⇒imageProviderForRef",
+   "screens__worker_profile_screen:_ProfileAvatar⇒imageProviderForRef"
   ],
   "dirty-helper": [
    "features__catalog_config__wheel_picker:_ColorRow",

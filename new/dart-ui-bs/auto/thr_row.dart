@@ -2,6 +2,7 @@
 // מוצא: screens__finance_hub_sheets:_ThrRow (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
 import 'bs_tokens.dart';
+import 'package:buildsmart/theme/config_theme.dart';
 
 class ThrRow extends StatelessWidget {
   const ThrRow({required this.label, required this.hit});

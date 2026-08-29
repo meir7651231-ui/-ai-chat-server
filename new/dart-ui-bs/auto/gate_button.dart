@@ -2,6 +2,7 @@
 // מוצא: screens__docs_readiness_gate:_GateButton (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
 import 'bs_tokens.dart';
+import 'package:buildsmart/theme/app_theme.dart';
 
 class GateButton extends StatelessWidget {
   const GateButton({required this.label, required this.onPressed});

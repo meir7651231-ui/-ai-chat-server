@@ -1,10 +1,11 @@
-// 🧽 לוטש ע"י מנוע-המטרות (data-lift v2) — הדאטה הורמה ל-props לפי מטרתה, אל תערוך ידנית.
+// 🧽 לוטש ע"י מנוע-המטרות (data-lift v3) — דאטה/מודל/תבנית הורמו ל-props לפי מטרתם, אל תערוך ידנית.
 // מוצא: screens__trade_builder__trade_builder_home:_AddTradeButton (בנייה-חכמה main) · צרור-1 · props-שורש: label, fallback
 // התוכן: new/dart-data-bs/auto/screens__trade_builder__trade_builder_home_content.dart
 import 'package:flutter/material.dart';
 import 'package:buildsmart/widgets/studio/cfg_visible.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
+import 'package:buildsmart/theme/app_theme.dart';
 
 class AddTradeButton extends StatelessWidget {
   AddTradeButton({required this.label, required this.fallback, required this.onTap});

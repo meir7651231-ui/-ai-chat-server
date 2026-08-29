@@ -1,4 +1,4 @@
-// 🧽 לוטש ע"י מנוע-המטרות (data-lift v2) — הדאטה הורמה ל-props לפי מטרתה, אל תערוך ידנית.
+// 🧽 לוטש ע"י מנוע-המטרות (data-lift v3) — דאטה/מודל/תבנית הורמו ל-props לפי מטרתם, אל תערוך ידנית.
 // מוצא: screens__manager_dashboard_screen:_RegressionBody (בנייה-חכמה main) · צרור-1 · props-שורש: fallback, title, body, fallback2
 // התוכן: new/dart-data-bs/auto/screens__manager_dashboard_screen_content.dart
 import 'package:flutter/material.dart';
@@ -6,6 +6,7 @@ import 'package:buildsmart/widgets/help_target.dart';
 import 'package:buildsmart/widgets/studio/cfg_visible.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
 import 'bs_tokens.dart';
+import 'package:buildsmart/theme/app_theme.dart';
 
 class RegressionBody extends StatelessWidget {
   RegressionBody({required this.fallback, required this.title, required this.body, required this.fallback2, required this.onOpen});

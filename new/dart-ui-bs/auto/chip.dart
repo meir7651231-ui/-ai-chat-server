@@ -2,6 +2,7 @@
 // מוצא: screens__store_dashboard_screen:_Chip (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
 import 'bs_tokens.dart';
+import 'package:buildsmart/theme/app_theme.dart';
 
 class Chip extends StatelessWidget {
   const Chip({required this.label, required this.on, required this.onTap});

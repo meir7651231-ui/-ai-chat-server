@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { okType, inferImports, classBody, stripComments, HEB_STR, IO_PAT, RIVERPOD, blind, snake, screenPascal, bodyIssue, FOUNDATION } from './lift-lib.mjs';
+import { okType, inferImports, classBody, stripComments, HEB_STR, IO_PAT, RIVERPOD, blind, snake, screenPascal, bodyIssue, FOUNDATION, FOUNDATION_FN } from './lift-lib.mjs';
 const ROOT = new URL('../../', import.meta.url).pathname;
 const SCRATCH = process.argv[2] || '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens';
 const SHELF = path.join(ROOT, 'new/dart-ui-bs');
@@ -38,6 +38,19 @@ try {
     .matchAll(/class\s+([A-Za-z0-9_]+)/g)].map(x => x[1]));
   projectClasses.delete('BsTokens'); // מכוסה ע"י אטום-הפיגמנטים
 } catch { /* בלי אינדקס — שער-האחים עדיין פעיל */ }
+let projectFns = new Set();
+try {
+  projectFns = new Set([...execSync("git grep -hE '^[A-Za-z][A-Za-z_<>,? ]+ [a-z][a-zA-Z0-9]+\\(' origin/main -- app_flutter/lib", { cwd: BS, encoding: 'utf8', maxBuffer: 1 << 24 })
+    .matchAll(/ ([a-z]\w+)\(/g)].map(x => x[1]));
+} catch { }
+const externalFn = (code) => {
+  for (const m of new Set([...code.matchAll(/\b([a-z]\w+)\s*\(/g)].map(x => x[1]))) {
+    if (!projectFns.has(m) || FOUNDATION_FN.has(m)) continue;
+    if (new RegExp('(\\n|^)\\s*[A-Za-z_][\\w<>,? ]* ' + m + '\\(').test(code)) continue;
+    return m;
+  }
+  return null;
+};
 
 // ── מלאי-המדף הקיים ──
 const shelfNames = new Set(); const shelfHashes = new Map();
@@ -137,6 +150,8 @@ for (const mf of maps) {
     if (!ok) continue;
     const allCode = stripComments(bundle.map(b => b.body).join('\n'));
     if (RIVERPOD.test(allCode)) { skip('riverpod', id); continue; }
+    const exFn = externalFn(allCode);
+    if (exFn) { skip('project-fn', id + '⇒' + exFn); continue; }
     const needsTokens = /\bBsTokens\./.test(allCode);
     if (needsTokens && !hasTokensAtom) { skip('project-dep', id + '⇒BsTokens'); continue; }
 
@@ -164,6 +179,7 @@ for (const L of [...liftedHashes.values()].sort((a, b) => a.pub.localeCompare(b.
   if (L.stateful) joined = joined.replaceAll('_' + L.name.replace(/^_/, '') + 'State', '_' + L.pub + 'State');
   const extras = inferImports(stripComments(joined));
   for (const [cls, imp] of FOUNDATION) if (new RegExp('\\b' + cls + '\\b').test(stripComments(joined))) extras.unshift(imp);
+  for (const [fn, imp] of FOUNDATION_FN) if (new RegExp('\\b' + fn + '\\s*\\(').test(stripComments(joined)) && !extras.includes(imp)) extras.push(imp);
   const also = L.also.length ? `\n// משרת-גם (זהה-מבנית): ${L.also.join(' · ')}` : '';
   const kind = L.stateful ? 'Stateful+State' : L.bundle.length > 1 ? `צרור-${L.bundle.length}` : 'Stateless';
   const code = `// 🛗 הורם ע"י מנוע-המדף v2 (shelf-lift) — verbatim מהמקור, אל תערוך ידנית.

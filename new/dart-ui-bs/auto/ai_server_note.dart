@@ -2,6 +2,7 @@
 // מוצא: screens__ai_hub_screen:AiServerNote (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
 import 'bs_tokens.dart';
+import 'package:buildsmart/theme/config_theme.dart';
 
 class AiServerNote extends StatelessWidget {
   const AiServerNote(this.text, {super.key});

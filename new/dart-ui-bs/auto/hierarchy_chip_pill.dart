@@ -2,6 +2,7 @@
 // מוצא: screens__lipskey_products_screen:_HierarchyChipPill (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
 import 'bs_tokens.dart';
+import 'package:buildsmart/theme/app_theme.dart';
 
 class HierarchyChipPill extends StatelessWidget {
   const HierarchyChipPill(

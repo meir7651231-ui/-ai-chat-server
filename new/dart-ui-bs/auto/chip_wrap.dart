@@ -2,6 +2,7 @@
 // מוצא: screens__catalog_screen:_ChipWrap (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
 import 'bs_tokens.dart';
+import 'package:buildsmart/theme/app_theme.dart';
 
 class ChipWrap extends StatelessWidget {
   const ChipWrap({

@@ -2,6 +2,7 @@
 // מוצא: screens__store_dashboard_screen:_BigButton (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
 import 'bs_tokens.dart';
+import 'package:buildsmart/theme/config_theme.dart';
 
 class BigButton extends StatelessWidget {
   const BigButton({required this.label, required this.onTap});

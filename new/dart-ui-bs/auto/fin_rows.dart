@@ -2,6 +2,7 @@
 // מוצא: screens__finance_hub_sheets:_FinRows (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
 import 'bs_tokens.dart';
+import 'package:buildsmart/theme/config_theme.dart';
 
 class FinRows extends StatelessWidget {
   const FinRows(this.children);

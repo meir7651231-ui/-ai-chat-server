@@ -2,6 +2,7 @@
 // מוצא: screens__rewards_hub_screen:_CaCard (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
 import 'bs_tokens.dart';
+import 'package:buildsmart/theme/config_theme.dart';
 
 class CaCard extends StatelessWidget {
   const CaCard({required this.child, required this.overdue});

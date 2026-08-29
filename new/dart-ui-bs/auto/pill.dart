@@ -3,6 +3,7 @@
 // משרת-גם (זהה-מבנית): screens__regression_panel_screen:_Pill
 import 'package:flutter/material.dart';
 import 'bs_tokens.dart';
+import 'package:buildsmart/theme/app_theme.dart';
 
 class Pill extends StatelessWidget {
   const Pill({required this.label, required this.active, required this.onTap});

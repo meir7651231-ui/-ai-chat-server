@@ -2,6 +2,7 @@
 // מוצא: screens__catalog_screen:_AxisChip (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
 import 'bs_tokens.dart';
+import 'package:buildsmart/theme/app_theme.dart';
 
 class AxisChip extends StatelessWidget {
   const AxisChip({required this.label, required this.isSelected, required this.onTap});

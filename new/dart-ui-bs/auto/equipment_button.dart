@@ -1,4 +1,4 @@
-// 🧽 לוטש ע"י מנוע-המטרות (data-lift v2) — הדאטה הורמה ל-props לפי מטרתה, אל תערוך ידנית.
+// 🧽 לוטש ע"י מנוע-המטרות (data-lift v3) — דאטה/מודל/תבנית הורמו ל-props לפי מטרתם, אל תערוך ידנית.
 // מוצא: screens__worker_app_screen:_EquipmentButton (בנייה-חכמה main) · צרור-1 · props-שורש: title, body, label, fallback
 // התוכן: new/dart-data-bs/auto/screens__worker_app_screen_content.dart
 // משרת-גם (זהה-מבנית): screens__worker_app_screen:_EmployerStockButton

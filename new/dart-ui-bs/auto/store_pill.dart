@@ -2,6 +2,7 @@
 // מוצא: screens__store_screen:_Pill (בנייה-חכמה main) · Stateless
 import 'package:flutter/material.dart';
 import 'bs_tokens.dart';
+import 'package:buildsmart/theme/app_theme.dart';
 
 class StorePill extends StatelessWidget {
   const StorePill({required this.label, required this.active, required this.onTap});
