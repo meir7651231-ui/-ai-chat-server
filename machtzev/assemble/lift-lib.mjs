@@ -107,6 +107,12 @@ export const maskLitsKeepInterp = (src) => {
     const c = src[j];
     if (m2) {
       if (!r2 && c === '\\') { X(j); j++; if (j < src.length) X(j); continue; }
+      if (!r2 && c === '$' && /[A-Za-z_]/.test(src[j + 1] || '')) {
+        // אינטרפולציה-פשוטה $ident — המזהה נשאר-גלוי לעדשה-הסמנטית
+        j++;
+        while (j < src.length && /[\w$]/.test(src[j]) && src[j] !== '$') j++;
+        j--; continue;
+      }
       if (!r2 && c === '$' && src[j + 1] === '{') {
         let d = 0, im = 0, ir = false;
         for (; j < src.length; j++) {
