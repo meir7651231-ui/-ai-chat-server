@@ -16,6 +16,7 @@
     "label3": "$: worker_nav_label3",
     "label4": "$: worker_nav_label4",
     "currentIndex": "?:int",
+    "onTap": "@:onTap|void Function(int)",
     "chatOn": "?:bool"
    }
   },
@@ -95,7 +96,7 @@
    "atom": "ProposePrimaryBtn",
    "props": {
     "label": "?:String",
-    "onTap": "@:onTap"
+    "onTap": "@:onTap|VoidCallback?"
    }
   }
  ]

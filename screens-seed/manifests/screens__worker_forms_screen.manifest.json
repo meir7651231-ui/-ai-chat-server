@@ -35,7 +35,8 @@
     "id": "?:String",
     "label3": "?:String",
     "label4": "?:String",
-    "onApprove": "@:onApprove"
+    "onApprove": "@:onApprove",
+    "onReject": "@:onReject|Future<void> Function()"
    }
   }
  ]

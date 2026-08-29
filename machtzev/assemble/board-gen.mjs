@@ -189,13 +189,13 @@ for (const mf of fs.readdirSync(MANIFESTS).filter(f => f.endsWith('.manifest.jso
   const selfImport = "import 'package:buildsmart/" + srcScreen.replace(/__/g, '/') + ".dart';";
 
   // איסוף החיבורים הנדרשים מהמניפסט (אותם-כללים כמו המרכיב)
-  const needP = new Map(); const needCb = new Set(); const needTok = new Map(); const needGates = new Set();
+  const needP = new Map(); const needCb = new Map(); const needTok = new Map(); const needGates = new Set();
   for (const sec of M.sections || []) {
     for (const [k, v] of Object.entries(sec.props || {})) {
       if (typeof v !== 'string') continue;
       if (v.startsWith('?:')) { let n = k; const t = v.slice(2).trim() || 'String'; while (needP.has(n) && needP.get(n).t !== t) n += '2'; needP.set(n, { t, sec }); }
       else if (v === '~:') { /* פר-פריט — מחווט דרך פרמטר-הרשימה */ }
-      else if (v.startsWith('@:')) needCb.add(v.slice(2).trim());
+      else if (v.startsWith('@:')) { const [cn, ct] = v.slice(2).trim().split('|'); needCb.set(cn, ct || 'VoidCallback'); }
       else if (v.startsWith('#:')) needTok.set(v.slice(2).trim(), /radius|size|width|height|space|pill/i.test(v.slice(2)) ? 'double' : 'Color');
     }
     if (sec.repeat?.item) {
@@ -300,9 +300,10 @@ for (const mf of fs.readdirSync(MANIFESTS).filter(f => f.endsWith('.manifest.jso
     : t === 'Widget' ? 'const SizedBox.shrink()' : t.includes('Controller') ? t.replace(/\?$/, '') + '()'
     : t === 'Color' ? 'const Color(0xFF223047)' : '(null as dynamic)';
   for (const g of [...needGates].sort()) { argLines.push(`      ${g}: true /* TODO-לוח: שער */,`); todo++; }
-  for (const c of [...needCb].sort()) {
+  for (const [c, ct] of [...needCb.entries()].sort()) {
     const e = wires.get(c);
-    if (e) argLines.push(`      ${c}: ${e},`); else { argLines.push(`      ${c}: () {} /* TODO-לוח */,`); todo++; }
+    const dflt = /Future/.test(ct) ? '() async {}' : /ValueChanged|Function\(/.test(ct) ? '(_) {}' : '() {}';
+    if (e) argLines.push(`      ${c}: ${e},`); else { argLines.push(`      ${c}: ${dflt} /* TODO-לוח */,`); todo++; }
   }
   for (const [n, { t }] of [...needP].sort()) {
     const e = wires.get(n);

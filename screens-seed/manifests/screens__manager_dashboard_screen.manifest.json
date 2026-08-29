@@ -23,7 +23,7 @@
     "count": "~:",
     "max": "?:int",
     "color": "~:",
-    "onTap": "@:onTap"
+    "onTap": "@:onTap|VoidCallback?"
    },
    "repeat": {
     "as": "stage",

@@ -130,7 +130,9 @@
   {
    "id": "report_table",
    "atom": "ReportTable",
-   "props": {}
+   "props": {
+    "rows": "?:List<(String, String, bool)>"
+   }
   }
  ]
 }

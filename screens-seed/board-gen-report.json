@@ -23,7 +23,7 @@
   {
    "screen": "screens__budget_screen",
    "wired": 0,
-   "todo": 7
+   "todo": 8
   },
   {
    "screen": "screens__camera_sheet",
@@ -33,7 +33,7 @@
   {
    "screen": "screens__catalog_screen",
    "wired": 2,
-   "todo": 22
+   "todo": 23
   },
   {
    "screen": "screens__catalog_settings_screen",
@@ -88,7 +88,7 @@
   {
    "screen": "screens__courier_forms_screen",
    "wired": 1,
-   "todo": 13
+   "todo": 14
   },
   {
    "screen": "screens__courier_portal_tab",
@@ -123,7 +123,7 @@
   {
    "screen": "screens__finance_hub_sheets",
    "wired": 1,
-   "todo": 25
+   "todo": 26
   },
   {
    "screen": "screens__finder_screen",
@@ -198,7 +198,7 @@
   {
    "screen": "screens__persona_picking_sheet",
    "wired": 0,
-   "todo": 2
+   "todo": 3
   },
   {
    "screen": "screens__persona_portal",
@@ -208,7 +208,7 @@
   {
    "screen": "screens__profile_screen",
    "wired": 1,
-   "todo": 4
+   "todo": 5
   },
   {
    "screen": "screens__projects_screen",
@@ -248,7 +248,7 @@
   {
    "screen": "screens__stock_screen",
    "wired": 0,
-   "todo": 6
+   "todo": 7
   },
   {
    "screen": "screens__store_dashboard_screen",
@@ -358,7 +358,7 @@
   {
    "screen": "screens__worker_forms_screen",
    "wired": 1,
-   "todo": 13
+   "todo": 14
   },
   {
    "screen": "screens__worker_notifs_sheet",
@@ -398,7 +398,7 @@
  ],
  "totals": {
   "wired": 42,
-  "todo": 421,
+  "todo": 429,
   "hebInExpr": 13
  }
 }

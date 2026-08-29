@@ -27,7 +27,8 @@
     "fallback": "$: split_control_fallback",
     "label": "$: split_control_label",
     "label2": "$: split_control_label2",
-    "splitInto": "?:int"
+    "splitInto": "?:int",
+    "onSelect": "@:onSelect|void Function(int)"
    }
   }
  ]

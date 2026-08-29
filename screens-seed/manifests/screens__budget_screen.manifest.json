@@ -36,7 +36,8 @@
    "props": {
     "label": "?:String",
     "controller": "?:TextEditingController",
-    "number": "?:bool"
+    "number": "?:bool",
+    "validator": "@:validator|String? Function(String value)?"
    }
   }
  ]

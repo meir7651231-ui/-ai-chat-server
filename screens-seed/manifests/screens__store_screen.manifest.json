@@ -129,7 +129,7 @@
     "label": "$: store_step_btn_label",
     "label2": "$: store_step_btn_label2",
     "icon": "?:IconData",
-    "onTap": "@:onTap"
+    "onTap": "@:onTap|VoidCallback?"
    }
   },
   {

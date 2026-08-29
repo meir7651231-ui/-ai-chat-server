@@ -13,7 +13,7 @@
     "label2": "$: kpi_box_label2",
     "value": "?:String",
     "label": "?:String",
-    "onTap": "@:onTap"
+    "onTap": "@:onTap|VoidCallback?"
    }
   },
   {
@@ -32,7 +32,7 @@
     "label2": "$: worker_reports_tab_kv_row_label2",
     "label": "?:String",
     "value": "?:String",
-    "onTap": "@:onTap"
+    "onTap": "@:onTap|VoidCallback?"
    }
   }
  ]

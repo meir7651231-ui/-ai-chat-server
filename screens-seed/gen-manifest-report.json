@@ -107,7 +107,7 @@
   },
   {
    "screen": "screens__finance_hub_sheets",
-   "holes": 32,
+   "holes": 33,
    "flat": true
   },
   {
@@ -217,7 +217,7 @@
   },
   {
    "screen": "screens__stock_screen",
-   "holes": 4
+   "holes": 5
   },
   {
    "screen": "screens__store_dashboard_screen",
@@ -548,6 +548,8 @@
   "String?": 9,
   "int?": 2,
   "List<String>?": 1,
-  "List<Widget>": 9
+  "List<Widget>": 9,
+  "List<(String, String, bool)>": 1,
+  "({String img, String why})": 1
  }
 }

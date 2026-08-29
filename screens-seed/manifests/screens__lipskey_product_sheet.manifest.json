@@ -27,7 +27,7 @@
    "atom": "QtyStepper",
    "props": {
     "qty": "?:int",
-    "onChanged": "@:onChanged"
+    "onChanged": "@:onChanged|ValueChanged<int>"
    }
   },
   {

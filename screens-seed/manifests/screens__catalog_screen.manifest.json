@@ -84,7 +84,8 @@
    "atom": "ChipWrap",
    "props": {
     "options": "?:List<String>",
-    "selected": "?:String?"
+    "selected": "?:String?",
+    "onSelect": "@:onSelect|void Function(String)"
    }
   },
   {
@@ -119,8 +120,8 @@
     "label4": "$: acc_row_label4",
     "selected": "?:bool",
     "qty": "?:int",
-    "onToggle": "@:onToggle",
-    "onQtyChanged": "@:onQtyChanged",
+    "onToggle": "@:onToggle|ValueChanged<bool>?",
+    "onQtyChanged": "@:onQtyChanged|ValueChanged<int>",
     "activeMatch": "?:List<String>?"
    }
   },
@@ -131,7 +132,7 @@
     "label": "$: mini_qty_btn_label",
     "label2": "$: mini_qty_btn_label2",
     "icon": "?:IconData",
-    "onTap": "@:onTap"
+    "onTap": "@:onTap|VoidCallback?"
    }
   },
   {

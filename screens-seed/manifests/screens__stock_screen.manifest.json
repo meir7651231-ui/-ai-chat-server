@@ -22,6 +22,7 @@
     "label": "$: stock_row_label",
     "label2": "$: stock_row_label2",
     "name": "?:String",
+    "info": "?:({String img, String why})",
     "warehouse": "?:bool",
     "onMove": "@:onMove"
    }

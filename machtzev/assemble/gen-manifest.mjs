@@ -24,7 +24,7 @@ for (const f of fs.readdirSync(SHELF, { recursive: true }).map(String)) {
   if (!cm) continue;
   const atom = cm[1];
   const body = classBody(src, cm.index) || '';
-  const props = [...stripComments(body).matchAll(/final\s+([A-Za-z_][\w<>,? ]*?)\s+([a-zA-Z_]\w*)\s*;/g)]
+  const props = [...stripComments(body).matchAll(/final\s+((?:\([^)]*\)\??|[A-Za-z_][\w<>,?() ]*?))\s+([a-zA-Z_]\w*)\s*;/g)]
     .map(x => ({ name: x[2], type: x[1].trim() }));
   const entry = { atom, file: f, props };
   classByName.set(atom, entry);
@@ -122,7 +122,7 @@ for (const mf of fs.readdirSync(path.join(ROOT, 'screens-seed/machine')).filter(
       const cn = snake(o.atom) + '_' + snake(p.name);
       if (consts.has(cn)) props[p.name] = '$: ' + cn;
       else if (rec && rec.fields.has(p.name) && p.type.startsWith('String')) props[p.name] = '$: ' + rec.rec + '.' + p.name;
-      else if (isCb(p.type)) props[p.name] = '@:' + p.name;
+      else if (isCb(p.type)) props[p.name] = '@:' + p.name + (p.type === 'VoidCallback' ? '' : '|' + p.type);
       else if (isTok(p.name, p.type)) props[p.name] = '#:' + p.name;
       else { props[p.name] = '?:' + p.type; holes++; holeTypes.add(p.type); }
     }

@@ -17,7 +17,7 @@
    "atom": "WorkerEquipmentChecklistSheetPrimaryBtn",
    "props": {
     "label": "?:String",
-    "onTap": "@:onTap"
+    "onTap": "@:onTap|VoidCallback?"
    }
   }
  ]

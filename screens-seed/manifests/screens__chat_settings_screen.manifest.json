@@ -14,13 +14,13 @@
     "leadingGlyph": "$: chatSettingsScreenContent.leadingGlyph",
     "title": "$: chatSettingsScreenContent.title",
     "templates": "?:List<String>",
-    "onTemplateTap": "@:onTemplateTap",
+    "onTemplateTap": "@:onTemplateTap|ValueChanged<String>",
     "inkColor": "#:inkColor",
     "accentColor": "#:accentColor",
     "chipFillColor": "#:chipFillColor",
     "chipBorderColor": "#:chipBorderColor",
     "editLabel": "$: chatSettingsScreenContent.editLabel",
-    "onEditTap": "@:onEditTap"
+    "onEditTap": "@:onEditTap|VoidCallback?"
    }
   }
  ]

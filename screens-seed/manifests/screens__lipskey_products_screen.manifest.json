@@ -23,7 +23,7 @@
     "label": "?:String",
     "label2": "?:String",
     "icon": "?:IconData",
-    "onTap": "@:onTap"
+    "onTap": "@:onTap|VoidCallback?"
    }
   },
   {
@@ -31,7 +31,7 @@
    "atom": "HierarchyChipPill",
    "props": {
     "word": "?:String",
-    "onTap": "@:onTap",
+    "onTap": "@:onTap|VoidCallback?",
     "isOpen": "?:bool"
    }
   }

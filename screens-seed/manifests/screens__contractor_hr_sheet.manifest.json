@@ -20,7 +20,8 @@
     "id": "?:String",
     "label3": "$: vacation_row_label3",
     "label4": "$: vacation_row_label4",
-    "onApprove": "~:"
+    "onApprove": "~:",
+    "onReject": "~:"
    },
    "repeat": {
     "as": "r",

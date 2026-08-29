@@ -23,10 +23,11 @@ for (const f of fs.readdirSync(SHELF, { recursive: true }).map(String)) {
   const cm = src.match(/class\s+([A-Za-z0-9]+)\s+extends\s+(?:StatelessWidget|StatefulWidget)/);
   if (!cm) continue;
   const props = new Set([...src.matchAll(/this\.([a-zA-Z0-9]+)/g)].map(x => x[1]));
-  const types = new Map([...src.matchAll(/final\s+([A-Za-z_][\w<>,? ]*?)\s+([a-zA-Z0-9_]+)\s*;/g)].map(x => [x[2], x[1].trim()]));
+  const types = new Map([...src.matchAll(/final\s+((?:\([^)]*\)\??|[A-Za-z_][\w<>,?() ]*?))\s+([a-zA-Z0-9_]+)\s*;/g)].map(x => [x[2], x[1].trim()]));
   // חתימת-הבנאי: מיקומיים (לפני '{') בסדרם · required-בשמות
   let positional = [], requiredNamed = [];
-  const ctm = src.match(new RegExp('(?:const\\s+)?' + cm[1] + '\\s*\\(([^)]*)\\)', 's'));
+  const codeOnly2 = src.split('\n').filter(l => !l.trim().startsWith('//')).join('\n');
+  const ctm = codeOnly2.match(new RegExp('(?:const\\s+)?' + cm[1] + '\\s*\\(([^)]*)\\)', 's'));
   if (ctm) {
     const [posPart, namedPart = ''] = ctm[1].split('{');
     positional = [...posPart.matchAll(/this\.(\w+)/g)].map(x => x[1]);
@@ -39,7 +40,7 @@ if (!shelf.TitledSection) die('אין TitledSection במדף');
 
 // ── פירוק ערך-prop לביטוי-Dart + רישום פרמטרים ──
 const tokens = new Map();   // name ⇒ dartType
-const callbacks = new Set();
+const callbacks = new Map();  // name ⇒ type
 const gates = new Set();
 const params = new Map();   // חורי-נתוני-ריצה: name ⇒ type (הלוח מזרים)
 const itemClasses = new Map(); // 🔁 repeat: ItemClass ⇒ [{name,type}]
@@ -51,7 +52,7 @@ function expr(v, scopeVar) {
     if (scopeVar && (e === scopeVar || e.startsWith(scopeVar + '.'))) return e;
     return e; // הפניה לקבועי-קובץ-התוכן
   }
-  if (v.startsWith('@:')) { const n = v.slice(2).trim(); callbacks.add(n); return n; }
+  if (v.startsWith('@:')) { const [n, t] = v.slice(2).trim().split('|'); callbacks.set(n, t || 'VoidCallback'); return n; }
   if (v.startsWith('?:')) { return null; } // מטופל ב-sectionCode (צריך את שם-ה-prop)
   if (v.startsWith('#:')) {
     const n = v.slice(2).trim();
@@ -116,7 +117,7 @@ const imports = [...usedAtoms].map(a => `import '../dart-ui-bs/${shelf[a].file}'
 for (const c of M.content || []) imports.push(`import '../dart-data-bs/${c}';`);
 const tokFields = [...tokens.entries()].sort().map(([n, t]) => `  final ${t} ${n};`).join('\n');
 const tokCtor = [...tokens.keys()].sort().map(n => `required this.${n}`).join(', ');
-const cbFields = [...callbacks].sort().map(n => `  final VoidCallback ${n};`).join('\n');
+const cbFields = [...callbacks.entries()].sort().map(([n, t]) => `  final ${t} ${n};`).join('\n');
 const gateFields = [...gates].sort().map(n => `  final bool ${n};`).join('\n');
 const paramFields = [...params.entries()].sort().map(([n, t]) => `  final ${t} ${n};`).join('\n');
 const ctorParams = [
