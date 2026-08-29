@@ -98,6 +98,9 @@ stage('הרכבה-מחוללת (gen-screen)', () => {
   return n + ' מסכים הורכבו-ממניפסט';
 });
 
+// ── 4ג · מחולל-הלוחות: חיווט המסכים-המורכבים למקורות-החיים ──
+stage('מחולל-הלוחות (board-gen)', () => last(run('machtzev/assemble/board-gen.mjs', [SCRATCH]).split('\n').filter(l => l.includes('לוחות'))));
+
 // ── 5 · ביקורות-ההרכבה והטוהר (שערי-ratchet) ──
 stage('ביקורת-הרכבה (box-audit)', () => last(run('machtzev/assemble/box-audit.mjs', ['--gate'])));
 stage('טוהר-דאטה (purity-data)', () => last(run('machtzev/purity-data.mjs', ['--gate'])));

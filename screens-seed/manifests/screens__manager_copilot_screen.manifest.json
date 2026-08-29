@@ -1,0 +1,38 @@
+{
+ "generated": true,
+ "src": "screens__manager_copilot_screen",
+ "screen": "manager_copilot_screen",
+ "flat": true,
+ "content": [
+  "auto/screens__manager_copilot_screen_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "welcome",
+   "atom": "Welcome",
+   "props": {
+    "fallback": "$: welcome_fallback",
+    "fallback2": "$: welcome_fallback2",
+    "fallback3": "$: welcome_fallback3",
+    "fallback4": "$: welcome_fallback4",
+    "onBrief": "@:onBrief"
+   }
+  },
+  {
+   "id": "typing",
+   "atom": "Typing",
+   "props": {}
+  },
+  {
+   "id": "input_bar",
+   "atom": "InputBar",
+   "props": {
+    "hintText": "$: input_bar_hint_text",
+    "tooltip": "$: input_bar_tooltip",
+    "controller": "?:TextEditingController",
+    "enabled": "?:bool",
+    "onSend": "@:onSend"
+   }
+  }
+ ]
+}

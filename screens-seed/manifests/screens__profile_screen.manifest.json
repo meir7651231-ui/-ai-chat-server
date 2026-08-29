@@ -1,0 +1,40 @@
+{
+ "generated": true,
+ "src": "screens__profile_screen",
+ "screen": "profile_screen",
+ "flat": true,
+ "content": [],
+ "sections": [
+  {
+   "id": "section_label",
+   "atom": "SectionLabel",
+   "props": {
+    "text": "?:String"
+   }
+  },
+  {
+   "id": "field",
+   "atom": "Field",
+   "props": {
+    "label": "?:String",
+    "controller": "?:TextEditingController",
+    "number": "?:bool"
+   }
+  },
+  {
+   "id": "field_label",
+   "atom": "FieldLabel",
+   "props": {
+    "text": "?:String"
+   }
+  },
+  {
+   "id": "link_row",
+   "atom": "LinkRow",
+   "props": {
+    "label": "?:String",
+    "onTap": "@:onTap"
+   }
+  }
+ ]
+}

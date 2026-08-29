@@ -1,5 +1,6 @@
 {
  "generated": true,
+ "src": "screens__intel__intel_tab",
  "screen": "intel_intel_tab",
  "content": [
   "auto/screens__intel__intel_tab_content.dart"

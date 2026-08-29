@@ -1,0 +1,156 @@
+{
+ "generated": true,
+ "src": "screens__catalog_screen",
+ "screen": "catalog_screen",
+ "flat": true,
+ "content": [
+  "auto/screens__catalog_screen_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "company_catalog_import_card",
+   "atom": "CompanyCatalogImportCard",
+   "props": {
+    "label": "$: company_catalog_import_card_label",
+    "label2": "$: company_catalog_import_card_label2",
+    "label3": "$: company_catalog_import_card_label3",
+    "label4": "$: company_catalog_import_card_label4",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "section_header",
+   "atom": "SectionHeader",
+   "props": {
+    "title": "?:String"
+   }
+  },
+  {
+   "id": "empty_section",
+   "atom": "EmptySection",
+   "props": {
+    "fallback": "$: empty_section_fallback",
+    "emoji": "?:String",
+    "label": "?:String"
+   }
+  },
+  {
+   "id": "facet_row",
+   "atom": "FacetRow",
+   "props": {
+    "label2": "$: facet_row_label2",
+    "label": "?:String",
+    "desc": "?:String",
+    "count": "?:int",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "tree_coming_soon",
+   "atom": "TreeComingSoon",
+   "props": {
+    "fallback": "$: tree_coming_soon_fallback",
+    "fallback2": "$: tree_coming_soon_fallback2",
+    "title": "?:String",
+    "emoji": "?:String"
+   }
+  },
+  {
+   "id": "catalog_count_badge",
+   "atom": "CatalogCountBadge",
+   "props": {
+    "label": "?:String",
+    "count": "?:int",
+    "color": "#:color"
+   }
+  },
+  {
+   "id": "sheet_section",
+   "atom": "SheetSection",
+   "props": {
+    "title": "?:String",
+    "value": "?:String",
+    "expanded": "?:bool",
+    "onToggle": "@:onToggle",
+    "child": "?:Widget"
+   }
+  },
+  {
+   "id": "chip_wrap",
+   "atom": "ChipWrap",
+   "props": {
+    "options": "?:List<String>",
+    "selected": "?:String?"
+   }
+  },
+  {
+   "id": "saved_version_chip",
+   "atom": "SavedVersionChip",
+   "props": {
+    "message": "$: saved_version_chip_message",
+    "label2": "$: saved_version_chip_label2",
+    "message2": "$: saved_version_chip_message2",
+    "label3": "$: saved_version_chip_label3",
+    "label": "?:String",
+    "onLoad": "@:onLoad",
+    "onDelete": "@:onDelete"
+   }
+  },
+  {
+   "id": "acc_row",
+   "atom": "AccRow",
+   "props": {
+    "label": "$: acc_row_label",
+    "label2": "$: acc_row_label2",
+    "name": "?:String",
+    "emoji": "?:String",
+    "why": "?:String",
+    "price": "?:int?",
+    "onTap": "@:onTap",
+    "label3": "$: acc_row_label3",
+    "label4": "$: acc_row_label4",
+    "selected": "?:bool",
+    "qty": "?:int",
+    "onToggle": "@:onToggle",
+    "onQtyChanged": "@:onQtyChanged",
+    "activeMatch": "?:List<String>?"
+   }
+  },
+  {
+   "id": "mini_qty_btn",
+   "atom": "MiniQtyBtn",
+   "props": {
+    "label": "$: mini_qty_btn_label",
+    "label2": "$: mini_qty_btn_label2",
+    "icon": "?:IconData",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "value_chip",
+   "atom": "ValueChip",
+   "props": {
+    "text": "?:String"
+   }
+  },
+  {
+   "id": "axis_chip",
+   "atom": "AxisChip",
+   "props": {
+    "label": "?:String",
+    "isSelected": "?:bool",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "facet_chip",
+   "atom": "FacetChip",
+   "props": {
+    "label": "?:String",
+    "count": "?:int",
+    "isSelected": "?:bool",
+    "onTap": "@:onTap"
+   }
+  }
+ ]
+}

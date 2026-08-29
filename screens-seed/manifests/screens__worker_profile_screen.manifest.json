@@ -1,0 +1,24 @@
+{
+ "generated": true,
+ "src": "screens__worker_profile_screen",
+ "screen": "worker_profile_screen",
+ "content": [
+  "auto/screens__worker_profile_screen_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "stats_card",
+   "atom": "StatsCard",
+   "props": {
+    "fallback": "$: stats_card_fallback",
+    "label": "$: stats_card_label",
+    "label2": "$: stats_card_label2",
+    "label3": "$: stats_card_label3",
+    "done": "?:int",
+    "inReview": "?:int",
+    "rejected": "?:int",
+    "total": "?:int"
+   }
+  }
+ ]
+}

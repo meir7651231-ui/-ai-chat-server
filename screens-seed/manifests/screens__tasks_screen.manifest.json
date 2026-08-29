@@ -1,0 +1,106 @@
+{
+ "generated": true,
+ "src": "screens__tasks_screen",
+ "screen": "tasks_screen",
+ "flat": true,
+ "content": [
+  "auto/screens__tasks_screen_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "intro",
+   "atom": "Intro",
+   "props": {
+    "text": "?:String"
+   }
+  },
+  {
+   "id": "new_task_button",
+   "atom": "NewTaskButton",
+   "props": {
+    "fallback": "$: new_task_button_fallback",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "log_button",
+   "atom": "LogButton",
+   "props": {
+    "fallback": "$: log_button_fallback",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "done_all",
+   "atom": "DoneAll",
+   "props": {
+    "text": "?:String"
+   }
+  },
+  {
+   "id": "approval_card",
+   "atom": "ApprovalCard",
+   "props": {
+    "label": "$: approval_card_label",
+    "fallback": "$: approval_card_fallback",
+    "label2": "$: approval_card_label2",
+    "name": "?:String",
+    "workerLabel": "?:String",
+    "onApprove": "@:onApprove",
+    "onReject": "@:onReject"
+   }
+  },
+  {
+   "id": "proposal_card",
+   "atom": "ProposalCard",
+   "props": {
+    "label": "$: proposal_card_label",
+    "fallback": "$: proposal_card_fallback",
+    "label2": "$: proposal_card_label2",
+    "id": "?:int",
+    "name": "?:String",
+    "detail": "?:String",
+    "workerLabel": "?:String",
+    "days": "?:int",
+    "onApprove": "@:onApprove",
+    "onReject": "@:onReject"
+   }
+  },
+  {
+   "id": "worker_pick",
+   "atom": "WorkerPick",
+   "props": {
+    "selected": "?:int"
+   }
+  },
+  {
+   "id": "primary_btn",
+   "atom": "PrimaryBtn",
+   "props": {
+    "label": "?:String",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "tasks_card",
+   "atom": "TasksCard",
+   "props": {
+    "fallback": "$: tasks_card_fallback",
+    "label": "$: tasks_card_label",
+    "label2": "$: tasks_card_label2",
+    "status": "?:String",
+    "name": "?:String",
+    "detail": "?:String",
+    "onTap": "@:onTap",
+    "onEdit": "@:onEdit"
+   }
+  },
+  {
+   "id": "sec_h",
+   "atom": "SecH",
+   "props": {
+    "text": "?:String"
+   }
+  }
+ ]
+}

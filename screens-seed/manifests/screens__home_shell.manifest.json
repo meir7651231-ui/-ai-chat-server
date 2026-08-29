@@ -1,0 +1,26 @@
+{
+ "generated": true,
+ "src": "screens__home_shell",
+ "screen": "home_shell",
+ "flat": true,
+ "content": [],
+ "sections": [
+  {
+   "id": "home_shell_badged_icon",
+   "atom": "HomeShellBadgedIcon",
+   "props": {
+    "icon": "?:IconData",
+    "count": "?:int"
+   }
+  },
+  {
+   "id": "home_shell_menu_row",
+   "atom": "HomeShellMenuRow",
+   "props": {
+    "emoji": "?:String",
+    "label": "?:String",
+    "cfgId": "?:String?"
+   }
+  }
+ ]
+}

@@ -1,0 +1,18 @@
+{
+ "generated": true,
+ "src": "screens__defects_sheet",
+ "screen": "defects_sheet",
+ "flat": true,
+ "content": [],
+ "sections": [
+  {
+   "id": "severity_chip",
+   "atom": "SeverityChip",
+   "props": {
+    "label": "?:String",
+    "selected": "?:bool",
+    "onTap": "@:onTap"
+   }
+  }
+ ]
+}

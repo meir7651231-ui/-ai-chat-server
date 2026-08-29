@@ -1,0 +1,34 @@
+{
+ "generated": true,
+ "src": "screens__persona_picking_sheet",
+ "screen": "persona_picking_sheet",
+ "content": [
+  "auto/screens__persona_picking_sheet_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "grip",
+   "atom": "Grip",
+   "props": {}
+  },
+  {
+   "id": "banner",
+   "atom": "Banner",
+   "props": {
+    "text": "?:String",
+    "bg": "#:bg",
+    "fg": "#:fg"
+   }
+  },
+  {
+   "id": "split_control",
+   "atom": "SplitControl",
+   "props": {
+    "fallback": "$: split_control_fallback",
+    "label": "$: split_control_label",
+    "label2": "$: split_control_label2",
+    "splitInto": "?:int"
+   }
+  }
+ ]
+}

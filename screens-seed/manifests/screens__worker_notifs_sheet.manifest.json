@@ -1,0 +1,16 @@
+{
+ "generated": true,
+ "src": "screens__worker_notifs_sheet",
+ "screen": "worker_notifs_sheet",
+ "content": [],
+ "sections": [
+  {
+   "id": "notif_row",
+   "atom": "NotifRow",
+   "props": {
+    "fallback": "?:String",
+    "onTap": "@:onTap"
+   }
+  }
+ ]
+}

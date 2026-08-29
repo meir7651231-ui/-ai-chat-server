@@ -1,0 +1,25 @@
+// 🔌 חולל ע"י מחולל-הלוחות (board-gen) — הלוח = המקום-היחיד שנוגע-בחיווט (חוק-3).
+// מקור-החיווט: screens__persona_portal.dart (בנייה-חכמה main) · מחווט: 0 · TODO: 3.
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:buildsmart/data/supplier_data.dart';
+import 'package:buildsmart/screens/chats_screen.dart';
+import 'package:buildsmart/state/store_stock.dart';
+import 'package:buildsmart/state/sys_chat.dart';
+import 'package:buildsmart/state/under_construction.dart';
+import 'package:buildsmart/theme/tokens.dart';
+import '../dart-screens-bs/persona_portal.g.dart';
+
+class PersonaPortalBoard extends ConsumerWidget {
+  const PersonaPortalBoard({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return PersonaPortalComposed(
+      onTap: () {} /* TODO-לוח */,
+      sub: '' /* TODO-לוח: String */,
+      title: '' /* TODO-לוח: String */,
+      t: PersonaPortalTokens(),
+    );
+  }
+}

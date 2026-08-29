@@ -25,6 +25,7 @@ class ContractorHomeComposed extends StatelessWidget {
   final bool showEmptyOrders;
   final bool workPathOn;
   final VoidCallback onHeroTap;
+
   final ContractorHomeTokens t;
 
   @override

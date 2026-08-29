@@ -1,0 +1,404 @@
+{
+ "boards": [
+  {
+   "screen": "features__catalog_config__catalog_config_screen",
+   "wired": 2,
+   "todo": 0
+  },
+  {
+   "screen": "features__catalog_config__wheel_picker",
+   "wired": 0,
+   "todo": 0
+  },
+  {
+   "screen": "screens__ai_hub_screen",
+   "wired": 10,
+   "todo": 3
+  },
+  {
+   "screen": "screens__budget_screen",
+   "wired": 6,
+   "todo": 1
+  },
+  {
+   "screen": "screens__camera_sheet",
+   "wired": 6,
+   "todo": 0
+  },
+  {
+   "screen": "screens__catalog_screen",
+   "wired": 16,
+   "todo": 8
+  },
+  {
+   "screen": "screens__catalog_settings_screen",
+   "wired": 2,
+   "todo": 0
+  },
+  {
+   "screen": "screens__chat_settings_screen",
+   "wired": 0,
+   "todo": 3
+  },
+  {
+   "screen": "screens__chats_screen",
+   "wired": 2,
+   "todo": 1
+  },
+  {
+   "screen": "screens__consent_modal",
+   "wired": 1,
+   "todo": 2
+  },
+  {
+   "screen": "screens__contractor_hr_sheet",
+   "wired": 3,
+   "todo": 3
+  },
+  {
+   "screen": "screens__contractor_material_requests_sheet",
+   "wired": 0,
+   "todo": 2
+  },
+  {
+   "screen": "screens__contractor_tools_sheets",
+   "wired": 1,
+   "todo": 0
+  },
+  {
+   "screen": "screens__courier_attendance_screen",
+   "wired": 4,
+   "todo": 5
+  },
+  {
+   "screen": "screens__courier_certs_screen",
+   "wired": 2,
+   "todo": 1
+  },
+  {
+   "screen": "screens__courier_dashboard_screen",
+   "wired": 6,
+   "todo": 2
+  },
+  {
+   "screen": "screens__courier_forms_screen",
+   "wired": 10,
+   "todo": 2
+  },
+  {
+   "screen": "screens__courier_portal_tab",
+   "wired": 3,
+   "todo": 1
+  },
+  {
+   "screen": "screens__courier_profile_screen",
+   "wired": 0,
+   "todo": 2
+  },
+  {
+   "screen": "screens__courier_reports_tab",
+   "wired": 3,
+   "todo": 1
+  },
+  {
+   "screen": "screens__courier_settings_screen",
+   "wired": 2,
+   "todo": 0
+  },
+  {
+   "screen": "screens__defects_sheet",
+   "wired": 2,
+   "todo": 1
+  },
+  {
+   "screen": "screens__docs_readiness_gate",
+   "wired": 3,
+   "todo": 2
+  },
+  {
+   "screen": "screens__finance_hub_sheets",
+   "wired": 9,
+   "todo": 14
+  },
+  {
+   "screen": "screens__finder_screen",
+   "wired": 1,
+   "todo": 0
+  },
+  {
+   "screen": "screens__home_shell",
+   "wired": 2,
+   "todo": 3
+  },
+  {
+   "screen": "screens__install_studio_screen",
+   "wired": 3,
+   "todo": 0
+  },
+  {
+   "screen": "screens__intel__intel_tab",
+   "wired": 0,
+   "todo": 0
+  },
+  {
+   "screen": "screens__legal_screen",
+   "wired": 0,
+   "todo": 0
+  },
+  {
+   "screen": "screens__lipskey_brand_screen",
+   "wired": 7,
+   "todo": 0
+  },
+  {
+   "screen": "screens__lipskey_product_sheet",
+   "wired": 15,
+   "todo": 3
+  },
+  {
+   "screen": "screens__lipskey_products_screen",
+   "wired": 4,
+   "todo": 5
+  },
+  {
+   "screen": "screens__manager_copilot_screen",
+   "wired": 4,
+   "todo": 0
+  },
+  {
+   "screen": "screens__manager_dashboard_screen",
+   "wired": 5,
+   "todo": 1
+  },
+  {
+   "screen": "screens__manager_profile_screen",
+   "wired": 0,
+   "todo": 2
+  },
+  {
+   "screen": "screens__manager_role_assign_sheet",
+   "wired": 4,
+   "todo": 0
+  },
+  {
+   "screen": "screens__notif_settings_screen",
+   "wired": 2,
+   "todo": 7
+  },
+  {
+   "screen": "screens__notifications_screen",
+   "wired": 2,
+   "todo": 1
+  },
+  {
+   "screen": "screens__persona_picking_sheet",
+   "wired": 1,
+   "todo": 1
+  },
+  {
+   "screen": "screens__persona_portal",
+   "wired": 0,
+   "todo": 3
+  },
+  {
+   "screen": "screens__profile_screen",
+   "wired": 4,
+   "todo": 1
+  },
+  {
+   "screen": "screens__projects_screen",
+   "wired": 6,
+   "todo": 2
+  },
+  {
+   "screen": "screens__regression_panel_screen",
+   "wired": 0,
+   "todo": 11
+  },
+  {
+   "screen": "screens__rewards_hub_screen",
+   "wired": 4,
+   "todo": 1
+  },
+  {
+   "screen": "screens__role_requests_inbox_screen",
+   "wired": 1,
+   "todo": 1
+  },
+  {
+   "screen": "screens__site_hub_screen",
+   "wired": 4,
+   "todo": 1
+  },
+  {
+   "screen": "screens__smart_home_screen",
+   "wired": 0,
+   "todo": 4
+  },
+  {
+   "screen": "screens__smart_project_screen",
+   "wired": 4,
+   "todo": 0
+  },
+  {
+   "screen": "screens__stock_screen",
+   "wired": 3,
+   "todo": 3
+  },
+  {
+   "screen": "screens__store_dashboard_screen",
+   "wired": 5,
+   "todo": 3
+  },
+  {
+   "screen": "screens__store_profile_screen",
+   "wired": 1,
+   "todo": 1
+  },
+  {
+   "screen": "screens__store_screen",
+   "wired": 15,
+   "todo": 4
+  },
+  {
+   "screen": "screens__store_settings_screen",
+   "wired": 2,
+   "todo": 10
+  },
+  {
+   "screen": "screens__studio__panes__find_replace_pane",
+   "wired": 2,
+   "todo": 0
+  },
+  {
+   "screen": "screens__studio__panes__theme_pane",
+   "wired": 2,
+   "todo": 1
+  },
+  {
+   "screen": "screens__studio__studio_top_bar",
+   "wired": 1,
+   "todo": 0
+  },
+  {
+   "screen": "screens__suppliers_screen",
+   "wired": 0,
+   "todo": 4
+  },
+  {
+   "screen": "screens__tasks_screen",
+   "wired": 10,
+   "todo": 3
+  },
+  {
+   "screen": "screens__trade_builder__accessory_rule_editor",
+   "wired": 9,
+   "todo": 1
+  },
+  {
+   "screen": "screens__trade_builder__attribute_schema_editor",
+   "wired": 4,
+   "todo": 0
+  },
+  {
+   "screen": "screens__trade_builder__category_tree_editor",
+   "wired": 6,
+   "todo": 1
+  },
+  {
+   "screen": "screens__trade_builder__connection_rule_studio",
+   "wired": 9,
+   "todo": 0
+  },
+  {
+   "screen": "screens__trade_builder__product_authoring_screen",
+   "wired": 8,
+   "todo": 0
+  },
+  {
+   "screen": "screens__trade_builder__trade_builder_home",
+   "wired": 1,
+   "todo": 2
+  },
+  {
+   "screen": "screens__trade_builder__trade_define_step",
+   "wired": 5,
+   "todo": 0
+  },
+  {
+   "screen": "screens__trade_builder__trade_publish_sheet",
+   "wired": 2,
+   "todo": 2
+  },
+  {
+   "screen": "screens__worker_app_screen",
+   "wired": 6,
+   "todo": 8
+  },
+  {
+   "screen": "screens__worker_attendance_screen",
+   "wired": 5,
+   "todo": 1
+  },
+  {
+   "screen": "screens__worker_employer_stock_sheet",
+   "wired": 7,
+   "todo": 0
+  },
+  {
+   "screen": "screens__worker_equipment_checklist_sheet",
+   "wired": 3,
+   "todo": 0
+  },
+  {
+   "screen": "screens__worker_forms_screen",
+   "wired": 10,
+   "todo": 1
+  },
+  {
+   "screen": "screens__worker_notifs_sheet",
+   "wired": 1,
+   "todo": 1
+  },
+  {
+   "screen": "screens__worker_profile_screen",
+   "wired": 4,
+   "todo": 0
+  },
+  {
+   "screen": "screens__worker_report_drilldowns",
+   "wired": 2,
+   "todo": 2
+  },
+  {
+   "screen": "screens__worker_reports_tab",
+   "wired": 8,
+   "todo": 1
+  },
+  {
+   "screen": "screens__worker_safety_screen",
+   "wired": 3,
+   "todo": 0
+  },
+  {
+   "screen": "screens__worker_settings_screen",
+   "wired": 2,
+   "todo": 3
+  },
+  {
+   "screen": "screens__worker_task_detail_sheet",
+   "wired": 1,
+   "todo": 2
+  },
+  {
+   "screen": "screens__worker_today_strip",
+   "wired": 5,
+   "todo": 0
+  }
+ ],
+ "totals": {
+  "wired": 308,
+  "todo": 155,
+  "hebInExpr": 32
+ }
+}

@@ -1,0 +1,27 @@
+{
+ "generated": true,
+ "src": "screens__chat_settings_screen",
+ "screen": "chat_settings_screen",
+ "content": [
+  "auto/screens__chat_settings_screen_content.dart",
+  "screens__chat_settings_screen_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "quick_reply_banner",
+   "atom": "QuickReplyBanner",
+   "props": {
+    "leadingGlyph": "$: chatSettingsScreenContent.leadingGlyph",
+    "title": "$: chatSettingsScreenContent.title",
+    "templates": "?:List<String>",
+    "onTemplateTap": "@:onTemplateTap",
+    "inkColor": "#:inkColor",
+    "accentColor": "#:accentColor",
+    "chipFillColor": "#:chipFillColor",
+    "chipBorderColor": "#:chipBorderColor",
+    "editLabel": "$: chatSettingsScreenContent.editLabel",
+    "onEditTap": "@:onEditTap"
+   }
+  }
+ ]
+}

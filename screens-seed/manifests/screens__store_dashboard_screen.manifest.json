@@ -1,0 +1,61 @@
+{
+ "generated": true,
+ "src": "screens__store_dashboard_screen",
+ "screen": "store_dashboard_screen",
+ "flat": true,
+ "content": [],
+ "sections": [
+  {
+   "id": "action_card",
+   "atom": "ActionCard",
+   "props": {
+    "color": "#:color",
+    "badge": "?:String",
+    "title": "?:String",
+    "sub": "?:String",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "flat_card",
+   "atom": "FlatCard",
+   "props": {
+    "child": "?:Widget"
+   }
+  },
+  {
+   "id": "stat",
+   "atom": "Stat",
+   "props": {
+    "value": "?:String",
+    "label": "?:String"
+   }
+  },
+  {
+   "id": "big_button",
+   "atom": "BigButton",
+   "props": {
+    "label": "?:String",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "chip",
+   "atom": "Chip",
+   "props": {
+    "label": "?:String",
+    "on": "?:bool",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "portal_tile_button",
+   "atom": "PortalTileButton",
+   "props": {
+    "title": "?:String",
+    "sub": "?:String",
+    "onTap": "@:onTap"
+   }
+  }
+ ]
+}

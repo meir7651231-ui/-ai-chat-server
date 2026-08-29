@@ -20,7 +20,7 @@ const shelf = {}; // ClassName ⇒ {file, props:Set, className}
 for (const f of fs.readdirSync(SHELF, { recursive: true }).map(String)) {
   if (!f.endsWith('.dart') || !fs.statSync(path.join(SHELF, f)).isFile()) continue;
   const src = fs.readFileSync(path.join(SHELF, f), 'utf8');
-  const cm = src.match(/class\s+([A-Za-z0-9]+)\s+extends\s+StatelessWidget/);
+  const cm = src.match(/class\s+([A-Za-z0-9]+)\s+extends\s+(?:StatelessWidget|StatefulWidget)/);
   if (!cm) continue;
   const props = new Set([...src.matchAll(/this\.([a-zA-Z0-9]+)/g)].map(x => x[1]));
   shelf[cm[1]] = { file: f, props };
@@ -32,6 +32,7 @@ if (!shelf.TitledSection) die('אין TitledSection במדף');
 const tokens = new Map();   // name ⇒ dartType
 const callbacks = new Set();
 const gates = new Set();
+const params = new Map();   // חורי-נתוני-ריצה: name ⇒ type (הלוח מזרים)
 function expr(v, scopeVar) {
   if (typeof v === 'number' || typeof v === 'boolean') return String(v);
   if (typeof v !== 'string') die('ערך-prop לא-נתמך: ' + JSON.stringify(v));
@@ -41,6 +42,7 @@ function expr(v, scopeVar) {
     return e; // הפניה לקבועי-קובץ-התוכן
   }
   if (v.startsWith('@:')) { const n = v.slice(2).trim(); callbacks.add(n); return n; }
+  if (v.startsWith('?:')) { return null; } // מטופל ב-sectionCode (צריך את שם-ה-prop)
   if (v.startsWith('#:')) {
     const n = v.slice(2).trim();
     const t = /radius|size|width|height|space|pill/i.test(n) ? 'double' : 'Color';
@@ -58,7 +60,15 @@ function sectionCode(s) {
   const scope = s.repeat?.as;
   for (const p of Object.keys(s.props || {}))
     if (!A.props.has(p)) die(`prop "${p}" לא-קיים בבנאי ${s.atom} — props-אמיתיים: ${[...A.props].join(',')}`);
-  const propLines = Object.entries(s.props || {}).map(([k, v]) => `${k}: ${expr(v, scope)},`);
+  const propLines = Object.entries(s.props || {}).map(([k, v]) => {
+    if (typeof v === 'string' && v.startsWith('?:')) {
+      const t = v.slice(2).trim() || 'String';
+      let n = k; while (params.has(n) && params.get(n) !== t) n += '2';
+      params.set(n, t);
+      return `${k}: ${n},`;
+    }
+    return `${k}: ${expr(v, scope)},`;
+  });
   let w = `${s.atom}(\n            ${propLines.join('\n            ')}\n          )`;
   if (s.repeat) {
     const listE = expr(s.repeat.in, null);
@@ -83,9 +93,11 @@ const tokFields = [...tokens.entries()].sort().map(([n, t]) => `  final ${t} ${n
 const tokCtor = [...tokens.keys()].sort().map(n => `required this.${n}`).join(', ');
 const cbFields = [...callbacks].sort().map(n => `  final VoidCallback ${n};`).join('\n');
 const gateFields = [...gates].sort().map(n => `  final bool ${n};`).join('\n');
+const paramFields = [...params.entries()].sort().map(([n, t]) => `  final ${t} ${n};`).join('\n');
 const ctorParams = [
   ...[...gates].sort().map(n => `required this.${n}`),
   ...[...callbacks].sort().map(n => `required this.${n}`),
+  ...[...params.keys()].sort().map(n => `required this.${n}`),
   'required this.t',
 ].join(', ');
 
@@ -105,6 +117,7 @@ class ${cls}Composed extends StatelessWidget {
   const ${cls}Composed({${ctorParams}, super.key});
 ${gateFields}
 ${cbFields}
+${paramFields}
   final ${cls}Tokens t;
 
   @override
@@ -122,4 +135,4 @@ if (/[֐-׿]/.test(codeOnly)) die('עברית דלפה לקוד-הפלט — ה�
 fs.mkdirSync(OUT, { recursive: true });
 const outFile = path.join(OUT, M.screen + '.g.dart');
 fs.writeFileSync(outFile, out);
-console.log(`🏗️ הורכב: ${path.relative(ROOT, outFile)} · ${M.sections.length} סקציות · ${usedAtoms.size} אטומי-מדף · ${tokens.size} טוקנים · ${callbacks.size} callbacks · ${gates.size} שערים`);
+console.log(`🏗️ הורכב: ${path.relative(ROOT, outFile)} · ${M.sections.length} סקציות · ${usedAtoms.size} אטומי-מדף · ${tokens.size} טוקנים · ${callbacks.size} callbacks · ${params.size} פרמטרי-לוח · ${gates.size} שערים`);

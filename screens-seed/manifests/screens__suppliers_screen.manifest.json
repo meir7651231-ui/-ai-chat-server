@@ -1,0 +1,18 @@
+{
+ "generated": true,
+ "src": "screens__suppliers_screen",
+ "screen": "suppliers_screen",
+ "content": [],
+ "sections": [
+  {
+   "id": "supplier_tile",
+   "atom": "SupplierTile",
+   "props": {
+    "emoji": "?:String",
+    "title": "?:String",
+    "subtitle": "?:String",
+    "onTap": "@:onTap"
+   }
+  }
+ ]
+}

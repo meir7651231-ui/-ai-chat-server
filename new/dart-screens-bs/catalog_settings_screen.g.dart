@@ -18,6 +18,7 @@ class CatalogSettingsScreenComposed extends StatelessWidget {
 
   final VoidCallback onTap;
   final VoidCallback onTap2;
+
   final CatalogSettingsScreenTokens t;
 
   @override

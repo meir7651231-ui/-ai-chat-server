@@ -1,0 +1,38 @@
+{
+ "generated": true,
+ "src": "screens__courier_dashboard_screen",
+ "screen": "courier_dashboard_screen",
+ "flat": true,
+ "content": [
+  "auto/screens__courier_dashboard_screen_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "vehicle_button",
+   "atom": "VehicleButton",
+   "props": {
+    "fallback": "$: vehicle_button_fallback",
+    "ic": "?:String",
+    "name": "?:String",
+    "on": "?:bool",
+    "preferred": "?:bool",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "flat_card",
+   "atom": "FlatCard",
+   "props": {
+    "child": "?:Widget"
+   }
+  },
+  {
+   "id": "stat",
+   "atom": "Stat",
+   "props": {
+    "value": "?:String",
+    "label": "?:String"
+   }
+  }
+ ]
+}

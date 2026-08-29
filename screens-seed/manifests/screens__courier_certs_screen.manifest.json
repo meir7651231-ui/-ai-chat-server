@@ -1,0 +1,17 @@
+{
+ "generated": true,
+ "src": "screens__courier_certs_screen",
+ "screen": "courier_certs_screen",
+ "content": [],
+ "sections": [
+  {
+   "id": "preset_chip",
+   "atom": "PresetChip",
+   "props": {
+    "label": "?:String",
+    "selected": "?:bool",
+    "onTap": "@:onTap"
+   }
+  }
+ ]
+}

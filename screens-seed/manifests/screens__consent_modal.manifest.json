@@ -1,0 +1,25 @@
+{
+ "generated": true,
+ "src": "screens__consent_modal",
+ "screen": "consent_modal",
+ "flat": true,
+ "content": [
+  "auto/screens__consent_modal_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "consent_dialog",
+   "atom": "ConsentDialog",
+   "props": {
+    "fallback": "$: consent_dialog_fallback",
+    "fallback2": "$: consent_dialog_fallback2",
+    "fallback3": "$: consent_dialog_fallback3",
+    "fallback4": "$: consent_dialog_fallback4",
+    "fallback5": "$: consent_dialog_fallback5",
+    "onTap": "@:onTap",
+    "onAgree": "@:onAgree",
+    "onDismiss": "@:onDismiss"
+   }
+  }
+ ]
+}

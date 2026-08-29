@@ -1,0 +1,17 @@
+{
+ "generated": true,
+ "src": "screens__role_requests_inbox_screen",
+ "screen": "role_requests_inbox_screen",
+ "flat": true,
+ "content": [],
+ "sections": [
+  {
+   "id": "role_requests_inbox_empty",
+   "atom": "RoleRequestsInboxEmpty",
+   "props": {
+    "icon": "?:IconData",
+    "text": "?:String"
+   }
+  }
+ ]
+}

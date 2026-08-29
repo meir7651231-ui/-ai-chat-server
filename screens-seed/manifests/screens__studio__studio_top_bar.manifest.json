@@ -1,0 +1,21 @@
+{
+ "generated": true,
+ "src": "screens__studio__studio_top_bar",
+ "screen": "studio_studio_top_bar",
+ "flat": true,
+ "content": [
+  "auto/screens__studio__studio_top_bar_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "draft_badge",
+   "atom": "DraftBadge",
+   "props": {
+    "label": "$: draft_badge_label",
+    "label2": "$: draft_badge_label2",
+    "label3": "$: draft_badge_label3",
+    "count": "?:int"
+   }
+  }
+ ]
+}

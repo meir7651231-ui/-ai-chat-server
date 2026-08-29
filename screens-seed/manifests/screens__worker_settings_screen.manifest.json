@@ -1,4 +1,6 @@
 {
+ "generated": true,
+ "src": "screens__worker_settings_screen",
  "screen": "worker_settings_screen",
  "content": [
   "auto/screens__worker_settings_screen_content.dart"
@@ -10,6 +12,17 @@
    "props": {
     "fallback": "$: notif_row_fallback",
     "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "info_section",
+   "atom": "InfoSection",
+   "props": {
+    "title": "?:String",
+    "fallback": "?:String",
+    "fallback2": "?:String",
+    "onTap": "@:onTap",
+    "onTap2": "@:onTap2"
    }
   }
  ]

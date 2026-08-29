@@ -1,0 +1,34 @@
+{
+ "generated": true,
+ "src": "screens__lipskey_brand_screen",
+ "screen": "lipskey_brand_screen",
+ "content": [
+  "auto/screens__lipskey_brand_screen_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "brand_header",
+   "atom": "BrandHeader",
+   "props": {
+    "fallback": "$: brand_header_fallback",
+    "label": "$: brand_header_label",
+    "label2": "$: brand_header_label2",
+    "totalProducts": "?:int",
+    "totalCats": "?:int"
+   }
+  },
+  {
+   "id": "lipskey_brand_section_card",
+   "atom": "LipskeyBrandSectionCard",
+   "props": {
+    "label": "$: lipskey_brand_section_card_label",
+    "label2": "$: lipskey_brand_section_card_label2",
+    "emoji": "?:String",
+    "name": "?:String",
+    "prodCount": "?:int",
+    "catCount": "?:int",
+    "onTap": "@:onTap"
+   }
+  }
+ ]
+}

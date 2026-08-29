@@ -1,0 +1,37 @@
+{
+ "generated": true,
+ "src": "screens__rewards_hub_screen",
+ "screen": "rewards_hub_screen",
+ "content": [
+  "auto/screens__rewards_hub_screen_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "md_head",
+   "atom": "MdHead",
+   "props": {
+    "ic": "?:String",
+    "title": "?:String",
+    "sub": "?:String"
+   }
+  },
+  {
+   "id": "coin_banner",
+   "atom": "CoinBanner",
+   "props": {
+    "coins": "?:int",
+    "sub": "?:String"
+   }
+  },
+  {
+   "id": "fin_tile",
+   "atom": "FinTile",
+   "props": {
+    "ic": "?:String",
+    "title": "?:String",
+    "sub": "?:String",
+    "onTap": "@:onTap"
+   }
+  }
+ ]
+}

@@ -1,0 +1,215 @@
+#!/usr/bin/env node
+/** 🔌 מחצב · מחולל-הלוחות (board-gen) — חוזה: BOARD-GEN-CONTRACT.md.
+ *  לכל מסך-מורכב: לוח-ConsumerWidget שמחווט אותו למקורות-החיים — הכול נגזר מהמקור.
+ *  שימוש: node board-gen.mjs [screens-dir] */
+import fs from 'node:fs';
+import path from 'node:path';
+import { classBody, stripComments, maskComments, snake } from './lift-lib.mjs';
+const ROOT = new URL('../../', import.meta.url).pathname;
+const SCRATCH = process.argv[2] || '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens';
+const SHELF = path.join(ROOT, 'new/dart-ui-bs');
+const MANIFESTS = path.join(ROOT, 'screens-seed/manifests');
+const OUT = path.join(ROOT, 'new/dart-boards-bs');
+const ANY_LIT = /'(?:[^'\\\n]|\\.)*'/g;
+const maskLits = (s) => s.replace(ANY_LIT, (m) => "'" + 'x'.repeat(m.length - 2) + "'");
+
+// ── אינדקס-מוצא: אטום ⇒ מסך-מקור:widget (שני הפורמטים) ──
+const atomOrigin = new Map();
+for (const f of fs.readdirSync(SHELF, { recursive: true }).map(String)) {
+  const p = path.join(SHELF, f);
+  if (!f.endsWith('.dart') || !fs.statSync(p).isFile()) continue;
+  const src = fs.readFileSync(p, 'utf8');
+  const cm = src.match(/class\s+([A-Za-z0-9]+)\s+extends\s+(?:StatelessWidget|StatefulWidget)/);
+  if (!cm) continue;
+  const om = src.match(/\/\/ מוצא: ([\w:]+) /);
+  const om2 = src.match(/\/\/ מוצא: (\w+)\.dart[^\n]*?·\s*(_?[A-Za-z0-9]+)/);
+  if (om && om[1].includes(':')) atomOrigin.set(cm[1], om[1]);
+  else if (om2) atomOrigin.set(cm[1], om2[1] + ':' + om2[2]);
+}
+
+// ── טוקני-BsTokens: שם ⇒ קבוע ──
+const bsTokens = new Set();
+try {
+  const tk = fs.readFileSync(path.join(SHELF, 'auto/bs_tokens.dart'), 'utf8');
+  for (const m of tk.matchAll(/static const \w+ (\w+) =/g)) bsTokens.add(m[1]);
+} catch { }
+const TOKEN_ALIAS = { ink: 'inkLight', muted: 'mutedLight', border: 'line', card: 'surface' };
+const tokenExpr = (n, t) => {
+  if (bsTokens.has(n)) return 'BsTokens.' + n;
+  if (TOKEN_ALIAS[n] && bsTokens.has(TOKEN_ALIAS[n])) return 'BsTokens.' + TOKEN_ALIAS[n];
+  return t === 'double' ? (bsTokens.has('radiusCard') && /radius/i.test(n) ? 'BsTokens.radiusCard' : '12 /* TODO-לוח: טוקן */')
+    : 'const Color(0xFF223047) /* TODO-לוח: טוקן */';
+};
+
+// ── חילוץ ארגומנטים-של-אתר-קריאה: Widget(...) ⇒ {named:{k:expr}, positional:[expr]} ──
+function callSiteArgs(src, widget) {
+  const scan = maskLits(maskComments(src));
+  const m = scan.match(new RegExp('(?<!class )\\b' + widget + '\\s*\\('));
+  if (!m) return null;
+  let d = 0, j = scan.indexOf('(', m.index), open = j;
+  for (; j < scan.length; j++) { const c = scan[j]; if (c === '(' || c === '[' || c === '{') d++; else if (c === ')' || c === ']' || c === '}') { d--; if (!d) break; } }
+  // פיצול-ארגומנטים בעומק-0 — על ה-scan; הביטויים נלקחים מהמקור-הגולמי באותם-אינדקסים
+  const named = {}; const positional = [];
+  let s0 = open + 1, dep = 0;
+  const pushArg = (a, b) => {
+    const raw = src.slice(a, b).trim();
+    if (!raw) return;
+    const nm = raw.match(/^([a-zA-Z_]\w*)\s*:\s*([\s\S]+)$/);
+    if (nm && !/^['"(]/.test(nm[2].trimStart()[0] === ':' ? 'x' : nm[2]) && !raw.startsWith("'")) named[nm[1]] = nm[2].trim();
+    else positional.push(raw);
+  };
+  for (let k = open + 1; k <= j; k++) {
+    const c = scan[k];
+    if (c === '(' || c === '[' || c === '{') dep++;
+    else if (c === ']' || c === '}') dep--;
+    else if (c === ')' && k < j) dep--;
+    else if ((c === ',' && !dep) || k === j) { pushArg(s0, k); s0 = k + 1; }
+  }
+  return { named, positional };
+}
+
+// ── שם-פרמטרי-הבנאי-המקוריים + טיפוסיהם (למיפוי-מודלים) ──
+function origCtorInfo(src, widget) {
+  const d = src.match(new RegExp('class\\s+' + widget + '\\b'));
+  if (!d) return { pos: [], types: new Map() };
+  const body = classBody(src, d.index) || '';
+  const types = new Map();
+  for (const fm of stripComments(body).matchAll(/final\s+([A-Za-z_][\w<>,? ]*?)\s+([a-zA-Z_]\w*)\s*;/g)) types.set(fm[2], fm[1].trim());
+  const cm = body.match(new RegExp('(?:const\\s+)?' + widget + '\\s*\\(([^)]*)\\)'));
+  const pos = [];
+  if (cm) for (const pp of cm[1].split(',')) { const t = pp.trim(); if (t.startsWith('{')) break; const mm = t.match(/this\.(\w+)/); if (mm) pos.push(mm[1]); }
+  return { pos, types };
+}
+
+// ── סוגרים-פנימיים + watches מהגוף-המקורי (אותם-כללים כמנוע-ההתרה) ──
+function innerWiring(src, widget) {
+  const d = src.match(new RegExp('class\\s+' + widget + '\\b'));
+  if (!d) return { handlers: new Map(), watches: new Map() };
+  const body = classBody(src, d.index) || '';
+  const scan = maskLits(maskComments(body));
+  const handlers = new Map(); const seen = new Map();
+  const IOISH = /Navigator\.|\bref\.|show[A-Z]\w*\(|open[A-Z]\w*\(|\bcontext\.(push|go|pop)\b/;
+  for (const m of [...scan.matchAll(/\b(on[A-Z]\w*)\s*:\s*/g)]) {
+    const vs = m.index + m[0].length;
+    if (!/^\(\)?\s*\w*\)?\s*(=>|\{|async)|^\(\s*\w+\s*\)\s*(=>|\{|async)/.test(scan.slice(vs, vs + 24)) && !/^\(\)/.test(scan.slice(vs, vs + 4))) continue;
+    let dd = 0, j = vs;
+    for (; j < scan.length; j++) {
+      const c = scan[j];
+      if (c === '(' || c === '[' || c === '{') dd++;
+      else if (c === ')' || c === ']' || c === '}') { if (!dd) break; dd--; }
+      else if (c === ',' && !dd) break;
+    }
+    if (!IOISH.test(scan.slice(vs, j))) continue;
+    const base = m[1];
+    const n = (seen.get(base) || 0) + 1; seen.set(base, n);
+    handlers.set(n === 1 ? base : base + n, src.slice(0, 0) + body.slice(vs, j).trim());
+  }
+  const watches = new Map();
+  for (const m of body.matchAll(/ref\.watch\(\s*([a-zA-Z0-9_]+Provider)\s*(?:\([^()]*\))?\s*\)/g))
+    watches.set(m[1].replace(/Provider$/, '').replace(/^_/, ''), m[1]);
+  return { handlers, watches };
+}
+
+// ── המעבר על המניפסטים ──
+fs.rmSync(OUT, { recursive: true, force: true });
+fs.mkdirSync(OUT, { recursive: true });
+const report = { boards: [], totals: { wired: 0, todo: 0, hebInExpr: 0 } };
+for (const mf of fs.readdirSync(MANIFESTS).filter(f => f.endsWith('.manifest.json')).sort()) {
+  const M = JSON.parse(fs.readFileSync(path.join(MANIFESTS, mf), 'utf8'));
+  const srcScreen = M.src || mf.replace('.manifest.json', '');
+  const srcPath = path.join(SCRATCH, srcScreen + '.dart');
+  if (!fs.existsSync(srcPath)) continue;
+  const src = fs.readFileSync(srcPath, 'utf8');
+  const cls = M.screen.replace(/(^|[_-])([a-z])/g, (_, __, c) => c.toUpperCase());
+
+  // איסוף החיבורים הנדרשים מהמניפסט (אותם-כללים כמו המרכיב)
+  const needP = new Map(); const needCb = new Set(); const needTok = new Map(); const needGates = new Set();
+  for (const sec of M.sections || []) {
+    for (const [k, v] of Object.entries(sec.props || {})) {
+      if (typeof v !== 'string') continue;
+      if (v.startsWith('?:')) { let n = k; const t = v.slice(2).trim() || 'String'; while (needP.has(n) && needP.get(n).t !== t) n += '2'; needP.set(n, { t, sec }); }
+      else if (v.startsWith('@:')) needCb.add(v.slice(2).trim());
+      else if (v.startsWith('#:')) needTok.set(v.slice(2).trim(), /radius|size|width|height|space|pill/i.test(v.slice(2)) ? 'double' : 'Color');
+    }
+    if (sec.gate) needGates.add(sec.gate);
+    if (sec.title && String(sec.title).startsWith('#:')) needTok.set('ink', 'Color');
+  }
+  if (M.sections?.some(s => s.title)) needTok.set('ink', 'Color');
+
+  // חיווט פר-סקציה מהמקור
+  const wires = new Map(); let todo = 0, heb = 0;
+  const watchLines = new Map();
+  for (const sec of M.sections || []) {
+    const org = atomOrigin.get(sec.atom);
+    const origWidget = org?.split(':')[1];
+    const origSrc = org && org.split(':')[0] !== srcScreen && fs.existsSync(path.join(SCRATCH, org.split(':')[0] + '.dart'))
+      ? fs.readFileSync(path.join(SCRATCH, org.split(':')[0] + '.dart'), 'utf8') : src;
+    const args = origWidget ? callSiteArgs(src, origWidget) || callSiteArgs(origSrc, origWidget) : null;
+    const info = origWidget ? origCtorInfo(origSrc, origWidget) : { pos: [], types: new Map() };
+    const inner = origWidget ? innerWiring(origSrc, origWidget) : { handlers: new Map(), watches: new Map() };
+    const resolve = (propName) => {
+      if (args?.named[propName]) return args.named[propName];
+      const pi = info.pos.indexOf(propName);
+      if (pi >= 0 && args?.positional[pi]) return args.positional[pi];
+      if (inner.handlers.has(propName)) return inner.handlers.get(propName);
+      if (inner.watches.has(propName)) { const pv = inner.watches.get(propName); if (!pv.startsWith('_')) { watchLines.set(propName, pv); return propName; } }
+      // שדה-מודל-שוטח: פרמטר-מקורי מודלי שהועבר באתר-הקריאה
+      for (const [pn, pt] of info.types) {
+        if (!/^[A-Z]/.test(pt) || ['String', 'Color', 'Widget', 'Key', 'IconData', 'Duration'].includes(pt.replace(/\?$/, ''))) continue;
+        const e = args?.named[pn] ?? (info.pos.indexOf(pn) >= 0 ? args?.positional[info.pos.indexOf(pn)] : null);
+        if (e) return e + '.' + propName;
+      }
+      return null;
+    };
+    for (const [k, v] of Object.entries(sec.props || {})) {
+      if (typeof v !== 'string' || (!v.startsWith('?:') && !v.startsWith('@:'))) continue;
+      const pname = v.startsWith('@:') ? v.slice(2).trim() : [...needP.keys()].find(n => n === k || n.startsWith(k)) || k;
+      if (wires.has(pname)) continue;
+      const e = resolve(k);
+      if (e) { if (/[֐-׿]/.test(e)) heb++; wires.set(pname, e); }
+    }
+  }
+
+  // הרכבת-הלוח
+  const pkgImports = [...new Set([...src.matchAll(/import 'package:[^']+';/g)].map(x => x[0]))];
+  const lines = [];
+  for (const [v, pv] of watchLines) lines.push(`    final ${v} = ref.watch(${pv});`);
+  const argLines = [];
+  const defFor = (t) => t.startsWith('String') ? "''" : t.startsWith('int') ? '0' : t.startsWith('double') ? '0.0' : t.startsWith('bool') ? 'false' : t.includes('List') ? 'const []' : t.includes('IconData') ? 'Icons.circle' : 'null';
+  for (const g of [...needGates].sort()) { argLines.push(`      ${g}: true /* TODO-לוח: שער */,`); todo++; }
+  for (const c of [...needCb].sort()) {
+    const e = wires.get(c);
+    if (e) argLines.push(`      ${c}: ${e},`); else { argLines.push(`      ${c}: () {} /* TODO-לוח */,`); todo++; }
+  }
+  for (const [n, { t }] of [...needP].sort()) {
+    const e = wires.get(n);
+    if (e) argLines.push(`      ${n}: ${e},`); else { argLines.push(`      ${n}: ${defFor(t)} /* TODO-לוח: ${t} */,`); todo++; }
+  }
+  const tokArgs = [...needTok].sort().map(([n, t]) => `${n}: ${tokenExpr(n, t)}`).join(', ');
+  const wired = wires.size;
+  const code = `// 🔌 חולל ע"י מחולל-הלוחות (board-gen) — הלוח = המקום-היחיד שנוגע-בחיווט (חוק-3).
+// מקור-החיווט: ${srcScreen}.dart (בנייה-חכמה main) · מחווט: ${wired} · TODO: ${todo}.
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+${pkgImports.filter(i => !i.includes('flutter/material') && !i.includes('flutter_riverpod')).join('\n')}
+import '../dart-screens-bs/${M.screen}.g.dart';
+
+class ${cls}Board extends ConsumerWidget {
+  const ${cls}Board({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+${lines.join('\n')}${lines.length ? '\n' : ''}    return ${cls}Composed(
+${argLines.join('\n')}
+      t: ${cls}Tokens(${tokArgs}),
+    );
+  }
+}
+`;
+  fs.writeFileSync(path.join(OUT, srcScreen + '_board.dart'), code);
+  report.boards.push({ screen: srcScreen, wired, todo });
+  report.totals.wired += wired; report.totals.todo += todo; report.totals.hebInExpr += heb;
+}
+
+fs.writeFileSync(path.join(ROOT, 'screens-seed/board-gen-report.json'), JSON.stringify(report, null, 1));
+console.log(`🔌 מחולל-הלוחות · ${report.boards.length} לוחות · חיבורים-מהמקור: ${report.totals.wired} · TODO-לוח: ${report.totals.todo} · עברית-בביטוי (מועמדת-תוכן): ${report.totals.hebInExpr}`);

@@ -1,0 +1,70 @@
+{
+ "generated": true,
+ "src": "screens__store_settings_screen",
+ "screen": "store_settings_screen",
+ "content": [],
+ "sections": [
+  {
+   "id": "settings_validated_text_row",
+   "atom": "SettingsValidatedTextRow",
+   "props": {
+    "label": "?:String",
+    "hint": "?:String",
+    "value": "?:String",
+    "onChanged": "@:onChanged",
+    "labelColor": "#:labelColor",
+    "inkColor": "#:inkColor",
+    "mutedColor": "#:mutedColor",
+    "cursorColor": "#:cursorColor",
+    "hintColor": "#:hintColor",
+    "fillColor": "#:fillColor",
+    "errorText": "?:String?",
+    "subtitleNote": "?:String?"
+   }
+  },
+  {
+   "id": "chat_settings_switch_row",
+   "atom": "ChatSettingsSwitchRow",
+   "props": {
+    "fallback": "?:String",
+    "label": "?:String",
+    "value": "?:bool",
+    "onChanged": "@:onChanged",
+    "underConstruction": "?:bool"
+   }
+  },
+  {
+   "id": "catalog_settings_placeholder_row",
+   "atom": "CatalogSettingsPlaceholderRow",
+   "props": {
+    "fallback": "?:String",
+    "onTap": "@:onTap",
+    "label": "?:String"
+   }
+  },
+  {
+   "id": "settings_number_row",
+   "atom": "SettingsNumberRow",
+   "props": {
+    "label": "?:String",
+    "value": "?:int",
+    "onChanged": "@:onChanged",
+    "inkColor": "#:inkColor",
+    "mutedColor": "#:mutedColor",
+    "cursorColor": "#:cursorColor",
+    "fillColor": "#:fillColor",
+    "subtitleNote": "?:String?",
+    "fieldWidth": "#:fieldWidth"
+   }
+  },
+  {
+   "id": "store_settings_action_row",
+   "atom": "StoreSettingsActionRow",
+   "props": {
+    "label": "?:String",
+    "buttonLabel": "?:String",
+    "onTap": "@:onTap"
+   }
+  }
+ ]
+}

@@ -1,0 +1,17 @@
+{
+ "generated": true,
+ "src": "screens__courier_profile_screen",
+ "screen": "courier_profile_screen",
+ "flat": true,
+ "content": [],
+ "sections": [
+  {
+   "id": "stat",
+   "atom": "Stat",
+   "props": {
+    "value": "?:String",
+    "label": "?:String"
+   }
+  }
+ ]
+}

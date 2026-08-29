@@ -1,0 +1,40 @@
+{
+ "generated": true,
+ "src": "screens__courier_forms_screen",
+ "screen": "courier_forms_screen",
+ "flat": true,
+ "content": [],
+ "sections": [
+  {
+   "id": "form_card",
+   "atom": "FormCard",
+   "props": {
+    "title": "?:String",
+    "children": "?:List<Widget>"
+   }
+  },
+  {
+   "id": "courier_forms_pill_button",
+   "atom": "CourierFormsPillButton",
+   "props": {
+    "id": "?:String",
+    "label": "?:String",
+    "onPressed": "@:onPressed",
+    "filled": "?:bool"
+   }
+  },
+  {
+   "id": "vacation_row",
+   "atom": "VacationRow",
+   "props": {
+    "label": "?:String",
+    "label2": "?:String",
+    "status": "?:String",
+    "reason": "?:String",
+    "label3": "?:String",
+    "label4": "?:String",
+    "onApprove": "@:onApprove"
+   }
+  }
+ ]
+}

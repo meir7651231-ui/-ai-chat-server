@@ -16,6 +16,7 @@ class CourierSettingsScreenComposed extends StatelessWidget {
 
   final VoidCallback onTap;
   final VoidCallback onTap2;
+
   final CourierSettingsScreenTokens t;
 
   @override

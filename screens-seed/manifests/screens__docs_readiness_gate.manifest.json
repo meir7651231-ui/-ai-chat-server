@@ -1,0 +1,26 @@
+{
+ "generated": true,
+ "src": "screens__docs_readiness_gate",
+ "screen": "docs_readiness_gate",
+ "content": [],
+ "sections": [
+  {
+   "id": "section_card",
+   "atom": "SectionCard",
+   "props": {
+    "title": "?:String",
+    "lines": "?:List<String>",
+    "accent": "#:accent",
+    "emptyText": "?:String?"
+   }
+  },
+  {
+   "id": "gate_button",
+   "atom": "GateButton",
+   "props": {
+    "label": "?:String",
+    "onPressed": "@:onPressed"
+   }
+  }
+ ]
+}

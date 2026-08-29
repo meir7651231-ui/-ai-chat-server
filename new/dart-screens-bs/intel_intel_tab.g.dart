@@ -15,6 +15,7 @@ class IntelIntelTabComposed extends StatelessWidget {
   const IntelIntelTabComposed({required this.t, super.key});
 
 
+
   final IntelIntelTabTokens t;
 
   @override

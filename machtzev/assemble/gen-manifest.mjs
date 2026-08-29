@@ -158,6 +158,7 @@ for (const mf of fs.readdirSync(path.join(ROOT, 'screens-seed/machine')).filter(
 
   const manifest = {
     generated: true,
+    src: screen,
     screen: screen.replace(/^(screens|features)__/, '').replace(/__/g, '_'),
     ...(flat ? { flat: true } : {}),
     content: [...(consts.size ? ['auto/' + screen + '_content.dart'] : []), ...(rec && JSON.stringify(sections).includes(rec.rec + '.') ? [rec.file] : [])],
@@ -165,14 +166,9 @@ for (const mf of fs.readdirSync(path.join(ROOT, 'screens-seed/machine')).filter(
   };
   for (const t of holeTypes) report.holesByType[t] = (report.holesByType[t] || 0) + 1;
   const fname = screen + '.manifest.json';
-  if (!holes && !flat) {
-    if (handWritten.has(manifest.screen + '.manifest.json')) continue;  // הפיילוט-הידני נשמר
-    fs.writeFileSync(path.join(OUT_FULL, fname), JSON.stringify(manifest, null, 1));
-    report.full.push(screen);
-  } else {
-    fs.writeFileSync(path.join(OUT_DRAFT, fname.replace('.json', '.draft.json')), JSON.stringify(manifest, null, 1));
-    report.draft.push({ screen, holes, ...(flat ? { flat: true } : {}) });
-  }
+  if (handWritten.has(manifest.screen + '.manifest.json')) continue;  // הפיילוט-הידני נשמר
+  fs.writeFileSync(path.join(OUT_FULL, fname), JSON.stringify(manifest, null, 1));
+  (holes || flat ? report.draft : report.full).push(holes || flat ? { screen, holes, ...(flat ? { flat: true } : {}) } : screen);
 }
 
 fs.writeFileSync(path.join(ROOT, 'screens-seed/gen-manifest-report.json'), JSON.stringify(report, null, 1));

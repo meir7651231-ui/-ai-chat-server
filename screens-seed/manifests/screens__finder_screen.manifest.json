@@ -1,0 +1,16 @@
+{
+ "generated": true,
+ "src": "screens__finder_screen",
+ "screen": "finder_screen",
+ "flat": true,
+ "content": [],
+ "sections": [
+  {
+   "id": "chip_scroll",
+   "atom": "ChipScroll",
+   "props": {
+    "children": "?:List<Widget>"
+   }
+  }
+ ]
+}
