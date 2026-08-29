@@ -105,6 +105,14 @@
    "serves": 1
   },
   {
+   "atom": "ConsentDialog",
+   "from": "screens__consent_modal:_ConsentDialog",
+   "bundle": 1,
+   "props": 5,
+   "model": 0,
+   "serves": 1
+  },
+  {
    "atom": "ContractorToolsSheetsSheetHandle",
    "from": "screens__contractor_tools_sheets:_SheetHandle",
    "bundle": 1,
@@ -134,6 +142,14 @@
    "bundle": 1,
    "props": 4,
    "model": 0,
+   "serves": 1
+  },
+  {
+   "atom": "DestinationCard",
+   "from": "screens__courier_portal_tab:_DestinationCard",
+   "bundle": 1,
+   "props": 1,
+   "model": 1,
    "serves": 1
   },
   {
@@ -353,6 +369,14 @@
    "serves": 1
   },
   {
+   "atom": "PenaltyCard",
+   "from": "screens__finance_hub_sheets:_PenaltyCard",
+   "bundle": 2,
+   "props": 2,
+   "model": 2,
+   "serves": 1
+  },
+  {
    "atom": "PipeLink",
    "from": "screens__install_studio_screen:_PipeLink",
    "bundle": 3,
@@ -405,6 +429,14 @@
    "from": "screens__smart_project_screen:_ProjectDone",
    "bundle": 1,
    "props": 1,
+   "model": 0,
+   "serves": 1
+  },
+  {
+   "atom": "ProofThumb",
+   "from": "screens__worker_reports_tab:_ProofThumb",
+   "bundle": 2,
+   "props": 3,
    "model": 0,
    "serves": 1
   },
@@ -617,6 +649,14 @@
    "serves": 1
   },
   {
+   "atom": "SubRow",
+   "from": "screens__finance_hub_sheets:_SubRow",
+   "bundle": 2,
+   "props": 2,
+   "model": 2,
+   "serves": 1
+  },
+  {
    "atom": "SummaryCard",
    "from": "screens__store_screen:_SummaryCard",
    "bundle": 3,
@@ -645,6 +685,22 @@
    "from": "screens__trade_builder__trade_builder_home:_StatusChip",
    "bundle": 1,
    "props": 2,
+   "model": 0,
+   "serves": 1
+  },
+  {
+   "atom": "TreeComingSoon",
+   "from": "screens__catalog_screen:_TreeComingSoon",
+   "bundle": 1,
+   "props": 2,
+   "model": 2,
+   "serves": 1
+  },
+  {
+   "atom": "TypingBubble",
+   "from": "screens__chats_screen:_TypingBubble",
+   "bundle": 1,
+   "props": 1,
    "model": 0,
    "serves": 1
   },
@@ -716,21 +772,29 @@
  "skipped": {
   "model-deep": [
    "features__card_keyboard__opening_surface:OpeningSurface",
+   "features__fittings__intel__build_plan_export_screen:BuildPlanExportScreen",
    "features__fittings__intel__build_plan_screen:_CutTile",
+   "features__fittings__intel__compatibility_screen:CompatibilityScreen",
    "features__fittings__intel__line_builder_screen:_LineSummary",
+   "features__fittings__intel__line_pressure_screen:LinePressureScreen",
    "features__fittings__intel__product_3d_screen:_SpecPanel",
    "features__fittings__ui__line_3d:Line3DView",
    "features__word_finder__word_keyboard:WordKeyboard",
    "screens__coming_soon_screen:ComingSoonScreen",
+   "screens__contractor_attendance_sheet:_PresentRow",
    "screens__contractor_attendance_sheet:_TodayRow",
    "screens__contractor_attendance_sheet:_LocationPill",
    "screens__contractor_hr_sheet:_CertRow",
+   "screens__contractor_tools_sheets:_StorePriceComparisonSheet",
    "screens__courier_attendance_screen:_ClockCard",
+   "screens__courier_certs_screen:_CertsCard",
+   "screens__courier_certs_screen:_CertRow",
    "screens__home_shell:_CartChatBubble",
    "screens__intel__intel_tab:_FunnelCard",
    "screens__intel__intel_tab:_SegmentsCard",
    "screens__intel__intel_tab:_RetentionCard",
    "screens__lipskey_brand_screen:_CategoryCard",
+   "screens__lipskey_product_sheet:_InteractiveChips",
    "screens__manager_dashboard_screen:_VacationsBody",
    "screens__manager_dashboard_screen:_VacationRequestRow",
    "screens__org_setup_wizard_screen:_WizardHistoryScreen",
@@ -741,44 +805,21 @@
    "screens__site_hub_screen:_SiteDeps",
    "screens__site_hub_screen:_SiteArchive",
    "screens__smart_project_screen:_StageCard",
+   "screens__store_dashboard_screen:_DeliveredCard",
+   "screens__store_profile_screen:_StoreIdentityCard",
+   "screens__store_profile_screen:_StoreCertsCard",
+   "screens__store_profile_screen:_StoreCertRow",
    "screens__store_screen:_NotesField",
    "screens__studio__panes__theme_pane:_ContrastWarning",
    "screens__studio__panes__theme_pane:_Preview",
    "screens__tasks_gantt_sheet:_GanttBarRow",
    "screens__trade_builder__connection_rule_studio:_MatrixCell",
+   "screens__worker_attendance_screen:_ClockCard",
+   "screens__worker_attendance_screen:_DayCell",
    "screens__worker_safety_screen:_TrainingsCard",
+   "screens__worker_safety_screen:_CertsCard",
+   "screens__worker_safety_screen:_CertRow",
    "screens__worker_task_board_screen:_TaskRow"
-  ],
-  "project-fn": [
-   "features__fittings__intel__build_plan_export_screen:BuildPlanExportScreen⇒exportBuildPlanText",
-   "features__fittings__intel__compatibility_screen:CompatibilityScreen⇒pairCompatible",
-   "features__fittings__intel__line_pressure_screen:LinePressureScreen⇒pressureDropForPlan",
-   "features__fittings__intel__product_3d_screen:Product3dScreen⇒routeFromProducts",
-   "screens__catalog_screen:_TreeComingSoon⇒catAvatar",
-   "screens__chats_screen:_TypingBubble⇒chatBubbleAlignment",
-   "screens__consent_modal:_ConsentDialog⇒consentPolicyExcerpt",
-   "screens__contractor_attendance_sheet:_PresentRow⇒mapsQueryForDay",
-   "screens__contractor_tools_sheets:_StorePriceComparisonSheet⇒storePriceComparisonAcrossCatalog",
-   "screens__courier_certs_screen:_CertsCard⇒imageProviderForRef",
-   "screens__courier_certs_screen:_CertRow⇒imageProviderForRef",
-   "screens__courier_portal_tab:_DestinationCard⇒haulInfo",
-   "screens__courier_profile_screen:_CourierIdentityCard⇒haulInfo",
-   "screens__finance_hub_sheets:_SubRow⇒fMoney",
-   "screens__finance_hub_sheets:_ApprovalCard⇒fMoney",
-   "screens__finance_hub_sheets:_PenaltyCard⇒fMoney",
-   "screens__lipskey_product_sheet:_InteractiveChips⇒kindOf",
-   "screens__manager_dashboard_screen:JourneyTimeline⇒journeyEventsFor",
-   "screens__manager_dashboard_screen:_JourneyRow⇒intelEventHe",
-   "screens__store_dashboard_screen:_StoreNotifRow⇒workerNotifAgo",
-   "screens__store_dashboard_screen:_DeliveredCard⇒imageProviderForRef",
-   "screens__store_profile_screen:_StoreIdentityCard⇒imageProviderForRef",
-   "screens__store_profile_screen:_StoreCertsCard⇒imageProviderForRef",
-   "screens__store_profile_screen:_StoreCertRow⇒imageProviderForRef",
-   "screens__worker_attendance_screen:_ClockCard⇒mapsQueryForDay",
-   "screens__worker_attendance_screen:_DayCell⇒mapsQueryForDay",
-   "screens__worker_reports_tab:_ProofThumb⇒imageProviderForRef",
-   "screens__worker_safety_screen:_CertsCard⇒imageProviderForRef",
-   "screens__worker_safety_screen:_CertRow⇒imageProviderForRef"
   ],
   "private-dep": [
    "features__fittings__intel__build_plan_screen:BuildPlanScreen",
@@ -907,6 +948,12 @@
    "screens__rewards_hub_screen:_VipCard",
    "screens__stock_screen:_Empty",
    "screens__worker_app_screen:_DayChip"
+  ],
+  "project-fn": [
+   "features__fittings__intel__product_3d_screen:Product3dScreen⇒familyOf",
+   "screens__manager_dashboard_screen:JourneyTimeline⇒intelEventHe",
+   "screens__manager_dashboard_screen:_JourneyRow⇒intelEventHe",
+   "screens__store_dashboard_screen:_StoreNotifRow⇒workerNotifAgo"
   ],
   "sibling-class": [
    "screens__ai_hub_screen:_AIFeatureScreen",
@@ -1133,6 +1180,12 @@
    "screens__worker_app_screen:_SummaryCard",
    "screens__worker_forms_screen:_VacationRow",
    "screens__worker_safety_screen:_TrainingRow"
+  ],
+  "model-clash": [
+   "screens__courier_profile_screen:_CourierIdentityCard"
+  ],
+  "logic-token": [
+   "screens__finance_hub_sheets:_ApprovalCard"
   ],
   "no-props": [
    "screens__intel__intel_tab:_EmptyLine"

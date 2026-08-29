@@ -43,10 +43,33 @@ try {
   }
 } catch { }
 
+// פונקציה-פרויקטלית טהורה ⇒ import-יעד אוטומטי (מטרת-הפונקציה = היכן-שהוגדרה)
+const fnImportCache = new Map();
+function resolveFnImport(name) {
+  if (fnImportCache.has(name)) return fnImportCache.get(name);
+  let res = null;
+  try {
+    const hits = execSync(`git grep -lE '^[A-Za-z][A-Za-z_<>,? ]+ ${name}\\(' origin/main -- app_flutter/lib`, { cwd: BS, encoding: 'utf8' }).trim().split('\n').filter(Boolean);
+    if (hits.length === 1) {
+      const src = execSync(`git show '${hits[0].replace(/'/g, '')}'`, { cwd: BS, encoding: 'utf8', maxBuffer: 1 << 24 });
+      const dm = src.match(new RegExp('(^|\\n)[A-Za-z][A-Za-z_<>,? ]+ ' + name + '\\('));
+      if (dm) {
+        const b = classBody(src, dm.index) || src.slice(dm.index, src.indexOf(';', dm.index) + 1);
+        const codeB = stripComments(b || '');
+        if (codeB && !HEB_STR.test(codeB) && !IO_PAT.test(codeB) && !RIVERPOD.test(codeB) && b.split('\n').length <= 60)
+          res = "import 'package:buildsmart/" + hits[0].replace(/^origin\/main:app_flutter\/lib\//, '') + "';";
+      }
+    }
+  } catch { }
+  fnImportCache.set(name, res);
+  return res;
+}
+const usedFnImports = new Set();
 const externalFn = (code) => {
   for (const m of new Set([...code.matchAll(/\b([a-z]\w+)\s*\(/g)].map(x => x[1]))) {
     if (!projectFns.has(m) || FOUNDATION_FN.has(m)) continue;
     if (new RegExp('(\\n|^)\\s*[A-Za-z_][\\w<>,? ]* ' + m + '\\(').test(code)) continue; // מוגדרת-בצרור
+    if (resolveFnImport(m)) continue;                       // טהורה ⇒ import אוטומטי בפליטה
     return m;
   }
   return null;
@@ -593,6 +616,7 @@ for (const L of [...liftedHashes.values()].sort((a, b) => a.pub.localeCompare(b.
   const extras = inferImports(stripComments(joined));
   for (const [cls, imp] of FOUNDATION) if (new RegExp('\\b' + cls + '\\b').test(stripComments(joined))) extras.unshift(imp);
   for (const [fn, imp] of FOUNDATION_FN) if (new RegExp('\\b' + fn + '\\s*\\(').test(stripComments(joined)) && !extras.includes(imp)) extras.push(imp);
+  for (const [fn, imp] of fnImportCache) if (imp && new RegExp('\\b' + fn + '\\s*\\(').test(stripComments(joined)) && !extras.includes(imp)) extras.push(imp);
   const also = L.also.length ? `\n// משרת-גם (זהה-מבנית): ${L.also.join(' · ')}` : '';
   const code = `// 🧽 לוטש ע"י מנוע-המטרות (data-lift v3) — דאטה/מודל/תבנית הורמו ל-props לפי מטרתם, אל תערוך ידנית.
 // מוצא: ${L.id} (בנייה-חכמה main) · צרור-${L.nBundle}${L.nData ? ` · מודל-שוטח: ${L.nData} שדות` : ''} · props-שורש: ${L.rootProps.join(', ')}

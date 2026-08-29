@@ -11,3 +11,5 @@ const String saved_version_chip_message = 'טעינת גרסה — החלף למ
 const String saved_version_chip_label2 = 'טען גרסה ';
 const String saved_version_chip_message2 = 'מחק גרסה';
 const String saved_version_chip_label3 = 'מחק גרסה ';
+const String tree_coming_soon_fallback = 'בקרוב';
+const String tree_coming_soon_fallback2 = 'הקטגוריה הזו בבנייה — תת-קטגוריות ומוצרים יתווספו בקרוב.';
