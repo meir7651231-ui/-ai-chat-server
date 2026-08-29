@@ -84,6 +84,7 @@ import crypto from 'node:crypto';
 
 // ── 4א · מנוע-המדף: הרמת widgets נקיים-מלידה, בלי-סוכן (הכרעה-11) ──
 stage('מנוע-המדף (shelf-lift)', () => run('machtzev/assemble/shelf-lift.mjs', [SCRATCH]).split('\n').find(l => l.includes('הורמו'))?.trim());
+stage('מנוע-הליטוש (data-lift)', () => run('machtzev/assemble/data-lift.mjs', [SCRATCH]).split('\n').find(l => l.includes('לוטשו'))?.trim());
 
 // ── 4ב · המנוע-המרכיב: מניפסטים ⇒ מסכים מחוללים ──
 stage('הרכבה-מחוללת (gen-screen)', () => {
