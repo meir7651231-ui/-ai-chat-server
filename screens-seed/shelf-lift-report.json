@@ -925,6 +925,12 @@
    "serves": 1
   },
   {
+   "atom": "WorkerPick",
+   "from": "screens__tasks_screen:_WorkerPick",
+   "kind": "צרור-2",
+   "serves": 1
+  },
+  {
    "atom": "WorkerProfileStat",
    "from": "screens__worker_profile_screen:_Stat",
    "kind": "Stateless",
@@ -1059,8 +1065,7 @@
   "dirty-helper": [
    "features__catalog_config__wheel_picker:_ColorRow",
    "screens__manager_role_assign_sheet:_NoBackendBanner",
-   "screens__role_request_sheet:_RoleRequestRow",
-   "screens__tasks_screen:_WorkerPick"
+   "screens__role_request_sheet:_RoleRequestRow"
   ],
   "private-dep": [
    "features__ring_dive__ring_dive_dial:RingDiveDial",

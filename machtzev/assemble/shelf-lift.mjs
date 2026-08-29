@@ -68,19 +68,26 @@ for (const f of fs.readdirSync(SHELF, { recursive: true }).map(String)) {
 // ── איסוף הצהרות-קובץ (מחלקות + עוזרים-פרטיים עליונים) ──
 function fileDecls(src) {
   const classes = new Map(); // name ⇒ {start, body, ext}
-  for (const m of src.matchAll(/class\s+([A-Za-z0-9_]+)(?:<[^{]*>)?\s+extends\s+([A-Za-z0-9_<>, ]+?)\s*\{/g)) {
+  for (const m of src.matchAll(/class\s+([A-Za-z0-9_]+)(?:<[^{]*>)?(?:\s+extends\s+([A-Za-z0-9_<>, ]+?))?\s*\{/g)) {
     const b = classBody(src, m.index);
-    if (b) classes.set(m[1], { body: b, ext: m[2].trim() });
+    if (b) classes.set(m[1], { body: b, ext: (m[2] || '').trim() });
   }
   const helpers = new Map(); // _name ⇒ source
   for (const m of src.matchAll(/(?:^|\n)(?:const|final)\s+(?:[A-Za-z_<>\[\], ]+\s+)?(_[a-z]\w*)\s*=/g)) {
     const line = src.indexOf(';', m.index);
     if (line > 0 && line - m.index < 2000) helpers.set(m[1], src.slice(m.index, line + 1).trim());
   }
-  for (const m of src.matchAll(/(?:^|\n)([A-Za-z_<>\[\], ]+\s+)?(_[a-z]\w*)\s*\([^)]*\)\s*(?:=>|\{)/g)) {
-    if (/\b(if|for|while|switch|catch|return)\b/.test(m[2])) continue;
-    const b = classBody(src, m.index);
-    if (b && b.split('\n').length <= 40) helpers.set(m[2], src.slice(m.index, m.index + b.length + src.slice(m.index).indexOf(b[0])).trim());
+  for (const m of src.matchAll(/(?:^|\n)[A-Za-z_][\w<>\[\], ?]*\s+(_[a-z]\w*)\s*\(/g)) {
+    let j = src.indexOf('(', m.index + m[0].length - 1), d = 0;
+    for (; j < src.length; j++) { const c = src[j]; if (c === '(') d++; else if (c === ')') { d--; if (!d) break; } }
+    const after = src.slice(j + 1).match(/^\s*(=>|\{|async)/);
+    if (!after) continue;
+    let end;
+    if (after[1] === '{') { const b = classBody(src, j); end = b ? j + src.slice(j).indexOf('{') + b.length : -1; }
+    else { end = src.indexOf(';', j); }
+    if (end < 0) continue;
+    const full = src.slice(m.index, end + 1).trim();
+    if (full.split('\n').length <= 80) helpers.set(m[1], full);
   }
   return { classes, helpers };
 }

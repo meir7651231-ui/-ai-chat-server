@@ -31,6 +31,18 @@ try {
   projectFns = new Set([...execSync("git grep -hE '^[A-Za-z][A-Za-z_<>,? ]+ [a-z][a-zA-Z0-9]+\\(' origin/main -- app_flutter/lib", { cwd: BS, encoding: 'utf8', maxBuffer: 1 << 24 })
     .matchAll(/ ([a-z]\w+)\(/g)].map(x => x[1]));
 } catch { }
+// אינדקס-טיפוסי-providers: fooProvider ⇒ הטיפוס-הנצפה (Provider<T>/StateProvider<T>/StateNotifierProvider<N,T>)
+const providerType = new Map();
+try {
+  const defs = execSync("git grep -hE 'final [a-z][a-zA-Z0-9]*Provider = ' origin/main -- app_flutter/lib", { cwd: BS, encoding: 'utf8', maxBuffer: 1 << 24 });
+  for (const m of defs.matchAll(/final ([a-z]\w*Provider) = (Provider|StateProvider|StateNotifierProvider|FutureProvider|StreamProvider)(?:<([^>]+)>)?/g)) {
+    if (m[2] === 'FutureProvider' || m[2] === 'StreamProvider') { providerType.set(m[1], null); continue; } // אסינכרוני ⇒ דחייה
+    let t = (m[3] || '').trim();
+    if (m[2] === 'StateNotifierProvider') t = t.split(',').slice(-1)[0].trim();
+    providerType.set(m[1], t || null);
+  }
+} catch { }
+
 const externalFn = (code) => {
   for (const m of new Set([...code.matchAll(/\b([a-z]\w+)\s*\(/g)].map(x => x[1]))) {
     if (!projectFns.has(m) || FOUNDATION_FN.has(m)) continue;
@@ -151,6 +163,61 @@ function splitTemplate(v) {
   }
   if (txt) parts.push({ t: 'txt', s: txt });
   return parts;
+}
+
+/** 🪢 התרת-סבך: on*-closures-עם-IO ⇒ callbacks · ref.watch ⇒ props · Consumer ⇒ Stateless.
+ *  מחזיר {out, callbacks:[{prop}], watchProps:[{prop,type}], modelWatch:[{v,R}]} או {fail}. */
+function untangle(body, seen) {
+  let out = body;
+  const callbacks = []; const watchProps = []; const modelWatch = [];
+  // א. הרמת-handlers: הארגומנט on* = המטרה; הסוגר כולו ⇒ callback
+  const IOISH = /Navigator\.|\bref\.|show[A-Z]\w*\(|open[A-Z]\w*\(|\bcontext\.(push|go|pop)\b|Provider\b/;
+  let edits = [];
+  {
+    const scan = maskLits(maskComments(out));
+    for (const m of [...scan.matchAll(/\b(on[A-Z]\w*)\s*:\s*/g)]) {
+      const vs = m.index + m[0].length;
+      const head = scan.slice(vs, vs + 12);
+      if (!/^\(\)\s*(=>|\{|async)/.test(head)) continue;
+      // סוף-הערך: פסיק/סוגר בעומק-0
+      let d = 0, j = vs, inDone = false;
+      for (; j < scan.length; j++) {
+        const c = scan[j];
+        if (c === '(' || c === '[' || c === '{') d++;
+        else if (c === ')' || c === ']' || c === '}') { if (!d) break; d--; }
+        else if (c === ',' && !d) break;
+      }
+      const val = scan.slice(vs, j);
+      if (!IOISH.test(val)) continue;                     // סוגר-טהור נשאר במקומו
+      const base = m[1];
+      let n = (seen.get(base) || 0) + 1; seen.set(base, n);
+      const prop = n === 1 ? base : base + n;
+      callbacks.push({ prop, type: 'VoidCallback' });
+      edits.push({ start: vs, len: j - vs, text: prop });
+    }
+    for (const e of edits.sort((a, b) => b.start - a.start)) out = out.slice(0, e.start) + e.text + out.slice(e.start + e.len);
+  }
+  // ב. ref.watch(fooProvider) ⇒ foo (הטיפוס מהגדרת-ה-provider = המטרה)
+  let fail = null;
+  out = out.replace(/ref\.watch\(\s*([a-zA-Z0-9_]+Provider)\s*\)/g, (mm, pv) => {
+    if (fail) return mm;
+    if (!providerType.has(pv)) { fail = 'provider-unknown'; return mm; }
+    const t = providerType.get(pv);
+    if (!t) { fail = 'provider-async'; return mm; }
+    const v = pv.replace(/Provider$/, '');
+    if (isPrim(t)) { if (!watchProps.some(x => x.prop === v)) watchProps.push({ prop: v, type: t }); }
+    else if (projectClasses.has(t.replace(/\?$/, ''))) { if (!modelWatch.some(x => x.v === v)) modelWatch.push({ v, R: t.replace(/\?$/, '') }); }
+    else { fail = 'provider-type'; return mm; }
+    return v;
+  });
+  if (fail) return { fail };
+  // ג. שאריות-חיווט ⇒ עדיין-סבוך
+  const left = stripComments(out);
+  if (/\bref\.|\bWidgetRef\b|Navigator\.|\bcontext\.(push|go|pop)\b/.test(left)) return { fail: 'io-left' };
+  // ד. Consumer ⇒ Stateless
+  out = out.replace(/extends\s+ConsumerWidget/, 'extends StatelessWidget')
+           .replace(/Widget\s+build\(\s*BuildContext\s+(\w+)\s*,\s*WidgetRef\s+\w+\s*\)/, 'Widget build(BuildContext $1)');
+  return { out, callbacks, watchProps, modelWatch };
 }
 
 // ── ליבת-ההרמה (per-body): עברית ⇒ props לפי מטרה · תבניות מפורקות-הפוך ──
@@ -373,9 +440,9 @@ for (const mf of fs.readdirSync(MACHINE).filter(f => f.endsWith('.json')).sort()
   const src = fs.readFileSync(srcPath, 'utf8');
   const widgetKind = new Map((map.widgets || []).map(w => [w.name, w]));
   const classes = new Map();
-  for (const m of src.matchAll(/class\s+([A-Za-z0-9_]+)(?:<[^{]*>)?\s+extends\s+([A-Za-z0-9_<>, ]+?)\s*\{/g)) {
+  for (const m of src.matchAll(/class\s+([A-Za-z0-9_]+)(?:<[^{]*>)?(?:\s+extends\s+([A-Za-z0-9_<>, ]+?))?\s*\{/g)) {
     const b = classBody(src, m.index);
-    if (b) classes.set(m[1], { body: b, ext: m[2].trim() });
+    if (b) classes.set(m[1], { body: b, ext: (m[2] || '').trim() });
   }
   const ctorIndex = new Map();
   for (const [n, c] of classes) { const ps = ctorPositionals(n, c.body); if (ps) ctorIndex.set(n, ps); }
@@ -384,15 +451,24 @@ for (const mf of fs.readdirSync(MACHINE).filter(f => f.endsWith('.json')).sort()
     const line = src.indexOf(';', m.index);
     if (line > 0 && line - m.index < 2000) helpers.set(m[1], src.slice(m.index, line + 1).trim());
   }
-  for (const m of src.matchAll(/(?:^|\n)([A-Za-z_<>\[\], ]+\s+)?(_[a-z]\w*)\s*\([^)]*\)\s*(?:=>|\{)/g)) {
-    if (/\b(if|for|while|switch|catch|return)\b/.test(m[2])) continue;
-    const b = classBody(src, m.index);
-    if (b && b.split('\n').length <= 40) helpers.set(m[2], src.slice(m.index, m.index + src.slice(m.index).indexOf(b) + b.length).trim());
+  for (const m of src.matchAll(/(?:^|\n)[A-Za-z_][\w<>\[\], ?]*\s+(_[a-z]\w*)\s*\(/g)) {
+    // סריקה-מאוזנת: פרמטרים (גם-מקוננים) ⇒ גוף ({...} או =>...;)
+    let j = src.indexOf('(', m.index + m[0].length - 1), d = 0;
+    for (; j < src.length; j++) { const c = src[j]; if (c === '(') d++; else if (c === ')') { d--; if (!d) break; } }
+    const after = src.slice(j + 1).match(/^\s*(=>|\{|async)/);
+    if (!after) continue;
+    let end;
+    if (after[1] === '{') { const b = classBody(src, j); end = b ? j + src.slice(j).indexOf('{') + b.length : -1; }
+    else { end = src.indexOf(';', j); }
+    if (end < 0) continue;
+    const full = src.slice(m.index, end + 1).trim();
+    if (full.split('\n').length <= 80) helpers.set(m[1], full);
   }
 
   for (const w of map.widgets || []) {
     const id = screen + ':' + w.name;
-    if (w.dataClean || !w.pure || w.kind !== 'StatelessWidget') continue;
+    if (!['StatelessWidget', 'ConsumerWidget'].includes(w.kind)) continue;
+    if (w.dataClean && w.pure && w.kind === 'StatelessWidget') continue;  // אלה של shelf-lift
     const main = classes.get(w.name);
     if (!main) { skip('no-decl', id); continue; }
 
@@ -410,12 +486,12 @@ for (const mf of fs.readdirSync(MACHINE).filter(f => f.endsWith('.json')).sort()
         if (inB.has(r) || modelCand.has(r)) continue;
         if (classes.has(r)) {
           const wk = widgetKind.get(r);
-          if (!r.startsWith('_') || bundle.length >= 6 || (wk && (wk.kind !== 'StatelessWidget' || !wk.pure))) { skip('sibling-class', id); ok = false; break; }
+          if (!r.startsWith('_') || bundle.length >= 10 || (wk && !['StatelessWidget', 'ConsumerWidget'].includes(wk.kind))) { skip('sibling-class', id); ok = false; break; }
           bundle.push({ name: r, body: classes.get(r).body }); grew = true;
         } else if (/^_[a-z]/.test(r)) {
           const declared = new RegExp('(final|var|const|void|double|int|String|bool|Widget|Color|late)\\s+' + r + '\\b|[A-Za-z>]\\s+' + r + '\\s*\\(').test(code);
           if (declared) continue;
-          if (!helpers.has(r) || bundle.length + 1 >= 8) { skip('private-dep', id); ok = false; break; }
+          if (!helpers.has(r) || bundle.length + 1 >= 12) { skip('private-dep', id); ok = false; break; }
           const hsrc = helpers.get(r);
           if (HEB_STR.test(stripComments(hsrc)) || IO_PAT.test(stripComments(hsrc))) { skip('dirty-helper', id); ok = false; break; }
           bundle.push({ name: r, body: hsrc, helper: true }); grew = true;
@@ -425,8 +501,28 @@ for (const mf of fs.readdirSync(MACHINE).filter(f => f.endsWith('.json')).sort()
       if (!grew) break;
     }
     if (!ok) continue;
+
+    // ── 🪢 התרת-סבך פר-גוף (לא-עוזרים) ──
+    const cbSeen = new Map();
+    let unFail = null; const extraModels = [];
+    for (const b of bundle) {
+      if (b.helper) { b.untangled = []; continue; }
+      const u = untangle(b.body, cbSeen);
+      if (u.fail) { unFail = u.fail; break; }
+      b.body = u.out;
+      b.untangled = [...u.callbacks, ...u.watchProps];
+      for (const mw of u.modelWatch) {
+        if (b !== bundle[0]) { unFail = 'model-deep'; break; }
+        // הצהרה-סינתטית ⇒ שיטוח-המודלים הקיים יפרק לשדות
+        b.body = b.body.replace('{', '{\n  final ' + mw.R + ' ' + mw.v + ';', );
+        extraModels.push(mw.R);
+      }
+      if (unFail) break;
+    }
+    if (unFail) { skip(unFail, id); continue; }
     const allRaw = stripComments(bundle.map(b => b.body).join('\n'));
     if (IO_PAT.test(allRaw) || RIVERPOD.test(allRaw)) { skip('io', id); continue; }
+    for (const r of extraModels) modelCand.add(r);
     const exFn = externalFn(allRaw);
     if (exFn) { skip('project-fn', id + '⇒' + exFn); continue; }
 
@@ -450,8 +546,9 @@ for (const mf of fs.readdirSync(MACHINE).filter(f => f.endsWith('.json')).sort()
       const h = hoistStrings(b.body, ctorIndex, propBase);
       if (h.fail) { fail = h.fail; break; }
       b.out = h.out; b.props = h.props;
-      b.allProps = h.props.filter(p => !p.isDefault).map(p => p.prop); b.threaded = [];
+      b.allProps = [...h.props.filter(p => !p.isDefault).map(p => p.prop), ...(b.untangled || []).map(p => p.prop)]; b.threaded = [];
       if (b === bundle[0]) b.allProps.push(...dataProps.map(p => p.prop));
+      for (const p of b.untangled || []) propType.set(p.prop, p.type);
       for (const p of h.props) { propBase.set(p.prop.replace(/\d+$/, ''), Math.max(propBase.get(p.prop.replace(/\d+$/, '')) || 0, +(p.prop.match(/(\d+)$/)?.[1] || 1))); propType.set(p.prop, 'String'); }
     }
     if (fail) { skip(fail, id); continue; }
@@ -464,7 +561,7 @@ for (const mf of fs.readdirSync(MACHINE).filter(f => f.endsWith('.json')).sort()
     for (const b of bundle) {
       if (b.helper) { b.final = b.out; continue; }
       const inj = injectProps(b.out, b.name, [
-        ...b.props, ...(b === bundle[0] ? dataProps : []),
+        ...b.props, ...(b === bundle[0] ? dataProps : []), ...(b.untangled || []),
         ...b.threaded.map(p => ({ prop: p, type: propType.get(p) || 'String' })),
       ]);
       if (!inj) { bad = true; break; }

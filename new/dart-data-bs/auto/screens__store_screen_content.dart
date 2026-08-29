@@ -1,4 +1,9 @@
 // 📦 דאטה · תוכן-שהורם ע"י data-lift מ-screens__store_screen — verbatim מהמקור, אל תערוך ידנית.
+const String sicha_sheet_name = 'הקבלן הראשי';
+const String sicha_sheet_name2 = 'ספק חומרי בנייה';
+const String sicha_sheet_name3 = 'השליח';
+const String sicha_sheet_name4 = 'מנהל המערכת';
+const String sicha_sheet_title = 'שיחה חדשה';
 const String store_empty_state_label = 'אין פריטים';
 const String store_empty_state_label2 = 'לא נמצאו תוצאות\nעבור "';
 const String store_smart_qty_stepper_message = 'הוסף כמות';

@@ -1,4 +1,8 @@
 // 📦 דאטה · תוכן-שהורם ע"י data-lift מ-screens__catalog_screen — verbatim מהמקור, אל תערוך ידנית.
+const String company_catalog_import_card_label = '📦 טעינת קטלוג החברה';
+const String company_catalog_import_card_label2 = 'נטענו ';
+const String company_catalog_import_card_label3 = ' מוצרים';
+const String company_catalog_import_card_label4 = 'הורידו תבנית, מלאו והעלו — והאפליקציה תעבוד על הקטלוג שלכם';
 const String empty_section_fallback = 'אין פריטים להצגה.\nפתחו את ניהול הרשימות והקישו ✏️ כדי לבחור פריטים.';
 const String facet_row_label2 = ' מוצרים';
 const String mini_qty_btn_label = 'הוסף כמות';
