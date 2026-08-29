@@ -334,5 +334,82 @@ ${argLines.join('\n')}
   report.totals.wired += wired; report.totals.todo += todo; report.totals.hebInExpr += heb;
 }
 
+// ── 🧪 שער-ההצצה (חוק-7): גלריה + כפתור-כניסה מאחורי דגל-הפיך; כבוי ⇒ זהות-ביט ──
+const entries = report.boards.map(b => {
+  const cls = (JSON.parse(fs.readFileSync(path.join(MANIFESTS, b.screen + '.manifest.json'), 'utf8')).screen)
+    .replace(/(^|[_-])([a-z])/g, (_, __, c) => c.toUpperCase()) + 'Board';
+  return { name: b.screen.replace(/^(screens|features)__/, '').replace(/__/g, ' · ').replace(/_/g, ' '), file: b.screen + '_board.dart', cls, wired: b.wired, todo: b.todo };
+}).sort((a, b) => a.name.localeCompare(b.name));
+const gallery = `// 🧪 חולל ע"י מחולל-הלוחות (board-gen) — שער-ההצצה למסכי-הגנסיס. אל תערוך ידנית.
+// חוק-7 (החלפה-הפיכה): הדגל כבוי כברירת-מחדל ⇒ collection-if מעלים הכול — זהות-ביט.
+// הדלקה: flutter run --dart-define=GENESIS_SCREENS=true
+import 'package:flutter/material.dart';
+import 'package:buildsmart/widgets/toast.dart' show bsNavigatorKey;
+${entries.map(e => `import '${e.file}';`).join('\n')}
+
+const bool kGenesisScreens = bool.fromEnvironment('GENESIS_SCREENS');
+
+/// כפתור-כניסה צף (🧪) — נטען-לצד מעל-הניווט; קיים רק כשהדגל דלוק.
+class GenesisEntryButton extends StatelessWidget {
+  const GenesisEntryButton({super.key});
+
+  @override
+  Widget build(BuildContext context) => SafeArea(
+        child: Align(
+          alignment: Alignment.bottomLeft,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 12, bottom: 96),
+            child: FloatingActionButton.small(
+              heroTag: 'genesis-gallery',
+              tooltip: 'מסכי-הגנסיס (תצוגה-לצד)',
+              onPressed: () => bsNavigatorKey.currentState?.push(
+                MaterialPageRoute(builder: (_) => const GenesisGallery()),
+              ),
+              child: const Text('🧪', style: TextStyle(fontSize: 18)),
+            ),
+          ),
+        ),
+      );
+}
+
+class _GEntry {
+  const _GEntry(this.name, this.wired, this.todo, this.build);
+  final String name;
+  final int wired;
+  final int todo;
+  final Widget Function() build;
+}
+
+/// הגלריה: כל המסכים-המורכבים, לחיצה פותחת כל-אחד חי (הלוח מחווט את מה-שנפתר).
+class GenesisGallery extends StatelessWidget {
+  const GenesisGallery({super.key});
+
+  static final List<_GEntry> _screens = [
+${entries.map(e => `    _GEntry('${e.name}', ${e.wired}, ${e.todo}, () => const ${e.cls}()),`).join('\n')}
+  ];
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(title: const Text('🧪 מסכי-הגנסיס — תצוגה-לצד')),
+        body: ListView.separated(
+          itemCount: _screens.length,
+          separatorBuilder: (_, __) => const Divider(height: 1),
+          itemBuilder: (context, i) {
+            final e = _screens[i];
+            return ListTile(
+              title: Text(e.name),
+              subtitle: Text('מחווט: \${e.wired} · ממתין-לחיווט: \${e.todo}'),
+              trailing: const Icon(Icons.chevron_left),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => e.build()),
+              ),
+            );
+          },
+        ),
+      );
+}
+`;
+fs.writeFileSync(path.join(OUT, 'genesis_gallery.dart'), gallery);
+
 fs.writeFileSync(path.join(ROOT, 'screens-seed/board-gen-report.json'), JSON.stringify(report, null, 1));
 console.log(`🔌 מחולל-הלוחות · ${report.boards.length} לוחות · חיבורים-מהמקור: ${report.totals.wired} · TODO-לוח: ${report.totals.todo} · עברית-בביטוי (מועמדת-תוכן): ${report.totals.hebInExpr}`);
