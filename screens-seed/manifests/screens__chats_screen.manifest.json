@@ -4,7 +4,8 @@
  "screen": "chats_screen",
  "flat": true,
  "content": [
-  "auto/screens__chats_screen_content.dart"
+  "auto/screens__chats_screen_content.dart",
+  "auto/screens__chats_screen_content2.dart"
  ],
  "sections": [
   {
@@ -27,7 +28,7 @@
    "id": "date_chip",
    "atom": "DateChip",
    "props": {
-    "date": "?:String"
+    "date": "$: date_chip_date"
    }
   },
   {

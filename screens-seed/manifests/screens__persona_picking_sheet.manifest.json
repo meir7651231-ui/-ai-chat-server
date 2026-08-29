@@ -3,7 +3,8 @@
  "src": "screens__persona_picking_sheet",
  "screen": "persona_picking_sheet",
  "content": [
-  "auto/screens__persona_picking_sheet_content.dart"
+  "auto/screens__persona_picking_sheet_content.dart",
+  "auto/screens__persona_picking_sheet_content2.dart"
  ],
  "sections": [
   {
@@ -15,7 +16,7 @@
    "id": "persona_picking_sheet_banner",
    "atom": "PersonaPickingSheetBanner",
    "props": {
-    "text": "?:String",
+    "text": "$: persona_picking_sheet_banner_text",
     "bg": "#:bg",
     "fg": "#:fg"
    }

@@ -3,14 +3,16 @@
  "src": "screens__manager_profile_screen",
  "screen": "manager_profile_screen",
  "flat": true,
- "content": [],
+ "content": [
+  "auto/screens__manager_profile_screen_content2.dart"
+ ],
  "sections": [
   {
    "id": "rstat",
    "atom": "RStat",
    "props": {
     "value": "?:String",
-    "label": "?:String"
+    "label": "$: rstat_label"
    }
   }
  ]

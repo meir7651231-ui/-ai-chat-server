@@ -2,21 +2,23 @@
  "generated": true,
  "src": "screens__trade_builder__trade_publish_sheet",
  "screen": "trade_builder_trade_publish_sheet",
- "content": [],
+ "content": [
+  "auto/screens__trade_builder__trade_publish_sheet_content2.dart"
+ ],
  "sections": [
   {
    "id": "check_row",
    "atom": "CheckRow",
    "props": {
     "pass": "?:bool",
-    "label": "?:String"
+    "label": "$: check_row_label"
    }
   },
   {
    "id": "trade_builder_accessory_rule_editor_pill_button",
    "atom": "TradeBuilderAccessoryRuleEditorPillButton",
    "props": {
-    "label": "?:String",
+    "label": "$: trade_builder_accessory_rule_editor_pill_button_label",
     "onTap": "@:onTap",
     "enabled": "?:bool"
    }

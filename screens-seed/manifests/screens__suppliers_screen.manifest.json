@@ -2,14 +2,16 @@
  "generated": true,
  "src": "screens__suppliers_screen",
  "screen": "suppliers_screen",
- "content": [],
+ "content": [
+  "auto/screens__suppliers_screen_content2.dart"
+ ],
  "sections": [
   {
    "id": "supplier_tile",
    "atom": "SupplierTile",
    "props": {
-    "emoji": "?:String",
-    "title": "?:String",
+    "emoji": "$: supplier_tile_emoji",
+    "title": "$: supplier_tile_title",
     "subtitle": "?:String",
     "onTap": "@:onTap"
    }

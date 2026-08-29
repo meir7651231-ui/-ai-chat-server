@@ -55,6 +55,8 @@ for (const rf of ['shelf-lift-report.json', 'data-lift-report.json']) {
 }
 
 // ── קבועי-התוכן פר-מסך (מנוע: auto/ שטוח · נחיל: records סמנטיים) ──
+// v2 · תוצרי-הריצה-הקודמת של תוכן-מאתר-הקריאה (content2) נמחקים לפני-הסריקה — אידמפוטנטיות
+if (fs.existsSync(CONTENT)) for (const f of fs.readdirSync(CONTENT)) if (f.endsWith('_content2.dart')) fs.unlinkSync(path.join(CONTENT, f));
 const contentConsts = new Map(); // screen ⇒ Set(constName)
 if (fs.existsSync(CONTENT)) for (const f of fs.readdirSync(CONTENT)) {
   const scr = f.replace('_content.dart', '');
@@ -128,10 +130,12 @@ for (const mf of fs.readdirSync(path.join(ROOT, 'screens-seed/machine')).filter(
   // רישום-callbacks ברמת-המסך: שם-חוזר עם טיפוס-שונה ⇒ שם-ממוספר (onChanged2) —
   // אחרת שדה-אחד-בקומפוזר משרת אטומים עם חתימות-שונות ולא-מתקמפל
   const cbReg = new Map(); // name ⇒ type
+  const extraConsts = new Map(); // v2 · תוכן-מאתר-הקריאה: constName ⇒ ליטרל
   // 🔁 מנוע-ה-repeat: widget שמופע-בלולאה במקור ⇒ סקציית-repeat; prop תלוי-משתנה-הלולאה ⇒ פר-פריט (~:)
   const buildSection = (o, origName) => {
     const lc = loopContext(src, origName);
     const args = lc ? parseCallArgs(src, origName, Math.max(0, lc.callIndex - 2)) : null;
+    const cs = args || parseCallArgs(src, origName, 0);   // אתר-הקריאה גם בלי-לולאה (לתוכן-ליטרלי)
     const props = {};
     for (const p of o.props) {
       const argE = args ? (args.named[p.name] ?? null) : null;
@@ -147,7 +151,13 @@ for (const mf of fs.readdirSync(path.join(ROOT, 'screens-seed/machine')).filter(
         props[p.name] = '@:' + cn2 + (p.type === 'VoidCallback' ? '' : '|' + p.type);
       }
       else if (isTok(p.name, p.type)) props[p.name] = '#:' + p.name;
-      else { props[p.name] = '?:' + p.type; holes++; holeTypes.add(p.type); }
+      else {
+        // v2 · תוכן-מאתר-הקריאה: ליטרל-מחרוזת נקי (בלי אינטרפולציה) שהועבר לאטום במקור ⇒
+        // קבוע-תוכן אוטומטי (content2) במקום חור — verbatim, אפס-המצאה
+        const litE = p.type.startsWith('String') ? String(cs?.named[p.name] ?? '').trim() : '';
+        if (/^'(?:[^'\\$]|\\.)*'$/.test(litE)) { extraConsts.set(cn, litE); props[p.name] = '$: ' + cn; }
+        else { props[p.name] = '?:' + p.type; holes++; holeTypes.add(p.type); }
+      }
     }
     const sec = { id: snake(o.atom), atom: o.atom, props };
     if (lc && Object.values(props).includes('~:')) sec.repeat = { as: lc.as, item: o.atom + 'Item' };
@@ -185,12 +195,15 @@ for (const mf of fs.readdirSync(path.join(ROOT, 'screens-seed/machine')).filter(
     src: screen,
     screen: screen.replace(/^(screens|features)__/, '').replace(/__/g, '_'),
     ...(flat ? { flat: true } : {}),
-    content: [...(consts.size ? ['auto/' + screen + '_content.dart'] : []), ...(recs.some(r => JSON.stringify(sections).includes(r.rec + '.')) ? [contentRecordFile.get(screen)] : [])],
+    content: [...(consts.size ? ['auto/' + screen + '_content.dart'] : []), ...(extraConsts.size ? ['auto/' + screen + '_content2.dart'] : []), ...(recs.some(r => JSON.stringify(sections).includes(r.rec + '.')) ? [contentRecordFile.get(screen)] : [])],
     sections,
   };
   for (const t of holeTypes) report.holesByType[t] = (report.holesByType[t] || 0) + 1;
   const fname = screen + '.manifest.json';
   if (handWritten.has(manifest.screen + '.manifest.json')) continue;  // הפיילוט-הידני נשמר
+  if (extraConsts.size) fs.writeFileSync(path.join(CONTENT, screen + '_content2.dart'),
+    '// 📦 דאטה · תוכן-מאתר-הקריאה שהורם ע"י מנוע-המניפסטים (content2) — verbatim מהמקור, אל תערוך ידנית.\n' +
+    [...extraConsts].map(([n, v]) => `const String ${n} = ${v};`).join('\n') + '\n');
   fs.writeFileSync(path.join(OUT_FULL, fname), JSON.stringify(manifest, null, 1));
   (holes || flat ? report.draft : report.full).push(holes || flat ? { screen, holes, ...(flat ? { flat: true } : {}) } : screen);
 }

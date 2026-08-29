@@ -4,7 +4,8 @@
  "screen": "store_settings_screen",
  "flat": true,
  "content": [
-  "auto/screens__store_settings_screen_content.dart"
+  "auto/screens__store_settings_screen_content.dart",
+  "auto/screens__store_settings_screen_content2.dart"
  ],
  "sections": [
   {
@@ -12,8 +13,8 @@
    "atom": "StoreSettingsSectionTile",
    "props": {
     "fallback": "$: store_settings_section_tile_fallback",
-    "emoji": "?:String",
-    "title": "?:String",
+    "emoji": "$: store_settings_section_tile_emoji",
+    "title": "$: store_settings_section_tile_title",
     "children": "?:List<Widget>",
     "underConstruction": "?:bool"
    }
@@ -22,8 +23,8 @@
    "id": "settings_validated_text_row",
    "atom": "SettingsValidatedTextRow",
    "props": {
-    "label": "?:String",
-    "hint": "?:String",
+    "label": "$: settings_validated_text_row_label",
+    "hint": "$: settings_validated_text_row_hint",
     "value": "?:String",
     "onChanged": "@:onChanged|ValueChanged<String>",
     "labelColor": "#:labelColor",
@@ -41,7 +42,7 @@
    "atom": "ChatSettingsSwitchRow",
    "props": {
     "fallback": "?:String",
-    "label": "?:String",
+    "label": "$: chat_settings_switch_row_label",
     "value": "?:bool",
     "onChanged": "@:onChanged2|ValueChanged<bool>",
     "underConstruction": "?:bool"
@@ -53,14 +54,14 @@
    "props": {
     "fallback": "?:String",
     "onTap": "@:onTap",
-    "label": "?:String"
+    "label": "$: catalog_settings_placeholder_row_label"
    }
   },
   {
    "id": "settings_number_row",
    "atom": "SettingsNumberRow",
    "props": {
-    "label": "?:String",
+    "label": "$: settings_number_row_label",
     "value": "?:int",
     "onChanged": "@:onChanged3|ValueChanged<int>",
     "inkColor": "#:inkColor",
@@ -75,8 +76,8 @@
    "id": "store_settings_action_row",
    "atom": "StoreSettingsActionRow",
    "props": {
-    "label": "?:String",
-    "buttonLabel": "?:String",
+    "label": "$: store_settings_action_row_label",
+    "buttonLabel": "$: store_settings_action_row_button_label",
     "onTap": "@:onTap"
    }
   }

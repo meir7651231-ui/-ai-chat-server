@@ -4,7 +4,8 @@
  "screen": "courier_attendance_screen",
  "flat": true,
  "content": [
-  "auto/screens__courier_attendance_screen_content.dart"
+  "auto/screens__courier_attendance_screen_content.dart",
+  "auto/screens__courier_attendance_screen_content2.dart"
  ],
  "sections": [
   {
@@ -22,7 +23,7 @@
    "id": "today_stat",
    "atom": "TodayStat",
    "props": {
-    "label": "?:String",
+    "label": "$: today_stat_label",
     "value": "?:String"
    }
   },
@@ -30,10 +31,10 @@
    "id": "courier_attendance_table_row",
    "atom": "CourierAttendanceTableRow",
    "props": {
-    "date": "?:String",
-    "inText": "?:String",
-    "outText": "?:String",
-    "totalText": "?:String",
+    "date": "$: courier_attendance_table_row_date",
+    "inText": "$: courier_attendance_table_row_in_text",
+    "outText": "$: courier_attendance_table_row_out_text",
+    "totalText": "$: courier_attendance_table_row_total_text",
     "header": "?:bool"
    }
   }

@@ -4,7 +4,8 @@
  "screen": "courier_dashboard_screen",
  "flat": true,
  "content": [
-  "auto/screens__courier_dashboard_screen_content.dart"
+  "auto/screens__courier_dashboard_screen_content.dart",
+  "auto/screens__courier_dashboard_screen_content2.dart"
  ],
  "sections": [
   {
@@ -31,7 +32,7 @@
    "atom": "Stat",
    "props": {
     "value": "?:String",
-    "label": "?:String"
+    "label": "$: stat_label"
    }
   }
  ]

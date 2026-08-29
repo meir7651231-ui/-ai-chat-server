@@ -65,29 +65,46 @@ const existsInMain = (libPath) => {
   return ok;
 };
 const GENERIC_IDS = new Set(['label', 'value', 'text', 'children', 'child', 'title', 'item', 'items', 'name', 'data']);
-const DART_OK = new Set(['context', 'ref', 'true', 'false', 'null', 'const', 'final', 'new', 'if', 'else', 'for', 'in', 'is', 'as', 'return', 'switch', 'case', 'await', 'async', 'toList', 'map', 'where', 'length', 'toString', 'print', 'var', 'this']);
+const DART_OK = new Set(['context', 'ref', 'true', 'false', 'null', 'const', 'final', 'new', 'if', 'else', 'for', 'in', 'is', 'as', 'return', 'switch', 'case', 'await', 'async', 'toList', 'map', 'where', 'length', 'toString', 'print', 'var', 'this',
+  // v2 · מילות-מפתח + Flutter-בקטנות שנפלו לשווא במאמת
+  'try', 'catch', 'finally', 'throw', 'rethrow', 'do', 'while', 'break', 'continue', 'late', 'void', 'dynamic', 'num', 'int', 'double', 'bool', 'mounted',
+  'showDialog', 'showModalBottomSheet', 'showDatePicker', 'showTimePicker', 'showSearch', 'showAboutDialog', 'debugPrint', 'identical', 'isEmpty', 'isNotEmpty', 'first', 'last', 'entries', 'keys', 'values']);
 
-/** ביטוי פתיר-בלוח? כל מזהה חייב להיות: מוצהר-בביטוי · watch-var · ציבורי-פרויקטלי · Flutter (רישית) · ליבת-Dart. */
+/** v2 · ביטוי פתיר-בלוח? כל מזהה חייב להיות: מוצהר-בביטוי · watch-var · הרמת-מצב/מקומי (extras) ·
+ *  ציבורי-פרויקטלי · Flutter (רישית) · ליבת-Dart. ‏stateful ⇒ ‏setState מותר (לוח-Stateful).
+ *  ‏collect ⇒ במקום להיכשל, אוסף את המזהים-הנופלים (מועמדי-הרמה). */
 let srcPublicsRef = new Set();
-function exprResolvable(expr, watchVars) {
+function exprScanIds(expr, watchVars, extras, stateful, collect) {
   const scan = maskLitsKeepInterp(expr);                    // עדשה-סמנטית: קוד-בתוך-\${} נסרק
-  if (/\bsetState\b|\bwidget\.|\bthis\.|\b_\w/.test(scan)) return false;
+  if (/\bwidget\.|\bthis\./.test(scan)) return false;
+  if (!stateful && /\bsetState\b/.test(scan)) return false;
   const declared = new Set();
-  for (const m of scan.matchAll(/\(\s*([\w ,]+)\)\s*=>|\bfor\s*\(\s*(?:final|var)\s+(\w+)/g))
-    for (const v of (m[1] || m[2] || '').split(',')) declared.add(v.trim());
-  for (const m of scan.matchAll(/(?<![.\w'])([a-zA-Z_]\w*)\b(?!\s*:)/g)) {
+  for (const m of scan.matchAll(/\(\s*([\w ,]+)\)\s*=>|\bfor\s*\(\s*(?:final|var)\s+(\w+)|\b(?:final|var)\s+(\w+)\s*=/g))
+    for (const v of (m[1] || m[2] || m[3] || '').split(',')) declared.add(v.trim());
+  let ok = true;
+  for (const m of scan.matchAll(/(?<![.\w'$])([a-zA-Z_]\w*)\b(?!\s*:)/g)) {
     const id = m[1];
-    if (declared.has(id) || watchVars.has(id)) continue;
+    if (declared.has(id) || watchVars.has(id) || extras.has(id)) continue;
+    if (stateful && id === 'setState') continue;
     if (/^[A-Z]/.test(id)) continue;
     if (DART_OK.has(id)) continue;
-    if (id.length <= 2 || GENERIC_IDS.has(id)) return false;   // מזהה-גנרי/קצר ⇒ הקשר-מקומי
+    if (id.startsWith('_') || id.length <= 2 || GENERIC_IDS.has(id)) {  // פרטי/גנרי ⇒ רק הרמה (extras) מצילה
+      ok = false; if (collect) { collect.add(id); continue; } return false;
+    }
     const isCall = scan.slice(m.index + id.length).match(/^\s*\(/);
     if (isCall && projectPub.has(id)) continue;
     if (projectConsts.has(id)) continue;
     if (srcPublicsRef.has(id)) continue;
-    return false;
+    ok = false; if (collect) { collect.add(id); continue; } return false;
   }
-  return true;
+  return ok;
+}
+const exprResolvable = (expr, watchVars, extras = new Set(), stateful = false) => exprScanIds(expr, watchVars, extras, stateful, null);
+/** המזהים-הנופלים של ביטוי — מועמדים להרמה. null ⇒ פסול-מהותית (widget./this.). */
+function failingIds(expr, watchVars, extras, stateful) {
+  const bad = new Set();
+  const r = exprScanIds(expr, watchVars, extras, stateful, bad);
+  return (r === false && bad.size === 0) ? null : bad;
 }
 
 // ── טוקני-BsTokens: שם ⇒ קבוע ──
@@ -118,7 +135,9 @@ function callSiteArgs(src, widget) {
     const raw = src.slice(a, b).trim();
     if (!raw) return;
     const nm = raw.match(/^([a-zA-Z_]\w*)\s*:\s*([\s\S]+)$/);
-    if (nm && !/^['"(]/.test(nm[2].trimStart()[0] === ':' ? 'x' : nm[2]) && !raw.startsWith("'")) named[nm[1]] = nm[2].trim();
+    // v2 · ‏( הוסר מרשימת-הפסילה: ‏onX: () => handler(...) הוא ארגומנט-בשם לגיטימי —
+    // הפסילה הישנה זרקה את כל משפחת-ה-closures לפני-המאמת (ואף זיהמה את המיקומיים)
+    if (nm && !/^['"]/.test(nm[2].trimStart()[0] === ':' ? 'x' : nm[2]) && !raw.startsWith("'")) named[nm[1]] = nm[2].trim();
     else positional.push(raw);
   };
   for (let k = open + 1; k <= j; k++) {
@@ -187,6 +206,37 @@ for (const mf of fs.readdirSync(MANIFESTS).filter(f => f.endsWith('.manifest.jso
   // פומביי-המקור: פונקציות/קבועים עליוניים של קובץ-המסך — זמינים ללוח דרך import-עצמי
   srcPublicsRef = new Set([...stripComments(src).matchAll(/(?:^|\n)(?:const |final )?[A-Za-z_][\w<>,? ]*?\b([a-z]\w*)\s*[=(]/g)].map(x => x[1]));
   const selfImport = "import 'package:buildsmart/" + srcScreen.replace(/__/g, '/') + ".dart';";
+  const codeSrc = stripComments(src);
+
+  // ── v2 · הרמת-מצב: שדות + מתודות פרטיות מכל מחלקות-ה-State של קובץ-המקור ──
+  // מסך-Stateful מקורי ⇒ הלוח יכול להיות Stateful ולארח את המצב verbatim (setState חוקי).
+  // רק חברי-מחלקה בהזחת-2 (הקוד מפורמט-dart) — לא מקומיים-בתוך-מתודות.
+  const stateFields = new Map();   // name ⇒ {decl, init}
+  const stateMethods = new Map();  // name ⇒ {text, params}
+  for (const sm of codeSrc.matchAll(/class\s+_\w+State\s+extends\s+(?:ConsumerState|State)<\w+>/g)) {
+    const sb = classBody(codeSrc, sm.index) || '';
+    const inner = sb.slice(sb.indexOf('{') + 1);
+    const innerScan = maskLits(inner);
+    for (const fm of inner.matchAll(/\n {2}((?:late\s+)?final|(?:late\s+)?(?:final\s+)?[A-Za-z_][\w<>,?. ]*?\??)\s+(_\w+)\s*(=[^;\n]*)?;/g)) {
+      const [, type, name, init] = fm;
+      if (stateFields.has(name)) continue;
+      if (/\bwidget\.|\bthis\./.test(init || '')) continue;
+      if (!init && !type.includes('?')) continue;                       // בלי-init ולא-nullable ⇒ תלוי-בנאי, לא מרימים
+      if (/^(late\s+)?final$/.test(type.trim()) && !init) continue;
+      stateFields.set(name, { decl: `${type} ${name}${init ? ' ' + init.trim() : ''};`, init: init ? init.replace(/^=\s*/, '') : 'null' });
+    }
+    for (const mm of inner.matchAll(/\n {2}((?:Future<[^>{}]+>|void|bool|int|double|String|Widget)\s+(_\w+)\s*\(([^)]*)\)\s*(?:async\s*)?\{)/g)) {
+      if (stateMethods.has(mm[2])) continue;
+      let d = 0, j = mm.index + mm[1].length - 1;                       // פותח על ה-{ של הגוף
+      for (let k = j; k < innerScan.length; k++) {
+        const c = innerScan[k];
+        if (c === '{') d++;
+        else if (c === '}') { d--; if (!d) { j = k; break; } }
+      }
+      const params = mm[3].split(',').map(p => p.trim().split(/\s+/).pop()?.replace(/[^\w]/g, '')).filter(Boolean);
+      stateMethods.set(mm[2], { text: inner.slice(mm.index + 1, j + 1), params });
+    }
+  }
 
   // איסוף החיבורים הנדרשים מהמניפסט (אותם-כללים כמו המרכיב)
   const needP = new Map(); const needCb = new Map(); const needTok = new Map(); const needGates = new Set();
@@ -207,8 +257,8 @@ for (const mf of fs.readdirSync(MANIFESTS).filter(f => f.endsWith('.manifest.jso
   }
   if (M.sections?.some(s => s.title)) needTok.set('ink', 'Color');
 
-  // חיווט פר-סקציה מהמקור
-  const wires = new Map(); let todo = 0, heb = 0;
+  // חיווט פר-סקציה מהמקור — נאסף כמועמדים (cand); הקבלה בשלב-v2 עם ההרמות
+  const wires = new Map(); const cand = new Map(); let todo = 0, heb = 0;
   const watchLines = new Map();
   for (const sec of M.sections || []) {
     const org = atomOrigin.get(sec.atom);
@@ -224,9 +274,16 @@ for (const mf of fs.readdirSync(MANIFESTS).filter(f => f.endsWith('.manifest.jso
       if (pi >= 0 && args?.positional[pi]) return args.positional[pi];
       if (inner.handlers.has(propName)) return inner.handlers.get(propName);
       if (inner.watches.has(propName)) { const pv = inner.watches.get(propName); if (!pv.startsWith('_')) { watchLines.set(propName, pv); return propName; } }
-      // שדה-מודל-שוטח: פרמטר-מקורי מודלי שהועבר באתר-הקריאה
+      // שדה-מודל-שוטח: פרמטר-מקורי מודלי שהועבר באתר-הקריאה.
+      // v2 · בלי-ניחושים: רק כשמחלקת-המודל בקובץ-המקור ומכריזה על השדה בפועל
+      // (הבאג שנתפס: ‏_itemsCtrl.onSend על TextEditingController).
+      if (/^on[A-Z]/.test(propName)) return null;
       for (const [pn, pt] of info.types) {
-        if (!/^[A-Z]/.test(pt) || ['String', 'Color', 'Widget', 'Key', 'IconData', 'Duration'].includes(pt.replace(/\?$/, ''))) continue;
+        const bare = pt.replace(/\?$/, '');
+        if (!/^[A-Z]/.test(bare)) continue;
+        if (/^(String|Color|Widget|Key|IconData|Duration|List|Map|Set|Iterable|Future|FocusNode|GlobalKey)\b/.test(bare) || /Controller$/.test(bare)) continue;
+        const mi = origCtorInfo(origSrc, bare);
+        if (!mi.types.has(propName)) continue;
         const e = args?.named[pn] ?? (info.pos.indexOf(pn) >= 0 ? args?.positional[info.pos.indexOf(pn)] : null);
         if (e) return e + '.' + propName;
       }
@@ -242,20 +299,55 @@ for (const mf of fs.readdirSync(MANIFESTS).filter(f => f.endsWith('.manifest.jso
         const ln = sec.repeat.item.charAt(0).toLowerCase() + sec.repeat.item.slice(1) + 's';
         const le = lc.list.trim();
         const full = `${le}.map((${lc.as}) => ${sec.repeat.item}(${fArgs.join(', ')})).toList()`;
-        if (exprResolvable(full, new Set([...watchLines.keys()]))) wires.set(ln, full);
+        cand.set(ln, full);
       }
     }
     for (const [k, v] of Object.entries(sec.props || {})) {
       if (typeof v !== 'string' || (!v.startsWith('?:') && !v.startsWith('@:'))) continue;
       // ‏@:name|Type — המפתח הוא השם בלבד (ה-|Type השאיר wires יתומים שנפלו ל-TODO)
       const pname = v.startsWith('@:') ? v.slice(2).trim().split('|')[0] : [...needP.keys()].find(n => n === k || n.startsWith(k)) || k;
-      if (wires.has(pname)) continue;
+      if (cand.has(pname)) continue;
       const e = resolve(k);
       if (!e) continue;
       if (e.trim() === pname || e.trim() === k) continue;                  // הפניה-עצמית חסרת-פשר
-      if (!exprResolvable(e, new Set([...watchLines.keys()]))) continue;   // תלוי-הקשר ⇒ TODO כן
-      if (/[֐-׿]/.test(e)) heb++;
-      wires.set(pname, e);
+      cand.set(pname, e);                                                  // הקבלה — בשלב-v2 (עם הרמות)
+    }
+  }
+
+  // ── v2 · אימות-מצב-מורם (פיקספוינט): שדה/מתודה שגופם לא-פתיר נופלים, והשאר מאומתים-שוב ──
+  const wv0 = new Set([...watchLines.keys()]);
+  let vFields = new Map(stateFields); let vMethods = new Map(stateMethods);
+  for (let r = 0; r < 4; r++) {
+    const names = new Set([...vFields.keys(), ...vMethods.keys()]);
+    const f2 = new Map([...vFields].filter(([, d]) => exprResolvable(d.init, wv0, names, true)));
+    const m2 = new Map([...vMethods].filter(([, d]) => exprResolvable(d.text, wv0, new Set([...names, ...d.params]), true)));
+    const same = f2.size === vFields.size && m2.size === vMethods.size;
+    vFields = f2; vMethods = m2;
+    if (same) break;
+  }
+
+  // ── v2 · קבלת-חיבורים עם הרמות: extras = מצב-מורם + מקומיים-מורמים; גדל עד-פיקספוינט ──
+  const stateful = vFields.size > 0 || vMethods.size > 0;
+  const extras = new Set([...vFields.keys(), ...vMethods.keys()]);
+  const hoistLocals = new Map();   // name ⇒ הצהרה מורמת לגוף-הלוח
+  let grew = true;
+  while (grew) {
+    grew = false;
+    const wv = new Set([...watchLines.keys()]);
+    for (const [k, e] of cand) {
+      if (wires.has(k)) continue;
+      if (exprResolvable(e, wv, extras, stateful)) { wires.set(k, e); if (/[֐-׿]/.test(e)) heb++; grew = true; continue; }
+      const bad = failingIds(e, wv, extras, stateful);
+      if (!bad) continue;                                          // widget./this. ⇒ באמת תלוי-הקשר
+      for (const id of bad) {
+        if (extras.has(id) || hoistLocals.has(id)) continue;
+        // הצהרה-מקומית חד-שורתית במקור שפתרונה פתיר ⇒ מרימים לגוף-הלוח
+        const dm = codeSrc.match(new RegExp('(?:^|\\n)[ \\t]*(?:final|var)\\s+(?:[A-Za-z_$][\\w<>,?. ]*\\s+)?' + id + '\\s*=\\s*([^;\\n]+);'));
+        if (dm && exprResolvable(dm[1], wv, extras, stateful)) {
+          hoistLocals.set(id, `final ${id} = ${dm[1].trim()};`);
+          extras.add(id); grew = true;
+        }
+      }
     }
   }
 
@@ -265,12 +357,27 @@ for (const mf of fs.readdirSync(MANIFESTS).filter(f => f.endsWith('.manifest.jso
     shrunk = false;
     const wv = new Set([...watchLines.keys()]);
     for (const [k2, e2] of [...wires]) {
-      if (!exprResolvable(e2, wv)) { wires.delete(k2); todo++; shrunk = true; }
+      if (!exprResolvable(e2, wv, extras, stateful)) { wires.delete(k2); shrunk = true; }
     }
+    const usedIn = [...wires.values(), ...hoistLocals.values()].join('\n');
     for (const [v2] of [...watchLines]) {
-      if (![...wires.values()].some(e2 => new RegExp('\\b' + v2 + '\\b').test(e2))) { watchLines.delete(v2); shrunk = true; }
+      if (!new RegExp('\\b' + v2 + '\\b').test(usedIn)) { watchLines.delete(v2); shrunk = true; }
     }
   }
+
+  // ── v2 · המצב-בשימוש בפועל (worklist): רק שדות/מתודות שהחיווט-החי נוגע-בהם נפלטים ──
+  const emittedRef = [...wires.values(), ...hoistLocals.values()].join('\n');
+  const usedState = new Set();
+  {
+    const q = [];
+    for (const n of [...vFields.keys(), ...vMethods.keys()]) if (new RegExp('\\b' + n + '\\b').test(emittedRef)) { usedState.add(n); q.push(n); }
+    while (q.length) {
+      const n = q.pop();
+      const t = vMethods.get(n)?.text || vFields.get(n)?.init || '';
+      for (const n2 of [...vFields.keys(), ...vMethods.keys()]) if (!usedState.has(n2) && new RegExp('\\b' + n2 + '\\b').test(t)) { usedState.add(n2); q.push(n2); }
+    }
+  }
+  const needState = usedState.size > 0 || /\bsetState\b/.test(emittedRef);
   // הרכבת-הלוח
   const srcLibPath = srcScreen.replace(/__/g, '/') + '.dart';
   const srcDir = srcLibPath.split('/').slice(0, -1).join('/');
@@ -283,7 +390,9 @@ for (const mf of fs.readdirSync(MANIFESTS).filter(f => f.endsWith('.manifest.jso
   const pkgImports = [...new Set([selfImport, ...relImports, ...[...src.matchAll(/import 'package:[^']+';/g)].map(x => x[0])])]
     .filter(im => { const mm = im.match(/package:buildsmart\/([^']+)'/); return !mm || existsInMain(mm[1]); });
   // auto-import: מחלקות/פונקציות-פרויקט שהחיווט צורך
-  const wireText = [...wires.values()].join('\n');
+  const stateDecls = [...usedState].filter(n => vFields.has(n)).map(n => '  ' + vFields.get(n).decl);
+  const stateMethodTexts = [...usedState].filter(n => vMethods.has(n)).map(n => '  ' + vMethods.get(n).text);
+  const wireText = [...wires.values(), ...hoistLocals.values(), ...stateDecls, ...stateMethodTexts].join('\n');
   for (const m of new Set([...wireText.matchAll(/\b([A-Z]\w{2,})\b/g)].map(x => x[1]))) {
     const f2 = projectClassFiles.get(m);
     if (f2 && existsInMain(f2)) pkgImports.push(`import 'package:buildsmart/${f2}';`);
@@ -312,22 +421,40 @@ for (const mf of fs.readdirSync(MANIFESTS).filter(f => f.endsWith('.manifest.jso
   }
   const tokArgs = [...needTok].sort().map(([n, t]) => `${n}: ${tokenExpr(n, t)}`).join(', ');
   const wired = wires.size;
-  const code = `// 🔌 חולל ע"י מחולל-הלוחות (board-gen) — הלוח = המקום-היחיד שנוגע-בחיווט (חוק-3).
+  const header = `// 🔌 חולל ע"י מחולל-הלוחות (board-gen) — הלוח = המקום-היחיד שנוגע-בחיווט (חוק-3).
 // מקור-החיווט: ${srcScreen}.dart (בנייה-חכמה main) · מחווט: ${wired} · TODO: ${todo}.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 ${pkgImports.filter(i => !i.includes('flutter/material') && !i.includes('flutter_riverpod')).join('\n')}
 import '../dart-screens-bs/${M.screen}.g.dart';
+`;
+  const buildBody = `${lines.join('\n')}${lines.length ? '\n' : ''}${[...hoistLocals.values()].map(l => '    ' + l).join('\n')}${hoistLocals.size ? '\n' : ''}    return ${cls}Composed(
+${argLines.join('\n')}
+      t: ${cls}Tokens(${tokArgs}),
+    );`;
+  // v2 · לוח-Stateful רק כשהחיווט-החי נוגע במצב-מורם — אחרת ConsumerWidget רזה כמקודם
+  const code = needState ? `${header}
+class ${cls}Board extends ConsumerStatefulWidget {
+  const ${cls}Board({super.key});
 
+  @override
+  ConsumerState<${cls}Board> createState() => _${cls}BoardState();
+}
+
+class _${cls}BoardState extends ConsumerState<${cls}Board> {
+${stateDecls.join('\n')}${stateDecls.length ? '\n' : ''}${stateMethodTexts.join('\n\n')}${stateMethodTexts.length ? '\n' : ''}
+  @override
+  Widget build(BuildContext context) {
+${buildBody}
+  }
+}
+` : `${header}
 class ${cls}Board extends ConsumerWidget {
   const ${cls}Board({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-${lines.join('\n')}${lines.length ? '\n' : ''}    return ${cls}Composed(
-${argLines.join('\n')}
-      t: ${cls}Tokens(${tokArgs}),
-    );
+${buildBody}
   }
 }
 `;

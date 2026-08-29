@@ -4,7 +4,8 @@
  "screen": "contractor_hr_sheet",
  "flat": true,
  "content": [
-  "auto/screens__contractor_hr_sheet_content.dart"
+  "auto/screens__contractor_hr_sheet_content.dart",
+  "auto/screens__contractor_hr_sheet_content2.dart"
  ],
  "sections": [
   {
@@ -32,7 +33,7 @@
    "id": "decide_button",
    "atom": "DecideButton",
    "props": {
-    "label": "?:String",
+    "label": "$: decide_button_label",
     "color": "#:color",
     "textColor": "#:textColor",
     "bordered": "?:bool",

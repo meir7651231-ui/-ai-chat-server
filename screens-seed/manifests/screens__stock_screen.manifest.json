@@ -3,14 +3,15 @@
  "src": "screens__stock_screen",
  "screen": "stock_screen",
  "content": [
-  "auto/screens__stock_screen_content.dart"
+  "auto/screens__stock_screen_content.dart",
+  "auto/screens__stock_screen_content2.dart"
  ],
  "sections": [
   {
    "id": "stock_tab",
    "atom": "StockTab",
    "props": {
-    "label": "?:String",
+    "label": "$: stock_tab_label",
     "on": "?:bool",
     "onTap": "@:onTap"
    }

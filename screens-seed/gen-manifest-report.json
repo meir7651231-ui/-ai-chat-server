@@ -1,10 +1,12 @@
 {
  "full": [
+  "screens__ai_hub_screen",
   "screens__catalog_settings_screen",
   "screens__courier_certs_screen",
   "screens__courier_settings_screen",
   "screens__intel__intel_tab",
-  "screens__notif_settings_screen"
+  "screens__notif_settings_screen",
+  "screens__projects_screen"
  ],
  "draft": [
   {
@@ -22,12 +24,8 @@
    "holes": 4
   },
   {
-   "screen": "screens__ai_hub_screen",
-   "holes": 3
-  },
-  {
    "screen": "screens__budget_screen",
-   "holes": 8
+   "holes": 6
   },
   {
    "screen": "screens__camera_sheet",
@@ -36,7 +34,7 @@
   },
   {
    "screen": "screens__catalog_screen",
-   "holes": 25,
+   "holes": 24,
    "flat": true
   },
   {
@@ -45,7 +43,7 @@
   },
   {
    "screen": "screens__chats_screen",
-   "holes": 9,
+   "holes": 8,
    "flat": true
   },
   {
@@ -55,12 +53,12 @@
   },
   {
    "screen": "screens__contractor_hr_sheet",
-   "holes": 8,
+   "holes": 7,
    "flat": true
   },
   {
    "screen": "screens__contractor_material_requests_sheet",
-   "holes": 1,
+   "holes": 0,
    "flat": true
   },
   {
@@ -70,17 +68,17 @@
   },
   {
    "screen": "screens__courier_attendance_screen",
-   "holes": 9,
+   "holes": 4,
    "flat": true
   },
   {
    "screen": "screens__courier_dashboard_screen",
-   "holes": 7,
+   "holes": 6,
    "flat": true
   },
   {
    "screen": "screens__courier_forms_screen",
-   "holes": 14,
+   "holes": 12,
    "flat": true
   },
   {
@@ -89,12 +87,12 @@
   },
   {
    "screen": "screens__courier_profile_screen",
-   "holes": 2,
+   "holes": 1,
    "flat": true
   },
   {
    "screen": "screens__courier_reports_tab",
-   "holes": 4
+   "holes": 2
   },
   {
    "screen": "screens__defects_sheet",
@@ -103,7 +101,7 @@
   },
   {
    "screen": "screens__docs_readiness_gate",
-   "holes": 4
+   "holes": 1
   },
   {
    "screen": "screens__finance_hub_sheets",
@@ -117,7 +115,7 @@
   },
   {
    "screen": "screens__home_shell",
-   "holes": 5,
+   "holes": 2,
    "flat": true
   },
   {
@@ -136,7 +134,7 @@
   },
   {
    "screen": "screens__lipskey_product_sheet",
-   "holes": 4,
+   "holes": 3,
    "flat": true
   },
   {
@@ -151,12 +149,12 @@
   },
   {
    "screen": "screens__manager_dashboard_screen",
-   "holes": 15,
+   "holes": 10,
    "flat": true
   },
   {
    "screen": "screens__manager_profile_screen",
-   "holes": 2,
+   "holes": 1,
    "flat": true
   },
   {
@@ -171,7 +169,7 @@
   },
   {
    "screen": "screens__persona_picking_sheet",
-   "holes": 2
+   "holes": 1
   },
   {
    "screen": "screens__persona_portal",
@@ -180,12 +178,8 @@
   },
   {
    "screen": "screens__profile_screen",
-   "holes": 6,
+   "holes": 4,
    "flat": true
-  },
-  {
-   "screen": "screens__projects_screen",
-   "holes": 1
   },
   {
    "screen": "screens__regression_panel_screen",
@@ -193,11 +187,11 @@
   },
   {
    "screen": "screens__rewards_hub_screen",
-   "holes": 5
+   "holes": 3
   },
   {
    "screen": "screens__role_requests_inbox_screen",
-   "holes": 2,
+   "holes": 1,
    "flat": true
   },
   {
@@ -217,11 +211,11 @@
   },
   {
    "screen": "screens__stock_screen",
-   "holes": 5
+   "holes": 4
   },
   {
    "screen": "screens__store_dashboard_screen",
-   "holes": 9,
+   "holes": 5,
    "flat": true
   },
   {
@@ -231,12 +225,12 @@
   },
   {
    "screen": "screens__store_screen",
-   "holes": 20,
+   "holes": 16,
    "flat": true
   },
   {
    "screen": "screens__store_settings_screen",
-   "holes": 20,
+   "holes": 11,
    "flat": true
   },
   {
@@ -255,36 +249,36 @@
   },
   {
    "screen": "screens__suppliers_screen",
-   "holes": 3
+   "holes": 1
   },
   {
    "screen": "screens__tasks_screen",
-   "holes": 8,
+   "holes": 7,
    "flat": true
   },
   {
    "screen": "screens__trade_builder__accessory_rule_editor",
-   "holes": 8,
+   "holes": 7,
    "flat": true
   },
   {
    "screen": "screens__trade_builder__attribute_schema_editor",
-   "holes": 3,
+   "holes": 1,
    "flat": true
   },
   {
    "screen": "screens__trade_builder__category_tree_editor",
-   "holes": 5,
+   "holes": 4,
    "flat": true
   },
   {
    "screen": "screens__trade_builder__connection_rule_studio",
-   "holes": 5,
+   "holes": 4,
    "flat": true
   },
   {
    "screen": "screens__trade_builder__product_authoring_screen",
-   "holes": 6,
+   "holes": 5,
    "flat": true
   },
   {
@@ -298,16 +292,16 @@
   },
   {
    "screen": "screens__trade_builder__trade_publish_sheet",
-   "holes": 4
+   "holes": 2
   },
   {
    "screen": "screens__worker_app_screen",
-   "holes": 19,
+   "holes": 16,
    "flat": true
   },
   {
    "screen": "screens__worker_attendance_screen",
-   "holes": 6,
+   "holes": 5,
    "flat": true
   },
   {
@@ -322,7 +316,7 @@
   },
   {
    "screen": "screens__worker_forms_screen",
-   "holes": 13,
+   "holes": 12,
    "flat": true
   },
   {
@@ -340,11 +334,11 @@
   },
   {
    "screen": "screens__worker_reports_tab",
-   "holes": 7
+   "holes": 4
   },
   {
    "screen": "screens__worker_safety_screen",
-   "holes": 2,
+   "holes": 1,
    "flat": true
   },
   {
@@ -353,7 +347,7 @@
   },
   {
    "screen": "screens__worker_task_detail_sheet",
-   "holes": 2,
+   "holes": 1,
    "flat": true
   }
  ],
@@ -539,13 +533,13 @@
  "holesByType": {
   "int": 21,
   "double": 3,
-  "String": 60,
+  "String": 49,
   "Widget": 7,
   "TextEditingController": 5,
   "bool": 33,
   "IconData": 8,
   "List<String>": 3,
-  "String?": 9,
+  "String?": 6,
   "int?": 2,
   "List<String>?": 1,
   "List<Widget>": 9,

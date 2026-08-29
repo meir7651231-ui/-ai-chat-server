@@ -4,7 +4,8 @@
  "screen": "store_screen",
  "flat": true,
  "content": [
-  "auto/screens__store_screen_content.dart"
+  "auto/screens__store_screen_content.dart",
+  "auto/screens__store_screen_content2.dart"
  ],
  "sections": [
   {
@@ -19,7 +20,7 @@
    "id": "store_pill",
    "atom": "StorePill",
    "props": {
-    "label": "?:String",
+    "label": "$: store_pill_label",
     "active": "?:bool",
     "onTap": "@:onTap"
    }
@@ -29,7 +30,7 @@
    "atom": "QuickAction",
    "props": {
     "icon": "?:IconData",
-    "label": "?:String",
+    "label": "$: quick_action_label",
     "onTap": "@:onTap",
     "badge": "?:int"
    }
@@ -50,8 +51,8 @@
    "id": "store_sheet_scaffold",
    "atom": "StoreSheetScaffold",
    "props": {
-    "title": "?:String",
-    "emoji": "?:String",
+    "title": "$: store_sheet_scaffold_title",
+    "emoji": "$: store_sheet_scaffold_emoji",
     "children": "?:List<Widget>"
    }
   },

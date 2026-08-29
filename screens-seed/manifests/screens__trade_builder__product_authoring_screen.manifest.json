@@ -4,7 +4,8 @@
  "screen": "trade_builder_product_authoring_screen",
  "flat": true,
  "content": [
-  "auto/screens__trade_builder__product_authoring_screen_content.dart"
+  "auto/screens__trade_builder__product_authoring_screen_content.dart",
+  "auto/screens__trade_builder__product_authoring_screen_content2.dart"
  ],
  "sections": [
   {
@@ -30,7 +31,7 @@
    "id": "trade_builder_accessory_rule_editor_pill_button",
    "atom": "TradeBuilderAccessoryRuleEditorPillButton",
    "props": {
-    "label": "?:String",
+    "label": "$: trade_builder_accessory_rule_editor_pill_button_label",
     "onTap": "@:onTap",
     "enabled": "?:bool"
    }

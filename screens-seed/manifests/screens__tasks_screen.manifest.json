@@ -4,7 +4,8 @@
  "screen": "tasks_screen",
  "flat": true,
  "content": [
-  "auto/screens__tasks_screen_content.dart"
+  "auto/screens__tasks_screen_content.dart",
+  "auto/screens__tasks_screen_content2.dart"
  ],
  "sections": [
   {
@@ -78,7 +79,7 @@
    "id": "primary_btn",
    "atom": "PrimaryBtn",
    "props": {
-    "label": "?:String",
+    "label": "$: primary_btn_label",
     "onTap": "@:onTap"
    }
   },

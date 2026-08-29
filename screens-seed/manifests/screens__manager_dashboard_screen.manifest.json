@@ -5,6 +5,7 @@
  "flat": true,
  "content": [
   "auto/screens__manager_dashboard_screen_content.dart",
+  "auto/screens__manager_dashboard_screen_content2.dart",
   "screens__manager_dashboard_screen_content.dart"
  ],
  "sections": [
@@ -93,11 +94,11 @@
     "title2": "$: manage_section_title2",
     "body": "$: manage_section_body",
     "label": "$: manage_section_label",
-    "sectionKey": "?:String",
-    "titleCfgId": "?:String",
-    "emoji": "?:String",
-    "title": "?:String",
-    "sub": "?:String",
+    "sectionKey": "$: manage_section_section_key",
+    "titleCfgId": "$: manage_section_title_cfg_id",
+    "emoji": "$: manage_section_emoji",
+    "title": "$: manage_section_title",
+    "sub": "$: manage_section_sub",
     "open": "?:bool",
     "onTap": "@:onTap2",
     "child": "?:Widget",

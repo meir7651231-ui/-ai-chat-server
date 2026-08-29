@@ -3,7 +3,9 @@
  "src": "screens__worker_forms_screen",
  "screen": "worker_forms_screen",
  "flat": true,
- "content": [],
+ "content": [
+  "auto/screens__worker_forms_screen_content2.dart"
+ ],
  "sections": [
   {
    "id": "form_card",
@@ -17,7 +19,7 @@
    "id": "worker_forms_pill_button",
    "atom": "WorkerFormsPillButton",
    "props": {
-    "label": "?:String",
+    "label": "$: worker_forms_pill_button_label",
     "onPressed": "@:onPressed",
     "filled": "?:bool"
    }

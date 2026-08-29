@@ -3,14 +3,16 @@
  "src": "screens__role_requests_inbox_screen",
  "screen": "role_requests_inbox_screen",
  "flat": true,
- "content": [],
+ "content": [
+  "auto/screens__role_requests_inbox_screen_content2.dart"
+ ],
  "sections": [
   {
    "id": "role_requests_inbox_empty",
    "atom": "RoleRequestsInboxEmpty",
    "props": {
     "icon": "?:IconData",
-    "text": "?:String"
+    "text": "$: role_requests_inbox_empty_text"
    }
   }
  ]

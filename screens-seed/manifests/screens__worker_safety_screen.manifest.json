@@ -3,14 +3,16 @@
  "src": "screens__worker_safety_screen",
  "screen": "worker_safety_screen",
  "flat": true,
- "content": [],
+ "content": [
+  "auto/screens__worker_safety_screen_content2.dart"
+ ],
  "sections": [
   {
    "id": "training_action",
    "atom": "TrainingAction",
    "props": {
     "icon": "?:IconData",
-    "label": "?:String",
+    "label": "$: training_action_label",
     "onTap": "@:onTap"
    }
   }

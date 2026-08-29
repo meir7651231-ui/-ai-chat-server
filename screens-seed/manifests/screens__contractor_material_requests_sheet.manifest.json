@@ -3,13 +3,15 @@
  "src": "screens__contractor_material_requests_sheet",
  "screen": "contractor_material_requests_sheet",
  "flat": true,
- "content": [],
+ "content": [
+  "auto/screens__contractor_material_requests_sheet_content2.dart"
+ ],
  "sections": [
   {
    "id": "action_button",
    "atom": "ActionButton",
    "props": {
-    "label": "?:String",
+    "label": "$: action_button_label",
     "color": "#:color",
     "onTap": "@:onTap"
    }

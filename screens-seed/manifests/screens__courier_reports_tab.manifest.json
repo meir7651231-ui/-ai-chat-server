@@ -2,21 +2,23 @@
  "generated": true,
  "src": "screens__courier_reports_tab",
  "screen": "courier_reports_tab",
- "content": [],
+ "content": [
+  "auto/screens__courier_reports_tab_content2.dart"
+ ],
  "sections": [
   {
    "id": "rstat",
    "atom": "RStat",
    "props": {
     "value": "?:String",
-    "label": "?:String"
+    "label": "$: rstat_label"
    }
   },
   {
    "id": "rcard",
    "atom": "RCard",
    "props": {
-    "title": "?:String",
+    "title": "$: rcard_title",
     "children": "?:List<Widget>"
    }
   },

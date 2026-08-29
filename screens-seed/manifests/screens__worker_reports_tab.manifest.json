@@ -3,7 +3,8 @@
  "src": "screens__worker_reports_tab",
  "screen": "worker_reports_tab",
  "content": [
-  "auto/screens__worker_reports_tab_content.dart"
+  "auto/screens__worker_reports_tab_content.dart",
+  "auto/screens__worker_reports_tab_content2.dart"
  ],
  "sections": [
   {
@@ -12,7 +13,7 @@
    "props": {
     "label2": "$: kpi_box_label2",
     "value": "?:String",
-    "label": "?:String",
+    "label": "$: kpi_box_label",
     "onTap": "@:onTap|VoidCallback?"
    }
   },
@@ -20,8 +21,8 @@
    "id": "worker_reports_tab_card",
    "atom": "WorkerReportsTabCard",
    "props": {
-    "title": "?:String",
-    "titleId": "?:String?",
+    "title": "$: worker_reports_tab_card_title",
+    "titleId": "$: worker_reports_tab_card_title_id",
     "children": "?:List<Widget>"
    }
   },

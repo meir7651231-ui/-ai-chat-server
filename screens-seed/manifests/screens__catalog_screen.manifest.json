@@ -4,7 +4,8 @@
  "screen": "catalog_screen",
  "flat": true,
  "content": [
-  "auto/screens__catalog_screen_content.dart"
+  "auto/screens__catalog_screen_content.dart",
+  "auto/screens__catalog_screen_content2.dart"
  ],
  "sections": [
   {
@@ -30,7 +31,7 @@
    "atom": "EmptySection",
    "props": {
     "fallback": "$: empty_section_fallback",
-    "emoji": "?:String",
+    "emoji": "$: empty_section_emoji",
     "label": "?:String"
    }
   },

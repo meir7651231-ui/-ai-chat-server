@@ -3,16 +3,17 @@
  "src": "screens__ai_hub_screen",
  "screen": "ai_hub_screen",
  "content": [
-  "auto/screens__ai_hub_screen_content.dart"
+  "auto/screens__ai_hub_screen_content.dart",
+  "auto/screens__ai_hub_screen_content2.dart"
  ],
  "sections": [
   {
    "id": "ai_md_head",
    "atom": "AiMdHead",
    "props": {
-    "ic": "?:String",
-    "title": "?:String",
-    "sub": "?:String"
+    "ic": "$: ai_md_head_ic",
+    "title": "$: ai_md_head_title",
+    "sub": "$: ai_md_head_sub"
    }
   },
   {

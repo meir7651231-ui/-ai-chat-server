@@ -3,7 +3,9 @@
  "src": "screens__profile_screen",
  "screen": "profile_screen",
  "flat": true,
- "content": [],
+ "content": [
+  "auto/screens__profile_screen_content2.dart"
+ ],
  "sections": [
   {
    "id": "section_label",
@@ -16,7 +18,7 @@
    "id": "field",
    "atom": "Field",
    "props": {
-    "label": "?:String",
+    "label": "$: field_label",
     "controller": "?:TextEditingController",
     "number": "?:bool",
     "validator": "@:validator|String? Function(String value)?"
@@ -33,7 +35,7 @@
    "id": "link_row",
    "atom": "LinkRow",
    "props": {
-    "label": "?:String",
+    "label": "$: link_row_label",
     "onTap": "@:onTap"
    }
   }

@@ -3,7 +3,9 @@
  "src": "screens__store_dashboard_screen",
  "screen": "store_dashboard_screen",
  "flat": true,
- "content": [],
+ "content": [
+  "auto/screens__store_dashboard_screen_content2.dart"
+ ],
  "sections": [
   {
    "id": "action_card",
@@ -11,8 +13,8 @@
    "props": {
     "color": "#:color",
     "badge": "?:String",
-    "title": "?:String",
-    "sub": "?:String",
+    "title": "$: action_card_title",
+    "sub": "$: action_card_sub",
     "onTap": "@:onTap"
    }
   },
@@ -28,14 +30,14 @@
    "atom": "Stat",
    "props": {
     "value": "?:String",
-    "label": "?:String"
+    "label": "$: stat_label"
    }
   },
   {
    "id": "big_button",
    "atom": "BigButton",
    "props": {
-    "label": "?:String",
+    "label": "$: big_button_label",
     "onTap": "@:onTap"
    }
   },

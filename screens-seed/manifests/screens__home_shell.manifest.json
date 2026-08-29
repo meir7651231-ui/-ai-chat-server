@@ -3,7 +3,9 @@
  "src": "screens__home_shell",
  "screen": "home_shell",
  "flat": true,
- "content": [],
+ "content": [
+  "auto/screens__home_shell_content2.dart"
+ ],
  "sections": [
   {
    "id": "home_shell_badged_icon",
@@ -17,9 +19,9 @@
    "id": "home_shell_menu_row",
    "atom": "HomeShellMenuRow",
    "props": {
-    "emoji": "?:String",
-    "label": "?:String",
-    "cfgId": "?:String?"
+    "emoji": "$: home_shell_menu_row_emoji",
+    "label": "$: home_shell_menu_row_label",
+    "cfgId": "$: home_shell_menu_row_cfg_id"
    }
   }
  ]

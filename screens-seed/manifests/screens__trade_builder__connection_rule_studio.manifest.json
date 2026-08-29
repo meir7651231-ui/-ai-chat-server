@@ -4,7 +4,8 @@
  "screen": "trade_builder_connection_rule_studio",
  "flat": true,
  "content": [
-  "auto/screens__trade_builder__connection_rule_studio_content.dart"
+  "auto/screens__trade_builder__connection_rule_studio_content.dart",
+  "auto/screens__trade_builder__connection_rule_studio_content2.dart"
  ],
  "sections": [
   {
@@ -47,7 +48,7 @@
    "id": "trade_builder_accessory_rule_editor_pill_button",
    "atom": "TradeBuilderAccessoryRuleEditorPillButton",
    "props": {
-    "label": "?:String",
+    "label": "$: trade_builder_accessory_rule_editor_pill_button_label",
     "onTap": "@:onTap",
     "enabled": "?:bool"
    }

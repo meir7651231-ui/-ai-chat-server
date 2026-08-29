@@ -3,7 +3,9 @@
  "src": "screens__courier_forms_screen",
  "screen": "courier_forms_screen",
  "flat": true,
- "content": [],
+ "content": [
+  "auto/screens__courier_forms_screen_content2.dart"
+ ],
  "sections": [
   {
    "id": "form_card",
@@ -17,8 +19,8 @@
    "id": "courier_forms_pill_button",
    "atom": "CourierFormsPillButton",
    "props": {
-    "id": "?:String",
-    "label": "?:String",
+    "id": "$: courier_forms_pill_button_id",
+    "label": "$: courier_forms_pill_button_label",
     "onPressed": "@:onPressed",
     "filled": "?:bool"
    }

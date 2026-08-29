@@ -4,7 +4,8 @@
  "screen": "worker_app_screen",
  "flat": true,
  "content": [
-  "auto/screens__worker_app_screen_content.dart"
+  "auto/screens__worker_app_screen_content.dart",
+  "auto/screens__worker_app_screen_content2.dart"
  ],
  "sections": [
   {
@@ -63,7 +64,7 @@
    "id": "today_stat",
    "atom": "TodayStat",
    "props": {
-    "label": "?:String",
+    "label": "$: today_stat_label",
     "value": "?:String"
    }
   },
@@ -72,7 +73,7 @@
    "atom": "WorkerAppStat",
    "props": {
     "value": "?:String",
-    "label": "?:String"
+    "label": "$: worker_app_stat_label"
    }
   },
   {
@@ -95,7 +96,7 @@
    "id": "propose_primary_btn",
    "atom": "ProposePrimaryBtn",
    "props": {
-    "label": "?:String",
+    "label": "$: propose_primary_btn_label",
     "onTap": "@:onTap2|VoidCallback?"
    }
   }

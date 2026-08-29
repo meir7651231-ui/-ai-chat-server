@@ -3,13 +3,15 @@
  "src": "screens__trade_builder__attribute_schema_editor",
  "screen": "trade_builder_attribute_schema_editor",
  "flat": true,
- "content": [],
+ "content": [
+  "auto/screens__trade_builder__attribute_schema_editor_content2.dart"
+ ],
  "sections": [
   {
    "id": "trade_builder_accessory_rule_editor_pill_button",
    "atom": "TradeBuilderAccessoryRuleEditorPillButton",
    "props": {
-    "label": "?:String",
+    "label": "$: trade_builder_accessory_rule_editor_pill_button_label",
     "onTap": "@:onTap",
     "enabled": "?:bool"
    }
@@ -18,7 +20,7 @@
    "id": "warn_chip",
    "atom": "WarnChip",
    "props": {
-    "text": "?:String"
+    "text": "$: warn_chip_text"
    }
   },
   {

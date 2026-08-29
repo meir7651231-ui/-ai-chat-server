@@ -4,7 +4,8 @@
  "screen": "worker_attendance_screen",
  "flat": true,
  "content": [
-  "auto/screens__worker_attendance_screen_content.dart"
+  "auto/screens__worker_attendance_screen_content.dart",
+  "auto/screens__worker_attendance_screen_content2.dart"
  ],
  "sections": [
   {
@@ -20,7 +21,7 @@
    "id": "today_stat",
    "atom": "TodayStat",
    "props": {
-    "label": "?:String",
+    "label": "$: today_stat_label",
     "value": "?:String"
    }
   },

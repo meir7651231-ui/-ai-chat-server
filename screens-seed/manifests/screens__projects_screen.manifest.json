@@ -2,13 +2,15 @@
  "generated": true,
  "src": "screens__projects_screen",
  "screen": "projects_screen",
- "content": [],
+ "content": [
+  "auto/screens__projects_screen_content2.dart"
+ ],
  "sections": [
   {
    "id": "link_btn",
    "atom": "LinkBtn",
    "props": {
-    "label": "?:String",
+    "label": "$: link_btn_label",
     "onTap": "@:onTap"
    }
   }
