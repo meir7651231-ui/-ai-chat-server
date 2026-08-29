@@ -1,4 +1,8 @@
 // 📦 דאטה · תוכן-שהורם ע"י data-lift מ-screens__catalog_screen — verbatim מהמקור, אל תערוך ידנית.
+const String acc_row_label = 'מידע על האביזר';
+const String acc_row_label2 = 'לפי ספק';
+const String acc_row_label3 = 'הוסף כמות';
+const String acc_row_label4 = 'הפחת כמות';
 const String company_catalog_import_card_label = '📦 טעינת קטלוג החברה';
 const String company_catalog_import_card_label2 = 'נטענו ';
 const String company_catalog_import_card_label3 = ' מוצרים';

@@ -35,7 +35,7 @@ try {
 const providerType = new Map();
 try {
   const defs = execSync("git grep -hE 'final [a-z][a-zA-Z0-9]*Provider = ' origin/main -- app_flutter/lib", { cwd: BS, encoding: 'utf8', maxBuffer: 1 << 24 });
-  for (const m of defs.matchAll(/final ([a-z]\w*Provider) = (Provider|StateProvider|StateNotifierProvider|FutureProvider|StreamProvider)(?:<([^>]+)>)?/g)) {
+  for (const m of defs.matchAll(/final ([_a-z]\w*Provider) = (Provider|StateProvider|StateNotifierProvider|FutureProvider|StreamProvider)(?:\.autoDispose)?(?:\.family)?(?:<([^>]+)>)?/g)) {
     if (m[2] === 'FutureProvider' || m[2] === 'StreamProvider') { providerType.set(m[1], null); continue; } // אסינכרוני ⇒ דחייה
     let t = (m[3] || '').trim();
     if (m[2] === 'StateNotifierProvider') t = t.split(',').slice(-1)[0].trim();
@@ -190,7 +190,7 @@ function splitTemplate(v) {
 
 /** 🪢 התרת-סבך: on*-closures-עם-IO ⇒ callbacks · ref.watch ⇒ props · Consumer ⇒ Stateless.
  *  מחזיר {out, callbacks:[{prop}], watchProps:[{prop,type}], modelWatch:[{v,R}]} או {fail}. */
-function untangle(body, seen) {
+function untangle(body, seen, refPrefix = '') {
   let out = body;
   const callbacks = []; const watchProps = []; const modelWatch = [];
   // א. הרמת-handlers: הארגומנט on* = המטרה; הסוגר כולו ⇒ callback
@@ -200,8 +200,10 @@ function untangle(body, seen) {
     const scan = maskLits(maskComments(out));
     for (const m of [...scan.matchAll(/\b(on[A-Z]\w*)\s*:\s*/g)]) {
       const vs = m.index + m[0].length;
-      const head = scan.slice(vs, vs + 12);
-      if (!/^\(\)\s*(=>|\{|async)/.test(head)) continue;
+      const head = scan.slice(vs, vs + 24);
+      const oneArg = /^\(\s*\w+\s*\)\s*(=>|\{|async)/.test(head);
+      const methRef = /^_[a-z]\w*\s*[,)\]]/.test(scan.slice(vs));
+      if (!/^\(\)\s*(=>|\{|async)/.test(head) && !oneArg && !methRef) continue;
       // סוף-הערך: פסיק/סוגר בעומק-0
       let d = 0, j = vs, inDone = false;
       for (; j < scan.length; j++) {
@@ -210,30 +212,54 @@ function untangle(body, seen) {
         else if (c === ')' || c === ']' || c === '}') { if (!d) break; d--; }
         else if (c === ',' && !d) break;
       }
-      const val = scan.slice(vs, j);
-      if (!IOISH.test(val)) continue;                     // סוגר-טהור נשאר במקומו
+      let val = scan.slice(vs, j), vlen = j - vs;
+      if (methRef) { const mr = scan.slice(vs).match(/^_[a-z]\w*/); val = out.slice(vs, vs + mr[0].length); vlen = mr[0].length;
+        // הפניית-מתודה: המתודה עצמה נבחנת — IO ⇒ callback; טהורה ⇒ תישאר (תיבחן כעוזר)
+        const md = maskLits(maskComments(out)).match(new RegExp('[A-Za-z>\\]]\\s+' + val + '\\s*\\(')); 
+        if (!md) continue; const mb = classBody(out, md.index) || '';
+        if (!IOISH.test(mb)) continue;
+      } else if (!IOISH.test(val)) continue;              // סוגר-טהור נשאר במקומו
       const base = m[1];
       let n = (seen.get(base) || 0) + 1; seen.set(base, n);
       const prop = n === 1 ? base : base + n;
-      callbacks.push({ prop, type: 'VoidCallback' });
-      edits.push({ start: vs, len: j - vs, text: prop });
+      callbacks.push({ prop, type: oneArg ? 'ValueChanged<dynamic>' : 'VoidCallback' });
+      edits.push({ start: vs, len: vlen, text: refPrefix + prop });
     }
     for (const e of edits.sort((a, b) => b.start - a.start)) out = out.slice(0, e.start) + e.text + out.slice(e.start + e.len);
   }
   // ב. ref.watch(fooProvider) ⇒ foo (הטיפוס מהגדרת-ה-provider = המטרה)
   let fail = null;
-  out = out.replace(/ref\.watch\(\s*([a-zA-Z0-9_]+Provider)\s*\)/g, (mm, pv) => {
+  out = out.replace(/ref\.watch\(\s*([a-zA-Z0-9_]+Provider)\s*(?:\([^()]*\))?\s*\)/g, (mm, pv) => {
     if (fail) return mm;
     if (!providerType.has(pv)) { fail = 'provider-unknown'; return mm; }
     const t = providerType.get(pv);
     if (!t) { fail = 'provider-async'; return mm; }
-    const v = pv.replace(/Provider$/, '');
+    const v = pv.replace(/Provider$/, '').replace(/^_/, '');
     if (isPrim(t)) { if (!watchProps.some(x => x.prop === v)) watchProps.push({ prop: v, type: t }); }
     else if (projectClasses.has(t.replace(/\?$/, ''))) { if (!modelWatch.some(x => x.v === v)) modelWatch.push({ v, R: t.replace(/\?$/, '') }); }
     else { fail = 'provider-type'; return mm; }
-    return v;
+    return refPrefix + v;
   });
   if (fail) return { fail };
+  // ג2. מתודה-פרטית-עם-IO שאין-לה עוד קורא ⇒ נמחקת (הוחלפה ב-callback)
+  let pruned = true;
+  while (pruned) {
+    pruned = false;
+    const sc = maskLits(maskComments(out));
+    for (const dm of [...sc.matchAll(/[A-Za-z>\]]\s+(_[a-z]\w*)\s*\(/g)]) {
+      const nm2 = dm[1];
+      const uses = [...sc.matchAll(new RegExp('\\b' + nm2 + '\\b', 'g'))].length;
+      if (uses > 1) continue;                              // יש-קוראים
+      const db = classBody(out, dm.index + dm[0].length - nm2.length - dm[0].match(/\s+/)[0].length - 1);
+      const start = dm.index + 1;
+      const b2 = classBody(out, start);
+      if (!b2) continue;
+      const mb = out.slice(start, start + out.slice(start).indexOf(b2) + b2.length);
+      if (!/Navigator\.|\bref\.|show[A-Z]\w*\(|\bcontext\.(push|go|pop)\b/.test(mb)) continue;
+      out = out.slice(0, start) + out.slice(start + mb.length);
+      pruned = true; break;
+    }
+  }
   // ג. שאריות-חיווט ⇒ עדיין-סבוך
   const left = stripComments(out);
   if (/\bref\.|\bWidgetRef\b|Navigator\.|\bcontext\.(push|go|pop)\b/.test(left)) return { fail: 'io-left' };
@@ -244,7 +270,7 @@ function untangle(body, seen) {
 }
 
 // ── ליבת-ההרמה (per-body): עברית ⇒ props לפי מטרה · תבניות מפורקות-הפוך ──
-function hoistStrings(body, ctorIndex, propBase) {
+function hoistStrings(body, ctorIndex, propBase, fb, refPrefix = '') {
   const masked = maskComments(body);
   const scan = maskLits(masked);
   const runs = [];
@@ -265,7 +291,10 @@ function hoistStrings(body, ctorIndex, propBase) {
     return n === 1 ? name : name + n;
   };
   for (const m of lits) {
-    if (/[=!]=\s*$/.test(scan.slice(0, m.start))) return { fail: 'logic-token' };
+    if (/[=!]=\s*$/.test(scan.slice(0, m.start))) {
+      if (fb) { edits.push({ start: m.start, len: m.end - m.start, text: fb.take(m.value) }); continue; }
+      return { fail: 'logic-token' };
+    }
     // מטרת-המחרוזת (זהה לרגיל ולתבנית)
     let d = 0, k = m.start - 1;
     for (; k >= 0; k--) {
@@ -282,25 +311,33 @@ function hoistStrings(body, ctorIndex, propBase) {
     else if (nm && !['children', 'style', 'key'].includes(nm[1])) name = nm[1];
     else if (/(\breturn|=>)\s*$/.test(scan.slice(0, m.start).replace(/\s+$/, ' '))) name = 'text';
     else name = purposeOf(scan, m.start, ctorIndex);          // 🎯 מנוע-המטרות
+    const wantsConst = fb && (!name || (/=\s*$/.test(scan.slice(0, m.start)) && !isDefault));
+    if (wantsConst) {
+      // 📦 קבוע-תוכן: העברית עוברת לקובץ-הדאטה, המנגנון מפנה בשם
+      const cn = fb.take(m.value);
+      edits.push({ start: m.start, len: m.end - m.start, text: cn });
+      continue;
+    }
     if (!name) return { fail: 'unnamed-string' };
     if (/=\s*$/.test(scan.slice(0, m.start)) && !isDefault) return { fail: 'default-param' };
 
     if (m.value.includes('$')) {
-      // 🧩 תבנית: קטעי-עברית ⇒ props, החורים נשארים מנגנון
-      if (isDefault) return { fail: 'template-default' };
+      // 🧩 תבנית: קטעי-עברית ⇒ props (או קבועי-תוכן ב-fallback), החורים נשארים מנגנון
+      if (isDefault && !fb) return { fail: 'template-default' };
       const parts = splitTemplate(m.value);
-      if (!parts) return { fail: 'template-deep' };
+      if (!parts) { if (fb) continue; return { fail: 'template-deep' }; }
       const rebuilt = parts.map(p => {
         if (p.t === 'hole' || !/[֐-׿]/.test(p.s)) return p.s;
+        if (fb) return '${' + fb.take(p.s) + '}';
         const prop = takeName(name, false);
         props.push({ prop, value: p.s, isDefault: false });
-        return '${' + prop + '}';
+        return '${' + (refPrefix ? refPrefix + prop : prop) + '}';
       }).join('');
       edits.push({ start: m.start, len: m.end - m.start, text: "'" + rebuilt + "'" });
     } else {
       const prop = takeName(name, isDefault);
       props.push({ prop, value: m.value, isDefault, start: m.start, len: m.end - m.start });
-      edits.push({ start: m.start, len: m.end - m.start, text: prop, isDefault });
+      edits.push({ start: m.start, len: m.end - m.start, text: refPrefix + prop, isDefault });
     }
   }
   // עריכות מהסוף-להתחלה
@@ -448,8 +485,9 @@ function threadProps(bundle) {
 }
 
 // ── המעבר ──
-const report = { lifted: [], skipped: {} };
-const skip = (why, id) => (report.skipped[why] ??= []).push(id);
+const report = { lifted: [], skipped: {}, fileLifted: [], fileSkipped: {} };
+const screensWithSkips = new Set();
+const skip = (why, id) => { (report.skipped[why] ??= []).push(id); screensWithSkips.add(id.split(':')[0]); };
 fs.rmSync(CONTENT_OUT, { recursive: true, force: true });
 fs.mkdirSync(CONTENT_OUT, { recursive: true });
 fs.mkdirSync(OUT, { recursive: true });
@@ -509,10 +547,10 @@ for (const mf of fs.readdirSync(MACHINE).filter(f => f.endsWith('.json')).sort()
         if (inB.has(r) || modelCand.has(r)) continue;
         if (classes.has(r)) {
           const wk = widgetKind.get(r);
-          if (!r.startsWith('_') || bundle.length >= 10 || (wk && !['StatelessWidget', 'ConsumerWidget'].includes(wk.kind))) { skip('sibling-class', id); ok = false; break; }
-          bundle.push({ name: r, body: classes.get(r).body }); grew = true;
+          if (bundle.length >= 10 || (wk && !['StatelessWidget', 'ConsumerWidget'].includes(wk.kind))) { skip('sibling-class', id); ok = false; break; }
+          bundle.push({ name: r, body: classes.get(r).body, privatize: !r.startsWith('_') }); grew = true;
         } else if (/^_[a-z]/.test(r)) {
-          const declared = new RegExp('(final|var|const|void|double|int|String|bool|Widget|Color|late)\\s+' + r + '\\b|[A-Za-z>]\\s+' + r + '\\s*\\(').test(code);
+          const declared = new RegExp('(^|\\n)\\s*(static\\s+)?(const\\s+|final\\s+|late\\s+|var\\s+)?[A-Za-z_][\\w<>,?\\[\\] ]*\\s+' + r + '\\s*[=;({]|[A-Za-z>\\]]\\s+' + r + '\\s*\\(').test(code);
           if (declared) continue;
           if (!helpers.has(r) || bundle.length + 1 >= 12) { skip('private-dep', id); ok = false; break; }
           const hsrc = helpers.get(r);
@@ -604,8 +642,127 @@ for (const mf of fs.readdirSync(MACHINE).filter(f => f.endsWith('.json')).sort()
     if (usedNames.has(pub)) { skip('name-collision', id); continue; }
     usedNames.add(pub);
     const allContent = bundle.flatMap(b => b.props.map(p => ({ prop: p.prop, value: p.value })));
-    liftedHashes.set(hash, { id, pub, screen, name: w.name, joined: joinedAll, content: allContent, nBundle: bundle.length, nData: dataProps.length, rootProps, also: [] });
+    liftedHashes.set(hash, { id, pub, screen, name: w.name, joined: joinedAll, content: allContent, nBundle: bundle.length, nData: dataProps.length, rootProps, privatized: bundle.filter(b => b.privatize).map(b => b.name), also: [] });
   }
+}
+
+
+// ── 🗂️ מעבר-הקובץ (file-lift) — "פירוק מלא": מסך שנכשל ברמת-widget מורם כקובץ-שלם-נקי.
+//    הכול-בצרור מעצם-ההגדרה (אפס תלות-פרטית/אחים) · עברית-בלתי-prop-בילית ⇒ קבוע-תוכן מיובא ──
+const FOUT = path.join(SHELF, 'screens_clean');
+fs.rmSync(FOUT, { recursive: true, force: true });
+fs.mkdirSync(FOUT, { recursive: true });
+const hoistAllConst = (text, fb) => text.replace(/'((?:[^'\\\n]|\\.)*[֐-׿](?:[^'\\\n]|\\.)*)'/g, (mm, v) => {
+  if (v.includes('$')) { const parts = splitTemplate(v); if (!parts) return mm;
+    return "'" + parts.map(pp => pp.t === 'hole' || !/[֐-׿]/.test(pp.s) ? pp.s : '${' + fb.take(pp.s) + '}').join('') + "'"; }
+  return fb.take(v);
+});
+for (const screen of [...screensWithSkips].sort()) {
+  const srcPath = path.join(SCRATCH, screen + '.dart');
+  if (!fs.existsSync(srcPath)) continue;
+  const src = fs.readFileSync(srcPath, 'utf8');
+  const fskip = (why) => (report.fileSkipped[why] ??= []).push(screen);
+  const decls = [...src.matchAll(/class\s+([A-Za-z0-9_]+)(?:<[^{]*>)?(?:\s+extends\s+([A-Za-z0-9_<>, ]+?))?\s*\{/g)]
+    .map(m => ({ name: m[1], ext: (m[2] || '').trim(), idx: m.index, body: classBody(src, m.index) })).filter(c => c.body);
+  for (const c of decls) {
+    c.ext = c.ext.replace(/^ConsumerStatefulWidget$/, 'StatefulWidget').replace(/^ConsumerState</, 'State<');
+    c.body = c.body.replace(/extends\s+ConsumerStatefulWidget/, 'extends StatefulWidget')
+                   .replace(/extends\s+ConsumerState<([^>]+)>/, 'extends State<$1>')
+                   .replace(/ConsumerState<([^>]+)>\s+createState\(\)/, 'State<$1> createState()');
+  }
+  // rest = הקובץ בלי imports/exports ובלי גופי-המחלקות (עוזרים-עליונים verbatim)
+  let rest = src;
+  for (const c of [...decls].sort((a, b) => b.idx - a.idx)) rest = rest.slice(0, c.idx) + rest.slice(c.idx + rest.slice(c.idx).indexOf(c.body) + c.body.length);
+  rest = rest.replace(/(^|\n)(import|export|part)[^\n]*/g, '');
+  rest = rest.replace(/(^|\n)final\s+[_a-z]\w*Provider\s*=[^;]*;/g, '').trim();
+  const ctorIndex = new Map();
+  for (const c of decls) { const ps = ctorPositionals(c.name, c.body); if (ps) ctorIndex.set(c.name, ps); }
+  // קבועי-תוכן: ערך-זהה ⇒ קבוע-אחד
+  const constByVal = new Map(); let cn = 0; const constLines = [];
+  const base = snake(screenPascal(screen));
+  const fb = { take: (v) => { if (constByVal.has(v)) return constByVal.get(v);
+    const name = base + '_t' + (++cn); constByVal.set(v, name);
+    constLines.push("const String " + name + " = '" + v + "';"); return name; } };
+
+  // ── התרה + שיטוח + הרמה פר-מחלקה ──
+  const bundle = decls.map(c => ({ name: c.name, body: c.body, ext: c.ext }));
+  for (const b of bundle) {
+    const sm = b.ext.match(/^State<\s*(\w+)\s*>/);
+    if (sm) { b.holder = bundle.find(x => x.name === sm[1]); if (!b.holder) { b.holder = null; } }
+  }
+  if (bundle.some(b => /^State</.test(b.ext) && !b.holder)) { fskip('orphan-state'); continue; }
+  const cbSeen = new Map(); const propBase = new Map();
+  let fail = null; const flatProps = new Set();
+  for (const b of bundle) {
+    const pref = b.holder ? 'widget.' : '';
+    const u = untangle(b.body, cbSeen, pref);
+    if (u.fail) { fail = u.fail; break; }
+    b.body = u.out; b.untangled = [...u.callbacks, ...u.watchProps];
+    for (const mw of u.modelWatch) { b.body = b.body.replace('{', '{\n  final ' + mw.R + ' ' + mw.v + ';'); }
+    // שיטוח כל המודלים המופיעים במחלקה-זו
+    const mc = new Set([...stripComments(b.body).matchAll(/\b([A-Z]\w+)\b/g)].map(x => x[1])
+      .filter(r => !FOUNDATION.has(r) && projectClasses.has(r) && !decls.some(d => d.name === r)));
+    if (mc.size) {
+      if (b.holder) { fail = 'model-in-state'; break; }
+      const fl = flattenModels(b.body, mc, flatProps);
+      if (fl.fail) { fail = fl.fail; break; }
+      b.body = fl.out; b.untangled.push(...fl.dataProps);
+    }
+    const h = hoistStrings(b.body, ctorIndex, propBase, fb, pref);
+    if (h.fail) { fail = h.fail; break; }
+    b.out = h.out; b.props = h.props;
+    // props-של-State שייכים למחזיק (widget.p) — ההזרקה והרישום אצלו
+    if (b.holder) {
+      (b.holder.extraProps ??= []).push(...h.props.filter(pp => !pp.isDefault), ...b.untangled);
+      b.props = []; b.untangled = []; b.allProps = [];
+    } else {
+      b.allProps = [...h.props.filter(pp => !pp.isDefault).map(pp => pp.prop), ...b.untangled.map(pp => pp.prop)];
+    }
+    b.threaded = [];
+    for (const pp of [...h.props, ...(b.untangled || [])]) propType.set(pp.prop, pp.type || 'String');
+  }
+  if (fail) { fskip(fail); continue; }
+  for (const b of bundle) if (b.extraProps) {
+    b.props = [...(b.props || []), ...b.extraProps.filter(pp => pp.value !== undefined)];
+    b.untangled = [...(b.untangled || []), ...b.extraProps.filter(pp => pp.value === undefined)];
+    b.allProps.push(...b.extraProps.map(pp => pp.prop));
+    for (const pp of b.extraProps) propType.set(pp.prop, pp.type || 'String');
+  }
+  const restClean = hoistAllConst(rest, fb);
+  const joinedRaw = restClean + '\n' + bundle.map(b => b.out).join('\n');
+  if (HEB_STR.test(stripComments(joinedRaw))) { fskip('hebrew-left'); continue; }
+  if (RIVERPOD.test(stripComments(joinedRaw)) || IO_PAT.test(stripComments(joinedRaw))) { fskip('io-left'); continue; }
+  const exFn = externalFn(stripComments(joinedRaw));
+  if (exFn) { fskip('project-fn⇒' + exFn); continue; }
+  if (!threadProps(bundle)) { fskip('thread-cycle'); continue; }
+  let bad = false;
+  for (const b of bundle) {
+    const inj = injectProps(b.out, b.name, [...b.props, ...b.untangled, ...b.threaded.map(pp => ({ prop: pp, type: propType.get(pp) || 'String' }))]);
+    if (!inj) { bad = true; break; }
+    b.final = stripConstOn(inj, b.allProps);
+  }
+  if (bad) { fskip('ctor-shape'); continue; }
+
+  // ── פליטה + שער-עצמי ──
+  const joined = restClean + '\n\n' + bundle.map(b => b.final).join('\n\n');
+  const extras = inferImports(stripComments(joined));
+  for (const [cls2, imp] of FOUNDATION) if (new RegExp('\\b' + cls2 + '\\b').test(stripComments(joined))) extras.unshift(imp);
+  for (const [fn2, imp] of fnImportCache) if (imp && new RegExp('\\b' + fn2 + '\\s*\\(').test(stripComments(joined)) && !extras.includes(imp)) extras.push(imp);
+  if (constLines.length) extras.push("import '../../dart-data-bs/auto/" + screen + "_content.dart';");
+  const outFile = path.join(FOUT, screen + '.dart');
+  const code = `// 🗂️ הורם ע"י מעבר-הקובץ (data-lift file) — הקובץ-כולו נקי: מנגנון-בלבד, אל תערוך ידנית.
+// מוצא: ${screen}.dart (בנייה-חכמה main) · ${bundle.length} מחלקות · ${constLines.length} קבועי-תוכן
+import 'package:flutter/material.dart';
+${extras.join('\n')}${extras.length ? '\n' : ''}
+${joined}
+`;
+  fs.writeFileSync(outFile, code);
+  try {
+    const chk = execFileSync('node', [path.join(ROOT, 'machtzev/carve/screen-decomp.mjs'), outFile], { encoding: 'utf8' });
+    if (/⚠️ טהורי-IO אך עם דאטה-צרובה/.test(chk) || !/ש5 סקציות\/מחוברים: 0/.test(chk)) throw new Error('gate');
+    (contentByScreen.get(screen) ?? contentByScreen.set(screen, []).get(screen)).push(...constLines);
+    report.fileLifted.push({ screen, classes: bundle.length, consts: constLines.length });
+  } catch { fs.unlinkSync(outFile); fskip('failed-self-gate'); }
 }
 
 // ── פליטה + שער-עצמי + שימור ──
@@ -613,6 +770,7 @@ for (const L of [...liftedHashes.values()].sort((a, b) => a.pub.localeCompare(b.
   const file = path.join(OUT, snake(L.pub) + '.dart');
   if (fs.existsSync(file)) { skip('file-collision', L.id); continue; }
   let joined = L.joined.replaceAll(L.name, L.pub);
+  for (const pn of L.privatized || []) if (!joined.includes('_' + pn)) joined = joined.replaceAll(pn, '_' + pn);
   const extras = inferImports(stripComments(joined));
   for (const [cls, imp] of FOUNDATION) if (new RegExp('\\b' + cls + '\\b').test(stripComments(joined))) extras.unshift(imp);
   for (const [fn, imp] of FOUNDATION_FN) if (new RegExp('\\b' + fn + '\\s*\\(').test(stripComments(joined)) && !extras.includes(imp)) extras.push(imp);
@@ -639,6 +797,9 @@ for (const [screen, lines] of [...contentByScreen.entries()].sort()) {
     `// 📦 דאטה · תוכן-שהורם ע"י data-lift מ-${screen} — verbatim מהמקור, אל תערוך ידנית.\n${lines.join('\n')}\n`);
 }
 
+const fSkipN = Object.values(report.fileSkipped).reduce((a, v) => a + v.length, 0);
+console.log(`🗂️ מעבר-הקובץ · הורמו-שלמים: ${report.fileLifted.length} מסכים · נדחו: ${fSkipN}`);
+for (const [why, ids] of Object.entries(report.fileSkipped).sort((a, b) => b[1].length - a[1].length)) console.log(`   ⏭️ ${why}: ${ids.length}`);
 const skippedN = Object.values(report.skipped).reduce((a, v) => a + v.length, 0);
 const strings = report.lifted.reduce((a, x) => a + x.props, 0);
 const modeled = report.lifted.filter(x => x.model).length;

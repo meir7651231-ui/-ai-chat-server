@@ -138,12 +138,12 @@ for (const mf of maps) {
       for (const r of refs) {
         if (inBundle.has(r)) continue;
         if (classes.has(r)) {
-          if (!r.startsWith('_') || bundle.length >= 4) { skip('sibling-class', id); ok = false; break; }
+          if (bundle.length >= 6) { skip('sibling-class', id); ok = false; break; }
           const sib = classes.get(r);
           if (bodyIssue(sib.body)) { skip('dirty-sibling', id); ok = false; break; }
-          bundle.push({ name: r, body: sib.body }); grew = true;
+          bundle.push({ name: r, body: sib.body, privatize: !r.startsWith('_') }); grew = true;
         } else if (/^_[a-z]/.test(r)) {
-          const declared = new RegExp('(final|var|const|void|double|int|String|bool|Widget|Color|late)\\s+' + r + '\\b|[A-Za-z>]\\s+' + r + '\\s*\\(').test(code);
+          const declared = new RegExp('(^|\\n)\\s*(static\\s+)?(const\\s+|final\\s+|late\\s+|var\\s+)?[A-Za-z_][\\w<>,?\\[\\] ]*\\s+' + r + '\\s*[=;({]|[A-Za-z>\\]]\\s+' + r + '\\s*\\(').test(code);
           if (declared) continue;
           if (!helpers.has(r) || bundle.length + 1 >= 6) { skip('private-dep', id); ok = false; break; }
           const h = helpers.get(r);
@@ -181,8 +181,9 @@ fs.mkdirSync(OUT, { recursive: true });
 for (const L of [...liftedHashes.values()].sort((a, b) => a.pub.localeCompare(b.pub))) {
   const file = path.join(OUT, snake(L.pub) + '.dart');
   let joined = L.bundle.map(b => b.body).join('\n\n');
-  // שינוי-שם עקבי: המחלקה-הראשית ⇒ ציבורית; State ⇒ _<Pub>State
+  // שינוי-שם עקבי: המחלקה-הראשית ⇒ ציבורית; State ⇒ _<Pub>State; אח-ציבורי ⇒ מופרט
   joined = joined.replaceAll(L.name, L.pub);
+  for (const b of L.bundle) if (b.privatize && !joined.includes('_' + b.name)) joined = joined.replaceAll(b.name, '_' + b.name);
   if (L.stateful) joined = joined.replaceAll('_' + L.name.replace(/^_/, '') + 'State', '_' + L.pub + 'State');
   const extras = inferImports(stripComments(joined));
   for (const [cls, imp] of FOUNDATION) if (new RegExp('\\b' + cls + '\\b').test(stripComments(joined))) extras.unshift(imp);

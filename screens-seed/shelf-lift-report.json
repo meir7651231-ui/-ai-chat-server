@@ -391,6 +391,12 @@
    "serves": 1
   },
   {
+   "atom": "InlineTextRow",
+   "from": "screens__chat_settings_screen:_InlineTextRow",
+   "kind": "Stateful+State",
+   "serves": 1
+  },
+  {
    "atom": "IntelBar",
    "from": "screens__intel__intel_tab:_IntelBar",
    "kind": "Stateless",
@@ -460,6 +466,12 @@
    "atom": "LinkBtn",
    "from": "screens__projects_screen:_LinkBtn",
    "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "LinkRow",
+   "from": "screens__profile_screen:_LinkRow",
+   "kind": "צרור-2",
    "serves": 1
   },
   {
@@ -669,6 +681,12 @@
   {
    "atom": "SectionLabel",
    "from": "screens__profile_screen:_SectionLabel",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "SectionTile",
+   "from": "screens__courier_settings_screen:_SectionTile",
    "kind": "Stateless",
    "serves": 1
   },
@@ -1069,13 +1087,9 @@
   ],
   "private-dep": [
    "features__ring_dive__ring_dive_dial:RingDiveDial",
-   "screens__catalog_settings_screen:_SectionTile",
-   "screens__chat_settings_screen:_InlineTextRow",
-   "screens__courier_settings_screen:_SectionTile",
    "screens__floating_card_keyboard:FloatingCardKeyboard",
    "screens__home_shell:_PulsingStatus",
    "screens__install_studio_screen:InstallStudioScreen",
-   "screens__profile_screen:_LinkRow",
    "screens__smart_home_screen:_SectionTitle",
    "screens__smart_home_screen:_MiniTile",
    "screens__smart_home_screen:_CatalogConfigOpen",
@@ -1091,6 +1105,7 @@
    "screens__catalog_screen:_ManageListsSheet",
    "screens__catalog_screen:_ItemPickerSheet",
    "screens__catalog_screen:_TreeDrillBar",
+   "screens__catalog_settings_screen:_SectionTile",
    "screens__chats_screen:_SearchBar",
    "screens__company_catalog_import_sheet:_CompanyCatalogImportSheet",
    "screens__contractor_hr_sheet:_ContractorHrSheet",

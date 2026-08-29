@@ -1,5 +1,10 @@
 // 📦 דאטה · תוכן-שהורם ע"י data-lift מ-screens__manager_dashboard_screen — verbatim מהמקור, אל תערוך ידנית.
 const String advance_button_fallback = 'קדם שלב ›';
+const String app_settings_body_label = 'תוספת משלוח אקספרס';
+const String app_settings_body_label2 = 'מסגרת אשראי לקבלן';
+const String app_settings_body_label3 = 'שיעור מע״מ';
+const String app_settings_body_text = 'המע״מ קבוע לפי חוק (';
+const String app_settings_body_text2 = '%). תוספת האקספרס והאשראי נראים מיד בעגלת הקבלן.';
 const String brands_body_label = 'מותגים (';
 const String brands_body_label2 = ' מוצרים';
 const String manage_intro_fallback = '🛠️ שליטה מלאה על אפליקציית הקבלן — כל שינוי מתעדכן מיידית.';
