@@ -154,8 +154,7 @@ function generate(slug, specText) {
   const chosen = parts.map(part => ({ part, atom: pickAtom(part) })).filter(c => c.atom);
   if (!chosen.length) { console.log(`🧬 ${slug}: אף אטום לא נבחר`); return null; }
 
-  const calls = [];
-  for (const { part, atom } of chosen) {
+  const buildCall = ({ part, atom }) => {
     imports.add(`import '../dart-ui-bs/${atom.file}';`);
     const shared = {};
     const argsOut = [];
@@ -168,7 +167,19 @@ function generate(slug, specText) {
       if (r) argsOut.push(`${pn}: ${r.expr}`);
       else if (req) argsOut.push(`${pn}: (null as dynamic) /* לא-ממולא */`);
     }
-    calls.push(`          ${atom.cls}(${argsOut.join(', ')}),`);
+    return `${atom.cls}(${argsOut.join(', ')})`;
+  };
+  // אטום-flex (שורש Expanded/Flexible) בנוי-ל-Row: רצף-עוקב נארז יחד בשורה אחת
+  const calls = [];
+  for (let i = 0; i < chosen.length; i++) {
+    if (chosen[i].atom.flexRoot) {
+      const run = [];
+      while (i < chosen.length && chosen[i].atom.flexRoot) run.push(buildCall(chosen[i++]));
+      i--;
+      calls.push(`          Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: Row(children: [${run.join(', ')}])),`);
+    } else {
+      calls.push(`          ${buildCall(chosen[i])},`);
+    }
   }
 
   const titleConst = constFor(title, 'app_bar_title');

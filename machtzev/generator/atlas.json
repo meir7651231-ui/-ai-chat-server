@@ -2,7 +2,7 @@
  "counts": {
   "widgets": 381,
   "functions": 463,
-  "data": 657
+  "data": 660
  },
  "widgets": [
   {
@@ -10569,7 +10569,12 @@
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_business_textfield_text",
+   "name": "gen_business_textfield_label",
+   "file": "auto/gen_business_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_business_textfield_hint",
    "file": "auto/gen_business_content.dart",
    "shelf": "new/dart-data-bs"
   },
@@ -10749,7 +10754,12 @@
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_shipping_textfield_text",
+   "name": "gen_shipping_textfield_label",
+   "file": "auto/gen_shipping_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_shipping_textfield_hint",
    "file": "auto/gen_shipping_content.dart",
    "shelf": "new/dart-data-bs"
   },
@@ -10774,7 +10784,12 @@
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_team_textfield_text",
+   "name": "gen_team_textfield_label",
+   "file": "auto/gen_team_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_team_textfield_hint",
    "file": "auto/gen_team_content.dart",
    "shelf": "new/dart-data-bs"
   },
