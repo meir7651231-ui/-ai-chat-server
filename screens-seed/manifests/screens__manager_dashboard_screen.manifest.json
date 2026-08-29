@@ -34,7 +34,7 @@
    "id": "stage_pill",
    "atom": "StagePill",
    "props": {
-    "label": "$: managerShellContent.label",
+    "label": "$: sheetAdvanceButtonContent.label",
     "color": "#:color"
    }
   },
@@ -59,7 +59,7 @@
    "props": {
     "title": "$: sheet_advance_button_title",
     "body": "$: sheet_advance_button_body",
-    "label": "$: managerShellContent.label",
+    "label": "$: sheetAdvanceButtonContent.label",
     "onPressed": "@:onPressed"
    }
   },
@@ -76,7 +76,7 @@
    "id": "journey_empty",
    "atom": "JourneyEmpty",
    "props": {
-    "text": "$: managerShellContent.text"
+    "text": "$: manageIntroContent.text"
    }
   },
   {
@@ -96,10 +96,10 @@
     "sectionKey": "?:String",
     "titleCfgId": "?:String",
     "emoji": "?:String",
-    "title": "$: managerShellContent.title",
+    "title": "?:String",
     "sub": "?:String",
     "open": "?:bool",
-    "onTap": "@:onTap",
+    "onTap": "@:onTap2",
     "child": "?:Widget",
     "badge": "?:int"
    }
@@ -150,7 +150,7 @@
    "id": "approval_button",
    "atom": "ApprovalButton",
    "props": {
-    "label": "$: managerShellContent.label",
+    "label": "$: sheetAdvanceButtonContent.label",
     "color": "#:color",
     "textColor": "#:textColor",
     "bordered": "?:bool",
@@ -173,7 +173,7 @@
    "id": "manage_hint",
    "atom": "ManageHint",
    "props": {
-    "text": "$: managerShellContent.text"
+    "text": "$: manageIntroContent.text"
    }
   }
  ]

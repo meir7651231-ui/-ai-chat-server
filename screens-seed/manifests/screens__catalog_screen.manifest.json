@@ -120,7 +120,7 @@
     "label4": "$: acc_row_label4",
     "selected": "?:bool",
     "qty": "?:int",
-    "onToggle": "@:onToggle|ValueChanged<bool>?",
+    "onToggle": "@:onToggle2|ValueChanged<bool>?",
     "onQtyChanged": "@:onQtyChanged|ValueChanged<int>",
     "activeMatch": "?:List<String>?"
    }
@@ -132,7 +132,7 @@
     "label": "$: mini_qty_btn_label",
     "label2": "$: mini_qty_btn_label2",
     "icon": "?:IconData",
-    "onTap": "@:onTap|VoidCallback?"
+    "onTap": "@:onTap2|VoidCallback?"
    }
   },
   {

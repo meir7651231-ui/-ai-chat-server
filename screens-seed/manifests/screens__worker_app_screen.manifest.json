@@ -96,7 +96,7 @@
    "atom": "ProposePrimaryBtn",
    "props": {
     "label": "?:String",
-    "onTap": "@:onTap|VoidCallback?"
+    "onTap": "@:onTap2|VoidCallback?"
    }
   }
  ]

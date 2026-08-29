@@ -151,7 +151,7 @@
   },
   {
    "screen": "screens__manager_dashboard_screen",
-   "holes": 14,
+   "holes": 15,
    "flat": true
   },
   {
@@ -231,12 +231,12 @@
   },
   {
    "screen": "screens__store_screen",
-   "holes": 19,
+   "holes": 20,
    "flat": true
   },
   {
    "screen": "screens__store_settings_screen",
-   "holes": 18,
+   "holes": 20,
    "flat": true
   },
   {

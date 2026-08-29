@@ -4,8 +4,7 @@
  "screen": "store_screen",
  "flat": true,
  "content": [
-  "auto/screens__store_screen_content.dart",
-  "screens__store_screen_content.dart"
+  "auto/screens__store_screen_content.dart"
  ],
  "sections": [
   {
@@ -51,7 +50,7 @@
    "id": "store_sheet_scaffold",
    "atom": "StoreSheetScaffold",
    "props": {
-    "title": "$: summaryChips.title",
+    "title": "?:String",
     "emoji": "?:String",
     "children": "?:List<Widget>"
    }
@@ -129,7 +128,7 @@
     "label": "$: store_step_btn_label",
     "label2": "$: store_step_btn_label2",
     "icon": "?:IconData",
-    "onTap": "@:onTap|VoidCallback?"
+    "onTap": "@:onTap2|VoidCallback?"
    }
   },
   {

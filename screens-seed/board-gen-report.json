@@ -28,12 +28,12 @@
   {
    "screen": "screens__camera_sheet",
    "wired": 0,
-   "todo": 6
+   "todo": 7
   },
   {
    "screen": "screens__catalog_screen",
    "wired": 2,
-   "todo": 23
+   "todo": 25
   },
   {
    "screen": "screens__catalog_settings_screen",
@@ -173,7 +173,7 @@
   {
    "screen": "screens__manager_dashboard_screen",
    "wired": 0,
-   "todo": 19
+   "todo": 21
   },
   {
    "screen": "screens__manager_profile_screen",
@@ -263,12 +263,12 @@
   {
    "screen": "screens__store_screen",
    "wired": 1,
-   "todo": 19
+   "todo": 21
   },
   {
    "screen": "screens__store_settings_screen",
    "wired": 0,
-   "todo": 13
+   "todo": 17
   },
   {
    "screen": "screens__studio__panes__find_replace_pane",
@@ -338,7 +338,7 @@
   {
    "screen": "screens__worker_app_screen",
    "wired": 1,
-   "todo": 15
+   "todo": 16
   },
   {
    "screen": "screens__worker_attendance_screen",
@@ -398,7 +398,7 @@
  ],
  "totals": {
   "wired": 42,
-  "todo": 429,
+  "todo": 441,
   "hebInExpr": 13
  }
 }

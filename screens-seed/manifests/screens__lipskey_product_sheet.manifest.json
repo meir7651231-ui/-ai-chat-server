@@ -18,7 +18,7 @@
    "atom": "SectionTitle",
    "props": {
     "emoji": "?:String",
-    "title": "$: sheetChrome.title",
+    "title": "$: lineBomSheet.title",
     "subtitle": "?:String?"
    }
   },

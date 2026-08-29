@@ -247,7 +247,8 @@ for (const mf of fs.readdirSync(MANIFESTS).filter(f => f.endsWith('.manifest.jso
     }
     for (const [k, v] of Object.entries(sec.props || {})) {
       if (typeof v !== 'string' || (!v.startsWith('?:') && !v.startsWith('@:'))) continue;
-      const pname = v.startsWith('@:') ? v.slice(2).trim() : [...needP.keys()].find(n => n === k || n.startsWith(k)) || k;
+      // ‏@:name|Type — המפתח הוא השם בלבד (ה-|Type השאיר wires יתומים שנפלו ל-TODO)
+      const pname = v.startsWith('@:') ? v.slice(2).trim().split('|')[0] : [...needP.keys()].find(n => n === k || n.startsWith(k)) || k;
       if (wires.has(pname)) continue;
       const e = resolve(k);
       if (!e) continue;

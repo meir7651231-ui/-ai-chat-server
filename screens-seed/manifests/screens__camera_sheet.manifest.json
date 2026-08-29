@@ -39,7 +39,7 @@
     "label": "$: gallery_all_btn_label",
     "message": "$: gallery_all_btn_message",
     "fallback": "$: gallery_all_btn_fallback",
-    "onTap": "@:onTap|VoidCallback?"
+    "onTap": "@:onTap2|VoidCallback?"
    }
   },
   {

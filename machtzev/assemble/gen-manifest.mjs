@@ -60,17 +60,23 @@ if (fs.existsSync(CONTENT)) for (const f of fs.readdirSync(CONTENT)) {
   const scr = f.replace('_content.dart', '');
   contentConsts.set(scr, new Set([...fs.readFileSync(path.join(CONTENT, f), 'utf8').matchAll(/const String (\w+) =/g)].map(x => x[1])));
 }
-const contentRecords = new Map(); // screen ⇒ {file, rec, fields:Set}
+// כל רשומות-התוכן בקובץ, כל אחת בגבולות-גופה שלה — לא רשומה-ראשונה עם שדות-כל-הקובץ
+// (הבאג שנפל בקומפילציה-מלאה: chatSettingsScreenContent.leadingGlyph כשהשדה ברשומה אחרת)
+const contentRecords = new Map(); // screen ⇒ [{rec, fields:Set}]
+const contentRecordFile = new Map(); // screen ⇒ שם-קובץ-התוכן הידני
 const DATA = path.join(ROOT, 'new/dart-data-bs');
 for (const f of fs.readdirSync(DATA)) {
   if (!f.endsWith('_content.dart')) continue;
   const scr = f.replace('_content.dart', '');
   const src = fs.readFileSync(path.join(DATA, f), 'utf8');
-  const rm = src.match(/const (\w+) = \(/);
-  if (!rm) continue;
-  const body = src.slice(rm.index);
-  const fields = new Set([...body.matchAll(/(?:^|\n)\s{2}(\w+):/g)].map(x => x[1]));
-  contentRecords.set(scr, { file: f, rec: rm[1], fields });
+  const recs = [];
+  for (const rm of src.matchAll(/const (\w+) = \(/g)) {
+    const end = src.indexOf('\n);', rm.index);
+    const body = src.slice(rm.index, end === -1 ? src.length : end);
+    recs.push({ rec: rm[1], fields: new Set([...body.matchAll(/(?:^|\n)\s{2}(\w+):/g)].map(x => x[1])) });
+  }
+  if (recs.length) contentRecords.set(scr, recs);
+  if (recs.length) contentRecordFile.set(scr, f);
 }
 
 const isCb = (t) => /VoidCallback|ValueChanged|Function/.test(t);
@@ -110,7 +116,18 @@ for (const mf of fs.readdirSync(path.join(ROOT, 'screens-seed/machine')).filter(
   // סקציות: כל מופע-מחלקה בגוף-השורש, בסדר-המקור; פתרון: אותו-קובץ ⇒ מוצא · אחרת שם-ייחודי-גלובלי
   const sections = [];
   const consts = contentConsts.get(screen) || new Set();
-  const rec = contentRecords.get(screen);
+  const recs = contentRecords.get(screen) || [];
+  // בחירת-הרשומה הנכונה לשדה: רשומה-על-שם-האטום ⇒ רשומה-יחידה-שמכילה ⇒ אין (חור-כן)
+  const pickRec = (atom, field) => {
+    const pref = atom[0].toLowerCase() + atom.slice(1) + 'Content';
+    const hit = recs.find(r => r.rec === pref && r.fields.has(field));
+    if (hit) return hit.rec;
+    const all = recs.filter(r => r.fields.has(field));
+    return all.length === 1 ? all[0].rec : null;
+  };
+  // רישום-callbacks ברמת-המסך: שם-חוזר עם טיפוס-שונה ⇒ שם-ממוספר (onChanged2) —
+  // אחרת שדה-אחד-בקומפוזר משרת אטומים עם חתימות-שונות ולא-מתקמפל
+  const cbReg = new Map(); // name ⇒ type
   // 🔁 מנוע-ה-repeat: widget שמופע-בלולאה במקור ⇒ סקציית-repeat; prop תלוי-משתנה-הלולאה ⇒ פר-פריט (~:)
   const buildSection = (o, origName) => {
     const lc = loopContext(src, origName);
@@ -120,9 +137,15 @@ for (const mf of fs.readdirSync(path.join(ROOT, 'screens-seed/machine')).filter(
       const argE = args ? (args.named[p.name] ?? null) : null;
       if (lc && argE && new RegExp('\\b' + lc.as + '\\b').test(argE)) { props[p.name] = '~:'; continue; }
       const cn = snake(o.atom) + '_' + snake(p.name);
+      const recName = p.type.startsWith('String') ? pickRec(o.atom, p.name) : null;
       if (consts.has(cn)) props[p.name] = '$: ' + cn;
-      else if (rec && rec.fields.has(p.name) && p.type.startsWith('String')) props[p.name] = '$: ' + rec.rec + '.' + p.name;
-      else if (isCb(p.type)) props[p.name] = '@:' + p.name + (p.type === 'VoidCallback' ? '' : '|' + p.type);
+      else if (recName) props[p.name] = '$: ' + recName + '.' + p.name;
+      else if (isCb(p.type)) {
+        let cn2 = p.name, i = 2;
+        while (cbReg.has(cn2) && cbReg.get(cn2) !== p.type) cn2 = p.name + i++;
+        cbReg.set(cn2, p.type);
+        props[p.name] = '@:' + cn2 + (p.type === 'VoidCallback' ? '' : '|' + p.type);
+      }
       else if (isTok(p.name, p.type)) props[p.name] = '#:' + p.name;
       else { props[p.name] = '?:' + p.type; holes++; holeTypes.add(p.type); }
     }
@@ -162,7 +185,7 @@ for (const mf of fs.readdirSync(path.join(ROOT, 'screens-seed/machine')).filter(
     src: screen,
     screen: screen.replace(/^(screens|features)__/, '').replace(/__/g, '_'),
     ...(flat ? { flat: true } : {}),
-    content: [...(consts.size ? ['auto/' + screen + '_content.dart'] : []), ...(rec && JSON.stringify(sections).includes(rec.rec + '.') ? [rec.file] : [])],
+    content: [...(consts.size ? ['auto/' + screen + '_content.dart'] : []), ...(recs.some(r => JSON.stringify(sections).includes(r.rec + '.')) ? [contentRecordFile.get(screen)] : [])],
     sections,
   };
   for (const t of holeTypes) report.holesByType[t] = (report.holesByType[t] || 0) + 1;

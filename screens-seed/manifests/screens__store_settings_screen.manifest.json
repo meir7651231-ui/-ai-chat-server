@@ -4,8 +4,7 @@
  "screen": "store_settings_screen",
  "flat": true,
  "content": [
-  "auto/screens__store_settings_screen_content.dart",
-  "screens__store_settings_screen_content.dart"
+  "auto/screens__store_settings_screen_content.dart"
  ],
  "sections": [
   {
@@ -13,8 +12,8 @@
    "atom": "StoreSettingsSectionTile",
    "props": {
     "fallback": "$: store_settings_section_tile_fallback",
-    "emoji": "$: storeSettingsScreenContent.emoji",
-    "title": "$: storeSettingsScreenContent.title",
+    "emoji": "?:String",
+    "title": "?:String",
     "children": "?:List<Widget>",
     "underConstruction": "?:bool"
    }
@@ -44,7 +43,7 @@
     "fallback": "?:String",
     "label": "?:String",
     "value": "?:bool",
-    "onChanged": "@:onChanged|ValueChanged<bool>",
+    "onChanged": "@:onChanged2|ValueChanged<bool>",
     "underConstruction": "?:bool"
    }
   },
@@ -63,7 +62,7 @@
    "props": {
     "label": "?:String",
     "value": "?:int",
-    "onChanged": "@:onChanged|ValueChanged<int>",
+    "onChanged": "@:onChanged3|ValueChanged<int>",
     "inkColor": "#:inkColor",
     "mutedColor": "#:mutedColor",
     "cursorColor": "#:cursorColor",
