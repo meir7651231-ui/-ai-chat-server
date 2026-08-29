@@ -1,5 +1,5 @@
 // 🧽 לוטש ע"י מנוע-המטרות (data-lift v3) — דאטה/מודל/תבנית הורמו ל-props לפי מטרתם, אל תערוך ידנית.
-// מוצא: screens__notif_settings_screen:_QuickActionsSection (בנייה-חכמה main) · צרור-7 · props-שורש: title, label, label2, label3, label4, fallback, fallback2, fallback3, fallback4, onTap, onTap2, fallback5, onTap3, fallback6, fallback7, onTap4
+// מוצא: screens__notif_settings_screen:_QuickActionsSection (בנייה-חכמה main) · צרור-7 · props-שורש: title, label, label2, label3, label4, fallback, fallback2, fallback3, fallback4, onTap, onTap2, fallback5, onTap3
 // התוכן: new/dart-data-bs/auto/screens__notif_settings_screen_content.dart
 import 'package:flutter/material.dart';
 import 'package:buildsmart/widgets/studio/cfg_text.dart';
@@ -7,7 +7,7 @@ import 'bs_tokens.dart';
 import 'package:buildsmart/state/under_construction.dart';
 
 class QuickActionsSection extends StatelessWidget {
-  QuickActionsSection({required this.title, required this.label, required this.label2, required this.label3, required this.label4, required this.fallback, required this.fallback2, required this.fallback3, required this.fallback4, required this.onTap, required this.onTap2, required this.fallback5, required this.onTap3, required this.fallback6, required this.fallback7, required this.onTap4});
+  QuickActionsSection({required this.title, required this.label, required this.label2, required this.label3, required this.label4, required this.fallback, required this.fallback2, required this.fallback3, required this.fallback4, required this.onTap, required this.onTap2, required this.fallback5, required this.onTap3});
   final String title;
   final String label;
   final String label2;
@@ -21,9 +21,6 @@ class QuickActionsSection extends StatelessWidget {
   final VoidCallback onTap2;
   final String fallback5;
   final VoidCallback onTap3;
-  final String fallback6;
-  final String fallback7;
-  final VoidCallback onTap4;
 
   @override
   Widget build(BuildContext context) {
@@ -36,12 +33,12 @@ class QuickActionsSection extends StatelessWidget {
         _PlaceholderRow(label: label3, fallback5: fallback5, onTap3: onTap3),
         _PlaceholderRow(label: label4, fallback5: fallback5, onTap3: onTap3),
       ],
-    , fallback: fallback, fallback2: fallback2, fallback3: fallback3, fallback4: fallback4, onTap: onTap, onTap2: onTap2, fallback5: fallback5, onTap3: onTap3, fallback6: fallback6, fallback7: fallback7, onTap4: onTap4);
+     fallback: fallback, fallback2: fallback2, fallback3: fallback3, fallback4: fallback4, onTap: onTap, onTap2: onTap2);
   }
 }
 
 class _SectionTile extends StatelessWidget {
-  _SectionTile({required this.fallback, required this.fallback2, required this.fallback3, required this.fallback4, required this.onTap, required this.onTap2, required this.fallback5, required this.onTap3, required this.fallback6, required this.fallback7, required this.onTap4, 
+  _SectionTile({required this.fallback, required this.fallback2, required this.fallback3, required this.fallback4, required this.onTap, required this.onTap2, 
     required this.emoji,
     required this.title,
     required this.children,
@@ -53,11 +50,6 @@ class _SectionTile extends StatelessWidget {
   final String fallback4;
   final VoidCallback onTap;
   final VoidCallback onTap2;
-  final String fallback5;
-  final VoidCallback onTap3;
-  final String fallback6;
-  final String fallback7;
-  final VoidCallback onTap4;
 
   final String emoji;
   final String title;
@@ -167,13 +159,13 @@ abstract interface class _Inert {
 }
 
 class _SwitchRow extends StatelessWidget implements _Inert {
-  _SwitchRow({
+  const _SwitchRow({
     required this.label,
     required this.value,
     required this.onChanged,
     this.underConstruction = false,
     this.requiresServer = false,
-  }, fallback6: fallback6, fallback7: fallback7);
+  });
 
   final String label;
   final bool value;
@@ -257,11 +249,11 @@ class _RadioGroupRow<T> extends StatelessWidget {
 }
 
 class _TimeRow extends StatelessWidget {
-  _TimeRow({
+  const _TimeRow({
     required this.label,
     required this.time,
     required this.onChanged,
-  }, onTap4: onTap4);
+  });
 
   final String label;
   final TimeOfDay time;
@@ -289,7 +281,7 @@ class _TimeRow extends StatelessWidget {
 }
 
 class _PlaceholderRow extends StatelessWidget {
-  _PlaceholderRow({required this.label}, fallback5: fallback5, onTap3: onTap3);
+  const _PlaceholderRow({required this.label});
   final String label;
 
   @override

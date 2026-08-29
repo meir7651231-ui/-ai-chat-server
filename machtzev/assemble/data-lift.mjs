@@ -398,12 +398,12 @@ function hoistStrings(body, ctorIndex, propBase, fb, refPrefix = '') {
 function stripConstOn(out, propNames) {
   if (!propNames.length) return out;
   const propWord = new RegExp('\\b(' + propNames.join('|') + ')\\b');
-  // הצהרת-const (גם static) שהאתחול שלה נוגע-ב-prop ⇒ final
-  for (const dm of [...out.matchAll(/(static\s+)?const(\s+[A-Za-z_][\w<>,? ]*)?\s+\w+\s*=/g)].reverse()) {
+  // הצהרה (static-)const/final שהאתחול שלה נוגע-ב-prop ⇒ late final (מותר-להפנות-לשדות)
+  for (const dm of [...out.matchAll(/(?<!late )(static\s+)?(const|final)(\s+[A-Za-z_][\w<>,? ]*)?\s+\w+\s*=/g)].reverse()) {
     const end = out.indexOf(';', dm.index);
     if (end < 0) continue;
     if (propWord.test(out.slice(dm.index, end)))
-      out = out.slice(0, dm.index) + dm[0].replace(/\bconst\b/, 'final') + out.slice(dm.index + dm[0].length);
+      out = out.slice(0, dm.index) + dm[0].replace(/^(static\s+)?(const|final)/, 'late final') + out.slice(dm.index + dm[0].length);
   }
   let changed = true;
   while (changed) {
@@ -516,6 +516,7 @@ function threadProps(bundle) {
           let d = 0, j = scan.indexOf('(', m.index), open = j;
           for (; j < scan.length; j++) { const c = scan[j]; if (c === '(') d++; else if (c === ')') { d--; if (!d) break; } }
           const argText = scan.slice(open + 1, j);
+          if (argText.includes('this.')) continue;              // הצהרת-בנאי — לא אתר-קריאה!
           // תוויות בעומק-0 בלבד (ארגומנט-מקונן אינו מספק את הקריאה-החיצונית!)
           const given = new Set();
           { let dep = 0, s0 = 0;
@@ -529,7 +530,8 @@ function threadProps(bundle) {
           }
           const missing = target.allProps.filter(p => !given.has(p));
           if (!missing.length) continue;
-          const insert = (argText.trim() ? ', ' : '') + missing.map(p => `${p}: ${p}`).join(', ');
+          const tt = argText.replace(/\s+$/, '');
+          const insert = (!tt ? '' : tt.endsWith(',') ? ' ' : ', ') + missing.map(p => `${p}: ${p}`).join(', ');
           holder.out = holder.out.slice(0, j) + insert + holder.out.slice(j);
           for (const p of missing) if (!holder.allProps.includes(p)) { holder.allProps.push(p); holder.threaded.push(p); }
           changed = true; break;
@@ -676,6 +678,20 @@ for (const mf of fs.readdirSync(MACHINE).filter(f => f.endsWith('.json')).sort()
     for (const p of dataProps) propType.set(p.prop, p.type);
     if (HEB_STR.test(stripComments(bundle.map(b => b.out).join('\n')))) { skip('hebrew-left', id); continue; }
 
+    // props-חופשיים: prop-של-הצרור שמופיע בגוף-אחר בלי-הצהרה ⇒ נרשם-אצלו (ההשחלה תשלים)
+    {
+      const allP = new Set(bundle.flatMap(b => b.allProps));
+      for (const b of bundle) {
+        if (b.helper) continue;
+        const sc = maskLits(maskComments(b.out));
+        for (const pn of allP) {
+          if (b.allProps.includes(pn)) continue;
+          if (!new RegExp('\\b' + pn + '\\b(?!\\s*:)').test(sc)) continue;   // תווית-ארגומנט אינה-שימוש
+          if (new RegExp('(final|var|const)\\s+[\\w<>,? ]*\\b' + pn + '\\s*[=;]|this\\.' + pn + '\\b|\\(\\s*' + pn + '\\s*\\)|[({,]\\s*' + pn + '\\s*=>').test(sc)) continue; // מקומי/פרמטר
+          b.allProps.push(pn); b.threaded.push(pn);
+        }
+      }
+    }
     // ── השחלה + הזרקה ──
     if (!threadProps(bundle)) { skip('thread-cycle', id); continue; }
     let bad = false;
