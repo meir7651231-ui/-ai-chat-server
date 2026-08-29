@@ -469,12 +469,19 @@ const entries = report.boards.map(b => {
     .replace(/(^|[_-])([a-z])/g, (_, __, c) => c.toUpperCase()) + 'Board';
   return { name: b.screen.replace(/^(screens|features)__/, '').replace(/__/g, ' · ').replace(/_/g, ' '), file: b.screen + '_board.dart', cls, wired: b.wired, todo: b.todo };
 }).sort((a, b) => a.name.localeCompare(b.name));
+// 🧬 מסכי-המחולל (genesis-gen, הכרעה 17) — בראש-הגלריה: בקשה ⇒ אטומים ⇒ מסך עובד
+const GEN = path.join(ROOT, 'new/dart-gen-bs');
+const genEntries = fs.existsSync(GEN) ? fs.readdirSync(GEN).filter(f => /^gen_.*\.dart$/.test(f)).map(f => {
+  const s = fs.readFileSync(path.join(GEN, f), 'utf8');
+  return { file: f, name: s.match(/\/\/ 🧬 שם: (.+)/)?.[1]?.trim(), cls: s.match(/class (Gen\w+) extends/)?.[1] };
+}).filter(e => e.cls && e.name) : [];
 const gallery = `// 🧪 חולל ע"י מחולל-הלוחות (board-gen) — שער-ההצצה למסכי-הגנסיס. אל תערוך ידנית.
 // חוק-7 (החלפה-הפיכה): הדגל כבוי כברירת-מחדל ⇒ collection-if מעלים הכול — זהות-ביט.
 // הדלקה: flutter run --dart-define=GENESIS_SCREENS=true
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:buildsmart/widgets/toast.dart' show bsNavigatorKey;
+${genEntries.map(e => `import '../dart-gen-bs/${e.file}';`).join('\n')}
 ${entries.map(e => `import '${e.file}';`).join('\n')}
 
 const bool kGenesisScreens = bool.fromEnvironment('GENESIS_SCREENS');
@@ -526,19 +533,19 @@ class GenesisEntryButton extends StatelessWidget {
 }
 
 class _GEntry {
-  const _GEntry(this.name, this.wired, this.todo, this.build);
+  const _GEntry(this.name, this.subtitle, this.build);
   final String name;
-  final int wired;
-  final int todo;
+  final String subtitle;
   final Widget Function() build;
 }
 
-/// הגלריה: כל המסכים-המורכבים, לחיצה פותחת כל-אחד חי (הלוח מחווט את מה-שנפתר).
+/// הגלריה: 🧬 מסכי-המחולל (בקשה⇒מסך) בראש, ואחריהם המסכים-המורכבים-מהמקור.
 class GenesisGallery extends StatelessWidget {
   const GenesisGallery({super.key});
 
   static final List<_GEntry> _screens = [
-${entries.map(e => `    _GEntry('${e.name}', ${e.wired}, ${e.todo}, () => const ${e.cls}()),`).join('\n')}
+${genEntries.map(e => `    _GEntry('🧬 ${e.name}', 'נוצר מהמחולל — חיווט-מלא', () => const ${e.cls}()),`).join('\n')}
+${entries.map(e => `    _GEntry('${e.name}', 'מחווט: ${e.wired} · ממתין-לחיווט: ${e.todo}', () => const ${e.cls}()),`).join('\n')}
   ];
 
   @override
@@ -551,7 +558,7 @@ ${entries.map(e => `    _GEntry('${e.name}', ${e.wired}, ${e.todo}, () => const 
             final e = _screens[i];
             return ListTile(
               title: Text(e.name),
-              subtitle: Text('מחווט: \${e.wired} · ממתין-לחיווט: \${e.todo}'),
+              subtitle: Text(e.subtitle),
               trailing: const Icon(Icons.chevron_left),
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (_) => e.build()),
