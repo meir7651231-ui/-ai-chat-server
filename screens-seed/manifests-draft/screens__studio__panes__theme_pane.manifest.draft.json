@@ -1,4 +1,5 @@
 {
+ "generated": true,
  "screen": "studio_panes_theme_pane",
  "content": [
   "auto/screens__studio__panes__theme_pane_content.dart"

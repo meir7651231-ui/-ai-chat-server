@@ -1,4 +1,5 @@
 {
+ "generated": true,
  "screen": "worker_reports_tab",
  "content": [
   "auto/screens__worker_reports_tab_content.dart"

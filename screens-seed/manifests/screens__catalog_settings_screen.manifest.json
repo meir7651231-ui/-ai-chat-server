@@ -1,4 +1,5 @@
 {
+ "generated": true,
  "screen": "catalog_settings_screen",
  "content": [
   "auto/screens__catalog_settings_screen_content.dart"

@@ -1,4 +1,5 @@
 {
+ "generated": true,
  "screen": "courier_settings_screen",
  "content": [
   "auto/screens__courier_settings_screen_content.dart"

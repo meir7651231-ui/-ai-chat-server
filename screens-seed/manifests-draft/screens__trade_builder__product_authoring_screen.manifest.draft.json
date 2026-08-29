@@ -1,0 +1,45 @@
+{
+ "generated": true,
+ "screen": "trade_builder_product_authoring_screen",
+ "flat": true,
+ "content": [
+  "auto/screens__trade_builder__product_authoring_screen_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "empty_products",
+   "atom": "EmptyProducts",
+   "props": {
+    "fallback": "$: empty_products_fallback"
+   }
+  },
+  {
+   "id": "product_tile",
+   "atom": "ProductTile",
+   "props": {
+    "label": "$: product_tile_label",
+    "tooltip": "$: product_tile_tooltip",
+    "nameHe": "?:String",
+    "id": "?:String",
+    "categoryTitle": "?:String",
+    "onDelete": "@:onDelete"
+   }
+  },
+  {
+   "id": "trade_builder_accessory_rule_editor_pill_button",
+   "atom": "TradeBuilderAccessoryRuleEditorPillButton",
+   "props": {
+    "label": "?:String",
+    "onTap": "@:onTap",
+    "enabled": "?:bool"
+   }
+  },
+  {
+   "id": "section_header",
+   "atom": "SectionHeader",
+   "props": {
+    "title": "?:String"
+   }
+  }
+ ]
+}

@@ -1,0 +1,38 @@
+{
+ "generated": true,
+ "screen": "trade_builder_category_tree_editor",
+ "flat": true,
+ "content": [
+  "auto/screens__trade_builder__category_tree_editor_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "empty_accessories",
+   "atom": "EmptyAccessories",
+   "props": {
+    "fallback": "?:String"
+   }
+  },
+  {
+   "id": "category_tile",
+   "atom": "CategoryTile",
+   "props": {
+    "label": "$: category_tile_label",
+    "tooltip": "$: category_tile_tooltip",
+    "emoji": "?:String",
+    "titleHe": "?:String",
+    "onTap": "@:onTap",
+    "onDelete": "@:onDelete"
+   }
+  },
+  {
+   "id": "trade_builder_accessory_rule_editor_pill_button",
+   "atom": "TradeBuilderAccessoryRuleEditorPillButton",
+   "props": {
+    "label": "?:String",
+    "onTap": "@:onTap",
+    "enabled": "?:bool"
+   }
+  }
+ ]
+}

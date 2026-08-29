@@ -1,4 +1,5 @@
 {
+ "generated": true,
  "screen": "manager_role_assign_sheet",
  "content": [
   "auto/screens__manager_role_assign_sheet_content.dart"

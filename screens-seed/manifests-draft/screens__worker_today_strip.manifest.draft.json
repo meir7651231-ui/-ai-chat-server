@@ -1,4 +1,5 @@
 {
+ "generated": true,
  "screen": "worker_today_strip",
  "content": [
   "auto/screens__worker_today_strip_content.dart"

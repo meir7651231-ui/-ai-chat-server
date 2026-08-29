@@ -1,4 +1,5 @@
 {
+ "generated": true,
  "screen": "smart_home_screen",
  "content": [],
  "sections": [
@@ -7,6 +8,15 @@
    "atom": "Pad",
    "props": {
     "child": "?:Widget"
+   }
+  },
+  {
+   "id": "section_title",
+   "atom": "SectionTitle",
+   "props": {
+    "emoji": "?:String",
+    "title": "?:String",
+    "subtitle": "?:String?"
    }
   }
  ]

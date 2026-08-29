@@ -1,4 +1,5 @@
 {
+ "generated": true,
  "screen": "notif_settings_screen",
  "content": [
   "auto/screens__notif_settings_screen_content.dart"

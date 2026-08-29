@@ -1,4 +1,5 @@
 {
+ "generated": true,
  "screen": "persona_picking_sheet",
  "content": [
   "auto/screens__persona_picking_sheet_content.dart"

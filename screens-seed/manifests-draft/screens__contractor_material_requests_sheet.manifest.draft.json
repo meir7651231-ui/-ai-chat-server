@@ -1,0 +1,17 @@
+{
+ "generated": true,
+ "screen": "contractor_material_requests_sheet",
+ "flat": true,
+ "content": [],
+ "sections": [
+  {
+   "id": "action_button",
+   "atom": "ActionButton",
+   "props": {
+    "label": "?:String",
+    "color": "#:color",
+    "onTap": "@:onTap"
+   }
+  }
+ ]
+}

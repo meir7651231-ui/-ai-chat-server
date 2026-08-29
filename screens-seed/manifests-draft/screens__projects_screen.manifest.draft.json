@@ -1,4 +1,5 @@
 {
+ "generated": true,
  "screen": "projects_screen",
  "content": [
   "auto/screens__projects_screen_content.dart"

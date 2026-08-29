@@ -1,4 +1,5 @@
 {
+ "generated": true,
  "screen": "lipskey_brand_screen",
  "content": [
   "auto/screens__lipskey_brand_screen_content.dart"

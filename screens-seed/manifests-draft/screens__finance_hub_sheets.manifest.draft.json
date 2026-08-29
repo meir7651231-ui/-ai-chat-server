@@ -1,0 +1,126 @@
+{
+ "generated": true,
+ "screen": "finance_hub_sheets",
+ "flat": true,
+ "content": [
+  "auto/screens__finance_hub_sheets_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "fin_head",
+   "atom": "FinHead",
+   "props": {
+    "ic": "?:String",
+    "title": "?:String",
+    "sub": "?:String"
+   }
+  },
+  {
+   "id": "fin_row",
+   "atom": "FinRow",
+   "props": {
+    "label": "?:String",
+    "value": "?:String",
+    "valueColor": "#:valueColor"
+   }
+  },
+  {
+   "id": "fin_rows",
+   "atom": "FinRows",
+   "props": {
+    "children": "?:List<Widget>"
+   }
+  },
+  {
+   "id": "fin_callout",
+   "atom": "FinCallout",
+   "props": {
+    "label": "?:String",
+    "value": "?:String",
+    "big": "?:bool",
+    "valueColor": "#:valueColor",
+    "note": "?:String?",
+    "secondLabel": "?:String?",
+    "secondValue": "?:String?"
+   }
+  },
+  {
+   "id": "ca_primary",
+   "atom": "CaPrimary",
+   "props": {
+    "label": "?:String",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "fin_tile",
+   "atom": "FinTile",
+   "props": {
+    "ic": "?:String",
+    "title": "?:String",
+    "sub": "?:String",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "sub_row",
+   "atom": "SubRow",
+   "props": {
+    "label": "$: sub_row_label",
+    "label2": "$: sub_row_label2",
+    "allocated": "?:int",
+    "spent": "?:int"
+   }
+  },
+  {
+   "id": "ca_empty",
+   "atom": "CaEmpty",
+   "props": {
+    "text": "?:String"
+   }
+  },
+  {
+   "id": "approval_card",
+   "atom": "ApprovalCard",
+   "props": {
+    "label": "?:String",
+    "fallback": "?:String",
+    "label2": "?:String",
+    "name": "?:String",
+    "workerLabel": "?:String",
+    "onApprove": "@:onApprove",
+    "onReject": "@:onReject"
+   }
+  },
+  {
+   "id": "thr_row",
+   "atom": "ThrRow",
+   "props": {
+    "label": "?:String",
+    "hit": "?:bool"
+   }
+  },
+  {
+   "id": "penalty_card",
+   "atom": "PenaltyCard",
+   "props": {
+    "label": "$: penalty_card_label",
+    "label2": "$: penalty_card_label2",
+    "id": "?:String",
+    "amount": "?:int"
+   }
+  },
+  {
+   "id": "report_h2",
+   "atom": "ReportH2",
+   "props": {
+    "text": "?:String"
+   }
+  },
+  {
+   "id": "report_table",
+   "atom": "ReportTable",
+   "props": {}
+  }
+ ]
+}

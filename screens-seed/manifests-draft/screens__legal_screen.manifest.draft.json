@@ -1,0 +1,17 @@
+{
+ "generated": true,
+ "screen": "legal_screen",
+ "flat": true,
+ "content": [
+  "auto/screens__legal_screen_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "placeholder_notice",
+   "atom": "PlaceholderNotice",
+   "props": {
+    "label": "$: placeholder_notice_label"
+   }
+  }
+ ]
+}

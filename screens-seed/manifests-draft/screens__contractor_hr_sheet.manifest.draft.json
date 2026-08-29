@@ -1,0 +1,43 @@
+{
+ "generated": true,
+ "screen": "contractor_hr_sheet",
+ "flat": true,
+ "content": [
+  "auto/screens__contractor_hr_sheet_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "vacation_row",
+   "atom": "VacationRow",
+   "props": {
+    "label": "$: vacation_row_label",
+    "label2": "$: vacation_row_label2",
+    "status": "?:String",
+    "reason": "?:String",
+    "label3": "$: vacation_row_label3",
+    "label4": "$: vacation_row_label4",
+    "onApprove": "@:onApprove"
+   }
+  },
+  {
+   "id": "decide_button",
+   "atom": "DecideButton",
+   "props": {
+    "label": "?:String",
+    "color": "#:color",
+    "textColor": "#:textColor",
+    "bordered": "?:bool",
+    "onPressed": "@:onPressed"
+   }
+  },
+  {
+   "id": "status_chip",
+   "atom": "StatusChip",
+   "props": {
+    "label": "$: status_chip_label",
+    "label2": "$: status_chip_label2",
+    "status": "?:String"
+   }
+  }
+ ]
+}

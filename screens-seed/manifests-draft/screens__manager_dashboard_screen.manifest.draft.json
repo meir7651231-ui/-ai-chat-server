@@ -1,7 +1,9 @@
 {
+ "generated": true,
  "screen": "manager_dashboard_screen",
  "content": [
-  "auto/screens__manager_dashboard_screen_content.dart"
+  "auto/screens__manager_dashboard_screen_content.dart",
+  "screens__manager_dashboard_screen_content.dart"
  ],
  "sections": [
   {
@@ -15,7 +17,7 @@
    "id": "pipeline_row",
    "atom": "PipelineRow",
    "props": {
-    "label": "?:String",
+    "label": "$: managerShellContent.label",
     "count": "?:int",
     "max": "?:int",
     "color": "#:color",
@@ -26,7 +28,7 @@
    "id": "stage_pill",
    "atom": "StagePill",
    "props": {
-    "label": "?:String",
+    "label": "$: managerShellContent.label",
     "color": "#:color"
    }
   },
@@ -51,7 +53,7 @@
    "props": {
     "title": "$: sheet_advance_button_title",
     "body": "$: sheet_advance_button_body",
-    "label": "?:String",
+    "label": "$: managerShellContent.label",
     "onPressed": "@:onPressed"
    }
   },

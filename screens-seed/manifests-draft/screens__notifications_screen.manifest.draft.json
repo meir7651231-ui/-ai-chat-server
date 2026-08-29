@@ -1,0 +1,23 @@
+{
+ "generated": true,
+ "screen": "notifications_screen",
+ "flat": true,
+ "content": [],
+ "sections": [
+  {
+   "id": "date_header",
+   "atom": "DateHeader",
+   "props": {
+    "label": "?:String"
+   }
+  },
+  {
+   "id": "notif_row",
+   "atom": "NotifRow",
+   "props": {
+    "fallback": "?:String",
+    "onTap": "@:onTap"
+   }
+  }
+ ]
+}

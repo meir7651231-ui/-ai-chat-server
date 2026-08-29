@@ -1,0 +1,55 @@
+{
+ "generated": true,
+ "screen": "trade_builder_accessory_rule_editor",
+ "flat": true,
+ "content": [
+  "auto/screens__trade_builder__accessory_rule_editor_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "empty_accessories",
+   "atom": "EmptyAccessories",
+   "props": {
+    "fallback": "$: empty_accessories_fallback"
+   }
+  },
+  {
+   "id": "accessory_tile",
+   "atom": "AccessoryTile",
+   "props": {
+    "label": "$: accessory_tile_label",
+    "tooltip": "$: accessory_tile_tooltip",
+    "price": "?:int?",
+    "mustHave": "?:bool",
+    "emoji": "?:String",
+    "nameHe": "?:String",
+    "whyHe": "?:String",
+    "fallback": "$: accessory_tile_fallback",
+    "onDelete": "@:onDelete"
+   }
+  },
+  {
+   "id": "trade_builder_accessory_rule_editor_pill_button",
+   "atom": "TradeBuilderAccessoryRuleEditorPillButton",
+   "props": {
+    "label": "?:String",
+    "onTap": "@:onTap",
+    "enabled": "?:bool"
+   }
+  },
+  {
+   "id": "must_chip",
+   "atom": "MustChip",
+   "props": {
+    "fallback": "$: must_chip_fallback"
+   }
+  },
+  {
+   "id": "price_chip",
+   "atom": "PriceChip",
+   "props": {
+    "price": "?:int"
+   }
+  }
+ ]
+}

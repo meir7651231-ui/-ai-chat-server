@@ -1,4 +1,5 @@
 {
+ "generated": true,
  "screen": "trade_builder_trade_builder_home",
  "content": [
   "auto/screens__trade_builder__trade_builder_home_content.dart"

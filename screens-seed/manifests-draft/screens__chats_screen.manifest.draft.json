@@ -1,4 +1,5 @@
 {
+ "generated": true,
  "screen": "chats_screen",
  "content": [
   "auto/screens__chats_screen_content.dart"

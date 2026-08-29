@@ -1,4 +1,5 @@
 {
+ "generated": true,
  "screen": "worker_profile_screen",
  "content": [
   "auto/screens__worker_profile_screen_content.dart"

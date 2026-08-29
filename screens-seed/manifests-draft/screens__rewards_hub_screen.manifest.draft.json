@@ -1,4 +1,5 @@
 {
+ "generated": true,
  "screen": "rewards_hub_screen",
  "content": [
   "auto/screens__rewards_hub_screen_content.dart"

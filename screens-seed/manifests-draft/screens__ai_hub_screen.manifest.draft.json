@@ -1,4 +1,5 @@
 {
+ "generated": true,
  "screen": "ai_hub_screen",
  "content": [
   "auto/screens__ai_hub_screen_content.dart"

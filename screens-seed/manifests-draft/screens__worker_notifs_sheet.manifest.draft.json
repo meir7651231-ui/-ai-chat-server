@@ -1,0 +1,15 @@
+{
+ "generated": true,
+ "screen": "worker_notifs_sheet",
+ "content": [],
+ "sections": [
+  {
+   "id": "notif_row",
+   "atom": "NotifRow",
+   "props": {
+    "fallback": "?:String",
+    "onTap": "@:onTap"
+   }
+  }
+ ]
+}

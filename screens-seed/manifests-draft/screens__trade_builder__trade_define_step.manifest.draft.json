@@ -1,0 +1,31 @@
+{
+ "generated": true,
+ "screen": "trade_builder_trade_define_step",
+ "flat": true,
+ "content": [
+  "auto/screens__trade_builder__trade_define_step_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "color_swatch",
+   "atom": "ColorSwatch",
+   "props": {
+    "label": "$: color_swatch_label",
+    "color": "?:int",
+    "index": "?:int",
+    "selected": "?:bool",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "save_draft_button",
+   "atom": "SaveDraftButton",
+   "props": {
+    "label": "$: save_draft_button_label",
+    "fallback": "$: save_draft_button_fallback",
+    "enabled": "?:bool",
+    "onTap": "@:onTap"
+   }
+  }
+ ]
+}
