@@ -157,6 +157,7 @@ for (const f of fs.readdirSync(SHELF, { recursive: true }).map(String)) {
   }
 }
 
+const FLUTTER_RESERVED = new Set(['Divider','Card','Chip','Banner','Hero','TableRow','ColorSwatch','Switch','Radio','Checkbox','Slider','Stepper','Badge','Tab','Drawer','AppBar','Scaffold','ListTile','Row','Column','Stack','Text','Icon','Form','Table','Step','Material','Padding','Center','Align','Title','Actions','Element','State','Navigator','Route','Page','View','Ink','Tooltip','Dialog','SnackBar','Spacer','Placeholder','ListView','GridView','Container','SizedBox','Expanded','Flexible','Wrap','Positioned','Opacity','Transform','ClipRRect','InkWell','GestureDetector','SafeArea','Builder','Key','Size','Offset','Rect','Colors','Icons','Theme','MediaQuery','Border','BorderSide','Radius','Duration','Curve','Curves','Alignment','EdgeInsets','TextStyle','TextSpan','BoxDecoration','BoxShadow','Gradient','Image','ImageProvider','Feedback','Focus','FocusNode','Overlay','Notification']);
 const ANY_LIT = /'(?:[^'\\\n]|\\.)*'/g;
 const maskLits = (s) => s.replace(ANY_LIT, (m) => "'" + 'x'.repeat(m.length - 2) + "'");
 const FLUTTER_POS = { Text: ['label'], SelectableText: ['label'], CfgText: ['id', 'fallback'] };
@@ -397,6 +398,13 @@ function hoistStrings(body, ctorIndex, propBase, fb, refPrefix = '') {
 function stripConstOn(out, propNames) {
   if (!propNames.length) return out;
   const propWord = new RegExp('\\b(' + propNames.join('|') + ')\\b');
+  // הצהרת-const (גם static) שהאתחול שלה נוגע-ב-prop ⇒ final
+  for (const dm of [...out.matchAll(/(static\s+)?const(\s+[A-Za-z_][\w<>,? ]*)?\s+\w+\s*=/g)].reverse()) {
+    const end = out.indexOf(';', dm.index);
+    if (end < 0) continue;
+    if (propWord.test(out.slice(dm.index, end)))
+      out = out.slice(0, dm.index) + dm[0].replace(/\bconst\b/, 'final') + out.slice(dm.index + dm[0].length);
+  }
   let changed = true;
   while (changed) {
     changed = false;
@@ -690,7 +698,7 @@ for (const mf of fs.readdirSync(MACHINE).filter(f => f.endsWith('.json')).sort()
     if (shelfHashes.has(hash)) { skip('already-on-shelf', id); continue; }
     if (liftedHashes.has(hash)) { liftedHashes.get(hash).also.push(id); continue; }
     let pub = w.name.replace(/^_/, '');
-    if (usedNames.has(pub)) pub = screenPascal(screen) + pub;
+    if (usedNames.has(pub) || FLUTTER_RESERVED.has(pub)) pub = screenPascal(screen) + pub;
     if (usedNames.has(pub)) { skip('name-collision', id); continue; }
     usedNames.add(pub);
     const allContent = bundle.flatMap(b => b.props.map(p => ({ prop: p.prop, value: p.value })));

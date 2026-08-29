@@ -27,8 +27,8 @@
    }
   },
   {
-   "id": "table_row",
-   "atom": "TableRow",
+   "id": "courier_attendance_table_row",
+   "atom": "CourierAttendanceTableRow",
    "props": {
     "date": "?:String",
     "inText": "?:String",

@@ -12,8 +12,8 @@
    "props": {}
   },
   {
-   "id": "banner",
-   "atom": "Banner",
+   "id": "persona_picking_sheet_banner",
+   "atom": "PersonaPickingSheetBanner",
    "props": {
     "text": "?:String",
     "bg": "#:bg",

@@ -8,11 +8,11 @@
  ],
  "sections": [
   {
-   "id": "hero",
-   "atom": "Hero",
+   "id": "smart_project_hero",
+   "atom": "SmartProjectHero",
    "props": {
-    "label": "$: hero_label",
-    "label2": "$: hero_label2",
+    "label": "$: smart_project_hero_label",
+    "label2": "$: smart_project_hero_label2",
     "title": "?:String",
     "done": "?:int",
     "total": "?:int",

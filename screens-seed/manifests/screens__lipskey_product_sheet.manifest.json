@@ -9,8 +9,8 @@
  ],
  "sections": [
   {
-   "id": "divider",
-   "atom": "Divider",
+   "id": "lipskey_product_sheet_divider",
+   "atom": "LipskeyProductSheetDivider",
    "props": {}
   },
   {

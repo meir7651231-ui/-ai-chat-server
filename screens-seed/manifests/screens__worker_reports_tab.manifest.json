@@ -17,8 +17,8 @@
    }
   },
   {
-   "id": "card",
-   "atom": "Card",
+   "id": "worker_reports_tab_card",
+   "atom": "WorkerReportsTabCard",
    "props": {
     "title": "?:String",
     "titleId": "?:String?",

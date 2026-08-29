@@ -22,8 +22,8 @@
   },
   {
    "screen": "screens__camera_sheet",
-   "wired": 3,
-   "todo": 3
+   "wired": 0,
+   "todo": 6
   },
   {
    "screen": "screens__catalog_screen",
@@ -327,8 +327,8 @@
   },
   {
    "screen": "screens__trade_builder__trade_publish_sheet",
-   "wired": 1,
-   "todo": 3
+   "wired": 0,
+   "todo": 4
   },
   {
    "screen": "screens__worker_app_screen",
@@ -397,8 +397,8 @@
   }
  ],
  "totals": {
-  "wired": 52,
-  "todo": 394,
+  "wired": 48,
+  "todo": 398,
   "hebInExpr": 16
  }
 }

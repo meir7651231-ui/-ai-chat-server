@@ -85,12 +85,6 @@
    "serves": 1
   },
   {
-   "atom": "Banner",
-   "from": "screens__persona_picking_sheet:_Banner",
-   "kind": "Stateless",
-   "serves": 1
-  },
-  {
    "atom": "Bar",
    "from": "screens__rewards_hub_screen:_Bar",
    "kind": "Stateless",
@@ -135,12 +129,6 @@
   {
    "atom": "CaPrimary",
    "from": "screens__finance_hub_sheets:_CaPrimary",
-   "kind": "Stateless",
-   "serves": 1
-  },
-  {
-   "atom": "Card",
-   "from": "screens__worker_reports_tab:_Card",
    "kind": "Stateless",
    "serves": 1
   },
@@ -205,12 +193,6 @@
    "serves": 1
   },
   {
-   "atom": "Chip",
-   "from": "screens__store_dashboard_screen:_Chip",
-   "kind": "Stateless",
-   "serves": 1
-  },
-  {
    "atom": "ChipScroll",
    "from": "screens__finder_screen:_ChipScroll",
    "kind": "Stateful+State",
@@ -231,6 +213,12 @@
   {
    "atom": "CoinBanner",
    "from": "screens__rewards_hub_screen:_CoinBanner",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "CourierAttendanceTableRow",
+   "from": "screens__courier_attendance_screen:_TableRow",
    "kind": "Stateless",
    "serves": 1
   },
@@ -261,12 +249,6 @@
   {
    "atom": "DecideButton",
    "from": "screens__contractor_hr_sheet:_DecideButton",
-   "kind": "Stateless",
-   "serves": 1
-  },
-  {
-   "atom": "Divider",
-   "from": "screens__lipskey_product_sheet:_Divider",
    "kind": "Stateless",
    "serves": 1
   },
@@ -475,6 +457,12 @@
    "serves": 1
   },
   {
+   "atom": "LipskeyProductSheetDivider",
+   "from": "screens__lipskey_product_sheet:_Divider",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
    "atom": "LiveDot",
    "from": "screens__intel__intel_tab:_LiveDot",
    "kind": "Stateless",
@@ -535,6 +523,12 @@
    "serves": 1
   },
   {
+   "atom": "PersonaPickingSheetBanner",
+   "from": "screens__persona_picking_sheet:_Banner",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
    "atom": "PickerOption",
    "from": "screens__lipskey_product_sheet:_PickerOption",
    "kind": "Stateless",
@@ -549,12 +543,6 @@
   {
    "atom": "PipelineRow",
    "from": "screens__manager_dashboard_screen:_PipelineRow",
-   "kind": "Stateless",
-   "serves": 1
-  },
-  {
-   "atom": "Placeholder",
-   "from": "screens__studio__panes__find_replace_pane:_Placeholder",
    "kind": "Stateless",
    "serves": 1
   },
@@ -787,6 +775,12 @@
    "serves": 1
   },
   {
+   "atom": "StoreDashboardChip",
+   "from": "screens__store_dashboard_screen:_Chip",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
    "atom": "StorePill",
    "from": "screens__store_screen:_Pill",
    "kind": "Stateless",
@@ -823,6 +817,12 @@
    "serves": 1
   },
   {
+   "atom": "StudioPanesFindReplacePanePlaceholder",
+   "from": "screens__studio__panes__find_replace_pane:_Placeholder",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
    "atom": "SupplierTile",
    "from": "screens__suppliers_screen:_SupplierTile",
    "kind": "Stateless",
@@ -831,12 +831,6 @@
   {
    "atom": "SwitchRow",
    "from": "screens__catalog_settings_screen:_SwitchRow",
-   "kind": "Stateless",
-   "serves": 1
-  },
-  {
-   "atom": "TableRow",
-   "from": "screens__courier_attendance_screen:_TableRow",
    "kind": "Stateless",
    "serves": 1
   },
@@ -933,6 +927,12 @@
   {
    "atom": "WorkerProfileStat",
    "from": "screens__worker_profile_screen:_Stat",
+   "kind": "Stateless",
+   "serves": 1
+  },
+  {
+   "atom": "WorkerReportsTabCard",
+   "from": "screens__worker_reports_tab:_Card",
    "kind": "Stateless",
    "serves": 1
   },

@@ -97,14 +97,6 @@
    "serves": 2
   },
   {
-   "atom": "ColorSwatch",
-   "from": "screens__trade_builder__trade_define_step:_ColorSwatch",
-   "bundle": 1,
-   "props": 1,
-   "model": 0,
-   "serves": 1
-  },
-  {
    "atom": "CompanyCatalogImportCard",
    "from": "screens__catalog_screen:_CompanyCatalogImportCard",
    "bundle": 1,
@@ -235,14 +227,6 @@
   {
    "atom": "GalleryThumb",
    "from": "screens__camera_sheet:_GalleryThumb",
-   "bundle": 1,
-   "props": 2,
-   "model": 0,
-   "serves": 1
-  },
-  {
-   "atom": "Hero",
-   "from": "screens__smart_project_screen:_Hero",
    "bundle": 1,
    "props": 2,
    "model": 0,
@@ -577,6 +561,14 @@
    "serves": 1
   },
   {
+   "atom": "SmartProjectHero",
+   "from": "screens__smart_project_screen:_Hero",
+   "bundle": 1,
+   "props": 2,
+   "model": 0,
+   "serves": 1
+  },
+  {
    "atom": "SnoozeSheet",
    "from": "screens__notif_settings_screen:_SnoozeSheet",
    "bundle": 1,
@@ -709,6 +701,14 @@
    "from": "screens__trade_builder__trade_builder_home:_StatusChip",
    "bundle": 1,
    "props": 2,
+   "model": 0,
+   "serves": 1
+  },
+  {
+   "atom": "TradeBuilderTradeDefineStepColorSwatch",
+   "from": "screens__trade_builder__trade_define_step:_ColorSwatch",
+   "bundle": 1,
+   "props": 1,
    "model": 0,
    "serves": 1
   },

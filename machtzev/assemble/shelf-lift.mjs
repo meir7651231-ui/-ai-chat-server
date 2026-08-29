@@ -91,6 +91,7 @@ const externalFn = (code) => {
   return null;
 };
 
+const FLUTTER_RESERVED = new Set(['Divider','Card','Chip','Banner','Hero','TableRow','ColorSwatch','Switch','Radio','Checkbox','Slider','Stepper','Badge','Tab','Drawer','AppBar','Scaffold','ListTile','Row','Column','Stack','Text','Icon','Form','Table','Step','Material','Padding','Center','Align','Title','Actions','Element','State','Navigator','Route','Page','View','Ink','Tooltip','Dialog','SnackBar','Spacer','Placeholder','ListView','GridView','Container','SizedBox','Expanded','Flexible','Wrap','Positioned','Opacity','Transform','ClipRRect','InkWell','GestureDetector','SafeArea','Builder','Key','Size','Offset','Rect','Colors','Icons','Theme','MediaQuery','Border','BorderSide','Radius','Duration','Curve','Curves','Alignment','EdgeInsets','TextStyle','TextSpan','BoxDecoration','BoxShadow','Gradient','Image','ImageProvider','Feedback','Focus','FocusNode','Overlay','Notification']);
 // ── מלאי-המדף הקיים ──
 const shelfNames = new Set(); const shelfHashes = new Map();
 for (const f of fs.readdirSync(SHELF, { recursive: true }).map(String)) {
@@ -210,7 +211,7 @@ for (const mf of maps) {
 
     // ── שם-ציבורי: בסיס, ואם-תפוס ⇒ מסויג-במסך (v2) ──
     let pub = w.name.replace(/^_/, '');
-    if (usedNames.has(pub)) pub = screenPascal(screen) + pub;
+    if (usedNames.has(pub) || FLUTTER_RESERVED.has(pub)) pub = screenPascal(screen) + pub;
     if (usedNames.has(pub)) { skip('name-collision', id); continue; }
     usedNames.add(pub);
     liftedHashes.set(h, { id, pub, screen, bundle, name: w.name, stateful: isStateful, needsTokens, also: [] });

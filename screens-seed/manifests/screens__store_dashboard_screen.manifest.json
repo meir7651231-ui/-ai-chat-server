@@ -40,8 +40,8 @@
    }
   },
   {
-   "id": "chip",
-   "atom": "Chip",
+   "id": "store_dashboard_chip",
+   "atom": "StoreDashboardChip",
    "props": {
     "label": "?:String",
     "on": "?:bool",

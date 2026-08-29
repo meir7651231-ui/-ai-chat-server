@@ -35,9 +35,15 @@ try {
   const dump = execSync("git grep -hE '^(const|final|[A-Za-z][A-Za-z_<>,? ]+) k?[a-zA-Z][a-zA-Z0-9]*( =|\\()' origin/main -- app_flutter/lib", { cwd: BS, encoding: 'utf8', maxBuffer: 1 << 25 });
   for (const m of dump.matchAll(/(?:^|\n)(?:const |final )?[A-Za-z_][\w<>,? ]*?\b([a-zA-Z]\w*)\s*(?:=|\()/g)) projectPub.add(m[1]);
 } catch { }
+let projectConsts = new Set();
+try {
+  const dump2 = execSync("git grep -hE '^(const|final) ' origin/main -- app_flutter/lib", { cwd: BS, encoding: 'utf8', maxBuffer: 1 << 25 });
+  for (const m of dump2.matchAll(/(?:^|\n)(?:const|final)\s+(?:[A-Za-z_][\w<>,? ]*?\s+)?([a-zA-Z]\w*)\s*=/g)) projectConsts.add(m[1]);
+} catch { }
 const DART_OK = new Set(['context', 'ref', 'true', 'false', 'null', 'const', 'final', 'new', 'if', 'else', 'for', 'in', 'is', 'as', 'return', 'switch', 'case', 'await', 'async', 'toList', 'map', 'where', 'length', 'toString', 'print', 'var', 'this']);
 
 /** ביטוי פתיר-בלוח? כל מזהה חייב להיות: מוצהר-בביטוי · watch-var · ציבורי-פרויקטלי · Flutter (רישית) · ליבת-Dart. */
+let srcPublicsRef = new Set();
 function exprResolvable(expr, watchVars) {
   const scan = maskLits(maskComments(expr));
   if (/\bsetState\b|\bwidget\.|\b_\w/.test(scan)) return false;
@@ -47,7 +53,10 @@ function exprResolvable(expr, watchVars) {
   for (const m of scan.matchAll(/(?<![.\w'])([a-zA-Z_]\w*)\b(?!\s*:)/g)) {
     const id = m[1];
     if (/^[A-Z]/.test(id) || DART_OK.has(id) || declared.has(id) || watchVars.has(id)) continue;
-    if (projectPub.has(id)) continue;
+    const isCall = scan.slice(m.index + id.length).match(/^\s*\(/);
+    if (isCall && projectPub.has(id)) continue;
+    if (projectConsts.has(id)) continue;
+    if (srcPublicsRef.has(id)) continue;
     return false;
   }
   return true;
@@ -147,6 +156,9 @@ for (const mf of fs.readdirSync(MANIFESTS).filter(f => f.endsWith('.manifest.jso
   if (!fs.existsSync(srcPath)) continue;
   const src = fs.readFileSync(srcPath, 'utf8');
   const cls = M.screen.replace(/(^|[_-])([a-z])/g, (_, __, c) => c.toUpperCase());
+  // פומביי-המקור: פונקציות/קבועים עליוניים של קובץ-המסך — זמינים ללוח דרך import-עצמי
+  srcPublicsRef = new Set([...stripComments(src).matchAll(/(?:^|\n)(?:const |final )?[A-Za-z_][\w<>,? ]*?\b([a-z]\w*)\s*[=(]/g)].map(x => x[1]));
+  const selfImport = "import 'package:buildsmart/" + srcScreen.replace(/__/g, '/') + ".dart';";
 
   // איסוף החיבורים הנדרשים מהמניפסט (אותם-כללים כמו המרכיב)
   const needP = new Map(); const needCb = new Set(); const needTok = new Map(); const needGates = new Set();
@@ -217,12 +229,28 @@ for (const mf of fs.readdirSync(MANIFESTS).filter(f => f.endsWith('.manifest.jso
     }
   }
 
+  // ולידציה-סופית (פיקספוינט): כל ביטוי חייב-להיפתר מול קבוצת-ה-watch הסופית
+  let shrunk = true;
+  while (shrunk) {
+    shrunk = false;
+    const wv = new Set([...watchLines.keys()]);
+    for (const [k2, e2] of [...wires]) {
+      if (!exprResolvable(e2, wv)) { wires.delete(k2); todo++; shrunk = true; }
+    }
+    for (const [v2] of [...watchLines]) {
+      if (![...wires.values()].some(e2 => new RegExp('\\b' + v2 + '\\b').test(e2))) { watchLines.delete(v2); shrunk = true; }
+    }
+  }
   // הרכבת-הלוח
-  const pkgImports = [...new Set([...src.matchAll(/import 'package:[^']+';/g)].map(x => x[0]))];
+  const pkgImports = [...new Set([selfImport, ...[...src.matchAll(/import 'package:[^']+';/g)].map(x => x[0])])];
   const lines = [];
   for (const [v, pv] of watchLines) lines.push(`    final ${v} = ref.watch(${pv});`);
   const argLines = [];
-  const defFor = (t) => t.startsWith('String') ? "''" : t.startsWith('int') ? '0' : t.startsWith('double') ? '0.0' : t.startsWith('bool') ? 'false' : t.includes('List') ? 'const []' : t.includes('IconData') ? 'Icons.circle' : 'null';
+  const defFor = (t) => t.endsWith('?') ? 'null'
+    : t.startsWith('String') ? "''" : t.startsWith('int') ? '0' : t.startsWith('double') ? '0.0' : t.startsWith('bool') ? 'false'
+    : t.includes('List') ? 'const []' : t.includes('IconData') ? 'Icons.circle'
+    : t === 'Widget' ? 'const SizedBox.shrink()' : t.includes('Controller') ? t.replace(/\?$/, '') + '()'
+    : t === 'Color' ? 'const Color(0xFF223047)' : '(null as dynamic)';
   for (const g of [...needGates].sort()) { argLines.push(`      ${g}: true /* TODO-לוח: שער */,`); todo++; }
   for (const c of [...needCb].sort()) {
     const e = wires.get(c);

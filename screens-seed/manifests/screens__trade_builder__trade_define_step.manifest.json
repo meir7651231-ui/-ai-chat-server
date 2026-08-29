@@ -8,10 +8,10 @@
  ],
  "sections": [
   {
-   "id": "color_swatch",
-   "atom": "ColorSwatch",
+   "id": "trade_builder_trade_define_step_color_swatch",
+   "atom": "TradeBuilderTradeDefineStepColorSwatch",
    "props": {
-    "label": "$: color_swatch_label",
+    "label": "$: trade_builder_trade_define_step_color_swatch_label",
     "color": "?:int",
     "index": "?:int",
     "selected": "?:bool",

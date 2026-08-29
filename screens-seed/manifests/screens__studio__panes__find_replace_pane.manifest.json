@@ -8,8 +8,8 @@
  ],
  "sections": [
   {
-   "id": "placeholder",
-   "atom": "Placeholder",
+   "id": "studio_panes_find_replace_pane_placeholder",
+   "atom": "StudioPanesFindReplacePanePlaceholder",
    "props": {
     "msg": "?:String"
    }
