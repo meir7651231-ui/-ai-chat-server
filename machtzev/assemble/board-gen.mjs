@@ -50,11 +50,17 @@ try {
 } catch { }
 // v2.1 · קובץ-הבית של כל קבוע-פרויקט — המאמת מקבל קבועים, אז הלוח חייב לייבא אותם (ניסיון-7: kDemoContractorId/providers בלי-import)
 let projectConstFiles = new Map();
+let projectConstFilesAll = new Map(); // name ⇒ [כל הקבצים] — לזיהוי סמל-דו-משמעי (ניסיון-9: requestsForEmployer בשניים)
 try {
   const dumpK = execSync("git grep -nHE '^(const|final) ' origin/main -- app_flutter/lib", { cwd: BS, encoding: 'utf8', maxBuffer: 1 << 25 });
   for (const line of dumpK.split('\n')) {
     const m = line.match(/^([^:]+:[^:]+):\d+:(?:const|final)\s+(?:[A-Za-z_][\w<>,? ]*?\s+)?([a-zA-Z]\w*)\s*=/);
-    if (m && !projectConstFiles.has(m[2]) && !m[1].endsWith('.g.dart')) projectConstFiles.set(m[2], m[1].replace(/^origin\/main:app_flutter\/lib\//, ''));
+    if (m && !m[1].endsWith('.g.dart')) {
+      const f = m[1].replace(/^origin\/main:app_flutter\/lib\//, '');
+      if (!projectConstFiles.has(m[2])) projectConstFiles.set(m[2], f);
+      if (!projectConstFilesAll.has(m[2])) projectConstFilesAll.set(m[2], []);
+      if (!projectConstFilesAll.get(m[2]).includes(f)) projectConstFilesAll.get(m[2]).push(f);
+    }
   }
 } catch { }
 let projectFnFiles = new Map();
@@ -421,8 +427,12 @@ for (const mf of fs.readdirSync(MANIFESTS).filter(f => f.endsWith('.manifest.jso
     const f2 = projectFnFiles.get(m);
     if (f2 && existsInMain(f2)) pkgImports.push(`import 'package:buildsmart/${f2}';`);
   }
-  // v2.1 · imports לקבועי-פרויקט (כולל providers) שהחיווט/המצב-המורם צורכים
+  // v2.1 · imports לקבועי-פרויקט (כולל providers) שהחיווט/המצב-המורם צורכים.
+  // סמל שכבר מסופק ע"י import קיים ⇒ לא מוסיפים שני (התנגשות-דו-משמעות, ניסיון-9)
   for (const m of new Set([...wireText.matchAll(/\b([a-z]\w{2,})\b/g)].map(x => x[1]))) {
+    const all = projectConstFilesAll.get(m);
+    if (!all) continue;
+    if (all.some(f3 => pkgImports.some(im => im.includes(`/${f3}'`)))) continue;
     const f2 = projectConstFiles.get(m);
     if (f2 && existsInMain(f2)) pkgImports.push(`import 'package:buildsmart/${f2}';`);
   }
