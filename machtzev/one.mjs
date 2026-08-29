@@ -99,7 +99,7 @@ stage('הרכבה-מחוללת (gen-screen)', () => {
 });
 
 // ── 4ג · מחולל-הלוחות: חיווט המסכים-המורכבים למקורות-החיים ──
-stage('מחולל-הלוחות (board-gen)', () => last(run('machtzev/assemble/board-gen.mjs', [SCRATCH]).split('\n').filter(l => l.includes('לוחות'))));
+stage('מחולל-הלוחות (board-gen)', () => run('machtzev/assemble/board-gen.mjs', [SCRATCH]).split('\n').find(l => l.includes('לוחות'))?.trim());
 
 // ── 5 · ביקורות-ההרכבה והטוהר (שערי-ratchet) ──
 stage('ביקורת-הרכבה (box-audit)', () => last(run('machtzev/assemble/box-audit.mjs', ['--gate'])));
