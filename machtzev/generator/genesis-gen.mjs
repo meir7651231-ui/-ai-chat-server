@@ -15,7 +15,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { classBody, stripComments } from '../assemble/lift-lib.mjs';
+import { classBody, stripComments, snake } from '../assemble/lift-lib.mjs';
 
 const ROOT = new URL('../../', import.meta.url).pathname;
 const SHELF = path.join(ROOT, 'new/dart-ui-bs');
@@ -89,6 +89,13 @@ const tokenFor = (n) =>
         : /fill|surface|card|bg|background|chip/i.test(n) ? 'BsTokens.cardLight'
           : 'BsTokens.inkLight';
 
+// ── קטלוג-המונחים: ערך-עברי ⇒ מפתח-קטלוג (מוער ליד כל קבוע — 'מונח-קיים ⇒ המפתח שלו') ──
+let termKeyOf = new Map();
+try {
+  const tc = JSON.parse(fs.readFileSync(path.join(ROOT, 'screens-seed/terms-catalog.json'), 'utf8'));
+  for (const t of tc.terms || []) if (!termKeyOf.has(t.he)) termKeyOf.set(t.he, t.key);
+} catch { }
+
 // ── חילול מסך אחד מ-spec ──────────────────────────────────────────────────
 function generate(slug, spec) {
   const [titleRaw, restRaw] = spec.includes(':') ? [spec.slice(0, spec.indexOf(':')), spec.slice(spec.indexOf(':') + 1)] : ['מסך חדש', spec];
@@ -110,9 +117,13 @@ function generate(slug, spec) {
 
   const pascal = slug.replace(/(^|[_-])([a-z])/g, (_, __, c) => c.toUpperCase());
   const cls = 'Gen' + pascal + 'Screen';
-  const consts = [];           // [name, value]
-  const constFor = (v) => {
-    const n = 'gen_' + slug + '_t' + (consts.length + 1);
+  const consts = [];           // [name, value] — שם = מטרת-הנתון (תורת-המטרות, לא מספור סידורי)
+  const usedNames = new Set();
+  const constFor = (v, purpose) => {
+    let n = 'gen_' + slug + '_' + (purpose || 'text');
+    let i = 2;
+    while (usedNames.has(n)) n = 'gen_' + slug + '_' + (purpose || 'text') + i++;
+    usedNames.add(n);
     consts.push([n, v]);
     return n;
   };
@@ -125,7 +136,7 @@ function generate(slug, spec) {
     const t = (a.types.get(name) || 'String').replace(/\?$/, '');
     if (t === 'String' && /^(value|selected)$/.test(name)) { if (!shared.s) { shared.s = '_t' + (++sIdx); stateDecls.push(`String ${shared.s} = '';`); } return { expr: shared.s }; }
     if (t === 'String' && /^(glyph|emoji|icon)$/.test(name)) return { expr: `'${part.emoji || '🔹'}'` };
-    if (t === 'String') return { expr: constFor(part.label) };
+    if (t === 'String') return { expr: constFor(part.label, part.role + '_' + snake(name)) };
     if (t === 'bool' && name === 'value') { if (!shared.b) { shared.b = '_v' + (++sIdx); stateDecls.push(`bool ${shared.b} = false;`); } return { expr: shared.b }; }
     if (t === 'bool') return { expr: 'false' };
     if (t === 'int' && /^(value|selectedIndex|activeIndex|selected)$/.test(name)) { if (!shared.i) { shared.i = '_n' + (++sIdx); stateDecls.push(`int ${shared.i} = 0;`); } return { expr: shared.i }; }
@@ -134,17 +145,17 @@ function generate(slug, spec) {
     if (t === 'Color') return { expr: tokenFor(name) };
     if (t === 'IconData') return { expr: 'Icons.tune' };
     if (t === 'TextEditingController') { const c = '_c' + (++sIdx); stateDecls.push(`final TextEditingController ${c} = TextEditingController();`); return { expr: c }; }
-    if (t === 'VoidCallback' || t === 'void Function()') return { expr: `() => _toast(${constFor(part.label)})` };
+    if (t === 'VoidCallback' || t === 'void Function()') return { expr: `() => _toast(${constFor(part.label, part.role + '_toast')})` };
     if (/^ValueChanged<bool>$|^void Function\(bool\)$/.test(t)) { if (!shared.b) { shared.b = '_v' + (++sIdx); stateDecls.push(`bool ${shared.b} = false;`); } return { expr: `(v) => setState(() => ${shared.b} = v)` }; }
     if (/^ValueChanged<int>$|^void Function\(int\)$/.test(t)) { if (!shared.i) { shared.i = '_n' + (++sIdx); stateDecls.push(`int ${shared.i} = 0;`); } return { expr: `(v) => setState(() => ${shared.i} = v)` }; }
     if (/^ValueChanged<String>$|^void Function\(String\)$/.test(t)) { if (!shared.s) { shared.s = '_t' + (++sIdx); stateDecls.push(`String ${shared.s} = '';`); } return { expr: `(v) => setState(() => ${shared.s} = v)` }; }
-    if (/^List<String>/.test(t)) return { expr: part.options?.length ? `const <String>[${part.options.map(o => constFor(o)).join(', ')}]` : 'const <String>[]' };
+    if (/^List<String>/.test(t)) return { expr: part.options?.length ? `const <String>[${part.options.map(o => constFor(o, part.role + '_option')).join(', ')}]` : 'const <String>[]' };
     // רשימת-record של אופציות (למשל List<({String label, bool enabled})>)
     const rm2 = t.match(/^List<(\(\{[^}]*\}\))>$/);
     if (rm2 && part.options?.length) {
       const recT = rm2[1];
       const fields2 = [...recT.matchAll(/(String|bool|int)\s+(\w+)/g)];
-      const items = part.options.map(o => '(' + fields2.map(([, ft, fn]) => `${fn}: ${ft === 'String' ? constFor(o) : ft === 'bool' ? 'true' : '0'}`).join(', ') + ')');
+      const items = part.options.map(o => '(' + fields2.map(([, ft, fn]) => `${fn}: ${ft === 'String' ? constFor(o, part.role + '_option') : ft === 'bool' ? 'true' : '0'}`).join(', ') + ')');
       return { expr: `const <${recT}>[${items.join(', ')}]` };
     }
     if (t === 'Widget') return { expr: 'const SizedBox(height: 4)' };
@@ -200,11 +211,11 @@ function generate(slug, spec) {
     calls.push(`          ${atom.cls}(${argsOut.join(', ')}),`);
   }
 
-  const titleConst = constFor(title);
+  const titleConst = constFor(title, 'app_bar_title');
   // קובץ-התוכן (עברית רק כאן)
   fs.writeFileSync(path.join(DATA, `gen_${slug}_content.dart`),
     '// 📦 דאטה · תוכן-המחולל (genesis-gen) — התוויות מן-הבקשה, verbatim. אל תערוך ידנית.\n' +
-    consts.map(([n, v]) => `const String ${n} = '${v.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}';`).join('\n') + '\n');
+    consts.map(([n, v]) => `const String ${n} = '${v.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}';${termKeyOf.has(v) ? ' // ' + termKeyOf.get(v) : ''}`).join('\n') + '\n');
 
   // קובץ-המסך (אפס-עברית בקוד)
   const code = `// 🧬 חולל ע"י המחולל (genesis-gen, הכרעה 17) — בקשה ⇒ בחירת-אטומים ⇒ חיווט ⇒ מסך. אל תערוך ידנית.
