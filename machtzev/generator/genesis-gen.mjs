@@ -62,6 +62,7 @@ const roleOf = (cls) =>
           : /Banner/.test(cls) ? 'banner'
             : /Radio|Segment|Toggle/.test(cls) ? 'radio'
               : /Slider/.test(cls) ? 'slider'
+                : /Kpi|Stat(?!us|e)/.test(cls) ? 'stat'
                 : /Chip/.test(cls) ? 'chip'
                   : /Card/.test(cls) ? 'card'
                     : /Header|Section|Title/.test(cls) ? 'header'
@@ -76,9 +77,10 @@ const LEXICON = new Map(Object.entries({
   'באנר': 'banner', 'הודעה': 'banner',
   'בחירה': 'radio', 'רדיו': 'radio', 'בורר': 'radio',
   'תגיות': 'chip', 'תגית': 'chip',
-  'כרטיס': 'card', 'אריח': 'card',
+  'כרטיס': 'card', 'אריח': 'card', 'הירו': 'card',
   'כותרת': 'header', 'סקציה': 'header',
   'שורה': 'row',
+  'נתון': 'stat', 'מדד': 'stat',
 }));
 
 // ── (3) חיווט: מילוי-prop לפי טיפוס+שם; מחזיר {expr, state?, needsLabel?} או null ──
@@ -109,10 +111,19 @@ function generate(slug, spec) {
     const em = body.match(/(\p{Extended_Pictographic}(?:️)?)/u);
     const emoji = em ? em[1] : null;
     if (emoji) body = body.replace(emoji, '').replace(/\s+/g, ' ').trim();
+    // תת-כותרת: 'הירו 🧬 המחולל | משפט בעברית נהיה מסך' ⇒ label + sub
+    let sub = null;
+    const pi = body.indexOf('|');
+    if (pi > 0) { sub = body.slice(pi + 1).trim(); body = body.slice(0, pi).trim(); }
+    // נתון-מספרי בחלק ⇒ value של אטום-מדד ('נתון ⚛️ 381 אטומים...')
+    const vm = body.match(/\d[\d,.]*[%+]?/);
+    const value = vm ? vm[0] : null;
+    if (value) body = body.replace(value, '').replace(/\s+/g, ' ').trim();
     const words = body.split(/\s+/);
     const role = LEXICON.get(words[0]) || 'row';
+    const hero = words[0] === 'הירו';
     const label = (LEXICON.has(words[0]) ? words.slice(1) : words).join(' ') || body;
-    return { role, label, txt, options, emoji };
+    return { role, label, txt, options, emoji, sub, hero, value };
   });
 
   const pascal = slug.replace(/(^|[_-])([a-z])/g, (_, __, c) => c.toUpperCase());
@@ -134,8 +145,11 @@ function generate(slug, spec) {
   // מילוי prop; part=החלק; פותח מצב-משותף value/onChanged דרך shared
   const fillProp = (a, name, part, shared) => {
     const t = (a.types.get(name) || 'String').replace(/\?$/, '');
+    if (name === 'value' && part.value != null && t === 'String') return { expr: constFor(part.value, part.role + '_value') };
+    if (name === 'value' && part.value != null && t === 'int') return { expr: String(parseInt(part.value.replace(/[^0-9]/g, ''))) };
     if (t === 'String' && /^(value|selected)$/.test(name)) { if (!shared.s) { shared.s = '_t' + (++sIdx); stateDecls.push(`String ${shared.s} = '';`); } return { expr: shared.s }; }
     if (t === 'String' && /^(glyph|emoji|icon)$/.test(name)) return { expr: constFor(part.emoji || '🔹', part.role + '_glyph') };
+    if (t === 'String' && /^(sub|subtitle|caption|secondary)$/.test(name)) return { expr: constFor(part.sub || part.label, part.role + '_sub') };
     if (t === 'String') return { expr: constFor(part.label, part.role + '_' + snake(name)) };
     if (t === 'bool' && name === 'value') { if (!shared.b) { shared.b = '_v' + (++sIdx); stateDecls.push(`bool ${shared.b} = false;`); } return { expr: shared.b }; }
     if (t === 'bool') return { expr: 'false' };
@@ -171,7 +185,7 @@ function generate(slug, spec) {
       const role = roleOf(a.cls);
       let score = role === part.role ? 5 : role === 'row' ? 1 : 0;
       if (score === 0) continue;
-      if (/Settings/.test(a.cls)) score += 1;
+      if (/Settings/.test(a.cls)) score += 0.2;
       // כל required חייב מילוי (בדיקה-יבשה, בלי לצרוך מונים); Widget-ריק נקנס — עדיף אטום פשוט
       let fillable = true, widgetFills = 0;
       for (const rq of [...a.required, ...a.positional]) {
@@ -182,6 +196,8 @@ function generate(slug, spec) {
       }
       if (!fillable) continue;
       if (part.options?.length && [...a.types.entries()].some(([n2, t2]) => /^(options|items)$/.test(n2) && /^List</.test(t2))) score += 2;
+      if (part.hero && /Hero/.test(a.cls)) score += 4;                 // 'הירו' ⇒ העדפת אטומי-Hero
+      if (part.sub && a.types.has('sub')) score += 2;                  // יש תת-כותרת ⇒ אטום עם sub
       score -= widgetFills;
       score -= 0.05 * (a.required.size + a.positional.length);
       if (score > bestScore) { bestScore = score; best = a; }

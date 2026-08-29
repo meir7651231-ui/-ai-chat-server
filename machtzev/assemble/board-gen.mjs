@@ -506,10 +506,12 @@ const entries = report.boards.map(b => {
 }).sort((a, b) => a.name.localeCompare(b.name));
 // 🧬 מסכי-המחולל (genesis-gen, הכרעה 17) — בראש-הגלריה: בקשה ⇒ אטומים ⇒ מסך עובד
 const GEN = path.join(ROOT, 'new/dart-gen-bs');
-const genEntries = fs.existsSync(GEN) ? fs.readdirSync(GEN).filter(f => /^gen_.*\.dart$/.test(f)).map(f => {
+const genEntries = fs.existsSync(GEN) ? fs.readdirSync(GEN).filter(f => /^gen_.*\.dart$/.test(f)).sort().map(f => {
   const s = fs.readFileSync(path.join(GEN, f), 'utf8');
   return { file: f, name: s.match(/\/\/ 🧬 שם: (.+)/)?.[1]?.trim(), cls: s.match(/class (Gen\w+) extends/)?.[1] };
 }).filter(e => e.cls && e.name) : [];
+// 🧬 מסך-הכניסה (הכרעה 18): gen_entry קיים ⇒ הוא הבית; הכניסה לגלריה בכפתור-צף (שכבת-החיווט, חוק-3)
+const entryE = genEntries.find(e => e.file === 'gen_entry.dart');
 const gallery = `// 🧪 חולל ע"י מחולל-הלוחות (board-gen) — שער-ההצצה למסכי-הגנסיס. אל תערוך ידנית.
 // חוק-7 (החלפה-הפיכה): הדגל כבוי כברירת-מחדל ⇒ collection-if מעלים הכול — זהות-ביט.
 // הדלקה: flutter run --dart-define=GENESIS_SCREENS=true
@@ -539,10 +541,37 @@ class GenesisApp extends StatelessWidget {
             textDirection: TextDirection.rtl,
             child: child ?? const SizedBox.shrink(),
           ),
-          home: const GenesisGallery(),
+          home: const ${entryE ? '_GenEntryHost' : 'GenesisGallery'}(),
         ),
       );
 }
+${entryE ? `
+/// 🧬 מארח-הכניסה (הכרעה 18): מסך-הכניסה שהמחולל יצר לעצמו + כפתור-צף אל הגלריה.
+class _GenEntryHost extends StatelessWidget {
+  const _GenEntryHost();
+
+  @override
+  Widget build(BuildContext context) => Stack(children: [
+        const ${entryE.cls}(),
+        SafeArea(
+          child: Align(
+            alignment: Alignment.bottomLeft,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: FloatingActionButton.small(
+                heroTag: 'genesis-enter',
+                tooltip: 'כל המסכים',
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const GenesisGallery()),
+                ),
+                child: const Text('🧪', style: TextStyle(fontSize: 18)),
+              ),
+            ),
+          ),
+        ),
+      ]);
+}
+` : ''}
 
 /// כפתור-כניסה צף (🧪) — נטען-לצד מעל-הניווט; קיים רק כשהדגל דלוק.
 class GenesisEntryButton extends StatelessWidget {
