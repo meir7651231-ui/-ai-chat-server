@@ -54,9 +54,17 @@ export function buildAtlas() {
 
   const functions = [];
   for (const f of LOGIC_SHELVES.flatMap(dartFiles)) {
-    const src = stripComments(fs.readFileSync(f.abs, 'utf8'));
+    const raw = fs.readFileSync(f.abs, 'utf8');
+    const src = stripComments(raw);
+    // תיאור-עצמי בעברית: המילים-העבריות משורת-הכותרת של האטום (מנורמלות: בלי ה"א-הידיעה/פיסוק)
+    const he = [...(raw.split('\n')[0] || '').matchAll(/[֐-׿][֐-׿]*/g)].map(m => m[0].replace(/^ה(?=..)/, '')).filter(w => w.length > 1);
     for (const fm of src.matchAll(/(?:^|\n)((?:Future<[^>\n]+>|Iterable<[^>\n]+>|List<[^>\n]+>|Map<[^>\n]+>|Set<[^>\n]+>|[A-Z]\w*(?:<[^>\n]+>)?\??|void|bool|int|double|num|String\??|dynamic)\s+([a-z]\w*)\s*\(([^)]*)\))\s*(?:=>|\{|async)/g)) {
-      functions.push({ name: fm[2], sig: fm[1].replace(/\s+/g, ' ').trim(), file: f.rel, shelf: f.shelf });
+      const ret = fm[1].split(/\s+/)[0];
+      const params = fm[3].replace(/[\[\]]/g, '').split(',').map(p => p.trim()).filter(Boolean).map(p => {
+        const mm = p.match(/^([\w<>,?() ]+?)\s+(\w+)$/);
+        return mm ? { type: mm[1].trim(), name: mm[2] } : { type: p, name: '' };
+      });
+      functions.push({ name: fm[2], sig: fm[1].replace(/\s+/g, ' ').trim(), ret, params, he, file: f.rel, shelf: f.shelf });
     }
   }
 

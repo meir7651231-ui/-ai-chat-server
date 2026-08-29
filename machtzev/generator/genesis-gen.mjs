@@ -105,18 +105,29 @@ function generate(slug, specText) {
     ? (first.includes(':') ? first.slice(first.indexOf(':') + 1) : first).split(',').map(s => s.trim()).filter(Boolean)
     : lines.slice(1);
   const parts = partTexts.map(parsePart);
-  // 🌉 גשר-הלוגיקה: חלק-'חישוב' ⇒ קריאה חיה לאטום-לוגיקה מהמדף (מוצג כמדד)
+  // 🌉 גשר-הלוגיקה: חלק-'חישוב' ⇒ קריאה חיה לאטום-לוגיקה מהמדף (מוצג כמדד).
+  // סדר: כלל-מפורש מקובץ-הדעת ⇒ התאמה-אוטומטית לפי התיאור-העברי-העצמי של האטום +
+  // כיול-ארגומנטים מהמשפט עצמו (מספרים · "מחרוזות" · תאריך-עכשיו). אין-התאמה ⇒ שורה כנה.
   const logicImports = new Set();
-  for (const part of parts) {
-    if (part.role !== 'calc') continue;
-    const rule = LOGIC_RULES.find(r => part.txt.includes(r.match));
-    const fn = rule && atlas.functions.find(f => f.name === rule.fn);
-    if (rule && fn) {
-      part.calcExpr = rule.call;
-      part.role = 'stat';
-      logicImports.add(`import '../${fn.shelf.replace(/^new\//, '')}/${fn.file}';`);
-    } else part.role = 'row';                                         // אין-גשר ⇒ שורה כנה, לא המצאה
-  }
+  const norm = (w) => w.replace(/^ה(?=..)/, '').replace(/[^֐-׿\w]/g, '');
+  const RETS = new Set(['String', 'String?', 'int', 'double', 'num', 'bool']);
+  const bindArgs = (fn, part, pendingHebArg) => {
+    const nums = [...part.txt.matchAll(/\d[\d.]*/g)].map(m => m[0]);
+    const strs = [...part.txt.matchAll(/"([^"]*)"/g)].map(m => m[1]);
+    const args = [];
+    for (const p of fn.params) {
+      const t = p.type.replace(/\?$/, '');
+      if (t === 'DateTime') args.push('DateTime.now()');
+      else if (t === 'String' && strs.length) { const s = strs.shift(); args.push(/[֐-׿]/.test(s) ? pendingHebArg(s) : `'${s.replace(/'/g, "\\'")}'`); }
+      else if ((t === 'int') && nums.length) args.push(String(parseInt(nums.shift())));
+      else if ((t === 'double' || t === 'num') && nums.length) args.push(nums.shift());
+      else if (t === 'bool') args.push('false');
+      else if (p.type.endsWith('?')) args.push('null');
+      else return null;                                               // פרמטר-חובה בלי מקור ⇒ לא קוראים
+    }
+    return args;
+  };
+  // (לולאת-הגשר עצמה רצה אחרי הגדרת constFor — ראה resolveCalcParts להלן)
 
   const cls = 'Gen' + slug.replace(/(^|[_-])([a-z])/g, (_, __, c) => c.toUpperCase()) + 'Screen';
   const consts = [];
@@ -129,8 +140,36 @@ function generate(slug, specText) {
     return n;
   };
   const stateDecls = [];
-  const imports = new Set(["import 'package:flutter/material.dart';", "import '../dart-ui-bs/auto/bs_tokens.dart';", `import '../dart-data-bs/auto/gen_${slug}_content.dart';`, ...logicImports]);
+  const imports = new Set(["import 'package:flutter/material.dart';", "import '../dart-ui-bs/auto/bs_tokens.dart';", `import '../dart-data-bs/auto/gen_${slug}_content.dart';`]);
   let sIdx = 0;
+
+  // 🌉 פתרון חלקי-'חישוב' (רץ כאן — אחרי constFor, שמשרת ארגומנט-עברי דרך קובץ-התוכן)
+  for (const part of parts) {
+    if (part.role !== 'calc') continue;
+    const pendingHebArg = (s) => constFor(s, 'calc_arg');
+    let call = null, fnHit = null;
+    const rule = LOGIC_RULES.find(r => part.txt.includes(r.match));
+    if (rule) { fnHit = atlas.functions.find(f => f.name === rule.fn); call = rule.call; }
+    if (!fnHit) {
+      // התאמה-אוטומטית: חפיפת-מילים בין הבקשה לתיאור-העצמי; רק פונקציות-ערך ניתנות-לכיול
+      const words = new Set(part.label.split(/\s+/).map(norm).filter(w => w.length > 1));
+      let best = null, bestScore = 1;                                 // סף: לפחות 2 מילים חופפות
+      for (const f of atlas.functions) {
+        if (!RETS.has(f.ret) || !f.he.length) continue;
+        const overlap = f.he.filter(w => words.has(norm(w))).length;
+        if (overlap > bestScore) { bestScore = overlap; best = f; }
+      }
+      if (best) {
+        const args = bindArgs(best, part, pendingHebArg);
+        if (args) { fnHit = best; call = `${best.name}(${args.join(', ')})${best.ret === 'String' || best.ret === 'String?' ? '' : '.toString()'}${best.ret === 'String?' ? " ?? ''" : ''}`; }
+      }
+    }
+    if (fnHit && call) {
+      part.calcExpr = call;
+      part.role = 'stat';
+      imports.add(`import '../${fnHit.shelf.replace(/^new\//, '')}/${fnHit.file}';`);
+    } else part.role = 'row';                                         // אין-גשר ⇒ שורה כנה, לא המצאה
+  }
 
   const fillProp = (a, name, part, shared) => {
     const t = (a.types.get(name) || 'String').replace(/\?$/, '');
