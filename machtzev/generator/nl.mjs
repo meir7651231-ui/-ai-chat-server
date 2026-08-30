@@ -19,7 +19,7 @@ const MIN = 1.5; // סף-אמון לאחזור
 const heWords = (s) => [...(s || '').matchAll(/[֐-׿][֐-׿״׳]*/g)].map((m) => m[0]);
 const cleanLabel = (s) => heWords(s).join(' ').slice(0, 34) || 'פריט';
 
-function interpret(text) {
+export function interpret(text) {
   const trace = [];
   const lines = [];
   const title = cleanLabel(text.split(/[.,\n]/)[0]).slice(0, 40) || 'המסך שלי';
@@ -78,7 +78,8 @@ function interpret(text) {
   return { spec: lines.join('\n'), trace, title, gaps };
 }
 
-// ── CLI ──
+// ── CLI (רץ רק בהרצה ישירה, לא ביבוא) ──
+if (import.meta.url === 'file://' + process.argv[1]) {
 // למידה-מהשימוש: node nl.mjs --teach "<מילה>" <AtomClass>
 if (process.argv[2] === '--teach') {
   const [, , , word, cls] = process.argv;
@@ -103,3 +104,4 @@ fs.writeFileSync(path.join(HERE, 'specs/nl.txt'), spec + '\n');
 console.log('\n▶ מריץ את המחולל...');
 const out = execFileSync('node', [path.join(HERE, 'genesis-gen.mjs'), 'nl', spec], { encoding: 'utf8' });
 console.log(out.split('\n').filter((l) => /nl ·/.test(l)).join('\n'));
+}

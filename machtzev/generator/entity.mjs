@@ -32,9 +32,9 @@ const inputAtom = (type, used) => {
   const hit = matchClass(TYPE_ATOM[type] || 'InlineTextRow'); return (hit && hit.cls) || 'InlineTextRow';
 };
 
-function interpret(text) {
+export function interpret(text) {
   // שם-הישות + רשימת-השדות (בלי \b — לא עובד על עברית ב-JS)
-  const body = text.replace(/^\s*(צור|תוסיף|בנה|הוסף)\s+(ישות|טבלה|טופס)\s*/, '');
+  const body = text.replace(/^\s*(צור|תוסיף|בנה|הוסף)?\s*(ישות|טבלה|טופס)\s+/, '');
   const [namePart, ...rest] = body.split(/\s+עם\s+|\s+שדות[:\s]+|\s*:\s*/);
   const entity = clean(namePart).slice(0, 20) || 'רשומה';
   const fieldsPart = rest.join(' ') || '';
@@ -56,7 +56,8 @@ function interpret(text) {
   return { spec: lines.join('\n'), entity, schema };
 }
 
-// ── CLI ──
+// ── CLI (רץ רק בהרצה ישירה, לא ביבוא) ──
+if (import.meta.url === 'file://' + process.argv[1]) {
 const text = process.argv.slice(2).join(' ').trim();
 if (!text) { console.error('שימוש: node entity.mjs "צור ישות <שם> עם <שדות>"'); process.exit(1); }
 const { spec, entity, schema } = interpret(text);
@@ -68,3 +69,4 @@ fs.writeFileSync(path.join(HERE, 'specs/entity.txt'), spec + '\n');
 console.log('\n▶ מריץ את המחולל...');
 const out = execFileSync('node', [path.join(HERE, 'genesis-gen.mjs'), 'entity', spec], { encoding: 'utf8' });
 console.log(out.split('\n').filter((l) => /entity ·/.test(l)).join('\n'));
+}

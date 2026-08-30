@@ -1,0 +1,14 @@
+הירו 🗂️ משימה | ישות מורכבת — טופס + טבלה
+כותרת טופס משימה
+אטום InlineTextRow שם
+אטום GlowField אחראי
+אטום DatePills תאריך יעד
+אטום InlineTextRow עדיפות
+אטום NumberStepper אחוז ביצוע
+אטום ChatSettingsSwitchRow סטטוס
+אטום FabMenu שמירה
+כותרת רשומות משימה
+אטום DataGrid משימה
+כותרת מעבר-סטטוס
+אטום NeonButton קדם סטטוס
+באנר ישות משימה: 6 שדות · טופס + טבלה מהמדף
