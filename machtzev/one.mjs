@@ -120,7 +120,7 @@ stage('מנוע-ההמרה-מחדש · דאטה (reconvert-data)', () => last(ru
 // ── הזרקת-המדף לתצוגה (buildsmart) + נחיתה — בתוך המנוע (הכרעת-בעלים "למה הם לא בפנים") ──
 stage('הזרקת-המדף ל-buildsmart (8 מדפים)', () => {
   const B = '/home/user/buildsmart/app_flutter/lib/genesis';
-  const DIRS8 = ['dart-ui-bs', 'dart-data-bs', 'dart-data-maor', 'dart-screens-bs', 'dart-boards-bs', 'dart-gen-bs', 'dart-maor', 'dart'];
+  const DIRS8 = ['dart-ui-bs', 'dart-data-bs', 'dart-data-maor', 'dart-data', 'dart-screens-bs', 'dart-boards-bs', 'dart-gen-bs', 'dart-maor', 'dart'];
   let n = 0;
   for (const d of DIRS8) {
     execSync(`rm -rf ${B}/${d}`);
