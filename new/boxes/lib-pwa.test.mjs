@@ -132,16 +132,20 @@ function fakeIo(state) {
 
 /* 🛡 מגן-הכרעה: ההכרעות verbatim במקור-הקופסה (סדר-מפתחות/צבעים/אייקונים/סדר-שערים). */
 const src = readFileSync(new URL('./lib-pwa.mjs', import.meta.url), 'utf8');
-for (const needle of ["'#211d17'", "'#faf7f2'", "'shell.pwa'", "'sw.js'", 'portrait-primary', "'standalone'", 'icon-maskable-512.png', "'he'", "'rtl'", "'?org='"]) {
-  if (!src.includes(needle)) { console.error(`✗ מגן: ההכרעה ${needle} נעדרה מהמקור`); f = 1; }
+// הכרעות-המניפסט חיות כדאטה באטום pwa-manifest-data (הכרעה 19) — מאומתות שם
+const manifestData = readFileSync(new URL('../atoms/pwa-manifest-data.mjs', import.meta.url), 'utf8');
+for (const needle of ["'#211d17'", "'#faf7f2'", "'shell.pwa'", "'sw.js'", 'portrait-primary', "'standalone'", "'he'", "'rtl'"]) {
+  if (!manifestData.includes(needle)) { console.error(`✗ מגן: ההכרעה ${needle} נעדרה מאטום-המניפסט`); f = 1; }
 }
+if (!manifestData.includes('icon-maskable-512.png')) { console.error('✗ מגן: אייקון-maskable נעדר מאטום-המניפסט'); f = 1; }
+if (!src.includes("'?org='")) { console.error('✗ מגן: פרמטר-ה-org נעדר מ-start_url'); f = 1; }
 // סדר-שער-רישום: navigator/webdriver/isProd נבדקים לפני register
 if (src.indexOf("'serviceWorker' in") > src.indexOf('.register(')) { console.error('✗ מגן: register לפני שער-serviceWorker'); f = 1; }
 if (src.indexOf('webdriver') > src.indexOf('.register(')) { console.error('✗ מגן: register לפני שער-webdriver'); f = 1; }
 // שער-הדגל לפני register; מתג-חירום (unregister) לפני register בקוד
 if (src.indexOf('featureOn(') > src.indexOf('.register(')) { console.error('✗ מגן: register לפני שער-הדגל'); f = 1; }
 // buildManifest: short_name > 12 ⇒ חיתוך (הסף חי כקבוע-הכרעה)
-if (!/SHORT_NAME_MAX\s*=\s*12/.test(src)) { console.error('✗ מגן: סף-12 ל-short_name נעדר'); f = 1; }
+if (!/SHORT_NAME_MAX\s*=\s*12/.test(manifestData)) { console.error('✗ מגן: סף-12 ל-short_name נעדר'); f = 1; }
 if (!/length\s*>\s*SHORT_NAME_MAX/.test(src)) { console.error('✗ מגן: חיתוך short_name לא-מחווט לסף'); f = 1; }
 
 if (f) process.exit(1);

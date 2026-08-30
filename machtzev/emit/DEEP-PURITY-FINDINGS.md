@@ -1,10 +1,9 @@
 # 🔬 ממצאי טוהר-עומק (הכרעה 19) — דאטה בתוך מנגנון
 
-נסרקו אטומי-מנגנון ב-new/atoms · new/boxes · הפרות: 28
+נסרקו אטומי-מנגנון ב-new/atoms · new/boxes · הפרות: 27
 
 | אטום | ציון | עברית | טבלאות | מחרוזות-דומיין | מספרי-קסם |
 |---|---|---|---|---|---|
-| new/boxes/lib-pwa.mjs | 9 | — | — | shell.pwa · #faf7f2 · image/png · (display-mode: standalone) | 12 |
 | new/boxes/net-check.mjs | 9 | — | — | netcheck · netcheck= · site · /version.json? | 8000 |
 | new/boxes/receipt.mjs | 9 | — | — | text/plain;charset=utf-8 · receipt- · .txt · iframe | 10 |
 | new/atoms/portfolio-portfolio-intel.mjs | 6 | — | — | — | 10 10 86400000 10 10 30 |
