@@ -2,7 +2,7 @@
  "counts": {
   "widgets": 464,
   "functions": 445,
-  "data": 1832
+  "data": 1830
  },
  "widgets": [
   {
@@ -28643,24 +28643,7 @@
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_app_ent1_switch_fallback",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_app_ent1_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_app_ent1_switch_label",
+   "name": "gen_app_ent1_toggle_label",
    "type": "String",
    "he": [
     "דאטה",
@@ -29085,24 +29068,7 @@
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_app_ent3_switch_fallback",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_app_ent3_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_app_ent3_switch_label",
+   "name": "gen_app_ent3_toggle_label",
    "type": "String",
    "he": [
     "דאטה",

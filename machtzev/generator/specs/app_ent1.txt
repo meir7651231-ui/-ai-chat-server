@@ -4,7 +4,7 @@
 אטום GlowField כתובת
 אטום NumberStepper תקציב
 אטום DatePills תאריך התחלה
-אטום ChatSettingsSwitchRow סטטוס
+אטום AnimatedToggle סטטוס
 אטום FabMenu שמירה
 כותרת רשומות פרויקט
 אטום DataGrid פרויקט

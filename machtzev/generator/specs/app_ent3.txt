@@ -5,7 +5,7 @@
 אטום DatePills תאריך יעד
 אטום InlineTextRow עדיפות
 אטום NumberStepper אחוז ביצוע
-אטום ChatSettingsSwitchRow סטטוס
+אטום AnimatedToggle סטטוס
 אטום FabMenu שמירה
 כותרת רשומות משימה
 אטום DataGrid משימה

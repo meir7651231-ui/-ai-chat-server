@@ -27,7 +27,8 @@ function inferType(field) {
 const TYPE_ATOM = { text: 'InlineTextRow', multiline: 'InlineTextRow', num: 'NumberStepper', bool: 'SwitchRow', date: 'DatePills' };
 const inputAtom = (type, used) => {
   // מנסה כמה מועמדי-קלט מוכרים ובוחר את הראשון שקיים ולא-נוצל.
-  const cands = { text: ['InlineTextRow', 'TextRow', 'GlowField'], multiline: ['InlineTextRow', 'TextRow'], num: ['NumberStepper', 'QtyStepper', 'Stepper'], bool: ['SwitchRow', 'AnimatedToggle', 'Toggle'], date: ['DatePills', 'DatePicker', 'MiniCalendar'] }[type] || ['InlineTextRow'];
+  // bool: AnimatedToggle (מצויר, נקי) לפני SwitchRow — כל ה-*SwitchRow משתמשים ב-activeColor הדפרקייטד.
+  const cands = { text: ['InlineTextRow', 'TextRow', 'GlowField'], multiline: ['InlineTextRow', 'TextRow'], num: ['NumberStepper', 'QtyStepper', 'Stepper'], bool: ['AnimatedToggle', 'Toggle'], date: ['DatePills', 'DatePicker', 'MiniCalendar'] }[type] || ['InlineTextRow'];
   for (const c of cands) { const hit = matchClass(c); if (hit && !used.has(hit.cls)) return hit.cls; }
   const hit = matchClass(TYPE_ATOM[type] || 'InlineTextRow'); return (hit && hit.cls) || 'InlineTextRow';
 };
