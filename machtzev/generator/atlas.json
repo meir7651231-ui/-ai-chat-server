@@ -2,7 +2,7 @@
  "counts": {
   "widgets": 381,
   "functions": 438,
-  "data": 656
+  "data": 675
  },
  "widgets": [
   {
@@ -18796,7 +18796,17 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_entry_stat_value",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_entry_stat_label",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_stat_value2",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
@@ -18806,7 +18816,32 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_entry_stat_value3",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_stat_label3",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_entry_header_text2",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_stat_label4",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_stat_label5",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_header_text3",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
@@ -18826,12 +18861,12 @@
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_entry_stat_value",
+   "name": "gen_entry_stat_value4",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_entry_stat_label3",
+   "name": "gen_entry_stat_label6",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
@@ -18847,6 +18882,66 @@
   },
   {
    "name": "gen_entry_radio_option3",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_chip_option",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_chip_option2",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_chip_option3",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_chip_option4",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_chip_option5",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_chip_option6",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_chip_option7",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_chip_option8",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_chip_option9",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_chip_option10",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_chip_option11",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_chip_option12",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },

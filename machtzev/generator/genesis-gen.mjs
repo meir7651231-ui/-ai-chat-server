@@ -29,6 +29,8 @@ const SPECS = path.join(HERE, 'specs');
 const LEX_RAW = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/lexicon.json'), 'utf8'));
 const LEXICON = new Map(Object.entries(LEX_RAW).filter(([k]) => !k.startsWith('_')));
 const HERO_WORD = LEX_RAW._hero || '';
+const NAV_WORD = LEX_RAW._nav || '';
+const pascalOf = (slug) => slug.replace(/(^|[_-])([a-z])/g, (_, __, c) => c.toUpperCase());
 const ROLE_RULES = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/roles.json'), 'utf8')).rules.map(r => ({ re: new RegExp(r.pattern), role: r.role }));
 const TOKEN_RULES = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/tokens.json'), 'utf8')).rules.map(r => ({ re: new RegExp(r.pattern, 'i'), token: r.token }));
 const roleOf = (cls) => ROLE_RULES.find(r => r.re.test(cls))?.role || 'other';
@@ -58,6 +60,10 @@ function parsePart(txt) {
   const value = vm ? vm[0] : null;
   if (value) body = body.replace(value, '').replace(/\s+/g, ' ').trim();
   const words = body.split(/\s+/);
+  // 🔀 חיבור בין-מסכים: 'ניווט <slug> <תווית>' ⇒ כרטיס שפותח מסך-מחולל אחר
+  if (words[0] === NAV_WORD && /^[a-z][a-z0-9_-]*$/.test(words[1] || '')) {
+    return { role: 'card', hero: true, navSlug: words[1], label: words.slice(2).join(' ') || words[1], txt, options, emoji, sub, value };
+  }
   return {
     role: LEXICON.get(words[0]) || 'row',
     hero: words[0] === HERO_WORD,
@@ -122,13 +128,14 @@ function generate(slug, specText) {
   const logicImports = new Set();
   const norm = (w) => w.replace(/^ה(?=..)/, '').replace(/[^֐-׿\w]/g, '');
   const RETS = new Set(['String', 'String?', 'int', 'double', 'num', 'bool']);
-  const bindArgs = (fn, part, pendingHebArg) => {
+  const bindArgs = (fn, part, pendingHebArg, fieldFeed = false) => {
     const nums = [...part.txt.matchAll(/\d[\d.]*/g)].map(m => m[0]);
     const strs = [...part.txt.matchAll(/"([^"]*)"/g)].map(m => m[1]);
     const args = [];
     for (const p of fn.params) {
       const t = p.type.replace(/\?$/, '');
       if (t === 'DateTime') args.push('DateTime.now()');
+      else if (t === 'String' && fieldFeed) args.push('__FIELD__');
       else if (t === 'String' && strs.length) { const s = strs.shift(); args.push(/[֐-׿]/.test(s) ? pendingHebArg(s) : `'${s.replace(/'/g, "\\'")}'`); }
       else if ((t === 'int') && nums.length) args.push(String(parseInt(nums.shift())));
       else if ((t === 'double' || t === 'num') && nums.length) args.push(nums.shift());
@@ -154,6 +161,15 @@ function generate(slug, specText) {
   const imports = new Set(["import 'package:flutter/material.dart';", "import '../dart-ui-bs/auto/bs_tokens.dart';", `import '../dart-data-bs/auto/gen_${slug}_content.dart';`]);
   let sIdx = 0;
 
+  // מפת-הורים (לחיבור שדה⇒חישוב) + חיווט-ניווט בין-מסכים
+  const parentOf = new Map();
+  for (const n of nodes) for (const c of n.children) parentOf.set(c, n.part);
+  for (const part of parts) {
+    if (!part.navSlug) continue;
+    imports.add(`import 'gen_${part.navSlug}.dart';`);
+    part.navExpr = `() => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const Gen${pascalOf(part.navSlug)}Screen()))`;
+  }
+
   // 🌉 פתרון חלקי-'חישוב' (רץ כאן — אחרי constFor, שמשרת ארגומנט-עברי דרך קובץ-התוכן)
   for (const part of parts) {
     if (part.role !== 'calc') continue;
@@ -171,7 +187,7 @@ function generate(slug, specText) {
         if (overlap > bestScore) { bestScore = overlap; best = f; }
       }
       if (best) {
-        const args = bindArgs(best, part, pendingHebArg);
+        const args = bindArgs(best, part, pendingHebArg, parentOf.get(part)?.role === 'textfield');
         if (args) { fnHit = best; call = `${best.name}(${args.join(', ')})${best.ret === 'String' || best.ret === 'String?' ? '' : '.toString()'}${best.ret === 'String?' ? " ?? ''" : ''}`; }
       }
     }
@@ -199,6 +215,7 @@ function generate(slug, specText) {
     if (t === 'Color') return { expr: tokenFor(name) };
     if (t === 'IconData') return { expr: 'Icons.tune' };
     if (t === 'TextEditingController') { const c = '_c' + (++sIdx); stateDecls.push(`final TextEditingController ${c} = TextEditingController();`); return { expr: c }; }
+    if (part.navExpr && (t === 'VoidCallback' || t === 'void Function()')) return { expr: part.navExpr };
     if (t === 'VoidCallback' || t === 'void Function()') return { expr: `() => _toast(${constFor(part.label, part.role + '_toast')})` };
     if (/^ValueChanged<bool>$|^void Function\(bool\)$/.test(t)) { if (!shared.b) { shared.b = '_v' + (++sIdx); stateDecls.push(`bool ${shared.b} = false;`); } return { expr: `(v) => setState(() => ${shared.b} = v)` }; }
     if (/^ValueChanged<int>$|^void Function\(int\)$/.test(t)) { if (!shared.i) { shared.i = '_n' + (++sIdx); stateDecls.push(`int ${shared.i} = 0;`); } return { expr: `(v) => setState(() => ${shared.i} = v)` }; }
@@ -261,6 +278,10 @@ function generate(slug, specText) {
       const pickerCall = buildCall({ part: node.part, atom }, shared);
       calls.push(`          ${pickerCall},`);
       calls.push(`          IndexedStack(index: ${shared.i || '0'}, children: [${kidCalls.join(', ')}]),`);
+    } else if (node.part.role === 'textfield') {
+      const shared = {};
+      calls.push(`          ${buildCall({ part: node.part, atom }, shared)},`);
+      for (const kc of kidCalls) calls.push(`          ${kc.replaceAll('__FIELD__', shared.s || "''")},`);
     } else if (/^List<Widget>/.test((atom.types.get('children') || ''))) {
       calls.push(`          ${buildCall({ part: node.part, atom }, {}, { children: `[${kidCalls.join(', ')}]` })},`);
     } else if ((atom.types.get('child') || '').replace(/\?$/, '') === 'Widget') {
@@ -334,23 +355,33 @@ function writeSelfEntry() {
   const shapeWords = [];
   const seenRoles = new Set();
   for (const [w, r] of LEXICON) if (!seenRoles.has(r)) { seenRoles.add(r); shapeWords.push(w); }
+  // המסכים שהמחולל עצמו יצר (specs אחרים) — מקושרים בניווט חי
+  const siblingNavs = fs.readdirSync(SPECS).filter(f => f.endsWith('.txt') && f !== 'entry.txt').map(f => {
+    const slug = f.replace('.txt', '');
+    const t = (fs.readFileSync(path.join(SPECS, f), 'utf8').split('\n')[0] || slug).replace(/:$/, '').trim();
+    return `ניווט ${slug} ${t} | נוצר מבקשה בעברית - הקישו לפתיחה`;
+  });
   const spec = [
     'המחולל:',
-    'הירו 🧬 המחולל של המחצב | כותבים משפט בעברית - מקבלים מסך חי',
+    'הירו 🧬 המחולל של המחצב | דיוקן עצמי חי - כל יכולת שרואים כאן אמיתית',
     'כותרת המפעל במספרים - עדכון חי מהאטלס',
     `נתון ⚛️ ${atlas.widgets.length} לבנים ויזואליות על המדף`,
     `נתון 🧠 ${atlas.functions.length} אטומי לוגיקה פעילים`,
     `נתון 🖼️ ${boards} מסכים הורכבו מחדש`,
-    'כותרת גשר הלוגיקה פועם',
+    'כותרת גשר הלוגיקה - אטום מדד + אטום חישוב',
     'חישוב החודש העברי כרגע לפי מנוע מאור',
-    'חישוב קוד הזמנה דטרמיניסטי "genesis"',
-    'כותרת הבחירה כאן מחליפה את האטום שמתחתיה',
+    'כותרת יכולת מורכבת - שדה מזין חישוב חי',
+    'שדה הקלידו שם ותקבלו קוד הזמנה',
+    '  חישוב קוד הזמנה דטרמיניסטי',
+    'כותרת חיבור אטום לאטום - הבחירה מחליפה את המוצג',
     'בחירה מה בונים היום: הגדרות / ניהול / דוחות',
     '  מתג 🔔 התראות למסך ההגדרות',
     '  שדה שם מסך הניהול',
     '  נתון 📊 3 דוחות מוכנים להפקה',
-    `תגיות הצורות שהוא מבין: ${shapeWords.join(' / ')}`,
-    'באנר נכתב והורכב בידי המחולל מהידע החי שלו — מאטומים קיימים בלבד',
+    'כותרת חיבור בין מסכים - המסכים שיצרתי מבקשות',
+    ...siblingNavs,
+    `תגיות הצורות שאני מבין: ${shapeWords.join(' / ')}`,
+    'באנר נכתב והורכב בידי המחולל מהידע החי שלו - מאטומים קיימים בלבד',
     'כפתור ✨ צרו מסך חדש',
   ].join('\n');
   fs.writeFileSync(path.join(SPECS, 'entry.txt'), spec + '\n');
