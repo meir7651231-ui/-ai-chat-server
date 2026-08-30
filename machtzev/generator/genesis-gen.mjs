@@ -17,6 +17,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { stripComments, snake } from '../assemble/lift-lib.mjs';
+import { dartLit } from './twins.mjs';
 import { buildAtlas, writeAtlas } from './atlas.mjs';
 
 const ROOT = new URL('../../', import.meta.url).pathname;
@@ -45,6 +46,9 @@ try {
 
 const atlas = buildAtlas();
 writeAtlas(atlas);
+// ידע-זנבות-הקציר (נכתב ע"י רתמת-התאומים בריצת-הסינתזה; חסר ⇒ אין זנבות)
+let TWIN_TAILS = {};
+try { TWIN_TAILS = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/twin-tails.json'), 'utf8')); } catch { }
 
 // ── פירוק-בקשה: שורה ⇒ חלק {role,label,options,emoji,sub,hero,value} ──
 function parsePart(txt) {
@@ -149,10 +153,17 @@ function generate(slug, specText) {
   const bindArgs = (fn, part, pendingHebArg, fieldFeed = false) => {
     const nums = [...part.txt.matchAll(/\d[\d.]*/g)].map(m => m[0]);
     const strs = [...part.txt.matchAll(/"([^"]*)"/g)].map(m => m[1]);
+    // 🌾 זנב-הקציר: אמת-קרקע מבדיקת-האטום (twin-tails.json, נכתב ע"י רתמת-התאומים) —
+    // פרמטרי-הזנב של מנוע רב-פרמטרי נפלטים כליטרלים ⇒ המסך שקול לתאום-ה-JS שהוכיח.
+    const tailMeta = TWIN_TAILS[fn.name];
+    const tailLits = tailMeta && tailMeta.simple && tailMeta.tail.length === fn.params.length - 1 ? tailMeta.tail.map(x => dartLit(x)) : null;
     const args = [];
+    let pi = -1;
     for (const p of fn.params) {
+      pi++;
       const t = p.type.replace(/\?$/, '');
-      if (t === 'DateTime') args.push('DateTime.now()');
+      if (pi > 0 && tailLits) args.push(tailLits[pi - 1]);
+      else if (t === 'DateTime') args.push('DateTime.now()');
       else if (t === 'String' && fieldFeed) args.push('__FIELD__');
       // 🔗 הזנת-שרשרת גם לפרמטר גמיש/מספרי (מנוע-הסינתזה מרכיב חוליות שקולטות מספר):
       // dynamic/Object בולעים String כמות-שהוא; num/int דרך tryParse — כשל-פרסור ⇒ NaN/0 ⇒

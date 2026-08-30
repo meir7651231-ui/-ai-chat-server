@@ -11,7 +11,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync, execSync } from 'node:child_process';
 import { buildAtlas } from './atlas.mjs';
-import { buildTwinRegistry } from './twins.mjs';
+import { buildTwinRegistry, twinMeta, dartLit } from './twins.mjs';
 const HERE = new URL('.', import.meta.url).pathname;
 const ROOT = new URL('../../', import.meta.url).pathname;
 const CAPS = path.join(HERE, 'capabilities');
@@ -30,13 +30,21 @@ const pool = [];
   const seen = new Set();
   for (const f of atlas.functions) {
     if (seen.has(f.name) || !f.he.length || !f.params.length) continue;
-    // הרחבת-המאגר: גם פונקציה רב-פרמטרית שכל זנבה אופציונלי — ניתנת-לחיווט במסך (bindArgs ⇒ null)
-    if (f.params.length !== 1 && !f.params.slice(1).every(p => p.type.endsWith('?'))) continue;
     seen.add(f.name); pool.push(f);
   }
 }
 const twins = await buildTwinRegistry(pool);
 const fnsBy = new Map(pool.map(f => [f.name, f]));
+// קבילות-למסך: המנוע רץ ב-JS, אבל spec חייב להיות ניתן-לחיווט Dart שקול —
+// זנב אופציונלי (null) או זנב-קציר פשוט באורך-הפרמטרים (נפלט כליטרלים).
+const wirable = (f) => {
+  if (!twins.has(f.name)) return false;
+  // ‏Dart קובע את החיווט: תאום-Dart חד-פרמטרי / זנב-אופציונלי ⇒ תמיד ניתן (שקעי-JS הם
+  // פרט-מימוש של הטיהור); אחרת נדרש זנב-קציר פשוט תואם-אורך שנפלט כליטרלים.
+  if (f.params.length === 1 || f.params.slice(1).every(p => p.type.endsWith('?'))) return true;
+  const meta = twinMeta.get(f.name);
+  return !!(meta && meta.simple && meta.tail.length === f.params.length - 1);
+};
 
 // ── השחלת-מסך: בין חוליות עובר תמיד String (כמו ב-Dart המחולל: ‎.toString()‎ בין שלבים),
 //    ופרמטר מספרי נפתח ב-tryParse. החיפוש רץ בדיוק בסמנטיקה שהמסך ירוץ — אפס פער JS⇄Dart.
@@ -59,7 +67,7 @@ const runChain = (chain, input) => {
 function synthesize(desc, examples) {
   const dwords = new Set((desc.match(/[֐-׿]+/g) || []).map(norm));
   const cohere = (f) => f.he.reduce((n, w) => n + (dwords.has(norm(w)) ? 1 : 0), 0);
-  const fns = pool.filter(f => twins.has(f.name)).sort((a, b) => cohere(b) - cohere(a));
+  const fns = pool.filter(wirable).sort((a, b) => cohere(b) - cohere(a));
   const inputs = examples.map(e => String(e.in));
   const want = examples.map(e => e.out);
   const sig = (v) => JSON.stringify(v);
@@ -154,7 +162,8 @@ if (GATE) {
       for (const c of chain) {
         const f = fnsBy.get(c);
         const t = f.params[0].type.replace(/\?$/, '');
-        const tail = f.params.slice(1).map(() => 'null');
+        const meta = twinMeta.get(c);
+        const tail = meta && meta.simple && meta.tail.length === f.params.length - 1 ? meta.tail.map(x => dartLit(x)) : f.params.slice(1).map(() => 'null');
         const arg = (t === 'num' || t === 'double') ? `(num.tryParse(${expr}) ?? double.nan)` : t === 'int' ? `(int.tryParse(${expr}) ?? 0)` : expr;
         expr = `${c}(${[arg, ...tail].join(', ')})${f.ret === 'String' ? '' : f.ret === 'String?' ? " ?? ''" : '.toString()'}`;
         if (f.ret === 'String?') expr = `(${c}(${[arg, ...tail].join(', ')}) ?? '')`;
@@ -183,7 +192,7 @@ if (DREAM) {
   const bank = [];
   for (const d of atlas.data) if (d.type === 'List<String>' && Array.isArray(d.items))
     for (const it of d.items) if (typeof it === 'string' && it.length >= 2 && it.length <= 25) bank.push(it);
-  const fns = pool.filter(f => twins.has(f.name));
+  const fns = pool.filter(wirable);
   let dreamed = null;
   for (let t = 0; t < 500 && !dreamed; t++) {
     const len = 2 + Math.floor(rnd() * 2);
@@ -246,4 +255,4 @@ if (fs.existsSync(CAPS)) for (const cf of fs.readdirSync(CAPS).filter(x => x.end
   console.log(`🧪 ${cf}: ✅ הרכבה נמצאה — ${chain.join(' ∘ ')} ⇒ specs/${slug}.txt`);
   made++;
 }
-console.log(`🧪 סינתזה: ${made} יכולות-מוזמנות הורכבו (מאגר: ${pool.filter(f => twins.has(f.name)).length} אטומים ברי-הרצה)`);
+console.log(`🧪 סינתזה: ${made} יכולות-מוזמנות הורכבו (מאגר-חיווט: ${pool.filter(wirable).length} · ברי-הרצה: ${twins.size})`);

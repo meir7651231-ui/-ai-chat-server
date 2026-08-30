@@ -59,7 +59,18 @@ export function buildAtlas() {
     // תיאור-עצמי בעברית: המילים-העבריות משורת-הכותרת של האטום (מנורמלות: בלי ה"א-הידיעה/פיסוק)
     // מילות-פיגום של כותרות-האטומים (חוט/אטום/חוזה/דרגת...) אינן תיאור — מסוננות
     const SCAFFOLD = new Set(['חוט', 'אטום', 'חוזה', 'דרגת', 'קבוע', 'מוצא', 'קודם', 'אוטומטית']);
-    const he = [...(raw.split('\n')[0] || '').matchAll(/[֐-׿][֐-׿]*/g)].map(m => m[0].replace(/^ה(?=..)/, '')).filter(w => w.length > 1 && !SCAFFOLD.has(w));
+    const heOf = (line) => [...(line || '').matchAll(/[֐-׿][֐-׿]*/g)].map(m => m[0].replace(/^ה(?=..)/, '')).filter(w => w.length > 1 && !SCAFFOLD.has(w));
+    // שורה-1 טכנית ("אטום-Dart · fnName") ⇒ יורדים בכותרת עד שורת-תיאור עם ≥2 מילים-עבריות.
+    // שורות-פיגום (מוצא/טוהר/המרה/חוק/תיקוני-פורט) מדולגות — התיאור האמיתי בדרך-כלל ב"תפקיד:".
+    const headLines = raw.split('\n').slice(0, 14).filter(l => /^\s*\/\//.test(l));
+    let he = heOf(headLines[0]);
+    if (he.length < 2) {
+      for (const hl of headLines.slice(1)) {
+        if (/מוצא:|טוהר:|חוק-|המרה|תורגם|תיקוני|import |אזהר|צילום|קלט:|פלט:/.test(hl)) continue;
+        const w = heOf(hl.replace(/^\s*\/\/+\s*/, '').replace(/^תפקיד:\s*/, ''));
+        if (w.length >= 2) { he = w.slice(0, 10); break; }
+      }
+    }
     for (const fm of src.matchAll(/(?:^|\n)((?:Future<[^>\n]+>|Iterable<[^>\n]+>|List<[^>\n]+>|Map<[^>\n]+>|Set<[^>\n]+>|[A-Z]\w*(?:<[^>\n]+>)?\??|void|bool|int|double|num|String\??|dynamic)\s+([a-z]\w*)\s*\(([^)]*)\))\s*(?:=>|\{|async)/g)) {
       const ret = fm[1].split(/\s+/)[0];
       const params = fm[3].replace(/[\[\]]/g, '').split(',').map(p => p.trim()).filter(Boolean).map(p => {
