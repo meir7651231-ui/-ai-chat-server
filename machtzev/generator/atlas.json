@@ -2,7 +2,7 @@
  "counts": {
   "widgets": 381,
   "functions": 445,
-  "data": 794
+  "data": 1173
  },
  "widgets": [
   {
@@ -18408,12 +18408,27 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_quest2_header_text",
+   "file": "auto/gen_quest2_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_quest2_stat_label",
    "file": "auto/gen_quest2_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_quest2_switch_label",
+   "name": "gen_quest2_stat_label2",
+   "file": "auto/gen_quest2_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest2_radio_option",
+   "file": "auto/gen_quest2_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest2_radio_option2",
    "file": "auto/gen_quest2_content.dart",
    "shelf": "new/dart-data-bs"
   },
@@ -20333,8 +20348,108 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "ACADEMIC_YEAR_LABEL_T",
+   "file": "academic-year-label-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ADAR_NORM_T",
+   "file": "adar-norm-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ADD_ORG_MEMBER_T",
+   "file": "add-org-member-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ORDER",
+   "file": "advance-status-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "AGE_OF_T",
+   "file": "age-of-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "HUNDREDS",
+   "file": "amount-in-words-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ONES",
+   "file": "amount-in-words-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ONES_F",
+   "file": "amount-in-words-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "TEENS",
+   "file": "amount-in-words-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "TEENS_F",
+   "file": "amount-in-words-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "TENS",
+   "file": "amount-in-words-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "THOUSAND_CONSTRUCT",
+   "file": "amount-in-words-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "AMOUNT_IN_WORDS_T",
+   "file": "amount-in-words-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ANNUAL_ALL_LINES_T",
+   "file": "annual-all-lines-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "annual-all-lines-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ANNUAL_REPORT_LINES_T",
+   "file": "annual-report-lines-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ANNUAL_REPORT_TERMS",
+   "file": "annual-report-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "APPEND_CALL_T",
+   "file": "append-call-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "APPLY_AYIN_SHEET_T",
+   "file": "apply-ayin-sheet-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "APPLY_META_PARTIAL_T",
+   "file": "apply-meta-partial-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ASK_CLAUDE_T",
+   "file": "ask-claude-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20343,8 +20458,33 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "AUDIT_CATEGORIES_T",
+   "file": "audit-categories-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "AUDIT_REPORT_LINES_T",
+   "file": "audit-report-lines-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "audit-report-lines-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "AYIN_ACTION_VISIBLE_T",
+   "file": "ayin-action-visible-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "AYIN_ACTIVE_T",
+   "file": "ayin-active-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "AYIN_ADVANCE_LABEL_T",
+   "file": "ayin-advance-label-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20353,13 +20493,28 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "AYIN_ALL_ROWS_T",
+   "file": "ayin-all-rows-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "ayin-all-rows-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "AYIN_DAILY_ROWS_T",
+   "file": "ayin-daily-rows-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "ayin-daily-rows-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "AYIN_SHEET_ROWS_T",
+   "file": "ayin-sheet-rows-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20373,8 +20528,88 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "BENEFICIARY_LABEL_T",
+   "file": "beneficiary-label-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "beneficiary-label-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FULL_HOLIDAYS",
+   "file": "block-reason-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "BLOCK_REASON_T",
+   "file": "block-reason-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "BOXES_OVERVIEW_T",
+   "file": "boxes-overview-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "DAY_NAMES",
+   "file": "build-course-daily-rows-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "BUILD_COURSE_DAILY_ROWS_T",
+   "file": "build-course-daily-rows-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "CAP_DAYS",
+   "file": "build-custom-export-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "BUILD_CUSTOM_EXPORT_T",
+   "file": "build-custom-export-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "BUILD_ICS_T",
+   "file": "build-ics-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "BUILD_MONTH_GRID_T",
+   "file": "build-month-grid-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "BUILD_REENROLL_ROWS_T",
+   "file": "build-reenroll-rows-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "BUILD_SLOTS_T",
+   "file": "build-slots-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "CALL_STATS_T",
+   "file": "call-stats-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "CALLER_ID_TERMS",
+   "file": "caller-id-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "CALLER_KIND_LABEL_T",
+   "file": "caller-kind-label-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "CAMPAIGN_CSV_ROWS_T",
+   "file": "campaign-csv-rows-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20383,8 +20618,38 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "CAMPAIGN_PROGRESS_T",
+   "file": "campaign-progress-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "CANDIDATE_SUPPORTERS_FOR_CHARGE_T",
+   "file": "candidate-supporters-for-charge-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "cat-options-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "CHANGE_PASSWORD_T",
+   "file": "change-password-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "CHARGE_DEDUP_KEY_T",
+   "file": "charge-dedup-key-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "CHARGE_TO_HIST_T",
+   "file": "charge-to-hist-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "CHIP_STYLE_T",
+   "file": "chip-style-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20393,8 +20658,48 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "CLEAR_EMPLOYEE_FIELD_T",
+   "file": "clear-employee-field-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "CLOUD_CFG_CACHE_KEY_T",
+   "file": "cloud-cfg-cache-key-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "CLOUD_DB_T",
+   "file": "cloud-db-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "COCKPIT_AT_RISK_T",
+   "file": "cockpit-at-risk-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "COCKPIT_CALLS_T",
+   "file": "cockpit-calls-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "cockpit-calls-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "COCKPIT_CSV_ROWS_T",
+   "file": "cockpit-csv-rows-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "COCKPIT_DAYS_SINCE_T",
+   "file": "cockpit-days-since-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "COCKPIT_FEED_T",
+   "file": "cockpit-feed-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20403,8 +20708,18 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "COCKPIT_HOK_TASKS_T",
+   "file": "cockpit-hok-tasks-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "cockpit-hok-tasks-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "COCKPIT_THANKS_T",
+   "file": "cockpit-thanks-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20413,8 +20728,38 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "COCKPIT_WORK_LIST_TEXT_T",
+   "file": "cockpit-work-list-text-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "COL_PATH_T",
+   "file": "col-path-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "COL_REF_TO_INDEX_T",
+   "file": "col-ref-to-index-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "COLLECTION_SCORE_DELTA_T",
+   "file": "collection-score-delta-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "COLLECTIONS_CSV_ROWS_T",
+   "file": "collections-csv-rows-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "collections-csv-rows-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "COMMANDS_BUILD_COMMANDS_T",
+   "file": "commands-build-commands-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20423,8 +20768,73 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "COMMANDS_FILTER_COMMANDS_T",
+   "file": "commands-filter-commands-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "COMPONENT_REDEEMED_NOW_T",
+   "file": "component-redeemed-now-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "COMPOSE_SMTP_URL_T",
+   "file": "compose-smtp-url-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "COMPUTE_QUOTE_T",
+   "file": "compute-quote-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "TIER_KEY",
+   "file": "constellation-donor-constellation-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "CONSTELLATION_DONOR_CONSTELLATION_T",
+   "file": "constellation-donor-constellation-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "COOLDOWN_FOR_FAILS_T",
+   "file": "cooldown-for-fails-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "COORDINATOR_PRINT_LINES_T",
+   "file": "coordinator-print-lines-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "CORAL_PALETTE_T",
+   "file": "coral-palette-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "COURSE_DATE_ERROR_T",
+   "file": "course-date-error-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "course-date-error-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "COURSE_FITS_MEMBER_T",
+   "file": "course-fits-member-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "CREATE_CLOUD_KEY_T",
+   "file": "create-cloud-key-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "CSVX_TERMS",
+   "file": "csvx-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20433,8 +20843,73 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "DAY_PROGRESS_T",
+   "file": "day-progress-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "DECODE_CSV_BUFFER_T",
+   "file": "decode-csv-buffer-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "DECODE_QUOTED_PRINTABLE_T",
+   "file": "decode-quoted-printable-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "DECRYPT_DOC_T",
+   "file": "decrypt-doc-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "DEDUP_TERMS",
+   "file": "dedup-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "DEFAULT_COURSE_DATES_T",
+   "file": "default-course-dates-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "default-kit-labels-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "DEFAULT_PRICES_T",
+   "file": "default-prices-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "DELETE_ORG_COMPLETELY_T",
+   "file": "delete-org-completely-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "DELETE_ORG_JOIN_REQUEST_T",
+   "file": "delete-org-join-request-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "DELETE_ORG_MEMBER_CONFIG_T",
+   "file": "delete-org-member-config-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "DELETE_ORG_REQUEST_T",
+   "file": "delete-org-request-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "DELIVER_RECEIPT_T",
+   "file": "deliver-receipt-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "DELIVERIES_CSV_ROWS_T",
+   "file": "deliveries-csv-rows-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20443,8 +20918,38 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "DELIVERY_LIST_LINES_T",
+   "file": "delivery-list-lines-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "delivery-list-lines-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "DETECT_RECURRING_HOK_T",
+   "file": "detect-recurring-hok-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "DISTRIBUTION_LIST_LINES_T",
+   "file": "distribution-list-lines-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "DOC_SKEY_T",
+   "file": "doc-skey-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "DON_ALLOWED_KEYS_T",
+   "file": "don-allowed-keys-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "DON_CAL_MONTH_LINE_T",
+   "file": "don-cal-month-line-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20453,8 +20958,38 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "DONE_TODAY_FOR_T",
+   "file": "done-today-for-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "DUP_FIELDS_T",
+   "file": "dup-fields-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "DUPLICATE_COURSE_T",
+   "file": "duplicate-course-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "duplicate-course-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "EFFECTIVE_PRICE_T",
+   "file": "effective-price-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ELIGIBLE_ASSIGNMENTS_FOR_DAY_T",
+   "file": "eligible-assignments-for-day-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "EMPLOYEE_SIGN_UP_ERROR_T",
+   "file": "employee-sign-up-error-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20463,8 +20998,38 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "EMPTY_TELEPHONY_CONFIG_T",
+   "file": "empty-telephony-config-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "empty-telephony-config-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ENCRYPT_DB_T",
+   "file": "encrypt-db-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ENCRYPT_DOC_T",
+   "file": "encrypt-doc-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ENROLL_COUNT_T",
+   "file": "enroll-count-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ENROLL_NEW_FAMILY_T",
+   "file": "enroll-new-family-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ENROLL_STATUS_META_T",
+   "file": "enroll-status-meta-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20473,8 +21038,58 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "ENROLL_SUMMARY_T",
+   "file": "enroll-summary-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ENROLLMENT_PAID_STATUS_T",
+   "file": "enrollment-paid-status-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ENV_PATH_T",
+   "file": "env-path-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "EV_LABEL_T",
+   "file": "ev-label-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "EVENTS_CSV_ROWS_T",
+   "file": "events-csv-rows-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "EXCEL_SERIAL_TO_ISO_T",
+   "file": "excel-serial-to-iso-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "EXP_FIELD_DEFS_T",
+   "file": "exp-field-defs-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "exp-field-defs-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "DOW_HE",
+   "file": "explain-call-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "EXPLAIN_CALL_T",
+   "file": "explain-call-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "EXPLAIN_ONE_T",
+   "file": "explain-one-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20483,8 +21098,83 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "FAM_HISTORY_OF_T",
+   "file": "fam-history-of-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FAMILIES_IMPORT_FORMAT_ROWS_T",
+   "file": "families-import-format-rows-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "families-import-format-rows-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FAMILY_CONTEXT_T",
+   "file": "family-context-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FAVICON_DATA_URI_T",
+   "file": "favicon-data-uri-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FEAT_LABEL_T",
+   "file": "feat-label-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FETCH_ALL_ORGS_T",
+   "file": "fetch-all-orgs-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FETCH_INCOMING_PAYMENTS_T",
+   "file": "fetch-incoming-payments-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FETCH_NEDARIM_DONORS_T",
+   "file": "fetch-nedarim-donors-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FETCH_ORG_CLOUD_CONFIG_T",
+   "file": "fetch-org-cloud-config-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FETCH_ORG_JOIN_REQUESTS_T",
+   "file": "fetch-org-join-requests-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FETCH_ORG_LEADS_T",
+   "file": "fetch-org-leads-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FETCH_ORG_REQUESTS_T",
+   "file": "fetch-org-requests-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FETCH_PROVIDER_ROWS_T",
+   "file": "fetch-provider-rows-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FILTER_AYIN_BOARD_T",
+   "file": "filter-ayin-board-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FILTER_DELIVERIES_T",
+   "file": "filter-deliveries-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20493,8 +21183,108 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "FILTER_ITEMS_T",
+   "file": "filter-items-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FIND_ALL_OPEN_PLANS_T",
+   "file": "find-all-open-plans-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FIND_CALLER_T",
+   "file": "find-caller-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FIND_MEMBER_ORG_SLUGS_T",
+   "file": "find-member-org-slugs-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FINDER_AXES_T",
+   "file": "finder-axes-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "finder-axes-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FINDER_AXIS_VALUE_T",
+   "file": "finder-axis-value-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FMT_DATE_T",
+   "file": "fmt-date-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FOLD_ICS_LINE_T",
+   "file": "fold-ics-line-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FOREIGN_HOST_T",
+   "file": "foreign-host-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FORMAT_ISRAELI_PHONE_T",
+   "file": "format-israeli-phone-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "FRESHEN_DEMO_DB_T",
+   "file": "freshen-demo-db-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "GEM_YEAR_T",
+   "file": "gem-year-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "H",
+   "file": "gematria-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "T",
+   "file": "gematria-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "U",
+   "file": "gematria-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "GEMATRIA_T",
+   "file": "gematria-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "GEN_JOIN_CODE_T",
+   "file": "gen-join-code-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "GEN_RECOVERY_KEY_T",
+   "file": "gen-recovery-key-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "GRANTABLE_STAFF_FEATURES_T",
+   "file": "grantable-staff-features-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "GROUP_LABEL_OF_T",
+   "file": "group-label-of-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20503,8 +21293,28 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "GROUP_OPTIONS_OF_T",
+   "file": "group-options-of-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "GROUPS_HINT_FROM_AUDIENCE_T",
+   "file": "groups-hint-from-audience-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "groups-hint-from-audience-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "GUIDE_FOOT_T",
+   "file": "guide-foot-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "GUIDE_SECTIONS_OF_T",
+   "file": "guide-sections-of-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20513,98 +21323,58 @@
    "shelf": "new/dart-data-maor"
   },
   {
-   "name": "hebCalAnchor",
+   "name": "HASH_PIN_T",
+   "file": "hash-pin-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "HEB_ANNUAL_EQ_T",
+   "file": "heb-annual-eq-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "HEB_CAL",
    "file": "heb-cal-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
-   "name": "hebCalApproxA",
-   "file": "heb-cal-data.dart",
+   "name": "HEB_DATE_FULL_T",
+   "file": "heb-date-full-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
-   "name": "hebCalLeapA",
-   "file": "heb-cal-data.dart",
+   "name": "ORDER_COMMON",
+   "file": "heb-months-of-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
-   "name": "hebCalMonthsA",
-   "file": "heb-cal-data.dart",
+   "name": "ORDER_LEAP",
+   "file": "heb-months-of-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
-   "name": "hebCalCarryBase",
-   "file": "heb-cal-data.dart",
+   "name": "HP_CACHE_MAX",
+   "file": "heb-parts-of-iso-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
-   "name": "hebCalPostM",
-   "file": "heb-cal-data.dart",
+   "name": "HEB_PARTS_T",
+   "file": "heb-parts-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
-   "name": "hebCalSpanHi",
-   "file": "heb-cal-data.dart",
+   "name": "HOK_CAT_T",
+   "file": "hok-cat-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
-   "name": "hebCalLongMid",
-   "file": "heb-cal-data.dart",
+   "name": "HOK_EFFECTIVELY_ACTIVE_T",
+   "file": "hok-effectively-active-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
-   "name": "hebCalShortMid",
-   "file": "heb-cal-data.dart",
-   "shelf": "new/dart-data-maor"
-  },
-  {
-   "name": "hebCalShortMonths",
-   "file": "heb-cal-data.dart",
-   "shelf": "new/dart-data-maor"
-  },
-  {
-   "name": "hebCalFlexLong",
-   "file": "heb-cal-data.dart",
-   "shelf": "new/dart-data-maor"
-  },
-  {
-   "name": "hebCalMonthsInLeap",
-   "file": "heb-cal-data.dart",
-   "shelf": "new/dart-data-maor"
-  },
-  {
-   "name": "hebCalShortLen",
-   "file": "heb-cal-data.dart",
-   "shelf": "new/dart-data-maor"
-  },
-  {
-   "name": "hebCalNisan",
-   "file": "heb-cal-data.dart",
-   "shelf": "new/dart-data-maor"
-  },
-  {
-   "name": "hebCalNames",
-   "file": "heb-cal-data.dart",
-   "shelf": "new/dart-data-maor"
-  },
-  {
-   "name": "hebCalLeapName12",
-   "file": "heb-cal-data.dart",
-   "shelf": "new/dart-data-maor"
-  },
-  {
-   "name": "hebCalGregYearDays",
-   "file": "heb-cal-data.dart",
-   "shelf": "new/dart-data-maor"
-  },
-  {
-   "name": "hebCalGregMA",
-   "file": "heb-cal-data.dart",
-   "shelf": "new/dart-data-maor"
-  },
-  {
-   "name": "hebCalGregLeapAdj",
-   "file": "heb-cal-data.dart",
+   "name": "HOK_METHOD_LABEL_T",
+   "file": "hok-method-label-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20613,8 +21383,43 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "HOLIDAY_NAMES_T",
+   "file": "holiday-names-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "HOLIDAY_OF_T",
+   "file": "holiday-of-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "holiday-of-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ICS_FEED_TERMS",
+   "file": "ics-feed-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ICS_FEED_URL_T",
+   "file": "ics-feed-url-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "IMAGE_PICK_TERMS",
+   "file": "image-pick-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "INACTIVE_ROOM_COURSES_T",
+   "file": "inactive-room-courses-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "INTEGER_IN_WORDS_T",
+   "file": "integer-in-words-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20623,8 +21428,223 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "INTEGRATION_SETTING_T",
+   "file": "integration-setting-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "INTEL_CHURN_FROM_SCAN_T",
+   "file": "intel-churn-from-scan-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "INTEL_DAY_DIFF_T",
+   "file": "intel-day-diff-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "INTEL_DONOR_INTEL_T",
+   "file": "intel-donor-intel-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "INTEL_DONOR_SCAN_T",
+   "file": "intel-donor-scan-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "INTEL_FORECAST_FROM_SCAN_T",
+   "file": "intel-forecast-from-scan-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "INTEL_RFM_FROM_SCAN_T",
+   "file": "intel-rfm-from-scan-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "INTEL_TREND_FROM_SCAN_T",
+   "file": "intel-trend-from-scan-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "IS_ENC_DOC_T",
+   "file": "is-enc-doc-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "IS_ENCRYPTED_T",
+   "file": "is-encrypted-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "IS_HEB_LEAP_YEAR_T",
+   "file": "is-heb-leap-year-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "IS_IOS_T",
+   "file": "is-ios-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ITEM_LABEL_T",
+   "file": "item-label-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "KIT_PROGRESS_T",
+   "file": "kit-progress-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "LESSON_TIER_OPTIONS_T",
+   "file": "lesson-tier-options-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "LESSONS_IN_TERM_T",
+   "file": "lessons-in-term-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "LIB_AI_TERMS",
+   "file": "lib-ai-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "LIB_CONFIG_TERMS",
+   "file": "lib-config-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "LIB_CRYPTO_TERMS",
+   "file": "lib-crypto-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "LIB_ICS_TERMS",
+   "file": "lib-ics-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "LIB_NEDARIM_SYNC_TERMS",
+   "file": "lib-nedarim-sync-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "LOCK_KEY_T",
+   "file": "lock-key-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "MAKE_NORMALIZE_CONFIG_T",
+   "file": "make-normalize-config-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "cf",
+   "file": "make-normalize-site-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "MAKE_NORMALIZE_SITE_T",
+   "file": "make-normalize-site-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "MAKEUP_ELIGIBILITY_T",
+   "file": "makeup-eligibility-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "MANUAL_DRIVER_T",
+   "file": "manual-driver-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "MAPS_ROUTE_URL_T",
+   "file": "maps-route-url-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "MAPS_SEARCH_URL_T",
+   "file": "maps-search-url-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "MARITAL_CHIP",
+   "file": "marital-chip-style-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "MARITAL_CHIP_STYLE_T",
+   "file": "marital-chip-style-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "MARK_SUPPORT_READ_T",
+   "file": "mark-support-read-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "MATCH_INCOMING_TO_PLANNED_T",
+   "file": "match-incoming-to-planned-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "MAX_DISCOUNT_PCT_T",
+   "file": "max-discount-pct-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "MERGE_DONATIONS_PRESERVING_T",
+   "file": "merge-donations-preserving-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "MERGE_FAMILIES_BY_FIELDS_T",
+   "file": "merge-families-by-fields-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "MERGE_FAMILIES_T",
+   "file": "merge-families-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "merge-families-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "MERGE_SUPPORTERS_BY_FIELDS_T",
+   "file": "merge-supporters-by-fields-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "META_PATH_T",
+   "file": "meta-path-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "MIGRATE_SUPPORTERS_TO_KEYED_T",
+   "file": "migrate-supporters-to-keyed-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "MIN_TO_HM_T",
+   "file": "min-to-hm-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "MODEL_META_T",
+   "file": "model-meta-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "MONTHS",
+   "file": "month-en-of-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20633,8 +21653,108 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "NAMES_EXPORT_TERMS",
+   "file": "names-export-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "NEEDS_CARE_SHOP_T",
+   "file": "needs-care-shop-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "NEEDS_CARE_TZEDAKA_T",
+   "file": "needs-care-tzedaka-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "needs-care-tzedaka-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "NET_CHECK_SCRIPT_T",
+   "file": "net-check-script-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "NET_CHECK_TERMS",
+   "file": "net-check-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "NEXT_CLOSURE_T",
+   "file": "next-closure-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "NORM_SEARCH_T",
+   "file": "norm-search-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "NORMALIZE_PRICES_T",
+   "file": "normalize-prices-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "TEL_KINDS",
+   "file": "normalize-telephony-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "NORMALIZE_TELEPHONY_T",
+   "file": "normalize-telephony-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "OPEN_DEK_T",
+   "file": "open-dek-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ORBIT_THEME_T",
+   "file": "orbit-theme-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ORG_CAL_ENTRIES_T",
+   "file": "org-cal-entries-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ORG_JOIN_LINK_T",
+   "file": "org-join-link-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ORG_LINK_T",
+   "file": "org-link-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ORG_SLUG_FROM_URL_T",
+   "file": "org-slug-from-url-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "OVERDUE_CONTACT_TASK_DRAFTS_T",
+   "file": "overdue-contact-task-drafts-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PARSE_ANY_DATE_T",
+   "file": "parse-any-date-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PARSE_AYIN_SHEET_T",
+   "file": "parse-ayin-sheet-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PARSE_FAMILIES_CSV_T",
+   "file": "parse-families-csv-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20643,8 +21763,78 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "PARSE_SUPPORTER_GRID_T",
+   "file": "parse-supporter-grid-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PARSE_VCARDS_T",
+   "file": "parse-vcards-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PARSE_XLSX_SHEET_T",
+   "file": "parse-xlsx-sheet-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PAY_LINK_T",
+   "file": "pay-link-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PENDING_DELIVERIES_TODAY_T",
+   "file": "pending-deliveries-today-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PERSONAL_CAL_ENTRIES_T",
+   "file": "personal-cal-entries-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PHONE_ISSUE_T",
+   "file": "phone-issue-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PHONE_REGION_T",
+   "file": "phone-region-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PLAN_ADD_NAME_T",
+   "file": "plan-add-name-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PLAN_AYIN_ADVANCE_T",
+   "file": "plan-ayin-advance-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PLAN_DEMO_CLEANUP_T",
+   "file": "plan-demo-cleanup-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kFpFields",
    "file": "plan-demo-cleanup.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PLAN_LABEL_OF_T",
+   "file": "plan-label-of-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PLAN_NEDARIM_SYNC_T",
+   "file": "plan-nedarim-sync-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PLAN_WORD_T",
+   "file": "plan-word-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20653,8 +21843,43 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "PLATFORM_TERMS",
+   "file": "platform-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PORTFOLIO_ACTIVE_BY_MONTH_T",
+   "file": "portfolio-active-by-month-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "RISK",
+   "file": "portfolio-portfolio-intel-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "order",
+   "file": "portfolio-tier-trend-counts-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PORTFOLIO_TIER_TREND_COUNTS_T",
+   "file": "portfolio-tier-trend-counts-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "portfolio-tier-trend-counts-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "caller",
+   "file": "preview-telephony-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PREVIEW_TELEPHONY_T",
+   "file": "preview-telephony-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20663,8 +21888,28 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "PRICE_SUFFIX_T",
+   "file": "price-suffix-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "price-suffix-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PRICING_TERMS",
+   "file": "pricing-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PROMPT_INSTALL_T",
+   "file": "prompt-install-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PROVIDER_CLEARER_T",
+   "file": "provider-clearer-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20673,8 +21918,138 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "PUBLIC_SITE_ON_T",
+   "file": "public-site-on-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PUBLISH_ICS_FEED_T",
+   "file": "publish-ics-feed-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PULL_AUDIT_RING_T",
+   "file": "pull-audit-ring-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PULL_NEDARIM_T",
+   "file": "pull-nedarim-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PULL_SOLA_T",
+   "file": "pull-sola-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PUNCH_CONFIRM_STEP_T",
+   "file": "punch-confirm-step-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PURPOSE_KEY_OF_T",
+   "file": "purpose-key-of-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PUSH_AUDIT_RING_T",
+   "file": "push-audit-ring-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PUSH_DIFF_T",
+   "file": "push-diff-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "PUSH_DONATIONS_T",
+   "file": "push-donations-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "NAV_HIST_MAX",
+   "file": "push-nav-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "RANGE_LABEL_T",
+   "file": "range-label-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "READ_CLOUD_ENVELOPE_T",
+   "file": "read-cloud-envelope-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "READ_FILE_AS_DATA_URL_T",
+   "file": "read-file-as-data-url-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "READ_ICS_FEED_TOKEN_T",
+   "file": "read-ics-feed-token-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "READ_ORG_SECRETS_META_T",
+   "file": "read-org-secrets-meta-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "RECEIPT_FMT_OF_T",
+   "file": "receipt-fmt-of-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "RECEIPT_HTML_T",
+   "file": "receipt-html-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "RECEIPT_LINES_T",
+   "file": "receipt-lines-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "RECEIPT_TERMS",
+   "file": "receipt-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "RECEIPT_VERIFY_CODE_T",
+   "file": "receipt-verify-code-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "REDEMPTIONS_CSV_ROWS_T",
+   "file": "redemptions-csv-rows-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "redemptions-csv-rows-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "REENROLL_COUNTS_T",
+   "file": "reenroll-counts-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "head",
+   "file": "reenroll-csv-rows-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "REENROLL_CSV_ROWS_T",
+   "file": "reenroll-csv-rows-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "REENROLL_LIST_TEXT_T",
+   "file": "reenroll-list-text-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20683,8 +22058,133 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "REMOVE_ORG_MEMBER_T",
+   "file": "remove-org-member-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "RENEW_TARGETS_T",
+   "file": "renew-targets-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "RESET_PASSWORD_T",
+   "file": "reset-password-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "RESOLVE_ENROLL_FAMILY_T",
+   "file": "resolve-enroll-family-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "REVERT_PATCH_T",
+   "file": "revert-patch-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "REWRAP_PASSWORD_T",
+   "file": "rewrap-password-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ROLE_OF_T",
+   "file": "role-of-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ROOM_INFO_LABEL_T",
+   "file": "room-info-label-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ROOMS_NOW_T",
+   "file": "rooms-now-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "ROUND2_T",
+   "file": "round2-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "RULE_CONTAINS_T",
+   "file": "rule-contains-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "RULE_EXACT_T",
+   "file": "rule-exact-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "RULE_PLURAL_T",
+   "file": "rule-plural-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "rule-plural-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "RULE_PREFIX_T",
+   "file": "rule-prefix-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "RULE_SKELETON_T",
+   "file": "rule-skeleton-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "RULE_TYPO_T",
+   "file": "rule-typo-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "RUN_AUDIT_T",
+   "file": "run-audit-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "RUN_NET_CHECK_T",
+   "file": "run-net-check-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SAFE_HTTPS_URL_T",
+   "file": "safe-https-url-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SANITIZE_INCOMING_T",
+   "file": "sanitize-incoming-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SANITIZE_PHOTOS_T",
+   "file": "sanitize-photos-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SANITIZE_SUPPORT_TEXT_T",
+   "file": "sanitize-support-text-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SCHEDULE_CLASH_TEXT_T",
+   "file": "schedule-clash-text-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SEGMENTS_MATCH_SEGMENT_T",
+   "file": "segments-match-segment-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SEGMENTS_SEGMENT_COUNTS_T",
+   "file": "segments-segment-counts-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20693,8 +22193,38 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "SEGULA_TITLE_T",
+   "file": "segula-title-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "segula-title-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SEND_SUPPORT_MESSAGE_T",
+   "file": "send-support-message-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SEND_SUPPORT_REPLY_T",
+   "file": "send-support-reply-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SEND_TEAM_MESSAGE_T",
+   "file": "send-team-message-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SHEKEL_T",
+   "file": "shekel-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SIGN_UP_ERROR_T",
+   "file": "sign-up-error-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20703,8 +22233,33 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "SIGN_UP_T",
+   "file": "sign-up-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SITE_CAMPAIGN_PROGRESS_T",
+   "file": "site-campaign-progress-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SITE_PALETTE_T",
+   "file": "site-palette-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SITE_VOCAB_T",
+   "file": "site-vocab-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "site-vocab-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "HEB2LAT",
+   "file": "slugify-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20713,8 +22268,63 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "SMART_SCORE_T",
+   "file": "smart-score-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SMTP_URL_TERMS",
+   "file": "smtp-url-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SORT_SUPPORT_THREADS_T",
+   "file": "sort-support-threads-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SPOTLIGHT_BOX_T",
+   "file": "spotlight-box-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "STAGE_LABEL_T",
+   "file": "stage-label-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kStageFallback",
    "file": "stage-label.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "STALE_BOXES_T",
+   "file": "stale-boxes-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "STEP_SCALE_T",
+   "file": "step-scale-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "STRIP_AUDIT_META_T",
+   "file": "strip-audit-meta-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "STRIP_SUP_KEY_T",
+   "file": "strip-sup-key-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "STRIP_SUPPORTER_DONATIONS_T",
+   "file": "strip-supporter-donations-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "STUDENT_HISTORY_TEXT_T",
+   "file": "student-history-text-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -20723,13 +22333,298 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "SUGGESTIONS_T",
+   "file": "suggestions-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SUP_ALLOWED_KEYS_T",
+   "file": "sup-allowed-keys-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SUP_DON_EVENTS_T",
+   "file": "sup-don-events-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SUP_DUP_FIELDS_T",
+   "file": "sup-dup-fields-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SUP_SCORE_BINS_T",
+   "file": "sup-score-bins-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SUP_SCORE_T",
+   "file": "sup-score-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SUP_TIER_T",
+   "file": "sup-tier-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SUP12M_T",
+   "file": "sup12m-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SUPPORT_CHAT_TERMS",
+   "file": "support-chat-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SUPPORT_DAY_LABEL_T",
+   "file": "support-day-label-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SUPPORT_MSG_TIME_T",
+   "file": "support-msg-time-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SUPPORT_PREVIEW_T",
+   "file": "support-preview-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "SUPPORTERS_IMPORT_FORMAT_ROWS_T",
+   "file": "supporters-import-format-rows-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "supporters-import-format-rows-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "SUPPORTERS_TERMS",
+   "file": "supporters-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "TASK_IDENTITY_T",
+   "file": "task-identity-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "TASK_STATS_FOR_T",
+   "file": "task-stats-for-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "TEL_HREF_T",
+   "file": "tel-href-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "TELEPHONY_TO_TENANT_T",
+   "file": "telephony-to-tenant-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "TERM_LABEL_T",
+   "file": "term-label-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "THANKS_PROMPT_T",
+   "file": "thanks-prompt-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "THEME_TERMS",
+   "file": "theme-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "TIER_OF_T",
+   "file": "tier-of-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "tier-of-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "TIME_TO_MIN_T",
+   "file": "time-to-min-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "TO_TENANT_ID_T",
+   "file": "to-tenant-id-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "TOUR_STEPS_T",
+   "file": "tour-steps-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "TRUST_REPORT_T",
+   "file": "trust-report-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "UNIT_LABEL_T",
+   "file": "unit-label-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "UPCOMING_HOLIDAYS_T",
+   "file": "upcoming-holidays-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "UPCOMING_MEETINGS_T",
+   "file": "upcoming-meetings-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "VALID_ISRAELI_ID_T",
+   "file": "valid-israeli-id-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "VALIDATE_HEB_MONTH_NAMES_T",
+   "file": "validate-heb-month-names-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "VALIDATE_TERMS",
+   "file": "validate-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "VCARD_IMPORT_TERMS",
+   "file": "vcard-import-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "WA_APP_LINK_T",
+   "file": "wa-app-link-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "WA_BIRTHDAY_TEXT_T",
+   "file": "wa-birthday-text-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "WA_DELIVERY_TEXT_T",
+   "file": "wa-delivery-text-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "WA_DIGITS_T",
+   "file": "wa-digits-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "WA_LINK_T",
+   "file": "wa-link-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "WA_PAYMENT_TEXT_T",
+   "file": "wa-payment-text-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "WA_TERMS",
+   "file": "wa-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "WAITLIST_FOR_T",
+   "file": "waitlist-for-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "WATCH_ALL_SUPPORT_THREADS_T",
+   "file": "watch-all-support-threads-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "WATCH_INCOMING_PAYMENTS_T",
+   "file": "watch-incoming-payments-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "WATCH_ORG_CLOUD_CONFIG_T",
+   "file": "watch-org-cloud-config-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "WATCH_SUPPORT_MESSAGES_T",
+   "file": "watch-support-messages-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "WATCH_TEAM_MESSAGES_T",
+   "file": "watch-team-messages-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "WHEEL_INDEX_UNDER_POINTER_T",
+   "file": "wheel-index-under-pointer-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "WITH_NEDARIM_HOK_T",
+   "file": "with-nedarim-hok-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "WIZARD_STEP_ERROR_T",
+   "file": "wizard-step-error-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "WRITE_MAIL_OUTBOX_T",
+   "file": "write-mail-outbox-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "WRITE_ORG_CLOUD_DOC_T",
+   "file": "write-org-cloud-doc-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "WRITE_ORG_JOIN_REQUEST_T",
+   "file": "write-org-join-request-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "WRITE_ORG_LEAD_T",
+   "file": "write-org-lead-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "WRITE_ORG_REQUEST_T",
+   "file": "write-org-request-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "WRITE_ORG_SECRETS_T",
+   "file": "write-org-secrets-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "WRITE_SMS_OUTBOX_T",
+   "file": "write-sms-outbox-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "XLAT_T",
+   "file": "xlat-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
