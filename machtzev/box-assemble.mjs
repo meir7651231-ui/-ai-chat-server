@@ -43,6 +43,7 @@ try { mod = await import(pathToFileURL(tmp).href + '?t=' + Date.now()); }
 catch (e) { fs.unlinkSync(tmp); console.error(`✗ ${boxName}: יבוא-נכשל — ${String(e.message).slice(0, 80)}`); process.exit(1); }
 
 const fnCases = {};
+// ── שלב-א׳: golden מ-POOL (קלט פשוט) ──
 for (const n of exports) {
   const fn = mod[n];
   if (typeof fn !== 'function' || fn.constructor.name === 'AsyncFunction' || fn.length > 3) continue;
@@ -58,6 +59,48 @@ for (const n of exports) {
     if (cs.length >= 10) break;
   }
   if (cs.length >= 3 && new Set(cs.map(c => c[1])).size >= 2) fnCases[n] = cs;
+}
+
+// ── שלב-ב׳: קציר-פיקסצ'רים — replay מכשור של קובץ-הבדיקה של maor (קלט-מורכב) ──
+const testPath = path.join('/home/user/maor-system', path.dirname(SRCREL), '__tests__', path.basename(SRCREL).replace(/\.(ts|tsx)$/, '.test.$1'));
+if (fs.existsSync(testPath)) {
+  try {
+    const tjs = ts.transpileModule(fs.readFileSync(testPath, 'utf8'), { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } }).outputText;
+    const otherVal = [...tjs.matchAll(/^import\s+.*?from\s+['"]([^'"]+)['"]/gm)].map(m => m[1]).filter(p => !/vitest|jest|\/plannedMatch|['"]\.\.?\//.test(p) === false && !new RegExp(path.basename(SRCREL, path.extname(SRCREL))).test(p) && !/vitest|jest/.test(p));
+    // גוף-הבדיקה בלי שורות-import (טיפוסים נמחקו; vitest+הקופסה מוזרקים); דילוג אם יש יבוא-ערך-זר
+    const body = tjs.replace(/^import\s+.*$/gm, '').trim();
+    const stray = [...tjs.matchAll(/^import\s+(?!type)([^;]*?)from\s+['"]([^'"]+)['"]/gm)]
+      .filter(m => !/vitest|jest/.test(m[2]) && !new RegExp(path.basename(SRCREL, path.extname(SRCREL)) + "['\"]?$").test(m[2]));
+    if (!stray.length) {
+      const runner = path.join(BOXES, '__replay_' + boxName + '.mjs');
+      fs.writeFileSync(runner, `
+import * as __box from './${boxName}.mjs';
+const __REC = {};
+const __w = {};
+for (const k of Object.keys(__box)) __w[k] = typeof __box[k] === 'function'
+  ? (...a) => { let r; try { r = __box[k](...a); } catch { return undefined; }
+      try { const A = a.map(x => x === undefined ? '"__undef__"' : JSON.stringify(x)); const R = JSON.stringify(r);
+        if (A.every(x => x != null) && R != null && R.length < 600) (__REC[k] = __REC[k] || []).push([A, R]); } catch {} return r; }
+  : __box[k];
+const { ${exports.join(', ')} } = __w;
+const describe = (n, f) => { try { f(); } catch {} };
+const it = (n, f) => { try { f(); } catch {} };
+const test = it, beforeEach = () => {}, afterEach = () => {}, beforeAll = () => {}, afterAll = () => {};
+const __c = new Proxy(function () { return __c; }, { get() { return function () { return __c; }; } });
+const expect = () => __c;
+${body}
+export const CASES = __REC;
+`);
+      try {
+        const rm = await import(pathToFileURL(runner).href + '?t=' + Date.now());
+        for (const [n, cs] of Object.entries(rm.CASES || {})) {
+          const uniq = [...new Map(cs.map(c => [c[0].join('|') + '=>' + c[1], c])).values()];
+          if (uniq.length && (!fnCases[n] || fnCases[n].length < uniq.length)) fnCases[n] = uniq.slice(0, 12);
+        }
+      } catch (e) { console.error(`  ~ replay ${boxName}: ${String(e.message).slice(0, 60)}`); }
+      fs.unlinkSync(runner);
+    }
+  } catch {}
 }
 const golden = Object.keys(fnCases);
 if (!golden.length) { fs.unlinkSync(tmp); console.error(`✗ ${boxName}: אף יצוא לא בר-golden (קלט-מורכב/לא-דטרמיניסטי)`); process.exit(1); }
