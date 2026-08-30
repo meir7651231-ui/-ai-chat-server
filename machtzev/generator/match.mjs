@@ -17,8 +17,14 @@ const atlas = readJson('atlas.json', { widgets: [] });
 export const stem = (w) => w.replace(/^[בלהומשכ](?=..)/, '').replace(/(יות|ים|ות)$/, '').replace(/[התי]$/, '');
 const heTokens = (s) => [...(s || '').matchAll(/[֐-׿]{2,}/g)].map((m) => stem(m[0])).filter((w) => w.length > 1);
 
-// אינדקס: כל ווידג'ט → קבוצת-גזעים מהתיאור-העברי שלו. IDF נלמד מהמדף.
-const WIDGETS = atlas.widgets.map((w) => ({ cls: w.cls, file: w.file, st: [...new Set((w.he || []).map(stem))] })).filter((w) => w.st.length);
+// מילים-שנלמדו-משימוש (דאטה, לא האכלה): אטום ⇒ מילים שהמשתמש קשר אליו.
+const LEARNED = readJson('knowledge/learned.json', { bindings: {} }).bindings || {};
+const stemsOf = (arr) => (arr || []).flatMap((x) => [...String(x).matchAll(/[֐-׿]{2,}/g)].map((m) => stem(m[0]))).filter((t) => t.length > 1);
+
+// אינדקס: כל ווידג'ט → גזעים מהתיאור-העברי שלו + מהמילים-שנלמדו. IDF נלמד מהמדף.
+const WIDGETS = atlas.widgets
+  .map((w) => ({ cls: w.cls, file: w.file, st: [...new Set([...stemsOf(w.he), ...stemsOf(LEARNED[w.cls])])] }))
+  .filter((w) => w.st.length);
 const df = new Map();
 for (const w of WIDGETS) for (const t of w.st) df.set(t, (df.get(t) || 0) + 1);
 const N = WIDGETS.length || 1;

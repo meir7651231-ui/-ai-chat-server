@@ -2,7 +2,7 @@
  "counts": {
   "widgets": 464,
   "functions": 445,
-  "data": 1716
+  "data": 1714
  },
  "widgets": [
   {
@@ -37127,40 +37127,6 @@
   },
   {
    "name": "gen_nl_card_toast3",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_nl_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_nl_profile_title",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_nl_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_nl_profile_sub",
    "type": "String",
    "he": [
     "דאטה",

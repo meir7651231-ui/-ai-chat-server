@@ -1,7 +1,7 @@
 // 🧬 חולל ע"י המחולל (genesis-gen, הכרעות 17+18) — בקשה ⇒ בחירת-אטומים ⇒ חיווט ⇒ מסך. אל תערוך ידנית.
-// 🧬 שם: הירו 🎯 לוח בקרה לניהול עסק עם הזמנות | נבנה מתיאור חופשי
-// 🧬 בקשה: הירו 🎯 לוח בקרה לניהול עסק עם הזמנות | נבנה מתיאור חופשי · אטום HeroCard לוח בקרה לניהול עסק עם הזמנות · אטום EmptyStateCard לוח בקרה לניהול עסק עם הזמנות · אטום ManagerDashboardCountBadge לוח בקרה לניהול עסק עם הזמנות · אטום DataGrid לוח בקרה לניהול עסק עם הזמנות · אטום WorkerTaskDetailSheetPrimaryBtn לוח בקרה לניהול עסק עם הזמנות · אטום TitledSection לוח בקרה לניהול עסק עם הזמנות · אטום LiveStatusPill לוח בקרה לניהול עסק עם הזמנות · אטום OrderCard הזמנות · אטום CustomerCard לקוחות · אטום ProfileCard מדדים · באנר המחולל למד מהאטומים ומהלוחות ובחר לבד לפי משמעות
-// 🧬 אטומים שנבחרו: HeroCard · EmptyStateCard · ManagerDashboardCountBadge · DataGrid · WorkerTaskDetailSheetPrimaryBtn · TitledSection · LiveStatusPill · OrderCard · CustomerCard · ProfileCard · CoinBanner
+// 🧬 שם: הירו 🎯 לוח בקרה לניהול עסק עם הזמנות ולקו | נבנה מתיאור חופשי
+// 🧬 בקשה: הירו 🎯 לוח בקרה לניהול עסק עם הזמנות ולקו | נבנה מתיאור חופשי · אטום HeroCard לוח בקרה לניהול עסק עם הזמנות ולקו · אטום EmptyStateCard לוח בקרה לניהול עסק עם הזמנות ולקו · אטום ManagerDashboardCountBadge לוח בקרה לניהול עסק עם הזמנות ולקו · אטום DataGrid לוח בקרה לניהול עסק עם הזמנות ולקו · אטום WorkerTaskDetailSheetPrimaryBtn לוח בקרה לניהול עסק עם הזמנות ולקו · אטום TitledSection לוח בקרה לניהול עסק עם הזמנות ולקו · אטום LiveStatusPill לוח בקרה לניהול עסק עם הזמנות ולקו · אטום OrderCard הזמנות · אטום CustomerCard לקוחות · באנר המחולל למד מהאטומים ומהלוחות ובחר לבד לפי משמעות
+// 🧬 אטומים שנבחרו: HeroCard · EmptyStateCard · ManagerDashboardCountBadge · DataGrid · WorkerTaskDetailSheetPrimaryBtn · TitledSection · LiveStatusPill · OrderCard · CustomerCard · CoinBanner
 import '../dart-data-bs/auto/gen_nl_content.dart';
 import '../dart-ui-bs/auto/bs_tokens.dart';
 import '../dart-ui-bs/auto/coin_banner.dart';
@@ -11,7 +11,6 @@ import '../dart-ui-bs/data_grid.dart';
 import '../dart-ui-bs/empty_state_card.dart';
 import '../dart-ui-bs/hero_card.dart';
 import '../dart-ui-bs/order_card.dart';
-import '../dart-ui-bs/profile_card.dart';
 import '../dart-ui-bs/screens__manager_dashboard_screen/customer_card.dart';
 import '../dart-ui-bs/screens__manager_dashboard_screen/live_status_pill.dart';
 import '../dart-ui-bs/titled_section.dart';
@@ -50,7 +49,6 @@ class _GenNlScreenState extends State<GenNlScreen> {
           LiveStatusPill(text: gen_nl_other_text, textColor: BsTokens.inkLight, fillColor: BsTokens.cardLight, pillRadius: 12, horizontalPadding: 16),
           OrderCard(stageLabel: gen_nl_card_stage_label, itemsLabel: gen_nl_card_items_label, sumLabel: gen_nl_card_sum_label, onTap: () => _toast(gen_nl_card_toast2), cardColor: BsTokens.cardLight, inkColor: BsTokens.inkLight, mutedColor: BsTokens.mutedLight, borderColor: BsTokens.divider, radius: 12, width: 16),
           CustomerCard(glyph: gen_nl_card_glyph3, name: gen_nl_card_name, subLabel: gen_nl_card_sub_label, creditLine: gen_nl_card_credit_line, onTap: () => _toast(gen_nl_card_toast3), statusPill: const SizedBox(height: 4), creditBar: const SizedBox(height: 4), surfaceColor: BsTokens.cardLight, borderColor: BsTokens.divider, inkColor: BsTokens.inkLight, mutedColor: BsTokens.mutedLight, radius: 12, padding: (null as dynamic) /* לא-ממולא */, gap: 16, sectionGap: 16),
-          ProfileCard(title: gen_nl_profile_title, sub: gen_nl_profile_sub, height: 16, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
           CoinBanner(coins: 0, sub: gen_nl_banner_sub),
           ],
         ),
