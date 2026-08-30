@@ -7,10 +7,10 @@
 
 // סיבת-סגירה להצגה — רק ספציפית (חג/שבת/dnd/חירום), לא הגנרית "מחוץ-לשעות".
 
-export function explainCall(tenant, call = {}, opts = {}, eng = {}, DOW_HE) {
+export function explainCall(tenant, call = {}, opts = {}, eng = {}, DOW_HE, T) {
   // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
   function closedTag(reason) {
-    return reason && reason !== 'מחוץ-לשעות' && reason !== 'שעות-פעילות' ? ` (${reason})` : '';
+    return reason && reason !== T.k1 && reason !== T.k2 ? ` (${reason})` : '';
   }
 
   const { simulateCall, featureOn } = eng;
@@ -21,47 +21,47 @@ export function explainCall(tenant, call = {}, opts = {}, eng = {}, DOW_HE) {
   const vm = tenant.destinations?.voicemail?.box || '—';
   const when = call.dow != null ? `יום ${DOW_HE[call.dow]} ${call.hhmm || ''}` : call.date ? `${call.date} ${call.hhmm || ''}` : '';
 
-  if (call.direction === 'outbound') {
+  if (call.direction === T.k3) {
     lines.push(`📞 חיוג-יוצא: ${call.did || ''}`);
-    if (sim.outcome === 'non-kosher-blocked') lines.push('⛔ מצב-כשר: ניסיון-יציאה דרך SIM לא-כשר — נחסם.');
-    else if (sim.outcome === 'no-such-sim') lines.push('⚠️ הערוץ שנבחר לא-קיים.');
-    else if (sim.outcome === 'no-default') lines.push('⚠️ אין SIM ליציאת-ברירת-מחדל.');
+    if (sim.outcome === T.k4) lines.push(T.k5);
+    else if (sim.outcome === T.k6) lines.push(T.k7);
+    else if (sim.outcome === T.k8) lines.push(T.k9);
     else lines.push(`✅ יוצא דרך: ${sim.outcome.replace('via:', '')}`);
     return { outcome: sim.outcome, reason: '', summary: lines.join(' '), lines, sim };
   }
 
   if (call.callerId) lines.push(`📲 מתקשר ${call.callerId}${when ? ` · ${when}` : ''}`);
   switch (sim.outcome) {
-    case 'unknown-did':
-      lines.push('❓ המספר שחויג אינו מוכר למרכזייה — לא ינותב.'); break;
-    case 'blocked':
-      lines.push(sim.path.includes('allowlist') ? '⛔ המתקשר אינו ברשימת-ההיתר (או חסוי) — נותק.' : '⛔ המתקשר ברשימת-החסומים — נותק.'); break;
-    case 'priority':
+    case T.k10:
+      lines.push(T.k11); break;
+    case T.k12:
+      lines.push(sim.path.includes(T.k13) ? T.k14 : T.k15); break;
+    case T.k16:
       lines.push(`🆘 מוקד-מצוקה: מתקשר-בסיכון — מנותב ישירות לאחראי (${sim.path.find((p) => p.startsWith('resp:'))?.slice(5) || manager}), עוקף שעות/חג.`); break;
-    case 'mourning':
+    case T.k17:
       lines.push(`🕯️ מצב-שבעה פעיל: מנותב למחליף (${sim.path.find((p) => p.startsWith('sub:'))?.slice(4) || manager}).`); break;
-    case 'announcement':
-      lines.push('📢 קו-הכרזה: משמיע הודעה מוקלטת ומנתק.'); break;
-    case 'office':
+    case T.k18:
+      lines.push(T.k19); break;
+    case T.k20:
       lines.push(`✅ בשעות-פעילות → מצלצל במשרד (${office}).`); break;
-    case 'ivr-menu':
-      lines.push('✅ בשעות → תפריט-קולי (IVR) ממתין לבחירה.'); break;
-    case 'queue':
-      lines.push('✅ בשעות → תור-המתנה עד שנציג מושך את השיחה.'); break;
-    case 'voicemail':
+    case T.k21:
+      lines.push(T.k22); break;
+    case T.k23:
+      lines.push(T.k24); break;
+    case T.k25:
       lines.push(`🌙 מחוץ-לשעות${closedTag(sim.reason)} → מנהל (${manager}) → תא-קולי (${vm}).`); break;
-    case 'manager':
+    case T.k26:
       lines.push(`🌙 מחוץ-לשעות${closedTag(sim.reason)} → מנהל (${manager}) (בלי תא-קולי).`); break;
-    case 'afterhours': {
+    case T.k27: {
       // F11: מודע-voicemail — כשהתא-הקולי כבוי, אחרי-שעות מנגן צליל-תפוס ומנתק (בלי לכידה).
-      const trg = sim.path.includes('ivr-invalid') ? 'בחירה לא-תקינה ב-IVR' : 'אין-מענה במשרד';
-      lines.push(featureOn(tenant, 'voicemail')
+      const trg = sim.path.includes(T.k28) ? T.k29 : T.k30;
+      lines.push(featureOn(tenant, T.k25)
         ? `🌙 ${trg} → מנהל (${manager}) → תא-קולי.`
         : `🌙 ${trg} → מנהל (${manager}) → צליל-תפוס (אין תא-קולי).`);
       break;
     }
     default:
-      if (String(sim.outcome).startsWith('ivr:')) lines.push(`✅ בחירת-IVR → ${sim.outcome.slice(4)}.`);
+      if (String(sim.outcome).startsWith(T.k31)) lines.push(`✅ בחירת-IVR → ${sim.outcome.slice(4)}.`);
       else lines.push(`תוצאה: ${sim.outcome}`);
   }
   return { outcome: sim.outcome, reason: sim.reason || '', summary: lines.join(' '), lines, sim };

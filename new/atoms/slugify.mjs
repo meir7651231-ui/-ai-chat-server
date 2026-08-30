@@ -6,11 +6,11 @@
 
 /** תעתיק אות עברית → לטינית (פשוט וצפוי — הבעלים עורך את התוצאה ממילא). */
 
-export function slugify(orgName, taken, HEB2LAT) {
+export function slugify(orgName, taken, HEB2LAT, T) {
     const lat = [...orgName.trim().toLowerCase()].map((ch) => HEB2LAT[ch] ?? ch).join('');
     let base = lat.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').replace(/--+/g, '-');
     if (base.length < 2)
-        base = 'org';
+        base = T.k1;
     if (base.length > 30)
         base = base.slice(0, 30).replace(/-+$/g, '');
     if (!taken.includes(base))

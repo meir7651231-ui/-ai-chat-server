@@ -1,5 +1,7 @@
 /** בדיקת-חוזה · make-normalize-site — זבל/עוין/תקרות/ריקים/רב-לשוני. */
 import { makeNormalizeSite as __pure_makeNormalizeSite } from './make-normalize-site.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור; בדיקה לא מייבאת אטום-שכן)
+const __d_make_normalize_site_cf = {};
 // צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
 const __d_makeNormalizeSite_MAKE_NORMALIZE_SITE_T = {
   k1: "string",
@@ -17,7 +19,7 @@ const __d_makeNormalizeSite_MAKE_NORMALIZE_SITE_T = {
   k13: "storyBadge",
   k14: "donateNote",
 };
-const makeNormalizeSite = (...a) => __pure_makeNormalizeSite(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_makeNormalizeSite_MAKE_NORMALIZE_SITE_T);
+const makeNormalizeSite = (...a) => __pure_makeNormalizeSite(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_makeNormalizeSite_MAKE_NORMALIZE_SITE_T, __d_make_normalize_site_cf);
 import assert from 'node:assert';
 
 // שקע-https מינימלי תואם-חוזה (הצלבת-אמת מול safe-https-url = בדיקת-הקופסה)

@@ -30,9 +30,10 @@ import { nextYearCourseDraft } from '../atoms/next-year-course-draft.mjs';
 import { studentHistory } from '../atoms/student-history.mjs';
 import { studentHistoryText } from '../atoms/student-history-text.mjs';
 import { reenrollCsvRows as __pure_reenrollCsvRows } from '../atoms/reenroll-csv-rows.mjs';
+import { REENROLL_CSV_ROWS_T as __d_reenrollCsvRows_REENROLL_CSV_ROWS_T } from '../atoms/reenroll-csv-rows-strings.mjs';
 import { head } from '../atoms/reenroll-csv-rows-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
-const reenrollCsvRows = (...a) => __pure_reenrollCsvRows(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), head);
+const reenrollCsvRows = (...a) => __pure_reenrollCsvRows(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), head, __d_reenrollCsvRows_REENROLL_CSV_ROWS_T);
 import { reenrollListText as __pure_reenrollListText } from '../atoms/reenroll-list-text.mjs';
 import { REENROLL_LIST_TEXT_T as __d_reenrollListText_REENROLL_LIST_TEXT_T } from '../atoms/reenroll-list-text-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

@@ -1,4 +1,12 @@
 import { blockReason as __pure_blockReason } from './block-reason.mjs';
+const __d_blockReason_BLOCK_REASON_T = {
+  k1: "שבת",
+  k2: "יום שישי (שעתיים לפני שבת)",
+  k3: "תשעה באב (נדחה)",
+  k4: "Tishri",
+  k5: "Nisan",
+  k6: "חול המועד",
+};
 // צילום-מקומי מ-block-reason-data + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)
 const FULL_HOLIDAYS = [
   'ראש השנה',
@@ -11,7 +19,7 @@ const FULL_HOLIDAYS = [
   'שבועות',
   'תשעה באב',
 ];
-const blockReason = (...a) => __pure_blockReason(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), FULL_HOLIDAYS);
+const blockReason = (...a) => __pure_blockReason(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), FULL_HOLIDAYS, __d_blockReason_BLOCK_REASON_T);
 // שקע hebParts — ההתנהגות האמיתית (Intl בלוח hebrew, חודש בשם אנגלי)
 const fmtParts = new Intl.DateTimeFormat('en-u-ca-hebrew', { day: 'numeric', month: 'long', year: 'numeric' });
 const hebParts = (d) => {

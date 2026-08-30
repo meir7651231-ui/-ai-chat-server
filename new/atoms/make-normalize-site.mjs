@@ -4,7 +4,7 @@
  *  מוצא: maor/src/lib/config.ts:216-512 כלשונו (עוזרי-הקובץ הפרטיים siteStr/normLocalized/
  *  sitePosNum/sitePhone נכללו); ‏safeHttpsUrl ו-SITE_LANGS הוזרקו כשקעי-מפעל (חוק-1).
  *  @param safeHttpsUrl שקע: (raw)=>string|null · @param SITE_LANGS שקע: readonly string[] */
-export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS, T) {
+export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS, T, cf) {
   function siteStr(v, max) {
       return typeof v === T.k1 ? v.replace(/\p{Cc}/gu, '').trim().slice(0, max) : '';
   }
@@ -413,7 +413,6 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS, T) {
       }
       if (s.contactForm && typeof s.contactForm === T.k2 && !Array.isArray(s.contactForm)) {
           const o = s.contactForm;
-          const cf = {};
           if (o.enabled === true)
               cf.enabled = true;
           else if (o.enabled === false)

@@ -2,9 +2,10 @@
  *  חוזה: hebrew.contract.md · תוכנית: box-drafts/lib-hebrew.box-draft.md
  *  אפס שקעי-IO: הכול Intl/סטנדרט — אין DOM/רשת/אחסון להזרקה. */
 import { gem as __pure_gem } from '../atoms/gematria.mjs';
+import { GEMATRIA_T as __d_gem_GEMATRIA_T } from '../atoms/gematria-strings.mjs';
 import { U, T, H } from '../atoms/gematria-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
-const gem = (...a) => __pure_gem(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), U, T, H);
+const gem = (...a) => __pure_gem(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), U, T, H, __d_gem_GEMATRIA_T);
 import { gemYear as gemYearWire } from '../atoms/gem-year.mjs';
 import { adarNorm as __pure_adarNorm } from '../atoms/adar-norm.mjs';
 import { ADAR_NORM_T as __d_adarNorm_ADAR_NORM_T } from '../atoms/adar-norm-strings.mjs';

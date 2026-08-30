@@ -1,7 +1,10 @@
 import { advanceStatus as __pure_advanceStatus } from './advance-status.mjs';
+const __d_advanceStatus_ADVANCE_STATUS_T = {
+  k1: "delivered",
+};
 // צילום-מקומי מ-advance-status-data + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)
 const ORDER = ['pickup', 'enroute', 'delivered'];
-const advanceStatus = (...a) => __pure_advanceStatus(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), ORDER);
+const advanceStatus = (...a) => __pure_advanceStatus(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), ORDER, __d_advanceStatus_ADVANCE_STATUS_T);
 const C = [
   ['pickup', 'enroute'],
   ['enroute', 'delivered'],

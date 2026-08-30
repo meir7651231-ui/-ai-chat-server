@@ -142,6 +142,6 @@ assert.ok(src.includes('famLiveWire(db, fam, famEnrollments)'), 'מגן: famEnro
 assert.ok(src.includes('const DEFAULT_CONFIG = {}'), 'מגן: ברירת-מחדל ריקה בקופסה'); n++;
 // אכיפת-חשמלאי: קופסה מייבאת רק אטומים, לא קופסאות
 assert.ok(!/from '\.\/[^']*\.mjs'/.test(src.replace(/families\.contract/g, '')), 'מגן: אפס ייבוא-קופסה'); n++;
-assert.ok((src.match(/from '\.\.\/atoms\//g) || []).length === 30, 'מגן: 30 ייבואי-אטום (20 חוטים + iso-local + term-of + marital-chip-style-data — הכרעה 19)'); n++;
+assert.ok((src.match(/from '\.\.\/atoms\//g) || []).length === 31, 'מגן: 31 ייבואי-אטום (20 חוטים + iso-local + term-of + marital-chip-style-data — הכרעה 19)'); n++;
 
 console.log(`✓ קופסת-המשפחות: ${n} טענות עברו (20 חוטים · עדשה-עוינת: ריק/null/עברית/שבור · מגן-הכרעה)`);

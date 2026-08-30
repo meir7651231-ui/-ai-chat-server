@@ -1,0 +1,22 @@
+/** אטום-דאטה · build-course-daily-rows-strings — מחרוזות-התצוגה/דומיין שחולצו מ-build-course-daily-rows (מנוע-הטיהור v3, הכרעה 19). חוזה: build-course-daily-rows-strings.contract.md */
+export const BUILD_COURSE_DAILY_ROWS_T = {
+  k1: "תאריך עברי",
+  k2: "תאריך לועזי",
+  k3: "יום",
+  k4: "קבוצה/שעה",
+  k5: "סטטוס יום",
+  k6: "תלמידה פעילה",
+  k7: "entity.family",
+  k8: "משפחה",
+  k9: "סטטוס נוכחות",
+  k10: "קבוצה",
+  k11: "wait",
+  k12: "ended",
+  k13: "אין רשומות",
+  k14: "paused",
+  k15: "מוקפא",
+  k16: "מתקיים",
+  k17: "לא הופיעה",
+  k18: "חיסור",
+  k19: "פעיל",
+};

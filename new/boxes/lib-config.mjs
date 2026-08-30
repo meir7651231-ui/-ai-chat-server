@@ -39,13 +39,15 @@ import { INTEGRATION_SETTING_T as __d_termOf_TERM_OF_T } from '../atoms/integrat
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const atomTermOf = (...a) => __pure_termOf(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_termOf_TERM_OF_T);
 import { normalizeTelephony as __pure_normalizeTelephony } from '../atoms/normalize-telephony.mjs';
+import { NORMALIZE_TELEPHONY_T as __d_normalizeTelephony_NORMALIZE_TELEPHONY_T } from '../atoms/normalize-telephony-strings.mjs';
 import { TEL_KINDS } from '../atoms/normalize-telephony-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
-const atomNormalizeTelephony = (...a) => __pure_normalizeTelephony(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), TEL_KINDS);
+const atomNormalizeTelephony = (...a) => __pure_normalizeTelephony(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), TEL_KINDS, __d_normalizeTelephony_NORMALIZE_TELEPHONY_T);
 import { makeNormalizeSite as __pure_makeNormalizeSite } from '../atoms/make-normalize-site.mjs';
+import { cf as __d_make_normalize_site_cf } from '../atoms/make-normalize-site-data.mjs';
 import { MAKE_NORMALIZE_SITE_T as __d_makeNormalizeSite_MAKE_NORMALIZE_SITE_T } from '../atoms/make-normalize-site-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
-const makeNormalizeSite = (...a) => __pure_makeNormalizeSite(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_makeNormalizeSite_MAKE_NORMALIZE_SITE_T);
+const makeNormalizeSite = (...a) => __pure_makeNormalizeSite(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_makeNormalizeSite_MAKE_NORMALIZE_SITE_T, __d_make_normalize_site_cf);
 import { makeNormalizeConfig as __pure_makeNormalizeConfig } from '../atoms/make-normalize-config.mjs';
 import { MAKE_NORMALIZE_CONFIG_T as __d_makeNormalizeConfig_MAKE_NORMALIZE_CONFIG_T } from '../atoms/make-normalize-config-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

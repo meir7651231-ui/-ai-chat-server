@@ -1,4 +1,6 @@
 import { previewTelephony as __pure_previewTelephony } from './preview-telephony.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור; בדיקה לא מייבאת אטום-שכן)
+const __d_preview_telephony_caller = '050-1234567';
 // צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
 const __d_previewTelephony_PREVIEW_TELEPHONY_T = {
   k1: "sim",
@@ -7,7 +9,7 @@ const __d_previewTelephony_PREVIEW_TELEPHONY_T = {
   k4: "יום שלישי 20:00 (אחרי-שעות)",
   k5: "שבת 11:00",
 };
-const previewTelephony = (...a) => __pure_previewTelephony(...a, ...Array(Math.max(0, 9 - a.length)).fill(undefined), __d_previewTelephony_PREVIEW_TELEPHONY_T);
+const previewTelephony = (...a) => __pure_previewTelephony(...a, ...Array(Math.max(0, 9 - a.length)).fill(undefined), __d_previewTelephony_PREVIEW_TELEPHONY_T, __d_preview_telephony_caller);
 const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 let f = 0;
 const chk = (cond, label) => { if (!cond) { console.error('✗ ' + label); f = 1; } };

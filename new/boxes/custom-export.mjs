@@ -9,9 +9,10 @@ import { EXP_FIELD_DEFS_T as __d_expFieldDefs_EXP_FIELD_DEFS_T } from '../atoms/
 const expFieldDefsAtom = (...a) => __pure_expFieldDefs(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_expFieldDefs_EXP_FIELD_DEFS_T);
 import { overrideColumn as overrideColumnAtom } from '../atoms/override-column.mjs';
 import { buildCustomExport as __pure_buildCustomExport } from '../atoms/build-custom-export.mjs';
+import { CAP_DAYS as __d_build_custom_export_CAP_DAYS } from '../atoms/build-custom-export-data.mjs';
 import { BUILD_CUSTOM_EXPORT_T as __d_buildCustomExport_BUILD_CUSTOM_EXPORT_T } from '../atoms/build-custom-export-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
-const buildCustomExportAtom = (...a) => __pure_buildCustomExport(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_buildCustomExport_BUILD_CUSTOM_EXPORT_T);
+const buildCustomExportAtom = (...a) => __pure_buildCustomExport(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_buildCustomExport_BUILD_CUSTOM_EXPORT_T, __d_build_custom_export_CAP_DAYS);
 import { featureOn as featureOnAtom } from '../atoms/feature-on.mjs';
 import { moduleOn } from '../atoms/module-on.mjs';
 import { termOf as __pure_termOf } from '../atoms/term-of.mjs';
@@ -52,9 +53,10 @@ import { HEB_DATE_FULL_T as __d_hebDateFull_HEB_DATE_FULL_T } from '../atoms/heb
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const hebDateFullAtom = (...a) => __pure_hebDateFull(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_hebDateFull_HEB_DATE_FULL_T);
 import { gem as __pure_gem } from '../atoms/gematria.mjs';
+import { GEMATRIA_T as __d_gem_GEMATRIA_T } from '../atoms/gematria-strings.mjs';
 import { U, T, H } from '../atoms/gematria-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
-const gem = (...a) => __pure_gem(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), U, T, H);
+const gem = (...a) => __pure_gem(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), U, T, H, __d_gem_GEMATRIA_T);
 import { gemYear as gemYearAtom } from '../atoms/gem-year.mjs';
 import { supCount } from '../atoms/sup-count.mjs';
 import { supIls } from '../atoms/sup-ils.mjs';

@@ -7,7 +7,7 @@
 
 
 
-export function buildCustomExport(cfg, db, target, range, selectedKeys, s, T) {
+export function buildCustomExport(cfg, db, target, range, selectedKeys, s, T, CAP_DAYS) {
   // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
   function inR(iso, r) {
       if (!iso) return false;
@@ -117,7 +117,6 @@ export function buildCustomExport(cfg, db, target, range, selectedKeys, s, T) {
                 const d1raw = new Date(range.to + 'T12:00:00');
                 // תקרת-ימים (עקבי עם courseDaily MAX_DAYS) — טעות בשנת "עד" (טווח של
                 // עשרות שנים) הקפיאה את הדפדפן בלולאה יום-יום. חוסמים ל-~11 שנים.
-                const CAP_DAYS = 4000;
                 const capped = new Date(d0.getTime() + CAP_DAYS * 86400000);
                 const d1 = d1raw < capped ? d1raw : capped;
                 for (let dd = new Date(d0); dd <= d1; dd.setDate(dd.getDate() + 1)) {

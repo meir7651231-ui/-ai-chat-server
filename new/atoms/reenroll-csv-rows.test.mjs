@@ -1,7 +1,15 @@
 import { reenrollCsvRows as __pure_reenrollCsvRows } from './reenroll-csv-rows.mjs';
+const __d_reenrollCsvRows_REENROLL_CSV_ROWS_T = {
+  k1: "yes",
+  k2: "ממשיך",
+  k3: "לא ממשיך",
+  k4: "hold",
+  k5: "בהמתנה",
+  k6: "כן",
+};
 // צילום-מקומי מ-reenroll-csv-rows-data + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)
 const head = ['תלמיד/ה', 'משפחה', 'חוג', 'נוכחות', 'חיסורים', 'יתרה ₪', 'סטטוס', 'החלטה', 'נרשם לשנה הבאה', 'הערה'];
-const reenrollCsvRows = (...a) => __pure_reenrollCsvRows(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), head);
+const reenrollCsvRows = (...a) => __pure_reenrollCsvRows(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), head, __d_reenrollCsvRows_REENROLL_CSV_ROWS_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b);

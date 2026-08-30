@@ -6,7 +6,10 @@
 import { normPhone } from '../atoms/norm-phone.mjs';
 import { normId } from '../atoms/norm-id.mjs';
 import { findDuplicateGroups as _findDuplicateGroups } from '../atoms/find-duplicate-groups.mjs';
-import { mergeFamilies as _mergeFamilies } from '../atoms/merge-families.mjs';
+import { mergeFamilies as __pure_mergeFamilies } from '../atoms/merge-families.mjs';
+import { MERGE_FAMILIES_T as __d_mergeFamilies_MERGE_FAMILIES_T } from '../atoms/merge-families-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const _mergeFamilies = (...a) => __pure_mergeFamilies(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_mergeFamilies_MERGE_FAMILIES_T);
 import { DUP_FIELDS } from '../atoms/dup-fields.mjs';
 import { dupFieldValue } from '../atoms/dup-field-value.mjs';
 import { mergeFamiliesByFields as __pure_mergeFamiliesByFields } from '../atoms/merge-families-by-fields.mjs';

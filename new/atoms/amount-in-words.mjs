@@ -15,7 +15,7 @@
 
 /** המספר השלם במילים (0..999,999,999). null אם מחוץ לטווח. */
 
-export function amountInWords(amount, currency = '₪', ONES, TEENS, TENS, HUNDREDS, ONES_F, TEENS_F, THOUSAND_CONSTRUCT) {
+export function amountInWords(amount, currency = '₪', ONES, TEENS, TENS, HUNDREDS, ONES_F, TEENS_F, THOUSAND_CONSTRUCT, T) {
   // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
   function words0_999(n) {
       const out = [];
@@ -40,12 +40,12 @@ export function amountInWords(amount, currency = '₪', ONES, TEENS, TENS, HUNDR
   }
   function thousandWords(th) {
       if (th === 1)
-          return ['אלף'];
+          return [T.k1];
       if (th === 2)
-          return ['אלפיים'];
+          return [T.k2];
       if (THOUSAND_CONSTRUCT[th])
-          return [THOUSAND_CONSTRUCT[th] + ' אלפים'];
-      return [joinHeb(words0_999(th)) + ' אלף'];
+          return [THOUSAND_CONSTRUCT[th] + T.k3];
+      return [joinHeb(words0_999(th)) + T.k4];
   }
   function agorotWords(n) {
       if (n < 10)
@@ -54,14 +54,14 @@ export function amountInWords(amount, currency = '₪', ONES, TEENS, TENS, HUNDR
           return TEENS_F[n - 10];
       const t = Math.floor(n / 10);
       const u = n % 10;
-      return u ? TENS[t] + ' ו' + ONES_F[u] : TENS[t];
+      return u ? TENS[t] + T.k5 + ONES_F[u] : TENS[t];
   }
   function agorotPhrase(n) {
       if (n === 1)
-          return 'אגורה אחת';
+          return T.k6;
       if (n === 2)
-          return 'שתי אגורות';
-      return agorotWords(n) + ' אגורות';
+          return T.k7;
+      return agorotWords(n) + T.k8;
   }
   function joinHeb(words) {
       const w = words.filter(Boolean);
@@ -69,24 +69,24 @@ export function amountInWords(amount, currency = '₪', ONES, TEENS, TENS, HUNDR
           return '';
       if (w.length === 1)
           return w[0];
-      return w.slice(0, -1).join(' ') + ' ו' + w[w.length - 1];
+      return w.slice(0, -1).join(' ') + T.k5 + w[w.length - 1];
   }
   function integerInWords(n) {
       if (!Number.isFinite(n) || n < 0 || n > 999_999_999 || Math.floor(n) !== n)
           return null;
       if (n === 0)
-          return 'אפס';
+          return T.k9;
       const millions = Math.floor(n / 1_000_000);
       const thousands = Math.floor((n % 1_000_000) / 1000);
       const rest = n % 1000;
       const groups = [];
       if (millions) {
           if (millions === 1)
-              groups.push('מיליון');
+              groups.push(T.k10);
           else if (millions === 2)
-              groups.push('שני מיליון');
+              groups.push(T.k11);
           else
-              groups.push(joinHeb(words0_999(millions)) + ' מיליון');
+              groups.push(joinHeb(words0_999(millions)) + T.k12);
       }
       if (thousands)
           groups.push(...thousandWords(thousands));
@@ -97,7 +97,7 @@ export function amountInWords(amount, currency = '₪', ONES, TEENS, TENS, HUNDR
 
     if (!Number.isFinite(amount) || amount < 0)
         return String(amount);
-    const shekelWord = currency === '$' ? { one: 'דולר אחד', many: 'דולרים', agName: 'סנט' } : { one: 'שקל אחד', many: 'שקלים', agName: 'אגורות' };
+    const shekelWord = currency === '$' ? { one: T.k13, many: T.k14, agName: T.k15 } : { one: T.k16, many: T.k17, agName: T.k18 };
     let whole = Math.floor(amount);
     let agorot = Math.round((amount - whole) * 100);
     // 🐛 נחיל-9×9 (13.8): גלישת-עיגול — שבר ≥.995 עיגל אגורות ל-100 ("6 ומאה אגורות").
@@ -115,22 +115,22 @@ export function amountInWords(amount, currency = '₪', ONES, TEENS, TENS, HUNDR
     if (whole === 1)
         s = shekelWord.one;
     else if (whole === 0)
-        s = 'אפס ' + shekelWord.many;
+        s = T.k19 + shekelWord.many;
     // 🐛 נחיל-עמוק (13.8): 2 בצורת-נפרד ("שניים") שגוי לפני שם-עצם — הצורה התקנית
     // היא סמיכות "שני שקלים"/"שני דולרים" (הכרעת-בעלים "לתקן ל'שני שקלים'").
     else if (whole === 2)
-        s = 'שני ' + shekelWord.many;
+        s = T.k20 + shekelWord.many;
     else
         s = wholeWords + ' ' + shekelWord.many;
     if (agorot > 0) {
         if (currency === '₪') {
             // אגורה נקבה — מספר בצורת-נקבה + יחיד/סמיכות ("שתי אגורות").
-            s += ' ו-' + agorotPhrase(agorot);
+            s += T.k21 + agorotPhrase(agorot);
         }
         else {
             // סנט זכר — צורת-הזכר של integerInWords מתאימה.
             const agWords = integerInWords(agorot);
-            s += ' ו-' + (agWords ?? agorot) + ' ' + shekelWord.agName;
+            s += T.k21 + (agWords ?? agorot) + ' ' + shekelWord.agName;
         }
     }
     return s;

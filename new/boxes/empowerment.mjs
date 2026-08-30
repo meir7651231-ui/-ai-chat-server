@@ -60,13 +60,15 @@ import { RISK as __d_portfolioIntel_RISK } from '../atoms/portfolio-portfolio-in
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
 const portfolioIntelAtom = (...a) => __pure_portfolioIntel(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_portfolioIntel_RISK);
 import { tierTrendCounts as __pure_tierTrendCounts } from '../atoms/portfolio-tier-trend-counts.mjs';
+import { PORTFOLIO_TIER_TREND_COUNTS_T as __d_tierTrendCounts_PORTFOLIO_TIER_TREND_COUNTS_T } from '../atoms/portfolio-tier-trend-counts-strings.mjs';
 import { order } from '../atoms/portfolio-tier-trend-counts-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
-const tierTrendCountsAtom = (...a) => __pure_tierTrendCounts(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), order);
+const tierTrendCountsAtom = (...a) => __pure_tierTrendCounts(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), order, __d_tierTrendCounts_PORTFOLIO_TIER_TREND_COUNTS_T);
 import { donorConstellation as __pure_donorConstellation } from '../atoms/constellation-donor-constellation.mjs';
+import { CONSTELLATION_DONOR_CONSTELLATION_T as __d_donorConstellation_CONSTELLATION_DONOR_CONSTELLATION_T } from '../atoms/constellation-donor-constellation-strings.mjs';
 import { TIER_KEY } from '../atoms/constellation-donor-constellation-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
-const donorConstellationAtom = (...a) => __pure_donorConstellation(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), TIER_KEY);
+const donorConstellationAtom = (...a) => __pure_donorConstellation(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), TIER_KEY, __d_donorConstellation_CONSTELLATION_DONOR_CONSTELLATION_T);
 import { buildCommands as __pure_buildCommands } from '../atoms/commands-build-commands.mjs';
 import { COMMANDS_BUILD_COMMANDS_T as __d_buildCommands_COMMANDS_BUILD_COMMANDS_T } from '../atoms/commands-build-commands-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

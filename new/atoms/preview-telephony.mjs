@@ -3,7 +3,7 @@
  *  שקעים: telephonyToTenant, anchorToday, validateTenant, buildTenant, explainCall, trustReport
  *  חולץ כלשונו מ-maor/src/components/telephony/lib.ts:133-185 (קריאות-השכן שוקעו;
  *  anchorToday הפרטי — מקור אי-הדטרמיניזם — הוזרק אף הוא). */
-export function previewTelephony(tc, orgName, tenantId, telephonyToTenant, anchorToday, validateTenant, buildTenant, explainCall, trustReport, T) {
+export function previewTelephony(tc, orgName, tenantId, telephonyToTenant, anchorToday, validateTenant, buildTenant, explainCall, trustReport, T, caller) {
     const raw = telephonyToTenant(tc, orgName, tenantId);
     const anchor = anchorToday();
     const opts = { anchorDate: anchor, calendarWindow: 400 };
@@ -13,7 +13,6 @@ export function previewTelephony(tc, orgName, tenantId, telephonyToTenant, ancho
     const tenant = v.tenant;
     const built = buildTenant(raw, opts);
     const voiceDid = (tc.numbers.find((n) => n.kind === T.k1 || n.kind === T.k2) || tc.numbers[0])?.e164 || '';
-    const caller = '050-1234567';
     // תרחישים מייצגים: יום-חול בשעות · יום-חול אחרי-שעות · שבת (אם מגודר).
     const rows = [];
     const scenarios = [

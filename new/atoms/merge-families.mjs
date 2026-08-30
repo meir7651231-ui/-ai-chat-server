@@ -2,7 +2,7 @@
  *  חוזה: merge-families.contract.md
  *  חולץ כלשונו מ-maor/src/lib/dedup.ts:109-188 (תורגם TS→JS); השכנים
  *  normPhone + dedupById הוזרקו כאובייקט-שקעים deps (חוק-1 — אפס import פנימי). */
-export function mergeFamilies(keeper, losers, deps) {
+export function mergeFamilies(keeper, losers, deps, T) {
   const { normPhone, dedupById } = deps;
   const all = [keeper, ...losers];
   const firstNonEmpty = (pick) => {
@@ -13,8 +13,8 @@ export function mergeFamilies(keeper, losers, deps) {
     }
     return '';
   };
-  const rank = (s) => (s === 'active' ? 2 : s === 'pending' ? 1 : 0);
-  const status = all.reduce((acc, f) => (rank(f.status) > rank(acc) ? f.status : acc), 'inactive');
+  const rank = (s) => (s === T.k1 ? 2 : s === T.k2 ? 1 : 0);
+  const status = all.reduce((acc, f) => (rank(f.status) > rank(acc) ? f.status : acc), T.k3);
   const phone = (keeper.phone || '').trim() || firstNonEmpty((f) => f.phone);
   const phoneNorm = normPhone(phone);
   let phone2 = (keeper.phone2 || '').trim();
@@ -37,7 +37,7 @@ export function mergeFamilies(keeper, losers, deps) {
   const loserNames = losers.map((l) => l.name).filter(Boolean).join(', ');
   const notesParts = all.map((f) => (f.notes || '').trim()).filter(Boolean);
   const baseNotes = [...new Set(notesParts)].join(' · ');
-  const notes = loserNames ? (baseNotes ? baseNotes + ' ' : '') + '| מוזג: ' + loserNames : baseNotes;
+  const notes = loserNames ? (baseNotes ? baseNotes + ' ' : '') + T.k4 + loserNames : baseNotes;
   return {
     ...keeper,
     father: keeper.father?.trim() || firstNonEmpty((f) => f.father),

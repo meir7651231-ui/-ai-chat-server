@@ -1,6 +1,6 @@
 # 🔬 ממצאי טוהר-עומק (הכרעה 19) — דאטה בתוך מנגנון
 
-נסרקו אטומי-מנגנון ב-new/atoms · new/boxes · הפרות: 333
+נסרקו אטומי-מנגנון ב-new/atoms · new/boxes · הפרות: 330
 
 | אטום | ציון | עברית | טבלאות | מחרוזות-דומיין | מספרי-קסם |
 |---|---|---|---|---|---|
@@ -9,7 +9,6 @@
 | new/atoms/ayin-sheet-rows.mjs | 31 | תומכת · טלפון · שם למסירה · כמה עיניים | const AYIN_SHEET_HEADER = [ 'תומכת', 'טל · const rows = [[...AYIN_SHEET_HEADER]] · const leadDone = ['eyes', 'answer', 'done']. | eyes · answer · done | — |
 | new/boxes/net-check.mjs | 31 | האתר עצמו · כניסה לחשבון (Auth) · חידוש-חיבור (Token) · סנכרון נתונים (Firestore) | const LABEL = { site: 'האתר עצמו', auth: · const list = [ { key: 'site', label: LAB | ../atoms/run-net-check.mjs · ../atoms/net-check-script.mjs · ../atoms/net-check-script-stri · netcheck | 8000 |
 | new/atoms/ask-claude.mjs | 29 | מפתח ה-API לא תקין — בדקו בהגד · חריגה ממכסת-השימוש — נסו בעוד  · הקריאה לעוזר נכשלה ( · לא התקבלה תשובה — נסו שוב | — | https://api.anthropic.com/v1/m · POST · content-type · application/json | 06 20251001 600 401 429 |
-| new/atoms/build-course-daily-rows.mjs | 28 | תאריך עברי · תאריך לועזי · יום · קבוצה/שעה | const rows = [ ['תאריך עברי', 'תאריך | ${d.getFullYear()}-${p2(d.getM · entity.family · wait · ended | 500 |
 | new/boxes/tour.mjs | 28 | 👋 הדמיה מלאה — המערכת מדגימה  · סטטיסטיקות חיות — כל אריח לחיץ · מדד אמינות · ⌘K — חיפוש חכם מכל מקום | const TOUR_STEPS = [ { view: 'home', capti | ../atoms/tour-stop-label.mjs · ../atoms/tour-steps.mjs · ../atoms/tour-steps-strings.mj · ../atoms/tour-advance.mjs | 48 |
 | new/atoms/dup-fields.mjs | 27 | שם משפחה · שם האם · שם האב · טלפון | const DUP_FIELDS = [ { key: 'name', label: | name · mother · father · phone | — |
 | new/atoms/sup-dup-fields.mjs | 27 | שם · טלפון · אימייל · ת"ז | const SUP_DUP_FIELDS = [ { key: 'name',  | name · phone · email · idNum | — |
@@ -19,41 +18,36 @@
 | new/atoms/dict-he.mjs | 25 | משפחה · חוג · משפחות · משפחת | const DICT_HE = {"משפחה":126,"חוג":121,"משפח | — | 126 121 91 76 69 53 |
 | new/atoms/suggestions.mjs | 25 | מתנת-חג · ${hol.name} בעוד ${h · ${activeFams.length} ${T('nav. · ערכת בית-ספר · ${m.first} (${f · בן/בת ${age} — לקראת/בתחילת כי | — | sug:holiday:${hol.name}:${hol. · sug:school:${m.id}:${age} · sug:baby:${m.id} · sug:renew:${e.id}:${e.purchase | 30 |
 | new/boxes/navhist.mjs | 25 | ↩ חזרה · חזרה למסך הקודם | const next = { view, selFamilyId: prev.selFa · const next = { view: 'families', selFamilyId · const next = { view: 'courses', selFamilyId: | ../atoms/same-loc.mjs · ../atoms/push-nav.mjs · ../atoms/push-nav-data.mjs · ../atoms/push-recent.mjs | — |
-| new/atoms/block-reason.mjs | 24 | שבת · יום שישי (שעתיים לפני שבת) · תשעה באב (נדחה) · חול המועד | — | ${hp.month} ${hp.day} · Tishri · Nisan | 10 20 |
-| new/atoms/explain-call.mjs | 24 | מחוץ-לשעות · שעות-פעילות · יום ${DOW_HE[call.dow]} ${call · 📞 חיוג-יוצא: ${call.did || '' | — |  (${reason}) · ${call.date} ${call.hhmm || '' · outbound · non-kosher-blocked | — |
 | new/atoms/sign-up.mjs | 24 | האימייל כבר רשום — נסו להתחבר  · הסיסמה חלשה מדי — לפחות 6 תווי · כתובת האימייל אינה תקינה · ההרשמה סגורה כרגע — פנו למנהל  | — | auth/email-already-in-use · auth/weak-password · auth/invalid-email · auth/operation-not-allowed | — |
 | new/boxes/dedup.mjs | 24 | ר · רבי · הרב · הרבנית | — | ../atoms/norm-phone.mjs · ../atoms/norm-id.mjs · ../atoms/find-duplicate-groups · ../atoms/merge-families.mjs | — |
 | new/boxes/diary.mjs | 24 | כרטיסייה · יתרה ${Math.max(0,  · מוקפא · הסתיים · רשימת-המתנה ⏳ | — | ../atoms/fmt-date.mjs · ../atoms/iso-local.mjs · ../atoms/iso-today.mjs · ../atoms/week-day-names.mjs | — |
 | new/boxes/validate.mjs | 24 | ר · רבי · הרב · הרבנית | — | ../atoms/valid-israeli-id.mjs · ../atoms/normalize-phone.mjs · ../atoms/format-israeli-phone. · ../atoms/norm-search.mjs | — |
 | new/atoms/trust-report.mjs | 23 | יתומים: ${[...ar.dangling, ... · נפילה למנהל ${fs.fallback} · חסרים ${pf.missing.length} (שע · ${leak.violations.length} דליפ | const SEV = { critical: 3, high: 2, info: 1  | — | 100 95 85 70 |
-| new/boxes/distribution.mjs | 23 | איסוף · בדרך · נמסר | const STATUS_LABEL = { pickup: 'איסוף', enro | ../atoms/advance-status.mjs · ../atoms/advance-status-data.m · ../atoms/deliveries-of-day.mjs · ../atoms/deliveries-of-volunte | — |
+| new/boxes/distribution.mjs | 23 | איסוף · בדרך · נמסר | const STATUS_LABEL = { pickup: 'איסוף', enro | ../atoms/advance-status.mjs · ../atoms/pending-deliveries-to · ../atoms/advance-status-data.m · ../atoms/deliveries-of-day.mjs | — |
 | new/atoms/heb-cal-data.mjs | 22 | ניסן · אייר · סיוון · תמוז | — | — | -1373427 98496 35975351 19 235 234 |
 | new/boxes/theme.mjs | 22 | מצב לא-מוכר:  · חיווט לפיגמנט-לא-קיים:  | const WIRING = { "light": { "--c-ink": "p · const pal = { ...PALETTE, ...overrides } | ../atoms/palette.mjs · light · --c-ink · --c-soft | — |
 | new/boxes/image-pick.mjs | 21 | הקובץ אינו תמונה · התמונה גדולה מדי (מקסימום 8MB) · דפדפן אינו תומך בעיבוד תמונה | — | ../atoms/max-upload-bytes.mjs · ../atoms/max-embed-bytes.mjs · ../atoms/read-file-as-data-url · image/ | 320 |
 | new/atoms/change-password.mjs | 20 | אין משתמש מחובר — התחברו ונסו  · הסיסמה הנוכחית שגויה · הסיסמה החדשה חלשה מדי — לפחות  | — | auth/wrong-password · auth/invalid-credential · auth/invalid-login-credentials · auth/weak-password | — |
+| new/atoms/explain-call.mjs | 20 | יום ${DOW_HE[call.dow]} ${call · 📞 חיוג-יוצא: ${call.did || '' · ✅ יוצא דרך: ${sim.outcome.repl · 📲 מתקשר ${call.callerId}${whe | — |  (${reason}) · ${call.date} ${call.hhmm || '' | — |
 | new/atoms/plan-ayin-advance.mjs | 20 | נרשמו ${a.names.length} — נכנס · אושר — נרשם בלוח ובדוח. עכשיו: · נרשם — נכנס ללוח: ${stageLabel | — | ${feat}: ${stageLabel(cfg, 'le · ${feat}: ${stageLabel(cfg, 'le · ${feat}: ${stageLabel(cfg, 'an · ${feat}: ${stageLabel(cfg, 'an | — |
-| new/atoms/reenroll-csv-rows.mjs | 20 | ממשיך · לא ממשיך · בהמתנה · כן | — | yes · hold | — |
-| new/atoms/amount-in-words.mjs | 19 | אלף · אלפיים ·  אלפים ·  אלף | — | — | 100 20 20 |
 | new/atoms/audit-categories.mjs | 19 | כפילות · ת"ז · טלפון · אימייל | const AUDIT_CATEGORIES = [ 'כפילות',  | — | — |
 | new/atoms/telephony-to-tenant.mjs | 19 | — | const ONRAMP = { sim: T.k1, virtual: · const CHANNELS = { sim: [T.k4], virt · const base = { id: n.id, e16 | voice.kosher · calendar.hebrew · calendar.shabbat · calendar.fasts | 25 30 |
 | new/atoms/enroll-new-family.mjs | 18 | כ · מ · נ · פ | — | __new | — |
-| new/atoms/gematria.mjs | 18 | טו · טז · ׳ · ״ | — | — | 100 15 |
 | new/atoms/schedule-clash-text.mjs | 18 | ראשון · שני · שלישי · רביעי | — | ended | — |
 | new/boxes/custom-export.mjs | 18 | — | const NAV_MODULE_KEYS = [ 'families', 'c · const res = { seq, has30 } | ../atoms/exp-field-defs.mjs · ../atoms/exp-field-defs-string · ../atoms/override-column.mjs · ../atoms/build-custom-export.m | 3761 440 12 30 |
 | new/boxes/hebdate.mjs | 17 | ⚠ שם חודש עברי לא-צפוי מ-Intl  | — | ../atoms/heb-parts.mjs · ../atoms/heb-parts-strings.mjs · ../atoms/pad2.mjs · ../atoms/month-he-of.mjs | 30 7000 3761 440 12 |
 | new/boxes/lib-config.mjs | 17 | — | const NAV_MODULE_KEYS = ['families', 'course · const DEFAULT_CONFIG = { slug: 'default', or · const INTEGRATION_KEYS = ['receipts', 'payme | ../atoms/module-on.mjs · ../atoms/feature-on.mjs · ../atoms/donation-split-on.mjs · ../atoms/sup-enforce-on.mjs | — |
 | new/boxes/pricing.mjs | 17 | — | const DEFAULT_INTEGRATION_PRICES = { recei | ../atoms/default-prices.mjs · ../atoms/size-labels.mjs · ../atoms/normalize-prices.mjs · ../atoms/normalize-prices-stri | 60 90 50 40 90 30 |
 | new/boxes/receipt.mjs | 17 | receipt: שקע amountInWords לא  | const NAV_MODULE_KEYS = ['families', 'course | ../atoms/receipt-verify-code.m · ../atoms/receipt-lines.mjs · ../atoms/receipt-lines-strings · ../atoms/receipt-html.mjs | 10 5000 |
-| new/atoms/merge-families.mjs | 16 | | מוזג:  | const all = [keeper, ...losers] · const baseNotes = [...new Set(notesParts)].j | active · pending · inactive | — |
-| new/atoms/normalize-telephony.mjs | 16 | — | const num = { id, e164, label: telStr(o.labe · const officeDays = [ ...new Set(daysRaw. | object · object · sim · string | 24 20 |
 | new/atoms/pull-nedarim.mjs | 16 | נדרשת התחברות-ענן · משיכה נכשלה ( | — | root · org · full · reset | — |
 | new/atoms/pull-sola.mjs | 16 | נדרשת התחברות-ענן · משיכה נכשלה ( | — | root · org · default · vault | — |
 | new/boxes/smtp-url.mjs | 16 | מייל: מלאו גם כתובת וגם סיסמת- · מייל: הספק לא מוכר — מלאו את ש | — | ../atoms/smtp-hosts.mjs · ../atoms/smtp-host-for.mjs · ../atoms/smtp-hosts.mjs · ../atoms/compose-smtp-url.mjs | — |
 | new/atoms/coral-palette.mjs | 15 | — | const CORAL_PALETTE = { c1: '#EC9C9C', c | #FFFCFA · #FBF1EF · #FFF3F0 | 156 156 127 127 39 42 |
-| new/boxes/hebrew.mjs | 15 | — | const res = { seq, has30 } | ../atoms/gematria.mjs · ../atoms/gematria-data.mjs · ../atoms/gem-year.mjs · ../atoms/adar-norm.mjs | 3761 440 12 30 |
+| new/boxes/hebrew.mjs | 15 | — | const res = { seq, has30 } | ../atoms/gematria.mjs · ../atoms/gematria-strings.mjs · ../atoms/gematria-data.mjs · ../atoms/gem-year.mjs | 3761 440 12 30 |
 | new/atoms/make-normalize-config.mjs | 14 | — | const req = [f.apiKey, f.authDomain, f.proje · const out = { apiKey: f.apiKey,  · const cfg = { ...DEFAULT_CONFIG,  | — | 20 500 12 120 12 |
+| new/atoms/normalize-telephony.mjs | 14 | — | const num = { id, e164, label: telStr(o.labe · const officeDays = [ ...new Set(daysRaw. | 101 · 201 · 100 | 24 20 |
 | new/atoms/orbit-theme.mjs | 14 | — | — | ${Math.round(c.r)},${Math.roun · rgba(${accentRgb},0.30) · rgba(${auroraHi},0.20) · rgba(${auroraLo},0.15) | 255 255 255 360 360 360 |
-| new/atoms/build-custom-export.mjs | 13 | — | const rows = [defs.map((f) => f.label)] · const rec = { title: ev.titl · const obj = { name: sp.name,  | ${d.getFullYear()}-${p2(d.getM | 4000 86400000 |
+| new/atoms/build-custom-export.mjs | 12 | — | const rows = [defs.map((f) => f.label)] · const rec = { title: ev.titl · const obj = { name: sp.name,  | ${d.getFullYear()}-${p2(d.getM | 86400000 |
 | new/atoms/make-normalize-site.mjs | 12 | — | const it = { year, title } · const pm = { label, detail } | — | 24 12 200 60 24 60 |
 | new/atoms/reset-password.mjs | 12 | לא נמצא משתמש עם האימייל הזה · כתובת האימייל אינה תקינה | — | auth/user-not-found · auth/invalid-email | — |
 | new/boxes/empowerment.mjs | 12 | — | — | ../atoms/cockpit-days-since.mj · ../atoms/cockpit-at-risk.mjs · ../atoms/cockpit-thanks.mjs · ../atoms/cockpit-thanks-string | 60 60 12 12 |
@@ -63,9 +57,10 @@
 | new/atoms/manual-driver.mjs | 11 | חיוג בלחיצה (טלפון קיים) | const manualDriver = { id: 'manual',  | tel: · manual | — |
 | new/atoms/send-support-message.mjs | 11 | — | — | supportChats · messages · user · supportChats | 120 120 120 |
 | new/boxes/cloud-diff.mjs | 11 | — | const META_KEYS = [ 'orgName', 'orgSite' | ../atoms/entity-collections.mj · ../atoms/col-path.mjs · ../atoms/col-path-strings.mjs · ../atoms/meta-path.mjs | — |
-| new/boxes/platform.mjs | 11 | — | const DEFAULT_CONFIG = { slug: 'default', or | ../atoms/slugify.mjs · ../atoms/slugify-data.mjs · ../atoms/is-valid-slug.mjs · ../atoms/all-modules.mjs | — |
+| new/boxes/platform.mjs | 11 | — | const DEFAULT_CONFIG = { slug: 'default', or | ../atoms/slugify.mjs · ../atoms/org-slug-from-url-str · ../atoms/slugify-data.mjs · ../atoms/is-valid-slug.mjs | — |
 | new/boxes/search.mjs | 11 | — | const CASCADE = [ruleExact, rulePrefix, rule | ../atoms/levenshtein.mjs · ../atoms/norm-search.mjs · ../atoms/norm-search-strings.m · ../atoms/xlat.mjs | — |
 | new/atoms/ayin-daily-rows.mjs | 10 | ${unit} היום | const rows = [ [T.k1, T.k2, `${unit} · const a = { ...emptyAyin(), ...sp.ayin } | — | — |
+| new/atoms/build-course-daily-rows.mjs | 10 | הדוח נקטע ב-${MAX_DAYS} ימי מפ | const rows = [ [T2.k1, T2.k2, T2.k3, | ${d.getFullYear()}-${p2(d.getM | 500 |
 | new/atoms/wa-digits.mjs | 10 | — | — | 972 · 972 · 972 · 972 | 10 15 |
 | new/boxes/lib-pwa.mjs | 10 | — | — | ../atoms/install-available.mjs · ../atoms/prompt-install.mjs · ../atoms/is-ios.mjs · ../atoms/is-ios-strings.mjs | 12 192 |
 | new/atoms/build-slots.mjs | 9 | — | — | crs|${hh}|${c.id}|${i} · out|${c.id}|${i} | 60 20 60 60 96 |
@@ -75,12 +70,11 @@
 | new/atoms/send-support-reply.mjs | 9 | — | — | supportChats · messages · admin · admin | 120 |
 | new/boxes/annual-report.mjs | 9 | — | — | ../atoms/donation-years.mjs · ../atoms/donations-of-year.mjs · ../atoms/annual-report-lines.m · ../atoms/annual-report-lines-s | 5000 |
 | new/boxes/csvx.mjs | 9 | — | — | ../atoms/csv-escape.mjs · ../atoms/to-csv.mjs · ../atoms/decode-csv-buffer.mjs · ../atoms/decode-csv-buffer-str | 5000 |
-| new/boxes/hebrew-calendar.mjs | 9 | — | — | ../atoms/gematria.mjs · ../atoms/gematria-data.mjs · ../atoms/heb-parts.mjs · ../atoms/heb-parts-strings.mjs | 10 |
+| new/boxes/hebrew-calendar.mjs | 9 | — | — | ../atoms/gematria.mjs · ../atoms/gematria-strings.mjs · ../atoms/gematria-data.mjs · ../atoms/heb-parts.mjs | 10 |
 | new/boxes/lib-crypto.mjs | 9 | — | — | ../atoms/gen-recovery-key.mjs · ../atoms/gen-recovery-key-stri · ../atoms/encrypt-db.mjs · ../atoms/is-encrypted.mjs | 12 |
 | new/boxes/lib-ics.mjs | 9 | — | — | ../atoms/ics-escape.mjs · ../atoms/fold-ics-line.mjs · ../atoms/build-ics.mjs · ../atoms/build-ics-strings.mjs | 5000 |
 | new/boxes/reports.mjs | 9 | — | — | ../atoms/fmt-date.mjs · ../atoms/in-range.mjs · ../atoms/range-label.mjs · ../atoms/range-label-strings.m | 10 |
 | new/atoms/annual-report-lines.mjs | 8 | — | const out = [ '='.repeat(46), T.k1 + | — | 46 46 46 12 46 |
-| new/atoms/constellation-donor-constellation.mjs | 8 | — | — | dormant | 2166136261 16777619 30 90 180 365 |
 | new/atoms/default-course-dates.mjs | 8 | — | — | ${startYear}-09-01 · ${startYear + 1}-07-31 | 10 -09 -07 31 |
 | new/atoms/delete-org-completely.mjs | 8 | — | — | donations · auditlog · incomingPayments · smsOutbox | — |
 | new/atoms/encrypt-db.mjs | 8 | — | — | raw · AES-GCM · encrypt · decrypt | — |
@@ -89,7 +83,6 @@
 | new/atoms/mark-support-read.mjs | 8 | — | — | admin · unreadAdmin · unreadUser · supportChats | — |
 | new/atoms/migrate-supporters-to-keyed.mjs | 8 | — | — | supporters · events · events | 400 400 |
 | new/atoms/open-dek.mjs | 8 | — | — | pass · pass · raw · AES-GCM | — |
-| new/atoms/preview-telephony.mjs | 8 | — | const opts = { anchorDate: anchor, calendarW · const scenarios = [ { when: T.k3, ca | — | 400 1234567 |
 | new/atoms/read-file-as-data-url.mjs | 8 | הקובץ גדול מדי להטמעה (מקסימום · MB) — הוסיפו קישור במקום | — | — | — |
 | new/atoms/student-history-text.mjs | 8 | ${yr}${h.courseName}${grp} — נ | — | [${h.yearLabel}]  ·  · ${h.group} | — |
 | new/boxes/a11y.mjs | 8 | — | — | ../atoms/scale-min.mjs · ../atoms/scale-max.mjs · ../atoms/scale-step.mjs · ../atoms/a11y-fab-toggles.mjs | — |
@@ -120,9 +113,10 @@
 | new/boxes/tzedaka.mjs | 8 | — | — | ../atoms/tz-score-rules.mjs · ../atoms/tz-stale-days.mjs · ../atoms/last-collection-iso.m · ../atoms/collection-score-delt | — |
 | new/boxes/worktasks.mjs | 8 | — | — | ../atoms/task-identity.mjs · ../atoms/task-identity-strings · ../atoms/open-tasks-for.mjs · ../atoms/done-today-for.mjs | — |
 | new/atoms/plan-add-name.mjs | 7 | השם "${nm}" כבר ברשימה | const names = [...a.names, { id, name: nm, e | — | — |
-| new/atoms/slugify.mjs | 7 | — | const lat = [...orgName.trim().toLowerCase() | org | 30 30 |
+| new/atoms/preview-telephony.mjs | 7 | — | const opts = { anchorDate: anchor, calendarW · const scenarios = [ { when: T.k3, ca | — | 400 |
 | new/atoms/ayin-all-rows.mjs | 6 | — | const rows = [[T.k1, T.k2, T.k3, unit, T.k4, · const a = { ...emptyAyin(), ...sp.ayin } | — | — |
 | new/atoms/compute-quote.mjs | 6 | — | const lines = [...all.filter((l) => l.price  | subscription | 12 |
+| new/atoms/constellation-donor-constellation.mjs | 6 | — | — | — | 2166136261 16777619 30 90 180 365 |
 | new/atoms/create-cloud-key.mjs | 6 | יצירת מפתח-הצפנה נכשלה | — | pass | — |
 | new/atoms/default-prices.mjs | 6 | — | — | — | 290 120 70 180 60 90 |
 | new/atoms/delivery-list-lines.mjs | 6 | 🦺 ${volName} (${list.length}  | — |   • ${r.familyName} · ${status | — |
@@ -133,6 +127,7 @@
 | new/atoms/find-member-org-slugs.mjs | 6 | — | — | platformOrgs · members · array-contains | — |
 | new/atoms/ics-feed-url.mjs | 6 | — | — | https://us-central1- · .cloudfunctions.net/icsFeed?or · &key= | — |
 | new/atoms/intel-rfm-from-scan.mjs | 6 | — | — | — | 30 350 90 280 180 200 |
+| new/atoms/merge-families.mjs | 6 | — | const all = [keeper, ...losers] · const baseNotes = [...new Set(notesParts)].j | — | — |
 | new/atoms/parse-any-date.mjs | 6 | — | — | — | 31 2000 1900 31 1899 11 |
 | new/atoms/run-audit.mjs | 6 | — | const a = [...new Set(g2[k])] · const a = [...new Set(g3[k])] | — | — |
 | new/atoms/segments-match-segment.mjs | 6 | — | const SEGMENTS = [ { key: T.k1, match: ( | — | 5000 60 365 |
@@ -152,6 +147,8 @@
 | new/atoms/push-donations.mjs | 5 | — | const payload = { supporterId: d.supporterId | — | 400 400 |
 | new/atoms/remove-org-member.mjs | 5 | — | const variants = [...new Set([email.trim(),  | platformOrgs | — |
 | new/atoms/segula-reminders.mjs | 5 | — | — | ${startIso}T12:00:00 | 21 35 40 |
+| new/atoms/slugify.mjs | 5 | — | const lat = [...orgName.trim().toLowerCase() | — | 30 30 |
+| new/atoms/block-reason.mjs | 4 | — | — | ${hp.month} ${hp.day} | 10 20 |
 | new/atoms/build-month-grid.mjs | 4 | — | — | — | 42 15 15 31 |
 | new/atoms/clear-employee-field.mjs | 4 | — | — | platformOrgs · memberConfigs | — |
 | new/atoms/collection-score-delta.mjs | 4 | — | — | — | 10 50 60 86400000 |
@@ -185,6 +182,7 @@
 | new/atoms/write-org-secrets.mjs | 4 | — | — | orgSecrets · orgSecretsMeta | — |
 | new/atoms/write-sms-outbox.mjs | 4 | — | — | smsOutbox · pending | — |
 | new/atoms/academic-year-label.mjs | 3 | — | — | ${startYear}/${nn} | 100 |
+| new/atoms/amount-in-words.mjs | 3 | — | — | — | 100 20 20 |
 | new/atoms/append-call.mjs | 3 | — | const next = [...(calls ?? []), { at: iso, o | — | — |
 | new/atoms/apply-entity-partial.mjs | 3 | — | const next = [...incoming.values(), ...kept] | — | — |
 | new/atoms/apply-outcome.mjs | 3 | — | const entry = { id, outcome, at: iso } | — | — |
@@ -227,7 +225,6 @@
 | new/atoms/parse-acc.mjs | 3 | — | const off = { contrast: false, noanim: false | — | — |
 | new/atoms/parse-families-csv.mjs | 3 | — | const obj = { name, father: '',  | — | — |
 | new/atoms/plan-demo-cleanup.mjs | 3 | — | const FP_FIELDS = { families: [T.k1, T.k | — | — |
-| new/atoms/portfolio-tier-trend-counts.mjs | 3 | — | — | down | 12 |
 | new/atoms/pull-audit-ring.mjs | 3 | — | — | auditlog | 500 |
 | new/atoms/push-audit-ring.mjs | 3 | — | — | auditlog | 500 |
 | new/atoms/push-nav.mjs | 3 | — | const h = [...hist, prev] | — | — |
@@ -248,7 +245,6 @@
 | new/atoms/validate-heb-month-names.mjs | 3 | — | — | — | 3761 440 12 |
 | new/atoms/volunteer-route-stops.mjs | 3 | — | const stop = [fam.address, fam.city].map((s) | — | — |
 | new/atoms/add-org-member.mjs | 2 | — | — | platformOrgs | — |
-| new/atoms/advance-status.mjs | 2 | — | — | delivered | — |
 | new/atoms/build-reenroll-rows.mjs | 2 | — | — | ${memberName} ${family} ${cour | — |
 | new/atoms/cockpit-calls.mjs | 2 | — | — | — | 60 5000 |
 | new/atoms/decrypt-doc.mjs | 2 | — | — | AES-GCM | — |
@@ -259,10 +255,10 @@
 | new/atoms/fetch-org-leads.mjs | 2 | — | — | platformLeads | — |
 | new/atoms/fetch-org-requests.mjs | 2 | — | — | platformRequests | — |
 | new/atoms/fold-ics-line.mjs | 2 | — | — | — | 75 75 |
+| new/atoms/gematria.mjs | 2 | — | — | — | 100 15 |
 | new/atoms/groups-hint-from-audience.mjs | 2 | — | — | — | 10 12 |
 | new/atoms/hash-pin.mjs | 2 | — | — | SHA-256 | — |
 | new/atoms/iso-local.mjs | 2 | — | — | ${d.getFullYear()}-${p2(d.getM | — |
-| new/atoms/marital-chip-style.mjs | 2 | — | — | #eef1f5 | — |
 | new/atoms/match-incoming-to-planned.mjs | 2 | — | — | — | 100 60 |
 | new/atoms/min-to-hm.mjs | 2 | — | — | — | 60 60 |
 | new/atoms/next-academic-year-label.mjs | 2 | — | — | — | -12 31 |
@@ -314,6 +310,7 @@
 | new/atoms/org-slug-from-url.mjs | 1 | — | — | — | 40 |
 | new/atoms/pay-link.mjs | 1 | — | — | — | 100 |
 | new/atoms/portfolio-active-by-month.mjs | 1 | — | — | — | 12 |
+| new/atoms/portfolio-tier-trend-counts.mjs | 1 | — | — | — | 12 |
 | new/atoms/punch-confirm-step.mjs | 1 | — | — | — | 3000 |
 | new/atoms/receipt-lines.mjs | 1 | — | — | — | 10 |
 | new/atoms/round2.mjs | 1 | — | — | — | 100 |

@@ -1,4 +1,6 @@
 import { buildCustomExport as __pure_buildCustomExport } from './build-custom-export.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור; בדיקה לא מייבאת אטום-שכן)
+const __d_build_custom_export_CAP_DAYS = 4000;
 // צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
 const __d_buildCustomExport_BUILD_CUSTOM_EXPORT_T = {
   k1: "courses",
@@ -20,7 +22,7 @@ const __d_buildCustomExport_BUILD_CUSTOM_EXPORT_T = {
   k17: "entity.donations",
   k18: "תרומות",
 };
-const buildCustomExport = (...a) => __pure_buildCustomExport(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_buildCustomExport_BUILD_CUSTOM_EXPORT_T);
+const buildCustomExport = (...a) => __pure_buildCustomExport(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_buildCustomExport_BUILD_CUSTOM_EXPORT_T, __d_build_custom_export_CAP_DAYS);
 
 /* ---------- אובייקט-השקעים לבדיקה (מתועד בחוזה) ---------- */
 const COURSE_DEFS = ['name', 'teacher', 'grade', 'room', 'schedule', 'model', 'occ', 'students', 'studentsFull', 'pays', 'revenue', 'abs'];

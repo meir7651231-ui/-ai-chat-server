@@ -2,7 +2,7 @@
  * מוצא: portfolio.ts:116 (tierTrendCounts). חוק-4 verbatim. פרוקסי-מגמה פר-דרגה.
  * שקעים (מבונים): donorScan,rfmFromScan,trendFromScan (intel) · supTier (Genesis).
  */
-export function tierTrendCounts(supporters, todayIso, rate = 3.7, { donorScan, rfmFromScan, trendFromScan, supTier }, order) {
+export function tierTrendCounts(supporters, todayIso, rate = 3.7, { donorScan, rfmFromScan, trendFromScan, supTier }, order, T) {
   const map = new Map(order.map((t) => [t, { tier: t, total: 0, rising: 0, falling: 0, stable: 0 }]));
   for (const sp of supporters) {
     const scan = donorScan(sp, todayIso, rate, 12);
@@ -13,7 +13,7 @@ export function tierTrendCounts(supporters, todayIso, rate = 3.7, { donorScan, r
     row.total++;
     const d = trendFromScan(scan).dir;
     if (d === 'up') row.rising++;
-    else if (d === 'down') row.falling++;
+    else if (d === T.k1) row.falling++;
     else row.stable++;
   }
   return order.map((t) => map.get(t));

@@ -47,9 +47,10 @@ import { CHIP_STYLE_T as __d_chipStyle_CHIP_STYLE_T } from '../atoms/chip-style-
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const chipStyle = (...a) => __pure_chipStyle(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_chipStyle_CHIP_STYLE_T);
 import { maritalChipStyle as __pure_maritalChipStyle } from '../atoms/marital-chip-style.mjs';
+import { MARITAL_CHIP_STYLE_T as __d_maritalChipStyle_MARITAL_CHIP_STYLE_T } from '../atoms/marital-chip-style-strings.mjs';
 import { MARITAL_CHIP } from '../atoms/marital-chip-style-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
-const maritalChipWire = (...a) => __pure_maritalChipStyle(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), MARITAL_CHIP);
+const maritalChipWire = (...a) => __pure_maritalChipStyle(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), MARITAL_CHIP, __d_maritalChipStyle_MARITAL_CHIP_STYLE_T);
 import { termOf as __pure_termOf } from '../atoms/term-of.mjs';
 import { INTEGRATION_SETTING_T as __d_termOf_TERM_OF_T } from '../atoms/integration-setting-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

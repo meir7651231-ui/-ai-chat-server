@@ -19,9 +19,10 @@ import { TELEPHONY_TO_TENANT_T as __d_telephonyToTenant_TELEPHONY_TO_TENANT_T } 
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const telephonyToTenant = (...a) => __pure_telephonyToTenant(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_telephonyToTenant_TELEPHONY_TO_TENANT_T);
 import { previewTelephony as __pure_previewTelephony } from '../atoms/preview-telephony.mjs';
+import { caller as __d_preview_telephony_caller } from '../atoms/preview-telephony-data.mjs';
 import { PREVIEW_TELEPHONY_T as __d_previewTelephony_PREVIEW_TELEPHONY_T } from '../atoms/preview-telephony-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
-const previewTelephonyAtom = (...a) => __pure_previewTelephony(...a, ...Array(Math.max(0, 9 - a.length)).fill(undefined), __d_previewTelephony_PREVIEW_TELEPHONY_T);
+const previewTelephonyAtom = (...a) => __pure_previewTelephony(...a, ...Array(Math.max(0, 9 - a.length)).fill(undefined), __d_previewTelephony_PREVIEW_TELEPHONY_T, __d_preview_telephony_caller);
 import { nextClosure as __pure_nextClosure } from '../atoms/next-closure.mjs';
 import { NEXT_CLOSURE_T as __d_nextClosure_NEXT_CLOSURE_T } from '../atoms/next-closure-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

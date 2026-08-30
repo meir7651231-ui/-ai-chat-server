@@ -1,7 +1,10 @@
 import { donorConstellation as __pure_donorConstellation } from './constellation-donor-constellation.mjs';
+const __d_donorConstellation_CONSTELLATION_DONOR_CONSTELLATION_T = {
+  k1: "dormant",
+};
 // צילום-מקומי מ-constellation-donor-constellation-data + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)
 const TIER_KEY = { 'זהב': 'gold', 'כסף': 'silver', 'ארד': 'bronze', 'רדומה': 'dormant' };
-const f = (...a) => __pure_donorConstellation(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), TIER_KEY);
+const f = (...a) => __pure_donorConstellation(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), TIER_KEY, __d_donorConstellation_CONSTELLATION_DONOR_CONSTELLATION_T);
 // עצמאי (חוק-1: אפס import-אח; שקעים inline מבונים). Golden נלכד מהרצה.
 const MS_DAY=86400000;
 const dayDiff=(iso,today)=>{if(!iso)return Infinity;const a=Date.parse(iso.slice(0,10)+'T12:00:00'),b=Date.parse(today.slice(0,10)+'T12:00:00');if(Number.isNaN(a)||Number.isNaN(b))return Infinity;return Math.floor((b-a)/MS_DAY);};

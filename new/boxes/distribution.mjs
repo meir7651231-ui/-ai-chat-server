@@ -3,9 +3,10 @@
  *  זה המקום היחיד שבו חוטי-SHOP7 נפגשים (חוקי-החשמלאי, LAW.md). מייבא אך-ורק
  *  אטומים; שקעי-IO/מודולים-אחרים (smartFilter) = פרמטרים-מוזרקים מתועדים. */
 import { advanceStatus as __pure_advanceStatus } from '../atoms/advance-status.mjs';
+import { PENDING_DELIVERIES_TODAY_T as __d_advanceStatus_ADVANCE_STATUS_T } from '../atoms/pending-deliveries-today-strings.mjs';
 import { ORDER } from '../atoms/advance-status-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
-const advanceStatus = (...a) => __pure_advanceStatus(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), ORDER);
+const advanceStatus = (...a) => __pure_advanceStatus(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), ORDER, __d_advanceStatus_ADVANCE_STATUS_T);
 import { deliveriesOfDay } from '../atoms/deliveries-of-day.mjs';
 import { deliveriesOfVolunteer } from '../atoms/deliveries-of-volunteer.mjs';
 import { eligibleAssignmentsForDay as __pure_eligibleAssignmentsForDay } from '../atoms/eligible-assignments-for-day.mjs';

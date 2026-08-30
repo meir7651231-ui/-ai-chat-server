@@ -1,7 +1,10 @@
 import { tierTrendCounts as __pure_tierTrendCounts } from './portfolio-tier-trend-counts.mjs';
+const __d_tierTrendCounts_PORTFOLIO_TIER_TREND_COUNTS_T = {
+  k1: "down",
+};
 // צילום-מקומי מ-portfolio-tier-trend-counts-data + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)
 const order = ['זהב', 'כסף', 'ארד', 'רדומה'];
-const f = (...a) => __pure_tierTrendCounts(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), order);
+const f = (...a) => __pure_tierTrendCounts(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), order, __d_tierTrendCounts_PORTFOLIO_TIER_TREND_COUNTS_T);
 // עצמאי (חוק-1: אפס import-אח; שקעים inline מבונים). Golden נלכד מהרצה.
 const MS_DAY=86400000;
 const dayDiff=(iso,today)=>{if(!iso)return Infinity;const a=Date.parse(iso.slice(0,10)+'T12:00:00'),b=Date.parse(today.slice(0,10)+'T12:00:00');if(Number.isNaN(a)||Number.isNaN(b))return Infinity;return Math.floor((b-a)/MS_DAY);};

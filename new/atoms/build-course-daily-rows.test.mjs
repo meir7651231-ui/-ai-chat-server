@@ -1,7 +1,28 @@
 import { buildCourseDailyRows as __pure_buildCourseDailyRows } from './build-course-daily-rows.mjs';
+const __d_buildCourseDailyRows_BUILD_COURSE_DAILY_ROWS_T = {
+  k1: "תאריך עברי",
+  k2: "תאריך לועזי",
+  k3: "יום",
+  k4: "קבוצה/שעה",
+  k5: "סטטוס יום",
+  k6: "תלמידה פעילה",
+  k7: "entity.family",
+  k8: "משפחה",
+  k9: "סטטוס נוכחות",
+  k10: "קבוצה",
+  k11: "wait",
+  k12: "ended",
+  k13: "אין רשומות",
+  k14: "paused",
+  k15: "מוקפא",
+  k16: "מתקיים",
+  k17: "לא הופיעה",
+  k18: "חיסור",
+  k19: "פעיל",
+};
 // צילום-מקומי מ-build-course-daily-rows-data + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)
 const DAY_NAMES = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
-const buildCourseDailyRows = (...a) => __pure_buildCourseDailyRows(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), DAY_NAMES);
+const buildCourseDailyRows = (...a) => __pure_buildCourseDailyRows(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), DAY_NAMES, __d_buildCourseDailyRows_BUILD_COURSE_DAILY_ROWS_T);
 
 // שקעים מקומיים לבדיקה
 const hebDateFull = (iso) => 'ע:' + iso;

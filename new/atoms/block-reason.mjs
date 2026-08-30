@@ -5,18 +5,18 @@
 
 /** חגים שבהם אין פעילות כלל (מתוך לוח החגים המשותף). */
 
-export function blockReason(d, blockingOn = true, hebParts, holidays, FULL_HOLIDAYS) {
+export function blockReason(d, blockingOn = true, hebParts, holidays, FULL_HOLIDAYS, T) {
   if (!blockingOn) return null;
   const dow = d.getDay();
-  if (dow === 6) return 'שבת';
-  if (dow === 5) return 'יום שישי (שעתיים לפני שבת)';
+  if (dow === 6) return T.k1;
+  if (dow === 5) return T.k2;
   const hp = hebParts(d);
   const hol = holidays[`${hp.month} ${hp.day}`];
   if (hol && FULL_HOLIDAYS.includes(hol)) return hol;
   // צום תשעה באב נדחה: כשט' באב חל בשבת, הצום נצפה בי' באב (ראשון). ט' באב עצמו
   // נחסם כ'שבת', אך י' באב — הצום בפועל — נחסם כאן כדין הלוח.
-  if (dow === 0 && hp.month === 'Av' && hp.day === 10) return 'תשעה באב (נדחה)';
-  if ((hp.month === 'Tishri' && hp.day >= 16 && hp.day <= 21) || (hp.month === 'Nisan' && hp.day >= 16 && hp.day <= 20))
-    return 'חול המועד';
+  if (dow === 0 && hp.month === 'Av' && hp.day === 10) return T.k3;
+  if ((hp.month === T.k4 && hp.day >= 16 && hp.day <= 21) || (hp.month === T.k5 && hp.day >= 16 && hp.day <= 20))
+    return T.k6;
   return null;
 }

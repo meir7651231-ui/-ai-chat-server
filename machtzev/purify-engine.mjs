@@ -195,25 +195,33 @@ function purifyOne(cand, log) {
   const edits = new Map();
   for (const cp of csSet) {
     let t = fs.readFileSync(cp, 'utf8');
-    if (cand.fns.some(fn => t.includes(`__pure_${fn}`))) return log(`~ ${base}: קורא כבר-עטוף (${path.relative(ROOT, cp)})`);
     const im = t.match(new RegExp(`import\\s*\\{([^}]*)\\}\\s*from\\s*(['\"])([^'\"]*\\/${base}\\.mjs)\\2\\s*;?`));
     if (!im) return log(`~ ${base}: קורא בלי import-מפורש (${path.relative(ROOT, cp)})`);
     let braces = im[1];
     const wraps = [];
+    let extended = false;
     for (const fn of cand.fns) {
+      const alias = `__pure_${fn}`;
+      if (braces.includes(`${fn} as ${alias}`)) {
+        // 🔁 שילוב-מעברים: עטיפה קיימת — הדאטה החדשה מצטרפת לזנב-הקריאה
+        const wre = new RegExp(`(const \\w+ = \\(\\.\\.\\.a\\) => ${alias}\\(\\.\\.\\.a,[^\\n]*)\\);`);
+        if (!wre.test(t)) return log(`~ ${base}: עטיפה קיימת לא-נמצאה (${path.relative(ROOT, cp)})`);
+        t = t.replace(wre, `$1, ${cand.consts.map(uniq).join(', ')});`);
+        extended = true;
+        continue;
+      }
       const spec = braces.match(new RegExp(`\\b${fn}\\b(\\s+as\\s+(\\w+))?`));
       if (!spec) continue;                          // הקורא לא מייבא את הפונקציה הזו
       const local = spec[2] || fn;
-      const alias = `__pure_${fn}`;
       braces = braces.replace(spec[0], `${fn} as ${alias}`);
       const pad = `...Array(Math.max(0, ${arity[fn]} - a.length)).fill(undefined)`;
       wraps.push(`const ${local} = (...a) => ${alias}(...a, ${pad}, ${cand.consts.map(uniq).join(', ')});`);
     }
-    if (!wraps.length) continue;
+    if (!wraps.length && !extended) continue;
     let inject;
     if (cp.endsWith('.test.mjs')) {
       const inl = cand.consts.map(c => `const ${uniq(c)} = ${c.lit};`).join('\n');
-      inject = `\n// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור; בדיקה לא מייבאת אטום-שכן)\n${inl}\n${wraps.join('\n')}`;
+      inject = `\n// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור; בדיקה לא מייבאת אטום-שכן)\n${inl}` + (wraps.length ? `\n${wraps.join('\n')}` : '');
     } else {
       const byHome = new Map();
       for (const c of cand.consts) {
@@ -226,7 +234,7 @@ function purifyOne(cand, log) {
         const rel = path.relative(path.dirname(cp), path.join(ATOMS, home)).replace(/^(?!\.)/, './');
         return `import { ${specs.join(', ')} } from '${rel}';`;
       }).join('\n');
-      inject = `\n${ims}\n// עטיפת-כריכה (מנוע-הטיהור): הדאטה נכרכת כאן — ה-API החיצוני זהה\n${wraps.join('\n')}`;
+      inject = `\n${ims}` + (wraps.length ? `\n// עטיפת-כריכה (מנוע-הטיהור): הדאטה נכרכת כאן — ה-API החיצוני זהה\n${wraps.join('\n')}` : '');
     }
     edits.set(cp, t.replace(im[0], im[0].replace(im[1], braces) + inject));
   }
@@ -348,14 +356,29 @@ function purifyStrings(cand, log) {
   const cs = callers(base, cand.fn);
   const edits = new Map();
   for (const cp of cs) {
-    const t = fs.readFileSync(cp, 'utf8');
-    if (t.includes(`__pure_${cand.fn}`)) return log(`~ ${base}: קורא כבר-עטוף (שילוב-מעברים — בהמשך)`);
+    let t = fs.readFileSync(cp, 'utf8');
     const im = t.match(new RegExp(`import\\s*\\{([^}]*)\\}\\s*from\\s*(['\"])([^'\"]*\\/${base}\\.mjs)\\2\\s*;?`));
     if (!im) return log(`~ ${base}: קורא בלי import-מפורש (${path.relative(ROOT, cp)})`);
+    const alias = `__pure_${cand.fn}`;
+    if (im[1].includes(`${cand.fn} as ${alias}`)) {
+      // 🔁 שילוב-מעברים: הרחבת עטיפה קיימת בדאטת-המחרוזות
+      const wre = new RegExp(`(const \\w+ = \\(\\.\\.\\.a\\) => ${alias}\\(\\.\\.\\.a,[^\\n]*)\\);`);
+      if (!wre.test(t)) return log(`~ ${base}: עטיפה קיימת לא-נמצאה (${path.relative(ROOT, cp)})`);
+      const dAlias2 = `__d_${cand.fn}_${CONST}`;
+      t = t.replace(wre, `$1, ${dAlias2});`);
+      if (cp.endsWith('.test.mjs')) {
+        edits.set(cp, t.replace(im[0], im[0] + `\nconst ${dAlias2} = ${litObj};`));
+      } else {
+        const home2 = existing ? existing.file : dataBase + '.mjs';
+        const exp2 = existing ? existing.name : CONST;
+        const rel2 = path.relative(path.dirname(cp), path.join(ATOMS, home2)).replace(/^(?!\.)/, './');
+        edits.set(cp, t.replace(im[0], im[0] + `\nimport { ${exp2} as ${dAlias2} } from '${rel2}';`));
+      }
+      continue;
+    }
     const spec = im[1].match(new RegExp(`\\b${cand.fn}\\b(\\s+as\\s+(\\w+))?`));
     if (!spec) return log(`~ ${base}: היבוא לא נמצא במפרט`);
     const local = spec[2] || cand.fn;
-    const alias = `__pure_${cand.fn}`;
     const newBraces = im[1].replace(spec[0], `${cand.fn} as ${alias}`);
     const pad = `...Array(Math.max(0, ${origArity} - a.length)).fill(undefined)`;
     const dAlias = `__d_${cand.fn}_${CONST}`;

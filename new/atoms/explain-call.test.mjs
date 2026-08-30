@@ -1,7 +1,40 @@
 import { explainCall as __pure_explainCall } from './explain-call.mjs';
+const __d_explainCall_EXPLAIN_CALL_T = {
+  k1: "מחוץ-לשעות",
+  k2: "שעות-פעילות",
+  k3: "outbound",
+  k4: "non-kosher-blocked",
+  k5: "⛔ מצב-כשר: ניסיון-יציאה דרך SIM לא-כשר — נחסם.",
+  k6: "no-such-sim",
+  k7: "⚠️ הערוץ שנבחר לא-קיים.",
+  k8: "no-default",
+  k9: "⚠️ אין SIM ליציאת-ברירת-מחדל.",
+  k10: "unknown-did",
+  k11: "❓ המספר שחויג אינו מוכר למרכזייה — לא ינותב.",
+  k12: "blocked",
+  k13: "allowlist",
+  k14: "⛔ המתקשר אינו ברשימת-ההיתר (או חסוי) — נותק.",
+  k15: "⛔ המתקשר ברשימת-החסומים — נותק.",
+  k16: "priority",
+  k17: "mourning",
+  k18: "announcement",
+  k19: "📢 קו-הכרזה: משמיע הודעה מוקלטת ומנתק.",
+  k20: "office",
+  k21: "ivr-menu",
+  k22: "✅ בשעות → תפריט-קולי (IVR) ממתין לבחירה.",
+  k23: "queue",
+  k24: "✅ בשעות → תור-המתנה עד שנציג מושך את השיחה.",
+  k25: "voicemail",
+  k26: "manager",
+  k27: "afterhours",
+  k28: "ivr-invalid",
+  k29: "בחירה לא-תקינה ב-IVR",
+  k30: "אין-מענה במשרד",
+  k31: "ivr:",
+};
 // צילום-מקומי מ-explain-call-data + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)
 const DOW_HE = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
-const explainCall = (...a) => __pure_explainCall(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), DOW_HE);
+const explainCall = (...a) => __pure_explainCall(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), DOW_HE, __d_explainCall_EXPLAIN_CALL_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

@@ -19,9 +19,10 @@ import { MAKEUP_ELIGIBILITY_T as __d_makeupEligibility_MAKEUP_ELIGIBILITY_T } fr
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const makeupEligibility = (...a) => __pure_makeupEligibility(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_makeupEligibility_MAKEUP_ELIGIBILITY_T);
 import { blockReason as __pure_blockReason } from '../atoms/block-reason.mjs';
+import { BLOCK_REASON_T as __d_blockReason_BLOCK_REASON_T } from '../atoms/block-reason-strings.mjs';
 import { FULL_HOLIDAYS } from '../atoms/block-reason-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
-const blockReasonAtom = (...a) => __pure_blockReason(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), FULL_HOLIDAYS);
+const blockReasonAtom = (...a) => __pure_blockReason(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), FULL_HOLIDAYS, __d_blockReason_BLOCK_REASON_T);
 import { buildSlots as __pure_buildSlots } from '../atoms/build-slots.mjs';
 import { BUILD_SLOTS_T as __d_buildSlots_BUILD_SLOTS_T } from '../atoms/build-slots-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

@@ -1,7 +1,13 @@
 import { normalizeTelephony as __pure_normalizeTelephony } from './normalize-telephony.mjs';
+const __d_normalizeTelephony_NORMALIZE_TELEPHONY_T = {
+  k1: "object",
+  k2: "sim",
+  k3: "string",
+  k4: "boolean",
+};
 // צילום-מקומי מ-normalize-telephony-data + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)
 const TEL_KINDS = ['sim', 'virtual', 'whatsapp'];
-const normalizeTelephony = (...a) => __pure_normalizeTelephony(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), TEL_KINDS);
+const normalizeTelephony = (...a) => __pure_normalizeTelephony(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), TEL_KINDS, __d_normalizeTelephony_NORMALIZE_TELEPHONY_T);
 
 // מימושי-השקעים (העתק-מקור maor/src/lib/config.ts:153-160) — הבדיקה מייבאת רק את האטום שלה.
 const telStr = (v, max) => (typeof v === 'string' ? v.replace(/\p{Cc}/gu, '').trim().slice(0, max) : '');
