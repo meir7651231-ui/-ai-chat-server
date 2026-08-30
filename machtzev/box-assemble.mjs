@@ -20,11 +20,30 @@ const boxName = (process.argv[3] && !process.argv[3].startsWith('--') ? process.
 
 const raw = fs.readFileSync(SRC, 'utf8');
 // TS→JS: מסיר import-type ואנוטציות; משאיר import-ערך (שקעים-חיצוניים)
-const js = ts.transpileModule(raw, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext, isolatedModules: false } }).outputText;
-const valueImports = [...js.matchAll(/^import\s+.*?from\s+['"]([^'"]+)['"]/gm)].map(m => m[1]);
-if (valueImports.length) {
-  console.error(`⚠ ${boxName}: ${valueImports.length} יבוא-ערך חיצוני (שקעים לא-פתורים): ${valueImports.join(', ')}`);
-  console.error('   v1 מטפל בקבצים עצמאיים (type-imports בלבד). נדרש פתרון-שקע-למדף — שלב-ב׳.');
+let js = ts.transpileModule(raw, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext, isolatedModules: false } }).outputText;
+
+// ── שלב-ב׳: פתרון-שקע-למדף — כל יבוא-ערך חיצוני נפתר לאטום-מדף (קופסה→אטום=חוקי;
+//    קופסה→קופסה=אסור ⇒ אטומים בלבד). סמל שאינו-על-מדף-האטומים ⇒ אי-אפשר ⇒ נדחית. ──
+const walkFs = (d, o = []) => { if (!fs.existsSync(d)) return o; for (const e of fs.readdirSync(d, { withFileTypes: true })) { const p = path.join(d, e.name); e.isDirectory() ? walkFs(p, o) : o.push(p); } return o; };
+const atomOf = new Map();  // שם-יצוא → basename-של-אטום (מדף-האטומים בלבד)
+for (const f of walkFs(path.join(ROOT, 'new/atoms'))) {
+  if (!/\.mjs$/.test(f) || /\.test\./.test(f)) continue; const t = fs.readFileSync(f, 'utf8'); let m; const b = path.basename(f, '.mjs');
+  for (const re of [/export\s+(?:async\s+)?function\s+([a-zA-Z_$][\w$]*)/g, /export\s+const\s+([a-zA-Z_$][\w$]*)/g]) while ((m = re.exec(t))) if (!atomOf.has(m[1])) atomOf.set(m[1], b);
+}
+const impLines = [...js.matchAll(/^import\s+(?!type\b)(.+?)\s+from\s+['"]([^'"]+)['"];?\s*$/gm)];
+const unresolved = [];
+for (const [full, clause, spec] of impLines) {
+  const named = clause.match(/^\{([^}]*)\}$/);
+  if (!named) { unresolved.push(spec + ' (יבוא-לא-מפורש: default/namespace)'); continue; }
+  const syms = named[1].split(',').map(x => x.trim()).filter(Boolean).map(x => { const [orig, alias] = x.split(/\s+as\s+/).map(s => s.trim()); return { orig, alias: alias || orig }; });
+  const miss = syms.filter(s => !atomOf.has(s.orig));
+  if (miss.length) { unresolved.push(spec + ' → ' + miss.map(s => s.orig).join(',')); continue; }
+  // חיווט-מחדש: כל סמל ← אטום-המדף שלו (יבוא נפרד פר-אטום, נתיב יחסי מ-new/boxes)
+  const rewired = syms.map(s => `import { ${s.orig}${s.alias !== s.orig ? ' as ' + s.alias : ''} } from '../atoms/${atomOf.get(s.orig)}.mjs';`).join('\n');
+  js = js.replace(full, rewired);
+}
+if (unresolved.length) {
+  console.error(`⚠ ${boxName}: ${unresolved.length} שקע לא-פתיר (סמל חסר-במדף-האטומים): ${unresolved.join(' · ')}`);
   process.exit(1);
 }
 const exports = [...js.matchAll(/export\s+(?:async\s+)?function\s+([a-zA-Z_$][\w$]*)/g)].map(m => m[1])
@@ -33,7 +52,7 @@ if (!exports.length) { console.error(`✗ ${boxName}: אין יצואים`); pro
 
 // כתיבת-הקופסה זמנית לצורך הרצה+golden
 const tmp = path.join(BOXES, boxName + '.mjs');
-const header = `/** קופסת-חיבורים · ${boxName} — הורכבה במנוע-הרכבת-הקופסאות (הכרעה 19).\n *  מוצא: ${SRCREL} · קובץ-עצמאי (type-imports בלבד) ⇒ TS→JS ביט-התנהגותי. */\n`;
+const header = `/** קופסת-חיבורים · ${boxName} — הורכבה במנוע-הרכבת-הקופסאות (הכרעה 19).\n *  מוצא: ${SRCREL} · TS→JS ביט-התנהגותי · שקעים-חיצוניים נפתרו לאטומי-מדף (קופסה→אטום). */\n`;
 fs.writeFileSync(tmp, header + js.replace(/^\/\*[\s\S]*?\*\/\n/, ''));
 
 const POOL = ['123456782', {amount: 100}, {payments: [{amount: 100}]}, {name: 'כהן', phone: '0501234567'}, ['2026-08-24'], 3.14, 1000, 2026, '', 'אבג', 'כהן לוי', 'abc', 'a@b.com', '2026-08-24', '0501234567', 'https://x.co', '12', 0, 1, 2, 5, 15, 100, -3, null, undefined, true, false, [], {}];
