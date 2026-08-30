@@ -51,7 +51,7 @@ const src = readFileSync(new URL('./smtp-url.mjs', import.meta.url), 'utf8');
 if (!src.includes("SMTP_URL_TERMS.k1")) err('מגן: נוסח הודעה-1 שונה');
 if (!src.includes("SMTP_URL_TERMS.k2")) err('מגן: נוסח הודעה-2 שונה');
 if (!src.includes('composeSmtpUrl(em, pw, knownHost || mh)')) err('מגן: תפר-הקדימות (ספק-מוכר גובר) שונה');
-if (!src.includes("if (!em.trim() && !pw.trim()) return { state: 'empty' }")) err('מגן: שער-הדילוג שונה');
+if (!src.includes("if (!em.trim() && !pw.trim()) return { state: SMTP_STATE.empty }")) err('מגן: שער-הדילוג שונה');
 if (!src.includes('knownHost || mh ? MSG_MISSING_FIELDS : MSG_UNKNOWN_PROVIDER')) err('מגן: בורר-ההודעות שונה');
 if (src.indexOf('smtpHostFor(em)') > src.indexOf('composeSmtpUrl(em')) err('מגן: זיהוי-הספק חייב לקדום להרכבה');
 

@@ -1,16 +1,12 @@
 # 🔬 ממצאי טוהר-עומק (הכרעה 19) — דאטה בתוך מנגנון
 
-נסרקו אטומי-מנגנון ב-new/atoms · new/boxes · הפרות: 27
+נסרקו אטומי-מנגנון ב-new/atoms · new/boxes · הפרות: 23
 
 | אטום | ציון | עברית | טבלאות | מחרוזות-דומיין | מספרי-קסם |
 |---|---|---|---|---|---|
-| new/boxes/net-check.mjs | 9 | — | — | netcheck · netcheck= · site · /version.json? | 8000 |
-| new/boxes/receipt.mjs | 9 | — | — | text/plain;charset=utf-8 · receipt- · .txt · iframe | 10 |
 | new/atoms/portfolio-portfolio-intel.mjs | 6 | — | — | — | 10 10 86400000 10 10 30 |
 | new/boxes/empowerment.mjs | 5 | — | — | — | 60 60 12 12 10 |
 | new/boxes/lib-nedarim-sync.mjs | 4 | — | — | — | 10 28 999 12 |
-| new/boxes/pricing.mjs | 4 | — | — | maor_prices · subscription | — |
-| new/boxes/smtp-url.mjs | 4 | — | — | empty · error | — |
 | new/atoms/collection-score-delta.mjs | 3 | — | — | — | 10 50 60 |
 | new/atoms/lessons-in-term.mjs | 3 | — | — | — | 52 12 12 |
 | new/atoms/segula-reminders.mjs | 3 | — | — | — | 21 35 40 |

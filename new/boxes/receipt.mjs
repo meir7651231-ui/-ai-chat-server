@@ -69,6 +69,7 @@ const hebDateFull = (iso) => hebDateFullX(iso, gem, gemYear, hebParts);
 
 // ── חיווט: הלועזי של קבלה — צהריים-מקומי, he-IL (receipt.ts:59-62) ──
 const hebrewLocaleDate = (iso) => {
+  // פרוטוקול-חיצוני: אורך-קידומת תאריך-ISO (YYYY-MM-DD)
   const d = new Date(iso.slice(0, 10) + 'T12:00:00');
   return isNaN(d.getTime()) ? iso : d.toLocaleDateString('he-IL');
 };
@@ -107,9 +108,11 @@ export const receiptFmtOf = (config, ui) => receiptFmtOfX(config, ui, featureOn)
 export function downloadReceipt(o, io, amountInWords = AMOUNT_IN_WORDS_MISSING) {
   if (!guardExport(io)) return; // 🔐 שער יציאת-מידע
   const text = BOM + receiptLines(o, amountInWords).filter((x) => x !== '').join('\n');
+  // פרוטוקול-חיצוני: MIME של קובץ-טקסט
   const blob = new io.Blob([text], { type: 'text/plain;charset=utf-8' });
   const a = io.document.createElement('a');
   a.href = io.URL.createObjectURL(blob);
+  // פרוטוקול-חיצוני: שם-קובץ-ההורדה (קידומת + סיומת .txt)
   a.download = `receipt-${o.rid}.txt`;
   a.click();
   io.setTimeout(() => io.URL.revokeObjectURL(a.href), REVOKE_MS);
@@ -118,11 +121,13 @@ export function downloadReceipt(o, io, amountInWords = AMOUNT_IN_WORDS_MISSING) 
 /** הדפסה/PDF דרך iframe נסתר (לא window.open — חוסמי-חלונות). שער-ההרשאה קודם. */
 export function printReceipt(o, io, amountInWords = AMOUNT_IN_WORDS_MISSING) {
   if (!guardExport(io)) return; // 🔐 שער יציאת-מידע
+  // פרוטוקול-חיצוני: תג-DOM
   const frame = io.document.createElement('iframe');
   frame.style.position = 'fixed';
   frame.style.insetInlineEnd = '-9999px';
   frame.style.width = '0';
   frame.style.height = '0';
+  // פרוטוקול-חיצוני: תכונת-נגישות ARIA
   frame.setAttribute('aria-hidden', 'true');
   frame.srcdoc = receiptHtml(o, amountInWords);
   frame.onload = () => {
