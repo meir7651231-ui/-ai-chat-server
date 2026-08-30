@@ -7,6 +7,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { buildAtlas } from './generator/atlas.mjs';
 import { buildTwinRegistry } from './generator/twins.mjs';
+import { harvestDartTwins } from './generator/dart-twins.mjs';
 const HERE = new URL('.', import.meta.url).pathname;
 const ROOT = new URL('..', import.meta.url).pathname;
 const BASE = path.join(HERE, 'coverage-baseline.json');
@@ -26,6 +27,7 @@ for (const w of atlas.widgets) {
 const uniq = new Map();
 for (const f of atlas.functions) if (!uniq.has(f.name)) uniq.set(f.name, f);
 const withHe = [...uniq.values()].filter(f => f.he.length);
+const dartReg = harvestDartTwins(atlas.functions);
 const twins = await buildTwinRegistry([...uniq.values()].filter(f => f.he.length && f.params.length));
 // תאומי-דאטה: כל אטום-דאטה-JS (מוסכמת-שמות) עם קובץ-Dart תואם
 const jsData = fs.readdirSync(path.join(ROOT, 'new/atoms')).filter(f => /(-strings|-terms|-data)\.mjs$/.test(f) && !/\.test\.|\.contract\./.test(f));
@@ -35,7 +37,7 @@ const dataTwinned = jsData.filter(f => dartData.has(f.replace(/\.mjs$/, ''))).le
 const cur = {
   widgetsFillable: fillable,
   widgetsTotal: atlas.widgets.length,
-  enginesRunnable: twins.size,
+  enginesRunnable: new Set([...twins.keys(), ...dartReg.keys()]).size,
   enginesTotal: uniq.size,
   essence: withHe.length,
   dataTwinned,
