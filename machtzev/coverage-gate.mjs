@@ -30,7 +30,7 @@ const withHe = [...uniq.values()].filter(f => f.he.length);
 const dartReg = harvestDartTwins(atlas.functions);
 const twins = await buildTwinRegistry([...uniq.values()].filter(f => f.he.length && f.params.length));
 // תאומי-דאטה: כל אטום-דאטה-JS (מוסכמת-שמות) עם קובץ-Dart תואם
-const jsData = fs.readdirSync(path.join(ROOT, 'new/atoms')).filter(f => /(-strings|-terms|-data)\.mjs$/.test(f) && !/\.test\.|\.contract\./.test(f));
+const jsData = fs.readdirSync(path.join(ROOT, 'new/atoms')).filter(f => /(-strings|-terms|-data|-nums)\.mjs$/.test(f) && !/\.test\.|\.contract\./.test(f));
 const dartData = new Set(fs.readdirSync(path.join(ROOT, 'new/dart-data-maor')).map(f => f.replace(/\.dart$/, '')));
 const dataTwinned = jsData.filter(f => dartData.has(f.replace(/\.mjs$/, ''))).length;
 
