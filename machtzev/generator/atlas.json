@@ -1,8 +1,8 @@
 {
  "counts": {
-  "widgets": 448,
+  "widgets": 456,
   "functions": 445,
-  "data": 1611
+  "data": 1609
  },
  "widgets": [
   {
@@ -18,6 +18,27 @@
    ],
    "required": [
     "labels",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "positional": []
+  },
+  {
+   "cls": "AlertBanner",
+   "file": "alert_banner.dart",
+   "props": [
+    "label",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "required": [
+    "label",
     "height",
     "radius",
     "accentColor",
@@ -131,6 +152,27 @@
    "required": [
     "height",
     "faces",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "positional": []
+  },
+  {
+   "cls": "BadgePill",
+   "file": "badge_pill.dart",
+   "props": [
+    "label",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "required": [
+    "label",
+    "height",
     "radius",
     "accentColor",
     "baseColor",
@@ -322,6 +364,27 @@
    ],
    "required": [
     "label",
+    "height",
+    "target",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "positional": []
+  },
+  {
+   "cls": "Countdown",
+   "file": "countdown_timer.dart",
+   "props": [
+    "height",
+    "target",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "required": [
     "height",
     "target",
     "radius",
@@ -808,6 +871,25 @@
    "positional": []
   },
   {
+   "cls": "LinearProgress",
+   "file": "linear_progress.dart",
+   "props": [
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "required": [
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "positional": []
+  },
+  {
    "cls": "MagneticButton",
    "file": "magnetic_button.dart",
    "props": [
@@ -882,6 +964,29 @@
     "fillColor"
    ],
    "required": [
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "positional": []
+  },
+  {
+   "cls": "ModalDialog",
+   "file": "modal_dialog.dart",
+   "props": [
+    "title",
+    "sub",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "required": [
+    "title",
+    "sub",
     "height",
     "radius",
     "accentColor",
@@ -1369,6 +1474,25 @@
    "positional": []
   },
   {
+   "cls": "SkeletonCard",
+   "file": "skeleton_card.dart",
+   "props": [
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "required": [
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "positional": []
+  },
+  {
    "cls": "SlideSheet",
    "file": "slide_sheet.dart",
    "props": [
@@ -1501,6 +1625,27 @@
    "positional": []
   },
   {
+   "cls": "StatusDot",
+   "file": "status_dot.dart",
+   "props": [
+    "label",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "required": [
+    "label",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "positional": []
+  },
+  {
    "cls": "StepFlow",
    "file": "step_flow.dart",
    "props": [
@@ -1594,6 +1739,27 @@
     "title",
     "inkColor",
     "child"
+   ],
+   "positional": []
+  },
+  {
+   "cls": "TooltipBubble",
+   "file": "tooltip_bubble.dart",
+   "props": [
+    "text",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "required": [
+    "text",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
    ],
    "positional": []
   },
@@ -28490,40 +28656,6 @@
   },
   {
    "name": "gen_input9_header_text",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_input9_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_input9_swatch_label",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_input9_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_input9_swatch_toast",
    "type": "String",
    "he": [
     "דאטה",
