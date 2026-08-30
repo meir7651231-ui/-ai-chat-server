@@ -2,7 +2,7 @@
  "counts": {
   "widgets": 381,
   "functions": 445,
-  "data": 1198
+  "data": 1196
  },
  "widgets": [
   {
@@ -18227,18 +18227,6 @@
   },
   {
    "name": "gen_entry_header_text6",
-   "type": "String",
-   "file": "auto/gen_entry_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_entry_chip_word",
-   "type": "String",
-   "file": "auto/gen_entry_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_entry_chip_toast",
    "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"

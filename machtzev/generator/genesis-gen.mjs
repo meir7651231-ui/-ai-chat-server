@@ -488,13 +488,24 @@ async function writeImprovSpec() {
     try { const m = await import('file://' + tp); if (typeof m[f.name] === 'function') twins.set(f.name, m[f.name]); } catch { }
   }
   const testable = starts.filter(s => twins.has(s.fn.name));
-  const start = testable.length ? testable[Math.floor(rnd() * testable.length)] : (starts.length ? starts[Math.floor(rnd() * starts.length)] : null);
-  if (!start) return;
+  // 🎲 v4 · ערבוב-שלושת-המדפים: החומר = אטום-דאטה אקראי (List<String> עשיר) מהמדף המטוהר;
+  // אין-דאטה ⇒ נפילה-רכה לתחום-מוצהר-בפונקציה (v3). הצינור נבחן חי על ערכי-ההגרלה.
+  const dataRich = atlas.data.filter(d => d.type === 'List<String>' && (d.items || []).filter(x => x && !/[<>{}$]/.test(x)).length >= 3);
+  const dataPick = dataRich.length ? dataRich[Math.floor(rnd() * dataRich.length)] : null;
   // עוקבים אחרי וקטור-הערכים (ערך פר-בחירה): כל חוליה חייבת (1) לשנות-נראה, (2) להישאר
   // קריאה-לתצוגה, (3) לשמר הבחנה בין הבחירות — שהצינור יגיב לבחירת-המשתמש עד סופו.
-  const chain = [start.fn];
-  let values = start.domain.slice(0, 6);
-  try { values = values.map(v => String(twins.get(start.fn.name)?.(v) ?? v)); } catch { }
+  let start = null;
+  let chain = [];
+  let values = [];
+  if (dataPick) {
+    values = dataPick.items.filter(x => x && !/[<>{}$]/.test(x)).slice(0, 6);
+  } else {
+    start = testable.length ? testable[Math.floor(rnd() * testable.length)] : (starts.length ? starts[Math.floor(rnd() * starts.length)] : null);
+    if (!start) return;
+    chain = [start.fn];
+    values = start.domain.slice(0, 6);
+    try { values = values.map(v => String(twins.get(start.fn.name)?.(v) ?? v)); } catch { }
+  }
   while (chain.length < 5) {
     const cands2 = pool.filter(f => twins.has(f.name) && !chain.includes(f));
     if (!cands2.length) break;
@@ -513,16 +524,18 @@ async function writeImprovSpec() {
     chain.push(hit.c); values = hit.e.outs;
   }
   if (chain.length < 5) return;
-  const inputLine = start
-    ? `אטום ChipWrap ${start.fn.he.join(' ')}: ${start.domain.join(' / ')}`
-    : `שדה ${SM.phrases.improvType}`;
+  const inputLine = dataPick
+    ? `דאטה ${dataPick.name} ${dataPick.name}`
+    : start
+      ? `אטום ChipWrap ${start.fn.he.join(' ')}: ${start.domain.join(' / ')}`
+      : `שדה ${SM.phrases.improvType}`;
   const lines = [
     'יכולת מאולתרת - שרשרת חמישה:',
     `הירו 🎲 ${SM.phrases.improvHero} | ${ins}`,
-    `כותרת ${SM.phrases.chainTitle}`,
+    `כותרת ${SM.phrases.mixTitle || SM.phrases.chainTitle}`,
     inputLine,
     ...chain.map(f => `  חישוב ${f.he.join(' ')} (${f.name})`),
-    `באנר ${SM.phrases.chainBanner}`,
+    `באנר ${SM.phrases.mixBanner || SM.phrases.chainBanner}`,
   ];
   fs.writeFileSync(path.join(SPECS, 'improv.txt'), lines.join('\n') + '\n');
 }
