@@ -20,5 +20,9 @@ for (const fn of cand) {
   if (o[0] !== null) verified.push(fn);
 }
 verified.sort();
+if (cand.length && !verified.length) {                              // מגן-מטמון (L27): כל-המועמדים נכשלו ⇒ Dart שבור/חסר, לא מוחקים
+  console.error('⚠ אפס-מאומתים מתוך מועמדים (Dart חסר/שבור?) — מטמון-ההוכחות נשמר, לא נכתב.');
+  process.exit(1);
+}
 fs.writeFileSync(OUT, JSON.stringify(verified, null, 0) + '\n');
 console.log(`✅ אומתו-רצים: ${verified.length}/${cand.length} ⇒ ${path.relative(ROOT, OUT)} (${cand.length - verified.length} נדחו — לא-רצו)`);

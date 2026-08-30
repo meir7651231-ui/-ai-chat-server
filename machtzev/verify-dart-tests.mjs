@@ -41,5 +41,10 @@ async function worker() { while (queue.length) { const b = queue.shift(); const 
 await Promise.all(Array.from({ length: JOBS }, worker));
 
 const list = [...proven].sort();
+// מגן-מטמון (L27): אם אפס-עברו (Dart שבור/חסר) — לא מוחקים proof-record קיים
+if (!list.length) {
+  console.error(`⚠ אפס בדיקות עברו (Dart חסר/שבור?) — מטמון-ההוכחות נשמר ללא-שינוי, לא נכתב.`);
+  process.exit(1);
+}
 fs.writeFileSync(OUT, JSON.stringify(list, null, 0) + '\n');
 console.log(`✅ בדיקות-עברו: ${passed}/${bases.length} · פונקציות-מוכחות: ${list.length} ⇒ ${path.relative(ROOT, OUT)}`);

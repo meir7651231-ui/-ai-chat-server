@@ -85,6 +85,8 @@ import crypto from 'node:crypto';
 // ── 4א · מנוע-המדף: הרמת widgets נקיים-מלידה, בלי-סוכן (הכרעה-11) ──
 stage('מנוע-המדף (shelf-lift)', () => run('machtzev/assemble/shelf-lift.mjs', [SCRATCH]).split('\n').find(l => l.includes('הורמו'))?.trim());
 stage('מנוע-הליטוש (data-lift)', () => run('machtzev/assemble/data-lift.mjs', [SCRATCH]).split('\n').find(l => l.includes('לוטשו'))?.trim());
+// 4א² · המנוע-המלא: חציבת-קופסאות מקבצי-לוגיקת-maor (assemble+שקע→autoPurify→data/magic/purify), רק-ירוק ננחת
+stage('חציבת-קופסאות (chisel-all)', () => fs.existsSync('/home/user/maor-system') ? last(run('machtzev/chisel-all.mjs')) : 'דולג (אין maor)', { optional: true });
 
 // ── 4ב½ · מנוע-המניפסטים: הוראות-הרכבה אוטומטיות לכל מסך ──
 stage('מנוע-המניפסטים (gen-manifest)', () => run('machtzev/assemble/gen-manifest.mjs', [SCRATCH]).split('\n').find(l => l.includes('שלמים'))?.trim());
@@ -117,6 +119,10 @@ stage('מפת-חיווט (gen-wiring-doc)', () => last(run('machtzev/gen-wiring-
 
 // ── 6 · המשטרה (כל שערי-ה-ratchet הפנימיים) ──
 stage('מנוע-ההמרה-מחדש · דאטה (reconvert-data)', () => last(run('machtzev/reconvert-data.mjs')), { optional: true });
+// 5½ · רענון-הוכחות-רהיצות (proof-records) לפני-המשטרה — Dart-gated (בלי בינארי: מדלג, לא-מוחק מטמון)
+const HAS_DART = [process.env.DART_BIN, process.env.HOME && path.join(process.env.HOME, 'dart-sdk/bin/dart'), '/root/dart-sdk/bin/dart', '/home/user/flutter/bin/dart'].filter(Boolean).some(c => { try { return fs.existsSync(c); } catch { return false; } });
+stage('אימות-רהיצות-Dart (verify-dart-tests)', () => HAS_DART ? last(run('machtzev/verify-dart-tests.mjs', ['-j12'])) : 'דולג (אין בינארי Dart — מטמון-ההוכחות נשמר)', { optional: true });
+stage('אימות-arg0-Dart (verify-dart-arg0)', () => HAS_DART ? last(run('machtzev/verify-dart-arg0.mjs')) : 'דולג (אין בינארי Dart)', { optional: true });
 // ── הזרקת-המדף לתצוגה (buildsmart) + נחיתה — בתוך המנוע (הכרעת-בעלים "למה הם לא בפנים") ──
 stage('הזרקת-המדף ל-buildsmart (8 מדפים)', () => {
   const B = '/home/user/buildsmart/app_flutter/lib/genesis';
