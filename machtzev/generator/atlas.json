@@ -890,6 +890,27 @@
    "positional": []
   },
   {
+   "cls": "LiveStatusDot",
+   "file": "live_status_dot.dart",
+   "props": [
+    "label",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "required": [
+    "label",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "positional": []
+  },
+  {
    "cls": "MagneticButton",
    "file": "magnetic_button.dart",
    "props": [
@@ -1734,27 +1755,6 @@
     "inkColor",
     "mutedColor",
     "radius"
-   ],
-   "positional": []
-  },
-  {
-   "cls": "StatusDot",
-   "file": "status_dot.dart",
-   "props": [
-    "label",
-    "height",
-    "radius",
-    "accentColor",
-    "baseColor",
-    "fillColor"
-   ],
-   "required": [
-    "label",
-    "height",
-    "radius",
-    "accentColor",
-    "baseColor",
-    "fillColor"
    ],
    "positional": []
   },

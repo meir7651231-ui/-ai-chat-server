@@ -72,7 +72,7 @@
     { "pattern": "LinearProgress", "role": "linprog" },
     { "pattern": "TooltipBubble", "role": "tooltip" },
     { "pattern": "ModalDialog", "role": "dialog" },
-    { "pattern": "StatusDot", "role": "statusdot" },
+    { "pattern": "LiveStatusDot", "role": "statusdot" },
     { "pattern": "Countdown", "role": "countdown" },
     { "pattern": "SkeletonCard", "role": "skeleton" },
     { "pattern": "BadgePill", "role": "badgepill" },
