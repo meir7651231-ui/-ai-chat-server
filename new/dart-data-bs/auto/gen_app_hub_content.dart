@@ -1,4 +1,5 @@
 // 📦 דאטה · תוכן-המחולל (genesis-gen) — התוויות מן-הבקשה, verbatim. אל תערוך ידנית.
+const String gen_app_hub_statusdot_label = 'מחובר · מסונכרן';
 const String gen_app_hub_card_glyph = '🗂️';
 const String gen_app_hub_card_title = 'ליד';
 const String gen_app_hub_card_sub = 'ליד';
@@ -101,5 +102,14 @@ const String gen_app_hub_card_sub33 = 'דשבורד כספים עם הכנסות
 const String gen_app_hub_card_glyph34 = '📊';
 const String gen_app_hub_card_title34 = 'דשבורד בטיחות עם בדיקות פתוחות';
 const String gen_app_hub_card_sub34 = 'דשבורד בטיחות עם בדיקות פתוחות';
-const String gen_app_hub_banner_sub = 'מסכים · המחולל הרכיב אפליקציה שלמה מהמדף';
+const String gen_app_hub_card_glyph35 = '🧾';
+const String gen_app_hub_card_title35 = 'יומן פעולות';
+const String gen_app_hub_card_sub35 = 'יומן פעולות';
+const String gen_app_hub_card_glyph36 = '🎚️';
+const String gen_app_hub_card_title36 = 'דגלי-יכולת';
+const String gen_app_hub_card_sub36 = 'דגלי-יכולת';
+const String gen_app_hub_card_glyph37 = '⚙️';
+const String gen_app_hub_card_title37 = 'הגדרות'; // t_47cfdefb
+const String gen_app_hub_card_sub37 = 'הגדרות'; // t_47cfdefb
+const String gen_app_hub_banner_sub = 'מסכים · אפליקציה שלמה';
 const String gen_app_hub_app_bar_title = 'הירו 🏗️ האפליקציה שלי | נבנתה מאפיון-חופשי';

@@ -1,11 +1,13 @@
 // 🧬 חולל ע"י המחולל (genesis-gen, הכרעות 17+18) — בקשה ⇒ בחירת-אטומים ⇒ חיווט ⇒ מסך. אל תערוך ידנית.
 // 🧬 שם: הירו 🏗️ האפליקציה שלי | נבנתה מאפיון-חופשי
-// 🧬 בקשה: הירו 🏗️ האפליקציה שלי | נבנתה מאפיון-חופשי · ניווט app_ent1 🗂️ ליד · ניווט app_ent2 🗂️ לקוח · ניווט app_ent3 🗂️ פרויקט · ניווט app_ent4 🗂️ שדה · ניווט app_ent5 🗂️ סעיף כתב כמויות · ניווט app_ent6 🗂️ אומדן · ניווט app_ent7 🗂️ הצעה · ניווט app_ent8 🗂️ חוזה · ניווט app_ent9 🗂️ תקציב · ניווט app_ent10 🗂️ משימה · ניווט app_ent11 🗂️ דוח יומי · ניווט app_ent12 🗂️ עובד · ניווט app_ent13 🗂️ קבלן משנה · ניווט app_ent14 🗂️ הזמנת רכש · ניווט app_ent15 🗂️ חומר · ניווט app_ent16 🗂️ ציוד · ניווט app_ent17 🗂️ מסמך · ניווט app_ent18 🗂️ שדה · ניווט app_ent19 🗂️ שדה · ניווט app_ent20 🗂️ שינוי עבודה · ניווט app_ent21 🗂️ בדיקת איכות · ניווט app_ent22 🗂️ ליקוי · ניווט app_ent23 🗂️ אירוע בטיחות · ניווט app_ent24 🗂️ נוכחות · ניווט app_ent25 🗂️ קריאת תחזוקה · ניווט app_ent26 🗂️ מסירה · ניווט app_ent27 🗂️ אחריות · ניווט app_ent28 🗂️ חשבונית · ניווט app_ent29 🗂️ חשבון חלקי · ניווט app_scr30 📊 דשבורד הנהלה עם פרויקטים · ניווט app_scr31 📊 דשבורד מנהל פרויקט עם התקדמות · ניווט app_scr32 📊 דשבורד מנהל אתר עם משימות היום · ניווט app_scr33 📊 דשבורד כספים עם הכנסות · ניווט app_scr34 📊 דשבורד בטיחות עם בדיקות פתוחות · באנר 34 מסכים · המחולל הרכיב אפליקציה שלמה מהמדף
-// 🧬 אטומים שנבחרו: HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · CoinBanner
+// 🧬 בקשה: הירו 🏗️ האפליקציה שלי | נבנתה מאפיון-חופשי · אטום LiveStatusDot מחובר · מסונכרן · ניווט app_ent1 🗂️ ליד · ניווט app_ent2 🗂️ לקוח · ניווט app_ent3 🗂️ פרויקט · ניווט app_ent4 🗂️ שדה · ניווט app_ent5 🗂️ סעיף כתב כמויות · ניווט app_ent6 🗂️ אומדן · ניווט app_ent7 🗂️ הצעה · ניווט app_ent8 🗂️ חוזה · ניווט app_ent9 🗂️ תקציב · ניווט app_ent10 🗂️ משימה · ניווט app_ent11 🗂️ דוח יומי · ניווט app_ent12 🗂️ עובד · ניווט app_ent13 🗂️ קבלן משנה · ניווט app_ent14 🗂️ הזמנת רכש · ניווט app_ent15 🗂️ חומר · ניווט app_ent16 🗂️ ציוד · ניווט app_ent17 🗂️ מסמך · ניווט app_ent18 🗂️ שדה · ניווט app_ent19 🗂️ שדה · ניווט app_ent20 🗂️ שינוי עבודה · ניווט app_ent21 🗂️ בדיקת איכות · ניווט app_ent22 🗂️ ליקוי · ניווט app_ent23 🗂️ אירוע בטיחות · ניווט app_ent24 🗂️ נוכחות · ניווט app_ent25 🗂️ קריאת תחזוקה · ניווט app_ent26 🗂️ מסירה · ניווט app_ent27 🗂️ אחריות · ניווט app_ent28 🗂️ חשבונית · ניווט app_ent29 🗂️ חשבון חלקי · ניווט app_scr30 📊 דשבורד הנהלה עם פרויקטים · ניווט app_scr31 📊 דשבורד מנהל פרויקט עם התקדמות · ניווט app_scr32 📊 דשבורד מנהל אתר עם משימות היום · ניווט app_scr33 📊 דשבורד כספים עם הכנסות · ניווט app_scr34 📊 דשבורד בטיחות עם בדיקות פתוחות · ניווט app_audit 🧾 יומן פעולות · ניווט app_flags 🎚️ דגלי-יכולת · ניווט app_settings ⚙️ הגדרות · באנר 37 מסכים · אפליקציה שלמה: ישויות · workflows · הרשאות · audit · דגלים · סנכרון
+// 🧬 אטומים שנבחרו: LiveStatusDot · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · HeroCard · CoinBanner
 import '../dart-data-bs/auto/gen_app_hub_content.dart';
 import '../dart-ui-bs/auto/bs_tokens.dart';
 import '../dart-ui-bs/auto/coin_banner.dart';
 import '../dart-ui-bs/hero_card.dart';
+import '../dart-ui-bs/live_status_dot.dart';
+import 'gen_app_audit.dart';
 import 'gen_app_ent1.dart';
 import 'gen_app_ent10.dart';
 import 'gen_app_ent11.dart';
@@ -35,11 +37,13 @@ import 'gen_app_ent6.dart';
 import 'gen_app_ent7.dart';
 import 'gen_app_ent8.dart';
 import 'gen_app_ent9.dart';
+import 'gen_app_flags.dart';
 import 'gen_app_scr30.dart';
 import 'gen_app_scr31.dart';
 import 'gen_app_scr32.dart';
 import 'gen_app_scr33.dart';
 import 'gen_app_scr34.dart';
+import 'gen_app_settings.dart';
 import 'package:flutter/material.dart';
 
 class GenAppHubScreen extends StatefulWidget {
@@ -66,6 +70,7 @@ class _GenAppHubScreenState extends State<GenAppHubScreen> {
         body: ListView(
           padding: const EdgeInsets.symmetric(vertical: 12),
           children: [
+          LiveStatusDot(label: gen_app_hub_statusdot_label, height: 16, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
           HeroCard(glyph: gen_app_hub_card_glyph, title: gen_app_hub_card_title, sub: gen_app_hub_card_sub, onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GenAppEnt1Screen())), cardColor: BsTokens.cardLight, inkColor: BsTokens.inkLight, mutedColor: BsTokens.mutedLight, borderColor: BsTokens.divider, radius: 12),
           HeroCard(glyph: gen_app_hub_card_glyph2, title: gen_app_hub_card_title2, sub: gen_app_hub_card_sub2, onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GenAppEnt2Screen())), cardColor: BsTokens.cardLight, inkColor: BsTokens.inkLight, mutedColor: BsTokens.mutedLight, borderColor: BsTokens.divider, radius: 12),
           HeroCard(glyph: gen_app_hub_card_glyph3, title: gen_app_hub_card_title3, sub: gen_app_hub_card_sub3, onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GenAppEnt3Screen())), cardColor: BsTokens.cardLight, inkColor: BsTokens.inkLight, mutedColor: BsTokens.mutedLight, borderColor: BsTokens.divider, radius: 12),
@@ -100,7 +105,10 @@ class _GenAppHubScreenState extends State<GenAppHubScreen> {
           HeroCard(glyph: gen_app_hub_card_glyph32, title: gen_app_hub_card_title32, sub: gen_app_hub_card_sub32, onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GenAppScr32Screen())), cardColor: BsTokens.cardLight, inkColor: BsTokens.inkLight, mutedColor: BsTokens.mutedLight, borderColor: BsTokens.divider, radius: 12),
           HeroCard(glyph: gen_app_hub_card_glyph33, title: gen_app_hub_card_title33, sub: gen_app_hub_card_sub33, onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GenAppScr33Screen())), cardColor: BsTokens.cardLight, inkColor: BsTokens.inkLight, mutedColor: BsTokens.mutedLight, borderColor: BsTokens.divider, radius: 12),
           HeroCard(glyph: gen_app_hub_card_glyph34, title: gen_app_hub_card_title34, sub: gen_app_hub_card_sub34, onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GenAppScr34Screen())), cardColor: BsTokens.cardLight, inkColor: BsTokens.inkLight, mutedColor: BsTokens.mutedLight, borderColor: BsTokens.divider, radius: 12),
-          CoinBanner(coins: 34, sub: gen_app_hub_banner_sub),
+          HeroCard(glyph: gen_app_hub_card_glyph35, title: gen_app_hub_card_title35, sub: gen_app_hub_card_sub35, onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GenAppAuditScreen())), cardColor: BsTokens.cardLight, inkColor: BsTokens.inkLight, mutedColor: BsTokens.mutedLight, borderColor: BsTokens.divider, radius: 12),
+          HeroCard(glyph: gen_app_hub_card_glyph36, title: gen_app_hub_card_title36, sub: gen_app_hub_card_sub36, onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GenAppFlagsScreen())), cardColor: BsTokens.cardLight, inkColor: BsTokens.inkLight, mutedColor: BsTokens.mutedLight, borderColor: BsTokens.divider, radius: 12),
+          HeroCard(glyph: gen_app_hub_card_glyph37, title: gen_app_hub_card_title37, sub: gen_app_hub_card_sub37, onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GenAppSettingsScreen())), cardColor: BsTokens.cardLight, inkColor: BsTokens.inkLight, mutedColor: BsTokens.mutedLight, borderColor: BsTokens.divider, radius: 12),
+          CoinBanner(coins: 37, sub: gen_app_hub_banner_sub),
           ],
         ),
       ),
