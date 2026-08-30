@@ -42617,7 +42617,7 @@
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_app_settings_switch_label",
+   "name": "gen_app_settings_toggle_label",
    "type": "String",
    "he": [
     "דאטה",

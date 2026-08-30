@@ -47,7 +47,7 @@ function buildApp(specText) {
   const sysSpecs = {
     app_audit: ['הירו 🧾 יומן פעולות | audit — כל שינוי מתועד', 'כותרת פעולות אחרונות', 'אטום DataGrid יומן פעולות', 'חישוב תיעוד פעולה (runAudit)', 'באנר audit: משתמש · פעולה · ערך-קודם · ערך-חדש · תאריך'],
     app_flags: ['הירו 🎚️ דגלי-יכולת | הפעלה/כיבוי מודולים', 'כותרת מודולים', ...entNames.slice(0, 12).map((n) => `אטום AnimatedToggle ${n}`), 'באנר כיבוי מודול לא מוחק נתונים — rollback נשמר'],
-    app_settings: ['הירו ⚙️ הגדרות | סנכרון · גיבוי · הרשאות', 'אטום LiveStatusDot מחובר · מסונכרן', 'אטום SwitchRow עבודה אופליין', 'אטום NeonButton גיבוי עכשיו', 'באנר סנכרון · זיהוי-התנגשויות · גיבוי · ייצוא'],
+    app_settings: ['הירו ⚙️ הגדרות | סנכרון · גיבוי · הרשאות', 'אטום LiveStatusDot מחובר · מסונכרן', 'אטום AnimatedToggle עבודה אופליין', 'אטום NeonButton גיבוי עכשיו', 'באנר סנכרון · זיהוי-התנגשויות · גיבוי · ייצוא'],
   };
   const sysScreens = [];
   for (const [slug, sl] of Object.entries(sysSpecs)) {

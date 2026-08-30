@@ -378,6 +378,10 @@ function generate(slug, specText) {
     '// 📦 דאטה · תוכן-המחולל (genesis-gen) — התוויות מן-הבקשה, verbatim. אל תערוך ידנית.\n' +
     consts.map(([n, v]) => `const String ${n} = '${v.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}';${termKeyOf.has(v) ? ' // ' + termKeyOf.get(v) : ''}`).join('\n') + '\n');
 
+  // 🧹 רק שדות-מצב שבאמת מופיעים בגוף (אחרת unused_field warning ⇒ שער-קומפילציה אדום)
+  const body = calls.join('\n');
+  const usedDecls = stateDecls.filter((d) => { const m = d.match(/(_[a-z]\d+)\b/); return !m || body.includes(m[1]); });
+
   const code = `// 🧬 חולל ע"י המחולל (genesis-gen, הכרעות 17+18) — בקשה ⇒ בחירת-אטומים ⇒ חיווט ⇒ מסך. אל תערוך ידנית.
 // 🧬 שם: ${title}
 // 🧬 בקשה: ${lines.join(' · ')}
@@ -392,7 +396,7 @@ class ${cls} extends StatefulWidget {
 }
 
 class _${cls}State extends State<${cls}> {
-  ${stateDecls.join('\n  ')}
+  ${usedDecls.join('\n  ')}
 
   void _toast(String msg) => ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(msg), duration: const Duration(seconds: 2)),
