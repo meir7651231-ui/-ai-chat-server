@@ -1,4 +1,4 @@
-/** אטום-דאטה · encrypt-db-strings — מחרוזות-הדאטה של encrypt-db (מנוע-הקשיחים, הכרעה 19). חוזה: encrypt-db-strings.contract.md */
+/** אטום-דאטה · encrypt-db-strings — מחרוזות-הדאטה של encrypt-db (מנוע-הקשיחים, הכרעה 19). חוזה: encrypt-db-strings.contract.md · מהות-המוצא: מעטפת מוצפנת חדשה עטוף פעמיים סיסמה מפתח שחזור */
 export const ENCRYPT_DB_T = {
   k1: "raw",
   k2: "AES-GCM",

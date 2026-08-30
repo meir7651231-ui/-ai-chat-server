@@ -1,4 +1,4 @@
-/** אטום-דאטה · net-check-script-strings — מחרוזות-התצוגה/דומיין שחולצו מ-net-check-script (מנוע-הטיהור v3, הכרעה 19). חוזה: net-check-script-strings.contract.md */
+/** אטום-דאטה · net-check-script-strings — מחרוזות-התצוגה/דומיין שחולצו מ-net-check-script (מנוע-הטיהור v3, הכרעה 19). חוזה: net-check-script-strings.contract.md · מהות-המוצא: קודם אוטומטית אפיון */
 export const NET_CHECK_SCRIPT_T = {
   k1: "שלום, אני משתמש/ת במערכת ניהול לעמותה לצורכי עבודה,",
   k2: "ואבקש לפתוח את הכתובות הבאות (כלי-עבודה, ללא תוכן גולשים):",

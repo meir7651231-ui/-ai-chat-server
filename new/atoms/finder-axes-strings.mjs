@@ -1,4 +1,4 @@
-/** אטום-דאטה · finder-axes-strings — מחרוזות-התצוגה/דומיין שחולצו מ-finder-axes (מנוע-הטיהור v3, הכרעה 19). חוזה: finder-axes-strings.contract.md */
+/** אטום-דאטה · finder-axes-strings — מחרוזות-התצוגה/דומיין שחולצו מ-finder-axes (מנוע-הטיהור v3, הכרעה 19). חוזה: finder-axes-strings.contract.md · מהות-המוצא: צירי הצלילה של מאתר המשפחות */
 export const FINDER_AXES_T = {
   k1: "city",
   k2: "עיר",

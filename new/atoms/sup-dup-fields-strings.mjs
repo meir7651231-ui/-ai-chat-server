@@ -1,4 +1,4 @@
-/** אטום-דאטה · sup-dup-fields-strings — מחרוזות-הדאטה של sup-dup-fields (מנוע-הקשיחים, הכרעה 19). חוזה: sup-dup-fields-strings.contract.md */
+/** אטום-דאטה · sup-dup-fields-strings — מחרוזות-הדאטה של sup-dup-fields (מנוע-הקשיחים, הכרעה 19). חוזה: sup-dup-fields-strings.contract.md · מהות-המוצא: קבוע קודם אוטומטית צילום ערך */
 export const SUP_DUP_FIELDS_T = {
   k1: "name",
   k2: "שם",

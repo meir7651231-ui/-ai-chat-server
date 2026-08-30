@@ -1,4 +1,4 @@
-/** אטום-דאטה · plan-demo-cleanup-strings — מחרוזות-התצוגה/דומיין שחולצו מ-plan-demo-cleanup (מנוע-הטיהור v3, הכרעה 19). חוזה: plan-demo-cleanup-strings.contract.md */
+/** אטום-דאטה · plan-demo-cleanup-strings — מחרוזות-התצוגה/דומיין שחולצו מ-plan-demo-cleanup (מנוע-הטיהור v3, הכרעה 19). חוזה: plan-demo-cleanup-strings.contract.md · מהות-המוצא: תכנון ניקוי נתוני דמו שהתערבבו בנתונים האמיתיים */
 export const PLAN_DEMO_CLEANUP_T = {
   k1: "name",
   k2: "father",

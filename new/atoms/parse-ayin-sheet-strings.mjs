@@ -1,4 +1,4 @@
-/** אטום-דאטה · parse-ayin-sheet-strings — מחרוזות-התצוגה/דומיין שחולצו מ-parse-ayin-sheet (מנוע-הטיהור v3, הכרעה 19). חוזה: parse-ayin-sheet-strings.contract.md */
+/** אטום-דאטה · parse-ayin-sheet-strings — מחרוזות-התצוגה/דומיין שחולצו מ-parse-ayin-sheet (מנוע-הטיהור v3, הכרעה 19). חוזה: parse-ayin-sheet-strings.contract.md · מהות-המוצא: פענוח גיליון העיניים שחזר מהלגאסי */
 export const PARSE_AYIN_SHEET_T = {
   k1: "הקובץ ריק או לא בפורמט CSV",
   k2: "תומכת",

@@ -1,4 +1,4 @@
-/** אטום-דאטה · ayin-daily-rows-strings — מחרוזות-התצוגה/דומיין שחולצו מ-ayin-daily-rows (מנוע-הטיהור v3, הכרעה 19). חוזה: ayin-daily-rows-strings.contract.md */
+/** אטום-דאטה · ayin-daily-rows-strings — מחרוזות-התצוגה/דומיין שחולצו מ-ayin-daily-rows (מנוע-הטיהור v3, הכרעה 19). חוזה: ayin-daily-rows-strings.contract.md · מהות-המוצא: שורות הדוח היומי של מעקב הטיפול */
 export const AYIN_DAILY_ROWS_T = {
   k1: "שם",
   k2: "טלפון",

@@ -1,4 +1,4 @@
-/** אטום-דאטה · with-nedarim-hok-strings — מחרוזות-הדאטה של with-nedarim-hok (מנוע-הקשיחים, הכרעה 19). חוזה: with-nedarim-hok-strings.contract.md */
+/** אטום-דאטה · with-nedarim-hok-strings — מחרוזות-הדאטה של with-nedarim-hok (מנוע-הקשיחים, הכרעה 19). חוזה: with-nedarim-hok-strings.contract.md · מהות-המוצא: מילוי משבצת ההו מחיוב נדרים חוזר ידני לא */
 export const WITH_NEDARIM_HOK_T = {
   k1: "card",
   k2: "הו״ק נדרים · ",

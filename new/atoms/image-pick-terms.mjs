@@ -1,4 +1,4 @@
-/** אטום-דאטה · image-pick-terms — מונחי-התצוגה של קופסת-image-pick (מנוע-הטיהור v6, הכרעה 19). חוזה: image-pick-terms.contract.md */
+/** אטום-דאטה · image-pick-terms — מונחי-התצוגה של קופסת-image-pick (מנוע-הטיהור v6, הכרעה 19). חוזה: image-pick-terms.contract.md · מהות-המוצא: בחירת תמונה כיווץ הטמעת קובץ */
 export const IMAGE_PICK_TERMS = {
   k1: "הקובץ אינו תמונה",
   k2: "התמונה גדולה מדי (מקסימום 8MB)",

@@ -1,4 +1,4 @@
-/** אטום-דאטה · grantable-staff-features-strings — מחרוזות-הדאטה של grantable-staff-features (מנוע-הקשיחים, הכרעה 19). חוזה: grantable-staff-features-strings.contract.md */
+/** אטום-דאטה · grantable-staff-features-strings — מחרוזות-הדאטה של grantable-staff-features (מנוע-הקשיחים, הכרעה 19). חוזה: grantable-staff-features-strings.contract.md · מהות-המוצא: קבוע קודם אוטומטית צילום ערך */
 export const GRANTABLE_STAFF_FEATURES_T = {
   k1: "supporters.bulkselect",
   k2: "supporters.bulkdelete",

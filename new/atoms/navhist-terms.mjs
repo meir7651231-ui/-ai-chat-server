@@ -1,4 +1,4 @@
-/** אטום-דאטה · navhist-terms — מונחי-התצוגה של קופסת-navhist (מנוע-הטיהור v6, הכרעה 19). חוזה: navhist-terms.contract.md */
+/** אטום-דאטה · navhist-terms — מונחי-התצוגה של קופסת-navhist (מנוע-הטיהור v6, הכרעה 19). חוזה: navhist-terms.contract.md · מהות-המוצא: ניווט אחורה נפתחו לאחרונה */
 export const NAVHIST_TERMS = {
   k1: "↩ חזרה",
   k2: "חזרה למסך הקודם",

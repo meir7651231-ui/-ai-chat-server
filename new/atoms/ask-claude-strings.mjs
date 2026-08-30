@@ -1,4 +1,4 @@
-/** אטום-דאטה · ask-claude-strings — מחרוזות-הדאטה של ask-claude (מנוע-הקשיחים, הכרעה 19). חוזה: ask-claude-strings.contract.md */
+/** אטום-דאטה · ask-claude-strings — מחרוזות-הדאטה של ask-claude (מנוע-הקשיחים, הכרעה 19). חוזה: ask-claude-strings.contract.md · מהות-המוצא: קריאה מהדפדפן פרומפט טקסט או שגיאה בעברית */
 export const ASK_CLAUDE_T = {
   k1: "https://api.anthropic.com/v1/messages",
   k2: "POST",

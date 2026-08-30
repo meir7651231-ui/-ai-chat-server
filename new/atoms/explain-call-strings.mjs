@@ -1,4 +1,4 @@
-/** אטום-דאטה · explain-call-strings — מחרוזות-התצוגה/דומיין שחולצו מ-explain-call (מנוע-הטיהור v3, הכרעה 19). חוזה: explain-call-strings.contract.md */
+/** אטום-דאטה · explain-call-strings — מחרוזות-התצוגה/דומיין שחולצו מ-explain-call (מנוע-הטיהור v3, הכרעה 19). חוזה: explain-call-strings.contract.md · מהות-המוצא: תיאור אנושי בעברית של מה שמתקשר יחווה סימולטור */
 export const EXPLAIN_CALL_T = {
   k1: "מחוץ-לשעות",
   k2: "שעות-פעילות",

@@ -1,4 +1,4 @@
-/** אטום-דאטה · build-custom-export-strings — מחרוזות-הדאטה של build-custom-export (מנוע-הקשיחים, הכרעה 19). חוזה: build-custom-export-strings.contract.md */
+/** אטום-דאטה · build-custom-export-strings — מחרוזות-הדאטה של build-custom-export (מנוע-הקשיחים, הכרעה 19). חוזה: build-custom-export-strings.contract.md · מהות-המוצא: בונה דו מותאם חוגים אירועים תומכות לפי */
 export const BUILD_CUSTOM_EXPORT_T = {
   k1: "courses",
   k2: "יום ",

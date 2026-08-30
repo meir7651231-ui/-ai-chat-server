@@ -1,4 +1,4 @@
-/** אטום-דאטה · send-support-reply-strings — מחרוזות-הדאטה של send-support-reply (מנוע-הקשיחים, הכרעה 19). חוזה: send-support-reply-strings.contract.md */
+/** אטום-דאטה · send-support-reply-strings — מחרוזות-הדאטה של send-support-reply (מנוע-הקשיחים, הכרעה 19). חוזה: send-support-reply-strings.contract.md · מהות-המוצא: תשובת התמיכה מייל על בצ׳אט הלקוח הודעה עדכון */
 export const SEND_SUPPORT_REPLY_T = {
   k1: "messages",
   k2: "admin",

@@ -1,4 +1,4 @@
-/** אטום-דאטה · receipt-html-strings — מחרוזות-התצוגה/דומיין שחולצו מ-receipt-html (מנוע-הטיהור v3, הכרעה 19). חוזה: receipt-html-strings.contract.md */
+/** אטום-דאטה · receipt-html-strings — מחרוזות-התצוגה/דומיין שחולצו מ-receipt-html (מנוע-הטיהור v3, הכרעה 19). חוזה: receipt-html-strings.contract.md · מהות-המוצא: הקבלה מוכן להדפסה טהור מחרוזת בלבד */
 export const RECEIPT_HTML_T = {
   k1: "&amp;",
   k2: "<div class=\"ln\">",

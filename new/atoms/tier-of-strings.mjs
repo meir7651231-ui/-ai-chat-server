@@ -1,4 +1,4 @@
-/** אטום-דאטה · tier-of-strings — מחרוזות-הדאטה של tier-of (מנוע-הקשיחים, הכרעה 19). חוזה: tier-of-strings.contract.md */
+/** אטום-דאטה · tier-of-strings — מחרוזות-הדאטה של tier-of (מנוע-הקשיחים, הכרעה 19). חוזה: tier-of-strings.contract.md · מהות-המוצא: דרגת מדד האמינות לפי ניקוד סף אדום כולל */
 export const TIER_OF_T = {
   k1: "titan",
   k2: "טיטאן",

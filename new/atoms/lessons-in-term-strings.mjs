@@ -1,4 +1,4 @@
-/** אטום-דאטה · lessons-in-term-strings — מחרוזות-התצוגה/דומיין שחולצו מ-lessons-in-term (מנוע-הטיהור v3, הכרעה 19). חוזה: lessons-in-term-strings.contract.md */
+/** אטום-דאטה · lessons-in-term-strings — מחרוזות-התצוגה/דומיין שחולצו מ-lessons-in-term (מנוע-הטיהור v3, הכרעה 19). חוזה: lessons-in-term-strings.contract.md · מהות-המוצא: מספר שיעורים בתקופת תמחור לפי תדירות */
 export const LESSONS_IN_TERM_T = {
   k1: "week",
   k2: "month",

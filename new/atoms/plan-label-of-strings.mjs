@@ -1,4 +1,4 @@
-/** אטום-דאטה · plan-label-of-strings — מחרוזות-התצוגה/דומיין שחולצו מ-plan-label-of (מנוע-הטיהור v3, הכרעה 19). חוזה: plan-label-of-strings.contract.md */
+/** אטום-דאטה · plan-label-of-strings — מחרוזות-התצוגה/דומיין שחולצו מ-plan-label-of (מנוע-הטיהור v3, הכרעה 19). חוזה: plan-label-of-strings.contract.md · מהות-המוצא: תווית המסלול בשורת תלמיד הקפאה סיום חיסורים חוב */
 export const PLAN_LABEL_OF_T = {
   k1: "punch",
   k2: "כרטיסייה · ",

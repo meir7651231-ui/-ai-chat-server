@@ -1,4 +1,4 @@
-/** אטום-דאטה · site-vocab-strings — מחרוזות-התצוגה/דומיין שחולצו מ-site-vocab (מנוע-הטיהור v3, הכרעה 19). חוזה: site-vocab-strings.contract.md */
+/** אטום-דאטה · site-vocab-strings — מחרוזות-התצוגה/דומיין שחולצו מ-site-vocab (מנוע-הטיהור v3, הכרעה 19). חוזה: site-vocab-strings.contract.md · מהות-המוצא: תוויות פעולה של האתר הציבורי תלויות סוג ארגון */
 export const SITE_VOCAB_T = {
   k1: "Get in touch",
   k2: "צרו קשר",

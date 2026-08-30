@@ -1,4 +1,4 @@
-/** אטום-דאטה · xlat-strings — מחרוזות-הדאטה של xlat (מנוע-הקשיחים, הכרעה 19). חוזה: xlat-strings.contract.md */
+/** אטום-דאטה · xlat-strings — מחרוזות-הדאטה של xlat (מנוע-הקשיחים, הכרעה 19). חוזה: xlat-strings.contract.md · מהות-המוצא: טבלת תעתיקים עברית אנגלית רוסית הרחבת שאילתה */
 export const XLAT_T = {
   k1: "כהן",
   k2: "cohen",

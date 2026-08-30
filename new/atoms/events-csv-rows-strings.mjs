@@ -1,4 +1,4 @@
-/** אטום-דאטה · events-csv-rows-strings — מחרוזות-התצוגה/דומיין שחולצו מ-events-csv-rows (מנוע-הטיהור v3, הכרעה 19). חוזה: events-csv-rows-strings.contract.md */
+/** אטום-דאטה · events-csv-rows-strings — מחרוזות-התצוגה/דומיין שחולצו מ-events-csv-rows (מנוע-הטיהור v3, הכרעה 19). חוזה: events-csv-rows-strings.contract.md · מהות-המוצא: שורות ייצוא של האירועים */
 export const EVENTS_CSV_ROWS_T = {
   k1: "רגיל (ירוק)",
   k2: "בינוני (כתום)",

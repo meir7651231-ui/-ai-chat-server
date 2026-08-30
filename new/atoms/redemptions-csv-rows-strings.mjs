@@ -1,4 +1,4 @@
-/** אטום-דאטה · redemptions-csv-rows-strings — מחרוזות-התצוגה/דומיין שחולצו מ-redemptions-csv-rows (מנוע-הטיהור v3, הכרעה 19). חוזה: redemptions-csv-rows-strings.contract.md */
+/** אטום-דאטה · redemptions-csv-rows-strings — מחרוזות-התצוגה/דומיין שחולצו מ-redemptions-csv-rows (מנוע-הטיהור v3, הכרעה 19). חוזה: redemptions-csv-rows-strings.contract.md · מהות-המוצא: שורות של כל מימושי החנות מבוטל מסומן לא */
 export const REDEMPTIONS_CSV_ROWS_T = {
   k1: "תאריך",
   k2: "מוטב",

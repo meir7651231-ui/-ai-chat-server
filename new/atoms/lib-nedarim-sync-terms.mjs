@@ -1,4 +1,4 @@
-/** אטום-דאטה · lib-nedarim-sync-terms — מונחי-התצוגה של קופסת-lib-nedarim-sync (מנוע-הטיהור v6, הכרעה 19). חוזה: lib-nedarim-sync-terms.contract.md */
+/** אטום-דאטה · lib-nedarim-sync-terms — מונחי-התצוגה של קופסת-lib-nedarim-sync (מנוע-הטיהור v6, הכרעה 19). חוזה: lib-nedarim-sync-terms.contract.md · מהות-המוצא: סנכרון נדרים מאור כיוון נכנס */
 export const LIB_NEDARIM_SYNC_TERMS = {
   k1: "ר",
   k2: "רבי",

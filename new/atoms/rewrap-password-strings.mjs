@@ -1,4 +1,4 @@
-/** אטום-דאטה · rewrap-password-strings — מחרוזות-הדאטה של rewrap-password (מנוע-הקשיחים, הכרעה 19). חוזה: rewrap-password-strings.contract.md */
+/** אטום-דאטה · rewrap-password-strings — מחרוזות-הדאטה של rewrap-password (מנוע-הקשיחים, הכרעה 19). חוזה: rewrap-password-strings.contract.md · מהות-המוצא: החלפת סיסמה בלי להצפין מחדש עוטף מחדש רק */
 export const REWRAP_PASSWORD_T = {
   k1: "raw",
 };

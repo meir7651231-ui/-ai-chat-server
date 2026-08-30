@@ -1,2 +1,2 @@
-/** אטום-דאטה · explain-call-data — הדאטה שחולצה מ-explain-call (מנוע-הטיהור, הכרעה 19). חוזה: explain-call-data.contract.md */
+/** אטום-דאטה · explain-call-data — הדאטה שחולצה מ-explain-call (מנוע-הטיהור, הכרעה 19). חוזה: explain-call-data.contract.md · מהות-המוצא: תיאור אנושי בעברית של מה שמתקשר יחווה סימולטור */
 export const DOW_HE = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];

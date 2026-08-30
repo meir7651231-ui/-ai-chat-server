@@ -1,4 +1,4 @@
-/** אטום-דאטה · reenroll-list-text-strings — מחרוזות-התצוגה/דומיין שחולצו מ-reenroll-list-text (מנוע-הטיהור v3, הכרעה 19). חוזה: reenroll-list-text-strings.contract.md */
+/** אטום-דאטה · reenroll-list-text-strings — מחרוזות-התצוגה/דומיין שחולצו מ-reenroll-list-text (מנוע-הטיהור v3, הכרעה 19). חוזה: reenroll-list-text-strings.contract.md · מהות-המוצא: טקסט תדפיס קריא לרשימת הרישום מחדש שורה לתלמיד */
 export const REENROLL_LIST_TEXT_T = {
   k1: "yes",
   k2: "ממשיך",

@@ -1,4 +1,4 @@
-/** אטום-דאטה · parse-vcards-strings — מחרוזות-התצוגה/דומיין שחולצו מ-parse-vcards (מנוע-הטיהור v3, הכרעה 19). חוזה: parse-vcards-strings.contract.md */
+/** אטום-דאטה · parse-vcards-strings — מחרוזות-התצוגה/דומיין שחולצו מ-parse-vcards (מנוע-הטיהור v3, הכרעה 19). חוזה: parse-vcards-strings.contract.md · מהות-המוצא: פענוח קובץ שלם רשימת אנשי קשר סדר הקובץ */
 export const PARSE_VCARDS_T = {
   k1: "TEL",
   k2: "EMAIL",

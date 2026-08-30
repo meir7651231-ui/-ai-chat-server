@@ -1,4 +1,4 @@
-/** אטום-דאטה · build-ics-strings — מחרוזות-הדאטה של build-ics (מנוע-הקשיחים, הכרעה 19). חוזה: build-ics-strings.contract.md */
+/** אטום-דאטה · build-ics-strings — מחרוזות-הדאטה של build-ics (מנוע-הקשיחים, הכרעה 19). חוזה: build-ics-strings.contract.md · מהות-המוצא: בניית קובץ שלם ממופעים קונקרטיים */
 export const BUILD_ICS_T = {
   k1: "BEGIN:VCALENDAR",
   k2: "VERSION:2.0",

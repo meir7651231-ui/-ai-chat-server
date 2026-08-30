@@ -1,4 +1,4 @@
-/** אטום-דאטה · dedup-terms — מונחי-התצוגה של קופסת-dedup (מנוע-הטיהור v6, הכרעה 19). חוזה: dedup-terms.contract.md */
+/** אטום-דאטה · dedup-terms — מונחי-התצוגה של קופסת-dedup (מנוע-הטיהור v6, הכרעה 19). חוזה: dedup-terms.contract.md · מהות-המוצא: זיהוי כפילויות ומיזוג משפחות תורמים */
 export const DEDUP_TERMS = {
   k1: "ר",
   k2: "רבי",

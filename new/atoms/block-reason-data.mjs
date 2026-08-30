@@ -1,4 +1,4 @@
-/** אטום-דאטה · block-reason-data — הדאטה שחולצה מ-block-reason (מנוע-הטיהור, הכרעה 19). חוזה: block-reason-data.contract.md */
+/** אטום-דאטה · block-reason-data — הדאטה שחולצה מ-block-reason (מנוע-הטיהור, הכרעה 19). חוזה: block-reason-data.contract.md · מהות-המוצא: סיבת חסימת יום לתזמון חוגים */
 export const FULL_HOLIDAYS = [
   'ראש השנה',
   'ראש השנה ב׳',

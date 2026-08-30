@@ -1,4 +1,4 @@
-/** אטום-דאטה · ics-feed-url-strings — מחרוזות-התצוגה/דומיין שחולצו מ-ics-feed-url (מנוע-הטיהור v3, הכרעה 19). חוזה: ics-feed-url-strings.contract.md */
+/** אטום-דאטה · ics-feed-url-strings — מחרוזות-התצוגה/דומיין שחולצו מ-ics-feed-url (מנוע-הטיהור v3, הכרעה 19). חוזה: ics-feed-url-strings.contract.md · מהות-המוצא: כתובת המנוי הציבורית של פיד היומן */
 export const ICS_FEED_URL_T = {
   k1: "https://us-central1-",
   k2: ".cloudfunctions.net/icsFeed?org=",

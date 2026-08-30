@@ -73,8 +73,10 @@ export function buildAtlas() {
   const data = [];
   for (const f of DATA_SHELVES.flatMap(dartFiles)) {
     const src = stripComments(fs.readFileSync(f.abs, 'utf8'));
+    const rawD = fs.readFileSync(f.abs, 'utf8');
+    const heD = [...(rawD.split('\n')[0] || '').matchAll(/[֐-׿][֐-׿]*/g)].map(m => m[0].replace(/^ה(?=..)/, '')).filter(w => w.length > 1);
     for (const dm of src.matchAll(/(?:^|\n)const\s+(?:(\w[\w<>, ]*?)\s+)?([a-zA-Z_]\w*)\s*=/g)) {
-      const entry = { name: dm[2], type: dm[1] || '', file: f.rel, shelf: f.shelf };
+      const entry = { name: dm[2], type: dm[1] || '', he: heD, file: f.rel, shelf: f.shelf };
       // דגימת-תוכן ל-List<String>: הפריטים עצמם (חומר-בנייה חי למחולל)
       if (entry.type === 'List<String>') {
         const at = dm.index + dm[0].length;

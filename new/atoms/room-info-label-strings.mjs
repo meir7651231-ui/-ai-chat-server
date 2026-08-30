@@ -1,4 +1,4 @@
-/** אטום-דאטה · room-info-label-strings — מחרוזות-התצוגה/דומיין שחולצו מ-room-info-label (מנוע-הטיהור v3, הכרעה 19). חוזה: room-info-label-strings.contract.md */
+/** אטום-דאטה · room-info-label-strings — מחרוזות-התצוגה/דומיין שחולצו מ-room-info-label (מנוע-הטיהור v3, הכרעה 19). חוזה: room-info-label-strings.contract.md · מהות-המוצא: שורת המידע על חדר משבצות קיבולת נגישות ציוד */
 export const ROOM_INFO_LABEL_T = {
   k1: "משבצות של ",
   k2: " דק׳",

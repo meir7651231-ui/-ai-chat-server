@@ -1,4 +1,4 @@
-/** אטום-דאטה · dup-fields-strings — מחרוזות-הדאטה של dup-fields (מנוע-הקשיחים, הכרעה 19). חוזה: dup-fields-strings.contract.md */
+/** אטום-דאטה · dup-fields-strings — מחרוזות-הדאטה של dup-fields (מנוע-הקשיחים, הכרעה 19). חוזה: dup-fields-strings.contract.md · מהות-המוצא: שדות מיזוג כפולי משפחות */
 export const DUP_FIELDS_T = {
   k1: "name",
   k2: "שם משפחה",

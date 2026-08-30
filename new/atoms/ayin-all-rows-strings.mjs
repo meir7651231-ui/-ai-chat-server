@@ -1,4 +1,4 @@
-/** אטום-דאטה · ayin-all-rows-strings — מחרוזות-התצוגה/דומיין שחולצו מ-ayin-all-rows (מנוע-הטיהור v3, הכרעה 19). חוזה: ayin-all-rows-strings.contract.md */
+/** אטום-דאטה · ayin-all-rows-strings — מחרוזות-התצוגה/דומיין שחולצו מ-ayin-all-rows (מנוע-הטיהור v3, הכרעה 19). חוזה: ayin-all-rows-strings.contract.md · מהות-המוצא: דוח כל השמות בכרטיסי מעקב הטיפול */
 export const AYIN_ALL_ROWS_T = {
   k1: "תורם/ת",
   k2: "טלפון",

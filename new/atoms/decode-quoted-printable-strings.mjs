@@ -1,4 +1,4 @@
-/** אטום-דאטה · decode-quoted-printable-strings — מחרוזות-הדאטה של decode-quoted-printable (מנוע-הקשיחים, הכרעה 19). חוזה: decode-quoted-printable-strings.contract.md */
+/** אטום-דאטה · decode-quoted-printable-strings — מחרוזות-הדאטה של decode-quoted-printable (מנוע-הקשיחים, הכרעה 19). חוזה: decode-quoted-printable-strings.contract.md · מהות-המוצא: קודם אוטומטית אפיון */
 export const DECODE_QUOTED_PRINTABLE_T = {
   k1: "QUOTED-PRINTABLE",
   k2: "נייד",

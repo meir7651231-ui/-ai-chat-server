@@ -1,4 +1,4 @@
-/** אטום-דאטה · heb-parts-strings — מחרוזות-התצוגה/דומיין שחולצו מ-heb-parts (מנוע-הטיהור v3, הכרעה 19). חוזה: heb-parts-strings.contract.md */
+/** אטום-דאטה · heb-parts-strings — מחרוזות-התצוגה/דומיין שחולצו מ-heb-parts (מנוע-הטיהור v3, הכרעה 19). חוזה: heb-parts-strings.contract.md · מהות-המוצא: לועזי עברי דרך */
 export const HEB_PARTS_T = {
   k1: "en-u-ca-hebrew",
   k2: "numeric",

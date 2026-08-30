@@ -1,4 +1,4 @@
-/** אטום-דאטה · ayin-sheet-rows-strings — מחרוזות-הדאטה של ayin-sheet-rows (מנוע-הקשיחים, הכרעה 19). חוזה: ayin-sheet-rows-strings.contract.md */
+/** אטום-דאטה · ayin-sheet-rows-strings — מחרוזות-הדאטה של ayin-sheet-rows (מנוע-הקשיחים, הכרעה 19). חוזה: ayin-sheet-rows-strings.contract.md · מהות-המוצא: שורות ייצוא גיליון העיניים */
 export const AYIN_SHEET_ROWS_T = {
   k1: "תומכת",
   k2: "טלפון",

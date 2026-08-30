@@ -1,4 +1,4 @@
-/** אטום-דאטה · sign-up-strings — מחרוזות-הדאטה של sign-up (מנוע-הקשיחים, הכרעה 19). חוזה: sign-up-strings.contract.md */
+/** אטום-דאטה · sign-up-strings — מחרוזות-הדאטה של sign-up (מנוע-הקשיחים, הכרעה 19). חוזה: sign-up-strings.contract.md · מהות-המוצא: הרשמה עצמית ענן יוצר משתמש שולח מייל אימות */
 export const SIGN_UP_T = {
   k1: "auth/email-already-in-use",
   k2: "האימייל כבר רשום — נסו להתחבר או לאפס סיסמה",

@@ -1,4 +1,4 @@
-/** אטום-דאטה · thanks-prompt-strings — מחרוזות-התצוגה/דומיין שחולצו מ-thanks-prompt (מנוע-הטיהור v3, הכרעה 19). חוזה: thanks-prompt-strings.contract.md */
+/** אטום-דאטה · thanks-prompt-strings — מחרוזות-התצוגה/דומיין שחולצו מ-thanks-prompt (מנוע-הטיהור v3, הכרעה 19). חוזה: thanks-prompt-strings.contract.md · מהות-המוצא: בונה פרומפט למכתב תודה לתורם שורות רשות רק */
 export const THANKS_PROMPT_T = {
   k1: "כתוב מכתב תודה קצר (4-6 שורות), חם ואישי, בעברית, מארגון \"",
   k2: "הארגון",

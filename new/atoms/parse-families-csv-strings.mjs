@@ -1,4 +1,4 @@
-/** אטום-דאטה · parse-families-csv-strings — מחרוזות-הדאטה של parse-families-csv (מנוע-הקשיחים, הכרעה 19). חוזה: parse-families-csv-strings.contract.md */
+/** אטום-דאטה · parse-families-csv-strings — מחרוזות-הדאטה של parse-families-csv (מנוע-הקשיחים, הכרעה 19). חוזה: parse-families-csv-strings.contract.md · מהות-המוצא: תכנון ייבוא משפחות עמודות ענף המשפחות בלגאסי */
 export const PARSE_FAMILIES_CSV_T = {
   k1: "שם פרטי שם משפחה",
   k2: "#NAME?",

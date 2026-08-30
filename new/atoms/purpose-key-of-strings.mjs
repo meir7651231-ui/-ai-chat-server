@@ -1,4 +1,4 @@
-/** אטום-דאטה · purpose-key-of-strings — מחרוזות-הדאטה של purpose-key-of (מנוע-הקשיחים, הכרעה 19). חוזה: purpose-key-of-strings.contract.md */
+/** אטום-דאטה · purpose-key-of-strings — מחרוזות-הדאטה של purpose-key-of (מנוע-הקשיחים, הכרעה 19). חוזה: purpose-key-of-strings.contract.md · מהות-המוצא: מפתח הפיצול של תרומה מחוטא ריק */
 export const PURPOSE_KEY_OF_T = {
   k1: "_shared_",
 };

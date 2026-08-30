@@ -1,4 +1,4 @@
-/** אטום-דאטה · month-en-of-data — הדאטה שחולצה מ-month-en-of (מנוע-הטיהור, הכרעה 19). חוזה: month-en-of-data.contract.md */
+/** אטום-דאטה · month-en-of-data — הדאטה שחולצה מ-month-en-of (מנוע-הטיהור, הכרעה 19). חוזה: month-en-of-data.contract.md · מהות-המוצא: תווית עברית של חודש עברי שם */
 export const MONTHS = [
   ['Tishri', 'תשרי'],
   ['Heshvan', 'חשוון'],

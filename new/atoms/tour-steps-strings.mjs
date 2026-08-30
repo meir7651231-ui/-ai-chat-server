@@ -1,4 +1,4 @@
-/** אטום-דאטה · tour-steps-strings — מחרוזות-התצוגה/דומיין שחולצו מ-tour-steps (מנוע-הטיהור v3, הכרעה 19). חוזה: tour-steps-strings.contract.md */
+/** אטום-דאטה · tour-steps-strings — מחרוזות-התצוגה/דומיין שחולצו מ-tour-steps (מנוע-הטיהור v3, הכרעה 19). חוזה: tour-steps-strings.contract.md · מהות-המוצא: סינון מיתוג צעדי הסיור */
 export const TOUR_STEPS_T = {
   k1: "מאתר המשפחות",
   k2: "מאתר ה",

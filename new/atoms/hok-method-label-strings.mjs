@@ -1,4 +1,4 @@
-/** אטום-דאטה · hok-method-label-strings — מחרוזות-התצוגה/דומיין שחולצו מ-hok-method-label (מנוע-הטיהור v3, הכרעה 19). חוזה: hok-method-label-strings.contract.md */
+/** אטום-דאטה · hok-method-label-strings — מחרוזות-התצוגה/דומיין שחולצו מ-hok-method-label (מנוע-הטיהור v3, הכרעה 19). חוזה: hok-method-label-strings.contract.md · מהות-המוצא: קודם אוטומטית אפיון */
 export const HOK_METHOD_LABEL_T = {
   k1: "bank",
   k2: "הו\"ק בנקאית",

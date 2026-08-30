@@ -1,4 +1,4 @@
-/** אטום-דאטה · build-slots-strings — מחרוזות-הדאטה של build-slots (מנוע-הקשיחים, הכרעה 19). חוזה: build-slots-strings.contract.md */
+/** אטום-דאטה · build-slots-strings — מחרוזות-הדאטה של build-slots (מנוע-הקשיחים, הכרעה 19). חוזה: build-slots-strings.contract.md · מהות-המוצא: משבצות היום של חדר ביומן */
 export const BUILD_SLOTS_T = {
   k1: "clean",
   k2: "cleaning",

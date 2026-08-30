@@ -1,4 +1,4 @@
-/** אטום-דאטה · caller-kind-label-strings — מחרוזות-התצוגה/דומיין שחולצו מ-caller-kind-label (מנוע-הטיהור v3, הכרעה 19). חוזה: caller-kind-label-strings.contract.md */
+/** אטום-דאטה · caller-kind-label-strings — מחרוזות-התצוגה/דומיין שחולצו מ-caller-kind-label (מנוע-הטיהור v3, הכרעה 19). חוזה: caller-kind-label-strings.contract.md · מהות-המוצא: תווית סוג המתקשר דרך מילון המונחים */
 export const CALLER_KIND_LABEL_T = {
   k1: "family",
   k2: "entity.family",

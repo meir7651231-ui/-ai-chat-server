@@ -1,4 +1,4 @@
-/** אטום-דאטה · exp-field-defs-strings — מחרוזות-התצוגה/דומיין שחולצו מ-exp-field-defs (מנוע-הטיהור v3, הכרעה 19). חוזה: exp-field-defs-strings.contract.md */
+/** אטום-דאטה · exp-field-defs-strings — מחרוזות-התצוגה/דומיין שחולצו מ-exp-field-defs (מנוע-הטיהור v3, הכרעה 19). חוזה: exp-field-defs-strings.contract.md · מהות-המוצא: הגדרות שדות הדו המותאם לפי יעד */
 export const EXP_FIELD_DEFS_T = {
   k1: "reports.custom.full",
   k2: "courses",

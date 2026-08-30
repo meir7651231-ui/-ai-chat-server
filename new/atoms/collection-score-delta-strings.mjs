@@ -1,4 +1,4 @@
-/** אטום-דאטה · collection-score-delta-strings — מחרוזות-הדאטה של collection-score-delta (מנוע-הקשיחים, הכרעה 19). חוזה: collection-score-delta-strings.contract.md */
+/** אטום-דאטה · collection-score-delta-strings — מחרוזות-הדאטה של collection-score-delta (מנוע-הקשיחים, הכרעה 19). חוזה: collection-score-delta-strings.contract.md · מהות-המוצא: דלתת ניקוד על ריקון קופת צדקה */
 export const COLLECTION_SCORE_DELTA_T = {
   k1: 86400000,
 };

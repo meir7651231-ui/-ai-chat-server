@@ -1,4 +1,4 @@
-/** אטום-דאטה · needs-care-shop-strings — מחרוזות-התצוגה/דומיין שחולצו מ-needs-care-shop (מנוע-הטיהור v3, הכרעה 19). חוזה: needs-care-shop-strings.contract.md */
+/** אטום-דאטה · needs-care-shop-strings — מחרוזות-התצוגה/דומיין שחולצו מ-needs-care-shop (מנוע-הטיהור v3, הכרעה 19). חוזה: needs-care-shop-strings.contract.md · מהות-המוצא: רשימת הטיפול של מודול החנות מה מגיע מלאי */
 export const NEEDS_CARE_SHOP_T = {
   k1: "stockOut",
   k2: " — המלאי אזל",

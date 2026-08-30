@@ -1,4 +1,4 @@
-/** אטום-דאטה · run-audit-strings — מחרוזות-הדאטה של run-audit (מנוע-הקשיחים, הכרעה 19). חוזה: run-audit-strings.contract.md */
+/** אטום-דאטה · run-audit-strings — מחרוזות-הדאטה של run-audit (מנוע-הקשיחים, הכרעה 19). חוזה: run-audit-strings.contract.md · מהות-המוצא: בדיקת תקינות הנתונים קטגוריות ממצאים */
 export const RUN_AUDIT_T = {
   k1: "כפילות",
   k2: "שם + שם האם זהים: \"",

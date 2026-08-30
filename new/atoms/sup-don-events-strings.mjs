@@ -1,4 +1,4 @@
-/** אטום-דאטה · sup-don-events-strings — מחרוזות-התצוגה/דומיין שחולצו מ-sup-don-events (מנוע-הטיהור v3, הכרעה 19). חוזה: sup-don-events-strings.contract.md */
+/** אטום-דאטה · sup-don-events-strings — מחרוזות-התצוגה/דומיין שחולצו מ-sup-don-events (מנוע-הטיהור v3, הכרעה 19). חוזה: sup-don-events-strings.contract.md · מהות-המוצא: מיזוג תרומות היסטוריה לרשימת תצוגה ממוינת מהחדש לישן */
 export const SUP_DON_EVENTS_T = {
   k1: "קבלה ",
   k2: "עסקה ",

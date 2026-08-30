@@ -1,4 +1,4 @@
-/** אטום-דאטה · enroll-status-meta-strings — מחרוזות-התצוגה/דומיין שחולצו מ-enroll-status-meta (מנוע-הטיהור v3, הכרעה 19). חוזה: enroll-status-meta-strings.contract.md */
+/** אטום-דאטה · enroll-status-meta-strings — מחרוזות-התצוגה/דומיין שחולצו מ-enroll-status-meta (מנוע-הטיהור v3, הכרעה 19). חוזה: enroll-status-meta-strings.contract.md · מהות-המוצא: תווית צבעי יפ לסטטוס שיבוץ */
 export const ENROLL_STATUS_META_T = {
   k1: "paused",
   k2: "מוקפא",

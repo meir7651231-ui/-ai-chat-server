@@ -1,4 +1,4 @@
-/** אטום-דאטה · sup-tier-strings — מחרוזות-הדאטה של sup-tier (מנוע-הקשיחים, הכרעה 19). חוזה: sup-tier-strings.contract.md */
+/** אטום-דאטה · sup-tier-strings — מחרוזות-הדאטה של sup-tier (מנוע-הקשיחים, הכרעה 19). חוזה: sup-tier-strings.contract.md · מהות-המוצא: קודם אוטומטית אפיון */
 export const SUP_TIER_T = {
   k1: "זהב",
   k2: "#fdf3dd",

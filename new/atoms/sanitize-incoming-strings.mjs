@@ -1,4 +1,4 @@
-/** אטום-דאטה · sanitize-incoming-strings — מחרוזות-התצוגה/דומיין שחולצו מ-sanitize-incoming (מנוע-הטיהור v3, הכרעה 19). חוזה: sanitize-incoming-strings.contract.md */
+/** אטום-דאטה · sanitize-incoming-strings — מחרוזות-התצוגה/דומיין שחולצו מ-sanitize-incoming (מנוע-הטיהור v3, הכרעה 19). חוזה: sanitize-incoming-strings.contract.md · מהות-המוצא: חיזוק מסמך ישות מרוחק שדות רשימה תמיד מערכים */
 export const SANITIZE_INCOMING_T = {
   k1: "members",
   k2: "docs",

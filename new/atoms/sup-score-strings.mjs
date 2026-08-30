@@ -1,4 +1,4 @@
-/** אטום-דאטה · sup-score-strings — מחרוזות-הדאטה של sup-score (מנוע-הקשיחים, הכרעה 19). חוזה: sup-score-strings.contract.md */
+/** אטום-דאטה · sup-score-strings — מחרוזות-הדאטה של sup-score (מנוע-הקשיחים, הכרעה 19). חוזה: sup-score-strings.contract.md · מהות-המוצא: ציון תורם טריות תדירות סכום ספים */
 export const SUP_SCORE_T = {
   k1: 86400000,
   k2: 9999,

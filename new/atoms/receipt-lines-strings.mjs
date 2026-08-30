@@ -1,4 +1,4 @@
-/** אטום-דאטה · receipt-lines-strings — מחרוזות-הדאטה של receipt-lines (מנוע-הקשיחים, הכרעה 19). חוזה: receipt-lines-strings.contract.md */
+/** אטום-דאטה · receipt-lines-strings — מחרוזות-הדאטה של receipt-lines (מנוע-הקשיחים, הכרעה 19). חוזה: receipt-lines-strings.contract.md · מהות-המוצא: שורות הקבלה רגילה אישור חנות */
 export const RECEIPT_LINES_T = {
   k1: "העתק נאמן למקור",
   k2: "מקור",

@@ -1,4 +1,4 @@
-/** אטום-דאטה · pull-sola-strings — מחרוזות-הדאטה של pull-sola (מנוע-הקשיחים, הכרעה 19). חוזה: pull-sola-strings.contract.md */
+/** אטום-דאטה · pull-sola-strings — מחרוזות-הדאטה של pull-sola (מנוע-הקשיחים, הכרעה 19). חוזה: pull-sola-strings.contract.md · מהות-המוצא: משיכה בקליק מסולה עם טוקן הכניסה גשר */
 export const PULL_SOLA_T = {
   k1: "כתובת-משיכה לא-תקינה (חייבת https)",
   k2: "נדרשת התחברות-ענן",

@@ -1,4 +1,4 @@
-/** אטום-דאטה · build-course-daily-rows-strings — מחרוזות-הדאטה של build-course-daily-rows (מנוע-הקשיחים, הכרעה 19). חוזה: build-course-daily-rows-strings.contract.md */
+/** אטום-דאטה · build-course-daily-rows-strings — מחרוזות-הדאטה של build-course-daily-rows (מנוע-הקשיחים, הכרעה 19). חוזה: build-course-daily-rows-strings.contract.md · מהות-המוצא: דו נוכחות יומי מפורט לחוג מפגש מפגש */
 export const BUILD_COURSE_DAILY_ROWS_T = {
   k1: "תאריך עברי",
   k2: "תאריך לועזי",

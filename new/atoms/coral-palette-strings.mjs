@@ -1,4 +1,4 @@
-/** אטום-דאטה · coral-palette-strings — מחרוזות-הדאטה של coral-palette (מנוע-הקשיחים, הכרעה 19). חוזה: coral-palette-strings.contract.md */
+/** אטום-דאטה · coral-palette-strings — מחרוזות-הדאטה של coral-palette (מנוע-הקשיחים, הכרעה 19). חוזה: coral-palette-strings.contract.md · מהות-המוצא: קבוע קודם אוטומטית צילום ערך */
 export const CORAL_PALETTE_T = {
   k1: "#FFFCFA",
   k2: "#FBF1EF",

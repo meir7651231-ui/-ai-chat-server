@@ -1,4 +1,4 @@
-/** אטום-דאטה · pull-nedarim-strings — מחרוזות-הדאטה של pull-nedarim (מנוע-הקשיחים, הכרעה 19). חוזה: pull-nedarim-strings.contract.md */
+/** אטום-דאטה · pull-nedarim-strings — מחרוזות-הדאטה של pull-nedarim (מנוע-הקשיחים, הכרעה 19). חוזה: pull-nedarim-strings.contract.md · מהות-המוצא: משיכת נדרים בקליק עם טוקן הכניסה */
 export const PULL_NEDARIM_T = {
   k1: "כתובת-משיכה לא-תקינה (חייבת https)",
   k2: "נדרשת התחברות-ענן",

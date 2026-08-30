@@ -1,4 +1,4 @@
-/** אטום-דאטה · make-normalize-site-strings — מחרוזות-הדאטה של make-normalize-site (מנוע-הקשיחים, הכרעה 19). חוזה: make-normalize-site-strings.contract.md */
+/** אטום-דאטה · make-normalize-site-strings — מחרוזות-הדאטה של make-normalize-site (מנוע-הקשיחים, הכרעה 19). חוזה: make-normalize-site-strings.contract.md · מהות-המוצא: מפעל חיטוי תוכן האתר הציבורי מלא תקרות */
 export const MAKE_NORMALIZE_SITE_T = {
   k1: "string",
   k2: "object",

@@ -1,4 +1,4 @@
-/** אטום-דאטה · guide-sections-of-strings — מחרוזות-התצוגה/דומיין שחולצו מ-guide-sections-of (מנוע-הטיהור v3, הכרעה 19). חוזה: guide-sections-of-strings.contract.md */
+/** אטום-דאטה · guide-sections-of-strings — מחרוזות-התצוגה/דומיין שחולצו מ-guide-sections-of (מנוע-הטיהור v3, הכרעה 19). חוזה: guide-sections-of-strings.contract.md · מהות-המוצא: שורות המדריך למצב מערכת סינון לפי מודולים פעילים */
 export const GUIDE_SECTIONS_OF_T = {
   k1: "כרטיס משפחה",
   k2: "כרטיס ",

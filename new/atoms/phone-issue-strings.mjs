@@ -1,4 +1,4 @@
-/** אטום-דאטה · phone-issue-strings — מחרוזות-הדאטה של phone-issue (מנוע-הקשיחים, הכרעה 19). חוזה: phone-issue-strings.contract.md */
+/** אטום-דאטה · phone-issue-strings — מחרוזות-הדאטה של phone-issue (מנוע-הקשיחים, הכרעה 19). חוזה: phone-issue-strings.contract.md · מהות-המוצא: אבחון תקינות מספר טלפון תקין */
 export const PHONE_ISSUE_T = {
   k1: "כנראה חסרה ספרת 0 מובילה: ",
   k2: "קצר מדי: ",

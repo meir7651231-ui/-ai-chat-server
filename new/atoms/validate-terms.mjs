@@ -1,4 +1,4 @@
-/** אטום-דאטה · validate-terms — מונחי-התצוגה של קופסת-validate (מנוע-הטיהור v6, הכרעה 19). חוזה: validate-terms.contract.md */
+/** אטום-דאטה · validate-terms — מונחי-התצוגה של קופסת-validate (מנוע-הטיהור v6, הכרעה 19). חוזה: validate-terms.contract.md · מהות-המוצא: אימות קלט ישראלי */
 export const VALIDATE_TERMS = {
   k1: "ר",
   k2: "רבי",

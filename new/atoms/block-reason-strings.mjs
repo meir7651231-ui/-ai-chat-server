@@ -1,4 +1,4 @@
-/** אטום-דאטה · block-reason-strings — מחרוזות-הדאטה של block-reason (מנוע-הקשיחים, הכרעה 19). חוזה: block-reason-strings.contract.md */
+/** אטום-דאטה · block-reason-strings — מחרוזות-הדאטה של block-reason (מנוע-הקשיחים, הכרעה 19). חוזה: block-reason-strings.contract.md · מהות-המוצא: סיבת חסימת יום לתזמון חוגים */
 export const BLOCK_REASON_T = {
   k1: "שבת",
   k2: "יום שישי (שעתיים לפני שבת)",

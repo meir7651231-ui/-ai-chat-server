@@ -35,9 +35,11 @@ for (const f of fs.readdirSync(SRC)) {
   // מגן-דריסה: תאום קיים שאינו פליטה-של-המנוע (אין חותם-מקור) — לא נוגעים (קובץ ידני קדוש)
   const outPath = path.join(OUT, outName);
   if (fs.existsSync(outPath) && !fs.readFileSync(outPath, 'utf8').includes('מנוע-ההמרה-מחדש')) { continue; }
+  const srcFirst = fs.readFileSync(path.join(SRC, f), 'utf8').split('\n')[0];
+  const essence = (srcFirst.match(/מהות-המוצא: ([^*]+)/) || [])[1]?.trim() || '';
   const lines = [
-    `// אטום-דאטה · ${f.replace('.mjs', '')} — תאום-Dart שנפלט אוטומטית מהמקור-הקדוש (מנוע-ההמרה-מחדש · הכרעה 19).`,
-    `// המקור: new/atoms/${f} — אל תערוך ידנית; שינוי = במקור + פליטה-מחדש.`,
+    `// אטום-דאטה · ${f.replace('.mjs', '')} — תאום-Dart שנפלט אוטומטית מהמקור-הקדוש${essence ? ' · מהות-המוצא: ' + essence : ''}`,
+    `// (מנוע-ההמרה-מחדש · הכרעה 19) המקור: new/atoms/${f} — אל תערוך ידנית; שינוי = במקור + פליטה-מחדש.`,
   ];
   let ok = false;
   for (const [name, v] of Object.entries(mod)) {

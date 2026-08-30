@@ -1,4 +1,4 @@
-/** אטום-דאטה · apply-meta-partial-strings — מחרוזות-התצוגה/דומיין שחולצו מ-apply-meta-partial (מנוע-הטיהור v3, הכרעה 19). חוזה: apply-meta-partial-strings.contract.md */
+/** אטום-דאטה · apply-meta-partial-strings — מחרוזות-התצוגה/דומיין שחולצו מ-apply-meta-partial (מנוע-הטיהור v3, הכרעה 19). חוזה: apply-meta-partial-strings.contract.md · מהות-המוצא: מיזוג מסמך מרוחק הענן מנצח מונים רק עולים */
 export const APPLY_META_PARTIAL_T = {
   k1: "orgName",
   k2: "orgSite",

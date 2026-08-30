@@ -1,4 +1,4 @@
-/** אטום-דאטה · delete-org-completely-strings — מחרוזות-הדאטה של delete-org-completely (מנוע-הקשיחים, הכרעה 19). חוזה: delete-org-completely-strings.contract.md */
+/** אטום-דאטה · delete-org-completely-strings — מחרוזות-הדאטה של delete-org-completely (מנוע-הקשיחים, הכרעה 19). חוזה: delete-org-completely-strings.contract.md · מהות-המוצא: מחיקת לקוח מלאה מהענן מצבת */
 export const DELETE_ORG_COMPLETELY_T = {
   k1: "donations",
   k2: "auditlog",

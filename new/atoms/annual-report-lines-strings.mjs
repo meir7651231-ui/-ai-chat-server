@@ -1,4 +1,4 @@
-/** אטום-דאטה · annual-report-lines-strings — מחרוזות-הדאטה של annual-report-lines (מנוע-הקשיחים, הכרעה 19). חוזה: annual-report-lines-strings.contract.md */
+/** אטום-דאטה · annual-report-lines-strings — מחרוזות-הדאטה של annual-report-lines (מנוע-הקשיחים, הכרעה 19). חוזה: annual-report-lines-strings.contract.md · מהות-המוצא: שורות דוח שנתי לתורם */
 export const ANNUAL_REPORT_LINES_T = {
   k1: "        דוח תרומות שנתי — שנת ",
   k2: "הארגון: ",

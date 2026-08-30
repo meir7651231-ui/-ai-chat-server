@@ -1,4 +1,4 @@
-/** אטום-דאטה · holiday-of-strings — מחרוזות-הדאטה של holiday-of (מנוע-הקשיחים, הכרעה 19). חוזה: holiday-of-strings.contract.md */
+/** אטום-דאטה · holiday-of-strings — מחרוזות-הדאטה של holiday-of (מנוע-הקשיחים, הכרעה 19). חוזה: holiday-of-strings.contract.md · מהות-המוצא: שם החג בתאריך נתון דיני חנוכה צום נדחה */
 export const HOLIDAY_OF_T = {
   k1: "Tevet",
   k2: "Kislev",

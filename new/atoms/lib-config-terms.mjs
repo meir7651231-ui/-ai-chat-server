@@ -1,4 +1,4 @@
-/** אטום-דאטה · lib-config-terms — מונחי-התצוגה של קופסת-lib-config (מנוע-הטיהור v6, הכרעה 19). חוזה: lib-config-terms.contract.md */
+/** אטום-דאטה · lib-config-terms — מונחי-התצוגה של קופסת-lib-config (מנוע-הטיהור v6, הכרעה 19). חוזה: lib-config-terms.contract.md · מהות-המוצא: הקונפיגורציה של */
 export const LIB_CONFIG_TERMS = {
   k1: "families",
   k2: "courses",

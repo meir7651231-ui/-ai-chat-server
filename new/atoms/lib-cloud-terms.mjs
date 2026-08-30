@@ -1,4 +1,4 @@
-/** אטום-דאטה · lib-cloud-terms — מונחי-התצוגה של קופסת-lib-cloud (מנוע-הטיהור v6, הכרעה 19). חוזה: lib-cloud-terms.contract.md */
+/** אטום-דאטה · lib-cloud-terms — מונחי-התצוגה של קופסת-lib-cloud (מנוע-הטיהור v6, הכרעה 19). חוזה: lib-cloud-terms.contract.md · מהות-המוצא: הענן */
 export const LIB_CLOUD_TERMS = {
   k1: "default",
   k2: "donations",

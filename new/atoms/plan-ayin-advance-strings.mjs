@@ -1,4 +1,4 @@
-/** אטום-דאטה · plan-ayin-advance-strings — מחרוזות-התצוגה/דומיין שחולצו מ-plan-ayin-advance (מנוע-הטיהור v3, הכרעה 19). חוזה: plan-ayin-advance-strings.contract.md */
+/** אטום-דאטה · plan-ayin-advance-strings — מחרוזות-התצוגה/דומיין שחולצו מ-plan-ayin-advance (מנוע-הטיהור v3, הכרעה 19). חוזה: plan-ayin-advance-strings.contract.md · מהות-המוצא: תכנון פעולת הכפתור החכם של תיק המעקב */
 export const PLAN_AYIN_ADVANCE_T = {
   k1: "new",
   k2: "lead",

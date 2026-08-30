@@ -1,4 +1,4 @@
-/** אטום-דאטה · course-date-error-strings — מחרוזות-התצוגה/דומיין שחולצו מ-course-date-error (מנוע-הטיהור v3, הכרעה 19). חוזה: course-date-error-strings.contract.md */
+/** אטום-דאטה · course-date-error-strings — מחרוזות-התצוגה/דומיין שחולצו מ-course-date-error (מנוע-הטיהור v3, הכרעה 19). חוזה: course-date-error-strings.contract.md · מהות-המוצא: ולידציית טווח תאריכי חוג */
 export const COURSE_DATE_ERROR_T = {
   k1: "entity.course",
   k2: "חוג",

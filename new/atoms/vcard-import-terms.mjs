@@ -1,4 +1,4 @@
-/** אטום-דאטה · vcard-import-terms — מונחי-התצוגה של קופסת-vcard-import (מנוע-הטיהור v6, הכרעה 19). חוזה: vcard-import-terms.contract.md */
+/** אטום-דאטה · vcard-import-terms — מונחי-התצוגה של קופסת-vcard-import (מנוע-הטיהור v6, הכרעה 19). חוזה: vcard-import-terms.contract.md · מהות-המוצא: ייבוא אנשי קשר */
 export const VCARD_IMPORT_TERMS = {
   k1: "נייד",
   k2: "בית",

@@ -1,4 +1,4 @@
-/** אטום-דאטה · append-call-strings — מחרוזות-התצוגה/דומיין שחולצו מ-append-call (מנוע-הטיהור v3, הכרעה 19). חוזה: append-call-strings.contract.md */
+/** אטום-דאטה · append-call-strings — מחרוזות-התצוגה/דומיין שחולצו מ-append-call (מנוע-הטיהור v3, הכרעה 19). חוזה: append-call-strings.contract.md · מהות-המוצא: רישום שיחה ליומן טבעת */
 export const APPEND_CALL_T = {
   k1: "skip",
 };

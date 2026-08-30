@@ -1,4 +1,4 @@
-/** אטום-דאטה · preview-telephony-strings — מחרוזות-הדאטה של preview-telephony (מנוע-הקשיחים, הכרעה 19). חוזה: preview-telephony-strings.contract.md */
+/** אטום-דאטה · preview-telephony-strings — מחרוזות-הדאטה של preview-telephony (מנוע-הקשיחים, הכרעה 19). חוזה: preview-telephony-strings.contract.md · מהות-המוצא: תצוגה מקדימה חיה לקונפיג טלפוניה סימולטור דוח אמון */
 export const PREVIEW_TELEPHONY_T = {
   k1: "sim",
   k2: "virtual",

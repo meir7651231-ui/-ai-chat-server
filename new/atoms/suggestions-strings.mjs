@@ -1,4 +1,4 @@
-/** אטום-דאטה · suggestions-strings — מחרוזות-הדאטה של suggestions (מנוע-הקשיחים, הכרעה 19). חוזה: suggestions-strings.contract.md */
+/** אטום-דאטה · suggestions-strings — מחרוזות-הדאטה של suggestions (מנוע-הקשיחים, הכרעה 19). חוזה: suggestions-strings.contract.md · מהות-המוצא: מקדים הצורך חג מתקרב גיל בית ספר תינוק */
 export const SUGGESTIONS_T = {
   k1: "active",
   k2: "shop",

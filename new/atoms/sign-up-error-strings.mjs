@@ -1,4 +1,4 @@
-/** אטום-דאטה · sign-up-error-strings — מחרוזות-התצוגה/דומיין שחולצו מ-sign-up-error (מנוע-הטיהור v3, הכרעה 19). חוזה: sign-up-error-strings.contract.md */
+/** אטום-דאטה · sign-up-error-strings — מחרוזות-התצוגה/דומיין שחולצו מ-sign-up-error (מנוע-הטיהור v3, הכרעה 19). חוזה: sign-up-error-strings.contract.md · מהות-המוצא: ולידציית טופס הרשמה עצמית הודעת שגיאה בעברית או */
 export const SIGN_UP_ERROR_T = {
   k1: "שם הארגון הוא שדה חובה",
   k2: "שם איש הקשר הוא שדה חובה",

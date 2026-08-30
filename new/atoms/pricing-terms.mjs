@@ -1,4 +1,4 @@
-/** אטום-קבוע · pricing-terms — קודם אוטומטית (צילום-ערך). חוזה: pricing-terms.contract.md */
+/** אטום-קבוע · pricing-terms — קודם אוטומטית (צילום-ערך). חוזה: pricing-terms.contract.md · מהות-המוצא: תמחור מחווטת את חוטי התמחור */
 export const PRICING_TERMS = [
     { v: 'once', t: 'חד-פעמי' },
     { v: 'weekly', t: 'שבועי' },

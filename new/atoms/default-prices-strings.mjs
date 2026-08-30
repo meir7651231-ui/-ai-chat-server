@@ -1,4 +1,4 @@
-/** אטום-דאטה · default-prices-strings — מחרוזות-הדאטה של default-prices (מנוע-הקשיחים, הכרעה 19). חוזה: default-prices-strings.contract.md */
+/** אטום-דאטה · default-prices-strings — מחרוזות-הדאטה של default-prices (מנוע-הקשיחים, הכרעה 19). חוזה: default-prices-strings.contract.md · מהות-המוצא: טבלת מחירי ברירת המחדל של התמחור */
 export const DEFAULT_PRICES_T = {
   k1: 290,
   k2: 120,

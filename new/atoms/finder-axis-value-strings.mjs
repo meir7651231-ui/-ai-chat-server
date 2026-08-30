@@ -1,4 +1,4 @@
-/** אטום-דאטה · finder-axis-value-strings — מחרוזות-הדאטה של finder-axis-value (מנוע-הקשיחים, הכרעה 19). חוזה: finder-axis-value-strings.contract.md */
+/** אטום-דאטה · finder-axis-value-strings — מחרוזות-הדאטה של finder-axis-value (מנוע-הקשיחים, הכרעה 19). חוזה: finder-axis-value-strings.contract.md · מהות-המוצא: ערך המשפחה בציר צלילה נתון */
 export const FINDER_AXIS_VALUE_T = {
   k1: "city",
   k2: "comm",

@@ -1,4 +1,4 @@
-/** אטום-דאטה · fam-history-of-strings — מחרוזות-הדאטה של fam-history-of (מנוע-הקשיחים, הכרעה 19). חוזה: fam-history-of-strings.contract.md */
+/** אטום-דאטה · fam-history-of-strings — מחרוזות-הדאטה של fam-history-of (מנוע-הקשיחים, הכרעה 19). חוזה: fam-history-of-strings.contract.md · מהות-המוצא: ציר ההיסטוריה הנגזר של משפחה עד מהחדש לישן */
 export const FAM_HISTORY_OF_T = {
   k1: "הצטרפות",
   k2: "#e7edf5",

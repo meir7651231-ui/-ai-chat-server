@@ -1,4 +1,4 @@
-/** אטום-דאטה · amount-in-words-strings — מחרוזות-הדאטה של amount-in-words (מנוע-הקשיחים, הכרעה 19). חוזה: amount-in-words-strings.contract.md */
+/** אטום-דאטה · amount-in-words-strings — מחרוזות-הדאטה של amount-in-words (מנוע-הקשיחים, הכרעה 19). חוזה: amount-in-words-strings.contract.md · מהות-המוצא: קודם אוטומטית אפיון */
 export const AMOUNT_IN_WORDS_T = {
   k1: "אלף",
   k2: "אלפיים",

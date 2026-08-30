@@ -1,4 +1,4 @@
-/** אטום-דאטה · telephony-to-tenant-strings — מחרוזות-הדאטה של telephony-to-tenant (מנוע-הקשיחים, הכרעה 19). חוזה: telephony-to-tenant-strings.contract.md */
+/** אטום-דאטה · telephony-to-tenant-strings — מחרוזות-הדאטה של telephony-to-tenant (מנוע-הקשיחים, הכרעה 19). חוזה: telephony-to-tenant-strings.contract.md · מהות-המוצא: תצורת אשף טלפוניה למנוע */
 export const TELEPHONY_TO_TENANT_T = {
   k1: "sim-in-gateway",
   k2: "customer-forward",

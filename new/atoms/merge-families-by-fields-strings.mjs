@@ -1,4 +1,4 @@
-/** אטום-דאטה · merge-families-by-fields-strings — מחרוזות-התצוגה/דומיין שחולצו מ-merge-families-by-fields (מנוע-הטיהור v3, הכרעה 19). חוזה: merge-families-by-fields-strings.contract.md */
+/** אטום-דאטה · merge-families-by-fields-strings — מחרוזות-התצוגה/דומיין שחולצו מ-merge-families-by-fields (מנוע-הטיהור v3, הכרעה 19). חוזה: merge-families-by-fields-strings.contract.md · מהות-המוצא: מיזוג כפולים לפי בחירת שדות בסיס בטוח דריסה */
 export const MERGE_FAMILIES_BY_FIELDS_T = {
   k1: "kidsHome",
   k2: "kidsMarried",

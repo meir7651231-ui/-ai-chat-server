@@ -1,4 +1,4 @@
-/** אטום-דאטה · parse-supporter-grid-strings — מחרוזות-הדאטה של parse-supporter-grid (מנוע-הקשיחים, הכרעה 19). חוזה: parse-supporter-grid-strings.contract.md */
+/** אטום-דאטה · parse-supporter-grid-strings — מחרוזות-הדאטה של parse-supporter-grid (מנוע-הקשיחים, הכרעה 19). חוזה: parse-supporter-grid-strings.contract.md · מהות-המוצא: פענוח רשת תאים לשורות ייבוא תומכות */
 export const PARSE_SUPPORTER_GRID_T = {
   k1: "טלפון",
   k2: "נייד",

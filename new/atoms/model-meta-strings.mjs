@@ -1,4 +1,4 @@
-/** אטום-דאטה · model-meta-strings — מחרוזות-התצוגה/דומיין שחולצו מ-model-meta (מנוע-הטיהור v3, הכרעה 19). חוזה: model-meta-strings.contract.md */
+/** אטום-דאטה · model-meta-strings — מחרוזות-התצוגה/דומיין שחולצו מ-model-meta (מנוע-הטיהור v3, הכרעה 19). חוזה: model-meta-strings.contract.md · מהות-המוצא: תווית צבעי מסלול התמחור של חוג משבץ */
 export const MODEL_META_T = {
   k1: "punch",
   k2: "כרטיסייה · ",

@@ -1,4 +1,4 @@
-/** אטום-דאטה · families-import-format-rows-strings — מחרוזות-התצוגה/דומיין שחולצו מ-families-import-format-rows (מנוע-הטיהור v3, הכרעה 19). חוזה: families-import-format-rows-strings.contract.md */
+/** אטום-דאטה · families-import-format-rows-strings — מחרוזות-התצוגה/דומיין שחולצו מ-families-import-format-rows (מנוע-הטיהור v3, הכרעה 19). חוזה: families-import-format-rows-strings.contract.md · מהות-המוצא: משפחות בפורמט ייבוא העמודות */
 export const FAMILIES_IMPORT_FORMAT_ROWS_T = {
   k1: "שם",
   k2: "ת\"ז אב",

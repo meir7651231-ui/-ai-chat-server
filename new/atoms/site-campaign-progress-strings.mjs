@@ -1,4 +1,4 @@
-/** אטום-דאטה · site-campaign-progress-strings — מחרוזות-הדאטה של site-campaign-progress (מנוע-הקשיחים, הכרעה 19). חוזה: site-campaign-progress-strings.contract.md */
+/** אטום-דאטה · site-campaign-progress-strings — מחרוזות-הדאטה של site-campaign-progress (מנוע-הקשיחים, הכרעה 19). חוזה: site-campaign-progress-strings.contract.md · מהות-המוצא: התקדמות קמפיין וספירה לאחור של האתר הציבורי */
 export const SITE_CAMPAIGN_PROGRESS_T = {
   k1: "number",
   k2: 100,

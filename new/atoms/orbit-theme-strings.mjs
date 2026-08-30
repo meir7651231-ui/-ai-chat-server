@@ -1,4 +1,4 @@
-/** אטום-דאטה · orbit-theme-strings — מחרוזות-הדאטה של orbit-theme (מנוע-הקשיחים, הכרעה 19). חוזה: orbit-theme-strings.contract.md */
+/** אטום-דאטה · orbit-theme-strings — מחרוזות-הדאטה של orbit-theme (מנוע-הקשיחים, הכרעה 19). חוזה: orbit-theme-strings.contract.md · מהות-המוצא: גזירת ערכת מסך משתני סצנת כדור ארגוני */
 export const ORBIT_THEME_T = {
   k1: "#ffffff",
   k2: "Ice",

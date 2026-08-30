@@ -1,4 +1,4 @@
-/** אטום-דאטה · trust-report-strings — מחרוזות-הדאטה של trust-report (מנוע-הקשיחים, הכרעה 19). חוזה: trust-report-strings.contract.md */
+/** אטום-דאטה · trust-report-strings — מחרוזות-הדאטה של trust-report (מנוע-הקשיחים, הכרעה 19). חוזה: trust-report-strings.contract.md · מהות-המוצא: דוח אמון פר עמותה טלפוניה כרטיס אמון לוועד */
 export const TRUST_REPORT_T = {
   k1: "route-closure",
   k2: "סגירת-מסלולים (אין ניתוב-יתום)",

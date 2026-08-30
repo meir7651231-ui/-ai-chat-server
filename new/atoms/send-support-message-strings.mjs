@@ -1,4 +1,4 @@
-/** אטום-דאטה · send-support-message-strings — מחרוזות-הדאטה של send-support-message (מנוע-הקשיחים, הכרעה 19). חוזה: send-support-message-strings.contract.md */
+/** אטום-דאטה · send-support-message-strings — מחרוזות-הדאטה של send-support-message (מנוע-הקשיחים, הכרעה 19). חוזה: send-support-message-strings.contract.md · מהות-המוצא: הלקוח שולח הודעת צ׳אט תמיכה כותב */
 export const SEND_SUPPORT_MESSAGE_T = {
   k1: "supportChats",
   k2: "messages",

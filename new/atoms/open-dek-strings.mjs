@@ -1,4 +1,4 @@
-/** אטום-דאטה · open-dek-strings — מחרוזות-הדאטה של open-dek (מנוע-הקשיחים, הכרעה 19). חוזה: open-dek-strings.contract.md */
+/** אטום-דאטה · open-dek-strings — מחרוזות-הדאטה של open-dek (מנוע-הקשיחים, הכרעה 19). חוזה: open-dek-strings.contract.md · מהות-המוצא: חילוץ ממעטפת הצפנה בסיסמה מפתח שחזור כשל */
 export const OPEN_DEK_T = {
   k1: "pass",
   k2: "raw",

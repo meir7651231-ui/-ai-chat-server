@@ -1,4 +1,4 @@
-/** אטום-דאטה · heb-date-full-strings — מחרוזות-הדאטה של heb-date-full (מנוע-הקשיחים, הכרעה 19). חוזה: heb-date-full-strings.contract.md */
+/** אטום-דאטה · heb-date-full-strings — מחרוזות-הדאטה של heb-date-full (מנוע-הקשיחים, הכרעה 19). חוזה: heb-date-full-strings.contract.md · מהות-המוצא: ט״ו אלול תשפ״ו מתוך צהריים מקומי חסין אזורי */
 export const HEB_DATE_FULL_T = {
   k1: "he-u-ca-hebrew",
   k2: "long",
