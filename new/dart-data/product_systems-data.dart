@@ -25,4 +25,4 @@ const Set structuralCats = {
   'חבקי תליה', 'חבקי צינור', 'עוגנים ובנדים', 'כלי עבודה', 'מצופים',
   'ידיות אחיזה', 'ארונות מחלק',
 };
-const allSystems = {WaterSystem.supply, WaterSystem.drainage};
+const Set<WaterSystem> allSystems = {WaterSystem.supply, WaterSystem.drainage};

@@ -35,7 +35,7 @@ enum WaterSystem { supply, drainage }
 /// The plumbing systems a product belongs to, by engineering logic.
 Set<WaterSystem> productSystems(
   String categoryHe, {
-  required Set<WaterSystem>? Function() endSystemsOf, required Set supplyCats, required Set drainCats, required Set fixtureCats, required Set structuralCats, required dynamic allSystems}) {
+  required Set<WaterSystem>? Function() endSystemsOf, required Set supplyCats, required Set drainCats, required Set fixtureCats, required Set structuralCats, required Set<WaterSystem> allSystems}) {
   final c = categoryHe;
   if (supplyCats.contains(c)) return {WaterSystem.supply};
   if (drainCats.contains(c)) return {WaterSystem.drainage};
