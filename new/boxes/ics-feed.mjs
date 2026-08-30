@@ -7,7 +7,10 @@
 import { mintFeedToken as mintAtom } from '../atoms/mint-feed-token.mjs';
 import { readIcsFeedToken as readAtom } from '../atoms/read-ics-feed-token.mjs';
 import { publishIcsFeed as publishAtom } from '../atoms/publish-ics-feed.mjs';
-import { icsFeedUrl as urlAtom } from '../atoms/ics-feed-url.mjs';
+import { icsFeedUrl as __pure_icsFeedUrl } from '../atoms/ics-feed-url.mjs';
+import { ICS_FEED_URL_T as __d_icsFeedUrl_ICS_FEED_URL_T } from '../atoms/ics-feed-url-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const urlAtom = (...a) => __pure_icsFeedUrl(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_icsFeedUrl_ICS_FEED_URL_T);
 
 // ── מילון-הקופסה (הכרעת-חיווט) ──
 // שם-אוסף-הענן ICS_FEEDS (icsFeed.ts:11 verbatim) — מוטבע בחוט-הקריאה, ומחווט

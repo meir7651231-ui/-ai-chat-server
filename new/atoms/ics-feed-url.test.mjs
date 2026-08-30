@@ -1,4 +1,11 @@
-import { icsFeedUrl } from './ics-feed-url.mjs';
+import { icsFeedUrl as __pure_icsFeedUrl } from './ics-feed-url.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_icsFeedUrl_ICS_FEED_URL_T = {
+  k1: "https://us-central1-",
+  k2: ".cloudfunctions.net/icsFeed?org=",
+  k3: "&key=",
+};
+const icsFeedUrl = (...a) => __pure_icsFeedUrl(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_icsFeedUrl_ICS_FEED_URL_T);
 let f = 0;
 const chk = (name, got, want) => { if (got !== want) { console.error(`✗ ${name} ⇒ ${got} ≠ ${want}`); f = 1; } };
 chk('1 בסיס', icsFeedUrl('my-proj', 'demo', 'abc123'),

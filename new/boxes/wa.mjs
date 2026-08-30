@@ -3,7 +3,10 @@
  *  קישורי wa.me click-to-chat + נוסחי-הודעה, טהור לגמרי: פתיחת-הקישור
  *  בדפדפן/אפליקציה = שקע של לוח-האם, לא כאן. */
 import { waDigits as digitsAtom } from '../atoms/wa-digits.mjs';
-import { waLink as linkAtom } from '../atoms/wa-link.mjs';
+import { waLink as __pure_waLink } from '../atoms/wa-link.mjs';
+import { WA_LINK_T as __d_waLink_WA_LINK_T } from '../atoms/wa-link-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const linkAtom = (...a) => __pure_waLink(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_waLink_WA_LINK_T);
 import { waDeliveryText as __pure_waDeliveryText } from '../atoms/wa-delivery-text.mjs';
 import { WA_DELIVERY_TEXT_T as __d_waDeliveryText_WA_DELIVERY_TEXT_T } from '../atoms/wa-delivery-text-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

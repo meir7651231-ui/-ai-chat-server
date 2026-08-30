@@ -1,4 +1,10 @@
-import { waLink } from './wa-link.mjs';
+import { waLink as __pure_waLink } from './wa-link.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_waLink_WA_LINK_T = {
+  k1: "https://wa.me/",
+  k2: "?text=",
+};
+const waLink = (...a) => __pure_waLink(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_waLink_WA_LINK_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 

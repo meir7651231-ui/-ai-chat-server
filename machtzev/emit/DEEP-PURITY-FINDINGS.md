@@ -1,6 +1,6 @@
 # 🔬 ממצאי טוהר-עומק (הכרעה 19) — דאטה בתוך מנגנון
 
-נסרקו אטומי-מנגנון ב-new/atoms · new/boxes · הפרות: 330
+נסרקו אטומי-מנגנון ב-new/atoms · new/boxes · הפרות: 327
 
 | אטום | ציון | עברית | טבלאות | מחרוזות-דומיין | מספרי-קסם |
 |---|---|---|---|---|---|
@@ -110,7 +110,7 @@
 | new/boxes/telephony.mjs | 8 | — | — | ../atoms/empty-telephony-confi · ../atoms/empty-telephony-confi · ../atoms/to-tenant-id.mjs · ../atoms/to-tenant-id-strings. | — |
 | new/boxes/tzedaka.mjs | 8 | — | — | ../atoms/tz-score-rules.mjs · ../atoms/tz-stale-days.mjs · ../atoms/last-collection-iso.m · ../atoms/collection-score-delt | — |
 | new/boxes/validate.mjs | 8 | — | — | ../atoms/valid-israeli-id.mjs · ../atoms/normalize-phone.mjs · ../atoms/format-israeli-phone. · ../atoms/norm-search.mjs | — |
-| new/boxes/wa.mjs | 8 | — | — | ../atoms/wa-digits.mjs · ../atoms/wa-link.mjs · ../atoms/wa-delivery-text.mjs · ../atoms/wa-delivery-text-stri | — |
+| new/boxes/wa.mjs | 8 | — | — | ../atoms/wa-digits.mjs · ../atoms/wa-link.mjs · ../atoms/wa-link-strings.mjs · ../atoms/wa-delivery-text.mjs | — |
 | new/boxes/worktasks.mjs | 8 | — | — | ../atoms/task-identity.mjs · ../atoms/task-identity-strings · ../atoms/open-tasks-for.mjs · ../atoms/done-today-for.mjs | — |
 | new/atoms/plan-add-name.mjs | 7 | השם "${nm}" כבר ברשימה | const names = [...a.names, { id, name: nm, e | — | — |
 | new/atoms/preview-telephony.mjs | 7 | — | const opts = { anchorDate: anchor, calendarW · const scenarios = [ { when: T.k3, ca | — | 400 |
@@ -125,7 +125,6 @@
 | new/atoms/exp-field-defs.mjs | 6 | — | const defs = [ { key: T.k3, labe · const defs = [ { key: T.k3, label: T | — | — |
 | new/atoms/fetch-incoming-payments.mjs | 6 | — | — | incomingPayments · status · pending | — |
 | new/atoms/find-member-org-slugs.mjs | 6 | — | — | platformOrgs · members · array-contains | — |
-| new/atoms/ics-feed-url.mjs | 6 | — | — | https://us-central1- · .cloudfunctions.net/icsFeed?or · &key= | — |
 | new/atoms/intel-rfm-from-scan.mjs | 6 | — | — | — | 30 350 90 280 180 200 |
 | new/atoms/merge-families.mjs | 6 | — | const all = [keeper, ...losers] · const baseNotes = [...new Set(notesParts)].j | — | — |
 | new/atoms/parse-any-date.mjs | 6 | — | — | — | 31 2000 1900 31 1899 11 |
@@ -141,7 +140,6 @@
 | new/boxes/vertical-packs.mjs | 6 | — | — | ../atoms/vertical-packs.mjs · ../atoms/commercial-off.mjs · ../atoms/apply-vertical-pack.m | — |
 | new/atoms/hok-cat.mjs | 5 | הו"ק | — | — | 12 |
 | new/atoms/intel-forecast-from-scan.mjs | 5 | — | — | — | 365 15 92 30 25 |
-| new/atoms/maps-search-url.mjs | 5 | — | const q = [address, city].map(cleanStop).fil | https://www.google.com/maps/se | — |
 | new/atoms/normalize-phone.mjs | 5 | — | — | 972 · +972 | 972 |
 | new/atoms/portfolio-portfolio-intel.mjs | 5 | — | — | — | 10 30 90 12 365 |
 | new/atoms/push-donations.mjs | 5 | — | const payload = { supporterId: d.supporterId | — | 400 400 |
@@ -174,8 +172,6 @@
 | new/atoms/read-ics-feed-token.mjs | 4 | — | — | icsFeeds · string | — |
 | new/atoms/reenroll-list-text.mjs | 4 | ${r.memberName} · ${r.courseNa | — | — | — |
 | new/atoms/sup-allowed-keys.mjs | 4 | — | const clean = [...new Set(allowed.map((s) => | — | 29 |
-| new/atoms/wa-app-link.mjs | 4 | — | — | whatsapp://send?phone= · &text= | — |
-| new/atoms/wa-link.mjs | 4 | — | — | https://wa.me/ · ?text= | — |
 | new/atoms/wheel-index-under-pointer.mjs | 4 | — | — | — | 360 360 360 360 |
 | new/atoms/write-mail-outbox.mjs | 4 | — | — | mailOutbox · pending | — |
 | new/atoms/write-org-join-request.mjs | 4 | — | — | platformOrgs · joinRequests | — |
@@ -219,6 +215,7 @@
 | new/atoms/intel-donor-scan.mjs | 3 | — | — | — | 12 12 12 |
 | new/atoms/lesson-tier-options.mjs | 3 | — | const out = [{ v: '', t: T.k1 + (c.lessonPri | — | — |
 | new/atoms/lessons-in-term.mjs | 3 | — | — | — | 52 12 12 |
+| new/atoms/maps-search-url.mjs | 3 | — | const q = [address, city].map(cleanStop).fil | — | — |
 | new/atoms/match-all.mjs | 3 | — | const pool = [...allOpen] | — | — |
 | new/atoms/merge-families-by-fields.mjs | 3 | — | const out = { ...base } | — | — |
 | new/atoms/merge-supporters-by-fields.mjs | 3 | — | const out = { ...base } | — | — |

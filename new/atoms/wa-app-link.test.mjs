@@ -1,4 +1,10 @@
-import { waAppLink } from './wa-app-link.mjs';
+import { waAppLink as __pure_waAppLink } from './wa-app-link.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_waAppLink_WA_APP_LINK_T = {
+  k1: "whatsapp://send?phone=",
+  k2: "&text=",
+};
+const waAppLink = (...a) => __pure_waAppLink(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_waAppLink_WA_APP_LINK_T);
 // שקע waDigits — מימוש-inline כחוזה wa-digits (בדיקת-אטום לא מייבאת אטום — חוק-חיווט):
 const waDigits = (phone) => { let d = (phone || '').replace(/\D/g, ''); if (!d) return null; if (d.startsWith('00972')) d = '972' + d.slice(5); else if (d.startsWith('00')) d = d.slice(2); if (d.startsWith('9720')) d = '972' + d.slice(4); if (!d.startsWith('972') && !d.startsWith('0') && (d.length === 8 || d.length === 9)) d = '0' + d; if (d.startsWith('0')) { if (d.length === 9 || d.length === 10) d = '972' + d.slice(1); else return null; } if (d.length < 8 || d.length > 15) return null; return d; };
 let f = 0;
