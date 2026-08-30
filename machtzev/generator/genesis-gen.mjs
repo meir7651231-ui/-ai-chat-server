@@ -180,8 +180,18 @@ function generate(slug, specText) {
   for (const part of parts) {
     if (part.role !== 'calc') continue;
     const pendingHebArg = (s) => constFor(s, 'calc_arg');
+    const wrapCall = (f, args) => `${f.name}(${args.join(', ')})${f.ret === 'String' || f.ret === 'String?' ? '' : '.toString()'}${f.ret === 'String?' ? " ?? ''" : ''}`;
     let call = null, fnHit = null;
-    const rule = LOGIC_RULES.find(r => part.txt.includes(r.match));
+    // 📌 עיגון-מפורש '(fnName)' בסוף חלק-חישוב ⇒ האטום המדויק — לבקשות שהמכונה כותבת לעצמה
+    const pinM = part.txt.match(/\(([a-z]\w*)\)\s*$/);
+    if (pinM) {
+      const pf = atlas.functions.find(f => f.name === pinM[1]);
+      if (pf) {
+        const args = bindArgs(pf, part, pendingHebArg, ['textfield', 'chip'].includes(parentOf.get(part)?.role));
+        if (args) { fnHit = pf; call = wrapCall(pf, args); part.label = part.label.replace(/\s*\([a-z]\w*\)\s*$/, ''); }
+      }
+    }
+    const rule = !fnHit && LOGIC_RULES.find(r => part.txt.includes(r.match));
     if (rule) { fnHit = atlas.functions.find(f => f.name === rule.fn); call = rule.call; }
     if (!fnHit) {
       // התאמה-אוטומטית: חפיפת-מילים בין הבקשה לתיאור-העצמי; רק פונקציות-ערך ניתנות-לכיול
@@ -194,7 +204,7 @@ function generate(slug, specText) {
       }
       if (best) {
         const args = bindArgs(best, part, pendingHebArg, ['textfield', 'chip'].includes(parentOf.get(part)?.role));
-        if (args) { fnHit = best; call = `${best.name}(${args.join(', ')})${best.ret === 'String' || best.ret === 'String?' ? '' : '.toString()'}${best.ret === 'String?' ? " ?? ''" : ''}`; }
+        if (args) { fnHit = best; call = wrapCall(best, args); }
       }
     }
     if (fnHit && call) {
@@ -202,6 +212,18 @@ function generate(slug, specText) {
       part.role = 'stat';
       imports.add(`import '../${fnHit.shelf.replace(/^new\//, '')}/${fnHit.file}';`);
     } else part.role = 'row';                                         // אין-גשר ⇒ שורה כנה, לא המצאה
+  }
+
+  // 🔗 שרשרת-חישובים: כמה ילדי-'חישוב' תחת קלט אחד ⇒ צינור אמיתי — פלט כל שלב מוזרם לבא.
+  // שלב 1 ניזון מהקלט (__FIELD__); שלב N מקבל את ביטוי שלב N-1 (הביטוי תמיד String ⇒ תואם-טיפוס).
+  for (const n of nodes) {
+    if (!['textfield', 'chip'].includes(n.part.role)) continue;
+    let prev = '__FIELD__';
+    for (const c of n.children) {
+      if (!c.calcExpr || !c.calcExpr.includes('__FIELD__')) continue;
+      c.calcExpr = c.calcExpr.replace('__FIELD__', prev);
+      prev = '(' + c.calcExpr + ')';
+    }
   }
 
   const fillProp = (a, name, part, shared) => {
@@ -407,44 +429,87 @@ function writeSelfEntry() {
 // 🎲 מצב-אלתור: הוראה-חופשית מהבעלים ("תבחר N אטומים רנדומליים תחבר בין ותוציא יכולת חדשה").
 // המנוע לבדו: מגריל N אטומים ברי-מילוי (זרע-יומי — יכולת חדשה כל יום), מסווג מפעילים/מציגים,
 // ובוחר את החיבורים: שדה⇒חישוב-חי · מתג⇒שער-נראות · השאר מוזנים/מוצגים. הפלט = spec רגיל.
-// 🎲 מצב-אלתור v2 — צינור-חי (ביקורת-בעלים: 'איפה הדאטה ואיפה היכולת'):
-// המנוע מאתר לבדו פונקציה שמכריזה תחום-ערכים (const list בגופה), מחלץ את הדאטה האמיתי,
-// ובונה צינור שכל חוליה צורכת את קודמתה: תחום ⇒ chips ⇒ הבחירה מוזרמת לפונקציה ⇒ תוצאה.
-function writeImprovSpec() {
+// 🎲 מצב-אלתור v3 — שרשרת-חמישה (ביקורת-בעלים: 'לא אטום-לוגיקה אחד — חמישה, מחוברים,
+// יכולת חדשה'): המנוע מגריל 5 אטומי-לוגיקה שונים ומשרשר אותם לצינור אחד — פלט כל שלב
+// מוזרם לשלב הבא וכל שלב מוצג חי. ההתחלה: אטום עם תחום-ערכים מוצהר ⇒ chips מהדאטה שלו.
+async function writeImprovSpec() {
   const insPath = path.join(HERE, 'instructions/improv.txt');
   if (!fs.existsSync(insPath)) return;
   const ins = fs.readFileSync(insPath, 'utf8').trim();
   const SM = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/self-model.json'), 'utf8'));
   let seed = parseInt(new Date().toISOString().slice(0, 10).replace(/-/g, '')) + ins.length;
   const rnd = () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
-  // מועמדי-צינור: פונקציה String⇒String עם תיאור-עברי ותחום-ערכים מוצהר בגופה
-  const cands = [];
+  // חוליות-שרשרת: פונקציה בת פרמטר-String יחיד שמחזירה ערך — כל אחת יכולה לצרוך את פלט קודמתה
+  // (הביטוי המשורשר תמיד String ⇒ כל צירוף של 5 תקין-טיפוסית). דדופ לפי-שם (התנגשות-import).
+  const RETS3 = new Set(['String', 'String?', 'int', 'bool', 'double', 'num']);
+  const byName = new Map();
   for (const f of atlas.functions) {
-    if (!(f.ret === 'String' && f.params.length === 1 && /^String/.test(f.params[0].type) && f.he.length >= 2)) continue;
+    if (!(RETS3.has(f.ret) && f.params.length === 1 && /^String\??$/.test(f.params[0].type.trim()) && f.he.length >= 1)) continue;
+    if (!byName.has(f.name)) byName.set(f.name, f);
+  }
+  const pool = [...byName.values()];
+  if (pool.length < 5) return;
+  // התחלה מועדפת: חוליה עם תחום-ערכים מוצהר בגופה ⇒ ה-chips = הדאטה האמיתית של האטום
+  const starts = [];
+  for (const f of pool) {
     try {
-      const src = fs.readFileSync(path.join(ROOT, f.shelf, f.file), 'utf8');
-      const dm = src.match(/const \w+ = \[([^\]]+)\]/);
+      const dm = fs.readFileSync(path.join(ROOT, f.shelf, f.file), 'utf8').match(/const \w+ = \[([^\]]+)\]/);
       if (!dm) continue;
       const domain = [...dm[1].matchAll(/'([^']+)'/g)].map(m => m[1]);
-      if (domain.length >= 2 && domain.length <= 6) cands.push({ fn: f, domain });
+      if (domain.length >= 2 && domain.length <= 6) starts.push({ fn: f, domain });
     } catch { }
   }
-  if (!cands.length) return;
-  const pick = cands[Math.floor(rnd() * cands.length)];
+  // 🧪 בחינה-עצמית: לכל חוליה יש תאום-JS (new/atoms) — המנוע מריץ את המועמדים על הדאטה
+  // האמיתית ובוחר שרשרת שבה כל שלב משנה את הערך באופן-נראה ("היכולת הכי טובה", לא עיוורת).
+  const twins = new Map();
+  for (const f of pool) {
+    const tp = path.join(ROOT, 'new/atoms', path.basename(f.file).replace(/\.dart$/, '.mjs'));
+    if (!fs.existsSync(tp)) continue;
+    try { const m = await import('file://' + tp); if (typeof m[f.name] === 'function') twins.set(f.name, m[f.name]); } catch { }
+  }
+  const testable = starts.filter(s => twins.has(s.fn.name));
+  const start = testable.length ? testable[Math.floor(rnd() * testable.length)] : (starts.length ? starts[Math.floor(rnd() * starts.length)] : null);
+  if (!start) return;
+  // עוקבים אחרי וקטור-הערכים (ערך פר-בחירה): כל חוליה חייבת (1) לשנות-נראה, (2) להישאר
+  // קריאה-לתצוגה, (3) לשמר הבחנה בין הבחירות — שהצינור יגיב לבחירת-המשתמש עד סופו.
+  const chain = [start.fn];
+  let values = start.domain.slice(0, 6);
+  try { values = values.map(v => String(twins.get(start.fn.name)?.(v) ?? v)); } catch { }
+  while (chain.length < 5) {
+    const cands2 = pool.filter(f => twins.has(f.name) && !chain.includes(f));
+    if (!cands2.length) break;
+    const order = [...cands2].sort(() => rnd() - 0.5);           // סדר-הגרלה (זרע-יומי)
+    const evalC = (c) => {
+      try {
+        const outs = values.map(v => String(twins.get(c.name)(v)));
+        if (outs.some(o => o.trim() === '' || o.length > 40)) return null;
+        return { outs, changed: outs.some((o, i) => o !== values[i]), distinct: new Set(outs).size };
+      } catch { return null; }
+    };
+    let hit = null;
+    for (const c of order) { const e = evalC(c); if (e && e.changed && e.distinct >= 2) { hit = { c, e }; break; } }
+    if (!hit) for (const c of order) { const e = evalC(c); if (e && e.changed) { hit = { c, e }; break; } }
+    if (!hit) { const c = order[0]; hit = { c, e: evalC(c) || { outs: values } }; }
+    chain.push(hit.c); values = hit.e.outs;
+  }
+  if (chain.length < 5) return;
+  const inputLine = start
+    ? `אטום ChipWrap ${start.fn.he.join(' ')}: ${start.domain.join(' / ')}`
+    : `שדה ${SM.phrases.improvType}`;
   const lines = [
-    'יכולת מאולתרת - צינור חי:',
+    'יכולת מאולתרת - שרשרת חמישה:',
     `הירו 🎲 ${SM.phrases.improvHero} | ${ins}`,
-    `כותרת ${SM.phrases.pipeTitle}`,
-    `אטום ChipWrap ${pick.fn.he.join(' ')}: ${pick.domain.join(' / ')}`,
-    `  חישוב ${pick.fn.he.join(' ')}`,
-    `באנר ${SM.phrases.pipeBanner}`,
+    `כותרת ${SM.phrases.chainTitle}`,
+    inputLine,
+    ...chain.map(f => `  חישוב ${f.he.join(' ')} (${f.name})`),
+    `באנר ${SM.phrases.chainBanner}`,
   ];
   fs.writeFileSync(path.join(SPECS, 'improv.txt'), lines.join('\n') + '\n');
 }
 
 // ── CLI ──
 fs.mkdirSync(SPECS, { recursive: true });
-writeImprovSpec();
+await writeImprovSpec();
 writeSelfEntry();
 const [slugArg, specArg] = process.argv.slice(2);
 if (slugArg && specArg) fs.writeFileSync(path.join(SPECS, slugArg + '.txt'), specArg + '\n');

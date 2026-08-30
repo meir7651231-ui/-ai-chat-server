@@ -2,7 +2,7 @@
  "counts": {
   "widgets": 381,
   "functions": 438,
-  "data": 701
+  "data": 705
  },
  "widgets": [
   {
@@ -17794,6 +17794,26 @@
   },
   {
    "name": "gen_improv_stat_label",
+   "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_stat_label2",
+   "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_stat_label3",
+   "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_stat_label4",
+   "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_stat_label5",
    "file": "auto/gen_improv_content.dart",
    "shelf": "new/dart-data-bs"
   },
