@@ -1,5 +1,8 @@
 /** בדיקת-קצה · קופסת lib-ics — דרך הקופסה בלבד (חוק-4). מוכיחה את דוגמאות-החוזה. */
 import { icsEscape, foldIcsLine, buildIcs, downloadIcs } from './lib-ics.mjs';
+const LIB_ICS_TERMS = {
+  k1: "text/calendar;charset=utf-8",
+};   // צילום-מקומי (מנוע-הטיהור v6 — מגני-המקור עודכנו לצורה החדשה)
 let f = 0;
 const now = new Date(Date.UTC(2026, 7, 24, 10, 0, 0));
 
@@ -61,7 +64,7 @@ downloadIcs('cal.ics', empty, {
 if (notified !== 0) { console.error('✗ notify נקרא כשמותר'); f = 1; }
 if (calls[0][0] !== 'createElement' || calls[0][1] !== 'a') { console.error('✗ createElement'); f = 1; }
 const cou = calls.find(c => c[0] === 'createObjectURL');
-if (!cou || cou[1] !== true || cou[2] !== 'text/calendar;charset=utf-8') { console.error('✗ Blob/mime'); f = 1; }
+if (!cou || cou[1] !== true || cou[2] !== LIB_ICS_TERMS.k1) { console.error('✗ Blob/mime'); f = 1; }
 if (!calls.some(c => c[0] === 'download' && c[1] === 'cal.ics')) { console.error('✗ download filename'); f = 1; }
 if (!calls.some(c => c[0] === 'click')) { console.error('✗ click'); f = 1; }
 if (!calls.some(c => c[0] === 'revoke' && c[1] === 'blob:zzz')) { console.error('✗ revoke'); f = 1; }
@@ -84,7 +87,7 @@ if (src.indexOf('guardExport(') > src.indexOf('createElement(')) { console.error
 // ב) buildIcs מזריק את שני השכנים כשקעים
 if (!src.includes('buildIcsAtom(occurrences, calName, now, icsEscape, foldIcsLine)')) { console.error('✗ מגן: חיווט buildIcs השתנה'); f = 1; }
 // ג) מילון-הקופסה verbatim (mime בלי BOM · חלון-שחרור)
-if (!src.includes("'text/calendar;charset=utf-8'")) { console.error('✗ מגן: mime השתנה'); f = 1; }
+if (!src.includes("LIB_ICS_TERMS.k1")) { console.error('✗ מגן: mime השתנה'); f = 1; }
 if (!/REVOKE_MS = 5000/.test(src)) { console.error('✗ מגן: חלון-שחרור השתנה'); f = 1; }
 
 if (f) process.exit(1);

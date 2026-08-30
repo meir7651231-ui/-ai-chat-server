@@ -11,10 +11,11 @@ import { BUILD_ICS_T as __d_buildIcs_BUILD_ICS_T } from '../atoms/build-ics-stri
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const buildIcsAtom = (...a) => __pure_buildIcs(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_buildIcs_BUILD_ICS_T);
 import { guardExport } from '../atoms/guard-export.mjs';
+import { LIB_ICS_TERMS } from '../atoms/lib-ics-terms.mjs';
 
 // ── מילון-הקופסה (הכרעות-הצבה, verbatim מ-maor/src/lib/ics.ts:132-139) ──
 // mime יומן, בלי BOM (בניגוד ל-CSV — יומנים לא אוהבים BOM). — ics.ts:132,136
-const CAL_MIME = 'text/calendar;charset=utf-8';
+const CAL_MIME = LIB_ICS_TERMS.k1;
 // חלון-שחרור ה-object-URL אחרי ה-click. — ics.ts:139
 const REVOKE_MS = 5000;
 

@@ -1,6 +1,9 @@
 /** בדיקת-קצה · קופסת csvx — דרך הקופסה בלבד (חוק-4; מייבאת רק את הקופסה-שלה).
  *  ה-DoD נכתב לפני הקוד ב-csvx.contract.md §"דוגמאות מחייבות" — כאן ההוכחה. */
 import assert from 'node:assert';
+const CSVX_TERMS = {
+  k1: "text/csv;charset=utf-8",
+};   // צילום-מקומי (מנוע-הטיהור v6 — מגני-המקור עודכנו לצורה החדשה)
 import { readFileSync } from 'node:fs';
 import {
   csvEscape, toCsv, decodeCsvBuffer, readCsvFileText, parseCsv, parseAnyDate, downloadCsv,
@@ -72,7 +75,7 @@ eq(txt, 'שלום', 'readCsvFileText decode-מחווט');
     createObjectURL: (blob) => { capturedBlob = blob; return 'blob:u'; },
     revokeObjectURL: () => {}, setTimeout: (_fn, m) => { ms = m; },
   });
-  ok(capturedBlob && capturedBlob.type === 'text/csv;charset=utf-8', 'downloadCsv mime=CSV+BOM');
+  ok(capturedBlob && capturedBlob.type === CSVX_TERMS.k1, 'downloadCsv mime=CSV+BOM');
   ok(el.download === 'report.csv', 'downloadCsv שם-קובץ');
   ok(el.href === 'blob:u', 'downloadCsv href=object-url');
   ok(clicked === 1, 'downloadCsv click נקרא');
@@ -85,7 +88,7 @@ eq(txt, 'שלום', 'readCsvFileText decode-מחווט');
 
 /* 🛡 מגן-הכרעה: הבדיקה קוראת את מקור-הקופסה ומאשרת הכרעות verbatim (דפוס theme.test). */
 const src = readFileSync(new URL('./csvx.mjs', import.meta.url), 'utf8');
-ok(src.includes("const CSV_MIME = 'text/csv;charset=utf-8';"), 'מגן: CSV_MIME verbatim (csvx.ts:30)');
+ok(src.includes("const CSV_MIME = CSVX_TERMS.k1;"), 'מגן: CSV_MIME verbatim (csvx.ts:30)');
 ok(src.includes('const REVOKE_MS = 5000;'), 'מגן: REVOKE_MS=5000 (csvx.ts:33)');
 ok(src.includes('toCsvAtom(rows, csvEscape)'), 'מגן: toCsv מחווט escape=csvEscape');
 ok(src.includes('readCsvFileTextAtom(file, decodeCsvBuffer)'), 'מגן: readCsvFileText מחווט decodeCsvBuffer');

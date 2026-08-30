@@ -1,5 +1,9 @@
 /** בדיקת-קצה · קופסת-זיהוי-השיחה — זרימה מלאה מספר⇒כרטיס-שיחה על db-אמת. */
 import { identifyCaller, kindLabel, screenPop, phoneKey } from './caller-id.mjs';
+const CALLER_ID_TERMS = {
+  k1: "family",
+  k2: "member",
+};   // צילום-מקומי (מנוע-הטיהור v6 — מגני-המקור עודכנו לצורה החדשה)
 import assert from 'node:assert';
 
 const db = {
@@ -16,20 +20,20 @@ const cfgBiz = { terms: { 'entity.family': 'לקוח', 'entity.supporter': 'לי
 // 1+3) זיהוי בכל הצורות של אותו מספר
 for (const raw of ['0501234567', '+972-50-1234567', '00972501234567', '050 123 4567']) {
   const c = identifyCaller(db, raw);
-  assert.strictEqual(c?.kind, 'family', raw);
+  assert.strictEqual(c?.kind, CALLER_ID_TERMS.k1, raw);
   assert.strictEqual(c.id, 'F1');
 }
 // 2) קצר ⇒ null
 assert.strictEqual(identifyCaller(db, '12345'), null);
 // סדר-קדימות: בן-משפחה לפני תורם
-assert.strictEqual(identifyCaller(db, '0521111111').kind, 'member');
+assert.strictEqual(identifyCaller(db, '0521111111').kind, CALLER_ID_TERMS.k2);
 assert.strictEqual(identifyCaller(db, '0532222222').kind, 'supporter');
 assert.strictEqual(identifyCaller(db, '0543333333').kind, 'volunteer');
 assert.strictEqual(identifyCaller(db, '0554444444').kind, 'coordinator');
 
 // 4) white-label חי: בלי דריסות = היסטורי; עם = נדרס
-assert.strictEqual(kindLabel(cfg, 'family'), 'משפחה');
-assert.strictEqual(kindLabel(cfgBiz, 'family'), 'לקוח');
+assert.strictEqual(kindLabel(cfg, CALLER_ID_TERMS.k1), 'משפחה');
+assert.strictEqual(kindLabel(cfgBiz, CALLER_ID_TERMS.k1), 'לקוח');
 assert.strictEqual(kindLabel(cfgBiz, 'supporter'), 'ליד');
 
 // 5) כרטיס-שיחה מלא: משפחה ⇒ הקשר (מסירה פתוחה אחת, שיבוץ פעיל אחד); תורם ⇒ בלי

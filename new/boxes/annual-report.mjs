@@ -13,6 +13,7 @@ import { ANNUAL_ALL_LINES_T as __d_annualAllLines_ANNUAL_ALL_LINES_T } from '../
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const annualAllLines = (...a) => __pure_annualAllLines(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_annualAllLines_ANNUAL_ALL_LINES_T);
 import { guardExport } from '../atoms/guard-export.mjs';
+import { ANNUAL_REPORT_TERMS } from '../atoms/annual-report-terms.mjs';
 
 // ── שקע-פורמט (הכרעת-הקופסה): ₪ ברירת-מחדל / $, ללא-עיגול, he-IL ──
 //    (במקור money — עוזר פרטי ב-annualReport.ts:41-43; לא-מיוצא ⇒ לא-אטום)
@@ -36,7 +37,7 @@ export const reportText = (lines) => BOM + lines.join('\n');
 export function downloadAnnualReport({ filename, lines }, io) {
   if (!guardExport(io.blocked, io.notify)) return false; // 🔐 core.export כבוי בכרטיס-העובד
   const a = io.createAnchor();
-  a.href = io.makeBlobUrl(reportText(lines), 'text/plain;charset=utf-8');
+  a.href = io.makeBlobUrl(reportText(lines), ANNUAL_REPORT_TERMS.k1);
   a.download = filename;
   a.click();
   io.schedule(() => io.revokeUrl(a.href), 5000);

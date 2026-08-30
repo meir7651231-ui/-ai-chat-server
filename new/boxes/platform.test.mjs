@@ -1,6 +1,10 @@
 /** בדיקת-קצה: קופסת-platform דרך הקופסה בלבד — כל 24 החוטים המחווטים + מגן-הכרעה.
  *  DoD (דיבר 12): node platform.test.mjs ⇒ exit 0, "✓ קופסת-platform". */
 import * as P from './platform.mjs';
+const PLATFORM_TERMS = {
+  k1: "default",
+  k2: "or-rishon",
+};   // צילום-מקומי (מנוע-הטיהור v6 — מגני-המקור עודכנו לצורה החדשה)
 import { readFileSync } from 'node:fs';
 import assert from 'node:assert';
 let f = 0;
@@ -19,7 +23,7 @@ chk(P.MODULE_LABELS.shop7 === 'חלוקה', 'MODULE_LABELS');
 // ── קונפיג-לידה + קישורים ──
 const born = P.allOffConfig('x', 'ארגון');
 chk(born.modules.families === false && born.modules.shop7 === false, 'allOffConfig all-off');
-chk(born.theme === 'or-rishon' && JSON.stringify(born.features) === '{}', 'allOffConfig ברירת-מחדל');
+chk(born.theme === PLATFORM_TERMS.k2 && JSON.stringify(born.features) === '{}', 'allOffConfig ברירת-מחדל');
 chk(P.orgLink('https://a.co', '/', 'x') === 'https://a.co/?org=x', 'orgLink');
 
 // ── מייל וקודים ──
@@ -73,7 +77,7 @@ assert.deepStrictEqual(P.removeMember({ members: ['e@o.co', 'a@o.co'], memberCon
 
 /* 🛡 מגן-הכרעה — קורא את מקור-הקופסה ומאשר הכרעות verbatim (דפוס theme.test) */
 const src = readFileSync(new URL('./platform.mjs', import.meta.url), 'utf8');
-chk(/theme:\s*'or-rishon'/.test(src), 'מגן: קונפיג-הלידה theme=or-rishon');
+chk(/theme:\s*PLATFORM_TERMS.k2/.test(src), 'מגן: קונפיג-הלידה theme=or-rishon');
 chk(!/from '\.\.\/boxes\//.test(src) && !/from '\.\/[^']*\.mjs'/.test(src), 'מגן: אפס import-קופסה (חוק-2)');
 chk(/effectiveConfigForAtom\([^)]*GRANTABLE_STAFF_FEATURES/.test(src), 'מגן: תפר-הדלקה-פר-עובד מזריק את GRANTABLE');
 

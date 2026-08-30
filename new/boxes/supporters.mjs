@@ -88,6 +88,7 @@ import { parseAnyDate } from '../atoms/parse-any-date.mjs';
 import { parseCsv } from '../atoms/parse-csv.mjs';
 import { planAddName as __pure_planAddName } from '../atoms/plan-add-name.mjs';
 import { PLAN_ADD_NAME_T as __d_planAddName_PLAN_ADD_NAME_T } from '../atoms/plan-add-name-strings.mjs';
+import { SUPPORTERS_TERMS } from '../atoms/supporters-terms.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const planAddNameAtom = (...a) => __pure_planAddName(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_planAddName_PLAN_ADD_NAME_T);
 
@@ -100,7 +101,7 @@ const planAddNameAtom = (...a) => __pure_planAddName(...a, ...Array(Math.max(0, 
  *  ברירת-מחדל = החלטת-קופסה (LAW: תיקון-בעלים לחוק-5), לא אטום. */
 function emptyAyin() {
   return {
-    stage: 'new', note: '', answeredNote: '', answerPushed: false,
+    stage: SUPPORTERS_TERMS.k1, note: '', answeredNote: '', answerPushed: false,
     nextTalk: '', nextTalkTime: '', lastTouch: '',
     names: [], answers: [], log: [], time: [], mat: [],
   };
@@ -112,7 +113,7 @@ function emptyAyin() {
 function fillEmpty(a, b) {
   const out = { ...a };
   Object.keys(b).forEach((k) => {
-    if (k === 'hist') return;
+    if (k === SUPPORTERS_TERMS.k2) return;
     if (!out[k] && b[k]) out[k] = b[k];
   });
   if (a.hist?.length || b.hist?.length) out.hist = [...(a.hist ?? []), ...(b.hist ?? [])];

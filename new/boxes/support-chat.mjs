@@ -22,6 +22,7 @@ import { SORT_SUPPORT_THREADS_T as __d_supportUnread_SUPPORT_UNREAD_T } from '..
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const supportUnread = (...a) => __pure_supportUnread(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_supportUnread_SUPPORT_UNREAD_T);
 import { sortTeamMsgs } from '../atoms/sort-team-msgs.mjs';
+import { SUPPORT_CHAT_TERMS } from '../atoms/support-chat-terms.mjs';
 
 // ── החיווט (גרף-הקריאות של supportChat.ts, סוקטים מוזרקים) ──
 // תקרת-האורך = הכרעת-קופסה: האטום מקבל שקע, הקופסה מזריקה את SUPPORT_MSG_MAX (מקור:36-38).
@@ -34,8 +35,8 @@ const isSendableSupportText = (raw) => _isSendableSupportText(raw, sanitizeSuppo
 // מפנה שכן חופשי ⇒ לא ניתן-להזרקה; הסדר שייך לקופסה). verbatim מ-supportChat.ts:104-115.
 const sortSupportThreads = (threads) =>
   [...threads].sort((a, b) => {
-    const ua = supportUnread(a, 'admin');
-    const ub = supportUnread(b, 'admin');
+    const ua = supportUnread(a, SUPPORT_CHAT_TERMS.k1);
+    const ub = supportUnread(b, SUPPORT_CHAT_TERMS.k1);
     if ((ua > 0) !== (ub > 0)) return ua > 0 ? -1 : 1; // לא-נקרא ראשון
     const la = a.lastAt ?? '';
     const lb = b.lastAt ?? '';

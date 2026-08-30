@@ -36,10 +36,11 @@ import { canIssueReceipt } from '../atoms/can-issue-receipt.mjs';
 import { approveMember as approveMemberAtom } from '../atoms/approve-member.mjs';
 import { setEmployeeOverride as setEmployeeOverrideAtom } from '../atoms/set-employee-override.mjs';
 import { removeMember as removeMemberAtom } from '../atoms/remove-member.mjs';
+import { PLATFORM_TERMS } from '../atoms/platform-terms.mjs';
 
 // ── שקע-הזרעה (הכרעת-קופסה): קונפיג-הלידה verbatim מ-maor/src/types/config.ts:404-410.
 // ברירת-מחדל חיה בקופסה — לא אטום (חוק-6: קונפיג≠חלק-מכונה) ולא IO. ארגון נולד all-off מכאן.
-const DEFAULT_CONFIG = { slug: 'default', orgName: '', theme: 'or-rishon', modules: {}, features: {} };
+const DEFAULT_CONFIG = { slug: PLATFORM_TERMS.k1, orgName: '', theme: PLATFORM_TERMS.k2, modules: {}, features: {} };
 
 // ── שכנים-מחווטים: כל קריאת-שכן שבמקור נבנית כאן כהזרקת-שקע (חוק-1/3) ──
 const wiredIsOrgManager = (email, org) => isOrgManagerAtom(email, org, normEmail);

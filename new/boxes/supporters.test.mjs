@@ -1,6 +1,10 @@
 /** בדיקת-קצה: קופסת-התומכים — חיווט 41-החוטים דרך הקופסה בלבד (DoD: exit 0).
  *  מייבאת רק את הקופסה-שלה (מגילה, דיבר 12). */
 import assert from 'node:assert';
+const SUPPORTERS_TERMS = {
+  k1: "new",
+  k2: "hist",
+};   // צילום-מקומי (מנוע-הטיהור v6 — מגני-המקור עודכנו לצורה החדשה)
 import { readFileSync } from 'node:fs';
 import * as B from './supporters.mjs';
 
@@ -86,7 +90,7 @@ chk('isoToday-injected', B.isoToday(() => FIXED), FIXED);
 /* 🛡 מגן-הכרעה: ההחלטות חיות בקופסה verbatim — נקראות מהמקור עם fs. */
 const src = readFileSync(new URL('./supporters.mjs', import.meta.url), 'utf8');
 // (1) emptyAyin — ברירת-המחדל של תיק-המעקב, ביט-זהה ל-domain.
-for (const frag of ["stage: 'new'", 'names: [], answers: [], log: [], time: [], mat: []']) {
+for (const frag of ["stage: SUPPORTERS_TERMS.k1", 'names: [], answers: [], log: [], time: [], mat: []']) {
   if (!src.includes(frag)) { console.error(`✗ מגן emptyAyin: "${frag}" נעדר`); f = 1; }
 }
 // (2) fillEmpty — hist/ayinNames מצטרפים (מדיניות-המיזוג).

@@ -88,37 +88,38 @@ import { FAVICON_DATA_URI_T as __d_faviconDataUri_FAVICON_DATA_URI_T } from '../
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const atomFaviconDataUri = (...a) => __pure_faviconDataUri(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_faviconDataUri_FAVICON_DATA_URI_T);
 import { applyConfig as atomApplyConfig } from '../atoms/apply-config.mjs';
+import { LIB_CONFIG_TERMS } from '../atoms/lib-config-terms.mjs';
 
 // ── שקעי-נתונים (הכרעות-הקופסה) — מיושרים ביט-לביט למקור ──
 // תשעת מודולי-הניווט הכפופים לטוגל-מודול (maor/src/types + config.ts:20-30).
-const NAV_MODULE_KEYS = ['families', 'courses', 'calendar', 'diary', 'supporters', 'reports', 'tzedaka', 'shop', 'shop7'];
+const NAV_MODULE_KEYS = [LIB_CONFIG_TERMS.k1, LIB_CONFIG_TERMS.k2, LIB_CONFIG_TERMS.k3, LIB_CONFIG_TERMS.k4, LIB_CONFIG_TERMS.k5, LIB_CONFIG_TERMS.k6, LIB_CONFIG_TERMS.k7, LIB_CONFIG_TERMS.k8, LIB_CONFIG_TERMS.k9];
 // ברירת-המחדל של הקונפיג (types/config.ts:404-410).
-const DEFAULT_CONFIG = { slug: 'default', orgName: '', theme: 'or-rishon', modules: {}, features: {} };
+const DEFAULT_CONFIG = { slug: LIB_CONFIG_TERMS.k10, orgName: '', theme: LIB_CONFIG_TERMS.k11, modules: {}, features: {} };
 // allowlist-ההרחבות (types/config.ts:385-388).
-const INTEGRATION_KEYS = ['receipts', 'payments', 'whatsapp', 'sms', 'phone', 'gcal', 'drive', 'sheets', 'maps', 'esign', 'ai', 'campaign', 'mail'];
+const INTEGRATION_KEYS = [LIB_CONFIG_TERMS.k12, LIB_CONFIG_TERMS.k13, LIB_CONFIG_TERMS.k14, LIB_CONFIG_TERMS.k15, LIB_CONFIG_TERMS.k16, LIB_CONFIG_TERMS.k17, LIB_CONFIG_TERMS.k18, LIB_CONFIG_TERMS.k19, LIB_CONFIG_TERMS.k20, LIB_CONFIG_TERMS.k21, 'ai', LIB_CONFIG_TERMS.k22, LIB_CONFIG_TERMS.k23];
 // הגדרות-מחרוזת מותרות פר-הרחבה (types/config.ts:395-402).
 const INTEGRATION_SETTING_KEYS = {
-  payments: ['provider', 'payUrl', 'pullUrl', 'solaPullUrl', 'solaPayUrl'],
-  campaign: ['url'],
-  sheets: ['spreadsheetId'],
-  sms: ['adminPhone'],
-  mail: ['digestTo'],
+  payments: [LIB_CONFIG_TERMS.k24, LIB_CONFIG_TERMS.k25, LIB_CONFIG_TERMS.k26, LIB_CONFIG_TERMS.k27, LIB_CONFIG_TERMS.k28],
+  campaign: [LIB_CONFIG_TERMS.k29],
+  sheets: [LIB_CONFIG_TERMS.k30],
+  sms: [LIB_CONFIG_TERMS.k31],
+  mail: [LIB_CONFIG_TERMS.k32],
 };
 // סגנונות-תנועה מותרים (types/config.ts:21).
-const MOTION_KEYS = ['calm', 'snappy', 'bold'];
+const MOTION_KEYS = [LIB_CONFIG_TERMS.k33, LIB_CONFIG_TERMS.k34, LIB_CONFIG_TERMS.k35];
 // שפות-האתר-הציבורי המוכרות (types/config.ts:65).
 const SITE_LANGS = ['he', 'en', 'yi'];
 // מפתחות-התבניות (templates.ts TEMPLATE_DEFS.map(d=>d.key), סדר-ההגדרה).
-const TEMPLATE_KEYS = ['wa.delivery', 'wa.payment', 'wa.birthday', 'wa.dialer', 'wa.paylink'];
+const TEMPLATE_KEYS = [LIB_CONFIG_TERMS.k36, LIB_CONFIG_TERMS.k37, LIB_CONFIG_TERMS.k38, LIB_CONFIG_TERMS.k39, LIB_CONFIG_TERMS.k40];
 // מפתח דריסת-הריצה בדפדפן (config.ts:12).
-const LS_CONFIG_KEY = 'maor_org_config';
+const LS_CONFIG_KEY = LIB_CONFIG_TERMS.k41;
 
 // ── מילוי-שקע: עוזרי-הטלפוניה (config.ts:153-160 verbatim; אין אטום ייעודי) ──
 /** מחרוזת נקייה מתווי-בקרה (Unicode Cc), מגוזמת (לא-מחרוזת ⇒ ''). */
-const telStr = (v, max) => (typeof v === 'string' ? v.replace(/\p{Cc}/gu, '').trim().slice(0, max) : '');
+const telStr = (v, max) => (typeof v === LIB_CONFIG_TERMS.k42 ? v.replace(/\p{Cc}/gu, '').trim().slice(0, max) : '');
 /** שלוחה — ספרות בלבד עד 8; ריק ⇒ ברירת-המחדל שנמסרה. */
 const telExt = (v, def) => {
-  const s = typeof v === 'string' ? v.replace(/\D/g, '').slice(0, 8) : '';
+  const s = typeof v === LIB_CONFIG_TERMS.k42 ? v.replace(/\D/g, '').slice(0, 8) : '';
   return s || def;
 };
 
@@ -129,7 +130,7 @@ const wiredNormalizeSite = makeNormalizeSite(atomSafeHttpsUrl, SITE_LANGS);
 // היה שכן-מודול; החילוץ השאיר אותו לא-מוצהר). איני רשאי לתקן אטום קיים ⇒ ממלא את
 // השקע דרך globalThis בערך-האטום עצמו, כך שהסגור פותר אותו זהה-למקור (accent-בטוח
 // נשמר, accent-זדוני נזרק). זו הכרעת-חיווט בקופסה, אפס-נגיעה בקובץ-אטום.
-if (typeof globalThis.isSafeAccent !== 'function') globalThis.isSafeAccent = atomIsSafeAccent;
+if (typeof globalThis.isSafeAccent !== LIB_CONFIG_TERMS.k43) globalThis.isSafeAccent = atomIsSafeAccent;
 const wiredNormalizeConfig = makeNormalizeConfig({
   DEFAULT_CONFIG,
   INTEGRATION_KEYS,
@@ -235,7 +236,7 @@ export async function loadOrgConfig({ search, getItem, fetch }) {
   }
   if (slug) {
     try {
-      const res = await fetch(`./c/${slug}/config.json`, { cache: 'no-cache' });
+      const res = await fetch(`./c/${slug}${LIB_CONFIG_TERMS.k44}`, { cache: LIB_CONFIG_TERMS.k45 });
       if (res.ok) {
         const cfg = wiredNormalizeConfig(await res.json());
         if (cfg) return { ...cfg, slug };
@@ -247,16 +248,16 @@ export async function loadOrgConfig({ search, getItem, fetch }) {
   const override = readConfigOverride(getItem);
   if (override && (!slug || override.slug === slug)) return override;
   try {
-    const res = await fetch('./config.json', { cache: 'no-cache' });
+    const res = await fetch(LIB_CONFIG_TERMS.k46, { cache: LIB_CONFIG_TERMS.k45 });
     if (res.ok) {
       const cfg = wiredNormalizeConfig(await res.json());
       // slug זר לא יורש cloudRoot (ראה הערת-המקור config.ts:848-855).
-      if (cfg) return slug ? { ...cfg, slug, cloudRoot: slug === 'default' ? cfg.cloudRoot : false } : cfg;
+      if (cfg) return slug ? { ...cfg, slug, cloudRoot: slug === LIB_CONFIG_TERMS.k10 ? cfg.cloudRoot : false } : cfg;
     }
   } catch {
     /* אין קובץ/רשת — נמשיך לברירת-המחדל */
   }
-  return slug ? { ...DEFAULT_CONFIG, slug, ...(slug !== 'default' ? { cloudRoot: false } : {}) } : DEFAULT_CONFIG;
+  return slug ? { ...DEFAULT_CONFIG, slug, ...(slug !== LIB_CONFIG_TERMS.k10 ? { cloudRoot: false } : {}) } : DEFAULT_CONFIG;
 }
 
 /**
@@ -266,8 +267,8 @@ export async function loadOrgConfig({ search, getItem, fetch }) {
  */
 export function applyTheme(theme, accent, motion, root) {
   root.dataset.theme = theme || DEFAULT_CONFIG.theme;
-  if (accent && atomIsSafeAccent(accent.trim())) root.style.setProperty('--accent', accent.trim());
-  else root.style.removeProperty('--accent');
+  if (accent && atomIsSafeAccent(accent.trim())) root.style.setProperty(LIB_CONFIG_TERMS.k47, accent.trim());
+  else root.style.removeProperty(LIB_CONFIG_TERMS.k47);
   if (motion && MOTION_KEYS.includes(motion)) root.dataset.motion = motion;
   else delete root.dataset.motion;
 }
@@ -281,10 +282,10 @@ export const faviconDataUri = (emoji) => atomFaviconDataUri(emoji);
  */
 export function applyFavicon(emoji, doc) {
   if (!doc) return;
-  let link = doc.querySelector('link[rel="icon"]');
+  let link = doc.querySelector(LIB_CONFIG_TERMS.k48);
   if (!link) {
-    link = doc.createElement('link');
-    link.rel = 'icon';
+    link = doc.createElement(LIB_CONFIG_TERMS.k49);
+    link.rel = LIB_CONFIG_TERMS.k50;
     doc.head.appendChild(link);
   }
   link.href = emoji ? atomFaviconDataUri(emoji) : ATOM_DEFAULT_FAVICON;

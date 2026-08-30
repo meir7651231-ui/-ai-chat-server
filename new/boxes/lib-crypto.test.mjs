@@ -3,6 +3,15 @@
  *  "✓ קופסת lib-crypto" — 7 דוגמאות-החוזה ירוקות + מגן-הכרעה.
  *  מייבאת אך-ורק את הקופסה-שלה (מותר לבדיקת-קופסה). */
 import { readFileSync } from 'node:fs';
+const LIB_CRYPTO_TERMS = {
+  k1: "raw",
+  k2: "PBKDF2",
+  k3: "deriveKey",
+  k4: "SHA-256",
+  k5: "AES-GCM",
+  k6: "encrypt",
+  k7: "decrypt",
+};   // צילום-מקומי (מנוע-הטיהור v6 — מגני-המקור עודכנו לצורה החדשה)
 import {
   genRecoveryKey, encryptDb, isEncrypted, openDek, decryptDb, reencryptDb, rewrapPassword,
 } from './lib-crypto.mjs';
@@ -84,9 +93,9 @@ for (const m of src.matchAll(/^import .*? from '(.+?)';/gm)) {
 // (ב) שקעי-הפרימיטיב verbatim מהמקור
 for (const needle of [
   "crypto.getRandomValues(new Uint8Array(n))",   // rand ← crypto.ts:36
-  "'PBKDF2', false, ['deriveKey']",              // deriveWrapKey ← :40
-  "{ name: 'AES-GCM', length: 256 }",            // ← :44
-  "hash: 'SHA-256'",                             // ← :42
+  "LIB_CRYPTO_TERMS.k2, false, [LIB_CRYPTO_TERMS.k3]",              // deriveWrapKey ← :40
+  "{ name: LIB_CRYPTO_TERMS.k5, length: 256 }",            // ← :44
+  "hash: LIB_CRYPTO_TERMS.k4",                             // ← :42
   "const iv = rand(12);",                        // aesEnc iv ← :52
   "return b64(iv) + ':' + b64(ct);",             // ← :54
 ]) if (!src.includes(needle)) { console.error('✗ מגן: פרימיטיב-מקור שונה — ' + needle); f = 1; }

@@ -30,7 +30,7 @@
 | new/boxes/custom-export.mjs | 18 | — | const NAV_MODULE_KEYS = [ 'families', 'c · const res = { seq, has30 } | ../atoms/exp-field-defs.mjs · ../atoms/exp-field-defs-string · ../atoms/override-column.mjs · ../atoms/build-custom-export.m | 3761 440 12 30 |
 | new/boxes/lib-nedarim-sync.mjs | 18 | — | const extraPhones = [d.phone2, d.phone3].map · const notes = [d.notes, extraPhones.length ? | ../atoms/norm-id.mjs · ../atoms/norm-phone.mjs · ../atoms/norm-search.mjs · ../atoms/norm-search-strings.m | 10 28 999 12 |
 | new/boxes/hebdate.mjs | 17 | ⚠ שם חודש עברי לא-צפוי מ-Intl  | — | ../atoms/heb-parts.mjs · ../atoms/heb-parts-strings.mjs · ../atoms/pad2.mjs · ../atoms/month-he-of.mjs | 30 7000 3761 440 12 |
-| new/boxes/lib-config.mjs | 17 | — | const NAV_MODULE_KEYS = ['families', 'course · const DEFAULT_CONFIG = { slug: 'default', or · const INTEGRATION_KEYS = ['receipts', 'payme | ../atoms/module-on.mjs · ../atoms/feature-on.mjs · ../atoms/donation-split-on.mjs · ../atoms/sup-enforce-on.mjs | — |
+| new/boxes/lib-config.mjs | 17 | — | const NAV_MODULE_KEYS = [LIB_CONFIG_TERMS.k1 · const DEFAULT_CONFIG = { slug: LIB_CONFIG_TE · const INTEGRATION_KEYS = [LIB_CONFIG_TERMS.k | ../atoms/module-on.mjs · ../atoms/feature-on.mjs · ../atoms/donation-split-on.mjs · ../atoms/sup-enforce-on.mjs | — |
 | new/boxes/pricing.mjs | 17 | — | const DEFAULT_INTEGRATION_PRICES = { recei | ../atoms/default-prices.mjs · ../atoms/size-labels.mjs · ../atoms/normalize-prices.mjs · ../atoms/normalize-prices-stri | 60 90 50 40 90 30 |
 | new/atoms/pull-nedarim.mjs | 16 | נדרשת התחברות-ענן · משיכה נכשלה ( | — | root · org · full · reset | — |
 | new/atoms/pull-sola.mjs | 16 | נדרשת התחברות-ענן · משיכה נכשלה ( | — | root · org · default · vault | — |
@@ -50,7 +50,7 @@
 | new/atoms/manual-driver.mjs | 11 | חיוג בלחיצה (טלפון קיים) | const manualDriver = { id: 'manual',  | tel: · manual | — |
 | new/atoms/send-support-message.mjs | 11 | — | — | supportChats · messages · user · supportChats | 120 120 120 |
 | new/boxes/cloud-diff.mjs | 11 | — | const META_KEYS = [ 'orgName', 'orgSite' | ../atoms/entity-collections.mj · ../atoms/col-path.mjs · ../atoms/col-path-strings.mjs · ../atoms/meta-path.mjs | — |
-| new/boxes/platform.mjs | 11 | — | const DEFAULT_CONFIG = { slug: 'default', or | ../atoms/slugify.mjs · ../atoms/org-slug-from-url-str · ../atoms/slugify-data.mjs · ../atoms/is-valid-slug.mjs | — |
+| new/boxes/platform.mjs | 11 | — | const DEFAULT_CONFIG = { slug: PLATFORM_TERM | ../atoms/slugify.mjs · ../atoms/org-slug-from-url-str · ../atoms/slugify-data.mjs · ../atoms/is-valid-slug.mjs | — |
 | new/boxes/search.mjs | 11 | — | const CASCADE = [ruleExact, rulePrefix, rule | ../atoms/levenshtein.mjs · ../atoms/norm-search.mjs · ../atoms/norm-search-strings.m · ../atoms/xlat.mjs | — |
 | new/boxes/vcard-import.mjs | 11 | — | const PHONE_LABELS = { CELL: VCARD_IMPORT_ | ../atoms/parse-vcards.mjs · ../atoms/parse-vcards-strings. · ../atoms/is-junk-contact.mjs · ../atoms/importable-contacts.m | — |
 | new/atoms/ayin-daily-rows.mjs | 10 | ${unit} היום | const rows = [ [T.k1, T.k2, `${unit} · const a = { ...emptyAyin(), ...sp.ayin } | — | — |
@@ -94,7 +94,7 @@
 | new/boxes/families.mjs | 8 | — | — | ../atoms/fmt-date.mjs · ../atoms/iso-today.mjs · ../atoms/iso-local.mjs · ../atoms/age-of.mjs | — |
 | new/boxes/heb-cal-box.mjs | 8 | — | — | ../atoms/cycle-hit.mjs · ../atoms/lin-cycles.mjs · ../atoms/cycle-carry.mjs · ../atoms/step-postpone.mjs | — |
 | new/boxes/ics-feed.mjs | 8 | — | — | ../atoms/mint-feed-token.mjs · ../atoms/read-ics-feed-token.m · ../atoms/publish-ics-feed.mjs · ../atoms/ics-feed-url.mjs | — |
-| new/boxes/lib-ai.mjs | 8 | — | — | ../atoms/thanks-prompt.mjs · ../atoms/thanks-prompt-strings · ../atoms/ask-claude.mjs · maor_ai_key | — |
+| new/boxes/lib-ai.mjs | 8 | — | — | ../atoms/thanks-prompt.mjs · ../atoms/thanks-prompt-strings · ../atoms/ask-claude.mjs · ../atoms/lib-ai-terms.mjs | — |
 | new/boxes/lib-cloud-config.mjs | 8 | — | — | ../atoms/platform-orgs.mjs · ../atoms/platform-requests.mjs · ../atoms/platform-leads.mjs · ../atoms/support-chats.mjs | — |
 | new/boxes/lib-lock.mjs | 8 | — | — | ../atoms/lock-zones.mjs · ../atoms/default-lock-zones.mj · ../atoms/lock-key.mjs · ../atoms/lock-key-strings.mjs | — |
 | new/boxes/names-export.mjs | 8 | — | — | ../atoms/csv-escape.mjs · ../atoms/to-csv.mjs · ../atoms/is-admin.mjs · ../atoms/names-export-terms.mj | — |

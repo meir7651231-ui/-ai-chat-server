@@ -15,10 +15,11 @@ import { readCsvFileText as readCsvFileTextAtom } from '../atoms/read-csv-file-t
 import { parseCsv } from '../atoms/parse-csv.mjs';
 import { parseAnyDate } from '../atoms/parse-any-date.mjs';
 import { guardExport } from '../atoms/guard-export.mjs';
+import { CSVX_TERMS } from '../atoms/csvx-terms.mjs';
 
 // ── מילון-הקופסה (הכרעות-הצבה, verbatim מ-maor/src/lib/csvx.ts) ──
 // סוג-ה-Blob של CSV עם BOM כדי שאקסל יפתח עברית תקינה. — csvx.ts:30
-const CSV_MIME = 'text/csv;charset=utf-8';
+const CSV_MIME = CSVX_TERMS.k1;
 // חלון-שחרור ה-object-URL אחרי ה-click. — csvx.ts:33
 const REVOKE_MS = 5000;
 

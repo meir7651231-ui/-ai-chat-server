@@ -1,6 +1,9 @@
 /** בדיקת-קצה: הקופסה המלאה — כספת-מפתח (nsLsKey/storage מוזרקים) · פרומפט-תודה ·
  *  קריאה-ל-Claude (doFetch מוזרק). DoD: node lib-ai.test.mjs ⇒ exit 0. */
 import { readAiKey, writeAiKey, thanksPrompt, askClaude } from './lib-ai.mjs';
+const LIB_AI_TERMS = {
+  k1: "maor_ai_key",
+};   // צילום-מקומי (מנוע-הטיהור v6 — מגני-המקור עודכנו לצורה החדשה)
 let f = 0;
 
 // שקע-אחסון דמוי, עם מתג-זריקה (מצב-פרטי)
@@ -28,10 +31,10 @@ writeAiKey(id, s, '  sk-abc  ');
 if (s.m.maor_ai_key !== 'sk-abc') { console.error('✗ כתיבה+גזימה'); f = 1; }
 s = makeStore({ maor_ai_key: 'old' });
 writeAiKey(id, s, '   ');
-if ('maor_ai_key' in s.m) { console.error('✗ רווחים ⇒ מחיקה'); f = 1; }
+if (LIB_AI_TERMS.k1 in s.m) { console.error('✗ רווחים ⇒ מחיקה'); f = 1; }
 s = makeStore({ maor_ai_key: 'old' });
 writeAiKey(id, s, '');
-if ('maor_ai_key' in s.m) { console.error('✗ ריק ⇒ מחיקה'); f = 1; }
+if (LIB_AI_TERMS.k1 in s.m) { console.error('✗ ריק ⇒ מחיקה'); f = 1; }
 s = makeStore();
 writeAiKey(org, s, 'sk-y');
 if (s.m['maor_ai_key:org1'] !== 'sk-y') { console.error('✗ מרחב-שם בכתיבה'); f = 1; }
@@ -68,7 +71,7 @@ catch (e) { if (e.message !== 'לא התקבלה תשובה — נסו שוב') 
 /* 🛡 מגן-הכרעה: KEY_BASE verbatim + ייבוא-אטומים-בלבד (אפס ייבוא-קופסה). */
 import { readFileSync } from 'node:fs';
 const src = readFileSync(new URL('./lib-ai.mjs', import.meta.url), 'utf8');
-if (!src.includes("const KEY_BASE = 'maor_ai_key';")) { console.error('✗ מגן: KEY_BASE שונה מהמקור'); f = 1; }
+if (!src.includes("const KEY_BASE = LIB_AI_TERMS.k1;")) { console.error('✗ מגן: KEY_BASE שונה מהמקור'); f = 1; }
 const imports = [...src.matchAll(/from\s+'([^']+)'/g)].map((m) => m[1]);
 if (!imports.every((p) => p.startsWith('../atoms/'))) { console.error('✗ מגן: ייבוא שאינו-אטום (חוק-2/3)'); f = 1; }
 if (!imports.includes('../atoms/thanks-prompt.mjs') || !imports.includes('../atoms/ask-claude.mjs')) { console.error('✗ מגן: חסר ייבוא-אטום מהגרף'); f = 1; }

@@ -8,12 +8,13 @@ import { THANKS_PROMPT_T as __d_thanksPrompt_THANKS_PROMPT_T } from '../atoms/th
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const thanksPromptAtom = (...a) => __pure_thanksPrompt(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_thanksPrompt_THANKS_PROMPT_T);
 import { askClaude as askClaudeAtom } from '../atoms/ask-claude.mjs';
+import { LIB_AI_TERMS } from '../atoms/lib-ai-terms.mjs';
 
 // ── הכרעות-החיווט של הקופסה (מילון-הקבועים) ──
 // בסיס-מפתח-הכספת. המפתח **מקומי-למכשיר בלבד** (בדיוק כמו נעילת-ה-PIN — לא בקונפיג,
 // לא בענן, לא בגיבוי); ה-nsLsKey (ממרחב-השמות) עוטף אותו לתחום-הארגון בזמן-הצבה.
 // חוק-6: זו קונפיגורציית-הצבה (שם-מפתח-אחסון), חיה בחיווט. המקור: ai.ts:13.
-const KEY_BASE = 'maor_ai_key';
+const KEY_BASE = LIB_AI_TERMS.k1;
 
 /** קריאת-מפתח-ה-API מהכספת המקומית. שקעים מוזרקים: nsLsKey (מרחב-שם) ·
  *  storage (localStorage-דמוי). חסר ⇒ '' (הכפתור לא מוצג — דורמנטי). storage

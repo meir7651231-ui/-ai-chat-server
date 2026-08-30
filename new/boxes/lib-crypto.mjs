@@ -21,6 +21,7 @@ import { openDek as _openDek } from '../atoms/open-dek.mjs';
 import { decryptDb as _decryptDb } from '../atoms/decrypt-db.mjs';
 import { reencryptDb as _reencryptDb } from '../atoms/reencrypt-db.mjs';
 import { rewrapPassword as _rewrapPassword } from '../atoms/rewrap-password.mjs';
+import { LIB_CRYPTO_TERMS } from '../atoms/lib-crypto-terms.mjs';
 
 // ── שקעי-החיווט: ה-helpers הפרטיים של המקור (crypto.ts:29-66), verbatim ──
 // enc משמש רק את deriveWrapKey (גזירת-הסוד ⇒ בייטים); הקידוד json⇒בייטים חי באטומים.
@@ -37,27 +38,27 @@ const rand = (n) => crypto.getRandomValues(new Uint8Array(n));
 
 /** גזירת מפתח-עטיפה (AES-GCM) מסוד טקסטואלי + מלח, דרך PBKDF2-SHA256. */
 async function deriveWrapKey(secret, salt, iter) {
-  const base = await crypto.subtle.importKey('raw', enc.encode(secret), 'PBKDF2', false, ['deriveKey']);
+  const base = await crypto.subtle.importKey(LIB_CRYPTO_TERMS.k1, enc.encode(secret), LIB_CRYPTO_TERMS.k2, false, [LIB_CRYPTO_TERMS.k3]);
   return crypto.subtle.deriveKey(
-    { name: 'PBKDF2', salt, iterations: iter, hash: 'SHA-256' },
+    { name: LIB_CRYPTO_TERMS.k2, salt, iterations: iter, hash: LIB_CRYPTO_TERMS.k4 },
     base,
-    { name: 'AES-GCM', length: 256 },
+    { name: LIB_CRYPTO_TERMS.k5, length: 256 },
     false,
-    ['encrypt', 'decrypt'],
+    [LIB_CRYPTO_TERMS.k6, LIB_CRYPTO_TERMS.k7],
   );
 }
 
 /** הצפנה: iv אקראי → "iv:ct" ב-base64. */
 async function aesEnc(key, plain) {
   const iv = rand(12);
-  const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, plain);
+  const ct = await crypto.subtle.encrypt({ name: LIB_CRYPTO_TERMS.k5, iv }, key, plain);
   return b64(iv) + ':' + b64(ct);
 }
 
 /** פענוח "iv:ct" — זורק אם המפתח שגוי או הנתונים שונו. */
 async function aesDec(key, blob) {
   const [ivB, ctB] = blob.split(':');
-  const buf = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(ivB) }, key, unb64(ctB));
+  const buf = await crypto.subtle.decrypt({ name: LIB_CRYPTO_TERMS.k5, iv: unb64(ivB) }, key, unb64(ctB));
   return new Uint8Array(buf);
 }
 

@@ -544,7 +544,7 @@ function purifyBox(file, log) {
   const base = file.replace(/\.mjs$/, '');
   const dataBase = base + '-terms';
   if (fs.existsSync(path.join(ATOMS, dataBase + '.mjs'))) return log(`~ ${base}: כבר קיים אטום-מונחים`);
-  const sites = collectStringSites(src).filter(st => /[\u0590-\u05FF]/.test(st.v));  // בקופסאות: עברית בלבד (שלב זה)
+  const sites = collectStringSites(src).filter(st => /[\u0590-\u05FF]/.test(st.v) || /[a-zA-Z]{3,}/.test(st.v));  // עברית + מחרוזות-דומיין
   if (!sites.length) return log(`~ ${base}: אין מחרוזות-עבריות פשוטות`);
   const CONST = base.replace(/-/g, '_').toUpperCase() + '_TERMS';
   const keys = new Map();

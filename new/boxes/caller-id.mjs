@@ -17,6 +17,7 @@ import { FAMILY_CONTEXT_T as __d_familyContext_FAMILY_CONTEXT_T } from '../atoms
 const familyContext = (...a) => __pure_familyContext(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_familyContext_FAMILY_CONTEXT_T);
 import { termOf as __pure_termOf } from '../atoms/term-of.mjs';
 import { INTEGRATION_SETTING_T as __d_termOf_TERM_OF_T } from '../atoms/integration-setting-strings.mjs';
+import { CALLER_ID_TERMS } from '../atoms/caller-id-terms.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const termOf = (...a) => __pure_termOf(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_termOf_TERM_OF_T);
 
@@ -33,6 +34,6 @@ export function screenPop(db, cfg, rawNumber) {
   const caller = identifyCaller(db, rawNumber);
   if (!caller) return null;
   const label = kindLabel(cfg, caller.kind);
-  const famId = caller.kind === 'family' ? caller.id : caller.kind === 'member' ? caller.famId : null;
+  const famId = caller.kind === CALLER_ID_TERMS.k1 ? caller.id : caller.kind === CALLER_ID_TERMS.k2 ? caller.famId : null;
   return { ...caller, label, context: famId ? familyContext(db, famId) : null };
 }
