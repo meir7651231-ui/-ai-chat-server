@@ -136,15 +136,31 @@ function valueIndex(sockets) {
   const idx = new Map();
   for (const { name, value } of sockets) {
     if (typeof value === 'string') idx.set(value, name);
-    else if (Array.isArray(value)) value.forEach((v, i) => { if (typeof v === 'string' && !idx.has(v)) idx.set(v, `${name}[${i}]`); });
-    else if (value && typeof value === 'object')
-      for (const [k, v] of Object.entries(value)) if (typeof v === 'string' && !idx.has(v)) idx.set(v, `${name}['${k}']!`);
+    else if (Array.isArray(value)) {
+      // רשימה מעורבת ⇒ List<dynamic> ⇒ cast-מפורש (strict-casts ב-CI אוסר dynamic⇒String שקט)
+      const allStr = value.every(x => typeof x === 'string');
+      value.forEach((v, i) => { if (typeof v === 'string' && !idx.has(v)) idx.set(v, allStr ? `${name}[${i}]` : `(${name}[${i}] as String)`); });
+    } else if (value && typeof value === 'object') {
+      const allStr = Object.values(value).every(x => typeof x === 'string');
+      for (const [k, v] of Object.entries(value)) if (typeof v === 'string' && !idx.has(v)) idx.set(v, allStr ? `${name}['${k}']!` : `(${name}['${k}'] as String)`);
+    }
   }
   return idx;
 }
-const dartType = (v) => typeof v === 'string' ? 'String' : typeof v === 'number' ? 'num' : typeof v === 'boolean' ? 'bool'
-  : Array.isArray(v) ? (v.every(x => typeof x === 'string') ? 'List<String>' : 'List<dynamic>')
-    : (Object.values(v).every(x => typeof x === 'string') ? 'Map<String, String>' : 'Map<String, dynamic>');
+const dartType = (v) => {
+  if (typeof v === 'string') return 'String';
+  if (typeof v === 'number') return 'num';
+  if (typeof v === 'boolean') return 'bool';
+  if (Array.isArray(v)) {
+    if (!v.length) return 'List<dynamic>';
+    const ts = new Set(v.map(dartType));                            // רקורסיבי: רשימת-זוגות ⇒ List<List<String>>
+    return ts.size === 1 ? `List<${[...ts][0]}>` : 'List<dynamic>';
+  }
+  const vs = Object.values(v || {});
+  if (!vs.length) return 'Map<String, dynamic>';
+  const ts = new Set(vs.map(dartType));
+  return ts.size === 1 ? `Map<String, ${[...ts][0]}>` : 'Map<String, dynamic>';
+};
 const dartVal = (v) => v === null ? 'null'
   : typeof v === 'string' ? "'" + dEsc(v) + "'"
     : typeof v === 'number' || typeof v === 'boolean' ? String(v)
