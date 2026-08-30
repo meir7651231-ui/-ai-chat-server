@@ -99,7 +99,7 @@ stage('הרכבה-מחוללת (gen-screen)', () => {
 });
 
 // ── 4ג · מחולל-הלוחות: חיווט המסכים-המורכבים למקורות-החיים ──
-stage('מנוע-הסינתזה (יכולות-מוזמנות)', () => last(run('machtzev/generator/synth.mjs')), { optional: true });
+stage('מנוע-הסינתזה (חלום + יכולות-מוזמנות)', () => last(run('machtzev/generator/synth.mjs', ['--dream'])), { optional: true });
 stage('המחולל (genesis-gen · הכרעה 17)', () => run('machtzev/generator/genesis-gen.mjs').split('\n').find(l => l.includes('המחולל'))?.trim());
 stage('מחולל-הלוחות (board-gen)', () => run('machtzev/assemble/board-gen.mjs', [SCRATCH]).split('\n').find(l => l.includes('לוחות'))?.trim());
 
