@@ -81,6 +81,7 @@ function dartStrings(src) {
       let cur = '';
       for (; j < src.length; j++) {
         const c = src[j];
+        if (c === '\n') break;                                      // מחרוזת-Dart חד-שורתית
         if (!raw && c === '\\') { cur += c + (src[j + 1] ?? ''); j++; continue; }
         if (c === q) break;
         if (!raw && c === '$') {
@@ -171,7 +172,7 @@ function balance(s, start, open, close) {
   let d = 1, q = null;
   for (let j = start; j < s.length; j++) {
     const ch = s[j];
-    if (q) { if (ch === '\\') j++; else if (ch === q) q = null; continue; }
+    if (q) { if (ch === '\n') { q = null; } else if (ch === '\\') j++; else if (ch === q) q = null; continue; }
     if (ch === "'" || ch === '"') { q = ch; continue; }
     if (ch === open) d++;
     else if (ch === close) { d--; if (!d) return j; }
@@ -221,6 +222,7 @@ function purifyFile(base, report) {
   const sockets = jsSockets(base);
   if (!sockets) return report.skip(base, 'אין-שקעי-JS (המקור לא-מטוהר/לא-נקצר)');
   let src = fs.readFileSync(dp, 'utf8');
+  if (src.includes(String.fromCharCode(39,39,39)) || src.includes(String.fromCharCode(34,34,34))) return report.skip(base, 'triple-quote — מחוץ-ליכולת-הפרשן (v1)');
   const orig = src;
   const merged = [];
   { const seen = new Set(); for (const list of Object.values(sockets)) for (const s of list) if (!seen.has(s.name)) { seen.add(s.name); merged.push(s); } }
@@ -401,6 +403,7 @@ function purifyFile(base, report) {
     addedPerFn.set(fn, new Set(socksOf(fn).filter(s2 => !new RegExp('[\\s(,]' + s2.name + '\\s*[,)\\]}]').test(sigTxt)).map(s2 => s2.name)));
   }
   // הזנת קריאות-פנימיות (מהסוף להתחלה כדי לא להזיז מיקומים מוקדמים)
+  if (process.env.PDBG) { console.log('PDBG needMap:', JSON.stringify([...needMap].map(([k,v])=>[k,[...v]]))); console.log('PDBG added:', JSON.stringify([...addedPerFn].map(([k,v])=>[k,[...v]]))); }
   const feedCall = (txt, callee) => {
     const socks = socksOf(callee).filter(s2 => addedPerFn.get(callee)?.has(s2.name) ?? true);
     if (!socks.length) return txt;

@@ -1,3 +1,4 @@
+import '../dart-data-maor/detect-recurring-hok-sockets.dart' as sk_detect_recurring_hok;
 // בדיקת-חוזה (רתמת-זהב) · detectRecurringHok — מייבאת אך ורק את האטום-שלה (חוק-4).
 // שש דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/detect-recurring-hok.test.mjs.
 // השקעים (modeStr/modeOf/monthsAgo) — המרת-JS נאמנה של מימושי-המקור (nedarimSync.ts).
@@ -51,7 +52,7 @@ int monthsAgo(String dateIso, String todayIso) {
 }
 
 Map<String, Object?> run(List<Map<String, Object?>> sps, [int min = 3]) =>
-    detectRecurringHok(sps, '2026-08-24', min, clearingProviders, modeStr, modeOf, monthsAgo);
+    detectRecurringHok(sps, '2026-08-24', min, clearingProviders, modeStr, modeOf, monthsAgo, sk_detect_recurring_hok.detectRecurringHok_T);
 
 void main() {
   // 1) תבנית 3 חודשים ⇒ הו"ק מזוהה

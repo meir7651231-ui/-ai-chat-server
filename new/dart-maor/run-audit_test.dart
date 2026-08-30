@@ -1,3 +1,4 @@
+import '../dart-data-maor/run-audit-sockets.dart' as sk_run_audit;
 // בדיקת-חוזה · run-audit — פורט נאמן מ-new/atoms/run-audit.test.mjs.
 // 7 דוגמאות-חוזה (12 בדיקות). מריצים: dart run --enable-asserts run-audit_test.dart
 import 'dart:io';
@@ -72,7 +73,7 @@ void main() {
       fam('f01', {'name': 'כהן', 'mother': 'שרה'}),
       fam('f02', {'name': 'כהן', 'mother': 'שרה'}),
     ]
-  }, '', true, null, deps);
+  }, sk_run_audit.runAudit_T2, '', true, null, deps);
   chk(
       '1 כפילות שם+אם',
       r1.length == 1 &&
@@ -88,13 +89,13 @@ void main() {
       fam('f12', {'name': 'ב', 'phone': '0521111111', 'phone2': '0521111111'}),
     ]
   };
-  final r2 = runAudit(dbPhone, '', true, null, deps);
+  final r2 = runAudit(dbPhone, sk_run_audit.runAudit_T2, '', true, null, deps);
   chk(
       '2א טלפון משותף — ממצא יחיד בנוסח ברירת-המחדל',
       r2.length == 1 &&
           r2[0]['cat'] == 'כפילות' &&
           r2[0]['title'] == 'טלפון 0521111111 משותף ל-2 משפחות: א, ב');
-  final r2b = runAudit(dbPhone, '', true, {}, deps);
+  final r2b = runAudit(dbPhone, sk_run_audit.runAudit_T2, '', true, {}, deps);
   chk('2ב עם config ⇒ מונח termOf "בתי-אב"',
       r2b[0]['title'] == 'טלפון 0521111111 משותף ל-2 בתי-אב: א, ב');
 
@@ -104,7 +105,7 @@ void main() {
     'families': [
       fam('f21', {'fatherId': '123456789'})
     ]
-  }, '', true, null, deps);
+  }, sk_run_audit.runAudit_T2, '', true, null, deps);
   chk(
       '3א ת"ז אב שגויה',
       r3.length == 1 &&
@@ -116,7 +117,7 @@ void main() {
     'families': [
       fam('f22', {'fatherId': '123456782'})
     ]
-  }, '', true, null, deps);
+  }, sk_run_audit.runAudit_T2, '', true, null, deps);
   chk('3ב ת"ז תקינה ⇒ אפס ממצאים', r3b.length == 0);
 
   // 4) פעילה בלי עיר ⇒ 'כתובת'; inactive ⇒ מדולגת
@@ -125,7 +126,7 @@ void main() {
     'families': [
       fam('f31', {'city': ''})
     ]
-  }, '', true, null, deps);
+  }, sk_run_audit.runAudit_T2, '', true, null, deps);
   chk(
       '4א חסרה עיר',
       r4.length == 1 &&
@@ -136,7 +137,7 @@ void main() {
     'families': [
       fam('f32', {'city': '', 'status': 'inactive'})
     ]
-  }, '', true, null, deps);
+  }, sk_run_audit.runAudit_T2, '', true, null, deps);
   chk('4ב ‏inactive לא נבדקת', r4b.length == 0);
 
   // 5) תשלום-יתר בשיבוץ ⇒ 'לוגיקה' עם famId של משפחת-החבר
@@ -159,7 +160,7 @@ void main() {
       }
     ],
     'supporters': [],
-  }, '', true, null, deps);
+  }, sk_run_audit.runAudit_T2, '', true, null, deps);
   chk(
       '5 תשלום-יתר ₪300 > ₪200',
       r5.length == 1 &&
@@ -174,7 +175,7 @@ void main() {
     'supporters': [
       sup('s01', {'ils': 50})
     ]
-  }, '', true, null, deps);
+  }, sk_run_audit.runAudit_T2, '', true, null, deps);
   chk(
       '6א מצבור 50 מול נגזר 100 ⇒ לוגיקה',
       r6.length == 1 &&
@@ -187,7 +188,7 @@ void main() {
       runAudit({
         ...emptyDb,
         'supporters': [sup('s02')]
-      }, '', true, null, deps).length ==
+      }, sk_run_audit.runAudit_T2, '', true, null, deps).length ==
           0);
 
   // 7) יעד-קשר שעבר — רק ב-extra=true
@@ -197,14 +198,14 @@ void main() {
       sup('s03', {'nextDate': '2026-08-01'})
     ]
   };
-  final r7 = runAudit(dbNext, '2026-08-24', true, null, deps);
+  final r7 = runAudit(dbNext, sk_run_audit.runAudit_T2, '2026-08-24', true, null, deps);
   chk(
       '7א ‏extra=true ⇒ ממצא-קשר',
       r7.length == 1 &&
           r7[0]['cat'] == 'קשר' &&
           r7[0]['title'] == 'עבר יעד הקשר של "תורם-s03" (2026-08-01)');
   chk('7ב ‏extra=false ⇒ כבוי',
-      runAudit(dbNext, '2026-08-24', false, null, deps).length == 0);
+      runAudit(dbNext, sk_run_audit.runAudit_T2, '2026-08-24', false, null, deps).length == 0);
 
   // ── ratchet-הסגר (26.8) · אופרטור `+` פולימורפי + null↔undefined ─────────────
   // הבאג-שהיה: הפורט חיבר מספרית (_jsAddNum) במקום `+` של JS (שרשור-מחרוזות
@@ -222,7 +223,7 @@ void main() {
       'enrollments': [
         {'memberId': 'mR', 'totalDue': due, 'payments': pays}
       ]
-    }, '', true, null, deps);
+    }, sk_run_audit.runAudit_T2, '', true, null, deps);
     return r.where((x) => x['cat'] == 'לוגיקה').map((x) => x['title']).toList();
   }
 
@@ -261,7 +262,7 @@ void main() {
         'supporters': [
           {'id': 'sR', 'name': 'ד', 'ils': 100, 'usd': 0, 'count': 1, 'donations': dons}
         ]
-      }, '', true, null, deps)
+      }, sk_run_audit.runAudit_T2, '', true, null, deps)
           .where((x) => (x['title'] as String).contains('בסכום'))
           .map((x) => x['title'])
           .toList();
