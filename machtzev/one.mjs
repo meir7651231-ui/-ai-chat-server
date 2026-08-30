@@ -115,7 +115,25 @@ stage('מד-מוכנות-קופסאות', () => last(run('machtzev/box-coverage.
 stage('מפת-חיווט (gen-wiring-doc)', () => last(run('machtzev/gen-wiring-doc.mjs')), { optional: true });
 
 // ── 6 · המשטרה (כל שערי-ה-ratchet הפנימיים) ──
-stage(FULL ? 'משטרה-מלאה (9 שערים)' : 'משטרה --fast (9 שערים)', () => last(run('machtzev/police.mjs', FULL ? [] : ['--fast'])));
+// ── הזרקת-המדף לתצוגה (buildsmart) + נחיתה — בתוך המנוע (הכרעת-בעלים "למה הם לא בפנים") ──
+stage('הזרקת-המדף ל-buildsmart (8 מדפים)', () => {
+  const B = '/home/user/buildsmart/app_flutter/lib/genesis';
+  const DIRS8 = ['dart-ui-bs', 'dart-data-bs', 'dart-data-maor', 'dart-screens-bs', 'dart-boards-bs', 'dart-gen-bs', 'dart-maor', 'dart'];
+  let n = 0;
+  for (const d of DIRS8) {
+    execSync(`rm -rf ${B}/${d}`);
+    execSync(`cd ${ROOT}/new/${d} && find . -name "*.dart" ! -name "*_test.dart" ! -path "*QUARANTINE*" | while read fx; do mkdir -p ${B}/${d}/$(dirname $fx); cp $fx ${B}/${d}/$fx; done`);
+    n += parseInt(execSync(`find ${B}/${d} -name "*.dart" | wc -l`).toString().trim());
+  }
+  return `${n} קבצים הוזרקו`;
+}, { optional: true });
+stage('נחיתת-buildsmart (commit+push כשיש-שינוי)', () => {
+  const st = execSync('cd /home/user/buildsmart && git status --short app_flutter/lib/genesis').toString().trim();
+  if (!st) return 'אין-שינוי — אין-נחיתה';
+  execSync(`cd /home/user/buildsmart && git add app_flutter/lib/genesis && git commit -q -m "גנסיס · הזרקת-מדף מהמנוע-האחד" -m "Co-Authored-By: Claude <noreply@anthropic.com>" && git push -q -u origin claude/mah-kora-0by8kw`);
+  return `נדחף: ${st.split('\n').length} קבצים`;
+}, { optional: true });
+stage(FULL ? 'משטרה-מלאה (10 שערים)' : 'משטרה --fast (10 שערים)', () => last(run('machtzev/police.mjs', FULL ? [] : ['--fast'])));
 
 // ── 7 · לוח-מצב מאוחד ──
 const count = (dir, ext, excl = '_test') => fs.existsSync(path.join(ROOT, dir)) ? fs.readdirSync(path.join(ROOT, dir)).filter(f => f.endsWith(ext) && !f.includes(excl) && !f.includes('.test.')).length : 0;
