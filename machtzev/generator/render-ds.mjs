@@ -41,18 +41,30 @@ const PRIM = new Set(['dynamic', 'String', 'num', 'int', 'double', 'String?', 'n
 const selfContained = (shelf, file) => { try { return !/^import\s+'(?!dart:|package:flutter)/m.test(fs.readFileSync(path.join(ROOT, shelf, file), 'utf8')); } catch { return false; } };
 const XFORM = atlas.functions
   .filter((f) => f.ret === 'String' && (f.params || []).length >= 1 && PRIM.has(f.params[0].type) && ((f.params.length === 1) || /\[/.test(f.sig || '')) && (f.he || []).length && selfContained(f.shelf, f.file))
-  .map((f) => ({ name: f.name, file: f.file, shelf: f.shelf, inType: f.params[0].type, st: [...new Set((f.he || []).flatMap(heToks))] }));
-// בוחר מנוע-טרנספורם לשדה לפי-משמעות (אחזור טהור, אפס regex). דורש התאמה ברורה.
-function pickXform(label, used) {
+  .map((f) => ({ name: f.name, file: f.file, shelf: f.shelf, inType: f.params[0].type.replace(/\?$/, ''), st: [...new Set((f.he || []).flatMap(heToks))] }));
+
+// 🎯 שכבה-1 · בחירה מכוונת-מטרה (לא הכי-קרוב, הכי-מתאים) — שלושה אותות טהורים:
+// (א) IDF: מילה-נדירה-ספציפית ('טלפון') שווה יותר ממילה-נפוצה ('מספר') ⇒ מסלק רעש.
+const xdf = new Map();
+for (const f of XFORM) for (const t of f.st) xdf.set(t, (xdf.get(t) || 0) + 1);
+const XN = XFORM.length || 1;
+const xidf = (t) => Math.log((XN + 1) / ((xdf.get(t) || 0) + 1)) + 1;
+// (ב) התאמת-טיפוס: מנוע-מספרי לשדה-מספרי, מנוע-טקסט לשדה-טקסט.
+const TYPE_COMPAT = { num: ['num', 'int', 'double', 'dynamic', 'Object'], text: ['String', 'dynamic', 'Object'], date: ['String', 'dynamic', 'DateTime', 'Object'], bool: ['dynamic'] };
+const INPUT_TYPE = { DsNumberField: 'num', DsDateField: 'date', DsToggleTile: 'bool', DsField: 'text' };
+const typeOf = (label) => INPUT_TYPE[pickInput(label)] || 'text';
+// בוחר מנוע-טרנספורם מכוון-מטרה: התאמת-טיפוס + ניקוד-IDF מובהק + מרווח-ברור מהשני.
+function pickXform(label, ftype) {
   const q = [...new Set(heToks(label))];
-  let best = null, bs = 0;
+  const ok = TYPE_COMPAT[ftype] || TYPE_COMPAT.text;
+  let best = null, bs = 0, second = 0;
   for (const f of XFORM) {
-    if (used.has(f.name)) continue;
-    let s = 0;
-    for (const t of q) if (f.st.includes(t)) s++;
-    if (s > bs) { bs = s; best = f; }
+    if (!ok.includes(f.inType)) continue;   // (ב) שער-טיפוס
+    let s = 0; for (const t of q) if (f.st.includes(t)) s += xidf(t);   // (א) ניקוד-IDF
+    if (s > bs) { second = bs; bs = s; best = f; } else if (s > second) second = s;
   }
-  return bs >= 1 ? best : null;
+  // (ג) דורש ניקוד-מטרה מובהק + מנצח-ברור (לא צירוף-מקרי, לא עמום) — אחרת לא מחווט (כנות > רעש).
+  return (best && bs >= 2.4 && bs >= second * 1.4) ? best : null;
 }
 
 // מחולל-תוכן: אוסף מחרוזות-עברית ⇒ const; מחזיר את שם-הקבוע לשיבוץ בקוד.
@@ -87,15 +99,13 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const cEntity = k(name);
 
   const funcImports = new Set();
-  const usedX = new Set();
   const labelConst = [];
   const fieldBlocks = [];
   schema.forEach((s, i) => {
     const cl = k(s.label); labelConst.push(cl);
     fieldBlocks.push(`          DsField(label: ${cl}, hint: '', value: _v[${i}] ?? '', onChanged: (v) => setState(() => _v[${i}] = v)),`);
-    const xf = pickXform(s.label, usedX);   // 🔌 מנוע-אימפריה נבחר לשדה לפי-משמעות (אחזור טהור)
+    const xf = pickXform(s.label, typeOf(s.label));   // 🎯 מנוע-אימפריה מכוון-מטרה (טיפוס+IDF+מרווח)
     if (xf) {
-      usedX.add(xf.name);
       funcImports.add(`import '../${xf.shelf.replace(/^new\//, '')}/${xf.file}';`);
       const cx = k(xf.name);
       // המרת-קלט לפי-חתימה: מנוע-מספרי מקבל מספר בטיפוסו המדויק, אחר מקבל טקסט (טהור מהחוזה).
