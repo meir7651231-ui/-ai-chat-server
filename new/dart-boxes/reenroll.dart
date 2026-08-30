@@ -1,3 +1,4 @@
+import '../dart-data-maor/reenroll-csv-rows-sockets.dart' as sk_rcr;
 import '../dart-data-maor/enroll-summary-sockets.dart' as skb_enroll_summary;
 import '../dart-data-maor/student-history-text-terms.dart' as td_student_history_text;
 import '../dart-data-maor/reenroll-list-text-terms.dart';
@@ -85,7 +86,7 @@ Map<String, Object?> freshNextYearEnrollment(
         [Object? groupOverride]) =>
     fnye.freshNextYearEnrollment(src, targetCourseId, newId, todayIso, groupOverride);
 String studentHistoryText(List<dynamic> entries) => sht.studentHistoryText(entries, term: (k)=>td_student_history_text.kTerms[k]!);
-List<List<String>> reenrollCsvRows(List<Map<String, Object?>> rows) => rcr.reenrollCsvRows(rows);
+List<List<String>> reenrollCsvRows(List<Map<String, Object?>> rows) => rcr.reenrollCsvRows(rows, sk_rcr.reenrollCsvRows_head, sk_rcr.reenrollCsvRows_T);
 String reenrollListText(List<Map<String, dynamic>> rows) => rlt.reenrollListText(rows, term: (k)=>kTerms[k]!);
 
 // ── מחווטים — השקעים (atNoon/toIso/payBal/paidOf/findMember) הולחמו פנימית ──────
