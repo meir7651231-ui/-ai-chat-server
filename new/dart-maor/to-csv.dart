@@ -2,5 +2,5 @@
 /// זהה-ביט ל-JS: BOM (U+FEFF) בראש · תאים ב-',' · שורות ב-'\n'.
 dynamic toCsv(dynamic rows, dynamic escape) {
   return '﻿' +
-      rows.map((r) => r.map(escape).join(',')).join('\n');
+      ((rows.map((r) => r.map(escape).join(',')).join('\n')) as String);
 }

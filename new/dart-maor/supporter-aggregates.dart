@@ -21,7 +21,7 @@ dynamic supporterAggregates(dynamic sp) {
   final List dates = [];
   for (final d in dons) {
     final dynamic amount = (d is Map) ? d['amount'] : null;
-    final num amt = _isFiniteNum(amount) ? amount : 0;
+    final num amt = ((_isFiniteNum(amount) ? amount : 0) as num);
     final dynamic cur = (d is Map) ? d['cur'] : null;
     if (cur == '\$') {
       usd += amt.toDouble();

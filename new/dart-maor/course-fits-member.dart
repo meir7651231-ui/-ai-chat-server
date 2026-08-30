@@ -6,6 +6,11 @@
 // truthy-JS ל-c.gender / gender / c.ageMin / c.ageMax (מחרוזת-ריקה/0/undefined = falsy).
 // ⇒ שקע `_truthy` שמחקה נאמנה את truthiness של JS. כלל-2 (null≠undefined):
 // המקור משתמש ב-`age != null` הרופף (תופס null+undefined) ⇒ Dart `age != null` (null יחיד) זהה.
+
+/// ‏truthiness של JS (חוק 7): '' / 0 / -0 / NaN / null / false כוזבים. (הוזרק ע"י מתקן-ההסגר)
+bool _rqTruthy(dynamic v) =>
+    !(v == null || v == false || v == '' || (v is num && (v == 0 || v.isNaN)));
+
 bool _truthy(dynamic v) {
   if (v == null) return false;
   if (v is bool) return v;
@@ -21,9 +26,9 @@ bool courseFitsMember(
       _truthy(gender) &&
       c['gender'] != gender) return false;
   if (age != null) {
-    if (_truthy(c['ageMin']) && age < c['ageMin']) return false;
-    if (_truthy(c['ageMax']) && age > c['ageMax']) return false;
+    if (_truthy(c['ageMin']) && _rqTruthy(age < c['ageMin'])) return false;
+    if (_truthy(c['ageMax']) && _rqTruthy(age > c['ageMax'])) return false;
   }
-  if (!gradeFits(c, grade)) return false;
+  if (!_rqTruthy(gradeFits(c, grade))) return false;
   return true;
 }

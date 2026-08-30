@@ -25,6 +25,11 @@
 //    await נאמן לסמנטיקת JS await (Future או ערך-מיידי).
 
 /// כפייה-לבוליאני נאמנה ל-JS `!x` / `x ?`: null/false/0/NaN/'' ⇒ true (falsy).
+
+/// ‏truthiness של JS (חוק 7): '' / 0 / -0 / NaN / null / false כוזבים. (הוזרק ע"י מתקן-ההסגר)
+bool _rqTruthy(dynamic v) =>
+    !(v == null || v == false || v == '' || (v is num && (v == 0 || v.isNaN)));
+
 bool _falsy(Object? v) {
   if (v == null) return true;
   if (v is bool) return !v;
@@ -50,7 +55,7 @@ Future<void> pushAuditRing(
   dynamic encryptDoc,
 ) async {
   if (_falsy(auditUid)) return;
-  final ring = entries.length <= _auditCap
+  final ring = _rqTruthy(entries.length <= _auditCap)
       ? entries.sublist(0)
       : entries.sublist(entries.length - _auditCap);
   final payload = {'entries': ring};

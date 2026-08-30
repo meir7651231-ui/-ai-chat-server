@@ -4,7 +4,7 @@
 /// טלפון שמור (פורמט מקומי מעוצב) ⇒ קישור-חיוג `tel:`; קצר מ-6 ספרות ⇒ null.
 dynamic telHref(dynamic phone) {
   // ‏JS: (phone || '') — truthiness מפורש (RULES-DIGEST חוק-7)
-  final String p = _falsy(phone) ? '' : phone;
+  final String p = ((_falsy(phone) ? '' : phone) as String);
   final cleaned = p.replaceAll(RegExp(r'[^\d+]'), '');
   final digits = cleaned.replaceAll(RegExp(r'\D'), '');
   if (digits.length < 6) return null; // קצר מדי = לא מספר-חיוג תקין

@@ -23,7 +23,7 @@ DateTime? nextSessionDate(
     dynamic c, DateTime? now, dynamic Function(dynamic) sessionsOf) {
   final n = now ?? DateTime.now();
   DateTime? best;
-  for (final ss in sessionsOf(c)) {
+  for (final ss in ((sessionsOf(c)) as Iterable)) {
     final rawTime = ss['time'];
     // JS `ss.time || '17:00'` — null או מחרוזת-ריקה נופלים ל-ברירת-המחדל.
     final timeStr =

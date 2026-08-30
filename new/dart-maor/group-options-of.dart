@@ -16,6 +16,11 @@
 //    ממומש כ-_truthy מפורש (לא ?? — כדי לשמר סמנטיקת-|| לכל טיפוס-falsy).
 //  • ה-template + .trim() זהים בין השפות (רווח-זנב נגזם כשאין שעה).
 
+
+/// ‏truthiness של JS (חוק 7): '' / 0 / -0 / NaN / null / false כוזבים. (הוזרק ע"י מתקן-ההסגר)
+bool _rqTruthy(dynamic v) =>
+    !(v == null || v == false || v == '' || (v is num && (v == 0 || v.isNaN)));
+
 bool _truthy(Object? x) {
   if (x == null) return false;
   if (x is bool) return x;
@@ -33,11 +38,11 @@ List<dynamic> groupOptionsOf(
   List<dynamic> dayNames,
 ) {
   final ss = sessionsOf(c);
-  if (ss.length <= 1) return [];
-  return List.generate(ss.length, (i) {
+  if (_rqTruthy(ss.length <= 1)) return [];
+  return List.generate(((ss.length) as int), (i) {
     final s = ss[i];
     final v = groupLabelOf(s, i);
     final timeStr = _truthy(s['time']) ? s['time'] : '';
-    return {'v': v, 't': '$v · יום ${dayNames[s['day']]} $timeStr'.trim()};
+    return {'v': v, 't': '$v · יום ${dayNames[((s['day']) as int)]} $timeStr'.trim()};
   });
 }

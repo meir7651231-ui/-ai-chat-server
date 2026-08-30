@@ -55,8 +55,8 @@ List<Map<String, dynamic>> donorConstellation(
     return m > 0.18 ? m : 0.18; // Math.max(0.18, …)
   }
 
-  final num rate = opts['rate'] ?? 3.7;
-  final num riskT = opts['riskThreshold'] ?? 60;
+  final num rate = ((opts['rate'] ?? 3.7) as num);
+  final num riskT = ((opts['riskThreshold'] ?? 60) as num);
   final raw = <Map<String, dynamic>>[];
   double maxLog = 0;
   for (final sp in supporters) {

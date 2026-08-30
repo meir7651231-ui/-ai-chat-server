@@ -119,14 +119,14 @@ Future<void> pushDiff(
     // כדי ש-Rules ושאילתת-where יבחנו אותו גם בארגון-מוצפן. כבוי ⇒ ביט-זהה.
     final keyed = sup.enforceOn && sup.keyedCols.contains(s['col']);
     final body = keyed
-        ? _withSkey(sup.docSkey!(s['col'], s['data'], supKeyBySpId), inner)
+        ? _withSkey(sup.docSkey!(((s['col']) as String), s['data'], supKeyBySpId), inner)
         : inner;
-    ops.add((b) => b.set(fs.doc(db, scopedCol(s['col']), s['id']), body));
+    ops.add((b) => b.set(fs.doc(db, scopedCol(((s['col']) as String)), s['id']), body));
   }
 
   final List<dynamic> deletes = (diff['deletes'] as List?) ?? const [];
   for (final d in deletes) {
-    ops.add((b) => b.delete(fs.doc(db, scopedCol(d['col']), d['id'])));
+    ops.add((b) => b.delete(fs.doc(db, scopedCol(((d['col']) as String)), d['id'])));
   }
 
   for (var i = 0; i < ops.length; i += 400) {

@@ -162,13 +162,13 @@ List<List<String>> buildCustomExport(
       for (final e in ens) {
         for (final p in (e['payments'] as List)) {
           revenue += _orZero(p['amount']);
-          if (_inR(p['date'], range)) {
+          if (_inR(((p['date']) as String?), range)) {
             payN++;
             paySum += _orZero(p['amount']);
           }
         }
         for (final ab in (e['absences'] as List)) {
-          if (_inR(ab['date'], range)) absN++;
+          if (_inR(((ab['date']) as String?), range)) absN++;
         }
       }
       dynamic t;
@@ -188,7 +188,7 @@ List<List<String>> buildCustomExport(
       final schedule = s
           .sessionsOf(c)
           .map((ss) => ('יום ' +
-                  (s.dayNames[ss['day']] as String) +
+                  (s.dayNames[((ss['day']) as int)] as String) +
                   (_truthy(ss['time']) ? ' ' + (ss['time'] as String) : ''))
               .trim())
           .join(' · ');
@@ -292,7 +292,7 @@ List<List<String>> buildCustomExport(
             occ.add({...rec, 'date': _isoOf(dd)});
           }
         }
-      } else if (_inR(ev['date'], range) ||
+      } else if (_inR(((ev['date']) as String?), range) ||
           (!_truthy(range['from']) && !_truthy(range['to']))) {
         occ.add({...rec, 'date': ev['date']});
       }
@@ -316,15 +316,15 @@ List<List<String>> buildCustomExport(
   // supporters
   final ayinOn = s.featureOn(cfg, 'supporters.ayin');
   for (final sp in (db['supporters'] as List)) {
-    final dons = (sp['donations'] as List).where((d) => _inR(d['date'], range)).toList();
+    final dons = (sp['donations'] as List).where((d) => _inR(((d['date']) as String?), range)).toList();
     final a = sp['ayin'];
     final answers = a != null
-        ? (a['answers'] as List).where((x) => _inR(x['date'], range)).toList()
+        ? (a['answers'] as List).where((x) => _inR(((x['date']) as String?), range)).toList()
         : const [];
     final touchedInRange = ayinOn &&
         a != null &&
-        (_inR(a['lastTouch'], range) ||
-            (a['log'] as List).any((l) => _inR(l['date'], range)));
+        (_inR(((a['lastTouch']) as String?), range) ||
+            (a['log'] as List).any((l) => _inR(((l['date']) as String?), range)));
     if (!(dons.isNotEmpty || answers.isNotEmpty || touchedInRange)) continue;
 
     num ils = 0;

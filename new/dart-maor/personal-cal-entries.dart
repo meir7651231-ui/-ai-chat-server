@@ -47,7 +47,7 @@ List<Map<String, dynamic>> personalCalEntries(
   }
   final ayin = sp['ayin'];
   final log = (ayin is Map ? ayin['log'] : null) ?? const [];
-  for (final l in log) {
+  for (final l in ((log) as Iterable)) {
     out.add({
       'date': l['date'],
       'amount': 0,
@@ -58,7 +58,7 @@ List<Map<String, dynamic>> personalCalEntries(
     });
   }
   final answers = (ayin is Map ? ayin['answers'] : null) ?? const [];
-  for (final an in answers) {
+  for (final an in ((answers) as Iterable)) {
     out.add({
       'date': an['date'],
       'amount': 0,

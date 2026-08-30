@@ -33,9 +33,9 @@ dynamic smartScore(dynamic q, dynamic terms, dynamic norm, dynamic expand, dynam
   num phrase = 0;
   if (toks.length > 1) {
     outerPhrase:
-    for (final exp in expand(q.trim(), norm)) {
-      for (final term in terms) {
-        phrase = _jsMax(phrase, score(exp, term));
+    for (final exp in ((expand(q.trim(), norm)) as Iterable)) {
+      for (final term in ((terms) as Iterable)) {
+        phrase = _jsMax(phrase, ((score(exp, term)) as num));
         if (phrase >= 100) break outerPhrase; // break כפול כמו במקור
       }
     }
@@ -44,9 +44,9 @@ dynamic smartScore(dynamic q, dynamic terms, dynamic norm, dynamic expand, dynam
   for (final tok in toks) {
     num best = 0;
     outerTok:
-    for (final exp in expand(tok, norm)) {
-      for (final term in terms) {
-        best = _jsMax(best, score(exp, term));
+    for (final exp in ((expand(tok, norm)) as Iterable)) {
+      for (final term in ((terms) as Iterable)) {
+        best = _jsMax(best, ((score(exp, term)) as num));
         if (best >= 100) break outerTok; // break כפול כמו במקור
       }
     }

@@ -43,7 +43,7 @@ Map<String, dynamic> progress(Map c, List requeueOutcomes) {
       if (s.contains(m['id'])) continue;
       s.add(m['id']);
     }
-    counts[outcome] = (counts[outcome] ?? 0) + 1;
+    counts[((outcome) as String)] = (counts[outcome] ?? 0) + 1;
   }
   final num total = c['total'] as num;
   return {

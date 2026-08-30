@@ -10,7 +10,7 @@ dynamic dupFieldValue(List fams, Map def, Map pick, Map edit) {
   if (edited != null) return edited;
   final picked = pick[key];
   // JS `??` נופל רק על null/undefined (0 עובר) ⇒ Dart `??` זהה.
-  final int idx = picked ?? fams.indexWhere((f) => _truthy(get(f)));
+  final int idx = ((picked ?? fams.indexWhere((f) => _truthy(get(f)))) as int);
   return get(fams[idx >= 0 ? idx : 0]);
 }
 

@@ -51,8 +51,8 @@ String _jsToLowerCase(String s) => s.replaceAll('İ', 'i̇').toLowerCase();
 /// שרת-היציאה 'host:port' של ספק-מייל מוכר לפי דומיין הכתובת; לא-מוכר/שבורה ⇒ ''.
 /// Verbatim behaviour of the JS source `smtpHostFor`.
 dynamic smtpHostFor(dynamic email) {
-  final int at = email.lastIndexOf('@');
+  final int at = ((email.lastIndexOf('@')) as int);
   if (at < 1) return '';
-  final String domain = _jsToLowerCase(_jsTrim(email.substring(at + 1)));
+  final String domain = _jsToLowerCase(_jsTrim(((email.substring(at + 1)) as String)));
   return _smtpHosts[domain] ?? '';
 }

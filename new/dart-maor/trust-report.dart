@@ -58,7 +58,7 @@ Map<String, dynamic> trustReport(dynamic bundle,
       _truthy(ar['ok'])
           ? 'כל גשר/transfer/שער מוביל ליעד-קיים'
           : 'יתומים: ' +
-              [...ar['dangling'], ...ar['orphanTransfers'], ...ar['missingGateways']]
+              [...((ar['dangling']) as Iterable), ...((ar['orphanTransfers']) as Iterable), ...((ar['missingGateways']) as Iterable)]
                   .join(', '));
 
   // 2. מסלול-חירום (fail-safe) — תמיד יש מנהל לחזור אליו.
@@ -106,7 +106,7 @@ Map<String, dynamic> trustReport(dynamic bundle,
 
   // 7. בידוד חוצה-דיירים — אם נמסרו peers.
   if (opt['peers'] is List && _truthy((opt['peers'] as List).length)) {
-    final leak = crossTenantLeakScan(<dynamic>[bundle, ...opt['peers']]);
+    final leak = crossTenantLeakScan(<dynamic>[bundle, ...((opt['peers']) as Iterable)]);
     add('isolation', 'בידוד חוצה-דיירים', leak['clean'], 'critical',
         _truthy(leak['clean']) ? 'אין דליפת-סוד/זהות בין-לקוחות' : '${leak['violations'].length} דליפות');
   }

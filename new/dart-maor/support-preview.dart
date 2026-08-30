@@ -24,5 +24,5 @@ String _trimEs(String s) =>
 dynamic supportPreview(dynamic text, [dynamic max = 40]) {
   final t = _trimEs(
       (text ?? '').replaceAll(RegExp(r'\s+', unicode: true), ' ') as String);
-  return t.length > max ? _sliceJs(t, 0, max - 1) + '…' : t;
+  return t.length > ((max) as num) ? _sliceJs(t, 0, ((max - 1) as num)) + '…' : t;
 }

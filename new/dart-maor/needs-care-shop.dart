@@ -77,7 +77,7 @@ List<Map<String, dynamic>> needsCare(
         'label': '${item['name']} — המלאי אזל',
         'hint': 'לחדש מלאי או לעדכן את הפריט',
       });
-    } else if (item['minStock'] != null && rem != null && rem < item['minStock']) {
+    } else if (item['minStock'] != null && rem != null && rem < ((item['minStock']) as num)) {
       // מלאי מינימום (SHOP6 חנות 25): מתחת לסף — "להצטייד" לפני שאוזל
       stock.add({
         'kind': 'restock',

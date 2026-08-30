@@ -24,9 +24,14 @@
 /// new/atoms/rule-typo.mjs: queries shorter than 3 chars or all-digits never
 /// match; threshold is 2 for terms of length >= 6, else 1; score is 52 - 4*d.
 /// `distance` is the injected edit-distance socket.
+
+/// ‏truthiness של JS (חוק 7): '' / 0 / -0 / NaN / null / false כוזבים. (הוזרק ע"י מתקן-ההסגר)
+bool _rqTruthy(dynamic v) =>
+    !(v == null || v == false || v == '' || (v is num && (v == 0 || v.isNaN)));
+
 dynamic ruleTypo(dynamic nq, dynamic nt, dynamic distance) {
-  if (nq.length < 3 || RegExp(r'^\d+$').hasMatch(nq)) return null;
-  final max = nt.length >= 6 ? 2 : 1;
+  if (_rqTruthy(nq.length < 3) || RegExp(r'^\d+$').hasMatch(((nq) as String))) return null;
+  final max = _rqTruthy(nt.length >= 6) ? 2 : 1;
   final d = distance(nq, nt);
-  return d <= max ? 52 - d * 4 : null;
+  return _rqTruthy(d <= max) ? 52 - ((d * 4) as num) : null;
 }

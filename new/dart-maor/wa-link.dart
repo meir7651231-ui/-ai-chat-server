@@ -52,8 +52,8 @@ String _jsTrim(String s) {
 dynamic waLink(dynamic phone, dynamic text, dynamic waDigits) {
   final digits = waDigits(phone);
   if (_falsy(digits)) return null;
-  final t = _jsTrim(text);
+  final t = _jsTrim(((text) as String));
   return 'https://wa.me/' +
-      digits +
+      ((digits) as String) +
       (_falsy(t) ? '' : '?text=' + Uri.encodeComponent(t));
 }

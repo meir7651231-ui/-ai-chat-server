@@ -31,7 +31,7 @@ dynamic stepScale(dynamic v, dynamic dir, dynamic clampScale,
     [dynamic step = 0.1]) {
   final double d = _toNum(dir);
   final double s = _toNum(step);
-  return clampScale(_jsRound((clampScale(v) + d * s) * 10) / 10);
+  return clampScale(_jsRound((((clampScale(v) + d * s) * 10) as num)) / 10);
 }
 
 // — עוזרים מקומיים (קידומת _, חוק-1: בלי import של אטום אחר) —

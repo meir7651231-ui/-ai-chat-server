@@ -78,6 +78,6 @@ dynamic waPaymentText(dynamic orgName, dynamic what, dynamic balance,
   return renderTemplate(cfg, 'wa.payment', {
     'org': orgOf(orgName),
     'what': what,
-    'amount': _jsHeIlInt(_jsRound(balance)),
+    'amount': _jsHeIlInt(_jsRound(((balance) as num))),
   });
 }

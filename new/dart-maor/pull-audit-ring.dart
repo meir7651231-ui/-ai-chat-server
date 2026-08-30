@@ -54,7 +54,7 @@ Future<List<dynamic>?> pullAuditRing(
   if (_falsy(auditReadable)) return null;
   final snap = await fs.getDocs(fs.collection(db, scopedCol('auditlog')));
   final all = <dynamic>[];
-  for (final doc in snap.docs) {
+  for (final doc in ((snap.docs) as Iterable)) {
     final data = _falsy(dek) ? doc.data() : await decryptDoc(doc.data(), dek);
     final entries = data['entries'];
     if (entries is List) all.addAll(entries);

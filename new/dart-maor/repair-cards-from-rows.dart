@@ -47,13 +47,13 @@ Map<String, dynamic> repairCardsFromRows(
       if (h['clearer'] == label) return h;
       touched = true;
       relabeled++;
-      return {...h, 'clearer': label};
+      return {...((h) as Map), 'clearer': label};
     }).toList();
-    if (mine.isEmpty) return touched ? {...sp, 'hist': next} : sp;
-    var filled = {...sp, 'hist': next};
+    if (mine.isEmpty) return touched ? {...((sp) as Map), 'hist': next} : sp;
+    var filled = {...((sp) as Map), 'hist': next};
     final before = filled;
     for (final row in mine) {
-      filled = fillCardFromCharge(filled, row);
+      filled = ((fillCardFromCharge(filled, row)) as Map<dynamic, dynamic>);
     }
     if (!identical(filled, before)) enriched++;
     if (!identical(filled, before) || touched) return filled;

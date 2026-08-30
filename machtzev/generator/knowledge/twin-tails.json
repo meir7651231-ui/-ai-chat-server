@@ -241,6 +241,14 @@
   ],
   "simple": true
  },
+ "courseFitsMember": {
+  "tail": [
+   {
+    "k1": "all"
+   }
+  ],
+  "simple": true
+ },
  "cycleCarry": {
   "tail": [
    29,
@@ -1070,6 +1078,15 @@
   ],
   "simple": true
  },
+ "progress": {
+  "tail": [
+   [
+    "noanswer",
+    "skip"
+   ]
+  ],
+  "simple": true
+ },
  "publishIcsFeed": {
   "tail": [
    {
@@ -1091,6 +1108,15 @@
   "tail": [
    {
     "k1": "_shared_"
+   }
+  ],
+  "simple": true
+ },
+ "pushAuditRing": {
+  "tail": [
+   {
+    "k1": "auditlog",
+    "tbl1": 500
    }
   ],
   "simple": true
@@ -1223,6 +1249,14 @@
   ],
   "simple": true
  },
+ "revertPatch": {
+  "tail": [
+   {
+    "k1": "answer"
+   }
+  ],
+  "simple": true
+ },
  "roleOf": {
   "tail": [
    {
@@ -1273,6 +1307,14 @@
   "tail": [
    {
     "k1": 58
+   }
+  ],
+  "simple": true
+ },
+ "ruleTypo": {
+  "tail": [
+   {
+    "k1": 52
    }
   ],
   "simple": true
@@ -1379,6 +1421,17 @@
   ],
   "simple": true
  },
+ "campaignProgress": {
+  "tail": [
+   {
+    "k1": "number",
+    "k2": 100,
+    "k3": 10,
+    "k4": 86400000
+   }
+  ],
+  "simple": true
+ },
  "siteDonateUrl": {
   "tail": [
    {
@@ -1467,6 +1520,27 @@
   ],
   "simple": true
  },
+ "smartScore": {
+  "tail": [
+   {
+    "k1": 100
+   }
+  ],
+  "simple": true
+ },
+ "smtpHostFor": {
+  "tail": [
+   {
+    "gmail.com": "smtp.gmail.com:465",
+    "googlemail.com": "smtp.gmail.com:465",
+    "outlook.com": "smtp-mail.outlook.com:587",
+    "hotmail.com": "smtp-mail.outlook.com:587",
+    "yahoo.com": "smtp.mail.yahoo.com:465",
+    "walla.co.il": "out.walla.co.il:465"
+   }
+  ],
+  "simple": true
+ },
  "sortSupportThreads": {
   "tail": [
    {
@@ -1548,6 +1622,14 @@
   ],
   "simple": true
  },
+ "stepScale": {
+  "tail": [
+   {
+    "k1": 10
+   }
+  ],
+  "simple": true
+ },
  "stripAuditMeta": {
   "tail": [
    {
@@ -1569,6 +1651,14 @@
    {
     "k1": "supporters",
     "k2": "object"
+   }
+  ],
+  "simple": true
+ },
+ "strongMatchForCharge": {
+  "tail": [
+   {
+    "k1": "ext:"
    }
   ],
   "simple": true
@@ -1677,6 +1767,14 @@
   "tail": [
    {
     "k1": "2-digit"
+   }
+  ],
+  "simple": true
+ },
+ "supportPreview": {
+  "tail": [
+   {
+    "k1": 40
    }
   ],
   "simple": true
@@ -1837,6 +1935,31 @@
    {
     "k1": "wa.delivery",
     "k2": "משפחת "
+   }
+  ],
+  "simple": true
+ },
+ "waDigits": {
+  "tail": [
+   {
+    "k1": 10,
+    "k2": 15
+   }
+  ],
+  "simple": true
+ },
+ "waPaymentText": {
+  "tail": [
+   {
+    "k1": "wa.payment"
+   }
+  ],
+  "simple": true
+ },
+ "waitlistFor": {
+  "tail": [
+   {
+    "k1": "wait"
    }
   ],
   "simple": true

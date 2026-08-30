@@ -20,38 +20,43 @@
 
 /// ההתאמה-החזקה-ביותר של עסקת-סליקה לכרטיס-תומך — לפי מפתח-ודאי בלבד,
 /// או null (עסקה בלי מפתחות ⇒ יציאה-מוקדמת; אף התאמה ⇒ null, בלי ניחוש).
+
+/// ‏truthiness של JS (חוק 7): '' / 0 / -0 / NaN / null / false כוזבים. (הוזרק ע"י מתקן-ההסגר)
+bool _rqTruthy(dynamic v) =>
+    !(v == null || v == false || v == '' || (v is num && (v == 0 || v.isNaN)));
+
 dynamic strongMatchForCharge(dynamic charge, dynamic supporters, dynamic keysOf) {
   final ck = <dynamic>{};
-  for (final k in keysOf({
+  for (final k in ((keysOf({
     'extId': charge['toremId'],
     'zeout': charge['zeout'],
     'phone': charge['phone'],
     'email': charge['email'],
-  })) {
+  })) as Iterable)) {
     ck.add(k);
   }
   if (ck.isEmpty) return null;
   dynamic best;
-  for (final sp in supporters) {
+  for (final sp in ((supporters) as Iterable)) {
     var score = 0;
-    for (final k in keysOf({
+    for (final k in ((keysOf({
       'extId': sp['extId'],
       'idNum': sp['idNum'],
       'phone': sp['phone'],
       'email': sp['email'],
-    })) {
+    })) as Iterable)) {
       if (!ck.contains(k)) continue;
-      if (k.startsWith('ext:')) {
+      if (_rqTruthy(k.startsWith('ext:'))) {
         score = score < 5 ? 5 : score;
-      } else if (k.startsWith('id:')) {
+      } else if (_rqTruthy(k.startsWith('id:'))) {
         score = score < 4 ? 4 : score;
-      } else if (k.startsWith('ph:')) {
+      } else if (_rqTruthy(k.startsWith('ph:'))) {
         score = score < 3 ? 3 : score;
-      } else if (k.startsWith('em:')) {
+      } else if (_rqTruthy(k.startsWith('em:'))) {
         score = score < 2 ? 2 : score;
       }
     }
-    if (score != 0 && (best == null || score > best['score'])) {
+    if (score != 0 && (best == null || score > ((best['score']) as num))) {
       best = {'sp': sp, 'score': score};
     }
   }

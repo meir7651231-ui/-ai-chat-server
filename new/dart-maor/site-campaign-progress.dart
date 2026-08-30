@@ -95,7 +95,7 @@ Map<String, dynamic> campaignProgress(dynamic c, dynamic nowMs) {
     final s = end as String; // JS היה זורק TypeError על .slice של לא-מחרוזת
     final t = _parseLocalMidnightMs(s.length < 10 ? s : s.substring(0, 10));
     if (t != null) {
-      final diff = _jsCeil((t - nowMs) / 86400000);
+      final diff = _jsCeil((t - ((nowMs) as num)) / 86400000);
       daysLeft = diff > 0 ? diff : 0;
     }
   }

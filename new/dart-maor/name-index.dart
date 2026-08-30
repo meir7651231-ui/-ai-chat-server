@@ -52,7 +52,7 @@ dynamic _keyOf(dynamic m) {
 /// Verbatim behaviour of the JS source `nameIndex`.
 dynamic nameIndex(dynamic db, dynamic allMembers) {
   final map = <dynamic, dynamic>{};
-  for (final m in allMembers(db)) {
+  for (final m in ((allMembers(db)) as Iterable)) {
     map[_keyOf(m)] = m;
   }
   return map;

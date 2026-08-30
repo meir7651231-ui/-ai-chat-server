@@ -18,8 +18,8 @@ Map<String, dynamic> weightedQuote(
   final perLesson = lessonPriceForTier(c, opts['tier']);
   final raw = lessonsInTerm(opts['freq'], opts['unit'], opts['term'], opts['months']);
   return {
-    'lessons': _jsRound(raw.toDouble() * 2) / 2,
+    'lessons': _jsRound(((raw.toDouble() * 2) as num)) / 2,
     'perLesson': perLesson,
-    'total': _jsRound(raw.toDouble() * perLesson.toDouble()),
+    'total': _jsRound(((raw.toDouble() * perLesson.toDouble()) as num)),
   };
 }
