@@ -3,7 +3,10 @@
  *  OrgSecretsSection.tsx (שורות 45, 61-71) — עכשיו חיווט גלוי אחד.
  *  שקעי-IO (שמירת-הענן writeOrgSecrets · toast · שדות-הטופס) = לוח-האם; הקופסה טהורה. */
 import { SMTP_HOSTS } from '../atoms/smtp-hosts.mjs';
-import { smtpHostFor } from '../atoms/smtp-host-for.mjs';
+import { smtpHostFor as __pure_smtpHostFor } from '../atoms/smtp-host-for.mjs';
+import { SMTP_HOSTS as __d_smtpHostFor_SMTP_HOSTS } from '../atoms/smtp-hosts.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const smtpHostFor = (...a) => __pure_smtpHostFor(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_smtpHostFor_SMTP_HOSTS);
 import { composeSmtpUrl } from '../atoms/compose-smtp-url.mjs';
 
 // ── מילון-הקופסה (נוסח-המקור verbatim — OrgSecretsSection.tsx:66-67) ──

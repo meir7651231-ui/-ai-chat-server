@@ -99,9 +99,25 @@ function appendArgAtCalls(src, fn, extra) {   // fn(<args>) ⇒ fn(<args>, extra
   out += src.slice(prev);
   return out;
 }
+const normLit = (x) => x.replace(/\s+/g, '');
+function findExistingData(lit) {
+  // הכרעה 5: אם ליטרל זהה כבר מיוצא מאטום-דאטה קיים — משתמשים בו, לא משכפלים
+  for (const f of fs.readdirSync(ATOMS)) {
+    if (!f.endsWith('.mjs') || f.endsWith('.test.mjs')) continue;
+    const t = fs.readFileSync(path.join(ATOMS, f), 'utf8');
+    for (const m of t.matchAll(/export const (\w+) = ([\[{])/g)) {
+      const st = m.index + m[0].length - 1;
+      const en = balanced(t, st);
+      if (en > 0 && normLit(t.slice(st, en + 1)) === normLit(lit)) return { file: f, name: m[1] };
+    }
+  }
+  return null;
+}
 function purifyOne(cand, log) {
   const base = cand.file.replace(/\.mjs$/, '');
   const dataBase = base + '-data';
+  for (const c of cand.consts) c.existing = findExistingData(c.lit);
+  const allExisting = cand.consts.every(c => c.existing);
   if (fs.existsSync(path.join(ATOMS, dataBase + '.mjs'))) return log(`~ ${base}: כבר קיים אטום-דאטה`);
   const names = cand.consts.map(c => c.name);
   // (1) המנגנון: הסרת ההכרזות + הרחבת-חתימה
@@ -124,11 +140,12 @@ function purifyOne(cand, log) {
     else if (ch === ',' && dpt === 0) origArity++; } }
   mech = mech.slice(0, po + 1) + (params ? params + ', ' : '') + names.join(', ') + mech.slice(pc);
   // (2) אטום-הדאטה + חוזה + בדיקה
+  const newConsts = cand.consts.filter(c => !c.existing);
   const dataSrc = `/** אטום-דאטה · ${dataBase} — הדאטה שחולצה מ-${base} (מנוע-הטיהור, הכרעה 19). חוזה: ${dataBase}.contract.md */\n` +
-    cand.consts.map(c => `export const ${c.name} = ${c.lit};`).join('\n') + '\n';
+    newConsts.map(c => `export const ${c.name} = ${c.lit};`).join('\n') + '\n';
   const contract = `# חוזה · ${dataBase}\nאטום-דאטה שחולץ מכנית מ-${base} על-ידי מנוע-הטיהור (הכרעה 19: קבועים ושמות-דומיין = דאטה).\nהמנגנון ${base} מקבל אותו כפרמטר-שקע; הקוראים מזריקים. צורת-דאטה טהורה — אפס לוגיקה.\n\n## דוגמאות-זהב\nצילום-ערך ב-${dataBase}.test.mjs.\n`;
   const test = `// בדיקת-צילום · ${dataBase} — הדאטה שחולצה זהה ביט-אחר-ביט למקור (מנוע-הטיהור).\nimport * as D from './${dataBase}.mjs';\nimport assert from 'node:assert';\n` +
-    cand.consts.map(c => `assert.strictEqual(JSON.stringify(D.${c.name}), ${JSON.stringify(JSON.stringify(eval('(' + c.lit + ')')))});`).join('\n') +
+    newConsts.map(c => `assert.strictEqual(JSON.stringify(D.${c.name}), ${JSON.stringify(JSON.stringify(eval('(' + c.lit + ')')))});`).join('\n') +
     `\nconsole.log('OK ${dataBase}');\n`;
   // (3) הקוראים — כריכת-עטיפה (v2): הקורא מייבא את האטום-הטהור בכינוי, כורך את הדאטה
   // בעטיפה מרופדת-אריות (ברירות-מחדל נשמרות), וכל שאר הקובץ — קריאות, re-export,
@@ -145,14 +162,25 @@ function purifyOne(cand, log) {
     const alias = `__pure_${cand.fn}`;
     const newBraces = im[1].replace(spec[0], `${cand.fn} as ${alias}`);
     const pad = `...Array(Math.max(0, ${origArity} - a.length)).fill(undefined)`;
-    const wrap = `const ${local} = (...a) => ${alias}(...a, ${pad}, ${names.join(', ')});`;
+    const uniq = (c) => `__d_${cand.fn}_${c.name}`;
+    const wrap = `const ${local} = (...a) => ${alias}(...a, ${pad}, ${cand.consts.map(uniq).join(', ')});`;
     let inject;
     if (cp.endsWith('.test.mjs')) {
-      const inl = cand.consts.map(c => `const ${c.name} = ${c.lit};`).join('\n');
-      inject = `\n// צילום-מקומי מ-${dataBase} + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)\n${inl}\n${wrap}`;
+      const inl = cand.consts.map(c => `const ${uniq(c)} = ${c.lit};`).join('\n');
+      inject = `\n// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)\n${inl}\n${wrap}`;
     } else {
-      const relData = path.relative(path.dirname(cp), path.join(ATOMS, dataBase + '.mjs')).replace(/^(?!\.)/, './');
-      inject = `\nimport { ${names.join(', ')} } from '${relData}';\n// עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה\n${wrap}`;
+      const byHome = new Map();
+      for (const c of cand.consts) {
+        const home = c.existing ? c.existing.file : dataBase + '.mjs';
+        const exp = c.existing ? c.existing.name : c.name;
+        if (!byHome.has(home)) byHome.set(home, []);
+        byHome.get(home).push(`${exp} as ${uniq(c)}`);
+      }
+      const ims = [...byHome].map(([home, specs]) => {
+        const rel = path.relative(path.dirname(cp), path.join(ATOMS, home)).replace(/^(?!\.)/, './');
+        return `import { ${specs.join(', ')} } from '${rel}';`;
+      }).join('\n');
+      inject = `\n${ims}\n// עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה\n${wrap}`;
     }
     const stmt = im[0];
     const nu = t.replace(stmt, stmt.replace(im[1], newBraces) + inject);
@@ -163,13 +191,15 @@ function purifyOne(cand, log) {
   for (const [p] of edits) backup.set(p, fs.readFileSync(p, 'utf8'));
   try {
     fs.writeFileSync(path.join(ATOMS, cand.file), mech);
-    fs.writeFileSync(path.join(ATOMS, dataBase + '.mjs'), dataSrc);
-    fs.writeFileSync(path.join(ATOMS, dataBase + '.contract.md'), contract);
-    fs.writeFileSync(path.join(ATOMS, dataBase + '.test.mjs'), test);
+    if (newConsts.length) {
+      fs.writeFileSync(path.join(ATOMS, dataBase + '.mjs'), dataSrc);
+      fs.writeFileSync(path.join(ATOMS, dataBase + '.contract.md'), contract);
+      fs.writeFileSync(path.join(ATOMS, dataBase + '.test.mjs'), test);
+    }
     for (const [p, t] of edits) fs.writeFileSync(p, t);
-    for (const p of [path.join(ATOMS, cand.file), path.join(ATOMS, dataBase + '.mjs'), ...edits.keys()])
+    for (const p of [path.join(ATOMS, cand.file), ...(newConsts.length ? [path.join(ATOMS, dataBase + '.mjs')] : []), ...edits.keys()])
       execFileSync('node', ['--check', p], { stdio: 'pipe' });
-    const tests = new Set([path.join(ATOMS, dataBase + '.test.mjs')]);
+    const tests = new Set(newConsts.length ? [path.join(ATOMS, dataBase + '.test.mjs')] : []);
     const ownT = path.join(ATOMS, base + '.test.mjs');
     if (fs.existsSync(ownT)) tests.add(ownT);
     for (const p of edits.keys()) {
@@ -182,8 +212,9 @@ function purifyOne(cand, log) {
     log(`✅ ${base}: ${names.join('+')} ⇒ ${dataBase} · ${edits.size} קוראים שוכתבו · בדיקות ירוקות`);
     return true;
   } catch (e) {
+    if (process.env.PDEBUG) { const dd = '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/pdebug'; fs.mkdirSync(dd, { recursive: true }); for (const [pp] of backup) { try { fs.copyFileSync(pp, path.join(dd, base + '__' + path.basename(pp))); } catch { } } }
     for (const [p, t] of backup) fs.writeFileSync(p, t);
-    for (const ext of ['.mjs', '.contract.md', '.test.mjs']) fs.rmSync(path.join(ATOMS, dataBase + ext), { force: true });
+    if (newConsts.length) for (const ext of ['.mjs', '.contract.md', '.test.mjs']) fs.rmSync(path.join(ATOMS, dataBase + ext), { force: true });
     return log(`✗ ${base}: אימות אדום — הוחזר (${String(e.message).slice(0, 60)})`);
   }
 }

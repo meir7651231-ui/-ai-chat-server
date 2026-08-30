@@ -5,16 +5,8 @@
  *  נתון של האטום, לא קריאת-שכן (חוק-1; קיים גם כאטום-קבוע smtp-hosts). */
 
 /** ספקים מוכרים — דומיין-המייל ⇒ שרת-היציאה שלו. לא מוכר ⇒ שדה-שרת ידני. */
-const SMTP_HOSTS = {
-    'gmail.com': 'smtp.gmail.com:465',
-    'googlemail.com': 'smtp.gmail.com:465',
-    'outlook.com': 'smtp-mail.outlook.com:587',
-    'hotmail.com': 'smtp-mail.outlook.com:587',
-    'yahoo.com': 'smtp.mail.yahoo.com:465',
-    'walla.co.il': 'out.walla.co.il:465',
-};
 
-export function smtpHostFor(email) {
+export function smtpHostFor(email, SMTP_HOSTS) {
     const at = email.lastIndexOf('@');
     if (at < 1)
         return '';

@@ -5,9 +5,8 @@
  *  נתון של האטום, לא קריאת-שכן (חוק-1; קיים גם כאטום-קבוע ayin-stages). */
 
 /** סדר השלבים — קבוע; התוויות נגזרות דרך termOf (אצל stage-label). */
-const AYIN_STAGES = ['new', 'lead', 'eyes', 'answer', 'done'];
 
-export function stageIndex(stage) {
+export function stageIndex(stage, AYIN_STAGES) {
     const i = AYIN_STAGES.indexOf(stage);
     return i < 0 ? 0 : i;
 }

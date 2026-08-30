@@ -1,4 +1,7 @@
-import { stageIndex } from './stage-index.mjs';
+import { stageIndex as __pure_stageIndex } from './stage-index.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)
+const __d_stageIndex_AYIN_STAGES = ['new', 'lead', 'eyes', 'answer', 'done'];
+const stageIndex = (...a) => __pure_stageIndex(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_stageIndex_AYIN_STAGES);
 let f = 0;
 const eq = (a, b, msg) => { if (a !== b) { console.error(`✗ ${msg} ⇒ ${JSON.stringify(a)}`); f = 1; } };
 

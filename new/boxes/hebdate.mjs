@@ -11,7 +11,10 @@
  *  נחשף כאן כפונקציה cldrGuard — הקופסה נקייה מתופעות-לוואי בייבוא; לוח-האם מחווט אותה באתחול. */
 import { hebParts } from '../atoms/heb-parts.mjs';
 import { pad2 } from '../atoms/pad2.mjs';
-import { monthHeOf as monthHeOfAtom } from '../atoms/month-he-of.mjs';
+import { monthHeOf as __pure_monthHeOf } from '../atoms/month-he-of.mjs';
+import { MONTHS as __d_monthHeOf_MONTHS } from '../atoms/month-en-of-data.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const monthHeOfAtom = (...a) => __pure_monthHeOf(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_monthHeOf_MONTHS);
 import { monthEnOf as __pure_monthEnOf } from '../atoms/month-en-of.mjs';
 import { MONTHS } from '../atoms/month-en-of-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה

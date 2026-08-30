@@ -1,4 +1,14 @@
-import { smtpHostFor } from './smtp-host-for.mjs';
+import { smtpHostFor as __pure_smtpHostFor } from './smtp-host-for.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)
+const __d_smtpHostFor_SMTP_HOSTS = {
+    'gmail.com': 'smtp.gmail.com:465',
+    'googlemail.com': 'smtp.gmail.com:465',
+    'outlook.com': 'smtp-mail.outlook.com:587',
+    'hotmail.com': 'smtp-mail.outlook.com:587',
+    'yahoo.com': 'smtp.mail.yahoo.com:465',
+    'walla.co.il': 'out.walla.co.il:465',
+};
+const smtpHostFor = (...a) => __pure_smtpHostFor(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_smtpHostFor_SMTP_HOSTS);
 let f = 0;
 const eq = (a, b, msg) => { if (a !== b) { console.error(`✗ ${msg} ⇒ ${JSON.stringify(a)}`); f = 1; } };
 

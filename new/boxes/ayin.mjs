@@ -8,7 +8,10 @@ import { stageLabel as stageLabelA } from '../atoms/stage-label.mjs';
 import { featLabel as featLabelA }   from '../atoms/feat-label.mjs';
 import { itemLabel as itemLabelA }   from '../atoms/item-label.mjs';
 import { unitLabel as unitLabelA }   from '../atoms/unit-label.mjs';
-import { stageIndex as stageIndexA } from '../atoms/stage-index.mjs';
+import { stageIndex as __pure_stageIndex } from '../atoms/stage-index.mjs';
+import { AYIN_STAGES as __d_stageIndex_AYIN_STAGES } from '../atoms/ayin-stages.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const stageIndexA = (...a) => __pure_stageIndex(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_stageIndex_AYIN_STAGES);
 import { nextStage as nextStageA }   from '../atoms/next-stage.mjs';
 import { revertPatch as revertPatchA } from '../atoms/revert-patch.mjs';
 import { normName as normNameA }     from '../atoms/norm-name.mjs';
