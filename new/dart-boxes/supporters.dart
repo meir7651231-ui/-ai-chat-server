@@ -1,3 +1,5 @@
+import '../dart-data-maor/norm-search-sockets.dart' as skb_norm_search;
+import '../dart-data-maor/parse-supporter-grid-sockets.dart' as skb_parse_supporter_grid;
 import '../dart-data-maor/personal-cal-entries-sockets.dart' as skb_personal_cal_entries;
 import '../dart-data-maor/sup-tier-sockets.dart' as skb_sup_tier;
 import '../dart-data-maor/sup-don-events-sockets.dart' as skb_sde;
@@ -98,7 +100,7 @@ int _len(dynamic v) => v is List ? v.length : 0;
 
 // ── פורמט / זהות ─────────────────────────────────────────────────────────────
 String fmtDate(String? iso) => fd.fmtDate(iso);
-String normName(dynamic s) => nn.normName(s, ns.normSearch);
+String normName(dynamic s) => nn.normName(s, (a0) => ns.normSearch(a0, skb_norm_search.normSearch_T));
 String fixPhone(dynamic p) => fp.fixPhone(p, fip.formatIsraeliPhone);
 
 // ── אגרגטים (pass-through — האטום כבר מקבל dynamic sp) ────────────────────────
@@ -172,7 +174,7 @@ bool _purposeVisible(dynamic d, Set<String> set) {
 List<String> get supNameKeys => snk.supNameKeys;
 String excelSerialToIso(Object? serial) => esti.excelSerialToIso(serial);
 List<Map<String, dynamic>> parseSupporterGrid(List<List<Object?>> rows) =>
-    psg.parseSupporterGrid(rows, snk.supNameKeys, pad.parseAnyDate, esti.excelSerialToIso);
+    psg.parseSupporterGrid(rows, snk.supNameKeys, pad.parseAnyDate, esti.excelSerialToIso, skb_parse_supporter_grid.parseSupporterGrid_T);
 List<Map<String, dynamic>> parseSupporterCsv(String text) =>
     psc.parseSupporterCsv<Map<String, dynamic>>(text, pc.parseCsv, parseSupporterGrid);
 Map<String, dynamic> planSupporterImport(List rows, List existing) =>

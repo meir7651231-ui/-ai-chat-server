@@ -20,6 +20,9 @@ function isMixed(src) {
   // סימטריית-regex: תבנית-RegExp היא לוגיקת-ההתאמה עצמה (ב-JS ליטרל-regex פטור מטבעו;
   // ב-Dart אותה תבנית עטופה במחרוזת) — עברית בתוך ארגומנט-RegExp איננה דאטה-תצוגה.
   code = code.replace(/RegExp\(\s*r?('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*")/g, "RegExp('");
+  // מפתח-עברי שקושר-שקע ('ך': T['k1']!) = חיווט, לא דאטה — הערך חי באטום-הדאטה
+  // (מקביל ל-{ ך: T.k1 } בצד-ה-JS, שם המפתח אינו מחרוזת כלל).
+  code = code.replace(/'[֐-׿]{1,3}'(?=\s*:\s*T\[)/g, "'k'");
   let heb = false;
   for (const m of code.matchAll(/['"]([^'"\\\n]{0,160})['"]/g)) if (HEB.test(m[1])) { heb = true; break; }
   if (!heb) return false;

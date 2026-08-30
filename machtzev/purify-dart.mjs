@@ -276,6 +276,8 @@ function purifyFile(base, report) {
   const leftovers = [];
   const edits = [];
   for (const st of strs) {
+    // תבנית-RegExp = לוגיקת-ההתאמה עצמה (ב-JS ליטרל-regex פטור מטבעו) — לא מטרת-החלפה
+    if (/RegExp\(\s*r?$/.test(src.slice(Math.max(0, st.start - 12), st.start))) continue;
     if (st.raw) {
       const whole = st.segs.map(x => x.s).join('');
       if (idx.has(whole)) edits.push({ start: st.start, end: st.end, txt: idx.get(whole) });

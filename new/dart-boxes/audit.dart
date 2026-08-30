@@ -1,3 +1,4 @@
+import '../dart-data-maor/norm-search-sockets.dart' as skb_norm_search;
 import '../dart-data-maor/phone-issue-sockets.dart' as skb_phone_issue;
 import '../dart-data-maor/run-audit-sockets.dart' as skb_run_audit;
 import '../dart-data-maor/audit-cat-colors-terms.dart' as td_audit_cat_colors;
@@ -24,7 +25,7 @@ import '../dart-maor/supporter-aggregates.dart' as sa;
 
 // ── תפר-הנרמול: normName של המקור = normSearch + הסרת-רווחים (validate.ts:65-67) ──
 // דבק-חיווט module-private (חוק-5), מקביל ל-wiredNormName ב-audit.mjs.
-String _wiredNormName(dynamic t) => nn.normName(t, ns.normSearch);
+String _wiredNormName(dynamic t) => nn.normName(t, (a0) => ns.normSearch(a0, skb_norm_search.normSearch_T));
 
 // ── ה-API הפומבי (ביט-זהה לחתימות audit.ts / audit.mjs) ──────────────────────
 // קבועי-התצוגה — חוטים בלי-שקעים, מוגשים כמות-שהם (החיווט: בחירת-האטום בלבד).

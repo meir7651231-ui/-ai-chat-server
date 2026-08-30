@@ -1,3 +1,4 @@
+import '../dart-data-maor/norm-search-sockets.dart' as skb_ns;
 import '../dart-data-maor/with-nedarim-hok-sockets.dart' as skb_wnh;
 import '../dart-data-maor/detect-recurring-hok-sockets.dart' as skb_drh;
 import '../dart-data-maor/provider-clearer-terms.dart';
@@ -84,8 +85,8 @@ List<String> keysOf(Map<String, dynamic> o) {
   }
   final em = _s(o['email']).trim().toLowerCase();
   if (em.isNotEmpty) ks.add('em:$em');
-  final n = _ns.normSearch(_s(o['name']));
-  final c = _ns.normSearch(_s(o['city']));
+  final n = _ns.normSearch(_s(o['name']), skb_ns.normSearch_T);
+  final c = _ns.normSearch(_s(o['city']), skb_ns.normSearch_T);
   if (n.isNotEmpty && c.isNotEmpty) ks.add('nc:$n|$c');
   return ks;
 }
@@ -164,7 +165,7 @@ String modeStr(List<String> strs) {
 }
 
 // מפתח-שם חסין-סדר: name-sort-key מוזרק normSearch (אטום) + NAME_TITLES (מילון-קופסה).
-String nameSortKey(dynamic t) => _nsk.nameSortKey(t, _ns.normSearch, _nameTitles);
+String nameSortKey(dynamic t) => _nsk.nameSortKey(t, (x) => _ns.normSearch(x, skb_ns.normSearch_T), _nameTitles);
 
 // nedarimSync.ts:471-498 — כרטיס-תומך חדש מרשומת-תורם נדרים (מזהה דטרמיניסטי).
 Map<String, dynamic> supFromDonor(Map<String, dynamic> d) {

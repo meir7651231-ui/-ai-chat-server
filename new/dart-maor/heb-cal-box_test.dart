@@ -1,13 +1,14 @@
 // בדיקת-חוזה · heb-cal-box — שקילות-פלט מלאה מול האטום החי heb-month-he על 1900–2100
 // (דילוגי 13 ימים) + סריקה צפופה סביב ערבי-ר"ה (ספט'-אוק' 2018–2032) כולל קצה 2024-10-02.
 // הרצה: dart run --enable-asserts new/dart-maor/heb-cal-box_test.dart ⇒ exit 0
+import '../dart-data-maor/heb-month-he-sockets.dart' as sk_hmh;
 import 'heb-cal-box.dart';
 import 'heb-month-he.dart';
 
 void main() {
   int n = 0;
   void eq(DateTime d) {
-    final a = hebMonthHeWired(d), b = hebMonthHe(d);
+    final a = hebMonthHeWired(d), b = hebMonthHe(d, sk_hmh.hebMonthHe_monthNames);
     if (a != b) throw StateError('$d: wired=$a atom=$b');
     n++;
   }

@@ -1,3 +1,4 @@
+import '../dart-data-maor/heb-month-he-sockets.dart' as skb_hmh;
 import '../dart-data-maor/gematria-sockets.dart' as td_gematria;
 // 📦 קופסת-חיבורים · לוח עברי (Dart) — מחווטת 4 אטומי-Dart. מקבילה ל-new/boxes/hebrew-calendar.mjs.
 // חוזה משותף: new/boxes/hebrew-calendar.contract.md. מקור-האמת: maor/src/lib/hebrew.ts.
@@ -32,7 +33,7 @@ String fullDate(String? iso) {
   final p = hp.hebParts(d);
   final day = p['day'] as int;
   final year = p['year'] as int;
-  return '${g.gem(day, td_gematria.gematria_U, td_gematria.gematria_T, td_gematria.gematria_H, td_gematria.gematria_T2)} ${hm.hebMonthHe(d)} ${g.gem(year % 1000, td_gematria.gematria_U, td_gematria.gematria_T, td_gematria.gematria_H, td_gematria.gematria_T2)}';
+  return '${g.gem(day, td_gematria.gematria_U, td_gematria.gematria_T, td_gematria.gematria_H, td_gematria.gematria_T2)} ${hm.hebMonthHe(d, skb_hmh.hebMonthHe_monthNames)} ${g.gem(year % 1000, td_gematria.gematria_U, td_gematria.gematria_T, td_gematria.gematria_H, td_gematria.gematria_T2)}';
 }
 
 /// מפתח-חזרה-שנתית: "‹חודש-מנורמל-אדר› ‹יום›". חודש ריק (קלט שבור) ⇒ ''.

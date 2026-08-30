@@ -1,3 +1,4 @@
+import '../dart-data-maor/norm-search-sockets.dart' as skb_norm_search;
 import '../dart-data-maor/sup-dup-fields-sockets.dart' as skb_sdf;
 import '../dart-data-maor/dup-fields-sockets.dart' as skb_df;
 import '../dart-data-maor/merge-families-terms.dart';
@@ -57,7 +58,7 @@ List<dynamic> _dedupById(List<dynamic> items) {
   }
   return out;
 }
-String _nameSortKey(dynamic t) => nsk.nameSortKey(t, ns.normSearch, _nameTitles);
+String _nameSortKey(dynamic t) => nsk.nameSortKey(t, (a0) => ns.normSearch(a0, skb_norm_search.normSearch_T), _nameTitles);
 
 // ── מתאמי-טיפוס לשקעים (Dart קשיח-טיפוס) ─────────────────────────────────────
 String _npDyn(dynamic s) => np.normPhone(s as String?);
