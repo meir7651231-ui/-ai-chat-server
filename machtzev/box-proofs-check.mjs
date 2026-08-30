@@ -14,7 +14,8 @@ const BASE = path.join(ROOT, 'machtzev/box-proofs-baseline.json');
 
 // פתרון-Dart עמיד: DART_BIN → dart ב-PATH → flutter → הסקרצ'פד. אין בינארי ⇒ לא-ניתן-להוכיח (כנות, לא סחף).
 const resolveDart = () => {
-  const cands = [process.env.DART_BIN, '/home/user/flutter/bin/dart',
+  const cands = [process.env.DART_BIN, path.join(process.env.HOME || '', 'dart-sdk/bin/dart'),
+    '/home/user/flutter/bin/dart',
     '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/dart-sdk/bin/dart'];
   for (const c of cands) if (c && fs.existsSync(c)) return c;
   try { return execFileSync('bash', ['-lc', 'command -v dart'], { encoding: 'utf8' }).trim() || null; } catch { return null; }
