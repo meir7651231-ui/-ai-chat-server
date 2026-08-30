@@ -8,7 +8,7 @@
 | ציר | בוקר | עכשיו | % | שער |
 |---|---|---|---|---|
 | 🧼 טוהר-עומק (הכרעה 19) | 37 | **36** | 92.7% | deeppurity ✓ |
-| 🧼 טוהר-דאטה (הכרעה 16) | 124 | **6** | 99.0% | datapurity ✓ |
+| 🧼 טוהר-דאטה (הכרעה 16) | 124 | **0** | **100%** 🏁 | datapurity ✓ |
 | 🔁 המרת-מנגנונים JS⇒Dart | 39 בהסגר | **0** | **100%** 🏁 | genesis-compile ✓ |
 | 🧠 מנועים ברי-הרצה | 104 | **313**/459 | 68% | coverage ✓ (ratchet) |
 | 🧠 ברי-חיווט-לסינתזה (Dart-שקול) | 104 | **119-172** | — | שער-synth ✓ |
@@ -235,3 +235,10 @@
   ‏kLevelLabels מיובא). משטרה 13/13 · קופסאות 62/62 · strict 0. **נותרו 6 — כולם עברית ב-
   string-interpolation** (תוויות-UI): line_compliance_checklist · project_quote_text ·
   quote_text_for · recommended_kit_for×2 · size_diameter_atoms.
+- **30.8 · 🏁 טוהר-דאטה 100% (מעורבים 124⇒0) — הכרעת-בעלים "הכל כולל-מותג" הושלמה:**
+  ‏6 אטומי-UI האחרונים (עברית ב-string-interpolation) טוהרו: size_diameter_atoms (יחידת-ס"מ) ·
+  quote_text_for/project_quote_text (תוויות-הצעה) · recommended_kit_for (29) · recommended_kit_for_product
+  (15) · line_compliance_checklist (67) — כלי `lift_interp.py` מפריד כל מקטע-עברי-סטטי לקבוע-
+  מיובא (`<base>-uidata.dart`) ושומר את ה-interpolation (`$var`); כל קובץ אומת מול בדיקת-הזהב.
+  **baseline רוענן ל-0.** משטרה 13/13 · קופסאות 62/62 · מנועים 456 · strict 0.
+  🏆 **חמישה צירים ב-100%: המרה · קופסאות · לבנים · תאומי-דאטה · טוהר-דאטה.**
