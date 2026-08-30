@@ -1,10 +1,31 @@
 {
  "counts": {
-  "widgets": 395,
+  "widgets": 401,
   "functions": 445,
-  "data": 1392
+  "data": 1393
  },
  "widgets": [
+  {
+   "cls": "AnimatedToggle",
+   "file": "animated_toggle.dart",
+   "props": [
+    "label",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "required": [
+    "label",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "positional": []
+  },
   {
    "cls": "AuroraField",
    "file": "aurora_field.dart",
@@ -43,6 +64,27 @@
     "label",
     "inkColor",
     "mutedColor"
+   ],
+   "positional": []
+  },
+  {
+   "cls": "CheckPop",
+   "file": "check_pop.dart",
+   "props": [
+    "label",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "required": [
+    "label",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
    ],
    "positional": []
   },
@@ -141,6 +183,27 @@
    "positional": []
   },
   {
+   "cls": "GlowField",
+   "file": "glow_field.dart",
+   "props": [
+    "hint",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "required": [
+    "hint",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "positional": []
+  },
+  {
    "cls": "GlowPulse",
    "file": "glow_pulse.dart",
    "props": [
@@ -154,6 +217,27 @@
    "required": [
     "height",
     "speed",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "positional": []
+  },
+  {
+   "cls": "GlowSlider",
+   "file": "glow_slider.dart",
+   "props": [
+    "label",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "required": [
+    "label",
+    "height",
     "radius",
     "accentColor",
     "baseColor",
@@ -439,6 +523,27 @@
    "positional": []
   },
   {
+   "cls": "SearchField",
+   "file": "search_field.dart",
+   "props": [
+    "hint",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "required": [
+    "hint",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "positional": []
+  },
+  {
    "cls": "ShimmerSkeleton",
    "file": "shimmer_skeleton.dart",
    "props": [
@@ -477,6 +582,29 @@
     "title",
     "sub",
     "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "positional": []
+  },
+  {
+   "cls": "StarRating",
+   "file": "star_rating.dart",
+   "props": [
+    "label",
+    "height",
+    "stars",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "required": [
+    "label",
+    "height",
+    "stars",
     "radius",
     "accentColor",
     "baseColor",
@@ -22934,6 +23062,23 @@
   },
   {
    "name": "gen_components_gradientbtn_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_components_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_components_gradientbtn_toast",
    "type": "String",
    "he": [
     "דאטה",
