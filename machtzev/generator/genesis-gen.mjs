@@ -96,6 +96,8 @@ function pickAtom(part) {
     if (score === 0) continue;
     // תפקיד-אינטראקטיבי ⇒ האטום חייב יכולת-תגובה (on*) — תווית-דוממת לא משמשת שדה/מתג
     if (INTERACTIVE.has(part.role) && ![...a.types.keys()].some(n => /^on[A-Z]/.test(n))) continue;
+    // עוגן-דאטה ⇒ חובה prop-אופציות List<String> (התוכן החי חייב משטח-הצגה)
+    if (part.dataPin && ![...a.types.entries()].some(([n, t]) => /^(options|items)$/.test(n) && /^List<String>/.test(t.replace(/\?$/, '')))) continue;
     let fillable = true, widgetFills = 0;
     for (const rq of [...a.required, ...a.positional]) {
       const t = (a.types.get(rq) || '').replace(/\?$/, '');
