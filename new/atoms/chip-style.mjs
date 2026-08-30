@@ -1,14 +1,14 @@
 /** חוט · chip-style — קודם אוטומטית (אפיון-Golden). חוזה: chip-style.contract.md */
-export function chipStyle(bg, c) {
+export function chipStyle(bg, c, T) {
     return {
-        display: 'inline-block',
+        display: T.k1,
         padding: '3px 10px',
         borderRadius: 999,
         fontSize: 12,
         fontWeight: 700,
         background: bg,
         color: c,
-        whiteSpace: 'nowrap',
+        whiteSpace: T.k2,
     };
 }
 /* ── סינון שיבוץ חכם (P1.7, feature courses.enroll.smartfilter) — הכרעה 3:

@@ -23,8 +23,14 @@ import { COURSE_DATE_ERROR_T as __d_courseDateError_COURSE_DATE_ERROR_T } from '
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const courseDateErrorWire = (...a) => __pure_courseDateError(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_courseDateError_COURSE_DATE_ERROR_T);
 import { ageOf as ageOfWire } from '../atoms/age-of.mjs';
-import { termOf } from '../atoms/term-of.mjs';
-import { normSearch } from '../atoms/norm-search.mjs';
+import { termOf as __pure_termOf } from '../atoms/term-of.mjs';
+import { INTEGRATION_SETTING_T as __d_termOf_TERM_OF_T } from '../atoms/integration-setting-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const termOf = (...a) => __pure_termOf(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_termOf_TERM_OF_T);
+import { normSearch as __pure_normSearch } from '../atoms/norm-search.mjs';
+import { NORM_SEARCH_T as __d_normSearch_NORM_SEARCH_T } from '../atoms/norm-search-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const normSearch = (...a) => __pure_normSearch(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_normSearch_NORM_SEARCH_T);
 import { DAY_NAMES } from '../atoms/day-names.mjs';
 import { DAY_LETTERS } from '../atoms/day-letters.mjs';
 import { sessionsOf } from '../atoms/sessions-of.mjs';
@@ -109,7 +115,10 @@ import { planLabelOf as __pure_planLabelOf } from '../atoms/plan-label-of.mjs';
 import { PLAN_LABEL_OF_T as __d_planLabelOf_PLAN_LABEL_OF_T } from '../atoms/plan-label-of-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const planLabelWire = (...a) => __pure_planLabelOf(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_planLabelOf_PLAN_LABEL_OF_T);
-import { chipStyle } from '../atoms/chip-style.mjs';
+import { chipStyle as __pure_chipStyle } from '../atoms/chip-style.mjs';
+import { CHIP_STYLE_T as __d_chipStyle_CHIP_STYLE_T } from '../atoms/chip-style-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const chipStyle = (...a) => __pure_chipStyle(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_chipStyle_CHIP_STYLE_T);
 import { GRADE_ORDER } from '../atoms/grade-order.mjs';
 import { gradeIndex as gradeIndexWire } from '../atoms/grade-index.mjs';
 import { gradeFits as gradeFitsWire } from '../atoms/grade-fits.mjs';

@@ -1,4 +1,19 @@
-import { tierOf } from './tier-of.mjs';
+import { tierOf as __pure_tierOf } from './tier-of.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_tierOf_TIER_OF_T = {
+  k1: "titan",
+  k2: "טיטאן",
+  k3: "#fdf3dd",
+  k4: "lion",
+  k5: "לביאה",
+  k6: "pale",
+  k7: "טעון שיפור",
+  k8: "#fdf1d4",
+  k9: "red",
+  k10: "סיכון נטישה",
+  k11: "#fdeaea",
+};
+const tierOf = (...a) => __pure_tierOf(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_tierOf_TIER_OF_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const eq = (a, b, msg) => ok(JSON.stringify(a) === JSON.stringify(b), msg + ` ⇒ ${JSON.stringify(a)}`);

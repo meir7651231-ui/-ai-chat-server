@@ -64,7 +64,10 @@ import { BENEFICIARY_LABEL_T as __d_beneficiaryLabel_BENEFICIARY_LABEL_T } from 
 const _beneficiaryLabel = (...a) => __pure_beneficiaryLabel(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_beneficiaryLabel_BENEFICIARY_LABEL_T);
 import { componentCounts } from '../atoms/component-counts.mjs';
 // עלי-שכן חסרי-שקע — מיובאים ומחווטים בקופסה
-import { termOf } from '../atoms/term-of.mjs';
+import { termOf as __pure_termOf } from '../atoms/term-of.mjs';
+import { INTEGRATION_SETTING_T as __d_termOf_TERM_OF_T } from '../atoms/integration-setting-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const termOf = (...a) => __pure_termOf(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_termOf_TERM_OF_T);
 import { dateInRange } from '../atoms/date-in-range.mjs';
 import { hebParts as __pure_hebParts } from '../atoms/heb-parts.mjs';
 import { HEB_PARTS_T as __d_hebParts_HEB_PARTS_T } from '../atoms/heb-parts-strings.mjs';

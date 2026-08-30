@@ -40,7 +40,10 @@ import { COLLECTIONS_CSV_ROWS_T as __d_collectionsCsvRows_COLLECTIONS_CSV_ROWS_T
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const collectionsCsvRowsA = (...a) => __pure_collectionsCsvRows(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_collectionsCsvRows_COLLECTIONS_CSV_ROWS_T);
 import { buildTzGrid as buildTzGridA } from '../atoms/build-tz-grid.mjs';
-import { termOf } from '../atoms/term-of.mjs';
+import { termOf as __pure_termOf } from '../atoms/term-of.mjs';
+import { INTEGRATION_SETTING_T as __d_termOf_TERM_OF_T } from '../atoms/integration-setting-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const termOf = (...a) => __pure_termOf(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_termOf_TERM_OF_T);
 import { dateInRange } from '../atoms/date-in-range.mjs';
 import { isoLocal } from '../atoms/iso-local.mjs';
 import { DAY_NAMES as DAY_NAMES_A } from '../atoms/week-day-names.mjs';

@@ -34,7 +34,10 @@ import { safeHttpsUrl as __pure_safeHttpsUrl } from '../atoms/safe-https-url.mjs
 import { SAFE_HTTPS_URL_T as __d_safeHttpsUrl_SAFE_HTTPS_URL_T } from '../atoms/safe-https-url-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const atomSafeHttpsUrl = (...a) => __pure_safeHttpsUrl(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_safeHttpsUrl_SAFE_HTTPS_URL_T);
-import { termOf as atomTermOf } from '../atoms/term-of.mjs';
+import { termOf as __pure_termOf } from '../atoms/term-of.mjs';
+import { INTEGRATION_SETTING_T as __d_termOf_TERM_OF_T } from '../atoms/integration-setting-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const atomTermOf = (...a) => __pure_termOf(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_termOf_TERM_OF_T);
 import { normalizeTelephony as __pure_normalizeTelephony } from '../atoms/normalize-telephony.mjs';
 import { TEL_KINDS } from '../atoms/normalize-telephony-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה

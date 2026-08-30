@@ -1,0 +1,23 @@
+/** אטום-דאטה · finder-axes-strings — מחרוזות-התצוגה/דומיין שחולצו מ-finder-axes (מנוע-הטיהור v3, הכרעה 19). חוזה: finder-axes-strings.contract.md */
+export const FINDER_AXES_T = {
+  k1: "city",
+  k2: "עיר",
+  k3: "comm",
+  k4: "קהילה",
+  k5: "marital",
+  k6: "מצב משפחתי",
+  k7: "status",
+  k8: "סטטוס",
+  k9: "cred",
+  k10: "entity.cred",
+  k11: "אמינות",
+  k12: "kids",
+  k13: "ילדים",
+  k14: "enrolled",
+  k15: "nav.courses",
+  k16: "חוגים",
+  k17: "sefach",
+  k18: "ספח מלא",
+  k19: "lang",
+  k20: "שפה",
+};

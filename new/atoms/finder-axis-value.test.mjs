@@ -1,4 +1,26 @@
-import { finderAxisValue } from './finder-axis-value.mjs';
+import { finderAxisValue as __pure_finderAxisValue } from './finder-axis-value.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_finderAxisValue_FINDER_AXIS_VALUE_T = {
+  k1: "city",
+  k2: "comm",
+  k3: "marital",
+  k4: "לא ידוע",
+  k5: "status",
+  k6: "cred",
+  k7: "kids",
+  k8: "עם ילדים",
+  k9: "בלי ילדים",
+  k10: "enrolled",
+  k11: "משתתפות ב",
+  k12: "nav.courses",
+  k13: "חוגים",
+  k14: "לא משתתפות",
+  k15: "sefach",
+  k16: "קיים",
+  k17: "חסר",
+  k18: "lang",
+};
+const finderAxisValue = (...a) => __pure_finderAxisValue(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_finderAxisValue_FINDER_AXIS_VALUE_T);
 // שקעי-ייחוס כמוסכמת-maor (מקומיים לבדיקה)
 const STATUS_META = {
   active: { label: 'פעילה' },

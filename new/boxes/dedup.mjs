@@ -25,7 +25,10 @@ const _mergeSupportersByFields = (...a) => __pure_mergeSupportersByFields(...a, 
 import { mergeHist } from '../atoms/merge-hist.mjs';
 import { PHOTO_MAX } from '../atoms/photo-max.mjs';
 import { nameSortKey as _nameSortKey } from '../atoms/name-sort-key.mjs';
-import { normSearch } from '../atoms/norm-search.mjs';
+import { normSearch as __pure_normSearch } from '../atoms/norm-search.mjs';
+import { NORM_SEARCH_T as __d_normSearch_NORM_SEARCH_T } from '../atoms/norm-search-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const normSearch = (...a) => __pure_normSearch(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_normSearch_NORM_SEARCH_T);
 
 // ── מילון-החיווט (הכרעות שחיות בקופסה, verbatim מהמקור) ──
 // תארים/כינויי-כבוד עבריים למפתח-שם חסין-סדר (validate.ts:73-80). מילון-תוויות

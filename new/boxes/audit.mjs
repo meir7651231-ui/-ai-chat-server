@@ -21,9 +21,15 @@ import { auditReportLines as __pure_auditReportLines } from '../atoms/audit-repo
 import { AUDIT_REPORT_LINES_T as __d_auditReportLines_AUDIT_REPORT_LINES_T } from '../atoms/audit-report-lines-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const auditReportLines = (...a) => __pure_auditReportLines(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_auditReportLines_AUDIT_REPORT_LINES_T);
-import { termOf } from '../atoms/term-of.mjs';
+import { termOf as __pure_termOf } from '../atoms/term-of.mjs';
+import { INTEGRATION_SETTING_T as __d_termOf_TERM_OF_T } from '../atoms/integration-setting-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const termOf = (...a) => __pure_termOf(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_termOf_TERM_OF_T);
 import { normName as normNameWire } from '../atoms/norm-name.mjs';
-import { normSearch } from '../atoms/norm-search.mjs';
+import { normSearch as __pure_normSearch } from '../atoms/norm-search.mjs';
+import { NORM_SEARCH_T as __d_normSearch_NORM_SEARCH_T } from '../atoms/norm-search-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const normSearch = (...a) => __pure_normSearch(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_normSearch_NORM_SEARCH_T);
 import { validIsraeliId } from '../atoms/valid-israeli-id.mjs';
 import { ageOf } from '../atoms/age-of.mjs';
 import { supporterAggregates } from '../atoms/supporter-aggregates.mjs';

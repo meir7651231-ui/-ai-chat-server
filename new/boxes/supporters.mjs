@@ -23,7 +23,10 @@ import { TIER_ORDER } from '../atoms/tier-order.mjs';
 import { supScoreBins as supScoreBinsAtom } from '../atoms/sup-score-bins.mjs';
 import { supAvgDon as supAvgDonAtom } from '../atoms/sup-avg-don.mjs';
 import { sup12m as sup12mAtom } from '../atoms/sup12m.mjs';
-import { chipStyle } from '../atoms/chip-style.mjs';
+import { chipStyle as __pure_chipStyle } from '../atoms/chip-style.mjs';
+import { CHIP_STYLE_T as __d_chipStyle_CHIP_STYLE_T } from '../atoms/chip-style-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const chipStyle = (...a) => __pure_chipStyle(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_chipStyle_CHIP_STYLE_T);
 import { fixPhone as fixPhoneAtom } from '../atoms/fix-phone.mjs';
 import { totalLabel as totalLabelAtom } from '../atoms/total-label.mjs';
 import { supDonEvents as __pure_supDonEvents } from '../atoms/sup-don-events.mjs';
@@ -72,8 +75,14 @@ import { HOK_METHOD_LABEL_T as __d_hokMethodLabel_HOK_METHOD_LABEL_T } from '../
 const hokMethodLabel = (...a) => __pure_hokMethodLabel(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_hokMethodLabel_HOK_METHOD_LABEL_T);
 
 // ── חוטי-מודולים-אחרים (אטומים חיצוניים; קריאות-שכן ⇒ שקע, LAW חוק-1/3) ──
-import { termOf } from '../atoms/term-of.mjs';
-import { normSearch } from '../atoms/norm-search.mjs';
+import { termOf as __pure_termOf } from '../atoms/term-of.mjs';
+import { INTEGRATION_SETTING_T as __d_termOf_TERM_OF_T } from '../atoms/integration-setting-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const termOf = (...a) => __pure_termOf(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_termOf_TERM_OF_T);
+import { normSearch as __pure_normSearch } from '../atoms/norm-search.mjs';
+import { NORM_SEARCH_T as __d_normSearch_NORM_SEARCH_T } from '../atoms/norm-search-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const normSearch = (...a) => __pure_normSearch(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_normSearch_NORM_SEARCH_T);
 import { formatIsraeliPhone } from '../atoms/format-israeli-phone.mjs';
 import { parseAnyDate } from '../atoms/parse-any-date.mjs';
 import { parseCsv } from '../atoms/parse-csv.mjs';

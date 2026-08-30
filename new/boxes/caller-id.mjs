@@ -15,7 +15,10 @@ import { familyContext as __pure_familyContext } from '../atoms/family-context.m
 import { FAMILY_CONTEXT_T as __d_familyContext_FAMILY_CONTEXT_T } from '../atoms/family-context-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const familyContext = (...a) => __pure_familyContext(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_familyContext_FAMILY_CONTEXT_T);
-import { termOf } from '../atoms/term-of.mjs';
+import { termOf as __pure_termOf } from '../atoms/term-of.mjs';
+import { INTEGRATION_SETTING_T as __d_termOf_TERM_OF_T } from '../atoms/integration-setting-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const termOf = (...a) => __pure_termOf(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_termOf_TERM_OF_T);
 
 export { phoneKey, familyContext };
 

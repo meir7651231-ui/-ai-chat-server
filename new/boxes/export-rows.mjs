@@ -14,7 +14,10 @@ import { eventsCsvRows as __pure_eventsCsvRows } from '../atoms/events-csv-rows.
 import { EVENTS_CSV_ROWS_T as __d_eventsCsvRows_EVENTS_CSV_ROWS_T } from '../atoms/events-csv-rows-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const eventsCsvRowsWire = (...a) => __pure_eventsCsvRows(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_eventsCsvRows_EVENTS_CSV_ROWS_T);
-import { termOf } from '../atoms/term-of.mjs';
+import { termOf as __pure_termOf } from '../atoms/term-of.mjs';
+import { INTEGRATION_SETTING_T as __d_termOf_TERM_OF_T } from '../atoms/integration-setting-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const termOf = (...a) => __pure_termOf(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_termOf_TERM_OF_T);
 import { hebDateFull as __pure_hebDateFull } from '../atoms/heb-date-full.mjs';
 import { HEB_DATE_FULL_T as __d_hebDateFull_HEB_DATE_FULL_T } from '../atoms/heb-date-full-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

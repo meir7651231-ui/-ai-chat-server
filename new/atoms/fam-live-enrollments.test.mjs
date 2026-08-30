@@ -1,4 +1,10 @@
-import { famLiveEnrollments } from './fam-live-enrollments.mjs';
+import { famLiveEnrollments as __pure_famLiveEnrollments } from './fam-live-enrollments.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_famLiveEnrollments_FAM_LIVE_ENROLLMENTS_T = {
+  k1: "ended",
+  k2: "wait",
+};
+const famLiveEnrollments = (...a) => __pure_famLiveEnrollments(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_famLiveEnrollments_FAM_LIVE_ENROLLMENTS_T);
 let f = 0;
 const eq = (a, b, msg) => { if (JSON.stringify(a) !== JSON.stringify(b)) { console.error(`✗ ${msg} ⇒ ${JSON.stringify(a)}`); f = 1; } };
 

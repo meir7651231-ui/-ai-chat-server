@@ -5,7 +5,10 @@
 import { validIsraeliId as atomValidId } from '../atoms/valid-israeli-id.mjs';
 import { normalizePhone as atomNormPhone } from '../atoms/normalize-phone.mjs';
 import { formatIsraeliPhone as atomFormatPhone } from '../atoms/format-israeli-phone.mjs';
-import { normSearch as atomNormSearch } from '../atoms/norm-search.mjs';
+import { normSearch as __pure_normSearch } from '../atoms/norm-search.mjs';
+import { NORM_SEARCH_T as __d_normSearch_NORM_SEARCH_T } from '../atoms/norm-search-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const atomNormSearch = (...a) => __pure_normSearch(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_normSearch_NORM_SEARCH_T);
 import { normName as atomNormName } from '../atoms/norm-name.mjs';
 import { nameSortKey as atomNameSortKey } from '../atoms/name-sort-key.mjs';
 

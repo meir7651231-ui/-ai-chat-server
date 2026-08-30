@@ -7,7 +7,10 @@ import { normalizePrices as __pure_normalizePrices } from '../atoms/normalize-pr
 import { NORMALIZE_PRICES_T as __d_normalizePrices_NORMALIZE_PRICES_T } from '../atoms/normalize-prices-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const normalizePrices = (...a) => __pure_normalizePrices(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_normalizePrices_NORMALIZE_PRICES_T);
-import { computeQuote } from '../atoms/compute-quote.mjs';
+import { computeQuote as __pure_computeQuote } from '../atoms/compute-quote.mjs';
+import { COMPUTE_QUOTE_T as __d_computeQuote_COMPUTE_QUOTE_T } from '../atoms/compute-quote-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const computeQuote = (...a) => __pure_computeQuote(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_computeQuote_COMPUTE_QUOTE_T);
 import { shekel as __pure_shekel } from '../atoms/shekel.mjs';
 import { SHEKEL_T as __d_shekel_SHEKEL_T } from '../atoms/shekel-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

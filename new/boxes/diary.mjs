@@ -32,7 +32,10 @@ import { inactiveRoomCourses as __pure_inactiveRoomCourses } from '../atoms/inac
 import { INACTIVE_ROOM_COURSES_T as __d_inactiveRoomCourses_INACTIVE_ROOM_COURSES_T } from '../atoms/inactive-room-courses-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const inactiveRoomCoursesAtom = (...a) => __pure_inactiveRoomCourses(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_inactiveRoomCourses_INACTIVE_ROOM_COURSES_T);
-import { chipStyle } from '../atoms/chip-style.mjs';
+import { chipStyle as __pure_chipStyle } from '../atoms/chip-style.mjs';
+import { CHIP_STYLE_T as __d_chipStyle_CHIP_STYLE_T } from '../atoms/chip-style-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const chipStyle = (...a) => __pure_chipStyle(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_chipStyle_CHIP_STYLE_T);
 import { roomInfoLabel as __pure_roomInfoLabel } from '../atoms/room-info-label.mjs';
 import { ROOM_INFO_LABEL_T as __d_roomInfoLabel_ROOM_INFO_LABEL_T } from '../atoms/room-info-label-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
@@ -44,7 +47,10 @@ import { HEB_PARTS_T as __d_hebParts_HEB_PARTS_T } from '../atoms/heb-parts-stri
 const hebParts = (...a) => __pure_hebParts(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_hebParts_HEB_PARTS_T);
 import { HOLIDAYS } from '../atoms/holidays.mjs';
 import { sessionsOf } from '../atoms/sessions-of.mjs';
-import { termOf } from '../atoms/term-of.mjs';
+import { termOf as __pure_termOf } from '../atoms/term-of.mjs';
+import { INTEGRATION_SETTING_T as __d_termOf_TERM_OF_T } from '../atoms/integration-setting-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const termOf = (...a) => __pure_termOf(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_termOf_TERM_OF_T);
 import { planWord as __pure_planWord } from '../atoms/plan-word.mjs';
 import { PLAN_WORD_T as __d_planWord_PLAN_WORD_T } from '../atoms/plan-word-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

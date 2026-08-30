@@ -11,7 +11,10 @@ import { guideSections as __pure_guideSections } from '../atoms/guide-sections-o
 import { GUIDE_SECTIONS_OF_T as __d_guideSections_GUIDE_SECTIONS_OF_T } from '../atoms/guide-sections-of-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const sectionsWire = (...a) => __pure_guideSections(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_guideSections_GUIDE_SECTIONS_OF_T);
-import { termOf } from '../atoms/term-of.mjs';
+import { termOf as __pure_termOf } from '../atoms/term-of.mjs';
+import { INTEGRATION_SETTING_T as __d_termOf_TERM_OF_T } from '../atoms/integration-setting-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const termOf = (...a) => __pure_termOf(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_termOf_TERM_OF_T);
 
 // ── החיווט ──
 // swap — הכרעת-הקופסה (guide.ts:91-93): החלפת תת-מחרוזת גלובלית בלי regex.

@@ -8,7 +8,10 @@ import { TOUR_STEPS_T as __d_tourSteps_TOUR_STEPS_T } from '../atoms/tour-steps-
 const tourSteps = (...a) => __pure_tourSteps(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_tourSteps_TOUR_STEPS_T);
 import { tourAdvance } from '../atoms/tour-advance.mjs';
 import { spotlightBox } from '../atoms/spotlight-box.mjs';
-import { termOf } from '../atoms/term-of.mjs';
+import { termOf as __pure_termOf } from '../atoms/term-of.mjs';
+import { INTEGRATION_SETTING_T as __d_termOf_TERM_OF_T } from '../atoms/integration-setting-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const termOf = (...a) => __pure_termOf(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_termOf_TERM_OF_T);
 
 // ── מילון-התסריט — הכרעת-הקופסה (באטום tour-steps זה שקע `steps`) ──
 // 14 צעדים, כיתובים מילה-במילה מכיתובי-ההדמיה של הלגאסי (script:1133-1256),

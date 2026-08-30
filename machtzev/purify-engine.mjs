@@ -29,12 +29,46 @@ const balanced = (s, i) => {                       // מ-i (פותח) עד הס�
   }
   return -1;
 };
+function fnSpans(src, fns) {
+  // טווח-גוף לכל פונקציה-מיוצאת: מהחתימה עד סוגר-הגוף
+  const spans = [];
+  for (const fn of fns) {
+    const sm = src.match(new RegExp(`export\\s+(?:const\\s+${fn}\\s*=\\s*(?:async\\s*)?|function\\s+${fn}\\s*)\\(`));
+    if (!sm) return null;
+    const po = src.indexOf('(', sm.index + sm[0].length - 1);
+    const pc = balanced(src, po);
+    if (pc < 0) return null;
+    const ob = src.indexOf('{', pc);
+    const arrowExpr = src.slice(pc + 1, ob < 0 ? pc + 1 : ob).trim();
+    if (ob < 0 || (arrowExpr !== '' && arrowExpr !== '=>')) {
+      // גוף-ביטוי (arrow ללא-בלוק): הטווח עד ; ברמת-אפס
+      let d = 0, q = pc + 1, stq = null;
+      for (; q < src.length; q++) {
+        const c = src[q];
+        if (stq) { if (c === '\\') q++; else if (c === stq) stq = null; continue; }
+        if (c === "'" || c === '"' || c === '`') stq = c;
+        else if ('([{'.includes(c)) d++;
+        else if (')]}'.includes(c)) { if (d === 0) break; d--; }
+        else if (c === ';' && d === 0) break;
+      }
+      spans.push({ fn, sig: sm.index, po, pc, end: q });
+      continue;
+    }
+    const oe = balanced(src, ob);
+    if (oe < 0) return null;
+    spans.push({ fn, sig: sm.index, po, pc, end: oe });
+  }
+  return spans;
+}
 function eligible(file) {
   const src = fs.readFileSync(path.join(ATOMS, file), 'utf8');
   const code = strip(src);
   const fns = [...code.matchAll(/export\s+(?:const\s+(\w+)\s*=\s*(?:async\s*)?\(|function\s+(\w+)\s*\()/g)].map(m => m[1] || m[2]);
-  if (fns.length !== 1) return null;
-  const fn = fns[0];
+  if (!fns.length || fns.length > 6) return null;
+  if ([...code.matchAll(/export\s+(?:const|let|var|\{|function)/g)].length !== fns.length) return null;
+  const spans = fnSpans(src, fns);
+  if (!spans) return null;
+  const inSpan = (i) => spans.find(sp => i > sp.pc && i <= sp.end);
   const consts = [];
   for (const m of src.matchAll(/(?:^|\n)([ \t]*)const\s+([A-Za-z_$][\w$]*)\s*=\s*(?=[\[{]|-?\d|['"])/g)) {
     const start = m.index + m[0].length;
@@ -43,30 +77,30 @@ function eligible(file) {
       end = balanced(src, start);
       if (end < 0 || src[end + 1] !== ';') continue;
     } else {
-      // סקלר: מספר או מחרוזת פשוטה עד ;
       const sm2 = src.slice(start).match(/^(-?\d[\d._]*(?:e-?\d+)?|'(?:\\.|[^'\\\n])*'|"(?:\\.|[^"\\\n])*")\s*;/);
       if (!sm2) continue;
       end = start + sm2[1].length - 1;
       if (src[end + 1] !== ';') { const semi = src.indexOf(';', start); if (src.slice(start, semi).trim() !== sm2[1]) continue; end = semi - 1; }
     }
     const lit = src.slice(start, end + 1);
-    if (!isStaticLit(lit)) continue;
-    if (lit.length < 2) continue;
-    // מגן-מוטציה: דאטה שהמנגנון משנה בגוף (push/מיון/הצבה) אינה קבוע — חילוץ היה יוצר מצב-משותף
-    if (new RegExp(`\\b${m[2]}\\s*\\.\\s*(push|pop|shift|unshift|splice|sort|reverse|fill)\\b|\\b${m[2]}\\s*\\[[^\\]]*\\]\\s*=|\\b${m[2]}\\s*=`).test(code.slice(code.indexOf(m[2]) + 1))) continue;
+    if (!isStaticLit(lit) || lit.length < 2) continue;
+    if (new RegExp(`\\b${m[2]}\\s*\\.\\s*(push|pop|shift|unshift|splice|sort|reverse|fill)\\b|\\b${m[2]}\\s*\\[[^\\]]*\\]\\s*(=|\\+\\+|--|\\+=|-=)|\\b${m[2]}\\s*(=|\\+\\+|--)|(\\+\\+|--)\\s*${m[2]}\\b|Object\\.(assign|defineProperty)\\(\\s*${m[2]}\\b|delete\\s+${m[2]}\\b`).test(code.slice(code.indexOf(m[2]) + 1))) continue;
     consts.push({ name: m[2], lit, declStart: m.index + (m[0].startsWith('\n') ? 1 : 0), declEnd: end + 2 });
   }
   if (!consts.length) return null;
   if (new Set(consts.map(c => c.name)).size !== consts.length) return null;
-  // מגן-תחום: שימוש בקבוע לפני חתימת-הפונקציה-המיוצאת = עוזר-מודול חיצוני (לקח amount-in-words):
-  // הרחבת-החתימה לא תגיע אליו ⇒ הפניה-חופשית בזמן-ריצה. דוחים בכבוד.
-  const sigAt = code.search(new RegExp(`export\\s+(?:const\\s+${fn}\\s*=|function\\s+${fn}\\s*\\()`));
+  // מגן-טווחים: כל שימוש (מחוץ להכרזה) חייב לשבת בגוף פונקציה-מיוצאת; הפונקציות-המשתמשות יורחבו
+  const users = new Set();
   for (const c of consts) {
-    const uses = [...code.matchAll(new RegExp(`\\b${c.name}\\b`, 'g'))].map(u => u.index);
-    if (uses.some(u => u < sigAt && u !== code.indexOf(`const ${c.name}`) && !code.slice(Math.max(0, u - 8), u).includes('const')))
-      return null;
+    for (const u of src.matchAll(new RegExp(`\\b${c.name}\\b`, 'g'))) {
+      if (u.index >= c.declStart && u.index <= c.declEnd) continue;
+      const sp = inSpan(u.index);
+      if (!sp) return null;                        // שימוש מחוץ-לגוף-מיוצא (עוזר-מודול) — דוחים
+      users.add(sp.fn);
+    }
   }
-  return { file, src, fn, consts };
+  if (!users.size) return null;
+  return { file, src, fns: [...users], allFns: fns, consts };
 }
 const callers = (base, fn) => {
   const out = [];
@@ -126,30 +160,27 @@ function findExistingData(lit) {
 function purifyOne(cand, log) {
   const base = cand.file.replace(/\.mjs$/, '');
   const dataBase = base + '-data';
-  for (const c of cand.consts) c.existing = findExistingData(c.lit);
-  const allExisting = cand.consts.every(c => c.existing);
   if (fs.existsSync(path.join(ATOMS, dataBase + '.mjs'))) return log(`~ ${base}: כבר קיים אטום-דאטה`);
+  for (const c of cand.consts) c.existing = findExistingData(c.lit);
   const names = cand.consts.map(c => c.name);
-  // (1) המנגנון: הסרת ההכרזות + הרחבת-חתימה
   let mech = cand.src;
-  for (const c of [...cand.consts].sort((a, b) => b.declStart - a.declStart))
+  for (const c of [...cand.consts].sort((a2, b2) => b2.declStart - a2.declStart))
     mech = mech.slice(0, c.declStart) + mech.slice(c.declEnd + (mech[c.declEnd] === '\n' ? 1 : 0));
-  const sig = new RegExp(`(export\\s+(?:const\\s+${cand.fn}\\s*=\\s*(?:async\\s*)?|function\\s+${cand.fn}\\s*))\\(`);
-  const sm = mech.match(sig);
-  if (!sm) return log(`~ ${base}: חתימה לא-משוכתבת`);
-  const po = mech.indexOf('(', sm.index + sm[1].length - 1);
-  const pc = balanced(mech, po);
-  if (pc < 0) return log(`~ ${base}: פרמטרים לא-נקראים`);
-  const params = mech.slice(po + 1, pc).trim();
-  // אריות-מקור: כמה פרמטרים היו — העטיפה בקוראים מרפדת עד-אליה כדי שברירות-מחדל יישמרו
-  let origArity = 0, dpt = 0, st = null;
-  if (params) { origArity = 1; for (let q = 0; q < params.length; q++) { const ch = params[q];
-    if (st) { if (ch === '\\') q++; else if (ch === st) st = null; continue; }
-    if (ch === "'" || ch === '"' || ch === '`') st = ch;
-    else if ('([{'.includes(ch)) dpt++; else if (')]}'.includes(ch)) dpt--;
-    else if (ch === ',' && dpt === 0) origArity++; } }
-  mech = mech.slice(0, po + 1) + (params ? params + ', ' : '') + names.join(', ') + mech.slice(pc);
-  // (2) אטום-הדאטה + חוזה + בדיקה
+  // הרחבת-חתימה לכל פונקציה-משתמשת (מהאחרונה לראשונה — אינדקסים יציבים) + אריות-מקור פר-פונקציה
+  const arity = {};
+  const spans2 = fnSpans(mech, cand.fns);
+  if (!spans2) return log(`~ ${base}: טווחים לא-נקראים אחרי-הסרה`);
+  for (const sp of [...spans2].sort((x, y) => y.po - x.po)) {
+    const params = mech.slice(sp.po + 1, sp.pc).trim();
+    let n = 0, d = 0, stq = null;
+    if (params) { n = 1; for (let q = 0; q < params.length; q++) { const ch = params[q];
+      if (stq) { if (ch === '\\') q++; else if (ch === stq) stq = null; continue; }
+      if (ch === "'" || ch === '"' || ch === '`') stq = ch;
+      else if ('([{'.includes(ch)) d++; else if (')]}'.includes(ch)) d--;
+      else if (ch === ',' && d === 0) n++; } }
+    arity[sp.fn] = n;
+    mech = mech.slice(0, sp.po + 1) + (params ? params.replace(/,\s*$/, '') + ', ' : '') + names.join(', ') + mech.slice(sp.pc);
+  }
   const newConsts = cand.consts.filter(c => !c.existing);
   const dataSrc = `/** אטום-דאטה · ${dataBase} — הדאטה שחולצה מ-${base} (מנוע-הטיהור, הכרעה 19). חוזה: ${dataBase}.contract.md */\n` +
     newConsts.map(c => `export const ${c.name} = ${c.lit};`).join('\n') + '\n';
@@ -157,27 +188,32 @@ function purifyOne(cand, log) {
   const test = `// בדיקת-צילום · ${dataBase} — הדאטה שחולצה זהה ביט-אחר-ביט למקור (מנוע-הטיהור).\nimport * as D from './${dataBase}.mjs';\nimport assert from 'node:assert';\n` +
     newConsts.map(c => `assert.strictEqual(JSON.stringify(D.${c.name}), ${JSON.stringify(JSON.stringify(eval('(' + c.lit + ')')))});`).join('\n') +
     `\nconsole.log('OK ${dataBase}');\n`;
-  // (3) הקוראים — כריכת-עטיפה (v2): הקורא מייבא את האטום-הטהור בכינוי, כורך את הדאטה
-  // בעטיפה מרופדת-אריות (ברירות-מחדל נשמרות), וכל שאר הקובץ — קריאות, re-export,
-  // הזרקה-כערך — רואה את העטיפה. ה-API החיצוני של קופסאות לא זז.
-  const cs = callers(base, cand.fn);
+  // קוראים: עטיפה פר-פונקציה-מורחבת שמיובאת אצלם
+  const uniq = (c) => `__d_${base.replace(/-/g, '_')}_${c.name}`;
+  const csSet = new Set();
+  for (const fn of cand.fns) for (const cp of callers(base, fn)) csSet.add(cp);
   const edits = new Map();
-  for (const cp of cs) {
-    const t = fs.readFileSync(cp, 'utf8');
+  for (const cp of csSet) {
+    let t = fs.readFileSync(cp, 'utf8');
+    if (cand.fns.some(fn => t.includes(`__pure_${fn}`))) return log(`~ ${base}: קורא כבר-עטוף (${path.relative(ROOT, cp)})`);
     const im = t.match(new RegExp(`import\\s*\\{([^}]*)\\}\\s*from\\s*(['\"])([^'\"]*\\/${base}\\.mjs)\\2\\s*;?`));
     if (!im) return log(`~ ${base}: קורא בלי import-מפורש (${path.relative(ROOT, cp)})`);
-    const spec = im[1].match(new RegExp(`\\b${cand.fn}\\b(\\s+as\\s+(\\w+))?`));
-    if (!spec) return log(`~ ${base}: היבוא לא נמצא במפרט (${path.relative(ROOT, cp)})`);
-    const local = spec[2] || cand.fn;
-    const alias = `__pure_${cand.fn}`;
-    const newBraces = im[1].replace(spec[0], `${cand.fn} as ${alias}`);
-    const pad = `...Array(Math.max(0, ${origArity} - a.length)).fill(undefined)`;
-    const uniq = (c) => `__d_${cand.fn}_${c.name}`;
-    const wrap = `const ${local} = (...a) => ${alias}(...a, ${pad}, ${cand.consts.map(uniq).join(', ')});`;
+    let braces = im[1];
+    const wraps = [];
+    for (const fn of cand.fns) {
+      const spec = braces.match(new RegExp(`\\b${fn}\\b(\\s+as\\s+(\\w+))?`));
+      if (!spec) continue;                          // הקורא לא מייבא את הפונקציה הזו
+      const local = spec[2] || fn;
+      const alias = `__pure_${fn}`;
+      braces = braces.replace(spec[0], `${fn} as ${alias}`);
+      const pad = `...Array(Math.max(0, ${arity[fn]} - a.length)).fill(undefined)`;
+      wraps.push(`const ${local} = (...a) => ${alias}(...a, ${pad}, ${cand.consts.map(uniq).join(', ')});`);
+    }
+    if (!wraps.length) continue;
     let inject;
     if (cp.endsWith('.test.mjs')) {
       const inl = cand.consts.map(c => `const ${uniq(c)} = ${c.lit};`).join('\n');
-      inject = `\n// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)\n${inl}\n${wrap}`;
+      inject = `\n// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור; בדיקה לא מייבאת אטום-שכן)\n${inl}\n${wraps.join('\n')}`;
     } else {
       const byHome = new Map();
       for (const c of cand.consts) {
@@ -190,42 +226,51 @@ function purifyOne(cand, log) {
         const rel = path.relative(path.dirname(cp), path.join(ATOMS, home)).replace(/^(?!\.)/, './');
         return `import { ${specs.join(', ')} } from '${rel}';`;
       }).join('\n');
-      inject = `\n${ims}\n// עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה\n${wrap}`;
+      inject = `\n${ims}\n// עטיפת-כריכה (מנוע-הטיהור): הדאטה נכרכת כאן — ה-API החיצוני זהה\n${wraps.join('\n')}`;
     }
-    const stmt = im[0];
-    const nu = t.replace(stmt, stmt.replace(im[1], newBraces) + inject);
-    edits.set(cp, nu);
+    edits.set(cp, t.replace(im[0], im[0].replace(im[1], braces) + inject));
   }
-  // כתיבה + אימות + החזרה-על-אדום
+
+  // 🛡️ מגן-ספירת-ייבוא בקופסאות: ספירה נעולה בבדיקה הצמודה מתעדכנת לערך-האמת החדש
+  for (const [cp, nu] of [...edits]) {
+    if (cp.endsWith('.test.mjs')) continue;
+    const adj = cp.replace(/\.mjs$/, '.test.mjs');
+    if (!fs.existsSync(adj)) continue;
+    const at = edits.has(adj) ? edits.get(adj) : fs.readFileSync(adj, 'utf8');
+    const cnt = (nu.match(/from '\.\.\/atoms\//g) || []).length;
+    const patched = at.replace(/\.length === (\d+), 'מגן: (\d+) ייבואי-אטום([^']*)'/g,
+      (mm, a2, b2, rest) => `.length === ${cnt}, 'מגן: ${cnt} ייבואי-אטום${rest.includes('הכרעה 19') ? rest : rest + ' — הכרעה 19'}'`);
+    if (patched !== at) edits.set(adj, patched);
+  }
   const backup = new Map([[path.join(ATOMS, cand.file), cand.src]]);
-  for (const [p] of edits) backup.set(p, fs.readFileSync(p, 'utf8'));
+  for (const [pp] of edits) backup.set(pp, fs.readFileSync(pp, 'utf8'));
+  const mkData = newConsts.length > 0;
   try {
     fs.writeFileSync(path.join(ATOMS, cand.file), mech);
-    if (newConsts.length) {
+    if (mkData) {
       fs.writeFileSync(path.join(ATOMS, dataBase + '.mjs'), dataSrc);
       fs.writeFileSync(path.join(ATOMS, dataBase + '.contract.md'), contract);
       fs.writeFileSync(path.join(ATOMS, dataBase + '.test.mjs'), test);
     }
-    for (const [p, t] of edits) fs.writeFileSync(p, t);
-    for (const p of [path.join(ATOMS, cand.file), ...(newConsts.length ? [path.join(ATOMS, dataBase + '.mjs')] : []), ...edits.keys()])
-      execFileSync('node', ['--check', p], { stdio: 'pipe' });
-    const tests = new Set(newConsts.length ? [path.join(ATOMS, dataBase + '.test.mjs')] : []);
+    for (const [pp, tt] of edits) fs.writeFileSync(pp, tt);
+    for (const pp of [path.join(ATOMS, cand.file), ...(mkData ? [path.join(ATOMS, dataBase + '.mjs')] : []), ...edits.keys()])
+      execFileSync('node', ['--check', pp], { stdio: 'pipe' });
+    const tests = new Set(mkData ? [path.join(ATOMS, dataBase + '.test.mjs')] : []);
     const ownT = path.join(ATOMS, base + '.test.mjs');
     if (fs.existsSync(ownT)) tests.add(ownT);
-    for (const p of edits.keys()) {
-      if (p.endsWith('.test.mjs')) tests.add(p);
-      else { const adj = p.replace(/\.mjs$/, '.test.mjs'); if (fs.existsSync(adj)) tests.add(adj); }  // בדיקת-הקופסה הצמודה (מגני-הכרעה!)
+    for (const pp of edits.keys()) {
+      if (pp.endsWith('.test.mjs')) tests.add(pp);
+      else { const adj = pp.replace(/\.mjs$/, '.test.mjs'); if (fs.existsSync(adj)) tests.add(adj); }
     }
-    for (const t of tests) execFileSync('node', [t], { stdio: 'pipe' });
-    // מגן-הפניות: הסורק הגלובלי חייב להישאר ירוק (תופס עוזרי-מודול שהוחמצו — לקח amount-in-words)
+    for (const tt of tests) execFileSync('node', [tt], { stdio: 'pipe' });
     execFileSync('node', [path.join(ROOT, 'machtzev/emit/free-ref-scan.mjs'), '--gate'], { stdio: 'pipe' });
-    log(`✅ ${base}: ${names.join('+')} ⇒ ${dataBase} · ${edits.size} קוראים שוכתבו · בדיקות ירוקות`);
+    log(`✅ ${base}: ${names.join('+')} ⇒ ${dataBase} · ${cand.fns.length} פונקציות · ${edits.size} קוראים`);
     return true;
   } catch (e) {
     if (process.env.PDEBUG) { const dd = '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/pdebug'; fs.mkdirSync(dd, { recursive: true }); for (const [pp] of backup) { try { fs.copyFileSync(pp, path.join(dd, base + '__' + path.basename(pp))); } catch { } } }
-    for (const [p, t] of backup) fs.writeFileSync(p, t);
-    if (newConsts.length) for (const ext of ['.mjs', '.contract.md', '.test.mjs']) fs.rmSync(path.join(ATOMS, dataBase + ext), { force: true });
-    return log(`✗ ${base}: אימות אדום — הוחזר (${String(e.message).slice(0, 60)})`);
+    for (const [pp, tt] of backup) fs.writeFileSync(pp, tt);
+    if (mkData) for (const ext of ['.mjs', '.contract.md', '.test.mjs']) fs.rmSync(path.join(ATOMS, dataBase + ext), { force: true });
+    return log(`✗ ${base}: אימות אדום — הוחזר (${String(e.message).slice(0, 60)} · ${String(e.stderr || '').slice(0, 200).replace(/\n/g, ' ⏎ ')})`);
   }
 }
 
@@ -238,9 +283,14 @@ function eligibleStrings(file) {
   if (fns.length !== 1) return null;
   const fn = fns[0];
   // מיסוך הערות בלבד (מחרוזות נשארות גלויות לאיסוף)
-  const noCom = src.replace(/\/\*[\s\S]*?\*\//g, m => 'x'.repeat(m.length)).replace(/\/\/[^\n]*/g, m => 'x'.repeat(m.length));
+  let noCom = src.replace(/\/\*[\s\S]*?\*\//g, m => 'x'.repeat(m.length)).replace(/\/\/[^\n]*/g, m => 'x'.repeat(m.length));
+  // מיסוך regex-literals — גרש בתוך מחלקת-תווים אינו פותח-מחרוזת (לקח grade-index)
+  noCom = noCom.replace(/(?<=[=(,:;!&|?{\[\s]|^)\/(?:\\.|\[(?:\\.|[^\]\\\n])*\]|[^\/\\\n])+\/[gimsuy]*/g, m => 'x'.repeat(m.length));
   const sigAt = noCom.search(new RegExp(`export\\s+(?:const\\s+${fn}\\s*=|function\\s+${fn}\\s*\\()`));
   if (sigAt < 0) return null;
+  // טווח-הפרמטרים — מחרוזת בברירת-מחדל היא חלק מהחתימה, לא מועמדת-חילוץ (לקח compute-quote)
+  const po0 = noCom.indexOf('(', sigAt);
+  const pc0 = po0 >= 0 ? balanced(noCom, po0) : -1;
   const sites = [];
   for (const m of noCom.matchAll(/(['"])((?:\\.|(?!\1)[^\\\n])*)\1/g)) {
     const v = m[2];
@@ -253,6 +303,7 @@ function eligibleStrings(file) {
     const prevC = (before.match(/(\S)\s*$/) || [])[1] || '';
     const afterC = (noCom.slice(m.index + m[0].length).match(/^\s*(\S)/) || [])[1] || '';
     if ((prevC === '{' || prevC === ',') && afterC === ':') continue;   // מפתח-אובייקט — לא בגרסה זו
+    if (po0 >= 0 && m.index > po0 && m.index < pc0) continue;           // ברירת-מחדל בחתימה — נשארת
     if (m.index < sigAt) return null;                                   // מחרוזת בעוזר-מודול — דוחים
     sites.push({ at: m.index, len: m[0].length, v, raw: m[0] });
   }
@@ -287,7 +338,7 @@ function purifyStrings(cand, log) {
     if (ch === "'" || ch === '"' || ch === '`') stq = ch;
     else if ('([{'.includes(ch)) dpt++; else if (')]}'.includes(ch)) dpt--;
     else if (ch === ',' && dpt === 0) origArity++; } }
-  mech = mech.slice(0, po + 1) + (params ? params + ', ' : '') + tParam + mech.slice(pc);
+  mech = mech.slice(0, po + 1) + (params ? params.replace(/,\s*$/, '') + ', ' : '') + tParam + mech.slice(pc);
   const litObj = '{\n' + [...keys].map(([v, k]) => `  ${k}: ${JSON.stringify(v).replace(/\u2028|\u2029/g, '')},`).join('\n') + '\n}';
   const existing = findExistingData(litObj);
   const dataSrc = `/** אטום-דאטה · ${dataBase} — מחרוזות-התצוגה/דומיין שחולצו מ-${base} (מנוע-הטיהור v3, הכרעה 19). חוזה: ${dataBase}.contract.md */\nexport const ${CONST} = ${litObj};\n`;
@@ -320,6 +371,18 @@ function purifyStrings(cand, log) {
     }
     edits.set(cp, t.replace(im[0], im[0].replace(im[1], newBraces) + inject));
   }
+
+  // 🛡️ מגן-ספירת-ייבוא בקופסאות: ספירה נעולה בבדיקה הצמודה מתעדכנת לערך-האמת החדש
+  for (const [cp, nu] of [...edits]) {
+    if (cp.endsWith('.test.mjs')) continue;
+    const adj = cp.replace(/\.mjs$/, '.test.mjs');
+    if (!fs.existsSync(adj)) continue;
+    const at = edits.has(adj) ? edits.get(adj) : fs.readFileSync(adj, 'utf8');
+    const cnt = (nu.match(/from '\.\.\/atoms\//g) || []).length;
+    const patched = at.replace(/\.length === (\d+), 'מגן: (\d+) ייבואי-אטום([^']*)'/g,
+      (mm, a2, b2, rest) => `.length === ${cnt}, 'מגן: ${cnt} ייבואי-אטום${rest.includes('הכרעה 19') ? rest : rest + ' — הכרעה 19'}'`);
+    if (patched !== at) edits.set(adj, patched);
+  }
   const backup = new Map([[path.join(ATOMS, cand.file), cand.src]]);
   for (const [pp] of edits) backup.set(pp, fs.readFileSync(pp, 'utf8'));
   const mkData = !existing;
@@ -348,7 +411,7 @@ function purifyStrings(cand, log) {
     if (process.env.PDEBUG) { const dd = '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/pdebug'; fs.mkdirSync(dd, { recursive: true }); for (const [pp] of backup) { try { fs.copyFileSync(pp, path.join(dd, base + '__' + path.basename(pp))); } catch { } } }
     for (const [pp, tt] of backup) fs.writeFileSync(pp, tt);
     if (mkData) for (const ext of ['.mjs', '.contract.md', '.test.mjs']) fs.rmSync(path.join(ATOMS, dataBase + ext), { force: true });
-    return log(`✗ ${base}: אימות אדום — הוחזר (${String(e.message).slice(0, 60)})`);
+    return log(`✗ ${base}: אימות אדום — הוחזר (${String(e.message).slice(0, 60)} · ${String(e.stderr || '').slice(0, 200).replace(/\n/g, ' ⏎ ')})`);
   }
 }
 

@@ -83,8 +83,14 @@ import { APPLY_AYIN_SHEET_T as __d_applyAyinSheet_APPLY_AYIN_SHEET_T } from '../
 const applyAyinSheetA = (...a) => __pure_applyAyinSheet(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_applyAyinSheet_APPLY_AYIN_SHEET_T);
 
 // ── אטומי-שכן טהורים (מודולים אחרים; אטומים-על-המדף ⇒ מיובאים ומחווטים) ──
-import { termOf }     from '../atoms/term-of.mjs';
-import { normSearch } from '../atoms/norm-search.mjs';
+import { termOf as __pure_termOf }     from '../atoms/term-of.mjs';
+import { INTEGRATION_SETTING_T as __d_termOf_TERM_OF_T } from '../atoms/integration-setting-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const termOf = (...a) => __pure_termOf(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_termOf_TERM_OF_T);
+import { normSearch as __pure_normSearch } from '../atoms/norm-search.mjs';
+import { NORM_SEARCH_T as __d_normSearch_NORM_SEARCH_T } from '../atoms/norm-search-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const normSearch = (...a) => __pure_normSearch(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_normSearch_NORM_SEARCH_T);
 
 // ── החיווט ──
 // שקעי-IO (החלטת-הקופסה): isoToday · emptyAyin · nextId מוזרקים — לעולם לא ממומשים כאן.

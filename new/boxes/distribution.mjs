@@ -28,7 +28,10 @@ import { DELIVERIES_CSV_ROWS_T as __d_deliveriesCsvRows_DELIVERIES_CSV_ROWS_T } 
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const deliveriesCsvRows = (...a) => __pure_deliveriesCsvRows(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_deliveriesCsvRows_DELIVERIES_CSV_ROWS_T);
 import { volunteerRouteStops } from '../atoms/volunteer-route-stops.mjs';
-import { termOf } from '../atoms/term-of.mjs';
+import { termOf as __pure_termOf } from '../atoms/term-of.mjs';
+import { INTEGRATION_SETTING_T as __d_termOf_TERM_OF_T } from '../atoms/integration-setting-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const termOf = (...a) => __pure_termOf(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_termOf_TERM_OF_T);
 
 // ── מילון-התוויות (הכרעה — חי בקופסה, לא בחוטים) ──
 // מקור: shop7/lib.ts:20-22 — pickup→איסוף · enroute→בדרך · delivered→נמסר.

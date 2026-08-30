@@ -1,7 +1,10 @@
 /** קופסת-חיבורים · חיפוש — מחווטת את חוטי-החיפוש. חוזה: search.contract.md
  *  זה המקום היחיד שבו החוטים נפגשים (חוקי-החשמלאי, LAW.md). */
 import { levenshtein } from '../atoms/levenshtein.mjs';
-import { normSearch } from '../atoms/norm-search.mjs';
+import { normSearch as __pure_normSearch } from '../atoms/norm-search.mjs';
+import { NORM_SEARCH_T as __d_normSearch_NORM_SEARCH_T } from '../atoms/norm-search-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const normSearch = (...a) => __pure_normSearch(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_normSearch_NORM_SEARCH_T);
 import { expandQuery } from '../atoms/xlat.mjs';
 import { ruleExact } from '../atoms/rule-exact.mjs';
 import { rulePrefix } from '../atoms/rule-prefix.mjs';
