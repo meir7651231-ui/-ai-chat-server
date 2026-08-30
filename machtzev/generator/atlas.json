@@ -2,7 +2,7 @@
  "counts": {
   "widgets": 381,
   "functions": 438,
-  "data": 711
+  "data": 701
  },
  "widgets": [
   {
@@ -17788,77 +17788,27 @@
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_improv_row_ic",
+   "name": "gen_improv_header_text",
    "file": "auto/gen_improv_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_improv_row_title",
+   "name": "gen_improv_stat_label",
    "file": "auto/gen_improv_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_improv_row_sub",
+   "name": "gen_improv_chip_option",
    "file": "auto/gen_improv_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_improv_row_toast",
+   "name": "gen_improv_chip_option2",
    "file": "auto/gen_improv_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_improv_switch_fallback",
-   "file": "auto/gen_improv_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_improv_switch_label",
-   "file": "auto/gen_improv_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_improv_other_label",
-   "file": "auto/gen_improv_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_improv_card_stage_label",
-   "file": "auto/gen_improv_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_improv_card_items_label",
-   "file": "auto/gen_improv_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_improv_card_sum_label",
-   "file": "auto/gen_improv_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_improv_card_toast2",
-   "file": "auto/gen_improv_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_improv_button_badge",
-   "file": "auto/gen_improv_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_improv_button_title",
-   "file": "auto/gen_improv_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_improv_button_sub",
-   "file": "auto/gen_improv_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_improv_button_toast",
+   "name": "gen_improv_chip_option3",
    "file": "auto/gen_improv_content.dart",
    "shelf": "new/dart-data-bs"
   },

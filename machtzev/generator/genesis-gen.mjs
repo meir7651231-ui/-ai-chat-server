@@ -360,27 +360,23 @@ ${calls.join('\n')}
 // ── 🪞 מסך-עצמי: המחולל כותב לעצמו את בקשת מסך-הכניסה מן הידע החי (אטלס · לקסיקון · דוח-לוחות).
 // העובדות לא מוקלדות-ביד ולא מתיישנות: קידום-אטומים/צורה-חדשה ⇒ המסך מתעדכן בריצה הבאה.
 // 🪞 דיוקן-עצמי: המחולל בוחר לבדו את הדגמותיו מהידע החי — הפונקציות בסריקת-האטלס,
-// התוויות מקטלוג-המונחים שלו, המסכים מרשימת-הבקשות. הניסוחים הקבועים = המודל-העצמי (דאטה).
+// התוויות מהלקסיקון-של-עצמו בלבד, המסכים מרשימת-הבקשות. הניסוחים הקבועים = המודל-העצמי (דאטה).
+// 🚫 ביקורת-בעלים ("איך יש לו את המושג ברך או פקק"): אפס-שאיבה מקטלוג-מונחי-האימפריה —
+// הדיוקן משקף את המחולל, לא את הדומיין. תוויות = אוצר-המילים שלו (מילות-הצורה).
 function writeSelfEntry() {
   const SM = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/self-model.json'), 'utf8'));
   let boards = 0;
   try { boards = JSON.parse(fs.readFileSync(path.join(ROOT, 'screens-seed/board-gen-report.json'), 'utf8')).boards.length; } catch { }
-  // מונחים-נפוצים מהקטלוג — התוויות של ההדגמות (הידע שלו, לא ניסוח-ידני)
-  let topTerms = [];
-  try {
-    topTerms = JSON.parse(fs.readFileSync(path.join(ROOT, 'screens-seed/terms-catalog.json'), 'utf8')).terms
-      .filter(t => t.he.length > 2 && !/[a-zA-Z]/.test(t.he)).slice(0, 12).map(t => t.he);
-  } catch { }
   const RETS2 = new Set(['String', 'String?', 'int', 'double', 'num', 'bool']);
   const simple = (f, allow) => RETS2.has(f.ret) && f.he.length >= 2 && f.params.every(pp => allow.test(pp.type));
   // בחירת-הפונקציות — שלו: הראשונה שכל-פרמטריה DateTime (לגשר) · הראשונה עם String (להזנה-משדה)
   const bridgeFn = atlas.functions.find(f => simple(f, /^DateTime\??$/));
   const feedFn = atlas.functions.find(f => simple(f, /^(String|DateTime)\??$/) && f.params.some(pp => /^String/.test(pp.type)));
-  // ענפי-ההחלפה — שלוש צורות אינטראקטיביות מהלקסיקון + תוויות ממונחיו
+  // ענפי-ההחלפה — שלוש צורות אינטראקטיביות מהלקסיקון; התווית = שם-הצורה עצמה (טהור-עצמי)
   const roleWord = new Map();
   for (const [w, r] of LEXICON) if (!roleWord.has(r)) roleWord.set(r, w);
   const swapRoles = ['switch', 'textfield', 'stat'].filter(r => roleWord.has(r));
-  const swapTerms = topTerms.slice(0, swapRoles.length);
+  const swapTerms = swapRoles.map(r => roleWord.get(r));
   const shapeWords = [...roleWord.values()];
   const siblingNavs = fs.readdirSync(SPECS).filter(f => f.endsWith('.txt') && f !== 'entry.txt').map(f => {
     const slug = f.replace('.txt', '');
