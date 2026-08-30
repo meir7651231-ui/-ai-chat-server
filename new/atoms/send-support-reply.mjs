@@ -4,17 +4,16 @@
  *  sanitizeSupportText הוזרק כשקע sanitize, ושכני firebase/firestore
  *  (cloudDb·addDoc·collection·setDoc·doc·increment) הוזרקו כאובייקט-שקעים fs
  *  (חוק-1 — אפס import פנימי). קבוע-המנגנון SUPPORT_CHATS הוטבע כלשונו. */
-const SUPPORT_CHATS = 'supportChats';
 
-export async function sendSupportReply(uid, text, sanitize, fs) {
+export async function sendSupportReply(uid, text, sanitize, fs, T) {
   const { db, addDoc, collection, setDoc, doc, increment } = fs;
   const clean = sanitize(text);
   if (!clean) return;
   const now = new Date().toISOString();
-  await addDoc(collection(db, SUPPORT_CHATS, uid, 'messages'), { from: 'admin', text: clean, at: now });
+  await addDoc(collection(db, T.tbl1, uid, T.k1), { from: T.k2, text: clean, at: now });
   await setDoc(
-    doc(db, SUPPORT_CHATS, uid),
-    { lastText: clean.slice(0, 120), lastAt: now, lastFrom: 'admin', unreadUser: increment(1) },
+    doc(db, T.tbl1, uid),
+    { lastText: clean.slice(0, T.k3), lastAt: now, lastFrom: T.k2, unreadUser: increment(1) },
     { merge: true },
   );
 }

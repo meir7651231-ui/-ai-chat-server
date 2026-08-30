@@ -2,6 +2,7 @@ import { pullAuditRing as __pure_pullAuditRing } from './pull-audit-ring.mjs';
 // צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
 const __d_pull_audit_ring_T = {
   k1: "auditlog",
+  tbl1: 500,
 };
 const pullAuditRing = (...a) => __pure_pullAuditRing(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_pull_audit_ring_T);
 let f = 0;

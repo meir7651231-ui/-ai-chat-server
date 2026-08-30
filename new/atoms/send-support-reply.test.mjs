@@ -1,4 +1,12 @@
-import { sendSupportReply } from './send-support-reply.mjs';
+import { sendSupportReply as __pure_sendSupportReply } from './send-support-reply.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_send_support_reply_T = {
+  k1: "messages",
+  k2: "admin",
+  k3: 120,
+  tbl1: "supportChats",
+};
+const sendSupportReply = (...a) => __pure_sendSupportReply(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_send_support_reply_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const ISO_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/;

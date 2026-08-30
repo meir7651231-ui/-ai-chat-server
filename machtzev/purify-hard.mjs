@@ -170,6 +170,22 @@ function findings() {
   return [...md.matchAll(/\| new\/atoms\/([^ |]+) \| (\d+) \|/g)].map(m => ({ f: m[1], score: +m[2] }));
 }
 
+function replaceInlineSnap(t, aliasRe, litObj) {
+  // רענון-צילום מאוזן: מאתרים 'const <alias> = {' ומחליפים עד הסוגר-התואם (לא רגקס-עצל)
+  const m = t.match(new RegExp('const (' + aliasRe + ') = \\{'));
+  if (!m) return null;
+  const ob = t.indexOf('{', m.index);
+  let d = 0, j = ob, str = null;
+  for (; j < t.length; j++) {
+    const c = t[j];
+    if (str) { if (c === '\\') j++; else if (c === str) str = null; continue; }
+    if (c === "'" || c === '"' || c === '`') { str = c; continue; }
+    if (c === '{') d++; else if (c === '}' && --d === 0) break;
+  }
+  if (j >= t.length) return null;
+  const end = t[j + 1] === ';' ? j + 2 : j + 1;
+  return t.slice(0, m.index) + 'const ' + m[1] + ' = ' + litObj + ';' + t.slice(end);
+}
 function purifyHard(file, log) {
   const base = file.replace(/\.mjs$/, '');
   const dataBase = base + '-strings';
@@ -178,8 +194,8 @@ function purifyHard(file, log) {
   if (mo.unsupported) return log(`~ ${base}: ${mo.unsupported}`);
   if (!mo.exported.length && !(mo.valueExports || []).length) return log(`~ ${base}: אפס ייצוא-נתמך`);
   const sites = collectSites(src, mo);
-  if (!sites.length) return log(`~ ${base}: אין אתרי-מחרוזת`);
-  if (sites.some(st => st.own.kind === 'top')) return log(`~ ${base}: מחרוזת ברמת-המודול (טבלה — למעבר-הטבלאות)`);
+  // מחרוזת top שאינה בתוך טבלה-נבלעת ⇒ עדיין נדחית (תבוא ב-tblAbsorb או שאין-טיפול)
+
   // ייצואי-ערך נזקקים: מפעל-ערך. שימוש-פנימי בגוף-פונקציה ⇒ קריאת-מפעל (טהור — בנייה-מחדש שקולה)
   const valNeed = new Set(sites.filter(st => st.own.kind === 'val').map(st => st.own.name));
   const valUseFix = [];      // {at, len, vn} — הפניות-פנימיות להחלפה בקריאת-מפעל
@@ -209,6 +225,53 @@ function purifyHard(file, log) {
     try { walkU(mo.sf); } catch { }
     if (valUseFix.length < 0) return log(`~ ${base}: ייצוא-ערך בשימוש מחוץ-לפונקציה`);
   }
+  // v10 · בליעת-טבלאות-מודול: const סטטי לא-מיוצא ⇒ מפתח-tbl בשקע; הפניות בגופי-פונקציות מוחלפות
+  const tblAbsorb = [];      // {decl, name, value, refs:[{at,len}], forces:Set(fnName)}
+  const staticLit = (n) => {
+    if (!n) return false;
+    if (ts.isStringLiteral(n) || ts.isNumericLiteral(n) || n.kind === ts.SyntaxKind.TrueKeyword || n.kind === ts.SyntaxKind.FalseKeyword || n.kind === ts.SyntaxKind.NullKeyword) return true;
+    if (ts.isPrefixUnaryExpression(n) && n.operator === ts.SyntaxKind.MinusToken) return staticLit(n.operand);
+    if (ts.isArrayLiteralExpression(n)) return n.elements.every(staticLit);
+    if (ts.isObjectLiteralExpression(n)) return n.properties.every(pp => ts.isPropertyAssignment(pp) && (ts.isIdentifier(pp.name) || ts.isStringLiteral(pp.name)) && staticLit(pp.initializer));
+    return false;
+  };
+  for (const h of mo.helpers) {
+    if (h.isFn || !h.decl || !ts.isVariableStatement(h.decl)) continue;
+    if (h.decl.declarationList.declarations.length !== 1) continue;
+    const d0 = h.decl.declarationList.declarations[0];
+    if (!d0.initializer || !staticLit(d0.initializer)) continue;
+    const nm = h.name;
+    if (new RegExp(`\\b${nm}\\s*\\.\\s*(push|pop|shift|unshift|splice|sort|reverse|fill)\\b|\\b${nm}\\s*\\[[^\\]]*\\]\\s*(=[^=]|\\+\\+|--)|\\b${nm}\\s*=[^=]`).test(src.slice(h.decl.end))) continue;
+    const refs = []; const forces = new Set(); let outside = false;
+    const walkR = (n) => {
+      if (ts.isIdentifier(n) && n.text === nm) {
+        const inDecl = n.getStart(mo.sf) >= h.decl.getStart(mo.sf) && n.end <= h.decl.end;
+        const p2 = n.parent;
+        if (!inDecl && !(p2 && ts.isPropertyAccessExpression(p2) && p2.name === n)) {
+          let up = n, own2 = null;
+          while (up) {
+            const ex = mo.exported.find(e => e.node && up === e.node); if (ex) { own2 = ex.name; break; }
+            const hp = mo.helpers.find(x => x.node && up === x.node); if (hp) { own2 = hp.name; break; }
+            const vv = (mo.valueExports || []).find(x => x.decl && up === x.decl); if (vv) { own2 = null; outside = true; break; }
+            up = up.parent;
+          }
+          if (own2) { refs.push({ at: n.getStart(mo.sf), len: nm.length }); forces.add(own2); }
+          else outside = true;
+        }
+      }
+      ts.forEachChild(n, walkR);
+    };
+    walkR(mo.sf);
+    if (outside || !refs.length) continue;
+    let value;
+    try { value = eval('(' + src.slice(d0.initializer.getStart(mo.sf), d0.initializer.end) + ')'); } catch { continue; }
+    tblAbsorb.push({ decl: h.decl, name: nm, value, refs, forces });
+  }
+  const topOnly = sites.filter(st => st.own.kind === 'top');
+  const inAbsorbed = (st) => tblAbsorb.some(tb => st.at >= tb.decl.getStart(mo.sf) && st.at < tb.decl.end);
+  if (topOnly.some(st => !inAbsorbed(st))) return log(`~ ${base}: מחרוזת ברמת-מודול מחוץ-לטבלה-נבלעת`);
+  for (let i = sites.length - 1; i >= 0; i--) if (sites[i].own.kind === 'top') sites.splice(i, 1);
+  if (!sites.length && !tblAbsorb.length) return log(`~ ${base}: אין אתרים`);
   const { calls, valueUse } = callGraph(mo);
   // עוזרים-נזקקים: בגופם אתר, או קוראים-לנזקק (סגור-טרנזיטיבי)
   const need = new Set(sites.filter(s => s.own.kind === 'help').map(s => s.own.name));
@@ -229,6 +292,13 @@ function purifyHard(file, log) {
     while (stack.length) { const c = stack.pop(); if (seen.has(c)) continue; seen.add(c); if (need.has(c)) { expNeed.add(e.name); break; } for (const c2 of calls.get(c) || []) stack.push(c2); }
   }
   for (const f2 of valForcesFn) { if (mo.exported.some(e => e.name === f2)) expNeed.add(f2); else need.add(f2); }
+  for (const tb of tblAbsorb) for (const f2 of tb.forces) { if (mo.exported.some(e => e.name === f2)) expNeed.add(f2); else need.add(f2); }
+  // סגירה-טרנזיטיבית נוספת אחרי הכפיות
+  { let g2 = true; while (g2) { g2 = false;
+    for (const [caller, cs] of calls) if (!need.has(caller) && !expNeed.has(caller)) for (const c of cs) if (need.has(c)) {
+      if (mo.helpers.some(h => h.name === caller)) { need.add(caller); g2 = true; }
+      else if (mo.exported.some(e => e.name === caller)) { expNeed.add(caller); g2 = true; }
+    } } }
   if (!expNeed.size && !valNeed.size) return log(`~ ${base}: אין נזקקים`);
   // המשך-חילוץ: מפתחות קיימים
   const dataPath = path.join(ATOMS, dataBase + '.mjs');
@@ -247,6 +317,14 @@ function purifyHard(file, log) {
   } else { tParam = 'T'; let ti = 2; while (new RegExp(`\\b${tParam}\\b`).test(src)) tParam = 'T' + ti++; }
   const keys = new Map(priorKeys);
   for (const st of sites) if (!keys.has(st.v)) keys.set(st.v, 'k' + (keys.size + 1));
+  const tblKeyOf = new Map();
+  { let ti2 = 1;
+    for (const tb of tblAbsorb) {
+      while ([...keys.values()].includes('tbl' + ti2)) ti2++;
+      const kk = 'tbl' + ti2++;
+      keys.set(`__tbl__${tb.name}`, kk);            // מזהה-פנימי; הערך האמיתי מוזרק ב-litObj
+      tblKeyOf.set(tb.name, { key: kk, value: tb.value });
+    } }
   if (priorKeys.size && keys.size === priorKeys.size) return log(`~ ${base}: אין מחרוזות חדשות`);
   // ── בניית-עריכות: {at, del, ins} ──
   const edits = [];
@@ -301,6 +379,11 @@ function purifyHard(file, log) {
     edits.push({ at: d.initializer.end, del: 0, ins: ')' });
   }
   for (const u of valUseFix) edits.push({ at: u.at, del: u.len, ins: `${factoryOf[u.vn]}(${tParam})` });
+  for (const tb of tblAbsorb) {
+    const a0 = tb.decl.getStart(mo.sf);
+    edits.push({ at: a0, del: tb.decl.end - a0 + (src[tb.decl.end] === '\n' ? 1 : 0), ins: '' });
+    for (const r of tb.refs) edits.push({ at: r.at, del: r.len, ins: `${tParam}.${tblKeyOf.get(tb.name).key}` });
+  }
   // קריאות-פנימיות לעוזרים-נזקקים ⇒ הוספת tParam
   {
     const walk = (n) => {
@@ -315,10 +398,13 @@ function purifyHard(file, log) {
   for (const e of edits.sort((a, b) => b.at - a.at)) mech = mech.slice(0, e.at) + e.ins + mech.slice(e.at + e.del);
   // ── אטום-הדאטה ──
   const CONST = base.replace(/-/g, '_').toUpperCase() + '_T';
-  const litObj = '{\n' + [...keys].map(([v, k]) => `  ${k}: ${JSON.stringify(v)},`).join('\n') + '\n}';
+  const litObj = '{\n' + [...keys].map(([v, k]) => {
+    const tb = typeof v === 'string' && v.startsWith('__tbl__') ? tblKeyOf.get(v.slice(7)) : null;
+    return `  ${k}: ${JSON.stringify(tb ? tb.value : v)},`;
+  }).join('\n') + '\n}';
   const dataSrc = `/** אטום-דאטה · ${dataBase} — מחרוזות-הדאטה של ${base} (מנוע-הקשיחים, הכרעה 19). חוזה: ${dataBase}.contract.md */\nexport const ${CONST} = ${litObj};\n`;
   const contract = `# חוזה · ${dataBase}\nמחרוזות-דאטה (עברית/דומיין — כולל מפתחות וברירות-מחדל) שחולצו מכנית מ-${base} (הכרעה 19).\nהמנגנון מקבל אותן בשקע ${tParam}, מושחל גם דרך עוזרי-הקובץ; הקוראים כורכים. אפס לוגיקה.\n\n## דוגמאות-זהב\nצילום-ערך ב-${dataBase}.test.mjs.\n`;
-  const testSrc = `// בדיקת-צילום · ${dataBase} — המחרוזות זהות ביט-אחר-ביט למקור.\nimport { ${CONST} } from './${dataBase}.mjs';\nimport assert from 'node:assert';\nassert.strictEqual(JSON.stringify(${CONST}), ${JSON.stringify(JSON.stringify(Object.fromEntries([...keys].map(([v, k]) => [k, v]))))});\nconsole.log('OK ${dataBase}');\n`;
+  const testSrc = `// בדיקת-צילום · ${dataBase} — המחרוזות זהות ביט-אחר-ביט למקור.\nimport { ${CONST} } from './${dataBase}.mjs';\nimport assert from 'node:assert';\nassert.strictEqual(JSON.stringify(${CONST}), ${JSON.stringify(JSON.stringify(Object.fromEntries([...keys].map(([v, k]) => [k, (typeof v === 'string' && v.startsWith('__tbl__')) ? tblKeyOf.get(v.slice(7)).value : v]))))});\nconsole.log('OK ${dataBase}');\n`;
   // ── קוראים: עטיפה/הרחבה פר-פונקציה-נזקקת ──
   const callerFiles = new Set();
   const walkDir = (d) => { for (const e of fs.readdirSync(d, { withFileTypes: true })) {
@@ -334,7 +420,27 @@ function purifyHard(file, log) {
   for (const cp of callerFiles) {
     let t = fs.readFileSync(cp, 'utf8');
     const im = t.match(new RegExp(`import\\s*\\{([^}]*)\\}\\s*from\\s*(['"])([^'"]*\\/${base}\\.mjs)\\2\\s*;?`));
-    if (!im) return log(`~ ${base}: קורא בלי import-מפורש (${path.relative(ROOT, cp)})`);
+    if (!im) {
+      // ענף-namespace: import * as NS — ערכים דרך מפעל בקריאה-במקום (טהור: בנייה-שקולה)
+      const nsm = t.match(new RegExp(`import\\s*\\*\\s*as\\s+(\\w+)\\s+from\\s*(['"])([^'"]*\\/${base}\\.mjs)\\2\\s*;?`));
+      if (!nsm) return log(`~ ${base}: קורא בלי import-מפורש (${path.relative(ROOT, cp)})`);
+      if (expNeed.size) {
+        // פונקציות דרך namespace: קריאות NS.fn(...) לא-משוכתבות בשלב-זה — דוחים בכבוד
+        const usesFn = [...expNeed].some(fn => new RegExp(`\\b${nsm[1]}\\.${fn}\\b`).test(t));
+        if (usesFn) return log(`~ ${base}: קורא-namespace לפונקציות (${path.relative(ROOT, cp)})`);
+      }
+      let t2 = t; let touchedNs = false;
+      for (const vn of valNeed) {
+        const re2 = new RegExp(`\\b${nsm[1]}\\.${vn}\\b`, 'g');
+        if (re2.test(t2)) { t2 = t2.replace(re2, `${nsm[1]}.${factoryOf[vn]}(${dAlias})`); touchedNs = true; }
+      }
+      if (!touchedNs) continue;
+      const inj = cp.endsWith('.test.mjs')
+        ? `\n// צילום-מקומי (מנוע-הקשיחים · ענף-namespace)\nconst ${dAlias} = ${litObj};`
+        : `\nimport { ${CONST} as ${dAlias} } from '${path.relative(path.dirname(cp), dataPath).replace(/^(?!\.)/, './')}';`;
+      cEdits.set(cp, t2.replace(nsm[0], nsm[0] + inj));
+      continue;
+    }
     let braces = im[1];
     const wraps = [];
     let touched = false;
@@ -379,8 +485,8 @@ function purifyHard(file, log) {
     }
     // המשך: רענון צילומי-inline ישנים
     if (priorKeys.size) {
-      const dre = new RegExp(`const (__d_[\\w]+_T|__d_\\w+_${CONST}) = \\{[\\s\\S]*?\\n\\};`);
-      if (dre.test(t)) t = t.replace(dre, `const $1 = ${litObj};`);
+      const rp = replaceInlineSnap(t, `__d_[\\w]+_T|__d_\\w+_${CONST}`, litObj);
+      if (rp) t = rp;
     }
     cEdits.set(cp, t);
   }

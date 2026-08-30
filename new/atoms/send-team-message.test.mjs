@@ -1,4 +1,12 @@
-import { sendTeamMessage } from './send-team-message.mjs';
+import { sendTeamMessage as __pure_sendTeamMessage } from './send-team-message.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_send_team_message_T = {
+  k1: "messages",
+  k2: 120,
+  k3: 60,
+  tbl1: "teamChats",
+};
+const sendTeamMessage = (...a) => __pure_sendTeamMessage(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_send_team_message_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const ISO_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/;

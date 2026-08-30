@@ -349,6 +349,22 @@ function eligibleStrings(file) {
   if (!sites.length) return null;
   return { file, src, fn, sites };
 }
+function replaceInlineSnap(t, aliasRe, litObj) {
+  // רענון-צילום מאוזן: מאתרים 'const <alias> = {' ומחליפים עד הסוגר-התואם (לא רגקס-עצל)
+  const m = t.match(new RegExp('const (' + aliasRe + ') = \\{'));
+  if (!m) return null;
+  const ob = t.indexOf('{', m.index);
+  let d = 0, j = ob, str = null;
+  for (; j < t.length; j++) {
+    const c = t[j];
+    if (str) { if (c === '\\') j++; else if (c === str) str = null; continue; }
+    if (c === "'" || c === '"' || c === '`') { str = c; continue; }
+    if (c === '{') d++; else if (c === '}' && --d === 0) break;
+  }
+  if (j >= t.length) return null;
+  const end = t[j + 1] === ';' ? j + 2 : j + 1;
+  return t.slice(0, m.index) + 'const ' + m[1] + ' = ' + litObj + ';' + t.slice(end);
+}
 function purifyStrings(cand, log) {
   const base = cand.file.replace(/\.mjs$/, '');
   const dataBase = base + '-strings';
@@ -402,10 +418,9 @@ function purifyStrings(cand, log) {
   const cs = callers(base, cand.fn);
   const edits = new Map();
   if (priorKeys.size) {
-    const dAliasRe = new RegExp(`const (__d_${cand.fn}_${CONST}) = \\{[\\s\\S]*?\\n\\};`);
     for (const cp of cs) {
-      const t = fs.readFileSync(cp, 'utf8');
-      if (dAliasRe.test(t)) edits.set(cp, t.replace(dAliasRe, `const $1 = ${litObj};`));
+      const rp = replaceInlineSnap(fs.readFileSync(cp, 'utf8'), `__d_${cand.fn}_${CONST}`, litObj);
+      if (rp) edits.set(cp, rp);
     }
   } else {
   for (const cp of cs) {

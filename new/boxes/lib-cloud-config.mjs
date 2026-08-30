@@ -101,7 +101,10 @@ import { sendSupportMessage as __pure_sendSupportMessage } from '../atoms/send-s
 import { SEND_SUPPORT_MESSAGE_T as __d_send_support_message_T } from '../atoms/send-support-message-strings.mjs';
 // עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
 const sendSupportMessageAtom = (...a) => __pure_sendSupportMessage(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_send_support_message_T);
-import { sendSupportReply as sendSupportReplyAtom } from '../atoms/send-support-reply.mjs';
+import { sendSupportReply as __pure_sendSupportReply } from '../atoms/send-support-reply.mjs';
+import { SEND_SUPPORT_REPLY_T as __d_send_support_reply_T } from '../atoms/send-support-reply-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const sendSupportReplyAtom = (...a) => __pure_sendSupportReply(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_send_support_reply_T);
 import { watchSupportMessages as __pure_watchSupportMessages } from '../atoms/watch-support-messages.mjs';
 import { WATCH_SUPPORT_MESSAGES_T as __d_watchSupportMessages_WATCH_SUPPORT_MESSAGES_T } from '../atoms/watch-support-messages-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
@@ -118,7 +121,10 @@ import { markSupportRead as __pure_markSupportRead } from '../atoms/mark-support
 import { MARK_SUPPORT_READ_T as __d_mark_support_read_T } from '../atoms/mark-support-read-strings.mjs';
 // עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
 const markSupportReadAtom = (...a) => __pure_markSupportRead(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_mark_support_read_T);
-import { sendTeamMessage as sendTeamMessageAtom } from '../atoms/send-team-message.mjs';
+import { sendTeamMessage as __pure_sendTeamMessage } from '../atoms/send-team-message.mjs';
+import { SEND_TEAM_MESSAGE_T as __d_send_team_message_T } from '../atoms/send-team-message-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const sendTeamMessageAtom = (...a) => __pure_sendTeamMessage(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_send_team_message_T);
 import { watchTeamMessages as __pure_watchTeamMessages } from '../atoms/watch-team-messages.mjs';
 import { WATCH_TEAM_MESSAGES_T as __d_watchTeamMessages_WATCH_TEAM_MESSAGES_T } from '../atoms/watch-team-messages-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

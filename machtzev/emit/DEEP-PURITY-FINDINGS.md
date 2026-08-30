@@ -1,6 +1,6 @@
 # 🔬 ממצאי טוהר-עומק (הכרעה 19) — דאטה בתוך מנגנון
 
-נסרקו אטומי-מנגנון ב-new/atoms · new/boxes · הפרות: 200
+נסרקו אטומי-מנגנון ב-new/atoms · new/boxes · הפרות: 196
 
 | אטום | ציון | עברית | טבלאות | מחרוזות-דומיין | מספרי-קסם |
 |---|---|---|---|---|---|
@@ -40,7 +40,6 @@
 | new/atoms/events-csv-rows.mjs | 9 | — | const PRIORITY_LABEL = { green: T2.k1,  · const rows = [ [T2.k4, T2.k5, T2.k6, T2. · const evs = [...db.events].sort((a, b) => (a | — | — |
 | new/atoms/merge-supporter-into.mjs | 9 | — | const donations = [...keep.donations, ...dro · const photos = [...new Set([...(keep.photos  · const notes = [keep.notes, drop.notes].map(( | — | — |
 | new/atoms/orbit-theme.mjs | 9 | — | — | ${Math.round(c.r)},${Math.roun · ${T.k5}${accentRgb},0.30) · ${T.k5}${auroraHi},0.20) · ${T.k5}${auroraLo},0.15) | -12 |
-| new/atoms/send-support-reply.mjs | 9 | — | — | supportChats · messages · admin · admin | 120 |
 | new/atoms/telephony-to-tenant.mjs | 9 | — | const ONRAMP = { sim: T.k1, virtual: · const CHANNELS = { sim: [T.k4], virt · const base = { id: n.id, e16 | — | — |
 | new/boxes/annual-report.mjs | 9 | — | — | ../atoms/donation-years.mjs · ../atoms/donations-of-year.mjs · ../atoms/annual-report-lines.m · ../atoms/annual-report-lines-s | 5000 |
 | new/boxes/csvx.mjs | 9 | — | — | ../atoms/csv-escape.mjs · ../atoms/to-csv.mjs · ../atoms/decode-csv-buffer.mjs · ../atoms/decode-csv-buffer-str | 5000 |
@@ -100,7 +99,6 @@
 | new/atoms/plan-nedarim-sync.mjs | 6 | — | const summary = { existing: existing.len · const nextHist = [...(out[idx].hist || []),  | — | — |
 | new/atoms/preview-telephony.mjs | 6 | — | const opts = { anchorDate: anchor, calendarW · const scenarios = [ { when: T.k3, ca | — | — |
 | new/atoms/run-audit.mjs | 6 | — | const a = [...new Set(g2[k])] · const a = [...new Set(g3[k])] | — | — |
-| new/atoms/send-team-message.mjs | 6 | — | — | teamChats · messages | 120 60 |
 | new/atoms/student-history-text.mjs | 6 | — | — | [${h.yearLabel}]  ·  · ${h.group} · ${yr}${h.courseName}${grp}${T. | — |
 | new/boxes/export-gate.mjs | 6 | — | — | ../atoms/set-export-blocked.mj · ../atoms/export-allowed.mjs · ../atoms/guard-export.mjs | — |
 | new/boxes/templates.mjs | 6 | — | — | ../atoms/template-defs.mjs · ../atoms/template-keys.mjs · ../atoms/render-template.mjs | — |
@@ -202,5 +200,3 @@
 | new/atoms/is-safe-accent.mjs | 1 | — | — | — | 20 |
 | new/atoms/is-valid-slug.mjs | 1 | — | — | — | 40 |
 | new/atoms/org-slug-from-url.mjs | 1 | — | — | — | 40 |
-| new/atoms/pull-audit-ring.mjs | 1 | — | — | — | 500 |
-| new/atoms/push-audit-ring.mjs | 1 | — | — | — | 500 |
