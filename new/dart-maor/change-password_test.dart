@@ -1,3 +1,4 @@
+import '../dart-data-maor/change-password-sockets.dart' as sk_change_password;
 // בדיקת-חוזה (רתמת-זהב) · changePassword — מייבאת אך ורק את האטום-שלה (חוק-4).
 // שבע דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/change-password.test.mjs.
 // אם עובר ⇒ Dart≡JS.
@@ -64,7 +65,7 @@ Future<void> main() async {
     }
 
     await _threw(
-      changePassword('a', 'b', () => null, spy, spy, heb),
+      changePassword('a', 'b', () => null, spy, spy, heb, sk_change_password.changePassword_T),
       'אין משתמש מחובר — התחברו ונסו שוב',
       'דוגמה 1',
     );
@@ -73,7 +74,7 @@ Future<void> main() async {
 
   // 2) משתמש בלי email
   await _threw(
-    changePassword('a', 'b', () => const _User(''), okAsync, okAsync, heb),
+    changePassword('a', 'b', () => const _User(''), okAsync, okAsync, heb, sk_change_password.changePassword_T),
     'אין משתמש מחובר — התחברו ונסו שוב',
     'דוגמה 2',
   );
@@ -91,7 +92,7 @@ Future<void> main() async {
     }
 
     await _threw(
-      changePassword('old', 'new', () => _U, rejWith(code), updSpy, heb),
+      changePassword('old', 'new', () => _U, rejWith(code), updSpy, heb, sk_change_password.changePassword_T),
       'הסיסמה הנוכחית שגויה',
       'דוגמה 3 ($code)',
     );
@@ -100,16 +101,14 @@ Future<void> main() async {
 
   // 4) קוד-reauth אחר ⇒ hebrewAuthError קיבל את השגיאה המקורית
   await _threw(
-    changePassword(
-        'old', 'new', () => _U, rejWith('auth/too-many-requests'), okAsync, heb),
+    changePassword('old', 'new', () => _U, rejWith('auth/too-many-requests'), okAsync, heb, sk_change_password.changePassword_T),
     'עברית:auth/too-many-requests',
     'דוגמה 4',
   );
 
   // 5) update ⇒ weak-password
   await _threw(
-    changePassword(
-        'old', 'new', () => _U, okAsync, rejWith('auth/weak-password'), heb),
+    changePassword('old', 'new', () => _U, okAsync, rejWith('auth/weak-password'), heb, sk_change_password.changePassword_T),
     'הסיסמה החדשה חלשה מדי — לפחות 6 תווים',
     'דוגמה 5',
   );
@@ -117,7 +116,7 @@ Future<void> main() async {
   // 6) קוד-update אחר ⇒ hebrewAuthError
   await _threw(
     changePassword('old', 'new', () => _U, okAsync,
-        rejWith('auth/network-request-failed'), heb),
+        rejWith('auth/network-request-failed'), heb, sk_change_password.changePassword_T),
     'עברית:auth/network-request-failed',
     'דוגמה 6',
   );
@@ -138,7 +137,7 @@ Future<void> main() async {
     // Future<void> נפתר ללא-ערך (מקביל ל-undefined של JS): עצם השלמת-ה-await
     // בלי-זריקה מוכיח את קיום דוגמה 7.
     var resolved = false;
-    await changePassword('old1', 'new123', () => _U, reauth, update, heb);
+    await changePassword('old1', 'new123', () => _U, reauth, update, heb, sk_change_password.changePassword_T);
     resolved = true;
     _ok(resolved, 'דוגמה 7 — ההבטחה לא נפתרה');
     _ok(
@@ -156,7 +155,7 @@ Future<void> main() async {
   // assert חי (חוק: --enable-asserts) — מוכיח שהמנגנון פעיל.
   var guardThrew = false;
   try {
-    await changePassword('a', 'b', () => null, okAsync, okAsync, heb);
+    await changePassword('a', 'b', () => null, okAsync, okAsync, heb, sk_change_password.changePassword_T);
   } catch (_) {
     guardThrew = true;
   }

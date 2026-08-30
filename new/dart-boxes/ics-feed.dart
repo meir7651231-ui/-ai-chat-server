@@ -6,6 +6,7 @@
 // כאן החיווט הפנימי גלוי ומפורש (חוק-2/3 — הקופסה היחידה שמחווטת אטומים).
 // שקעי-IO (Firestore: db/doc/getDoc/setDoc, חותם-זמן) = לוח-האם, מוזרקים כאובייקט
 // Cloud — הקופסה עצמה טהורה (חוק-6: שום זהות/ידית-ענן נצרבת).
+import '../dart-data-maor/publish-ics-feed-sockets.dart' as skb_pif;
 import '../dart-maor/mint-feed-token.dart' as mint;
 import '../dart-maor/read-ics-feed-token.dart' as read;
 import '../dart-maor/publish-ics-feed.dart' as pub;
@@ -70,6 +71,7 @@ Future<dynamic> publishIcsFeed(
       mintToken: mint.mintFeedToken,
       writeFeed: (s, data) =>
           cloud.setDoc(cloud.doc(cloud.db, ICS_FEEDS, s as String), data),
+      T: skb_pif.publishIcsFeed_T,
       // JS: `...(cloud.nowIso ? {nowIso} : {})` — חסר ⇒ null ⇒ ברירת-המחדל של האטום.
       nowIso: cloud.nowIso,
     );

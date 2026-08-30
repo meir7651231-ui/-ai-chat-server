@@ -30,10 +30,16 @@ function jsSockets(base) {
   const js = fs.readFileSync(jp, 'utf8');
   const tt = fs.readFileSync(tp, 'utf8');
   const out = {};                                                   // fnName ⇒ [{name, value}]
-  for (const m of js.matchAll(/export function (\w+)\s*\(([^)]*)\)/g)) {
+  const decls = [
+    ...js.matchAll(/export (?:async )?function (\w+)\s*\(([^)]*)\)/g),
+    ...js.matchAll(/export const (\w+)\s*=\s*(?:async\s*)?\(([^)]*)\)\s*=>/g),
+  ];
+  for (const m of decls) {
     const fn = m[1];
     const sig = m[2].split(',').map(s => s.trim().split('=')[0].trim()).filter(Boolean);
-    const wm = tt.match(new RegExp(`__pure_${fn}\\(\\.\\.\\.a,\\s*\\.\\.\\.Array\\(Math\\.max\\([^)]*\\)\\)\\.fill\\(undefined\\),\\s*([^)]+)\\)`));
+    // עטיפת-כריכה סטנדרטית, או קריאת-מפעל ישירה: __pure_fn(__d_a, __d_b)
+    const wm = tt.match(new RegExp(`__pure_${fn}\\(\\.\\.\\.a,\\s*\\.\\.\\.Array\\(Math\\.max\\([^)]*\\)\\)\\.fill\\(undefined\\),\\s*([^)]+)\\)`))
+      || tt.match(new RegExp(`__pure_${fn}\\(\\s*(__d_[\\w$]+(?:\\s*,\\s*__d_[\\w$]+)*)\\s*\\)`));
     if (!wm) continue;
     const socketNames = wm[1].split(',').map(x => x.trim());
     const vals = [];
