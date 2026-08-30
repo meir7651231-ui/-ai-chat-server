@@ -282,6 +282,58 @@ function purifyFile(base, report) {
   edits.sort((a, b) => b.start - a.start);
   for (const e of edits) src = src.slice(0, e.start) + e.txt + src.slice(e.end);
 
+  // ── שלב ב½: הצהרת-const שקיבלה הפניית-שקע איננה קבועת-קומפילציה עוד ──
+  //   מקומית ⇒ final; מודולית ⇒ מהגרת לראש-גוף כל פונקציה-צורכת כ-final (נגזרת-שקעים דטרמיניסטית).
+  {
+    const sockRe = new RegExp(`(?<![\\w'$])(${merged.map(s => s.name).join('|')})(?![\\w'$])`);
+    const isInsideFn = (pos) => {
+      for (const m of src.matchAll(/(?:^|\n)(?:[A-Za-z_][\w<>,?\[\] ]*\s+)?[a-z_]\w*\s*\(/g)) {
+        const open = m.index + m[0].length - 1;
+        const close = balance(src, open + 1, '(', ')');
+        if (close < 0) continue;
+        const bm = src.slice(close + 1, close + 30).match(/\{/);
+        if (!bm) continue;
+        const bs = close + 1 + src.slice(close + 1).indexOf('{');
+        const be = balance(src, bs + 1, '{', '}');
+        if (be > 0 && pos > bs && pos < be) return true;
+      }
+      return false;
+    };
+    for (const cm of [...src.matchAll(/(?:^|\n)(\s*)const\s+(?:[\w<>, ?]+\s+)?(_?\w+)\s*=\s*/g)].reverse()) {
+      const declStart = cm.index + (cm[0].startsWith('\n') ? 1 : 0);
+      const local = cm[2];
+      let d = 0, j = cm.index + cm[0].length, q = null;
+      for (; j < src.length; j++) {
+        const ch = src[j];
+        if (q) { if (ch === '\\') j++; else if (ch === q) q = null; continue; }
+        if (ch === "'" || ch === '"') { q = ch; continue; }
+        if ('([{'.includes(ch)) d++;
+        else if (')]}'.includes(ch)) d--;
+        else if (ch === ';' && d === 0) break;
+      }
+      const declTxt = src.slice(declStart, j + 1);
+      if (!sockRe.test(declTxt)) continue;
+      if (isInsideFn(declStart)) {
+        src = src.slice(0, declStart) + declTxt.replace(/\bconst\b/, 'final') + src.slice(j + 1);
+      } else {
+        // מודולית: מחיקה + הזרעה כ-final בראש-גוף כל פונקציה שמשתמשת בשם
+        src = src.slice(0, declStart) + src.slice(j + 1);
+        const finalDecl = declTxt.trim().replace(/\bconst\b/, 'final');
+        const users = [];
+        for (const fm of src.matchAll(/(?:^|\n)(?:[A-Za-z_][\w<>,?\[\] ]*\s+)?([a-z_]\w*)\s*\(/g)) {
+          const open = fm.index + fm[0].length - 1;
+          const close = balance(src, open + 1, '(', ')');
+          if (close < 0 || !/^\s*\{/.test(src.slice(close + 1, close + 20))) continue;
+          const bs = close + 1 + src.slice(close + 1).indexOf('{');
+          const be = balance(src, bs + 1, '{', '}');
+          if (be < 0) continue;
+          if (new RegExp(`(?<![\\w$])${local.replace(/\$/g, '\\$')}(?![\\w$])`).test(src.slice(bs, be + 1))) users.push(bs);
+        }
+        for (const bs of users.sort((a, b) => b - a))
+          src = src.slice(0, bs + 1) + '\n  ' + finalDecl + src.slice(bs + 1);
+      }
+    }
+  }
   const needed = merged.filter(s => new RegExp(`(?<![\\w'$])${s.name}(?![\\w'$])`).test(src));
   if (!needed.length) return report.skip(base, 'אחרי-החלפה אף שקע לא בשימוש (חריג)');
 
@@ -342,9 +394,15 @@ function purifyFile(base, report) {
     } else insertAt.set(fn, null);
   }
   const socksOf = (fn) => merged.filter(s => needMap.get(fn)?.has(s.name));
+  // מצב-השלמה: שקע שכבר בחתימה איננו נוסף/מוזן שוב — מחושב פעם-אחת לפני ההזנות
+  const addedPerFn = new Map();
+  for (const [fn, r] of fnInfo) {
+    const sigTxt = src.slice(r.open, r.close + 1);
+    addedPerFn.set(fn, new Set(socksOf(fn).filter(s2 => !new RegExp('[\\s(,]' + s2.name + '\\s*[,)\\]}]').test(sigTxt)).map(s2 => s2.name)));
+  }
   // הזנת קריאות-פנימיות (מהסוף להתחלה כדי לא להזיז מיקומים מוקדמים)
   const feedCall = (txt, callee) => {
-    const socks = socksOf(callee);
+    const socks = socksOf(callee).filter(s2 => addedPerFn.get(callee)?.has(s2.name) ?? true);
     if (!socks.length) return txt;
     const args = socks.map(s => feedStyle.get(callee) === 'named' ? `${s.name}: ${s.name}` : s.name);
     return spliceCalls(txt, callee, args, insertAt.get(callee) ?? null);
@@ -378,7 +436,7 @@ function purifyFile(base, report) {
   refreshFns();
   // הרחבת-חתימות (מהסוף להתחלה)
   for (const [fn, r] of [...fnInfo.entries()].sort((a, b) => b[1].open - a[1].open)) {
-    const socks = socksOf(fn);
+    const socks = socksOf(fn).filter(s2 => addedPerFn.get(fn)?.has(s2.name));
     if (!socks.length) continue;
     const sigTxt = src.slice(r.open, r.close + 1);
     if (r.named) {
@@ -426,7 +484,8 @@ function purifyFile(base, report) {
       test = `import '../dart-data-maor/${base}-sockets.dart' as ${alias};\n` + test;
     for (const [fn, nset] of needMap) {
       if (!nset.size) continue;
-      const socks = merged.filter(s => nset.has(s.name));
+      const socks = merged.filter(s => nset.has(s.name) && (addedPerFn.get(fn)?.has(s.name) ?? true));
+      if (!socks.length) continue;
       const args = socks.map(s => feedStyle.get(fn) === 'named' ? `${s.name}: ${alias}.${camel}_${s.name}` : `${alias}.${camel}_${s.name}`);
       test = spliceCalls(test, fn, args, insertAt.get(fn) ?? null);
     }
@@ -434,6 +493,7 @@ function purifyFile(base, report) {
 
   if (DRY) return report.ok(base, `[dry] שקעים: ${needed.map(s => s.name).join(',')} · החלפות: ${edits.length}`);
 
+  const origData = fs.existsSync(dataFile) ? fs.readFileSync(dataFile, 'utf8') : null;
   fs.writeFileSync(dp, src);
   fs.writeFileSync(dataFile, dataSrc);
   if (test) fs.writeFileSync(tp, test);
@@ -444,7 +504,8 @@ function purifyFile(base, report) {
   } catch (e) {
     fs.writeFileSync(dp, orig);
     if (origTest !== null) fs.writeFileSync(tp, origTest);
-    if (fs.existsSync(dataFile)) fs.rmSync(dataFile);
+    if (origData !== null) fs.writeFileSync(dataFile, origData);
+    else if (fs.existsSync(dataFile)) fs.rmSync(dataFile);
     return report.skip(base, 'ולידציה-נכשלה ⇒ הוחזר: ' + String(e.stderr || e.message).slice(0, 140).replace(/\n/g, ' '));
   }
 }
@@ -452,7 +513,12 @@ function purifyFile(base, report) {
 // ── ריצה ──
 const baseline = JSON.parse(fs.readFileSync(path.join(ROOT, 'machtzev/data-purity-baseline.json'), 'utf8'));
 const targets = baseline.filter(e => e.startsWith('dart-maor/')).map(e => e.slice('dart-maor/'.length))
-  .filter(b => fs.existsSync(path.join(DM, b + '.dart')) && HEB.test(fs.readFileSync(path.join(DM, b + '.dart'), 'utf8').replace(/^\s*\/\/.*$/gm, '')))
+  .filter(b => {
+    const fp = path.join(DM, b + '.dart');
+    if (!fs.existsSync(fp)) return false;
+    // עברית-במחרוזות בלבד (הלקסר) — קובץ שעברי רק בהערותיו איננו מטרה
+    return dartStrings(fs.readFileSync(fp, 'utf8')).some(st => HEB.test(st.full));
+  })
   .filter(b => !ONLY || b === ONLY);
 let ok = 0, skip = 0;
 const report = {

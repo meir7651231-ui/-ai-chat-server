@@ -105,7 +105,7 @@ stage('מחולל-הלוחות (board-gen)', () => run('machtzev/assemble/board-
 
 // ── 5 · ביקורות-ההרכבה והטוהר (שערי-ratchet) ──
 stage('ביקורת-הרכבה (box-audit)', () => last(run('machtzev/assemble/box-audit.mjs', ['--gate'])));
-stage('טוהר-דאטה (purity-data)', () => last(run('machtzev/purity-data.mjs', ['--gate'])));
+stage('טוהר-דאטה (data-purity-check)', () => last(run('machtzev/data-purity-check.mjs', ['--gate'])));
 // הכרעה 19 · מכונת-הטיהור המלאה: קופסאות⇒קינון⇒טבלאות⇒מחרוזות (נקודת-שבת) + מנוע-הקשיחים + השער
 stage('מכונת-הטיהור (הכרעה 19)', () => {
   run('machtzev/purify-engine.mjs', ['--all']);
