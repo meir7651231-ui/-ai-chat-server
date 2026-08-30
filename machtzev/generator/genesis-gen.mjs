@@ -349,40 +349,51 @@ ${calls.join('\n')}
 
 // ── 🪞 מסך-עצמי: המחולל כותב לעצמו את בקשת מסך-הכניסה מן הידע החי (אטלס · לקסיקון · דוח-לוחות).
 // העובדות לא מוקלדות-ביד ולא מתיישנות: קידום-אטומים/צורה-חדשה ⇒ המסך מתעדכן בריצה הבאה.
+// 🪞 דיוקן-עצמי: המחולל בוחר לבדו את הדגמותיו מהידע החי — הפונקציות בסריקת-האטלס,
+// התוויות מקטלוג-המונחים שלו, המסכים מרשימת-הבקשות. הניסוחים הקבועים = המודל-העצמי (דאטה).
 function writeSelfEntry() {
+  const SM = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/self-model.json'), 'utf8'));
   let boards = 0;
   try { boards = JSON.parse(fs.readFileSync(path.join(ROOT, 'screens-seed/board-gen-report.json'), 'utf8')).boards.length; } catch { }
-  const shapeWords = [];
-  const seenRoles = new Set();
-  for (const [w, r] of LEXICON) if (!seenRoles.has(r)) { seenRoles.add(r); shapeWords.push(w); }
-  // המסכים שהמחולל עצמו יצר (specs אחרים) — מקושרים בניווט חי
+  // מונחים-נפוצים מהקטלוג — התוויות של ההדגמות (הידע שלו, לא ניסוח-ידני)
+  let topTerms = [];
+  try {
+    topTerms = JSON.parse(fs.readFileSync(path.join(ROOT, 'screens-seed/terms-catalog.json'), 'utf8')).terms
+      .filter(t => t.he.length > 2 && !/[a-zA-Z]/.test(t.he)).slice(0, 12).map(t => t.he);
+  } catch { }
+  const RETS2 = new Set(['String', 'String?', 'int', 'double', 'num', 'bool']);
+  const simple = (f, allow) => RETS2.has(f.ret) && f.he.length >= 2 && f.params.every(pp => allow.test(pp.type));
+  // בחירת-הפונקציות — שלו: הראשונה שכל-פרמטריה DateTime (לגשר) · הראשונה עם String (להזנה-משדה)
+  const bridgeFn = atlas.functions.find(f => simple(f, /^DateTime\??$/));
+  const feedFn = atlas.functions.find(f => simple(f, /^(String|DateTime)\??$/) && f.params.some(pp => /^String/.test(pp.type)));
+  // ענפי-ההחלפה — שלוש צורות אינטראקטיביות מהלקסיקון + תוויות ממונחיו
+  const roleWord = new Map();
+  for (const [w, r] of LEXICON) if (!roleWord.has(r)) roleWord.set(r, w);
+  const swapRoles = ['switch', 'textfield', 'stat'].filter(r => roleWord.has(r));
+  const swapTerms = topTerms.slice(0, swapRoles.length);
+  const shapeWords = [...roleWord.values()];
   const siblingNavs = fs.readdirSync(SPECS).filter(f => f.endsWith('.txt') && f !== 'entry.txt').map(f => {
     const slug = f.replace('.txt', '');
     const t = (fs.readFileSync(path.join(SPECS, f), 'utf8').split('\n')[0] || slug).replace(/:$/, '').trim();
-    return `ניווט ${slug} ${t} | נוצר מבקשה בעברית - הקישו לפתיחה`;
+    return `ניווט ${slug} ${t} | ${SM.phrases.navSub}`;
   });
   const spec = [
     'המחולל:',
-    'הירו 🧬 המחולל של המחצב | דיוקן עצמי חי - כל יכולת שרואים כאן אמיתית',
-    'כותרת המפעל במספרים - עדכון חי מהאטלס',
-    `נתון ⚛️ ${atlas.widgets.length} לבנים ויזואליות על המדף`,
-    `נתון 🧠 ${atlas.functions.length} אטומי לוגיקה פעילים`,
-    `נתון 🖼️ ${boards} מסכים הורכבו מחדש`,
-    'כותרת גשר הלוגיקה - אטום מדד + אטום חישוב',
-    'חישוב החודש העברי כרגע לפי מנוע מאור',
-    'כותרת יכולת מורכבת - שדה מזין חישוב חי',
-    'שדה הקלידו שם ותקבלו קוד הזמנה',
-    '  חישוב קוד הזמנה דטרמיניסטי',
-    'כותרת חיבור אטום לאטום - הבחירה מחליפה את המוצג',
-    'בחירה מה בונים היום: הגדרות / ניהול / דוחות',
-    '  מתג 🔔 התראות למסך ההגדרות',
-    '  שדה שם מסך הניהול',
-    '  נתון 📊 3 דוחות מוכנים להפקה',
-    'כותרת חיבור בין מסכים - המסכים שיצרתי מבקשות',
+    `הירו ${SM.hero.emoji} ${SM.hero.title} | ${SM.hero.sub}`,
+    `כותרת ${SM.titles.stats}`,
+    `נתון ⚛️ ${atlas.widgets.length} ${SM.phrases.statWidgets}`,
+    `נתון 🧠 ${atlas.functions.length} ${SM.phrases.statFunctions}`,
+    `נתון 🖼️ ${boards} ${SM.phrases.statBoards}`,
+    ...(bridgeFn ? [`כותרת ${SM.titles.bridge}`, `${SM.phrases.calcWord} ${bridgeFn.he.join(' ')}`] : []),
+    ...(feedFn ? [`כותרת ${SM.titles.compose}`, `${SM.phrases.fieldPrompt} ${feedFn.he.join(' ')}`, `  ${SM.phrases.calcWord} ${feedFn.he.join(' ')}`] : []),
+    `כותרת ${SM.titles.swap}`,
+    `בחירה ${swapTerms.join(' או ')}: ${swapTerms.join(' / ')}`,
+    ...swapRoles.map((r, i) => `  ${roleWord.get(r)} ${swapTerms[i] || roleWord.get(r)}`),
+    `כותרת ${SM.titles.screens}`,
     ...siblingNavs,
-    `תגיות הצורות שאני מבין: ${shapeWords.join(' / ')}`,
-    'באנר נכתב והורכב בידי המחולל מהידע החי שלו - מאטומים קיימים בלבד',
-    'כפתור ✨ צרו מסך חדש',
+    `תגיות ${SM.titles.shapes}: ${shapeWords.join(' / ')}`,
+    SM.phrases.banner,
+    SM.phrases.button,
   ].join('\n');
   fs.writeFileSync(path.join(SPECS, 'entry.txt'), spec + '\n');
 }

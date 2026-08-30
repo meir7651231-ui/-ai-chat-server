@@ -57,7 +57,9 @@ export function buildAtlas() {
     const raw = fs.readFileSync(f.abs, 'utf8');
     const src = stripComments(raw);
     // תיאור-עצמי בעברית: המילים-העבריות משורת-הכותרת של האטום (מנורמלות: בלי ה"א-הידיעה/פיסוק)
-    const he = [...(raw.split('\n')[0] || '').matchAll(/[֐-׿][֐-׿]*/g)].map(m => m[0].replace(/^ה(?=..)/, '')).filter(w => w.length > 1);
+    // מילות-פיגום של כותרות-האטומים (חוט/אטום/חוזה/דרגת...) אינן תיאור — מסוננות
+    const SCAFFOLD = new Set(['חוט', 'אטום', 'חוזה', 'דרגת', 'קבוע', 'מוצא', 'קודם', 'אוטומטית']);
+    const he = [...(raw.split('\n')[0] || '').matchAll(/[֐-׿][֐-׿]*/g)].map(m => m[0].replace(/^ה(?=..)/, '')).filter(w => w.length > 1 && !SCAFFOLD.has(w));
     for (const fm of src.matchAll(/(?:^|\n)((?:Future<[^>\n]+>|Iterable<[^>\n]+>|List<[^>\n]+>|Map<[^>\n]+>|Set<[^>\n]+>|[A-Z]\w*(?:<[^>\n]+>)?\??|void|bool|int|double|num|String\??|dynamic)\s+([a-z]\w*)\s*\(([^)]*)\))\s*(?:=>|\{|async)/g)) {
       const ret = fm[1].split(/\s+/)[0];
       const params = fm[3].replace(/[\[\]]/g, '').split(',').map(p => p.trim()).filter(Boolean).map(p => {
