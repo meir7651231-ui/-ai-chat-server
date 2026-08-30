@@ -3,7 +3,6 @@
  *  חולץ כלשונו מ-maor/src/lib/courseDaily.ts:23-92; העוזרים הפרטיים של הקובץ
  *  (DAY_NAMES · isoOf · fmtD) נשארו בקובץ — עוזר-פנימי, לא import. */
 
-const DAY_NAMES = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
 
 function isoOf(d) {
     const p2 = (n) => String(n).padStart(2, '0');
@@ -15,7 +14,7 @@ function fmtD(iso) {
     return `${d}/${m}/${y}`;
 }
 
-export function buildCourseDailyRows(c, db, config, termOf, hebDateFull) {
+export function buildCourseDailyRows(c, db, config, termOf, hebDateFull, DAY_NAMES) {
     const T = (k, fb) => (config ? termOf(config, k, fb) : fb);
     const rows = [
         ['תאריך עברי', 'תאריך לועזי', 'יום', 'קבוצה/שעה', 'סטטוס יום', 'תלמידה פעילה', T('entity.family', 'משפחה'), 'סטטוס נוכחות'],

@@ -18,7 +18,8 @@ function isMixed(src) {
   let heb = false;
   for (const m of code.matchAll(/[\u0027"]([^\u0027"\\]{0,160})[\u0027"]/g)) if (HEB.test(m[1])) { heb = true; break; }
   if (!heb) return false;
-  const pureData = /^\s*(const\s+[\w<>,\s?]+\s+\w+\s*=\s*[\[{]|[\w<>,\s?]+\s+get\s+\w+\s*=>\s*(?:const\s+)?[\[{]|[\w<>,\s?]+\s+\w+\(\)\s*(?:=>\s*|\{\s*return\s+)(?:const\s+)?[\[{])/m.test(code)
+  // צורת-דאטה-טהורה: Dart (const מוקלד/getter/פונקציה-מחזירת-ליטרל) או JS (export const = ליטרל) — הכרעה 19
+  const pureData = /^\s*(const\s+[\w<>,\s?]+\s+\w+\s*=\s*[\[{]|[\w<>,\s?]+\s+get\s+\w+\s*=>\s*(?:const\s+)?[\[{]|[\w<>,\s?]+\s+\w+\(\)\s*(?:=>\s*|\{\s*return\s+)(?:const\s+)?[\[{]|export\s+(?:const\s+\w+\s*=\s*[\[{]|function\s+\w+\s*\(\)\s*\{\s*return\s+[\[{]))/m.test(code)
     && !/\b(if|for|while|switch)\b/.test(code);
   return !pureData;
 }

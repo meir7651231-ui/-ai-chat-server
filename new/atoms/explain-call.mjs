@@ -5,13 +5,12 @@
  *  הוזרקו כאובייקט-שקעים eng (חוק-1 — אפס import פנימי). העוזרים הפרטיים
  *  DOW_HE + closedTag הם חלק מהיחידה — נשארו בקובץ. */
 
-const DOW_HE = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
 // סיבת-סגירה להצגה — רק ספציפית (חג/שבת/dnd/חירום), לא הגנרית "מחוץ-לשעות".
 function closedTag(reason) {
   return reason && reason !== 'מחוץ-לשעות' && reason !== 'שעות-פעילות' ? ` (${reason})` : '';
 }
 
-export function explainCall(tenant, call = {}, opts = {}, eng = {}) {
+export function explainCall(tenant, call = {}, opts = {}, eng = {}, DOW_HE) {
   const { simulateCall, featureOn } = eng;
   const sim = simulateCall(tenant, call, opts); // R6-8: אופק-חלון מושחל
   const lines = [];

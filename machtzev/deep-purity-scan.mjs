@@ -42,13 +42,30 @@ for (const dir of DIRS) {
   }
 }
 findings.sort((a, b) => b.score - a.score);
-const lines = ['# 🔬 ממצאי טוהר-עומק (הכרעה 19) — דאטה בתוך מנגנון', '',
-  `נסרקו אטומי-מנגנון ב-${DIRS.join(' · ')} · הפרות: ${findings.length}`, '',
-  '| אטום | ציון | עברית | טבלאות | מחרוזות-דומיין | מספרי-קסם |', '|---|---|---|---|---|---|'];
-for (const x of findings) lines.push(`| ${x.f} | ${x.score} | ${x.cats.heb.join(' · ') || '—'} | ${x.cats.table.join(' · ') || '—'} | ${x.cats.domstr.join(' · ') || '—'} | ${x.cats.magic.join(' ') || '—'} |`);
-fs.mkdirSync(path.join(ROOT, 'machtzev/emit'), { recursive: true });
-fs.writeFileSync(path.join(ROOT, 'machtzev/emit/DEEP-PURITY-FINDINGS.md'), lines.join('\n') + '\n');
-const t = { heb: 0, table: 0, domstr: 0, magic: 0 };
-for (const x of findings) for (const k in t) if (x.cats[k].length) t[k]++;
-console.log(`🔬 טוהר-עומק: ${findings.length} אטומים עם דאטה-במנגנון · עברית:${t.heb} · טבלאות:${t.table} · דומיין:${t.domstr} · קסם:${t.magic}`);
-console.log('   הדוח: machtzev/emit/DEEP-PURITY-FINDINGS.md');
+const BASELINE = path.join(ROOT, 'machtzev/deep-purity-baseline.json');
+const arg = process.argv[2] || '--report';
+if (arg === '--baseline') {
+  fs.writeFileSync(BASELINE, JSON.stringify(findings.map(x => x.f).sort(), null, 0));
+  console.log(`baseline טוהר-עומק נכתב: ${findings.length} אטומים (חוב-מנוהל).`);
+} else if (arg === '--gate') {
+  const base = fs.existsSync(BASELINE) ? new Set(JSON.parse(fs.readFileSync(BASELINE, 'utf8'))) : new Set();
+  const fresh = findings.filter(x => !base.has(x.f));
+  if (fresh.length) {
+    console.error(`✗ שער-טוהר-עומק: ${fresh.length} אטומים חדשים עם דאטה-במנגנון (הכרעה 19 — קבועים ושמות-דומיין = דאטה):`);
+    fresh.slice(0, 20).forEach(x => console.error(`   + ${x.f} (ציון ${x.score})`));
+    console.error('   פרק לפי תבנית-הלוח: מנגנון-עיוור + אטום-דאטה + חיווט-בקופסה (heb-cal-box).');
+    process.exit(1);
+  }
+  console.log(`✓ שער-טוהר-עומק: אפס זיהום-חדש · חוב-מנוהל ${findings.length}/${base.size} (רק יורד — הכרעה 19)`);
+} else { // --report
+  const lines = ['# 🔬 ממצאי טוהר-עומק (הכרעה 19) — דאטה בתוך מנגנון', '',
+    `נסרקו אטומי-מנגנון ב-${DIRS.join(' · ')} · הפרות: ${findings.length}`, '',
+    '| אטום | ציון | עברית | טבלאות | מחרוזות-דומיין | מספרי-קסם |', '|---|---|---|---|---|---|'];
+  for (const x of findings) lines.push(`| ${x.f} | ${x.score} | ${x.cats.heb.join(' · ') || '—'} | ${x.cats.table.join(' · ') || '—'} | ${x.cats.domstr.join(' · ') || '—'} | ${x.cats.magic.join(' ') || '—'} |`);
+  fs.mkdirSync(path.join(ROOT, 'machtzev/emit'), { recursive: true });
+  fs.writeFileSync(path.join(ROOT, 'machtzev/emit/DEEP-PURITY-FINDINGS.md'), lines.join('\n') + '\n');
+  const t = { heb: 0, table: 0, domstr: 0, magic: 0 };
+  for (const x of findings) for (const k in t) if (x.cats[k].length) t[k]++;
+  console.log(`🔬 טוהר-עומק: ${findings.length} אטומים עם דאטה-במנגנון · עברית:${t.heb} · טבלאות:${t.table} · דומיין:${t.domstr} · קסם:${t.magic}`);
+  console.log('   הדוח: machtzev/emit/DEEP-PURITY-FINDINGS.md');
+}

@@ -21,6 +21,7 @@ gate('contract', 'contract-check.mjs', [HERE + '../new']);
 gate('quarry', 'quarry-check.mjs', [HERE + '../quarry']);
 gate('freeref', 'emit/free-ref-scan.mjs', ['--gate']);
 gate('datapurity', 'data-purity-check.mjs', ['--gate']);
+gate('deeppurity', 'deep-purity-scan.mjs', ['--gate']);
 gate('assembly', 'assemble/box-audit.mjs', ['--gate']);
 gate('pins', 'pins-check.mjs');
 gate('selftest', 'police-selftest.mjs', [], FAST);
