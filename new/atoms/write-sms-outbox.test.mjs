@@ -1,4 +1,10 @@
-import { writeSmsOutbox } from './write-sms-outbox.mjs';
+import { writeSmsOutbox as __pure_writeSmsOutbox } from './write-sms-outbox.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_write_sms_outbox_T = {
+  k1: "smsOutbox",
+  k2: "pending",
+};
+const writeSmsOutbox = (...a) => __pure_writeSmsOutbox(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_write_sms_outbox_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

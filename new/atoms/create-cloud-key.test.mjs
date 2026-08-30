@@ -1,4 +1,10 @@
-import { createCloudKey } from './create-cloud-key.mjs';
+import { createCloudKey as __pure_createCloudKey } from './create-cloud-key.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_create_cloud_key_T = {
+  k1: "pass",
+  k2: "יצירת מפתח-הצפנה נכשלה",
+};
+const createCloudKey = (...a) => __pure_createCloudKey(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_create_cloud_key_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 // 1–3 — מסלול מוצלח + פרוטוקול-הקריאות

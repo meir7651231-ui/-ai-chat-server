@@ -1,4 +1,11 @@
-import { findMemberOrgSlugs } from './find-member-org-slugs.mjs';
+import { findMemberOrgSlugs as __pure_findMemberOrgSlugs } from './find-member-org-slugs.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_find_member_org_slugs_T = {
+  k1: "platformOrgs",
+  k2: "members",
+  k3: "array-contains",
+};
+const findMemberOrgSlugs = (...a) => __pure_findMemberOrgSlugs(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_find_member_org_slugs_T);
 let f = 0;
 const eq = (a, b, msg) => { if (JSON.stringify(a) !== JSON.stringify(b)) { console.error(`✗ ${msg} ⇒ ${JSON.stringify(a)}`); f = 1; } };
 

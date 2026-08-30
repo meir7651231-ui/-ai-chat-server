@@ -5,10 +5,10 @@
  *  ‏writeFeed (setDoc על icsFeeds/{slug}); הקבוע הפרטי MAX_ICS_BYTES הוטמע. */
 const MAX_ICS_BYTES = 900_000;
 
-export async function publishIcsFeed(slug, ics, opts, sockets) {
+export async function publishIcsFeed(slug, ics, opts, sockets, T) {
   const { readToken, mintToken, writeFeed, nowIso = () => new Date().toISOString() } = sockets;
   if (new TextEncoder().encode(ics).length > MAX_ICS_BYTES) {
-    throw new Error('לוח-השנה גדול מדי לפרסום כפיד — פנו לתמיכה');
+    throw new Error(T.k1);
   }
   const token = (opts?.rotate ? null : await readToken(slug)) ?? mintToken();
   await writeFeed(slug, { token, ics, updatedAt: nowIso() });

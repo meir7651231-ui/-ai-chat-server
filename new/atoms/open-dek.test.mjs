@@ -1,4 +1,13 @@
-import { openDek } from './open-dek.mjs';
+import { openDek as __pure_openDek } from './open-dek.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_open_dek_T = {
+  k1: "pass",
+  k2: "raw",
+  k3: "AES-GCM",
+  k4: "encrypt",
+  k5: "decrypt",
+};
+const openDek = (...a) => __pure_openDek(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_open_dek_T);
 
 /* מימושי-השקעים (העתק-מקור maor/src/lib/crypto.ts) + עזרי-בנייה למעטפת-הבדיקה.
    הבדיקה מייבאת רק את האטום שלה; WebCrypto = גלובלי-סטנדרט. */

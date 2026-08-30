@@ -1,4 +1,10 @@
-import { deleteOrgJoinRequest } from './delete-org-join-request.mjs';
+import { deleteOrgJoinRequest as __pure_deleteOrgJoinRequest } from './delete-org-join-request.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_delete_org_join_request_T = {
+  k1: "platformOrgs",
+  k2: "joinRequests",
+};
+const deleteOrgJoinRequest = (...a) => __pure_deleteOrgJoinRequest(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_delete_org_join_request_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

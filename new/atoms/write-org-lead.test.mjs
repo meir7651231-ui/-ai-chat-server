@@ -1,4 +1,9 @@
-import { writeOrgLead } from './write-org-lead.mjs';
+import { writeOrgLead as __pure_writeOrgLead } from './write-org-lead.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_write_org_lead_T = {
+  k1: "platformLeads",
+};
+const writeOrgLead = (...a) => __pure_writeOrgLead(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_write_org_lead_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

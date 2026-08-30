@@ -1,4 +1,10 @@
-import { clearEmployeeField } from './clear-employee-field.mjs';
+import { clearEmployeeField as __pure_clearEmployeeField } from './clear-employee-field.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_clear_employee_field_T = {
+  k1: "platformOrgs",
+  k2: "memberConfigs",
+};
+const clearEmployeeField = (...a) => __pure_clearEmployeeField(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_clear_employee_field_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

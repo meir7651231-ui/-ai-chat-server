@@ -1,4 +1,10 @@
-import { deleteOrgMemberConfig } from './delete-org-member-config.mjs';
+import { deleteOrgMemberConfig as __pure_deleteOrgMemberConfig } from './delete-org-member-config.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_delete_org_member_config_T = {
+  k1: "platformOrgs",
+  k2: "memberConfigs",
+};
+const deleteOrgMemberConfig = (...a) => __pure_deleteOrgMemberConfig(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_delete_org_member_config_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

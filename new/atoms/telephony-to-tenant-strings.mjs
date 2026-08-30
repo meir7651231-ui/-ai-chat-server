@@ -1,4 +1,4 @@
-/** אטום-דאטה · telephony-to-tenant-strings — מחרוזות-התצוגה/דומיין שחולצו מ-telephony-to-tenant (מנוע-הטיהור v3, הכרעה 19). חוזה: telephony-to-tenant-strings.contract.md */
+/** אטום-דאטה · telephony-to-tenant-strings — מחרוזות-הדאטה של telephony-to-tenant (מנוע-הקשיחים, הכרעה 19). חוזה: telephony-to-tenant-strings.contract.md */
 export const TELEPHONY_TO_TENANT_T = {
   k1: "sim-in-gateway",
   k2: "customer-forward",
@@ -9,4 +9,9 @@ export const TELEPHONY_TO_TENANT_T = {
   k7: "ארגון",
   k8: "Asia/Jerusalem",
   k9: "directory",
+  k10: "voice.kosher",
+  k11: "calendar.hebrew",
+  k12: "calendar.shabbat",
+  k13: "calendar.fasts",
+  k14: "calendar.zmanim",
 };

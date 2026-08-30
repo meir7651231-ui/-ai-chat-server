@@ -4,20 +4,20 @@
  *  חולץ כלשונו מ-maor/src/lib/cloudConfig.ts:338-359; שכני firebase/firestore
  *  (cloudDb·addDoc·collection·doc·setDoc·increment) הוזרקו כאובייקט-שקעים fs,
  *  והשכן-הטהור sanitizeSupportText כשקע נפרד (חוק-1 — אפס import פנימי). */
-export async function sendSupportMessage(uid, meta, text, fs, sanitizeSupportText) {
+export async function sendSupportMessage(uid, meta, text, fs, sanitizeSupportText, T) {
   const { db, addDoc, collection, doc, setDoc, increment } = fs;
   const clean = sanitizeSupportText(text);
   if (!clean) return;
   const now = new Date().toISOString();
-  await addDoc(collection(db, 'supportChats', uid, 'messages'), { from: 'user', text: clean, at: now });
+  await addDoc(collection(db, T.k1, uid, T.k2), { from: T.k3, text: clean, at: now });
   await setDoc(
-    doc(db, 'supportChats', uid),
+    doc(db, T.k1, uid),
     {
       email: (meta.email ?? '').slice(0, 120),
       orgName: (meta.orgName ?? '').slice(0, 120),
       lastText: clean.slice(0, 120),
       lastAt: now,
-      lastFrom: 'user',
+      lastFrom: T.k3,
       unreadAdmin: increment(1),
     },
     { merge: true },

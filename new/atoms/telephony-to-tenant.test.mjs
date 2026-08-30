@@ -10,6 +10,11 @@ const __d_telephonyToTenant_TELEPHONY_TO_TENANT_T = {
   k7: "ארגון",
   k8: "Asia/Jerusalem",
   k9: "directory",
+  k10: "voice.kosher",
+  k11: "calendar.hebrew",
+  k12: "calendar.shabbat",
+  k13: "calendar.fasts",
+  k14: "calendar.zmanim",
 };
 const telephonyToTenant = (...a) => __pure_telephonyToTenant(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_telephonyToTenant_TELEPHONY_TO_TENANT_T);
 let f = 0;

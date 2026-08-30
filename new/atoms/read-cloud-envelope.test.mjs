@@ -1,4 +1,9 @@
-import { readCloudEnvelope } from './read-cloud-envelope.mjs';
+import { readCloudEnvelope as __pure_readCloudEnvelope } from './read-cloud-envelope.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_read_cloud_envelope_T = {
+  k1: "object",
+};
+const readCloudEnvelope = (...a) => __pure_readCloudEnvelope(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_read_cloud_envelope_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 

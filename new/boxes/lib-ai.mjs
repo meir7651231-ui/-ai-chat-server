@@ -7,7 +7,10 @@ import { thanksPrompt as __pure_thanksPrompt } from '../atoms/thanks-prompt.mjs'
 import { THANKS_PROMPT_T as __d_thanksPrompt_THANKS_PROMPT_T } from '../atoms/thanks-prompt-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const thanksPromptAtom = (...a) => __pure_thanksPrompt(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_thanksPrompt_THANKS_PROMPT_T);
-import { askClaude as askClaudeAtom } from '../atoms/ask-claude.mjs';
+import { askClaude as __pure_askClaude } from '../atoms/ask-claude.mjs';
+import { ASK_CLAUDE_T as __d_ask_claude_T } from '../atoms/ask-claude-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const askClaudeAtom = (...a) => __pure_askClaude(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_ask_claude_T);
 import { LIB_AI_TERMS } from '../atoms/lib-ai-terms.mjs';
 
 // ── הכרעות-החיווט של הקופסה (מילון-הקבועים) ──

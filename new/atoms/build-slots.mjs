@@ -28,7 +28,7 @@ export function buildSlots(db, room, iso, blocked, config,
           occupied = true;
           covered.push({ c, i });
           slots.push({
-            key: `crs|${hh}|${c.id}|${i}`,
+            key: `${T.k19}${hh}|${c.id}|${i}`,
             time: ss[i].time || hh,
             kind: T.k5,
             label: termOf(config, T.k6, T.k7) + ': ' + c.name,
@@ -62,7 +62,7 @@ export function buildSlots(db, room, iso, blocked, config,
       if (ss[i].day !== wd) continue;
       if (covered.some((x) => x.c.id === c.id && x.i === i)) continue;
       slots.push({
-        key: `out|${c.id}|${i}`,
+        key: `${T.k20}${c.id}|${i}`,
         time: ss[i].time || '—',
         kind: T.k5,
         label: termOf(config, T.k6, T.k7) + ': ' + c.name + T.k18,

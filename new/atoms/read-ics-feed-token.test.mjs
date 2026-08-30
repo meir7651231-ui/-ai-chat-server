@@ -1,4 +1,10 @@
-import { readIcsFeedToken } from './read-ics-feed-token.mjs';
+import { readIcsFeedToken as __pure_readIcsFeedToken } from './read-ics-feed-token.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_read_ics_feed_token_T = {
+  k1: "icsFeeds",
+  k2: "string",
+};
+const readIcsFeedToken = (...a) => __pure_readIcsFeedToken(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_read_ics_feed_token_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

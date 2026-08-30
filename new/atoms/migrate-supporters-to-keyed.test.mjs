@@ -1,4 +1,10 @@
-import { migrateSupportersToKeyed } from './migrate-supporters-to-keyed.mjs';
+import { migrateSupportersToKeyed as __pure_migrateSupportersToKeyed } from './migrate-supporters-to-keyed.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_migrate_supporters_to_keyed_T = {
+  k1: "supporters",
+  k2: "events",
+};
+const migrateSupportersToKeyed = (...a) => __pure_migrateSupportersToKeyed(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_migrate_supporters_to_keyed_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

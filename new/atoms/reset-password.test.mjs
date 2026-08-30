@@ -1,4 +1,12 @@
-import { resetPassword } from './reset-password.mjs';
+import { resetPassword as __pure_resetPassword } from './reset-password.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_reset_password_T = {
+  k1: "auth/user-not-found",
+  k2: "לא נמצא משתמש עם האימייל הזה",
+  k3: "auth/invalid-email",
+  k4: "כתובת האימייל אינה תקינה",
+};
+const resetPassword = (...a) => __pure_resetPassword(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_reset_password_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const threw = async (p, expected, msg) => {

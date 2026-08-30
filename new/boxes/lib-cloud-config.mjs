@@ -16,31 +16,91 @@ import { ORG_SECRET_KEYS } from '../atoms/org-secret-keys.mjs';
 import { SUPPORT_MSG_MAX } from '../atoms/support-msg-max.mjs';
 
 // ── חוטי-הענן (כולם: cloudDb+firestore הוזרקו כשקע-fs באטום) ──
-import { fetchOrgCloudConfig as fetchOrgCloudConfigAtom } from '../atoms/fetch-org-cloud-config.mjs';
+import { fetchOrgCloudConfig as __pure_fetchOrgCloudConfig } from '../atoms/fetch-org-cloud-config.mjs';
+import { FETCH_ORG_CLOUD_CONFIG_T as __d_fetch_org_cloud_config_T } from '../atoms/fetch-org-cloud-config-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const fetchOrgCloudConfigAtom = (...a) => __pure_fetchOrgCloudConfig(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_fetch_org_cloud_config_T);
 import { watchOrgCloudConfig as __pure_watchOrgCloudConfig } from '../atoms/watch-org-cloud-config.mjs';
 import { WATCH_ORG_CLOUD_CONFIG_T as __d_watchOrgCloudConfig_WATCH_ORG_CLOUD_CONFIG_T } from '../atoms/watch-org-cloud-config-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const watchOrgCloudConfigAtom = (...a) => __pure_watchOrgCloudConfig(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_watchOrgCloudConfig_WATCH_ORG_CLOUD_CONFIG_T);
-import { writeOrgCloudDoc as writeOrgCloudDocAtom } from '../atoms/write-org-cloud-doc.mjs';
+import { writeOrgCloudDoc as __pure_writeOrgCloudDoc } from '../atoms/write-org-cloud-doc.mjs';
+import { WRITE_ORG_CLOUD_DOC_T as __d_write_org_cloud_doc_T } from '../atoms/write-org-cloud-doc-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const writeOrgCloudDocAtom = (...a) => __pure_writeOrgCloudDoc(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_write_org_cloud_doc_T);
 import { writeOrgCloudConfig as writeOrgCloudConfigAtom } from '../atoms/write-org-cloud-config.mjs';
-import { writeOrgSecrets as writeOrgSecretsAtom } from '../atoms/write-org-secrets.mjs';
-import { readOrgSecretsMeta as readOrgSecretsMetaAtom } from '../atoms/read-org-secrets-meta.mjs';
-import { deleteOrgRequest as deleteOrgRequestAtom } from '../atoms/delete-org-request.mjs';
-import { writeOrgRequest as writeOrgRequestAtom } from '../atoms/write-org-request.mjs';
-import { fetchOrgRequests as fetchOrgRequestsAtom } from '../atoms/fetch-org-requests.mjs';
-import { findMemberOrgSlugs as findMemberOrgSlugsAtom } from '../atoms/find-member-org-slugs.mjs';
-import { fetchAllOrgs as fetchAllOrgsAtom } from '../atoms/fetch-all-orgs.mjs';
-import { writeOrgJoinRequest as writeOrgJoinRequestAtom } from '../atoms/write-org-join-request.mjs';
-import { fetchOrgJoinRequests as fetchOrgJoinRequestsAtom } from '../atoms/fetch-org-join-requests.mjs';
-import { deleteOrgJoinRequest as deleteOrgJoinRequestAtom } from '../atoms/delete-org-join-request.mjs';
-import { deleteOrgMemberConfig as deleteOrgMemberConfigAtom } from '../atoms/delete-org-member-config.mjs';
-import { clearEmployeeField as clearEmployeeFieldAtom } from '../atoms/clear-employee-field.mjs';
-import { addOrgMember as addOrgMemberAtom } from '../atoms/add-org-member.mjs';
-import { removeOrgMember as removeOrgMemberAtom } from '../atoms/remove-org-member.mjs';
-import { deleteOrgCompletely as deleteOrgCompletelyAtom } from '../atoms/delete-org-completely.mjs';
-import { writeOrgLead as writeOrgLeadAtom } from '../atoms/write-org-lead.mjs';
-import { fetchOrgLeads as fetchOrgLeadsAtom } from '../atoms/fetch-org-leads.mjs';
-import { sendSupportMessage as sendSupportMessageAtom } from '../atoms/send-support-message.mjs';
+import { writeOrgSecrets as __pure_writeOrgSecrets } from '../atoms/write-org-secrets.mjs';
+import { WRITE_ORG_SECRETS_T as __d_write_org_secrets_T } from '../atoms/write-org-secrets-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const writeOrgSecretsAtom = (...a) => __pure_writeOrgSecrets(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_write_org_secrets_T);
+import { readOrgSecretsMeta as __pure_readOrgSecretsMeta } from '../atoms/read-org-secrets-meta.mjs';
+import { READ_ORG_SECRETS_META_T as __d_read_org_secrets_meta_T } from '../atoms/read-org-secrets-meta-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const readOrgSecretsMetaAtom = (...a) => __pure_readOrgSecretsMeta(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_read_org_secrets_meta_T);
+import { deleteOrgRequest as __pure_deleteOrgRequest } from '../atoms/delete-org-request.mjs';
+import { DELETE_ORG_REQUEST_T as __d_delete_org_request_T } from '../atoms/delete-org-request-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const deleteOrgRequestAtom = (...a) => __pure_deleteOrgRequest(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_delete_org_request_T);
+import { writeOrgRequest as __pure_writeOrgRequest } from '../atoms/write-org-request.mjs';
+import { WRITE_ORG_REQUEST_T as __d_write_org_request_T } from '../atoms/write-org-request-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const writeOrgRequestAtom = (...a) => __pure_writeOrgRequest(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_write_org_request_T);
+import { fetchOrgRequests as __pure_fetchOrgRequests } from '../atoms/fetch-org-requests.mjs';
+import { FETCH_ORG_REQUESTS_T as __d_fetch_org_requests_T } from '../atoms/fetch-org-requests-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const fetchOrgRequestsAtom = (...a) => __pure_fetchOrgRequests(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_fetch_org_requests_T);
+import { findMemberOrgSlugs as __pure_findMemberOrgSlugs } from '../atoms/find-member-org-slugs.mjs';
+import { FIND_MEMBER_ORG_SLUGS_T as __d_find_member_org_slugs_T } from '../atoms/find-member-org-slugs-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const findMemberOrgSlugsAtom = (...a) => __pure_findMemberOrgSlugs(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_find_member_org_slugs_T);
+import { fetchAllOrgs as __pure_fetchAllOrgs } from '../atoms/fetch-all-orgs.mjs';
+import { FETCH_ALL_ORGS_T as __d_fetch_all_orgs_T } from '../atoms/fetch-all-orgs-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const fetchAllOrgsAtom = (...a) => __pure_fetchAllOrgs(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_fetch_all_orgs_T);
+import { writeOrgJoinRequest as __pure_writeOrgJoinRequest } from '../atoms/write-org-join-request.mjs';
+import { WRITE_ORG_JOIN_REQUEST_T as __d_write_org_join_request_T } from '../atoms/write-org-join-request-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const writeOrgJoinRequestAtom = (...a) => __pure_writeOrgJoinRequest(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_write_org_join_request_T);
+import { fetchOrgJoinRequests as __pure_fetchOrgJoinRequests } from '../atoms/fetch-org-join-requests.mjs';
+import { FETCH_ORG_JOIN_REQUESTS_T as __d_fetch_org_join_requests_T } from '../atoms/fetch-org-join-requests-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const fetchOrgJoinRequestsAtom = (...a) => __pure_fetchOrgJoinRequests(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_fetch_org_join_requests_T);
+import { deleteOrgJoinRequest as __pure_deleteOrgJoinRequest } from '../atoms/delete-org-join-request.mjs';
+import { DELETE_ORG_JOIN_REQUEST_T as __d_delete_org_join_request_T } from '../atoms/delete-org-join-request-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const deleteOrgJoinRequestAtom = (...a) => __pure_deleteOrgJoinRequest(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_delete_org_join_request_T);
+import { deleteOrgMemberConfig as __pure_deleteOrgMemberConfig } from '../atoms/delete-org-member-config.mjs';
+import { DELETE_ORG_MEMBER_CONFIG_T as __d_delete_org_member_config_T } from '../atoms/delete-org-member-config-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const deleteOrgMemberConfigAtom = (...a) => __pure_deleteOrgMemberConfig(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_delete_org_member_config_T);
+import { clearEmployeeField as __pure_clearEmployeeField } from '../atoms/clear-employee-field.mjs';
+import { CLEAR_EMPLOYEE_FIELD_T as __d_clear_employee_field_T } from '../atoms/clear-employee-field-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const clearEmployeeFieldAtom = (...a) => __pure_clearEmployeeField(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_clear_employee_field_T);
+import { addOrgMember as __pure_addOrgMember } from '../atoms/add-org-member.mjs';
+import { ADD_ORG_MEMBER_T as __d_add_org_member_T } from '../atoms/add-org-member-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const addOrgMemberAtom = (...a) => __pure_addOrgMember(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_add_org_member_T);
+import { removeOrgMember as __pure_removeOrgMember } from '../atoms/remove-org-member.mjs';
+import { REMOVE_ORG_MEMBER_T as __d_remove_org_member_T } from '../atoms/remove-org-member-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const removeOrgMemberAtom = (...a) => __pure_removeOrgMember(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_remove_org_member_T);
+import { deleteOrgCompletely as __pure_deleteOrgCompletely } from '../atoms/delete-org-completely.mjs';
+import { DELETE_ORG_COMPLETELY_T as __d_delete_org_completely_T } from '../atoms/delete-org-completely-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const deleteOrgCompletelyAtom = (...a) => __pure_deleteOrgCompletely(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_delete_org_completely_T);
+import { writeOrgLead as __pure_writeOrgLead } from '../atoms/write-org-lead.mjs';
+import { WRITE_ORG_LEAD_T as __d_write_org_lead_T } from '../atoms/write-org-lead-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const writeOrgLeadAtom = (...a) => __pure_writeOrgLead(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_write_org_lead_T);
+import { fetchOrgLeads as __pure_fetchOrgLeads } from '../atoms/fetch-org-leads.mjs';
+import { FETCH_ORG_LEADS_T as __d_fetch_org_leads_T } from '../atoms/fetch-org-leads-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const fetchOrgLeadsAtom = (...a) => __pure_fetchOrgLeads(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_fetch_org_leads_T);
+import { sendSupportMessage as __pure_sendSupportMessage } from '../atoms/send-support-message.mjs';
+import { SEND_SUPPORT_MESSAGE_T as __d_send_support_message_T } from '../atoms/send-support-message-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const sendSupportMessageAtom = (...a) => __pure_sendSupportMessage(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_send_support_message_T);
 import { sendSupportReply as sendSupportReplyAtom } from '../atoms/send-support-reply.mjs';
 import { watchSupportMessages as __pure_watchSupportMessages } from '../atoms/watch-support-messages.mjs';
 import { WATCH_SUPPORT_MESSAGES_T as __d_watchSupportMessages_WATCH_SUPPORT_MESSAGES_T } from '../atoms/watch-support-messages-strings.mjs';
@@ -54,7 +114,10 @@ import { watchAllSupportThreads as __pure_watchAllSupportThreads } from '../atom
 import { WATCH_ALL_SUPPORT_THREADS_T as __d_watchAllSupportThreads_WATCH_ALL_SUPPORT_THREADS_T } from '../atoms/watch-all-support-threads-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const watchAllSupportThreadsAtom = (...a) => __pure_watchAllSupportThreads(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_watchAllSupportThreads_WATCH_ALL_SUPPORT_THREADS_T);
-import { markSupportRead as markSupportReadAtom } from '../atoms/mark-support-read.mjs';
+import { markSupportRead as __pure_markSupportRead } from '../atoms/mark-support-read.mjs';
+import { MARK_SUPPORT_READ_T as __d_mark_support_read_T } from '../atoms/mark-support-read-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const markSupportReadAtom = (...a) => __pure_markSupportRead(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_mark_support_read_T);
 import { sendTeamMessage as sendTeamMessageAtom } from '../atoms/send-team-message.mjs';
 import { watchTeamMessages as __pure_watchTeamMessages } from '../atoms/watch-team-messages.mjs';
 import { WATCH_TEAM_MESSAGES_T as __d_watchTeamMessages_WATCH_TEAM_MESSAGES_T } from '../atoms/watch-team-messages-strings.mjs';

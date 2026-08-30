@@ -1,4 +1,15 @@
-import { changePassword } from './change-password.mjs';
+import { changePassword as __pure_changePassword } from './change-password.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_change_password_T = {
+  k1: "אין משתמש מחובר — התחברו ונסו שוב",
+  k2: "auth/wrong-password",
+  k3: "auth/invalid-credential",
+  k4: "auth/invalid-login-credentials",
+  k5: "הסיסמה הנוכחית שגויה",
+  k6: "auth/weak-password",
+  k7: "הסיסמה החדשה חלשה מדי — לפחות 6 תווים",
+};
+const changePassword = (...a) => __pure_changePassword(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_change_password_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const threw = async (p, expected, msg) => {

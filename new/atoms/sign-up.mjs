@@ -4,7 +4,7 @@
  *  חוזה: sign-up.contract.md
  *  חולץ כלשונו מ-maor/src/lib/cloud.ts:318-337; השכנים createUserWithEmailAndPassword ·
  *  requireAuth · sendEmailVerification · hebrewAuthError הוזרקו כשקעים (חוק-1). */
-export async function signUp(email, password, createUserWithEmailAndPassword, requireAuth, sendEmailVerification, hebrewAuthError) {
+export async function signUp(email, password, createUserWithEmailAndPassword, requireAuth, sendEmailVerification, hebrewAuthError, T) {
   try {
     const cred = await createUserWithEmailAndPassword(requireAuth(), email, password);
     // 🛡️ נחיל-אבטחה 17.8 (ממצא #1 · שלב-1, תוספתי/לא-שובר): שולחים מייל-אימות
@@ -17,14 +17,14 @@ export async function signUp(email, password, createUserWithEmailAndPassword, re
   }
   catch (e) {
     const code = (e?.code ?? '').toString();
-    if (code === 'auth/email-already-in-use')
-      throw new Error('האימייל כבר רשום — נסו להתחבר או לאפס סיסמה');
-    if (code === 'auth/weak-password')
-      throw new Error('הסיסמה חלשה מדי — לפחות 6 תווים');
-    if (code === 'auth/invalid-email')
-      throw new Error('כתובת האימייל אינה תקינה');
-    if (code === 'auth/operation-not-allowed')
-      throw new Error('ההרשמה סגורה כרגע — פנו למנהל המערכת');
+    if (code === T.k1)
+      throw new Error(T.k2);
+    if (code === T.k3)
+      throw new Error(T.k4);
+    if (code === T.k5)
+      throw new Error(T.k6);
+    if (code === T.k7)
+      throw new Error(T.k8);
     throw hebrewAuthError(e);
   }
 }

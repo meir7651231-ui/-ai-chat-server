@@ -1,4 +1,9 @@
-import { promptInstall } from './prompt-install.mjs';
+import { promptInstall as __pure_promptInstall } from './prompt-install.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_prompt_install_T = {
+  k1: "accepted",
+};
+const promptInstall = (...a) => __pure_promptInstall(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_prompt_install_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const fake = (outcome) => {

@@ -1,4 +1,9 @@
-import { encryptDoc } from './encrypt-doc.mjs';
+import { encryptDoc as __pure_encryptDoc } from './encrypt-doc.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_encrypt_doc_T = {
+  k1: "AES-GCM",
+};
+const encryptDoc = (...a) => __pure_encryptDoc(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_encrypt_doc_T);
 let f = 0;
 const b64 = (buf) => {
   const bytes = buf instanceof Uint8Array ? buf : new Uint8Array(buf);

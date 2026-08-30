@@ -1,4 +1,10 @@
-import { writeOrgJoinRequest } from './write-org-join-request.mjs';
+import { writeOrgJoinRequest as __pure_writeOrgJoinRequest } from './write-org-join-request.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_write_org_join_request_T = {
+  k1: "platformOrgs",
+  k2: "joinRequests",
+};
+const writeOrgJoinRequest = (...a) => __pure_writeOrgJoinRequest(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_write_org_join_request_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

@@ -1,4 +1,9 @@
-import { readOrgSecretsMeta } from './read-org-secrets-meta.mjs';
+import { readOrgSecretsMeta as __pure_readOrgSecretsMeta } from './read-org-secrets-meta.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_read_org_secrets_meta_T = {
+  k1: "orgSecretsMeta",
+};
+const readOrgSecretsMeta = (...a) => __pure_readOrgSecretsMeta(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_read_org_secrets_meta_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

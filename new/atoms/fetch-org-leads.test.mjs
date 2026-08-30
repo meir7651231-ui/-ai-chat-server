@@ -1,4 +1,9 @@
-import { fetchOrgLeads } from './fetch-org-leads.mjs';
+import { fetchOrgLeads as __pure_fetchOrgLeads } from './fetch-org-leads.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_fetch_org_leads_T = {
+  k1: "platformLeads",
+};
+const fetchOrgLeads = (...a) => __pure_fetchOrgLeads(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_fetch_org_leads_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const eq = (a, b, msg) => ok(JSON.stringify(a) === JSON.stringify(b), msg + ` ⇒ ${JSON.stringify(a)}`);

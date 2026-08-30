@@ -1,4 +1,9 @@
-import { fetchAllOrgs } from './fetch-all-orgs.mjs';
+import { fetchAllOrgs as __pure_fetchAllOrgs } from './fetch-all-orgs.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_fetch_all_orgs_T = {
+  k1: "platformOrgs",
+};
+const fetchAllOrgs = (...a) => __pure_fetchAllOrgs(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_fetch_all_orgs_T);
 let f = 0;
 const eq = (a, b, msg) => { if (JSON.stringify(a) !== JSON.stringify(b)) { console.error(`✗ ${msg} ⇒ ${JSON.stringify(a)}`); f = 1; } };
 

@@ -2,32 +2,32 @@
  *  חוזה: ask-claude.contract.md
  *  חולץ כלשונו מ-maor/src/lib/ai.ts:61-87 (תורגם TS→JS); שכבת-הרשת = השקע
  *  doFetch (במקור: AiFetch — "ניתנת-להזרקה בטסטים, בלי רשת אמיתית"). */
-export async function askClaude(apiKey, prompt, doFetch = fetch) {
-    const res = await doFetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
+export async function askClaude(apiKey, prompt, doFetch = fetch, T) {
+    const res = await doFetch(T.k1, {
+        method: T.k2,
         headers: {
-            'content-type': 'application/json',
-            'x-api-key': apiKey,
-            'anthropic-version': '2023-06-01',
+            [T.k3]: T.k4,
+            [T.k5]: apiKey,
+            [T.k6]: '2023-06-01',
             // הכותרת הרשמית של Anthropic לקריאות-דפדפן ישירות (מפתח-הארגון, בבחירתו)
-            'anthropic-dangerous-direct-browser-access': 'true',
+            [T.k7]: T.k8,
         },
         body: JSON.stringify({
-            model: 'claude-haiku-4-5-20251001',
+            model: T.k9,
             max_tokens: 600,
-            messages: [{ role: 'user', content: prompt }],
+            messages: [{ role: T.k10, content: prompt }],
         }),
     });
     if (!res.ok) {
         if (res.status === 401)
-            throw new Error('מפתח ה-API לא תקין — בדקו בהגדרות');
+            throw new Error(T.k11);
         if (res.status === 429)
-            throw new Error('חריגה ממכסת-השימוש — נסו בעוד רגע');
-        throw new Error('הקריאה לעוזר נכשלה (' + res.status + ')');
+            throw new Error(T.k12);
+        throw new Error(T.k13 + res.status + ')');
     }
     const data = (await res.json());
-    const text = (data.content ?? []).filter((b) => b.type === 'text').map((b) => b.text ?? '').join('');
+    const text = (data.content ?? []).filter((b) => b.type === T.k14).map((b) => b.text ?? '').join('');
     if (!text.trim())
-        throw new Error('לא התקבלה תשובה — נסו שוב');
+        throw new Error(T.k15);
     return text.trim();
 }

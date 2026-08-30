@@ -3,6 +3,7 @@ import { computeQuote as __pure_computeQuote } from './compute-quote.mjs';
 const __d_computeQuote_COMPUTE_QUOTE_T = {
   k1: "module",
   k2: "integration",
+  k3: "subscription",
 };
 const computeQuote = (...a) => __pure_computeQuote(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_computeQuote_COMPUTE_QUOTE_T);
 let f = 0;

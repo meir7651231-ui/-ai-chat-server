@@ -1,4 +1,25 @@
-import { deleteOrgCompletely } from './delete-org-completely.mjs';
+import { deleteOrgCompletely as __pure_deleteOrgCompletely } from './delete-org-completely.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_delete_org_completely_T = {
+  k1: "donations",
+  k2: "auditlog",
+  k3: "incomingPayments",
+  k4: "smsOutbox",
+  k5: "mailOutbox",
+  k6: "orgs/",
+  k7: "orgSecrets/",
+  k8: "orgSecretsMeta/",
+  k9: "icsFeeds/",
+  k10: "teamChats/",
+  k11: "/messages",
+  k12: "teamChats",
+  k13: "/meta/org",
+  k14: "/_enc/envelope",
+  k15: "platformOrgs/",
+  k16: "/joinRequests",
+  k17: "platformOrgs",
+};
+const deleteOrgCompletely = (...a) => __pure_deleteOrgCompletely(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_delete_org_completely_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

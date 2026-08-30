@@ -1,4 +1,9 @@
-import { rewrapPassword } from './rewrap-password.mjs';
+import { rewrapPassword as __pure_rewrapPassword } from './rewrap-password.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_rewrap_password_T = {
+  k1: "raw",
+};
+const rewrapPassword = (...a) => __pure_rewrapPassword(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_rewrap_password_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 

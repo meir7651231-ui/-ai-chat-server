@@ -1,4 +1,16 @@
-import { signUp } from './sign-up.mjs';
+import { signUp as __pure_signUp } from './sign-up.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_sign_up_T = {
+  k1: "auth/email-already-in-use",
+  k2: "האימייל כבר רשום — נסו להתחבר או לאפס סיסמה",
+  k3: "auth/weak-password",
+  k4: "הסיסמה חלשה מדי — לפחות 6 תווים",
+  k5: "auth/invalid-email",
+  k6: "כתובת האימייל אינה תקינה",
+  k7: "auth/operation-not-allowed",
+  k8: "ההרשמה סגורה כרגע — פנו למנהל המערכת",
+};
+const signUp = (...a) => __pure_signUp(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_sign_up_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const AUTH = { tag: 'auth' };

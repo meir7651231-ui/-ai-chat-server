@@ -10,7 +10,10 @@ import { LOCK_KEY_T as __d_lockKey_LOCK_KEY_T } from '../atoms/lock-key-strings.
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const lockKeyAtom = (...a) => __pure_lockKey(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_lockKey_LOCK_KEY_T);
 import { isValidPin as isValidPinAtom } from '../atoms/is-valid-pin.mjs';
-import { hashPin as hashPinAtom } from '../atoms/hash-pin.mjs';
+import { hashPin as __pure_hashPin } from '../atoms/hash-pin.mjs';
+import { HASH_PIN_T as __d_hash_pin_T } from '../atoms/hash-pin-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const hashPinAtom = (...a) => __pure_hashPin(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_hash_pin_T);
 import { verifyPin as verifyPinAtom } from '../atoms/verify-pin.mjs';
 
 // ── הכרעות-החיווט של הקופסה (סדר · ברירות-מחדל · מילון-קבועים) ──

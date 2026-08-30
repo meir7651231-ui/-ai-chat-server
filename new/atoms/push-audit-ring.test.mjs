@@ -1,4 +1,9 @@
-import { pushAuditRing } from './push-audit-ring.mjs';
+import { pushAuditRing as __pure_pushAuditRing } from './push-audit-ring.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_push_audit_ring_T = {
+  k1: "auditlog",
+};
+const pushAuditRing = (...a) => __pure_pushAuditRing(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_push_audit_ring_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 // זיוף-Firestore: מתעד קריאות doc/setDoc; setDoc יכול להידחות לפי תסריט

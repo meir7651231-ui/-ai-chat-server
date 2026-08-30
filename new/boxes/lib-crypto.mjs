@@ -12,15 +12,24 @@ import { genRecoveryKey as __pure_genRecoveryKey } from '../atoms/gen-recovery-k
 import { GEN_RECOVERY_KEY_T as __d_genRecoveryKey_GEN_RECOVERY_KEY_T } from '../atoms/gen-recovery-key-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const _genRecoveryKey = (...a) => __pure_genRecoveryKey(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_genRecoveryKey_GEN_RECOVERY_KEY_T);
-import { encryptDb as _encryptDb } from '../atoms/encrypt-db.mjs';
+import { encryptDb as __pure_encryptDb } from '../atoms/encrypt-db.mjs';
+import { ENCRYPT_DB_T as __d_encrypt_db_T } from '../atoms/encrypt-db-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const _encryptDb = (...a) => __pure_encryptDb(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_encrypt_db_T);
 import { isEncrypted as __pure_isEncrypted } from '../atoms/is-encrypted.mjs';
 import { IS_ENCRYPTED_T as __d_isEncrypted_IS_ENCRYPTED_T } from '../atoms/is-encrypted-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const isEncrypted = (...a) => __pure_isEncrypted(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_isEncrypted_IS_ENCRYPTED_T);
-import { openDek as _openDek } from '../atoms/open-dek.mjs';
+import { openDek as __pure_openDek } from '../atoms/open-dek.mjs';
+import { OPEN_DEK_T as __d_open_dek_T } from '../atoms/open-dek-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const _openDek = (...a) => __pure_openDek(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_open_dek_T);
 import { decryptDb as _decryptDb } from '../atoms/decrypt-db.mjs';
 import { reencryptDb as _reencryptDb } from '../atoms/reencrypt-db.mjs';
-import { rewrapPassword as _rewrapPassword } from '../atoms/rewrap-password.mjs';
+import { rewrapPassword as __pure_rewrapPassword } from '../atoms/rewrap-password.mjs';
+import { REWRAP_PASSWORD_T as __d_rewrap_password_T } from '../atoms/rewrap-password-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const _rewrapPassword = (...a) => __pure_rewrapPassword(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_rewrap_password_T);
 import { LIB_CRYPTO_TERMS } from '../atoms/lib-crypto-terms.mjs';
 
 // ── שקעי-החיווט: ה-helpers הפרטיים של המקור (crypto.ts:29-66), verbatim ──

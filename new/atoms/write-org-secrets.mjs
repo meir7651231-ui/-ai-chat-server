@@ -6,7 +6,7 @@
  *  (doc/setDoc/deleteField) ⇒ אובייקט-שקעים fs (חוק-1 — אפס import פנימי).
  *  ערך מלא = נשמר (trim); '' = נמחק מהכספת; שדה שלא נשלח לא נגוע. חוק-6:
  *  אפס סוד מוטבע — הסודות עוברים רק דרך patch בזמן-ריצה. */
-export async function writeOrgSecrets(slug, patch, keys, fs) {
+export async function writeOrgSecrets(slug, patch, keys, fs, T) {
   const { db, doc, setDoc, deleteField } = fs;
   const secret = {};
   const meta = {};
@@ -17,6 +17,6 @@ export async function writeOrgSecrets(slug, patch, keys, fs) {
     meta[k] = !!v;
   }
   if (!Object.keys(secret).length) return;
-  await setDoc(doc(db, 'orgSecrets', slug), secret, { merge: true });
-  await setDoc(doc(db, 'orgSecretsMeta', slug), { ...meta, updatedAt: new Date().toISOString() }, { merge: true });
+  await setDoc(doc(db, T.k1, slug), secret, { merge: true });
+  await setDoc(doc(db, T.k2, slug), { ...meta, updatedAt: new Date().toISOString() }, { merge: true });
 }

@@ -24,8 +24,14 @@ import { ENV_PATH_T as __d_envPath_ENV_PATH_T } from '../atoms/env-path-strings.
 const envPath = (...a) => __pure_envPath(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_envPath_ENV_PATH_T);
 import { donationsPath } from '../atoms/donations-path.mjs';
 import { ENTITY_COLLECTIONS } from '../atoms/entity-collections.mjs';
-import { encryptDoc as _encryptDoc } from '../atoms/encrypt-doc.mjs';
-import { decryptDoc as _decryptDoc } from '../atoms/decrypt-doc.mjs';
+import { encryptDoc as __pure_encryptDoc } from '../atoms/encrypt-doc.mjs';
+import { ENCRYPT_DOC_T as __d_encrypt_doc_T } from '../atoms/encrypt-doc-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const _encryptDoc = (...a) => __pure_encryptDoc(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_encrypt_doc_T);
+import { decryptDoc as __pure_decryptDoc } from '../atoms/decrypt-doc.mjs';
+import { DECRYPT_DOC_T as __d_decrypt_doc_T } from '../atoms/decrypt-doc-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const _decryptDoc = (...a) => __pure_decryptDoc(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_decrypt_doc_T);
 import { SHARED_SUP_KEY } from '../atoms/shared-sup-key.mjs';
 import { SHARED_PURPOSE_KEY } from '../atoms/shared-purpose-key.mjs';
 import { SUP_KEYED_COLS } from '../atoms/sup-keyed-cols.mjs';
@@ -52,10 +58,16 @@ import { CLOUD_DB_T as __d_cloudDb_CLOUD_DB_T } from '../atoms/cloud-db-strings.
 const cloudDb = (...a) => __pure_cloudDb(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_cloudDb_CLOUD_DB_T);
 import { signOutCloud as _signOutCloud } from '../atoms/sign-out-cloud.mjs';
 import { pushDiff as _pushDiff } from '../atoms/push-diff.mjs';
-import { readCloudEnvelope as _readCloudEnvelope } from '../atoms/read-cloud-envelope.mjs';
+import { readCloudEnvelope as __pure_readCloudEnvelope } from '../atoms/read-cloud-envelope.mjs';
+import { READ_CLOUD_ENVELOPE_T as __d_read_cloud_envelope_T } from '../atoms/read-cloud-envelope-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const _readCloudEnvelope = (...a) => __pure_readCloudEnvelope(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_read_cloud_envelope_T);
 import { writeCloudEnvelope as _writeCloudEnvelope } from '../atoms/write-cloud-envelope.mjs';
 import { encryptExistingCloud as _encryptExistingCloud } from '../atoms/encrypt-existing-cloud.mjs';
-import { migrateSupportersToKeyed as _migrateSupportersToKeyed } from '../atoms/migrate-supporters-to-keyed.mjs';
+import { migrateSupportersToKeyed as __pure_migrateSupportersToKeyed } from '../atoms/migrate-supporters-to-keyed.mjs';
+import { MIGRATE_SUPPORTERS_TO_KEYED_T as __d_migrate_supporters_to_keyed_T } from '../atoms/migrate-supporters-to-keyed-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const _migrateSupportersToKeyed = (...a) => __pure_migrateSupportersToKeyed(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_migrate_supporters_to_keyed_T);
 
 /* ══════════ א) הכרעות טהורות (מילון-הקופסה, verbatim מהמקור) ══════════ */
 

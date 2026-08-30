@@ -5,9 +5,9 @@
  *  ⇒ fs, ‏decryptDoc — כולם שקעים (חוק-1). AUDIT_CAP=500 הוטמע. */
 const AUDIT_CAP = 500;
 
-export async function pullAuditRing(dek, auditReadable, db, scopedCol, fs, decryptDoc) {
+export async function pullAuditRing(dek, auditReadable, db, scopedCol, fs, decryptDoc, T) {
   if (!auditReadable) return null;
-  const snap = await fs.getDocs(fs.collection(db, scopedCol('auditlog')));
+  const snap = await fs.getDocs(fs.collection(db, scopedCol(T.k1)));
   const all = [];
   for (const d of snap.docs) {
     const data = dek ? await decryptDoc(d.data(), dek) : d.data();

@@ -1,4 +1,12 @@
-import { encryptDb } from './encrypt-db.mjs';
+import { encryptDb as __pure_encryptDb } from './encrypt-db.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_encrypt_db_T = {
+  k1: "raw",
+  k2: "AES-GCM",
+  k3: "encrypt",
+  k4: "decrypt",
+};
+const encryptDb = (...a) => __pure_encryptDb(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_encrypt_db_T);
 let f = 0;
 const err = (m) => { console.error('✗ ' + m); f = 1; };
 

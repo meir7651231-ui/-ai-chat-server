@@ -1,4 +1,11 @@
-import { sendSupportMessage } from './send-support-message.mjs';
+import { sendSupportMessage as __pure_sendSupportMessage } from './send-support-message.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_send_support_message_T = {
+  k1: "supportChats",
+  k2: "messages",
+  k3: "user",
+};
+const sendSupportMessage = (...a) => __pure_sendSupportMessage(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_send_support_message_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 const J = JSON.stringify;

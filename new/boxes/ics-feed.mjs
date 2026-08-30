@@ -5,8 +5,14 @@
  *  שקעי-IO (Firestore: db/doc/getDoc/setDoc, חותם-זמן) = לוח-האם, מוזרקים
  *  כאובייקט cloud — הקופסה עצמה טהורה (חוק-6: שום זהות/ידית-ענן נצרבת). */
 import { mintFeedToken as mintAtom } from '../atoms/mint-feed-token.mjs';
-import { readIcsFeedToken as readAtom } from '../atoms/read-ics-feed-token.mjs';
-import { publishIcsFeed as publishAtom } from '../atoms/publish-ics-feed.mjs';
+import { readIcsFeedToken as __pure_readIcsFeedToken } from '../atoms/read-ics-feed-token.mjs';
+import { READ_ICS_FEED_TOKEN_T as __d_read_ics_feed_token_T } from '../atoms/read-ics-feed-token-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const readAtom = (...a) => __pure_readIcsFeedToken(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_read_ics_feed_token_T);
+import { publishIcsFeed as __pure_publishIcsFeed } from '../atoms/publish-ics-feed.mjs';
+import { PUBLISH_ICS_FEED_T as __d_publish_ics_feed_T } from '../atoms/publish-ics-feed-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const publishAtom = (...a) => __pure_publishIcsFeed(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_publish_ics_feed_T);
 import { icsFeedUrl as __pure_icsFeedUrl } from '../atoms/ics-feed-url.mjs';
 import { ICS_FEED_URL_T as __d_icsFeedUrl_ICS_FEED_URL_T } from '../atoms/ics-feed-url-strings.mjs';
 import { ICS_FEED_TERMS } from '../atoms/ics-feed-terms.mjs';

@@ -1,4 +1,9 @@
-import { writeOrgRequest } from './write-org-request.mjs';
+import { writeOrgRequest as __pure_writeOrgRequest } from './write-org-request.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_write_org_request_T = {
+  k1: "platformRequests",
+};
+const writeOrgRequest = (...a) => __pure_writeOrgRequest(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_write_org_request_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

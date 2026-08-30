@@ -35,11 +35,11 @@ export function telephonyToTenant(tc, orgName, tenantId, T) {
     });
   const firstSim = numbers.find((n) => n.onramp === T.k1);
   const features = {
-    'voice.kosher': tc.kosherMode,
-    'calendar.hebrew': tc.hebrewCalendar,
-    'calendar.shabbat': tc.shabbat,
-    'calendar.fasts': tc.fasts,
-    'calendar.zmanim': tc.zmanim,
+    [T.k10]: tc.kosherMode,
+    [T.k11]: tc.hebrewCalendar,
+    [T.k12]: tc.shabbat,
+    [T.k13]: tc.fasts,
+    [T.k14]: tc.zmanim,
     voicemail: tc.voicemail,
   };
   return {

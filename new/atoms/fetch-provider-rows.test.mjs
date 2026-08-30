@@ -1,4 +1,10 @@
-import { fetchProviderRows } from './fetch-provider-rows.mjs';
+import { fetchProviderRows as __pure_fetchProviderRows } from './fetch-provider-rows.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_fetch_provider_rows_T = {
+  k1: "incomingPayments",
+  k2: "provider",
+};
+const fetchProviderRows = (...a) => __pure_fetchProviderRows(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_fetch_provider_rows_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const eq = (a, b, msg) => ok(JSON.stringify(a) === JSON.stringify(b), msg + ` ⇒ ${JSON.stringify(a)}`);

@@ -1,4 +1,17 @@
-import { pullNedarim } from './pull-nedarim.mjs';
+import { pullNedarim as __pure_pullNedarim } from './pull-nedarim.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_pull_nedarim_T = {
+  k1: "כתובת-משיכה לא-תקינה (חייבת https)",
+  k2: "נדרשת התחברות-ענן",
+  k3: "root",
+  k4: "org",
+  k5: "full",
+  k6: "reset",
+  k7: "POST",
+  k8: "Bearer ",
+  k9: "משיכה נכשלה (",
+};
+const pullNedarim = (...a) => __pure_pullNedarim(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_pull_nedarim_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 // זיוף-רשת: Response-דמוי לפי תסריט; jsonReject=גוף שאינו JSON

@@ -6,6 +6,14 @@ const __d_orbitTheme_ORBIT_THEME_T = {
   k3: "Ember",
   k4: "Aurora",
   k5: "rgba(",
+  k6: "--o-accent",
+  k7: "--o-accent-rgb",
+  k8: "--o-accent2",
+  k9: "--o-glow",
+  k10: "--o-btn-a",
+  k11: "--o-btn-b",
+  k12: "--o-btn-text",
+  k13: "--accent",
 };
 const orbitTheme = (...a) => __pure_orbitTheme(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_orbitTheme_ORBIT_THEME_T);
 

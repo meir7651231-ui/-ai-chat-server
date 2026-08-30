@@ -1,4 +1,18 @@
-import { pullSola } from './pull-sola.mjs';
+import { pullSola as __pure_pullSola } from './pull-sola.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_pull_sola_T = {
+  k1: "כתובת-משיכה לא-תקינה (חייבת https)",
+  k2: "נדרשת התחברות-ענן",
+  k3: "root",
+  k4: "org",
+  k5: "default",
+  k6: "vault",
+  k7: "reset",
+  k8: "POST",
+  k9: "Bearer ",
+  k10: "משיכה נכשלה (",
+};
+const pullSola = (...a) => __pure_pullSola(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_pull_sola_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const fake = (script) => {

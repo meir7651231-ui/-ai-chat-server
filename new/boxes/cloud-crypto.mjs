@@ -7,9 +7,18 @@ import { isEncDoc as __pure_isEncDoc } from '../atoms/is-enc-doc.mjs';
 import { IS_ENC_DOC_T as __d_isEncDoc_IS_ENC_DOC_T } from '../atoms/is-enc-doc-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const isEncDoc = (...a) => __pure_isEncDoc(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_isEncDoc_IS_ENC_DOC_T);
-import { encryptDoc as encDocAtom } from '../atoms/encrypt-doc.mjs';
-import { decryptDoc as decDocAtom } from '../atoms/decrypt-doc.mjs';
-import { createCloudKey as createCloudKeyAtom } from '../atoms/create-cloud-key.mjs';
+import { encryptDoc as __pure_encryptDoc } from '../atoms/encrypt-doc.mjs';
+import { ENCRYPT_DOC_T as __d_encrypt_doc_T } from '../atoms/encrypt-doc-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const encDocAtom = (...a) => __pure_encryptDoc(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_encrypt_doc_T);
+import { decryptDoc as __pure_decryptDoc } from '../atoms/decrypt-doc.mjs';
+import { DECRYPT_DOC_T as __d_decrypt_doc_T } from '../atoms/decrypt-doc-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const decDocAtom = (...a) => __pure_decryptDoc(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_decrypt_doc_T);
+import { createCloudKey as __pure_createCloudKey } from '../atoms/create-cloud-key.mjs';
+import { CREATE_CLOUD_KEY_T as __d_create_cloud_key_T } from '../atoms/create-cloud-key-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const createCloudKeyAtom = (...a) => __pure_createCloudKey(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_create_cloud_key_T);
 import { openCloudKey as openCloudKeyAtom } from '../atoms/open-cloud-key.mjs';
 import { isEncrypted as __pure_isEncrypted } from '../atoms/is-encrypted.mjs';
 import { IS_ENCRYPTED_T as __d_isEncrypted_IS_ENCRYPTED_T } from '../atoms/is-encrypted-strings.mjs';

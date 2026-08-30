@@ -3,7 +3,7 @@
  *  חולץ כלשונו מ-maor/src/lib/cloudConfig.ts:120-123 (תורגם TS→JS); ‏cloudDb
  *  וערכת-Firestore (doc/setDoc) הוזרקו כאובייקט-שקעים fs (חוק-1 — אפס import פנימי).
  *  עיקור-JSON לפני הכתיבה: מפיל undefined/פונקציות ומנתק הפניה מה-state. */
-export async function writeOrgCloudDoc(slug, data, fs) {
+export async function writeOrgCloudDoc(slug, data, fs, T) {
   const { db, doc, setDoc } = fs;
-  await setDoc(doc(db, 'platformOrgs', slug), JSON.parse(JSON.stringify(data)), { merge: true });
+  await setDoc(doc(db, T.k1, slug), JSON.parse(JSON.stringify(data)), { merge: true });
 }

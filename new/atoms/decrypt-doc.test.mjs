@@ -1,4 +1,9 @@
-import { decryptDoc } from './decrypt-doc.mjs';
+import { decryptDoc as __pure_decryptDoc } from './decrypt-doc.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_decrypt_doc_T = {
+  k1: "AES-GCM",
+};
+const decryptDoc = (...a) => __pure_decryptDoc(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_decrypt_doc_T);
 // שקעי-אמת כהגדרות-המקור (cloudCrypto.ts)
 const isEncDoc = (d) => !!d && typeof d === 'object' && typeof d.enc === 'string' && typeof d.iv === 'string';
 const unb64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));

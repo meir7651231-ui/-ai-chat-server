@@ -4,20 +4,20 @@
  *  חולץ כלשונו מ-maor/src/lib/cloud.ts:215-240; השכנים (requireDb · supKeyMapOf ·
  *  supKeyOf · docSkey · toPlain · encryptDoc · scopedCol · doc · writeBatch)
  *  הוזרקו כאובייקט-שקעים io (חוק-1 — אפס import פנימי). */
-export async function migrateSupportersToKeyed(supporters, events, dek, io) {
+export async function migrateSupportersToKeyed(supporters, events, dek, io, T) {
   const { requireDb, supKeyMapOf, supKeyOf, docSkey, toPlain, encryptDoc, scopedCol, doc, writeBatch } = io;
   const db = requireDb();
   const map = supKeyMapOf(supporters);
   const ops = [];
   for (const sp of supporters) {
     const inner = dek ? await encryptDoc(toPlain(sp), dek) : toPlain(sp);
-    ops.push((b) => b.set(doc(db, scopedCol('supporters'), sp.id), { skey: supKeyOf(sp), ...inner }));
+    ops.push((b) => b.set(doc(db, scopedCol(T.k1), sp.id), { skey: supKeyOf(sp), ...inner }));
   }
   // אירועי-הלוח: skey=מפתח-התומך-המקושר (אירוע כללי ⇒ משותף) — כדי ששם-תורם בלוח
   // לא ידלוף לעובדת אחרת. אירוע ללא-קישור נשאר גלוי לכולן (משותף).
   for (const ev of events) {
     const inner = dek ? await encryptDoc(toPlain(ev), dek) : toPlain(ev);
-    ops.push((b) => b.set(doc(db, scopedCol('events'), ev.id), { skey: docSkey('events', ev, map), ...inner }));
+    ops.push((b) => b.set(doc(db, scopedCol(T.k2), ev.id), { skey: docSkey(T.k2, ev, map), ...inner }));
   }
   for (let i = 0; i < ops.length; i += 400) {
     const batch = writeBatch(db);

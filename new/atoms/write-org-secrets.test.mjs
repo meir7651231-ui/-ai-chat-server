@@ -1,4 +1,10 @@
-import { writeOrgSecrets } from './write-org-secrets.mjs';
+import { writeOrgSecrets as __pure_writeOrgSecrets } from './write-org-secrets.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_write_org_secrets_T = {
+  k1: "orgSecrets",
+  k2: "orgSecretsMeta",
+};
+const writeOrgSecrets = (...a) => __pure_writeOrgSecrets(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_write_org_secrets_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

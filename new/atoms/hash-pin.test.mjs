@@ -1,4 +1,9 @@
-import { hashPin } from './hash-pin.mjs';
+import { hashPin as __pure_hashPin } from './hash-pin.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_hash_pin_T = {
+  k1: "SHA-256",
+};
+const hashPin = (...a) => __pure_hashPin(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_hash_pin_T);
 // המלח שמחווט maor (מקומי לבדיקה — הבדיקה מייבאת רק את האטום שלה)
 const SALT = 'maor.lock.v1::';
 const C = [

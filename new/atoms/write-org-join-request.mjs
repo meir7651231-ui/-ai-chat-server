@@ -3,7 +3,7 @@
  *  חולץ כלשונו מ-maor/src/lib/cloudConfig.ts:211-214 (תורגם TS→JS); ‏cloudDb
  *  וערכת-Firestore (doc/setDoc) הוזרקו כאובייקט-שקעים fs (חוק-1 — אפס import פנימי).
  *  כתיבה מלאה בלי merge — שליחה-חוזרת מחליפה את הבקשה הקודמת. */
-export async function writeOrgJoinRequest(slug, uid, req, fs) {
+export async function writeOrgJoinRequest(slug, uid, req, fs, T) {
   const { db, doc, setDoc } = fs;
-  await setDoc(doc(db, 'platformOrgs', slug, 'joinRequests', uid), JSON.parse(JSON.stringify(req)));
+  await setDoc(doc(db, T.k1, slug, T.k2, uid), JSON.parse(JSON.stringify(req)));
 }

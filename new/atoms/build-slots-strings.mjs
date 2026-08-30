@@ -1,4 +1,4 @@
-/** אטום-דאטה · build-slots-strings — מחרוזות-התצוגה/דומיין שחולצו מ-build-slots (מנוע-הטיהור v3, הכרעה 19). חוזה: build-slots-strings.contract.md */
+/** אטום-דאטה · build-slots-strings — מחרוזות-הדאטה של build-slots (מנוע-הקשיחים, הכרעה 19). חוזה: build-slots-strings.contract.md */
 export const BUILD_SLOTS_T = {
   k1: "clean",
   k2: "cleaning",
@@ -18,4 +18,6 @@ export const BUILD_SLOTS_T = {
   k16: "free",
   k17: "פנוי",
   k18: " · מחוץ לשעות הפעילות של החדר",
+  k19: "crs|",
+  k20: "out|",
 };

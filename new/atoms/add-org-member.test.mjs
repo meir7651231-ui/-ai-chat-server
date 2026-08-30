@@ -1,4 +1,9 @@
-import { addOrgMember } from './add-org-member.mjs';
+import { addOrgMember as __pure_addOrgMember } from './add-org-member.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_add_org_member_T = {
+  k1: "platformOrgs",
+};
+const addOrgMember = (...a) => __pure_addOrgMember(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_add_org_member_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

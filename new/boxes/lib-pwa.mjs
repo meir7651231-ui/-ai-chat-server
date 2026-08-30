@@ -4,7 +4,10 @@
  *  ההכרעות (סדר-שערים · ברירות-מניפסט · צבעים · אייקונים) חיות כאן; כל נגיעת-דפדפן
  *  (window/navigator/document/serviceWorker/Blob/import.meta.env) = שקע מוזרק (חוק-1/5/6). */
 import { installAvailable as atomInstallAvailable } from '../atoms/install-available.mjs';
-import { promptInstall as atomPromptInstall } from '../atoms/prompt-install.mjs';
+import { promptInstall as __pure_promptInstall } from '../atoms/prompt-install.mjs';
+import { PROMPT_INSTALL_T as __d_prompt_install_T } from '../atoms/prompt-install-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const atomPromptInstall = (...a) => __pure_promptInstall(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_prompt_install_T);
 import { isIos as __pure_isIos } from '../atoms/is-ios.mjs';
 import { IS_IOS_T as __d_isIos_IS_IOS_T } from '../atoms/is-ios-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

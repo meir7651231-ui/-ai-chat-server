@@ -1,4 +1,9 @@
-import { deleteOrgRequest } from './delete-org-request.mjs';
+import { deleteOrgRequest as __pure_deleteOrgRequest } from './delete-org-request.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_delete_org_request_T = {
+  k1: "platformRequests",
+};
+const deleteOrgRequest = (...a) => __pure_deleteOrgRequest(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_delete_org_request_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

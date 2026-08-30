@@ -1,4 +1,10 @@
-import { writeMailOutbox } from './write-mail-outbox.mjs';
+import { writeMailOutbox as __pure_writeMailOutbox } from './write-mail-outbox.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_write_mail_outbox_T = {
+  k1: "mailOutbox",
+  k2: "pending",
+};
+const writeMailOutbox = (...a) => __pure_writeMailOutbox(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_write_mail_outbox_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 
