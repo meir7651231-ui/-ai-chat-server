@@ -35,6 +35,7 @@ import { hebToIso as hebToIsoAtom } from '../atoms/heb-to-iso.mjs';
 import { isoToHebParts as isoToHebPartsAtom } from '../atoms/iso-to-heb-parts.mjs';
 import { validateHebMonthNames as __pure_validateHebMonthNames } from '../atoms/validate-heb-month-names.mjs';
 import { VALIDATE_HEB_MONTH_NAMES_T as __d_validate_heb_month_names_T } from '../atoms/validate-heb-month-names-strings.mjs';
+import { HEB_CAL } from '../atoms/heb-cal-data.mjs';
 // עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
 const validateHebMonthNamesAtom = (...a) => __pure_validateHebMonthNames(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_validate_heb_month_names_T);
 
@@ -45,8 +46,8 @@ const isoOf = (d) => d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2
 const hebToIsoEn = (day, monthEn, hebYear) => {
   if (!Number.isInteger(day) || day < 1 || day > 30) return null;
   if (!Number.isInteger(hebYear) || hebYear < 4000 || hebYear > 7000) return null;
-  const gy = hebYear - 3761; // 1 באוגוסט של השנה הזו קודם תמיד לא׳ תשרי של hebYear
-  for (let i = 0; i < 440; i++) {
+  const gy = hebYear - HEB_CAL.hebYearOffset; // 1 באוגוסט של השנה הזו קודם תמיד לא׳ תשרי של hebYear
+  for (let i = 0; i < HEB_CAL.scanWindowDays; i++) {
     const d = new Date(gy, 7, 1 + i, 12); // צהריים — חסין להיסטי שעון קיץ
     const p = hebParts(d);
     if (p.year === hebYear && p.month === monthEn && p.day === day) return isoOf(d);

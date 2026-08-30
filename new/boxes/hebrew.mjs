@@ -33,6 +33,7 @@ const hebDateFullWire = (...a) => __pure_hebDateFull(...a, ...Array(Math.max(0, 
 import { HOLIDAYS } from '../atoms/holidays.mjs';
 import { holidayOf as __pure_holidayOf } from '../atoms/holiday-of.mjs';
 import { HOLIDAY_OF_T as __d_holidayOf_HOLIDAY_OF_T } from '../atoms/holiday-of-strings.mjs';
+import { HEB_CAL } from '../atoms/heb-cal-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const holidayOfWire = (...a) => __pure_holidayOf(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_holidayOf_HOLIDAY_OF_T);
 
@@ -45,8 +46,8 @@ function scanHebYear(hebYear) {
   if (hit) return hit;
   const seq = [];
   const has30 = new Set();
-  const gy = hebYear - 3761; // 1 באוגוסט של השנה הזו קודם תמיד לא' תשרי של hebYear
-  for (let i = 0; i < 440; i++) {
+  const gy = hebYear - HEB_CAL.hebYearOffset; // 1 באוגוסט של השנה הזו קודם תמיד לא' תשרי של hebYear
+  for (let i = 0; i < HEB_CAL.scanWindowDays; i++) {
     const p = hebParts(new Date(gy, 7, 1 + i, 12));
     if (p.year !== hebYear) continue;
     if (!seq.includes(p.month)) seq.push(p.month);

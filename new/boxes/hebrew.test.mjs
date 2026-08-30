@@ -2,6 +2,7 @@
  *  DoD: node new/boxes/hebrew.test.mjs ⇒ exit 0. */
 import assert from 'node:assert';
 import { readFileSync } from 'node:fs';
+import { HEB_CAL } from '../atoms/heb-cal-data.mjs';
 import {
   gem, gemYear, adarNorm, hebAnnualEq, hebParts, hebPartsOfIso, hebDateFull, HOLIDAYS, holidayOf,
 } from './hebrew.mjs';
@@ -64,9 +65,10 @@ assert.strictEqual(holidayOf(new Date('zzz')), null);                  // תאר
 
 /* 🛡 מגן-הכרעה (דפוס theme.test): הכרעות-החיווט חיות בקופסה verbatim. */
 const src = readFileSync(new URL('./hebrew.mjs', import.meta.url), 'utf8');
+if (HEB_CAL.hebYearOffset !== 3761 || HEB_CAL.scanWindowDays !== 440) { console.error('✗ מגן: ערכי-הלוח סטו'); process.exit(1); }
 for (const anchor of [
-  'i < 440',                                        // חלון-הסריקה
-  'hebYear - 3761',                                 // עוגן-השנה הלועזית
+  'i < HEB_CAL.scanWindowDays',                     // חלון-הסריקה (הכרעה 19: הערך באטום-הדאטה)
+  'hebYear - HEB_CAL.hebYearOffset',                // עוגן-השנה הלועזית
   'new Date(gy, 7, 1 + i, 12)',                     // 1 באוגוסט, צהריים
   'gemYearWire(y, gem)',                            // שקע-גימטריה
   'hebAnnualEqWire(anchor, query, scanHebYear)',    // שקע-סריקת-שנה

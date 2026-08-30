@@ -77,6 +77,7 @@ const supTier = (...a) => __pure_supTier(...a, ...Array(Math.max(0, 1 - a.length
 import { EV_META } from '../atoms/ev-meta.mjs';
 import { DAY_NAMES } from '../atoms/day-names.mjs';
 import { NAV_MODULE_KEYS } from '../atoms/nav-module-keys.mjs';
+import { HEB_CAL } from '../atoms/heb-cal-data.mjs';
 
 // ── הכרעות-הקופסה (חיווט-הצבה, verbatim מהמקור) ──
 // תשעת מודולי-הניווט הניתנים-לכיבוי — maor/src/lib/config.ts:20-30
@@ -101,8 +102,8 @@ function scanHebYear(hebYear) {
   if (hit) return hit;
   const seq = [];
   const has30 = new Set();
-  const gy = hebYear - 3761; // 1 באוגוסט של השנה הזו קודם תמיד לא' תשרי של hebYear
-  for (let i = 0; i < 440; i++) {
+  const gy = hebYear - HEB_CAL.hebYearOffset; // 1 באוגוסט של השנה הזו קודם תמיד לא' תשרי של hebYear
+  for (let i = 0; i < HEB_CAL.scanWindowDays; i++) {
     const p = hebParts(new Date(gy, 7, 1 + i, 12));
     if (p.year !== hebYear) continue;
     if (!seq.includes(p.month)) seq.push(p.month);

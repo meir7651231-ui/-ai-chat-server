@@ -67,9 +67,10 @@ if (cldrGuard(new Date(NaN), () => warned++) !== false || warned !== 1) bad('cld
 
 /* 🛡 מגן-הכרעה: ההכרעות שבחוזה חיות במקור-הקופסה תו-בתו (דפוס theme.test). */
 import { readFileSync } from 'node:fs';
+import { HEB_CAL } from '../atoms/heb-cal-data.mjs';
 const src = readFileSync(new URL('./hebdate.mjs', import.meta.url), 'utf8');
-if (!src.includes('hebYear - 3761')) bad('מגן: עוגן-הסריקה (−3761) שונה');
-if (!src.includes('i < 440')) bad('מגן: חלון-440 שונה');
+if (HEB_CAL.hebYearOffset !== 3761 || !src.includes('hebYear - HEB_CAL.hebYearOffset')) bad('מגן: עוגן-הסריקה (−3761) שונה');   // הכרעה 19: על ערך-הדאטה
+if (HEB_CAL.scanWindowDays !== 440 || !src.includes('i < HEB_CAL.scanWindowDays')) bad('מגן: חלון-440 שונה');
 if (!src.includes('new Date(gy, 7, 1 + i, 12)')) bad('מגן: צהריים/1-באוגוסט שונה');
 if (!src.includes('now = new Date()')) bad('מגן: ברירת-מחדל-השעון שונתה');
 if (!src.includes('⚠ שם חודש עברי לא-צפוי מ-Intl — ייתכן שינוי CLDR שישבור המרות תאריך. הריצו validateHebMonthNames().')) bad('מגן: הודעת-ה-warn שונתה');
