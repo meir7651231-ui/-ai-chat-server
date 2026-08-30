@@ -10,8 +10,22 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 const ROOT = new URL('..', import.meta.url).pathname;
 const BOXES = path.join(ROOT, 'new/dart-boxes');
-const DART = process.env.DART_BIN || '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/dart-sdk/bin/dart';
 const BASE = path.join(ROOT, 'machtzev/box-proofs-baseline.json');
+
+// פתרון-Dart עמיד: DART_BIN → dart ב-PATH → flutter → הסקרצ'פד. אין בינארי ⇒ לא-ניתן-להוכיח (כנות, לא סחף).
+const resolveDart = () => {
+  const cands = [process.env.DART_BIN, '/home/user/flutter/bin/dart',
+    '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/dart-sdk/bin/dart'];
+  for (const c of cands) if (c && fs.existsSync(c)) return c;
+  try { return execFileSync('bash', ['-lc', 'command -v dart'], { encoding: 'utf8' }).trim() || null; } catch { return null; }
+};
+const DART = resolveDart();
+if (!DART) {
+  // ⚠️ הבחנה קריטית (L27): "אין בינארי" ≠ "סחף-חתימות". לא מפברקים ירוק ולא מפברקים סיבה.
+  console.error('🚨 שער-הוכחות-הקופסאות: לא-ניתן-להוכיח — אין בינארי Dart בסביבה.');
+  console.error('   זו אינה סחף-חתימות ואין להריץ rethread-boxes. התקן Dart/Flutter או הגדר DART_BIN, והרץ שוב.');
+  process.exit(2);   // קוד ייחודי: מדולג-בכפייה (לא pass, לא drift)
+}
 
 const red = [];
 const boxes = fs.readdirSync(BOXES).filter(f => f.endsWith('-proof.dart')).map(f => f.replace(/-proof\.dart$/, '')).sort();
