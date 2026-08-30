@@ -11,7 +11,7 @@
 אטום ManagerDashboardCreditBar 100 הזמנות שהוכחו מתוך שהוזמנו
 כותרת מבצע-המאה - צירי-הכיסוי נמדדים חיים בכל משטרה
 אטום ManagerDashboardCreditBar 100 לבנים ברות-מילוי במחולל
-אטום ManagerDashboardCreditBar 59 מנועים ברי-הרצה ברתמת-התאומים
+אטום ManagerDashboardCreditBar 61 מנועים ברי-הרצה ברתמת-התאומים
 אטום ManagerDashboardCreditBar 97 מנועים עם מהות-עברית
 אטום ManagerDashboardCreditBar 100 אטומי-דאטה עם תאום-Dart
 כותרת היכולות בפעולה - הקישו לפתיחה

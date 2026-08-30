@@ -22451,12 +22451,16 @@
   },
   {
    "name": "familyOf",
-   "sig": "String? familyOf(LipskeyCatalogProduct p, {required Map<String, String> kCategoryFamily})",
+   "sig": "String? familyOf(LipskeyCatalogProduct p, {required String Function(String) term, required Map<String, String> kCategoryFamily})",
    "ret": "String?",
    "params": [
     {
      "type": "LipskeyCatalogProduct",
      "name": "p"
+    },
+    {
+     "type": "String Function(String)",
+     "name": "term"
     },
     {
      "type": "Map<String, String>",
@@ -23269,12 +23273,16 @@
   },
   {
    "name": "galvanicallyDissimilar",
-   "sig": "bool galvanicallyDissimilar(Iterable<String> mats)",
+   "sig": "bool galvanicallyDissimilar(Iterable<String> mats, {required String Function(String) term})",
    "ret": "bool",
    "params": [
     {
      "type": "Iterable<String>",
      "name": "mats"
+    },
+    {
+     "type": "String Function(String)",
+     "name": "term"
     }
    ],
    "he": [
@@ -25462,12 +25470,16 @@
   },
   {
    "name": "plumbingConnectorTypes",
-   "sig": "List<ConnectorType> plumbingConnectorTypes(Iterable<ConnectorEnd> verifiedEnds)",
+   "sig": "List<ConnectorType> plumbingConnectorTypes(Iterable<ConnectorEnd> verifiedEnds, {required String Function(String) term})",
    "ret": "List<ConnectorType>",
    "params": [
     {
      "type": "Iterable<ConnectorEnd>",
      "name": "verifiedEnds"
+    },
+    {
+     "type": "String Function(String)",
+     "name": "term"
     }
    ],
    "he": [
@@ -26644,12 +26656,16 @@
   },
   {
    "name": "sizeSystem",
-   "sig": "String sizeSystem(String size)",
+   "sig": "String sizeSystem(String size, {required String Function(String) term})",
    "ret": "String",
    "params": [
     {
      "type": "String",
      "name": "size"
+    },
+    {
+     "type": "String Function(String)",
+     "name": "term"
     }
    ],
    "he": [
