@@ -1,3 +1,4 @@
+import '../dart-data/galvanically_dissimilar-terms.dart' as td_galvanically_dissimilar;
 import '../dart-data/product_systems-data.dart' as tdb_ps;
 import '../dart-data/flow_role-data.dart' as tdb_fr;
 import '../dart-data/is_pipe-data.dart' as tdb_isp;
@@ -580,7 +581,7 @@ class PipeBox {
 
   /// האם יש חצייה בין קבוצת-נחושת לקבוצת-ברזל (דורש רקורד-דיאלקטרי).
   bool galvanicallyDissimilar(Iterable<String> mats) =>
-      gd.galvanicallyDissimilar(mats);
+      gd.galvanicallyDissimilar(mats, term: (k)=>td_galvanically_dissimilar.kTerms[k]!);
 
   /// האם המוצר הוא התקן חד-כיווני (שסתום אל-חזור).
   bool isDirectionalDevice(PipeProduct p) => idd.isDirectionalDevice(

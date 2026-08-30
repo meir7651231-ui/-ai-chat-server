@@ -16,6 +16,17 @@ String? _slug(String s){var o='';for(final c in s.split('')){o+=_t[c]??'';}o=o.r
 
 class _Hit { final int offset,end; final String value; _Hit(this.offset,this.end,this.value); }
 
+// סורק: האם קיים SwitchStatement שתווית-מחרוזת שלו עברית (case-label = חייב-קבוע)
+class _SwitchHebScan extends RecursiveAstVisitor<void> {
+  bool found = false;
+  @override
+  void visitSwitchStatement(SwitchStatement node){
+    final s = node.toSource();
+    if(_heb.hasMatch(s)) found = true;
+    super.visitSwitchStatement(node);
+  }
+}
+
 class _Collector extends RecursiveAstVisitor<void> {
   final List<_Hit> hits = [];
   @override
@@ -45,23 +56,31 @@ void main(List<String> args){
   final src = File(file).readAsStringSync();
   final unit = parseString(content: src, throwIfDiagnostics: false).unit;
 
-  // הפונקציה-הראשית = ההצהרה-העליונה הראשונה שהיא פונקציה-ממש (לא getter — getter = דאטה).
+  // הפונקציה-הראשית = ההצהרה-העליונה הראשונה שהיא פונקציה-ממש **עם עברית-בגוף**
+  // (מדלגים על עוזרים קטנים חסרי-עברית שקודמים לה; getter = דאטה).
   FunctionDeclaration? fn;
-  for(final d in unit.declarations){ if(d is FunctionDeclaration && !d.isGetter && !d.isSetter){ fn=d; break; } }
-  if(fn==null){ print(jsonEncode({'ok':false,'reason':'no top-level function'})); return; }
-  // getter/expression ⇒ אין רשימת-פרמטרים; זו דאטה, לא מנוע — דלג בבטחה.
-  if(fn.functionExpression.parameters==null){ print(jsonEncode({'ok':false,'reason':'no parameter list (getter/data?)'})); return; }
-
-  final col = _Collector();
-  fn.functionExpression.body.visitChildren(col);
-  if(col.hits.isEmpty){ print(jsonEncode({'ok':false,'reason':'no raw hebrew in body'})); return; }
+  _Collector? col;
+  for(final d in unit.declarations){
+    if(d is! FunctionDeclaration || d.isGetter || d.isSetter) continue;
+    if(d.functionExpression.parameters==null) continue;
+    final c = _Collector();
+    d.functionExpression.body.visitChildren(c);
+    if(c.hits.isNotEmpty){ fn=d; col=c; break; }
+  }
+  if(fn==null){ print(jsonEncode({'ok':false,'reason':'no function with raw hebrew in body'})); return; }
+  // ‏case-label של מחרוזת חייב להיות קבוע ⇒ term() ישבור. פוסלים switch-על-מחרוזת-עברית
+  // (טעון המרת switch→if — טיפול-נפרד/יד).
+  {
+    final sc=_SwitchHebScan(); fn.functionExpression.body.visitChildren(sc);
+    if(sc.found){ print(jsonEncode({'ok':false,'reason':'hebrew in switch-case (needs switch to if, hand)'})); return; }
+  }
 
   // מפתחות-מטרה ייחודיים
   final terms = <String,String>{}; final keyOf = <String,String>{}; final used=<String>{}; var i=0;
-  for(final h in col.hits){ if(keyOf.containsKey(h.value)) continue; var k=_slug(h.value); if(k==null||used.contains(k)) k='t${i}'; used.add(k); keyOf[h.value]=k; terms[k]=h.value; i++; }
+  for(final h in col!.hits){ if(keyOf.containsKey(h.value)) continue; var k=_slug(h.value); if(k==null||used.contains(k)) k='t${i}'; used.add(k); keyOf[h.value]=k; terms[k]=h.value; i++; }
 
   // עריכות בסדר-הפוך (שמירת-offsets)
-  final edits = [...col.hits]..sort((a,b)=>b.offset-a.offset);
+  final edits = [...col!.hits]..sort((a,b)=>b.offset-a.offset);
   var out = src;
   for(final h in edits){ out = out.substring(0,h.offset) + "term('${keyOf[h.value]}')" + out.substring(h.end); }
 

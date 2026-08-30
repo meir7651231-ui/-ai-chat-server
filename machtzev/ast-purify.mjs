@@ -46,7 +46,9 @@ function purify(rel) {
 
   const dataRel = `${DATADIR[dir]}/${base}-terms.dart`;
   const dataAbs = path.join(ROOT, dataRel);
-  const entries = Object.entries(res.terms).map(([k, v]) => `  '${k}': ${JSON.stringify(v).replace(/^"|"$/g, "'")},`).join('\n');
+  // ליטרל-Dart בטוח (מחרוזת חד-גרשית): מברִיח \, ', $, ומעבר-שורה — גרש-פנימי שבר קבצים (תיקון 30.8)
+  const dartStr = (v) => "'" + String(v).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\$/g, '\\$').replace(/\n/g, '\\n').replace(/\r/g, '') + "'";
+  const entries = Object.entries(res.terms).map(([k, v]) => `  '${k}': ${dartStr(v)},`).join('\n');
   const dataBody = `// 🗄️ שמות · חולצו מ-${rel} (מכונת-AST). מטרה→שם; מתחלף פר-וורטיקל.\nconst Map<String, String> kTerms = {\n${entries}\n};\n`;
 
   // בדיקה + צרכנים

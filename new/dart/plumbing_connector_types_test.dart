@@ -1,3 +1,4 @@
+import '../dart-data/plumbing_connector_types-terms.dart' as td_plumbing_connector_types;
 // בדיקת-חוזה · plumbingConnectorTypes — מייבאת אך ורק את האטום-שלה (חוק-4).
 // הרצה: dart run --enable-asserts new/dart/plumbing_connector_types_test.dart
 import 'plumbing_connector_types.dart';
@@ -15,7 +16,7 @@ void main() {
   var n = 0;
 
   // ‏1 — קלט ריק ⇒ עדיין 6 רשומות (אחת פר-EndType), כולן sizeValues=[], ממוינות לפי id.
-  final empty = plumbingConnectorTypes(const []);
+  final empty = plumbingConnectorTypes(const [], term: (k)=>td_plumbing_connector_types.kTerms[k]!);
   _eq(empty.length, 6, '1 six types on empty input'); n++;
   _eq(empty.map((t) => t.id).toList(), [
     'plumbing.conn.bspFemale',
@@ -37,7 +38,7 @@ void main() {
     ConnectorEnd(EndType.pexPress, '16'),
     ConnectorEnd(EndType.pexPress, '25'),
     ConnectorEnd(EndType.bspMale, '1/2'),
-  ]);
+  ], term: (k)=>td_plumbing_connector_types.kTerms[k]!);
   _eq(_byId(ts, 'plumbing.conn.pexPress').sizeValues, ['16', '25'], '2 distinct+sorted'); n++;
   _eq(_byId(ts, 'plumbing.conn.bspMale').sizeValues, ['1/2'], '2b bsp size'); n++;
   _eq(_byId(ts, 'plumbing.conn.copperPress').sizeValues, <String>[], '2c untouched type stays empty'); n++;
@@ -47,7 +48,7 @@ void main() {
     ConnectorEnd(EndType.hdpeCompression, '63'),
     ConnectorEnd(EndType.hdpeCompression, '110'),
     ConnectorEnd(EndType.hdpeCompression, '16'),
-  ]);
+  ], term: (k)=>td_plumbing_connector_types.kTerms[k]!);
   _eq(_byId(hd, 'plumbing.conn.hdpeCompression').sizeValues, ['110', '16', '63'],
       '3 lexicographic string sort'); n++;
 
@@ -73,7 +74,7 @@ void main() {
     ConnectorEnd(EndType.pexPress, '16'),
     ConnectorEnd(EndType.pexPress, '25'),
     ConnectorEnd(EndType.bspMale, '1/2'),
-  ]);
+  ], term: (k)=>td_plumbing_connector_types.kTerms[k]!);
   _eq(again.map((t) => '${t.id}|${t.sizeValues}').toList(),
       ts.map((t) => '${t.id}|${t.sizeValues}').toList(), '6 deterministic'); n++;
 
