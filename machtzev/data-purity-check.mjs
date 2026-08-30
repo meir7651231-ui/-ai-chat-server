@@ -14,9 +14,11 @@ const BASELINE = path.join(HERE, 'data-purity-baseline.json');
 // מעורב = יש ליטרל-עברי (לא-תגובה) + זהו מנגנון (control-flow: if/for/while/switch/?: או ריבוי-משפטים),
 //         ולא אטום-דאטה טהור (const/getter/פונקציה-שמחזירה-ליטרל בלבד).
 function isMixed(src) {
-  const code = src.replace(/^\s*\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/\/.*$/gm, '');
+  // הפשטת-הערות מלאה: גם הערות-זנב (guard נגד :// ונגד // בתוך מחרוזת); מחרוזות JS/Dart
+  // הן חד-שורתיות ⇒ ‎\n שובר זוג-מרכאות — גרשיים בהערה (הו"ק/ת"ז) אינם פותחים מחרוזת.
+  const code = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/\/?.*$/gm, '').replace(/(^|[^:'"])\/\/[^\n]*/gm, '$1');
   let heb = false;
-  for (const m of code.matchAll(/[\u0027"]([^\u0027"\\]{0,160})[\u0027"]/g)) if (HEB.test(m[1])) { heb = true; break; }
+  for (const m of code.matchAll(/['"]([^'"\\\n]{0,160})['"]/g)) if (HEB.test(m[1])) { heb = true; break; }
   if (!heb) return false;
   // צורת-דאטה-טהורה: Dart (const מוקלד/getter/פונקציה-מחזירת-ליטרל) או JS (export const = ליטרל) — הכרעה 19
   // סימטריית-JS⇄Dart: גם ‏const-מחרוזת ב-Dart היא צורת-דאטה-טהורה (כמו export const '...' ב-JS)

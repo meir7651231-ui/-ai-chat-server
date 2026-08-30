@@ -2,13 +2,14 @@
  *  השיבוצים הפעילים של הילד/ה (אותו יום + אותה שעה). מייעץ — לא חוסם.
  *  חוזה: schedule-clash-text.contract.md
  *  חולץ כלשונו מ-maor/src/components/courses/lib.ts:497-516; השכנים sessionsOf
- *  ו-DAY_NAMES הוזרקו כשקעים (חוק-1; ברירת-מחדל dayNames = ערך-המוצא). */
+ *  ו-DAY_NAMES הוזרקו כשקעים (חוק-1; ערכי-המוצא של dayNames באטום-הדאטה day-names
+ *  ומוזרקים ע"י הקופסה/הבדיקה — אפס דאטה במנגנון, הכרעה 16). */
 export function scheduleClashText(
   db,
   memberId,
   course,
   sessionsOf,
-  dayNames = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי'], T) {
+  dayNames, T) {
   const target = sessionsOf(course);
   for (const e of db.enrollments) {
     if (e.memberId !== memberId || e.status === T.k1 || e.courseId === course.id) continue;

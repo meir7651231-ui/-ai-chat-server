@@ -5,7 +5,8 @@ const __d_schedule_clash_text_T = {
   k2: "⚠ התנגשות לו\"ז: כבר משובצ/ת ל\"",
   k3: "\" — יום ",
 };
-const scheduleClashText = (...a) => __pure_scheduleClashText(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_schedule_clash_text_T);
+const __d_schedule_clash_text_dayNames = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי'];
+const scheduleClashText = (...a) => __pure_scheduleClashText(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_schedule_clash_text_dayNames, __d_schedule_clash_text_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 // שקע-מפגשים = סמנטיקת-המוצא (sessionsOf)

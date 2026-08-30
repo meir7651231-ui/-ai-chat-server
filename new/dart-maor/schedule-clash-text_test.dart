@@ -1,6 +1,7 @@
 // בדיקת-חוזה · scheduleClashText — 8 דוגמאות-המקור (schedule-clash-text.test.mjs)
 // + עדות-הסגר (כלל-15): אינדוקס-מערך במחרוזת-קנונית (day='1' ⇒ dayNames[1]).
 // הרצה: dart run --enable-asserts schedule-clash-text_test.dart
+import '../dart-data-maor/schedule-clash-text-sockets.dart' as sk_schedule_clash_text;
 import 'schedule-clash-text.dart';
 
 int _f = 0;
@@ -35,7 +36,9 @@ void main() {
           ]),
           'm1',
           piano,
-          sessionsOf) ==
+          sessionsOf,
+          sk_schedule_clash_text.scheduleClashText_dayNames,
+          sk_schedule_clash_text.scheduleClashText_T) ==
         '⚠ התנגשות לו"ז: כבר משובצ/ת ל"ציור" — יום שלישי 17:00',
     'דוגמה 1: נוסח-האזהרה',
   );
@@ -50,7 +53,9 @@ void main() {
           ]),
           'm1',
           piano,
-          sessionsOf) ==
+          sessionsOf,
+          sk_schedule_clash_text.scheduleClashText_dayNames,
+          sk_schedule_clash_text.scheduleClashText_T) ==
         null,
     'דוגמה 2: שעה שונה',
   );
@@ -63,7 +68,9 @@ void main() {
           ]),
           'm1',
           piano,
-          sessionsOf) ==
+          sessionsOf,
+          sk_schedule_clash_text.scheduleClashText_dayNames,
+          sk_schedule_clash_text.scheduleClashText_T) ==
         null,
     'דוגמה 3: ended מוחרג',
   );
@@ -76,7 +83,9 @@ void main() {
           ]),
           'm1',
           piano,
-          sessionsOf) ==
+          sessionsOf,
+          sk_schedule_clash_text.scheduleClashText_dayNames,
+          sk_schedule_clash_text.scheduleClashText_T) ==
         null,
     'דוגמה 4: חוג-היעד עצמו',
   );
@@ -91,7 +100,9 @@ void main() {
           ]),
           'm1',
           {...piano, 'time': ''},
-          sessionsOf) ==
+          sessionsOf,
+          sk_schedule_clash_text.scheduleClashText_dayNames,
+          sk_schedule_clash_text.scheduleClashText_T) ==
         null,
     'דוגמה 5: שעה ריקה לא מתנגשת',
   );
@@ -104,7 +115,9 @@ void main() {
           ]),
           'm1',
           piano,
-          sessionsOf) ==
+          sessionsOf,
+          sk_schedule_clash_text.scheduleClashText_dayNames,
+          sk_schedule_clash_text.scheduleClashText_T) ==
         null,
     'דוגמה 6: ילד אחר',
   );
@@ -117,7 +130,9 @@ void main() {
           ]),
           'm1',
           piano,
-          sessionsOf) ==
+          sessionsOf,
+          sk_schedule_clash_text.scheduleClashText_dayNames,
+          sk_schedule_clash_text.scheduleClashText_T) ==
         null,
     'דוגמה 7: חוג חסר מדולג',
   );
@@ -139,7 +154,9 @@ void main() {
           ]),
           'm1',
           multiTarget,
-          sessionsOf) ==
+          sessionsOf,
+          sk_schedule_clash_text.scheduleClashText_dayNames,
+          sk_schedule_clash_text.scheduleClashText_T) ==
         '⚠ התנגשות לו"ז: כבר משובצ/ת ל"תפירה" — יום חמישי 16:30',
     'דוגמה 8: sessions מרובים',
   );
@@ -166,7 +183,9 @@ void main() {
           ]),
           'm1',
           pStr,
-          sessionsOf) ==
+          sessionsOf,
+          sk_schedule_clash_text.scheduleClashText_dayNames,
+          sk_schedule_clash_text.scheduleClashText_T) ==
         '⚠ התנגשות לו"ז: כבר משובצ/ת ל"ציור" — יום שני 17:00',
     'עדות-הסגר: אינדקס-מחרוזת-קנונית day="1"',
   );
@@ -193,7 +212,9 @@ void main() {
           ]),
           'm1',
           pBad,
-          sessionsOf) ==
+          sessionsOf,
+          sk_schedule_clash_text.scheduleClashText_dayNames,
+          sk_schedule_clash_text.scheduleClashText_T) ==
         '⚠ התנגשות לו"ז: כבר משובצ/ת ל"ציור" — יום undefined 17:00',
     'עדות-הסגר: מפתח לא-קנוני "01" ⇒ undefined',
   );
