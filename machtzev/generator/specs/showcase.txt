@@ -12,7 +12,7 @@
 כותרת מבצע-המאה - צירי-הכיסוי נמדדים חיים בכל משטרה
 אטום ManagerDashboardCreditBar 100 לבנים ברות-מילוי במחולל
 אטום ManagerDashboardCreditBar 61 מנועים ברי-הרצה ברתמת-התאומים
-אטום ManagerDashboardCreditBar 97 מנועים עם מהות-עברית
+אטום ManagerDashboardCreditBar 100 מנועים עם מהות-עברית
 אטום ManagerDashboardCreditBar 100 אטומי-דאטה עם תאום-Dart
 כותרת היכולות בפעולה - הקישו לפתיחה
 ניווט capmailphone שחזור מספר טלפון לתצוגה ישראלית תקנית מתוך שורה שהגיעה עטופה בקידוד-מייל ישן | נוצר מבקשה בעברית - הקישו לפתיחה
