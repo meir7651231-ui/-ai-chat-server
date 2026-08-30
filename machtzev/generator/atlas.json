@@ -1,6 +1,6 @@
 {
  "counts": {
-  "widgets": 413,
+  "widgets": 423,
   "functions": 445,
   "data": 1467
  },
@@ -118,6 +118,49 @@
    "positional": []
   },
   {
+   "cls": "AvatarStack",
+   "file": "avatar_stack.dart",
+   "props": [
+    "height",
+    "faces",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "required": [
+    "height",
+    "faces",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "positional": []
+  },
+  {
+   "cls": "BarChart",
+   "file": "bar_chart.dart",
+   "props": [
+    "height",
+    "radius",
+    "bars",
+    "accentColor",
+    "baseColor",
+    "fillColor",
+    "seed"
+   ],
+   "required": [
+    "height",
+    "bars",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "positional": []
+  },
+  {
    "cls": "BareStat",
    "file": "bare_stat.dart",
    "props": [
@@ -131,6 +174,27 @@
     "label",
     "inkColor",
     "mutedColor"
+   ],
+   "positional": []
+  },
+  {
+   "cls": "CarouselDeck",
+   "file": "carousel_deck.dart",
+   "props": [
+    "labels",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "required": [
+    "labels",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
    ],
    "positional": []
   },
@@ -224,6 +288,28 @@
    "positional": []
   },
   {
+   "cls": "DonutChart",
+   "file": "donut_chart.dart",
+   "props": [
+    "height",
+    "radius",
+    "slices",
+    "accentColor",
+    "baseColor",
+    "fillColor",
+    "seed"
+   ],
+   "required": [
+    "height",
+    "slices",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "positional": []
+  },
+  {
    "cls": "DotsLoader",
    "file": "dots_loader.dart",
    "props": [
@@ -258,6 +344,25 @@
     "mutedColor",
     "borderColor",
     "radius"
+   ],
+   "positional": []
+  },
+  {
+   "cls": "FabMenu",
+   "file": "fab_menu.dart",
+   "props": [
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "required": [
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
    ],
    "positional": []
   },
@@ -441,6 +546,28 @@
    "positional": []
   },
   {
+   "cls": "HeatGrid",
+   "file": "heat_grid.dart",
+   "props": [
+    "height",
+    "radius",
+    "cells",
+    "accentColor",
+    "baseColor",
+    "fillColor",
+    "seed"
+   ],
+   "required": [
+    "height",
+    "cells",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "positional": []
+  },
+  {
    "cls": "HeroCard",
    "file": "hero_card.dart",
    "props": [
@@ -465,6 +592,28 @@
     "mutedColor",
     "borderColor",
     "radius"
+   ],
+   "positional": []
+  },
+  {
+   "cls": "LineSpark",
+   "file": "line_spark.dart",
+   "props": [
+    "height",
+    "radius",
+    "points",
+    "accentColor",
+    "baseColor",
+    "fillColor",
+    "seed"
+   ],
+   "required": [
+    "height",
+    "points",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
    ],
    "positional": []
   },
@@ -710,6 +859,25 @@
    "positional": []
   },
   {
+   "cls": "RadialGauge",
+   "file": "radial_gauge.dart",
+   "props": [
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "required": [
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "positional": []
+  },
+  {
    "cls": "RevealCard",
    "file": "reveal_card.dart",
    "props": [
@@ -793,6 +961,50 @@
     "radius",
     "baseColor",
     "accentColor",
+    "fillColor"
+   ],
+   "positional": []
+  },
+  {
+   "cls": "SlideSheet",
+   "file": "slide_sheet.dart",
+   "props": [
+    "title",
+    "sub",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "required": [
+    "title",
+    "sub",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "positional": []
+  },
+  {
+   "cls": "SnackToast",
+   "file": "snack_toast.dart",
+   "props": [
+    "label",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
+    "fillColor"
+   ],
+   "required": [
+    "label",
+    "height",
+    "radius",
+    "accentColor",
+    "baseColor",
     "fillColor"
    ],
    "positional": []
