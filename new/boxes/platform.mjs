@@ -31,7 +31,10 @@ import { orgEnabledModules as orgEnabledModulesAtom } from '../atoms/org-enabled
 import { orgEnabledFeatures as orgEnabledFeaturesAtom } from '../atoms/org-enabled-features.mjs';
 import { isMember as isMemberAtom } from '../atoms/is-member.mjs';
 import { overrideOf as overrideOfAtom } from '../atoms/override-of.mjs';
-import { GRANTABLE_STAFF_FEATURES } from '../atoms/grantable-staff-features.mjs';
+import { makeGRANTABLE_STAFF_FEATURES as __pure_makeGRANTABLE_STAFF_FEATURES } from '../atoms/grantable-staff-features.mjs';
+import { GRANTABLE_STAFF_FEATURES_T as __d_grantable_staff_features_T } from '../atoms/grantable-staff-features-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const GRANTABLE_STAFF_FEATURES = __pure_makeGRANTABLE_STAFF_FEATURES(__d_grantable_staff_features_T);
 import { isGrantableFeature as isGrantableFeatureAtom } from '../atoms/is-grantable-feature.mjs';
 import { effectiveConfigFor as effectiveConfigForAtom } from '../atoms/effective-config-for.mjs';
 import { allowedDesignationsFor as allowedDesignationsForAtom } from '../atoms/allowed-designations-for.mjs';

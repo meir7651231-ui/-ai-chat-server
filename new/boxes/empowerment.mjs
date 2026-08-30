@@ -124,7 +124,10 @@ import { hokRecordedThisMonth as __pure_hokRecordedThisMonth } from '../atoms/ho
 import { HOK_EFFECTIVELY_ACTIVE_T as __d_hokRecordedThisMonth_HOK_RECORDED_THIS_MONTH_T } from '../atoms/hok-effectively-active-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const hokRecordedThisMonthAtom = (...a) => __pure_hokRecordedThisMonth(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_hokRecordedThisMonth_HOK_RECORDED_THIS_MONTH_T);
-import { HOK_CAT } from '../atoms/hok-cat.mjs';
+import { makeHOK_CAT as __pure_makeHOK_CAT } from '../atoms/hok-cat.mjs';
+import { HOK_CAT_T as __d_hok_cat_T } from '../atoms/hok-cat-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const HOK_CAT = __pure_makeHOK_CAT(__d_hok_cat_T);
 import { orgCalEntries as __pure_orgCalEntries } from '../atoms/org-cal-entries.mjs';
 import { ORG_CAL_ENTRIES_T as __d_orgCalEntries_ORG_CAL_ENTRIES_T } from '../atoms/org-cal-entries-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

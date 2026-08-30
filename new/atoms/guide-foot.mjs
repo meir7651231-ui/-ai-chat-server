@@ -1,5 +1,5 @@
 /** אטום-קבוע · guide-foot — קודם אוטומטית (צילום-ערך). חוזה: guide-foot.contract.md */
-export const GUIDE_FOOT = 'המדריך המלא והמפורט נמצא בקובץ "מדריך למשתמש" — מסך-מסך וכפתור-כפתור.';
+export const makeGUIDE_FOOT = (T) => (T.k1);
 /** החלפת תת-מחרוזת גלובלית (בלי regex) — לתרגום מונחי-ישות בגוף השורות. */
 function swap(s, from, to) {
     return s.split(from).join(to);

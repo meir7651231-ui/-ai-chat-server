@@ -8,7 +8,10 @@
  *  todayIso נשאר פרמטר-מוזרק כלשון-המקור (audit.ts:78; הקורא AuditSection.tsx:32
  *  מזרים isoToday()). */
 import { AUDIT_CAT_COLORS } from '../atoms/audit-cat-colors.mjs';
-import { AUDIT_CATEGORIES } from '../atoms/audit-categories.mjs';
+import { makeAUDIT_CATEGORIES as __pure_makeAUDIT_CATEGORIES } from '../atoms/audit-categories.mjs';
+import { AUDIT_CATEGORIES_T as __d_audit_categories_T } from '../atoms/audit-categories-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const AUDIT_CATEGORIES = __pure_makeAUDIT_CATEGORIES(__d_audit_categories_T);
 import { phoneIssue as __pure_phoneIssue } from '../atoms/phone-issue.mjs';
 import { PHONE_ISSUE_T as __d_phoneIssue_PHONE_ISSUE_T } from '../atoms/phone-issue-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

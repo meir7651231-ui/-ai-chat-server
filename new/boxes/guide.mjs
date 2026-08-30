@@ -6,7 +6,10 @@ import { GUIDE_INTRO } from '../atoms/guide-intro.mjs';
 import { GUIDE_SECTIONS } from '../atoms/guide-sections.mjs';
 import { GUIDE_RECIPES_LABEL } from '../atoms/guide-recipes-label.mjs';
 import { GUIDE_RECIPES } from '../atoms/guide-recipes.mjs';
-import { GUIDE_FOOT } from '../atoms/guide-foot.mjs';
+import { makeGUIDE_FOOT as __pure_makeGUIDE_FOOT } from '../atoms/guide-foot.mjs';
+import { GUIDE_FOOT_T as __d_guide_foot_T } from '../atoms/guide-foot-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const GUIDE_FOOT = __pure_makeGUIDE_FOOT(__d_guide_foot_T);
 import { guideSections as __pure_guideSections } from '../atoms/guide-sections-of.mjs';
 import { GUIDE_SECTIONS_OF_T as __d_guideSections_GUIDE_SECTIONS_OF_T } from '../atoms/guide-sections-of-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

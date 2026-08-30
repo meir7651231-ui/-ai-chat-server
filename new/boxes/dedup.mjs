@@ -22,7 +22,10 @@ const _mergeFamiliesByFields = (...a) => __pure_mergeFamiliesByFields(...a, ...A
 import { findSupporterDupGroups as _findSupporterDupGroups } from '../atoms/find-supporter-dup-groups.mjs';
 import { mergeSupporterInto as _mergeSupporterInto } from '../atoms/merge-supporter-into.mjs';
 import { mergeSupportersGroup as _mergeSupportersGroup } from '../atoms/merge-supporters-group.mjs';
-import { SUP_DUP_FIELDS } from '../atoms/sup-dup-fields.mjs';
+import { makeSUP_DUP_FIELDS as __pure_makeSUP_DUP_FIELDS } from '../atoms/sup-dup-fields.mjs';
+import { SUP_DUP_FIELDS_T as __d_sup_dup_fields_T } from '../atoms/sup-dup-fields-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const SUP_DUP_FIELDS = __pure_makeSUP_DUP_FIELDS(__d_sup_dup_fields_T);
 import { supDupFieldValue } from '../atoms/sup-dup-field-value.mjs';
 import { mergeSupportersByFields as __pure_mergeSupportersByFields } from '../atoms/merge-supporters-by-fields.mjs';
 import { MERGE_SUPPORTERS_BY_FIELDS_T as __d_mergeSupportersByFields_MERGE_SUPPORTERS_BY_FIELDS_T } from '../atoms/merge-supporters-by-fields-strings.mjs';

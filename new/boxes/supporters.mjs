@@ -73,7 +73,10 @@ import { mergeHist } from '../atoms/merge-hist.mjs';
 import { planSupporterImport as planSupporterImportAtom } from '../atoms/plan-supporter-import.mjs';
 import { mergeSupporterRow as mergeSupporterRowAtom } from '../atoms/merge-supporter-row.mjs';
 import { newSupporterFromRow as newSupporterFromRowAtom } from '../atoms/new-supporter-from-row.mjs';
-import { HOK_CAT } from '../atoms/hok-cat.mjs';
+import { makeHOK_CAT as __pure_makeHOK_CAT } from '../atoms/hok-cat.mjs';
+import { HOK_CAT_T as __d_hok_cat_T } from '../atoms/hok-cat-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const HOK_CAT = __pure_makeHOK_CAT(__d_hok_cat_T);
 import { hokEffectivelyActive as __pure_hokEffectivelyActive } from '../atoms/hok-effectively-active.mjs';
 import { HOK_EFFECTIVELY_ACTIVE_T as __d_hokEffectivelyActive_HOK_EFFECTIVELY_ACTIVE_T } from '../atoms/hok-effectively-active-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

@@ -148,7 +148,10 @@ import { scheduleClashText as __pure_scheduleClashText } from '../atoms/schedule
 import { SCHEDULE_CLASH_TEXT_T as __d_schedule_clash_text_T } from '../atoms/schedule-clash-text-strings.mjs';
 // עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
 const scheduleClashWire = (...a) => __pure_scheduleClashText(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_schedule_clash_text_T);
-import { ENROLL_NEW_FAMILY } from '../atoms/enroll-new-family.mjs';
+import { makeENROLL_NEW_FAMILY as __pure_makeENROLL_NEW_FAMILY } from '../atoms/enroll-new-family.mjs';
+import { ENROLL_NEW_FAMILY_T as __d_enroll_new_family_T } from '../atoms/enroll-new-family-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const ENROLL_NEW_FAMILY = __pure_makeENROLL_NEW_FAMILY(__d_enroll_new_family_T);
 import { offerNewFamily as offerNewFamilyWire } from '../atoms/offer-new-family.mjs';
 import { resolveEnrollFamily as __pure_resolveEnrollFamily } from '../atoms/resolve-enroll-family.mjs';
 import { RESOLVE_ENROLL_FAMILY_T as __d_resolve_enroll_family_T } from '../atoms/resolve-enroll-family-strings.mjs';

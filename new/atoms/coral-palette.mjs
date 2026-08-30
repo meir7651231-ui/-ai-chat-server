@@ -1,9 +1,9 @@
 /** אטום-קבוע · coral-palette — קודם אוטומטית (צילום-ערך). חוזה: coral-palette.contract.md */
-export const CORAL_PALETTE = {
+export const makeCORAL_PALETTE = (T) => ({
     c1: '#EC9C9C', c2: '#D97F7F', c3: '#B95F5F', word: '#E29392', ink: '#33272A',
-    paper: '#FFFCFA', cream: '#FBF1EF', blush: '#FFF3F0', marquee: '#F9E4E1',
+    paper: T.k1, cream: T.k2, blush: T.k3, marquee: '#F9E4E1',
     rgb1: '236,156,156', rgb2: '217,127,127', inkRgb: '51,39,42',
-};
+});
 function hexToRgb(hex) {
     const m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex.trim());
     if (!m)
@@ -14,10 +14,10 @@ function hexToRgb(hex) {
     const n = parseInt(h, 16);
     return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
 }
-function rgbToHsl(r, g, b) {
-    r /= 255;
-    g /= 255;
-    b /= 255;
+function rgbToHsl(r, g, b, T) {
+    r /= T.k4;
+    g /= T.k4;
+    b /= T.k4;
     const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min;
     const l = (max + min) / 2;
     let h = 0, s = 0;
@@ -29,32 +29,32 @@ function rgbToHsl(r, g, b) {
             h = (b - r) / d + 2;
         else
             h = (r - g) / d + 4;
-        h *= 60;
+        h *= T.k5;
     }
     return [h, s, l];
 }
-function hslToRgb(h, s, l) {
-    h = ((h % 360) + 360) % 360;
+function hslToRgb(h, s, l, T) {
+    h = ((h % T.k6) + T.k6) % T.k6;
     const c = (1 - Math.abs(2 * l - 1)) * s;
-    const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+    const x = c * (1 - Math.abs(((h / T.k5) % 2) - 1));
     const m = l - c / 2;
     let r = 0, g = 0, b = 0;
-    if (h < 60)
+    if (h < T.k5)
         [r, g, b] = [c, x, 0];
-    else if (h < 120)
+    else if (h < T.k7)
         [r, g, b] = [x, c, 0];
-    else if (h < 180)
+    else if (h < T.k8)
         [r, g, b] = [0, c, x];
-    else if (h < 240)
+    else if (h < T.k9)
         [r, g, b] = [0, x, c];
-    else if (h < 300)
+    else if (h < T.k10)
         [r, g, b] = [x, 0, c];
     else
         [r, g, b] = [c, 0, x];
-    return [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
+    return [Math.round((r + m) * T.k4), Math.round((g + m) * T.k4), Math.round((b + m) * T.k4)];
 }
-function toHex([r, g, b]) {
-    return '#' + [r, g, b].map((v) => Math.max(0, Math.min(255, v)).toString(16).padStart(2, '0')).join('');
+function toHex([r, g, b], T) {
+    return '#' + [r, g, b].map((v) => Math.max(0, Math.min(T.k4, v)).toString(16).padStart(2, '0')).join('');
 }
 const rgbStr = ([r, g, b]) => `${r},${g},${b}`;
 /**

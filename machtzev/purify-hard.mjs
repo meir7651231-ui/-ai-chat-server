@@ -424,21 +424,20 @@ function purifyHard(file, log) {
       // ענף-namespace: import * as NS — ערכים דרך מפעל בקריאה-במקום (טהור: בנייה-שקולה)
       const nsm = t.match(new RegExp(`import\\s*\\*\\s*as\\s+(\\w+)\\s+from\\s*(['"])([^'"]*\\/${base}\\.mjs)\\2\\s*;?`));
       if (!nsm) return log(`~ ${base}: קורא בלי import-מפורש (${path.relative(ROOT, cp)})`);
+      // מרחב-שמות-מורכב: פריסת-המקור + הערכים הבנויים — עובד גם לגישה דינמית m[k]
+      const nsName = nsm[1];
+      const hid = `__ns_${nsName}`;
       if (expNeed.size) {
-        // פונקציות דרך namespace: קריאות NS.fn(...) לא-משוכתבות בשלב-זה — דוחים בכבוד
-        const usesFn = [...expNeed].some(fn => new RegExp(`\\b${nsm[1]}\\.${fn}\\b`).test(t));
-        if (usesFn) return log(`~ ${base}: קורא-namespace לפונקציות (${path.relative(ROOT, cp)})`);
+        const usesFn = [...expNeed].some(fn => new RegExp(`\\b${nsName}\\.${fn}\\b`).test(t));
+        if (usesFn && !priorKeys.size) return log(`~ ${base}: קורא-namespace לפונקציות (${path.relative(ROOT, cp)})`);
       }
-      let t2 = t; let touchedNs = false;
-      for (const vn of valNeed) {
-        const re2 = new RegExp(`\\b${nsm[1]}\\.${vn}\\b`, 'g');
-        if (re2.test(t2)) { t2 = t2.replace(re2, `${nsm[1]}.${factoryOf[vn]}(${dAlias})`); touchedNs = true; }
-      }
-      if (!touchedNs) continue;
-      const inj = cp.endsWith('.test.mjs')
-        ? `\n// צילום-מקומי (מנוע-הקשיחים · ענף-namespace)\nconst ${dAlias} = ${litObj};`
-        : `\nimport { ${CONST} as ${dAlias} } from '${path.relative(path.dirname(cp), dataPath).replace(/^(?!\.)/, './')}';`;
-      cEdits.set(cp, t2.replace(nsm[0], nsm[0] + inj));
+      if (!valNeed.size) continue;
+      const renamed = nsm[0].replace(new RegExp(`as\\s+${nsName}\\b`), `as ${hid}`);
+      const dataInj = cp.endsWith('.test.mjs')
+        ? `const ${dAlias} = ${litObj};`
+        : `import { ${CONST} as ${dAlias} } from '${path.relative(path.dirname(cp), dataPath).replace(/^(?!\.)/, './')}';`;
+      const compose = `\n// מרחב-שמות-מורכב (מנוע-הקשיחים): המקור + ערכי-המפעל — ה-API החיצוני זהה\n${dataInj}\nconst ${nsName} = { ...${hid}${[...valNeed].map(vn => `, ${vn}: ${hid}.${factoryOf[vn]}(${dAlias})`).join('')} };`;
+      cEdits.set(cp, t.replace(nsm[0], renamed + compose));
       continue;
     }
     let braces = im[1];

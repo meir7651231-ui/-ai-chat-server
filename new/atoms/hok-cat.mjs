@@ -1,12 +1,12 @@
 /** אטום-קבוע · hok-cat — קודם אוטומטית (צילום-ערך). חוזה: hok-cat.contract.md */
-export const HOK_CAT = 'הו"ק';
+export const makeHOK_CAT = (T) => (T.k1);
 /** חודשים-אזרחיים מאז תאריך-ISO עד היום (0 = אותו חודש). ריק ⇒ Infinity. */
-function monthsAgoIso(iso, todayIso) {
+function monthsAgoIso(iso, todayIso, T) {
     if (!iso)
         return Infinity;
     const [y, m] = iso.slice(0, 7).split('-').map(Number);
     const [ty, tm] = todayIso.slice(0, 7).split('-').map(Number);
-    return (ty - y) * 12 + (tm - m);
+    return (ty - y) * T.k2 + (tm - m);
 }
 /** האם ההו"ק **אפקטיבית-פעילה**. הו"ק ידני (בלי kevaId) ⇒ לפי הדגל בלבד. הו"ק
  *  מנוהלת-נדרים (kevaId) ⇒ נחשבת **פגה** אם אין חיוב-נדרים ב-hist מזה >2 חודשים —

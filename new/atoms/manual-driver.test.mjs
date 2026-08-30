@@ -1,4 +1,11 @@
-import * as m from './manual-driver.mjs';
+import * as __ns_m from './manual-driver.mjs';
+// מרחב-שמות-מורכב (מנוע-הקשיחים): המקור + ערכי-המפעל — ה-API החיצוני זהה
+const __d_manual_driver_T = {
+  k1: "tel:",
+  k2: "manual",
+  k3: "חיוג בלחיצה (טלפון קיים)",
+};
+const m = { ...__ns_m, manualDriver: __ns_m.makeManualDriver(__d_manual_driver_T) };
 const SNAP = {"manualDriver":"{\"id\":\"manual\",\"label\":\"חיוג בלחיצה (טלפון קיים)\",\"capabilities\":{\"autoDial\":false,\"record\":false,\"screenPop\":true}}"};
 let f = 0;
 for (const [k, s] of Object.entries(SNAP)) if (JSON.stringify(m[k]) !== s) { console.error('✗ ' + k + ' סטה מהצילום'); f = 1; }

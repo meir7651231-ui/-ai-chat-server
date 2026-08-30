@@ -5,7 +5,10 @@
  *  שקעי-IO אמיתיים (מוזרקים ע"י הקורא, לא ממומשים כאן):
  *   · nowMs (מס' — Date.now של הקורא) ⇒ ספירת-הימים של campaign(); טהור/בדיק. */
 import { isRtlLang } from '../atoms/is-rtl-lang.mjs';
-import { CORAL_PALETTE } from '../atoms/coral-palette.mjs';
+import { makeCORAL_PALETTE as __pure_makeCORAL_PALETTE } from '../atoms/coral-palette.mjs';
+import { CORAL_PALETTE_T as __d_coral_palette_T } from '../atoms/coral-palette-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const CORAL_PALETTE = __pure_makeCORAL_PALETTE(__d_coral_palette_T);
 import { sitePalette as __pure_sitePalette } from '../atoms/site-palette.mjs';
 import { SITE_PALETTE_T as __d_site_palette_T } from '../atoms/site-palette-strings.mjs';
 // עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה

@@ -1,0 +1,21 @@
+/** אטום-דאטה · sup-dup-fields-strings — מחרוזות-הדאטה של sup-dup-fields (מנוע-הקשיחים, הכרעה 19). חוזה: sup-dup-fields-strings.contract.md */
+export const SUP_DUP_FIELDS_T = {
+  k1: "name",
+  k2: "שם",
+  k3: "phone",
+  k4: "טלפון",
+  k5: "email",
+  k6: "אימייל",
+  k7: "idNum",
+  k8: "ת\"ז",
+  k9: "city",
+  k10: "עיר",
+  k11: "address",
+  k12: "כתובת",
+  k13: "cat",
+  k14: "קטגוריה",
+  k15: "forWho",
+  k16: "ייעוד",
+  k17: "notes",
+  k18: "הערות",
+};
