@@ -1,3 +1,4 @@
+import '../dart-data-maor/phone-issue-sockets.dart' as skb_phone_issue;
 import '../dart-data-maor/run-audit-sockets.dart' as skb_run_audit;
 import '../dart-data-maor/audit-cat-colors-terms.dart' as td_audit_cat_colors;
 import '../dart-data-maor/audit-report-lines-terms.dart';
@@ -30,7 +31,7 @@ String _wiredNormName(dynamic t) => nn.normName(t, ns.normSearch);
 final Map<String, List<String>> AUDIT_CAT_COLORS = acc.auditCatColors(term: (k)=>td_audit_cat_colors.kTerms[k]!); // ignore: non_constant_identifier_names
 const List<String> AUDIT_CATEGORIES = acat.auditCategories; // ignore: constant_identifier_names
 
-String? phoneIssue(String? p) => pi.phoneIssue(p);
+String? phoneIssue(String? p) => pi.phoneIssue(p, skb_phone_issue.phoneIssue_T);
 
 List<String> auditReportLines(String? orgName, Iterable<Map<String, String>> issues, String nowLabel) =>
     arl.auditReportLines(orgName, issues, nowLabel, term: (k)=>kTerms[k]!);
@@ -46,7 +47,7 @@ List runAudit(dynamic db,
     'termOf': (dynamic cfg, dynamic k, dynamic fb) => to.termOf(cfg, k, fb),
     'normName': _wiredNormName,
     'validIsraeliId': (dynamic id) => vii.validIsraeliId(id),
-    'phoneIssue': (dynamic p) => pi.phoneIssue(p as String?),
+    'phoneIssue': (dynamic p) => pi.phoneIssue(p as String?, skb_phone_issue.phoneIssue_T),
     'ageOf': (dynamic birth) => ao.ageOf(birth as String?, n),
     'supporterAggregates': (dynamic sp) => sa.supporterAggregates(sp),
   });

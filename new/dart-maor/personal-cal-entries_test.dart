@@ -1,3 +1,4 @@
+import '../dart-data-maor/personal-cal-entries-sockets.dart' as sk_personal_cal_entries;
 // בדיקת-חוזה (רתמת-זהב) · personalCalEntries — מייבאת אך ורק את האטום-שלה (חוק-4).
 // 9 דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/personal-cal-entries.test.mjs.
 // אם עובר ⇒ Dart≡JS.
@@ -28,7 +29,7 @@ void main() {
     },
   };
 
-  final r = personalCalEntries(sp, donEvents);
+  final r = personalCalEntries(sp, donEvents, sk_personal_cal_entries.personalCalEntries_T);
 
   _ok(r.length == 6, 'אורך=6, בפועל ${r.length}'); n++;
 
@@ -71,11 +72,10 @@ void main() {
   n++;
 
   // תומך ריק והשקע ריק ⇒ [].
-  _ok(personalCalEntries({}, (_) => []).length == 0, 'תומך ריק ⇒ []'); n++;
+  _ok(personalCalEntries({}, (_) => [], sk_personal_cal_entries.personalCalEntries_T).length == 0, 'תומך ריק ⇒ []'); n++;
 
   // רשומת-log עם date='' מסוננת.
-  final r2 = personalCalEntries(
-      {'ayin': {'log': [{'date': '', 'eyes': 7}], 'answers': []}}, (_) => []);
+  final r2 = personalCalEntries({'ayin': {'log': [{'date': '', 'eyes': 7}], 'answers': []}}, (_) => [], sk_personal_cal_entries.personalCalEntries_T);
   _ok(r2.length == 0, "log עם date='' ⇒ מסונן"); n++;
 
   // assert חי — מוכיח ש---enable-asserts פעיל.

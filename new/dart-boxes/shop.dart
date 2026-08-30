@@ -1,3 +1,4 @@
+import '../dart-data-maor/needs-care-shop-sockets.dart' as skb_ncs;
 import '../dart-data-maor/distribution-list-lines-sockets.dart' as skb_distribution_list_lines;
 import '../dart-data-maor/redemptions-csv-rows-terms.dart' as td_redemptions_csv_rows;
 import '../dart-data-maor/beneficiary-label-terms.dart';
@@ -243,5 +244,6 @@ List<dynamic> needsCare(Map<String, dynamic> db, String todayIso, dynamic config
     featureOn,
     expiringIntakes,
     shd.shopHolidayDueDays,
+    skb_ncs.needsCareShop_T,
   );
 }

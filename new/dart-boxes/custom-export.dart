@@ -1,3 +1,4 @@
+import '../dart-data-maor/build-custom-export-sockets.dart' as skb_bce;
 import '../dart-data-maor/feat-label-sockets.dart' as skb_feat_label;
 import '../dart-data-maor/item-label-sockets.dart' as skb_item_label;
 import '../dart-data-maor/unit-label-sockets.dart' as skb_unit_label;
@@ -178,5 +179,6 @@ List<List<String>> buildCustomExport(
       hebrewRecurring: HEBREW_RECURRING,
       dayNames: DAY_NAMES,
     ),
+    skb_bce.buildCustomExport_T,
   );
 }

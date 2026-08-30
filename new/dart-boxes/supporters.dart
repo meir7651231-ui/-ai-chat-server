@@ -1,3 +1,4 @@
+import '../dart-data-maor/personal-cal-entries-sockets.dart' as skb_personal_cal_entries;
 import '../dart-data-maor/sup-tier-sockets.dart' as skb_sup_tier;
 import '../dart-data-maor/sup-don-events-sockets.dart' as skb_sde;
 import '../dart-data-maor/org-cal-entries-sockets.dart' as skb_oce;
@@ -138,7 +139,7 @@ List<String> allDonationPurposes(List supporters) =>
 List<Map<String, dynamic>> supDonEvents(dynamic sp, [Map? config]) => sde.supDonEvents(
     sp, skb_sde.supDonEvents_T2, config != null ? (String k, String fb) => to.termOf(config, k, fb) : null);
 List<Map<String, dynamic>> personalCalEntries(Map sp) =>
-    pce.personalCalEntries(sp, (s) => supDonEvents(s));
+    pce.personalCalEntries(sp, (s) => supDonEvents(s), skb_personal_cal_entries.personalCalEntries_T);
 List<Map<String, dynamic>> orgCalEntries(List<Map<String, dynamic>> supporters) =>
     oce.orgCalEntries(supporters, (s) => supDonEvents(s), skb_oce.orgCalEntries_T);
 String donCalMonthLine(Iterable entries, bool Function(dynamic date) inMonth, [Map? config]) =>

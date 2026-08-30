@@ -1,3 +1,4 @@
+import '../dart-data-maor/phone-issue-sockets.dart' as sk_phone_issue;
 // בדיקת-חוזה (רתמת-זהב) · phoneIssue — מייבאת אך ורק את האטום-שלה (חוק-4).
 // תשע דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/phone-issue.test.mjs:
 //   '050-1234567' ⇒ null · '03-1234567' ⇒ null · '' ⇒ null · undefined(=null) ⇒ null ·
@@ -11,7 +12,7 @@ import 'phone-issue.dart';
 void main() {
   var n = 0;
   void eq(String? inp, String? want) {
-    final got = phoneIssue(inp);
+    final got = phoneIssue(inp, sk_phone_issue.phoneIssue_T);
     assert(got == want, 'FAIL: ${inp == null ? "null" : "\"$inp\""} ⇒ צפוי ${want == null ? "null" : "\"$want\""}, בפועל ${got == null ? "null" : "\"$got\""}');
     n++;
   }

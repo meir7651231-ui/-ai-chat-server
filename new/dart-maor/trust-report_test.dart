@@ -1,3 +1,4 @@
+import '../dart-data-maor/trust-report-sockets.dart' as sk_trust_report;
 // בדיקת-חוזה (רתמת-זהב) · trustReport — מייבאת אך ורק את האטום-שלה (חוק-4).
 // 7 דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/trust-report.test.mjs
 // (אותם קלטים→פלטים; ‏eng = אובייקט-שקעים כמו במקור). מערכים מושווים
@@ -45,7 +46,7 @@ final bundle = <String, dynamic>{'tenant': <String, dynamic>{'tenantId': 't1'}, 
 void main() {
   // 1) ירוק מינימלי — 5 בדיקות, score=100, grade='A'
   {
-    final out = trustReport(bundle, {}, mkEng({'voice.hardening': true}));
+    final out = trustReport(bundle, sk_trust_report.trustReport_T, {}, mkEng({'voice.hardening': true}));
     _eqList((out['checks'] as List).map((c) => c['key']).toList(),
         ['route-closure', 'failsafe', 'toll-caps', 'downstream', 'cti-readonly'], 'דוגמה 1: סדר-הבדיקות');
     _ok(out['score'] == 100, 'דוגמה 1: score ⇒ ' + out['score'].toString());
@@ -58,7 +59,7 @@ void main() {
 
   // 2) כשל-failsafe (critical) ⇒ score=70, grade='F', ready=false
   {
-    final out = trustReport(bundle, {}, mkEng({'voice.hardening': true},
+    final out = trustReport(bundle, sk_trust_report.trustReport_T, {}, mkEng({'voice.hardening': true},
         {'failsafeRoute': (t) => <String, dynamic>{'ok': false}}));
     _ok(out['score'] == 70, 'דוגמה 2: score ⇒ ' + out['score'].toString());
     _ok(out['grade'] == 'F', 'דוגמה 2: grade ⇒ ' + out['grade'].toString());
@@ -69,7 +70,7 @@ void main() {
 
   // 3) hardening כבוי (high) ⇒ score=80, grade='C', ready=true
   {
-    final out = trustReport(bundle, {}, mkEng({}));
+    final out = trustReport(bundle, sk_trust_report.trustReport_T, {}, mkEng({}));
     _ok(out['score'] == 80, 'דוגמה 3: score ⇒ ' + out['score'].toString());
     _ok(out['grade'] == 'C', 'דוגמה 3: grade ⇒ ' + out['grade'].toString());
     _ok(out['ready'] == true, 'דוגמה 3: כשל-high לא חוסם');
@@ -77,7 +78,7 @@ void main() {
 
   // 4) recording פעיל ⇒ בדיקה שישית שתמיד pass=false; score=round(10/12*100)=83
   {
-    final out = trustReport(bundle, {}, mkEng({'voice.hardening': true, 'recording': true},
+    final out = trustReport(bundle, sk_trust_report.trustReport_T, {}, mkEng({'voice.hardening': true, 'recording': true},
         {'recordingEncryption': (t) => <String, dynamic>{'enabled': true}}));
     final rec = (out['checks'] as List).firstWhere((c) => c['key'] == 'recording-encryption');
     _ok((out['checks'] as List).length == 6, 'דוגמה 4: 6 בדיקות');
@@ -98,7 +99,7 @@ void main() {
       },
       'files': <String, dynamic>{},
     };
-    final out = trustReport(b, {}, mkEng({'voice.hardening': true, 'voice.kosher': true}));
+    final out = trustReport(b, sk_trust_report.trustReport_T, {}, mkEng({'voice.hardening': true, 'voice.kosher': true}));
     final k = (out['checks'] as List).firstWhere((c) => c['key'] == 'kosher-integrity');
     _ok(k['pass'] == true, 'דוגמה 5: kosher pass');
     _ok(out['score'] == 100, 'דוגמה 5: score ⇒ ' + out['score'].toString());
@@ -112,8 +113,7 @@ void main() {
     List<dynamic>? pfBundles;
     dynamic pfEnv;
     List<dynamic>? leakArgs;
-    final out = trustReport(bundle, <String, dynamic>{'env': env, 'peers': [peer]},
-        mkEng({'voice.hardening': true}, {
+    final out = trustReport(bundle, sk_trust_report.trustReport_T, <String, dynamic>{'env': env, 'peers': [peer]}, mkEng({'voice.hardening': true}, {
       'secretPreflight': (bundles, e) {
         pfBundles = bundles as List;
         pfEnv = e;
@@ -136,7 +136,7 @@ void main() {
 
   // 7) route-closure בכשל — איחוד רשימות-היתומים
   {
-    final out = trustReport(bundle, {}, mkEng({'voice.hardening': true}, {
+    final out = trustReport(bundle, sk_trust_report.trustReport_T, {}, mkEng({'voice.hardening': true}, {
       'auditRoutes': (b) => <String, dynamic>{
             'ok': false,
             'dangling': ['x'],
@@ -149,7 +149,7 @@ void main() {
   }
 
   // assert חי (חוק: --enable-asserts) — מוכיח שהמנגנון פעיל.
-  assert(trustReport(bundle, {}, mkEng({'voice.hardening': true}))['grade'] == 'A', 'assert-live guard');
+  assert(trustReport(bundle, sk_trust_report.trustReport_T, {}, mkEng({'voice.hardening': true}))['grade'] == 'A', 'assert-live guard');
 
   if (_f != 0) throw StateError('trust-report: דוגמת-חוזה נכשלה');
   // ignore: avoid_print

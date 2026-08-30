@@ -1,3 +1,4 @@
+import '../dart-data-maor/build-custom-export-sockets.dart' as sk_build_custom_export;
 // בדיקת-חוזה (רתמת-זהב) · buildCustomExport — מייבאת אך ורק את האטום-שלה (חוק-4).
 // 7 דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/build-custom-export.test.mjs
 // (אותם קלטים → אותם פלטים; הערכים הומרו ל-Dart). אם עובר ⇒ Dart≡JS.
@@ -74,7 +75,7 @@ void eq(String name, dynamic got, dynamic want) {
 void main() {
   // 1 — אפס שדות
   eq('1 · selectedKeys ריק',
-      buildCustomExport(cfg, {'courses': []}, 'courses', AUG, [], s), [[]]);
+      buildCustomExport(cfg, {'courses': []}, 'courses', AUG, [], s, sk_build_custom_export.buildCustomExport_T), [[]]);
 
   // 2 — courses
   final dbC = {
@@ -94,7 +95,7 @@ void main() {
       {'courseId': 'c1', 'memberId': 'm1', 'totalDue': 300, 'payments': [{'amount': 100, 'date': '2026-08-05'}, {'amount': 50, 'date': '2026-05-01'}], 'absences': [{'date': '2026-08-10'}, {'date': '2026-01-01'}]}
     ],
   };
-  final r2 = buildCustomExport(cfg, dbC, 'courses', AUG, COURSE_DEFS, s);
+  final r2 = buildCustomExport(cfg, dbC, 'courses', AUG, COURSE_DEFS, s, sk_build_custom_export.buildCustomExport_T);
   eq('2 · כותרות', r2[0], COURSE_DEFS.map((k) => 'ת:' + k).toList());
   eq('2 · שורת-החוג', r2[1], ['ציור', 'הדס 050', 'ג–ה', 'אולם', 'יום ראשון 16:00', 'כרטיסייה · ₪120', '1/10', 'רות', 'רות 03 · יתרה ₪150', '1 תשלומים · ₪100', '₪150', '1 חיסורים']);
 
@@ -109,25 +110,25 @@ void main() {
       {'type': 'org', 'title': 'ישן', 'date': '2025-01-01'},
     ],
   };
-  final r3 = buildCustomExport(cfg, dbE, 'events', AUG, EVENT_DEFS, s);
+  final r3 = buildCustomExport(cfg, dbE, 'events', AUG, EVENT_DEFS, s, sk_build_custom_export.buildCustomExport_T);
   eq('3 · שתי שורות ממוינות', r3.length, 3);
   eq('3 · חגיגה (customType דורס)', r3[1], ['חגיגה', 'מסיבה', 'ע:2026-08-10', '10/08/2026', '', '', 'לא']);
   eq('3 · ישיבה', r3[2], ['ישיבה', 'אירוע', 'ע:2026-08-20', '20/08/2026', '10:00', 'פרץ', 'כן']);
 
   // 4 — events חוזר (הלוח-המדומה)
   final memA = {'type': 'memorial', 'title': 'אזכרה-א', 'date': '2025-08-20'};
-  final r4a = buildCustomExport(cfg, {'families': [], 'events': [memA]}, 'events', AUG, ['title', 'gdate'], s);
+  final r4a = buildCustomExport(cfg, {'families': [], 'events': [memA]}, 'events', AUG, ['title', 'gdate'], s, sk_build_custom_export.buildCustomExport_T);
   eq('4 · מופע שנתי בטווח החסום', r4a.sublist(1), [['אזכרה-א', '20/08/2026']]);
   final memB = {'type': 'memorial', 'title': 'אזכרה-ב', 'date': '2026-08-25'};
-  final r4b = buildCustomExport(cfg, {'families': [], 'events': [memB]}, 'events', {'from': '2025-08-01', 'to': '2026-08-31'}, ['title', 'gdate'], s);
+  final r4b = buildCustomExport(cfg, {'families': [], 'events': [memB]}, 'events', {'from': '2025-08-01', 'to': '2026-08-31'}, ['title', 'gdate'], s, sk_build_custom_export.buildCustomExport_T);
   eq('4 · חסם iso≥ev.date — אין רפאים ב-2025', r4b.sublist(1), [['אזכרה-ב', '25/08/2026']]);
-  final r4c = buildCustomExport(cfg, {'families': [], 'events': [memA]}, 'events', {'from': '', 'to': ''}, ['title', 'gdate'], s);
+  final r4c = buildCustomExport(cfg, {'families': [], 'events': [memA]}, 'events', {'from': '', 'to': ''}, ['title', 'gdate'], s, sk_build_custom_export.buildCustomExport_T);
   eq('4 · טווח ריק ⇒ החוזר בתאריך-המקור בלבד', r4c.sublist(1), [['אזכרה-א', '20/08/2025']]);
 
   // 5 — supporters: סינון-נגיעה + סכומי-מטבע
   final sp1 = {'name': 'שרה', 'donations': [{'date': '2026-08-05', 'amount': 100, 'cur': '₪'}, {'date': '2026-08-06', 'amount': '20', 'cur': '\$'}, {'date': '2025-01-01', 'amount': 999, 'cur': '₪'}]};
   final sp0 = {'name': 'רחל', 'donations': [{'date': '2025-01-01', 'amount': 5, 'cur': '₪'}]};
-  final r5 = buildCustomExport(cfg, {'usdRate': 3.7, 'supporters': [sp0, sp1]}, 'supporters', AUG, SUP_DEFS, s);
+  final r5 = buildCustomExport(cfg, {'usdRate': 3.7, 'supporters': [sp0, sp1]}, 'supporters', AUG, SUP_DEFS, s, sk_build_custom_export.buildCustomExport_T);
   eq('5 · רחל מוחרגת', r5.length, 2);
   eq('5 · שורת שרה', r5[1], ['שרה', '2 תרומות · ₪100 + \$20', '3 תרומות · ₪1099 + \$20', 'זהב', '', '', '', '', '', '']);
 
@@ -138,13 +139,13 @@ void main() {
       'names': [{'name': 'משה', 'eyes': 4, 'done': true}, {'name': 'רות', 'eyes': ''}],
       'answers': [{'date': '2026-08-10', 'note': 'א'}, {'date': '2025-01-01', 'note': 'ישן'}]},
   };
-  final r6 = buildCustomExport(cfg, {'usdRate': 3.7, 'supporters': [sp2]}, 'supporters', AUG, SUP_DEFS, s);
+  final r6 = buildCustomExport(cfg, {'usdRate': 3.7, 'supporters': [sp2]}, 'supporters', AUG, SUP_DEFS, s, sk_build_custom_export.buildCustomExport_T);
   eq('6 · שורת לאה', r6[1], ['לאה', '0 תרומות · ₪0', '0 תרומות · ₪0', 'רגיל', 'ש:eyes', 'משה ·4 ✓ · רות', '4', 'כן', 'א', '01/09/2026 10:30']);
 
   // 7 — ayin כבוי: מגע-בלבד מוחרג; תשובה-בטווח נשארת אך עמודות-ayin ריקות
   final sp3 = {'name': 'מרים', 'donations': [], 'ayin': {'stage': 'new', 'lastTouch': '2026-08-15', 'log': [], 'names': [], 'answers': []}};
   final cfgOff = {'features': {'supporters.ayin': false}};
-  final r7 = buildCustomExport(cfgOff, {'usdRate': 3.7, 'supporters': [sp3, sp2]}, 'supporters', AUG, SUP_DEFS, s);
+  final r7 = buildCustomExport(cfgOff, {'usdRate': 3.7, 'supporters': [sp3, sp2]}, 'supporters', AUG, SUP_DEFS, s, sk_build_custom_export.buildCustomExport_T);
   eq('7 · רק לאה (מרים מוחרגת)', r7.sublist(1).map((r) => r[0]).toList(), ['לאה']);
   eq('7 · עמודות-ayin ריקות', r7[1].sublist(4), ['', '', '', '', '', '']);
 

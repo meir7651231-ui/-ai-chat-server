@@ -1,3 +1,4 @@
+import '../dart-data-maor/group-options-of-sockets.dart' as sk_group_options_of;
 // בדיקת-חוזה (רתמת-זהב) · groupOptionsOf — מייבאת אך ורק את האטום-שלה (חוק-4).
 // ארבע דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/group-options-of.test.mjs:
 //   1) שני מפגשים בלי תוויות              ⇒ [{v:'קבוצה 1',t:'... ראשון 16:00'},{v:'קבוצה 2',...שלישי 17:30}]
@@ -50,7 +51,7 @@ void main() {
       {'day': 0, 'time': '16:00'},
       {'day': 2, 'time': '17:30'},
     ]
-  }, sessionsOf, groupLabelOf, dayNames);
+  }, sessionsOf, groupLabelOf, dayNames, sk_group_options_of.groupOptionsOf_T);
   _ok(
       _eq(r1, [
         {'v': 'קבוצה 1', 't': 'קבוצה 1 · יום ראשון 16:00'},
@@ -65,7 +66,7 @@ void main() {
       {'day': 1, 'time': '10:00', 'label': 'בוגרים'},
       {'day': 4, 'time': ''},
     ]
-  }, sessionsOf, groupLabelOf, dayNames);
+  }, sessionsOf, groupLabelOf, dayNames, sk_group_options_of.groupOptionsOf_T);
   _ok(
       _eq(r2, [
         {'v': 'בוגרים', 't': 'בוגרים · יום שני 10:00'},
@@ -79,13 +80,12 @@ void main() {
     'sessions': [
       {'day': 3, 'time': '12:00'},
     ]
-  }, sessionsOf, groupLabelOf, dayNames);
+  }, sessionsOf, groupLabelOf, dayNames, sk_group_options_of.groupOptionsOf_T);
   _ok(_eq(r3, []), 'מפגש יחיד ⇒ $r3');
   n++;
 
   // 4) לגאסי בלי sessions ⇒ מפגש-יחיד ⇒ [].
-  final r4 = groupOptionsOf(
-      {'weekday': 5, 'time': '09:00'}, sessionsOf, groupLabelOf, dayNames);
+  final r4 = groupOptionsOf({'weekday': 5, 'time': '09:00'}, sessionsOf, groupLabelOf, dayNames, sk_group_options_of.groupOptionsOf_T);
   _ok(_eq(r4, []), 'לגאסי בלי sessions ⇒ $r4');
   n++;
 

@@ -1,3 +1,4 @@
+import '../dart-data-maor/needs-care-shop-sockets.dart' as sk_needs_care_shop;
 // בדיקת-חוזה (רתמת-זהב) · needsCare — מייבאת אך ורק את האטום-שלה (חוק-4).
 // שבע דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/needs-care-shop.test.mjs:
 //   שקעי-בדיקה דטרמיניסטיים (בסיס ניטרלי, כל דוגמה דורסת מה שהיא צריכה) —
@@ -39,22 +40,7 @@ List<Map<String, dynamic>> run(
   bool Function(dynamic, String)? featureOn,
   List<dynamic> Function(Map<String, dynamic>, String)? expiringIntakes,
 }) {
-  return needsCare(
-    db,
-    TODAY,
-    config,
-    upcomingHolidays ?? _holNone,
-    itemRemaining ?? _remNull,
-    _compNull,
-    _who,
-    _itemOf,
-    _holAllow,
-    _redNo,
-    couponExpiry ?? _expEmpty,
-    featureOn ?? _featOn,
-    expiringIntakes ?? _expNone,
-    30,
-  );
+  return needsCare(db, TODAY, config, upcomingHolidays ?? _holNone, itemRemaining ?? _remNull, _compNull, _who, _itemOf, _holAllow, _redNo, couponExpiry ?? _expEmpty, featureOn ?? _featOn, expiringIntakes ?? _expNone, 30, sk_needs_care_shop.needsCareShop_T);
 }
 
 int _f = 0;

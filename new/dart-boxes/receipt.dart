@@ -1,3 +1,4 @@
+import '../dart-data-maor/receipt-html-sockets.dart' as skb_receipt_html;
 import '../dart-data-maor/gematria-sockets.dart' as skb_gematria;
 import '../dart-data-maor/receipt-lines-sockets.dart' as skb_receipt_lines;
 import '../dart-data-maor/gematria-sockets.dart' as td_gematria;
@@ -125,7 +126,7 @@ List<String> receiptLines(Map<String, dynamic> o,
 /// הקבלה כ-HTML מוכן-להדפסה (טהור — מחרוזת בלבד); receiptLines מקור-האמת היחיד לתוכן.
 String receiptHtml(Map<String, dynamic> o,
         [String Function(dynamic amount, dynamic sym)? amountInWords]) =>
-    rh.receiptHtml(o, (x) => receiptLines(x, amountInWords));
+    rh.receiptHtml(o, (x) => receiptLines(x, amountInWords), skb_receipt_html.receiptHtml_T);
 
 /// הפורמט-האפקטיבי למסירה: הבחירה השמורה, רק כשדגל core.receipt.pdf דלוק.
 dynamic receiptFmtOf(dynamic config, Map ui) => rfo.receiptFmtOf(config, ui, _featureOn);
