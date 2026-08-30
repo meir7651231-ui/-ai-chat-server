@@ -1,3 +1,8 @@
+import '../dart-data-maor/feat-label-sockets.dart' as skb_fl;
+import '../dart-data-maor/item-label-sockets.dart' as skb_il;
+import '../dart-data-maor/unit-label-sockets.dart' as skb_ul;
+import '../dart-data-maor/plan-ayin-advance-sockets.dart' as skb_pa;
+import '../dart-data-maor/plan-add-name-sockets.dart' as skb_pan;
 import '../dart-data-maor/ayin-sheet-rows-terms.dart' as td_ayin_sheet_rows;
 import '../dart-data-maor/ayin-daily-rows-terms.dart' as td_ayin_daily_rows;
 import '../dart-data-maor/ayin-all-rows-terms.dart' as td_ayin_all_rows;
@@ -54,9 +59,9 @@ Map<String, dynamic> _cfgMap(dynamic cfg) => (cfg is Map) ? cfg.cast<String, dyn
 // ── החיווט ──
 // תוויות-העין: termOf האטום מחווט לכל אחת (הפער בין תצוגה למפתח-קבוע חי כאן).
 String stageLabel(dynamic cfg, dynamic stage) => sl.stageLabel(cfg, stage, tof.termOf, stageFallback: kStageFallback) as String;
-String featLabel(dynamic cfg) => fl.featLabel(cfg, _termOfStr);
-String itemLabel(dynamic cfg) => il.itemLabel(_cfgMap(cfg), _termOfMap);
-String unitLabel(dynamic cfg) => ul.unitLabel(cfg, tof.termOf) as String;
+String featLabel(dynamic cfg) => fl.featLabel(cfg, _termOfStr, skb_fl.featLabel_T);
+String itemLabel(dynamic cfg) => il.itemLabel(_cfgMap(cfg), _termOfMap, skb_il.itemLabel_T);
+String unitLabel(dynamic cfg) => ul.unitLabel(cfg, tof.termOf, skb_ul.unitLabel_T) as String;
 
 // סדר-השלבים: nextStage מחווט ל-stageIndex+ayinStages; revertPatch ל-stageIndex.
 int stageIndex(dynamic stage) => si.stageIndex(stage);
@@ -92,11 +97,12 @@ dynamic planAyinAdvance(dynamic cfg, dynamic name, dynamic a) => pa.planAyinAdva
       (m) => unitLabel(m),
       (m, st) => stageLabel(m, st),
       (m) => eyesTotal(m),
+      skb_pa.planAyinAdvance_T,
     );
 
 // הוספת-פריט: normName המחווט + isoToday מוזרק (שעון = שקע-IO).
 Map<String, dynamic> planAddName(dynamic a, dynamic rawName, dynamic eyes, dynamic id, String Function() isoToday) =>
-    pan.planAddName(_cfgMap(a), rawName as String, eyes, id as String, normName, isoToday);
+    pan.planAddName(_cfgMap(a), rawName as String, eyes, id as String, normName, isoToday, skb_pan.planAddName_T);
 
 // דוחות-העין: emptyAyin מוזרק (מפעל-domain = שקע-דאטה); תוויות ואגרגטים מחווטים.
 bool ayinActive(dynamic a) => aa.ayinActive(a);

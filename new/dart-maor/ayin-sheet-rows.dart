@@ -4,7 +4,7 @@
 
 List<List<String>> ayinSheetRows(List<dynamic> supporters, {required String Function(String) term, required List<dynamic> ayinSheetHeader}) {
   final List<List<String>> rows = [
-    [...ayinSheetHeader]
+    [...ayinSheetHeader.cast<String>()]
   ];
   for (final sp in supporters) {
     final a = sp['ayin'];

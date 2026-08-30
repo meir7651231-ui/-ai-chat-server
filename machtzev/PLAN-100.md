@@ -9,7 +9,7 @@
 |---|---|---|---|---|
 | 🧼 טוהר-עומק (הכרעה 19) | 37 | **36** | 92.7% | deeppurity ✓ |
 | 🧼 טוהר-דאטה (הכרעה 16) | 124 | **59** | 82.7% | datapurity ✓ |
-| 🔁 המרת-מנגנונים JS⇒Dart | 39 בהסגר | **7** | **98.9%** | genesis-compile ✓ |
+| 🔁 המרת-מנגנונים JS⇒Dart | 39 בהסגר | **0** | **100%** 🏁 | genesis-compile ✓ |
 | 🧠 מנועים ברי-הרצה | 104 | **313**/459 | 68% | coverage ✓ (ratchet) |
 | 🧠 ברי-חיווט-לסינתזה (Dart-שקול) | 104 | **119-172** | — | שער-synth ✓ |
 | 🧱 לבנים ברות-מילוי | 356 | **381**/381 | **100%** | coverage ✓ |
@@ -110,3 +110,13 @@
   lib-nedarim-sync (withNedarimHok_T/detectRecurringHok_T) · audit (runAudit_T2 עמדה-2 —
   באג-ריצה שקט: todayIso נחת ב-T2!) · tour (tourSteps_T2). ‏baseline ירד 14 ⇒ 6 —
   הנותרות כולן תלויות-הסגר (ayin/families/hebdate/reenroll/search/tzedaka ⇐ 7 אטומי-ההסגר).
+- **30.8 · פאזות 3-סיום + 8-סיום — ההסגר ריק (100% המרה!) וכל 62 הקופסאות ירוקות:**
+  מתקן-ההסגר תוקן (מסלולי-import של תאומי-דאטה מתוך-ההסגר: '../../' בפנים, שימור '../'
+  בשחרור) ⇒ ‏3 שוחררו מיידית (plan-demo-cleanup/tier-of/xlat — היו analyze-נקיים וחסומים
+  על באג-המסלולים בלבד); ‏4 האחרונים תוקנו ביד בהסגר (casts נאמני-מקור: spread-cast,
+  ‏return-cast, ‏Iterable-cast לצרכני-שקעים דינמיים) ⇒ ‏**QUARANTINE ריק — המרה 41⇒0,
+  ‏100%**. שני המשוחררים הביאו עברית-במנגנון ⇒ טוהרו בו-במקום (needs-care-tzedaka:
+  fallback דרך term('kvph'); ‏plan-demo-cleanup: ‏T['k33'] בשקע-שמי) — אפס הרחבת-baseline.
+  ‏rethread-boxes + יד השלימו את 6 הקופסאות תלויות-ההסגר (hebdate/reenroll/tzedaka במנוע;
+  ‏ayin/families ביד — שקעים שמיים T/T2 ו-planAyinAdvance_T) ⇒ **הוכחות-קופסה 62/62,
+  חוב 0**. משטרה 13/13 · strict 0.

@@ -1,3 +1,4 @@
+import '../dart-data-maor/enroll-summary-sockets.dart' as skb_enroll_summary;
 import '../dart-data-maor/student-history-text-terms.dart' as td_student_history_text;
 import '../dart-data-maor/reenroll-list-text-terms.dart';
 // 📦 קופסת-חיבורים · reenroll — רישום-לשנה-הבאה (courses.reenroll). מחווטת 16 אטומי-Dart.
@@ -98,7 +99,7 @@ Map<String, String> nextYearDates(String start, String end) =>
 
 /// סיכום-עבר פר-שיבוץ — קסקדת-הכספים (payBal⇒paidOf) הולחמה פנימית.
 Map<String, dynamic> enrollSummary(Map<String, dynamic> e) =>
-    es.enrollSummary(e, _wiredPayBal, po.paidOf);
+    es.enrollSummary(e, _wiredPayBal, po.paidOf, skb_enroll_summary.enrollSummary_T);
 
 /// שורות מסך-הרישום — ארבעת השקעים (isRenewed·renewOf·enrollSummary·findMember) מחווטים.
 List<Map<String, Object?>> buildReenrollRows(Map<String, Object?> db,

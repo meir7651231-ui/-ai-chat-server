@@ -1,3 +1,4 @@
+import '../dart-data-maor/coordinator-print-lines-sockets.dart' as skb_coordinator_print_lines;
 import '../dart-data-maor/needs-care-tzedaka-terms.dart' as td_needs_care_tzedaka;
 import '../dart-data-maor/collections-csv-rows-terms.dart';
 // 📦 קופסת-חיבורים · tzedaka (Dart) — מחווטת 22 אטומי-Dart. מקבילה ל-new/boxes/tzedaka.mjs.
@@ -154,7 +155,7 @@ List<Map<String, dynamic>> filterCollections(
 /// מקור lib.ts:250-275.
 List<String> coordinatorPrintLines(Map<String, dynamic> db, String coordinatorId,
         [Map<String, dynamic>? config]) =>
-    cpl.coordinatorPrintLines(db, coordinatorId, config, _termOf, _cbList, _lciDyn);
+    cpl.coordinatorPrintLines(db, coordinatorId, config, _termOf, _cbList, _lciDyn, skb_coordinator_print_lines.coordinatorPrintLines_T2);
 
 /// מקור lib.ts:281-293.
 List<List<Object>> collectionsCsvRows(Map<String, dynamic> db,

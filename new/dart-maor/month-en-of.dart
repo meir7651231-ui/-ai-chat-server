@@ -19,7 +19,7 @@
 /// Verbatim behaviour of the JS source new/atoms/month-en-of.mjs.
 String? monthEnOf(dynamic he, {required List<dynamic> months}) {
   for (final m in months) {
-    if (m[1] == he) return m[0];
+    if (m[1] == he) return m[0] as String?;
   }
   return null;
 }

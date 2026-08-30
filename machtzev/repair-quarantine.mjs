@@ -24,6 +24,12 @@ fs.writeFileSync(path.join(WORK, 'analysis_options.yaml'), 'analyzer:\n  languag
 fs.mkdirSync(path.join(WORK, 'lib'));
 fs.cpSync(DM, path.join(WORK, 'lib/dart-maor'), { recursive: true });
 fs.cpSync(path.join(ROOT, 'new/dart-data-maor'), path.join(WORK, 'lib/dart-data-maor'), { recursive: true });
+// בתוך-ההסגר: '../dart-data-maor/' פותר ל-dart-maor/dart-data-maor (לא-קיים) — משכתבים ל-'../../'
+for (const f of fs.readdirSync(path.join(WORK, 'lib/dart-maor/QUARANTINE'))) {
+  if (!f.endsWith('.dart')) continue;
+  const fp0 = path.join(WORK, 'lib/dart-maor/QUARANTINE', f);
+  fs.writeFileSync(fp0, fs.readFileSync(fp0, 'utf8').replace(/import '\.\.\/dart-data-maor\//g, "import '../../dart-data-maor/"));
+}
 // ההסגר יושב בתוך dart-maor/QUARANTINE — imports יחסיים 'x.dart' פותרים לשכנים? לא: בהסגר
 // הבדיקות מייבאות '../<dep>.dart'. משאירים את המבנה כפי-שהוא.
 
@@ -106,8 +112,10 @@ function repairFile(base, report) {
     fs.writeFileSync(path.join(Q, base + '_test.dart'), fixedT);
     return report(base, 'ok', 'תוקן בתוך-ההסגר (--keep)');
   }
-  fs.writeFileSync(path.join(DM, base + '.dart'), fixed.replace(/import '\.\.\//g, "import '"));
-  fs.writeFileSync(path.join(DM, base + '_test.dart'), fixedT.replace(/import '\.\.\//g, "import '"));
+  const relFix = (t) => t.replace(/import '\.\.\/\.\.\/dart-data-maor\//g, "import '../dart-data-maor/")
+    .replace(/import '\.\.\/(?!\.\.\/|dart-data-maor\/)/g, "import '");
+  fs.writeFileSync(path.join(DM, base + '.dart'), relFix(fixed));
+  fs.writeFileSync(path.join(DM, base + '_test.dart'), relFix(fixedT));
   // אימות אחרי-ההזזה (imports יחסיים השתנו) — בעץ-העבודה
   fs.writeFileSync(path.join(WORK, 'lib/dart-maor', base + '.dart'), fs.readFileSync(path.join(DM, base + '.dart')));
   fs.writeFileSync(path.join(WORK, 'lib/dart-maor', base + '_test.dart'), fs.readFileSync(path.join(DM, base + '_test.dart')));

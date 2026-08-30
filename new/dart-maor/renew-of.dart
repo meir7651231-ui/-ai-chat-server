@@ -13,5 +13,5 @@
 /// Returns the assignment's current renewal decision, or '' when undecided
 /// (field null or absent). Verbatim behaviour of the JS source `renewOf`.
 Object renewOf(Map<String, dynamic> e) {
-  return e['renew'] ?? '';
+  return (e['renew'] ?? '') as Object;
 }

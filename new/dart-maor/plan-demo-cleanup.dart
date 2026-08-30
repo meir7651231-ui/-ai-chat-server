@@ -6,7 +6,7 @@
 ///  · `String(x ?? '')` ⇒ שקע `_jsStrOrEmpty` (null/undefined⇒'', מספר-שלם בלי נקודה כמו JS).
 ///  · truthiness `if(id)` / `|| '(ללא שם)'` ⇒ בדיקת-מחרוזת-ריקה מפורשת (כלל-7).
 ///  · Set/List טהורים; db לא-מוטבל (keep/drop רשימות-חדשות).
-Map<String, dynamic> planDemoCleanup(Map db, Map demoDb, {required Map<String, dynamic> fpFields}) {
+Map<String, dynamic> planDemoCleanup(Map db, Map demoDb, {required Map<String, dynamic> fpFields, required Map<String, String> T}) {
   final cleaned = Map<String, dynamic>.from(db);
   final removed = <String, dynamic>{};
   // ids של ישויות-אב שהוסרו — לצורך מפל
@@ -18,12 +18,12 @@ Map<String, dynamic> planDemoCleanup(Map db, Map demoDb, {required Map<String, d
     final demo = demoDb[ent];
     if (cur is! List || demo is! List || demo.isEmpty) continue;
     final fields = fpFields[ent]!;
-    final demoFps = <String>{for (final r in demo) _fingerprint(r, fields)};
+    final demoFps = <String>{for (final r in demo) _fingerprint(r, ((fields) as List<String>))};
     final keep = <dynamic>[];
     final drop = <dynamic>[];
     final ids = <String>{};
     for (final r in cur) {
-      if (demoFps.contains(_fingerprint(r, fields))) {
+      if (demoFps.contains(_fingerprint(r, ((fields) as List<String>)))) {
         drop.add(r);
         final id = _jsStrOrEmpty(r is Map ? r['id'] : null);
         if (id.isNotEmpty) ids.add(id);
@@ -43,7 +43,7 @@ Map<String, dynamic> planDemoCleanup(Map db, Map demoDb, {required Map<String, d
       removedIds[ent] = ids;
       removed[ent] = <String, dynamic>{
         'count': drop.length,
-        'names': [for (final r in _take(drop, 8)) _nameOf(r)],
+        'names': [for (final r in _take(drop, 8)) _nameOf(r, T)],
       };
     }
   }
@@ -69,7 +69,7 @@ Map<String, dynamic> planDemoCleanup(Map db, Map demoDb, {required Map<String, d
       final existing = (prevEntry?['names'] as List?) ?? const [];
       final names = _take(<dynamic>[
         ...existing,
-        for (final r in _take(drop, 8)) _nameOf(r),
+        for (final r in _take(drop, 8)) _nameOf(r, T),
       ], 8);
       removed[ent] = <String, dynamic>{
         'count': prev + drop.length,
@@ -111,12 +111,12 @@ String _fingerprint(dynamic rec, List<String> fields) {
   return fields.map((f) => _jsStrOrEmpty(rec is Map ? rec[f] : null)).join(_sep);
 }
 
-String _nameOf(dynamic rec) {
+String _nameOf(dynamic rec, Map<String, String> T) {
   final m = rec is Map ? rec : const {};
   // JS: rec?.name ?? rec?.title ?? rec?.id ?? '' — ?? תופס רק null/undefined.
   final picked = m['name'] ?? m['title'] ?? m['id'] ?? '';
   final s = _jsStr(picked).trim();
-  return s.isEmpty ? '(ללא שם)' : s;
+  return s.isEmpty ? T['k33']! : s;
 }
 
 /// שקע-`String(x ?? '')`: null/undefined ⇒ '', אחרת String(x).

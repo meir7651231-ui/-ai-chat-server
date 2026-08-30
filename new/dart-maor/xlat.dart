@@ -4,6 +4,11 @@
 // ‏LinkedHashSet (דדופ שומר-הופעה-ראשונה); ‏!nq = truthiness (חוק-7: ''/null כוזבים).
 // שקע: norm — פונקציית-נרמול מוזרקת (חוט לא מכיר חוט).
 
+
+/// ‏truthiness של JS (חוק 7): '' / 0 / -0 / NaN / null / false כוזבים. (הוזרק ע"י מתקן-ההסגר)
+bool _rqTruthy(dynamic v) =>
+    !(v == null || v == false || v == '' || (v is num && (v == 0 || v.isNaN)));
+
 bool _falsy(dynamic v) =>
     v == null || v == false || v == '' || (v is num && (v == 0 || v.isNaN));
 
@@ -13,8 +18,8 @@ List<dynamic> expandQuery(dynamic q, dynamic Function(dynamic) norm, {required M
   if (_falsy(nq)) return out;
   for (final entry in xlatTable.entries) {
     if (norm(entry.key) == nq) {
-      out.addAll(entry.value);
-    } else if (entry.value.any((a) => norm(a) == nq)) {
+      out.addAll(((entry.value) as Iterable<dynamic>));
+    } else if (_rqTruthy(entry.value.any((a) => norm(a) == nq))) {
       out.add(entry.key);
     }
   }

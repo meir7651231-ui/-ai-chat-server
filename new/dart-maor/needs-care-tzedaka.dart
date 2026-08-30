@@ -43,24 +43,24 @@ List<Map<String, dynamic>> needsCare(
   final isoOf = sockets['isoOf'];
 
   final boxTerm =
-      config != null ? termOf(config, 'entity.tzBox', 'קופה') : term('kvph');
+      config != null ? termOf(config, 'entity.tzBox', term('kvph')) : term('kvph');
   final out = <Map<String, dynamic>>[];
 
-  for (final b in staleBoxes(db['tzBoxes'], todayIso)) {
+  for (final b in (staleBoxes(db['tzBoxes'], todayIso) as Iterable)) {
     final last = lastCollectionIso(b);
     out.add({
       'kind': 'stale',
       'id': b['id'],
       'label': boxTerm + ' ' + b['num'].toString() + term('la-rvknh-mzmn'),
       'hint': _truthy(last)
-          ? term('rykvn-achrvn') + last
+          ? term('rykvn-achrvn') + (last as String)
           : term('mavlm-la-rvknh-maz') +
               (_truthy(b['since']) ? b['since'].toString() : '—') +
               ')',
     });
   }
 
-  for (final b in db['tzBoxes'].where((x) => x['status'] == 'lost')) {
+  for (final b in (db['tzBoxes'] as List).where((x) => x['status'] == 'lost')) {
     out.add({
       'kind': 'lost',
       'id': b['id'],
@@ -69,8 +69,8 @@ List<Map<String, dynamic>> needsCare(
     });
   }
 
-  for (final c in db['tzCoordinators'].where((x) => _falsy(x['active']))) {
-    final holding = coordinatorBoxes(db['tzBoxes'], c['id'])
+  for (final c in (db['tzCoordinators'] as List).where((x) => _falsy(x['active']))) {
+    final holding = (coordinatorBoxes(db['tzBoxes'], c['id']) as Iterable)
         .where((b) => b['status'] == 'home')
         .length;
     if (holding > 0) {
@@ -90,15 +90,15 @@ List<Map<String, dynamic>> needsCare(
   final soon = DateTime(soonBase.year, soonBase.month, soonBase.day + 14,
       soonBase.hour, soonBase.minute, soonBase.second);
   final soonIso = isoOf(soon);
-  for (final p in db['tzCampaigns'].where((x) =>
+  for (final p in (db['tzCampaigns'] as List).where((x) =>
       _truthy(x['active']) &&
       _truthy(x['end']) &&
       (x['end'] as String).compareTo(todayIso) >= 0 &&
-      (x['end'] as String).compareTo(soonIso) <= 0)) {
+      (x['end'] as String).compareTo(((soonIso) as String)) <= 0)) {
     out.add({
       'kind': 'campaignEnding',
       'id': p['id'],
-      'label': term('hmbtsa') + p['name'] + term('mstyym-b') + p['end'],
+      'label': term('hmbtsa') + (p['name'] as String) + term('mstyym-b') + (p['end'] as String),
       'hint': term('lskm-vlsgvr'),
     });
   }

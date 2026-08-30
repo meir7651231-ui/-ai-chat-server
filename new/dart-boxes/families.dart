@@ -1,3 +1,6 @@
+import '../dart-data-maor/finder-axis-value-sockets.dart' as skb_fav;
+import '../dart-data-maor/finder-axes-sockets.dart' as skb_fax;
+import '../dart-data-maor/fam-history-of-sockets.dart' as skb_fho;
 import '../dart-data-maor/tier-of-terms.dart' as td_tier_of;
 import '../dart-data-maor/finder-axes-terms.dart';
 // 📦 קופסת-חיבורים · families (Dart) — מחווטת 22 אטומי-Dart. מקבילה ל-new/boxes/families.mjs.
@@ -68,6 +71,7 @@ String _wiredFinderAxisValue(dynamic db, Map<String, dynamic> f, String axis, [d
       tierOf: _tierOfMap,
       famLiveEnrollments: _famLiveSocket,
       STATUS_META: sm.statusMeta,
+      T2: skb_fav.finderAxisValue_T2,
     );
 
 // finderAxisValue כשקע ל-finderMatches (החתימה: dynamic Function(Map,dynamic,dynamic)).
@@ -85,10 +89,10 @@ String finderAxisValue(dynamic db, Map<String, dynamic> f, String axis, [dynamic
     _wiredFinderAxisValue(db, f, axis, config);
 List<dynamic> finderMatches(dynamic db, Map<dynamic, dynamic> locks) =>
     fmx.finderMatches(db as Map<dynamic, dynamic>, locks, _favForMatches);
-List<List<String>> finderAxes(Map<String, dynamic> config) => fax.finderAxes(config, _termOfStr, term: (k)=>kTerms[k]!);
+List<List<String>> finderAxes(Map<String, dynamic> config) => fax.finderAxes(config, _termOfStr, term: (k)=>kTerms[k]!, T: skb_fax.finderAxes_T);
 List<Map<String, dynamic>> famHistoryOf(Map<String, dynamic> db, Map<String, dynamic> fam,
         [Map<String, dynamic>? config]) =>
-    fho.famHistoryOf(db, fam, config ?? _defaultConfig, _termOfHist);
+    fho.famHistoryOf(db, fam, config ?? _defaultConfig, _termOfHist, skb_fho.famHistoryOf_T);
 Map<String, dynamic> maritalChipStyle(String status) => mcs.maritalChipStyle(status, cs.chipStyle);
 
 // חוטים בלי-שקעים — נבחרים כמות-שהם (החיווט = בחירת-האטום בלבד):
