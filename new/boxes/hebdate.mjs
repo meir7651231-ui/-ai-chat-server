@@ -44,11 +44,11 @@ const isoOf = (d) => d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2
 
 // ── חיווט: המרה עברי→לועזי כששם-החודש בשם-Intl — סריקת ~440 ימים מהעוגן (hebdate.ts:65-75) ──
 const hebToIsoEn = (day, monthEn, hebYear) => {
-  if (!Number.isInteger(day) || day < 1 || day > 30) return null;
-  if (!Number.isInteger(hebYear) || hebYear < 4000 || hebYear > 7000) return null;
+  if (!Number.isInteger(day) || day < 1 || day > HEB_CAL.longLen) return null;
+  if (!Number.isInteger(hebYear) || hebYear < HEB_CAL.yearMin || hebYear > HEB_CAL.yearMax) return null;
   const gy = hebYear - HEB_CAL.hebYearOffset; // 1 באוגוסט של השנה הזו קודם תמיד לא׳ תשרי של hebYear
   for (let i = 0; i < HEB_CAL.scanWindowDays; i++) {
-    const d = new Date(gy, 7, 1 + i, 12); // צהריים — חסין להיסטי שעון קיץ
+    const d = new Date(gy, 7, 1 + i, HEB_CAL.noonHour); // צהריים — חסין להיסטי שעון קיץ
     const p = hebParts(d);
     if (p.year === hebYear && p.month === monthEn && p.day === day) return isoOf(d);
   }
@@ -76,11 +76,8 @@ export const hebToIso = (day, monthHe, hebYear) => hebToIsoAtom(day, monthHe, he
 /** לועזי→עברי: '2026-08-06' → {day:23, monthHe:'אב', year:5786} | null. (hebdate.ts:107-115) */
 export const isoToHebParts = (iso) => isoToHebPartsAtom(iso, hebParts, monthHeOf);
 
-/** מילון-החודשים המוכרים (שמות-Intl, כולל 'Adar' + 'Adar I/II') — הכרעת-קופסה. (hebdate.ts:124) */
-export const KNOWN_MONTHS_EN = new Set([
-  'Tishri', 'Heshvan', 'Kislev', 'Tevet', 'Shevat', 'Adar', 'Adar I', 'Adar II',
-  'Nisan', 'Iyar', 'Sivan', 'Tamuz', 'Av', 'Elul',
-]);
+/** מילון-החודשים המוכרים (שמות-Intl, כולל 'Adar' + 'Adar I/II') — חי כדאטה ב-HEB_CAL. (hebdate.ts:124) */
+export const KNOWN_MONTHS_EN = new Set(HEB_CAL.knownMonthsEn);
 
 /** ולידציית-ריצה: סריקת שנה עברית ⇒ שמות-חודשי-Intl לא-מוכרים (ריק = תקין). (hebdate.ts:125-137) */
 export const validateHebMonthNames = (hebYear = hebYearNow()) =>
@@ -90,7 +87,7 @@ export const validateHebMonthNames = (hebYear = hebYearNow()) =>
  *  במקור רץ בטעינת-המודול (hebdate.ts:139-143) — כאן שקע-מחווט ללוח-האם. */
 export const cldrGuard = (now = new Date(), warn = console.warn) => {
   if (!KNOWN_MONTHS_EN.has(hebParts(now).month)) {
-    warn('⚠ שם חודש עברי לא-צפוי מ-Intl — ייתכן שינוי CLDR שישבור המרות תאריך. הריצו validateHebMonthNames().');
+    warn(HEB_CAL.cldrWarn);
     return false;
   }
   return true;

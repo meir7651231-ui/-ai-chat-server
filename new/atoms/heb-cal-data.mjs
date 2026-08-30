@@ -23,5 +23,11 @@ export function hebCalData() { return {
   names: ['ניסן', 'אייר', 'סיוון', 'תמוז', 'אב', 'אלול', 'תשרי', 'חשוון', 'כסלו', 'טבת', 'שבט', 'אדר', 'אדר ב׳'],
   leapName12: 'אדר א׳',
   greg: { yearDays: 365, c4: 4, c100: 100, c400: 400, mA: 367, mB: 362, mC: 12, leapAdj: -1, plainAdj: -2 },
+  // ── קלט/תצוגה תאריך-עברי (קופסת hebdate) — גבולות-ולידציה, שעת-סריקה ושמות-Intl ──
+  yearMin: 4000, yearMax: 7000,                        // גבולות שנה-עברית סבירה לסריקה
+  noonHour: 12,                                        // צהריים — חסין להיסטי שעון-קיץ בסריקה
+  knownMonthsEn: ['Tishri', 'Heshvan', 'Kislev', 'Tevet', 'Shevat', 'Adar', 'Adar I', 'Adar II',
+    'Nisan', 'Iyar', 'Sivan', 'Tamuz', 'Av', 'Elul'], // מילון-החודשים המוכר לשער-ה-CLDR (Intl)
+  cldrWarn: '⚠ שם חודש עברי לא-צפוי מ-Intl — ייתכן שינוי CLDR שישבור המרות תאריך. הריצו validateHebMonthNames().',
 }; }
 export const HEB_CAL = hebCalData();

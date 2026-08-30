@@ -1,11 +1,9 @@
 # 🔬 ממצאי טוהר-עומק (הכרעה 19) — דאטה בתוך מנגנון
 
-נסרקו אטומי-מנגנון ב-new/atoms · new/boxes · הפרות: 33
+נסרקו אטומי-מנגנון ב-new/atoms · new/boxes · הפרות: 31
 
 | אטום | ציון | עברית | טבלאות | מחרוזות-דומיין | מספרי-קסם |
 |---|---|---|---|---|---|
-| new/boxes/tour.mjs | 24 | 👋 הדמיה מלאה — המערכת מדגימה  · סטטיסטיקות חיות — כל אריח לחיץ · מדד אמינות · ⌘K — חיפוש חכם מכל מקום | — | home · home · home · families | — |
-| new/boxes/hebdate.mjs | 16 | ⚠ שם חודש עברי לא-צפוי מ-Intl  | — | Tishri · Heshvan · Kislev · Tevet | 30 4000 7000 12 |
 | new/boxes/lib-pwa.mjs | 9 | — | — | shell.pwa · #faf7f2 · image/png · (display-mode: standalone) | 12 |
 | new/boxes/net-check.mjs | 9 | — | — | netcheck · netcheck= · site · /version.json? | 8000 |
 | new/boxes/receipt.mjs | 9 | — | — | text/plain;charset=utf-8 · receipt- · .txt · iframe | 10 |
