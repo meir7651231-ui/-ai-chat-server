@@ -1,7 +1,14 @@
 {
   "_note": "תפקיד-צורני משם-מחלקה: תבנית-רגקס ⇒ תפקיד; הראשונה-שפוגעת מנצחת. דאטה — לא מנגנון.",
   "rules": [
-    { "pattern": "Aurora|Motion|Glow|Particle|Pulse|Shimmer|Parallax|Confetti", "role": "aurora" },
+    { "pattern": "Aurora", "role": "aurora" },
+    { "pattern": "Particle", "role": "particles" },
+    { "pattern": "Glow|Pulse", "role": "glow" },
+    { "pattern": "Shimmer", "role": "shimmer" },
+    { "pattern": "Sweep", "role": "sweep" },
+    { "pattern": "Parallax|Tilt", "role": "parallax" },
+    { "pattern": "Generative", "role": "canvas" },
+    { "pattern": "Confetti", "role": "confetti" },
     { "pattern": "Switch", "role": "switch" },
     { "pattern": "Number|Stepper|Counter", "role": "number" },
     { "pattern": "Validated|TextRow|TextField|Input|Field", "role": "textfield" },
