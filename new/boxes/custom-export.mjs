@@ -76,20 +76,10 @@ import { SUP_TIER_T as __d_supTier_SUP_TIER_T } from '../atoms/sup-tier-strings.
 const supTier = (...a) => __pure_supTier(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_supTier_SUP_TIER_T);
 import { EV_META } from '../atoms/ev-meta.mjs';
 import { DAY_NAMES } from '../atoms/day-names.mjs';
+import { NAV_MODULE_KEYS } from '../atoms/nav-module-keys.mjs';
 
 // ── הכרעות-הקופסה (חיווט-הצבה, verbatim מהמקור) ──
 // תשעת מודולי-הניווט הניתנים-לכיבוי — maor/src/lib/config.ts:20-30
-const NAV_MODULE_KEYS = [
-  'families',
-  'courses',
-  'calendar',
-  'diary',
-  'supporters',
-  'reports',
-  'tzedaka',
-  'shop',
-  'shop7',
-];
 // אירועים החוזרים שנתית לפי התאריך העברי — maor/src/types/domain.ts:363-367
 const HEBREW_RECURRING = new Set(['memorial', 'anniversary', 'bday']);
 

@@ -3,6 +3,7 @@
  *  amountInWords = שקע-שכן מוזרק (סטאב, כמו בבדיקת אטום receipt-lines) — ראה כותרת-הקופסה. */
 import * as R from './receipt.mjs';
 import { readFileSync } from 'node:fs';
+import { NAV_MODULE_KEYS } from '../atoms/nav-module-keys.mjs';
 let f = 0;
 const eq = (got, want, msg) => { if (got !== want) { console.error(`✗ ${msg}: ${JSON.stringify(got)} ≠ ${JSON.stringify(want)}`); f = 1; } };
 const ok = (c, msg) => { if (!c) { console.error('✗ ' + msg); f = 1; } };
@@ -129,7 +130,7 @@ ok(src.includes('`receipt-${o.rid}.txt`'), 'מגן: שם-קובץ verbatim');
 ok(src.includes('const REVOKE_MS = 5000;'), 'מגן: revoke 5000');
 ok(src.includes('const FRAME_MS = 60_000;'), 'מגן: frame 60000');
 // מילון NAV_MODULE_KEYS (9 מודולי-ניווט) + כלל-הצהריים
-ok(src.includes("const NAV_MODULE_KEYS = ['families', 'courses', 'calendar', 'diary', 'supporters', 'reports', 'tzedaka', 'shop', 'shop7'];"), 'מגן: NAV_MODULE_KEYS 9-מודולים verbatim');
+ok(JSON.stringify(NAV_MODULE_KEYS) === '["families","courses","calendar","diary","supporters","reports","tzedaka","shop","shop7"]', 'מגן: NAV_MODULE_KEYS 9-מודולים verbatim (הכרעה 19: על ערך-הדאטה)');
 ok(src.includes("'T12:00:00'"), 'מגן: hebrewLocaleDate צהריים-מקומי');
 
 if (f) process.exit(1);

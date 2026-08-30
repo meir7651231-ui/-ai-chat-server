@@ -60,6 +60,7 @@ import { HEB_PARTS_T as __d_hebParts_HEB_PARTS_T } from '../atoms/heb-parts-stri
 const hebParts = (...a) => __pure_hebParts(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_hebParts_HEB_PARTS_T);
 import { guardExport as guardExportX } from '../atoms/guard-export.mjs';
 import { RECEIPT_TERMS } from '../atoms/receipt-terms.mjs';
+import { NAV_MODULE_KEYS } from '../atoms/nav-module-keys.mjs';
 
 // ── חיווט: תאריך-עברי-מלא (gem/gemYear/hebParts שוקעו לתוך heb-date-full) ──
 const gemYear = (y) => gemYearX(y, gem);
@@ -72,7 +73,6 @@ const hebrewLocaleDate = (iso) => {
 };
 
 // ── חיווט: חוזה-הדגלים — תשעת מודולי-הניווט + moduleOn שוקעו לתוך feature-on (config.ts:20-30) ──
-const NAV_MODULE_KEYS = ['families', 'courses', 'calendar', 'diary', 'supporters', 'reports', 'tzedaka', 'shop', 'shop7'];
 const featureOn = (cfg, key) => featureOnX(cfg, key, NAV_MODULE_KEYS, moduleOn);
 
 // ── שקע-שכן amountInWords: ברירת-מחדל זורקת (רק ענף-§46 קורא לו; ראה כותרת) ──

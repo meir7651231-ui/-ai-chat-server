@@ -12,10 +12,10 @@
 | new/boxes/hebdate.mjs | 18 | ⚠ שם חודש עברי לא-צפוי מ-Intl  | — | Tishri · Heshvan · Kislev · Tevet | 30 4000 7000 3761 440 12 |
 | new/atoms/schedule-clash-text.mjs | 16 | ראשון · שני · שלישי · רביעי | — | — | — |
 | new/boxes/navhist.mjs | 16 | ↩ חזרה · חזרה למסך הקודם | — | families · families · courses · courses | — |
-| new/boxes/custom-export.mjs | 15 | — | NAV_MODULE_KEYS = [ 'families' | families · courses · calendar · diary | 3761 440 12 30 |
-| new/boxes/receipt.mjs | 14 | — | NAV_MODULE_KEYS = ['families', | families · courses · calendar · diary | 10 5000 60000 |
 | new/boxes/pricing.mjs | 13 | — | DEFAULT_INTEGRATION_PRICES = { | maor_prices · subscription | 60 90 50 40 90 30 |
 | new/boxes/cloud-diff.mjs | 11 | — | META_KEYS = [ 'orgName', 'orgS | orgName · orgSite · orgDonate · orgGoal | — |
+| new/boxes/receipt.mjs | 11 | — | — | text/plain;charset=utf-8 · receipt- · .txt · iframe | 10 5000 60000 |
+| new/boxes/custom-export.mjs | 10 | — | — | memorial · anniversary · bday | 3761 440 12 30 |
 | new/boxes/lib-pwa.mjs | 9 | — | — | shell.pwa · application/manifest+json · rtl · standalone | 12 |
 | new/boxes/net-check.mjs | 9 | — | — | netcheck · netcheck= · site · /version.json? | 8000 |
 | new/boxes/theme.mjs | 8 | — | — | light · --c-ink · --c-soft · --c-faint | — |

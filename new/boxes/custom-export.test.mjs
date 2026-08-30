@@ -78,9 +78,10 @@ if (open.length !== 4) bad('טווח-פתוח: ' + (open.length - 1) + ' ≠ 3 (
 
 /* 🛡 מגן-הכרעה: הכרעות-הקופסה verbatim במקור-הקופסה (דפוס theme.test) */
 import { readFileSync } from 'node:fs';
+import { NAV_MODULE_KEYS } from '../atoms/nav-module-keys.mjs';
 const src = readFileSync(new URL('./custom-export.mjs', import.meta.url), 'utf8');
 for (const m of ['families', 'courses', 'calendar', 'diary', 'supporters', 'reports', 'tzedaka', 'shop', 'shop7'])
-  if (!src.includes(`'${m}',`)) bad('מגן: NAV_MODULE_KEYS חסר ' + m);
+  if (!NAV_MODULE_KEYS.includes(m)) bad('מגן: NAV_MODULE_KEYS חסר ' + m);   // הכרעה 19: המגן על ערך-הדאטה
 if (!src.includes("new Set(['memorial', 'anniversary', 'bday'])")) bad('מגן: HEBREW_RECURRING שונה');
 if (!src.includes('hebYear - 3761') || !src.includes('i < 440')) bad('מגן: עוגני-scanHebYear שונו');
 if (!src.includes('supScoreAtom(sp, rate, nowMs, supTotalIls, supLast, supCount)')) bad('מגן: שקע-nowMs של supScore שונה');
