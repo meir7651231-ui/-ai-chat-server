@@ -1,8 +1,8 @@
 {
  "counts": {
   "widgets": 381,
-  "functions": 438,
-  "data": 775
+  "functions": 445,
+  "data": 794
  },
  "widgets": [
   {
@@ -7765,6 +7765,89 @@
    "shelf": "new/dart-maor"
   },
   {
+   "name": "cycleCarry",
+   "sig": "int cycleCarry(int n, int base, int p0, int q, int parts)",
+   "ret": "int",
+   "params": [
+    {
+     "type": "int",
+     "name": "n"
+    },
+    {
+     "type": "int",
+     "name": "base"
+    },
+    {
+     "type": "int",
+     "name": "p0"
+    },
+    {
+     "type": "int",
+     "name": "q"
+    },
+    {
+     "type": "int",
+     "name": "parts"
+    }
+   ],
+   "he": [
+    "מצטבר",
+    "מחזורים",
+    "עם",
+    "שארית",
+    "נגררת",
+    "מנגנון",
+    "עיוור",
+    "אפס",
+    "קבועים"
+   ],
+   "file": "cycle-carry.dart",
+   "shelf": "new/dart-maor"
+  },
+  {
+   "name": "cycleHit",
+   "sig": "bool cycleHit(int i, int a, int b, int m, int t)",
+   "ret": "bool",
+   "params": [
+    {
+     "type": "int",
+     "name": "i"
+    },
+    {
+     "type": "int",
+     "name": "a"
+    },
+    {
+     "type": "int",
+     "name": "b"
+    },
+    {
+     "type": "int",
+     "name": "m"
+    },
+    {
+     "type": "int",
+     "name": "t"
+    }
+   ],
+   "he": [
+    "פגיעת",
+    "מחזור",
+    "לפי",
+    "שארית",
+    "מול",
+    "סף",
+    "מנגנון",
+    "עיוור",
+    "אפס",
+    "קבועים",
+    "אפס",
+    "משמעות"
+   ],
+   "file": "cycle-hit.dart",
+   "shelf": "new/dart-maor"
+  },
+  {
    "name": "dateInRange",
    "sig": "bool dateInRange(String iso, String? fromIso, String? toIso)",
    "ret": "bool",
@@ -8642,6 +8725,30 @@
    "shelf": "new/dart-maor"
   },
   {
+   "name": "hebMonthHeWired",
+   "sig": "String hebMonthHeWired(DateTime? d)",
+   "ret": "String",
+   "params": [
+    {
+     "type": "DateTime?",
+     "name": "d"
+    }
+   ],
+   "he": [
+    "קופסה",
+    "חיווט",
+    "לוח",
+    "עברי",
+    "מלבנים",
+    "עיוורות",
+    "דאטה",
+    "כרעת",
+    "טוהר"
+   ],
+   "file": "heb-cal-box.dart",
+   "shelf": "new/dart-maor"
+  },
+  {
    "name": "hebMonthHe",
    "sig": "String hebMonthHe(DateTime? d)",
    "ret": "String",
@@ -9487,6 +9594,42 @@
     "מחרוזות"
    ],
    "file": "levenshtein.dart",
+   "shelf": "new/dart-maor"
+  },
+  {
+   "name": "linCycles",
+   "sig": "int linCycles(int n, int a, int b, int c)",
+   "ret": "int",
+   "params": [
+    {
+     "type": "int",
+     "name": "n"
+    },
+    {
+     "type": "int",
+     "name": "a"
+    },
+    {
+     "type": "int",
+     "name": "b"
+    },
+    {
+     "type": "int",
+     "name": "c"
+    }
+   ],
+   "he": [
+    "מונה",
+    "מחזורים",
+    "ליניארי",
+    "רצפת",
+    "חלוקה",
+    "מנגנון",
+    "עיוור",
+    "אפס",
+    "קבועים"
+   ],
+   "file": "lin-cycles.dart",
    "shelf": "new/dart-maor"
   },
   {
@@ -10502,6 +10645,37 @@
     "טלפון"
    ],
    "file": "phone-region.dart",
+   "shelf": "new/dart-maor"
+  },
+  {
+   "name": "pickName",
+   "sig": "String pickName(List<String> names, int i)",
+   "ret": "String",
+   "params": [
+    {
+     "type": "List<String>",
+     "name": "names"
+    },
+    {
+     "type": "int",
+     "name": "i"
+    }
+   ],
+   "he": [
+    "בחירה",
+    "מטבלה",
+    "לפי",
+    "מקום",
+    "או",
+    "ריק",
+    "מנגנון",
+    "עיוור",
+    "טבלה",
+    "דאטה",
+    "של",
+    "קורא"
+   ],
+   "file": "pick-name.dart",
    "shelf": "new/dart-maor"
   },
   {
@@ -11896,6 +12070,46 @@
    "shelf": "new/dart-maor"
   },
   {
+   "name": "spanCorrection",
+   "sig": "int spanCorrection(int prev, int cur, int next, int hi, int lo)",
+   "ret": "int",
+   "params": [
+    {
+     "type": "int",
+     "name": "prev"
+    },
+    {
+     "type": "int",
+     "name": "cur"
+    },
+    {
+     "type": "int",
+     "name": "next"
+    },
+    {
+     "type": "int",
+     "name": "hi"
+    },
+    {
+     "type": "int",
+     "name": "lo"
+    }
+   ],
+   "he": [
+    "תיקון",
+    "מרווחים",
+    "קדימה",
+    "ואחורה",
+    "מול",
+    "שני",
+    "ספים",
+    "מנגנון",
+    "עיוור"
+   ],
+   "file": "span-correction.dart",
+   "shelf": "new/dart-maor"
+  },
+  {
    "name": "spotlightBox",
    "sig": "dynamic spotlightBox(dynamic rect, dynamic vw, dynamic vh, [dynamic pad = 10])",
    "ret": "dynamic",
@@ -12054,6 +12268,42 @@
     "נשמר"
    ],
    "file": "start-campaign.dart",
+   "shelf": "new/dart-maor"
+  },
+  {
+   "name": "stepPostpone",
+   "sig": "int stepPostpone(int d, int m, int k, int t)",
+   "ret": "int",
+   "params": [
+    {
+     "type": "int",
+     "name": "d"
+    },
+    {
+     "type": "int",
+     "name": "m"
+    },
+    {
+     "type": "int",
+     "name": "k"
+    },
+    {
+     "type": "int",
+     "name": "t"
+    }
+   ],
+   "he": [
+    "כלל",
+    "דחייה",
+    "צעדי",
+    "לפי",
+    "שארית",
+    "מול",
+    "סף",
+    "מנגנון",
+    "עיוור"
+   ],
+   "file": "step-postpone.dart",
    "shelf": "new/dart-maor"
   },
   {
@@ -20260,6 +20510,101 @@
   {
    "name": "kTerms",
    "file": "guide-sections-of-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalAnchor",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalApproxA",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalLeapA",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalMonthsA",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalCarryBase",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalPostM",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalSpanHi",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalLongMid",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalShortMid",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalShortMonths",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalFlexLong",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalMonthsInLeap",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalShortLen",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalNisan",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalNames",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalLeapName12",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalGregYearDays",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalGregMA",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalGregLeapAdj",
+   "file": "heb-cal-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
