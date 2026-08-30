@@ -18,6 +18,12 @@ const DART = (() => {                                                // פתרו
   return 'dart';                                                     // נפילה ל-PATH (execFileSync יפתור)
 })();
 const FEEDABLE0 = /^(String|dynamic|Object|num|int|double)\??$/;
+// קבוצת-האימות-החי: שמות-פונקציות עם arg0-קבוע שהוכחו-רצים בהרצת-Dart מבודדת (proof-record,
+// מחודש ע"י machtzev/verify-dart-arg0.mjs). חסר-קובץ ⇒ קבוצה-ריקה ⇒ arg0Fixed לא-נספר (שמרני, בלי חלול).
+const ARG0_VERIFIED = (() => {
+  try { return new Set(JSON.parse(fs.readFileSync(path.join(ROOT, 'machtzev/generator/knowledge/dart-arg0-verified.json'), 'utf8'))); }
+  catch { return new Set(); }
+})();
 
 const balance = (s, start) => {
   let d = 1, q = null;
@@ -78,18 +84,19 @@ const tailResolvable = (arg, aliases) => {
 };
 
 /** קציר: fn ⇒ {file, tail, params, imports} עבור מנועי-new/dart ברי-הזנה */
-export function harvestDartTwins(functions) {
+export function harvestDartTwins(functions, { allArg0 = false } = {}) {  // allArg0: עוקף שער-האימות (בוטסטרפ ל-verify)
   const out = new Map();
   for (const f of functions) {
-    if (!SHELVES.has(f.shelf) || !f.params.length || !FEEDABLE0.test(f.params[0].type)) continue;
+    if (!SHELVES.has(f.shelf) || !f.params.length) continue;
     if (out.has(f.name)) continue;
+    const feed0 = FEEDABLE0.test(f.params[0].type);
     const ddir = path.join(ROOT, f.shelf);                          // מדף-הילידים של-האטום (dart / dart-maor)
     const abs = path.join(ddir, path.basename(f.file));
-    if (f.params.length === 1) { out.set(f.name, { file: f.file, abs, tail: [], params: f.params, imports: [] }); continue; }
+    if (feed0 && f.params.length === 1) { out.set(f.name, { file: f.file, abs, tail: [], params: f.params, imports: [] }); continue; }
     // שקע-term יחיד: זנב דטרמיניסטי מאטום-הדאטה של-האטום (<base>-terms.dart · kTerms) —
     // גם כשהבדיקה לא קוראת לפונקציה-העוזרת ישירות (מנוע-ה-AST v3, טיהור-100%).
     const rest = f.params.slice(1);
-    if (rest.every(p => p.name === 'term' && /Function/.test(p.type))) {
+    if (feed0 && rest.every(p => p.name === 'term' && /Function/.test(p.type))) {
       const base = path.basename(f.file).replace(/\.dart$/, '');
       const df = path.join(ROOT, dataDirOf(f.shelf), base + '-terms.dart');
       if (fs.existsSync(df)) {
@@ -109,11 +116,12 @@ export function harvestDartTwins(functions) {
       if (close < 0) continue;
       const args = splitTop(tt.slice(m.index + m[0].length, close));
       if (args.length !== f.params.length) continue;
-      const tail = args.slice(1);
-      const resolved = tail.map(a => tailResolvable(a, aliases));
+      const capture = feed0 ? args.slice(1) : args;
+      const resolved = capture.map(a => tailResolvable(a, aliases));
       if (!resolved.every(r => r.ok)) continue;
       const imports = [...new Map(resolved.flatMap(r => r.deps).map(d => [d.alias, d])).values()];
-      out.set(f.name, { file: f.file, tail, params: f.params, imports });
+      if (feed0) out.set(f.name, { file: f.file, abs, tail: args.slice(1), params: f.params, imports });
+      else if (allArg0 || ARG0_VERIFIED.has(f.name)) out.set(f.name, { file: f.file, abs, arg0Fixed: args[0], tail: args.slice(1), params: f.params, imports });
       break;
     }
   }
@@ -132,7 +140,8 @@ export function runDartBatch(registry, jobs) {
     files.add(r.abs || path.join(ROOT, 'new/dart', path.basename(r.file)));
     for (const d of (r.imports || [])) dataImports.set(d.alias, d.abs);
     const t0 = r.params[0].type.replace(/\?$/, '');
-    const arg0 = (t0 === 'num' || t0 === 'double') ? `(num.tryParse('${esc(input)}') ?? double.nan)`
+    const arg0 = r.arg0Fixed !== undefined ? r.arg0Fixed
+      : (t0 === 'num' || t0 === 'double') ? `(num.tryParse('${esc(input)}') ?? double.nan)`
       : t0 === 'int' ? `(int.tryParse('${esc(input)}') ?? 0)` : `'${esc(input)}'`;
     lines.push(`  try { print('${i}\\u0000' + ${fn}(${[arg0, ...r.tail].join(', ')}).toString()); } catch (_) { print('${i}\\u0000!'); }`);
   });
