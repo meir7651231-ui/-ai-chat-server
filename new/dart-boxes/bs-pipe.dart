@@ -1,3 +1,7 @@
+import '../dart-data/product_systems-data.dart' as tdb_ps;
+import '../dart-data/flow_role-data.dart' as tdb_fr;
+import '../dart-data/is_pipe-data.dart' as tdb_isp;
+import '../dart-data/is_fitting-data.dart' as tdb_isf;
 import '../dart-data/recommended_kit_for_product-terms.dart' as td_recommended_kit_for_product;
 import '../dart-data/estimate_pressure_drop-terms.dart' as td_estimate_pressure_drop;
 import '../dart-data/branch_label-terms.dart' as td_branch_label;
@@ -272,7 +276,7 @@ class PipeBox {
       verifiedSpec: _ecSpec,
       minBoreMm: _minBoreMm,
       isFitting: (cat) =>
-          isf.isFitting(isf.FittingPart(cat), companyCatalogActive: companyCatalogActive),
+          isf.isFitting(isf.FittingPart(cat), companyCatalogActive: companyCatalogActive, fittingCats: tdb_isf.fittingCats, fittingTypes: tdb_isf.fittingTypes),
     );
   }
 
@@ -510,19 +514,20 @@ class PipeBox {
   // ═══ אשכול ה׳ · פרדיקטים ════════════════════════════════════════════════════
 
   /// תפקיד המוצר בנתיב-זרימה: connector / fixture / accessory.
-  fr.FlowRole flowRole(PipeProduct p) => fr.flowRole(p.sku, p.categoryHe);
+  fr.FlowRole flowRole(PipeProduct p) => fr.flowRole(p.sku, p.categoryHe, fixtureCats: tdb_fr.fixtureCats, structuralCats: tdb_fr.structuralCats);
 
   /// האם המוצר הוא צינור (נמכר לפי-מטר).
-  bool isPipe(PipeProduct p) => ip.isPipe(p.categoryHe);
+  bool isPipe(PipeProduct p) => ip.isPipe(p.categoryHe, pipeCats: tdb_isp.pipeCats);
 
   /// האם המוצר הוא אביזר-מחבר (fitting).
   bool isFitting(PipeProduct p) => isf.isFitting(
       isf.FittingPart(p.categoryHe, productType: p.productType),
-      companyCatalogActive: companyCatalogActive);
+      companyCatalogActive: companyCatalogActive,
+      fittingCats: tdb_isf.fittingCats, fittingTypes: tdb_isf.fittingTypes);
 
   /// קבוצת-מערכות-המים שהמוצר משתייך אליהן (אספקה/ניקוז).
   Set<ps.WaterSystem> productSystems(PipeProduct p) =>
-      ps.productSystems(p.categoryHe, endSystemsOf: () => _psEndSystems(p.sku));
+      ps.productSystems(p.categoryHe, endSystemsOf: () => _psEndSystems(p.sku), supplyCats: tdb_ps.supplyCats, drainCats: tdb_ps.drainCats, fixtureCats: tdb_ps.fixtureCats, structuralCats: tdb_ps.structuralCats, allSystems: tdb_ps.allSystems);
 
   Set<ps.WaterSystem>? _psEndSystems(String sku) =>
       _endSystems(sku)?.map((s) => ps.WaterSystem.values.byName(s)).toSet();

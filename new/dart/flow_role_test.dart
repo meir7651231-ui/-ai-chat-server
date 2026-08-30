@@ -1,12 +1,13 @@
 // בדיקת-חוזה · flowRole — מייבאת אך ורק את האטום-שלה (חוק-4).
 // הרצה: dart run --enable-asserts new/dart/flow_role_test.dart
+import '../dart-data/flow_role-data.dart' as td_flow_role;
 import 'flow_role.dart';
 
 // שקע kHotWaterAccessorySkus (מקור:312) — קבוצת-בדיקה.
 const _hw = {'HW-PUMP-25', 'HW-TEE-RECIRC'};
 
 FlowRole _r(String sku, String cat) =>
-    flowRole(sku, cat, hotWaterAccessorySkus: _hw);
+    flowRole(sku, cat, hotWaterAccessorySkus: _hw, fixtureCats: td_flow_role.fixtureCats, structuralCats: td_flow_role.structuralCats);
 
 void _eq(FlowRole got, FlowRole want, String label) {
   if (got != want) throw StateError('FAIL [$label]: got=$got want=$want');

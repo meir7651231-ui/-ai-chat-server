@@ -43,13 +43,21 @@ function proofErrors(box) {
 }
 
 // ── חתימת-אטום: איתור הקובץ-המייצא (שם-קובץ ≠ שם-פונקציה, למשל gem⇐gematria) ──
+const DN = path.join(ROOT, 'new/dart');
+const DND = path.join(ROOT, 'new/dart-data');
+const snake = (fn) => fn.replace(/([a-z0-9])([A-Z])/g, '$1_$2').toLowerCase();
 const sigCache = new Map();
 function atomInfo(fn) {
   if (sigCache.has(fn)) return sigCache.get(fn);
-  const cands = [kebab(fn) + '.dart', ...fs.readdirSync(DM).filter(f => f.endsWith('.dart') && !f.endsWith('_test.dart'))];
+  const cands = [
+    { dir: DM, shelf: 'maor', f: kebab(fn) + '.dart' },
+    { dir: DN, shelf: 'bs', f: snake(fn) + '.dart' },
+    ...fs.readdirSync(DM).filter(f => f.endsWith('.dart') && !f.endsWith('_test.dart')).map(f => ({ dir: DM, shelf: 'maor', f })),
+    ...fs.readdirSync(DN).filter(f => f.endsWith('.dart') && !f.endsWith('_test.dart')).map(f => ({ dir: DN, shelf: 'bs', f })),
+  ];
   let out = null;
-  for (const cand of cands) {
-    const fp = path.join(DM, cand);
+  for (const { dir: cdir, shelf, f: cand } of cands) {
+    const fp = path.join(cdir, cand);
     if (!fs.existsSync(fp)) continue;
     const src = fs.readFileSync(fp, 'utf8');
     const re2 = new RegExp(`(?:^|\\n)([\\w<>,?\\[\\] ]+) ${fn}\\(`, 'g');
@@ -74,7 +82,7 @@ function atomInfo(fn) {
     }
     if (cur.trim()) parts.push(cur.trim());
     const base = cand.replace(/\.dart$/, '');
-    out = { base, camel: base.replace(/-(\w)/g, (_, c) => c.toUpperCase()), params: parts.map(p => p.replace(/=.*$/, '').trim().split(/\s+/).pop()) };
+    out = { base, shelf, camel: base.replace(/-(\w)/g, (_, c) => c.toUpperCase()), params: parts.map(p => p.replace(/=.*$/, '').trim().split(/\s+/).pop()) };
     break;
   }
   sigCache.set(fn, out);
@@ -86,6 +94,11 @@ const atomParams = (fn) => atomInfo(fn)?.params ?? null;
 function socketFor(fn, param) {
   const info = atomInfo(fn);
   if (!info) return null;
+  if (info.shelf === 'bs') {
+    const sf2 = path.join(DND, info.base + '-data.dart');
+    if (fs.existsSync(sf2) && fs.readFileSync(sf2, 'utf8').includes(`${param} =`)) return { shelf: 'bs', file: info.base + '-data.dart', constName: param };
+    return null;
+  }
   const sf = path.join(DD, info.base + '-sockets.dart');
   const cn = `${info.camel}_${param}`;
   if (fs.existsSync(sf) && fs.readFileSync(sf, 'utf8').includes(`${cn} =`)) return { file: info.base + '-sockets.dart', constName: cn };
@@ -93,9 +106,11 @@ function socketFor(fn, param) {
 }
 
 // alias-ייבוא לשקעים בתוך הקופסה (מוסיף import אם צריך)
-function ensureSocketImport(src, sockFile) {
-  const alias = 'skb_' + sockFile.replace(/-sockets\.dart$/, '').replace(/-/g, '_');
-  const line = `import '../dart-data-maor/${sockFile}' as ${alias};`;
+function ensureSocketImport(src, sockFile, shelf) {
+  const alias = (shelf === 'bs' ? 'tdb_' : 'skb_') + sockFile.replace(/-(sockets|data)\.dart$/, '').replace(/-/g, '_');
+  const line = shelf === 'bs'
+    ? `import '../dart-data/${sockFile}' as ${alias};`
+    : `import '../dart-data-maor/${sockFile}' as ${alias};`;
   if (!src.includes(line)) {
     const fi = src.search(/^import /m);
     src = fi >= 0 ? src.slice(0, fi) + line + '\n' + src.slice(fi) : line + '\n' + src;
@@ -122,7 +137,7 @@ function repairBox(box) {
 
   fs.writeFileSync(bp, src);
   let rounds = 0, last = Infinity;
-  while (rounds++ < 30) {
+  while (rounds++ < 150) {
     const errs = proofErrors(box);
     if (!errs.length) { if (DRY) { fs.writeFileSync(bp, orig); } return { ok: true, notes }; }
     // תלות-הסגר ⇒ דילוג כן
@@ -156,7 +171,7 @@ function repairBox(box) {
         for (const pm of missing) {
           const sk = socketFor(fn, pm);
           if (!sk) { okAll = false; notes.push(`יד: ${fn} — אין שקע ל-${pm}`); break; }
-          const r = ensureSocketImport(src, sk.file);
+          const r = ensureSocketImport(src, sk.file, sk.shelf);
           if (r.src !== src) { src = r.src; lines = src.split('\n'); }
           refs.push(`${r.alias}.${sk.constName}`);
         }
@@ -178,7 +193,7 @@ function repairBox(box) {
         const fn = src.slice(s + 1, p).split('.').pop();
         const sk = socketFor(fn, pm);
         if (!sk) { notes.push(`יד: ${fn} — אין שקע שמי ${pm}`); continue; }
-        const r = ensureSocketImport(src, sk.file);
+        const r = ensureSocketImport(src, sk.file, sk.shelf);
         src = r.src;
         const callAt2 = src.indexOf(src.slice(s + 1, p) + '(');
         let d = 0, j = callAt2 + (p - s - 1);
@@ -207,7 +222,7 @@ function repairBox(box) {
         for (const pm of missing) {
           const sk = socketFor(fn, pm);
           if (!sk) { okAll = false; notes.push(`יד: tear-off ${fn} — אין שקע ${pm}`); break; }
-          const r = ensureSocketImport(src, sk.file);
+          const r = ensureSocketImport(src, sk.file, sk.shelf);
           if (r.src !== src) { src = r.src; }
           refs.push(`${r.alias}.${sk.constName}`);
         }
@@ -215,7 +230,9 @@ function repairBox(box) {
         const args = Array.from({ length: wantN }, (_, i) => 'a' + i);
         const pos = src.indexOf(chain, s2 + (src.length - preLen));
         if (pos < 0 || !/[\s,(]/.test(src[pos - 1] ?? ' ')) { notes.push(`יד: tear-off ${chain} — מיקום`); continue; }
-        src = src.slice(0, pos) + `(${args.join(', ')}) => ${chain}(${[...args, ...refs].join(', ')})` + src.slice(pos + chain.length);
+        const info2 = atomInfo(fn);
+        const feed = info2?.shelf === 'bs' ? refs.map((r2, ri) => `${missing[ri]}: ${r2}`) : refs;
+        src = src.slice(0, pos) + `(${args.join(', ')}) => ${chain}(${[...args, ...feed].join(', ')})` + src.slice(pos + chain.length);
         notes.push(`${fn}: tear-off ⇒ סגירת-שקעים`);
         changed = true;
       }
@@ -226,7 +243,7 @@ function repairBox(box) {
   const fin = proofErrors(box);
   if (!fin.length) { if (DRY) fs.writeFileSync(bp, orig); return { ok: true, notes }; }
   fs.writeFileSync(bp, orig);
-  return { ok: false, notes: [...notes, 'לא-הבריא אחרי 30 סבבים'] };
+  return { ok: false, notes: [...notes, 'לא-הבריא אחרי 150 סבבים'] };
 }
 
 const boxes = fs.readdirSync(BOXES).filter(f => f.endsWith('.dart') && !f.endsWith('-proof.dart')).map(f => f.replace(/\.dart$/, ''))

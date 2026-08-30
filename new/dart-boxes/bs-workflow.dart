@@ -1,3 +1,4 @@
+import '../dart-data/wf_stage_label-data.dart' as tdb_wfl;
 import '../dart-data/wf_advance_label-terms.dart';
 // 📦 קופסת-חיבורים · bs-workflow (בנייה-חכמה) — מנוע-ה-workflow של הסטודיו (משפך-שלבים + כללי-סטודיו).
 // חוזה: מקור-האמת buildsmart/app_flutter/lib/logic/workflow_engine.dart + logic/studio/rules_model.dart.
@@ -148,6 +149,7 @@ String wfStageLabel<C>(
     sl.wfStageLabel<C>(
       cfg,
       sl.WfStage.values[s.index],
+      kStageFallback: tdb_wfl.kStageFallback,
       termOf: termOf,
       wfStageKey: (sl.WfStage x) => wfStageKey(_back(x.index)),
     );

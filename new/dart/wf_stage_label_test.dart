@@ -1,5 +1,6 @@
 // בדיקת-חוזה · wfStageLabel — מייבאת אך ורק את האטום-שלה (חוק-4).
 // הרצה: dart run --enable-asserts new/dart/wf_stage_label_test.dart
+import '../dart-data/wf_stage_label-data.dart' as td_wf_stage_label;
 import 'wf_stage_label.dart';
 
 // שקע-wfStageKey אמיתי (verbatim מיפוי-המקור) לצורך הבדיקה.
@@ -25,25 +26,25 @@ void main() {
   const cfg = <String, String>{}; // cfg שקוף — אינו בשימוש פנימי.
 
   // key שנבנה + fallback (echo).
-  _eq(wfStageLabel(cfg, WfStage.intake, termOf: _echo, wfStageKey: _key),
+  _eq(wfStageLabel(cfg, WfStage.intake, termOf: _echo, wfStageKey: _key, kStageFallback: td_wf_stage_label.kStageFallback),
       'K:workflow.stage.intake|F:חדש', '1 intake echo'); n++;
-  _eq(wfStageLabel(cfg, WfStage.prep, termOf: _echo, wfStageKey: _key),
+  _eq(wfStageLabel(cfg, WfStage.prep, termOf: _echo, wfStageKey: _key, kStageFallback: td_wf_stage_label.kStageFallback),
       'K:workflow.stage.prep|F:בהכנה', '2 prep echo'); n++;
-  _eq(wfStageLabel(cfg, WfStage.dispatch, termOf: _echo, wfStageKey: _key),
+  _eq(wfStageLabel(cfg, WfStage.dispatch, termOf: _echo, wfStageKey: _key, kStageFallback: td_wf_stage_label.kStageFallback),
       'K:workflow.stage.dispatch|F:מסירה', '3 dispatch echo'); n++;
 
   // מסלול-fallback: termOf שמחזיר את הערך הניטרלי.
-  _eq(wfStageLabel(cfg, WfStage.ready, termOf: _fallbackOnly, wfStageKey: _key),
+  _eq(wfStageLabel(cfg, WfStage.ready, termOf: _fallbackOnly, wfStageKey: _key, kStageFallback: td_wf_stage_label.kStageFallback),
       'מוכן', '4 ready fallback'); n++;
-  _eq(wfStageLabel(cfg, WfStage.done, termOf: _fallbackOnly, wfStageKey: _key),
+  _eq(wfStageLabel(cfg, WfStage.done, termOf: _fallbackOnly, wfStageKey: _key, kStageFallback: td_wf_stage_label.kStageFallback),
       'הושלם', '5 done fallback'); n++;
 
   // מונח-ארגון קבוע.
-  _eq(wfStageLabel(cfg, WfStage.intake, termOf: (c, k, f) => 'X', wfStageKey: _key),
+  _eq(wfStageLabel(cfg, WfStage.intake, termOf: (c, k, f) => 'X', wfStageKey: _key, kStageFallback: td_wf_stage_label.kStageFallback),
       'X', '6 org term'); n++;
 
   assert(
-      wfStageLabel(cfg, WfStage.intake, termOf: _fallbackOnly, wfStageKey: _key) == 'חדש',
+      wfStageLabel(cfg, WfStage.intake, termOf: _fallbackOnly, wfStageKey: _key, kStageFallback: td_wf_stage_label.kStageFallback) == 'חדש',
       'assert-live guard');
 
   print('OK wfStageLabel: $n asserts passed');

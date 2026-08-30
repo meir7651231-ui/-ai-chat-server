@@ -5,11 +5,11 @@
 // שימוש: node machtzev/ast-purify.mjs <file>   |   --all
 import fs from 'node:fs';
 import path from 'node:path';
-import { execSync } from 'node:child_process';
+import { execSync, execFileSync } from 'node:child_process';
 
 const ROOT = new URL('../new/', import.meta.url).pathname;
-const AST = '/tmp/claude-0/-home-user/65886fc0-dc27-5a35-9058-e6a50b9adaff/scratchpad/asttest';
-const DART = '/tmp/claude-0/-home-user/65886fc0-dc27-5a35-9058-e6a50b9adaff/scratchpad/dart-sdk-dl/dart-sdk/bin';
+const AST = '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/asttest';
+const DART = '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/dart-sdk/bin';
 const env = { ...process.env, PATH: `${DART}:${process.env.PATH}` };
 const DATADIR = { 'dart': 'dart-data', 'dart-maor': 'dart-data-maor', 'atoms': 'atoms-data' };
 
@@ -58,8 +58,8 @@ function purify(rel) {
     if (newEntries.length) fs.writeFileSync(dataAbs, dataSrc0.replace(/\n\};\s*$/, `\n${newEntries.join('\n')}\n};\n`));
     const cwd = path.join(ROOT, '..');
     try {
-      execSync(`dart analyze ${abs} ${dataAbs}`, { cwd, env, stdio: 'pipe' });
-      if (fs.existsSync(testAbs)) execSync(`dart run --enable-asserts ${testAbs}`, { cwd, env, stdio: 'pipe' });
+      execFileSync(`${DART}/dart`, ['analyze', abs, dataAbs], { cwd, env, stdio: 'pipe' });
+      if (fs.existsSync(testAbs)) execFileSync(`${DART}/dart`, ['run', '--enable-asserts', testAbs], { cwd, env, stdio: 'pipe' });
       console.log(`✅ ${rel} — מיזוג-term · +${newEntries.length} שמות ל-${dataRel}`);
       return true;
     } catch (e) { const err = ((e.stdout?.toString() || '') + (e.stderr?.toString() || '') || String(e)).slice(0, 300); restore(); console.log(`↩ ${rel}: מיזוג נכשל — הוחזר.\n   ${err.replace(/\n/g, ' ')}`); return false; }
@@ -98,11 +98,12 @@ function purify(rel) {
   for (const c of consumers) fs.writeFileSync(c.abs, injectNamedArg(imp + c.src0, res.fn, val, true));
 
   const cwd = path.join(ROOT, '..');
-  const restore = () => { fs.writeFileSync(abs, src0); fs.rmSync(dataAbs, { force: true }); if (hasTest) fs.writeFileSync(testAbs, testSrc0); for (const c of consumers) fs.writeFileSync(c.abs, c.src0); };
+  const dataPrev = fs.existsSync(dataAbs) ? fs.readFileSync(dataAbs, 'utf8') : null;
+  const restore = () => { fs.writeFileSync(abs, src0); if (dataPrev === null) fs.rmSync(dataAbs, { force: true }); else fs.writeFileSync(dataAbs, dataPrev); if (hasTest) fs.writeFileSync(testAbs, testSrc0); for (const c of consumers) fs.writeFileSync(c.abs, c.src0); };
   try {
-    execSync(`dart analyze ${abs} ${dataAbs}`, { cwd, env, stdio: 'pipe' });
-    if (hasTest) execSync(`dart run --enable-asserts ${testAbs}`, { cwd, env, stdio: 'pipe' });
-    for (const p of [...new Set(consumers.flatMap(c => c.proofs))]) execSync(`dart run --enable-asserts ${p}`, { cwd, env, stdio: 'pipe' });
+    execFileSync(`${DART}/dart`, ['analyze', abs, dataAbs], { cwd, env, stdio: 'pipe' });
+    if (hasTest) execFileSync(`${DART}/dart`, ['run', '--enable-asserts', testAbs], { cwd, env, stdio: 'pipe' });
+    for (const p of [...new Set(consumers.flatMap(c => c.proofs))]) execFileSync(`${DART}/dart`, ['run', '--enable-asserts', p], { cwd, env, stdio: 'pipe' });
     console.log(`✅ ${rel} — מנוע-מטרות · ${res.count} שמות ל-${dataRel}${hasTest ? ' · בדיקה ✓' : ''}${consumers.length ? ` · ${consumers.length} צרכנים ✓` : ''}`);
     return true;
   } catch (e) { const err = ((e.stdout?.toString() || '') + (e.stderr?.toString() || '') || String(e)).slice(0, 400); restore(); console.log(`↩ ${rel}: אימות נכשל.\n   ${err.replace(/\n/g, '\n   ')}`); return false; }

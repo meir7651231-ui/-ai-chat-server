@@ -3,6 +3,7 @@
 //   מאור:        new/dart-maor/norm-search.dart  (normSearch, dynamic)
 //   בנייה-חכמה:  new/dart/norm_search.dart        (normSearch, String)
 // ירוק ⇒ אותה יכולת-יסוד בדיוק — מועמדת לאטום-משותף יחיד ששתי המערכות מזריקות ממנו.
+import '../dart-data/norm_search-data.dart' as tdb_ns;
 import '../dart-data-maor/norm-search-sockets.dart' as sk_ns;
 import '../dart-maor/norm-search.dart' as maor;
 import '../dart/norm_search.dart' as bs;
@@ -10,7 +11,7 @@ import '../dart/norm_search.dart' as bs;
 int n = 0, fails = 0;
 void same(String input) {
   final a = maor.normSearch(input, sk_ns.normSearch_T);
-  final b = bs.normSearch(input);
+  final b = bs.normSearch(input, kHebrewFinalFold: tdb_ns.kHebrewFinalFold);
   if (a != b) { print('✗ "$input": מאור="$a" ≠ בנייה-חכמה="$b"'); fails++; } else { n++; }
 }
 

@@ -5,11 +5,11 @@
 // שימוש: node machtzev/ast-purify.mjs <file>   |   --all
 import fs from 'node:fs';
 import path from 'node:path';
-import { execSync } from 'node:child_process';
+import { execSync, execFileSync } from 'node:child_process';
 
 const ROOT = new URL('../new/', import.meta.url).pathname;
-const AST = '/tmp/claude-0/-home-user/65886fc0-dc27-5a35-9058-e6a50b9adaff/scratchpad/asttest';
-const DART = '/tmp/claude-0/-home-user/65886fc0-dc27-5a35-9058-e6a50b9adaff/scratchpad/dart-sdk-dl/dart-sdk/bin';
+const AST = '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/asttest';
+const DART = '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/dart-sdk/bin';
 const env = { ...process.env, PATH: `${DART}:${process.env.PATH}` };
 const DATADIR = { 'dart': 'dart-data', 'dart-maor': 'dart-data-maor', 'atoms': 'atoms-data' };
 
@@ -30,7 +30,7 @@ function injectNamedArg(src, fn, val, dotted) {
 }
 
 function runAst(absFile) {
-  const raw = execSync(`dart run ${AST}/ast_dehardcode.dart ${absFile}`, { cwd: AST, env, stdio: ['ignore','pipe','pipe'] }).toString();
+  const raw = execFileSync(`${DART}/dart`, ['run', `${AST}/ast_dehardcode.dart`, absFile], { cwd: AST, env, stdio: ['ignore','pipe','pipe'] }).toString();
   return JSON.parse(raw);
 }
 
@@ -72,16 +72,83 @@ function purify(rel) {
   const val = `(k)=>${alias}.kTerms[k]!`;
   fs.mkdirSync(path.dirname(dataAbs), { recursive: true });
   fs.writeFileSync(dataAbs, dataBody);
+  // הצהרת-const מקומית שערכה קיבל term() ⇒ final (תיקון 30.8)
+  {
+    let s3 = res.source;
+    const reD = /const(\s+\w+\s*=\s*(?:<[^>{]+>)?\s*)([\[{])/g;
+    let out3 = '', i3 = 0, mD;
+    while ((mD = reD.exec(s3))) {
+      const openCh = mD[2], closeCh = openCh === '[' ? ']' : '}';
+      let d3 = 1, j3 = mD.index + mD[0].length, q3 = null;
+      for (; j3 < s3.length && d3; j3++) {
+        const c3 = s3[j3];
+        if (q3) { if (c3 === '\\') j3++; else if (c3 === q3) q3 = null; continue; }
+        if (c3 === "'" || c3 === '"') { q3 = c3; continue; }
+        if (c3 === openCh) d3++;
+        else if (c3 === closeCh) d3--;
+      }
+      if (/\bterm\(/.test(s3.slice(mD.index, j3))) {
+        out3 += s3.slice(i3, mD.index) + 'final' + mD[1] + openCh;
+        i3 = mD.index + mD[0].length;
+      }
+    }
+    res.source = out3 + s3.slice(i3);
+  }
+  // const-בנאי (const ClassName(...)) שקיבל term() ⇒ מפילים את מילת-const (תיקון 30.8)
+  {
+    let s4 = res.source;
+    const reK = /const\s+(?=[A-Z]\w*\s*\()/g;
+    let out4 = '', i4 = 0, mK;
+    while ((mK = reK.exec(s4))) {
+      const po = s4.indexOf('(', mK.index);
+      let d4 = 1, j4 = po + 1, q4 = null;
+      for (; j4 < s4.length && d4; j4++) {
+        const c4 = s4[j4];
+        if (q4) { if (c4 === '\\') j4++; else if (c4 === q4) q4 = null; continue; }
+        if (c4 === "'" || c4 === '"') { q4 = c4; continue; }
+        if (c4 === '(') d4++;
+        else if (c4 === ')') d4--;
+      }
+      if (/\bterm\(/.test(s4.slice(mK.index, j4))) {
+        out4 += s4.slice(i4, mK.index);
+        i4 = mK.index + mK[0].length;
+      }
+    }
+    res.source = out4 + s4.slice(i4);
+  }
+  // const-ליטרל שקיבל term() איננו קבוע עוד — מפילים את מילת-const (תיקון 30.8)
+  {
+    let s2 = res.source, out = '', i2 = 0;
+    const reC = /const\s*(?:<[^>{]+>)?\s*([\[{])/g;
+    let mC;
+    while ((mC = reC.exec(s2))) {
+      const openCh = mC[1], closeCh = openCh === '[' ? ']' : '}';
+      let d2 = 1, j2 = mC.index + mC[0].length, q2 = null;
+      for (; j2 < s2.length && d2; j2++) {
+        const c2 = s2[j2];
+        if (q2) { if (c2 === '\\') j2++; else if (c2 === q2) q2 = null; continue; }
+        if (c2 === "'" || c2 === '"') { q2 = c2; continue; }
+        if (c2 === openCh) d2++;
+        else if (c2 === closeCh) d2--;
+      }
+      if (/\bterm\(/.test(s2.slice(mC.index, j2))) {
+        out += s2.slice(i2, mC.index) + openCh;
+        i2 = mC.index + mC[0].length;
+      }
+    }
+    res.source = out + s2.slice(i2);
+  }
   fs.writeFileSync(abs, res.source);
   if (hasTest) fs.writeFileSync(testAbs, injectNamedArg(imp + testSrc0, res.fn, val, false));
   for (const c of consumers) fs.writeFileSync(c.abs, injectNamedArg(imp + c.src0, res.fn, val, true));
 
   const cwd = path.join(ROOT, '..');
-  const restore = () => { fs.writeFileSync(abs, src0); fs.rmSync(dataAbs, { force: true }); if (hasTest) fs.writeFileSync(testAbs, testSrc0); for (const c of consumers) fs.writeFileSync(c.abs, c.src0); };
+  const dataPrev = fs.existsSync(dataAbs) ? fs.readFileSync(dataAbs, 'utf8') : null;
+  const restore = () => { fs.writeFileSync(abs, src0); if (dataPrev === null) fs.rmSync(dataAbs, { force: true }); else fs.writeFileSync(dataAbs, dataPrev); if (hasTest) fs.writeFileSync(testAbs, testSrc0); for (const c of consumers) fs.writeFileSync(c.abs, c.src0); };
   try {
-    execSync(`dart analyze ${abs} ${dataAbs}`, { cwd, env, stdio: 'pipe' });
-    if (hasTest) execSync(`dart run --enable-asserts ${testAbs}`, { cwd, env, stdio: 'pipe' });
-    for (const p of [...new Set(consumers.flatMap(c => c.proofs))]) execSync(`dart run --enable-asserts ${p}`, { cwd, env, stdio: 'pipe' });
+    execFileSync(`${DART}/dart`, ['analyze', abs, dataAbs], { cwd, env, stdio: 'pipe' });
+    if (hasTest) execFileSync(`${DART}/dart`, ['run', '--enable-asserts', testAbs], { cwd, env, stdio: 'pipe' });
+    for (const p of [...new Set(consumers.flatMap(c => c.proofs))]) execFileSync(`${DART}/dart`, ['run', '--enable-asserts', p], { cwd, env, stdio: 'pipe' });
     console.log(`✅ ${rel} — מנוע-מטרות · ${res.count} שמות ל-${dataRel}${hasTest ? ' · בדיקה ✓' : ''}${consumers.length ? ` · ${consumers.length} צרכנים ✓` : ''}`);
     return true;
   } catch (e) { const err = ((e.stdout?.toString() || '') + (e.stderr?.toString() || '') || String(e)).slice(0, 400); restore(); console.log(`↩ ${rel}: אימות נכשל.\n   ${err.replace(/\n/g, '\n   ')}`); return false; }

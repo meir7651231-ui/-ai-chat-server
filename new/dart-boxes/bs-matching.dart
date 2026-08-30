@@ -2,6 +2,7 @@
 // חוזה: bs-matching.contract.md. מקור-האמת: buildsmart/app_flutter/lib/logic (fuzzy_*).
 // זו הקופסה הראשונה של דומיין-בנייה-חכמה שנכנסת ללוח-האם המאוחד (board.dart).
 // מחווטת אטומי-בנייה-חכמה מ-../dart/. שקע-המדיניות fuzzyTolerance = הכרעת-קופסה (חוק-5).
+import '../dart-data/norm_search-data.dart' as tdb_ns;
 import '../dart/fuzzy_match.dart' as fm;
 import '../dart/fuzzy_name_match.dart' as fnm;
 import '../dart/fuzzy_score.dart' as fs;
@@ -14,7 +15,7 @@ int _fuzzyTolerance(int len) => len >= 4 ? 1 : 0;
 // ── החיווט ──
 bool fuzzyMatch(String query, String candidate) => fm.fuzzyMatch(
       query, candidate,
-      normSearch: ns.normSearch, damerauLevenshtein: dl.damerauLevenshtein, fuzzyTolerance: _fuzzyTolerance,
+      normSearch: (t) => ns.normSearch(t, kHebrewFinalFold: tdb_ns.kHebrewFinalFold), damerauLevenshtein: dl.damerauLevenshtein, fuzzyTolerance: _fuzzyTolerance,
     );
 
 bool fuzzyNameMatch(String query, String candidate) =>
@@ -22,5 +23,5 @@ bool fuzzyNameMatch(String query, String candidate) =>
 
 int fuzzyScore(String query, String candidate) => fs.fuzzyScore(
       query, candidate,
-      normSearch: ns.normSearch, damerauLevenshtein: dl.damerauLevenshtein, fuzzyTolerance: _fuzzyTolerance,
+      normSearch: (t) => ns.normSearch(t, kHebrewFinalFold: tdb_ns.kHebrewFinalFold), damerauLevenshtein: dl.damerauLevenshtein, fuzzyTolerance: _fuzzyTolerance,
     );
