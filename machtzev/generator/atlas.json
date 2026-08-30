@@ -22569,12 +22569,16 @@
   },
   {
    "name": "isSizeToken",
-   "sig": "bool isSizeToken(String w)",
+   "sig": "bool isSizeToken(String w, {required String Function(String) term})",
    "ret": "bool",
    "params": [
     {
      "type": "String",
      "name": "w"
+    },
+    {
+     "type": "String Function(String)",
+     "name": "term"
     }
    ],
    "he": [
@@ -22595,7 +22599,7 @@
   },
   {
    "name": "findAttrSiblings",
-   "sig": "List<LipRow> findAttrSiblings( LipRow p, String word, AttrKind kind, { required List<LipRow> catalog, required List<String> models, required List<String> types, required List<String> subtypes, required List<String> colors, required Set<String> pprMaterials, required Set<String> colorModifiers, required String polyrollBrand, })",
+   "sig": "List<LipRow> findAttrSiblings( LipRow p, String word, AttrKind kind, {required String Function(String) term, required List<LipRow> catalog, required List<String> models, required List<String> types, required List<String> subtypes, required List<String> colors, required Set<String> pprMaterials, required Set<String> colorModifiers, required String polyrollBrand, })",
    "ret": "List<LipRow>",
    "params": [
     {
@@ -22609,6 +22613,10 @@
     {
      "type": "AttrKind",
      "name": "kind"
+    },
+    {
+     "type": "String Function(String)",
+     "name": "term"
     },
     {
      "type": "List<LipRow>",
@@ -22767,12 +22775,16 @@
   },
   {
    "name": "isSizeToken",
-   "sig": "bool isSizeToken(String w)",
+   "sig": "bool isSizeToken(String w, {required String Function(String) term})",
    "ret": "bool",
    "params": [
     {
      "type": "String",
      "name": "w"
+    },
+    {
+     "type": "String Function(String)",
+     "name": "term"
     }
    ],
    "he": [
@@ -22793,12 +22805,16 @@
   },
   {
    "name": "findTypeSiblings",
-   "sig": "List<LipRow> findTypeSiblings( LipRow p, { required List<LipRow> catalog, required List<String> models, required List<String> types, required List<String> subtypes, required List<String> colors, required Set<String> pprMaterials, required Set<String> colorModifiers, required String polyrollBrand, })",
+   "sig": "List<LipRow> findTypeSiblings( LipRow p, {required String Function(String) term, required List<LipRow> catalog, required List<String> models, required List<String> types, required List<String> subtypes, required List<String> colors, required Set<String> pprMaterials, required Set<String> colorModifiers, required String polyrollBrand, })",
    "ret": "List<LipRow>",
    "params": [
     {
      "type": "LipRow",
      "name": "p"
+    },
+    {
+     "type": "String Function(String)",
+     "name": "term"
     },
     {
      "type": "List<LipRow>",
