@@ -29,6 +29,9 @@ for (const f of atlas.functions) if (!uniq.has(f.name)) uniq.set(f.name, f);
 const withHe = [...uniq.values()].filter(f => f.he.length);
 const dartReg = harvestDartTwins(atlas.functions);
 const twins = await buildTwinRegistry([...uniq.values()].filter(f => f.he.length && f.params.length));
+// מנועים מוכחי-חוזה: פונקציות שבדיקת-ה-golden שלהן עברה בהרצת-Dart (ההוכחה החזקה; machtzev/verify-dart-tests.mjs)
+let testProven = new Set();
+try { testProven = new Set(JSON.parse(fs.readFileSync(path.join(HERE, 'generator/knowledge/dart-tests-passing.json'), 'utf8'))); } catch { }
 // תאומי-דאטה: כל אטום-דאטה-JS (מוסכמת-שמות) עם קובץ-Dart תואם
 const jsData = fs.readdirSync(path.join(ROOT, 'new/atoms')).filter(f => /(-strings|-terms|-data|-nums)\.mjs$/.test(f) && !/\.test\.|\.contract\./.test(f));
 const dartData = new Set(fs.readdirSync(path.join(ROOT, 'new/dart-data-maor')).map(f => f.replace(/\.dart$/, '')));
@@ -37,7 +40,7 @@ const dataTwinned = jsData.filter(f => dartData.has(f.replace(/\.mjs$/, ''))).le
 const cur = {
   widgetsFillable: fillable,
   widgetsTotal: atlas.widgets.length,
-  enginesRunnable: new Set([...twins.keys(), ...dartReg.keys()]).size,
+  enginesRunnable: new Set([...twins.keys(), ...dartReg.keys(), ...[...testProven].filter(n => uniq.has(n))]).size,
   enginesTotal: uniq.size,
   essence: withHe.length,
   dataTwinned,
