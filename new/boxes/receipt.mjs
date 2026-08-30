@@ -61,6 +61,7 @@ const hebParts = (...a) => __pure_hebParts(...a, ...Array(Math.max(0, 1 - a.leng
 import { guardExport as guardExportX } from '../atoms/guard-export.mjs';
 import { RECEIPT_TERMS } from '../atoms/receipt-terms.mjs';
 import { NAV_MODULE_KEYS } from '../atoms/nav-module-keys.mjs';
+import { REVOKE_MS, FRAME_MS } from '../atoms/receipt-wiring-data.mjs';
 
 // ── חיווט: תאריך-עברי-מלא (gem/gemYear/hebParts שוקעו לתוך heb-date-full) ──
 const gemYear = (y) => gemYearX(y, gem);
@@ -82,8 +83,6 @@ const AMOUNT_IN_WORDS_MISSING = () => {
 
 // ── הכרעות-המסירה (receipt.ts:150-219) ──
 const BOM = '﻿';
-const REVOKE_MS = 5000;
-const FRAME_MS = 60_000;
 
 // ── חיווט: שער-היציאה (guard-export atom; המצב blocked/notify מוזרק ב-io מלוח-האם) ──
 const guardExport = (io) => guardExportX(io.exportBlocked, io.exportNotify);

@@ -19,12 +19,12 @@ import { PARSE_ANY_DATE_T as __d_parse_any_date_T } from '../atoms/parse-any-dat
 const parseAnyDate = (...a) => __pure_parseAnyDate(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_parse_any_date_T);
 import { guardExport } from '../atoms/guard-export.mjs';
 import { CSVX_TERMS } from '../atoms/csvx-terms.mjs';
+import { REVOKE_MS } from '../atoms/csvx-wiring-data.mjs';
 
 // ── מילון-הקופסה (הכרעות-הצבה, verbatim מ-maor/src/lib/csvx.ts) ──
 // סוג-ה-Blob של CSV עם BOM כדי שאקסל יפתח עברית תקינה. — csvx.ts:30
 const CSV_MIME = CSVX_TERMS.k1;
 // חלון-שחרור ה-object-URL אחרי ה-click. — csvx.ts:33
-const REVOKE_MS = 5000;
 
 // ── החשיפה (ממשק lib/csvx.ts אחד-לאחד — L4) ──
 
