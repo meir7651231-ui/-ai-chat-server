@@ -15,11 +15,14 @@ import { retrieveLogic } from './match.mjs';
 
 const HERE = new URL('.', import.meta.url).pathname;
 const ENTITY_RE = /^\s*(צור\s+)?(ישות|טופס|טבלת)(\s|$)/;
+const ROLE_RE = /^\s*(תפקיד|הרשאת)\s+/;
 const slugify = (i, kind) => `app_${kind}${i}`;
 const heWords = (s) => [...(s || '').matchAll(/[֐-׿][֐-׿״׳]*/g)].map((m) => m[0]).join(' ').slice(0, 30);
 
 function buildApp(specText) {
-  const lines = specText.split(/\n+/).map((l) => l.trim()).filter((l) => l.length > 2);
+  const allLines = specText.split(/\n+/).map((l) => l.trim()).filter((l) => l.length > 2);
+  const roleLines = allLines.filter((l) => ROLE_RE.test(l));
+  const lines = allLines.filter((l) => !ROLE_RE.test(l));
   const screens = [];
   let i = 0;
   for (const line of lines) {
@@ -29,14 +32,7 @@ function buildApp(specText) {
     if (isEntity) {
       kind = 'ent'; slug = slugify(i, kind);
       r = entInterpret(line);
-      // 🔄 workflow: ישות עם שדה-סטטוס ⇒ כפתור קידום-סטטוס (הפעולה שתחווט את
-      // advanceStatus כשהרשומה בהיקף — לא מאלצים wire שגוי על פונקציה לא-מתאימה).
-      if (/סטטוס|מצב/.test(line)) {
-        const hasAdvance = retrieveLogic('קידום סטטוס מצב', 8, false).some((l) => /advance|advanceStatus/i.test(l.name));
-        r.spec = r.spec.replace(/\nבאנר/, `\nכותרת מעבר-סטטוס\nאטום NeonButton קדם סטטוס\nבאנר`);
-        r.workflow = hasAdvance ? 'advanceStatus (מוכן)' : 'כפתור-קידום';
-      }
-      screens.push({ slug, kind, name: r.entity, spec: r.spec, schema: r.schema, workflow: r.workflow || null });
+      screens.push({ slug, kind, name: r.entity, spec: r.spec, schema: r.schema, stages: r.stages || [] });
     } else {
       kind = 'scr'; slug = slugify(i, kind);
       r = nlInterpret(line);
@@ -53,7 +49,17 @@ function buildApp(specText) {
   const hubSpec = hubLines.join('\n');
   fs.writeFileSync(path.join(HERE, 'specs/app_hub.txt'), hubSpec + '\n');
   execFileSync('node', [path.join(HERE, 'genesis-gen.mjs'), 'app_hub', hubSpec], { encoding: 'utf8' });
-  return screens;
+
+  // 🔐 מטריצת-הרשאות: "תפקיד <שם>: <מסכים>" ⇒ תפקיד → אילו מסכים גלויים.
+  const roles = roleLines.map((l) => {
+    const [rn, allow] = l.replace(ROLE_RE, '').split(/\s*:\s*/);
+    const role = heWords(rn);
+    const all = /הכל|כל המסכים/.test(allow || '');
+    const allowed = all ? screens.map((s) => s.slug)
+      : screens.filter((s) => (allow || '').split(/[,\n]/).some((w) => s.name.includes(w.trim()) || w.trim().includes(s.name))).map((s) => s.slug);
+    return { role, all, allowed };
+  });
+  return { screens, roles };
 }
 
 // ── CLI ──
@@ -63,15 +69,24 @@ if (import.meta.url === 'file://' + process.argv[1]) {
   else specText = process.argv.slice(2).join('\n');
   if (!specText.trim()) { console.error('שימוש: node app.mjs "<שורה לכל מסך/ישות>"  |  node app.mjs -f spec.txt'); process.exit(1); }
 
-  const screens = buildApp(specText);
+  const { screens, roles } = buildApp(specText);
   const ents = screens.filter((s) => s.kind === 'ent');
   const scrs = screens.filter((s) => s.kind === 'scr');
+  const wfs = ents.filter((e) => e.stages && e.stages.length >= 2);
   console.log('\n🏗️ ═══ אפליקציה חוללה ═══');
-  console.log(`📦 ${screens.length} מסכים · ${ents.length} ישויות · ${scrs.length} מסכי-UI · 1 לוח-ניווט\n`);
+  console.log(`📦 ${screens.length} מסכים · ${ents.length} ישויות · ${scrs.length} מסכי-UI · ${wfs.length} workflows · ${roles.length} תפקידים · 1 לוח-ניווט\n`);
   console.log('🗂️ ישויות (טופס + טבלה):');
-  for (const e of ents) console.log(`   ${e.name} — ${e.schema.length} שדות${e.workflow ? ` · 🔄 workflow: ${e.workflow}` : ''}`);
+  for (const e of ents) console.log(`   ${e.name} — ${e.schema.length} שדות${e.stages && e.stages.length ? ` · 🔄 ${e.stages.join('›')}` : ''}`);
   console.log('\n📊 מסכי-UI:');
   for (const s of scrs) console.log(`   ${s.name} — ${s.atoms} אטומים`);
+  if (roles.length) {
+    console.log('\n🔐 מטריצת-הרשאות:');
+    for (const r of roles) console.log(`   ${r.role} → ${r.all ? 'כל המסכים' : r.allowed.length + ' מסכים'}`);
+  }
   console.log('\n🧭 לוח-ניווט: app_hub (מקשר את כל ' + screens.length + ' המסכים)');
   console.log('▶ הכל חולל דרך genesis-gen — מתקמפל.');
+  // אינוונטר-פלט מלא (§49) — JSON לצריכה/דמו
+  const inv = { screens: screens.length, entities: ents.map((e) => ({ name: e.name, fields: e.schema.length, stages: e.stages || [] })), uiScreens: scrs.map((s) => s.name), workflows: wfs.length, roles };
+  fs.writeFileSync(path.join(HERE, 'app-inventory.json'), JSON.stringify(inv, null, 1));
+  console.log('📄 אינוונטר: machtzev/generator/app-inventory.json');
 }

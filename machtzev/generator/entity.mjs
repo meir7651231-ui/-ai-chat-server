@@ -34,27 +34,37 @@ const inputAtom = (type, used) => {
 };
 
 export function interpret(text) {
+  // '|' מפריד שדות משלבי-workflow: "ישות X עם <שדות> | שלבים: a, b, c"
+  const [main, stagesPart] = text.split('|');
   // שם-הישות + רשימת-השדות (בלי \b — לא עובד על עברית ב-JS)
-  const body = text.replace(/^\s*(צור|תוסיף|בנה|הוסף)?\s*(ישות|טבלה|טופס)\s+/, '');
+  const body = main.replace(/^\s*(צור|תוסיף|בנה|הוסף)?\s*(ישות|טבלה|טופס)\s+/, '');
   const [namePart, ...rest] = body.split(/\s+עם\s+|\s+שדות[:\s]+|\s*:\s*/);
   const entity = clean(namePart).slice(0, 20) || 'רשומה';
   const fieldsPart = rest.join(' ') || '';
   const fields = fieldsPart.split(/[,\n]|\s+ו(?=[א-ת])/).map((s) => clean(s)).filter((s) => s.length > 1).slice(0, 20);
+  // 🔄 שלבי-workflow (אם ניתנו): שרשרת-סטטוס. בלי '|' ⇒ אין workflow (לא ברירת-מחדל).
+  const stages = stagesPart
+    ? stagesPart.replace(/^\s*(שלבים|סטטוסים|מצבים)[:\s]*/, '').split(/[,\n]|\s*→\s*/).map((s) => heWords(s).join(' ').trim()).filter((s) => s.length > 1).slice(0, 8)
+    : [];
 
   const schema = fields.map((f) => ({ label: f, type: inferType(f) }));
   const used = new Set();
   const lines = [`הירו 🗂️ ${entity} | ישות מורכבת — טופס + טבלה`];
+  // 🔄 workflow: פס-שלבים מתוייג (BreadcrumbTrail labels) — מציג את מסע-הרשומה
+  if (stages.length >= 2) lines.push(`אטום BreadcrumbTrail ${entity}: ${stages.join(' / ')}`);
   // טופס: אטום-קלט פר-שדה
   lines.push(`כותרת טופס ${entity}`);
   for (const s of schema) { const a = inputAtom(s.type, used); used.add(a); s.atom = a; lines.push(`אטום ${a} ${s.label}`); }
-  // כפתור-שמירה + טבלת-רשומות
+  // כפתור-שמירה (+ קידום-שלב אם workflow)
   const btn = retrieve('כפתור שמירה שלח', 2)[0]?.cls || 'NeonButton';
   lines.push(`אטום ${btn} שמירה`);
+  if (stages.length >= 2) lines.push(`אטום NeonButton קדם ל${stages[1]}`);
+  // טבלת-רשומות
   lines.push(`כותרת רשומות ${entity}`);
   lines.push(`אטום DataGrid ${entity}`);
-  lines.push(`באנר ישות ${entity}: ${schema.length} שדות · טופס + טבלה מהמדף`);
+  lines.push(`באנר ישות ${entity}: ${schema.length} שדות${stages.length ? ` · ${stages.length}-שלבי workflow` : ''} · מהמדף`);
 
-  return { spec: lines.join('\n'), entity, schema };
+  return { spec: lines.join('\n'), entity, schema, stages };
 }
 
 // ── CLI (רץ רק בהרצה ישירה, לא ביבוא) ──

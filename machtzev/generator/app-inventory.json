@@ -1,0 +1,88 @@
+{
+ "screens": 8,
+ "entities": [
+  {
+   "name": "פרויקט",
+   "fields": 5,
+   "stages": [
+    "תכנון",
+    "הצעה",
+    "חוזה",
+    "ביצוע",
+    "מסירה",
+    "נסגר"
+   ]
+  },
+  {
+   "name": "ליד",
+   "fields": 5,
+   "stages": [
+    "חדש",
+    "קשר",
+    "סיור",
+    "הצעה",
+    "זכה"
+   ]
+  },
+  {
+   "name": "לקוח",
+   "fields": 5,
+   "stages": []
+  },
+  {
+   "name": "משימה",
+   "fields": 6,
+   "stages": [
+    "מתוכננת",
+    "בתהליך",
+    "בבדיקה",
+    "הושלמה"
+   ]
+  },
+  {
+   "name": "חשבונית",
+   "fields": 6,
+   "stages": []
+  }
+ ],
+ "uiScreens": [
+  "דשבורד הנהלה עם פרויקטים",
+  "לוח זמנים גאנט עם משימות",
+  "דוח יומי עם מזג אוויר"
+ ],
+ "workflows": 3,
+ "roles": [
+  {
+   "role": "מנהל",
+   "all": true,
+   "allowed": [
+    "app_ent1",
+    "app_ent2",
+    "app_ent3",
+    "app_ent4",
+    "app_ent5",
+    "app_scr6",
+    "app_scr7",
+    "app_scr8"
+   ]
+  },
+  {
+   "role": "מנהל אתר",
+   "all": false,
+   "allowed": [
+    "app_ent4",
+    "app_scr7",
+    "app_scr8"
+   ]
+  },
+  {
+   "role": "לקוח",
+   "all": false,
+   "allowed": [
+    "app_ent1",
+    "app_ent5",
+    "app_scr6"
+   ]
+  }
+ ]
+}

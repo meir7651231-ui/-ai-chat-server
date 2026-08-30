@@ -1,10 +1,13 @@
-הירו 🗂️ לקוח | ישות מורכבת — טופס + טבלה
-כותרת טופס לקוח
+הירו 🗂️ ליד | ישות מורכבת — טופס + טבלה
+אטום BreadcrumbTrail ליד: חדש / קשר / סיור / הצעה / זכה
+כותרת טופס ליד
 אטום InlineTextRow שם
 אטום GlowField טלפון
-אטום InlineTextRow מייל
-אטום InlineTextRow כתובת
+אטום InlineTextRow מקור
+אטום NumberStepper תקציב
+אטום AnimatedToggle סטטוס
 אטום FabMenu שמירה
-כותרת רשומות לקוח
-אטום DataGrid לקוח
-באנר ישות לקוח: 4 שדות · טופס + טבלה מהמדף
+אטום NeonButton קדם לקשר
+כותרת רשומות ליד
+אטום DataGrid ליד
+באנר ישות ליד: 5 שדות · 5-שלבי workflow · מהמדף

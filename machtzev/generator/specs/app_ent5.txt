@@ -1,0 +1,12 @@
+הירו 🗂️ חשבונית | ישות מורכבת — טופס + טבלה
+כותרת טופס חשבונית
+אטום NumberStepper מספר
+אטום InlineTextRow לקוח
+אטום QtyStepper סכום
+אטום GlowField מס
+אטום DatePills תאריך
+אטום AnimatedToggle סטטוס
+אטום FabMenu שמירה
+כותרת רשומות חשבונית
+אטום DataGrid חשבונית
+באנר ישות חשבונית: 6 שדות · מהמדף
