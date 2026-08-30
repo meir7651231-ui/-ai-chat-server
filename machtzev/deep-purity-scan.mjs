@@ -22,7 +22,19 @@ const isPureData = (code) => {
   !/\b(if|for|while|switch)\b/.test(skel) && !/=>(?!\s*[\[{('"`0-9])/.test(skel) &&
   !/^(?:export\s+)?(?:const\s+\w+\s*=\s*(?:async\s*)?\(|function\s+\w+\s*\()/m.test(skel);
 };
+// ── ליבת-הסריקה v2: AST-אמת (typescript) — אותו לקסר של מנוע-הטיהור, אפס-רגקס-על-קוד ──
+import { createRequire } from 'node:module';
+const _req = createRequire('/home/user/maor-system/');
+const _ts = _req('typescript');
 const findings = [];
+const staticLit = (n) => {
+  if (!n) return false;
+  if (_ts.isStringLiteral(n) || _ts.isNumericLiteral(n) || n.kind === _ts.SyntaxKind.TrueKeyword || n.kind === _ts.SyntaxKind.FalseKeyword || n.kind === _ts.SyntaxKind.NullKeyword) return true;
+  if (_ts.isPrefixUnaryExpression(n) && n.operator === _ts.SyntaxKind.MinusToken) return staticLit(n.operand);
+  if (_ts.isArrayLiteralExpression(n)) return n.elements.every(staticLit);
+  if (_ts.isObjectLiteralExpression(n)) return n.properties.every(pp => _ts.isPropertyAssignment(pp) && (_ts.isIdentifier(pp.name) || _ts.isStringLiteral(pp.name)) && staticLit(pp.initializer));
+  return false;
+};
 for (const dir of DIRS) {
   const abs = path.join(ROOT, dir);
   if (!fs.existsSync(abs)) continue;
@@ -30,22 +42,44 @@ for (const dir of DIRS) {
     if (!f.endsWith('.mjs') || f.endsWith('.test.mjs')) continue;
     const raw = fs.readFileSync(path.join(abs, f), 'utf8');
     const code = strip(raw);
-    if (isPureData(code)) continue;                       // אטום-דאטה בצורתו הנכונה
+    if (isPureData(code)) continue;
+    const sf = _ts.createSourceFile('x.mjs', raw, _ts.ScriptTarget.ES2022, true);
     const cats = { heb: [], table: [], domstr: [], magic: [] };
-    for (const m of code.matchAll(/(['"`])((?:\\.|(?!\1)[^\\\n])*)\1/g)) {
-      const v = m[2];
-      if (HEB.test(v)) { if (cats.heb.length < 4) cats.heb.push(v.slice(0, 30)); continue; }
-      if (/[a-zA-Z]{3,}|^\+?\d{3}$/.test(v) && !/^[a-z]$|^\\/.test(v)) { if (cats.domstr.length < 4) cats.domstr.push(v.slice(0, 30)); }
-    }
-    for (const m of code.matchAll(/const\s+\w+\s*=\s*[\[{][^;]{10,}/g)) { if (cats.table.length < 3) cats.table.push(m[0].slice(0, 44).replace(/\s+/g, ' ')); }
-    // מספר-קסם = קבוע-דומיין עשרוני; הקס/ביטוויז/חזקות-2 = מבנה-חישוב, לא דאטה
-    for (const m of code.matchAll(/(?<![\w.'"])-?\d{2,}(?:\.\d+)?(?![\w])/g)) {
-      const n = Math.abs(parseFloat(m[0]));
-      const around = code.slice(Math.max(0, m.index - 6), m.index + m[0].length + 6);
-      if (/0x|[&|^]|<<|>>/.test(around)) continue;                       // ביטוויז/הקס — מבני
-      if ((n & (n - 1)) === 0 && Number.isInteger(n)) continue;          // חזקת-2 — מבני
-      if (![10, 100, 1000].includes(n) || cats.magic.length === 0) { if (cats.magic.length < 6) cats.magic.push(m[0]); }
-    }
+    const seen = (arr, v, cap) => { if (arr.length < cap) arr.push(String(v).slice(0, 30)); };
+    const consider = (text) => {
+      if (HEB.test(text)) { seen(cats.heb, text, 4); return; }
+      if (/[a-zA-Z]{3,}/.test(text)) seen(cats.domstr, text, 4);
+    };
+    const walk = (n) => {
+      if (_ts.isImportDeclaration(n) || _ts.isExportDeclaration(n)) return;
+      if (_ts.isStringLiteral(n)) { consider(n.text); return; }
+      if (n.kind === _ts.SyntaxKind.NoSubstitutionTemplateLiteral) { consider(n.text); return; }
+      if (_ts.isTemplateExpression(n)) {
+        consider(n.head.text);
+        for (const sp of n.templateSpans) { walk(sp.expression); consider(sp.literal.text); }
+        return;
+      }
+      if (_ts.isVariableStatement(n) && n.parent === sf) {
+        for (const d of n.declarationList.declarations)
+          if (d.initializer && (_ts.isArrayLiteralExpression(d.initializer) || _ts.isObjectLiteralExpression(d.initializer)) && staticLit(d.initializer)) {
+            const isExp = (n.modifiers || []).some(m => m.kind === _ts.SyntaxKind.ExportKeyword);
+            if (!isExp) seen(cats.table, raw.slice(d.getStart(sf), Math.min(d.getStart(sf) + 44, d.end)).replace(/\s+/g, ' '), 3);
+          }
+        _ts.forEachChild(n, walk);
+        return;
+      }
+      if (_ts.isNumericLiteral(n)) {
+        const val = parseFloat(n.text);
+        if (val >= 10 && !/^0[xbo]/i.test(n.text) && !(Number.isInteger(val) && (val & (val - 1)) === 0)) {
+          const p2 = n.parent;
+          const bitwise = p2 && _ts.isBinaryExpression(p2) && /[&|^]|<<|>>/.test(p2.operatorToken.getText(sf));
+          if (!bitwise) seen(cats.magic, n.text, 6);
+        }
+        return;
+      }
+      _ts.forEachChild(n, walk);
+    };
+    walk(sf);
     const score = cats.heb.length * 4 + cats.table.length * 3 + cats.domstr.length * 2 + cats.magic.length;
     if (score > 0) findings.push({ f: path.join(dir, f), score, cats });
   }

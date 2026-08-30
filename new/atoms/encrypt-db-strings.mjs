@@ -4,4 +4,5 @@ export const ENCRYPT_DB_T = {
   k2: "AES-GCM",
   k3: "encrypt",
   k4: "decrypt",
+  tbl1: 600000,
 };

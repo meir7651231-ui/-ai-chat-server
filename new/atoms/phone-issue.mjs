@@ -8,7 +8,7 @@ export function phoneIssue(p, T) {
 
   if (!p || p === '-') return null;
   const d = digits(p);
-  if ((d.length === 9 || d.length === 10) && d[0] === '0') return null;
+  if ((d.length === 9 || d.length === T.k6) && d[0] === '0') return null;
   if (d.length === 8) return T.k1 + p;
   if (d.length < 7) return T.k2 + p;
   if (d[0] !== '0') return T.k3 + p;

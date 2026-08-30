@@ -11,7 +11,7 @@ export function hebAnnualEq(anchor, query, scanHebYear, T) {
   }
 
   // כלל ל׳: עוגן-30 מול א' בחודש-הבא, כשלחודש-העוגן אין 30 בשנת היום-הנבדק.
-  if (anchor.day === 30 && query.day === 1 && query.year) {
+  if (anchor.day === T.k4 && query.day === 1 && query.year) {
     const { seq, has30 } = scanHebYear(query.year);
     const qi = seq.indexOf(query.month);
     const prev = qi > 0 ? seq[qi - 1] : null;

@@ -4,6 +4,7 @@ const __d_hebAnnualEq_HEB_ANNUAL_EQ_T = {
   k1: "Adar",
   k2: "Adar I",
   k3: "Adar II",
+  k4: 30,
 };
 const hebAnnualEq = (...a) => __pure_hebAnnualEq(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_hebAnnualEq_HEB_ANNUAL_EQ_T);
 // שקע-scanHebYear אמיתי על Intl (מקומי לבדיקה — הבדיקה מייבאת רק את האטום שלה)

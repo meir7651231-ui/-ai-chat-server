@@ -6,6 +6,7 @@ const __d_phoneIssue_PHONE_ISSUE_T = {
   k3: "לא מתחיל ב-0: ",
   k4: "אורך חריג (",
   k5: " ספרות): ",
+  k6: 10,
 };
 const phoneIssue = (...a) => __pure_phoneIssue(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_phoneIssue_PHONE_ISSUE_T);
 let f = 0;

@@ -2,6 +2,7 @@ import { publishIcsFeed as __pure_publishIcsFeed } from './publish-ics-feed.mjs'
 // צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
 const __d_publish_ics_feed_T = {
   k1: "לוח-השנה גדול מדי לפרסום כפיד — פנו לתמיכה",
+  tbl1: 900000,
 };
 const publishIcsFeed = (...a) => __pure_publishIcsFeed(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_publish_ics_feed_T);
 let f = 0;

@@ -5,6 +5,7 @@ const __d_encrypt_db_T = {
   k2: "AES-GCM",
   k3: "encrypt",
   k4: "decrypt",
+  tbl1: 600000,
 };
 const encryptDb = (...a) => __pure_encryptDb(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_encrypt_db_T);
 let f = 0;
