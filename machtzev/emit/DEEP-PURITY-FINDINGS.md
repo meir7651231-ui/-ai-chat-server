@@ -1,6 +1,6 @@
 # 🔬 ממצאי טוהר-עומק (הכרעה 19) — דאטה בתוך מנגנון
 
-נסרקו אטומי-מנגנון ב-new/atoms · new/boxes · הפרות: 41
+נסרקו אטומי-מנגנון ב-new/atoms · new/boxes · הפרות: 39
 
 | אטום | ציון | עברית | טבלאות | מחרוזות-דומיין | מספרי-קסם |
 |---|---|---|---|---|---|
@@ -13,16 +13,13 @@
 | new/boxes/navhist.mjs | 16 | ↩ חזרה · חזרה למסך הקודם | — | families · families · courses · courses | — |
 | new/boxes/receipt.mjs | 11 | — | — | text/plain;charset=utf-8 · receipt- · .txt · iframe | 10 5000 60000 |
 | new/boxes/custom-export.mjs | 10 | — | — | memorial · anniversary · bday | 3761 440 12 30 |
-| new/boxes/lib-pwa.mjs | 9 | — | — | shell.pwa · application/manifest+json · rtl · standalone | 12 |
+| new/boxes/lib-pwa.mjs | 9 | — | — | shell.pwa · #faf7f2 · image/png · (display-mode: standalone) | 12 |
 | new/boxes/net-check.mjs | 9 | — | — | netcheck · netcheck= · site · /version.json? | 8000 |
 | new/boxes/theme.mjs | 8 | — | — | light · --c-ink · --c-soft · --c-faint | — |
 | new/atoms/portfolio-portfolio-intel.mjs | 6 | — | — | — | 10 10 86400000 10 10 30 |
 | new/boxes/empowerment.mjs | 5 | — | — | — | 60 60 12 12 10 |
-| new/boxes/image-pick.mjs | 5 | — | — | image/ · image/jpeg | 320 |
-| new/atoms/heb-month-he.mjs | 4 | — | — | he-u-ca-hebrew · long | — |
 | new/boxes/distribution.mjs | 4 | — | — | pickup · enroute | — |
 | new/boxes/hebrew.mjs | 4 | — | — | — | 3761 440 12 30 |
-| new/boxes/lib-lock.mjs | 4 | — | — | maor.lock.v1:: · maor_lock | — |
 | new/boxes/lib-nedarim-sync.mjs | 4 | — | — | — | 10 28 999 12 |
 | new/boxes/pricing.mjs | 4 | — | — | maor_prices · subscription | — |
 | new/boxes/smtp-url.mjs | 4 | — | — | empty · error | — |
@@ -41,6 +38,7 @@
 | new/atoms/orbit-theme.mjs | 1 | — | — | — | 12 |
 | new/boxes/annual-report.mjs | 1 | — | — | — | 5000 |
 | new/boxes/csvx.mjs | 1 | — | — | — | 5000 |
+| new/boxes/image-pick.mjs | 1 | — | — | — | 320 |
 | new/boxes/lib-crypto.mjs | 1 | — | — | — | 12 |
 | new/boxes/lib-ics.mjs | 1 | — | — | — | 5000 |
 | new/boxes/reports.mjs | 1 | — | — | — | 10 |

@@ -28,6 +28,7 @@ export { MAX_UPLOAD_BYTES, MAX_EMBED_BYTES };
 //   · createCanvas()⇒{width,height,getContext(t),toDataURL(type,q)} (במקור: document.createElement).
 export async function pickAndCompressImage(file, io) {
   const { readAsDataUrl, loadImage, createCanvas } = io;
+  // פרוטוקול-חיצוני: משפחת-MIME של הדפדפן
   if (!file.type.startsWith('image/')) throw new Error(ERR_NOT_IMAGE);
   if (file.size > MAX_UPLOAD_BYTES) throw new Error(ERR_TOO_BIG);
   const dataUrl = await readAsDataUrl(file);
@@ -41,6 +42,7 @@ export async function pickAndCompressImage(file, io) {
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error(ERR_NO_CANVAS);
   ctx.drawImage(img, 0, 0, w, h);
+  // פרוטוקול-חיצוני: MIME-יעד לדחיסה
   return canvas.toDataURL('image/jpeg', QUALITY);
 }
 

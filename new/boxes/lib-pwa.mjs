@@ -18,9 +18,12 @@ import { featureOn } from '../atoms/feature-on.mjs';
 const PWA_FLAG = 'shell.pwa';        // הדגל השולט על הרישום (pwa.ts:62)
 const SW_FILE = 'sw.js';             // שם קובץ ה-service-worker (pwa.ts:61)
 const SHORT_NAME_MAX = 12;           // סף short_name (pwa.ts:90)
+// פרוטוקול-חיצוני: MIME של מניפסט
 const MANIFEST_TYPE = 'application/manifest+json'; // (pwa.ts:106)
 const MANIFEST_LANG = 'he';
+// פרוטוקול-חיצוני: ערך-dir תקני
 const MANIFEST_DIR = 'rtl';
+// פרוטוקול-חיצוני: display-mode תקני
 const MANIFEST_DISPLAY = 'standalone';
 const MANIFEST_ORIENTATION = 'portrait-primary';
 const MANIFEST_THEME = '#211d17';

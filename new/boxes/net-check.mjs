@@ -36,6 +36,7 @@ export function targets(origin, firebase, randToken) {
       {
         key: 'auth',
         label: LABEL.auth,
+        // חוק-6: נקודת-קצה של פריסת-Firebase
         url: 'https://identitytoolkit.googleapis.com/v1/recaptchaParams?' + bust,
         domain: 'identitytoolkit.googleapis.com',
       },
@@ -43,6 +44,7 @@ export function targets(origin, firebase, randToken) {
         key: 'token',
         label: LABEL.token,
         // securetoken מחזיר CORS רק על POST; גוף-מחרוזת ⇒ text/plain ⇒ בקשה-פשוטה בלי preflight.
+        // חוק-6: נקודת-קצה של פריסת-Firebase
         url: 'https://securetoken.googleapis.com/v1/token?key=' + encodeURIComponent(apiKey) + '&' + bust,
         method: 'POST',
         body: 'grant_type=refresh_token&refresh_token=netcheck',
@@ -53,6 +55,7 @@ export function targets(origin, firebase, randToken) {
         // נתיב-מסמכים אמיתי מחזיר CORS (‏robots.txt לא): מסמך-דמה ⇒ 4xx עם CORS ⇒ נמדד כפתוח.
         label: LABEL.db,
         url:
+          // חוק-6: נקודת-קצה של פריסת-Firebase
           'https://firestore.googleapis.com/v1/projects/' +
           encodeURIComponent(projectId) +
           '/databases/(default)/documents/__netcheck__/__probe__?' +

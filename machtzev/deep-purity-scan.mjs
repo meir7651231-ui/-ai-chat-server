@@ -45,18 +45,27 @@ for (const dir of DIRS) {
     if (isPureData(code)) continue;
     const sf = _ts.createSourceFile('x.mjs', raw, _ts.ScriptTarget.ES2022, true);
     const cats = { heb: [], table: [], domstr: [], magic: [] };
+    const rawLines = raw.split('\n');
+    const lineOf = (pos) => raw.slice(0, pos).split('\n').length - 1;
+    let exempt6 = 0;
+    const isLaw6 = (pos) => {
+      const ln = lineOf(pos);
+      for (let q = Math.max(0, ln - 2); q <= ln; q++) if (rawLines[q] && (rawLines[q].includes('חוק-6') || rawLines[q].includes('פרוטוקול-חיצוני'))) { exempt6++; return true; }
+      return false;
+    };
     const seen = (arr, v, cap) => { if (arr.length < cap) arr.push(String(v).slice(0, 30)); };
-    const consider = (text) => {
+    const consider = (text, pos) => {
+      if (pos !== undefined && isLaw6(pos)) return;
       if (HEB.test(text)) { seen(cats.heb, text, 4); return; }
       if (/[a-zA-Z]{3,}/.test(text)) seen(cats.domstr, text, 4);
     };
     const walk = (n) => {
       if (_ts.isImportDeclaration(n) || _ts.isExportDeclaration(n)) return;
-      if (_ts.isStringLiteral(n)) { consider(n.text); return; }
-      if (n.kind === _ts.SyntaxKind.NoSubstitutionTemplateLiteral) { consider(n.text); return; }
+      if (_ts.isStringLiteral(n)) { consider(n.text, n.getStart(sf)); return; }
+      if (n.kind === _ts.SyntaxKind.NoSubstitutionTemplateLiteral) { consider(n.text, n.getStart(sf)); return; }
       if (_ts.isTemplateExpression(n)) {
-        consider(n.head.text);
-        for (const sp of n.templateSpans) { walk(sp.expression); consider(sp.literal.text); }
+        consider(n.head.text, n.getStart(sf));
+        for (const sp of n.templateSpans) { walk(sp.expression); consider(sp.literal.text, sp.literal.getStart(sf)); }
         return;
       }
       if (_ts.isVariableStatement(n) && n.parent === sf) {
@@ -73,7 +82,7 @@ for (const dir of DIRS) {
         if (val >= 10 && !/^0[xbo]/i.test(n.text) && !(Number.isInteger(val) && (val & (val - 1)) === 0)) {
           const p2 = n.parent;
           const bitwise = p2 && _ts.isBinaryExpression(p2) && /[&|^]|<<|>>/.test(p2.operatorToken.getText(sf));
-          if (!bitwise) seen(cats.magic, n.text, 6);
+          if (!bitwise && !isLaw6(n.getStart(sf))) seen(cats.magic, n.text, 6);
         }
         return;
       }
