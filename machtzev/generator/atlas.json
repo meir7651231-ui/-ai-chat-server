@@ -2,7 +2,7 @@
  "counts": {
   "widgets": 464,
   "functions": 445,
-  "data": 1688
+  "data": 1689
  },
  "widgets": [
   {
@@ -29467,6 +29467,23 @@
   },
   {
    "name": "gen_feedback10_alert_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_feedback10_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_feedback10_statusdot_label",
    "type": "String",
    "he": [
     "דאטה",
