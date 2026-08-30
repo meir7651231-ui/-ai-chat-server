@@ -2,7 +2,7 @@
  "counts": {
   "widgets": 381,
   "functions": 445,
-  "data": 1382
+  "data": 1497
  },
  "widgets": [
   {
@@ -6943,11 +6943,7 @@
      "name": "allModules"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "defaultConfig"
     }
    ],
@@ -6962,12 +6958,44 @@
   },
   {
    "name": "amountInWords",
-   "sig": "String amountInWords(dynamic amount, [dynamic currency = '₪'])",
+   "sig": "String amountInWords(dynamic amount, List<String> ONES, List<String> TEENS, List<String> TENS, List<String> HUNDREDS, List<String> ONES_F, List<String> TEENS_F, Map<String, String> THOUSAND_CONSTRUCT, Map<String, dynamic> T, [dynamic currency = '₪'])",
    "ret": "String",
    "params": [
     {
      "type": "dynamic",
      "name": "amount"
+    },
+    {
+     "type": "List<String>",
+     "name": "ONES"
+    },
+    {
+     "type": "List<String>",
+     "name": "TEENS"
+    },
+    {
+     "type": "List<String>",
+     "name": "TENS"
+    },
+    {
+     "type": "List<String>",
+     "name": "HUNDREDS"
+    },
+    {
+     "type": "List<String>",
+     "name": "ONES_F"
+    },
+    {
+     "type": "List<String>",
+     "name": "TEENS_F"
+    },
+    {
+     "type": "Map<String, String>",
+     "name": "THOUSAND_CONSTRUCT"
+    },
+    {
+     "type": "Map<String, dynamic>",
+     "name": "T"
     },
     {
      "type": "dynamic currency = '₪'",
@@ -7015,19 +7043,11 @@
    "ret": "Map<String,",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "Object?>",
+     "type": "Map<String, Object?>",
      "name": "db"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "Object?>",
+     "type": "Map<String, Object?>",
      "name": "meta"
     }
    ],
@@ -7046,11 +7066,7 @@
    "ret": "Map<String,",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "config"
     },
     {
@@ -7058,11 +7074,7 @@
      "name": "packId"
     },
     {
-     "type": "List<Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>>",
+     "type": "List<Map<String, dynamic>>",
      "name": "packs"
     }
    ],
@@ -7084,11 +7096,7 @@
    "ret": "bool",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "a"
     }
    ],
@@ -7130,11 +7138,7 @@
    "ret": "num",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "n"
     }
    ],
@@ -7248,7 +7252,7 @@
    "ret": "bool",
    "params": [
     {
-     "type": "{\n  bool superAdmin = false",
+     "type": "bool superAdmin = false",
      "name": ""
     },
     {
@@ -7261,10 +7265,6 @@
     },
     {
      "type": "bool cloudConnected = false",
-     "name": ""
-    },
-    {
-     "type": "}",
      "name": ""
     }
    ],
@@ -7327,11 +7327,7 @@
    "ret": "String",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "String?>",
+     "type": "Map<String, String?>",
      "name": "charge"
     }
    ],
@@ -7426,11 +7422,7 @@
      "name": "fsDb"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "String>",
+     "type": "Map<String, String>",
      "name": "T"
     }
    ],
@@ -7475,12 +7467,16 @@
   },
   {
    "name": "cockpitCsvRows",
-   "sig": "List<List> cockpitCsvRows(Map queue)",
+   "sig": "List<List> cockpitCsvRows(Map queue, Map<String, String> T)",
    "ret": "List<List>",
    "params": [
     {
      "type": "Map",
      "name": "queue"
+    },
+    {
+     "type": "Map<String, String>",
+     "name": "T"
     }
    ],
    "he": [
@@ -7545,12 +7541,16 @@
   },
   {
    "name": "cockpitWorkListText",
-   "sig": "String cockpitWorkListText(Map queue)",
+   "sig": "String cockpitWorkListText(Map queue, Map<String, String> T)",
    "ret": "String",
    "params": [
     {
      "type": "Map",
      "name": "queue"
+    },
+    {
+     "type": "Map<String, String>",
+     "name": "T"
     }
    ],
    "he": [
@@ -7618,11 +7618,7 @@
    "ret": "Map<String,",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "p"
     }
    ],
@@ -7672,11 +7668,7 @@
    "ret": "Map<String,",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "c"
     }
    ],
@@ -8015,11 +8007,7 @@
    "ret": "List<dynamic>",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "db"
     },
     {
@@ -8083,11 +8071,7 @@
    "ret": "bool",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "cfg"
     }
    ],
@@ -8107,11 +8091,7 @@
    "ret": "List<String>",
    "params": [
     {
-     "type": "Iterable<Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>>",
+     "type": "Iterable<Map<String, dynamic>>",
      "name": "donations"
     }
    ],
@@ -8306,19 +8286,11 @@
    "ret": "String",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "ev"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "evMeta"
     }
    ],
@@ -8379,11 +8351,7 @@
    "ret": "num",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "a"
     }
    ],
@@ -8599,11 +8567,7 @@
    "ret": "Map<String,",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "Object?>",
+     "type": "Map<String, Object?>",
      "name": "src"
     },
     {
@@ -8636,12 +8600,28 @@
   },
   {
    "name": "gem",
-   "sig": "String gem(num n)",
+   "sig": "String gem(num n, List<String> U, List<String> T, List<String> H, Map<String, dynamic> T2)",
    "ret": "String",
    "params": [
     {
      "type": "num",
      "name": "n"
+    },
+    {
+     "type": "List<String>",
+     "name": "U"
+    },
+    {
+     "type": "List<String>",
+     "name": "T"
+    },
+    {
+     "type": "List<String>",
+     "name": "H"
+    },
+    {
+     "type": "Map<String, dynamic>",
+     "name": "T2"
     }
    ],
    "he": [
@@ -8809,11 +8789,7 @@
    "ret": "bool",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "Object?>",
+     "type": "Map<String, Object?>",
      "name": "sp"
     },
     {
@@ -8821,11 +8797,7 @@
      "name": "todayIso"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "T"
     }
    ],
@@ -8856,11 +8828,7 @@
      "name": "hokCat"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "String>",
+     "type": "Map<String, String>",
      "name": "T"
     }
    ],
@@ -8957,11 +8925,7 @@
      "name": "id"
     },
     {
-     "type": "List<Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>>",
+     "type": "List<Map<String, dynamic>>",
      "name": "industries"
     }
    ],
@@ -9000,11 +8964,7 @@
    "ret": "Map<String,",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "Object?>",
+     "type": "Map<String, Object?>",
      "name": "db"
     }
    ],
@@ -9101,11 +9061,7 @@
    "ret": "Map<String,",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "sp"
     },
     {
@@ -9137,11 +9093,7 @@
    "ret": "Map<String,",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "scan"
     }
    ],
@@ -9163,11 +9115,7 @@
    "ret": "bool",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "config"
     },
     {
@@ -9324,11 +9272,7 @@
    "ret": "bool",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "e"
     }
    ],
@@ -9472,19 +9416,11 @@
    "ret": "Map<String,",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "db"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "comp"
     }
    ],
@@ -9529,11 +9465,7 @@
    "ret": "String",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "box"
     }
    ],
@@ -9555,11 +9487,7 @@
    "ret": "num",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "c"
     },
     {
@@ -9676,11 +9604,7 @@
    "ret": "List<dynamic>",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "a"
     }
    ],
@@ -9846,11 +9770,7 @@
      "name": "criterionIds"
     },
     {
-     "type": "List<Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>>",
+     "type": "List<Map<String, dynamic>>",
      "name": "criteria"
     }
    ],
@@ -9876,19 +9796,11 @@
      "name": "col"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "local"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "incoming"
     }
    ],
@@ -9993,11 +9905,7 @@
    "ret": "Map<String,",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "db"
     }
    ],
@@ -10091,11 +9999,7 @@
      "name": "c"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "String>",
+     "type": "Map<String, String>",
      "name": "T"
     }
    ],
@@ -10116,11 +10020,7 @@
    "ret": "bool",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "cfg"
     },
     {
@@ -10144,7 +10044,7 @@
   },
   {
    "name": "monthHeOf",
-   "sig": "String monthHeOf(dynamic en, List<dynamic> MONTHS)",
+   "sig": "String monthHeOf(dynamic en, List<List<String>> MONTHS)",
    "ret": "String",
    "params": [
     {
@@ -10152,7 +10052,7 @@
      "name": "en"
     },
     {
-     "type": "List<dynamic>",
+     "type": "List<List<String>>",
      "name": "MONTHS"
     }
    ],
@@ -10194,11 +10094,7 @@
      "name": "id"
     },
     {
-     "type": "List<Map<String",
-     "name": ""
-    },
-    {
-     "type": "String>>",
+     "type": "List<Map<String, String>>",
      "name": "orgNeeds"
     }
    ],
@@ -10223,11 +10119,7 @@
      "name": "results"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "String>",
+     "type": "Map<String, String>",
      "name": "T"
     }
    ],
@@ -10349,19 +10241,11 @@
      "name": "allModules"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "defaultPrices"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "defaultIntegrationPrices"
     }
    ],
@@ -10411,11 +10295,7 @@
      "name": "accent"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "fallback"
     }
    ],
@@ -10827,24 +10707,20 @@
      "name": "opts"
     },
     {
-     "type": "{\n  required ReadToken readToken",
-     "name": ""
+     "type": "ReadToken",
+     "name": "readToken"
     },
     {
-     "type": "required MintToken",
+     "type": "MintToken",
      "name": "mintToken"
     },
     {
-     "type": "required WriteFeed",
+     "type": "WriteFeed",
      "name": "writeFeed"
     },
     {
      "type": "NowIso?",
      "name": "nowIso"
-    },
-    {
-     "type": "}",
-     "name": ""
     }
    ],
    "he": [
@@ -10865,11 +10741,7 @@
      "name": "confirmOn"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "Object?>?",
+     "type": "Map<String, Object?>?",
      "name": "armed"
     },
     {
@@ -10998,11 +10870,7 @@
    "ret": "Map<String,",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "base"
     },
     {
@@ -11126,11 +10994,7 @@
    "ret": "String",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>?",
+     "type": "Map<String, dynamic>?",
      "name": "cfg"
     },
     {
@@ -11138,19 +11002,11 @@
      "name": "key"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "String>",
+     "type": "Map<String, String>",
      "name": "vars"
     },
     {
-     "type": "List<Map<String",
-     "name": ""
-    },
-    {
-     "type": "String>>",
+     "type": "List<Map<String, String>>",
      "name": "defs"
     }
    ],
@@ -11273,11 +11129,7 @@
      "name": "room"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "String>",
+     "type": "Map<String, String>",
      "name": "T"
     }
    ],
@@ -11476,11 +11328,7 @@
      "name": "col"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "item"
     }
    ],
@@ -11990,11 +11838,7 @@
      "name": "id"
     },
     {
-     "type": "List<Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>>",
+     "type": "List<Map<String, dynamic>>",
      "name": "sizes"
     }
    ],
@@ -12022,12 +11866,8 @@
      "name": "taken"
     },
     {
-     "type": "{required Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic> heb2lat}",
-     "name": ""
+     "type": "Map<String, dynamic>",
+     "name": "heb2lat"
     }
    ],
    "he": [
@@ -12257,12 +12097,8 @@
      "name": "termOf"
     },
     {
-     "type": "{required Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic> stageFallback}",
-     "name": ""
+     "type": "Map<String, dynamic>",
+     "name": "stageFallback"
     }
    ],
    "he": [
@@ -12486,19 +12322,11 @@
      "name": "config"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "sockets"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "T2"
     }
    ],
@@ -12804,11 +12632,7 @@
      "name": "sc"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "T"
     }
    ],
@@ -12888,11 +12712,7 @@
      "name": "todayIso"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "T"
     }
    ],
@@ -13018,11 +12838,7 @@
      "name": "email"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "String>",
+     "type": "Map<String, String>",
      "name": "T"
     }
    ],
@@ -13169,11 +12985,7 @@
      "name": "tenantId"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "T"
     }
    ],
@@ -13250,11 +13062,7 @@
      "name": "terms"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "String>",
+     "type": "Map<String, String>",
      "name": "T"
     }
    ],
@@ -13312,11 +13120,7 @@
      "name": "inp"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "String>",
+     "type": "Map<String, String>",
      "name": "T"
     }
    ],
@@ -13462,11 +13266,7 @@
      "name": "termOf"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "String>",
+     "type": "Map<String, String>",
      "name": "T2"
     },
     {
@@ -13609,11 +13409,7 @@
      "name": "orgOf"
     },
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "String>",
+     "type": "Map<String, String>",
      "name": "T"
     }
    ],
@@ -13731,11 +13527,7 @@
    "ret": "String?",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "m"
     }
    ],
@@ -13780,8 +13572,8 @@
    "ret": "List<String>",
    "params": [
     {
-     "type": "{required Iterable<String> categories}",
-     "name": ""
+     "type": "Iterable<String>",
+     "name": "categories"
     }
    ],
    "he": [
@@ -13801,20 +13593,16 @@
    "ret": "String",
    "params": [
     {
-     "type": "{\n  required String opTag",
-     "name": ""
+     "type": "String",
+     "name": "opTag"
     },
     {
-     "type": "required String",
+     "type": "String",
      "name": "opId"
     },
     {
-     "type": "required String",
+     "type": "String",
      "name": "reasonHe"
-    },
-    {
-     "type": "}",
-     "name": ""
     }
    ],
    "he": [
@@ -14015,12 +13803,8 @@
      "name": "node"
     },
     {
-     "type": "{\n  required Iterable<CatProduct> allProducts",
-     "name": ""
-    },
-    {
-     "type": "}",
-     "name": ""
+     "type": "Iterable<CatProduct>",
+     "name": "allProducts"
     }
    ],
    "he": [
@@ -14052,16 +13836,8 @@
      "name": "value"
     },
     {
-     "type": "{required Map<String",
-     "name": ""
-    },
-    {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "String>> kAxisValueSlang}",
-     "name": ""
+     "type": "Map<String, Map<String, String>>",
+     "name": "kAxisValueSlang"
     }
    ],
    "he": [],
@@ -14078,16 +13854,12 @@
      "name": "elementId"
     },
     {
-     "type": "{\n  required bool readOnly",
-     "name": ""
+     "type": "bool",
+     "name": "readOnly"
     },
     {
-     "type": "required Iterable<CatalogAction>",
+     "type": "Iterable<CatalogAction>",
      "name": "catalog"
-    },
-    {
-     "type": "}",
-     "name": ""
     }
    ],
    "he": [
@@ -14110,16 +13882,8 @@
      "name": "brand"
     },
     {
-     "type": "{\n  required Map<String",
-     "name": ""
-    },
-    {
-     "type": "LipskeyCatalogProduct>",
+     "type": "Map<String, LipskeyCatalogProduct>",
      "name": "skuIndex"
-    },
-    {
-     "type": "}",
-     "name": ""
     }
    ],
    "he": [
@@ -14146,8 +13910,8 @@
      "name": "key"
     },
     {
-     "type": "{required String kPlumbingTradeId}",
-     "name": ""
+     "type": "String",
+     "name": "kPlumbingTradeId"
     }
    ],
    "he": [],
@@ -14164,8 +13928,8 @@
      "name": "expiry"
     },
     {
-     "type": "{required DateTime now}",
-     "name": ""
+     "type": "DateTime",
+     "name": "now"
     }
    ],
    "he": [
@@ -14320,12 +14084,8 @@
      "name": "line"
     },
     {
-     "type": "{\n  required List<CompletionRule> rules",
-     "name": ""
-    },
-    {
-     "type": "}",
-     "name": ""
+     "type": "List<CompletionRule>",
+     "name": "rules"
     }
    ],
    "he": [
@@ -14413,16 +14173,12 @@
      "name": "deliveries"
     },
     {
-     "type": "{\n  required String username",
-     "name": ""
+     "type": "String",
+     "name": "username"
     },
     {
-     "type": "required DateTime",
+     "type": "DateTime",
      "name": "today"
-    },
-    {
-     "type": "}",
-     "name": ""
     }
    ],
    "he": [
@@ -14678,11 +14434,7 @@
    "ret": "Object?",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "value"
     }
    ],
@@ -14701,11 +14453,7 @@
    "ret": "Map<String,",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<String, dynamic>",
      "name": "fields"
     }
    ],
@@ -14761,20 +14509,16 @@
    "ret": "int",
    "params": [
     {
-     "type": "{\n  required List<Object?> steps",
-     "name": ""
+     "type": "List<Object?>",
+     "name": "steps"
     },
     {
-     "type": "required List<Object?>",
+     "type": "List<Object?>",
      "name": "doneSteps"
     },
     {
-     "type": "required String",
+     "type": "String",
      "name": "status"
-    },
-    {
-     "type": "}",
-     "name": ""
     }
    ],
    "he": [
@@ -14838,11 +14582,7 @@
    "ret": "Map<String,",
    "params": [
     {
-     "type": "Map<String",
-     "name": ""
-    },
-    {
-     "type": "Object?>",
+     "type": "Map<String, Object?>",
      "name": "data"
     }
    ],
@@ -14904,12 +14644,8 @@
      "name": "kind"
     },
     {
-     "type": "{\n  required List<VariantFamily> families",
-     "name": ""
-    },
-    {
-     "type": "}",
-     "name": ""
+     "type": "List<VariantFamily>",
+     "name": "families"
     }
    ],
    "he": [
@@ -14996,40 +14732,36 @@
      "name": "kind"
     },
     {
-     "type": "{\n  required List<LipRow> catalog",
-     "name": ""
+     "type": "List<LipRow>",
+     "name": "catalog"
     },
     {
-     "type": "required List<String>",
+     "type": "List<String>",
      "name": "models"
     },
     {
-     "type": "required List<String>",
+     "type": "List<String>",
      "name": "types"
     },
     {
-     "type": "required List<String>",
+     "type": "List<String>",
      "name": "subtypes"
     },
     {
-     "type": "required List<String>",
+     "type": "List<String>",
      "name": "colors"
     },
     {
-     "type": "required Set<String>",
+     "type": "Set<String>",
      "name": "pprMaterials"
     },
     {
-     "type": "required Set<String>",
+     "type": "Set<String>",
      "name": "colorModifiers"
     },
     {
-     "type": "required String",
+     "type": "String",
      "name": "polyrollBrand"
-    },
-    {
-     "type": "}",
-     "name": ""
     }
    ],
    "he": [
@@ -15084,40 +14816,36 @@
      "name": "p"
     },
     {
-     "type": "{\n  required List<LipRow> catalog",
-     "name": ""
+     "type": "List<LipRow>",
+     "name": "catalog"
     },
     {
-     "type": "required List<String>",
+     "type": "List<String>",
      "name": "models"
     },
     {
-     "type": "required List<String>",
+     "type": "List<String>",
      "name": "types"
     },
     {
-     "type": "required List<String>",
+     "type": "List<String>",
      "name": "subtypes"
     },
     {
-     "type": "required List<String>",
+     "type": "List<String>",
      "name": "colors"
     },
     {
-     "type": "required Set<String>",
+     "type": "Set<String>",
      "name": "pprMaterials"
     },
     {
-     "type": "required Set<String>",
+     "type": "Set<String>",
      "name": "colorModifiers"
     },
     {
-     "type": "required String",
+     "type": "String",
      "name": "polyrollBrand"
-    },
-    {
-     "type": "}",
-     "name": ""
     }
    ],
    "he": [
@@ -15173,11 +14901,7 @@
      "name": "categoryHe"
     },
     {
-     "type": "{\n  Set<String> hotWaterAccessorySkus = const {}",
-     "name": ""
-    },
-    {
-     "type": "}",
+     "type": "Set<String> hotWaterAccessorySkus = const",
      "name": ""
     }
    ],
@@ -15304,12 +15028,8 @@
      "name": "defNames"
     },
     {
-     "type": "{\n  required List<String> fixedColumns",
-     "name": ""
-    },
-    {
-     "type": "}",
-     "name": ""
+     "type": "List<String>",
+     "name": "fixedColumns"
     }
    ],
    "he": [
@@ -15403,8 +15123,8 @@
      "name": "w"
     },
     {
-     "type": "{required int kIndexMinWordLen}",
-     "name": ""
+     "type": "int",
+     "name": "kIndexMinWordLen"
     }
    ],
    "he": [],
@@ -15421,8 +15141,8 @@
      "name": "grossTotal"
     },
     {
-     "type": "{required double vatRate}",
-     "name": ""
+     "type": "double",
+     "name": "vatRate"
     }
    ],
    "he": [
@@ -15499,7 +15219,7 @@
      "name": "p"
     },
     {
-     "type": "{bool companyCatalogActive = false}",
+     "type": "bool companyCatalogActive = false",
      "name": ""
     }
    ],
@@ -15516,12 +15236,12 @@
    "ret": "bool",
    "params": [
     {
-     "type": "{required String area",
-     "name": ""
+     "type": "String",
+     "name": "area"
     },
     {
-     "type": "required bool isContainer}",
-     "name": ""
+     "type": "bool",
+     "name": "isContainer"
     }
    ],
    "he": [
@@ -15549,8 +15269,8 @@
      "name": "email"
     },
     {
-     "type": "{required Set<String> kOwnerEmails}",
-     "name": ""
+     "type": "Set<String>",
+     "name": "kOwnerEmails"
     }
    ],
    "he": [],
@@ -15591,8 +15311,8 @@
      "name": "color"
     },
     {
-     "type": "{required Set<String> kTrueColors}",
-     "name": ""
+     "type": "Set<String>",
+     "name": "kTrueColors"
     }
    ],
    "he": [],
@@ -15843,12 +15563,8 @@
      "name": "reply"
     },
     {
-     "type": "{\n  required List<String> categories",
-     "name": ""
-    },
-    {
-     "type": "}",
-     "name": ""
+     "type": "List<String>",
+     "name": "categories"
     }
    ],
    "he": [
@@ -15876,12 +15592,8 @@
      "name": "reply"
     },
     {
-     "type": "{\n  required List<String> productKeys",
-     "name": ""
-    },
-    {
-     "type": "}",
-     "name": ""
+     "type": "List<String>",
+     "name": "productKeys"
     }
    ],
    "he": [
@@ -15909,12 +15621,8 @@
      "name": "reply"
     },
     {
-     "type": "{\n  required Set<String> catalogActionIds",
-     "name": ""
-    },
-    {
-     "type": "}",
-     "name": ""
+     "type": "Set<String>",
+     "name": "catalogActionIds"
     }
    ],
    "he": [
@@ -15967,12 +15675,8 @@
      "name": "reply"
     },
     {
-     "type": "{\n  required Set<String> componentTypes",
-     "name": ""
-    },
-    {
-     "type": "}",
-     "name": ""
+     "type": "Set<String>",
+     "name": "componentTypes"
     }
    ],
    "he": [
@@ -15997,12 +15701,8 @@
      "name": "reply"
     },
     {
-     "type": "{\n  required Set<String> conditionFields",
-     "name": ""
-    },
-    {
-     "type": "}",
-     "name": ""
+     "type": "Set<String>",
+     "name": "conditionFields"
     }
    ],
    "he": [
@@ -16030,8 +15730,8 @@
      "name": "material"
     },
     {
-     "type": "{required List<dynamic> kMaterialOrder}",
-     "name": ""
+     "type": "List<dynamic>",
+     "name": "kMaterialOrder"
     }
    ],
    "he": [
@@ -16206,8 +15906,8 @@
      "name": "s"
     },
     {
-     "type": "{required String kCsvBom}",
-     "name": ""
+     "type": "String",
+     "name": "kCsvBom"
     }
    ],
    "he": [],
@@ -16413,56 +16113,52 @@
      "name": "nameHe"
     },
     {
-     "type": "{\n  required Set<String> chipTypes",
-     "name": ""
+     "type": "Set<String>",
+     "name": "chipTypes"
     },
     {
-     "type": "required Set<String>",
+     "type": "Set<String>",
      "name": "compoundTypes"
     },
     {
-     "type": "required Set<String>",
+     "type": "Set<String>",
      "name": "level1Connection"
     },
     {
-     "type": "required Set<String>",
+     "type": "Set<String>",
      "name": "level2Shape"
     },
     {
-     "type": "required Set<String>",
+     "type": "Set<String>",
      "name": "level3Feature"
     },
     {
-     "type": "required Set<String>",
+     "type": "Set<String>",
      "name": "level4Thread"
     },
     {
-     "type": "required Set<String>",
+     "type": "Set<String>",
      "name": "chipMaterial"
     },
     {
-     "type": "required Set<String>",
+     "type": "Set<String>",
      "name": "chipUnits"
     },
     {
-     "type": "required Set<String>",
+     "type": "Set<String>",
      "name": "l1Compounds"
     },
     {
-     "type": "required Set<String>",
+     "type": "Set<String>",
      "name": "l2Compounds"
     },
     {
-     "type": "required Set<String>",
+     "type": "Set<String>",
      "name": "l3Compounds"
     },
     {
-     "type": "required Set<String>",
+     "type": "Set<String>",
      "name": "l4Compounds"
-    },
-    {
-     "type": "}",
-     "name": ""
     }
    ],
    "he": [
@@ -16510,28 +16206,20 @@
    "ret": "List<AccessoryRule>",
    "params": [
     {
-     "type": "{\n  required List<SmartProduct> catalog",
-     "name": ""
+     "type": "List<SmartProduct>",
+     "name": "catalog"
     },
     {
-     "type": "required Map<String",
-     "name": ""
-    },
-    {
-     "type": "String>",
+     "type": "Map<String, String>",
      "name": "smartKeyToId"
     },
     {
-     "type": "required String",
+     "type": "String",
      "name": "kPlumbingTradeId"
     },
     {
-     "type": "required String",
+     "type": "String",
      "name": "kUncategorizedCategoryId"
-    },
-    {
-     "type": "}",
-     "name": ""
     }
    ],
    "he": [
@@ -16575,28 +16263,20 @@
    "ret": "List<SmartFixture>",
    "params": [
     {
-     "type": "{\n  required List<SmartProduct> products",
-     "name": ""
+     "type": "List<SmartProduct>",
+     "name": "products"
     },
     {
-     "type": "required Map<String",
-     "name": ""
-    },
-    {
-     "type": "String>",
+     "type": "Map<String, String>",
      "name": "smartKeyToId"
     },
     {
-     "type": "required String",
+     "type": "String",
      "name": "kPlumbingTradeId"
     },
     {
-     "type": "required String",
+     "type": "String",
      "name": "kUncategorizedCategoryId"
-    },
-    {
-     "type": "}",
-     "name": ""
     }
    ],
    "he": [
@@ -16618,7 +16298,7 @@
      "name": "dir"
     },
     {
-     "type": "{double tol = 1e-6}",
+     "type": "double tol = 1e-6",
      "name": ""
     }
    ],
@@ -16819,12 +16499,8 @@
      "name": "value"
     },
     {
-     "type": "{required Map<String",
-     "name": ""
-    },
-    {
-     "type": "List<String>> kRdOrder}",
-     "name": ""
+     "type": "Map<String, List<String>>",
+     "name": "kRdOrder"
     }
    ],
    "he": [],
@@ -16923,15 +16599,7 @@
      "name": "chain"
     },
     {
-     "type": "{\n  Map<String",
-     "name": ""
-    },
-    {
-     "type": "KitSpec> verifiedSpecs = const {}",
-     "name": ""
-    },
-    {
-     "type": "}",
+     "type": "Map<String, KitSpec> verifiedSpecs = const",
      "name": ""
     }
    ],
@@ -16952,16 +16620,12 @@
      "name": "title"
     },
     {
-     "type": "{\n  required List<CatalogNode> tree",
-     "name": ""
+     "type": "List<CatalogNode>",
+     "name": "tree"
     },
     {
-     "type": "required Iterable<CatProduct>",
+     "type": "Iterable<CatProduct>",
      "name": "allProducts"
-    },
-    {
-     "type": "}",
-     "name": ""
     }
    ],
    "he": [
@@ -16988,12 +16652,8 @@
      "name": "w"
     },
     {
-     "type": "{required Map<String",
-     "name": ""
-    },
-    {
-     "type": "dynamic> finalForm}",
-     "name": ""
+     "type": "Map<String, dynamic>",
+     "name": "finalForm"
     }
    ],
    "he": [
@@ -17009,36 +16669,28 @@
    "ret": "String",
    "params": [
     {
-     "type": "{\n  required String triggerLabel",
-     "name": ""
+     "type": "String",
+     "name": "triggerLabel"
     },
     {
-     "type": "required String",
+     "type": "String",
      "name": "fieldLabel"
     },
     {
-     "type": "required String",
+     "type": "String",
      "name": "opRaw"
     },
     {
-     "type": "required Object",
+     "type": "Object",
      "name": "value"
     },
     {
-     "type": "required String",
+     "type": "String",
      "name": "actionLabel"
     },
     {
-     "type": "required Map<String",
-     "name": ""
-    },
-    {
-     "type": "String>",
+     "type": "Map<String, String>",
      "name": "opLabels"
-    },
-    {
-     "type": "}",
-     "name": ""
     }
    ],
    "he": [
@@ -17087,7 +16739,7 @@
      "name": "input"
     },
     {
-     "type": "{\n  num freqHigh = 5",
+     "type": "num freqHigh = 5",
      "name": ""
     },
     {
@@ -17108,10 +16760,6 @@
     },
     {
      "type": "int staleDays = 90",
-     "name": ""
-    },
-    {
-     "type": "}",
      "name": ""
     }
    ],
@@ -17157,8 +16805,8 @@
    "ret": "String",
    "params": [
     {
-     "type": "{\n  String? uid",
-     "name": ""
+     "type": "String?",
+     "name": "uid"
     },
     {
      "type": "String?",
@@ -17166,10 +16814,6 @@
     },
     {
      "type": "String anonymousKey = 'anonymous'",
-     "name": ""
-    },
-    {
-     "type": "}",
      "name": ""
     }
    ],
@@ -17282,12 +16926,8 @@
      "name": "key"
     },
     {
-     "type": "{\n  required List<SmartProduct> catalog",
-     "name": ""
-    },
-    {
-     "type": "}",
-     "name": ""
+     "type": "List<SmartProduct>",
+     "name": "catalog"
     }
    ],
    "he": [
@@ -17311,12 +16951,8 @@
      "name": "cat"
     },
     {
-     "type": "{\n  required List<SmartProduct> catalog",
-     "name": ""
-    },
-    {
-     "type": "}",
-     "name": ""
+     "type": "List<SmartProduct>",
+     "name": "catalog"
     }
    ],
    "he": [
@@ -17340,8 +16976,8 @@
      "name": "od"
     },
     {
-     "type": "{required List<int> kDnRungs}",
-     "name": ""
+     "type": "List<int>",
+     "name": "kDnRungs"
     }
    ],
    "he": [],
@@ -17458,11 +17094,7 @@
    "ret": "Map<String,",
    "params": [
     {
-     "type": "Map<dynamic",
-     "name": ""
-    },
-    {
-     "type": "dynamic>",
+     "type": "Map<dynamic, dynamic>",
      "name": "m"
     }
    ],
@@ -17503,16 +17135,12 @@
      "name": "line"
     },
     {
-     "type": "{\n  required List<ConnectorType> connectorTypes",
-     "name": ""
+     "type": "List<ConnectorType>",
+     "name": "connectorTypes"
     },
     {
-     "type": "required List<SystemDef>",
+     "type": "List<SystemDef>",
      "name": "systems"
-    },
-    {
-     "type": "}",
-     "name": ""
     }
    ],
    "he": [
@@ -17604,28 +17232,24 @@
    "ret": "String",
    "params": [
     {
-     "type": "{\n  required double dropBar",
-     "name": ""
+     "type": "double",
+     "name": "dropBar"
     },
     {
-     "type": "required double",
+     "type": "double",
      "name": "totalK"
     },
     {
-     "type": "required double",
+     "type": "double",
      "name": "frictionMetres"
     },
     {
-     "type": "required double",
+     "type": "double",
      "name": "minBoreMm"
     },
     {
-     "type": "required String?",
+     "type": "String?",
      "name": "bottleneckSku"
-    },
-    {
-     "type": "}",
-     "name": ""
     }
    ],
    "he": [
@@ -18110,8 +17734,8 @@
      "name": "store"
     },
     {
-     "type": "{required bool on}",
-     "name": ""
+     "type": "bool",
+     "name": "on"
     }
    ],
    "he": [
@@ -21564,7 +21188,7 @@
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_capautodream_stat_label2",
+   "name": "gen_capautodream_row_label",
    "type": "String",
    "he": [
     "דאטה",
@@ -21632,7 +21256,7 @@
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_capautodream_stat_label3",
+   "name": "gen_capautodream_stat_label2",
    "type": "String",
    "he": [
     "דאטה",
@@ -21649,7 +21273,7 @@
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_capautodream_stat_label4",
+   "name": "gen_capautodream_row_label2",
    "type": "String",
    "he": [
     "דאטה",
@@ -22309,6 +21933,1060 @@
     "ידנית"
    ],
    "file": "auto/gen_capmailphone_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg4",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg5",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg6",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg7",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg8",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg9",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg10",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg11",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg12",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg13",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg14",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg15",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg16",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg17",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg18",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg19",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg20",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg21",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg22",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg23",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg24",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg25",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg26",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg27",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg28",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg29",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg30",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg31",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg32",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg33",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg34",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg35",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg36",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg37",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg38",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg39",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg40",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg41",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg42",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg43",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg44",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg45",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg46",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg47",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg48",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg49",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg50",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg51",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg52",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg53",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg54",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg55",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg56",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg57",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg58",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg59",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg60",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg61",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_calc_arg62",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
@@ -24179,6 +24857,533 @@
     "ידנית"
    ],
    "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg4",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg5",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg6",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg7",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg8",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg9",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg10",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg11",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg12",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg13",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg14",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg15",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg16",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg17",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg18",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg19",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg20",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg21",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg22",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg23",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg24",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg25",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg26",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg27",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg28",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg29",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg30",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_calc_arg31",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
@@ -26070,6 +27275,91 @@
   },
   {
    "name": "gen_showcase_header_text4",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_showcase_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_showcase_other_label4",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_showcase_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_showcase_other_label5",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_showcase_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_showcase_other_label6",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_showcase_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_showcase_other_label7",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_showcase_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_showcase_header_text5",
    "type": "String",
    "he": [
     "דאטה",
@@ -32646,6 +33936,222 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "amountInWords_ONES",
+   "type": "List<String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "amount-in-words-sockets.dart",
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "",
+    "אחד",
+    "שניים",
+    "שלושה",
+    "ארבעה",
+    "חמישה",
+    "שישה",
+    "שבעה",
+    "שמונה",
+    "תשעה"
+   ]
+  },
+  {
+   "name": "amountInWords_TEENS",
+   "type": "List<String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "amount-in-words-sockets.dart",
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "עשרה",
+    "אחד עשר",
+    "שנים עשר",
+    "שלושה עשר",
+    "ארבעה עשר",
+    "חמישה עשר",
+    "שישה עשר",
+    "שבעה עשר",
+    "שמונה עשר",
+    "תשעה עשר"
+   ]
+  },
+  {
+   "name": "amountInWords_TENS",
+   "type": "List<String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "amount-in-words-sockets.dart",
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "",
+    "",
+    "עשרים",
+    "שלושים",
+    "ארבעים",
+    "חמישים",
+    "שישים",
+    "שבעים",
+    "שמונים",
+    "תשעים"
+   ]
+  },
+  {
+   "name": "amountInWords_HUNDREDS",
+   "type": "List<String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "amount-in-words-sockets.dart",
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "",
+    "מאה",
+    "מאתיים",
+    "שלוש מאות",
+    "ארבע מאות",
+    "חמש מאות",
+    "שש מאות",
+    "שבע מאות",
+    "שמונה מאות",
+    "תשע מאות"
+   ]
+  },
+  {
+   "name": "amountInWords_ONES_F",
+   "type": "List<String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "amount-in-words-sockets.dart",
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "",
+    "אחת",
+    "שתיים",
+    "שלוש",
+    "ארבע",
+    "חמש",
+    "שש",
+    "שבע",
+    "שמונה",
+    "תשע"
+   ]
+  },
+  {
+   "name": "amountInWords_TEENS_F",
+   "type": "List<String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "amount-in-words-sockets.dart",
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "עשר",
+    "אחת עשרה",
+    "שתים עשרה",
+    "שלוש עשרה",
+    "ארבע עשרה",
+    "חמש עשרה",
+    "שש עשרה",
+    "שבע עשרה",
+    "שמונה עשרה",
+    "תשע עשרה"
+   ]
+  },
+  {
+   "name": "amountInWords_THOUSAND_CONSTRUCT",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "amount-in-words-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "amountInWords_T",
+   "type": "Map<String, dynamic>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "amount-in-words-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "AMOUNT_IN_WORDS_T",
    "type": "Map<String, Object>",
    "he": [
@@ -33969,6 +35475,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "cockpitCsvRows_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "cockpit-csv-rows-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "COCKPIT_CSV_ROWS_T",
    "type": "Map<String, String>",
    "he": [
@@ -34094,6 +35618,24 @@
     "וורטיקל"
    ],
    "file": "cockpit-thanks-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "cockpitWorkListText_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "cockpit-work-list-text-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -35468,6 +37010,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "enrollSummary_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "enroll-summary-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "ENROLL_SUMMARY_T",
    "type": "Map<String, String>",
    "he": [
@@ -35553,6 +37113,24 @@
     "גובר"
    ],
    "file": "ev-label-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "eventsCsvRows_T2",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "events-csv-rows-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -36590,6 +38168,114 @@
     "ח",
     "ט"
    ]
+  },
+  {
+   "name": "gematria_U",
+   "type": "List<String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "gematria-sockets.dart",
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "",
+    "א",
+    "ב",
+    "ג",
+    "ד",
+    "ה",
+    "ו",
+    "ז",
+    "ח",
+    "ט"
+   ]
+  },
+  {
+   "name": "gematria_T",
+   "type": "List<String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "gematria-sockets.dart",
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "",
+    "י",
+    "כ",
+    "ל",
+    "מ",
+    "נ",
+    "ס",
+    "ע",
+    "פ",
+    "צ"
+   ]
+  },
+  {
+   "name": "gematria_H",
+   "type": "List<String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "gematria-sockets.dart",
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "",
+    "ק",
+    "ר",
+    "ש",
+    "ת",
+    "תק",
+    "תר",
+    "תש",
+    "תת",
+    "תתק"
+   ]
+  },
+  {
+   "name": "gematria_T2",
+   "type": "Map<String, dynamic>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "gematria-sockets.dart",
+   "shelf": "new/dart-data-maor"
   },
   {
    "name": "GEMATRIA_T",
@@ -38764,7 +40450,7 @@
   },
   {
    "name": "monthHeOf_MONTHS",
-   "type": "List<dynamic>",
+   "type": "List<List<String>>",
    "he": [
     "אטום",
     "דאטה",
@@ -42273,6 +43959,24 @@
     "תומכים"
    ],
    "file": "supporters-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "taskIdentity_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "task-identity-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {

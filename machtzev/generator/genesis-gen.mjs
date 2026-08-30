@@ -156,7 +156,15 @@ function generate(slug, specText) {
     // 🌾 זנב-הקציר: אמת-קרקע מבדיקת-האטום (twin-tails.json, נכתב ע"י רתמת-התאומים) —
     // פרמטרי-הזנב של מנוע רב-פרמטרי נפלטים כליטרלים ⇒ המסך שקול לתאום-ה-JS שהוכיח.
     const tailMeta = TWIN_TAILS[fn.name];
-    const tailLits = tailMeta && tailMeta.simple && tailMeta.tail.length === fn.params.length - 1 ? tailMeta.tail.map(x => dartLit(x)) : null;
+    // טוהר-המסך: מחרוזת-עברית בזנב יורדת לקובץ-התוכן (const) והליטרל מפנה אליה — אפס עברית בקוד
+    const tl = (v) => {
+      if (v === null) return 'null';
+      if (typeof v === 'string') return /[֐-׿]/.test(v) ? pendingHebArg(v) : dartLit(v);
+      if (typeof v === 'number' || typeof v === 'boolean') return dartLit(v);
+      if (Array.isArray(v)) return 'const [' + v.map(tl).join(', ') + ']';
+      return 'const {' + Object.entries(v).map(([k, x]) => `${tl(k)}: ${tl(x)}`).join(', ') + '}';
+    };
+    const tailLits = tailMeta && tailMeta.simple && tailMeta.tail.length === fn.params.length - 1 ? tailMeta.tail.map(tl) : null;
     const args = [];
     let pi = -1;
     for (const p of fn.params) {

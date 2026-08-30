@@ -25,8 +25,10 @@ export const dartLit = (v, top = true) => {
 const jsonable = (v) => {
   try { const s = JSON.stringify(v); return s !== undefined && s.length <= 2000 && JSON.stringify(JSON.parse(s)) === s; } catch { return false; }
 };
-const simpleVal = (v) => v === null || ['string', 'number', 'boolean'].includes(typeof v)
-  || (Array.isArray(v) && v.length <= 24 && v.every(x => x === null || ['string', 'number', 'boolean'].includes(typeof x)));
+const prim = (v) => v === null || ['string', 'number', 'boolean'].includes(typeof v);
+const simpleVal = (v) => prim(v)
+  || (Array.isArray(v) && v.length <= 60 && v.every(prim))
+  || (v && typeof v === 'object' && !Array.isArray(v) && Object.keys(v).length <= 60 && Object.values(v).every(prim));
 
 // חיתוך-מאוזן: מ-start עד סוגר-הסיום התואם (start מצביע אחרי הפותח)
 const balanced = (s, start, open = '(', close = ')') => {

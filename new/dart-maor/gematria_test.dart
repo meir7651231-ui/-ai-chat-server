@@ -1,5 +1,5 @@
-import '../dart-data-maor/gematria-terms.dart' as td_gematria;
-// בדיקת-חוזה לאטום gem (Dart, term: (k)=>td_gematria.kTerms[k]!). מראה חוזה = new/atoms/gematria.test.mjs.
+import '../dart-data-maor/gematria-sockets.dart' as sk_gematria;
+// בדיקת-חוזה לאטום gem (Dart). מראה חוזה = new/atoms/gematria.test.mjs.
 // כולל ratchet-הסגר: n≥1000 כפולת-100 ⇒ '״' (JS slice בטוח על מחרוזת ריקה).
 import 'gematria.dart';
 
@@ -19,17 +19,17 @@ void main() {
   for (final c in cases) {
     final a = c[0] as num;
     final w = c[1] as String;
-    final g = gem(a, term: (k)=>td_gematria.kTerms[k]!);
+    final g = gem(a, sk_gematria.gematria_U, sk_gematria.gematria_T, sk_gematria.gematria_H, sk_gematria.gematria_T2);
     if (g != w) {
       fail = 1;
-      print('✗ gem($a, term: (k)=>td_gematria.kTerms[k]!) = "$g" ≠ "$w"');
+      print('✗ gem($a, sk_gematria.gematria_U, sk_gematria.gematria_T, sk_gematria.gematria_H, sk_gematria.gematria_T2) = "$g" ≠ "$w"');
     }
   }
 
   // ratchet-הסגר: המקרה שהפיל את הפורט — s ריק ⇒ substring(0,-1) זרק RangeError.
-  assert(gem(1000, term: (k)=>td_gematria.kTerms[k]!) == '״', 'gem(1000, term: (k)=>td_gematria.kTerms[k]!) צריך "״" (JS slice בטוח), קיבל "${gem(1000, term: (k)=>td_gematria.kTerms[k]!)}"');
-  assert(gem(double.infinity, term: (k)=>td_gematria.kTerms[k]!) == '', 'Infinity ⇒ ""');
-  assert(gem(999, term: (k)=>td_gematria.kTerms[k]!) == 'תתקצ״ט', 'gem(999, term: (k)=>td_gematria.kTerms[k]!)="${gem(999, term: (k)=>td_gematria.kTerms[k]!)}"');
+  assert(gem(1000, sk_gematria.gematria_U, sk_gematria.gematria_T, sk_gematria.gematria_H, sk_gematria.gematria_T2) == '״', 'gem(1000, sk_gematria.gematria_U, sk_gematria.gematria_T, sk_gematria.gematria_H, sk_gematria.gematria_T2) צריך "״" (JS slice בטוח), קיבל "${gem(1000, sk_gematria.gematria_U, sk_gematria.gematria_T, sk_gematria.gematria_H, sk_gematria.gematria_T2)}"');
+  assert(gem(double.infinity, sk_gematria.gematria_U, sk_gematria.gematria_T, sk_gematria.gematria_H, sk_gematria.gematria_T2) == '', 'Infinity ⇒ ""');
+  assert(gem(999, sk_gematria.gematria_U, sk_gematria.gematria_T, sk_gematria.gematria_H, sk_gematria.gematria_T2) == 'תתקצ״ט', 'gem(999, sk_gematria.gematria_U, sk_gematria.gematria_T, sk_gematria.gematria_H, sk_gematria.gematria_T2)="${gem(999, sk_gematria.gematria_U, sk_gematria.gematria_T, sk_gematria.gematria_H, sk_gematria.gematria_T2)}"');
 
   if (fail != 0) throw StateError('gematria: חוזה נכשל');
   print('✓ gematria: 9 דוגמאות-חוזה + ratchet-הסגר — ירוק');
