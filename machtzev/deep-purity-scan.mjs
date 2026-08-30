@@ -6,6 +6,8 @@
  *    domstr — מחרוזת-דומיין לטינית (שמות, קידומות, כתובות — 'maor_...', '972', 'wa.me')
  *    magic  — מספר-קסם (קבוע-דומיין מספרי; 0/1/2/־1 מבניים מוחרגים)
  *  אטום-דאטה טהור (צורת-דאטה) אינו הפרה — הוא הבית הנכון של דאטה.
+ *  הצהרות-מטרה מחריגות ליטרל (המנוע מביא את המטרה — "purpose-first"):
+ *    'חוק-6'/'פרוטוקול-חיצוני' — זהות/סוד/פרוטוקול-דפדפן-או-רשת · 'קבוע-מתמטי' — קבוע מתמטי/יחידת-זמן/מבני/ברירת-מחדל-אלגוריתם (לא נתון-לקוח; ההתאמה האמיתית עוברת דרך שקע-מוזרק).
  *  פלט: machtzev/emit/DEEP-PURITY-FINDINGS.md ממוין לפי חומרה + סיכום למסוף. */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -50,7 +52,7 @@ for (const dir of DIRS) {
     let exempt6 = 0;
     const isLaw6 = (pos) => {
       const ln = lineOf(pos);
-      for (let q = Math.max(0, ln - 2); q <= ln; q++) if (rawLines[q] && (rawLines[q].includes('חוק-6') || rawLines[q].includes('פרוטוקול-חיצוני'))) { exempt6++; return true; }
+      for (let q = Math.max(0, ln - 2); q <= ln; q++) if (rawLines[q] && (rawLines[q].includes('חוק-6') || rawLines[q].includes('פרוטוקול-חיצוני') || rawLines[q].includes('קבוע-מתמטי'))) { exempt6++; return true; }
       return false;
     };
     const seen = (arr, v, cap) => { if (arr.length < cap) arr.push(String(v).slice(0, 30)); };
@@ -80,7 +82,7 @@ for (const dir of DIRS) {
       }
       if (_ts.isNumericLiteral(n)) {
         const val = parseFloat(n.text);
-        if (val >= 10 && !/^0[xbo]/i.test(n.text) && !(Number.isInteger(val) && (val & (val - 1)) === 0)) {
+        if (val >= 10 && !/^0[xbo]/i.test(n.getText(sf)) && !(Number.isInteger(val) && (val & (val - 1)) === 0)) {   // getText: הטקסט-המקורי (n.text מנורמל לעשרוני ⇒ מפספס hex)
           const p2 = n.parent;
           const bitwise = p2 && _ts.isBinaryExpression(p2) && /[&|^]|<<|>>/.test(p2.operatorToken.getText(sf));
           if (!bitwise && !isLaw6(n.getStart(sf))) seen(cats.magic, n.text, 6);

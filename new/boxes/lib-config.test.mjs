@@ -197,7 +197,7 @@ const must = [
   ["const DEFAULT_CONFIG = { slug: LIB_CONFIG_TERMS.k10, orgName: '', theme: LIB_CONFIG_TERMS.k11, modules: {}, features: {} }", 'DEFAULT_CONFIG'],
   ["const INTEGRATION_KEYS = [LIB_CONFIG_TERMS.k12, LIB_CONFIG_TERMS.k13, LIB_CONFIG_TERMS.k14, LIB_CONFIG_TERMS.k15, LIB_CONFIG_TERMS.k16, LIB_CONFIG_TERMS.k17, LIB_CONFIG_TERMS.k18, LIB_CONFIG_TERMS.k19, LIB_CONFIG_TERMS.k20, LIB_CONFIG_TERMS.k21, 'ai', LIB_CONFIG_TERMS.k22, LIB_CONFIG_TERMS.k23]", 'INTEGRATION_KEYS'],
   ["const MOTION_KEYS = [LIB_CONFIG_TERMS.k33, LIB_CONFIG_TERMS.k34, LIB_CONFIG_TERMS.k35]", 'MOTION_KEYS'],
-  ["import { SITE_LANGS } from '../atoms/site-langs-data.mjs'", 'SITE_LANGS'],
+  ["import { SITE_LANGS } from '../atoms/site-langs-allow.mjs'", 'SITE_LANGS'],
   ["const TEMPLATE_KEYS = [LIB_CONFIG_TERMS.k36, LIB_CONFIG_TERMS.k37, LIB_CONFIG_TERMS.k38, LIB_CONFIG_TERMS.k39, LIB_CONFIG_TERMS.k40]", 'TEMPLATE_KEYS'],
   ["atomFeatureOn(cfg, key, NAV_MODULE_KEYS, atomModuleOn)", 'חיווט-featureOn'],
   ["makeNormalizeSite(atomSafeHttpsUrl, SITE_LANGS)", 'חיווט-normalizeSite'],

@@ -13,11 +13,11 @@ import { IS_IOS_T as __d_isIos_IS_IOS_T } from '../atoms/is-ios-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const atomIsIos = (...a) => __pure_isIos(...a, ...Array(Math.max(0, 0 - a.length)).fill(undefined), __d_isIos_IS_IOS_T);
 import { featureOn } from '../atoms/feature-on.mjs';
-// ── הכרעות ה-PWA/מניפסט חיות כדאטה באטום pwa-manifest-data (הכרעה 19) ──
+// ── הכרעות ה-PWA/מניפסט חיות כדאטה באטום pwa-manifest-spec (הכרעה 19) ──
 import {
   PWA_FLAG, SW_FILE, SHORT_NAME_MAX, MANIFEST_TYPE, MANIFEST_LANG, MANIFEST_DIR,
   MANIFEST_DISPLAY, MANIFEST_ORIENTATION, MANIFEST_THEME, MANIFEST_BG, ICON_TYPE, MANIFEST_ICONS,
-} from '../atoms/pwa-manifest-data.mjs';
+} from '../atoms/pwa-manifest-spec.mjs';
 
 // ── 1) installAvailable — חוט install-available, מצב-המודול (deferredInstall) מוזרק ──
 export const installAvailable = atomInstallAvailable;

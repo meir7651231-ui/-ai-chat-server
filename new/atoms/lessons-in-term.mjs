@@ -2,6 +2,7 @@
  *  חוזה: lessons-in-term.contract.md
  *  חולץ כלשונו מ-maor/src/components/courses/lib.ts:213+236-259;
  *  הקבוע-השכן WEEKS_PER_MONTH הוגדר מקומית (ערך, לא import — חוק-1). */
+// קבוע-מתמטי: שבועות-בשנה חלקי חודשי-שנה (52/12)
 export const WEEKS_PER_MONTH = 52 / 12;
 
 export function lessonsInTerm(freq, unit, term, months = 1, T) {
@@ -23,6 +24,7 @@ export function lessonsInTerm(freq, unit, term, months = 1, T) {
         case T.k8:
             return perMonth * 6;
         case T.k9:
+            // קבוע-מתמטי: חודשי-שנה
             return perMonth * 12;
         default:
             return 0;

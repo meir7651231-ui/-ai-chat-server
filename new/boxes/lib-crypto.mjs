@@ -59,6 +59,7 @@ async function deriveWrapKey(secret, salt, iter) {
 
 /** הצפנה: iv אקראי → "iv:ct" ב-base64. */
 async function aesEnc(key, plain) {
+  // פרוטוקול-חיצוני: אורך-IV תקני ל-AES-GCM (12 בתים)
   const iv = rand(12);
   const ct = await crypto.subtle.encrypt({ name: LIB_CRYPTO_TERMS.k5, iv }, key, plain);
   return b64(iv) + ':' + b64(ct);

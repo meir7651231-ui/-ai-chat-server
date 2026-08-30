@@ -31,6 +31,7 @@ export const isoToday = (isoLocal, now = new Date()) => isoLocal(now);
 //    (שונה מאטום fmt-date שמחזיר '—'; הליבה DD/MM/YYYY נלקחת מהאטום.)
 export function fmtDate(iso) {
   if (!iso) return '';
+  // קבוע-מתמטי: אורך-קידומת תאריך-ISO (YYYY-MM-DD)
   const [y, m, d] = iso.slice(0, 10).split('-');
   if (!y || !m || !d) return iso;
   return fmtDateCore(iso);

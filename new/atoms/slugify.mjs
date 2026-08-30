@@ -11,6 +11,7 @@ export function slugify(orgName, taken, HEB2LAT, T) {
     let base = lat.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').replace(/--+/g, '-');
     if (base.length < 2)
         base = T.k1;
+    // קבוע-מתמטי: אורך-סלאג מרבי (תווים)
     if (base.length > 30)
         base = base.slice(0, 30).replace(/-+$/g, '');
     if (!taken.includes(base))

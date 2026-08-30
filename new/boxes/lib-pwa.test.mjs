@@ -132,8 +132,8 @@ function fakeIo(state) {
 
 /* 🛡 מגן-הכרעה: ההכרעות verbatim במקור-הקופסה (סדר-מפתחות/צבעים/אייקונים/סדר-שערים). */
 const src = readFileSync(new URL('./lib-pwa.mjs', import.meta.url), 'utf8');
-// הכרעות-המניפסט חיות כדאטה באטום pwa-manifest-data (הכרעה 19) — מאומתות שם
-const manifestData = readFileSync(new URL('../atoms/pwa-manifest-data.mjs', import.meta.url), 'utf8');
+// הכרעות-המניפסט חיות כדאטה באטום pwa-manifest-spec (הכרעה 19) — מאומתות שם
+const manifestData = readFileSync(new URL('../atoms/pwa-manifest-spec.mjs', import.meta.url), 'utf8');
 for (const needle of ["'#211d17'", "'#faf7f2'", "'shell.pwa'", "'sw.js'", 'portrait-primary', "'standalone'", "'he'", "'rtl'"]) {
   if (!manifestData.includes(needle)) { console.error(`✗ מגן: ההכרעה ${needle} נעדרה מאטום-המניפסט`); f = 1; }
 }

@@ -48,10 +48,10 @@ function scanHebYear(hebYear) {
   const has30 = new Set();
   const gy = hebYear - HEB_CAL.hebYearOffset; // 1 באוגוסט של השנה הזו קודם תמיד לא' תשרי של hebYear
   for (let i = 0; i < HEB_CAL.scanWindowDays; i++) {
-    const p = hebParts(new Date(gy, 7, 1 + i, 12));
+    const p = hebParts(new Date(gy, 7, 1 + i, HEB_CAL.noonHour));
     if (p.year !== hebYear) continue;
     if (!seq.includes(p.month)) seq.push(p.month);
-    if (p.day === 30) has30.add(p.month);
+    if (p.day === HEB_CAL.longLen) has30.add(p.month);
   }
   const res = { seq, has30 };
   hebYearScan.set(hebYear, res);

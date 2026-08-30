@@ -1,5 +1,5 @@
-// בדיקת-צילום · pwa-manifest-data — ביט-אחר-ביט.
-import * as M from './pwa-manifest-data.mjs';
+// בדיקת-צילום · pwa-manifest-spec — ביט-אחר-ביט.
+import * as M from './pwa-manifest-spec.mjs';
 import assert from 'node:assert';
 assert.strictEqual(M.PWA_FLAG, 'shell.pwa');
 assert.strictEqual(M.SW_FILE, 'sw.js');
@@ -15,4 +15,4 @@ assert.strictEqual(M.ICON_TYPE, 'image/png');
 assert.strictEqual(M.MANIFEST_ICONS.length, 3);
 assert.strictEqual(M.MANIFEST_ICONS[2].purpose, 'maskable');
 assert.strictEqual(M.MANIFEST_ICONS[0].src, 'icons/icon-192.png');
-console.log('OK pwa-manifest-data');
+console.log('OK pwa-manifest-spec');

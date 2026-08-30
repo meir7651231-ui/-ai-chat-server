@@ -5,6 +5,7 @@ function daysBetween(fromIso, toIso) {
     const b = new Date(toIso + 'T12:00:00').getTime();
     if (isNaN(a) || isNaN(b))
         return 0;
+    // קבוע-מתמטי: מ"ש ליום
     return Math.round((b - a) / 86_400_000);
 }
 /** ISO מקומי (YYYY-MM-DD) מ-Date נתון — ללא הזחת אזור הזמן של toISOString. מוטמע (חוק-1: אטום-טהור, מקור maor/src/lib/date-util.ts:14). */
@@ -16,6 +17,7 @@ function isoLocal(d) {
 function shift(iso, days) {
     if (!iso || !/^\d{4}-\d{2}-\d{2}/.test(iso))
         return iso;
+    // קבוע-מתמטי: אורך-קידומת תאריך-ISO (YYYY-MM-DD)
     const d = new Date(iso.slice(0, 10) + 'T12:00:00');
     if (isNaN(d.getTime()))
         return iso;

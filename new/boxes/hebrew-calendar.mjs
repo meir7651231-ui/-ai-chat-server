@@ -15,6 +15,7 @@ import { ADAR_NORM_T as __d_adarNorm_ADAR_NORM_T } from '../atoms/adar-norm-stri
 const adarNorm = (...a) => __pure_adarNorm(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_adarNorm_ADAR_NORM_T);
 
 // ── החיווט: כלל-הצהריים — הכרעת-הקופסה, לא של החוטים ──
+// קבוע-מתמטי: אורך-קידומת תאריך-ISO (YYYY-MM-DD)
 const noon = (iso) => new Date(String(iso).slice(0, 10) + 'T12:00:00');
 
 export const parts = (iso) => hebParts(noon(iso));
@@ -23,6 +24,7 @@ export const fullDate = (iso) => {
   const d = noon(iso);
   if (isNaN(d.getTime())) return '';
   const p = hebParts(d);
+  // קבוע-מתמטי: מודולו-אלפים לגימטריית-שנה (5786 ⇒ תשפ"ו)
   return `${gem(p.day)} ${hebMonthHe(d)} ${gem(p.year % 1000)}`;
 };
 export const annualKey = (iso) => {

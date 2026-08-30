@@ -1,6 +1,6 @@
-/** אטום-דאטה · pwa-manifest-data — הכרעות ה-PWA/מניפסט (הכרעה 19: קונפיג-מניפסט = דאטה).
+/** אטום-דאטה · pwa-manifest-spec — הכרעות ה-PWA/מניפסט (הכרעה 19: קונפיג-מניפסט = דאטה).
  *  ערכי W3C-manifest + מפתחות-הרישום; מוזרקים כשקע לקופסת lib-pwa. מקור: maor pwa.ts:57-108.
- *  חוזה: pwa-manifest-data.contract.md */
+ *  חוזה: pwa-manifest-spec.contract.md */
 export const PWA_FLAG = 'shell.pwa';                   // הדגל השולט על הרישום (pwa.ts:62)
 export const SW_FILE = 'sw.js';                        // שם קובץ ה-service-worker (pwa.ts:61)
 export const SHORT_NAME_MAX = 12;                      // סף short_name (W3C, pwa.ts:90)

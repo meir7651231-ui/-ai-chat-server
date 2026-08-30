@@ -88,8 +88,10 @@ export const DONATIONS_COL = LIB_CLOUD_TERMS.k2;
 /** מוני-הענן — מונוטוניים בלבד (רצף קבלות-מס). לעולם לא לרדת. cloud.ts:393 */
 export const META_COUNTER_KEYS = [LIB_CLOUD_TERMS.k3, LIB_CLOUD_TERMS.k4, LIB_CLOUD_TERMS.k5, LIB_CLOUD_TERMS.k6];
 /** תקרת טבעת-הלוג. domain.ts:1072 */
+// קבוע-מתמטי: אורך-טבעת-הלוג
 export const AUDIT_CAP = 500;
 /** גודל-אצווה (מגבלת Firestore 500 ⇒ 400). cloud.ts:187/232/438 */
+// פרוטוקול-חיצוני: מגבלת-אצווה של Firestore
 export const PUSH_BATCH = 400;
 
 /** ערך תחום-הארגון החדש (אטום set-cloud-scope). cloud.ts:79-81 */

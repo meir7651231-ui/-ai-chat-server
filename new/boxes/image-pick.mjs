@@ -14,7 +14,8 @@ import { IMAGE_PICK_TERMS } from '../atoms/image-pick-terms.mjs';
 // ── הכרעות-הקופסה (חיות כאן, לא בחוטים) ──
 // למה כיווץ: הנתונים local-first ב-localStorage (~5MB למסמך) — thumbnail ~15-30KB
 // נוסע עם הסנכרון/גיבוי בלי לפוצץ את התקרה (imagePick.ts:1-10).
-const MAX_PX = 320;   // צלע-ארוכה מרבית ל-thumbnail (imagePick.ts:11)
+// קבוע-מתמטי: צלע-ארוכה מרבית ל-thumbnail (פיקסלים)
+const MAX_PX = 320;   // (imagePick.ts:11)
 const QUALITY = 0.72; // איכות-JPEG (imagePick.ts:12)
 const ERR_NOT_IMAGE = IMAGE_PICK_TERMS.k1;                 // imagePick.ts:16
 const ERR_TOO_BIG = IMAGE_PICK_TERMS.k2;      // imagePick.ts:17

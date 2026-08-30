@@ -6,6 +6,7 @@ export function hebPartsOfIso(iso, hebParts, HP_CACHE_MAX) {
   let hp = hpCacheShared.get(iso);
   if (!hp) {
     if (hpCacheShared.size >= HP_CACHE_MAX) hpCacheShared.clear();
+    // קבוע-מתמטי: אורך-קידומת תאריך-ISO (YYYY-MM-DD)
     hp = hebParts(new Date(iso.slice(0, 10) + 'T12:00:00'));
     hpCacheShared.set(iso, hp);
   }
