@@ -25,9 +25,19 @@ const dartFiles = (dir) => {
 };
 
 export function buildAtlas() {
+  // תיאור-עצמי בעברית מכותרת-האטום (אותו עיקרון כמו ב-functions): המחולל לומד מהאטום מה הוא.
+  const WSCAFFOLD = new Set(['חוט', 'תצוגה', 'אטום', 'חוק', 'מנוע', 'טהור', 'עם', 'של', 'ללא']);
+  const heHead = (raw) => {
+    const head = raw.split('\n').slice(0, 6).filter(l => /^\s*\/\//.test(l)).join(' ');
+    const desc = (head.split('—')[1] || head).replace(/\(חוק[^)]*\)/g, '');
+    return [...desc.matchAll(/[֐-׿]{2,}/g)].map(m => m[0]).filter(w => !WSCAFFOLD.has(w)).slice(0, 12);
+  };
+
   const widgets = [];
   for (const f of WIDGET_SHELVES.flatMap(dartFiles)) {
-    const src = stripComments(fs.readFileSync(f.abs, 'utf8'));
+    const raw = fs.readFileSync(f.abs, 'utf8');
+    const he = heHead(raw);
+    const src = stripComments(raw);
     for (const cm of src.matchAll(/class\s+([A-Z][A-Za-z0-9]*)\s+extends\s+(?:StatelessWidget|StatefulWidget)\b/g)) {
       const cls = cm[1];
       const body = classBody(src, cm.index) || '';
@@ -43,7 +53,7 @@ export function buildAtlas() {
         const mm = pp.match(/this\.(\w+)/); if (mm) positional.push(mm[1]);
       }
       widgets.push({
-        cls, file: f.rel, shelf: f.shelf, types, positional,
+        cls, file: f.rel, shelf: f.shelf, types, positional, he,
         required: new Set([...namedPart.matchAll(/required\s+this\.(\w+)/g)].map(x => x[1])),
         named: new Set([...namedPart.matchAll(/this\.(\w+)/g)].map(x => x[1])),
         flexRoot: /return\s+(?:Expanded|Flexible)\s*\(/.test(body),   // בנוי-ל-Row: חייב הורה-flex
@@ -104,7 +114,7 @@ export function buildAtlas() {
 export function writeAtlas(atlas) {
   fs.writeFileSync(path.join(ROOT, 'machtzev/generator/atlas.json'), JSON.stringify({
     counts: { widgets: atlas.widgets.length, functions: atlas.functions.length, data: atlas.data.length },
-    widgets: atlas.widgets.map(a => ({ cls: a.cls, file: a.file, props: [...a.types.keys()], required: [...a.required], positional: a.positional })),
+    widgets: atlas.widgets.map(a => ({ cls: a.cls, file: a.file, props: [...a.types.keys()], required: [...a.required], positional: a.positional, he: a.he })),
     functions: atlas.functions,
     data: atlas.data,
   }, null, 1));

@@ -1,21 +1,20 @@
 // 🧬 חולל ע"י המחולל (genesis-gen, הכרעות 17+18) — בקשה ⇒ בחירת-אטומים ⇒ חיווט ⇒ מסך. אל תערוך ידנית.
-// 🧬 שם: הירו 🎯 דשבורד מכירות מנהלים עם רקע קוסמי נושם | נבנה מתיאור חופשי
-// 🧬 בקשה: הירו 🎯 דשבורד מכירות מנהלים עם רקע קוסמי נושם | נבנה מתיאור חופשי · גל 200 60 2 רקע מונפש · עוגה 150 5 תרשים-עוגה · מד 160 מד · לוח 150 לוח-חודש · מגמה 130 20 גרף-מגמה · פרופיל 230 כרטיס-פרופיל · חיפוש 52 שדה-חיפוש · מיקוד 52 שדה-קלט · כוכבים 44 5 דירוג-כוכבים · טבלה 30 5 טבלה · ניאון 54 המשך · ניאון 54 עוד · ניאון 54 פעולה · באנר המחולל הבין את התיאור ובחר את האטומים לבד
-// 🧬 אטומים שנבחרו: AuroraField · DonutChart · RadialGauge · MiniCalendar · LineSpark · ProfileCard · SearchField · GlowField · StarRating · DataGrid · NeonButton · NeonButton · NeonButton · CoinBanner
+// 🧬 שם: הירו 🎯 לוח בקרה לניהול עסק עם הזמנות | נבנה מתיאור חופשי
+// 🧬 בקשה: הירו 🎯 לוח בקרה לניהול עסק עם הזמנות | נבנה מתיאור חופשי · אטום HeroCard לוח בקרה לניהול עסק עם הזמנות · אטום EmptyStateCard לוח בקרה לניהול עסק עם הזמנות · אטום ManagerDashboardCountBadge לוח בקרה לניהול עסק עם הזמנות · אטום DataGrid לוח בקרה לניהול עסק עם הזמנות · אטום WorkerTaskDetailSheetPrimaryBtn לוח בקרה לניהול עסק עם הזמנות · אטום TitledSection לוח בקרה לניהול עסק עם הזמנות · אטום LiveStatusPill לוח בקרה לניהול עסק עם הזמנות · אטום OrderCard הזמנות · אטום CustomerCard לקוחות · אטום ProfileCard מדדים · באנר המחולל למד מהאטומים ומהלוחות ובחר לבד לפי משמעות
+// 🧬 אטומים שנבחרו: HeroCard · EmptyStateCard · ManagerDashboardCountBadge · DataGrid · WorkerTaskDetailSheetPrimaryBtn · TitledSection · LiveStatusPill · OrderCard · CustomerCard · ProfileCard · CoinBanner
 import '../dart-data-bs/auto/gen_nl_content.dart';
-import '../dart-ui-bs/aurora_field.dart';
 import '../dart-ui-bs/auto/bs_tokens.dart';
 import '../dart-ui-bs/auto/coin_banner.dart';
+import '../dart-ui-bs/auto/manager_dashboard_count_badge.dart';
+import '../dart-ui-bs/auto/worker_task_detail_sheet_primary_btn.dart';
 import '../dart-ui-bs/data_grid.dart';
-import '../dart-ui-bs/donut_chart.dart';
-import '../dart-ui-bs/glow_field.dart';
-import '../dart-ui-bs/line_spark.dart';
-import '../dart-ui-bs/mini_calendar.dart';
-import '../dart-ui-bs/neon_button.dart';
+import '../dart-ui-bs/empty_state_card.dart';
+import '../dart-ui-bs/hero_card.dart';
+import '../dart-ui-bs/order_card.dart';
 import '../dart-ui-bs/profile_card.dart';
-import '../dart-ui-bs/radial_gauge.dart';
-import '../dart-ui-bs/search_field.dart';
-import '../dart-ui-bs/star_rating.dart';
+import '../dart-ui-bs/screens__manager_dashboard_screen/customer_card.dart';
+import '../dart-ui-bs/screens__manager_dashboard_screen/live_status_pill.dart';
+import '../dart-ui-bs/titled_section.dart';
 import 'package:flutter/material.dart';
 
 class GenNlScreen extends StatefulWidget {
@@ -26,7 +25,7 @@ class GenNlScreen extends StatefulWidget {
 }
 
 class _GenNlScreenState extends State<GenNlScreen> {
-  
+  int _n1 = 0;
 
   void _toast(String msg) => ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(msg), duration: const Duration(seconds: 2)),
@@ -42,19 +41,16 @@ class _GenNlScreenState extends State<GenNlScreen> {
         body: ListView(
           padding: const EdgeInsets.symmetric(vertical: 12),
           children: [
-          AuroraField(height: 200, bands: 60, speed: 2, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
-          DonutChart(height: 150, slices: 5, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
-          RadialGauge(height: 160, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
-          MiniCalendar(height: 150, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
-          LineSpark(height: 130, points: 20, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
-          ProfileCard(title: gen_nl_profile_title, sub: gen_nl_profile_sub, height: 230, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
-          SearchField(hint: gen_nl_searchfield_hint, height: 52, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
-          GlowField(hint: gen_nl_glowfield_hint, height: 52, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
-          StarRating(label: gen_nl_stars_label, height: 44, stars: 5, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
-          DataGrid(height: 30, rows: 5, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
-          NeonButton(label: gen_nl_neon_label, height: 54, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, onPressed: () => _toast(gen_nl_neon_toast)),
-          NeonButton(label: gen_nl_neon_label2, height: 54, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, onPressed: () => _toast(gen_nl_neon_toast2)),
-          NeonButton(label: gen_nl_neon_label3, height: 54, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, onPressed: () => _toast(gen_nl_neon_toast3)),
+          HeroCard(glyph: gen_nl_card_glyph, title: gen_nl_card_title, sub: gen_nl_card_sub, onTap: () => _toast(gen_nl_card_toast), cardColor: BsTokens.cardLight, inkColor: BsTokens.inkLight, mutedColor: BsTokens.mutedLight, borderColor: BsTokens.divider, radius: 12),
+          EmptyStateCard(glyph: gen_nl_card_glyph2, message: gen_nl_card_message, surfaceColor: BsTokens.cardLight, mutedColor: BsTokens.mutedLight, borderColor: BsTokens.divider, radius: 12),
+          ManagerDashboardCountBadge(label: gen_nl_other_label, count: _n1),
+          DataGrid(height: 16, rows: 0, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
+          WorkerTaskDetailSheetPrimaryBtn(label: gen_nl_other_label2, onTap: () => _toast(gen_nl_other_toast)),
+          TitledSection(title: gen_nl_header_title, inkColor: BsTokens.inkLight, child: const SizedBox(height: 4)),
+          LiveStatusPill(text: gen_nl_other_text, textColor: BsTokens.inkLight, fillColor: BsTokens.cardLight, pillRadius: 12, horizontalPadding: 16),
+          OrderCard(stageLabel: gen_nl_card_stage_label, itemsLabel: gen_nl_card_items_label, sumLabel: gen_nl_card_sum_label, onTap: () => _toast(gen_nl_card_toast2), cardColor: BsTokens.cardLight, inkColor: BsTokens.inkLight, mutedColor: BsTokens.mutedLight, borderColor: BsTokens.divider, radius: 12, width: 16),
+          CustomerCard(glyph: gen_nl_card_glyph3, name: gen_nl_card_name, subLabel: gen_nl_card_sub_label, creditLine: gen_nl_card_credit_line, onTap: () => _toast(gen_nl_card_toast3), statusPill: const SizedBox(height: 4), creditBar: const SizedBox(height: 4), surfaceColor: BsTokens.cardLight, borderColor: BsTokens.divider, inkColor: BsTokens.inkLight, mutedColor: BsTokens.mutedLight, radius: 12, padding: (null as dynamic) /* לא-ממולא */, gap: 16, sectionGap: 16),
+          ProfileCard(title: gen_nl_profile_title, sub: gen_nl_profile_sub, height: 16, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
           CoinBanner(coins: 0, sub: gen_nl_banner_sub),
           ],
         ),
