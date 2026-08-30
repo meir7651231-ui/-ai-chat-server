@@ -1,15 +1,12 @@
 הירו 🗂️ עובד | ישות מורכבת — טופס + טבלה
 כותרת טופס עובד
-אטום InlineTextRow שם
-אטום GlowField תפקיד
-אטום InlineTextRow טלפון
-אטום InlineTextRow חברה
+אטום FieldRow שם
+אטום FieldRow תפקיד
+אטום FieldRow טלפון
+אטום FieldRow חברה
 אטום NumberStepper עלות לשעה
 אטום AnimatedToggle סטטוס
 אטום FabMenu שמירה
-כותרת חוקים פר-שדה
-חישוב אין שקעים שם פרטי (kForType)
-חישוב נרמול טלפון למפתח דדופ (normPhone)
 כותרת רשומות עובד
 אטום DataGrid עובד
-באנר ישות עובד: 6 שדות · 2 חוקים · מהמדף
+באנר ישות עובד: 6 שדות · מהמדף

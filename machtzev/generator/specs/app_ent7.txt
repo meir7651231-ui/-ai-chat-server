@@ -2,16 +2,14 @@
 אטום BreadcrumbTrail הצעה: טיוטה / נשלחה / במשא ומתן / אושרה / נדחתה
 כותרת טופס הצעה
 אטום NumberStepper מספר
-אטום InlineTextRow לקוח
-אטום GlowField פרויקט
-אטום QtyStepper מחיר
-אטום InlineTextRow מס
-אטום DatePills תוקף
+אטום FieldRow לקוח
+אטום FieldRow פרויקט
+אטום NumberStepper מחיר
+אטום FieldRow מס
+אטום FieldRow תוקף
 אטום AnimatedToggle סטטוס
 אטום FabMenu שמירה
 אטום NeonButton קדם לנשלחה
-כותרת חוקים פר-שדה
-חישוב מספר סידורי של (excelSerialToIso)
 כותרת רשומות הצעה
 אטום DataGrid הצעה
-באנר ישות הצעה: 7 שדות · 5-שלבי workflow · 1 חוקים · מהמדף
+באנר ישות הצעה: 7 שדות · 5-שלבי workflow · מהמדף

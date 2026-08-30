@@ -1,17 +1,15 @@
 הירו 🗂️ אומדן | ישות מורכבת — טופס + טבלה
 כותרת טופס אומדן
-אטום InlineTextRow פרויקט
-אטום GlowField לקוח
-אטום InlineTextRow גרסה
-אטום DatePills תאריך
+אטום FieldRow פרויקט
+אטום FieldRow לקוח
+אטום FieldRow גרסה
+אטום FieldRow תאריך
 אטום NumberStepper עלות צפויה
-אטום QtyStepper מחיר
+אטום NumberStepper מחיר
 אטום NumberStepper רווח יעד
-אטום MiniCalendar תוקף
+אטום FieldRow תוקף
 אטום AnimatedToggle סטטוס
 אטום FabMenu שמירה
-כותרת חוקים פר-שדה
-חישוב תאריך לתצוגה (fmtDate)
 כותרת רשומות אומדן
 אטום DataGrid אומדן
-באנר ישות אומדן: 9 שדות · 1 חוקים · מהמדף
+באנר ישות אומדן: 9 שדות · מהמדף

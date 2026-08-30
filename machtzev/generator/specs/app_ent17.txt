@@ -1,19 +1,16 @@
 הירו 🗂️ מסמך | ישות מורכבת — טופס + טבלה
 אטום BreadcrumbTrail מסמך: טיוטה / נבדק / אושר
 כותרת טופס מסמך
-אטום InlineTextRow פרויקט
-אטום GlowField סוג
-אטום InlineTextRow שם
-אטום InlineTextRow גרסה
-אטום DatePills תאריך
-אטום InlineTextRow מאשר
-אטום MiniCalendar תוקף
+אטום FieldRow פרויקט
+אטום FieldRow סוג
+אטום FieldRow שם
+אטום FieldRow גרסה
+אטום FieldRow תאריך
+אטום FieldRow מאשר
+אטום FieldRow תוקף
 אטום AnimatedToggle סטטוס
 אטום FabMenu שמירה
 אטום NeonButton קדם לנבדק
-כותרת חוקים פר-שדה
-חישוב אין שקעים שם פרטי (kForType)
-חישוב תאריך לתצוגה (fmtDate)
 כותרת רשומות מסמך
 אטום DataGrid מסמך
-באנר ישות מסמך: 8 שדות · 3-שלבי workflow · 2 חוקים · מהמדף
+באנר ישות מסמך: 8 שדות · 3-שלבי workflow · מהמדף

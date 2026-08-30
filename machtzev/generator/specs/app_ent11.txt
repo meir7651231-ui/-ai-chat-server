@@ -1,15 +1,13 @@
 הירו 🗂️ דוח יומי | ישות מורכבת — טופס + טבלה
 כותרת טופס דוח יומי
-אטום InlineTextRow פרויקט
-אטום DatePills תאריך
-אטום GlowField מזג אוויר
-אטום InlineTextRow עובדים
+אטום FieldRow פרויקט
+אטום FieldRow תאריך
+אטום FieldRow מזג אוויר
+אטום FieldRow עובדים
 אטום NumberStepper שעות
-אטום QtyStepper אחוז התקדמות
+אטום NumberStepper אחוז התקדמות
 אטום AnimatedToggle סטטוס
 אטום FabMenu שמירה
-כותרת חוקים פר-שדה
-חישוב תאריך לתצוגה (fmtDate)
 כותרת רשומות דוח יומי
 אטום DataGrid דוח יומי
-באנר ישות דוח יומי: 7 שדות · 1 חוקים · מהמדף
+באנר ישות דוח יומי: 7 שדות · מהמדף

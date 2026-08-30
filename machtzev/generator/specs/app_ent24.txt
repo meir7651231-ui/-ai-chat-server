@@ -1,15 +1,13 @@
 הירו 🗂️ נוכחות | ישות מורכבת — טופס + טבלה
 כותרת טופס נוכחות
-אטום InlineTextRow עובד
-אטום GlowField פרויקט
-אטום DatePills תאריך
-אטום InlineTextRow כניסה
-אטום InlineTextRow יציאה
+אטום FieldRow עובד
+אטום FieldRow פרויקט
+אטום FieldRow תאריך
+אטום FieldRow כניסה
+אטום FieldRow יציאה
 אטום NumberStepper שעות
-אטום InlineTextRow אישור
+אטום FieldRow אישור
 אטום FabMenu שמירה
-כותרת חוקים פר-שדה
-חישוב תאריך לתצוגה (fmtDate)
 כותרת רשומות נוכחות
 אטום DataGrid נוכחות
-באנר ישות נוכחות: 7 שדות · 1 חוקים · מהמדף
+באנר ישות נוכחות: 7 שדות · מהמדף

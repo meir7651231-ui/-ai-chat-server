@@ -2,17 +2,14 @@
 אטום BreadcrumbTrail הזמנת רכש: בקשה / אושר / הוזמן / נמסר
 כותרת טופס הזמנת רכש
 אטום NumberStepper מספר
-אטום InlineTextRow ספק
-אטום GlowField פרויקט
-אטום QtyStepper כמות
+אטום FieldRow ספק
+אטום FieldRow פרויקט
+אטום NumberStepper כמות
 אטום NumberStepper מחיר
-אטום DatePills תאריך אספקה
+אטום FieldRow תאריך אספקה
 אטום AnimatedToggle סטטוס
 אטום FabMenu שמירה
 אטום NeonButton קדם לאושר
-כותרת חוקים פר-שדה
-חישוב מספר סידורי של (excelSerialToIso)
-חישוב תאריך לתצוגה (fmtDate)
 כותרת רשומות הזמנת רכש
 אטום DataGrid הזמנת רכש
-באנר ישות הזמנת רכש: 7 שדות · 4-שלבי workflow · 2 חוקים · מהמדף
+באנר ישות הזמנת רכש: 7 שדות · 4-שלבי workflow · מהמדף

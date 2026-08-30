@@ -1,17 +1,15 @@
 הירו 🗂️ אירוע בטיחות | ישות מורכבת — טופס + טבלה
 אטום BreadcrumbTrail אירוע בטיחות: דווח / נחסם / בתחקיר / טופל / נסגר
 כותרת טופס אירוע בטיחות
-אטום DatePills תאריך
-אטום InlineTextRow מיקום
-אטום GlowField חומרה
-אטום InlineTextRow מעורבים
+אטום FieldRow תאריך
+אטום FieldRow מיקום
+אטום FieldRow חומרה
+אטום FieldRow מעורבים
 אטום InlineTextRow תיאור
-אטום InlineTextRow גורם שורש
+אטום FieldRow גורם שורש
 אטום AnimatedToggle סטטוס
 אטום FabMenu שמירה
 אטום NeonButton קדם לנחסם
-כותרת חוקים פר-שדה
-חישוב תאריך לתצוגה (fmtDate)
 כותרת רשומות אירוע בטיחות
 אטום DataGrid אירוע בטיחות
-באנר ישות אירוע בטיחות: 7 שדות · 5-שלבי workflow · 1 חוקים · מהמדף
+באנר ישות אירוע בטיחות: 7 שדות · 5-שלבי workflow · מהמדף

@@ -59,8 +59,14 @@ function buildApp(specText) {
 
   // 🧭 לוח-ניווט: מסך-אב שמקשר לכל המסכים + מסכי-המערכת
   const hubLines = ['הירו 🏗️ האפליקציה שלי | נבנתה מאפיון-חופשי', 'אטום LiveStatusDot מחובר · מסונכרן'];
-  for (const s of screens) hubLines.push(`ניווט ${s.slug} ${s.kind === 'ent' ? '🗂️' : '📊'} ${s.name}`);
-  for (const s of sysScreens) hubLines.push(`ניווט ${s.slug} ${s.name}`);
+  // כרטיס-ניווט עם תת-כותרת אמיתית (לא שכפול-השם): ישות ⇒ שדות/שלבים · מסך-UI ⇒ רכיבים.
+  for (const s of screens) {
+    const sub = s.kind === 'ent'
+      ? `${s.schema.length} שדות${s.stages && s.stages.length ? ` · ${s.stages.length} שלבים` : ''}`
+      : `${s.atoms} רכיבים`;
+    hubLines.push(`ניווט ${s.slug} ${s.kind === 'ent' ? '🗂️' : '📊'} ${s.name} | ${sub}`);
+  }
+  for (const s of sysScreens) hubLines.push(`ניווט ${s.slug} ${s.name} | שכבת-מערכת`);
   hubLines.push(`באנר ${screens.length + sysScreens.length} מסכים · אפליקציה שלמה: ישויות · workflows · הרשאות · audit · דגלים · סנכרון`);
   const hubSpec = hubLines.join('\n');
   fs.writeFileSync(path.join(HERE, 'specs/app_hub.txt'), hubSpec + '\n');

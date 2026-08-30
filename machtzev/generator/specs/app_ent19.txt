@@ -1,17 +1,15 @@
 הירו 🗂️ שדה | ישות מורכבת — טופס + טבלה
 אטום BreadcrumbTrail שדה: הוגש / בבדיקה / תיקונים / אושר / נסגר
 כותרת טופס שדה
-אטום InlineTextRow פרויקט
-אטום GlowField חומר
-אטום InlineTextRow יצרן
-אטום InlineTextRow ספק
-אטום DatePills תאריך הגשה
-אטום InlineTextRow בודק
+אטום FieldRow פרויקט
+אטום FieldRow חומר
+אטום FieldRow יצרן
+אטום FieldRow ספק
+אטום FieldRow תאריך הגשה
+אטום FieldRow בודק
 אטום AnimatedToggle סטטוס
 אטום FabMenu שמירה
 אטום NeonButton קדם לבבדיקה
-כותרת חוקים פר-שדה
-חישוב תאריך לתצוגה (fmtDate)
 כותרת רשומות שדה
 אטום DataGrid שדה
-באנר ישות שדה: 7 שדות · 5-שלבי workflow · 1 חוקים · מהמדף
+באנר ישות שדה: 7 שדות · 5-שלבי workflow · מהמדף

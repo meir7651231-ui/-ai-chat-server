@@ -1,17 +1,15 @@
 הירו 🗂️ חשבון חלקי | ישות מורכבת — טופס + טבלה
 אטום BreadcrumbTrail חשבון חלקי: הוכן / אושר מנהל / אושר מפקח / אושר לקוח / שולם
 כותרת טופס חשבון חלקי
-אטום InlineTextRow פרויקט
-אטום GlowField תקופה
+אטום FieldRow פרויקט
+אטום FieldRow תקופה
 אטום NumberStepper אחוז ביצוע
-אטום InlineTextRow ערך נוכחי
-אטום InlineTextRow עיכבון
-אטום QtyStepper יתרה
+אטום FieldRow ערך נוכחי
+אטום FieldRow עיכבון
+אטום NumberStepper יתרה
 אטום AnimatedToggle סטטוס
 אטום FabMenu שמירה
 אטום NeonButton קדם לאושר מנהל
-כותרת חוקים פר-שדה
-חישוב אין שקעים שם פרטי (kForType)
 כותרת רשומות חשבון חלקי
 אטום DataGrid חשבון חלקי
-באנר ישות חשבון חלקי: 7 שדות · 5-שלבי workflow · 1 חוקים · מהמדף
+באנר ישות חשבון חלקי: 7 שדות · 5-שלבי workflow · מהמדף

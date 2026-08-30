@@ -24,13 +24,14 @@ function inferType(field) {
   return 'text';
 }
 // טיפוס ⇒ אטום-קלט אמיתי (לפי שם-מחלקה, לא לפי-תצוגה) — matchClass מהמדף.
-const TYPE_ATOM = { text: 'InlineTextRow', multiline: 'InlineTextRow', num: 'NumberStepper', bool: 'SwitchRow', date: 'DatePills' };
-const inputAtom = (type, used) => {
-  // מנסה כמה מועמדי-קלט מוכרים ובוחר את הראשון שקיים ולא-נוצל.
-  // bool: AnimatedToggle (מצויר, נקי) לפני SwitchRow — כל ה-*SwitchRow משתמשים ב-activeColor הדפרקייטד.
-  const cands = { text: ['InlineTextRow', 'TextRow', 'GlowField'], multiline: ['InlineTextRow', 'TextRow'], num: ['NumberStepper', 'QtyStepper', 'Stepper'], bool: ['AnimatedToggle', 'Toggle'], date: ['DatePills', 'DatePicker', 'MiniCalendar'] }[type] || ['InlineTextRow'];
-  for (const c of cands) { const hit = matchClass(c); if (hit && !used.has(hit.cls)) return hit.cls; }
-  const hit = matchClass(TYPE_ATOM[type] || 'InlineTextRow'); return (hit && hit.cls) || 'InlineTextRow';
+// date → FieldRow גם כן: DatePills הוא רצועת-14-יום אופקית (נשברה בטופס). שדה-תאריך
+// בטופס = שדה נקי ואחיד עם התווית ("תאריך התחלה") — קלט עקבי, אפס-גלישה.
+const TYPE_ATOM = { text: 'FieldRow', multiline: 'InlineTextRow', num: 'NumberStepper', bool: 'AnimatedToggle', date: 'FieldRow' };
+// 🎨 עיצוב טהור: אטום-קלט אחד ועקבי לכל טיפוס — טופס נקרא כטופס אחד, לא כתערוכת-אטומים.
+// (הריבוי-לשם-ריבוי היה נכון לשואוקייס · לא לטופס. עקביות > מגוון.)
+const inputAtom = (type) => {
+  const hit = matchClass(TYPE_ATOM[type] || 'InlineTextRow');
+  return (hit && hit.cls) || 'InlineTextRow';
 };
 
 export function interpret(text) {
@@ -54,27 +55,14 @@ export function interpret(text) {
   if (stages.length >= 2) lines.push(`אטום BreadcrumbTrail ${entity}: ${stages.join(' / ')}`);
   // טופס: אטום-קלט פר-שדה
   lines.push(`כותרת טופס ${entity}`);
-  for (const s of schema) { const a = inputAtom(s.type, used); used.add(a); s.atom = a; lines.push(`אטום ${a} ${s.label}`); }
+  for (const s of schema) { const a = inputAtom(s.type); used.add(a); s.atom = a; lines.push(`אטום ${a} ${s.label}`); }
   // כפתור-שמירה (+ קידום-שלב אם workflow)
   const btn = retrieve('כפתור שמירה שלח', 2)[0]?.cls || 'NeonButton';
   lines.push(`אטום ${btn} שמירה`);
   if (stages.length >= 2) lines.push(`אטום NeonButton קדם ל${stages[1]}`);
-  // 🔐 שכבת-חוקים פר-שדה: כל שדה מאחזר-לבד את אטום-החוק/פורמט/ולידציה שמתאים *לו*
-  // (סכום→shekel · תאריך→fmtDate · טלפון→normPhone). אפס מיפוי-ידני, אפס blob-גס.
-  // התאמת-טיפוס: אטום-החוק חייב לקבל את טיפוס-השדה (date→DateTime · num→num · text→String).
-  // כך 'שם' (text) לא נתפס ע"י hebMonthHe (DateTime) — סינון-הומוגרף טהור מהחתימה.
-  const TYPE_IN = { date: ['DateTime', 'String', 'Object'], num: ['num', 'int', 'double', 'Object', 'dynamic', 'String'], text: ['String', 'Object', 'dynamic'], multiline: ['String', 'Object'] };
+  // הערה: שכבת-החוקים-הגלויה (RStat פר-שדה) הוסרה מהטופס — הצגת ערך-פונקציה-גולמי
+  // ("0.3"/"true") בטופס היא רעש-UX. גשר-הלוגיקה עדיין מודגם במסכי-הדשבורד (role=calc).
   const rules = [];
-  const usedR = new Set();
-  for (const s of schema) {
-    const ok = TYPE_IN[s.type] || ['String'];
-    const hit = retrieveLogic(s.label, 6, true).find((l) => l.s >= 3 && !usedR.has(l.name) && l.inTypes.some((t) => ok.includes(t)));
-    if (hit) { usedR.add(hit.name); s.rule = hit.name; rules.push({ field: s.label, name: hit.name, he: hit.he }); }
-  }
-  if (rules.length) {
-    lines.push(`כותרת חוקים פר-שדה`);
-    for (const r of rules) lines.push(`חישוב ${r.he.slice(0, 4).join(' ')} (${r.name})`);
-  }
   // טבלת-רשומות
   lines.push(`כותרת רשומות ${entity}`);
   lines.push(`אטום DataGrid ${entity}`);

@@ -12,6 +12,6 @@ const String gen_capautodream_header_text2 = 'תחנת הקלט החופשי - �
 const String gen_capautodream_stat_label3 = 'מסיר את איבר תו אחרון';
 const String gen_capautodream_stat_label4 = 'מסיר את איבר תו אחרון';
 const String gen_capautodream_textfield_label = 'הקלידו ערך עבור הזמנה-עצמית - יכולת';
-const String gen_capautodream_textfield_hint = 'הקלידו ערך עבור הזמנה-עצמית - יכולת';
+const String gen_capautodream_textfield_hint = '';
 const String gen_capautodream_banner_sub = 'ההרכבה שמצאתי - popCall ⟵ popCall - כל הדוגמאות עברו';
 const String gen_capautodream_app_bar_title = 'הזמנה-עצמית - יכולת שחלמתי היום והוכחתי לבד - מסיר את איבר ואז מסיר את איבר';

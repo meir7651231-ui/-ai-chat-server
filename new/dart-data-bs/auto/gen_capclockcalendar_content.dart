@@ -14,6 +14,6 @@ const String gen_capclockcalendar_stat_label4 = 'לדקות מחצות';
 const String gen_capclockcalendar_stat_label5 = 'מספר סידורי';
 const String gen_capclockcalendar_stat_label6 = 'תאריך לתצוגה';
 const String gen_capclockcalendar_textfield_label = 'הקלידו ערך עבור מסע-בזמן של השעון';
-const String gen_capclockcalendar_textfield_hint = 'הקלידו ערך עבור מסע-בזמן של השעון';
+const String gen_capclockcalendar_textfield_hint = '';
 const String gen_capclockcalendar_banner_sub = 'ההרכבה שמצאתי - timeToMin ⟵ excelSerialToIso ⟵ fmtDate - כל הדוגמאות עברו';
 const String gen_capclockcalendar_app_bar_title = 'מסע-בזמן של השעון - שעת-יממה נהפכת לתאריך-תצוגה כשכל דקה מחצות נספרת כיום שלם בלוח';

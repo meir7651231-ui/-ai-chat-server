@@ -1,12 +1,12 @@
 הירו 🗂️ תקציב | ישות מורכבת — טופס + טבלה
 כותרת טופס תקציב
-אטום InlineTextRow פרויקט
-אטום GlowField סעיף
+אטום FieldRow פרויקט
+אטום FieldRow סעיף
 אטום NumberStepper תקציב מאושר
-אטום QtyStepper עלות מחויבת
+אטום NumberStepper עלות מחויבת
 אטום NumberStepper עלות בפועל
-אטום InlineTextRow תחזית
-אטום InlineTextRow סטייה
+אטום FieldRow תחזית
+אטום FieldRow סטייה
 אטום FabMenu שמירה
 כותרת רשומות תקציב
 אטום DataGrid תקציב

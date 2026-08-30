@@ -1,5 +1,5 @@
 // 🧬 חולל ע"י המחולל (genesis-gen, הכרעות 17+18) — בקשה ⇒ בחירת-אטומים ⇒ חיווט ⇒ מסך. אל תערוך ידנית.
-// 🧬 שם: הירו 🗂️ ליד | ישות מורכבת — טופס + טבלה
+// 🧬 שם: 🗂️ ליד
 // 🧬 בקשה: הירו 🗂️ ליד | ישות מורכבת — טופס + טבלה · כותרת טופס ליד · אטום InlineTextRow שם · אטום GlowField טלפון · אטום NumberStepper תקציב · אטום DatePills תאריך · אטום FabMenu שמירה · כותרת חוקים פר-שדה · חישוב אין שקעים שם פרטי (kForType) · חישוב נרמול טלפון למפתח דדופ (normPhone) · חישוב תאריך לתצוגה (fmtDate) · כותרת רשומות ליד · אטום DataGrid ליד · באנר ישות ליד: 4 שדות · 3 חוקים · מהמדף
 // 🧬 אטומים שנבחרו: CaSubTitle · InlineTextRow · GlowField · NumberStepper · DatePills · FabMenu · CaSubTitle · RStat · RStat · RStat · CaSubTitle · DataGrid · CoinBanner
 import '../dart-data-bs/auto/gen_entity_content.dart';

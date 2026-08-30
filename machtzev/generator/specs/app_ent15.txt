@@ -1,15 +1,13 @@
 הירו 🗂️ חומר | ישות מורכבת — טופס + טבלה
 כותרת טופס חומר
-אטום InlineTextRow קוד
-אטום GlowField שם
-אטום InlineTextRow קטגוריה
-אטום InlineTextRow יחידת מידה
+אטום FieldRow קוד
+אטום FieldRow שם
+אטום FieldRow קטגוריה
+אטום FieldRow יחידת מידה
 אטום NumberStepper מחיר
-אטום InlineTextRow מינימום
-אטום InlineTextRow נקודת הזמנה
+אטום FieldRow מינימום
+אטום FieldRow נקודת הזמנה
 אטום FabMenu שמירה
-כותרת חוקים פר-שדה
-חישוב אין שקעים שם פרטי (kForType)
 כותרת רשומות חומר
 אטום DataGrid חומר
-באנר ישות חומר: 7 שדות · 1 חוקים · מהמדף
+באנר ישות חומר: 7 שדות · מהמדף

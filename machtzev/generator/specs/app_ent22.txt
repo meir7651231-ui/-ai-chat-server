@@ -2,17 +2,14 @@
 אטום BreadcrumbTrail ליקוי: נפתח / בטיפול / תוקן / נבדק / נסגר
 כותרת טופס ליקוי
 אטום NumberStepper מספר
-אטום InlineTextRow מיקום
+אטום FieldRow מיקום
 אטום InlineTextRow תיאור
-אטום GlowField חומרה
-אטום InlineTextRow אחראי
-אטום DatePills תאריך יעד
+אטום FieldRow חומרה
+אטום FieldRow אחראי
+אטום FieldRow תאריך יעד
 אטום AnimatedToggle סטטוס
 אטום FabMenu שמירה
 אטום NeonButton קדם לבטיפול
-כותרת חוקים פר-שדה
-חישוב מספר סידורי של (excelSerialToIso)
-חישוב תאריך לתצוגה (fmtDate)
 כותרת רשומות ליקוי
 אטום DataGrid ליקוי
-באנר ישות ליקוי: 7 שדות · 5-שלבי workflow · 2 חוקים · מהמדף
+באנר ישות ליקוי: 7 שדות · 5-שלבי workflow · מהמדף

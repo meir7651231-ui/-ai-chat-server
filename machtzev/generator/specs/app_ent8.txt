@@ -2,20 +2,16 @@
 אטום BreadcrumbTrail חוזה: טיוטה / נחתם / פעיל / הושלם
 כותרת טופס חוזה
 אטום NumberStepper מספר
-אטום InlineTextRow סוג
-אטום GlowField פרויקט
-אטום QtyStepper סכום
-אטום DatePills תאריך חתימה
-אטום MiniCalendar התחלה
-אטום DatePills סיום
-אטום InlineTextRow עיכבון
+אטום FieldRow סוג
+אטום FieldRow פרויקט
+אטום NumberStepper סכום
+אטום FieldRow תאריך חתימה
+אטום FieldRow התחלה
+אטום FieldRow סיום
+אטום FieldRow עיכבון
 אטום AnimatedToggle סטטוס
 אטום FabMenu שמירה
 אטום NeonButton קדם לנחתם
-כותרת חוקים פר-שדה
-חישוב מספר סידורי של (excelSerialToIso)
-חישוב עיטוף סכום שקלים לתצוגה (shekel)
-חישוב תאריך לתצוגה (fmtDate)
 כותרת רשומות חוזה
 אטום DataGrid חוזה
-באנר ישות חוזה: 9 שדות · 4-שלבי workflow · 3 חוקים · מהמדף
+באנר ישות חוזה: 9 שדות · 4-שלבי workflow · מהמדף

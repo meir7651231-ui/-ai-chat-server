@@ -1,16 +1,13 @@
 הירו 🗂️ ציוד | ישות מורכבת — טופס + טבלה
 כותרת טופס ציוד
-אטום InlineTextRow שם
-אטום GlowField סוג
+אטום FieldRow שם
+אטום FieldRow סוג
 אטום NumberStepper מספר סידורי
-אטום InlineTextRow מיקום
-אטום DatePills תוקף בדיקה
-אטום QtyStepper שעות שימוש
+אטום FieldRow מיקום
+אטום FieldRow תוקף בדיקה
+אטום NumberStepper שעות שימוש
 אטום AnimatedToggle סטטוס
 אטום FabMenu שמירה
-כותרת חוקים פר-שדה
-חישוב אין שקעים שם פרטי (kForType)
-חישוב מספר סידורי של (excelSerialToIso)
 כותרת רשומות ציוד
 אטום DataGrid ציוד
-באנר ישות ציוד: 7 שדות · 2 חוקים · מהמדף
+באנר ישות ציוד: 7 שדות · מהמדף

@@ -1,11 +1,11 @@
 הירו 🗂️ קריאת תחזוקה | ישות מורכבת — טופס + טבלה
 אטום BreadcrumbTrail קריאת תחזוקה: דווח / סווג / בטיפול / תוקן / נסגר
 כותרת טופס קריאת תחזוקה
-אטום InlineTextRow ציוד
-אטום GlowField מיקום
+אטום FieldRow ציוד
+אטום FieldRow מיקום
 אטום InlineTextRow תיאור
-אטום InlineTextRow דחיפות
-אטום InlineTextRow אחראי
+אטום FieldRow דחיפות
+אטום FieldRow אחראי
 אטום AnimatedToggle סטטוס
 אטום FabMenu שמירה
 אטום NeonButton קדם לסווג

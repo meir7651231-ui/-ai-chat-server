@@ -130,7 +130,10 @@ function generate(slug, specText) {
   const lines = rawLines.map(s => s.trim().replace(/,$/, ''));
   const first = lines[0];
   const oneLine = lines.length === 1;
-  const title = (oneLine ? (first.includes(':') ? first.slice(0, first.indexOf(':')) : '') : first.replace(/:$/, '')).trim();
+  const rawTitle = (oneLine ? (first.includes(':') ? first.slice(0, first.indexOf(':')) : '') : first.replace(/:$/, '')).trim();
+  // כותרת-AppBar נקייה: מסירים את מילת-ההירו ואת התת-כותרת (הכל אחרי '|') — משאירים
+  // שם-מסך + אימוג'י בלבד ("🗂️ פרויקט"), לא את שורת-ההירו המלאה. עיצוב טהור.
+  const title = (HERO_WORD ? rawTitle.replace(new RegExp('^' + HERO_WORD + '\\s*'), '') : rawTitle).replace(/\s*\|.*$/, '').trim() || rawTitle;
   const nodes = [];   // [{part, children:[part]}]
   if (oneLine) {
     for (const t of (first.includes(':') ? first.slice(first.indexOf(':') + 1) : first).split(',').map(s => s.trim()).filter(Boolean))
@@ -269,6 +272,8 @@ function generate(slug, specText) {
     if (t === 'String' && /^(value|selected)$/.test(name)) { if (!shared.s) { shared.s = '_t' + (++sIdx); stateDecls.push(`String ${shared.s} = '';`); } return { expr: shared.s }; }
     if (t === 'String' && /^(glyph|emoji|icon)$/.test(name)) return { expr: constFor(part.emoji || '🔹', part.role + '_glyph') };
     if (t === 'String' && /^(sub|subtitle|caption|secondary)$/.test(name)) return { expr: constFor(part.sub || part.label, part.role + '_sub') };
+    // 🎨 placeholder ריק — התווית כבר מוצגת מעל השדה; שכפול תווית-בתוך-שדה נראה רע (עיצוב טהור).
+    if (t === 'String' && /^(hint|placeholder)$/.test(name)) return { expr: constFor('', part.role + '_hint') };
     if (t === 'String') {
       // 🎨 תור-טקסטים: prop-מחרוזת גנרי ראשון = התווית; הבאים נמזגים מה-options בסדרם
       // (רק כשהאטום עצמו אינו אטום-אופציות) ואז מה-sub — כך widget רב-כיתובים מקבל טקסט שונה לכל פינה.

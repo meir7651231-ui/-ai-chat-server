@@ -1,15 +1,13 @@
 הירו 🗂️ בדיקת איכות | ישות מורכבת — טופס + טבלה
 כותרת טופס בדיקת איכות
-אטום InlineTextRow פרויקט
-אטום GlowField שלב
-אטום InlineTextRow מיקום
-אטום InlineTextRow בודק
-אטום DatePills תאריך
-אטום InlineTextRow תוצאה
+אטום FieldRow פרויקט
+אטום FieldRow שלב
+אטום FieldRow מיקום
+אטום FieldRow בודק
+אטום FieldRow תאריך
+אטום FieldRow תוצאה
 אטום AnimatedToggle סטטוס
 אטום FabMenu שמירה
-כותרת חוקים פר-שדה
-חישוב תאריך לתצוגה (fmtDate)
 כותרת רשומות בדיקת איכות
 אטום DataGrid בדיקת איכות
-באנר ישות בדיקת איכות: 7 שדות · 1 חוקים · מהמדף
+באנר ישות בדיקת איכות: 7 שדות · מהמדף

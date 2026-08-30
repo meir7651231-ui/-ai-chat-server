@@ -1,18 +1,15 @@
 הירו 🗂️ משימה | ישות מורכבת — טופס + טבלה
 אטום BreadcrumbTrail משימה: מתוכננת / מוכנה / בתהליך / בבדיקה / הושלמה
 כותרת טופס משימה
-אטום InlineTextRow שם
-אטום GlowField אחראי
-אטום InlineTextRow מיקום
-אטום DatePills תאריך יעד
-אטום InlineTextRow עדיפות
+אטום FieldRow שם
+אטום FieldRow אחראי
+אטום FieldRow מיקום
+אטום FieldRow תאריך יעד
+אטום FieldRow עדיפות
 אטום NumberStepper אחוז ביצוע
 אטום AnimatedToggle סטטוס
 אטום FabMenu שמירה
 אטום NeonButton קדם למוכנה
-כותרת חוקים פר-שדה
-חישוב אין שקעים שם פרטי (kForType)
-חישוב תאריך לתצוגה (fmtDate)
 כותרת רשומות משימה
 אטום DataGrid משימה
-באנר ישות משימה: 7 שדות · 5-שלבי workflow · 2 חוקים · מהמדף
+באנר ישות משימה: 7 שדות · 5-שלבי workflow · מהמדף

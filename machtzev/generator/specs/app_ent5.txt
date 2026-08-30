@@ -1,11 +1,11 @@
 הירו 🗂️ סעיף כתב כמויות | ישות מורכבת — טופס + טבלה
 כותרת טופס סעיף כתב כמויות
-אטום InlineTextRow קוד
-אטום GlowField פרק
+אטום FieldRow קוד
+אטום FieldRow פרק
 אטום InlineTextRow תיאור
-אטום InlineTextRow יחידת מידה
+אטום FieldRow יחידת מידה
 אטום NumberStepper כמות
-אטום QtyStepper מחיר יחידה
+אטום NumberStepper מחיר יחידה
 אטום NumberStepper מחיר מכירה
 אטום AnimatedToggle סטטוס
 אטום FabMenu שמירה

@@ -2,18 +2,14 @@
 אטום BreadcrumbTrail חשבונית: טיוטה / הופקה / נשלחה / שולמה
 כותרת טופס חשבונית
 אטום NumberStepper מספר
-אטום InlineTextRow לקוח
-אטום GlowField פרויקט
-אטום QtyStepper סכום
-אטום InlineTextRow מס
-אטום DatePills תאריך
+אטום FieldRow לקוח
+אטום FieldRow פרויקט
+אטום NumberStepper סכום
+אטום FieldRow מס
+אטום FieldRow תאריך
 אטום AnimatedToggle סטטוס
 אטום FabMenu שמירה
 אטום NeonButton קדם להופקה
-כותרת חוקים פר-שדה
-חישוב מספר סידורי של (excelSerialToIso)
-חישוב עיטוף סכום שקלים לתצוגה (shekel)
-חישוב תאריך לתצוגה (fmtDate)
 כותרת רשומות חשבונית
 אטום DataGrid חשבונית
-באנר ישות חשבונית: 7 שדות · 4-שלבי workflow · 3 חוקים · מהמדף
+באנר ישות חשבונית: 7 שדות · 4-שלבי workflow · מהמדף
