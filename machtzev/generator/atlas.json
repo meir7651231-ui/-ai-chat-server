@@ -2,7 +2,7 @@
  "counts": {
   "widgets": 381,
   "functions": 438,
-  "data": 761
+  "data": 775
  },
  "widgets": [
   {
@@ -17718,6 +17718,21 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_entry_card_glyph8",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_card_title8",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_card_sub8",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_entry_chip_option",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
@@ -18120,6 +18135,61 @@
   {
    "name": "gen_quest1_app_bar_title",
    "file": "auto/gen_quest1_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest2_card_glyph",
+   "file": "auto/gen_quest2_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest2_card_title",
+   "file": "auto/gen_quest2_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest2_card_sub",
+   "file": "auto/gen_quest2_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest2_card_toast",
+   "file": "auto/gen_quest2_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest2_stat_label",
+   "file": "auto/gen_quest2_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest2_switch_label",
+   "file": "auto/gen_quest2_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest2_card_glyph2",
+   "file": "auto/gen_quest2_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest2_card_title2",
+   "file": "auto/gen_quest2_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest2_card_sub2",
+   "file": "auto/gen_quest2_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest2_banner_sub",
+   "file": "auto/gen_quest2_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest2_app_bar_title",
+   "file": "auto/gen_quest2_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {

@@ -57,7 +57,10 @@ function parsePart(txt) {
   let sub = null;
   const pi = body.indexOf('|');
   if (pi > 0) { sub = body.slice(pi + 1).trim(); body = body.slice(0, pi).trim(); }
-  const vm = body.match(/\d[\d,.]*[%+]?/);
+  // חילוץ-ערך: רק אסימון-מספר עומד-לבדו (לא ספרה בתוך מילה — 'quest1'/'ברך 90°' נשארים שלמים),
+  // ולא בשורות ניווט/אטום שבהן מספר הוא חלק מזהות (slug/שם-מחלקה)
+  const firstWord = body.split(/\s+/)[0];
+  const vm = (firstWord === NAV_WORD || firstWord === PIN_WORD) ? null : body.match(/(?<=^|\s)\d[\d,.]*[%+]?(?=\s|$)/);
   const value = vm ? vm[0] : null;
   if (value) body = body.replace(value, '').replace(/\s+/g, ' ').trim();
   const words = body.split(/\s+/);
