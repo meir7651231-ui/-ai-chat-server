@@ -48,6 +48,27 @@ export function retrieve(phrase, top = 5) {
 
 export const best = (phrase, min = 1.5) => { const r = retrieve(phrase, 1)[0]; return r && r.s >= min ? r : null; };
 
+// ── שכבת-לוגיקה: אחזור אטומי-לוגיקה לפי-משמעות (אותו מנגנון, מעל atlas.functions) ──
+const RETS = new Set(['String', 'String?', 'int', 'double', 'num', 'bool']);
+const primArg = (t) => { t = t.replace(/\?$/, ''); return ['DateTime', 'bool'].includes(t); };
+// ניתן-לחיווט-standalone: מחזיר-ערך + כל פרמטר-חובה מסוג-בסיס (DateTime/bool) או אופציונלי.
+const wireable = (f) => RETS.has(f.ret) && f.params.every((p) => primArg(p.type) || p.type.endsWith('?'));
+const LOGIC = atlas.functions.map((f) => ({ name: f.name, he: f.he || [], ret: f.ret, params: f.params || [], st: [...new Set(stemsOf(f.he))], wire: wireable(f) })).filter((f) => f.st.length && RETS.has(f.ret));
+const ldf = new Map();
+for (const f of LOGIC) for (const t of f.st) ldf.set(t, (ldf.get(t) || 0) + 1);
+const LN = LOGIC.length || 1;
+const lidf = (t) => Math.log((LN + 1) / ((ldf.get(t) || 0) + 1)) + 1;
+
+export function retrieveLogic(phrase, top = 4, onlyWireable = true) {
+  const q = [...new Set(heTokens(phrase))];
+  return LOGIC
+    .filter((f) => !onlyWireable || f.wire)
+    .map((f) => { let s = 0; for (const t of q) if (f.st.includes(t)) s += lidf(t); return { name: f.name, he: f.he, s: +s.toFixed(2), wire: f.wire }; })
+    .filter((x) => x.s > 0)
+    .sort((a, b) => b.s - a.s)
+    .slice(0, top);
+}
+
 // מיפוי חלק-מפורק (שם-מחלקה אנגלי כמו '_MetricGrid') לאטום-קטלוג לפי חפיפת-מילות-מחלקה.
 // טהור: נגזר משמות-המחלקות של הקטלוג בלבד. משמש את ההרכבה-ההפוכה (compose).
 const clsWords = (cls) => cls.replace(/^_+/, '').replace(/([a-z0-9])([A-Z])/g, '$1 $2').toLowerCase().split(/\s+/).filter(Boolean);

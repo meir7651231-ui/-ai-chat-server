@@ -2,7 +2,7 @@
  "counts": {
   "widgets": 464,
   "functions": 445,
-  "data": 1714
+  "data": 1699
  },
  "widgets": [
   {
@@ -36803,7 +36803,7 @@
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_nl_card_glyph",
+   "name": "gen_nl_stat_label",
    "type": "String",
    "he": [
     "דאטה",
@@ -36820,7 +36820,7 @@
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_nl_card_title",
+   "name": "gen_nl_header_text",
    "type": "String",
    "he": [
     "דאטה",
@@ -36837,7 +36837,7 @@
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_nl_card_sub",
+   "name": "gen_nl_stat_label2",
    "type": "String",
    "he": [
     "דאטה",
@@ -36854,7 +36854,7 @@
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_nl_card_toast",
+   "name": "gen_nl_stat_label3",
    "type": "String",
    "he": [
     "דאטה",
@@ -36871,262 +36871,7 @@
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_nl_card_glyph2",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_nl_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_nl_card_message",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_nl_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_nl_other_label",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_nl_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_nl_other_label2",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_nl_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_nl_other_toast",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_nl_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_nl_header_title",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_nl_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_nl_other_text",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_nl_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_nl_card_stage_label",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_nl_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_nl_card_items_label",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_nl_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_nl_card_sum_label",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_nl_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_nl_card_toast2",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_nl_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_nl_card_glyph3",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_nl_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_nl_card_name",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_nl_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_nl_card_sub_label",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_nl_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_nl_card_credit_line",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_nl_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_nl_card_toast3",
+   "name": "gen_nl_stat_label4",
    "type": "String",
    "he": [
     "דאטה",

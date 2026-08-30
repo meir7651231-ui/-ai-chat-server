@@ -9,7 +9,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { retrieve } from './match.mjs';
+import { retrieve, retrieveLogic } from './match.mjs';
 import { board } from './compose.mjs';
 import { teach } from './teach.mjs';
 
@@ -63,7 +63,18 @@ function interpret(text) {
     for (const seg of phrases.slice(0, 4)) lines.push(`כותרת ${cleanLabel(seg)}`);
   }
 
-  lines.push('באנר המחולל למד מהאטומים ומהלוחות ובחר לבד לפי משמעות');
+  // 🌉 שכבת-הלוגיקה: מחווט אטומי-לוגיקה רלוונטיים (מתחווטים-standalone) דרך גשר-'חישוב'.
+  // כך המסך אינו UI-בלבד — הוא כולל את הלוגיקה האמיתית מהמדף (boxTotal/hebMonthHe/…).
+  const logic = retrieveLogic(text, 4, true).filter((l) => l.s >= MIN);
+  if (logic.length) {
+    lines.push(`כותרת ${title} · לוגיקה חיה`);
+    for (const l of logic.slice(0, 3)) {
+      lines.push(`חישוב ${l.he.slice(0, 4).join(' ')} (${l.name})`);
+      trace.push(`🌉 לוגיקה: ${l.name} (${l.s})`);
+    }
+  }
+
+  lines.push('באנר המחולל מרכיב UI + לוגיקה מהמדף, ובחר לבד לפי משמעות');
   return { spec: lines.join('\n'), trace, title, gaps };
 }
 
