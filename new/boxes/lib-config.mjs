@@ -20,6 +20,7 @@
  *   · doc         — document-כמו { querySelector, createElement, head:{appendChild} } ⇒ applyFavicon.
  *   · superAdminEmails — רשימת מיילי-העל (זהות = חיווט-הצבה, חוק-6; לא מוטבעת בקופסה) ⇒ isSuperAdmin.
  */
+import { SITE_LANGS } from '../atoms/site-langs-data.mjs';
 import { moduleOn as atomModuleOn } from '../atoms/module-on.mjs';
 import { featureOn as atomFeatureOn } from '../atoms/feature-on.mjs';
 import { donationSplitOn as atomDonationSplitOn } from '../atoms/donation-split-on.mjs';
@@ -108,7 +109,7 @@ const INTEGRATION_SETTING_KEYS = {
 // סגנונות-תנועה מותרים (types/config.ts:21).
 const MOTION_KEYS = [LIB_CONFIG_TERMS.k33, LIB_CONFIG_TERMS.k34, LIB_CONFIG_TERMS.k35];
 // שפות-האתר-הציבורי המוכרות (types/config.ts:65).
-const SITE_LANGS = ['he', 'en', 'yi'];
+// SITE_LANGS = allowlist-דאטה, חי באטום site-langs-data (הכרעה 19)
 // מפתחות-התבניות (templates.ts TEMPLATE_DEFS.map(d=>d.key), סדר-ההגדרה).
 const TEMPLATE_KEYS = [LIB_CONFIG_TERMS.k36, LIB_CONFIG_TERMS.k37, LIB_CONFIG_TERMS.k38, LIB_CONFIG_TERMS.k39, LIB_CONFIG_TERMS.k40];
 // מפתח דריסת-הריצה בדפדפן (config.ts:12).

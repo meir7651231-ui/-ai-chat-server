@@ -1,6 +1,6 @@
 # 🔬 ממצאי טוהר-עומק (הכרעה 19) — דאטה בתוך מנגנון
 
-נסרקו אטומי-מנגנון ב-new/atoms · new/boxes · הפרות: 30
+נסרקו אטומי-מנגנון ב-new/atoms · new/boxes · הפרות: 28
 
 | אטום | ציון | עברית | טבלאות | מחרוזות-דומיין | מספרי-קסם |
 |---|---|---|---|---|---|
@@ -15,8 +15,6 @@
 | new/atoms/collection-score-delta.mjs | 3 | — | — | — | 10 50 60 |
 | new/atoms/lessons-in-term.mjs | 3 | — | — | — | 52 12 12 |
 | new/atoms/segula-reminders.mjs | 3 | — | — | — | 21 35 40 |
-| new/boxes/families.mjs | 3 | — | DEFAULT_CONFIG = {} | — | — |
-| new/boxes/lib-config.mjs | 3 | — | SITE_LANGS = ['he', 'en', 'yi' | — | — |
 | new/atoms/demo-anchor.mjs | 2 | — | — | — | 86400000 10 |
 | new/atoms/slugify.mjs | 2 | — | — | — | 30 30 |
 | new/boxes/custom-export.mjs | 2 | — | — | — | 12 30 |

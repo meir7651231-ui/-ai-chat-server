@@ -70,7 +70,8 @@ for (const dir of DIRS) {
       }
       if (_ts.isVariableStatement(n) && n.parent === sf) {
         for (const d of n.declarationList.declarations)
-          if (d.initializer && (_ts.isArrayLiteralExpression(d.initializer) || _ts.isObjectLiteralExpression(d.initializer)) && staticLit(d.initializer)) {
+          if (d.initializer && (_ts.isArrayLiteralExpression(d.initializer) || _ts.isObjectLiteralExpression(d.initializer)) && staticLit(d.initializer)
+              && (d.initializer.elements?.length || d.initializer.properties?.length)) {   // ליטרל-ריק {}/[] = אפס-דאטה, לא טבלה
             const isExp = (n.modifiers || []).some(m => m.kind === _ts.SyntaxKind.ExportKeyword);
             if (!isExp) seen(cats.table, raw.slice(d.getStart(sf), Math.min(d.getStart(sf) + 44, d.end)).replace(/\s+/g, ' '), 3);
           }
