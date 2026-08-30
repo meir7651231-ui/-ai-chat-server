@@ -3,7 +3,7 @@
 function cleanStop(s) {
   return (s || '').replace(/\|/g, ' ').trim();
 }
-export function mapsRouteUrl(stops) {
+export function mapsRouteUrl(stops, T) {
   const clean = stops.map(cleanStop).filter(Boolean);
   if (clean.length === 0) return null;
   if (clean.length === 1) {
@@ -14,7 +14,7 @@ export function mapsRouteUrl(stops) {
   return (
     'https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=' +
     encodeURIComponent(destination) +
-    '&waypoints=' +
+    T.k1 +
     waypoints.map(encodeURIComponent).join('%7C')
   );
 }

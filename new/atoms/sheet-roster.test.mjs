@@ -1,4 +1,10 @@
-import { sheetRoster } from './sheet-roster.mjs';
+import { sheetRoster as __pure_sheetRoster } from './sheet-roster.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_sheetRoster_SHEET_ROSTER_T = {
+  k1: "ended",
+  k2: "wait",
+};
+const sheetRoster = (...a) => __pure_sheetRoster(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_sheetRoster_SHEET_ROSTER_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 

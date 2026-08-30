@@ -1,4 +1,13 @@
-import { roomInfoLabel } from './room-info-label.mjs';
+import { roomInfoLabel as __pure_roomInfoLabel } from './room-info-label.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_roomInfoLabel_ROOM_INFO_LABEL_T = {
+  k1: "משבצות של ",
+  k2: " דק׳",
+  k3: " · עד ",
+  k4: " משתתפים",
+  k5: " · נגיש",
+};
+const roomInfoLabel = (...a) => __pure_roomInfoLabel(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_roomInfoLabel_ROOM_INFO_LABEL_T);
 const C = [
   [{ slot: 45, cap: 12, access: true, eq: { מקרן: true, מזגן: false, לוח: true } },
     'משבצות של 45 דק׳ · עד 12 משתתפים · נגיש · מקרן, לוח'],

@@ -1,4 +1,9 @@
-import { renewTargets } from './renew-targets.mjs';
+import { renewTargets as __pure_renewTargets } from './renew-targets.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_renewTargets_RENEW_TARGETS_T = {
+  k1: "yes",
+};
+const renewTargets = (...a) => __pure_renewTargets(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_renewTargets_RENEW_TARGETS_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const eq = (a, b, msg) => ok(JSON.stringify(a) === JSON.stringify(b), msg + ` ⇒ ${JSON.stringify(a)}`);

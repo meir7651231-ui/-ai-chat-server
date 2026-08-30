@@ -1,5 +1,23 @@
 /** בדיקת-חוזה · make-normalize-site — זבל/עוין/תקרות/ריקים/רב-לשוני. */
-import { makeNormalizeSite } from './make-normalize-site.mjs';
+import { makeNormalizeSite as __pure_makeNormalizeSite } from './make-normalize-site.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_makeNormalizeSite_MAKE_NORMALIZE_SITE_T = {
+  k1: "string",
+  k2: "object",
+  k3: "number",
+  k4: "heroTitle",
+  k5: "brandLine",
+  k6: "heroBadge",
+  k7: "titleAccent",
+  k8: "servicesHeading",
+  k9: "microCopy",
+  k10: "ticker",
+  k11: "storyTitle",
+  k12: "storyTitleAccent",
+  k13: "storyBadge",
+  k14: "donateNote",
+};
+const makeNormalizeSite = (...a) => __pure_makeNormalizeSite(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_makeNormalizeSite_MAKE_NORMALIZE_SITE_T);
 import assert from 'node:assert';
 
 // שקע-https מינימלי תואם-חוזה (הצלבת-אמת מול safe-https-url = בדיקת-הקופסה)

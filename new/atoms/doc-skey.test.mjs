@@ -1,4 +1,11 @@
-import { docSkey } from './doc-skey.mjs';
+import { docSkey as __pure_docSkey } from './doc-skey.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_docSkey_DOC_SKEY_T = {
+  k1: "supporters",
+  k2: "events",
+  k3: "string",
+};
+const docSkey = (...a) => __pure_docSkey(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_docSkey_DOC_SKEY_T);
 // שקעים: supKeyOf האמיתי (forWho מחוטא) + המפתח-המשותף.
 const SHARED = '_shared_';
 const supKeyOf = (sp) => ((sp.forWho ?? '').trim() || SHARED);

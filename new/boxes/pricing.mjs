@@ -3,7 +3,10 @@
  *  מוצא: maor/src/lib/pricing.ts (גרף-הקריאות המלא). */
 import { defaultPrices } from '../atoms/default-prices.mjs';
 import { SIZE_LABELS } from '../atoms/size-labels.mjs';
-import { normalizePrices } from '../atoms/normalize-prices.mjs';
+import { normalizePrices as __pure_normalizePrices } from '../atoms/normalize-prices.mjs';
+import { NORMALIZE_PRICES_T as __d_normalizePrices_NORMALIZE_PRICES_T } from '../atoms/normalize-prices-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const normalizePrices = (...a) => __pure_normalizePrices(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_normalizePrices_NORMALIZE_PRICES_T);
 import { computeQuote } from '../atoms/compute-quote.mjs';
 import { shekel } from '../atoms/shekel.mjs';
 import { ALL_MODULES } from '../atoms/all-modules.mjs';

@@ -4,9 +4,18 @@
  *  בדפדפן/אפליקציה = שקע של לוח-האם, לא כאן. */
 import { waDigits as digitsAtom } from '../atoms/wa-digits.mjs';
 import { waLink as linkAtom } from '../atoms/wa-link.mjs';
-import { waDeliveryText as deliveryAtom } from '../atoms/wa-delivery-text.mjs';
-import { waPaymentText as paymentAtom } from '../atoms/wa-payment-text.mjs';
-import { waBirthdayText as birthdayAtom } from '../atoms/wa-birthday-text.mjs';
+import { waDeliveryText as __pure_waDeliveryText } from '../atoms/wa-delivery-text.mjs';
+import { WA_DELIVERY_TEXT_T as __d_waDeliveryText_WA_DELIVERY_TEXT_T } from '../atoms/wa-delivery-text-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const deliveryAtom = (...a) => __pure_waDeliveryText(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_waDeliveryText_WA_DELIVERY_TEXT_T);
+import { waPaymentText as __pure_waPaymentText } from '../atoms/wa-payment-text.mjs';
+import { WA_PAYMENT_TEXT_T as __d_waPaymentText_WA_PAYMENT_TEXT_T } from '../atoms/wa-payment-text-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const paymentAtom = (...a) => __pure_waPaymentText(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_waPaymentText_WA_PAYMENT_TEXT_T);
+import { waBirthdayText as __pure_waBirthdayText } from '../atoms/wa-birthday-text.mjs';
+import { WA_BIRTHDAY_TEXT_T as __d_waBirthdayText_WA_BIRTHDAY_TEXT_T } from '../atoms/wa-birthday-text-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const birthdayAtom = (...a) => __pure_waBirthdayText(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_waBirthdayText_WA_BIRTHDAY_TEXT_T);
 import { renderTemplate as renderAtom } from '../atoms/render-template.mjs';
 import { TEMPLATE_DEFS } from '../atoms/template-defs.mjs';
 

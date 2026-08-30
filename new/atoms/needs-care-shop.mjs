@@ -4,7 +4,7 @@
  *  (upcomingHolidays · itemRemaining · componentRemaining · beneficiaryLabel ·
  *  itemOf · holidayAllowed · assignmentRedeemed · couponExpiry · featureOn ·
  *  expiringIntakes · הקבוע SHOP_HOLIDAY_DUE_DAYS) הוזרקו כשקעים (חוק-1). */
-export function needsCare(db, todayIso, config, sockets) {
+export function needsCare(db, todayIso, config, sockets, T) {
   const {
     upcomingHolidays, itemRemaining, componentRemaining, beneficiaryLabel,
     itemOf, holidayAllowed, assignmentRedeemed, couponExpiry, featureOn,
@@ -23,21 +23,21 @@ export function needsCare(db, todayIso, config, sockets) {
     const rem = itemRemaining(db, item.id);
     if (rem === 0) {
       stock.push({
-        kind: 'stockOut',
+        kind: T.k1,
         assignmentId: '',
         componentId: item.id,
-        label: item.name + ' — המלאי אזל',
-        hint: 'לחדש מלאי או לעדכן את הפריט',
+        label: item.name + T.k2,
+        hint: T.k3,
       });
     }
     else if (item.minStock != null && rem !== null && rem < item.minStock) {
       // מלאי מינימום (SHOP6 חנות 25): מתחת לסף — "להצטייד" לפני שאוזל
       stock.push({
-        kind: 'restock',
+        kind: T.k4,
         assignmentId: '',
         componentId: item.id,
-        label: item.name + ' — המלאי נמוך',
-        hint: 'להצטייד: נותרו ' + rem + ' מתחת ל-' + item.minStock,
+        label: item.name + T.k5,
+        hint: T.k6 + rem + T.k7 + item.minStock,
       });
     }
     // רשימת המתנה (SHOP6 חנות 27): ממתינים + מלאי חזר (>0 או בלי-מעקב) —
@@ -45,11 +45,11 @@ export function needsCare(db, todayIso, config, sockets) {
     const waiting = item.waits ?? [];
     if (waiting.length > 0 && rem !== 0) {
       stock.push({
-        kind: 'waitingRestocked',
+        kind: T.k8,
         assignmentId: '',
         componentId: item.id,
-        label: waiting.length + ' ממתינים ל' + item.name,
-        hint: 'המלאי חזר — אפשר לחלק לרשימת ההמתנה',
+        label: waiting.length + T.k9 + item.name,
+        hint: T.k10,
       });
     }
   }
@@ -63,17 +63,17 @@ export function needsCare(db, todayIso, config, sockets) {
       const rem = componentRemaining(comp.id, p.id, db.shopAssignments, comp.stock);
       if (rem === 0) {
         stock.push({
-          kind: 'stockOut',
+          kind: T.k1,
           assignmentId: '',
           componentId: comp.id,
-          label: comp.label + ' (' + p.name + ') — המלאי אזל',
-          hint: 'לחדש מלאי או לעדכן את הרכיב במוצר',
+          label: comp.label + ' (' + p.name + T.k11,
+          hint: T.k12,
         });
       }
     }
   }
   for (const a of db.shopAssignments) {
-    if (a.status !== 'active')
+    if (a.status !== T.k13)
       continue;
     const product = db.shopProducts.find((p) => p.id === a.productId);
     if (!product)
@@ -81,49 +81,49 @@ export function needsCare(db, todayIso, config, sockets) {
     const who = beneficiaryLabel(db, a, config);
     for (const comp of product.components) {
       const ri = itemOf(db, comp);
-      if (ri.kind === 'holidayGift') {
+      if (ri.kind === T.k14) {
         for (const h of holidays) {
           // חגים נבחרים (הכרעה 17): "מה מגיע" רק לחגים שסומנו על הפריט
           if (!holidayAllowed(ri, h.name))
             continue;
           if (!assignmentRedeemed(a, comp.id, h)) {
             due.push({
-              kind: 'holidayDue',
+              kind: T.k15,
               assignmentId: a.id,
               componentId: comp.id,
               label: who + ' — ' + ri.name,
-              hint: h.name + ' ב-' + h.iso + ' — טרם נמסרה',
+              hint: h.name + T.k16 + h.iso + T.k17,
             });
           }
         }
       }
-      else if (ri.kind === 'meeting' && !assignmentRedeemed(a, comp.id)) {
+      else if (ri.kind === T.k18 && !assignmentRedeemed(a, comp.id)) {
         meetings.push({
-          kind: 'meetingPending',
+          kind: T.k19,
           assignmentId: a.id,
           componentId: comp.id,
           label: who + ' — ' + ri.name,
-          hint: 'פגישת ליווי טרם התקיימה',
+          hint: T.k20,
         });
       }
-      else if (ri.kind === 'coupon' && !assignmentRedeemed(a, comp.id)) {
+      else if (ri.kind === T.k21 && !assignmentRedeemed(a, comp.id)) {
         const expiry = couponExpiry(a, ri);
         if (expiry && expiry < todayIso) {
           expired.push({
-            kind: 'couponExpired',
+            kind: T.k22,
             assignmentId: a.id,
             componentId: comp.id,
             label: who + ' — ' + ri.name,
-            hint: 'הקופון פג בתוקף ב-' + expiry + ' וטרם מומש',
+            hint: T.k23 + expiry + T.k24,
           });
         }
         else {
           coupons.push({
-            kind: 'couponPending',
+            kind: T.k25,
             assignmentId: a.id,
             componentId: comp.id,
             label: who + ' — ' + ri.name,
-            hint: expiry ? 'קופון טרם מומש · בתוקף עד ' + expiry : 'קופון טרם מומש',
+            hint: expiry ? T.k26 + expiry : T.k27,
           });
         }
       }
@@ -133,13 +133,13 @@ export function needsCare(db, todayIso, config, sockets) {
   // תיקון (swarm-audit): הקלט (שדה-תפוגה בקליטה) מגודר shop.expiry אבל ההתרעות
   // נפלטו ללא-תנאי — ארגון עם הדגל כבוי עדיין קיבל התרעות-תפוגה. עם config
   // הדגל נאכף; בלי config (קוראים ישנים/בדיקות) — ביט-זהה להיום.
-  const expiryOn = !config || featureOn(config, 'shop.expiry');
+  const expiryOn = !config || featureOn(config, T.k28);
   const expiring = (expiryOn ? expiringIntakes(db, todayIso) : []).map((x) => ({
-    kind: 'expiring',
+    kind: T.k29,
     assignmentId: '',
     componentId: x.intake.itemId,
-    label: x.itemName + (x.expired ? ' — פג תוקף' : ' — עומד לפוג'),
-    hint: (x.expired ? 'פג ב-' : 'בתוקף עד ') + x.intake.expiry + ' · אצווה ' + x.intake.qty + ' יח׳',
+    label: x.itemName + (x.expired ? T.k30 : T.k31),
+    hint: (x.expired ? T.k32 : T.k33) + x.intake.expiry + T.k34 + x.intake.qty + T.k35,
   }));
   return [...due, ...meetings, ...coupons, ...expired, ...stock, ...expiring];
 }

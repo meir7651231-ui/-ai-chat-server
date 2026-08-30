@@ -1,4 +1,15 @@
-import { planAyinAdvance } from './plan-ayin-advance.mjs';
+import { planAyinAdvance as __pure_planAyinAdvance } from './plan-ayin-advance.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_planAyinAdvance_PLAN_AYIN_ADVANCE_T = {
+  k1: "new",
+  k2: "lead",
+  k3: "eyes",
+  k4: "answer",
+  k5: "נמסר — נרשם בלוח היומי ובכרטיס",
+  k6: "done",
+  k7: "הטיפול הושלם ✓ — נרשם בלוח",
+};
+const planAyinAdvance = (...a) => __pure_planAyinAdvance(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_planAyinAdvance_PLAN_AYIN_ADVANCE_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 // שקעים בהתנהגות ברירת-המחדל של maor (ayin.ts):

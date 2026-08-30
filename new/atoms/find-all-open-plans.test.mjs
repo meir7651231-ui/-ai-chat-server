@@ -1,4 +1,11 @@
-import { findAllOpenPlans } from './find-all-open-plans.mjs';
+import { findAllOpenPlans as __pure_findAllOpenPlans } from './find-all-open-plans.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_findAllOpenPlans_FIND_ALL_OPEN_PLANS_T = {
+  k1: "supporter",
+  k2: "enrollment",
+  k3: "shopAssignment",
+};
+const findAllOpenPlans = (...a) => __pure_findAllOpenPlans(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_findAllOpenPlans_FIND_ALL_OPEN_PLANS_T);
 const db = {
   supporters: [
     { id: 's1', name: 'ראובן', plannedCharges: [{ id: 'p1' }, { id: 'p2', chargedRid: 'R-5' }, { id: 'p3', cancelledAt: '2026-01-01' }] },

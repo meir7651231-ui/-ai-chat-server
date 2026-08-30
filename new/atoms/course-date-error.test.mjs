@@ -1,4 +1,12 @@
-import { courseDateError } from './course-date-error.mjs';
+import { courseDateError as __pure_courseDateError } from './course-date-error.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_courseDateError_COURSE_DATE_ERROR_T = {
+  k1: "entity.course",
+  k2: "חוג",
+  k3: "תאריך הסיום מוקדם מתאריך ההתחלה — ה",
+  k4: " לא יופיע בלוח. תקנו את התאריכים",
+};
+const courseDateError = (...a) => __pure_courseDateError(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_courseDateError_COURSE_DATE_ERROR_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 const termHeb = () => 'שיעור';

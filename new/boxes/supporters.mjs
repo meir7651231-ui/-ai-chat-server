@@ -15,7 +15,10 @@ import { supLast } from '../atoms/sup-last.mjs';
 import { supLastInPeriod as supLastInPeriodAtom } from '../atoms/sup-last-in-period.mjs';
 import { supTotalIls as supTotalIlsAtom } from '../atoms/sup-total-ils.mjs';
 import { supScore as supScoreAtom } from '../atoms/sup-score.mjs';
-import { supTier } from '../atoms/sup-tier.mjs';
+import { supTier as __pure_supTier } from '../atoms/sup-tier.mjs';
+import { SUP_TIER_T as __d_supTier_SUP_TIER_T } from '../atoms/sup-tier-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const supTier = (...a) => __pure_supTier(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_supTier_SUP_TIER_T);
 import { TIER_ORDER } from '../atoms/tier-order.mjs';
 import { supScoreBins as supScoreBinsAtom } from '../atoms/sup-score-bins.mjs';
 import { supAvgDon as supAvgDonAtom } from '../atoms/sup-avg-don.mjs';
@@ -23,14 +26,29 @@ import { sup12m as sup12mAtom } from '../atoms/sup12m.mjs';
 import { chipStyle } from '../atoms/chip-style.mjs';
 import { fixPhone as fixPhoneAtom } from '../atoms/fix-phone.mjs';
 import { totalLabel as totalLabelAtom } from '../atoms/total-label.mjs';
-import { supDonEvents as supDonEventsAtom } from '../atoms/sup-don-events.mjs';
-import { personalCalEntries as personalCalEntriesAtom } from '../atoms/personal-cal-entries.mjs';
-import { orgCalEntries as orgCalEntriesAtom } from '../atoms/org-cal-entries.mjs';
-import { donCalMonthLine as donCalMonthLineAtom } from '../atoms/don-cal-month-line.mjs';
+import { supDonEvents as __pure_supDonEvents } from '../atoms/sup-don-events.mjs';
+import { SUP_DON_EVENTS_T as __d_supDonEvents_SUP_DON_EVENTS_T } from '../atoms/sup-don-events-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const supDonEventsAtom = (...a) => __pure_supDonEvents(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_supDonEvents_SUP_DON_EVENTS_T);
+import { personalCalEntries as __pure_personalCalEntries } from '../atoms/personal-cal-entries.mjs';
+import { PERSONAL_CAL_ENTRIES_T as __d_personalCalEntries_PERSONAL_CAL_ENTRIES_T } from '../atoms/personal-cal-entries-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const personalCalEntriesAtom = (...a) => __pure_personalCalEntries(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_personalCalEntries_PERSONAL_CAL_ENTRIES_T);
+import { orgCalEntries as __pure_orgCalEntries } from '../atoms/org-cal-entries.mjs';
+import { ORG_CAL_ENTRIES_T as __d_orgCalEntries_ORG_CAL_ENTRIES_T } from '../atoms/org-cal-entries-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const orgCalEntriesAtom = (...a) => __pure_orgCalEntries(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_orgCalEntries_ORG_CAL_ENTRIES_T);
+import { donCalMonthLine as __pure_donCalMonthLine } from '../atoms/don-cal-month-line.mjs';
+import { DON_CAL_MONTH_LINE_T as __d_donCalMonthLine_DON_CAL_MONTH_LINE_T } from '../atoms/don-cal-month-line-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const donCalMonthLineAtom = (...a) => __pure_donCalMonthLine(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_donCalMonthLine_DON_CAL_MONTH_LINE_T);
 import { normName as normNameAtom } from '../atoms/norm-name.mjs';
 import { SUP_NAME_KEYS } from '../atoms/sup-name-keys.mjs';
 import { excelSerialToIso } from '../atoms/excel-serial-to-iso.mjs';
-import { parseSupporterGrid as parseSupporterGridAtom } from '../atoms/parse-supporter-grid.mjs';
+import { parseSupporterGrid as __pure_parseSupporterGrid } from '../atoms/parse-supporter-grid.mjs';
+import { PARSE_SUPPORTER_GRID_T as __d_parseSupporterGrid_PARSE_SUPPORTER_GRID_T } from '../atoms/parse-supporter-grid-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const parseSupporterGridAtom = (...a) => __pure_parseSupporterGrid(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_parseSupporterGrid_PARSE_SUPPORTER_GRID_T);
 import { parseSupporterCsv as parseSupporterCsvAtom } from '../atoms/parse-supporter-csv.mjs';
 import { applyAyinNames as applyAyinNamesAtom } from '../atoms/apply-ayin-names.mjs';
 import { mergeHist } from '../atoms/merge-hist.mjs';
@@ -38,11 +56,20 @@ import { planSupporterImport as planSupporterImportAtom } from '../atoms/plan-su
 import { mergeSupporterRow as mergeSupporterRowAtom } from '../atoms/merge-supporter-row.mjs';
 import { newSupporterFromRow as newSupporterFromRowAtom } from '../atoms/new-supporter-from-row.mjs';
 import { HOK_CAT } from '../atoms/hok-cat.mjs';
-import { hokEffectivelyActive } from '../atoms/hok-effectively-active.mjs';
-import { hokRecordedThisMonth as hokRecordedThisMonthAtom } from '../atoms/hok-recorded-this-month.mjs';
+import { hokEffectivelyActive as __pure_hokEffectivelyActive } from '../atoms/hok-effectively-active.mjs';
+import { HOK_EFFECTIVELY_ACTIVE_T as __d_hokEffectivelyActive_HOK_EFFECTIVELY_ACTIVE_T } from '../atoms/hok-effectively-active-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const hokEffectivelyActive = (...a) => __pure_hokEffectivelyActive(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_hokEffectivelyActive_HOK_EFFECTIVELY_ACTIVE_T);
+import { hokRecordedThisMonth as __pure_hokRecordedThisMonth } from '../atoms/hok-recorded-this-month.mjs';
+import { HOK_EFFECTIVELY_ACTIVE_T as __d_hokRecordedThisMonth_HOK_RECORDED_THIS_MONTH_T } from '../atoms/hok-effectively-active-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const hokRecordedThisMonthAtom = (...a) => __pure_hokRecordedThisMonth(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_hokRecordedThisMonth_HOK_RECORDED_THIS_MONTH_T);
 import { hokDue as hokDueAtom } from '../atoms/hok-due.mjs';
 import { hokMonthlyTotal as hokMonthlyTotalAtom } from '../atoms/hok-monthly-total.mjs';
-import { hokMethodLabel } from '../atoms/hok-method-label.mjs';
+import { hokMethodLabel as __pure_hokMethodLabel } from '../atoms/hok-method-label.mjs';
+import { HOK_METHOD_LABEL_T as __d_hokMethodLabel_HOK_METHOD_LABEL_T } from '../atoms/hok-method-label-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const hokMethodLabel = (...a) => __pure_hokMethodLabel(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_hokMethodLabel_HOK_METHOD_LABEL_T);
 
 // ── חוטי-מודולים-אחרים (אטומים חיצוניים; קריאות-שכן ⇒ שקע, LAW חוק-1/3) ──
 import { termOf } from '../atoms/term-of.mjs';
@@ -50,7 +77,10 @@ import { normSearch } from '../atoms/norm-search.mjs';
 import { formatIsraeliPhone } from '../atoms/format-israeli-phone.mjs';
 import { parseAnyDate } from '../atoms/parse-any-date.mjs';
 import { parseCsv } from '../atoms/parse-csv.mjs';
-import { planAddName as planAddNameAtom } from '../atoms/plan-add-name.mjs';
+import { planAddName as __pure_planAddName } from '../atoms/plan-add-name.mjs';
+import { PLAN_ADD_NAME_T as __d_planAddName_PLAN_ADD_NAME_T } from '../atoms/plan-add-name-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const planAddNameAtom = (...a) => __pure_planAddName(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_planAddName_PLAN_ADD_NAME_T);
 
 // ── שקעי-IO (מוזרקים, לא ממומשים כאן) ──────────────────────────────────────
 // clockIso: () => 'YYYY-MM-DD' — שעון-מקומי. Date.now (בציון) — שעון-מערכת.

@@ -4,7 +4,7 @@
 export function buildSlots(db, room, iso, blocked, config,
   { timeToMin, minToHM, sessionsOf, courseOnDate, termOf },
   /** דגל diary.cleaning — false ⇒ אין משבצת ניקיון יומי (המשבצות נשארות רגילות). */
-  cleaningOn = true) {
+  cleaningOn = true, T) {
   const from = Number.isNaN(timeToMin(room.from)) ? 8 * 60 : timeToMin(room.from);
   const to = Number.isNaN(timeToMin(room.to)) ? 20 * 60 : timeToMin(room.to);
   const step = room.slot > 0 ? room.slot : 60;
@@ -16,7 +16,7 @@ export function buildSlots(db, room, iso, blocked, config,
     const hh = minToHM(t);
     // ניקיון יומי 15:00–16:00 — קבוע בכל החדרים (כמו במקור); מגודר diary.cleaning
     if (cleaningOn && t >= 900 && t < 960) {
-      slots.push({ key: 'clean' + hh, time: hh, kind: 'cleaning', label: 'ניקיון יומי (15:00–16:00)', bg: '#eceae2', c: '#4d463c' });
+      slots.push({ key: T.k1 + hh, time: hh, kind: T.k2, label: T.k3, bg: T.k4, c: '#4d463c' });
       continue;
     }
     let occupied = false;
@@ -30,9 +30,9 @@ export function buildSlots(db, room, iso, blocked, config,
           slots.push({
             key: `crs|${hh}|${c.id}|${i}`,
             time: ss[i].time || hh,
-            kind: 'course',
-            label: termOf(config, 'entity.course', 'חוג') + ': ' + c.name,
-            bg: '#fdf1d4',
+            kind: T.k5,
+            label: termOf(config, T.k6, T.k7) + ': ' + c.name,
+            bg: T.k8,
             c: '#9a6414',
             course: c,
             session: ss[i],
@@ -48,11 +48,11 @@ export function buildSlots(db, room, iso, blocked, config,
       return !Number.isNaN(tm) && tm >= t && tm < t + step;
     });
     if (oe) {
-      slots.push({ key: 'ev|' + hh + '|' + oe.id, time: oe.time || hh, kind: 'event', label: 'אירוע: ' + oe.title, bg: '#e7edf5', c: '#3a5a86', event: oe });
+      slots.push({ key: 'ev|' + hh + '|' + oe.id, time: oe.time || hh, kind: T.k9, label: T.k10 + oe.title, bg: T.k11, c: '#3a5a86', event: oe });
     } else if (blocked) {
-      slots.push({ key: 'blk' + hh, time: hh, kind: 'blocked', label: 'חסום — ' + blocked, bg: '#fdeaea', c: '#b91c1c' });
+      slots.push({ key: T.k12 + hh, time: hh, kind: T.k13, label: T.k14 + blocked, bg: T.k15, c: '#b91c1c' });
     } else {
-      slots.push({ key: 'free' + hh, time: hh, kind: 'free', label: 'פנוי', bg: '#e4f5ea', c: '#12803c' });
+      slots.push({ key: T.k16 + hh, time: hh, kind: T.k16, label: T.k17, bg: '#e4f5ea', c: '#12803c' });
     }
   }
   // מפגשים של היום שנופלים מחוץ לשעות הפעילות של החדר — עדיין מוצגים לרישום נוכחות
@@ -64,9 +64,9 @@ export function buildSlots(db, room, iso, blocked, config,
       slots.push({
         key: `out|${c.id}|${i}`,
         time: ss[i].time || '—',
-        kind: 'course',
-        label: termOf(config, 'entity.course', 'חוג') + ': ' + c.name + ' · מחוץ לשעות הפעילות של החדר',
-        bg: '#fdf1d4',
+        kind: T.k5,
+        label: termOf(config, T.k6, T.k7) + ': ' + c.name + T.k18,
+        bg: T.k8,
         c: '#9a6414',
         course: c,
         session: ss[i],

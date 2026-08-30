@@ -1,4 +1,9 @@
-import { staleBoxes } from './stale-boxes.mjs';
+import { staleBoxes as __pure_staleBoxes } from './stale-boxes.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_staleBoxes_STALE_BOXES_T = {
+  k1: "home",
+};
+const staleBoxes = (...a) => __pure_staleBoxes(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_staleBoxes_STALE_BOXES_T);
 let f = 0;
 const eq = (a, b, msg) => {
   const ja = JSON.stringify(a), jb = JSON.stringify(b);

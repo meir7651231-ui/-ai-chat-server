@@ -1,4 +1,10 @@
-import { nextClosure } from './next-closure.mjs';
+import { nextClosure as __pure_nextClosure } from './next-closure.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_nextClosure_NEXT_CLOSURE_T = {
+  k1: "default",
+  k2: "Asia/Jerusalem",
+};
+const nextClosure = (...a) => __pure_nextClosure(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_nextClosure_NEXT_CLOSURE_T);
 // שקעי-דמה מקומיים לבדיקה — הבדיקה מייבאת רק את האטום שלה (חוק-4).
 const CITIES = {
   jerusalem: { he: 'ירושלים', lat: 31.778, lon: 35.235, candle: 40 },

@@ -1,4 +1,15 @@
-import { collectionsCsvRows } from './collections-csv-rows.mjs';
+import { collectionsCsvRows as __pure_collectionsCsvRows } from './collections-csv-rows.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_collectionsCsvRows_COLLECTIONS_CSV_ROWS_T = {
+  k1: "תאריך",
+  k2: "רכז",
+  k3: "קופה",
+  k4: "entity.family",
+  k5: "משפחה",
+  k6: "סכום",
+  k7: "מבצע",
+};
+const collectionsCsvRows = (...a) => __pure_collectionsCsvRows(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_collectionsCsvRows_COLLECTIONS_CSV_ROWS_T);
 const termOf = (config, k, fb) => config.terms?.[k] ?? fb;
 const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const HDR = ['תאריך', 'רכז', 'קופה', 'משפחה', 'סכום', 'מבצע'];

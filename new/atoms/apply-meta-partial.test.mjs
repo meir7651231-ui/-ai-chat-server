@@ -1,4 +1,23 @@
-import { applyMetaPartial } from './apply-meta-partial.mjs';
+import { applyMetaPartial as __pure_applyMetaPartial } from './apply-meta-partial.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_applyMetaPartial_APPLY_META_PARTIAL_T = {
+  k1: "orgName",
+  k2: "orgSite",
+  k3: "orgDonate",
+  k4: "orgGoal",
+  k5: "budget",
+  k6: "usdRate",
+  k7: "audit",
+  k8: "notif",
+  k9: "reports",
+  k10: "attnDone",
+  k11: "number",
+  k12: "seq",
+  k13: "receiptSeq",
+  k14: "donationSeq",
+  k15: "shopReceiptSeq",
+};
+const applyMetaPartial = (...a) => __pure_applyMetaPartial(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_applyMetaPartial_APPLY_META_PARTIAL_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 

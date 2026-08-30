@@ -1,4 +1,9 @@
-import { annualAllLines } from './annual-all-lines.mjs';
+import { annualAllLines as __pure_annualAllLines } from './annual-all-lines.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_annualAllLines_ANNUAL_ALL_LINES_T = {
+  k1: "אין תורמים עם תרומות בשנת ",
+};
+const annualAllLines = (...a) => __pure_annualAllLines(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_annualAllLines_ANNUAL_ALL_LINES_T);
 // מימושי-שקע לבדיקה: סינון-שנה נאמן-למקור + מקטע מדומה שמוכיח את החיווט.
 const donationsOfYear = (donations, year) => donations.filter((d) => (d.date || '').startsWith(year + '-'));
 let seenPayerIds = [];

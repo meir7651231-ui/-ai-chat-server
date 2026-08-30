@@ -1,4 +1,9 @@
-import { appendCall } from './append-call.mjs';
+import { appendCall as __pure_appendCall } from './append-call.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_appendCall_APPEND_CALL_T = {
+  k1: "skip",
+};
+const appendCall = (...a) => __pure_appendCall(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_appendCall_APPEND_CALL_T);
 const CAP = 3; // שקע-הבדיקה (בקופסה: האטום call-log-cap = 200)
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };

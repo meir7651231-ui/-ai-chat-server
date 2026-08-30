@@ -1,4 +1,9 @@
-import { siteDonateUrl } from './site-donate-url.mjs';
+import { siteDonateUrl as __pure_siteDonateUrl } from './site-donate-url.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_siteDonateUrl_SITE_DONATE_URL_T = {
+  k1: "string",
+};
+const siteDonateUrl = (...a) => __pure_siteDonateUrl(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_siteDonateUrl_SITE_DONATE_URL_T);
 let f = 0;
 const eq = (a, b, msg) => { if (a !== b) { console.error(`✗ ${msg} ⇒ ${JSON.stringify(a)}`); f = 1; } };
 

@@ -1,5 +1,13 @@
 /** בדיקת-חוזה · employee-sign-up-error — סדר-שגיאות · גבולות · תקין. */
-import { employeeSignUpError } from './employee-sign-up-error.mjs';
+import { employeeSignUpError as __pure_employeeSignUpError } from './employee-sign-up-error.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_employeeSignUpError_EMPLOYEE_SIGN_UP_ERROR_T = {
+  k1: "כתובת האימייל אינה תקינה",
+  k2: "מספר טלפון תקין הוא שדה חובה",
+  k3: "הסיסמה חייבת להיות לפחות 6 תווים",
+  k4: "קוד-ההזמנה מהמנהל הוא שדה חובה",
+};
+const employeeSignUpError = (...a) => __pure_employeeSignUpError(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_employeeSignUpError_EMPLOYEE_SIGN_UP_ERROR_T);
 import assert from 'node:assert';
 const ok = ['a@b.co', '050-1234567', '123456', 'slug.777'];
 assert.strictEqual(employeeSignUpError(...ok), '');

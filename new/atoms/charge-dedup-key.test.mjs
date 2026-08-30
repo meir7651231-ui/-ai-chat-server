@@ -1,4 +1,10 @@
-import { chargeDedupKey } from './charge-dedup-key.mjs';
+import { chargeDedupKey as __pure_chargeDedupKey } from './charge-dedup-key.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_chargeDedupKey_CHARGE_DEDUP_KEY_T = {
+  k1: "txn:",
+  k2: "ref:",
+};
+const chargeDedupKey = (...a) => __pure_chargeDedupKey(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_chargeDedupKey_CHARGE_DEDUP_KEY_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 // 1) txn רגיל

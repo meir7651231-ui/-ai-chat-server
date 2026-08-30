@@ -1,4 +1,12 @@
-import { decodeCsvBuffer } from './decode-csv-buffer.mjs';
+import { decodeCsvBuffer as __pure_decodeCsvBuffer } from './decode-csv-buffer.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_decodeCsvBuffer_DECODE_CSV_BUFFER_T = {
+  k1: "utf-16le",
+  k2: "utf-16be",
+  k3: "utf-8",
+  k4: "windows-1255",
+};
+const decodeCsvBuffer = (...a) => __pure_decodeCsvBuffer(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_decodeCsvBuffer_DECODE_CSV_BUFFER_T);
 const B = (arr) => Uint8Array.from(arr).buffer;
 const utf16leNoBom = (s) => { const a = []; for (const ch of s) { const c = ch.charCodeAt(0); a.push(c & 0xff, c >> 8); } return B(a); };
 const C = [

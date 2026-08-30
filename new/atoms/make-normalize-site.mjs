@@ -4,17 +4,17 @@
  *  מוצא: maor/src/lib/config.ts:216-512 כלשונו (עוזרי-הקובץ הפרטיים siteStr/normLocalized/
  *  sitePosNum/sitePhone נכללו); ‏safeHttpsUrl ו-SITE_LANGS הוזרקו כשקעי-מפעל (חוק-1).
  *  @param safeHttpsUrl שקע: (raw)=>string|null · @param SITE_LANGS שקע: readonly string[] */
-export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS) {
+export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS, T) {
   function siteStr(v, max) {
-      return typeof v === 'string' ? v.replace(/\p{Cc}/gu, '').trim().slice(0, max) : '';
+      return typeof v === T.k1 ? v.replace(/\p{Cc}/gu, '').trim().slice(0, max) : '';
   }
   /** טקסט רב-לשוני: מחרוזת ⇒ מגוזמת; מפה ⇒ רק שפות-allowlist עם ערך לא-ריק; אחרת undefined. */
   function normLocalized(v, max) {
-      if (typeof v === 'string') {
+      if (typeof v === T.k1) {
           const s = siteStr(v, max);
           return s || undefined;
       }
-      if (v && typeof v === 'object' && !Array.isArray(v)) {
+      if (v && typeof v === T.k2 && !Array.isArray(v)) {
           const out = {};
           for (const l of SITE_LANGS) {
               const s = siteStr(v[l], max);
@@ -27,11 +27,11 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS) {
   }
   /** מספר חיובי-סופי או undefined. */
   function sitePosNum(v) {
-      return typeof v === 'number' && Number.isFinite(v) && v >= 0 ? v : undefined;
+      return typeof v === T.k3 && Number.isFinite(v) && v >= 0 ? v : undefined;
   }
   /** טלפון לתצוגה/חיוג — ספרות ‎+()- ‎ ורווח בלבד, עד 24. */
   function sitePhone(v) {
-      return typeof v === 'string' ? v.replace(/[^\d+()\-\s]/g, '').trim().slice(0, 24) : '';
+      return typeof v === T.k1 ? v.replace(/[^\d+()\-\s]/g, '').trim().slice(0, 24) : '';
   }
   /**
    * חיטוי תוכן-האתר-הציבורי — allowlist מלא + תקרות. הקונפיג מסתנכרן לענן/גיבוי,
@@ -39,7 +39,7 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS) {
    * לא-אובייקט ⇒ undefined (⇒ אין אתר ציבורי, ביט-זהה להיום).
    */
   function normalizeSite(raw) {
-      if (!raw || typeof raw !== 'object' || Array.isArray(raw))
+      if (!raw || typeof raw !== T.k2 || Array.isArray(raw))
           return undefined;
       const s = raw;
       const out = {};
@@ -66,7 +66,7 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS) {
       if (Array.isArray(s.stats)) {
           const stats = s.stats
               .map((st) => {
-              if (!st || typeof st !== 'object')
+              if (!st || typeof st !== T.k2)
                   return null;
               const o = st;
               const value = siteStr(o.value, 24);
@@ -83,7 +83,7 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS) {
       const lfl = normLocalized(s.liveFamiliesLabel, 60);
       if (lfl)
           out.liveFamiliesLabel = lfl;
-      if (s.campaign && typeof s.campaign === 'object' && !Array.isArray(s.campaign)) {
+      if (s.campaign && typeof s.campaign === T.k2 && !Array.isArray(s.campaign)) {
           const c = s.campaign;
           const camp = {};
           const ct = normLocalized(c.title, 120);
@@ -107,7 +107,7 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS) {
       if (Array.isArray(s.services)) {
           const svcs = s.services
               .map((sv) => {
-              if (!sv || typeof sv !== 'object')
+              if (!sv || typeof sv !== T.k2)
                   return null;
               const o = sv;
               const title = normLocalized(o.title, 80);
@@ -135,13 +135,13 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS) {
           out.story = story;
       if (Array.isArray(s.gallery)) {
           const imgs = s.gallery
-              .map((g) => (typeof g === 'string' ? safeHttpsUrl(g) : null))
+              .map((g) => (typeof g === T.k1 ? safeHttpsUrl(g) : null))
               .filter((g) => !!g)
               .slice(0, 24);
           if (imgs.length)
               out.gallery = imgs;
       }
-      if (s.contact && typeof s.contact === 'object' && !Array.isArray(s.contact)) {
+      if (s.contact && typeof s.contact === T.k2 && !Array.isArray(s.contact)) {
           const c = s.contact;
           const contact = {};
           if (Array.isArray(c.phones)) {
@@ -164,7 +164,7 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS) {
           const taxNote = normLocalized(c.taxNote, 200);
           if (taxNote)
               contact.taxNote = taxNote;
-          if (typeof c.mapUrl === 'string') {
+          if (typeof c.mapUrl === T.k1) {
               const mu = safeHttpsUrl(c.mapUrl);
               if (mu)
                   contact.mapUrl = mu;
@@ -172,13 +172,13 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS) {
           if (Object.keys(contact).length)
               out.contact = contact;
       }
-      if (typeof s.donateUrl === 'string') {
+      if (typeof s.donateUrl === T.k1) {
           const u = safeHttpsUrl(s.donateUrl);
           if (u)
               out.donateUrl = u;
       }
       /* ── עיצוב-דף-התרומות: שדות חדשים (allowlist + תקרות) ── */
-      const imgUrl = (v) => (typeof v === 'string' ? safeHttpsUrl(v) || undefined : undefined);
+      const imgUrl = (v) => (typeof v === T.k1 ? safeHttpsUrl(v) || undefined : undefined);
       const setLT = (k, v, max) => {
           const t = normLocalized(v, max);
           if (t)
@@ -187,23 +187,23 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS) {
       const hi = imgUrl(s.heroImage);
       if (hi)
           out.heroImage = hi;
-      setLT('heroTitle', s.heroTitle, 80);
-      setLT('brandLine', s.brandLine, 60);
-      setLT('heroBadge', s.heroBadge, 80);
-      setLT('titleAccent', s.titleAccent, 60);
-      setLT('servicesHeading', s.servicesHeading, 80);
-      setLT('microCopy', s.microCopy, 120);
-      setLT('ticker', s.ticker, 160);
-      setLT('storyTitle', s.storyTitle, 120);
-      setLT('storyTitleAccent', s.storyTitleAccent, 80);
-      setLT('storyBadge', s.storyBadge, 80);
-      setLT('donateNote', s.donateNote, 240);
+      setLT(T.k4, s.heroTitle, 80);
+      setLT(T.k5, s.brandLine, 60);
+      setLT(T.k6, s.heroBadge, 80);
+      setLT(T.k7, s.titleAccent, 60);
+      setLT(T.k8, s.servicesHeading, 80);
+      setLT(T.k9, s.microCopy, 120);
+      setLT(T.k10, s.ticker, 160);
+      setLT(T.k11, s.storyTitle, 120);
+      setLT(T.k12, s.storyTitleAccent, 80);
+      setLT(T.k13, s.storyBadge, 80);
+      setLT(T.k14, s.donateNote, 240);
       if (Array.isArray(s.marquee)) {
           const mq = s.marquee.map((m) => normLocalized(m, 80)).filter((m) => !!m).slice(0, 16);
           if (mq.length)
               out.marquee = mq;
       }
-      if (s.calc && typeof s.calc === 'object' && !Array.isArray(s.calc)) {
+      if (s.calc && typeof s.calc === T.k2 && !Array.isArray(s.calc)) {
           const c = s.calc;
           const calc = {};
           const amt = sitePosNum(c.unitAmount);
@@ -220,7 +220,7 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS) {
       }
       if (Array.isArray(s.tiers)) {
           const tiers = s.tiers.map((tr) => {
-              if (!tr || typeof tr !== 'object')
+              if (!tr || typeof tr !== T.k2)
                   return null;
               const o = tr;
               const name = normLocalized(o.name, 60);
@@ -250,7 +250,7 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS) {
       }
       if (Array.isArray(s.testimonials)) {
           const items = s.testimonials.map((tt) => {
-              if (!tt || typeof tt !== 'object')
+              if (!tt || typeof tt !== T.k2)
                   return null;
               const o = tt;
               const quote = normLocalized(o.quote, 400);
@@ -270,7 +270,7 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS) {
       }
       if (Array.isArray(s.faq)) {
           const items = s.faq.map((f) => {
-              if (!f || typeof f !== 'object')
+              if (!f || typeof f !== T.k2)
                   return null;
               const o = f;
               const q = normLocalized(o.q, 200);
@@ -282,7 +282,7 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS) {
       }
       if (Array.isArray(s.events)) {
           const items = s.events.map((e) => {
-              if (!e || typeof e !== 'object')
+              if (!e || typeof e !== T.k2)
                   return null;
               const o = e;
               const title = normLocalized(o.title, 120);
@@ -305,7 +305,7 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS) {
       }
       if (Array.isArray(s.partners)) {
           const items = s.partners.map((p) => {
-              if (!p || typeof p !== 'object')
+              if (!p || typeof p !== T.k2)
                   return null;
               const o = p;
               const name = siteStr(o.name, 80);
@@ -323,7 +323,7 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS) {
           if (items.length)
               out.partners = items;
       }
-      if (s.transparency && typeof s.transparency === 'object' && !Array.isArray(s.transparency)) {
+      if (s.transparency && typeof s.transparency === T.k2 && !Array.isArray(s.transparency)) {
           const o = s.transparency;
           const tr = {};
           const heading = normLocalized(o.heading, 120);
@@ -344,7 +344,7 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS) {
               out.transparency = tr;
       }
       /* ── סיפור: מייסד/ת + ציר-זמן ── */
-      if (s.founder && typeof s.founder === 'object' && !Array.isArray(s.founder)) {
+      if (s.founder && typeof s.founder === T.k2 && !Array.isArray(s.founder)) {
           const o = s.founder;
           const f = {};
           const name = normLocalized(o.name, 80);
@@ -361,7 +361,7 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS) {
       }
       if (Array.isArray(s.timeline)) {
           const items = s.timeline.map((m) => {
-              if (!m || typeof m !== 'object')
+              if (!m || typeof m !== T.k2)
                   return null;
               const o = m;
               const year = siteStr(o.year, 12);
@@ -377,7 +377,7 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS) {
           if (items.length)
               out.timeline = items;
       }
-      if (s.growth && typeof s.growth === 'object' && !Array.isArray(s.growth)) {
+      if (s.growth && typeof s.growth === T.k2 && !Array.isArray(s.growth)) {
           const o = s.growth;
           const g = {};
           const label = normLocalized(o.label, 120);
@@ -387,7 +387,7 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS) {
           if (delta)
               g.delta = delta;
           if (Array.isArray(o.points)) {
-              const pts = o.points.map((p) => (typeof p === 'number' && Number.isFinite(p) ? Math.max(0, Math.min(1, p)) : null)).filter((p) => p !== null).slice(0, 40);
+              const pts = o.points.map((p) => (typeof p === T.k3 && Number.isFinite(p) ? Math.max(0, Math.min(1, p)) : null)).filter((p) => p !== null).slice(0, 40);
               if (pts.length >= 2)
                   g.points = pts;
           }
@@ -396,7 +396,7 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS) {
       }
       if (Array.isArray(s.paymentMethods)) {
           const items = s.paymentMethods.map((p) => {
-              if (!p || typeof p !== 'object')
+              if (!p || typeof p !== T.k2)
                   return null;
               const o = p;
               const label = normLocalized(o.label, 60);
@@ -411,7 +411,7 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS) {
           if (items.length)
               out.paymentMethods = items;
       }
-      if (s.contactForm && typeof s.contactForm === 'object' && !Array.isArray(s.contactForm)) {
+      if (s.contactForm && typeof s.contactForm === T.k2 && !Array.isArray(s.contactForm)) {
           const o = s.contactForm;
           const cf = {};
           if (o.enabled === true)

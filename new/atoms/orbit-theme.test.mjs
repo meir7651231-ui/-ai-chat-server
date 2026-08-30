@@ -1,4 +1,12 @@
-import { orbitTheme } from './orbit-theme.mjs';
+import { orbitTheme as __pure_orbitTheme } from './orbit-theme.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_orbitTheme_ORBIT_THEME_T = {
+  k1: "#ffffff",
+  k2: "Ice",
+  k3: "Ember",
+  k4: "Aurora",
+};
+const orbitTheme = (...a) => __pure_orbitTheme(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_orbitTheme_ORBIT_THEME_T);
 
 // מימוש-שקע לבדיקה: ערכת-נפילה מדומה — מוכיחה שהחוט מחזיר אותה כמות-שהיא (===).
 const FB = { vars: { '--o-accent': '#000000' }, scene: 'Aurora' };

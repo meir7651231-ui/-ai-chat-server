@@ -3,9 +3,9 @@
  *  חולץ כלשונו מ-maor/src/lib/pricing.ts:122-151; השכנים ALL_MODULES,
  *  DEFAULT_PRICES ו-DEFAULT_INTEGRATION_PRICES (טבלאות-ידע עריכות של הבעלים)
  *  הוזרקו כשקעים (חוק-1 + חוק-5 — אפס import פנימי, אפס ידע-הקשר). */
-export function normalizePrices(raw, ALL_MODULES, DEFAULT_PRICES, DEFAULT_INTEGRATION_PRICES) {
-  const base = raw && typeof raw === 'object' ? raw : {};
-  const num = (v, fb) => (typeof v === 'number' && Number.isFinite(v) && v >= 0 ? v : fb);
+export function normalizePrices(raw, ALL_MODULES, DEFAULT_PRICES, DEFAULT_INTEGRATION_PRICES, T) {
+  const base = raw && typeof raw === T.k1 ? raw : {};
+  const num = (v, fb) => (typeof v === T.k2 && Number.isFinite(v) && v >= 0 ? v : fb);
   const modules = {};
   for (const m of ALL_MODULES)
     modules[m] = num(base.modules?.[m], DEFAULT_PRICES.modules[m] ?? 0);

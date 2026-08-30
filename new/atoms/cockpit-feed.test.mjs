@@ -1,4 +1,9 @@
-import { cockpitFeed } from './cockpit-feed.mjs';
+import { cockpitFeed as __pure_cockpitFeed } from './cockpit-feed.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_cockpitFeed_COCKPIT_FEED_T = {
+  k1: "תרם/ה ",
+};
+const cockpitFeed = (...a) => __pure_cockpitFeed(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_cockpitFeed_COCKPIT_FEED_T);
 // עצמאי: כל השקעים מוטבעים inline (test-doubles, בלי import-אח — חוק-1). Golden נלכד מהרצה.
 const M=86400000;
 const daysSince=(iso,today)=>{if(!iso)return Infinity;const t=new Date(iso+'T12:00:00').getTime(),n=new Date(today+'T12:00:00').getTime();if(Number.isNaN(t)||Number.isNaN(n))return Infinity;return Math.floor((n-t)/M);};

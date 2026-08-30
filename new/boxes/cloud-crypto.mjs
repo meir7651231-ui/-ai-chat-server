@@ -3,12 +3,18 @@
  *  החוטים + ה-import מ-'./crypto' — עכשיו חיווט גלוי אחד.
  *  שקעי-מודול-אחר (encryptDb/openDek מ-crypto) = deps מוזרקים; crypto.subtle/
  *  getRandomValues/TextEncoder/TextDecoder/btoa/atob = סטנדרט-פלטפורמה. */
-import { isEncDoc } from '../atoms/is-enc-doc.mjs';
+import { isEncDoc as __pure_isEncDoc } from '../atoms/is-enc-doc.mjs';
+import { IS_ENC_DOC_T as __d_isEncDoc_IS_ENC_DOC_T } from '../atoms/is-enc-doc-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const isEncDoc = (...a) => __pure_isEncDoc(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_isEncDoc_IS_ENC_DOC_T);
 import { encryptDoc as encDocAtom } from '../atoms/encrypt-doc.mjs';
 import { decryptDoc as decDocAtom } from '../atoms/decrypt-doc.mjs';
 import { createCloudKey as createCloudKeyAtom } from '../atoms/create-cloud-key.mjs';
 import { openCloudKey as openCloudKeyAtom } from '../atoms/open-cloud-key.mjs';
-import { isEncrypted } from '../atoms/is-encrypted.mjs';
+import { isEncrypted as __pure_isEncrypted } from '../atoms/is-encrypted.mjs';
+import { IS_ENCRYPTED_T as __d_isEncrypted_IS_ENCRYPTED_T } from '../atoms/is-encrypted-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const isEncrypted = (...a) => __pure_isEncrypted(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_isEncrypted_IS_ENCRYPTED_T);
 
 // ── מילון-הקופסה · קודק-base64 (verbatim מ-cloudCrypto.ts:16-22) ──
 // b64 מטפל ב-ArrayBuffer *וגם* Uint8Array: encrypt-doc מזין ct(ArrayBuffer)+iv(Uint8Array).

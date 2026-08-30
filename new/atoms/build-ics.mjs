@@ -30,20 +30,20 @@ function nextIso(iso) {
     return String(d.getFullYear()) + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
 }
 
-export function buildIcs(occurrences, calName, now, icsEscape, foldIcsLine) {
+export function buildIcs(occurrences, calName, now, icsEscape, foldIcsLine, T2) {
     const lines = [
-        'BEGIN:VCALENDAR',
-        'VERSION:2.0',
+        T2.k1,
+        T2.k2,
         'PRODID:-//maor-system//he//',
-        'CALSCALE:GREGORIAN',
-        'METHOD:PUBLISH',
-        'X-WR-CALNAME:' + icsEscape(calName),
+        T2.k3,
+        T2.k4,
+        T2.k5 + icsEscape(calName),
     ];
     const stamp = stampUtc(now);
     for (const oc of occurrences) {
-        lines.push('BEGIN:VEVENT');
-        lines.push('UID:' + icsEscape(oc.uid));
-        lines.push('DTSTAMP:' + stamp);
+        lines.push(T2.k6);
+        lines.push(T2.k7 + icsEscape(oc.uid));
+        lines.push(T2.k8 + stamp);
         // שעה שאינה HH:MM (ייבוא-JSON ידני, '9:00') ⇒ Invalid Date ⇒ VEVENT מושחת
         // שמפיל את **כל** הקובץ ביבואן. נפילה בטוחה: אירוע יום-שלם. (ביקורת 4.8.)
         // 🐛 נחיל-עמוק (13.8): '25:00'/'12:60' עברו את הרגקס אך יצרו Invalid Date —
@@ -51,20 +51,20 @@ export function buildIcs(occurrences, calName, now, icsEscape, foldIcsLine) {
         const parsedStart = oc.time && /^\d{2}:\d{2}$/.test(oc.time) ? new Date(oc.date + 'T' + oc.time + ':00') : null;
         if (parsedStart && !Number.isNaN(parsedStart.getTime())) {
             const end = new Date(parsedStart.getTime() + 3600e3); // שעה — כולל גלגול-חצות
-            lines.push('DTSTART:' + basicLocal(parsedStart));
-            lines.push('DTEND:' + basicLocal(end));
+            lines.push(T2.k9 + basicLocal(parsedStart));
+            lines.push(T2.k10 + basicLocal(end));
         }
         else {
-            lines.push('DTSTART;VALUE=DATE:' + basicDate(oc.date));
-            lines.push('DTEND;VALUE=DATE:' + basicDate(nextIso(oc.date)));
+            lines.push(T2.k11 + basicDate(oc.date));
+            lines.push(T2.k12 + basicDate(nextIso(oc.date)));
         }
-        lines.push('SUMMARY:' + icsEscape(oc.title));
+        lines.push(T2.k13 + icsEscape(oc.title));
         if (oc.notes)
-            lines.push('DESCRIPTION:' + icsEscape(oc.notes));
+            lines.push(T2.k14 + icsEscape(oc.notes));
         if (oc.location)
-            lines.push('LOCATION:' + icsEscape(oc.location));
-        lines.push('END:VEVENT');
+            lines.push(T2.k15 + icsEscape(oc.location));
+        lines.push(T2.k16);
     }
-    lines.push('END:VCALENDAR');
+    lines.push(T2.k17);
     return lines.flatMap(foldIcsLine).join('\r\n') + '\r\n';
 }

@@ -9,25 +9,43 @@ import { DAY_NAMES } from '../atoms/week-day-names.mjs';
 import { pad2 } from '../atoms/pad2.mjs';
 import { timeToMin } from '../atoms/time-to-min.mjs';
 import { minToHM as minToHMAtom } from '../atoms/min-to-hm.mjs';
-import { groupLabelOf } from '../atoms/group-label-of.mjs';
+import { groupLabelOf as __pure_groupLabelOf } from '../atoms/group-label-of.mjs';
+import { GROUP_LABEL_OF_T as __d_groupLabelOf_GROUP_LABEL_OF_T } from '../atoms/group-label-of-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const groupLabelOf = (...a) => __pure_groupLabelOf(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_groupLabelOf_GROUP_LABEL_OF_T);
 import { ABSENCE_REASON_CHIPS } from '../atoms/absence-reason-chips.mjs';
-import { makeupEligibility } from '../atoms/makeup-eligibility.mjs';
+import { makeupEligibility as __pure_makeupEligibility } from '../atoms/makeup-eligibility.mjs';
+import { MAKEUP_ELIGIBILITY_T as __d_makeupEligibility_MAKEUP_ELIGIBILITY_T } from '../atoms/makeup-eligibility-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const makeupEligibility = (...a) => __pure_makeupEligibility(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_makeupEligibility_MAKEUP_ELIGIBILITY_T);
 import { blockReason as __pure_blockReason } from '../atoms/block-reason.mjs';
 import { FULL_HOLIDAYS } from '../atoms/block-reason-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
 const blockReasonAtom = (...a) => __pure_blockReason(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), FULL_HOLIDAYS);
-import { buildSlots as buildSlotsAtom } from '../atoms/build-slots.mjs';
+import { buildSlots as __pure_buildSlots } from '../atoms/build-slots.mjs';
+import { BUILD_SLOTS_T as __d_buildSlots_BUILD_SLOTS_T } from '../atoms/build-slots-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const buildSlotsAtom = (...a) => __pure_buildSlots(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_buildSlots_BUILD_SLOTS_T);
 import { enrollmentsForSession as enrollmentsForSessionAtom } from '../atoms/enrollments-for-session.mjs';
 import { weeklyRoomSessions as weeklyRoomSessionsAtom } from '../atoms/weekly-room-sessions.mjs';
-import { inactiveRoomCourses as inactiveRoomCoursesAtom } from '../atoms/inactive-room-courses.mjs';
+import { inactiveRoomCourses as __pure_inactiveRoomCourses } from '../atoms/inactive-room-courses.mjs';
+import { INACTIVE_ROOM_COURSES_T as __d_inactiveRoomCourses_INACTIVE_ROOM_COURSES_T } from '../atoms/inactive-room-courses-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const inactiveRoomCoursesAtom = (...a) => __pure_inactiveRoomCourses(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_inactiveRoomCourses_INACTIVE_ROOM_COURSES_T);
 import { chipStyle } from '../atoms/chip-style.mjs';
-import { roomInfoLabel } from '../atoms/room-info-label.mjs';
+import { roomInfoLabel as __pure_roomInfoLabel } from '../atoms/room-info-label.mjs';
+import { ROOM_INFO_LABEL_T as __d_roomInfoLabel_ROOM_INFO_LABEL_T } from '../atoms/room-info-label-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const roomInfoLabel = (...a) => __pure_roomInfoLabel(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_roomInfoLabel_ROOM_INFO_LABEL_T);
 // שכני-החיווט (מוזרקים לאטומים כשקע — חוק-1):
 import { hebParts } from '../atoms/heb-parts.mjs';
 import { HOLIDAYS } from '../atoms/holidays.mjs';
 import { sessionsOf } from '../atoms/sessions-of.mjs';
 import { termOf } from '../atoms/term-of.mjs';
-import { planWord } from '../atoms/plan-word.mjs';
+import { planWord as __pure_planWord } from '../atoms/plan-word.mjs';
+import { PLAN_WORD_T as __d_planWord_PLAN_WORD_T } from '../atoms/plan-word-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const planWord = (...a) => __pure_planWord(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_planWord_PLAN_WORD_T);
 
 // ── חוטים טהורים — חשיפה ישירה (אפס שקע) ──
 export { fmtDate, DAY_NAMES, pad2, timeToMin, groupLabelOf, ABSENCE_REASON_CHIPS,

@@ -1,4 +1,14 @@
-import { suggestions } from './suggestions.mjs';
+import { suggestions as __pure_suggestions } from './suggestions.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_suggestions_SUGGESTIONS_T = {
+  k1: "active",
+  k2: "shop",
+  k3: "families",
+  k4: "courses",
+  k5: "punch",
+  k6: "הכרטיסייה נגמרה",
+};
+const suggestions = (...a) => __pure_suggestions(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_suggestions_SUGGESTIONS_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 

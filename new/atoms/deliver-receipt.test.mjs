@@ -1,4 +1,9 @@
-import { deliverReceipt } from './deliver-receipt.mjs';
+import { deliverReceipt as __pure_deliverReceipt } from './deliver-receipt.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_deliverReceipt_DELIVER_RECEIPT_T = {
+  k1: "pdf",
+};
+const deliverReceipt = (...a) => __pure_deliverReceipt(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_deliverReceipt_DELIVER_RECEIPT_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 const o = { rid: 'R-7', ils: 180 };

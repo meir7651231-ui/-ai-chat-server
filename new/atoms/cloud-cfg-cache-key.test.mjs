@@ -1,4 +1,9 @@
-import { cloudCfgCacheKey } from './cloud-cfg-cache-key.mjs';
+import { cloudCfgCacheKey as __pure_cloudCfgCacheKey } from './cloud-cfg-cache-key.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_cloudCfgCacheKey_CLOUD_CFG_CACHE_KEY_T = {
+  k1: "maor_cloudcfg:",
+};
+const cloudCfgCacheKey = (...a) => __pure_cloudCfgCacheKey(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_cloudCfgCacheKey_CLOUD_CFG_CACHE_KEY_T);
 const CASES = [[["\"\""],"\"maor_cloudcfg:\""],[["\"אבג\""],"\"maor_cloudcfg:אבג\""],[["\"כהן לוי\""],"\"maor_cloudcfg:כהן לוי\""],[["\"abc\""],"\"maor_cloudcfg:abc\""],[["\"a@b.com\""],"\"maor_cloudcfg:a@b.com\""],[["\"2026-08-24\""],"\"maor_cloudcfg:2026-08-24\""],[["\"2026-08-24T12:00:00\""],"\"maor_cloudcfg:2026-08-24T12:00:00\""],[["\"0501234567\""],"\"maor_cloudcfg:0501234567\""],[["\"03-1234567\""],"\"maor_cloudcfg:03-1234567\""],[["\"https://x.co\""],"\"maor_cloudcfg:https://x.co\""],[["\"שלום עולם\""],"\"maor_cloudcfg:שלום עולם\""],[["\"12\""],"\"maor_cloudcfg:12\""]];
 const de = (s) => s === '"__undef__"' ? undefined : JSON.parse(s);
 let f = 0;

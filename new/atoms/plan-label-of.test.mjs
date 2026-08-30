@@ -1,4 +1,15 @@
-import { planLabelOf } from './plan-label-of.mjs';
+import { planLabelOf as __pure_planLabelOf } from './plan-label-of.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_planLabelOf_PLAN_LABEL_OF_T = {
+  k1: "punch",
+  k2: "כרטיסייה · ",
+  k3: "paused",
+  k4: " · מוקפא ⏸",
+  k5: "ended",
+  k6: " · הסתיים",
+  k7: " חיס׳",
+};
+const planLabelOf = (...a) => __pure_planLabelOf(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_planLabelOf_PLAN_LABEL_OF_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 // שקעים בהתנהגות-מאור (courses/lib.ts): planWord + payBal (totalDue - paid, לא שלילי):

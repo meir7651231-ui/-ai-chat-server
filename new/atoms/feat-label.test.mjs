@@ -1,4 +1,10 @@
-import { featLabel } from './feat-label.mjs';
+import { featLabel as __pure_featLabel } from './feat-label.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_featLabel_FEAT_LABEL_T = {
+  k1: "nav.ayin",
+  k2: "מעקב טיפול",
+};
+const featLabel = (...a) => __pure_featLabel(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_featLabel_FEAT_LABEL_T);
 let f = 0;
 const eq = (a, b, msg) => { if (a !== b) { console.error(`✗ ${msg} ⇒ ${JSON.stringify(a)}`); f = 1; } };
 

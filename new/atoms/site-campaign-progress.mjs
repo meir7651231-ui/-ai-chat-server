@@ -4,9 +4,9 @@
  *  חולץ כלשונו מ-maor/src/lib/publicSite.ts:218-236 (הפונקציה campaignProgress —
  *  שם-הקובץ site-campaign-progress כי הכינוי campaign-progress תפוס ע"י אטום-
  *  התרומות מ-tzedaka/lib.ts, גוף שונה לגמרי). isFinite=Number.isFinite (שפה). */
-export function campaignProgress(c, nowMs) {
-  const goal = typeof c?.goal === 'number' && c.goal > 0 ? c.goal : 0;
-  const raised = typeof c?.raised === 'number' && c.raised > 0 ? c.raised : 0;
+export function campaignProgress(c, nowMs, T) {
+  const goal = typeof c?.goal === T.k1 && c.goal > 0 ? c.goal : 0;
+  const raised = typeof c?.raised === T.k1 && c.raised > 0 ? c.raised : 0;
   const pct = goal > 0 ? Math.max(0, Math.min(100, Math.round((raised / goal) * 100))) : 0;
   let daysLeft = null;
   if (c?.end) {

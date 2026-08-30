@@ -1,5 +1,35 @@
 import { deepStrictEqual, strictEqual } from 'node:assert';
-import { parseSupporterGrid } from './parse-supporter-grid.mjs';
+import { parseSupporterGrid as __pure_parseSupporterGrid } from './parse-supporter-grid.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_parseSupporterGrid_PARSE_SUPPORTER_GRID_T = {
+  k1: "טלפון",
+  k2: "נייד",
+  k3: "אימייל",
+  k4: "מייל",
+  k5: "email",
+  k6: "ת\"ז",
+  k7: "תז",
+  k8: "זהות",
+  k9: "כתובת",
+  k10: "קטגוריה",
+  k11: "עבור",
+  k12: "ייעוד",
+  k13: "סכום",
+  k14: "תאריך",
+  k15: "מטבע",
+  k16: "אסמכתא",
+  k17: "מספר עסקה",
+  k18: "מספר קבלה",
+  k19: "מותג",
+  k20: "4 ספרות",
+  k21: "ספרות",
+  k22: "חברה סולקת",
+  k23: "סולק",
+  k24: "תשלומים",
+  k25: "סטטוס",
+  k26: "נדרים",
+};
+const parseSupporterGrid = (...a) => __pure_parseSupporterGrid(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_parseSupporterGrid_PARSE_SUPPORTER_GRID_T);
 
 // מימושי-שקע לבדיקה — התנהגות מוצהרת-בחוזה (החוטים האמיתיים: sup-name-keys,
 // parse-any-date, excel-serial-to-iso — מחווטים בקופסה).

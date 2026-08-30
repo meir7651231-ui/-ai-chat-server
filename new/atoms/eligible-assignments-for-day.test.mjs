@@ -1,4 +1,9 @@
-import { eligibleAssignmentsForDay } from './eligible-assignments-for-day.mjs';
+import { eligibleAssignmentsForDay as __pure_eligibleAssignmentsForDay } from './eligible-assignments-for-day.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_eligibleAssignmentsForDay_ELIGIBLE_ASSIGNMENTS_FOR_DAY_T = {
+  k1: "active",
+};
+const eligibleAssignmentsForDay = (...a) => __pure_eligibleAssignmentsForDay(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_eligibleAssignmentsForDay_ELIGIBLE_ASSIGNMENTS_FOR_DAY_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const a1 = { id: 'a1', status: 'active' };

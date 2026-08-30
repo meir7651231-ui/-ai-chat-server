@@ -1,4 +1,11 @@
-import { dayProgress } from './day-progress.mjs';
+import { dayProgress as __pure_dayProgress } from './day-progress.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_dayProgress_DAY_PROGRESS_T = {
+  k1: "pickup",
+  k2: "enroute",
+  k3: "delivered",
+};
+const dayProgress = (...a) => __pure_dayProgress(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_dayProgress_DAY_PROGRESS_T);
 // שקע-אמת כבחוזה: סינון db.deliveries לפי dayId (התנהגות deliveriesOfDay של maor)
 const deliveriesOfDay = (db, dayId) => db.deliveries.filter((d) => d.dayId === dayId);
 const db = { deliveries: [

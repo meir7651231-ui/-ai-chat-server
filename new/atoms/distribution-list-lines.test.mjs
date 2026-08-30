@@ -1,4 +1,12 @@
-import { distributionListLines } from './distribution-list-lines.mjs';
+import { distributionListLines as __pure_distributionListLines } from './distribution-list-lines.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_distributionListLines_DISTRIBUTION_LIST_LINES_T = {
+  k1: "רשימת חלוקה — ",
+  k2: "active",
+  k3: "☐ נמסר",
+  k4: "אין שיוכים פעילים לחבילה",
+};
+const distributionListLines = (...a) => __pure_distributionListLines(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_distributionListLines_DISTRIBUTION_LIST_LINES_T);
 // שקעים (מדמים את שכני-המקור): itemOf פותר רכיב לפריט-קטלוג; beneficiaryLabel = שם-המשפחה.
 const itemOf = (db, c) => db.shopItems.find((i) => i.id === c.itemId) ?? { name: '' };
 const beneficiaryLabel = (db, a) => db.families.find((f) => f.id === a.famId)?.name ?? '';

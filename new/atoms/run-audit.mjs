@@ -7,7 +7,7 @@
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const digits = (x) => (x || '').replace(/\D/g, '');
 
-export function runAudit(db, todayIso = '', extra = true, config, deps) {
+export function runAudit(db, todayIso = '', extra = true, config, deps, T2) {
   const { termOf, normName, validIsraeliId, phoneIssue, ageOf, supporterAggregates } = deps;
   const issues = [];
   const T = (k, fb) => (config ? termOf(config, k, fb) : fb);
@@ -35,7 +35,7 @@ export function runAudit(db, todayIso = '', extra = true, config, deps) {
   for (const k in g1) {
     const a = g1[k];
     if (a.length > 1 && !k.endsWith('|'))
-      add('כפילות', 'שם + שם האם זהים: "' + a[0].name + '" — ' + a.length + ' רשומות', a[0].id);
+      add(T2.k1, T2.k2 + a[0].name + '" — ' + a.length + T2.k3, a[0].id);
   }
   const seenPair = new Set();
   for (const k in g2) {
@@ -44,66 +44,66 @@ export function runAudit(db, todayIso = '', extra = true, config, deps) {
       const key = a.map((f) => f.id).sort().join();
       if (!seenPair.has(key)) {
         seenPair.add(key);
-        add('כפילות', 'טלפון ' + k + ' משותף ל-' + a.length + ' ' + T('nav.families', 'משפחות') + ': ' + a.map((f) => f.name).slice(0, 3).join(', '), a[0].id);
+        add(T2.k1, T2.k4 + k + T2.k5 + a.length + ' ' + T(T2.k6, T2.k7) + ': ' + a.map((f) => f.name).slice(0, 3).join(', '), a[0].id);
       }
     }
   }
   for (const k in g3) {
     const a = [...new Set(g3[k])];
     if (a.length > 1)
-      add('כפילות', 'ת"ז ' + k + ' מופיעה ב-' + a.length + ' ' + T('nav.families', 'משפחות') + ': ' + a.map((f) => f.name).slice(0, 2).join(', '), a[0].id);
+      add(T2.k1, T2.k8 + k + T2.k9 + a.length + ' ' + T(T2.k6, T2.k7) + ': ' + a.map((f) => f.name).slice(0, 2).join(', '), a[0].id);
   }
   // ——— בדיקות פר-משפחה ———
   for (const f of (Array.isArray(db.families) ? db.families : [])) {
-    for (const [idn, who] of [[f.fatherId, 'אב'], [f.motherId, 'אם']]) {
+    for (const [idn, who] of [[f.fatherId, T2.k10], [f.motherId, T2.k11]]) {
       const d = digits(idn);
       if (d.length && !validIsraeliId(d))
-        add('ת"ז', T('entity.familyOf', 'משפחת') + ' ' + f.name + ': ת"ז ' + who + ' לא עוברת ספרת ביקורת (' + idn + ')', f.id);
+        add(T2.k12, T(T2.k13, T2.k14) + ' ' + f.name + T2.k15 + who + T2.k16 + idn + ')', f.id);
     }
     for (const p of [f.phone, f.phone2]) {
       const pi = phoneIssue(p);
       if (pi)
-        add('טלפון', T('entity.familyOf', 'משפחת') + ' ' + f.name + ': ' + pi, f.id);
+        add(T2.k17, T(T2.k13, T2.k14) + ' ' + f.name + ': ' + pi, f.id);
     }
     if (f.email && !EMAIL_RE.test(f.email))
-      add('אימייל', T('entity.familyOf', 'משפחת') + ' ' + f.name + ': אימייל לא תקין (' + f.email + ')', f.id);
-    if (f.status !== 'inactive') {
+      add(T2.k18, T(T2.k13, T2.k14) + ' ' + f.name + T2.k19 + f.email + ')', f.id);
+    if (f.status !== T2.k20) {
       if (!f.city)
-        add('כתובת', T('entity.familyOf', 'משפחת') + ' ' + f.name + ': חסרה עיר', f.id);
+        add(T2.k21, T(T2.k13, T2.k14) + ' ' + f.name + T2.k22, f.id);
       else if (!f.address)
-        add('כתובת', T('entity.familyOf', 'משפחת') + ' ' + f.name + ': יש עיר אבל חסרה כתובת', f.id);
+        add(T2.k21, T(T2.k13, T2.k14) + ' ' + f.name + T2.k23, f.id);
     }
-    const single = f.maritalStatus === 'אלמן/ה' || f.maritalStatus === 'גרושים' || f.maritalStatus === 'פרודים';
+    const single = f.maritalStatus === T2.k24 || f.maritalStatus === T2.k25 || f.maritalStatus === T2.k26;
     if (single && f.father && f.mother)
-      add('לוגיקה', T('entity.familyOf', 'משפחת') + ' ' + f.name + ': מסומנת "' + f.maritalStatus + '" — אמורה להיות בלי בן/בת זוג, אבל רשומים שניים (' + f.father + ' + ' + f.mother + ')', f.id);
+      add(T2.k27, T(T2.k13, T2.k14) + ' ' + f.name + T2.k28 + f.maritalStatus + T2.k29 + f.father + ' + ' + f.mother + ')', f.id);
     else if (single && digits(f.fatherId) && digits(f.motherId))
-      add('לוגיקה', T('entity.familyOf', 'משפחת') + ' ' + f.name + ': מסומנת "' + f.maritalStatus + '" אבל רשומות שתי תעודות זהות של בני זוג', f.id);
-    if (f.maritalStatus === 'נשואים' && f.status === 'active' && !f.father && !f.mother)
-      add('לוגיקה', T('entity.familyOf', 'משפחת') + ' ' + f.name + ': מסומנת נשואים אבל לא רשום אף בן זוג', f.id);
+      add(T2.k27, T(T2.k13, T2.k14) + ' ' + f.name + T2.k28 + f.maritalStatus + T2.k30, f.id);
+    if (f.maritalStatus === T2.k31 && f.status === T2.k32 && !f.father && !f.mother)
+      add(T2.k27, T(T2.k13, T2.k14) + ' ' + f.name + T2.k33, f.id);
     if (!digits(f.phone) && !digits(f.phone2) && !f.email)
-      add('קשר', T('entity.familyOf', 'משפחת') + ' ' + f.name + ': אין שום פרט קשר (טלפון או אימייל)', f.id);
+      add(T2.k34, T(T2.k13, T2.k14) + ' ' + f.name + T2.k35, f.id);
     const seenKid = new Set();
     for (const m of members(f)) {
       if (m.isParent) {
         if (m.idNum && !validIsraeliId(m.idNum))
-          add('ת"ז', T('entity.familyOf', 'משפחת') + ' ' + f.name + ': ת"ז של ' + m.first + ' (הורה) לא תקינה', f.id);
+          add(T2.k12, T(T2.k13, T2.k14) + ' ' + f.name + T2.k36 + m.first + T2.k37, f.id);
         continue;
       }
       if (!m.birth)
-        add('ילדים', T('entity.familyOf', 'משפחת') + ' ' + f.name + ': ל' + m.first + ' אין תאריך לידה', f.id);
+        add(T2.k38, T(T2.k13, T2.k14) + ' ' + f.name + T2.k39 + m.first + T2.k40, f.id);
       else {
         const a = ageOf(m.birth);
         if (a != null && (a < 0 || a > 25))
-          add('ילדים', T('entity.familyOf', 'משפחת') + ' ' + f.name + ': גיל חריג ל' + m.first + ' (' + a + ')', f.id);
+          add(T2.k38, T(T2.k13, T2.k14) + ' ' + f.name + T2.k41 + m.first + ' (' + a + ')', f.id);
       }
       if (m.idNum && !validIsraeliId(m.idNum))
-        add('ת"ז', T('entity.familyOf', 'משפחת') + ' ' + f.name + ': ת"ז של ' + m.first + ' לא תקינה', f.id);
+        add(T2.k12, T(T2.k13, T2.k14) + ' ' + f.name + T2.k36 + m.first + T2.k42, f.id);
       const mp = phoneIssue(m.phone);
       if (mp)
-        add('טלפון', T('entity.familyOf', 'משפחת') + ' ' + f.name + ': טלפון של ' + m.first + ' — ' + mp, f.id);
+        add(T2.k17, T(T2.k13, T2.k14) + ' ' + f.name + T2.k43 + m.first + ' — ' + mp, f.id);
       const kk = m.first + '|' + (m.birth || '');
       if (seenKid.has(kk))
-        add('כפילות', T('entity.familyOf', 'משפחת') + ' ' + f.name + ': הילד/ה ' + m.first + ' מופיע/ה פעמיים', f.id);
+        add(T2.k1, T(T2.k13, T2.k14) + ' ' + f.name + T2.k44 + m.first + T2.k45, f.id);
       seenKid.add(kk);
     }
   }
@@ -118,19 +118,19 @@ export function runAudit(db, todayIso = '', extra = true, config, deps) {
     if (e.totalDue && paid > e.totalDue) {
       const fam = famByMember.get(e.memberId);
       if (fam)
-        add('לוגיקה', T('entity.familyOf', 'משפחת') + ' ' + fam.name + ': שולם ₪' + paid + ' — יותר מסה"כ העסקה (₪' + e.totalDue + '). בדקו החזר או עדכנו את הסכום', fam.id);
+        add(T2.k27, T(T2.k13, T2.k14) + ' ' + fam.name + T2.k46 + paid + T2.k47 + e.totalDue + T2.k48, fam.id);
     }
   }
   // ——— תומכים: ת"ז לא תקינה · טלפון · כפילות שם · אי-התאמת מצבור/פירוט ———
   const supByName = {};
   for (const sp of (Array.isArray(db.supporters) ? db.supporters : [])) {
     if (sp.idNum && digits(sp.idNum).length && !validIsraeliId(sp.idNum))
-      issues.push({ cat: 'ת"ז', title: 'תומכ/ת ' + sp.name + ': ת"ז לא תקינה (' + sp.idNum + ')', spId: sp.id });
+      issues.push({ cat: T2.k12, title: T2.k49 + sp.name + T2.k50 + sp.idNum + ')', spId: sp.id });
     const pi = phoneIssue(sp.phone);
     if (pi)
-      issues.push({ cat: 'טלפון', title: 'תומכ/ת ' + sp.name + ': ' + pi, spId: sp.id });
+      issues.push({ cat: T2.k17, title: T2.k49 + sp.name + ': ' + pi, spId: sp.id });
     if (sp.email && !EMAIL_RE.test(sp.email))
-      issues.push({ cat: 'אימייל', title: 'תומכ/ת ' + sp.name + ': אימייל לא תקין (' + sp.email + ')', spId: sp.id });
+      issues.push({ cat: T2.k18, title: T2.k49 + sp.name + T2.k19 + sp.email + ')', spId: sp.id });
     // עקביות מצבור מול פירוט התרומות — הכרטיס מציג sp.ils/usd אך לוח הבית סוכם את
     // sp.donations; פער ביניהם (מיובא/נערך ידנית) גורם לשני מסכים להראות סכומים שונים.
     // #14 (הכרעת בעלים "כל מה שיעלה בקובץ") — המצבור נגזר מ-donations+hist יחד.
@@ -138,19 +138,19 @@ export function runAudit(db, todayIso = '', extra = true, config, deps) {
     const off = (a, b) => Math.abs((a || 0) - (b || 0)) > 0.5;
     if (off(sp.ils, agg.ils) || off(sp.usd, agg.usd) || (sp.count || 0) !== agg.count)
       issues.push({
-        cat: 'לוגיקה',
-        title: 'תומכ/ת ' + sp.name + ': הסכום המצטבר הרשום (₪' + (sp.ils || 0) +
-          (sp.usd ? ' + $' + sp.usd : '') + ' · ' + (sp.count || 0) + ' ' + T('entity.donations', 'תרומות') + ') לא תואם את פירוט ה' + T('entity.donations', 'תרומות') + ' (₪' +
-          agg.ils + (agg.usd ? ' + $' + agg.usd : '') + ' · ' + agg.count + ' ' + T('entity.donations', 'תרומות') + ')',
+        cat: T2.k27,
+        title: T2.k49 + sp.name + T2.k51 + (sp.ils || 0) +
+          (sp.usd ? ' + $' + sp.usd : '') + ' · ' + (sp.count || 0) + ' ' + T(T2.k52, T2.k53) + T2.k54 + T(T2.k52, T2.k53) + ' (₪' +
+          agg.ils + (agg.usd ? ' + $' + agg.usd : '') + ' · ' + agg.count + ' ' + T(T2.k52, T2.k53) + ')',
         spId: sp.id,
       });
     // ——— ביקורת מורחבת (P2 פער 22) ———
     if (extra && todayIso && sp.nextDate && sp.nextDate < todayIso)
-      issues.push({ cat: 'קשר', title: 'עבר יעד הקשר של "' + sp.name + '" (' + sp.nextDate + ')', spId: sp.id });
+      issues.push({ cat: T2.k34, title: T2.k55 + sp.name + '" (' + sp.nextDate + ')', spId: sp.id });
     if (extra)
       for (const d of Array.isArray(sp.donations) ? sp.donations : [])
         if (!(d.amount > 0))
-          issues.push({ cat: 'לוגיקה', title: T('entity.donation', 'תרומה') + ' בסכום ' + d.amount + ' אצל "' + sp.name + '" (' + d.rid + ')', spId: sp.id });
+          issues.push({ cat: T2.k27, title: T(T2.k56, T2.k57) + T2.k58 + d.amount + T2.k59 + sp.name + '" (' + d.rid + ')', spId: sp.id });
     const nk = normName(sp.name);
     if (nk)
       (supByName[nk] = supByName[nk] || []).push(sp.id);
@@ -159,7 +159,7 @@ export function runAudit(db, todayIso = '', extra = true, config, deps) {
     if (supByName[k].length > 1) {
       const sp = db.supporters.find((x) => x.id === supByName[k][0]);
       if (sp)
-        issues.push({ cat: 'כפילות', title: 'תומכ/ת בשם "' + sp.name + '" מופיע/ה ' + supByName[k].length + ' פעמים', spId: sp.id });
+        issues.push({ cat: T2.k1, title: T2.k60 + sp.name + T2.k61 + supByName[k].length + T2.k62, spId: sp.id });
     }
   }
   return issues;

@@ -1,4 +1,9 @@
-import { isDataImage } from './is-data-image.mjs';
+import { isDataImage as __pure_isDataImage } from './is-data-image.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_isDataImage_IS_DATA_IMAGE_T = {
+  k1: "string",
+};
+const isDataImage = (...a) => __pure_isDataImage(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_isDataImage_IS_DATA_IMAGE_T);
 const C = [
   ['data:image/png;base64,iVBORw0K', true],
   ['data:image/jpeg;base64,/9j/4AAQ', true],

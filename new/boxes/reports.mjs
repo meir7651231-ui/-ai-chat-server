@@ -4,7 +4,10 @@
  *  ההכרעות (סדר-הקסקדה, מילון-התוויות, טיפול-הקצה של fmtDate) חיות כאן, לא באטומים. */
 import { fmtDate as fmtDateCore } from '../atoms/fmt-date.mjs';
 import { inRange as inRangeA } from '../atoms/in-range.mjs';
-import { rangeLabel as rangeLabelA } from '../atoms/range-label.mjs';
+import { rangeLabel as __pure_rangeLabel } from '../atoms/range-label.mjs';
+import { RANGE_LABEL_T as __d_rangeLabel_RANGE_LABEL_T } from '../atoms/range-label-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const rangeLabelA = (...a) => __pure_rangeLabel(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_rangeLabel_RANGE_LABEL_T);
 import { paidOf as paidOfA } from '../atoms/paid-of.mjs';
 import { round2 as round2A } from '../atoms/round2.mjs';
 import { paidInRange as paidInRangeA } from '../atoms/paid-in-range.mjs';

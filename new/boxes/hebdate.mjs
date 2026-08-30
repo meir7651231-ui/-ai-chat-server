@@ -20,7 +20,10 @@ import { MONTHS } from '../atoms/month-en-of-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
 const monthEnOfAtom = (...a) => __pure_monthEnOf(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), MONTHS);
 import { hebYearNow as hebYearNowAtom } from '../atoms/heb-year-now.mjs';
-import { isHebLeapYear as isHebLeapYearAtom } from '../atoms/is-heb-leap-year.mjs';
+import { isHebLeapYear as __pure_isHebLeapYear } from '../atoms/is-heb-leap-year.mjs';
+import { IS_HEB_LEAP_YEAR_T as __d_isHebLeapYear_IS_HEB_LEAP_YEAR_T } from '../atoms/is-heb-leap-year-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const isHebLeapYearAtom = (...a) => __pure_isHebLeapYear(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_isHebLeapYear_IS_HEB_LEAP_YEAR_T);
 import { hebMonthsOf as __pure_hebMonthsOf } from '../atoms/heb-months-of.mjs';
 import { ORDER_COMMON, ORDER_LEAP } from '../atoms/heb-months-of-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה

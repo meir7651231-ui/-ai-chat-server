@@ -1,4 +1,12 @@
-import { integerInWords } from './integer-in-words.mjs';
+import { integerInWords as __pure_integerInWords } from './integer-in-words.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_integerInWords_INTEGER_IN_WORDS_T = {
+  k1: "אפס",
+  k2: "מיליון",
+  k3: "שני מיליון",
+  k4: " מיליון",
+};
+const integerInWords = (...a) => __pure_integerInWords(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_integerInWords_INTEGER_IN_WORDS_T);
 // שקעים אמיתיים כלשון-המקור (maor/src/lib/hebrewNumber.ts — מקומיים לבדיקה;
 // הבדיקה מייבאת רק את האטום שלה)
 const ONES = ['', 'אחד', 'שניים', 'שלושה', 'ארבעה', 'חמישה', 'שישה', 'שבעה', 'שמונה', 'תשעה'];

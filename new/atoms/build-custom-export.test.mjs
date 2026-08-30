@@ -1,4 +1,26 @@
-import { buildCustomExport } from './build-custom-export.mjs';
+import { buildCustomExport as __pure_buildCustomExport } from './build-custom-export.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_buildCustomExport_BUILD_CUSTOM_EXPORT_T = {
+  k1: "courses",
+  k2: "יום ",
+  k3: "punch",
+  k4: "כרטיסייה",
+  k5: "half_year",
+  k6: "מנוי חצי-שנתי",
+  k7: "year",
+  k8: "מנוי שנתי",
+  k9: "מנוי חודשי",
+  k10: " · יתרה ₪",
+  k11: " תשלומים · ₪",
+  k12: " חיסורים",
+  k13: "events",
+  k14: "כן",
+  k15: "לא",
+  k16: "supporters.ayin",
+  k17: "entity.donations",
+  k18: "תרומות",
+};
+const buildCustomExport = (...a) => __pure_buildCustomExport(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_buildCustomExport_BUILD_CUSTOM_EXPORT_T);
 
 /* ---------- אובייקט-השקעים לבדיקה (מתועד בחוזה) ---------- */
 const COURSE_DEFS = ['name', 'teacher', 'grade', 'room', 'schedule', 'model', 'occ', 'students', 'studentsFull', 'pays', 'revenue', 'abs'];

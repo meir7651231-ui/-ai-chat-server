@@ -1,4 +1,10 @@
-import { waDeliveryText } from './wa-delivery-text.mjs';
+import { waDeliveryText as __pure_waDeliveryText } from './wa-delivery-text.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_waDeliveryText_WA_DELIVERY_TEXT_T = {
+  k1: "wa.delivery",
+  k2: "משפחת ",
+};
+const waDeliveryText = (...a) => __pure_waDeliveryText(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_waDeliveryText_WA_DELIVERY_TEXT_T);
 // שקעי-אמת מקומיים כהתנהגות maor (הבדיקה מייבאת רק את האטום שלה):
 // renderTemplate — lib/templates.ts:57-66 עם ברירת-המחדל של 'wa.delivery'
 const DEFS = { 'wa.delivery': 'שלום {name}, משלוח מ{org} בדרך אליכם היום 🚚' };

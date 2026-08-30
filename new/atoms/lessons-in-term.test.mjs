@@ -1,4 +1,17 @@
-import { WEEKS_PER_MONTH, lessonsInTerm } from './lessons-in-term.mjs';
+import { WEEKS_PER_MONTH, lessonsInTerm as __pure_lessonsInTerm } from './lessons-in-term.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_lessonsInTerm_LESSONS_IN_TERM_T = {
+  k1: "week",
+  k2: "month",
+  k3: "once",
+  k4: "weekly",
+  k5: "biweekly",
+  k6: "monthly",
+  k7: "months",
+  k8: "half_year",
+  k9: "year",
+};
+const lessonsInTerm = (...a) => __pure_lessonsInTerm(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_lessonsInTerm_LESSONS_IN_TERM_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 // 1) שבועי

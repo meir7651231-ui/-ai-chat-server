@@ -8,10 +8,19 @@ import { SUPPORT_MSG_MAX } from '../atoms/support-msg-max.mjs';
 import { sanitizeSupportText as _sanitizeSupportText } from '../atoms/sanitize-support-text.mjs';
 import { isSendableSupportText as _isSendableSupportText } from '../atoms/is-sendable-support-text.mjs';
 import { sortSupportMsgs } from '../atoms/sort-support-msgs.mjs';
-import { supportMsgTime } from '../atoms/support-msg-time.mjs';
-import { supportDayLabel } from '../atoms/support-day-label.mjs';
+import { supportMsgTime as __pure_supportMsgTime } from '../atoms/support-msg-time.mjs';
+import { SUPPORT_MSG_TIME_T as __d_supportMsgTime_SUPPORT_MSG_TIME_T } from '../atoms/support-msg-time-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const supportMsgTime = (...a) => __pure_supportMsgTime(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_supportMsgTime_SUPPORT_MSG_TIME_T);
+import { supportDayLabel as __pure_supportDayLabel } from '../atoms/support-day-label.mjs';
+import { SUPPORT_DAY_LABEL_T as __d_supportDayLabel_SUPPORT_DAY_LABEL_T } from '../atoms/support-day-label-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const supportDayLabel = (...a) => __pure_supportDayLabel(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_supportDayLabel_SUPPORT_DAY_LABEL_T);
 import { supportPreview } from '../atoms/support-preview.mjs';
-import { supportUnread } from '../atoms/support-unread.mjs';
+import { supportUnread as __pure_supportUnread } from '../atoms/support-unread.mjs';
+import { SORT_SUPPORT_THREADS_T as __d_supportUnread_SUPPORT_UNREAD_T } from '../atoms/sort-support-threads-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const supportUnread = (...a) => __pure_supportUnread(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_supportUnread_SUPPORT_UNREAD_T);
 import { sortTeamMsgs } from '../atoms/sort-team-msgs.mjs';
 
 // ── החיווט (גרף-הקריאות של supportChat.ts, סוקטים מוזרקים) ──

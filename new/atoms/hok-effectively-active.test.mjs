@@ -1,5 +1,11 @@
 // בדיקת-חוזה · hok-effectively-active — מוכיחה את 7 דוגמאות-החוזה. מייבאת רק את האטום-שלה.
-import { hokEffectivelyActive } from './hok-effectively-active.mjs';
+import { hokEffectivelyActive as __pure_hokEffectivelyActive } from './hok-effectively-active.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_hokEffectivelyActive_HOK_EFFECTIVELY_ACTIVE_T = {
+  k1: "נדרים",
+  k2: "סולה",
+};
+const hokEffectivelyActive = (...a) => __pure_hokEffectivelyActive(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_hokEffectivelyActive_HOK_EFFECTIVELY_ACTIVE_T);
 
 const T = '2026-08-24';
 let f = 0;

@@ -1,8 +1,8 @@
 /** חוט · gen-recovery-key — מפתח-שחזור קריא (6×4 תווים, base32 בלי I,O,0,1).
  *  חוזה: gen-recovery-key.contract.md
  *  חולץ כלשונו מ-maor/src/lib/crypto.ts:69-78; השכן rand הוזרק כשקע (חוק-1). */
-export function genRecoveryKey(rand) {
-  const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // בלי I,O,0,1
+export function genRecoveryKey(rand, T) {
+  const ALPHABET = T.k1; // בלי I,O,0,1
   const bytes = rand(24);
   const chars = [...bytes].map((b) => ALPHABET[b % ALPHABET.length]);
   const groups = [];

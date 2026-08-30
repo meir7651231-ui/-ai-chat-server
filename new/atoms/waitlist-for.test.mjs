@@ -1,4 +1,9 @@
-import { waitlistFor } from './waitlist-for.mjs';
+import { waitlistFor as __pure_waitlistFor } from './waitlist-for.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_waitlistFor_WAITLIST_FOR_T = {
+  k1: "wait",
+};
+const waitlistFor = (...a) => __pure_waitlistFor(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_waitlistFor_WAITLIST_FOR_T);
 const ids = (arr) => arr.map((e) => e.id).join(',');
 let f = 0;
 const chk = (label, got, want) => {

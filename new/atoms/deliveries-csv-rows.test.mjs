@@ -1,4 +1,15 @@
-import { deliveriesCsvRows } from './deliveries-csv-rows.mjs';
+import { deliveriesCsvRows as __pure_deliveriesCsvRows } from './deliveries-csv-rows.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_deliveriesCsvRows_DELIVERIES_CSV_ROWS_T = {
+  k1: "תאריך",
+  k2: "entity.family",
+  k3: "משפחה",
+  k4: "כתובת",
+  k5: "מתנדב",
+  k6: "סטטוס",
+  k7: "הערה",
+};
+const deliveriesCsvRows = (...a) => __pure_deliveriesCsvRows(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_deliveriesCsvRows_DELIVERIES_CSV_ROWS_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 const eq = (name, a, b) => chk(name + ` ⇒ ${JSON.stringify(a)}`, JSON.stringify(a) === JSON.stringify(b));

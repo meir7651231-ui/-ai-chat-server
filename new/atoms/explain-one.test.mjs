@@ -1,4 +1,10 @@
-import { explainOne } from './explain-one.mjs';
+import { explainOne as __pure_explainOne } from './explain-one.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_explainOne_EXPLAIN_ONE_T = {
+  k1: "⚠️ תצורה לא-תקינה: ",
+  k2: "invalid",
+};
+const explainOne = (...a) => __pure_explainOne(...a, ...Array(Math.max(0, 8 - a.length)).fill(undefined), __d_explainOne_EXPLAIN_ONE_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b);

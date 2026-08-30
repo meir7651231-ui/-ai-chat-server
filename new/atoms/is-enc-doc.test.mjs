@@ -1,4 +1,10 @@
-import { isEncDoc } from './is-enc-doc.mjs';
+import { isEncDoc as __pure_isEncDoc } from './is-enc-doc.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_isEncDoc_IS_ENC_DOC_T = {
+  k1: "object",
+  k2: "string",
+};
+const isEncDoc = (...a) => __pure_isEncDoc(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_isEncDoc_IS_ENC_DOC_T);
 const C = [
   [{ enc: 'q1XZ', iv: 'AAAAAAAAAAAAAAAA' }, true],
   [{ enc: 'q1XZ' }, false],

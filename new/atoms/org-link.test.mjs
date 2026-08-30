@@ -1,4 +1,9 @@
-import { orgLink } from './org-link.mjs';
+import { orgLink as __pure_orgLink } from './org-link.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_orgLink_ORG_LINK_T = {
+  k1: "?org=",
+};
+const orgLink = (...a) => __pure_orgLink(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_orgLink_ORG_LINK_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 // 1) שורש רגיל

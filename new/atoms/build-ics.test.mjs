@@ -1,4 +1,25 @@
-import { buildIcs } from './build-ics.mjs';
+import { buildIcs as __pure_buildIcs } from './build-ics.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_buildIcs_BUILD_ICS_T = {
+  k1: "BEGIN:VCALENDAR",
+  k2: "VERSION:2.0",
+  k3: "CALSCALE:GREGORIAN",
+  k4: "METHOD:PUBLISH",
+  k5: "X-WR-CALNAME:",
+  k6: "BEGIN:VEVENT",
+  k7: "UID:",
+  k8: "DTSTAMP:",
+  k9: "DTSTART:",
+  k10: "DTEND:",
+  k11: "DTSTART;VALUE=DATE:",
+  k12: "DTEND;VALUE=DATE:",
+  k13: "SUMMARY:",
+  k14: "DESCRIPTION:",
+  k15: "LOCATION:",
+  k16: "END:VEVENT",
+  k17: "END:VCALENDAR",
+};
+const buildIcs = (...a) => __pure_buildIcs(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_buildIcs_BUILD_ICS_T);
 
 // שקעים מקומיים לבדיקה — icsEscape אמיתי-מינימלי; foldIcsLine=זהות (הקיפול נבדק באטום שלו)
 const icsEscape = (s) => (s || '')

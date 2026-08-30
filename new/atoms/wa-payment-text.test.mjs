@@ -1,4 +1,9 @@
-import { waPaymentText } from './wa-payment-text.mjs';
+import { waPaymentText as __pure_waPaymentText } from './wa-payment-text.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_waPaymentText_WA_PAYMENT_TEXT_T = {
+  k1: "wa.payment",
+};
+const waPaymentText = (...a) => __pure_waPaymentText(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_waPaymentText_WA_PAYMENT_TEXT_T);
 // שקעי-אמת מקומיים כהתנהגות maor (הבדיקה מייבאת רק את האטום שלה):
 // renderTemplate — lib/templates.ts:57-66 עם ברירת-המחדל של 'wa.payment'
 const DEFS = { 'wa.payment': 'שלום, תזכורת ידידותית מ{org}: יתרה לתשלום עבור {what} — ₪{amount}. תודה רבה!' };

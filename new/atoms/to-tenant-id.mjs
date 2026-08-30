@@ -1,6 +1,6 @@
 /** חוט · to-tenant-id — קודם אוטומטית (אפיון-Golden). חוזה: to-tenant-id.contract.md */
-export function toTenantId(slug, orgName) {
-    const base = (slug && slug !== 'default' ? slug : orgName || 'org')
+export function toTenantId(slug, orgName, T) {
+    const base = (slug && slug !== T.k1 ? slug : orgName || T.k2)
         .toLowerCase()
         .replace(/[^a-z0-9-]+/g, '-')
         .replace(/^-+|-+$/g, '')

@@ -1,4 +1,14 @@
-import { signUpError } from './sign-up-error.mjs';
+import { signUpError as __pure_signUpError } from './sign-up-error.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_signUpError_SIGN_UP_ERROR_T = {
+  k1: "שם הארגון הוא שדה חובה",
+  k2: "שם איש הקשר הוא שדה חובה",
+  k3: "מספר טלפון תקין הוא שדה חובה — נחזור אליכם לאישור",
+  k4: "כתובת האימייל אינה תקינה",
+  k5: "הסיסמה חייבת להיות לפחות 6 תווים",
+  k6: "הסיסמאות אינן זהות",
+};
+const signUpError = (...a) => __pure_signUpError(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_signUpError_SIGN_UP_ERROR_T);
 let f = 0;
 const eq = (a, b, msg) => { if (a !== b) { console.error(`✗ ${msg} ⇒ ${JSON.stringify(a)}`); f = 1; } };
 

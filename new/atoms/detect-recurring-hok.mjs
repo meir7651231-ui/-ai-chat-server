@@ -1,7 +1,7 @@
 /** חוט · detect-recurring-hok — זיהוי הוראות-קבע מתבנית-ה-hist ומילוי משבצת-ההו"ק.
  *  חוזה: detect-recurring-hok.contract.md · שקעים: clearingProviders, modeStr, modeOf, monthsAgo
  *  חולץ כלשונו מ-maor/src/lib/nedarimSync.ts:236-278 (קריאות-השכן שוקעו). */
-export function detectRecurringHok(supporters, todayIso, minMonths = 3, clearingProviders, modeStr, modeOf, monthsAgo) {
+export function detectRecurringHok(supporters, todayIso, minMonths = 3, clearingProviders, modeStr, modeOf, monthsAgo, T) {
     let detected = 0;
     const out = supporters.map((sp) => {
         if (sp.hok && !sp.hok.kevaId)
@@ -28,13 +28,13 @@ export function detectRecurringHok(supporters, todayIso, minMonths = 3, clearing
                 amount: Number(parts[0]),
                 cur,
                 day: Math.min(28, Math.max(1, modeOf(nd.map((h) => Number(h.d.slice(8, 10)) || 1)))),
-                method: 'card',
+                method: T.k1,
                 note: kevaCharge
-                    ? 'הו״ק ' + (nd[0]?.clearer || 'סליקה') + ' · ' + kevaCharge.kevaId
-                    : 'הו״ק ' + (nd[0]?.clearer || 'סליקה') + ' (זוהה מהיסטוריה · ' + distinctMonths.size + ' חודשים)',
+                    ? T.k2 + (nd[0]?.clearer || T.k3) + ' · ' + kevaCharge.kevaId
+                    : T.k2 + (nd[0]?.clearer || T.k3) + T.k4 + distinctMonths.size + T.k5,
                 active: monthsAgo(dates[dates.length - 1], todayIso) <= 2,
                 startedAt: dates[0],
-                kevaId: kevaCharge?.kevaId || 'auto',
+                kevaId: kevaCharge?.kevaId || T.k6,
             },
         };
     });

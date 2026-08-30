@@ -1,4 +1,11 @@
-import { applyAyinSheet } from './apply-ayin-sheet.mjs';
+import { applyAyinSheet as __pure_applyAyinSheet } from './apply-ayin-sheet.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_applyAyinSheet_APPLY_AYIN_SHEET_T = {
+  k1: "eyes",
+  k2: "answer",
+  k3: "done",
+};
+const applyAyinSheet = (...a) => __pure_applyAyinSheet(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_applyAyinSheet_APPLY_AYIN_SHEET_T);
 const mkAyin = () => ({ stage: 'new', answeredNote: '', lastTouch: '', names: [{ id: 'n1', name: 'משה', eyes: 3, done: false }], answers: [], log: [] });
 const TODAY = '2026-08-24';
 let f = 0;

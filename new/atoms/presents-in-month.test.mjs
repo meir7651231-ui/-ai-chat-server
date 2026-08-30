@@ -1,4 +1,9 @@
-import { presentsInMonth } from './presents-in-month.mjs';
+import { presentsInMonth as __pure_presentsInMonth } from './presents-in-month.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_presentsInMonth_PRESENTS_IN_MONTH_T = {
+  k1: "string",
+};
+const presentsInMonth = (...a) => __pure_presentsInMonth(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_presentsInMonth_PRESENTS_IN_MONTH_T);
 const C = [
   [[['2026-08-01', '2026-08-24', '2026-07-31'], '2026-08-24'], 2],
   [[undefined, '2026-08-24'], 0],

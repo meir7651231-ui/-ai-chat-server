@@ -1,7 +1,7 @@
 /** חוט · build-reenroll-rows — שורות מסך רישום-לשנה-הבאה. חוזה: build-reenroll-rows.contract.md
  *  חולץ כלשונו מ-maor/src/components/courses/reenroll-lib.ts:134-183; ארבעת השכנים
  *  (isRenewed · renewOf · enrollSummary · findMember) הוזרקו כשקעים (חוק-1). */
-export function buildReenrollRows(db, filter, { isRenewed, renewOf, enrollSummary, findMember }) {
+export function buildReenrollRows(db, filter, { isRenewed, renewOf, enrollSummary, findMember }, T) {
   filter = filter ?? {};
   const includeRenewed = filter.includeRenewed !== false;
   const q = (filter.q ?? '').trim();
@@ -16,7 +16,7 @@ export function buildReenrollRows(db, filter, { isRenewed, renewOf, enrollSummar
     const courseName = course?.name ?? '';
     const decision = renewOf(e);
     if (filter.decision) {
-      if (filter.decision === 'undecided') {
+      if (filter.decision === T.k1) {
         if (decision !== '') continue;
       } else if (decision !== filter.decision) continue;
     }

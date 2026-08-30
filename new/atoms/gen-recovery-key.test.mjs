@@ -1,4 +1,9 @@
-import { genRecoveryKey } from './gen-recovery-key.mjs';
+import { genRecoveryKey as __pure_genRecoveryKey } from './gen-recovery-key.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_genRecoveryKey_GEN_RECOVERY_KEY_T = {
+  k1: "ABCDEFGHJKLMNPQRSTUVWXYZ23456789",
+};
+const genRecoveryKey = (...a) => __pure_genRecoveryKey(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_genRecoveryKey_GEN_RECOVERY_KEY_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 // 1) בייטים 0..23 — מיפוי-האלפבית המדויק (בלי I,O,0,1)

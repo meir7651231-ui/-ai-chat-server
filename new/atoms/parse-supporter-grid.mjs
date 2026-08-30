@@ -2,7 +2,7 @@
  *  חוזה: parse-supporter-grid.contract.md · שקעים: supNameKeys, parseAnyDate, excelSerialToIso
  *  חולץ כלשונו מ-maor/src/components/supporters/lib.ts:416-505 (השכנים שוקעו — חוק-1;
  *  isFinite = גלובל-שפה, אינו שקע). */
-export function parseSupporterGrid(rows, supNameKeys, parseAnyDate, excelSerialToIso) {
+export function parseSupporterGrid(rows, supNameKeys, parseAnyDate, excelSerialToIso, T) {
   if (!rows.length) return [];
   // שורת-הכותרות = הראשונה (מבין 15 העליונות) שיש בה עמודת-שם ("שם"/"תורם").
   const hdrIdx = rows
@@ -11,26 +11,26 @@ export function parseSupporterGrid(rows, supNameKeys, parseAnyDate, excelSerialT
   const header = (hdrIdx >= 0 ? rows[hdrIdx] : rows[0]).map((h) => (h ?? '').trim());
   const find = (keys) => header.findIndex((h) => keys.some((k) => h.includes(k)));
   let iName = find(supNameKeys);
-  let iPhone = find(['טלפון', 'נייד']);
-  let iEmail = find(['אימייל', 'מייל', 'email']);
-  let iId = find(['ת"ז', 'תז', 'זהות']);
-  let iAddr = find(['כתובת']);
-  let iCat = find(['קטגוריה']);
-  let iFor = find(['עבור', 'ייעוד']);
+  let iPhone = find([T.k1, T.k2]);
+  let iEmail = find([T.k3, T.k4, T.k5]);
+  let iId = find([T.k6, T.k7, T.k8]);
+  let iAddr = find([T.k9]);
+  let iCat = find([T.k10]);
+  let iFor = find([T.k11, T.k12]);
   // קובץ מסוף-הסליקה (ExportHistory, 9.8): עמודות סכום/תאריך-עסקה/מטבע ⇒
   // כל שורה נושאת גם עסקה — נכנסת כהיסטוריה-ללא-קבלה (הכרעת-בעלים).
-  const iAmount = find(['סכום']);
-  const iTxDate = find(['תאריך']);
-  const iCur = find(['מטבע']);
+  const iAmount = find([T.k13]);
+  const iTxDate = find([T.k14]);
+  const iCur = find([T.k15]);
   // 13.8 — כל שאר עמודות-הסליקה נקלטות למטא-דאטה של רשומת-ההיסטוריה.
-  const iRef = find(['אסמכתא']);
-  const iTxn = find(['מספר עסקה']);
-  const iReceipt = find(['מספר קבלה']);
-  const iBrand = find(['מותג']);
-  const iLast4 = find(['4 ספרות', 'ספרות']);
-  const iClearer = find(['חברה סולקת', 'סולק']);
-  const iPays = find(['תשלומים']);
-  const iStatus = find(['סטטוס']);
+  const iRef = find([T.k16]);
+  const iTxn = find([T.k17]);
+  const iReceipt = find([T.k18]);
+  const iBrand = find([T.k19]);
+  const iLast4 = find([T.k20, T.k21]);
+  const iClearer = find([T.k22, T.k23]);
+  const iPays = find([T.k24]);
+  const iStatus = find([T.k25]);
   let start = hdrIdx >= 0 ? hdrIdx + 1 : 1;
   if (iName < 0) {
     // אין שורת כותרות מזוהה — סדר עמודות קבוע
@@ -76,7 +76,7 @@ export function parseSupporterGrid(rows, supNameKeys, parseAnyDate, excelSerialT
             ...(g(r, iReceipt) ? { receipt: g(r, iReceipt) } : {}),
             ...(g(r, iBrand) ? { brand: g(r, iBrand) } : {}),
             ...(g(r, iLast4) ? { last4: g(r, iLast4) } : {}),
-            ...(g(r, iClearer) ? { clearer: /נדרים|nedarim/i.test(g(r, iClearer)) ? 'נדרים' : g(r, iClearer) } : {}),
+            ...(g(r, iClearer) ? { clearer: /נדרים|nedarim/i.test(g(r, iClearer)) ? T.k26 : g(r, iClearer) } : {}),
             ...(iPays >= 0 && isFinite(pays) && pays > 0 ? { pays } : {}),
             ...(g(r, iStatus) ? { status: g(r, iStatus) } : {}),
           },

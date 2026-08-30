@@ -1,4 +1,10 @@
-import { termLabel } from './term-label.mjs';
+import { termLabel as __pure_termLabel } from './term-label.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_termLabel_TERM_LABEL_T = {
+  k1: "months",
+  k2: " חודשים",
+};
+const termLabel = (...a) => __pure_termLabel(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_termLabel_TERM_LABEL_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const eq = (a, b, msg) => ok(a === b, msg + ` ⇒ ${JSON.stringify(a)}`);

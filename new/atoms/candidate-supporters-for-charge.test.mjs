@@ -1,4 +1,9 @@
-import { candidateSupportersForCharge } from './candidate-supporters-for-charge.mjs';
+import { candidateSupportersForCharge as __pure_candidateSupportersForCharge } from './candidate-supporters-for-charge.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_candidateSupportersForCharge_CANDIDATE_SUPPORTERS_FOR_CHARGE_T = {
+  k1: "ext:",
+};
+const candidateSupportersForCharge = (...a) => __pure_candidateSupportersForCharge(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_candidateSupportersForCharge_CANDIDATE_SUPPORTERS_FOR_CHARGE_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 // שקעים-מדומים תואמי-חוזה (קידומות ext:/id:/ph:/em:; שם = טוקנים ממוינים)

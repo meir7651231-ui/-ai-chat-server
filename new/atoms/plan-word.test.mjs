@@ -1,4 +1,15 @@
-import { planWord } from './plan-word.mjs';
+import { planWord as __pure_planWord } from './plan-word.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_planWord_PLAN_WORD_T = {
+  k1: "punch",
+  k2: "כרטיסייה",
+  k3: "half_year",
+  k4: "מנוי חצי-שנתי",
+  k5: "year",
+  k6: "מנוי שנתי",
+  k7: "מנוי חודשי",
+};
+const planWord = (...a) => __pure_planWord(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_planWord_PLAN_WORD_T);
 const C = [
   ['punch', 'כרטיסייה'],
   ['half_year', 'מנוי חצי-שנתי'],

@@ -3,18 +3,36 @@
  *  supporters/lib) — עכשיו חיווט גלוי אחד מאטומים בלבד (חוק-2/3).
  *  שקע-IO יחיד: nowMs (טריות-supScore) — מוזרק אופציונלי; חסר ⇒ Date.now()
  *  בתוך האטום, ביט-זהה למקור. */
-import { expFieldDefs as expFieldDefsAtom } from '../atoms/exp-field-defs.mjs';
+import { expFieldDefs as __pure_expFieldDefs } from '../atoms/exp-field-defs.mjs';
+import { EXP_FIELD_DEFS_T as __d_expFieldDefs_EXP_FIELD_DEFS_T } from '../atoms/exp-field-defs-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const expFieldDefsAtom = (...a) => __pure_expFieldDefs(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_expFieldDefs_EXP_FIELD_DEFS_T);
 import { overrideColumn as overrideColumnAtom } from '../atoms/override-column.mjs';
-import { buildCustomExport as buildCustomExportAtom } from '../atoms/build-custom-export.mjs';
+import { buildCustomExport as __pure_buildCustomExport } from '../atoms/build-custom-export.mjs';
+import { BUILD_CUSTOM_EXPORT_T as __d_buildCustomExport_BUILD_CUSTOM_EXPORT_T } from '../atoms/build-custom-export-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const buildCustomExportAtom = (...a) => __pure_buildCustomExport(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_buildCustomExport_BUILD_CUSTOM_EXPORT_T);
 import { featureOn as featureOnAtom } from '../atoms/feature-on.mjs';
 import { moduleOn } from '../atoms/module-on.mjs';
 import { termOf } from '../atoms/term-of.mjs';
-import { featLabel as featLabelAtom } from '../atoms/feat-label.mjs';
-import { itemLabel as itemLabelAtom } from '../atoms/item-label.mjs';
-import { unitLabel as unitLabelAtom } from '../atoms/unit-label.mjs';
+import { featLabel as __pure_featLabel } from '../atoms/feat-label.mjs';
+import { FEAT_LABEL_T as __d_featLabel_FEAT_LABEL_T } from '../atoms/feat-label-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const featLabelAtom = (...a) => __pure_featLabel(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_featLabel_FEAT_LABEL_T);
+import { itemLabel as __pure_itemLabel } from '../atoms/item-label.mjs';
+import { ITEM_LABEL_T as __d_itemLabel_ITEM_LABEL_T } from '../atoms/item-label-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const itemLabelAtom = (...a) => __pure_itemLabel(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_itemLabel_ITEM_LABEL_T);
+import { unitLabel as __pure_unitLabel } from '../atoms/unit-label.mjs';
+import { UNIT_LABEL_T as __d_unitLabel_UNIT_LABEL_T } from '../atoms/unit-label-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const unitLabelAtom = (...a) => __pure_unitLabel(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_unitLabel_UNIT_LABEL_T);
 import { stageLabel as stageLabelAtom } from '../atoms/stage-label.mjs';
 import { sessionsOf } from '../atoms/sessions-of.mjs';
-import { enrollCount } from '../atoms/enroll-count.mjs';
+import { enrollCount as __pure_enrollCount } from '../atoms/enroll-count.mjs';
+import { ENROLL_COUNT_T as __d_enrollCount_ENROLL_COUNT_T } from '../atoms/enroll-count-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const enrollCount = (...a) => __pure_enrollCount(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_enrollCount_ENROLL_COUNT_T);
 import { hebParts } from '../atoms/heb-parts.mjs';
 import { hebAnnualEq as hebAnnualEqAtom } from '../atoms/heb-annual-eq.mjs';
 import { hebDateFull as hebDateFullAtom } from '../atoms/heb-date-full.mjs';
@@ -29,7 +47,10 @@ import { supUsd } from '../atoms/sup-usd.mjs';
 import { supLast } from '../atoms/sup-last.mjs';
 import { supTotalIls as supTotalIlsAtom } from '../atoms/sup-total-ils.mjs';
 import { supScore as supScoreAtom } from '../atoms/sup-score.mjs';
-import { supTier } from '../atoms/sup-tier.mjs';
+import { supTier as __pure_supTier } from '../atoms/sup-tier.mjs';
+import { SUP_TIER_T as __d_supTier_SUP_TIER_T } from '../atoms/sup-tier-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const supTier = (...a) => __pure_supTier(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_supTier_SUP_TIER_T);
 import { EV_META } from '../atoms/ev-meta.mjs';
 import { DAY_NAMES } from '../atoms/day-names.mjs';
 

@@ -1,4 +1,17 @@
-import { mergeSupportersByFields } from './merge-supporters-by-fields.mjs';
+import { mergeSupportersByFields as __pure_mergeSupportersByFields } from './merge-supporters-by-fields.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_mergeSupportersByFields_MERGE_SUPPORTERS_BY_FIELDS_T = {
+  k1: "name",
+  k2: "phone",
+  k3: "email",
+  k4: "idNum",
+  k5: "city",
+  k6: "address",
+  k7: "cat",
+  k8: "forWho",
+  k9: "notes",
+};
+const mergeSupportersByFields = (...a) => __pure_mergeSupportersByFields(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_mergeSupportersByFields_MERGE_SUPPORTERS_BY_FIELDS_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

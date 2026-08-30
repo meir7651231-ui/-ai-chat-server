@@ -1,4 +1,17 @@
-import { thanksPrompt } from './thanks-prompt.mjs';
+import { thanksPrompt as __pure_thanksPrompt } from './thanks-prompt.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_thanksPrompt_THANKS_PROMPT_T = {
+  k1: "כתוב מכתב תודה קצר (4-6 שורות), חם ואישי, בעברית, מארגון \"",
+  k2: "הארגון",
+  k3: "לתורם/ת בשם \"",
+  k4: "\" על תרומה של ",
+  k5: "התרומה יועדה ל: ",
+  k6: "סה\"כ תרומותיו/ה עד כה: ",
+  k7: " — אפשר לרמוז לנאמנות בעדינות.",
+  k8: "בלי הגזמות, בלי סופרלטיבים ריקים, בלי לציין סכומים מעבר לנאמר. לסיים בברכה חמה.",
+  k9: "להחזיר את המכתב בלבד — בלי הקדמות.",
+};
+const thanksPrompt = (...a) => __pure_thanksPrompt(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_thanksPrompt_THANKS_PROMPT_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const eq = (a, b, msg) => ok(a === b, msg + ` ⇒ ${JSON.stringify(a)}`);

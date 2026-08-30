@@ -10,13 +10,13 @@ function monthsAgoIso(iso, todayIso) {
   return (ty - y) * 12 + (tm - m);
 }
 
-export function hokEffectivelyActive(sp, todayIso) {
+export function hokEffectivelyActive(sp, todayIso, T) {
   const h = sp.hok;
   if (!h || !h.active) return false;
   if (!h.kevaId) return true; // הו"ק ידני — אין לאפ-אוטומטי
   let last = '';
   // 🐛 נחיל-סולה C7: גם חיובי-סולה נחשבים "חיות" של הו"ק-סליקה
-  for (const e of sp.hist ?? []) if ((e.clearer === 'נדרים' || e.clearer === 'סולה') && (e.d || '') > last) last = e.d || '';
+  for (const e of sp.hist ?? []) if ((e.clearer === T.k1 || e.clearer === T.k2) && (e.d || '') > last) last = e.d || '';
   if (!last) return true; // עדיין אין היסטוריית-נדרים — סומכים על הדגל
   return monthsAgoIso(last, todayIso) <= 2;
 }

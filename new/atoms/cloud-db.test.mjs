@@ -1,4 +1,9 @@
-import { cloudDb } from './cloud-db.mjs';
+import { cloudDb as __pure_cloudDb } from './cloud-db.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_cloudDb_CLOUD_DB_T = {
+  k1: "הענן לא אותחל — פנו למנהל המערכת",
+};
+const cloudDb = (...a) => __pure_cloudDb(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_cloudDb_CLOUD_DB_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

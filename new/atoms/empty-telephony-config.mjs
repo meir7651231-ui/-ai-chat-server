@@ -1,7 +1,7 @@
 /** חוט · empty-telephony-config — קודם אוטומטית (צילום-גטר). חוזה: empty-telephony-config.contract.md */
-export function emptyTelephonyConfig() {
+export function emptyTelephonyConfig(T) {
     return {
-        numbers: [{ id: 'n1', e164: '', label: 'קו ראשי', kind: 'sim' }],
+        numbers: [{ id: 'n1', e164: '', label: T.k1, kind: T.k2 }],
         officeDays: [0, 1, 2, 3, 4],
         officeStart: '09:00',
         officeEnd: '17:00',

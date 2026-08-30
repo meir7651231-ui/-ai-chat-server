@@ -1,4 +1,17 @@
-import { coordinatorPrintLines } from './coordinator-print-lines.mjs';
+import { coordinatorPrintLines as __pure_coordinatorPrintLines } from './coordinator-print-lines.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_coordinatorPrintLines_COORDINATOR_PRINT_LINES_T = {
+  k1: "home",
+  k2: "office",
+  k3: "רשימת קופות — ",
+  k4: "entity.familyOf",
+  k5: "משפחת",
+  k6: "במשרד",
+  k7: "ריקון אחרון: ",
+  k8: "טרם רוקנה",
+  k9: "אין קופות פעילות",
+};
+const coordinatorPrintLines = (...a) => __pure_coordinatorPrintLines(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_coordinatorPrintLines_COORDINATOR_PRINT_LINES_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 // שקעים חוזיים (מדמים את שכני-המקור)

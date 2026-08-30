@@ -1,4 +1,33 @@
-import { guideSections } from './guide-sections-of.mjs';
+import { guideSections as __pure_guideSections } from './guide-sections-of.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_guideSections_GUIDE_SECTIONS_OF_T = {
+  k1: "כרטיס משפחה",
+  k2: "כרטיס ",
+  k3: "entity.family",
+  k4: "משפחה",
+  k5: "חדרים חיים",
+  k6: "entity.rooms",
+  k7: "חדרים",
+  k8: " חיים",
+  k9: "על חדר",
+  k10: "על ",
+  k11: "entity.room",
+  k12: "חדר",
+  k13: "בתוך חוג",
+  k14: "בתוך ",
+  k15: "entity.course",
+  k16: "חוג",
+  k17: "תדפיס למורה",
+  k18: "תדפיס ל",
+  k19: "entity.teacher",
+  k20: "מורה",
+  k21: "＋ תרומה",
+  k22: "entity.donation",
+  k23: "תרומה",
+  k24: "שיוך למשפחה",
+  k25: "שיוך ל",
+};
+const guideSections = (...a) => __pure_guideSections(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_guideSections_GUIDE_SECTIONS_OF_T);
 // השקעים החוזיים
 const swap = (s, from, to) => s.split(from).join(to);
 const termOf = (cfg, k, fb) => (cfg.terms && cfg.terms[k]) || fb;

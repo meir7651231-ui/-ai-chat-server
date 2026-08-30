@@ -10,9 +10,18 @@
 
 import { setCloudScope as _setCloudScope } from '../atoms/set-cloud-scope.mjs';
 import { setAllowedPurposes as _setAllowedPurposes } from '../atoms/set-allowed-purposes.mjs';
-import { colPath } from '../atoms/col-path.mjs';
-import { metaPath } from '../atoms/meta-path.mjs';
-import { envPath } from '../atoms/env-path.mjs';
+import { colPath as __pure_colPath } from '../atoms/col-path.mjs';
+import { COL_PATH_T as __d_colPath_COL_PATH_T } from '../atoms/col-path-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const colPath = (...a) => __pure_colPath(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_colPath_COL_PATH_T);
+import { metaPath as __pure_metaPath } from '../atoms/meta-path.mjs';
+import { META_PATH_T as __d_metaPath_META_PATH_T } from '../atoms/meta-path-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const metaPath = (...a) => __pure_metaPath(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_metaPath_META_PATH_T);
+import { envPath as __pure_envPath } from '../atoms/env-path.mjs';
+import { ENV_PATH_T as __d_envPath_ENV_PATH_T } from '../atoms/env-path-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const envPath = (...a) => __pure_envPath(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_envPath_ENV_PATH_T);
 import { donationsPath } from '../atoms/donations-path.mjs';
 import { ENTITY_COLLECTIONS } from '../atoms/entity-collections.mjs';
 import { encryptDoc as _encryptDoc } from '../atoms/encrypt-doc.mjs';
@@ -22,13 +31,25 @@ import { SHARED_PURPOSE_KEY } from '../atoms/shared-purpose-key.mjs';
 import { SUP_KEYED_COLS } from '../atoms/sup-keyed-cols.mjs';
 import { supKeyOf as _supKeyOf } from '../atoms/sup-key-of.mjs';
 import { supKeyMapOf as _supKeyMapOf } from '../atoms/sup-key-map-of.mjs';
-import { docSkey as _docSkey } from '../atoms/doc-skey.mjs';
-import { stripAuditMeta } from '../atoms/strip-audit-meta.mjs';
-import { stripSupKey } from '../atoms/strip-sup-key.mjs';
+import { docSkey as __pure_docSkey } from '../atoms/doc-skey.mjs';
+import { DOC_SKEY_T as __d_docSkey_DOC_SKEY_T } from '../atoms/doc-skey-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const _docSkey = (...a) => __pure_docSkey(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_docSkey_DOC_SKEY_T);
+import { stripAuditMeta as __pure_stripAuditMeta } from '../atoms/strip-audit-meta.mjs';
+import { STRIP_AUDIT_META_T as __d_stripAuditMeta_STRIP_AUDIT_META_T } from '../atoms/strip-audit-meta-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const stripAuditMeta = (...a) => __pure_stripAuditMeta(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_stripAuditMeta_STRIP_AUDIT_META_T);
+import { stripSupKey as __pure_stripSupKey } from '../atoms/strip-sup-key.mjs';
+import { STRIP_SUP_KEY_T as __d_stripSupKey_STRIP_SUP_KEY_T } from '../atoms/strip-sup-key-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const stripSupKey = (...a) => __pure_stripSupKey(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_stripSupKey_STRIP_SUP_KEY_T);
 import { supAllowedKeys as _supAllowedKeys } from '../atoms/sup-allowed-keys.mjs';
 import { donAllowedKeys as _donAllowedKeys } from '../atoms/don-allowed-keys.mjs';
 import { fullDbDiff as _fullDbDiff } from '../atoms/full-db-diff.mjs';
-import { cloudDb } from '../atoms/cloud-db.mjs';
+import { cloudDb as __pure_cloudDb } from '../atoms/cloud-db.mjs';
+import { CLOUD_DB_T as __d_cloudDb_CLOUD_DB_T } from '../atoms/cloud-db-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const cloudDb = (...a) => __pure_cloudDb(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_cloudDb_CLOUD_DB_T);
 import { signOutCloud as _signOutCloud } from '../atoms/sign-out-cloud.mjs';
 import { pushDiff as _pushDiff } from '../atoms/push-diff.mjs';
 import { readCloudEnvelope as _readCloudEnvelope } from '../atoms/read-cloud-envelope.mjs';

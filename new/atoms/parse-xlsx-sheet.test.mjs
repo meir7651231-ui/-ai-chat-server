@@ -1,4 +1,10 @@
-import { parseXlsxSheet } from './parse-xlsx-sheet.mjs';
+import { parseXlsxSheet as __pure_parseXlsxSheet } from './parse-xlsx-sheet.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_parseXlsxSheet_PARSE_XLSX_SHEET_T = {
+  k1: "xl/sharedStrings.xml",
+  k2: "inlineStr",
+};
+const parseXlsxSheet = (...a) => __pure_parseXlsxSheet(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_parseXlsxSheet_PARSE_XLSX_SHEET_T);
 
 // ── שקעים: unzipSync/strFromU8 סטאבים (מגישים XML מוכן); השאר כחוזיהם ──
 const unzipSync = (bytes) => {

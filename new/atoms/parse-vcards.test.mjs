@@ -1,4 +1,15 @@
-import { parseVcards } from './parse-vcards.mjs';
+import { parseVcards as __pure_parseVcards } from './parse-vcards.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_parseVcards_PARSE_VCARDS_T = {
+  k1: "TEL",
+  k2: "EMAIL",
+  k3: "ORG",
+  k4: "null",
+  k5: "TITLE",
+  k6: "ADR",
+  k7: "NOTE",
+};
+const parseVcards = (...a) => __pure_parseVcards(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_parseVcards_PARSE_VCARDS_T);
 
 // ── שקעים מינימליים כחוזיהם (בלי QP — קלטי-הבדיקה נקיים) ──
 const unfoldLines = (text) => text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');

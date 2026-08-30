@@ -1,4 +1,11 @@
-import { inactiveRoomCourses } from './inactive-room-courses.mjs';
+import { inactiveRoomCourses as __pure_inactiveRoomCourses } from './inactive-room-courses.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_inactiveRoomCourses_INACTIVE_ROOM_COURSES_T = {
+  k1: "entity.room",
+  k2: "חדר",
+  k3: " לא קיים",
+};
+const inactiveRoomCourses = (...a) => __pure_inactiveRoomCourses(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_inactiveRoomCourses_INACTIVE_ROOM_COURSES_T);
 // שקע-termOf כחוזה-config של maor (מקומי לבדיקה — הבדיקה מייבאת רק את האטום שלה)
 const termOf = (cfg, key, fallback) => cfg?.terms?.[key] ?? fallback;
 

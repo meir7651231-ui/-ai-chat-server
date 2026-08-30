@@ -1,4 +1,10 @@
-import { normalizePrices } from './normalize-prices.mjs';
+import { normalizePrices as __pure_normalizePrices } from './normalize-prices.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_normalizePrices_NORMALIZE_PRICES_T = {
+  k1: "object",
+  k2: "number",
+};
+const normalizePrices = (...a) => __pure_normalizePrices(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_normalizePrices_NORMALIZE_PRICES_T);
 // שקעי-דמה כדוגמאות-החוזה (הבדיקה מייבאת רק את האטום שלה).
 const ALL_MODULES = ['families', 'courses'];
 const DEFAULT_INTEGRATION_PRICES = { whatsapp: 50, ai: 120 };

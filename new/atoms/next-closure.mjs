@@ -3,11 +3,11 @@
  *  חולץ כלשונו מ-maor/src/components/telephony/lib.ts:186-198; השכנים
  *  hebrewClosedWindows (מנוע-הזמנים) ו-CITIES (מילון-ערים) הוזרקו כשקעים
  *  (חוק-1 — אפס import פנימי). */
-export function nextClosure(config, todayIso, hebrewClosedWindows, CITIES) {
+export function nextClosure(config, todayIso, hebrewClosedWindows, CITIES, T) {
   const tel = config.telephony;
   if (!tel) return null;
-  const city = tel.city || 'default';
-  const tenant = { city, timezone: 'Asia/Jerusalem' };
+  const city = tel.city || T.k1;
+  const tenant = { city, timezone: T.k2 };
   const wins = hebrewClosedWindows(todayIso, 10, tenant, {});
   const w = wins[0];
   if (!w) return null;

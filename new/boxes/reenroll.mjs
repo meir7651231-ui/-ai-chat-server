@@ -7,10 +7,22 @@ import { nextYearDates } from '../atoms/next-year-dates.mjs';
 import { renewOf } from '../atoms/renew-of.mjs';
 import { isRenewed } from '../atoms/is-renewed.mjs';
 import { enrollSummary } from '../atoms/enroll-summary.mjs';
-import { buildReenrollRows } from '../atoms/build-reenroll-rows.mjs';
-import { reenrollCounts } from '../atoms/reenroll-counts.mjs';
-import { renewTargets } from '../atoms/renew-targets.mjs';
-import { freshNextYearEnrollment } from '../atoms/fresh-next-year-enrollment.mjs';
+import { buildReenrollRows as __pure_buildReenrollRows } from '../atoms/build-reenroll-rows.mjs';
+import { BUILD_REENROLL_ROWS_T as __d_buildReenrollRows_BUILD_REENROLL_ROWS_T } from '../atoms/build-reenroll-rows-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const buildReenrollRows = (...a) => __pure_buildReenrollRows(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_buildReenrollRows_BUILD_REENROLL_ROWS_T);
+import { reenrollCounts as __pure_reenrollCounts } from '../atoms/reenroll-counts.mjs';
+import { REENROLL_COUNTS_T as __d_reenrollCounts_REENROLL_COUNTS_T } from '../atoms/reenroll-counts-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const reenrollCounts = (...a) => __pure_reenrollCounts(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_reenrollCounts_REENROLL_COUNTS_T);
+import { renewTargets as __pure_renewTargets } from '../atoms/renew-targets.mjs';
+import { RENEW_TARGETS_T as __d_renewTargets_RENEW_TARGETS_T } from '../atoms/renew-targets-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const renewTargets = (...a) => __pure_renewTargets(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_renewTargets_RENEW_TARGETS_T);
+import { freshNextYearEnrollment as __pure_freshNextYearEnrollment } from '../atoms/fresh-next-year-enrollment.mjs';
+import { ELIGIBLE_ASSIGNMENTS_FOR_DAY_T as __d_freshNextYearEnrollment_FRESH_NEXT_YEAR_ENROLLMENT_T } from '../atoms/eligible-assignments-for-day-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const freshNextYearEnrollment = (...a) => __pure_freshNextYearEnrollment(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_freshNextYearEnrollment_FRESH_NEXT_YEAR_ENROLLMENT_T);
 import { nextYearCourseDraft } from '../atoms/next-year-course-draft.mjs';
 import { studentHistory } from '../atoms/student-history.mjs';
 import { studentHistoryText } from '../atoms/student-history-text.mjs';
@@ -18,7 +30,10 @@ import { reenrollCsvRows as __pure_reenrollCsvRows } from '../atoms/reenroll-csv
 import { head } from '../atoms/reenroll-csv-rows-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
 const reenrollCsvRows = (...a) => __pure_reenrollCsvRows(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), head);
-import { reenrollListText } from '../atoms/reenroll-list-text.mjs';
+import { reenrollListText as __pure_reenrollListText } from '../atoms/reenroll-list-text.mjs';
+import { REENROLL_LIST_TEXT_T as __d_reenrollListText_REENROLL_LIST_TEXT_T } from '../atoms/reenroll-list-text-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const reenrollListText = (...a) => __pure_reenrollListText(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_reenrollListText_REENROLL_LIST_TEXT_T);
 import { payBal } from '../atoms/pay-bal.mjs';
 import { paidOf } from '../atoms/paid-of.mjs';
 

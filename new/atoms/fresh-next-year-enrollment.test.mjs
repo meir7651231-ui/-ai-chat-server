@@ -1,4 +1,9 @@
-import { freshNextYearEnrollment } from './fresh-next-year-enrollment.mjs';
+import { freshNextYearEnrollment as __pure_freshNextYearEnrollment } from './fresh-next-year-enrollment.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_freshNextYearEnrollment_FRESH_NEXT_YEAR_ENROLLMENT_T = {
+  k1: "active",
+};
+const freshNextYearEnrollment = (...a) => __pure_freshNextYearEnrollment(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_freshNextYearEnrollment_FRESH_NEXT_YEAR_ENROLLMENT_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const src = {

@@ -1,9 +1,9 @@
 /** חוט · call-stats — קודם אוטומטית (אפיון-Golden). חוזה: call-stats.contract.md */
-export function callStats(calls) {
+export function callStats(calls, T) {
     const list = calls ?? [];
     let noanswer = 0;
     for (const c of list)
-        if (c.outcome === 'noanswer')
+        if (c.outcome === T.k1)
             noanswer++;
     return { total: list.length, last: list.length ? list[list.length - 1].at : '', noanswer };
 }

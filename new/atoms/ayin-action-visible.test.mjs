@@ -1,4 +1,11 @@
-import { ayinActionVisible } from './ayin-action-visible.mjs';
+import { ayinActionVisible as __pure_ayinActionVisible } from './ayin-action-visible.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_ayinActionVisible_AYIN_ACTION_VISIBLE_T = {
+  k1: "done",
+  k2: "new",
+  k3: "eyes",
+};
+const ayinActionVisible = (...a) => __pure_ayinActionVisible(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_ayinActionVisible_AYIN_ACTION_VISIBLE_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 ok(ayinActionVisible({ stage: 'done', names: [{ name: 'א' }] }) === false, 'done ⇒ false');

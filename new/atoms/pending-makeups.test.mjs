@@ -1,4 +1,10 @@
-import { pendingMakeups } from './pending-makeups.mjs';
+import { pendingMakeups as __pure_pendingMakeups } from './pending-makeups.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_pendingMakeups_PENDING_MAKEUPS_T = {
+  k1: "ended",
+  k2: "wait",
+};
+const pendingMakeups = (...a) => __pure_pendingMakeups(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_pendingMakeups_PENDING_MAKEUPS_T);
 const E1 = { id: 'e1', memberId: 'm1', courseId: 'c1', status: 'active', absences: [
   { date: '2026-03-01', reason: 'מחלה', makeup: true },
   { date: '2026-02-01', reason: 'טיול', makeup: false },

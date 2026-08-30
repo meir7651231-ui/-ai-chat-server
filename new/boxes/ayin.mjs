@@ -5,17 +5,32 @@
 // ── אטומי-העין ──
 import { AYIN_STAGES }             from '../atoms/ayin-stages.mjs';
 import { stageLabel as stageLabelA } from '../atoms/stage-label.mjs';
-import { featLabel as featLabelA }   from '../atoms/feat-label.mjs';
-import { itemLabel as itemLabelA }   from '../atoms/item-label.mjs';
-import { unitLabel as unitLabelA }   from '../atoms/unit-label.mjs';
+import { featLabel as __pure_featLabel }   from '../atoms/feat-label.mjs';
+import { FEAT_LABEL_T as __d_featLabel_FEAT_LABEL_T } from '../atoms/feat-label-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const featLabelA = (...a) => __pure_featLabel(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_featLabel_FEAT_LABEL_T);
+import { itemLabel as __pure_itemLabel }   from '../atoms/item-label.mjs';
+import { ITEM_LABEL_T as __d_itemLabel_ITEM_LABEL_T } from '../atoms/item-label-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const itemLabelA = (...a) => __pure_itemLabel(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_itemLabel_ITEM_LABEL_T);
+import { unitLabel as __pure_unitLabel }   from '../atoms/unit-label.mjs';
+import { UNIT_LABEL_T as __d_unitLabel_UNIT_LABEL_T } from '../atoms/unit-label-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const unitLabelA = (...a) => __pure_unitLabel(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_unitLabel_UNIT_LABEL_T);
 import { stageIndex as __pure_stageIndex } from '../atoms/stage-index.mjs';
 import { AYIN_STAGES as __d_stageIndex_AYIN_STAGES } from '../atoms/ayin-stages.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
 const stageIndexA = (...a) => __pure_stageIndex(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_stageIndex_AYIN_STAGES);
 import { nextStage as nextStageA }   from '../atoms/next-stage.mjs';
-import { revertPatch as revertPatchA } from '../atoms/revert-patch.mjs';
+import { revertPatch as __pure_revertPatch } from '../atoms/revert-patch.mjs';
+import { REVERT_PATCH_T as __d_revertPatch_REVERT_PATCH_T } from '../atoms/revert-patch-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const revertPatchA = (...a) => __pure_revertPatch(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_revertPatch_REVERT_PATCH_T);
 import { normName as normNameA }     from '../atoms/norm-name.mjs';
-import { ayinActive as ayinActiveA } from '../atoms/ayin-active.mjs';
+import { ayinActive as __pure_ayinActive } from '../atoms/ayin-active.mjs';
+import { AYIN_ACTIVE_T as __d_ayinActive_AYIN_ACTIVE_T } from '../atoms/ayin-active-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const ayinActiveA = (...a) => __pure_ayinActive(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_ayinActive_AYIN_ACTIVE_T);
 import { eyesTotal as eyesTotalA }   from '../atoms/eyes-total.mjs';
 import { boqLineAmount as boqLineAmountA } from '../atoms/boq-line-amount.mjs';
 import { boqTotal as boqTotalA }     from '../atoms/boq-total.mjs';
@@ -24,18 +39,45 @@ import { timeCostTotal as timeCostTotalA }   from '../atoms/time-cost-total.mjs'
 import { matCostTotal as matCostTotalA }     from '../atoms/mat-cost-total.mjs';
 import { namesToTemplateLines as namesToTemplateLinesA } from '../atoms/names-to-template-lines.mjs';
 import { templateLinesToNames as templateLinesToNamesA } from '../atoms/template-lines-to-names.mjs';
-import { ayinActionVisible as ayinActionVisibleA }       from '../atoms/ayin-action-visible.mjs';
-import { ayinAdvanceLabel as ayinAdvanceLabelA }         from '../atoms/ayin-advance-label.mjs';
-import { planAyinAdvance as planAyinAdvanceA }           from '../atoms/plan-ayin-advance.mjs';
-import { planAddName as planAddNameA }                   from '../atoms/plan-add-name.mjs';
-import { ayinDailyRows as ayinDailyRowsA }               from '../atoms/ayin-daily-rows.mjs';
-import { ayinAllRows as ayinAllRowsA }                   from '../atoms/ayin-all-rows.mjs';
+import { ayinActionVisible as __pure_ayinActionVisible }       from '../atoms/ayin-action-visible.mjs';
+import { AYIN_ACTION_VISIBLE_T as __d_ayinActionVisible_AYIN_ACTION_VISIBLE_T } from '../atoms/ayin-action-visible-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const ayinActionVisibleA = (...a) => __pure_ayinActionVisible(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_ayinActionVisible_AYIN_ACTION_VISIBLE_T);
+import { ayinAdvanceLabel as __pure_ayinAdvanceLabel }         from '../atoms/ayin-advance-label.mjs';
+import { AYIN_ADVANCE_LABEL_T as __d_ayinAdvanceLabel_AYIN_ADVANCE_LABEL_T } from '../atoms/ayin-advance-label-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const ayinAdvanceLabelA = (...a) => __pure_ayinAdvanceLabel(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_ayinAdvanceLabel_AYIN_ADVANCE_LABEL_T);
+import { planAyinAdvance as __pure_planAyinAdvance }           from '../atoms/plan-ayin-advance.mjs';
+import { PLAN_AYIN_ADVANCE_T as __d_planAyinAdvance_PLAN_AYIN_ADVANCE_T } from '../atoms/plan-ayin-advance-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const planAyinAdvanceA = (...a) => __pure_planAyinAdvance(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_planAyinAdvance_PLAN_AYIN_ADVANCE_T);
+import { planAddName as __pure_planAddName }                   from '../atoms/plan-add-name.mjs';
+import { PLAN_ADD_NAME_T as __d_planAddName_PLAN_ADD_NAME_T } from '../atoms/plan-add-name-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const planAddNameA = (...a) => __pure_planAddName(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_planAddName_PLAN_ADD_NAME_T);
+import { ayinDailyRows as __pure_ayinDailyRows }               from '../atoms/ayin-daily-rows.mjs';
+import { AYIN_DAILY_ROWS_T as __d_ayinDailyRows_AYIN_DAILY_ROWS_T } from '../atoms/ayin-daily-rows-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const ayinDailyRowsA = (...a) => __pure_ayinDailyRows(...a, ...Array(Math.max(0, 8 - a.length)).fill(undefined), __d_ayinDailyRows_AYIN_DAILY_ROWS_T);
+import { ayinAllRows as __pure_ayinAllRows }                   from '../atoms/ayin-all-rows.mjs';
+import { AYIN_ALL_ROWS_T as __d_ayinAllRows_AYIN_ALL_ROWS_T } from '../atoms/ayin-all-rows-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const ayinAllRowsA = (...a) => __pure_ayinAllRows(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_ayinAllRows_AYIN_ALL_ROWS_T);
 import { ayinBoardItems as ayinBoardItemsA }             from '../atoms/ayin-board-items.mjs';
-import { filterAyinBoard as filterAyinBoardA }           from '../atoms/filter-ayin-board.mjs';
+import { filterAyinBoard as __pure_filterAyinBoard }           from '../atoms/filter-ayin-board.mjs';
+import { FILTER_AYIN_BOARD_T as __d_filterAyinBoard_FILTER_AYIN_BOARD_T } from '../atoms/filter-ayin-board-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const filterAyinBoardA = (...a) => __pure_filterAyinBoard(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_filterAyinBoard_FILTER_AYIN_BOARD_T);
 import { AYIN_SHEET_HEADER }                             from '../atoms/ayin-sheet-header.mjs';
 import { ayinSheetRows as ayinSheetRowsA }               from '../atoms/ayin-sheet-rows.mjs';
-import { parseAyinSheet as parseAyinSheetA }             from '../atoms/parse-ayin-sheet.mjs';
-import { applyAyinSheet as applyAyinSheetA }             from '../atoms/apply-ayin-sheet.mjs';
+import { parseAyinSheet as __pure_parseAyinSheet }             from '../atoms/parse-ayin-sheet.mjs';
+import { PARSE_AYIN_SHEET_T as __d_parseAyinSheet_PARSE_AYIN_SHEET_T } from '../atoms/parse-ayin-sheet-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const parseAyinSheetA = (...a) => __pure_parseAyinSheet(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_parseAyinSheet_PARSE_AYIN_SHEET_T);
+import { applyAyinSheet as __pure_applyAyinSheet }             from '../atoms/apply-ayin-sheet.mjs';
+import { APPLY_AYIN_SHEET_T as __d_applyAyinSheet_APPLY_AYIN_SHEET_T } from '../atoms/apply-ayin-sheet-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const applyAyinSheetA = (...a) => __pure_applyAyinSheet(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_applyAyinSheet_APPLY_AYIN_SHEET_T);
 
 // ── אטומי-שכן טהורים (מודולים אחרים; אטומים-על-המדף ⇒ מיובאים ומחווטים) ──
 import { termOf }     from '../atoms/term-of.mjs';

@@ -1,4 +1,9 @@
-import { watchOrgCloudConfig } from './watch-org-cloud-config.mjs';
+import { watchOrgCloudConfig as __pure_watchOrgCloudConfig } from './watch-org-cloud-config.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_watchOrgCloudConfig_WATCH_ORG_CLOUD_CONFIG_T = {
+  k1: "platformOrgs",
+};
+const watchOrgCloudConfig = (...a) => __pure_watchOrgCloudConfig(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_watchOrgCloudConfig_WATCH_ORG_CLOUD_CONFIG_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

@@ -1,4 +1,10 @@
-import { filterItems } from './filter-items.mjs';
+import { filterItems as __pure_filterItems } from './filter-items.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_filterItems_FILTER_ITEMS_T = {
+  k1: "untracked",
+  k2: "out",
+};
+const filterItems = (...a) => __pure_filterItems(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_filterItems_FILTER_ITEMS_T);
 let f = 0;
 const eq = (a, b, msg) => { if (JSON.stringify(a) !== JSON.stringify(b)) { console.error(`✗ ${msg} ⇒ ${JSON.stringify(a)}`); f = 1; } };
 

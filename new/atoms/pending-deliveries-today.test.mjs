@@ -1,4 +1,9 @@
-import { pendingDeliveriesToday } from './pending-deliveries-today.mjs';
+import { pendingDeliveriesToday as __pure_pendingDeliveriesToday } from './pending-deliveries-today.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_pendingDeliveriesToday_PENDING_DELIVERIES_TODAY_T = {
+  k1: "delivered",
+};
+const pendingDeliveriesToday = (...a) => __pure_pendingDeliveriesToday(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_pendingDeliveriesToday_PENDING_DELIVERIES_TODAY_T);
 const db = {
   distributionDays: [
     { id: 'd1', date: '2026-08-20' },

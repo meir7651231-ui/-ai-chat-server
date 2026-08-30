@@ -6,7 +6,10 @@ import { PHOTO_MAX } from '../atoms/photo-max.mjs';
 import { PHOTO_MAX_DIM } from '../atoms/photo-max-dim.mjs';
 import { PHOTO_MAX_LEN } from '../atoms/photo-max-len.mjs';
 import { canAddPhoto as canAddPhotoAtom } from '../atoms/can-add-photo.mjs';
-import { isDataImage } from '../atoms/is-data-image.mjs';
+import { isDataImage as __pure_isDataImage } from '../atoms/is-data-image.mjs';
+import { INTEGRATION_SETTING_T as __d_isDataImage_IS_DATA_IMAGE_T } from '../atoms/integration-setting-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const isDataImage = (...a) => __pure_isDataImage(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_isDataImage_IS_DATA_IMAGE_T);
 import { fitDimensions as fitDimensionsAtom } from '../atoms/fit-dimensions.mjs';
 import { sanitizePhotos as sanitizePhotosAtom } from '../atoms/sanitize-photos.mjs';
 

@@ -1,4 +1,9 @@
-import { courseFitsMember } from './course-fits-member.mjs';
+import { courseFitsMember as __pure_courseFitsMember } from './course-fits-member.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_courseFitsMember_COURSE_FITS_MEMBER_T = {
+  k1: "all",
+};
+const courseFitsMember = (...a) => __pure_courseFitsMember(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_courseFitsMember_COURSE_FITS_MEMBER_T);
 const yes = () => true;
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };

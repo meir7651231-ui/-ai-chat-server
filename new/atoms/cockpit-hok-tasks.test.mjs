@@ -1,4 +1,14 @@
-import { cockpitHokTasks } from './cockpit-hok-tasks.mjs';
+import { cockpitHokTasks as __pure_cockpitHokTasks } from './cockpit-hok-tasks.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_cockpitHokTasks_COCKPIT_HOK_TASKS_T = {
+  k1: "hok:",
+  k2: "hok",
+  k3: "הו״ק ",
+  k4: " · יום ",
+  k5: " — טרם נרשם החודש",
+  k6: "due",
+};
+const cockpitHokTasks = (...a) => __pure_cockpitHokTasks(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_cockpitHokTasks_COCKPIT_HOK_TASKS_T);
 // עצמאי: כל השקעים מוטבעים inline (test-doubles, בלי import-אח — חוק-1). Golden נלכד מהרצה.
 const M=86400000;
 const daysSince=(iso,today)=>{if(!iso)return Infinity;const t=new Date(iso+'T12:00:00').getTime(),n=new Date(today+'T12:00:00').getTime();if(Number.isNaN(t)||Number.isNaN(n))return Infinity;return Math.floor((n-t)/M);};

@@ -1,4 +1,10 @@
-import { familyContext } from './family-context.mjs';
+import { familyContext as __pure_familyContext } from './family-context.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_familyContext_FAMILY_CONTEXT_T = {
+  k1: "delivered",
+  k2: "active",
+};
+const familyContext = (...a) => __pure_familyContext(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_familyContext_FAMILY_CONTEXT_T);
 let f = 0;
 const eq = (a, b, msg) => { if (JSON.stringify(a) !== JSON.stringify(b)) { console.error(`✗ ${msg} ⇒ ${JSON.stringify(a)}`); f = 1; } };
 

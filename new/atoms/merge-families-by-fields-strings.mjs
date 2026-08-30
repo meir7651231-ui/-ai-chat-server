@@ -1,0 +1,21 @@
+/** אטום-דאטה · merge-families-by-fields-strings — מחרוזות-התצוגה/דומיין שחולצו מ-merge-families-by-fields (מנוע-הטיהור v3, הכרעה 19). חוזה: merge-families-by-fields-strings.contract.md */
+export const MERGE_FAMILIES_BY_FIELDS_T = {
+  k1: "kidsHome",
+  k2: "kidsMarried",
+  k3: "status",
+  k4: "name",
+  k5: "mother",
+  k6: "father",
+  k7: "phone",
+  k8: "phone2",
+  k9: "email",
+  k10: "city",
+  k11: "address",
+  k12: "motherId",
+  k13: "fatherId",
+  k14: "community",
+  k15: "language",
+  k16: "maritalStatus",
+  k17: "createdAt",
+  k18: "notes",
+};

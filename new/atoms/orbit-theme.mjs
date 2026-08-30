@@ -51,7 +51,7 @@ const rgbStr = (c) => `${Math.round(c.r)},${Math.round(c.g)},${Math.round(c.b)}`
 /** בהירות נתפסת (0..1) — לבחירת צבע-טקסט מנוגד על הכפתור. */
 const luminance = (c) => (0.299 * c.r + 0.587 * c.g + 0.114 * c.b) / 255;
 
-export function orbitTheme(accent, fallback) {
+export function orbitTheme(accent, fallback, T) {
   if (!accent || !HEX6.test(accent.trim())) return fallback;
   const base = hexToRgb(accent.trim());
   const { h, s, l } = rgbToHsl(base.r, base.g, base.b);
@@ -67,8 +67,8 @@ export function orbitTheme(accent, fallback) {
   const auroraLo = rgbStr(hslToRgb(h - 18, sat, Math.min(0.66, l + 0.05)));
   const auroraHi = rgbStr(hslToRgb(h + 18, sat, Math.min(0.7, l + 0.08)));
   const btnA = hslToRgb(h, sat, Math.min(0.78, l + 0.12));
-  const btnText = luminance(base) > 0.62 ? '#2a1710' : '#ffffff';
-  const scene = l > 0.86 ? 'Ice' : h >= 15 && h <= 70 ? 'Ember' : h >= 180 && h <= 265 ? 'Aurora' : 'Aurora';
+  const btnText = luminance(base) > 0.62 ? '#2a1710' : T.k1;
+  const scene = l > 0.86 ? T.k2 : h >= 15 && h <= 70 ? T.k3 : h >= 180 && h <= 265 ? T.k4 : T.k4;
   return {
     vars: {
       '--o-g1': toHex(g1),

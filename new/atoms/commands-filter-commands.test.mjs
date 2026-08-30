@@ -1,4 +1,9 @@
-import { filterCommands as f } from './commands-filter-commands.mjs';
+import { filterCommands as __pure_filterCommands } from './commands-filter-commands.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_filterCommands_COMMANDS_FILTER_COMMANDS_T = {
+  k1: "openDonor",
+};
+const f = (...a) => __pure_filterCommands(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_filterCommands_COMMANDS_FILTER_COMMANDS_T);
 // עצמאי (חוק-1: אפס import-אח; שקעים/פיקסטורות inline). Golden נלכד מהרצה.
 const CMDS=JSON.parse("[{\"id\":\"cmd:add\",\"kind\":\"add\",\"label\":\"➕ הוספת תורם/ת\",\"group\":\"פעולה\",\"keywords\":\"➕ הוספת תורם/ת הוספה חדש חדשה תורם add new\"},{\"id\":\"cmd:work\",\"kind\":\"work\",\"label\":\"🎯 חלון העבודה\",\"group\":\"ניווט\",\"keywords\":\"🎯 חלון העבודה קוקפיט משימות עבודה היום cockpit\"},{\"id\":\"cmd:data\",\"kind\":\"data\",\"label\":\"☰ מסך הנתונים\",\"group\":\"ניווט\",\"keywords\":\"☰ מסך הנתונים טבלה נתונים רשימה סינון data\"},{\"id\":\"cmd:import\",\"kind\":\"import\",\"label\":\"⬆ ייבוא מקובץ CSV\",\"group\":\"פעולה\",\"keywords\":\"⬆ ייבוא מקובץ csv ייבוא csv excel קובץ import\"},{\"id\":\"cmd:dedup\",\"kind\":\"dedup\",\"label\":\"🔗 איחוד כפולים · 2\",\"group\":\"פעולה\",\"keywords\":\"🔗 איחוד כפולים · 2 כפולים מיזוג איחוד dedup merge\"},{\"id\":\"donor:1\",\"kind\":\"openDonor\",\"arg\":\"1\",\"label\":\"אבי\",\"hint\":\"פתיחת כרטיס\",\"group\":\"תורם\",\"keywords\":\"אבי אבי 050\"},{\"id\":\"donor:2\",\"kind\":\"openDonor\",\"arg\":\"2\",\"label\":\"ללא שם\",\"hint\":\"פתיחת כרטיס\",\"group\":\"תורם\",\"keywords\":\"ללא שם\"}]");
 const WANT="[[\"cmd:add\",\"cmd:work\",\"cmd:data\",\"cmd:import\",\"cmd:dedup\"],[\"cmd:import\"],[\"donor:1\"]]";

@@ -1,4 +1,18 @@
-import { segmentCounts as f } from './segments-segment-counts.mjs';
+import { segmentCounts as __pure_segmentCounts } from './segments-segment-counts.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_segmentCounts_SEGMENTS_SEGMENT_COUNTS_T = {
+  k1: "atrisk",
+  k2: "בסיכון נטישה",
+  k3: "goldsilent",
+  k4: "זהב · שקטים 60+ יום",
+  k5: "hok",
+  k6: "הו״ק פעילות",
+  k7: "gave12m",
+  k8: "תרמו ב-12 החודשים",
+  k9: "noemail",
+  k10: "ללא אימייל",
+};
+const f = (...a) => __pure_segmentCounts(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_segmentCounts_SEGMENTS_SEGMENT_COUNTS_T);
 // עצמאי (חוק-1: אפס import-אח; שקעים/פיקסטורות inline). Golden נלכד מהרצה.
 const daysSince=(iso,today)=>{const M=86400000;if(!iso)return Infinity;const t=new Date(iso+'T12:00:00').getTime(),n=new Date(today+'T12:00:00').getTime();if(Number.isNaN(t)||Number.isNaN(n))return Infinity;return Math.floor((n-t)/M);};
 const supCount=(sp)=>sp.donations.length, supLast=(sp)=>sp._last, supIls=(sp)=>sp._ils||0, supUsd=(sp)=>sp._usd||0;

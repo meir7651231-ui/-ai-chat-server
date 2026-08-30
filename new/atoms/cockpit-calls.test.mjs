@@ -1,4 +1,19 @@
-import { cockpitCalls } from './cockpit-calls.mjs';
+import { cockpitCalls as __pure_cockpitCalls } from './cockpit-calls.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_cockpitCalls_COCKPIT_CALLS_T = {
+  k1: "תורם/ת מרכזי/ת",
+  k2: "תורם/ת מהותי/ת",
+  k3: "תורם/ת",
+  k4: "call:",
+  k5: "call",
+  k6: "יעד-קשר להיום",
+  k7: "יעד-קשר עבר לפני ",
+  k8: " יום",
+  k9: "due",
+  k10: " · שקט/ה ",
+  k11: "risk",
+};
+const cockpitCalls = (...a) => __pure_cockpitCalls(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_cockpitCalls_COCKPIT_CALLS_T);
 // עצמאי: כל השקעים מוטבעים inline (test-doubles, בלי import-אח — חוק-1). Golden נלכד מהרצה.
 const M=86400000;
 const daysSince=(iso,today)=>{if(!iso)return Infinity;const t=new Date(iso+'T12:00:00').getTime(),n=new Date(today+'T12:00:00').getTime();if(Number.isNaN(t)||Number.isNaN(n))return Infinity;return Math.floor((n-t)/M);};

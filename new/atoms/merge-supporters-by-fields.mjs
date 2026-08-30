@@ -4,37 +4,37 @@
  *  mergeSupportersGroup (מיזוג-הבסיס הבטוח) · supDupFieldValue (הכרעת ערך-שדה
  *  edit/pick/ראשון-עם-ערך) · supDupFields (רשימת הגדרות-השדות הסקלריים —
  *  במקור הקבוע SUP_DUP_FIELDS; חוק-5 — הרכב-הרשימה = ידע-קופסה). */
-export function mergeSupportersByFields(sups, pick, edit, mergeSupportersGroup, supDupFieldValue, supDupFields) {
+export function mergeSupportersByFields(sups, pick, edit, mergeSupportersGroup, supDupFieldValue, supDupFields, T) {
     const base = mergeSupportersGroup(sups[0], sups.slice(1));
     const out = { ...base };
     for (const def of supDupFields) {
         const val = supDupFieldValue(sups, def, pick, edit);
         switch (def.key) {
-            case 'name':
+            case T.k1:
                 out.name = val;
                 break;
-            case 'phone':
+            case T.k2:
                 out.phone = val;
                 break;
-            case 'email':
+            case T.k3:
                 out.email = val;
                 break;
-            case 'idNum':
+            case T.k4:
                 out.idNum = val;
                 break;
-            case 'city':
+            case T.k5:
                 out.city = val;
                 break;
-            case 'address':
+            case T.k6:
                 out.address = val;
                 break;
-            case 'cat':
+            case T.k7:
                 out.cat = val;
                 break;
-            case 'forWho':
+            case T.k8:
                 out.forWho = val;
                 break;
-            case 'notes':
+            case T.k9:
                 out.notes = val;
                 break;
         }

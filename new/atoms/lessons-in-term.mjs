@@ -4,25 +4,25 @@
  *  הקבוע-השכן WEEKS_PER_MONTH הוגדר מקומית (ערך, לא import — חוק-1). */
 export const WEEKS_PER_MONTH = 52 / 12;
 
-export function lessonsInTerm(freq, unit, term, months = 1) {
+export function lessonsInTerm(freq, unit, term, months = 1, T) {
     const f = Math.max(0, Number.isFinite(freq) ? freq : 0);
-    const perWeek = unit === 'week' ? f : f / WEEKS_PER_MONTH;
-    const perMonth = unit === 'month' ? f : f * WEEKS_PER_MONTH;
+    const perWeek = unit === T.k1 ? f : f / WEEKS_PER_MONTH;
+    const perMonth = unit === T.k2 ? f : f * WEEKS_PER_MONTH;
     const n = Math.max(1, months || 1);
     switch (term) {
-        case 'once':
+        case T.k3:
             return 1;
-        case 'weekly':
+        case T.k4:
             return perWeek;
-        case 'biweekly':
+        case T.k5:
             return perWeek * 2;
-        case 'monthly':
+        case T.k6:
             return perMonth;
-        case 'months':
+        case T.k7:
             return perMonth * n;
-        case 'half_year':
+        case T.k8:
             return perMonth * 6;
-        case 'year':
+        case T.k9:
             return perMonth * 12;
         default:
             return 0;

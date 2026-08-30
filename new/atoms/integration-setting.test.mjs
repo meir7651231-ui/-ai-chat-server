@@ -1,4 +1,9 @@
-import { integrationSetting } from './integration-setting.mjs';
+import { integrationSetting as __pure_integrationSetting } from './integration-setting.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_integrationSetting_INTEGRATION_SETTING_T = {
+  k1: "string",
+};
+const integrationSetting = (...a) => __pure_integrationSetting(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_integrationSetting_INTEGRATION_SETTING_T);
 const C = [
   [{ integrations: { payments: { payUrl: '  https://pay.example  ' } } }, 'payments', 'payUrl', 'https://pay.example'],
   [{}, 'payments', 'payUrl', ''],

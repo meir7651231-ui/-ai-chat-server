@@ -1,4 +1,15 @@
-import { supportersImportFormatRows } from './supporters-import-format-rows.mjs';
+import { supportersImportFormatRows as __pure_supportersImportFormatRows } from './supporters-import-format-rows.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_supportersImportFormatRows_SUPPORTERS_IMPORT_FORMAT_ROWS_T = {
+  k1: "שם",
+  k2: "טלפון",
+  k3: "אימייל",
+  k4: "ת\"ז",
+  k5: "כתובת",
+  k6: "קטגוריה",
+  k7: "עבור",
+};
+const supportersImportFormatRows = (...a) => __pure_supportersImportFormatRows(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_supportersImportFormatRows_SUPPORTERS_IMPORT_FORMAT_ROWS_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b);

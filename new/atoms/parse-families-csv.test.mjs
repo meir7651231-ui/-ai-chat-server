@@ -1,5 +1,27 @@
 import { deepStrictEqual, strictEqual } from 'node:assert';
-import { parseFamiliesCsv } from './parse-families-csv.mjs';
+import { parseFamiliesCsv as __pure_parseFamiliesCsv } from './parse-families-csv.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_parseFamiliesCsv_PARSE_FAMILIES_CSV_T = {
+  k1: "שם פרטי שם משפחה",
+  k2: "#NAME?",
+  k3: "רגיל",
+  k4: "ביתר",
+  k5: "ביתר עלית",
+  k6: "ביתר עילית",
+  k7: "לא פעיל",
+  k8: "inactive",
+  k9: "active",
+  k10: "אלמנ",
+  k11: "אלמן",
+  k12: "אלמן/ה",
+  k13: "גרוש",
+  k14: "גרושים",
+  k15: "נשואים",
+  k16: "עברית",
+  k17: "חסידי",
+  k18: "השתתפה ביריד חנוכה תשפ\"ו",
+};
+const parseFamiliesCsv = (...a) => __pure_parseFamiliesCsv(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_parseFamiliesCsv_PARSE_FAMILIES_CSV_T);
 
 // מימושי-שקע לבדיקה — בדיוק הגדרות-המקור (familiesImport.ts).
 const clean = (x) => (x ?? '').replace(/\s+/g, ' ').trim();

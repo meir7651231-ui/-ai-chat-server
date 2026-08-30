@@ -1,4 +1,10 @@
-import { withNedarimHok } from './with-nedarim-hok.mjs';
+import { withNedarimHok as __pure_withNedarimHok } from './with-nedarim-hok.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_withNedarimHok_WITH_NEDARIM_HOK_T = {
+  k1: "card",
+  k2: "הו״ק נדרים · ",
+};
+const withNedarimHok = (...a) => __pure_withNedarimHok(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_withNedarimHok_WITH_NEDARIM_HOK_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b);

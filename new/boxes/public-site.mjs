@@ -7,14 +7,26 @@
 import { isRtlLang } from '../atoms/is-rtl-lang.mjs';
 import { CORAL_PALETTE } from '../atoms/coral-palette.mjs';
 import { sitePalette } from '../atoms/site-palette.mjs';
-import { siteVocab } from '../atoms/site-vocab.mjs';
-import { resolveLocalized, SITE_LANGS } from '../atoms/resolve-localized.mjs';
+import { siteVocab as __pure_siteVocab } from '../atoms/site-vocab.mjs';
+import { SITE_VOCAB_T as __d_siteVocab_SITE_VOCAB_T } from '../atoms/site-vocab-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const siteVocab = (...a) => __pure_siteVocab(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_siteVocab_SITE_VOCAB_T);
+import { resolveLocalized as __pure_resolveLocalized, SITE_LANGS } from '../atoms/resolve-localized.mjs';
+import { INTEGRATION_SETTING_T as __d_resolveLocalized_RESOLVE_LOCALIZED_T } from '../atoms/integration-setting-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const resolveLocalized = (...a) => __pure_resolveLocalized(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_resolveLocalized_RESOLVE_LOCALIZED_T);
 import { siteLangs } from '../atoms/site-langs.mjs';
 import { siteUi } from '../atoms/site-ui.mjs';
 import { SITE_UI_LABELS } from '../atoms/site-ui-labels.mjs';
-import { campaignProgress } from '../atoms/site-campaign-progress.mjs';
+import { campaignProgress as __pure_campaignProgress } from '../atoms/site-campaign-progress.mjs';
+import { SITE_CAMPAIGN_PROGRESS_T as __d_campaignProgress_SITE_CAMPAIGN_PROGRESS_T } from '../atoms/site-campaign-progress-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const campaignProgress = (...a) => __pure_campaignProgress(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_campaignProgress_SITE_CAMPAIGN_PROGRESS_T);
 import { hasPublicSite } from '../atoms/has-public-site.mjs';
-import { siteDonateUrl } from '../atoms/site-donate-url.mjs';
+import { siteDonateUrl as __pure_siteDonateUrl } from '../atoms/site-donate-url.mjs';
+import { INTEGRATION_SETTING_T as __d_siteDonateUrl_SITE_DONATE_URL_T } from '../atoms/integration-setting-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const siteDonateUrl = (...a) => __pure_siteDonateUrl(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_siteDonateUrl_SITE_DONATE_URL_T);
 
 // ── שקעי-נתונים (הכרעות-הקופסה — חיות כאן, לא בחוטים) ──
 // פלטת-הנפילה כשאין accent = הקורל המקורי (chesed ביט-זהה) — הכרעת-החיווט.

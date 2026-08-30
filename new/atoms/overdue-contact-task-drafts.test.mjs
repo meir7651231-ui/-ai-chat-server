@@ -1,4 +1,10 @@
-import { overdueContactTaskDrafts } from './overdue-contact-task-drafts.mjs';
+import { overdueContactTaskDrafts as __pure_overdueContactTaskDrafts } from './overdue-contact-task-drafts.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_overdueContactTaskDrafts_OVERDUE_CONTACT_TASK_DRAFTS_T = {
+  k1: "supporter",
+  k2: "📞 להתקשר — ",
+};
+const overdueContactTaskDrafts = (...a) => __pure_overdueContactTaskDrafts(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_overdueContactTaskDrafts_OVERDUE_CONTACT_TASK_DRAFTS_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 // שקע-הזהות כהתנהגות-המקור: trim+lowercase, ריק ⇒ 'מקומי'

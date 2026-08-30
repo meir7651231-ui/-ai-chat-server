@@ -1,4 +1,20 @@
-import { modelMeta } from './model-meta.mjs';
+import { modelMeta as __pure_modelMeta } from './model-meta.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_modelMeta_MODEL_META_T = {
+  k1: "punch",
+  k2: "כרטיסייה · ",
+  k3: " ניקובים",
+  k4: "#fdf1d4",
+  k5: "half_year",
+  k6: "מנוי חצי-שנתי",
+  k7: "#e7edf5",
+  k8: "year",
+  k9: "מנוי שנתי",
+  k10: "#efe7f3",
+  k11: "#7c3aed",
+  k12: "מנוי חודשי",
+};
+const modelMeta = (...a) => __pure_modelMeta(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_modelMeta_MODEL_META_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b);

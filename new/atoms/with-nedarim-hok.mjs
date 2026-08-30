@@ -2,7 +2,7 @@
  *  חוזה: with-nedarim-hok.contract.md
  *  חולץ כלשונו מ-maor/src/lib/nedarimSync.ts:172-192 (תורגם TS→JS); השכנים
  *  curOf/hokDayFromDate הוזרקו כשקעים (חוק-1 — אפס import פנימי). */
-export function withNedarimHok(sp, charge, curOf, hokDayFromDate) {
+export function withNedarimHok(sp, charge, curOf, hokDayFromDate, T) {
     if (!(charge.amount > 0))
         return sp; // זיכוי/ביטול (Amount≤0) לא ממלא/מעדכן הו"ק
     const keva = (charge.kevaId || '').trim();
@@ -18,8 +18,8 @@ export function withNedarimHok(sp, charge, curOf, hokDayFromDate) {
             amount: charge.amount,
             cur: curOf(charge),
             day: hokDayFromDate(cd),
-            method: 'card',
-            note: 'הו״ק נדרים · ' + keva,
+            method: T.k1,
+            note: T.k2 + keva,
             active: true,
             startedAt: prevStart && prevStart < cd ? prevStart : cd || prevStart || '',
             kevaId: keva,

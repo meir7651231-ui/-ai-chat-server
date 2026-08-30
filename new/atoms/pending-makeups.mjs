@@ -1,10 +1,10 @@
 /** חוט · pending-makeups — חיסורים-זכאים-להשלמה (makeup===true), אופציונלית פר-חוג.
  *  חוזה: pending-makeups.contract.md · טהור, אפס-שקעים.
  *  חולץ כלשונו מ-maor/src/components/courses/lib.ts:354-367. */
-export function pendingMakeups(enrollments, courseId) {
+export function pendingMakeups(enrollments, courseId, T) {
   const out = [];
   for (const e of enrollments) {
-    if (e.status === 'ended' || e.status === 'wait') continue;
+    if (e.status === T.k1 || e.status === T.k2) continue;
     if (courseId && e.courseId !== courseId) continue;
     for (const a of e.absences) {
       if (!a.makeup) continue;

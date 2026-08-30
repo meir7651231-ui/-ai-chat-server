@@ -8,13 +8,25 @@ import { ORDER } from '../atoms/advance-status-data.mjs';
 const advanceStatus = (...a) => __pure_advanceStatus(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), ORDER);
 import { deliveriesOfDay } from '../atoms/deliveries-of-day.mjs';
 import { deliveriesOfVolunteer } from '../atoms/deliveries-of-volunteer.mjs';
-import { eligibleAssignmentsForDay } from '../atoms/eligible-assignments-for-day.mjs';
-import { dayProgress } from '../atoms/day-progress.mjs';
+import { eligibleAssignmentsForDay as __pure_eligibleAssignmentsForDay } from '../atoms/eligible-assignments-for-day.mjs';
+import { ELIGIBLE_ASSIGNMENTS_FOR_DAY_T as __d_eligibleAssignmentsForDay_ELIGIBLE_ASSIGNMENTS_FOR_DAY_T } from '../atoms/eligible-assignments-for-day-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const eligibleAssignmentsForDay = (...a) => __pure_eligibleAssignmentsForDay(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_eligibleAssignmentsForDay_ELIGIBLE_ASSIGNMENTS_FOR_DAY_T);
+import { dayProgress as __pure_dayProgress } from '../atoms/day-progress.mjs';
+import { DAY_PROGRESS_T as __d_dayProgress_DAY_PROGRESS_T } from '../atoms/day-progress-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const dayProgress = (...a) => __pure_dayProgress(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_dayProgress_DAY_PROGRESS_T);
 import { volunteerLoadHint } from '../atoms/volunteer-load-hint.mjs';
 import { deliveriesOfFamily } from '../atoms/deliveries-of-family.mjs';
-import { pendingDeliveriesToday } from '../atoms/pending-deliveries-today.mjs';
+import { pendingDeliveriesToday as __pure_pendingDeliveriesToday } from '../atoms/pending-deliveries-today.mjs';
+import { PENDING_DELIVERIES_TODAY_T as __d_pendingDeliveriesToday_PENDING_DELIVERIES_TODAY_T } from '../atoms/pending-deliveries-today-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const pendingDeliveriesToday = (...a) => __pure_pendingDeliveriesToday(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_pendingDeliveriesToday_PENDING_DELIVERIES_TODAY_T);
 import { deliveryListLines } from '../atoms/delivery-list-lines.mjs';
-import { deliveriesCsvRows } from '../atoms/deliveries-csv-rows.mjs';
+import { deliveriesCsvRows as __pure_deliveriesCsvRows } from '../atoms/deliveries-csv-rows.mjs';
+import { DELIVERIES_CSV_ROWS_T as __d_deliveriesCsvRows_DELIVERIES_CSV_ROWS_T } from '../atoms/deliveries-csv-rows-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const deliveriesCsvRows = (...a) => __pure_deliveriesCsvRows(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_deliveriesCsvRows_DELIVERIES_CSV_ROWS_T);
 import { volunteerRouteStops } from '../atoms/volunteer-route-stops.mjs';
 import { termOf } from '../atoms/term-of.mjs';
 

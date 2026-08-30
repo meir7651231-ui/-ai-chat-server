@@ -1,4 +1,21 @@
-import { annualReportLines } from './annual-report-lines.mjs';
+import { annualReportLines as __pure_annualReportLines } from './annual-report-lines.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_annualReportLines_ANNUAL_REPORT_LINES_T = {
+  k1: "        דוח תרומות שנתי — שנת ",
+  k2: "הארגון: ",
+  k3: "מס׳ עמותה/מלכ\"ר: ",
+  k4: "התורם/ת: ",
+  k5: " · ת\"ז ",
+  k6: "אין תרומות רשומות בשנת ",
+  k7: "  קבלה ",
+  k8: "סה\"כ ",
+  k9: " תרומות בשנת ",
+  k10: "סה\"כ בשקלים: ",
+  k11: "סה\"כ בדולרים: ",
+  k12: "לארגון אישור מוסד ציבורי לעניין תרומות לפי סעיף 46 לפקודת מס הכנסה.",
+  k13: "דוח-ריכוז זה אינו קבלה — הקבלות המקוריות צוינו לצד כל תרומה.",
+};
+const annualReportLines = (...a) => __pure_annualReportLines(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_annualReportLines_ANNUAL_REPORT_LINES_T);
 // מימושי-שקע לבדיקה — נאמנים למקור (annualReport.ts):
 const donationsOfYear = (donations, year) =>
   donations.filter((d) => (d.date || '').startsWith(year + '-')).sort((a, b) => a.date.localeCompare(b.date));

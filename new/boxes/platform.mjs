@@ -10,10 +10,16 @@ import { isValidSlug } from '../atoms/is-valid-slug.mjs';
 import { ALL_MODULES } from '../atoms/all-modules.mjs';
 import { MODULE_LABELS } from '../atoms/module-labels.mjs';
 import { allOffConfig as allOffConfigAtom } from '../atoms/all-off-config.mjs';
-import { orgLink } from '../atoms/org-link.mjs';
+import { orgLink as __pure_orgLink } from '../atoms/org-link.mjs';
+import { ORG_LINK_T as __d_orgLink_ORG_LINK_T } from '../atoms/org-link-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const orgLink = (...a) => __pure_orgLink(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_orgLink_ORG_LINK_T);
 import { normEmail } from '../atoms/norm-email.mjs';
 import { genJoinCode } from '../atoms/gen-join-code.mjs';
-import { orgJoinLink } from '../atoms/org-join-link.mjs';
+import { orgJoinLink as __pure_orgJoinLink } from '../atoms/org-join-link.mjs';
+import { ORG_JOIN_LINK_T as __d_orgJoinLink_ORG_JOIN_LINK_T } from '../atoms/org-join-link-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const orgJoinLink = (...a) => __pure_orgJoinLink(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_orgJoinLink_ORG_JOIN_LINK_T);
 import { orgJoinFullCode } from '../atoms/org-join-full-code.mjs';
 import { parseJoinFullCode as parseJoinFullCodeAtom } from '../atoms/parse-join-full-code.mjs';
 import { isOrgManager as isOrgManagerAtom } from '../atoms/is-org-manager.mjs';

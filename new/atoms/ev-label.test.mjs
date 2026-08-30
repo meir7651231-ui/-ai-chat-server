@@ -1,4 +1,9 @@
-import { evLabel } from './ev-label.mjs';
+import { evLabel as __pure_evLabel } from './ev-label.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_evLabel_EV_LABEL_T = {
+  k1: "custom",
+};
+const evLabel = (...a) => __pure_evLabel(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_evLabel_EV_LABEL_T);
 // שקע-evMeta כטבלת-maor (מקומי לבדיקה — הבדיקה מייבאת רק את האטום שלה)
 const EV_META = {
   reminder: { label: 'תזכורת', bg: '#efe7f3', c: '#7c3aed' },

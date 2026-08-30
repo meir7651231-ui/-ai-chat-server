@@ -5,7 +5,10 @@ import { U, T, H } from '../atoms/gematria-data.mjs';
 const gem = (...a) => __pure_gem(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), U, T, H);
 import { hebParts } from '../atoms/heb-parts.mjs';
 import { hebMonthHe } from '../atoms/heb-month-he.mjs';
-import { adarNorm } from '../atoms/adar-norm.mjs';
+import { adarNorm as __pure_adarNorm } from '../atoms/adar-norm.mjs';
+import { ADAR_NORM_T as __d_adarNorm_ADAR_NORM_T } from '../atoms/adar-norm-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const adarNorm = (...a) => __pure_adarNorm(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_adarNorm_ADAR_NORM_T);
 
 // ── החיווט: כלל-הצהריים — הכרעת-הקופסה, לא של החוטים ──
 const noon = (iso) => new Date(String(iso).slice(0, 10) + 'T12:00:00');

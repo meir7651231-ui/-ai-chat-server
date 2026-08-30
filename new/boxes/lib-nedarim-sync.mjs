@@ -11,20 +11,41 @@ import { normPhone } from '../atoms/norm-phone.mjs';
 import { normSearch } from '../atoms/norm-search.mjs';
 import { nameSortKey as _nameSortKey } from '../atoms/name-sort-key.mjs';
 import { CLEARING_PROVIDERS } from '../atoms/clearing-providers.mjs';
-import { providerClearer } from '../atoms/provider-clearer.mjs';
+import { providerClearer as __pure_providerClearer } from '../atoms/provider-clearer.mjs';
+import { PROVIDER_CLEARER_T as __d_providerClearer_PROVIDER_CLEARER_T } from '../atoms/provider-clearer-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const providerClearer = (...a) => __pure_providerClearer(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_providerClearer_PROVIDER_CLEARER_T);
 import { chargeToHist as _chargeToHist } from '../atoms/charge-to-hist.mjs';
-import { chargeDedupKey } from '../atoms/charge-dedup-key.mjs';
-import { withNedarimHok as _withNedarimHok } from '../atoms/with-nedarim-hok.mjs';
-import { detectRecurringHok as _detectRecurringHok } from '../atoms/detect-recurring-hok.mjs';
-import { candidateSupportersForCharge as _candidateSupportersForCharge } from '../atoms/candidate-supporters-for-charge.mjs';
+import { chargeDedupKey as __pure_chargeDedupKey } from '../atoms/charge-dedup-key.mjs';
+import { CHARGE_DEDUP_KEY_T as __d_chargeDedupKey_CHARGE_DEDUP_KEY_T } from '../atoms/charge-dedup-key-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const chargeDedupKey = (...a) => __pure_chargeDedupKey(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_chargeDedupKey_CHARGE_DEDUP_KEY_T);
+import { withNedarimHok as __pure_withNedarimHok } from '../atoms/with-nedarim-hok.mjs';
+import { WITH_NEDARIM_HOK_T as __d_withNedarimHok_WITH_NEDARIM_HOK_T } from '../atoms/with-nedarim-hok-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const _withNedarimHok = (...a) => __pure_withNedarimHok(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_withNedarimHok_WITH_NEDARIM_HOK_T);
+import { detectRecurringHok as __pure_detectRecurringHok } from '../atoms/detect-recurring-hok.mjs';
+import { DETECT_RECURRING_HOK_T as __d_detectRecurringHok_DETECT_RECURRING_HOK_T } from '../atoms/detect-recurring-hok-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const _detectRecurringHok = (...a) => __pure_detectRecurringHok(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_detectRecurringHok_DETECT_RECURRING_HOK_T);
+import { candidateSupportersForCharge as __pure_candidateSupportersForCharge } from '../atoms/candidate-supporters-for-charge.mjs';
+import { CANDIDATE_SUPPORTERS_FOR_CHARGE_T as __d_candidateSupportersForCharge_CANDIDATE_SUPPORTERS_FOR_CHARGE_T } from '../atoms/candidate-supporters-for-charge-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const _candidateSupportersForCharge = (...a) => __pure_candidateSupportersForCharge(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_candidateSupportersForCharge_CANDIDATE_SUPPORTERS_FOR_CHARGE_T);
 import { fillCardFromCharge as _fillCardFromCharge } from '../atoms/fill-card-from-charge.mjs';
 import { attachChargeTo as _attachChargeTo } from '../atoms/attach-charge-to.mjs';
 import { relabelHistByTxn } from '../atoms/relabel-hist-by-txn.mjs';
 import { repairCardsFromRows as _repairCardsFromRows } from '../atoms/repair-cards-from-rows.mjs';
-import { strongMatchForCharge as _strongMatchForCharge } from '../atoms/strong-match-for-charge.mjs';
+import { strongMatchForCharge as __pure_strongMatchForCharge } from '../atoms/strong-match-for-charge.mjs';
+import { CANDIDATE_SUPPORTERS_FOR_CHARGE_T as __d_strongMatchForCharge_STRONG_MATCH_FOR_CHARGE_T } from '../atoms/candidate-supporters-for-charge-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const _strongMatchForCharge = (...a) => __pure_strongMatchForCharge(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_strongMatchForCharge_STRONG_MATCH_FOR_CHARGE_T);
 import { autoMatchCharges as _autoMatchCharges } from '../atoms/auto-match-charges.mjs';
 import { attachChargesBulk as _attachChargesBulk } from '../atoms/attach-charges-bulk.mjs';
-import { planNedarimSync as _planNedarimSync } from '../atoms/plan-nedarim-sync.mjs';
+import { planNedarimSync as __pure_planNedarimSync } from '../atoms/plan-nedarim-sync.mjs';
+import { PLAN_NEDARIM_SYNC_T as __d_planNedarimSync_PLAN_NEDARIM_SYNC_T } from '../atoms/plan-nedarim-sync-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const _planNedarimSync = (...a) => __pure_planNedarimSync(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_planNedarimSync_PLAN_NEDARIM_SYNC_T);
 
 // ── מילון-החיווט (הכרעה שחיה בקופסה, verbatim מהמקור) ──
 // תארים/כינויי-כבוד עבריים למפתח-שם חסין-סדר (validate.ts:73-80). מילון-תוויות

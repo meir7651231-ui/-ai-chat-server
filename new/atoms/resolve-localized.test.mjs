@@ -1,4 +1,9 @@
-import { SITE_LANGS, resolveLocalized } from './resolve-localized.mjs';
+import { SITE_LANGS, resolveLocalized as __pure_resolveLocalized } from './resolve-localized.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_resolveLocalized_RESOLVE_LOCALIZED_T = {
+  k1: "string",
+};
+const resolveLocalized = (...a) => __pure_resolveLocalized(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_resolveLocalized_RESOLVE_LOCALIZED_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 

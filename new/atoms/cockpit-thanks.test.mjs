@@ -1,4 +1,15 @@
-import { cockpitThanks } from './cockpit-thanks.mjs';
+import { cockpitThanks as __pure_cockpitThanks } from './cockpit-thanks.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_cockpitThanks_COCKPIT_THANKS_T = {
+  k1: "thanks:",
+  k2: "thanks",
+  k3: "תרם/ה ",
+  k4: "היום",
+  k5: "לפני ",
+  k6: " יום",
+  k7: "warm",
+};
+const cockpitThanks = (...a) => __pure_cockpitThanks(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_cockpitThanks_COCKPIT_THANKS_T);
 // עצמאי: כל השקעים מוטבעים inline (test-doubles, בלי import-אח — חוק-1). Golden נלכד מהרצה.
 const M=86400000;
 const daysSince=(iso,today)=>{if(!iso)return Infinity;const t=new Date(iso+'T12:00:00').getTime(),n=new Date(today+'T12:00:00').getTime();if(Number.isNaN(t)||Number.isNaN(n))return Infinity;return Math.floor((n-t)/M);};

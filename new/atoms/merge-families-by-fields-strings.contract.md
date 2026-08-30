@@ -1,0 +1,6 @@
+# חוזה · merge-families-by-fields-strings
+מחרוזות-דאטה (עברית/דומיין) שחולצו מכנית מהמנגנון merge-families-by-fields (הכרעה 19: שמות ומשמעות = דאטה).
+המנגנון מקבל אותן כטבלת-שקע T; הקוראים כורכים דרך העטיפה. אפס לוגיקה.
+
+## דוגמאות-זהב
+צילום-ערך ב-merge-families-by-fields-strings.test.mjs.

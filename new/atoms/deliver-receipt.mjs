@@ -2,7 +2,7 @@
  *  חוזה: deliver-receipt.contract.md
  *  חולץ כלשונו מ-maor/src/lib/receipt.ts:225-233; השכנים printReceipt/downloadReceipt
  *  הוזרקו כשקעים (חוק-1 — אפס import פנימי). */
-export function deliverReceipt(o, fmt, printReceipt, downloadReceipt) {
-  if (fmt === 'pdf') printReceipt(o);
+export function deliverReceipt(o, fmt, printReceipt, downloadReceipt, T) {
+  if (fmt === T.k1) printReceipt(o);
   else downloadReceipt(o);
 }

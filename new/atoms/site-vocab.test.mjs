@@ -1,4 +1,20 @@
-import { siteVocab } from './site-vocab.mjs';
+import { siteVocab as __pure_siteVocab } from './site-vocab.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_siteVocab_SITE_VOCAB_T = {
+  k1: "Get in touch",
+  k2: "צרו קשר",
+  k3: "Contact",
+  k4: "Contact us",
+  k5: "Your request",
+  k6: "הפנייה שלך",
+  k7: "Donate now",
+  k8: "לתרומה עכשיו",
+  k9: "Donate",
+  k10: "לתרומה",
+  k11: "Your gift",
+  k12: "התרומה שלך",
+};
+const siteVocab = (...a) => __pure_siteVocab(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_siteVocab_SITE_VOCAB_T);
 const C = [
   [false, 'he', { heroCta: 'לתרומה עכשיו', navCta: 'לתרומה ♡', give: 'לתרומה ♡', giveLabel: 'התרומה שלך', commercial: false }],
   [false, 'en', { heroCta: 'Donate now', navCta: 'Donate ♡', give: 'Donate ♡', giveLabel: 'Your gift', commercial: false }],

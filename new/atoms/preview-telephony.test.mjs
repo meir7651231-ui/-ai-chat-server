@@ -1,4 +1,13 @@
-import { previewTelephony } from './preview-telephony.mjs';
+import { previewTelephony as __pure_previewTelephony } from './preview-telephony.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_previewTelephony_PREVIEW_TELEPHONY_T = {
+  k1: "sim",
+  k2: "virtual",
+  k3: "יום שלישי 10:00 (בשעות)",
+  k4: "יום שלישי 20:00 (אחרי-שעות)",
+  k5: "שבת 11:00",
+};
+const previewTelephony = (...a) => __pure_previewTelephony(...a, ...Array(Math.max(0, 9 - a.length)).fill(undefined), __d_previewTelephony_PREVIEW_TELEPHONY_T);
 const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 let f = 0;
 const chk = (cond, label) => { if (!cond) { console.error('✗ ' + label); f = 1; } };

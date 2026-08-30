@@ -1,4 +1,9 @@
-import { upcomingMeetings } from './upcoming-meetings.mjs';
+import { upcomingMeetings as __pure_upcomingMeetings } from './upcoming-meetings.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_upcomingMeetings_UPCOMING_MEETINGS_T = {
+  k1: "meeting",
+};
+const upcomingMeetings = (...a) => __pure_upcomingMeetings(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_upcomingMeetings_UPCOMING_MEETINGS_T);
 let f = 0;
 const eq = (a, b, msg) => {
   if (JSON.stringify(a) !== JSON.stringify(b)) { console.error(`✗ ${msg} ⇒ ${JSON.stringify(a)}`); f = 1; }

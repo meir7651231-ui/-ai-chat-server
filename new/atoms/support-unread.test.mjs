@@ -1,4 +1,10 @@
-import { supportUnread } from './support-unread.mjs';
+import { supportUnread as __pure_supportUnread } from './support-unread.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_supportUnread_SUPPORT_UNREAD_T = {
+  k1: "admin",
+  k2: "number",
+};
+const supportUnread = (...a) => __pure_supportUnread(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_supportUnread_SUPPORT_UNREAD_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 // 1) אין שיחה

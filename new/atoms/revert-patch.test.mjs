@@ -1,4 +1,9 @@
-import { revertPatch } from './revert-patch.mjs';
+import { revertPatch as __pure_revertPatch } from './revert-patch.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_revertPatch_REVERT_PATCH_T = {
+  k1: "answer",
+};
+const revertPatch = (...a) => __pure_revertPatch(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_revertPatch_REVERT_PATCH_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 // שקע-stageIndex אמיתי כמתועד בחוזה (מקומי לבדיקה — הבדיקה מייבאת רק את האטום שלה)

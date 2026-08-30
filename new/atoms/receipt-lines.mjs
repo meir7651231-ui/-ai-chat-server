@@ -2,7 +2,7 @@
  *  חוזה: receipt-lines.contract.md · שקעים: hebDateFull, amountInWords,
  *  receiptVerifyCode, hebrewLocaleDate.
  *  חולץ כלשונו מ-maor/src/lib/receipt.ts:86-149 (קריאות-השכן שוקעו). */
-export function receiptLines(o, hebDateFull, amountInWords, receiptVerifyCode, hebrewLocaleDate) {
+export function receiptLines(o, hebDateFull, amountInWords, receiptVerifyCode, hebrewLocaleDate, T) {
   const cur = o.currency || '₪';
   const d = new Date(o.date.slice(0, 10) + 'T12:00:00');
   const gregorian = isNaN(d.getTime()) ? o.date : d.toLocaleDateString('he-IL');
@@ -12,29 +12,29 @@ export function receiptLines(o, hebDateFull, amountInWords, receiptVerifyCode, h
     const curSym = cur === '$' ? '$' : '₪';
     const words = amountInWords(o.amount, cur === '$' ? '$' : '₪');
     return [
-      ...(o.mark === false ? [] : [o.copy ? 'העתק נאמן למקור' : 'מקור']),
-      (o.orgName || 'מאור החסד'),
-      o.orgTaxId ? 'מס׳ עמותה/מלכ"ר: ' + o.orgTaxId : '',
+      ...(o.mark === false ? [] : [o.copy ? T.k1 : T.k2]),
+      (o.orgName || T.k3),
+      o.orgTaxId ? T.k4 + o.orgTaxId : '',
       '',
-      'קבלה על תרומה — לפי סעיף 46 לפקודת מס הכנסה',
-      'קבלה מס׳: ' + o.rid,
-      ...(o.verify ? ['קוד-אימות: ' + receiptVerifyCode(o.rid, o.amount, cur, o.date)] : []),
-      'תאריך: ' + (heb ? heb + ' · ' : '') + gregorian,
+      T.k5,
+      T.k6 + o.rid,
+      ...(o.verify ? [T.k7 + receiptVerifyCode(o.rid, o.amount, cur, o.date)] : []),
+      T.k8 + (heb ? heb + ' · ' : '') + gregorian,
       '',
-      'התקבל בתודה מאת: ' + o.payer,
-      o.payerId ? 'ת"ז / ח"פ: ' + o.payerId : '',
-      'סכום: ' + curSym + o.amount.toLocaleString('he-IL'),
-      'במילים: ' + words,
-      o.method ? 'אמצעי תשלום: ' + o.method : '',
-      'עבור: ' + o.forWhat,
+      T.k9 + o.payer,
+      o.payerId ? T.k10 + o.payerId : '',
+      T.k11 + curSym + o.amount.toLocaleString('he-IL'),
+      T.k12 + words,
+      o.method ? T.k13 + o.method : '',
+      T.k14 + o.forWhat,
       '',
-      'תרומה זו מוכרת לצורכי מס לפי סעיף 46 לפקודת מס הכנסה.',
-      'קבלה זו מהווה אסמכתא לתרומה שהתקבלה.',
+      T.k15,
+      T.k16,
       '',
-      'בכבוד רב,',
+      T.k17,
       (o.signatory ? o.signatory : '') + '  ______________________',
-      'חתימה וחותמת',
-      o.site ? 'אתר: ' + o.site : '',
+      T.k18,
+      o.site ? T.k19 + o.site : '',
     ];
   }
   // תיקון (swarm-audit): סדרת S- (אישורי-תשלום של החנות — shopReceiptSeq, לא קבלת
@@ -42,24 +42,24 @@ export function receiptLines(o, hebDateFull, amountInWords, receiptVerifyCode, h
   // "אישור תשלום"; כל rid אחר (כולל R-/D- מסחריים בלי §46) נשאר ביט-זהה.
   const isShopConfirmation = o.rid.startsWith('S-');
   return [
-    ...(o.mark === false ? [] : [o.copy ? 'העתק נאמן למקור' : 'מקור']),
-    (isShopConfirmation ? 'אישור תשלום — ' : 'קבלה — ') + (o.orgName || 'מאור החסד'),
-    (isShopConfirmation ? 'אישור מס׳: ' : 'קבלה מס׳: ') + o.rid,
-    ...(o.verify ? ['קוד-אימות: ' + receiptVerifyCode(o.rid, o.amount, cur, o.date)] : []),
+    ...(o.mark === false ? [] : [o.copy ? T.k1 : T.k2]),
+    (isShopConfirmation ? T.k20 : T.k21) + (o.orgName || T.k3),
+    (isShopConfirmation ? T.k22 : T.k6) + o.rid,
+    ...(o.verify ? [T.k7 + receiptVerifyCode(o.rid, o.amount, cur, o.date)] : []),
     // תאריך עברי + לועזי, כמו באב-טיפוס
-    'תאריך: ' + (heb ? heb + ' · ' : '') + gregorian,
-    'התקבל מאת: ' + o.payer,
-    'סכום: ' + cur + o.amount,
-    o.method ? 'אמצעי תשלום: ' + o.method : '',
-    'עבור: ' + o.forWhat,
+    T.k8 + (heb ? heb + ' · ' : '') + gregorian,
+    T.k23 + o.payer,
+    T.k11 + cur + o.amount,
+    o.method ? T.k13 + o.method : '',
+    T.k14 + o.forWhat,
     // סיכום העסקה — verbatim מלגאסי receipt() (legacy:1264-1265)
     o.summary
-      ? 'סה"כ עסקה: ₪' + o.summary.totalDue + ' · שולם עד כה: ₪' + o.summary.paidSoFar + ' · יתרה: ₪' + o.summary.balance
+      ? T.k24 + o.summary.totalDue + T.k25 + o.summary.paidSoFar + T.k26 + o.summary.balance
       : '',
     o.summary?.nextDate
-      ? 'תשלום הבא: ' + hebDateFull(o.summary.nextDate) + ' · ' + hebrewLocaleDate(o.summary.nextDate)
+      ? T.k27 + hebDateFull(o.summary.nextDate) + ' · ' + hebrewLocaleDate(o.summary.nextDate)
       : '',
-    o.site ? 'אתר: ' + o.site : '',
-    'תודה על תמיכתכם',
+    o.site ? T.k19 + o.site : '',
+    T.k28,
   ];
 }

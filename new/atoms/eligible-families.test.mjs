@@ -1,4 +1,9 @@
-import { eligibleFamilies } from './eligible-families.mjs';
+import { eligibleFamilies as __pure_eligibleFamilies } from './eligible-families.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_eligibleFamilies_ELIGIBLE_FAMILIES_T = {
+  k1: "active",
+};
+const eligibleFamilies = (...a) => __pure_eligibleFamilies(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_eligibleFamilies_ELIGIBLE_FAMILIES_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const db = {

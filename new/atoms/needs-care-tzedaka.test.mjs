@@ -1,4 +1,26 @@
-import { needsCare } from './needs-care-tzedaka.mjs';
+import { needsCare as __pure_needsCare } from './needs-care-tzedaka.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_needsCare_NEEDS_CARE_TZEDAKA_T = {
+  k1: "entity.tzBox",
+  k2: "קופה",
+  k3: "stale",
+  k4: " לא רוקנה מזמן",
+  k5: "ריקון אחרון: ",
+  k6: "מעולם לא רוקנה (מאז ",
+  k7: "lost",
+  k8: " מסומנת כאבודה",
+  k9: "לברר או להוציא משימוש",
+  k10: "home",
+  k11: "inactiveCoord",
+  k12: " אינו פעיל אך עדיין עם ",
+  k13: " קופות בבתים",
+  k14: "להעביר לרכז אחר או להחזיר למשרד",
+  k15: "campaignEnding",
+  k16: "המבצע \"",
+  k17: "\" מסתיים ב-",
+  k18: "לסכם ולסגור",
+};
+const needsCare = (...a) => __pure_needsCare(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_needsCare_NEEDS_CARE_TZEDAKA_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const TODAY = '2026-08-24';

@@ -1,4 +1,9 @@
-import { makeupEligibility } from './makeup-eligibility.mjs';
+import { makeupEligibility as __pure_makeupEligibility } from './makeup-eligibility.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_makeupEligibility_MAKEUP_ELIGIBILITY_T = {
+  k1: "noshow",
+};
+const makeupEligibility = (...a) => __pure_makeupEligibility(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_makeupEligibility_MAKEUP_ELIGIBILITY_T);
 const C = [
   [['noshow', true, 100], { eligible: false, dropsPunch: true }],
   [['cancel', true, 2], { eligible: true, dropsPunch: false }],

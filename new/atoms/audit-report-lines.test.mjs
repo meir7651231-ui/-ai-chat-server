@@ -1,4 +1,11 @@
-import { auditReportLines } from './audit-report-lines.mjs';
+import { auditReportLines as __pure_auditReportLines } from './audit-report-lines.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_auditReportLines_AUDIT_REPORT_LINES_T = {
+  k1: "דוח תקינות נתונים — ",
+  k2: "מאור החסד",
+  k3: "הופק: ",
+};
+const auditReportLines = (...a) => __pure_auditReportLines(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_auditReportLines_AUDIT_REPORT_LINES_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 // 1) דוח עם ממצא יחיד

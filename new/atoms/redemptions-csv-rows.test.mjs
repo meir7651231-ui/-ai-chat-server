@@ -1,4 +1,17 @@
-import { redemptionsCsvRows } from './redemptions-csv-rows.mjs';
+import { redemptionsCsvRows as __pure_redemptionsCsvRows } from './redemptions-csv-rows.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_redemptionsCsvRows_REDEMPTIONS_CSV_ROWS_T = {
+  k1: "תאריך",
+  k2: "מוטב",
+  k3: "פריט",
+  k4: "חבילה",
+  k5: "שולם",
+  k6: "שווי",
+  k7: "אישור",
+  k8: "מבוטל",
+  k9: "בוטל ב-",
+};
+const redemptionsCsvRows = (...a) => __pure_redemptionsCsvRows(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_redemptionsCsvRows_REDEMPTIONS_CSV_ROWS_T);
 // מימושי-שקע לבדיקה — כמוגדר בחוזה:
 const NAMES = { c1: 'קופון מזון', c2: 'מתנה' };
 const itemOf = (_db, comp) => ({ name: NAMES[comp.id] ?? '' });

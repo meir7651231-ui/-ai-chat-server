@@ -2,6 +2,6 @@
  *  חוזה: feat-label.contract.md
  *  חולץ כלשונו מ-maor/src/lib/ayin.ts:35-37 (תורגם TS→JS);
  *  השכן termOf הוזרק כשקע (חוק-1 — אפס import פנימי). */
-export function featLabel(cfg, termOf) {
-    return termOf(cfg, 'nav.ayin', 'מעקב טיפול');
+export function featLabel(cfg, termOf, T) {
+    return termOf(cfg, T.k1, T.k2);
 }

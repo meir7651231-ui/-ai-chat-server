@@ -1,4 +1,9 @@
-import { strongMatchForCharge } from './strong-match-for-charge.mjs';
+import { strongMatchForCharge as __pure_strongMatchForCharge } from './strong-match-for-charge.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_strongMatchForCharge_STRONG_MATCH_FOR_CHARGE_T = {
+  k1: "ext:",
+};
+const strongMatchForCharge = (...a) => __pure_strongMatchForCharge(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_strongMatchForCharge_STRONG_MATCH_FOR_CHARGE_T);
 
 // שקע-keysOf אמיתי-לפורמט-החוזה (מקומי לבדיקה — מייבאת רק את האטום שלה):
 // ext:/id:/ph:/em: · נרמול ספרות לטלפון/ת"ז · lowercase לאימייל · ריק ⇒ אין מפתח.

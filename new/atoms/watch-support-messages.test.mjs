@@ -1,4 +1,10 @@
-import { watchSupportMessages } from './watch-support-messages.mjs';
+import { watchSupportMessages as __pure_watchSupportMessages } from './watch-support-messages.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_watchSupportMessages_WATCH_SUPPORT_MESSAGES_T = {
+  k1: "supportChats",
+  k2: "messages",
+};
+const watchSupportMessages = (...a) => __pure_watchSupportMessages(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_watchSupportMessages_WATCH_SUPPORT_MESSAGES_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

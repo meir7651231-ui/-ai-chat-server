@@ -1,4 +1,21 @@
-import { tourSteps } from './tour-steps.mjs';
+import { tourSteps as __pure_tourSteps } from './tour-steps.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_tourSteps_TOUR_STEPS_T = {
+  k1: "מאתר המשפחות",
+  k2: "מאתר ה",
+  k3: "nav.families",
+  k4: "משפחות",
+  k5: "מאתר החוגים",
+  k6: "nav.courses",
+  k7: "חוגים",
+  k8: "חיזוי חוגים",
+  k9: "חיזוי ",
+  k10: "מצא חוג",
+  k11: "מצא ",
+  k12: "entity.course",
+  k13: "חוג",
+};
+const tourSteps = (...a) => __pure_tourSteps(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_tourSteps_TOUR_STEPS_T);
 const STEPS = [
   { view: 'home', caption: '👋 פתיחה' },
   { view: 'families', module: 'families', caption: '🎡 מאתר המשפחות — גלגל', anchorText: 'סינון מורחב' },

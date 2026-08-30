@@ -9,9 +9,18 @@
  *  מזרים isoToday()). */
 import { AUDIT_CAT_COLORS } from '../atoms/audit-cat-colors.mjs';
 import { AUDIT_CATEGORIES } from '../atoms/audit-categories.mjs';
-import { phoneIssue } from '../atoms/phone-issue.mjs';
-import { runAudit as runAuditWire } from '../atoms/run-audit.mjs';
-import { auditReportLines } from '../atoms/audit-report-lines.mjs';
+import { phoneIssue as __pure_phoneIssue } from '../atoms/phone-issue.mjs';
+import { PHONE_ISSUE_T as __d_phoneIssue_PHONE_ISSUE_T } from '../atoms/phone-issue-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const phoneIssue = (...a) => __pure_phoneIssue(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_phoneIssue_PHONE_ISSUE_T);
+import { runAudit as __pure_runAudit } from '../atoms/run-audit.mjs';
+import { RUN_AUDIT_T as __d_runAudit_RUN_AUDIT_T } from '../atoms/run-audit-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const runAuditWire = (...a) => __pure_runAudit(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_runAudit_RUN_AUDIT_T);
+import { auditReportLines as __pure_auditReportLines } from '../atoms/audit-report-lines.mjs';
+import { AUDIT_REPORT_LINES_T as __d_auditReportLines_AUDIT_REPORT_LINES_T } from '../atoms/audit-report-lines-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const auditReportLines = (...a) => __pure_auditReportLines(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_auditReportLines_AUDIT_REPORT_LINES_T);
 import { termOf } from '../atoms/term-of.mjs';
 import { normName as normNameWire } from '../atoms/norm-name.mjs';
 import { normSearch } from '../atoms/norm-search.mjs';

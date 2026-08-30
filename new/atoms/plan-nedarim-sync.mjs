@@ -4,7 +4,7 @@
  *  (nameSortKey/keysOf/normId/supFromDonor/supFromCharge/histDedupKey/
  *  chargeDedupKey/chargeToHist/withNedarimHok/curOf) הוזרקו כאובייקט-deps
  *  (חוק-1 — אפס import פנימי). */
-export function planNedarimSync(existing, donors, charges, opts = {}, deps) {
+export function planNedarimSync(existing, donors, charges, opts = {}, deps, T) {
   const { nameSortKey, keysOf, normId, supFromDonor, supFromCharge, histDedupKey, chargeDedupKey, chargeToHist, withNedarimHok, curOf } = deps;
   const out = existing.map((s) => ({ ...s, hist: s.hist ? [...s.hist] : undefined }));
   const keyIndex = new Map(); // key → index ב-out
@@ -81,11 +81,11 @@ export function planNedarimSync(existing, donors, charges, opts = {}, deps) {
           changed = true;
         }
       };
-      fill('extId', d.toremId);
-      fill('phone', (d.phone || d.phone2 || d.phone3 || '').trim());
-      fill('email', (d.email || '').trim());
-      fill('address', (d.address || '').trim());
-      fill('idNum', normId(d.zeout) ? String(d.zeout).replace(/\D/g, '') : '');
+      fill(T.k1, d.toremId);
+      fill(T.k2, (d.phone || d.phone2 || d.phone3 || '').trim());
+      fill(T.k3, (d.email || '').trim());
+      fill(T.k4, (d.address || '').trim());
+      fill(T.k5, normId(d.zeout) ? String(d.zeout).replace(/\D/g, '') : '');
       if (changed) {
         register(idx); // מפתחות-חדשים (טלפון/מייל/ext) ⇒ עסקאות עתידיות יתאימו
         summary.updatedSupporters++;

@@ -1,4 +1,9 @@
-import { watchSupportThreadMeta } from './watch-support-thread-meta.mjs';
+import { watchSupportThreadMeta as __pure_watchSupportThreadMeta } from './watch-support-thread-meta.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_watchSupportThreadMeta_WATCH_SUPPORT_THREAD_META_T = {
+  k1: "supportChats",
+};
+const watchSupportThreadMeta = (...a) => __pure_watchSupportThreadMeta(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_watchSupportThreadMeta_WATCH_SUPPORT_THREAD_META_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

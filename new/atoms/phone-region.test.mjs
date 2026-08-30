@@ -1,4 +1,9 @@
-import { phoneRegion } from './phone-region.mjs';
+import { phoneRegion as __pure_phoneRegion } from './phone-region.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_phoneRegion_PHONE_REGION_T = {
+  k1: "intl",
+};
+const phoneRegion = (...a) => __pure_phoneRegion(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_phoneRegion_PHONE_REGION_T);
 const C = [
   ['', 'il'],
   ['0521234567', 'il'],

@@ -4,19 +4,19 @@
  *  SITE_LANGS מ-maor/src/types/config.ts:65 הוטמע פנימה (סדר-הנפילה) ומיוצא. */
 export const SITE_LANGS = ['he', 'en', 'yi'];
 
-export function resolveLocalized(t, lang) {
+export function resolveLocalized(t, lang, T) {
     if (t == null)
         return '';
-    if (typeof t === 'string')
+    if (typeof t === T.k1)
         return t;
     const pick = t[lang];
-    if (typeof pick === 'string' && pick.trim())
+    if (typeof pick === T.k1 && pick.trim())
         return pick;
-    if (typeof t.he === 'string' && t.he.trim())
+    if (typeof t.he === T.k1 && t.he.trim())
         return t.he;
     for (const l of SITE_LANGS) {
         const v = t[l];
-        if (typeof v === 'string' && v.trim())
+        if (typeof v === T.k1 && v.trim())
             return v;
     }
     return '';

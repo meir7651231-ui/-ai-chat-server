@@ -2,7 +2,10 @@
  *  זה המקום היחיד שבו חוטי-הסיור נפגשים (חוקי-החשמלאי, LAW.md).
  *  מקור-האמת: maor/src/lib/tour.ts (מצב הדגמה ▶ סיור spotlight, הכרעה 4). */
 import { TOUR_STOP_LABEL } from '../atoms/tour-stop-label.mjs';
-import { tourSteps } from '../atoms/tour-steps.mjs';
+import { tourSteps as __pure_tourSteps } from '../atoms/tour-steps.mjs';
+import { TOUR_STEPS_T as __d_tourSteps_TOUR_STEPS_T } from '../atoms/tour-steps-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const tourSteps = (...a) => __pure_tourSteps(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_tourSteps_TOUR_STEPS_T);
 import { tourAdvance } from '../atoms/tour-advance.mjs';
 import { spotlightBox } from '../atoms/spotlight-box.mjs';
 import { termOf } from '../atoms/term-of.mjs';

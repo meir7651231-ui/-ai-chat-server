@@ -1,4 +1,9 @@
-import { waBirthdayText } from './wa-birthday-text.mjs';
+import { waBirthdayText as __pure_waBirthdayText } from './wa-birthday-text.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_waBirthdayText_WA_BIRTHDAY_TEXT_T = {
+  k1: "wa.birthday",
+};
+const waBirthdayText = (...a) => __pure_waBirthdayText(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_waBirthdayText_WA_BIRTHDAY_TEXT_T);
 // שקעי-אמת מקומיים כהתנהגות maor (הבדיקה מייבאת רק את האטום שלה):
 const DEFS = { 'wa.birthday': 'מזל טוב ל{first} ליום ההולדת! 🎂 באהבה, {org}' };
 const renderTemplate = (cfg, key, vars) => {

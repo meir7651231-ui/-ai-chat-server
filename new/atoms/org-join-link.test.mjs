@@ -1,4 +1,10 @@
-import { orgJoinLink } from './org-join-link.mjs';
+import { orgJoinLink as __pure_orgJoinLink } from './org-join-link.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_orgJoinLink_ORG_JOIN_LINK_T = {
+  k1: "?org=",
+  k2: "&join=",
+};
+const orgJoinLink = (...a) => __pure_orgJoinLink(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_orgJoinLink_ORG_JOIN_LINK_T);
 
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };

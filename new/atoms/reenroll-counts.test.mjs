@@ -1,4 +1,10 @@
-import { reenrollCounts } from './reenroll-counts.mjs';
+import { reenrollCounts as __pure_reenrollCounts } from './reenroll-counts.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_reenrollCounts_REENROLL_COUNTS_T = {
+  k1: "yes",
+  k2: "hold",
+};
+const reenrollCounts = (...a) => __pure_reenrollCounts(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_reenrollCounts_REENROLL_COUNTS_T);
 const CASES = [[["\"\""],"{\"total\":0,\"yes\":0,\"no\":0,\"hold\":0,\"undecided\":0,\"renewed\":0}"],[["\"אבג\""],"{\"total\":3,\"yes\":0,\"no\":0,\"hold\":0,\"undecided\":3,\"renewed\":0}"],[["\"כהן לוי\""],"{\"total\":7,\"yes\":0,\"no\":0,\"hold\":0,\"undecided\":7,\"renewed\":0}"],[["\"abc\""],"{\"total\":3,\"yes\":0,\"no\":0,\"hold\":0,\"undecided\":3,\"renewed\":0}"],[["\"a@b.com\""],"{\"total\":7,\"yes\":0,\"no\":0,\"hold\":0,\"undecided\":7,\"renewed\":0}"],[["\"2026-08-24\""],"{\"total\":10,\"yes\":0,\"no\":0,\"hold\":0,\"undecided\":10,\"renewed\":0}"],[["\"2026-08-24T12:00:00\""],"{\"total\":19,\"yes\":0,\"no\":0,\"hold\":0,\"undecided\":19,\"renewed\":0}"],[["\"0501234567\""],"{\"total\":10,\"yes\":0,\"no\":0,\"hold\":0,\"undecided\":10,\"renewed\":0}"],[["\"03-1234567\""],"{\"total\":10,\"yes\":0,\"no\":0,\"hold\":0,\"undecided\":10,\"renewed\":0}"],[["\"https://x.co\""],"{\"total\":12,\"yes\":0,\"no\":0,\"hold\":0,\"undecided\":12,\"renewed\":0}"],[["\"שלום עולם\""],"{\"total\":9,\"yes\":0,\"no\":0,\"hold\":0,\"undecided\":9,\"renewed\":0}"],[["\"12\""],"{\"total\":2,\"yes\":0,\"no\":0,\"hold\":0,\"undecided\":2,\"renewed\":0}"]];
 const de = (s) => s === '"__undef__"' ? undefined : JSON.parse(s);
 let f = 0;

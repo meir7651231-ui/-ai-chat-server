@@ -1,4 +1,13 @@
-import { beneficiaryLabel } from './beneficiary-label.mjs';
+import { beneficiaryLabel as __pure_beneficiaryLabel } from './beneficiary-label.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_beneficiaryLabel_BENEFICIARY_LABEL_T = {
+  k1: "entity.familyOf",
+  k2: "משפחת",
+  k3: "entity.family",
+  k4: "משפחה",
+  k5: " לא ידועה",
+};
+const beneficiaryLabel = (...a) => __pure_beneficiaryLabel(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_beneficiaryLabel_BENEFICIARY_LABEL_T);
 // שקע termOf — ההתנהגות האמיתית (מילון-הארגון או ברירת-מחדל; ריק/רווחים ⇒ נסיגה)
 const termOf = (cfg, key, fallback) => {
   const v = cfg.terms?.[key];

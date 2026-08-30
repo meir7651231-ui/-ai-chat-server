@@ -20,10 +20,19 @@
  *  זורקת בבירור (רק בענף-§46 שקורא אותו) — נתיב לא-§46 אינו נוגע בו כלל. כשהאטומים יתוקנו,
  *  הברירת-מחדל תוחלף בחיווט-אטומים כאן. */
 import { receiptVerifyCode as receiptVerifyCodeX } from '../atoms/receipt-verify-code.mjs';
-import { receiptLines as receiptLinesX } from '../atoms/receipt-lines.mjs';
+import { receiptLines as __pure_receiptLines } from '../atoms/receipt-lines.mjs';
+import { RECEIPT_LINES_T as __d_receiptLines_RECEIPT_LINES_T } from '../atoms/receipt-lines-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const receiptLinesX = (...a) => __pure_receiptLines(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_receiptLines_RECEIPT_LINES_T);
 import { receiptHtml as receiptHtmlX } from '../atoms/receipt-html.mjs';
-import { receiptFmtOf as receiptFmtOfX } from '../atoms/receipt-fmt-of.mjs';
-import { deliverReceipt as deliverReceiptX } from '../atoms/deliver-receipt.mjs';
+import { receiptFmtOf as __pure_receiptFmtOf } from '../atoms/receipt-fmt-of.mjs';
+import { RECEIPT_FMT_OF_T as __d_receiptFmtOf_RECEIPT_FMT_OF_T } from '../atoms/receipt-fmt-of-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const receiptFmtOfX = (...a) => __pure_receiptFmtOf(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_receiptFmtOf_RECEIPT_FMT_OF_T);
+import { deliverReceipt as __pure_deliverReceipt } from '../atoms/deliver-receipt.mjs';
+import { DELIVER_RECEIPT_T as __d_deliverReceipt_DELIVER_RECEIPT_T } from '../atoms/deliver-receipt-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const deliverReceiptX = (...a) => __pure_deliverReceipt(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_deliverReceipt_DELIVER_RECEIPT_T);
 import { hebDateFull as hebDateFullX } from '../atoms/heb-date-full.mjs';
 import { featureOn as featureOnX } from '../atoms/feature-on.mjs';
 import { moduleOn } from '../atoms/module-on.mjs';

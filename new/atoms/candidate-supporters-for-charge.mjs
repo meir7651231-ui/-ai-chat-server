@@ -2,7 +2,7 @@
  *  חוזה: candidate-supporters-for-charge.contract.md
  *  חולץ כלשונו מ-maor/src/lib/nedarimSync.ts:279-302; השכנים keysOf +
  *  nameSortKey הוזרקו כשקעים (חוק-1 — אפס import פנימי). */
-export function candidateSupportersForCharge(charge, supporters, limit = 8, keysOf, nameSortKey) {
+export function candidateSupportersForCharge(charge, supporters, limit = 8, keysOf, nameSortKey, T) {
     const ck = new Set(keysOf({ extId: charge.toremId, zeout: charge.zeout, phone: charge.phone, email: charge.email }));
     const cName = nameSortKey(charge.name || '');
     const scored = [];
@@ -12,7 +12,7 @@ export function candidateSupportersForCharge(charge, supporters, limit = 8, keys
         for (const k of sk) {
             if (!ck.has(k))
                 continue;
-            if (k.startsWith('ext:'))
+            if (k.startsWith(T.k1))
                 score = Math.max(score, 5);
             else if (k.startsWith('id:'))
                 score = Math.max(score, 4);

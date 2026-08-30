@@ -22,7 +22,7 @@ function fmtD(iso) {
     return `${d}/${m}/${y}`;
 }
 
-export function buildCustomExport(cfg, db, target, range, selectedKeys, s) {
+export function buildCustomExport(cfg, db, target, range, selectedKeys, s, T) {
     const { expFieldDefs, featureOn, termOf, sessionsOf, enrollCount, hebParts, hebAnnualEq, hebDateFull,
         supCount, supIls, supUsd, supScore, supTier, stageLabel, EV_META, HEBREW_RECURRING, DAY_NAMES } = s;
     const defs = expFieldDefs(cfg, target).filter((f) => selectedKeys.includes(f.key));
@@ -30,7 +30,7 @@ export function buildCustomExport(cfg, db, target, range, selectedKeys, s) {
     if (!defs.length)
         return rows;
     const pick = (obj) => defs.map((f) => obj[f.key] ?? '');
-    if (target === 'courses') {
+    if (target === T.k1) {
         // אינדקס בני משפחה לשמות התלמידים (בלי לגעת ב-store); טלפון — של הילד/ה,
         // fallback לטלפון המשפחה (לעמודת studentsFull של הדוח המלא)
         const memberInfo = new Map();
@@ -64,15 +64,15 @@ export function buildCustomExport(cfg, db, target, range, selectedKeys, s) {
                 audience: c.audience || '',
                 room: roomName.get(c.roomId) || '',
                 schedule: sessionsOf(c)
-                    .map((ss) => ('יום ' + DAY_NAMES[ss.day] + (ss.time ? ' ' + ss.time : '')).trim())
+                    .map((ss) => (T.k2 + DAY_NAMES[ss.day] + (ss.time ? ' ' + ss.time : '')).trim())
                     .join(' · '),
-                model: (c.model === 'punch'
-                    ? 'כרטיסייה'
-                    : c.model === 'half_year'
-                        ? 'מנוי חצי-שנתי'
-                        : c.model === 'year'
-                            ? 'מנוי שנתי'
-                            : 'מנוי חודשי') +
+                model: (c.model === T.k3
+                    ? T.k4
+                    : c.model === T.k5
+                        ? T.k6
+                        : c.model === T.k7
+                            ? T.k8
+                            : T.k9) +
                     ' · ₪' +
                     (c.price || 0),
                 occ: enrollCount(db, c.id) + '/' + (c.maxStudents || '—'),
@@ -83,19 +83,19 @@ export function buildCustomExport(cfg, db, target, range, selectedKeys, s) {
                     if (!mi)
                         return '';
                     const paid = (e.payments || []).reduce((a, p) => a + (p.amount || 0), 0);
-                    return mi.first + (mi.phone ? ' ' + mi.phone : '') + ' · יתרה ₪' + Math.max(0, (e.totalDue || 0) - paid);
+                    return mi.first + (mi.phone ? ' ' + mi.phone : '') + T.k10 + Math.max(0, (e.totalDue || 0) - paid);
                 })
                     .filter(Boolean)
                     .join(' | '),
-                pays: payN + ' תשלומים · ₪' + paySum,
+                pays: payN + T.k11 + paySum,
                 revenue: '₪' + revenue,
-                abs: absN + ' חיסורים',
+                abs: absN + T.k12,
                 notes: c.notes || '',
             }));
         }
         return rows;
     }
-    if (target === 'events') {
+    if (target === T.k13) {
         const bounded = !!range.from && !!range.to;
         const occ = [];
         for (const ev of db.events) {
@@ -140,13 +140,13 @@ export function buildCustomExport(cfg, db, target, range, selectedKeys, s) {
                 time: o.time,
                 fam: o.fam,
                 notes: o.notes,
-                done: o.done ? 'כן' : 'לא',
+                done: o.done ? T.k14 : T.k15,
             }));
         }
         return rows;
     }
     // supporters
-    const ayinOn = featureOn(cfg, 'supporters.ayin');
+    const ayinOn = featureOn(cfg, T.k16);
     for (const sp of db.supporters) {
         const dons = sp.donations.filter((d) => inR(d.date, range));
         const a = sp.ayin;
@@ -164,10 +164,10 @@ export function buildCustomExport(cfg, db, target, range, selectedKeys, s) {
             city: sp.city || '',
             cat: sp.cat || '',
             forWho: sp.forWho || '',
-            dons: dons.length + ' ' + termOf(cfg, 'entity.donations', 'תרומות') + ' · ₪' + ils + (usd ? ' + $' + usd : ''),
+            dons: dons.length + ' ' + termOf(cfg, T.k17, T.k18) + ' · ₪' + ils + (usd ? ' + $' + usd : ''),
             // "כל-הזמן" = הצבירה המוצגת (קבלות + היסטוריה) — הכרעת-בעלים 9.8 "לכולל":
             // CSV הוא משטח-תצוגה, לכן supCount/supIls/supUsd (כולל hist), לא המונים השמורים.
-            donsAll: supCount(sp) + ' ' + termOf(cfg, 'entity.donations', 'תרומות') + ' · ₪' + supIls(sp) + (supUsd(sp) ? ' + $' + supUsd(sp) : ''),
+            donsAll: supCount(sp) + ' ' + termOf(cfg, T.k17, T.k18) + ' · ₪' + supIls(sp) + (supUsd(sp) ? ' + $' + supUsd(sp) : ''),
             tier: supTier(supScore(sp, db.usdRate)).label,
             notes: sp.notes || '',
         };
@@ -177,7 +177,7 @@ export function buildCustomExport(cfg, db, target, range, selectedKeys, s) {
                 .map((n) => n.name + (n.eyes !== '' && n.eyes != null ? ' ·' + n.eyes : '') + (n.done ? ' ✓' : ''))
                 .join(' · ');
             obj.eyesTotal = String(a.names.reduce((x, n) => x + (+n.eyes || 0), 0));
-            obj.paid = a.paid ? 'כן' : 'לא';
+            obj.paid = a.paid ? T.k14 : T.k15;
             obj.answers = answers.map((x) => x.note).join(' | ');
             obj.next = a.nextTalk ? fmtD(a.nextTalk) + (a.nextTalkTime ? ' ' + a.nextTalkTime : '') : '';
         }

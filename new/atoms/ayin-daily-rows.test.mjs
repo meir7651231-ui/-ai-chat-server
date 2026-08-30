@@ -1,4 +1,13 @@
-import { ayinDailyRows } from './ayin-daily-rows.mjs';
+import { ayinDailyRows as __pure_ayinDailyRows } from './ayin-daily-rows.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_ayinDailyRows_AYIN_DAILY_ROWS_T = {
+  k1: "שם",
+  k2: "טלפון",
+  k3: "שלב",
+  k4: "מתי לדבר שוב",
+  k5: "הערה",
+};
+const ayinDailyRows = (...a) => __pure_ayinDailyRows(...a, ...Array(Math.max(0, 8 - a.length)).fill(undefined), __d_ayinDailyRows_AYIN_DAILY_ROWS_T);
 // מימושי-שקע לבדיקה — נאמנים למקור (ayin.ts / domain.ts):
 const unitLabel = () => 'כמות';
 const itemLabel = () => 'שם לטיפול';

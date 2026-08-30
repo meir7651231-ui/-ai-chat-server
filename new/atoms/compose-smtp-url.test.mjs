@@ -1,4 +1,10 @@
-import { composeSmtpUrl } from './compose-smtp-url.mjs';
+import { composeSmtpUrl as __pure_composeSmtpUrl } from './compose-smtp-url.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_composeSmtpUrl_COMPOSE_SMTP_URL_T = {
+  k1: "smtps",
+  k2: "smtp",
+};
+const composeSmtpUrl = (...a) => __pure_composeSmtpUrl(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_composeSmtpUrl_COMPOSE_SMTP_URL_T);
 const C = [
   [['a@b.com', 'pw', 'smtp.gmail.com:465'], 'smtps://a%40b.com:pw@smtp.gmail.com:465'],
   [['a@b.com', 'pw', 'smtp-mail.outlook.com:587'], 'smtp://a%40b.com:pw@smtp-mail.outlook.com:587'],

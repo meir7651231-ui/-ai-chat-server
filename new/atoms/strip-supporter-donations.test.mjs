@@ -1,4 +1,10 @@
-import { stripSupporterDonations } from './strip-supporter-donations.mjs';
+import { stripSupporterDonations as __pure_stripSupporterDonations } from './strip-supporter-donations.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_stripSupporterDonations_STRIP_SUPPORTER_DONATIONS_T = {
+  k1: "supporters",
+  k2: "object",
+};
+const stripSupporterDonations = (...a) => __pure_stripSupporterDonations(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_stripSupporterDonations_STRIP_SUPPORTER_DONATIONS_T);
 
 let f = 0;
 const chk = (n, ok) => { if (!ok) { console.error(`✗ ${n}`); f = 1; } };

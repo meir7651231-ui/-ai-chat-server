@@ -7,7 +7,10 @@ import { GUIDE_SECTIONS } from '../atoms/guide-sections.mjs';
 import { GUIDE_RECIPES_LABEL } from '../atoms/guide-recipes-label.mjs';
 import { GUIDE_RECIPES } from '../atoms/guide-recipes.mjs';
 import { GUIDE_FOOT } from '../atoms/guide-foot.mjs';
-import { guideSections as sectionsWire } from '../atoms/guide-sections-of.mjs';
+import { guideSections as __pure_guideSections } from '../atoms/guide-sections-of.mjs';
+import { GUIDE_SECTIONS_OF_T as __d_guideSections_GUIDE_SECTIONS_OF_T } from '../atoms/guide-sections-of-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const sectionsWire = (...a) => __pure_guideSections(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_guideSections_GUIDE_SECTIONS_OF_T);
 import { termOf } from '../atoms/term-of.mjs';
 
 // ── החיווט ──

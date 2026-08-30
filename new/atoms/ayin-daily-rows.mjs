@@ -1,11 +1,11 @@
 /** חוט · ayin-daily-rows — שורות הדוח-היומי של מעקב-הטיפול.
  *  חוזה: ayin-daily-rows.contract.md · שקעים: unitLabel, itemLabel, emptyAyin, eyesTotal, stageLabel
  *  חולץ כלשונו מ-maor/src/lib/ayin.ts:249-295 (קריאות-השכן שוקעו). */
-export function ayinDailyRows(cfg, supporters, todayIso, unitLabel, itemLabel, emptyAyin, eyesTotal, stageLabel) {
+export function ayinDailyRows(cfg, supporters, todayIso, unitLabel, itemLabel, emptyAyin, eyesTotal, stageLabel, T) {
     const unit = unitLabel(cfg);
     const item = itemLabel(cfg);
     const rows = [
-        ['שם', 'טלפון', `${unit} היום`, 'שלב', item, 'מתי לדבר שוב', 'הערה'],
+        [T.k1, T.k2, `${unit} היום`, T.k3, item, T.k4, T.k5],
     ];
     const touched = supporters.filter((sp) => sp.ayin && (sp.ayin.lastTouch === todayIso || sp.ayin.log?.some((l) => l.date === todayIso)));
     for (const sp of touched) {

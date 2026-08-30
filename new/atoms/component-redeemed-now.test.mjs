@@ -1,4 +1,9 @@
-import { componentRedeemedNow } from './component-redeemed-now.mjs';
+import { componentRedeemedNow as __pure_componentRedeemedNow } from './component-redeemed-now.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_componentRedeemedNow_COMPONENT_REDEEMED_NOW_T = {
+  k1: "holidayGift",
+};
+const componentRedeemedNow = (...a) => __pure_componentRedeemedNow(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_componentRedeemedNow_COMPONENT_REDEEMED_NOW_T);
 const db = {};
 const a = { id: 'as1' };
 const comp = { id: 'c1' };

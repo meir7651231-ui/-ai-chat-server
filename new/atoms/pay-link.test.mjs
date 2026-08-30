@@ -1,4 +1,14 @@
-import { payLink } from './pay-link.mjs';
+import { payLink as __pure_payLink } from './pay-link.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_payLink_PAY_LINK_T = {
+  k1: "%7Bamount%7D",
+  k2: "{amount}",
+  k3: "Amount",
+  k4: "ClientName",
+  k5: "amount",
+  k6: "name",
+};
+const payLink = (...a) => __pure_payLink(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_payLink_PAY_LINK_T);
 // שקע safeHttpsUrl כחוזה safe-https-url: ‏https בלבד, שבור/ריק ⇒ null.
 const safeHttpsUrl = (raw) => {
   const t = (raw || '').trim();

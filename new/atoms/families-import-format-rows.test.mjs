@@ -1,4 +1,19 @@
-import { familiesImportFormatRows } from './families-import-format-rows.mjs';
+import { familiesImportFormatRows as __pure_familiesImportFormatRows } from './families-import-format-rows.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_familiesImportFormatRows_FAMILIES_IMPORT_FORMAT_ROWS_T = {
+  k1: "שם",
+  k2: "ת\"ז אב",
+  k3: "טלפון",
+  k4: "שם האם",
+  k5: "ת\"ז אם",
+  k6: "טלפון 2",
+  k7: "עיר",
+  k8: "כתובת",
+  k9: "אלמן",
+  k10: "קהילה",
+  k11: "הערות",
+};
+const familiesImportFormatRows = (...a) => __pure_familiesImportFormatRows(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_familiesImportFormatRows_FAMILIES_IMPORT_FORMAT_ROWS_T);
 let f = 0;
 const eq = (a, b, msg) => { if (JSON.stringify(a) !== JSON.stringify(b)) { console.error(`✗ ${msg} ⇒ ${JSON.stringify(a)}`); f = 1; } };
 const HDR = ['שם', 'ת"ז אב', 'טלפון', 'שם האם', 'ת"ז אם', 'טלפון 2', 'עיר', 'כתובת', '', 'אלמן', 'קהילה', '', 'הערות'];

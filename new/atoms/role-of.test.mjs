@@ -1,4 +1,11 @@
-import { roleOf } from './role-of.mjs';
+import { roleOf as __pure_roleOf } from './role-of.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_roleOf_ROLE_OF_T = {
+  k1: "staff",
+  k2: "admin",
+  k3: "teacher",
+};
+const roleOf = (...a) => __pure_roleOf(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_roleOf_ROLE_OF_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 

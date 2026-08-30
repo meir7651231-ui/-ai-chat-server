@@ -1,7 +1,7 @@
 /** חוט · fresh-next-year-enrollment — טיוטת-שיבוץ לשנה הבאה (איפוס-היסטוריה).
  *  חוזה: fresh-next-year-enrollment.contract.md
  *  חולץ כלשונו מ-maor/src/components/courses/reenroll-lib.ts:207-242. */
-export function freshNextYearEnrollment(src, targetCourseId, newId, todayIso, groupOverride) {
+export function freshNextYearEnrollment(src, targetCourseId, newId, todayIso, groupOverride, T) {
   return {
     id: newId,
     memberId: src.memberId,
@@ -15,7 +15,7 @@ export function freshNextYearEnrollment(src, targetCourseId, newId, todayIso, gr
     payments: [],
     totalDue: src.totalDue,
     dueDate: '',
-    status: 'active',
+    status: T.k1,
     note: '',
     enrolledAt: todayIso,
     // תמחור משוקלל — נשמר כדי שהמחיר יעבור לשנה הבאה כמו שהיה.

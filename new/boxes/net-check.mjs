@@ -3,7 +3,10 @@
  *  בניית-יעדים (הכרעות חיות כאן) ← הרצה-מקבילית ← טקסט-להקראה.
  *  שקעי-IO (randToken · checkOne=fetch) מוזרקים — לא ממומשים כאן (חוק-1/6). */
 import { runNetCheck } from '../atoms/run-net-check.mjs';
-import { netCheckScript } from '../atoms/net-check-script.mjs';
+import { netCheckScript as __pure_netCheckScript } from '../atoms/net-check-script.mjs';
+import { NET_CHECK_SCRIPT_T as __d_netCheckScript_NET_CHECK_SCRIPT_T } from '../atoms/net-check-script-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const netCheckScript = (...a) => __pure_netCheckScript(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_netCheckScript_NET_CHECK_SCRIPT_T);
 
 // ── מילון-התוויות + הכרעות (הסדר/ברירות-המחדל/התבניות = המשמעות, חיה כאן) ──
 const PROBE = 'netcheck';          // ערך-בדיקה ניטרלי כשחסר projectId/apiKey (התשובה עדיין נושאת CORS)

@@ -1,4 +1,13 @@
-import { wizardStepError } from './wizard-step-error.mjs';
+import { wizardStepError as __pure_wizardStepError } from './wizard-step-error.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_wizardStepError_WIZARD_STEP_ERROR_T = {
+  k1: "בחרו את תחום העסק כדי להמשיך",
+  k2: "בחרו את גודל הארגון",
+  k3: "שם הארגון חובה",
+  k4: "שם איש קשר חובה",
+  k5: "טלפון חובה — נחזור אליכם לאישור",
+};
+const wizardStepError = (...a) => __pure_wizardStepError(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_wizardStepError_WIZARD_STEP_ERROR_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b);

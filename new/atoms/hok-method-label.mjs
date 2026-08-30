@@ -1,10 +1,10 @@
 /** חוט · hok-method-label — קודם אוטומטית (אפיון-Golden). חוזה: hok-method-label.contract.md */
-export function hokMethodLabel(m) {
-    if (m === 'bank')
-        return 'הו"ק בנקאית';
-    if (m === 'card')
-        return 'אשראי בסליקה';
-    if (m === 'cash')
-        return 'מזומן חודשי';
-    return m || 'אחר';
+export function hokMethodLabel(m, T) {
+    if (m === T.k1)
+        return T.k2;
+    if (m === T.k3)
+        return T.k4;
+    if (m === T.k5)
+        return T.k6;
+    return m || T.k7;
 }

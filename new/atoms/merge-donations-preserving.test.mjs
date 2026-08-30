@@ -1,4 +1,10 @@
-import { mergeDonationsPreserving } from './merge-donations-preserving.mjs';
+import { mergeDonationsPreserving as __pure_mergeDonationsPreserving } from './merge-donations-preserving.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_mergeDonationsPreserving_MERGE_DONATIONS_PRESERVING_T = {
+  k1: "supporters",
+  k2: "number",
+};
+const mergeDonationsPreserving = (...a) => __pure_mergeDonationsPreserving(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_mergeDonationsPreserving_MERGE_DONATIONS_PRESERVING_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const eq = (a, b, msg) => ok(JSON.stringify(a) === JSON.stringify(b), msg + ` ⇒ ${JSON.stringify(a)}`);

@@ -1,4 +1,26 @@
-import { buildSlots } from './build-slots.mjs';
+import { buildSlots as __pure_buildSlots } from './build-slots.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_buildSlots_BUILD_SLOTS_T = {
+  k1: "clean",
+  k2: "cleaning",
+  k3: "ניקיון יומי (15:00–16:00)",
+  k4: "#eceae2",
+  k5: "course",
+  k6: "entity.course",
+  k7: "חוג",
+  k8: "#fdf1d4",
+  k9: "event",
+  k10: "אירוע: ",
+  k11: "#e7edf5",
+  k12: "blk",
+  k13: "blocked",
+  k14: "חסום — ",
+  k15: "#fdeaea",
+  k16: "free",
+  k17: "פנוי",
+  k18: " · מחוץ לשעות הפעילות של החדר",
+};
+const buildSlots = (...a) => __pure_buildSlots(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_buildSlots_BUILD_SLOTS_T);
 
 // שקעי-הבדיקה — הסמנטיקה של השכנים במקור (diary/lib.ts + courses/lib.ts + config.ts)
 const pad2 = (n) => String(n).padStart(2, '0');

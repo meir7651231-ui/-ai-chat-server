@@ -1,4 +1,9 @@
-import { campaignProgress } from './site-campaign-progress.mjs';
+import { campaignProgress as __pure_campaignProgress } from './site-campaign-progress.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_campaignProgress_SITE_CAMPAIGN_PROGRESS_T = {
+  k1: "number",
+};
+const campaignProgress = (...a) => __pure_campaignProgress(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_campaignProgress_SITE_CAMPAIGN_PROGRESS_T);
 let f = 0;
 const eq = (a, b, msg) => { const g = JSON.stringify(a), w = JSON.stringify(b); if (g !== w) { console.error(`✗ ${msg} ⇒ ${g} ≠ ${w}`); f = 1; } };
 

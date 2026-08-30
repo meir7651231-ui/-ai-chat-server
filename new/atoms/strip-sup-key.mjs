@@ -1,6 +1,6 @@
 /** חוט · strip-sup-key — קודם אוטומטית (אפיון-Golden). חוזה: strip-sup-key.contract.md */
-export function stripSupKey(data) {
-    if (!('skey' in data))
+export function stripSupKey(data, T) {
+    if (!(T.k1 in data))
         return data;
     const rest = { ...data };
     delete rest.skey;

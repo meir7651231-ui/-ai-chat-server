@@ -3,7 +3,10 @@
  *  המקומית, בונה-פרומפט-התודה, והקריאה ל-Claude — עכשיו חיווט גלוי אחד.
  *  הקופסה מייבאת אטומים בלבד (חוק-2/3); שקעי-IO אמיתיים (nsLsKey, storage, doFetch)
  *  מוזרקים כפרמטרים ואינם ממומשים כאן. */
-import { thanksPrompt as thanksPromptAtom } from '../atoms/thanks-prompt.mjs';
+import { thanksPrompt as __pure_thanksPrompt } from '../atoms/thanks-prompt.mjs';
+import { THANKS_PROMPT_T as __d_thanksPrompt_THANKS_PROMPT_T } from '../atoms/thanks-prompt-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const thanksPromptAtom = (...a) => __pure_thanksPrompt(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_thanksPrompt_THANKS_PROMPT_T);
 import { askClaude as askClaudeAtom } from '../atoms/ask-claude.mjs';
 
 // ── הכרעות-החיווט של הקופסה (מילון-הקבועים) ──

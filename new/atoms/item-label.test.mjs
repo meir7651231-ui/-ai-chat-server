@@ -1,4 +1,10 @@
-import { itemLabel } from './item-label.mjs';
+import { itemLabel as __pure_itemLabel } from './item-label.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_itemLabel_ITEM_LABEL_T = {
+  k1: "entity.ayinItem",
+  k2: "שם לטיפול",
+};
+const itemLabel = (...a) => __pure_itemLabel(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_itemLabel_ITEM_LABEL_T);
 let f = 0;
 const eq = (a, b, msg) => { if (a !== b) { console.error(`✗ ${msg} ⇒ ${JSON.stringify(a)}`); f = 1; } };
 

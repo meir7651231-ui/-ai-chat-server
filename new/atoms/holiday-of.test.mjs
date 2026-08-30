@@ -1,4 +1,23 @@
-import { holidayOf } from './holiday-of.mjs';
+import { holidayOf as __pure_holidayOf } from './holiday-of.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_holidayOf_HOLIDAY_OF_T = {
+  k1: "Tevet",
+  k2: "Kislev",
+  k3: "חנוכה",
+  k4: "Tamuz 17",
+  k5: "Tamuz",
+  k6: "צום י״ז בתמוז (נדחה)",
+  k7: "תשעה באב (נדחה)",
+  k8: "Tishri 3",
+  k9: "Tishri",
+  k10: "צום גדליה (נדחה)",
+  k11: "Adar 13",
+  k12: "Adar II 13",
+  k13: "Adar",
+  k14: "Adar II",
+  k15: "תענית אסתר (מוקדם)",
+};
+const holidayOf = (...a) => __pure_holidayOf(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_holidayOf_HOLIDAY_OF_T);
 // ימי-עוגן אמיתיים לפי יום-בשבוע: שבת=22.8.2026 · ראשון=23.8 · שני=24.8 · חמישי=27.8
 const SAT=new Date('2026-08-22T12:00:00'), SUN=new Date('2026-08-23T12:00:00'),
       MON=new Date('2026-08-24T12:00:00'), THU=new Date('2026-08-27T12:00:00');

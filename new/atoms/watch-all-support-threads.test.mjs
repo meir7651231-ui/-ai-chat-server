@@ -1,6 +1,11 @@
 /** בדיקת-קצה: חוט watch-all-support-threads דרך האטום בלבד (חוק-4).
  *  DoD (דיבר 12): node watch-all-support-threads.test.mjs ⇒ exit 0. */
-import { watchAllSupportThreads } from './watch-all-support-threads.mjs';
+import { watchAllSupportThreads as __pure_watchAllSupportThreads } from './watch-all-support-threads.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_watchAllSupportThreads_WATCH_ALL_SUPPORT_THREADS_T = {
+  k1: "supportChats",
+};
+const watchAllSupportThreads = (...a) => __pure_watchAllSupportThreads(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_watchAllSupportThreads_WATCH_ALL_SUPPORT_THREADS_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

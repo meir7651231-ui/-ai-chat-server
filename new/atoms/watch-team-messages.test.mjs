@@ -1,4 +1,10 @@
-import { watchTeamMessages } from './watch-team-messages.mjs';
+import { watchTeamMessages as __pure_watchTeamMessages } from './watch-team-messages.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_watchTeamMessages_WATCH_TEAM_MESSAGES_T = {
+  k1: "teamChats",
+  k2: "messages",
+};
+const watchTeamMessages = (...a) => __pure_watchTeamMessages(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_watchTeamMessages_WATCH_TEAM_MESSAGES_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

@@ -1,5 +1,13 @@
 /** בדיקת-חוזה · make-normalize-config — זבל/allowlists/דגלי-true/firebase/emoji/motion. */
-import { makeNormalizeConfig } from './make-normalize-config.mjs';
+import { makeNormalizeConfig as __pure_makeNormalizeConfig } from './make-normalize-config.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_makeNormalizeConfig_MAKE_NORMALIZE_CONFIG_T = {
+  k1: "use strict",
+  k2: "object",
+  k3: "string",
+  k4: "boolean",
+};
+const makeNormalizeConfig = (...a) => __pure_makeNormalizeConfig(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_makeNormalizeConfig_MAKE_NORMALIZE_CONFIG_T);
 import assert from 'node:assert';
 
 const deps = {

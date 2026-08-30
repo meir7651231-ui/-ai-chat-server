@@ -1,4 +1,17 @@
-import { supDonEvents } from './sup-don-events.mjs';
+import { supDonEvents as __pure_supDonEvents } from './sup-don-events.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_supDonEvents_SUP_DON_EVENTS_T = {
+  k1: "קבלה ",
+  k2: "עסקה ",
+  k3: "אסמכתא ",
+  k4: " תשלומים",
+  k5: "entity.donation",
+  k6: "תרומה",
+  k7: "מהקובץ ההיסטורי",
+  k8: " ראשונה (מהקובץ)",
+  k9: " אחרונה (מהקובץ)",
+};
+const supDonEvents = (...a) => __pure_supDonEvents(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_supDonEvents_SUP_DON_EVENTS_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 

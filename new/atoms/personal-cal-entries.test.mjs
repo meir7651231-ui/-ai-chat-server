@@ -1,4 +1,11 @@
-import { personalCalEntries } from './personal-cal-entries.mjs';
+import { personalCalEntries as __pure_personalCalEntries } from './personal-cal-entries.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_personalCalEntries_PERSONAL_CAL_ENTRIES_T = {
+  k1: "🎯 תאריך יעד לקשר הבא",
+  k2: "📞 תשובה: ",
+  k3: "🔁 לדבר שוב",
+};
+const personalCalEntries = (...a) => __pure_personalCalEntries(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_personalCalEntries_PERSONAL_CAL_ENTRIES_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const donEvents = () => [{ date: '2026-08-01', amount: 180, cur: '₪', src: 'קבלה D-7', rid: 'D-7' }];

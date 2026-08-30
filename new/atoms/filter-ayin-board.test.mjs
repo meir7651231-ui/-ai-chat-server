@@ -1,4 +1,10 @@
-import { filterAyinBoard } from './filter-ayin-board.mjs';
+import { filterAyinBoard as __pure_filterAyinBoard } from './filter-ayin-board.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_filterAyinBoard_FILTER_AYIN_BOARD_T = {
+  k1: "wait",
+  k2: "done",
+};
+const filterAyinBoard = (...a) => __pure_filterAyinBoard(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_filterAyinBoard_FILTER_AYIN_BOARD_T);
 let f = 0;
 const eq = (name, got, want) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) { console.error(`✗ ${name}: ${JSON.stringify(got)} ≠ ${JSON.stringify(want)}`); f = 1; }

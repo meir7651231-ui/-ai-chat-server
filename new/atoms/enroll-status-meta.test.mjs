@@ -1,4 +1,18 @@
-import { enrollStatusMeta } from './enroll-status-meta.mjs';
+import { enrollStatusMeta as __pure_enrollStatusMeta } from './enroll-status-meta.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_enrollStatusMeta_ENROLL_STATUS_META_T = {
+  k1: "paused",
+  k2: "מוקפא",
+  k3: "#fdf1d4",
+  k4: "ended",
+  k5: "הסתיים",
+  k6: "#eceae2",
+  k7: "wait",
+  k8: "רשימת-המתנה ⏳",
+  k9: "#e7edf5",
+  k10: "פעיל",
+};
+const enrollStatusMeta = (...a) => __pure_enrollStatusMeta(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_enrollStatusMeta_ENROLL_STATUS_META_T);
 const C = [
   [{ status: 'paused' }, { label: 'מוקפא', bg: '#fdf1d4', c: '#9a6414' }, 'מוקפא'],
   [{ status: 'ended' }, { label: 'הסתיים', bg: '#eceae2', c: '#8b8474' }, 'הסתיים'],

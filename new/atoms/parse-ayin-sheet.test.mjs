@@ -1,5 +1,23 @@
 import { deepStrictEqual } from 'node:assert';
-import { parseAyinSheet } from './parse-ayin-sheet.mjs';
+import { parseAyinSheet as __pure_parseAyinSheet } from './parse-ayin-sheet.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_parseAyinSheet_PARSE_AYIN_SHEET_T = {
+  k1: "הקובץ ריק או לא בפורמט CSV",
+  k2: "תומכת",
+  k3: "תומך",
+  k4: "שם למסירה",
+  k5: "שם לעופרת",
+  k6: "שם",
+  k7: "עיניים",
+  k8: "נמסר",
+  k9: "שולם",
+  k10: "תשלום",
+  k11: "תשובה",
+  k12: "הערה",
+  k13: "עופרת",
+  k14: "חסרות עמודות \"שם למסירה\" ו/או \"כמה עיניים\"",
+};
+const parseAyinSheet = (...a) => __pure_parseAyinSheet(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_parseAyinSheet_PARSE_AYIN_SHEET_T);
 
 // מימוש-שקע לבדיקה: lowercase + הסרת כל הרווחים (רוח normName במקור).
 const normName = (s) => String(s).toLowerCase().replace(/\s/g, '');

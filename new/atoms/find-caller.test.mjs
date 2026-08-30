@@ -1,4 +1,17 @@
-import { findCaller } from './find-caller.mjs';
+import { findCaller as __pure_findCaller } from './find-caller.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_findCaller_FIND_CALLER_T = {
+  k1: "family",
+  k2: "families",
+  k3: "member",
+  k4: "supporter",
+  k5: "supporters",
+  k6: "volunteer",
+  k7: "shop7",
+  k8: "coordinator",
+  k9: "tzedaka",
+};
+const findCaller = (...a) => __pure_findCaller(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_findCaller_FIND_CALLER_T);
 let f = 0;
 const eq = (a, b, msg) => { if (JSON.stringify(a) !== JSON.stringify(b)) { console.error(`✗ ${msg} ⇒ ${JSON.stringify(a)}`); f = 1; } };
 

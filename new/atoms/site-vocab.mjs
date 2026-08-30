@@ -2,22 +2,22 @@
  *  מסחרי (בלי §46) ⇒ "צרו קשר"; עמותתי ⇒ "לתרומה" (+♡ בצ׳יפים).
  *  חוזה: site-vocab.contract.md
  *  חולץ כלשונו מ-maor/src/lib/publicSite.ts:153-176 — טהור, אפס שקעים. */
-export function siteVocab(commercial, lang) {
+export function siteVocab(commercial, lang, T) {
   const en = lang === 'en';
   if (commercial) {
     return {
-      heroCta: en ? 'Get in touch' : 'צרו קשר',
-      navCta: en ? 'Contact' : 'צרו קשר',
-      give: en ? 'Contact us' : 'צרו קשר',
-      giveLabel: en ? 'Your request' : 'הפנייה שלך',
+      heroCta: en ? T.k1 : T.k2,
+      navCta: en ? T.k3 : T.k2,
+      give: en ? T.k4 : T.k2,
+      giveLabel: en ? T.k5 : T.k6,
       commercial: true,
     };
   }
   return {
-    heroCta: en ? 'Donate now' : 'לתרומה עכשיו',
-    navCta: (en ? 'Donate' : 'לתרומה') + ' ♡',
-    give: (en ? 'Donate' : 'לתרומה') + ' ♡',
-    giveLabel: en ? 'Your gift' : 'התרומה שלך',
+    heroCta: en ? T.k7 : T.k8,
+    navCta: (en ? T.k9 : T.k10) + ' ♡',
+    give: (en ? T.k9 : T.k10) + ' ♡',
+    giveLabel: en ? T.k11 : T.k12,
     commercial: false,
   };
 }

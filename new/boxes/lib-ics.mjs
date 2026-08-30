@@ -6,7 +6,10 @@
  *  (חוק-1/6 — שום ידית-DOM/מצב-מודול נצרב בקופסה). */
 import { icsEscape } from '../atoms/ics-escape.mjs';
 import { foldIcsLine } from '../atoms/fold-ics-line.mjs';
-import { buildIcs as buildIcsAtom } from '../atoms/build-ics.mjs';
+import { buildIcs as __pure_buildIcs } from '../atoms/build-ics.mjs';
+import { BUILD_ICS_T as __d_buildIcs_BUILD_ICS_T } from '../atoms/build-ics-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const buildIcsAtom = (...a) => __pure_buildIcs(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_buildIcs_BUILD_ICS_T);
 import { guardExport } from '../atoms/guard-export.mjs';
 
 // ── מילון-הקופסה (הכרעות-הצבה, verbatim מ-maor/src/lib/ics.ts:132-139) ──

@@ -1,4 +1,9 @@
-import { publicSiteOn } from './public-site-on.mjs';
+import { publicSiteOn as __pure_publicSiteOn } from './public-site-on.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_publicSiteOn_PUBLIC_SITE_ON_T = {
+  k1: "shell.publicsite",
+};
+const publicSiteOn = (...a) => __pure_publicSiteOn(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_publicSiteOn_PUBLIC_SITE_ON_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const fOn = (c, k) => c.features?.[k] !== false;

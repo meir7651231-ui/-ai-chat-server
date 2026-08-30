@@ -1,7 +1,7 @@
 /** חוט · apply-meta-partial — מיזוג מסמך-meta מרוחק (הענן-מנצח; מונים רק-עולים).
  *  חוזה: apply-meta-partial.contract.md
  *  חולץ כלשונו מ-maor/src/lib/cloud-merge.ts:106-141 — ללא שכנים (עצמאי). */
-export function applyMetaPartial(db, meta) {
+export function applyMetaPartial(db, meta, T) {
   const next = { ...db };
   let changed = false;
   const assign = (k, v) => {
@@ -11,28 +11,28 @@ export function applyMetaPartial(db, meta) {
       changed = true;
     }
   };
-  assign('orgName', meta.orgName);
-  assign('orgSite', meta.orgSite);
-  assign('orgDonate', meta.orgDonate);
-  assign('orgGoal', meta.orgGoal);
-  assign('budget', meta.budget);
-  assign('usdRate', meta.usdRate);
-  assign('audit', meta.audit);
-  assign('notif', meta.notif);
-  assign('reports', meta.reports);
+  assign(T.k1, meta.orgName);
+  assign(T.k2, meta.orgSite);
+  assign(T.k3, meta.orgDonate);
+  assign(T.k4, meta.orgGoal);
+  assign(T.k5, meta.budget);
+  assign(T.k6, meta.usdRate);
+  assign(T.k7, meta.audit);
+  assign(T.k8, meta.notif);
+  assign(T.k9, meta.reports);
   assign('ui', meta.ui);
-  assign('attnDone', meta.attnDone);
+  assign(T.k10, meta.attnDone);
   // מונים: לעולם לא מקטינים — מונע התנגשות מזהים/מספרי-קבלה בין מכשירים
   const bumpCounter = (k) => {
     const v = meta[k];
-    if (typeof v === 'number' && Number.isFinite(v) && v > db[k]) {
+    if (typeof v === T.k11 && Number.isFinite(v) && v > db[k]) {
       next[k] = v;
       changed = true;
     }
   };
-  bumpCounter('seq');
-  bumpCounter('receiptSeq');
-  bumpCounter('donationSeq');
-  bumpCounter('shopReceiptSeq');
+  bumpCounter(T.k12);
+  bumpCounter(T.k13);
+  bumpCounter(T.k14);
+  bumpCounter(T.k15);
   return changed ? next : db;
 }

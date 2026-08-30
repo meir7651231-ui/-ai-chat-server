@@ -1,4 +1,9 @@
-import { buildReenrollRows } from './build-reenroll-rows.mjs';
+import { buildReenrollRows as __pure_buildReenrollRows } from './build-reenroll-rows.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_buildReenrollRows_BUILD_REENROLL_ROWS_T = {
+  k1: "undecided",
+};
+const buildReenrollRows = (...a) => __pure_buildReenrollRows(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_buildReenrollRows_BUILD_REENROLL_ROWS_T);
 
 // שקעי-הבדיקה — הסמנטיקה של השכנים במקור (reenroll-lib.ts)
 const S = {

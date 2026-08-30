@@ -1,4 +1,14 @@
-import { donCalMonthLine } from './don-cal-month-line.mjs';
+import { donCalMonthLine as __pure_donCalMonthLine } from './don-cal-month-line.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_donCalMonthLine_DON_CAL_MONTH_LINE_T = {
+  k1: "אין ",
+  k2: "entity.donations",
+  k3: "תרומות",
+  k4: " מתועדות בחודש זה",
+  k5: " החודש · ",
+  k6: "סכומים מהקובץ ההיסטורי",
+};
+const donCalMonthLine = (...a) => __pure_donCalMonthLine(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_donCalMonthLine_DON_CAL_MONTH_LINE_T);
 const inAug = (iso) => typeof iso === 'string' && iso.startsWith('2026-08');
 let f = 0;
 const eq = (name, got, want) => {

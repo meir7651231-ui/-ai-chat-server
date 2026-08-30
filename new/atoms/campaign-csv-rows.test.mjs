@@ -1,4 +1,12 @@
-import { campaignCsvRows } from './campaign-csv-rows.mjs';
+import { campaignCsvRows as __pure_campaignCsvRows } from './campaign-csv-rows.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_campaignCsvRows_CAMPAIGN_CSV_ROWS_T = {
+  k1: "שם",
+  k2: "תוצאה",
+  k3: "הערה",
+  k4: "מתי",
+};
+const campaignCsvRows = (...a) => __pure_campaignCsvRows(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_campaignCsvRows_CAMPAIGN_CSV_ROWS_T);
 
 const LABELS = { donated: 'תרם/ה', noanswer: 'לא ענה' };
 const nameOf = (id) => ({ s7: 'ראובן', s9: 'שמעון' })[id] ?? '?';

@@ -1,4 +1,14 @@
-import { reenrollListText } from './reenroll-list-text.mjs';
+import { reenrollListText as __pure_reenrollListText } from './reenroll-list-text.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_reenrollListText_REENROLL_LIST_TEXT_T = {
+  k1: "yes",
+  k2: "ממשיך",
+  k3: "לא ממשיך",
+  k4: "hold",
+  k5: "בהמתנה",
+  k6: "טרם הוחלט",
+};
+const reenrollListText = (...a) => __pure_reenrollListText(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_reenrollListText_REENROLL_LIST_TEXT_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 

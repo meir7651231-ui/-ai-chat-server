@@ -12,10 +12,19 @@ import { progress as progressAtom } from '../atoms/progress.mjs';
 import { isDone as isDoneAtom } from '../atoms/is-done.mjs';
 import { undoLast as undoLastAtom } from '../atoms/undo-last.mjs';
 import { CALL_LOG_CAP } from '../atoms/call-log-cap.mjs';
-import { appendCall as appendCallAtom } from '../atoms/append-call.mjs';
+import { appendCall as __pure_appendCall } from '../atoms/append-call.mjs';
+import { APPEND_CALL_T as __d_appendCall_APPEND_CALL_T } from '../atoms/append-call-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const appendCallAtom = (...a) => __pure_appendCall(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_appendCall_APPEND_CALL_T);
 import { popCall as popCallAtom } from '../atoms/pop-call.mjs';
-import { callStats as callStatsAtom } from '../atoms/call-stats.mjs';
-import { campaignCsvRows as campaignCsvRowsAtom } from '../atoms/campaign-csv-rows.mjs';
+import { callStats as __pure_callStats } from '../atoms/call-stats.mjs';
+import { CALL_STATS_T as __d_callStats_CALL_STATS_T } from '../atoms/call-stats-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const callStatsAtom = (...a) => __pure_callStats(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_callStats_CALL_STATS_T);
+import { campaignCsvRows as __pure_campaignCsvRows } from '../atoms/campaign-csv-rows.mjs';
+import { CAMPAIGN_CSV_ROWS_T as __d_campaignCsvRows_CAMPAIGN_CSV_ROWS_T } from '../atoms/campaign-csv-rows-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const campaignCsvRowsAtom = (...a) => __pure_campaignCsvRows(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_campaignCsvRows_CAMPAIGN_CSV_ROWS_T);
 
 // ── החיווט (ההכרעות החיות בקופסה) ──
 // קבועי-השכן מוזרקים כאן — הצרכן לא רואה אותם. שקעי-IO (iso/nameOf) נשארים.

@@ -1,4 +1,10 @@
-import { orgCalEntries } from './org-cal-entries.mjs';
+import { orgCalEntries as __pure_orgCalEntries } from './org-cal-entries.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_orgCalEntries_ORG_CAL_ENTRIES_T = {
+  k1: "📞 תשובה: ",
+  k2: "🔁 לדבר שוב",
+};
+const orgCalEntries = (...a) => __pure_orgCalEntries(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_orgCalEntries_ORG_CAL_ENTRIES_T);
 
 // מימוש-שקע לבדיקה: אירוע-תרומה אחד ל-s1 בלבד, [] לכל השאר.
 const supDonEvents = (sp) => (sp.id === 's1' ? [{ date: '2026-01-05', amount: 100, cur: '₪', src: 'תרומה' }] : []);

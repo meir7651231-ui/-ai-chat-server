@@ -1,4 +1,13 @@
-import { filterDeliveries } from './filter-deliveries.mjs';
+import { filterDeliveries as __pure_filterDeliveries } from './filter-deliveries.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_filterDeliveries_FILTER_DELIVERIES_T = {
+  k1: "pickup",
+  k2: "איסוף",
+  k3: "enroute",
+  k4: "בדרך",
+  k5: "נמסר",
+};
+const filterDeliveries = (...a) => __pure_filterDeliveries(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_filterDeliveries_FILTER_DELIVERIES_T);
 const CASES = [[["\"\"","\"\""],"\"\""],[["\"אבג\"","\"\""],"\"אבג\""],[["\"כהן לוי\"","\"\""],"\"כהן לוי\""],[["\"abc\"","\"\""],"\"abc\""],[["\"a@b.com\"","\"\""],"\"a@b.com\""],[["\"2026-08-24\"","\"\""],"\"2026-08-24\""],[["\"2026-08-24T12:00:00\"","\"\""],"\"2026-08-24T12:00:00\""],[["\"0501234567\"","\"\""],"\"0501234567\""],[["\"03-1234567\"","\"\""],"\"03-1234567\""],[["\"https://x.co\"","\"\""],"\"https://x.co\""],[["\"שלום עולם\"","\"\""],"\"שלום עולם\""],[["\"12\"","\"\""],"\"12\""]];
 const de = (s) => s === '"__undef__"' ? undefined : JSON.parse(s);
 let f = 0;

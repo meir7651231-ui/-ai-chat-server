@@ -1,4 +1,11 @@
-import { watchIncomingPayments } from './watch-incoming-payments.mjs';
+import { watchIncomingPayments as __pure_watchIncomingPayments } from './watch-incoming-payments.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_watchIncomingPayments_WATCH_INCOMING_PAYMENTS_T = {
+  k1: "incomingPayments",
+  k2: "status",
+  k3: "pending",
+};
+const watchIncomingPayments = (...a) => __pure_watchIncomingPayments(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_watchIncomingPayments_WATCH_INCOMING_PAYMENTS_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

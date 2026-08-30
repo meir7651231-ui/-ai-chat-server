@@ -1,4 +1,43 @@
-import { needsCare } from './needs-care-shop.mjs';
+import { needsCare as __pure_needsCare } from './needs-care-shop.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_needsCare_NEEDS_CARE_SHOP_T = {
+  k1: "stockOut",
+  k2: " — המלאי אזל",
+  k3: "לחדש מלאי או לעדכן את הפריט",
+  k4: "restock",
+  k5: " — המלאי נמוך",
+  k6: "להצטייד: נותרו ",
+  k7: " מתחת ל-",
+  k8: "waitingRestocked",
+  k9: " ממתינים ל",
+  k10: "המלאי חזר — אפשר לחלק לרשימת ההמתנה",
+  k11: ") — המלאי אזל",
+  k12: "לחדש מלאי או לעדכן את הרכיב במוצר",
+  k13: "active",
+  k14: "holidayGift",
+  k15: "holidayDue",
+  k16: " ב-",
+  k17: " — טרם נמסרה",
+  k18: "meeting",
+  k19: "meetingPending",
+  k20: "פגישת ליווי טרם התקיימה",
+  k21: "coupon",
+  k22: "couponExpired",
+  k23: "הקופון פג בתוקף ב-",
+  k24: " וטרם מומש",
+  k25: "couponPending",
+  k26: "קופון טרם מומש · בתוקף עד ",
+  k27: "קופון טרם מומש",
+  k28: "shop.expiry",
+  k29: "expiring",
+  k30: " — פג תוקף",
+  k31: " — עומד לפוג",
+  k32: "פג ב-",
+  k33: "בתוקף עד ",
+  k34: " · אצווה ",
+  k35: " יח׳",
+};
+const needsCare = (...a) => __pure_needsCare(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_needsCare_NEEDS_CARE_SHOP_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const TODAY = '2026-08-24';

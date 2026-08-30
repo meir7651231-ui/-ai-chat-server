@@ -1,4 +1,9 @@
-import { colPath } from './col-path.mjs';
+import { colPath as __pure_colPath } from './col-path.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_colPath_COL_PATH_T = {
+  k1: "orgs/",
+};
+const colPath = (...a) => __pure_colPath(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_colPath_COL_PATH_T);
 const C = [
   [['demo', true, 'families'], 'families'],
   [['demo', false, 'families'], 'orgs/demo/families'],

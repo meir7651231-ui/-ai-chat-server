@@ -17,7 +17,10 @@ import { SUPPORT_MSG_MAX } from '../atoms/support-msg-max.mjs';
 
 // ── חוטי-הענן (כולם: cloudDb+firestore הוזרקו כשקע-fs באטום) ──
 import { fetchOrgCloudConfig as fetchOrgCloudConfigAtom } from '../atoms/fetch-org-cloud-config.mjs';
-import { watchOrgCloudConfig as watchOrgCloudConfigAtom } from '../atoms/watch-org-cloud-config.mjs';
+import { watchOrgCloudConfig as __pure_watchOrgCloudConfig } from '../atoms/watch-org-cloud-config.mjs';
+import { WATCH_ORG_CLOUD_CONFIG_T as __d_watchOrgCloudConfig_WATCH_ORG_CLOUD_CONFIG_T } from '../atoms/watch-org-cloud-config-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const watchOrgCloudConfigAtom = (...a) => __pure_watchOrgCloudConfig(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_watchOrgCloudConfig_WATCH_ORG_CLOUD_CONFIG_T);
 import { writeOrgCloudDoc as writeOrgCloudDocAtom } from '../atoms/write-org-cloud-doc.mjs';
 import { writeOrgCloudConfig as writeOrgCloudConfigAtom } from '../atoms/write-org-cloud-config.mjs';
 import { writeOrgSecrets as writeOrgSecretsAtom } from '../atoms/write-org-secrets.mjs';
@@ -39,12 +42,24 @@ import { writeOrgLead as writeOrgLeadAtom } from '../atoms/write-org-lead.mjs';
 import { fetchOrgLeads as fetchOrgLeadsAtom } from '../atoms/fetch-org-leads.mjs';
 import { sendSupportMessage as sendSupportMessageAtom } from '../atoms/send-support-message.mjs';
 import { sendSupportReply as sendSupportReplyAtom } from '../atoms/send-support-reply.mjs';
-import { watchSupportMessages as watchSupportMessagesAtom } from '../atoms/watch-support-messages.mjs';
-import { watchSupportThreadMeta as watchSupportThreadMetaAtom } from '../atoms/watch-support-thread-meta.mjs';
-import { watchAllSupportThreads as watchAllSupportThreadsAtom } from '../atoms/watch-all-support-threads.mjs';
+import { watchSupportMessages as __pure_watchSupportMessages } from '../atoms/watch-support-messages.mjs';
+import { WATCH_SUPPORT_MESSAGES_T as __d_watchSupportMessages_WATCH_SUPPORT_MESSAGES_T } from '../atoms/watch-support-messages-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const watchSupportMessagesAtom = (...a) => __pure_watchSupportMessages(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_watchSupportMessages_WATCH_SUPPORT_MESSAGES_T);
+import { watchSupportThreadMeta as __pure_watchSupportThreadMeta } from '../atoms/watch-support-thread-meta.mjs';
+import { WATCH_ALL_SUPPORT_THREADS_T as __d_watchSupportThreadMeta_WATCH_SUPPORT_THREAD_META_T } from '../atoms/watch-all-support-threads-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const watchSupportThreadMetaAtom = (...a) => __pure_watchSupportThreadMeta(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_watchSupportThreadMeta_WATCH_SUPPORT_THREAD_META_T);
+import { watchAllSupportThreads as __pure_watchAllSupportThreads } from '../atoms/watch-all-support-threads.mjs';
+import { WATCH_ALL_SUPPORT_THREADS_T as __d_watchAllSupportThreads_WATCH_ALL_SUPPORT_THREADS_T } from '../atoms/watch-all-support-threads-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const watchAllSupportThreadsAtom = (...a) => __pure_watchAllSupportThreads(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_watchAllSupportThreads_WATCH_ALL_SUPPORT_THREADS_T);
 import { markSupportRead as markSupportReadAtom } from '../atoms/mark-support-read.mjs';
 import { sendTeamMessage as sendTeamMessageAtom } from '../atoms/send-team-message.mjs';
-import { watchTeamMessages as watchTeamMessagesAtom } from '../atoms/watch-team-messages.mjs';
+import { watchTeamMessages as __pure_watchTeamMessages } from '../atoms/watch-team-messages.mjs';
+import { WATCH_TEAM_MESSAGES_T as __d_watchTeamMessages_WATCH_TEAM_MESSAGES_T } from '../atoms/watch-team-messages-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const watchTeamMessagesAtom = (...a) => __pure_watchTeamMessages(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_watchTeamMessages_WATCH_TEAM_MESSAGES_T);
 import { sanitizeSupportText as sanitizeSupportTextAtom } from '../atoms/sanitize-support-text.mjs';
 
 // ── שכן-מחווט: ניקוי-הטקסט. במקור sendSupportMessage/Reply/TeamMessage מייבאים את

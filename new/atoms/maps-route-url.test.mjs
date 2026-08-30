@@ -1,4 +1,9 @@
-import { mapsRouteUrl } from './maps-route-url.mjs';
+import { mapsRouteUrl as __pure_mapsRouteUrl } from './maps-route-url.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_mapsRouteUrl_MAPS_ROUTE_URL_T = {
+  k1: "&waypoints=",
+};
+const mapsRouteUrl = (...a) => __pure_mapsRouteUrl(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_mapsRouteUrl_MAPS_ROUTE_URL_T);
 const C = [
   [[], null],
   [['', '  '], null],

@@ -26,29 +26,62 @@ import { donationSplitOn as atomDonationSplitOn } from '../atoms/donation-split-
 import { supEnforceOn as atomSupEnforceOn } from '../atoms/sup-enforce-on.mjs';
 import { integrationOn as atomIntegrationOn } from '../atoms/integration-on.mjs';
 import { telephonyOn as atomTelephonyOn } from '../atoms/telephony-on.mjs';
-import { integrationSetting as atomIntegrationSetting } from '../atoms/integration-setting.mjs';
-import { safeHttpsUrl as atomSafeHttpsUrl } from '../atoms/safe-https-url.mjs';
+import { integrationSetting as __pure_integrationSetting } from '../atoms/integration-setting.mjs';
+import { INTEGRATION_SETTING_T as __d_integrationSetting_INTEGRATION_SETTING_T } from '../atoms/integration-setting-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const atomIntegrationSetting = (...a) => __pure_integrationSetting(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_integrationSetting_INTEGRATION_SETTING_T);
+import { safeHttpsUrl as __pure_safeHttpsUrl } from '../atoms/safe-https-url.mjs';
+import { SAFE_HTTPS_URL_T as __d_safeHttpsUrl_SAFE_HTTPS_URL_T } from '../atoms/safe-https-url-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const atomSafeHttpsUrl = (...a) => __pure_safeHttpsUrl(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_safeHttpsUrl_SAFE_HTTPS_URL_T);
 import { termOf as atomTermOf } from '../atoms/term-of.mjs';
 import { normalizeTelephony as __pure_normalizeTelephony } from '../atoms/normalize-telephony.mjs';
 import { TEL_KINDS } from '../atoms/normalize-telephony-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
 const atomNormalizeTelephony = (...a) => __pure_normalizeTelephony(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), TEL_KINDS);
-import { makeNormalizeSite } from '../atoms/make-normalize-site.mjs';
-import { makeNormalizeConfig } from '../atoms/make-normalize-config.mjs';
-import { publicSiteOn as atomPublicSiteOn } from '../atoms/public-site-on.mjs';
-import { roleOf as atomRoleOf } from '../atoms/role-of.mjs';
+import { makeNormalizeSite as __pure_makeNormalizeSite } from '../atoms/make-normalize-site.mjs';
+import { MAKE_NORMALIZE_SITE_T as __d_makeNormalizeSite_MAKE_NORMALIZE_SITE_T } from '../atoms/make-normalize-site-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const makeNormalizeSite = (...a) => __pure_makeNormalizeSite(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_makeNormalizeSite_MAKE_NORMALIZE_SITE_T);
+import { makeNormalizeConfig as __pure_makeNormalizeConfig } from '../atoms/make-normalize-config.mjs';
+import { MAKE_NORMALIZE_CONFIG_T as __d_makeNormalizeConfig_MAKE_NORMALIZE_CONFIG_T } from '../atoms/make-normalize-config-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const makeNormalizeConfig = (...a) => __pure_makeNormalizeConfig(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_makeNormalizeConfig_MAKE_NORMALIZE_CONFIG_T);
+import { publicSiteOn as __pure_publicSiteOn } from '../atoms/public-site-on.mjs';
+import { PUBLIC_SITE_ON_T as __d_publicSiteOn_PUBLIC_SITE_ON_T } from '../atoms/public-site-on-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const atomPublicSiteOn = (...a) => __pure_publicSiteOn(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_publicSiteOn_PUBLIC_SITE_ON_T);
+import { roleOf as __pure_roleOf } from '../atoms/role-of.mjs';
+import { ROLE_OF_T as __d_roleOf_ROLE_OF_T } from '../atoms/role-of-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const atomRoleOf = (...a) => __pure_roleOf(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_roleOf_ROLE_OF_T);
 import { teacherIdOf as atomTeacherIdOf } from '../atoms/teacher-id-of.mjs';
 import { isAdminUser as atomIsAdminUser } from '../atoms/is-admin-user.mjs';
 import { canGrantedAction as atomCanGrantedAction } from '../atoms/can-granted-action.mjs';
 import { isSuperAdmin as atomIsSuperAdmin } from '../atoms/is-super-admin.mjs';
-import { signUpError as atomSignUpError } from '../atoms/sign-up-error.mjs';
-import { employeeSignUpError as atomEmployeeSignUpError } from '../atoms/employee-sign-up-error.mjs';
-import { cloudCfgCacheKey as atomCloudCfgCacheKey } from '../atoms/cloud-cfg-cache-key.mjs';
+import { signUpError as __pure_signUpError } from '../atoms/sign-up-error.mjs';
+import { SIGN_UP_ERROR_T as __d_signUpError_SIGN_UP_ERROR_T } from '../atoms/sign-up-error-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const atomSignUpError = (...a) => __pure_signUpError(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_signUpError_SIGN_UP_ERROR_T);
+import { employeeSignUpError as __pure_employeeSignUpError } from '../atoms/employee-sign-up-error.mjs';
+import { EMPLOYEE_SIGN_UP_ERROR_T as __d_employeeSignUpError_EMPLOYEE_SIGN_UP_ERROR_T } from '../atoms/employee-sign-up-error-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const atomEmployeeSignUpError = (...a) => __pure_employeeSignUpError(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_employeeSignUpError_EMPLOYEE_SIGN_UP_ERROR_T);
+import { cloudCfgCacheKey as __pure_cloudCfgCacheKey } from '../atoms/cloud-cfg-cache-key.mjs';
+import { CLOUD_CFG_CACHE_KEY_T as __d_cloudCfgCacheKey_CLOUD_CFG_CACHE_KEY_T } from '../atoms/cloud-cfg-cache-key-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const atomCloudCfgCacheKey = (...a) => __pure_cloudCfgCacheKey(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_cloudCfgCacheKey_CLOUD_CFG_CACHE_KEY_T);
 import { resolveOrgConfig as atomResolveOrgConfig } from '../atoms/resolve-org-config.mjs';
-import { orgSlugFromUrl as atomOrgSlugFromUrl } from '../atoms/org-slug-from-url.mjs';
+import { orgSlugFromUrl as __pure_orgSlugFromUrl } from '../atoms/org-slug-from-url.mjs';
+import { ORG_SLUG_FROM_URL_T as __d_orgSlugFromUrl_ORG_SLUG_FROM_URL_T } from '../atoms/org-slug-from-url-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const atomOrgSlugFromUrl = (...a) => __pure_orgSlugFromUrl(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_orgSlugFromUrl_ORG_SLUG_FROM_URL_T);
 import { isSafeAccent as atomIsSafeAccent } from '../atoms/is-safe-accent.mjs';
 import { DEFAULT_FAVICON as ATOM_DEFAULT_FAVICON } from '../atoms/default-favicon.mjs';
-import { faviconDataUri as atomFaviconDataUri } from '../atoms/favicon-data-uri.mjs';
+import { faviconDataUri as __pure_faviconDataUri } from '../atoms/favicon-data-uri.mjs';
+import { FAVICON_DATA_URI_T as __d_faviconDataUri_FAVICON_DATA_URI_T } from '../atoms/favicon-data-uri-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const atomFaviconDataUri = (...a) => __pure_faviconDataUri(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_faviconDataUri_FAVICON_DATA_URI_T);
 import { applyConfig as atomApplyConfig } from '../atoms/apply-config.mjs';
 
 // ── שקעי-נתונים (הכרעות-הקופסה) — מיושרים ביט-לביט למקור ──

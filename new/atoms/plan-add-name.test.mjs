@@ -1,4 +1,9 @@
-import { planAddName } from './plan-add-name.mjs';
+import { planAddName as __pure_planAddName } from './plan-add-name.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_planAddName_PLAN_ADD_NAME_T = {
+  k1: "הקלידו שם לפני ההוספה",
+};
+const planAddName = (...a) => __pure_planAddName(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_planAddName_PLAN_ADD_NAME_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const normName = (s) => s.replace(/\s/g, '');

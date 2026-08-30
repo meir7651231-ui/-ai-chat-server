@@ -1,4 +1,26 @@
-import { mergeFamiliesByFields } from './merge-families-by-fields.mjs';
+import { mergeFamiliesByFields as __pure_mergeFamiliesByFields } from './merge-families-by-fields.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_mergeFamiliesByFields_MERGE_FAMILIES_BY_FIELDS_T = {
+  k1: "kidsHome",
+  k2: "kidsMarried",
+  k3: "status",
+  k4: "name",
+  k5: "mother",
+  k6: "father",
+  k7: "phone",
+  k8: "phone2",
+  k9: "email",
+  k10: "city",
+  k11: "address",
+  k12: "motherId",
+  k13: "fatherId",
+  k14: "community",
+  k15: "language",
+  k16: "maritalStatus",
+  k17: "createdAt",
+  k18: "notes",
+};
+const mergeFamiliesByFields = (...a) => __pure_mergeFamiliesByFields(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_mergeFamiliesByFields_MERGE_FAMILIES_BY_FIELDS_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const eq = (a, b, msg) => ok(JSON.stringify(a) === JSON.stringify(b), msg + ` ⇒ ${JSON.stringify(a)}`);

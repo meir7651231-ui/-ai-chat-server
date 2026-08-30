@@ -2,7 +2,7 @@
  *  חוזה: parse-vcards.contract.md · שקעים: unfoldLines, splitProperty,
  *  decodeValue, phoneLabel, joinAddress (שכני-הקובץ שוקעו — חוק-1).
  *  חולץ כלשונו מ-maor/src/lib/vcardImport.ts:153-228. */
-export function parseVcards(text, unfoldLines, splitProperty, decodeValue, phoneLabel, joinAddress) {
+export function parseVcards(text, unfoldLines, splitProperty, decodeValue, phoneLabel, joinAddress, T) {
   const lines = unfoldLines(text || '');
   const out = [];
   let cur = null;
@@ -38,28 +38,28 @@ export function parseVcards(text, unfoldLines, splitProperty, decodeValue, phone
         cur.given = (segs[1] || '').trim();
         break;
       }
-      case 'TEL': {
+      case T.k1: {
         const v = value.trim();
         if (v) cur.phones.push({ value: v, label: phoneLabel(params) });
         break;
       }
-      case 'EMAIL': {
+      case T.k2: {
         const v = decodeValue(value, params).trim();
         if (v) cur.emails.push(v);
         break;
       }
-      case 'ORG': {
+      case T.k3: {
         const v = decodeValue(value, params).replace(/;+$/, '').trim();
-        if (v && v.toLowerCase() !== 'null') cur.org = v;
+        if (v && v.toLowerCase() !== T.k4) cur.org = v;
         break;
       }
-      case 'TITLE':
+      case T.k5:
         cur.title = decodeValue(value, params).trim();
         break;
-      case 'ADR':
+      case T.k6:
         cur.address = joinAddress(value, params);
         break;
-      case 'NOTE':
+      case T.k7:
         cur.note = decodeValue(value, params).trim();
         break;
       default:

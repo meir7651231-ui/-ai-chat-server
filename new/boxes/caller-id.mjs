@@ -3,9 +3,18 @@
  *  הקשר-משפחה לכרטיס-השיחה. ‏downstream טהור: המספר מגיע מ-#call=/הקלדה — אין API-ספק.
  *  חוקי-הקופסה (חוק-2): כאן ורק כאן נפגשים החוטים. */
 import { phoneKey } from '../atoms/phone-key.mjs';
-import { findCaller } from '../atoms/find-caller.mjs';
-import { callerKindLabel } from '../atoms/caller-kind-label.mjs';
-import { familyContext } from '../atoms/family-context.mjs';
+import { findCaller as __pure_findCaller } from '../atoms/find-caller.mjs';
+import { FIND_CALLER_T as __d_findCaller_FIND_CALLER_T } from '../atoms/find-caller-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const findCaller = (...a) => __pure_findCaller(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_findCaller_FIND_CALLER_T);
+import { callerKindLabel as __pure_callerKindLabel } from '../atoms/caller-kind-label.mjs';
+import { CALLER_KIND_LABEL_T as __d_callerKindLabel_CALLER_KIND_LABEL_T } from '../atoms/caller-kind-label-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const callerKindLabel = (...a) => __pure_callerKindLabel(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_callerKindLabel_CALLER_KIND_LABEL_T);
+import { familyContext as __pure_familyContext } from '../atoms/family-context.mjs';
+import { FAMILY_CONTEXT_T as __d_familyContext_FAMILY_CONTEXT_T } from '../atoms/family-context-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const familyContext = (...a) => __pure_familyContext(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_familyContext_FAMILY_CONTEXT_T);
 import { termOf } from '../atoms/term-of.mjs';
 
 export { phoneKey, familyContext };

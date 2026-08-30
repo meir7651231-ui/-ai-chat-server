@@ -1,4 +1,13 @@
-import { phoneIssue } from './phone-issue.mjs';
+import { phoneIssue as __pure_phoneIssue } from './phone-issue.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_phoneIssue_PHONE_ISSUE_T = {
+  k1: "כנראה חסרה ספרת 0 מובילה: ",
+  k2: "קצר מדי: ",
+  k3: "לא מתחיל ב-0: ",
+  k4: "אורך חריג (",
+  k5: " ספרות): ",
+};
+const phoneIssue = (...a) => __pure_phoneIssue(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_phoneIssue_PHONE_ISSUE_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const eq = (inp, want) => {

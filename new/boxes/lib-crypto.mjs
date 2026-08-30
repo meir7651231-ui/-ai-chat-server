@@ -8,9 +8,15 @@
  *  ומשותפים לכל החוטים. הפיגמנט היחיד שאינו דטרמיניסטי — אנטרופיה — נשען על
  *  crypto.getRandomValues (סטנדרט-פלטפורמה, כמו crypto.subtle שכבר בשימוש
  *  ישיר באטומים). ה-API הציבורי זהה-חתימה למקור. */
-import { genRecoveryKey as _genRecoveryKey } from '../atoms/gen-recovery-key.mjs';
+import { genRecoveryKey as __pure_genRecoveryKey } from '../atoms/gen-recovery-key.mjs';
+import { GEN_RECOVERY_KEY_T as __d_genRecoveryKey_GEN_RECOVERY_KEY_T } from '../atoms/gen-recovery-key-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const _genRecoveryKey = (...a) => __pure_genRecoveryKey(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_genRecoveryKey_GEN_RECOVERY_KEY_T);
 import { encryptDb as _encryptDb } from '../atoms/encrypt-db.mjs';
-import { isEncrypted } from '../atoms/is-encrypted.mjs';
+import { isEncrypted as __pure_isEncrypted } from '../atoms/is-encrypted.mjs';
+import { IS_ENCRYPTED_T as __d_isEncrypted_IS_ENCRYPTED_T } from '../atoms/is-encrypted-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const isEncrypted = (...a) => __pure_isEncrypted(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_isEncrypted_IS_ENCRYPTED_T);
 import { openDek as _openDek } from '../atoms/open-dek.mjs';
 import { decryptDb as _decryptDb } from '../atoms/decrypt-db.mjs';
 import { reencryptDb as _reencryptDb } from '../atoms/reencrypt-db.mjs';

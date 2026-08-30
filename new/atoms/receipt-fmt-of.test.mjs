@@ -1,4 +1,9 @@
-import { receiptFmtOf } from './receipt-fmt-of.mjs';
+import { receiptFmtOf as __pure_receiptFmtOf } from './receipt-fmt-of.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_receiptFmtOf_RECEIPT_FMT_OF_T = {
+  k1: "core.receipt.pdf",
+};
+const receiptFmtOf = (...a) => __pure_receiptFmtOf(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_receiptFmtOf_RECEIPT_FMT_OF_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

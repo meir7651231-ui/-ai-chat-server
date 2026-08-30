@@ -7,7 +7,10 @@
  *  מתועדים בחוזה (חוק-1/6 — שום ידית-DOM/מצב-מודול נצרב בקופסה). */
 import { csvEscape } from '../atoms/csv-escape.mjs';
 import { toCsv as toCsvAtom } from '../atoms/to-csv.mjs';
-import { decodeCsvBuffer } from '../atoms/decode-csv-buffer.mjs';
+import { decodeCsvBuffer as __pure_decodeCsvBuffer } from '../atoms/decode-csv-buffer.mjs';
+import { DECODE_CSV_BUFFER_T as __d_decodeCsvBuffer_DECODE_CSV_BUFFER_T } from '../atoms/decode-csv-buffer-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const decodeCsvBuffer = (...a) => __pure_decodeCsvBuffer(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_decodeCsvBuffer_DECODE_CSV_BUFFER_T);
 import { readCsvFileText as readCsvFileTextAtom } from '../atoms/read-csv-file-text.mjs';
 import { parseCsv } from '../atoms/parse-csv.mjs';
 import { parseAnyDate } from '../atoms/parse-any-date.mjs';

@@ -1,4 +1,11 @@
-import { rangeLabel } from './range-label.mjs';
+import { rangeLabel as __pure_rangeLabel } from './range-label.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_rangeLabel_RANGE_LABEL_T = {
+  k1: "כל התאריכים",
+  k2: "מ-",
+  k3: "עד ",
+};
+const rangeLabel = (...a) => __pure_rangeLabel(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_rangeLabel_RANGE_LABEL_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 

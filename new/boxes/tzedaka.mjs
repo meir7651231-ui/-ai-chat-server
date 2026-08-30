@@ -18,15 +18,27 @@ import { coordinatorBoxes as coordinatorBoxesA } from '../atoms/coordinator-boxe
 import { coordinatorTotal as coordinatorTotalA } from '../atoms/coordinator-total.mjs';
 import { grandTotal as grandTotalA } from '../atoms/grand-total.mjs';
 import { campaignTotal as campaignTotalA } from '../atoms/campaign-total.mjs';
-import { staleBoxes as staleBoxesA } from '../atoms/stale-boxes.mjs';
-import { needsCare as needsCareA } from '../atoms/needs-care-tzedaka.mjs';
+import { staleBoxes as __pure_staleBoxes } from '../atoms/stale-boxes.mjs';
+import { STALE_BOXES_T as __d_staleBoxes_STALE_BOXES_T } from '../atoms/stale-boxes-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const staleBoxesA = (...a) => __pure_staleBoxes(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_staleBoxes_STALE_BOXES_T);
+import { needsCare as __pure_needsCare } from '../atoms/needs-care-tzedaka.mjs';
+import { NEEDS_CARE_TZEDAKA_T as __d_needsCare_NEEDS_CARE_TZEDAKA_T } from '../atoms/needs-care-tzedaka-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const needsCareA = (...a) => __pure_needsCare(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_needsCare_NEEDS_CARE_TZEDAKA_T);
 import { leaderboard as leaderboardA } from '../atoms/leaderboard.mjs';
 import { campaignProgress as campaignProgressA } from '../atoms/campaign-progress.mjs';
 import { filterCoordinators as filterCoordinatorsA } from '../atoms/filter-coordinators.mjs';
 import { boxesOverview as boxesOverviewA } from '../atoms/boxes-overview.mjs';
 import { filterCollections as filterCollectionsA } from '../atoms/filter-collections.mjs';
-import { coordinatorPrintLines as coordinatorPrintLinesA } from '../atoms/coordinator-print-lines.mjs';
-import { collectionsCsvRows as collectionsCsvRowsA } from '../atoms/collections-csv-rows.mjs';
+import { coordinatorPrintLines as __pure_coordinatorPrintLines } from '../atoms/coordinator-print-lines.mjs';
+import { COORDINATOR_PRINT_LINES_T as __d_coordinatorPrintLines_COORDINATOR_PRINT_LINES_T } from '../atoms/coordinator-print-lines-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const coordinatorPrintLinesA = (...a) => __pure_coordinatorPrintLines(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_coordinatorPrintLines_COORDINATOR_PRINT_LINES_T);
+import { collectionsCsvRows as __pure_collectionsCsvRows } from '../atoms/collections-csv-rows.mjs';
+import { COLLECTIONS_CSV_ROWS_T as __d_collectionsCsvRows_COLLECTIONS_CSV_ROWS_T } from '../atoms/collections-csv-rows-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const collectionsCsvRowsA = (...a) => __pure_collectionsCsvRows(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_collectionsCsvRows_COLLECTIONS_CSV_ROWS_T);
 import { buildTzGrid as buildTzGridA } from '../atoms/build-tz-grid.mjs';
 import { termOf } from '../atoms/term-of.mjs';
 import { dateInRange } from '../atoms/date-in-range.mjs';

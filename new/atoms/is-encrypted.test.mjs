@@ -1,4 +1,9 @@
-import { isEncrypted } from './is-encrypted.mjs';
+import { isEncrypted as __pure_isEncrypted } from './is-encrypted.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_isEncrypted_IS_ENCRYPTED_T = {
+  k1: "object",
+};
+const isEncrypted = (...a) => __pure_isEncrypted(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_isEncrypted_IS_ENCRYPTED_T);
 const C = [
   [{ $enc: 2, iter: 600000, data: '...' }, true],
   [{ $enc: 2 }, true],

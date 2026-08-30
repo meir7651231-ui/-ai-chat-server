@@ -1,4 +1,10 @@
-import { enrollCount } from './enroll-count.mjs';
+import { enrollCount as __pure_enrollCount } from './enroll-count.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_enrollCount_ENROLL_COUNT_T = {
+  k1: "ended",
+  k2: "wait",
+};
+const enrollCount = (...a) => __pure_enrollCount(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_enrollCount_ENROLL_COUNT_T);
 const mixed = [
   { courseId: 'c1', status: 'active' },
   { courseId: 'c1', status: 'paused' },

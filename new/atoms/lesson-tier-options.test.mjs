@@ -1,4 +1,12 @@
-import { lessonTierOptions } from './lesson-tier-options.mjs';
+import { lessonTierOptions as __pure_lessonTierOptions } from './lesson-tier-options.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_lessonTierOptions_LESSON_TIER_OPTIONS_T = {
+  k1: "מחיר מלא · ₪",
+  k2: "הנחה 1",
+  k3: "הנחה 2",
+  k4: "הנחה 3",
+};
+const lessonTierOptions = (...a) => __pure_lessonTierOptions(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_lessonTierOptions_LESSON_TIER_OPTIONS_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 // 1) רק מחיר מלא

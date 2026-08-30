@@ -5,7 +5,10 @@ import { normSearch } from '../atoms/norm-search.mjs';
 import { expandQuery } from '../atoms/xlat.mjs';
 import { ruleExact } from '../atoms/rule-exact.mjs';
 import { rulePrefix } from '../atoms/rule-prefix.mjs';
-import { rulePlural } from '../atoms/rule-plural.mjs';
+import { rulePlural as __pure_rulePlural } from '../atoms/rule-plural.mjs';
+import { RULE_PLURAL_T as __d_rulePlural_RULE_PLURAL_T } from '../atoms/rule-plural-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const rulePlural = (...a) => __pure_rulePlural(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_rulePlural_RULE_PLURAL_T);
 import { ruleContains } from '../atoms/rule-contains.mjs';
 import { ruleSkeleton } from '../atoms/rule-skeleton.mjs';
 import { ruleTypo } from '../atoms/rule-typo.mjs';

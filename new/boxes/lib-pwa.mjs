@@ -5,7 +5,10 @@
  *  (window/navigator/document/serviceWorker/Blob/import.meta.env) = שקע מוזרק (חוק-1/5/6). */
 import { installAvailable as atomInstallAvailable } from '../atoms/install-available.mjs';
 import { promptInstall as atomPromptInstall } from '../atoms/prompt-install.mjs';
-import { isIos as atomIsIos } from '../atoms/is-ios.mjs';
+import { isIos as __pure_isIos } from '../atoms/is-ios.mjs';
+import { IS_IOS_T as __d_isIos_IS_IOS_T } from '../atoms/is-ios-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const atomIsIos = (...a) => __pure_isIos(...a, ...Array(Math.max(0, 0 - a.length)).fill(undefined), __d_isIos_IS_IOS_T);
 import { featureOn } from '../atoms/feature-on.mjs';
 
 // ── מילון-הקופסה: הכרעות (pwa.ts:57-108) — סדר/ברירות-מחדל/צבעים/אייקונים ──

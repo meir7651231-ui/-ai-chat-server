@@ -1,4 +1,14 @@
-import { detectRecurringHok } from './detect-recurring-hok.mjs';
+import { detectRecurringHok as __pure_detectRecurringHok } from './detect-recurring-hok.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_detectRecurringHok_DETECT_RECURRING_HOK_T = {
+  k1: "card",
+  k2: "הו״ק ",
+  k3: "סליקה",
+  k4: " (זוהה מהיסטוריה · ",
+  k5: " חודשים)",
+  k6: "auto",
+};
+const detectRecurringHok = (...a) => __pure_detectRecurringHok(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_detectRecurringHok_DETECT_RECURRING_HOK_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 // השקעים — מימושי-המקור (nedarimSync.ts)

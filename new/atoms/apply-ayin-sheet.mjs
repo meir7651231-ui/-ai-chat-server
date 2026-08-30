@@ -1,7 +1,7 @@
 /** חוט · apply-ayin-sheet — החלת עדכוני גיליון-העיניים.
  *  חוזה: apply-ayin-sheet.contract.md · טהור, אפס-שקעים.
  *  חולץ כלשונו מ-maor/src/lib/ayin.ts. */
-export function applyAyinSheet(supporters, upds, today) {
+export function applyAyinSheet(supporters, upds, today, T) {
   let logged = 0;
   const byId = new Map();
   for (const u of upds) {
@@ -32,7 +32,7 @@ export function applyAyinSheet(supporters, upds, today) {
       if (u.answer && !a.answers.some((x) => x.note === u.answer)) {
         a = { ...a, answers: [{ date: today, note: u.answer }, ...a.answers], answeredNote: u.answer };
       }
-      if (u.lead && !['eyes', 'answer', 'done'].includes(a.stage)) a = { ...a, stage: 'eyes' };
+      if (u.lead && ![T.k1, T.k2, T.k3].includes(a.stage)) a = { ...a, stage: T.k1 };
       a = { ...a, lastTouch: today };
     }
     return { ...sp, ayin: a };

@@ -1,4 +1,10 @@
-import { unitLabel } from './unit-label.mjs';
+import { unitLabel as __pure_unitLabel } from './unit-label.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_unitLabel_UNIT_LABEL_T = {
+  k1: "entity.ayinUnit",
+  k2: "כמות",
+};
+const unitLabel = (...a) => __pure_unitLabel(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_unitLabel_UNIT_LABEL_T);
 let f = 0;
 const eq = (a, b, msg) => { if (a !== b) { console.error(`✗ ${msg} ⇒ ${JSON.stringify(a)}`); f = 1; } };
 

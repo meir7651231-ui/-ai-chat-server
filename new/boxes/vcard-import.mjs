@@ -2,7 +2,10 @@
  *  מחווטת את גרף-הקריאות של maor/src/lib/vcardImport.ts — המקום היחיד שבו החוטים
  *  נפגשים (חוקי-החשמלאי, LAW.md). ההכרעות (סדר-שדות, מילון-תוויות, כלל-ריכוך-QP)
  *  חיות כאן; שכני-המקור (unfold/split/decode/label/join/digits) הם חיווט-מקומי. */
-import { parseVcards as _parseVcards } from '../atoms/parse-vcards.mjs';
+import { parseVcards as __pure_parseVcards } from '../atoms/parse-vcards.mjs';
+import { PARSE_VCARDS_T as __d_parseVcards_PARSE_VCARDS_T } from '../atoms/parse-vcards-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const _parseVcards = (...a) => __pure_parseVcards(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_parseVcards_PARSE_VCARDS_T);
 import { isJunkContact as _isJunkContact } from '../atoms/is-junk-contact.mjs';
 import { importableContacts as _importableContacts } from '../atoms/importable-contacts.mjs';
 import { contactToRow as _contactToRow } from '../atoms/contact-to-row.mjs';

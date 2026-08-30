@@ -2,16 +2,16 @@
  *  כרטיסייה נגמרת. חוזה: suggestions.contract.md.
  *  חולץ כלשונו מ-maor/src/components/shop8/lib.ts:62-139; השכנים
  *  termOf/moduleOn/upcomingHoliday/ageAt הוזרקו כשקעים (חוק-1 — אפס import פנימי). */
-export function suggestions(db, todayIso, config, { termOf, moduleOn, upcomingHoliday, ageAt }) {
+export function suggestions(db, todayIso, config, { termOf, moduleOn, upcomingHoliday, ageAt }, T2) {
   const T = (k, fb) => (config ? termOf(config, k, fb) : fb);
   // גידור-מודולים במנוע (20.8, ממצא-ביקורת): הצעה שה-act שלה במודול כבוי לא נוצרת —
   // בלי config (בדיקות ישנות) הכול פעיל, כמו חוזה-הדגלים.
   const modOn = (m) => !config || moduleOn(config, m);
   const out = [];
-  const activeFams = db.families.filter((f) => f.status === 'active');
+  const activeFams = db.families.filter((f) => f.status === T2.k1);
   // A — חג מתקרב (מודול חנות בלבד — היעד הוא מתנת-חג בחנות)
   const hol = upcomingHoliday(todayIso, 30);
-  if (modOn('shop') && hol && activeFams.length > 0) {
+  if (modOn(T2.k2) && hol && activeFams.length > 0) {
     // תיקון (swarm-audit): מפתחות 'sug:' פטורים מגיזום-30-הימים (useApp postLoad) —
     // מפתח בלי שנה עברית ⇒ ביטול חד-פעמי של "מתנת-חג · פסח" קובר את ההצעה לנצח,
     // לכל השנים. השנה העברית של מופע-החג במפתח ⇒ החג הבא (שנה אחרת) עולה מחדש.
@@ -20,7 +20,7 @@ export function suggestions(db, todayIso, config, { termOf, moduleOn, upcomingHo
       emoji: '🎁',
       title: `מתנת-חג · ${hol.name} בעוד ${hol.inDays} ימים`,
       detail: `${activeFams.length} ${T('nav.families', 'משפחות')} פעילות — שקלו חלוקת מתנות לקראת החג`,
-      act: 'shop',
+      act: T2.k2,
     });
   }
   // B/C — לפי גיל הילדים
@@ -37,7 +37,7 @@ export function suggestions(db, todayIso, config, { termOf, moduleOn, upcomingHo
           title: `ערכת בית-ספר · ${m.first} (${f.name})`,
           detail: `בן/בת ${age} — לקראת/בתחילת כיתה א׳`,
           famId: f.id,
-          act: 'families',
+          act: T2.k3,
         });
       } else if (age === 0) {
         out.push({
@@ -46,14 +46,14 @@ export function suggestions(db, todayIso, config, { termOf, moduleOn, upcomingHo
           title: `ערכת תינוק · ${T('entity.familyOf', 'משפחת')} ${f.name}`,
           detail: `${m.first} — תינוק/ת חדש/ה ב${T('entity.family', 'משפחה')}`,
           famId: f.id,
-          act: 'families',
+          act: T2.k3,
         });
       }
     }
   }
   // D — כרטיסייה נגמרת (מודול חוגים בלבד — הנתון והיעד שניהם בחוגים)
-  for (const e of modOn('courses') ? db.enrollments : []) {
-    if (e.plan !== 'punch' || e.status !== 'active') continue;
+  for (const e of modOn(T2.k4) ? db.enrollments : []) {
+    if (e.plan !== T2.k5 || e.status !== T2.k1) continue;
     const rem = e.purchased - e.used;
     if (rem > 2 || rem < 0) continue;
     const course = db.courses.find((c) => c.id === e.courseId);
@@ -66,10 +66,10 @@ export function suggestions(db, todayIso, config, { termOf, moduleOn, upcomingHo
       key: `sug:renew:${e.id}:${e.purchased}`,
       emoji: '🎫',
       title: `חידוש כרטיסייה · ${member?.first ?? '—'} · ${course?.name ?? '—'}`,
-      detail: rem <= 0 ? 'הכרטיסייה נגמרה' : `נותרו ${rem} ניקובים`,
+      detail: rem <= 0 ? T2.k6 : `נותרו ${rem} ניקובים`,
       famId: fam?.id,
       courseId: e.courseId,
-      act: 'courses',
+      act: T2.k4,
     });
   }
   return out;

@@ -20,24 +20,48 @@ import { assignmentRedeemed as _assignmentRedeemed } from '../atoms/assignment-r
 import { componentRemaining as _componentRemaining } from '../atoms/component-remaining.mjs';
 import { couponExpiry as _couponExpiry } from '../atoms/coupon-expiry.mjs';
 import { SHOP_HOLIDAY_DUE_DAYS } from '../atoms/shop-holiday-due-days.mjs';
-import { needsCare as _needsCare } from '../atoms/needs-care-shop.mjs';
+import { needsCare as __pure_needsCare } from '../atoms/needs-care-shop.mjs';
+import { NEEDS_CARE_SHOP_T as __d_needsCare_NEEDS_CARE_SHOP_T } from '../atoms/needs-care-shop-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const _needsCare = (...a) => __pure_needsCare(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_needsCare_NEEDS_CARE_SHOP_T);
 import { SHOP_EXPIRY_WARN_DAYS } from '../atoms/shop-expiry-warn-days.mjs';
 import { expiringIntakes as _expiringIntakes } from '../atoms/expiring-intakes.mjs';
-import { upcomingMeetings as _upcomingMeetings } from '../atoms/upcoming-meetings.mjs';
+import { upcomingMeetings as __pure_upcomingMeetings } from '../atoms/upcoming-meetings.mjs';
+import { UPCOMING_MEETINGS_T as __d_upcomingMeetings_UPCOMING_MEETINGS_T } from '../atoms/upcoming-meetings-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const _upcomingMeetings = (...a) => __pure_upcomingMeetings(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_upcomingMeetings_UPCOMING_MEETINGS_T);
 import { givenValue as _givenValue } from '../atoms/given-value.mjs';
 import { collectedPaid as _collectedPaid } from '../atoms/collected-paid.mjs';
 import { subsidyTotal as _subsidyTotal } from '../atoms/subsidy-total.mjs';
 import { productAssignments } from '../atoms/product-assignments.mjs';
-import { componentRedeemedNow as _componentRedeemedNow } from '../atoms/component-redeemed-now.mjs';
+import { componentRedeemedNow as __pure_componentRedeemedNow } from '../atoms/component-redeemed-now.mjs';
+import { COMPONENT_REDEEMED_NOW_T as __d_componentRedeemedNow_COMPONENT_REDEEMED_NOW_T } from '../atoms/component-redeemed-now-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const _componentRedeemedNow = (...a) => __pure_componentRedeemedNow(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_componentRedeemedNow_COMPONENT_REDEEMED_NOW_T);
 import { filterAssignments as _filterAssignments } from '../atoms/filter-assignments.mjs';
 import { filterProducts as _filterProducts } from '../atoms/filter-products.mjs';
-import { filterItems as _filterItems } from '../atoms/filter-items.mjs';
+import { filterItems as __pure_filterItems } from '../atoms/filter-items.mjs';
+import { FILTER_ITEMS_T as __d_filterItems_FILTER_ITEMS_T } from '../atoms/filter-items-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const _filterItems = (...a) => __pure_filterItems(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_filterItems_FILTER_ITEMS_T);
 import { filterRedemptions as _filterRedemptions } from '../atoms/filter-redemptions.mjs';
 import { intakeLog } from '../atoms/intake-log.mjs';
-import { eligibleFamilies } from '../atoms/eligible-families.mjs';
-import { distributionListLines as _distributionListLines } from '../atoms/distribution-list-lines.mjs';
-import { redemptionsCsvRows as _redemptionsCsvRows } from '../atoms/redemptions-csv-rows.mjs';
-import { beneficiaryLabel as _beneficiaryLabel } from '../atoms/beneficiary-label.mjs';
+import { eligibleFamilies as __pure_eligibleFamilies } from '../atoms/eligible-families.mjs';
+import { ELIGIBLE_ASSIGNMENTS_FOR_DAY_T as __d_eligibleFamilies_ELIGIBLE_FAMILIES_T } from '../atoms/eligible-assignments-for-day-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const eligibleFamilies = (...a) => __pure_eligibleFamilies(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_eligibleFamilies_ELIGIBLE_FAMILIES_T);
+import { distributionListLines as __pure_distributionListLines } from '../atoms/distribution-list-lines.mjs';
+import { DISTRIBUTION_LIST_LINES_T as __d_distributionListLines_DISTRIBUTION_LIST_LINES_T } from '../atoms/distribution-list-lines-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const _distributionListLines = (...a) => __pure_distributionListLines(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_distributionListLines_DISTRIBUTION_LIST_LINES_T);
+import { redemptionsCsvRows as __pure_redemptionsCsvRows } from '../atoms/redemptions-csv-rows.mjs';
+import { REDEMPTIONS_CSV_ROWS_T as __d_redemptionsCsvRows_REDEMPTIONS_CSV_ROWS_T } from '../atoms/redemptions-csv-rows-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const _redemptionsCsvRows = (...a) => __pure_redemptionsCsvRows(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_redemptionsCsvRows_REDEMPTIONS_CSV_ROWS_T);
+import { beneficiaryLabel as __pure_beneficiaryLabel } from '../atoms/beneficiary-label.mjs';
+import { BENEFICIARY_LABEL_T as __d_beneficiaryLabel_BENEFICIARY_LABEL_T } from '../atoms/beneficiary-label-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const _beneficiaryLabel = (...a) => __pure_beneficiaryLabel(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_beneficiaryLabel_BENEFICIARY_LABEL_T);
 import { componentCounts } from '../atoms/component-counts.mjs';
 // עלי-שכן חסרי-שקע — מיובאים ומחווטים בקופסה
 import { termOf } from '../atoms/term-of.mjs';

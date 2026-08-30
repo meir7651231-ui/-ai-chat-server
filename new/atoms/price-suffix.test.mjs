@@ -1,4 +1,14 @@
-import { priceSuffix } from './price-suffix.mjs';
+import { priceSuffix as __pure_priceSuffix } from './price-suffix.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_priceSuffix_PRICE_SUFFIX_T = {
+  k1: "half_year",
+  k2: "לחצי שנה",
+  k3: "year",
+  k4: "לשנה",
+  k5: "punch",
+  k6: "לחודש",
+};
+const priceSuffix = (...a) => __pure_priceSuffix(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_priceSuffix_PRICE_SUFFIX_T);
 const C = [
   ['half_year', 'לחצי שנה'],
   ['year', 'לשנה'],

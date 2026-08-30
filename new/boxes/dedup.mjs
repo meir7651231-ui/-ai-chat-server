@@ -9,13 +9,19 @@ import { findDuplicateGroups as _findDuplicateGroups } from '../atoms/find-dupli
 import { mergeFamilies as _mergeFamilies } from '../atoms/merge-families.mjs';
 import { DUP_FIELDS } from '../atoms/dup-fields.mjs';
 import { dupFieldValue } from '../atoms/dup-field-value.mjs';
-import { mergeFamiliesByFields as _mergeFamiliesByFields } from '../atoms/merge-families-by-fields.mjs';
+import { mergeFamiliesByFields as __pure_mergeFamiliesByFields } from '../atoms/merge-families-by-fields.mjs';
+import { MERGE_FAMILIES_BY_FIELDS_T as __d_mergeFamiliesByFields_MERGE_FAMILIES_BY_FIELDS_T } from '../atoms/merge-families-by-fields-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const _mergeFamiliesByFields = (...a) => __pure_mergeFamiliesByFields(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_mergeFamiliesByFields_MERGE_FAMILIES_BY_FIELDS_T);
 import { findSupporterDupGroups as _findSupporterDupGroups } from '../atoms/find-supporter-dup-groups.mjs';
 import { mergeSupporterInto as _mergeSupporterInto } from '../atoms/merge-supporter-into.mjs';
 import { mergeSupportersGroup as _mergeSupportersGroup } from '../atoms/merge-supporters-group.mjs';
 import { SUP_DUP_FIELDS } from '../atoms/sup-dup-fields.mjs';
 import { supDupFieldValue } from '../atoms/sup-dup-field-value.mjs';
-import { mergeSupportersByFields as _mergeSupportersByFields } from '../atoms/merge-supporters-by-fields.mjs';
+import { mergeSupportersByFields as __pure_mergeSupportersByFields } from '../atoms/merge-supporters-by-fields.mjs';
+import { MERGE_SUPPORTERS_BY_FIELDS_T as __d_mergeSupportersByFields_MERGE_SUPPORTERS_BY_FIELDS_T } from '../atoms/merge-supporters-by-fields-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const _mergeSupportersByFields = (...a) => __pure_mergeSupportersByFields(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_mergeSupportersByFields_MERGE_SUPPORTERS_BY_FIELDS_T);
 import { mergeHist } from '../atoms/merge-hist.mjs';
 import { PHOTO_MAX } from '../atoms/photo-max.mjs';
 import { nameSortKey as _nameSortKey } from '../atoms/name-sort-key.mjs';

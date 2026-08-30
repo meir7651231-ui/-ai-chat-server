@@ -3,7 +3,7 @@
  *  חולץ כלשונו מ-maor/src/lib/cloud.ts:266-275 (cloudDb + העוזר הפרטי requireDb
  *  אוחד פנימה); משתנה-המודול fsDb הוזרק כשקע-קלט (חוק-1 — אפס import פנימי;
  *  חוק-6 — החזקת-הידית היא חיווט-הצבה של הקופסה). */
-export function cloudDb(fsDb) {
-  if (!fsDb) throw new Error('הענן לא אותחל — פנו למנהל המערכת');
+export function cloudDb(fsDb, T) {
+  if (!fsDb) throw new Error(T.k1);
   return fsDb;
 }

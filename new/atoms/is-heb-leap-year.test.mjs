@@ -1,4 +1,9 @@
-import { isHebLeapYear } from './is-heb-leap-year.mjs';
+import { isHebLeapYear as __pure_isHebLeapYear } from './is-heb-leap-year.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_isHebLeapYear_IS_HEB_LEAP_YEAR_T = {
+  k1: "Adar I",
+};
+const isHebLeapYear = (...a) => __pure_isHebLeapYear(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_isHebLeapYear_IS_HEB_LEAP_YEAR_T);
 // שקע-דמה נאמן-ללוח: 'Adar I' קיים ⇔ השנה מעוברת לפי מחזור-19 ((7y+1)%19<7) — מאומת ל-5784/5786/5787.
 let calls = 0;
 const hebToIsoEn = (day, monthEn, y) => { calls++; return (monthEn === 'Adar I' && (7 * y + 1) % 19 < 7) ? '2024-02-10' : null; };

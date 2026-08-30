@@ -1,4 +1,10 @@
-import { hokRecordedThisMonth } from './hok-recorded-this-month.mjs';
+import { hokRecordedThisMonth as __pure_hokRecordedThisMonth } from './hok-recorded-this-month.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_hokRecordedThisMonth_HOK_RECORDED_THIS_MONTH_T = {
+  k1: "נדרים",
+  k2: "סולה",
+};
+const hokRecordedThisMonth = (...a) => __pure_hokRecordedThisMonth(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_hokRecordedThisMonth_HOK_RECORDED_THIS_MONTH_T);
 const HOK_CAT = 'הו"ק'; // ערך-השקע כמוסכמת-maor (מקומי לבדיקה)
 const T = '2026-08-24';
 const hok = { amount: 100, cur: '₪' };

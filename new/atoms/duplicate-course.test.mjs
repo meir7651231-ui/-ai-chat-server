@@ -1,4 +1,9 @@
-import { duplicateCourse } from './duplicate-course.mjs';
+import { duplicateCourse as __pure_duplicateCourse } from './duplicate-course.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_duplicateCourse_DUPLICATE_COURSE_T = {
+  k1: " (עותק)",
+};
+const duplicateCourse = (...a) => __pure_duplicateCourse(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_duplicateCourse_DUPLICATE_COURSE_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const c = { id: 'c1', name: 'ציור', start: '2026-01-01', end: '2026-06-30', roomId: 'r9', price: 120 };

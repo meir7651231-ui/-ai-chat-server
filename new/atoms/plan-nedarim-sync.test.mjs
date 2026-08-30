@@ -1,4 +1,13 @@
-import { planNedarimSync } from './plan-nedarim-sync.mjs';
+import { planNedarimSync as __pure_planNedarimSync } from './plan-nedarim-sync.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_planNedarimSync_PLAN_NEDARIM_SYNC_T = {
+  k1: "extId",
+  k2: "phone",
+  k3: "email",
+  k4: "address",
+  k5: "idNum",
+};
+const planNedarimSync = (...a) => __pure_planNedarimSync(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_planNedarimSync_PLAN_NEDARIM_SYNC_T);
 
 /* ── שקעי-ייחוס נאמנים למקור (maor/src/lib/nedarimSync.ts + dedup.ts + validate.ts)
    — מקומיים לבדיקה; הבדיקה מייבאת רק את האטום שלה (חוק-4). ── */

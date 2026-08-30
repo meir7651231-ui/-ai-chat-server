@@ -3,15 +3,15 @@
  *  fflate — תלות-חוץ שוקעה), readSharedStrings, colRefToIndex, unescapeXml
  *  (שכני-הקובץ שוקעו — חוק-1).
  *  חולץ כלשונו מ-maor/src/lib/xlsx.ts:55-106. */
-export function parseXlsxSheet(bytes, unzipSync, strFromU8, readSharedStrings, colRefToIndex, unescapeXml) {
+export function parseXlsxSheet(bytes, unzipSync, strFromU8, readSharedStrings, colRefToIndex, unescapeXml, T) {
   let files;
   try {
     files = unzipSync(bytes);
   } catch {
     return [];
   }
-  const shared = files['xl/sharedStrings.xml']
-    ? readSharedStrings(strFromU8(files['xl/sharedStrings.xml']))
+  const shared = files[T.k1]
+    ? readSharedStrings(strFromU8(files[T.k1]))
     : [];
   // הגיליון בעל המספר הנמוך ביותר (sheet1.xml הוא הראשון בפועל בכל היצואים).
   const sheetPath = Object.keys(files)
@@ -35,7 +35,7 @@ export function parseXlsxSheet(bytes, unzipSync, strFromU8, readSharedStrings, c
       const tM = /t="([^"]+)"/.exec(attrs);
       const t = tM ? tM[1] : '';
       let val = '';
-      if (t === 'inlineStr') {
+      if (t === T.k2) {
         // שרשור כל ה-<t> בתוך <is> (טקסט-עשיר מוטבע)
         const isRe = /<t[^>]*>([\s\S]*?)<\/t>/g;
         let im;

@@ -2,6 +2,6 @@
  *  חוזה: public-site-on.contract.md
  *  חולץ כלשונו מ-maor/src/lib/config.ts:637-641; השכן featureOn הוזרק
  *  כשקע (חוק-1 — אפס import פנימי). */
-export function publicSiteOn(cfg, featureOn) {
-  return featureOn(cfg, 'shell.publicsite') && !!cfg.site && cfg.site.enabled !== false;
+export function publicSiteOn(cfg, featureOn, T) {
+  return featureOn(cfg, T.k1) && !!cfg.site && cfg.site.enabled !== false;
 }
