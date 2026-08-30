@@ -16,7 +16,7 @@ class _SkeletonCardState extends State<SkeletonCard> with SingleTickerProviderSt
       final x = ((_c.value * 2) - 1);
       return Container(height: h, decoration: BoxDecoration(borderRadius: BorderRadius.circular(6),
         gradient: LinearGradient(begin: Alignment(x - 1, 0), end: Alignment(x + 1, 0),
-          colors: [widget.baseColor.withValues(alpha: 0.12), widget.accentColor.withValues(alpha: 0.35), widget.baseColor.withValues(alpha: 0.12)]))));
+          colors: [widget.baseColor.withValues(alpha: 0.12), widget.accentColor.withValues(alpha: 0.35), widget.baseColor.withValues(alpha: 0.12)])));
     }));
   @override void dispose() { _c.dispose(); super.dispose(); }
   @override Widget build(BuildContext context) => Container(
