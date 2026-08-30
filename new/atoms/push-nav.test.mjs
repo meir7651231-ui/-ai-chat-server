@@ -1,4 +1,7 @@
-import { pushNav } from './push-nav.mjs';
+import { pushNav as __pure_pushNav } from './push-nav.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)
+const __d_pushNav_NAV_HIST_MAX = 20;
+const pushNav = (...a) => __pure_pushNav(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_pushNav_NAV_HIST_MAX);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b);

@@ -2,8 +2,7 @@
  * מוצא: maor-system/src/components/supporters/portfolio.ts:44 (portfolioIntel) + _shiftIso:154 + RISK=60:20 (inline). חוק-4 verbatim.
  * שקעים (מבונים): donorScan,dayDiff,rfmFromScan,churnFromScan,forecastFromScan (intel) · supTier (Genesis).
  */
-export function portfolioIntel(supporters, todayIso, rate = 3.7, topN = 10, { donorScan, dayDiff, rfmFromScan, churnFromScan, forecastFromScan, supTier }) {
-  const RISK = 60;
+export function portfolioIntel(supporters, todayIso, rate = 3.7, topN = 10, { donorScan, dayDiff, rfmFromScan, churnFromScan, forecastFromScan, supTier }, RISK) {
   const _shiftIso = (iso, days) => new Date(Date.parse(iso.slice(0, 10) + 'T12:00:00') + days * 86_400_000).toISOString().slice(0, 10);
   const scoreBins = new Array(10).fill(0);
   const tierCounts = {};

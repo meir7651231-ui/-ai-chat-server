@@ -18,7 +18,10 @@ import { hebParts as __pure_hebParts } from '../atoms/heb-parts.mjs';
 import { HEB_PARTS_T as __d_hebParts_HEB_PARTS_T } from '../atoms/heb-parts-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const hebParts = (...a) => __pure_hebParts(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_hebParts_HEB_PARTS_T);
-import { hebPartsOfIso as hebPartsOfIsoWire } from '../atoms/heb-parts-of-iso.mjs';
+import { hebPartsOfIso as __pure_hebPartsOfIso } from '../atoms/heb-parts-of-iso.mjs';
+import { HP_CACHE_MAX as __d_hebPartsOfIso_HP_CACHE_MAX } from '../atoms/heb-parts-of-iso-data.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const hebPartsOfIsoWire = (...a) => __pure_hebPartsOfIso(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_hebPartsOfIso_HP_CACHE_MAX);
 import { hebDateFull as __pure_hebDateFull } from '../atoms/heb-date-full.mjs';
 import { HEB_DATE_FULL_T as __d_hebDateFull_HEB_DATE_FULL_T } from '../atoms/heb-date-full-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

@@ -36,12 +36,22 @@ function eligible(file) {
   if (fns.length !== 1) return null;
   const fn = fns[0];
   const consts = [];
-  for (const m of src.matchAll(/(?:^|\n)([ \t]*)const\s+([A-Za-z_$][\w$]*)\s*=\s*(?=[\[{])/g)) {
+  for (const m of src.matchAll(/(?:^|\n)([ \t]*)const\s+([A-Za-z_$][\w$]*)\s*=\s*(?=[\[{]|-?\d|['"])/g)) {
     const start = m.index + m[0].length;
-    const end = balanced(src, start);
-    if (end < 0 || src[end + 1] !== ';') continue;
+    let end;
+    if ('[{'.includes(src[start])) {
+      end = balanced(src, start);
+      if (end < 0 || src[end + 1] !== ';') continue;
+    } else {
+      // סקלר: מספר או מחרוזת פשוטה עד ;
+      const sm2 = src.slice(start).match(/^(-?\d[\d._]*(?:e-?\d+)?|'(?:\\.|[^'\\\n])*'|"(?:\\.|[^"\\\n])*")\s*;/);
+      if (!sm2) continue;
+      end = start + sm2[1].length - 1;
+      if (src[end + 1] !== ';') { const semi = src.indexOf(';', start); if (src.slice(start, semi).trim() !== sm2[1]) continue; end = semi - 1; }
+    }
     const lit = src.slice(start, end + 1);
-    if (lit.length < 8 || !isStaticLit(lit)) continue;
+    if (!isStaticLit(lit)) continue;
+    if (lit.length < 2) continue;
     // מגן-מוטציה: דאטה שהמנגנון משנה בגוף (push/מיון/הצבה) אינה קבוע — חילוץ היה יוצר מצב-משותף
     if (new RegExp(`\\b${m[2]}\\s*\\.\\s*(push|pop|shift|unshift|splice|sort|reverse|fill)\\b|\\b${m[2]}\\s*\\[[^\\]]*\\]\\s*=|\\b${m[2]}\\s*=`).test(code.slice(code.indexOf(m[2]) + 1))) continue;
     consts.push({ name: m[2], lit, declStart: m.index + (m[0].startsWith('\n') ? 1 : 0), declEnd: end + 2 });

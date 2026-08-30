@@ -1,4 +1,7 @@
-import { hebPartsOfIso } from './heb-parts-of-iso.mjs';
+import { hebPartsOfIso as __pure_hebPartsOfIso } from './heb-parts-of-iso.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)
+const __d_hebPartsOfIso_HP_CACHE_MAX = 3000;
+const hebPartsOfIso = (...a) => __pure_hebPartsOfIso(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_hebPartsOfIso_HP_CACHE_MAX);
 // שקע-hebParts אמיתי עם מונה-קריאות (מקומי לבדיקה — הבדיקה מייבאת רק את האטום שלה)
 const fmtParts = new Intl.DateTimeFormat('en-u-ca-hebrew', { day: 'numeric', month: 'long', year: 'numeric' });
 let calls = 0;

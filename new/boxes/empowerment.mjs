@@ -55,7 +55,10 @@ import { SEGMENTS_SEGMENT_COUNTS_T as __d_segmentCounts_SEGMENTS_SEGMENT_COUNTS_
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const segmentCountsAtom = (...a) => __pure_segmentCounts(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_segmentCounts_SEGMENTS_SEGMENT_COUNTS_T);
 import { activeByMonth as activeByMonthAtom } from '../atoms/portfolio-active-by-month.mjs';
-import { portfolioIntel as portfolioIntelAtom } from '../atoms/portfolio-portfolio-intel.mjs';
+import { portfolioIntel as __pure_portfolioIntel } from '../atoms/portfolio-portfolio-intel.mjs';
+import { RISK as __d_portfolioIntel_RISK } from '../atoms/portfolio-portfolio-intel-data.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const portfolioIntelAtom = (...a) => __pure_portfolioIntel(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_portfolioIntel_RISK);
 import { tierTrendCounts as __pure_tierTrendCounts } from '../atoms/portfolio-tier-trend-counts.mjs';
 import { order } from '../atoms/portfolio-tier-trend-counts-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה

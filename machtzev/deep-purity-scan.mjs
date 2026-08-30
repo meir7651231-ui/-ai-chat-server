@@ -15,7 +15,7 @@ const HEB = /[֐-׿]/;
 const strip = (s) => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '').replace(/(^|[^:])\/\/[^\n]*/g, '$1');
 // צורת-דאטה: הכרזת-ליטרל ברמת-המודול בלבד (עמודה 0) — const מוזח בתוך פונקציה איננו אטום-דאטה
 const isPureData = (code) =>
-  (/^export\s+(?:const\s+\w+\s*=\s*[\[{]|function\s+\w+\s*\(\)\s*\{\s*return\s+[\[{])/m.test(code) ||
+  (/^export\s+(?:const\s+\w+\s*=\s*(?:[\[{]|-?\d|['\"])|function\s+\w+\s*\(\)\s*\{\s*return\s+[\[{])/m.test(code) ||
     /^const\s+\w+\s*=\s*[\[{]/m.test(code)) &&
   !/\b(if|for|while|switch)\b/.test(code) && !/=>(?!\s*[\[{('"`0-9])/.test(code) &&
   !/^(?:export\s+)?(?:const\s+\w+\s*=\s*(?:async\s*)?\(|function\s+\w+\s*\()/m.test(code);
@@ -35,9 +35,13 @@ for (const dir of DIRS) {
       if (/[a-zA-Z]{3,}|^\+?\d{3}$/.test(v) && !/^[a-z]$|^\\/.test(v)) { if (cats.domstr.length < 4) cats.domstr.push(v.slice(0, 30)); }
     }
     for (const m of code.matchAll(/const\s+\w+\s*=\s*[\[{][^;]{10,}/g)) { if (cats.table.length < 3) cats.table.push(m[0].slice(0, 44).replace(/\s+/g, ' ')); }
+    // מספר-קסם = קבוע-דומיין עשרוני; הקס/ביטוויז/חזקות-2 = מבנה-חישוב, לא דאטה
     for (const m of code.matchAll(/(?<![\w.'"])-?\d{2,}(?:\.\d+)?(?![\w])/g)) {
       const n = Math.abs(parseFloat(m[0]));
-      if (![10, 16, 100, 1000].includes(n) || cats.magic.length === 0) { if (cats.magic.length < 6) cats.magic.push(m[0]); }
+      const around = code.slice(Math.max(0, m.index - 6), m.index + m[0].length + 6);
+      if (/0x|[&|^]|<<|>>/.test(around)) continue;                       // ביטוויז/הקס — מבני
+      if ((n & (n - 1)) === 0 && Number.isInteger(n)) continue;          // חזקת-2 — מבני
+      if (![10, 100, 1000].includes(n) || cats.magic.length === 0) { if (cats.magic.length < 6) cats.magic.push(m[0]); }
     }
     const score = cats.heb.length * 4 + cats.table.length * 3 + cats.domstr.length * 2 + cats.magic.length;
     if (score > 0) findings.push({ f: path.join(dir, f), score, cats });

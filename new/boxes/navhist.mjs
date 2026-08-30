@@ -3,7 +3,10 @@
  *  ההלחמות-לשעבר מ-maor src/lib/navhist.ts + useApp.ts (go/selectFamily/selectCourse/goBack)
  *  — עכשיו חיווט גלוי אחד. שקעי לוח-אם: גידור-הדגל, עדכון-store, DOM הכפתור. */
 import { sameLoc } from '../atoms/same-loc.mjs';
-import { pushNav } from '../atoms/push-nav.mjs';
+import { pushNav as __pure_pushNav } from '../atoms/push-nav.mjs';
+import { NAV_HIST_MAX as __d_pushNav_NAV_HIST_MAX } from '../atoms/push-nav-data.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const pushNav = (...a) => __pure_pushNav(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_pushNav_NAV_HIST_MAX);
 import { pushRecent } from '../atoms/push-recent.mjs';
 import { NAV_HIST_MAX } from '../atoms/nav-hist-max.mjs';
 import { RECENT_MAX } from '../atoms/recent-max.mjs';
