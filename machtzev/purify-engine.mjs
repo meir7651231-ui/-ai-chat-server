@@ -277,7 +277,7 @@ function purifyOne(cand, log) {
   } catch (e) {
     if (process.env.PDEBUG) { const dd = '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/pdebug'; fs.mkdirSync(dd, { recursive: true }); for (const [pp] of backup) { try { fs.copyFileSync(pp, path.join(dd, base + '__' + path.basename(pp))); } catch { } } }
     for (const [pp, tt] of backup) fs.writeFileSync(pp, tt);
-    if (mkData) for (const ext of ['.mjs', '.contract.md', '.test.mjs']) fs.rmSync(path.join(ATOMS, dataBase + ext), { force: true });
+    if (mkData && !priorKeys.size) for (const ext of ['.mjs', '.contract.md', '.test.mjs']) fs.rmSync(path.join(ATOMS, dataBase + ext), { force: true });
     return log(`✗ ${base}: אימות אדום — הוחזר (${String(e.message).slice(0, 60)} · ${String(e.stderr || '').slice(0, 200).replace(/\n/g, ' ⏎ ')})`);
   }
 }
@@ -352,13 +352,26 @@ function eligibleStrings(file) {
 function purifyStrings(cand, log) {
   const base = cand.file.replace(/\.mjs$/, '');
   const dataBase = base + '-strings';
-  if (fs.existsSync(path.join(ATOMS, dataBase + '.mjs'))) return log(`~ ${base}: כבר קיים אטום-מחרוזות`);
   const CONST = base.replace(/-/g, '_').toUpperCase() + '_T';
-  let tParam = 'T'; let ti = 2;
-  while (new RegExp(`\\b${tParam}\\b`).test(cand.src)) tParam = 'T' + ti++;
-  // מיפוי ערכים-ייחודיים ⇒ מפתחות
-  const keys = new Map();
+  // 🔁 המשך-חילוץ: אטום-מחרוזות קיים ⇒ ממשיכים מספור; ה-tParam הקיים מזוהה מחתימת-המנגנון
+  const dataPath = path.join(ATOMS, dataBase + '.mjs');
+  const priorKeys = new Map();
+  let tParam = null;
+  if (fs.existsSync(dataPath)) {
+    const dt = fs.readFileSync(dataPath, 'utf8');
+    for (const m of dt.matchAll(/(k\d+): ("(?:\\.|[^"\\])*")/g)) priorKeys.set(JSON.parse(m[2]), m[1]);
+    if (!priorKeys.size) return log(`~ ${base}: אטום-מחרוזות קיים בצורה לא-נקראת`);
+    const sigm = cand.src.match(new RegExp(`export\\s+(?:const\\s+${cand.fn}\\s*=\\s*(?:async\\s*)?|function\\s+${cand.fn}\\s*)\\(([^)]*)\\)`));
+    const lastP = sigm ? sigm[1].split(',').pop().trim() : '';
+    if (!/^T\d*$/.test(lastP)) return log(`~ ${base}: פרמטר-שקע קיים לא-מזוהה`);
+    tParam = lastP;
+  } else {
+    tParam = 'T'; let ti = 2;
+    while (new RegExp(`\\b${tParam}\\b`).test(cand.src)) tParam = 'T' + ti++;
+  }
+  const keys = new Map(priorKeys);
   for (const st of cand.sites) if (!keys.has(st.v)) keys.set(st.v, 'k' + (keys.size + 1));
+  if (priorKeys.size && keys.size === priorKeys.size) return log(`~ ${base}: אין מחרוזות חדשות`);
   // שכתוב מהסוף להתחלה
   let mech = cand.src;
   for (const st of [...cand.sites].sort((a, b) => b.at - a.at)) {
@@ -379,15 +392,22 @@ function purifyStrings(cand, log) {
     if (ch === "'" || ch === '"' || ch === '`') stq = ch;
     else if ('([{'.includes(ch)) dpt++; else if (')]}'.includes(ch)) dpt--;
     else if (ch === ',' && dpt === 0) origArity++; } }
-  mech = mech.slice(0, po + 1) + (params ? params.replace(/,\s*$/, '') + ', ' : '') + tParam + mech.slice(pc);
+  if (!priorKeys.size) mech = mech.slice(0, po + 1) + (params ? params.replace(/,\s*$/, '') + ', ' : '') + tParam + mech.slice(pc);
   const litObj = '{\n' + [...keys].map(([v, k]) => `  ${k}: ${JSON.stringify(v).replace(/\u2028|\u2029/g, '')},`).join('\n') + '\n}';
   const existing = findExistingData(litObj);
   const dataSrc = `/** אטום-דאטה · ${dataBase} — מחרוזות-התצוגה/דומיין שחולצו מ-${base} (מנוע-הטיהור v3, הכרעה 19). חוזה: ${dataBase}.contract.md */\nexport const ${CONST} = ${litObj};\n`;
   const contract = `# חוזה · ${dataBase}\nמחרוזות-דאטה (עברית/דומיין) שחולצו מכנית מהמנגנון ${base} (הכרעה 19: שמות ומשמעות = דאטה).\nהמנגנון מקבל אותן כטבלת-שקע ${tParam}; הקוראים כורכים דרך העטיפה. אפס לוגיקה.\n\n## דוגמאות-זהב\nצילום-ערך ב-${dataBase}.test.mjs.\n`;
   const test = `// בדיקת-צילום · ${dataBase} — המחרוזות שחולצו זהות ביט-אחר-ביט למקור.\nimport { ${CONST} } from './${dataBase}.mjs';\nimport assert from 'node:assert';\nassert.strictEqual(JSON.stringify(${CONST}), ${JSON.stringify(JSON.stringify(Object.fromEntries([...keys].map(([v, k]) => [k, v]))))});\nconsole.log('OK ${dataBase}');\n`;
-  // קוראים — אותה כריכת-עטיפה של v2
+  // קוראים — אותה כריכת-עטיפה של v2 (בהמשך-חילוץ: רק רענון צילומי-inline והדאטה)
   const cs = callers(base, cand.fn);
   const edits = new Map();
+  if (priorKeys.size) {
+    const dAliasRe = new RegExp(`const (__d_${cand.fn}_${CONST}) = \\{[\\s\\S]*?\\n\\};`);
+    for (const cp of cs) {
+      const t = fs.readFileSync(cp, 'utf8');
+      if (dAliasRe.test(t)) edits.set(cp, t.replace(dAliasRe, `const $1 = ${litObj};`));
+    }
+  } else {
   for (const cp of cs) {
     let t = fs.readFileSync(cp, 'utf8');
     const im = t.match(new RegExp(`import\\s*\\{([^}]*)\\}\\s*from\\s*(['\"])([^'\"]*\\/${base}\\.mjs)\\2\\s*;?`));
@@ -427,6 +447,7 @@ function purifyStrings(cand, log) {
     }
     edits.set(cp, t.replace(im[0], im[0].replace(im[1], newBraces) + inject));
   }
+  }
 
   // 🛡️ מגן-ספירת-ייבוא בקופסאות: ספירה נעולה בבדיקה הצמודה מתעדכנת לערך-האמת החדש
   for (const [cp, nu] of [...edits]) {
@@ -441,6 +462,7 @@ function purifyStrings(cand, log) {
   }
   const backup = new Map([[path.join(ATOMS, cand.file), cand.src]]);
   for (const [pp] of edits) backup.set(pp, fs.readFileSync(pp, 'utf8'));
+  if (priorKeys.size) backup.set(dataPath, fs.readFileSync(dataPath, 'utf8'));
   const mkData = !existing;
   try {
     fs.writeFileSync(path.join(ATOMS, cand.file), mech);
@@ -466,7 +488,7 @@ function purifyStrings(cand, log) {
   } catch (e) {
     if (process.env.PDEBUG) { const dd = '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/pdebug'; fs.mkdirSync(dd, { recursive: true }); for (const [pp] of backup) { try { fs.copyFileSync(pp, path.join(dd, base + '__' + path.basename(pp))); } catch { } } }
     for (const [pp, tt] of backup) fs.writeFileSync(pp, tt);
-    if (mkData) for (const ext of ['.mjs', '.contract.md', '.test.mjs']) fs.rmSync(path.join(ATOMS, dataBase + ext), { force: true });
+    if (mkData && !priorKeys.size) for (const ext of ['.mjs', '.contract.md', '.test.mjs']) fs.rmSync(path.join(ATOMS, dataBase + ext), { force: true });
     return log(`✗ ${base}: אימות אדום — הוחזר (${String(e.message).slice(0, 60)} · ${String(e.stderr || '').slice(0, 200).replace(/\n/g, ' ⏎ ')})`);
   }
 }
@@ -622,6 +644,23 @@ const files = fs.readdirSync(ATOMS).filter(f => f.endsWith('.mjs') && !f.endsWit
 const cands = files.map(eligible).filter(Boolean);
 console.log(`🧼 מנוע-הטיהור: ${cands.length} אטומים זכאים-מכנית (מתוך ${files.length})`);
 if (mode === '--dry') cands.slice(0, 30).forEach(c => console.log(`  · ${c.file} — ${c.consts.map(x => x.name).join(', ')}`));
+if (mode === '--all') {
+  // מכה-אחת (הכרעת-בעלים "למה לא הכל במכה"): כל המעברים בלולאה עד שאין התקדמות
+  const passes = ['--boxes', '--nest', '--run', '--strings'];
+  for (let round = 1; round <= 12; round++) {
+    let progress = 0;
+    for (const ps of passes) {
+      try {
+        const out2 = execFileSync('node', [process.argv[1], ps, '500'], { encoding: 'utf8' });
+        const m2 = out2.match(/(?:קוננו|טוהרו|קופסאות טוהרו): (\d+)/g) || [];
+        for (const x of m2) progress += parseInt(x.match(/(\d+)$/)[1]);
+        process.stdout.write(out2.split('\n').filter(l => /✅|קוננו:|טוהרו:/.test(l)).map(l => `[${round}${ps}] ${l.trim()}`).join('\n') + '\n');
+      } catch (e) { console.error(`[${round}${ps}] נפל: ${String(e.message).slice(0, 80)}`); }
+    }
+    console.log(`— סבב ${round}: התקדמות ${progress} —`);
+    if (!progress) break;
+  }
+}
 if (mode === '--boxes') {
   let ok = 0;
   for (const f of fs.readdirSync(BOXES).filter(x => x.endsWith('.mjs') && !x.endsWith('.test.mjs'))) {

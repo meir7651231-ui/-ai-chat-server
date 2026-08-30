@@ -8,6 +8,10 @@ const __d_planAyinAdvance_PLAN_AYIN_ADVANCE_T = {
   k5: "נמסר — נרשם בלוח היומי ובכרטיס",
   k6: "done",
   k7: "הטיפול הושלם ✓ — נרשם בלוח",
+  k8: "נרשמו ",
+  k9: " — נכנס ללוח: ",
+  k10: "אושר — נרשם בלוח ובדוח. עכשיו: ",
+  k11: "נרשם — נכנס ללוח: ",
 };
 const planAyinAdvance = (...a) => __pure_planAyinAdvance(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_planAyinAdvance_PLAN_AYIN_ADVANCE_T);
 let f = 0;

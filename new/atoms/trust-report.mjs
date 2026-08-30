@@ -20,11 +20,11 @@ export function trustReport(bundle, opt = {}, eng = {}, T) {
   // 1. סגירת-מסלולים (⭐1) — אין גשר/transfer/שער יתום.
   const ar = auditRoutes(bundle);
   add(T.k1, T.k2, ar.ok, T.k3,
-    ar.ok ? T.k4 : `יתומים: ${[...ar.dangling, ...ar.orphanTransfers, ...ar.missingGateways].join(', ')}`);
+    ar.ok ? T.k4 : `${T.k39}${[...ar.dangling, ...ar.orphanTransfers, ...ar.missingGateways].join(', ')}`);
 
   // 2. מסלול-חירום (fail-safe) — תמיד יש מנהל לחזור אליו.
   const fs = failsafeRoute(tenant);
-  add(T.k5, T.k6, fs.ok, T.k3, fs.ok ? `נפילה למנהל ${fs.fallback}` : T.k7);
+  add(T.k5, T.k6, fs.ok, T.k3, fs.ok ? `${T.k40}${fs.fallback}` : T.k7);
 
   // 3. תקרות-toll-fraud — הגנת חשבון-הסלולר.
   const toll = featureOn(tenant, T.k8);
@@ -50,13 +50,13 @@ export function trustReport(bundle, opt = {}, eng = {}, T) {
   // 6. preflight-סודות — env מלא (אם נמסר).
   if (opt.env) {
     const pf = secretPreflight([bundle], opt.env);
-    add(T.k26, T.k27, pf.ok, T.k3, pf.ok ? T.k28 : `חסרים ${pf.missing.length} (שער-דומם)`);
+    add(T.k26, T.k27, pf.ok, T.k3, pf.ok ? T.k28 : `${T.k41}${pf.missing.length}${T.k42}`);
   }
 
   // 7. בידוד חוצה-דיירים — אם נמסרו peers.
   if (Array.isArray(opt.peers) && opt.peers.length) {
     const leak = crossTenantLeakScan([bundle, ...opt.peers]);
-    add(T.k29, T.k30, leak.clean, T.k3, leak.clean ? T.k31 : `${leak.violations.length} דליפות`);
+    add(T.k29, T.k30, leak.clean, T.k3, leak.clean ? T.k31 : `${leak.violations.length}${T.k43}`);
   }
 
   // 8. אינווריאנטים (תמיד עוברים — הצהרה לוועד).

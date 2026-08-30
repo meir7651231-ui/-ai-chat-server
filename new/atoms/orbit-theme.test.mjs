@@ -5,6 +5,7 @@ const __d_orbitTheme_ORBIT_THEME_T = {
   k2: "Ice",
   k3: "Ember",
   k4: "Aurora",
+  k5: "rgba(",
 };
 const orbitTheme = (...a) => __pure_orbitTheme(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_orbitTheme_ORBIT_THEME_T);
 

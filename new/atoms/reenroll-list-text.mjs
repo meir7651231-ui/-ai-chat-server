@@ -4,6 +4,6 @@
 export function reenrollListText(rows, T) {
   const decWord = (d) => (d === T.k1 ? T.k2 : d === 'no' ? T.k3 : d === T.k4 ? T.k5 : T.k6);
   return rows
-    .map((r) => `${r.memberName} · ${r.courseName} — נוכחות ${r.summary.presents}, חיסורים ${r.summary.absences} · ${decWord(r.decision)}${r.renewed ? ' ✓נרשם' : ''}`)
+    .map((r) => `${r.memberName} · ${r.courseName}${T.k7}${r.summary.presents}${T.k8}${r.summary.absences} · ${decWord(r.decision)}${r.renewed ? T.k9 : ''}`)
     .join('\n');
 }

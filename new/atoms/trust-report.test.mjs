@@ -39,6 +39,11 @@ const __d_trustReport_TRUST_REPORT_T = {
   k36: "cti-readonly",
   k37: "זיהוי-מתקשר קריאה-בלבד",
   k38: "לעולם לא כותב למאור",
+  k39: "יתומים: ",
+  k40: "נפילה למנהל ",
+  k41: "חסרים ",
+  k42: " (שער-דומם)",
+  k43: " דליפות",
 };
 const trustReport = (...a) => __pure_trustReport(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_trustReport_TRUST_REPORT_T);
 let f = 0;

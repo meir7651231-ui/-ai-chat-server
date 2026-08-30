@@ -5,7 +5,7 @@ export function toTenantId(slug, orgName, T) {
         .replace(/[^a-z0-9-]+/g, '-')
         .replace(/^-+|-+$/g, '')
         .slice(0, 38);
-    const padded = base.length >= 3 ? base : `${base}-org`;
+    const padded = base.length >= 3 ? base : `${base}${T.k3}`;
     return /^[a-z0-9]/.test(padded) ? padded : `x-${padded}`.slice(0, 40);
 }
 /**

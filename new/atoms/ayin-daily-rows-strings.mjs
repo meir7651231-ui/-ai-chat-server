@@ -5,4 +5,5 @@ export const AYIN_DAILY_ROWS_T = {
   k3: "שלב",
   k4: "מתי לדבר שוב",
   k5: "הערה",
+  k6: " היום",
 };

@@ -4,4 +4,5 @@ export const ORBIT_THEME_T = {
   k2: "Ice",
   k3: "Ember",
   k4: "Aurora",
+  k5: "rgba(",
 };

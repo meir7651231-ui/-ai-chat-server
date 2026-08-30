@@ -3,6 +3,7 @@ import { toTenantId as __pure_toTenantId } from './to-tenant-id.mjs';
 const __d_toTenantId_TO_TENANT_ID_T = {
   k1: "default",
   k2: "org",
+  k3: "-org",
 };
 const toTenantId = (...a) => __pure_toTenantId(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_toTenantId_TO_TENANT_ID_T);
 const CASES = [[["\"\"","\"\""],"\"org\""],[["\"\"","\"אבג\""],"\"x--org\""],[["\"\"","\"כהן לוי\""],"\"x--org\""],[["\"\"","\"abc\""],"\"abc\""],[["\"\"","\"a@b.com\""],"\"a-b-com\""],[["\"\"","\"2026-08-24\""],"\"2026-08-24\""],[["\"\"","\"2026-08-24T12:00:00\""],"\"2026-08-24t12-00-00\""],[["\"\"","\"0501234567\""],"\"0501234567\""],[["\"\"","\"03-1234567\""],"\"03-1234567\""],[["\"\"","\"https://x.co\""],"\"https-x-co\""],[["\"\"","\"שלום עולם\""],"\"x--org\""],[["\"\"","\"12\""],"\"12-org\""]];

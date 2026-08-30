@@ -6,4 +6,7 @@ export const REENROLL_LIST_TEXT_T = {
   k4: "hold",
   k5: "בהמתנה",
   k6: "טרם הוחלט",
+  k7: " — נוכחות ",
+  k8: ", חיסורים ",
+  k9: " ✓נרשם",
 };

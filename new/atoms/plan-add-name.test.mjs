@@ -2,6 +2,8 @@ import { planAddName as __pure_planAddName } from './plan-add-name.mjs';
 // צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
 const __d_planAddName_PLAN_ADD_NAME_T = {
   k1: "הקלידו שם לפני ההוספה",
+  k2: "השם \"",
+  k3: "\" כבר ברשימה",
 };
 const planAddName = (...a) => __pure_planAddName(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_planAddName_PLAN_ADD_NAME_T);
 let f = 0;

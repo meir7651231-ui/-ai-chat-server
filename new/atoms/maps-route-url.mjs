@@ -9,12 +9,12 @@ export function mapsRouteUrl(stops, T) {
   const clean = stops.map(cleanStop).filter(Boolean);
   if (clean.length === 0) return null;
   if (clean.length === 1) {
-    return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(clean[0]);
+    return T.k2 + encodeURIComponent(clean[0]);
   }
   const destination = clean[clean.length - 1];
   const waypoints = clean.slice(0, -1);
   return (
-    'https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=' +
+    T.k3 +
     encodeURIComponent(destination) +
     T.k1 +
     waypoints.map(encodeURIComponent).join('%7C')

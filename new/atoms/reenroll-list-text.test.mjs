@@ -7,6 +7,9 @@ const __d_reenrollListText_REENROLL_LIST_TEXT_T = {
   k4: "hold",
   k5: "בהמתנה",
   k6: "טרם הוחלט",
+  k7: " — נוכחות ",
+  k8: ", חיסורים ",
+  k9: " ✓נרשם",
 };
 const reenrollListText = (...a) => __pure_reenrollListText(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_reenrollListText_REENROLL_LIST_TEXT_T);
 let f = 0;

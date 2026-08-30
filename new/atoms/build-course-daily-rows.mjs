@@ -78,7 +78,7 @@ export function buildCourseDailyRows(c, db, config, termOf, hebDateFull, DAY_NAM
         }
     }
     if (truncated) {
-        rows.push(['—', '—', '—', '—', `הדוח נקטע ב-${MAX_DAYS} ימי מפגש — בדקו את תאריך הסיום של ה${T('entity.course', 'חוג')}`, '', '', '']);
+        rows.push(['—', '—', '—', '—', `${T2.k20}${MAX_DAYS}${T2.k21}${T(T2.k22, T2.k23)}`, '', '', '']);
     }
     return { rows, days };
 }

@@ -6,6 +6,7 @@ const __d_ayinDailyRows_AYIN_DAILY_ROWS_T = {
   k3: "שלב",
   k4: "מתי לדבר שוב",
   k5: "הערה",
+  k6: " היום",
 };
 const ayinDailyRows = (...a) => __pure_ayinDailyRows(...a, ...Array(Math.max(0, 8 - a.length)).fill(undefined), __d_ayinDailyRows_AYIN_DAILY_ROWS_T);
 // מימושי-שקע לבדיקה — נאמנים למקור (ayin.ts / domain.ts):

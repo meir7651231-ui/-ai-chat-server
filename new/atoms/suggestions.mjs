@@ -16,10 +16,10 @@ export function suggestions(db, todayIso, config, { termOf, moduleOn, upcomingHo
     // מפתח בלי שנה עברית ⇒ ביטול חד-פעמי של "מתנת-חג · פסח" קובר את ההצעה לנצח,
     // לכל השנים. השנה העברית של מופע-החג במפתח ⇒ החג הבא (שנה אחרת) עולה מחדש.
     out.push({
-      key: `sug:holiday:${hol.name}:${hol.hebYear}`,
+      key: `${T2.k7}${hol.name}:${hol.hebYear}`,
       emoji: '🎁',
-      title: `מתנת-חג · ${hol.name} בעוד ${hol.inDays} ימים`,
-      detail: `${activeFams.length} ${T('nav.families', 'משפחות')} פעילות — שקלו חלוקת מתנות לקראת החג`,
+      title: `${T2.k8}${hol.name}${T2.k9}${hol.inDays}${T2.k10}`,
+      detail: `${activeFams.length} ${T(T2.k11, T2.k12)}${T2.k13}`,
       act: T2.k2,
     });
   }
@@ -32,19 +32,19 @@ export function suggestions(db, todayIso, config, { termOf, moduleOn, upcomingHo
         // תיקון (swarm-audit): הגיל במפתח — ביטול בגיל 5 לא מסתיר את ההצעה
         // המחודשת בגיל 6 (מפתח יחיד היה מכסה את שתי השנים; 'sug:' לא נגזם).
         out.push({
-          key: `sug:school:${m.id}:${age}`,
+          key: `${T2.k14}${m.id}:${age}`,
           emoji: '🎒',
-          title: `ערכת בית-ספר · ${m.first} (${f.name})`,
-          detail: `בן/בת ${age} — לקראת/בתחילת כיתה א׳`,
+          title: `${T2.k15}${m.first} (${f.name})`,
+          detail: `${T2.k16}${age}${T2.k17}`,
           famId: f.id,
           act: T2.k3,
         });
       } else if (age === 0) {
         out.push({
-          key: `sug:baby:${m.id}`,
+          key: `${T2.k18}${m.id}`,
           emoji: '👶',
-          title: `ערכת תינוק · ${T('entity.familyOf', 'משפחת')} ${f.name}`,
-          detail: `${m.first} — תינוק/ת חדש/ה ב${T('entity.family', 'משפחה')}`,
+          title: `${T2.k19}${T(T2.k20, T2.k21)} ${f.name}`,
+          detail: `${m.first}${T2.k22}${T(T2.k23, T2.k24)}`,
           famId: f.id,
           act: T2.k3,
         });
@@ -63,10 +63,10 @@ export function suggestions(db, todayIso, config, { termOf, moduleOn, upcomingHo
     // הכרטיסייה (purchased גדל) המפתח מתחלף, וההצעה הבאה כש"נגמרת שוב" עולה
     // גם אם הקודמת בוטלה ('sug:' פטור מגיזום ⇒ מפתח קבוע היה נקבר לנצח).
     out.push({
-      key: `sug:renew:${e.id}:${e.purchased}`,
+      key: `${T2.k25}${e.id}:${e.purchased}`,
       emoji: '🎫',
-      title: `חידוש כרטיסייה · ${member?.first ?? '—'} · ${course?.name ?? '—'}`,
-      detail: rem <= 0 ? T2.k6 : `נותרו ${rem} ניקובים`,
+      title: `${T2.k26}${member?.first ?? '—'} · ${course?.name ?? '—'}`,
+      detail: rem <= 0 ? T2.k6 : `${T2.k27}${rem}${T2.k28}`,
       famId: fam?.id,
       courseId: e.courseId,
       act: T2.k4,

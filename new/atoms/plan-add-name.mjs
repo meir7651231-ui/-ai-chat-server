@@ -6,7 +6,7 @@ export function planAddName(a, rawName, eyes, id, normName, isoToday, T) {
   if (!nm) return { ok: false, error: T.k1 };
   const key = normName(nm);
   if (a.names.some((x) => normName(x.name) === key)) {
-    return { ok: false, error: `השם "${nm}" כבר ברשימה` };
+    return { ok: false, error: `${T.k2}${nm}${T.k3}` };
   }
   const names = [...a.names, { id, name: nm, eyes, done: false }];
   if (eyes !== '' && eyes != null) {

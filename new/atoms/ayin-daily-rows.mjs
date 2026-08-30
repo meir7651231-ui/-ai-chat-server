@@ -13,7 +13,7 @@ export function ayinDailyRows(cfg, supporters, todayIso, unitLabel, itemLabel, e
     const unit = unitLabel(cfg);
     const item = itemLabel(cfg);
     const rows = [
-        [T.k1, T.k2, `${unit} היום`, T.k3, item, T.k4, T.k5],
+        [T.k1, T.k2, `${unit}${T.k6}`, T.k3, item, T.k4, T.k5],
     ];
     const touched = supporters.filter((sp) => sp.ayin && (sp.ayin.lastTouch === todayIso || sp.ayin.log?.some((l) => l.date === todayIso)));
     for (const sp of touched) {

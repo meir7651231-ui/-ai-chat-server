@@ -17,4 +17,5 @@ export const BUILD_ICS_T = {
   k15: "LOCATION:",
   k16: "END:VEVENT",
   k17: "END:VCALENDAR",
+  k18: "PRODID:-//maor-system//he//",
 };

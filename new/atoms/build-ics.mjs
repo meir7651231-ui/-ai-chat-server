@@ -36,7 +36,7 @@ export function buildIcs(occurrences, calName, now, icsEscape, foldIcsLine, T2) 
     const lines = [
         T2.k1,
         T2.k2,
-        'PRODID:-//maor-system//he//',
+        T2.k18,
         T2.k3,
         T2.k4,
         T2.k5 + icsEscape(calName),
