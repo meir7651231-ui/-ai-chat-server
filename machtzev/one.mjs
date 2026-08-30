@@ -115,6 +115,7 @@ stage('מד-מוכנות-קופסאות', () => last(run('machtzev/box-coverage.
 stage('מפת-חיווט (gen-wiring-doc)', () => last(run('machtzev/gen-wiring-doc.mjs')), { optional: true });
 
 // ── 6 · המשטרה (כל שערי-ה-ratchet הפנימיים) ──
+stage('מנוע-ההמרה-מחדש · דאטה (reconvert-data)', () => last(run('machtzev/reconvert-data.mjs')), { optional: true });
 // ── הזרקת-המדף לתצוגה (buildsmart) + נחיתה — בתוך המנוע (הכרעת-בעלים "למה הם לא בפנים") ──
 stage('הזרקת-המדף ל-buildsmart (8 מדפים)', () => {
   const B = '/home/user/buildsmart/app_flutter/lib/genesis';
