@@ -1,3 +1,4 @@
+import '../dart-data-maor/exp-field-defs-sockets.dart' as sk_exp_field_defs;
 import '../dart-data-maor/exp-field-defs-terms.dart';
 // בדיקת-חוזה (רתמת-זהב) · expFieldDefs — מייבאת אך ורק את האטום-שלה (חוק-4).
 // דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/exp-field-defs.test.mjs
@@ -31,15 +32,7 @@ String _featLabel(Cfg cfg) => _termOf(cfg, 'nav.ayin', 'מעקב טיפול');
 String _itemLabel(Cfg cfg) => _termOf(cfg, 'entity.ayinItem', 'שם לטיפול');
 String _unitLabel(Cfg cfg) => _termOf(cfg, 'entity.ayinUnit', 'כמות');
 
-List<Map<String, String>> _call(Cfg cfg, String target) => expFieldDefs<Cfg>(
-      cfg,
-      target,
-      _featureOn,
-      _termOf,
-      _featLabel,
-      _itemLabel,
-      _unitLabel,
-     term: (k)=>kTerms[k]!);
+List<Map<String, String>> _call(Cfg cfg, String target) => expFieldDefs<Cfg>(cfg, target, _featureOn, _termOf, _featLabel, _itemLabel, _unitLabel, term: (k)=>kTerms[k]!, T: sk_exp_field_defs.expFieldDefs_T);
 
 String _keys(List<Map<String, String>> a) => a.map((x) => x['key']).join(',');
 

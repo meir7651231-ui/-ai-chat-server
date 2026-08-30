@@ -204,7 +204,7 @@ function splitTopArgs(s) {
 // שתילת-ארגומנטים בקריאות של callee בתוך txt: לפי insertPos (null=סוף)
 function spliceCalls(txt, callee, args, insertPos) {
   let out = '', i = 0;
-  const re = new RegExp(`(?<![\\w.])${callee}\\(`, 'g');
+  const re = new RegExp(`(?<![\\w.])${callee}(?:<[\\w, ]+>)?\\(`, 'g');
   let m;
   while ((m = re.exec(txt))) {
     const open = m.index + m[0].length - 1;
@@ -346,7 +346,7 @@ function purifyFile(base, report) {
   if (!needed.length) return report.skip(base, 'אחרי-החלפה אף שקע לא בשימוש (חריג)');
 
   // ── שלב ג: השחלת-פרמטרים בגרף-הקריאות ──
-  const fnSigs = [...src.matchAll(/(?:^|\n)(?:[A-Za-z_][\w<>,?\[\] ]*\s+)?([a-z_]\w*)\s*\(/g)]
+  const fnSigs = [...src.matchAll(/(?:^|\n)(?:[A-Za-z_][\w<>,?\[\] ]*\s+)?([a-z_]\w*)\s*(?:<[\w, ]+>)?\s*\(/g)]
     .map(m => ({ name: m[1], open: m.index + m[0].length - 1 }))
     .filter(f => !['if', 'for', 'while', 'switch', 'return', 'assert', 'catch'].includes(f.name));
   const fnInfo = new Map();
@@ -431,7 +431,7 @@ function purifyFile(base, report) {
   }
   function refreshFns() {
     fnInfo.clear();
-    for (const m of src.matchAll(/(?:^|\n)(?:[A-Za-z_][\w<>,?\[\] ]*\s+)?([a-z_]\w*)\s*\(/g)) {
+    for (const m of src.matchAll(/(?:^|\n)(?:[A-Za-z_][\w<>,?\[\] ]*\s+)?([a-z_]\w*)\s*(?:<[\w, ]+>)?\s*\(/g)) {
       const name = m[1];
       if (['if', 'for', 'while', 'switch', 'return', 'assert', 'catch'].includes(name)) continue;
       const open = m.index + m[0].length - 1;

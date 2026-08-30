@@ -8,7 +8,7 @@
 | ציר | בוקר | עכשיו | % | שער |
 |---|---|---|---|---|
 | 🧼 טוהר-עומק (הכרעה 19) | 37 | **36** | 92.7% | deeppurity ✓ |
-| 🧼 טוהר-דאטה (הכרעה 16) | 124 | **40** | 89.6% | datapurity ✓ |
+| 🧼 טוהר-דאטה (הכרעה 16) | 124 | **39** | 90.4% | datapurity ✓ |
 | 🔁 המרת-מנגנונים JS⇒Dart | 39 בהסגר | **0** | **100%** 🏁 | genesis-compile ✓ |
 | 🧠 מנועים ברי-הרצה | 104 | **313**/459 | 68% | coverage ✓ (ratchet) |
 | 🧠 ברי-חיווט-לסינתזה (Dart-שקול) | 104 | **119-172** | — | שער-synth ✓ |
@@ -143,3 +143,9 @@
   הבדיקות ניזונות מקובצי-sockets חדשים. ‏CI ירוק על הנחיתה הקודמת. נותר ב-dart-maor: 12
   (מילוני-מנגנון לשוניים norm-search/enroll-new-family · heb-month-he צמוד-מחולל ·
   build-slots/constellation/create-cloud-key/exp-field-defs זנבות-מנוע) + 31 ילידי-dart/.
+- **30.8 · פאזה 2 המשך-ד — גנריות במנוע: exp-field-defs (88 מפתחות!) טוהר: טוהר-דאטה 40 ⇒ 39:**
+  שלושה תיקוני-גנריות ב-purify-dart (‏fnSigs · refreshFns · spliceCalls מקבלים `fn<C>(`)
+  פתחו את expFieldDefs — המנוע החליף לבדו את כל התוויות/מפתחות ל-T-שמי והזין את הבדיקה;
+  ‏custom-export הושחל ביד (T-שמי אחרי term). ‏CI ירוק גם על אצוות-המפעלים. נותרו ב-dart-maor
+  ‏8: ‏build-slots/constellation/create-cloud-key (זנבות-מנוע) · enroll-new-family/norm-search/
+  parse-* (מילוני-מנגנון לשוניים — שיפוט) · heb-month-he (צמוד-מחולל).

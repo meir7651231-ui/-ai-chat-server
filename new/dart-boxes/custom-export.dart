@@ -1,3 +1,4 @@
+import '../dart-data-maor/exp-field-defs-sockets.dart' as skb_efd;
 import '../dart-data-maor/build-custom-export-sockets.dart' as skb_bce;
 import '../dart-data-maor/feat-label-sockets.dart' as skb_feat_label;
 import '../dart-data-maor/item-label-sockets.dart' as skb_item_label;
@@ -134,7 +135,7 @@ bool _hebAnnualEq(dynamic anchor, dynamic query) {
 // ── החשיפה (חתימות-המקור) ──────────────────────────────────────────────────
 /// הגדרות-שדות (key+label) של הדו"ח המותאם לפי יעד: חוגים / אירועים / תומכות.
 List<Map<String, String>> expFieldDefs(dynamic cfg, String target) =>
-    efd.expFieldDefs<dynamic>(cfg, target, _featureOn, _termOfS, _featLabel, _itemLabel, _unitLabel, term: (k)=>kTerms[k]!);
+    efd.expFieldDefs<dynamic>(cfg, target, _featureOn, _termOfS, _featLabel, _itemLabel, _unitLabel, term: (k)=>kTerms[k]!, T: skb_efd.expFieldDefs_T);
 
 /// דריסת עמודה בשורות (כותרת חסינה, אי-מוטציה, colIdx<0 ⇒ כניסה-כיציאה).
 List<dynamic> overrideColumn(List<dynamic> rows, int colIdx, Map overrides) =>
