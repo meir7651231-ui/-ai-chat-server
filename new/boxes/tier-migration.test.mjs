@@ -1,0 +1,6 @@
+import * as m from './tier-migration.mjs';
+const de = (s) => s === '"__undef__"' ? undefined : JSON.parse(s);
+const FN = {"tierMigration":[[["\"\"","\"123456782\""],"{\"promoted\":0,\"demoted\":0,\"stable\":0,\"newDonors\":0,\"flows\":[],\"fromIso\":\"1238-07-02\"}"],[["\"\"","[\"2026-08-24\"]"],"{\"promoted\":0,\"demoted\":0,\"stable\":0,\"newDonors\":0,\"flows\":[],\"fromIso\":\"NaN-NaN-NaN\"}"],[["\"\"","\"\""],"{\"promoted\":0,\"demoted\":0,\"stable\":0,\"newDonors\":0,\"flows\":[],\"fromIso\":\"-2-00-00\"}"],[["\"\"","\"אבג\""],"{\"promoted\":0,\"demoted\":0,\"stable\":0,\"newDonors\":0,\"flows\":[],\"fromIso\":\"NaN-NaN-NaN\"}"]],"tierAsOf":[[["{\"id\":\"late\",\"name\":\"late\",\"phone\":\"\",\"email\":\"\",\"address\":\"\",\"idNum\":\"\",\"cat\":\"\",\"forWho\":\"\",\"notes\":\"\",\"count\":0,\"ils\":0,\"usd\":0,\"first\":\"\",\"last\":\"\",\"nextDate\":\"\",\"donations\":[{\"rid\":\"D\",\"date\":\"2026-07-06\",\"amount\":500,\"cur\":\"₪\",\"cat\":\"\"}]}","\"2025-01-01\""],"null"]]};
+let f = 0;
+for (const [n, cs] of Object.entries(FN)) for (const [args, want] of cs) { const got = JSON.stringify(m[n](...args.map(de))); if (got !== want) { console.error('✗ ' + n + '(' + args + ') ⇒ ' + got + ' ≠ ' + want); f = 1; } }
+if (f) process.exit(1); console.log('✓ tier-migration: ' + Object.values(FN).flat().length + ' golden — ירוק');
