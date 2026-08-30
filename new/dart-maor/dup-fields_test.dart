@@ -2,7 +2,10 @@
 // תשע דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/dup-fields.test.mjs
 // (אותם קלטים→פלטים). אם עובר ⇒ Dart≡JS.
 // הרצה: dart run --enable-asserts new/dart-maor/dup-fields_test.dart  ⇒ exit 0
+import '../dart-data-maor/dup-fields-sockets.dart' as sk_dup_fields;
 import 'dup-fields.dart';
+
+final List<DupField> dupFields = makeDupFields(sk_dup_fields.dupFields_T);
 
 int _f = 0;
 void ok(bool cond, String msg) {
