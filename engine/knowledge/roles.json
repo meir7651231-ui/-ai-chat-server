@@ -1,0 +1,11 @@
+{
+  "_note": "role משם-מחלקה: תבנית-regex ⇒ role. הראשונה-שפוגעת מנצחת. החלף לפי הקטלוג שלך.",
+  "rules": [
+    { "pattern": "Button|Action", "role": "button" },
+    { "pattern": "Kpi|Stat", "role": "stat" },
+    { "pattern": "Banner", "role": "banner" },
+    { "pattern": "Card|Hero", "role": "card" },
+    { "pattern": "Header|Section|Title", "role": "header" },
+    { "pattern": "Row|Tile", "role": "row" }
+  ]
+}
