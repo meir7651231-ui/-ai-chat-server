@@ -2,7 +2,7 @@
  "counts": {
   "widgets": 381,
   "functions": 471,
-  "data": 1096
+  "data": 1104
  },
  "widgets": [
   {
@@ -10679,12 +10679,16 @@
   },
   {
    "name": "phoneIssue",
-   "sig": "String? phoneIssue(String? p)",
+   "sig": "String? phoneIssue(String? p, Map<String, dynamic> T)",
    "ret": "String?",
    "params": [
     {
      "type": "String?",
      "name": "p"
+    },
+    {
+     "type": "Map<String, dynamic>",
+     "name": "T"
     }
    ],
    "he": [
@@ -13824,12 +13828,16 @@
   },
   {
    "name": "trustReport",
-   "sig": "Map<String, dynamic> trustReport(dynamic bundle, [dynamic opt = const <String, dynamic>{}, dynamic eng = const <String, dynamic>{}])",
+   "sig": "Map<String, dynamic> trustReport(dynamic bundle, Map<String, dynamic> T, [dynamic opt = const <String, dynamic>{}, dynamic eng = const <String, dynamic>{}])",
    "ret": "Map<String,",
    "params": [
     {
      "type": "dynamic",
      "name": "bundle"
+    },
+    {
+     "type": "Map<String, dynamic>",
+     "name": "T"
     },
     {
      "type": "dynamic opt = const <String, dynamic>",
@@ -28676,6 +28684,42 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "buildCustomExport_T",
+   "type": "Map<String, dynamic>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "build-custom-export-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "buildCustomExport_CAP_DAYS",
+   "type": "num",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "build-custom-export-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "BUILD_CUSTOM_EXPORT_T",
    "type": "Map<String, Object>",
    "he": [
@@ -32174,6 +32218,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "groupOptionsOf_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "group-options-of-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "GROUP_OPTIONS_OF_T",
    "type": "Map<String, String>",
    "he": [
@@ -34313,6 +34375,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "needsCareShop_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "needs-care-shop-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "NEEDS_CARE_SHOP_T",
    "type": "Map<String, String>",
    "he": [
@@ -34949,6 +35029,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "personalCalEntries_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "personal-cal-entries-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "PERSONAL_CAL_ENTRIES_T",
    "type": "Map<String, String>",
    "he": [
@@ -34968,6 +35066,24 @@
     "תומך"
    ],
    "file": "personal-cal-entries-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "phoneIssue_T",
+   "type": "Map<String, dynamic>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "phone-issue-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -35945,6 +36061,24 @@
     "בדגל"
    ],
    "file": "receipt-fmt-of-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "receiptHtml_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "receipt-html-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -38221,6 +38355,24 @@
     "סיור"
    ],
    "file": "tour-steps-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "trustReport_T",
+   "type": "Map<String, dynamic>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "trust-report-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
