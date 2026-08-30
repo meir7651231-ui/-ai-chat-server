@@ -24,27 +24,11 @@ import { metaOf } from '../atoms/meta-of.mjs';
 import { diffDb as diffDbAtom } from '../atoms/diff-db.mjs';
 import { fullDbDiff as fullDbDiffAtom } from '../atoms/full-db-diff.mjs';
 import { emptyDiff } from '../atoms/empty-diff.mjs';
+import { META_KEYS } from '../atoms/cloud-meta-keys.mjs';
 
 // ── הכרעות-הקופסה (חיות כאן, לא בחוטים) ──
 // META_KEYS: מפתחות-ה-Db שנבדקים לשינוי-meta. savedAt מוחרג במכוון (משתנה בכל שמירה = רעש).
 // המימוש והסדר verbatim מ-maor/src/lib/cloud-diff.ts:87-105.
-const META_KEYS = [
-  'orgName',
-  'orgSite',
-  'orgDonate',
-  'orgGoal',
-  'budget',
-  'usdRate',
-  'audit',
-  'notif',
-  'reports',
-  'ui',
-  'seq',
-  'receiptSeq',
-  'donationSeq',
-  'shopReceiptSeq',
-  'attnDone',
-];
 // sameJson: אסטרטגיית-ההשוואה — === מהיר, אחרת שוויון-JSON. verbatim מ-cloud-diff.ts:138-141.
 const sameJson = (a, b) => a === b || JSON.stringify(a) === JSON.stringify(b);
 

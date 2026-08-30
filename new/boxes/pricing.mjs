@@ -19,24 +19,11 @@ import { SHEKEL_T as __d_shekel_SHEKEL_T } from '../atoms/shekel-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const shekel = (...a) => __pure_shekel(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_shekel_SHEKEL_T);
 import { ALL_MODULES } from '../atoms/all-modules.mjs';
+import { DEFAULT_INTEGRATION_PRICES } from '../atoms/integration-prices.mjs';
 
 // ── שקעי-הכרעה (מילון-הקופסה — נתון-בעלים עריך, חי כאן ולא באטומים) ──
 // מחירי-ברירת-המחדל להרחבות (maor/src/lib/pricing.ts:36-49) — placeholder עריך
 // שהבעלים דורס באשף. המפתחות = INTEGRATION_LABELS.
-const DEFAULT_INTEGRATION_PRICES = {
-  receipts: 60, // קבלות §46 אוטומטיות — ערך-ציות גבוה
-  payments: 90, // סליקה והוראות-קבע
-  whatsapp: 50,
-  sms: 40, // דמי-מודול (עלות-הודעה בפועל נגבית בנפרד)
-  phone: 90, // טלפוניה/מרכזייה
-  gcal: 30,
-  drive: 30,
-  sheets: 40,
-  maps: 40,
-  esign: 60, // חתימה דיגיטלית
-  ai: 120, // עוזר-חכם — פרימיום
-  campaign: 60,
-};
 
 // מפתח-האחסון המקומי (maor/src/lib/pricing.ts:192) — הכרעת-הקופסה, לא של החוטים.
 const PRICES_LS_KEY = 'maor_prices';

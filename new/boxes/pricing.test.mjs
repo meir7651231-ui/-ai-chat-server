@@ -2,6 +2,7 @@
  *  DoD: node pricing.test.mjs ⇒ exit 0, כל האסרטים עוברים + מגן-הכרעה verbatim. */
 import assert from 'node:assert';
 import { readFileSync } from 'node:fs';
+import { DEFAULT_INTEGRATION_PRICES } from '../atoms/integration-prices.mjs';
 import {
   DEFAULT_PRICES, sizeLabels, shekel, normalize, quote, readPrices, writePrices,
 } from './pricing.mjs';
@@ -118,12 +119,11 @@ check('round-trip write→read', () => {
 
 /* 🛡 מגן-הכרעה: מילון-מחירי-ההרחבות ומפתח-האחסון חיים בקוד-הקופסה verbatim מהמקור. */
 const src = readFileSync(new URL('./pricing.mjs', import.meta.url), 'utf8');
-const guards = [
-  "const PRICES_LS_KEY = 'maor_prices';",
-  'receipts: 60,', 'payments: 90,', 'whatsapp: 50,', 'sms: 40,', 'phone: 90,',
-  'gcal: 30,', 'drive: 30,', 'sheets: 40,', 'maps: 40,', 'esign: 60,', 'ai: 120,', 'campaign: 60,',
-];
+const guards = ["const PRICES_LS_KEY = 'maor_prices';"];
 for (const g of guards) if (!src.includes(g)) { console.error('✗ מגן-הכרעה: חסר ' + JSON.stringify(g)); f = 1; }
+// הכרעה 19: מחירי-ההרחבות נשמרים על ערך-הדאטה
+const PRICE_EXPECT = { receipts: 60, payments: 90, whatsapp: 50, sms: 40, phone: 90, gcal: 30, drive: 30, sheets: 40, maps: 40, esign: 60, ai: 120, campaign: 60 };
+for (const [k2, v2] of Object.entries(PRICE_EXPECT)) if (DEFAULT_INTEGRATION_PRICES[k2] !== v2) { console.error('✗ מגן-הכרעה: מחיר ' + k2 + ' סטה'); f = 1; }
 // טוהר-חיווט: הקופסה מייבאת רק אטומים (חוק-2), אפס ייבוא-קופסה.
 if (/from '\.\/[a-z-]+\.mjs'/.test(src)) { console.error('✗ מגן: ייבוא-קופסה אסור'); f = 1; }
 

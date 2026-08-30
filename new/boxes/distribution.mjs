@@ -34,6 +34,7 @@ const deliveriesCsvRows = (...a) => __pure_deliveriesCsvRows(...a, ...Array(Math
 import { volunteerRouteStops } from '../atoms/volunteer-route-stops.mjs';
 import { termOf as __pure_termOf } from '../atoms/term-of.mjs';
 import { INTEGRATION_SETTING_T as __d_termOf_TERM_OF_T } from '../atoms/integration-setting-strings.mjs';
+import { STATUS_LABEL } from '../atoms/shop7-status-labels.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const termOf = (...a) => __pure_termOf(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_termOf_TERM_OF_T);
 
@@ -41,7 +42,6 @@ const termOf = (...a) => __pure_termOf(...a, ...Array(Math.max(0, 3 - a.length))
 // מקור: shop7/lib.ts:20-22 — pickup→איסוף · enroute→בדרך · delivered→נמסר.
 // המפה עצמה היא *המשמעות*; החוטים (delivery-list-lines/deliveries-csv-rows/filter)
 // מקבלים אותה כשקע-פונקציה statusLabel.
-const STATUS_LABEL = { pickup: 'איסוף', enroute: 'בדרך', delivered: 'נמסר' };
 const statusLabel = (status) =>
   status === 'pickup' ? STATUS_LABEL.pickup : status === 'enroute' ? STATUS_LABEL.enroute : STATUS_LABEL.delivered;
 

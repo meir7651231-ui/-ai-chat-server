@@ -127,9 +127,10 @@ chk('filterDeliveries (בורר-שדות + statusLabel)', () => {
 
 /* 🛡 מגן-הכרעה: מילון-התוויות + בוררי-השדות + קיצור-השאילתה-הריקה חתומים במקור-הקופסה. */
 import { readFileSync } from 'node:fs';
+import { STATUS_LABEL } from '../atoms/shop7-status-labels.mjs';
 const src = readFileSync(new URL('./distribution.mjs', import.meta.url), 'utf8');
-chk('מגן: מילון-תוויות verbatim', () => {
-  assert.ok(src.includes("{ pickup: 'איסוף', enroute: 'בדרך', delivered: 'נמסר' }"), 'STATUS_LABEL סטה מהמקור');
+chk('מגן: מילון-תוויות verbatim (הכרעה 19: על ערך-הדאטה)', () => {
+  assert.strictEqual(JSON.stringify(STATUS_LABEL), '{"pickup":"איסוף","enroute":"בדרך","delivered":"נמסר"}', 'STATUS_LABEL סטה מהמקור');
 });
 chk('מגן: בוררי-שדות verbatim', () => {
   assert.ok(src.includes("[v.name, v.phone, v.area ?? '']"), 'בורר-מתנדבים סטה');

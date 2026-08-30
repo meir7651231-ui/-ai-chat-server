@@ -73,17 +73,16 @@ ok(!ENTITY_COLLECTIONS.includes(DONATIONS_COL), '9: donations דלף ל-ENTITY_C
 
 /* 🛡 מגן-הכרעה: META_KEYS (סדר) + sameJson (אסטרטגיה) חתומים verbatim בקוד-הקופסה. */
 import { readFileSync } from 'node:fs';
+import { META_KEYS } from '../atoms/cloud-meta-keys.mjs';
 const src = readFileSync(new URL('./cloud-diff.mjs', import.meta.url), 'utf8');
 const META_KEYS_EXPECT = ['orgName','orgSite','orgDonate','orgGoal','budget','usdRate','audit',
   'notif','reports','ui','seq','receiptSeq','donationSeq','shopReceiptSeq','attnDone'];
 for (const k of META_KEYS_EXPECT) {
-  if (!new RegExp("'" + k + "'").test(src)) { console.error('✗ מגן: META_KEYS חסר ' + k); f = 1; }
+  if (!META_KEYS.includes(k)) { console.error('✗ מגן: META_KEYS חסר ' + k); f = 1; }   // הכרעה 19: על ערך-הדאטה
 }
 // סדר: כל מפתח מופיע לפני הבא ברשימה (חתימת-הסדר).
 for (let i = 1; i < META_KEYS_EXPECT.length; i++) {
-  if (src.indexOf("'" + META_KEYS_EXPECT[i - 1] + "'") > src.indexOf("'" + META_KEYS_EXPECT[i] + "'")) {
-    console.error('✗ מגן: סדר-META_KEYS שונה סביב ' + META_KEYS_EXPECT[i]); f = 1;
-  }
+  if (META_KEYS.indexOf(META_KEYS_EXPECT[i - 1]) > META_KEYS.indexOf(META_KEYS_EXPECT[i])) { console.error('✗ מגן: סדר META_KEYS'); f = 1; }
 }
 if (!src.includes('a === b || JSON.stringify(a) === JSON.stringify(b)')) {
   console.error('✗ מגן: sameJson שונה מהמקור'); f = 1;
