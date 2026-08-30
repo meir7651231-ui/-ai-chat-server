@@ -32,6 +32,9 @@ for (const f of fs.readdirSync(SRC)) {
   if (!/-(strings|data|terms)\.mjs$/.test(f) || f.endsWith('.test.mjs')) continue;
   const mod = await import('file://' + path.join(SRC, f));
   const outName = f.replace(/\.mjs$/, '.dart');
+  // מגן-דריסה: תאום קיים שאינו פליטה-של-המנוע (אין חותם-מקור) — לא נוגעים (קובץ ידני קדוש)
+  const outPath = path.join(OUT, outName);
+  if (fs.existsSync(outPath) && !fs.readFileSync(outPath, 'utf8').includes('מנוע-ההמרה-מחדש')) { continue; }
   const lines = [
     `// אטום-דאטה · ${f.replace('.mjs', '')} — תאום-Dart שנפלט אוטומטית מהמקור-הקדוש (מנוע-ההמרה-מחדש · הכרעה 19).`,
     `// המקור: new/atoms/${f} — אל תערוך ידנית; שינוי = במקור + פליטה-מחדש.`,
