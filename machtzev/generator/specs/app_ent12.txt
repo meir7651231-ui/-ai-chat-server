@@ -1,0 +1,12 @@
+הירו 🗂️ עובד | ישות מורכבת — טופס + טבלה
+כותרת טופס עובד
+אטום InlineTextRow שם
+אטום GlowField תפקיד
+אטום InlineTextRow טלפון
+אטום InlineTextRow חברה
+אטום NumberStepper עלות לשעה
+אטום AnimatedToggle סטטוס
+אטום FabMenu שמירה
+כותרת רשומות עובד
+אטום DataGrid עובד
+באנר ישות עובד: 6 שדות · מהמדף

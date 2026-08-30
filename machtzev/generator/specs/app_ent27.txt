@@ -1,0 +1,14 @@
+הירו 🗂️ אחריות | ישות מורכבת — טופס + טבלה
+אטום BreadcrumbTrail אחריות: דווח / אושר / בטיפול / נסגר
+כותרת טופס אחריות
+אטום InlineTextRow פרויקט
+אטום GlowField אזור
+אטום InlineTextRow תיאור
+אטום DatePills תוקף אחריות
+אטום InlineTextRow קבלן אחראי
+אטום AnimatedToggle סטטוס
+אטום FabMenu שמירה
+אטום NeonButton קדם לאושר
+כותרת רשומות אחריות
+אטום DataGrid אחריות
+באנר ישות אחריות: 6 שדות · 4-שלבי workflow · מהמדף

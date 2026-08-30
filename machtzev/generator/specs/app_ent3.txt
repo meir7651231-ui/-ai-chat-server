@@ -1,11 +1,20 @@
-הירו 🗂️ לקוח | ישות מורכבת — טופס + טבלה
-כותרת טופס לקוח
+הירו 🗂️ פרויקט | ישות מורכבת — טופס + טבלה
+אטום BreadcrumbTrail פרויקט: תכנון / הצעה / חוזה / ביצוע / מסירה / נסגר
+כותרת טופס פרויקט
+אטום NumberStepper מספר
 אטום InlineTextRow שם
-אטום GlowField חברה
-אטום InlineTextRow טלפון
-אטום InlineTextRow מייל
+אטום GlowField סוג
+אטום InlineTextRow לקוח
 אטום InlineTextRow כתובת
+אטום QtyStepper שטח
+אטום InlineTextRow מנהל פרויקט
+אטום NumberStepper מחיר חוזה
+אטום NumberStepper תקציב
+אטום DatePills תאריך התחלה
+אטום MiniCalendar תאריך סיום
+אטום AnimatedToggle סטטוס
 אטום FabMenu שמירה
-כותרת רשומות לקוח
-אטום DataGrid לקוח
-באנר ישות לקוח: 5 שדות · מהמדף
+אטום NeonButton קדם להצעה
+כותרת רשומות פרויקט
+אטום DataGrid פרויקט
+באנר ישות פרויקט: 12 שדות · 6-שלבי workflow · מהמדף

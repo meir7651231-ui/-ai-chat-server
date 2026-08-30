@@ -1,0 +1,13 @@
+הירו 🗂️ נוכחות | ישות מורכבת — טופס + טבלה
+כותרת טופס נוכחות
+אטום InlineTextRow עובד
+אטום GlowField פרויקט
+אטום DatePills תאריך
+אטום InlineTextRow כניסה
+אטום InlineTextRow יציאה
+אטום NumberStepper שעות
+אטום InlineTextRow אישור
+אטום FabMenu שמירה
+כותרת רשומות נוכחות
+אטום DataGrid נוכחות
+באנר ישות נוכחות: 7 שדות · מהמדף

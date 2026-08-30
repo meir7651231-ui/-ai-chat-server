@@ -1,0 +1,15 @@
+הירו 🗂️ שינוי עבודה | ישות מורכבת — טופס + טבלה
+אטום BreadcrumbTrail שינוי עבודה: בקשה / תומחר / אושר פנימי / אושר לקוח / בוצע
+כותרת טופס שינוי עבודה
+אטום NumberStepper מספר
+אטום InlineTextRow פרויקט
+אטום GlowField סיבה
+אטום QtyStepper מחיר ללקוח
+אטום InlineTextRow השפעה על זמן
+אטום InlineTextRow מאשר
+אטום AnimatedToggle סטטוס
+אטום FabMenu שמירה
+אטום NeonButton קדם לתומחר
+כותרת רשומות שינוי עבודה
+אטום DataGrid שינוי עבודה
+באנר ישות שינוי עבודה: 7 שדות · 5-שלבי workflow · מהמדף

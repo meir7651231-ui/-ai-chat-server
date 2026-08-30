@@ -1,12 +1,14 @@
-הירו 🗂️ חשבונית | ישות מורכבת — טופס + טבלה
-כותרת טופס חשבונית
-אטום NumberStepper מספר
-אטום InlineTextRow לקוח
-אטום QtyStepper סכום
-אטום GlowField מס
-אטום DatePills תאריך
+הירו 🗂️ סעיף כתב כמויות | ישות מורכבת — טופס + טבלה
+כותרת טופס סעיף כתב כמויות
+אטום InlineTextRow קוד
+אטום GlowField פרק
+אטום InlineTextRow תיאור
+אטום InlineTextRow יחידת מידה
+אטום NumberStepper כמות
+אטום QtyStepper מחיר יחידה
+אטום NumberStepper מחיר מכירה
 אטום AnimatedToggle סטטוס
 אטום FabMenu שמירה
-כותרת רשומות חשבונית
-אטום DataGrid חשבונית
-באנר ישות חשבונית: 6 שדות · מהמדף
+כותרת רשומות סעיף כתב כמויות
+אטום DataGrid סעיף כתב כמויות
+באנר ישות סעיף כתב כמויות: 8 שדות · מהמדף

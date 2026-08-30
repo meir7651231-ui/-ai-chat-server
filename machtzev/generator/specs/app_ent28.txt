@@ -1,0 +1,15 @@
+הירו 🗂️ חשבונית | ישות מורכבת — טופס + טבלה
+אטום BreadcrumbTrail חשבונית: טיוטה / הופקה / נשלחה / שולמה
+כותרת טופס חשבונית
+אטום NumberStepper מספר
+אטום InlineTextRow לקוח
+אטום GlowField פרויקט
+אטום QtyStepper סכום
+אטום InlineTextRow מס
+אטום DatePills תאריך
+אטום AnimatedToggle סטטוס
+אטום FabMenu שמירה
+אטום NeonButton קדם להופקה
+כותרת רשומות חשבונית
+אטום DataGrid חשבונית
+באנר ישות חשבונית: 7 שדות · 4-שלבי workflow · מהמדף

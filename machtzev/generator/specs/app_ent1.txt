@@ -1,13 +1,17 @@
-הירו 🗂️ פרויקט | ישות מורכבת — טופס + טבלה
-אטום BreadcrumbTrail פרויקט: תכנון / הצעה / חוזה / ביצוע / מסירה / נסגר
-כותרת טופס פרויקט
+הירו 🗂️ ליד | ישות מורכבת — טופס + טבלה
+אטום BreadcrumbTrail ליד: חדש / קשר / אפיון / סיור / תמחור / הצעה / זכה
+כותרת טופס ליד
 אטום InlineTextRow שם
-אטום GlowField כתובת
+אטום GlowField חברה
+אטום InlineTextRow טלפון
+אטום InlineTextRow מייל
+אטום InlineTextRow סוג פרויקט
+אטום InlineTextRow מיקום
 אטום NumberStepper תקציב
-אטום DatePills תאריך התחלה
+אטום InlineTextRow ציון
 אטום AnimatedToggle סטטוס
 אטום FabMenu שמירה
-אטום NeonButton קדם להצעה
-כותרת רשומות פרויקט
-אטום DataGrid פרויקט
-באנר ישות פרויקט: 5 שדות · 6-שלבי workflow · מהמדף
+אטום NeonButton קדם לקשר
+כותרת רשומות ליד
+אטום DataGrid ליד
+באנר ישות ליד: 9 שדות · 7-שלבי workflow · מהמדף

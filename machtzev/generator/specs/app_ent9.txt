@@ -1,0 +1,13 @@
+הירו 🗂️ תקציב | ישות מורכבת — טופס + טבלה
+כותרת טופס תקציב
+אטום InlineTextRow פרויקט
+אטום GlowField סעיף
+אטום NumberStepper תקציב מאושר
+אטום QtyStepper עלות מחויבת
+אטום NumberStepper עלות בפועל
+אטום InlineTextRow תחזית
+אטום InlineTextRow סטייה
+אטום FabMenu שמירה
+כותרת רשומות תקציב
+אטום DataGrid תקציב
+באנר ישות תקציב: 7 שדות · מהמדף

@@ -1,0 +1,15 @@
+הירו 🗂️ משימה | ישות מורכבת — טופס + טבלה
+אטום BreadcrumbTrail משימה: מתוכננת / מוכנה / בתהליך / בבדיקה / הושלמה
+כותרת טופס משימה
+אטום InlineTextRow שם
+אטום GlowField אחראי
+אטום InlineTextRow מיקום
+אטום DatePills תאריך יעד
+אטום InlineTextRow עדיפות
+אטום NumberStepper אחוז ביצוע
+אטום AnimatedToggle סטטוס
+אטום FabMenu שמירה
+אטום NeonButton קדם למוכנה
+כותרת רשומות משימה
+אטום DataGrid משימה
+באנר ישות משימה: 7 שדות · 5-שלבי workflow · מהמדף

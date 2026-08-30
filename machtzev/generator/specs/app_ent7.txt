@@ -1,0 +1,15 @@
+הירו 🗂️ הצעה | ישות מורכבת — טופס + טבלה
+אטום BreadcrumbTrail הצעה: טיוטה / נשלחה / במשא ומתן / אושרה / נדחתה
+כותרת טופס הצעה
+אטום NumberStepper מספר
+אטום InlineTextRow לקוח
+אטום GlowField פרויקט
+אטום QtyStepper מחיר
+אטום InlineTextRow מס
+אטום DatePills תוקף
+אטום AnimatedToggle סטטוס
+אטום FabMenu שמירה
+אטום NeonButton קדם לנשלחה
+כותרת רשומות הצעה
+אטום DataGrid הצעה
+באנר ישות הצעה: 7 שדות · 5-שלבי workflow · מהמדף

@@ -1,0 +1,15 @@
+הירו 🗂️ קבלן משנה | ישות מורכבת — טופס + טבלה
+אטום BreadcrumbTrail קבלן משנה: מועמד / נבדק / אושר / פעיל
+כותרת טופס קבלן משנה
+אטום InlineTextRow שם
+אטום GlowField חברה
+אטום InlineTextRow תחום
+אטום InlineTextRow רישיון
+אטום DatePills תוקף ביטוח
+אטום InlineTextRow דירוג
+אטום AnimatedToggle סטטוס
+אטום FabMenu שמירה
+אטום NeonButton קדם לנבדק
+כותרת רשומות קבלן משנה
+אטום DataGrid קבלן משנה
+באנר ישות קבלן משנה: 7 שדות · 4-שלבי workflow · מהמדף

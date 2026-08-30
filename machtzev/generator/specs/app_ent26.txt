@@ -1,0 +1,13 @@
+הירו 🗂️ מסירה | ישות מורכבת — טופס + טבלה
+אטום BreadcrumbTrail מסירה: בדיקות / ליקויים / תיקונים / חתימה / הושלם
+כותרת טופס מסירה
+אטום InlineTextRow פרויקט
+אטום GlowField לקוח
+אטום DatePills תאריך
+אטום InlineTextRow חשבון סופי
+אטום AnimatedToggle סטטוס
+אטום FabMenu שמירה
+אטום NeonButton קדם לליקויים
+כותרת רשומות מסירה
+אטום DataGrid מסירה
+באנר ישות מסירה: 5 שדות · 5-שלבי workflow · מהמדף

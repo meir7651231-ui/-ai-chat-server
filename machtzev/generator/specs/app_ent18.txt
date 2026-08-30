@@ -1,0 +1,16 @@
+הירו 🗂️ שדה | ישות מורכבת — טופס + טבלה
+אטום BreadcrumbTrail שדה: חדש / נשלח / בבדיקה / נענה / מאושר / סגור
+כותרת טופס שדה
+אטום NumberStepper מספר
+אטום InlineTextRow פרויקט
+אטום GlowField תחום
+אטום InlineTextRow שאלה
+אטום DatePills מועד נדרש
+אטום InlineTextRow דחיפות
+אטום QtyStepper השפעת עלות
+אטום AnimatedToggle סטטוס
+אטום FabMenu שמירה
+אטום NeonButton קדם לנשלח
+כותרת רשומות שדה
+אטום DataGrid שדה
+באנר ישות שדה: 8 שדות · 6-שלבי workflow · מהמדף

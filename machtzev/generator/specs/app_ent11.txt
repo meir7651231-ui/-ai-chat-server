@@ -1,0 +1,13 @@
+הירו 🗂️ דוח יומי | ישות מורכבת — טופס + טבלה
+כותרת טופס דוח יומי
+אטום InlineTextRow פרויקט
+אטום DatePills תאריך
+אטום GlowField מזג אוויר
+אטום InlineTextRow עובדים
+אטום NumberStepper שעות
+אטום QtyStepper אחוז התקדמות
+אטום AnimatedToggle סטטוס
+אטום FabMenu שמירה
+כותרת רשומות דוח יומי
+אטום DataGrid דוח יומי
+באנר ישות דוח יומי: 7 שדות · מהמדף

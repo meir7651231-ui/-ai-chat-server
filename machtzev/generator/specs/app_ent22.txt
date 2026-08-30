@@ -1,0 +1,15 @@
+הירו 🗂️ ליקוי | ישות מורכבת — טופס + טבלה
+אטום BreadcrumbTrail ליקוי: נפתח / בטיפול / תוקן / נבדק / נסגר
+כותרת טופס ליקוי
+אטום NumberStepper מספר
+אטום InlineTextRow מיקום
+אטום InlineTextRow תיאור
+אטום GlowField חומרה
+אטום InlineTextRow אחראי
+אטום DatePills תאריך יעד
+אטום AnimatedToggle סטטוס
+אטום FabMenu שמירה
+אטום NeonButton קדם לבטיפול
+כותרת רשומות ליקוי
+אטום DataGrid ליקוי
+באנר ישות ליקוי: 7 שדות · 5-שלבי workflow · מהמדף

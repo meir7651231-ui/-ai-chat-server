@@ -1,13 +1,14 @@
-הירו 🗂️ ליד | ישות מורכבת — טופס + טבלה
-אטום BreadcrumbTrail ליד: חדש / קשר / סיור / הצעה / זכה
-כותרת טופס ליד
+הירו 🗂️ לקוח | ישות מורכבת — טופס + טבלה
+כותרת טופס לקוח
 אטום InlineTextRow שם
-אטום GlowField טלפון
-אטום InlineTextRow מקור
-אטום NumberStepper תקציב
-אטום AnimatedToggle סטטוס
+אטום GlowField חברה
+אטום NumberStepper מספר עוסק
+אטום InlineTextRow איש קשר
+אטום InlineTextRow טלפון
+אטום InlineTextRow מייל
+אטום InlineTextRow כתובת
+אטום InlineTextRow דירוג
 אטום FabMenu שמירה
-אטום NeonButton קדם לקשר
-כותרת רשומות ליד
-אטום DataGrid ליד
-באנר ישות ליד: 5 שדות · 5-שלבי workflow · מהמדף
+כותרת רשומות לקוח
+אטום DataGrid לקוח
+באנר ישות לקוח: 8 שדות · מהמדף

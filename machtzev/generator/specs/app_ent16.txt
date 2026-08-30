@@ -1,0 +1,13 @@
+הירו 🗂️ ציוד | ישות מורכבת — טופס + טבלה
+כותרת טופס ציוד
+אטום InlineTextRow שם
+אטום GlowField סוג
+אטום NumberStepper מספר סידורי
+אטום InlineTextRow מיקום
+אטום DatePills תוקף בדיקה
+אטום QtyStepper שעות שימוש
+אטום AnimatedToggle סטטוס
+אטום FabMenu שמירה
+כותרת רשומות ציוד
+אטום DataGrid ציוד
+באנר ישות ציוד: 7 שדות · מהמדף

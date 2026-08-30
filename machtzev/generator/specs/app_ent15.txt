@@ -1,0 +1,13 @@
+הירו 🗂️ חומר | ישות מורכבת — טופס + טבלה
+כותרת טופס חומר
+אטום InlineTextRow קוד
+אטום GlowField שם
+אטום InlineTextRow קטגוריה
+אטום InlineTextRow יחידת מידה
+אטום NumberStepper מחיר
+אטום InlineTextRow מינימום
+אטום InlineTextRow נקודת הזמנה
+אטום FabMenu שמירה
+כותרת רשומות חומר
+אטום DataGrid חומר
+באנר ישות חומר: 7 שדות · מהמדף

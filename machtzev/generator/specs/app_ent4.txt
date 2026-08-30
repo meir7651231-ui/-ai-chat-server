@@ -1,14 +1,16 @@
-הירו 🗂️ משימה | ישות מורכבת — טופס + טבלה
-אטום BreadcrumbTrail משימה: מתוכננת / בתהליך / בבדיקה / הושלמה
-כותרת טופס משימה
-אטום InlineTextRow שם
-אטום GlowField אחראי
-אטום DatePills תאריך יעד
-אטום InlineTextRow עדיפות
+הירו 🗂️ שדה | ישות מורכבת — טופס + טבלה
+כותרת טופס שדה
+אטום InlineTextRow קוד
+אטום GlowField שם
+אטום InlineTextRow שלב
+אטום InlineTextRow אחראי
+אטום DatePills תאריך התחלה
+אטום MiniCalendar תאריך סיום
 אטום NumberStepper אחוז ביצוע
+אטום QtyStepper תקציב
+אטום NumberStepper עלות בפועל
 אטום AnimatedToggle סטטוס
 אטום FabMenu שמירה
-אטום NeonButton קדם לבתהליך
-כותרת רשומות משימה
-אטום DataGrid משימה
-באנר ישות משימה: 6 שדות · 4-שלבי workflow · מהמדף
+כותרת רשומות שדה
+אטום DataGrid שדה
+באנר ישות שדה: 10 שדות · מהמדף

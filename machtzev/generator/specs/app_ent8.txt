@@ -1,0 +1,17 @@
+הירו 🗂️ חוזה | ישות מורכבת — טופס + טבלה
+אטום BreadcrumbTrail חוזה: טיוטה / נחתם / פעיל / הושלם
+כותרת טופס חוזה
+אטום NumberStepper מספר
+אטום InlineTextRow סוג
+אטום GlowField פרויקט
+אטום QtyStepper סכום
+אטום DatePills תאריך חתימה
+אטום MiniCalendar התחלה
+אטום DatePills סיום
+אטום InlineTextRow עיכבון
+אטום AnimatedToggle סטטוס
+אטום FabMenu שמירה
+אטום NeonButton קדם לנחתם
+כותרת רשומות חוזה
+אטום DataGrid חוזה
+באנר ישות חוזה: 9 שדות · 4-שלבי workflow · מהמדף

@@ -1,0 +1,13 @@
+הירו 🗂️ בדיקת איכות | ישות מורכבת — טופס + טבלה
+כותרת טופס בדיקת איכות
+אטום InlineTextRow פרויקט
+אטום GlowField שלב
+אטום InlineTextRow מיקום
+אטום InlineTextRow בודק
+אטום DatePills תאריך
+אטום InlineTextRow תוצאה
+אטום AnimatedToggle סטטוס
+אטום FabMenu שמירה
+כותרת רשומות בדיקת איכות
+אטום DataGrid בדיקת איכות
+באנר ישות בדיקת איכות: 7 שדות · מהמדף
