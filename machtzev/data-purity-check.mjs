@@ -16,7 +16,10 @@ const BASELINE = path.join(HERE, 'data-purity-baseline.json');
 function isMixed(src) {
   // הפשטת-הערות מלאה: גם הערות-זנב (guard נגד :// ונגד // בתוך מחרוזת); מחרוזות JS/Dart
   // הן חד-שורתיות ⇒ ‎\n שובר זוג-מרכאות — גרשיים בהערה (הו"ק/ת"ז) אינם פותחים מחרוזת.
-  const code = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/\/?.*$/gm, '').replace(/(^|[^:'"])\/\/[^\n]*/gm, '$1');
+  let code = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/\/?.*$/gm, '').replace(/(^|[^:'"])\/\/[^\n]*/gm, '$1');
+  // סימטריית-regex: תבנית-RegExp היא לוגיקת-ההתאמה עצמה (ב-JS ליטרל-regex פטור מטבעו;
+  // ב-Dart אותה תבנית עטופה במחרוזת) — עברית בתוך ארגומנט-RegExp איננה דאטה-תצוגה.
+  code = code.replace(/RegExp\(\s*r?('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*")/g, "RegExp('");
   let heb = false;
   for (const m of code.matchAll(/['"]([^'"\\\n]{0,160})['"]/g)) if (HEB.test(m[1])) { heb = true; break; }
   if (!heb) return false;
