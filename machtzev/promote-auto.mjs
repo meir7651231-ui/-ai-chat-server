@@ -15,6 +15,14 @@ const ser = (v) => { try { const s = JSON.stringify(v); return (s && s.length <=
 let promoted = 0, residue = 0, skipped = 0;
 const why = {}; const R = (k, f) => { why[k] = (why[k] || []).concat(f).slice(0, 3); residue++; };
 const taken = new Set(fs.readdirSync(A).map(f => f.replace(/\..*$/, '')));
+// מגן-התנגשות-אמת: כל שם-מיוצא שכבר במדף (לא רק kebab-הקובץ) — מונע כפילות כמו gem⇄gematria
+const shelfExports = new Set();
+for (const f of fs.readdirSync(A)) {
+  if (!f.endsWith('.mjs') || f.endsWith('.test.mjs')) continue;
+  const t = fs.readFileSync(A + f, 'utf8'); let mm;
+  for (const re of [/export\s+(?:async\s+)?function\s+([a-zA-Z_$][\w$]*)/g, /export\s+const\s+([a-zA-Z_$][\w$]*)/g]) while ((mm = re.exec(t))) shelfExports.add(mm[1]);
+  const ce = /export\s*\{([^}]*)\}/g; while ((mm = ce.exec(t))) for (const n of mm[1].split(',')) { const nm = n.trim().split(/\s+as\s+/)[0].trim(); if (nm) shelfExports.add(nm); }
+}
 
 for (const file of fs.readdirSync(Q).filter(x => x.endsWith('.mjs'))) {
   if (EXCLUDE.has(file)) { skipped++; continue; }
@@ -26,6 +34,7 @@ for (const file of fs.readdirSync(Q).filter(x => x.endsWith('.mjs'))) {
   try { mod = await import(pathToFileURL(path.join(Q, file)).href); } catch (e) { R('import:' + String(e.message).slice(0, 40), file); continue; }
   const names = Object.keys(mod);
   if (!names.length) { R('no-exports', file); continue; }
+  if (names.some(n => shelfExports.has(n))) { R('collision:' + names.find(n => shelfExports.has(n)), file); continue; }
   const provenance = (txt.match(/מוצא: ([^\n]+)/) || ['', '?'])[1];
 
   const consts = [], fns = [];
@@ -48,7 +57,7 @@ for (const file of fs.readdirSync(Q).filter(x => x.endsWith('.mjs'))) {
   // ── פונקציות: אפיון-Golden ──
   if (fns.length === 1 && consts.length === 0) {
     const fn = mod[fns[0]];
-    if (fn.constructor.name === 'AsyncFunction' || fn.length > 2) { R('fn-shape:' + fn.length, file); continue; }
+    if (fn.constructor.name === 'AsyncFunction' || fn.length > 3) { R('fn-shape:' + fn.length, file); continue; }
     if (fn.length === 0) {
       let r1, r2; try { r1 = fn(); r2 = fn(); } catch (e) { R('getter-throw', file); continue; }
       if (r1 && typeof r1.then === 'function') { r1.catch(()=>{}); R('getter-async', file); continue; }
@@ -60,7 +69,10 @@ for (const file of fs.readdirSync(Q).filter(x => x.endsWith('.mjs'))) {
       taken.add(kebab); promoted++; fs.unlinkSync(Q + file); continue;
     }
     const cases = [];
-    const argSets = fn.length === 1 ? POOL.map(a => [a]) : POOL.slice(0, 14).flatMap(a => POOL.slice(0, 14).map(b => [a, b]));
+    const P3 = POOL.slice(0, 10);
+    const argSets = fn.length === 1 ? POOL.map(a => [a])
+      : fn.length === 2 ? POOL.slice(0, 14).flatMap(a => POOL.slice(0, 14).map(b => [a, b]))
+      : P3.flatMap(a => P3.flatMap(b => P3.map(c => [a, b, c])));   // arity-3 (מנוע-מפלצת: חלון-קלט רחב יותר)
     for (const args of argSets) {
       let r1, r2;
       try { r1 = fn(...args); r2 = fn(...args); } catch { continue; }
@@ -87,8 +99,11 @@ for (const file of fs.readdirSync(Q).filter(x => x.endsWith('.mjs'))) {
     const fnCases = {};
     if (ok) for (const n of fns) {
       const fn = mod[n];
-      if (fn.constructor.name === 'AsyncFunction' || fn.length > 2) { ok = false; break; }
-      const sets = fn.length === 0 ? [[]] : fn.length === 1 ? POOL.map(a => [a]) : POOL.slice(0, 12).flatMap(a => POOL.slice(0, 12).map(b => [a, b]));
+      if (fn.constructor.name === 'AsyncFunction' || fn.length > 3) { ok = false; break; }
+      const Pm = POOL.slice(0, 10);
+      const sets = fn.length === 0 ? [[]] : fn.length === 1 ? POOL.map(a => [a])
+        : fn.length === 2 ? POOL.slice(0, 12).flatMap(a => POOL.slice(0, 12).map(b => [a, b]))
+        : Pm.flatMap(a => Pm.flatMap(b => Pm.map(c => [a, b, c])));
       const cs = [];
       for (const args of sets) {
         let r1, r2; try { r1 = fn(...args); r2 = fn(...args); } catch { continue; }
