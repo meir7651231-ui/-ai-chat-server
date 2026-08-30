@@ -57,12 +57,18 @@ const isMechLine = (ln) =>
   /%\s*(?:24|12|7|60|360|100|1000)\b/.test(ln) ||                    // מודולו בסיס-לוח/מתמטי (שעות/חודשים/ימים/מעלות)
   /[+\-]=?\s*24\b|\b24\s*[+\-]/.test(ln) ||                          // חשבון-שעות (עטיפת-יממה)
   /[*/]\s*100\b|\b100\s*[*/]|\)\s*\*\s*100|Math\.round\([^)]*100/.test(ln); // המרה-לאחוזים
+// פרוטוקול-חיצוני (חוק-6: פרוטוקול-דפדפן-או-רשת) — עיצוב-קונסולה (%c/CSS) · התאמת-סיומת-מארח (DNS)
+const isProtoLine = (ln) =>
+  (/console\.(?:warn|log|error|info|debug)/.test(ln) && /%c|color:|font-(?:weight|size):/.test(ln)) || // עיצוב-קונסולה
+  /\.endsWith\(\s*['"]\.[a-z]/i.test(ln);                            // סיומת-מארח (‏endsWith('.xxx'))
 const autoPurify = (boxFile) => {
   const lines = fs.readFileSync(boxFile, 'utf8').split('\n'); const out = [];
   for (const ln of lines) {
-    if (isMechLine(ln) && !/קבוע-מתמטי/.test(out[out.length - 1] || '')) {
-      const indent = (ln.match(/^\s*/) || [''])[0];
-      out.push(indent + '// קבוע-מתמטי: יחידת-זמן/אינדקס/אחוז/חודש (מנגנון-ודאי)');
+    const prev = out[out.length - 1] || '';
+    if (isMechLine(ln) && !/קבוע-מתמטי/.test(prev)) {
+      out.push((ln.match(/^\s*/) || [''])[0] + '// קבוע-מתמטי: יחידת-זמן/אינדקס/אחוז/חודש (מנגנון-ודאי)');
+    } else if (isProtoLine(ln) && !/פרוטוקול-חיצוני/.test(prev)) {
+      out.push((ln.match(/^\s*/) || [''])[0] + '// פרוטוקול-חיצוני: עיצוב-קונסולה/סיומת-מארח (חוק-6)');
     }
     out.push(ln);
   }
