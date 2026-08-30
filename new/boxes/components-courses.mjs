@@ -42,7 +42,10 @@ import { GROUP_LABEL_OF_T as __d_groupLabelOf_GROUP_LABEL_OF_T } from '../atoms/
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const groupLabelOf = (...a) => __pure_groupLabelOf(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_groupLabelOf_GROUP_LABEL_OF_T);
 import { groupRemapOnRemoval as groupRemapWire } from '../atoms/group-remap-on-removal.mjs';
-import { groupOptionsOf as groupOptionsWire } from '../atoms/group-options-of.mjs';
+import { groupOptionsOf as __pure_groupOptionsOf } from '../atoms/group-options-of.mjs';
+import { GROUP_OPTIONS_OF_T as __d_groupOptionsOf_GROUP_OPTIONS_OF_T } from '../atoms/group-options-of-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const groupOptionsWire = (...a) => __pure_groupOptionsOf(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_groupOptionsOf_GROUP_OPTIONS_OF_T);
 import { planWord as __pure_planWord } from '../atoms/plan-word.mjs';
 import { PLAN_WORD_T as __d_planWord_PLAN_WORD_T } from '../atoms/plan-word-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

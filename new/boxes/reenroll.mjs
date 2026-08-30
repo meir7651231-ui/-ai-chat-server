@@ -28,7 +28,10 @@ import { ELIGIBLE_ASSIGNMENTS_FOR_DAY_T as __d_freshNextYearEnrollment_FRESH_NEX
 const freshNextYearEnrollment = (...a) => __pure_freshNextYearEnrollment(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_freshNextYearEnrollment_FRESH_NEXT_YEAR_ENROLLMENT_T);
 import { nextYearCourseDraft } from '../atoms/next-year-course-draft.mjs';
 import { studentHistory } from '../atoms/student-history.mjs';
-import { studentHistoryText } from '../atoms/student-history-text.mjs';
+import { studentHistoryText as __pure_studentHistoryText } from '../atoms/student-history-text.mjs';
+import { STUDENT_HISTORY_TEXT_T as __d_studentHistoryText_STUDENT_HISTORY_TEXT_T } from '../atoms/student-history-text-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const studentHistoryText = (...a) => __pure_studentHistoryText(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_studentHistoryText_STUDENT_HISTORY_TEXT_T);
 import { reenrollCsvRows as __pure_reenrollCsvRows } from '../atoms/reenroll-csv-rows.mjs';
 import { REENROLL_CSV_ROWS_T as __d_reenrollCsvRows_REENROLL_CSV_ROWS_T } from '../atoms/reenroll-csv-rows-strings.mjs';
 import { head } from '../atoms/reenroll-csv-rows-data.mjs';

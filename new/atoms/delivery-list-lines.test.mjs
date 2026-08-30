@@ -1,4 +1,9 @@
-import { deliveryListLines } from './delivery-list-lines.mjs';
+import { deliveryListLines as __pure_deliveryListLines } from './delivery-list-lines.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_deliveryListLines_DELIVERY_LIST_LINES_T = {
+  k1: " מסירות)",
+};
+const deliveryListLines = (...a) => __pure_deliveryListLines(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_deliveryListLines_DELIVERY_LIST_LINES_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 // השקע — תוויות-הסטטוס של המקור

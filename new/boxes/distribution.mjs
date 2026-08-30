@@ -23,7 +23,10 @@ import { pendingDeliveriesToday as __pure_pendingDeliveriesToday } from '../atom
 import { PENDING_DELIVERIES_TODAY_T as __d_pendingDeliveriesToday_PENDING_DELIVERIES_TODAY_T } from '../atoms/pending-deliveries-today-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const pendingDeliveriesToday = (...a) => __pure_pendingDeliveriesToday(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_pendingDeliveriesToday_PENDING_DELIVERIES_TODAY_T);
-import { deliveryListLines } from '../atoms/delivery-list-lines.mjs';
+import { deliveryListLines as __pure_deliveryListLines } from '../atoms/delivery-list-lines.mjs';
+import { DELIVERY_LIST_LINES_T as __d_deliveryListLines_DELIVERY_LIST_LINES_T } from '../atoms/delivery-list-lines-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const deliveryListLines = (...a) => __pure_deliveryListLines(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_deliveryListLines_DELIVERY_LIST_LINES_T);
 import { deliveriesCsvRows as __pure_deliveriesCsvRows } from '../atoms/deliveries-csv-rows.mjs';
 import { DELIVERIES_CSV_ROWS_T as __d_deliveriesCsvRows_DELIVERIES_CSV_ROWS_T } from '../atoms/deliveries-csv-rows-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

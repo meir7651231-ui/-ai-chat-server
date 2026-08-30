@@ -1,4 +1,9 @@
-import { groupOptionsOf } from './group-options-of.mjs';
+import { groupOptionsOf as __pure_groupOptionsOf } from './group-options-of.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_groupOptionsOf_GROUP_OPTIONS_OF_T = {
+  k1: " · יום ",
+};
+const groupOptionsOf = (...a) => __pure_groupOptionsOf(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_groupOptionsOf_GROUP_OPTIONS_OF_T);
 const DAY_NAMES = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי'];
 const sessionsOf = (c) => (c.sessions && c.sessions.length ? c.sessions : [{ day: c.weekday, time: c.time, label: '' }]);
 const groupLabelOf = (s, i) => s.label || 'קבוצה ' + (i + 1);

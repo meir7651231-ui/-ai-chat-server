@@ -1,4 +1,10 @@
-import { studentHistoryText } from './student-history-text.mjs';
+import { studentHistoryText as __pure_studentHistoryText } from './student-history-text.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_studentHistoryText_STUDENT_HISTORY_TEXT_T = {
+  k1: " — נוכחות ",
+  k2: ", חיסורים ",
+};
+const studentHistoryText = (...a) => __pure_studentHistoryText(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_studentHistoryText_STUDENT_HISTORY_TEXT_T);
 
 let f = 0;
 const chk = (n, got, want) => {

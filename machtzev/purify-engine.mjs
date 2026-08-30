@@ -291,18 +291,36 @@ const _ts = _req('typescript');
 function collectStringSites(src) {
   const sf = _ts.createSourceFile('x.mjs', src, _ts.ScriptTarget.ES2022, true);
   const sites = [];
+  const inParam = (n) => { let up = n; while (up) { if (_ts.isParameter(up)) return true; up = up.parent; } return false; };
+  const pushTplChunk = (n) => {
+    // חלק-סטטי של תבנית: `טקסט${ · }טקסט${ · }טקסט` — מוחלף ב-`${ref}` באותם גבולות
+    if (!n.text || inParam(n)) return;
+    const at = n.getStart(sf);
+    const raw = src.slice(at, n.end);
+    const suffix = raw.endsWith('${') ? '${' : '`';
+    const prefix = raw[0];
+    sites.push({ at, len: n.end - at, v: n.text, wrap: (ref) => `${prefix}\${${ref}}${suffix}` });
+  };
   const walk = (n) => {
     if (n.kind === _ts.SyntaxKind.StringLiteral) {
       const p = n.parent;
       let skip = false;
       if (p && (_ts.isImportDeclaration(p) || _ts.isExportDeclaration(p))) skip = true;          // module specifier
       if (p && _ts.isPropertyAssignment(p) && p.name === n) skip = true;                          // מפתח-אובייקט
-      let up = n;
-      while (up && !skip) { if (_ts.isParameter(up)) skip = true; up = up.parent; }               // ברירת-מחדל בחתימה
+      if (inParam(n)) skip = true;                                                                // ברירת-מחדל בחתימה
       if (!skip) {
         const at = n.getStart(sf);
         sites.push({ at, len: n.end - at, v: n.text });
       }
+      return;
+    }
+    if (n.kind === _ts.SyntaxKind.NoSubstitutionTemplateLiteral) {
+      if (n.text && !inParam(n)) { const at = n.getStart(sf); sites.push({ at, len: n.end - at, v: n.text }); }
+      return;
+    }
+    if (n.kind === _ts.SyntaxKind.TemplateExpression) {
+      pushTplChunk(n.head);
+      for (const sp of n.templateSpans) { walk(sp.expression); pushTplChunk(sp.literal); }
       return;
     }
     _ts.forEachChild(n, walk);
@@ -343,8 +361,10 @@ function purifyStrings(cand, log) {
   for (const st of cand.sites) if (!keys.has(st.v)) keys.set(st.v, 'k' + (keys.size + 1));
   // שכתוב מהסוף להתחלה
   let mech = cand.src;
-  for (const st of [...cand.sites].sort((a, b) => b.at - a.at))
-    mech = mech.slice(0, st.at) + `${tParam}.${keys.get(st.v)}` + mech.slice(st.at + st.len);
+  for (const st of [...cand.sites].sort((a, b) => b.at - a.at)) {
+    const ref = `${tParam}.${keys.get(st.v)}`;
+    mech = mech.slice(0, st.at) + (st.wrap ? st.wrap(ref) : ref) + mech.slice(st.at + st.len);
+  }
   // הרחבת-חתימה
   const sig = new RegExp(`(export\\s+(?:const\\s+${cand.fn}\\s*=\\s*(?:async\\s*)?|function\\s+${cand.fn}\\s*))\\(`);
   const sm = mech.match(sig);
@@ -530,8 +550,10 @@ function purifyBox(file, log) {
   const keys = new Map();
   for (const st of sites) if (!keys.has(st.v)) keys.set(st.v, 'k' + (keys.size + 1));
   let out = src;
-  for (const st of [...sites].sort((a, b) => b.at - a.at))
-    out = out.slice(0, st.at) + `${CONST}.${keys.get(st.v)}` + out.slice(st.at + st.len);
+  for (const st of [...sites].sort((a, b) => b.at - a.at)) {
+    const ref = `${CONST}.${keys.get(st.v)}`;
+    out = out.slice(0, st.at) + (st.wrap ? st.wrap(ref) : ref) + out.slice(st.at + st.len);
+  }
   // ייבוא אחרי ה-import האחרון הקיים
   const lastIm = [...out.matchAll(/^import[^\n]*$/gm)].pop();
   const imLine = `import { ${CONST} } from '../atoms/${dataBase}.mjs';`;

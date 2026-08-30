@@ -79,7 +79,6 @@
 | new/atoms/migrate-supporters-to-keyed.mjs | 8 | — | — | supporters · events · events | 400 400 |
 | new/atoms/open-dek.mjs | 8 | — | — | pass · pass · raw · AES-GCM | — |
 | new/atoms/read-file-as-data-url.mjs | 8 | הקובץ גדול מדי להטמעה (מקסימום · MB) — הוסיפו קישור במקום | — | — | — |
-| new/atoms/student-history-text.mjs | 8 | ${yr}${h.courseName}${grp} — נ | — | [${h.yearLabel}]  ·  · ${h.group} | — |
 | new/boxes/a11y.mjs | 8 | — | — | ../atoms/scale-min.mjs · ../atoms/scale-max.mjs · ../atoms/scale-step.mjs · ../atoms/a11y-fab-toggles.mjs | — |
 | new/boxes/audit.mjs | 8 | — | — | ../atoms/audit-cat-colors.mjs · ../atoms/audit-categories.mjs · ../atoms/phone-issue.mjs · ../atoms/phone-issue-strings.m | — |
 | new/boxes/ayin.mjs | 8 | — | — | ../atoms/ayin-stages.mjs · ../atoms/stage-label.mjs · ../atoms/stage-label-strings.m · ../atoms/feat-label.mjs | — |
@@ -119,7 +118,6 @@
 | new/atoms/constellation-donor-constellation.mjs | 6 | — | — | — | 2166136261 16777619 30 90 180 365 |
 | new/atoms/create-cloud-key.mjs | 6 | יצירת מפתח-הצפנה נכשלה | — | pass | — |
 | new/atoms/default-prices.mjs | 6 | — | — | — | 290 120 70 180 60 90 |
-| new/atoms/delivery-list-lines.mjs | 6 | 🦺 ${volName} (${list.length}  | — |   • ${r.familyName} · ${status | — |
 | new/atoms/effective-config-for.mjs | 6 | — | const modules = { ...orgConfig.modules } · const features = { ...orgConfig.features } | — | — |
 | new/atoms/empty-telephony-config.mjs | 6 | — | — | 101 · 201 · 100 | — |
 | new/atoms/exp-field-defs.mjs | 6 | — | const defs = [ { key: T.k3, labe · const defs = [ { key: T.k3, label: T | — | — |
@@ -133,6 +131,7 @@
 | new/atoms/segments-segment-counts.mjs | 6 | — | const SEGMENTS = [ { key: T.k1, label: T | — | 5000 60 365 |
 | new/atoms/send-team-message.mjs | 6 | — | — | teamChats · messages | 120 60 |
 | new/atoms/site-palette.mjs | 6 | — | — | — | 255 255 255 60 360 360 |
+| new/atoms/student-history-text.mjs | 6 | — | — | [${h.yearLabel}]  ·  · ${h.group} · ${yr}${h.courseName}${grp}${T. | — |
 | new/atoms/sup-score.mjs | 6 | — | — | — | 86400000 9999 30 350 90 280 |
 | new/atoms/to-tenant-id.mjs | 6 | — | — | ${base}-org · x-${padded} | 38 40 |
 | new/boxes/export-gate.mjs | 6 | — | — | ../atoms/set-export-blocked.mj · ../atoms/export-allowed.mjs · ../atoms/guard-export.mjs | — |
@@ -154,6 +153,7 @@
 | new/atoms/coordinator-print-lines.mjs | 4 | — | const lines = [ T2.k3 + (coord?.name | — | 30 |
 | new/atoms/delete-org-join-request.mjs | 4 | — | — | platformOrgs · joinRequests | — |
 | new/atoms/delete-org-member-config.mjs | 4 | — | — | platformOrgs · memberConfigs | — |
+| new/atoms/delivery-list-lines.mjs | 4 | — | — | 🦺 ${volName} (${list.length}$ ·   • ${r.familyName} · ${status | — |
 | new/atoms/distribution-list-lines.mjs | 4 | — | const lines = [T.k1 + (product?.name ?? ''), | — | 30 |
 | new/atoms/don-allowed-keys.mjs | 4 | — | const clean = [...new Set(allowed.map((s) => | — | 29 |
 | new/atoms/excel-serial-to-iso.mjs | 4 | — | — | ${dt.getUTCFullYear()}-${mo}-$ | 25569 86400000 |
@@ -161,7 +161,6 @@
 | new/atoms/fetch-provider-rows.mjs | 4 | — | — | incomingPayments · provider | — |
 | new/atoms/gen-join-code.mjs | 4 | — | — | — | 2166136261 16777619 36 36 |
 | new/atoms/gen-recovery-key.mjs | 4 | — | const chars = [...bytes].map((b) => ALPHABET | — | 24 |
-| new/atoms/group-options-of.mjs | 4 | ${v} · יום ${dayNames[s.day]}  | — | — | — |
 | new/atoms/guide-foot.mjs | 4 | המדריך המלא והמפורט נמצא בקובץ | — | — | — |
 | new/atoms/heb-month-he.mjs | 4 | — | — | he-u-ca-hebrew · long | — |
 | new/atoms/maps-route-url.mjs | 4 | — | — | https://www.google.com/maps/se · https://www.google.com/maps/di | — |
@@ -253,6 +252,7 @@
 | new/atoms/fetch-org-requests.mjs | 2 | — | — | platformRequests | — |
 | new/atoms/fold-ics-line.mjs | 2 | — | — | — | 75 75 |
 | new/atoms/gematria.mjs | 2 | — | — | — | 100 15 |
+| new/atoms/group-options-of.mjs | 2 | — | — | ${v}${T.k1}${dayNames[s.day]}  | — |
 | new/atoms/groups-hint-from-audience.mjs | 2 | — | — | — | 10 12 |
 | new/atoms/hash-pin.mjs | 2 | — | — | SHA-256 | — |
 | new/atoms/iso-local.mjs | 2 | — | — | ${d.getFullYear()}-${p2(d.getM | — |
