@@ -110,6 +110,134 @@ ${body.join('\n')}
   return { slug, cls };
 }
 
+// ── דשבורד: רשת אריחי-KPI מנתוני-הישויות של האפליקציה (נתוני-אמת, לא משפט חוזר) ──
+export function renderDashboard(slug, { title, icon = '📊', entities }) {
+  const { k, dump } = makeConsts(slug);
+  const cTitle = k(title);
+  const cSub = k(`${entities.length} מודולים · סקירת-על`);
+  const cIcon = k(icon);
+  const tiles = entities.map((e) => {
+    const lbl = k(e.name);
+    const val = k('0');
+    const sub = k(`${e.fields} שדות${e.stages ? ` · ${e.stages} שלבים` : ''}`);
+    const g = k(e.icon || '🗂️');
+    return `DsStat(label: ${lbl}, value: ${val}, sub: ${sub}, glyph: ${g})`;
+  });
+  const rows = [];
+  for (let i = 0; i < tiles.length; i += 2) {
+    const a = tiles[i], b = tiles[i + 1];
+    const second = b ? `Expanded(child: ${b})` : 'const Expanded(child: SizedBox())';
+    rows.push(`      Padding(padding: const EdgeInsets.only(bottom: 12), child: IntrinsicHeight(child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [Expanded(child: ${a}), const SizedBox(width: 12), ${second}]))),`);
+  }
+  const cls = pascal(slug);
+  const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — דשבורד מנתוני-הישויות. אל תערוך ידנית.
+import '../dart-data-bs/auto/gen_${slug}_content.dart';
+import '../dart-ui-bs/ds/ds.dart';
+import 'package:flutter/material.dart';
+
+class ${cls} extends StatelessWidget {
+  const ${cls}({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return DsScaffold(
+      title: ${cTitle},
+      subtitle: ${cSub},
+      icon: ${cIcon},
+      children: [
+${rows.join('\n')}
+      ],
+    );
+  }
+}
+`;
+  write(slug, code, dump());
+  return { slug, cls };
+}
+
+// ── לוח-ניווט: כרטיסי-ניווט לכל המסכים ──
+export function renderHub(slug, { title, icon = '🏗️', screens }) {
+  const { k, dump } = makeConsts(slug);
+  const cTitle = k(title);
+  const cSub = k(`${screens.length} מסכים · אפליקציה שלמה`);
+  const cIcon = k(icon);
+  const imports = new Set();
+  const tiles = screens.map((s) => {
+    const g = k(s.icon || '🗂️');
+    const t = k(s.name);
+    const sub = k(s.sub || '');
+    imports.add(`import 'gen_${s.slug}.dart';`);
+    return `      DsNavTile(glyph: ${g}, title: ${t}, sub: ${sub}, onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ${s.cls}()))),`;
+  });
+  const cls = pascal(slug);
+  const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — לוח-ניווט. אל תערוך ידנית.
+import '../dart-data-bs/auto/gen_${slug}_content.dart';
+import '../dart-ui-bs/ds/ds.dart';
+${[...imports].sort().join('\n')}
+import 'package:flutter/material.dart';
+
+class ${cls} extends StatelessWidget {
+  const ${cls}({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return DsScaffold(
+      title: ${cTitle},
+      subtitle: ${cSub},
+      icon: ${cIcon},
+      children: [
+${tiles.join('\n')}
+      ],
+    );
+  }
+}
+`;
+  write(slug, code, dump());
+  return { slug, cls };
+}
+
+// ── מסך-מערכת גנרי: כותרת + סקשן עם ילדים (מתגים/מצב-ריק) ──
+export function renderSystem(slug, { title, icon, sectionTitle, kind, items = [] }) {
+  const { k, dump } = makeConsts(slug);
+  const cTitle = k(title);
+  const cSub = k('שכבת-מערכת');
+  const cIcon = k(icon);
+  const cSection = k(sectionTitle);
+  let kids, extraImport = '';
+  if (kind === 'toggles') {
+    kids = items.map((it) => `        DsToggleTile(label: ${k(it)}),`);
+    extraImport = "import '../dart-ui-bs/ds/ds_toggle_tile.dart';\n";
+  } else {
+    kids = [`        DsEmpty(label: ${k(items[0] || 'אין נתונים עדיין')}),`];
+  }
+  const cls = pascal(slug);
+  const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-מערכת. אל תערוך ידנית.
+import '../dart-data-bs/auto/gen_${slug}_content.dart';
+import '../dart-ui-bs/ds/ds.dart';
+${extraImport}import 'package:flutter/material.dart';
+
+class ${cls} extends StatelessWidget {
+  const ${cls}({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return DsScaffold(
+      title: ${cTitle},
+      subtitle: ${cSub},
+      icon: ${cIcon},
+      children: [
+        DsSection(title: ${cSection}, children: [
+${kids.join('\n')}
+        ]),
+      ],
+    );
+  }
+}
+`;
+  write(slug, code, dump());
+  return { slug, cls };
+}
+
 // ── CLI לבדיקה מהירה: node render-ds.mjs ──
 if (import.meta.url === 'file://' + process.argv[1]) {
   renderEntity('app_ent3', {

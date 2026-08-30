@@ -232,6 +232,7 @@ class DsStat extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(color: DsTokens.card, borderRadius: BorderRadius.circular(DsTokens.r), boxShadow: DsTokens.shadow),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
