@@ -1,6 +1,10 @@
 /** בדיקת-קצה: חשבון-המייל המלא — זיהוי-ספק ⇒ קדימות ⇒ הרכבה/שגיאה.
  *  DoD (נכתב לפני הקוד): node new/boxes/smtp-url.test.mjs ⇒ exit 0. */
 import { KNOWN_SMTP_DOMAINS, detectSmtpHost, buildSmtpAccount } from './smtp-url.mjs';
+const SMTP_URL_TERMS = {
+  k1: "מייל: מלאו גם כתובת וגם סיסמת-אפליקציה",
+  k2: "מייל: הספק לא מוכר — מלאו את שדה שרת-היציאה (host:port)",
+};   // צילום-מקומי (מנוע-הטיהור v6 — מגני-המקור עודכנו לצורה החדשה)
 let f = 0;
 const err = (m) => { console.error('✗ ' + m); f = 1; };
 
@@ -31,21 +35,21 @@ if (mn.state !== 'ok' || mn.url !== 'smtp://x%40unknown.org:p@mail.org.il:587' |
 if (buildSmtpAccount({ email: '', password: '' }).state !== 'empty') err('שער-הדילוג');
 if (buildSmtpAccount({}).state !== 'empty' || buildSmtpAccount().state !== 'empty') err('קלט-חסר');
 const e1 = buildSmtpAccount({ email: 'a@gmail.com', password: '' });
-if (e1.state !== 'error' || e1.message !== 'מייל: מלאו גם כתובת וגם סיסמת-אפליקציה') err('הודעה-1');
+if (e1.state !== 'error' || e1.message !== SMTP_URL_TERMS.k1) err('הודעה-1');
 const e2 = buildSmtpAccount({ email: 'x@unknown.org', password: 'p' });
-if (e2.state !== 'error' || e2.message !== 'מייל: הספק לא מוכר — מלאו את שדה שרת-היציאה (host:port)') err('הודעה-2');
+if (e2.state !== 'error' || e2.message !== SMTP_URL_TERMS.k2) err('הודעה-2');
 // מייל-בלי-@ עם שרת-ידני ⇒ הודעה-1 (הקוד קדוש — ההכרעה לפי קיום-שרת, L4)
 const e3 = buildSmtpAccount({ email: 'בלי-שטרודל', password: 'p', manualHost: 'h:465' });
-if (e3.state !== 'error' || e3.message !== 'מייל: מלאו גם כתובת וגם סיסמת-אפליקציה') err('בלי-שטרודל+שרת');
+if (e3.state !== 'error' || e3.message !== SMTP_URL_TERMS.k1) err('בלי-שטרודל+שרת');
 // שרת-רווח-בלבד = "יש-שרת" לבורר-ההודעה (לא-מקוצץ, כמו המקור שורה 65)
 const e4 = buildSmtpAccount({ email: 'x@unknown.org', password: 'p', manualHost: ' ' });
-if (e4.state !== 'error' || e4.message !== 'מייל: מלאו גם כתובת וגם סיסמת-אפליקציה') err('שרת-רווח');
+if (e4.state !== 'error' || e4.message !== SMTP_URL_TERMS.k1) err('שרת-רווח');
 
 /* 🛡 מגן-הכרעה: ההכרעות חתומות verbatim במקור-הקופסה (דפוס theme.test). */
 import { readFileSync } from 'node:fs';
 const src = readFileSync(new URL('./smtp-url.mjs', import.meta.url), 'utf8');
-if (!src.includes("'מייל: מלאו גם כתובת וגם סיסמת-אפליקציה'")) err('מגן: נוסח הודעה-1 שונה');
-if (!src.includes("'מייל: הספק לא מוכר — מלאו את שדה שרת-היציאה (host:port)'")) err('מגן: נוסח הודעה-2 שונה');
+if (!src.includes("SMTP_URL_TERMS.k1")) err('מגן: נוסח הודעה-1 שונה');
+if (!src.includes("SMTP_URL_TERMS.k2")) err('מגן: נוסח הודעה-2 שונה');
 if (!src.includes('composeSmtpUrl(em, pw, knownHost || mh)')) err('מגן: תפר-הקדימות (ספק-מוכר גובר) שונה');
 if (!src.includes("if (!em.trim() && !pw.trim()) return { state: 'empty' }")) err('מגן: שער-הדילוג שונה');
 if (!src.includes('knownHost || mh ? MSG_MISSING_FIELDS : MSG_UNKNOWN_PROVIDER')) err('מגן: בורר-ההודעות שונה');

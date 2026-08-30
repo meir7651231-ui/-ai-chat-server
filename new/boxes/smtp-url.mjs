@@ -9,12 +9,13 @@ import { SMTP_HOSTS as __d_smtpHostFor_SMTP_HOSTS } from '../atoms/smtp-hosts.mj
 const smtpHostFor = (...a) => __pure_smtpHostFor(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_smtpHostFor_SMTP_HOSTS);
 import { composeSmtpUrl as __pure_composeSmtpUrl } from '../atoms/compose-smtp-url.mjs';
 import { COMPOSE_SMTP_URL_T as __d_composeSmtpUrl_COMPOSE_SMTP_URL_T } from '../atoms/compose-smtp-url-strings.mjs';
+import { SMTP_URL_TERMS } from '../atoms/smtp-url-terms.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const composeSmtpUrl = (...a) => __pure_composeSmtpUrl(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_composeSmtpUrl_COMPOSE_SMTP_URL_T);
 
 // ── מילון-הקופסה (נוסח-המקור verbatim — OrgSecretsSection.tsx:66-67) ──
-const MSG_MISSING_FIELDS = 'מייל: מלאו גם כתובת וגם סיסמת-אפליקציה';
-const MSG_UNKNOWN_PROVIDER = 'מייל: הספק לא מוכר — מלאו את שדה שרת-היציאה (host:port)';
+const MSG_MISSING_FIELDS = SMTP_URL_TERMS.k1;
+const MSG_UNKNOWN_PROVIDER = SMTP_URL_TERMS.k2;
 
 /** דומייני-הספקים המוכרים — לרמז-UI ("ספק מוכר ⇒ אין צורך בשדה-שרת"). */
 export const KNOWN_SMTP_DOMAINS = Object.keys(SMTP_HOSTS);

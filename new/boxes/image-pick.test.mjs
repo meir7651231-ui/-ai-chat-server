@@ -1,6 +1,11 @@
 /** בדיקת-קצה · קופסת image-pick — כל התרחישים דרך הקופסה בלבד (חוזה: image-pick.contract.md).
  *  DoD: node image-pick.test.mjs ⇒ exit 0 (כל 10 דוגמאות-החוזה ירוקות + מגן-הכרעה). */
 import { pickAndCompressImage, readFileAsDataUrl, MAX_UPLOAD_BYTES, MAX_EMBED_BYTES } from './image-pick.mjs';
+const IMAGE_PICK_TERMS = {
+  k1: "הקובץ אינו תמונה",
+  k2: "התמונה גדולה מדי (מקסימום 8MB)",
+  k3: "דפדפן אינו תומך בעיבוד תמונה",
+};   // צילום-מקומי (מנוע-הטיהור v6 — מגני-המקור עודכנו לצורה החדשה)
 let f = 0;
 const fail = (m) => { console.error('✗ ' + m); f = 1; };
 
@@ -29,12 +34,12 @@ async function throws(fn, msg, label) {
 
 // 1) לא-תמונה ⇒ שער-סוג, שום שקע לא נקרא
 { const { io, calls } = mkIo();
-  await throws(() => pickAndCompressImage({ type: 'text/plain', size: 10 }, io), 'הקובץ אינו תמונה', '1');
+  await throws(() => pickAndCompressImage({ type: 'text/plain', size: 10 }, io), IMAGE_PICK_TERMS.k1, '1');
   if (calls.read || calls.load || calls.canvas) fail('1: שקע נקרא למרות שער-הסוג'); }
 
 // 2) תמונה גדולה מדי
 { const { io } = mkIo();
-  await throws(() => pickAndCompressImage(imgFile(10, 10, MAX_UPLOAD_BYTES + 1), io), 'התמונה גדולה מדי (מקסימום 8MB)', '2'); }
+  await throws(() => pickAndCompressImage(imgFile(10, 10, MAX_UPLOAD_BYTES + 1), io), IMAGE_PICK_TERMS.k2, '2'); }
 
 // 3) 640×480 ⇒ 320×240, toDataURL(image/jpeg,0.72)
 { const { io, calls } = mkIo();
@@ -60,7 +65,7 @@ async function throws(fn, msg, label) {
 
 // 7) getContext=null ⇒ שגיאת-דפדפן (אחרי width/height, לפני drawImage)
 { const { io, calls } = mkIo({ noCtx: true });
-  await throws(() => pickAndCompressImage(imgFile(640, 480), io), 'דפדפן אינו תומך בעיבוד תמונה', '7');
+  await throws(() => pickAndCompressImage(imgFile(640, 480), io), IMAGE_PICK_TERMS.k3, '7');
   if (calls.draw !== null) fail('7: drawImage נקרא למרות ctx null'); }
 
 // 8) readFileAsDataUrl: 3MB+1 ⇒ שער-גודל, השקע לא נקרא
@@ -84,7 +89,7 @@ async function throws(fn, msg, label) {
 import { readFileSync } from 'node:fs';
 const src = readFileSync(new URL('./image-pick.mjs', import.meta.url), 'utf8');
 for (const lit of ['const MAX_PX = 320;', 'const QUALITY = 0.72;',
-  "'הקובץ אינו תמונה'", "'התמונה גדולה מדי (מקסימום 8MB)'", "'דפדפן אינו תומך בעיבוד תמונה'",
+  "IMAGE_PICK_TERMS.k1", "IMAGE_PICK_TERMS.k2", "IMAGE_PICK_TERMS.k3",
   "'image/jpeg', QUALITY"])
   if (!src.includes(lit)) fail(`מגן: ההכרעה "${lit}" שונתה/נעלמה`);
 // סדר: שער-סוג לפני שער-גודל לפני קריאה; null-check לפני drawImage

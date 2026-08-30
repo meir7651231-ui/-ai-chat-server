@@ -47,6 +47,7 @@ import { autoMatchCharges as _autoMatchCharges } from '../atoms/auto-match-charg
 import { attachChargesBulk as _attachChargesBulk } from '../atoms/attach-charges-bulk.mjs';
 import { planNedarimSync as __pure_planNedarimSync } from '../atoms/plan-nedarim-sync.mjs';
 import { PLAN_NEDARIM_SYNC_T as __d_planNedarimSync_PLAN_NEDARIM_SYNC_T } from '../atoms/plan-nedarim-sync-strings.mjs';
+import { LIB_NEDARIM_SYNC_TERMS } from '../atoms/lib-nedarim-sync-terms.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const _planNedarimSync = (...a) => __pure_planNedarimSync(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_planNedarimSync_PLAN_NEDARIM_SYNC_T);
 
@@ -54,9 +55,9 @@ const _planNedarimSync = (...a) => __pure_planNedarimSync(...a, ...Array(Math.ma
 // תארים/כינויי-כבוד עבריים למפתח-שם חסין-סדר (validate.ts:73-80). מילון-תוויות
 // = ידע-קופסה (חוק-5) — לא אטום; מוזרק ל-name-sort-key.
 const NAME_TITLES = new Set([
-  'ר', 'רבי', 'הרב', 'הרבנית', 'הרהג', 'הרהח', 'הגר', 'מוהרר', 'אדמור', 'מרת', 'מר', 'גב', 'הגב',
-  'דר', 'פרופ', 'הבחור', 'הבהח', 'הת', 'משפ', 'משפחת',
-  'שליטא', 'זצל', 'זצוקל', 'זקל', 'זל', 'עה', 'היד', 'נרו', 'ניו', 'ני', 'היו',
+  LIB_NEDARIM_SYNC_TERMS.k1, LIB_NEDARIM_SYNC_TERMS.k2, LIB_NEDARIM_SYNC_TERMS.k3, LIB_NEDARIM_SYNC_TERMS.k4, LIB_NEDARIM_SYNC_TERMS.k5, LIB_NEDARIM_SYNC_TERMS.k6, LIB_NEDARIM_SYNC_TERMS.k7, LIB_NEDARIM_SYNC_TERMS.k8, LIB_NEDARIM_SYNC_TERMS.k9, LIB_NEDARIM_SYNC_TERMS.k10, LIB_NEDARIM_SYNC_TERMS.k11, LIB_NEDARIM_SYNC_TERMS.k12, LIB_NEDARIM_SYNC_TERMS.k13,
+  LIB_NEDARIM_SYNC_TERMS.k14, LIB_NEDARIM_SYNC_TERMS.k15, LIB_NEDARIM_SYNC_TERMS.k16, LIB_NEDARIM_SYNC_TERMS.k17, LIB_NEDARIM_SYNC_TERMS.k18, LIB_NEDARIM_SYNC_TERMS.k19, LIB_NEDARIM_SYNC_TERMS.k20,
+  LIB_NEDARIM_SYNC_TERMS.k21, LIB_NEDARIM_SYNC_TERMS.k22, LIB_NEDARIM_SYNC_TERMS.k23, LIB_NEDARIM_SYNC_TERMS.k24, LIB_NEDARIM_SYNC_TERMS.k25, LIB_NEDARIM_SYNC_TERMS.k26, LIB_NEDARIM_SYNC_TERMS.k27, LIB_NEDARIM_SYNC_TERMS.k28, LIB_NEDARIM_SYNC_TERMS.k29, LIB_NEDARIM_SYNC_TERMS.k30, LIB_NEDARIM_SYNC_TERMS.k31,
 ]);
 
 // מפתח-שם חסין-סדר: name-sort-key מוזרק normSearch (אטום) + NAME_TITLES (מילון-קופסה).
@@ -133,7 +134,7 @@ const modeStr = (strs) => {
 const supFromDonor = (d) => {
   const phone = (d.phone || d.phone2 || d.phone3 || '').trim();
   const extraPhones = [d.phone2, d.phone3].map((p) => (p || '').trim()).filter((p) => p && p !== phone);
-  const notes = [d.notes, extraPhones.length ? 'טל׳ נוספים: ' + extraPhones.join(', ') : '']
+  const notes = [d.notes, extraPhones.length ? LIB_NEDARIM_SYNC_TERMS.k32 + extraPhones.join(', ') : '']
     .map((s) => (s || '').trim())
     .filter(Boolean)
     .join(' · ');
@@ -168,7 +169,7 @@ const supFromCharge = (c, seq) => {
       : 'sup-ned-txn-' + (c.txnId || String(seq));
   return {
     id,
-    name: (c.name || (anon ? 'תרומות נדרים ללא שיוך' : 'תורם נדרים')).trim(),
+    name: (c.name || (anon ? LIB_NEDARIM_SYNC_TERMS.k33 : LIB_NEDARIM_SYNC_TERMS.k34)).trim(),
     phone: (c.phone || '').trim(),
     email: (c.email || '').trim(),
     address: '',

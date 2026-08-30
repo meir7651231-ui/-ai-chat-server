@@ -6,15 +6,16 @@
 import { MAX_UPLOAD_BYTES } from '../atoms/max-upload-bytes.mjs';
 import { MAX_EMBED_BYTES } from '../atoms/max-embed-bytes.mjs';
 import { readFileAsDataUrl as readFileAsDataUrlAtom } from '../atoms/read-file-as-data-url.mjs';
+import { IMAGE_PICK_TERMS } from '../atoms/image-pick-terms.mjs';
 
 // ── הכרעות-הקופסה (חיות כאן, לא בחוטים) ──
 // למה כיווץ: הנתונים local-first ב-localStorage (~5MB למסמך) — thumbnail ~15-30KB
 // נוסע עם הסנכרון/גיבוי בלי לפוצץ את התקרה (imagePick.ts:1-10).
 const MAX_PX = 320;   // צלע-ארוכה מרבית ל-thumbnail (imagePick.ts:11)
 const QUALITY = 0.72; // איכות-JPEG (imagePick.ts:12)
-const ERR_NOT_IMAGE = 'הקובץ אינו תמונה';                 // imagePick.ts:16
-const ERR_TOO_BIG = 'התמונה גדולה מדי (מקסימום 8MB)';      // imagePick.ts:17
-const ERR_NO_CANVAS = 'דפדפן אינו תומך בעיבוד תמונה';       // imagePick.ts:27
+const ERR_NOT_IMAGE = IMAGE_PICK_TERMS.k1;                 // imagePick.ts:16
+const ERR_TOO_BIG = IMAGE_PICK_TERMS.k2;      // imagePick.ts:17
+const ERR_NO_CANVAS = IMAGE_PICK_TERMS.k3;       // imagePick.ts:27
 
 export { MAX_UPLOAD_BYTES, MAX_EMBED_BYTES };
 

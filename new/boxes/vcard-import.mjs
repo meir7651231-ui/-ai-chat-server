@@ -9,6 +9,7 @@ const _parseVcards = (...a) => __pure_parseVcards(...a, ...Array(Math.max(0, 6 -
 import { isJunkContact as _isJunkContact } from '../atoms/is-junk-contact.mjs';
 import { importableContacts as _importableContacts } from '../atoms/importable-contacts.mjs';
 import { contactToRow as _contactToRow } from '../atoms/contact-to-row.mjs';
+import { VCARD_IMPORT_TERMS } from '../atoms/vcard-import-terms.mjs';
 
 // ── פער-אטום מדווח (חוזה §⚠️): האטום decode-quoted-printable.mjs שבור (HEX2 לא-מוגדר,
 //    השמטת vcardImport.ts:33 בתרגום-המכונה). אסור לי לשנות אטומים ⇒ פענוח-ה-QP חי כאן
@@ -80,11 +81,11 @@ function decodeValue(value, params) {
 
 // מילון-תוויות-הטלפון — הכרעה חיה-בקופסה (מקור:109-117).
 const PHONE_LABELS = {
-  CELL: 'נייד',
-  HOME: 'בית',
-  WORK: 'עבודה',
-  FAX: 'פקס',
-  MAIN: 'ראשי',
+  CELL: VCARD_IMPORT_TERMS.k1,
+  HOME: VCARD_IMPORT_TERMS.k2,
+  WORK: VCARD_IMPORT_TERMS.k3,
+  FAX: VCARD_IMPORT_TERMS.k4,
+  MAIN: VCARD_IMPORT_TERMS.k5,
   VOICE: '',
   PREF: '',
 };

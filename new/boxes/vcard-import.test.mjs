@@ -1,6 +1,13 @@
 /** בדיקת-קצה · קופסת vcard-import — דרך הקופסה בלבד. חוזה: vcard-import.contract.md
  *  DoD: node new/boxes/vcard-import.test.mjs ⇒ exit 0. */
 import { readFileSync } from 'node:fs';
+const VCARD_IMPORT_TERMS = {
+  k1: "נייד",
+  k2: "בית",
+  k3: "עבודה",
+  k4: "פקס",
+  k5: "ראשי",
+};   // צילום-מקומי (מנוע-הטיהור v6 — מגני-המקור עודכנו לצורה החדשה)
 import assert from 'node:assert';
 import { parseVcards, isJunkContact, importableContacts, contactToRow, decodeQuotedPrintable }
   from './vcard-import.mjs';
@@ -29,7 +36,7 @@ const parsed = parseVcards(vcf);
 eq(parsed.length, 3, 'parsed count');
 eq(parsed[0], {
   fullName: 'מאיר כהן', family: 'כהן', given: 'מאיר',
-  phones: [{ value: '050-1234567', label: 'נייד' }, { value: '03-9998888', label: 'בית' }],
+  phones: [{ value: '050-1234567', label: VCARD_IMPORT_TERMS.k1 }, { value: '03-9998888', label: VCARD_IMPORT_TERMS.k2 }],
   emails: ['maor@example.com'], org: 'חסד', title: 'Manager',
   address: 'רחוב 1, תל אביב', note: 'hello',
 }, 'c0');
@@ -45,7 +52,7 @@ eq(contactToRow(parsed[0]), {
 const vcf2 = ['BEGIN:VCARD', 'FN:Test',
   'TEL;X-CUSTOM(CHARSET=UTF-8,ENCODING=QUOTED-PRINTABLE,=D7=A0=D7=99=D7=99=D7=93):0509999999',
   'END:VCARD'].join('\n');
-eq(parseVcards(vcf2)[0].phones, [{ value: '0509999999', label: 'נייד' }], 'custom hebrew label');
+eq(parseVcards(vcf2)[0].phones, [{ value: '0509999999', label: VCARD_IMPORT_TERMS.k1 }], 'custom hebrew label');
 
 // 4) קלט-קצה — ריק/null (עדשה-עוינת)
 eq(parseVcards(''), [], 'empty');
@@ -56,7 +63,7 @@ eq(importableContacts(''), [], 'importable empty');
 const src = readFileSync(new URL('./vcard-import.mjs', import.meta.url), 'utf8');
 const guard = (needle, msg) => { if (!src.includes(needle)) { console.error('✗ מגן: ' + msg); f = 1; } };
 guard('const HEX2 = /^[0-9A-Fa-f]{2}$/', 'רגקס HEX2 (פער-האטום)');
-guard("CELL: 'נייד'", 'מילון-תוויות CELL→נייד');
+guard("CELL: VCARD_IMPORT_TERMS.k1", 'מילון-תוויות CELL→נייד');
 guard("VOICE: '',", 'מילון-תוויות VOICE→ריק');
 guard("PREF: '',", 'מילון-תוויות PREF→ריק');
 guard('_parseVcards(text, unfoldLines, splitProperty, decodeValue, phoneLabel, joinAddress)', 'הזרקת-5-שקעים');

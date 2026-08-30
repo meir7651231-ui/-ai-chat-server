@@ -11,15 +11,16 @@ import { NORM_SEARCH_T as __d_normSearch_NORM_SEARCH_T } from '../atoms/norm-sea
 const atomNormSearch = (...a) => __pure_normSearch(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_normSearch_NORM_SEARCH_T);
 import { normName as atomNormName } from '../atoms/norm-name.mjs';
 import { nameSortKey as atomNameSortKey } from '../atoms/name-sort-key.mjs';
+import { VALIDATE_TERMS } from '../atoms/validate-terms.mjs';
 
 // ── מילון-ההכרעה של הקופסה (verbatim מ-maor/src/lib/validate.ts:73-78) ──
 // תארים/כינויי-כבוד עבריים (אחרי normSearch — בלי גרש/גרשיים/ניקוד). מוסרים
 // מהשם רק כטוקן-שלם (כדי ש-"מרים" לא ייחתך מ-"מר"). לא כולל בן/בר (פטרונים לגיטימי).
 const NAME_TITLES = new Set([
-  'ר', 'רבי', 'הרב', 'הרבנית', 'הרהג', 'הרהח', 'הגר', 'מוהרר', 'אדמור', 'מרת', 'מר', 'גב', 'הגב',
-  'דר', 'פרופ', 'הבחור', 'הבהח', 'הת', 'משפ', 'משפחת',
+  VALIDATE_TERMS.k1, VALIDATE_TERMS.k2, VALIDATE_TERMS.k3, VALIDATE_TERMS.k4, VALIDATE_TERMS.k5, VALIDATE_TERMS.k6, VALIDATE_TERMS.k7, VALIDATE_TERMS.k8, VALIDATE_TERMS.k9, VALIDATE_TERMS.k10, VALIDATE_TERMS.k11, VALIDATE_TERMS.k12, VALIDATE_TERMS.k13,
+  VALIDATE_TERMS.k14, VALIDATE_TERMS.k15, VALIDATE_TERMS.k16, VALIDATE_TERMS.k17, VALIDATE_TERMS.k18, VALIDATE_TERMS.k19, VALIDATE_TERMS.k20,
   // סיומות-כבוד:
-  'שליטא', 'זצל', 'זצוקל', 'זקל', 'זל', 'עה', 'היד', 'נרו', 'ניו', 'ני', 'היו',
+  VALIDATE_TERMS.k21, VALIDATE_TERMS.k22, VALIDATE_TERMS.k23, VALIDATE_TERMS.k24, VALIDATE_TERMS.k25, VALIDATE_TERMS.k26, VALIDATE_TERMS.k27, VALIDATE_TERMS.k28, VALIDATE_TERMS.k29, VALIDATE_TERMS.k30, VALIDATE_TERMS.k31,
 ]);
 
 // ── החיווט (לפי גרף-המקור: normName←normSearch · nameSortKey←normSearch+NAME_TITLES) ──

@@ -282,6 +282,34 @@ function purifyOne(cand, log) {
   }
 }
 
+
+// 🎓 לקסר-אמת (typescript, כמו free-ref-scan): מחרוזות עם מיקום מדויק והקשר-הורה —
+// אפס-ניחושי-רגקס (הלקח מקריסת wa: parity-של-backticks איננו לקסר).
+import { createRequire } from 'node:module';
+const _req = createRequire('/home/user/maor-system/');
+const _ts = _req('typescript');
+function collectStringSites(src) {
+  const sf = _ts.createSourceFile('x.mjs', src, _ts.ScriptTarget.ES2022, true);
+  const sites = [];
+  const walk = (n) => {
+    if (n.kind === _ts.SyntaxKind.StringLiteral) {
+      const p = n.parent;
+      let skip = false;
+      if (p && (_ts.isImportDeclaration(p) || _ts.isExportDeclaration(p))) skip = true;          // module specifier
+      if (p && _ts.isPropertyAssignment(p) && p.name === n) skip = true;                          // מפתח-אובייקט
+      let up = n;
+      while (up && !skip) { if (_ts.isParameter(up)) skip = true; up = up.parent; }               // ברירת-מחדל בחתימה
+      if (!skip) {
+        const at = n.getStart(sf);
+        sites.push({ at, len: n.end - at, v: n.text });
+      }
+      return;
+    }
+    _ts.forEachChild(n, walk);
+  };
+  walk(sf);
+  return sites;
+}
 // ── 🧵 v3: חילוץ-מחרוזות-דאטה (עברית + דומיין) מהמנגנון לטבלת-שקע ──
 const HEBRE = /[\u0590-\u05FF]/;
 function eligibleStrings(file) {
@@ -290,30 +318,15 @@ function eligibleStrings(file) {
   const fns = [...code.matchAll(/export\s+(?:const\s+(\w+)\s*=\s*(?:async\s*)?\(|function\s+(\w+)\s*\()/g)].map(m => m[1] || m[2]);
   if (fns.length !== 1) return null;
   const fn = fns[0];
-  // מיסוך הערות בלבד (מחרוזות נשארות גלויות לאיסוף)
-  let noCom = src.replace(/\/\*[\s\S]*?\*\//g, m => 'x'.repeat(m.length)).replace(/\/\/[^\n]*/g, m => 'x'.repeat(m.length));
-  // מיסוך regex-literals — גרש בתוך מחלקת-תווים אינו פותח-מחרוזת (לקח grade-index)
-  noCom = noCom.replace(/(?<=[=(,:;!&|?{\[\s]|^)\/(?:\\.|\[(?:\\.|[^\]\\\n])*\]|[^\/\\\n])+\/[gimsuy]*/g, m => 'x'.repeat(m.length));
-  const sigAt = noCom.search(new RegExp(`export\\s+(?:const\\s+${fn}\\s*=|function\\s+${fn}\\s*\\()`));
+  const sigAt = src.search(new RegExp(`export\\s+(?:const\\s+${fn}\\s*=|function\\s+${fn}\\s*\\()`));
   if (sigAt < 0) return null;
-  // טווח-הפרמטרים — מחרוזת בברירת-מחדל היא חלק מהחתימה, לא מועמדת-חילוץ (לקח compute-quote)
-  const po0 = noCom.indexOf('(', sigAt);
-  const pc0 = po0 >= 0 ? balanced(noCom, po0) : -1;
   const sites = [];
-  for (const m of noCom.matchAll(/(['"])((?:\\.|(?!\1)[^\\\n])*)\1/g)) {
-    const v = m[2];
+  for (const st of collectStringSites(src)) {
+    const v = st.v;
     if (!v) continue;
-    if (!(HEBRE.test(v) || /[a-zA-Z]{3,}/.test(v))) continue;
-    const before = noCom.slice(0, m.index);
-    if (/(?:import|export)\s*(?:\{[^}]*\}\s*)?from\s*$/.test(before) || /import\s*$/.test(before)) continue;
-    // תבנית-בתוך-template — הליטרל בתוך backtick? בדיקת-איזון גסה: מספר ה-backticks לפניו אי-זוגי ⇒ דלג
-    if ((before.match(/`/g) || []).length % 2 === 1) continue;
-    const prevC = (before.match(/(\S)\s*$/) || [])[1] || '';
-    const afterC = (noCom.slice(m.index + m[0].length).match(/^\s*(\S)/) || [])[1] || '';
-    if ((prevC === '{' || prevC === ',') && afterC === ':') continue;   // מפתח-אובייקט — לא בגרסה זו
-    if (po0 >= 0 && m.index > po0 && m.index < pc0) continue;           // ברירת-מחדל בחתימה — נשארת
-    if (m.index < sigAt) return null;                                   // מחרוזת בעוזר-מודול — דוחים
-    sites.push({ at: m.index, len: m[0].length, v, raw: m[0] });
+    if (!(/[\u0590-\u05FF]/.test(v) || /[a-zA-Z]{3,}/.test(v))) continue;
+    if (st.at < sigAt) return null;                                   // מחרוזת בעוזר-מודול — דוחים
+    sites.push(st);
   }
   if (!sites.length) return null;
   return { file, src, fn, sites };
@@ -502,12 +515,88 @@ function nestHelpers(file) {
     helpers.map(h => '  ' + h.text.replace(/\n/g, '\n  ')).join('\n') + '\n';
   return { file, src, out: out.slice(0, ob + 1) + nested + out.slice(ob + 1), fn };
 }
+
+// ── 📦 v6: מטהר-קופסאות — מחרוזות-דאטה בקופסה יורדות לאטום-דאטה שהקופסה מייבאת ישירות
+// (חוק-חיווט: קופסה⇐אטום מותר — אין צורך בעטיפות/פרמטרים). ──
+const BOXES = path.join(ROOT, 'new/boxes');
+function purifyBox(file, log) {
+  const src = fs.readFileSync(path.join(BOXES, file), 'utf8');
+  const base = file.replace(/\.mjs$/, '');
+  const dataBase = base + '-terms';
+  if (fs.existsSync(path.join(ATOMS, dataBase + '.mjs'))) return log(`~ ${base}: כבר קיים אטום-מונחים`);
+  const sites = collectStringSites(src).filter(st => /[\u0590-\u05FF]/.test(st.v));  // בקופסאות: עברית בלבד (שלב זה)
+  if (!sites.length) return log(`~ ${base}: אין מחרוזות-עבריות פשוטות`);
+  const CONST = base.replace(/-/g, '_').toUpperCase() + '_TERMS';
+  const keys = new Map();
+  for (const st of sites) if (!keys.has(st.v)) keys.set(st.v, 'k' + (keys.size + 1));
+  let out = src;
+  for (const st of [...sites].sort((a, b) => b.at - a.at))
+    out = out.slice(0, st.at) + `${CONST}.${keys.get(st.v)}` + out.slice(st.at + st.len);
+  // ייבוא אחרי ה-import האחרון הקיים
+  const lastIm = [...out.matchAll(/^import[^\n]*$/gm)].pop();
+  const imLine = `import { ${CONST} } from '../atoms/${dataBase}.mjs';`;
+  out = lastIm ? out.slice(0, lastIm.index + lastIm[0].length) + '\n' + imLine + out.slice(lastIm.index + lastIm[0].length) : imLine + '\n' + out;
+  if (!lastIm) return log(`~ ${base}: קופסה בלי imports — חריג`);
+  const litObj = '{\n' + [...keys].map(([v, k]) => `  ${k}: ${JSON.stringify(v)},`).join('\n') + '\n}';
+  const dataSrc = `/** אטום-דאטה · ${dataBase} — מונחי-התצוגה של קופסת-${base} (מנוע-הטיהור v6, הכרעה 19). חוזה: ${dataBase}.contract.md */\nexport const ${CONST} = ${litObj};\n`;
+  const contract = `# חוזה · ${dataBase}\nמונחי-תצוגה עבריים שחולצו מכנית מקופסת-${base} (הכרעה 19: המשמעות = דאטה; הקופסה מחווטת).\nהקופסה מייבאת ישירות (קופסה⇐אטום מותר). אפס לוגיקה.\n\n## דוגמאות-זהב\nצילום-ערך ב-${dataBase}.test.mjs.\n`;
+  const test = `// בדיקת-צילום · ${dataBase} — המונחים זהים ביט-אחר-ביט למקור.\nimport { ${CONST} } from './${dataBase}.mjs';\nimport assert from 'node:assert';\nassert.strictEqual(JSON.stringify(${CONST}), ${JSON.stringify(JSON.stringify(Object.fromEntries([...keys].map(([v, k]) => [k, v]))))});\nconsole.log('OK ${dataBase}');\n`;
+  // מגן-ספירה בבדיקה הצמודה
+  const adj = path.join(BOXES, base + '.test.mjs');
+  let adjOut = null;
+  if (fs.existsSync(adj)) {
+    const at = fs.readFileSync(adj, 'utf8');
+    const cnt = (out.match(/from '\.\.\/atoms\//g) || []).length;
+    let patched = at.replace(/\.length === (\d+), 'מגן: (\d+) ייבואי-אטום([^']*)'/g,
+      (mm, a2, b2, rest) => `.length === ${cnt}, 'מגן: ${cnt} ייבואי-אטום${rest.includes('הכרעה 19') ? rest : rest + ' — הכרעה 19'}'`);
+    // מגני-מקור שמצמידים ליטרל שהוזז: הצורה מתעדכנת ל-CONST.kN; ההתנהגות מוצמדת בצילום-הדאטה
+    let touchedPins = false;
+    for (const [v, k] of keys) {
+      const tok = `'${v.replace(/\\/g, '\\\\')}'`;
+      if (patched.includes(tok)) { patched = patched.split(tok).join(`${CONST}.${k}`); touchedPins = true; }
+    }
+    if (touchedPins) {
+      const fi = patched.match(/^import[^\n]*$/m);
+      const snap = `const ${CONST} = ${litObj};   // צילום-מקומי (מנוע-הטיהור v6 — מגני-המקור עודכנו לצורה החדשה)`;
+      patched = fi ? patched.replace(fi[0], fi[0] + '\n' + snap) : snap + '\n' + patched;
+    }
+    if (patched !== at) adjOut = patched;
+  }
+  const backup = new Map([[path.join(BOXES, file), src]]);
+  if (adjOut) backup.set(adj, fs.readFileSync(adj, 'utf8'));
+  try {
+    fs.writeFileSync(path.join(BOXES, file), out);
+    fs.writeFileSync(path.join(ATOMS, dataBase + '.mjs'), dataSrc);
+    fs.writeFileSync(path.join(ATOMS, dataBase + '.contract.md'), contract);
+    fs.writeFileSync(path.join(ATOMS, dataBase + '.test.mjs'), test);
+    if (adjOut) fs.writeFileSync(adj, adjOut);
+    execFileSync('node', ['--check', path.join(BOXES, file)], { stdio: 'pipe' });
+    execFileSync('node', [path.join(ATOMS, dataBase + '.test.mjs')], { stdio: 'pipe' });
+    if (fs.existsSync(adj)) execFileSync('node', [adj], { stdio: 'pipe' });
+    log(`✅ ${base}: ${keys.size} מונחים ⇒ ${dataBase}`);
+    return true;
+  } catch (e) {
+    if (process.env.PDEBUG) { const dd = '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/pdebug'; fs.mkdirSync(dd, { recursive: true }); try { fs.copyFileSync(path.join(BOXES, file), path.join(dd, 'box__' + file)); } catch { } }
+    for (const [pp, tt] of backup) fs.writeFileSync(pp, tt);
+    for (const ext of ['.mjs', '.contract.md', '.test.mjs']) fs.rmSync(path.join(ATOMS, dataBase + ext), { force: true });
+    return log(`✗ ${base}: אימות אדום — הוחזר (${String(e.stderr || e.message).slice(0, 500).replace(/\n/g, ' ⏎ ')})`);
+  }
+}
+
 const mode = process.argv[2] || '--dry';
 const N = parseInt(process.argv[3] || '5');
 const files = fs.readdirSync(ATOMS).filter(f => f.endsWith('.mjs') && !f.endsWith('.test.mjs') && !f.endsWith('-data.mjs'));
 const cands = files.map(eligible).filter(Boolean);
 console.log(`🧼 מנוע-הטיהור: ${cands.length} אטומים זכאים-מכנית (מתוך ${files.length})`);
 if (mode === '--dry') cands.slice(0, 30).forEach(c => console.log(`  · ${c.file} — ${c.consts.map(x => x.name).join(', ')}`));
+if (mode === '--boxes') {
+  let ok = 0;
+  for (const f of fs.readdirSync(BOXES).filter(x => x.endsWith('.mjs') && !x.endsWith('.test.mjs'))) {
+    if (ok >= N) break;
+    if (purifyBox(f, (x) => console.log('  ' + x)) === true) ok++;
+  }
+  console.log(`📦 קופסאות טוהרו: ${ok}`);
+}
 if (mode === '--nest') {
   let ok = 0;
   for (const f of files) {

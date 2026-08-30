@@ -18,10 +18,11 @@ import { WA_BIRTHDAY_TEXT_T as __d_waBirthdayText_WA_BIRTHDAY_TEXT_T } from '../
 const birthdayAtom = (...a) => __pure_waBirthdayText(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_waBirthdayText_WA_BIRTHDAY_TEXT_T);
 import { renderTemplate as renderAtom } from '../atoms/render-template.mjs';
 import { TEMPLATE_DEFS } from '../atoms/template-defs.mjs';
+import { WA_TERMS } from '../atoms/wa-terms.mjs';
 
 // ── מילון-הקופסה (הכרעות — נוסח-המקור verbatim) ──
 // הכרעה 1: שם-ארגון ריק/רווחים ⇒ 'העמותה' (wa.ts:47-49).
-const ORG_FALLBACK = 'העמותה';
+const ORG_FALLBACK = WA_TERMS.k1;
 
 // ── החיווט ──
 // orgOf היה helper פנימי ב-wa.ts:47-49 — התפקיד (נפילת-שם) חי בקופסה, לא באטום (חוק-5).

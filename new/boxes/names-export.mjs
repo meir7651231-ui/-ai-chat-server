@@ -3,9 +3,10 @@
 import { csvEscape } from '../atoms/csv-escape.mjs';
 import { toCsv } from '../atoms/to-csv.mjs';
 import { isAdmin } from '../atoms/is-admin.mjs';
+import { NAMES_EXPORT_TERMS } from '../atoms/names-export-terms.mjs';
 
 // ── שקעי-תוכן (מילון הקופסה) ──
-const LABEL = '⬇ ייצוא CSV';
+const LABEL = NAMES_EXPORT_TERMS.k1;
 const FILENAME = 'names-report.csv';
 
 // ── החיווט ──

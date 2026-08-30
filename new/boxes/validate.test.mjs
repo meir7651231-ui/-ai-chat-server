@@ -1,5 +1,38 @@
 /** בדיקת-קצה של קופסת-האימות — דוגמאות-החוזה עצמן, דרך הקופסה בלבד. */
 import { validIsraeliId, normalizePhone, formatIsraeliPhone, normSearch, normName, nameSortKey } from './validate.mjs';
+const VALIDATE_TERMS = {
+  k1: "ר",
+  k2: "רבי",
+  k3: "הרב",
+  k4: "הרבנית",
+  k5: "הרהג",
+  k6: "הרהח",
+  k7: "הגר",
+  k8: "מוהרר",
+  k9: "אדמור",
+  k10: "מרת",
+  k11: "מר",
+  k12: "גב",
+  k13: "הגב",
+  k14: "דר",
+  k15: "פרופ",
+  k16: "הבחור",
+  k17: "הבהח",
+  k18: "הת",
+  k19: "משפ",
+  k20: "משפחת",
+  k21: "שליטא",
+  k22: "זצל",
+  k23: "זצוקל",
+  k24: "זקל",
+  k25: "זל",
+  k26: "עה",
+  k27: "היד",
+  k28: "נרו",
+  k29: "ניו",
+  k30: "ני",
+  k31: "היו",
+};   // צילום-מקומי (מנוע-הטיהור v6 — מגני-המקור עודכנו לצורה החדשה)
 let f = 0;
 const eq = (name, got, want) => {
   if (got !== want) { console.error(`✗ ${name}: ${JSON.stringify(got)} ≠ ${JSON.stringify(want)}`); f = 1; }
@@ -51,7 +84,7 @@ eq('נדרים≡מאור', nameSortKey('בן צבי רחל'), nameSortKey('רח
 eq('תואר+סיומת-כבוד', nameSortKey('הרב יוסף כהן שליטא'), 'יוספ כהנ');
 eq('מרים לא נחתכת', nameSortKey('מרים כהן'), 'כהנ מרימ');
 eq('בן=פטרונים נשמר', nameSortKey('בן ציון'), 'בנ ציונ');
-eq('תואר-בלבד ⇒ ריק', nameSortKey('הרב'), '');
+eq('תואר-בלבד ⇒ ריק', nameSortKey(VALIDATE_TERMS.k3), '');
 eq('ריק ⇒ ריק', nameSortKey(''), '');
 
 /* 🛡 מגן-הכרעה (דפוס theme.test): מילון-התארים = הכרעת-הקופסה, verbatim מהמקור
@@ -59,10 +92,10 @@ eq('ריק ⇒ ריק', nameSortKey(''), '');
 import { readFileSync } from 'node:fs';
 const src = readFileSync(new URL('./validate.mjs', import.meta.url), 'utf8');
 const TITLES_VERBATIM =
-  "'ר', 'רבי', 'הרב', 'הרבנית', 'הרהג', 'הרהח', 'הגר', 'מוהרר', 'אדמור', 'מרת', 'מר', 'גב', 'הגב',\n" +
-  "  'דר', 'פרופ', 'הבחור', 'הבהח', 'הת', 'משפ', 'משפחת',";
+  "VALIDATE_TERMS.k1, VALIDATE_TERMS.k2, VALIDATE_TERMS.k3, VALIDATE_TERMS.k4, VALIDATE_TERMS.k5, VALIDATE_TERMS.k6, VALIDATE_TERMS.k7, VALIDATE_TERMS.k8, VALIDATE_TERMS.k9, VALIDATE_TERMS.k10, VALIDATE_TERMS.k11, VALIDATE_TERMS.k12, VALIDATE_TERMS.k13,\n" +
+  "  VALIDATE_TERMS.k14, VALIDATE_TERMS.k15, VALIDATE_TERMS.k16, VALIDATE_TERMS.k17, VALIDATE_TERMS.k18, VALIDATE_TERMS.k19, VALIDATE_TERMS.k20,";
 if (!src.includes(TITLES_VERBATIM)) { console.error('✗ מגן: רשימת-התארים סטתה מהמקור'); f = 1; }
-if (!src.includes("'שליטא', 'זצל', 'זצוקל', 'זקל', 'זל', 'עה', 'היד', 'נרו', 'ניו', 'ני', 'היו',")) { console.error('✗ מגן: סיומות-הכבוד סטו מהמקור'); f = 1; }
+if (!src.includes("VALIDATE_TERMS.k21, VALIDATE_TERMS.k22, VALIDATE_TERMS.k23, VALIDATE_TERMS.k24, VALIDATE_TERMS.k25, VALIDATE_TERMS.k26, VALIDATE_TERMS.k27, VALIDATE_TERMS.k28, VALIDATE_TERMS.k29, VALIDATE_TERMS.k30, VALIDATE_TERMS.k31,")) { console.error('✗ מגן: סיומות-הכבוד סטו מהמקור'); f = 1; }
 if (/'בן'|'בר'/.test(src)) { console.error('✗ מגן: בן/בר נכנסו למילון — פטרונים לגיטימי (validate.ts:71)'); f = 1; }
 if (!src.includes('atomNormName(t, atomNormSearch)')) { console.error('✗ מגן: חיווט norm-name השתנה'); f = 1; }
 if (!src.includes('atomNameSortKey(t, atomNormSearch, NAME_TITLES)')) { console.error('✗ מגן: חיווט name-sort-key השתנה'); f = 1; }

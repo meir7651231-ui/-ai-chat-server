@@ -1,6 +1,39 @@
 /** בדיקת-קצה · קופסת dedup — מוכיחה את דוגמאות-החוזה דרך הקופסה בלבד (מותר לייבא
  *  אך-ורק את הקופסה-שלה). + מגן-הכרעה: קורא את מקור-הקופסה ומאשר הזרקות verbatim. */
 import * as D from './dedup.mjs';
+const DEDUP_TERMS = {
+  k1: "ר",
+  k2: "רבי",
+  k3: "הרב",
+  k4: "הרבנית",
+  k5: "הרהג",
+  k6: "הרהח",
+  k7: "הגר",
+  k8: "מוהרר",
+  k9: "אדמור",
+  k10: "מרת",
+  k11: "מר",
+  k12: "גב",
+  k13: "הגב",
+  k14: "דר",
+  k15: "פרופ",
+  k16: "הבחור",
+  k17: "הבהח",
+  k18: "הת",
+  k19: "משפ",
+  k20: "משפחת",
+  k21: "שליטא",
+  k22: "זצל",
+  k23: "זצוקל",
+  k24: "זקל",
+  k25: "זל",
+  k26: "עה",
+  k27: "היד",
+  k28: "נרו",
+  k29: "ניו",
+  k30: "ני",
+  k31: "היו",
+};   // צילום-מקומי (מנוע-הטיהור v6 — מגני-המקור עודכנו לצורה החדשה)
 import assert from 'node:assert';
 import { readFileSync } from 'node:fs';
 
@@ -116,7 +149,7 @@ const src = readFileSync(new URL('./dedup.mjs', import.meta.url), 'utf8');
 ok(src.includes('{ normPhone, dedupById }'), 'מגן: הזרקת mergeFamilies');
 ok(src.includes('{ normPhone, normId, supNameCityKey, nameSortKey }'), 'מגן: הזרקת findSupporterDupGroups');
 ok(src.includes('mergeHist, PHOTO_MAX'), 'מגן: הזרקת mergeSupporterInto');
-ok(src.includes("'שליטא', 'זצל'"), 'מגן: NAME_TITLES verbatim');
+ok(src.includes("DEDUP_TERMS.k21, DEDUP_TERMS.k22"), 'מגן: NAME_TITLES verbatim');
 ok(src.includes("filter((p) => p.length >= 7)"), 'מגן: phonesOf ≥7');
 // אפס-ייבוא-פנימי (חוק-2/3): כל import מ-../atoms/ בלבד
 for (const m of src.matchAll(/^import .*?from '([^']+)'/gm)) {

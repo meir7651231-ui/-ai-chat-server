@@ -1,5 +1,8 @@
 /** בדיקת-קצה · קופסת-וואטסאפ — מוכיחה את דוגמאות-החוזה (wa.contract.md) דרך הקופסה בלבד. */
 import { waDigits, waLink, waDeliveryText, waPaymentText, waBirthdayText } from './wa.mjs';
+const WA_TERMS = {
+  k1: "העמותה",
+};   // צילום-מקומי (מנוע-הטיהור v6 — מגני-המקור עודכנו לצורה החדשה)
 let f = 0;
 const eq = (got, want, msg) => {
   if (got !== want) { console.error(`✗ ${msg}: ציפינו ${JSON.stringify(want)}, קיבלנו ${JSON.stringify(got)}`); f = 1; }
@@ -38,7 +41,7 @@ eq(waDeliveryText('מאור', ''), 'שלום משפחת, משלוח ממאור �
 /* 🛡 מגן-הכרעה: הקריאה קוראת את מקור-הקופסה ומאשרת שההכרעות חיות בה verbatim (דפוס theme.test). */
 import { readFileSync } from 'node:fs';
 const src = readFileSync(new URL('./wa.mjs', import.meta.url), 'utf8');
-if (!src.includes("const ORG_FALLBACK = 'העמותה'")) { console.error('✗ מגן: נפילת-הארגון (הכרעה 1) שונתה'); f = 1; }
+if (!src.includes("const ORG_FALLBACK = WA_TERMS.k1")) { console.error('✗ מגן: נפילת-הארגון (הכרעה 1) שונתה'); f = 1; }
 if (!src.includes('renderAtom(cfg, key, vars, TEMPLATE_DEFS)')) { console.error('✗ מגן: תפר-הזרקת TEMPLATE_DEFS (הכרעה 2) שונה'); f = 1; }
 if (!src.includes('linkAtom(phone, text, digitsAtom)')) { console.error('✗ מגן: תפר-שקע-הספרות של waLink שונה'); f = 1; }
 if (!src.includes("orgName.trim() || ORG_FALLBACK")) { console.error('✗ מגן: חיווט-orgOf שונה'); f = 1; }

@@ -1,6 +1,12 @@
 /** בדיקת-קצה: הקופסה המלאה — יעדים ⇒ הרצה-מקבילית ⇒ טקסט-להקראה.
  *  DoD (דיבר 12): node net-check.test.mjs ⇒ exit 0. מייבאת רק את הקופסה-שלה. */
 import { targets, run, script, diagnose } from './net-check.mjs';
+const NET_CHECK_TERMS = {
+  k1: "האתר עצמו",
+  k2: "כניסה לחשבון (Auth)",
+  k3: "חידוש-חיבור (Token)",
+  k4: "סנכרון נתונים (Firestore)",
+};   // צילום-מקומי (מנוע-הטיהור v6 — מגני-המקור עודכנו לצורה החדשה)
 import { readFileSync } from 'node:fs';
 import assert from 'node:assert';
 
@@ -11,7 +17,7 @@ const bad = (msg) => { console.error('✗ ' + msg); f = 1; };
 {
   const t = targets('https://a.co', null, 'X');
   if (t.length !== 1) bad('null-firebase: ציפיתי ליעד יחיד');
-  assert.deepStrictEqual(t[0], { key: 'site', label: 'האתר עצמו', url: 'https://a.co/version.json?netcheck=X', domain: 'a.co' });
+  assert.deepStrictEqual(t[0], { key: 'site', label: NET_CHECK_TERMS.k1, url: 'https://a.co/version.json?netcheck=X', domain: 'a.co' });
 }
 
 // 2) עם ענן מלא ⇒ 4 יעדים; token=POST; מזהים משורשרים ל-URL
@@ -83,10 +89,10 @@ if (script([]) !== '') bad('script: ריק לא החזיר ריק');
 /* 🛡 מגן-הכרעה: התוויות/ברירות-המחדל/סדר-החיווט חתומים במקור-הקופסה. */
 const src = readFileSync(new URL('./net-check.mjs', import.meta.url), 'utf8');
 for (const anchor of [
-  "site: 'האתר עצמו'",
-  "auth: 'כניסה לחשבון (Auth)'",
-  "token: 'חידוש-חיבור (Token)'",
-  "db: 'סנכרון נתונים (Firestore)'",
+  "site: NET_CHECK_TERMS.k1",
+  "auth: NET_CHECK_TERMS.k2",
+  "token: NET_CHECK_TERMS.k3",
+  "db: NET_CHECK_TERMS.k4",
   "BUST_PREFIX = 'netcheck='",
   "PROBE = 'netcheck'",
   "method: 'POST'",

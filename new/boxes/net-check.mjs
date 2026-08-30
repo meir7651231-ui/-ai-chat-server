@@ -5,6 +5,7 @@
 import { runNetCheck } from '../atoms/run-net-check.mjs';
 import { netCheckScript as __pure_netCheckScript } from '../atoms/net-check-script.mjs';
 import { NET_CHECK_SCRIPT_T as __d_netCheckScript_NET_CHECK_SCRIPT_T } from '../atoms/net-check-script-strings.mjs';
+import { NET_CHECK_TERMS } from '../atoms/net-check-terms.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const netCheckScript = (...a) => __pure_netCheckScript(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_netCheckScript_NET_CHECK_SCRIPT_T);
 
@@ -12,10 +13,10 @@ const netCheckScript = (...a) => __pure_netCheckScript(...a, ...Array(Math.max(0
 const PROBE = 'netcheck';          // ערך-בדיקה ניטרלי כשחסר projectId/apiKey (התשובה עדיין נושאת CORS)
 const BUST_PREFIX = 'netcheck=';   // תחילית cache-bust; הערך האקראי מוזרק (randToken)
 const LABEL = {
-  site: 'האתר עצמו',
-  auth: 'כניסה לחשבון (Auth)',
-  token: 'חידוש-חיבור (Token)',
-  db: 'סנכרון נתונים (Firestore)',
+  site: NET_CHECK_TERMS.k1,
+  auth: NET_CHECK_TERMS.k2,
+  token: NET_CHECK_TERMS.k3,
+  db: NET_CHECK_TERMS.k4,
 };
 
 // ── החיווט ──

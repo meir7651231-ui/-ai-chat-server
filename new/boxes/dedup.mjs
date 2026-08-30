@@ -30,6 +30,7 @@ import { PHOTO_MAX } from '../atoms/photo-max.mjs';
 import { nameSortKey as _nameSortKey } from '../atoms/name-sort-key.mjs';
 import { normSearch as __pure_normSearch } from '../atoms/norm-search.mjs';
 import { NORM_SEARCH_T as __d_normSearch_NORM_SEARCH_T } from '../atoms/norm-search-strings.mjs';
+import { DEDUP_TERMS } from '../atoms/dedup-terms.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const normSearch = (...a) => __pure_normSearch(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_normSearch_NORM_SEARCH_T);
 
@@ -37,9 +38,9 @@ const normSearch = (...a) => __pure_normSearch(...a, ...Array(Math.max(0, 1 - a.
 // תארים/כינויי-כבוד עבריים למפתח-שם חסין-סדר (validate.ts:73-80). מילון-תוויות
 // = ידע-קופסה (חוק-5) — לא אטום; מוזרק ל-name-sort-key.
 const NAME_TITLES = new Set([
-  'ר', 'רבי', 'הרב', 'הרבנית', 'הרהג', 'הרהח', 'הגר', 'מוהרר', 'אדמור', 'מרת', 'מר', 'גב', 'הגב',
-  'דר', 'פרופ', 'הבחור', 'הבהח', 'הת', 'משפ', 'משפחת',
-  'שליטא', 'זצל', 'זצוקל', 'זקל', 'זל', 'עה', 'היד', 'נרו', 'ניו', 'ני', 'היו',
+  DEDUP_TERMS.k1, DEDUP_TERMS.k2, DEDUP_TERMS.k3, DEDUP_TERMS.k4, DEDUP_TERMS.k5, DEDUP_TERMS.k6, DEDUP_TERMS.k7, DEDUP_TERMS.k8, DEDUP_TERMS.k9, DEDUP_TERMS.k10, DEDUP_TERMS.k11, DEDUP_TERMS.k12, DEDUP_TERMS.k13,
+  DEDUP_TERMS.k14, DEDUP_TERMS.k15, DEDUP_TERMS.k16, DEDUP_TERMS.k17, DEDUP_TERMS.k18, DEDUP_TERMS.k19, DEDUP_TERMS.k20,
+  DEDUP_TERMS.k21, DEDUP_TERMS.k22, DEDUP_TERMS.k23, DEDUP_TERMS.k24, DEDUP_TERMS.k25, DEDUP_TERMS.k26, DEDUP_TERMS.k27, DEDUP_TERMS.k28, DEDUP_TERMS.k29, DEDUP_TERMS.k30, DEDUP_TERMS.k31,
 ]);
 
 // ── שקעי-הצמדה (glue) — שכנים module-private במקור, שלא קודמו כאטומים ──

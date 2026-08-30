@@ -53,6 +53,7 @@ import { HEB_PARTS_T as __d_hebParts_HEB_PARTS_T } from '../atoms/heb-parts-stri
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const hebParts = (...a) => __pure_hebParts(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_hebParts_HEB_PARTS_T);
 import { guardExport as guardExportX } from '../atoms/guard-export.mjs';
+import { RECEIPT_TERMS } from '../atoms/receipt-terms.mjs';
 
 // ── חיווט: תאריך-עברי-מלא (gem/gemYear/hebParts שוקעו לתוך heb-date-full) ──
 const gemYear = (y) => gemYearX(y, gem);
@@ -70,7 +71,7 @@ const featureOn = (cfg, key) => featureOnX(cfg, key, NAV_MODULE_KEYS, moduleOn);
 
 // ── שקע-שכן amountInWords: ברירת-מחדל זורקת (רק ענף-§46 קורא לו; ראה כותרת) ──
 const AMOUNT_IN_WORDS_MISSING = () => {
-  throw new Error('receipt: שקע amountInWords לא סופק — אטום amount-in-words שבור (integerInWords/agorotPhrase) ו-agorot-phrase חסר; לוח-האם מזריק את שכן hebrew-number.');
+  throw new Error(RECEIPT_TERMS.k1);
 };
 
 // ── הכרעות-המסירה (receipt.ts:150-219) ──
