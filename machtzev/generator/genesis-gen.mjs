@@ -68,6 +68,10 @@ function parsePart(txt) {
   if (words[0] === PIN_WORD && /^[A-Z]\w+$/.test(words[1] || '')) {
     return { pin: words[1], role: roleOf(words[1]), label: words.slice(2).join(' ') || words[1], txt, options, emoji, sub, value };
   }
+  // 📚 עיגון-דאטה: 'דאטה <ConstName> <תווית>' ⇒ chips חיים מתוכן אטום-דאטה מהמדף
+  if (words[0] === 'דאטה' && /^[a-zA-Z_]\w*$/.test(words[1] || '')) {
+    return { dataPin: words[1], role: 'chip', label: words.slice(2).join(' ') || words[1], txt, options, emoji, sub, value };
+  }
   // 🔀 חיבור בין-מסכים: 'ניווט <slug> <תווית>' ⇒ כרטיס שפותח מסך-מחולל אחר
   if (words[0] === NAV_WORD && /^[a-z][a-z0-9_-]*$/.test(words[1] || '')) {
     return { role: 'card', hero: true, navSlug: words[1], label: words.slice(2).join(' ') || words[1], txt, options, emoji, sub, value };
@@ -234,6 +238,10 @@ function generate(slug, specText) {
     if (part.calcExpr && name === 'value' && t === 'String') return { expr: part.calcExpr };   // 🌉 ערך-חי ממנוע-לוגיקה
     if (name === 'value' && part.value != null && t === 'String') return { expr: constFor(part.value, part.role + '_value') };
     if (name === 'value' && part.value != null && t === 'int') return { expr: String(parseInt(part.value.replace(/[^0-9]/g, ''))) };
+    if (part.dataPin && name === 'options' && t === 'List<String>') {
+      const da = atlas.data.find(d => d.name === part.dataPin && d.type === 'List<String>');
+      if (da) { imports.add(`import '../${da.shelf.replace(/^new\//, '')}/${da.file}';`); return { expr: da.name }; }
+    }
     if (t === 'String' && /^(value|selected)$/.test(name)) { if (!shared.s) { shared.s = '_t' + (++sIdx); stateDecls.push(`String ${shared.s} = '';`); } return { expr: shared.s }; }
     if (t === 'String' && /^(glyph|emoji|icon)$/.test(name)) return { expr: constFor(part.emoji || '🔹', part.role + '_glyph') };
     if (t === 'String' && /^(sub|subtitle|caption|secondary)$/.test(name)) return { expr: constFor(part.sub || part.label, part.role + '_sub') };
@@ -422,6 +430,13 @@ function writeSelfEntry() {
     ...swapRoles.map((r, i) => `  ${roleWord.get(r)} ${swapTerms[i] || roleWord.get(r)}`),
     `כותרת ${SM.titles.screens}`,
     ...siblingNavs,
+    ...(() => {
+      // אוצר-דאטה חי: אטום List<String> עשיר מהמדף — הוכחת "הדאטה חומר-בנייה" (הכרעה 19)
+      const rich = atlas.data.filter(d => d.type === 'List<String>' && (d.items || []).length >= 4);
+      if (!rich.length) return [];
+      const pick2 = rich[Math.floor(rich.length / 2)];
+      return [`כותרת ${SM.titles.dataTreasure || 'אוצר-דאטה חי מהמדף'}`, `דאטה ${pick2.name} ${pick2.name}`];
+    })(),
     `תגיות ${SM.titles.shapes}: ${shapeWords.join(' / ')}`,
     SM.phrases.banner,
     SM.phrases.button,

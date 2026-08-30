@@ -73,8 +73,15 @@ export function buildAtlas() {
   const data = [];
   for (const f of DATA_SHELVES.flatMap(dartFiles)) {
     const src = stripComments(fs.readFileSync(f.abs, 'utf8'));
-    for (const dm of src.matchAll(/(?:^|\n)const\s+(?:\w[\w<>,?() ]*\s+)?([a-zA-Z_]\w*)\s*=/g)) {
-      data.push({ name: dm[1], file: f.rel, shelf: f.shelf });
+    for (const dm of src.matchAll(/(?:^|\n)const\s+(?:(\w[\w<>, ]*?)\s+)?([a-zA-Z_]\w*)\s*=/g)) {
+      const entry = { name: dm[2], type: dm[1] || '', file: f.rel, shelf: f.shelf };
+      // דגימת-תוכן ל-List<String>: הפריטים עצמם (חומר-בנייה חי למחולל)
+      if (entry.type === 'List<String>') {
+        const at = dm.index + dm[0].length;
+        const seg = src.slice(at, src.indexOf(';', at));
+        entry.items = [...seg.matchAll(/'((?:\\.|[^'\\])*)'/g)].map(x => x[1].replace(/\\'/g, "'")).slice(0, 12);
+      }
+      data.push(entry);
     }
   }
 

@@ -16769,5976 +16769,7378 @@
  "data": [
   {
    "name": "homeSectionTitles",
+   "type": "",
    "file": "home_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "workPathContent",
+   "type": "",
    "file": "home_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "quickToolsContent",
+   "type": "",
    "file": "home_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "homeHeroes",
+   "type": "",
    "file": "home_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "orderCardTerms",
+   "type": "",
    "file": "home_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "emptyStateTerms",
+   "type": "",
    "file": "home_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "kPlumbingCompatRules",
+   "type": "List<PlumbingCompatRuleRow>",
    "file": "plumbing-compat-rules.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "kPlumbingCompletionRules",
+   "type": "List<PlumbingCompletionRuleRow>",
    "file": "plumbing-compat-rules.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "chatSettingsScreenContent",
+   "type": "",
    "file": "screens__chat_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "quickReplyBannerContent",
+   "type": "",
    "file": "screens__chat_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "presenceSectionContent",
+   "type": "",
    "file": "screens__chat_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "chatNotifSectionContent",
+   "type": "",
    "file": "screens__chat_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "mediaSectionContent",
+   "type": "",
    "file": "screens__chat_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "chatPrivacySectionContent",
+   "type": "",
    "file": "screens__chat_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "backupSectionContent",
+   "type": "",
    "file": "screens__chat_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "langSectionContent",
+   "type": "",
    "file": "screens__chat_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "businessSectionContent",
+   "type": "",
    "file": "screens__chat_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "botSectionContent",
+   "type": "",
    "file": "screens__chat_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "archiveSectionContent",
+   "type": "",
    "file": "screens__chat_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "sectionTileContent",
+   "type": "",
    "file": "screens__chat_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "inertRowContent",
+   "type": "",
    "file": "screens__chat_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "placeholderRowContent",
+   "type": "",
    "file": "screens__chat_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "homeShellContent",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "cartFabHelp",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "tabHelp",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "bottomNavTabs",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "unreadBadgeOverflowLabel",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "helpModeOverlayContent",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "cartChatBubbleContent",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "appBarContent",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "appBarHelp",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "catalogMenuItems",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "chatsMenuItems",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "muteAllRow",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "muteAllConfirm",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "muteAllToasts",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "notifMenuItems",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "notifMenuToasts",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "clearAllConfirm",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "storeMenuItems",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "newChatSheetContent",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "newChatContactTypes",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "roleBadges",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "roleBadgeFallback",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "profileCardContent",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "roleStatusLabels",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "roleStatusSemanticsTpl",
+   "type": "",
    "file": "screens__home_shell_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "sheetChrome",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "heroFaces",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "productHeader",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "hopCluster",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "lineBomSheet",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "purchaseBar",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "unitToggleOptions",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "sectionTitles",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "specRows",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "compatSection",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "stripDefs",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "stripBrandGates",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "stripEmptyHints",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "kitPanel",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "pprWeldPlan",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "pprWeldDimKeys",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "weldPlanSection",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "specPanelKeys",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "pricePanel",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "connectExplainChipTpl",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "polyrollInfo",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "huliotInfoCaption",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "huliotInfoSections",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "hygienePanel",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "attributeChipLabels",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "materialInferKeys",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "compoundTypeFilters",
+   "type": "",
    "file": "screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "managerShellContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "managerTabsContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "managerTabHelpContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "connectionPillContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "copilotHeroContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "studioHeroContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "attentionCardContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "metricTilesContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "pipelineCardContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "pipelineStages",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "orderStages",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "orderSummaryContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "orderStageChipsContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "ordersTabContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "orderRowContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "advanceButtonContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "orderDetailSheetContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "sheetAdvanceButtonContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "customerStatuses",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "customerDetailTags",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "customerSummaryContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "customerStatusChipsContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "accountFilterOptions",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "customersTabContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "rfmTiers",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "rfmAtRiskContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "customerCardContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "creditBarContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "customerDetailSheetContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "customerChatContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "bsRoleLabels",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "approvalBadgeContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "customerActionsContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "pendingApprovalPanelContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "pendingRowContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "journeyContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "savedCustomerContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "manageIntroContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "manageSectionsContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "manageSectionHelpContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "manageTabContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "countBadgeContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "approvalsBodyContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "approvalRowContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "vacationsBodyContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "vacationRequestRowContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "categoriesBodyContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "appSettingsBodyContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "productTreeBodyContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "brandsBodyContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "regressionBodyContent",
+   "type": "",
    "file": "screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "summaryChips",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "sectionChips",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "quickActions",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "favoritesSheetHeader",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "moadimSheetHeader",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "moadimSheetTiles",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "tizmonSheetHeader",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "tizmonSheetTiles",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "sichaSheetHeader",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "sichaContacts",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "sichaCallToastTpl",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "sheetTileFallbackToastTpl",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "storeHubItems",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "storeSectionItemIndexes",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "serviceIndexByEmoji",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "hubLiveTemplates",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "favoriteTooltips",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "emptyStateContent",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "emptyCartContent",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "smartProductsGroupLabel",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "supplierHeaderContent",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "cartLineLabels",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "projectSelectorContent",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "checkoutProjectSeeds",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "checkoutProjectSeedsEmptyProfile",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "deliverySectionTitle",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "deliveryOptions",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "deliveryFreeLabel",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "paymentSectionTitle",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "paymentOptions",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "notesFieldContent",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "cartSummaryContent",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "shipToSheetContent",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "checkoutContent",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "cartActionsContent",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "services",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "serviceSheetRows",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "serviceSheetContent",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "orderStages",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "orderRowGlyph",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "orderItemsCountTpl",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "ordersHiddenContent",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "orderSheetContent",
+   "type": "",
    "file": "screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "storeSettingsScreenContent",
+   "type": "",
    "file": "screens__store_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "shippingSectionContent",
+   "type": "",
    "file": "screens__store_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "paymentSectionContent",
+   "type": "",
    "file": "screens__store_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "invoicesSectionContent",
+   "type": "",
    "file": "screens__store_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "notificationsSectionContent",
+   "type": "",
    "file": "screens__store_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "cartSectionContent",
+   "type": "",
    "file": "screens__store_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "suppliersSectionContent",
+   "type": "",
    "file": "screens__store_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "displaySectionContent",
+   "type": "",
    "file": "screens__store_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "logisticsSectionContent",
+   "type": "",
    "file": "screens__store_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "privacySectionContent",
+   "type": "",
    "file": "screens__store_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "underConstructionContent",
+   "type": "",
    "file": "screens__store_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "uiTerms",
+   "type": "",
    "file": "ui_terms.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "empty_state_label",
+   "type": "String",
    "file": "auto/features__catalog_config__catalog_config_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "cut_tile_label",
+   "type": "String",
    "file": "auto/features__fittings__intel__build_plan_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "cut_tile_label2",
+   "type": "String",
    "file": "auto/features__fittings__intel__build_plan_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_business_header_text",
+   "type": "String",
    "file": "auto/gen_business_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_business_textfield_label",
+   "type": "String",
    "file": "auto/gen_business_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_business_textfield_hint",
+   "type": "String",
    "file": "auto/gen_business_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_business_radio_option",
+   "type": "String",
    "file": "auto/gen_business_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_business_radio_option2",
+   "type": "String",
    "file": "auto/gen_business_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_business_radio_option3",
+   "type": "String",
    "file": "auto/gen_business_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_business_chip_option",
+   "type": "String",
    "file": "auto/gen_business_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_business_chip_option2",
+   "type": "String",
    "file": "auto/gen_business_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_business_chip_option3",
+   "type": "String",
    "file": "auto/gen_business_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_business_switch_label",
+   "type": "String",
    "file": "auto/gen_business_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_business_button_label",
+   "type": "String",
    "file": "auto/gen_business_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_business_button_toast",
+   "type": "String",
    "file": "auto/gen_business_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_business_app_bar_title",
+   "type": "String",
    "file": "auto/gen_business_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_glyph",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_title",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_sub",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_toast",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_header_text",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_stat_value",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_stat_label",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_stat_value2",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_stat_label2",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_stat_value3",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_stat_label3",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_header_text2",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_stat_label4",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_header_text3",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_stat_label5",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_textfield_label",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_textfield_hint",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_header_text4",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_switch_label",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_textfield_label2",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_textfield_hint2",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_stat_label6",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_radio_option",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_radio_option2",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_radio_option3",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_header_text5",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_glyph2",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_title2",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_sub2",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_glyph3",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_title3",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_sub3",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_glyph4",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_title4",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_sub4",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_glyph5",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_title5",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_sub5",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_glyph6",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_title6",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_sub6",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_glyph7",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_title7",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_sub7",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_glyph8",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_title8",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_card_sub8",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_chip_option",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_chip_option2",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_chip_option3",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_chip_option4",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_chip_option5",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_chip_option6",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_chip_option7",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_chip_option8",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_chip_option9",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_chip_option10",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_chip_option11",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_chip_option12",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_banner_sub",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_button_label",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_button_toast",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_entry_app_bar_title",
+   "type": "String",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_improv_card_glyph",
+   "type": "String",
    "file": "auto/gen_improv_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_improv_card_title",
+   "type": "String",
    "file": "auto/gen_improv_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_improv_card_sub",
+   "type": "String",
    "file": "auto/gen_improv_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_improv_card_toast",
+   "type": "String",
    "file": "auto/gen_improv_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_improv_header_text",
+   "type": "String",
    "file": "auto/gen_improv_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_improv_stat_label",
+   "type": "String",
    "file": "auto/gen_improv_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_improv_stat_label2",
+   "type": "String",
    "file": "auto/gen_improv_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_improv_stat_label3",
+   "type": "String",
    "file": "auto/gen_improv_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_improv_stat_label4",
+   "type": "String",
    "file": "auto/gen_improv_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_improv_stat_label5",
+   "type": "String",
    "file": "auto/gen_improv_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_improv_chip_option",
+   "type": "String",
    "file": "auto/gen_improv_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_improv_chip_option2",
+   "type": "String",
    "file": "auto/gen_improv_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_improv_chip_option3",
+   "type": "String",
    "file": "auto/gen_improv_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_improv_banner_sub",
+   "type": "String",
    "file": "auto/gen_improv_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_improv_app_bar_title",
+   "type": "String",
    "file": "auto/gen_improv_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_card_glyph",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_card_title",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_card_sub",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_card_toast",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_header_text",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_stat_label",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_textfield_label",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_textfield_hint",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_header_text2",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_stat_value",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_stat_label2",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_stat_value2",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_stat_label3",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_stat_value3",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_stat_label4",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_radio_option",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_radio_option2",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_radio_option3",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_header_text3",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_stat_label5",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_header_text4",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_stat_label6",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_row_label",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_switch_label",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_stat_value4",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_stat_label7",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_banner_sub",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_button_label",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_button_toast",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_mission_app_bar_title",
+   "type": "String",
    "file": "auto/gen_mission_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest1_card_glyph",
+   "type": "String",
    "file": "auto/gen_quest1_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest1_card_title",
+   "type": "String",
    "file": "auto/gen_quest1_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest1_card_sub",
+   "type": "String",
    "file": "auto/gen_quest1_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest1_card_toast",
+   "type": "String",
    "file": "auto/gen_quest1_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest1_header_text",
+   "type": "String",
    "file": "auto/gen_quest1_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest1_stat_label",
+   "type": "String",
    "file": "auto/gen_quest1_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest1_chip_option",
+   "type": "String",
    "file": "auto/gen_quest1_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest1_chip_option2",
+   "type": "String",
    "file": "auto/gen_quest1_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest1_chip_option3",
+   "type": "String",
    "file": "auto/gen_quest1_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest1_header_text2",
+   "type": "String",
    "file": "auto/gen_quest1_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest1_stat_label2",
+   "type": "String",
    "file": "auto/gen_quest1_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest1_stat_label3",
+   "type": "String",
    "file": "auto/gen_quest1_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest1_textfield_label",
+   "type": "String",
    "file": "auto/gen_quest1_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest1_textfield_hint",
+   "type": "String",
    "file": "auto/gen_quest1_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest1_card_glyph2",
+   "type": "String",
    "file": "auto/gen_quest1_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest1_card_title2",
+   "type": "String",
    "file": "auto/gen_quest1_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest1_card_sub2",
+   "type": "String",
    "file": "auto/gen_quest1_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest1_banner_sub",
+   "type": "String",
    "file": "auto/gen_quest1_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest1_app_bar_title",
+   "type": "String",
    "file": "auto/gen_quest1_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest2_card_glyph",
+   "type": "String",
    "file": "auto/gen_quest2_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest2_card_title",
+   "type": "String",
    "file": "auto/gen_quest2_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest2_card_sub",
+   "type": "String",
    "file": "auto/gen_quest2_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest2_card_toast",
+   "type": "String",
    "file": "auto/gen_quest2_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest2_header_text",
+   "type": "String",
    "file": "auto/gen_quest2_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest2_stat_label",
+   "type": "String",
    "file": "auto/gen_quest2_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest2_stat_label2",
+   "type": "String",
    "file": "auto/gen_quest2_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest2_radio_option",
+   "type": "String",
    "file": "auto/gen_quest2_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest2_radio_option2",
+   "type": "String",
    "file": "auto/gen_quest2_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest2_card_glyph2",
+   "type": "String",
    "file": "auto/gen_quest2_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest2_card_title2",
+   "type": "String",
    "file": "auto/gen_quest2_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest2_card_sub2",
+   "type": "String",
    "file": "auto/gen_quest2_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest2_banner_sub",
+   "type": "String",
    "file": "auto/gen_quest2_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_quest2_app_bar_title",
+   "type": "String",
    "file": "auto/gen_quest2_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_shipping_switch_label",
+   "type": "String",
    "file": "auto/gen_shipping_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_shipping_textfield_label",
+   "type": "String",
    "file": "auto/gen_shipping_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_shipping_textfield_hint",
+   "type": "String",
    "file": "auto/gen_shipping_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_shipping_switch_label2",
+   "type": "String",
    "file": "auto/gen_shipping_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_shipping_button_label",
+   "type": "String",
    "file": "auto/gen_shipping_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_shipping_button_toast",
+   "type": "String",
    "file": "auto/gen_shipping_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_shipping_app_bar_title",
+   "type": "String",
    "file": "auto/gen_shipping_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_team_textfield_label",
+   "type": "String",
    "file": "auto/gen_team_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_team_textfield_hint",
+   "type": "String",
    "file": "auto/gen_team_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_team_switch_label",
+   "type": "String",
    "file": "auto/gen_team_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_team_switch_label2",
+   "type": "String",
    "file": "auto/gen_team_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_team_button_label",
+   "type": "String",
    "file": "auto/gen_team_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_team_button_toast",
+   "type": "String",
    "file": "auto/gen_team_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gen_team_app_bar_title",
+   "type": "String",
    "file": "auto/gen_team_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "three_way_title",
+   "type": "String",
    "file": "auto/screens__ai_hub_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "three_way_sub",
+   "type": "String",
    "file": "auto/screens__ai_hub_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "three_way_text",
+   "type": "String",
    "file": "auto/screens__ai_hub_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "three_way_pill",
+   "type": "String",
    "file": "auto/screens__ai_hub_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "three_way_pill2",
+   "type": "String",
    "file": "auto/screens__ai_hub_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "three_way_label",
+   "type": "String",
    "file": "auto/screens__ai_hub_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "three_way_label2",
+   "type": "String",
    "file": "auto/screens__ai_hub_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "three_way_label3",
+   "type": "String",
    "file": "auto/screens__ai_hub_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "three_way_fallback",
+   "type": "String",
    "file": "auto/screens__ai_hub_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "ai_md_head_ic",
+   "type": "String",
    "file": "auto/screens__ai_hub_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "ai_md_head_title",
+   "type": "String",
    "file": "auto/screens__ai_hub_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "ai_md_head_sub",
+   "type": "String",
    "file": "auto/screens__ai_hub_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "num_box_label",
+   "type": "String",
    "file": "auto/screens__budget_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "field_label",
+   "type": "String",
    "file": "auto/screens__budget_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gallery_all_btn_label",
+   "type": "String",
    "file": "auto/screens__camera_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gallery_all_btn_message",
+   "type": "String",
    "file": "auto/screens__camera_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gallery_all_btn_fallback",
+   "type": "String",
    "file": "auto/screens__camera_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gallery_thumb_label2",
+   "type": "String",
    "file": "auto/screens__camera_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gallery_thumb_message",
+   "type": "String",
    "file": "auto/screens__camera_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "shutter_button_label2",
+   "type": "String",
    "file": "auto/screens__camera_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "shutter_button_label3",
+   "type": "String",
    "file": "auto/screens__camera_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "shutter_button_label4",
+   "type": "String",
    "file": "auto/screens__camera_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "acc_row_label",
+   "type": "String",
    "file": "auto/screens__catalog_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "acc_row_label2",
+   "type": "String",
    "file": "auto/screens__catalog_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "acc_row_label3",
+   "type": "String",
    "file": "auto/screens__catalog_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "acc_row_label4",
+   "type": "String",
    "file": "auto/screens__catalog_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "company_catalog_import_card_label",
+   "type": "String",
    "file": "auto/screens__catalog_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "company_catalog_import_card_label2",
+   "type": "String",
    "file": "auto/screens__catalog_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "company_catalog_import_card_label3",
+   "type": "String",
    "file": "auto/screens__catalog_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "company_catalog_import_card_label4",
+   "type": "String",
    "file": "auto/screens__catalog_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "empty_section_fallback",
+   "type": "String",
    "file": "auto/screens__catalog_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "facet_row_label2",
+   "type": "String",
    "file": "auto/screens__catalog_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "mini_qty_btn_label",
+   "type": "String",
    "file": "auto/screens__catalog_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "mini_qty_btn_label2",
+   "type": "String",
    "file": "auto/screens__catalog_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "saved_version_chip_message",
+   "type": "String",
    "file": "auto/screens__catalog_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "saved_version_chip_label2",
+   "type": "String",
    "file": "auto/screens__catalog_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "saved_version_chip_message2",
+   "type": "String",
    "file": "auto/screens__catalog_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "saved_version_chip_label3",
+   "type": "String",
    "file": "auto/screens__catalog_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "tree_coming_soon_fallback",
+   "type": "String",
    "file": "auto/screens__catalog_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "tree_coming_soon_fallback2",
+   "type": "String",
    "file": "auto/screens__catalog_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "empty_section_emoji",
+   "type": "String",
    "file": "auto/screens__catalog_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "ai_section_title",
+   "type": "String",
    "file": "auto/screens__catalog_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "ai_section_label",
+   "type": "String",
    "file": "auto/screens__catalog_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "ai_section_label2",
+   "type": "String",
    "file": "auto/screens__catalog_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "ai_section_label3",
+   "type": "String",
    "file": "auto/screens__catalog_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "ai_section_label4",
+   "type": "String",
    "file": "auto/screens__catalog_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "ai_section_fallback",
+   "type": "String",
    "file": "auto/screens__catalog_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "catalog_settings_placeholder_row_fallback",
+   "type": "String",
    "file": "auto/screens__catalog_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "info_section_title",
+   "type": "String",
    "file": "auto/screens__catalog_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "info_section_fallback",
+   "type": "String",
    "file": "auto/screens__catalog_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "info_section_fallback2",
+   "type": "String",
    "file": "auto/screens__catalog_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "info_section_fallback3",
+   "type": "String",
    "file": "auto/screens__catalog_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "number_row_tooltip",
+   "type": "String",
    "file": "auto/screens__catalog_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "number_row_tooltip2",
+   "type": "String",
    "file": "auto/screens__catalog_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "profile_row_fallback",
+   "type": "String",
    "file": "auto/screens__catalog_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "chat_settings_section_tile_fallback",
+   "type": "String",
    "file": "auto/screens__chat_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "chat_settings_section_tile_fallback2",
+   "type": "String",
    "file": "auto/screens__chat_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "chat_settings_switch_row_fallback",
+   "type": "String",
    "file": "auto/screens__chat_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "privacy_notice_fallback",
+   "type": "String",
    "file": "auto/screens__chats_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "typing_bubble_fallback",
+   "type": "String",
    "file": "auto/screens__chats_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "date_chip_date",
+   "type": "String",
    "file": "auto/screens__chats_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "consent_dialog_fallback",
+   "type": "String",
    "file": "auto/screens__consent_modal_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "consent_dialog_fallback2",
+   "type": "String",
    "file": "auto/screens__consent_modal_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "consent_dialog_fallback3",
+   "type": "String",
    "file": "auto/screens__consent_modal_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "consent_dialog_fallback4",
+   "type": "String",
    "file": "auto/screens__consent_modal_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "consent_dialog_fallback5",
+   "type": "String",
    "file": "auto/screens__consent_modal_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "status_chip_label",
+   "type": "String",
    "file": "auto/screens__contractor_hr_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "status_chip_label2",
+   "type": "String",
    "file": "auto/screens__contractor_hr_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "vacation_row_label",
+   "type": "String",
    "file": "auto/screens__contractor_hr_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "vacation_row_label2",
+   "type": "String",
    "file": "auto/screens__contractor_hr_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "vacation_row_label3",
+   "type": "String",
    "file": "auto/screens__contractor_hr_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "vacation_row_label4",
+   "type": "String",
    "file": "auto/screens__contractor_hr_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "decide_button_label",
+   "type": "String",
    "file": "auto/screens__contractor_hr_sheet_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "action_button_label",
+   "type": "String",
    "file": "auto/screens__contractor_material_requests_sheet_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "contractor_tools_sheets_sheet_handle_label",
+   "type": "String",
    "file": "auto/screens__contractor_tools_sheets_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "contractor_tools_sheets_sheet_handle_tooltip",
+   "type": "String",
    "file": "auto/screens__contractor_tools_sheets_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_attendance_send_report_button_title",
+   "type": "String",
    "file": "auto/screens__courier_attendance_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_attendance_send_report_button_body",
+   "type": "String",
    "file": "auto/screens__courier_attendance_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "today_stat_label",
+   "type": "String",
    "file": "auto/screens__courier_attendance_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_attendance_table_row_date",
+   "type": "String",
    "file": "auto/screens__courier_attendance_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_attendance_table_row_in_text",
+   "type": "String",
    "file": "auto/screens__courier_attendance_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_attendance_table_row_out_text",
+   "type": "String",
    "file": "auto/screens__courier_attendance_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_attendance_table_row_total_text",
+   "type": "String",
    "file": "auto/screens__courier_attendance_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "vehicle_button_fallback",
+   "type": "String",
    "file": "auto/screens__courier_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "stat_label",
+   "type": "String",
    "file": "auto/screens__courier_dashboard_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_forms_pill_button_id",
+   "type": "String",
    "file": "auto/screens__courier_forms_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_forms_pill_button_label",
+   "type": "String",
    "file": "auto/screens__courier_forms_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_personal_area_card_title",
+   "type": "String",
    "file": "auto/screens__courier_profile_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_personal_area_card_body",
+   "type": "String",
    "file": "auto/screens__courier_profile_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_personal_area_card_fallback",
+   "type": "String",
    "file": "auto/screens__courier_profile_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_personal_area_card_fallback2",
+   "type": "String",
    "file": "auto/screens__courier_profile_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_personal_area_card_title2",
+   "type": "String",
    "file": "auto/screens__courier_profile_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_personal_area_card_body2",
+   "type": "String",
    "file": "auto/screens__courier_profile_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_personal_area_card_fallback3",
+   "type": "String",
    "file": "auto/screens__courier_profile_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_personal_area_card_fallback4",
+   "type": "String",
    "file": "auto/screens__courier_profile_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_personal_area_card_title3",
+   "type": "String",
    "file": "auto/screens__courier_profile_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_personal_area_card_body3",
+   "type": "String",
    "file": "auto/screens__courier_profile_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_personal_area_card_fallback5",
+   "type": "String",
    "file": "auto/screens__courier_profile_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_personal_area_card_fallback6",
+   "type": "String",
    "file": "auto/screens__courier_profile_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_personal_area_card_title4",
+   "type": "String",
    "file": "auto/screens__courier_profile_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_personal_area_card_body4",
+   "type": "String",
    "file": "auto/screens__courier_profile_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_personal_area_card_fallback7",
+   "type": "String",
    "file": "auto/screens__courier_profile_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_personal_area_card_fallback8",
+   "type": "String",
    "file": "auto/screens__courier_profile_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "stat_label",
+   "type": "String",
    "file": "auto/screens__courier_profile_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "rstat_label",
+   "type": "String",
    "file": "auto/screens__courier_reports_tab_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "rcard_title",
+   "type": "String",
    "file": "auto/screens__courier_reports_tab_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_info_section_title",
+   "type": "String",
    "file": "auto/screens__courier_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_info_section_title2",
+   "type": "String",
    "file": "auto/screens__courier_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_info_section_body",
+   "type": "String",
    "file": "auto/screens__courier_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_info_section_fallback",
+   "type": "String",
    "file": "auto/screens__courier_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_info_section_title3",
+   "type": "String",
    "file": "auto/screens__courier_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_info_section_body2",
+   "type": "String",
    "file": "auto/screens__courier_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "courier_info_section_fallback2",
+   "type": "String",
    "file": "auto/screens__courier_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "section_card_title",
+   "type": "String",
    "file": "auto/screens__docs_readiness_gate_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "section_card_empty_text",
+   "type": "String",
    "file": "auto/screens__docs_readiness_gate_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "gate_button_label",
+   "type": "String",
    "file": "auto/screens__docs_readiness_gate_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "penalty_card_label",
+   "type": "String",
    "file": "auto/screens__finance_hub_sheets_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "penalty_card_label2",
+   "type": "String",
    "file": "auto/screens__finance_hub_sheets_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "sub_row_label",
+   "type": "String",
    "file": "auto/screens__finance_hub_sheets_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "sub_row_label2",
+   "type": "String",
    "file": "auto/screens__finance_hub_sheets_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "home_shell_menu_row_emoji",
+   "type": "String",
    "file": "auto/screens__home_shell_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "home_shell_menu_row_label",
+   "type": "String",
    "file": "auto/screens__home_shell_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "home_shell_menu_row_cfg_id",
+   "type": "String",
    "file": "auto/screens__home_shell_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "pipe_link_label",
+   "type": "String",
    "file": "auto/screens__install_studio_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "pipe_link_label2",
+   "type": "String",
    "file": "auto/screens__install_studio_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "sheet_close_label",
+   "type": "String",
    "file": "auto/screens__install_studio_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "sheet_close_message",
+   "type": "String",
    "file": "auto/screens__install_studio_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "intel_intro_label",
+   "type": "String",
    "file": "auto/screens__intel__intel_tab_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "intel_intro_fallback",
+   "type": "String",
    "file": "auto/screens__intel__intel_tab_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "intel_intro_fallback2",
+   "type": "String",
    "file": "auto/screens__intel__intel_tab_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "placeholder_notice_label",
+   "type": "String",
    "file": "auto/screens__legal_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "brand_header_fallback",
+   "type": "String",
    "file": "auto/screens__lipskey_brand_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "brand_header_label",
+   "type": "String",
    "file": "auto/screens__lipskey_brand_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "brand_header_label2",
+   "type": "String",
    "file": "auto/screens__lipskey_brand_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "lipskey_brand_section_card_label",
+   "type": "String",
    "file": "auto/screens__lipskey_brand_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "lipskey_brand_section_card_label2",
+   "type": "String",
    "file": "auto/screens__lipskey_brand_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "zoom_hint_fallback",
+   "type": "String",
    "file": "auto/screens__lipskey_product_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "section_title_emoji",
+   "type": "String",
    "file": "auto/screens__lipskey_product_sheet_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "input_bar_hint_text",
+   "type": "String",
    "file": "auto/screens__manager_copilot_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "input_bar_tooltip",
+   "type": "String",
    "file": "auto/screens__manager_copilot_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "advance_button_fallback",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "app_settings_body_label",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "app_settings_body_label2",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "app_settings_body_label3",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "app_settings_body_text",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "app_settings_body_text2",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "manage_intro_fallback",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "manager_dashboard_count_badge_label",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "manager_dashboard_credit_bar_label",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "manage_section_title2",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "manage_section_body",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "manage_section_label",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "product_tree_body_fallback",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "product_tree_body_label",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "product_tree_body_label2",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "product_tree_body_text",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "regression_body_fallback",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "regression_body_title",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "regression_body_body",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "regression_body_fallback2",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "sheet_advance_button_title",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "sheet_advance_button_body",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "manage_section_section_key",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "manage_section_title_cfg_id",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "manage_section_emoji",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "manage_section_title",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "manage_section_sub",
+   "type": "String",
    "file": "auto/screens__manager_dashboard_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "rstat_label",
+   "type": "String",
    "file": "auto/screens__manager_profile_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "assign_button_fallback",
+   "type": "String",
    "file": "auto/screens__manager_role_assign_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "notif_settings_section_tile_fallback",
+   "type": "String",
    "file": "auto/screens__notif_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "notif_settings_section_tile_fallback2",
+   "type": "String",
    "file": "auto/screens__notif_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "notif_settings_section_tile_fallback3",
+   "type": "String",
    "file": "auto/screens__notif_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "notif_settings_section_tile_fallback4",
+   "type": "String",
    "file": "auto/screens__notif_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "notif_settings_switch_row_fallback",
+   "type": "String",
    "file": "auto/screens__notif_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "notif_settings_switch_row_fallback2",
+   "type": "String",
    "file": "auto/screens__notif_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "quick_actions_section_title",
+   "type": "String",
    "file": "auto/screens__notif_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "quick_actions_section_label",
+   "type": "String",
    "file": "auto/screens__notif_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "quick_actions_section_label2",
+   "type": "String",
    "file": "auto/screens__notif_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "quick_actions_section_label3",
+   "type": "String",
    "file": "auto/screens__notif_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "quick_actions_section_label4",
+   "type": "String",
    "file": "auto/screens__notif_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "quick_actions_section_fallback",
+   "type": "String",
    "file": "auto/screens__notif_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "quick_actions_section_fallback2",
+   "type": "String",
    "file": "auto/screens__notif_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "quick_actions_section_fallback3",
+   "type": "String",
    "file": "auto/screens__notif_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "quick_actions_section_fallback4",
+   "type": "String",
    "file": "auto/screens__notif_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "snooze_sheet_label",
+   "type": "String",
    "file": "auto/screens__notif_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "snooze_sheet_label2",
+   "type": "String",
    "file": "auto/screens__notif_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "snooze_sheet_label3",
+   "type": "String",
    "file": "auto/screens__notif_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "snooze_sheet_label4",
+   "type": "String",
    "file": "auto/screens__notif_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "snooze_sheet_fallback",
+   "type": "String",
    "file": "auto/screens__notif_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "decision_line_label",
+   "type": "String",
    "file": "auto/screens__persona_picking_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "decision_line_label2",
+   "type": "String",
    "file": "auto/screens__persona_picking_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "decision_line_fallback",
+   "type": "String",
    "file": "auto/screens__persona_picking_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "decision_line_fallback2",
+   "type": "String",
    "file": "auto/screens__persona_picking_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "split_control_fallback",
+   "type": "String",
    "file": "auto/screens__persona_picking_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "split_control_label",
+   "type": "String",
    "file": "auto/screens__persona_picking_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "split_control_label2",
+   "type": "String",
    "file": "auto/screens__persona_picking_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "persona_picking_sheet_banner_text",
+   "type": "String",
    "file": "auto/screens__persona_picking_sheet_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "field_label",
+   "type": "String",
    "file": "auto/screens__profile_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "link_row_label",
+   "type": "String",
    "file": "auto/screens__profile_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "link_btn_label",
+   "type": "String",
    "file": "auto/screens__projects_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "regression_panel_check_row_label",
+   "type": "String",
    "file": "auto/screens__regression_panel_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "regression_panel_check_row_label2",
+   "type": "String",
    "file": "auto/screens__regression_panel_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "referral_title",
+   "type": "String",
    "file": "auto/screens__rewards_hub_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "referral_sub",
+   "type": "String",
    "file": "auto/screens__rewards_hub_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "referral_fallback",
+   "type": "String",
    "file": "auto/screens__rewards_hub_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "referral_text",
+   "type": "String",
    "file": "auto/screens__rewards_hub_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "referral_label",
+   "type": "String",
    "file": "auto/screens__rewards_hub_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "referral_label2",
+   "type": "String",
    "file": "auto/screens__rewards_hub_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "referral_label3",
+   "type": "String",
    "file": "auto/screens__rewards_hub_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "referral_value",
+   "type": "String",
    "file": "auto/screens__rewards_hub_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "referral_label4",
+   "type": "String",
    "file": "auto/screens__rewards_hub_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "md_head_ic",
+   "type": "String",
    "file": "auto/screens__rewards_hub_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "md_head_sub",
+   "type": "String",
    "file": "auto/screens__rewards_hub_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "role_requests_inbox_empty_text",
+   "type": "String",
    "file": "auto/screens__role_requests_inbox_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "project_done_fallback",
+   "type": "String",
    "file": "auto/screens__smart_project_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "smart_project_hero_label",
+   "type": "String",
    "file": "auto/screens__smart_project_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "smart_project_hero_label2",
+   "type": "String",
    "file": "auto/screens__smart_project_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "stock_row_label",
+   "type": "String",
    "file": "auto/screens__stock_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "stock_row_label2",
+   "type": "String",
    "file": "auto/screens__stock_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "stock_tab_label",
+   "type": "String",
    "file": "auto/screens__stock_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "action_card_title",
+   "type": "String",
    "file": "auto/screens__store_dashboard_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "action_card_sub",
+   "type": "String",
    "file": "auto/screens__store_dashboard_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "stat_label",
+   "type": "String",
    "file": "auto/screens__store_dashboard_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "big_button_label",
+   "type": "String",
    "file": "auto/screens__store_dashboard_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "sicha_sheet_name",
+   "type": "String",
    "file": "auto/screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "sicha_sheet_name2",
+   "type": "String",
    "file": "auto/screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "sicha_sheet_name3",
+   "type": "String",
    "file": "auto/screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "sicha_sheet_name4",
+   "type": "String",
    "file": "auto/screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "sicha_sheet_title",
+   "type": "String",
    "file": "auto/screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "store_empty_state_label",
+   "type": "String",
    "file": "auto/screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "store_empty_state_label2",
+   "type": "String",
    "file": "auto/screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "store_smart_qty_stepper_message",
+   "type": "String",
    "file": "auto/screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "store_smart_qty_stepper_message2",
+   "type": "String",
    "file": "auto/screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "store_smart_qty_stepper_label",
+   "type": "String",
    "file": "auto/screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "store_smart_qty_stepper_label2",
+   "type": "String",
    "file": "auto/screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "store_step_btn_message",
+   "type": "String",
    "file": "auto/screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "store_step_btn_message2",
+   "type": "String",
    "file": "auto/screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "store_step_btn_label",
+   "type": "String",
    "file": "auto/screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "store_step_btn_label2",
+   "type": "String",
    "file": "auto/screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "store_supplier_header_fallback",
+   "type": "String",
    "file": "auto/screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "summary_card_label",
+   "type": "String",
    "file": "auto/screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "summary_card_label2",
+   "type": "String",
    "file": "auto/screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "summary_card_label3",
+   "type": "String",
    "file": "auto/screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "summary_card_label4",
+   "type": "String",
    "file": "auto/screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "summary_card_value",
+   "type": "String",
    "file": "auto/screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "summary_card_label5",
+   "type": "String",
    "file": "auto/screens__store_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "store_pill_label",
+   "type": "String",
    "file": "auto/screens__store_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "quick_action_label",
+   "type": "String",
    "file": "auto/screens__store_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "store_sheet_scaffold_title",
+   "type": "String",
    "file": "auto/screens__store_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "store_sheet_scaffold_emoji",
+   "type": "String",
    "file": "auto/screens__store_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "store_settings_section_tile_fallback",
+   "type": "String",
    "file": "auto/screens__store_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "store_settings_section_tile_fallback2",
+   "type": "String",
    "file": "auto/screens__store_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "store_settings_section_tile_emoji",
+   "type": "String",
    "file": "auto/screens__store_settings_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "store_settings_section_tile_title",
+   "type": "String",
    "file": "auto/screens__store_settings_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "settings_validated_text_row_label",
+   "type": "String",
    "file": "auto/screens__store_settings_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "settings_validated_text_row_hint",
+   "type": "String",
    "file": "auto/screens__store_settings_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "chat_settings_switch_row_label",
+   "type": "String",
    "file": "auto/screens__store_settings_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "catalog_settings_placeholder_row_label",
+   "type": "String",
    "file": "auto/screens__store_settings_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "settings_number_row_label",
+   "type": "String",
    "file": "auto/screens__store_settings_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "store_settings_action_row_label",
+   "type": "String",
    "file": "auto/screens__store_settings_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "store_settings_action_row_button_label",
+   "type": "String",
    "file": "auto/screens__store_settings_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "wide_warning_label",
+   "type": "String",
    "file": "auto/screens__studio__panes__find_replace_pane_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "contrast_warning_label",
+   "type": "String",
    "file": "auto/screens__studio__panes__theme_pane_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "contrast_warning_label2",
+   "type": "String",
    "file": "auto/screens__studio__panes__theme_pane_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "swatch_label",
+   "type": "String",
    "file": "auto/screens__studio__panes__theme_pane_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "draft_badge_label",
+   "type": "String",
    "file": "auto/screens__studio__studio_top_bar_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "draft_badge_label2",
+   "type": "String",
    "file": "auto/screens__studio__studio_top_bar_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "draft_badge_label3",
+   "type": "String",
    "file": "auto/screens__studio__studio_top_bar_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "supplier_tile_emoji",
+   "type": "String",
    "file": "auto/screens__suppliers_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "supplier_tile_title",
+   "type": "String",
    "file": "auto/screens__suppliers_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "approval_card_label",
+   "type": "String",
    "file": "auto/screens__tasks_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "approval_card_fallback",
+   "type": "String",
    "file": "auto/screens__tasks_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "approval_card_label2",
+   "type": "String",
    "file": "auto/screens__tasks_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "log_button_fallback",
+   "type": "String",
    "file": "auto/screens__tasks_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "new_task_button_fallback",
+   "type": "String",
    "file": "auto/screens__tasks_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "proposal_card_label",
+   "type": "String",
    "file": "auto/screens__tasks_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "proposal_card_fallback",
+   "type": "String",
    "file": "auto/screens__tasks_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "proposal_card_label2",
+   "type": "String",
    "file": "auto/screens__tasks_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "primary_btn_label",
+   "type": "String",
    "file": "auto/screens__tasks_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "accessory_tile_label",
+   "type": "String",
    "file": "auto/screens__trade_builder__accessory_rule_editor_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "accessory_tile_tooltip",
+   "type": "String",
    "file": "auto/screens__trade_builder__accessory_rule_editor_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "accessory_tile_fallback",
+   "type": "String",
    "file": "auto/screens__trade_builder__accessory_rule_editor_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "empty_accessories_fallback",
+   "type": "String",
    "file": "auto/screens__trade_builder__accessory_rule_editor_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "must_chip_fallback",
+   "type": "String",
    "file": "auto/screens__trade_builder__accessory_rule_editor_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "trade_builder_accessory_rule_editor_pill_button_label",
+   "type": "String",
    "file": "auto/screens__trade_builder__accessory_rule_editor_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "trade_builder_accessory_rule_editor_pill_button_label",
+   "type": "String",
    "file": "auto/screens__trade_builder__attribute_schema_editor_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "warn_chip_text",
+   "type": "String",
    "file": "auto/screens__trade_builder__attribute_schema_editor_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "category_tile_label",
+   "type": "String",
    "file": "auto/screens__trade_builder__category_tree_editor_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "category_tile_tooltip",
+   "type": "String",
    "file": "auto/screens__trade_builder__category_tree_editor_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "trade_builder_accessory_rule_editor_pill_button_label",
+   "type": "String",
    "file": "auto/screens__trade_builder__category_tree_editor_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "connector_tile_label",
+   "type": "String",
    "file": "auto/screens__trade_builder__connection_rule_studio_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "connector_tile_tooltip",
+   "type": "String",
    "file": "auto/screens__trade_builder__connection_rule_studio_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "empty_connectors_fallback",
+   "type": "String",
    "file": "auto/screens__trade_builder__connection_rule_studio_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "rule_inspect_dialog_fallback",
+   "type": "String",
    "file": "auto/screens__trade_builder__connection_rule_studio_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "rule_inspect_dialog_fallback2",
+   "type": "String",
    "file": "auto/screens__trade_builder__connection_rule_studio_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "rule_inspect_dialog_fallback3",
+   "type": "String",
    "file": "auto/screens__trade_builder__connection_rule_studio_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "trade_builder_accessory_rule_editor_pill_button_label",
+   "type": "String",
    "file": "auto/screens__trade_builder__connection_rule_studio_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "empty_products_fallback",
+   "type": "String",
    "file": "auto/screens__trade_builder__product_authoring_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "product_tile_label",
+   "type": "String",
    "file": "auto/screens__trade_builder__product_authoring_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "product_tile_tooltip",
+   "type": "String",
    "file": "auto/screens__trade_builder__product_authoring_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "trade_builder_accessory_rule_editor_pill_button_label",
+   "type": "String",
    "file": "auto/screens__trade_builder__product_authoring_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "add_trade_button_label",
+   "type": "String",
    "file": "auto/screens__trade_builder__trade_builder_home_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "add_trade_button_fallback",
+   "type": "String",
    "file": "auto/screens__trade_builder__trade_builder_home_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "trade_builder_trade_builder_home_status_chip_label",
+   "type": "String",
    "file": "auto/screens__trade_builder__trade_builder_home_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "trade_builder_trade_builder_home_status_chip_label2",
+   "type": "String",
    "file": "auto/screens__trade_builder__trade_builder_home_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "wizard_header_label",
+   "type": "String",
    "file": "auto/screens__trade_builder__trade_builder_home_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "wizard_header_label2",
+   "type": "String",
    "file": "auto/screens__trade_builder__trade_builder_home_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "wizard_header_fallback",
+   "type": "String",
    "file": "auto/screens__trade_builder__trade_builder_home_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "wizard_header_fallback2",
+   "type": "String",
    "file": "auto/screens__trade_builder__trade_builder_home_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "save_draft_button_label",
+   "type": "String",
    "file": "auto/screens__trade_builder__trade_define_step_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "save_draft_button_fallback",
+   "type": "String",
    "file": "auto/screens__trade_builder__trade_define_step_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "trade_builder_trade_define_step_color_swatch_label",
+   "type": "String",
    "file": "auto/screens__trade_builder__trade_define_step_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "check_row_label",
+   "type": "String",
    "file": "auto/screens__trade_builder__trade_publish_sheet_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "trade_builder_accessory_rule_editor_pill_button_label",
+   "type": "String",
    "file": "auto/screens__trade_builder__trade_publish_sheet_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "equipment_button_title",
+   "type": "String",
    "file": "auto/screens__worker_app_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "equipment_button_body",
+   "type": "String",
    "file": "auto/screens__worker_app_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "equipment_button_label",
+   "type": "String",
    "file": "auto/screens__worker_app_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "equipment_button_fallback",
+   "type": "String",
    "file": "auto/screens__worker_app_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "propose_task_button_title",
+   "type": "String",
    "file": "auto/screens__worker_app_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "propose_task_button_body",
+   "type": "String",
    "file": "auto/screens__worker_app_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "propose_task_button_label",
+   "type": "String",
    "file": "auto/screens__worker_app_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "propose_task_button_fallback",
+   "type": "String",
    "file": "auto/screens__worker_app_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "submit_button_label",
+   "type": "String",
    "file": "auto/screens__worker_app_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "submit_button_fallback",
+   "type": "String",
    "file": "auto/screens__worker_app_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "worker_nav_label",
+   "type": "String",
    "file": "auto/screens__worker_app_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "worker_nav_label2",
+   "type": "String",
    "file": "auto/screens__worker_app_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "worker_nav_label3",
+   "type": "String",
    "file": "auto/screens__worker_app_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "worker_nav_label4",
+   "type": "String",
    "file": "auto/screens__worker_app_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "today_stat_label",
+   "type": "String",
    "file": "auto/screens__worker_app_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "worker_app_stat_label",
+   "type": "String",
    "file": "auto/screens__worker_app_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "propose_primary_btn_label",
+   "type": "String",
    "file": "auto/screens__worker_app_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "location_button_label2",
+   "type": "String",
    "file": "auto/screens__worker_attendance_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "location_button_fallback",
+   "type": "String",
    "file": "auto/screens__worker_attendance_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "today_stat_label",
+   "type": "String",
    "file": "auto/screens__worker_attendance_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "request_composer_fallback",
+   "type": "String",
    "file": "auto/screens__worker_employer_stock_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "request_composer_fallback2",
+   "type": "String",
    "file": "auto/screens__worker_employer_stock_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "request_composer_fallback3",
+   "type": "String",
    "file": "auto/screens__worker_employer_stock_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "request_composer_hint_text",
+   "type": "String",
    "file": "auto/screens__worker_employer_stock_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "request_composer_label_text",
+   "type": "String",
    "file": "auto/screens__worker_employer_stock_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "request_composer_hint_text2",
+   "type": "String",
    "file": "auto/screens__worker_employer_stock_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "request_composer_fallback4",
+   "type": "String",
    "file": "auto/screens__worker_employer_stock_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "request_composer_fallback5",
+   "type": "String",
    "file": "auto/screens__worker_employer_stock_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "worker_employer_stock_sheet_stock_row_label",
+   "type": "String",
    "file": "auto/screens__worker_employer_stock_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "worker_employer_stock_sheet_stock_row_label2",
+   "type": "String",
    "file": "auto/screens__worker_employer_stock_sheet_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "worker_forms_pill_button_label",
+   "type": "String",
    "file": "auto/screens__worker_forms_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "specialty_derived_row_fallback",
+   "type": "String",
    "file": "auto/screens__worker_profile_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "specialty_derived_row_label",
+   "type": "String",
    "file": "auto/screens__worker_profile_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "specialty_derived_row_fallback2",
+   "type": "String",
    "file": "auto/screens__worker_profile_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "stats_card_fallback",
+   "type": "String",
    "file": "auto/screens__worker_profile_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "stats_card_label",
+   "type": "String",
    "file": "auto/screens__worker_profile_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "stats_card_label2",
+   "type": "String",
    "file": "auto/screens__worker_profile_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "stats_card_label3",
+   "type": "String",
    "file": "auto/screens__worker_profile_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "kpi_box_label2",
+   "type": "String",
    "file": "auto/screens__worker_reports_tab_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "proof_thumb_title",
+   "type": "String",
    "file": "auto/screens__worker_reports_tab_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "proof_thumb_body",
+   "type": "String",
    "file": "auto/screens__worker_reports_tab_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "proof_thumb_label",
+   "type": "String",
    "file": "auto/screens__worker_reports_tab_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "worker_reports_tab_kv_row_label2",
+   "type": "String",
    "file": "auto/screens__worker_reports_tab_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "kpi_box_label",
+   "type": "String",
    "file": "auto/screens__worker_reports_tab_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "worker_reports_tab_card_title",
+   "type": "String",
    "file": "auto/screens__worker_reports_tab_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "worker_reports_tab_card_title_id",
+   "type": "String",
    "file": "auto/screens__worker_reports_tab_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "training_action_label",
+   "type": "String",
    "file": "auto/screens__worker_safety_screen_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "notif_row_fallback",
+   "type": "String",
    "file": "auto/screens__worker_settings_screen_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "worker_task_detail_sheet_primary_btn_label",
+   "type": "String",
    "file": "auto/screens__worker_task_detail_sheet_content2.dart",
    "shelf": "new/dart-data-bs"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "absence-reason-chips-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ACADEMIC_YEAR_LABEL_T",
+   "type": "Map<String, int>",
    "file": "academic-year-label-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ADAR_NORM_T",
+   "type": "Map<String, String>",
    "file": "adar-norm-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ADD_ORG_MEMBER_T",
+   "type": "Map<String, String>",
    "file": "add-org-member-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ORDER",
+   "type": "List<String>",
    "file": "advance-status-data.dart",
-   "shelf": "new/dart-data-maor"
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "pickup",
+    "enroute",
+    "delivered"
+   ]
   },
   {
    "name": "AGE_OF_T",
+   "type": "Map<String, int>",
    "file": "age-of-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "HUNDREDS",
+   "type": "List<String>",
    "file": "amount-in-words-data.dart",
-   "shelf": "new/dart-data-maor"
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "",
+    "מאה",
+    "מאתיים",
+    "שלוש מאות",
+    "ארבע מאות",
+    "חמש מאות",
+    "שש מאות",
+    "שבע מאות",
+    "שמונה מאות",
+    "תשע מאות"
+   ]
   },
   {
    "name": "ONES",
+   "type": "List<String>",
    "file": "amount-in-words-data.dart",
-   "shelf": "new/dart-data-maor"
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "",
+    "אחד",
+    "שניים",
+    "שלושה",
+    "ארבעה",
+    "חמישה",
+    "שישה",
+    "שבעה",
+    "שמונה",
+    "תשעה"
+   ]
   },
   {
    "name": "ONES_F",
+   "type": "List<String>",
    "file": "amount-in-words-data.dart",
-   "shelf": "new/dart-data-maor"
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "",
+    "אחת",
+    "שתיים",
+    "שלוש",
+    "ארבע",
+    "חמש",
+    "שש",
+    "שבע",
+    "שמונה",
+    "תשע"
+   ]
   },
   {
    "name": "TEENS",
+   "type": "List<String>",
    "file": "amount-in-words-data.dart",
-   "shelf": "new/dart-data-maor"
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "עשרה",
+    "אחד עשר",
+    "שנים עשר",
+    "שלושה עשר",
+    "ארבעה עשר",
+    "חמישה עשר",
+    "שישה עשר",
+    "שבעה עשר",
+    "שמונה עשר",
+    "תשעה עשר"
+   ]
   },
   {
    "name": "TEENS_F",
+   "type": "List<String>",
    "file": "amount-in-words-data.dart",
-   "shelf": "new/dart-data-maor"
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "עשר",
+    "אחת עשרה",
+    "שתים עשרה",
+    "שלוש עשרה",
+    "ארבע עשרה",
+    "חמש עשרה",
+    "שש עשרה",
+    "שבע עשרה",
+    "שמונה עשרה",
+    "תשע עשרה"
+   ]
   },
   {
    "name": "TENS",
+   "type": "List<String>",
    "file": "amount-in-words-data.dart",
-   "shelf": "new/dart-data-maor"
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "",
+    "",
+    "עשרים",
+    "שלושים",
+    "ארבעים",
+    "חמישים",
+    "שישים",
+    "שבעים",
+    "שמונים",
+    "תשעים"
+   ]
   },
   {
    "name": "THOUSAND_CONSTRUCT",
+   "type": "Map<String, String>",
    "file": "amount-in-words-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "AMOUNT_IN_WORDS_T",
+   "type": "Map<String, Object>",
    "file": "amount-in-words-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ANNUAL_ALL_LINES_T",
+   "type": "Map<String, String>",
    "file": "annual-all-lines-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "annual-all-lines-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ANNUAL_REPORT_LINES_T",
+   "type": "Map<String, Object>",
    "file": "annual-report-lines-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ANNUAL_REPORT_TERMS",
+   "type": "Map<String, String>",
    "file": "annual-report-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "APPEND_CALL_T",
+   "type": "Map<String, String>",
    "file": "append-call-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "APPLY_AYIN_SHEET_T",
+   "type": "Map<String, String>",
    "file": "apply-ayin-sheet-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "APPLY_META_PARTIAL_T",
+   "type": "Map<String, String>",
    "file": "apply-meta-partial-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ASK_CLAUDE_T",
+   "type": "Map<String, Object>",
    "file": "ask-claude-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "audit-cat-colors-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "AUDIT_CATEGORIES_T",
+   "type": "Map<String, String>",
    "file": "audit-categories-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "AUDIT_REPORT_LINES_T",
+   "type": "Map<String, String>",
    "file": "audit-report-lines-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "audit-report-lines-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "AYIN_ACTION_VISIBLE_T",
+   "type": "Map<String, String>",
    "file": "ayin-action-visible-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "AYIN_ACTIVE_T",
+   "type": "Map<String, String>",
    "file": "ayin-active-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "AYIN_ADVANCE_LABEL_T",
+   "type": "Map<String, String>",
    "file": "ayin-advance-label-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "ayin-advance-label-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "AYIN_ALL_ROWS_T",
+   "type": "Map<String, String>",
    "file": "ayin-all-rows-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "ayin-all-rows-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "AYIN_DAILY_ROWS_T",
+   "type": "Map<String, String>",
    "file": "ayin-daily-rows-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "ayin-daily-rows-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "AYIN_SHEET_ROWS_T",
+   "type": "Map<String, String>",
    "file": "ayin-sheet-rows-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "ayin-sheet-rows-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kAyinSheetHeader",
+   "type": "",
    "file": "ayin-sheet-rows.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "BENEFICIARY_LABEL_T",
+   "type": "Map<String, String>",
    "file": "beneficiary-label-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "beneficiary-label-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FULL_HOLIDAYS",
+   "type": "List<String>",
    "file": "block-reason-data.dart",
-   "shelf": "new/dart-data-maor"
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "ראש השנה",
+    "ראש השנה ב׳",
+    "יום כיפור",
+    "סוכות",
+    "שמחת תורה",
+    "פסח",
+    "שביעי של פסח",
+    "שבועות",
+    "תשעה באב"
+   ]
   },
   {
    "name": "BLOCK_REASON_T",
+   "type": "Map<String, Object>",
    "file": "block-reason-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "BOXES_OVERVIEW_T",
+   "type": "Map<String, int>",
    "file": "boxes-overview-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DAY_NAMES",
+   "type": "List<String>",
    "file": "build-course-daily-rows-data.dart",
-   "shelf": "new/dart-data-maor"
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "ראשון",
+    "שני",
+    "שלישי",
+    "רביעי",
+    "חמישי",
+    "שישי",
+    "שבת"
+   ]
   },
   {
    "name": "BUILD_COURSE_DAILY_ROWS_T",
+   "type": "Map<String, Object>",
    "file": "build-course-daily-rows-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "CAP_DAYS",
+   "type": "int",
    "file": "build-custom-export-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "BUILD_CUSTOM_EXPORT_T",
+   "type": "Map<String, Object>",
    "file": "build-custom-export-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "BUILD_ICS_T",
+   "type": "Map<String, Object>",
    "file": "build-ics-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "BUILD_MONTH_GRID_T",
+   "type": "Map<String, Object>",
    "file": "build-month-grid-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "BUILD_REENROLL_ROWS_T",
+   "type": "Map<String, String>",
    "file": "build-reenroll-rows-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "BUILD_SLOTS_T",
+   "type": "Map<String, Object>",
    "file": "build-slots-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "CALL_STATS_T",
+   "type": "Map<String, String>",
    "file": "call-stats-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "CALLER_ID_TERMS",
+   "type": "Map<String, String>",
    "file": "caller-id-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "CALLER_KIND_LABEL_T",
+   "type": "Map<String, String>",
    "file": "caller-kind-label-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "CAMPAIGN_CSV_ROWS_T",
+   "type": "Map<String, String>",
    "file": "campaign-csv-rows-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "campaign-csv-rows-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "CAMPAIGN_PROGRESS_T",
+   "type": "Map<String, int>",
    "file": "campaign-progress-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "CANDIDATE_SUPPORTERS_FOR_CHARGE_T",
+   "type": "Map<String, String>",
    "file": "candidate-supporters-for-charge-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "cat-options-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "CHANGE_PASSWORD_T",
+   "type": "Map<String, String>",
    "file": "change-password-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "CHARGE_DEDUP_KEY_T",
+   "type": "Map<String, String>",
    "file": "charge-dedup-key-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "CHARGE_TO_HIST_T",
+   "type": "Map<String, int>",
    "file": "charge-to-hist-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "CHIP_STYLE_T",
+   "type": "Map<String, Object>",
    "file": "chip-style-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "cities-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "CLEAR_EMPLOYEE_FIELD_T",
+   "type": "Map<String, String>",
    "file": "clear-employee-field-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "CLOUD_CFG_CACHE_KEY_T",
+   "type": "Map<String, String>",
    "file": "cloud-cfg-cache-key-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "CLOUD_DB_T",
+   "type": "Map<String, String>",
    "file": "cloud-db-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "COCKPIT_AT_RISK_T",
+   "type": "Map<String, int>",
    "file": "cockpit-at-risk-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "COCKPIT_CALLS_T",
+   "type": "Map<String, Object>",
    "file": "cockpit-calls-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "cockpit-calls-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "COCKPIT_CSV_ROWS_T",
+   "type": "Map<String, String>",
    "file": "cockpit-csv-rows-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "COCKPIT_DAYS_SINCE_T",
+   "type": "Map<String, int>",
    "file": "cockpit-days-since-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "COCKPIT_FEED_T",
+   "type": "Map<String, String>",
    "file": "cockpit-feed-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "cockpit-feed-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "COCKPIT_HOK_TASKS_T",
+   "type": "Map<String, Object>",
    "file": "cockpit-hok-tasks-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "cockpit-hok-tasks-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "COCKPIT_THANKS_T",
+   "type": "Map<String, String>",
    "file": "cockpit-thanks-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "cockpit-thanks-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "COCKPIT_WORK_LIST_TEXT_T",
+   "type": "Map<String, String>",
    "file": "cockpit-work-list-text-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "COL_PATH_T",
+   "type": "Map<String, String>",
    "file": "col-path-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "COL_REF_TO_INDEX_T",
+   "type": "Map<String, int>",
    "file": "col-ref-to-index-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "COLLECTION_SCORE_DELTA_T",
+   "type": "Map<String, int>",
    "file": "collection-score-delta-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "COLLECTIONS_CSV_ROWS_T",
+   "type": "Map<String, String>",
    "file": "collections-csv-rows-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "collections-csv-rows-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "COMMANDS_BUILD_COMMANDS_T",
+   "type": "Map<String, String>",
    "file": "commands-build-commands-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "commands-build-commands-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "COMMANDS_FILTER_COMMANDS_T",
+   "type": "Map<String, Object>",
    "file": "commands-filter-commands-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "COMPONENT_REDEEMED_NOW_T",
+   "type": "Map<String, String>",
    "file": "component-redeemed-now-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "COMPOSE_SMTP_URL_T",
+   "type": "Map<String, String>",
    "file": "compose-smtp-url-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "COMPUTE_QUOTE_T",
+   "type": "Map<String, Object>",
    "file": "compute-quote-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "TIER_KEY",
+   "type": "Map<String, String>",
    "file": "constellation-donor-constellation-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "CONSTELLATION_DONOR_CONSTELLATION_T",
+   "type": "Map<String, Object>",
    "file": "constellation-donor-constellation-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "COOLDOWN_FOR_FAILS_T",
+   "type": "Map<String, int>",
    "file": "cooldown-for-fails-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "COORDINATOR_PRINT_LINES_T",
+   "type": "Map<String, Object>",
    "file": "coordinator-print-lines-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "CORAL_PALETTE_T",
+   "type": "Map<String, Object>",
    "file": "coral-palette-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "COURSE_DATE_ERROR_T",
+   "type": "Map<String, String>",
    "file": "course-date-error-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "course-date-error-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "COURSE_FITS_MEMBER_T",
+   "type": "Map<String, String>",
    "file": "course-fits-member-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "CREATE_CLOUD_KEY_T",
+   "type": "Map<String, String>",
    "file": "create-cloud-key-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "CSVX_TERMS",
+   "type": "Map<String, String>",
    "file": "csvx-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "CUSTOM_EXPORT_TERMS",
+   "type": "Map<String, String>",
    "file": "custom-export-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "day-letters-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DAY_PROGRESS_T",
+   "type": "Map<String, String>",
    "file": "day-progress-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DECODE_CSV_BUFFER_T",
+   "type": "Map<String, Object>",
    "file": "decode-csv-buffer-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DECODE_QUOTED_PRINTABLE_T",
+   "type": "Map<String, Object>",
    "file": "decode-quoted-printable-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DECRYPT_DOC_T",
+   "type": "Map<String, String>",
    "file": "decrypt-doc-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DEDUP_TERMS",
+   "type": "Map<String, String>",
    "file": "dedup-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DEFAULT_COURSE_DATES_T",
+   "type": "Map<String, int>",
    "file": "default-course-dates-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "default-kit-labels-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DEFAULT_PRICES_T",
+   "type": "Map<String, int>",
    "file": "default-prices-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DELETE_ORG_COMPLETELY_T",
+   "type": "Map<String, String>",
    "file": "delete-org-completely-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DELETE_ORG_JOIN_REQUEST_T",
+   "type": "Map<String, String>",
    "file": "delete-org-join-request-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DELETE_ORG_MEMBER_CONFIG_T",
+   "type": "Map<String, String>",
    "file": "delete-org-member-config-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DELETE_ORG_REQUEST_T",
+   "type": "Map<String, String>",
    "file": "delete-org-request-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DELIVER_RECEIPT_T",
+   "type": "Map<String, String>",
    "file": "deliver-receipt-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DELIVERIES_CSV_ROWS_T",
+   "type": "Map<String, String>",
    "file": "deliveries-csv-rows-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "deliveries-csv-rows-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DELIVERY_LIST_LINES_T",
+   "type": "Map<String, String>",
    "file": "delivery-list-lines-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "delivery-list-lines-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DETECT_RECURRING_HOK_T",
+   "type": "Map<String, Object>",
    "file": "detect-recurring-hok-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DISTRIBUTION_LIST_LINES_T",
+   "type": "Map<String, Object>",
    "file": "distribution-list-lines-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DISTRIBUTION_TERMS",
+   "type": "Map<String, String>",
    "file": "distribution-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DOC_SKEY_T",
+   "type": "Map<String, String>",
    "file": "doc-skey-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DON_ALLOWED_KEYS_T",
+   "type": "Map<String, int>",
    "file": "don-allowed-keys-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DON_CAL_MONTH_LINE_T",
+   "type": "Map<String, String>",
    "file": "don-cal-month-line-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "don-cal-month-line-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DONE_TODAY_FOR_T",
+   "type": "Map<String, int>",
    "file": "done-today-for-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DUP_FIELDS_T",
+   "type": "Map<String, String>",
    "file": "dup-fields-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DUPLICATE_COURSE_T",
+   "type": "Map<String, String>",
    "file": "duplicate-course-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "duplicate-course-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "EFFECTIVE_PRICE_T",
+   "type": "Map<String, int>",
    "file": "effective-price-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ELIGIBLE_ASSIGNMENTS_FOR_DAY_T",
+   "type": "Map<String, String>",
    "file": "eligible-assignments-for-day-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "EMPLOYEE_SIGN_UP_ERROR_T",
+   "type": "Map<String, String>",
    "file": "employee-sign-up-error-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "employee-sign-up-error-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "EMPTY_TELEPHONY_CONFIG_T",
+   "type": "Map<String, String>",
    "file": "empty-telephony-config-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "empty-telephony-config-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ENCRYPT_DB_T",
+   "type": "Map<String, Object>",
    "file": "encrypt-db-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ENCRYPT_DOC_T",
+   "type": "Map<String, Object>",
    "file": "encrypt-doc-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ENROLL_COUNT_T",
+   "type": "Map<String, String>",
    "file": "enroll-count-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ENROLL_NEW_FAMILY_T",
+   "type": "Map<String, String>",
    "file": "enroll-new-family-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ENROLL_STATUS_META_T",
+   "type": "Map<String, String>",
    "file": "enroll-status-meta-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "enroll-status-meta-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ENROLL_SUMMARY_T",
+   "type": "Map<String, String>",
    "file": "enroll-summary-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ENROLLMENT_PAID_STATUS_T",
+   "type": "Map<String, String>",
    "file": "enrollment-paid-status-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ENV_PATH_T",
+   "type": "Map<String, String>",
    "file": "env-path-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "EV_LABEL_T",
+   "type": "Map<String, String>",
    "file": "ev-label-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "EVENTS_CSV_ROWS_T",
+   "type": "Map<String, String>",
    "file": "events-csv-rows-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "EXCEL_SERIAL_TO_ISO_T",
+   "type": "Map<String, int>",
    "file": "excel-serial-to-iso-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "EXP_FIELD_DEFS_T",
+   "type": "Map<String, String>",
    "file": "exp-field-defs-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "exp-field-defs-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "DOW_HE",
+   "type": "List<String>",
    "file": "explain-call-data.dart",
-   "shelf": "new/dart-data-maor"
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "ראשון",
+    "שני",
+    "שלישי",
+    "רביעי",
+    "חמישי",
+    "שישי",
+    "שבת"
+   ]
   },
   {
    "name": "EXPLAIN_CALL_T",
+   "type": "Map<String, String>",
    "file": "explain-call-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "EXPLAIN_ONE_T",
+   "type": "Map<String, Object>",
    "file": "explain-one-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "explain-one-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FAM_HISTORY_OF_T",
+   "type": "Map<String, Object>",
    "file": "fam-history-of-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FAMILIES_IMPORT_FORMAT_ROWS_T",
+   "type": "Map<String, String>",
    "file": "families-import-format-rows-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "families-import-format-rows-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FAMILY_CONTEXT_T",
+   "type": "Map<String, String>",
    "file": "family-context-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FAVICON_DATA_URI_T",
+   "type": "Map<String, String>",
    "file": "favicon-data-uri-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FEAT_LABEL_T",
+   "type": "Map<String, String>",
    "file": "feat-label-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FETCH_ALL_ORGS_T",
+   "type": "Map<String, String>",
    "file": "fetch-all-orgs-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FETCH_INCOMING_PAYMENTS_T",
+   "type": "Map<String, String>",
    "file": "fetch-incoming-payments-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FETCH_NEDARIM_DONORS_T",
+   "type": "Map<String, String>",
    "file": "fetch-nedarim-donors-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FETCH_ORG_CLOUD_CONFIG_T",
+   "type": "Map<String, String>",
    "file": "fetch-org-cloud-config-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FETCH_ORG_JOIN_REQUESTS_T",
+   "type": "Map<String, String>",
    "file": "fetch-org-join-requests-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FETCH_ORG_LEADS_T",
+   "type": "Map<String, String>",
    "file": "fetch-org-leads-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FETCH_ORG_REQUESTS_T",
+   "type": "Map<String, String>",
    "file": "fetch-org-requests-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FETCH_PROVIDER_ROWS_T",
+   "type": "Map<String, String>",
    "file": "fetch-provider-rows-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FILTER_AYIN_BOARD_T",
+   "type": "Map<String, String>",
    "file": "filter-ayin-board-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FILTER_DELIVERIES_T",
+   "type": "Map<String, String>",
    "file": "filter-deliveries-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "filter-deliveries-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FILTER_ITEMS_T",
+   "type": "Map<String, String>",
    "file": "filter-items-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FIND_ALL_OPEN_PLANS_T",
+   "type": "Map<String, String>",
    "file": "find-all-open-plans-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FIND_CALLER_T",
+   "type": "Map<String, String>",
    "file": "find-caller-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FIND_MEMBER_ORG_SLUGS_T",
+   "type": "Map<String, String>",
    "file": "find-member-org-slugs-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FINDER_AXES_T",
+   "type": "Map<String, String>",
    "file": "finder-axes-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "finder-axes-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FINDER_AXIS_VALUE_T",
+   "type": "Map<String, Object>",
    "file": "finder-axis-value-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FMT_DATE_T",
+   "type": "Map<String, int>",
    "file": "fmt-date-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FOLD_ICS_LINE_T",
+   "type": "Map<String, int>",
    "file": "fold-ics-line-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FOREIGN_HOST_T",
+   "type": "Map<String, String>",
    "file": "foreign-host-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FORMAT_ISRAELI_PHONE_T",
+   "type": "Map<String, int>",
    "file": "format-israeli-phone-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "FRESHEN_DEMO_DB_T",
+   "type": "Map<String, int>",
    "file": "freshen-demo-db-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "GEM_YEAR_T",
+   "type": "Map<String, int>",
    "file": "gem-year-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "H",
+   "type": "List<String>",
    "file": "gematria-data.dart",
-   "shelf": "new/dart-data-maor"
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "",
+    "ק",
+    "ר",
+    "ש",
+    "ת",
+    "תק",
+    "תר",
+    "תש",
+    "תת",
+    "תתק"
+   ]
   },
   {
    "name": "T",
+   "type": "List<String>",
    "file": "gematria-data.dart",
-   "shelf": "new/dart-data-maor"
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "",
+    "י",
+    "כ",
+    "ל",
+    "מ",
+    "נ",
+    "ס",
+    "ע",
+    "פ",
+    "צ"
+   ]
   },
   {
    "name": "U",
+   "type": "List<String>",
    "file": "gematria-data.dart",
-   "shelf": "new/dart-data-maor"
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "",
+    "א",
+    "ב",
+    "ג",
+    "ד",
+    "ה",
+    "ו",
+    "ז",
+    "ח",
+    "ט"
+   ]
   },
   {
    "name": "GEMATRIA_T",
+   "type": "Map<String, Object>",
    "file": "gematria-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "GEN_JOIN_CODE_T",
+   "type": "Map<String, int>",
    "file": "gen-join-code-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "GEN_RECOVERY_KEY_T",
+   "type": "Map<String, Object>",
    "file": "gen-recovery-key-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "GRANTABLE_STAFF_FEATURES_T",
+   "type": "Map<String, String>",
    "file": "grantable-staff-features-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "GROUP_LABEL_OF_T",
+   "type": "Map<String, String>",
    "file": "group-label-of-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "group-label-of-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "GROUP_OPTIONS_OF_T",
+   "type": "Map<String, String>",
    "file": "group-options-of-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "GROUPS_HINT_FROM_AUDIENCE_T",
+   "type": "Map<String, int>",
    "file": "groups-hint-from-audience-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "groups-hint-from-audience-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "GUIDE_FOOT_T",
+   "type": "Map<String, String>",
    "file": "guide-foot-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "GUIDE_SECTIONS_OF_T",
+   "type": "Map<String, String>",
    "file": "guide-sections-of-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "guide-sections-of-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "HASH_PIN_T",
+   "type": "Map<String, String>",
    "file": "hash-pin-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "HEB_ANNUAL_EQ_T",
+   "type": "Map<String, Object>",
    "file": "heb-annual-eq-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "hebCalAnchor",
+   "type": "int",
    "file": "heb-cal-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "hebCalApproxA",
+   "type": "int",
    "file": "heb-cal-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "hebCalLeapA",
+   "type": "int",
    "file": "heb-cal-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "hebCalMonthsA",
+   "type": "int",
    "file": "heb-cal-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "hebCalCarryBase",
+   "type": "int",
    "file": "heb-cal-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "hebCalPostM",
+   "type": "int",
    "file": "heb-cal-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "hebCalSpanHi",
+   "type": "int",
    "file": "heb-cal-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "hebCalLongMid",
+   "type": "List<int>",
    "file": "heb-cal-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "hebCalShortMid",
+   "type": "List<int>",
    "file": "heb-cal-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "hebCalShortMonths",
+   "type": "List<int>",
    "file": "heb-cal-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "hebCalFlexLong",
+   "type": "int",
    "file": "heb-cal-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "hebCalMonthsInLeap",
+   "type": "int",
    "file": "heb-cal-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "hebCalShortLen",
+   "type": "int",
    "file": "heb-cal-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "hebCalNisan",
+   "type": "int",
    "file": "heb-cal-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "hebCalNames",
+   "type": "List<String>",
    "file": "heb-cal-data.dart",
-   "shelf": "new/dart-data-maor"
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "ניסן",
+    "אייר",
+    "סיוון",
+    "תמוז",
+    "אב",
+    "אלול",
+    "תשרי",
+    "חשוון",
+    "כסלו",
+    "טבת",
+    "שבט",
+    "אדר"
+   ]
   },
   {
    "name": "hebCalLeapName12",
+   "type": "String",
    "file": "heb-cal-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "hebCalGregYearDays",
+   "type": "int",
    "file": "heb-cal-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "hebCalGregMA",
+   "type": "int",
    "file": "heb-cal-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "hebCalGregLeapAdj",
+   "type": "int",
    "file": "heb-cal-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "HEB_DATE_FULL_T",
+   "type": "Map<String, Object>",
    "file": "heb-date-full-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ORDER_COMMON",
+   "type": "List<String>",
    "file": "heb-months-of-data.dart",
-   "shelf": "new/dart-data-maor"
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "Tishri",
+    "Heshvan",
+    "Kislev",
+    "Tevet",
+    "Shevat",
+    "Adar",
+    "Nisan",
+    "Iyar",
+    "Sivan",
+    "Tamuz",
+    "Av",
+    "Elul"
+   ]
   },
   {
    "name": "ORDER_LEAP",
+   "type": "List<String>",
    "file": "heb-months-of-data.dart",
-   "shelf": "new/dart-data-maor"
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "Tishri",
+    "Heshvan",
+    "Kislev",
+    "Tevet",
+    "Shevat",
+    "Adar I",
+    "Adar II",
+    "Nisan",
+    "Iyar",
+    "Sivan",
+    "Tamuz",
+    "Av"
+   ]
   },
   {
    "name": "HP_CACHE_MAX",
+   "type": "int",
    "file": "heb-parts-of-iso-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "HEB_PARTS_T",
+   "type": "Map<String, String>",
    "file": "heb-parts-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "HOK_CAT_T",
+   "type": "Map<String, Object>",
    "file": "hok-cat-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "HOK_EFFECTIVELY_ACTIVE_T",
+   "type": "Map<String, Object>",
    "file": "hok-effectively-active-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "HOK_METHOD_LABEL_T",
+   "type": "Map<String, String>",
    "file": "hok-method-label-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "hok-method-label-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "HOLIDAY_NAMES_T",
+   "type": "Map<String, int>",
    "file": "holiday-names-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "HOLIDAY_OF_T",
+   "type": "Map<String, Object>",
    "file": "holiday-of-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "holiday-of-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ICS_FEED_TERMS",
+   "type": "Map<String, String>",
    "file": "ics-feed-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ICS_FEED_URL_T",
+   "type": "Map<String, String>",
    "file": "ics-feed-url-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "IMAGE_PICK_TERMS",
+   "type": "Map<String, String>",
    "file": "image-pick-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "INACTIVE_ROOM_COURSES_T",
+   "type": "Map<String, String>",
    "file": "inactive-room-courses-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "INTEGER_IN_WORDS_T",
+   "type": "Map<String, Object>",
    "file": "integer-in-words-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "integer-in-words-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "INTEGRATION_SETTING_T",
+   "type": "Map<String, String>",
    "file": "integration-setting-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "INTEL_CHURN_FROM_SCAN_T",
+   "type": "Map<String, int>",
    "file": "intel-churn-from-scan-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "INTEL_DAY_DIFF_T",
+   "type": "Map<String, int>",
    "file": "intel-day-diff-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "INTEL_DONOR_INTEL_T",
+   "type": "Map<String, int>",
    "file": "intel-donor-intel-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "INTEL_DONOR_SCAN_T",
+   "type": "Map<String, int>",
    "file": "intel-donor-scan-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "INTEL_FORECAST_FROM_SCAN_T",
+   "type": "Map<String, int>",
    "file": "intel-forecast-from-scan-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "INTEL_RFM_FROM_SCAN_T",
+   "type": "Map<String, int>",
    "file": "intel-rfm-from-scan-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "INTEL_TREND_FROM_SCAN_T",
+   "type": "Map<String, Object>",
    "file": "intel-trend-from-scan-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "IS_ENC_DOC_T",
+   "type": "Map<String, String>",
    "file": "is-enc-doc-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "IS_ENCRYPTED_T",
+   "type": "Map<String, String>",
    "file": "is-encrypted-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "IS_HEB_LEAP_YEAR_T",
+   "type": "Map<String, String>",
    "file": "is-heb-leap-year-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "IS_IOS_T",
+   "type": "Map<String, String>",
    "file": "is-ios-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ITEM_LABEL_T",
+   "type": "Map<String, String>",
    "file": "item-label-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "KIT_PROGRESS_T",
+   "type": "Map<String, int>",
    "file": "kit-progress-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "LESSON_TIER_OPTIONS_T",
+   "type": "Map<String, String>",
    "file": "lesson-tier-options-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "LESSONS_IN_TERM_T",
+   "type": "Map<String, String>",
    "file": "lessons-in-term-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "LIB_AI_TERMS",
+   "type": "Map<String, String>",
    "file": "lib-ai-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "LIB_CLOUD_TERMS",
+   "type": "Map<String, String>",
    "file": "lib-cloud-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "LIB_CONFIG_TERMS",
+   "type": "Map<String, String>",
    "file": "lib-config-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "LIB_CRYPTO_TERMS",
+   "type": "Map<String, String>",
    "file": "lib-crypto-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "LIB_ICS_TERMS",
+   "type": "Map<String, String>",
    "file": "lib-ics-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "LIB_LOCK_TERMS",
+   "type": "Map<String, String>",
    "file": "lib-lock-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "LIB_NEDARIM_SYNC_TERMS",
+   "type": "Map<String, String>",
    "file": "lib-nedarim-sync-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "LOCK_KEY_T",
+   "type": "Map<String, String>",
    "file": "lock-key-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "MAKE_NORMALIZE_CONFIG_T",
+   "type": "Map<String, Object>",
    "file": "make-normalize-config-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "cf",
+   "type": "Map<String, Object>",
    "file": "make-normalize-site-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "MAKE_NORMALIZE_SITE_T",
+   "type": "Map<String, Object>",
    "file": "make-normalize-site-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "MAKEUP_ELIGIBILITY_T",
+   "type": "Map<String, Object>",
    "file": "makeup-eligibility-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "MANUAL_DRIVER_T",
+   "type": "Map<String, String>",
    "file": "manual-driver-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "MAPS_ROUTE_URL_T",
+   "type": "Map<String, String>",
    "file": "maps-route-url-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "MAPS_SEARCH_URL_T",
+   "type": "Map<String, String>",
    "file": "maps-search-url-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "MARITAL_CHIP",
+   "type": "Map<String, List<String>>",
    "file": "marital-chip-style-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "MARITAL_CHIP_STYLE_T",
+   "type": "Map<String, String>",
    "file": "marital-chip-style-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "MARK_SUPPORT_READ_T",
+   "type": "Map<String, String>",
    "file": "mark-support-read-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "MATCH_INCOMING_TO_PLANNED_T",
+   "type": "Map<String, int>",
    "file": "match-incoming-to-planned-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "MAX_DISCOUNT_PCT_T",
+   "type": "Map<String, int>",
    "file": "max-discount-pct-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "MERGE_DONATIONS_PRESERVING_T",
+   "type": "Map<String, String>",
    "file": "merge-donations-preserving-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "MERGE_FAMILIES_BY_FIELDS_T",
+   "type": "Map<String, String>",
    "file": "merge-families-by-fields-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "MERGE_FAMILIES_T",
+   "type": "Map<String, String>",
    "file": "merge-families-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "merge-families-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "MERGE_SUPPORTERS_BY_FIELDS_T",
+   "type": "Map<String, String>",
    "file": "merge-supporters-by-fields-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "META_PATH_T",
+   "type": "Map<String, String>",
    "file": "meta-path-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "MIGRATE_SUPPORTERS_TO_KEYED_T",
+   "type": "Map<String, Object>",
    "file": "migrate-supporters-to-keyed-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "MIN_TO_HM_T",
+   "type": "Map<String, int>",
    "file": "min-to-hm-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "MODEL_META_T",
+   "type": "Map<String, String>",
    "file": "model-meta-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "MONTHS",
+   "type": "List<List<String>>",
    "file": "month-en-of-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kMonths",
+   "type": "",
    "file": "month-en-of.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "NAMES_EXPORT_TERMS",
+   "type": "Map<String, String>",
    "file": "names-export-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "NAVHIST_TERMS",
+   "type": "Map<String, String>",
    "file": "navhist-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "NEEDS_CARE_SHOP_T",
+   "type": "Map<String, String>",
    "file": "needs-care-shop-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "NEEDS_CARE_TZEDAKA_T",
+   "type": "Map<String, Object>",
    "file": "needs-care-tzedaka-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "needs-care-tzedaka-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "NET_CHECK_SCRIPT_T",
+   "type": "Map<String, String>",
    "file": "net-check-script-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "NET_CHECK_TERMS",
+   "type": "Map<String, String>",
    "file": "net-check-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "NEXT_CLOSURE_T",
+   "type": "Map<String, Object>",
    "file": "next-closure-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "NORM_SEARCH_T",
+   "type": "Map<String, String>",
    "file": "norm-search-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "NORMALIZE_PRICES_T",
+   "type": "Map<String, String>",
    "file": "normalize-prices-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "TEL_KINDS",
+   "type": "List<String>",
    "file": "normalize-telephony-data.dart",
-   "shelf": "new/dart-data-maor"
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "sim",
+    "virtual",
+    "whatsapp"
+   ]
   },
   {
    "name": "NORMALIZE_TELEPHONY_T",
+   "type": "Map<String, Object>",
    "file": "normalize-telephony-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "OPEN_DEK_T",
+   "type": "Map<String, String>",
    "file": "open-dek-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ORBIT_THEME_T",
+   "type": "Map<String, Object>",
    "file": "orbit-theme-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ORG_CAL_ENTRIES_T",
+   "type": "Map<String, String>",
    "file": "org-cal-entries-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ORG_JOIN_LINK_T",
+   "type": "Map<String, String>",
    "file": "org-join-link-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ORG_LINK_T",
+   "type": "Map<String, String>",
    "file": "org-link-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ORG_SLUG_FROM_URL_T",
+   "type": "Map<String, String>",
    "file": "org-slug-from-url-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "OVERDUE_CONTACT_TASK_DRAFTS_T",
+   "type": "Map<String, String>",
    "file": "overdue-contact-task-drafts-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PARSE_ANY_DATE_T",
+   "type": "Map<String, int>",
    "file": "parse-any-date-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PARSE_AYIN_SHEET_T",
+   "type": "Map<String, String>",
    "file": "parse-ayin-sheet-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PARSE_FAMILIES_CSV_T",
+   "type": "Map<String, Object>",
    "file": "parse-families-csv-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "parse-families-csv-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PARSE_SUPPORTER_GRID_T",
+   "type": "Map<String, Object>",
    "file": "parse-supporter-grid-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PARSE_VCARDS_T",
+   "type": "Map<String, String>",
    "file": "parse-vcards-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PARSE_XLSX_SHEET_T",
+   "type": "Map<String, String>",
    "file": "parse-xlsx-sheet-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PAY_LINK_T",
+   "type": "Map<String, Object>",
    "file": "pay-link-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PENDING_DELIVERIES_TODAY_T",
+   "type": "Map<String, String>",
    "file": "pending-deliveries-today-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PERSONAL_CAL_ENTRIES_T",
+   "type": "Map<String, String>",
    "file": "personal-cal-entries-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PHONE_ISSUE_T",
+   "type": "Map<String, Object>",
    "file": "phone-issue-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PHONE_REGION_T",
+   "type": "Map<String, String>",
    "file": "phone-region-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PLAN_ADD_NAME_T",
+   "type": "Map<String, String>",
    "file": "plan-add-name-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PLAN_AYIN_ADVANCE_T",
+   "type": "Map<String, String>",
    "file": "plan-ayin-advance-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PLAN_DEMO_CLEANUP_T",
+   "type": "Map<String, String>",
    "file": "plan-demo-cleanup-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kFpFields",
+   "type": "",
    "file": "plan-demo-cleanup.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PLAN_LABEL_OF_T",
+   "type": "Map<String, String>",
    "file": "plan-label-of-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PLAN_NEDARIM_SYNC_T",
+   "type": "Map<String, Object>",
    "file": "plan-nedarim-sync-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PLAN_WORD_T",
+   "type": "Map<String, String>",
    "file": "plan-word-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "plan-word-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PLATFORM_TERMS",
+   "type": "Map<String, String>",
    "file": "platform-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PORTFOLIO_ACTIVE_BY_MONTH_T",
+   "type": "Map<String, int>",
    "file": "portfolio-active-by-month-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "RISK",
+   "type": "int",
    "file": "portfolio-portfolio-intel-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "order",
+   "type": "List<String>",
    "file": "portfolio-tier-trend-counts-data.dart",
-   "shelf": "new/dart-data-maor"
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "זהב",
+    "כסף",
+    "ארד",
+    "רדומה"
+   ]
   },
   {
    "name": "PORTFOLIO_TIER_TREND_COUNTS_T",
+   "type": "Map<String, Object>",
    "file": "portfolio-tier-trend-counts-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "portfolio-tier-trend-counts-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "caller",
+   "type": "String",
    "file": "preview-telephony-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PREVIEW_TELEPHONY_T",
+   "type": "Map<String, Object>",
    "file": "preview-telephony-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "preview-telephony-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PRICE_SUFFIX_T",
+   "type": "Map<String, String>",
    "file": "price-suffix-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "price-suffix-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PRICING_TERMS",
+   "type": "List<Map<String, String>>",
    "file": "pricing-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PROMPT_INSTALL_T",
+   "type": "Map<String, String>",
    "file": "prompt-install-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PROVIDER_CLEARER_T",
+   "type": "Map<String, String>",
    "file": "provider-clearer-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "provider-clearer-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PUBLIC_SITE_ON_T",
+   "type": "Map<String, String>",
    "file": "public-site-on-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PUBLISH_ICS_FEED_T",
+   "type": "Map<String, Object>",
    "file": "publish-ics-feed-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PULL_AUDIT_RING_T",
+   "type": "Map<String, Object>",
    "file": "pull-audit-ring-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PULL_NEDARIM_T",
+   "type": "Map<String, String>",
    "file": "pull-nedarim-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PULL_SOLA_T",
+   "type": "Map<String, String>",
    "file": "pull-sola-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PUNCH_CONFIRM_STEP_T",
+   "type": "Map<String, int>",
    "file": "punch-confirm-step-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PURPOSE_KEY_OF_T",
+   "type": "Map<String, String>",
    "file": "purpose-key-of-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PUSH_AUDIT_RING_T",
+   "type": "Map<String, Object>",
    "file": "push-audit-ring-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PUSH_DIFF_T",
+   "type": "Map<String, int>",
    "file": "push-diff-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "PUSH_DONATIONS_T",
+   "type": "Map<String, int>",
    "file": "push-donations-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "NAV_HIST_MAX",
+   "type": "int",
    "file": "push-nav-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "RANGE_LABEL_T",
+   "type": "Map<String, String>",
    "file": "range-label-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "READ_CLOUD_ENVELOPE_T",
+   "type": "Map<String, String>",
    "file": "read-cloud-envelope-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "READ_FILE_AS_DATA_URL_T",
+   "type": "Map<String, String>",
    "file": "read-file-as-data-url-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "READ_ICS_FEED_TOKEN_T",
+   "type": "Map<String, String>",
    "file": "read-ics-feed-token-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "READ_ORG_SECRETS_META_T",
+   "type": "Map<String, String>",
    "file": "read-org-secrets-meta-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "RECEIPT_FMT_OF_T",
+   "type": "Map<String, String>",
    "file": "receipt-fmt-of-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "RECEIPT_HTML_T",
+   "type": "Map<String, String>",
    "file": "receipt-html-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "RECEIPT_LINES_T",
+   "type": "Map<String, Object>",
    "file": "receipt-lines-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "RECEIPT_TERMS",
+   "type": "Map<String, String>",
    "file": "receipt-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "RECEIPT_VERIFY_CODE_T",
+   "type": "Map<String, int>",
    "file": "receipt-verify-code-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "REDEMPTIONS_CSV_ROWS_T",
+   "type": "Map<String, String>",
    "file": "redemptions-csv-rows-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "redemptions-csv-rows-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "REENROLL_COUNTS_T",
+   "type": "Map<String, String>",
    "file": "reenroll-counts-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "head",
+   "type": "List<String>",
    "file": "reenroll-csv-rows-data.dart",
-   "shelf": "new/dart-data-maor"
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "תלמיד/ה",
+    "משפחה",
+    "חוג",
+    "נוכחות",
+    "חיסורים",
+    "יתרה ₪",
+    "סטטוס",
+    "החלטה",
+    "נרשם לשנה הבאה",
+    "הערה"
+   ]
   },
   {
    "name": "REENROLL_CSV_ROWS_T",
+   "type": "Map<String, String>",
    "file": "reenroll-csv-rows-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "REENROLL_LIST_TEXT_T",
+   "type": "Map<String, String>",
    "file": "reenroll-list-text-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "reenroll-list-text-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "REMOVE_ORG_MEMBER_T",
+   "type": "Map<String, String>",
    "file": "remove-org-member-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "RENEW_TARGETS_T",
+   "type": "Map<String, String>",
    "file": "renew-targets-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "RESET_PASSWORD_T",
+   "type": "Map<String, String>",
    "file": "reset-password-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "RESOLVE_ENROLL_FAMILY_T",
+   "type": "Map<String, String>",
    "file": "resolve-enroll-family-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "REVERT_PATCH_T",
+   "type": "Map<String, String>",
    "file": "revert-patch-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "REWRAP_PASSWORD_T",
+   "type": "Map<String, String>",
    "file": "rewrap-password-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ROLE_OF_T",
+   "type": "Map<String, String>",
    "file": "role-of-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ROOM_INFO_LABEL_T",
+   "type": "Map<String, String>",
    "file": "room-info-label-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ROOMS_NOW_T",
+   "type": "Map<String, int>",
    "file": "rooms-now-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "ROUND2_T",
+   "type": "Map<String, int>",
    "file": "round2-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "RULE_CONTAINS_T",
+   "type": "Map<String, int>",
    "file": "rule-contains-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "RULE_EXACT_T",
+   "type": "Map<String, int>",
    "file": "rule-exact-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "RULE_PLURAL_T",
+   "type": "Map<String, Object>",
    "file": "rule-plural-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "rule-plural-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "RULE_PREFIX_T",
+   "type": "Map<String, int>",
    "file": "rule-prefix-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "RULE_SKELETON_T",
+   "type": "Map<String, int>",
    "file": "rule-skeleton-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "RULE_TYPO_T",
+   "type": "Map<String, int>",
    "file": "rule-typo-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "RUN_AUDIT_T",
+   "type": "Map<String, Object>",
    "file": "run-audit-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "RUN_NET_CHECK_T",
+   "type": "Map<String, int>",
    "file": "run-net-check-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SAFE_HTTPS_URL_T",
+   "type": "Map<String, String>",
    "file": "safe-https-url-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SANITIZE_INCOMING_T",
+   "type": "Map<String, String>",
    "file": "sanitize-incoming-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SANITIZE_PHOTOS_T",
+   "type": "Map<String, int>",
    "file": "sanitize-photos-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SANITIZE_SUPPORT_TEXT_T",
+   "type": "Map<String, int>",
    "file": "sanitize-support-text-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SCHEDULE_CLASH_TEXT_T",
+   "type": "Map<String, String>",
    "file": "schedule-clash-text-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SEGMENTS_MATCH_SEGMENT_T",
+   "type": "Map<String, Object>",
    "file": "segments-match-segment-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SEGMENTS_SEGMENT_COUNTS_T",
+   "type": "Map<String, Object>",
    "file": "segments-segment-counts-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "segments-segment-counts-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SEGULA_TITLE_T",
+   "type": "Map<String, String>",
    "file": "segula-title-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "segula-title-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SEND_SUPPORT_MESSAGE_T",
+   "type": "Map<String, Object>",
    "file": "send-support-message-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SEND_SUPPORT_REPLY_T",
+   "type": "Map<String, Object>",
    "file": "send-support-reply-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SEND_TEAM_MESSAGE_T",
+   "type": "Map<String, Object>",
    "file": "send-team-message-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SHEKEL_T",
+   "type": "Map<String, String>",
    "file": "shekel-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SIGN_UP_ERROR_T",
+   "type": "Map<String, String>",
    "file": "sign-up-error-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "sign-up-error-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SIGN_UP_T",
+   "type": "Map<String, String>",
    "file": "sign-up-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SITE_CAMPAIGN_PROGRESS_T",
+   "type": "Map<String, Object>",
    "file": "site-campaign-progress-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SITE_PALETTE_T",
+   "type": "Map<String, int>",
    "file": "site-palette-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SITE_VOCAB_T",
+   "type": "Map<String, String>",
    "file": "site-vocab-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "site-vocab-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "HEB2LAT",
+   "type": "Map<String, String>",
    "file": "slugify-data.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kHeb2lat",
+   "type": "",
    "file": "slugify.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SMART_SCORE_T",
+   "type": "Map<String, int>",
    "file": "smart-score-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SMTP_URL_TERMS",
+   "type": "Map<String, String>",
    "file": "smtp-url-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SORT_SUPPORT_THREADS_T",
+   "type": "Map<String, String>",
    "file": "sort-support-threads-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SPOTLIGHT_BOX_T",
+   "type": "Map<String, int>",
    "file": "spotlight-box-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "STAGE_LABEL_T",
+   "type": "Map<String, String>",
    "file": "stage-label-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kStageFallback",
+   "type": "",
    "file": "stage-label.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "STALE_BOXES_T",
+   "type": "Map<String, Object>",
    "file": "stale-boxes-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "STEP_SCALE_T",
+   "type": "Map<String, int>",
    "file": "step-scale-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "STRIP_AUDIT_META_T",
+   "type": "Map<String, String>",
    "file": "strip-audit-meta-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "STRIP_SUP_KEY_T",
+   "type": "Map<String, String>",
    "file": "strip-sup-key-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "STRIP_SUPPORTER_DONATIONS_T",
+   "type": "Map<String, String>",
    "file": "strip-supporter-donations-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "STUDENT_HISTORY_TEXT_T",
+   "type": "Map<String, String>",
    "file": "student-history-text-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "student-history-text-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SUGGESTIONS_T",
+   "type": "Map<String, Object>",
    "file": "suggestions-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SUP_ALLOWED_KEYS_T",
+   "type": "Map<String, int>",
    "file": "sup-allowed-keys-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SUP_DON_EVENTS_T",
+   "type": "Map<String, String>",
    "file": "sup-don-events-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SUP_DUP_FIELDS_T",
+   "type": "Map<String, String>",
    "file": "sup-dup-fields-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SUP_SCORE_BINS_T",
+   "type": "Map<String, int>",
    "file": "sup-score-bins-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SUP_SCORE_T",
+   "type": "Map<String, int>",
    "file": "sup-score-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SUP_TIER_T",
+   "type": "Map<String, Object>",
    "file": "sup-tier-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SUP12M_T",
+   "type": "Map<String, int>",
    "file": "sup12m-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SUPPORT_CHAT_TERMS",
+   "type": "Map<String, String>",
    "file": "support-chat-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SUPPORT_DAY_LABEL_T",
+   "type": "Map<String, Object>",
    "file": "support-day-label-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SUPPORT_MSG_TIME_T",
+   "type": "Map<String, String>",
    "file": "support-msg-time-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SUPPORT_PREVIEW_T",
+   "type": "Map<String, int>",
    "file": "support-preview-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SUPPORTERS_IMPORT_FORMAT_ROWS_T",
+   "type": "Map<String, String>",
    "file": "supporters-import-format-rows-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "supporters-import-format-rows-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "SUPPORTERS_TERMS",
+   "type": "Map<String, String>",
    "file": "supporters-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "TASK_IDENTITY_T",
+   "type": "Map<String, String>",
    "file": "task-identity-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "TASK_STATS_FOR_T",
+   "type": "Map<String, int>",
    "file": "task-stats-for-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "TEL_HREF_T",
+   "type": "Map<String, String>",
    "file": "tel-href-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "TELEPHONY_TO_TENANT_T",
+   "type": "Map<String, Object>",
    "file": "telephony-to-tenant-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "TERM_LABEL_T",
+   "type": "Map<String, String>",
    "file": "term-label-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "THANKS_PROMPT_T",
+   "type": "Map<String, String>",
    "file": "thanks-prompt-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "THEME_TERMS",
+   "type": "Map<String, String>",
    "file": "theme-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "TIER_OF_T",
+   "type": "Map<String, Object>",
    "file": "tier-of-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kTerms",
+   "type": "Map<String, String>",
    "file": "tier-of-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "TIME_TO_MIN_T",
+   "type": "Map<String, int>",
    "file": "time-to-min-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "TO_TENANT_ID_T",
+   "type": "Map<String, Object>",
    "file": "to-tenant-id-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "TOUR_STEPS_T",
+   "type": "Map<String, String>",
    "file": "tour-steps-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "TRUST_REPORT_T",
+   "type": "Map<String, Object>",
    "file": "trust-report-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "UNIT_LABEL_T",
+   "type": "Map<String, String>",
    "file": "unit-label-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "UPCOMING_HOLIDAYS_T",
+   "type": "Map<String, int>",
    "file": "upcoming-holidays-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "UPCOMING_MEETINGS_T",
+   "type": "Map<String, String>",
    "file": "upcoming-meetings-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "VALID_ISRAELI_ID_T",
+   "type": "Map<String, int>",
    "file": "valid-israeli-id-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "VALIDATE_HEB_MONTH_NAMES_T",
+   "type": "Map<String, int>",
    "file": "validate-heb-month-names-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "VALIDATE_TERMS",
+   "type": "Map<String, String>",
    "file": "validate-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "VCARD_IMPORT_TERMS",
+   "type": "Map<String, String>",
    "file": "vcard-import-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "WA_APP_LINK_T",
+   "type": "Map<String, String>",
    "file": "wa-app-link-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "WA_BIRTHDAY_TEXT_T",
+   "type": "Map<String, String>",
    "file": "wa-birthday-text-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "WA_DELIVERY_TEXT_T",
+   "type": "Map<String, String>",
    "file": "wa-delivery-text-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "WA_DIGITS_T",
+   "type": "Map<String, int>",
    "file": "wa-digits-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "WA_LINK_T",
+   "type": "Map<String, String>",
    "file": "wa-link-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "WA_PAYMENT_TEXT_T",
+   "type": "Map<String, String>",
    "file": "wa-payment-text-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "WA_TERMS",
+   "type": "Map<String, String>",
    "file": "wa-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "WAITLIST_FOR_T",
+   "type": "Map<String, String>",
    "file": "waitlist-for-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "WATCH_ALL_SUPPORT_THREADS_T",
+   "type": "Map<String, String>",
    "file": "watch-all-support-threads-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "WATCH_INCOMING_PAYMENTS_T",
+   "type": "Map<String, String>",
    "file": "watch-incoming-payments-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "WATCH_ORG_CLOUD_CONFIG_T",
+   "type": "Map<String, String>",
    "file": "watch-org-cloud-config-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "WATCH_SUPPORT_MESSAGES_T",
+   "type": "Map<String, String>",
    "file": "watch-support-messages-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "WATCH_TEAM_MESSAGES_T",
+   "type": "Map<String, String>",
    "file": "watch-team-messages-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "WHEEL_INDEX_UNDER_POINTER_T",
+   "type": "Map<String, int>",
    "file": "wheel-index-under-pointer-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "WITH_NEDARIM_HOK_T",
+   "type": "Map<String, Object>",
    "file": "with-nedarim-hok-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "WIZARD_STEP_ERROR_T",
+   "type": "Map<String, String>",
    "file": "wizard-step-error-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "WRITE_MAIL_OUTBOX_T",
+   "type": "Map<String, String>",
    "file": "write-mail-outbox-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "WRITE_ORG_CLOUD_DOC_T",
+   "type": "Map<String, String>",
    "file": "write-org-cloud-doc-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "WRITE_ORG_JOIN_REQUEST_T",
+   "type": "Map<String, String>",
    "file": "write-org-join-request-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "WRITE_ORG_LEAD_T",
+   "type": "Map<String, String>",
    "file": "write-org-lead-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "WRITE_ORG_REQUEST_T",
+   "type": "Map<String, String>",
    "file": "write-org-request-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "WRITE_ORG_SECRETS_T",
+   "type": "Map<String, String>",
    "file": "write-org-secrets-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "WRITE_SMS_OUTBOX_T",
+   "type": "Map<String, String>",
    "file": "write-sms-outbox-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "XLAT_T",
+   "type": "Map<String, String>",
    "file": "xlat-strings.dart",
    "shelf": "new/dart-data-maor"
   },
   {
    "name": "kXlatTable",
+   "type": "",
    "file": "xlat.dart",
    "shelf": "new/dart-data-maor"
   }
