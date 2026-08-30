@@ -97,14 +97,25 @@ function pickAtom(part) {
 
 // ── חילול מסך אחד ──
 function generate(slug, specText) {
-  const lines = specText.split('\n').map(s => s.trim().replace(/,$/, '')).filter(Boolean);
+  // שורה-מוזחת (שני-רווחים/טאב) = ענף של החלק שמעליה — חיבור אטום⇒אטום (הבורר מחליף ענפים)
+  const rawLines = specText.split('\n').filter(l => l.trim());
+  const lines = rawLines.map(s => s.trim().replace(/,$/, ''));
   const first = lines[0];
   const oneLine = lines.length === 1;
   const title = (oneLine ? (first.includes(':') ? first.slice(0, first.indexOf(':')) : '') : first.replace(/:$/, '')).trim();
-  const partTexts = oneLine
-    ? (first.includes(':') ? first.slice(first.indexOf(':') + 1) : first).split(',').map(s => s.trim()).filter(Boolean)
-    : lines.slice(1);
-  const parts = partTexts.map(parsePart);
+  const nodes = [];   // [{part, children:[part]}]
+  if (oneLine) {
+    for (const t of (first.includes(':') ? first.slice(first.indexOf(':') + 1) : first).split(',').map(s => s.trim()).filter(Boolean))
+      nodes.push({ part: parsePart(t), children: [] });
+  } else {
+    for (let i = 1; i < rawLines.length; i++) {
+      const indented = /^(\s{2,}|\t)/.test(rawLines[i]);
+      const part = parsePart(lines[i]);
+      if (indented && nodes.length) nodes.at(-1).children.push(part);
+      else nodes.push({ part, children: [] });
+    }
+  }
+  const parts = [...nodes.map(n => n.part), ...nodes.flatMap(n => n.children)];
   // 🌉 גשר-הלוגיקה: חלק-'חישוב' ⇒ קריאה חיה לאטום-לוגיקה מהמדף (מוצג כמדד).
   // סדר: כלל-מפורש מקובץ-הדעת ⇒ התאמה-אוטומטית לפי התיאור-העברי-העצמי של האטום +
   // כיול-ארגומנטים מהמשפט עצמו (מספרים · "מחרוזות" · תאריך-עכשיו). אין-התאמה ⇒ שורה כנה.
@@ -205,15 +216,16 @@ function generate(slug, specText) {
     return null;
   };
 
-  const chosen = parts.map(part => ({ part, atom: pickAtom(part) })).filter(c => c.atom);
+  const atomOf = new Map(parts.map(p => [p, pickAtom(p)]));
+  const chosen = parts.map(part => ({ part, atom: atomOf.get(part) })).filter(c => c.atom);
   if (!chosen.length) { console.log(`🧬 ${slug}: אף אטום לא נבחר`); return null; }
 
-  const buildCall = ({ part, atom }) => {
+  const buildCall = ({ part, atom }, shared = {}, overrides = {}) => {
     imports.add(`import '../dart-ui-bs/${atom.file}';`);
-    const shared = {};
     const argsOut = [];
     for (const pn of atom.positional) { const r = fillProp(atom, pn, part, shared); argsOut.push(r ? r.expr : "''"); }
     for (const pn of atom.named) {
+      if (overrides[pn]) { argsOut.push(`${pn}: ${overrides[pn]}`); continue; }
       const req = atom.required.has(pn);
       const t = (atom.types.get(pn) || '').replace(/\?$/, '');
       if (!req && !(t === 'String' && /^(label|title|text|hint)$/.test(pn)) && !/^ValueChanged|^void Function\(/.test(t) && pn !== 'value' && pn !== 'onTap' && pn !== 'onPressed') continue;
@@ -223,18 +235,42 @@ function generate(slug, specText) {
     }
     return `${atom.cls}(${argsOut.join(', ')})`;
   };
-  // אטום-flex (שורש Expanded/Flexible) בנוי-ל-Row: רצף-עוקב נארז יחד בשורה אחת
+  // הרכבה: אטומי-flex עוקבים ⇒ Row אחד · ענפים-מוזחים תחת בורר ⇒ IndexedStack מחווט
+  // למצב-הבורר (חיבור אטום⇒אטום: הבחירה מחליפה את האטום המוצג) · אטום-מכיל ⇒ ילדים אמיתיים
   const calls = [];
-  for (let i = 0; i < chosen.length; i++) {
-    if (chosen[i].atom.flexRoot) {
-      const run = [];
-      while (i < chosen.length && chosen[i].atom.flexRoot) run.push(buildCall(chosen[i++]));
-      i--;
-      calls.push(`          Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: Row(children: [${run.join(', ')}])),`);
+  const flexBuf = [];
+  const flushFlex = () => {
+    if (!flexBuf.length) return;
+    calls.push(`          Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: Row(children: [${flexBuf.join(', ')}])),`);
+    flexBuf.length = 0;
+  };
+  for (const node of nodes) {
+    const atom = atomOf.get(node.part);
+    if (!atom) continue;
+    const kids = node.children.map(c => ({ part: c, atom: atomOf.get(c) })).filter(k => k.atom);
+    if (!kids.length) {
+      if (atom.flexRoot) { flexBuf.push(buildCall({ part: node.part, atom })); continue; }
+      flushFlex();
+      calls.push(`          ${buildCall({ part: node.part, atom })},`);
+      continue;
+    }
+    flushFlex();
+    const kidCalls = kids.map(k => k.atom.flexRoot ? `Row(children: [${buildCall(k)}])` : buildCall(k));
+    if (node.part.role === 'radio' && node.part.options?.length) {
+      const shared = {};
+      const pickerCall = buildCall({ part: node.part, atom }, shared);
+      calls.push(`          ${pickerCall},`);
+      calls.push(`          IndexedStack(index: ${shared.i || '0'}, children: [${kidCalls.join(', ')}]),`);
+    } else if (/^List<Widget>/.test((atom.types.get('children') || ''))) {
+      calls.push(`          ${buildCall({ part: node.part, atom }, {}, { children: `[${kidCalls.join(', ')}]` })},`);
+    } else if ((atom.types.get('child') || '').replace(/\?$/, '') === 'Widget') {
+      calls.push(`          ${buildCall({ part: node.part, atom }, {}, { child: `Column(children: [${kidCalls.join(', ')}])` })},`);
     } else {
-      calls.push(`          ${buildCall(chosen[i])},`);
+      calls.push(`          ${buildCall({ part: node.part, atom })},`);
+      for (const kc of kidCalls) calls.push(`          ${kc},`);
     }
   }
+  flushFlex();
 
   const titleConst = constFor(title, 'app_bar_title');
   fs.writeFileSync(path.join(DATA, `gen_${slug}_content.dart`),
