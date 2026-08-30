@@ -23915,12 +23915,16 @@
   },
   {
    "name": "kForType",
-   "sig": "double kForType(String? productType)",
+   "sig": "double kForType(String? productType, {required Map<String, double> table})",
    "ret": "double",
    "params": [
     {
      "type": "String?",
      "name": "productType"
+    },
+    {
+     "type": "Map<String, double>",
+     "name": "table"
     }
    ],
    "he": [
