@@ -1,3 +1,4 @@
+import '../dart-data-maor/plan-label-of-sockets.dart' as sk_plan_label_of;
 // 🥇 רתמת-זהב · planLabelOf — Dart≡JS. ה-assert-ים = דוגמאות-החוזה של new/atoms/plan-label-of.test.mjs
 // (אותם קלטים→פלטים). עובר ⇒ הפורט זהה-התנהגות למקור-ה-JS. הרצה:
 //   dart run --enable-asserts new/dart-maor/plan-label-of_test.dart  ⇒  exit 0.
@@ -21,7 +22,7 @@ num payBal(Map<String, dynamic> e) {
 }
 
 void run(Map<String, dynamic> e, String want) {
-  final got = planLabelOf(e, planWord, payBal);
+  final got = planLabelOf(e, planWord, payBal, sk_plan_label_of.planLabelOf_T);
   if (got != want) {
     throw AssertionError('✗ צפוי: $want — בפועל: $got');
   }

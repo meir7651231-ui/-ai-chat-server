@@ -1,3 +1,4 @@
+import '../dart-data-maor/tour-steps-sockets.dart' as sk_tour_steps;
 // בדיקת חוט tour-steps — כל 4 דוגמאות-החוזה + בדיקת-ה-JS (tour-steps.test.mjs).
 // מערכים: אורך + איבר-איבר. כשל ⇒ StateError.
 import 'tour-steps.dart';
@@ -37,14 +38,14 @@ void main() {
   }
 
   // 1. הכול-דלוק, בלי config — 4 צעדים, זהות-אובייקט נשמרת (אפס-העתקה)
-  final r1 = tourSteps(steps, allOn, termOf);
+  final r1 = tourSteps(steps, allOn, termOf, sk_tour_steps.tourSteps_T2);
   ck('בלי-config: 4 צעדים', r1.length == 4);
   for (var i = 0; i < r1.length; i++) {
     ck('בלי-config: זהות-אובייקט [$i]', identical(r1[i], steps[i]));
   }
 
   // 2. courses כבוי — נשארים 2 (בית + משפחות)
-  final r2 = tourSteps(steps, (dynamic m) => m != 'courses', termOf);
+  final r2 = tourSteps(steps, (dynamic m) => m != 'courses', termOf, sk_tour_steps.tourSteps_T2);
   ck('סינון-מודול: 2 צעדים', r2.length == 2);
   ck('סינון-מודול: [0]=home', r2[0]['view'] == 'home');
   ck('סינון-מודול: [1]=families', r2[1]['view'] == 'families');
@@ -55,7 +56,7 @@ void main() {
   final cfg = {
     'terms': {'nav.courses': 'סדנאות', 'entity.course': 'סדנה'},
   };
-  final r3 = tourSteps(steps, allOn, termOf, cfg);
+  final r3 = tourSteps(steps, allOn, termOf, sk_tour_steps.tourSteps_T2, cfg);
   ck('מיתוג: 4 צעדים', r3.length == 4);
   ck('מיתוג caption', r3[2]['caption'] == '🎡 מאתר הסדנאות');
   ck('מיתוג anchorText', r3[2]['anchorText'] == 'מצא סדנה');

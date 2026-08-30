@@ -1,3 +1,4 @@
+import '../dart-data-maor/finder-axes-sockets.dart' as sk_finder_axes;
 import '../dart-data-maor/finder-axes-terms.dart';
 /// רתמת-זהב · finder-axes — 3 דוגמאות-החוזה בדיוק כמו new/atoms/finder-axes.test.mjs.
 /// אם עובר: Dart ≡ JS (אותם קלטים → אותם פלטים).
@@ -6,7 +7,7 @@ import 'finder-axes.dart';
 void main() {
   // 1) termOf של ברירות-מחדל ⇒ תוויות-המקור.
   String fb(Map<String, dynamic> _c, String _k, String fallback) => fallback;
-  var a = finderAxes({}, fb, term: (k)=>kTerms[k]!);
+  var a = finderAxes({}, fb, term: (k)=>kTerms[k]!, T: sk_finder_axes.finderAxes_T);
   assert(a.length == 9, 'דוגמה 1: האורך ≠ 9');
   assert(a[0][0] == 'city' && a[0][1] == 'עיר', "דוגמה 1: [0] ≠ ['city','עיר']");
   assert(a[4][0] == 'cred' && a[4][1] == 'אמינות', "דוגמה 1: [4] ≠ ['cred','אמינות']");
@@ -17,7 +18,7 @@ void main() {
   final dict = {'nav.courses': 'שיעורים'};
   String termOf(Map<String, dynamic> _c, String k, String fallback) =>
       dict[k] ?? fallback;
-  a = finderAxes({}, termOf, term: (k)=>kTerms[k]!);
+  a = finderAxes({}, termOf, term: (k)=>kTerms[k]!, T: sk_finder_axes.finderAxes_T);
   assert(a[6][1] == 'שיעורים', "דוגמה 2: [6] לא קיבל 'שיעורים' מהמילון");
   assert(a[4][1] == 'אמינות', 'דוגמה 2: cred זז מברירת-המחדל');
 

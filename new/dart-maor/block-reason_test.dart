@@ -1,3 +1,4 @@
+import '../dart-data-maor/block-reason-sockets.dart' as sk_block_reason;
 // בדיקת-חוזה (רתמת-זהב) · blockReason — מייבאת אך ורק את האטום-שלה (חוק-4).
 // דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/block-reason.test.mjs:
 //   אותם 7 קלטים→פלטים. השקע hebParts מוזרק עם אותם ערכים ש-Intl-hebrew הפיק
@@ -49,22 +50,22 @@ void main() {
   var n = 0;
 
   // — 7 דוגמאות-החוזה verbatim (block-reason.test.mjs) —
-  _eq(blockReason(at(2026, 8, 29), hebParts, holidays), 'שבת', '1 שבת'); n++;
-  _eq(blockReason(at(2026, 8, 28), hebParts, holidays),
+  _eq(blockReason(at(2026, 8, 29), hebParts, holidays, sk_block_reason.blockReason_FULL_HOLIDAYS, sk_block_reason.blockReason_T), 'שבת', '1 שבת'); n++;
+  _eq(blockReason(at(2026, 8, 28), hebParts, holidays, sk_block_reason.blockReason_FULL_HOLIDAYS, sk_block_reason.blockReason_T),
       'יום שישי (שעתיים לפני שבת)', '2 שישי'); n++;
-  _eq(blockReason(at(2026, 9, 21), hebParts, holidays), 'יום כיפור',
+  _eq(blockReason(at(2026, 9, 21), hebParts, holidays, sk_block_reason.blockReason_FULL_HOLIDAYS, sk_block_reason.blockReason_T), 'יום כיפור',
       '3 יום כיפור'); n++;
-  _eq(blockReason(at(2026, 9, 28), hebParts, holidays), 'חול המועד',
+  _eq(blockReason(at(2026, 9, 28), hebParts, holidays, sk_block_reason.blockReason_FULL_HOLIDAYS, sk_block_reason.blockReason_T), 'חול המועד',
       '4 חול המועד'); n++;
-  _eq(blockReason(at(2022, 8, 7), hebParts, holidays), 'תשעה באב (נדחה)',
+  _eq(blockReason(at(2022, 8, 7), hebParts, holidays, sk_block_reason.blockReason_FULL_HOLIDAYS, sk_block_reason.blockReason_T), 'תשעה באב (נדחה)',
       '5 תשעה באב נדחה'); n++;
-  _eq(blockReason(at(2026, 3, 3), hebParts, holidays), null,
+  _eq(blockReason(at(2026, 3, 3), hebParts, holidays, sk_block_reason.blockReason_FULL_HOLIDAYS, sk_block_reason.blockReason_T), null,
       '6 פורים ⇒ null'); n++;
-  _eq(blockReason(at(2026, 8, 29), hebParts, holidays, false), null,
+  _eq(blockReason(at(2026, 8, 29), hebParts, holidays, sk_block_reason.blockReason_FULL_HOLIDAYS, sk_block_reason.blockReason_T, false), null,
       '7 הדגל כבוי ⇒ null'); n++;
 
   // assert חי (חוק: --enable-asserts) — מוכיח שהמנגנון פעיל.
-  assert(blockReason(at(2026, 8, 29), hebParts, holidays) == 'שבת',
+  assert(blockReason(at(2026, 8, 29), hebParts, holidays, sk_block_reason.blockReason_FULL_HOLIDAYS, sk_block_reason.blockReason_T) == 'שבת',
       'assert-live guard');
 
   print('OK blockReason: $n asserts passed (כולל תשעה-באב-נדחה 7.8.2022)');

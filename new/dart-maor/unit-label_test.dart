@@ -1,10 +1,11 @@
+import '../dart-data-maor/unit-label-sockets.dart' as sk_unit_label;
 // בדיקת-חוזה · unitLabel — מתרגמת את new/atoms/unit-label.test.mjs אחד-לאחד.
 // הרצה: dart run --enable-asserts new/dart-maor/unit-label_test.dart ⇒ OK
 import 'unit-label.dart';
 
 void main() {
   // 1) מונח-הארגון גובר
-  if (unitLabel(<String, dynamic>{}, (c, k, fb) => 'שעות') != 'שעות') {
+  if (unitLabel(<String, dynamic>{}, (c, k, fb) => 'שעות', sk_unit_label.unitLabel_T) != 'שעות') {
     throw StateError('מונח-הארגון לא גבר');
   }
 
@@ -14,7 +15,7 @@ void main() {
     final v = (t is Map) ? t[k] : null;
     return v ?? fb;
   }
-  if (unitLabel(<String, dynamic>{}, termOf) != 'כמות') {
+  if (unitLabel(<String, dynamic>{}, termOf, sk_unit_label.unitLabel_T) != 'כמות') {
     throw StateError('ברירת-המחדל שגויה');
   }
 
@@ -26,7 +27,7 @@ void main() {
     calls++;
     got = [c, k, fb];
     return 'x';
-  });
+  }, sk_unit_label.unitLabel_T);
   if (calls != 1 ||
       !identical(got![0], cfg) ||
       got![1] != 'entity.ayinUnit' ||

@@ -1,3 +1,4 @@
+import '../dart-data-maor/with-nedarim-hok-sockets.dart' as sk_with_nedarim_hok;
 // רתמת-זהב · with-nedarim-hok — מוכיחה את 7 דוגמאות-החוזה + בדיקת-ה-JS
 // (זהות-ביט למקור). מייבאת רק את האטום-שלה; כישלון ⇒ StateError.
 // שקעים מזויפים לפי החוזה: curOf=currency==='$'?'$':'₪' · hokDayFromDate=יום-מה-ISO.
@@ -40,22 +41,19 @@ void main() {
   chk(
       '1 זיכוי/ביטול ⇒ sp כלשונו',
       identical(
-              withNedarimHok(sp0, {'amount': 0, 'kevaId': 'K1'}, curOf,
-                  hokDayFromDate),
+              withNedarimHok(sp0, {'amount': 0, 'kevaId': 'K1'}, curOf, hokDayFromDate, sk_with_nedarim_hok.withNedarimHok_T),
               sp0) &&
           identical(
-              withNedarimHok(sp0, {'amount': -50, 'kevaId': 'K1'}, curOf,
-                  hokDayFromDate),
+              withNedarimHok(sp0, {'amount': -50, 'kevaId': 'K1'}, curOf, hokDayFromDate, sk_with_nedarim_hok.withNedarimHok_T),
               sp0));
 
   // 2) בלי kevaId (גם רווחים) ⇒ אותה הפניה
   chk(
       '2 בלי kevaId ⇒ sp כלשונו',
-      identical(withNedarimHok(sp0, {'amount': 180}, curOf, hokDayFromDate),
+      identical(withNedarimHok(sp0, {'amount': 180}, curOf, hokDayFromDate, sk_with_nedarim_hok.withNedarimHok_T),
               sp0) &&
           identical(
-              withNedarimHok(
-                  sp0, {'amount': 180, 'kevaId': '  '}, curOf, hokDayFromDate),
+              withNedarimHok(sp0, {'amount': 180, 'kevaId': '  '}, curOf, hokDayFromDate, sk_with_nedarim_hok.withNedarimHok_T),
               sp0));
 
   // 3) הו"ק ידני (בלי kevaId) — לא נדרס
@@ -66,16 +64,12 @@ void main() {
   chk(
       '3 הו"ק ידני לא נדרס',
       identical(
-          withNedarimHok(spManual,
-              {'amount': 180, 'kevaId': 'K7', 'd': '2026-08-15'},
-              curOf, hokDayFromDate),
+          withNedarimHok(spManual, {'amount': 180, 'kevaId': 'K7', 'd': '2026-08-15'}, curOf, hokDayFromDate, sk_with_nedarim_hok.withNedarimHok_T),
           spManual));
 
   // 4) מילוי מלא + טוהר (sp המקורי לא השתנה)
   final Map<String, Object?> sp1 = {'id': 's1', 'name': 'לוי'};
-  final out4 = withNedarimHok(
-      sp1, {'amount': 180, 'kevaId': 'K7', 'd': '2026-08-15'},
-      curOf, hokDayFromDate);
+  final out4 = withNedarimHok(sp1, {'amount': 180, 'kevaId': 'K7', 'd': '2026-08-15'}, curOf, hokDayFromDate, sk_with_nedarim_hok.withNedarimHok_T);
   chk(
       '4 מילוי מלא',
       out4['id'] == 's1' &&
@@ -97,9 +91,7 @@ void main() {
     'id': 's5',
     'hok': {'kevaId': 'K7', 'amount': 100, 'startedAt': '2026-05-01'}
   };
-  final out5 = withNedarimHok(
-      sp5, {'amount': 220, 'kevaId': 'K7', 'd': '2026-08-15'},
-      curOf, hokDayFromDate);
+  final out5 = withNedarimHok(sp5, {'amount': 220, 'kevaId': 'K7', 'd': '2026-08-15'}, curOf, hokDayFromDate, sk_with_nedarim_hok.withNedarimHok_T);
   final hok5 = out5['hok'] as Map;
   chk('5 שימור-התחלה מוקדמת',
       hok5['startedAt'] == '2026-05-01' && hok5['amount'] == 220);
@@ -109,18 +101,12 @@ void main() {
     'id': 's6',
     'hok': {'kevaId': 'K7', 'amount': 100, 'startedAt': '2026-09-01'}
   };
-  final out6 = withNedarimHok(
-      sp6, {'amount': 220, 'kevaId': 'K7', 'd': '2026-08-15'},
-      curOf, hokDayFromDate);
+  final out6 = withNedarimHok(sp6, {'amount': 220, 'kevaId': 'K7', 'd': '2026-08-15'}, curOf, hokDayFromDate, sk_with_nedarim_hok.withNedarimHok_T);
   chk('6 העסקה המוקדמת מנצחת',
       (out6['hok'] as Map)['startedAt'] == '2026-08-15');
 
   // 7) בלי d — נופל ל-at (10 תווים ראשונים)
-  final out7 = withNedarimHok(
-      {'id': 's7'},
-      {'amount': 50, 'kevaId': 'K9', 'at': '2026-08-20T10:30:00'},
-      curOf,
-      hokDayFromDate);
+  final out7 = withNedarimHok({'id': 's7'}, {'amount': 50, 'kevaId': 'K9', 'at': '2026-08-20T10:30:00'}, curOf, hokDayFromDate, sk_with_nedarim_hok.withNedarimHok_T);
   final hok7 = out7['hok'] as Map;
   chk('7 נפילה ל-at', hok7['startedAt'] == '2026-08-20' && hok7['day'] == 20);
 

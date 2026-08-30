@@ -1,3 +1,4 @@
+import '../dart-data-maor/item-label-sockets.dart' as sk_item_label;
 import 'item-label.dart';
 
 /// רתמת-זהב: אותן 3 דוגמאות-חוזה בדיוק מ-new/atoms/item-label.test.mjs.
@@ -7,7 +8,7 @@ void main() {
 
   // 1) מונח-ארגון גובר: השקע מחזיר מונח ⇒ הוא הפלט.
   {
-    final g = itemLabel(<String, dynamic>{}, (c, k, fb) => 'פרויקט');
+    final g = itemLabel(<String, dynamic>{}, (c, k, fb) => 'פרויקט', sk_item_label.itemLabel_T);
     if (g != 'פרויקט') {
       print('✗ מונח-הארגון לא גבר ⇒ "$g"');
       f = 1;
@@ -24,7 +25,7 @@ void main() {
     return fb;
   }
   {
-    final g = itemLabel(<String, dynamic>{}, termOf);
+    final g = itemLabel(<String, dynamic>{}, termOf, sk_item_label.itemLabel_T);
     if (g != 'שם לטיפול') {
       print('✗ ברירת-המחדל שגויה ⇒ "$g"');
       f = 1;
@@ -40,7 +41,7 @@ void main() {
       calls++;
       got = [c, k, fb];
       return 'x';
-    });
+    }, sk_item_label.itemLabel_T);
     if (calls != 1 ||
         !identical(got![0], cfg) ||
         got![1] != 'entity.ayinItem' ||
