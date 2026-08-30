@@ -19,11 +19,18 @@ const MIN = 1.5; // סף-אמון לאחזור
 const heWords = (s) => [...(s || '').matchAll(/[֐-׿][֐-׿״׳]*/g)].map((m) => m[0]);
 const cleanLabel = (s) => heWords(s).join(' ').slice(0, 34) || 'פריט';
 
-export function interpret(text) {
+export function interpret(text, content = []) {
   const trace = [];
   const lines = [];
   const title = cleanLabel(text.split(/[.,\n]/)[0]).slice(0, 40) || 'המסך שלי';
   lines.push(`הירו 🎯 ${title} | נבנה מתיאור חופשי`);
+  // 🎯 תוכן-להזרקה: כשהקורא (app.mjs) יודע על מה המסך (שמות-הישויות של האפליקציה),
+  // כל אטום-לוח מקבל תוכן *שונה ומשמעותי* במקום שכפול-הכותרת. אפס-נתון-מומצא —
+  // התוכן הוא שמות-הישויות שהמחולל כבר בנה. חסר-תוכן ⇒ נופל חזרה לכותרת (התנהגות-קודמת).
+  // תוכן = שם-ישות + תת-כותרת-אמת (מספר-שדות) ⇒ אריח מציג primary+secondary שונים
+  // (במקום שכפול "ליד ליד"). מחרוזת פשוטה נתמכת גם (name בלבד). התת-כותרת raw (שומרת ספרה).
+  const fillWords = (content || []).map((c) => typeof c === 'string' ? { name: cleanLabel(c), sub: '' } : { name: cleanLabel(c.name), sub: (c.sub || '').trim() }).filter((w) => w.name);
+  const contentAt = (i) => fillWords.length ? fillWords[i % fillWords.length] : { name: title, sub: '' };
 
   // (א) אחזור-רכיבים: אטום פר-ביטוי-משמעות בתיאור.
   const phrases = text.split(/[,.\n]|\s+ו|\s+עם\s+|\s*\+\s*/).map((s) => s.trim()).filter((s) => s.length > 1);
@@ -51,7 +58,8 @@ export function interpret(text) {
   let placed = 0;
   if (boardScore >= MIN && boardScore > compScore) {
     trace.push(`🧩 הרכבה-הפוכה מהמסך «${screenName}» (${boardScore} > רכיבים ${compScore.toFixed(1)})`);
-    for (const cls of bd.atoms) { if (used.has(cls)) continue; used.add(cls); lines.push(`אטום ${cls} ${title}`); placed++; }
+    let fi = 0;
+    for (const cls of bd.atoms) { if (used.has(cls)) continue; used.add(cls); const w = contentAt(fi++); lines.push(`אטום ${cls} ${w.name}${w.sub ? ` | ${w.sub}` : ''}`); placed++; }
     for (const c of comps) { lines.push(`אטום ${c.cls} ${c.label}`); trace.push(`   +רכיב מפורש: ${c.cls}`); placed++; }
   } else {
     for (const c of comps) { lines.push(`אטום ${c.cls} ${c.label}`); trace.push(`«${c.label.slice(0, 22)}» → ${c.cls} (${c.s})`); placed++; }

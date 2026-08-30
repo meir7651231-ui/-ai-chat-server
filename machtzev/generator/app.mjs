@@ -23,6 +23,9 @@ function buildApp(specText) {
   const allLines = specText.split(/\n+/).map((l) => l.trim()).filter((l) => l.length > 2);
   const roleLines = allLines.filter((l) => ROLE_RE.test(l));
   const lines = allLines.filter((l) => !ROLE_RE.test(l));
+  // 🎯 מקדימים: שמות-הישויות של האפליקציה = התוכן שיזרים לדשבורדים (KPI על נתוני-האמת,
+  // לא כותרת חוזרת). אפס-המצאה — המחולל מרכיב את הדשבורד מהישויות שהוא-עצמו בנה.
+  const dashContent = lines.filter((l) => ENTITY_RE.test(l)).map((l) => { const e = entInterpret(l); return { name: e.entity, sub: `${e.schema.length} שדות${e.stages && e.stages.length ? ` · ${e.stages.length} שלבים` : ''}` }; });
   const screens = [];
   let i = 0;
   for (const line of lines) {
@@ -35,7 +38,7 @@ function buildApp(specText) {
       screens.push({ slug, kind, name: r.entity, spec: r.spec, schema: r.schema, stages: r.stages || [] });
     } else {
       kind = 'scr'; slug = slugify(i, kind);
-      r = nlInterpret(line);
+      r = nlInterpret(line, dashContent);
       screens.push({ slug, kind, name: r.title, spec: r.spec, atoms: (r.spec.match(/^אטום (\w+)/gm) || []).length });
     }
     // חילול המסך

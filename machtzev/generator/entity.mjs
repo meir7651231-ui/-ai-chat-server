@@ -60,13 +60,27 @@ export function interpret(text) {
   const btn = retrieve('כפתור שמירה שלח', 2)[0]?.cls || 'NeonButton';
   lines.push(`אטום ${btn} שמירה`);
   if (stages.length >= 2) lines.push(`אטום NeonButton קדם ל${stages[1]}`);
-  // הערה: שכבת-החוקים-הגלויה (RStat פר-שדה) הוסרה מהטופס — הצגת ערך-פונקציה-גולמי
-  // ("0.3"/"true") בטופס היא רעש-UX. גשר-הלוגיקה עדיין מודגם במסכי-הדשבורד (role=calc).
+  // 🔐 שכבת-חוקים פר-שדה: כל שדה מאחזר-לבד את אטום-הלוגיקה/פורמט/ולידציה שמתאים *לו*
+  // (סכום→shekel · תאריך→fmtDate · טלפון→normPhone). אפס מיפוי-ידני. התאמת-טיפוס:
+  // אטום-החוק חייב לקבל את טיפוס-השדה (date→DateTime · num→num · text→String).
+  const TYPE_IN = { date: ['DateTime', 'String', 'Object'], num: ['num', 'int', 'double', 'Object', 'dynamic', 'String'], text: ['String', 'Object', 'dynamic'], multiline: ['String', 'Object'] };
   const rules = [];
+  const usedR = new Set();
+  for (const s of schema) {
+    const ok = TYPE_IN[s.type] || ['String'];
+    const hit = retrieveLogic(s.label, 6, true).find((l) => l.s >= 3 && !usedR.has(l.name) && l.inTypes.some((t) => ok.includes(t)));
+    if (hit) { usedR.add(hit.name); s.rule = hit.name; rules.push({ field: s.label, name: hit.name, he: hit.he }); }
+  }
   // טבלת-רשומות
   lines.push(`כותרת רשומות ${entity}`);
   lines.push(`אטום DataGrid ${entity}`);
-  lines.push(`באנר ישות ${entity}: ${schema.length} שדות${stages.length ? ` · ${stages.length}-שלבי workflow` : ''}${rules.length ? ` · ${rules.length} חוקים` : ''} · מהמדף`);
+  // 🔗 מנוע-החוקים החי — סקשן ברור בתחתית (לא אריחים מרחפים בתוך הטופס). כל חוק
+  // מחווט חי מהמדף (role=calc, קריאת-פונקציה אמיתית) ומתויג בשם-מטרתו העברי.
+  if (rules.length) {
+    lines.push(`כותרת 🔗 מנוע-חוקים חי · ${rules.length} חוקים מהמדף`);
+    for (const r of rules) lines.push(`חישוב ${r.he.slice(0, 4).join(' ')} (${r.name})`);
+  }
+  lines.push(`באנר ישות ${entity}: ${schema.length} שדות${stages.length ? ` · ${stages.length}-שלבי workflow` : ''}${rules.length ? ` · ${rules.length} חוקים חיים` : ''} · מהמדף`);
 
   return { spec: lines.join('\n'), entity, schema, stages, rules: rules.map((r) => r.name) };
 }
