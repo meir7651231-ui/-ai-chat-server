@@ -1,3 +1,4 @@
+import '../dart-data-maor/run-audit-sockets.dart' as skb_run_audit;
 import '../dart-data-maor/audit-cat-colors-terms.dart' as td_audit_cat_colors;
 import '../dart-data-maor/audit-report-lines-terms.dart';
 // 📦 קופסת-חיבורים · audit (Dart) — מחווטת אטומי-Dart. מקבילה ל-new/boxes/audit.mjs.
@@ -41,7 +42,7 @@ List<String> auditReportLines(String? orgName, Iterable<Map<String, String>> iss
 List runAudit(dynamic db,
     [dynamic todayIso = '', dynamic extra = true, dynamic config, DateTime? now]) {
   final n = now ?? DateTime.now();
-  return ra.runAudit(db, todayIso, extra, config, {
+  return ra.runAudit(db, skb_run_audit.runAudit_T2, todayIso, extra, config, {
     'termOf': (dynamic cfg, dynamic k, dynamic fb) => to.termOf(cfg, k, fb),
     'normName': _wiredNormName,
     'validIsraeliId': (dynamic id) => vii.validIsraeliId(id),

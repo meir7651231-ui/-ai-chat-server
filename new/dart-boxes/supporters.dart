@@ -1,3 +1,9 @@
+import '../dart-data-maor/sup-tier-sockets.dart' as skb_sup_tier;
+import '../dart-data-maor/sup-don-events-sockets.dart' as skb_sde;
+import '../dart-data-maor/org-cal-entries-sockets.dart' as skb_oce;
+import '../dart-data-maor/plan-add-name-sockets.dart' as skb_pan;
+import '../dart-data-maor/hok-effectively-active-sockets.dart' as skb_hea;
+import '../dart-data-maor/hok-recorded-this-month-sockets.dart' as skb_hrtm;
 import '../dart-data-maor/hok-method-label-terms.dart' as td_hok_method_label;
 import '../dart-data-maor/don-cal-month-line-terms.dart';
 // 📦 קופסת-חיבורים · תומכים (Dart) — מחווטת 45 אטומי-Dart. מקבילה ל-new/boxes/supporters.mjs.
@@ -111,7 +117,7 @@ int supScore(dynamic sp, [dynamic rate = 3.7]) => ss.supScore(sp,
     supTotalIls: (s, r) => supTotalIls(s, r),
     supLast: (s) => sl.supLast(s),
     supCount: scnt.supCount);
-Map<String, String> supTier(dynamic sc) => st.supTier(sc);
+Map<String, String> supTier(dynamic sc) => st.supTier(sc, skb_sup_tier.supTier_T);
 List<String> get tierOrder => tord.tierOrder;
 List<int> supScoreBins(List<dynamic> supporters, [dynamic rate = 3.7]) =>
     ssb.supScoreBins(supporters, rate: rate, supScore: (s, r) => supScore(s, r));
@@ -130,11 +136,11 @@ List<String> allDonationPurposes(List supporters) =>
 
 // ── אירועי-לוח (config אופציונלי מחווט ל-termOf) ──────────────────────────────
 List<Map<String, dynamic>> supDonEvents(dynamic sp, [Map? config]) => sde.supDonEvents(
-    sp, config != null ? (String k, String fb) => to.termOf(config, k, fb) : null);
+    sp, skb_sde.supDonEvents_T2, config != null ? (String k, String fb) => to.termOf(config, k, fb) : null);
 List<Map<String, dynamic>> personalCalEntries(Map sp) =>
     pce.personalCalEntries(sp, (s) => supDonEvents(s));
 List<Map<String, dynamic>> orgCalEntries(List<Map<String, dynamic>> supporters) =>
-    oce.orgCalEntries(supporters, (s) => supDonEvents(s));
+    oce.orgCalEntries(supporters, (s) => supDonEvents(s), skb_oce.orgCalEntries_T);
 String donCalMonthLine(Iterable entries, bool Function(dynamic date) inMonth, [Map? config]) =>
     dcml.donCalMonthLine(entries, inMonth, config,
         (Map c, String k, String fb) => to.termOf(c, k, fb) as String, term: (k)=>kTerms[k]!);
@@ -182,24 +188,24 @@ Map<String, dynamic> applyAyinNames(
         Map<String, dynamic> sp, List<String> names, String Function() mkId, String Function() clockIso) =>
     aan.applyAyinNames(sp, names, mkId, emptyAyin,
         (Map<String, dynamic> a, String nm, String eyes, String id) =>
-            pan.planAddName(a, nm, eyes, id, normName, clockIso));
+            pan.planAddName(a, nm, eyes, id, normName, clockIso, skb_pan.planAddName_T));
 
 // ── הו"ק ─────────────────────────────────────────────────────────────────────
 String get hokCat => hc.hokCat;
 String hokMethodLabel(String m) => hml.hokMethodLabel(m, term: (k)=>td_hok_method_label.kTerms[k]!);
 bool hokEffectivelyActive(Map sp, String iso) =>
-    hea.hokEffectivelyActive(sp.cast<String, Object?>(), iso);
+    hea.hokEffectivelyActive(sp.cast<String, Object?>(), iso, skb_hea.hokEffectivelyActive_T);
 bool hokRecordedThisMonth(Map sp, String iso) =>
-    hrtm.hokRecordedThisMonth(sp, iso, hc.hokCat);
+    hrtm.hokRecordedThisMonth(sp, iso, hc.hokCat, skb_hrtm.hokRecordedThisMonth_T);
 List<Map<String, Object?>> hokDue(List supporters, String todayIso) {
   final sups = [for (final s in supporters) (s as Map).cast<String, Object?>()];
-  return hd.hokDue(sups, todayIso, (s, i) => hea.hokEffectivelyActive(s, i),
-      (s, i) => hrtm.hokRecordedThisMonth(s, i, hc.hokCat));
+  return hd.hokDue(sups, todayIso, (s, i) => hea.hokEffectivelyActive(s, i, skb_hea.hokEffectivelyActive_T),
+      (s, i) => hrtm.hokRecordedThisMonth(s, i, hc.hokCat, skb_hrtm.hokRecordedThisMonth_T));
 }
 
 int hokMonthlyTotal(List supporters, num usdRate, [Object? todayIso]) => hmt.hokMonthlyTotal(
     supporters, usdRate, todayIso,
-    (s, i) => hea.hokEffectivelyActive((s as Map).cast<String, Object?>(), i as String));
+    (s, i) => hea.hokEffectivelyActive((s as Map).cast<String, Object?>(), i as String, skb_hea.hokEffectivelyActive_T));
 
 // ── שקע-שעון (IO): ISO של היום. מוזרק — הקופסה לא מממשת שעון. ──────────────────
 dynamic isoToday(dynamic Function() clockIso) => clockIso();

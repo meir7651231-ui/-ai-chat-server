@@ -1,3 +1,5 @@
+import '../dart-data-maor/with-nedarim-hok-sockets.dart' as skb_wnh;
+import '../dart-data-maor/detect-recurring-hok-sockets.dart' as skb_drh;
 import '../dart-data-maor/provider-clearer-terms.dart';
 // 📦 קופסת-חיבורים · lib-nedarim-sync (Dart) — מנוע-סנכרון נדרים→מאור (כיוון-נכנס).
 // מקבילה ל-new/boxes/lib-nedarim-sync.mjs · חוזה משותף: lib-nedarim-sync.contract.md.
@@ -263,6 +265,7 @@ Map<String, dynamic> withNedarimHok(Map<String, dynamic> sp, Map<String, dynamic
     charge.cast<String, Object?>(),
     (Map<String, Object?> ch) => curOf(ch.cast<String, dynamic>()),
     hokDayFromDate,
+    skb_wnh.withNedarimHok_T,
   );
   return r.cast<String, dynamic>();
 }
@@ -281,6 +284,7 @@ Map<String, Object?> detectRecurringHok(
       modeStr,
       modeOf,
       monthsAgo,
+      skb_drh.detectRecurringHok_T,
     );
 
 /// מועמדים לשיוך עסקה לכרטיס-תורם — מוזרק keysOf + nameSortKey (מתאמי Object?).

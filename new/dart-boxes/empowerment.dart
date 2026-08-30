@@ -1,3 +1,10 @@
+import '../dart-data-maor/sup-tier-sockets.dart' as skb_sup_tier;
+import '../dart-data-maor/hok-recorded-this-month-sockets.dart' as skb_hrtm;
+import '../dart-data-maor/hok-effectively-active-sockets.dart' as skb_hea;
+import '../dart-data-maor/sup-don-events-sockets.dart' as skb_sde;
+import '../dart-data-maor/org-cal-entries-sockets.dart' as skb_oce;
+import '../dart-data-maor/cockpit-csv-rows-sockets.dart' as skb_ccr;
+import '../dart-data-maor/cockpit-work-list-text-sockets.dart' as skb_cwl;
 import '../dart-data-maor/segments-segment-counts-terms.dart' as td_segments_segment_counts;
 import '../dart-data-maor/portfolio-tier-trend-counts-terms.dart' as td_portfolio_tier_trend_counts;
 import '../dart-data-maor/commands-build-commands-terms.dart' as td_commands_build_commands;
@@ -57,22 +64,22 @@ num _ilsMap(Map sp) => si.supIls(sp) as num;
 num _usdMap(Map sp) => su.supUsd(sp) as num;
 num _ilsDyn(dynamic sp) => si.supIls(sp) as num;
 num _usdDyn(dynamic sp) => su.supUsd(sp) as num;
-Map _tier(num score) => st.supTier(score);
+Map _tier(num score) => st.supTier(score, skb_sup_tier.supTier_T);
 num _dsSS(String iso, String today) => dsc.cockpitDaysSince(iso, today);
 num _dsDS(dynamic iso, String today) => dsc.cockpitDaysSince(iso as String, today);
 num _ddSS(String iso, String today) => di.dayDiff(iso, today);
 num _ddDS(dynamic iso, String today) => di.dayDiff(iso as String, today);
 
 // ── כריכת-האגרגטים (השקעים-החיצוניים — 3 דורשים תת-אטום) ─────────────────────
-bool _hrtm(Map<String, Object?> sp, String today) => hr.hokRecordedThisMonth(sp, today, hc.hokCat);
+bool _hrtm(Map<String, Object?> sp, String today) => hr.hokRecordedThisMonth(sp, today, hc.hokCat, skb_hrtm.hokRecordedThisMonth_T);
 bool _heaDyn(dynamic sp, dynamic today) =>
-    hea.hokEffectivelyActive(sp as Map<String, Object?>, (today ?? '') as String);
+    hea.hokEffectivelyActive(sp as Map<String, Object?>, (today ?? '') as String, skb_hea.hokEffectivelyActive_T);
 List _hokDue(List sups, String today) => hd.hokDue(
-      sups.cast<Map<String, Object?>>(), today, hea.hokEffectivelyActive, _hrtm);
+      sups.cast<Map<String, Object?>>(), today, (sp, t) => hea.hokEffectivelyActive(sp, t, skb_hea.hokEffectivelyActive_T), _hrtm);
 num _hokMonthlyTotal(List sups, num rate, String today) =>
     hm.hokMonthlyTotal(sups, rate, today, _heaDyn);
-List<Map<String, dynamic>> _supDon(Map<String, dynamic> sp) => sde.supDonEvents(sp);
-List _orgCal(List sups) => oce.orgCalEntries(sups.cast<Map<String, dynamic>>(), _supDon);
+List<Map<String, dynamic>> _supDon(Map<String, dynamic> sp) => sde.supDonEvents(sp, skb_sde.supDonEvents_T2);
+List _orgCal(List sups) => oce.orgCalEntries(sups.cast<Map<String, dynamic>>(), _supDon, skb_oce.orgCalEntries_T);
 
 Map _scanLoose(dynamic sp, String t, num r, int m) => dscan.donorScan(sp as Map<String, dynamic>, t, r, m);
 Map _rfmLoose(Map scan, String t) => rf.rfmFromScan(scan as Map<String, dynamic>, t, _ddSS);
@@ -89,8 +96,8 @@ Map<String, dynamic> trendFromScan(Map<String, dynamic> scan) => tr.trendFromSca
 int cockpitCollectedThisMonth(List sups, String today, [num rate = 3.7]) =>
     cctm.cockpitCollectedThisMonth(sups, today, rate);
 Map<String, dynamic> cockpitProgress(Map queue, Set doneIds) => cp.cockpitProgress(queue, doneIds);
-List<List> cockpitCsvRows(Map queue) => ccr.cockpitCsvRows(queue);
-String cockpitWorkListText(Map queue) => cwl.cockpitWorkListText(queue);
+List<List> cockpitCsvRows(Map queue) => ccr.cockpitCsvRows(queue, skb_ccr.cockpitCsvRows_T);
+String cockpitWorkListText(Map queue) => cwl.cockpitWorkListText(queue, skb_cwl.cockpitWorkListText_T);
 List<Map<String, dynamic>> buildCommands(Map<String, dynamic> ctx) => bc.buildCommands(ctx, term: (k)=>td_commands_build_commands.kTerms[k]!);
 List<Map<String, dynamic>> filterCommands(List<Map<String, dynamic>> commands, String query, [int limit = 12]) =>
     flc.filterCommands(commands, query, limit);
@@ -98,7 +105,7 @@ int supCount(dynamic sp) => sc.supCount(sp);
 dynamic supLast(dynamic sp) => sl.supLast(sp);
 num supIls(dynamic sp) => si.supIls(sp);
 num supUsd(dynamic sp) => su.supUsd(sp);
-Map<String, String> supTier(dynamic score) => st.supTier(score);
+Map<String, String> supTier(dynamic score) => st.supTier(score, skb_sup_tier.supTier_T);
 List hokDue(List sups, String today) => _hokDue(sups, today);
 num hokMonthlyTotal(List sups, num rate, String today) => _hokMonthlyTotal(sups, rate, today);
 List orgCalEntries(List sups) => _orgCal(sups);

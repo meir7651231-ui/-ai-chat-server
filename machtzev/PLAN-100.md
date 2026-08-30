@@ -102,3 +102,11 @@
   חדש `boxes` (13/13, ratchet 14 אדומות רק-יורד) + L29. נותרו-ליד: 8 (audit/tour=ריצה,
   ‏diary/empowerment/supporters/worktasks/signup-wizard/lib-nedarim-sync=חתימות-עמוקות) +
   ‏6 תלויות-הסגר + atoms (אין-הוכחה).
+- **30.8 · פאזה 8 (חלק ב) — כל קופסאות-היד ירוקות: הוכחות 48 ⇒ 56/62:** הושלמו ביד
+  (חתימות-עמוקות שהמנוע לא מנחש): diary (blockReason באמצע-אופציונלי · roomInfoLabel ·
+  inactiveRoomCourses) · empowerment (9 השחלות: supTier/hrtm/hea/hokDue-סגירות/supDonEvents-T2/
+  orgCal/cockpit-csv/worklist) · supporters (8: כולל supDonEvents עם term-אופציונלי אחרי-T2) ·
+  worktasks (עטיפות-taskIdentity לכל 4 הצרכנים) · signup-wizard (wizardStepError_T אחרי-סגירה) ·
+  lib-nedarim-sync (withNedarimHok_T/detectRecurringHok_T) · audit (runAudit_T2 עמדה-2 —
+  באג-ריצה שקט: todayIso נחת ב-T2!) · tour (tourSteps_T2). ‏baseline ירד 14 ⇒ 6 —
+  הנותרות כולן תלויות-הסגר (ayin/families/hebdate/reenroll/search/tzedaka ⇐ 7 אטומי-ההסגר).
