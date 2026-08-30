@@ -60,27 +60,30 @@ function parsePart(txt) {
   // חילוץ-ערך: רק אסימון-מספר עומד-לבדו (לא ספרה בתוך מילה — 'quest1'/'ברך 90°' נשארים שלמים),
   // ולא בשורות ניווט/אטום שבהן מספר הוא חלק מזהות (slug/שם-מחלקה)
   const firstWord = body.split(/\s+/)[0];
-  const vm = (firstWord === NAV_WORD || firstWord === PIN_WORD) ? null : body.match(/(?<=^|\s)\d[\d,.]*[%+]?(?=\s|$)/);
-  const value = vm ? vm[0] : null;
-  if (value) body = body.replace(value, '').replace(/\s+/g, ' ').trim();
+  // 🎨 תור-ערכים: כל האסימונים-המספריים העומדים-לבדם נאספים בסדרם — props מספריים נדרשים
+  //   (done/total/pct/coins/flow) נמזגים מהם בזה-אחר-זה (עיצוב-חי, לא 0 קשיח). ניווט מוחרג (slug).
+  const numRe = /(?<=^|\s)\d[\d,.]*[%+]?(?=\s|$)/g;
+  const values = firstWord === NAV_WORD ? [] : [...body.matchAll(numRe)].map(mm => mm[0]);
+  if (values.length) body = body.replace(numRe, ' ').replace(/\s+/g, ' ').trim();
+  const value = values[0] ?? null;
   const words = body.split(/\s+/);
   // 📌 הצבעה-ישירה: 'אטום <ClassName> <תווית>' ⇒ האטום הזה בדיוק (מצב-האלתור מצביע כך)
   if (words[0] === PIN_WORD && /^[A-Z]\w+$/.test(words[1] || '')) {
-    return { pin: words[1], role: roleOf(words[1]), label: words.slice(2).join(' ') || words[1], txt, options, emoji, sub, value };
+    return { pin: words[1], role: roleOf(words[1]), label: words.slice(2).join(' ') || words[1], txt, options, emoji, sub, value, values };
   }
   // 📚 עיגון-דאטה: 'דאטה <ConstName> <תווית>' ⇒ chips חיים מתוכן אטום-דאטה מהמדף
   if (words[0] === 'דאטה' && /^[a-zA-Z_]\w*$/.test(words[1] || '')) {
-    return { dataPin: words[1], role: 'chip', label: words.slice(2).join(' ') || words[1], txt, options, emoji, sub, value };
+    return { dataPin: words[1], role: 'chip', label: words.slice(2).join(' ') || words[1], txt, options, emoji, sub, value, values };
   }
   // 🔀 חיבור בין-מסכים: 'ניווט <slug> <תווית>' ⇒ כרטיס שפותח מסך-מחולל אחר
   if (words[0] === NAV_WORD && /^[a-z][a-z0-9_-]*$/.test(words[1] || '')) {
-    return { role: 'card', hero: true, navSlug: words[1], label: words.slice(2).join(' ') || words[1], txt, options, emoji, sub, value };
+    return { role: 'card', hero: true, navSlug: words[1], label: words.slice(2).join(' ') || words[1], txt, options, emoji, sub, value, values };
   }
   return {
     role: LEXICON.get(words[0]) || 'row',
     hero: words[0] === HERO_WORD,
     label: (LEXICON.has(words[0]) ? words.slice(1) : words).join(' ') || body,
-    txt, options, emoji, sub, value,
+    txt, options, emoji, sub, value, values,
   };
 }
 
@@ -241,11 +244,13 @@ function generate(slug, specText) {
     }
   }
 
+  // 🎨 תור-הערכים של החלק: כל בקשת-prop-מספרי מושכת את המספר-הבא בסדר-הכתיבה
+  const nextNum = (part) => { part._vi = part._vi || 0; const v = (part.values || [])[part._vi]; if (v !== undefined) part._vi++; return v; };
   const fillProp = (a, name, part, shared) => {
     const t = (a.types.get(name) || 'String').replace(/\?$/, '');
     if (part.calcExpr && name === 'value' && t === 'String') return { expr: part.calcExpr };   // 🌉 ערך-חי ממנוע-לוגיקה
-    if (name === 'value' && part.value != null && t === 'String') return { expr: constFor(part.value, part.role + '_value') };
-    if (name === 'value' && part.value != null && t === 'int') return { expr: String(parseInt(part.value.replace(/[^0-9]/g, ''))) };
+    if (name === 'value' && part.value != null && t === 'String') return { expr: constFor(nextNum(part) ?? part.value, part.role + '_value') };
+    if (name === 'value' && part.value != null && t === 'int') return { expr: String(parseInt(String(nextNum(part) ?? part.value).replace(/[^0-9]/g, ''))) };
     if (part.dataPin && name === 'options' && t === 'List<String>') {
       const da = atlas.data.find(d => d.name === part.dataPin && d.type === 'List<String>');
       if (da) { imports.add(`import '../${da.shelf.replace(/^new\//, '')}/${da.file}';`); return { expr: da.name }; }
@@ -253,12 +258,25 @@ function generate(slug, specText) {
     if (t === 'String' && /^(value|selected)$/.test(name)) { if (!shared.s) { shared.s = '_t' + (++sIdx); stateDecls.push(`String ${shared.s} = '';`); } return { expr: shared.s }; }
     if (t === 'String' && /^(glyph|emoji|icon)$/.test(name)) return { expr: constFor(part.emoji || '🔹', part.role + '_glyph') };
     if (t === 'String' && /^(sub|subtitle|caption|secondary)$/.test(name)) return { expr: constFor(part.sub || part.label, part.role + '_sub') };
-    if (t === 'String') return { expr: constFor(part.label, part.role + '_' + snake(name)) };
+    if (t === 'String') {
+      // 🎨 תור-טקסטים: prop-מחרוזת גנרי ראשון = התווית; הבאים נמזגים מה-options בסדרם
+      // (רק כשהאטום עצמו אינו אטום-אופציות) ואז מה-sub — כך widget רב-כיתובים מקבל טקסט שונה לכל פינה.
+      part._si = part._si || 0;
+      const optWidget = [...a.types.entries()].some(([n2, t2]) => /^(options|items)$/.test(n2) && /^List</.test(t2.replace(/\?$/, '')));
+      const texts = optWidget || !part.options ? [] : part.options;
+      const pick = part._si === 0 ? part.label : (texts[part._si - 1] ?? part.sub ?? part.label);
+      part._si++;
+      return { expr: constFor(pick, part.role + '_' + snake(name)) };
+    }
     if (t === 'bool' && name === 'value') { if (!shared.b) { shared.b = '_v' + (++sIdx); stateDecls.push(`bool ${shared.b} = false;`); } return { expr: shared.b }; }
     if (t === 'bool') return { expr: 'false' };
     if (t === 'int' && /^(value|selectedIndex|activeIndex|selected|qty|count)$/.test(name)) { if (!shared.i) { shared.i = '_n' + (++sIdx); stateDecls.push(`int ${shared.i} = 0;`); } return { expr: shared.i }; }
-    if (t === 'int') return { expr: '0' };
-    if (t === 'double') return { expr: /radius/i.test(name) ? '12' : '16' };
+    if (t === 'int') { const nv = nextNum(part); return { expr: nv !== undefined ? String(parseInt(nv.replace(/[^0-9]/g, '')) || 0) : '0' }; }
+    if (t === 'double') {
+      if (/radius/i.test(name)) return { expr: '12' };
+      const nv = nextNum(part);
+      return { expr: nv !== undefined ? String(parseFloat(nv.replace(/[^0-9.]/g, '')) || 0) : '16' };
+    }
     if (t === 'Color') return { expr: tokenFor(name) };
     if (t === 'IconData') return { expr: 'Icons.tune' };
     if (t === 'TextEditingController') { const c = '_c' + (++sIdx); stateDecls.push(`final TextEditingController ${c} = TextEditingController();`); return { expr: c }; }
@@ -404,6 +422,48 @@ ${calls.join('\n')}
 // התוויות מהלקסיקון-של-עצמו בלבד, המסכים מרשימת-הבקשות. הניסוחים הקבועים = המודל-העצמי (דאטה).
 // 🚫 ביקורת-בעלים ("איך יש לו את המושג ברך או פקק"): אפס-שאיבה מקטלוג-מונחי-האימפריה —
 // הדיוקן משקף את המחולל, לא את הדומיין. תוויות = אוצר-המילים שלו (מילות-הצורה).
+// 🏛️ מסך-הראווה: כרטיס-הביקור החי של המחולל — נמדד כולו מהאטלס ומהמדף ברגע-החילול
+// (הכרעת-בעלים: "מסך חדש שישקף את היכולות, גם עיצוב וגרפיקה"). המנוע בוחר לבנים
+// עשירות-ויזואלית מהמדף (גרדיאנט/מדדים/צינור/פסי-התקדמות) וממזג לתוכן מספרים חיים.
+function writeShowcaseSpec() {
+  const SM = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/self-model.json'), 'utf8'));
+  const W = SM.showcase;
+  if (!W) return;
+  const has = (cls) => atlas.widgets.some(a => a.cls === cls);
+  const capSpecs = fs.readdirSync(SPECS).filter(f => /^cap.*\.txt$/.test(f));
+  let orders = capSpecs.length;
+  try { orders = fs.readdirSync(path.join(HERE, 'capabilities')).filter(f => f.endsWith('.txt')).length; } catch { }
+  const proven = capSpecs.length;
+  const pct = orders ? Math.round((proven / orders) * 100) : 0;
+  let gates = 0;
+  try { gates = fs.readFileSync(path.join(ROOT, 'machtzev/gates.tsv'), 'utf8').split('\n').filter(l => l && !l.startsWith('#')).length; } catch { }
+  const navs = ['capmailphone', 'captimegematria', 'capclockcalendar', 'capautodream', 'improv', 'quest1']
+    .filter(s => fs.existsSync(path.join(SPECS, s + '.txt')))
+    .map(s => {
+      const t = (fs.readFileSync(path.join(SPECS, s + '.txt'), 'utf8').split('\n')[0] || s).replace(/:$/, '').trim();
+      return `ניווט ${s} ${t} | ${SM.phrases.navSub}`;
+    });
+  const lines = [
+    `${W.name}:`,
+    `הירו 🧬 ${SM.hero.title} | ${W.headerSub}`,
+    `כותרת ${W.kpisTitle}`,
+    ...(has('KpiBox') ? [
+      `אטום KpiBox ${atlas.widgets.length} ${W.kpiWidgets}`,
+      `אטום KpiBox ${atlas.functions.length} ${W.kpiFunctions}`,
+      `אטום KpiBox ${atlas.data.length} ${W.kpiData}`,
+    ] : []),
+    `כותרת ${W.pipeTitle}`,
+    ...(has('PipeLink') ? [`אטום PipeLink 0.9 ${W.pipeLabel} | ${W.pipeSub}`] : []),
+    `כותרת ${W.synthTitle}`,
+    ...(has('StatsCard') ? [`אטום StatsCard ${proven} 0 0 ${orders} ${W.synthLabel}: הוכחו / בבדיקה / נדחו`] : []),
+    ...(has('ManagerDashboardCreditBar') ? [`אטום ManagerDashboardCreditBar ${pct} ${W.barLabel}`] : []),
+    `כותרת ${W.capsTitle}`,
+    ...navs,
+    `באנר ${gates} ${W.gatesBanner}`,
+  ];
+  fs.writeFileSync(path.join(SPECS, 'showcase.txt'), lines.join('\n') + '\n');
+}
+
 function writeSelfEntry() {
   const SM = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/self-model.json'), 'utf8'));
   let boards = 0;
@@ -683,6 +743,7 @@ async function writeGoalSpecs() {
 fs.mkdirSync(SPECS, { recursive: true });
 await writeImprovSpec();
 await writeGoalSpecs();
+writeShowcaseSpec();
 writeSelfEntry();
 const [slugArg, specArg] = process.argv.slice(2);
 if (slugArg && specArg) fs.writeFileSync(path.join(SPECS, slugArg + '.txt'), specArg + '\n');
