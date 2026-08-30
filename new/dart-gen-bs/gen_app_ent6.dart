@@ -1,14 +1,16 @@
 // 🧬 חולל ע"י המחולל (genesis-gen, הכרעות 17+18) — בקשה ⇒ בחירת-אטומים ⇒ חיווט ⇒ מסך. אל תערוך ידנית.
 // 🧬 שם: הירו 🗂️ אומדן | ישות מורכבת — טופס + טבלה
-// 🧬 בקשה: הירו 🗂️ אומדן | ישות מורכבת — טופס + טבלה · כותרת טופס אומדן · אטום InlineTextRow פרויקט · אטום GlowField לקוח · אטום InlineTextRow גרסה · אטום DatePills תאריך · אטום NumberStepper עלות צפויה · אטום QtyStepper מחיר · אטום NumberStepper רווח יעד · אטום MiniCalendar תוקף · אטום AnimatedToggle סטטוס · אטום FabMenu שמירה · כותרת רשומות אומדן · אטום DataGrid אומדן · באנר ישות אומדן: 9 שדות · מהמדף
-// 🧬 אטומים שנבחרו: CaSubTitle · InlineTextRow · GlowField · InlineTextRow · DatePills · NumberStepper · QtyStepper · NumberStepper · MiniCalendar · AnimatedToggle · FabMenu · CaSubTitle · DataGrid · CoinBanner
+// 🧬 בקשה: הירו 🗂️ אומדן | ישות מורכבת — טופס + טבלה · כותרת טופס אומדן · אטום InlineTextRow פרויקט · אטום GlowField לקוח · אטום InlineTextRow גרסה · אטום DatePills תאריך · אטום NumberStepper עלות צפויה · אטום QtyStepper מחיר · אטום NumberStepper רווח יעד · אטום MiniCalendar תוקף · אטום AnimatedToggle סטטוס · אטום FabMenu שמירה · כותרת חוקים פר-שדה · חישוב תאריך לתצוגה (fmtDate) · כותרת רשומות אומדן · אטום DataGrid אומדן · באנר ישות אומדן: 9 שדות · 1 חוקים · מהמדף
+// 🧬 אטומים שנבחרו: CaSubTitle · InlineTextRow · GlowField · InlineTextRow · DatePills · NumberStepper · QtyStepper · NumberStepper · MiniCalendar · AnimatedToggle · FabMenu · CaSubTitle · RStat · CaSubTitle · DataGrid · CoinBanner
 import '../dart-data-bs/auto/gen_app_ent6_content.dart';
+import '../dart-maor/fmt-date.dart';
 import '../dart-ui-bs/animated_toggle.dart';
 import '../dart-ui-bs/auto/bs_tokens.dart';
 import '../dart-ui-bs/auto/ca_sub_title.dart';
 import '../dart-ui-bs/auto/coin_banner.dart';
 import '../dart-ui-bs/auto/inline_text_row.dart';
 import '../dart-ui-bs/auto/qty_stepper.dart';
+import '../dart-ui-bs/auto/rstat.dart';
 import '../dart-ui-bs/data_grid.dart';
 import '../dart-ui-bs/date_pills.dart';
 import '../dart-ui-bs/fab_menu.dart';
@@ -55,6 +57,8 @@ class _GenAppEnt6ScreenState extends State<GenAppEnt6Screen> {
           AnimatedToggle(label: gen_app_ent6_toggle_label, height: 16, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
           FabMenu(height: 16, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
           CaSubTitle(gen_app_ent6_header_text2),
+          Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: Row(children: [RStat(value: fmtDate(null), label: gen_app_ent6_stat_label)])),
+          CaSubTitle(gen_app_ent6_header_text3),
           DataGrid(height: 16, rows: 0, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
           CoinBanner(coins: 0, sub: gen_app_ent6_banner_sub),
           ],

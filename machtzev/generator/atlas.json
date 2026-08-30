@@ -2,7 +2,7 @@
  "counts": {
   "widgets": 464,
   "functions": 445,
-  "data": 2547
+  "data": 2616
  },
  "widgets": [
   {
@@ -28864,6 +28864,57 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent10_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent10_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent10_stat_label2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent10_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent10_header_text3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent10_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent10_banner_sub",
    "type": "String",
    "he": [
@@ -29035,6 +29086,40 @@
   },
   {
    "name": "gen_app_ent11_header_text2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent11_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent11_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent11_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent11_header_text3",
    "type": "String",
    "he": [
     "דאטה",
@@ -29256,6 +29341,57 @@
   },
   {
    "name": "gen_app_ent12_header_text2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent12_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent12_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent12_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent12_stat_label2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent12_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent12_header_text3",
    "type": "String",
    "he": [
     "דאטה",
@@ -29612,6 +29748,40 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent13_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent13_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent13_header_text3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent13_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent13_banner_sub",
    "type": "String",
    "he": [
@@ -29868,6 +30038,57 @@
   },
   {
    "name": "gen_app_ent14_header_text2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent14_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent14_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent14_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent14_stat_label2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent14_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent14_header_text3",
    "type": "String",
    "he": [
     "דאטה",
@@ -30156,6 +30377,40 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent15_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent15_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent15_header_text3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent15_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent15_banner_sub",
    "type": "String",
    "he": [
@@ -30327,6 +30582,57 @@
   },
   {
    "name": "gen_app_ent16_header_text2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent16_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent16_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent16_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent16_stat_label2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent16_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent16_header_text3",
    "type": "String",
    "he": [
     "דאטה",
@@ -30650,6 +30956,57 @@
   },
   {
    "name": "gen_app_ent17_header_text2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent17_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent17_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent17_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent17_stat_label2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent17_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent17_header_text3",
    "type": "String",
    "he": [
     "דאטה",
@@ -31023,6 +31380,40 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent18_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent18_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent18_header_text3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent18_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent18_banner_sub",
    "type": "String",
    "he": [
@@ -31364,6 +31755,40 @@
   },
   {
    "name": "gen_app_ent19_header_text2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent19_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent19_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent19_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent19_header_text3",
    "type": "String",
    "he": [
     "דאטה",
@@ -31856,6 +32281,57 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent1_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent1_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent1_stat_label2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent1_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent1_header_text3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent1_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent1_banner_sub",
    "type": "String",
    "he": [
@@ -32196,6 +32672,40 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent20_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent20_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent20_header_text3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent20_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent20_banner_sub",
    "type": "String",
    "he": [
@@ -32418,6 +32928,40 @@
   },
   {
    "name": "gen_app_ent21_header_text2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent21_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent21_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent21_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent21_header_text3",
    "type": "String",
    "he": [
     "דאטה",
@@ -32758,6 +33302,57 @@
   },
   {
    "name": "gen_app_ent22_header_text2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent22_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent22_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent22_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent22_stat_label2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent22_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent22_header_text3",
    "type": "String",
    "he": [
     "דאטה",
@@ -33131,6 +33726,40 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent23_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent23_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent23_header_text3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent23_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent23_banner_sub",
    "type": "String",
    "he": [
@@ -33353,6 +33982,40 @@
   },
   {
    "name": "gen_app_ent24_header_text2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent24_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent24_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent24_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent24_header_text3",
    "type": "String",
    "he": [
     "דאטה",
@@ -34015,6 +34678,40 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent26_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent26_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent26_header_text3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent26_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent26_banner_sub",
    "type": "String",
    "he": [
@@ -34321,6 +35018,40 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent27_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent27_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent27_header_text3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent27_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent27_banner_sub",
    "type": "String",
    "he": [
@@ -34594,6 +35325,74 @@
   },
   {
    "name": "gen_app_ent28_header_text2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent28_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent28_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent28_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent28_stat_label2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent28_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent28_stat_label3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent28_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent28_header_text3",
    "type": "String",
    "he": [
     "דאטה",
@@ -34950,6 +35749,40 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent29_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent29_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent29_header_text3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent29_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent29_banner_sub",
    "type": "String",
    "he": [
@@ -35240,6 +36073,74 @@
   },
   {
    "name": "gen_app_ent2_header_text2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent2_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent2_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent2_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent2_stat_label2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent2_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent2_stat_label3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent2_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent2_header_text3",
    "type": "String",
    "he": [
     "דאטה",
@@ -35681,6 +36582,125 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent3_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent3_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent3_stat_label2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent3_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent3_stat_label3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent3_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent3_stat_label4",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent3_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent3_stat_label5",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent3_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent3_stat_label6",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent3_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent3_header_text3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent3_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent3_banner_sub",
    "type": "String",
    "he": [
@@ -35903,6 +36923,74 @@
   },
   {
    "name": "gen_app_ent4_header_text2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent4_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent4_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent4_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent4_stat_label2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent4_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent4_stat_label3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent4_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent4_header_text3",
    "type": "String",
    "he": [
     "דאטה",
@@ -36361,6 +37449,40 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent6_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent6_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent6_header_text3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent6_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent6_banner_sub",
    "type": "String",
    "he": [
@@ -36667,6 +37789,40 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent7_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent7_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent7_header_text3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent7_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent7_banner_sub",
    "type": "String",
    "he": [
@@ -36940,6 +38096,74 @@
   },
   {
    "name": "gen_app_ent8_header_text2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent8_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent8_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent8_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent8_stat_label2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent8_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent8_stat_label3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent8_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent8_header_text3",
    "type": "String",
    "he": [
     "דאטה",
@@ -43688,91 +44912,6 @@
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_entity_crumbs_option",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_entity_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_entity_crumbs_option2",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_entity_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_entity_crumbs_option3",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_entity_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_entity_crumbs_option4",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_entity_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_entity_crumbs_option5",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_entity_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
    "name": "gen_entity_header_text",
    "type": "String",
    "he": [
@@ -43824,6 +44963,23 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_entity_glowfield_hint",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_entity_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_entity_numstep_label",
    "type": "String",
    "he": [
@@ -43841,58 +44997,75 @@
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_entity_toggle_label",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_entity_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_entity_neon_label",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_entity_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_entity_neon_toast",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_entity_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
    "name": "gen_entity_header_text2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_entity_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entity_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_entity_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entity_stat_label2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_entity_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entity_stat_label3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_entity_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entity_header_text3",
    "type": "String",
    "he": [
     "דאטה",

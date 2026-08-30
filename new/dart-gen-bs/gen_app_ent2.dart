@@ -1,16 +1,20 @@
 // 🧬 חולל ע"י המחולל (genesis-gen, הכרעות 17+18) — בקשה ⇒ בחירת-אטומים ⇒ חיווט ⇒ מסך. אל תערוך ידנית.
 // 🧬 שם: הירו 🗂️ לקוח | ישות מורכבת — טופס + טבלה
-// 🧬 בקשה: הירו 🗂️ לקוח | ישות מורכבת — טופס + טבלה · כותרת טופס לקוח · אטום InlineTextRow שם · אטום GlowField חברה · אטום NumberStepper מספר עוסק · אטום InlineTextRow איש קשר · אטום InlineTextRow טלפון · אטום InlineTextRow מייל · אטום InlineTextRow כתובת · אטום InlineTextRow דירוג · אטום FabMenu שמירה · כותרת רשומות לקוח · אטום DataGrid לקוח · באנר ישות לקוח: 8 שדות · מהמדף
-// 🧬 אטומים שנבחרו: CaSubTitle · InlineTextRow · GlowField · NumberStepper · InlineTextRow · InlineTextRow · InlineTextRow · InlineTextRow · InlineTextRow · FabMenu · CaSubTitle · DataGrid · CoinBanner
+// 🧬 בקשה: הירו 🗂️ לקוח | ישות מורכבת — טופס + טבלה · כותרת טופס לקוח · אטום InlineTextRow שם · אטום GlowField חברה · אטום NumberStepper מספר עוסק · אטום InlineTextRow איש קשר · אטום InlineTextRow טלפון · אטום InlineTextRow מייל · אטום InlineTextRow כתובת · אטום InlineTextRow דירוג · אטום FabMenu שמירה · כותרת חוקים פר-שדה · חישוב אין שקעים שם פרטי (kForType) · חישוב מספר סידורי של (excelSerialToIso) · חישוב נרמול טלפון למפתח דדופ (normPhone) · כותרת רשומות לקוח · אטום DataGrid לקוח · באנר ישות לקוח: 8 שדות · 3 חוקים · מהמדף
+// 🧬 אטומים שנבחרו: CaSubTitle · InlineTextRow · GlowField · NumberStepper · InlineTextRow · InlineTextRow · InlineTextRow · InlineTextRow · InlineTextRow · FabMenu · CaSubTitle · RStat · RStat · RStat · CaSubTitle · DataGrid · CoinBanner
 import '../dart-data-bs/auto/gen_app_ent2_content.dart';
+import '../dart-maor/excel-serial-to-iso.dart';
+import '../dart-maor/norm-phone.dart';
 import '../dart-ui-bs/auto/bs_tokens.dart';
 import '../dart-ui-bs/auto/ca_sub_title.dart';
 import '../dart-ui-bs/auto/coin_banner.dart';
 import '../dart-ui-bs/auto/inline_text_row.dart';
+import '../dart-ui-bs/auto/rstat.dart';
 import '../dart-ui-bs/data_grid.dart';
 import '../dart-ui-bs/fab_menu.dart';
 import '../dart-ui-bs/glow_field.dart';
 import '../dart-ui-bs/number_stepper.dart';
+import '../dart/k_for_type.dart';
 import 'package:flutter/material.dart';
 
 class GenAppEnt2Screen extends StatefulWidget {
@@ -53,6 +57,8 @@ class _GenAppEnt2ScreenState extends State<GenAppEnt2Screen> {
           InlineTextRow(label: gen_app_ent2_textfield_label6, hint: gen_app_ent2_textfield_hint6, value: _t6, onChanged: (v) => setState(() => _t6 = v)),
           FabMenu(height: 16, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
           CaSubTitle(gen_app_ent2_header_text2),
+          Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: Row(children: [RStat(value: kForType(null).toString(), label: gen_app_ent2_stat_label), RStat(value: excelSerialToIso(null), label: gen_app_ent2_stat_label2), RStat(value: normPhone(null), label: gen_app_ent2_stat_label3)])),
+          CaSubTitle(gen_app_ent2_header_text3),
           DataGrid(height: 16, rows: 0, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
           CoinBanner(coins: 0, sub: gen_app_ent2_banner_sub),
           ],

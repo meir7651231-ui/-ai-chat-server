@@ -63,7 +63,7 @@ export function retrieveLogic(phrase, top = 4, onlyWireable = true) {
   const q = [...new Set(heTokens(phrase))];
   return LOGIC
     .filter((f) => !onlyWireable || f.wire)
-    .map((f) => { let s = 0; for (const t of q) if (f.st.includes(t)) s += lidf(t); return { name: f.name, he: f.he, s: +s.toFixed(2), wire: f.wire }; })
+    .map((f) => { let s = 0; for (const t of q) if (f.st.includes(t)) s += lidf(t); return { name: f.name, he: f.he, s: +s.toFixed(2), wire: f.wire, params: f.params, inTypes: f.params.map((p) => p.type.replace(/\?$/, '')) }; })
     .filter((x) => x.s > 0)
     .sort((a, b) => b.s - a.s)
     .slice(0, top);

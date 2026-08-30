@@ -1,14 +1,16 @@
 // 🧬 חולל ע"י המחולל (genesis-gen, הכרעות 17+18) — בקשה ⇒ בחירת-אטומים ⇒ חיווט ⇒ מסך. אל תערוך ידנית.
 // 🧬 שם: הירו 🗂️ דוח יומי | ישות מורכבת — טופס + טבלה
-// 🧬 בקשה: הירו 🗂️ דוח יומי | ישות מורכבת — טופס + טבלה · כותרת טופס דוח יומי · אטום InlineTextRow פרויקט · אטום DatePills תאריך · אטום GlowField מזג אוויר · אטום InlineTextRow עובדים · אטום NumberStepper שעות · אטום QtyStepper אחוז התקדמות · אטום AnimatedToggle סטטוס · אטום FabMenu שמירה · כותרת רשומות דוח יומי · אטום DataGrid דוח יומי · באנר ישות דוח יומי: 7 שדות · מהמדף
-// 🧬 אטומים שנבחרו: CaSubTitle · InlineTextRow · DatePills · GlowField · InlineTextRow · NumberStepper · QtyStepper · AnimatedToggle · FabMenu · CaSubTitle · DataGrid · CoinBanner
+// 🧬 בקשה: הירו 🗂️ דוח יומי | ישות מורכבת — טופס + טבלה · כותרת טופס דוח יומי · אטום InlineTextRow פרויקט · אטום DatePills תאריך · אטום GlowField מזג אוויר · אטום InlineTextRow עובדים · אטום NumberStepper שעות · אטום QtyStepper אחוז התקדמות · אטום AnimatedToggle סטטוס · אטום FabMenu שמירה · כותרת חוקים פר-שדה · חישוב תאריך לתצוגה (fmtDate) · כותרת רשומות דוח יומי · אטום DataGrid דוח יומי · באנר ישות דוח יומי: 7 שדות · 1 חוקים · מהמדף
+// 🧬 אטומים שנבחרו: CaSubTitle · InlineTextRow · DatePills · GlowField · InlineTextRow · NumberStepper · QtyStepper · AnimatedToggle · FabMenu · CaSubTitle · RStat · CaSubTitle · DataGrid · CoinBanner
 import '../dart-data-bs/auto/gen_app_ent11_content.dart';
+import '../dart-maor/fmt-date.dart';
 import '../dart-ui-bs/animated_toggle.dart';
 import '../dart-ui-bs/auto/bs_tokens.dart';
 import '../dart-ui-bs/auto/ca_sub_title.dart';
 import '../dart-ui-bs/auto/coin_banner.dart';
 import '../dart-ui-bs/auto/inline_text_row.dart';
 import '../dart-ui-bs/auto/qty_stepper.dart';
+import '../dart-ui-bs/auto/rstat.dart';
 import '../dart-ui-bs/data_grid.dart';
 import '../dart-ui-bs/date_pills.dart';
 import '../dart-ui-bs/fab_menu.dart';
@@ -52,6 +54,8 @@ class _GenAppEnt11ScreenState extends State<GenAppEnt11Screen> {
           AnimatedToggle(label: gen_app_ent11_toggle_label, height: 16, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
           FabMenu(height: 16, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
           CaSubTitle(gen_app_ent11_header_text2),
+          Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: Row(children: [RStat(value: fmtDate(null), label: gen_app_ent11_stat_label)])),
+          CaSubTitle(gen_app_ent11_header_text3),
           DataGrid(height: 16, rows: 0, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
           CoinBanner(coins: 0, sub: gen_app_ent11_banner_sub),
           ],

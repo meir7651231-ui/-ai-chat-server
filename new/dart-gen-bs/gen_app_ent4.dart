@@ -1,20 +1,24 @@
 // 🧬 חולל ע"י המחולל (genesis-gen, הכרעות 17+18) — בקשה ⇒ בחירת-אטומים ⇒ חיווט ⇒ מסך. אל תערוך ידנית.
 // 🧬 שם: הירו 🗂️ שדה | ישות מורכבת — טופס + טבלה
-// 🧬 בקשה: הירו 🗂️ שדה | ישות מורכבת — טופס + טבלה · כותרת טופס שדה · אטום InlineTextRow קוד · אטום GlowField שם · אטום InlineTextRow שלב · אטום InlineTextRow אחראי · אטום DatePills תאריך התחלה · אטום MiniCalendar תאריך סיום · אטום NumberStepper אחוז ביצוע · אטום QtyStepper תקציב · אטום NumberStepper עלות בפועל · אטום AnimatedToggle סטטוס · אטום FabMenu שמירה · כותרת רשומות שדה · אטום DataGrid שדה · באנר ישות שדה: 10 שדות · מהמדף
-// 🧬 אטומים שנבחרו: CaSubTitle · InlineTextRow · GlowField · InlineTextRow · InlineTextRow · DatePills · MiniCalendar · NumberStepper · QtyStepper · NumberStepper · AnimatedToggle · FabMenu · CaSubTitle · DataGrid · CoinBanner
+// 🧬 בקשה: הירו 🗂️ שדה | ישות מורכבת — טופס + טבלה · כותרת טופס שדה · אטום InlineTextRow קוד · אטום GlowField שם · אטום InlineTextRow שלב · אטום InlineTextRow אחראי · אטום DatePills תאריך התחלה · אטום MiniCalendar תאריך סיום · אטום NumberStepper אחוז ביצוע · אטום QtyStepper תקציב · אטום NumberStepper עלות בפועל · אטום AnimatedToggle סטטוס · אטום FabMenu שמירה · כותרת חוקים פר-שדה · חישוב אין שקעים שם פרטי (kForType) · חישוב תאריך לתצוגה (fmtDate) · חישוב קלט חופשי או אם (parseAnyDate) · כותרת רשומות שדה · אטום DataGrid שדה · באנר ישות שדה: 10 שדות · 3 חוקים · מהמדף
+// 🧬 אטומים שנבחרו: CaSubTitle · InlineTextRow · GlowField · InlineTextRow · InlineTextRow · DatePills · MiniCalendar · NumberStepper · QtyStepper · NumberStepper · AnimatedToggle · FabMenu · CaSubTitle · RStat · RStat · RStat · CaSubTitle · DataGrid · CoinBanner
 import '../dart-data-bs/auto/gen_app_ent4_content.dart';
+import '../dart-maor/fmt-date.dart';
+import '../dart-maor/parse-any-date.dart';
 import '../dart-ui-bs/animated_toggle.dart';
 import '../dart-ui-bs/auto/bs_tokens.dart';
 import '../dart-ui-bs/auto/ca_sub_title.dart';
 import '../dart-ui-bs/auto/coin_banner.dart';
 import '../dart-ui-bs/auto/inline_text_row.dart';
 import '../dart-ui-bs/auto/qty_stepper.dart';
+import '../dart-ui-bs/auto/rstat.dart';
 import '../dart-ui-bs/data_grid.dart';
 import '../dart-ui-bs/date_pills.dart';
 import '../dart-ui-bs/fab_menu.dart';
 import '../dart-ui-bs/glow_field.dart';
 import '../dart-ui-bs/mini_calendar.dart';
 import '../dart-ui-bs/number_stepper.dart';
+import '../dart/k_for_type.dart';
 import 'package:flutter/material.dart';
 
 class GenAppEnt4Screen extends StatefulWidget {
@@ -57,6 +61,8 @@ class _GenAppEnt4ScreenState extends State<GenAppEnt4Screen> {
           AnimatedToggle(label: gen_app_ent4_toggle_label, height: 16, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
           FabMenu(height: 16, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
           CaSubTitle(gen_app_ent4_header_text2),
+          Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: Row(children: [RStat(value: kForType(null).toString(), label: gen_app_ent4_stat_label), RStat(value: fmtDate(null), label: gen_app_ent4_stat_label2), RStat(value: parseAnyDate(null), label: gen_app_ent4_stat_label3)])),
+          CaSubTitle(gen_app_ent4_header_text3),
           DataGrid(height: 16, rows: 0, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
           CoinBanner(coins: 0, sub: gen_app_ent4_banner_sub),
           ],

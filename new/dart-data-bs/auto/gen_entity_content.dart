@@ -1,16 +1,13 @@
 // 📦 דאטה · תוכן-המחולל (genesis-gen) — התוויות מן-הבקשה, verbatim. אל תערוך ידנית.
-const String gen_entity_crumbs_option = 'תכנון';
-const String gen_entity_crumbs_option2 = 'הצעה';
-const String gen_entity_crumbs_option3 = 'חוזה';
-const String gen_entity_crumbs_option4 = 'ביצוע';
-const String gen_entity_crumbs_option5 = 'מסירה';
-const String gen_entity_header_text = 'טופס פרויקט';
+const String gen_entity_header_text = 'טופס ליד';
 const String gen_entity_textfield_label = 'שם'; // t_8b1aa6b1
 const String gen_entity_textfield_hint = 'שם'; // t_8b1aa6b1
+const String gen_entity_glowfield_hint = 'טלפון'; // t_737232c2
 const String gen_entity_numstep_label = 'תקציב'; // t_3bb32ddd
-const String gen_entity_toggle_label = 'סטטוס'; // t_c184d0ed
-const String gen_entity_neon_label = 'קדם להצעה';
-const String gen_entity_neon_toast = 'קדם להצעה';
-const String gen_entity_header_text2 = 'רשומות פרויקט';
-const String gen_entity_banner_sub = 'ישות פרויקט';
-const String gen_entity_app_bar_title = 'הירו 🗂️ פרויקט | ישות מורכבת — טופס + טבלה';
+const String gen_entity_header_text2 = 'חוקים פר-שדה';
+const String gen_entity_stat_label = 'אין שקעים שם פרטי';
+const String gen_entity_stat_label2 = 'נרמול טלפון למפתח דדופ';
+const String gen_entity_stat_label3 = 'תאריך לתצוגה';
+const String gen_entity_header_text3 = 'רשומות ליד';
+const String gen_entity_banner_sub = 'ישות ליד';
+const String gen_entity_app_bar_title = 'הירו 🗂️ ליד | ישות מורכבת — טופס + טבלה';

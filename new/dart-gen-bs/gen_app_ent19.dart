@@ -1,13 +1,15 @@
 // 🧬 חולל ע"י המחולל (genesis-gen, הכרעות 17+18) — בקשה ⇒ בחירת-אטומים ⇒ חיווט ⇒ מסך. אל תערוך ידנית.
 // 🧬 שם: הירו 🗂️ שדה | ישות מורכבת — טופס + טבלה
-// 🧬 בקשה: הירו 🗂️ שדה | ישות מורכבת — טופס + טבלה · אטום BreadcrumbTrail שדה: הוגש / בבדיקה / תיקונים / אושר / נסגר · כותרת טופס שדה · אטום InlineTextRow פרויקט · אטום GlowField חומר · אטום InlineTextRow יצרן · אטום InlineTextRow ספק · אטום DatePills תאריך הגשה · אטום InlineTextRow בודק · אטום AnimatedToggle סטטוס · אטום FabMenu שמירה · אטום NeonButton קדם לבבדיקה · כותרת רשומות שדה · אטום DataGrid שדה · באנר ישות שדה: 7 שדות · 5-שלבי workflow · מהמדף
-// 🧬 אטומים שנבחרו: BreadcrumbTrail · CaSubTitle · InlineTextRow · GlowField · InlineTextRow · InlineTextRow · DatePills · InlineTextRow · AnimatedToggle · FabMenu · NeonButton · CaSubTitle · DataGrid · CoinBanner
+// 🧬 בקשה: הירו 🗂️ שדה | ישות מורכבת — טופס + טבלה · אטום BreadcrumbTrail שדה: הוגש / בבדיקה / תיקונים / אושר / נסגר · כותרת טופס שדה · אטום InlineTextRow פרויקט · אטום GlowField חומר · אטום InlineTextRow יצרן · אטום InlineTextRow ספק · אטום DatePills תאריך הגשה · אטום InlineTextRow בודק · אטום AnimatedToggle סטטוס · אטום FabMenu שמירה · אטום NeonButton קדם לבבדיקה · כותרת חוקים פר-שדה · חישוב תאריך לתצוגה (fmtDate) · כותרת רשומות שדה · אטום DataGrid שדה · באנר ישות שדה: 7 שדות · 5-שלבי workflow · 1 חוקים · מהמדף
+// 🧬 אטומים שנבחרו: BreadcrumbTrail · CaSubTitle · InlineTextRow · GlowField · InlineTextRow · InlineTextRow · DatePills · InlineTextRow · AnimatedToggle · FabMenu · NeonButton · CaSubTitle · RStat · CaSubTitle · DataGrid · CoinBanner
 import '../dart-data-bs/auto/gen_app_ent19_content.dart';
+import '../dart-maor/fmt-date.dart';
 import '../dart-ui-bs/animated_toggle.dart';
 import '../dart-ui-bs/auto/bs_tokens.dart';
 import '../dart-ui-bs/auto/ca_sub_title.dart';
 import '../dart-ui-bs/auto/coin_banner.dart';
 import '../dart-ui-bs/auto/inline_text_row.dart';
+import '../dart-ui-bs/auto/rstat.dart';
 import '../dart-ui-bs/breadcrumb_trail.dart';
 import '../dart-ui-bs/data_grid.dart';
 import '../dart-ui-bs/date_pills.dart';
@@ -55,6 +57,8 @@ class _GenAppEnt19ScreenState extends State<GenAppEnt19Screen> {
           FabMenu(height: 16, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
           NeonButton(label: gen_app_ent19_neon_label, height: 16, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, onPressed: () => _toast(gen_app_ent19_neon_toast)),
           CaSubTitle(gen_app_ent19_header_text2),
+          Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: Row(children: [RStat(value: fmtDate(null), label: gen_app_ent19_stat_label)])),
+          CaSubTitle(gen_app_ent19_header_text3),
           DataGrid(height: 16, rows: 0, radius: 12, accentColor: BsTokens.brand, baseColor: BsTokens.inkLight, fillColor: BsTokens.cardLight),
           CoinBanner(coins: 0, sub: gen_app_ent19_banner_sub),
           ],

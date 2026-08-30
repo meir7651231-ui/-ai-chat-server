@@ -9,7 +9,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { retrieve, matchClass } from './match.mjs';
+import { retrieve, matchClass, retrieveLogic } from './match.mjs';
 
 const HERE = new URL('.', import.meta.url).pathname;
 const heWords = (s) => [...(s || '').matchAll(/[֐-׿][֐-׿״׳]*/g)].map((m) => m[0]);
@@ -59,12 +59,28 @@ export function interpret(text) {
   const btn = retrieve('כפתור שמירה שלח', 2)[0]?.cls || 'NeonButton';
   lines.push(`אטום ${btn} שמירה`);
   if (stages.length >= 2) lines.push(`אטום NeonButton קדם ל${stages[1]}`);
+  // 🔐 שכבת-חוקים פר-שדה: כל שדה מאחזר-לבד את אטום-החוק/פורמט/ולידציה שמתאים *לו*
+  // (סכום→shekel · תאריך→fmtDate · טלפון→normPhone). אפס מיפוי-ידני, אפס blob-גס.
+  // התאמת-טיפוס: אטום-החוק חייב לקבל את טיפוס-השדה (date→DateTime · num→num · text→String).
+  // כך 'שם' (text) לא נתפס ע"י hebMonthHe (DateTime) — סינון-הומוגרף טהור מהחתימה.
+  const TYPE_IN = { date: ['DateTime', 'String', 'Object'], num: ['num', 'int', 'double', 'Object', 'dynamic', 'String'], text: ['String', 'Object', 'dynamic'], multiline: ['String', 'Object'] };
+  const rules = [];
+  const usedR = new Set();
+  for (const s of schema) {
+    const ok = TYPE_IN[s.type] || ['String'];
+    const hit = retrieveLogic(s.label, 6, true).find((l) => l.s >= 3 && !usedR.has(l.name) && l.inTypes.some((t) => ok.includes(t)));
+    if (hit) { usedR.add(hit.name); s.rule = hit.name; rules.push({ field: s.label, name: hit.name, he: hit.he }); }
+  }
+  if (rules.length) {
+    lines.push(`כותרת חוקים פר-שדה`);
+    for (const r of rules) lines.push(`חישוב ${r.he.slice(0, 4).join(' ')} (${r.name})`);
+  }
   // טבלת-רשומות
   lines.push(`כותרת רשומות ${entity}`);
   lines.push(`אטום DataGrid ${entity}`);
-  lines.push(`באנר ישות ${entity}: ${schema.length} שדות${stages.length ? ` · ${stages.length}-שלבי workflow` : ''} · מהמדף`);
+  lines.push(`באנר ישות ${entity}: ${schema.length} שדות${stages.length ? ` · ${stages.length}-שלבי workflow` : ''}${rules.length ? ` · ${rules.length} חוקים` : ''} · מהמדף`);
 
-  return { spec: lines.join('\n'), entity, schema, stages };
+  return { spec: lines.join('\n'), entity, schema, stages, rules: rules.map((r) => r.name) };
 }
 
 // ── CLI (רץ רק בהרצה ישירה, לא ביבוא) ──
