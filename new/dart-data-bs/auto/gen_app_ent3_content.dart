@@ -1,0 +1,26 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_ent3_c0 = 'פרויקט';
+const String gen_app_ent3_c1 = '12 שדות · 6 שלבים';
+const String gen_app_ent3_c2 = '🗂️';
+const String gen_app_ent3_c3 = 'שמירה';
+const String gen_app_ent3_c4 = 'פרטי הרשומה';
+const String gen_app_ent3_c5 = 'רשומות';
+const String gen_app_ent3_c6 = 'אין פרויקט עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_ent3_c7 = 'תכנון';
+const String gen_app_ent3_c8 = 'הצעה';
+const String gen_app_ent3_c9 = 'חוזה';
+const String gen_app_ent3_c10 = 'ביצוע';
+const String gen_app_ent3_c11 = 'מסירה';
+const String gen_app_ent3_c12 = 'נסגר';
+const String gen_app_ent3_c13 = 'מספר';
+const String gen_app_ent3_c14 = 'שם';
+const String gen_app_ent3_c15 = 'סוג';
+const String gen_app_ent3_c16 = 'לקוח';
+const String gen_app_ent3_c17 = 'כתובת';
+const String gen_app_ent3_c18 = 'שטח';
+const String gen_app_ent3_c19 = 'מנהל פרויקט';
+const String gen_app_ent3_c20 = 'מחיר חוזה';
+const String gen_app_ent3_c21 = 'תקציב';
+const String gen_app_ent3_c22 = 'תאריך התחלה';
+const String gen_app_ent3_c23 = 'תאריך סיום';
+const String gen_app_ent3_c24 = 'סטטוס';

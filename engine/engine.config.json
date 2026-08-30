@@ -1,0 +1,21 @@
+{
+  "root": ".",
+  "knowledge": "knowledge",
+  "specs": "specs",
+  "out": { "screens": "out/screens", "data": "out/data" },
+  "catalog": {
+    "widgets": ["catalog/widgets"],
+    "logic": ["catalog/logic"],
+    "data": ["catalog/data"]
+  },
+  "framework": {
+    "imports": ["import 'package:flutter/material.dart';"],
+    "tokenImport": "import '../../catalog/widgets/tokens.dart';",
+    "scaffoldBg": "Tokens.bg",
+    "defaultToken": "Tokens.ink",
+    "widgetImportPrefix": "../../catalog/widgets/",
+    "logicImportPrefix": "../../catalog/logic/",
+    "contentImportPrefix": "import '../data/gen_",
+    "contentImportSuffix": "_content.dart';"
+  }
+}

@@ -12,6 +12,6 @@ const String gen_capmailphone_header_text2 = 'תחנת הקלט החופשי - �
 const String gen_capmailphone_stat_label3 = 'פענוח מחרוזת';
 const String gen_capmailphone_stat_label4 = 'עיצוב טלפון ישראלי מקור חוק';
 const String gen_capmailphone_textfield_label = 'הקלידו ערך עבור שחזור מספר טלפון';
-const String gen_capmailphone_textfield_hint = 'הקלידו ערך עבור שחזור מספר טלפון';
+const String gen_capmailphone_textfield_hint = '';
 const String gen_capmailphone_banner_sub = 'ההרכבה שמצאתי - decodeQuotedPrintable ⟵ formatIsraeliPhone - כל הדוגמאות עברו';
 const String gen_capmailphone_app_bar_title = 'שחזור מספר טלפון לתצוגה ישראלית תקנית מתוך שורה שהגיעה עטופה בקידוד-מייל ישן';

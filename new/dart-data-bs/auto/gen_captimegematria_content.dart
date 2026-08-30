@@ -74,6 +74,6 @@ const String gen_captimegematria_header_text2 = 'תחנת הקלט החופשי 
 const String gen_captimegematria_stat_label3 = 'לדקות מחצות';
 const String gen_captimegematria_stat_label4 = 'גימטריה מספר אותיות עבריות';
 const String gen_captimegematria_textfield_label = 'הקלידו ערך עבור חתימת-אותיות עברית לשעה';
-const String gen_captimegematria_textfield_hint = 'הקלידו ערך עבור חתימת-אותיות עברית לשעה';
+const String gen_captimegematria_textfield_hint = '';
 const String gen_captimegematria_banner_sub = 'ההרכבה שמצאתי - timeToMin ⟵ gem - כל הדוגמאות עברו';
 const String gen_captimegematria_app_bar_title = 'חתימת-אותיות עברית לשעה על השעון - כמה דקות עברו מחצות הלילה כתוב בגימטריה';

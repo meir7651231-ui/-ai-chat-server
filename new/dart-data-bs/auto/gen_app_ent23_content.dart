@@ -1,0 +1,20 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_ent23_c0 = 'אירוע בטיחות';
+const String gen_app_ent23_c1 = '7 שדות · 5 שלבים';
+const String gen_app_ent23_c2 = '🗂️';
+const String gen_app_ent23_c3 = 'שמירה';
+const String gen_app_ent23_c4 = 'פרטי הרשומה';
+const String gen_app_ent23_c5 = 'רשומות';
+const String gen_app_ent23_c6 = 'אין אירוע בטיחות עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_ent23_c7 = 'דווח';
+const String gen_app_ent23_c8 = 'נחסם';
+const String gen_app_ent23_c9 = 'בתחקיר';
+const String gen_app_ent23_c10 = 'טופל';
+const String gen_app_ent23_c11 = 'נסגר';
+const String gen_app_ent23_c12 = 'תאריך';
+const String gen_app_ent23_c13 = 'מיקום';
+const String gen_app_ent23_c14 = 'חומרה';
+const String gen_app_ent23_c15 = 'מעורבים';
+const String gen_app_ent23_c16 = 'תיאור';
+const String gen_app_ent23_c17 = 'גורם שורש';
+const String gen_app_ent23_c18 = 'סטטוס';

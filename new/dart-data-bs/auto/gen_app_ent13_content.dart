@@ -1,0 +1,19 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_ent13_c0 = 'קבלן משנה';
+const String gen_app_ent13_c1 = '7 שדות · 4 שלבים';
+const String gen_app_ent13_c2 = '🗂️';
+const String gen_app_ent13_c3 = 'שמירה';
+const String gen_app_ent13_c4 = 'פרטי הרשומה';
+const String gen_app_ent13_c5 = 'רשומות';
+const String gen_app_ent13_c6 = 'אין קבלן משנה עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_ent13_c7 = 'מועמד';
+const String gen_app_ent13_c8 = 'נבדק';
+const String gen_app_ent13_c9 = 'אושר';
+const String gen_app_ent13_c10 = 'פעיל';
+const String gen_app_ent13_c11 = 'שם';
+const String gen_app_ent13_c12 = 'חברה';
+const String gen_app_ent13_c13 = 'תחום';
+const String gen_app_ent13_c14 = 'רישיון';
+const String gen_app_ent13_c15 = 'תוקף ביטוח';
+const String gen_app_ent13_c16 = 'דירוג';
+const String gen_app_ent13_c17 = 'סטטוס';

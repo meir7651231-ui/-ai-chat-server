@@ -1,0 +1,20 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_ent19_c0 = 'שדה';
+const String gen_app_ent19_c1 = '7 שדות · 5 שלבים';
+const String gen_app_ent19_c2 = '🗂️';
+const String gen_app_ent19_c3 = 'שמירה';
+const String gen_app_ent19_c4 = 'פרטי הרשומה';
+const String gen_app_ent19_c5 = 'רשומות';
+const String gen_app_ent19_c6 = 'אין שדה עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_ent19_c7 = 'הוגש';
+const String gen_app_ent19_c8 = 'בבדיקה';
+const String gen_app_ent19_c9 = 'תיקונים';
+const String gen_app_ent19_c10 = 'אושר';
+const String gen_app_ent19_c11 = 'נסגר';
+const String gen_app_ent19_c12 = 'פרויקט';
+const String gen_app_ent19_c13 = 'חומר';
+const String gen_app_ent19_c14 = 'יצרן';
+const String gen_app_ent19_c15 = 'ספק';
+const String gen_app_ent19_c16 = 'תאריך הגשה';
+const String gen_app_ent19_c17 = 'בודק';
+const String gen_app_ent19_c18 = 'סטטוס';

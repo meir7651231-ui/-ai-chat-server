@@ -130,7 +130,10 @@ function generate(slug, specText) {
   const lines = rawLines.map(s => s.trim().replace(/,$/, ''));
   const first = lines[0];
   const oneLine = lines.length === 1;
-  const title = (oneLine ? (first.includes(':') ? first.slice(0, first.indexOf(':')) : '') : first.replace(/:$/, '')).trim();
+  const rawTitle = (oneLine ? (first.includes(':') ? first.slice(0, first.indexOf(':')) : '') : first.replace(/:$/, '')).trim();
+  // כותרת-AppBar נקייה: מסירים את מילת-ההירו ואת התת-כותרת (הכל אחרי '|') — משאירים
+  // שם-מסך + אימוג'י בלבד ("🗂️ פרויקט"), לא את שורת-ההירו המלאה. עיצוב טהור.
+  const title = (HERO_WORD ? rawTitle.replace(new RegExp('^' + HERO_WORD + '\\s*'), '') : rawTitle).replace(/\s*\|.*$/, '').trim() || rawTitle;
   const nodes = [];   // [{part, children:[part]}]
   if (oneLine) {
     for (const t of (first.includes(':') ? first.slice(first.indexOf(':') + 1) : first).split(',').map(s => s.trim()).filter(Boolean))
@@ -277,6 +280,8 @@ function generate(slug, specText) {
     if (t === 'String' && /^(value|selected)$/.test(name)) { if (!shared.s) { shared.s = '_t' + (++sIdx); stateDecls.push(`String ${shared.s} = '';`); } return { expr: shared.s }; }
     if (t === 'String' && /^(glyph|emoji|icon)$/.test(name)) return { expr: constFor(part.emoji || '🔹', part.role + '_glyph') };
     if (t === 'String' && /^(sub|subtitle|caption|secondary)$/.test(name)) return { expr: constFor(part.sub || part.label, part.role + '_sub') };
+    // 🎨 placeholder ריק — התווית כבר מוצגת מעל השדה; שכפול תווית-בתוך-שדה נראה רע (עיצוב טהור).
+    if (t === 'String' && /^(hint|placeholder)$/.test(name)) return { expr: constFor('', part.role + '_hint') };
     if (t === 'String') {
       // 🎨 תור-טקסטים: prop-מחרוזת גנרי ראשון = התווית; הבאים נמזגים מה-options בסדרם
       // (רק כשהאטום עצמו אינו אטום-אופציות) ואז מה-sub — כך widget רב-כיתובים מקבל טקסט שונה לכל פינה.
@@ -289,7 +294,7 @@ function generate(slug, specText) {
     }
     if (t === 'bool' && name === 'value') { if (!shared.b) { shared.b = '_v' + (++sIdx); stateDecls.push(`bool ${shared.b} = false;`); } return { expr: shared.b }; }
     if (t === 'bool') return { expr: 'false' };
-    if (t === 'int' && /^(value|selectedIndex|activeIndex|selected|qty|count)$/.test(name)) { if (!shared.i) { shared.i = '_n' + (++sIdx); stateDecls.push(`int ${shared.i} = 0;`); } return { expr: shared.i }; }
+    if (t === 'int' && /^(value|selectedIndex|activeIndex|selected|currentIndex|currentTab|activeTab|tabIndex|pageIndex|current|qty|count)$/.test(name)) { if (!shared.i) { shared.i = '_n' + (++sIdx); stateDecls.push(`int ${shared.i} = 0;`); } return { expr: shared.i }; }
     if (t === 'int') { const nv = nextNum(part); return { expr: nv !== undefined ? String(parseInt(nv.replace(/[^0-9]/g, '')) || 0) : '0' }; }
     if (t === 'double') {
       if (/radius/i.test(name)) return { expr: '12' };
@@ -406,6 +411,10 @@ function generate(slug, specText) {
     '// 📦 דאטה · תוכן-המחולל (genesis-gen) — התוויות מן-הבקשה, verbatim. אל תערוך ידנית.\n' +
     consts.map(([n, v]) => `const String ${n} = '${v.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}';${termKeyOf.has(v) ? ' // ' + termKeyOf.get(v) : ''}`).join('\n') + '\n');
 
+  // 🧹 רק שדות-מצב שבאמת מופיעים בגוף (אחרת unused_field warning ⇒ שער-קומפילציה אדום)
+  const body = calls.join('\n');
+  const usedDecls = stateDecls.filter((d) => { const m = d.match(/(_[a-z]\d+)\b/); return !m || body.includes(m[1]); });
+
   const code = `// 🧬 חולל ע"י המחולל (genesis-gen, הכרעות 17+18) — בקשה ⇒ בחירת-אטומים ⇒ חיווט ⇒ מסך. אל תערוך ידנית.
 // 🧬 שם: ${title}
 // 🧬 בקשה: ${lines.join(' · ')}
@@ -420,7 +429,7 @@ class ${cls} extends StatefulWidget {
 }
 
 class _${cls}State extends State<${cls}> {
-  ${stateDecls.join('\n  ')}
+  ${usedDecls.join('\n  ')}
 
   void _toast(String msg) => ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(msg), duration: const Duration(seconds: 2)),

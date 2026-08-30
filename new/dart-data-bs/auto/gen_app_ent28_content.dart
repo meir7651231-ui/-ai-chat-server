@@ -1,0 +1,19 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_ent28_c0 = 'חשבונית';
+const String gen_app_ent28_c1 = '7 שדות · 4 שלבים';
+const String gen_app_ent28_c2 = '🗂️';
+const String gen_app_ent28_c3 = 'שמירה';
+const String gen_app_ent28_c4 = 'פרטי הרשומה';
+const String gen_app_ent28_c5 = 'רשומות';
+const String gen_app_ent28_c6 = 'אין חשבונית עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_ent28_c7 = 'טיוטה';
+const String gen_app_ent28_c8 = 'הופקה';
+const String gen_app_ent28_c9 = 'נשלחה';
+const String gen_app_ent28_c10 = 'שולמה';
+const String gen_app_ent28_c11 = 'מספר';
+const String gen_app_ent28_c12 = 'לקוח';
+const String gen_app_ent28_c13 = 'פרויקט';
+const String gen_app_ent28_c14 = 'סכום';
+const String gen_app_ent28_c15 = 'מס';
+const String gen_app_ent28_c16 = 'תאריך';
+const String gen_app_ent28_c17 = 'סטטוס';
