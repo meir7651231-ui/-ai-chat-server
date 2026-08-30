@@ -62,7 +62,10 @@ const autoPurify = (boxFile) => {
   fs.writeFileSync(boxFile, out.join('\n'));
 };
 
-const rmBox = (n) => { for (const e of ['.mjs', '.contract.md', '.test.mjs']) { const fp = path.join(BOXES, n + e); if (fs.existsSync(fp)) fs.unlinkSync(fp); } };
+const rmBox = (n) => {
+  for (const e of ['.mjs', '.contract.md', '.test.mjs']) { const fp = path.join(BOXES, n + e); if (fs.existsSync(fp)) fs.unlinkSync(fp); }
+  for (const e of ['.mjs', '.contract.md', '.test.mjs']) { const fp = path.join(ROOT, 'new/atoms', n + '-strings' + e); if (fs.existsSync(fp)) fs.unlinkSync(fp); }  // גם אטום-המחרוזות
+};
 const freshViolators = (names) => {
   const bad = new Set();
   for (const [s, arg] of [['data-purity-check.mjs', '--gate'], ['deep-purity-scan.mjs', '--gate'], ['wiring-check.mjs', ''], ['contract-check.mjs', '']]) {
@@ -81,7 +84,9 @@ for (const { rel, boxName } of candidates) {
   processed++;
   const r = run('node', [path.join(ROOT, 'machtzev/box-assemble.mjs'), rel, boxName, '--write']);
   if (!/קופסה הורכבה/.test(r)) { skipped++; continue; }              // יבוא-ערך-זר / אין-golden
-  autoPurify(path.join(BOXES, boxName + '.mjs'));
+  const bp = path.join(BOXES, boxName + '.mjs');
+  autoPurify(bp);                                                    // קסם ⇒ קבוע-מתמטי
+  run('node', [path.join(ROOT, 'machtzev/box-purify.mjs'), bp]);     // עברית/enum ⇒ אטום-דאטה
 }
 // מסנן-שערים על כל הקופסאות-החדשות ביחד
 const fresh = fs.readdirSync(BOXES).filter(f => /\.mjs$/.test(f) && !/\.test\./.test(f)).map(f => f.replace(/\.mjs$/, ''))
@@ -92,6 +97,9 @@ for (let round = 0; round < 8; round++) {
   for (const n of bad) { rmBox(n); needsJudgment.push(n); judged++; }
 }
 for (const n of fresh) if (fs.existsSync(path.join(BOXES, n + '.mjs'))) { green.push(n); landed++; }
+
+// טיהור-מחרוזות יצר אטומי-דאטה חדשים ⇒ פליטת-תאומי-Dart (שער-הכיסוי נשאר 100%)
+if (landed) run('node', [path.join(ROOT, 'machtzev/reconvert-data.mjs')]);
 
 console.log(`\n🏭 המנוע-המלא: ${processed} מועמדים · ${skipped} דולגו (זר/ללא-golden) · ✅ ${landed} קופסאות ירוקות נחתו · 🔍 ${judged} דורשות-הכרעה`);
 if (green.length) console.log('  ✅ ירוקות: ' + green.join(', '));
