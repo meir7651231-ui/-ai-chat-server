@@ -1,4 +1,15 @@
-import { amountInWords } from './amount-in-words.mjs';
+import { amountInWords as __pure_amountInWords } from './amount-in-words.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)
+const __d_amountInWords_ONES = ['', 'אחד', 'שניים', 'שלושה', 'ארבעה', 'חמישה', 'שישה', 'שבעה', 'שמונה', 'תשעה'];
+const __d_amountInWords_TEENS = ['עשרה', 'אחד עשר', 'שנים עשר', 'שלושה עשר', 'ארבעה עשר', 'חמישה עשר', 'שישה עשר', 'שבעה עשר', 'שמונה עשר', 'תשעה עשר'];
+const __d_amountInWords_TENS = ['', '', 'עשרים', 'שלושים', 'ארבעים', 'חמישים', 'שישים', 'שבעים', 'שמונים', 'תשעים'];
+const __d_amountInWords_HUNDREDS = ['', 'מאה', 'מאתיים', 'שלוש מאות', 'ארבע מאות', 'חמש מאות', 'שש מאות', 'שבע מאות', 'שמונה מאות', 'תשע מאות'];
+const __d_amountInWords_ONES_F = ['', 'אחת', 'שתיים', 'שלוש', 'ארבע', 'חמש', 'שש', 'שבע', 'שמונה', 'תשע'];
+const __d_amountInWords_TEENS_F = ['עשר', 'אחת עשרה', 'שתים עשרה', 'שלוש עשרה', 'ארבע עשרה', 'חמש עשרה', 'שש עשרה', 'שבע עשרה', 'שמונה עשרה', 'תשע עשרה'];
+const __d_amountInWords_THOUSAND_CONSTRUCT = {
+      3: 'שלושת', 4: 'ארבעת', 5: 'חמשת', 6: 'ששת', 7: 'שבעת', 8: 'שמונת', 9: 'תשעת', 10: 'עשרת',
+  };
+const amountInWords = (...a) => __pure_amountInWords(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_amountInWords_ONES, __d_amountInWords_TEENS, __d_amountInWords_TENS, __d_amountInWords_HUNDREDS, __d_amountInWords_ONES_F, __d_amountInWords_TEENS_F, __d_amountInWords_THOUSAND_CONSTRUCT);
 const CASES = [[["\"\""],"\"\""],[["\"אבג\""],"\"אבג\""],[["\"כהן לוי\""],"\"כהן לוי\""],[["\"abc\""],"\"abc\""],[["\"a@b.com\""],"\"a@b.com\""],[["\"2026-08-24\""],"\"2026-08-24\""],[["\"2026-08-24T12:00:00\""],"\"2026-08-24T12:00:00\""],[["\"0501234567\""],"\"0501234567\""],[["\"03-1234567\""],"\"03-1234567\""],[["\"https://x.co\""],"\"https://x.co\""],[["\"שלום עולם\""],"\"שלום עולם\""],[["\"12\""],"\"12\""]];
 const de = (s) => s === '"__undef__"' ? undefined : JSON.parse(s);
 let f = 0;

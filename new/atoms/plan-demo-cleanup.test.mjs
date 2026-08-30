@@ -1,4 +1,51 @@
-import { planDemoCleanup } from './plan-demo-cleanup.mjs';
+import { planDemoCleanup as __pure_planDemoCleanup } from './plan-demo-cleanup.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_planDemoCleanup_PLAN_DEMO_CLEANUP_T = {
+  k1: "name",
+  k2: "father",
+  k3: "mother",
+  k4: "phone",
+  k5: "phone2",
+  k6: "city",
+  k7: "address",
+  k8: "email",
+  k9: "idNum",
+  k10: "cat",
+  k11: "forWho",
+  k12: "description",
+  k13: "price",
+  k14: "price1",
+  k15: "price2",
+  k16: "specialty",
+  k17: "location",
+  k18: "cap",
+  k19: "title",
+  k20: "type",
+  k21: "customType",
+  k22: "notes",
+  k23: "time",
+  k24: "area",
+  k25: "note",
+  k26: "goal",
+  k27: "kind",
+  k28: "value",
+  k29: "basePrice",
+  k30: "label",
+  k31: "desc",
+  k32: "sku",
+  k33: "(ללא שם)",
+  k34: "families",
+  k35: "enrollments",
+  k36: "courses",
+  k37: "deliveries",
+  k38: "distributionDays",
+  k39: "volunteers",
+  k40: "shopAssignments",
+  k41: "shopProducts",
+  k42: "tzBoxes",
+  k43: "tzCoordinators",
+};
+const planDemoCleanup = (...a) => __pure_planDemoCleanup(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_planDemoCleanup_PLAN_DEMO_CLEANUP_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const famDemo = { id: 'f1', name: 'כהן', father: 'אהרן', mother: 'בתיה', phone: '0501111111', phone2: '', city: 'צפת', address: 'רח 1', email: 'k@x.co', members: [{ id: 'm1' }] };

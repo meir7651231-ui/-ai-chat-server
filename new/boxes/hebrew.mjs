@@ -10,10 +10,19 @@ import { adarNorm as __pure_adarNorm } from '../atoms/adar-norm.mjs';
 import { ADAR_NORM_T as __d_adarNorm_ADAR_NORM_T } from '../atoms/adar-norm-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const adarNorm = (...a) => __pure_adarNorm(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_adarNorm_ADAR_NORM_T);
-import { hebAnnualEq as hebAnnualEqWire } from '../atoms/heb-annual-eq.mjs';
-import { hebParts } from '../atoms/heb-parts.mjs';
+import { hebAnnualEq as __pure_hebAnnualEq } from '../atoms/heb-annual-eq.mjs';
+import { HEB_ANNUAL_EQ_T as __d_hebAnnualEq_HEB_ANNUAL_EQ_T } from '../atoms/heb-annual-eq-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const hebAnnualEqWire = (...a) => __pure_hebAnnualEq(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_hebAnnualEq_HEB_ANNUAL_EQ_T);
+import { hebParts as __pure_hebParts } from '../atoms/heb-parts.mjs';
+import { HEB_PARTS_T as __d_hebParts_HEB_PARTS_T } from '../atoms/heb-parts-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const hebParts = (...a) => __pure_hebParts(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_hebParts_HEB_PARTS_T);
 import { hebPartsOfIso as hebPartsOfIsoWire } from '../atoms/heb-parts-of-iso.mjs';
-import { hebDateFull as hebDateFullWire } from '../atoms/heb-date-full.mjs';
+import { hebDateFull as __pure_hebDateFull } from '../atoms/heb-date-full.mjs';
+import { HEB_DATE_FULL_T as __d_hebDateFull_HEB_DATE_FULL_T } from '../atoms/heb-date-full-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const hebDateFullWire = (...a) => __pure_hebDateFull(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_hebDateFull_HEB_DATE_FULL_T);
 import { HOLIDAYS } from '../atoms/holidays.mjs';
 import { holidayOf as __pure_holidayOf } from '../atoms/holiday-of.mjs';
 import { HOLIDAY_OF_T as __d_holidayOf_HOLIDAY_OF_T } from '../atoms/holiday-of-strings.mjs';

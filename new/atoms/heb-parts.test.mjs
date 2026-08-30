@@ -1,4 +1,14 @@
-import { hebParts } from './heb-parts.mjs';
+import { hebParts as __pure_hebParts } from './heb-parts.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_hebParts_HEB_PARTS_T = {
+  k1: "en-u-ca-hebrew",
+  k2: "numeric",
+  k3: "long",
+  k4: "day",
+  k5: "month",
+  k6: "year",
+};
+const hebParts = (...a) => __pure_hebParts(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_hebParts_HEB_PARTS_T);
 let f=0;
 const p1 = hebParts(new Date('2026-08-24T12:00:00'));
 if (!(p1.day===11 && p1.month==='Elul' && p1.year===5786)) { console.error('✗ אלול: '+JSON.stringify(p1)); f=1; }

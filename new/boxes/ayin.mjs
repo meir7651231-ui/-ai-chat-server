@@ -4,7 +4,10 @@
 
 // ── אטומי-העין ──
 import { AYIN_STAGES }             from '../atoms/ayin-stages.mjs';
-import { stageLabel as stageLabelA } from '../atoms/stage-label.mjs';
+import { stageLabel as __pure_stageLabel } from '../atoms/stage-label.mjs';
+import { STAGE_LABEL_T as __d_stageLabel_STAGE_LABEL_T } from '../atoms/stage-label-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const stageLabelA = (...a) => __pure_stageLabel(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_stageLabel_STAGE_LABEL_T);
 import { featLabel as __pure_featLabel }   from '../atoms/feat-label.mjs';
 import { FEAT_LABEL_T as __d_featLabel_FEAT_LABEL_T } from '../atoms/feat-label-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

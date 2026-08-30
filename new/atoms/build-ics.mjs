@@ -4,33 +4,35 @@
  *  (basicDate · basicLocal · stampUtc · nextIso) נשארו בקובץ — עוזר-פנימי. */
 
 /** YYYYMMDD מ-ISO. */
-function basicDate(iso) {
-    return iso.replace(/-/g, '');
-}
 
 /** תאריך+שעה מקומיים בפורמט בסיסי צף: YYYYMMDDTHHMMSS. */
-function basicLocal(d) {
-    const p = (n, w = 2) => String(n).padStart(w, '0');
-    return (String(d.getFullYear()) + p(d.getMonth() + 1) + p(d.getDate()) +
-        'T' + p(d.getHours()) + p(d.getMinutes()) + p(d.getSeconds()));
-}
 
 /** DTSTAMP ב-UTC: YYYYMMDDTHHMMSSZ. */
-function stampUtc(now) {
-    const p = (n) => String(n).padStart(2, '0');
-    return (String(now.getUTCFullYear()) + p(now.getUTCMonth() + 1) + p(now.getUTCDate()) +
-        'T' + p(now.getUTCHours()) + p(now.getUTCMinutes()) + p(now.getUTCSeconds()) + 'Z');
-}
 
 /** יום-המחרת של ISO (ל-DTEND של אירוע יום-שלם). */
-function nextIso(iso) {
-    const d = new Date(iso + 'T12:00:00');
-    d.setDate(d.getDate() + 1);
-    const p = (n) => String(n).padStart(2, '0');
-    return String(d.getFullYear()) + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
-}
 
 export function buildIcs(occurrences, calName, now, icsEscape, foldIcsLine, T2) {
+  // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
+  function basicDate(iso) {
+      return iso.replace(/-/g, '');
+  }
+  function basicLocal(d) {
+      const p = (n, w = 2) => String(n).padStart(w, '0');
+      return (String(d.getFullYear()) + p(d.getMonth() + 1) + p(d.getDate()) +
+          'T' + p(d.getHours()) + p(d.getMinutes()) + p(d.getSeconds()));
+  }
+  function stampUtc(now) {
+      const p = (n) => String(n).padStart(2, '0');
+      return (String(now.getUTCFullYear()) + p(now.getUTCMonth() + 1) + p(now.getUTCDate()) +
+          'T' + p(now.getUTCHours()) + p(now.getUTCMinutes()) + p(now.getUTCSeconds()) + 'Z');
+  }
+  function nextIso(iso) {
+      const d = new Date(iso + 'T12:00:00');
+      d.setDate(d.getDate() + 1);
+      const p = (n) => String(n).padStart(2, '0');
+      return String(d.getFullYear()) + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+  }
+
     const lines = [
         T2.k1,
         T2.k2,

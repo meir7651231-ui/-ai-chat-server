@@ -3,11 +3,13 @@
  *  חולץ כלשונו מ-maor/src/lib/monthGrid.ts:54-114; פורמטרי-Intl נשארו בקובץ
  *  (שפה/סטנדרט — מותר בחוק-1). */
 
-const fmtMonthYear = new Intl.DateTimeFormat('he', { month: 'long', year: 'numeric' });
-const fmtHebMonth = new Intl.DateTimeFormat('he-u-ca-hebrew', { month: 'long' });
-const fmtHebYear = new Intl.DateTimeFormat('he-u-ca-hebrew', { year: 'numeric' });
 
-export function buildMonthGrid(events, anchorIso, hebMode, cellOf, isoOf, hpOf, gemYear) {
+export function buildMonthGrid(events, anchorIso, hebMode, cellOf, isoOf, hpOf, gemYear, T) {
+  // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
+  const fmtMonthYear = new Intl.DateTimeFormat('he', { month: T.k1, year: T.k2 });
+  const fmtHebMonth = new Intl.DateTimeFormat(T.k3, { month: T.k1 });
+  const fmtHebYear = new Intl.DateTimeFormat(T.k3, { year: T.k2 });
+
     const byDate = new Map();
     for (const ev of events) {
         if (!ev.date)

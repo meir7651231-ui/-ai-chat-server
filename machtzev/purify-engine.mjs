@@ -342,12 +342,98 @@ function purifyStrings(cand, log) {
   }
 }
 
+
+// ── 🪺 v4: קינון-עוזרים — עוזרי-מודול נבלעים לתוך הפונקציה-המיוצאת (קובץ חד-ייצוא),
+// כך שחילוץ-הדאטה (v2/v3) מגיע לכל הגוף: הפרמטר-שקע נראה גם לעוזרים (סגירה). ──
+function nestHelpers(file) {
+  const src = fs.readFileSync(path.join(ATOMS, file), 'utf8');
+  const code = strip(src);
+  const exps = [...code.matchAll(/export\s+(?:const|function|let|var|\{)/g)];
+  if (exps.length !== 1) return null;
+  const fm = code.match(/export\s+(?:const\s+(\w+)\s*=\s*(?:async\s*)?\(|function\s+(\w+)\s*\()/);
+  if (!fm) return null;
+  const fn = fm[1] || fm[2];
+  // מקננים רק אטום-מזוהם (מחרוזת-דאטה או טבלת-const בגוף) — אטום נקי לא נוגעים
+  const noCom = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
+  const hasData = /['"][^'"\n]*[\u0590-\u05FF]/.test(noCom) || /['"][^'"\n]*[a-zA-Z]{3,}[^'"\n]*['"]/.test(noCom) || /(?:^|\n)[ \t]*const\s+\w+\s*=\s*[\[{]/.test(noCom);
+  if (!hasData) return null;
+  const sigAt = src.search(new RegExp(`export\\s+(?:const\\s+${fn}\\s*=|function\\s+${fn}\\s*\\()`));
+  if (sigAt < 0) return null;
+  // איסוף הכרזות-עזר ברמת-המודול (פונקציות/קבועים), לפני או אחרי הייצוא
+  const helpers = [];
+  const declRe = /(?:^|\n)(?:function\s+(\w+)|const\s+(\w+)\s*=)/g;
+  let m;
+  while ((m = declRe.exec(src))) {
+    const at = m.index + (m[0].startsWith('\n') ? 1 : 0);
+    if (at === sigAt || src.slice(Math.max(0, at - 7), at).includes('export')) continue;
+    // גוף-ההכרזה: פונקציה ⇒ סוגריים-מאוזנים אחרי ה-{; קבוע ⇒ עד ; ברמת-אפס
+    let end;
+    if (m[1]) {
+      const ob = src.indexOf('{', declRe.lastIndex);
+      if (ob < 0) return null;
+      end = balanced(src, ob);
+      if (end < 0) return null;
+      end++;
+    } else {
+      let d = 0, q = declRe.lastIndex, stq = null;
+      for (; q < src.length; q++) {
+        const c = src[q];
+        if (stq) { if (c === '\\') q++; else if (c === stq) stq = null; continue; }
+        if (c === "'" || c === '\"' || c === '`') stq = c;
+        else if ('([{'.includes(c)) d++;
+        else if (')]}'.includes(c)) d--;
+        else if (c === ';' && d === 0) break;
+      }
+      if (q >= src.length) return null;
+      end = q + 1;
+    }
+    helpers.push({ at, end, text: src.slice(at, end), name: m[1] || m[2] });
+    declRe.lastIndex = end;
+  }
+  if (!helpers.length) return null;
+  // הסרה מהמודול (מהסוף) והזרקה אחרי פתיחת-גוף-הפונקציה
+  let out = src;
+  for (const h of [...helpers].sort((a, b) => b.at - a.at))
+    out = out.slice(0, h.at) + out.slice(h.end + (out[h.end] === '\n' ? 1 : 0));
+  const sig2 = out.search(new RegExp(`export\\s+(?:const\\s+${fn}\\s*=|function\\s+${fn}\\s*\\()`));
+  const po = out.indexOf('(', sig2);
+  const pc = balanced(out, po);
+  if (pc < 0) return null;
+  const ob = out.indexOf('{', pc);
+  const arrowAt = out.slice(pc, pc + 12).match(/^\)\s*(?:=>)?/);
+  if (ob < 0 || (out.slice(pc + 1, ob).trim() !== '' && out.slice(pc + 1, ob).trim() !== '=>')) return null; // גוף-ביטוי — לא מקננים
+  const nested = '\n  // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה\n' +
+    helpers.map(h => '  ' + h.text.replace(/\n/g, '\n  ')).join('\n') + '\n';
+  return { file, src, out: out.slice(0, ob + 1) + nested + out.slice(ob + 1), fn };
+}
 const mode = process.argv[2] || '--dry';
 const N = parseInt(process.argv[3] || '5');
 const files = fs.readdirSync(ATOMS).filter(f => f.endsWith('.mjs') && !f.endsWith('.test.mjs') && !f.endsWith('-data.mjs'));
 const cands = files.map(eligible).filter(Boolean);
 console.log(`🧼 מנוע-הטיהור: ${cands.length} אטומים זכאים-מכנית (מתוך ${files.length})`);
 if (mode === '--dry') cands.slice(0, 30).forEach(c => console.log(`  · ${c.file} — ${c.consts.map(x => x.name).join(', ')}`));
+if (mode === '--nest') {
+  let ok = 0;
+  for (const f of files) {
+    if (ok >= N) break;
+    const nh = nestHelpers(f);
+    if (!nh) continue;
+    const base = f.replace(/\.mjs$/, '');
+    try {
+      fs.writeFileSync(path.join(ATOMS, f), nh.out);
+      execFileSync('node', ['--check', path.join(ATOMS, f)], { stdio: 'pipe' });
+      const ownT = path.join(ATOMS, base + '.test.mjs');
+      if (fs.existsSync(ownT)) execFileSync('node', [ownT], { stdio: 'pipe' });
+      execFileSync('node', [path.join(ROOT, 'machtzev/emit/free-ref-scan.mjs'), '--gate'], { stdio: 'pipe' });
+      console.log(`  🪺 ${base}: עוזרים קוננו`);
+      ok++;
+    } catch (e) {
+      fs.writeFileSync(path.join(ATOMS, f), nh.src);
+      console.log(`  ✗ ${base}: קינון נכשל — הוחזר`);
+    }
+  }
+  console.log(`🪺 קוננו: ${ok}`);
+}
 if (mode === '--strings') {
   const scands = files.filter(f => !f.endsWith('-strings.mjs')).map(eligibleStrings).filter(Boolean);
   console.log(`🧵 חילוץ-מחרוזות: ${scands.length} מועמדים`);

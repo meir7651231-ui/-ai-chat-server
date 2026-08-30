@@ -1,4 +1,9 @@
-import { scheduleTasks } from './schedule-tasks.mjs';
+import { scheduleTasks as __pure_scheduleTasks } from './schedule-tasks.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_scheduleTasks_SCHEDULE_TASKS_T = {
+  k1: "number",
+};
+const scheduleTasks = (...a) => __pure_scheduleTasks(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_scheduleTasks_SCHEDULE_TASKS_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const J = JSON.stringify;

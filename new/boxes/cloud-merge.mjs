@@ -2,7 +2,10 @@
  *  זה המקום היחיד שבו חוטי-המיזוג נפגשים (חוקי-החשמלאי, LAW.md).
  *  מקור: maor/src/lib/cloud-merge.ts — צד-הקבלה הטהור (ללא firebase/DOM). */
 import { ENTITY_COLLECTIONS } from '../atoms/entity-collections.mjs';
-import { sanitizeIncoming } from '../atoms/sanitize-incoming.mjs';
+import { sanitizeIncoming as __pure_sanitizeIncoming } from '../atoms/sanitize-incoming.mjs';
+import { SANITIZE_INCOMING_T as __d_sanitizeIncoming_SANITIZE_INCOMING_T } from '../atoms/sanitize-incoming-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const sanitizeIncoming = (...a) => __pure_sanitizeIncoming(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_sanitizeIncoming_SANITIZE_INCOMING_T);
 import { mergeDonationsPreserving as __pure_mergeDonationsPreserving } from '../atoms/merge-donations-preserving.mjs';
 import { MERGE_DONATIONS_PRESERVING_T as __d_mergeDonationsPreserving_MERGE_DONATIONS_PRESERVING_T } from '../atoms/merge-donations-preserving-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

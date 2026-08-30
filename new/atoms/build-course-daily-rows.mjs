@@ -4,17 +4,19 @@
  *  (DAY_NAMES · isoOf · fmtD) נשארו בקובץ — עוזר-פנימי, לא import. */
 
 
-function isoOf(d) {
-    const p2 = (n) => String(n).padStart(2, '0');
-    return `${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}`;
-}
 
-function fmtD(iso) {
-    const [y, m, d] = iso.split('-');
-    return `${d}/${m}/${y}`;
-}
 
 export function buildCourseDailyRows(c, db, config, termOf, hebDateFull, DAY_NAMES) {
+  // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
+  function isoOf(d) {
+      const p2 = (n) => String(n).padStart(2, '0');
+      return `${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}`;
+  }
+  function fmtD(iso) {
+      const [y, m, d] = iso.split('-');
+      return `${d}/${m}/${y}`;
+  }
+
     const T = (k, fb) => (config ? termOf(config, k, fb) : fb);
     const rows = [
         ['תאריך עברי', 'תאריך לועזי', 'יום', 'קבוצה/שעה', 'סטטוס יום', 'תלמידה פעילה', T('entity.family', 'משפחה'), 'סטטוס נוכחות'],

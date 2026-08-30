@@ -3,8 +3,10 @@
  *  חולץ כלשונו מ-maor/src/lib/plannedMatch.ts:107-129 (matchIncomingToPlanned).
  *  השכנים nameMatches (דמיון-שם) ו-dayDiff (מרחק-ימים) הוזרקו כשקעים (חוק-1).
  *  ‏DATE_WINDOW_DAYS = 3: ערך-הסף של האטום עצמו (טווח ±3 ימים). */
-const DATE_WINDOW_DAYS = 3;
 export function matchIncomingToPlanned(inc, allOpen, nameMatches, dayDiff) {
+  // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
+  const DATE_WINDOW_DAYS = 3;
+
   const targetCents = Math.round(inc.amount * 100);
   const incDate = (inc.at || '').slice(0, 10); // ISO
   const candidates = [];

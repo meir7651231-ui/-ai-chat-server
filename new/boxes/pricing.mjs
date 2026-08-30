@@ -8,7 +8,10 @@ import { NORMALIZE_PRICES_T as __d_normalizePrices_NORMALIZE_PRICES_T } from '..
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const normalizePrices = (...a) => __pure_normalizePrices(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_normalizePrices_NORMALIZE_PRICES_T);
 import { computeQuote } from '../atoms/compute-quote.mjs';
-import { shekel } from '../atoms/shekel.mjs';
+import { shekel as __pure_shekel } from '../atoms/shekel.mjs';
+import { SHEKEL_T as __d_shekel_SHEKEL_T } from '../atoms/shekel-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const shekel = (...a) => __pure_shekel(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_shekel_SHEKEL_T);
 import { ALL_MODULES } from '../atoms/all-modules.mjs';
 
 // ── שקעי-הכרעה (מילון-הקופסה — נתון-בעלים עריך, חי כאן ולא באטומים) ──

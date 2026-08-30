@@ -24,7 +24,10 @@ import { receiptLines as __pure_receiptLines } from '../atoms/receipt-lines.mjs'
 import { RECEIPT_LINES_T as __d_receiptLines_RECEIPT_LINES_T } from '../atoms/receipt-lines-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const receiptLinesX = (...a) => __pure_receiptLines(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_receiptLines_RECEIPT_LINES_T);
-import { receiptHtml as receiptHtmlX } from '../atoms/receipt-html.mjs';
+import { receiptHtml as __pure_receiptHtml } from '../atoms/receipt-html.mjs';
+import { RECEIPT_HTML_T as __d_receiptHtml_RECEIPT_HTML_T } from '../atoms/receipt-html-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const receiptHtmlX = (...a) => __pure_receiptHtml(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_receiptHtml_RECEIPT_HTML_T);
 import { receiptFmtOf as __pure_receiptFmtOf } from '../atoms/receipt-fmt-of.mjs';
 import { RECEIPT_FMT_OF_T as __d_receiptFmtOf_RECEIPT_FMT_OF_T } from '../atoms/receipt-fmt-of-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
@@ -33,7 +36,10 @@ import { deliverReceipt as __pure_deliverReceipt } from '../atoms/deliver-receip
 import { DELIVER_RECEIPT_T as __d_deliverReceipt_DELIVER_RECEIPT_T } from '../atoms/deliver-receipt-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const deliverReceiptX = (...a) => __pure_deliverReceipt(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_deliverReceipt_DELIVER_RECEIPT_T);
-import { hebDateFull as hebDateFullX } from '../atoms/heb-date-full.mjs';
+import { hebDateFull as __pure_hebDateFull } from '../atoms/heb-date-full.mjs';
+import { HEB_DATE_FULL_T as __d_hebDateFull_HEB_DATE_FULL_T } from '../atoms/heb-date-full-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const hebDateFullX = (...a) => __pure_hebDateFull(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_hebDateFull_HEB_DATE_FULL_T);
 import { featureOn as featureOnX } from '../atoms/feature-on.mjs';
 import { moduleOn } from '../atoms/module-on.mjs';
 import { gem as __pure_gem } from '../atoms/gematria.mjs';
@@ -41,7 +47,10 @@ import { U, T, H } from '../atoms/gematria-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
 const gem = (...a) => __pure_gem(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), U, T, H);
 import { gemYear as gemYearX } from '../atoms/gem-year.mjs';
-import { hebParts } from '../atoms/heb-parts.mjs';
+import { hebParts as __pure_hebParts } from '../atoms/heb-parts.mjs';
+import { HEB_PARTS_T as __d_hebParts_HEB_PARTS_T } from '../atoms/heb-parts-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const hebParts = (...a) => __pure_hebParts(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_hebParts_HEB_PARTS_T);
 import { guardExport as guardExportX } from '../atoms/guard-export.mjs';
 
 // ── חיווט: תאריך-עברי-מלא (gem/gemYear/hebParts שוקעו לתוך heb-date-full) ──

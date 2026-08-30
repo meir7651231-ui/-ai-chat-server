@@ -1,4 +1,10 @@
-import { foreignHost } from './foreign-host.mjs';
+import { foreignHost as __pure_foreignHost } from './foreign-host.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_foreignHost_FOREIGN_HOST_T = {
+  k1: "localhost",
+  k2: ".local",
+};
+const foreignHost = (...a) => __pure_foreignHost(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_foreignHost_FOREIGN_HOST_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 // 1) מארח זר

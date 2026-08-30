@@ -1,4 +1,11 @@
-import { buildMonthGrid } from './build-month-grid.mjs';
+import { buildMonthGrid as __pure_buildMonthGrid } from './build-month-grid.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_buildMonthGrid_BUILD_MONTH_GRID_T = {
+  k1: "long",
+  k2: "numeric",
+  k3: "he-u-ca-hebrew",
+};
+const buildMonthGrid = (...a) => __pure_buildMonthGrid(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_buildMonthGrid_BUILD_MONTH_GRID_T);
 
 // שקעים מקומיים לבדיקה
 const isoOf = (d) => {

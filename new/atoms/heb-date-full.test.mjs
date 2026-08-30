@@ -1,4 +1,11 @@
-import { hebDateFull } from './heb-date-full.mjs';
+import { hebDateFull as __pure_hebDateFull } from './heb-date-full.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_hebDateFull_HEB_DATE_FULL_T = {
+  k1: "he-u-ca-hebrew",
+  k2: "long",
+  k3: "numeric",
+};
+const hebDateFull = (...a) => __pure_hebDateFull(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_hebDateFull_HEB_DATE_FULL_T);
 // שקעים אמיתיים כמו ב-maor (מקומיים לבדיקה — הבדיקה מייבאת רק את האטום שלה)
 function gem(n) {
   n = Math.floor(+n);

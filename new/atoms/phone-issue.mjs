@@ -1,9 +1,11 @@
 /** חוט · phone-issue — אבחון תקינות מספר-טלפון (null=תקין).
  *  חוזה: phone-issue.contract.md · טהור, אפס-שקעים.
  *  חולץ כלשונו מ-maor/src/lib/audit.ts (כולל העוזר-הפרטי digits). */
-const digits = (x) => (x || '').replace(/\D/g, '');
 
 export function phoneIssue(p, T) {
+  // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
+  const digits = (x) => (x || '').replace(/\D/g, '');
+
   if (!p || p === '-') return null;
   const d = digits(p);
   if ((d.length === 9 || d.length === 10) && d[0] === '0') return null;

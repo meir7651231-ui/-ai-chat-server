@@ -1,4 +1,23 @@
-import { eventsCsvRows } from './events-csv-rows.mjs';
+import { eventsCsvRows as __pure_eventsCsvRows } from './events-csv-rows.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_eventsCsvRows_EVENTS_CSV_ROWS_T = {
+  k1: "רגיל (ירוק)",
+  k2: "בינוני (כתום)",
+  k3: "דחוף (אדום)",
+  k4: "כותרת",
+  k5: "סוג אירוע",
+  k6: "תאריך עברי",
+  k7: "תאריך לועזי",
+  k8: "שעה",
+  k9: "entity.family",
+  k10: "משפחה",
+  k11: "עדיפות",
+  k12: "הערות",
+  k13: "בוצע",
+  k14: "כן",
+  k15: "לא",
+};
+const eventsCsvRows = (...a) => __pure_eventsCsvRows(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_eventsCsvRows_EVENTS_CSV_ROWS_T);
 // מימושי-שקע לבדיקה — נאמנים למקור:
 const termOf = (c, k, fb) => c?.terms?.[k] || fb;
 const hebDateFull = (iso) => 'ע(' + iso + ')';

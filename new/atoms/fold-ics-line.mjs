@@ -1,8 +1,10 @@
 /** חוט · fold-ics-line — קיפול-שורת-ICS ל-≤75 אוקטטים (RFC 5545). חוזה: fold-ics-line.contract.md
  *  חולץ כלשונו מ-maor/src/lib/ics.ts:40-58; ‏TextEncoder = סטנדרט (מותר בחוק-1). */
-const enc = new TextEncoder();
 
 export function foldIcsLine(line) {
+  // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
+  const enc = new TextEncoder();
+
   const out = [];
   let cur = '';
   let curBytes = 0;

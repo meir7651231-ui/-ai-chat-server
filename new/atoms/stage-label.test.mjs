@@ -1,4 +1,14 @@
-import { stageLabel } from './stage-label.mjs';
+import { stageLabel as __pure_stageLabel } from './stage-label.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_stageLabel_STAGE_LABEL_T = {
+  k1: "חדש",
+  k2: "בהכנה",
+  k3: "רישום",
+  k4: "מסירה",
+  k5: "הושלם",
+  k6: "ayin.stage.",
+};
+const stageLabel = (...a) => __pure_stageLabel(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_stageLabel_STAGE_LABEL_T);
 let f = 0;
 const eq = (a, b, msg) => { if (a !== b) { console.error(`✗ ${msg} ⇒ ${JSON.stringify(a)}`); f = 1; } };
 

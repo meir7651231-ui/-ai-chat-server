@@ -6,7 +6,10 @@ import { academicYearLabel } from '../atoms/academic-year-label.mjs';
 import { nextYearDates } from '../atoms/next-year-dates.mjs';
 import { renewOf } from '../atoms/renew-of.mjs';
 import { isRenewed } from '../atoms/is-renewed.mjs';
-import { enrollSummary } from '../atoms/enroll-summary.mjs';
+import { enrollSummary as __pure_enrollSummary } from '../atoms/enroll-summary.mjs';
+import { ENROLL_SUMMARY_T as __d_enrollSummary_ENROLL_SUMMARY_T } from '../atoms/enroll-summary-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const enrollSummary = (...a) => __pure_enrollSummary(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_enrollSummary_ENROLL_SUMMARY_T);
 import { buildReenrollRows as __pure_buildReenrollRows } from '../atoms/build-reenroll-rows.mjs';
 import { BUILD_REENROLL_ROWS_T as __d_buildReenrollRows_BUILD_REENROLL_ROWS_T } from '../atoms/build-reenroll-rows-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

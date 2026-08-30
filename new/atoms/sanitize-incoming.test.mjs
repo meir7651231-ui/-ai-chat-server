@@ -1,4 +1,19 @@
-import { sanitizeIncoming } from './sanitize-incoming.mjs';
+import { sanitizeIncoming as __pure_sanitizeIncoming } from './sanitize-incoming.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_sanitizeIncoming_SANITIZE_INCOMING_T = {
+  k1: "members",
+  k2: "docs",
+  k3: "payments",
+  k4: "absences",
+  k5: "donations",
+  k6: "collections",
+  k7: "scoreLog",
+  k8: "components",
+  k9: "redemptions",
+  k10: "criterionIds",
+  k11: "waits",
+};
+const sanitizeIncoming = (...a) => __pure_sanitizeIncoming(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_sanitizeIncoming_SANITIZE_INCOMING_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

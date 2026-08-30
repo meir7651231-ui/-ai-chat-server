@@ -10,15 +10,24 @@ import { supportersImportFormatRows as __pure_supportersImportFormatRows } from 
 import { SUPPORTERS_IMPORT_FORMAT_ROWS_T as __d_supportersImportFormatRows_SUPPORTERS_IMPORT_FORMAT_ROWS_T } from '../atoms/supporters-import-format-rows-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const supportersImportFormatRows = (...a) => __pure_supportersImportFormatRows(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_supportersImportFormatRows_SUPPORTERS_IMPORT_FORMAT_ROWS_T);
-import { eventsCsvRows as eventsCsvRowsWire } from '../atoms/events-csv-rows.mjs';
+import { eventsCsvRows as __pure_eventsCsvRows } from '../atoms/events-csv-rows.mjs';
+import { EVENTS_CSV_ROWS_T as __d_eventsCsvRows_EVENTS_CSV_ROWS_T } from '../atoms/events-csv-rows-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const eventsCsvRowsWire = (...a) => __pure_eventsCsvRows(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_eventsCsvRows_EVENTS_CSV_ROWS_T);
 import { termOf } from '../atoms/term-of.mjs';
-import { hebDateFull } from '../atoms/heb-date-full.mjs';
+import { hebDateFull as __pure_hebDateFull } from '../atoms/heb-date-full.mjs';
+import { HEB_DATE_FULL_T as __d_hebDateFull_HEB_DATE_FULL_T } from '../atoms/heb-date-full-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const hebDateFull = (...a) => __pure_hebDateFull(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_hebDateFull_HEB_DATE_FULL_T);
 import { gem as __pure_gem } from '../atoms/gematria.mjs';
 import { U, T, H } from '../atoms/gematria-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
 const gem = (...a) => __pure_gem(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), U, T, H);
 import { gemYear } from '../atoms/gem-year.mjs';
-import { hebParts } from '../atoms/heb-parts.mjs';
+import { hebParts as __pure_hebParts } from '../atoms/heb-parts.mjs';
+import { HEB_PARTS_T as __d_hebParts_HEB_PARTS_T } from '../atoms/heb-parts-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const hebParts = (...a) => __pure_hebParts(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_hebParts_HEB_PARTS_T);
 import { EV_META } from '../atoms/ev-meta.mjs';
 
 // ── החיווט: שרשרת-התאריך-העברי — הכרעת-הקופסה (hebrew.ts:160) ──

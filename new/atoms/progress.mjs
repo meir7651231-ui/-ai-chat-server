@@ -1,8 +1,10 @@
 /** חוט · progress — מדד-התקדמות של קמפיין-חיוג. חוזה: progress.contract.md
  *  חולץ כלשונו מ-maor/src/lib/dialer.ts:80-96; השכן REQUEUE_OUTCOMES הוזרק
  *  כשקע (חוק-1 — אפס import פנימי); ZERO_COUNTS הפרטי הוטמע. */
-const ZERO_COUNTS = () => ({ donated: 0, noanswer: 0, refused: 0, callback: 0, done: 0, skip: 0 });
 export function progress(c, requeueOutcomes) {
+  // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
+  const ZERO_COUNTS = () => ({ donated: 0, noanswer: 0, refused: 0, callback: 0, done: 0, skip: 0 });
+
   const pending = new Set(c.queue);
   const remaining = pending.size;
   const counts = ZERO_COUNTS();

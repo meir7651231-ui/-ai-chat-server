@@ -3,18 +3,20 @@
  *  חוזה: telephony-to-tenant.contract.md
  *  חולץ כלשונו מ-maor/src/components/telephony/lib.ts:68-132; מפות ONRAMP/CHANNELS
  *  (קבועים פרטיים-למודול, שורות 23-31) הוטמעו כאן. אפס import פנימי. */
-const ONRAMP = {
-  sim: 'sim-in-gateway',
-  virtual: 'customer-forward',
-  whatsapp: 'device-link',
-};
-const CHANNELS = {
-  sim: ['voice'],
-  virtual: ['voice'],
-  whatsapp: ['whatsapp'],
-};
 
-export function telephonyToTenant(tc, orgName, tenantId) {
+export function telephonyToTenant(tc, orgName, tenantId, T) {
+  // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
+  const ONRAMP = {
+    sim: T.k1,
+    virtual: T.k2,
+    whatsapp: T.k3,
+  };
+  const CHANNELS = {
+    sim: [T.k4],
+    virtual: [T.k4],
+    whatsapp: [T.k5],
+  };
+
   let gw = 0;
   const numbers = (tc.numbers || [])
     .filter((n) => n.e164 && n.e164.trim())
@@ -28,10 +30,10 @@ export function telephonyToTenant(tc, orgName, tenantId) {
         channels: CHANNELS[n.kind],
         ...(n.kosher ? { kosher: true } : {}),
       };
-      if (n.kind === 'sim') { gw += 1; base.gatewayChannel = gw; }
+      if (n.kind === T.k6) { gw += 1; base.gatewayChannel = gw; }
       return base;
     });
-  const firstSim = numbers.find((n) => n.onramp === 'sim-in-gateway');
+  const firstSim = numbers.find((n) => n.onramp === T.k1);
   const features = {
     'voice.kosher': tc.kosherMode,
     'calendar.hebrew': tc.hebrewCalendar,
@@ -42,8 +44,8 @@ export function telephonyToTenant(tc, orgName, tenantId) {
   };
   return {
     tenantId,
-    orgName: orgName || 'ארגון',
-    timezone: 'Asia/Jerusalem',
+    orgName: orgName || T.k7,
+    timezone: T.k8,
     ...(tc.city ? { city: tc.city } : {}),
     officeHours: { days: [...tc.officeDays].sort((a, b) => a - b), start: tc.officeStart, end: tc.officeEnd },
     numbers,
@@ -53,7 +55,7 @@ export function telephonyToTenant(tc, orgName, tenantId) {
       voicemail: { box: tc.vmBox },
     },
     outbound: { defaultNumberId: firstSim ? firstSim.id : (numbers[0]?.id ?? 'n1') },
-    cti: { org: tenantId, mode: 'directory' },
+    cti: { org: tenantId, mode: T.k9 },
     features,
   };
 }

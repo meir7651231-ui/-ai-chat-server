@@ -4,25 +4,27 @@
  *  ראו חוזה) · חולץ כלשונו מ-maor/src/lib/customExport.ts:159-323; העוזרים
  *  הפרטיים של הקובץ (inR · isoOf · fmtD) נשארו בקובץ — עוזר-פנימי. */
 
-function inR(iso, r) {
-    if (!iso) return false;
-    if (r.from && iso < r.from) return false;
-    if (r.to && iso > r.to) return false;
-    return true;
-}
 
-function isoOf(d) {
-    const p2 = (n) => String(n).padStart(2, '0');
-    return `${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}`;
-}
 
-function fmtD(iso) {
-    if (!iso) return '';
-    const [y, m, d] = iso.split('-');
-    return `${d}/${m}/${y}`;
-}
 
 export function buildCustomExport(cfg, db, target, range, selectedKeys, s, T) {
+  // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
+  function inR(iso, r) {
+      if (!iso) return false;
+      if (r.from && iso < r.from) return false;
+      if (r.to && iso > r.to) return false;
+      return true;
+  }
+  function isoOf(d) {
+      const p2 = (n) => String(n).padStart(2, '0');
+      return `${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}`;
+  }
+  function fmtD(iso) {
+      if (!iso) return '';
+      const [y, m, d] = iso.split('-');
+      return `${d}/${m}/${y}`;
+  }
+
     const { expFieldDefs, featureOn, termOf, sessionsOf, enrollCount, hebParts, hebAnnualEq, hebDateFull,
         supCount, supIls, supUsd, supScore, supTier, stageLabel, EV_META, HEBREW_RECURRING, DAY_NAMES } = s;
     const defs = expFieldDefs(cfg, target).filter((f) => selectedKeys.includes(f.key));

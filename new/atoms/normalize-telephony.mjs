@@ -2,9 +2,11 @@
  *  חוזה: normalize-telephony.contract.md · שקעים: telStr, telExt
  *  חולץ כלשונו מ-maor/src/lib/config.ts:169-211; השכנים telStr/telExt הוזרקו
  *  כשקעים (חוק-1 — אפס import פנימי); הקבועים TEL_KINDS/TEL_HHMM_RE שוכנו כאן. */
-const TEL_HHMM_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
 
 export function normalizeTelephony(raw, telStr, telExt, TEL_KINDS) {
+  // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
+  const TEL_HHMM_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
+
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return undefined;
   const t = raw;
   const numsRaw = Array.isArray(t.numbers) ? t.numbers.slice(0, 64) : [];

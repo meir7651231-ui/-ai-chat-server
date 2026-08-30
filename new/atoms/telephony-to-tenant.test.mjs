@@ -1,4 +1,17 @@
-import { telephonyToTenant } from './telephony-to-tenant.mjs';
+import { telephonyToTenant as __pure_telephonyToTenant } from './telephony-to-tenant.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_telephonyToTenant_TELEPHONY_TO_TENANT_T = {
+  k1: "sim-in-gateway",
+  k2: "customer-forward",
+  k3: "device-link",
+  k4: "voice",
+  k5: "whatsapp",
+  k6: "sim",
+  k7: "ארגון",
+  k8: "Asia/Jerusalem",
+  k9: "directory",
+};
+const telephonyToTenant = (...a) => __pure_telephonyToTenant(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_telephonyToTenant_TELEPHONY_TO_TENANT_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b);

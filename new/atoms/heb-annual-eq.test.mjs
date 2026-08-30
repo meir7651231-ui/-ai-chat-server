@@ -1,4 +1,11 @@
-import { hebAnnualEq } from './heb-annual-eq.mjs';
+import { hebAnnualEq as __pure_hebAnnualEq } from './heb-annual-eq.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_hebAnnualEq_HEB_ANNUAL_EQ_T = {
+  k1: "Adar",
+  k2: "Adar I",
+  k3: "Adar II",
+};
+const hebAnnualEq = (...a) => __pure_hebAnnualEq(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_hebAnnualEq_HEB_ANNUAL_EQ_T);
 // שקע-scanHebYear אמיתי על Intl (מקומי לבדיקה — הבדיקה מייבאת רק את האטום שלה)
 const fmtParts = new Intl.DateTimeFormat('en-u-ca-hebrew', { day: 'numeric', month: 'long', year: 'numeric' });
 function hebParts(d) {

@@ -4,10 +4,12 @@
  *  validIsraeliId · phoneIssue · ageOf · supporterAggregates הוזרקו כאובייקט-
  *  שקעים deps (חוק-1 — אפס import פנימי). digits ו-EMAIL_RE — קבועי-עזר
  *  מקומיים של קובץ-המקור — מוטבעים כלשונם. */
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const digits = (x) => (x || '').replace(/\D/g, '');
 
 export function runAudit(db, todayIso = '', extra = true, config, deps, T2) {
+  // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  const digits = (x) => (x || '').replace(/\D/g, '');
+
   const { termOf, normName, validIsraeliId, phoneIssue, ageOf, supporterAggregates } = deps;
   const issues = [];
   const T = (k, fb) => (config ? termOf(config, k, fb) : fb);

@@ -6,11 +6,13 @@
  *  DOW_HE + closedTag הם חלק מהיחידה — נשארו בקובץ. */
 
 // סיבת-סגירה להצגה — רק ספציפית (חג/שבת/dnd/חירום), לא הגנרית "מחוץ-לשעות".
-function closedTag(reason) {
-  return reason && reason !== 'מחוץ-לשעות' && reason !== 'שעות-פעילות' ? ` (${reason})` : '';
-}
 
 export function explainCall(tenant, call = {}, opts = {}, eng = {}, DOW_HE) {
+  // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
+  function closedTag(reason) {
+    return reason && reason !== 'מחוץ-לשעות' && reason !== 'שעות-פעילות' ? ` (${reason})` : '';
+  }
+
   const { simulateCall, featureOn } = eng;
   const sim = simulateCall(tenant, call, opts); // R6-8: אופק-חלון מושחל
   const lines = [];

@@ -1,5 +1,15 @@
 /** חוט · norm-phone — קודם אוטומטית (אפיון-Golden). חוזה: norm-phone.contract.md */
 export function normPhone(s) {
+  // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
+  function nameCityKey(f) {
+      const n = (f.name || '').trim().replace(/\s+/g, ' ').toLowerCase();
+      const c = (f.city || '').trim().toLowerCase();
+      return n && c ? n + '|' + c : '';
+  }
+  function phonesOf(f) {
+      return [normPhone(f.phone), normPhone(f.phone2)].filter((p) => p.length >= 7);
+  }
+
     let d = (s || '').replace(/\D/g, '');
     if (/^(\d)\1+$/.test(d))
         return ''; // מציין-מקום (אפסים/ספרה-חוזרת) — לא טלפון אמיתי
@@ -12,15 +22,7 @@ export function normPhone(s) {
  * מפתח שם+עיר מנורמל. דורש גם שם וגם עיר לא-ריקים — אחרת ריק. בלי הדרישה הזו,
  * משפחות רבות ללא עיר ובעלות שם-משפחה נפוץ היו מתקבצות בטעות (סיכון מיזוג-שווא).
  */
-function nameCityKey(f) {
-    const n = (f.name || '').trim().replace(/\s+/g, ' ').toLowerCase();
-    const c = (f.city || '').trim().toLowerCase();
-    return n && c ? n + '|' + c : '';
-}
 /** כל הטלפונים המנורמלים של משפחה (ראשי + נוסף), לא-ריקים. */
-function phonesOf(f) {
-    return [normPhone(f.phone), normPhone(f.phone2)].filter((p) => p.length >= 7);
-}
 /**
  * קבוצות כפילות — רכיבי-קשירות של משפחות שחולקות טלפון מנורמל, או שם+עיר זהים.
  * מחזיר מערך קבוצות (מזהי משפחות), כל קבוצה בגודל ≥2. Union-Find לטרנזיטיביות.

@@ -5,7 +5,10 @@
  *  מוזרקים כפרמטרים ואינם ממומשים כאן. */
 import { LOCK_ZONES } from '../atoms/lock-zones.mjs';
 import { DEFAULT_LOCK_ZONES } from '../atoms/default-lock-zones.mjs';
-import { lockKey as lockKeyAtom } from '../atoms/lock-key.mjs';
+import { lockKey as __pure_lockKey } from '../atoms/lock-key.mjs';
+import { LOCK_KEY_T as __d_lockKey_LOCK_KEY_T } from '../atoms/lock-key-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const lockKeyAtom = (...a) => __pure_lockKey(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_lockKey_LOCK_KEY_T);
 import { isValidPin as isValidPinAtom } from '../atoms/is-valid-pin.mjs';
 import { hashPin as hashPinAtom } from '../atoms/hash-pin.mjs';
 import { verifyPin as verifyPinAtom } from '../atoms/verify-pin.mjs';

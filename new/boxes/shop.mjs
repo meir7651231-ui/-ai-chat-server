@@ -66,7 +66,10 @@ import { componentCounts } from '../atoms/component-counts.mjs';
 // עלי-שכן חסרי-שקע — מיובאים ומחווטים בקופסה
 import { termOf } from '../atoms/term-of.mjs';
 import { dateInRange } from '../atoms/date-in-range.mjs';
-import { hebParts } from '../atoms/heb-parts.mjs';
+import { hebParts as __pure_hebParts } from '../atoms/heb-parts.mjs';
+import { HEB_PARTS_T as __d_hebParts_HEB_PARTS_T } from '../atoms/heb-parts-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const hebParts = (...a) => __pure_hebParts(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_hebParts_HEB_PARTS_T);
 import { isoLocal } from '../atoms/iso-local.mjs';
 
 /* ── חיווט-פנימי · הכרעות שחיות בקופסה (מקור: shop/lib.ts) ── */

@@ -27,15 +27,27 @@ import { unitLabel as __pure_unitLabel } from '../atoms/unit-label.mjs';
 import { UNIT_LABEL_T as __d_unitLabel_UNIT_LABEL_T } from '../atoms/unit-label-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const unitLabelAtom = (...a) => __pure_unitLabel(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_unitLabel_UNIT_LABEL_T);
-import { stageLabel as stageLabelAtom } from '../atoms/stage-label.mjs';
+import { stageLabel as __pure_stageLabel } from '../atoms/stage-label.mjs';
+import { STAGE_LABEL_T as __d_stageLabel_STAGE_LABEL_T } from '../atoms/stage-label-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const stageLabelAtom = (...a) => __pure_stageLabel(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_stageLabel_STAGE_LABEL_T);
 import { sessionsOf } from '../atoms/sessions-of.mjs';
 import { enrollCount as __pure_enrollCount } from '../atoms/enroll-count.mjs';
 import { ENROLL_COUNT_T as __d_enrollCount_ENROLL_COUNT_T } from '../atoms/enroll-count-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const enrollCount = (...a) => __pure_enrollCount(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_enrollCount_ENROLL_COUNT_T);
-import { hebParts } from '../atoms/heb-parts.mjs';
-import { hebAnnualEq as hebAnnualEqAtom } from '../atoms/heb-annual-eq.mjs';
-import { hebDateFull as hebDateFullAtom } from '../atoms/heb-date-full.mjs';
+import { hebParts as __pure_hebParts } from '../atoms/heb-parts.mjs';
+import { HEB_PARTS_T as __d_hebParts_HEB_PARTS_T } from '../atoms/heb-parts-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const hebParts = (...a) => __pure_hebParts(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_hebParts_HEB_PARTS_T);
+import { hebAnnualEq as __pure_hebAnnualEq } from '../atoms/heb-annual-eq.mjs';
+import { HEB_ANNUAL_EQ_T as __d_hebAnnualEq_HEB_ANNUAL_EQ_T } from '../atoms/heb-annual-eq-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const hebAnnualEqAtom = (...a) => __pure_hebAnnualEq(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_hebAnnualEq_HEB_ANNUAL_EQ_T);
+import { hebDateFull as __pure_hebDateFull } from '../atoms/heb-date-full.mjs';
+import { HEB_DATE_FULL_T as __d_hebDateFull_HEB_DATE_FULL_T } from '../atoms/heb-date-full-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const hebDateFullAtom = (...a) => __pure_hebDateFull(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_hebDateFull_HEB_DATE_FULL_T);
 import { gem as __pure_gem } from '../atoms/gematria.mjs';
 import { U, T, H } from '../atoms/gematria-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה

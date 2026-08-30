@@ -14,7 +14,10 @@ import { toTenantId as __pure_toTenantId } from '../atoms/to-tenant-id.mjs';
 import { TO_TENANT_ID_T as __d_toTenantId_TO_TENANT_ID_T } from '../atoms/to-tenant-id-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const toTenantId = (...a) => __pure_toTenantId(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_toTenantId_TO_TENANT_ID_T);
-import { telephonyToTenant } from '../atoms/telephony-to-tenant.mjs';
+import { telephonyToTenant as __pure_telephonyToTenant } from '../atoms/telephony-to-tenant.mjs';
+import { TELEPHONY_TO_TENANT_T as __d_telephonyToTenant_TELEPHONY_TO_TENANT_T } from '../atoms/telephony-to-tenant-strings.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
+const telephonyToTenant = (...a) => __pure_telephonyToTenant(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_telephonyToTenant_TELEPHONY_TO_TENANT_T);
 import { previewTelephony as __pure_previewTelephony } from '../atoms/preview-telephony.mjs';
 import { PREVIEW_TELEPHONY_T as __d_previewTelephony_PREVIEW_TELEPHONY_T } from '../atoms/preview-telephony-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

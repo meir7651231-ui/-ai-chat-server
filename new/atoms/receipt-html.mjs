@@ -2,28 +2,30 @@
  *  מוצא: maor/src/lib/receipt.ts:165-195 כלשונו; ‏receiptLines הוזרק כשקע (חוק-1 —
  *  אפס import פנימי; מקור-האמת היחיד לתוכן נשאר אצל שורות-הטקסט).
  *  ‏esc = עוזר-פנימי לא-מיוצא במקור — נכלל (שם-תורם/ייעוד הם קלט חופשי, אסור שיוזרקו). */
-function esc(s) {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-}
 
 /** @param o פרטי-הקבלה · @param receiptLines שקע: (o)=>string[] — שורות-הטקסט של הקבלה */
-export function receiptHtml(o, receiptLines) {
+export function receiptHtml(o, receiptLines, T) {
+  // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
+  function esc(s) {
+    return s.replace(/&/g, T.k1).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
   const lines = receiptLines(o).filter((x) => x !== '');
   const [first, ...rest] = lines;
-  const body = rest.map((ln) => '<div class="ln">' + esc(ln) + '</div>').join('\n');
+  const body = rest.map((ln) => T.k2 + esc(ln) + T.k3).join('\n');
   return (
-    '<!doctype html><html dir="rtl" lang="he"><head><meta charset="utf-8">' +
-    '<title>' + esc('קבלה ' + o.rid) + '</title>' +
-    '<style>' +
-    'body{font-family:"Segoe UI",Arial,"Noto Sans Hebrew",sans-serif;color:#111;margin:0;padding:32px;direction:rtl}' +
-    '.sheet{max-width:520px;margin:0 auto;border:1px solid #bbb;border-radius:10px;padding:28px 32px}' +
-    '.mark{font-size:12px;letter-spacing:.08em;color:#555;text-align:left}' +
-    '.ln{font-size:14.5px;line-height:1.9}' +
-    '.ln:first-of-type{font-size:19px;font-weight:700;margin-bottom:6px}' +
-    '@media print{body{padding:0}.sheet{border:none}}' +
-    '</style></head><body><div class="sheet">' +
-    '<div class="mark">' + esc(first) + '</div>' +
+    T.k4 +
+    T.k5 + esc(T.k6 + o.rid) + T.k7 +
+    T.k8 +
+    T.k9 +
+    T.k10 +
+    T.k11 +
+    T.k12 +
+    T.k13 +
+    T.k14 +
+    T.k15 +
+    T.k16 + esc(first) + T.k3 +
     body +
-    '</div></body></html>'
+    T.k17
   );
 }

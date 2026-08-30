@@ -1,9 +1,11 @@
 /** חוט · maps-route-url — מסלול רב-עצירות Google Maps. חוזה: maps-route-url.contract.md */
 /** ניקוי עצירה: '|' ליטרלי = מפריד-העצירות של Google (אין escaping ב-api=1) ⇒ מוחלף ברווח. */
-function cleanStop(s) {
-  return (s || '').replace(/\|/g, ' ').trim();
-}
 export function mapsRouteUrl(stops, T) {
+  // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
+  function cleanStop(s) {
+    return (s || '').replace(/\|/g, ' ').trim();
+  }
+
   const clean = stops.map(cleanStop).filter(Boolean);
   if (clean.length === 0) return null;
   if (clean.length === 1) {

@@ -1,4 +1,9 @@
-import { lockKey } from './lock-key.mjs';
+import { lockKey as __pure_lockKey } from './lock-key.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_lockKey_LOCK_KEY_T = {
+  k1: "maor_lock",
+};
+const lockKey = (...a) => __pure_lockKey(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_lockKey_LOCK_KEY_T);
 let f = 0;
 const eq = (g, w, m) => { if (g !== w) { console.error(`✗ ${m}: ${g} ≠ ${w}`); f = 1; } };
 // default — שקע-זהות ⇒ הבסיס עצמו

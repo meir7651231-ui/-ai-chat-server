@@ -1,4 +1,12 @@
-import { enrollSummary } from './enroll-summary.mjs';
+import { enrollSummary as __pure_enrollSummary } from './enroll-summary.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
+const __d_enrollSummary_ENROLL_SUMMARY_T = {
+  k1: "פעיל",
+  k2: "מושהה",
+  k3: "הסתיים",
+  k4: "רשימת-המתנה",
+};
+const enrollSummary = (...a) => __pure_enrollSummary(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_enrollSummary_ENROLL_SUMMARY_T);
 // שקעים אמיתיים כסמנטיקת-maor (מקומיים לבדיקה — הבדיקה מייבאת רק את האטום שלה)
 const paidOf = (e) => (e.payments || []).reduce((a, p) => a + (Number.isFinite(p.amount) ? p.amount : 0), 0);
 const payBal = (e) => Math.max(0, (e.totalDue || 0) - paidOf(e));

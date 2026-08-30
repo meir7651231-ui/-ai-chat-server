@@ -3,14 +3,16 @@
  *  monthsAgoIso (שם:682-687) הוטמע כלשונו — לא שקע. */
 
 /** חודשים-אזרחיים מאז תאריך-ISO עד היום (0 = אותו חודש). ריק ⇒ Infinity. */
-function monthsAgoIso(iso, todayIso) {
-  if (!iso) return Infinity;
-  const [y, m] = iso.slice(0, 7).split('-').map(Number);
-  const [ty, tm] = todayIso.slice(0, 7).split('-').map(Number);
-  return (ty - y) * 12 + (tm - m);
-}
 
 export function hokEffectivelyActive(sp, todayIso, T) {
+  // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
+  function monthsAgoIso(iso, todayIso) {
+    if (!iso) return Infinity;
+    const [y, m] = iso.slice(0, 7).split('-').map(Number);
+    const [ty, tm] = todayIso.slice(0, 7).split('-').map(Number);
+    return (ty - y) * 12 + (tm - m);
+  }
+
   const h = sp.hok;
   if (!h || !h.active) return false;
   if (!h.kevaId) return true; // הו"ק ידני — אין לאפ-אוטומטי

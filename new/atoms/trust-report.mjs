@@ -7,9 +7,11 @@
  *  הקבוע הפרטי SEV הוא חלק מהיחידה — נשאר בקובץ. */
 
 // חומרת-כשל פר-בדיקה: critical=חוסם-חי · high=סיכון · info=מידע.
-const SEV = { critical: 3, high: 2, info: 1 };
 
 export function trustReport(bundle, opt = {}, eng = {}, T) {
+  // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
+  const SEV = { critical: 3, high: 2, info: 1 };
+
   const { featureOn, auditRoutes, failsafeRoute, recordingEncryption, secretPreflight, crossTenantLeakScan } = eng;
   const tenant = bundle.tenant || {};
   const checks = [];

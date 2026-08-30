@@ -2,6 +2,14 @@
  *  חוזה: ayin-daily-rows.contract.md · שקעים: unitLabel, itemLabel, emptyAyin, eyesTotal, stageLabel
  *  חולץ כלשונו מ-maor/src/lib/ayin.ts:249-295 (קריאות-השכן שוקעו). */
 export function ayinDailyRows(cfg, supporters, todayIso, unitLabel, itemLabel, emptyAyin, eyesTotal, stageLabel, T) {
+  // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
+  function fmtD(iso) {
+      if (!iso)
+          return '';
+      const [y, m, d] = iso.split('-');
+      return `${d}/${m}/${y}`;
+  }
+
     const unit = unitLabel(cfg);
     const item = itemLabel(cfg);
     const rows = [
@@ -33,9 +41,3 @@ export function ayinDailyRows(cfg, supporters, todayIso, unitLabel, itemLabel, e
     return rows;
 }
 /** תצוגת תאריך DD/MM/YYYY מ-ISO (מקומי לדוח). */
-function fmtD(iso) {
-    if (!iso)
-        return '';
-    const [y, m, d] = iso.split('-');
-    return `${d}/${m}/${y}`;
-}

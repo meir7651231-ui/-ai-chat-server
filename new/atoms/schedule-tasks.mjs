@@ -5,11 +5,13 @@
  *  מאותו קובץ — אינו-מיוצא במקור, חלק-מהמנגנון). עצמאי — אפס שקעים. */
 
 /** רק שורות עם days>0 הן משימות-מתוזמנות (עוזר-פרטי מהמוצא :30-32). */
-function isTask(n) {
-  return typeof n.days === 'number' && n.days > 0;
-}
 
-export function scheduleTasks(names) {
+export function scheduleTasks(names, T) {
+  // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
+  function isTask(n) {
+    return typeof n.days === T.k1 && n.days > 0;
+  }
+
   const tasks = names.filter(isTask);
   const ids = new Set(tasks.map((t) => t.id));
   const byId = new Map(tasks.map((t) => [t.id, t]));
