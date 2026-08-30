@@ -507,9 +507,108 @@ async function writeImprovSpec() {
   fs.writeFileSync(path.join(SPECS, 'improv.txt'), lines.join('\n') + '\n');
 }
 
+// 🎯 שכבת-המטרה (ביקורת-בעלים: 'אתה רק מבקש ממנו מטרה - לא אומר מה לעשות'):
+// הבעלים מניח משפט-מטרה בלבד ב-goals/<שם>.txt — אפס הוראות-הרכבה. המנוע לבדו:
+// (1) מדרג את כל אטומי-הלוגיקה לפי קרבה-למטרה (חפיפת-מילים לתיאור-העצמי) + הגרלה זרועה-מהמטרה,
+// (2) גוזר לכל אטום את צורת-החיבור מהחתימה שלו (תחום-מוצהר⇒בחירה-מזינה · String⇒שרשרת-משדה,
+//     נבחנת על מילות-המטרה עצמן · DateTime⇒מנוע-חי, מוצב בבורר-החלפה או מאחורי מתג-שער),
+// (3) מפצל את היחידות לחדרים ומחווט ניווט-מסע ביניהם (האחרון חוזר לראשון).
+async function writeGoalSpecs() {
+  const GOALS = path.join(HERE, 'goals');
+  if (!fs.existsSync(GOALS)) return;
+  const SM = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/self-model.json'), 'utf8'));
+  const P = SM.phrases;
+  const norm2 = (w) => w.replace(/^ה(?=..)/, '');
+  for (const gf of fs.readdirSync(GOALS).filter(f => /^[a-z][a-z0-9-]*\.txt$/.test(f))) {
+    const goal = fs.readFileSync(path.join(GOALS, gf), 'utf8').trim();
+    if (!goal) continue;
+    const gname = gf.replace(/\.txt$/, '');
+    let seed = 2166136261;
+    for (const ch of goal) { seed ^= ch.codePointAt(0); seed = Math.imul(seed, 16777619); }
+    const rnd = () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+    const gwords = new Set((goal.match(/[֐-׿]+/g) || []).map(norm2));
+    const score = (f) => f.he.reduce((s, w) => s + (gwords.has(norm2(w)) ? 1 : 0), 0);
+    // בריכות לפי-חתימה — רק אטומים ברי-חיווט-עצמאי
+    const RETS4 = new Set(['String', 'String?', 'int', 'bool', 'double', 'num']);
+    const seen = new Set(); const strFns = []; const dateFns = []; const domFns = [];
+    for (const f of atlas.functions) {
+      if (!RETS4.has(f.ret) || !f.he.length || seen.has(f.name)) continue;
+      if (f.params.length === 1 && /^String\??$/.test(f.params[0].type.trim())) {
+        seen.add(f.name); strFns.push(f);
+        try {
+          const dm = fs.readFileSync(path.join(ROOT, f.shelf, f.file), 'utf8').match(/const \w+ = \[([^\]]+)\]/);
+          const domain = dm ? [...dm[1].matchAll(/'([^']+)'/g)].map(m => m[1]) : [];
+          if (domain.length >= 2 && domain.length <= 6) domFns.push({ fn: f, domain });
+        } catch { }
+      } else if (f.params.length >= 1 && f.params.every(pp => /^DateTime\??$/.test(pp.type.trim()))) {
+        seen.add(f.name); dateFns.push(f);
+      }
+    }
+    const pick = (arr, n, of = (x) => x) => [...arr].map(x => [x, score(of(x)) + rnd()]).sort((a, b) => b[1] - a[1]).slice(0, n).map(x => x[0]);
+    // סל-היחידות שהמכונה מרכיבה לעצמה
+    const units = [];
+    for (const d of pick(domFns, 1, (x) => x.fn)) units.push({ kind: 'chips', d });
+    // שרשרת-שדה: מועמדים מדורגים-למטרה, נבחנים על מילת-המטרה הראשונה (תאומי-JS)
+    const sample = [...gwords][0] || gname;
+    const twins = new Map();
+    for (const f of strFns) {
+      const tp = path.join(ROOT, 'new/atoms', path.basename(f.file).replace(/\.dart$/, '.mjs'));
+      if (!fs.existsSync(tp)) continue;
+      try { const m = await import('file://' + tp); if (typeof m[f.name] === 'function') twins.set(f.name, m[f.name]); } catch { }
+    }
+    const chain = [];
+    let val = sample;
+    for (const c of pick(strFns.filter(f => twins.has(f.name)), 12)) {
+      if (chain.length >= 3) break;
+      try {
+        const o = String(twins.get(c.name)(val));
+        if (o !== val && o.trim() !== '' && o.length <= 40) { chain.push(c); val = o; }
+      } catch { }
+    }
+    if (chain.length) units.push({ kind: 'field', chain });
+    const swaps = pick(dateFns, 3);
+    const usedSwap = swaps.length >= 2;                          // בורר דורש 2+ מנועים
+    if (usedSwap) units.push({ kind: 'swap', swaps });
+    for (const g of pick(dateFns.filter(f => !usedSwap || !swaps.includes(f)), 2)) units.push({ kind: 'gate', g });
+    if (!units.length) continue;
+    // פיצול-חדרים: עד 2 יחידות לחדר, ניווט משורשר, האחרון סוגר מעגל
+    const rooms = [];
+    for (let i = 0; i < units.length; i += 2) rooms.push(units.slice(i, i + 2));
+    const shortGoal = (goal.match(/[֐-׿]+/g) || []).slice(0, 3).join(' ');
+    rooms.forEach((ru, i) => {
+      const slug = `${gname}${i + 1}`;
+      const lines = [`${shortGoal} - ${P.goalRoom} ${i + 1}:`, `הירו 🎯 ${goal} | ${P.goalHeroSub}`];
+      for (const u of ru) {
+        if (u.kind === 'chips') {
+          lines.push(`כותרת ${P.goalUnitChips}`,
+            `אטום ChipWrap ${u.d.fn.he.join(' ')}: ${u.d.domain.join(' / ')}`,
+            `  חישוב ${u.d.fn.he.join(' ')} (${u.d.fn.name})`);
+        } else if (u.kind === 'field') {
+          lines.push(`כותרת ${P.goalUnitField}`, `${P.fieldPrompt} ${u.chain[0].he.join(' ')}`,
+            ...u.chain.map(f => `  חישוב ${f.he.join(' ')} (${f.name})`));
+        } else if (u.kind === 'swap') {
+          const labels = u.swaps.map(f => f.he.slice(0, 2).join(' '));
+          lines.push(`כותרת ${P.goalUnitSwap}`,
+            `בחירה ${labels.join(' או ')}: ${labels.join(' / ')}`,
+            ...u.swaps.map(f => `  חישוב ${f.he.join(' ')} (${f.name})`));
+        } else if (u.kind === 'gate') {
+          lines.push(`מתג 🔓 ${P.goalUnitGate}`, `  חישוב ${u.g.he.join(' ')} (${u.g.name})`);
+        }
+      }
+      if (rooms.length > 1) {                                    // מסע = ניווט רק כשיש לאן
+        const next = i < rooms.length - 1 ? `${gname}${i + 2}` : `${gname}1`;
+        lines.push(`ניווט ${next} ${i < rooms.length - 1 ? P.goalNav : P.goalBack} | ${P.goalNavSub}`);
+      }
+      lines.push(`באנר ${P.goalBanner}`);
+      fs.writeFileSync(path.join(SPECS, slug + '.txt'), lines.join('\n') + '\n');
+    });
+  }
+}
+
 // ── CLI ──
 fs.mkdirSync(SPECS, { recursive: true });
 await writeImprovSpec();
+await writeGoalSpecs();
 writeSelfEntry();
 const [slugArg, specArg] = process.argv.slice(2);
 if (slugArg && specArg) fs.writeFileSync(path.join(SPECS, slugArg + '.txt'), specArg + '\n');

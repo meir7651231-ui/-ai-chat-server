@@ -2,7 +2,7 @@
  "counts": {
   "widgets": 381,
   "functions": 438,
-  "data": 705
+  "data": 761
  },
  "widgets": [
   {
@@ -17688,6 +17688,36 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_entry_card_glyph6",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_card_title6",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_card_sub6",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_card_glyph7",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_card_title7",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_card_sub7",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_entry_chip_option",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
@@ -17840,6 +17870,256 @@
   {
    "name": "gen_improv_app_bar_title",
    "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_card_glyph",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_card_title",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_card_sub",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_card_toast",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_header_text",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_stat_label",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_textfield_label",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_textfield_hint",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_header_text2",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_stat_value",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_stat_label2",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_stat_value2",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_stat_label3",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_stat_value3",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_stat_label4",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_radio_option",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_radio_option2",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_radio_option3",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_header_text3",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_stat_label5",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_header_text4",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_stat_label6",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_row_label",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_switch_label",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_stat_value4",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_stat_label7",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_banner_sub",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_button_label",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_button_toast",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_mission_app_bar_title",
+   "file": "auto/gen_mission_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest1_card_glyph",
+   "file": "auto/gen_quest1_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest1_card_title",
+   "file": "auto/gen_quest1_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest1_card_sub",
+   "file": "auto/gen_quest1_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest1_card_toast",
+   "file": "auto/gen_quest1_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest1_header_text",
+   "file": "auto/gen_quest1_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest1_stat_label",
+   "file": "auto/gen_quest1_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest1_chip_option",
+   "file": "auto/gen_quest1_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest1_chip_option2",
+   "file": "auto/gen_quest1_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest1_chip_option3",
+   "file": "auto/gen_quest1_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest1_header_text2",
+   "file": "auto/gen_quest1_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest1_stat_label2",
+   "file": "auto/gen_quest1_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest1_stat_label3",
+   "file": "auto/gen_quest1_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest1_stat_label4",
+   "file": "auto/gen_quest1_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest1_textfield_label",
+   "file": "auto/gen_quest1_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest1_textfield_hint",
+   "file": "auto/gen_quest1_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest1_card_glyph2",
+   "file": "auto/gen_quest1_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest1_card_title2",
+   "file": "auto/gen_quest1_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest1_card_sub2",
+   "file": "auto/gen_quest1_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest1_banner_sub",
+   "file": "auto/gen_quest1_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest1_app_bar_title",
+   "file": "auto/gen_quest1_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
