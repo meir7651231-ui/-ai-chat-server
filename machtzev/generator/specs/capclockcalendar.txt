@@ -4,4 +4,4 @@
   חישוב לדקות מחצות (timeToMin)
   חישוב מספר סידורי של (excelSerialToIso)
   חישוב תאריך לתצוגה (fmtDate)
-באנר ההרכבה שמצאתי: timeToMin ⟵ excelSerialToIso ⟵ fmtDate - כל הדוגמאות עברו
+באנר ההרכבה שמצאתי - timeToMin ⟵ excelSerialToIso ⟵ fmtDate - כל הדוגמאות עברו

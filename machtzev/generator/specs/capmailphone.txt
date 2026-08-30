@@ -3,4 +3,4 @@
 אטום ChipWrap שחזור מספר טלפון לתצוגה ישראלית תקנית מתוך שורה שהגיעה עטופה בקידוד-מייל ישן: +972=2050-123=204567 / =2B972=2054-987=2065=2043
   חישוב פענוח מחרוזת (decodeQuotedPrintable)
   חישוב עיצוב טלפון ישראלי מקור חוק (formatIsraeliPhone)
-באנר ההרכבה שמצאתי: decodeQuotedPrintable ⟵ formatIsraeliPhone - כל הדוגמאות עברו
+באנר ההרכבה שמצאתי - decodeQuotedPrintable ⟵ formatIsraeliPhone - כל הדוגמאות עברו

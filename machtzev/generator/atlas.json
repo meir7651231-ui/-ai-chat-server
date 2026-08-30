@@ -20172,23 +20172,6 @@
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_capclockcalendar_row_label",
-   "type": "String",
-   "he": [
-    "דאטה",
-    "תוכן",
-    "מחולל",
-    "תוויות",
-    "מן",
-    "בקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_capclockcalendar_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
    "name": "gen_capclockcalendar_stat_label",
    "type": "String",
    "he": [
@@ -20207,6 +20190,23 @@
   },
   {
    "name": "gen_capclockcalendar_stat_label2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capclockcalendar_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capclockcalendar_stat_label3",
    "type": "String",
    "he": [
     "דאטה",
@@ -20376,7 +20376,7 @@
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_capmailphone_row_label",
+   "name": "gen_capmailphone_stat_label2",
    "type": "String",
    "he": [
     "דאטה",
@@ -20529,7 +20529,7 @@
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_captimegematria_row_label",
+   "name": "gen_captimegematria_stat_label",
    "type": "String",
    "he": [
     "דאטה",
@@ -20546,7 +20546,7 @@
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_captimegematria_row_label2",
+   "name": "gen_captimegematria_stat_label2",
    "type": "String",
    "he": [
     "דאטה",

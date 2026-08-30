@@ -70,7 +70,8 @@ if (fs.existsSync(CAPS)) for (const cf of fs.readdirSync(CAPS).filter(x => x.end
     `הירו 🧪 ${desc} | יכולת שהוזמנה ולא היתה קיימת - הרכבתי אותה לבד מ-${chain.length} אטומים והוכחתי על ${examples.length} דוגמאות`,
     `אטום ChipWrap ${desc}: ${examples.map(e => e.in).join(' / ')}`,
     ...chain.map(n => `  חישוב ${(fnsBy.get(n)?.he || [n]).join(' ')} (${n})`),
-    `באנר ההרכבה שמצאתי: ${chain.join(' ⟵ ')} - כל הדוגמאות עברו`,
+    // בלי ':' — פרסר-הבקשות מפרש אותו כמפריד-אפשרויות והשמות היו נעלמים מהבאנר
+    `באנר ההרכבה שמצאתי - ${chain.join(' ⟵ ')} - כל הדוגמאות עברו`,
   ].join('\n');
   fs.writeFileSync(path.join(SPECS, slug + '.txt'), spec + '\n');
   console.log(`🧪 ${cf}: ✅ הרכבה נמצאה — ${chain.join(' ∘ ')} ⇒ specs/${slug}.txt`);
