@@ -30,6 +30,7 @@ const LEX_RAW = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/lexicon.js
 const LEXICON = new Map(Object.entries(LEX_RAW).filter(([k]) => !k.startsWith('_')));
 const HERO_WORD = LEX_RAW._hero || '';
 const NAV_WORD = LEX_RAW._nav || '';
+const PIN_WORD = LEX_RAW._pin || '';
 const pascalOf = (slug) => slug.replace(/(^|[_-])([a-z])/g, (_, __, c) => c.toUpperCase());
 const ROLE_RULES = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/roles.json'), 'utf8')).rules.map(r => ({ re: new RegExp(r.pattern), role: r.role }));
 const TOKEN_RULES = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/tokens.json'), 'utf8')).rules.map(r => ({ re: new RegExp(r.pattern, 'i'), token: r.token }));
@@ -60,6 +61,10 @@ function parsePart(txt) {
   const value = vm ? vm[0] : null;
   if (value) body = body.replace(value, '').replace(/\s+/g, ' ').trim();
   const words = body.split(/\s+/);
+  // 📌 הצבעה-ישירה: 'אטום <ClassName> <תווית>' ⇒ האטום הזה בדיוק (מצב-האלתור מצביע כך)
+  if (words[0] === PIN_WORD && /^[A-Z]\w+$/.test(words[1] || '')) {
+    return { pin: words[1], role: roleOf(words[1]), label: words.slice(2).join(' ') || words[1], txt, options, emoji, sub, value };
+  }
   // 🔀 חיבור בין-מסכים: 'ניווט <slug> <תווית>' ⇒ כרטיס שפותח מסך-מחולל אחר
   if (words[0] === NAV_WORD && /^[a-z][a-z0-9_-]*$/.test(words[1] || '')) {
     return { role: 'card', hero: true, navSlug: words[1], label: words.slice(2).join(' ') || words[1], txt, options, emoji, sub, value };
@@ -76,6 +81,7 @@ function parsePart(txt) {
 const FILLABLE = /^(String|bool|int|double|Color|IconData|TextEditingController|VoidCallback|void Function\(\)|ValueChanged<(bool|int|String)>|void Function\((bool|int|String)\)|List<String>)/;
 const INTERACTIVE = new Set(['textfield', 'number', 'switch', 'radio', 'chip', 'button', 'slider']);
 function pickAtom(part) {
+  if (part.pin) return atlas.widgets.find(a => a.cls === part.pin) || null;
   let best = null, bestScore = -1;
   for (const a of atlas.widgets) {
     const role = roleOf(a.cls);
@@ -278,6 +284,10 @@ function generate(slug, specText) {
       const pickerCall = buildCall({ part: node.part, atom }, shared);
       calls.push(`          ${pickerCall},`);
       calls.push(`          IndexedStack(index: ${shared.i || '0'}, children: [${kidCalls.join(', ')}]),`);
+    } else if (node.part.role === 'switch') {
+      const shared = {};
+      calls.push(`          ${buildCall({ part: node.part, atom }, shared)},`);
+      for (const kc of kidCalls) calls.push(`          if (${shared.b || 'true'}) ${kc},`);
     } else if (node.part.role === 'textfield') {
       const shared = {};
       calls.push(`          ${buildCall({ part: node.part, atom }, shared)},`);
@@ -398,8 +408,60 @@ function writeSelfEntry() {
   fs.writeFileSync(path.join(SPECS, 'entry.txt'), spec + '\n');
 }
 
+// 🎲 מצב-אלתור: הוראה-חופשית מהבעלים ("תבחר N אטומים רנדומליים תחבר בין ותוציא יכולת חדשה").
+// המנוע לבדו: מגריל N אטומים ברי-מילוי (זרע-יומי — יכולת חדשה כל יום), מסווג מפעילים/מציגים,
+// ובוחר את החיבורים: שדה⇒חישוב-חי · מתג⇒שער-נראות · השאר מוזנים/מוצגים. הפלט = spec רגיל.
+function writeImprovSpec() {
+  const insPath = path.join(HERE, 'instructions/improv.txt');
+  if (!fs.existsSync(insPath)) return;
+  const ins = fs.readFileSync(insPath, 'utf8').trim();
+  const n = parseInt((ins.match(/\d+/) || ['5'])[0]);
+  const SM = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/self-model.json'), 'utf8'));
+  // זרע-יומי דטרמיניסטי: אותו יום ⇒ אותה הגרלה (יציב למשטרה); יום חדש ⇒ יכולת חדשה
+  let seed = parseInt(new Date().toISOString().slice(0, 10).replace(/-/g, '')) + ins.length;
+  const rnd = () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  const FILL_T = /^(String|bool|int|double|Color|IconData|TextEditingController|VoidCallback|void Function\(\)|ValueChanged<(bool|int|String)>|void Function\((bool|int|String)\))/;
+  const pool = atlas.widgets.filter(a => !a.dirty && !a.flexRoot &&
+    [...a.required, ...a.positional].every(rq => FILL_T.test((a.types.get(rq) || '').replace(/\?$/, ''))));
+  // הגרלה עם עדיפות-גיוון תפקידים
+  const picked = [];
+  const usedRoles = new Set();
+  const shuffled = [...pool].sort(() => rnd() - 0.5);
+  for (const a of shuffled) { const r = roleOf(a.cls); if (!usedRoles.has(r) && picked.length < n) { picked.push(a); usedRoles.add(r); } }
+  for (const a of shuffled) { if (picked.length >= n) break; if (!picked.includes(a)) picked.push(a); }
+  // סיווג: מפעילים (שדה/מתג) קודמים; מציגים אחריהם
+  const roleWordOf = new Map();
+  for (const [w, r] of LEXICON) if (!roleWordOf.has(r)) roleWordOf.set(r, w);
+  const drivers = picked.filter(a => ['textfield', 'switch'].includes(roleOf(a.cls)));
+  const rest = picked.filter(a => !drivers.includes(a));
+  let topTerms = [];
+  try { topTerms = JSON.parse(fs.readFileSync(path.join(ROOT, 'screens-seed/terms-catalog.json'), 'utf8')).terms.filter(t => t.he.length > 2 && !/[a-zA-Z]/.test(t.he)).slice(0, 30).map(t => t.he); } catch { }
+  const term = (i) => topTerms[(i * 7 + Math.floor(rnd() * 5)) % topTerms.length] || 'ערך';
+  const lines = ['יכולת מאולתרת - הגרלת היום:'];
+  lines.push(`הירו 🎲 ${SM.phrases.improvHero} | ${ins}`);
+  let li = 0;
+  const restLines = rest.map(a => `אטום ${a.cls} ${term(li++)}`);
+  for (const d of drivers) {
+    const rw = roleOfWord(d);
+    if (roleOf(d.cls) === 'textfield') {
+      lines.push(`אטום ${d.cls} ${SM.phrases.improvType}`);
+      const feedFn = atlas.functions.find(f => ['String', 'String?'].includes(f.ret) && f.he.length >= 2 && f.params.every(pp => /^(String|DateTime)\??$/.test(pp.type)) && f.params.some(pp => /^String/.test(pp.type)));
+      if (feedFn) lines.push(`  חישוב ${feedFn.he.join(' ')}`);
+      if (restLines.length) lines.push('  ' + restLines.shift());
+    } else if (roleOf(d.cls) === 'switch') {
+      lines.push(`אטום ${d.cls} ${SM.phrases.improvGate}`);
+      if (restLines.length) lines.push('  ' + restLines.shift());
+    }
+  }
+  lines.push(...restLines);
+  lines.push(`באנר ${SM.phrases.improvBanner}`);
+  fs.writeFileSync(path.join(SPECS, 'improv.txt'), lines.join('\n') + '\n');
+  function roleOfWord(a) { return roleWordOf.get(roleOf(a.cls)) || ''; }
+}
+
 // ── CLI ──
 fs.mkdirSync(SPECS, { recursive: true });
+writeImprovSpec();
 writeSelfEntry();
 const [slugArg, specArg] = process.argv.slice(2);
 if (slugArg && specArg) fs.writeFileSync(path.join(SPECS, slugArg + '.txt'), specArg + '\n');
