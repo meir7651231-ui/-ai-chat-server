@@ -22,7 +22,7 @@ function isMixed(src) {
   if (!heb) return false;
   // צורת-דאטה-טהורה: Dart (const מוקלד/getter/פונקציה-מחזירת-ליטרל) או JS (export const = ליטרל) — הכרעה 19
   // סימטריית-JS⇄Dart: גם ‏const-מחרוזת ב-Dart היא צורת-דאטה-טהורה (כמו export const '...' ב-JS)
-  const pureData = /^\s*(const\s+[\w<>,\s?]+\s+\w+\s*=\s*(?:[\[{]|['"])|[\w<>,\s?]+\s+get\s+\w+\s*=>\s*(?:const\s+)?[\[{]|[\w<>,\s?]+\s+\w+\(\)\s*(?:=>\s*|\{\s*return\s+)(?:const\s+)?[\[{]|export\s+(?:const\s+\w+\s*=\s*(?:[\[{]|-?\d|['\"])|function\s+\w+\s*\(\)\s*\{\s*return\s+[\[{]))/m.test(code)
+  const pureData = /^\s*(const\s+[\w<>,\s?]+\s+\w+\s*=\s*(?:[\[{]|['"])|[\w<>,\s?]+\s+get\s+\w+\s*=>\s*(?:const\s+)?(?:[\[{]|['"])|[\w<>,\s?]+\s+\w+\(\)\s*(?:=>\s*|\{\s*return\s+)(?:const\s+)?[\[{]|export\s+(?:const\s+\w+\s*=\s*(?:[\[{]|-?\d|['\"])|function\s+\w+\s*\(\)\s*\{\s*return\s+[\[{]))/m.test(code)
     && !/\b(if|for|while|switch)\b/.test(code);
   return !pureData;
 }
