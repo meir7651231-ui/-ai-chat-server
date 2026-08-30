@@ -1,4 +1,9 @@
-import { timeToMin } from './time-to-min.mjs';
+import { timeToMin as __pure_timeToMin } from './time-to-min.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_time_to_min_T = {
+  k1: 60,
+};
+const timeToMin = (...a) => __pure_timeToMin(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_time_to_min_T);
 const C = [
   ['9:30', 570], ['00:00', 0], ['23:59', 1439], [' 12:05 ', 725],
   ['9:5', NaN], ['930', NaN], ['', NaN], [null, NaN],

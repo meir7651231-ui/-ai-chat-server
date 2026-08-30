@@ -16,6 +16,9 @@ const __d_holidayOf_HOLIDAY_OF_T = {
   k13: "Adar",
   k14: "Adar II",
   k15: "תענית אסתר (מוקדם)",
+  k16: 18,
+  k17: 10,
+  k18: 11,
 };
 const holidayOf = (...a) => __pure_holidayOf(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_holidayOf_HOLIDAY_OF_T);
 // ימי-עוגן אמיתיים לפי יום-בשבוע: שבת=22.8.2026 · ראשון=23.8 · שני=24.8 · חמישי=27.8

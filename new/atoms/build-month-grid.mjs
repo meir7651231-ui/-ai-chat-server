@@ -23,7 +23,7 @@ export function buildMonthGrid(events, anchorIso, hebMode, cellOf, isoOf, hpOf, 
         const first = new Date(anchor.getFullYear(), anchor.getMonth(), 1);
         const start = new Date(first.getFullYear(), first.getMonth(), 1 - first.getDay());
         const cells = [];
-        for (let i = 0; i < 42; i++) {
+        for (let i = 0; i < T.k4; i++) {
             const d = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
             cells.push(cellOf(d, d.getMonth() === anchor.getMonth(), false, byDate));
         }
@@ -31,8 +31,8 @@ export function buildMonthGrid(events, anchorIso, hebMode, cellOf, isoOf, hpOf, 
             cells,
             label: fmtMonthYear.format(first),
             subLabel: fmtHebMonth.format(first) + '–' + fmtHebMonth.format(new Date(anchor.getFullYear(), anchor.getMonth() + 1, 0)),
-            prevIso: isoOf(new Date(first.getFullYear(), first.getMonth() - 1, 15)),
-            nextIso: isoOf(new Date(first.getFullYear(), first.getMonth() + 1, 15)),
+            prevIso: isoOf(new Date(first.getFullYear(), first.getMonth() - 1, T.k5)),
+            nextIso: isoOf(new Date(first.getFullYear(), first.getMonth() + 1, T.k5)),
         };
     }
     // עברי: אחורה עד א׳ בחודש, ואז קדימה עד סוף החודש העברי
@@ -43,7 +43,7 @@ export function buildMonthGrid(events, anchorIso, hebMode, cellOf, isoOf, hpOf, 
     const monthName = hpOf(isoOf(first), first).month;
     const days = [];
     let cur = first;
-    while (hpOf(isoOf(cur), cur).month === monthName && days.length < 31) {
+    while (hpOf(isoOf(cur), cur).month === monthName && days.length < T.k6) {
         days.push(cur);
         cur = new Date(cur.getFullYear(), cur.getMonth(), cur.getDate() + 1);
     }

@@ -16,7 +16,10 @@ import { ORG_LINK_T as __d_orgLink_ORG_LINK_T } from '../atoms/org-link-strings.
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const orgLink = (...a) => __pure_orgLink(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_orgLink_ORG_LINK_T);
 import { normEmail } from '../atoms/norm-email.mjs';
-import { genJoinCode } from '../atoms/gen-join-code.mjs';
+import { genJoinCode as __pure_genJoinCode } from '../atoms/gen-join-code.mjs';
+import { GEN_JOIN_CODE_T as __d_gen_join_code_T } from '../atoms/gen-join-code-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const genJoinCode = (...a) => __pure_genJoinCode(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_gen_join_code_T);
 import { orgJoinLink as __pure_orgJoinLink } from '../atoms/org-join-link.mjs';
 import { ORG_JOIN_LINK_T as __d_orgJoinLink_ORG_JOIN_LINK_T } from '../atoms/org-join-link-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

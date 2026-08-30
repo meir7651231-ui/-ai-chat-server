@@ -14,6 +14,13 @@ const __d_orbitTheme_ORBIT_THEME_T = {
   k11: "--o-btn-b",
   k12: "--o-btn-text",
   k13: "--accent",
+  k14: 255,
+  k15: 360,
+  k16: 15,
+  k17: 70,
+  k18: 18,
+  k19: 180,
+  k20: 265,
 };
 const orbitTheme = (...a) => __pure_orbitTheme(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_orbitTheme_ORBIT_THEME_T);
 

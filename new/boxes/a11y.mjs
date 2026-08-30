@@ -8,7 +8,10 @@ import { SCALE_MAX } from '../atoms/scale-max.mjs';
 import { SCALE_STEP } from '../atoms/scale-step.mjs';
 import { A11Y_FAB_TOGGLES } from '../atoms/a11y-fab-toggles.mjs';
 import { clampScale as clampScaleAtom } from '../atoms/clamp-scale.mjs';
-import { stepScale as stepScaleAtom } from '../atoms/step-scale.mjs';
+import { stepScale as __pure_stepScale } from '../atoms/step-scale.mjs';
+import { STEP_SCALE_T as __d_step_scale_T } from '../atoms/step-scale-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const stepScaleAtom = (...a) => __pure_stepScale(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_step_scale_T);
 import { parseAcc as parseAccAtom } from '../atoms/parse-acc.mjs';
 
 /** קבועי-הסולם והמילון — מיוצאים מהחוטים כלשונם (a11y.ts:13-15,27-32). */

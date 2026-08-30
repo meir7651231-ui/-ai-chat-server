@@ -32,6 +32,7 @@ const __d_famHistoryOf_FAM_HISTORY_OF_T = {
   k29: "#fdeaea",
   k30: "היעדרות — ",
   k31: " · זכאי/ת השלמה",
+  k32: 40,
 };
 const famHistoryOf = (...a) => __pure_famHistoryOf(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_famHistoryOf_FAM_HISTORY_OF_T);
 let f = 0;

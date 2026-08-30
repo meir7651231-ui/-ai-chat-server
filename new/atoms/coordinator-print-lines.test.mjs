@@ -10,6 +10,7 @@ const __d_coordinatorPrintLines_COORDINATOR_PRINT_LINES_T = {
   k7: "ריקון אחרון: ",
   k8: "טרם רוקנה",
   k9: "אין קופות פעילות",
+  k10: 30,
 };
 const coordinatorPrintLines = (...a) => __pure_coordinatorPrintLines(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_coordinatorPrintLines_COORDINATOR_PRINT_LINES_T);
 let f = 0;

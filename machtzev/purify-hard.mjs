@@ -63,7 +63,8 @@ function collectSites(src, mo) {
   };
   const push = (n, extra) => {
     const at = n.getStart(sf);
-    sites.push({ at, len: n.end - at, v: n.text, own: owner(n), ...extra });
+    const v = extra && extra.num ? parseFloat(n.text) : n.text;
+    sites.push({ at, len: n.end - at, v, own: owner(n), ...extra });
   };
   const walk = (n) => {
     if (ts.isStringLiteral(n)) {
@@ -101,6 +102,20 @@ function collectSites(src, mo) {
       };
       chunk(n.head);
       for (const sp of n.templateSpans) { walk(sp.expression); chunk(sp.literal); }
+      return;
+    }
+    if (ts.isNumericLiteral(n)) {
+      // מספר-קסם ⇒ אתר-דאטה: עשרוני ≥10, לא-מבני (ביטוויז/חזקת-2 מוחרגים — כמו הסורק)
+      const val = parseFloat(n.text);
+      if (!(val >= 10) || /^0[xbo]/i.test(n.text)) return;
+      if (Number.isInteger(val) && (val & (val - 1)) === 0) return;          // חזקת-2 — מבני
+      const p = n.parent;
+      if (p && (ts.isBinaryExpression(p) && /[&|^]|<<|>>/.test(p.operatorToken.getText(sf)))) return;
+      let up = n;
+      while (up) { if (ts.isParameter(up)) return; up = up.parent; }         // ברירת-מחדל נשארת (שלב-זה)
+      const neg = p && ts.isPrefixUnaryExpression(p) && p.operator === ts.SyntaxKind.MinusToken;
+      if (neg) return;                                                       // שלילי — שלב-זה מדלג
+      push(n, { num: true });
       return;
     }
     ts.forEachChild(n, walk);
@@ -224,7 +239,9 @@ function purifyHard(file, log) {
     // עד סוגר-הפרמטרים: פסיק-זנב קיים נבלע (לקח schedule-clash-text)
     const openAt = src.lastIndexOf('(', ps.pos);
     const closeAt = balancedIdx(src, openAt);
-    edits.push({ at: ps.end, del: closeAt - ps.end, ins: `, ${tParam}` });
+    // NodeArray.end כולל פסיק-זנב — אם כבר יש פסיק, לא מוסיפים שני
+    const hasTrail = src.slice(0, ps.end).trimEnd().endsWith(',');
+    edits.push({ at: ps.end, del: closeAt - ps.end, ins: hasTrail ? ` ${tParam}` : `, ${tParam}` });
   };
   const arity = {};
   for (const e of mo.exported) if (expNeed.has(e.name)) {
@@ -307,7 +324,10 @@ function purifyHard(file, log) {
   // ── כתיבה + אימות + החזרה ──
   const backup = new Map([[path.join(ATOMS, file), src]]);
   for (const [pp] of cEdits) backup.set(pp, fs.readFileSync(pp, 'utf8'));
-  if (priorKeys.size) backup.set(dataPath, fs.readFileSync(dataPath, 'utf8'));
+  if (priorKeys.size) for (const ext of ['.mjs', '.contract.md', '.test.mjs']) {
+    const pf = path.join(ATOMS, dataBase + ext);
+    if (fs.existsSync(pf)) backup.set(pf, fs.readFileSync(pf, 'utf8'));
+  }
   try {
     fs.writeFileSync(path.join(ATOMS, file), mech);
     fs.writeFileSync(dataPath, dataSrc);

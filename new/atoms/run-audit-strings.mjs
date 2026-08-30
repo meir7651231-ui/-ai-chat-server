@@ -1,4 +1,4 @@
-/** אטום-דאטה · run-audit-strings — מחרוזות-התצוגה/דומיין שחולצו מ-run-audit (מנוע-הטיהור v3, הכרעה 19). חוזה: run-audit-strings.contract.md */
+/** אטום-דאטה · run-audit-strings — מחרוזות-הדאטה של run-audit (מנוע-הקשיחים, הכרעה 19). חוזה: run-audit-strings.contract.md */
 export const RUN_AUDIT_T = {
   k1: "כפילות",
   k2: "שם + שם האם זהים: \"",
@@ -62,4 +62,5 @@ export const RUN_AUDIT_T = {
   k60: "תומכ/ת בשם \"",
   k61: "\" מופיע/ה ",
   k62: " פעמים",
+  k63: 25,
 };

@@ -10,7 +10,7 @@ export function hokEffectivelyActive(sp, todayIso, T) {
     if (!iso) return Infinity;
     const [y, m] = iso.slice(0, 7).split('-').map(Number);
     const [ty, tm] = todayIso.slice(0, 7).split('-').map(Number);
-    return (ty - y) * 12 + (tm - m);
+    return (ty - y) * T.k3 + (tm - m);
   }
 
   const h = sp.hok;

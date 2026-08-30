@@ -1,4 +1,4 @@
-/** אטום-דאטה · segments-segment-counts-strings — מחרוזות-התצוגה/דומיין שחולצו מ-segments-segment-counts (מנוע-הטיהור v3, הכרעה 19). חוזה: segments-segment-counts-strings.contract.md */
+/** אטום-דאטה · segments-segment-counts-strings — מחרוזות-הדאטה של segments-segment-counts (מנוע-הקשיחים, הכרעה 19). חוזה: segments-segment-counts-strings.contract.md */
 export const SEGMENTS_SEGMENT_COUNTS_T = {
   k1: "atrisk",
   k2: "בסיכון נטישה",
@@ -10,4 +10,7 @@ export const SEGMENTS_SEGMENT_COUNTS_T = {
   k8: "תרמו ב-12 החודשים",
   k9: "noemail",
   k10: "ללא אימייל",
+  k11: 5000,
+  k12: 60,
+  k13: 365,
 };

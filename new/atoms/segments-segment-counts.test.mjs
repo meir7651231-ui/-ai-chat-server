@@ -11,6 +11,9 @@ const __d_segmentCounts_SEGMENTS_SEGMENT_COUNTS_T = {
   k8: "תרמו ב-12 החודשים",
   k9: "noemail",
   k10: "ללא אימייל",
+  k11: 5000,
+  k12: 60,
+  k13: 365,
 };
 const f = (...a) => __pure_segmentCounts(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_segmentCounts_SEGMENTS_SEGMENT_COUNTS_T);
 // עצמאי (חוק-1: אפס import-אח; שקעים/פיקסטורות inline). Golden נלכד מהרצה.

@@ -1,4 +1,10 @@
-import { taskStatsFor } from './task-stats-for.mjs';
+import { taskStatsFor as __pure_taskStatsFor } from './task-stats-for.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_task_stats_for_T = {
+  k1: 10,
+  k2: 86400000,
+};
+const taskStatsFor = (...a) => __pure_taskStatsFor(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_task_stats_for_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b);

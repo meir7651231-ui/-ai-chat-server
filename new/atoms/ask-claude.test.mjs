@@ -16,6 +16,9 @@ const __d_ask_claude_T = {
   k13: "הקריאה לעוזר נכשלה (",
   k14: "text",
   k15: "לא התקבלה תשובה — נסו שוב",
+  k16: 600,
+  k17: 401,
+  k18: 429,
 };
 const askClaude = (...a) => __pure_askClaude(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_ask_claude_T);
 let f = 0;

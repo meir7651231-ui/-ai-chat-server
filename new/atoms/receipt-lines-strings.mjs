@@ -1,4 +1,4 @@
-/** אטום-דאטה · receipt-lines-strings — מחרוזות-התצוגה/דומיין שחולצו מ-receipt-lines (מנוע-הטיהור v3, הכרעה 19). חוזה: receipt-lines-strings.contract.md */
+/** אטום-דאטה · receipt-lines-strings — מחרוזות-הדאטה של receipt-lines (מנוע-הקשיחים, הכרעה 19). חוזה: receipt-lines-strings.contract.md */
 export const RECEIPT_LINES_T = {
   k1: "העתק נאמן למקור",
   k2: "מקור",
@@ -28,4 +28,5 @@ export const RECEIPT_LINES_T = {
   k26: " · יתרה: ₪",
   k27: "תשלום הבא: ",
   k28: "תודה על תמיכתכם",
+  k29: 10,
 };

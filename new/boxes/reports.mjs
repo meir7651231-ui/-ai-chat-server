@@ -9,7 +9,10 @@ import { RANGE_LABEL_T as __d_rangeLabel_RANGE_LABEL_T } from '../atoms/range-la
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const rangeLabelA = (...a) => __pure_rangeLabel(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_rangeLabel_RANGE_LABEL_T);
 import { paidOf as paidOfA } from '../atoms/paid-of.mjs';
-import { round2 as round2A } from '../atoms/round2.mjs';
+import { round2 as __pure_round2 } from '../atoms/round2.mjs';
+import { ROUND2_T as __d_round2_T } from '../atoms/round2-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const round2A = (...a) => __pure_round2(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_round2_T);
 import { paidInRange as paidInRangeA } from '../atoms/paid-in-range.mjs';
 import { balanceOf as balanceOfA } from '../atoms/balance-of.mjs';
 import { monthKey as monthKeyA } from '../atoms/month-key.mjs';

@@ -20,6 +20,8 @@ const __d_parseFamiliesCsv_PARSE_FAMILIES_CSV_T = {
   k16: "עברית",
   k17: "חסידי",
   k18: "השתתפה ביריד חנוכה תשפ\"ו",
+  k19: 12,
+  k20: 10,
 };
 const parseFamiliesCsv = (...a) => __pure_parseFamiliesCsv(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_parseFamiliesCsv_PARSE_FAMILIES_CSV_T);
 

@@ -1,4 +1,9 @@
-import { smartScore } from './smart-score.mjs';
+import { smartScore as __pure_smartScore } from './smart-score.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_smart_score_T = {
+  k1: 100,
+};
+const smartScore = (...a) => __pure_smartScore(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_smart_score_T);
 const norm=(t)=>String(t||'').toLowerCase().replace(/[֑-ׇ]/g,'').replace(/[ךםןףץ]/g,(c)=>({ך:'כ',ם:'מ',ן:'נ',ף:'פ',ץ:'צ'})[c]).replace(/['"׳״\-–._]/g,'').trim();
 const dist=(a,b)=>{const la=a.length,lb=b.length;if(!la)return lb;if(!lb)return la;const dp=[];for(let j=0;j<=lb;j++)dp[j]=j;for(let i=1;i<=la;i++){let p=dp[0];dp[0]=i;for(let j=1;j<=lb;j++){const t=dp[j];dp[j]=Math.min(dp[j]+1,dp[j-1]+1,p+(a[i-1]===b[j-1]?0:1));p=t;}}return dp[lb];};
 const XL={'כהן':['cohen','kohen','коэн']};

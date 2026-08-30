@@ -5,6 +5,9 @@ const __d_decodeCsvBuffer_DECODE_CSV_BUFFER_T = {
   k2: "utf-16be",
   k3: "utf-8",
   k4: "windows-1255",
+  k5: 255,
+  k6: 254,
+  k7: 400,
 };
 const decodeCsvBuffer = (...a) => __pure_decodeCsvBuffer(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_decodeCsvBuffer_DECODE_CSV_BUFFER_T);
 const B = (arr) => Uint8Array.from(arr).buffer;

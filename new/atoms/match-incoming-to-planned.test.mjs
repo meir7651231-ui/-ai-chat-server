@@ -1,4 +1,11 @@
-import { matchIncomingToPlanned } from './match-incoming-to-planned.mjs';
+import { matchIncomingToPlanned as __pure_matchIncomingToPlanned } from './match-incoming-to-planned.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_match_incoming_to_planned_T = {
+  k1: 100,
+  k2: 10,
+  k3: 60,
+};
+const matchIncomingToPlanned = (...a) => __pure_matchIncomingToPlanned(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_match_incoming_to_planned_T);
 // שקעים אמיתיים/מתועדים (מקומיים — הבדיקה מייבאת רק את האטום שלה)
 const nameMatches = (a, b) => a === b; // חוזה: שקע-דמיון (כאן: זהות פשוטה)
 const dayDiff = (a, b) => {           // מימוש-אמת של maor: מרחק-ימים מוחלט

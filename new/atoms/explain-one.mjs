@@ -5,6 +5,6 @@ export function explainOne(tc, orgName, tenantId, call, telephonyToTenant, valid
   const raw = telephonyToTenant(tc, orgName, tenantId);
   const v = validateTenant(raw);
   if (!v.ok) return { summary: T.k1 + v.errors.join(' · '), outcome: T.k2, reason: '' };
-  const e = explainCall(v.tenant, call, { anchorDate: anchorToday(), calendarWindow: 400 });
+  const e = explainCall(v.tenant, call, { anchorDate: anchorToday(), calendarWindow: T.k3 });
   return { summary: e.summary, outcome: e.outcome, reason: e.reason };
 }

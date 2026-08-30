@@ -1,7 +1,10 @@
 /** קופסת-חיבורים · תמחור (lib-pricing) — מחווטת את חוטי-התמחור. חוזה: pricing.contract.md
  *  זה המקום היחיד שבו חוטי-התמחור נפגשים (חוקי-החשמלאי, LAW.md).
  *  מוצא: maor/src/lib/pricing.ts (גרף-הקריאות המלא). */
-import { defaultPrices } from '../atoms/default-prices.mjs';
+import { defaultPrices as __pure_defaultPrices } from '../atoms/default-prices.mjs';
+import { DEFAULT_PRICES_T as __d_default_prices_T } from '../atoms/default-prices-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const defaultPrices = (...a) => __pure_defaultPrices(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_default_prices_T);
 import { SIZE_LABELS } from '../atoms/size-labels.mjs';
 import { normalizePrices as __pure_normalizePrices } from '../atoms/normalize-prices.mjs';
 import { NORMALIZE_PRICES_T as __d_normalizePrices_NORMALIZE_PRICES_T } from '../atoms/normalize-prices-strings.mjs';

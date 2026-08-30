@@ -1,4 +1,9 @@
-import { effectivePrice } from './effective-price.mjs';
+import { effectivePrice as __pure_effectivePrice } from './effective-price.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_effective_price_T = {
+  k1: 100,
+};
+const effectivePrice = (...a) => __pure_effectivePrice(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_effective_price_T);
 // מימוש-שקע לבדיקה (בקופסה יחווט האטום האמיתי maxDiscountPct):
 const maxDiscountPct = (ids, criteria) => {
   let pct = 0;

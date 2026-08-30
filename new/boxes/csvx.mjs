@@ -13,7 +13,10 @@ import { DECODE_CSV_BUFFER_T as __d_decodeCsvBuffer_DECODE_CSV_BUFFER_T } from '
 const decodeCsvBuffer = (...a) => __pure_decodeCsvBuffer(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_decodeCsvBuffer_DECODE_CSV_BUFFER_T);
 import { readCsvFileText as readCsvFileTextAtom } from '../atoms/read-csv-file-text.mjs';
 import { parseCsv } from '../atoms/parse-csv.mjs';
-import { parseAnyDate } from '../atoms/parse-any-date.mjs';
+import { parseAnyDate as __pure_parseAnyDate } from '../atoms/parse-any-date.mjs';
+import { PARSE_ANY_DATE_T as __d_parse_any_date_T } from '../atoms/parse-any-date-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const parseAnyDate = (...a) => __pure_parseAnyDate(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_parse_any_date_T);
 import { guardExport } from '../atoms/guard-export.mjs';
 import { CSVX_TERMS } from '../atoms/csvx-terms.mjs';
 

@@ -3,7 +3,7 @@
  *  חולץ כלשונו מ-maor/src/lib/cloud.ts:175-200 (תורגם TS→JS); ‏requireDb ⇒ db,
  *  ‏scopedDonations, ערכת-Firestore (doc/writeBatch) ⇒ fs, ‏encryptDoc —
  *  כולם שקעים (חוק-1). ‏pkey נשמר plaintext מחוץ למעטפה (where-pkey-in + Rules). */
-export async function pushDonations(diff, dek, db, scopedDonations, fs, encryptDoc) {
+export async function pushDonations(diff, dek, db, scopedDonations, fs, encryptDoc, T) {
   const ops = [];
   for (const d of diff.sets) {
     // pkey נשמר plaintext (מחוץ למעטפה) כדי ש-where-pkey-in + Rules יעבדו גם בארגון-מוצפן.
@@ -14,9 +14,9 @@ export async function pushDonations(diff, dek, db, scopedDonations, fs, encryptD
   for (const id of diff.deletes) {
     ops.push((b) => b.delete(fs.doc(db, scopedDonations(), id)));
   }
-  for (let i = 0; i < ops.length; i += 400) {
+  for (let i = 0; i < ops.length; i += T.k1) {
     const batch = fs.writeBatch(db);
-    for (const op of ops.slice(i, i + 400)) op(batch);
+    for (const op of ops.slice(i, i + T.k1)) op(batch);
     await batch.commit();
   }
 }

@@ -3,6 +3,7 @@ import { nextClosure as __pure_nextClosure } from './next-closure.mjs';
 const __d_nextClosure_NEXT_CLOSURE_T = {
   k1: "default",
   k2: "Asia/Jerusalem",
+  k3: 10,
 };
 const nextClosure = (...a) => __pure_nextClosure(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_nextClosure_NEXT_CLOSURE_T);
 // שקעי-דמה מקומיים לבדיקה — הבדיקה מייבאת רק את האטום שלה (חוק-4).

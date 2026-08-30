@@ -14,14 +14,14 @@ export async function askClaude(apiKey, prompt, doFetch = fetch, T) {
         },
         body: JSON.stringify({
             model: T.k9,
-            max_tokens: 600,
+            max_tokens: T.k16,
             messages: [{ role: T.k10, content: prompt }],
         }),
     });
     if (!res.ok) {
-        if (res.status === 401)
+        if (res.status === T.k17)
             throw new Error(T.k11);
-        if (res.status === 429)
+        if (res.status === T.k18)
             throw new Error(T.k12);
         throw new Error(T.k13 + res.status + ')');
     }

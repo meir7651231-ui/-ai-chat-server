@@ -23,6 +23,7 @@ const __d_buildCourseDailyRows_BUILD_COURSE_DAILY_ROWS_T = {
   k21: " ימי מפגש — בדקו את תאריך הסיום של ה",
   k22: "entity.course",
   k23: "חוג",
+  k24: 500,
 };
 // צילום-מקומי מ-build-course-daily-rows-data + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)
 const DAY_NAMES = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];

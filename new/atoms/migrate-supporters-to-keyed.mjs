@@ -19,9 +19,9 @@ export async function migrateSupportersToKeyed(supporters, events, dek, io, T) {
     const inner = dek ? await encryptDoc(toPlain(ev), dek) : toPlain(ev);
     ops.push((b) => b.set(doc(db, scopedCol(T.k2), ev.id), { skey: docSkey(T.k2, ev, map), ...inner }));
   }
-  for (let i = 0; i < ops.length; i += 400) {
+  for (let i = 0; i < ops.length; i += T.k3) {
     const batch = writeBatch(db);
-    for (const op of ops.slice(i, i + 400))
+    for (const op of ops.slice(i, i + T.k3))
       op(batch);
     await batch.commit();
   }

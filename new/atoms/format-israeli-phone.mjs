@@ -1,5 +1,5 @@
 /** חוט · format-israeli-phone — קודם אוטומטית (אפיון-Golden). חוזה: format-israeli-phone.contract.md */
-export function formatIsraeliPhone(raw) {
+export function formatIsraeliPhone(raw, T) {
     const s = String(raw || '').trim();
     let d = s.replace(/\D/g, '');
     // קידומת בינלאומית 972/00972 → 0 מקומי (מספרים מיובאים מגיעים כך)
@@ -10,7 +10,7 @@ export function formatIsraeliPhone(raw) {
     if (!d)
         return s;
     if (d[0] === '0') {
-        if (d.length === 10)
+        if (d.length === T.k1)
             return d.slice(0, 3) + '-' + d.slice(3);
         if (d.length === 9)
             return d.slice(0, 2) + '-' + d.slice(2);

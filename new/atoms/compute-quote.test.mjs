@@ -4,6 +4,8 @@ const __d_computeQuote_COMPUTE_QUOTE_T = {
   k1: "module",
   k2: "integration",
   k3: "subscription",
+  k4: 12,
+  k5: 10,
 };
 const computeQuote = (...a) => __pure_computeQuote(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_computeQuote_COMPUTE_QUOTE_T);
 let f = 0;

@@ -1,4 +1,9 @@
-import { maxDiscountPct } from './max-discount-pct.mjs';
+import { maxDiscountPct as __pure_maxDiscountPct } from './max-discount-pct.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_max_discount_pct_T = {
+  k1: 100,
+};
+const maxDiscountPct = (...a) => __pure_maxDiscountPct(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_max_discount_pct_T);
 let f = 0;
 const eq = (a, w, msg) => { if (a !== w) { console.error(`✗ ${msg} ⇒ ${a} ≠ ${w}`); f = 1; } };
 

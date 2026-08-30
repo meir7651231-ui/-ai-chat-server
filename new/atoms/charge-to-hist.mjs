@@ -2,9 +2,9 @@
  *  חוזה: charge-to-hist.contract.md
  *  חולץ כלשונו מ-maor/src/lib/nedarimSync.ts:124-145 (תורגם TS→JS); השכנים
  *  curOf/providerClearer הוזרקו כשקעים (חוק-1 — אפס import פנימי). */
-export function chargeToHist(charge, curOf, providerClearer) {
+export function chargeToHist(charge, curOf, providerClearer, T) {
     const h = {
-        d: (charge.d || (charge.at || '').slice(0, 10) || '').trim(),
+        d: (charge.d || (charge.at || '').slice(0, T.k1) || '').trim(),
         a: charge.amount,
         c: curOf(charge),
         clearer: providerClearer(charge.provider),

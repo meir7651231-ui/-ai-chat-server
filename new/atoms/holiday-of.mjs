@@ -13,15 +13,15 @@ export function holidayOf(d, hebParts, scanHebYear, HOLIDAYS, T) {
   const dow = d.getDay();
   const key = `${p.month} ${p.day}`;
   if (dow === 6 && (key === T.k4 || key === 'Av 9')) return null; // שבת — הצום נדחה
-  if (dow === 0 && p.month === T.k5 && p.day === 18) return T.k6;
-  if (dow === 0 && p.month === 'Av' && p.day === 10) return T.k7;
+  if (dow === 0 && p.month === T.k5 && p.day === T.k16) return T.k6;
+  if (dow === 0 && p.month === 'Av' && p.day === T.k17) return T.k7;
   // דין-נדחה מלא (19.8) — אותו דפוס לשני הצומות הנותרים:
   // צום גדליה (ג' תשרי) שחל בשבת נדחה ליום ראשון (ד' תשרי) — קורה כשר"ה ביום חמישי.
   if (dow === 6 && key === T.k8) return null;
   if (dow === 0 && p.month === T.k9 && p.day === 4) return T.k10;
   // תענית אסתר (י"ג אדר) שחלה בשבת מוקדמת ליום חמישי (י"א אדר) — פורים ביום ראשון.
   if (dow === 6 && (key === T.k11 || key === T.k12)) return null;
-  if (dow === 4 && p.day === 11 && (p.month === T.k13 || p.month === T.k14)) {
+  if (dow === 4 && p.day === T.k18 && (p.month === T.k13 || p.month === T.k14)) {
     return T.k15;
   }
   return HOLIDAYS[key] ?? null;

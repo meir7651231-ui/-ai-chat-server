@@ -1,4 +1,4 @@
-/** אטום-דאטה · suggestions-strings — מחרוזות-התצוגה/דומיין שחולצו מ-suggestions (מנוע-הטיהור v3, הכרעה 19). חוזה: suggestions-strings.contract.md */
+/** אטום-דאטה · suggestions-strings — מחרוזות-הדאטה של suggestions (מנוע-הקשיחים, הכרעה 19). חוזה: suggestions-strings.contract.md */
 export const SUGGESTIONS_T = {
   k1: "active",
   k2: "shop",
@@ -28,4 +28,5 @@ export const SUGGESTIONS_T = {
   k26: "חידוש כרטיסייה · ",
   k27: "נותרו ",
   k28: " ניקובים",
+  k29: 30,
 };

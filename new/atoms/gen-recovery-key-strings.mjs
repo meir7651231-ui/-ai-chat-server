@@ -1,4 +1,5 @@
-/** אטום-דאטה · gen-recovery-key-strings — מחרוזות-התצוגה/דומיין שחולצו מ-gen-recovery-key (מנוע-הטיהור v3, הכרעה 19). חוזה: gen-recovery-key-strings.contract.md */
+/** אטום-דאטה · gen-recovery-key-strings — מחרוזות-הדאטה של gen-recovery-key (מנוע-הקשיחים, הכרעה 19). חוזה: gen-recovery-key-strings.contract.md */
 export const GEN_RECOVERY_KEY_T = {
   k1: "ABCDEFGHJKLMNPQRSTUVWXYZ23456789",
+  k2: 24,
 };

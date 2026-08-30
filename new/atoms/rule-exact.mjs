@@ -1,2 +1,2 @@
 /** חוט · rule-exact — חוזה: rule-exact.contract.md */
-export const ruleExact = (nq, nt) => (nt === nq ? 100 : null);
+export const ruleExact = (nq, nt, T) => (nt === nq ? T.k1 : null);

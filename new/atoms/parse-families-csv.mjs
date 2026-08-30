@@ -17,7 +17,7 @@ export function parseFamiliesCsv(rows, existing, clean, normName, digits, T) {
     let city = clean(r[6]);
     if (city === T.k3) city = '';
     if (city === T.k4 || city === T.k5) city = T.k6;
-    const noteRaw = r[12] || '';
+    const noteRaw = r[T.k19] || '';
     const stc = clean((noteRaw.match(/סטטוס:\s*([^\n]+)/) || [])[1] || '');
     const obj = {
       name,
@@ -37,7 +37,7 @@ export function parseFamiliesCsv(rows, existing, clean, normName, digits, T) {
           ? T.k14
           : T.k15,
       language: T.k16,
-      community: clean(r[10]) || T.k17,
+      community: clean(r[T.k20]) || T.k17,
       notes: isFair ? T.k18 : '',
     };
     const ex = existing.find((f) => normName(f.name) === normName(name) &&

@@ -3,14 +3,14 @@
  * שקעים (מבונים): donorScan,dayDiff,rfmFromScan,churnFromScan (intel) · supTier (Genesis).
  */
 export function donorConstellation(supporters, todayIso, opts = {}, { donorScan, dayDiff, rfmFromScan, churnFromScan, supTier }, TIER_KEY, T) {
-  const hash01 = (s) => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0) / 4294967296; };
-  const radiusFor = (daysSince, jitter) => { const base = daysSince <= 30 ? 0.30 : daysSince <= 90 ? 0.45 : daysSince <= 180 ? 0.60 : daysSince <= 365 ? 0.75 : 0.9; return Math.max(0.18, Math.min(0.98, base + (jitter - 0.5) * 0.1)); };
+  const hash01 = (s) => { let h = T.k2; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, T.k3); } return (h >>> 0) / 4294967296; };
+  const radiusFor = (daysSince, jitter) => { const base = daysSince <= T.k4 ? 0.30 : daysSince <= T.k5 ? 0.45 : daysSince <= T.k6 ? 0.60 : daysSince <= T.k7 ? 0.75 : 0.9; return Math.max(0.18, Math.min(0.98, base + (jitter - 0.5) * 0.1)); };
   const rate = opts.rate ?? 3.7;
-  const riskT = opts.riskThreshold ?? 60;
+  const riskT = opts.riskThreshold ?? T.k8;
   const raw = [];
   let maxLog = 0;
   for (const sp of supporters) {
-    const scan = donorScan(sp, todayIso, rate, 12);
+    const scan = donorScan(sp, todayIso, rate, T.k9);
     if (scan.count === 0) continue;
     const days = dayDiff(scan.last, todayIso);
     const tier = TIER_KEY[supTier(rfmFromScan(scan, todayIso).score).label] ?? T.k1;

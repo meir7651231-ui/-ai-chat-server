@@ -12,7 +12,10 @@
 import { TZ_SCORE_RULES as TZ_SCORE_RULES_A } from '../atoms/tz-score-rules.mjs';
 import { TZ_STALE_DAYS as TZ_STALE_DAYS_A } from '../atoms/tz-stale-days.mjs';
 import { lastCollectionIso as lastCollectionIsoA } from '../atoms/last-collection-iso.mjs';
-import { collectionScoreDelta as collectionScoreDeltaA } from '../atoms/collection-score-delta.mjs';
+import { collectionScoreDelta as __pure_collectionScoreDelta } from '../atoms/collection-score-delta.mjs';
+import { COLLECTION_SCORE_DELTA_T as __d_collection_score_delta_T } from '../atoms/collection-score-delta-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const collectionScoreDeltaA = (...a) => __pure_collectionScoreDelta(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_collection_score_delta_T);
 import { boxTotal as boxTotalA } from '../atoms/box-total.mjs';
 import { coordinatorBoxes as coordinatorBoxesA } from '../atoms/coordinator-boxes.mjs';
 import { coordinatorTotal as coordinatorTotalA } from '../atoms/coordinator-total.mjs';
@@ -27,9 +30,15 @@ import { NEEDS_CARE_TZEDAKA_T as __d_needsCare_NEEDS_CARE_TZEDAKA_T } from '../a
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const needsCareA = (...a) => __pure_needsCare(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_needsCare_NEEDS_CARE_TZEDAKA_T);
 import { leaderboard as leaderboardA } from '../atoms/leaderboard.mjs';
-import { campaignProgress as campaignProgressA } from '../atoms/campaign-progress.mjs';
+import { campaignProgress as __pure_campaignProgress } from '../atoms/campaign-progress.mjs';
+import { CAMPAIGN_PROGRESS_T as __d_campaign_progress_T } from '../atoms/campaign-progress-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const campaignProgressA = (...a) => __pure_campaignProgress(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_campaign_progress_T);
 import { filterCoordinators as filterCoordinatorsA } from '../atoms/filter-coordinators.mjs';
-import { boxesOverview as boxesOverviewA } from '../atoms/boxes-overview.mjs';
+import { boxesOverview as __pure_boxesOverview } from '../atoms/boxes-overview.mjs';
+import { BOXES_OVERVIEW_T as __d_boxes_overview_T } from '../atoms/boxes-overview-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const boxesOverviewA = (...a) => __pure_boxesOverview(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_boxes_overview_T);
 import { filterCollections as filterCollectionsA } from '../atoms/filter-collections.mjs';
 import { coordinatorPrintLines as __pure_coordinatorPrintLines } from '../atoms/coordinator-print-lines.mjs';
 import { COORDINATOR_PRINT_LINES_T as __d_coordinatorPrintLines_COORDINATOR_PRINT_LINES_T } from '../atoms/coordinator-print-lines-strings.mjs';

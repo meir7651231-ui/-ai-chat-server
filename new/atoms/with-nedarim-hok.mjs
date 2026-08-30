@@ -10,7 +10,7 @@ export function withNedarimHok(sp, charge, curOf, hokDayFromDate, T) {
         return sp;
     if (sp.hok && !sp.hok.kevaId)
         return sp; // הו"ק ידני — לא דורסים
-    const cd = (charge.d || charge.at || '').slice(0, 10);
+    const cd = (charge.d || charge.at || '').slice(0, T.k3);
     const prevStart = sp.hok?.startedAt || '';
     return {
         ...sp,

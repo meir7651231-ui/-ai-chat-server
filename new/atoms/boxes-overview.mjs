@@ -1,7 +1,7 @@
 /** חוט · boxes-overview — מבט "כל הקופות" עם חיפוש/סינון/מיון.
  *  חוזה: boxes-overview.contract.md · שקעים: lastCollectionIso, boxTotal, smartFilter
  *  חולץ כלשונו מ-maor/src/components/tzedaka/lib.ts:203-232 (קריאות-השכן שוקעו). */
-export function boxesOverview(db, q, status, sort, lastCollectionIso, boxTotal, smartFilter) {
+export function boxesOverview(db, q, status, sort, lastCollectionIso, boxTotal, smartFilter, T) {
     let rows = db.tzBoxes.map((box) => ({
         box,
         coordName: db.tzCoordinators.find((c) => c.id === box.coordinatorId)?.name ?? '',
@@ -19,7 +19,7 @@ export function boxesOverview(db, q, status, sort, lastCollectionIso, boxTotal, 
         r.famName,
     ]);
     const cmp = {
-        num: (a, b) => (parseInt(a.box.num, 10) || 0) - (parseInt(b.box.num, 10) || 0),
+        num: (a, b) => (parseInt(a.box.num, T.k1) || 0) - (parseInt(b.box.num, T.k1) || 0),
         lastCollection: (a, b) => a.last.localeCompare(b.last), // ישן/מעולם-לא ראשון — לרדיפה
         total: (a, b) => b.total - a.total,
     };

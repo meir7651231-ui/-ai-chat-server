@@ -1,4 +1,9 @@
-import { doneTodayFor } from './done-today-for.mjs';
+import { doneTodayFor as __pure_doneTodayFor } from './done-today-for.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_done_today_for_T = {
+  k1: 10,
+};
+const doneTodayFor = (...a) => __pure_doneTodayFor(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_done_today_for_T);
 // שקע מוזרק לפי חוזה task-identity (הבדיקה לא מייבאת אטום אחר — חוק-4)
 const taskIdentity = (email) => { const e = (email ?? '').trim().toLowerCase(); return e || 'מקומי'; };
 const TODAY = '2026-08-24';

@@ -2,7 +2,10 @@
  *  ההלחמות-לשעבר מ-maor/src/lib/wa.ts + lib/templates.ts — עכשיו חיווט גלוי אחד.
  *  קישורי wa.me click-to-chat + נוסחי-הודעה, טהור לגמרי: פתיחת-הקישור
  *  בדפדפן/אפליקציה = שקע של לוח-האם, לא כאן. */
-import { waDigits as digitsAtom } from '../atoms/wa-digits.mjs';
+import { waDigits as __pure_waDigits } from '../atoms/wa-digits.mjs';
+import { WA_DIGITS_T as __d_wa_digits_T } from '../atoms/wa-digits-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const digitsAtom = (...a) => __pure_waDigits(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_wa_digits_T);
 import { waLink as __pure_waLink } from '../atoms/wa-link.mjs';
 import { WA_LINK_T as __d_waLink_WA_LINK_T } from '../atoms/wa-link-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

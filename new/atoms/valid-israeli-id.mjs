@@ -1,5 +1,5 @@
 /** חוט · valid-israeli-id — קודם אוטומטית (אפיון-Golden). חוזה: valid-israeli-id.contract.md */
-export function validIsraeliId(id) {
+export function validIsraeliId(id, T) {
     const s = String(id).trim();
     if (!/^\d{5,9}$/.test(s))
         return false;
@@ -13,6 +13,6 @@ export function validIsraeliId(id) {
             d -= 9;
         sum += d;
     }
-    return sum % 10 === 0;
+    return sum % T.k1 === 0;
 }
 /** נרמול טלפון: מסיר רווחים/מקפים, מוסיף 0 מוביל אם חסר. */

@@ -7,14 +7,14 @@
 export function campaignProgress(c, nowMs, T) {
   const goal = typeof c?.goal === T.k1 && c.goal > 0 ? c.goal : 0;
   const raised = typeof c?.raised === T.k1 && c.raised > 0 ? c.raised : 0;
-  const pct = goal > 0 ? Math.max(0, Math.min(100, Math.round((raised / goal) * 100))) : 0;
+  const pct = goal > 0 ? Math.max(0, Math.min(T.k2, Math.round((raised / goal) * T.k2))) : 0;
   let daysLeft = null;
   if (c?.end) {
     // חצות-מקומי של יום-היעד (חלק-התאריך בלבד) — ספירת ימים קלנדרית: מ-1.9 ל-11.9
     // = 10 (ולא 11 שנוצר מחישוב סוף-יום). עבר ⇒ 0.
-    const t = Date.parse(c.end.slice(0, 10) + 'T00:00:00');
+    const t = Date.parse(c.end.slice(0, T.k3) + 'T00:00:00');
     if (Number.isFinite(t)) {
-      const diff = Math.ceil((t - nowMs) / 86_400_000);
+      const diff = Math.ceil((t - nowMs) / T.k4);
       daysLeft = diff > 0 ? diff : 0;
     }
   }

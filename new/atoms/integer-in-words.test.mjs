@@ -5,6 +5,9 @@ const __d_integerInWords_INTEGER_IN_WORDS_T = {
   k2: "מיליון",
   k3: "שני מיליון",
   k4: " מיליון",
+  k5: 999999999,
+  k6: 1000000,
+  k7: 1000,
 };
 const integerInWords = (...a) => __pure_integerInWords(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_integerInWords_INTEGER_IN_WORDS_T);
 // שקעים אמיתיים כלשון-המקור (maor/src/lib/hebrewNumber.ts — מקומיים לבדיקה;

@@ -2,12 +2,12 @@
  *  חוזה: rooms-now.contract.md
  *  חולץ כלשונו מ-maor/src/components/courses/lib.ts:120-147; השכן sessionsOf
  *  (המפגשים-בפועל של חוג) הוזרק כשקע (חוק-1 — אפס import פנימי). */
-export function roomsNow(db, now, sessionsOf) {
+export function roomsNow(db, now, sessionsOf, T) {
   const day = now.getDay();
-  const mins = now.getHours() * 60 + now.getMinutes();
+  const mins = now.getHours() * T.k1 + now.getMinutes();
   const toMin = (t) => {
     const [h, m] = t.split(':').map(Number);
-    return (h || 0) * 60 + (m || 0);
+    return (h || 0) * T.k1 + (m || 0);
   };
   return db.rooms
     .filter((r) => r.active)

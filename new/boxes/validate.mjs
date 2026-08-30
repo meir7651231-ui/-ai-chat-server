@@ -2,9 +2,15 @@
  *  מחווטת את 6 חוטי maor/src/lib/validate.ts — ת"ז · טלפון (נרמול/עיצוב) ·
  *  נרמול-חיפוש · נרמול-שם · מפתח-שם. זה המקום היחיד שבו החוטים נפגשים (LAW.md).
  *  אפס-IO: כל הפונקציות טהורות — אין שקעי DOM/localStorage/fetch להזרקה. */
-import { validIsraeliId as atomValidId } from '../atoms/valid-israeli-id.mjs';
+import { validIsraeliId as __pure_validIsraeliId } from '../atoms/valid-israeli-id.mjs';
+import { VALID_ISRAELI_ID_T as __d_valid_israeli_id_T } from '../atoms/valid-israeli-id-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const atomValidId = (...a) => __pure_validIsraeliId(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_valid_israeli_id_T);
 import { normalizePhone as atomNormPhone } from '../atoms/normalize-phone.mjs';
-import { formatIsraeliPhone as atomFormatPhone } from '../atoms/format-israeli-phone.mjs';
+import { formatIsraeliPhone as __pure_formatIsraeliPhone } from '../atoms/format-israeli-phone.mjs';
+import { FORMAT_ISRAELI_PHONE_T as __d_format_israeli_phone_T } from '../atoms/format-israeli-phone-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const atomFormatPhone = (...a) => __pure_formatIsraeliPhone(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_format_israeli_phone_T);
 import { normSearch as __pure_normSearch } from '../atoms/norm-search.mjs';
 import { NORM_SEARCH_T as __d_normSearch_NORM_SEARCH_T } from '../atoms/norm-search-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

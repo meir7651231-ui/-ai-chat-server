@@ -1,4 +1,4 @@
-/** אטום-דאטה · build-ics-strings — מחרוזות-התצוגה/דומיין שחולצו מ-build-ics (מנוע-הטיהור v3, הכרעה 19). חוזה: build-ics-strings.contract.md */
+/** אטום-דאטה · build-ics-strings — מחרוזות-הדאטה של build-ics (מנוע-הקשיחים, הכרעה 19). חוזה: build-ics-strings.contract.md */
 export const BUILD_ICS_T = {
   k1: "BEGIN:VCALENDAR",
   k2: "VERSION:2.0",
@@ -18,4 +18,5 @@ export const BUILD_ICS_T = {
   k16: "END:VEVENT",
   k17: "END:VCALENDAR",
   k18: "PRODID:-//maor-system//he//",
+  k19: 3600000,
 };

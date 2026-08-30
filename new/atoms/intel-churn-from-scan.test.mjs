@@ -1,4 +1,12 @@
-import { churnFromScan as f } from './intel-churn-from-scan.mjs';
+import { churnFromScan as __pure_churnFromScan } from './intel-churn-from-scan.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_intel_churn_from_scan_T = {
+  k1: 365,
+  k2: 30,
+  k3: 100,
+  k4: 50,
+};
+const f = (...a) => __pure_churnFromScan(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_intel_churn_from_scan_T);
 // עצמאי (חוק-1: אפס import-אח; שקעים inline). Golden נלכד מהרצה.
 const T='2026-08-26';
 const MS_DAY=86400000;

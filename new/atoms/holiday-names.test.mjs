@@ -1,4 +1,9 @@
-import { holidayNames } from './holiday-names.mjs';
+import { holidayNames as __pure_holidayNames } from './holiday-names.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_holiday_names_T = {
+  k1: 400,
+};
+const holidayNames = (...a) => __pure_holidayNames(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_holiday_names_T);
 let f = 0;
 const chk = (name, got, want) => {
   if (JSON.stringify(got) !== JSON.stringify(want)) { console.error(`✗ ${name} ⇒ ${JSON.stringify(got)} ≠ ${JSON.stringify(want)}`); f = 1; }

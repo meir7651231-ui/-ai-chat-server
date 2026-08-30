@@ -1,4 +1,4 @@
-/** אטום-דאטה · trust-report-strings — מחרוזות-התצוגה/דומיין שחולצו מ-trust-report (מנוע-הטיהור v3, הכרעה 19). חוזה: trust-report-strings.contract.md */
+/** אטום-דאטה · trust-report-strings — מחרוזות-הדאטה של trust-report (מנוע-הקשיחים, הכרעה 19). חוזה: trust-report-strings.contract.md */
 export const TRUST_REPORT_T = {
   k1: "route-closure",
   k2: "סגירת-מסלולים (אין ניתוב-יתום)",
@@ -43,4 +43,8 @@ export const TRUST_REPORT_T = {
   k41: "חסרים ",
   k42: " (שער-דומם)",
   k43: " דליפות",
+  k44: 100,
+  k45: 95,
+  k46: 85,
+  k47: 70,
 };

@@ -7,7 +7,7 @@
  *  פנימה; הקבוע-השכן CORAL_PALETTE (האטום coral-palette) הוזרק כשקע-נתונים
  *  (חוק-1 — אפס import פנימי). */
 
-export function sitePalette(accent, fallbackPalette) {
+export function sitePalette(accent, fallbackPalette, T) {
   // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
   function hexToRgb(hex) {
     const m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex.trim());
@@ -20,9 +20,9 @@ export function sitePalette(accent, fallbackPalette) {
     return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
   }
   function rgbToHsl(r, g, b) {
-    r /= 255;
-    g /= 255;
-    b /= 255;
+    r /= T.k1;
+    g /= T.k1;
+    b /= T.k1;
     const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min;
     const l = (max + min) / 2;
     let h = 0, s = 0;
@@ -34,32 +34,32 @@ export function sitePalette(accent, fallbackPalette) {
         h = (b - r) / d + 2;
       else
         h = (r - g) / d + 4;
-      h *= 60;
+      h *= T.k2;
     }
     return [h, s, l];
   }
   function hslToRgb(h, s, l) {
-    h = ((h % 360) + 360) % 360;
+    h = ((h % T.k3) + T.k3) % T.k3;
     const c = (1 - Math.abs(2 * l - 1)) * s;
-    const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+    const x = c * (1 - Math.abs(((h / T.k2) % 2) - 1));
     const m = l - c / 2;
     let r = 0, g = 0, b = 0;
-    if (h < 60)
+    if (h < T.k2)
       [r, g, b] = [c, x, 0];
-    else if (h < 120)
+    else if (h < T.k4)
       [r, g, b] = [x, c, 0];
-    else if (h < 180)
+    else if (h < T.k5)
       [r, g, b] = [0, c, x];
-    else if (h < 240)
+    else if (h < T.k6)
       [r, g, b] = [0, x, c];
-    else if (h < 300)
+    else if (h < T.k7)
       [r, g, b] = [x, 0, c];
     else
       [r, g, b] = [c, 0, x];
-    return [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
+    return [Math.round((r + m) * T.k1), Math.round((g + m) * T.k1), Math.round((b + m) * T.k1)];
   }
   function toHex([r, g, b]) {
-    return '#' + [r, g, b].map((v) => Math.max(0, Math.min(255, v)).toString(16).padStart(2, '0')).join('');
+    return '#' + [r, g, b].map((v) => Math.max(0, Math.min(T.k1, v)).toString(16).padStart(2, '0')).join('');
   }
   const rgbStr = ([r, g, b]) => `${r},${g},${b}`;
 

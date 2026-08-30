@@ -6,7 +6,7 @@ export function parseSupporterGrid(rows, supNameKeys, parseAnyDate, excelSerialT
   if (!rows.length) return [];
   // שורת-הכותרות = הראשונה (מבין 15 העליונות) שיש בה עמודת-שם ("שם"/"תורם").
   const hdrIdx = rows
-    .slice(0, 15)
+    .slice(0, T.k27)
     .findIndex((r) => r.some((h) => supNameKeys.some((k) => (h ?? '').includes(k))));
   const header = (hdrIdx >= 0 ? rows[hdrIdx] : rows[0]).map((h) => (h ?? '').trim());
   const find = (keys) => header.findIndex((h) => keys.some((k) => h.includes(k)));
@@ -58,7 +58,7 @@ export function parseSupporterGrid(rows, supNameKeys, parseAnyDate, excelSerialT
       forWho: g(r, iFor),
     };
     if (iAmount >= 0 && iTxDate >= 0) {
-      const amount = Math.round(Number(g(r, iAmount).replace(/[^\d.-]/g, '')) * 100) / 100;
+      const amount = Math.round(Number(g(r, iAmount).replace(/[^\d.-]/g, '')) * T.k28) / T.k28;
       // 'תאריך עסקה' מגיע עם שעה ("09/08/26 00:36") — התאריך בלבד. אם התא מספר-
       // סריאל של Excel (יצוא ששומר תאריך כמספר) — parseAnyDate נכשל ⇒ המרה מסריאל.
       const rawDate = g(r, iTxDate).split(' ')[0];

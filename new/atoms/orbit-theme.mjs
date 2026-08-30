@@ -13,9 +13,9 @@ export function orbitTheme(accent, fallback, T) {
     return { r: parseInt(h.slice(0, 2), 16), g: parseInt(h.slice(2, 4), 16), b: parseInt(h.slice(4, 6), 16) };
   }
   function rgbToHsl(r, g, b) {
-    r /= 255;
-    g /= 255;
-    b /= 255;
+    r /= T.k14;
+    g /= T.k14;
+    b /= T.k14;
     const max = Math.max(r, g, b);
     const min = Math.min(r, g, b);
     const l = (max + min) / 2;
@@ -28,14 +28,14 @@ export function orbitTheme(accent, fallback, T) {
       else if (max === g) h = ((b - r) / d + 2) / 6;
       else h = ((r - g) / d + 4) / 6;
     }
-    return { h: h * 360, s, l };
+    return { h: h * T.k15, s, l };
   }
   function hslToRgb(h, s, l) {
-    h = ((h % 360) + 360) % 360 / 360;
+    h = ((h % T.k15) + T.k15) % T.k15 / T.k15;
     s = Math.min(1, Math.max(0, s));
     l = Math.min(1, Math.max(0, l));
     if (s === 0) {
-      const v = Math.round(l * 255);
+      const v = Math.round(l * T.k14);
       return { r: v, g: v, b: v };
     }
     const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
@@ -48,11 +48,11 @@ export function orbitTheme(accent, fallback, T) {
       if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
       return p;
     };
-    return { r: Math.round(hue(h + 1 / 3) * 255), g: Math.round(hue(h) * 255), b: Math.round(hue(h - 1 / 3) * 255) };
+    return { r: Math.round(hue(h + 1 / 3) * T.k14), g: Math.round(hue(h) * T.k14), b: Math.round(hue(h - 1 / 3) * T.k14) };
   }
-  const toHex = (c) => '#' + [c.r, c.g, c.b].map((x) => Math.max(0, Math.min(255, Math.round(x))).toString(16).padStart(2, '0')).join('');
+  const toHex = (c) => '#' + [c.r, c.g, c.b].map((x) => Math.max(0, Math.min(T.k14, Math.round(x))).toString(16).padStart(2, '0')).join('');
   const rgbStr = (c) => `${Math.round(c.r)},${Math.round(c.g)},${Math.round(c.b)}`;
-  const luminance = (c) => (0.299 * c.r + 0.587 * c.g + 0.114 * c.b) / 255;
+  const luminance = (c) => (0.299 * c.r + 0.587 * c.g + 0.114 * c.b) / T.k14;
 
   if (!accent || !HEX6.test(accent.trim())) return fallback;
   const base = hexToRgb(accent.trim());
@@ -62,15 +62,15 @@ export function orbitTheme(accent, fallback, T) {
   const accentRgb = rgbStr(base);
   const accent2 = hslToRgb(h + 6, sat, Math.min(0.74, l + 0.1));
   // קרקע — כהה מאוד, גוון-האקסנט עם עומק (הסטה קלה לעבר מגנטה לחום/ורוד)
-  const groundHueShift = h >= 15 && h <= 70 ? -12 : 0;
+  const groundHueShift = h >= T.k16 && h <= T.k17 ? -12 : 0;
   const g1 = hslToRgb(h + groundHueShift, Math.min(0.5, sat * 0.6), 0.13);
   const g2 = hslToRgb(h + groundHueShift, Math.min(0.55, sat * 0.62), 0.075);
   const g3 = hslToRgb(h + groundHueShift, Math.min(0.5, sat * 0.6), 0.035);
-  const auroraLo = rgbStr(hslToRgb(h - 18, sat, Math.min(0.66, l + 0.05)));
-  const auroraHi = rgbStr(hslToRgb(h + 18, sat, Math.min(0.7, l + 0.08)));
+  const auroraLo = rgbStr(hslToRgb(h - T.k18, sat, Math.min(0.66, l + 0.05)));
+  const auroraHi = rgbStr(hslToRgb(h + T.k18, sat, Math.min(0.7, l + 0.08)));
   const btnA = hslToRgb(h, sat, Math.min(0.78, l + 0.12));
   const btnText = luminance(base) > 0.62 ? '#2a1710' : T.k1;
-  const scene = l > 0.86 ? T.k2 : h >= 15 && h <= 70 ? T.k3 : h >= 180 && h <= 265 ? T.k4 : T.k4;
+  const scene = l > 0.86 ? T.k2 : h >= T.k16 && h <= T.k17 ? T.k3 : h >= T.k19 && h <= T.k20 ? T.k4 : T.k4;
   return {
     vars: {
       '--o-g1': toHex(g1),

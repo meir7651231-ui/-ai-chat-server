@@ -111,7 +111,7 @@ export function makeNormalizeConfig(deps, T) {
               if (!TEMPLATE_KEYS.includes(k))
                   continue;
               if (typeof v === T.k3 && v.trim())
-                  tpl[k] = v.trim().slice(0, 500);
+                  tpl[k] = v.trim().slice(0, T.k5);
           }
           if (Object.keys(tpl).length)
               cfg.templates = tpl;
@@ -155,7 +155,7 @@ export function makeNormalizeConfig(deps, T) {
       // זהות-ורטיקל חזותית (16.8) — אימוג'י-ארגון: מחרוזת קצרה בלבד (glyph),
       // תקרת-אורך 12 (אימוג'י מרובה-נקודות-קוד). ריק/לא-מחרוזת ⇒ מוסר (ביט-זהה להיום).
       if (typeof c.emoji === T.k3 && c.emoji.trim())
-          cfg.emoji = c.emoji.trim().slice(0, 12);
+          cfg.emoji = c.emoji.trim().slice(0, T.k6);
       else
           delete cfg.emoji;
       // סגנון-תנועה — allowlist בלבד (calm/snappy/bold); כל ערך אחר ⇒ מוסר.
@@ -185,7 +185,7 @@ export function makeNormalizeConfig(deps, T) {
           delete cfg.site;
       // הגנת-מקור (16.8) — allowlist מארחים: מערך-מחרוזות מנוקה (עד 12, כ"א ≤120).
       if (Array.isArray(c.allowedHosts)) {
-          const hosts = c.allowedHosts.filter((h) => typeof h === T.k3 && !!h.trim()).map((h) => h.trim().slice(0, 120)).slice(0, 12);
+          const hosts = c.allowedHosts.filter((h) => typeof h === T.k3 && !!h.trim()).map((h) => h.trim().slice(0, T.k7)).slice(0, T.k6);
           if (hosts.length)
               cfg.allowedHosts = hosts;
           else

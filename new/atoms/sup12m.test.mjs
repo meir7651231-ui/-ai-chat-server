@@ -1,4 +1,9 @@
-import { sup12m } from './sup12m.mjs';
+import { sup12m as __pure_sup12m } from './sup12m.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_sup12m_T = {
+  k1: 365,
+};
+const sup12m = (...a) => __pure_sup12m(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_sup12m_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 // שקע-הבדיקה כמוגדר בחוזה

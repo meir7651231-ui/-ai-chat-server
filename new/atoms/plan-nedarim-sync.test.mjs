@@ -6,6 +6,7 @@ const __d_planNedarimSync_PLAN_NEDARIM_SYNC_T = {
   k3: "email",
   k4: "address",
   k5: "idNum",
+  k6: 40,
 };
 const planNedarimSync = (...a) => __pure_planNedarimSync(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_planNedarimSync_PLAN_NEDARIM_SYNC_T);
 

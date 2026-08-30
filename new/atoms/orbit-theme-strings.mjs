@@ -13,4 +13,11 @@ export const ORBIT_THEME_T = {
   k11: "--o-btn-b",
   k12: "--o-btn-text",
   k13: "--accent",
+  k14: 255,
+  k15: 360,
+  k16: 15,
+  k17: 70,
+  k18: 18,
+  k19: 180,
+  k20: 265,
 };

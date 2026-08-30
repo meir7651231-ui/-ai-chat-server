@@ -29,6 +29,7 @@ const __d_suggestions_SUGGESTIONS_T = {
   k26: "חידוש כרטיסייה · ",
   k27: "נותרו ",
   k28: " ניקובים",
+  k29: 30,
 };
 const suggestions = (...a) => __pure_suggestions(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_suggestions_SUGGESTIONS_T);
 let f = 0;

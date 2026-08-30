@@ -6,7 +6,10 @@
  *  שקעי-IO אמיתיים: אין — donationPartition טהור לגמרי (בלי DOM/localStorage/fetch/ענן). */
 import { SHARED_PURPOSE_KEY } from '../atoms/shared-purpose-key.mjs';
 import { purposeKeyOf } from '../atoms/purpose-key-of.mjs';
-import { donAllowedKeys as _donAllowedKeys } from '../atoms/don-allowed-keys.mjs';
+import { donAllowedKeys as __pure_donAllowedKeys } from '../atoms/don-allowed-keys.mjs';
+import { DON_ALLOWED_KEYS_T as __d_don_allowed_keys_T } from '../atoms/don-allowed-keys-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const _donAllowedKeys = (...a) => __pure_donAllowedKeys(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_don_allowed_keys_T);
 import { explodeSupporter as _explodeSupporter } from '../atoms/explode-supporter.mjs';
 import { reassembleDonations } from '../atoms/reassemble-donations.mjs';
 import { donationPartitionDiff as _donationPartitionDiff } from '../atoms/donation-partition-diff.mjs';

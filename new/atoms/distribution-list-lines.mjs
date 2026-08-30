@@ -3,7 +3,7 @@
  *  ו-beneficiaryLabel הוזרקו כשקעים (חוק-1 — אפס import פנימי). */
 export function distributionListLines(db, productId, config, itemOf, beneficiaryLabel, T) {
   const product = db.shopProducts.find((p) => p.id === productId);
-  const lines = [T.k1 + (product?.name ?? ''), '='.repeat(30)];
+  const lines = [T.k1 + (product?.name ?? ''), '='.repeat(T.k5)];
   const active = db.shopAssignments.filter((a) => a.productId === productId && a.status === T.k2);
   for (const a of active) {
     const fam = db.families.find((f) => f.id === a.famId);

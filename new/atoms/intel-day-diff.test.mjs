@@ -1,4 +1,10 @@
-import { dayDiff as f } from './intel-day-diff.mjs';
+import { dayDiff as __pure_dayDiff } from './intel-day-diff.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_intel_day_diff_T = {
+  k1: 86400000,
+  k2: 10,
+};
+const f = (...a) => __pure_dayDiff(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_intel_day_diff_T);
 // עצמאי (חוק-1: אפס import-אח; שקעים inline). Golden נלכד מהרצה.
 const T='2026-08-26';
 

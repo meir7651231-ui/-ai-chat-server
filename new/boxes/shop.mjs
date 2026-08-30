@@ -12,10 +12,19 @@ import { liveRedemptions } from '../atoms/live-redemptions.mjs';
 import { itemOf } from '../atoms/item-of.mjs';
 import { holidayAllowed } from '../atoms/holiday-allowed.mjs';
 import { itemRemaining as _itemRemaining } from '../atoms/item-remaining.mjs';
-import { effectivePrice as _effectivePrice } from '../atoms/effective-price.mjs';
-import { maxDiscountPct } from '../atoms/max-discount-pct.mjs';
+import { effectivePrice as __pure_effectivePrice } from '../atoms/effective-price.mjs';
+import { EFFECTIVE_PRICE_T as __d_effective_price_T } from '../atoms/effective-price-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const _effectivePrice = (...a) => __pure_effectivePrice(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_effective_price_T);
+import { maxDiscountPct as __pure_maxDiscountPct } from '../atoms/max-discount-pct.mjs';
+import { MAX_DISCOUNT_PCT_T as __d_max_discount_pct_T } from '../atoms/max-discount-pct-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const maxDiscountPct = (...a) => __pure_maxDiscountPct(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_max_discount_pct_T);
 import { upcomingHolidays as _upcomingHolidays } from '../atoms/upcoming-holidays.mjs';
-import { holidayNames as _holidayNames } from '../atoms/holiday-names.mjs';
+import { holidayNames as __pure_holidayNames } from '../atoms/holiday-names.mjs';
+import { HOLIDAY_NAMES_T as __d_holiday_names_T } from '../atoms/holiday-names-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const _holidayNames = (...a) => __pure_holidayNames(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_holiday_names_T);
 import { assignmentRedeemed as _assignmentRedeemed } from '../atoms/assignment-redeemed.mjs';
 import { componentRemaining as _componentRemaining } from '../atoms/component-remaining.mjs';
 import { couponExpiry as _couponExpiry } from '../atoms/coupon-expiry.mjs';

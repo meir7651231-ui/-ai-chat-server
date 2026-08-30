@@ -57,13 +57,19 @@ import { GEMATRIA_T as __d_gem_GEMATRIA_T } from '../atoms/gematria-strings.mjs'
 import { U, T, H } from '../atoms/gematria-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
 const gem = (...a) => __pure_gem(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), U, T, H, __d_gem_GEMATRIA_T);
-import { gemYear as gemYearAtom } from '../atoms/gem-year.mjs';
+import { gemYear as __pure_gemYear } from '../atoms/gem-year.mjs';
+import { GEM_YEAR_T as __d_gem_year_T } from '../atoms/gem-year-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const gemYearAtom = (...a) => __pure_gemYear(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_gem_year_T);
 import { supCount } from '../atoms/sup-count.mjs';
 import { supIls } from '../atoms/sup-ils.mjs';
 import { supUsd } from '../atoms/sup-usd.mjs';
 import { supLast } from '../atoms/sup-last.mjs';
 import { supTotalIls as supTotalIlsAtom } from '../atoms/sup-total-ils.mjs';
-import { supScore as supScoreAtom } from '../atoms/sup-score.mjs';
+import { supScore as __pure_supScore } from '../atoms/sup-score.mjs';
+import { SUP_SCORE_T as __d_sup_score_T } from '../atoms/sup-score-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const supScoreAtom = (...a) => __pure_supScore(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_sup_score_T);
 import { supTier as __pure_supTier } from '../atoms/sup-tier.mjs';
 import { SUP_TIER_T as __d_supTier_SUP_TIER_T } from '../atoms/sup-tier-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

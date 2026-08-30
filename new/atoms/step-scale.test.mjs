@@ -1,4 +1,9 @@
-import { stepScale } from './step-scale.mjs';
+import { stepScale as __pure_stepScale } from './step-scale.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_step_scale_T = {
+  k1: 10,
+};
+const stepScale = (...a) => __pure_stepScale(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_step_scale_T);
 
 // שקע-clampScale אמיתי כקוד-המקור (מקומי לבדיקה — הבדיקה מייבאת רק את האטום שלה)
 const clampScale = (v) => {

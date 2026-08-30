@@ -14,4 +14,6 @@ export const TELEPHONY_TO_TENANT_T = {
   k12: "calendar.shabbat",
   k13: "calendar.fasts",
   k14: "calendar.zmanim",
+  k15: 25,
+  k16: 30,
 };

@@ -1,4 +1,4 @@
-/** אטום-דאטה · holiday-of-strings — מחרוזות-התצוגה/דומיין שחולצו מ-holiday-of (מנוע-הטיהור v3, הכרעה 19). חוזה: holiday-of-strings.contract.md */
+/** אטום-דאטה · holiday-of-strings — מחרוזות-הדאטה של holiday-of (מנוע-הקשיחים, הכרעה 19). חוזה: holiday-of-strings.contract.md */
 export const HOLIDAY_OF_T = {
   k1: "Tevet",
   k2: "Kislev",
@@ -15,4 +15,7 @@ export const HOLIDAY_OF_T = {
   k13: "Adar",
   k14: "Adar II",
   k15: "תענית אסתר (מוקדם)",
+  k16: 18,
+  k17: 10,
+  k18: 11,
 };

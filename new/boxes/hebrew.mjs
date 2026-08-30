@@ -6,7 +6,10 @@ import { GEMATRIA_T as __d_gem_GEMATRIA_T } from '../atoms/gematria-strings.mjs'
 import { U, T, H } from '../atoms/gematria-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
 const gem = (...a) => __pure_gem(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), U, T, H, __d_gem_GEMATRIA_T);
-import { gemYear as gemYearWire } from '../atoms/gem-year.mjs';
+import { gemYear as __pure_gemYear } from '../atoms/gem-year.mjs';
+import { GEM_YEAR_T as __d_gem_year_T } from '../atoms/gem-year-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const gemYearWire = (...a) => __pure_gemYear(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_gem_year_T);
 import { adarNorm as __pure_adarNorm } from '../atoms/adar-norm.mjs';
 import { ADAR_NORM_T as __d_adarNorm_ADAR_NORM_T } from '../atoms/adar-norm-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

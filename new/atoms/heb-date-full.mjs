@@ -7,7 +7,7 @@ export function hebDateFull(iso, gem, gemYear, hebParts, T) {
   const fmtHY = new Intl.DateTimeFormat(T.k1, { year: T.k3 });
 
   if (!iso) return '';
-  const d = new Date(iso.slice(0, 10) + 'T12:00:00');
+  const d = new Date(iso.slice(0, T.k4) + 'T12:00:00');
   if (isNaN(d.getTime())) return '';
   return `${gem(hebParts(d).day)} ${fmtHM.format(d)} ${gemYear(fmtHY.format(d))}`;
 }

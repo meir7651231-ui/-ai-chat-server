@@ -63,6 +63,7 @@ const __d_runAudit_RUN_AUDIT_T = {
   k60: "תומכ/ת בשם \"",
   k61: "\" מופיע/ה ",
   k62: " פעמים",
+  k63: 25,
 };
 const runAudit = (...a) => __pure_runAudit(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_runAudit_RUN_AUDIT_T);
 let f = 0;

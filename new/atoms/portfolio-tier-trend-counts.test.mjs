@@ -1,6 +1,7 @@
 import { tierTrendCounts as __pure_tierTrendCounts } from './portfolio-tier-trend-counts.mjs';
 const __d_tierTrendCounts_PORTFOLIO_TIER_TREND_COUNTS_T = {
   k1: "down",
+  k2: 12,
 };
 // צילום-מקומי מ-portfolio-tier-trend-counts-data + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)
 const order = ['זהב', 'כסף', 'ארד', 'רדומה'];

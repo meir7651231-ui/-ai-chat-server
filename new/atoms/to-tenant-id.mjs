@@ -4,9 +4,9 @@ export function toTenantId(slug, orgName, T) {
         .toLowerCase()
         .replace(/[^a-z0-9-]+/g, '-')
         .replace(/^-+|-+$/g, '')
-        .slice(0, 38);
+        .slice(0, T.k4);
     const padded = base.length >= 3 ? base : `${base}${T.k3}`;
-    return /^[a-z0-9]/.test(padded) ? padded : `x-${padded}`.slice(0, 40);
+    return /^[a-z0-9]/.test(padded) ? padded : `x-${padded}`.slice(0, T.k5);
 }
 /**
  * ממיר תצורת-אשף ל-raw-tenant שהמנוע מקבל. ערוצי-שער מוקצים אוטומטית ל-SIM-ים.

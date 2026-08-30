@@ -1,4 +1,9 @@
-import { gemYear } from './gem-year.mjs';
+import { gemYear as __pure_gemYear } from './gem-year.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_gem_year_T = {
+  k1: 1000,
+};
+const gemYear = (...a) => __pure_gemYear(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_gem_year_T);
 // שקע-גימטריה מוזרק (העתק התנהגות חוט gematria — בדיקה מייבאת רק את האטום שלה):
 const gem=(n)=>{n=Math.floor(+n);if(!Number.isFinite(n)||n<=0)return '';
 const U=['','א','ב','ג','ד','ה','ו','ז','ח','ט'],T=['','י','כ','ל','מ','נ','ס','ע','פ','צ'],

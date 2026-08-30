@@ -4,7 +4,7 @@
  *  חולץ כלשונו מ-maor/src/lib/receipt.ts:86-149 (קריאות-השכן שוקעו). */
 export function receiptLines(o, hebDateFull, amountInWords, receiptVerifyCode, hebrewLocaleDate, T) {
   const cur = o.currency || '₪';
-  const d = new Date(o.date.slice(0, 10) + 'T12:00:00');
+  const d = new Date(o.date.slice(0, T.k29) + 'T12:00:00');
   const gregorian = isNaN(d.getTime()) ? o.date : d.toLocaleDateString('he-IL');
   const heb = hebDateFull(o.date);
   // קבלת סעיף 46 פורמלית — פריסה רשמית עם סכום-במילים, ת"ז ונוסח §46.

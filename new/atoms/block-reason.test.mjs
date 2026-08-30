@@ -6,6 +6,9 @@ const __d_blockReason_BLOCK_REASON_T = {
   k4: "Tishri",
   k5: "Nisan",
   k6: "חול המועד",
+  k7: 10,
+  k8: 21,
+  k9: 20,
 };
 // צילום-מקומי מ-block-reason-data + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)
 const FULL_HOLIDAYS = [

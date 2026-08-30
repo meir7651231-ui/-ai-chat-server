@@ -4,6 +4,9 @@ const __d_buildMonthGrid_BUILD_MONTH_GRID_T = {
   k1: "long",
   k2: "numeric",
   k3: "he-u-ca-hebrew",
+  k4: 42,
+  k5: 15,
+  k6: 31,
 };
 const buildMonthGrid = (...a) => __pure_buildMonthGrid(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_buildMonthGrid_BUILD_MONTH_GRID_T);
 

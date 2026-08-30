@@ -7,13 +7,12 @@ export function collectionScoreDelta(
   date,
   amount,
   lastCollectionIso,
-  rules = { emptyPts: 10, ilsPerPoint: 50, streakDays: 60, streakPts: 5 },
-) {
+  rules = { emptyPts: 10, ilsPerPoint: 50, streakDays: 60, streakPts: 5 }, T) {
   let pts = rules.emptyPts + Math.floor(amount / rules.ilsPerPoint);
   const prev = lastCollectionIso(box);
   if (prev) {
     const days = Math.round(
-      (new Date(date + 'T12:00:00').getTime() - new Date(prev + 'T12:00:00').getTime()) / 86400000,
+      (new Date(date + 'T12:00:00').getTime() - new Date(prev + 'T12:00:00').getTime()) / T.k1,
     );
     if (days >= 0 && days <= rules.streakDays) pts += rules.streakPts;
   }

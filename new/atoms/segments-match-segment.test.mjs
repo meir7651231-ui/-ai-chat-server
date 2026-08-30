@@ -6,6 +6,9 @@ const __d_matchSegment_SEGMENTS_MATCH_SEGMENT_T = {
   k3: "hok",
   k4: "gave12m",
   k5: "noemail",
+  k6: 5000,
+  k7: 60,
+  k8: 365,
 };
 const f = (...a) => __pure_matchSegment(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_matchSegment_SEGMENTS_MATCH_SEGMENT_T);
 // עצמאי (חוק-1: אפס import-אח; שקעים/פיקסטורות inline). Golden נלכד מהרצה.

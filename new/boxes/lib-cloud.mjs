@@ -49,15 +49,24 @@ import { stripSupKey as __pure_stripSupKey } from '../atoms/strip-sup-key.mjs';
 import { STRIP_SUP_KEY_T as __d_stripSupKey_STRIP_SUP_KEY_T } from '../atoms/strip-sup-key-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const stripSupKey = (...a) => __pure_stripSupKey(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_stripSupKey_STRIP_SUP_KEY_T);
-import { supAllowedKeys as _supAllowedKeys } from '../atoms/sup-allowed-keys.mjs';
-import { donAllowedKeys as _donAllowedKeys } from '../atoms/don-allowed-keys.mjs';
+import { supAllowedKeys as __pure_supAllowedKeys } from '../atoms/sup-allowed-keys.mjs';
+import { SUP_ALLOWED_KEYS_T as __d_sup_allowed_keys_T } from '../atoms/sup-allowed-keys-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const _supAllowedKeys = (...a) => __pure_supAllowedKeys(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_sup_allowed_keys_T);
+import { donAllowedKeys as __pure_donAllowedKeys } from '../atoms/don-allowed-keys.mjs';
+import { DON_ALLOWED_KEYS_T as __d_don_allowed_keys_T } from '../atoms/don-allowed-keys-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const _donAllowedKeys = (...a) => __pure_donAllowedKeys(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_don_allowed_keys_T);
 import { fullDbDiff as _fullDbDiff } from '../atoms/full-db-diff.mjs';
 import { cloudDb as __pure_cloudDb } from '../atoms/cloud-db.mjs';
 import { CLOUD_DB_T as __d_cloudDb_CLOUD_DB_T } from '../atoms/cloud-db-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const cloudDb = (...a) => __pure_cloudDb(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_cloudDb_CLOUD_DB_T);
 import { signOutCloud as _signOutCloud } from '../atoms/sign-out-cloud.mjs';
-import { pushDiff as _pushDiff } from '../atoms/push-diff.mjs';
+import { pushDiff as __pure_pushDiff } from '../atoms/push-diff.mjs';
+import { PUSH_DIFF_T as __d_push_diff_T } from '../atoms/push-diff-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const _pushDiff = (...a) => __pure_pushDiff(...a, ...Array(Math.max(0, 9 - a.length)).fill(undefined), __d_push_diff_T);
 import { readCloudEnvelope as __pure_readCloudEnvelope } from '../atoms/read-cloud-envelope.mjs';
 import { READ_CLOUD_ENVELOPE_T as __d_read_cloud_envelope_T } from '../atoms/read-cloud-envelope-strings.mjs';
 // עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה

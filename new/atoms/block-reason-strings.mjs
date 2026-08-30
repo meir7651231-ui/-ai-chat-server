@@ -1,4 +1,4 @@
-/** אטום-דאטה · block-reason-strings — מחרוזות-התצוגה/דומיין שחולצו מ-block-reason (מנוע-הטיהור v3, הכרעה 19). חוזה: block-reason-strings.contract.md */
+/** אטום-דאטה · block-reason-strings — מחרוזות-הדאטה של block-reason (מנוע-הקשיחים, הכרעה 19). חוזה: block-reason-strings.contract.md */
 export const BLOCK_REASON_T = {
   k1: "שבת",
   k2: "יום שישי (שעתיים לפני שבת)",
@@ -6,4 +6,7 @@ export const BLOCK_REASON_T = {
   k4: "Tishri",
   k5: "Nisan",
   k6: "חול המועד",
+  k7: 10,
+  k8: 21,
+  k9: 20,
 };

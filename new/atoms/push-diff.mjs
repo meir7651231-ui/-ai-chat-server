@@ -12,8 +12,7 @@ const toPlain = (data) => JSON.parse(JSON.stringify(data));
 export async function pushDiff(
   diff, dek, supKeyBySpId = new Map(),
   db, scopedCol, fs, encryptDoc, pushMeta,
-  sup = { enforceOn: false, keyedCols: [], docSkey: null, stripAuditMeta: null }
-) {
+  sup = { enforceOn: false, keyedCols: [], docSkey: null, stripAuditMeta: null }, T) {
   const ops = [];
   for (const s of diff.sets) {
     const inner = dek ? await encryptDoc(toPlain(s.data), dek) : toPlain(s.data);
@@ -28,9 +27,9 @@ export async function pushDiff(
   for (const d of diff.deletes) {
     ops.push((b) => b.delete(fs.doc(db, scopedCol(d.col), d.id)));
   }
-  for (let i = 0; i < ops.length; i += 400) {
+  for (let i = 0; i < ops.length; i += T.k1) {
     const batch = fs.writeBatch(db);
-    for (const op of ops.slice(i, i + 400)) op(batch);
+    for (const op of ops.slice(i, i + T.k1)) op(batch);
     await batch.commit();
   }
   // מסמך ה-meta נכתב בעסקה נפרדת בטוחה-למונים (לא בכתיבת-האצווה העיוורת).

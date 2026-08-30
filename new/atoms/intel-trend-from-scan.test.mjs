@@ -3,6 +3,7 @@ import { trendFromScan as __pure_trendFromScan } from './intel-trend-from-scan.m
 const __d_trendFromScan_INTEL_TREND_FROM_SCAN_T = {
   k1: "flat",
   k2: "down",
+  k3: 100,
 };
 const f = (...a) => __pure_trendFromScan(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_trendFromScan_INTEL_TREND_FROM_SCAN_T);
 // עצמאי (חוק-1: אפס import-אח; שקעים inline). Golden נלכד מהרצה.

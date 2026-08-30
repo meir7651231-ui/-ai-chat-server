@@ -35,7 +35,7 @@ export function buildCourseDailyRows(c, db, config, termOf, hebDateFull, DAY_NAM
     // תקרת בטיחות: קורס לגיטימי הוא שנתי/דו-שנתי (עד ~100 ימי מפגש). טווח ענק
     // (טעות הקלדה בשנת הסיום, למשל 2202) היה מייצר עשרות אלפי שורות עם hebDateFull
     // (Intl) יקר לכל שורה — הקפאה של הדפדפן. עוצרים ומסמנים קטיעה.
-    const MAX_DAYS = 500;
+    const MAX_DAYS = T2.k24;
     let days = 0;
     let truncated = false;
     for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {

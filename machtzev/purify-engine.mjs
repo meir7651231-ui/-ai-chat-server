@@ -462,7 +462,10 @@ function purifyStrings(cand, log) {
   }
   const backup = new Map([[path.join(ATOMS, cand.file), cand.src]]);
   for (const [pp] of edits) backup.set(pp, fs.readFileSync(pp, 'utf8'));
-  if (priorKeys.size) backup.set(dataPath, fs.readFileSync(dataPath, 'utf8'));
+  if (priorKeys.size) for (const ext of ['.mjs', '.contract.md', '.test.mjs']) {
+    const pf = path.join(ATOMS, dataBase + ext);
+    if (fs.existsSync(pf)) backup.set(pf, fs.readFileSync(pf, 'utf8'));
+  }
   const mkData = !existing;
   try {
     fs.writeFileSync(path.join(ATOMS, cand.file), mech);
@@ -618,7 +621,10 @@ function purifyBox(file, log) {
   }
   const backup = new Map([[path.join(BOXES, file), src]]);
   if (adjOut) backup.set(adj, fs.readFileSync(adj, 'utf8'));
-  if (priorKeys.size) backup.set(dataPath, fs.readFileSync(dataPath, 'utf8'));   // המשך: גם הדאטה הקיימת מגובה
+  if (priorKeys.size) for (const ext of ['.mjs', '.contract.md', '.test.mjs']) {
+    const pf = path.join(ATOMS, dataBase + ext);
+    if (fs.existsSync(pf)) backup.set(pf, fs.readFileSync(pf, 'utf8'));           // המשך: כל שלישיית-הדאטה מגובה
+  }
   try {
     fs.writeFileSync(path.join(BOXES, file), out);
     fs.writeFileSync(path.join(ATOMS, dataBase + '.mjs'), dataSrc);

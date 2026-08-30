@@ -1,4 +1,4 @@
-/** אטום-דאטה · needs-care-tzedaka-strings — מחרוזות-התצוגה/דומיין שחולצו מ-needs-care-tzedaka (מנוע-הטיהור v3, הכרעה 19). חוזה: needs-care-tzedaka-strings.contract.md */
+/** אטום-דאטה · needs-care-tzedaka-strings — מחרוזות-הדאטה של needs-care-tzedaka (מנוע-הקשיחים, הכרעה 19). חוזה: needs-care-tzedaka-strings.contract.md */
 export const NEEDS_CARE_TZEDAKA_T = {
   k1: "entity.tzBox",
   k2: "קופה",
@@ -18,4 +18,5 @@ export const NEEDS_CARE_TZEDAKA_T = {
   k16: "המבצע \"",
   k17: "\" מסתיים ב-",
   k18: "לסכם ולסגור",
+  k19: 14,
 };

@@ -1,4 +1,11 @@
-import { validateHebMonthNames } from './validate-heb-month-names.mjs';
+import { validateHebMonthNames as __pure_validateHebMonthNames } from './validate-heb-month-names.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_validate_heb_month_names_T = {
+  k1: 3761,
+  k2: 440,
+  k3: 12,
+};
+const validateHebMonthNames = (...a) => __pure_validateHebMonthNames(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_validate_heb_month_names_T);
 let f = 0;
 const eq = (a, b, msg) => {
   if (JSON.stringify(a) !== JSON.stringify(b)) { console.error(`✗ ${msg} ⇒ ${JSON.stringify(a)}`); f = 1; }

@@ -4,6 +4,7 @@ import { hokEffectivelyActive as __pure_hokEffectivelyActive } from './hok-effec
 const __d_hokEffectivelyActive_HOK_EFFECTIVELY_ACTIVE_T = {
   k1: "נדרים",
   k2: "סולה",
+  k3: 12,
 };
 const hokEffectivelyActive = (...a) => __pure_hokEffectivelyActive(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_hokEffectivelyActive_HOK_EFFECTIVELY_ACTIVE_T);
 

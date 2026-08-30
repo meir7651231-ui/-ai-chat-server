@@ -1,4 +1,15 @@
-import { forecastFromScan as f } from './intel-forecast-from-scan.mjs';
+import { forecastFromScan as __pure_forecastFromScan } from './intel-forecast-from-scan.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_intel_forecast_from_scan_T = {
+  k1: 86400000,
+  k2: 365,
+  k3: 10,
+  k4: 15,
+  k5: 92,
+  k6: 30,
+  k7: 25,
+};
+const f = (...a) => __pure_forecastFromScan(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_intel_forecast_from_scan_T);
 // עצמאי (חוק-1: אפס import-אח; שקעים inline). Golden נלכד מהרצה.
 const T='2026-08-26';
 const MS_DAY=86400000;

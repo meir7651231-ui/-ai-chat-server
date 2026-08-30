@@ -28,6 +28,8 @@ const __d_parseSupporterGrid_PARSE_SUPPORTER_GRID_T = {
   k24: "תשלומים",
   k25: "סטטוס",
   k26: "נדרים",
+  k27: 15,
+  k28: 100,
 };
 const parseSupporterGrid = (...a) => __pure_parseSupporterGrid(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_parseSupporterGrid_PARSE_SUPPORTER_GRID_T);
 

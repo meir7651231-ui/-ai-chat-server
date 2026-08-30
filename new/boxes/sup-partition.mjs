@@ -10,7 +10,10 @@ import { DOC_SKEY_T as __d_docSkey_DOC_SKEY_T } from '../atoms/doc-skey-strings.
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const docSkeyAtom = (...a) => __pure_docSkey(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_docSkey_DOC_SKEY_T);
 import { supKeyMapOf as supKeyMapOfAtom } from '../atoms/sup-key-map-of.mjs';
-import { supAllowedKeys as supAllowedKeysAtom } from '../atoms/sup-allowed-keys.mjs';
+import { supAllowedKeys as __pure_supAllowedKeys } from '../atoms/sup-allowed-keys.mjs';
+import { SUP_ALLOWED_KEYS_T as __d_sup_allowed_keys_T } from '../atoms/sup-allowed-keys-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const supAllowedKeysAtom = (...a) => __pure_supAllowedKeys(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_sup_allowed_keys_T);
 import { stripSupKey as __pure_stripSupKey } from '../atoms/strip-sup-key.mjs';
 import { STRIP_SUP_KEY_T as __d_stripSupKey_STRIP_SUP_KEY_T } from '../atoms/strip-sup-key-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

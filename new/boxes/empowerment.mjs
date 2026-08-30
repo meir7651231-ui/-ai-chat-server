@@ -36,11 +36,26 @@ import { cockpitWorkListText as __pure_cockpitWorkListText } from '../atoms/cock
 import { COCKPIT_WORK_LIST_TEXT_T as __d_cockpitWorkListText_COCKPIT_WORK_LIST_TEXT_T } from '../atoms/cockpit-work-list-text-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const cockpitWorkListText = (...a) => __pure_cockpitWorkListText(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_cockpitWorkListText_COCKPIT_WORK_LIST_TEXT_T);
-import { dayDiff } from '../atoms/intel-day-diff.mjs';
-import { donorScan } from '../atoms/intel-donor-scan.mjs';
-import { rfmFromScan as rfmFromScanAtom } from '../atoms/intel-rfm-from-scan.mjs';
-import { churnFromScan as churnFromScanAtom } from '../atoms/intel-churn-from-scan.mjs';
-import { forecastFromScan as forecastFromScanAtom } from '../atoms/intel-forecast-from-scan.mjs';
+import { dayDiff as __pure_dayDiff } from '../atoms/intel-day-diff.mjs';
+import { INTEL_DAY_DIFF_T as __d_intel_day_diff_T } from '../atoms/intel-day-diff-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const dayDiff = (...a) => __pure_dayDiff(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_intel_day_diff_T);
+import { donorScan as __pure_donorScan } from '../atoms/intel-donor-scan.mjs';
+import { INTEL_DONOR_SCAN_T as __d_intel_donor_scan_T } from '../atoms/intel-donor-scan-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const donorScan = (...a) => __pure_donorScan(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_intel_donor_scan_T);
+import { rfmFromScan as __pure_rfmFromScan } from '../atoms/intel-rfm-from-scan.mjs';
+import { INTEL_RFM_FROM_SCAN_T as __d_intel_rfm_from_scan_T } from '../atoms/intel-rfm-from-scan-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const rfmFromScanAtom = (...a) => __pure_rfmFromScan(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_intel_rfm_from_scan_T);
+import { churnFromScan as __pure_churnFromScan } from '../atoms/intel-churn-from-scan.mjs';
+import { INTEL_CHURN_FROM_SCAN_T as __d_intel_churn_from_scan_T } from '../atoms/intel-churn-from-scan-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const churnFromScanAtom = (...a) => __pure_churnFromScan(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_intel_churn_from_scan_T);
+import { forecastFromScan as __pure_forecastFromScan } from '../atoms/intel-forecast-from-scan.mjs';
+import { INTEL_FORECAST_FROM_SCAN_T as __d_intel_forecast_from_scan_T } from '../atoms/intel-forecast-from-scan-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const forecastFromScanAtom = (...a) => __pure_forecastFromScan(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_intel_forecast_from_scan_T);
 import { trendFromScan as __pure_trendFromScan } from '../atoms/intel-trend-from-scan.mjs';
 import { INTEL_TREND_FROM_SCAN_T as __d_trendFromScan_INTEL_TREND_FROM_SCAN_T } from '../atoms/intel-trend-from-scan-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

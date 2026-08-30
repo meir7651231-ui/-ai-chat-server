@@ -19,6 +19,7 @@ const __d_finderAxisValue_FINDER_AXIS_VALUE_T = {
   k16: "קיים",
   k17: "חסר",
   k18: "lang",
+  k19: 700,
 };
 const finderAxisValue = (...a) => __pure_finderAxisValue(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_finderAxisValue_FINDER_AXIS_VALUE_T);
 // שקעי-ייחוס כמוסכמת-maor (מקומיים לבדיקה)

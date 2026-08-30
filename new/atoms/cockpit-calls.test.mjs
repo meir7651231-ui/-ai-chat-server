@@ -12,6 +12,9 @@ const __d_cockpitCalls_COCKPIT_CALLS_T = {
   k9: "due",
   k10: " · שקט/ה ",
   k11: "risk",
+  k12: 5000,
+  k13: 1000,
+  k14: 1000000,
 };
 const cockpitCalls = (...a) => __pure_cockpitCalls(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_cockpitCalls_COCKPIT_CALLS_T);
 // עצמאי: כל השקעים מוטבעים inline (test-doubles, בלי import-אח — חוק-1). Golden נלכד מהרצה.

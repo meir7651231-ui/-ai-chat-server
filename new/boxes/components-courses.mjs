@@ -13,7 +13,10 @@
 import { fmtDate } from '../atoms/fmt-date.mjs';
 import { isoToday as isoTodayWire } from '../atoms/iso-today.mjs';
 import { isoLocal } from '../atoms/iso-local.mjs';
-import { defaultCourseDates as defaultCourseDatesWire } from '../atoms/default-course-dates.mjs';
+import { defaultCourseDates as __pure_defaultCourseDates } from '../atoms/default-course-dates.mjs';
+import { DEFAULT_COURSE_DATES_T as __d_default_course_dates_T } from '../atoms/default-course-dates-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const defaultCourseDatesWire = (...a) => __pure_defaultCourseDates(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_default_course_dates_T);
 import { presentsInMonth as __pure_presentsInMonth } from '../atoms/presents-in-month.mjs';
 import { INTEGRATION_SETTING_T as __d_presentsInMonth_PRESENTS_IN_MONTH_T } from '../atoms/integration-setting-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
@@ -34,9 +37,15 @@ const normSearch = (...a) => __pure_normSearch(...a, ...Array(Math.max(0, 1 - a.
 import { DAY_NAMES } from '../atoms/day-names.mjs';
 import { DAY_LETTERS } from '../atoms/day-letters.mjs';
 import { sessionsOf } from '../atoms/sessions-of.mjs';
-import { groupsHintFromAudience } from '../atoms/groups-hint-from-audience.mjs';
+import { groupsHintFromAudience as __pure_groupsHintFromAudience } from '../atoms/groups-hint-from-audience.mjs';
+import { GROUPS_HINT_FROM_AUDIENCE_T as __d_groups_hint_from_audience_T } from '../atoms/groups-hint-from-audience-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const groupsHintFromAudience = (...a) => __pure_groupsHintFromAudience(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_groups_hint_from_audience_T);
 import { coursesOfTeacher } from '../atoms/courses-of-teacher.mjs';
-import { roomsNow as roomsNowWire } from '../atoms/rooms-now.mjs';
+import { roomsNow as __pure_roomsNow } from '../atoms/rooms-now.mjs';
+import { ROOMS_NOW_T as __d_rooms_now_T } from '../atoms/rooms-now-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const roomsNowWire = (...a) => __pure_roomsNow(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_rooms_now_T);
 import { groupLabelOf as __pure_groupLabelOf } from '../atoms/group-label-of.mjs';
 import { GROUP_LABEL_OF_T as __d_groupLabelOf_GROUP_LABEL_OF_T } from '../atoms/group-label-of-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
@@ -129,13 +138,19 @@ import { courseFitsMember as __pure_courseFitsMember } from '../atoms/course-fit
 import { COURSE_FITS_MEMBER_T as __d_courseFitsMember_COURSE_FITS_MEMBER_T } from '../atoms/course-fits-member-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const courseFitsWire = (...a) => __pure_courseFitsMember(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_courseFitsMember_COURSE_FITS_MEMBER_T);
-import { scheduleClashText as scheduleClashWire } from '../atoms/schedule-clash-text.mjs';
+import { scheduleClashText as __pure_scheduleClashText } from '../atoms/schedule-clash-text.mjs';
+import { SCHEDULE_CLASH_TEXT_T as __d_schedule_clash_text_T } from '../atoms/schedule-clash-text-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const scheduleClashWire = (...a) => __pure_scheduleClashText(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_schedule_clash_text_T);
 import { ENROLL_NEW_FAMILY } from '../atoms/enroll-new-family.mjs';
 import { offerNewFamily as offerNewFamilyWire } from '../atoms/offer-new-family.mjs';
 import { resolveEnrollFamily as resolveEnrollFamilyWire } from '../atoms/resolve-enroll-family.mjs';
 import { PUNCH_CONFIRM_MS } from '../atoms/punch-confirm-ms.mjs';
 import { punchConfirmStep } from '../atoms/punch-confirm-step.mjs';
-import { wheelIndexUnderPointer } from '../atoms/wheel-index-under-pointer.mjs';
+import { wheelIndexUnderPointer as __pure_wheelIndexUnderPointer } from '../atoms/wheel-index-under-pointer.mjs';
+import { WHEEL_INDEX_UNDER_POINTER_T as __d_wheel_index_under_pointer_T } from '../atoms/wheel-index-under-pointer-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const wheelIndexUnderPointer = (...a) => __pure_wheelIndexUnderPointer(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_wheel_index_under_pointer_T);
 
 // ── הכרעת-הקופסה: normName (חיה כאן, לא באטום) ──
 // מקור: lib.ts:526-528 — normNameLocal = normSearch(s) + הסרת כל הרווחים הפנימיים

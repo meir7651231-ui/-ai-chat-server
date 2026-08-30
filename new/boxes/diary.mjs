@@ -7,8 +7,14 @@ import { isoLocal } from '../atoms/iso-local.mjs';
 import { isoToday as isoTodayAtom } from '../atoms/iso-today.mjs';
 import { DAY_NAMES } from '../atoms/week-day-names.mjs';
 import { pad2 } from '../atoms/pad2.mjs';
-import { timeToMin } from '../atoms/time-to-min.mjs';
-import { minToHM as minToHMAtom } from '../atoms/min-to-hm.mjs';
+import { timeToMin as __pure_timeToMin } from '../atoms/time-to-min.mjs';
+import { TIME_TO_MIN_T as __d_time_to_min_T } from '../atoms/time-to-min-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const timeToMin = (...a) => __pure_timeToMin(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_time_to_min_T);
+import { minToHM as __pure_minToHM } from '../atoms/min-to-hm.mjs';
+import { MIN_TO_HM_T as __d_min_to_hm_T } from '../atoms/min-to-hm-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const minToHMAtom = (...a) => __pure_minToHM(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_min_to_hm_T);
 import { groupLabelOf as __pure_groupLabelOf } from '../atoms/group-label-of.mjs';
 import { GROUP_LABEL_OF_T as __d_groupLabelOf_GROUP_LABEL_OF_T } from '../atoms/group-label-of-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

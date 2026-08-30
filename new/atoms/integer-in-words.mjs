@@ -3,11 +3,11 @@
  *  חולץ כלשונו מ-maor/src/lib/hebrewNumber.ts:79-95; שלושת השכנים —
  *  joinHeb · words0_999 · thousandWords — הוזרקו כשקעים (חוק-1 — אפס import פנימי). */
 export function integerInWords(n, joinHeb, words0_999, thousandWords, T) {
-  if (!Number.isFinite(n) || n < 0 || n > 999_999_999 || Math.floor(n) !== n) return null;
+  if (!Number.isFinite(n) || n < 0 || n > T.k5 || Math.floor(n) !== n) return null;
   if (n === 0) return T.k1;
-  const millions = Math.floor(n / 1_000_000);
-  const thousands = Math.floor((n % 1_000_000) / 1000);
-  const rest = n % 1000;
+  const millions = Math.floor(n / T.k6);
+  const thousands = Math.floor((n % T.k6) / T.k7);
+  const rest = n % T.k7;
   const groups = [];
   if (millions) {
     if (millions === 1) groups.push(T.k2);

@@ -1,4 +1,4 @@
-/** אטום-דאטה · parse-families-csv-strings — מחרוזות-התצוגה/דומיין שחולצו מ-parse-families-csv (מנוע-הטיהור v3, הכרעה 19). חוזה: parse-families-csv-strings.contract.md */
+/** אטום-דאטה · parse-families-csv-strings — מחרוזות-הדאטה של parse-families-csv (מנוע-הקשיחים, הכרעה 19). חוזה: parse-families-csv-strings.contract.md */
 export const PARSE_FAMILIES_CSV_T = {
   k1: "שם פרטי שם משפחה",
   k2: "#NAME?",
@@ -18,4 +18,6 @@ export const PARSE_FAMILIES_CSV_T = {
   k16: "עברית",
   k17: "חסידי",
   k18: "השתתפה ביריד חנוכה תשפ\"ו",
+  k19: 12,
+  k20: 10,
 };

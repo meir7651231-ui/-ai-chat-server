@@ -67,8 +67,8 @@ export function trustReport(bundle, opt = {}, eng = {}, T) {
   // ציון: משוקלל לפי חומרה (critical=3, high=2, info=1).
   const totalW = checks.reduce((s, c) => s + SEV[c.severity], 0);
   const gotW = checks.reduce((s, c) => s + (c.pass ? SEV[c.severity] : 0), 0);
-  const score = totalW ? Math.round((gotW / totalW) * 100) : 100;
+  const score = totalW ? Math.round((gotW / totalW) * T.k44) : T.k44;
   const anyCritical = failing.some((c) => c.severity === T.k3);
-  const grade = anyCritical ? 'F' : score >= 95 ? 'A' : score >= 85 ? 'B' : score >= 70 ? 'C' : 'D';
+  const grade = anyCritical ? 'F' : score >= T.k45 ? 'A' : score >= T.k46 ? 'B' : score >= T.k47 ? 'C' : 'D';
   return { tenantId: tenant.tenantId, checks, failing, score, grade, ready: !anyCritical };
 }

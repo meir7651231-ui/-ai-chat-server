@@ -1,4 +1,4 @@
-/** אטום-דאטה · build-course-daily-rows-strings — מחרוזות-התצוגה/דומיין שחולצו מ-build-course-daily-rows (מנוע-הטיהור v3, הכרעה 19). חוזה: build-course-daily-rows-strings.contract.md */
+/** אטום-דאטה · build-course-daily-rows-strings — מחרוזות-הדאטה של build-course-daily-rows (מנוע-הקשיחים, הכרעה 19). חוזה: build-course-daily-rows-strings.contract.md */
 export const BUILD_COURSE_DAILY_ROWS_T = {
   k1: "תאריך עברי",
   k2: "תאריך לועזי",
@@ -23,4 +23,5 @@ export const BUILD_COURSE_DAILY_ROWS_T = {
   k21: " ימי מפגש — בדקו את תאריך הסיום של ה",
   k22: "entity.course",
   k23: "חוג",
+  k24: 500,
 };

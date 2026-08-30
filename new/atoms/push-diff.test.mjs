@@ -1,4 +1,9 @@
-import { pushDiff } from './push-diff.mjs';
+import { pushDiff as __pure_pushDiff } from './push-diff.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_push_diff_T = {
+  k1: 400,
+};
+const pushDiff = (...a) => __pure_pushDiff(...a, ...Array(Math.max(0, 9 - a.length)).fill(undefined), __d_push_diff_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b);

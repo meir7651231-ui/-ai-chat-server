@@ -1,4 +1,9 @@
-import { defaultCourseDates } from './default-course-dates.mjs';
+import { defaultCourseDates as __pure_defaultCourseDates } from './default-course-dates.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_default_course_dates_T = {
+  k1: 10,
+};
+const defaultCourseDates = (...a) => __pure_defaultCourseDates(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_default_course_dates_T);
 const C = [
   ['2026-08-24', { start: '2026-09-01', end: '2027-07-31' }],
   ['2026-07-31', { start: '2025-09-01', end: '2026-07-31' }],

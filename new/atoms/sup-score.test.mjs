@@ -1,4 +1,32 @@
-import { supScore } from './sup-score.mjs';
+import { supScore as __pure_supScore } from './sup-score.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_sup_score_T = {
+  k1: 86400000,
+  k2: 9999,
+  k3: 30,
+  k4: 350,
+  k5: 90,
+  k6: 280,
+  k7: 180,
+  k8: 200,
+  k9: 365,
+  k10: 120,
+  k11: 40,
+  k12: 10,
+  k13: 300,
+  k14: 230,
+  k15: 160,
+  k16: 100,
+  k17: 50,
+  k18: 5000,
+  k19: 2000,
+  k20: 1000,
+  k21: 210,
+  k22: 500,
+  k23: 140,
+  k24: 80,
+};
+const supScore = (...a) => __pure_supScore(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_sup_score_T);
 // שקעי-הבדיקה כמוגדר בחוזה
 const totIls = (sp, r) => (sp.ils || 0) + (sp.usd || 0) * r;
 const last = (sp) => sp.last || '';

@@ -5,7 +5,7 @@
 export function tierTrendCounts(supporters, todayIso, rate = 3.7, { donorScan, rfmFromScan, trendFromScan, supTier }, order, T) {
   const map = new Map(order.map((t) => [t, { tier: t, total: 0, rising: 0, falling: 0, stable: 0 }]));
   for (const sp of supporters) {
-    const scan = donorScan(sp, todayIso, rate, 12);
+    const scan = donorScan(sp, todayIso, rate, T.k2);
     if (scan.count === 0) continue;
     const tier = supTier(rfmFromScan(scan, todayIso).score).label;
     const row = map.get(tier);

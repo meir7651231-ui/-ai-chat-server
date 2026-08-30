@@ -12,6 +12,8 @@ const __d_tierOf_TIER_OF_T = {
   k9: "red",
   k10: "סיכון נטישה",
   k11: "#fdeaea",
+  k12: 950,
+  k13: 800,
 };
 const tierOf = (...a) => __pure_tierOf(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_tierOf_TIER_OF_T);
 let f = 0;

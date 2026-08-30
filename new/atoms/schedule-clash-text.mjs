@@ -8,17 +8,16 @@ export function scheduleClashText(
   memberId,
   course,
   sessionsOf,
-  dayNames = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי'],
-) {
+  dayNames = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי'], T) {
   const target = sessionsOf(course);
   for (const e of db.enrollments) {
-    if (e.memberId !== memberId || e.status === 'ended' || e.courseId === course.id) continue;
+    if (e.memberId !== memberId || e.status === T.k1 || e.courseId === course.id) continue;
     const other = db.courses.find((x) => x.id === e.courseId);
     if (!other) continue;
     for (const s1 of target) {
       for (const s2 of sessionsOf(other)) {
         if (s1.day === s2.day && !!s1.time && s1.time === s2.time) {
-          return '⚠ התנגשות לו"ז: כבר משובצ/ת ל"' + other.name + '" — יום ' + dayNames[s1.day] + ' ' + s1.time;
+          return T.k2 + other.name + T.k3 + dayNames[s1.day] + ' ' + s1.time;
         }
       }
     }

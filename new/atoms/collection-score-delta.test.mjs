@@ -1,4 +1,9 @@
-import { collectionScoreDelta } from './collection-score-delta.mjs';
+import { collectionScoreDelta as __pure_collectionScoreDelta } from './collection-score-delta.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_collection_score_delta_T = {
+  k1: 86400000,
+};
+const collectionScoreDelta = (...a) => __pure_collectionScoreDelta(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_collection_score_delta_T);
 // שקע כמו-במקור: הריקון האחרון = מקסימום c.date, '' כשאין.
 const lastIso = (box) => { let last = ''; for (const c of box.collections) if (c.date > last) last = c.date; return last; };
 const boxOf = (...dates) => ({ collections: dates.map((d) => ({ date: d, amount: 1 })) });

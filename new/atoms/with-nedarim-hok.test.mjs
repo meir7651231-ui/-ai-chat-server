@@ -3,6 +3,7 @@ import { withNedarimHok as __pure_withNedarimHok } from './with-nedarim-hok.mjs'
 const __d_withNedarimHok_WITH_NEDARIM_HOK_T = {
   k1: "card",
   k2: "הו״ק נדרים · ",
+  k3: 10,
 };
 const withNedarimHok = (...a) => __pure_withNedarimHok(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_withNedarimHok_WITH_NEDARIM_HOK_T);
 let f = 0;

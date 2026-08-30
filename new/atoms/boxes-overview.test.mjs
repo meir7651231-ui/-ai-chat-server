@@ -1,4 +1,9 @@
-import { boxesOverview } from './boxes-overview.mjs';
+import { boxesOverview as __pure_boxesOverview } from './boxes-overview.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_boxes_overview_T = {
+  k1: 10,
+};
+const boxesOverview = (...a) => __pure_boxesOverview(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_boxes_overview_T);
 
 // שקעים מקומיים לבדיקה (הבדיקה מייבאת רק את האטום שלה)
 const lastCollectionIso = (box) => {

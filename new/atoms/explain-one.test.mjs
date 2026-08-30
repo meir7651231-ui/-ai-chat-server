@@ -3,6 +3,7 @@ import { explainOne as __pure_explainOne } from './explain-one.mjs';
 const __d_explainOne_EXPLAIN_ONE_T = {
   k1: "⚠️ תצורה לא-תקינה: ",
   k2: "invalid",
+  k3: 400,
 };
 const explainOne = (...a) => __pure_explainOne(...a, ...Array(Math.max(0, 8 - a.length)).fill(undefined), __d_explainOne_EXPLAIN_ONE_T);
 let f = 0;

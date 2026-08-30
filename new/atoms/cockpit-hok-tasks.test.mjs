@@ -7,6 +7,7 @@ const __d_cockpitHokTasks_COCKPIT_HOK_TASKS_T = {
   k4: " · יום ",
   k5: " — טרם נרשם החודש",
   k6: "due",
+  k7: 100,
 };
 const cockpitHokTasks = (...a) => __pure_cockpitHokTasks(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_cockpitHokTasks_COCKPIT_HOK_TASKS_T);
 // עצמאי: כל השקעים מוטבעים inline (test-doubles, בלי import-אח — חוק-1). Golden נלכד מהרצה.

@@ -3,4 +3,6 @@ export const COMPUTE_QUOTE_T = {
   k1: "module",
   k2: "integration",
   k3: "subscription",
+  k4: 12,
+  k5: 10,
 };

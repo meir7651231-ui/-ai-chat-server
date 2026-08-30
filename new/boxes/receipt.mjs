@@ -19,7 +19,10 @@
  *  שאטום receipt-lines מגדיר אותו כשקע). לוח-האם מזריק את שכן-hebrew-number; ברירת-מחדל
  *  זורקת בבירור (רק בענף-§46 שקורא אותו) — נתיב לא-§46 אינו נוגע בו כלל. כשהאטומים יתוקנו,
  *  הברירת-מחדל תוחלף בחיווט-אטומים כאן. */
-import { receiptVerifyCode as receiptVerifyCodeX } from '../atoms/receipt-verify-code.mjs';
+import { receiptVerifyCode as __pure_receiptVerifyCode } from '../atoms/receipt-verify-code.mjs';
+import { RECEIPT_VERIFY_CODE_T as __d_receipt_verify_code_T } from '../atoms/receipt-verify-code-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const receiptVerifyCodeX = (...a) => __pure_receiptVerifyCode(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_receipt_verify_code_T);
 import { receiptLines as __pure_receiptLines } from '../atoms/receipt-lines.mjs';
 import { RECEIPT_LINES_T as __d_receiptLines_RECEIPT_LINES_T } from '../atoms/receipt-lines-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
@@ -47,7 +50,10 @@ import { GEMATRIA_T as __d_gem_GEMATRIA_T } from '../atoms/gematria-strings.mjs'
 import { U, T, H } from '../atoms/gematria-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
 const gem = (...a) => __pure_gem(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), U, T, H, __d_gem_GEMATRIA_T);
-import { gemYear as gemYearX } from '../atoms/gem-year.mjs';
+import { gemYear as __pure_gemYear } from '../atoms/gem-year.mjs';
+import { GEM_YEAR_T as __d_gem_year_T } from '../atoms/gem-year-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const gemYearX = (...a) => __pure_gemYear(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_gem_year_T);
 import { hebParts as __pure_hebParts } from '../atoms/heb-parts.mjs';
 import { HEB_PARTS_T as __d_hebParts_HEB_PARTS_T } from '../atoms/heb-parts-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

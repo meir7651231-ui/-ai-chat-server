@@ -1,4 +1,4 @@
-/** אטום-דאטה · parse-supporter-grid-strings — מחרוזות-התצוגה/דומיין שחולצו מ-parse-supporter-grid (מנוע-הטיהור v3, הכרעה 19). חוזה: parse-supporter-grid-strings.contract.md */
+/** אטום-דאטה · parse-supporter-grid-strings — מחרוזות-הדאטה של parse-supporter-grid (מנוע-הקשיחים, הכרעה 19). חוזה: parse-supporter-grid-strings.contract.md */
 export const PARSE_SUPPORTER_GRID_T = {
   k1: "טלפון",
   k2: "נייד",
@@ -26,4 +26,6 @@ export const PARSE_SUPPORTER_GRID_T = {
   k24: "תשלומים",
   k25: "סטטוס",
   k26: "נדרים",
+  k27: 15,
+  k28: 100,
 };

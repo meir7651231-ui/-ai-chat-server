@@ -1,4 +1,9 @@
-import { roomsNow } from './rooms-now.mjs';
+import { roomsNow as __pure_roomsNow } from './rooms-now.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_rooms_now_T = {
+  k1: 60,
+};
+const roomsNow = (...a) => __pure_roomsNow(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_rooms_now_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

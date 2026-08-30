@@ -1,4 +1,9 @@
-import { minToHM } from './min-to-hm.mjs';
+import { minToHM as __pure_minToHM } from './min-to-hm.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_min_to_hm_T = {
+  k1: 60,
+};
+const minToHM = (...a) => __pure_minToHM(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_min_to_hm_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

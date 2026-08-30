@@ -2,6 +2,9 @@ import { campaignProgress as __pure_campaignProgress } from './site-campaign-pro
 // צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
 const __d_campaignProgress_SITE_CAMPAIGN_PROGRESS_T = {
   k1: "number",
+  k2: 100,
+  k3: 10,
+  k4: 86400000,
 };
 const campaignProgress = (...a) => __pure_campaignProgress(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_campaignProgress_SITE_CAMPAIGN_PROGRESS_T);
 let f = 0;

@@ -1,4 +1,4 @@
-/** אטום-דאטה · amount-in-words-strings — מחרוזות-התצוגה/דומיין שחולצו מ-amount-in-words (מנוע-הטיהור v3, הכרעה 19). חוזה: amount-in-words-strings.contract.md */
+/** אטום-דאטה · amount-in-words-strings — מחרוזות-הדאטה של amount-in-words (מנוע-הקשיחים, הכרעה 19). חוזה: amount-in-words-strings.contract.md */
 export const AMOUNT_IN_WORDS_T = {
   k1: "אלף",
   k2: "אלפיים",
@@ -21,4 +21,10 @@ export const AMOUNT_IN_WORDS_T = {
   k19: "אפס ",
   k20: "שני ",
   k21: " ו-",
+  k22: 100,
+  k23: 10,
+  k24: 20,
+  k25: 999999999,
+  k26: 1000000,
+  k27: 1000,
 };

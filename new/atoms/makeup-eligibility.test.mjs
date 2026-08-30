@@ -2,6 +2,7 @@ import { makeupEligibility as __pure_makeupEligibility } from './makeup-eligibil
 // צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
 const __d_makeupEligibility_MAKEUP_ELIGIBILITY_T = {
   k1: "noshow",
+  k2: 48,
 };
 const makeupEligibility = (...a) => __pure_makeupEligibility(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_makeupEligibility_MAKEUP_ELIGIBILITY_T);
 const C = [

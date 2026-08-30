@@ -1,4 +1,10 @@
-import { freshenDemoDb } from './freshen-demo-db.mjs';
+import { freshenDemoDb as __pure_freshenDemoDb } from './freshen-demo-db.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_freshen_demo_db_T = {
+  k1: 86400000,
+  k2: 10,
+};
+const freshenDemoDb = (...a) => __pure_freshenDemoDb(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_freshen_demo_db_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 // שקע isoLocal — פורמט מקומי בלי הזחת-אזור-זמן (כמו date-util של maor)

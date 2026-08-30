@@ -2,7 +2,10 @@
  *  חוזה: reenroll.contract.md · מקור-אמת: maor/src/components/courses/reenroll-lib.ts
  *  זה המקום היחיד שבו חוטי-הרישום-מחדש נפגשים (חוקי-החשמלאי, LAW.md). מייבאת
  *  אך-ורק אטומים; שקעי-השכן (atNoon/toIso/findMember) = הכרעות-הקופסה, חיים כאן. */
-import { academicYearLabel } from '../atoms/academic-year-label.mjs';
+import { academicYearLabel as __pure_academicYearLabel } from '../atoms/academic-year-label.mjs';
+import { ACADEMIC_YEAR_LABEL_T as __d_academic_year_label_T } from '../atoms/academic-year-label-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const academicYearLabel = (...a) => __pure_academicYearLabel(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_academic_year_label_T);
 import { nextYearDates } from '../atoms/next-year-dates.mjs';
 import { renewOf } from '../atoms/renew-of.mjs';
 import { isRenewed } from '../atoms/is-renewed.mjs';

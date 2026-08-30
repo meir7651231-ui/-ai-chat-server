@@ -1,4 +1,9 @@
-import { kitProgress } from './kit-progress.mjs';
+import { kitProgress as __pure_kitProgress } from './kit-progress.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_kit_progress_T = {
+  k1: 100,
+};
+const kitProgress = (...a) => __pure_kitProgress(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_kit_progress_T);
 let f = 0;
 const eqJ = (a, b, msg) => {
   const A = JSON.stringify(a), B = JSON.stringify(b);

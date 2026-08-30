@@ -3,9 +3,9 @@ export function chipStyle(bg, c, T) {
     return {
         display: T.k1,
         padding: '3px 10px',
-        borderRadius: 999,
-        fontSize: 12,
-        fontWeight: 700,
+        borderRadius: T.k3,
+        fontSize: T.k4,
+        fontWeight: T.k5,
         background: bg,
         color: c,
         whiteSpace: T.k2,

@@ -50,8 +50,8 @@ export function telephonyToTenant(tc, orgName, tenantId, T) {
     officeHours: { days: [...tc.officeDays].sort((a, b) => a - b), start: tc.officeStart, end: tc.officeEnd },
     numbers,
     destinations: {
-      office: { ext: [tc.officeExt], ringSeconds: 25 },
-      manager: { ext: tc.managerExt, ringSeconds: 30 },
+      office: { ext: [tc.officeExt], ringSeconds: T.k15 },
+      manager: { ext: tc.managerExt, ringSeconds: T.k16 },
       voicemail: { box: tc.vmBox },
     },
     outbound: { defaultNumberId: firstSim ? firstSim.id : (numbers[0]?.id ?? 'n1') },

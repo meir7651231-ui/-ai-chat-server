@@ -1,4 +1,31 @@
-import { rfmFromScan as f } from './intel-rfm-from-scan.mjs';
+import { rfmFromScan as __pure_rfmFromScan } from './intel-rfm-from-scan.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_intel_rfm_from_scan_T = {
+  k1: 30,
+  k2: 350,
+  k3: 90,
+  k4: 280,
+  k5: 180,
+  k6: 200,
+  k7: 365,
+  k8: 120,
+  k9: 40,
+  k10: 10,
+  k11: 300,
+  k12: 230,
+  k13: 160,
+  k14: 100,
+  k15: 50,
+  k16: 5000,
+  k17: 2000,
+  k18: 1000,
+  k19: 210,
+  k20: 500,
+  k21: 140,
+  k22: 80,
+  k23: 99999,
+};
+const f = (...a) => __pure_rfmFromScan(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_intel_rfm_from_scan_T);
 // עצמאי (חוק-1: אפס import-אח; שקעים inline). Golden נלכד מהרצה.
 const T='2026-08-26';
 const MS_DAY=86400000;

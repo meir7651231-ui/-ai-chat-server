@@ -1,4 +1,10 @@
-import { groupsHintFromAudience } from './groups-hint-from-audience.mjs';
+import { groupsHintFromAudience as __pure_groupsHintFromAudience } from './groups-hint-from-audience.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_groups_hint_from_audience_T = {
+  k1: 10,
+  k2: 12,
+};
+const groupsHintFromAudience = (...a) => __pure_groupsHintFromAudience(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_groups_hint_from_audience_T);
 const C = [
   ['3 קבוצות', 3],
   ['נפגשים 5 פעמים בשבוע', 5],

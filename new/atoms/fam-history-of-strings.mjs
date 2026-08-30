@@ -1,4 +1,4 @@
-/** אטום-דאטה · fam-history-of-strings — מחרוזות-התצוגה/דומיין שחולצו מ-fam-history-of (מנוע-הטיהור v3, הכרעה 19). חוזה: fam-history-of-strings.contract.md */
+/** אטום-דאטה · fam-history-of-strings — מחרוזות-הדאטה של fam-history-of (מנוע-הקשיחים, הכרעה 19). חוזה: fam-history-of-strings.contract.md */
 export const FAM_HISTORY_OF_T = {
   k1: "הצטרפות",
   k2: "#e7edf5",
@@ -31,4 +31,5 @@ export const FAM_HISTORY_OF_T = {
   k29: "#fdeaea",
   k30: "היעדרות — ",
   k31: " · זכאי/ת השלמה",
+  k32: 40,
 };

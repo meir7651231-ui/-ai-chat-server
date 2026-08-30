@@ -1,5 +1,8 @@
-/** אטום-דאטה · chip-style-strings — מחרוזות-התצוגה/דומיין שחולצו מ-chip-style (מנוע-הטיהור v3, הכרעה 19). חוזה: chip-style-strings.contract.md */
+/** אטום-דאטה · chip-style-strings — מחרוזות-הדאטה של chip-style (מנוע-הקשיחים, הכרעה 19). חוזה: chip-style-strings.contract.md */
 export const CHIP_STYLE_T = {
   k1: "inline-block",
   k2: "nowrap",
+  k3: 999,
+  k4: 12,
+  k5: 700,
 };

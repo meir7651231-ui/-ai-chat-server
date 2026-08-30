@@ -89,7 +89,7 @@ export function planNedarimSync(existing, donors, charges, opts = {}, deps, T) {
       if (changed) {
         register(idx); // מפתחות-חדשים (טלפון/מייל/ext) ⇒ עסקאות עתידיות יתאימו
         summary.updatedSupporters++;
-        if (updatedNames.length < 40)
+        if (updatedNames.length < T.k6)
           updatedNames.push(sp.name);
       }
     }
@@ -98,7 +98,7 @@ export function planNedarimSync(existing, donors, charges, opts = {}, deps, T) {
       out.push(sp);
       register(out.length - 1);
       summary.newSupporters++;
-      if (newNames.length < 40)
+      if (newNames.length < T.k6)
         newNames.push(sp.name);
     }
   }
@@ -152,7 +152,7 @@ export function planNedarimSync(existing, donors, charges, opts = {}, deps, T) {
         idx = out.length - 1;
         register(idx);
         summary.newSupporters++;
-        if (newNames.length < 40)
+        if (newNames.length < T.k6)
           newNames.push(sp.name);
       }
     }

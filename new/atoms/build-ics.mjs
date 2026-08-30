@@ -52,7 +52,7 @@ export function buildIcs(occurrences, calName, now, icsEscape, foldIcsLine, T2) 
         // כעת מאמתים גם את הערך בפועל (isNaN), לא רק את הפורמט.
         const parsedStart = oc.time && /^\d{2}:\d{2}$/.test(oc.time) ? new Date(oc.date + 'T' + oc.time + ':00') : null;
         if (parsedStart && !Number.isNaN(parsedStart.getTime())) {
-            const end = new Date(parsedStart.getTime() + 3600e3); // שעה — כולל גלגול-חצות
+            const end = new Date(parsedStart.getTime() + T2.k19); // שעה — כולל גלגול-חצות
             lines.push(T2.k9 + basicLocal(parsedStart));
             lines.push(T2.k10 + basicLocal(end));
         }

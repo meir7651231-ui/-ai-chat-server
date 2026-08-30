@@ -1,6 +1,6 @@
 /** חוט · support-day-label — קודם אוטומטית (אפיון-Golden). חוזה: support-day-label.contract.md */
 export function supportDayLabel(at, todayIso, T) {
-    const day = at.slice(0, 10);
+    const day = at.slice(0, T.k3);
     if (day === todayIso)
         return T.k1;
     // אתמול = יום-אחד לפני todayIso (חישוב על ה-ISO, צהריים מקומי)

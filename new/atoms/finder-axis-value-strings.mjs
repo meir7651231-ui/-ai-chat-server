@@ -1,4 +1,4 @@
-/** אטום-דאטה · finder-axis-value-strings — מחרוזות-התצוגה/דומיין שחולצו מ-finder-axis-value (מנוע-הטיהור v3, הכרעה 19). חוזה: finder-axis-value-strings.contract.md */
+/** אטום-דאטה · finder-axis-value-strings — מחרוזות-הדאטה של finder-axis-value (מנוע-הקשיחים, הכרעה 19). חוזה: finder-axis-value-strings.contract.md */
 export const FINDER_AXIS_VALUE_T = {
   k1: "city",
   k2: "comm",
@@ -18,4 +18,5 @@ export const FINDER_AXIS_VALUE_T = {
   k16: "קיים",
   k17: "חסר",
   k18: "lang",
+  k19: 700,
 };

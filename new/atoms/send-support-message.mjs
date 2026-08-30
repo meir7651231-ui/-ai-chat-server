@@ -13,9 +13,9 @@ export async function sendSupportMessage(uid, meta, text, fs, sanitizeSupportTex
   await setDoc(
     doc(db, T.k1, uid),
     {
-      email: (meta.email ?? '').slice(0, 120),
-      orgName: (meta.orgName ?? '').slice(0, 120),
-      lastText: clean.slice(0, 120),
+      email: (meta.email ?? '').slice(0, T.k4),
+      orgName: (meta.orgName ?? '').slice(0, T.k4),
+      lastText: clean.slice(0, T.k4),
       lastAt: now,
       lastFrom: T.k3,
       unreadAdmin: increment(1),

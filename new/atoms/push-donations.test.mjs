@@ -1,4 +1,9 @@
-import { pushDonations } from './push-donations.mjs';
+import { pushDonations as __pure_pushDonations } from './push-donations.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_push_donations_T = {
+  k1: 400,
+};
+const pushDonations = (...a) => __pure_pushDonations(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_push_donations_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b);

@@ -11,7 +11,7 @@ export function filterCommands(commands, query, limit = 12, T) {
   for (const c of commands) {
     if (!tokens.every((t) => c.keywords.includes(t))) continue;
     const nl = norm(c.label);
-    let score = nl === q ? 100 : nl.startsWith(q) ? 60 : nl.includes(q) ? 40 : 20;
+    let score = nl === q ? T.k2 : nl.startsWith(q) ? T.k3 : nl.includes(q) ? T.k4 : T.k5;
     if (c.kind !== T.k1) score += 5;
     scored.push({ c, score });
   }

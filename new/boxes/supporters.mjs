@@ -14,15 +14,24 @@ import { supCount } from '../atoms/sup-count.mjs';
 import { supLast } from '../atoms/sup-last.mjs';
 import { supLastInPeriod as supLastInPeriodAtom } from '../atoms/sup-last-in-period.mjs';
 import { supTotalIls as supTotalIlsAtom } from '../atoms/sup-total-ils.mjs';
-import { supScore as supScoreAtom } from '../atoms/sup-score.mjs';
+import { supScore as __pure_supScore } from '../atoms/sup-score.mjs';
+import { SUP_SCORE_T as __d_sup_score_T } from '../atoms/sup-score-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const supScoreAtom = (...a) => __pure_supScore(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_sup_score_T);
 import { supTier as __pure_supTier } from '../atoms/sup-tier.mjs';
 import { SUP_TIER_T as __d_supTier_SUP_TIER_T } from '../atoms/sup-tier-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const supTier = (...a) => __pure_supTier(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_supTier_SUP_TIER_T);
 import { TIER_ORDER } from '../atoms/tier-order.mjs';
-import { supScoreBins as supScoreBinsAtom } from '../atoms/sup-score-bins.mjs';
+import { supScoreBins as __pure_supScoreBins } from '../atoms/sup-score-bins.mjs';
+import { SUP_SCORE_BINS_T as __d_sup_score_bins_T } from '../atoms/sup-score-bins-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const supScoreBinsAtom = (...a) => __pure_supScoreBins(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_sup_score_bins_T);
 import { supAvgDon as supAvgDonAtom } from '../atoms/sup-avg-don.mjs';
-import { sup12m as sup12mAtom } from '../atoms/sup12m.mjs';
+import { sup12m as __pure_sup12m } from '../atoms/sup12m.mjs';
+import { SUP12M_T as __d_sup12m_T } from '../atoms/sup12m-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const sup12mAtom = (...a) => __pure_sup12m(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_sup12m_T);
 import { chipStyle as __pure_chipStyle } from '../atoms/chip-style.mjs';
 import { CHIP_STYLE_T as __d_chipStyle_CHIP_STYLE_T } from '../atoms/chip-style-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
@@ -47,7 +56,10 @@ import { DON_CAL_MONTH_LINE_T as __d_donCalMonthLine_DON_CAL_MONTH_LINE_T } from
 const donCalMonthLineAtom = (...a) => __pure_donCalMonthLine(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_donCalMonthLine_DON_CAL_MONTH_LINE_T);
 import { normName as normNameAtom } from '../atoms/norm-name.mjs';
 import { SUP_NAME_KEYS } from '../atoms/sup-name-keys.mjs';
-import { excelSerialToIso } from '../atoms/excel-serial-to-iso.mjs';
+import { excelSerialToIso as __pure_excelSerialToIso } from '../atoms/excel-serial-to-iso.mjs';
+import { EXCEL_SERIAL_TO_ISO_T as __d_excel_serial_to_iso_T } from '../atoms/excel-serial-to-iso-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const excelSerialToIso = (...a) => __pure_excelSerialToIso(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_excel_serial_to_iso_T);
 import { parseSupporterGrid as __pure_parseSupporterGrid } from '../atoms/parse-supporter-grid.mjs';
 import { PARSE_SUPPORTER_GRID_T as __d_parseSupporterGrid_PARSE_SUPPORTER_GRID_T } from '../atoms/parse-supporter-grid-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
@@ -83,8 +95,14 @@ import { normSearch as __pure_normSearch } from '../atoms/norm-search.mjs';
 import { NORM_SEARCH_T as __d_normSearch_NORM_SEARCH_T } from '../atoms/norm-search-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const normSearch = (...a) => __pure_normSearch(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_normSearch_NORM_SEARCH_T);
-import { formatIsraeliPhone } from '../atoms/format-israeli-phone.mjs';
-import { parseAnyDate } from '../atoms/parse-any-date.mjs';
+import { formatIsraeliPhone as __pure_formatIsraeliPhone } from '../atoms/format-israeli-phone.mjs';
+import { FORMAT_ISRAELI_PHONE_T as __d_format_israeli_phone_T } from '../atoms/format-israeli-phone-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const formatIsraeliPhone = (...a) => __pure_formatIsraeliPhone(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_format_israeli_phone_T);
+import { parseAnyDate as __pure_parseAnyDate } from '../atoms/parse-any-date.mjs';
+import { PARSE_ANY_DATE_T as __d_parse_any_date_T } from '../atoms/parse-any-date-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const parseAnyDate = (...a) => __pure_parseAnyDate(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_parse_any_date_T);
 import { parseCsv } from '../atoms/parse-csv.mjs';
 import { planAddName as __pure_planAddName } from '../atoms/plan-add-name.mjs';
 import { PLAN_ADD_NAME_T as __d_planAddName_PLAN_ADD_NAME_T } from '../atoms/plan-add-name-strings.mjs';

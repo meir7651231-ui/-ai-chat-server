@@ -29,7 +29,7 @@ export function needsCare(db, todayIso, config, sockets, T) {
       });
   }
   const soon = new Date(todayIso + 'T12:00:00');
-  soon.setDate(soon.getDate() + 14);
+  soon.setDate(soon.getDate() + T.k19);
   const soonIso = isoOf(soon);
   for (const p of db.tzCampaigns.filter((x) => x.active && x.end && x.end >= todayIso && x.end <= soonIso))
     out.push({ kind: T.k15, id: p.id, label: T.k16 + p.name + T.k17 + p.end, hint: T.k18 });

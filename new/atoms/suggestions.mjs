@@ -10,7 +10,7 @@ export function suggestions(db, todayIso, config, { termOf, moduleOn, upcomingHo
   const out = [];
   const activeFams = db.families.filter((f) => f.status === T2.k1);
   // A — חג מתקרב (מודול חנות בלבד — היעד הוא מתנת-חג בחנות)
-  const hol = upcomingHoliday(todayIso, 30);
+  const hol = upcomingHoliday(todayIso, T2.k29);
   if (modOn(T2.k2) && hol && activeFams.length > 0) {
     // תיקון (swarm-audit): מפתחות 'sug:' פטורים מגיזום-30-הימים (useApp postLoad) —
     // מפתח בלי שנה עברית ⇒ ביטול חד-פעמי של "מתנת-חג · פסח" קובר את ההצעה לנצח,

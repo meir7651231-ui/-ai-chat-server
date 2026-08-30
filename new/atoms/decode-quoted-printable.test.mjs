@@ -9,6 +9,8 @@ const __d_decodeQuotedPrintable_DECODE_QUOTED_PRINTABLE_T = {
   k6: "ראשי",
   k7: "X-CUSTOM",
   k8: "utf-8",
+  k9: 255,
+  k10: 63,
 };
 const decodeQuotedPrintable = (...a) => __pure_decodeQuotedPrintable(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_decodeQuotedPrintable_DECODE_QUOTED_PRINTABLE_T);
 const CASES = [[["\"\""],"\"\""],[["\"אבג\""],"\"???\""],[["\"כהן לוי\""],"\"??? ???\""],[["\"abc\""],"\"abc\""],[["\"a@b.com\""],"\"a@b.com\""],[["\"2026-08-24\""],"\"2026-08-24\""],[["\"2026-08-24T12:00:00\""],"\"2026-08-24T12:00:00\""],[["\"0501234567\""],"\"0501234567\""],[["\"03-1234567\""],"\"03-1234567\""],[["\"https://x.co\""],"\"https://x.co\""],[["\"שלום עולם\""],"\"???? ????\""],[["\"12\""],"\"12\""]];

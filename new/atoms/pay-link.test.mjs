@@ -7,6 +7,7 @@ const __d_payLink_PAY_LINK_T = {
   k4: "ClientName",
   k5: "amount",
   k6: "name",
+  k7: 100,
 };
 const payLink = (...a) => __pure_payLink(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_payLink_PAY_LINK_T);
 // שקע safeHttpsUrl כחוזה safe-https-url: ‏https בלבד, שבור/ריק ⇒ null.

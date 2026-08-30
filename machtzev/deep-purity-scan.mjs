@@ -14,11 +14,14 @@ const DIRS = ['new/atoms', 'new/boxes'];
 const HEB = /[֐-׿]/;
 const strip = (s) => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '').replace(/(^|[^:])\/\/[^\n]*/g, '$1');
 // צורת-דאטה: הכרזת-ליטרל ברמת-המודול בלבד (עמודה 0) — const מוזח בתוך פונקציה איננו אטום-דאטה
-const isPureData = (code) =>
-  (/^export\s+(?:const\s+\w+\s*=\s*(?:[\[{]|-?\d|['\"])|function\s+\w+\s*\(\)\s*\{\s*return\s+[\[{])/m.test(code) ||
-    /^const\s+\w+\s*=\s*[\[{]/m.test(code)) &&
-  !/\b(if|for|while|switch)\b/.test(code) && !/=>(?!\s*[\[{('"`0-9])/.test(code) &&
-  !/^(?:export\s+)?(?:const\s+\w+\s*=\s*(?:async\s*)?\(|function\s+\w+\s*\()/m.test(code);
+const isPureData = (code) => {
+  // בדיקת-הצורה על שלד-הקוד — תוכן-מחרוזות ממוסך ("for"/"if" בתוך ערך אינם זרימת-בקרה)
+  const skel = code.replace(/(['"`])(?:\\.|(?!\1)[^\\])*\1/g, '""');
+  return (/^export\s+(?:const\s+\w+\s*=\s*(?:[\[{]|-?\d|['"])|function\s+\w+\s*\(\)\s*\{\s*return\s+[\[{])/m.test(skel) ||
+    /^const\s+\w+\s*=\s*[\[{]/m.test(skel)) &&
+  !/\b(if|for|while|switch)\b/.test(skel) && !/=>(?!\s*[\[{('"`0-9])/.test(skel) &&
+  !/^(?:export\s+)?(?:const\s+\w+\s*=\s*(?:async\s*)?\(|function\s+\w+\s*\()/m.test(skel);
+};
 const findings = [];
 for (const dir of DIRS) {
   const abs = path.join(ROOT, dir);

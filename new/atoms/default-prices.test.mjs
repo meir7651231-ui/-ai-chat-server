@@ -1,4 +1,18 @@
-import { defaultPrices } from './default-prices.mjs';
+import { defaultPrices as __pure_defaultPrices } from './default-prices.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_default_prices_T = {
+  k1: 290,
+  k2: 120,
+  k3: 70,
+  k4: 180,
+  k5: 60,
+  k6: 90,
+  k7: 80,
+  k8: 1500,
+  k9: 55000,
+  k10: 9000,
+};
+const defaultPrices = (...a) => __pure_defaultPrices(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_default_prices_T);
 let f = 0;
 const bad = (msg) => { console.error('✗ ' + msg); f = 1; };
 const ip = { ai: 120 };

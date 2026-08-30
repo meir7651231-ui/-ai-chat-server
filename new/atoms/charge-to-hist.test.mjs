@@ -1,4 +1,9 @@
-import { chargeToHist } from './charge-to-hist.mjs';
+import { chargeToHist as __pure_chargeToHist } from './charge-to-hist.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_charge_to_hist_T = {
+  k1: 10,
+};
+const chargeToHist = (...a) => __pure_chargeToHist(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_charge_to_hist_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 // שקעים-מיני כמתועד בחוזה

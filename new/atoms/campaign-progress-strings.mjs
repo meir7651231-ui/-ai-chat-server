@@ -1,0 +1,4 @@
+/** אטום-דאטה · campaign-progress-strings — מחרוזות-הדאטה של campaign-progress (מנוע-הקשיחים, הכרעה 19). חוזה: campaign-progress-strings.contract.md */
+export const CAMPAIGN_PROGRESS_T = {
+  k1: 100,
+};

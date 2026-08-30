@@ -7,6 +7,8 @@ const __d_detectRecurringHok_DETECT_RECURRING_HOK_T = {
   k4: " (זוהה מהיסטוריה · ",
   k5: " חודשים)",
   k6: "auto",
+  k7: 28,
+  k8: 10,
 };
 const detectRecurringHok = (...a) => __pure_detectRecurringHok(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_detectRecurringHok_DETECT_RECURRING_HOK_T);
 let f = 0;

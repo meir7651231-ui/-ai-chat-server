@@ -6,8 +6,8 @@
 export function cockpitCalls(supporters, todayIso, rate = 3.7, silentDays = 60, { supIls, supUsd, supLast, daysSince, cockpitAtRisk }, T) {
   const valueTag = (sp) => {
     const ils = supIls(sp) + supUsd(sp) * rate;
-    if (ils >= 5000) return T.k1;
-    if (ils >= 1000) return T.k2;
+    if (ils >= T.k12) return T.k1;
+    if (ils >= T.k13) return T.k2;
     return T.k3;
   };
   const tasks = [];
@@ -15,7 +15,7 @@ export function cockpitCalls(supporters, todayIso, rate = 3.7, silentDays = 60, 
   for (const sp of supporters) {
     if (!sp.nextDate || sp.nextDate > todayIso) continue;
     const late = daysSince(sp.nextDate, todayIso);
-    tasks.push({ id: T.k4 + sp.id, kind: T.k5, supId: sp.id, name: sp.name, phone: sp.phone || '', email: sp.email || '', reason: late <= 0 ? T.k6 : T.k7 + late + T.k8, severity: T.k9, sort: 1_000_000 + late });
+    tasks.push({ id: T.k4 + sp.id, kind: T.k5, supId: sp.id, name: sp.name, phone: sp.phone || '', email: sp.email || '', reason: late <= 0 ? T.k6 : T.k7 + late + T.k8, severity: T.k9, sort: T.k14 + late });
     seen.add(sp.id);
   }
   for (const sp of cockpitAtRisk(supporters, todayIso, silentDays)) {

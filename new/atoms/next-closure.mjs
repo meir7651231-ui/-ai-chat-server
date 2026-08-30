@@ -8,7 +8,7 @@ export function nextClosure(config, todayIso, hebrewClosedWindows, CITIES, T) {
   if (!tel) return null;
   const city = tel.city || T.k1;
   const tenant = { city, timezone: T.k2 };
-  const wins = hebrewClosedWindows(todayIso, 10, tenant, {});
+  const wins = hebrewClosedWindows(todayIso, T.k3, tenant, {});
   const w = wins[0];
   if (!w) return null;
   const cityHe = (tel.city && CITIES[tel.city]) ? CITIES[tel.city].he : CITIES.jerusalem.he;

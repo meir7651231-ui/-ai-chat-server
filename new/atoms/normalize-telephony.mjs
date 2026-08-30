@@ -15,9 +15,9 @@ export function normalizeTelephony(raw, telStr, telExt, TEL_KINDS, T) {
     if (!n || typeof n !== T.k1 || Array.isArray(n)) return;
     const o = n;
     const kind = TEL_KINDS.includes(o.kind) ? o.kind : T.k2;
-    const e164 = typeof o.e164 === T.k3 ? o.e164.replace(/[^\d+()\-\s]/g, '').trim().slice(0, 24) : '';
+    const e164 = typeof o.e164 === T.k3 ? o.e164.replace(/[^\d+()\-\s]/g, '').trim().slice(0, T.k5) : '';
     const id = telStr(o.id, 32) || `n${i + 1}`;
-    const num = { id, e164, label: telStr(o.label, 60) || id, kind };
+    const num = { id, e164, label: telStr(o.label, T.k6) || id, kind };
     if (o.kosher === true) num.kosher = true;
     numbers.push(num);
   });
@@ -40,7 +40,7 @@ export function normalizeTelephony(raw, telStr, telExt, TEL_KINDS, T) {
     officeExt: telExt(t.officeExt, '101'),
     managerExt: telExt(t.managerExt, '201'),
     vmBox: telExt(t.vmBox, '100'),
-    city: cityRaw.length >= 2 && cityRaw.length <= 20 ? cityRaw : '',
+    city: cityRaw.length >= 2 && cityRaw.length <= T.k7 ? cityRaw : '',
     kosherMode: bool(t.kosherMode, false),
     hebrewCalendar: bool(t.hebrewCalendar, true),
     zmanim: bool(t.zmanim, false),

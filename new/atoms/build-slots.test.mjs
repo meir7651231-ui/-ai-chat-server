@@ -21,6 +21,11 @@ const __d_buildSlots_BUILD_SLOTS_T = {
   k18: " · מחוץ לשעות הפעילות של החדר",
   k19: "crs|",
   k20: "out|",
+  k21: 60,
+  k22: 20,
+  k23: 96,
+  k24: 900,
+  k25: 960,
 };
 const buildSlots = (...a) => __pure_buildSlots(...a, ...Array(Math.max(0, 7 - a.length)).fill(undefined), __d_buildSlots_BUILD_SLOTS_T);
 

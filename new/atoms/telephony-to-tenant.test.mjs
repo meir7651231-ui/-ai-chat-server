@@ -15,6 +15,8 @@ const __d_telephonyToTenant_TELEPHONY_TO_TENANT_T = {
   k12: "calendar.shabbat",
   k13: "calendar.fasts",
   k14: "calendar.zmanim",
+  k15: 25,
+  k16: 30,
 };
 const telephonyToTenant = (...a) => __pure_telephonyToTenant(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_telephonyToTenant_TELEPHONY_TO_TENANT_T);
 let f = 0;

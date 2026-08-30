@@ -5,6 +5,7 @@ const __d_distributionListLines_DISTRIBUTION_LIST_LINES_T = {
   k2: "active",
   k3: "☐ נמסר",
   k4: "אין שיוכים פעילים לחבילה",
+  k5: 30,
 };
 const distributionListLines = (...a) => __pure_distributionListLines(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_distributionListLines_DISTRIBUTION_LIST_LINES_T);
 // שקעים (מדמים את שכני-המקור): itemOf פותר רכיב לפריט-קטלוג; beneficiaryLabel = שם-המשפחה.

@@ -2,12 +2,12 @@
  * מוצא: intel.ts:49 (donorScan) + monthsBefore:25 (inline) + MS_DAY (לא נחוץ כאן). חוק-4 verbatim.
  * מעבר-יחיד על אירועי-הנתינה: count/ils/first/last + סדרה-חודשית (ישן→חדש). טהור.
  */
-export function donorScan(sp, todayIso, rate = 3.7, months = 12) {
+export function donorScan(sp, todayIso, rate = 3.7, months = 12, T) {
   const monthsBefore = (iso) => {
     const y = +iso.slice(0, 4), m = +iso.slice(5, 7);
     const ty = +todayIso.slice(0, 4), tm = +todayIso.slice(5, 7);
     if (!y || !m || !ty || !tm) return -1;
-    return ty * 12 + tm - (y * 12 + m);
+    return ty * T.k1 + tm - (y * T.k1 + m);
   };
   const monthly = new Array(months).fill(0);
   let count = 0, ils = 0, first = '', last = '';

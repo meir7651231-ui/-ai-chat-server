@@ -2,4 +2,5 @@
 export const MIGRATE_SUPPORTERS_TO_KEYED_T = {
   k1: "supporters",
   k2: "events",
+  k3: 400,
 };

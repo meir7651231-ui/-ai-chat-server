@@ -7,7 +7,7 @@ export function coordinatorPrintLines(db, coordinatorId, config, termOf, coordin
     const boxes = coordinatorBoxes(db.tzBoxes, coordinatorId).filter((b) => b.status === T2.k1 || b.status === T2.k2);
     const lines = [
         T2.k3 + (coord?.name ?? ''),
-        '='.repeat(30),
+        '='.repeat(T2.k10),
     ];
     for (const b of boxes) {
         const fam = db.families.find((f) => f.id === b.famId);

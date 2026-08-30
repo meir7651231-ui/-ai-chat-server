@@ -18,7 +18,10 @@ import { providerClearer as __pure_providerClearer } from '../atoms/provider-cle
 import { PROVIDER_CLEARER_T as __d_providerClearer_PROVIDER_CLEARER_T } from '../atoms/provider-clearer-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const providerClearer = (...a) => __pure_providerClearer(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_providerClearer_PROVIDER_CLEARER_T);
-import { chargeToHist as _chargeToHist } from '../atoms/charge-to-hist.mjs';
+import { chargeToHist as __pure_chargeToHist } from '../atoms/charge-to-hist.mjs';
+import { CHARGE_TO_HIST_T as __d_charge_to_hist_T } from '../atoms/charge-to-hist-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const _chargeToHist = (...a) => __pure_chargeToHist(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_charge_to_hist_T);
 import { chargeDedupKey as __pure_chargeDedupKey } from '../atoms/charge-dedup-key.mjs';
 import { CHARGE_DEDUP_KEY_T as __d_chargeDedupKey_CHARGE_DEDUP_KEY_T } from '../atoms/charge-dedup-key-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

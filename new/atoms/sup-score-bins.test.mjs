@@ -1,4 +1,10 @@
-import { supScoreBins } from './sup-score-bins.mjs';
+import { supScoreBins as __pure_supScoreBins } from './sup-score-bins.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_sup_score_bins_T = {
+  k1: 10,
+  k2: 100,
+};
+const supScoreBins = (...a) => __pure_supScoreBins(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_sup_score_bins_T);
 const byScore = (sp) => sp.score;
 const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 let f = 0;

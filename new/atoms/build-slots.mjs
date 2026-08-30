@@ -5,17 +5,17 @@ export function buildSlots(db, room, iso, blocked, config,
   { timeToMin, minToHM, sessionsOf, courseOnDate, termOf },
   /** דגל diary.cleaning — false ⇒ אין משבצת ניקיון יומי (המשבצות נשארות רגילות). */
   cleaningOn = true, T) {
-  const from = Number.isNaN(timeToMin(room.from)) ? 8 * 60 : timeToMin(room.from);
-  const to = Number.isNaN(timeToMin(room.to)) ? 20 * 60 : timeToMin(room.to);
-  const step = room.slot > 0 ? room.slot : 60;
+  const from = Number.isNaN(timeToMin(room.from)) ? 8 * T.k21 : timeToMin(room.from);
+  const to = Number.isNaN(timeToMin(room.to)) ? T.k22 * T.k21 : timeToMin(room.to);
+  const step = room.slot > 0 ? room.slot : T.k21;
   const wd = new Date(iso + 'T12:00:00').getDay();
   const slots = [];
   const covered = [];
   const dayCourses = db.courses.filter((c) => c.roomId === room.id && courseOnDate(c, iso));
-  for (let t = from, guard = 0; t < to && guard < 96; t += step, guard++) {
+  for (let t = from, guard = 0; t < to && guard < T.k23; t += step, guard++) {
     const hh = minToHM(t);
     // ניקיון יומי 15:00–16:00 — קבוע בכל החדרים (כמו במקור); מגודר diary.cleaning
-    if (cleaningOn && t >= 900 && t < 960) {
+    if (cleaningOn && t >= T.k24 && t < T.k25) {
       slots.push({ key: T.k1 + hh, time: hh, kind: T.k2, label: T.k3, bg: T.k4, c: '#4d463c' });
       continue;
     }

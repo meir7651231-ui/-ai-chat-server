@@ -6,7 +6,10 @@
  *   · nowMs (מס' — Date.now של הקורא) ⇒ ספירת-הימים של campaign(); טהור/בדיק. */
 import { isRtlLang } from '../atoms/is-rtl-lang.mjs';
 import { CORAL_PALETTE } from '../atoms/coral-palette.mjs';
-import { sitePalette } from '../atoms/site-palette.mjs';
+import { sitePalette as __pure_sitePalette } from '../atoms/site-palette.mjs';
+import { SITE_PALETTE_T as __d_site_palette_T } from '../atoms/site-palette-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const sitePalette = (...a) => __pure_sitePalette(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_site_palette_T);
 import { siteVocab as __pure_siteVocab } from '../atoms/site-vocab.mjs';
 import { SITE_VOCAB_T as __d_siteVocab_SITE_VOCAB_T } from '../atoms/site-vocab-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

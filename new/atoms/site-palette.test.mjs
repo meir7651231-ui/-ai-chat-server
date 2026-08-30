@@ -1,4 +1,15 @@
-import { sitePalette } from './site-palette.mjs';
+import { sitePalette as __pure_sitePalette } from './site-palette.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_site_palette_T = {
+  k1: 255,
+  k2: 60,
+  k3: 360,
+  k4: 120,
+  k5: 180,
+  k6: 240,
+  k7: 300,
+};
+const sitePalette = (...a) => __pure_sitePalette(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_site_palette_T);
 let f = 0;
 const err = (m) => { console.error('✗ ' + m); f = 1; };
 // שקע-נתונים: פלטת-נפילה (במקור CORAL_PALETTE; לבדיקת-הזהות מספיק אובייקט-עד)

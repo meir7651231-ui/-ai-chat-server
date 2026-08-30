@@ -2,6 +2,7 @@ import { encryptDoc as __pure_encryptDoc } from './encrypt-doc.mjs';
 // צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
 const __d_encrypt_doc_T = {
   k1: "AES-GCM",
+  k2: 12,
 };
 const encryptDoc = (...a) => __pure_encryptDoc(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_encrypt_doc_T);
 let f = 0;

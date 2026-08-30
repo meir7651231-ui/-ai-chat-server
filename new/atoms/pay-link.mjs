@@ -4,7 +4,7 @@
 export function payLink(payUrl, amount, name = '', safeHttpsUrl, T) {
   const base = safeHttpsUrl(payUrl);
   if (!base) return null;
-  const amt = String(Math.max(0, Math.round(amount * 100) / 100));
+  const amt = String(Math.max(0, Math.round(amount * T.k7) / T.k7));
   if (base.includes(T.k1) || base.includes(T.k2)) {
     // תבנית-מותאמת — החלפה בתוך ה-URL (גם בצורה המקודדת שה-URL parser מייצר).
     // סכום 0 ("לא-ידוע", קישור-תרומה-כללי) ⇒ שדה-ריק, עקבי עם מצב-הפרמטרים (לא Amount=0).

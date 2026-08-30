@@ -1,4 +1,9 @@
-import { foldIcsLine } from './fold-ics-line.mjs';
+import { foldIcsLine as __pure_foldIcsLine } from './fold-ics-line.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_fold_ics_line_T = {
+  k1: 75,
+};
+const foldIcsLine = (...a) => __pure_foldIcsLine(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_fold_ics_line_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const eq = (a, b, msg) => ok(JSON.stringify(a) === JSON.stringify(b), msg + ` — קיבלנו ${JSON.stringify(a)}`);

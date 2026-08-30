@@ -1,2 +1,2 @@
 /** חוט · rule-contains — חוזה: rule-contains.contract.md */
-export const ruleContains = (nq, nt) => (nq.length >= 2 && nt.includes(nq) ? 62 : null);
+export const ruleContains = (nq, nt, T) => (nq.length >= 2 && nt.includes(nq) ? T.k1 : null);

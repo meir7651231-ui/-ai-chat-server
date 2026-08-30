@@ -4,6 +4,9 @@ const __d_normalizeTelephony_NORMALIZE_TELEPHONY_T = {
   k2: "sim",
   k3: "string",
   k4: "boolean",
+  k5: 24,
+  k6: 60,
+  k7: 20,
 };
 // צילום-מקומי מ-normalize-telephony-data + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)
 const TEL_KINDS = ['sim', 'virtual', 'whatsapp'];

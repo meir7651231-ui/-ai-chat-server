@@ -19,6 +19,7 @@ const __d_buildIcs_BUILD_ICS_T = {
   k16: "END:VEVENT",
   k17: "END:VCALENDAR",
   k18: "PRODID:-//maor-system//he//",
+  k19: 3600000,
 };
 const buildIcs = (...a) => __pure_buildIcs(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_buildIcs_BUILD_ICS_T);
 

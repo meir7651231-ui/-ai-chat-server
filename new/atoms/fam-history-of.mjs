@@ -42,5 +42,5 @@ export function famHistoryOf(db, fam, config, termOf, T) {
       );
     }
   }
-  return out.sort((a, b) => b.date.localeCompare(a.date)).slice(0, 40);
+  return out.sort((a, b) => b.date.localeCompare(a.date)).slice(0, T.k32);
 }

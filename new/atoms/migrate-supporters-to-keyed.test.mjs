@@ -3,6 +3,7 @@ import { migrateSupportersToKeyed as __pure_migrateSupportersToKeyed } from './m
 const __d_migrate_supporters_to_keyed_T = {
   k1: "supporters",
   k2: "events",
+  k3: 400,
 };
 const migrateSupportersToKeyed = (...a) => __pure_migrateSupportersToKeyed(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_migrate_supporters_to_keyed_T);
 let f = 0;

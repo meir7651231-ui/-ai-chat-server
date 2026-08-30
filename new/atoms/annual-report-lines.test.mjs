@@ -14,6 +14,8 @@ const __d_annualReportLines_ANNUAL_REPORT_LINES_T = {
   k11: "סה\"כ בדולרים: ",
   k12: "לארגון אישור מוסד ציבורי לעניין תרומות לפי סעיף 46 לפקודת מס הכנסה.",
   k13: "דוח-ריכוז זה אינו קבלה — הקבלות המקוריות צוינו לצד כל תרומה.",
+  k14: 46,
+  k15: 12,
 };
 const annualReportLines = (...a) => __pure_annualReportLines(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_annualReportLines_ANNUAL_REPORT_LINES_T);
 // מימושי-שקע לבדיקה — נאמנים למקור (annualReport.ts):

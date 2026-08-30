@@ -19,6 +19,7 @@ const __d_needsCare_NEEDS_CARE_TZEDAKA_T = {
   k16: "המבצע \"",
   k17: "\" מסתיים ב-",
   k18: "לסכם ולסגור",
+  k19: 14,
 };
 const needsCare = (...a) => __pure_needsCare(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_needsCare_NEEDS_CARE_TZEDAKA_T);
 let f = 0;

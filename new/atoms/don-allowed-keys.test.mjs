@@ -1,4 +1,9 @@
-import { donAllowedKeys } from './don-allowed-keys.mjs';
+import { donAllowedKeys as __pure_donAllowedKeys } from './don-allowed-keys.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_don_allowed_keys_T = {
+  k1: 29,
+};
+const donAllowedKeys = (...a) => __pure_donAllowedKeys(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_don_allowed_keys_T);
 const SHARED = '_shared_';
 let f = 0;
 const eq = (name, got, want) => {

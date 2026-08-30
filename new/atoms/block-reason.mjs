@@ -15,8 +15,8 @@ export function blockReason(d, blockingOn = true, hebParts, holidays, FULL_HOLID
   if (hol && FULL_HOLIDAYS.includes(hol)) return hol;
   // צום תשעה באב נדחה: כשט' באב חל בשבת, הצום נצפה בי' באב (ראשון). ט' באב עצמו
   // נחסם כ'שבת', אך י' באב — הצום בפועל — נחסם כאן כדין הלוח.
-  if (dow === 0 && hp.month === 'Av' && hp.day === 10) return T.k3;
-  if ((hp.month === T.k4 && hp.day >= 16 && hp.day <= 21) || (hp.month === T.k5 && hp.day >= 16 && hp.day <= 20))
+  if (dow === 0 && hp.month === 'Av' && hp.day === T.k7) return T.k3;
+  if ((hp.month === T.k4 && hp.day >= 16 && hp.day <= T.k8) || (hp.month === T.k5 && hp.day >= 16 && hp.day <= T.k9))
     return T.k6;
   return null;
 }

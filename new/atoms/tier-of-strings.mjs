@@ -1,4 +1,4 @@
-/** אטום-דאטה · tier-of-strings — מחרוזות-התצוגה/דומיין שחולצו מ-tier-of (מנוע-הטיהור v3, הכרעה 19). חוזה: tier-of-strings.contract.md */
+/** אטום-דאטה · tier-of-strings — מחרוזות-הדאטה של tier-of (מנוע-הקשיחים, הכרעה 19). חוזה: tier-of-strings.contract.md */
 export const TIER_OF_T = {
   k1: "titan",
   k2: "טיטאן",
@@ -11,4 +11,6 @@ export const TIER_OF_T = {
   k9: "red",
   k10: "סיכון נטישה",
   k11: "#fdeaea",
+  k12: 950,
+  k13: 800,
 };

@@ -29,6 +29,7 @@ const __d_receiptLines_RECEIPT_LINES_T = {
   k26: " · יתרה: ₪",
   k27: "תשלום הבא: ",
   k28: "תודה על תמיכתכם",
+  k29: 10,
 };
 const receiptLines = (...a) => __pure_receiptLines(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_receiptLines_RECEIPT_LINES_T);
 // מימושי-שקע לבדיקה — כמוגדר בחוזה:

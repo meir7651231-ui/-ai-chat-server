@@ -91,7 +91,7 @@ export function decodeQuotedPrintable(s, T) {
         else {
             // תו ASCII רגיל — code-point בטווח בית בודד; מעל 0xFF נשמר כמות-שהוא (נדיר).
             const cp = s.charCodeAt(i);
-            bytes.push(cp <= 0xff ? cp : 0x3f /* '?' */);
+            bytes.push(cp <= T.k9 ? cp : T.k10 /* '?' */);
         }
     }
     try {

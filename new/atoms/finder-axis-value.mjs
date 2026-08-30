@@ -8,7 +8,7 @@ export function finderAxisValue(db, f, axis, config, { termOf, tierOf, famLiveEn
     case T2.k2: return f.community || '';
     case T2.k3: return f.maritalStatus || T2.k4;
     case T2.k5: return STATUS_META[f.status].label;
-    case T2.k6: return tierOf(f.cred?.score ?? 700).label;
+    case T2.k6: return tierOf(f.cred?.score ?? T2.k19).label;
     case T2.k7: return f.members.some((m) => !m.isParent) ? T2.k8 : T2.k9;
     case T2.k10: return famLiveEnrollments(db, f).length ? T2.k11 + T(T2.k12, T2.k13) : T2.k14;
     case T2.k15: return f.fullSefach ? T2.k16 : T2.k17;

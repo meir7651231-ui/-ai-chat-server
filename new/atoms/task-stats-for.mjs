@@ -2,7 +2,7 @@
  *  חוזה: task-stats-for.contract.md
  *  חולץ כלשונו מ-maor/src/lib/worktasks.ts:45-64; השכנים taskIdentity ו-taskOverdue
  *  הוזרקו כשקעים (חוק-1 — אפס import פנימי). */
-export function taskStatsFor(tasks, identity, todayIso, taskIdentity, taskOverdue) {
+export function taskStatsFor(tasks, identity, todayIso, taskIdentity, taskOverdue, T) {
   const me = taskIdentity(identity);
   const mine = tasks.filter((t) => taskIdentity(t.assignee) === me);
   const t0 = new Date(todayIso + 'T12:00:00').getTime();
@@ -13,8 +13,8 @@ export function taskStatsFor(tasks, identity, todayIso, taskIdentity, taskOverdu
       if (taskOverdue(t, todayIso)) overdue++;
     } else {
       done++;
-      const d = new Date((t.doneAt ?? '').slice(0, 10) + 'T12:00:00').getTime();
-      const diff = (t0 - d) / 86400000;
+      const d = new Date((t.doneAt ?? '').slice(0, T.k1) + 'T12:00:00').getTime();
+      const diff = (t0 - d) / T.k2;
       if (diff >= 0 && diff < 7) doneWeek++;
     }
   }

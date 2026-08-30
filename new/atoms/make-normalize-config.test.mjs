@@ -6,6 +6,9 @@ const __d_makeNormalizeConfig_MAKE_NORMALIZE_CONFIG_T = {
   k2: "object",
   k3: "string",
   k4: "boolean",
+  k5: 500,
+  k6: 12,
+  k7: 120,
 };
 const makeNormalizeConfig = (...a) => __pure_makeNormalizeConfig(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_makeNormalizeConfig_MAKE_NORMALIZE_CONFIG_T);
 import assert from 'node:assert';

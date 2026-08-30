@@ -3,11 +3,11 @@
  *  מ-lib/hebrew) הוזרק כשקע (חוק-1 — אפס import פנימי). המטמון-המודולרי של המקור
  *  (holidayNamesCache) הושמט — memoization היא הקשר-שימוש (חוק-5) ושייכת לקופסה;
  *  עם שקע מוזרק מטמון גלובלי היה מזהם בין תוכניות-חיווט שונות. */
-export function holidayNames(holidayOf) {
+export function holidayNames(holidayOf, T) {
   const out = [];
   const seen = new Set();
   const start = new Date('2026-01-01T12:00:00');
-  for (let i = 0; i < 400; i++) {
+  for (let i = 0; i < T.k1; i++) {
     const d = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
     const name = holidayOf(d);
     if (name && !seen.has(name)) {

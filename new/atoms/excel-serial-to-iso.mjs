@@ -1,8 +1,8 @@
 /** חוט · excel-serial-to-iso — קודם אוטומטית (אפיון-Golden). חוזה: excel-serial-to-iso.contract.md */
-export function excelSerialToIso(serial) {
+export function excelSerialToIso(serial, T) {
     if (!isFinite(serial) || serial < 1)
         return '';
-    const dt = new Date(Math.round((serial - 25569) * 86400000));
+    const dt = new Date(Math.round((serial - T.k1) * T.k2));
     if (isNaN(dt.getTime()))
         return '';
     const mo = String(dt.getUTCMonth() + 1).padStart(2, '0');

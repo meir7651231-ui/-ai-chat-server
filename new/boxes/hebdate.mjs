@@ -33,7 +33,10 @@ import { ORDER_COMMON, ORDER_LEAP } from '../atoms/heb-months-of-data.mjs';
 const hebMonthsOfAtom = (...a) => __pure_hebMonthsOf(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), ORDER_COMMON, ORDER_LEAP);
 import { hebToIso as hebToIsoAtom } from '../atoms/heb-to-iso.mjs';
 import { isoToHebParts as isoToHebPartsAtom } from '../atoms/iso-to-heb-parts.mjs';
-import { validateHebMonthNames as validateHebMonthNamesAtom } from '../atoms/validate-heb-month-names.mjs';
+import { validateHebMonthNames as __pure_validateHebMonthNames } from '../atoms/validate-heb-month-names.mjs';
+import { VALIDATE_HEB_MONTH_NAMES_T as __d_validate_heb_month_names_T } from '../atoms/validate-heb-month-names-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const validateHebMonthNamesAtom = (...a) => __pure_validateHebMonthNames(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_validate_heb_month_names_T);
 
 // ── חיווט: Date⇒ISO מקומי (hebdate.ts:60-62) ──
 const isoOf = (d) => d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());

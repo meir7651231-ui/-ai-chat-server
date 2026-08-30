@@ -5,7 +5,10 @@
  *  downloadIcs (⚠️ לא-טהור): שער-יציאה + DOM. שקעי-IO מוזרקים, מתועדים בחוזה
  *  (חוק-1/6 — שום ידית-DOM/מצב-מודול נצרב בקופסה). */
 import { icsEscape } from '../atoms/ics-escape.mjs';
-import { foldIcsLine } from '../atoms/fold-ics-line.mjs';
+import { foldIcsLine as __pure_foldIcsLine } from '../atoms/fold-ics-line.mjs';
+import { FOLD_ICS_LINE_T as __d_fold_ics_line_T } from '../atoms/fold-ics-line-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const foldIcsLine = (...a) => __pure_foldIcsLine(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_fold_ics_line_T);
 import { buildIcs as __pure_buildIcs } from '../atoms/build-ics.mjs';
 import { BUILD_ICS_T as __d_buildIcs_BUILD_ICS_T } from '../atoms/build-ics-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

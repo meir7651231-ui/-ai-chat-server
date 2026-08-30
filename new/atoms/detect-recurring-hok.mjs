@@ -27,7 +27,7 @@ export function detectRecurringHok(supporters, todayIso, minMonths = 3, clearing
             hok: {
                 amount: Number(parts[0]),
                 cur,
-                day: Math.min(28, Math.max(1, modeOf(nd.map((h) => Number(h.d.slice(8, 10)) || 1)))),
+                day: Math.min(T.k7, Math.max(1, modeOf(nd.map((h) => Number(h.d.slice(8, T.k8)) || 1)))),
                 method: T.k1,
                 note: kevaCharge
                     ? T.k2 + (nd[0]?.clearer || T.k3) + ' · ' + kevaCharge.kevaId

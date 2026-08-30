@@ -3,4 +3,5 @@ export const SEND_SUPPORT_MESSAGE_T = {
   k1: "supportChats",
   k2: "messages",
   k3: "user",
+  k4: 120,
 };

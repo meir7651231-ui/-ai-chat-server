@@ -30,7 +30,10 @@ import { normSearch as __pure_normSearch } from '../atoms/norm-search.mjs';
 import { NORM_SEARCH_T as __d_normSearch_NORM_SEARCH_T } from '../atoms/norm-search-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const normSearch = (...a) => __pure_normSearch(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_normSearch_NORM_SEARCH_T);
-import { validIsraeliId } from '../atoms/valid-israeli-id.mjs';
+import { validIsraeliId as __pure_validIsraeliId } from '../atoms/valid-israeli-id.mjs';
+import { VALID_ISRAELI_ID_T as __d_valid_israeli_id_T } from '../atoms/valid-israeli-id-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const validIsraeliId = (...a) => __pure_validIsraeliId(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_valid_israeli_id_T);
 import { ageOf } from '../atoms/age-of.mjs';
 import { supporterAggregates } from '../atoms/supporter-aggregates.mjs';
 

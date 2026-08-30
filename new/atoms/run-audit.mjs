@@ -95,7 +95,7 @@ export function runAudit(db, todayIso = '', extra = true, config, deps, T2) {
         add(T2.k38, T(T2.k13, T2.k14) + ' ' + f.name + T2.k39 + m.first + T2.k40, f.id);
       else {
         const a = ageOf(m.birth);
-        if (a != null && (a < 0 || a > 25))
+        if (a != null && (a < 0 || a > T2.k63))
           add(T2.k38, T(T2.k13, T2.k14) + ' ' + f.name + T2.k41 + m.first + ' (' + a + ')', f.id);
       }
       if (m.idNum && !validIsraeliId(m.idNum))

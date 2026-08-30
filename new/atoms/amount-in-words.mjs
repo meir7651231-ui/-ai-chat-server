@@ -19,18 +19,18 @@ export function amountInWords(amount, currency = '₪', ONES, TEENS, TENS, HUNDR
   // 🪺 עוזרים קוננו פנימה (מנוע-הטיהור v4) — שקעי-הדאטה נראים להם דרך הסגירה
   function words0_999(n) {
       const out = [];
-      const h = Math.floor(n / 100);
-      const rem = n % 100;
+      const h = Math.floor(n / T.k22);
+      const rem = n % T.k22;
       if (h)
           out.push(HUNDREDS[h]);
       if (rem) {
-          if (rem < 10)
+          if (rem < T.k23)
               out.push(ONES[rem]);
-          else if (rem < 20)
-              out.push(TEENS[rem - 10]);
+          else if (rem < T.k24)
+              out.push(TEENS[rem - T.k23]);
           else {
-              const t = Math.floor(rem / 10);
-              const u = rem % 10;
+              const t = Math.floor(rem / T.k23);
+              const u = rem % T.k23;
               out.push(TENS[t]);
               if (u)
                   out.push(ONES[u]);
@@ -48,12 +48,12 @@ export function amountInWords(amount, currency = '₪', ONES, TEENS, TENS, HUNDR
       return [joinHeb(words0_999(th)) + T.k4];
   }
   function agorotWords(n) {
-      if (n < 10)
+      if (n < T.k23)
           return ONES_F[n];
-      if (n < 20)
-          return TEENS_F[n - 10];
-      const t = Math.floor(n / 10);
-      const u = n % 10;
+      if (n < T.k24)
+          return TEENS_F[n - T.k23];
+      const t = Math.floor(n / T.k23);
+      const u = n % T.k23;
       return u ? TENS[t] + T.k5 + ONES_F[u] : TENS[t];
   }
   function agorotPhrase(n) {
@@ -72,13 +72,13 @@ export function amountInWords(amount, currency = '₪', ONES, TEENS, TENS, HUNDR
       return w.slice(0, -1).join(' ') + T.k5 + w[w.length - 1];
   }
   function integerInWords(n) {
-      if (!Number.isFinite(n) || n < 0 || n > 999_999_999 || Math.floor(n) !== n)
+      if (!Number.isFinite(n) || n < 0 || n > T.k25 || Math.floor(n) !== n)
           return null;
       if (n === 0)
           return T.k9;
-      const millions = Math.floor(n / 1_000_000);
-      const thousands = Math.floor((n % 1_000_000) / 1000);
-      const rest = n % 1000;
+      const millions = Math.floor(n / T.k26);
+      const thousands = Math.floor((n % T.k26) / T.k27);
+      const rest = n % T.k27;
       const groups = [];
       if (millions) {
           if (millions === 1)
@@ -99,10 +99,10 @@ export function amountInWords(amount, currency = '₪', ONES, TEENS, TENS, HUNDR
         return String(amount);
     const shekelWord = currency === '$' ? { one: T.k13, many: T.k14, agName: T.k15 } : { one: T.k16, many: T.k17, agName: T.k18 };
     let whole = Math.floor(amount);
-    let agorot = Math.round((amount - whole) * 100);
+    let agorot = Math.round((amount - whole) * T.k22);
     // 🐛 נחיל-9×9 (13.8): גלישת-עיגול — שבר ≥.995 עיגל אגורות ל-100 ("6 ומאה אגורות").
     // נשיאה לשקל השלם (5.995 ⇒ "שישה שקלים", לא "חמישה שקלים ומאה אגורות").
-    if (agorot === 100) {
+    if (agorot === T.k22) {
         whole += 1;
         agorot = 0;
     }

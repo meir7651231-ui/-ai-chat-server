@@ -1,4 +1,9 @@
-import { campaignProgress } from './campaign-progress.mjs';
+import { campaignProgress as __pure_campaignProgress } from './campaign-progress.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_campaign_progress_T = {
+  k1: 100,
+};
+const campaignProgress = (...a) => __pure_campaignProgress(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_campaign_progress_T);
 
 // שקע-campaignTotal בסמנטיקת-המקור (tzedaka/lib.ts:68-73)
 const campaignTotal = (boxes, campaignId) => {
