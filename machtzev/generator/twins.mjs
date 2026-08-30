@@ -85,8 +85,10 @@ async function replayCapture(base, fnName, testSrc) {
   const atomsDir = path.join(ROOT, 'new/atoms');
   // גוף-הבדיקה בלי שורות-import; קריאות process.exit מנוטרלות; יבוא-ערך-זר (מלבד האטום) ⇒ פסילה
   const stray = [...testSrc.matchAll(/^import\s+(?!type)([^;]*?)from\s+['"]([^'"]+)['"]/gm)]
-    .filter(m => m[2] !== `./${base}.mjs`);
+    .filter(m => m[2] !== `./${base}.mjs` && !/^node:/.test(m[2]));  // node: builtins בטוחים (assert וכו')
   if (stray.length) return null;                                    // תלוי-מדף-זר — לא-בטוח לשידור
+  // שורות-import של node: נשמרות (assert דרוש לגוף); רק יבוא-האטום מוסר
+  const keepNode = [...testSrc.matchAll(/^import\s+.*from\s+['"]node:[^'"]+['"];?$/gm)].map(m => m[0]);
   const body = testSrc.replace(/^import\s+.*$/gm, '').replace(/process\.exit\s*\([^)]*\)/g, 'void 0');
   const runner = path.join(atomsDir, `__twinreplay_${base}.mjs`);
   // שאר-יצואי-האטום מוזרקים כ-const — רק אלו שהבדיקה מזכירה ואינה מגדירה בעצמה (מניעת-התנגשות)
@@ -96,6 +98,7 @@ async function replayCapture(base, fnName, testSrc) {
       && new RegExp('\\b' + n + '\\b').test(body)
       && !new RegExp('(?:const|let|var|function|class)\\s+' + n + '\\b').test(body)) others.push(n); }
   fs.writeFileSync(runner,
+    keepNode.join('\n') + (keepNode.length ? '\n' : '') +
     `import * as __atom from './${base}.mjs';\n` +
     `const __rec = { args: null };\n` +
     `const ${fnName} = (...a) => { if (!__rec.args) __rec.args = a; return __atom.${fnName}(...a); };\n` +

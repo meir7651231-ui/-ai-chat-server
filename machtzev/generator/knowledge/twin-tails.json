@@ -900,6 +900,11 @@
   ],
   "simple": true
  },
+ "expandQuery": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "explainOne": {
   "tail": [
    {
@@ -2297,6 +2302,11 @@
   ],
   "simple": true
  },
+ "parseJoinFullCode": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "payBal": {
   "tail": [],
   "simple": false,
@@ -2844,6 +2854,11 @@
    }
   ],
   "simple": true
+ },
+ "resolveOrgConfig": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "revertPatch": {
   "tail": [
