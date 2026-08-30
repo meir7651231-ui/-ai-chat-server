@@ -28,6 +28,26 @@ function stage(name, fn, { optional = false } = {}) {
 const run = (script, args = []) => execFileSync('node', [path.join(ROOT, script), ...args], { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
 const last = (s) => s.trim().split('\n').pop();
 
+// ── 0 · רענון-מקור maor + census (חיבור-מאור-למנוע · הכרעה 19: "מנוע-אחד תופס-הכל") ──
+//    fetch origin/main → merge לענף-העבודה (abort-על-קונפליקט, לעולם-לא-force) → run.mjs (census+extract+שערים).
+//    כך `one` תופס את עדכוני-מאור האחרונים לבד — לא ידנית.
+const MAOR = '/home/user/maor-system';
+stage('רענון-מאור + census', () => {
+  if (!fs.existsSync(MAOR)) return 'דולג (אין maor)';
+  execSync('git fetch -q origin main', { cwd: MAOR });
+  const behind = +execSync('git rev-list --count HEAD..origin/main', { cwd: MAOR, encoding: 'utf8' }).trim();
+  let merged = 'מעודכן';
+  if (behind > 0) {
+    try { execSync('git merge origin/main --no-edit', { cwd: MAOR, stdio: 'pipe' }); merged = `מוזגו ${behind} קומיטים`; }
+    catch { try { execSync('git merge --abort', { cwd: MAOR, stdio: 'pipe' }); } catch { } throw new Error('מיזוג-main-של-מאור נכשל (קונפליקט) — דורש-יד; לא בוצע force'); }
+  }
+  execSync('node machtzev/run.mjs', { cwd: MAOR, stdio: 'pipe', timeout: 600000 });   // census + 15 מחלצים + reconcile + שערים
+  // נחיתת-מאור: registry+census שהשתנו (בלבד) — commit+push לענף-העבודה (סימטרי להזרקת-buildsmart)
+  const dirty = execSync('git status --short machtzev/registry machtzev/STATUS.md', { cwd: MAOR, encoding: 'utf8' }).trim();
+  if (dirty) execSync(`cd ${MAOR} && git add machtzev/registry machtzev/STATUS.md && git commit -q -m "עדכון-מקור · census אוטומטי מהמנוע-האחד (${merged})" -m "Co-Authored-By: Claude <noreply@anthropic.com>" && git push -q -u origin claude/mah-kora-0by8kw`);
+  return `${merged} · census רוענן${dirty ? ' + נחת' : ''}`;
+}, { optional: true });
+
 // ── 1 · רענון-מקור-המסכים (בנייה-חכמה main — קו-האמת, הכרעה-9) ──
 stage('רענון-מסכים ממקור-חי', () => {
   if (!fs.existsSync(BS)) throw new Error('אין clone של buildsmart');
