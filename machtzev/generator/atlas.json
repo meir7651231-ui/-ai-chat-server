@@ -2,7 +2,7 @@
  "counts": {
   "widgets": 381,
   "functions": 438,
-  "data": 687
+  "data": 711
  },
  "widgets": [
   {
@@ -17673,6 +17673,21 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_entry_card_glyph5",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_card_title5",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_card_sub5",
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_entry_chip_option",
    "file": "auto/gen_entry_content.dart",
    "shelf": "new/dart-data-bs"
@@ -17750,6 +17765,111 @@
   {
    "name": "gen_entry_app_bar_title",
    "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_card_glyph",
+   "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_card_title",
+   "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_card_sub",
+   "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_card_toast",
+   "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_row_ic",
+   "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_row_title",
+   "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_row_sub",
+   "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_row_toast",
+   "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_switch_fallback",
+   "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_switch_label",
+   "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_other_label",
+   "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_card_stage_label",
+   "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_card_items_label",
+   "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_card_sum_label",
+   "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_card_toast2",
+   "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_button_badge",
+   "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_button_title",
+   "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_button_sub",
+   "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_button_toast",
+   "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_banner_sub",
+   "file": "auto/gen_improv_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_improv_app_bar_title",
+   "file": "auto/gen_improv_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {

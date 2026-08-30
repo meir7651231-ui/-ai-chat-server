@@ -193,7 +193,7 @@ function generate(slug, specText) {
         if (overlap > bestScore) { bestScore = overlap; best = f; }
       }
       if (best) {
-        const args = bindArgs(best, part, pendingHebArg, parentOf.get(part)?.role === 'textfield');
+        const args = bindArgs(best, part, pendingHebArg, ['textfield', 'chip'].includes(parentOf.get(part)?.role));
         if (args) { fnHit = best; call = `${best.name}(${args.join(', ')})${best.ret === 'String' || best.ret === 'String?' ? '' : '.toString()'}${best.ret === 'String?' ? " ?? ''" : ''}`; }
       }
     }
@@ -288,7 +288,7 @@ function generate(slug, specText) {
       const shared = {};
       calls.push(`          ${buildCall({ part: node.part, atom }, shared)},`);
       for (const kc of kidCalls) calls.push(`          if (${shared.b || 'true'}) ${kc},`);
-    } else if (node.part.role === 'textfield') {
+    } else if (node.part.role === 'textfield' || node.part.role === 'chip') {
       const shared = {};
       calls.push(`          ${buildCall({ part: node.part, atom }, shared)},`);
       for (const kc of kidCalls) calls.push(`          ${kc.replaceAll('__FIELD__', shared.s || "''")},`);
@@ -411,52 +411,39 @@ function writeSelfEntry() {
 // 🎲 מצב-אלתור: הוראה-חופשית מהבעלים ("תבחר N אטומים רנדומליים תחבר בין ותוציא יכולת חדשה").
 // המנוע לבדו: מגריל N אטומים ברי-מילוי (זרע-יומי — יכולת חדשה כל יום), מסווג מפעילים/מציגים,
 // ובוחר את החיבורים: שדה⇒חישוב-חי · מתג⇒שער-נראות · השאר מוזנים/מוצגים. הפלט = spec רגיל.
+// 🎲 מצב-אלתור v2 — צינור-חי (ביקורת-בעלים: 'איפה הדאטה ואיפה היכולת'):
+// המנוע מאתר לבדו פונקציה שמכריזה תחום-ערכים (const list בגופה), מחלץ את הדאטה האמיתי,
+// ובונה צינור שכל חוליה צורכת את קודמתה: תחום ⇒ chips ⇒ הבחירה מוזרמת לפונקציה ⇒ תוצאה.
 function writeImprovSpec() {
   const insPath = path.join(HERE, 'instructions/improv.txt');
   if (!fs.existsSync(insPath)) return;
   const ins = fs.readFileSync(insPath, 'utf8').trim();
-  const n = parseInt((ins.match(/\d+/) || ['5'])[0]);
   const SM = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/self-model.json'), 'utf8'));
-  // זרע-יומי דטרמיניסטי: אותו יום ⇒ אותה הגרלה (יציב למשטרה); יום חדש ⇒ יכולת חדשה
   let seed = parseInt(new Date().toISOString().slice(0, 10).replace(/-/g, '')) + ins.length;
   const rnd = () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
-  const FILL_T = /^(String|bool|int|double|Color|IconData|TextEditingController|VoidCallback|void Function\(\)|ValueChanged<(bool|int|String)>|void Function\((bool|int|String)\))/;
-  const pool = atlas.widgets.filter(a => !a.dirty && !a.flexRoot &&
-    [...a.required, ...a.positional].every(rq => FILL_T.test((a.types.get(rq) || '').replace(/\?$/, ''))));
-  // הגרלה עם עדיפות-גיוון תפקידים
-  const picked = [];
-  const usedRoles = new Set();
-  const shuffled = [...pool].sort(() => rnd() - 0.5);
-  for (const a of shuffled) { const r = roleOf(a.cls); if (!usedRoles.has(r) && picked.length < n) { picked.push(a); usedRoles.add(r); } }
-  for (const a of shuffled) { if (picked.length >= n) break; if (!picked.includes(a)) picked.push(a); }
-  // סיווג: מפעילים (שדה/מתג) קודמים; מציגים אחריהם
-  const roleWordOf = new Map();
-  for (const [w, r] of LEXICON) if (!roleWordOf.has(r)) roleWordOf.set(r, w);
-  const drivers = picked.filter(a => ['textfield', 'switch'].includes(roleOf(a.cls)));
-  const rest = picked.filter(a => !drivers.includes(a));
-  let topTerms = [];
-  try { topTerms = JSON.parse(fs.readFileSync(path.join(ROOT, 'screens-seed/terms-catalog.json'), 'utf8')).terms.filter(t => t.he.length > 2 && !/[a-zA-Z]/.test(t.he)).slice(0, 30).map(t => t.he); } catch { }
-  const term = (i) => topTerms[(i * 7 + Math.floor(rnd() * 5)) % topTerms.length] || 'ערך';
-  const lines = ['יכולת מאולתרת - הגרלת היום:'];
-  lines.push(`הירו 🎲 ${SM.phrases.improvHero} | ${ins}`);
-  let li = 0;
-  const restLines = rest.map(a => `אטום ${a.cls} ${term(li++)}`);
-  for (const d of drivers) {
-    const rw = roleOfWord(d);
-    if (roleOf(d.cls) === 'textfield') {
-      lines.push(`אטום ${d.cls} ${SM.phrases.improvType}`);
-      const feedFn = atlas.functions.find(f => ['String', 'String?'].includes(f.ret) && f.he.length >= 2 && f.params.every(pp => /^(String|DateTime)\??$/.test(pp.type)) && f.params.some(pp => /^String/.test(pp.type)));
-      if (feedFn) lines.push(`  חישוב ${feedFn.he.join(' ')}`);
-      if (restLines.length) lines.push('  ' + restLines.shift());
-    } else if (roleOf(d.cls) === 'switch') {
-      lines.push(`אטום ${d.cls} ${SM.phrases.improvGate}`);
-      if (restLines.length) lines.push('  ' + restLines.shift());
-    }
+  // מועמדי-צינור: פונקציה String⇒String עם תיאור-עברי ותחום-ערכים מוצהר בגופה
+  const cands = [];
+  for (const f of atlas.functions) {
+    if (!(f.ret === 'String' && f.params.length === 1 && /^String/.test(f.params[0].type) && f.he.length >= 2)) continue;
+    try {
+      const src = fs.readFileSync(path.join(ROOT, f.shelf, f.file), 'utf8');
+      const dm = src.match(/const \w+ = \[([^\]]+)\]/);
+      if (!dm) continue;
+      const domain = [...dm[1].matchAll(/'([^']+)'/g)].map(m => m[1]);
+      if (domain.length >= 2 && domain.length <= 6) cands.push({ fn: f, domain });
+    } catch { }
   }
-  lines.push(...restLines);
-  lines.push(`באנר ${SM.phrases.improvBanner}`);
+  if (!cands.length) return;
+  const pick = cands[Math.floor(rnd() * cands.length)];
+  const lines = [
+    'יכולת מאולתרת - צינור חי:',
+    `הירו 🎲 ${SM.phrases.improvHero} | ${ins}`,
+    `כותרת ${SM.phrases.pipeTitle}`,
+    `אטום ChipWrap ${pick.fn.he.join(' ')}: ${pick.domain.join(' / ')}`,
+    `  חישוב ${pick.fn.he.join(' ')}`,
+    `באנר ${SM.phrases.pipeBanner}`,
+  ];
   fs.writeFileSync(path.join(SPECS, 'improv.txt'), lines.join('\n') + '\n');
-  function roleOfWord(a) { return roleWordOf.get(roleOf(a.cls)) || ''; }
 }
 
 // ── CLI ──
