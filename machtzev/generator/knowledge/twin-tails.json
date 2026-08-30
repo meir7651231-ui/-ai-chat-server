@@ -42,6 +42,11 @@
   ],
   "simple": true
  },
+ "allowedDesignationsFor": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "annualAllLines": {
   "tail": [
    {
@@ -72,6 +77,11 @@
   ],
   "simple": true
  },
+ "applyAyinNames": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "applyAyinSheet": {
   "tail": [
    {
@@ -81,6 +91,16 @@
    }
   ],
   "simple": true
+ },
+ "applyConfig": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "applyEntityPartial": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "applyMetaPartial": {
   "tail": [
@@ -103,6 +123,11 @@
    }
   ],
   "simple": true
+ },
+ "applyOutcome": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "applyVerticalPack": {
   "tail": [
@@ -127,6 +152,16 @@
    ]
   ],
   "simple": false
+ },
+ "attachChargeTo": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "attachChargesBulk": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "auditReportLines": {
   "tail": [
@@ -170,6 +205,11 @@
   ],
   "simple": true
  },
+ "balanceOf": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "beneficiaryLabel": {
   "tail": [
    {
@@ -181,6 +221,11 @@
    }
   ],
   "simple": true
+ },
+ "boqTotal": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "buildCourseDailyRows": {
   "tail": [
@@ -261,6 +306,11 @@
   ],
   "simple": true
  },
+ "buildTzGrid": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "callStats": {
   "tail": [
    {
@@ -304,6 +354,11 @@
    "c1"
   ],
   "simple": true
+ },
+ "canGrantedAction": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "changePassword": {
   "tail": [
@@ -485,6 +540,16 @@
   ],
   "simple": true
  },
+ "coordinatorTotal": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "couponExpiry": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "courseDateError": {
   "tail": [
    {
@@ -504,6 +569,11 @@
   ],
   "simple": true
  },
+ "coursesOfTeacher": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "cycleCarry": {
   "tail": [
    29,
@@ -521,6 +591,11 @@
    7
   ],
   "simple": true
+ },
+ "dateInRange": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "dayProgress": {
   "tail": [
@@ -562,6 +637,11 @@
    }
   ],
   "simple": true
+ },
+ "decryptDb": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "defaultCourseDates": {
   "tail": [
@@ -625,6 +705,11 @@
   ],
   "simple": true
  },
+ "diffDb": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "distributionListLines": {
   "tail": [
    {
@@ -668,6 +753,16 @@
   ],
   "simple": true
  },
+ "donationPartitionDiff": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "donationsPath": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "doneTodayFor": {
   "tail": [
    {
@@ -676,6 +771,11 @@
   ],
   "simple": true
  },
+ "dupFieldValue": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "duplicateCourse": {
   "tail": [
    {
@@ -683,6 +783,11 @@
    }
   ],
   "simple": true
+ },
+ "effectiveConfigFor": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "effectivePrice": {
   "tail": [
@@ -710,6 +815,11 @@
    }
   ],
   "simple": true
+ },
+ "encryptExistingCloud": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "enrollCount": {
   "tail": [
@@ -757,6 +867,11 @@
    }
   ],
   "simple": true
+ },
+ "enrollmentQuote": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "envPath": {
   "tail": [
@@ -838,6 +953,21 @@
   ],
   "simple": true
  },
+ "featureOn": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "fillCardFromCharge": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "filterRedemptions": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "findAllOpenPlans": {
   "tail": [
    {
@@ -890,6 +1020,21 @@
   ],
   "simple": true
  },
+ "finderMatches": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "fitDimensions": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "fixPhone": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "fmtDate": {
   "tail": [
    {
@@ -939,6 +1084,11 @@
    }
   ],
   "simple": true
+ },
+ "fullDbDiff": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "gemYear": {
   "tail": [
@@ -1017,6 +1167,16 @@
   ],
   "simple": true
  },
+ "givenValue": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "gradeFits": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "gradeIndex": {
   "tail": [
    [
@@ -1037,6 +1197,11 @@
   ],
   "simple": true
  },
+ "grandTotal": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "groupLabelOf": {
   "tail": [
    {
@@ -1052,6 +1217,11 @@
    }
   ],
   "simple": true
+ },
+ "guardExport": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "hebAnnualEq": {
   "tail": [
@@ -1128,6 +1298,11 @@
   ],
   "simple": true
  },
+ "hebToIso": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "hebYearNow": {
   "tail": [
    null
@@ -1166,6 +1341,11 @@
    }
   ],
   "simple": true
+ },
+ "holidayAllowed": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "holidayNames": {
   "tail": [
@@ -1210,6 +1390,16 @@
   ],
   "simple": true
  },
+ "importableContacts": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "inRange": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "industryLabel": {
   "tail": [
    [
@@ -1238,6 +1428,11 @@
    }
   ],
   "simple": true
+ },
+ "integrationOn": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "integrationSetting": {
   "tail": [
@@ -1337,6 +1532,16 @@
   ],
   "simple": true
  },
+ "isAdminUser": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "isAdmin": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "isDataImage": {
   "tail": [
    {
@@ -1376,6 +1581,26 @@
   ],
   "simple": true
  },
+ "isJunkContact": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "isMember": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "isOrgManager": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "isSendableSupportText": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "isSuperAdmin": {
   "tail": [
    [
@@ -1383,6 +1608,16 @@
    ]
   ],
   "simple": true
+ },
+ "isoDaysAgo": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "isoToHebParts": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "itemLabel": {
   "tail": [
@@ -1434,6 +1669,11 @@
   ],
   "simple": true
  },
+ "levenshtein": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "linCycles": {
   "tail": [
    235,
@@ -1441,6 +1681,11 @@
    19
   ],
   "simple": true
+ },
+ "liveSuggestions": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "lockKey": {
   "tail": [
@@ -1532,6 +1777,26 @@
   ],
   "simple": true
  },
+ "mergeFamilyImport": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "mergeHist": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "mergeSupporterInto": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "mergeSupporterRow": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "mergeSupportersByFields": {
   "tail": [
    {
@@ -1547,6 +1812,11 @@
    }
   ],
   "simple": true
+ },
+ "mergeSupportersGroup": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "metaPath": {
   "tail": [
@@ -1727,6 +1997,21 @@
   ],
   "simple": false
  },
+ "nameIndex": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "nameMatches": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "nameSortKey": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "needLabel": {
   "tail": [
    [
@@ -1779,6 +2064,16 @@
   ],
   "simple": true
  },
+ "newSupporterFromRow": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "nextAcademicYearLabel": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "nextClosure": {
   "tail": [
    {
@@ -1788,6 +2083,26 @@
    }
   ],
   "simple": true
+ },
+ "nextStage": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "nextYearCourseDraft": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "nextYearDates": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "normName": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "normalizePrices": {
   "tail": [
@@ -1816,6 +2131,21 @@
    }
   ],
   "simple": true
+ },
+ "numMatch": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "offerNewFamily": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "openCloudKey": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "orbitTheme": {
   "tail": [
@@ -1854,6 +2184,11 @@
   ],
   "simple": true
  },
+ "orgJoinFullCode": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "orgJoinLink": {
   "tail": [
    {
@@ -1887,6 +2222,16 @@
    }
   ],
   "simple": true
+ },
+ "overrideOf": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "paidInRange": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "parseAnyDate": {
   "tail": [
@@ -1951,6 +2296,16 @@
    }
   ],
   "simple": true
+ },
+ "payBal": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "payCredit": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "payLink": {
   "tail": [
@@ -2097,6 +2452,11 @@
    }
   ],
   "simple": true
+ },
+ "planSupporterImport": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "planWord": {
   "tail": [
@@ -2424,6 +2784,11 @@
   ],
   "simple": true
  },
+ "removeMember": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "renderTemplate": {
   "tail": [
    "wa.delivery",
@@ -2447,6 +2812,11 @@
    }
   ],
   "simple": true
+ },
+ "repairCardsFromRows": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "resetPassword": {
   "tail": [
@@ -2553,6 +2923,11 @@
   ],
   "simple": true
  },
+ "sameLoc": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "sanitizeIncoming": {
   "tail": [
    {
@@ -2651,6 +3026,11 @@
   ],
   "simple": true
  },
+ "setEmployeeOverride": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "setExportBlocked": {
   "tail": [
    null
@@ -2724,6 +3104,11 @@
    }
   ],
   "simple": true
+ },
+ "siteUi": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "siteVocab": {
   "tail": [
@@ -2952,6 +3337,11 @@
   ],
   "simple": true
  },
+ "subsidyTotal": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "suggestions": {
   "tail": [
    {
@@ -3010,11 +3400,26 @@
   ],
   "simple": false
  },
+ "supHasRegion": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "supKeyMapOf": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "supKeyOf": {
   "tail": [
    "_shared_"
   ],
   "simple": true
+ },
+ "supLastInPeriod": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "supTier": {
   "tail": [
@@ -3077,6 +3482,11 @@
   ],
   "simple": true
  },
+ "supporterVisibleForDesignations": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "taskIdentity": {
   "tail": [
    {
@@ -3128,6 +3538,11 @@
    }
   ],
   "simple": true
+ },
+ "templateLinesToNames": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "termLabel": {
   "tail": [
@@ -3190,6 +3605,11 @@
   ],
   "simple": true
  },
+ "toCsv": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "toTenantId": {
   "tail": [
    {
@@ -3201,6 +3621,11 @@
    }
   ],
   "simple": true
+ },
+ "totalLabel": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "tourSteps": {
   "tail": [
@@ -3258,6 +3683,26 @@
   ],
   "simple": true
  },
+ "visibleEventsForDesignations": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "visibleSupportersForDesignations": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "volunteerLoadHint": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "volunteerRouteStops": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "waBirthdayText": {
   "tail": [
    {
@@ -3284,6 +3729,11 @@
   ],
   "simple": true
  },
+ "waHref": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "waPaymentText": {
   "tail": [
    {
@@ -3299,6 +3749,16 @@
    }
   ],
   "simple": true
+ },
+ "weeklyRoomSessions": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "weightedQuote": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "wheelIndexUnderPointer": {
   "tail": [

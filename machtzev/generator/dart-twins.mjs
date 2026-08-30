@@ -10,7 +10,13 @@ const DDIR = path.join(ROOT, 'new/dart');
 // מדפי-הילידים הנקצרים + מדף-הדאטה התואם לכל אחד (מנוע-מפלצת: גם dart-maor, לא רק dart)
 const SHELVES = new Set(['new/dart', 'new/dart-maor']);
 const dataDirOf = (shelf) => shelf === 'new/dart-maor' ? 'new/dart-data-maor' : 'new/dart-data';
-const DART = process.env.DART_BIN || '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/dart-sdk/bin/dart';
+const DART = (() => {                                                // פתרון-Dart עמיד (L34): env → sdk-בית → flutter → PATH
+  const cands = [process.env.DART_BIN, process.env.HOME && path.join(process.env.HOME, 'dart-sdk/bin/dart'),
+    '/root/dart-sdk/bin/dart', '/home/user/flutter/bin/dart',
+    '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/dart-sdk/bin/dart'].filter(Boolean);
+  for (const c of cands) { try { if (fs.existsSync(c)) return c; } catch { } }
+  return 'dart';                                                     // נפילה ל-PATH (execFileSync יפתור)
+})();
 const FEEDABLE0 = /^(String|dynamic|Object|num|int|double)\??$/;
 
 const balance = (s, start) => {
