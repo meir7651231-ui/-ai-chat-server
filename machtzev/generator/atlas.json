@@ -2,7 +2,7 @@
  "counts": {
   "widgets": 381,
   "functions": 445,
-  "data": 1271
+  "data": 1382
  },
  "widgets": [
   {
@@ -7418,12 +7418,20 @@
   },
   {
    "name": "cloudDb",
-   "sig": "Object cloudDb(Object? fsDb)",
+   "sig": "Object cloudDb(Object? fsDb, Map<String, String> T)",
    "ret": "Object",
    "params": [
     {
      "type": "Object?",
      "name": "fsDb"
+    },
+    {
+     "type": "Map<String",
+     "name": ""
+    },
+    {
+     "type": "String>",
+     "name": "T"
     }
    ],
    "he": [
@@ -8797,7 +8805,7 @@
   },
   {
    "name": "hokEffectivelyActive",
-   "sig": "bool hokEffectivelyActive(Map<String, Object?> sp, String todayIso)",
+   "sig": "bool hokEffectivelyActive(Map<String, Object?> sp, String todayIso, Map<String, dynamic> T)",
    "ret": "bool",
    "params": [
     {
@@ -8811,6 +8819,14 @@
     {
      "type": "String",
      "name": "todayIso"
+    },
+    {
+     "type": "Map<String",
+     "name": ""
+    },
+    {
+     "type": "dynamic>",
+     "name": "T"
     }
    ],
    "he": [
@@ -8824,7 +8840,7 @@
   },
   {
    "name": "hokRecordedThisMonth",
-   "sig": "bool hokRecordedThisMonth(Map sp, String todayIso, String hokCat)",
+   "sig": "bool hokRecordedThisMonth(Map sp, String todayIso, String hokCat, Map<String, String> T)",
    "ret": "bool",
    "params": [
     {
@@ -8838,6 +8854,14 @@
     {
      "type": "String",
      "name": "hokCat"
+    },
+    {
+     "type": "Map<String",
+     "name": ""
+    },
+    {
+     "type": "String>",
+     "name": "T"
     }
    ],
    "he": [
@@ -10059,12 +10083,20 @@
   },
   {
    "name": "modelMeta",
-   "sig": "Map<String, dynamic> modelMeta(dynamic c)",
+   "sig": "Map<String, dynamic> modelMeta(dynamic c, Map<String, String> T)",
    "ret": "Map<String,",
    "params": [
     {
      "type": "dynamic",
      "name": "c"
+    },
+    {
+     "type": "Map<String",
+     "name": ""
+    },
+    {
+     "type": "String>",
+     "name": "T"
     }
    ],
    "he": [
@@ -10112,12 +10144,16 @@
   },
   {
    "name": "monthHeOf",
-   "sig": "String monthHeOf(dynamic en)",
+   "sig": "String monthHeOf(dynamic en, List<dynamic> MONTHS)",
    "ret": "String",
    "params": [
     {
      "type": "dynamic",
      "name": "en"
+    },
+    {
+     "type": "List<dynamic>",
+     "name": "MONTHS"
     }
    ],
    "he": [
@@ -10179,12 +10215,20 @@
   },
   {
    "name": "netCheckScript",
-   "sig": "String netCheckScript(List<dynamic> results)",
+   "sig": "String netCheckScript(List<dynamic> results, Map<String, String> T)",
    "ret": "String",
    "params": [
     {
      "type": "List<dynamic>",
      "name": "results"
+    },
+    {
+     "type": "Map<String",
+     "name": ""
+    },
+    {
+     "type": "String>",
+     "name": "T"
     }
    ],
    "he": [
@@ -11221,12 +11265,20 @@
   },
   {
    "name": "roomInfoLabel",
-   "sig": "String roomInfoLabel(dynamic room)",
+   "sig": "String roomInfoLabel(dynamic room, Map<String, String> T)",
    "ret": "String",
    "params": [
     {
      "type": "dynamic",
      "name": "room"
+    },
+    {
+     "type": "Map<String",
+     "name": ""
+    },
+    {
+     "type": "String>",
+     "name": "T"
     }
    ],
    "he": [
@@ -12418,7 +12470,7 @@
   },
   {
    "name": "suggestions",
-   "sig": "List<dynamic> suggestions( dynamic db, dynamic todayIso, dynamic config, Map<String, dynamic> sockets, )",
+   "sig": "List<dynamic> suggestions(dynamic db, dynamic todayIso, dynamic config, Map<String, dynamic> sockets, Map<String, dynamic> T2)",
    "ret": "List<dynamic>",
    "params": [
     {
@@ -12440,6 +12492,14 @@
     {
      "type": "dynamic>",
      "name": "sockets"
+    },
+    {
+     "type": "Map<String",
+     "name": ""
+    },
+    {
+     "type": "dynamic>",
+     "name": "T2"
     }
    ],
    "he": [
@@ -12736,12 +12796,20 @@
   },
   {
    "name": "supTier",
-   "sig": "Map<String, String> supTier(dynamic sc)",
+   "sig": "Map<String, String> supTier(dynamic sc, Map<String, dynamic> T)",
    "ret": "Map<String,",
    "params": [
     {
      "type": "dynamic",
      "name": "sc"
+    },
+    {
+     "type": "Map<String",
+     "name": ""
+    },
+    {
+     "type": "dynamic>",
+     "name": "T"
     }
    ],
    "he": [
@@ -12808,7 +12876,7 @@
   },
   {
    "name": "supportDayLabel",
-   "sig": "dynamic supportDayLabel(dynamic at, dynamic todayIso)",
+   "sig": "dynamic supportDayLabel(dynamic at, dynamic todayIso, Map<String, dynamic> T)",
    "ret": "dynamic",
    "params": [
     {
@@ -12818,6 +12886,14 @@
     {
      "type": "dynamic",
      "name": "todayIso"
+    },
+    {
+     "type": "Map<String",
+     "name": ""
+    },
+    {
+     "type": "dynamic>",
+     "name": "T"
     }
    ],
    "he": [
@@ -12934,12 +13010,20 @@
   },
   {
    "name": "taskIdentity",
-   "sig": "String taskIdentity(dynamic email)",
+   "sig": "String taskIdentity(dynamic email, Map<String, String> T)",
    "ret": "String",
    "params": [
     {
      "type": "dynamic",
      "name": "email"
+    },
+    {
+     "type": "Map<String",
+     "name": ""
+    },
+    {
+     "type": "String>",
+     "name": "T"
     }
    ],
    "he": [
@@ -13069,7 +13153,7 @@
   },
   {
    "name": "telephonyToTenant",
-   "sig": "Map<String, dynamic> telephonyToTenant( dynamic tc, dynamic orgName, dynamic tenantId)",
+   "sig": "Map<String, dynamic> telephonyToTenant(dynamic tc, dynamic orgName, dynamic tenantId, Map<String, dynamic> T)",
    "ret": "Map<String,",
    "params": [
     {
@@ -13083,6 +13167,14 @@
     {
      "type": "dynamic",
      "name": "tenantId"
+    },
+    {
+     "type": "Map<String",
+     "name": ""
+    },
+    {
+     "type": "dynamic>",
+     "name": "T"
     }
    ],
    "he": [
@@ -13142,7 +13234,7 @@
   },
   {
    "name": "termLabel",
-   "sig": "dynamic termLabel(dynamic term, dynamic months, dynamic terms)",
+   "sig": "dynamic termLabel(dynamic term, dynamic months, dynamic terms, Map<String, String> T)",
    "ret": "dynamic",
    "params": [
     {
@@ -13156,6 +13248,14 @@
     {
      "type": "dynamic",
      "name": "terms"
+    },
+    {
+     "type": "Map<String",
+     "name": ""
+    },
+    {
+     "type": "String>",
+     "name": "T"
     }
    ],
    "he": [
@@ -13204,12 +13304,20 @@
   },
   {
    "name": "thanksPrompt",
-   "sig": "String thanksPrompt(dynamic inp)",
+   "sig": "String thanksPrompt(dynamic inp, Map<String, String> T)",
    "ret": "String",
    "params": [
     {
      "type": "dynamic",
      "name": "inp"
+    },
+    {
+     "type": "Map<String",
+     "name": ""
+    },
+    {
+     "type": "String>",
+     "name": "T"
     }
    ],
    "he": [
@@ -13338,7 +13446,7 @@
   },
   {
    "name": "tourSteps",
-   "sig": "List<dynamic> tourSteps( List<dynamic> steps, dynamic isModuleOn, dynamic termOf, [dynamic config])",
+   "sig": "List<dynamic> tourSteps( List<dynamic> steps, dynamic isModuleOn, dynamic termOf, Map<String, String> T2, [dynamic config])",
    "ret": "List<dynamic>",
    "params": [
     {
@@ -13352,6 +13460,14 @@
     {
      "type": "dynamic",
      "name": "termOf"
+    },
+    {
+     "type": "Map<String",
+     "name": ""
+    },
+    {
+     "type": "String>",
+     "name": "T2"
     },
     {
      "type": "dynamic",
@@ -13469,7 +13585,7 @@
   },
   {
    "name": "waDeliveryText",
-   "sig": "dynamic waDeliveryText(dynamic orgName, dynamic famName, dynamic cfg, dynamic renderTemplate, dynamic orgOf)",
+   "sig": "dynamic waDeliveryText(dynamic orgName, dynamic famName, dynamic cfg, dynamic renderTemplate, dynamic orgOf, Map<String, String> T)",
    "ret": "dynamic",
    "params": [
     {
@@ -13491,6 +13607,14 @@
     {
      "type": "dynamic",
      "name": "orgOf"
+    },
+    {
+     "type": "Map<String",
+     "name": ""
+    },
+    {
+     "type": "String>",
+     "name": "T"
     }
    ],
    "he": [
@@ -21610,6 +21734,856 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_capclockcalendar_card_glyph",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capclockcalendar_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capclockcalendar_card_title",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capclockcalendar_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capclockcalendar_card_sub",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capclockcalendar_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capclockcalendar_card_toast",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capclockcalendar_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capclockcalendar_header_text",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capclockcalendar_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capclockcalendar_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capclockcalendar_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capclockcalendar_stat_label2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capclockcalendar_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capclockcalendar_stat_label3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capclockcalendar_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capclockcalendar_chip_option",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capclockcalendar_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capclockcalendar_chip_option2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capclockcalendar_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capclockcalendar_header_text2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capclockcalendar_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capclockcalendar_stat_label4",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capclockcalendar_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capclockcalendar_stat_label5",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capclockcalendar_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capclockcalendar_stat_label6",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capclockcalendar_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capclockcalendar_textfield_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capclockcalendar_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capclockcalendar_textfield_hint",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capclockcalendar_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capclockcalendar_banner_sub",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capclockcalendar_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capclockcalendar_app_bar_title",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capclockcalendar_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capmailphone_card_glyph",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capmailphone_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capmailphone_card_title",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capmailphone_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capmailphone_card_sub",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capmailphone_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capmailphone_card_toast",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capmailphone_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capmailphone_header_text",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capmailphone_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capmailphone_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capmailphone_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capmailphone_stat_label2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capmailphone_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capmailphone_chip_option",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capmailphone_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capmailphone_chip_option2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capmailphone_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capmailphone_header_text2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capmailphone_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capmailphone_stat_label3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capmailphone_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capmailphone_stat_label4",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capmailphone_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capmailphone_textfield_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capmailphone_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capmailphone_textfield_hint",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capmailphone_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capmailphone_banner_sub",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capmailphone_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_capmailphone_app_bar_title",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_capmailphone_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_card_glyph",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_card_title",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_card_sub",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_card_toast",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_header_text",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_stat_label2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_chip_option",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_chip_option2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_header_text2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_stat_label3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_stat_label4",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_textfield_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_textfield_hint",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_banner_sub",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_captimegematria_app_bar_title",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_captimegematria_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_entry_card_glyph",
    "type": "String",
    "he": [
@@ -22648,6 +23622,57 @@
   },
   {
    "name": "gen_entry_card_sub13",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_card_glyph14",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_card_title14",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_entry_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_entry_card_sub14",
    "type": "String",
    "he": [
     "דאטה",
@@ -24109,6 +25134,23 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_quest2_stat_label3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_quest2_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_quest2_radio_option",
    "type": "String",
    "he": [
@@ -24127,6 +25169,57 @@
   },
   {
    "name": "gen_quest2_radio_option2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_quest2_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest2_radio_option3",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_quest2_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest2_stat_label4",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_quest2_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest2_switch_label",
    "type": "String",
    "he": [
     "דאטה",
@@ -24225,6 +25318,193 @@
     "ידנית"
    ],
    "file": "auto/gen_quest2_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest3_card_glyph",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_quest3_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest3_card_title",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_quest3_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest3_card_sub",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_quest3_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest3_card_toast",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_quest3_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest3_stat_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_quest3_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest3_switch_label",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_quest3_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest3_card_glyph2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_quest3_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest3_card_title2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_quest3_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest3_card_sub2",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_quest3_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest3_banner_sub",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_quest3_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_quest3_app_bar_title",
+   "type": "String",
+   "he": [
+    "דאטה",
+    "תוכן",
+    "מחולל",
+    "תוויות",
+    "מן",
+    "בקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_quest3_content.dart",
    "shelf": "new/dart-data-bs"
   },
   {
@@ -31424,6 +32704,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "annualReportLines_T",
+   "type": "Map<String, dynamic>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "annual-report-lines-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "ANNUAL_REPORT_LINES_T",
    "type": "Map<String, Object>",
    "he": [
@@ -31911,6 +33209,53 @@
    ]
   },
   {
+   "name": "blockReason_FULL_HOLIDAYS",
+   "type": "List<String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "block-reason-sockets.dart",
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "ראש השנה",
+    "ראש השנה ב׳",
+    "יום כיפור",
+    "סוכות",
+    "שמחת תורה",
+    "פסח",
+    "שביעי של פסח",
+    "שבועות",
+    "תשעה באב"
+   ]
+  },
+  {
+   "name": "blockReason_T",
+   "type": "Map<String, dynamic>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "block-reason-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "BLOCK_REASON_T",
    "type": "Map<String, Object>",
    "he": [
@@ -31988,6 +33333,51 @@
     "שישי",
     "שבת"
    ]
+  },
+  {
+   "name": "buildCourseDailyRows_DAY_NAMES",
+   "type": "List<String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "build-course-daily-rows-sockets.dart",
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "ראשון",
+    "שני",
+    "שלישי",
+    "רביעי",
+    "חמישי",
+    "שישי",
+    "שבת"
+   ]
+  },
+  {
+   "name": "buildCourseDailyRows_T2",
+   "type": "Map<String, dynamic>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "build-course-daily-rows-sockets.dart",
+   "shelf": "new/dart-data-maor"
   },
   {
    "name": "BUILD_COURSE_DAILY_ROWS_T",
@@ -32195,6 +33585,24 @@
     "על"
    ],
    "file": "caller-id-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "callerKindLabel_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "caller-kind-label-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -32469,6 +33877,24 @@
     "אפיון"
    ],
    "file": "cloud-cfg-cache-key-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "cloudDb_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "cloud-db-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -32958,6 +34384,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "coordinatorPrintLines_T2",
+   "type": "Map<String, dynamic>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "coordinator-print-lines-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "COORDINATOR_PRINT_LINES_T",
    "type": "Map<String, Object>",
    "he": [
@@ -33000,6 +34444,24 @@
     "ערך"
    ],
    "file": "coral-palette-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "courseDateError_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "course-date-error-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -33521,6 +34983,24 @@
     "הו"
    ],
    "file": "detect-recurring-hok-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "distributionListLines_T",
+   "type": "Map<String, dynamic>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "distribution-list-lines-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -34190,6 +35670,51 @@
    ]
   },
   {
+   "name": "explainCall_DOW_HE",
+   "type": "List<String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "explain-call-sockets.dart",
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "ראשון",
+    "שני",
+    "שלישי",
+    "רביעי",
+    "חמישי",
+    "שישי",
+    "שבת"
+   ]
+  },
+  {
+   "name": "explainCall_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "explain-call-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "EXPLAIN_CALL_T",
    "type": "Map<String, String>",
    "he": [
@@ -34252,6 +35777,24 @@
     "וורטיקל"
    ],
    "file": "explain-one-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "famHistoryOf_T",
+   "type": "Map<String, dynamic>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "fam-history-of-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -34357,6 +35900,24 @@
     "אפיון"
    ],
    "file": "favicon-data-uri-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "featLabel_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "feat-label-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -34716,6 +36277,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "finderAxes_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "finder-axes-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "FINDER_AXES_T",
    "type": "Map<String, String>",
    "he": [
@@ -34751,6 +36330,24 @@
     "וורטיקל"
    ],
    "file": "finder-axes-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "finderAxisValue_T2",
+   "type": "Map<String, dynamic>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "finder-axis-value-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -35832,6 +37429,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "hokEffectivelyActive_T",
+   "type": "Map<String, dynamic>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "hok-effectively-active-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "HOK_EFFECTIVELY_ACTIVE_T",
    "type": "Map<String, Object>",
    "he": [
@@ -35886,6 +37501,24 @@
     "וורטיקל"
    ],
    "file": "hok-method-label-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hokRecordedThisMonth_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "hok-recorded-this-month-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -36017,6 +37650,24 @@
     "קובץ"
    ],
    "file": "image-pick-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "inactiveRoomCourses_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "inactive-room-courses-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -36297,6 +37948,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "itemLabel_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "item-label-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "ITEM_LABEL_T",
    "type": "Map<String, String>",
    "he": [
@@ -36344,6 +38013,24 @@
     "סטודיו"
    ],
    "file": "kit-progress-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "lessonTierOptions_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "lesson-tier-options-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -36997,6 +38684,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "modelMeta_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "model-meta-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "MODEL_META_T",
    "type": "Map<String, String>",
    "he": [
@@ -37055,6 +38760,24 @@
     "במנוע"
    ],
    "file": "month-en-of.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "monthHeOf_MONTHS",
+   "type": "List<dynamic>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "month-he-of-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -37161,6 +38884,24 @@
     "וורטיקל"
    ],
    "file": "needs-care-tzedaka-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "netCheckScript_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "net-check-script-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -37372,6 +39113,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "orgCalEntries_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "org-cal-entries-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "ORG_CAL_ENTRIES_T",
    "type": "Map<String, String>",
    "he": [
@@ -37452,6 +39211,24 @@
     "לקוחות"
    ],
    "file": "org-slug-from-url-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "overdueContactTaskDrafts_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "overdue-contact-task-drafts-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -37747,6 +39524,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "planAddName_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "plan-add-name-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "PLAN_ADD_NAME_T",
    "type": "Map<String, String>",
    "he": [
@@ -37767,6 +39562,24 @@
     "אולי"
    ],
    "file": "plan-add-name-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "planAyinAdvance_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "plan-ayin-advance-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -37829,6 +39642,24 @@
     "במנוע"
    ],
    "file": "plan-demo-cleanup.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "planLabelOf_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "plan-label-of-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -38473,6 +40304,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "rangeLabel_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "range-label-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "RANGE_LABEL_T",
    "type": "Map<String, String>",
    "he": [
@@ -39024,6 +40873,24 @@
     "מייל"
    ],
    "file": "role-of-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "roomInfoLabel_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "room-info-label-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -40012,6 +41879,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "suggestions_T2",
+   "type": "Map<String, dynamic>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "suggestions-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "SUGGESTIONS_T",
    "type": "Map<String, Object>",
    "he": [
@@ -40056,6 +41941,24 @@
     "משותף"
    ],
    "file": "sup-allowed-keys-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "supDonEvents_T2",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "sup-don-events-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -40153,6 +42056,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "supTier_T",
+   "type": "Map<String, dynamic>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "sup-tier-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "SUP_TIER_T",
    "type": "Map<String, Object>",
    "he": [
@@ -40218,6 +42139,24 @@
     "צוות"
    ],
    "file": "support-chat-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "supportDayLabel_T",
+   "type": "Map<String, dynamic>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "support-day-label-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -40403,6 +42342,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "telephonyToTenant_T",
+   "type": "Map<String, dynamic>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "telephony-to-tenant-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "TELEPHONY_TO_TENANT_T",
    "type": "Map<String, Object>",
    "he": [
@@ -40421,6 +42378,24 @@
     "למנוע"
    ],
    "file": "telephony-to-tenant-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "termLabel_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "term-label-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -40446,6 +42421,24 @@
     "חודשים"
    ],
    "file": "term-label-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "thanksPrompt_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "thanks-prompt-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -40575,6 +42568,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "tourSteps_T2",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "tour-steps-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "TOUR_STEPS_T",
    "type": "Map<String, String>",
    "he": [
@@ -40618,6 +42629,24 @@
     "לוועד"
    ],
    "file": "trust-report-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "unitLabel_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "unit-label-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -40821,6 +42850,24 @@
     "לוואטסאפ"
    ],
    "file": "wa-birthday-text-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "waDeliveryText_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "wa-delivery-text-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -41082,6 +43129,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "withNedarimHok_T",
+   "type": "Map<String, dynamic>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "with-nedarim-hok-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "WITH_NEDARIM_HOK_T",
    "type": "Map<String, Object>",
    "he": [
@@ -41104,6 +43169,24 @@
     "לא"
    ],
    "file": "with-nedarim-hok-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "wizardStepError_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "wizard-step-error-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {

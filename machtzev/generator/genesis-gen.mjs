@@ -92,7 +92,7 @@ function parsePart(txt) {
 }
 
 // ── בחירה: האטום-הוויזואלי המנוקד-הכי-גבוה שכל ה-required שלו ניתנים-למילוי ──
-const FILLABLE = /^(String|bool|int|double|Color|IconData|TextEditingController|VoidCallback|void Function\(\)|ValueChanged<(bool|int|String)>|void Function\((bool|int|String)\)|List<String>)/;
+const FILLABLE = /^(String|bool|int|double|Color|IconData|TextEditingController|VoidCallback|void Function\(\)|ValueChanged<(bool|int|String|TimeOfDay)>|void Function\((bool|int|String|TimeOfDay)( \w+)?\)|List<String>|EdgeInsets(Geometry)?|FontWeight|TimeOfDay|Key|Object|Future<void> Function\(\)|List<[A-Z]\w*>|List<\([^)]*\)>|\(\{[^}]*\}\))/;
 const INTERACTIVE = new Set(['textfield', 'number', 'switch', 'radio', 'chip', 'button', 'slider']);
 function pickAtom(part) {
   if (part.pin) return atlas.widgets.find(a => a.cls === part.pin) || null;
@@ -109,7 +109,7 @@ function pickAtom(part) {
     for (const rq of [...a.required, ...a.positional]) {
       const t = (a.types.get(rq) || '').replace(/\?$/, '');
       if (/^Widget\b/.test(t) || /^List<Widget>/.test(t)) { widgetFills++; continue; }
-      if (/^List<\(\{/.test(t)) { if (!part.options?.length) { fillable = false; break; } continue; }
+      if (/^List<\(/.test(t)) { if (!part.options?.length) { fillable = false; break; } continue; }
       if (!FILLABLE.test(t)) { fillable = false; break; }
     }
     if (!fillable) continue;
@@ -293,9 +293,9 @@ function generate(slug, specText) {
     if (t === 'TextEditingController') { const c = '_c' + (++sIdx); stateDecls.push(`final TextEditingController ${c} = TextEditingController();`); return { expr: c }; }
     if (part.navExpr && (t === 'VoidCallback' || t === 'void Function()')) return { expr: part.navExpr };
     if (t === 'VoidCallback' || t === 'void Function()') return { expr: `() => _toast(${constFor(part.label, part.role + '_toast')})` };
-    if (/^ValueChanged<bool>$|^void Function\(bool\)$/.test(t)) { if (!shared.b) { shared.b = '_v' + (++sIdx); stateDecls.push(`bool ${shared.b} = false;`); } return { expr: `(v) => setState(() => ${shared.b} = v)` }; }
-    if (/^ValueChanged<int>$|^void Function\(int\)$/.test(t)) { if (!shared.i) { shared.i = '_n' + (++sIdx); stateDecls.push(`int ${shared.i} = 0;`); } return { expr: `(v) => setState(() => ${shared.i} = v)` }; }
-    if (/^ValueChanged<String>$|^void Function\(String\)$/.test(t)) { if (!shared.s) { shared.s = '_t' + (++sIdx); stateDecls.push(`String ${shared.s} = '';`); } return { expr: `(v) => setState(() => ${shared.s} = v)` }; }
+    if (/^ValueChanged<bool>$|^void Function\(bool( \w+)?\)$/.test(t)) { if (!shared.b) { shared.b = '_v' + (++sIdx); stateDecls.push(`bool ${shared.b} = false;`); } return { expr: `(v) => setState(() => ${shared.b} = v)` }; }
+    if (/^ValueChanged<int>$|^void Function\(int( \w+)?\)$/.test(t)) { if (!shared.i) { shared.i = '_n' + (++sIdx); stateDecls.push(`int ${shared.i} = 0;`); } return { expr: `(v) => setState(() => ${shared.i} = v)` }; }
+    if (/^ValueChanged<String>$|^void Function\(String( \w+)?\)$/.test(t)) { if (!shared.s) { shared.s = '_t' + (++sIdx); stateDecls.push(`String ${shared.s} = '';`); } return { expr: `(v) => setState(() => ${shared.s} = v)` }; }
     if (/^List<String>/.test(t)) return { expr: part.options?.length ? `const <String>[${part.options.map(o => constFor(o, part.role + '_option')).join(', ')}]` : 'const <String>[]' };
     const rm2 = t.match(/^List<(\(\{[^}]*\}\))>$/);
     if (rm2 && part.options?.length) {
@@ -304,6 +304,26 @@ function generate(slug, specText) {
       const items = part.options.map(o => '(' + fields2.map(([, ft, fn]) => `${fn}: ${ft === 'String' ? constFor(o, part.role + '_option') : ft === 'bool' ? 'true' : '0'}`).join(', ') + ')');
       return { expr: `const <${recT}>[${items.join(', ')}]` };
     }
+    // 🧱 מתאמי-הלבנים (מבצע-המאה, פאזה 4): טיפוסי-עיצוב/מבנה שחסמו 25 לבנים
+    if (t === 'EdgeInsetsGeometry' || t === 'EdgeInsets') return { expr: 'const EdgeInsets.all(12)' };
+    if (t === 'FontWeight') return { expr: 'FontWeight.w600' };
+    if (t === 'TimeOfDay') return { expr: 'const TimeOfDay(hour: 8, minute: 0)' };
+    if (/^ValueChanged<TimeOfDay>$|^void Function\(TimeOfDay( \w+)?\)$/.test(t)) return { expr: '(v) {}' };
+    if (t === 'Key') return { expr: `ValueKey(${constFor(part.label, part.role + '_key')})` };
+    if (t === 'Object') return { expr: constFor(part.label, part.role + '_tag') };
+    if (t === 'Future<void> Function()') return { expr: `() async => _toast(${constFor(part.label, part.role + '_toast')})` };
+    const rmT = t.match(/^List<\(([^{}()]+)\)>$/);                  // רשומות-מיקומיות (String, String, bool)
+    if (rmT && part.options?.length) {
+      const fts = rmT[1].split(',').map(x => x.trim());
+      const items = part.options.map(o => '(' + fts.map(ft => ft === 'String' ? constFor(o, part.role + '_cell') : ft === 'bool' ? 'true' : '0').join(', ') + ')');
+      return { expr: `const <(${rmT[1]})>[${items.join(', ')}]` };
+    }
+    const rmR = t.match(/^\(\{([^}]*)\}\)$/);                       // רשומה-שמית יחידה ({String img, String why})
+    if (rmR) {
+      const fields3 = [...rmR[1].matchAll(/(String|bool|int)\s+(\w+)/g)];
+      if (fields3.length) return { expr: '(' + fields3.map(([, ft, fn]) => `${fn}: ${ft === 'String' ? constFor(part.sub || part.label, part.role + '_' + snake(fn)) : ft === 'bool' ? 'false' : '0'}`).join(', ') + ')' };
+    }
+    if (/^List<[A-Z]\w*>$/.test(t)) return { expr: `const <${t.slice(5, -1)}>[]` };
     if (t === 'Widget') return { expr: 'const SizedBox(height: 4)' };
     if (/^List<Widget>/.test(t)) return { expr: 'const <Widget>[]' };
     return null;
@@ -468,6 +488,21 @@ function writeShowcaseSpec() {
     `כותרת ${W.synthTitle}`,
     ...(has('StatsCard') ? [`אטום StatsCard ${proven} 0 0 ${orders} ${W.synthLabel}: הוכחו / בבדיקה / נדחו`] : []),
     ...(has('ManagerDashboardCreditBar') ? [`אטום ManagerDashboardCreditBar ${pct} ${W.barLabel}`] : []),
+    ...(() => {
+      // 📈 צירי-מבצע-המאה: אחוזים חיים משער-הכיסוי (coverage-baseline.json — נמדד בכל משטרה)
+      try {
+        const c = JSON.parse(fs.readFileSync(path.join(ROOT, 'machtzev/coverage-baseline.json'), 'utf8'));
+        const pc = (a2, b2) => b2 ? Math.round(a2 / b2 * 100) : 0;
+        if (!has('ManagerDashboardCreditBar') || !W.axesTitle) return [];
+        return [
+          `כותרת ${W.axesTitle}`,
+          `אטום ManagerDashboardCreditBar ${pc(c.widgetsFillable, c.widgetsTotal)} ${W.axisWidgets}`,
+          `אטום ManagerDashboardCreditBar ${pc(c.enginesRunnable, c.enginesTotal)} ${W.axisEngines}`,
+          `אטום ManagerDashboardCreditBar ${pc(c.essence, c.enginesTotal)} ${W.axisEssence}`,
+          `אטום ManagerDashboardCreditBar ${pc(c.dataTwinned, c.dataTotal)} ${W.axisData}`,
+        ];
+      } catch { return []; }
+    })(),
     `כותרת ${W.capsTitle}`,
     ...navs,
     `באנר ${gates} ${W.gatesBanner}`,

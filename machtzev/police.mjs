@@ -24,6 +24,7 @@ gate('datapurity', 'data-purity-check.mjs', ['--gate']);
 gate('deeppurity', 'deep-purity-scan.mjs', ['--gate']);
 gate('assembly', 'assemble/box-audit.mjs', ['--gate']);
 gate('synth', 'generator/synth.mjs', ['--gate']);
+gate('coverage', 'coverage-gate.mjs');
 gate('pins', 'pins-check.mjs');
 gate('selftest', 'police-selftest.mjs', [], FAST);
 gate('mutation', 'mutation-check.mjs', [], FAST);
