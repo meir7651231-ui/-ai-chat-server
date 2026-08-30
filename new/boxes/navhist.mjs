@@ -10,12 +10,13 @@ const pushNav = (...a) => __pure_pushNav(...a, ...Array(Math.max(0, 2 - a.length
 import { pushRecent } from '../atoms/push-recent.mjs';
 import { NAV_HIST_MAX } from '../atoms/nav-hist-max.mjs';
 import { RECENT_MAX } from '../atoms/recent-max.mjs';
+import { NAVHIST_TERMS } from '../atoms/navhist-terms.mjs';
 
 export { NAV_HIST_MAX, RECENT_MAX };
 
 // ── שקעי-תוכן (מילון הקופסה — App.tsx:635,639) ──
-export const BACK_LABEL = '↩ חזרה';
-export const BACK_TITLE = 'חזרה למסך הקודם';
+export const BACK_LABEL = NAVHIST_TERMS.k1;
+export const BACK_TITLE = NAVHIST_TERMS.k2;
 
 // ── החיווט ──
 
@@ -33,9 +34,9 @@ export function goTo({ hist, prev, view }) {
 /** פתיחת כרטיס-משפחה — הכרעה 2: רק id אמיתי מקדם את "נפתחו לאחרונה"
  *  (useApp.ts:1368-1379; שורה 1377 — `id ? pushRecent : {}`). */
 export function openFamily({ hist, recentIds, prev, id }) {
-  const next = { view: 'families', selFamilyId: id, selCourseId: prev.selCourseId };
+  const next = { view: NAVHIST_TERMS.k3, selFamilyId: id, selCourseId: prev.selCourseId };
   return {
-    view: 'families',
+    view: NAVHIST_TERMS.k3,
     selFamilyId: id,
     hist: navStep(hist, prev, next),
     recentIds: id ? pushRecent(recentIds, id) : recentIds,
@@ -44,8 +45,8 @@ export function openFamily({ hist, recentIds, prev, id }) {
 
 /** פתיחת חוג — ללא recent (useApp.ts:1380-1389). */
 export function openCourse({ hist, prev, id }) {
-  const next = { view: 'courses', selFamilyId: prev.selFamilyId, selCourseId: id };
-  return { view: 'courses', selCourseId: id, hist: navStep(hist, prev, next) };
+  const next = { view: NAVHIST_TERMS.k4, selFamilyId: prev.selFamilyId, selCourseId: id };
+  return { view: NAVHIST_TERMS.k4, selCourseId: id, hist: navStep(hist, prev, next) };
 }
 
 /** הכרעה 3: החזרה אינה נרשמת כצעד (useApp.ts:1392-1405 · legacy:3147);

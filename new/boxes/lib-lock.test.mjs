@@ -1,5 +1,9 @@
 /** בדיקת-קצה: קופסת-הנעילה המלאה — מפתח-תחום · קריאה/כתיבה · תיקוף/גיבוב/אימות.
  *  DoD: `node lib-lock.test.mjs` ⇒ exit 0. מייבאת אך-ורק את הקופסה-שלה (חוק-4). */
+const LIB_LOCK_TERMS = {
+  k1: "maor.lock.v1::",
+  k2: "maor_lock",
+};   // צילום-מקומי (מנוע-הטיהור v6 — מגני-המקור עודכנו לצורה החדשה)
 import {
   LOCK_ZONES, DEFAULT_LOCK_ZONES,
   lockKey, readLock, writeLock, isValidPin, hashPin, verifyPin,
@@ -28,8 +32,8 @@ function mkStore(init = {}) {
 assert.deepStrictEqual(LOCK_ZONES.map((z) => z.key), ['wizard', 'settings', 'supporters', 'reports']);
 assert.deepStrictEqual(DEFAULT_LOCK_ZONES, ['wizard', 'settings']);
 
-// ── 2) lockKey: nsLsKey מוזרק, הבסיס תמיד 'maor_lock' ──
-if (lockKey((b) => b) !== 'maor_lock') fail('lockKey default');
+// ── 2) lockKey: nsLsKey מוזרק, הבסיס תמיד LIB_LOCK_TERMS.k2 ──
+if (lockKey((b) => b) !== LIB_LOCK_TERMS.k2) fail('lockKey default');
 if (lockKey((b) => `${b}:demo`) !== 'maor_lock:demo') fail('lockKey slug');
 
 // ── 3) isValidPin: 4–8 ספרות ──
@@ -64,7 +68,7 @@ if (await verifyPin('1234', '')) fail('verifyPin ריק (falsy)');
   assert.deepStrictEqual(readLock(ns, s.obj), {});
 }
 
-// ── 7) מיגרציה-רכה: תחום בלי מפתח-משלו נופל ל-bare 'maor_lock' ──
+// ── 7) מיגרציה-רכה: תחום בלי מפתח-משלו נופל ל-bare LIB_LOCK_TERMS.k2 ──
 {
   const s = mkStore({ maor_lock: JSON.stringify({ primary: 'old' }) });
   const ns = (b) => `${b}:demo`;
@@ -86,8 +90,8 @@ if (await verifyPin('1234', '')) fail('verifyPin ריק (falsy)');
 /* 🛡 מגן-הכרעה: הבדיקה קוראת את מקור-הקופסה ומאמתת הכרעות verbatim. */
 import { readFileSync } from 'node:fs';
 const src = readFileSync(new URL('./lib-lock.mjs', import.meta.url), 'utf8');
-if (!src.includes("const SALT = 'maor.lock.v1::';")) fail('מגן: המלח שונה מהמקור');
-if (!src.includes("const LOCK_BASE = 'maor_lock';")) fail('מגן: בסיס-המיגרציה שונה');
+if (!src.includes("const SALT = LIB_LOCK_TERMS.k1;")) fail('מגן: המלח שונה מהמקור');
+if (!src.includes("const LOCK_BASE = LIB_LOCK_TERMS.k2;")) fail('מגן: בסיס-המיגרציה שונה');
 // verifyPin חייב להזריק את hashPin המחווט (הנושא SALT), לא את החוט הגולמי
 if (!src.includes('verifyPinAtom(pin, hash, hashPin)')) fail('מגן: verifyPin לא מזריק את hashPin המחווט — שרשרת-המלח נשברה');
 if (src.includes('verifyPinAtom(pin, hash, hashPinAtom)')) fail('מגן: verifyPin מזריק חוט-גולמי בלי SALT');

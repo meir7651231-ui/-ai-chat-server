@@ -1,5 +1,9 @@
 /** בדיקת-קצה · קופסת-החלוקה (SHOP7) — מחווטת מקצה-לקצה דרך הקופסה בלבד.
  *  DoD: node distribution.test.mjs ⇒ exit 0. מוכיח את דוגמאות-החוזה + עדשה-עוינת. */
+const DISTRIBUTION_TERMS = {
+  k1: "pickup",
+  k2: "enroute",
+};   // צילום-מקומי (מנוע-הטיהור v6 — מגני-המקור עודכנו לצורה החדשה)
 import {
   advanceStatus, statusLabel, deliveriesOfDay, deliveriesOfVolunteer,
   eligibleAssignmentsForDay, progressOfDay, loadHint, deliveriesOfFamily,
@@ -13,23 +17,23 @@ const chk = (name, fn) => { try { fn(); } catch (e) { console.error('✗ ' + nam
 
 // ── advanceStatus / statusLabel ──
 chk('advanceStatus קדימה', () => {
-  assert.strictEqual(advanceStatus('pickup'), 'enroute');
-  assert.strictEqual(advanceStatus('enroute'), 'delivered');
+  assert.strictEqual(advanceStatus(DISTRIBUTION_TERMS.k1), DISTRIBUTION_TERMS.k2);
+  assert.strictEqual(advanceStatus(DISTRIBUTION_TERMS.k2), 'delivered');
   assert.strictEqual(advanceStatus('delivered'), 'delivered');
   assert.strictEqual(advanceStatus('zzz'), 'delivered'); // קלט-קצה: סטטוס לא-מוכר ⇒ delivered
 });
 chk('statusLabel', () => {
-  assert.strictEqual(statusLabel('pickup'), 'איסוף');
-  assert.strictEqual(statusLabel('enroute'), 'בדרך');
+  assert.strictEqual(statusLabel(DISTRIBUTION_TERMS.k1), 'איסוף');
+  assert.strictEqual(statusLabel(DISTRIBUTION_TERMS.k2), 'בדרך');
   assert.strictEqual(statusLabel('delivered'), 'נמסר');
 });
 
 // ── מסד לדוגמה ──
 const db = {
   deliveries: [
-    { id: 'd1', dayId: 'day1', assignmentId: 'a1', volunteerId: 'v1', familyId: 'f1', status: 'pickup', note: 'קומה 3' },
+    { id: 'd1', dayId: 'day1', assignmentId: 'a1', volunteerId: 'v1', familyId: 'f1', status: DISTRIBUTION_TERMS.k1, note: 'קומה 3' },
     { id: 'd2', dayId: 'day1', assignmentId: 'a2', volunteerId: 'v1', familyId: 'f2', status: 'delivered', note: '' },
-    { id: 'd3', dayId: 'day2', assignmentId: 'a3', volunteerId: 'v2', familyId: 'f1', status: 'enroute', note: '' },
+    { id: 'd3', dayId: 'day2', assignmentId: 'a3', volunteerId: 'v2', familyId: 'f1', status: DISTRIBUTION_TERMS.k2, note: '' },
   ],
   shopAssignments: [
     { id: 'a1', status: 'active' }, { id: 'a2', status: 'active' },

@@ -15,13 +15,14 @@ import { HASH_PIN_T as __d_hash_pin_T } from '../atoms/hash-pin-strings.mjs';
 // עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
 const hashPinAtom = (...a) => __pure_hashPin(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_hash_pin_T);
 import { verifyPin as verifyPinAtom } from '../atoms/verify-pin.mjs';
+import { LIB_LOCK_TERMS } from '../atoms/lib-lock-terms.mjs';
 
 // ── הכרעות-החיווט של הקופסה (סדר · ברירות-מחדל · מילון-קבועים) ──
 // 1) המלח: גרסת-פורמט של ההצבה — שינויו מבטל כל גיבוב שמור. המקור: lock.ts:23.
 //    הוא שקע-הגיבוב של החוט hash-pin (חוק-6 — קבוע-הצבה חי בחיווט, לא באטום).
-const SALT = 'maor.lock.v1::';
+const SALT = LIB_LOCK_TERMS.k1;
 // 2) בסיס-המפתח הישן (bare), לזיהוי המיגרציה-הרכה. המקור: lock.ts:36. (חוק-6: מפתח-הצבה בחיווט)
-const LOCK_BASE = 'maor_lock';
+const LOCK_BASE = LIB_LOCK_TERMS.k2;
 
 // ── קבועי-האזורים מיוצאים כלשונם מהחוטים ──
 export { LOCK_ZONES, DEFAULT_LOCK_ZONES };

@@ -1,6 +1,11 @@
 /** בדיקת-קצה · קופסת "דו"ח מותאם" — מוכיחה את דוגמאות-החוזה (custom-export.contract.md)
  *  דרך הקופסה בלבד. DoD: node custom-export.test.mjs ⇒ exit 0. */
 import { expFieldDefs, overrideColumn, buildCustomExport } from './custom-export.mjs';
+const CUSTOM_EXPORT_TERMS = {
+  k1: "memorial",
+  k2: "anniversary",
+  k3: "bday",
+};   // צילום-מקומי (מנוע-הטיהור v6 — מגני-המקור עודכנו לצורה החדשה)
 let f = 0;
 const bad = (m) => { console.error('✗ ' + m); f = 1; };
 const cfg = { terms: {}, modules: {}, features: {} };
@@ -30,7 +35,7 @@ const db = {
   teachers: [{ id: 't1', name: 'שרה', phone: '050' }],
   courses: [{ id: 'c1', name: 'ציור', teacherId: 't1', roomId: 'r1', weekday: 2, time: '16:00', model: 'punch', price: 120, maxStudents: 10, notes: '' }],
   enrollments: [{ id: 'e1', courseId: 'c1', memberId: 'm1', payments: [{ date: '2025-01-05', amount: 100 }], absences: [{ date: '2025-01-12' }], totalDue: 400 }],
-  events: [{ id: 'v1', type: 'memorial', title: 'אזכרה לסבא', date: '2024-03-24', time: '', famId: 'f1', notes: '', done: false }],
+  events: [{ id: 'v1', type: CUSTOM_EXPORT_TERMS.k1, title: 'אזכרה לסבא', date: '2024-03-24', time: '', famId: 'f1', notes: '', done: false }],
   supporters: [],
   usdRate: 3.7,
 };
@@ -83,7 +88,7 @@ import { HEB_CAL } from '../atoms/heb-cal-data.mjs';
 const src = readFileSync(new URL('./custom-export.mjs', import.meta.url), 'utf8');
 for (const m of ['families', 'courses', 'calendar', 'diary', 'supporters', 'reports', 'tzedaka', 'shop', 'shop7'])
   if (!NAV_MODULE_KEYS.includes(m)) bad('מגן: NAV_MODULE_KEYS חסר ' + m);   // הכרעה 19: המגן על ערך-הדאטה
-if (!src.includes("new Set(['memorial', 'anniversary', 'bday'])")) bad('מגן: HEBREW_RECURRING שונה');
+if (!src.includes("new Set([CUSTOM_EXPORT_TERMS.k1, CUSTOM_EXPORT_TERMS.k2, CUSTOM_EXPORT_TERMS.k3])")) bad('מגן: HEBREW_RECURRING שונה');
 if (HEB_CAL.hebYearOffset !== 3761 || HEB_CAL.scanWindowDays !== 440 || !src.includes('HEB_CAL.hebYearOffset')) bad('מגן: עוגני-scanHebYear שונו');   // הכרעה 19
 if (!src.includes('supScoreAtom(sp, rate, nowMs, supTotalIls, supLast, supCount)')) bad('מגן: שקע-nowMs של supScore שונה');
 

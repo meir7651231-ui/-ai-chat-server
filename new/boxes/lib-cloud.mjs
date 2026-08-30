@@ -75,17 +75,18 @@ import { writeCloudEnvelope as _writeCloudEnvelope } from '../atoms/write-cloud-
 import { encryptExistingCloud as _encryptExistingCloud } from '../atoms/encrypt-existing-cloud.mjs';
 import { migrateSupportersToKeyed as __pure_migrateSupportersToKeyed } from '../atoms/migrate-supporters-to-keyed.mjs';
 import { MIGRATE_SUPPORTERS_TO_KEYED_T as __d_migrate_supporters_to_keyed_T } from '../atoms/migrate-supporters-to-keyed-strings.mjs';
+import { LIB_CLOUD_TERMS } from '../atoms/lib-cloud-terms.mjs';
 // עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
 const _migrateSupportersToKeyed = (...a) => __pure_migrateSupportersToKeyed(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_migrate_supporters_to_keyed_T);
 
 /* ══════════ א) הכרעות טהורות (מילון-הקופסה, verbatim מהמקור) ══════════ */
 
 /** ברירת-התחום הבטוחה — נתיבי-שורש (ביט-זהה ללקוח-החי). cloud.ts:76 */
-export const DEFAULT_SCOPE = { slug: 'default', cloudRoot: true };
+export const DEFAULT_SCOPE = { slug: LIB_CLOUD_TERMS.k1, cloudRoot: true };
 /** שם-אוסף התרומות-הנפרד (מסלול-B). cloud-diff.ts:64 */
-export const DONATIONS_COL = 'donations';
+export const DONATIONS_COL = LIB_CLOUD_TERMS.k2;
 /** מוני-הענן — מונוטוניים בלבד (רצף קבלות-מס). לעולם לא לרדת. cloud.ts:393 */
-export const META_COUNTER_KEYS = ['seq', 'receiptSeq', 'donationSeq', 'shopReceiptSeq'];
+export const META_COUNTER_KEYS = [LIB_CLOUD_TERMS.k3, LIB_CLOUD_TERMS.k4, LIB_CLOUD_TERMS.k5, LIB_CLOUD_TERMS.k6];
 /** תקרת טבעת-הלוג. domain.ts:1072 */
 export const AUDIT_CAP = 500;
 /** גודל-אצווה (מגבלת Firestore 500 ⇒ 400). cloud.ts:187/232/438 */
@@ -114,53 +115,53 @@ export function scopedDonations(scope) {
 export function hebrewAuthError(e) {
   const code = ((e && e.code) ?? '').toString();
   switch (code) {
-    case 'auth/invalid-credential':
-    case 'auth/invalid-login-credentials':
-    case 'auth/wrong-password':
-    case 'auth/user-not-found':
-    case 'auth/invalid-email':
-      return new Error('אימייל או סיסמה שגויים');
-    case 'auth/network-request-failed':
-      return new Error('אין חיבור לאינטרנט — בדקו את החיבור ונסו שוב');
-    case 'auth/too-many-requests':
-      return new Error('יותר מדי ניסיונות — המתינו מספר דקות ונסו שוב');
-    case 'auth/user-disabled':
-      return new Error('החשבון הושבת — פנו למנהל המערכת');
+    case LIB_CLOUD_TERMS.k7:
+    case LIB_CLOUD_TERMS.k8:
+    case LIB_CLOUD_TERMS.k9:
+    case LIB_CLOUD_TERMS.k10:
+    case LIB_CLOUD_TERMS.k11:
+      return new Error(LIB_CLOUD_TERMS.k12);
+    case LIB_CLOUD_TERMS.k13:
+      return new Error(LIB_CLOUD_TERMS.k14);
+    case LIB_CLOUD_TERMS.k15:
+      return new Error(LIB_CLOUD_TERMS.k16);
+    case LIB_CLOUD_TERMS.k17:
+      return new Error(LIB_CLOUD_TERMS.k18);
     default:
-      return new Error('הכניסה נכשלה — נסו שוב');
+      return new Error(LIB_CLOUD_TERMS.k19);
   }
 }
 
 /** מיפוי-שגיאת הרשמה-עצמית; קוד לא-מוכר ⇒ נופל ל-hebrewAuthError. cloud.ts:329-334 */
 export function signUpError(e) {
   const code = ((e && e.code) ?? '').toString();
-  if (code === 'auth/email-already-in-use') return new Error('האימייל כבר רשום — נסו להתחבר או לאפס סיסמה');
-  if (code === 'auth/weak-password') return new Error('הסיסמה חלשה מדי — לפחות 6 תווים');
-  if (code === 'auth/invalid-email') return new Error('כתובת האימייל אינה תקינה');
-  if (code === 'auth/operation-not-allowed') return new Error('ההרשמה סגורה כרגע — פנו למנהל המערכת');
+  if (code === LIB_CLOUD_TERMS.k20) return new Error(LIB_CLOUD_TERMS.k21);
+  if (code === LIB_CLOUD_TERMS.k22) return new Error(LIB_CLOUD_TERMS.k23);
+  if (code === LIB_CLOUD_TERMS.k11) return new Error(LIB_CLOUD_TERMS.k24);
+  if (code === LIB_CLOUD_TERMS.k25) return new Error(LIB_CLOUD_TERMS.k26);
   return hebrewAuthError(e);
 }
 
 /** מיפוי-שגיאת איפוס-סיסמה. cloud.ts:351-354 */
 export function resetPasswordError(e) {
   const code = ((e && e.code) ?? '').toString();
-  if (code === 'auth/user-not-found') return new Error('לא נמצא משתמש עם האימייל הזה');
-  if (code === 'auth/invalid-email') return new Error('כתובת האימייל אינה תקינה');
+  if (code === LIB_CLOUD_TERMS.k10) return new Error(LIB_CLOUD_TERMS.k27);
+  if (code === LIB_CLOUD_TERMS.k11) return new Error(LIB_CLOUD_TERMS.k24);
   return hebrewAuthError(e);
 }
 
 /** מיפוי-שגיאת אימות-מחדש בשינוי-סיסמה (הסיסמה הנוכחית). cloud.ts:368-371 */
 export function changePasswordCurrentError(e) {
   const code = ((e && e.code) ?? '').toString();
-  if (code === 'auth/wrong-password' || code === 'auth/invalid-credential' || code === 'auth/invalid-login-credentials')
-    return new Error('הסיסמה הנוכחית שגויה');
+  if (code === LIB_CLOUD_TERMS.k9 || code === LIB_CLOUD_TERMS.k7 || code === LIB_CLOUD_TERMS.k8)
+    return new Error(LIB_CLOUD_TERMS.k28);
   return hebrewAuthError(e);
 }
 
 /** מיפוי-שגיאת החלפת-הסיסמה (הסיסמה החדשה). cloud.ts:375-378 */
 export function changePasswordNextError(e) {
   const code = ((e && e.code) ?? '').toString();
-  if (code === 'auth/weak-password') return new Error('הסיסמה החדשה חלשה מדי — לפחות 6 תווים');
+  if (code === LIB_CLOUD_TERMS.k22) return new Error(LIB_CLOUD_TERMS.k29);
   return hebrewAuthError(e);
 }
 
@@ -170,7 +171,7 @@ export function mergeMetaCounters(existing, meta) {
   for (const k of META_COUNTER_KEYS) {
     const cur = existing?.[k];
     const nxt = safe[k];
-    if (typeof cur === 'number' && (typeof nxt !== 'number' || cur > nxt)) safe[k] = cur;
+    if (typeof cur === LIB_CLOUD_TERMS.k30 && (typeof nxt !== LIB_CLOUD_TERMS.k30 || cur > nxt)) safe[k] = cur;
   }
   return safe;
 }
@@ -188,31 +189,31 @@ export function normalizeAuditEmail(email) {
 /** שער-https משותף לבניית-URL של משיכה. cloud.ts:688-689/707-708 */
 function pullBase(rawUrl) {
   const clean = String(rawUrl || '').trim();
-  if (!/^https:\/\//i.test(clean)) throw new Error('כתובת-משיכה לא-תקינה (חייבת https)');
+  if (!/^https:\/\//i.test(clean)) throw new Error(LIB_CLOUD_TERMS.k31);
   return clean;
 }
 /** org של התחום הנוכחי (שורש ⇒ 'root'). cloud.ts:693/712 */
 function orgOf(scope) {
-  return scope.cloudRoot ? 'root' : scope.slug;
+  return scope.cloudRoot ? LIB_CLOUD_TERMS.k32 : scope.slug;
 }
 
 /** בניית-URL למשיכת-נדרים (org · full=1 · reset). cloud.ts:687-698 */
 export function buildNedarimUrl(scope, rawUrl, opts = {}) {
   const u = new URL(pullBase(rawUrl));
-  u.searchParams.set('org', orgOf(scope));
-  u.searchParams.set('full', '1');
-  if (opts.reset) u.searchParams.set('reset', '1');
+  u.searchParams.set(LIB_CLOUD_TERMS.k33, orgOf(scope));
+  u.searchParams.set(LIB_CLOUD_TERMS.k34, '1');
+  if (opts.reset) u.searchParams.set(LIB_CLOUD_TERMS.k35, '1');
   return u;
 }
 
 /** בניית-URL למשיכת-סולה (org · vault-לשורש-עם-slug · reset; בלי full). cloud.ts:706-719 */
 export function buildSolaUrl(scope, rawUrl, opts = {}) {
   const u = new URL(pullBase(rawUrl));
-  u.searchParams.set('org', orgOf(scope));
+  u.searchParams.set(LIB_CLOUD_TERMS.k33, orgOf(scope));
   // לקוח-השורש: האוספים ב-root אבל הכספת (orgSecrets) נכתבת תחת ה-slug האמיתי —
   // vault מגשר כדי שהפונקציה תמצא את ה-xKey שהוזן בהגדרות. cloud.ts:715-717
-  if (scope.cloudRoot && scope.slug && scope.slug !== 'default') u.searchParams.set('vault', scope.slug);
-  if (opts.reset) u.searchParams.set('reset', '1');
+  if (scope.cloudRoot && scope.slug && scope.slug !== LIB_CLOUD_TERMS.k1) u.searchParams.set(LIB_CLOUD_TERMS.k36, scope.slug);
+  if (opts.reset) u.searchParams.set(LIB_CLOUD_TERMS.k35, '1');
   return u;
 }
 
@@ -248,7 +249,7 @@ export function createLibCloud(io) {
   // ── שערי-הידית (cloud.ts:262-270) ──
   const requireDb = () => cloudDb(fsDb);
   const requireAuth = () => {
-    if (!auth) throw new Error('הענן לא אותחל — פנו למנהל המערכת');
+    if (!auth) throw new Error(LIB_CLOUD_TERMS.k37);
     return auth;
   };
 
@@ -311,12 +312,12 @@ export function createLibCloud(io) {
     const db = requireDb();
     const ring = entries.slice(-AUDIT_CAP);
     const body = dek ? await encDoc({ entries: ring }, dek) : { entries: ring };
-    await io.setDoc(io.doc(db, sCol('auditlog'), audit.uid), body);
+    await io.setDoc(io.doc(db, sCol(LIB_CLOUD_TERMS.k38), audit.uid), body);
   };
   const pullAuditRing = async (dek) => {
     if (!audit.readable) return null;
     const db = requireDb();
-    const snap = await io.getDocs(io.collection(db, sCol('auditlog')));
+    const snap = await io.getDocs(io.collection(db, sCol(LIB_CLOUD_TERMS.k38)));
     const all = [];
     for (const d of snap.docs) {
       const data = dek ? await decDoc(d.data(), dek) : d.data();
@@ -384,7 +385,7 @@ export function createLibCloud(io) {
   };
   const changePassword = async (currentPass, nextPass) => {
     const u = requireAuth().currentUser;
-    if (!u || !u.email) throw new Error('אין משתמש מחובר — התחברו ונסו שוב');
+    if (!u || !u.email) throw new Error(LIB_CLOUD_TERMS.k39);
     try {
       await io.reauthenticateWithCredential(u, io.emailCredential(u.email, currentPass));
     } catch (e) {
@@ -412,7 +413,7 @@ export function createLibCloud(io) {
     const snaps = await Promise.all(
       ENTITY_COLLECTIONS.map((col) => {
         if (supEnforceOn && SUP_KEYED_COLS.includes(col) && allowedPurposes) {
-          return io.getDocs(io.query(io.collection(db, sCol(col)), io.where('skey', 'in', supAllowedKeys(allowedPurposes))));
+          return io.getDocs(io.query(io.collection(db, sCol(col)), io.where(LIB_CLOUD_TERMS.k40, 'in', supAllowedKeys(allowedPurposes))));
         }
         return io.getDocs(io.collection(db, sCol(col)));
       }),
@@ -430,13 +431,13 @@ export function createLibCloud(io) {
     if (splitOn) {
       const donRef = io.collection(db, sDon());
       const dsnap = await io.getDocs(
-        allowedPurposes ? io.query(donRef, io.where('pkey', 'in', donAllowedKeys(allowedPurposes))) : donRef,
+        allowedPurposes ? io.query(donRef, io.where(LIB_CLOUD_TERMS.k41, 'in', donAllowedKeys(allowedPurposes))) : donRef,
       );
       const bySup = new Map();
       for (const d of dsnap.docs) {
         const data = dek ? await decDoc(d.data(), dek) : d.data();
         const supporterId = data.supporterId;
-        if (typeof supporterId !== 'string') continue;
+        if (typeof supporterId !== LIB_CLOUD_TERMS.k42) continue;
         const { supporterId: _s, pkey: _p, ...donation } = data; // rid נשמר בתוך ...donation
         void _s;
         void _p;
@@ -448,7 +449,7 @@ export function createLibCloud(io) {
       if (Array.isArray(sups)) for (const sp of sups) sp.donations = bySup.get(sp.id) ?? [];
     }
     const migrated = io.migrate(raw);
-    if (!migrated) throw new Error('נתוני הענן אינם בפורמט מוכר — לא בוצע סנכרון');
+    if (!migrated) throw new Error(LIB_CLOUD_TERMS.k43);
     return migrated;
   };
 
@@ -459,21 +460,21 @@ export function createLibCloud(io) {
     const unsubs = ENTITY_COLLECTIONS.map((col) =>
       io.onSnapshot(
         supEnforceOn && SUP_KEYED_COLS.includes(col) && allowedPurposes
-          ? io.query(io.collection(db, sCol(col)), io.where('skey', 'in', supAllowedKeys(allowedPurposes)))
+          ? io.query(io.collection(db, sCol(col)), io.where(LIB_CLOUD_TERMS.k40, 'in', supAllowedKeys(allowedPurposes)))
           : io.collection(db, sCol(col)),
         (snap) => {
           if (snap.metadata.hasPendingWrites) return;
           const changes = snap.docChanges();
           if (!changes.length) return;
           if (!dek) {
-            onRemote({ col, docs: changes.map((ch) => ({ id: ch.doc.id, data: clean(col, ch.doc.data()), deleted: ch.type === 'removed' })) });
+            onRemote({ col, docs: changes.map((ch) => ({ id: ch.doc.id, data: clean(col, ch.doc.data()), deleted: ch.type === LIB_CLOUD_TERMS.k44 })) });
             return;
           }
           void Promise.all(
             changes.map(async (ch) => ({
               id: ch.doc.id,
-              data: ch.type === 'removed' ? clean(col, ch.doc.data()) : clean(col, await decDoc(ch.doc.data(), dek)),
-              deleted: ch.type === 'removed',
+              data: ch.type === LIB_CLOUD_TERMS.k44 ? clean(col, ch.doc.data()) : clean(col, await decDoc(ch.doc.data(), dek)),
+              deleted: ch.type === LIB_CLOUD_TERMS.k44,
             })),
           )
             .then((docs) => onRemote({ col, docs }))
@@ -505,51 +506,51 @@ export function createLibCloud(io) {
 
   // ── צד-הלקוח של functions/ (cloud.ts:663-770) ──
   const fetchNedarimDonors = async () => {
-    const snap = await io.getDocs(io.collection(requireDb(), sCol('nedarimDonors')));
+    const snap = await io.getDocs(io.collection(requireDb(), sCol(LIB_CLOUD_TERMS.k45)));
     return snap.docs.map((d) => ({ toremId: d.id, ...d.data() }));
   };
   const fetchIncomingPayments = async () => {
-    const snap = await io.getDocs(io.query(io.collection(requireDb(), sCol('incomingPayments')), io.where('status', '==', 'pending')));
+    const snap = await io.getDocs(io.query(io.collection(requireDb(), sCol(LIB_CLOUD_TERMS.k46)), io.where(LIB_CLOUD_TERMS.k47, '==', LIB_CLOUD_TERMS.k48)));
     return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
   };
   const fetchProviderRows = async (provider) => {
-    const snap = await io.getDocs(io.query(io.collection(requireDb(), sCol('incomingPayments')), io.where('provider', '==', provider)));
+    const snap = await io.getDocs(io.query(io.collection(requireDb(), sCol(LIB_CLOUD_TERMS.k46)), io.where(LIB_CLOUD_TERMS.k49, '==', provider)));
     return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
   };
   const pullNedarim = async (pullUrl, opts = {}) => {
     const u = buildNedarimUrl(scope, pullUrl, opts);
     const user = requireAuth().currentUser;
-    if (!user) throw new Error('נדרשת התחברות-ענן');
+    if (!user) throw new Error(LIB_CLOUD_TERMS.k50);
     const token = await user.getIdToken();
-    const r = await io.fetch(u.toString(), { method: 'POST', headers: { Authorization: 'Bearer ' + token } });
+    const r = await io.fetch(u.toString(), { method: LIB_CLOUD_TERMS.k51, headers: { Authorization: LIB_CLOUD_TERMS.k52 + token } });
     const j = await r.json().catch(() => ({}));
-    if (!r.ok || j.ok === false) throw new Error(j.error || 'משיכה נכשלה (' + r.status + ')');
+    if (!r.ok || j.ok === false) throw new Error(j.error || LIB_CLOUD_TERMS.k53 + r.status + ')');
     return j;
   };
   const pullSola = async (pullUrl, opts = {}) => {
     const u = buildSolaUrl(scope, pullUrl, opts);
     const user = requireAuth().currentUser;
-    if (!user) throw new Error('נדרשת התחברות-ענן');
+    if (!user) throw new Error(LIB_CLOUD_TERMS.k50);
     const token = await user.getIdToken();
-    const r = await io.fetch(u.toString(), { method: 'POST', headers: { Authorization: 'Bearer ' + token } });
+    const r = await io.fetch(u.toString(), { method: LIB_CLOUD_TERMS.k51, headers: { Authorization: LIB_CLOUD_TERMS.k52 + token } });
     const j = await r.json().catch(() => ({}));
-    if (!r.ok || j.ok === false) throw new Error(j.error || 'משיכה נכשלה (' + r.status + ')');
+    if (!r.ok || j.ok === false) throw new Error(j.error || LIB_CLOUD_TERMS.k53 + r.status + ')');
     return j;
   };
   const markIncomingPayment = (id) =>
-    io.updateDoc(io.doc(requireDb(), sCol('incomingPayments'), id), { status: 'handled', handledAt: io.now() });
+    io.updateDoc(io.doc(requireDb(), sCol(LIB_CLOUD_TERMS.k46), id), { status: LIB_CLOUD_TERMS.k54, handledAt: io.now() });
   const watchIncomingPayments = (cb) => {
     try {
-      const q = io.query(io.collection(requireDb(), sCol('incomingPayments')), io.where('status', '==', 'pending'));
+      const q = io.query(io.collection(requireDb(), sCol(LIB_CLOUD_TERMS.k46)), io.where(LIB_CLOUD_TERMS.k47, '==', LIB_CLOUD_TERMS.k48));
       return io.onSnapshot(q, (snap) => cb(snap.docs.map((d) => ({ id: d.id, ...d.data() }))), () => {});
     } catch {
       return () => {};
     }
   };
   const writeSmsOutbox = (to, text) =>
-    io.addDoc(io.collection(requireDb(), sCol('smsOutbox')), { to, text, status: 'pending', at: io.now() });
+    io.addDoc(io.collection(requireDb(), sCol(LIB_CLOUD_TERMS.k55)), { to, text, status: LIB_CLOUD_TERMS.k48, at: io.now() });
   const writeMailOutbox = (to, subject, text) =>
-    io.addDoc(io.collection(requireDb(), sCol('mailOutbox')), { to, subject, text, status: 'pending', at: io.now() });
+    io.addDoc(io.collection(requireDb(), sCol(LIB_CLOUD_TERMS.k56)), { to, subject, text, status: LIB_CLOUD_TERMS.k48, at: io.now() });
 
   // ── שקעי-הקונפיג (cloud.ts:79-146) ──
   const setCloudScope = (slug, cloudRoot) => { scope = newScope(slug, cloudRoot); };

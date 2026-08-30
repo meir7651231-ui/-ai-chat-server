@@ -625,12 +625,20 @@ function purifyBox(file, log) {
     let touchedPins = false;
     for (const [v, k] of keys) {
       const tok = `'${v.replace(/\\/g, '\\\\')}'`;
-      if (patched.includes(tok)) { patched = patched.split(tok).join(`${CONST}.${k}`); touchedPins = true; }
+      let idx = 0;
+      while ((idx = patched.indexOf(tok, idx)) >= 0) {
+        const after = patched.slice(idx + tok.length).match(/^\s*(\S)/);
+        if (after && after[1] === ':') { idx += tok.length; continue; }      // עמדת-מפתח — נשארת
+        patched = patched.slice(0, idx) + `${CONST}.${k}` + patched.slice(idx + tok.length);
+        touchedPins = true;
+        idx += (`${CONST}.${k}`).length;
+      }
     }
     if (touchedPins) {
-      const fi = patched.match(/^import[^\n]*$/m);
-      const snap = `const ${CONST} = ${litObj};   // צילום-מקומי (מנוע-הטיהור v6 — מגני-המקור עודכנו לצורה החדשה)`;
-      patched = fi ? patched.replace(fi[0], fi[0] + '\n' + snap) : snap + '\n' + patched;
+      // הצילום נכנס בראש-הקובץ (לפני כל ייבוא — const-לפני-import חוקי ב-ESM; ייבוא רב-שורתי לא נפגע)
+      const snap = `const ${CONST} = ${litObj};   // צילום-מקומי (מנוע-הטיהור v6 — מגני-המקור עודכנו לצורה החדשה)\n`;
+      const db = patched.match(/^\/\*[\s\S]*?\*\/\n/);
+      patched = db ? patched.replace(db[0], db[0] + snap) : snap + patched;
     }
     if (patched !== at) adjOut = patched;
   }

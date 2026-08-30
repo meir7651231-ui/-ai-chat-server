@@ -78,11 +78,12 @@ import { EV_META } from '../atoms/ev-meta.mjs';
 import { DAY_NAMES } from '../atoms/day-names.mjs';
 import { NAV_MODULE_KEYS } from '../atoms/nav-module-keys.mjs';
 import { HEB_CAL } from '../atoms/heb-cal-data.mjs';
+import { CUSTOM_EXPORT_TERMS } from '../atoms/custom-export-terms.mjs';
 
 // ── הכרעות-הקופסה (חיווט-הצבה, verbatim מהמקור) ──
 // תשעת מודולי-הניווט הניתנים-לכיבוי — maor/src/lib/config.ts:20-30
 // אירועים החוזרים שנתית לפי התאריך העברי — maor/src/types/domain.ts:363-367
-const HEBREW_RECURRING = new Set(['memorial', 'anniversary', 'bday']);
+const HEBREW_RECURRING = new Set([CUSTOM_EXPORT_TERMS.k1, CUSTOM_EXPORT_TERMS.k2, CUSTOM_EXPORT_TERMS.k3]);
 
 // ── חיווט-שכנים (השקעים של האטומים ⇐ אטומים אחרים) ──
 const featureOn = (cfg, key) => featureOnAtom(cfg, key, NAV_MODULE_KEYS, moduleOn);
