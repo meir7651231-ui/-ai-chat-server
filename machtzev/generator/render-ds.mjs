@@ -35,6 +35,26 @@ function pickInput(label) {
   return (best && best.cls) || 'DsField';
 }
 
+// 🔌 מנועי-טרנספורם לשדה: פונקציה טהורה String f(קלט[, אופ]) — ניתן להריץ על ערך-שדה
+// בודד. עצמאיות בלבד (אפס import חוצה-אטום ⇒ סינכרון בטוח). הידע (he) על הפונקציה.
+const PRIM = new Set(['dynamic', 'String', 'num', 'int', 'double', 'String?', 'num?']);
+const selfContained = (shelf, file) => { try { return !/^import\s+'(?!dart:|package:flutter)/m.test(fs.readFileSync(path.join(ROOT, shelf, file), 'utf8')); } catch { return false; } };
+const XFORM = atlas.functions
+  .filter((f) => f.ret === 'String' && (f.params || []).length >= 1 && PRIM.has(f.params[0].type) && ((f.params.length === 1) || /\[/.test(f.sig || '')) && (f.he || []).length && selfContained(f.shelf, f.file))
+  .map((f) => ({ name: f.name, file: f.file, shelf: f.shelf, inType: f.params[0].type, st: [...new Set((f.he || []).flatMap(heToks))] }));
+// בוחר מנוע-טרנספורם לשדה לפי-משמעות (אחזור טהור, אפס regex). דורש התאמה ברורה.
+function pickXform(label, used) {
+  const q = [...new Set(heToks(label))];
+  let best = null, bs = 0;
+  for (const f of XFORM) {
+    if (used.has(f.name)) continue;
+    let s = 0;
+    for (const t of q) if (f.st.includes(t)) s++;
+    if (s > bs) { bs = s; best = f; }
+  }
+  return bs >= 1 ? best : null;
+}
+
 // מחולל-תוכן: אוסף מחרוזות-עברית ⇒ const; מחזיר את שם-הקבוע לשיבוץ בקוד.
 function makeConsts(slug) {
   const consts = [];
@@ -54,7 +74,7 @@ const write = (slug, code, content) => {
   fs.writeFileSync(path.join(DATA, `gen_${slug}_content.dart`), '// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.\n' + content);
 };
 
-// ── ישות: workflow + כרטיס-טופס + כפתור-שמירה + רשומות ──
+// ── ישות: מסך-חי מחווט — טופס→שמירה→חנות→טבלה→דשבורד, + לוגיקת-אימפריה פר-שדה ──
 export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [] }) {
   const { k, dump } = makeConsts(slug);
   const cTitle = k(name);
@@ -64,33 +84,74 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const cForm = k('פרטי הרשומה');
   const cRecords = k('רשומות');
   const cEmpty = k(`אין ${name} עדיין — הרשומה הראשונה תופיע כאן`);
-  const body = [];
-  if (stages.length >= 2) {
-    const stepConsts = stages.map((s) => k(s));
-    const cur = Math.min(2, stages.length - 1);
-    body.push(`      DsWorkflow(steps: const [${stepConsts.join(', ')}], current: ${cur}),`);
-  }
-  const inputImports = new Set();
-  const fileOf = (cls) => `../dart-ui-bs/ds/${cls.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase()}.dart`;
-  const fieldWidgets = schema.map((s) => {
-    const cls = pickInput(s.label);   // אטום-הקלט נבחר לפי-משמעות מהאטומים (טהור)
-    inputImports.add(`import '${fileOf(cls)}';`);
-    const cl = k(s.label);
-    if (cls === 'DsField') return `        DsField(label: ${cl}, hint: '', value: '', onChanged: (_) {}),`;
-    return `        ${cls}(label: ${cl}),`;
+  const cEntity = k(name);
+
+  const funcImports = new Set();
+  const usedX = new Set();
+  const labelConst = [];
+  const fieldBlocks = [];
+  schema.forEach((s, i) => {
+    const cl = k(s.label); labelConst.push(cl);
+    fieldBlocks.push(`          DsField(label: ${cl}, hint: '', value: _v[${i}] ?? '', onChanged: (v) => setState(() => _v[${i}] = v)),`);
+    const xf = pickXform(s.label, usedX);   // 🔌 מנוע-אימפריה נבחר לשדה לפי-משמעות (אחזור טהור)
+    if (xf) {
+      usedX.add(xf.name);
+      funcImports.add(`import '../${xf.shelf.replace(/^new\//, '')}/${xf.file}';`);
+      const cx = k(xf.name);
+      // המרת-קלט לפי-חתימה: מנוע-מספרי מקבל מספר בטיפוסו המדויק, אחר מקבל טקסט (טהור מהחוזה).
+      const nt = xf.inType.replace(/\?$/, '');
+      const arg = nt === 'int' ? `(int.tryParse(_v[${i}] ?? '') ?? 0)`
+        : nt === 'double' ? `(double.tryParse(_v[${i}] ?? '') ?? 0)`
+        : nt === 'num' ? `(num.tryParse(_v[${i}] ?? '') ?? 0)`
+        : `(_v[${i}] ?? '')`;
+      fieldBlocks.push(`          if ((_v[${i}] ?? '').trim().isNotEmpty) _live(${cx}, ${xf.name}(${arg})),`);
+    }
   });
-  body.push(`      DsSection(title: ${cForm}, children: [\n${fieldWidgets.join('\n')}\n      ]),`);
-  body.push(`      DsSection(title: ${cRecords}, children: const [DsEmpty(label: ${cEmpty})]),`);
+  const stepsDart = stages.length >= 2
+    ? `        DsWorkflow(steps: const [${stages.map((x) => k(x)).join(', ')}], current: ${Math.min(2, stages.length - 1)}),\n`
+    : '';
+  const saveEntries = labelConst.map((cl, i) => `${cl}: _v[${i}] ?? ''`).join(', ');
+  const recValues = labelConst.map((cl) => `r[${cl}] ?? ''`).join(', ');
+  const labelsList = labelConst.join(', ');
 
   const cls = pascal(slug);
-  const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) על מערכת-העיצוב — סכמה ⇒ מסך-פרימיום. אל תערוך ידנית.
+  const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→חנות→טבלה + לוגיקה). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
-${[...inputImports].sort().join('\n')}
+import '../dart-ui-bs/ds/ds_field.dart';
+import '../dart-ui-bs/ds/ds_store.dart';
+${[...funcImports].sort().join('\n')}
 import 'package:flutter/material.dart';
 
-class ${cls} extends StatelessWidget {
+class ${cls} extends StatefulWidget {
   const ${cls}({super.key});
+
+  @override
+  State<${cls}> createState() => _${cls}State();
+}
+
+class _${cls}State extends State<${cls}> {
+  final Map<int, String> _v = {};
+
+  void _save() {
+    if (_v.values.where((x) => x.trim().isNotEmpty).isEmpty) return;
+    appStore.add(${cEntity}, <String, String>{${saveEntries}});
+    setState(() => _v.clear());
+  }
+
+  Widget _live(String label, String out) => Padding(
+        padding: const EdgeInsets.only(top: 2, bottom: 6),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(11),
+          decoration: BoxDecoration(color: DsTokens.accentSoft, borderRadius: BorderRadius.circular(DsTokens.rSm)),
+          child: Row(children: [
+            const Icon(Icons.bolt, size: 15, color: DsTokens.accentDark),
+            const SizedBox(width: 7),
+            Expanded(child: Text('\$label · \$out', style: const TextStyle(color: DsTokens.accentDark, fontSize: 13, fontWeight: FontWeight.w700))),
+          ]),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -98,9 +159,24 @@ class ${cls} extends StatelessWidget {
       title: ${cTitle},
       subtitle: ${cSub},
       icon: ${cIcon},
-      bottomBar: DsPrimaryButton(label: ${cSave}),
+      bottomBar: DsPrimaryButton(label: ${cSave}, onTap: _save),
       children: [
-${body.join('\n')}
+${stepsDart}        DsSection(title: ${cForm}, children: [
+${fieldBlocks.join('\n')}
+        ]),
+        DsSection(title: ${cRecords}, children: [
+          AnimatedBuilder(
+            animation: appStore,
+            builder: (context, _) {
+              final rs = appStore.records(${cEntity});
+              if (rs.isEmpty) return const DsEmpty(label: ${cEmpty});
+              return Column(children: [
+                for (final r in rs)
+                  DsRecordCard(labels: const [${labelsList}], values: [${recValues}]),
+              ]);
+            },
+          ),
+        ]),
       ],
     );
   }
@@ -118,10 +194,10 @@ export function renderDashboard(slug, { title, icon = '📊', entities }) {
   const cIcon = k(icon);
   const tiles = entities.map((e) => {
     const lbl = k(e.name);
-    const val = k('0');
     const sub = k(`${e.fields} שדות${e.stages ? ` · ${e.stages} שלבים` : ''}`);
     const g = k(e.icon || '🗂️');
-    return `DsStat(label: ${lbl}, value: ${val}, sub: ${sub}, glyph: ${g})`;
+    // ערך-חי: סופר את הרשומות בחנות פר-ישות (מגיב לשמירה)
+    return `AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: ${lbl}, value: appStore.count(${lbl}).toString(), sub: ${sub}, glyph: ${g}))`;
   });
   const rows = [];
   for (let i = 0; i < tiles.length; i += 2) {
@@ -130,9 +206,10 @@ export function renderDashboard(slug, { title, icon = '📊', entities }) {
     rows.push(`      Padding(padding: const EdgeInsets.only(bottom: 12), child: IntrinsicHeight(child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [Expanded(child: ${a}), const SizedBox(width: 12), ${second}]))),`);
   }
   const cls = pascal(slug);
-  const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — דשבורד מנתוני-הישויות. אל תערוך ידנית.
+  const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — דשבורד מנתוני-הישויות החיים. אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
+import '../dart-ui-bs/ds/ds_store.dart';
 import 'package:flutter/material.dart';
 
 class ${cls} extends StatelessWidget {
