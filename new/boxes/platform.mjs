@@ -2,7 +2,10 @@
  *  חוזה: platform.contract.md · מקור-האמת: maor/src/components/platform/lib.ts.
  *  זה המקום היחיד שבו חוטי-הפלטפורמה נפגשים (חוקי-החשמלאי, LAW.md): קריאת-שכן
  *  שבמקור = הזרקת-שקע כאן. הקופסה מייבאת אך-ורק אטומים (חוק-2). */
-import { slugify } from '../atoms/slugify.mjs';
+import { slugify as __pure_slugify } from '../atoms/slugify.mjs';
+import { HEB2LAT } from '../atoms/slugify-data.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const slugify = (...a) => __pure_slugify(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), HEB2LAT);
 import { isValidSlug } from '../atoms/is-valid-slug.mjs';
 import { ALL_MODULES } from '../atoms/all-modules.mjs';
 import { MODULE_LABELS } from '../atoms/module-labels.mjs';

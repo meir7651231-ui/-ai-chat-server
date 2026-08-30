@@ -12,7 +12,10 @@ import { minToHM as minToHMAtom } from '../atoms/min-to-hm.mjs';
 import { groupLabelOf } from '../atoms/group-label-of.mjs';
 import { ABSENCE_REASON_CHIPS } from '../atoms/absence-reason-chips.mjs';
 import { makeupEligibility } from '../atoms/makeup-eligibility.mjs';
-import { blockReason as blockReasonAtom } from '../atoms/block-reason.mjs';
+import { blockReason as __pure_blockReason } from '../atoms/block-reason.mjs';
+import { FULL_HOLIDAYS } from '../atoms/block-reason-data.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const blockReasonAtom = (...a) => __pure_blockReason(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), FULL_HOLIDAYS);
 import { buildSlots as buildSlotsAtom } from '../atoms/build-slots.mjs';
 import { enrollmentsForSession as enrollmentsForSessionAtom } from '../atoms/enrollments-for-session.mjs';
 import { weeklyRoomSessions as weeklyRoomSessionsAtom } from '../atoms/weekly-room-sessions.mjs';

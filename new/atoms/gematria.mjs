@@ -1,11 +1,8 @@
 /** חוט · gematria — מספר⇒אותיות. חוזה: gematria.contract.md
  *  חולץ כלשונו מ-maor/src/lib/hebrew.ts */
-export function gem(n) {
+export function gem(n, U, T, H) {
   n = Math.floor(+n);
   if (!Number.isFinite(n) || n <= 0) return '';
-  const U = ['', 'א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט'];
-  const T = ['', 'י', 'כ', 'ל', 'מ', 'נ', 'ס', 'ע', 'פ', 'צ'];
-  const H = ['', 'ק', 'ר', 'ש', 'ת', 'תק', 'תר', 'תש', 'תת', 'תתק'];
   let s = H[Math.floor(n / 100)] || '';
   const r = n % 100;
   if (r === 15) s += 'טו';

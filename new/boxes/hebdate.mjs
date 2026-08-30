@@ -12,10 +12,16 @@
 import { hebParts } from '../atoms/heb-parts.mjs';
 import { pad2 } from '../atoms/pad2.mjs';
 import { monthHeOf as monthHeOfAtom } from '../atoms/month-he-of.mjs';
-import { monthEnOf as monthEnOfAtom } from '../atoms/month-en-of.mjs';
+import { monthEnOf as __pure_monthEnOf } from '../atoms/month-en-of.mjs';
+import { MONTHS } from '../atoms/month-en-of-data.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const monthEnOfAtom = (...a) => __pure_monthEnOf(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), MONTHS);
 import { hebYearNow as hebYearNowAtom } from '../atoms/heb-year-now.mjs';
 import { isHebLeapYear as isHebLeapYearAtom } from '../atoms/is-heb-leap-year.mjs';
-import { hebMonthsOf as hebMonthsOfAtom } from '../atoms/heb-months-of.mjs';
+import { hebMonthsOf as __pure_hebMonthsOf } from '../atoms/heb-months-of.mjs';
+import { ORDER_COMMON, ORDER_LEAP } from '../atoms/heb-months-of-data.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const hebMonthsOfAtom = (...a) => __pure_hebMonthsOf(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), ORDER_COMMON, ORDER_LEAP);
 import { hebToIso as hebToIsoAtom } from '../atoms/heb-to-iso.mjs';
 import { isoToHebParts as isoToHebPartsAtom } from '../atoms/iso-to-heb-parts.mjs';
 import { validateHebMonthNames as validateHebMonthNamesAtom } from '../atoms/validate-heb-month-names.mjs';

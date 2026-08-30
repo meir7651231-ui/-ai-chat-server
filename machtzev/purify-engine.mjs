@@ -70,30 +70,34 @@ const callers = (base, fn) => {
   walk(path.join(ROOT, 'new'));
   return out;
 };
-function appendArgAtCalls(src, fn, extra) {          // fn(<args>) ⇒ fn(<args>, extra); הפניה-כערך ⇒ null
-  let out = '', i = 0, touched = false;
-  const re = new RegExp(`\\b${fn}\\b`, 'g'); let m;
-  while ((m = re.exec(src))) {
-    const j = m.index + fn.length;
-    const before = src.slice(0, m.index);
-    if (/(import[^;]*$)|(from\s*['"][^'"]*$)|[.'"\`\w$]$/.test(before.slice(-60)) && /[.\w$]$/.test(before)) continue;
-    if (src[j] !== '(') {
-      if (/from\s*['"][^'"]*$/.test(before) || /\{[^}]*$/.test(before.slice(before.lastIndexOf('import')))) continue;
-      return null;                                   // שימוש-כערך — לא משכתבים
-    }
+function appendArgAtCalls(src, fn, extra) {   // fn(<args>) ⇒ fn(<args>, extra) · שימוש-כערך ⇒ null
+  // מיסוך מחרוזות/הערות כדי שסריקה לא תתעתע; אזורי-import מוחרגים (שם מותר אזכור-לא-קריאה)
+  const mask = src.replace(/(['"`])(?:\\.|(?!\1)[^\\])*\1/g, m => 'x'.repeat(m.length))
+    .replace(/\/\*[\s\S]*?\*\//g, m => 'x'.repeat(m.length))
+    .replace(/\/\/[^\n]*/g, m => 'x'.repeat(m.length));
+  const importSpans = [...mask.matchAll(/import[\s\S]*?from\s*x+\s*;|import\s*x+\s*;/g)]
+    .map(m => [m.index, m.index + m[0].length]);
+  const inImport = (i) => importSpans.some(([a, b]) => i >= a && i < b);
+  const sites = [];
+  for (const m of mask.matchAll(new RegExp(`\\b${fn}\\b`, 'g'))) {
+    if (inImport(m.index)) continue;
+    if (/[.\w$]/.test(mask[m.index - 1] || '')) continue;         // obj.fn — לא שלנו
+    let j = m.index + fn.length;
+    while (/\s/.test(mask[j])) j++;
+    if (mask[j] !== '(') return null;                              // הפניה-כערך — לא משכתבים
+    sites.push(j);
   }
-  i = 0;
-  while (true) {
-    const k = src.indexOf(fn + '(', i);
-    if (k < 0) { out += src.slice(i); break; }
-    if (/[.\w$]/.test(src[k - 1] || '')) { out += src.slice(i, k + fn.length + 1); i = k + fn.length + 1; continue; }
-    const close = balanced(src, k + fn.length);
+  if (!sites.length) return null;
+  let out = '', prev = 0;
+  for (const po of sites) {
+    const close = balanced(src, po);
     if (close < 0) return null;
-    const inner = src.slice(k + fn.length + 1, close);
-    out += src.slice(i, close) + (inner.trim() ? ', ' : '') + extra + src.slice(close, close + 1);
-    i = close + 1; touched = true;
+    const inner = src.slice(po + 1, close);
+    out += src.slice(prev, close) + (inner.trim() ? ', ' : '') + extra;
+    prev = close;
   }
-  return touched ? out : null;
+  out += src.slice(prev);
+  return out;
 }
 function purifyOne(cand, log) {
   const base = cand.file.replace(/\.mjs$/, '');
@@ -111,6 +115,13 @@ function purifyOne(cand, log) {
   const pc = balanced(mech, po);
   if (pc < 0) return log(`~ ${base}: פרמטרים לא-נקראים`);
   const params = mech.slice(po + 1, pc).trim();
+  // אריות-מקור: כמה פרמטרים היו — העטיפה בקוראים מרפדת עד-אליה כדי שברירות-מחדל יישמרו
+  let origArity = 0, dpt = 0, st = null;
+  if (params) { origArity = 1; for (let q = 0; q < params.length; q++) { const ch = params[q];
+    if (st) { if (ch === '\\') q++; else if (ch === st) st = null; continue; }
+    if (ch === "'" || ch === '"' || ch === '`') st = ch;
+    else if ('([{'.includes(ch)) dpt++; else if (')]}'.includes(ch)) dpt--;
+    else if (ch === ',' && dpt === 0) origArity++; } }
   mech = mech.slice(0, po + 1) + (params ? params + ', ' : '') + names.join(', ') + mech.slice(pc);
   // (2) אטום-הדאטה + חוזה + בדיקה
   const dataSrc = `/** אטום-דאטה · ${dataBase} — הדאטה שחולצה מ-${base} (מנוע-הטיהור, הכרעה 19). חוזה: ${dataBase}.contract.md */\n` +
@@ -119,21 +130,33 @@ function purifyOne(cand, log) {
   const test = `// בדיקת-צילום · ${dataBase} — הדאטה שחולצה זהה ביט-אחר-ביט למקור (מנוע-הטיהור).\nimport * as D from './${dataBase}.mjs';\nimport assert from 'node:assert';\n` +
     cand.consts.map(c => `assert.strictEqual(JSON.stringify(D.${c.name}), ${JSON.stringify(JSON.stringify(eval('(' + c.lit + ')')))});`).join('\n') +
     `\nconsole.log('OK ${dataBase}');\n`;
-  // (3) הקוראים
+  // (3) הקוראים — כריכת-עטיפה (v2): הקורא מייבא את האטום-הטהור בכינוי, כורך את הדאטה
+  // בעטיפה מרופדת-אריות (ברירות-מחדל נשמרות), וכל שאר הקובץ — קריאות, re-export,
+  // הזרקה-כערך — רואה את העטיפה. ה-API החיצוני של קופסאות לא זז.
   const cs = callers(base, cand.fn);
   const edits = new Map();
   for (const cp of cs) {
     const t = fs.readFileSync(cp, 'utf8');
-    const nu = appendArgAtCalls(t, cand.fn, names.join(', '));
-    if (nu === null) return log(`~ ${base}: קורא עם שימוש-כערך (${path.relative(ROOT, cp)})`);
+    const im = t.match(new RegExp(`import\\s*\\{([^}]*)\\}\\s*from\\s*(['\"])([^'\"]*\\/${base}\\.mjs)\\2\\s*;?`));
+    if (!im) return log(`~ ${base}: קורא בלי import-מפורש (${path.relative(ROOT, cp)})`);
+    const spec = im[1].match(new RegExp(`\\b${cand.fn}\\b(\\s+as\\s+(\\w+))?`));
+    if (!spec) return log(`~ ${base}: היבוא לא נמצא במפרט (${path.relative(ROOT, cp)})`);
+    const local = spec[2] || cand.fn;
+    const alias = `__pure_${cand.fn}`;
+    const newBraces = im[1].replace(spec[0], `${cand.fn} as ${alias}`);
+    const pad = `...Array(Math.max(0, ${origArity} - a.length)).fill(undefined)`;
+    const wrap = `const ${local} = (...a) => ${alias}(...a, ${pad}, ${names.join(', ')});`;
+    let inject;
     if (cp.endsWith('.test.mjs')) {
-      // בדיקה = צילום-ערכים: הדאטה משוכפלת מקומית (חוק-חיווט: בדיקת-אטום לא מייבאת אטום-שכן)
-      const inl = cand.consts.map(c => `// צילום-מקומי מ-${dataBase} (בדיקה לא מייבאת אטום-שכן)\nconst ${c.name} = ${c.lit};`).join('\n') + '\n';
-      edits.set(cp, inl + nu);
+      const inl = cand.consts.map(c => `const ${c.name} = ${c.lit};`).join('\n');
+      inject = `\n// צילום-מקומי מ-${dataBase} + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)\n${inl}\n${wrap}`;
     } else {
       const relData = path.relative(path.dirname(cp), path.join(ATOMS, dataBase + '.mjs')).replace(/^(?!\.)/, './');
-      edits.set(cp, `import { ${names.join(', ')} } from '${relData}';\n` + nu);
+      inject = `\nimport { ${names.join(', ')} } from '${relData}';\n// עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה\n${wrap}`;
     }
+    const stmt = im[0];
+    const nu = t.replace(stmt, stmt.replace(im[1], newBraces) + inject);
+    edits.set(cp, nu);
   }
   // כתיבה + אימות + החזרה-על-אדום
   const backup = new Map([[path.join(ATOMS, cand.file), cand.src]]);
@@ -149,7 +172,10 @@ function purifyOne(cand, log) {
     const tests = new Set([path.join(ATOMS, dataBase + '.test.mjs')]);
     const ownT = path.join(ATOMS, base + '.test.mjs');
     if (fs.existsSync(ownT)) tests.add(ownT);
-    for (const p of edits.keys()) if (p.endsWith('.test.mjs')) tests.add(p);
+    for (const p of edits.keys()) {
+      if (p.endsWith('.test.mjs')) tests.add(p);
+      else { const adj = p.replace(/\.mjs$/, '.test.mjs'); if (fs.existsSync(adj)) tests.add(adj); }  // בדיקת-הקופסה הצמודה (מגני-הכרעה!)
+    }
     for (const t of tests) execFileSync('node', [t], { stdio: 'pipe' });
     // מגן-הפניות: הסורק הגלובלי חייב להישאר ירוק (תופס עוזרי-מודול שהוחמצו — לקח amount-in-words)
     execFileSync('node', [path.join(ROOT, 'machtzev/emit/free-ref-scan.mjs'), '--gate'], { stdio: 'pipe' });

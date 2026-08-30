@@ -1,4 +1,12 @@
-import { maritalChipStyle } from './marital-chip-style.mjs';
+import { maritalChipStyle as __pure_maritalChipStyle } from './marital-chip-style.mjs';
+// צילום-מקומי מ-marital-chip-style-data + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)
+const MARITAL_CHIP = {
+  נשואים: ['#e6f4ea', '#1e7a3a'],
+  'אלמן/ה': ['#eef1f5', '#4a5568'],
+  גרושים: ['#fdecec', '#b4433a'],
+  פרודים: ['#fff4e5', '#a15c00'],
+};
+const maritalChipStyle = (...a) => __pure_maritalChipStyle(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), MARITAL_CHIP);
 const probe = (bg, c) => [bg, c]; // שקע-בוחן — מחזיר את הזוג שנבחר
 const C = [
   ['נשואים', ['#e6f4ea', '#1e7a3a']],

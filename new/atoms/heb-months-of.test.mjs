@@ -1,4 +1,14 @@
-import { hebMonthsOf } from './heb-months-of.mjs';
+import { hebMonthsOf as __pure_hebMonthsOf } from './heb-months-of.mjs';
+// צילום-מקומי מ-heb-months-of-data + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)
+const ORDER_COMMON = [
+  'Tishri', 'Heshvan', 'Kislev', 'Tevet', 'Shevat', 'Adar',
+  'Nisan', 'Iyar', 'Sivan', 'Tamuz', 'Av', 'Elul',
+];
+const ORDER_LEAP = [
+  'Tishri', 'Heshvan', 'Kislev', 'Tevet', 'Shevat', 'Adar I', 'Adar II',
+  'Nisan', 'Iyar', 'Sivan', 'Tamuz', 'Av', 'Elul',
+];
+const hebMonthsOf = (...a) => __pure_hebMonthsOf(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), ORDER_COMMON, ORDER_LEAP);
 // שקעים אמיתיים (מקומיים לבדיקה — הבדיקה מייבאת רק את האטום שלה):
 // עיבור לפי מחזור-המטונים (זהה לתשובת Intl — אומת מול סריקת-הלוח לשנים הנבדקות)
 const isHebLeapYear = (y) => (7 * y + 1) % 19 < 7;

@@ -28,7 +28,10 @@ import { LANGUAGE_OPTIONS } from '../atoms/language-options.mjs';
 import { OTHER } from '../atoms/other.mjs';
 import { OTHER_LABEL } from '../atoms/other-label.mjs';
 import { chipStyle } from '../atoms/chip-style.mjs';
-import { maritalChipStyle as maritalChipWire } from '../atoms/marital-chip-style.mjs';
+import { maritalChipStyle as __pure_maritalChipStyle } from '../atoms/marital-chip-style.mjs';
+import { MARITAL_CHIP } from '../atoms/marital-chip-style-data.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const maritalChipWire = (...a) => __pure_maritalChipStyle(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), MARITAL_CHIP);
 import { termOf } from '../atoms/term-of.mjs';
 
 // ── הכרעות-הקופסה (סדר/ברירות-מחדל/מילון) ──

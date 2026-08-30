@@ -14,7 +14,10 @@ import { freshNextYearEnrollment } from '../atoms/fresh-next-year-enrollment.mjs
 import { nextYearCourseDraft } from '../atoms/next-year-course-draft.mjs';
 import { studentHistory } from '../atoms/student-history.mjs';
 import { studentHistoryText } from '../atoms/student-history-text.mjs';
-import { reenrollCsvRows } from '../atoms/reenroll-csv-rows.mjs';
+import { reenrollCsvRows as __pure_reenrollCsvRows } from '../atoms/reenroll-csv-rows.mjs';
+import { head } from '../atoms/reenroll-csv-rows-data.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const reenrollCsvRows = (...a) => __pure_reenrollCsvRows(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), head);
 import { reenrollListText } from '../atoms/reenroll-list-text.mjs';
 import { payBal } from '../atoms/pay-bal.mjs';
 import { paidOf } from '../atoms/paid-of.mjs';

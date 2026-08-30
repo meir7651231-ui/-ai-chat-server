@@ -29,8 +29,14 @@ import { matchSegment as matchSegmentAtom } from '../atoms/segments-match-segmen
 import { segmentCounts as segmentCountsAtom } from '../atoms/segments-segment-counts.mjs';
 import { activeByMonth as activeByMonthAtom } from '../atoms/portfolio-active-by-month.mjs';
 import { portfolioIntel as portfolioIntelAtom } from '../atoms/portfolio-portfolio-intel.mjs';
-import { tierTrendCounts as tierTrendCountsAtom } from '../atoms/portfolio-tier-trend-counts.mjs';
-import { donorConstellation as donorConstellationAtom } from '../atoms/constellation-donor-constellation.mjs';
+import { tierTrendCounts as __pure_tierTrendCounts } from '../atoms/portfolio-tier-trend-counts.mjs';
+import { order } from '../atoms/portfolio-tier-trend-counts-data.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const tierTrendCountsAtom = (...a) => __pure_tierTrendCounts(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), order);
+import { donorConstellation as __pure_donorConstellation } from '../atoms/constellation-donor-constellation.mjs';
+import { TIER_KEY } from '../atoms/constellation-donor-constellation-data.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const donorConstellationAtom = (...a) => __pure_donorConstellation(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), TIER_KEY);
 import { buildCommands } from '../atoms/commands-build-commands.mjs';
 import { filterCommands } from '../atoms/commands-filter-commands.mjs';
 

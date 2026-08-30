@@ -7,7 +7,10 @@ import { supportersImportFormatRows } from '../atoms/supporters-import-format-ro
 import { eventsCsvRows as eventsCsvRowsWire } from '../atoms/events-csv-rows.mjs';
 import { termOf } from '../atoms/term-of.mjs';
 import { hebDateFull } from '../atoms/heb-date-full.mjs';
-import { gem } from '../atoms/gematria.mjs';
+import { gem as __pure_gem } from '../atoms/gematria.mjs';
+import { U, T, H } from '../atoms/gematria-data.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const gem = (...a) => __pure_gem(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), U, T, H);
 import { gemYear } from '../atoms/gem-year.mjs';
 import { hebParts } from '../atoms/heb-parts.mjs';
 import { EV_META } from '../atoms/ev-meta.mjs';

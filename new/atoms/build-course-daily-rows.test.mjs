@@ -1,6 +1,7 @@
-// צילום-מקומי מאטום-הדאטה (בדיקה לא מייבאת אטום-שכן)
+import { buildCourseDailyRows as __pure_buildCourseDailyRows } from './build-course-daily-rows.mjs';
+// צילום-מקומי מ-build-course-daily-rows-data + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)
 const DAY_NAMES = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
-import { buildCourseDailyRows } from './build-course-daily-rows.mjs';
+const buildCourseDailyRows = (...a) => __pure_buildCourseDailyRows(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), DAY_NAMES);
 
 // שקעים מקומיים לבדיקה
 const hebDateFull = (iso) => 'ע:' + iso;
@@ -26,7 +27,7 @@ const db1 = {
 const c1 = { id: 'c1', start: '2026-08-23', end: '2026-08-30', weekday: 0, time: '16:00' };
 
 // דוגמה 1
-const r1 = buildCourseDailyRows(c1, db1, undefined, termOf, hebDateFull, DAY_NAMES);
+const r1 = buildCourseDailyRows(c1, db1, undefined, termOf, hebDateFull);
 eq('1 · days', r1.days, 2);
 eq('1 · rows.length', r1.rows.length, 6);
 eq('1 · רות 23.8', r1.rows[1], ['ע:2026-08-23', '23/08/2026', 'ראשון', 'קבוצה · 16:00', 'מתקיים', 'רות', 'פרץ', 'פעיל']);
@@ -37,16 +38,16 @@ eq('1 · תמר 30.8', r1.rows[5][5], 'תמר'); // נעמי איננה ב-30.8,
 eq('1 · אין נעמי/יעל ב-30.8', r1.rows.filter((r) => r[1] === '30/08/2026').map((r) => r[5]), ['רות', 'תמר']);
 
 // דוגמה 2 — termOf על כותרת-המשפחה
-const r2 = buildCourseDailyRows(c1, db1, { terms: { 'entity.family': 'לקוח' } }, termOf, hebDateFull, DAY_NAMES);
+const r2 = buildCourseDailyRows(c1, db1, { terms: { 'entity.family': 'לקוח' } }, termOf, hebDateFull);
 eq('2 · כותרת עם config', r2.rows[0][6], 'לקוח');
 eq('2 · כותרת בלי config', r1.rows[0][6], 'משפחה');
 
 // דוגמה 3 — start ריק
-const r3 = buildCourseDailyRows({ id: 'c1', start: '', end: '2026-08-30' }, db1, undefined, termOf, hebDateFull, DAY_NAMES);
+const r3 = buildCourseDailyRows({ id: 'c1', start: '', end: '2026-08-30' }, db1, undefined, termOf, hebDateFull);
 eq('3 · start ריק', { n: r3.rows.length, days: r3.days }, { n: 1, days: 0 });
 
 // דוגמה 4 — אין שיבוצים ⇒ 'אין רשומות'
-const r4 = buildCourseDailyRows({ id: 'cX', start: '2026-08-23', end: '2026-08-23', weekday: 0, time: '16:00' }, db1, undefined, termOf, hebDateFull, DAY_NAMES);
+const r4 = buildCourseDailyRows({ id: 'cX', start: '2026-08-23', end: '2026-08-23', weekday: 0, time: '16:00' }, db1, undefined, termOf, hebDateFull);
 eq('4 · אין רשומות', r4.rows[1], ['ע:2026-08-23', '23/08/2026', 'ראשון', 'קבוצה · 16:00', 'אין רשומות', '', '', '']);
 
 // דוגמה 5 — קבוצות מרובות: תואמת-label נכנסת לסלוט שלה; חסרת-קבוצה לכל סלוט
@@ -58,13 +59,13 @@ const db5 = {
     { courseId: 'c5', memberId: 'm3', status: 'active', absences: [] },
   ],
 };
-const r5 = buildCourseDailyRows(c5, db5, undefined, termOf, hebDateFull, DAY_NAMES);
+const r5 = buildCourseDailyRows(c5, db5, undefined, termOf, hebDateFull);
 eq('5 · days', r5.days, 1);
 eq('5 · סלוט א', r5.rows.filter((r) => r[3] === 'א · 10:00').map((r) => r[5]), ['רות', 'נעמי']);
 eq('5 · סלוט ב', r5.rows.filter((r) => r[3] === 'ב · 12:00').map((r) => r[5]), ['נעמי']);
 
 // דוגמה 6 — קטיעה ב-MAX_DAYS=500
-const r6 = buildCourseDailyRows({ id: 'cY', start: '2026-01-04', end: '2036-12-31', weekday: 0, time: '' }, { families: [], enrollments: [] }, undefined, termOf, hebDateFull, DAY_NAMES);
+const r6 = buildCourseDailyRows({ id: 'cY', start: '2026-01-04', end: '2036-12-31', weekday: 0, time: '' }, { families: [], enrollments: [] }, undefined, termOf, hebDateFull);
 eq('6 · days=500', r6.days, 500);
 eq('6 · rows=502', r6.rows.length, 502);
 eq('6 · שורת-הקטיעה', r6.rows[501], ['—', '—', '—', '—', 'הדוח נקטע ב-500 ימי מפגש — בדקו את תאריך הסיום של החוג', '', '', '']);

@@ -2,8 +2,7 @@
  * מוצא: maor-system/src/components/supporters/constellation.ts:54 (donorConstellation) + hash01:32 + radiusFor:39 + TIER_KEY:14 (inline). חוק-4 verbatim.
  * שקעים (מבונים): donorScan,dayDiff,rfmFromScan,churnFromScan (intel) · supTier (Genesis).
  */
-export function donorConstellation(supporters, todayIso, opts = {}, { donorScan, dayDiff, rfmFromScan, churnFromScan, supTier }) {
-  const TIER_KEY = { 'זהב': 'gold', 'כסף': 'silver', 'ארד': 'bronze', 'רדומה': 'dormant' };
+export function donorConstellation(supporters, todayIso, opts = {}, { donorScan, dayDiff, rfmFromScan, churnFromScan, supTier }, TIER_KEY) {
   const hash01 = (s) => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0) / 4294967296; };
   const radiusFor = (daysSince, jitter) => { const base = daysSince <= 30 ? 0.30 : daysSince <= 90 ? 0.45 : daysSince <= 180 ? 0.60 : daysSince <= 365 ? 0.75 : 0.9; return Math.max(0.18, Math.min(0.98, base + (jitter - 0.5) * 0.1)); };
   const rate = opts.rate ?? 3.7;

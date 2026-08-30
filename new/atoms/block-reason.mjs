@@ -4,19 +4,8 @@
  *  הוזרקו כשקעים (חוק-1 — אפס import פנימי). */
 
 /** חגים שבהם אין פעילות כלל (מתוך לוח החגים המשותף). */
-const FULL_HOLIDAYS = [
-  'ראש השנה',
-  'ראש השנה ב׳',
-  'יום כיפור',
-  'סוכות',
-  'שמחת תורה',
-  'פסח',
-  'שביעי של פסח',
-  'שבועות',
-  'תשעה באב',
-];
 
-export function blockReason(d, blockingOn = true, hebParts, holidays) {
+export function blockReason(d, blockingOn = true, hebParts, holidays, FULL_HOLIDAYS) {
   if (!blockingOn) return null;
   const dow = d.getDay();
   if (dow === 6) return 'שבת';

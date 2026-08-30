@@ -1,4 +1,17 @@
-import { blockReason } from './block-reason.mjs';
+import { blockReason as __pure_blockReason } from './block-reason.mjs';
+// צילום-מקומי מ-block-reason-data + עטיפת-כריכה (מנוע-הטיהור v2; בדיקה לא מייבאת אטום-שכן)
+const FULL_HOLIDAYS = [
+  'ראש השנה',
+  'ראש השנה ב׳',
+  'יום כיפור',
+  'סוכות',
+  'שמחת תורה',
+  'פסח',
+  'שביעי של פסח',
+  'שבועות',
+  'תשעה באב',
+];
+const blockReason = (...a) => __pure_blockReason(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), FULL_HOLIDAYS);
 // שקע hebParts — ההתנהגות האמיתית (Intl בלוח hebrew, חודש בשם אנגלי)
 const fmtParts = new Intl.DateTimeFormat('en-u-ca-hebrew', { day: 'numeric', month: 'long', year: 'numeric' });
 const hebParts = (d) => {

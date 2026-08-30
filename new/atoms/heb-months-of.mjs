@@ -3,16 +3,8 @@
  *  השכנים isHebLeapYear/monthHeOf הוזרקו כשקעים (חוק-1); סדרי-החודשים = קבוע-נתונים. */
 
 /** סדר החודשים בשנה פשוטה (12) ובשנה מעוברת (13) — שמות Intl. */
-const ORDER_COMMON = [
-  'Tishri', 'Heshvan', 'Kislev', 'Tevet', 'Shevat', 'Adar',
-  'Nisan', 'Iyar', 'Sivan', 'Tamuz', 'Av', 'Elul',
-];
-const ORDER_LEAP = [
-  'Tishri', 'Heshvan', 'Kislev', 'Tevet', 'Shevat', 'Adar I', 'Adar II',
-  'Nisan', 'Iyar', 'Sivan', 'Tamuz', 'Av', 'Elul',
-];
 
-export function hebMonthsOf(hebYear, isHebLeapYear, monthHeOf) {
+export function hebMonthsOf(hebYear, isHebLeapYear, monthHeOf, ORDER_COMMON, ORDER_LEAP) {
   const order = isHebLeapYear(hebYear) ? ORDER_LEAP : ORDER_COMMON;
   return order.map(monthHeOf);
 }

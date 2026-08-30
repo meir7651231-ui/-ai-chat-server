@@ -27,7 +27,10 @@ import { deliverReceipt as deliverReceiptX } from '../atoms/deliver-receipt.mjs'
 import { hebDateFull as hebDateFullX } from '../atoms/heb-date-full.mjs';
 import { featureOn as featureOnX } from '../atoms/feature-on.mjs';
 import { moduleOn } from '../atoms/module-on.mjs';
-import { gem } from '../atoms/gematria.mjs';
+import { gem as __pure_gem } from '../atoms/gematria.mjs';
+import { U, T, H } from '../atoms/gematria-data.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const gem = (...a) => __pure_gem(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), U, T, H);
 import { gemYear as gemYearX } from '../atoms/gem-year.mjs';
 import { hebParts } from '../atoms/heb-parts.mjs';
 import { guardExport as guardExportX } from '../atoms/guard-export.mjs';

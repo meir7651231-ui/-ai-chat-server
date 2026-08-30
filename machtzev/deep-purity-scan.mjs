@@ -13,10 +13,12 @@ const ROOT = new URL('../', import.meta.url).pathname;
 const DIRS = ['new/atoms', 'new/boxes'];
 const HEB = /[֐-׿]/;
 const strip = (s) => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '').replace(/(^|[^:])\/\/[^\n]*/g, '$1');
+// צורת-דאטה: הכרזת-ליטרל ברמת-המודול בלבד (עמודה 0) — const מוזח בתוך פונקציה איננו אטום-דאטה
 const isPureData = (code) =>
-  (/^\s*export\s+(?:const\s+\w+\s*=\s*[\[{]|function\s+\w+\s*\(\)\s*\{\s*return\s+[\[{])/m.test(code) ||
-    /^\s*(?:const\s+\w+\s*=\s*[\[{])/m.test(code)) &&
-  !/\b(if|for|while|switch)\b/.test(code) && !/=>(?!\s*[\[{('"`0-9])/.test(code);
+  (/^export\s+(?:const\s+\w+\s*=\s*[\[{]|function\s+\w+\s*\(\)\s*\{\s*return\s+[\[{])/m.test(code) ||
+    /^const\s+\w+\s*=\s*[\[{]/m.test(code)) &&
+  !/\b(if|for|while|switch)\b/.test(code) && !/=>(?!\s*[\[{('"`0-9])/.test(code) &&
+  !/^(?:export\s+)?(?:const\s+\w+\s*=\s*(?:async\s*)?\(|function\s+\w+\s*\()/m.test(code);
 const findings = [];
 for (const dir of DIRS) {
   const abs = path.join(ROOT, dir);

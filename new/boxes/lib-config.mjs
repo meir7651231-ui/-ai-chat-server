@@ -29,7 +29,10 @@ import { telephonyOn as atomTelephonyOn } from '../atoms/telephony-on.mjs';
 import { integrationSetting as atomIntegrationSetting } from '../atoms/integration-setting.mjs';
 import { safeHttpsUrl as atomSafeHttpsUrl } from '../atoms/safe-https-url.mjs';
 import { termOf as atomTermOf } from '../atoms/term-of.mjs';
-import { normalizeTelephony as atomNormalizeTelephony } from '../atoms/normalize-telephony.mjs';
+import { normalizeTelephony as __pure_normalizeTelephony } from '../atoms/normalize-telephony.mjs';
+import { TEL_KINDS } from '../atoms/normalize-telephony-data.mjs';
+// עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const atomNormalizeTelephony = (...a) => __pure_normalizeTelephony(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), TEL_KINDS);
 import { makeNormalizeSite } from '../atoms/make-normalize-site.mjs';
 import { makeNormalizeConfig } from '../atoms/make-normalize-config.mjs';
 import { publicSiteOn as atomPublicSiteOn } from '../atoms/public-site-on.mjs';
