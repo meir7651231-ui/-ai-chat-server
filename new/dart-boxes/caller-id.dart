@@ -3,6 +3,7 @@
 // זהו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart) מתחברות לאותה קופסה: אותם קלטים ⇒ אותו פלט.
 // כאן ורק כאן נפגשים החוטים (חוק-2). אף אטום לא מייבא אטום — כל הכריכה (כולל מתאמי-טיפוס
 // ל-Dart קשיח-הטיפוס) חיה בקופסה בלבד (חוק-5).
+import '../dart-data-maor/caller-kind-label-sockets.dart' as skb_caller_kind_label;
 import '../dart-maor/phone-key.dart' as pk;
 import '../dart-maor/find-caller.dart' as fc;
 import '../dart-maor/caller-kind-label.dart' as ckl;
@@ -31,7 +32,7 @@ Map<String, Object?>? identifyCaller(Map<String, Object?> db, String rawNumber) 
     fc.findCaller(db, rawNumber, pk.phoneKey);
 
 // ── תווית-הסוג דרך מילון-המונחים של הארגון (white-label — termOf האמיתי מחווט). ──
-String? kindLabel(dynamic cfg, String kind) => ckl.callerKindLabel(cfg, kind, _termLabel);
+String? kindLabel(dynamic cfg, String kind) => ckl.callerKindLabel(cfg, kind, _termLabel, skb_caller_kind_label.callerKindLabel_T);
 
 // ── כרטיס-שיחה שלם: מתקשר + תווית + הקשר-משפחה (כשזה משפחה/בן-משפחה). ──
 Map<String, Object?>? screenPop(Map<String, Object?> db, dynamic cfg, String rawNumber) {

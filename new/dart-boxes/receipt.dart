@@ -1,4 +1,6 @@
-import '../dart-data-maor/gematria-terms.dart' as td_gematria;
+import '../dart-data-maor/gematria-sockets.dart' as skb_gematria;
+import '../dart-data-maor/receipt-lines-sockets.dart' as skb_receipt_lines;
+import '../dart-data-maor/gematria-sockets.dart' as td_gematria;
 // 📦 קופסת-חיבורים · receipt (Dart) — מחווטת 12 אטומי-Dart. מקבילה ל-new/boxes/receipt.mjs.
 // חוזה משותף: new/boxes/receipt.contract.md · מקור-האמת (L4): maor/src/lib/receipt.ts.
 // זהו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart) מתחברות לאותה קופסה: אותם קלטים ⇒ אותו פלט.
@@ -22,6 +24,7 @@ import '../dart-maor/receipt-lines.dart' as rl;
 import '../dart-maor/receipt-html.dart' as rh;
 import '../dart-maor/receipt-fmt-of.dart' as rfo;
 import '../dart-maor/deliver-receipt.dart' as dr;
+import '../dart-data-maor/heb-date-full-sockets.dart' as sk_hdf;
 import '../dart-maor/heb-date-full.dart' as hdf;
 import '../dart-maor/feature-on.dart' as fo;
 import '../dart-maor/module-on.dart' as mo;
@@ -66,9 +69,9 @@ abstract class ReceiptIo {
 }
 
 // ── חיווט: תאריך-עברי-מלא (gem/gemYear/hebParts שוקעו לתוך heb-date-full) ──────
-String _gemYear(String y) => gy.gemYear(y, gm.gem);
+String _gemYear(String y) => gy.gemYear(y, (a0) => gm.gem(a0, skb_gematria.gematria_U, skb_gematria.gematria_T, skb_gematria.gematria_H, skb_gematria.gematria_T2));
 String _hebDateFull(dynamic iso) =>
-    hdf.hebDateFull(iso as String?, gm.gem, _gemYear, hp.hebParts);
+    hdf.hebDateFull(iso as String?, (a0) => gm.gem(a0, skb_gematria.gematria_U, skb_gematria.gematria_T, skb_gematria.gematria_H, skb_gematria.gematria_T2), _gemYear, hp.hebParts, sk_hdf.hebDateFull_monthNames);
 
 // ── חיווט: הלועזי של קבלה — צהריים-מקומי, he-IL / d.m.yyyy (receipt.ts:59-62) ──
 String _hebrewLocaleDate(dynamic iso) {
@@ -117,7 +120,7 @@ String receiptVerifyCode(String rid, num amount, String? currency, String date) 
 List<String> receiptLines(Map<String, dynamic> o,
         [String Function(dynamic amount, dynamic sym)? amountInWords]) =>
     rl.receiptLines(
-        o, _hebDateFull, amountInWords ?? _amountInWordsMissing, _rvc, _hebrewLocaleDate);
+        o, _hebDateFull, amountInWords ?? _amountInWordsMissing, _rvc, _hebrewLocaleDate, skb_receipt_lines.receiptLines_T);
 
 /// הקבלה כ-HTML מוכן-להדפסה (טהור — מחרוזת בלבד); receiptLines מקור-האמת היחיד לתוכן.
 String receiptHtml(Map<String, dynamic> o,

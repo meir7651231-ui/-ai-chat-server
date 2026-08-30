@@ -26,6 +26,7 @@ gate('assembly', 'assemble/box-audit.mjs', ['--gate']);
 gate('synth', 'generator/synth.mjs', ['--gate']);
 gate('coverage', 'coverage-gate.mjs');
 gate('pins', 'pins-check.mjs');
+gate('boxes', 'box-proofs-check.mjs', ['--gate'], FAST);
 gate('selftest', 'police-selftest.mjs', [], FAST);
 gate('mutation', 'mutation-check.mjs', [], FAST);
 // פריטי מרשם⇄ריצה — דו-כיווני

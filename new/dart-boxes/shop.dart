@@ -1,3 +1,4 @@
+import '../dart-data-maor/distribution-list-lines-sockets.dart' as skb_distribution_list_lines;
 import '../dart-data-maor/redemptions-csv-rows-terms.dart' as td_redemptions_csv_rows;
 import '../dart-data-maor/beneficiary-label-terms.dart';
 // 📦 קופסת-חיבורים · מודול-החנות (shop) (Dart) — מחווטת 35 אטומי-Dart. מקבילה ל-new/boxes/shop.mjs.
@@ -141,7 +142,7 @@ Object? componentRedeemedNow(Map<String, dynamic> db, dynamic a, dynamic comp, d
 
 /// רשימת-חלוקה מודפסת — itemOf + beneficiaryLabel מחווטים פנימית.
 List<String> distributionListLines(Map<String, dynamic> db, Object? productId, [Object? config]) =>
-    dll.distributionListLines(db, productId, config, _itemOfDL, _benLabel3);
+    dll.distributionListLines(db, productId, config, _itemOfDL, _benLabel3, skb_distribution_list_lines.distributionListLines_T);
 
 /// שורות-CSV של מימושים — beneficiaryLabel + itemOf מחווטים פנימית.
 List<List<dynamic>> redemptionsCsvRows(Map<String, dynamic> db, [dynamic config]) =>

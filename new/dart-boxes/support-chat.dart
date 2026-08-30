@@ -13,6 +13,7 @@
 //   sort-support-threads.dart קיים אך אינו מחווט כאן — הסדר שייך לקופסה (זהה למבנה-ה-JS).
 //
 // מתאמי-טיפוס: ה-JS גמיש-טיפוסים; ב-Dart-הקשיח הקופסה מיישרת את פלט-האטומים (dynamic⇒String/num).
+import '../dart-data-maor/support-day-label-sockets.dart' as skb_support_day_label;
 import '../dart-maor/support-msg-max.dart' as smm;
 import '../dart-maor/sanitize-support-text.dart' as sst;
 import '../dart-maor/is-sendable-support-text.dart' as iss;
@@ -64,7 +65,7 @@ List<dynamic> sortSupportThreads(dynamic threads) {
 int get supportMsgMax => smm.supportMsgMax;
 List<dynamic> sortSupportMsgs(dynamic msgs) => ssm.sortSupportMsgs(msgs);
 String supportMsgTime(dynamic at) => smt.supportMsgTime(at) as String;
-String supportDayLabel(dynamic at, dynamic todayIso) => sdl.supportDayLabel(at, todayIso) as String;
+String supportDayLabel(dynamic at, dynamic todayIso) => sdl.supportDayLabel(at, todayIso, skb_support_day_label.supportDayLabel_T) as String;
 String supportPreview(dynamic text, [dynamic max = 40]) => spv.supportPreview(text, max) as String;
 num supportUnread(dynamic thread, dynamic side) => sur.supportUnread(thread, side) as num;
 List<dynamic> sortTeamMsgs(dynamic msgs) => stm.sortTeamMsgs(msgs);

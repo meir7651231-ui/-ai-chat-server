@@ -9,6 +9,7 @@
 //   החוטים עובדים על אובייקט-JS (⇒ Map). הקופסה מגשרת: Map ⇒ record לפני-האטום.
 // · אטום paid-in-range מזריק שקע-inRange בחתימת `bool Function(Object?, Map<String,dynamic>)`;
 //   הקופסה מספקת מתאם `_inRangeMap` שקורא לאטום in-range עם ה-record.
+import '../dart-data-maor/range-label-sockets.dart' as skb_range_label;
 import '../dart-maor/fmt-date.dart' as fdc;
 import '../dart-maor/in-range.dart' as ir;
 import '../dart-maor/range-label.dart' as rl;
@@ -67,7 +68,7 @@ List<List<Object>> countBy(List<dynamic> items, String Function(dynamic) key) =>
 
 // ── חיווט-שכנים (חוק-3): השכן מוזרק פנימה בקופסה ──
 /// תווית עברית לטווח-תאריכים — fmtDate של הקופסה מוזרק כשקע.
-String rangeLabel(Map r) => rl.rangeLabel(r, fmtDate);
+String rangeLabel(Map r) => rl.rangeLabel(r, fmtDate, skb_range_label.rangeLabel_T);
 
 /// סכום-ששולם-בטווח — inRange מוזרק כשקע (דרך מתאם ה-record).
 num paidInRange(Map<String, dynamic> e, Map<String, dynamic> r) => pir.paidInRange(e, r, _inRangeMap);
