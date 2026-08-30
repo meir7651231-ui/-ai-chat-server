@@ -1,3 +1,4 @@
+import '../dart-data/find_type_siblings-terms.dart' as td_find_type_siblings;
 // בדיקת-חוזה · findTypeSiblings — מייבאת אך ורק את האטום-שלה (חוק-4).
 // המנוע נבדק עם **מילון מוזרק זעיר** — מוכיח מנגנון, לא קטלוג.
 // טענת "הדאטה מוחלפת ⇒ הפלט משתנה" מוכיחה שהמילון מוזרק, לא צרוב.
@@ -23,7 +24,7 @@ List<LipRow> _ft(LipRow p, List<LipRow> catalog,
         colors: _colors,
         pprMaterials: _ppr,
         colorModifiers: _mods,
-        polyrollBrand: _brand);
+        polyrollBrand: _brand, term: (k)=>td_find_type_siblings.kTerms[k]!);
 
 void _eqNames(List<LipRow> got, List<String> want, String label) {
   final g = got.map((r) => r.nameHe).toList();

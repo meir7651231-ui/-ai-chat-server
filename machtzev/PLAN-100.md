@@ -8,7 +8,7 @@
 | ציר | בוקר | עכשיו | % | שער |
 |---|---|---|---|---|
 | 🧼 טוהר-עומק (הכרעה 19) | 37 | **36** | 92.7% | deeppurity ✓ |
-| 🧼 טוהר-דאטה (הכרעה 16) | 124 | **14** | 97.8% | datapurity ✓ |
+| 🧼 טוהר-דאטה (הכרעה 16) | 124 | **9** | 98.6% | datapurity ✓ |
 | 🔁 המרת-מנגנונים JS⇒Dart | 39 בהסגר | **0** | **100%** 🏁 | genesis-compile ✓ |
 | 🧠 מנועים ברי-הרצה | 104 | **313**/459 | 68% | coverage ✓ (ratchet) |
 | 🧠 ברי-חיווט-לסינתזה (Dart-שקול) | 104 | **119-172** | — | שער-synth ✓ |
@@ -217,3 +217,12 @@
   class-default לאטום-דאטה) · (ב) switch-על-מפתח-עברי (k_for_type — טעון switch→if) ·
   (ג) עברית-בהצהרה/getter (color_value/edge_cost/parse_chips/project_quote_text/quote_text_for/
   size_diameter_atoms/synthetic_pipe/line_compliance/recommended_kit_for×2). משטרה 13/13 · strict 0.
+- **30.8 · (Opus) הכרעת-בעלים "100% כולל-מותג" — הרמת class-default: טוהר-דאטה 14⇒9:**
+  ‏DECISIONS: מותג='ליפסקי'=נתון-לבן, לא קבוע-מקור. ‏5 אטומים (brand_value/color_value/
+  synthetic_pipe/find_attr_siblings/find_type_siblings) — ברירת-המחדל `this.brand='ליפסקי'`
+  הורמה ל-`<base>-brand.dart` (const מיובא, ברירת-מחדל=const-expression חוקי); find_attr/
+  find_type גם עברו טיהור-גוף מלא (AST v3). לקח-מנוע: dart-twins מסנתז זנב-`term` דטרמיניסטי
+  מ-`<base>-terms.dart` כשזה השקע-היחיד (גם בלי קריאת-בדיקה — מנוע 453⇒456). משטרה 13/13 ·
+  קופסאות 62/62 · strict 0. **נותרו 9:** k_for_type (switch→if) · edge_cost (const-list) ·
+  parse_chips (getter-עם-לוגיקה) · project_quote_text/quote_text_for (interpolation) ·
+  size_diameter_atoms · line_compliance_checklist · recommended_kit_for×2.
