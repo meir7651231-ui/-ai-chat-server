@@ -1,3 +1,4 @@
+import '../dart-data-maor/constellation-donor-constellation-sockets.dart' as skb_cdc;
 import '../dart-data-maor/sup-tier-sockets.dart' as skb_sup_tier;
 import '../dart-data-maor/hok-recorded-this-month-sockets.dart' as skb_hrtm;
 import '../dart-data-maor/hok-effectively-active-sockets.dart' as skb_hea;
@@ -171,4 +172,5 @@ List<Map<String, dynamic>> donorConstellation(List sups, String today, [Map opts
     con.donorConstellation(
       sups, today, opts: opts,
       donorScan: _scanLoose, dayDiff: _ddDS, rfmFromScan: _rfmLoose, churnFromScan: _churnLoose, supTier: _tier,
+      TIER_KEY: skb_cdc.donorConstellation_TIER_KEY, T: skb_cdc.donorConstellation_T,
     );

@@ -1,6 +1,7 @@
 // רתמת-זהב · constellation-donor-constellation — פלט מקודד JSON נאמן-JS מול WANT המדויק
 // מ-new/atoms/constellation-donor-constellation.test.mjs. שקעים-inline = פורט ביט-אחר-ביט של שקעי-ה-JS.
 // ⚠️ מאמת בין השאר את angle (hash01 FNV-1a uint32) ואת size (log10) כ-double זהה-ביט ל-Node.
+import '../dart-data-maor/constellation-donor-constellation-sockets.dart' as sk_cdc;
 import 'constellation-donor-constellation.dart';
 
 int _round(num x) => (x + 0.5).floor();
@@ -135,6 +136,8 @@ void main() {
     rfmFromScan: _rfmFromScan,
     churnFromScan: _churnFromScan,
     supTier: _supTier,
+    TIER_KEY: sk_cdc.donorConstellation_TIER_KEY,
+    T: sk_cdc.donorConstellation_T,
   ));
   if (got != want) {
     throw StateError('✗ constellation-donor-constellation\n$got\n≠\n$want');
