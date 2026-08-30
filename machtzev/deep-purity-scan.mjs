@@ -20,7 +20,7 @@ const isPureData = (code) => {
   return (/^export\s+(?:const\s+\w+\s*=\s*(?:[\[{]|-?\d|['"])|function\s+\w+\s*\(\)\s*\{\s*return\s+[\[{])/m.test(skel) ||
     /^const\s+\w+\s*=\s*[\[{]/m.test(skel)) &&
   !/\b(if|for|while|switch)\b/.test(skel) && !/=>(?!\s*[\[{('"`0-9])/.test(skel) &&
-  !/^(?:export\s+)?(?:const\s+\w+\s*=\s*(?:async\s*)?\(|function\s+\w+\s*\()/m.test(skel);
+  !/^(?:export\s+)?(?:const\s+\w+\s*=\s*(?:async\s*)?\(|function\s+\w+\s*\([^)])/m.test(skel);
 };
 // ── ליבת-הסריקה v2: AST-אמת (typescript) — אותו לקסר של מנוע-הטיהור, אפס-רגקס-על-קוד ──
 import { createRequire } from 'node:module';

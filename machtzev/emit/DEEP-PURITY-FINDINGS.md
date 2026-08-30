@@ -1,6 +1,6 @@
 # 🔬 ממצאי טוהר-עומק (הכרעה 19) — דאטה בתוך מנגנון
 
-נסרקו אטומי-מנגנון ב-new/atoms · new/boxes · הפרות: 55
+נסרקו אטומי-מנגנון ב-new/atoms · new/boxes · הפרות: 50
 
 | אטום | ציון | עברית | טבלאות | מחרוזות-דומיין | מספרי-קסם |
 |---|---|---|---|---|---|
@@ -9,7 +9,6 @@
 | new/atoms/sup-dup-fields.mjs | 24 | שם · טלפון · אימייל · ת"ז | — | name · phone · email · idNum | — |
 | new/boxes/diary.mjs | 24 | כרטיסייה · יתרה  · מוקפא · הסתיים · רשימת-המתנה ⏳ | — | punch · paused · #fdf1d4 · ended | — |
 | new/boxes/tour.mjs | 24 | 👋 הדמיה מלאה — המערכת מדגימה  · סטטיסטיקות חיות — כל אריח לחיץ · מדד אמינות · ⌘K — חיפוש חכם מכל מקום | — | home · home · home · families | — |
-| new/atoms/heb-cal-data.mjs | 22 | ניסן · אייר · סיוון · תמוז | — | — | 1373427 98496 35975351 19 235 234 |
 | new/boxes/distribution.mjs | 19 | איסוף · בדרך · נמסר | STATUS_LABEL = { pickup: 'איסו | pickup · enroute | — |
 | new/atoms/enroll-new-family.mjs | 18 | כ · מ · נ · פ | — | __new | — |
 | new/boxes/hebdate.mjs | 18 | ⚠ שם חודש עברי לא-צפוי מ-Intl  | — | Tishri · Heshvan · Kislev · Tevet | 30 4000 7000 3761 440 12 |
@@ -45,14 +44,10 @@
 | new/atoms/slugify.mjs | 2 | — | — | — | 30 30 |
 | new/boxes/hebrew-calendar.mjs | 2 | — | — | — | 10 1000 |
 | new/boxes/vcard-import.mjs | 2 | — | — | — | 255 63 |
-| new/atoms/age-of.mjs | 1 | — | — | — | 10 |
 | new/atoms/cockpit-calls.mjs | 1 | — | — | — | 60 |
-| new/atoms/cockpit-days-since.mjs | 1 | — | — | — | 86400000 |
-| new/atoms/fmt-date.mjs | 1 | — | — | — | 10 |
 | new/atoms/heb-parts-of-iso.mjs | 1 | — | — | — | 10 |
 | new/atoms/intel-donor-scan.mjs | 1 | — | — | — | 12 |
 | new/atoms/orbit-theme.mjs | 1 | — | — | — | 12 |
-| new/atoms/sanitize-photos.mjs | 1 | — | — | — | 460000 |
 | new/boxes/annual-report.mjs | 1 | — | — | — | 5000 |
 | new/boxes/csvx.mjs | 1 | — | — | — | 5000 |
 | new/boxes/lib-crypto.mjs | 1 | — | — | — | 12 |

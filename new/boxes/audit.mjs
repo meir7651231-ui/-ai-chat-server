@@ -34,7 +34,10 @@ import { validIsraeliId as __pure_validIsraeliId } from '../atoms/valid-israeli-
 import { VALID_ISRAELI_ID_T as __d_valid_israeli_id_T } from '../atoms/valid-israeli-id-strings.mjs';
 // עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
 const validIsraeliId = (...a) => __pure_validIsraeliId(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_valid_israeli_id_T);
-import { ageOf } from '../atoms/age-of.mjs';
+import { ageOf as __pure_ageOf } from '../atoms/age-of.mjs';
+import { AGE_OF_T as __d_age_of_T } from '../atoms/age-of-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const ageOf = (...a) => __pure_ageOf(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_age_of_T);
 import { supporterAggregates } from '../atoms/supporter-aggregates.mjs';
 
 // ── החיווט ──

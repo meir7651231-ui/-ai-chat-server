@@ -2,7 +2,10 @@
  *  המקום היחיד שבו חוטי-היומן נפגשים (חוקי-החשמלאי, LAW.md). מייבאת אך-ורק
  *  אטומים; ההכרעות (מילון-תוויות, ברירות-מחדל, העוזר-הפרטי courseOnDate) חיות כאן.
  *  מקור-אמת (L4): maor-system/src/components/diary/lib.ts. */
-import { fmtDate } from '../atoms/fmt-date.mjs';
+import { fmtDate as __pure_fmtDate } from '../atoms/fmt-date.mjs';
+import { FMT_DATE_T as __d_fmt_date_T } from '../atoms/fmt-date-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const fmtDate = (...a) => __pure_fmtDate(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_fmt_date_T);
 import { isoLocal } from '../atoms/iso-local.mjs';
 import { isoToday as isoTodayAtom } from '../atoms/iso-today.mjs';
 import { DAY_NAMES } from '../atoms/week-day-names.mjs';

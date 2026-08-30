@@ -11,7 +11,10 @@ import { INTEGRATION_SETTING_T as __d_isDataImage_IS_DATA_IMAGE_T } from '../ato
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const isDataImage = (...a) => __pure_isDataImage(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_isDataImage_IS_DATA_IMAGE_T);
 import { fitDimensions as fitDimensionsAtom } from '../atoms/fit-dimensions.mjs';
-import { sanitizePhotos as sanitizePhotosAtom } from '../atoms/sanitize-photos.mjs';
+import { sanitizePhotos as __pure_sanitizePhotos } from '../atoms/sanitize-photos.mjs';
+import { SANITIZE_PHOTOS_T as __d_sanitize_photos_T } from '../atoms/sanitize-photos-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const sanitizePhotosAtom = (...a) => __pure_sanitizePhotos(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_sanitize_photos_T);
 
 // ── שקעי-הכרעה (מילון הקופסה — ערכי-המוצא מ-photoGallery.ts) ──
 // התקרות חיות כאן כתוכנית-חיווט; לנתק/לשנות תקרה = לגעת בקופסה בלבד, לא באטומים.

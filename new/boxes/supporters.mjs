@@ -4,7 +4,10 @@
  *  מילון-תוויות) חיות כאן; שקעי-IO אמיתיים (שעון/מזהה/קונפיג) = פרמטרים מוזרקים. */
 
 // ── חוטי-התומכים (new/atoms) ──
-import { fmtDate } from '../atoms/fmt-date.mjs';
+import { fmtDate as __pure_fmtDate } from '../atoms/fmt-date.mjs';
+import { FMT_DATE_T as __d_fmt_date_T } from '../atoms/fmt-date-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const fmtDate = (...a) => __pure_fmtDate(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_fmt_date_T);
 import { supporterPurposes } from '../atoms/supporter-purposes.mjs';
 import { supporterVisibleForDesignations } from '../atoms/supporter-visible-for-designations.mjs';
 import { allDonationPurposes as allDonationPurposesAtom } from '../atoms/all-donation-purposes.mjs';

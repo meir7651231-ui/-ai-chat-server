@@ -2,7 +2,10 @@
  *  מקור-אמת (L4): maor-system/src/components/reports/lib.ts — 13 חוטים.
  *  מייבאת אך-ורק אטומים (חוק-2). שכנים חוצי-מודול ו-new Date() = שקעים מוזרקים (חוק-3/6).
  *  ההכרעות (סדר-הקסקדה, מילון-התוויות, טיפול-הקצה של fmtDate) חיות כאן, לא באטומים. */
-import { fmtDate as fmtDateCore } from '../atoms/fmt-date.mjs';
+import { fmtDate as __pure_fmtDate } from '../atoms/fmt-date.mjs';
+import { FMT_DATE_T as __d_fmt_date_T } from '../atoms/fmt-date-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const fmtDateCore = (...a) => __pure_fmtDate(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_fmt_date_T);
 import { inRange as inRangeA } from '../atoms/in-range.mjs';
 import { rangeLabel as __pure_rangeLabel } from '../atoms/range-label.mjs';
 import { RANGE_LABEL_T as __d_rangeLabel_RANGE_LABEL_T } from '../atoms/range-label-strings.mjs';

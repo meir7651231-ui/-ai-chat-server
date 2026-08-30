@@ -6,7 +6,10 @@
  *  אף אטום לא מייבא אטום — הכריכה כולה בקופסה (חוק-1/2). */
 
 // ── חוטי-ההעצמה (new/atoms) ──────────────────────────────────────────────────
-import { cockpitDaysSince } from '../atoms/cockpit-days-since.mjs';
+import { cockpitDaysSince as __pure_cockpitDaysSince } from '../atoms/cockpit-days-since.mjs';
+import { COCKPIT_DAYS_SINCE_T as __d_cockpit_days_since_T } from '../atoms/cockpit-days-since-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const cockpitDaysSince = (...a) => __pure_cockpitDaysSince(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_cockpit_days_since_T);
 import { cockpitAtRisk as __pure_cockpitAtRisk } from '../atoms/cockpit-at-risk.mjs';
 import { COCKPIT_AT_RISK_T as __d_cockpit_at_risk_T } from '../atoms/cockpit-at-risk-strings.mjs';
 // עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה

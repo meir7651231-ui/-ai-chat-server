@@ -64,7 +64,7 @@ function collectSites(src, mo) {
   };
   const push = (n, extra) => {
     const at = n.getStart(sf);
-    const v = extra && extra.num ? (extra.negV ? -parseFloat(n.getText(sf).replace('-', '')) : parseFloat(n.getText ? n.getText(sf).replace(/^-/, '') : n.text)) : n.text;
+    const v = extra && extra.num ? (extra.negV ? -parseFloat(n.getText(sf).replace(/[-_]/g, '')) : parseFloat((n.getText ? n.getText(sf) : n.text).replace(/[_]/g, '').replace(/^-/, ''))) : n.text;
     sites.push({ at, len: n.end - at, v, own: owner(n), ...extra });
   };
   const walk = (n) => {
@@ -107,7 +107,7 @@ function collectSites(src, mo) {
     }
     if (ts.isNumericLiteral(n)) {
       // מספר-קסם ⇒ אתר-דאטה: עשרוני ≥10, לא-מבני (ביטוויז/חזקת-2 מוחרגים — כמו הסורק)
-      const val = parseFloat(n.text);
+      const val = parseFloat(n.text.replace(/_/g, ''));
       if (!(val >= 10) || /^0[xbo]/i.test(n.text)) return;
       if (Number.isInteger(val) && (val & (val - 1)) === 0) return;          // חזקת-2 — מבני
       const p = n.parent;
@@ -491,6 +491,17 @@ function purifyHard(file, log) {
     cEdits.set(cp, t);
   }
   // ── כתיבה + אימות + החזרה ──
+  // 🛡️ מגן-ספירת-ייבוא בקופסאות-קוראות (כמו במנוע-הראשי)
+  for (const [cp, nu] of [...cEdits]) {
+    if (cp.endsWith('.test.mjs') || !cp.includes('/boxes/')) continue;
+    const adj = cp.replace(/\.mjs$/, '.test.mjs');
+    if (!fs.existsSync(adj)) continue;
+    const at2 = cEdits.has(adj) ? cEdits.get(adj) : fs.readFileSync(adj, 'utf8');
+    const cnt = (nu.match(/from '\.\.\/atoms\//g) || []).length;
+    const patched = at2.replace(/\.length === (\d+), 'מגן: (\d+) ייבואי-אטום([^']*)'/g,
+      (mm, a2, b2, rest) => `.length === ${cnt}, 'מגן: ${cnt} ייבואי-אטום${rest.includes('הכרעה 19') ? rest : rest + ' — הכרעה 19'}'`);
+    if (patched !== at2) cEdits.set(adj, patched);
+  }
   const backup = new Map([[path.join(ATOMS, file), src]]);
   for (const [pp] of cEdits) backup.set(pp, fs.readFileSync(pp, 'utf8'));
   if (priorKeys.size) for (const ext of ['.mjs', '.contract.md', '.test.mjs']) {
@@ -516,6 +527,7 @@ function purifyHard(file, log) {
     log(`✅ ${base}: ${keys.size - priorKeys.size} מחרוזות (מפתחות/ברירות-מחדל/עוזרים) ⇒ ${dataBase} · ${cEdits.size} קוראים`);
     return true;
   } catch (e) {
+    if (process.env.PDEBUG) { const dd = '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/pdebug'; fs.mkdirSync(dd, { recursive: true }); for (const [pp] of backup) { try { fs.copyFileSync(pp, path.join(dd, base + '__' + path.basename(pp))); } catch { } } }
     for (const [pp, tt] of backup) fs.writeFileSync(pp, tt);
     if (!priorKeys.size) for (const ext of ['.mjs', '.contract.md', '.test.mjs']) fs.rmSync(path.join(ATOMS, dataBase + ext), { force: true });
     return log(`✗ ${base}: אימות אדום — הוחזר (${String(e.stderr || e.message).slice(0, 200).replace(/\n/g, ' ⏎ ')})`);

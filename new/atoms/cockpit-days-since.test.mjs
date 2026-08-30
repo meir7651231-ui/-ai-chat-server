@@ -1,4 +1,9 @@
-import { cockpitDaysSince } from './cockpit-days-since.mjs';
+import { cockpitDaysSince as __pure_cockpitDaysSince } from './cockpit-days-since.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_cockpit_days_since_T = {
+  k1: 86400000,
+};
+const cockpitDaysSince = (...a) => __pure_cockpitDaysSince(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_cockpit_days_since_T);
 // Golden — נלכד מהרצת האטום על קלטים מייצגים + קצוות (ריק/לא-תקין/מעברי-חודש/שנה מעוברת).
 // Infinity ⇒ JSON "null" (כמו במקור). דין שנה-מעוברת: 2024-02-28→03-01 = 2 ימים.
 const CASES = [

@@ -10,7 +10,10 @@
  *   · term-of   (מילון-המונחים, config.ts:119) — מוזרק ל-course-date-error.
  *   · iso-local (date-util.ts:13) — מרכיב את isoToday (Date⇒YYYY-MM-DD מקומי).
  *   · norm-search (validate.ts:51) — לב ה-normName (השוואת-שמות חסינת-רווחים). */
-import { fmtDate } from '../atoms/fmt-date.mjs';
+import { fmtDate as __pure_fmtDate } from '../atoms/fmt-date.mjs';
+import { FMT_DATE_T as __d_fmt_date_T } from '../atoms/fmt-date-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const fmtDate = (...a) => __pure_fmtDate(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_fmt_date_T);
 import { isoToday as isoTodayWire } from '../atoms/iso-today.mjs';
 import { isoLocal } from '../atoms/iso-local.mjs';
 import { defaultCourseDates as __pure_defaultCourseDates } from '../atoms/default-course-dates.mjs';
@@ -25,7 +28,10 @@ import { courseDateError as __pure_courseDateError } from '../atoms/course-date-
 import { COURSE_DATE_ERROR_T as __d_courseDateError_COURSE_DATE_ERROR_T } from '../atoms/course-date-error-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const courseDateErrorWire = (...a) => __pure_courseDateError(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_courseDateError_COURSE_DATE_ERROR_T);
-import { ageOf as ageOfWire } from '../atoms/age-of.mjs';
+import { ageOf as __pure_ageOf } from '../atoms/age-of.mjs';
+import { AGE_OF_T as __d_age_of_T } from '../atoms/age-of-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const ageOfWire = (...a) => __pure_ageOf(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_age_of_T);
 import { termOf as __pure_termOf } from '../atoms/term-of.mjs';
 import { INTEGRATION_SETTING_T as __d_termOf_TERM_OF_T } from '../atoms/integration-setting-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

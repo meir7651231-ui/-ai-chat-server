@@ -8,10 +8,16 @@
  *            נאמנה למקור (families/lib.ts:19-21,30 → date-util.ts:10 · lib.ts:30).
  *  שקעים-חוצי-מודול שהפכו לאטומים (חוק-3 — לא ייבוא-קופסה): term-of (מילון-המונחים,
  *  config.ts:119) · iso-local (date-util.ts:13). מחווטים כאטומים, לא כפרמטרים. */
-import { fmtDate } from '../atoms/fmt-date.mjs';
+import { fmtDate as __pure_fmtDate } from '../atoms/fmt-date.mjs';
+import { FMT_DATE_T as __d_fmt_date_T } from '../atoms/fmt-date-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const fmtDate = (...a) => __pure_fmtDate(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_fmt_date_T);
 import { isoToday as isoTodayWire } from '../atoms/iso-today.mjs';
 import { isoLocal } from '../atoms/iso-local.mjs';
-import { ageOf as ageOfWire } from '../atoms/age-of.mjs';
+import { ageOf as __pure_ageOf } from '../atoms/age-of.mjs';
+import { AGE_OF_T as __d_age_of_T } from '../atoms/age-of-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const ageOfWire = (...a) => __pure_ageOf(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_age_of_T);
 import { STATUS_META } from '../atoms/status-meta.mjs';
 import { CRED_RED_THRESHOLD } from '../atoms/cred-red-threshold.mjs';
 import { CRED_HELP_TEXT } from '../atoms/cred-help-text.mjs';

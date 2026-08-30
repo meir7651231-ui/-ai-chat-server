@@ -1,4 +1,9 @@
-import { sanitizePhotos } from './sanitize-photos.mjs';
+import { sanitizePhotos as __pure_sanitizePhotos } from './sanitize-photos.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_sanitize_photos_T = {
+  k1: 460000,
+};
+const sanitizePhotos = (...a) => __pure_sanitizePhotos(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_sanitize_photos_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const J = JSON.stringify;
