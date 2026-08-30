@@ -1,4 +1,22 @@
-import { ayinSheetRows, AYIN_SHEET_HEADER } from './ayin-sheet-rows.mjs';
+import { ayinSheetRows as __pure_ayinSheetRows, makeAYIN_SHEET_HEADER as __pure_makeAYIN_SHEET_HEADER } from './ayin-sheet-rows.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_ayin_sheet_rows_T = {
+  k1: "תומכת",
+  k2: "טלפון",
+  k3: "שם למסירה",
+  k4: "כמה עיניים",
+  k5: "נמסר (כן/לא)",
+  k6: "שולם (כן/לא)",
+  k7: "תשובה/הערה",
+  k8: "עופרת בוצעה (כן/לא)",
+  k9: "eyes",
+  k10: "answer",
+  k11: "done",
+  k12: "כן",
+  k13: "לא",
+};
+const AYIN_SHEET_HEADER = __pure_makeAYIN_SHEET_HEADER(__d_ayin_sheet_rows_T);
+const ayinSheetRows = (...a) => __pure_ayinSheetRows(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_ayin_sheet_rows_T);
 const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 let f = 0;
 const bad = (m) => { console.error('✗ ' + m); f = 1; };

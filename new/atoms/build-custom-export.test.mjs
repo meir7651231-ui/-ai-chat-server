@@ -21,6 +21,7 @@ const __d_buildCustomExport_BUILD_CUSTOM_EXPORT_T = {
   k16: "supporters.ayin",
   k17: "entity.donations",
   k18: "תרומות",
+  k19: 86400000,
 };
 const buildCustomExport = (...a) => __pure_buildCustomExport(...a, ...Array(Math.max(0, 6 - a.length)).fill(undefined), __d_buildCustomExport_BUILD_CUSTOM_EXPORT_T, __d_build_custom_export_CAP_DAYS);
 

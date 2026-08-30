@@ -1,4 +1,10 @@
-import { readFileAsDataUrl, MAX_EMBED_BYTES } from './read-file-as-data-url.mjs';
+import { readFileAsDataUrl as __pure_readFileAsDataUrl, MAX_EMBED_BYTES } from './read-file-as-data-url.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_read_file_as_data_url_T = {
+  k1: "הקובץ גדול מדי להטמעה (מקסימום ",
+  k2: "MB) — הוסיפו קישור במקום",
+};
+const readFileAsDataUrl = (...a) => __pure_readFileAsDataUrl(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_read_file_as_data_url_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

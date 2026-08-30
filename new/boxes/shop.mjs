@@ -20,7 +20,10 @@ import { maxDiscountPct as __pure_maxDiscountPct } from '../atoms/max-discount-p
 import { MAX_DISCOUNT_PCT_T as __d_max_discount_pct_T } from '../atoms/max-discount-pct-strings.mjs';
 // עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
 const maxDiscountPct = (...a) => __pure_maxDiscountPct(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_max_discount_pct_T);
-import { upcomingHolidays as _upcomingHolidays } from '../atoms/upcoming-holidays.mjs';
+import { upcomingHolidays as __pure_upcomingHolidays } from '../atoms/upcoming-holidays.mjs';
+import { UPCOMING_HOLIDAYS_T as __d_upcoming_holidays_T } from '../atoms/upcoming-holidays-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const _upcomingHolidays = (...a) => __pure_upcomingHolidays(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_upcoming_holidays_T);
 import { holidayNames as __pure_holidayNames } from '../atoms/holiday-names.mjs';
 import { HOLIDAY_NAMES_T as __d_holiday_names_T } from '../atoms/holiday-names-strings.mjs';
 // עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה

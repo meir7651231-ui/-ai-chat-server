@@ -2,7 +2,10 @@
  *  זה המקום היחיד שבו חוטי-הבדיקה נפגשים (חוקי-החשמלאי, LAW.md):
  *  בניית-יעדים (הכרעות חיות כאן) ← הרצה-מקבילית ← טקסט-להקראה.
  *  שקעי-IO (randToken · checkOne=fetch) מוזרקים — לא ממומשים כאן (חוק-1/6). */
-import { runNetCheck } from '../atoms/run-net-check.mjs';
+import { runNetCheck as __pure_runNetCheck } from '../atoms/run-net-check.mjs';
+import { RUN_NET_CHECK_T as __d_run_net_check_T } from '../atoms/run-net-check-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const runNetCheck = (...a) => __pure_runNetCheck(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_run_net_check_T);
 import { netCheckScript as __pure_netCheckScript } from '../atoms/net-check-script.mjs';
 import { NET_CHECK_SCRIPT_T as __d_netCheckScript_NET_CHECK_SCRIPT_T } from '../atoms/net-check-script-strings.mjs';
 import { NET_CHECK_TERMS } from '../atoms/net-check-terms.mjs';

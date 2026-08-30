@@ -1,4 +1,10 @@
-import { ENROLL_NEW_FAMILY, resolveEnrollFamily } from './resolve-enroll-family.mjs';
+import { makeENROLL_NEW_FAMILY as __pure_makeENROLL_NEW_FAMILY, resolveEnrollFamily as __pure_resolveEnrollFamily } from './resolve-enroll-family.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_resolve_enroll_family_T = {
+  k1: "__new",
+};
+const ENROLL_NEW_FAMILY = __pure_makeENROLL_NEW_FAMILY(__d_resolve_enroll_family_T);
+const resolveEnrollFamily = (...a) => __pure_resolveEnrollFamily(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_resolve_enroll_family_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 // שקע-normName לבדיקה כמתועד בחוזה: lowercase + הסרת רווחים ומקפים

@@ -2,7 +2,8 @@
  * מוצא: intel.ts:179 (donorIntel). חוק-4 verbatim. כל המודיעין במעבר-יחיד + נגזרות.
  * שקעים (אחים intel): donorScan, rfmFromScan, churnFromScan, forecastFromScan, trendFromScan.
  */
-export function donorIntel(sp, todayIso, rate = 3.7, months = 12, { donorScan, rfmFromScan, churnFromScan, forecastFromScan, trendFromScan }) {
+export function donorIntel(sp, todayIso, rate = 3.7, months , { donorScan, rfmFromScan, churnFromScan, forecastFromScan, trendFromScan }, T) {
+  if (months === undefined) months = T.k1;
   const scan = donorScan(sp, todayIso, rate, months);
   return {
     scan,

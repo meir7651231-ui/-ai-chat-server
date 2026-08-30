@@ -31,7 +31,7 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS, T, cf) {
   }
   /** טלפון לתצוגה/חיוג — ספרות ‎+()- ‎ ורווח בלבד, עד 24. */
   function sitePhone(v) {
-      return typeof v === T.k1 ? v.replace(/[^\d+()\-\s]/g, '').trim().slice(0, 24) : '';
+      return typeof v === T.k1 ? v.replace(/[^\d+()\-\s]/g, '').trim().slice(0, T.k15) : '';
   }
   /**
    * חיטוי תוכן-האתר-הציבורי — allowlist מלא + תקרות. הקונפיג מסתנכרן לענן/גיבוי,
@@ -47,7 +47,7 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS, T, cf) {
           out.enabled = false;
       else if (s.enabled === true)
           out.enabled = true;
-      const icon = siteStr(s.icon, 12);
+      const icon = siteStr(s.icon, T.k16);
       if (icon)
           out.icon = icon;
       const langs = Array.isArray(s.langs)
@@ -55,11 +55,11 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS, T, cf) {
           : [];
       if (langs.length)
           out.langs = langs;
-      const tagline = normLocalized(s.tagline, 200);
+      const tagline = normLocalized(s.tagline, T.k17);
       if (tagline)
           out.tagline = tagline;
       if (Array.isArray(s.heroWords)) {
-          const words = s.heroWords.map((w) => normLocalized(w, 60)).filter((w) => !!w).slice(0, 8);
+          const words = s.heroWords.map((w) => normLocalized(w, T.k18)).filter((w) => !!w).slice(0, 8);
           if (words.length)
               out.heroWords = words;
       }
@@ -69,8 +69,8 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS, T, cf) {
               if (!st || typeof st !== T.k2)
                   return null;
               const o = st;
-              const value = siteStr(o.value, 24);
-              const label = normLocalized(o.label, 60);
+              const value = siteStr(o.value, T.k15);
+              const label = normLocalized(o.label, T.k18);
               return value && label ? { value, label } : null;
           })
               .filter((x) => !!x)
@@ -80,13 +80,13 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS, T, cf) {
       }
       if (s.liveFamilies === true)
           out.liveFamilies = true;
-      const lfl = normLocalized(s.liveFamiliesLabel, 60);
+      const lfl = normLocalized(s.liveFamiliesLabel, T.k18);
       if (lfl)
           out.liveFamiliesLabel = lfl;
       if (s.campaign && typeof s.campaign === T.k2 && !Array.isArray(s.campaign)) {
           const c = s.campaign;
           const camp = {};
-          const ct = normLocalized(c.title, 120);
+          const ct = normLocalized(c.title, T.k19);
           if (ct)
               camp.title = ct;
           const goal = sitePosNum(c.goal);
@@ -95,7 +95,7 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS, T, cf) {
           const raised = sitePosNum(c.raised);
           if (raised !== undefined)
               camp.raised = raised;
-          const end = siteStr(c.end, 30);
+          const end = siteStr(c.end, T.k20);
           if (end)
               camp.end = end;
           const cur = siteStr(c.currency, 4);
@@ -110,34 +110,34 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS, T, cf) {
               if (!sv || typeof sv !== T.k2)
                   return null;
               const o = sv;
-              const title = normLocalized(o.title, 80);
+              const title = normLocalized(o.title, T.k21);
               if (!title)
                   return null;
               const svc = { title };
-              const icon = siteStr(o.icon, 12);
+              const icon = siteStr(o.icon, T.k16);
               if (icon)
                   svc.icon = icon;
-              const text = normLocalized(o.text, 240);
+              const text = normLocalized(o.text, T.k22);
               if (text)
                   svc.text = text;
               return svc;
           })
               .filter((x) => !!x)
-              .slice(0, 12);
+              .slice(0, T.k16);
           if (svcs.length)
               out.services = svcs;
       }
-      const news = normLocalized(s.news, 800);
+      const news = normLocalized(s.news, T.k23);
       if (news)
           out.news = news;
-      const story = normLocalized(s.story, 2000);
+      const story = normLocalized(s.story, T.k24);
       if (story)
           out.story = story;
       if (Array.isArray(s.gallery)) {
           const imgs = s.gallery
               .map((g) => (typeof g === T.k1 ? safeHttpsUrl(g) : null))
               .filter((g) => !!g)
-              .slice(0, 24);
+              .slice(0, T.k15);
           if (imgs.length)
               out.gallery = imgs;
       }
@@ -152,16 +152,16 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS, T, cf) {
           const wa = sitePhone(c.whatsapp);
           if (wa)
               contact.whatsapp = wa;
-          const email = siteStr(c.email, 120);
+          const email = siteStr(c.email, T.k19);
           if (email && email.includes('@'))
               contact.email = email;
-          const addr = normLocalized(c.address, 200);
+          const addr = normLocalized(c.address, T.k17);
           if (addr)
               contact.address = addr;
-          const hours = normLocalized(c.hours, 120);
+          const hours = normLocalized(c.hours, T.k19);
           if (hours)
               contact.hours = hours;
-          const taxNote = normLocalized(c.taxNote, 200);
+          const taxNote = normLocalized(c.taxNote, T.k17);
           if (taxNote)
               contact.taxNote = taxNote;
           if (typeof c.mapUrl === T.k1) {
@@ -187,19 +187,19 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS, T, cf) {
       const hi = imgUrl(s.heroImage);
       if (hi)
           out.heroImage = hi;
-      setLT(T.k4, s.heroTitle, 80);
-      setLT(T.k5, s.brandLine, 60);
-      setLT(T.k6, s.heroBadge, 80);
-      setLT(T.k7, s.titleAccent, 60);
-      setLT(T.k8, s.servicesHeading, 80);
-      setLT(T.k9, s.microCopy, 120);
-      setLT(T.k10, s.ticker, 160);
-      setLT(T.k11, s.storyTitle, 120);
-      setLT(T.k12, s.storyTitleAccent, 80);
-      setLT(T.k13, s.storyBadge, 80);
-      setLT(T.k14, s.donateNote, 240);
+      setLT(T.k4, s.heroTitle, T.k21);
+      setLT(T.k5, s.brandLine, T.k18);
+      setLT(T.k6, s.heroBadge, T.k21);
+      setLT(T.k7, s.titleAccent, T.k18);
+      setLT(T.k8, s.servicesHeading, T.k21);
+      setLT(T.k9, s.microCopy, T.k19);
+      setLT(T.k10, s.ticker, T.k25);
+      setLT(T.k11, s.storyTitle, T.k19);
+      setLT(T.k12, s.storyTitleAccent, T.k21);
+      setLT(T.k13, s.storyBadge, T.k21);
+      setLT(T.k14, s.donateNote, T.k22);
       if (Array.isArray(s.marquee)) {
-          const mq = s.marquee.map((m) => normLocalized(m, 80)).filter((m) => !!m).slice(0, 16);
+          const mq = s.marquee.map((m) => normLocalized(m, T.k21)).filter((m) => !!m).slice(0, 16);
           if (mq.length)
               out.marquee = mq;
       }
@@ -209,10 +209,10 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS, T, cf) {
           const amt = sitePosNum(c.unitAmount);
           if (amt !== undefined)
               calc.unitAmount = amt;
-          const unit = normLocalized(c.unit, 60);
+          const unit = normLocalized(c.unit, T.k18);
           if (unit)
               calc.unit = unit;
-          const note = normLocalized(c.note, 120);
+          const note = normLocalized(c.note, T.k19);
           if (note)
               calc.note = note;
           if (Object.keys(calc).length)
@@ -223,18 +223,18 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS, T, cf) {
               if (!tr || typeof tr !== T.k2)
                   return null;
               const o = tr;
-              const name = normLocalized(o.name, 60);
+              const name = normLocalized(o.name, T.k18);
               if (!name)
                   return null;
               const t = { name };
               const amt = sitePosNum(o.amount);
               if (amt !== undefined)
                   t.amount = amt;
-              const period = normLocalized(o.period, 40);
+              const period = normLocalized(o.period, T.k26);
               if (period)
                   t.period = period;
               if (Array.isArray(o.perks)) {
-                  const perks = o.perks.map((p) => normLocalized(p, 100)).filter((p) => !!p).slice(0, 8);
+                  const perks = o.perks.map((p) => normLocalized(p, T.k27)).filter((p) => !!p).slice(0, 8);
                   if (perks.length)
                       t.perks = perks;
               }
@@ -253,18 +253,18 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS, T, cf) {
               if (!tt || typeof tt !== T.k2)
                   return null;
               const o = tt;
-              const quote = normLocalized(o.quote, 400);
+              const quote = normLocalized(o.quote, T.k28);
               if (!quote)
                   return null;
               const t = { quote };
-              const author = siteStr(o.author, 80);
+              const author = siteStr(o.author, T.k21);
               if (author)
                   t.author = author;
-              const role = normLocalized(o.role, 80);
+              const role = normLocalized(o.role, T.k21);
               if (role)
                   t.role = role;
               return t;
-          }).filter((x) => !!x).slice(0, 12);
+          }).filter((x) => !!x).slice(0, T.k16);
           if (items.length)
               out.testimonials = items;
       }
@@ -273,10 +273,10 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS, T, cf) {
               if (!f || typeof f !== T.k2)
                   return null;
               const o = f;
-              const q = normLocalized(o.q, 200);
-              const a = normLocalized(o.a, 800);
+              const q = normLocalized(o.q, T.k17);
+              const a = normLocalized(o.a, T.k23);
               return q && a ? { q, a } : null;
-          }).filter((x) => !!x).slice(0, 20);
+          }).filter((x) => !!x).slice(0, T.k29);
           if (items.length)
               out.faq = items;
       }
@@ -285,21 +285,21 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS, T, cf) {
               if (!e || typeof e !== T.k2)
                   return null;
               const o = e;
-              const title = normLocalized(o.title, 120);
+              const title = normLocalized(o.title, T.k19);
               if (!title)
                   return null;
               const ev = { title };
-              const date = siteStr(o.date, 30);
+              const date = siteStr(o.date, T.k20);
               if (date)
                   ev.date = date;
-              const meta = normLocalized(o.meta, 120);
+              const meta = normLocalized(o.meta, T.k19);
               if (meta)
                   ev.meta = meta;
               const url = imgUrl(o.url);
               if (url)
                   ev.url = url;
               return ev;
-          }).filter((x) => !!x).slice(0, 12);
+          }).filter((x) => !!x).slice(0, T.k16);
           if (items.length)
               out.events = items;
       }
@@ -308,7 +308,7 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS, T, cf) {
               if (!p || typeof p !== T.k2)
                   return null;
               const o = p;
-              const name = siteStr(o.name, 80);
+              const name = siteStr(o.name, T.k21);
               if (!name)
                   return null;
               const pt = { name };
@@ -319,24 +319,24 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS, T, cf) {
               if (url)
                   pt.url = url;
               return pt;
-          }).filter((x) => !!x).slice(0, 24);
+          }).filter((x) => !!x).slice(0, T.k15);
           if (items.length)
               out.partners = items;
       }
       if (s.transparency && typeof s.transparency === T.k2 && !Array.isArray(s.transparency)) {
           const o = s.transparency;
           const tr = {};
-          const heading = normLocalized(o.heading, 120);
+          const heading = normLocalized(o.heading, T.k19);
           if (heading)
               tr.heading = heading;
-          const text = normLocalized(o.text, 600);
+          const text = normLocalized(o.text, T.k30);
           if (text)
               tr.text = text;
           const url = imgUrl(o.reportsUrl);
           if (url)
               tr.reportsUrl = url;
           if (Array.isArray(o.badges)) {
-              const badges = o.badges.map((b) => normLocalized(b, 60)).filter((b) => !!b).slice(0, 6);
+              const badges = o.badges.map((b) => normLocalized(b, T.k18)).filter((b) => !!b).slice(0, 6);
               if (badges.length)
                   tr.badges = badges;
           }
@@ -347,10 +347,10 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS, T, cf) {
       if (s.founder && typeof s.founder === T.k2 && !Array.isArray(s.founder)) {
           const o = s.founder;
           const f = {};
-          const name = normLocalized(o.name, 80);
+          const name = normLocalized(o.name, T.k21);
           if (name)
               f.name = name;
-          const quote = normLocalized(o.quote, 200);
+          const quote = normLocalized(o.quote, T.k17);
           if (quote)
               f.quote = quote;
           const photo = imgUrl(o.photo);
@@ -364,30 +364,30 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS, T, cf) {
               if (!m || typeof m !== T.k2)
                   return null;
               const o = m;
-              const year = siteStr(o.year, 12);
-              const title = normLocalized(o.title, 120);
+              const year = siteStr(o.year, T.k16);
+              const title = normLocalized(o.title, T.k19);
               if (!year || !title)
                   return null;
               const it = { year, title };
-              const note = normLocalized(o.note, 160);
+              const note = normLocalized(o.note, T.k25);
               if (note)
                   it.note = note;
               return it;
-          }).filter((x) => !!x).slice(0, 10);
+          }).filter((x) => !!x).slice(0, T.k31);
           if (items.length)
               out.timeline = items;
       }
       if (s.growth && typeof s.growth === T.k2 && !Array.isArray(s.growth)) {
           const o = s.growth;
           const g = {};
-          const label = normLocalized(o.label, 120);
+          const label = normLocalized(o.label, T.k19);
           if (label)
               g.label = label;
-          const delta = siteStr(o.delta, 40);
+          const delta = siteStr(o.delta, T.k26);
           if (delta)
               g.delta = delta;
           if (Array.isArray(o.points)) {
-              const pts = o.points.map((p) => (typeof p === T.k3 && Number.isFinite(p) ? Math.max(0, Math.min(1, p)) : null)).filter((p) => p !== null).slice(0, 40);
+              const pts = o.points.map((p) => (typeof p === T.k3 && Number.isFinite(p) ? Math.max(0, Math.min(1, p)) : null)).filter((p) => p !== null).slice(0, T.k26);
               if (pts.length >= 2)
                   g.points = pts;
           }
@@ -399,8 +399,8 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS, T, cf) {
               if (!p || typeof p !== T.k2)
                   return null;
               const o = p;
-              const label = normLocalized(o.label, 60);
-              const detail = normLocalized(o.detail, 200);
+              const label = normLocalized(o.label, T.k18);
+              const detail = normLocalized(o.detail, T.k17);
               if (!label || !detail)
                   return null;
               const pm = { label, detail };
@@ -417,7 +417,7 @@ export function makeNormalizeSite(safeHttpsUrl, SITE_LANGS, T, cf) {
               cf.enabled = true;
           else if (o.enabled === false)
               cf.enabled = false;
-          const note = normLocalized(o.note, 200);
+          const note = normLocalized(o.note, T.k17);
           if (note)
               cf.note = note;
           if (Object.keys(cf).length)

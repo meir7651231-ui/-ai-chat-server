@@ -18,6 +18,23 @@ const __d_makeNormalizeSite_MAKE_NORMALIZE_SITE_T = {
   k12: "storyTitleAccent",
   k13: "storyBadge",
   k14: "donateNote",
+  k15: 24,
+  k16: 12,
+  k17: 200,
+  k18: 60,
+  k19: 120,
+  k20: 30,
+  k21: 80,
+  k22: 240,
+  k23: 800,
+  k24: 2000,
+  k25: 160,
+  k26: 40,
+  k27: 100,
+  k28: 400,
+  k29: 20,
+  k30: 600,
+  k31: 10,
 };
 const makeNormalizeSite = (...a) => __pure_makeNormalizeSite(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_makeNormalizeSite_MAKE_NORMALIZE_SITE_T, __d_make_normalize_site_cf);
 import assert from 'node:assert';

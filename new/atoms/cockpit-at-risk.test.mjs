@@ -1,4 +1,9 @@
-import { cockpitAtRisk } from './cockpit-at-risk.mjs';
+import { cockpitAtRisk as __pure_cockpitAtRisk } from './cockpit-at-risk.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_cockpit_at_risk_T = {
+  k1: 60,
+};
+const cockpitAtRisk = (...a) => __pure_cockpitAtRisk(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_cockpit_at_risk_T);
 // עצמאי: כל השקעים מוטבעים inline (test-doubles, בלי import-אח — חוק-1). Golden נלכד מהרצה.
 const M=86400000;
 const daysSince=(iso,today)=>{if(!iso)return Infinity;const t=new Date(iso+'T12:00:00').getTime(),n=new Date(today+'T12:00:00').getTime();if(Number.isNaN(t)||Number.isNaN(n))return Infinity;return Math.floor((n-t)/M);};

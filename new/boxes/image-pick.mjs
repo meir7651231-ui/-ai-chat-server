@@ -5,7 +5,10 @@
  *  פרמטרים-מוזרקים בזמן-הצבה, לא מימוש בקופסה (חוק-1/6). */
 import { MAX_UPLOAD_BYTES } from '../atoms/max-upload-bytes.mjs';
 import { MAX_EMBED_BYTES } from '../atoms/max-embed-bytes.mjs';
-import { readFileAsDataUrl as readFileAsDataUrlAtom } from '../atoms/read-file-as-data-url.mjs';
+import { readFileAsDataUrl as __pure_readFileAsDataUrl } from '../atoms/read-file-as-data-url.mjs';
+import { READ_FILE_AS_DATA_URL_T as __d_read_file_as_data_url_T } from '../atoms/read-file-as-data-url-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const readFileAsDataUrlAtom = (...a) => __pure_readFileAsDataUrl(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_read_file_as_data_url_T);
 import { IMAGE_PICK_TERMS } from '../atoms/image-pick-terms.mjs';
 
 // ── הכרעות-הקופסה (חיות כאן, לא בחוטים) ──

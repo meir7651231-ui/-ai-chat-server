@@ -1,4 +1,9 @@
-import { spotlightBox } from './spotlight-box.mjs';
+import { spotlightBox as __pure_spotlightBox } from './spotlight-box.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_spotlight_box_T = {
+  k1: 10,
+};
+const spotlightBox = (...a) => __pure_spotlightBox(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_spotlight_box_T);
 let f = 0;
 const eq = (a, b, msg) => {
   const ja = JSON.stringify(a), jb = JSON.stringify(b);

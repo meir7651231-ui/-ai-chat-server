@@ -44,8 +44,8 @@ function model(src) {
     if (ts.isExpressionStatement(st)) continue;
     unsupported = 'מבנה-עליון-לא-נתמך: ' + ts.SyntaxKind[st.kind];
   }
-  if (exported.some(e => !e.isFn)) unsupported = 'ייצוא-ערך (לא-פונקציה)';
-  return { sf, exported, helpers, unsupported };
+  const valueExports = exported.filter(e => !e.isFn);
+  return { sf, exported: exported.filter(e => e.isFn), valueExports, helpers, unsupported };
 }
 
 // ── איסוף-אתרים: רגיל + מפתח + ברירת-מחדל + חלקי-תבנית; משויכים לפונקציה-המכילה ──
@@ -57,13 +57,14 @@ function collectSites(src, mo) {
     while (up) {
       for (const e of mo.exported) if (e.node && up === e.node) return { kind: 'exp', name: e.name };
       for (const h of mo.helpers) if (h.node && up === h.node) return { kind: 'help', name: h.name };
+      for (const v of mo.valueExports || []) if (v.decl && up === v.decl) return { kind: 'val', name: v.name };
       up = up.parent;
     }
     return { kind: 'top' };
   };
   const push = (n, extra) => {
     const at = n.getStart(sf);
-    const v = extra && extra.num ? parseFloat(n.text) : n.text;
+    const v = extra && extra.num ? (extra.negV ? -parseFloat(n.getText(sf).replace('-', '')) : parseFloat(n.getText ? n.getText(sf).replace(/^-/, '') : n.text)) : n.text;
     sites.push({ at, len: n.end - at, v, own: owner(n), ...extra });
   };
   const walk = (n) => {
@@ -111,11 +112,17 @@ function collectSites(src, mo) {
       if (Number.isInteger(val) && (val & (val - 1)) === 0) return;          // חזקת-2 — מבני
       const p = n.parent;
       if (p && (ts.isBinaryExpression(p) && /[&|^]|<<|>>/.test(p.operatorToken.getText(sf)))) return;
-      let up = n;
-      while (up) { if (ts.isParameter(up)) return; up = up.parent; }         // ברירת-מחדל נשארת (שלב-זה)
       const neg = p && ts.isPrefixUnaryExpression(p) && p.operator === ts.SyntaxKind.MinusToken;
-      if (neg) return;                                                       // שלילי — שלב-זה מדלג
-      push(n, { num: true });
+      const siteNode = neg ? p : n;
+      let up = siteNode;
+      while (up) {
+        if (ts.isParameter(up)) {
+          if (up.initializer === siteNode) { push(siteNode, { def: up, num: true, negV: neg }); }
+          return;
+        }
+        up = up.parent;
+      }
+      push(siteNode, { num: true, negV: neg });
       return;
     }
     ts.forEachChild(n, walk);
@@ -169,10 +176,39 @@ function purifyHard(file, log) {
   const src = fs.readFileSync(path.join(ATOMS, file), 'utf8');
   const mo = model(src);
   if (mo.unsupported) return log(`~ ${base}: ${mo.unsupported}`);
-  if (!mo.exported.length) return log(`~ ${base}: אפס פונקציות-מיוצאות`);
+  if (!mo.exported.length && !(mo.valueExports || []).length) return log(`~ ${base}: אפס ייצוא-נתמך`);
   const sites = collectSites(src, mo);
   if (!sites.length) return log(`~ ${base}: אין אתרי-מחרוזת`);
   if (sites.some(st => st.own.kind === 'top')) return log(`~ ${base}: מחרוזת ברמת-המודול (טבלה — למעבר-הטבלאות)`);
+  // ייצואי-ערך נזקקים: מפעל-ערך. שימוש-פנימי בגוף-פונקציה ⇒ קריאת-מפעל (טהור — בנייה-מחדש שקולה)
+  const valNeed = new Set(sites.filter(st => st.own.kind === 'val').map(st => st.own.name));
+  const valUseFix = [];      // {at, len, vn} — הפניות-פנימיות להחלפה בקריאת-מפעל
+  const valForcesFn = new Set();
+  {
+    const walkU = (n) => {
+      if (ts.isIdentifier(n) && valNeed.has(n.text)) {
+        const ve = mo.valueExports.find(x => x.name === n.text);
+        const inOwnDecl = n.getStart(mo.sf) >= ve.decl.getStart(mo.sf) && n.end <= ve.decl.end;
+        if (!inOwnDecl) {
+          const p2 = n.parent;
+          if (p2 && ts.isPropertyAccessExpression(p2) && p2.name === n) { /* a.X — לא שלנו */ }
+          else {
+            let up = n, ownFn = null;
+            while (up) {
+              const ex = mo.exported.find(e => e.node && up === e.node); if (ex) { ownFn = { kind: 'exp', name: ex.name }; break; }
+              const hp = mo.helpers.find(h => h.node && up === h.node); if (hp) { ownFn = { kind: 'help', name: hp.name }; break; }
+              up = up.parent;
+            }
+            if (!ownFn) { valUseFix.length = -1; }   // שימוש מחוץ-לפונקציה — נדחה בהמשך
+            else { valUseFix.push({ at: n.getStart(mo.sf), len: n.text.length, vn: n.text }); valForcesFn.add(ownFn.name); }
+          }
+        }
+      }
+      ts.forEachChild(n, walkU);
+    };
+    try { walkU(mo.sf); } catch { }
+    if (valUseFix.length < 0) return log(`~ ${base}: ייצוא-ערך בשימוש מחוץ-לפונקציה`);
+  }
   const { calls, valueUse } = callGraph(mo);
   // עוזרים-נזקקים: בגופם אתר, או קוראים-לנזקק (סגור-טרנזיטיבי)
   const need = new Set(sites.filter(s => s.own.kind === 'help').map(s => s.own.name));
@@ -192,7 +228,8 @@ function purifyHard(file, log) {
     const seen = new Set(); const stack = [...(calls.get(e.name) || [])];
     while (stack.length) { const c = stack.pop(); if (seen.has(c)) continue; seen.add(c); if (need.has(c)) { expNeed.add(e.name); break; } for (const c2 of calls.get(c) || []) stack.push(c2); }
   }
-  if (!expNeed.size) return log(`~ ${base}: אין פונקציה-מיוצאת-נזקקת`);
+  for (const f2 of valForcesFn) { if (mo.exported.some(e => e.name === f2)) expNeed.add(f2); else need.add(f2); }
+  if (!expNeed.size && !valNeed.size) return log(`~ ${base}: אין נזקקים`);
   // המשך-חילוץ: מפתחות קיימים
   const dataPath = path.join(ATOMS, dataBase + '.mjs');
   const priorKeys = new Map();
@@ -203,10 +240,10 @@ function purifyHard(file, log) {
   // tParam: קיים (המשך) או חדש
   let tParam = null;
   if (priorKeys.size) {
-    const e0 = mo.exported.find(e => expNeed.has(e.name));
-    const lastP = e0.node.parameters.length ? e0.node.parameters[e0.node.parameters.length - 1].name : null;
-    if (!lastP || !ts.isIdentifier(lastP) || !/^T\d*$/.test(lastP.text)) return log(`~ ${base}: פרמטר-שקע קיים לא-מזוהה`);
-    tParam = lastP.text;
+    const e0 = mo.exported.find(e => expNeed.has(e.name)) || mo.exported[0];
+    const tp = e0 && e0.node.parameters.map(pp => pp.name).find(nm => ts.isIdentifier(nm) && /^T\d*$/.test(nm.text));
+    if (!tp) return log(`~ ${base}: פרמטר-שקע קיים לא-מזוהה`);
+    tParam = tp.text;
   } else { tParam = 'T'; let ti = 2; while (new RegExp(`\\b${tParam}\\b`).test(src)) tParam = 'T' + ti++; }
   const keys = new Map(priorKeys);
   for (const st of sites) if (!keys.has(st.v)) keys.set(st.v, 'k' + (keys.size + 1));
@@ -249,6 +286,21 @@ function purifyHard(file, log) {
     if (!priorKeys.size) widen(e.node);
   }
   for (const h of mo.helpers) if (need.has(h.name)) widen(h.node);
+  // מפעלי-ערך: export const X = <expr> ⇒ export const makeX = (T) => (<expr>)
+  const factoryOf = {};
+  for (const vn of valNeed) {
+    const ve = mo.valueExports.find(x => x.name === vn);
+    const d = ve.decl.declarationList.declarations.find(dd => dd.name.text === vn);
+    const factory = 'make' + vn.charAt(0).toUpperCase() + vn.slice(1);
+    factoryOf[vn] = factory;
+    if (new RegExp(`\\b${factory}\\b`).test(src)) return log(`~ ${base}: שם-מפעל תפוס (${factory})`);
+    const nameAt = d.name.getStart(mo.sf);
+    edits.push({ at: nameAt, del: vn.length, ins: factory });
+    const initAt = d.initializer.getStart(mo.sf);
+    edits.push({ at: initAt, del: 0, ins: `(${tParam}) => (` });
+    edits.push({ at: d.initializer.end, del: 0, ins: ')' });
+  }
+  for (const u of valUseFix) edits.push({ at: u.at, del: u.len, ins: `${factoryOf[u.vn]}(${tParam})` });
   // קריאות-פנימיות לעוזרים-נזקקים ⇒ הוספת tParam
   {
     const walk = (n) => {
@@ -286,6 +338,17 @@ function purifyHard(file, log) {
     let braces = im[1];
     const wraps = [];
     let touched = false;
+    for (const vn of valNeed) {
+      const factory = factoryOf[vn];
+      const alias = `__pure_${factory}`;
+      if (braces.includes(`${factory} as ${alias}`)) { touched = true; continue; }
+      const spec = braces.match(new RegExp(`\\b${vn}\\b(\\s+as\\s+(\\w+))?`));
+      if (!spec) continue;
+      const local = spec[2] || vn;
+      braces = braces.replace(spec[0], `${factory} as ${alias}`);
+      wraps.push(`const ${local} = ${alias}(${dAlias});`);
+      touched = true;
+    }
     for (const fn of expNeed) {
       const alias = `__pure_${fn}`;
       if (braces.includes(`${fn} as ${alias}`)) {

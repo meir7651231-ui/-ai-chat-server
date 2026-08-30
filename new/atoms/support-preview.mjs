@@ -1,5 +1,6 @@
 /** חוט · support-preview — קודם אוטומטית (אפיון-Golden). חוזה: support-preview.contract.md */
-export function supportPreview(text, max = 40) {
+export function supportPreview(text, max , T) {
+  if (max === undefined) max = T.k1;
     const t = (text ?? '').replace(/\s+/gu, ' ').trim();
     return t.length > max ? t.slice(0, max - 1) + '…' : t;
 }

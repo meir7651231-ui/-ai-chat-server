@@ -1,4 +1,4 @@
-/** אטום-דאטה · make-normalize-site-strings — מחרוזות-התצוגה/דומיין שחולצו מ-make-normalize-site (מנוע-הטיהור v3, הכרעה 19). חוזה: make-normalize-site-strings.contract.md */
+/** אטום-דאטה · make-normalize-site-strings — מחרוזות-הדאטה של make-normalize-site (מנוע-הקשיחים, הכרעה 19). חוזה: make-normalize-site-strings.contract.md */
 export const MAKE_NORMALIZE_SITE_T = {
   k1: "string",
   k2: "object",
@@ -14,4 +14,21 @@ export const MAKE_NORMALIZE_SITE_T = {
   k12: "storyTitleAccent",
   k13: "storyBadge",
   k14: "donateNote",
+  k15: 24,
+  k16: 12,
+  k17: 200,
+  k18: 60,
+  k19: 120,
+  k20: 30,
+  k21: 80,
+  k22: 240,
+  k23: 800,
+  k24: 2000,
+  k25: 160,
+  k26: 40,
+  k27: 100,
+  k28: 400,
+  k29: 20,
+  k30: 600,
+  k31: 10,
 };

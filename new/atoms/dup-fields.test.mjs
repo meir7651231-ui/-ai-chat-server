@@ -1,4 +1,44 @@
-import { DUP_FIELDS } from './dup-fields.mjs';
+import { makeDUP_FIELDS as __pure_makeDUP_FIELDS } from './dup-fields.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_dup_fields_T = {
+  k1: "name",
+  k2: "שם משפחה",
+  k3: "mother",
+  k4: "שם האם",
+  k5: "father",
+  k6: "שם האב",
+  k7: "phone",
+  k8: "טלפון",
+  k9: "phone2",
+  k10: "טלפון 2",
+  k11: "email",
+  k12: "אימייל",
+  k13: "city",
+  k14: "עיר",
+  k15: "address",
+  k16: "כתובת",
+  k17: "motherId",
+  k18: "ת\"ז אם",
+  k19: "fatherId",
+  k20: "ת\"ז אב",
+  k21: "community",
+  k22: "קהילה",
+  k23: "language",
+  k24: "שפה",
+  k25: "maritalStatus",
+  k26: "מצב משפחתי",
+  k27: "status",
+  k28: "סטטוס",
+  k29: "kidsHome",
+  k30: "ילדים בבית",
+  k31: "kidsMarried",
+  k32: "ילדים נשואים",
+  k33: "createdAt",
+  k34: "נרשמה",
+  k35: "notes",
+  k36: "הערות",
+};
+const DUP_FIELDS = __pure_makeDUP_FIELDS(__d_dup_fields_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const by = (k) => DUP_FIELDS.find((d) => d.key === k);

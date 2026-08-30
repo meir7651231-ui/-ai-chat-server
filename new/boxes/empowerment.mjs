@@ -7,7 +7,10 @@
 
 // ── חוטי-ההעצמה (new/atoms) ──────────────────────────────────────────────────
 import { cockpitDaysSince } from '../atoms/cockpit-days-since.mjs';
-import { cockpitAtRisk as cockpitAtRiskAtom } from '../atoms/cockpit-at-risk.mjs';
+import { cockpitAtRisk as __pure_cockpitAtRisk } from '../atoms/cockpit-at-risk.mjs';
+import { COCKPIT_AT_RISK_T as __d_cockpit_at_risk_T } from '../atoms/cockpit-at-risk-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const cockpitAtRiskAtom = (...a) => __pure_cockpitAtRisk(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_cockpit_at_risk_T);
 import { cockpitThanks as __pure_cockpitThanks } from '../atoms/cockpit-thanks.mjs';
 import { COCKPIT_THANKS_T as __d_cockpitThanks_COCKPIT_THANKS_T } from '../atoms/cockpit-thanks-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
@@ -60,7 +63,10 @@ import { trendFromScan as __pure_trendFromScan } from '../atoms/intel-trend-from
 import { INTEL_TREND_FROM_SCAN_T as __d_trendFromScan_INTEL_TREND_FROM_SCAN_T } from '../atoms/intel-trend-from-scan-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const trendFromScan = (...a) => __pure_trendFromScan(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_trendFromScan_INTEL_TREND_FROM_SCAN_T);
-import { donorIntel as donorIntelAtom } from '../atoms/intel-donor-intel.mjs';
+import { donorIntel as __pure_donorIntel } from '../atoms/intel-donor-intel.mjs';
+import { INTEL_DONOR_INTEL_T as __d_intel_donor_intel_T } from '../atoms/intel-donor-intel-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const donorIntelAtom = (...a) => __pure_donorIntel(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_intel_donor_intel_T);
 import { matchSegment as __pure_matchSegment } from '../atoms/segments-match-segment.mjs';
 import { SEGMENTS_MATCH_SEGMENT_T as __d_matchSegment_SEGMENTS_MATCH_SEGMENT_T } from '../atoms/segments-match-segment-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
@@ -69,7 +75,10 @@ import { segmentCounts as __pure_segmentCounts } from '../atoms/segments-segment
 import { SEGMENTS_SEGMENT_COUNTS_T as __d_segmentCounts_SEGMENTS_SEGMENT_COUNTS_T } from '../atoms/segments-segment-counts-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const segmentCountsAtom = (...a) => __pure_segmentCounts(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_segmentCounts_SEGMENTS_SEGMENT_COUNTS_T);
-import { activeByMonth as activeByMonthAtom } from '../atoms/portfolio-active-by-month.mjs';
+import { activeByMonth as __pure_activeByMonth } from '../atoms/portfolio-active-by-month.mjs';
+import { PORTFOLIO_ACTIVE_BY_MONTH_T as __d_portfolio_active_by_month_T } from '../atoms/portfolio-active-by-month-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const activeByMonthAtom = (...a) => __pure_activeByMonth(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_portfolio_active_by_month_T);
 import { portfolioIntel as __pure_portfolioIntel } from '../atoms/portfolio-portfolio-intel.mjs';
 import { RISK as __d_portfolioIntel_RISK } from '../atoms/portfolio-portfolio-intel-data.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה

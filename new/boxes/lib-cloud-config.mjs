@@ -123,7 +123,10 @@ import { watchTeamMessages as __pure_watchTeamMessages } from '../atoms/watch-te
 import { WATCH_TEAM_MESSAGES_T as __d_watchTeamMessages_WATCH_TEAM_MESSAGES_T } from '../atoms/watch-team-messages-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const watchTeamMessagesAtom = (...a) => __pure_watchTeamMessages(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_watchTeamMessages_WATCH_TEAM_MESSAGES_T);
-import { sanitizeSupportText as sanitizeSupportTextAtom } from '../atoms/sanitize-support-text.mjs';
+import { sanitizeSupportText as __pure_sanitizeSupportText } from '../atoms/sanitize-support-text.mjs';
+import { SANITIZE_SUPPORT_TEXT_T as __d_sanitize_support_text_T } from '../atoms/sanitize-support-text-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const sanitizeSupportTextAtom = (...a) => __pure_sanitizeSupportText(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_sanitize_support_text_T);
 
 // ── שכן-מחווט: ניקוי-הטקסט. במקור sendSupportMessage/Reply/TeamMessage מייבאים את
 //    sanitizeSupportText מ-supportChat — כאן זו הזרקת-שקע (חוק-3), והתקרה SUPPORT_MSG_MAX

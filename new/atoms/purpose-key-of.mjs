@@ -2,9 +2,9 @@
  *  חוזה: purpose-key-of.contract.md
  *  חולץ כלשונו מ-maor/src/lib/donationPartition.ts:24-33 (תורגם TS→JS); טהור,
  *  אפס שקעים. מפתח-הפיצול = purpose (הרשאה-פר-עובד), לא designation (SHOP9). */
-export const SHARED_PURPOSE_KEY = '_shared_';
+export const makeSHARED_PURPOSE_KEY = (T) => (T.k1);
 
-export function purposeKeyOf(d) {
+export function purposeKeyOf(d, T) {
   const p = (d.purpose ?? '').trim();
-  return p || SHARED_PURPOSE_KEY;
+  return p || makeSHARED_PURPOSE_KEY(T);
 }

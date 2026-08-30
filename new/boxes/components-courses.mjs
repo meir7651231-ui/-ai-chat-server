@@ -144,9 +144,15 @@ import { SCHEDULE_CLASH_TEXT_T as __d_schedule_clash_text_T } from '../atoms/sch
 const scheduleClashWire = (...a) => __pure_scheduleClashText(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_schedule_clash_text_T);
 import { ENROLL_NEW_FAMILY } from '../atoms/enroll-new-family.mjs';
 import { offerNewFamily as offerNewFamilyWire } from '../atoms/offer-new-family.mjs';
-import { resolveEnrollFamily as resolveEnrollFamilyWire } from '../atoms/resolve-enroll-family.mjs';
+import { resolveEnrollFamily as __pure_resolveEnrollFamily } from '../atoms/resolve-enroll-family.mjs';
+import { RESOLVE_ENROLL_FAMILY_T as __d_resolve_enroll_family_T } from '../atoms/resolve-enroll-family-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const resolveEnrollFamilyWire = (...a) => __pure_resolveEnrollFamily(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_resolve_enroll_family_T);
 import { PUNCH_CONFIRM_MS } from '../atoms/punch-confirm-ms.mjs';
-import { punchConfirmStep } from '../atoms/punch-confirm-step.mjs';
+import { punchConfirmStep as __pure_punchConfirmStep } from '../atoms/punch-confirm-step.mjs';
+import { PUNCH_CONFIRM_STEP_T as __d_punch_confirm_step_T } from '../atoms/punch-confirm-step-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const punchConfirmStep = (...a) => __pure_punchConfirmStep(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_punch_confirm_step_T);
 import { wheelIndexUnderPointer as __pure_wheelIndexUnderPointer } from '../atoms/wheel-index-under-pointer.mjs';
 import { WHEEL_INDEX_UNDER_POINTER_T as __d_wheel_index_under_pointer_T } from '../atoms/wheel-index-under-pointer-strings.mjs';
 // עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה

@@ -3,7 +3,8 @@
  * בסיכון-נטישה: נתן בעבר, בלי nextDate, שקט מעל הסף. ממוין מהשקט-ביותר.
  * שקעים: supCount, supLast (אטומי-Genesis) · daysSince (אח cockpit).
  */
-export function cockpitAtRisk(supporters, todayIso, silentDays = 60, { supCount, supLast, daysSince }) {
+export function cockpitAtRisk(supporters, todayIso, silentDays , { supCount, supLast, daysSince }, T) {
+  if (silentDays === undefined) silentDays = T.k1;
   const hasGiven = (sp) => supCount(sp) > 0 && !!supLast(sp);
   return supporters
     .filter((sp) => {

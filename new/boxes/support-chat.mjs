@@ -5,7 +5,10 @@
  *  שקעי-IO מוזרקים (מתועדים, לא ממומשים): todayIso ל-supportDayLabel (הרכיב מזרים
  *  isoToday() — טוהר, בלי Date.now). אין DOM/localStorage/fetch/ענן — הלִיבּ טהור. */
 import { SUPPORT_MSG_MAX } from '../atoms/support-msg-max.mjs';
-import { sanitizeSupportText as _sanitizeSupportText } from '../atoms/sanitize-support-text.mjs';
+import { sanitizeSupportText as __pure_sanitizeSupportText } from '../atoms/sanitize-support-text.mjs';
+import { SANITIZE_SUPPORT_TEXT_T as __d_sanitize_support_text_T } from '../atoms/sanitize-support-text-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const _sanitizeSupportText = (...a) => __pure_sanitizeSupportText(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_sanitize_support_text_T);
 import { isSendableSupportText as _isSendableSupportText } from '../atoms/is-sendable-support-text.mjs';
 import { sortSupportMsgs } from '../atoms/sort-support-msgs.mjs';
 import { supportMsgTime as __pure_supportMsgTime } from '../atoms/support-msg-time.mjs';
@@ -16,7 +19,10 @@ import { supportDayLabel as __pure_supportDayLabel } from '../atoms/support-day-
 import { SUPPORT_DAY_LABEL_T as __d_supportDayLabel_SUPPORT_DAY_LABEL_T } from '../atoms/support-day-label-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const supportDayLabel = (...a) => __pure_supportDayLabel(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_supportDayLabel_SUPPORT_DAY_LABEL_T);
-import { supportPreview } from '../atoms/support-preview.mjs';
+import { supportPreview as __pure_supportPreview } from '../atoms/support-preview.mjs';
+import { SUPPORT_PREVIEW_T as __d_support_preview_T } from '../atoms/support-preview-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const supportPreview = (...a) => __pure_supportPreview(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_support_preview_T);
 import { supportUnread as __pure_supportUnread } from '../atoms/support-unread.mjs';
 import { SORT_SUPPORT_THREADS_T as __d_supportUnread_SUPPORT_UNREAD_T } from '../atoms/sort-support-threads-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

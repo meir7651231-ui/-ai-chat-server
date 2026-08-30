@@ -6,8 +6,8 @@
 /** תקרת-ההטמעה מהמקור: 3MB לקובץ מוטמע (localStorage ~5MB למסמך כולו). */
 export const MAX_EMBED_BYTES = 3 * 1024 * 1024;
 
-export async function readFileAsDataUrl(file, readAsDataUrl, maxBytes = MAX_EMBED_BYTES) {
+export async function readFileAsDataUrl(file, readAsDataUrl, maxBytes = MAX_EMBED_BYTES, T) {
   if (file.size > maxBytes)
-    throw new Error('הקובץ גדול מדי להטמעה (מקסימום ' + Math.round(maxBytes / 1024 / 1024) + 'MB) — הוסיפו קישור במקום');
+    throw new Error(T.k1 + Math.round(maxBytes / 1024 / 1024) + T.k2);
   return readAsDataUrl(file);
 }

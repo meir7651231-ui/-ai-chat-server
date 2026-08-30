@@ -1,0 +1,4 @@
+/** אטום-דאטה · sanitize-support-text-strings — מחרוזות-הדאטה של sanitize-support-text (מנוע-הקשיחים, הכרעה 19). חוזה: sanitize-support-text-strings.contract.md */
+export const SANITIZE_SUPPORT_TEXT_T = {
+  k1: 2000,
+};

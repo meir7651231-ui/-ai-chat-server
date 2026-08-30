@@ -2,7 +2,8 @@
  * מוצא: commands.ts:85 (filterCommands) + norm:45 (inline). חוק-4 verbatim.
  * מסנן פקודות לפי שאילתה. ריק ⇒ פעולות (בלי כרטיסי-תורם) בראש. טהור, אפס-שקעים.
  */
-export function filterCommands(commands, query, limit = 12, T) {
+export function filterCommands(commands, query, limit , T) {
+  if (limit === undefined) limit = T.k2;
   const norm = (s) => s.toLowerCase().replace(/\s+/g, ' ').trim();
   const q = norm(query);
   if (!q) return commands.filter((c) => c.kind !== T.k1).slice(0, limit);

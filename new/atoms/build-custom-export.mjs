@@ -117,7 +117,7 @@ export function buildCustomExport(cfg, db, target, range, selectedKeys, s, T, CA
                 const d1raw = new Date(range.to + 'T12:00:00');
                 // תקרת-ימים (עקבי עם courseDaily MAX_DAYS) — טעות בשנת "עד" (טווח של
                 // עשרות שנים) הקפיאה את הדפדפן בלולאה יום-יום. חוסמים ל-~11 שנים.
-                const capped = new Date(d0.getTime() + CAP_DAYS * 86400000);
+                const capped = new Date(d0.getTime() + CAP_DAYS * T.k19);
                 const d1 = d1raw < capped ? d1raw : capped;
                 for (let dd = new Date(d0); dd <= d1; dd.setDate(dd.getDate() + 1)) {
                     // נרמול אדר משותף — עקבי עם הלוח והבית; בלעדיו אזכרה ב"אדר" נעדרת מהייצוא בשנה מעוברת.

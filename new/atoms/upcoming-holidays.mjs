@@ -2,7 +2,8 @@
  *  חוזה: upcoming-holidays.contract.md
  *  חולץ כלשונו מ-maor/src/components/shop/lib.ts:131-144 (תורגם TS→JS);
  *  השכנים holidayOf/isoOf הוזרקו כשקעים (חוק-1 — אפס import פנימי). */
-export function upcomingHolidays(fromIso, days = 45, holidayOf, isoOf) {
+export function upcomingHolidays(fromIso, days , holidayOf, isoOf, T) {
+  if (days === undefined) days = T.k1;
     const out = [];
     const seen = new Set();
     const start = new Date(fromIso + 'T12:00:00');

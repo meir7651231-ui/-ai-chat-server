@@ -1,4 +1,9 @@
-import { sanitizeSupportText } from './sanitize-support-text.mjs';
+import { sanitizeSupportText as __pure_sanitizeSupportText } from './sanitize-support-text.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_sanitize_support_text_T = {
+  k1: 2000,
+};
+const sanitizeSupportText = (...a) => __pure_sanitizeSupportText(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_sanitize_support_text_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 

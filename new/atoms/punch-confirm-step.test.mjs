@@ -1,4 +1,10 @@
-import { punchConfirmStep, PUNCH_CONFIRM_MS } from './punch-confirm-step.mjs';
+import { punchConfirmStep as __pure_punchConfirmStep, makePUNCH_CONFIRM_MS as __pure_makePUNCH_CONFIRM_MS } from './punch-confirm-step.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_punch_confirm_step_T = {
+  k1: 3000,
+};
+const PUNCH_CONFIRM_MS = __pure_makePUNCH_CONFIRM_MS(__d_punch_confirm_step_T);
+const punchConfirmStep = (...a) => __pure_punchConfirmStep(...a, ...Array(Math.max(0, 4 - a.length)).fill(undefined), __d_punch_confirm_step_T);
 let f = 0;
 const ok = (cond, msg) => { if (!cond) { console.error('✗ ' + msg); f = 1; } };
 const eq = (r, fire, next, label) => {

@@ -1,4 +1,9 @@
-import { runNetCheck } from './run-net-check.mjs';
+import { runNetCheck as __pure_runNetCheck } from './run-net-check.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_run_net_check_T = {
+  k1: 8000,
+};
+const runNetCheck = (...a) => __pure_runNetCheck(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_run_net_check_T);
 let f = 0;
 const chk = (name, cond) => { if (!cond) { console.error('✗ ' + name); f = 1; } };
 

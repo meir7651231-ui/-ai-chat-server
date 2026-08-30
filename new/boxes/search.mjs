@@ -5,7 +5,10 @@ import { normSearch as __pure_normSearch } from '../atoms/norm-search.mjs';
 import { NORM_SEARCH_T as __d_normSearch_NORM_SEARCH_T } from '../atoms/norm-search-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const normSearch = (...a) => __pure_normSearch(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_normSearch_NORM_SEARCH_T);
-import { expandQuery } from '../atoms/xlat.mjs';
+import { expandQuery as __pure_expandQuery } from '../atoms/xlat.mjs';
+import { XLAT_T as __d_xlat_T } from '../atoms/xlat-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const expandQuery = (...a) => __pure_expandQuery(...a, ...Array(Math.max(0, 2 - a.length)).fill(undefined), __d_xlat_T);
 import { ruleExact as __pure_ruleExact } from '../atoms/rule-exact.mjs';
 import { RULE_EXACT_T as __d_rule_exact_T } from '../atoms/rule-exact-strings.mjs';
 // עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה

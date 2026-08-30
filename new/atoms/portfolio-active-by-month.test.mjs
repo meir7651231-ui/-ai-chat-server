@@ -1,4 +1,9 @@
-import { activeByMonth as f } from './portfolio-active-by-month.mjs';
+import { activeByMonth as __pure_activeByMonth } from './portfolio-active-by-month.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_portfolio_active_by_month_T = {
+  k1: 12,
+};
+const f = (...a) => __pure_activeByMonth(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_portfolio_active_by_month_T);
 // עצמאי (חוק-1: אפס import-אח; שקעים inline מבונים). Golden נלכד מהרצה.
 const MS_DAY=86400000;
 const dayDiff=(iso,today)=>{if(!iso)return Infinity;const a=Date.parse(iso.slice(0,10)+'T12:00:00'),b=Date.parse(today.slice(0,10)+'T12:00:00');if(Number.isNaN(a)||Number.isNaN(b))return Infinity;return Math.floor((b-a)/MS_DAY);};

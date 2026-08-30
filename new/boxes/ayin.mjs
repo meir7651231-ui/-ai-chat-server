@@ -72,7 +72,10 @@ import { FILTER_AYIN_BOARD_T as __d_filterAyinBoard_FILTER_AYIN_BOARD_T } from '
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const filterAyinBoardA = (...a) => __pure_filterAyinBoard(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_filterAyinBoard_FILTER_AYIN_BOARD_T);
 import { AYIN_SHEET_HEADER }                             from '../atoms/ayin-sheet-header.mjs';
-import { ayinSheetRows as ayinSheetRowsA }               from '../atoms/ayin-sheet-rows.mjs';
+import { ayinSheetRows as __pure_ayinSheetRows }               from '../atoms/ayin-sheet-rows.mjs';
+import { AYIN_SHEET_ROWS_T as __d_ayin_sheet_rows_T } from '../atoms/ayin-sheet-rows-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const ayinSheetRowsA = (...a) => __pure_ayinSheetRows(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_ayin_sheet_rows_T);
 import { parseAyinSheet as __pure_parseAyinSheet }             from '../atoms/parse-ayin-sheet.mjs';
 import { PARSE_AYIN_SHEET_T as __d_parseAyinSheet_PARSE_AYIN_SHEET_T } from '../atoms/parse-ayin-sheet-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן

@@ -8,6 +8,7 @@ const __d_previewTelephony_PREVIEW_TELEPHONY_T = {
   k3: "יום שלישי 10:00 (בשעות)",
   k4: "יום שלישי 20:00 (אחרי-שעות)",
   k5: "שבת 11:00",
+  k6: 400,
 };
 const previewTelephony = (...a) => __pure_previewTelephony(...a, ...Array(Math.max(0, 9 - a.length)).fill(undefined), __d_previewTelephony_PREVIEW_TELEPHONY_T, __d_preview_telephony_caller);
 const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b);

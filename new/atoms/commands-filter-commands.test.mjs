@@ -2,10 +2,7 @@ import { filterCommands as __pure_filterCommands } from './commands-filter-comma
 // צילום-מקומי + עטיפת-כריכה (מנוע-הטיהור v3)
 const __d_filterCommands_COMMANDS_FILTER_COMMANDS_T = {
   k1: "openDonor",
-  k2: 100,
-  k3: 60,
-  k4: 40,
-  k5: 20,
+  k2: 12,
 };
 const f = (...a) => __pure_filterCommands(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_filterCommands_COMMANDS_FILTER_COMMANDS_T);
 // עצמאי (חוק-1: אפס import-אח; שקעים/פיקסטורות inline). Golden נלכד מהרצה.

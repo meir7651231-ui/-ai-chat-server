@@ -1,4 +1,9 @@
-import { donorIntel as f } from './intel-donor-intel.mjs';
+import { donorIntel as __pure_donorIntel } from './intel-donor-intel.mjs';
+// צילום-מקומי + עטיפת-כריכה (מנוע-הקשיחים; בדיקה לא מייבאת אטום-שכן)
+const __d_intel_donor_intel_T = {
+  k1: 12,
+};
+const f = (...a) => __pure_donorIntel(...a, ...Array(Math.max(0, 5 - a.length)).fill(undefined), __d_intel_donor_intel_T);
 // עצמאי (חוק-1: אפס import-אח; שקעים inline). Golden נלכד מהרצה.
 const T='2026-08-26';
 const MS_DAY=86400000;

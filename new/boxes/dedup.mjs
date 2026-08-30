@@ -10,7 +10,10 @@ import { mergeFamilies as __pure_mergeFamilies } from '../atoms/merge-families.m
 import { MERGE_FAMILIES_T as __d_mergeFamilies_MERGE_FAMILIES_T } from '../atoms/merge-families-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const _mergeFamilies = (...a) => __pure_mergeFamilies(...a, ...Array(Math.max(0, 3 - a.length)).fill(undefined), __d_mergeFamilies_MERGE_FAMILIES_T);
-import { DUP_FIELDS } from '../atoms/dup-fields.mjs';
+import { makeDUP_FIELDS as __pure_makeDUP_FIELDS } from '../atoms/dup-fields.mjs';
+import { DUP_FIELDS_T as __d_dup_fields_T } from '../atoms/dup-fields-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const DUP_FIELDS = __pure_makeDUP_FIELDS(__d_dup_fields_T);
 import { dupFieldValue } from '../atoms/dup-field-value.mjs';
 import { mergeFamiliesByFields as __pure_mergeFamiliesByFields } from '../atoms/merge-families-by-fields.mjs';
 import { MERGE_FAMILIES_BY_FIELDS_T as __d_mergeFamiliesByFields_MERGE_FAMILIES_BY_FIELDS_T } from '../atoms/merge-families-by-fields-strings.mjs';

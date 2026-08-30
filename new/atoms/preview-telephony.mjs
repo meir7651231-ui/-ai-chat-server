@@ -6,7 +6,7 @@
 export function previewTelephony(tc, orgName, tenantId, telephonyToTenant, anchorToday, validateTenant, buildTenant, explainCall, trustReport, T, caller) {
     const raw = telephonyToTenant(tc, orgName, tenantId);
     const anchor = anchorToday();
-    const opts = { anchorDate: anchor, calendarWindow: 400 };
+    const opts = { anchorDate: anchor, calendarWindow: T.k6 };
     const v = validateTenant(raw);
     if (!v.ok)
         return { ok: false, errors: v.errors, warnings: v.warnings, rows: [], trust: null, files: null };

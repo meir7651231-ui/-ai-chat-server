@@ -5,7 +5,10 @@
  *  הפירוק — חי כאן, לא בחוטים.
  *  שקעי-IO אמיתיים: אין — donationPartition טהור לגמרי (בלי DOM/localStorage/fetch/ענן). */
 import { SHARED_PURPOSE_KEY } from '../atoms/shared-purpose-key.mjs';
-import { purposeKeyOf } from '../atoms/purpose-key-of.mjs';
+import { purposeKeyOf as __pure_purposeKeyOf } from '../atoms/purpose-key-of.mjs';
+import { PURPOSE_KEY_OF_T as __d_purpose_key_of_T } from '../atoms/purpose-key-of-strings.mjs';
+// עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
+const purposeKeyOf = (...a) => __pure_purposeKeyOf(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_purpose_key_of_T);
 import { donAllowedKeys as __pure_donAllowedKeys } from '../atoms/don-allowed-keys.mjs';
 import { DON_ALLOWED_KEYS_T as __d_don_allowed_keys_T } from '../atoms/don-allowed-keys-strings.mjs';
 // עטיפת-כריכה (מנוע-הקשיחים): הדאטה נכרכת כאן — ה-API החיצוני זהה
