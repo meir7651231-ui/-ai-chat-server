@@ -2,7 +2,7 @@
  "counts": {
   "widgets": 381,
   "functions": 445,
-  "data": 1173
+  "data": 1195
  },
  "widgets": [
   {
@@ -18348,11 +18348,6 @@
    "shelf": "new/dart-data-bs"
   },
   {
-   "name": "gen_quest1_stat_label4",
-   "file": "auto/gen_quest1_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
    "name": "gen_quest1_textfield_label",
    "file": "auto/gen_quest1_content.dart",
    "shelf": "new/dart-data-bs"
@@ -20838,6 +20833,11 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "CUSTOM_EXPORT_TERMS",
+   "file": "custom-export-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "kTerms",
    "file": "day-letters-terms.dart",
    "shelf": "new/dart-data-maor"
@@ -20935,6 +20935,11 @@
   {
    "name": "DISTRIBUTION_LIST_LINES_T",
    "file": "distribution-list-lines-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "DISTRIBUTION_TERMS",
+   "file": "distribution-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -21333,7 +21338,97 @@
    "shelf": "new/dart-data-maor"
   },
   {
-   "name": "HEB_CAL",
+   "name": "hebCalAnchor",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalApproxA",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalLeapA",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalMonthsA",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalCarryBase",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalPostM",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalSpanHi",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalLongMid",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalShortMid",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalShortMonths",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalFlexLong",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalMonthsInLeap",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalShortLen",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalNisan",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalNames",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalLeapName12",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalGregYearDays",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalGregMA",
+   "file": "heb-cal-data.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "hebCalGregLeapAdj",
    "file": "heb-cal-data.dart",
    "shelf": "new/dart-data-maor"
   },
@@ -21513,6 +21608,11 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "LIB_CLOUD_TERMS",
+   "file": "lib-cloud-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "LIB_CONFIG_TERMS",
    "file": "lib-config-terms.dart",
    "shelf": "new/dart-data-maor"
@@ -21525,6 +21625,11 @@
   {
    "name": "LIB_ICS_TERMS",
    "file": "lib-ics-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "LIB_LOCK_TERMS",
+   "file": "lib-lock-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -21655,6 +21760,11 @@
   {
    "name": "NAMES_EXPORT_TERMS",
    "file": "names-export-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "NAVHIST_TERMS",
+   "file": "navhist-terms.dart",
    "shelf": "new/dart-data-maor"
   },
   {
