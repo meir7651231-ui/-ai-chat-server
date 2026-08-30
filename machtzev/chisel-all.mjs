@@ -49,6 +49,8 @@ const isMechLine = (ln) =>
   /\.(slice|substr|substring|charAt|padStart|padEnd|repeat|codePointAt)\(/.test(ln) || // אינדקס/אורך-מחרוזת
   /new Date\(|\.set(Date|Hours|Minutes|Month|FullYear)\(/.test(ln) || // רכיבי-תאריך
   /[*/]\s*12\b|\b12\s*[*+]|month/i.test(ln) ||                       // חודשי-שנה
+  /%\s*(?:24|12|7|60|360|100|1000)\b/.test(ln) ||                    // מודולו בסיס-לוח/מתמטי (שעות/חודשים/ימים/מעלות)
+  /[+\-]=?\s*24\b|\b24\s*[+\-]/.test(ln) ||                          // חשבון-שעות (עטיפת-יממה)
   /[*/]\s*100\b|\b100\s*[*/]|\)\s*\*\s*100|Math\.round\([^)]*100/.test(ln); // המרה-לאחוזים
 const autoPurify = (boxFile) => {
   const lines = fs.readFileSync(boxFile, 'utf8').split('\n'); const out = [];
@@ -64,7 +66,7 @@ const autoPurify = (boxFile) => {
 
 const rmBox = (n) => {
   for (const e of ['.mjs', '.contract.md', '.test.mjs']) { const fp = path.join(BOXES, n + e); if (fs.existsSync(fp)) fs.unlinkSync(fp); }
-  for (const e of ['.mjs', '.contract.md', '.test.mjs']) { const fp = path.join(ROOT, 'new/atoms', n + '-strings' + e); if (fs.existsSync(fp)) fs.unlinkSync(fp); }  // גם אטום-המחרוזות
+  for (const suf of ['-strings', '-data']) for (const e of ['.mjs', '.contract.md', '.test.mjs']) { const fp = path.join(ROOT, 'new/atoms', n + suf + e); if (fs.existsSync(fp)) fs.unlinkSync(fp); }  // גם אטומי-הדאטה/המחרוזות
 };
 const freshViolators = (names) => {
   const bad = new Set();
@@ -85,8 +87,9 @@ for (const { rel, boxName } of candidates) {
   const r = run('node', [path.join(ROOT, 'machtzev/box-assemble.mjs'), rel, boxName, '--write']);
   if (!/קופסה הורכבה/.test(r)) { skipped++; continue; }              // יבוא-ערך-זר / אין-golden
   const bp = path.join(BOXES, boxName + '.mjs');
-  autoPurify(bp);                                                    // קסם ⇒ קבוע-מתמטי
-  run('node', [path.join(ROOT, 'machtzev/box-purify.mjs'), bp]);     // עברית/enum ⇒ אטום-דאטה
+  autoPurify(bp);                                                    // קסם-מנגנון ⇒ קבוע-מתמטי
+  run('node', [path.join(ROOT, 'machtzev/box-data-lift.mjs'), bp]);  // קבועי-דומיין/טבלאות ⇒ אטום-דאטה (המנגנון-ההפוך)
+  run('node', [path.join(ROOT, 'machtzev/box-purify.mjs'), bp]);     // עברית/enum שנותרו ⇒ אטום-מחרוזות
 }
 // מסנן-שערים על כל הקופסאות-החדשות ביחד
 const fresh = fs.readdirSync(BOXES).filter(f => /\.mjs$/.test(f) && !/\.test\./.test(f)).map(f => f.replace(/\.mjs$/, ''))
