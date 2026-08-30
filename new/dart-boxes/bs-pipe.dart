@@ -84,6 +84,7 @@ import '../dart/directional_context.dart' as dc;
 import '../dart/install_add_item.dart' as iai;
 import '../dart/kit_add_item.dart' as kai;
 import '../dart/branch_label.dart' as bl;
+import '../dart-data/k_for_type-data.dart' as kd_kft;
 
 // ── טיפוסי-הנתונים שהאטומים פועלים עליהם — נחשפים דרך הקופסה (data-shapes) ──────
 export '../dart/estimate_pressure_drop.dart'
@@ -394,7 +395,7 @@ class PipeBox {
         verticalRiseMeters: verticalRiseMeters,
         skuOf: (p) => p.sku,
         nameHeOf: (p) => p.nameHe,
-        kOf: (p) => kft.kForType(p.productType),
+        kOf: (p) => kft.kForType(p.productType, table: kd_kft.kKFactors),
         minBoreOf: (p) => _minBoreMeters(p.sku),
         widerSiblingOf: (p) => widerSiblingOf(p),
         frictionFactor: (re) => ff.frictionFactor(re, pow025: pw.pow025),

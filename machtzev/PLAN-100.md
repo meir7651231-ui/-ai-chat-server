@@ -8,7 +8,7 @@
 | ציר | בוקר | עכשיו | % | שער |
 |---|---|---|---|---|
 | 🧼 טוהר-עומק (הכרעה 19) | 37 | **36** | 92.7% | deeppurity ✓ |
-| 🧼 טוהר-דאטה (הכרעה 16) | 124 | **9** | 98.6% | datapurity ✓ |
+| 🧼 טוהר-דאטה (הכרעה 16) | 124 | **6** | 99.0% | datapurity ✓ |
 | 🔁 המרת-מנגנונים JS⇒Dart | 39 בהסגר | **0** | **100%** 🏁 | genesis-compile ✓ |
 | 🧠 מנועים ברי-הרצה | 104 | **313**/459 | 68% | coverage ✓ (ratchet) |
 | 🧠 ברי-חיווט-לסינתזה (Dart-שקול) | 104 | **119-172** | — | שער-synth ✓ |
@@ -226,3 +226,12 @@
   קופסאות 62/62 · strict 0. **נותרו 9:** k_for_type (switch→if) · edge_cost (const-list) ·
   parse_chips (getter-עם-לוגיקה) · project_quote_text/quote_text_for (interpolation) ·
   size_diameter_atoms · line_compliance_checklist · recommended_kit_for×2.
+- **30.8 · (Opus) k_for_type/edge_cost/parse_chips + תיקון-הזרקה קריטי (L31): טוהר-דאטה 9⇒6:**
+  ‏(1) **CI #83 אדום** — ברירת-מחדל-class מייבאת `../dart-data/` ישירות, אבל dart-data לא
+  היה ב-DIRS8 של המנוע-האחד (אטומי-סוקט לא מייבאים דאטה ⇒ לא צף) ⇒ buildsmart ייבא קובץ-
+  חסר. תוקן: dart-data נוסף ל-DIRS8 (87 קבצים הוזרקו), **CI ירוק**. L31 נחקק. ‏(2) שלושה
+  אטומים טוהרו כטבלאות-חיפוש/const-מיובא: **k_for_type** (switch⇒Map<String,double> kKFactors) ·
+  **edge_cost** (שני const-Sets עבריים ⇒ אטום-דאטה) · **parse_chips** (levelLabelOf ⇒
+  ‏kLevelLabels מיובא). משטרה 13/13 · קופסאות 62/62 · strict 0. **נותרו 6 — כולם עברית ב-
+  string-interpolation** (תוויות-UI): line_compliance_checklist · project_quote_text ·
+  quote_text_for · recommended_kit_for×2 · size_diameter_atoms.
