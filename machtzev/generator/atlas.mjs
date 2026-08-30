@@ -71,7 +71,8 @@ export function buildAtlas() {
         if (w.length >= 2) { he = w.slice(0, 10); break; }
       }
     }
-    for (const fm of src.matchAll(/(?:^|\n)((?:Future<[^>\n]+>|Iterable<[^>\n]+>|List<[^>\n]+>|Map<[^>\n]+>|Set<[^>\n]+>|[A-Z]\w*(?:<[^>\n]+>)?\??|void|bool|int|double|num|String\??|dynamic)\s+([a-z]\w*)\s*\(([^)]*)\))\s*(?:=>|\{|async)/g)) {
+    // רשימת-פרמטרים מודעת-סוגריים: תופסת גם callback מוקלד `Function(String)` (רמת-קינון אחת)
+    for (const fm of src.matchAll(/(?:^|\n)((?:Future<[^>\n]+>|Iterable<[^>\n]+>|List<[^>\n]+>|Map<[^>\n]+>|Set<[^>\n]+>|[A-Z]\w*(?:<[^>\n]+>)?\??|void|bool|int|double|num|String\??|dynamic)\s+([a-z]\w*)\s*\(((?:[^()]|\([^()]*\))*)\))\s*(?:=>|\{|async)/g)) {
       const ret = fm[1].split(/\s+/)[0];
       // פיצול-פרמטרים מודע-עומק: פסיק בתוך <...> (Map<String, dynamic>) איננו מפריד
       const splitParams = (s2) => {
