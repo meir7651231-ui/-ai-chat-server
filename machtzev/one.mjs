@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /** ⚡ מחצב · המנוע-האחד (one) — לוח-האם של כל מנועי-הפירוק-וההרכבה.
  *  פקודה-אחת ⇒ הצנרת המלאה: רענון-מקורות → פירוק-מסכים (מיפוי+חילוץ+דדופ+מונחים)
- *  → דדופ-אטומים → ביקורת-הרכבה → טוהר-דאטה → משטרה → לוח-מצב-מאוחד.
+ *  → דדופ-אטומים → ביקורת-הרכבה → טוהר-דאטה → מכונת-הטיהור (הכרעה 19) → משטרה → לוח-מצב-מאוחד.
  *  כל שלב = מנוע-קיים (חוק-2: המשמעות בקופסה — כאן רק חיווט, אפס-לוגיקה-חדשה).
  *  שימוש: node machtzev/one.mjs [--full]   (--full מוסיף משטרה-מלאה selftest+mutation) */
 import { execFileSync, execSync } from 'node:child_process';
@@ -105,6 +105,12 @@ stage('מחולל-הלוחות (board-gen)', () => run('machtzev/assemble/board-
 // ── 5 · ביקורות-ההרכבה והטוהר (שערי-ratchet) ──
 stage('ביקורת-הרכבה (box-audit)', () => last(run('machtzev/assemble/box-audit.mjs', ['--gate'])));
 stage('טוהר-דאטה (purity-data)', () => last(run('machtzev/purity-data.mjs', ['--gate'])));
+// הכרעה 19 · מכונת-הטיהור המלאה: קופסאות⇒קינון⇒טבלאות⇒מחרוזות (נקודת-שבת) + מנוע-הקשיחים + השער
+stage('מכונת-הטיהור (הכרעה 19)', () => {
+  run('machtzev/purify-engine.mjs', ['--all']);
+  const h = run('machtzev/purify-hard.mjs', ['--run', '300']).split('\n').find(l => l.includes('טוהרו')) || '';
+  return (last(run('machtzev/deep-purity-scan.mjs', ['--gate'])) + ' · ' + h.trim()).trim();
+}, { optional: true });
 stage('מד-מוכנות-קופסאות', () => last(run('machtzev/box-coverage.mjs')), { optional: true });
 stage('מפת-חיווט (gen-wiring-doc)', () => last(run('machtzev/gen-wiring-doc.mjs')), { optional: true });
 

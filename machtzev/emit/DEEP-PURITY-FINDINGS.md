@@ -1,6 +1,6 @@
 # 🔬 ממצאי טוהר-עומק (הכרעה 19) — דאטה בתוך מנגנון
 
-נסרקו אטומי-מנגנון ב-new/atoms · new/boxes · הפרות: 42
+נסרקו אטומי-מנגנון ב-new/atoms · new/boxes · הפרות: 41
 
 | אטום | ציון | עברית | טבלאות | מחרוזות-דומיין | מספרי-קסם |
 |---|---|---|---|---|---|
@@ -8,12 +8,9 @@
 | new/boxes/lib-cloud.mjs | 26 | אימייל או סיסמה שגויים · אין חיבור לאינטרנט — בדקו את ה · יותר מדי ניסיונות — המתינו מספ · החשבון הושבת — פנו למנהל המערכ | — | default · donations · seq · receiptSeq | 500 400 |
 | new/boxes/diary.mjs | 24 | כרטיסייה · יתרה  · מוקפא · הסתיים · רשימת-המתנה ⏳ | — | punch · paused · #fdf1d4 · ended | — |
 | new/boxes/tour.mjs | 24 | 👋 הדמיה מלאה — המערכת מדגימה  · סטטיסטיקות חיות — כל אריח לחיץ · מדד אמינות · ⌘K — חיפוש חכם מכל מקום | — | home · home · home · families | — |
-| new/boxes/distribution.mjs | 19 | איסוף · בדרך · נמסר | STATUS_LABEL = { pickup: 'איסו | pickup · enroute | — |
 | new/boxes/hebdate.mjs | 18 | ⚠ שם חודש עברי לא-צפוי מ-Intl  | — | Tishri · Heshvan · Kislev · Tevet | 30 4000 7000 3761 440 12 |
 | new/atoms/schedule-clash-text.mjs | 16 | ראשון · שני · שלישי · רביעי | — | — | — |
 | new/boxes/navhist.mjs | 16 | ↩ חזרה · חזרה למסך הקודם | — | families · families · courses · courses | — |
-| new/boxes/pricing.mjs | 13 | — | DEFAULT_INTEGRATION_PRICES = { | maor_prices · subscription | 60 90 50 40 90 30 |
-| new/boxes/cloud-diff.mjs | 11 | — | META_KEYS = [ 'orgName', 'orgS | orgName · orgSite · orgDonate · orgGoal | — |
 | new/boxes/receipt.mjs | 11 | — | — | text/plain;charset=utf-8 · receipt- · .txt · iframe | 10 5000 60000 |
 | new/boxes/custom-export.mjs | 10 | — | — | memorial · anniversary · bday | 3761 440 12 30 |
 | new/boxes/lib-pwa.mjs | 9 | — | — | shell.pwa · application/manifest+json · rtl · standalone | 12 |
@@ -23,9 +20,11 @@
 | new/boxes/empowerment.mjs | 5 | — | — | — | 60 60 12 12 10 |
 | new/boxes/image-pick.mjs | 5 | — | — | image/ · image/jpeg | 320 |
 | new/atoms/heb-month-he.mjs | 4 | — | — | he-u-ca-hebrew · long | — |
+| new/boxes/distribution.mjs | 4 | — | — | pickup · enroute | — |
 | new/boxes/hebrew.mjs | 4 | — | — | — | 3761 440 12 30 |
 | new/boxes/lib-lock.mjs | 4 | — | — | maor.lock.v1:: · maor_lock | — |
 | new/boxes/lib-nedarim-sync.mjs | 4 | — | — | — | 10 28 999 12 |
+| new/boxes/pricing.mjs | 4 | — | — | maor_prices · subscription | — |
 | new/boxes/smtp-url.mjs | 4 | — | — | empty · error | — |
 | new/atoms/collection-score-delta.mjs | 3 | — | — | — | 10 50 60 |
 | new/atoms/lessons-in-term.mjs | 3 | — | — | — | 52 12 12 |
