@@ -440,6 +440,8 @@ for (const mf of fs.readdirSync(MANIFESTS).filter(f => f.endsWith('.manifest.jso
   for (const [v, pv] of watchLines) lines.push(`    final ${v} = ref.watch(${pv});`);
   const argLines = [];
   const defFor = (t) => t.endsWith('?') ? 'null'
+    // טיפוס-record: בונים ליטרל עם ברירת-מחדל פר-שדה (dynamic נפסל תחת strict-casts)
+    : /^\(\{.*\}\)$/.test(t) ? '(' + [...t.matchAll(/(String|int|double|num|bool)\??\s+(\w+)/g)].map(([, ft, fn]) => `${fn}: ${ft === 'String' ? "''" : ft === 'bool' ? 'false' : '0'}`).join(', ') + ')'
     : t.startsWith('String') ? "''" : t.startsWith('int') ? '0' : t.startsWith('double') ? '0.0' : t.startsWith('bool') ? 'false'
     : t.includes('List') ? 'const []' : t.includes('IconData') ? 'Icons.circle'
     : t === 'Widget' ? 'const SizedBox.shrink()' : t.includes('Controller') ? t.replace(/\?$/, '') + '()'
