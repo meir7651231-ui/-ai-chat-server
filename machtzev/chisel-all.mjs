@@ -40,14 +40,22 @@ for (const f of walk(path.join(MAOR, 'src'))) {
   candidates.push({ rel, boxName });
 }
 
-// טיהור-אוטומטי-חד-משמעי: אנוטציית קבוע-מתמטי לקבועי-זמן/radix (מנגנון ודאי בלבד)
+// טיהור-אוטומטי-חד-משמעי: אנוטציית קבוע-מתמטי רק להקשר-מנגנון ודאי (שמרני —
+// סף-דומיין-חסר-הקשר לא-מתאים לאף כלל ⇒ נשאר-מסומן ⇒ הקופסה תיפול בשער ⇒ דורשת-הכרעה).
 const TIME = /(?<![\w.])(86_?400_?000|3_?600_?000|604_?800_?000|60_?000|1000)(?![\w.])/;
+const isMechLine = (ln) =>
+  TIME.test(ln) ||                                                   // יחידות-זמן
+  /parseInt\([^,]+,\s*\d+\s*\)/.test(ln) ||                          // בסיס-מספר
+  /\.(slice|substr|substring|charAt|padStart|padEnd|repeat|codePointAt)\(/.test(ln) || // אינדקס/אורך-מחרוזת
+  /new Date\(|\.set(Date|Hours|Minutes|Month|FullYear)\(/.test(ln) || // רכיבי-תאריך
+  /[*/]\s*12\b|\b12\s*[*+]|month/i.test(ln) ||                       // חודשי-שנה
+  /[*/]\s*100\b|\b100\s*[*/]|\)\s*\*\s*100|Math\.round\([^)]*100/.test(ln); // המרה-לאחוזים
 const autoPurify = (boxFile) => {
   const lines = fs.readFileSync(boxFile, 'utf8').split('\n'); const out = [];
   for (const ln of lines) {
-    if ((TIME.test(ln) || /parseInt\([^,]+,\s*\d+\s*\)/.test(ln)) && !/קבוע-מתמטי/.test(out[out.length - 1] || '')) {
+    if (isMechLine(ln) && !/קבוע-מתמטי/.test(out[out.length - 1] || '')) {
       const indent = (ln.match(/^\s*/) || [''])[0];
-      out.push(indent + '// קבוע-מתמטי: יחידת-זמן/בסיס-מספר (מנגנון)');
+      out.push(indent + '// קבוע-מתמטי: יחידת-זמן/אינדקס/אחוז/חודש (מנגנון-ודאי)');
     }
     out.push(ln);
   }
