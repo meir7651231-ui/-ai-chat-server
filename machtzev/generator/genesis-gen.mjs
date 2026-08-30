@@ -326,8 +326,39 @@ ${calls.join('\n')}
   return cls;
 }
 
+// ── 🪞 מסך-עצמי: המחולל כותב לעצמו את בקשת מסך-הכניסה מן הידע החי (אטלס · לקסיקון · דוח-לוחות).
+// העובדות לא מוקלדות-ביד ולא מתיישנות: קידום-אטומים/צורה-חדשה ⇒ המסך מתעדכן בריצה הבאה.
+function writeSelfEntry() {
+  let boards = 0;
+  try { boards = JSON.parse(fs.readFileSync(path.join(ROOT, 'screens-seed/board-gen-report.json'), 'utf8')).boards.length; } catch { }
+  const shapeWords = [];
+  const seenRoles = new Set();
+  for (const [w, r] of LEXICON) if (!seenRoles.has(r)) { seenRoles.add(r); shapeWords.push(w); }
+  const spec = [
+    'המחולל:',
+    'הירו 🧬 המחולל של המחצב | כותבים משפט בעברית - מקבלים מסך חי',
+    'כותרת המפעל במספרים - עדכון חי מהאטלס',
+    `נתון ⚛️ ${atlas.widgets.length} לבנים ויזואליות על המדף`,
+    `נתון 🧠 ${atlas.functions.length} אטומי לוגיקה פעילים`,
+    `נתון 🖼️ ${boards} מסכים הורכבו מחדש`,
+    'כותרת גשר הלוגיקה פועם',
+    'חישוב החודש העברי כרגע לפי מנוע מאור',
+    'חישוב קוד הזמנה דטרמיניסטי "genesis"',
+    'כותרת הבחירה כאן מחליפה את האטום שמתחתיה',
+    'בחירה מה בונים היום: הגדרות / ניהול / דוחות',
+    '  מתג 🔔 התראות למסך ההגדרות',
+    '  שדה שם מסך הניהול',
+    '  נתון 📊 3 דוחות מוכנים להפקה',
+    `תגיות הצורות שהוא מבין: ${shapeWords.join(' / ')}`,
+    'באנר נכתב והורכב בידי המחולל מהידע החי שלו — מאטומים קיימים בלבד',
+    'כפתור ✨ צרו מסך חדש',
+  ].join('\n');
+  fs.writeFileSync(path.join(SPECS, 'entry.txt'), spec + '\n');
+}
+
 // ── CLI ──
 fs.mkdirSync(SPECS, { recursive: true });
+writeSelfEntry();
 const [slugArg, specArg] = process.argv.slice(2);
 if (slugArg && specArg) fs.writeFileSync(path.join(SPECS, slugArg + '.txt'), specArg + '\n');
 fs.rmSync(OUT, { recursive: true, force: true });
