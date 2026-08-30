@@ -151,6 +151,12 @@ function generate(slug, specText) {
       const t = p.type.replace(/\?$/, '');
       if (t === 'DateTime') args.push('DateTime.now()');
       else if (t === 'String' && fieldFeed) args.push('__FIELD__');
+      // 🔗 הזנת-שרשרת גם לפרמטר גמיש/מספרי (מנוע-הסינתזה מרכיב חוליות שקולטות מספר):
+      // dynamic/Object בולעים String כמות-שהוא; num/int דרך tryParse — כשל-פרסור ⇒ NaN/0 ⇒
+      // האטום עצמו מחזיר '' (כנות-תצוגה), בדיוק כמו תאום-ה-JS על קלט שבור.
+      else if ((t === 'dynamic' || t === 'Object') && fieldFeed) args.push('__FIELD__');
+      else if ((t === 'num' || t === 'double') && fieldFeed && !nums.length) args.push('(num.tryParse(__FIELD__) ?? double.nan)');
+      else if (t === 'int' && fieldFeed && !nums.length) args.push('(int.tryParse(__FIELD__) ?? 0)');
       else if (t === 'String' && strs.length) { const s = strs.shift(); args.push(/[֐-׿]/.test(s) ? pendingHebArg(s) : `'${s.replace(/'/g, "\\'")}'`); }
       else if ((t === 'int') && nums.length) args.push(String(parseInt(nums.shift())));
       else if ((t === 'double' || t === 'num') && nums.length) args.push(nums.shift());
