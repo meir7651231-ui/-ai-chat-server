@@ -5,4 +5,7 @@ export const VCARD_IMPORT_TERMS = {
   k3: "עבודה",
   k4: "פקס",
   k5: "ראשי",
+  k6: "utf-8",
+  k7: "QUOTED-PRINTABLE",
+  k8: "X-CUSTOM",
 };

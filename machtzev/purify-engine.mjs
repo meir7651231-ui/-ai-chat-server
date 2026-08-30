@@ -543,22 +543,32 @@ function purifyBox(file, log) {
   const src = fs.readFileSync(path.join(BOXES, file), 'utf8');
   const base = file.replace(/\.mjs$/, '');
   const dataBase = base + '-terms';
-  if (fs.existsSync(path.join(ATOMS, dataBase + '.mjs'))) return log(`~ ${base}: כבר קיים אטום-מונחים`);
+  // 🔁 המשך-חילוץ: אטום-מונחים קיים ⇒ ממשיכים את המספור וממזגים
+  const dataPath = path.join(ATOMS, dataBase + '.mjs');
+  const priorKeys = new Map();
+  if (fs.existsSync(dataPath)) {
+    const dt = fs.readFileSync(dataPath, 'utf8');
+    for (const m of dt.matchAll(/(k\d+): ("(?:\\.|[^"\\])*")/g)) priorKeys.set(JSON.parse(m[2]), m[1]);
+    if (!priorKeys.size) return log(`~ ${base}: אטום-מונחים קיים בצורה לא-נקראת`);
+  }
   const sites = collectStringSites(src).filter(st => /[\u0590-\u05FF]/.test(st.v) || /[a-zA-Z]{3,}/.test(st.v));  // עברית + מחרוזות-דומיין
   if (!sites.length) return log(`~ ${base}: אין מחרוזות-עבריות פשוטות`);
   const CONST = base.replace(/-/g, '_').toUpperCase() + '_TERMS';
-  const keys = new Map();
+  const keys = new Map(priorKeys);
   for (const st of sites) if (!keys.has(st.v)) keys.set(st.v, 'k' + (keys.size + 1));
+  if (keys.size === priorKeys.size && priorKeys.size) return log(`~ ${base}: אין מונחים חדשים לחילוץ`);
   let out = src;
   for (const st of [...sites].sort((a, b) => b.at - a.at)) {
     const ref = `${CONST}.${keys.get(st.v)}`;
     out = out.slice(0, st.at) + (st.wrap ? st.wrap(ref) : ref) + out.slice(st.at + st.len);
   }
   // ייבוא אחרי ה-import האחרון הקיים
-  const lastIm = [...out.matchAll(/^import[^\n]*$/gm)].pop();
-  const imLine = `import { ${CONST} } from '../atoms/${dataBase}.mjs';`;
-  out = lastIm ? out.slice(0, lastIm.index + lastIm[0].length) + '\n' + imLine + out.slice(lastIm.index + lastIm[0].length) : imLine + '\n' + out;
-  if (!lastIm) return log(`~ ${base}: קופסה בלי imports — חריג`);
+  if (!out.includes(`from '../atoms/${dataBase}.mjs'`)) {
+    const lastIm = [...out.matchAll(/^import[^\n]*$/gm)].pop();
+    if (!lastIm) return log(`~ ${base}: קופסה בלי imports — חריג`);
+    const imLine = `import { ${CONST} } from '../atoms/${dataBase}.mjs';`;
+    out = out.slice(0, lastIm.index + lastIm[0].length) + '\n' + imLine + out.slice(lastIm.index + lastIm[0].length);
+  }
   const litObj = '{\n' + [...keys].map(([v, k]) => `  ${k}: ${JSON.stringify(v)},`).join('\n') + '\n}';
   const dataSrc = `/** אטום-דאטה · ${dataBase} — מונחי-התצוגה של קופסת-${base} (מנוע-הטיהור v6, הכרעה 19). חוזה: ${dataBase}.contract.md */\nexport const ${CONST} = ${litObj};\n`;
   const contract = `# חוזה · ${dataBase}\nמונחי-תצוגה עבריים שחולצו מכנית מקופסת-${base} (הכרעה 19: המשמעות = דאטה; הקופסה מחווטת).\nהקופסה מייבאת ישירות (קופסה⇐אטום מותר). אפס לוגיקה.\n\n## דוגמאות-זהב\nצילום-ערך ב-${dataBase}.test.mjs.\n`;
@@ -586,6 +596,7 @@ function purifyBox(file, log) {
   }
   const backup = new Map([[path.join(BOXES, file), src]]);
   if (adjOut) backup.set(adj, fs.readFileSync(adj, 'utf8'));
+  if (priorKeys.size) backup.set(dataPath, fs.readFileSync(dataPath, 'utf8'));   // המשך: גם הדאטה הקיימת מגובה
   try {
     fs.writeFileSync(path.join(BOXES, file), out);
     fs.writeFileSync(path.join(ATOMS, dataBase + '.mjs'), dataSrc);
@@ -600,7 +611,7 @@ function purifyBox(file, log) {
   } catch (e) {
     if (process.env.PDEBUG) { const dd = '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/pdebug'; fs.mkdirSync(dd, { recursive: true }); try { fs.copyFileSync(path.join(BOXES, file), path.join(dd, 'box__' + file)); } catch { } }
     for (const [pp, tt] of backup) fs.writeFileSync(pp, tt);
-    for (const ext of ['.mjs', '.contract.md', '.test.mjs']) fs.rmSync(path.join(ATOMS, dataBase + ext), { force: true });
+    if (!priorKeys.size) for (const ext of ['.mjs', '.contract.md', '.test.mjs']) fs.rmSync(path.join(ATOMS, dataBase + ext), { force: true });
     return log(`✗ ${base}: אימות אדום — הוחזר (${String(e.stderr || e.message).slice(0, 500).replace(/\n/g, ' ⏎ ')})`);
   }
 }

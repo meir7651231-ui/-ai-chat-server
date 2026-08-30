@@ -1,5 +1,47 @@
 /** בדיקת-קצה: מנוע-הסנכרון המלא דרך הקופסה בלבד — כל דוגמאות-החוזה. */
 import * as NED from './lib-nedarim-sync.mjs';
+const LIB_NEDARIM_SYNC_TERMS = {
+  k1: "ר",
+  k2: "רבי",
+  k3: "הרב",
+  k4: "הרבנית",
+  k5: "הרהג",
+  k6: "הרהח",
+  k7: "הגר",
+  k8: "מוהרר",
+  k9: "אדמור",
+  k10: "מרת",
+  k11: "מר",
+  k12: "גב",
+  k13: "הגב",
+  k14: "דר",
+  k15: "פרופ",
+  k16: "הבחור",
+  k17: "הבהח",
+  k18: "הת",
+  k19: "משפ",
+  k20: "משפחת",
+  k21: "שליטא",
+  k22: "זצל",
+  k23: "זצוקל",
+  k24: "זקל",
+  k25: "זל",
+  k26: "עה",
+  k27: "היד",
+  k28: "נרו",
+  k29: "ניו",
+  k30: "ני",
+  k31: "היו",
+  k32: "טל׳ נוספים: ",
+  k33: "תרומות נדרים ללא שיוך",
+  k34: "תורם נדרים",
+  k35: "ext:",
+  k36: "txn:",
+  k37: "ref:",
+  k38: "sup-ned-",
+  k39: "sup-ned-unassigned",
+  k40: "sup-ned-txn-",
+};   // צילום-מקומי (מנוע-הטיהור v6 — מגני-המקור עודכנו לצורה החדשה)
 import assert from 'node:assert';
 import { readFileSync } from 'node:fs';
 
@@ -104,11 +146,11 @@ chk('edge-empty-null', () => {
 const src = readFileSync(new URL('./lib-nedarim-sync.mjs', import.meta.url), 'utf8');
 const must = [
   "raw === '$' || raw === '2'",        // curOf — קידוד-נדרים
-  "'sup-ned-' + d.toremId",             // מזהה דטרמיניסטי (תורם)
-  "'sup-ned-unassigned'",               // איגום אנונימי
-  "'sup-ned-txn-'",                     // כרטיס-לפי-עסקה
+  "LIB_NEDARIM_SYNC_TERMS.k38 + d.toremId",             // מזהה דטרמיניסטי (תורם)
+  "LIB_NEDARIM_SYNC_TERMS.k39",               // איגום אנונימי
+  "LIB_NEDARIM_SYNC_TERMS.k40",                     // כרטיס-לפי-עסקה
   'ph.length >= 7',                     // סף-טלפון במפתח-שיוך
-  "ks.push('ext:' + ext)",              // מפתח-חזק ext
+  "ks.push(LIB_NEDARIM_SYNC_TERMS.k35 + ext)",              // מפתח-חזק ext
   '_nameSortKey(t, normSearch, NAME_TITLES)', // חיווט מילון-התוויות
 ];
 for (const m of must) {

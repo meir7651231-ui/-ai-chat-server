@@ -68,7 +68,7 @@ const nameSortKey = (t) => _nameSortKey(t, normSearch, NAME_TITLES);
 const keysOf = (o) => {
   const ks = [];
   const ext = (o.extId || '').trim();
-  if (ext) ks.push('ext:' + ext);
+  if (ext) ks.push(LIB_NEDARIM_SYNC_TERMS.k35 + ext);
   const id = normId(o.idNum || o.zeout);
   if (id) ks.push('id:' + id);
   for (const p of [o.phone, o.phone2, o.phone3]) {
@@ -90,9 +90,9 @@ const curOf = (charge) => {
 // nedarimSync.ts:153-158 — מפתח-דדופ מרשומת-hist קיימת (מקביל ל-chargeDedupKey).
 const histDedupKey = (h) => {
   const txn = (h.txn || '').trim();
-  if (txn) return 'txn:' + txn;
+  if (txn) return LIB_NEDARIM_SYNC_TERMS.k36 + txn;
   const ref = (h.ref || '').trim();
-  return ref ? 'ref:' + ref : '';
+  return ref ? LIB_NEDARIM_SYNC_TERMS.k37 + ref : '';
 };
 // nedarimSync.ts:165-168 — יום-החיוב מתאריך-העסקה (1–28 — כך קיים בכל חודש). ברירת-מחדל 1.
 const hokDayFromDate = (iso) => {
@@ -139,7 +139,7 @@ const supFromDonor = (d) => {
     .filter(Boolean)
     .join(' · ');
   return {
-    id: 'sup-ned-' + d.toremId,
+    id: LIB_NEDARIM_SYNC_TERMS.k38 + d.toremId,
     name: d.name.trim(),
     phone,
     email: (d.email || '').trim(),
@@ -163,10 +163,10 @@ const supFromDonor = (d) => {
 const supFromCharge = (c, seq) => {
   const anon = !c.toremId && !nameSortKey(c.name || '');
   const id = c.toremId
-    ? 'sup-ned-' + c.toremId
+    ? LIB_NEDARIM_SYNC_TERMS.k38 + c.toremId
     : anon
-      ? 'sup-ned-unassigned'
-      : 'sup-ned-txn-' + (c.txnId || String(seq));
+      ? LIB_NEDARIM_SYNC_TERMS.k39
+      : LIB_NEDARIM_SYNC_TERMS.k40 + (c.txnId || String(seq));
   return {
     id,
     name: (c.name || (anon ? LIB_NEDARIM_SYNC_TERMS.k33 : LIB_NEDARIM_SYNC_TERMS.k34)).trim(),

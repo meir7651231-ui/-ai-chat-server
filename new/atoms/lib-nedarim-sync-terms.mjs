@@ -34,4 +34,10 @@ export const LIB_NEDARIM_SYNC_TERMS = {
   k32: "טל׳ נוספים: ",
   k33: "תרומות נדרים ללא שיוך",
   k34: "תורם נדרים",
+  k35: "ext:",
+  k36: "txn:",
+  k37: "ref:",
+  k38: "sup-ned-",
+  k39: "sup-ned-unassigned",
+  k40: "sup-ned-txn-",
 };

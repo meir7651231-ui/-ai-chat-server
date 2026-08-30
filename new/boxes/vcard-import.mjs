@@ -32,7 +32,7 @@ function decodeQuotedPrintable(s) {
     }
   }
   try {
-    return new TextDecoder('utf-8').decode(new Uint8Array(bytes));
+    return new TextDecoder(VCARD_IMPORT_TERMS.k6).decode(new Uint8Array(bytes));
   } catch {
     return s;
   }
@@ -76,7 +76,7 @@ const hasParam = (params, token) => params.some((p) => p.toUpperCase().includes(
 
 /** ערך-שדה מפוענח לפי הפרמטרים (QP אם צוין; אחרת גלמי). (מקור:105-107) */
 function decodeValue(value, params) {
-  return hasParam(params, 'QUOTED-PRINTABLE') ? decodeQuotedPrintable(value) : value;
+  return hasParam(params, VCARD_IMPORT_TERMS.k7) ? decodeQuotedPrintable(value) : value;
 }
 
 // מילון-תוויות-הטלפון — הכרעה חיה-בקופסה (מקור:109-117).
@@ -94,7 +94,7 @@ const PHONE_LABELS = {
 function phoneLabel(params) {
   for (const p of params) {
     const up = p.toUpperCase();
-    if (up.startsWith('X-CUSTOM')) {
+    if (up.startsWith(VCARD_IMPORT_TERMS.k8)) {
       const inner = p.slice(p.indexOf('(') + 1, p.lastIndexOf(')'));
       const parts = inner.split(',');
       const last = parts[parts.length - 1] || '';

@@ -7,7 +7,7 @@ import { NAMES_EXPORT_TERMS } from '../atoms/names-export-terms.mjs';
 
 // ── שקעי-תוכן (מילון הקופסה) ──
 const LABEL = NAMES_EXPORT_TERMS.k1;
-const FILENAME = 'names-report.csv';
+const FILENAME = NAMES_EXPORT_TERMS.k2;
 
 // ── החיווט ──
 export function exportNames({ rows, userEmail, adminEmails }) {
