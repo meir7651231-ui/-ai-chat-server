@@ -1,8 +1,8 @@
 {
  "counts": {
   "widgets": 381,
-  "functions": 471,
-  "data": 1104
+  "functions": 474,
+  "data": 1121
  },
  "widgets": [
   {
@@ -7282,7 +7282,7 @@
   },
   {
    "name": "changePassword",
-   "sig": "Future<void> changePassword( String currentPass, String nextPass, GetUser getUser, Reauth reauth, UpdatePass update, HebrewAuthError hebrewAuthError, )",
+   "sig": "Future<void> changePassword(String currentPass, String nextPass, GetUser getUser, Reauth reauth, UpdatePass update, HebrewAuthError hebrewAuthError, Map<String, String> T)",
    "ret": "Future<void>",
    "params": [
     {
@@ -7308,6 +7308,10 @@
     {
      "type": "HebrewAuthError",
      "name": "hebrewAuthError"
+    },
+    {
+     "type": "Map<String, String>",
+     "name": "T"
     }
    ],
    "he": [
@@ -8179,6 +8183,25 @@
    "shelf": "new/dart-maor"
   },
   {
+   "name": "makeDupFields",
+   "sig": "List<DupField> makeDupFields(Map<String, String> T)",
+   "ret": "List<DupField>",
+   "params": [
+    {
+     "type": "Map<String, String>",
+     "name": "T"
+    }
+   ],
+   "he": [
+    "שדות",
+    "מיזוג",
+    "כפולי",
+    "משפחות"
+   ],
+   "file": "dup-fields.dart",
+   "shelf": "new/dart-maor"
+  },
+  {
    "name": "eligibleAssignmentsForDay",
    "sig": "List eligibleAssignmentsForDay(Map db, dynamic dayId)",
    "ret": "List",
@@ -8297,12 +8320,16 @@
   },
   {
    "name": "normSearch",
-   "sig": "String normSearch(dynamic t)",
+   "sig": "String normSearch(dynamic t, Map<String, String> T)",
    "ret": "String",
    "params": [
     {
      "type": "dynamic",
      "name": "t"
+    },
+    {
+     "type": "Map<String, String>",
+     "name": "T"
     }
    ],
    "he": [
@@ -8314,12 +8341,16 @@
   },
   {
    "name": "normNameLocal",
-   "sig": "String normNameLocal(dynamic s)",
+   "sig": "String normNameLocal(dynamic s, Map<String, String> T)",
    "ret": "String",
    "params": [
     {
      "type": "dynamic",
      "name": "s"
+    },
+    {
+     "type": "Map<String, String>",
+     "name": "T"
     }
    ],
    "he": [
@@ -8819,12 +8850,16 @@
   },
   {
    "name": "hebMonthHe",
-   "sig": "String hebMonthHe(DateTime? d)",
+   "sig": "String hebMonthHe(DateTime? d, List<String> monthNames)",
    "ret": "String",
    "params": [
     {
      "type": "DateTime?",
      "name": "d"
+    },
+    {
+     "type": "List<String>",
+     "name": "monthNames"
     }
    ],
    "he": [
@@ -9751,12 +9786,35 @@
   },
   {
    "name": "telHref",
-   "sig": "String? telHref(String? phone)",
+   "sig": "String? telHref(String? phone, Map<String, String> T)",
    "ret": "String?",
    "params": [
     {
      "type": "String?",
      "name": "phone"
+    },
+    {
+     "type": "Map<String, String>",
+     "name": "T"
+    }
+   ],
+   "he": [
+    "נהג",
+    "ידני",
+    "קישור",
+    "חיוג"
+   ],
+   "file": "manual-driver.dart",
+   "shelf": "new/dart-maor"
+  },
+  {
+   "name": "makeManualDriver",
+   "sig": "Map<String, dynamic> makeManualDriver(Map<String, String> T)",
+   "ret": "Map<String,",
+   "params": [
+    {
+     "type": "Map<String, String>",
+     "name": "T"
     }
    ],
    "he": [
@@ -10331,12 +10389,16 @@
   },
   {
    "name": "normSearch",
-   "sig": "String normSearch(dynamic t)",
+   "sig": "String normSearch(dynamic t, Map<String, String> T)",
    "ret": "String",
    "params": [
     {
      "type": "dynamic",
      "name": "t"
+    },
+    {
+     "type": "Map<String, String>",
+     "name": "T"
     }
    ],
    "he": [
@@ -10896,7 +10958,7 @@
   },
   {
    "name": "publishIcsFeed",
-   "sig": "Future<dynamic> publishIcsFeed( dynamic slug, dynamic ics, dynamic opts, { required ReadToken readToken, required MintToken mintToken, required WriteFeed writeFeed, NowIso? nowIso, })",
+   "sig": "Future<dynamic> publishIcsFeed( dynamic slug, dynamic ics, dynamic opts, { required ReadToken readToken, required MintToken mintToken, required WriteFeed writeFeed, NowIso? nowIso, required Map<String, dynamic> T})",
    "ret": "Future<dynamic>",
    "params": [
     {
@@ -10926,6 +10988,10 @@
     {
      "type": "NowIso?",
      "name": "nowIso"
+    },
+    {
+     "type": "Map<String, dynamic>",
+     "name": "T"
     }
    ],
    "he": [
@@ -11314,7 +11380,7 @@
   },
   {
    "name": "resetPassword",
-   "sig": "Future<void> resetPassword( String email, RequireAuth requireAuth, SendReset sendReset, HebrewAuthError hebrewAuthError, )",
+   "sig": "Future<void> resetPassword(String email, RequireAuth requireAuth, SendReset sendReset, HebrewAuthError hebrewAuthError, Map<String, String> T)",
    "ret": "Future<void>",
    "params": [
     {
@@ -11332,6 +11398,10 @@
     {
      "type": "HebrewAuthError",
      "name": "hebrewAuthError"
+    },
+    {
+     "type": "Map<String, String>",
+     "name": "T"
     }
    ],
    "he": [
@@ -12911,6 +12981,25 @@
     "תורמים"
    ],
    "file": "sup-dup-field-value.dart",
+   "shelf": "new/dart-maor"
+  },
+  {
+   "name": "makeSupDupFields",
+   "sig": "List<SupDupField> makeSupDupFields(Map<String, String> T)",
+   "ret": "List<SupDupField>",
+   "params": [
+    {
+     "type": "Map<String, String>",
+     "name": "T"
+    }
+   ],
+   "he": [
+    "שדות",
+    "מיזוג",
+    "כפולי",
+    "תורמים"
+   ],
+   "file": "sup-dup-fields.dart",
    "shelf": "new/dart-maor"
   },
   {
@@ -28813,6 +28902,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "buildSlots_T",
+   "type": "Map<String, dynamic>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "build-slots-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "BUILD_SLOTS_T",
    "type": "Map<String, Object>",
    "he": [
@@ -29015,6 +29122,24 @@
     "וורטיקל"
    ],
    "file": "cat-options-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "changePassword_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "change-password-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -29677,6 +29802,36 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "donorConstellation_TIER_KEY",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "זהים",
+    "ביט",
+    "לביט",
+    "לצד"
+   ],
+   "file": "constellation-donor-constellation-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "donorConstellation_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "זהים",
+    "ביט",
+    "לביט",
+    "לצד"
+   ],
+   "file": "constellation-donor-constellation-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "CONSTELLATION_DONOR_CONSTELLATION_T",
    "type": "Map<String, Object>",
    "he": [
@@ -29850,6 +30005,24 @@
     "כיתה"
    ],
    "file": "course-fits-member-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "createCloudKey_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "create-cloud-key-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -30514,6 +30687,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "dupFields_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "זהים",
+    "ביט",
+    "לביט",
+    "לצד",
+    "בדיקה",
+    "אמת",
+    "קרקע"
+   ],
+   "file": "dup-fields-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "DUP_FIELDS_T",
    "type": "Map<String, String>",
    "he": [
@@ -30991,6 +31182,24 @@
     "אפיון"
    ],
    "file": "excel-serial-to-iso-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "expFieldDefs_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "exp-field-defs-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -32842,6 +33051,36 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "hebMonthHe_monthNames",
+   "type": "List<String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "שמות",
+    "חודשים",
+    "עבריים",
+    "זהים",
+    "לפלט"
+   ],
+   "file": "heb-month-he-sockets.dart",
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "ניסן",
+    "אייר",
+    "סיוון",
+    "תמוז",
+    "אב",
+    "אלול",
+    "תשרי",
+    "חשוון",
+    "כסלו",
+    "טבת",
+    "שבט",
+    "אדר"
+   ]
+  },
+  {
    "name": "ORDER_COMMON",
    "type": "List<String>",
    "he": [
@@ -33877,6 +34116,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "manualDriver_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "זהים",
+    "ביט",
+    "לביט",
+    "לצד",
+    "בדיקה",
+    "אמת",
+    "קרקע"
+   ],
+   "file": "manual-driver-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "MANUAL_DRIVER_T",
    "type": "Map<String, String>",
    "he": [
@@ -34541,6 +34798,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "normSearch_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "זהים",
+    "ביט",
+    "לביט",
+    "לצד",
+    "בדיקה",
+    "אמת",
+    "קרקע"
+   ],
+   "file": "norm-search-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "NORM_SEARCH_T",
    "type": "Map<String, String>",
    "he": [
@@ -34848,6 +35123,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "parseAyinSheet_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "parse-ayin-sheet-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "PARSE_AYIN_SHEET_T",
    "type": "Map<String, String>",
    "he": [
@@ -34907,6 +35200,24 @@
     "וורטיקל"
    ],
    "file": "parse-families-csv-terms.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "parseSupporterGrid_T",
+   "type": "Map<String, dynamic>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "parse-supporter-grid-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -35674,6 +35985,24 @@
    "shelf": "new/dart-data-maor"
   },
   {
+   "name": "publishIcsFeed_T",
+   "type": "Map<String, dynamic>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "publish-ics-feed-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "PUBLISH_ICS_FEED_T",
    "type": "Map<String, Object>",
    "he": [
@@ -36315,6 +36644,54 @@
    ]
   },
   {
+   "name": "reenrollCsvRows_head",
+   "type": "List<String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "זהים",
+    "ביט",
+    "לביט",
+    "לצד",
+    "בדיקה",
+    "אמת",
+    "קרקע"
+   ],
+   "file": "reenroll-csv-rows-sockets.dart",
+   "shelf": "new/dart-data-maor",
+   "items": [
+    "תלמיד/ה",
+    "משפחה",
+    "חוג",
+    "נוכחות",
+    "חיסורים",
+    "יתרה ₪",
+    "סטטוס",
+    "החלטה",
+    "נרשם לשנה הבאה",
+    "הערה"
+   ]
+  },
+  {
+   "name": "reenrollCsvRows_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "זהים",
+    "ביט",
+    "לביט",
+    "לצד",
+    "בדיקה",
+    "אמת",
+    "קרקע"
+   ],
+   "file": "reenroll-csv-rows-sockets.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
    "name": "REENROLL_CSV_ROWS_T",
    "type": "Map<String, String>",
    "he": [
@@ -36426,6 +36803,24 @@
     "שעדיין"
    ],
    "file": "renew-targets-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "resetPassword_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "חולץ",
+    "מבצע",
+    "מאה",
+    "מאמת",
+    "קרקע",
+    "של",
+    "בדיקת"
+   ],
+   "file": "reset-password-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
@@ -37717,6 +38112,24 @@
     "לישן"
    ],
    "file": "sup-don-events-strings.dart",
+   "shelf": "new/dart-data-maor"
+  },
+  {
+   "name": "supDupFields_T",
+   "type": "Map<String, String>",
+   "he": [
+    "אטום",
+    "דאטה",
+    "שקעי",
+    "זהים",
+    "ביט",
+    "לביט",
+    "לצד",
+    "בדיקה",
+    "אמת",
+    "קרקע"
+   ],
+   "file": "sup-dup-fields-sockets.dart",
    "shelf": "new/dart-data-maor"
   },
   {
