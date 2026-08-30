@@ -8,7 +8,7 @@
 | ציר | בוקר | עכשיו | % | שער |
 |---|---|---|---|---|
 | 🧼 טוהר-עומק (הכרעה 19) | 37 | **36** | 92.7% | deeppurity ✓ |
-| 🧼 טוהר-דאטה (הכרעה 16) | 124 | **15** | 97.6% | datapurity ✓ |
+| 🧼 טוהר-דאטה (הכרעה 16) | 124 | **14** | 97.8% | datapurity ✓ |
 | 🔁 המרת-מנגנונים JS⇒Dart | 39 בהסגר | **0** | **100%** 🏁 | genesis-compile ✓ |
 | 🧠 מנועים ברי-הרצה | 104 | **313**/459 | 68% | coverage ✓ (ratchet) |
 | 🧠 ברי-חיווט-לסינתזה (Dart-שקול) | 104 | **119-172** | — | שער-synth ✓ |
@@ -206,3 +206,14 @@
   משטרה 13/13 · קופסאות 62/62 · strict 0. **נותרו 15:** 2 switch (connection_method_label,
   k_for_type — טעון switch→if) · 5 שרשרת-קריאות-פנימית (find_attr/find_type/line_compliance/
   recommended_kit_for×2 — טעון השחלה-תוך-קובץ) · 8 עברית-בהצהרה (constructor-default/getter).
+- **30.8 · (Opus) מכונת-AST v3 — רב-פונקציה + סגור-קריאות + switch-מדויק: טוהר-דאטה 15⇒14:**
+  המכונה שודרגה: (1) אוספת עברית מ**כל** פונקציות-הראש; (2) **סגור-קריאות טרנזיטיבי** —
+  פונקציה הקוראת לפונקציה-נזקקת מקבלת term ומשחילה `term: term` בקריאה-הפנימית; (3) סורק-
+  switch מדויק — פוסל רק **תווית**-case עברית (return-עברי בגוף-case מותר-לטיהור). ast-purify
+  משחיל term לכל פונקציות-הכניסה (res.fns). **connection_method_label טוהר** (5 מונחים,
+  צרכן bs-pipe). find_attr/find_type הושחלו-בהצלחה אך עדיין חסומים ע"י `this.brand='ליפסקי'`
+  (ברירת-מחדל-שדה-מחלקה מוטבעת) + גררו נסיגת-מנוע ⇒ הוחזרו זמנית. **נותרו 14** בשלושה
+  דפוסים מדויקים: (א) `'ליפסקי'` class-default (find_attr/find_type/brand_value — טעון הרמת-
+  class-default לאטום-דאטה) · (ב) switch-על-מפתח-עברי (k_for_type — טעון switch→if) ·
+  (ג) עברית-בהצהרה/getter (color_value/edge_cost/parse_chips/project_quote_text/quote_text_for/
+  size_diameter_atoms/synthetic_pipe/line_compliance/recommended_kit_for×2). משטרה 13/13 · strict 0.

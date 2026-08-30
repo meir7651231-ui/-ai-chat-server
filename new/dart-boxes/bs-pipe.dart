@@ -1,3 +1,4 @@
+import '../dart-data/connection_method_label-terms.dart' as td_connection_method_label;
 import '../dart-data/galvanically_dissimilar-terms.dart' as td_galvanically_dissimilar;
 import '../dart-data/product_systems-data.dart' as tdb_ps;
 import '../dart-data/flow_role-data.dart' as tdb_fr;
@@ -486,7 +487,7 @@ class PipeBox {
 
   /// שם-שיטת-החיבור הפיזית בין שני מוצרים, או '' כשלא-ניתן-לגזור.
   String connectionLabel(PipeProduct a, PipeProduct b) =>
-      cml.connectionMethodLabel<PipeProduct>(a, b, endsOf: (p) => _cmlEnds(p.sku));
+      cml.connectionMethodLabel<PipeProduct>(a, b, endsOf: (p) => _cmlEnds(p.sku), term: (k)=>td_connection_method_label.kTerms[k]!);
 
   List<cml.ConnEnd>? _cmlEnds(String sku) {
     if (!_hasSpec(sku)) return null;

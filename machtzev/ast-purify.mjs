@@ -141,8 +141,11 @@ function purify(rel) {
     res.source = out + s2.slice(i2);
   }
   fs.writeFileSync(abs, res.source);
-  if (hasTest) fs.writeFileSync(testAbs, injectNamedArg(imp + testSrc0, res.fn, val, false));
-  for (const c of consumers) fs.writeFileSync(c.abs, injectNamedArg(imp + c.src0, res.fn, val, true));
+  // כל פונקציות-הכניסה שקיבלו term (רב-פונקציה: השחלה-תוך-קובץ ⇒ כמה כניסות ציבוריות)
+  const entryFns = res.fns && res.fns.length ? res.fns : [res.fn];
+  const injectAll = (s0, dotted) => entryFns.reduce((s, fnName) => injectNamedArg(s, fnName, val, dotted), s0);
+  if (hasTest) fs.writeFileSync(testAbs, injectAll(imp + testSrc0, false));
+  for (const c of consumers) fs.writeFileSync(c.abs, injectAll(imp + c.src0, true));
 
   const cwd = path.join(ROOT, '..');
   const dataPrev = fs.existsSync(dataAbs) ? fs.readFileSync(dataAbs, 'utf8') : null;

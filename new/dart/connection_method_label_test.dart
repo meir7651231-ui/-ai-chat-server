@@ -1,3 +1,4 @@
+import '../dart-data/connection_method_label-terms.dart' as td_connection_method_label;
 // בדיקת-חוזה · connectionMethodLabel — מייבאת אך ורק את האטום-שלה (חוק-4).
 // DoD (דיבר-12): dart run --enable-asserts new/dart/connection_method_label_test.dart ⇒ exit 0.
 import 'connection_method_label.dart';
@@ -23,7 +24,7 @@ final Map<String, List<ConnEnd>> _ends = {
 List<ConnEnd>? _endsOf(_Prod p) => _ends[p.sku];
 
 String _lbl(String a, String b) =>
-    connectionMethodLabel(_Prod(a), _Prod(b), endsOf: _endsOf);
+    connectionMethodLabel(_Prod(a), _Prod(b), endsOf: _endsOf, term: (k)=>td_connection_method_label.kTerms[k]!);
 
 void _eq(String got, String want, String label) {
   if (got != want) throw StateError('FAIL [$label]: got="$got" want="$want"');
@@ -53,7 +54,7 @@ void main() {
           specOf: (p) => p.sku, // spec לא-null לכל sku
           resolve: (a, b) => 'ריתוך',
         ),
-      ),
+       term: (k)=>td_connection_method_label.kTerms[k]!),
       'ריתוך',
       '8 trade resolve');
   n++;
@@ -69,7 +70,7 @@ void main() {
           specOf: (p) => p.sku == 'BM' ? null : p.sku,
           resolve: (a, b) => 'ריתוך',
         ),
-      ),
+       term: (k)=>td_connection_method_label.kTerms[k]!),
       '',
       '9 trade null-spec ⇒ empty, not legacy');
   n++;
@@ -85,7 +86,7 @@ void main() {
           specOf: (p) => p.sku,
           resolve: (a, b) => throw StateError('resolver boom'),
         ),
-      ),
+       term: (k)=>td_connection_method_label.kTerms[k]!),
       'Press / טבעת כיווץ',
       '10 resolver throw ⇒ legacy fallback');
   n++;
@@ -101,7 +102,7 @@ void main() {
           specOf: (p) => throw StateError('must never be called'),
           resolve: (a, b) => 'לא-אמור-לרוץ',
         ),
-      ),
+       term: (k)=>td_connection_method_label.kTerms[k]!),
       'Press / טבעת כיווץ',
       '11 plumbing never delegates ⇒ legacy');
   n++;
