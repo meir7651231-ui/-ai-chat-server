@@ -1,3 +1,4 @@
+import '../dart-data-maor/build-slots-sockets.dart' as sk_build_slots;
 // בדיקת-חוזה (רתמת-זהב) · buildSlots — מייבאת אך ורק את האטום-שלה (חוק-4).
 // 9 הבדיקות מ-5 דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/build-slots.test.mjs
 // (אותם קלטים→פלטים). השקעים נאמנים למקור (diary/lib.ts + courses/lib.ts + config.ts):
@@ -115,10 +116,8 @@ void main() {
     bool? cleaningOn,
   ]) =>
       cleaningOn == null
-          ? buildSlots(d, room, iso, blocked, cfg, _timeToMin, _minToHM,
-              _sessionsOf, _courseOnDate, _termOf)
-          : buildSlots(d, room, iso, blocked, cfg, _timeToMin, _minToHM,
-              _sessionsOf, _courseOnDate, _termOf, cleaningOn);
+          ? buildSlots(d, room, iso, blocked, cfg, _timeToMin, _minToHM, _sessionsOf, _courseOnDate, _termOf, sk_build_slots.buildSlots_T)
+          : buildSlots(d, room, iso, blocked, cfg, _timeToMin, _minToHM, _sessionsOf, _courseOnDate, _termOf, sk_build_slots.buildSlots_T, cleaningOn);
 
   // 1 · חדר עם חוג + אירוע + מפגש-מחוץ-לשעות
   final a = run(db, r1, null, {});

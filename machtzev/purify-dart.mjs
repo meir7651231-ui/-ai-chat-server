@@ -27,7 +27,8 @@ function jsSockets(base) {
   const jp = path.join(ATOMS, base + '.mjs');
   const tp = path.join(ATOMS, base + '.test.mjs');
   if (!fs.existsSync(jp) || !fs.existsSync(tp)) return null;
-  const js = fs.readFileSync(jp, 'utf8');
+  // הפשטת-הערות לפני ניתוח-חתימות: ')' בתוך הערת-פרמטר קוטעת את לכידת-הסוגריים
+  const js = fs.readFileSync(jp, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"])\/\/[^\n]*/gm, '$1');
   const tt = fs.readFileSync(tp, 'utf8');
   const out = {};                                                   // fnName ⇒ [{name, value}]
   const decls = [
@@ -36,7 +37,19 @@ function jsSockets(base) {
   ];
   for (const m of decls) {
     const fn = m[1];
-    const sig = m[2].split(',').map(s => s.trim().split('=')[0].trim()).filter(Boolean);
+    // פיצול-פרמטרים מודע-עומק: {sockets מפורקים} / ברירות-מחדל אינם נשברים בפסיק פנימי
+    const sig = (() => {
+      const out = [];
+      let d = 0, cur = '';
+      for (const ch of m[2]) {
+        if ('{[('.includes(ch)) d++;
+        if ('}])'.includes(ch)) d--;
+        if (ch === ',' && !d) { out.push(cur); cur = ''; continue; }
+        cur += ch;
+      }
+      if (cur.trim()) out.push(cur);
+      return out.map(x => x.trim().split('=')[0].trim()).filter(Boolean);
+    })();
     // עטיפת-כריכה סטנדרטית, או קריאת-מפעל ישירה: __pure_fn(__d_a, __d_b)
     const wm = tt.match(new RegExp(`__pure_${fn}\\(\\.\\.\\.a,\\s*\\.\\.\\.Array\\(Math\\.max\\([^)]*\\)\\)\\.fill\\(undefined\\),\\s*([^)]+)\\)`))
       || tt.match(new RegExp(`__pure_${fn}\\(\\s*(__d_[\\w$]+(?:\\s*,\\s*__d_[\\w$]+)*)\\s*\\)`));
@@ -192,8 +205,9 @@ function splitTopArgs(s) {
     const ch = s[j];
     if (q) { cur += ch; if (ch === '\\') { cur += s[j + 1] ?? ''; j++; } else if (ch === q) q = null; continue; }
     if (ch === "'" || ch === '"') { q = ch; cur += ch; continue; }
-    if ('([{<'.includes(ch)) d++;
-    if (')]}>'.includes(ch)) d--;
+    // '=>' איננו סוגר-גנרי: '>' נספר רק כשאינו חלק מחץ-למבדה (התו-הקודם '=')
+    if ('([{'.includes(ch) || (ch === '<' && /[\w>]/.test(s[j - 1] ?? ''))) d++;
+    if (')]}'.includes(ch) || (ch === '>' && s[j - 1] !== '=' && d > 0 && /[\w>?]/.test(s[j - 1] ?? ''))) d--;
     if (ch === ',' && d === 0) { out.push(cur.trim()); cur = ''; continue; }
     cur += ch;
   }

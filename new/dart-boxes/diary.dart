@@ -1,3 +1,4 @@
+import '../dart-data-maor/build-slots-sockets.dart' as skb_bs;
 import '../dart-data-maor/block-reason-sockets.dart' as skb_block_reason;
 import '../dart-data-maor/inactive-room-courses-sockets.dart' as skb_inactive_room_courses;
 import '../dart-data-maor/room-info-label-sockets.dart' as skb_room_info_label;
@@ -106,7 +107,7 @@ List<Map<String, dynamic>> buildSlots(Map<String, dynamic> db, Map<String, dynam
         String iso, dynamic blocked, Map<String, dynamic> config,
         [bool cleaningOn = true]) =>
     bs.buildSlots(db, room, iso, blocked, config, _timeToMinSock, _minToHMSlot,
-        _sessionsOf, _courseOnDate, _termOf, cleaningOn);
+        _sessionsOf, _courseOnDate, _termOf, skb_bs.buildSlots_T, cleaningOn);
 
 // ── הכרעת-קופסה: וריאנט-היומן של planLabelOf (מקור: lib.ts:261-266) ──
 // שונה מוריאנט-הקורסים (atom plan-label-of): יתרת-כרטיסייה purchased-used, בלי status/חוב.
