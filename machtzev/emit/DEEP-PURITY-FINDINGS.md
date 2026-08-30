@@ -1,10 +1,9 @@
 # 🔬 ממצאי טוהר-עומק (הכרעה 19) — דאטה בתוך מנגנון
 
-נסרקו אטומי-מנגנון ב-new/atoms · new/boxes · הפרות: 35
+נסרקו אטומי-מנגנון ב-new/atoms · new/boxes · הפרות: 34
 
 | אטום | ציון | עברית | טבלאות | מחרוזות-דומיין | מספרי-קסם |
 |---|---|---|---|---|---|
-| new/boxes/guide.mjs | 27 | ליד השיבוץ · ליד ה · שיבוץ · כדי שיבוץ | RECIPE_SWAPS = [ ['ליד השיבוץ' | entity.enrollment · entity.enrollment · entity.family · entity.course | — |
 | new/boxes/diary.mjs | 24 | כרטיסייה · יתרה  · מוקפא · הסתיים · רשימת-המתנה ⏳ | — | punch · paused · #fdf1d4 · ended | — |
 | new/boxes/tour.mjs | 24 | 👋 הדמיה מלאה — המערכת מדגימה  · סטטיסטיקות חיות — כל אריח לחיץ · מדד אמינות · ⌘K — חיפוש חכם מכל מקום | — | home · home · home · families | — |
 | new/boxes/hebdate.mjs | 16 | ⚠ שם חודש עברי לא-צפוי מ-Intl  | — | Tishri · Heshvan · Kislev · Tevet | 30 4000 7000 12 |

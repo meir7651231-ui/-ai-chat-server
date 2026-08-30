@@ -60,11 +60,12 @@ assert.deepStrictEqual(guideSections(() => true, { terms: null }), GUIDE_SECTION
 /* 🛡 מגן-הכרעה (דפוס theme.test): ההכרעות חיות בקופסה — verbatim במקור-הקופסה. */
 import { readFileSync } from 'node:fs';
 const src = readFileSync(new URL('./guide.mjs', import.meta.url), 'utf8');
+const swaps = readFileSync(new URL('../atoms/guide-recipe-swaps.mjs', import.meta.url), 'utf8');
 let f = 0;
 if (!src.includes('s.split(from).join(to)')) { console.error('✗ מגן: swap שונה (guide.ts:92)'); f = 1; }
 for (const from of ['ליד השיבוץ', 'כדי שיבוץ', 'משפחה חדשה', 'חוג מתאים', 'מצא חוג', 'החוג', 'למורה', '← ＋ תרומה', 'תרומה ←'])
-  if (!src.includes(`['${from}', `)) { console.error(`✗ מגן: חסרה החלפה '${from}' במילון-המתכונים`); f = 1; }
-if (src.indexOf("['← ＋ תרומה', ") > src.indexOf("['תרומה ←', ")) { console.error('✗ מגן: סדר-ההחלפות התהפך — הסדר הוא המשמעות'); f = 1; }
+  if (!swaps.includes(`['${from}', `)) { console.error(`✗ מגן: חסרה החלפה '${from}' במילון-המתכונים`); f = 1; }
+if (swaps.indexOf("['← ＋ תרומה', ") > swaps.indexOf("['תרומה ←', ")) { console.error('✗ מגן: סדר-ההחלפות התהפך — הסדר הוא המשמעות'); f = 1; }
 if (!src.includes('sectionsWire(isModuleOn, config, GUIDE_SECTIONS, termOf, swap)')) { console.error('✗ מגן: חיווט-הסעיפים שונה'); f = 1; }
 if (f) process.exit(1);
 console.log('✓ קופסת-המדריך: 9 שורות-מסך · סינון-מודולים · מילון-בוחן (7 מונחים) · מתכונים ממותגים · מגן-הכרעה');
