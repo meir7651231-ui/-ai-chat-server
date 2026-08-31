@@ -68,39 +68,46 @@
 
 ---
 
-## 3 · מבצע-המאה · 10 גלים × 10 פאזות = 100
+## 3 · מנועי-העיצוב (5 מנועים — **לא נחיל**, הכרעה 19)
 
-> כל פאזה: **תוצר קונקרטי · סקיל-מחבר · שער-ירוק**. גל = יחידת-נחיתה (commit+push+CI ירוק).
+> **הכרעת-בעלים (31.8): "מנוע ולא נחיל."** מערכת-עיצוב היא **פורמולה**, לא אוסף-ידני:
+> סולם-טיפוגרפיה = בסיס×יחס · מרווח = כפולות-4 · הגבהה = ראמפת-צל · כהה = טרנספורם-מהבהיר ·
+> גרדיאנט = זוגות-פלטה. לכן היא **מנוע**: `seed → יצירה-דטרמיניסטית → פליטת-Dart → compile-proof`.
+>
+> **הזרע (`ds/design-seed.json`) הוא איפה שהסקילים נוחתים — כתוב-פעם.** הסקיל
+> (`ui-ux-pro-max`/`theme-factory`/`taste`) מייצר **זרע קומפקטי** (פלטת-מותג · יחס-סולם ·
+> יחידת-רשת · תחושת-מוֹשֶׁן); המנוע **מרחיב אותו למערכת-מלאה**. שינוי-זרע ⇒ כל-הקטלוג
+> נולד-מחדש. זהו המנגנון-ההפוך: הזרע מכריז על הכוונה, המנוע מחלץ את המערכת.
 
-### גל 1 (01–10) · יסוד-הטוקנים — `ui-ux-pro-max · theme-factory`
-01 `DsType` — סולם-טיפוגרפיה (display→caption+numeric) · 02 `DsSpace` 4/8-נק' · 03 `DsRadii` · 04 `DsElev` e0–e4 · 05 `DsGradient` ספרייה · 06 `DsMotion` משכים+עקומות · 07 `DsDark` פלטה-כהה · 08 theming (`Brightness`/`isDark` בורר) · 09 חוזה+צילום פר-סקאלה · 10 **compile ב-buildsmart ירוק**.
+| מנוע | קלט (זרע) | פלט (דטרמיניסטי) | שער |
+|---|---|---|---|
+| **`ds-tokens.mjs`** | פלטה · יחס-טיפוגרפיה (1.25) · יחידת-רשת (4) · בסיס-רדיוס · עומק-צל · תחושת-מוֹשֶׁן | `ds_scale.dart`: `DsType/DsSpace/DsRadii/DsElev/DsGradient/DsMotion/DsDark` | compile+צילום |
+| **`ds-graphics.mjs`** | פלטה · פרמטרי-דפוס (צפיפות/גל/seed) | `CustomPainter` נוסחתיים: מֶש · אורורה · גלים · נקודות · בלוב (דטרמיניסטי, params-מוזרקים) | compile |
+| **`ds-motion.mjs`** | פרימיטיבי-מוֹשֶׁן (משכים/עקומות) | קטלוג-presets (fadeIn/slideUp/pulse/shimmer/stagger/spring) + `motion-map.json` (אטום⇒preset) | compile |
+| **`ds-variants.mjs`** | רכיב-בסיס × מטריצת-סגנון (מוגבה/מתאר/זכוכית/גרדיאנט) | וריאנט פר-תא-מטריצה (מכני, ביט-זהה בפונקציה) | compile+golden |
+| **`ds-critic.mjs`** | פלט-המחולל (מסך מחולל) | דוח-ביקורת + **שער** (design-judge מזוקק-לכללים): היררכיה · ריווח-8 · ניגודיות-WCAG · אפס-hex-inline · אנטי-גנרי · touch≥44 · RTL | gate-ratchet |
 
-### גל 2 (11–20) · גרפיקה-גנרטיבית — `algorithmic-art`
-11 `MeshBg` (מֶש-גרדיאנט) · 12 `AuroraBg` (מעל aurora_field הקיים) · 13 `WaveBg` · 14 `DotGridBg` · 15 `NoiseBg` · 16 `BlobField` · 17 דטרמיניזם (seed, בלי Date.now) · 18 params מוזרקים (אפס-דאטה) · 19 he-header עשיר לאחזור · 20 compile ירוק.
+**חוקי-כל-מנוע (זהים למנועי-המחצב הקיימים):** אידמפוטנטי · רק-ירוק-נוחת · אפס-דאטה-במנגנון
+(הזרע=דאטה, המנוע=נוסחה-עיוורת, הכרעה 19) · דטרמיניסטי (אין `Date.now`, seed בלבד) ·
+he-header נפלט אוטומטית לאחזור · חוזה+צילום-ערכים (מוטציה מאדימה, L36) · compile-proof.
 
-### גל 3 (21–30) · קומפוזיציה-סטטית — `canvas-design`
-21 spot-illustrations (empty/success/error/onboarding) · 22 pattern-library · 23 color-swatch-system · 24 badge/ribbon-shapes · 25 divider/ornament · 26 hero-composition presets · 27 icon-intent map (אמוג'י⇒סמנטי) · 28 avatar (image/initials/status) · 29 he[]+קטגוריה · 30 compile ירוק.
+### חיווט-למנוע-האחד (`one.mjs`)
+חמשת המנועים נתפרים ל-`one.mjs` כשלב-עיצוב (אחרי `data-lift`, לפני `genesis-gen`):
+```
+… data-lift → chisel-all →  🎨 ds-tokens → ds-graphics → ds-motion → ds-variants  → genesis-gen …
+                                            (מרחיבים את הזרע לקטלוג)                 (משתמש בו)
+                            … → genesis-gen → ds-critic (שער-פלט) → הזרקה → משטרה
+```
+כך `node one.mjs` = מרענן-מאור **ו**מרענן-את-מאגר-העיצוב **ומבקר-את-הפלט**, הכל בפקודה-אחת.
+**החלף-זרע ⇒ הרץ-מנוע ⇒ כל האפליקציות המחוללות מתעצבות-מחדש** — זה מַכפיל-הכוח.
 
-### גל 4 (31–40) · מוֹשֶׁן-מרכזי — `GSAP · make-interfaces-feel-better`
-31 `DsMotion.fadeIn` · 32 `slideUp` · 33 `pulse` · 34 `shimmer` · 35 `stagger` · 36 `springIn` · 37 `motion-map.json` (אטום⇒preset) · 38 מיקרו-אינטראקציות (hover/press/focus tokens) · 39 `prefers-reduced-motion` מכובד · 40 compile ירוק.
-
-### גל 5 (41–50) · וריאנטי-רכיב — `frontend-design · impeccable`
-41 card: elevated/outlined/glass/gradient · 42 button: solid/soft/ghost/neon · 43 input: filled/outlined/underline · 44 chip/badge variants · 45 skeleton-per-shape · 46 empty-state-per-context · 47 list/table density presets · 48 chart-palette משותף (categorical/sequential) · 49 he[]+קטגוריה · 50 compile ירוק.
-
-### גל 6 (51–60) · אחזור-לפי-כוונה — `match.mjs` + מטא-דאטה
-51 שדה-קטגוריה מובנה באטום (harvest ב-`atlas.mjs`) · 52 מילון-עיצוב עברי (`design-lexicon.json`) · 53 "כרטיס זכוכית"⇒glass_card · 54 "רקע נושם"⇒AuroraBg · 55 "הופעה עדינה"⇒fadeIn · 56 צירופי-כוונה (style+motion+bg) · 57 ניקוד-טעם (design-score) · 58 `--teach` לפערים · 59 ratchet-אחזור (רק-משתפר) · 60 golden-אחזור (משפט⇒צירוף-צפוי).
-
-### גל 7 (61–70) · שער-איכות — `design-judge · taste`
-61 `design-critic.mjs` (סורק פלט-מחולל) · 62 בדיקת-היררכיה · 63 בדיקת-ריווח (סולם-8) · 64 ניגודיות a11y (WCAG) · 65 עקביות-טוקן (אין hex-inline) · 66 "אנטי-גנרי" (מגוון-פריסות) · 67 touch-target ≥44 · 68 RTL-נכונות · 69 שער-ratchet (ציון-איכות רק-עולה) · 70 דוח-ביקורת פר-מסך.
-
-### גל 8 (71–80) · מובייל+טקטיליות — `mobile-app-ui-design · Apple Design`
-71 bottom-nav preset · 72 sheet/drawer presets · 73 pull-to-refresh · 74 swipe-actions · 75 haptic-map · 76 safe-area tokens · 77 gesture-transitions · 78 large-title scroll · 79 he[]+קטגוריה · 80 compile ירוק.
-
-### גל 9 (81–90) · נחיתות+וידאו — `landing-page-design · remotion · Pexo`
-81 hero-section presets · 82 feature-grid · 83 pricing-table · 84 testimonial-wall · 85 CTA-band · 86 scroll-story · 87 onboarding-video (remotion, lazy chunk) · 88 app-store-shots (`app-store-screenshots`) · 89 מחוץ-לבנדל-ראשי (מדידה) · 90 build-web ירוק.
-
-### גל 10 (91–100) · אינטגרציה-מלאה + חיווט-למנוע-האחד
-91 `render-ds` משתמש ב-`DsType/DsSpace/DsElev` (אפס-hex-inline) · 92 בורר-theme במחולל · 93 בורר-מוֹשֶׁן פר-מסך · 94 `nl.mjs` מזהה-כוונת-עיצוב · 95 `app.mjs` מקבל "סגנון: זכוכית/כהה/מינימלי" · 96 design-critic ב-`one.mjs` (שער-פלט) · 97 ראווה: "גלריית-סגנונות" מחוללת · 98 ratchet-כיסוי-עיצוב · 99 knowledge-דוח-סגירה · 100 **מבצע-עיצוב 100% · הכל דחוף · CI ירוק**.
+### מפת-הבנייה (סדר-מנועים, לא-פאזות-ידניות)
+1. **`ds-tokens`** — הבסיס; זרע→7 מחלקות-טוקן→`ds_scale.dart`→compile. (הראשון.)
+2. **`ds-motion`** — קטלוג-presets מהפרימיטיבים (זול, מכני).
+3. **`ds-graphics`** — painters נוסחתיים מהפלטה.
+4. **`ds-variants`** — מטריצת-סגנון על רכיבים קיימים.
+5. **`ds-critic`** — שער-איכות; ננעל אחרון (אחרי שיש פלט לבקר).
+6. **חיווט ל-`one.mjs`** + `render-ds` צורך `DsType/DsElev` (אפס-hex-inline) + בורר-סגנון ב-`app.mjs`.
 
 ---
 
