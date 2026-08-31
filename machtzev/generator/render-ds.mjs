@@ -880,19 +880,29 @@ class ${cls} extends StatelessWidget {
 //    פריט-שקע; הכותרת = הערך-הראשון-הלא-ריק. AnimatedBuilder חי. רישום-מסכים ⇒ הכללה.
 // build(disp, cIc, cSub) מחזיר ביטוי-פריט; disp = ביטוי-הכותרת-מרשומה.
 // build(disp, k, entityName): k(label) יוצר const-תוכן רק כשצריך ⇒ אין import-מיותם.
+// mode 'records' — פריט פר-רשומה (אריח/שבב). mode 'stats' — פריט פר-אגרגט (מונה + סכומי-שדות).
 export const SCREEN_REGISTRY = [
-  { file: 'ai_hub_screen.g.dart', cls: 'AiHubScreenComposed', tokens: 'AiHubScreenTokens', list: 'aiFinTileItems', build: (disp, k, en) => `AiFinTileItem(ic: ${k('🗂️')}, title: ${disp}, sub: ${k(en)}, onTap: () {})` },
-  { file: 'persona_portal.g.dart', cls: 'PersonaPortalComposed', tokens: 'PersonaPortalTokens', list: 'portalTileButtonItems', build: (disp, k, en) => `PortalTileButtonItem(title: ${disp}, sub: ${k(en)}, onTap: () {})` },
-  { file: 'courier_certs_screen.g.dart', cls: 'CourierCertsScreenComposed', tokens: 'CourierCertsScreenTokens', list: 'presetChipItems', build: (disp) => `PresetChipItem(label: ${disp}, selected: false, onTap: () {})` },
+  { file: 'ai_hub_screen.g.dart', cls: 'AiHubScreenComposed', tokens: 'AiHubScreenTokens', list: 'aiFinTileItems', mode: 'records', build: (disp, k, en) => `AiFinTileItem(ic: ${k('🗂️')}, title: ${disp}, sub: ${k(en)}, onTap: () {})` },
+  { file: 'persona_portal.g.dart', cls: 'PersonaPortalComposed', tokens: 'PersonaPortalTokens', list: 'portalTileButtonItems', mode: 'records', build: (disp, k, en) => `PortalTileButtonItem(title: ${disp}, sub: ${k(en)}, onTap: () {})` },
+  { file: 'courier_certs_screen.g.dart', cls: 'CourierCertsScreenComposed', tokens: 'CourierCertsScreenTokens', list: 'presetChipItems', mode: 'records', build: (disp) => `PresetChipItem(label: ${disp}, selected: false, onTap: () {})` },
+  { file: 'store_profile_screen.g.dart', cls: 'StoreProfileScreenComposed', tokens: 'StoreProfileScreenTokens', list: 'sStatItems', mode: 'stats', stat: (valueExpr, labelConst) => `SStatItem(value: ${valueExpr}, label: ${labelConst})` },
 ];
 
-export function renderScreenBind(slug, { entitySlug, entityName, spec }) {
+export function renderScreenBind(slug, { entitySlug, entityName, spec, numFields = [] }) {
   const { k, dump } = makeConsts(slug);
   const cls = pascal(slug);
-  const disp = `r.entries.firstWhere((e) => !e.key.startsWith('__') && e.value.trim().isNotEmpty, orElse: () => MapEntry('', r['__id'] ?? '')).value.trim()`;
-  const itemExpr = spec.build(disp, k, entityName);
-  const contentImport = itemExpr.includes(`gen_${slug}_c`) ? `import '../dart-data-bs/auto/gen_${slug}_content.dart';\n` : '';
-  const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מחבר-ישות-למסך: רשומות-ישות ⇒ מסך-Composed מפורק. אל תערוך ידנית.
+  let listExpr;
+  if (spec.mode === 'stats') {
+    // אגרגטים: מונה-רשומות + סכום פר-שדה-מספרי ⇒ פריטי-סטטיסטיקה במסך-הסטטיסטיקה המפורק.
+    const items = [`${spec.stat(`appStore.count('${entitySlug}').toString()`, k(entityName))}`]
+      .concat(numFields.slice(0, 4).map((f) => spec.stat(`appStore.sum('${entitySlug}', ${k(f)}).toStringAsFixed(0)`, k(f))));
+    listExpr = `[${items.join(', ')}]`;
+  } else {
+    const disp = `r.entries.firstWhere((e) => !e.key.startsWith('__') && e.value.trim().isNotEmpty, orElse: () => MapEntry('', r['__id'] ?? '')).value.trim()`;
+    listExpr = `appStore.records('${entitySlug}').map((r) => ${spec.build(disp, k, entityName)}).toList()`;
+  }
+  const contentImport = listExpr.includes(`gen_${slug}_c`) ? `import '../dart-data-bs/auto/gen_${slug}_content.dart';\n` : '';
+  const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מחבר-ישות-למסך: ${spec.mode === 'stats' ? 'אגרגטי-ישות' : 'רשומות-ישות'} ⇒ מסך-Composed מפורק. אל תערוך ידנית.
 ${contentImport}import '../dart-screens-bs/${spec.file}';
 import '../dart-ui-bs/ds/ds_store.dart';
 import 'package:flutter/material.dart';
@@ -904,7 +914,7 @@ class ${cls} extends StatelessWidget {
   Widget build(BuildContext context) => AnimatedBuilder(
         animation: appStore,
         builder: (context, _) => ${spec.cls}(
-          ${spec.list}: appStore.records('${entitySlug}').map((r) => ${itemExpr}).toList(),
+          ${spec.list}: ${listExpr},
           t: const ${spec.tokens}(),
         ),
       );

@@ -56,7 +56,7 @@ export function buildApp(specText) {
   for (const li of info) if (li.isEnt) {
     const r = entRes[li.i];
     const eslug = `app_ent${li.i}`;
-    entMeta.push({ name: r.entity, slug: eslug, fields: r.schema.length, stages: (r.stages || []).length, icon: '🗂️' });
+    entMeta.push({ name: r.entity, slug: eslug, fields: r.schema.length, stages: (r.stages || []).length, icon: '🗂️', numFields: r.schema.filter((s) => s.type === 'num').map((s) => s.label) });
     if (!(r.entity in nameToSlug)) nameToSlug[r.entity] = eslug;   // שם ⇒ slug-היעד לקשרים
   }
   const entityNames = entMeta.map((e) => e.name);
@@ -143,7 +143,7 @@ export function buildApp(specText) {
     const ent = entMeta[bi];
     const spec = SCREEN_REGISTRY[bi % SCREEN_REGISTRY.length];
     const bslug = `app_bind${bi + 1}`;
-    const { cls } = renderScreenBind(bslug, { entitySlug: ent.slug, entityName: ent.name, spec });
+    const { cls } = renderScreenBind(bslug, { entitySlug: ent.slug, entityName: ent.name, spec, numFields: ent.numFields || [] });
     bindScreens.push({ slug: bslug, cls, kind: 'entity', name: `🖥 ${ent.name} · מסך`, icon: '🖥', sub: `מסך-אמת מפורק (${spec.cls.replace('Composed', '')}) · מחווט-מהישות` });
   }
 
