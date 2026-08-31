@@ -1,0 +1,52 @@
+// ✨ חולל ע"י מנוע-ההרכבה (render-ds/detail) — בורר-רשומה ⇒ שדות + KPI-יחסים. אל תערוך ידנית.
+import '../dart-ui-bs/ds/ds_store.dart';
+import 'package:flutter/material.dart';
+import '../dart-ui-bs/auto/callout.dart';
+import '../dart-data-bs/auto/gen_app_rec25_content.dart';
+
+class GenAppRec25Screen extends StatefulWidget {
+  const GenAppRec25Screen({super.key});
+
+  @override
+  State<GenAppRec25Screen> createState() => _GenAppRec25ScreenState();
+}
+
+class _GenAppRec25ScreenState extends State<GenAppRec25Screen> {
+  int _sel = 0;
+
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(
+        animation: appStore,
+        builder: (context, _) {
+          final recs = appStore.records('app_ent25');
+          if (recs.isEmpty) return Center(child: Text(gen_app_rec25_c13));
+          final i = _sel.clamp(0, recs.length - 1);
+          final r = recs[i];
+          final id = r['__id'] ?? '';
+          return ListView(
+            padding: const EdgeInsets.only(bottom: 24, top: 8),
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: DropdownButton<int>(
+                  value: i,
+                  isExpanded: true,
+                  items: [
+                    for (var j = 0; j < recs.length; j++)
+                      DropdownMenuItem(value: j, child: Text((recs[j][gen_app_rec25_c0] ?? '').isEmpty ? '#' + (j + 1).toString() : (recs[j][gen_app_rec25_c0] ?? ''))),
+                  ],
+                  onChanged: (v) { if (v != null) setState(() => _sel = v); },
+                ),
+              ),
+              const SizedBox(height: 8),
+              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec25_c1] ?? '', label: gen_app_rec25_c2)),
+              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec25_c3] ?? '', label: gen_app_rec25_c4)),
+              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec25_c5] ?? '', label: gen_app_rec25_c6)),
+              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec25_c7] ?? '', label: gen_app_rec25_c8)),
+              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec25_c9] ?? '', label: gen_app_rec25_c10)),
+              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec25_c11] ?? '', label: gen_app_rec25_c12)),
+            ],
+          );
+        },
+      );
+}

@@ -7,7 +7,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { interpret as entInterpret } from './entity.mjs';
-import { renderEntity, renderDashboard, renderHub, renderSystem, renderMain, renderScreenBind, renderCompose, SCREEN_REGISTRY } from './render-ds.mjs';
+import { renderEntity, renderDashboard, renderHub, renderSystem, renderMain, renderScreenBind, renderCompose, renderRecordDetail, SCREEN_REGISTRY } from './render-ds.mjs';
 
 const ROOT = new URL('../../', import.meta.url).pathname;
 const OUT = path.join(ROOT, 'new/dart-gen-bs');
@@ -159,6 +159,17 @@ export function buildApp(specText) {
     else overN--;
   }
 
+  // 🔎 מסכי-רשומה-בודדת: בורר-רשומה ⇒ שדות + KPI-יחסים (ילדים שמצביעים על הרשומה).
+  // היחסים הם ערך פר-רשומה (countRef) — שייכים למסך-הפרט, לא לסקירה.
+  const detailScreens = [];
+  let detN = 0;
+  for (const e of entMeta) {
+    const rels = (backRefs[e.name] || []).map((b) => ({ childSlug: b.fslug, childField: b.ffield, childName: b.fname }));
+    const d = renderRecordDetail(`app_rec${++detN}`, { entitySlug: e.slug, entityName: e.name, fields: e.labels || [], relations: rels });
+    if (d) detailScreens.push({ slug: d.slug, cls: d.cls, kind: 'entity', name: `🔎 ${e.name} · כרטיס`, icon: '🔎', sub: rels.length ? `רשומה + ${rels.length} קשרים` : 'רשומה בודדת' });
+    else detN--;
+  }
+
   // מסכי-מערכת (kind='system' — גלויים רק לתפקיד 'הכל')
   const sys = [];
   const a = renderSystem('app_audit', { title: 'יומן פעולות', icon: '🧾', sectionTitle: 'פעולות אחרונות', kind: 'empty', items: ['כל שינוי במערכת יתועד כאן'] });
@@ -171,7 +182,7 @@ export function buildApp(specText) {
   // RLS · שדות-היקף ייחודיים (slug+שדה) — למילוי בורר-"מי-אני" בלוח.
   const scopeFields = [];
   for (const role of roles) for (const sc of (role.scope || [])) { const sl = nameToSlug[sc.ent]; if (sl && !scopeFields.some((x) => x.slug === sl && x.field === sc.field)) scopeFields.push({ slug: sl, field: sc.field }); }
-  const hub = renderHub('app_hub', { title: 'האפליקציה שלי', icon: '🏗️', screens: [...screens, ...composeScreens, ...bindScreens, ...sys], roles, scopeFields });
+  const hub = renderHub('app_hub', { title: 'האפליקציה שלי', icon: '🏗️', screens: [...screens, ...composeScreens, ...detailScreens, ...bindScreens, ...sys], roles, scopeFields });
   // שורש-האפליקציה: main + MaterialApp ⇒ אפליקציה עצמאית שרצה בלי entry-זמני.
   renderMain('app_main', { title: 'האפליקציה שלי', hubSlug: 'app_hub', hubCls: hub.cls, edges });
 

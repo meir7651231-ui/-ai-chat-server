@@ -1,0 +1,66 @@
+// ✨ חולל ע"י מנוע-ההרכבה (render-ds/detail) — בורר-רשומה ⇒ שדות + KPI-יחסים. אל תערוך ידנית.
+import '../dart-ui-bs/ds/ds_store.dart';
+import 'package:flutter/material.dart';
+import '../dart-ui-bs/auto/callout.dart';
+import '../dart-data-bs/auto/gen_app_rec2_content.dart';
+
+class GenAppRec2Screen extends StatefulWidget {
+  const GenAppRec2Screen({super.key});
+
+  @override
+  State<GenAppRec2Screen> createState() => _GenAppRec2ScreenState();
+}
+
+class _GenAppRec2ScreenState extends State<GenAppRec2Screen> {
+  int _sel = 0;
+
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(
+        animation: appStore,
+        builder: (context, _) {
+          final recs = appStore.records('app_ent2');
+          if (recs.isEmpty) return Center(child: Text(gen_app_rec2_c28));
+          final i = _sel.clamp(0, recs.length - 1);
+          final r = recs[i];
+          final id = r['__id'] ?? '';
+          return ListView(
+            padding: const EdgeInsets.only(bottom: 24, top: 8),
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: DropdownButton<int>(
+                  value: i,
+                  isExpanded: true,
+                  items: [
+                    for (var j = 0; j < recs.length; j++)
+                      DropdownMenuItem(value: j, child: Text((recs[j][gen_app_rec2_c0] ?? '').isEmpty ? '#' + (j + 1).toString() : (recs[j][gen_app_rec2_c0] ?? ''))),
+                  ],
+                  onChanged: (v) { if (v != null) setState(() => _sel = v); },
+                ),
+              ),
+              const SizedBox(height: 8),
+              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec2_c1] ?? '', label: gen_app_rec2_c2)),
+              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec2_c3] ?? '', label: gen_app_rec2_c4)),
+              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec2_c5] ?? '', label: gen_app_rec2_c6)),
+              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec2_c7] ?? '', label: gen_app_rec2_c8)),
+              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec2_c9] ?? '', label: gen_app_rec2_c10)),
+              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec2_c11] ?? '', label: gen_app_rec2_c12)),
+              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec2_c13] ?? '', label: gen_app_rec2_c14)),
+              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec2_c15] ?? '', label: gen_app_rec2_c16)),
+              const SizedBox(height: 8),
+              Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: Text(gen_app_rec2_c27, style: const TextStyle(fontWeight: FontWeight.w800))),
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Wrap(spacing: 10, runSpacing: 10, children: [
+                Callout(value: appStore.countRef('app_ent3', gen_app_rec2_c17, id).toString(), label: gen_app_rec2_c18),
+                Callout(value: appStore.countRef('app_ent6', gen_app_rec2_c19, id).toString(), label: gen_app_rec2_c20),
+                Callout(value: appStore.countRef('app_ent7', gen_app_rec2_c21, id).toString(), label: gen_app_rec2_c22),
+                Callout(value: appStore.countRef('app_ent26', gen_app_rec2_c23, id).toString(), label: gen_app_rec2_c24),
+                Callout(value: appStore.countRef('app_ent28', gen_app_rec2_c25, id).toString(), label: gen_app_rec2_c26),
+                ]),
+              ),
+            ],
+          );
+        },
+      );
+}

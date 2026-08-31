@@ -1,0 +1,20 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_rec16_c0 = 'שם';
+const String gen_app_rec16_c1 = 'שם';
+const String gen_app_rec16_c2 = 'שם';
+const String gen_app_rec16_c3 = 'סוג';
+const String gen_app_rec16_c4 = 'סוג';
+const String gen_app_rec16_c5 = 'מספר סידורי';
+const String gen_app_rec16_c6 = 'מספר סידורי';
+const String gen_app_rec16_c7 = 'מיקום';
+const String gen_app_rec16_c8 = 'מיקום';
+const String gen_app_rec16_c9 = 'תוקף בדיקה';
+const String gen_app_rec16_c10 = 'תוקף בדיקה';
+const String gen_app_rec16_c11 = 'שעות שימוש';
+const String gen_app_rec16_c12 = 'שעות שימוש';
+const String gen_app_rec16_c13 = 'סטטוס';
+const String gen_app_rec16_c14 = 'סטטוס';
+const String gen_app_rec16_c15 = 'ציוד';
+const String gen_app_rec16_c16 = 'קריאת תחזוקה';
+const String gen_app_rec16_c17 = 'מקושרים';
+const String gen_app_rec16_c18 = 'אין רשומות עדיין';

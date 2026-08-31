@@ -1012,6 +1012,72 @@ class ${cls} extends StatelessWidget {
   return { slug, cls };
 }
 
+// 🔎 מסך-רשומה-בודדת: בורר-רשומה (dropdown) ⇒ שדות-הרשומה + KPI-יחסים (כמה ילדים
+// מצביעים על הרשומה — countRef). היחסים הם ערך פר-רשומה, ולכן חיים כאן ולא בסקירה.
+// אטום-ה-KPI נבחר מהמצע (label+value); חיווט-אמת בלבד.
+export function renderRecordDetail(slug, { entitySlug, entityName, fields = [], relations = [] }) {
+  if (!fields.length) return null;
+  const { k, dump } = makeConsts(slug);
+  const cls = pascal(slug);
+  const kpi = selectAtom({ value: { re: /^(value|val|amount|total|count|num)$/, ty: _rS }, label: { re: /^(label|title|caption|name|sub)$/, ty: _rS } },
+    (a) => a.caps.includes('kpi') && a.seam === 'fields');
+  if (!kpi) return null;
+  const ex = kpi.fills.length ? ', ' + kpi.fills.join(', ') : '';
+  const kv = (val, lbl) => `${kpi.cls}(${kpi.p.value}: ${val}, ${kpi.p.label}: ${lbl}${ex})`;
+  const titleC = k(fields[0]);
+  const fieldRows = fields.map((f) => `Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: ${kv(`r[${k(f)}] ?? ''`, k(f))})`).join(',\n              ');
+  const relRows = relations.map((rel) => kv(`appStore.countRef('${rel.childSlug}', ${k(rel.childField)}, id).toString()`, k(rel.childName))).join(',\n                ');
+  const relBlock = relations.length ? `\n              const SizedBox(height: 8),\n              Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: Text(${k('מקושרים')}, style: const TextStyle(fontWeight: FontWeight.w800))),\n              Padding(\n                padding: const EdgeInsets.all(12),\n                child: Wrap(spacing: 10, runSpacing: 10, children: [\n                ${relRows},\n                ]),\n              ),` : '';
+  const imports = new Set(["import '../dart-ui-bs/ds/ds_store.dart';", "import 'package:flutter/material.dart';", `import '../${kpi.file}';`, `import '../dart-data-bs/auto/gen_${slug}_content.dart';`]);
+  const code = `// ✨ חולל ע"י מנוע-ההרכבה (render-ds/detail) — בורר-רשומה ⇒ שדות + KPI-יחסים. אל תערוך ידנית.
+${[...imports].join('\n')}
+
+class ${cls} extends StatefulWidget {
+  const ${cls}({super.key});
+
+  @override
+  State<${cls}> createState() => _${cls}State();
+}
+
+class _${cls}State extends State<${cls}> {
+  int _sel = 0;
+
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(
+        animation: appStore,
+        builder: (context, _) {
+          final recs = appStore.records('${entitySlug}');
+          if (recs.isEmpty) return Center(child: Text(${k('אין רשומות עדיין')}));
+          final i = _sel.clamp(0, recs.length - 1);
+          final r = recs[i];
+          final id = r['__id'] ?? '';
+          return ListView(
+            padding: const EdgeInsets.only(bottom: 24, top: 8),
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: DropdownButton<int>(
+                  value: i,
+                  isExpanded: true,
+                  items: [
+                    for (var j = 0; j < recs.length; j++)
+                      DropdownMenuItem(value: j, child: Text((recs[j][${titleC}] ?? '').isEmpty ? '#' + (j + 1).toString() : (recs[j][${titleC}] ?? ''))),
+                  ],
+                  onChanged: (v) { if (v != null) setState(() => _sel = v); },
+                ),
+              ),
+              const SizedBox(height: 8),
+              ${fieldRows},${relBlock}
+            ],
+          );
+        },
+      );
+}
+`;
+  write(slug, code, dump());
+  return { slug, cls };
+}
+
 // ── 🖥 מחבר-ישות-למסך · סורק-אוטומטי: עובר על כל מסכי-Composed המפורקים, ומזהה את הניתנים-
 //    לחיבור — רשימה-ראשית עם פריט-נושא-כותרת שכל-שדותיו ממופים בהיוריסטיקה, + סקלרים/רשימות-
 //    משניות שניתנים-למילוי-בטוח. כל רשומה ⇒ פריט (הכותרת = הערך-הראשון-הלא-ריק). אפס-Hebrew
