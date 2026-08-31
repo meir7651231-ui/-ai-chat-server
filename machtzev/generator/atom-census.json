@@ -1,0 +1,4942 @@
+[
+ {
+  "cls": "AccessoryTile",
+  "file": "dart-ui-bs/auto/accessory_tile.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 11,
+  "dataFields": 10,
+  "str": 7,
+  "num": 2,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "AccRow",
+  "file": "dart-ui-bs/auto/acc_row.dart",
+  "seam": "collection",
+  "caps": [
+   "list"
+  ],
+  "fields": 18,
+  "dataFields": 13,
+  "str": 9,
+  "num": 2,
+  "bool": 1,
+  "list": 1,
+  "series": 0,
+  "widget": 0,
+  "cb": 4,
+  "style": 1
+ },
+ {
+  "cls": "ActionButton",
+  "file": "dart-ui-bs/auto/action_button.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 1
+ },
+ {
+  "cls": "ActionCard",
+  "file": "dart-ui-bs/auto/action_card.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 5,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 1
+ },
+ {
+  "cls": "ActionRow",
+  "file": "dart-ui-bs/auto/action_row.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "AddTradeButton",
+  "file": "dart-ui-bs/auto/add_trade_button.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "AdvanceButton",
+  "file": "dart-ui-bs/auto/advance_button.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "AiBar",
+  "file": "dart-ui-bs/auto/ai_bar.dart",
+  "seam": "fields",
+  "caps": [
+   "progress"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 0,
+  "num": 1,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "AiCard",
+  "file": "dart-ui-bs/auto/ai_card.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 0,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "AiCardBtn",
+  "file": "dart-ui-bs/auto/ai_card_btn.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "AiCardSub",
+  "file": "dart-ui-bs/auto/ai_card_sub.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "AiCardTop",
+  "file": "dart-ui-bs/auto/ai_card_top.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 2,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "AiFinTile",
+  "file": "dart-ui-bs/auto/ai_fin_tile.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 4,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "AiMdHead",
+  "file": "dart-ui-bs/auto/ai_md_head.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "AiPrimary",
+  "file": "dart-ui-bs/auto/ai_primary.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "AiSection",
+  "file": "dart-ui-bs/auto/ai_section.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 13,
+  "dataFields": 11,
+  "str": 10,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 2,
+  "style": 0
+ },
+ {
+  "cls": "AiServerNote",
+  "file": "dart-ui-bs/auto/ai_server_note.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "ApprovalButton",
+  "file": "dart-ui-bs/auto/approval_button.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 5,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 2
+ },
+ {
+  "cls": "ApprovalCard",
+  "file": "dart-ui-bs/auto/approval_card.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 9,
+  "dataFields": 6,
+  "str": 6,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 3,
+  "style": 0
+ },
+ {
+  "cls": "AppSettingsBody",
+  "file": "dart-ui-bs/auto/app_settings_body.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 8,
+  "dataFields": 8,
+  "str": 8,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "AssignButton",
+  "file": "dart-ui-bs/auto/assign_button.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 4,
+  "dataFields": 3,
+  "str": 1,
+  "num": 0,
+  "bool": 2,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "AxisChip",
+  "file": "dart-ui-bs/auto/axis_chip.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "Bar",
+  "file": "dart-ui-bs/auto/bar.dart",
+  "seam": "fields",
+  "caps": [
+   "progress"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 0,
+  "num": 1,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "BarcodeReticle",
+  "file": "dart-ui-bs/auto/barcode_reticle.dart",
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "fields": 0,
+  "dataFields": 0,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "BigButton",
+  "file": "dart-ui-bs/auto/big_button.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "BrandHeader",
+  "file": "dart-ui-bs/auto/brand_header.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 5,
+  "dataFields": 5,
+  "str": 3,
+  "num": 2,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "CaCard",
+  "file": "dart-ui-bs/auto/ca_card.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 0,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "CaEmpty",
+  "file": "dart-ui-bs/auto/ca_empty.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "Callout",
+  "file": "dart-ui-bs/auto/callout.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "CaPill",
+  "file": "dart-ui-bs/auto/ca_pill.dart",
+  "seam": "fields",
+  "caps": [
+   "progress"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "CaPrimary",
+  "file": "dart-ui-bs/auto/ca_primary.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "CardBtn",
+  "file": "dart-ui-bs/auto/card_btn.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "CardDone",
+  "file": "dart-ui-bs/auto/card_done.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "CardTop",
+  "file": "dart-ui-bs/auto/card_top.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "CaSub",
+  "file": "dart-ui-bs/auto/ca_sub.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "CaSubTitle",
+  "file": "dart-ui-bs/auto/ca_sub_title.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "CatalogConfigCatalogConfigCountBadge",
+  "file": "dart-ui-bs/auto/catalog_config_catalog_config_count_badge.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 0,
+  "num": 1,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "CatalogCountBadge",
+  "file": "dart-ui-bs/auto/catalog_count_badge.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 1,
+  "num": 1,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 1
+ },
+ {
+  "cls": "CatalogSettingsPlaceholderRow",
+  "file": "dart-ui-bs/auto/catalog_settings_placeholder_row.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "CategoryTile",
+  "file": "dart-ui-bs/auto/category_tile.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 6,
+  "dataFields": 4,
+  "str": 4,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 2,
+  "style": 0
+ },
+ {
+  "cls": "CaTop",
+  "file": "dart-ui-bs/auto/ca_top.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 5,
+  "dataFields": 5,
+  "str": 3,
+  "num": 0,
+  "bool": 2,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "ChatSettingsActionRow",
+  "file": "dart-ui-bs/auto/chat_settings_action_row.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 4,
+  "dataFields": 3,
+  "str": 2,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "ChatSettingsSectionTile",
+  "file": "dart-ui-bs/auto/chat_settings_section_tile.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 8,
+  "dataFields": 7,
+  "str": 5,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "ChatSettingsSwitchRow",
+  "file": "dart-ui-bs/auto/chat_settings_switch_row.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 5,
+  "dataFields": 4,
+  "str": 2,
+  "num": 0,
+  "bool": 2,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "CheckRow",
+  "file": "dart-ui-bs/auto/check_row.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "ChipScroll",
+  "file": "dart-ui-bs/auto/chip_scroll.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "ChipWrap",
+  "file": "dart-ui-bs/auto/chip_wrap.dart",
+  "seam": "collection",
+  "caps": [
+   "list"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 1,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "CircleFab",
+  "file": "dart-ui-bs/auto/circle_fab.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 1
+ },
+ {
+  "cls": "CoinBanner",
+  "file": "dart-ui-bs/auto/coin_banner.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 1,
+  "num": 1,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "CompanyCatalogImportCard",
+  "file": "dart-ui-bs/auto/company_catalog_import_card.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 5,
+  "dataFields": 4,
+  "str": 4,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "ConnectorTile",
+  "file": "dart-ui-bs/auto/connector_tile.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 4,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "ConsentDialog",
+  "file": "dart-ui-bs/auto/consent_dialog.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 8,
+  "dataFields": 5,
+  "str": 5,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 3,
+  "style": 0
+ },
+ {
+  "cls": "ContractorToolsSheetsSheetHandle",
+  "file": "dart-ui-bs/auto/contractor_tools_sheets_sheet_handle.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "ContrastWarning",
+  "file": "dart-ui-bs/auto/contrast_warning.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 2,
+  "num": 1,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "CourierAttendanceSendReportButton",
+  "file": "dart-ui-bs/auto/courier_attendance_send_report_button.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 5,
+  "dataFields": 4,
+  "str": 3,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "CourierAttendanceTableRow",
+  "file": "dart-ui-bs/auto/courier_attendance_table_row.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 5,
+  "dataFields": 5,
+  "str": 4,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "CourierFormsPillButton",
+  "file": "dart-ui-bs/auto/courier_forms_pill_button.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 4,
+  "dataFields": 3,
+  "str": 2,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "CourierInfoSection",
+  "file": "dart-ui-bs/auto/courier_info_section.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 12,
+  "dataFields": 10,
+  "str": 9,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 2,
+  "style": 0
+ },
+ {
+  "cls": "CourierPersonalAreaCard",
+  "file": "dart-ui-bs/auto/courier_personal_area_card.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 20,
+  "dataFields": 16,
+  "str": 16,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 4,
+  "style": 0
+ },
+ {
+  "cls": "CourierSettingsSwitchRow",
+  "file": "dart-ui-bs/auto/courier_settings_switch_row.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 4,
+  "dataFields": 3,
+  "str": 2,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "CutTile",
+  "file": "dart-ui-bs/auto/cut_tile.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 6,
+  "dataFields": 6,
+  "str": 4,
+  "num": 2,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "DateChip",
+  "file": "dart-ui-bs/auto/date_chip.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "DateHeader",
+  "file": "dart-ui-bs/auto/date_header.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "DecideButton",
+  "file": "dart-ui-bs/auto/decide_button.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 5,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 2
+ },
+ {
+  "cls": "DecisionLine",
+  "file": "dart-ui-bs/auto/decision_line.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 8,
+  "dataFields": 6,
+  "str": 5,
+  "num": 1,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 2,
+  "style": 0
+ },
+ {
+  "cls": "DoneAll",
+  "file": "dart-ui-bs/auto/done_all.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "Dot",
+  "file": "dart-ui-bs/auto/dot.dart",
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "fields": 1,
+  "dataFields": 0,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 1
+ },
+ {
+  "cls": "DraftBadge",
+  "file": "dart-ui-bs/auto/draft_badge.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 4,
+  "dataFields": 4,
+  "str": 3,
+  "num": 1,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "DsBars",
+  "file": "dart-ui-bs/ds/ds_bars.dart",
+  "seam": "series",
+  "caps": [
+   "trend"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 1,
+  "series": 1,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "DsBoard",
+  "file": "dart-ui-bs/ds/ds_board.dart",
+  "seam": "collection",
+  "caps": [
+   "list"
+  ],
+  "fields": 4,
+  "dataFields": 2,
+  "str": 0,
+  "num": 0,
+  "bool": 1,
+  "list": 1,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 1
+ },
+ {
+  "cls": "DsCalendar",
+  "file": "dart-ui-bs/ds/ds_calendar.dart",
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "fields": 2,
+  "dataFields": 0,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 1
+ },
+ {
+  "cls": "DsDateField",
+  "file": "dart-ui-bs/ds/ds_date_field.dart",
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "fields": 1,
+  "dataFields": 0,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "DsEnumField",
+  "file": "dart-ui-bs/ds/ds_enum_field.dart",
+  "seam": "collection",
+  "caps": [
+   "list"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 1,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "DsField",
+  "file": "dart-ui-bs/ds/ds_field.dart",
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "fields": 1,
+  "dataFields": 0,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "DsMultiSelect",
+  "file": "dart-ui-bs/ds/ds_multi_select.dart",
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "fields": 1,
+  "dataFields": 0,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "DsNumberField",
+  "file": "dart-ui-bs/ds/ds_number_field.dart",
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "fields": 1,
+  "dataFields": 0,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "DsScaffold",
+  "file": "dart-ui-bs/ds/ds.dart",
+  "seam": "collection",
+  "caps": [
+   "list",
+   "status"
+  ],
+  "fields": 23,
+  "dataFields": 18,
+  "str": 7,
+  "num": 3,
+  "bool": 1,
+  "list": 2,
+  "series": 0,
+  "widget": 5,
+  "cb": 4,
+  "style": 0
+ },
+ {
+  "cls": "DsSearch",
+  "file": "dart-ui-bs/ds/ds_search.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "DsSelect",
+  "file": "dart-ui-bs/ds/ds_select.dart",
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "fields": 1,
+  "dataFields": 0,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "DsTable",
+  "file": "dart-ui-bs/ds/ds_table.dart",
+  "seam": "collection",
+  "caps": [
+   "list"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 2,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "DsToggleTile",
+  "file": "dart-ui-bs/ds/ds_toggle_tile.dart",
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "fields": 1,
+  "dataFields": 0,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "Empty",
+  "file": "dart-ui-bs/auto/empty.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "EmptyAccessories",
+  "file": "dart-ui-bs/auto/empty_accessories.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "EmptyConnectors",
+  "file": "dart-ui-bs/auto/empty_connectors.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "EmptyHint",
+  "file": "dart-ui-bs/auto/empty_hint.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "EmptyProducts",
+  "file": "dart-ui-bs/auto/empty_products.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "EmptySection",
+  "file": "dart-ui-bs/auto/empty_section.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "EmptyState",
+  "file": "dart-ui-bs/auto/empty_state.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "EquipmentButton",
+  "file": "dart-ui-bs/auto/equipment_button.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 5,
+  "dataFields": 4,
+  "str": 4,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "FacetChip",
+  "file": "dart-ui-bs/auto/facet_chip.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 4,
+  "dataFields": 3,
+  "str": 1,
+  "num": 1,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "FacetRow",
+  "file": "dart-ui-bs/auto/facet_row.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi",
+   "card"
+  ],
+  "fields": 5,
+  "dataFields": 4,
+  "str": 3,
+  "num": 1,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "Field",
+  "file": "dart-ui-bs/auto/field.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "FieldLabel",
+  "file": "dart-ui-bs/auto/field_label.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "FinCallout",
+  "file": "dart-ui-bs/auto/fin_callout.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 7,
+  "dataFields": 6,
+  "str": 5,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 1
+ },
+ {
+  "cls": "FinHead",
+  "file": "dart-ui-bs/auto/fin_head.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "FinRow",
+  "file": "dart-ui-bs/auto/fin_row.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 1
+ },
+ {
+  "cls": "FinRows",
+  "file": "dart-ui-bs/auto/fin_rows.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "FinTile",
+  "file": "dart-ui-bs/auto/fin_tile.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 4,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "FlatCard",
+  "file": "dart-ui-bs/auto/flat_card.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "FormCard",
+  "file": "dart-ui-bs/auto/form_card.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "GalleryAllBtn",
+  "file": "dart-ui-bs/auto/gallery_all_btn.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 4,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "GalleryThumb",
+  "file": "dart-ui-bs/auto/gallery_thumb.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 6,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 2
+ },
+ {
+  "cls": "GateButton",
+  "file": "dart-ui-bs/auto/gate_button.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "Grip",
+  "file": "dart-ui-bs/auto/grip.dart",
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "fields": 0,
+  "dataFields": 0,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "HierarchyChipPill",
+  "file": "dart-ui-bs/auto/hierarchy_chip_pill.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "HomeShellBadgedIcon",
+  "file": "dart-ui-bs/auto/home_shell_badged_icon.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 0,
+  "num": 1,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 1
+ },
+ {
+  "cls": "HomeShellMenuRow",
+  "file": "dart-ui-bs/auto/home_shell_menu_row.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "HubTile",
+  "file": "dart-ui-bs/auto/hub_tile.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 4,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "InfoSection",
+  "file": "dart-ui-bs/auto/info_section.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 11,
+  "dataFields": 8,
+  "str": 7,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 3,
+  "style": 0
+ },
+ {
+  "cls": "InlineTextRow",
+  "file": "dart-ui-bs/auto/inline_text_row.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 4,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "InputBar",
+  "file": "dart-ui-bs/auto/input_bar.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 5,
+  "dataFields": 3,
+  "str": 2,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "IntelBar",
+  "file": "dart-ui-bs/auto/intel_bar.dart",
+  "seam": "fields",
+  "caps": [
+   "progress"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 1,
+  "num": 1,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 1
+ },
+ {
+  "cls": "IntelCard",
+  "file": "dart-ui-bs/auto/intel_card.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 6,
+  "dataFields": 5,
+  "str": 4,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 0,
+  "style": 1
+ },
+ {
+  "cls": "IntelIntro",
+  "file": "dart-ui-bs/auto/intel_intro.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "IntelPill",
+  "file": "dart-ui-bs/auto/intel_pill.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 1
+ },
+ {
+  "cls": "IntelStat",
+  "file": "dart-ui-bs/auto/intel_stat.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "Intro",
+  "file": "dart-ui-bs/auto/intro.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "JourneyEmpty",
+  "file": "dart-ui-bs/auto/journey_empty.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "KpiBox",
+  "file": "dart-ui-bs/auto/kpi_box.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 4,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "KvLine",
+  "file": "dart-ui-bs/auto/kv_line.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "KvRow",
+  "file": "dart-ui-bs/auto/kv_row.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "Label",
+  "file": "dart-ui-bs/auto/label.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "LbRow",
+  "file": "dart-ui-bs/auto/lb_row.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 4,
+  "dataFields": 4,
+  "str": 2,
+  "num": 1,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "LensGroupHeader",
+  "file": "dart-ui-bs/auto/lens_group_header.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 1,
+  "num": 1,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "LinkBtn",
+  "file": "dart-ui-bs/auto/link_btn.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "LinkRow",
+  "file": "dart-ui-bs/auto/link_row.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "LipskeyBrandSectionCard",
+  "file": "dart-ui-bs/auto/lipskey_brand_section_card.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 7,
+  "dataFields": 6,
+  "str": 4,
+  "num": 2,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "LipskeyProductSheetDivider",
+  "file": "dart-ui-bs/auto/lipskey_product_sheet_divider.dart",
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "fields": 0,
+  "dataFields": 0,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "LiveDot",
+  "file": "dart-ui-bs/auto/live_dot.dart",
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "fields": 0,
+  "dataFields": 0,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "LocationButton",
+  "file": "dart-ui-bs/auto/location_button.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 5,
+  "dataFields": 4,
+  "str": 4,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "LogButton",
+  "file": "dart-ui-bs/auto/log_button.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "ManageHint",
+  "file": "dart-ui-bs/auto/manage_hint.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "ManageIntro",
+  "file": "dart-ui-bs/auto/manage_intro.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "ManagerDashboardCountBadge",
+  "file": "dart-ui-bs/auto/manager_dashboard_count_badge.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 1,
+  "num": 1,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "ManagerDashboardCreditBar",
+  "file": "dart-ui-bs/auto/manager_dashboard_credit_bar.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi",
+   "progress"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 1,
+  "num": 1,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 1
+ },
+ {
+  "cls": "ManageRow",
+  "file": "dart-ui-bs/auto/manage_row.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "ManageSection",
+  "file": "dart-ui-bs/auto/manage_section.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi",
+   "card"
+  ],
+  "fields": 14,
+  "dataFields": 13,
+  "str": 9,
+  "num": 2,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "MatchChip",
+  "file": "dart-ui-bs/auto/match_chip.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "MaterialDots",
+  "file": "dart-ui-bs/auto/material_dots.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 0,
+  "num": 2,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "MdHead",
+  "file": "dart-ui-bs/auto/md_head.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "MiniQtyBtn",
+  "file": "dart-ui-bs/auto/mini_qty_btn.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 4,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 1
+ },
+ {
+  "cls": "MiniTracker",
+  "file": "dart-ui-bs/auto/mini_tracker.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 0,
+  "num": 1,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "ModeFrame",
+  "file": "dart-ui-bs/auto/mode_frame.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "MustChip",
+  "file": "dart-ui-bs/auto/must_chip.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "NewTaskButton",
+  "file": "dart-ui-bs/auto/new_task_button.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "NotifRow",
+  "file": "dart-ui-bs/auto/notif_row.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "NotifSettingsSectionTile",
+  "file": "dart-ui-bs/auto/notif_settings_section_tile.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 15,
+  "dataFields": 13,
+  "str": 8,
+  "num": 0,
+  "bool": 4,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 2,
+  "style": 0
+ },
+ {
+  "cls": "NotifSettingsSwitchRow",
+  "file": "dart-ui-bs/auto/notif_settings_switch_row.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 7,
+  "dataFields": 6,
+  "str": 3,
+  "num": 0,
+  "bool": 3,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "NumberRow",
+  "file": "dart-ui-bs/auto/number_row.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 9,
+  "dataFields": 8,
+  "str": 4,
+  "num": 4,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "NumBox",
+  "file": "dart-ui-bs/auto/num_box.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 4,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 1
+ },
+ {
+  "cls": "Pad",
+  "file": "dart-ui-bs/auto/pad.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "PenaltyCard",
+  "file": "dart-ui-bs/auto/penalty_card.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 7,
+  "dataFields": 7,
+  "str": 4,
+  "num": 3,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "PersonaPickingSheetBanner",
+  "file": "dart-ui-bs/auto/persona_picking_sheet_banner.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 2
+ },
+ {
+  "cls": "PickerOption",
+  "file": "dart-ui-bs/auto/picker_option.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "Pill",
+  "file": "dart-ui-bs/auto/pill.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "PipelineRow",
+  "file": "dart-ui-bs/auto/pipeline_row.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 5,
+  "dataFields": 3,
+  "str": 1,
+  "num": 2,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 1
+ },
+ {
+  "cls": "PipeLink",
+  "file": "dart-ui-bs/auto/pipe_link.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 7,
+  "dataFields": 5,
+  "str": 2,
+  "num": 2,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 2
+ },
+ {
+  "cls": "PlaceholderNotice",
+  "file": "dart-ui-bs/auto/placeholder_notice.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "PortalTileButton",
+  "file": "dart-ui-bs/auto/portal_tile_button.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "PresetChip",
+  "file": "dart-ui-bs/auto/preset_chip.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "PriceChip",
+  "file": "dart-ui-bs/auto/price_chip.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 0,
+  "num": 1,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "Primary",
+  "file": "dart-ui-bs/auto/primary.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "PrimaryBtn",
+  "file": "dart-ui-bs/auto/primary_btn.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "PrivacyNotice",
+  "file": "dart-ui-bs/auto/privacy_notice.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "ProductTile",
+  "file": "dart-ui-bs/auto/product_tile.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 6,
+  "dataFields": 5,
+  "str": 5,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "ProductTreeBody",
+  "file": "dart-ui-bs/auto/product_tree_body.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 9,
+  "dataFields": 9,
+  "str": 7,
+  "num": 2,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "ProfileRow",
+  "file": "dart-ui-bs/auto/profile_row.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "ProjectDone",
+  "file": "dart-ui-bs/auto/project_done.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "ProofThumb",
+  "file": "dart-ui-bs/auto/proof_thumb.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 6,
+  "dataFields": 5,
+  "str": 5,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "ProposalCard",
+  "file": "dart-ui-bs/auto/proposal_card.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 12,
+  "dataFields": 9,
+  "str": 7,
+  "num": 2,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 3,
+  "style": 0
+ },
+ {
+  "cls": "ProposePrimaryBtn",
+  "file": "dart-ui-bs/auto/propose_primary_btn.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "ProposeSecH",
+  "file": "dart-ui-bs/auto/propose_sec_h.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "ProposeTaskButton",
+  "file": "dart-ui-bs/auto/propose_task_button.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 5,
+  "dataFields": 4,
+  "str": 4,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "QtyStepper",
+  "file": "dart-ui-bs/auto/qty_stepper.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 0,
+  "num": 1,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "QuickAction",
+  "file": "dart-ui-bs/auto/quick_action.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 4,
+  "dataFields": 2,
+  "str": 1,
+  "num": 1,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 1
+ },
+ {
+  "cls": "QuickActionsSection",
+  "file": "dart-ui-bs/auto/quick_actions_section.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 23,
+  "dataFields": 20,
+  "str": 15,
+  "num": 0,
+  "bool": 4,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 3,
+  "style": 0
+ },
+ {
+  "cls": "RCard",
+  "file": "dart-ui-bs/auto/rcard.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "Referral",
+  "file": "dart-ui-bs/auto/referral.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi",
+   "card"
+  ],
+  "fields": 19,
+  "dataFields": 17,
+  "str": 16,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 2,
+  "style": 0
+ },
+ {
+  "cls": "RegressionBody",
+  "file": "dart-ui-bs/auto/regression_body.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 5,
+  "dataFields": 4,
+  "str": 4,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "RegressionPanelCheckRow",
+  "file": "dart-ui-bs/auto/regression_panel_check_row.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 7,
+  "dataFields": 7,
+  "str": 6,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "ReportH2",
+  "file": "dart-ui-bs/auto/report_h2.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "ReportTable",
+  "file": "dart-ui-bs/auto/report_table.dart",
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "fields": 0,
+  "dataFields": 0,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "RequestComposer",
+  "file": "dart-ui-bs/auto/request_composer.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 13,
+  "dataFields": 9,
+  "str": 8,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 2,
+  "style": 0
+ },
+ {
+  "cls": "RewardsHubFinRow",
+  "file": "dart-ui-bs/auto/rewards_hub_fin_row.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 2,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "RewardsHubPill",
+  "file": "dart-ui-bs/auto/rewards_hub_pill.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "RoleRequestsInboxEmpty",
+  "file": "dart-ui-bs/auto/role_requests_inbox_empty.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 1
+ },
+ {
+  "cls": "RStat",
+  "file": "dart-ui-bs/auto/rstat.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "RuleInspectDialog",
+  "file": "dart-ui-bs/auto/rule_inspect_dialog.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 6,
+  "dataFields": 4,
+  "str": 4,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 2,
+  "style": 0
+ },
+ {
+  "cls": "SaveDraftButton",
+  "file": "dart-ui-bs/auto/save_draft_button.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 4,
+  "dataFields": 3,
+  "str": 2,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "SavedVersionChip",
+  "file": "dart-ui-bs/auto/saved_version_chip.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 7,
+  "dataFields": 5,
+  "str": 5,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 2,
+  "style": 0
+ },
+ {
+  "cls": "SecH",
+  "file": "dart-ui-bs/auto/sec_h.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "SectionCard",
+  "file": "dart-ui-bs/auto/section_card.dart",
+  "seam": "collection",
+  "caps": [
+   "list"
+  ],
+  "fields": 4,
+  "dataFields": 3,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 1,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 1
+ },
+ {
+  "cls": "SectionHeader",
+  "file": "dart-ui-bs/auto/section_header.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "SectionLabel",
+  "file": "dart-ui-bs/auto/section_label.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "SectionTile",
+  "file": "dart-ui-bs/auto/section_tile.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "SectionTitle",
+  "file": "dart-ui-bs/auto/section_title.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "SelectionBand",
+  "file": "dart-ui-bs/auto/selection_band.dart",
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "fields": 0,
+  "dataFields": 0,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "SendReportButton",
+  "file": "dart-ui-bs/auto/send_report_button.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "ServerNote",
+  "file": "dart-ui-bs/auto/server_note.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "SeverityChip",
+  "file": "dart-ui-bs/auto/severity_chip.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "SheetAdvanceButton",
+  "file": "dart-ui-bs/auto/sheet_advance_button.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 4,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "SheetClose",
+  "file": "dart-ui-bs/auto/sheet_close.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "SheetSection",
+  "file": "dart-ui-bs/auto/sheet_section.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 5,
+  "dataFields": 4,
+  "str": 2,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "ShutterButton",
+  "file": "dart-ui-bs/auto/shutter_button.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 6,
+  "dataFields": 5,
+  "str": 4,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "SichaSheet",
+  "file": "dart-ui-bs/auto/sicha_sheet.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 9,
+  "dataFields": 8,
+  "str": 7,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "SiteHubCaCard",
+  "file": "dart-ui-bs/auto/site_hub_ca_card.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 0,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "SiteHubCaEmpty",
+  "file": "dart-ui-bs/auto/site_hub_ca_empty.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "SiteHubCaPrimary",
+  "file": "dart-ui-bs/auto/site_hub_ca_primary.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "SiteHubCardBtn",
+  "file": "dart-ui-bs/auto/site_hub_card_btn.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "SiteHubMdHead",
+  "file": "dart-ui-bs/auto/site_hub_md_head.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "SiteRow",
+  "file": "dart-ui-bs/auto/site_row.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "SiteServerNote",
+  "file": "dart-ui-bs/auto/site_server_note.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "SmartProjectHero",
+  "file": "dart-ui-bs/auto/smart_project_hero.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi",
+   "progress"
+  ],
+  "fields": 6,
+  "dataFields": 6,
+  "str": 3,
+  "num": 3,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "SnoozeSheet",
+  "file": "dart-ui-bs/auto/snooze_sheet.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 6,
+  "dataFields": 5,
+  "str": 5,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "SpecialtyDerivedRow",
+  "file": "dart-ui-bs/auto/specialty_derived_row.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 4,
+  "dataFields": 4,
+  "str": 4,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "SplitControl",
+  "file": "dart-ui-bs/auto/split_control.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 4,
+  "dataFields": 4,
+  "str": 3,
+  "num": 1,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "SStat",
+  "file": "dart-ui-bs/auto/sstat.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "StagePill",
+  "file": "dart-ui-bs/auto/stage_pill.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 1
+ },
+ {
+  "cls": "Stat",
+  "file": "dart-ui-bs/auto/stat.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "StatsCard",
+  "file": "dart-ui-bs/auto/stats_card.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi",
+   "progress"
+  ],
+  "fields": 10,
+  "dataFields": 10,
+  "str": 6,
+  "num": 4,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "StatusChip",
+  "file": "dart-ui-bs/auto/status_chip.dart",
+  "seam": "fields",
+  "caps": [
+   "status"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "StockRow",
+  "file": "dart-ui-bs/auto/stock_row.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 5,
+  "dataFields": 4,
+  "str": 3,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "StockTab",
+  "file": "dart-ui-bs/auto/stock_tab.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "StoreDashboardChip",
+  "file": "dart-ui-bs/auto/store_dashboard_chip.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "StoreEmptyState",
+  "file": "dart-ui-bs/auto/store_empty_state.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "StorePill",
+  "file": "dart-ui-bs/auto/store_pill.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "StoreProjectChip",
+  "file": "dart-ui-bs/auto/store_project_chip.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "StoreSettingsActionRow",
+  "file": "dart-ui-bs/auto/store_settings_action_row.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "StoreSettingsSectionTile",
+  "file": "dart-ui-bs/auto/store_settings_section_tile.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 8,
+  "dataFields": 7,
+  "str": 5,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "StoreSheetScaffold",
+  "file": "dart-ui-bs/auto/store_sheet_scaffold.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "StoreSmartQtyStepper",
+  "file": "dart-ui-bs/auto/store_smart_qty_stepper.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 7,
+  "dataFields": 5,
+  "str": 4,
+  "num": 1,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 2,
+  "style": 0
+ },
+ {
+  "cls": "StoreStepBtn",
+  "file": "dart-ui-bs/auto/store_step_btn.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 6,
+  "dataFields": 4,
+  "str": 4,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 1
+ },
+ {
+  "cls": "StoreSummaryChip",
+  "file": "dart-ui-bs/auto/store_summary_chip.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 1
+ },
+ {
+  "cls": "StoreSummaryLine",
+  "file": "dart-ui-bs/auto/store_summary_line.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 2,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "StoreSupplierHeader",
+  "file": "dart-ui-bs/auto/store_supplier_header.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "StudioPanesFindReplacePanePlaceholder",
+  "file": "dart-ui-bs/auto/studio_panes_find_replace_pane_placeholder.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "SubmitButton",
+  "file": "dart-ui-bs/auto/submit_button.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "SubRow",
+  "file": "dart-ui-bs/auto/sub_row.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 6,
+  "dataFields": 6,
+  "str": 4,
+  "num": 2,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "SummaryCard",
+  "file": "dart-ui-bs/auto/summary_card.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 14,
+  "dataFields": 14,
+  "str": 8,
+  "num": 4,
+  "bool": 2,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "SupplierTile",
+  "file": "dart-ui-bs/auto/supplier_tile.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 4,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "Swatch",
+  "file": "dart-ui-bs/auto/swatch.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 4,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 1
+ },
+ {
+  "cls": "SwitchRow",
+  "file": "dart-ui-bs/auto/switch_row.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "Tappable",
+  "file": "dart-ui-bs/auto/tappable.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "TargetSubject",
+  "file": "dart-ui-bs/auto/target_subject.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "ThreeCol",
+  "file": "dart-ui-bs/auto/three_col.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 2,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "ThreeWay",
+  "file": "dart-ui-bs/auto/three_way.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi",
+   "card"
+  ],
+  "fields": 21,
+  "dataFields": 21,
+  "str": 17,
+  "num": 0,
+  "bool": 3,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "ThrRow",
+  "file": "dart-ui-bs/auto/thr_row.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "ThumbPlaceholder",
+  "file": "dart-ui-bs/auto/thumb_placeholder.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "TodayStat",
+  "file": "dart-ui-bs/auto/today_stat.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "TradeBuilderAccessoryRuleEditorPillButton",
+  "file": "dart-ui-bs/auto/trade_builder_accessory_rule_editor_pill_button.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "TradeBuilderTradeBuilderHomeStatusChip",
+  "file": "dart-ui-bs/auto/trade_builder_trade_builder_home_status_chip.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 2,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "TradeBuilderTradeDefineStepColorSwatch",
+  "file": "dart-ui-bs/auto/trade_builder_trade_define_step_color_swatch.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 5,
+  "dataFields": 4,
+  "str": 1,
+  "num": 2,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "TrainingAction",
+  "file": "dart-ui-bs/auto/training_action.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 1
+ },
+ {
+  "cls": "TreeComingSoon",
+  "file": "dart-ui-bs/auto/tree_coming_soon.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 4,
+  "dataFields": 4,
+  "str": 4,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "Typing",
+  "file": "dart-ui-bs/auto/typing.dart",
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "fields": 0,
+  "dataFields": 0,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "TypingBubble",
+  "file": "dart-ui-bs/auto/typing_bubble.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "VacationRow",
+  "file": "dart-ui-bs/auto/vacation_row.dart",
+  "seam": "fields",
+  "caps": [
+   "status"
+  ],
+  "fields": 18,
+  "dataFields": 14,
+  "str": 13,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 2,
+  "style": 2
+ },
+ {
+  "cls": "ValueChip",
+  "file": "dart-ui-bs/auto/value_chip.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "VehicleButton",
+  "file": "dart-ui-bs/auto/vehicle_button.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 6,
+  "dataFields": 5,
+  "str": 3,
+  "num": 0,
+  "bool": 2,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "WarnChip",
+  "file": "dart-ui-bs/auto/warn_chip.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "WideWarning",
+  "file": "dart-ui-bs/auto/wide_warning.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 1,
+  "num": 1,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "WizardHeader",
+  "file": "dart-ui-bs/auto/wizard_header.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 4,
+  "dataFields": 4,
+  "str": 4,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "WorkerAppStat",
+  "file": "dart-ui-bs/auto/worker_app_stat.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "WorkerEmployerStockSheetStockRow",
+  "file": "dart-ui-bs/auto/worker_employer_stock_sheet_stock_row.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 4,
+  "dataFields": 4,
+  "str": 4,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "WorkerEquipmentChecklistSheetPrimaryBtn",
+  "file": "dart-ui-bs/auto/worker_equipment_checklist_sheet_primary_btn.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "WorkerEquipmentChecklistSheetSecH",
+  "file": "dart-ui-bs/auto/worker_equipment_checklist_sheet_sec_h.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "WorkerFormsPillButton",
+  "file": "dart-ui-bs/auto/worker_forms_pill_button.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "WorkerNav",
+  "file": "dart-ui-bs/auto/worker_nav.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 6,
+  "dataFields": 6,
+  "str": 4,
+  "num": 1,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "WorkerProfileStat",
+  "file": "dart-ui-bs/auto/worker_profile_stat.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "WorkerReportsTabCard",
+  "file": "dart-ui-bs/auto/worker_reports_tab_card.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "WorkerReportsTabKvRow",
+  "file": "dart-ui-bs/auto/worker_reports_tab_kv_row.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 4,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "WorkerSettingsSectionCard",
+  "file": "dart-ui-bs/auto/worker_settings_section_card.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "WorkerTaskDetailSheetPrimaryBtn",
+  "file": "dart-ui-bs/auto/worker_task_detail_sheet_primary_btn.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "ZoomHint",
+  "file": "dart-ui-bs/auto/zoom_hint.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ }
+]
