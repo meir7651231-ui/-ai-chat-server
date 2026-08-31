@@ -12,15 +12,22 @@ import { execFileSync } from 'node:child_process';
 import { retrieve, matchClass, retrieveLogic } from './match.mjs';
 
 const HERE = new URL('.', import.meta.url).pathname;
+// 📦 אוצר-מילות דקדוק-האפיון + רמזי-הטיפוס — אטום-דאטה (§19-ד: אפס-מילון-במנוע).
+const G = JSON.parse(fs.readFileSync(new URL('./spec-lang.data.json', import.meta.url), 'utf8'));
+const alt = (arr) => '(' + arr.join('|') + ')';   // בונה אלטרנציית-regex מהדאטה
 const heWords = (s) => [...(s || '').matchAll(/[֐-׿][֐-׿״׳]*/g)].map((m) => m[0]);
-const clean = (s) => heWords(s).join(' ').slice(0, 60) || 'שדה';
+const clean = (s) => heWords(s).join(' ').slice(0, 60) || G.fallbackField;
 
-// הסקת-טיפוס מרמזי-שפה (לינגוויסטי, לא פר-ישות) — כמו stemmer.
+// הסקת-טיפוס מרמזי-שפה (לינגוויסטי, לא פר-ישות) — כמו stemmer. הרמזים מהדאטה (עיוור).
+const RE_DATE = new RegExp(G.typeDate.join('|'));
+const RE_NUM = new RegExp(G.typeNum.join('|'));
+const RE_BOOL = new RegExp(G.typeBool.join('|'));
+const RE_ML = new RegExp(G.typeMultiline.join('|'));
 function inferType(field) {
-  if (/תאריך|מועד|יום|לידה|תוקף|התחלה|סיום/.test(field)) return 'date';
-  if (/מחיר|סכום|תקציב|עלות|כמות|מספר|אחוז|שעות|שטח|רווח|יתרה|מ״ר|מ"ר/.test(field)) return 'num';
-  if (/האם|פעיל|סטטוס|מצב|חסום|מאושר|נכלל/.test(field)) return 'bool';
-  if (/תיאור|הערה|הערות|פירוט/.test(field)) return 'multiline';
+  if (RE_DATE.test(field)) return 'date';
+  if (RE_NUM.test(field)) return 'num';
+  if (RE_BOOL.test(field)) return 'bool';
+  if (RE_ML.test(field)) return 'multiline';
   return 'text';
 }
 // טיפוס ⇒ אטום-קלט אמיתי (לפי שם-מחלקה, לא לפי-תצוגה) — matchClass מהמדף.
@@ -37,22 +44,22 @@ const inputAtom = (type) => {
 export function interpret(text) {
   // סעיפי-'|' לפי מילת-מפתח בלבד (כדי ש-'|' בתוך enum {א|ב|ג} לא יישבר):
   // "ישות X עם <שדות> | שלבים: a,b | חוקים: תאריך יעד >= תאריך חיוב"
-  const markers = [...text.matchAll(/\|\s*(שלבים|סטטוסים|מצבים|חוקים|ולידציה|מחיקה|מעברים|שערים)/g)];
+  const markers = [...text.matchAll(new RegExp('\\|\\s*' + alt(G.sectionMarkers), 'g'))];
   const main = markers.length ? text.slice(0, markers[0].index) : text;
   let stagesPart = '', rulesPart = '', delPart = '', guardsPart = '';
   markers.forEach((m, mi) => {
     const start = m.index + m[0].length;
     const end = mi + 1 < markers.length ? markers[mi + 1].index : text.length;
     const content = text.slice(start, end).replace(/^[:\s]+/, '');
-    if (m[1] === 'חוקים' || m[1] === 'ולידציה') rulesPart = content;
-    else if (m[1] === 'מחיקה') delPart = content;
-    else if (m[1] === 'מעברים' || m[1] === 'שערים') guardsPart = content;
+    if (G.markRules.includes(m[1])) rulesPart = content;
+    else if (G.markDelete.includes(m[1])) delPart = content;
+    else if (G.markGuards.includes(m[1])) guardsPart = content;
     else stagesPart = content;
   });
   // שם-הישות + רשימת-השדות (בלי \b — לא עובד על עברית ב-JS)
-  const body = main.replace(/^\s*(צור|תוסיף|בנה|הוסף)?\s*(ישות|טבלה|טופס)\s+/, '');
-  const [namePart, ...rest] = body.split(/\s+עם\s+|\s+שדות[:\s]+|\s*:\s*/);
-  const entity = clean(namePart).slice(0, 40) || 'רשומה';
+  const body = main.replace(new RegExp('^\\s*' + alt(G.createVerbs) + '?\\s*' + alt(G.entityNouns) + '\\s+'), '');
+  const [namePart, ...rest] = body.split(new RegExp('\\s+' + G.withWord + '\\s+|\\s+' + G.fieldsWord + '[:\\s]+|\\s*:\\s*'));
+  const entity = clean(namePart).slice(0, 40) || G.fallbackEntity;
   const fieldsPart = rest.join(' ') || '';
   // אין חיתוך-שקט: כל השדות נשמרים (קודם נחתך ל-20 ⇒ 'סטטוס'/'התאמות' נעלמו). תקרת-שפיות בלבד.
   // 🔤 פעלי-שפה (תואמי-לאחור): שדה* = חובה · שדה{א|ב|ג} = ערכים-מותרים · שדה=נוסחה = מחושב.
@@ -95,7 +102,7 @@ export function interpret(text) {
   // 🔄 שלבי-workflow (אם ניתנו): שרשרת-סטטוס. בלי '|' ⇒ אין workflow (לא ברירת-מחדל).
   // אין חיתוך ל-8 (קודם הפיל 'ועדה/התקבל/נדחה' — שלבי-ההכרעה שה-workflow קיים בשבילם).
   const stages = stagesPart
-    ? stagesPart.replace(/^\s*(שלבים|סטטוסים|מצבים)[:\s]*/, '').split(/[,\n]|\s*→\s*/).map((s) => heWords(s).join(' ').trim()).filter((s) => s.length > 1).slice(0, 30)
+    ? stagesPart.replace(new RegExp('^\\s*' + alt(G.stagePrefixes) + '[:\\s]*'), '').split(/[,\n]|\s*→\s*/).map((s) => heWords(s).join(' ').trim()).filter((s) => s.length > 1).slice(0, 30)
     : [];
 
   const schema = annots.map((a) => ({ label: a.label, type: inferType(a.label), required: a.required, unique: a.unique, enumVals: a.enumVals, formula: a.formula, def: a.def, members: a.members, pattern: a.pattern, range: a.range }));
@@ -135,7 +142,7 @@ export function interpret(text) {
   const vrules = rulesPart ? rulesPart.split(/[,\n]/).map((s) => s.trim()).filter((s) => s.length > 2) : [];
   // 🗑 שלמות-קשר: '| מחיקה: כיתה=מפל, תלמיד=ניתוק' ⇒ מדיניות פר-שדה-קשר. מילות-מפתח
   // דו-לשוניות (מפל/cascade · ניתוק/set-null · חסימה/restrict); לא-מזוהה ⇒ חסימה (בטוח).
-  const POL = { 'מפל': 1, cascade: 1, 'ניתוק': 2, 'נתק': 2, null: 2, 'חסימה': 0, 'חסום': 0, restrict: 0 };
+  const POL = G.delPolicies;
   const delPolicy = delPart
     ? delPart.split(/[,\n]/).map((e) => { const m = e.match(/^(.+?)\s*=\s*(.+)$/); if (!m) return null; const field = clean(m[1]); const pk = m[2].trim(); return field.length > 1 ? { field, policy: pk in POL ? POL[pk] : 0 } : null; }).filter(Boolean)
     : [];

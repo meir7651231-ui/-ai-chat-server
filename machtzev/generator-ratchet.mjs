@@ -59,6 +59,10 @@ const adSrc = fs.readFileSync(new URL('./generator/app-ds.mjs', import.meta.url)
 ok(/from '\.\/chrome\.mjs'/.test(adSrc), 'app-ds מייבא chrome (תוויות-מערכת מהדאטה)');
 const adHe = (adSrc.split('\n').map((l) => l.replace(/\/\/.*$/, '')).join('\n').match(/[֐-׿]{2,}/g) || []).filter((w) => !/^[֐׿׳״]+$/.test(w));
 ok(adHe.length <= 39, `app-ds חוב-עברית-במנוע ${adHe.length} ≤ 39 (רק-יורד; היה 96)`);
+const enSrc = fs.readFileSync(new URL('./generator/entity.mjs', import.meta.url), 'utf8');
+ok(/spec-lang\.data\.json/.test(enSrc), 'entity מושך דקדוק+רמזי-טיפוס מ-spec-lang.data.json');
+const enHe = (enSrc.split('\n').map((l) => l.replace(/\/\/.*$/, '')).join('\n').match(/[֐-׿]{2,}/g) || []).filter((w) => !/^[֐׿׳״]+$/.test(w));
+ok(enHe.length <= 45, `entity חוב-עברית-במנוע ${enHe.length} ≤ 45 (רק-יורד; היה 107 · המילון-הדומייני חולץ §19-ד)`);
 
 // 3) RLS — scoped כשיש שדה-היקף
 buildApp('ישות חוג עם שם, מורה, מחיר, סטטוס | שלבים: פתוח, מלא\nישות תלמיד עם שם, מורה, ממוצע\nתפקיד מזכירה: הכל\nתפקיד מורה: חוג, תלמיד | היקף: חוג.מורה, תלמיד.מורה');
