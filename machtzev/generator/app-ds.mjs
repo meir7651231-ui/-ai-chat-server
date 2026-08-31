@@ -137,20 +137,20 @@ export function buildApp(specText) {
 
   // 🖥 מחבר-ישות-למסך: הישויות-הראשונות ממלאות מסכי-Composed מפורקים אמיתיים, מחזוריות
   // על רישום-המסכים (כל ישות ⇒ תבנית-מסך אחרת) — הוכחת-הכללה על 3 צורות-שקע גנריות.
+  // 🔐 היקף-RLS פר-ישות: שדה-ההיקף שתפקיד מגביל לפיו (role.scope). כל מסכי-החיווט
+  // (בינד/הרכבה/כרטיס) מכבדים אותו (scoped) כמו מסך-הישות — אחרת משתמש-מוגבל רואה הכל.
+  const scopeByEnt = {};
+  for (const role of roles) for (const sc of (role.scope || [])) { const sl = nameToSlug[sc.ent]; if (sl && !scopeByEnt[sl]) scopeByEnt[sl] = sc.field; }
+
   const bindScreens = [];
   const bindN = Math.min(entMeta.length, SCREEN_REGISTRY.length);
   for (let bi = 0; bi < bindN; bi++) {
     const ent = entMeta[bi];
     const spec = SCREEN_REGISTRY[bi % SCREEN_REGISTRY.length];
     const bslug = `app_bind${bi + 1}`;
-    const { cls } = renderScreenBind(bslug, { entitySlug: ent.slug, spec });
+    const { cls } = renderScreenBind(bslug, { entitySlug: ent.slug, spec, scopeField: scopeByEnt[ent.slug] || null });
     bindScreens.push({ slug: bslug, cls, kind: 'entity', name: `🖥 ${ent.name} · מסך`, icon: '🖥', sub: `מסך-אמת מפורק (${spec.cls.replace('Composed', '')}) · מחווט-מהישות` });
   }
-
-  // 🔐 היקף-RLS פר-ישות: שדה-ההיקף שתפקיד מגביל לפיו (role.scope). מסכי-ההרכבה/כרטיס
-  // מכבדים אותו (scoped) בדיוק כמו מסך-הישות — אחרת משתמש-מוגבל היה רואה את כל הרשומות.
-  const scopeByEnt = {};
-  for (const role of roles) for (const sc of (role.scope || [])) { const sl = nameToSlug[sc.ent]; if (sl && !scopeByEnt[sl]) scopeByEnt[sl] = sc.field; }
 
   // 🔎 מסכי-רשומה-בודדת: בורר-רשומה ⇒ שדות + KPI-יחסים (ילדים שמצביעים על הרשומה).
   // היחסים הם ערך פר-רשומה (countRef) — שייכים למסך-הפרט, לא לסקירה. נבנים ראשונים

@@ -1233,17 +1233,22 @@ export const SCREEN_REGISTRY = (() => {
   return files.map(analyzeScreen).filter(Boolean).sort((a, b) => a.file.localeCompare(b.file));  // דטרמיניסטי
 })();
 
-export function renderScreenBind(slug, { entitySlug, spec }) {
+export function renderScreenBind(slug, { entitySlug, spec, scopeField = null }) {
+  const { k, dump } = makeConsts(slug);
   const cls = pascal(slug);
   const disp = `r.entries.firstWhere((e) => !e.key.startsWith('__') && e.value.trim().isNotEmpty, orElse: () => MapEntry('', r['__id'] ?? '')).value.trim()`;
   const itemArgs = spec.args.map((a) => a.replace(/DISP/g, disp)).join(', ');
-  const primaryFill = `${spec.list}: appStore.records('${entitySlug}').map((r) => ${spec.item}(${itemArgs})).toList()`;
+  // 🔐 מכבד RLS: יש שדה-היקף ⇒ scoped, אחרת records (ביט-זהה).
+  const recsExpr = scopeField ? `appStore.scoped('${entitySlug}', ${k(scopeField)})` : `appStore.records('${entitySlug}')`;
+  const primaryFill = `${spec.list}: ${recsExpr}.map((r) => ${spec.item}(${itemArgs})).toList()`;
   const args = spec.fills.map((f) => (f === '__PRIMARY__' ? primaryFill : f)).join(',\n          ');
   const dsImport = spec.needsDs ? "import '../dart-ui-bs/ds/ds.dart';\n" : '';
+  const contentBody = dump();
+  const contentImport = scopeField ? `import '../dart-data-bs/auto/gen_${slug}_content.dart';\n` : '';
   const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מחבר-ישות-למסך: רשומות-ישות ⇒ מסך-Composed מפורק (סורק-אוטומטי). אל תערוך ידנית.
 import '../dart-screens-bs/${spec.file}';
 import '../dart-ui-bs/ds/ds_store.dart';
-${dsImport}import 'package:flutter/material.dart';
+${dsImport}${contentImport}import 'package:flutter/material.dart';
 
 class ${cls} extends StatelessWidget {
   const ${cls}({super.key});
@@ -1258,7 +1263,8 @@ class ${cls} extends StatelessWidget {
 }
 `;
   fs.mkdirSync(OUT, { recursive: true });
-  fs.writeFileSync(path.join(OUT, `gen_${slug}.dart`), code);   // מסך-חיווט טהור — בלי קובץ-תוכן (אין k())
+  fs.writeFileSync(path.join(OUT, `gen_${slug}.dart`), code);
+  if (scopeField) { fs.mkdirSync(DATA, { recursive: true }); fs.writeFileSync(path.join(DATA, `gen_${slug}_content.dart`), '// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.\n' + contentBody); }
   return { slug, cls };
 }
 
