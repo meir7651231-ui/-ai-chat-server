@@ -1,3 +1,0 @@
-dynamic orgLink(dynamic origin, dynamic basePath, dynamic slug) {
-  return origin + basePath + '?org=' + slug;
-}

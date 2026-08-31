@@ -1,3 +1,0 @@
-dynamic receiptFmtOf(dynamic config, dynamic ui, dynamic featureOn) {
-  return featureOn(config, 'core.receipt.pdf') ? ui.receiptFmt : undefined;
-}

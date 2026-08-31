@@ -1,3 +1,0 @@
-dynamic sortSupportMsgs(dynamic msgs) {
-  return ([...msgs]..sort((a, b) => (a.at < b.at ? -1 : a.at > b.at ? 1 : 0)));
-}

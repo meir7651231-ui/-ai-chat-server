@@ -1,3 +1,0 @@
-dynamic templateKeys(dynamic defs) {
-  return defs.map((d) => d.key).toList();
-}

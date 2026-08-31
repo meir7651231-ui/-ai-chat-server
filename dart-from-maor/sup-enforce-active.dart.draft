@@ -1,3 +1,0 @@
-dynamic supEnforceActive(dynamic supEnforceOn) {
-  return supEnforceOn;
-}

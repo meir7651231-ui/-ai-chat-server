@@ -1,3 +1,0 @@
-dynamic finderMatches(dynamic db, dynamic locks, dynamic finderAxisValue) {
-  return db.families.where((f) => Object.entries(locks).every(() => finderAxisValue(db, f, k) == v));
-}

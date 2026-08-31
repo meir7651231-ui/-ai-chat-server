@@ -1,3 +1,0 @@
-dynamic hasPublicSite(dynamic config) {
-  return _falsy(_falsy(config.site)) && config.site.enabled != false;
-}

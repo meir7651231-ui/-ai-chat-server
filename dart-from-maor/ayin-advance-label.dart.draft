@@ -1,8 +1,0 @@
-dynamic ayinAdvanceLabel(dynamic cfg, dynamic a, dynamic stageLabel) {
-  var st = a.stage;
-  if (st == 'new') return stageLabel(cfg, 'lead') + ' ←';
-  if (st == 'lead') return '✓ אישור — ' + stageLabel(cfg, 'lead');
-  if (st == 'eyes') return stageLabel(cfg, 'answer') + ' ←';
-  if (st == 'answer') return a.answerPushed ? '✓ ' + stageLabel(cfg, 'done') : '📞 דחיפה ללוח';
-  return '';
-}

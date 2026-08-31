@@ -1,1 +1,0 @@
-var PRICING_TERMS = [{'v': 'once', 't': 'חד-פעמי'}, {'v': 'weekly', 't': 'שבועי'}, {'v': 'biweekly', 't': 'דו-שבועי'}, {'v': 'monthly', 't': 'חודשי'}, {'v': 'months', 't': 'מספר חודשים'}, {'v': 'half_year', 't': 'חצי-שנתי'}, {'v': 'year', 't': 'שנתי'}];

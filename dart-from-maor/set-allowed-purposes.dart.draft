@@ -1,3 +1,0 @@
-dynamic setAllowedPurposes(dynamic p) {
-  return p && p.length ? p : null;
-}

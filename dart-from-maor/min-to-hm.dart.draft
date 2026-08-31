@@ -1,3 +1,0 @@
-dynamic minToHM(dynamic min, dynamic pad2) {
-  return pad2(_floor(min / 60)) + ':' + pad2(min % 60);
-}

@@ -1,1 +1,0 @@
-var OUTCOME_LABELS = {'donated': 'תרם/ה', 'noanswer': 'לא ענה', 'refused': 'סירב/ה', 'callback': 'לחזור', 'done': 'טופל', 'skip': 'דילוג'};

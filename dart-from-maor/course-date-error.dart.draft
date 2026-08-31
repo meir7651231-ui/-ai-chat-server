@@ -1,7 +1,0 @@
-dynamic courseDateError(dynamic start, dynamic end, dynamic config, dynamic termOf) {
-  if (start && end && end < start) {
-  var courseWord = config ? termOf(config, 'entity.course', 'חוג') : 'חוג';
-  return 'תאריך הסיום מוקדם מתאריך ההתחלה — ה' + courseWord + ' לא יופיע בלוח. תקנו את התאריכים';
-}
-  return null;
-}

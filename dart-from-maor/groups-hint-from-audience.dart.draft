@@ -1,6 +1,0 @@
-dynamic groupsHintFromAudience(dynamic audience) {
-  var m = ((audience ?? '')).match(RegExp(r'(\d+)\s*(?:קבוצות|פעמים)'));
-  if (_falsy(m)) return null;
-  var n = int.tryParse(m[1].toString()) ?? 0;
-  return n >= 2 && n <= 12 ? n : null;
-}

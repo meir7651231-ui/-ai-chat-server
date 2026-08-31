@@ -1,1 +1,0 @@
-var GRANTABLE_STAFF_FEATURES = <dynamic>{...['supporters.bulkselect', 'supporters.bulkdelete', 'supporters.purpose', 'supporters.delete', 'families.delete', 'courses.delete', 'courses.bulkadmin', 'settings.teachers.delete', 'shop.delete', 'tzedaka.delete']};

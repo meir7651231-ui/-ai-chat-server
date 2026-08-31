@@ -1,3 +1,0 @@
-dynamic donationsPath(dynamic slug, dynamic cloudRoot, dynamic colPath, dynamic donationsCol) {
-  return colPath(slug, cloudRoot, donationsCol);
-}

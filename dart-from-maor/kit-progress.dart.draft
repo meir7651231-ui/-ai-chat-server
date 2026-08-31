@@ -1,6 +1,0 @@
-dynamic kitProgress(dynamic a) {
-  var kit = (a.kit ?? []);
-  var total = kit.length;
-  var done = kit.fold(0, (n, k) => n + (k.done ? 1 : 0));
-  return {'done': done, 'total': total, 'pct': total ? _round((done / total) * 100) : 0, 'ready': total > 0 && done == total};
-}

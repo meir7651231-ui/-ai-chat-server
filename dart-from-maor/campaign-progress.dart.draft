@@ -1,6 +1,0 @@
-dynamic campaignProgress(dynamic campaign, dynamic boxes, dynamic campaignTotal) {
-  var sum = campaignTotal(boxes, campaign.id);
-  var goal = (campaign.goal ?? 0);
-  var pct = goal > 0 ? min(100, _round((sum / goal) * 100)) : 0;
-  return {'sum': sum, 'goal': goal, 'pct': pct};
-}

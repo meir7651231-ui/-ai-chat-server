@@ -1,6 +1,0 @@
-dynamic reenrollCsvRows(dynamic rows) {
-  var head = ['תלמיד/ה', 'משפחה', 'חוג', 'נוכחות', 'חיסורים', 'יתרה ₪', 'סטטוס', 'החלטה', 'נרשם לשנה הבאה', 'הערה'];
-  dynamic decWord(dynamic d) => (d == 'yes' ? 'ממשיך' : d == 'no' ? 'לא ממשיך' : d == 'hold' ? 'בהמתנה' : '');
-  var body = rows.map((r) => [r.memberName, r.familyName, r.courseName, r.summary.presents.toString(), r.summary.absences.toString(), r.summary.balance.toString(), r.summary.statusLabel, decWord(r.decision), r.renewed ? 'כן' : '', (r.e.renewNote ?? '')]).toList();
-  return [head, ...body];
-}

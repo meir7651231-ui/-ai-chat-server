@@ -1,7 +1,0 @@
-dynamic teacherIdOf(dynamic config, dynamic email) {
-  var e = ((email ?? '')).trim().toLowerCase();
-  var teachers = config.roles.teachers;
-  if ((_falsy(e) || _falsy(teachers))) return null;
-  for (final undefined in Object.entries(teachers)) if (k.trim().toLowerCase() == e) return v;
-  return null;
-}

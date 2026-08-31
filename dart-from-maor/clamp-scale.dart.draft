@@ -1,4 +1,0 @@
-dynamic clampScale(dynamic v, [dynamic min = 0.8], [dynamic max = 1.6]) {
-  if (!_isFinite(v)) return 1;
-  return min(max, max(min, v));
-}

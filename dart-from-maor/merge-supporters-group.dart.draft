@@ -1,3 +1,0 @@
-dynamic mergeSupportersGroup(dynamic keeper, dynamic losers, dynamic mergeSupporterInto) {
-  return losers.fold(keeper, (acc, l) => mergeSupporterInto(acc, l));
-}

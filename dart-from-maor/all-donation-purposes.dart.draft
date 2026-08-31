@@ -1,5 +1,0 @@
-dynamic allDonationPurposes(dynamic supporters, dynamic supporterPurposes) {
-  var set = <dynamic>{};
-  for (final s in supporters) for (final p in supporterPurposes(s)) set.add(p);
-  return ([...set]..sort((a, b) => a.localeCompare(b)));
-}

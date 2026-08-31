@@ -1,7 +1,0 @@
-dynamic isAdminUser(dynamic config, dynamic email) {
-  var admins = config.adminEmails;
-  if ((_falsy(admins) || admins.length == 0)) return true;
-  if (_falsy(email)) return false;
-  var e = email.trim().toLowerCase();
-  return admins.any((a) => a.trim().toLowerCase() == e);
-}

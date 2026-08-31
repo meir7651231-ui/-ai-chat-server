@@ -1,1 +1,0 @@
-dynamic adarNorm(dynamic monthEn) => (monthEn == 'Adar II' ? 'Adar' : monthEn);

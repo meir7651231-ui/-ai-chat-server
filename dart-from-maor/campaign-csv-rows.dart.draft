@@ -1,7 +1,0 @@
-dynamic campaignCsvRows(dynamic c, dynamic nameOf, dynamic outcomeLabels) {
-  var rows = [['שם', 'תוצאה', 'הערה', 'מתי']];
-  for (final e in c.log) {
-  rows.add([nameOf(e.id), outcomeLabels[e.outcome], (e.note ?? ''), e.at]);
-}
-  return rows;
-}

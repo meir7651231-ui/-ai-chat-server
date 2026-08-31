@@ -1,4 +1,0 @@
-dynamic monthLabel(dynamic key) {
-  var undefined = key.split('-');
-  return '${m}/${y}';
-}

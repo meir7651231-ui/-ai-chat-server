@@ -1,3 +1,0 @@
-dynamic stepScale(dynamic v, dynamic dir, dynamic clampScale, [dynamic step = 0.1]) {
-  return clampScale(_round((clampScale(v) + dir * step) * 10) / 10);
-}

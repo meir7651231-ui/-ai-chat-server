@@ -1,2 +1,0 @@
-var AYIN_STAGES = ['new', 'lead', 'eyes', 'answer', 'done'];
-var STAGE_FALLBACK = {'new': 'חדש', 'lead': 'בהכנה', 'eyes': 'רישום', 'answer': 'מסירה', 'done': 'הושלם'};

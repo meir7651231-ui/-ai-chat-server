@@ -1,6 +1,0 @@
-dynamic tourAdvance(dynamic index, dynamic delta, dynamic length) {
-  var next = index + delta;
-  if (next < 0) return 0;
-  if (next >= length) return null;
-  return next;
-}

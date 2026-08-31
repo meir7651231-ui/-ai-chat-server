@@ -1,4 +1,0 @@
-dynamic isOrgManager(dynamic email, dynamic org, dynamic normEmail) {
-  var m = ((org.manager ?? '')).trim().toLowerCase();
-  return _falsy(_falsy(m)) && normEmail(email) == m;
-}

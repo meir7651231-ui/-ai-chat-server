@@ -1,6 +1,0 @@
-dynamic createCloudKey(dynamic password, dynamic recoveryKey, dynamic encryptDb, dynamic openDek) {
-  var env = /*?AwaitExpression?*/;
-  var dek = /*?AwaitExpression?*/;
-  if (_falsy(dek)) throw Error('יצירת מפתח-הצפנה נכשלה');
-  return {'env': env, 'dek': dek};
-}

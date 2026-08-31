@@ -1,9 +1,0 @@
-dynamic parseJoinFullCode(dynamic full, dynamic isValidSlug) {
-  var t = full.trim();
-  var dot = t.indexOf('.');
-  if (dot <= 0) return null;
-  var slug = t.sublist(0, dot).trim().toLowerCase();
-  var code = t.sublist(dot + 1).trim();
-  if ((!isValidSlug(slug) || _falsy(code))) return null;
-  return {'slug': slug, 'code': code};
-}

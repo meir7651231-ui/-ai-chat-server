@@ -1,3 +1,0 @@
-dynamic namesToTemplateLines(dynamic names) {
-  return names.where((n) => n.name.trim()).map((n) => ({'name': n.name.trim(), 'qty': (+n.eyes || 0), 'rate': (n.rate ?? 0)})).toList();
-}

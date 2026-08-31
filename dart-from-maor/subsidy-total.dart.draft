@@ -1,3 +1,0 @@
-dynamic subsidyTotal(dynamic assignments, dynamic givenValue, dynamic collectedPaid) {
-  return givenValue(assignments) - collectedPaid(assignments);
-}

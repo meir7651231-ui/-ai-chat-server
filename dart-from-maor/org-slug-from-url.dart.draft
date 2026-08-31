@@ -1,8 +1,0 @@
-dynamic orgSlugFromUrl(dynamic search) {
-  try {
-  var slug = URLSearchParams(search).get('org');
-  return slug && RegExp(r'^[a-z0-9-]{2,40}$').test(slug) ? slug : null;
-} catch (_) {
-  return null;
-}
-}

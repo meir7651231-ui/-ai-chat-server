@@ -1,5 +1,0 @@
-var ORDER = ['pickup', 'enroute', 'delivered'];
-dynamic advanceStatus(dynamic status) {
-  var i = ORDER.indexOf(status);
-  return (i < 0 || i >= ORDER.length - 1) ? 'delivered' : ORDER[i + 1];
-}

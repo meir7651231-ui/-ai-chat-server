@@ -1,5 +1,0 @@
-dynamic supScoreBins(dynamic supporters, [dynamic rate = 3.7], dynamic supScore) {
-  var bins = Array(10).fill(0);
-  for (final sp in supporters) bins[min(9, _floor(supScore(sp, rate) / 100))]++;
-  return bins;
-}

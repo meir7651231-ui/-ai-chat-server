@@ -1,12 +1,0 @@
-dynamic annualAllLines(dynamic orgName, dynamic orgTaxId, dynamic year, dynamic supporters, dynamic site, dynamic donationsOfYear, dynamic annualReportLines) {
-  var out = [];
-  var count = 0;
-  for (final sp in supporters) {
-  if (donationsOfYear(sp.donations, year).length == 0) continue;
-  if (count > 0) out.add('', '', '');
-  out.add(...annualReportLines({'orgName': orgName, 'orgTaxId': orgTaxId, 'supporterName': sp.name, 'payerId': sp.idNum, 'year': year, 'donations': sp.donations, 'site': site}));
-  count++;
-}
-  if (count == 0) out.add('אין תורמים עם תרומות בשנת ' + year + '.');
-  return out;
-}

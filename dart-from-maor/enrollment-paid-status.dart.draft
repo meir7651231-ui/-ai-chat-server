@@ -1,6 +1,0 @@
-dynamic enrollmentPaidStatus(dynamic e, dynamic payBal, dynamic paidOf) {
-  if (e.paidFull) return 'paid';
-  var due = (e.totalDue ?? 0);
-  if (due > 0) return payBal(e) == 0 ? 'paid' : paidOf(e) > 0 ? 'partial' : 'unpaid';
-  return 'unpaid';
-}

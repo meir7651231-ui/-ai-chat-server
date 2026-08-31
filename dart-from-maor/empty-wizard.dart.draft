@@ -1,1 +1,0 @@
-var EMPTY_WIZARD = {'industry': '', 'size': '', 'needs': [], 'orgName': '', 'contactName': '', 'phone': '', 'email': '', 'password': '', 'password2': ''};

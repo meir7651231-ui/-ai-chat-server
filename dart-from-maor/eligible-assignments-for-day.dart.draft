@@ -1,4 +1,0 @@
-dynamic eligibleAssignmentsForDay(dynamic db, dynamic dayId) {
-  var taken = <dynamic>{...db.deliveries.where((d) => d.dayId == dayId).map((d) => d.assignmentId).toList()};
-  return db.shopAssignments.where((a) => a.status == 'active' && !taken.has(a.id));
-}

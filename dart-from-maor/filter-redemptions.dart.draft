@@ -1,3 +1,0 @@
-dynamic filterRedemptions(dynamic a, dynamic fromIso, dynamic toIso, dynamic includeVoided, dynamic dateInRange) {
-  return a.redemptions.where((r) => dateInRange(r.date, fromIso, toIso) && ((includeVoided || _falsy(r.voidedAt))));
-}

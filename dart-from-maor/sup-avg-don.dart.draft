@@ -1,5 +1,0 @@
-dynamic supAvgDon(dynamic supporters, [dynamic rate = 3.7], dynamic supTotalIls, dynamic supCount) {
-  var totIls = supporters.fold(0, (a, x) => a + supTotalIls(x, rate));
-  var totCnt = supporters.fold(0, (a, x) => a + supCount(x));
-  return totCnt ? _round(totIls / totCnt) : null;
-}

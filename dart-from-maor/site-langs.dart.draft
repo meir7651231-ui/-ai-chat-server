@@ -1,5 +1,0 @@
-dynamic siteLangs(dynamic site, dynamic knownLangs) {
-  var raw = (site.langs.where((l) => knownLangs.contains(l)) ?? []);
-  var uniq = [...<dynamic>{...raw}];
-  return uniq.length ? uniq : ['he'];
-}

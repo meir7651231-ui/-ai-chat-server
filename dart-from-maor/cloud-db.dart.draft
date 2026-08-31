@@ -1,4 +1,0 @@
-dynamic cloudDb(dynamic fsDb) {
-  if (_falsy(fsDb)) throw Error('הענן לא אותחל — פנו למנהל המערכת');
-  return fsDb;
-}

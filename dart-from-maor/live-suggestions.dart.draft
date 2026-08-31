@@ -1,4 +1,0 @@
-dynamic liveSuggestions(dynamic db, dynamic todayIso, dynamic config, dynamic suggestions) {
-  var done = (db.attnDone ?? {});
-  return suggestions(db, todayIso, config).where((s) => _falsy(done[s.key]));
-}

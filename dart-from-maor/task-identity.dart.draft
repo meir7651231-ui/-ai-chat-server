@@ -1,4 +1,0 @@
-dynamic taskIdentity(dynamic email) {
-  var e = ((email ?? '')).trim().toLowerCase();
-  return (e ?? 'מקומי');
-}

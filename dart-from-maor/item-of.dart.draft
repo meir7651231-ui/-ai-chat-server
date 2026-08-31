@@ -1,7 +1,0 @@
-dynamic itemOf(dynamic db, dynamic comp) {
-  var item = db.shopItems.firstWhere((i) => i.id == comp.itemId);
-  if (_falsy(item)) {
-  return {'itemId': comp.itemId, 'name': comp.label, 'kind': comp.kind, 'storeId': comp.storeId, 'value': (comp.value ?? 0), 'basePrice': (comp.basePrice ?? 0), 'stock': comp.stock, 'validDays': comp.validDays, 'active': true};
-}
-  return {'itemId': item.id, 'name': item.name, 'kind': item.kind, 'storeId': item.storeId, 'value': (comp.value ?? item.value), 'basePrice': (comp.basePrice ?? item.basePrice), 'stock': item.stock, 'validDays': item.validDays, 'holidays': item.holidays, 'active': item.active};
-}

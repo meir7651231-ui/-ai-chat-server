@@ -1,4 +1,0 @@
-dynamic applyConfig(dynamic cfg, dynamic applyTheme, dynamic applyFavicon) {
-  applyTheme(cfg.theme, cfg.accent, cfg.motion);
-  applyFavicon(cfg.emoji);
-}

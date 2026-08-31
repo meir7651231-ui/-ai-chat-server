@@ -1,1 +1,0 @@
-dynamic ruleExact(dynamic nq, dynamic nt) => (nt == nq ? 100 : null);

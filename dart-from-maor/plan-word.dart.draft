@@ -1,3 +1,0 @@
-dynamic planWord(dynamic model) {
-  return model == 'punch' ? 'כרטיסייה' : model == 'half_year' ? 'מנוי חצי-שנתי' : model == 'year' ? 'מנוי שנתי' : 'מנוי חודשי';
-}

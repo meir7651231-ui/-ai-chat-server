@@ -1,7 +1,0 @@
-dynamic familiesImportFormatRows(dynamic db) {
-  var rows = [['שם', 'ת"ז אב', 'טלפון', 'שם האם', 'ת"ז אם', 'טלפון 2', 'עיר', 'כתובת', '', 'אלמן', 'קהילה', '', 'הערות']];
-  for (final f in db.families) {
-  rows.add([f.name, f.fatherId, f.phone, f.mother, f.motherId, f.phone2, f.city, f.address, '', ((f.maritalStatus ?? '')).contains('אלמן') ? 'אלמן' : '', f.community, '', f.notes]);
-}
-  return rows;
-}

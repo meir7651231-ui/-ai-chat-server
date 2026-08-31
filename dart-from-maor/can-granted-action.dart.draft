@@ -1,3 +1,0 @@
-dynamic canGrantedAction(dynamic config, dynamic email, dynamic isManager, dynamic key, dynamic isAdminUser) {
-  return ((isManager ?? isAdminUser(config, email)) || config.features[key] == true);
-}

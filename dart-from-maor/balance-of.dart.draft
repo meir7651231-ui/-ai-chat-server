@@ -1,3 +1,0 @@
-dynamic balanceOf(dynamic e, dynamic paidOf) {
-  return max(0, ((e.totalDue ?? 0)) - paidOf(e));
-}

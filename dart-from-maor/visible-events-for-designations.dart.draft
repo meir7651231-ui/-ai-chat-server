@@ -1,9 +1,0 @@
-dynamic visibleEventsForDesignations(dynamic events, dynamic supporters, dynamic allowed, dynamic isSupVisible) {
-  if ((_falsy(allowed) || _falsy(allowed.length))) return events;
-  var byId = <dynamic, dynamic>{};
-  return events.where((ev) {
-  if (_falsy(ev.spId)) return true;
-  var sp = byId.get(ev.spId);
-  return sp ? isSupVisible(sp, allowed) : false;
-});
-}

@@ -1,8 +1,0 @@
-dynamic nextYearDates(dynamic start, dynamic end, dynamic atNoon, dynamic toIso) {
-  dynamic shift(dynamic iso) {
-  var d = atNoon(iso);
-  d.setFullYear(d.year + 1);
-  return toIso(d);
-}
-  return {'start': shift(start), 'end': shift(end)};
-}

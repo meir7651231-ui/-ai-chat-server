@@ -1,3 +1,0 @@
-dynamic sessionsOf(dynamic c) {
-  return c.sessions && c.sessions.length ? c.sessions : [{'day': c.weekday, 'time': c.time, 'label': ''}];
-}

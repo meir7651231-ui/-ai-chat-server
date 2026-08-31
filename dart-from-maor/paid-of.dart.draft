@@ -1,1 +1,0 @@
-dynamic paidOf(dynamic e) => ((e.payments ?? [])).fold(0, (a, p) => a + (_isFinite(p.amount) ? p.amount : 0));

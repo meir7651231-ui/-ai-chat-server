@@ -1,3 +1,0 @@
-dynamic deliveriesOfVolunteer(dynamic db, dynamic volId, dynamic dayId) {
-  return db.deliveries.where((d) => d.volunteerId == volId && ((_falsy(dayId) || d.dayId == dayId)));
-}

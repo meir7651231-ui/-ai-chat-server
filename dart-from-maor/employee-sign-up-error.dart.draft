@@ -1,7 +1,0 @@
-dynamic employeeSignUpError(dynamic email, dynamic phone, dynamic password, dynamic code) {
-  if (!RegExp(r'^\S+@\S+\.\S+$').test(email.trim())) return 'כתובת האימייל אינה תקינה';
-  if (!RegExp(r'^[\d+][\d\s-]{6,}$').test(phone.trim())) return 'מספר טלפון תקין הוא שדה חובה';
-  if (password.length < 6) return 'הסיסמה חייבת להיות לפחות 6 תווים';
-  if (!code.trim()) return 'קוד-ההזמנה מהמנהל הוא שדה חובה';
-  return '';
-}

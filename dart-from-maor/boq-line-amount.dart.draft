@@ -1,3 +1,0 @@
-dynamic boqLineAmount(dynamic n) {
-  return ((+n.eyes || 0)) * ((n.rate ?? 0));
-}

@@ -1,9 +1,0 @@
-dynamic eligibleFamilies(dynamic db, dynamic criterionIds, dynamic excludeProductId) {
-  return db.families.where((f) => f.status == 'active').where((f) {
-  var theirs = db.shopAssignments.where((a) => a.famId == f.id);
-  if (theirs.any((a) => a.productId == excludeProductId && a.status == 'active')) return false;
-  if (criterionIds.length == 0) return true;
-  var held = <dynamic>{...theirs.expand((a) => a.criterionIds).toList()};
-  return criterionIds.every((c) => held.has(c));
-}).map((f) => ({'famId': f.id, 'name': f.name, 'memberIds': f.members.map((m) => m.id).toList()})).toList();
-}

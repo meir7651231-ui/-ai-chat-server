@@ -1,3 +1,0 @@
-dynamic publicSiteOn(dynamic cfg, dynamic featureOn) {
-  return featureOn(cfg, 'shell.publicsite') && _falsy(_falsy(cfg.site)) && cfg.site.enabled != false;
-}

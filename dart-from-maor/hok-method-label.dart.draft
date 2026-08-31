@@ -1,6 +1,0 @@
-dynamic hokMethodLabel(dynamic m) {
-  if (m == 'bank') return 'הו"ק בנקאית';
-  if (m == 'card') return 'אשראי בסליקה';
-  if (m == 'cash') return 'מזומן חודשי';
-  return (m ?? 'אחר');
-}

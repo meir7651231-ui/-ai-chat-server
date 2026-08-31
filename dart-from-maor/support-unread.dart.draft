@@ -1,5 +1,0 @@
-dynamic supportUnread(dynamic thread, dynamic side) {
-  if (_falsy(thread)) return 0;
-  var n = side == 'admin' ? thread.unreadAdmin : thread.unreadUser;
-  return n is num && n > 0 ? n : 0;
-}

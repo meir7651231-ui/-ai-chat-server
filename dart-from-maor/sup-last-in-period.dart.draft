@@ -1,8 +1,0 @@
-dynamic supLastInPeriod(dynamic sp, dynamic year, dynamic month, dynamic supLast) {
-  if (year == null && month == null) return true;
-  var iso = supLast(sp);
-  if (_falsy(iso)) return false;
-  if (year != null && +iso.sublist(0, 4) != year) return false;
-  if (month != null && +iso.sublist(5, 7) != month) return false;
-  return true;
-}

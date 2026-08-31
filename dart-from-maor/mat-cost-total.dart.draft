@@ -1,3 +1,0 @@
-dynamic matCostTotal(dynamic a) {
-  return ((a.mat ?? [])).fold(0, (t, m) => t + ((+m.qty || 0)) * ((+m.cost || 0)));
-}

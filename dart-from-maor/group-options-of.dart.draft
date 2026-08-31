@@ -1,8 +1,0 @@
-dynamic groupOptionsOf(dynamic c, dynamic sessionsOf, dynamic groupLabelOf, dynamic dayNames) {
-  var ss = sessionsOf(c);
-  if (ss.length <= 1) return [];
-  return ss.map((s, i) {
-  var v = groupLabelOf(s, i);
-  return {'v': v, 't': '${v} · יום ${dayNames[s.day]} ${(s.time ?? '')}'.trim()};
-}).toList();
-}

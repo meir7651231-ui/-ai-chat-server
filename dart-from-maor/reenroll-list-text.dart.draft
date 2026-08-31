@@ -1,5 +1,0 @@
-dynamic reenrollListText(dynamic rows) {
-  dynamic decWord(dynamic d) => (d == 'yes' ? 'ממשיך' : d == 'no' ? 'לא ממשיך' : d == 'hold' ? 'בהמתנה' : 'טרם הוחלט');
-  return rows.map((r) => '${r.memberName} · ${r.courseName} — נוכחות ${r.summary.presents}, חיסורים ${r.summary.absences} · ${decWord(r.decision)}${r.renewed ? ' ✓נרשם' : ''}').toList().join('
-');
-}

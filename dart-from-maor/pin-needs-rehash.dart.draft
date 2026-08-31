@@ -1,3 +1,0 @@
-dynamic pinNeedsRehash(dynamic hash) {
-  return _falsy(_falsy(hash)) && !hash.startsWith('v2:');
-}

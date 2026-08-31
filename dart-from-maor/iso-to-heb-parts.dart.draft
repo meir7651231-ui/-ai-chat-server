@@ -1,9 +1,0 @@
-dynamic isoToHebParts(dynamic iso, dynamic hebParts, dynamic monthHeOf) {
-  if (!RegExp(r'^\d{4}-\d{2}-\d{2}$').test(iso)) return null;
-  var d = DateTime.parse(iso + 'T12:00:00');
-  if ((d.millisecondsSinceEpoch).isNaN) return null;
-  var p = hebParts(d);
-  var monthHe = monthHeOf(p.month);
-  if (((_falsy(monthHe) || _falsy(p.day)) || _falsy(p.year))) return null;
-  return {'day': p.day, 'monthHe': monthHe, 'year': p.year};
-}

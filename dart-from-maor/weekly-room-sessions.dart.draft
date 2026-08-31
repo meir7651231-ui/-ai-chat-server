@@ -1,3 +1,0 @@
-dynamic weeklyRoomSessions(dynamic db, dynamic roomId, dynamic iso, dynamic sessionsOf) {
-  return db.courses.where((c) => c.roomId == roomId && ((_falsy(c.end) || iso <= c.end))).fold(0, (a, c) => a + sessionsOf(c).length);
-}

@@ -1,3 +1,0 @@
-dynamic donationYears(dynamic donations) {
-  return ([...<dynamic>{...donations.map((d) => ((d.date ?? '')).sublist(0, 4)).toList().where((y) => RegExp(r'^\d{4}$').test(y))}]..sort()).reversed();
-}

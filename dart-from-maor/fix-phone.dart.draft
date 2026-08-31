@@ -1,3 +1,0 @@
-dynamic fixPhone(dynamic p, dynamic formatIsraeliPhone) {
-  return formatIsraeliPhone(p);
-}

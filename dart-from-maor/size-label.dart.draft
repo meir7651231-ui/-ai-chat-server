@@ -1,3 +1,0 @@
-dynamic sizeLabel(dynamic id, dynamic sizes) {
-  return ((sizes.firstWhere((s) => s.id == id).label ?? id) ?? '—');
-}

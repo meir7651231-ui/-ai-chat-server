@@ -1,3 +1,0 @@
-dynamic importableContacts(dynamic text, dynamic parseVcards, dynamic isJunkContact) {
-  return parseVcards(text).where((c) => !isJunkContact(c));
-}

@@ -1,3 +1,0 @@
-dynamic unitLabel(dynamic cfg, dynamic termOf) {
-  return termOf(cfg, 'entity.ayinUnit', 'כמות');
-}

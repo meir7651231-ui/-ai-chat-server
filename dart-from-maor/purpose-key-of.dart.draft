@@ -1,5 +1,0 @@
-var SHARED_PURPOSE_KEY = '_shared_';
-dynamic purposeKeyOf(dynamic d) {
-  var p = ((d.purpose ?? '')).trim();
-  return (p ?? SHARED_PURPOSE_KEY);
-}

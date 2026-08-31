@@ -1,6 +1,0 @@
-dynamic normalizePhone(dynamic raw) {
-  var s = (raw ?? '').toString().replaceFirst(RegExp(r'[\s\-().]'), '');
-  if (s.startsWith('972')) s = '0' + s.sublist(3);
-  if (raw.startsWith('+972')) s = '0' + raw.replaceFirst(RegExp(r'[\s\-().]'), '').sublist(4);
-  return s;
-}

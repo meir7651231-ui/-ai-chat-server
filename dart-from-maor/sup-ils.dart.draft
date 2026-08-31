@@ -1,3 +1,0 @@
-dynamic supIls(dynamic sp) {
-  return ((sp.ils ?? 0)) + ((sp.hist ?? [])).fold(0, (a, h) => a + (h.c == '$' ? 0 : h.a));
-}

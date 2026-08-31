@@ -1,6 +1,0 @@
-var ORDER_COMMON = ['Tishri', 'Heshvan', 'Kislev', 'Tevet', 'Shevat', 'Adar', 'Nisan', 'Iyar', 'Sivan', 'Tamuz', 'Av', 'Elul'];
-var ORDER_LEAP = ['Tishri', 'Heshvan', 'Kislev', 'Tevet', 'Shevat', 'Adar I', 'Adar II', 'Nisan', 'Iyar', 'Sivan', 'Tamuz', 'Av', 'Elul'];
-dynamic hebMonthsOf(dynamic hebYear, dynamic isHebLeapYear, dynamic monthHeOf) {
-  var order = isHebLeapYear(hebYear) ? ORDER_LEAP : ORDER_COMMON;
-  return order.map(monthHeOf).toList();
-}

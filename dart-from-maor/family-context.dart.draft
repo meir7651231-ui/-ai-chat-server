@@ -1,5 +1,0 @@
-dynamic familyContext(dynamic db, dynamic famId) {
-  var openDeliveries = ((db.deliveries ?? [])).where((d) => d.familyId == famId && d.status != 'delivered').length;
-  var activeAssignments = ((db.shopAssignments ?? [])).where((a) => a.famId == famId && a.status == 'active').length;
-  return {'openDeliveries': openDeliveries, 'activeAssignments': activeAssignments};
-}

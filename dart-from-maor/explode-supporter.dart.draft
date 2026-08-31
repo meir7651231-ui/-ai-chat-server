@@ -1,3 +1,0 @@
-dynamic explodeSupporter(dynamic sp, dynamic purposeKeyOf) {
-  return ((sp.donations ?? [])).map((d) => ({'id': d.rid, 'supporterId': sp.id, 'pkey': purposeKeyOf(d), 'donation': d})).toList();
-}

@@ -1,5 +1,0 @@
-dynamic volunteerLoadHint(dynamic db, dynamic vol, dynamic dayId, dynamic deliveriesOfVolunteer) {
-  var count = deliveriesOfVolunteer(db, vol.id, dayId).length;
-  if (vol.maxDeliveries == null) return {'count': count, 'over': false};
-  return {'count': count, 'over': count >= vol.maxDeliveries};
-}

@@ -1,8 +1,0 @@
-dynamic countBy(dynamic items, dynamic key) {
-  var m = <dynamic, dynamic>{};
-  for (final it in items) {
-  var k = key(it);
-  m.set(k, ((m.get(k) ?? 0)) + 1);
-}
-  return ([...m.entries()]..sort((a, b) => b[1] - a[1]));
-}

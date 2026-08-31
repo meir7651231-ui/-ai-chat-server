@@ -1,5 +1,0 @@
-dynamic supportMsgTime(dynamic at) {
-  var d = DateTime.parse(at.contains('T') ? at : at + 'T12:00:00');
-  if (Number.isNaN(d.millisecondsSinceEpoch)) return '';
-  return d.toLocaleTimeString('he-IL', {'hour': '2-digit', 'minute': '2-digit'});
-}

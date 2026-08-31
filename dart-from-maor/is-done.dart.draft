@@ -1,3 +1,0 @@
-dynamic isDone(dynamic c) {
-  return c.queue.length == 0;
-}

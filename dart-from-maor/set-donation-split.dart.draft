@@ -1,3 +1,0 @@
-dynamic setDonationSplit(dynamic on) {
-  return on;
-}

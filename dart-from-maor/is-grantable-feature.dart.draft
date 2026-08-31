@@ -1,3 +1,0 @@
-dynamic isGrantableFeature(dynamic key, dynamic grantableSet) {
-  return grantableSet.has(key);
-}

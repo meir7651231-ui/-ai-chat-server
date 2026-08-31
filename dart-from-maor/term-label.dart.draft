@@ -1,4 +1,0 @@
-dynamic termLabel(dynamic term, dynamic months, dynamic terms) {
-  if (term == 'months') return (months && months > 0 ? months : 1) + ' חודשים';
-  return (terms.firstWhere((x) => x.v == term).t ?? '');
-}

@@ -1,3 +1,0 @@
-dynamic sanitizeSupportText(dynamic raw, [dynamic supportMsgMax = 2000]) {
-  return ((raw ?? '')).replaceFirst(RegExp(r'\s+$'), '').replaceFirst(RegExp(r'^\s+'), '').sublist(0, supportMsgMax);
-}

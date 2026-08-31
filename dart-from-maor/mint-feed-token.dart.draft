@@ -1,5 +1,0 @@
-dynamic mintFeedToken() {
-  var b = Uint8Array(16);
-  crypto.getRandomValues(b);
-  return Array.from(b, (x) => xfunction toString() { [native code] }._padStart(2, '0')).join('');
-}

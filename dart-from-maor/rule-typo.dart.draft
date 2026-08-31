@@ -1,6 +1,0 @@
-dynamic ruleTypo(dynamic nq, dynamic nt, dynamic distance) {
-  if ((nq.length < 3 || RegExp(r'^\d+$').test(nq))) return null;
-  var max = nt.length >= 6 ? 2 : 1;
-  var d = distance(nq, nt);
-  return d <= max ? 52 - d * 4 : null;
-}

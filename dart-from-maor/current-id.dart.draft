@@ -1,3 +1,0 @@
-dynamic currentId(dynamic c) {
-  return c.queue.length ? c.queue[0] : null;
-}

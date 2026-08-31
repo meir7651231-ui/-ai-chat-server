@@ -1,7 +1,0 @@
-dynamic colRefToIndex(dynamic ref) {
-  var m = RegExp(r'^([A-Z]+)').exec(ref);
-  if (_falsy(m)) return 0;
-  var n = 0;
-  for (final ch in m[1]) n = n * 26 + (ch.codeUnitAt(0) - 64);
-  return n - 1;
-}

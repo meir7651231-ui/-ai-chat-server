@@ -1,5 +1,0 @@
-dynamic gradeIndex(dynamic g, dynamic gradeOrder) {
-  var clean = ((g ?? '')).replaceFirst(RegExp(r'["'׳״]'), '').replaceFirst(RegExp(r'^כיתה\s*'), '').trim();
-  if (_falsy(clean)) return -1;
-  return gradeOrder.indexOf(clean);
-}

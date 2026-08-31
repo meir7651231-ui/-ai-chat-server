@@ -1,9 +1,0 @@
-dynamic fullDbDiff(dynamic db, dynamic entityCollections, dynamic metaOf) {
-  var sets = [];
-  for (final col in entityCollections) {
-  for (final item in db[col]) {
-  sets.add({'col': col, 'id': item.id, 'data': item});
-}
-}
-  return {'sets': sets, 'deletes': [], 'meta': metaOf(db)};
-}

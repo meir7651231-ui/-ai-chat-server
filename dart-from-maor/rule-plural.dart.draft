@@ -1,7 +1,0 @@
-dynamic rulePlural(dynamic nq, dynamic nt) {
-  if (nq.length >= 5 && ((nq.endsWith('ימ') ?? nq.endsWith('ות')))) {
-  var stem = nq.sublist(0, -2);
-  if ((nt == stem || nt.startsWith(stem))) return 70;
-}
-  return null;
-}

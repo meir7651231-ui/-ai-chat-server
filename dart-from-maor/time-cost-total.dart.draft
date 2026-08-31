@@ -1,3 +1,0 @@
-dynamic timeCostTotal(dynamic a) {
-  return ((a.time ?? [])).fold(0, (t, e) => t + ((+e.hours || 0)) * ((e.rate ?? 0)));
-}

@@ -1,3 +1,0 @@
-dynamic providerClearer(dynamic provider) {
-  return RegExp(r'sola').test((provider ?? '')) ? 'סולה' : 'נדרים';
-}

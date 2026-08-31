@@ -1,5 +1,0 @@
-dynamic ruleSkeleton(dynamic nq, dynamic nt) {
-  if ((nq.length < 3 || RegExp(r'^\d+$').test(nq))) return null;
-  var sq = nq.replaceFirst(RegExp(r'[יו]'), '');
-  return sq.length >= 2 && sq == st ? 58 : null;
-}

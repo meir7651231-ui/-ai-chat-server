@@ -1,3 +1,0 @@
-dynamic priceSuffix(dynamic model) {
-  return model == 'half_year' ? 'לחצי שנה' : model == 'year' ? 'לשנה' : model == 'punch' ? '' : 'לחודש';
-}

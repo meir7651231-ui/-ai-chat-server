@@ -1,3 +1,0 @@
-dynamic hokDue(dynamic supporters, dynamic todayIso, dynamic hokEffectivelyActive, dynamic hokRecordedThisMonth) {
-  return (supporters.where((sp) => hokEffectivelyActive(sp, todayIso) && !hokRecordedThisMonth(sp, todayIso))..sort((a, b) => ((a.hok.day ?? 0)) - ((b.hok.day ?? 0))));
-}

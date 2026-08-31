@@ -1,3 +1,0 @@
-dynamic supHasRegion(dynamic sp, dynamic region, dynamic allSupPhones) {
-  return allSupPhones(sp).any((r) => r.region == region);
-}

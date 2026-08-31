@@ -1,3 +1,0 @@
-dynamic setCloudScope(dynamic slug, dynamic cloudRoot) {
-  return {'slug': slug, 'cloudRoot': cloudRoot};
-}

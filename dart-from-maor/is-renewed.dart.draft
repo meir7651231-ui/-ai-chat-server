@@ -1,3 +1,0 @@
-dynamic isRenewed(dynamic e) {
-  return _falsy(_falsy(e.renewedToId));
-}

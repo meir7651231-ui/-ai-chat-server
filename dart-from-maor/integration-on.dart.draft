@@ -1,3 +1,0 @@
-dynamic integrationOn(dynamic cfg, dynamic key) {
-  return cfg.integrations[key].enabled == true;
-}

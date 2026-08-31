@@ -1,9 +1,0 @@
-dynamic componentRemaining(dynamic componentId, dynamic productId, dynamic assignments, dynamic stock, dynamic liveRedemptions) {
-  if (stock == undefined) return null;
-  var used = 0;
-  for (final a in assignments) {
-  if (a.productId != productId) continue;
-  for (final r in liveRedemptions(a)) if (r.componentId == componentId) used++;
-}
-  return max(0, stock - used);
-}

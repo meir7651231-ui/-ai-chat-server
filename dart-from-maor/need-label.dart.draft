@@ -1,3 +1,0 @@
-dynamic needLabel(dynamic id, dynamic orgNeeds) {
-  return (orgNeeds.firstWhere((n) => n.id == id).label ?? id);
-}

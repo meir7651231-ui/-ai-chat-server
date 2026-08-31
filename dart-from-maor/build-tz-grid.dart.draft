@@ -1,3 +1,0 @@
-dynamic buildTzGrid(dynamic tzEvents, dynamic anchorIso, dynamic hebMode, dynamic buildMonthGrid) {
-  return buildMonthGrid(tzEvents, anchorIso, hebMode);
-}

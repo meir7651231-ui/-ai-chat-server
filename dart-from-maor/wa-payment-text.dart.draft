@@ -1,3 +1,0 @@
-dynamic waPaymentText(dynamic orgName, dynamic what, dynamic balance, dynamic cfg, dynamic renderTemplate, dynamic orgOf) {
-  return renderTemplate(cfg, 'wa.payment', {'org': orgOf(orgName), 'what': what, 'amount': _round(balance)function toLocaleString() { [native code] }});
-}

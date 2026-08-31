@@ -1,5 +1,0 @@
-dynamic isoDaysAgo(dynamic days, dynamic isoLocal) {
-  var d = DateTime.now();
-  d.setDate(d.day - days);
-  return isoLocal(d);
-}

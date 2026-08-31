@@ -1,7 +1,0 @@
-var HOK_CAT = 'הו"ק';
-dynamic monthsAgoIso(dynamic iso, dynamic todayIso) {
-  if (_falsy(iso)) return Infinity;
-  var undefined = iso.sublist(0, 7).split('-').map(Number).toList();
-  var undefined = todayIso.sublist(0, 7).split('-').map(Number).toList();
-  return (ty - y) * 12 + (tm - m);
-}

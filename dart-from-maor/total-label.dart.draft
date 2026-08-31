@@ -1,7 +1,0 @@
-dynamic totalLabel(dynamic sp, dynamic supIls, dynamic supUsd) {
-  var i = supIls(sp);
-  var u = supUsd(sp);
-  var ils = i ? '₪' + ifunction toLocaleString() { [native code] } : '';
-  var usd = u ? '$' + ufunction toLocaleString() { [native code] } : '';
-  return ils && usd ? ils + ' + ' + usd : ((ils ?? usd) || '—');
-}

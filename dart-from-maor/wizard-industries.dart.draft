@@ -1,3 +1,0 @@
-dynamic wizardIndustries(dynamic packs) {
-  return packs.map((p) => ({'id': p.id, 'emoji': p.emoji, 'label': p.label, 'sub': p.sub})).toList();
-}

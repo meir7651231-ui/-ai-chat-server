@@ -1,3 +1,0 @@
-dynamic setSupEnforce(dynamic on) {
-  return on;
-}

@@ -1,7 +1,0 @@
-dynamic defaultCourseDates(dynamic today) {
-  var d = DateTime.parse(today.sublist(0, 10) + 'T12:00:00');
-  var y = (d.millisecondsSinceEpoch).isNaN ? DateTime.now().year : d.year;
-  var m = (d.millisecondsSinceEpoch).isNaN ? (DateTime.now().month - 1) : (d.month - 1);
-  var startYear = m >= 7 ? y : y - 1;
-  return {'start': '${startYear}-09-01', 'end': '${startYear + 1}-07-31'};
-}

@@ -1,6 +1,0 @@
-dynamic csvEscape(dynamic x) {
-  var v = (x ?? '').toString();
-  if (RegExp(r'^[=+\-@\t\r]').test(v)) v = '\'' + v;
-  return (((v.contains(',') ?? v.contains('"')) || v.contains('
-')) || v.contains('')) ? '"' + v.replaceFirst(RegExp(r'"'), '""') + '"' : v;
-}

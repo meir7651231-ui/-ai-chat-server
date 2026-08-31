@@ -1,8 +1,0 @@
-dynamic termOf(dynamic cfg, dynamic key, dynamic fallback) {
-  var v = cfg.terms[key];
-  if (v is String) {
-  var t = v.trim();
-  if (t) return t;
-}
-  return fallback;
-}

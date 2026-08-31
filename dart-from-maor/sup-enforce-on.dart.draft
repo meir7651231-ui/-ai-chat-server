@@ -1,3 +1,0 @@
-dynamic supEnforceOn(dynamic cfg) {
-  return cfg.supporterEnforce == true;
-}

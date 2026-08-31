@@ -1,3 +1,0 @@
-dynamic isValidPin(dynamic pin) {
-  return RegExp(r'^\d{4,8}$').test(pin);
-}

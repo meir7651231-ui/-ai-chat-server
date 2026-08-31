@@ -1,3 +1,0 @@
-dynamic deliveriesOfFamily(dynamic db, dynamic famId) {
-  return db.deliveries.where((d) => d.familyId == famId);
-}

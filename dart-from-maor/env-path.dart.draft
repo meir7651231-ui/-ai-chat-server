@@ -1,3 +1,0 @@
-dynamic envPath(dynamic slug, dynamic cloudRoot) {
-  return cloudRoot ? '_enc/envelope' : 'orgs/' + slug + '/_enc/envelope';
-}

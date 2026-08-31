@@ -1,5 +1,0 @@
-dynamic timeToMin(dynamic t) {
-  var m = RegExp(r'^(\d{1,2}):(\d{2})$').exec((t ?? '').toString().trim());
-  if (_falsy(m)) return NaN;
-  return +m[1] * 60 + +m[2];
-}

@@ -1,6 +1,0 @@
-dynamic fmtDate(dynamic iso) {
-  if (_falsy(iso)) return '—';
-  var undefined = iso.sublist(0, 10).split('-');
-  if (((_falsy(y) || _falsy(m)) || _falsy(d))) return '—';
-  return '${d}/${m}/${y}';
-}

@@ -1,4 +1,0 @@
-var STAGE_FALLBACK = {'new': 'חדש', 'lead': 'בהכנה', 'eyes': 'רישום', 'answer': 'מסירה', 'done': 'הושלם'};
-dynamic stageLabel(dynamic cfg, dynamic stage, dynamic termOf) {
-  return termOf(cfg, 'ayin.stage.' + stage, STAGE_FALLBACK[stage]);
-}

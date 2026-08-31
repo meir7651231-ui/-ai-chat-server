@@ -1,3 +1,0 @@
-dynamic parseSupporterCsv(dynamic text, dynamic parseCsv, dynamic parseSupporterGrid) {
-  return parseSupporterGrid(parseCsv(text));
-}

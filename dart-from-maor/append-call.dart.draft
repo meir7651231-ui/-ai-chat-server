@@ -1,5 +1,0 @@
-dynamic appendCall(dynamic calls, dynamic outcome, dynamic iso, dynamic cap) {
-  if (outcome == 'skip') return calls;
-  var next = [...((calls ?? [])), {'at': iso, 'outcome': outcome}];
-  return next.length > cap ? next.sublist(next.length - cap) : next;
-}

@@ -1,4 +1,0 @@
-dynamic popCall(dynamic calls) {
-  if ((_falsy(calls) || _falsy(calls.length))) return calls;
-  return calls.sublist(0, -1);
-}

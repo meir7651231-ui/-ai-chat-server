@@ -1,1 +1,0 @@
-dynamic round2(dynamic x) => _round(x * 100) / 100;

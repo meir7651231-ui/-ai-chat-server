@@ -1,5 +1,0 @@
-dynamic supLast(dynamic sp) {
-  var m = (sp.last ?? '');
-  for (final h in (sp.hist ?? [])) if (h.d > m) m = h.d;
-  return m;
-}

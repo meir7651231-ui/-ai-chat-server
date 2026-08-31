@@ -1,9 +1,0 @@
-dynamic upcomingMeetings(dynamic db, dynamic todayIso, [dynamic days = 2], dynamic config, dynamic isoOf, dynamic beneficiaryLabel) {
-  var end = DateTime.parse(todayIso + 'T12:00:00');
-  end.setDate(end.day + days - 1);
-  var endIso = isoOf(end);
-  return (db.shopEvents.where((e) => e.kind == 'meeting' && _falsy(e.done) && e.date >= todayIso && e.date <= endIso)..sort((x, y) => (x.date + '·' + ((x.time ?? '99:99'))).localeCompare(y.date + '·' + ((y.time ?? '99:99'))))).map((ev) {
-  var a = db.shopAssignments.firstWhere((x) => x.id == ev.assignmentId);
-  return {'ev': ev, 'who': a ? beneficiaryLabel(db, a, config) : ev.title, 'roomName': ev.roomId ? ((db.rooms.firstWhere((r) => r.id == ev.roomId).name ?? '')) : ''};
-}).toList();
-}

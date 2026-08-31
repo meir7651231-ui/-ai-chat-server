@@ -1,1 +1,0 @@
-var MODULE_LABELS = {'families': 'משפחות', 'courses': 'חוגים', 'calendar': 'לוח שנה', 'diary': 'יומן חדרים', 'supporters': 'תורמים', 'reports': 'דוחות', 'tzedaka': 'קופות צדקה', 'shop': 'חנות', 'shop7': 'חלוקה'};

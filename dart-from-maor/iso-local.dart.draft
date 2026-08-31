@@ -1,4 +1,0 @@
-dynamic isoLocal(dynamic d) {
-  dynamic p2(dynamic n) => n.toString()._padStart(2, '0');
-  return '${d.year}-${p2((d.month - 1) + 1)}-${p2(d.day)}';
-}

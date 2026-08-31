@@ -1,8 +1,0 @@
-dynamic studentHistoryText(dynamic entries) {
-  return entries.map((h) {
-  var yr = h.yearLabel ? '[${h.yearLabel}] ' : '';
-  var grp = h.group ? ' · ${h.group}' : '';
-  return '${yr}${h.courseName}${grp} — נוכחות ${h.summary.presents}, חיסורים ${h.summary.absences} · ${h.summary.statusLabel}';
-}).toList().join('
-');
-}

@@ -1,3 +1,0 @@
-dynamic filterCollections(dynamic box, dynamic fromIso, dynamic toIso, dynamic campaignId, dynamic dateInRange) {
-  return box.collections.where((c) => dateInRange(c.date, fromIso, toIso) && ((_falsy(campaignId) || c.campaignId == campaignId)));
-}

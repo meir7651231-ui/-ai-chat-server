@@ -1,9 +1,0 @@
-dynamic expandQuery(dynamic q, dynamic normSearch, dynamic XLAT) {
-  var nq = normSearch(q);
-  var out = [q];
-  if (_falsy(nq)) return out;
-  for (final undefined in Object.entries(XLAT)) {
-  if (normSearch(heb) == nq) out.add(...aliases); else if (aliases.any((a) => normSearch(a) == nq)) out.add(heb);
-}
-  return [...<dynamic>{...out}];
-}

@@ -1,9 +1,0 @@
-dynamic allSupPhones(dynamic sp, dynamic phoneRegion) {
-  var rows = [];
-  if (sp.phone) rows.add({'num': sp.phone, 'label': '', 'note': '', 'wa': false, 'region': phoneRegion(sp.phone), 'primary': true});
-  for (final p in (sp.phones ?? [])) {
-  if (_falsy(p.num)) continue;
-  rows.add({'num': p.num, 'label': (p.label ?? ''), 'note': (p.note ?? ''), 'wa': _falsy(_falsy(p.wa)), 'region': phoneRegion(p.num), 'primary': false});
-}
-  return rows;
-}

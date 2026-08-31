@@ -1,4 +1,0 @@
-dynamic openTasksFor(dynamic tasks, dynamic identity, dynamic taskIdentity) {
-  var me = taskIdentity(identity);
-  return (tasks.where((t) => _falsy(t.doneAt) && taskIdentity(t.assignee) == me)..sort((a, b) => ((a.pri - b.pri ?? ((a.due ?? '9999')).localeCompare((b.due ?? '9999'))) || a.createdAt.localeCompare(b.createdAt))));
-}

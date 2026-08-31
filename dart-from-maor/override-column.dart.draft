@@ -1,9 +1,0 @@
-dynamic overrideColumn(dynamic rows, dynamic colIdx, dynamic overrides) {
-  if (colIdx < 0) return rows;
-  return rows.map((r, i) {
-  if ((i == 0 || overrides[i] == undefined)) return r;
-  var c = [...r];
-  c[colIdx] = overrides[i];
-  return c;
-}).toList();
-}

@@ -1,3 +1,0 @@
-dynamic pad2(dynamic n) {
-  return n.toString()._padStart(2, '0');
-}

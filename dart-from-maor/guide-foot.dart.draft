@@ -1,4 +1,0 @@
-var GUIDE_FOOT = 'המדריך המלא והמפורט נמצא בקובץ "מדריך למשתמש" — מסך-מסך וכפתור-כפתור.';
-dynamic swap(dynamic s, dynamic from, dynamic to) {
-  return s.split(from).join(to);
-}

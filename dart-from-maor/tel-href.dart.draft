@@ -1,6 +1,0 @@
-dynamic telHref(dynamic phone) {
-  var cleaned = ((phone ?? '')).replaceFirst(RegExp(r'[^\d+]'), '');
-  var digits = cleaned.replaceFirst(RegExp(r'\D'), '');
-  if (digits.length < 6) return null;
-  return 'tel:' + cleaned;
-}

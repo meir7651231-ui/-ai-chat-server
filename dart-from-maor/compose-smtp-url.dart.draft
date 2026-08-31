@@ -1,8 +1,0 @@
-dynamic composeSmtpUrl(dynamic email, dynamic password, dynamic host) {
-  var em = email.trim();
-  var pw = password.trim();
-  var h = host.trim();
-  if ((((_falsy(em) || _falsy(pw)) || _falsy(h)) || em.indexOf('@') < 1)) return null;
-  var scheme = RegExp(r':465$').test(h) ? 'smtps' : 'smtp';
-  return '${scheme}://${encodeURIComponent(em)}:${encodeURIComponent(pw)}@${h}';
-}

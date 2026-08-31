@@ -1,3 +1,0 @@
-dynamic featLabel(dynamic cfg, dynamic termOf) {
-  return termOf(cfg, 'nav.ayin', 'מעקב טיפול');
-}

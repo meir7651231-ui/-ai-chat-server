@@ -1,3 +1,0 @@
-dynamic isRtlLang(dynamic lang) {
-  return lang != 'en';
-}

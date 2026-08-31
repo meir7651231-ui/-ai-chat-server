@@ -1,3 +1,0 @@
-dynamic isoToday(dynamic isoLocal, [dynamic now = DateTime.now()]) {
-  return isoLocal(now);
-}

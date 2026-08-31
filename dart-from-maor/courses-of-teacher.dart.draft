@@ -1,3 +1,0 @@
-dynamic coursesOfTeacher(dynamic courses, dynamic teacherId) {
-  return teacherId ? courses.where((c) => c.teacherId == teacherId) : courses;
-}
