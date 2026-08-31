@@ -143,7 +143,7 @@ export function buildApp(specText) {
     const ent = entMeta[bi];
     const spec = SCREEN_REGISTRY[bi % SCREEN_REGISTRY.length];
     const bslug = `app_bind${bi + 1}`;
-    const { cls } = renderScreenBind(bslug, { entitySlug: ent.slug, entityName: ent.name, spec, numFields: ent.numFields || [] });
+    const { cls } = renderScreenBind(bslug, { entitySlug: ent.slug, spec });
     bindScreens.push({ slug: bslug, cls, kind: 'entity', name: `🖥 ${ent.name} · מסך`, icon: '🖥', sub: `מסך-אמת מפורק (${spec.cls.replace('Composed', '')}) · מחווט-מהישות` });
   }
 

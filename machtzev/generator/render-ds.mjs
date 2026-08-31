@@ -875,37 +875,90 @@ class ${cls} extends StatelessWidget {
 }
 
 // ── מסך-מערכת גנרי: כותרת + סקשן עם ילדים (מתגים/מצב-ריק) ──
-// ── 🖥 מחבר-ישות-למסך: ממלא מסך-Composed מפורק מרשומות-ישות. הוכח שהמסכים ניתנים-
-//    להרכבה עם דאטה גנרית (76% מהשקעים בצורת {כותרת/תווית/מונה/צבע/פעולה}). כל רשומה ⇒
-//    פריט-שקע; הכותרת = הערך-הראשון-הלא-ריק. AnimatedBuilder חי. רישום-מסכים ⇒ הכללה.
-// build(disp, cIc, cSub) מחזיר ביטוי-פריט; disp = ביטוי-הכותרת-מרשומה.
-// build(disp, k, entityName): k(label) יוצר const-תוכן רק כשצריך ⇒ אין import-מיותם.
-// mode 'records' — פריט פר-רשומה (אריח/שבב). mode 'stats' — פריט פר-אגרגט (מונה + סכומי-שדות).
-export const SCREEN_REGISTRY = [
-  { file: 'ai_hub_screen.g.dart', cls: 'AiHubScreenComposed', tokens: 'AiHubScreenTokens', list: 'aiFinTileItems', mode: 'records', build: (disp, k, en) => `AiFinTileItem(ic: ${k('🗂️')}, title: ${disp}, sub: ${k(en)}, onTap: () {})` },
-  { file: 'persona_portal.g.dart', cls: 'PersonaPortalComposed', tokens: 'PersonaPortalTokens', list: 'portalTileButtonItems', mode: 'records', build: (disp, k, en) => `PortalTileButtonItem(title: ${disp}, sub: ${k(en)}, onTap: () {})` },
-  { file: 'courier_certs_screen.g.dart', cls: 'CourierCertsScreenComposed', tokens: 'CourierCertsScreenTokens', list: 'presetChipItems', mode: 'records', build: (disp) => `PresetChipItem(label: ${disp}, selected: false, onTap: () {})` },
-  { file: 'store_profile_screen.g.dart', cls: 'StoreProfileScreenComposed', tokens: 'StoreProfileScreenTokens', list: 'sStatItems', mode: 'stats', stat: (valueExpr, labelConst) => `SStatItem(value: ${valueExpr}, label: ${labelConst})` },
-];
-
-export function renderScreenBind(slug, { entitySlug, entityName, spec, numFields = [] }) {
-  const { k, dump } = makeConsts(slug);
-  const cls = pascal(slug);
-  let listExpr;
-  if (spec.mode === 'stats') {
-    // אגרגטים: מונה-רשומות + סכום פר-שדה-מספרי ⇒ פריטי-סטטיסטיקה במסך-הסטטיסטיקה המפורק.
-    const items = [`${spec.stat(`appStore.count('${entitySlug}').toString()`, k(entityName))}`]
-      .concat(numFields.slice(0, 4).map((f) => spec.stat(`appStore.sum('${entitySlug}', ${k(f)}).toStringAsFixed(0)`, k(f))));
-    listExpr = `[${items.join(', ')}]`;
-  } else {
-    const disp = `r.entries.firstWhere((e) => !e.key.startsWith('__') && e.value.trim().isNotEmpty, orElse: () => MapEntry('', r['__id'] ?? '')).value.trim()`;
-    listExpr = `appStore.records('${entitySlug}').map((r) => ${spec.build(disp, k, entityName)}).toList()`;
+// ── 🖥 מחבר-ישות-למסך · סורק-אוטומטי: עובר על כל מסכי-Composed המפורקים, ומזהה את הניתנים-
+//    לחיבור — רשימה-ראשית עם פריט-נושא-כותרת שכל-שדותיו ממופים בהיוריסטיקה, + סקלרים/רשימות-
+//    משניות שניתנים-למילוי-בטוח. כל רשומה ⇒ פריט (הכותרת = הערך-הראשון-הלא-ריק). אפס-Hebrew
+//    בקוד (מילויי-ליטרל בלבד). כך המחולל כורך ישות אל מסך-אמת מפורק — לכל מסך שהסורק אישר.
+const SCREENS_DIR = path.join(ROOT, 'new/dart-screens-bs');
+// היוריסטיקת-שדה-פריט (String-display לכותרת · ריק/0/false/() {}/Colors.grey/Icons.circle לשאר):
+const _itemField = (ty, nm) => {
+  const t = ty.replace(/\?$/, '');
+  if (t === 'String') return /^(title|label|name|text|value)$/.test(nm) ? 'DISP' : /^(ic|icon|glyph)$/.test(nm) ? "'\u{1F5C2}\u{FE0F}'" : "''";
+  if (/^on[A-Z]/.test(nm) || t === 'VoidCallback') return '() {}';
+  if (t === 'int' || t === 'double' || t === 'num') return '0';
+  if (t === 'bool') return 'false';
+  if (t === 'Color') return 'Colors.grey';
+  if (t === 'IconData') return 'Icons.circle';
+  return null;
+};
+const _scalarFill = (ty, nm) => {
+  const t = ty.replace(/\?$/, '');
+  if (t === 'String') return "''";
+  if (/^on[A-Z]/.test(nm) || t === 'VoidCallback') return '() {}';
+  if (t === 'int' || t === 'double' || t === 'num') return '0';
+  if (t === 'bool') return 'false';
+  if (t === 'Color') return 'Colors.grey';
+  if (t === 'IconData') return 'Icons.circle';
+  if (t === 'Widget') return 'const SizedBox.shrink()';
+  return ty.endsWith('?') ? 'null' : null;
+};
+function analyzeScreen(file) {
+  let s; try { s = fs.readFileSync(path.join(SCREENS_DIR, file), 'utf8'); } catch { return null; }
+  const cm = s.match(/class ([A-Za-z]+)Composed/); if (!cm) return null;
+  const cls = cm[1] + 'Composed';
+  const ctor = s.match(new RegExp('const ' + cls + '\\(\\{([^}]*)\\}\\)')); if (!ctor) return null;
+  const params = [...ctor[1].matchAll(/required this\.([a-zA-Z][a-zA-Z0-9_]*)/g)].map((m) => m[1]);
+  const typeOf = (p) => { const m = s.match(new RegExp('final ([A-Za-z0-9<>?]+) ' + p + ';')); return m ? m[1] : null; };
+  // מילוי-Tokens: קורא את שדות-מחלקת-ה-Tokens וממלא כל אחד (Color⇒DsToken תואם-שם · שאר⇒סקלר).
+  const tokColor = (nm) => /text|ink|title|label/i.test(nm) ? 'DsTokens.ink' : /muted|sub|faint|hint/i.test(nm) ? 'DsTokens.muted' : /line|border|divider/i.test(nm) ? 'DsTokens.line' : /bg|back|surface|card/i.test(nm) ? 'DsTokens.card' : 'DsTokens.accent';
+  const tokensArgs = (ty) => {
+    const body = s.match(new RegExp('class ' + ty + ' \\{([\\s\\S]*?)\\n\\}'));
+    const fm = body ? [...body[1].matchAll(/final ([A-Za-z0-9<>?]+) ([a-z][A-Za-z0-9_]*);/g)] : [];
+    if (!fm.length) return { args: '', ds: false };
+    let ds = false;
+    const parts = fm.map(([, ty2, n2]) => { const t = ty2.replace(/\?$/, ''); if (t === 'Color') { ds = true; return `${n2}: ${tokColor(n2)}`; } const sf = _scalarFill(ty2, n2); return sf === null ? null : `${n2}: ${sf}`; });
+    if (parts.some((x) => x === null)) return null;
+    return { args: parts.join(', '), ds };
+  };
+  let needsDs = false;
+  const fills = []; let primary = null;
+  for (const p of params) {
+    const ty = typeOf(p); if (!ty) return null;
+    if (/Tokens$/.test(ty)) { const ta = tokensArgs(ty); if (ta === null) return null; if (ta.ds) needsDs = true; fills.push(ta.args ? `${p}: ${ty}(${ta.args})` : `${p}: const ${ty}()`); continue; }
+    const lm = ty.match(/^List<([A-Za-z]+)>$/);
+    if (lm) {
+      const item = lm[1];
+      const body = s.match(new RegExp('class ' + item + ' \\{([\\s\\S]*?)\\n\\}'));
+      const fm = body ? [...body[1].matchAll(/final ([A-Za-z0-9<>?]+) ([a-z][A-Za-z0-9_]*);/g)] : [];
+      const hasTitle = fm.some(([, , n]) => /^(title|label|name|text)$/.test(n));
+      const args = fm.map(([, ty2, n2]) => { const e = _itemField(ty2, n2); return e === null ? null : `${n2}: ${e}`; });
+      if (args.some((a) => a === null)) return null;
+      if (hasTitle && !primary) { primary = { p, item, args }; fills.push('__PRIMARY__'); }
+      else fills.push(`${p}: const []`);
+      continue;
+    }
+    const sf = _scalarFill(ty, p); if (sf === null) return null;
+    fills.push(`${p}: ${sf}`);
   }
-  const contentImport = listExpr.includes(`gen_${slug}_c`) ? `import '../dart-data-bs/auto/gen_${slug}_content.dart';\n` : '';
-  const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מחבר-ישות-למסך: ${spec.mode === 'stats' ? 'אגרגטי-ישות' : 'רשומות-ישות'} ⇒ מסך-Composed מפורק. אל תערוך ידנית.
-${contentImport}import '../dart-screens-bs/${spec.file}';
+  if (!primary) return null;
+  return { file, cls, list: primary.p, item: primary.item, args: primary.args, fills, needsDs };
+}
+export const SCREEN_REGISTRY = (() => {
+  let files; try { files = fs.readdirSync(SCREENS_DIR).filter((f) => f.endsWith('.g.dart')); } catch { return []; }
+  return files.map(analyzeScreen).filter(Boolean).sort((a, b) => a.file.localeCompare(b.file));  // דטרמיניסטי
+})();
+
+export function renderScreenBind(slug, { entitySlug, spec }) {
+  const cls = pascal(slug);
+  const disp = `r.entries.firstWhere((e) => !e.key.startsWith('__') && e.value.trim().isNotEmpty, orElse: () => MapEntry('', r['__id'] ?? '')).value.trim()`;
+  const itemArgs = spec.args.map((a) => a.replace(/DISP/g, disp)).join(', ');
+  const primaryFill = `${spec.list}: appStore.records('${entitySlug}').map((r) => ${spec.item}(${itemArgs})).toList()`;
+  const args = spec.fills.map((f) => (f === '__PRIMARY__' ? primaryFill : f)).join(',\n          ');
+  const dsImport = spec.needsDs ? "import '../dart-ui-bs/ds/ds.dart';\n" : '';
+  const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מחבר-ישות-למסך: רשומות-ישות ⇒ מסך-Composed מפורק (סורק-אוטומטי). אל תערוך ידנית.
+import '../dart-screens-bs/${spec.file}';
 import '../dart-ui-bs/ds/ds_store.dart';
-import 'package:flutter/material.dart';
+${dsImport}import 'package:flutter/material.dart';
 
 class ${cls} extends StatelessWidget {
   const ${cls}({super.key});
@@ -914,13 +967,13 @@ class ${cls} extends StatelessWidget {
   Widget build(BuildContext context) => AnimatedBuilder(
         animation: appStore,
         builder: (context, _) => ${spec.cls}(
-          ${spec.list}: ${listExpr},
-          t: const ${spec.tokens}(),
+          ${args},
         ),
       );
 }
 `;
-  write(slug, code, dump());
+  fs.mkdirSync(OUT, { recursive: true });
+  fs.writeFileSync(path.join(OUT, `gen_${slug}.dart`), code);   // מסך-חיווט טהור — בלי קובץ-תוכן (אין k())
   return { slug, cls };
 }
 
