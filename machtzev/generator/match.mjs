@@ -23,10 +23,12 @@ const heTokens = (s) => [...(s || '').matchAll(/[֐-׿]{2,}/g)].map((m) => stem(
 // מילים-שנלמדו-משימוש (דאטה, לא האכלה): אטום ⇒ מילים שהמשתמש קשר אליו.
 const LEARNED = readJson('knowledge/learned.json', { bindings: {} }).bindings || {};
 const stemsOf = (arr) => (arr || []).flatMap((x) => [...String(x).matchAll(/[֐-׿]{2,}/g)].map((m) => stem(m[0]))).filter((t) => t.length > 1);
+// 🎯 מטרת-האטום-האמיתית: מ-atom-index (מונחי-מסך-המקור), עוקפת את בוילרפלייט-ההערה.
+const PURPOSE = {}; for (const a of readJson('atom-index.json', [])) PURPOSE[a.cls] = a.purpose || [];
 
-// אינדקס: כל ווידג'ט → גזעים מהתיאור-העברי שלו + מהמילים-שנלמדו. IDF נלמד מהמדף.
+// אינדקס: כל ווידג'ט → גזעים מהמטרה-האמיתית (אינדקס) + התיאור-העצמי + הנלמד. IDF נלמד מהמדף.
 const WIDGETS = atlas.widgets
-  .map((w) => ({ cls: w.cls, file: w.file, st: [...new Set([...stemsOf(w.he), ...stemsOf(LEARNED[w.cls])])] }))
+  .map((w) => ({ cls: w.cls, file: w.file, st: [...new Set([...stemsOf(PURPOSE[w.cls]), ...stemsOf(w.he), ...stemsOf(LEARNED[w.cls])])] }))
   .filter((w) => w.st.length);
 const df = new Map();
 for (const w of WIDGETS) for (const t of w.st) df.set(t, (df.get(t) || 0) + 1);
