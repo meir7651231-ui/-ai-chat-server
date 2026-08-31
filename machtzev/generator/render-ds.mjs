@@ -883,42 +883,79 @@ class ${cls} extends StatelessWidget {
 // ══════════════════════════════════════════════════════════════════════════
 let _census = null;
 const loadCensus = () => { if (_census) return _census; try { _census = JSON.parse(fs.readFileSync(path.join(HERE, 'atom-census.json'), 'utf8')); } catch { _census = []; } return _census; };
-const atomCtorParams = (relFile) => { let s; try { s = fs.readFileSync(path.join(ROOT, 'new', relFile), 'utf8'); } catch { return []; } const ctor = s.match(/const [A-Za-z0-9]+\(\{([^}]*)\}\)/); return ctor ? [...ctor[1].matchAll(/required this\.([a-zA-Z][a-zA-Z0-9_]*)/g)].map((m) => m[1]) : []; };
-// בורר-אטום: predicate על רשומת-המצע ⇒ מיפוי-תפקידים על פרמטרי-הבנאי (בטוח: null ⇒ דילוג).
-function pickAtom(pred, roles) {
-  for (const a of loadCensus().filter(pred).sort((x, y) => x.cls.localeCompare(y.cls))) {
-    const ps = atomCtorParams(a.file); if (!ps.length) continue;
+// פרמטרי-בנאי של אטום עם טיפוסים: [{nm, ty}] (required בלבד).
+const atomCtor = (relFile, cls) => {
+  let s; try { s = fs.readFileSync(path.join(ROOT, 'new', relFile), 'utf8'); } catch { return null; }
+  const ctor = s.match(new RegExp('const ' + cls + '\\(\\{([^}]*)\\}\\)')); if (!ctor) return null;
+  const typeOf = (p) => { const m = s.match(new RegExp('final ([A-Za-z0-9<>?]+) ' + p + ';')); return m ? m[1] : null; };
+  return [...ctor[1].matchAll(/required this\.([a-zA-Z][a-zA-Z0-9_]*)/g)].map((m) => ({ nm: m[1], ty: typeOf(m[1]) }));
+};
+// מילוי-שקע-לא-דאטה (סגנון/התנהגות/ווידג'ט/טוקן) — לעולם לא דאטה. null ⇒ לא-בטוח-למילוי.
+const _fillStyle = (ty) => {
+  const t = (ty || '').replace(/\?$/, '');
+  const cb = _cb(t); if (cb) return cb;
+  if (t === 'Color') return 'Colors.grey';
+  if (t === 'IconData') return 'Icons.circle';
+  if (t === 'Widget') return 'const SizedBox.shrink()';
+  if (t === 'List<Widget>') return 'const <Widget>[]';
+  if (/^[A-Z][A-Za-z0-9]*Tokens$/.test(t)) return `const ${t}()`;
+  return ty && ty.endsWith('?') ? 'null' : null;
+};
+// 🥇 בורר-אטום מונחה-מטרה: לא "הראשון-שמתאים" אלא **הכי-טוב לייעוד**. לכל מועמד-מהמצע:
+// (1) שקעי-התפקיד חייבים להיקשר (שם+טיפוס תואמים למה שנזין); (2) כל שקע-חובה אחר חייב להיות
+// בטוח-למילוי (סגנון/התנהגות — לא דאטה, אחרת נזייף). ניקוד = פחות-שקעים-נותרים ⇒ טהור-יותר-לייעוד.
+export function selectAtom(roleSpecs, pred = () => true) {
+  let best = null;
+  for (const a of loadCensus().filter(pred)) {
+    const ps = atomCtor(a.file, a.cls); if (!ps || !ps.length) continue;
     const bound = {}; let ok = true;
-    for (const [role, re] of Object.entries(roles)) { const p = ps.find((x) => re.test(x) && !Object.values(bound).includes(x)); if (!p) { ok = false; break; } bound[role] = p; }
-    if (ok) return { cls: a.cls, file: a.file, p: bound };
+    for (const [role, spec] of Object.entries(roleSpecs)) {
+      const p = ps.find((x) => spec.re.test(x.nm) && (!spec.ty || spec.ty.test(x.ty || '')) && !Object.values(bound).includes(x.nm));
+      if (!p) { ok = false; break; } bound[role] = p.nm;
+    }
+    if (!ok) continue;
+    const rest = ps.filter((x) => !Object.values(bound).includes(x.nm));
+    const fills = []; let safe = true;
+    for (const x of rest) { const f = _fillStyle(x.ty); if (f === null) { safe = false; break; } fills.push(`${x.nm}: ${f}`); }
+    if (!safe) continue;                                  // שקע-דאטה-נוסף שאין-לי-למלא ⇒ פסול (לא נזייף)
+    const score = -rest.length;                           // פחות-מילויי-ברירת-מחדל = מגשים-הייעוד-שלם-יותר
+    if (!best || score > best.score || (score === best.score && a.cls < best.cls)) best = { cls: a.cls, file: a.file, p: bound, fills, score };
   }
-  return null;
+  return best;
 }
 
-// 🧩 מסך-סקירה מורכב-מאטומים: רצועת-KPI (Stat-כמו) מצבירות + טבלת-רשומות (DsTable-כמו).
-// שני האטומים נבחרים מהמצע לפי-צורה; אם אין מתאים ⇒ הבלוק מדולג (אפס-קוד-שבור).
+// 🧩 מסך-סקירה מונחה-מטרה: המטרה "סקירה" = היבטים {מדדים · רשומות}. לכל היבט נבחר
+// **האטום שמגשים אותו הכי-טוב** (selectAtom מדורג); ההרכבה **משלבת** את אטומי-ההיבטים
+// יחד עד שהמטרה מושגת. שקעי-דאטה⇐נתוני-אמת · שקעים-נותרים⇐סגנון-בטוח (לא דאטה מזויף).
+const _rS = /^String\??$/, _rLS = /^List<String>\??$/, _rLLS = /^List<List<String>>\??$/;
 export function renderCompose(slug, { entitySlug, entityName, fields = [], numFields = [] }) {
   const { k, dump } = makeConsts(slug);
   const cls = pascal(slug);
-  const kpi = pickAtom((a) => a.caps.includes('kpi') && a.seam === 'fields' && a.str === 2 && a.num === 0 && a.list === 0 && a.cb === 0 && a.style === 0,
-    { value: /^(value|val|amount|total|count)$/, label: /^(label|title|caption|name)$/ });
-  const tbl = pickAtom((a) => a.caps.includes('list') && a.seam === 'collection' && a.list >= 2 && a.str === 0 && a.num === 0 && a.cb === 0 && a.style === 0,
-    { labels: /^(labels|cols|columns|headers)$/, rows: /^(rows|data)$/ });
-  if (!kpi && !tbl) return null;   // אין לבנים מתאימות ⇒ אין מסך
+  // היבט-מדדים: האטום שמגשים "ערך+תווית" הכי-טוב (הכי-מעט שקעים-נותרים).
+  const kpi = selectAtom({ value: { re: /^(value|val|amount|total|count|num)$/, ty: _rS }, label: { re: /^(label|title|caption|name|sub)$/, ty: _rS } },
+    (a) => a.caps.includes('kpi') && a.seam === 'fields');
+  // היבט-רשומות: האטום שמגשים "כותרות+שורות" הכי-טוב.
+  const tbl = selectAtom({ labels: { re: /^(labels|cols|columns|headers)$/, ty: _rLS }, rows: { re: /^(rows|data)$/, ty: _rLLS } },
+    (a) => a.caps.includes('list') && a.seam === 'collection');
+  if (!kpi && !tbl) return null;   // אין לבנים שמגשימות ⇒ אין מסך
 
   const imports = new Set(["import '../dart-ui-bs/ds/ds_store.dart';", "import 'package:flutter/material.dart';"]);
   const blocks = [];
   if (kpi) {
     imports.add(`import '../${kpi.file}';`);
-    const tiles = [`${kpi.cls}(${kpi.p.value}: appStore.count('${entitySlug}').toString(), ${kpi.p.label}: ${k(entityName)})`];
-    for (const f of numFields.slice(0, 3)) tiles.push(`${kpi.cls}(${kpi.p.value}: appStore.sum('${entitySlug}', ${k(f)}).toStringAsFixed(0), ${kpi.p.label}: ${k(f)})`);
+    const extra = kpi.fills.length ? ', ' + kpi.fills.join(', ') : '';
+    const tile = (val, lbl) => `${kpi.cls}(${kpi.p.value}: ${val}, ${kpi.p.label}: ${lbl}${extra})`;
+    // שילוב: אטום-המדד-הטוב מופע פר-מדד (מונה + צבירות) — עד שכל המדדים מוצגים.
+    const tiles = [tile(`appStore.count('${entitySlug}').toString()`, k(entityName))];
+    for (const f of numFields.slice(0, 3)) tiles.push(tile(`appStore.sum('${entitySlug}', ${k(f)}).toStringAsFixed(0)`, k(f)));
     blocks.push(`Padding(\n            padding: const EdgeInsets.all(12),\n            child: Wrap(spacing: 10, runSpacing: 10, children: [\n              ${tiles.join(',\n              ')},\n            ]),\n          )`);
   }
   if (tbl && fields.length) {
     imports.add(`import '../${tbl.file}';`);
+    const extra = tbl.fills.length ? ', ' + tbl.fills.join(', ') : '';
     const labelList = fields.map((f) => k(f)).join(', ');
     const rowCells = fields.map((f) => `r[${k(f)}] ?? ''`).join(', ');
-    blocks.push(`Expanded(\n            child: SingleChildScrollView(\n              child: ${tbl.cls}(${tbl.p.labels}: const [${labelList}], ${tbl.p.rows}: appStore.records('${entitySlug}').map((r) => [${rowCells}]).toList()),\n            ),\n          )`);
+    blocks.push(`Expanded(\n            child: SingleChildScrollView(\n              child: ${tbl.cls}(${tbl.p.labels}: const [${labelList}], ${tbl.p.rows}: appStore.records('${entitySlug}').map((r) => [${rowCells}]).toList()${extra}),\n            ),\n          )`);
   }
   if (!blocks.length) return null;
 
