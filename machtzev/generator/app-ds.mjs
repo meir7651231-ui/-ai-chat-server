@@ -97,7 +97,7 @@ export function buildApp(specText) {
     if (li.isEnt) {
       const r = entRes[li.i];
       const slug = `app_ent${li.i}`;
-      const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames, nameToSlug, backRefs: backRefs[r.entity] || [], vrules: r.vrules || [], delGuard: delGuardByName[r.entity] });
+      const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames, nameToSlug, backRefs: backRefs[r.entity] || [], vrules: r.vrules || [], delGuard: delGuardByName[r.entity], guards: r.guards || [] });
       screens.push({ slug, cls, kind: 'entity', name: r.entity, icon: '🗂️', sub: `${r.schema.length} שדות${(r.stages || []).length ? ` · ${r.stages.length} שלבים` : ''}` });
     } else {
       const slug = `app_scr${li.i}`;

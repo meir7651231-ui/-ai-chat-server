@@ -177,8 +177,24 @@ function compileRule(rule, labels) {
   return { li, ri, op: m[2], text: rule.trim() };
 }
 
+// ⛔ מהדר-שער: תנאי-כניסה-לשלב מעל ההשוואה של compileRule + שתי הרחבות: אגף-ימני
+// מספר-ליטרלי ('סכום > 0'), ותווית-בודדת = "חייב-מלא" ('תיאור'). מילה-לא-מזוהה ⇒ null.
+function compileGuard(cond, labels) {
+  const find = (name) => { const c = labels.find((l) => l.label === name.trim()); return c ? c.idx : -1; };
+  const m = cond.match(/^(.+?)\s*(>=|<=|>|<)\s*(.+)$/);
+  if (m) {
+    const li = find(m[1]); if (li < 0) return null;
+    const rlit = m[3].trim();
+    if (/^-?\d+(\.\d+)?$/.test(rlit)) return { kind: 'num', li, op: m[2], num: rlit };
+    const ri = find(rlit); if (ri < 0 || ri === li) return null;
+    return { kind: 'ff', li, op: m[2], ri };
+  }
+  const bi = find(cond); if (bi < 0) return null;   // תווית-בודדת ⇒ חייב-מלא
+  return { kind: 'filled', li: bi };
+}
+
 // ── ישות: מסך-חי מחווט — טופס→שמירה→חנות→טבלה→דשבורד, + קשרים(מזהה) + מסע + עריכה/מחיקה ──
-export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard }) {
+export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard, guards = [] }) {
   const { k, dump } = makeConsts(slug);
   const cTitle = k(name);
   const cSub = k(`${schema.length} שדות${stages.length ? ` · ${stages.length} שלבים` : ''}`);
@@ -356,8 +372,26 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
     : delGuard === 1
     ? `, confirmMessage: ${refCount} > 0 ? (${k('מחיקה תמחק גם ')} + ${refCount}.toString() + ${k(' רשומות מקושרות. להמשיך?')}) : null`
     : '';
+  // ⛔ שערי-מעבר (רק עם workflow): תנאי-כניסה פר-שלב-יעד, מהודרים מול הרשומה-השמורה r.
+  // חוסמים רק קדימה (i > הנוכחי); נסיגה חופשית. חסימה ⇒ טוסט. ריק ⇒ stageArgs ביט-זהה.
+  const guardSpecs = hasStages ? guards.map((g) => { const t = stages.indexOf(g.stage); const c = compileGuard(g.cond, labelIdx); return (t >= 0 && c) ? { t, c, reason: k(`${g.stage} · ${g.cond}`) } : null; }).filter(Boolean) : [];
+  const hasGuards = guardSpecs.length > 0;
+  const gExpr = (c) => c.kind === 'filled'
+    ? `(r[${labelConst[c.li]}] ?? '').trim().isEmpty`
+    : c.kind === 'num'
+    ? `!((num.tryParse((r[${labelConst[c.li]}] ?? '').trim()) ?? double.nan) ${c.op} ${c.num})`
+    : `!(() { final l = (r[${labelConst[c.li]}] ?? '').trim(); final rr = (r[${labelConst[c.ri]}] ?? '').trim(); final nl = num.tryParse(l); final nr = num.tryParse(rr); return (nl != null && nr != null) ? (nl ${c.op} nr) : (l.compareTo(rr) ${c.op} 0); }())`;
+  const guardMethod = hasGuards
+    ? `\n  String? _guard(int t, Map<String, String> r) {\n    switch (t) {\n${guardSpecs.map((g) => `      case ${g.t}: if (${gExpr(g.c)}) return ${g.reason}; return null;`).join('\n')}\n      default: return null;\n    }\n  }\n`
+    : '';
+  const onStageBody = hasGuards
+    ? `(i) { if (i > appStore.stageOf(${SK}, rid)) { final g = _guard(i, r); if (g != null) { ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('חסום: ' + g))); return; } } appStore.setStage(${SK}, rid, i); }`
+    : `(i) => appStore.setStage(${SK}, rid, i)`;
+  const onAdvBody = hasGuards
+    ? `() { final g = _guard(appStore.stageOf(${SK}, rid) + 1, r); if (g != null) { ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('חסום: ' + g))); return; } appStore.advance(${SK}, rid, ${stages.length}); }`
+    : `() => appStore.advance(${SK}, rid, ${stages.length})`;
   const stageArgs = hasStages
-    ? `stage: (const ${stageList})[appStore.stageOf(${SK}, rid)], stageDone: appStore.stageOf(${SK}, rid) >= ${stages.length - 1}, stages: const ${stageList}, stageIndex: appStore.stageOf(${SK}, rid), onStage: (i) => appStore.setStage(${SK}, rid, i), onAdvance: () => appStore.advance(${SK}, rid, ${stages.length}), `
+    ? `stage: (const ${stageList})[appStore.stageOf(${SK}, rid)], stageDone: appStore.stageOf(${SK}, rid) >= ${stages.length - 1}, stages: const ${stageList}, stageIndex: appStore.stageOf(${SK}, rid), onStage: ${onStageBody}, onAdvance: ${onAdvBody}, `
     : '';
 
   const relImport = hasRel ? "import '../dart-ui-bs/ds/ds_select.dart';\n" : '';
@@ -407,7 +441,7 @@ ${hasVal ? `    final miss = <String>[];
       _v = {${editLoad}};
     });
   }
-
+${guardMethod}
   Widget _card(Map<String, String> r) {
     final rid = r['__id'] ?? '';
     return DsRecordCard(labels: const [${labelsList}], values: [${recValues}], ${stageArgs}onEdit: () => _edit(r), onDelete: () => appStore.removeById(${SK}, rid)${backFooter}${delArgs});

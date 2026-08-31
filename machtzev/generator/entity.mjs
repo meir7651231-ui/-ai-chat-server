@@ -37,15 +37,16 @@ const inputAtom = (type) => {
 export function interpret(text) {
   // סעיפי-'|' לפי מילת-מפתח בלבד (כדי ש-'|' בתוך enum {א|ב|ג} לא יישבר):
   // "ישות X עם <שדות> | שלבים: a,b | חוקים: תאריך יעד >= תאריך חיוב"
-  const markers = [...text.matchAll(/\|\s*(שלבים|סטטוסים|מצבים|חוקים|ולידציה|מחיקה)/g)];
+  const markers = [...text.matchAll(/\|\s*(שלבים|סטטוסים|מצבים|חוקים|ולידציה|מחיקה|מעברים|שערים)/g)];
   const main = markers.length ? text.slice(0, markers[0].index) : text;
-  let stagesPart = '', rulesPart = '', delPart = '';
+  let stagesPart = '', rulesPart = '', delPart = '', guardsPart = '';
   markers.forEach((m, mi) => {
     const start = m.index + m[0].length;
     const end = mi + 1 < markers.length ? markers[mi + 1].index : text.length;
     const content = text.slice(start, end).replace(/^[:\s]+/, '');
     if (m[1] === 'חוקים' || m[1] === 'ולידציה') rulesPart = content;
     else if (m[1] === 'מחיקה') delPart = content;
+    else if (m[1] === 'מעברים' || m[1] === 'שערים') guardsPart = content;
     else stagesPart = content;
   });
   // שם-הישות + רשימת-השדות (בלי \b — לא עובד על עברית ב-JS)
@@ -135,7 +136,12 @@ export function interpret(text) {
   const delPolicy = delPart
     ? delPart.split(/[,\n]/).map((e) => { const m = e.match(/^(.+?)\s*=\s*(.+)$/); if (!m) return null; const field = clean(m[1]); const pk = m[2].trim(); return field.length > 1 ? { field, policy: pk in POL ? POL[pk] : 0 } : null; }).filter(Boolean)
     : [];
-  return { spec: lines.join('\n'), entity, schema, stages, rules: rules.map((r) => r.name), vrules, delPolicy };
+  // ⛔ שערי-מעבר: '| מעברים: אושר: סכום > 0, נשלח: תיאור' ⇒ תנאי-כניסה פר-שלב-יעד.
+  // התנאי חוזר על דקדוק-ההשוואה של '| חוקים:' (מהודר ב-render-ds מול הרשומה-השמורה).
+  const guards = guardsPart
+    ? guardsPart.split(/[,\n]/).map((e) => { const m = e.match(/^(.+?)\s*:\s*(.+)$/); return m ? { stage: heWords(m[1]).join(' ').trim(), cond: m[2].trim() } : null; }).filter((g) => g && g.stage.length > 1 && g.cond.length > 1)
+    : [];
+  return { spec: lines.join('\n'), entity, schema, stages, rules: rules.map((r) => r.name), vrules, delPolicy, guards };
 }
 
 // ── CLI (רץ רק בהרצה ישירה, לא ביבוא) ──
