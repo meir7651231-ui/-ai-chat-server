@@ -13,8 +13,11 @@ const readJson = (p, d) => { try { return JSON.parse(fs.readFileSync(path.join(H
 
 const atlas = readJson('atlas.json', { widgets: [] });
 
-// stemming עברי קליל (מנגנון-שפה טהור): קידומת-חיבור (ב/ל/ה/ו/מ/ש/כ) + סיומת (ים/ות/יות/ת/ה/י)
-export const stem = (w) => w.replace(/^[בלהומשכ](?=..)/, '').replace(/(יות|ים|ות)$/, '').replace(/[התי]$/, '');
+// stemming עברי קליל (מנגנון-שפה טהור): נרמול-אות-סופית (ך/ם/ן/ף/ץ⇒כ/מ/נ/פ/צ) +
+// קידומת-חיבור (ב/ל/ה/ו/מ/ש/כ) + סיומת (ים/ות/יות/ת/ה/י). הנרמול-הסופי אחרון ⇒
+// 'תשלומים'(מ) ו-'תשלום'(ם) מתלכדים לאותו גזע. באג-מורפולוגיה שתוקן: חוסר-נרמול-סופי.
+const definal = (w) => w.replace(/ך$/, 'כ').replace(/ם$/, 'מ').replace(/ן$/, 'נ').replace(/ף$/, 'פ').replace(/ץ$/, 'צ');
+export const stem = (w) => definal(w.replace(/^[בלהומשכ](?=..)/, '').replace(/(יות|ים|ות)$/, '').replace(/[התי]$/, ''));
 const heTokens = (s) => [...(s || '').matchAll(/[֐-׿]{2,}/g)].map((m) => stem(m[0])).filter((w) => w.length > 1);
 
 // מילים-שנלמדו-משימוש (דאטה, לא האכלה): אטום ⇒ מילים שהמשתמש קשר אליו.
