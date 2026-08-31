@@ -8,6 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { interpret as entInterpret } from './entity.mjs';
 import { renderEntity, renderDashboard, renderHub, renderSystem, renderMain, renderScreenBind, renderCompose, renderRecordDetail, SCREEN_REGISTRY } from './render-ds.mjs';
+import { nlToSpec } from './nl-spec.mjs';
 
 const ROOT = new URL('../../', import.meta.url).pathname;
 const OUT = path.join(ROOT, 'new/dart-gen-bs');
@@ -43,6 +44,13 @@ function parseRole(line) {
 }
 
 export function buildApp(specText) {
+  // 🗣️ צפן §22: קלט חסר-מבנה לגמרי (אף ישות/דשבורד/תפקיד) ⇒ עברית-חופשית ⇒ nlToSpec.
+  // מבנה קיים ⇒ ביט-זהה (לא נוגעים). כך אותה דלת מקבלת גם משפט-חופשי וגם אפיון-מדויק.
+  const raw = specText.split(/\n+/).map((l) => l.trim()).filter((l) => l.length > 2);
+  if (raw.length && !raw.some((l) => ENTITY_RE.test(l) || ROLE_RE.test(l))) {
+    const nl = nlToSpec(specText);
+    if (nl.trim()) specText = nl;   // חסר-מבנה ⇒ עברית-חופשית; אחרת ביט-זהה
+  }
   const all = specText.split(/\n+/).map((l) => l.trim()).filter((l) => l.length > 2);
   const roles = all.filter((l) => ROLE_RE.test(l)).map(parseRole);
   const lines = all.filter((l) => !ROLE_RE.test(l));
