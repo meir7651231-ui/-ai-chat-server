@@ -1,6 +1,6 @@
 {
  "counts": {
-  "widgets": 480,
+  "widgets": 481,
   "functions": 445,
   "data": 3864
  },
@@ -10657,6 +10657,33 @@
     "אחוז",
     "שעות",
     "שטח"
+   ]
+  },
+  {
+   "cls": "DsSearch",
+   "file": "ds/ds_search.dart",
+   "props": [
+    "value",
+    "onChanged"
+   ],
+   "required": [
+    "value",
+    "onChanged"
+   ],
+   "positional": [],
+   "he": [
+    "שדה",
+    "חיפוש",
+    "סינון",
+    "רשומות",
+    "חי",
+    "לפי",
+    "מחרוזת",
+    "תיבת",
+    "חיפוש",
+    "אייקון",
+    "ניקוי",
+    "מעל"
    ]
   },
   {

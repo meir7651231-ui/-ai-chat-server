@@ -154,6 +154,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const cForm = k('פרטי הרשומה');
   const cRecords = k('רשומות');
   const cEmpty = k(`אין ${name} עדיין — הרשומה הראשונה תופיע כאן`);
+  const cNoMatch = k('לא נמצאו רשומות תואמות');
   const SK = `'${slug}'`;   // מפתח-חנות = slug יציב (לא שם-תצוגה חתוך ⇒ אפס דליפת-נתונים בין ישויות)
 
   const funcImports = new Set();
@@ -239,6 +240,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→קשרים→מסע→חנות→טבלה + לוגיקה). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
+import '../dart-ui-bs/ds/ds_search.dart';
 ${usedField ? "import '../dart-ui-bs/ds/ds_field.dart';\n" : ''}${[...typedImports].sort().map((x) => x + '\n').join('')}${enumImport}${relImport}import '../dart-ui-bs/ds/ds_store.dart';
 ${[...funcImports].sort().join('\n')}
 import 'package:flutter/material.dart';
@@ -253,6 +255,7 @@ class ${cls} extends StatefulWidget {
 class _${cls}State extends State<${cls}> {
   Map<int, String> _v = {};
   String? _editId;   // ריק = הוספה · מזהה = עריכת-רשומה קיימת
+  String _q = '';    // מחרוזת-חיפוש (סינון-רשומות חי)
 ${requiredIdx.length ? '  String? _err;      // שגיאת-ולידציה (שדות-חובה חסרים)\n' : ''}
 
   void _save() {
@@ -330,9 +333,13 @@ ${fieldBlocks.join('\n')}
           AnimatedBuilder(
             animation: appStore,
             builder: (context, _) {
-              final rs = appStore.records(${SK});
-              if (rs.isEmpty) return const DsEmpty(label: ${cEmpty});
+              final all = appStore.records(${SK});
+              if (all.isEmpty) return const DsEmpty(label: ${cEmpty});
+              final q = _q.trim().toLowerCase();
+              final rs = q.isEmpty ? all : all.where((r) => r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q))).toList();
               return Column(children: [
+                DsSearch(value: _q, onChanged: (v) => setState(() => _q = v)),
+                if (rs.isEmpty) const DsEmpty(label: ${cNoMatch}),
                 for (var i = 0; i < rs.length; i++)
                   _card(rs[i]),
               ]);

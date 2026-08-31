@@ -1,6 +1,7 @@
 // ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→קשרים→מסע→חנות→טבלה + לוגיקה). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_app_ent2_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
+import '../dart-ui-bs/ds/ds_search.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_number_field.dart';
 import '../dart-ui-bs/ds/ds_toggle_tile.dart';
@@ -21,11 +22,12 @@ class GenAppEnt2Screen extends StatefulWidget {
 class _GenAppEnt2ScreenState extends State<GenAppEnt2Screen> {
   Map<int, String> _v = {};
   String? _editId;   // ריק = הוספה · מזהה = עריכת-רשומה קיימת
+  String _q = '';    // מחרוזת-חיפוש (סינון-רשומות חי)
 
 
   void _save() {
     if (_v.values.where((x) => x.trim().isNotEmpty).isEmpty) return;
-    final map = <String, String>{gen_app_ent2_c8: _v[0] ?? '', gen_app_ent2_c9: _v[1] ?? '', gen_app_ent2_c10: _v[2] ?? '', gen_app_ent2_c11: _v[3] ?? '', gen_app_ent2_c12: _v[4] ?? '', gen_app_ent2_c13: _v[5] ?? '', gen_app_ent2_c14: _v[6] ?? '', gen_app_ent2_c15: _v[7] ?? '', gen_app_ent2_c17: _v[8] ?? '', gen_app_ent2_c18: _v[9] ?? '', gen_app_ent2_c20: _v[10] ?? '', gen_app_ent2_c21: _v[11] ?? '', gen_app_ent2_c22: _v[12] ?? '', gen_app_ent2_c23: _v[13] ?? '', gen_app_ent2_c24: _v[14] ?? '', gen_app_ent2_c25: _v[15] ?? '', gen_app_ent2_c26: _v[16] ?? '', gen_app_ent2_c27: _v[17] ?? ''};
+    final map = <String, String>{gen_app_ent2_c9: _v[0] ?? '', gen_app_ent2_c10: _v[1] ?? '', gen_app_ent2_c11: _v[2] ?? '', gen_app_ent2_c12: _v[3] ?? '', gen_app_ent2_c13: _v[4] ?? '', gen_app_ent2_c14: _v[5] ?? '', gen_app_ent2_c15: _v[6] ?? '', gen_app_ent2_c16: _v[7] ?? '', gen_app_ent2_c18: _v[8] ?? '', gen_app_ent2_c19: _v[9] ?? '', gen_app_ent2_c21: _v[10] ?? '', gen_app_ent2_c22: _v[11] ?? '', gen_app_ent2_c23: _v[12] ?? '', gen_app_ent2_c24: _v[13] ?? '', gen_app_ent2_c25: _v[14] ?? '', gen_app_ent2_c26: _v[15] ?? '', gen_app_ent2_c27: _v[16] ?? '', gen_app_ent2_c28: _v[17] ?? ''};
     if (_editId != null) {
       appStore.update('app_ent2', _editId!, map);
     } else {
@@ -37,13 +39,13 @@ class _GenAppEnt2ScreenState extends State<GenAppEnt2Screen> {
   void _edit(Map<String, String> r) {
     setState(() {
       _editId = r['__id'];
-      _v = {0: r[gen_app_ent2_c8] ?? '', 1: r[gen_app_ent2_c9] ?? '', 2: r[gen_app_ent2_c10] ?? '', 3: r[gen_app_ent2_c11] ?? '', 4: r[gen_app_ent2_c12] ?? '', 5: r[gen_app_ent2_c13] ?? '', 6: r[gen_app_ent2_c14] ?? '', 7: r[gen_app_ent2_c15] ?? '', 8: r[gen_app_ent2_c17] ?? '', 9: r[gen_app_ent2_c18] ?? '', 10: r[gen_app_ent2_c20] ?? '', 11: r[gen_app_ent2_c21] ?? '', 12: r[gen_app_ent2_c22] ?? '', 13: r[gen_app_ent2_c23] ?? '', 14: r[gen_app_ent2_c24] ?? '', 15: r[gen_app_ent2_c25] ?? '', 16: r[gen_app_ent2_c26] ?? '', 17: r[gen_app_ent2_c27] ?? ''};
+      _v = {0: r[gen_app_ent2_c9] ?? '', 1: r[gen_app_ent2_c10] ?? '', 2: r[gen_app_ent2_c11] ?? '', 3: r[gen_app_ent2_c12] ?? '', 4: r[gen_app_ent2_c13] ?? '', 5: r[gen_app_ent2_c14] ?? '', 6: r[gen_app_ent2_c15] ?? '', 7: r[gen_app_ent2_c16] ?? '', 8: r[gen_app_ent2_c18] ?? '', 9: r[gen_app_ent2_c19] ?? '', 10: r[gen_app_ent2_c21] ?? '', 11: r[gen_app_ent2_c22] ?? '', 12: r[gen_app_ent2_c23] ?? '', 13: r[gen_app_ent2_c24] ?? '', 14: r[gen_app_ent2_c25] ?? '', 15: r[gen_app_ent2_c26] ?? '', 16: r[gen_app_ent2_c27] ?? '', 17: r[gen_app_ent2_c28] ?? ''};
     });
   }
 
   Widget _card(Map<String, String> r) {
     final rid = r['__id'] ?? '';
-    return DsRecordCard(labels: const [gen_app_ent2_c8, gen_app_ent2_c9, gen_app_ent2_c10, gen_app_ent2_c11, gen_app_ent2_c12, gen_app_ent2_c13, gen_app_ent2_c14, gen_app_ent2_c15, gen_app_ent2_c17, gen_app_ent2_c18, gen_app_ent2_c20, gen_app_ent2_c21, gen_app_ent2_c22, gen_app_ent2_c23, gen_app_ent2_c24, gen_app_ent2_c25, gen_app_ent2_c26, gen_app_ent2_c27], values: [r[gen_app_ent2_c8] ?? '', r[gen_app_ent2_c9] ?? '', r[gen_app_ent2_c10] ?? '', r[gen_app_ent2_c11] ?? '', r[gen_app_ent2_c12] ?? '', r[gen_app_ent2_c13] ?? '', r[gen_app_ent2_c14] ?? '', r[gen_app_ent2_c15] ?? '', r[gen_app_ent2_c17] ?? '', r[gen_app_ent2_c18] ?? '', r[gen_app_ent2_c20] ?? '', r[gen_app_ent2_c21] ?? '', r[gen_app_ent2_c22] ?? '', r[gen_app_ent2_c23] ?? '', r[gen_app_ent2_c24] ?? '', r[gen_app_ent2_c25] ?? '', appStore.displayOf('app_ent4', r[gen_app_ent2_c26] ?? ''), r[gen_app_ent2_c27] ?? ''], onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent2', rid));
+    return DsRecordCard(labels: const [gen_app_ent2_c9, gen_app_ent2_c10, gen_app_ent2_c11, gen_app_ent2_c12, gen_app_ent2_c13, gen_app_ent2_c14, gen_app_ent2_c15, gen_app_ent2_c16, gen_app_ent2_c18, gen_app_ent2_c19, gen_app_ent2_c21, gen_app_ent2_c22, gen_app_ent2_c23, gen_app_ent2_c24, gen_app_ent2_c25, gen_app_ent2_c26, gen_app_ent2_c27, gen_app_ent2_c28], values: [r[gen_app_ent2_c9] ?? '', r[gen_app_ent2_c10] ?? '', r[gen_app_ent2_c11] ?? '', r[gen_app_ent2_c12] ?? '', r[gen_app_ent2_c13] ?? '', r[gen_app_ent2_c14] ?? '', r[gen_app_ent2_c15] ?? '', r[gen_app_ent2_c16] ?? '', r[gen_app_ent2_c18] ?? '', r[gen_app_ent2_c19] ?? '', r[gen_app_ent2_c21] ?? '', r[gen_app_ent2_c22] ?? '', r[gen_app_ent2_c23] ?? '', r[gen_app_ent2_c24] ?? '', r[gen_app_ent2_c25] ?? '', r[gen_app_ent2_c26] ?? '', appStore.displayOf('app_ent4', r[gen_app_ent2_c27] ?? ''), r[gen_app_ent2_c28] ?? ''], onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent2', rid));
   }
 
   Widget _live(String label, String out) => Padding(
@@ -69,35 +71,39 @@ class _GenAppEnt2ScreenState extends State<GenAppEnt2Screen> {
       bottomBar: DsPrimaryButton(label: _editId == null ? gen_app_ent2_c3 : gen_app_ent2_c4, onTap: _save),
       children: [
         DsSection(title: gen_app_ent2_c5, children: [
-          DsField(label: gen_app_ent2_c8, hint: '', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
-          DsField(label: gen_app_ent2_c9, hint: '', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
-          DsField(label: gen_app_ent2_c10, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
-          DsNumberField(label: gen_app_ent2_c11, value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
-          DsField(label: gen_app_ent2_c12, hint: '', value: _v[4] ?? '', onChanged: (v) => setState(() => _v[4] = v)),
-          DsField(label: gen_app_ent2_c13, hint: '', value: _v[5] ?? '', onChanged: (v) => setState(() => _v[5] = v)),
-          DsField(label: gen_app_ent2_c14, hint: '', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
-          DsField(label: gen_app_ent2_c15, hint: '', value: _v[7] ?? '', onChanged: (v) => setState(() => _v[7] = v)),
-          if ((_v[7] ?? '').trim().isNotEmpty) _live(gen_app_ent2_c16, phoneRegion((_v[7] ?? ''))),
-          DsField(label: gen_app_ent2_c17, hint: '', value: _v[8] ?? '', onChanged: (v) => setState(() => _v[8] = v)),
-          DsField(label: gen_app_ent2_c18, hint: '', value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
-          if ((_v[9] ?? '').trim().isNotEmpty) _live(gen_app_ent2_c19, normEmail((_v[9] ?? ''))),
-          DsField(label: gen_app_ent2_c20, hint: '', value: _v[10] ?? '', onChanged: (v) => setState(() => _v[10] = v)),
-          DsField(label: gen_app_ent2_c21, hint: '', value: _v[11] ?? '', onChanged: (v) => setState(() => _v[11] = v)),
-          DsField(label: gen_app_ent2_c22, hint: '', value: _v[12] ?? '', onChanged: (v) => setState(() => _v[12] = v)),
-          DsField(label: gen_app_ent2_c23, hint: '', value: _v[13] ?? '', onChanged: (v) => setState(() => _v[13] = v)),
-          DsField(label: gen_app_ent2_c24, hint: '', value: _v[14] ?? '', onChanged: (v) => setState(() => _v[14] = v)),
-          DsToggleTile(label: gen_app_ent2_c25, value: _v[15] ?? '', onChanged: (v) => setState(() => _v[15] = v)),
-          DsSelect(label: gen_app_ent2_c26, entity: 'app_ent4', value: _v[16] ?? '', onChanged: (v) => setState(() => _v[16] = v)),
-          DsField(label: gen_app_ent2_c27, hint: '', value: _v[17] ?? '', onChanged: (v) => setState(() => _v[17] = v)),
-          if ((_v[17] ?? '').trim().isNotEmpty) _live(gen_app_ent2_c28, advanceStatus((_v[17] ?? ''))),
+          DsField(label: gen_app_ent2_c9, hint: '', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
+          DsField(label: gen_app_ent2_c10, hint: '', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
+          DsField(label: gen_app_ent2_c11, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
+          DsNumberField(label: gen_app_ent2_c12, value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
+          DsField(label: gen_app_ent2_c13, hint: '', value: _v[4] ?? '', onChanged: (v) => setState(() => _v[4] = v)),
+          DsField(label: gen_app_ent2_c14, hint: '', value: _v[5] ?? '', onChanged: (v) => setState(() => _v[5] = v)),
+          DsField(label: gen_app_ent2_c15, hint: '', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
+          DsField(label: gen_app_ent2_c16, hint: '', value: _v[7] ?? '', onChanged: (v) => setState(() => _v[7] = v)),
+          if ((_v[7] ?? '').trim().isNotEmpty) _live(gen_app_ent2_c17, phoneRegion((_v[7] ?? ''))),
+          DsField(label: gen_app_ent2_c18, hint: '', value: _v[8] ?? '', onChanged: (v) => setState(() => _v[8] = v)),
+          DsField(label: gen_app_ent2_c19, hint: '', value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
+          if ((_v[9] ?? '').trim().isNotEmpty) _live(gen_app_ent2_c20, normEmail((_v[9] ?? ''))),
+          DsField(label: gen_app_ent2_c21, hint: '', value: _v[10] ?? '', onChanged: (v) => setState(() => _v[10] = v)),
+          DsField(label: gen_app_ent2_c22, hint: '', value: _v[11] ?? '', onChanged: (v) => setState(() => _v[11] = v)),
+          DsField(label: gen_app_ent2_c23, hint: '', value: _v[12] ?? '', onChanged: (v) => setState(() => _v[12] = v)),
+          DsField(label: gen_app_ent2_c24, hint: '', value: _v[13] ?? '', onChanged: (v) => setState(() => _v[13] = v)),
+          DsField(label: gen_app_ent2_c25, hint: '', value: _v[14] ?? '', onChanged: (v) => setState(() => _v[14] = v)),
+          DsToggleTile(label: gen_app_ent2_c26, value: _v[15] ?? '', onChanged: (v) => setState(() => _v[15] = v)),
+          DsSelect(label: gen_app_ent2_c27, entity: 'app_ent4', value: _v[16] ?? '', onChanged: (v) => setState(() => _v[16] = v)),
+          DsField(label: gen_app_ent2_c28, hint: '', value: _v[17] ?? '', onChanged: (v) => setState(() => _v[17] = v)),
+          if ((_v[17] ?? '').trim().isNotEmpty) _live(gen_app_ent2_c29, advanceStatus((_v[17] ?? ''))),
         ]),
         DsSection(title: gen_app_ent2_c6, children: [
           AnimatedBuilder(
             animation: appStore,
             builder: (context, _) {
-              final rs = appStore.records('app_ent2');
-              if (rs.isEmpty) return const DsEmpty(label: gen_app_ent2_c7);
+              final all = appStore.records('app_ent2');
+              if (all.isEmpty) return const DsEmpty(label: gen_app_ent2_c7);
+              final q = _q.trim().toLowerCase();
+              final rs = q.isEmpty ? all : all.where((r) => r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q))).toList();
               return Column(children: [
+                DsSearch(value: _q, onChanged: (v) => setState(() => _q = v)),
+                if (rs.isEmpty) const DsEmpty(label: gen_app_ent2_c8),
                 for (var i = 0; i < rs.length; i++)
                   _card(rs[i]),
               ]);
