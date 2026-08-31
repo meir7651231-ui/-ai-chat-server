@@ -15,12 +15,30 @@ class GenAppEnt10Screen extends StatefulWidget {
 }
 
 class _GenAppEnt10ScreenState extends State<GenAppEnt10Screen> {
-  final Map<int, String> _v = {};
+  Map<int, String> _v = {};
+  String? _editId;   // ריק = הוספה · מזהה = עריכת-רשומה קיימת
 
   void _save() {
     if (_v.values.where((x) => x.trim().isNotEmpty).isEmpty) return;
-    appStore.add(gen_app_ent10_c7, <String, String>{gen_app_ent10_c8: _v[0] ?? '', gen_app_ent10_c10: _v[1] ?? '', gen_app_ent10_c12: _v[2] ?? '', gen_app_ent10_c14: _v[3] ?? '', gen_app_ent10_c15: _v[4] ?? '', gen_app_ent10_c17: _v[5] ?? '', gen_app_ent10_c18: _v[6] ?? '', gen_app_ent10_c19: _v[7] ?? '', gen_app_ent10_c20: _v[8] ?? '', '__stage': '0'});
-    setState(() => _v.clear());
+    final map = <String, String>{gen_app_ent10_c8: _v[0] ?? '', gen_app_ent10_c9: _v[1] ?? '', gen_app_ent10_c10: _v[2] ?? '', gen_app_ent10_c11: _v[3] ?? '', gen_app_ent10_c12: _v[4] ?? '', gen_app_ent10_c14: _v[5] ?? '', gen_app_ent10_c15: _v[6] ?? '', gen_app_ent10_c16: _v[7] ?? '', gen_app_ent10_c17: _v[8] ?? ''};
+    if (_editId != null) {
+      appStore.update('app_ent10', _editId!, map);
+    } else {
+      appStore.add('app_ent10', <String, String>{...map, '__stage': '0'});
+    }
+    setState(() { _v.clear(); _editId = null; });
+  }
+
+  void _edit(Map<String, String> r) {
+    setState(() {
+      _editId = r['__id'];
+      _v = {0: r[gen_app_ent10_c8] ?? '', 1: r[gen_app_ent10_c9] ?? '', 2: r[gen_app_ent10_c10] ?? '', 3: r[gen_app_ent10_c11] ?? '', 4: r[gen_app_ent10_c12] ?? '', 5: r[gen_app_ent10_c14] ?? '', 6: r[gen_app_ent10_c15] ?? '', 7: r[gen_app_ent10_c16] ?? '', 8: r[gen_app_ent10_c17] ?? ''};
+    });
+  }
+
+  Widget _card(Map<String, String> r) {
+    final rid = r['__id'] ?? '';
+    return DsRecordCard(labels: const [gen_app_ent10_c8, gen_app_ent10_c9, gen_app_ent10_c10, gen_app_ent10_c11, gen_app_ent10_c12, gen_app_ent10_c14, gen_app_ent10_c15, gen_app_ent10_c16, gen_app_ent10_c17], values: [appStore.displayOf('app_ent8', r[gen_app_ent10_c8] ?? ''), appStore.displayOf('app_ent15', r[gen_app_ent10_c9] ?? ''), appStore.displayOf('app_ent4', r[gen_app_ent10_c10] ?? ''), r[gen_app_ent10_c11] ?? '', r[gen_app_ent10_c12] ?? '', r[gen_app_ent10_c14] ?? '', r[gen_app_ent10_c15] ?? '', r[gen_app_ent10_c16] ?? '', r[gen_app_ent10_c17] ?? ''], stage: (const [gen_app_ent10_c18, gen_app_ent10_c19, gen_app_ent10_c20, gen_app_ent10_c21])[appStore.stageOf('app_ent10', rid)], stageDone: appStore.stageOf('app_ent10', rid) >= 3, onAdvance: () => appStore.advance('app_ent10', rid, 4), onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent10', rid));
   }
 
   Widget _live(String label, String out) => Padding(
@@ -43,30 +61,30 @@ class _GenAppEnt10ScreenState extends State<GenAppEnt10Screen> {
       title: gen_app_ent10_c0,
       subtitle: gen_app_ent10_c1,
       icon: gen_app_ent10_c2,
-      bottomBar: DsPrimaryButton(label: gen_app_ent10_c3, onTap: _save),
+      bottomBar: DsPrimaryButton(label: _editId == null ? gen_app_ent10_c3 : gen_app_ent10_c4, onTap: _save),
       children: [
-        DsWorkflow(steps: const [gen_app_ent10_c21, gen_app_ent10_c22, gen_app_ent10_c23, gen_app_ent10_c24], current: 0),
-        DsSection(title: gen_app_ent10_c4, children: [
-          DsSelect(label: gen_app_ent10_c8, entity: gen_app_ent10_c9, value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
-          DsSelect(label: gen_app_ent10_c10, entity: gen_app_ent10_c11, value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
-          DsSelect(label: gen_app_ent10_c12, entity: gen_app_ent10_c13, value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
-          DsField(label: gen_app_ent10_c14, hint: '', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
-          DsField(label: gen_app_ent10_c15, hint: '', value: _v[4] ?? '', onChanged: (v) => setState(() => _v[4] = v)),
-          if ((_v[4] ?? '').trim().isNotEmpty) _live(gen_app_ent10_c16, fmtDate((_v[4] ?? ''))),
-          DsField(label: gen_app_ent10_c17, hint: '', value: _v[5] ?? '', onChanged: (v) => setState(() => _v[5] = v)),
-          DsField(label: gen_app_ent10_c18, hint: '', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
-          DsField(label: gen_app_ent10_c19, hint: '', value: _v[7] ?? '', onChanged: (v) => setState(() => _v[7] = v)),
-          DsField(label: gen_app_ent10_c20, hint: '', value: _v[8] ?? '', onChanged: (v) => setState(() => _v[8] = v)),
-        ]),
+        DsWorkflow(steps: const [gen_app_ent10_c18, gen_app_ent10_c19, gen_app_ent10_c20, gen_app_ent10_c21], current: 0),
         DsSection(title: gen_app_ent10_c5, children: [
+          DsSelect(label: gen_app_ent10_c8, entity: 'app_ent8', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
+          DsSelect(label: gen_app_ent10_c9, entity: 'app_ent15', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
+          DsSelect(label: gen_app_ent10_c10, entity: 'app_ent4', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
+          DsField(label: gen_app_ent10_c11, hint: '', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
+          DsField(label: gen_app_ent10_c12, hint: '', value: _v[4] ?? '', onChanged: (v) => setState(() => _v[4] = v)),
+          if ((_v[4] ?? '').trim().isNotEmpty) _live(gen_app_ent10_c13, fmtDate((_v[4] ?? ''))),
+          DsField(label: gen_app_ent10_c14, hint: '', value: _v[5] ?? '', onChanged: (v) => setState(() => _v[5] = v)),
+          DsField(label: gen_app_ent10_c15, hint: '', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
+          DsField(label: gen_app_ent10_c16, hint: '', value: _v[7] ?? '', onChanged: (v) => setState(() => _v[7] = v)),
+          DsField(label: gen_app_ent10_c17, hint: '', value: _v[8] ?? '', onChanged: (v) => setState(() => _v[8] = v)),
+        ]),
+        DsSection(title: gen_app_ent10_c6, children: [
           AnimatedBuilder(
             animation: appStore,
             builder: (context, _) {
-              final rs = appStore.records(gen_app_ent10_c7);
-              if (rs.isEmpty) return const DsEmpty(label: gen_app_ent10_c6);
+              final rs = appStore.records('app_ent10');
+              if (rs.isEmpty) return const DsEmpty(label: gen_app_ent10_c7);
               return Column(children: [
                 for (var i = 0; i < rs.length; i++)
-                  DsRecordCard(labels: const [gen_app_ent10_c8, gen_app_ent10_c10, gen_app_ent10_c12, gen_app_ent10_c14, gen_app_ent10_c15, gen_app_ent10_c17, gen_app_ent10_c18, gen_app_ent10_c19, gen_app_ent10_c20], values: [rs[i][gen_app_ent10_c8] ?? '', rs[i][gen_app_ent10_c10] ?? '', rs[i][gen_app_ent10_c12] ?? '', rs[i][gen_app_ent10_c14] ?? '', rs[i][gen_app_ent10_c15] ?? '', rs[i][gen_app_ent10_c17] ?? '', rs[i][gen_app_ent10_c18] ?? '', rs[i][gen_app_ent10_c19] ?? '', rs[i][gen_app_ent10_c20] ?? ''], stage: (const [gen_app_ent10_c21, gen_app_ent10_c22, gen_app_ent10_c23, gen_app_ent10_c24])[appStore.stageOf(gen_app_ent10_c7, i)], stageDone: appStore.stageOf(gen_app_ent10_c7, i) >= 3, onAdvance: () => appStore.advance(gen_app_ent10_c7, i, 4)),
+                  _card(rs[i]),
               ]);
             },
           ),

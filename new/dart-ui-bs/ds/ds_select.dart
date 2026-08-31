@@ -1,6 +1,6 @@
 // שדה לנתון קשר: בורר-רשומה מישות-אחרת · הפניה · שיוך · קישור · בחירה מרשימה חיה.
-// אטום-קלט מצהיר-עצמו (he) — המנוע מזהה שדה שמצביע על ישות ומחווט אליו את רשומותיה
-// החיות מהחנות. הערך-הנבחר נשמר כטקסט (אחיד עם שאר-השדות). חוט-טהור מעל ds + חנות.
+// שומר את מזהה-היעד (__id) — לא את מחרוזת-התצוגה — כך שהקשר שורד שינוי-שם ומצביע יציב.
+// מציג את שם-היעד. חוט-טהור מעל ds + חנות.
 import 'package:flutter/material.dart';
 import 'ds.dart';
 import 'ds_store.dart';
@@ -15,8 +15,9 @@ class DsSelect extends StatelessWidget {
     return AnimatedBuilder(
       animation: appStore,
       builder: (context, _) {
-        final opts = appStore.options(entity);
-        final cur = opts.contains(value) ? value : null;
+        final opts = appStore.options(entity); // (id → display)
+        final ids = opts.map((e) => e.key).toSet();
+        final cur = ids.contains(value) ? value : null;
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 7),
           child: Column(
@@ -43,7 +44,7 @@ class DsSelect extends StatelessWidget {
                           hint: Text('בחר $entity', style: const TextStyle(color: DsTokens.faint, fontSize: 14)),
                           icon: const Icon(Icons.expand_more, color: DsTokens.faint),
                           items: opts
-                              .map((o) => DropdownMenuItem<String>(value: o, child: Text(o, style: const TextStyle(color: DsTokens.ink, fontSize: 14, fontWeight: FontWeight.w600))))
+                              .map((e) => DropdownMenuItem<String>(value: e.key, child: Text(e.value, overflow: TextOverflow.ellipsis, style: const TextStyle(color: DsTokens.ink, fontSize: 14, fontWeight: FontWeight.w600))))
                               .toList(),
                           onChanged: (v) => onChanged(v ?? ''),
                         ),

@@ -1,12 +1,12 @@
 // 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
 const String gen_app_ent21_c0 = 'עובד';
-const String gen_app_ent21_c1 = '20 שדות';
+const String gen_app_ent21_c1 = '21 שדות';
 const String gen_app_ent21_c2 = '🗂️';
 const String gen_app_ent21_c3 = 'שמירה';
-const String gen_app_ent21_c4 = 'פרטי הרשומה';
-const String gen_app_ent21_c5 = 'רשומות';
-const String gen_app_ent21_c6 = 'אין עובד עדיין — הרשומה הראשונה תופיע כאן';
-const String gen_app_ent21_c7 = 'עובד';
+const String gen_app_ent21_c4 = 'עדכון';
+const String gen_app_ent21_c5 = 'פרטי הרשומה';
+const String gen_app_ent21_c6 = 'רשומות';
+const String gen_app_ent21_c7 = 'אין עובד עדיין — הרשומה הראשונה תופיע כאן';
 const String gen_app_ent21_c8 = 'שם';
 const String gen_app_ent21_c9 = 'תפקיד';
 const String gen_app_ent21_c10 = 'מחלקה';
@@ -30,3 +30,4 @@ const String gen_app_ent21_c27 = 'חופשות';
 const String gen_app_ent21_c28 = 'הערכות';
 const String gen_app_ent21_c29 = 'מסמכים';
 const String gen_app_ent21_c30 = 'הרשאות';
+const String gen_app_ent21_c31 = 'סטטוס';

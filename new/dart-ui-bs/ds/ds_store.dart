@@ -1,57 +1,105 @@
-// 🗄️ חנות-מצב חיה (חוט-טהור) — מודל-נתונים כללי לאפליקציה: רשומות פר-ישות +
-// התראה-על-שינוי. אפס-דאטה, אפס-תלות חיצונית (foundation בלבד). זהו ה"מוח":
-// שמירה מוסיפה רשומה · טבלה קוראת · דשבורד סופר · שלב-מסע מתקדם — הכל מגיב לאותו מקור.
+// 🗄️ חנות-מצב חיה (חוט-טהור) — מודל-נתונים אמיתי לאפליקציה. כל רשומה נושאת מזהה
+// יציב (__id), נגישה לפי-מזהה (לא לפי-אינדקס), ומפתח-זר מצביע במזהה — לא במחרוזת-תצוגה.
+// שמירה · עדכון · מחיקה · קידום-מסע · צבירה — הכל מגיב לאותו מקור-אמת (ChangeNotifier).
 import 'package:flutter/foundation.dart';
 
 class AppStore extends ChangeNotifier {
+  // ממופתח ב-slug יציב (app_entN) — לא בשם-תצוגה חתוך (שמנע דליפת-נתונים בין ישויות).
   final Map<String, List<Map<String, String>>> _rec = {};
+  int _seq = 0;
 
-  // מפתח-שמור לשלב-המסע הנוכחי של רשומה (אינדקס בתוך רשימת-השלבים).
-  static const stageKey = '__stage';
+  static const idKey = '__id';       // מזהה-רשומה יציב
+  static const stageKey = '__stage'; // אינדקס שלב-המסע הנוכחי
 
   List<Map<String, String>> records(String entity) => _rec[entity] ?? const [];
   int count(String entity) => _rec[entity]?.length ?? 0;
 
-  // ערכי-תצוגה של ישות (לשדות-קשר): הערך-הראשון-הלא-ריק בכל רשומה = "שם" הרשומה.
-  List<String> options(String entity) {
-    final out = <String>[];
+  Map<String, String>? byId(String entity, String id) {
     for (final r in records(entity)) {
-      for (final e in r.entries) {
-        if (e.key == stageKey) continue;
-        if (e.value.trim().isNotEmpty) { out.add(e.value.trim()); break; }
-      }
+      if (r[idKey] == id) return r;
+    }
+    return null;
+  }
+
+  // "שם" רשומה = הערך-הראשון-הלא-ריק שאינו מטא (לתצוגת מפתח-זר ולבורר-קשר).
+  String _display(Map<String, String> r) {
+    for (final e in r.entries) {
+      if (e.key == idKey || e.key == stageKey) continue;
+      if (e.value.trim().isNotEmpty) return e.value.trim();
+    }
+    return r[idKey] ?? '';
+  }
+
+  // אפשרויות לבורר-קשר: זוגות (מזהה → תצוגה). הבורר שומר מזהה, מציג תצוגה.
+  List<MapEntry<String, String>> options(String entity) {
+    final out = <MapEntry<String, String>>[];
+    for (final r in records(entity)) {
+      final id = r[idKey] ?? '';
+      if (id.isNotEmpty) out.add(MapEntry(id, _display(r)));
     }
     return out;
   }
 
-  int stageOf(String entity, int i) {
-    final list = _rec[entity];
-    if (list == null || i < 0 || i >= list.length) return 0;
-    return int.tryParse(list[i][stageKey] ?? '0') ?? 0;
+  // תצוגת מפתח-זר: מזהה מאוחסן ⇒ שם-הרשומה ביעד (ריק אם היעד נמחק — מפתח יתום גלוי).
+  String displayOf(String entity, String id) {
+    if (id.isEmpty) return '';
+    final r = byId(entity, id);
+    return r == null ? '' : _display(r);
   }
 
-  void add(String entity, Map<String, String> record) {
-    (_rec[entity] ??= <Map<String, String>>[]).add(record);
+  // אינדקס-הפוך (קשר-נגדי): רשומות של entity ששדה-הקשר שלהן מצביע על id.
+  List<Map<String, String>> referencing(String entity, String field, String id) =>
+      records(entity).where((r) => r[field] == id).toList();
+
+  int stageOf(String entity, String id) {
+    final r = byId(entity, id);
+    return int.tryParse(r?[stageKey] ?? '0') ?? 0;
+  }
+
+  // צבירה טיפוסית (בסיס לדשבורדי-מדדים אמיתיים): סכום/ממוצע/מונה על שדה מספרי.
+  double sum(String entity, String field) {
+    var t = 0.0;
+    for (final r in records(entity)) {
+      t += double.tryParse((r[field] ?? '').replaceAll(RegExp(r'[^0-9.\-]'), '')) ?? 0;
+    }
+    return t;
+  }
+
+  double avg(String entity, String field) {
+    final n = count(entity);
+    return n == 0 ? 0 : sum(entity, field) / n;
+  }
+
+  String add(String entity, Map<String, String> record) {
+    final id = 'r${++_seq}';
+    final rec = <String, String>{idKey: id, ...record};
+    (_rec[entity] ??= <Map<String, String>>[]).add(rec);
+    notifyListeners();
+    return id;
+  }
+
+  void update(String entity, String id, Map<String, String> values) {
+    final r = byId(entity, id);
+    if (r == null) return;
+    values.forEach((k, v) {
+      if (k != idKey) r[k] = v;
+    });
     notifyListeners();
   }
 
-  // קידום שלב-מסע ברשומה (חסום בשלב-האחרון) — מנוע-המסע החי.
-  void advance(String entity, int i, int stageCount) {
-    final list = _rec[entity];
-    if (list == null || i < 0 || i >= list.length) return;
-    final cur = int.tryParse(list[i][stageKey] ?? '0') ?? 0;
+  void advance(String entity, String id, int stageCount) {
+    final r = byId(entity, id);
+    if (r == null) return;
+    final cur = int.tryParse(r[stageKey] ?? '0') ?? 0;
     if (cur + 1 < stageCount) {
-      list[i][stageKey] = '${cur + 1}';
+      r[stageKey] = '${cur + 1}';
       notifyListeners();
     }
   }
 
-  void removeAt(String entity, int i) {
-    final list = _rec[entity];
-    if (list != null && i >= 0 && i < list.length) {
-      list.removeAt(i);
-      notifyListeners();
-    }
+  void removeById(String entity, String id) {
+    _rec[entity]?.removeWhere((r) => r[idKey] == id);
+    notifyListeners();
   }
 }
 

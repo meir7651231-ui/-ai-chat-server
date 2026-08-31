@@ -13,7 +13,7 @@ import { retrieve, matchClass, retrieveLogic } from './match.mjs';
 
 const HERE = new URL('.', import.meta.url).pathname;
 const heWords = (s) => [...(s || '').matchAll(/[֐-׿][֐-׿״׳]*/g)].map((m) => m[0]);
-const clean = (s) => heWords(s).join(' ').slice(0, 28) || 'שדה';
+const clean = (s) => heWords(s).join(' ').slice(0, 60) || 'שדה';
 
 // הסקת-טיפוס מרמזי-שפה (לינגוויסטי, לא פר-ישות) — כמו stemmer.
 function inferType(field) {
@@ -40,12 +40,14 @@ export function interpret(text) {
   // שם-הישות + רשימת-השדות (בלי \b — לא עובד על עברית ב-JS)
   const body = main.replace(/^\s*(צור|תוסיף|בנה|הוסף)?\s*(ישות|טבלה|טופס)\s+/, '');
   const [namePart, ...rest] = body.split(/\s+עם\s+|\s+שדות[:\s]+|\s*:\s*/);
-  const entity = clean(namePart).slice(0, 20) || 'רשומה';
+  const entity = clean(namePart).slice(0, 40) || 'רשומה';
   const fieldsPart = rest.join(' ') || '';
-  const fields = fieldsPart.split(/[,\n]|\s+ו(?=[א-ת])/).map((s) => clean(s)).filter((s) => s.length > 1).slice(0, 20);
+  // אין חיתוך-שקט: כל השדות נשמרים (קודם נחתך ל-20 ⇒ 'סטטוס'/'התאמות' נעלמו). תקרת-שפיות בלבד.
+  const fields = fieldsPart.split(/[,\n]|\s+ו(?=[א-ת])/).map((s) => clean(s)).filter((s) => s.length > 1).slice(0, 200);
   // 🔄 שלבי-workflow (אם ניתנו): שרשרת-סטטוס. בלי '|' ⇒ אין workflow (לא ברירת-מחדל).
+  // אין חיתוך ל-8 (קודם הפיל 'ועדה/התקבל/נדחה' — שלבי-ההכרעה שה-workflow קיים בשבילם).
   const stages = stagesPart
-    ? stagesPart.replace(/^\s*(שלבים|סטטוסים|מצבים)[:\s]*/, '').split(/[,\n]|\s*→\s*/).map((s) => heWords(s).join(' ').trim()).filter((s) => s.length > 1).slice(0, 8)
+    ? stagesPart.replace(/^\s*(שלבים|סטטוסים|מצבים)[:\s]*/, '').split(/[,\n]|\s*→\s*/).map((s) => heWords(s).join(' ').trim()).filter((s) => s.length > 1).slice(0, 30)
     : [];
 
   const schema = fields.map((f) => ({ label: f, type: inferType(f) }));

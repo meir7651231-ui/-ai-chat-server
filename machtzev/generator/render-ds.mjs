@@ -130,35 +130,39 @@ function pickRelation(label, selfName, entityNames) {
   return null;
 }
 
-// ── ישות: מסך-חי מחווט — טופס→שמירה→חנות→טבלה→דשבורד, + קשרים + מסע + לוגיקת-אימפריה ──
-export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [] }) {
+// ── ישות: מסך-חי מחווט — טופס→שמירה→חנות→טבלה→דשבורד, + קשרים(מזהה) + מסע + עריכה/מחיקה ──
+export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {} }) {
   const { k, dump } = makeConsts(slug);
   const cTitle = k(name);
   const cSub = k(`${schema.length} שדות${stages.length ? ` · ${stages.length} שלבים` : ''}`);
   const cIcon = k(icon);
   const cSave = k('שמירה');
+  const cUpdate = k('עדכון');
   const cForm = k('פרטי הרשומה');
   const cRecords = k('רשומות');
   const cEmpty = k(`אין ${name} עדיין — הרשומה הראשונה תופיע כאן`);
-  const cEntity = k(name);
+  const SK = `'${slug}'`;   // מפתח-חנות = slug יציב (לא שם-תצוגה חתוך ⇒ אפס דליפת-נתונים בין ישויות)
 
   const funcImports = new Set();
   const labelConst = [];
   const fieldBlocks = [];
+  const recValsR = [];   // ערך-תצוגה בטבלה פר-שדה (מפתח-זר ⇒ שם-היעד; אחר ⇒ הערך הגולמי)
   let hasLive = false;
   let hasRel = false;
   schema.forEach((s, i) => {
     const cl = k(s.label); labelConst.push(cl);
-    // (1) שדה-קשר גובר: אם השדה נוקב בישות-אחרת ⇒ בורר-רשומה חי (לא טקסט, לא לוגיקה).
+    // (1) שדה-קשר גובר: השדה נוקב בישות-אחרת ⇒ בורר-רשומה ששומר מזהה-יעד יציב (לא מחרוזת).
     const rel = pickRelation(s.label, name, entityNames);
-    if (rel) {
+    const tslug = rel ? (nameToSlug[rel] || null) : null;
+    if (tslug) {
       hasRel = true;
-      const ce = k(rel);
-      fieldBlocks.push(`          DsSelect(label: ${cl}, entity: ${ce}, value: _v[${i}] ?? '', onChanged: (v) => setState(() => _v[${i}] = v)),`);
+      fieldBlocks.push(`          DsSelect(label: ${cl}, entity: '${tslug}', value: _v[${i}] ?? '', onChanged: (v) => setState(() => _v[${i}] = v)),`);
+      recValsR.push(`appStore.displayOf('${tslug}', r[${cl}] ?? '')`);
       return;
     }
     // (2) שדה-טקסט + לוגיקת-אימפריה חיה מכוונת-מטרה (טיפוס+IDF+קידומת+מובהקות).
     fieldBlocks.push(`          DsField(label: ${cl}, hint: '', value: _v[${i}] ?? '', onChanged: (v) => setState(() => _v[${i}] = v)),`);
+    recValsR.push(`r[${cl}] ?? ''`);
     const xf = pickXform(s.label, typeOf(s.label));
     if (xf) {
       funcImports.add(`import '../${xf.shelf.replace(/^new\//, '')}/${xf.file}';`);
@@ -178,14 +182,13 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const stepsDart = hasStages
     ? `        DsWorkflow(steps: const ${stageList}, current: 0),\n`
     : '';
-  // שמירה: מפת-השדות + שלב-פתיחה '0' לישות-עם-מסע (מנוע-המסע החי).
-  const saveEntries = [...labelConst.map((cl, i) => `${cl}: _v[${i}] ?? ''`), ...(hasStages ? [`'__stage': '0'`] : [])].join(', ');
-  const recValues = labelConst.map((cl) => `rs[i][${cl}] ?? ''`).join(', ');
+  const mapEntries = labelConst.map((cl, i) => `${cl}: _v[${i}] ?? ''`).join(', ');     // שדות ⇒ מפה
+  const editLoad = labelConst.map((cl, i) => `${i}: r[${cl}] ?? ''`).join(', ');         // רשומה ⇒ טופס (עריכה)
+  const recValues = recValsR.join(', ');
   const labelsList = labelConst.join(', ');
-  // כרטיס-רשומה חי: שלב-נוכחי מהחנות + כפתור-קידום (רק לישות-עם-מסע).
-  const recCard = hasStages
-    ? `DsRecordCard(labels: const [${labelsList}], values: [${recValues}], stage: (const ${stageList})[appStore.stageOf(${cEntity}, i)], stageDone: appStore.stageOf(${cEntity}, i) >= ${stages.length - 1}, onAdvance: () => appStore.advance(${cEntity}, i, ${stages.length}))`
-    : `DsRecordCard(labels: const [${labelsList}], values: [${recValues}])`;
+  const stageArgs = hasStages
+    ? `stage: (const ${stageList})[appStore.stageOf(${SK}, rid)], stageDone: appStore.stageOf(${SK}, rid) >= ${stages.length - 1}, onAdvance: () => appStore.advance(${SK}, rid, ${stages.length}), `
+    : '';
 
   const relImport = hasRel ? "import '../dart-ui-bs/ds/ds_select.dart';\n" : '';
   const cls = pascal(slug);
@@ -205,12 +208,30 @@ class ${cls} extends StatefulWidget {
 }
 
 class _${cls}State extends State<${cls}> {
-  final Map<int, String> _v = {};
+  Map<int, String> _v = {};
+  String? _editId;   // ריק = הוספה · מזהה = עריכת-רשומה קיימת
 
   void _save() {
     if (_v.values.where((x) => x.trim().isNotEmpty).isEmpty) return;
-    appStore.add(${cEntity}, <String, String>{${saveEntries}});
-    setState(() => _v.clear());
+    final map = <String, String>{${mapEntries}};
+    if (_editId != null) {
+      appStore.update(${SK}, _editId!, map);
+    } else {
+      appStore.add(${SK}, <String, String>{...map${hasStages ? `, '__stage': '0'` : ''}});
+    }
+    setState(() { _v.clear(); _editId = null; });
+  }
+
+  void _edit(Map<String, String> r) {
+    setState(() {
+      _editId = r['__id'];
+      _v = {${editLoad}};
+    });
+  }
+
+  Widget _card(Map<String, String> r) {
+    final rid = r['__id'] ?? '';
+    return DsRecordCard(labels: const [${labelsList}], values: [${recValues}], ${stageArgs}onEdit: () => _edit(r), onDelete: () => appStore.removeById(${SK}, rid));
   }
 
 ${hasLive ? `  Widget _live(String label, String out) => Padding(
@@ -233,7 +254,7 @@ ${hasLive ? `  Widget _live(String label, String out) => Padding(
       title: ${cTitle},
       subtitle: ${cSub},
       icon: ${cIcon},
-      bottomBar: DsPrimaryButton(label: ${cSave}, onTap: _save),
+      bottomBar: DsPrimaryButton(label: _editId == null ? ${cSave} : ${cUpdate}, onTap: _save),
       children: [
 ${stepsDart}        DsSection(title: ${cForm}, children: [
 ${fieldBlocks.join('\n')}
@@ -242,11 +263,11 @@ ${fieldBlocks.join('\n')}
           AnimatedBuilder(
             animation: appStore,
             builder: (context, _) {
-              final rs = appStore.records(${cEntity});
+              final rs = appStore.records(${SK});
               if (rs.isEmpty) return const DsEmpty(label: ${cEmpty});
               return Column(children: [
                 for (var i = 0; i < rs.length; i++)
-                  ${recCard},
+                  _card(rs[i]),
               ]);
             },
           ),
@@ -277,8 +298,8 @@ export function renderDashboard(slug, { title, icon = '📊', entities, metrics 
     const lbl = k(e.name);
     const sub = k(`${e.fields} שדות${e.stages ? ` · ${e.stages} שלבים` : ''}`);
     const g = k(e.icon || '🗂️');
-    // ערך-חי: סופר את הרשומות בחנות פר-ישות (מגיב לשמירה)
-    return `AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: ${lbl}, value: appStore.count(${lbl}).toString(), sub: ${sub}, glyph: ${g}))`;
+    // ערך-חי: סופר את הרשומות בחנות לפי-slug (מפתח-החנות היציב), מגיב לשמירה
+    return `AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: ${lbl}, value: appStore.count('${e.slug || ''}').toString(), sub: ${sub}, glyph: ${g}))`;
   });
   const rows = [];
   for (let i = 0; i < tiles.length; i += 2) {

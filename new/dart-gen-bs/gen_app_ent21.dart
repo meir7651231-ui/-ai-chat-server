@@ -15,12 +15,30 @@ class GenAppEnt21Screen extends StatefulWidget {
 }
 
 class _GenAppEnt21ScreenState extends State<GenAppEnt21Screen> {
-  final Map<int, String> _v = {};
+  Map<int, String> _v = {};
+  String? _editId;   // ריק = הוספה · מזהה = עריכת-רשומה קיימת
 
   void _save() {
     if (_v.values.where((x) => x.trim().isNotEmpty).isEmpty) return;
-    appStore.add(gen_app_ent21_c7, <String, String>{gen_app_ent21_c8: _v[0] ?? '', gen_app_ent21_c9: _v[1] ?? '', gen_app_ent21_c10: _v[2] ?? '', gen_app_ent21_c11: _v[3] ?? '', gen_app_ent21_c12: _v[4] ?? '', gen_app_ent21_c14: _v[5] ?? '', gen_app_ent21_c15: _v[6] ?? '', gen_app_ent21_c17: _v[7] ?? '', gen_app_ent21_c19: _v[8] ?? '', gen_app_ent21_c20: _v[9] ?? '', gen_app_ent21_c21: _v[10] ?? '', gen_app_ent21_c22: _v[11] ?? '', gen_app_ent21_c23: _v[12] ?? '', gen_app_ent21_c24: _v[13] ?? '', gen_app_ent21_c25: _v[14] ?? '', gen_app_ent21_c26: _v[15] ?? '', gen_app_ent21_c27: _v[16] ?? '', gen_app_ent21_c28: _v[17] ?? '', gen_app_ent21_c29: _v[18] ?? '', gen_app_ent21_c30: _v[19] ?? ''});
-    setState(() => _v.clear());
+    final map = <String, String>{gen_app_ent21_c8: _v[0] ?? '', gen_app_ent21_c9: _v[1] ?? '', gen_app_ent21_c10: _v[2] ?? '', gen_app_ent21_c11: _v[3] ?? '', gen_app_ent21_c12: _v[4] ?? '', gen_app_ent21_c14: _v[5] ?? '', gen_app_ent21_c15: _v[6] ?? '', gen_app_ent21_c17: _v[7] ?? '', gen_app_ent21_c19: _v[8] ?? '', gen_app_ent21_c20: _v[9] ?? '', gen_app_ent21_c21: _v[10] ?? '', gen_app_ent21_c22: _v[11] ?? '', gen_app_ent21_c23: _v[12] ?? '', gen_app_ent21_c24: _v[13] ?? '', gen_app_ent21_c25: _v[14] ?? '', gen_app_ent21_c26: _v[15] ?? '', gen_app_ent21_c27: _v[16] ?? '', gen_app_ent21_c28: _v[17] ?? '', gen_app_ent21_c29: _v[18] ?? '', gen_app_ent21_c30: _v[19] ?? '', gen_app_ent21_c31: _v[20] ?? ''};
+    if (_editId != null) {
+      appStore.update('app_ent21', _editId!, map);
+    } else {
+      appStore.add('app_ent21', <String, String>{...map});
+    }
+    setState(() { _v.clear(); _editId = null; });
+  }
+
+  void _edit(Map<String, String> r) {
+    setState(() {
+      _editId = r['__id'];
+      _v = {0: r[gen_app_ent21_c8] ?? '', 1: r[gen_app_ent21_c9] ?? '', 2: r[gen_app_ent21_c10] ?? '', 3: r[gen_app_ent21_c11] ?? '', 4: r[gen_app_ent21_c12] ?? '', 5: r[gen_app_ent21_c14] ?? '', 6: r[gen_app_ent21_c15] ?? '', 7: r[gen_app_ent21_c17] ?? '', 8: r[gen_app_ent21_c19] ?? '', 9: r[gen_app_ent21_c20] ?? '', 10: r[gen_app_ent21_c21] ?? '', 11: r[gen_app_ent21_c22] ?? '', 12: r[gen_app_ent21_c23] ?? '', 13: r[gen_app_ent21_c24] ?? '', 14: r[gen_app_ent21_c25] ?? '', 15: r[gen_app_ent21_c26] ?? '', 16: r[gen_app_ent21_c27] ?? '', 17: r[gen_app_ent21_c28] ?? '', 18: r[gen_app_ent21_c29] ?? '', 19: r[gen_app_ent21_c30] ?? '', 20: r[gen_app_ent21_c31] ?? ''};
+    });
+  }
+
+  Widget _card(Map<String, String> r) {
+    final rid = r['__id'] ?? '';
+    return DsRecordCard(labels: const [gen_app_ent21_c8, gen_app_ent21_c9, gen_app_ent21_c10, gen_app_ent21_c11, gen_app_ent21_c12, gen_app_ent21_c14, gen_app_ent21_c15, gen_app_ent21_c17, gen_app_ent21_c19, gen_app_ent21_c20, gen_app_ent21_c21, gen_app_ent21_c22, gen_app_ent21_c23, gen_app_ent21_c24, gen_app_ent21_c25, gen_app_ent21_c26, gen_app_ent21_c27, gen_app_ent21_c28, gen_app_ent21_c29, gen_app_ent21_c30, gen_app_ent21_c31], values: [r[gen_app_ent21_c8] ?? '', r[gen_app_ent21_c9] ?? '', r[gen_app_ent21_c10] ?? '', r[gen_app_ent21_c11] ?? '', r[gen_app_ent21_c12] ?? '', r[gen_app_ent21_c14] ?? '', r[gen_app_ent21_c15] ?? '', r[gen_app_ent21_c17] ?? '', r[gen_app_ent21_c19] ?? '', r[gen_app_ent21_c20] ?? '', r[gen_app_ent21_c21] ?? '', r[gen_app_ent21_c22] ?? '', r[gen_app_ent21_c23] ?? '', r[gen_app_ent21_c24] ?? '', r[gen_app_ent21_c25] ?? '', r[gen_app_ent21_c26] ?? '', r[gen_app_ent21_c27] ?? '', r[gen_app_ent21_c28] ?? '', r[gen_app_ent21_c29] ?? '', r[gen_app_ent21_c30] ?? '', r[gen_app_ent21_c31] ?? ''], onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent21', rid));
   }
 
   Widget _live(String label, String out) => Padding(
@@ -43,9 +61,9 @@ class _GenAppEnt21ScreenState extends State<GenAppEnt21Screen> {
       title: gen_app_ent21_c0,
       subtitle: gen_app_ent21_c1,
       icon: gen_app_ent21_c2,
-      bottomBar: DsPrimaryButton(label: gen_app_ent21_c3, onTap: _save),
+      bottomBar: DsPrimaryButton(label: _editId == null ? gen_app_ent21_c3 : gen_app_ent21_c4, onTap: _save),
       children: [
-        DsSection(title: gen_app_ent21_c4, children: [
+        DsSection(title: gen_app_ent21_c5, children: [
           DsField(label: gen_app_ent21_c8, hint: '', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
           DsField(label: gen_app_ent21_c9, hint: '', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
           DsField(label: gen_app_ent21_c10, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
@@ -69,16 +87,17 @@ class _GenAppEnt21ScreenState extends State<GenAppEnt21Screen> {
           DsField(label: gen_app_ent21_c28, hint: '', value: _v[17] ?? '', onChanged: (v) => setState(() => _v[17] = v)),
           DsField(label: gen_app_ent21_c29, hint: '', value: _v[18] ?? '', onChanged: (v) => setState(() => _v[18] = v)),
           DsField(label: gen_app_ent21_c30, hint: '', value: _v[19] ?? '', onChanged: (v) => setState(() => _v[19] = v)),
+          DsField(label: gen_app_ent21_c31, hint: '', value: _v[20] ?? '', onChanged: (v) => setState(() => _v[20] = v)),
         ]),
-        DsSection(title: gen_app_ent21_c5, children: [
+        DsSection(title: gen_app_ent21_c6, children: [
           AnimatedBuilder(
             animation: appStore,
             builder: (context, _) {
-              final rs = appStore.records(gen_app_ent21_c7);
-              if (rs.isEmpty) return const DsEmpty(label: gen_app_ent21_c6);
+              final rs = appStore.records('app_ent21');
+              if (rs.isEmpty) return const DsEmpty(label: gen_app_ent21_c7);
               return Column(children: [
                 for (var i = 0; i < rs.length; i++)
-                  DsRecordCard(labels: const [gen_app_ent21_c8, gen_app_ent21_c9, gen_app_ent21_c10, gen_app_ent21_c11, gen_app_ent21_c12, gen_app_ent21_c14, gen_app_ent21_c15, gen_app_ent21_c17, gen_app_ent21_c19, gen_app_ent21_c20, gen_app_ent21_c21, gen_app_ent21_c22, gen_app_ent21_c23, gen_app_ent21_c24, gen_app_ent21_c25, gen_app_ent21_c26, gen_app_ent21_c27, gen_app_ent21_c28, gen_app_ent21_c29, gen_app_ent21_c30], values: [rs[i][gen_app_ent21_c8] ?? '', rs[i][gen_app_ent21_c9] ?? '', rs[i][gen_app_ent21_c10] ?? '', rs[i][gen_app_ent21_c11] ?? '', rs[i][gen_app_ent21_c12] ?? '', rs[i][gen_app_ent21_c14] ?? '', rs[i][gen_app_ent21_c15] ?? '', rs[i][gen_app_ent21_c17] ?? '', rs[i][gen_app_ent21_c19] ?? '', rs[i][gen_app_ent21_c20] ?? '', rs[i][gen_app_ent21_c21] ?? '', rs[i][gen_app_ent21_c22] ?? '', rs[i][gen_app_ent21_c23] ?? '', rs[i][gen_app_ent21_c24] ?? '', rs[i][gen_app_ent21_c25] ?? '', rs[i][gen_app_ent21_c26] ?? '', rs[i][gen_app_ent21_c27] ?? '', rs[i][gen_app_ent21_c28] ?? '', rs[i][gen_app_ent21_c29] ?? '', rs[i][gen_app_ent21_c30] ?? '']),
+                  _card(rs[i]),
               ]);
             },
           ),

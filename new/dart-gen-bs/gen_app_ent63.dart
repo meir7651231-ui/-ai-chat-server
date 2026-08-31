@@ -14,12 +14,30 @@ class GenAppEnt63Screen extends StatefulWidget {
 }
 
 class _GenAppEnt63ScreenState extends State<GenAppEnt63Screen> {
-  final Map<int, String> _v = {};
+  Map<int, String> _v = {};
+  String? _editId;   // ריק = הוספה · מזהה = עריכת-רשומה קיימת
 
   void _save() {
     if (_v.values.where((x) => x.trim().isNotEmpty).isEmpty) return;
-    appStore.add(gen_app_ent63_c7, <String, String>{gen_app_ent63_c8: _v[0] ?? '', gen_app_ent63_c9: _v[1] ?? '', gen_app_ent63_c10: _v[2] ?? '', gen_app_ent63_c11: _v[3] ?? '', gen_app_ent63_c12: _v[4] ?? '', gen_app_ent63_c13: _v[5] ?? '', gen_app_ent63_c15: _v[6] ?? '', gen_app_ent63_c17: _v[7] ?? '', gen_app_ent63_c18: _v[8] ?? '', gen_app_ent63_c19: _v[9] ?? ''});
-    setState(() => _v.clear());
+    final map = <String, String>{gen_app_ent63_c8: _v[0] ?? '', gen_app_ent63_c9: _v[1] ?? '', gen_app_ent63_c10: _v[2] ?? '', gen_app_ent63_c11: _v[3] ?? '', gen_app_ent63_c12: _v[4] ?? '', gen_app_ent63_c13: _v[5] ?? '', gen_app_ent63_c15: _v[6] ?? '', gen_app_ent63_c17: _v[7] ?? '', gen_app_ent63_c18: _v[8] ?? '', gen_app_ent63_c19: _v[9] ?? ''};
+    if (_editId != null) {
+      appStore.update('app_ent63', _editId!, map);
+    } else {
+      appStore.add('app_ent63', <String, String>{...map});
+    }
+    setState(() { _v.clear(); _editId = null; });
+  }
+
+  void _edit(Map<String, String> r) {
+    setState(() {
+      _editId = r['__id'];
+      _v = {0: r[gen_app_ent63_c8] ?? '', 1: r[gen_app_ent63_c9] ?? '', 2: r[gen_app_ent63_c10] ?? '', 3: r[gen_app_ent63_c11] ?? '', 4: r[gen_app_ent63_c12] ?? '', 5: r[gen_app_ent63_c13] ?? '', 6: r[gen_app_ent63_c15] ?? '', 7: r[gen_app_ent63_c17] ?? '', 8: r[gen_app_ent63_c18] ?? '', 9: r[gen_app_ent63_c19] ?? ''};
+    });
+  }
+
+  Widget _card(Map<String, String> r) {
+    final rid = r['__id'] ?? '';
+    return DsRecordCard(labels: const [gen_app_ent63_c8, gen_app_ent63_c9, gen_app_ent63_c10, gen_app_ent63_c11, gen_app_ent63_c12, gen_app_ent63_c13, gen_app_ent63_c15, gen_app_ent63_c17, gen_app_ent63_c18, gen_app_ent63_c19], values: [r[gen_app_ent63_c8] ?? '', r[gen_app_ent63_c9] ?? '', r[gen_app_ent63_c10] ?? '', r[gen_app_ent63_c11] ?? '', r[gen_app_ent63_c12] ?? '', r[gen_app_ent63_c13] ?? '', r[gen_app_ent63_c15] ?? '', r[gen_app_ent63_c17] ?? '', r[gen_app_ent63_c18] ?? '', r[gen_app_ent63_c19] ?? ''], onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent63', rid));
   }
 
   Widget _live(String label, String out) => Padding(
@@ -42,9 +60,9 @@ class _GenAppEnt63ScreenState extends State<GenAppEnt63Screen> {
       title: gen_app_ent63_c0,
       subtitle: gen_app_ent63_c1,
       icon: gen_app_ent63_c2,
-      bottomBar: DsPrimaryButton(label: gen_app_ent63_c3, onTap: _save),
+      bottomBar: DsPrimaryButton(label: _editId == null ? gen_app_ent63_c3 : gen_app_ent63_c4, onTap: _save),
       children: [
-        DsSection(title: gen_app_ent63_c4, children: [
+        DsSection(title: gen_app_ent63_c5, children: [
           DsField(label: gen_app_ent63_c8, hint: '', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
           DsField(label: gen_app_ent63_c9, hint: '', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
           DsField(label: gen_app_ent63_c10, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
@@ -58,15 +76,15 @@ class _GenAppEnt63ScreenState extends State<GenAppEnt63Screen> {
           DsField(label: gen_app_ent63_c18, hint: '', value: _v[8] ?? '', onChanged: (v) => setState(() => _v[8] = v)),
           DsField(label: gen_app_ent63_c19, hint: '', value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
         ]),
-        DsSection(title: gen_app_ent63_c5, children: [
+        DsSection(title: gen_app_ent63_c6, children: [
           AnimatedBuilder(
             animation: appStore,
             builder: (context, _) {
-              final rs = appStore.records(gen_app_ent63_c7);
-              if (rs.isEmpty) return const DsEmpty(label: gen_app_ent63_c6);
+              final rs = appStore.records('app_ent63');
+              if (rs.isEmpty) return const DsEmpty(label: gen_app_ent63_c7);
               return Column(children: [
                 for (var i = 0; i < rs.length; i++)
-                  DsRecordCard(labels: const [gen_app_ent63_c8, gen_app_ent63_c9, gen_app_ent63_c10, gen_app_ent63_c11, gen_app_ent63_c12, gen_app_ent63_c13, gen_app_ent63_c15, gen_app_ent63_c17, gen_app_ent63_c18, gen_app_ent63_c19], values: [rs[i][gen_app_ent63_c8] ?? '', rs[i][gen_app_ent63_c9] ?? '', rs[i][gen_app_ent63_c10] ?? '', rs[i][gen_app_ent63_c11] ?? '', rs[i][gen_app_ent63_c12] ?? '', rs[i][gen_app_ent63_c13] ?? '', rs[i][gen_app_ent63_c15] ?? '', rs[i][gen_app_ent63_c17] ?? '', rs[i][gen_app_ent63_c18] ?? '', rs[i][gen_app_ent63_c19] ?? '']),
+                  _card(rs[i]),
               ]);
             },
           ),

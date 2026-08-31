@@ -33,10 +33,17 @@ export function buildApp(specText) {
   const lines = all.filter((l) => !ROLE_RE.test(l));
   const info = lines.map((line, idx) => ({ line, i: idx + 1, isEnt: ENTITY_RE.test(line) }));
 
-  // מקדימים: כל הישויות (לתוכן-הדשבורדים ולזיהוי-קשרים בין-ישויות)
+  // מקדימים: כל הישויות (לתוכן-הדשבורדים ולזיהוי-קשרים בין-ישויות) + מפת שם→slug יציב
   const entRes = {};
   for (const li of info) if (li.isEnt) entRes[li.i] = entInterpret(li.line);
-  const entMeta = Object.values(entRes).map((r) => ({ name: r.entity, fields: r.schema.length, stages: (r.stages || []).length, icon: '🗂️' }));
+  const entMeta = [];
+  const nameToSlug = {};
+  for (const li of info) if (li.isEnt) {
+    const r = entRes[li.i];
+    const eslug = `app_ent${li.i}`;
+    entMeta.push({ name: r.entity, slug: eslug, fields: r.schema.length, stages: (r.stages || []).length, icon: '🗂️' });
+    if (!(r.entity in nameToSlug)) nameToSlug[r.entity] = eslug;   // שם ⇒ slug-היעד לקשרים
+  }
   const entityNames = entMeta.map((e) => e.name);
 
   // ניקוי פלט-app קודם
@@ -48,7 +55,7 @@ export function buildApp(specText) {
     if (li.isEnt) {
       const r = entRes[li.i];
       const slug = `app_ent${li.i}`;
-      const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames });
+      const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames, nameToSlug });
       screens.push({ slug, cls, kind: 'entity', name: r.entity, icon: '🗂️', sub: `${r.schema.length} שדות${(r.stages || []).length ? ` · ${r.stages.length} שלבים` : ''}` });
     } else {
       const slug = `app_scr${li.i}`;

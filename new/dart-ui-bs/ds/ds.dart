@@ -302,13 +302,13 @@ class DsNavTile extends StatelessWidget {
       );
 }
 
-// ── כרטיס-רשומה: תווית:ערך לכל שדה + שבב-שלב-מסע חי וכפתור-קידום (מציג רשומה מהחנות) ──
+// ── כרטיס-רשומה: תווית:ערך לכל שדה + שבב-שלב חי + קידום + עריכה (הקשה) + מחיקה ──
 class DsRecordCard extends StatelessWidget {
-  const DsRecordCard({required this.labels, required this.values, this.stage = '', this.stageDone = false, this.onAdvance, super.key});
+  const DsRecordCard({required this.labels, required this.values, this.stage = '', this.stageDone = false, this.onAdvance, this.onEdit, this.onDelete, super.key});
   final List<String> labels, values;
   final String stage;         // שם השלב-הנוכחי (ריק = לישות אין מסע)
   final bool stageDone;       // האם הגיע לשלב-האחרון
-  final VoidCallback? onAdvance;
+  final VoidCallback? onAdvance, onEdit, onDelete;
   @override
   Widget build(BuildContext context) {
     final rows = <Widget>[];
@@ -326,46 +326,61 @@ class DsRecordCard extends StatelessWidget {
         ),
       ));
     }
+    final body = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (stage.isNotEmpty || onDelete != null) Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Row(
+            children: [
+              if (stage.isNotEmpty) DsChip(label: stage, tone: stageDone ? 1 : 0),
+              const Spacer(),
+              if (stage.isNotEmpty && !stageDone && onAdvance != null)
+                Material(
+                  color: DsTokens.accentSoft,
+                  borderRadius: BorderRadius.circular(20),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(20),
+                    onTap: onAdvance,
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      child: Row(mainAxisSize: MainAxisSize.min, children: [
+                        Text('קדם שלב', style: TextStyle(color: DsTokens.accentDark, fontSize: 12, fontWeight: FontWeight.w700)),
+                        SizedBox(width: 4),
+                        Icon(Icons.arrow_back, size: 14, color: DsTokens.accentDark),
+                      ]),
+                    ),
+                  ),
+                ),
+              if (onDelete != null)
+                Padding(
+                  padding: const EdgeInsets.only(right: 4),
+                  child: IconButton(
+                    onPressed: onDelete,
+                    visualDensity: VisualDensity.compact,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(minWidth: 30, minHeight: 30),
+                    icon: const Icon(Icons.delete_outline, size: 18, color: DsTokens.faint),
+                    tooltip: 'מחק',
+                  ),
+                ),
+            ],
+          ),
+        ),
+        ...rows.isEmpty ? [const Text('—', style: TextStyle(color: DsTokens.faint))] : rows,
+      ],
+    );
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: const Color(0xFFF8FAFC),
         borderRadius: BorderRadius.circular(DsTokens.rSm),
         border: Border.all(color: DsTokens.line),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (stage.isNotEmpty) Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Row(
-              children: [
-                DsChip(label: stage, tone: stageDone ? 1 : 0),
-                const Spacer(),
-                if (!stageDone && onAdvance != null)
-                  Material(
-                    color: DsTokens.accentSoft,
-                    borderRadius: BorderRadius.circular(20),
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(20),
-                      onTap: onAdvance,
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        child: Row(mainAxisSize: MainAxisSize.min, children: [
-                          Text('קדם שלב', style: TextStyle(color: DsTokens.accentDark, fontSize: 12, fontWeight: FontWeight.w700)),
-                          SizedBox(width: 4),
-                          Icon(Icons.arrow_back, size: 14, color: DsTokens.accentDark),
-                        ]),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          ...rows.isEmpty ? [const Text('—', style: TextStyle(color: DsTokens.faint))] : rows,
-        ],
-      ),
+      clipBehavior: Clip.antiAlias,
+      child: onEdit == null
+          ? Padding(padding: const EdgeInsets.all(14), child: body)
+          : InkWell(onTap: onEdit, child: Padding(padding: const EdgeInsets.all(14), child: body)),
     );
   }
 }
