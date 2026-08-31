@@ -60,9 +60,16 @@ export function buildApp(specText) {
     } else {
       const slug = `app_scr${li.i}`;
       const title = (li.line.split(/\s+עם\s+/)[0] || li.line).trim();     // כותרת = לפני 'עם'
-      const metrics = (li.line.split(/\s+עם\s+/)[1] || '').split(/[\s,]+/).filter(Boolean);   // מדדים = אחרי 'עם'
-      const { cls } = renderDashboard(slug, { title: clean(title), icon: '📊', entities: entMeta, metrics });
-      screens.push({ slug, cls, kind: 'dashboard', name: clean(title), icon: '📊', sub: `${metrics.length || entMeta.length} מדדים` });
+      const rawMetrics = (li.line.split(/\s+עם\s+/)[1] || '').split(/[\s,]+/).filter(Boolean);   // מדדים = אחרי 'עם'
+      // אגרגט מהאפיון: סכום(ישות.שדה) · ממוצע(ישות.שדה) · מונה(ישות). בלי-סוגריים ⇒ מונה-לפי-שם.
+      const aggs = [], countWords = [];
+      for (const t of rawMetrics) {
+        const m = t.match(/^(סכום|ממוצע|מונה)\(([^.)]+)(?:\.([^)]+))?\)$/);
+        if (m) aggs.push({ kind: m[1], entityName: m[2].trim(), field: (m[3] || '').trim(), slug: nameToSlug[m[2].trim()] || '' });
+        else countWords.push(t);
+      }
+      const { cls } = renderDashboard(slug, { title: clean(title), icon: '📊', entities: entMeta, metrics: countWords, aggs });
+      screens.push({ slug, cls, kind: 'dashboard', name: clean(title), icon: '📊', sub: `${(countWords.length + aggs.length) || entMeta.length} מדדים` });
     }
   }
 

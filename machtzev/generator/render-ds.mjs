@@ -387,24 +387,37 @@ ${fieldBlocks.join('\n')}
 
 // ── דשבורד: רשת אריחי-KPI מנתוני-הישויות. metrics = המילים אחרי 'עם' באפיון ⇒ מציג
 //    בדיוק את המדדים שביקשת (מותאמים-קידומת לישויות-אמת), לא את כל-הישויות. נופל-לכל אם אין. ──
-export function renderDashboard(slug, { title, icon = '📊', entities, metrics = [] }) {
+export function renderDashboard(slug, { title, icon = '📊', entities, metrics = [], aggs = [] }) {
   const { k, dump } = makeConsts(slug);
   const cTitle = k(title);
   let shown = entities;
   if (metrics.length) {
     const mw = metrics.flatMap(heWords);
     const picked = entities.filter((e) => heWords(e.name).some((n) => mw.some((m) => prefixMatch(m, n))));
-    if (picked.length) shown = picked;
+    shown = picked.length ? picked : (aggs.length ? [] : entities);
+  } else if (aggs.length) {
+    shown = [];   // רק אגרגטים בוקשו ⇒ בלי אריחי-מונה של כל-הישויות
   }
-  const cSub = k(`${shown.length} מדדים · סקירת-על`);
   const cIcon = k(icon);
-  const tiles = shown.map((e) => {
+  // אריחי-אגרגט (שורש-4): סכום/ממוצע על שדה-מספרי · מונה על ישות — ערך-אמת, לא ספירה עיוורת.
+  const aggTiles = aggs.filter((a) => a.slug && (a.kind === 'מונה' || a.field)).map((a) => {
+    const lbl = k(a.field || a.entityName);
+    const sub = k(`${a.kind} · ${a.entityName}`);
+    const g = k(a.kind === 'ממוצע' ? '📈' : a.kind === 'סכום' ? '🧮' : '🔢');
+    const call = a.kind === 'סכום' ? `appStore.sum('${a.slug}', ${k(a.field)}).toStringAsFixed(0)`
+      : a.kind === 'ממוצע' ? `appStore.avg('${a.slug}', ${k(a.field)}).toStringAsFixed(1)`
+      : `appStore.count('${a.slug}').toString()`;
+    return `AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: ${lbl}, value: ${call}, sub: ${sub}, glyph: ${g}))`;
+  });
+  const countTiles = shown.map((e) => {
     const lbl = k(e.name);
     const sub = k(`${e.fields} שדות${e.stages ? ` · ${e.stages} שלבים` : ''}`);
     const g = k(e.icon || '🗂️');
     // ערך-חי: סופר את הרשומות בחנות לפי-slug (מפתח-החנות היציב), מגיב לשמירה
     return `AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: ${lbl}, value: appStore.count('${e.slug || ''}').toString(), sub: ${sub}, glyph: ${g}))`;
   });
+  const tiles = [...aggTiles, ...countTiles];
+  const cSub = k(`${tiles.length} מדדים · סקירת-על`);
   const rows = [];
   for (let i = 0; i < tiles.length; i += 2) {
     const a = tiles[i], b = tiles[i + 1];

@@ -11,10 +11,10 @@ class GenAppScr74Screen extends StatelessWidget {
   Widget build(BuildContext context) {
     return DsScaffold(
       title: gen_app_scr74_c0,
-      subtitle: gen_app_scr74_c1,
-      icon: gen_app_scr74_c2,
+      subtitle: gen_app_scr74_c8,
+      icon: gen_app_scr74_c1,
       children: [
-      Padding(padding: const EdgeInsets.only(bottom: 12), child: IntrinsicHeight(child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [Expanded(child: AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: gen_app_scr74_c3, value: appStore.count('app_ent44').toString(), sub: gen_app_scr74_c4, glyph: gen_app_scr74_c5))), const SizedBox(width: 12), Expanded(child: AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: gen_app_scr74_c6, value: appStore.count('app_ent46').toString(), sub: gen_app_scr74_c7, glyph: gen_app_scr74_c8)))]))),
+      Padding(padding: const EdgeInsets.only(bottom: 12), child: IntrinsicHeight(child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [Expanded(child: AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: gen_app_scr74_c2, value: appStore.count('app_ent44').toString(), sub: gen_app_scr74_c3, glyph: gen_app_scr74_c4))), const SizedBox(width: 12), Expanded(child: AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: gen_app_scr74_c5, value: appStore.count('app_ent46').toString(), sub: gen_app_scr74_c6, glyph: gen_app_scr74_c7)))]))),
       ],
     );
   }

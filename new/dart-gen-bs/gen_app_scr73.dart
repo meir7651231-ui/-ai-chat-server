@@ -11,11 +11,11 @@ class GenAppScr73Screen extends StatelessWidget {
   Widget build(BuildContext context) {
     return DsScaffold(
       title: gen_app_scr73_c0,
-      subtitle: gen_app_scr73_c1,
-      icon: gen_app_scr73_c2,
+      subtitle: gen_app_scr73_c11,
+      icon: gen_app_scr73_c1,
       children: [
-      Padding(padding: const EdgeInsets.only(bottom: 12), child: IntrinsicHeight(child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [Expanded(child: AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: gen_app_scr73_c3, value: appStore.count('app_ent30').toString(), sub: gen_app_scr73_c4, glyph: gen_app_scr73_c5))), const SizedBox(width: 12), Expanded(child: AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: gen_app_scr73_c6, value: appStore.count('app_ent32').toString(), sub: gen_app_scr73_c7, glyph: gen_app_scr73_c8)))]))),
-      Padding(padding: const EdgeInsets.only(bottom: 12), child: IntrinsicHeight(child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [Expanded(child: AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: gen_app_scr73_c9, value: appStore.count('app_ent34').toString(), sub: gen_app_scr73_c10, glyph: gen_app_scr73_c11))), const SizedBox(width: 12), const Expanded(child: SizedBox())]))),
+      Padding(padding: const EdgeInsets.only(bottom: 12), child: IntrinsicHeight(child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [Expanded(child: AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: gen_app_scr73_c2, value: appStore.count('app_ent30').toString(), sub: gen_app_scr73_c3, glyph: gen_app_scr73_c4))), const SizedBox(width: 12), Expanded(child: AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: gen_app_scr73_c5, value: appStore.count('app_ent32').toString(), sub: gen_app_scr73_c6, glyph: gen_app_scr73_c7)))]))),
+      Padding(padding: const EdgeInsets.only(bottom: 12), child: IntrinsicHeight(child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [Expanded(child: AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: gen_app_scr73_c8, value: appStore.count('app_ent34').toString(), sub: gen_app_scr73_c9, glyph: gen_app_scr73_c10))), const SizedBox(width: 12), const Expanded(child: SizedBox())]))),
       ],
     );
   }
