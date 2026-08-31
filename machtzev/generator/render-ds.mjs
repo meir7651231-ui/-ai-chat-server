@@ -210,7 +210,10 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const funcImports = new Set();
   const typedImports = new Set();
   const labelConst = [];
-  const fieldBlocks = [];
+  const fieldBlocks = [];   // {i, expr, cond?} — expr בלי הזחה/פסיק (לעיטוף-גישה בטוח פר-תפקיד)
+  // 🔩 עוזר-הוספה: שומר את ביטוי-הווידג'ט + אינדקס-השדה (+ תנאי-קיום ל-_live) ⇒ ניתן
+  // לעטוף בהסתרה/נעילה פר-תפקיד. פלט-רגיל = ביט-זהה (אותה שורה שנפלטה קודם).
+  const addField = (i, expr, cond = null) => fieldBlocks.push({ i, expr, cond });
   const recValsR = [];   // ערך-תצוגה בטבלה פר-שדה
   const mapVals = [];    // ערך-שמירה פר-שדה (מחושב ⇒ תוצאת-הנוסחה; אחר ⇒ _v[i])
   const requiredIdx = [];
@@ -256,7 +259,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
       const expr = compileFormula(s.formula, labelIdx);
       if (expr) {
         hasCalc = true;
-        fieldBlocks.push(`          _calc(${cl}, ${expr}),`);
+        addField(i, `_calc(${cl}, ${expr})`);
         recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: (${expr}).toStringAsFixed(2)`);
         return;
       }
@@ -275,7 +278,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
         return { si, mk, sk };
       });
       const subLines = subs.map((x) => `            DsField(label: ${x.mk}, hint: '', value: _v[${x.si}] ?? '', onChanged: (v) => setState(() => _v[${x.si}] = v)),`).join('\n');
-      fieldBlocks.push(`          DsSection(title: ${cl}, children: [\n${subLines}\n          ]),`);
+      addField(i, `DsSection(title: ${cl}, children: [\n${subLines}\n          ])`);
       recValsR.push(`[${subs.map((x) => `r[${x.sk}] ?? ''`).join(', ')}].where((x) => x.trim().isNotEmpty).join(' · ')`);
       return;
     }
@@ -283,7 +286,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
     if (s.enumVals && s.enumVals.length) {
       hasEnum = true;
       const opts = s.enumVals.map((v) => k(v)).join(', ');
-      fieldBlocks.push(`          DsEnumField(label: ${cl}, options: const [${opts}], ${bind}),`);
+      addField(i, `DsEnumField(label: ${cl}, options: const [${opts}], ${bind})`);
       recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: _v[${i}] ?? ''`);
       return;
     }
@@ -292,7 +295,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
     const tslug = rel ? (nameToSlug[rel] || null) : null;
     if (tslug) {
       hasRel = true;
-      fieldBlocks.push(`          DsSelect(label: ${cl}, entity: '${tslug}', ${bind}),`);
+      addField(i, `DsSelect(label: ${cl}, entity: '${tslug}', ${bind})`);
       recValsR.push(`appStore.displayOf('${tslug}', r[${cl}] ?? '')`); mapVals.push(`${cl}: _v[${i}] ?? ''`);
       return;
     }
@@ -301,18 +304,18 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
     const mslug = mrel ? (nameToSlug[mrel] || null) : null;
     if (mslug) {
       hasMulti = true;
-      fieldBlocks.push(`          DsMultiSelect(label: ${cl}, entity: '${mslug}', ${bind}),`);
+      addField(i, `DsMultiSelect(label: ${cl}, entity: '${mslug}', ${bind})`);
       recValsR.push(`appStore.displayList('${mslug}', r[${cl}] ?? '')`); mapVals.push(`${cl}: _v[${i}] ?? ''`);
       return;
     }
     // (3) טיפוס נאחז-מהאטומים ⇒ הווידג'ט האמיתי: תאריך→בורר · מספר→מקלדת · דו-ערכי→מתג.
     const ft = typeOf(s.label);
-    if (ft === 'date') { typedImports.add("import '../dart-ui-bs/ds/ds_date_field.dart';"); fieldBlocks.push(`          DsDateField(label: ${cl}, ${bind}),`); recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: _v[${i}] ?? ''`); return; }
-    if (ft === 'num')  { typedImports.add("import '../dart-ui-bs/ds/ds_number_field.dart';"); fieldBlocks.push(`          DsNumberField(label: ${cl}, ${bind}),`); recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: _v[${i}] ?? ''`); return; }
-    if (ft === 'bool') { typedImports.add("import '../dart-ui-bs/ds/ds_toggle_tile.dart';"); fieldBlocks.push(`          DsToggleTile(label: ${cl}, ${bind}),`); recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: _v[${i}] ?? ''`); return; }
+    if (ft === 'date') { typedImports.add("import '../dart-ui-bs/ds/ds_date_field.dart';"); addField(i, `DsDateField(label: ${cl}, ${bind})`); recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: _v[${i}] ?? ''`); return; }
+    if (ft === 'num')  { typedImports.add("import '../dart-ui-bs/ds/ds_number_field.dart';"); addField(i, `DsNumberField(label: ${cl}, ${bind})`); recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: _v[${i}] ?? ''`); return; }
+    if (ft === 'bool') { typedImports.add("import '../dart-ui-bs/ds/ds_toggle_tile.dart';"); addField(i, `DsToggleTile(label: ${cl}, ${bind})`); recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: _v[${i}] ?? ''`); return; }
     // (4) טקסט: שדה חופשי + לוגיקת-אימפריה חיה מכוונת-מטרה (טיפוס+IDF+קידומת+מובהקות).
     usedField = true;
-    fieldBlocks.push(`          DsField(label: ${cl}, hint: '', ${bind}),`);
+    addField(i, `DsField(label: ${cl}, hint: '', ${bind})`);
     recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: _v[${i}] ?? ''`);
     const xf = pickXform(s.label, ft);
     if (xf) {
@@ -323,7 +326,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
         : nt === 'double' ? `(double.tryParse(_v[${i}] ?? '') ?? 0)`
         : nt === 'num' ? `(num.tryParse(_v[${i}] ?? '') ?? 0)`
         : `(_v[${i}] ?? '')`;
-      fieldBlocks.push(`          if ((_v[${i}] ?? '').trim().isNotEmpty) _live(${cx}, ${xf.name}(${arg})),`);
+      addField(i, `_live(${cx}, ${xf.name}(${arg}))`, `(_v[${i}] ?? '').trim().isNotEmpty`);
       hasLive = true;
     }
   });
@@ -399,10 +402,30 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const nRoles = authz ? authz.scope.length : 0;
   const hasScope = !!(authz && authz.scope.some((f) => f));
   const hasHide = !!(authz && authz.hidden.some((h) => h.length));
-  const rlsActive = hasScope || hasHide;
-  const rlsFields = rlsActive
-    ? `\n  static const List<String> _rlsScope = [${authz.scope.map((f) => f ? k(f) : "''").join(', ')}];\n  static const List<List<int>> _rlsHidden = [${authz.hidden.map((h) => `[${h.join(', ')}]`).join(', ')}];\n  int get _rlsRole => appStore.role.clamp(0, ${Math.max(0, nRoles - 1)});\n  Set<int> get _rlsHiddenSet => _rlsHidden[_rlsRole].toSet();\n`
+  const hasRO = !!(authz && authz.readonly && authz.readonly.some((h) => h.length));
+  const rlsActive = hasScope || hasHide;   // read-side (כרטיס/CSV/רשימה) — ללא זה ⇒ ביט-זהה
+  const rlsWrite = hasHide || hasRO;       // write-side (טופס role-reactive: הסתרה/נעילת-קלט)
+  const rlsTables = rlsActive || hasRO;    // האם לפלוט טבלאות-הרשאה + getters
+  // כל טבלה נפלטת רק אם היא בשימוש (מונע unused_field שמפיל את שער-ה-analyze):
+  // _rlsScope רק עם היקף · _rlsRO רק עם נעילה · _rlsHiddenSet רק בצד-הקריאה (כרטיס).
+  const scopeTable = hasScope ? `\n  static const List<String> _rlsScope = [${authz.scope.map((f) => f ? k(f) : "''").join(', ')}];` : '';
+  const hiddenTable = `\n  static const List<List<int>> _rlsHidden = [${(authz && authz.hidden || []).map((h) => `[${h.join(', ')}]`).join(', ')}];`;
+  const roTable = hasRO ? `\n  static const List<List<int>> _rlsRO = [${authz.readonly.map((h) => `[${h.join(', ')}]`).join(', ')}];` : '';
+  const hiddenSetGetter = rlsActive ? `\n  Set<int> get _rlsHiddenSet => _rlsHidden[_rlsRole].toSet();` : '';
+  const rlsFields = rlsTables
+    ? `${scopeTable}${hiddenTable}${roTable}\n  int get _rlsRole => appStore.role.clamp(0, ${Math.max(0, nRoles - 1)});${hiddenSetGetter}\n`
     : '';
+  // טופס: פלט-רגיל (ביט-זהה) או פלט-מגודר-תפקיד (הסתרה=collection-if · נעילה=AbsorbPointer).
+  const fieldsPlain = fieldBlocks.map((fb) => fb.cond ? `          if (${fb.cond}) ${fb.expr},` : `          ${fb.expr},`).join('\n');
+  const fieldsGated = fieldBlocks.map((fb) => {
+    const hideG = `!_rlsHidden[_rlsRole].contains(${fb.i})`;
+    const inner = hasRO ? `AbsorbPointer(absorbing: _rlsRO[_rlsRole].contains(${fb.i}), child: ${fb.expr})` : fb.expr;
+    const cond = fb.cond ? `${hideG} && (${fb.cond})` : hideG;
+    return `          if (${cond}) ${inner},`;
+  }).join('\n');
+  const formSection = rlsWrite
+    ? `AnimatedBuilder(animation: appStore, builder: (context, _) => DsSection(title: ${cForm}, children: [\n${fieldsGated}\n        ])),`
+    : `DsSection(title: ${cForm}, children: [\n${fieldsPlain}\n        ]),`;
   const listRead = hasScope ? `appStore.scoped(${SK}, _rlsScope[_rlsRole])` : `appStore.records(${SK})`;
   const cardSig = rlsActive ? 'Widget _card(Map<String, String> r, Set<int> hidden) {' : 'Widget _card(Map<String, String> r) {';
   const cardHiddenArg = rlsActive ? ', hidden: hidden' : '';
@@ -551,9 +574,7 @@ ${stepsDart}${hasVal ? `        if (_err != null) Container(
           decoration: BoxDecoration(color: const Color(0x14DC2626), borderRadius: BorderRadius.circular(DsTokens.rSm), border: Border.all(color: const Color(0x40DC2626))),
           child: Row(children: [const Icon(Icons.error_outline, size: 16, color: Color(0xFFDC2626)), const SizedBox(width: 8), Expanded(child: Text(_err!, style: const TextStyle(color: Color(0xFFDC2626), fontSize: 13, fontWeight: FontWeight.w600)))]),
         ),
-` : ''}        DsSection(title: ${cForm}, children: [
-${fieldBlocks.join('\n')}
-        ]),
+` : ''}        ${formSection}
         DsSection(title: ${cRecords}, trailing: _csvBtn(context), children: [
           AnimatedBuilder(
             animation: appStore,

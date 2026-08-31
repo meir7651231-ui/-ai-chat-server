@@ -27,7 +27,7 @@ function parseRole(line) {
   const entPart = segs[0];
   const all = entPart.includes('הכל');   // ‏\b הוא ASCII בלבד — לא נדלק על עברית
   const ents = all ? [] : entPart.split(/[,،]/).map((s) => s.trim()).filter(Boolean);
-  const scope = [], hide = [];
+  const scope = [], hide = [], ro = [];
   for (let i = 1; i < segs.length; i++) {
     const hm = segs[i].match(/^\s*(היקף|שדות)\s*:(.*)$/);
     if (!hm) continue;
@@ -35,10 +35,11 @@ function parseRole(line) {
     if (hm[1] === 'היקף') {
       for (const it of items) { const d = it.match(/^(.+?)\.(.+)$/); if (d) scope.push({ ent: clean(d[1]), field: clean(d[2]) }); }
     } else {
-      for (const it of items) { const d = it.match(/^(.+?)\.(.+?)\s*=\s*(.+)$/); if (d && /הסתר/.test(d[3])) hide.push({ ent: clean(d[1]), field: clean(d[2]) }); }
+      // שדות: X.Y=הסתר (הסתרה מלאה כרטיס+טופס) · X.Y=נעל/קריאה (נעילת-קלט בטופס בלבד)
+      for (const it of items) { const d = it.match(/^(.+?)\.(.+?)\s*=\s*(.+)$/); if (!d) continue; const e = { ent: clean(d[1]), field: clean(d[2]) }; if (/הסתר/.test(d[3])) hide.push(e); else if (/נעל|קריאה/.test(d[3])) ro.push(e); }
     }
   }
-  return { name, all, ents, scope, hide };
+  return { name, all, ents, scope, hide, ro };
 }
 
 export function buildApp(specText) {
@@ -114,6 +115,7 @@ export function buildApp(specText) {
       const authz = roles.length ? {
         scope: roles.map((role) => { const sc = (role.scope || []).find((x) => x.ent === r.entity); return sc ? sc.field : ''; }),
         hidden: roles.map((role) => r.schema.map((s, i) => (role.hide || []).some((h) => h.ent === r.entity && h.field === s.label) ? i : -1).filter((i) => i >= 0)),
+        readonly: roles.map((role) => r.schema.map((s, i) => (role.ro || []).some((h) => h.ent === r.entity && h.field === s.label) ? i : -1).filter((i) => i >= 0)),
       } : null;
       const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames, nameToSlug, backRefs: backRefs[r.entity] || [], vrules: r.vrules || [], delGuard: delGuardByName[r.entity], guards: r.guards || [], authz });
       screens.push({ slug, cls, kind: 'entity', name: r.entity, icon: '🗂️', sub: `${r.schema.length} שדות${(r.stages || []).length ? ` · ${r.stages.length} שלבים` : ''}` });
