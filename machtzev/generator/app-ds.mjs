@@ -7,7 +7,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { interpret as entInterpret } from './entity.mjs';
-import { renderEntity, renderDashboard, renderHub, renderSystem, renderMain } from './render-ds.mjs';
+import { renderEntity, renderDashboard, renderHub, renderSystem, renderMain, renderScreenBind } from './render-ds.mjs';
 
 const ROOT = new URL('../../', import.meta.url).pathname;
 const OUT = path.join(ROOT, 'new/dart-gen-bs');
@@ -135,6 +135,14 @@ export function buildApp(specText) {
     }
   }
 
+  // 🖥 מחבר-ישות-למסך (POC): הישות-הראשונה ממלאת מסך-Composed מפורק (AiHub) — הוכחת-פרדיגמה.
+  const firstEnt = entMeta[0];
+  const bindScreens = [];
+  if (firstEnt) {
+    const { cls } = renderScreenBind('app_bind', { entitySlug: firstEnt.slug, entityName: firstEnt.name });
+    bindScreens.push({ slug: 'app_bind', cls, kind: 'entity', name: `🖥 ${firstEnt.name} · מסך`, icon: '🖥', sub: 'מסך-אמת מפורק · מחווט-מהישות' });
+  }
+
   // מסכי-מערכת (kind='system' — גלויים רק לתפקיד 'הכל')
   const sys = [];
   const a = renderSystem('app_audit', { title: 'יומן פעולות', icon: '🧾', sectionTitle: 'פעולות אחרונות', kind: 'empty', items: ['כל שינוי במערכת יתועד כאן'] });
@@ -147,7 +155,7 @@ export function buildApp(specText) {
   // RLS · שדות-היקף ייחודיים (slug+שדה) — למילוי בורר-"מי-אני" בלוח.
   const scopeFields = [];
   for (const role of roles) for (const sc of (role.scope || [])) { const sl = nameToSlug[sc.ent]; if (sl && !scopeFields.some((x) => x.slug === sl && x.field === sc.field)) scopeFields.push({ slug: sl, field: sc.field }); }
-  const hub = renderHub('app_hub', { title: 'האפליקציה שלי', icon: '🏗️', screens: [...screens, ...sys], roles, scopeFields });
+  const hub = renderHub('app_hub', { title: 'האפליקציה שלי', icon: '🏗️', screens: [...screens, ...bindScreens, ...sys], roles, scopeFields });
   // שורש-האפליקציה: main + MaterialApp ⇒ אפליקציה עצמאית שרצה בלי entry-זמני.
   renderMain('app_main', { title: 'האפליקציה שלי', hubSlug: 'app_hub', hubCls: hub.cls, edges });
 

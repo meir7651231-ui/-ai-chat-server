@@ -875,6 +875,42 @@ class ${cls} extends StatelessWidget {
 }
 
 // ── מסך-מערכת גנרי: כותרת + סקשן עם ילדים (מתגים/מצב-ריק) ──
+// ── 🖥 מחבר-ישות-למסך (POC): ממלא מסך-Composed מפורק (AiHubScreenComposed) מרשומות-ישות.
+//    מוכיח את הפרדיגמה: המסכים-המפורקים ניתנים-להרכבה עם דאטה גנרית (שקע {אייקון/כותרת/תת/פעולה}).
+//    כל רשומה ⇒ AiFinTileItem; הכותרת = הערך-הראשון-הלא-ריק (כמו _display). AnimatedBuilder חי.
+export function renderScreenBind(slug, { entitySlug, entityName }) {
+  const { k, dump } = makeConsts(slug);
+  const cIc = k('🗂️');
+  const cSub = k(entityName);
+  const cls = pascal(slug);
+  const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מחבר-ישות-למסך: רשומות-ישות ⇒ מסך-Composed מפורק. אל תערוך ידנית.
+import '../dart-data-bs/auto/gen_${slug}_content.dart';
+import '../dart-screens-bs/ai_hub_screen.g.dart';
+import '../dart-ui-bs/ds/ds_store.dart';
+import 'package:flutter/material.dart';
+
+class ${cls} extends StatelessWidget {
+  const ${cls}({super.key});
+
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(
+        animation: appStore,
+        builder: (context, _) => AiHubScreenComposed(
+          aiFinTileItems: appStore.records('${entitySlug}').map((r) => AiFinTileItem(
+                ic: ${cIc},
+                title: r.entries.firstWhere((e) => !e.key.startsWith('__') && e.value.trim().isNotEmpty, orElse: () => MapEntry('', r['__id'] ?? '')).value.trim(),
+                sub: ${cSub},
+                onTap: () {},
+              )).toList(),
+          t: const AiHubScreenTokens(),
+        ),
+      );
+}
+`;
+  write(slug, code, dump());
+  return { slug, cls };
+}
+
 export function renderSystem(slug, { title, icon, sectionTitle, kind, items = [] }) {
   const { k, dump } = makeConsts(slug);
   const cTitle = k(title);
