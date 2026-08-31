@@ -6,6 +6,7 @@ import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_number_field.dart';
 import '../dart-ui-bs/ds/ds_select.dart';
 import '../dart-ui-bs/ds/ds_board.dart';
+import '../dart-ui-bs/ds/ds_table.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/advance-status.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class _GenAppEnt64ScreenState extends State<GenAppEnt64Screen> {
   Map<int, String> _v = {};
   String? _editId;   // ריק = הוספה · מזהה = עריכת-רשומה קיימת
   String _q = '';    // מחרוזת-חיפוש (סינון-רשומות חי)
-  int _view = 0;   // 0=רשימה · 1=לוח · 2=לוח-שנה
+  int _view = 0;   // 0=רשימה · לוח · לוח-שנה · טבלה
 
 
   void _save() {
@@ -44,7 +45,7 @@ class _GenAppEnt64ScreenState extends State<GenAppEnt64Screen> {
   }
 
   Widget _viewBar(BuildContext context) {
-    const labels = ['☰ רשימה', '📋 לוח'];
+    const labels = ['☰ רשימה', '📋 לוח', '▦ טבלה'];
     return Row(mainAxisSize: MainAxisSize.min, children: [
       for (var i = 0; i < labels.length; i++)
         Padding(
@@ -149,6 +150,7 @@ class _GenAppEnt64ScreenState extends State<GenAppEnt64Screen> {
               final q = _q.trim().toLowerCase();
               final rs = q.isEmpty ? all : all.where((r) => r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q))).toList();
               if (_view == 1) return DsBoard(stages: const [gen_app_ent64_c24, gen_app_ent64_c25, gen_app_ent64_c26, gen_app_ent64_c27], records: rs, stageOf: (r) => appStore.stageOf('app_ent64', r['__id'] ?? ''), titleOf: (r) => r[gen_app_ent64_c9] ?? '', onMove: (id, to) => appStore.setStage('app_ent64', id, to));
+              if (_view == 2) return DsTable(labels: const [gen_app_ent64_c9, gen_app_ent64_c10, gen_app_ent64_c11, gen_app_ent64_c12, gen_app_ent64_c13, gen_app_ent64_c14, gen_app_ent64_c15, gen_app_ent64_c16, gen_app_ent64_c17, gen_app_ent64_c18, gen_app_ent64_c19, gen_app_ent64_c20, gen_app_ent64_c21, gen_app_ent64_c22], rows: rs.map((r) => [r[gen_app_ent64_c9] ?? '', appStore.displayOf('app_ent2', r[gen_app_ent64_c10] ?? ''), r[gen_app_ent64_c11] ?? '', r[gen_app_ent64_c12] ?? '', r[gen_app_ent64_c13] ?? '', r[gen_app_ent64_c14] ?? '', r[gen_app_ent64_c15] ?? '', r[gen_app_ent64_c16] ?? '', r[gen_app_ent64_c17] ?? '', r[gen_app_ent64_c18] ?? '', r[gen_app_ent64_c19] ?? '', r[gen_app_ent64_c20] ?? '', r[gen_app_ent64_c21] ?? '', r[gen_app_ent64_c22] ?? '']).toList());
               return Column(children: [
                 DsSearch(value: _q, onChanged: (v) => setState(() => _q = v)),
                 if (rs.isEmpty) const DsEmpty(label: gen_app_ent64_c8),

@@ -6,6 +6,7 @@ import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_date_field.dart';
 import '../dart-ui-bs/ds/ds_select.dart';
 import '../dart-ui-bs/ds/ds_calendar.dart';
+import '../dart-ui-bs/ds/ds_table.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class _GenAppEnt52ScreenState extends State<GenAppEnt52Screen> {
   Map<int, String> _v = {};
   String? _editId;   // ריק = הוספה · מזהה = עריכת-רשומה קיימת
   String _q = '';    // מחרוזת-חיפוש (סינון-רשומות חי)
-  int _view = 0;   // 0=רשימה · 1=לוח · 2=לוח-שנה
+  int _view = 0;   // 0=רשימה · לוח · לוח-שנה · טבלה
 
 
   void _save() {
@@ -44,7 +45,7 @@ class _GenAppEnt52ScreenState extends State<GenAppEnt52Screen> {
   }
 
   Widget _viewBar(BuildContext context) {
-    const labels = ['☰ רשימה', '📅 לוח-שנה'];
+    const labels = ['☰ רשימה', '📅 לוח-שנה', '▦ טבלה'];
     return Row(mainAxisSize: MainAxisSize.min, children: [
       for (var i = 0; i < labels.length; i++)
         Padding(
@@ -127,6 +128,7 @@ class _GenAppEnt52ScreenState extends State<GenAppEnt52Screen> {
               final q = _q.trim().toLowerCase();
               final rs = q.isEmpty ? all : all.where((r) => r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q))).toList();
               if (_view == 1) return DsCalendar(records: rs, dateOf: (r) => r[gen_app_ent52_c14] ?? '', titleOf: (r) => r[gen_app_ent52_c9] ?? '');
+              if (_view == 2) return DsTable(labels: const [gen_app_ent52_c9, gen_app_ent52_c10, gen_app_ent52_c11, gen_app_ent52_c12, gen_app_ent52_c13, gen_app_ent52_c14, gen_app_ent52_c15, gen_app_ent52_c16], rows: rs.map((r) => [appStore.displayOf('app_ent11', r[gen_app_ent52_c9] ?? ''), r[gen_app_ent52_c10] ?? '', r[gen_app_ent52_c11] ?? '', r[gen_app_ent52_c12] ?? '', r[gen_app_ent52_c13] ?? '', r[gen_app_ent52_c14] ?? '', appStore.displayOf('app_ent12', r[gen_app_ent52_c15] ?? ''), r[gen_app_ent52_c16] ?? '']).toList());
               return Column(children: [
                 DsSearch(value: _q, onChanged: (v) => setState(() => _q = v)),
                 if (rs.isEmpty) const DsEmpty(label: gen_app_ent52_c8),

@@ -457,27 +457,31 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   // כל תצוגה מקבלת records אמיתיים. בלי-טריגר ⇒ אין מחליף ⇒ ביט-זהה. מגודר hasBoard/hasCal.
   const hasBoard = hasStages;
   const hasCal = firstDateConst !== null;
-  const hasSwitch = hasBoard || hasCal;
+  const hasTable = true;   // טבלה-ממוינת = יכולת אוניברסלית (כל ישות)
+  const hasSwitch = hasBoard || hasCal || hasTable;
   const viewTitle = labelConst[0] || "''";
   const boardImport = hasBoard ? "import '../dart-ui-bs/ds/ds_board.dart';\n" : '';
   const calImport = hasCal ? "import '../dart-ui-bs/ds/ds_calendar.dart';\n" : '';
-  const viewField = hasSwitch ? "  int _view = 0;   // 0=רשימה · 1=לוח · 2=לוח-שנה\n" : '';
+  const tableImport = hasTable ? "import '../dart-ui-bs/ds/ds_table.dart';\n" : '';
+  const viewField = hasSwitch ? "  int _view = 0;   // 0=רשימה · לוח · לוח-שנה · טבלה\n" : '';
   const viewChips = ["'☰ רשימה'"];   // list תמיד
-  const viewIdx = { board: -1, cal: -1 };
+  const viewIdx = { board: -1, cal: -1, table: -1 };
   if (hasBoard) { viewIdx.board = viewChips.length; viewChips.push("'📋 לוח'"); }
   if (hasCal) { viewIdx.cal = viewChips.length; viewChips.push("'📅 לוח-שנה'"); }
+  if (hasTable) { viewIdx.table = viewChips.length; viewChips.push("'▦ טבלה'"); }
   const viewToggle = hasSwitch
     ? `\n  Widget _viewBar(BuildContext context) {\n    const labels = [${viewChips.join(', ')}];\n    return Row(mainAxisSize: MainAxisSize.min, children: [\n      for (var i = 0; i < labels.length; i++)\n        Padding(\n          padding: const EdgeInsets.only(left: 6),\n          child: Material(\n            color: _view == i ? DsTokens.accentSoft : const Color(0xFFF1F5F9),\n            borderRadius: BorderRadius.circular(20),\n            child: InkWell(\n              borderRadius: BorderRadius.circular(20),\n              onTap: () => setState(() => _view = i),\n              child: Padding(\n                padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),\n                child: Text(labels[i], style: TextStyle(color: _view == i ? DsTokens.accentDark : DsTokens.muted, fontSize: 12, fontWeight: FontWeight.w700)),\n              ),\n            ),\n          ),\n        ),\n    ]);\n  }\n`
     : '';
   const recordsTrailing = hasSwitch ? 'Row(mainAxisSize: MainAxisSize.min, children: [_viewBar(context), const SizedBox(width: 8), _csvBtn(context)])' : '_csvBtn(context)';
   const boardBranch = (hasBoard ? `if (_view == ${viewIdx.board}) return DsBoard(stages: const ${stageList}, records: rs, stageOf: (r) => appStore.stageOf(${SK}, r['__id'] ?? ''), titleOf: (r) => r[${viewTitle}] ?? '', onMove: (id, to) => appStore.setStage(${SK}, id, to));\n              ` : '')
-    + (hasCal ? `if (_view == ${viewIdx.cal}) return DsCalendar(records: rs, dateOf: (r) => r[${firstDateConst}] ?? '', titleOf: (r) => r[${viewTitle}] ?? '');\n              ` : '');
+    + (hasCal ? `if (_view == ${viewIdx.cal}) return DsCalendar(records: rs, dateOf: (r) => r[${firstDateConst}] ?? '', titleOf: (r) => r[${viewTitle}] ?? '');\n              ` : '')
+    + (hasTable ? `if (_view == ${viewIdx.table}) return DsTable(labels: const [${labelsList}], rows: rs.map((r) => [${recValues}]).toList());\n              ` : '');
   const cls = pascal(slug);
   const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→קשרים→מסע→חנות→טבלה + לוגיקה). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_search.dart';
-${usedField ? "import '../dart-ui-bs/ds/ds_field.dart';\n" : ''}${[...typedImports].sort().map((x) => x + '\n').join('')}${enumImport}${relImport}${multiImport}${boardImport}${calImport}import '../dart-ui-bs/ds/ds_store.dart';
+${usedField ? "import '../dart-ui-bs/ds/ds_field.dart';\n" : ''}${[...typedImports].sort().map((x) => x + '\n').join('')}${enumImport}${relImport}${multiImport}${boardImport}${calImport}${tableImport}import '../dart-ui-bs/ds/ds_store.dart';
 ${[...funcImports].sort().join('\n')}
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

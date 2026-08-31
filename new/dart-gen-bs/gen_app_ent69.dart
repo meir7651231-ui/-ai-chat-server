@@ -6,6 +6,7 @@ import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_date_field.dart';
 import '../dart-ui-bs/ds/ds_number_field.dart';
 import '../dart-ui-bs/ds/ds_calendar.dart';
+import '../dart-ui-bs/ds/ds_table.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/advance-status.dart';
 import '../dart-maor/gen-join-code.dart';
@@ -23,7 +24,7 @@ class _GenAppEnt69ScreenState extends State<GenAppEnt69Screen> {
   Map<int, String> _v = {};
   String? _editId;   // ריק = הוספה · מזהה = עריכת-רשומה קיימת
   String _q = '';    // מחרוזת-חיפוש (סינון-רשומות חי)
-  int _view = 0;   // 0=רשימה · 1=לוח · 2=לוח-שנה
+  int _view = 0;   // 0=רשימה · לוח · לוח-שנה · טבלה
 
 
   void _save() {
@@ -45,7 +46,7 @@ class _GenAppEnt69ScreenState extends State<GenAppEnt69Screen> {
   }
 
   Widget _viewBar(BuildContext context) {
-    const labels = ['☰ רשימה', '📅 לוח-שנה'];
+    const labels = ['☰ רשימה', '📅 לוח-שנה', '▦ טבלה'];
     return Row(mainAxisSize: MainAxisSize.min, children: [
       for (var i = 0; i < labels.length; i++)
         Padding(
@@ -149,6 +150,7 @@ class _GenAppEnt69ScreenState extends State<GenAppEnt69Screen> {
               final q = _q.trim().toLowerCase();
               final rs = q.isEmpty ? all : all.where((r) => r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q))).toList();
               if (_view == 1) return DsCalendar(records: rs, dateOf: (r) => r[gen_app_ent69_c20] ?? '', titleOf: (r) => r[gen_app_ent69_c9] ?? '');
+              if (_view == 2) return DsTable(labels: const [gen_app_ent69_c9, gen_app_ent69_c11, gen_app_ent69_c12, gen_app_ent69_c13, gen_app_ent69_c14, gen_app_ent69_c15, gen_app_ent69_c16, gen_app_ent69_c17, gen_app_ent69_c18, gen_app_ent69_c19, gen_app_ent69_c20, gen_app_ent69_c21, gen_app_ent69_c22], rows: rs.map((r) => [r[gen_app_ent69_c9] ?? '', r[gen_app_ent69_c11] ?? '', r[gen_app_ent69_c12] ?? '', r[gen_app_ent69_c13] ?? '', r[gen_app_ent69_c14] ?? '', r[gen_app_ent69_c15] ?? '', r[gen_app_ent69_c16] ?? '', r[gen_app_ent69_c17] ?? '', r[gen_app_ent69_c18] ?? '', r[gen_app_ent69_c19] ?? '', r[gen_app_ent69_c20] ?? '', r[gen_app_ent69_c21] ?? '', r[gen_app_ent69_c22] ?? '']).toList());
               return Column(children: [
                 DsSearch(value: _q, onChanged: (v) => setState(() => _q = v)),
                 if (rs.isEmpty) const DsEmpty(label: gen_app_ent69_c8),

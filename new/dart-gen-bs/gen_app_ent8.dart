@@ -9,6 +9,7 @@ import '../dart-ui-bs/ds/ds_select.dart';
 import '../dart-ui-bs/ds/ds_multi_select.dart';
 import '../dart-ui-bs/ds/ds_board.dart';
 import '../dart-ui-bs/ds/ds_calendar.dart';
+import '../dart-ui-bs/ds/ds_table.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/advance-status.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class _GenAppEnt8ScreenState extends State<GenAppEnt8Screen> {
   Map<int, String> _v = {};
   String? _editId;   // ריק = הוספה · מזהה = עריכת-רשומה קיימת
   String _q = '';    // מחרוזת-חיפוש (סינון-רשומות חי)
-  int _view = 0;   // 0=רשימה · 1=לוח · 2=לוח-שנה
+  int _view = 0;   // 0=רשימה · לוח · לוח-שנה · טבלה
 
 
   void _save() {
@@ -47,7 +48,7 @@ class _GenAppEnt8ScreenState extends State<GenAppEnt8Screen> {
   }
 
   Widget _viewBar(BuildContext context) {
-    const labels = ['☰ רשימה', '📋 לוח', '📅 לוח-שנה'];
+    const labels = ['☰ רשימה', '📋 לוח', '📅 לוח-שנה', '▦ טבלה'];
     return Row(mainAxisSize: MainAxisSize.min, children: [
       for (var i = 0; i < labels.length; i++)
         Padding(
@@ -164,6 +165,7 @@ class _GenAppEnt8ScreenState extends State<GenAppEnt8Screen> {
               final rs = q.isEmpty ? all : all.where((r) => r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q))).toList();
               if (_view == 1) return DsBoard(stages: const [gen_app_ent8_c29, gen_app_ent8_c30, gen_app_ent8_c31, gen_app_ent8_c32, gen_app_ent8_c33, gen_app_ent8_c34, gen_app_ent8_c35], records: rs, stageOf: (r) => appStore.stageOf('app_ent8', r['__id'] ?? ''), titleOf: (r) => r[gen_app_ent8_c9] ?? '', onMove: (id, to) => appStore.setStage('app_ent8', id, to));
               if (_view == 2) return DsCalendar(records: rs, dateOf: (r) => r[gen_app_ent8_c11] ?? '', titleOf: (r) => r[gen_app_ent8_c9] ?? '');
+              if (_view == 3) return DsTable(labels: const [gen_app_ent8_c9, gen_app_ent8_c10, gen_app_ent8_c11, gen_app_ent8_c12, gen_app_ent8_c13, gen_app_ent8_c14, gen_app_ent8_c15, gen_app_ent8_c16, gen_app_ent8_c17, gen_app_ent8_c18, gen_app_ent8_c19, gen_app_ent8_c20, gen_app_ent8_c21, gen_app_ent8_c22, gen_app_ent8_c23, gen_app_ent8_c24, gen_app_ent8_c25, gen_app_ent8_c26, gen_app_ent8_c27], rows: rs.map((r) => [r[gen_app_ent8_c9] ?? '', r[gen_app_ent8_c10] ?? '', r[gen_app_ent8_c11] ?? '', r[gen_app_ent8_c12] ?? '', r[gen_app_ent8_c13] ?? '', appStore.displayOf('app_ent12', r[gen_app_ent8_c14] ?? ''), appStore.displayOf('app_ent2', r[gen_app_ent8_c15] ?? ''), appStore.displayOf('app_ent15', r[gen_app_ent8_c16] ?? ''), r[gen_app_ent8_c17] ?? '', appStore.displayOf('app_ent4', r[gen_app_ent8_c18] ?? ''), r[gen_app_ent8_c19] ?? '', r[gen_app_ent8_c20] ?? '', r[gen_app_ent8_c21] ?? '', appStore.displayList('app_ent37', r[gen_app_ent8_c22] ?? ''), r[gen_app_ent8_c23] ?? '', appStore.displayList('app_ent70', r[gen_app_ent8_c24] ?? ''), r[gen_app_ent8_c25] ?? '', r[gen_app_ent8_c26] ?? '', r[gen_app_ent8_c27] ?? '']).toList());
               return Column(children: [
                 DsSearch(value: _q, onChanged: (v) => setState(() => _q = v)),
                 if (rs.isEmpty) const DsEmpty(label: gen_app_ent8_c8),
