@@ -183,12 +183,14 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const recValsR = [];   // ערך-תצוגה בטבלה פר-שדה
   const mapVals = [];    // ערך-שמירה פר-שדה (מחושב ⇒ תוצאת-הנוסחה; אחר ⇒ _v[i])
   const requiredIdx = [];
+  const uniqueIdx = [];
   let hasLive = false, hasRel = false, hasEnum = false, hasCalc = false, hasMulti = false, usedField = false;
   const labelIdx = schema.map((s, i) => ({ label: s.label, idx: i }));
   schema.forEach((s, i) => {
     const cl = k(s.label); labelConst.push(cl);
     const bind = `value: _v[${i}] ?? '', onChanged: (v) => setState(() => _v[${i}] = v)`;
     if (s.required) requiredIdx.push(i);
+    if (s.unique) uniqueIdx.push(i);
     // (0) שדה-מחושב (שורש-4): נוסחה מעל שדות-אחות ⇒ ערך-נגזר קריאה-בלבד (לא קלט).
     if (s.formula) {
       const expr = compileFormula(s.formula, labelIdx);
@@ -247,7 +249,9 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
       hasLive = true;
     }
   });
-  const reqChecks = requiredIdx.map((i) => `if ((_v[${i}] ?? '').trim().isEmpty) miss.add(${labelConst[i]});`).join('\n      ');
+  const reqChecks = requiredIdx.map((i) => `if ((_v[${i}] ?? '').trim().isEmpty) miss.add('חסר ' + ${labelConst[i]});`).join('\n      ');
+  const uniqChecks = uniqueIdx.map((i) => `{ final v = (_v[${i}] ?? '').trim(); if (v.isNotEmpty && appStore.records(${SK}).any((r) => r['__id'] != _editId && (r[${labelConst[i]}] ?? '') == v)) miss.add('כפול ' + ${labelConst[i]}); }`).join('\n      ');
+  const hasVal = requiredIdx.length + uniqueIdx.length > 0;
   const enumImport = hasEnum ? "import '../dart-ui-bs/ds/ds_enum_field.dart';\n" : '';
   const hasStages = stages.length >= 2;
   const stageConsts = hasStages ? stages.map((x) => k(x)) : [];
@@ -289,20 +293,21 @@ class _${cls}State extends State<${cls}> {
   Map<int, String> _v = {};
   String? _editId;   // ריק = הוספה · מזהה = עריכת-רשומה קיימת
   String _q = '';    // מחרוזת-חיפוש (סינון-רשומות חי)
-${requiredIdx.length ? '  String? _err;      // שגיאת-ולידציה (שדות-חובה חסרים)\n' : ''}
+${hasVal ? '  String? _err;      // שגיאת-ולידציה (שדות-חובה חסרים)\n' : ''}
 
   void _save() {
     if (_v.values.where((x) => x.trim().isNotEmpty).isEmpty) return;
-${requiredIdx.length ? `    final miss = <String>[];
+${hasVal ? `    final miss = <String>[];
       ${reqChecks}
-    if (miss.isNotEmpty) { setState(() => _err = 'יש למלא: ' + miss.join(', ')); return; }
+      ${uniqChecks}
+    if (miss.isNotEmpty) { setState(() => _err = miss.join(' · ')); return; }
 ` : ''}    final map = <String, String>{${mapEntries}};
     if (_editId != null) {
       appStore.update(${SK}, _editId!, map);
     } else {
       appStore.add(${SK}, <String, String>{...map${hasStages ? `, '__stage': '0'` : ''}});
     }
-    setState(() { _v.clear(); _editId = null;${requiredIdx.length ? ' _err = null;' : ''} });
+    setState(() { _v.clear(); _editId = null;${hasVal ? ' _err = null;' : ''} });
   }
 
   void _edit(Map<String, String> r) {
@@ -389,7 +394,7 @@ ${hasCalc ? `  Widget _calc(String label, num v) => Padding(
       icon: ${cIcon},
       bottomBar: DsPrimaryButton(label: _editId == null ? ${cSave} : ${cUpdate}, onTap: _save),
       children: [
-${stepsDart}${requiredIdx.length ? `        if (_err != null) Container(
+${stepsDart}${hasVal ? `        if (_err != null) Container(
           margin: const EdgeInsets.only(bottom: 12),
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(color: const Color(0x14DC2626), borderRadius: BorderRadius.circular(DsTokens.rSm), border: Border.all(color: const Color(0x40DC2626))),

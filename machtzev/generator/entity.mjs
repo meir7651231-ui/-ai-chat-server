@@ -48,17 +48,18 @@ export function interpret(text) {
   // אין חיתוך-שקט: כל השדות נשמרים (קודם נחתך ל-20 ⇒ 'סטטוס'/'התאמות' נעלמו). תקרת-שפיות בלבד.
   // 🔤 פעלי-שפה (תואמי-לאחור): שדה* = חובה · שדה{א|ב|ג} = ערכים-מותרים · שדה=נוסחה = מחושב.
   const rawFields = fieldsPart.split(/[,\n]/).map((s) => s.trim()).filter(Boolean).slice(0, 200);
-  const annots = [];   // { label, required, enumVals, formula }
+  const annots = [];   // { label, required, unique, enumVals, formula }
   for (const raw of rawFields) {
     let f = raw;
-    let required = false, enumVals = null, formula = null;
+    let required = false, unique = false, enumVals = null, formula = null;
     const eq = f.indexOf('=');
     if (eq > 0) { formula = f.slice(eq + 1).trim(); f = f.slice(0, eq); }          // שדה=נוסחה
     const em = f.match(/\{([^}]*)\}/);
     if (em) { enumVals = em[1].split('|').map((x) => clean(x)).filter((x) => x.length > 0); f = f.replace(/\{[^}]*\}/, ''); }   // {א|ב|ג}
-    if (/\*/.test(f)) { required = true; f = f.replace(/\*/g, ''); }               // שדה*
+    if (/\*/.test(f)) { required = true; f = f.replace(/\*/g, ''); }               // שדה* = חובה
+    if (/!/.test(f)) { unique = true; f = f.replace(/!/g, ''); }                   // שדה! = ייחודי
     const label = clean(f);
-    if (label.length > 1) annots.push({ label, required, enumVals: enumVals && enumVals.length ? enumVals : null, formula });
+    if (label.length > 1) annots.push({ label, required, unique, enumVals: enumVals && enumVals.length ? enumVals : null, formula });
   }
   const fields = annots.map((a) => a.label);
   // 🔄 שלבי-workflow (אם ניתנו): שרשרת-סטטוס. בלי '|' ⇒ אין workflow (לא ברירת-מחדל).
@@ -67,7 +68,7 @@ export function interpret(text) {
     ? stagesPart.replace(/^\s*(שלבים|סטטוסים|מצבים)[:\s]*/, '').split(/[,\n]|\s*→\s*/).map((s) => heWords(s).join(' ').trim()).filter((s) => s.length > 1).slice(0, 30)
     : [];
 
-  const schema = annots.map((a) => ({ label: a.label, type: inferType(a.label), required: a.required, enumVals: a.enumVals, formula: a.formula }));
+  const schema = annots.map((a) => ({ label: a.label, type: inferType(a.label), required: a.required, unique: a.unique, enumVals: a.enumVals, formula: a.formula }));
   const used = new Set();
   const lines = [`הירו 🗂️ ${entity} | ישות מורכבת — טופס + טבלה`];
   // 🔄 workflow: פס-שלבים מתוייג (BreadcrumbTrail labels) — מציג את מסע-הרשומה
