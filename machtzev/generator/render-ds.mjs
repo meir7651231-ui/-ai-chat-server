@@ -43,6 +43,9 @@ function pickInput(label) {
 // 🔌 מנועי-טרנספורם לשדה: פונקציה טהורה String f(קלט[, אופ]) — ניתן להריץ על ערך-שדה
 // בודד. עצמאיות בלבד (אפס import חוצה-אטום ⇒ סינכרון בטוח). הידע (he) על הפונקציה.
 const PRIM = new Set(['dynamic', 'String', 'num', 'int', 'double', 'String?', 'num?']);
+// פלט-ניתן-לתצוגה (הכרעה 21 — לחווט את כל אטומי-הלוגיקה, לא רק String): מספר⇒toString ·
+// bool⇒כן/לא · String?⇒?? ''. כך נחווטים גם ‏bool/int/num engines, לא רק טרנספורמי-טקסט.
+const RET_OK = new Set(['String', 'String?', 'int', 'num', 'double', 'bool']);
 const srcOf = (shelf, file) => { try { return fs.readFileSync(path.join(ROOT, shelf, file), 'utf8'); } catch { return null; } };
 const selfContained = (shelf, file) => { const s = srcOf(shelf, file); return s != null && !/^import\s+'(?!dart:|package:flutter)/m.test(s); };
 // 🧱 טרנספורם-סקלרי בלבד: אטום שמטיל את-קלטו ל-Map/List (‏as Map / as List) צורך אובייקט
@@ -50,11 +53,11 @@ const selfContained = (shelf, file) => { const s = srcOf(shelf, file); return s 
 // מסלק את התאמות-הרעש (‎'מידע רפואי'→שורת-מידע-על-חדר) וגם מונע Map-גולמי בניתוח-הקפדני.
 const scalarBody = (shelf, file) => { const s = srcOf(shelf, file); return s != null && !/\bas\s+(Map|List)\b/.test(s); };
 const XFORM = atlas.functions
-  .filter((f) => f.ret === 'String' && (f.params || []).length >= 1 && PRIM.has(f.params[0].type) && ((f.params.length === 1) || /\[/.test(f.sig || '')) && (f.he || []).length && selfContained(f.shelf, f.file) && scalarBody(f.shelf, f.file))
+  .filter((f) => RET_OK.has(f.ret) && (f.params || []).length >= 1 && PRIM.has(f.params[0].type) && ((f.params.length === 1) || /\[/.test(f.sig || '')) && (f.he || []).length && selfContained(f.shelf, f.file) && scalarBody(f.shelf, f.file))
   .map((f) => {
     const hw = (f.he || []).filter((w) => w.length >= 2);            // מילות-ה-he המקוריות
     return {
-      name: f.name, file: f.file, shelf: f.shelf, inType: f.params[0].type.replace(/\?$/, ''),
+      name: f.name, file: f.file, shelf: f.shelf, ret: f.ret, inType: f.params[0].type.replace(/\?$/, ''),
       hwords: hw,                                                    // לאימות-קידומת
       subj: stem(hw[0] || ''),                                       // נושא-האטום (המילה-הראשונה בתיאורו-העצמי)
       head: new Set(hw.slice(0, 2).flatMap(heToks)),                 // כותרת = שתי-המילים-הראשונות
@@ -328,7 +331,12 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
         : nt === 'double' ? `(double.tryParse(_v[${i}] ?? '') ?? 0)`
         : nt === 'num' ? `(num.tryParse(_v[${i}] ?? '') ?? 0)`
         : `(_v[${i}] ?? '')`;
-      addField(i, `_live(${cx}, ${xf.name}(${arg}))`, `(_v[${i}] ?? '').trim().isNotEmpty`);
+      const call = `${xf.name}(${arg})`;
+      const disp = xf.ret === 'bool' ? `(${call} ? ${k('כן')} : ${k('לא')})`
+        : /^(int|num|double)$/.test(xf.ret) ? `${call}.toString()`
+        : xf.ret === 'String?' ? `(${call} ?? '')`
+        : call;
+      addField(i, `_live(${cx}, ${disp})`, `(_v[${i}] ?? '').trim().isNotEmpty`);
       hasLive = true;
     }
   });
