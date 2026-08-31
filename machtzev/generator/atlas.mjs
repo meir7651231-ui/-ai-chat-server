@@ -83,7 +83,9 @@ export function buildAtlas() {
     }
     for (const fm of src.matchAll(/(?:^|\n)((?:Future<[^>\n]+>|Iterable<[^>\n]+>|List<[^>\n]+>|Map<[^>\n]+>|Set<[^>\n]+>|[A-Z]\w*(?:<[^>\n]+>)?\??|void|bool|int|double|num|String\??|dynamic)\s+([a-z]\w*)\s*\(([^)]*)\))\s*(?:=>|\{|async)/g)) {
       const ret = fm[1].split(/\s+/)[0];
-      const params = fm[3].replace(/[\[\]]/g, '').split(',').map(p => p.trim()).filter(Boolean).map(p => {
+      // פיצול-פרמטרים מודע-עומק: Map<String, X> הוא פרמטר-אחד (הפסיק הפנימי אינו מפריד).
+      const splitTop = (s) => { const out = []; let d = 0, cur = ''; for (const ch of s.replace(/[\[\]]/g, ' ')) { if ('<('.includes(ch)) d++; else if ('>)'.includes(ch)) d--; if (ch === ',' && d === 0) { out.push(cur); cur = ''; } else cur += ch; } if (cur.trim()) out.push(cur); return out; };
+      const params = splitTop(fm[3]).map(p => p.trim()).filter(Boolean).map(p => {
         const mm = p.match(/^([\w<>,?() ]+?)\s+(\w+)$/);
         return mm ? { type: mm[1].trim(), name: mm[2] } : { type: p, name: '' };
       });
