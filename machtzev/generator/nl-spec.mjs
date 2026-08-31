@@ -39,12 +39,19 @@ export function nlToSpec(text) {
     const headItems = splitItems(headStr).map(nameOf).filter(Boolean);
     const headReal = content(heWords(headStr));
     const tailItems = tailStr ? splitItems(tailStr).filter((x) => content(heWords(x)).length) : [];
+    // אות-ריבוי מורפולוגי (מבני, לא מילון): פריט ברבים (ים/ות) = ישות · ביחיד = שדה.
+    const plural = (s) => { const w = content(heWords(s))[0] || ''; return /(ים|ות)$/.test(w); };
+    const tailPlural = tailItems.filter(plural);
+    const tailSingular = tailItems.filter((x) => !plural(x));
     if (headReal.length === 0 && tailItems.length) {
       tailItems.forEach((tt) => push(nameOf(tt), []));                  // 'מערכת עם A, B, C' ⇒ A/B/C ישויות
     } else if (headItems.length > 1) {
-      headItems.forEach((h, i) => push(h, i === headItems.length - 1 ? tailItems : []));   // רשימת-ישויות בראש
+      headItems.forEach((h, i) => push(h, i === headItems.length - 1 ? tailSingular : []));   // רשימת-ישויות בראש
+      tailPlural.forEach((tt) => push(nameOf(tt), []));                 // פריטי-זנב ברבים = ישויות נוספות
     } else {
-      push(headItems[0] || nameOf(headStr), tailItems);                 // ישות + שדותיה
+      // ישות-אחת + זנב: פריטי-רבים = ישויות-קשורות · פריטי-יחיד = שדות.
+      push(headItems[0] || nameOf(headStr), tailSingular);
+      tailPlural.forEach((tt) => push(nameOf(tt), []));
     }
   }
   if (!ents.length) push(nameOf(t) || FALLBACK, []);
