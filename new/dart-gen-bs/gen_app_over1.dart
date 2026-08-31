@@ -2,7 +2,7 @@
 import '../dart-ui-bs/ds/ds_store.dart';
 import 'package:flutter/material.dart';
 import '../dart-ui-bs/auto/callout.dart';
-import '../dart-ui-bs/ds/ds_table.dart';
+import '../dart-ui-bs/ds/ds_board.dart';
 import '../dart-data-bs/auto/gen_app_over1_content.dart';
 
 class GenAppOver1Screen extends StatelessWidget {
@@ -21,11 +21,7 @@ class GenAppOver1Screen extends StatelessWidget {
               Callout(value: appStore.sum('app_ent1', gen_app_over1_c1).toStringAsFixed(0), label: gen_app_over1_c2),
             ]),
           ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: DsTable(labels: const [gen_app_over1_c3, gen_app_over1_c4, gen_app_over1_c5, gen_app_over1_c6, gen_app_over1_c7, gen_app_over1_c8, gen_app_over1_c9, gen_app_over1_c10, gen_app_over1_c11], rows: appStore.records('app_ent1').map((r) => [r[gen_app_over1_c12] ?? '', r[gen_app_over1_c13] ?? '', r[gen_app_over1_c14] ?? '', r[gen_app_over1_c15] ?? '', r[gen_app_over1_c16] ?? '', r[gen_app_over1_c17] ?? '', r[gen_app_over1_c18] ?? '', r[gen_app_over1_c19] ?? '', r[gen_app_over1_c20] ?? '']).toList()),
-            ),
-          ),
+          Expanded(child: DsBoard(stages: const [gen_app_over1_c3, gen_app_over1_c4, gen_app_over1_c5, gen_app_over1_c6, gen_app_over1_c7, gen_app_over1_c8, gen_app_over1_c9], records: appStore.records('app_ent1'), stageOf: (r) => appStore.stageOf('app_ent1', r['__id'] ?? ''), titleOf: (r) => r[gen_app_over1_c10] ?? '', onMove: (id, to) => appStore.setStage('app_ent1', id, to))),
           ],
         ),
       );

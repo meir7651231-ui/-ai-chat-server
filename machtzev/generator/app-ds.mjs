@@ -56,7 +56,7 @@ export function buildApp(specText) {
   for (const li of info) if (li.isEnt) {
     const r = entRes[li.i];
     const eslug = `app_ent${li.i}`;
-    entMeta.push({ name: r.entity, slug: eslug, fields: r.schema.length, stages: (r.stages || []).length, icon: '🗂️', numFields: r.schema.filter((s) => s.type === 'num').map((s) => s.label), labels: r.schema.map((s) => s.label) });
+    entMeta.push({ name: r.entity, slug: eslug, fields: r.schema.length, stages: (r.stages || []).length, stageLabels: r.stages || [], icon: '🗂️', numFields: r.schema.filter((s) => s.type === 'num').map((s) => s.label), labels: r.schema.map((s) => s.label) });
     if (!(r.entity in nameToSlug)) nameToSlug[r.entity] = eslug;   // שם ⇒ slug-היעד לקשרים
   }
   const entityNames = entMeta.map((e) => e.name);
@@ -152,7 +152,7 @@ export function buildApp(specText) {
   const composeScreens = [];
   if (entMeta.length) {
     const e0 = entMeta[0];
-    const c = renderCompose('app_over1', { entitySlug: e0.slug, entityName: e0.name, fields: e0.labels || [], numFields: e0.numFields || [] });
+    const c = renderCompose('app_over1', { entitySlug: e0.slug, entityName: e0.name, fields: e0.labels || [], numFields: e0.numFields || [], stages: e0.stageLabels || [] });
     if (c) composeScreens.push({ slug: c.slug, cls: c.cls, kind: 'entity', name: `🧩 ${e0.name} · סקירה`, icon: '🧩', sub: 'מורכב-מאטומים (KPI + טבלה) · מנתוני-הישות' });
   }
 

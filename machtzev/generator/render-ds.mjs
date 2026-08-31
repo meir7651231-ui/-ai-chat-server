@@ -928,16 +928,18 @@ export function selectAtom(roleSpecs, pred = () => true) {
 // **האטום שמגשים אותו הכי-טוב** (selectAtom מדורג); ההרכבה **משלבת** את אטומי-ההיבטים
 // יחד עד שהמטרה מושגת. שקעי-דאטה⇐נתוני-אמת · שקעים-נותרים⇐סגנון-בטוח (לא דאטה מזויף).
 const _rS = /^String\??$/, _rLS = /^List<String>\??$/, _rLLS = /^List<List<String>>\??$/;
-export function renderCompose(slug, { entitySlug, entityName, fields = [], numFields = [] }) {
+export function renderCompose(slug, { entitySlug, entityName, fields = [], numFields = [], stages = [] }) {
   const { k, dump } = makeConsts(slug);
   const cls = pascal(slug);
   // היבט-מדדים: האטום שמגשים "ערך+תווית" הכי-טוב (הכי-מעט שקעים-נותרים).
   const kpi = selectAtom({ value: { re: /^(value|val|amount|total|count|num)$/, ty: _rS }, label: { re: /^(label|title|caption|name|sub)$/, ty: _rS } },
     (a) => a.caps.includes('kpi') && a.seam === 'fields');
-  // היבט-רשומות: האטום שמגשים "כותרות+שורות" הכי-טוב.
-  const tbl = selectAtom({ labels: { re: /^(labels|cols|columns|headers)$/, ty: _rLS }, rows: { re: /^(rows|data)$/, ty: _rLLS } },
+  // היבט-מבט-ראשי: אם לישות שלבים ⇒ לוח-סטטוס (המגשים-הטוב-יותר לזרימה); אחרת ⇒ טבלה.
+  const board = stages.length ? selectAtom({ stages: { re: /^stages$/ }, records: { re: /^records$/ }, stageOf: { re: /^stageOf$/ }, titleOf: { re: /^titleOf$/ }, onMove: { re: /^onMove$/ } },
+    (a) => a.seam === 'collection') : null;
+  const tbl = board ? null : selectAtom({ labels: { re: /^(labels|cols|columns|headers)$/, ty: _rLS }, rows: { re: /^(rows|data)$/, ty: _rLLS } },
     (a) => a.caps.includes('list') && a.seam === 'collection');
-  if (!kpi && !tbl) return null;   // אין לבנים שמגשימות ⇒ אין מסך
+  if (!kpi && !tbl && !board) return null;   // אין לבנים שמגשימות ⇒ אין מסך
 
   const imports = new Set(["import '../dart-ui-bs/ds/ds_store.dart';", "import 'package:flutter/material.dart';"]);
   const blocks = [];
@@ -950,7 +952,13 @@ export function renderCompose(slug, { entitySlug, entityName, fields = [], numFi
     for (const f of numFields.slice(0, 3)) tiles.push(tile(`appStore.sum('${entitySlug}', ${k(f)}).toStringAsFixed(0)`, k(f)));
     blocks.push(`Padding(\n            padding: const EdgeInsets.all(12),\n            child: Wrap(spacing: 10, runSpacing: 10, children: [\n              ${tiles.join(',\n              ')},\n            ]),\n          )`);
   }
-  if (tbl && fields.length) {
+  if (board) {
+    imports.add(`import '../${board.file}';`);
+    const stageConsts = stages.map((sName) => k(sName)).join(', ');
+    const titleF = fields.length ? k(fields[0]) : "''";
+    const b = `${board.cls}(${board.p.stages}: const [${stageConsts}], ${board.p.records}: appStore.records('${entitySlug}'), ${board.p.stageOf}: (r) => appStore.stageOf('${entitySlug}', r['__id'] ?? ''), ${board.p.titleOf}: (r) => r[${titleF}] ?? '', ${board.p.onMove}: (id, to) => appStore.setStage('${entitySlug}', id, to))`;
+    blocks.push(`Expanded(child: ${b})`);
+  } else if (tbl && fields.length) {
     imports.add(`import '../${tbl.file}';`);
     const extra = tbl.fills.length ? ', ' + tbl.fills.join(', ') : '';
     const labelList = fields.map((f) => k(f)).join(', ');
