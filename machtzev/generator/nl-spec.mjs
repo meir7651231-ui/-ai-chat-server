@@ -16,6 +16,11 @@ const FALLBACK = LANG.fallbackName || '';
 const TPL_ENT = LANG.tplEntity || '';
 const TPL_WITH = LANG.tplWith || '';
 const INTRO = LANG.introMarks || [];
+const EACH = LANG.eachWords || [];
+const IMPLIED = LANG.impliedMark || '';
+// 'לכל X שדה, שדה' — מרקר-שדות **מובלע** (בעברית 'יש' משתמע). ⇒ מזריק את המרקר: X מקבל
+// את הרשימה כשדות (במקום שהשדות יהפכו לישויות). מבני · מהדאטה (eachWords/impliedMark).
+const EACH_RE = (EACH.length && IMPLIED) ? new RegExp(`(?:^|[,،]\\s*)(?:${EACH.join('|')})\\s+([֐-׿]{2,})\\s+(?=[֐-׿])`) : null;
 const PLURAL_RE = new RegExp('(' + (LANG.pluralSuffixes || []).join('|') + ')$');   // אות-ריבוי מהדאטה (עיוור)
 const heWords = (s) => [...(s || '').matchAll(/[֐-׿][֐-׿'"׳״]*/g)].map((m) => m[0]);
 const content = (ws) => ws.filter((w) => w.length > 1 && !LEAD.has(w) && !MARK.includes(w) && !CONJ.includes(w));
@@ -40,7 +45,9 @@ export function nlToSpec(text) {
     const fs = [...new Set(fieldStrs.map((g) => content(heWords(g)).join(' ')).filter((f) => f.length > 1))];
     ents.push({ name, fields: fs.length ? fs : DEF_FIELDS });
   };
-  for (const clause of clauses) {
+  for (const rawClause of clauses) {
+    // (0) 'לכל X …' ⇒ מזריק מרקר-שדות מובלע (X יש …) כדי שהרשימה תהיה שדות, לא ישויות.
+    const clause = EACH_RE ? rawClause.replace(EACH_RE, (m, w) => ` , ${w} ${IMPLIED} `) : rawClause;
     // (1) intro-mark (':') — הראש שלפניו = תחום/מערכת. ראש-לפני-אינטרו ברבים (ישות אמיתית,
     //     'ניהול רכבים:') נשמר; ראש-תחום ביחיד ('ניהול מלון:') נשמט. הזנב שאחרי = הפריטים.
     const iParts = INTRO_RE ? clause.split(INTRO_RE) : [clause];
@@ -66,6 +73,10 @@ export function nlToSpec(text) {
       // זנב-רבים = ישויות. ראש-רבים = ישות-נוספת (מקבל שדות-יחיד); ראש-תחום = נשמט.
       if (headIsEnt) push(headName(headStr), tailSingular);
       tailItems.forEach((tt) => push(nameOf(tt), []));
+    } else if (headItems.length > 1) {
+      // רשימת-ראש + זנב-שדות ('משימות, משימה יש …') ⇒ קודמים=ישויות · אחרון מקבל את השדות.
+      headItems.slice(0, -1).forEach((h) => push(h, []));
+      push(headItems[headItems.length - 1], tailSingular);
     } else {
       // זנב כולו יחיד = שדות ⇒ הראש = הישות (שם-מנוקה-קידומת).
       push(headName(headStr) || headItems[0], tailSingular);

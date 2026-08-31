@@ -8,5 +8,7 @@
   "fallbackName": "פריט",
   "tplEntity": "ישות",
   "tplWith": "עם",
-  "pluralSuffixes": ["ים", "ות"]
+  "pluralSuffixes": ["ים", "ות"],
+  "eachWords": ["לכל"],
+  "impliedMark": "יש"
 }
