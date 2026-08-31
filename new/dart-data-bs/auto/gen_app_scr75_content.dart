@@ -17,3 +17,4 @@ const String gen_app_scr75_c14 = 'בקשת תחזוקה';
 const String gen_app_scr75_c15 = '14 שדות · 4 שלבים';
 const String gen_app_scr75_c16 = '🗂️';
 const String gen_app_scr75_c17 = '5 מדדים · סקירת-על';
+const String gen_app_scr75_c18 = 'השוואה חיה';

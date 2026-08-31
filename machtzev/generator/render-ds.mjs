@@ -417,24 +417,33 @@ export function renderDashboard(slug, { title, icon = '📊', entities, metrics 
     return `, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${pascal(tslug)}()))`;
   };
   // אריחי-אגרגט (שורש-4): סכום/ממוצע על שדה-מספרי · מונה על ישות — ערך-אמת, לא ספירה עיוורת.
-  const aggTiles = aggs.filter((a) => a.slug && (a.kind === 'מונה' || a.field)).map((a) => {
+  const tiles = [];
+  const barLabels = [];   // תוויות לתרשים-העמודות
+  const barVals = [];     // ביטויי-double חיים לתרשים
+  for (const a of aggs.filter((a) => a.slug && (a.kind === 'מונה' || a.field))) {
     const lbl = k(a.field || a.entityName);
     const sub = k(`${a.kind} · ${a.entityName}`);
     const g = k(a.kind === 'ממוצע' ? '📈' : a.kind === 'סכום' ? '🧮' : '🔢');
-    const call = a.kind === 'סכום' ? `appStore.sum('${a.slug}', ${k(a.field)}).toStringAsFixed(0)`
-      : a.kind === 'ממוצע' ? `appStore.avg('${a.slug}', ${k(a.field)}).toStringAsFixed(1)`
-      : `appStore.count('${a.slug}').toString()`;
-    return `AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: ${lbl}, value: ${call}, sub: ${sub}, glyph: ${g}${nav(a.slug)}))`;
-  });
-  const countTiles = shown.map((e) => {
+    const cf = a.field ? k(a.field) : null;
+    const num = a.kind === 'סכום' ? `appStore.sum('${a.slug}', ${cf})`
+      : a.kind === 'ממוצע' ? `appStore.avg('${a.slug}', ${cf})`
+      : `appStore.count('${a.slug}').toDouble()`;
+    const disp = a.kind === 'ממוצע' ? `${num}.toStringAsFixed(1)` : `${num}.toStringAsFixed(0)`;
+    tiles.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: ${lbl}, value: ${disp}, sub: ${sub}, glyph: ${g}${nav(a.slug)}))`);
+    barLabels.push(lbl); barVals.push(num);
+  }
+  for (const e of shown) {
     const lbl = k(e.name);
     const sub = k(`${e.fields} שדות${e.stages ? ` · ${e.stages} שלבים` : ''}`);
     const g = k(e.icon || '🗂️');
-    // ערך-חי: סופר את הרשומות בחנות לפי-slug (מפתח-החנות היציב), מגיב לשמירה
-    return `AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: ${lbl}, value: appStore.count('${e.slug || ''}').toString(), sub: ${sub}, glyph: ${g}${nav(e.slug)}))`;
-  });
-  const tiles = [...aggTiles, ...countTiles];
+    tiles.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: ${lbl}, value: appStore.count('${e.slug || ''}').toString(), sub: ${sub}, glyph: ${g}${nav(e.slug)}))`);
+    barLabels.push(lbl); barVals.push(`appStore.count('${e.slug || ''}').toDouble()`);
+  }
   const cSub = k(`${tiles.length} מדדים · סקירת-על`);
+  const cChart = k('השוואה חיה');
+  const barsBlock = barVals.length >= 2
+    ? `      AnimatedBuilder(animation: appStore, builder: (context, _) => DsBars(title: ${cChart}, labels: const [${barLabels.join(', ')}], values: [${barVals.join(', ')}])),\n`
+    : '';
   const rows = [];
   for (let i = 0; i < tiles.length; i += 2) {
     const a = tiles[i], b = tiles[i + 1];
@@ -446,7 +455,7 @@ export function renderDashboard(slug, { title, icon = '📊', entities, metrics 
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
-${[...imports].sort().join('\n')}
+${barsBlock ? "import '../dart-ui-bs/ds/ds_bars.dart';\n" : ''}${[...imports].sort().join('\n')}
 import 'package:flutter/material.dart';
 
 class ${cls} extends StatelessWidget {
@@ -460,7 +469,7 @@ class ${cls} extends StatelessWidget {
       icon: ${cIcon},
       children: [
 ${rows.join('\n')}
-      ],
+${barsBlock}      ],
     );
   }
 }

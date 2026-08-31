@@ -11,3 +11,4 @@ const String gen_app_scr73_c8 = 'ציונים';
 const String gen_app_scr73_c9 = '14 שדות · 4 שלבים';
 const String gen_app_scr73_c10 = '🗂️';
 const String gen_app_scr73_c11 = '3 מדדים · סקירת-על';
+const String gen_app_scr73_c12 = 'השוואה חיה';

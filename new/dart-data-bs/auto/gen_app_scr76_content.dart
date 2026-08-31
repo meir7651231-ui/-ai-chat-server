@@ -14,3 +14,4 @@ const String gen_app_scr76_c11 = 'אירוע חירום';
 const String gen_app_scr76_c12 = '16 שדות · 4 שלבים';
 const String gen_app_scr76_c13 = '🗂️';
 const String gen_app_scr76_c14 = '4 מדדים · סקירת-על';
+const String gen_app_scr76_c15 = 'השוואה חיה';

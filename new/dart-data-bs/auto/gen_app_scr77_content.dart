@@ -11,3 +11,4 @@ const String gen_app_scr77_c8 = 'בקשת קבלה';
 const String gen_app_scr77_c9 = '14 שדות · 5 שלבים';
 const String gen_app_scr77_c10 = '🗂️';
 const String gen_app_scr77_c11 = '3 מדדים · סקירת-על';
+const String gen_app_scr77_c12 = 'השוואה חיה';

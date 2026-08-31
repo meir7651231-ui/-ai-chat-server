@@ -8,3 +8,4 @@ const String gen_app_scr74_c5 = 'תשלום';
 const String gen_app_scr74_c6 = '10 שדות · 4 שלבים';
 const String gen_app_scr74_c7 = '🗂️';
 const String gen_app_scr74_c8 = '2 מדדים · סקירת-על';
+const String gen_app_scr74_c9 = 'השוואה חיה';
