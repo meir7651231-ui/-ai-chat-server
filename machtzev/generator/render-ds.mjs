@@ -162,8 +162,19 @@ function compileFormula(formula, labels) {
   return /@|[֐-׿]/.test(dart) ? null : (dart || null);
 }
 
+// ⚖️ מהדר-חוק-בין-שדות: 'תאריך יעד >= תאריך חיוב' ⇒ {li,op,ri}. השוואה מספרית אם שניהם
+// מספר, אחרת לקסיקלית (ISO-תאריך מסתדר לקסיקלית). מילה-לא-מזוהה ⇒ null (מדולג בשקט).
+function compileRule(rule, labels) {
+  const m = rule.match(/^(.+?)\s*(>=|<=|>|<)\s*(.+)$/);
+  if (!m) return null;
+  const find = (name) => { const c = labels.find((l) => l.label === name.trim()); return c ? c.idx : -1; };
+  const li = find(m[1]), ri = find(m[3]);
+  if (li < 0 || ri < 0 || li === ri) return null;
+  return { li, ri, op: m[2], text: rule.trim() };
+}
+
 // ── ישות: מסך-חי מחווט — טופס→שמירה→חנות→טבלה→דשבורד, + קשרים(מזהה) + מסע + עריכה/מחיקה ──
-export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [] }) {
+export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [] }) {
   const { k, dump } = makeConsts(slug);
   const cTitle = k(name);
   const cSub = k(`${schema.length} שדות${stages.length ? ` · ${stages.length} שלבים` : ''}`);
@@ -251,7 +262,11 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   });
   const reqChecks = requiredIdx.map((i) => `if ((_v[${i}] ?? '').trim().isEmpty) miss.add('חסר ' + ${labelConst[i]});`).join('\n      ');
   const uniqChecks = uniqueIdx.map((i) => `{ final v = (_v[${i}] ?? '').trim(); if (v.isNotEmpty && appStore.records(${SK}).any((r) => r['__id'] != _editId && (r[${labelConst[i]}] ?? '') == v)) miss.add('כפול ' + ${labelConst[i]}); }`).join('\n      ');
-  const hasVal = requiredIdx.length + uniqueIdx.length > 0;
+  // ⚖️ חוקי-בין-שדות מהאפיון ('| חוקים: תאריך יעד >= תאריך חיוב') ⇒ בדיקת-הצלבה בשמירה.
+  // שני-הצדדים ריקים ⇒ מדולג (החוק חל רק על ערכים-מוזנים); מספר-מול-מספר=מספרי, אחרת לקסיקלי.
+  const ruleSpecs = vrules.map((v) => compileRule(v, labelIdx)).filter(Boolean);
+  const ruleChecks = ruleSpecs.map((rc) => `{ final l = (_v[${rc.li}] ?? '').trim(); final rr = (_v[${rc.ri}] ?? '').trim(); if (l.isNotEmpty && rr.isNotEmpty) { final nl = num.tryParse(l); final nr = num.tryParse(rr); final ok = (nl != null && nr != null) ? (nl ${rc.op} nr) : (l.compareTo(rr) ${rc.op} 0); if (!ok) miss.add(${k(rc.text)}); } }`).join('\n      ');
+  const hasVal = requiredIdx.length + uniqueIdx.length + ruleSpecs.length > 0;
   const enumImport = hasEnum ? "import '../dart-ui-bs/ds/ds_enum_field.dart';\n" : '';
   const hasStages = stages.length >= 2;
   const stageConsts = hasStages ? stages.map((x) => k(x)) : [];
@@ -300,6 +315,7 @@ ${hasVal ? '  String? _err;      // שגיאת-ולידציה (שדות-חובה
 ${hasVal ? `    final miss = <String>[];
       ${reqChecks}
       ${uniqChecks}
+      ${ruleChecks}
     if (miss.isNotEmpty) { setState(() => _err = miss.join(' · ')); return; }
 ` : ''}    final map = <String, String>{${mapEntries}};
     if (_editId != null) {

@@ -35,11 +35,17 @@ const inputAtom = (type) => {
 };
 
 export function interpret(text) {
-  // '|' מפריד שדות משלבי-workflow — אבל רק ה-'|' שלפני "שלבים:" (כדי ש-'|' בתוך enum
-  // ‏{א|ב|ג} לא יישבר). "ישות X עם <שדות> | שלבים: a, b, c"
-  const stM = text.match(/\|\s*(?=שלבים|סטטוסים|מצבים)/);
-  const main = stM ? text.slice(0, stM.index) : text;
-  const stagesPart = stM ? text.slice(stM.index + 1) : '';
+  // סעיפי-'|' לפי מילת-מפתח בלבד (כדי ש-'|' בתוך enum {א|ב|ג} לא יישבר):
+  // "ישות X עם <שדות> | שלבים: a,b | חוקים: תאריך יעד >= תאריך חיוב"
+  const markers = [...text.matchAll(/\|\s*(שלבים|סטטוסים|מצבים|חוקים|ולידציה)/g)];
+  const main = markers.length ? text.slice(0, markers[0].index) : text;
+  let stagesPart = '', rulesPart = '';
+  markers.forEach((m, mi) => {
+    const start = m.index + m[0].length;
+    const end = mi + 1 < markers.length ? markers[mi + 1].index : text.length;
+    const content = text.slice(start, end).replace(/^[:\s]+/, '');
+    if (m[1] === 'חוקים' || m[1] === 'ולידציה') rulesPart = content; else stagesPart = content;
+  });
   // שם-הישות + רשימת-השדות (בלי \b — לא עובד על עברית ב-JS)
   const body = main.replace(/^\s*(צור|תוסיף|בנה|הוסף)?\s*(ישות|טבלה|טופס)\s+/, '');
   const [namePart, ...rest] = body.split(/\s+עם\s+|\s+שדות[:\s]+|\s*:\s*/);
@@ -102,7 +108,8 @@ export function interpret(text) {
   }
   lines.push(`באנר ישות ${entity}: ${schema.length} שדות${stages.length ? ` · ${stages.length}-שלבי workflow` : ''}${rules.length ? ` · ${rules.length} חוקים חיים` : ''} · מהמדף`);
 
-  return { spec: lines.join('\n'), entity, schema, stages, rules: rules.map((r) => r.name) };
+  const vrules = rulesPart ? rulesPart.split(/[,\n]/).map((s) => s.trim()).filter((s) => s.length > 2) : [];
+  return { spec: lines.join('\n'), entity, schema, stages, rules: rules.map((r) => r.name), vrules };
 }
 
 // ── CLI (רץ רק בהרצה ישירה, לא ביבוא) ──
