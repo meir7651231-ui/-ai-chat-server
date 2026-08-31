@@ -21,10 +21,24 @@ function parseRole(line) {
   const body = line.replace(ROLE_RE, '');
   const ci = body.indexOf(':');
   const name = (ci >= 0 ? body.slice(0, ci) : body).trim();
-  const rest = ci >= 0 ? body.slice(ci + 1) : '';
-  const all = rest.includes('הכל');   // ‏\b הוא ASCII בלבד — לא נדלק על עברית
-  const ents = all ? [] : rest.split(/[,،]/).map((s) => s.trim()).filter(Boolean);
-  return { name, all, ents };
+  const afterName = ci >= 0 ? body.slice(ci + 1) : '';
+  // סעיפי-'|' (RLS · read-side): '... | היקף: תלמיד.מורה | שדות: תלמיד.ציון=הסתר'.
+  const segs = afterName.split('|');
+  const entPart = segs[0];
+  const all = entPart.includes('הכל');   // ‏\b הוא ASCII בלבד — לא נדלק על עברית
+  const ents = all ? [] : entPart.split(/[,،]/).map((s) => s.trim()).filter(Boolean);
+  const scope = [], hide = [];
+  for (let i = 1; i < segs.length; i++) {
+    const hm = segs[i].match(/^\s*(היקף|שדות)\s*:(.*)$/);
+    if (!hm) continue;
+    const items = hm[2].split(/[,،]/).map((x) => x.trim()).filter(Boolean);
+    if (hm[1] === 'היקף') {
+      for (const it of items) { const d = it.match(/^(.+?)\.(.+)$/); if (d) scope.push({ ent: clean(d[1]), field: clean(d[2]) }); }
+    } else {
+      for (const it of items) { const d = it.match(/^(.+?)\.(.+?)\s*=\s*(.+)$/); if (d && /הסתר/.test(d[3])) hide.push({ ent: clean(d[1]), field: clean(d[2]) }); }
+    }
+  }
+  return { name, all, ents, scope, hide };
 }
 
 export function buildApp(specText) {
@@ -97,7 +111,11 @@ export function buildApp(specText) {
     if (li.isEnt) {
       const r = entRes[li.i];
       const slug = `app_ent${li.i}`;
-      const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames, nameToSlug, backRefs: backRefs[r.entity] || [], vrules: r.vrules || [], delGuard: delGuardByName[r.entity], guards: r.guards || [] });
+      const authz = roles.length ? {
+        scope: roles.map((role) => { const sc = (role.scope || []).find((x) => x.ent === r.entity); return sc ? sc.field : ''; }),
+        hidden: roles.map((role) => r.schema.map((s, i) => (role.hide || []).some((h) => h.ent === r.entity && h.field === s.label) ? i : -1).filter((i) => i >= 0)),
+      } : null;
+      const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames, nameToSlug, backRefs: backRefs[r.entity] || [], vrules: r.vrules || [], delGuard: delGuardByName[r.entity], guards: r.guards || [], authz });
       screens.push({ slug, cls, kind: 'entity', name: r.entity, icon: '🗂️', sub: `${r.schema.length} שדות${(r.stages || []).length ? ` · ${r.stages.length} שלבים` : ''}` });
     } else {
       const slug = `app_scr${li.i}`;
@@ -124,7 +142,10 @@ export function buildApp(specText) {
   const st = renderSystem('app_settings', { title: 'הגדרות', icon: '⚙️', sectionTitle: 'סנכרון · גיבוי · הרשאות', kind: 'toggles', items: ['עבודה אופליין', 'גיבוי אוטומטי', 'הצפנת-ענן'] });
   sys.push({ ...st, kind: 'system', name: 'הגדרות', icon: '⚙️', sub: 'סנכרון · הרשאות' });
 
-  const hub = renderHub('app_hub', { title: 'האפליקציה שלי', icon: '🏗️', screens: [...screens, ...sys], roles });
+  // RLS · שדות-היקף ייחודיים (slug+שדה) — למילוי בורר-"מי-אני" בלוח.
+  const scopeFields = [];
+  for (const role of roles) for (const sc of (role.scope || [])) { const sl = nameToSlug[sc.ent]; if (sl && !scopeFields.some((x) => x.slug === sl && x.field === sc.field)) scopeFields.push({ slug: sl, field: sc.field }); }
+  const hub = renderHub('app_hub', { title: 'האפליקציה שלי', icon: '🏗️', screens: [...screens, ...sys], roles, scopeFields });
   // שורש-האפליקציה: main + MaterialApp ⇒ אפליקציה עצמאית שרצה בלי entry-זמני.
   renderMain('app_main', { title: 'האפליקציה שלי', hubSlug: 'app_hub', hubCls: hub.cls, edges });
 

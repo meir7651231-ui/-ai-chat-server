@@ -15,6 +15,22 @@ class AppStore extends ChangeNotifier {
   int get role => _role;
   void setRole(int i) { _role = i; notifyListeners(); }
 
+  // 👤 "מי-אני" רך (RLS צד-לקוח = סינון-תצוגה, לא אכיפה!). ריק ⇒ בלי-סינון (ביט-זהה).
+  String _actor = '';
+  String get actor => _actor;
+  void setActor(String v) { _actor = v; notifyListeners(); }
+
+  // היקף-שורה: רשומות שערך-השדה שלהן שווה ל-actor. field ריק / actor ריק ⇒ הכל (בלי-סינון).
+  List<Map<String, String>> scoped(String entity, String field) =>
+      (field.isEmpty || _actor.isEmpty) ? records(entity) : records(entity).where((r) => (r[field] ?? '') == _actor).toList();
+
+  // ערכי-סינון ייחודיים לשדה (למילוי בורר-"מי-אני").
+  List<String> distinctValues(String entity, String field) {
+    final out = <String>{};
+    for (final r in records(entity)) { final v = (r[field] ?? '').trim(); if (v.isNotEmpty) out.add(v); }
+    return out.toList()..sort();
+  }
+
   static const idKey = '__id';       // מזהה-רשומה יציב
   static const stageKey = '__stage'; // אינדקס שלב-המסע הנוכחי
   static const _pkey = 'ds_app_v1';  // מפתח-ההתמדה
@@ -29,6 +45,7 @@ class AppStore extends ChangeNotifier {
       final data = jsonDecode(raw) as Map<String, dynamic>;
       _seq = (data['seq'] as num?)?.toInt() ?? 0;
       _role = (data['role'] as num?)?.toInt() ?? 0;
+      _actor = (data['actor'] as String?) ?? '';
       (data['rec'] as Map<String, dynamic>).forEach((k, v) {
         _rec[k] = (v as List)
             .map((e) => (e as Map).map((kk, vv) => MapEntry(kk.toString(), vv.toString())))
@@ -40,7 +57,7 @@ class AppStore extends ChangeNotifier {
   @override
   void notifyListeners() {
     try {
-      persistSave(_pkey, jsonEncode({'seq': _seq, 'role': _role, 'rec': _rec}));
+      persistSave(_pkey, jsonEncode({'seq': _seq, 'role': _role, 'actor': _actor, 'rec': _rec}));
     } catch (_) {}
     super.notifyListeners();
   }

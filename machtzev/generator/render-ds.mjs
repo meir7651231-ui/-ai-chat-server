@@ -194,7 +194,7 @@ function compileGuard(cond, labels) {
 }
 
 // ── ישות: מסך-חי מחווט — טופס→שמירה→חנות→טבלה→דשבורד, + קשרים(מזהה) + מסע + עריכה/מחיקה ──
-export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard, guards = [] }) {
+export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard, guards = [], authz = null }) {
   const { k, dump } = makeConsts(slug);
   const cTitle = k(name);
   const cSub = k(`${schema.length} שדות${stages.length ? ` · ${stages.length} שלבים` : ''}`);
@@ -394,6 +394,39 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
     ? `stage: (const ${stageList})[appStore.stageOf(${SK}, rid)], stageDone: appStore.stageOf(${SK}, rid) >= ${stages.length - 1}, stages: const ${stageList}, stageIndex: appStore.stageOf(${SK}, rid), onStage: ${onStageBody}, onAdvance: ${onAdvBody}, `
     : '';
 
+  // 🔒 RLS (read-side · סינון-תצוגה, לא אכיפה): היקף-שורה (scoped) + הסתרת-עמודות פר-תפקיד.
+  // הכל מגודר — בלי scope/hide ⇒ אפס-פליטה ⇒ ביט-זהה. ייחודיות נשארת על כל-הרשומות.
+  const nRoles = authz ? authz.scope.length : 0;
+  const hasScope = !!(authz && authz.scope.some((f) => f));
+  const hasHide = !!(authz && authz.hidden.some((h) => h.length));
+  const rlsActive = hasScope || hasHide;
+  const rlsFields = rlsActive
+    ? `\n  static const List<String> _rlsScope = [${authz.scope.map((f) => f ? k(f) : "''").join(', ')}];\n  static const List<List<int>> _rlsHidden = [${authz.hidden.map((h) => `[${h.join(', ')}]`).join(', ')}];\n  int get _rlsRole => appStore.role.clamp(0, ${Math.max(0, nRoles - 1)});\n  Set<int> get _rlsHiddenSet => _rlsHidden[_rlsRole].toSet();\n`
+    : '';
+  const listRead = hasScope ? `appStore.scoped(${SK}, _rlsScope[_rlsRole])` : `appStore.records(${SK})`;
+  const cardSig = rlsActive ? 'Widget _card(Map<String, String> r, Set<int> hidden) {' : 'Widget _card(Map<String, String> r) {';
+  const cardHiddenArg = rlsActive ? ', hidden: hidden' : '';
+  const cardCall = rlsActive ? '_card(rs[i], _rlsHiddenSet)' : '_card(rs[i])';
+  const csvMethod = rlsActive
+    ? `  String _csv() {
+    final b = StringBuffer();
+    final hid = _rlsHiddenSet;
+    final labels = const [${labelsList}];
+    b.writeln([for (var i = 0; i < labels.length; i++) if (!hid.contains(i)) labels[i]].map((h) => '"' + h.replaceAll('"', '""') + '"').join(','));
+    for (final r in ${listRead}) {
+      final vals = [${recValues}];
+      b.writeln([for (var i = 0; i < vals.length; i++) if (!hid.contains(i)) vals[i]].map((v) => '"' + v.replaceAll('"', '""') + '"').join(','));
+    }
+    return b.toString();
+  }`
+    : `  String _csv() {
+    final b = StringBuffer();
+    b.writeln(const [${labelsList}].map((h) => '"' + h.replaceAll('"', '""') + '"').join(','));
+    for (final r in appStore.records(${SK})) {
+      b.writeln([${recValues}].map((v) => '"' + v.replaceAll('"', '""') + '"').join(','));
+    }
+    return b.toString();
+  }`;
   const relImport = hasRel ? "import '../dart-ui-bs/ds/ds_select.dart';\n" : '';
   const multiImport = hasMulti ? "import '../dart-ui-bs/ds/ds_multi_select.dart';\n" : '';
   const cls = pascal(slug);
@@ -441,10 +474,10 @@ ${hasVal ? `    final miss = <String>[];
       _v = {${editLoad}};
     });
   }
-${guardMethod}
-  Widget _card(Map<String, String> r) {
+${guardMethod}${rlsFields}
+  ${cardSig}
     final rid = r['__id'] ?? '';
-    return DsRecordCard(labels: const [${labelsList}], values: [${recValues}], ${stageArgs}onEdit: () => _edit(r), onDelete: () => appStore.removeById(${SK}, rid)${backFooter}${delArgs});
+    return DsRecordCard(labels: const [${labelsList}], values: [${recValues}], ${stageArgs}onEdit: () => _edit(r), onDelete: () => appStore.removeById(${SK}, rid)${backFooter}${delArgs}${cardHiddenArg});
   }
 ${backRefs.length ? `
   Widget _backChip(String label, int n) => Container(
@@ -454,14 +487,7 @@ ${backRefs.length ? `
       );
 ` : ''}
 
-  String _csv() {
-    final b = StringBuffer();
-    b.writeln(const [${labelsList}].map((h) => '"' + h.replaceAll('"', '""') + '"').join(','));
-    for (final r in appStore.records(${SK})) {
-      b.writeln([${recValues}].map((v) => '"' + v.replaceAll('"', '""') + '"').join(','));
-    }
-    return b.toString();
-  }
+${csvMethod}
 
   Widget _csvBtn(BuildContext context) => Material(
         color: const Color(0xFFF1F5F9),
@@ -532,7 +558,7 @@ ${fieldBlocks.join('\n')}
           AnimatedBuilder(
             animation: appStore,
             builder: (context, _) {
-              final all = appStore.records(${SK});
+              final all = ${listRead};
               if (all.isEmpty) return const DsEmpty(label: ${cEmpty});
               final q = _q.trim().toLowerCase();
               final rs = q.isEmpty ? all : all.where((r) => r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q))).toList();
@@ -540,7 +566,7 @@ ${fieldBlocks.join('\n')}
                 DsSearch(value: _q, onChanged: (v) => setState(() => _q = v)),
                 if (rs.isEmpty) const DsEmpty(label: ${cNoMatch}),
                 for (var i = 0; i < rs.length; i++)
-                  _card(rs[i]),
+                  ${cardCall},
               ]);
             },
           ),
@@ -640,10 +666,16 @@ ${barsBlock}      ],
 // ── לוח-ניווט + שער-הרשאות: בורר-תפקיד מסנן את המסכים-הגלויים (אכיפה חיה) ──
 //    roles = [{name, all, ents}] מהאפיון. גלוּת פר-תפקיד מחושבת-מראש (התאמת-קידומת
 //    שם-הישות ↔ הרשאות-התפקיד; 'הכל'⇒כל · 'דוחות'⇒דשבורדים · מערכת רק ל-'הכל'). טהור-מבני.
-export function renderHub(slug, { title, icon = '🏗️', screens, roles = [] }) {
+export function renderHub(slug, { title, icon = '🏗️', screens, roles = [], scopeFields = [] }) {
   const { k, dump } = makeConsts(slug);
   const cTitle = k(title);
   const cIcon = k(icon);
+  // 🔒 RLS · בורר-"מי-אני" (סינון-תצוגה, לא אכיפה): אופציות = איחוד ערכי שדות-ההיקף.
+  const hasActor = scopeFields.length > 0;
+  const actorUnion = scopeFields.map((sf) => `...appStore.distinctValues('${sf.slug}', ${k(sf.field)})`).join(', ');
+  const actorMethod = hasActor
+    ? `\n  Widget _actorBar(BuildContext context) => AnimatedBuilder(\n    animation: appStore,\n    builder: (context, _) {\n      final opts = <String>{${actorUnion}}.toList()..sort();\n      return Container(\n        margin: const EdgeInsets.only(bottom: 8),\n        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),\n        decoration: BoxDecoration(color: const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(12)),\n        child: Row(children: [\n          const Text('מציג כ:', style: TextStyle(fontSize: 12.5, color: DsTokens.muted, fontWeight: FontWeight.w700)),\n          const SizedBox(width: 8),\n          DropdownButton<String>(\n            value: appStore.actor,\n            underline: const SizedBox.shrink(),\n            items: [const DropdownMenuItem<String>(value: '', child: Text('הכל')), for (final o in opts) if (o.isNotEmpty) DropdownMenuItem<String>(value: o, child: Text(o))],\n            onChanged: (v) => setState(() => appStore.setActor(v ?? '')),\n          ),\n          const Spacer(),\n          const Text('סינון-תצוגה', style: TextStyle(fontSize: 11, color: DsTokens.faint)),\n        ]),\n      );\n    },\n  );\n`
+    : '';
   const imports = new Set();
   const tiles = screens.map((s) => {
     const g = k(s.icon || '🗂️');
@@ -690,7 +722,7 @@ class _${cls}State extends State<${cls}> {
   List<Widget> _tiles(BuildContext context) => [
 ${tiles.join('\n')}
   ];
-${showChips ? `
+${actorMethod}${showChips ? `
   Widget _roleChip(int i, String label) {
     final sel = appStore.role == i;
     return Padding(
@@ -719,7 +751,8 @@ ${showChips ? `
       subtitle: '\${vis.length} מסכים גלויים',
       icon: ${cIcon},
       children: [
-${showChips ? `        Container(
+${hasActor ? `        _actorBar(context),
+` : ''}${showChips ? `        Container(
           margin: const EdgeInsets.only(bottom: 4),
           child: Wrap(children: [${roleChips}]),
         ),

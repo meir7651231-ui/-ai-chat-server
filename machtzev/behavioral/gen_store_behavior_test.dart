@@ -117,6 +117,19 @@ void main() {
     expect(s.sumRef('הוצאה', 'פרויקט', q, 'סכום'), 400.0);
   });
 
+  // ratchet · RLS: scoped מסנן שורות לפי actor (ריק ⇒ הכל) · distinctValues לבורר.
+  test('RLS · scoped לפי actor (סינון-תצוגה) · distinctValues', () {
+    final s = AppStore();
+    s.add('תלמיד', {'שם': 'דנה', 'מורה': 'רבקה'});
+    s.add('תלמיד', {'שם': 'רן', 'מורה': 'רבקה'});
+    s.add('תלמיד', {'שם': 'גל', 'מורה': 'שרה'});
+    expect(s.scoped('תלמיד', 'מורה').length, 3);   // actor ריק ⇒ הכל (ביט-זהה)
+    s.setActor('רבקה');
+    expect(s.scoped('תלמיד', 'מורה').length, 2);   // רק של רבקה
+    expect(s.scoped('תלמיד', '').length, 3);        // שדה ריק ⇒ בלי-סינון
+    expect(s.distinctValues('תלמיד', 'מורה'), ['רבקה', 'שרה']);
+  });
+
   test('options/displayOf — מפתח-זר מזהה⇒שם-תצוגה', () {
     final s = AppStore();
     final id = s.add('לקוח', {'שם': 'חברת X', 'טלפון': '050'});

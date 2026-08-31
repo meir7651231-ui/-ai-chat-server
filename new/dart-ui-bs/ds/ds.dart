@@ -313,8 +313,9 @@ class DsNavTile extends StatelessWidget {
 
 // ── כרטיס-רשומה: תווית:ערך לכל שדה + שבב-שלב חי + קידום + עריכה (הקשה) + מחיקה ──
 class DsRecordCard extends StatelessWidget {
-  const DsRecordCard({required this.labels, required this.values, this.stage = '', this.stageDone = false, this.stages = const [], this.stageIndex = 0, this.onStage, this.onAdvance, this.onEdit, this.onDelete, this.footer, this.blockedReason, this.confirmMessage, super.key});
+  const DsRecordCard({required this.labels, required this.values, this.stage = '', this.stageDone = false, this.stages = const [], this.stageIndex = 0, this.onStage, this.onAdvance, this.onEdit, this.onDelete, this.footer, this.blockedReason, this.confirmMessage, this.hidden = const {}, super.key});
   final List<String> labels, values;
+  final Set<int> hidden;   // RLS · אינדקסי-עמודה מוסתרים לתפקיד-הנוכחי (סינון-תצוגה)
   final Widget? footer;   // תוכן-תחתית (למשל שבבי קשר-הפוך)
   final String? blockedReason;   // שלמות-קשר · חסימה: מחיקה חסומה + סיבה (טוסט)
   final String? confirmMessage;  // שלמות-קשר · מפל: אישור לפני מחיקת-שרשרת
@@ -328,6 +329,7 @@ class DsRecordCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final rows = <Widget>[];
     for (var i = 0; i < labels.length && i < values.length; i++) {
+      if (hidden.contains(i)) continue;   // RLS · עמודה מוסתרת לתפקיד
       if (values[i].trim().isEmpty) continue;
       rows.add(Padding(
         padding: const EdgeInsets.symmetric(vertical: 3),
