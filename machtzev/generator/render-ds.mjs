@@ -991,9 +991,11 @@ export function selectAtom(roleSpecs, pred = () => true) {
 // **האטום שמגשים אותו הכי-טוב** (selectAtom מדורג); ההרכבה **משלבת** את אטומי-ההיבטים
 // יחד עד שהמטרה מושגת. שקעי-דאטה⇐נתוני-אמת · שקעים-נותרים⇐סגנון-בטוח (לא דאטה מזויף).
 const _rS = /^String\??$/, _rLS = /^List<String>\??$/, _rLLS = /^List<List<String>>\??$/, _rLD = /^List<double>\??$/, _rI = /^int\??$/;
-export function renderCompose(slug, { entitySlug, entityName, fields = [], numFields = [], stages = [], detail = null }) {
+export function renderCompose(slug, { entitySlug, entityName, fields = [], numFields = [], stages = [], detail = null, scopeField = null }) {
   const { k, dump } = makeConsts(slug);
   const cls = pascal(slug);
+  // 🔐 מקור-הרשומות מכבד RLS: יש שדה-היקף ⇒ scoped (מסונן ל-actor), אחרת records (הכל).
+  const recsExpr = scopeField ? `appStore.scoped('${entitySlug}', ${k(scopeField)})` : `appStore.records('${entitySlug}')`;
   // היבט-מדדים: האטום שמגשים "ערך+תווית" הכי-טוב (הכי-מעט שקעים-נותרים).
   const kpi = selectAtom({ value: { re: /^(value|val|amount|total|count|num)$/, ty: _rS }, label: { re: /^(label|title|caption|name|sub)$/, ty: _rS } },
     (a) => a.caps.includes('kpi') && a.seam === 'fields');
@@ -1028,7 +1030,7 @@ export function renderCompose(slug, { entitySlug, entityName, fields = [], numFi
     imports.add(`import '../${prog.file}';`);
     const extra = prog.fills.length ? ', ' + prog.fills.join(', ') : '';
     const last = Math.max(0, stages.length - 1);
-    const pctExpr = `appStore.count('${entitySlug}') == 0 ? 0 : (appStore.records('${entitySlug}').where((r) => appStore.stageOf('${entitySlug}', r['__id'] ?? '') >= ${last}).length * 100 ~/ appStore.count('${entitySlug}'))`;
+    const pctExpr = `appStore.count('${entitySlug}') == 0 ? 0 : (${recsExpr}.where((r) => appStore.stageOf('${entitySlug}', r['__id'] ?? '') >= ${last}).length * 100 ~/ appStore.count('${entitySlug}'))`;
     blocks.push(`Padding(\n            padding: const EdgeInsets.symmetric(horizontal: 12),\n            child: ${prog.cls}(${prog.p.pct}: ${pctExpr}${extra}),\n          )`);
   }
   if (trend) {
@@ -1036,15 +1038,15 @@ export function renderCompose(slug, { entitySlug, entityName, fields = [], numFi
     const extra = trend.fills.length ? ', ' + trend.fills.join(', ') : '';
     const nf = k(numFields[0]);
     const titleF = fields.length ? k(fields[0]) : "''";
-    const vals = `appStore.records('${entitySlug}').take(12).map((r) => double.tryParse(r[${nf}] ?? '') ?? 0).toList()`;
-    const labs = `appStore.records('${entitySlug}').take(12).map((r) => r[${titleF}] ?? '').toList()`;
+    const vals = `${recsExpr}.take(12).map((r) => double.tryParse(r[${nf}] ?? '') ?? 0).toList()`;
+    const labs = `${recsExpr}.take(12).map((r) => r[${titleF}] ?? '').toList()`;
     blocks.push(`Padding(\n            padding: const EdgeInsets.all(12),\n            child: ${trend.cls}(${trend.p.labels}: ${labs}, ${trend.p.values}: ${vals}${extra}),\n          )`);
   }
   if (board) {
     imports.add(`import '../${board.file}';`);
     const stageConsts = stages.map((sName) => k(sName)).join(', ');
     const titleF = fields.length ? k(fields[0]) : "''";
-    const b = `${board.cls}(${board.p.stages}: const [${stageConsts}], ${board.p.records}: appStore.records('${entitySlug}'), ${board.p.stageOf}: (r) => appStore.stageOf('${entitySlug}', r['__id'] ?? ''), ${board.p.titleOf}: (r) => r[${titleF}] ?? '', ${board.p.onMove}: (id, to) => appStore.setStage('${entitySlug}', id, to))`;
+    const b = `${board.cls}(${board.p.stages}: const [${stageConsts}], ${board.p.records}: ${recsExpr}, ${board.p.stageOf}: (r) => appStore.stageOf('${entitySlug}', r['__id'] ?? ''), ${board.p.titleOf}: (r) => r[${titleF}] ?? '', ${board.p.onMove}: (id, to) => appStore.setStage('${entitySlug}', id, to))`;
     blocks.push(`Expanded(child: ${b})`);
   } else if (nav) {
     imports.add(`import '../${nav.file}';`);
@@ -1052,13 +1054,13 @@ export function renderCompose(slug, { entitySlug, entityName, fields = [], numFi
     const ex = nav.fills.length ? ', ' + nav.fills.join(', ') : '';
     const titleF = fields.length ? k(fields[0]) : "''";
     const row = `${nav.cls}(${nav.p.label}: (r[${titleF}] ?? '').isEmpty ? (r['__id'] ?? '') : (r[${titleF}] ?? ''), ${nav.p.onTap}: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${detail.cls}(initialId: r['__id'] ?? '')))${ex})`;
-    blocks.push(`Expanded(\n            child: ListView(\n              children: [\n                for (final r in appStore.records('${entitySlug}'))\n                  Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3), child: ${row}),\n              ],\n            ),\n          )`);
+    blocks.push(`Expanded(\n            child: ListView(\n              children: [\n                for (final r in ${recsExpr})\n                  Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3), child: ${row}),\n              ],\n            ),\n          )`);
   } else if (tbl && fields.length) {
     imports.add(`import '../${tbl.file}';`);
     const extra = tbl.fills.length ? ', ' + tbl.fills.join(', ') : '';
     const labelList = fields.map((f) => k(f)).join(', ');
     const rowCells = fields.map((f) => `r[${k(f)}] ?? ''`).join(', ');
-    blocks.push(`Expanded(\n            child: SingleChildScrollView(\n              child: ${tbl.cls}(${tbl.p.labels}: const [${labelList}], ${tbl.p.rows}: appStore.records('${entitySlug}').map((r) => [${rowCells}]).toList()${extra}),\n            ),\n          )`);
+    blocks.push(`Expanded(\n            child: SingleChildScrollView(\n              child: ${tbl.cls}(${tbl.p.labels}: const [${labelList}], ${tbl.p.rows}: ${recsExpr}.map((r) => [${rowCells}]).toList()${extra}),\n            ),\n          )`);
   }
   if (!blocks.length) return null;
 
@@ -1088,7 +1090,7 @@ class ${cls} extends StatelessWidget {
 // 🔎 מסך-רשומה-בודדת: בורר-רשומה (dropdown) ⇒ שדות-הרשומה + KPI-יחסים (כמה ילדים
 // מצביעים על הרשומה — countRef). היחסים הם ערך פר-רשומה, ולכן חיים כאן ולא בסקירה.
 // אטום-ה-KPI נבחר מהמצע (label+value); חיווט-אמת בלבד.
-export function renderRecordDetail(slug, { entitySlug, entityName, fields = [], relations = [] }) {
+export function renderRecordDetail(slug, { entitySlug, entityName, fields = [], relations = [], scopeField = null }) {
   if (!fields.length) return null;
   const { k, dump } = makeConsts(slug);
   const cls = pascal(slug);
@@ -1121,7 +1123,7 @@ class _${cls}State extends State<${cls}> {
   Widget build(BuildContext context) => AnimatedBuilder(
         animation: appStore,
         builder: (context, _) {
-          final recs = appStore.records('${entitySlug}');
+          final recs = ${scopeField ? `appStore.scoped('${entitySlug}', ${k(scopeField)})` : `appStore.records('${entitySlug}')`};
           if (recs.isEmpty) return Center(child: Text(${k('אין רשומות עדיין')}));
           final i0 = _sel ?? (widget.initialId != null ? recs.indexWhere((r) => r['__id'] == widget.initialId) : 0);
           final i = (i0 < 0 ? 0 : i0).clamp(0, recs.length - 1);

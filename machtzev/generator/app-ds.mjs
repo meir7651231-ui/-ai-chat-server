@@ -147,6 +147,11 @@ export function buildApp(specText) {
     bindScreens.push({ slug: bslug, cls, kind: 'entity', name: `🖥 ${ent.name} · מסך`, icon: '🖥', sub: `מסך-אמת מפורק (${spec.cls.replace('Composed', '')}) · מחווט-מהישות` });
   }
 
+  // 🔐 היקף-RLS פר-ישות: שדה-ההיקף שתפקיד מגביל לפיו (role.scope). מסכי-ההרכבה/כרטיס
+  // מכבדים אותו (scoped) בדיוק כמו מסך-הישות — אחרת משתמש-מוגבל היה רואה את כל הרשומות.
+  const scopeByEnt = {};
+  for (const role of roles) for (const sc of (role.scope || [])) { const sl = nameToSlug[sc.ent]; if (sl && !scopeByEnt[sl]) scopeByEnt[sl] = sc.field; }
+
   // 🔎 מסכי-רשומה-בודדת: בורר-רשומה ⇒ שדות + KPI-יחסים (ילדים שמצביעים על הרשומה).
   // היחסים הם ערך פר-רשומה (countRef) — שייכים למסך-הפרט, לא לסקירה. נבנים ראשונים
   // כדי שמסך-הסקירה יוכל לנווט אליהם (הקלקה על שורה ⇒ הכרטיס של אותה רשומה).
@@ -155,7 +160,7 @@ export function buildApp(specText) {
   let detN = 0;
   for (const e of entMeta) {
     const rels = (backRefs[e.name] || []).map((b) => ({ childSlug: b.fslug, childField: b.ffield, childName: b.fname }));
-    const d = renderRecordDetail(`app_rec${++detN}`, { entitySlug: e.slug, entityName: e.name, fields: e.labels || [], relations: rels });
+    const d = renderRecordDetail(`app_rec${++detN}`, { entitySlug: e.slug, entityName: e.name, fields: e.labels || [], relations: rels, scopeField: scopeByEnt[e.slug] || null });
     if (d) { detailScreens.push({ slug: d.slug, cls: d.cls, kind: 'entity', name: `🔎 ${e.name} · כרטיס`, icon: '🔎', sub: rels.length ? `רשומה + ${rels.length} קשרים` : 'רשומה בודדת' }); detailByEnt[e.slug] = { cls: d.cls, slug: d.slug }; }
     else detN--;
   }
@@ -167,7 +172,7 @@ export function buildApp(specText) {
   let overN = 0;
   for (const e of entMeta) {
     if (!(e.stageLabels || []).length && !(e.numFields || []).length) continue;   // אין מה להרכיב מעבר ללי מסך-הישות
-    const c = renderCompose(`app_over${++overN}`, { entitySlug: e.slug, entityName: e.name, fields: e.labels || [], numFields: e.numFields || [], stages: e.stageLabels || [], detail: detailByEnt[e.slug] || null });
+    const c = renderCompose(`app_over${++overN}`, { entitySlug: e.slug, entityName: e.name, fields: e.labels || [], numFields: e.numFields || [], stages: e.stageLabels || [], detail: detailByEnt[e.slug] || null, scopeField: scopeByEnt[e.slug] || null });
     if (c) composeScreens.push({ slug: c.slug, cls: c.cls, kind: 'entity', name: `🧩 ${e.name} · סקירה`, icon: '🧩', sub: 'מורכב-מאטומים · מנתוני-הישות' });
     else overN--;
   }
