@@ -34,14 +34,15 @@ class DsBars extends StatelessWidget {
                   Expanded(
                     child: Stack(
                       children: [
-                        Container(height: 22, decoration: BoxDecoration(color: const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(6))),
+                        Container(height: 22, decoration: BoxDecoration(color: DsTokens.track, borderRadius: BorderRadius.circular(6))),
                         FractionallySizedBox(
                           widthFactor: (values[i] / safeMax).clamp(0.02, 1.0),
                           child: Container(
                             height: 22,
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(colors: [DsTokens.accent, DsTokens.accentDark]),
-                              borderRadius: BorderRadius.circular(6),
+                            decoration: const BoxDecoration(
+                              gradient: DsTokens.neonGrad,
+                              borderRadius: BorderRadius.all(Radius.circular(6)),
+                              boxShadow: [BoxShadow(color: Color(0x557C3AED), blurRadius: 10, offset: Offset(0, 2))],
                             ),
                           ),
                         ),
