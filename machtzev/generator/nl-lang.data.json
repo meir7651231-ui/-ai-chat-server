@@ -6,5 +6,6 @@
   "defaultFields": ["שם", "תיאור", "תאריך", "סטטוס"],
   "fallbackName": "פריט",
   "tplEntity": "ישות",
-  "tplWith": "עם"
+  "tplWith": "עם",
+  "pluralSuffixes": ["ים", "ות"]
 }

@@ -15,6 +15,7 @@ const DEF_FIELDS = LANG.defaultFields || [];
 const FALLBACK = LANG.fallbackName || '';
 const TPL_ENT = LANG.tplEntity || '';
 const TPL_WITH = LANG.tplWith || '';
+const PLURAL_RE = new RegExp('(' + (LANG.pluralSuffixes || []).join('|') + ')$');   // אות-ריבוי מהדאטה (עיוור)
 const heWords = (s) => [...(s || '').matchAll(/[֐-׿][֐-׿'"׳״]*/g)].map((m) => m[0]);
 const content = (ws) => ws.filter((w) => w.length > 1 && !LEAD.has(w) && !MARK.includes(w) && !CONJ.includes(w));
 const nameOf = (s) => content(heWords(s)).slice(0, 2).join(' ') || null;
@@ -40,7 +41,7 @@ export function nlToSpec(text) {
     const headReal = content(heWords(headStr));
     const tailItems = tailStr ? splitItems(tailStr).filter((x) => content(heWords(x)).length) : [];
     // אות-ריבוי מורפולוגי (מבני, לא מילון): פריט ברבים (ים/ות) = ישות · ביחיד = שדה.
-    const plural = (s) => { const w = content(heWords(s))[0] || ''; return /(ים|ות)$/.test(w); };
+    const plural = (s) => PLURAL_RE.test(content(heWords(s))[0] || '');
     const tailPlural = tailItems.filter(plural);
     const tailSingular = tailItems.filter((x) => !plural(x));
     if (headReal.length === 0 && tailItems.length) {

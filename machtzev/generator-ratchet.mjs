@@ -48,6 +48,14 @@ const nlSrc = fs.readFileSync(new URL('./generator/nl-spec.mjs', import.meta.url
 const heInCode = (nlSrc.match(/[֐-׿]{2,}/g) || []).filter((w) => !/^[֐׿׳״]+$/.test(w));
 ok(heInCode.length === 0, `NL-engine עיוור: ${heInCode.length} מילות-עברית בקוד (חייב 0)`);
 
+// 2.6) טוהר-כרום (§19 · P4) — render-ds מושך תוויות-UI מאטום-דאטה chrome.data.json,
+// לא ממחרוזות-קשיחות. חוב-העברית-במנוע = רק-יורד (baseline 34; היה 100 לפני החילוץ).
+ok(fs.existsSync(new URL('./generator/chrome.data.json', import.meta.url)), 'אטום-דאטה chrome.data.json קיים');
+const rdSrc = fs.readFileSync(new URL('./generator/render-ds.mjs', import.meta.url), 'utf8');
+ok(/from '\.\/chrome\.mjs'/.test(rdSrc), 'render-ds מייבא chrome (תוויות מהדאטה, לא קשיח)');
+const rdHe = (rdSrc.split('\n').map((l) => l.replace(/\/\/.*$/, '')).join('\n').match(/[֐-׿]{2,}/g) || []).filter((w) => !/^[֐׿׳״]+$/.test(w));
+ok(rdHe.length <= 34, `render-ds חוב-עברית-במנוע ${rdHe.length} ≤ 34 (רק-יורד; היה 100)`);
+
 // 3) RLS — scoped כשיש שדה-היקף
 buildApp('ישות חוג עם שם, מורה, מחיר, סטטוס | שלבים: פתוח, מלא\nישות תלמיד עם שם, מורה, ממוצע\nתפקיד מזכירה: הכל\nתפקיד מורה: חוג, תלמיד | היקף: חוג.מורה, תלמיד.מורה');
 const s3 = all();

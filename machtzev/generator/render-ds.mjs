@@ -7,6 +7,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { stem } from './match.mjs';
+import { L, T } from './chrome.mjs';
 
 const ROOT = new URL('../../', import.meta.url).pathname;
 const HERE = new URL('.', import.meta.url).pathname;
@@ -27,7 +28,7 @@ const heWords = (s) => [...String(s || '').matchAll(/[֐-׿]{2,}/g)].map((m) => 
 const prefixMatch = (a, b) => { let n = 0; const m = Math.min(a.length, b.length); while (n < m && a[n] === b[n]) n++; return n >= 3 && n >= 0.7 * m; };
 // אטומי-קלט = אלה שמצהירים "שדה לנתון…" בתיאור-העצמי (הצהרת-האטום, לא כלל-מנוע).
 const INPUTS = atlas.widgets
-  .filter((w) => (w.he || []).slice(0, 2).join(' ') === 'שדה לנתון')
+  .filter((w) => (w.he || []).slice(0, 2).join(' ') === L.fieldForData)
   .map((w) => ({ cls: w.cls, st: [...new Set((w.he || []).flatMap(heToks))] }));
 function pickInput(label) {
   const q = [...new Set(heToks(label))];
@@ -181,7 +182,7 @@ function pickMultiRelation(label, selfName, entityNames) {
 
 // 📊 שדה-צבירה (Rollup): 'סכום(ישות.שדה)' — אותו דקדוק-אגרגט של הדשבורדים, אך מכוון
 // לרשומה-הנוכחית דרך קשר-הבן הידוע. מובחן מנוסחת-אחות ('סכום - הנחה') לפי מילת-מפתח + '('.
-const ROLLUP_RE = /^(סכום|ממוצע|מונה)\(([^.)]+)(?:\.([^)]+))?\)$/;
+const ROLLUP_RE = new RegExp('^(' + [L.sum, L.avg, L.count].join('|') + ')\\(([^.)]+)(?:\\.([^)]+))?\\)$');
 
 // 🧮 מהדר-נוסחה (שורש-4): 'סכום - הנחה - תשלום' ⇒ ביטוי-Dart מספרי מעל שדות-האחות.
 // שמות-שדה (הארוך-קודם) ⇒ קריאת-הערך; אופרטורים/מספרים/סוגריים עוברים. שארית לא-מזוהה ⇒ null
@@ -227,14 +228,14 @@ function compileGuard(cond, labels) {
 export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard, guards = [], authz = null }) {
   const { k, dump } = makeConsts(slug);
   const cTitle = k(name);
-  const cSub = k(`${schema.length} שדות${stages.length ? ` · ${stages.length} שלבים` : ''}`);
+  const cSub = k(`${schema.length} ${L.fieldsWord}${stages.length ? ` · ${stages.length} ${L.stagesWord}` : ''}`);
   const cIcon = k(icon);
-  const cSave = k('שמירה');
-  const cUpdate = k('עדכון');
-  const cForm = k('פרטי הרשומה');
-  const cRecords = k('רשומות');
-  const cEmpty = k(`אין ${name} עדיין — הרשומה הראשונה תופיע כאן`);
-  const cNoMatch = k('לא נמצאו רשומות תואמות');
+  const cSave = k(L.save);
+  const cUpdate = k(L.update);
+  const cForm = k(L.recordForm);
+  const cRecords = k(L.records);
+  const cEmpty = k(T('emptyHint', { name }));
+  const cNoMatch = k(L.noMatch);
   const SK = `'${slug}'`;   // מפתח-חנות = slug יציב (לא שם-תצוגה חתוך ⇒ אפס דליפת-נתונים בין ישויות)
 
   const funcImports = new Set();
@@ -278,9 +279,9 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
         if (link) {
           const col = k((rm[3] || '').trim() || s.label);
           const pid = `r['__id'] ?? ''`;
-          const v = rm[1] === 'מונה'
+          const v = rm[1] === L.count
             ? `appStore.countRef('${link.fslug}', ${k(link.ffield)}, ${pid}).toString()`
-            : rm[1] === 'ממוצע'
+            : rm[1] === L.avg
             ? `appStore.avgRef('${link.fslug}', ${k(link.ffield)}, ${pid}, ${col}).toStringAsFixed(1)`
             : `appStore.sumRef('${link.fslug}', ${k(link.ffield)}, ${pid}, ${col}).toStringAsFixed(2)`;
           recValsR.push(v);   // ערך-כרטיס יחיד ⇒ נשמר labelConst[i]↔recValsR[i]; אין fieldBlocks/mapVals (נגזר)
@@ -297,7 +298,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
         funcImports.add(`import '../${f.shelf.replace(/^new\//, '')}/${f.file}';`);
         const helpers = (f.ptypes || []).slice(1).map((t) => injectHelper(t));
         const hz = helpers.length ? ', ' + helpers.join(', ') : '';
-        const wrap = (call) => f.ret === 'bool' ? `(${call} ? ${k('כן')} : ${k('לא')})`
+        const wrap = (call) => f.ret === 'bool' ? `(${call} ? ${k(L.yes)} : ${k(L.no)})`
           : /^(int|num|double)$/.test(f.ret) ? `${call}.toString()`
           : f.ret === 'String?' ? `(${call} ?? '')` : call;
         // מיפוי מפורש 'שדה→מפתח'? ⇒ רשומה ממופתחת; אחרת ⇒ הרשומה השלמה (תוויות-השדה כמפתחות).
@@ -387,7 +388,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
         : nt === 'num' ? `(num.tryParse(_v[${i}] ?? '') ?? 0)`
         : `(_v[${i}] ?? '')`;
       const call = `${xf.name}(${arg})`;
-      const disp = xf.ret === 'bool' ? `(${call} ? ${k('כן')} : ${k('לא')})`
+      const disp = xf.ret === 'bool' ? `(${call} ? ${k(L.yes)} : ${k(L.no)})`
         : /^(int|num|double)$/.test(xf.ret) ? `${call}.toString()`
         : xf.ret === 'String?' ? `(${call} ?? '')`
         : call;
@@ -395,8 +396,8 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
       hasLive = true;
     }
   });
-  const reqChecks = requiredIdx.map((i) => `if ((_v[${i}] ?? '').trim().isEmpty) miss.add('חסר ' + ${labelConst[i]});`).join('\n      ');
-  const uniqChecks = uniqueIdx.map((i) => `{ final v = (_v[${i}] ?? '').trim(); if (v.isNotEmpty && appStore.records(${SK}).any((r) => r['__id'] != _editId && (r[${labelConst[i]}] ?? '') == v)) miss.add('כפול ' + ${labelConst[i]}); }`).join('\n      ');
+  const reqChecks = requiredIdx.map((i) => `if ((_v[${i}] ?? '').trim().isEmpty) miss.add('${L.missPrefix}' + ${labelConst[i]});`).join('\n      ');
+  const uniqChecks = uniqueIdx.map((i) => `{ final v = (_v[${i}] ?? '').trim(); if (v.isNotEmpty && appStore.records(${SK}).any((r) => r['__id'] != _editId && (r[${labelConst[i]}] ?? '') == v)) miss.add('${L.dupPrefix}' + ${labelConst[i]}); }`).join('\n      ');
   // ⚖️ חוקי-בין-שדות מהאפיון ('| חוקים: תאריך יעד >= תאריך חיוב') ⇒ בדיקת-הצלבה בשמירה.
   // שני-הצדדים ריקים ⇒ מדולג (החוק חל רק על ערכים-מוזנים); מספר-מול-מספר=מספרי, אחרת לקסיקלי.
   const ruleSpecs = vrules.map((v) => compileRule(v, labelIdx)).filter(Boolean);
@@ -407,7 +408,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
     if (r.min !== null) parts.push(`n < ${r.min}`);
     if (r.max !== null) parts.push(`n > ${r.max}`);
     const bound = r.min !== null && r.max !== null ? ` (${r.min}–${r.max})` : r.min !== null ? ` (≥${r.min})` : ` (≤${r.max})`;
-    return `{ final v = (_v[${r.i}] ?? '').trim(); if (v.isNotEmpty) { final n = num.tryParse(v); if (n == null || ${parts.join(' || ')}) miss.add(${k(`טווח ${schema[r.i].label}${bound}`)}); } }`;
+    return `{ final v = (_v[${r.i}] ?? '').trim(); if (v.isNotEmpty) { final n = num.tryParse(v); if (n == null || ${parts.join(' || ')}) miss.add(${k(`${L.rangeWord} ${schema[r.i].label}${bound}`)}); } }`;
   }).join('\n      ');
   // 🔤 ולידציית-תבנית: regex גולמי מהאפיון ⇒ RegExp בזמן-קומפילציה (דרך k() לבריחה נכונה).
   // אימות בזמן-חילול: regex פסול ⇒ מדולג בשקט (כנות > קוד-שבור בזמן-ריצה). ריק ⇒ מדולג.
@@ -415,7 +416,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   // מחרוזת-Dart בטוחה ל-regex: בורח \ · ' · $ (אינטרפולציה!) · שורה-חדשה. הרגקס אינליין
   // (ערך-קונפיג צמוד-קוד), לא דרך k()/dump שאינם בורחים '$' ⇒ היו שוברים עוגן-סוף '$'.
   const dartStr = (s) => "'" + String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\$/g, '\\$').replace(/\n/g, '\\n').replace(/\r/g, '\\r') + "'";
-  const patternChecks = validPatterns.map((p) => `{ final v = (_v[${p.i}] ?? '').trim(); if (v.isNotEmpty && !RegExp(${dartStr(p.pattern)}).hasMatch(v)) miss.add(${k(`תבנית שגויה: ${schema[p.i].label}`)}); }`).join('\n      ');
+  const patternChecks = validPatterns.map((p) => `{ final v = (_v[${p.i}] ?? '').trim(); if (v.isNotEmpty && !RegExp(${dartStr(p.pattern)}).hasMatch(v)) miss.add(${k(`${L.patternErr}${schema[p.i].label}`)}); }`).join('\n      ');
   const hasVal = requiredIdx.length + uniqueIdx.length + ruleSpecs.length + rangeSpecs.length + validPatterns.length > 0;
   const defInit = defEntries.length ? `{${defEntries.join(', ')}}` : '{}';   // זריעת-פתיחה (ריק ⇒ ביט-זהה לקודם)
   const enumImport = hasEnum ? "import '../dart-ui-bs/ds/ds_enum_field.dart';\n" : '';
@@ -436,9 +437,9 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   // (טוסט) · מפל ⇒ confirmMessage (דיאלוג-אישור). ניתוק/ברירת-מחדל ⇒ שקט (כמקודם).
   const refCount = `appStore.inboundRefs(${SK}, rid)`;
   const delArgs = delGuard === 0
-    ? `, blockedReason: ${refCount} > 0 ? (${k('לא ניתן למחוק — ')} + ${refCount}.toString() + ${k(' רשומות מקושרות')}) : null`
+    ? `, blockedReason: ${refCount} > 0 ? (${k(L.delBlockA)} + ${refCount}.toString() + ${k(L.delBlockB)}) : null`
     : delGuard === 1
-    ? `, confirmMessage: ${refCount} > 0 ? (${k('מחיקה תמחק גם ')} + ${refCount}.toString() + ${k(' רשומות מקושרות. להמשיך?')}) : null`
+    ? `, confirmMessage: ${refCount} > 0 ? (${k(L.delConfirmA)} + ${refCount}.toString() + ${k(L.delConfirmB)}) : null`
     : '';
   // ⛔ שערי-מעבר (רק עם workflow): תנאי-כניסה פר-שלב-יעד, מהודרים מול הרשומה-השמורה r.
   // חוסמים רק קדימה (i > הנוכחי); נסיגה חופשית. חסימה ⇒ טוסט. ריק ⇒ stageArgs ביט-זהה.
@@ -453,10 +454,10 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
     ? `\n  String? _guard(int t, Map<String, String> r) {\n    switch (t) {\n${guardSpecs.map((g) => `      case ${g.t}: if (${gExpr(g.c)}) return ${g.reason}; return null;`).join('\n')}\n      default: return null;\n    }\n  }\n`
     : '';
   const onStageBody = hasGuards
-    ? `(i) { if (i > appStore.stageOf(${SK}, rid)) { final g = _guard(i, r); if (g != null) { ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('חסום: ' + g))); return; } } appStore.setStage(${SK}, rid, i); }`
+    ? `(i) { if (i > appStore.stageOf(${SK}, rid)) { final g = _guard(i, r); if (g != null) { ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${L.blockPrefix}' + g))); return; } } appStore.setStage(${SK}, rid, i); }`
     : `(i) => appStore.setStage(${SK}, rid, i)`;
   const onAdvBody = hasGuards
-    ? `() { final g = _guard(appStore.stageOf(${SK}, rid) + 1, r); if (g != null) { ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('חסום: ' + g))); return; } appStore.advance(${SK}, rid, ${stages.length}); }`
+    ? `() { final g = _guard(appStore.stageOf(${SK}, rid) + 1, r); if (g != null) { ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${L.blockPrefix}' + g))); return; } appStore.advance(${SK}, rid, ${stages.length}); }`
     : `() => appStore.advance(${SK}, rid, ${stages.length})`;
   const stageArgs = hasStages
     ? `stage: (const ${stageList})[appStore.stageOf(${SK}, rid)], stageDone: appStore.stageOf(${SK}, rid) >= ${stages.length - 1}, stages: const ${stageList}, stageIndex: appStore.stageOf(${SK}, rid), onStage: ${onStageBody}, onAdvance: ${onAdvBody}, `
@@ -493,8 +494,8 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
     : `DsSection(title: ${cForm}, children: [\n${fieldsPlain}\n        ]),`;
   // 📊 תפר-KPI: רצועת-סטטיסטיקה חיה מעל הישות — מונה-רשומות + סכום פר-שדה-מספרי (עד 2).
   // נגזרת טהורה מהחנות (count/sum), מגיבה לכל שינוי. אוניברסלי (כל ישות מקבלת מונה).
-  const kpiNumTiles = numFields.slice(0, 2).map((fc) => `const SizedBox(width: 10), Expanded(child: DsStat(label: ${fc}, value: appStore.sum(${SK}, ${fc}).toStringAsFixed(0), sub: ${k('סכום')}, glyph: ${k('🧮')}))`).join(', ');
-  const kpiStrip = `AnimatedBuilder(animation: appStore, builder: (context, _) => Padding(padding: const EdgeInsets.only(bottom: 12), child: Row(children: [Expanded(child: DsStat(label: ${cTitle}, value: appStore.count(${SK}).toString(), sub: ${k('סה"כ רשומות')}, glyph: ${k('🗂️')}))${kpiNumTiles ? ', ' + kpiNumTiles : ''}]))),`;
+  const kpiNumTiles = numFields.slice(0, 2).map((fc) => `const SizedBox(width: 10), Expanded(child: DsStat(label: ${fc}, value: appStore.sum(${SK}, ${fc}).toStringAsFixed(0), sub: ${k(L.sum)}, glyph: ${k('🧮')}))`).join(', ');
+  const kpiStrip = `AnimatedBuilder(animation: appStore, builder: (context, _) => Padding(padding: const EdgeInsets.only(bottom: 12), child: Row(children: [Expanded(child: DsStat(label: ${cTitle}, value: appStore.count(${SK}).toString(), sub: ${k(L.totalRecords)}, glyph: ${k('🗂️')}))${kpiNumTiles ? ', ' + kpiNumTiles : ''}]))),`;
   const listRead = hasScope ? `appStore.scoped(${SK}, _rlsScope[_rlsRole])` : `appStore.records(${SK})`;
   const cardSig = rlsActive ? 'Widget _card(Map<String, String> r, Set<int> hidden) {' : 'Widget _card(Map<String, String> r) {';
   const cardHiddenArg = rlsActive ? ', hidden: hidden' : '';
@@ -532,11 +533,11 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const calImport = hasCal ? "import '../dart-ui-bs/ds/ds_calendar.dart';\n" : '';
   const tableImport = hasTable ? "import '../dart-ui-bs/ds/ds_table.dart';\n" : '';
   const viewField = hasSwitch ? "  int _view = 0;   // 0=רשימה · לוח · לוח-שנה · טבלה\n" : '';
-  const viewChips = ["'☰ רשימה'"];   // list תמיד
+  const viewChips = [`'${L.listChip}'`];   // list תמיד
   const viewIdx = { board: -1, cal: -1, table: -1 };
-  if (hasBoard) { viewIdx.board = viewChips.length; viewChips.push("'📋 לוח'"); }
-  if (hasCal) { viewIdx.cal = viewChips.length; viewChips.push("'📅 לוח-שנה'"); }
-  if (hasTable) { viewIdx.table = viewChips.length; viewChips.push("'▦ טבלה'"); }
+  if (hasBoard) { viewIdx.board = viewChips.length; viewChips.push(`'${L.boardChip}'`); }
+  if (hasCal) { viewIdx.cal = viewChips.length; viewChips.push(`'${L.calChip}'`); }
+  if (hasTable) { viewIdx.table = viewChips.length; viewChips.push(`'${L.tableChip}'`); }
   const viewToggle = hasSwitch
     ? `\n  Widget _viewBar(BuildContext context) {\n    const labels = [${viewChips.join(', ')}];\n    return Row(mainAxisSize: MainAxisSize.min, children: [\n      for (var i = 0; i < labels.length; i++)\n        Padding(\n          padding: const EdgeInsets.only(left: 6),\n          child: Material(\n            color: _view == i ? DsTokens.accentSoft : const Color(0xFFF1F5F9),\n            borderRadius: BorderRadius.circular(20),\n            child: InkWell(\n              borderRadius: BorderRadius.circular(20),\n              onTap: () => setState(() => _view = i),\n              child: Padding(\n                padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),\n                child: Text(labels[i], style: TextStyle(color: _view == i ? DsTokens.accentDark : DsTokens.muted, fontSize: 12, fontWeight: FontWeight.w700)),\n              ),\n            ),\n          ),\n        ),\n    ]);\n  }\n`
     : '';
@@ -611,7 +612,7 @@ ${csvMethod}
           borderRadius: BorderRadius.circular(9),
           onTap: () {
             Clipboard.setData(ClipboardData(text: _csv()));
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('הועתק כ-CSV'), duration: Duration(seconds: 2)));
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('${L.copiedCsv}'), duration: Duration(seconds: 2)));
           },
           child: const Padding(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -719,27 +720,27 @@ export function renderDashboard(slug, { title, icon = '📊', entities, metrics 
   const tiles = [];
   const barLabels = [];   // תוויות לתרשים-העמודות
   const barVals = [];     // ביטויי-double חיים לתרשים
-  for (const a of aggs.filter((a) => a.slug && (a.kind === 'מונה' || a.field))) {
+  for (const a of aggs.filter((a) => a.slug && (a.kind === L.count || a.field))) {
     const lbl = k(a.field || a.entityName);
     const sub = k(`${a.kind} · ${a.entityName}`);
-    const g = k(a.kind === 'ממוצע' ? '📈' : a.kind === 'סכום' ? '🧮' : '🔢');
+    const g = k(a.kind === L.avg ? '📈' : a.kind === L.sum ? '🧮' : '🔢');
     const cf = a.field ? k(a.field) : null;
-    const num = a.kind === 'סכום' ? `appStore.sum('${a.slug}', ${cf})`
-      : a.kind === 'ממוצע' ? `appStore.avg('${a.slug}', ${cf})`
+    const num = a.kind === L.sum ? `appStore.sum('${a.slug}', ${cf})`
+      : a.kind === L.avg ? `appStore.avg('${a.slug}', ${cf})`
       : `appStore.count('${a.slug}').toDouble()`;
-    const disp = a.kind === 'ממוצע' ? `${num}.toStringAsFixed(1)` : `${num}.toStringAsFixed(0)`;
+    const disp = a.kind === L.avg ? `${num}.toStringAsFixed(1)` : `${num}.toStringAsFixed(0)`;
     tiles.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: ${lbl}, value: ${disp}, sub: ${sub}, glyph: ${g}${nav(a.slug)}))`);
     barLabels.push(lbl); barVals.push(num);
   }
   for (const e of shown) {
     const lbl = k(e.name);
-    const sub = k(`${e.fields} שדות${e.stages ? ` · ${e.stages} שלבים` : ''}`);
+    const sub = k(`${e.fields} ${L.fieldsWord}${e.stages ? ` · ${e.stages} ${L.stagesWord}` : ''}`);
     const g = k(e.icon || '🗂️');
     tiles.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: ${lbl}, value: appStore.count('${e.slug || ''}').toString(), sub: ${sub}, glyph: ${g}${nav(e.slug)}))`);
     barLabels.push(lbl); barVals.push(`appStore.count('${e.slug || ''}').toDouble()`);
   }
-  const cSub = k(`${tiles.length} מדדים · סקירת-על`);
-  const cChart = k('השוואה חיה');
+  const cSub = k(`${tiles.length} ${L.metricsWord} · ${L.overview}`);
+  const cChart = k(L.liveCompare);
   const barsBlock = barVals.length >= 2
     ? `      AnimatedBuilder(animation: appStore, builder: (context, _) => DsBars(title: ${cChart}, labels: const [${barLabels.join(', ')}], values: [${barVals.join(', ')}])),\n`
     : '';
@@ -788,7 +789,7 @@ export function renderHub(slug, { title, icon = '🏗️', screens, roles = [], 
   const hasActor = scopeFields.length > 0;
   const actorUnion = scopeFields.map((sf) => `...appStore.distinctValues('${sf.slug}', ${k(sf.field)})`).join(', ');
   const actorMethod = hasActor
-    ? `\n  Widget _actorBar(BuildContext context) => AnimatedBuilder(\n    animation: appStore,\n    builder: (context, _) {\n      final opts = <String>{${actorUnion}}.toList()..sort();\n      return Container(\n        margin: const EdgeInsets.only(bottom: 8),\n        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),\n        decoration: BoxDecoration(color: const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(12)),\n        child: Row(children: [\n          const Text('מציג כ:', style: TextStyle(fontSize: 12.5, color: DsTokens.muted, fontWeight: FontWeight.w700)),\n          const SizedBox(width: 8),\n          DropdownButton<String>(\n            value: appStore.actor,\n            underline: const SizedBox.shrink(),\n            items: [const DropdownMenuItem<String>(value: '', child: Text('הכל')), for (final o in opts) if (o.isNotEmpty) DropdownMenuItem<String>(value: o, child: Text(o))],\n            onChanged: (v) => setState(() => appStore.setActor(v ?? '')),\n          ),\n          const Spacer(),\n          const Text('סינון-תצוגה', style: TextStyle(fontSize: 11, color: DsTokens.faint)),\n        ]),\n      );\n    },\n  );\n`
+    ? `\n  Widget _actorBar(BuildContext context) => AnimatedBuilder(\n    animation: appStore,\n    builder: (context, _) {\n      final opts = <String>{${actorUnion}}.toList()..sort();\n      return Container(\n        margin: const EdgeInsets.only(bottom: 8),\n        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),\n        decoration: BoxDecoration(color: const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(12)),\n        child: Row(children: [\n          const Text('${L.viewingAs}', style: TextStyle(fontSize: 12.5, color: DsTokens.muted, fontWeight: FontWeight.w700)),\n          const SizedBox(width: 8),\n          DropdownButton<String>(\n            value: appStore.actor,\n            underline: const SizedBox.shrink(),\n            items: [const DropdownMenuItem<String>(value: '', child: Text('${L.all}')), for (final o in opts) if (o.isNotEmpty) DropdownMenuItem<String>(value: o, child: Text(o))],\n            onChanged: (v) => setState(() => appStore.setActor(v ?? '')),\n          ),\n          const Spacer(),\n          const Text('${L.viewFilter}', style: TextStyle(fontSize: 11, color: DsTokens.faint)),\n        ]),\n      );\n    },\n  );\n`
     : '';
   const imports = new Set();
   const tiles = screens.map((s) => {
@@ -799,13 +800,13 @@ export function renderHub(slug, { title, icon = '🏗️', screens, roles = [], 
     return `        DsNavTile(glyph: ${g}, title: ${t}, sub: ${sub}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${s.cls}()))),`;
   });
 
-  const effRoles = roles.length ? roles : [{ name: 'הכל', all: true, ents: [] }];
+  const effRoles = roles.length ? roles : [{ name: L.all, all: true, ents: [] }];
   const roleVis = effRoles.map((role) => {
     if (role.all) return screens.map((_, i) => i);
     const out = [];
     screens.forEach((s, i) => {
       if (s.kind === 'system') return;                                   // מסכי-מערכת רק למנהל-על
-      if (s.kind === 'dashboard') { if (role.ents.some((e) => /דוח/.test(e))) out.push(i); return; }
+      if (s.kind === 'dashboard') { if (role.ents.some((e) => new RegExp(L.reportKw).test(e))) out.push(i); return; }
       const nw = heWords(s.name);
       if (role.ents.some((e) => { const ew = heWords(e); return ew.length && ew.every((w) => nw.some((x) => prefixMatch(x, w))); })) out.push(i);
     });
@@ -813,7 +814,7 @@ export function renderHub(slug, { title, icon = '🏗️', screens, roles = [], 
   });
   const showChips = effRoles.length >= 2;
   const visList = `[${roleVis.map((v) => `[${v.join(', ')}]`).join(', ')}]`;
-  const roleChips = effRoles.map((r, i) => `_roleChip(${i}, ${k(r.name || 'הכל')})`).join(', ');
+  const roleChips = effRoles.map((r, i) => `_roleChip(${i}, ${k(r.name || L.all)})`).join(', ');
 
   const cls = pascal(slug);
   const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — לוח-ניווט + שער-הרשאות (בורר-תפקיד חי · נשמר). אל תערוך ידנית.
@@ -1102,7 +1103,7 @@ export function renderRecordDetail(slug, { entitySlug, entityName, fields = [], 
   const titleC = k(fields[0]);
   const fieldRows = fields.map((f) => `Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: ${kv(`r[${k(f)}] ?? ''`, k(f))})`).join(',\n              ');
   const relRows = relations.map((rel) => kv(`appStore.countRef('${rel.childSlug}', ${k(rel.childField)}, id).toString()`, k(rel.childName))).join(',\n                ');
-  const relBlock = relations.length ? `\n              const SizedBox(height: 8),\n              Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: Text(${k('מקושרים')}, style: const TextStyle(fontWeight: FontWeight.w800))),\n              Padding(\n                padding: const EdgeInsets.all(12),\n                child: Wrap(spacing: 10, runSpacing: 10, children: [\n                ${relRows},\n                ]),\n              ),` : '';
+  const relBlock = relations.length ? `\n              const SizedBox(height: 8),\n              Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: Text(${k(L.linked)}, style: const TextStyle(fontWeight: FontWeight.w800))),\n              Padding(\n                padding: const EdgeInsets.all(12),\n                child: Wrap(spacing: 10, runSpacing: 10, children: [\n                ${relRows},\n                ]),\n              ),` : '';
   const imports = new Set(["import '../dart-ui-bs/ds/ds_store.dart';", "import 'package:flutter/material.dart';", `import '../${kpi.file}';`, `import '../dart-data-bs/auto/gen_${slug}_content.dart';`]);
   const code = `// ✨ חולל ע"י מנוע-ההרכבה (render-ds/detail) — בורר-רשומה ⇒ שדות + KPI-יחסים. אל תערוך ידנית.
 ${[...imports].join('\n')}
@@ -1124,7 +1125,7 @@ class _${cls}State extends State<${cls}> {
         animation: appStore,
         builder: (context, _) {
           final recs = ${scopeField ? `appStore.scoped('${entitySlug}', ${k(scopeField)})` : `appStore.records('${entitySlug}')`};
-          if (recs.isEmpty) return Center(child: Text(${k('אין רשומות עדיין')}));
+          if (recs.isEmpty) return Center(child: Text(${k(L.noRecords)}));
           final i0 = _sel ?? (widget.initialId != null ? recs.indexWhere((r) => r['__id'] == widget.initialId) : 0);
           final i = (i0 < 0 ? 0 : i0).clamp(0, recs.length - 1);
           final r = recs[i];
