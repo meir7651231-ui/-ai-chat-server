@@ -11,7 +11,7 @@ class GenAppBind3Screen extends StatelessWidget {
         animation: appStore,
         builder: (context, _) => CourierReportsTabComposed(
           children: const [],
-          kvRowItems: appStore.records('app_ent3').map((r) => KvRowItem(label: r.entries.firstWhere((e) => !e.key.startsWith('__') && e.value.trim().isNotEmpty, orElse: () => MapEntry('', r['__id'] ?? '')).value.trim(), value: r.entries.firstWhere((e) => !e.key.startsWith('__') && e.value.trim().isNotEmpty, orElse: () => MapEntry('', r['__id'] ?? '')).value.trim())).toList(),
+          kvRowItems: appStore.records('app_ent3').map((r) => KvRowItem(label: r.entries.firstWhere((e) => !e.key.startsWith('__') && e.value.trim().isNotEmpty, orElse: () => MapEntry('', r['__id'] ?? '')).value.trim(), value: '')).toList(),
           value: '',
           t: const CourierReportsTabTokens(),
         ),

@@ -881,10 +881,12 @@ class ${cls} extends StatelessWidget {
 //    בקוד (מילויי-ליטרל בלבד). כך המחולל כורך ישות אל מסך-אמת מפורק — לכל מסך שהסורק אישר.
 const SCREENS_DIR = path.join(ROOT, 'new/dart-screens-bs');
 // היוריסטיקת-שדה-פריט (String-display לכותרת · ריק/0/false/() {}/Colors.grey/Icons.circle לשאר):
+// מילוי-קולבק מודע-אַריוּת: VoidCallback⇒() {} · ValueChanged/ValueSetter<T>⇒(_) {} · אחר⇒null (פסול).
+const _cb = (t) => t === 'VoidCallback' ? '() {}' : /^(ValueChanged|ValueSetter)</.test(t) ? '(_) {}' : null;
 const _itemField = (ty, nm) => {
   const t = ty.replace(/\?$/, '');
-  if (t === 'String') return /^(title|label|name|text|value)$/.test(nm) ? 'DISP' : /^(ic|icon|glyph)$/.test(nm) ? "'\u{1F5C2}\u{FE0F}'" : "''";
-  if (/^on[A-Z]/.test(nm) || t === 'VoidCallback') return '() {}';
+  const cb = _cb(t); if (cb) return cb;
+  if (t === 'String') return /^(ic|icon|glyph)$/.test(nm) ? "'\u{1F5C2}\u{FE0F}'" : "''";
   if (t === 'int' || t === 'double' || t === 'num') return '0';
   if (t === 'bool') return 'false';
   if (t === 'Color') return 'Colors.grey';
@@ -893,8 +895,8 @@ const _itemField = (ty, nm) => {
 };
 const _scalarFill = (ty, nm) => {
   const t = ty.replace(/\?$/, '');
+  const cb = _cb(t); if (cb) return cb;
   if (t === 'String') return "''";
-  if (/^on[A-Z]/.test(nm) || t === 'VoidCallback') return '() {}';
   if (t === 'int' || t === 'double' || t === 'num') return '0';
   if (t === 'bool') return 'false';
   if (t === 'Color') return 'Colors.grey';
@@ -930,10 +932,12 @@ function analyzeScreen(file) {
       const item = lm[1];
       const body = s.match(new RegExp('class ' + item + ' \\{([\\s\\S]*?)\\n\\}'));
       const fm = body ? [...body[1].matchAll(/final ([A-Za-z0-9<>?]+) ([a-z][A-Za-z0-9_]*);/g)] : [];
-      const hasTitle = fm.some(([, , n]) => /^(title|label|name|text)$/.test(n));
-      const args = fm.map(([, ty2, n2]) => { const e = _itemField(ty2, n2); return e === null ? null : `${n2}: ${e}`; });
+      // שדה-התצוגה: מועדף שם-כותרת · אחרת שדה-ה-String הראשון (מקבל DISP; השאר ברירת-מחדל).
+      const names = fm.map((x) => x[2]);
+      const dispF = names.find((n) => /^(title|label|name|text|value)$/.test(n)) || fm.find(([, t]) => t.replace(/\?$/, '') === 'String')?.[2] || null;
+      const args = fm.map(([, ty2, n2]) => { if (n2 === dispF) return `${n2}: DISP`; const e = _itemField(ty2, n2); return e === null ? null : `${n2}: ${e}`; });
       if (args.some((a) => a === null)) return null;
-      if (hasTitle && !primary) { primary = { p, item, args }; fills.push('__PRIMARY__'); }
+      if (dispF && !primary) { primary = { p, item, args }; fills.push('__PRIMARY__'); }
       else fills.push(`${p}: const []`);
       continue;
     }

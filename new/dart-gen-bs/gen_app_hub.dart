@@ -7,6 +7,7 @@ import 'gen_app_bind1.dart';
 import 'gen_app_bind10.dart';
 import 'gen_app_bind11.dart';
 import 'gen_app_bind12.dart';
+import 'gen_app_bind13.dart';
 import 'gen_app_bind2.dart';
 import 'gen_app_bind3.dart';
 import 'gen_app_bind4.dart';
@@ -61,7 +62,7 @@ class GenAppHubScreen extends StatefulWidget {
 }
 
 class _GenAppHubScreenState extends State<GenAppHubScreen> {
-  static const List<List<int>> _vis = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48], [2, 8, 9, 19, 21, 25, 36, 42, 43], [9, 10, 11, 14, 15, 20, 22, 29, 30, 31, 32, 33, 43, 44, 45], [5, 6, 8, 27, 28, 39, 40, 42], [20, 21, 22], [20, 21], [2, 21, 25, 27, 28, 36], [9, 23, 43]];
+  static const List<List<int>> _vis = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49], [2, 8, 9, 19, 21, 25, 36, 42, 43], [9, 10, 11, 14, 15, 20, 22, 29, 30, 31, 32, 33, 43, 44, 45], [5, 6, 8, 27, 28, 39, 40, 42], [20, 21, 22], [20, 21], [2, 21, 25, 27, 28, 36], [9, 23, 43]];
 
   List<Widget> _tiles(BuildContext context) => [
         DsNavTile(glyph: gen_app_hub_c2, title: gen_app_hub_c3, sub: gen_app_hub_c4, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppEnt1Screen()))),
@@ -110,9 +111,10 @@ class _GenAppHubScreenState extends State<GenAppHubScreen> {
         DsNavTile(glyph: gen_app_hub_c131, title: gen_app_hub_c132, sub: gen_app_hub_c133, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppBind10Screen()))),
         DsNavTile(glyph: gen_app_hub_c134, title: gen_app_hub_c135, sub: gen_app_hub_c136, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppBind11Screen()))),
         DsNavTile(glyph: gen_app_hub_c137, title: gen_app_hub_c138, sub: gen_app_hub_c139, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppBind12Screen()))),
-        DsNavTile(glyph: gen_app_hub_c140, title: gen_app_hub_c141, sub: gen_app_hub_c142, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppAuditScreen()))),
-        DsNavTile(glyph: gen_app_hub_c143, title: gen_app_hub_c144, sub: gen_app_hub_c145, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppFlagsScreen()))),
-        DsNavTile(glyph: gen_app_hub_c146, title: gen_app_hub_c147, sub: gen_app_hub_c148, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppSettingsScreen()))),
+        DsNavTile(glyph: gen_app_hub_c140, title: gen_app_hub_c141, sub: gen_app_hub_c142, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppBind13Screen()))),
+        DsNavTile(glyph: gen_app_hub_c143, title: gen_app_hub_c144, sub: gen_app_hub_c145, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppAuditScreen()))),
+        DsNavTile(glyph: gen_app_hub_c146, title: gen_app_hub_c147, sub: gen_app_hub_c148, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppFlagsScreen()))),
+        DsNavTile(glyph: gen_app_hub_c149, title: gen_app_hub_c150, sub: gen_app_hub_c151, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppSettingsScreen()))),
   ];
 
   Widget _roleChip(int i, String label) {
@@ -145,7 +147,7 @@ class _GenAppHubScreenState extends State<GenAppHubScreen> {
       children: [
         Container(
           margin: const EdgeInsets.only(bottom: 4),
-          child: Wrap(children: [_roleChip(0, gen_app_hub_c149), _roleChip(1, gen_app_hub_c150), _roleChip(2, gen_app_hub_c151), _roleChip(3, gen_app_hub_c152), _roleChip(4, gen_app_hub_c153), _roleChip(5, gen_app_hub_c154), _roleChip(6, gen_app_hub_c155), _roleChip(7, gen_app_hub_c156)]),
+          child: Wrap(children: [_roleChip(0, gen_app_hub_c152), _roleChip(1, gen_app_hub_c153), _roleChip(2, gen_app_hub_c154), _roleChip(3, gen_app_hub_c155), _roleChip(4, gen_app_hub_c156), _roleChip(5, gen_app_hub_c157), _roleChip(6, gen_app_hub_c158), _roleChip(7, gen_app_hub_c159)]),
         ),
         for (final i in vis) all[i],
       ],
