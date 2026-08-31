@@ -196,6 +196,8 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const requiredIdx = [];
   const uniqueIdx = [];
   const defEntries = [];   // ברירות-מחדל: {idx: 'ערך'} לזריעת-טופס-חדש
+  let subCounter = schema.length;   // מקצה מקומות-_v לתת-שדות-מקוננים (מעל אינדקסי-הסכמה)
+  const subEditLoad = [];  // טעינת תת-תאים לעריכה: `si: r['הורה/בן']`
   let hasLive = false, hasRel = false, hasEnum = false, hasCalc = false, hasMulti = false, usedField = false;
   const labelIdx = schema.map((s, i) => ({ label: s.label, idx: i }));
   schema.forEach((s, i) => {
@@ -214,6 +216,24 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
         recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: (${expr}).toStringAsFixed(2)`);
         return;
       }
+    }
+    // (0b) אובייקט-מקונן (Value Object): תת-טופס DsSection עם קלט פר-תת-שדה. אחסון שטוח
+    // במפתח מורכב 'הורה/בן' (store נשאר טהור); בכרטיס/CSV מוצג כעמודה-אחת מחוברת (' · ')
+    // ⇒ נשמר האינווריאנט labelConst[i] ↔ recValsR[i] (1:1), אפס refactor של תוויות-הכרטיס.
+    if (s.members && s.members.length) {
+      usedField = true;
+      const subs = s.members.map((m) => {
+        const si = subCounter++;
+        const mk = k(`${s.label} · ${m}`);   // תווית-תצוגה לתת-שדה
+        const sk = k(`${s.label}/${m}`);     // מפתח-אחסון "הורה/בן"
+        subEditLoad.push(`${si}: r[${sk}] ?? ''`);
+        mapVals.push(`${sk}: _v[${si}] ?? ''`);
+        return { si, mk, sk };
+      });
+      const subLines = subs.map((x) => `            DsField(label: ${x.mk}, hint: '', value: _v[${x.si}] ?? '', onChanged: (v) => setState(() => _v[${x.si}] = v)),`).join('\n');
+      fieldBlocks.push(`          DsSection(title: ${cl}, children: [\n${subLines}\n          ]),`);
+      recValsR.push(`[${subs.map((x) => `r[${x.sk}] ?? ''`).join(', ')}].where((x) => x.trim().isNotEmpty).join(' · ')`);
+      return;
     }
     // (1) ערכים-מותרים (enum, שורש-6): בורר על קבוצה-סגורה מהאפיון (לא טקסט-חופשי).
     if (s.enumVals && s.enumVals.length) {
@@ -279,7 +299,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
     ? `        DsWorkflow(steps: const ${stageList}, current: 0),\n`
     : '';
   const mapEntries = mapVals.join(', ');                                                  // שדות ⇒ מפה (מחושב=נוסחה)
-  const editLoad = labelConst.map((cl, i) => `${i}: r[${cl}] ?? ''`).join(', ');         // רשומה ⇒ טופס (עריכה)
+  const editLoad = [...labelConst.map((cl, i) => `${i}: r[${cl}] ?? ''`), ...subEditLoad].join(', ');   // רשומה ⇒ טופס (עריכה) + תת-תאים מקוננים
   const recValues = recValsR.join(', ');
   const labelsList = labelConst.join(', ');
   // קשר-הפוך: שבב פר-ישות-מצביעה עם מונה-חי (appStore.referencing).
