@@ -434,9 +434,10 @@ export function renderHub(slug, { title, icon = '🏗️', screens, roles = [] }
   const roleChips = effRoles.map((r, i) => `_roleChip(${i}, ${k(r.name || 'הכל')})`).join(', ');
 
   const cls = pascal(slug);
-  const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — לוח-ניווט + שער-הרשאות (בורר-תפקיד חי). אל תערוך ידנית.
+  const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — לוח-ניווט + שער-הרשאות (בורר-תפקיד חי · נשמר). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
+import '../dart-ui-bs/ds/ds_store.dart';
 ${[...imports].sort().join('\n')}
 import 'package:flutter/material.dart';
 
@@ -448,7 +449,6 @@ class ${cls} extends StatefulWidget {
 }
 
 class _${cls}State extends State<${cls}> {
-  int _role = 0;
   static const List<List<int>> _vis = ${visList};
 
   List<Widget> _tiles(BuildContext context) => [
@@ -456,7 +456,7 @@ ${tiles.join('\n')}
   ];
 ${showChips ? `
   Widget _roleChip(int i, String label) {
-    final sel = _role == i;
+    final sel = appStore.role == i;
     return Padding(
       padding: const EdgeInsets.only(left: 8, bottom: 8),
       child: Material(
@@ -464,7 +464,7 @@ ${showChips ? `
         borderRadius: BorderRadius.circular(20),
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
-          onTap: () => setState(() => _role = i),
+          onTap: () => setState(() => appStore.setRole(i)),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             child: Text(label, style: TextStyle(color: sel ? Colors.white : DsTokens.muted, fontSize: 13, fontWeight: FontWeight.w700)),
@@ -477,7 +477,7 @@ ${showChips ? `
   @override
   Widget build(BuildContext context) {
     final all = _tiles(context);
-    final vis = _vis[_role];
+    final vis = _vis[appStore.role.clamp(0, _vis.length - 1)];
     return DsScaffold(
       title: ${cTitle},
       subtitle: '\${vis.length} מסכים גלויים',

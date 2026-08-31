@@ -10,6 +10,10 @@ class AppStore extends ChangeNotifier {
   // ממופתח ב-slug יציב (app_entN) — לא בשם-תצוגה חתוך (שמנע דליפת-נתונים בין ישויות).
   final Map<String, List<Map<String, String>>> _rec = {};
   int _seq = 0;
+  int _role = 0;   // התפקיד-הנבחר (נשמר בין רענונים — session רך; אימות-אמת = תשתית)
+
+  int get role => _role;
+  void setRole(int i) { _role = i; notifyListeners(); }
 
   static const idKey = '__id';       // מזהה-רשומה יציב
   static const stageKey = '__stage'; // אינדקס שלב-המסע הנוכחי
@@ -24,6 +28,7 @@ class AppStore extends ChangeNotifier {
     try {
       final data = jsonDecode(raw) as Map<String, dynamic>;
       _seq = (data['seq'] as num?)?.toInt() ?? 0;
+      _role = (data['role'] as num?)?.toInt() ?? 0;
       (data['rec'] as Map<String, dynamic>).forEach((k, v) {
         _rec[k] = (v as List)
             .map((e) => (e as Map).map((kk, vv) => MapEntry(kk.toString(), vv.toString())))
@@ -35,7 +40,7 @@ class AppStore extends ChangeNotifier {
   @override
   void notifyListeners() {
     try {
-      persistSave(_pkey, jsonEncode({'seq': _seq, 'rec': _rec}));
+      persistSave(_pkey, jsonEncode({'seq': _seq, 'role': _role, 'rec': _rec}));
     } catch (_) {}
     super.notifyListeners();
   }

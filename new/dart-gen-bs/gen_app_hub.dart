@@ -1,6 +1,7 @@
-// ✨ חולל ע"י מנוע-הרינדור (render-ds) — לוח-ניווט + שער-הרשאות (בורר-תפקיד חי). אל תערוך ידנית.
+// ✨ חולל ע"י מנוע-הרינדור (render-ds) — לוח-ניווט + שער-הרשאות (בורר-תפקיד חי · נשמר). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_app_hub_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
+import '../dart-ui-bs/ds/ds_store.dart';
 import 'gen_app_audit.dart';
 import 'gen_app_ent1.dart';
 import 'gen_app_ent10.dart';
@@ -91,7 +92,6 @@ class GenAppHubScreen extends StatefulWidget {
 }
 
 class _GenAppHubScreenState extends State<GenAppHubScreen> {
-  int _role = 0;
   static const List<List<int>> _vis = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79], [10, 14, 15, 20, 21, 23, 24, 25, 27, 33, 41, 58, 65, 71, 72, 73, 74, 75, 76], [6, 7, 12, 16, 69], [14, 23, 27, 28, 29, 33], [14, 23, 27, 33, 37], [35, 37, 38], [40, 41, 42], [43, 44, 45, 46], [10, 15, 23, 27, 33, 45, 59], [23, 27, 28, 29, 31, 33]];
 
   List<Widget> _tiles(BuildContext context) => [
@@ -178,7 +178,7 @@ class _GenAppHubScreenState extends State<GenAppHubScreen> {
   ];
 
   Widget _roleChip(int i, String label) {
-    final sel = _role == i;
+    final sel = appStore.role == i;
     return Padding(
       padding: const EdgeInsets.only(left: 8, bottom: 8),
       child: Material(
@@ -186,7 +186,7 @@ class _GenAppHubScreenState extends State<GenAppHubScreen> {
         borderRadius: BorderRadius.circular(20),
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
-          onTap: () => setState(() => _role = i),
+          onTap: () => setState(() => appStore.setRole(i)),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             child: Text(label, style: TextStyle(color: sel ? Colors.white : DsTokens.muted, fontSize: 13, fontWeight: FontWeight.w700)),
@@ -199,7 +199,7 @@ class _GenAppHubScreenState extends State<GenAppHubScreen> {
   @override
   Widget build(BuildContext context) {
     final all = _tiles(context);
-    final vis = _vis[_role];
+    final vis = _vis[appStore.role.clamp(0, _vis.length - 1)];
     return DsScaffold(
       title: gen_app_hub_c0,
       subtitle: '${vis.length} מסכים גלויים',
