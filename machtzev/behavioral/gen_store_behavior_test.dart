@@ -67,6 +67,42 @@ void main() {
     expect(s.referencing('נוכחות', 'כיתה', cls).length, 1);
   });
 
+  // ratchet · פאזה-1ב: שלמות-קשר במחיקה — חסימה/מפל/ניתוק. אין-קשר-רשום ⇒ מחיקה-עיוורת.
+  test('שלמות-קשר · חסימה חוסמת · מפל מוחק-שרשרת · ניתוק מנקה', () {
+    final s = AppStore();
+    s.registerRelation('תלמיד', 'כיתה', 'כיתה', 0);   // חסימה
+    final k1 = s.add('כיתה', {'שם': 'א1'});
+    s.add('תלמיד', {'שם': 'דנה', 'כיתה': k1});
+    expect(s.removeById('כיתה', k1), isFalse);         // חסום — יש מצביע
+    expect(s.byId('כיתה', k1), isNotNull);             // לא נמחק
+    expect(s.inboundRefs('כיתה', k1), 1);
+
+    final s2 = AppStore();
+    s2.registerRelation('תלמיד', 'כיתה', 'כיתה', 1);  // מפל
+    final k2 = s2.add('כיתה', {'שם': 'ב2'});
+    s2.add('תלמיד', {'שם': 'רן', 'כיתה': k2});
+    s2.add('תלמיד', {'שם': 'גל', 'כיתה': k2});
+    expect(s2.removeById('כיתה', k2), isTrue);
+    expect(s2.count('תלמיד'), 0);                       // הילדים נמחקו בשרשרת
+
+    final s3 = AppStore();
+    s3.registerRelation('תלמיד', 'כיתה', 'כיתה', 2);  // ניתוק
+    final k3 = s3.add('כיתה', {'שם': 'ג3'});
+    final t3 = s3.add('תלמיד', {'שם': 'יעל', 'כיתה': k3});
+    expect(s3.removeById('כיתה', k3), isTrue);
+    expect(s3.byId('תלמיד', t3)?['כיתה'], '');          // המפתח-הזר נוקה
+
+    // מפל-רבים (M2M): מסיר-מהרשימה, לא מוחק-שורה
+    final s4 = AppStore();
+    s4.registerRelation('תלמיד', 'מקצועות', 'מקצוע', 1, multi: true);
+    final m1 = s4.add('מקצוע', {'שם': 'מתמטיקה'});
+    final m2 = s4.add('מקצוע', {'שם': 'אנגלית'});
+    final t4 = s4.add('תלמיד', {'שם': 'עדי', 'מקצועות': '$m1,$m2'});
+    expect(s4.removeById('מקצוע', m1), isTrue);
+    expect(s4.count('תלמיד'), 1);                       // התלמיד שרד
+    expect(s4.byId('תלמיד', t4)?['מקצועות'], m2);       // רק m1 הוסר מהרשימה
+  });
+
   test('options/displayOf — מפתח-זר מזהה⇒שם-תצוגה', () {
     final s = AppStore();
     final id = s.add('לקוח', {'שם': 'חברת X', 'טלפון': '050'});

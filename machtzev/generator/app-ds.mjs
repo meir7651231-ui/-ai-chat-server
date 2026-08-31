@@ -66,11 +66,23 @@ export function buildApp(specText) {
     return null;
   };
   const backRefs = {};
+  // 🗑 קשתות-שלמות (Referential Integrity, opt-in): רק שדות-קשר שהילד הכריז עליהם
+  // ב-'| מחיקה:'. בלי-הכרזה ⇒ אין-קשת ⇒ removeById מתנהג כמקודם (ביט-זהה). מדיניות-מחיקה
+  // חמורה-ביותר פר-ישות-הורה (חסימה=0 גוברת) ⇒ שער-מחיקה בכרטיס-ההורה.
+  const edges = [];
+  const delGuardByName = {};
   for (const li of info) if (li.isEnt) {
     const F = entRes[li.i]; const fslug = `app_ent${li.i}`;
+    const dp = F.delPolicy || [];
     for (const s of F.schema) {
       const hit = relOf(s.label, F.entity);
       if (hit) (backRefs[hit.en] ??= []).push({ fslug, ffield: s.label, fname: F.entity, multi: hit.multi });
+      const decl = hit ? dp.find((d) => d.field === s.label) : null;
+      if (hit && decl && nameToSlug[hit.en]) {
+        edges.push({ childSlug: fslug, field: s.label, parentSlug: nameToSlug[hit.en], parentName: hit.en, policy: decl.policy, multi: hit.multi });
+        const cur = delGuardByName[hit.en];
+        delGuardByName[hit.en] = cur === undefined ? decl.policy : (cur === 0 || decl.policy === 0 ? 0 : decl.policy);
+      }
     }
   }
 
@@ -83,7 +95,7 @@ export function buildApp(specText) {
     if (li.isEnt) {
       const r = entRes[li.i];
       const slug = `app_ent${li.i}`;
-      const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames, nameToSlug, backRefs: backRefs[r.entity] || [], vrules: r.vrules || [] });
+      const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames, nameToSlug, backRefs: backRefs[r.entity] || [], vrules: r.vrules || [], delGuard: delGuardByName[r.entity] });
       screens.push({ slug, cls, kind: 'entity', name: r.entity, icon: '🗂️', sub: `${r.schema.length} שדות${(r.stages || []).length ? ` · ${r.stages.length} שלבים` : ''}` });
     } else {
       const slug = `app_scr${li.i}`;
@@ -112,7 +124,7 @@ export function buildApp(specText) {
 
   const hub = renderHub('app_hub', { title: 'האפליקציה שלי', icon: '🏗️', screens: [...screens, ...sys], roles });
   // שורש-האפליקציה: main + MaterialApp ⇒ אפליקציה עצמאית שרצה בלי entry-זמני.
-  renderMain('app_main', { title: 'האפליקציה שלי', hubSlug: 'app_hub', hubCls: hub.cls });
+  renderMain('app_main', { title: 'האפליקציה שלי', hubSlug: 'app_hub', hubCls: hub.cls, edges });
 
   return { screens, sys, roles };
 }

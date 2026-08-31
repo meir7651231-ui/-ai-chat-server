@@ -37,14 +37,16 @@ const inputAtom = (type) => {
 export function interpret(text) {
   // סעיפי-'|' לפי מילת-מפתח בלבד (כדי ש-'|' בתוך enum {א|ב|ג} לא יישבר):
   // "ישות X עם <שדות> | שלבים: a,b | חוקים: תאריך יעד >= תאריך חיוב"
-  const markers = [...text.matchAll(/\|\s*(שלבים|סטטוסים|מצבים|חוקים|ולידציה)/g)];
+  const markers = [...text.matchAll(/\|\s*(שלבים|סטטוסים|מצבים|חוקים|ולידציה|מחיקה)/g)];
   const main = markers.length ? text.slice(0, markers[0].index) : text;
-  let stagesPart = '', rulesPart = '';
+  let stagesPart = '', rulesPart = '', delPart = '';
   markers.forEach((m, mi) => {
     const start = m.index + m[0].length;
     const end = mi + 1 < markers.length ? markers[mi + 1].index : text.length;
     const content = text.slice(start, end).replace(/^[:\s]+/, '');
-    if (m[1] === 'חוקים' || m[1] === 'ולידציה') rulesPart = content; else stagesPart = content;
+    if (m[1] === 'חוקים' || m[1] === 'ולידציה') rulesPart = content;
+    else if (m[1] === 'מחיקה') delPart = content;
+    else stagesPart = content;
   });
   // שם-הישות + רשימת-השדות (בלי \b — לא עובד על עברית ב-JS)
   const body = main.replace(/^\s*(צור|תוסיף|בנה|הוסף)?\s*(ישות|טבלה|טופס)\s+/, '');
@@ -116,7 +118,13 @@ export function interpret(text) {
   lines.push(`באנר ישות ${entity}: ${schema.length} שדות${stages.length ? ` · ${stages.length}-שלבי workflow` : ''}${rules.length ? ` · ${rules.length} חוקים חיים` : ''} · מהמדף`);
 
   const vrules = rulesPart ? rulesPart.split(/[,\n]/).map((s) => s.trim()).filter((s) => s.length > 2) : [];
-  return { spec: lines.join('\n'), entity, schema, stages, rules: rules.map((r) => r.name), vrules };
+  // 🗑 שלמות-קשר: '| מחיקה: כיתה=מפל, תלמיד=ניתוק' ⇒ מדיניות פר-שדה-קשר. מילות-מפתח
+  // דו-לשוניות (מפל/cascade · ניתוק/set-null · חסימה/restrict); לא-מזוהה ⇒ חסימה (בטוח).
+  const POL = { 'מפל': 1, cascade: 1, 'ניתוק': 2, 'נתק': 2, null: 2, 'חסימה': 0, 'חסום': 0, restrict: 0 };
+  const delPolicy = delPart
+    ? delPart.split(/[,\n]/).map((e) => { const m = e.match(/^(.+?)\s*=\s*(.+)$/); if (!m) return null; const field = clean(m[1]); const pk = m[2].trim(); return field.length > 1 ? { field, policy: pk in POL ? POL[pk] : 0 } : null; }).filter(Boolean)
+    : [];
+  return { spec: lines.join('\n'), entity, schema, stages, rules: rules.map((r) => r.name), vrules, delPolicy };
 }
 
 // ── CLI (רץ רק בהרצה ישירה, לא ביבוא) ──

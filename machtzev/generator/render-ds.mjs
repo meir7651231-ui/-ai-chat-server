@@ -174,7 +174,7 @@ function compileRule(rule, labels) {
 }
 
 // ── ישות: מסך-חי מחווט — טופס→שמירה→חנות→טבלה→דשבורד, + קשרים(מזהה) + מסע + עריכה/מחיקה ──
-export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [] }) {
+export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard }) {
   const { k, dump } = makeConsts(slug);
   const cTitle = k(name);
   const cSub = k(`${schema.length} שדות${stages.length ? ` · ${stages.length} שלבים` : ''}`);
@@ -305,6 +305,14 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   // קשר-הפוך: שבב פר-ישות-מצביעה עם מונה-חי (appStore.referencing).
   const backChips = backRefs.map((b) => `_backChip(${k(b.fname)}, appStore.referencing('${b.fslug}', ${k(b.ffield)}, rid).length)`).join(', ');
   const backFooter = backRefs.length ? `, footer: Wrap(spacing: 6, runSpacing: 6, children: [${backChips}])` : '';
+  // 🗑 שער-מחיקה בכרטיס-ההורה (opt-in · רק אם הוכרז '| מחיקה:'): חסימה ⇒ blockedReason
+  // (טוסט) · מפל ⇒ confirmMessage (דיאלוג-אישור). ניתוק/ברירת-מחדל ⇒ שקט (כמקודם).
+  const refCount = `appStore.inboundRefs(${SK}, rid)`;
+  const delArgs = delGuard === 0
+    ? `, blockedReason: ${refCount} > 0 ? (${k('לא ניתן למחוק — ')} + ${refCount}.toString() + ${k(' רשומות מקושרות')}) : null`
+    : delGuard === 1
+    ? `, confirmMessage: ${refCount} > 0 ? (${k('מחיקה תמחק גם ')} + ${refCount}.toString() + ${k(' רשומות מקושרות. להמשיך?')}) : null`
+    : '';
   const stageArgs = hasStages
     ? `stage: (const ${stageList})[appStore.stageOf(${SK}, rid)], stageDone: appStore.stageOf(${SK}, rid) >= ${stages.length - 1}, stages: const ${stageList}, stageIndex: appStore.stageOf(${SK}, rid), onStage: (i) => appStore.setStage(${SK}, rid, i), onAdvance: () => appStore.advance(${SK}, rid, ${stages.length}), `
     : '';
@@ -359,7 +367,7 @@ ${hasVal ? `    final miss = <String>[];
 
   Widget _card(Map<String, String> r) {
     final rid = r['__id'] ?? '';
-    return DsRecordCard(labels: const [${labelsList}], values: [${recValues}], ${stageArgs}onEdit: () => _edit(r), onDelete: () => appStore.removeById(${SK}, rid)${backFooter});
+    return DsRecordCard(labels: const [${labelsList}], values: [${recValues}], ${stageArgs}onEdit: () => _edit(r), onDelete: () => appStore.removeById(${SK}, rid)${backFooter}${delArgs});
   }
 ${backRefs.length ? `
   Widget _backChip(String label, int n) => Container(
@@ -650,17 +658,35 @@ ${showChips ? `        Container(
 
 // ── שורש-האפליקציה: main() + MaterialApp + ערכת-נושא + RTL ⇒ אפליקציה עצמאית שלמה ──
 //    (טהור: דטרמיניסטי, אפס-סודות, אפס-דאטה. פותח את לוח-הניווט; ה-DS נותן את המראה.)
-export function renderMain(slug, { title, hubSlug, hubCls }) {
+export function renderMain(slug, { title, hubSlug, hubCls, edges = [] }) {
   const { k, dump } = makeConsts(slug);
   const cTitle = k(title);
   const cls = pascal(slug);
+  // 🗑 קובץ-רישום-קשרים (רק אם יש קשתות-שלמות מוכרזות) — נטען פעם-אחת ב-main.
+  // אין קשתות ⇒ אין קובץ, אין import, אין קריאה ⇒ main ביט-זהה לאפליקציה בלי '| מחיקה:'.
+  const hasEdges = edges.length > 0;
+  if (hasEdges) {
+    const { k: rk, dump: rdump } = makeConsts('app_relations');
+    const regs = edges.map((e) => `  s.registerRelation('${e.childSlug}', ${rk(e.field)}, '${e.parentSlug}', ${e.policy}, multi: ${e.multi});`).join('\n');
+    const relCode = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — רישום גרף-הקשרים לשלמות-מחיקה. אל תערוך ידנית.
+import '../dart-data-bs/auto/gen_app_relations_content.dart';
+import '../dart-ui-bs/ds/ds_store.dart';
+
+void registerAppRelations(AppStore s) {
+${regs}
+}
+`;
+    write('app_relations', relCode, rdump());
+  }
+  const relImport = hasEdges ? "import 'gen_app_relations.dart';\nimport '../dart-ui-bs/ds/ds_store.dart';\n" : '';
+  const mainLine = hasEdges ? `void main() { registerAppRelations(appStore); runApp(const ${cls}()); }` : `void main() => runApp(const ${cls}());`;
   const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — שורש-האפליקציה (main + MaterialApp + theme + RTL). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
-import 'gen_${hubSlug}.dart';
+${relImport}import 'gen_${hubSlug}.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(const ${cls}());
+${mainLine}
 
 class ${cls} extends StatelessWidget {
   const ${cls}({super.key});

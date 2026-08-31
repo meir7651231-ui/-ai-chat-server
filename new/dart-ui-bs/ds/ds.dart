@@ -313,9 +313,11 @@ class DsNavTile extends StatelessWidget {
 
 // ── כרטיס-רשומה: תווית:ערך לכל שדה + שבב-שלב חי + קידום + עריכה (הקשה) + מחיקה ──
 class DsRecordCard extends StatelessWidget {
-  const DsRecordCard({required this.labels, required this.values, this.stage = '', this.stageDone = false, this.stages = const [], this.stageIndex = 0, this.onStage, this.onAdvance, this.onEdit, this.onDelete, this.footer, super.key});
+  const DsRecordCard({required this.labels, required this.values, this.stage = '', this.stageDone = false, this.stages = const [], this.stageIndex = 0, this.onStage, this.onAdvance, this.onEdit, this.onDelete, this.footer, this.blockedReason, this.confirmMessage, super.key});
   final List<String> labels, values;
   final Widget? footer;   // תוכן-תחתית (למשל שבבי קשר-הפוך)
+  final String? blockedReason;   // שלמות-קשר · חסימה: מחיקה חסומה + סיבה (טוסט)
+  final String? confirmMessage;  // שלמות-קשר · מפל: אישור לפני מחיקת-שרשרת
   final String stage;         // שם השלב-הנוכחי (ריק = לישות אין מסע)
   final bool stageDone;       // האם הגיע לשלב-האחרון
   final List<String> stages;  // כל השלבים (למסע לא-ליניארי — קפיצה לכל שלב)
@@ -391,12 +393,28 @@ class DsRecordCard extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(right: 4),
                   child: IconButton(
-                    onPressed: onDelete,
+                    onPressed: blockedReason != null
+                        ? () => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(blockedReason!)))
+                        : confirmMessage != null
+                            ? () async {
+                                final ok = await showDialog<bool>(
+                                  context: context,
+                                  builder: (c) => AlertDialog(
+                                    content: Text(confirmMessage!),
+                                    actions: [
+                                      TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('ביטול')),
+                                      TextButton(onPressed: () => Navigator.pop(c, true), child: const Text('מחק')),
+                                    ],
+                                  ),
+                                );
+                                if (ok == true) onDelete?.call();
+                              }
+                            : onDelete,
                     visualDensity: VisualDensity.compact,
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(minWidth: 30, minHeight: 30),
-                    icon: const Icon(Icons.delete_outline, size: 18, color: DsTokens.faint),
-                    tooltip: 'מחק',
+                    icon: Icon(Icons.delete_outline, size: 18, color: blockedReason != null ? DsTokens.line : DsTokens.faint),
+                    tooltip: blockedReason != null ? 'מחיקה חסומה' : 'מחק',
                   ),
                 ),
             ],

@@ -153,10 +153,78 @@ class AppStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeById(String entity, String id) {
+  // ── שלמות-קשר (Referential Integrity) — גרף-הקשרים נרשם בלידה כ-data (מבנה, לא-מתמיד).
+  //    ‏policy: 0=חסימה(restrict) · 1=מפל(cascade) · 2=ניתוק(set-null). אין-קשר-רשום ⇒
+  //    removeById מתנהג כמקודם (מחיקה-עיוורת) ⇒ ביט-זהה לאפליקציה בלי '| מחיקה:'.
+  final List<_Rel> _rels = [];
+  void registerRelation(String child, String field, String parent, int policy, {bool multi = false}) {
+    _rels.add(_Rel(child, field, parent, policy, multi));
+  }
+
+  // חברוּת: האם רשומת-ילד מצביעה על id (יחיד: שוויון · רבים: id ברשימה מופרדת-פסיק).
+  bool _pointsAt(Map<String, String> r, String field, String id, bool multi) {
+    final v = r[field] ?? '';
+    return multi ? v.split(',').map((x) => x.trim()).contains(id) : v == id;
+  }
+
+  // כמה רשומות מצביעות על (parent,id) בכל הקשרים הרשומים.
+  int inboundRefs(String parent, String id) {
+    var n = 0;
+    for (final rel in _rels) {
+      if (rel.parent != parent) continue;
+      for (final r in records(rel.child)) {
+        if (_pointsAt(r, rel.field, id, rel.multi)) n++;
+      }
+    }
+    return n;
+  }
+
+  // המדיניות החמורה-ביותר על מחיקת parent (חסימה גוברת). אין-קשר ⇒ null.
+  int? policyOf(String parent) {
+    int? p;
+    for (final rel in _rels) {
+      if (rel.parent != parent) continue;
+      if (rel.policy == 0) return 0;
+      p = rel.policy;
+    }
+    return p;
+  }
+
+  void _pull(Map<String, String> r, String field, String id) {
+    r[field] = (r[field] ?? '').split(',').map((x) => x.trim()).where((x) => x.isNotEmpty && x != id).join(',');
+  }
+
+  // מחיקה עם אכיפת-שלמות (מחזיר: הצליח?). חסימה ⇒ false בלי-מוטציה · מפל ⇒ מוחק/מנתק
+  // ילדים (רבים: מסיר-מהרשימה, לא מוחק-שורה) · ניתוק ⇒ מנקה את המפתח-הזר. שומר-מחזור.
+  bool removeById(String entity, String id, [Set<String>? seen]) {
+    seen ??= <String>{};
+    if (!seen.add('$entity/$id')) return true;   // כבר בטיפול (מחזור)
+    for (final rel in _rels) {
+      if (rel.parent != entity) continue;
+      final refs = records(rel.child).where((r) => _pointsAt(r, rel.field, id, rel.multi)).toList();
+      if (refs.isEmpty) continue;
+      if (rel.policy == 0) return false;                        // חסימה
+      for (final r in refs) {
+        if (rel.policy == 1 && !rel.multi) {
+          removeById(rel.child, r[idKey] ?? '', seen);          // מפל — יחיד: מחיקה רקורסיבית
+        } else {
+          _pull(r, rel.field, id);                              // מפל-רבים / ניתוק — מסיר מהרשימה/מנקה
+          if (rel.policy == 2 && !rel.multi) r[rel.field] = '';
+        }
+      }
+    }
     _rec[entity]?.removeWhere((r) => r[idKey] == id);
     notifyListeners();
+    return true;
   }
+}
+
+// קשר-רשום (ילד.מפתח ⇒ הורה, + מדיניות-מחיקה). נבנה בלידה מקובץ-הרישום המחולל.
+class _Rel {
+  const _Rel(this.child, this.field, this.parent, this.policy, this.multi);
+  final String child, field, parent;
+  final int policy;
+  final bool multi;
 }
 
 // מקור-אמת יחיד לאפליקציה כולה (חוצה-מסכים דרך ה-Navigator).
