@@ -91,8 +91,13 @@ class AppStore extends ChangeNotifier {
       .join(', ');
 
   // אינדקס-הפוך (קשר-נגדי): רשומות של entity ששדה-הקשר שלהן מצביע על id.
+  // מודע-CSV: קשר-יחיד ⇒ r[field]==id · קשר-רבים ⇒ id ברשימת-המזהים המופרדת-פסיק.
+  // (קשר-יחיד נשאר ביט-זהה — ערך-יחיד בלי פסיק split-ל-[ערך] שמכיל את עצמו.)
   List<Map<String, String>> referencing(String entity, String field, String id) =>
-      records(entity).where((r) => r[field] == id).toList();
+      records(entity).where((r) {
+        final v = r[field] ?? '';
+        return v == id || v.split(',').map((x) => x.trim()).contains(id);
+      }).toList();
 
   int stageOf(String entity, String id) {
     final r = byId(entity, id);

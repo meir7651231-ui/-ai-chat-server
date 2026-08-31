@@ -35,3 +35,5 @@ const String gen_app_ent59_c32 = 'נסיעת הסעה';
 const String gen_app_ent59_c33 = 'אירוע';
 const String gen_app_ent59_c34 = 'אישור הורה';
 const String gen_app_ent59_c35 = 'אירוע';
+const String gen_app_ent59_c36 = 'בוגר';
+const String gen_app_ent59_c37 = 'אירועים';

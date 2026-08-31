@@ -45,18 +45,32 @@ export function buildApp(specText) {
     if (!(r.entity in nameToSlug)) nameToSlug[r.entity] = eslug;   // שם ⇒ slug-היעד לקשרים
   }
   const entityNames = entMeta.map((e) => e.name);
-  // 🔁 קשר-הפוך: לכל ישות-יעד — מי מצביע עליה (ישות F · שדה). התאמה-מדויקת כמו pickRelation.
+  // 🔁 קשר-הפוך: לכל ישות-יעד — מי מצביע עליה (ישות F · שדה · יחיד/רבים). משקף את
+  // סדר-הקדימות של render-ds: קשר-יחיד (pickRelation, תת-קבוצת-מילים) קודם, ואם אין —
+  // קשר-רבים (pickMultiRelation, צורת-רבים של ישות חד-מילית). כך גרף-הקשרים שלם ל-M2M.
   const hw = (s) => [...String(s || '').matchAll(/[֐-׿][֐-׿״׳]*/g)].map((m) => m[0]);
+  const definal = (w) => w.replace(/ך$/, 'כ').replace(/ם$/, 'מ').replace(/ן$/, 'נ').replace(/ף$/, 'פ').replace(/ץ$/, 'צ');
+  const pluralForms = (en) => { const b = definal(en.replace(/ה$/, '')); const b2 = definal(en); return new Set([`${b}ים`, `${b}ות`, `${b2}ים`, `${b2}ות`]); };
+  const relOf = (label, self) => {
+    const fw = new Set(hw(label));
+    for (const en of entityNames) {                                   // (א) קשר-יחיד — כמו pickRelation
+      if (en === self) continue;
+      const ew = hw(en);
+      if (ew.length && ew.every((w) => fw.has(w))) return { en, multi: false };
+    }
+    for (const en of entityNames) {                                   // (ב) קשר-רבים — כמו pickMultiRelation
+      if (en === self || hw(en).length !== 1) continue;
+      const forms = pluralForms(en);
+      for (const w of fw) if (forms.has(w)) return { en, multi: true };
+    }
+    return null;
+  };
   const backRefs = {};
   for (const li of info) if (li.isEnt) {
     const F = entRes[li.i]; const fslug = `app_ent${li.i}`;
     for (const s of F.schema) {
-      const fw = new Set(hw(s.label));
-      for (const en of entityNames) {
-        if (en === F.entity) continue;
-        const ew = hw(en);
-        if (ew.length && ew.every((w) => fw.has(w))) { (backRefs[en] ??= []).push({ fslug, ffield: s.label, fname: F.entity }); break; }
-      }
+      const hit = relOf(s.label, F.entity);
+      if (hit) (backRefs[hit.en] ??= []).push({ fslug, ffield: s.label, fname: F.entity, multi: hit.multi });
     }
   }
 

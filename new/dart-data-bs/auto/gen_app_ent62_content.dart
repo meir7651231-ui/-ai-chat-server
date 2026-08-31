@@ -20,3 +20,5 @@ const String gen_app_ent62_c17 = 'שעות פעילות';
 const String gen_app_ent62_c18 = 'הזמנות';
 const String gen_app_ent62_c19 = 'סטטוס';
 const String gen_app_ent62_c20 = 'סטטוס בא';
+const String gen_app_ent62_c21 = 'אירוע חירום';
+const String gen_app_ent62_c22 = 'פעולות מתקנות';

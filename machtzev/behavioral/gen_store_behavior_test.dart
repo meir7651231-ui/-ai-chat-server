@@ -49,6 +49,24 @@ void main() {
     expect(s.referencing('תלמיד', 'כיתה', cls).length, 2);
   });
 
+  // ratchet · פאזה-0: referencing מודע-CSV — קשר-רבים (M2M) שומר רשימת-מזהים מופרדת-פסיק;
+  // הקשר-ההפוך חייב לספור רשומה שה-id שלה נמצא *בתוך* הרשימה, לא רק בהתאמה-מלאה.
+  // (הבאג: r[field]==id דלג על כל M2M ⇒ backRefs שלם אך מונה-אפס.)
+  test('referencing מודע-CSV — קשר-רבים סופר חברוּת ברשימה', () {
+    final s = AppStore();
+    final m = s.add('מקצוע', {'שם': 'מתמטיקה'});
+    final other = s.add('מקצוע', {'שם': 'אנגלית'});
+    s.add('תלמיד', {'שם': 'דנה', 'מקצועות': '$m,$other'}); // רבים: שני מזהים
+    s.add('תלמיד', {'שם': 'רן', 'מקצועות': '$other'});
+    s.add('תלמיד', {'שם': 'גד', 'מקצועות': ' $m , $other '}); // רווחים סביב פסיק
+    expect(s.referencing('תלמיד', 'מקצועות', m).length, 2); // דנה + גד
+    expect(s.referencing('תלמיד', 'מקצועות', other).length, 3);
+    // קשר-יחיד נשאר ביט-זהה: ערך-יחיד בלי פסיק
+    final cls = s.add('כיתה', {'שם': 'א1'});
+    s.add('נוכחות', {'כיתה': cls});
+    expect(s.referencing('נוכחות', 'כיתה', cls).length, 1);
+  });
+
   test('options/displayOf — מפתח-זר מזהה⇒שם-תצוגה', () {
     final s = AppStore();
     final id = s.add('לקוח', {'שם': 'חברת X', 'טלפון': '050'});
