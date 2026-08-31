@@ -2,7 +2,7 @@
  "counts": {
   "widgets": 479,
   "functions": 445,
-  "data": 3807
+  "data": 3865
  },
  "widgets": [
   {
@@ -29334,6 +29334,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent10_c21",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent10_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent11_c0",
    "type": "String",
    "he": [
@@ -29828,6 +29841,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent11_c38",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent11_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent12_c0",
    "type": "String",
    "he": [
@@ -30140,6 +30166,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent12_c24",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent12_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent13_c0",
    "type": "String",
    "he": [
@@ -30375,6 +30414,19 @@
   },
   {
    "name": "gen_app_ent13_c18",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent13_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent13_c19",
    "type": "String",
    "he": [
     "תוכן",
@@ -30868,6 +30920,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent15_c21",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent15_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent16_c0",
    "type": "String",
    "he": [
@@ -31064,6 +31129,19 @@
   },
   {
    "name": "gen_app_ent16_c15",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent16_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent16_c16",
    "type": "String",
    "he": [
     "תוכן",
@@ -31363,6 +31441,19 @@
   },
   {
    "name": "gen_app_ent17_c22",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent17_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent17_c23",
    "type": "String",
    "he": [
     "תוכן",
@@ -32272,6 +32363,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent1_c23",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent1_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent20_c0",
    "type": "String",
    "he": [
@@ -32909,6 +33013,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent21_c30",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent21_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent22_c0",
    "type": "String",
    "he": [
@@ -33234,6 +33351,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent22_c25",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent22_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent23_c0",
    "type": "String",
    "he": [
@@ -33482,6 +33612,19 @@
   },
   {
    "name": "gen_app_ent23_c19",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent23_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent23_c20",
    "type": "String",
    "he": [
     "תוכן",
@@ -33988,6 +34131,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent25_c21",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent25_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent26_c0",
    "type": "String",
    "he": [
@@ -34287,6 +34443,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent26_c23",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent26_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent27_c0",
    "type": "String",
    "he": [
@@ -34535,6 +34704,19 @@
   },
   {
    "name": "gen_app_ent27_c19",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent27_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent27_c20",
    "type": "String",
    "he": [
     "תוכן",
@@ -35171,6 +35353,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent29_c21",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent29_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent2_c0",
    "type": "String",
    "he": [
@@ -35535,6 +35730,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent2_c28",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent2_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent30_c0",
    "type": "String",
    "he": [
@@ -35873,6 +36081,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent30_c26",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent30_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent31_c0",
    "type": "String",
    "he": [
@@ -36160,6 +36381,19 @@
   },
   {
    "name": "gen_app_ent31_c22",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent31_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent31_c23",
    "type": "String",
    "he": [
     "תוכן",
@@ -36536,6 +36770,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent32_c28",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent32_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent33_c0",
    "type": "String",
    "he": [
@@ -36771,6 +37018,19 @@
   },
   {
    "name": "gen_app_ent33_c18",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent33_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent33_c19",
    "type": "String",
    "he": [
     "תוכן",
@@ -37121,6 +37381,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent34_c26",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent34_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent35_c0",
    "type": "String",
    "he": [
@@ -37459,6 +37732,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent35_c26",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent35_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent36_c0",
    "type": "String",
    "he": [
@@ -37759,6 +38045,19 @@
   },
   {
    "name": "gen_app_ent36_c23",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent36_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent36_c24",
    "type": "String",
    "he": [
     "תוכן",
@@ -38330,6 +38629,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent38_c26",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent38_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent39_c0",
    "type": "String",
    "he": [
@@ -38591,6 +38903,19 @@
   },
   {
    "name": "gen_app_ent39_c20",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent39_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent39_c21",
    "type": "String",
    "he": [
     "תוכן",
@@ -39266,6 +39591,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent40_c27",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent40_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent41_c0",
    "type": "String",
    "he": [
@@ -39800,6 +40138,19 @@
   },
   {
    "name": "gen_app_ent42_c22",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent42_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent42_c23",
    "type": "String",
    "he": [
     "תוכן",
@@ -40371,6 +40722,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent44_c26",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent44_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent45_c0",
    "type": "String",
    "he": [
@@ -40696,6 +41060,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent45_c25",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent45_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent46_c0",
    "type": "String",
    "he": [
@@ -40982,6 +41359,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent46_c22",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent46_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent47_c0",
    "type": "String",
    "he": [
@@ -41255,6 +41645,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent47_c21",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent47_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent48_c0",
    "type": "String",
    "he": [
@@ -41515,6 +41918,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent48_c20",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent48_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent49_c0",
    "type": "String",
    "he": [
@@ -41698,6 +42114,19 @@
   },
   {
    "name": "gen_app_ent49_c14",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent49_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent49_c15",
    "type": "String",
    "he": [
     "תוכן",
@@ -42035,6 +42464,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent4_c25",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent4_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent50_c0",
    "type": "String",
    "he": [
@@ -42257,6 +42699,19 @@
   },
   {
    "name": "gen_app_ent50_c17",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent50_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent50_c18",
    "type": "String",
    "he": [
     "תוכן",
@@ -42517,6 +42972,19 @@
   },
   {
    "name": "gen_app_ent51_c19",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent51_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent51_c20",
    "type": "String",
    "he": [
     "תוכן",
@@ -43023,6 +43491,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent53_c22",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent53_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent54_c0",
    "type": "String",
    "he": [
@@ -43283,6 +43764,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent54_c20",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent54_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent55_c0",
    "type": "String",
    "he": [
@@ -43479,6 +43973,19 @@
   },
   {
    "name": "gen_app_ent55_c15",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent55_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent55_c16",
    "type": "String",
    "he": [
     "תוכן",
@@ -43739,6 +44246,19 @@
   },
   {
    "name": "gen_app_ent56_c19",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent56_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent56_c20",
    "type": "String",
    "he": [
     "תוכן",
@@ -44193,6 +44713,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent58_c17",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent58_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent59_c0",
    "type": "String",
    "he": [
@@ -44583,6 +45116,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent59_c30",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent59_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent5_c0",
    "type": "String",
    "he": [
@@ -44779,6 +45325,19 @@
   },
   {
    "name": "gen_app_ent5_c15",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent5_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent5_c16",
    "type": "String",
    "he": [
     "תוכן",
@@ -45091,6 +45650,19 @@
   },
   {
    "name": "gen_app_ent60_c23",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent60_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent60_c24",
    "type": "String",
    "he": [
     "תוכן",
@@ -45441,6 +46013,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent61_c26",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent61_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent62_c0",
    "type": "String",
    "he": [
@@ -45688,6 +46273,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent62_c19",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent62_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent63_c0",
    "type": "String",
    "he": [
@@ -45910,6 +46508,19 @@
   },
   {
    "name": "gen_app_ent63_c17",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent63_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent63_c18",
    "type": "String",
    "he": [
     "תוכן",
@@ -46248,6 +46859,19 @@
   },
   {
    "name": "gen_app_ent64_c25",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent64_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent64_c26",
    "type": "String",
    "he": [
     "תוכן",
@@ -46884,6 +47508,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent66_c28",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent66_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent67_c0",
    "type": "String",
    "he": [
@@ -47171,6 +47808,19 @@
   },
   {
    "name": "gen_app_ent67_c22",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent67_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent67_c23",
    "type": "String",
    "he": [
     "תוכן",
@@ -47495,6 +48145,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent68_c24",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent68_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent69_c0",
    "type": "String",
    "he": [
@@ -47769,6 +48432,19 @@
   },
   {
    "name": "gen_app_ent69_c21",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent69_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent69_c22",
    "type": "String",
    "he": [
     "תוכן",
@@ -48094,6 +48770,19 @@
   },
   {
    "name": "gen_app_ent6_c24",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent6_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent6_c25",
    "type": "String",
    "he": [
     "תוכן",
@@ -48470,6 +49159,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent70_c28",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent70_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent71_c0",
    "type": "String",
    "he": [
@@ -48744,6 +49446,19 @@
   },
   {
    "name": "gen_app_ent71_c21",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent71_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent71_c22",
    "type": "String",
    "he": [
     "תוכן",
@@ -49250,6 +49965,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent7_c38",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent7_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent8_c0",
    "type": "String",
    "he": [
@@ -49692,6 +50420,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_ent8_c34",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent8_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_ent9_c0",
    "type": "String",
    "he": [
@@ -50044,6 +50785,19 @@
   },
   {
    "name": "gen_app_ent9_c27",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_ent9_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_ent9_c28",
    "type": "String",
    "he": [
     "תוכן",

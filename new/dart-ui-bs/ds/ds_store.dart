@@ -1,7 +1,10 @@
 // 🗄️ חנות-מצב חיה (חוט-טהור) — מודל-נתונים אמיתי לאפליקציה. כל רשומה נושאת מזהה
 // יציב (__id), נגישה לפי-מזהה (לא לפי-אינדקס), ומפתח-זר מצביע במזהה — לא במחרוזת-תצוגה.
 // שמירה · עדכון · מחיקה · קידום-מסע · צבירה — הכל מגיב לאותו מקור-אמת (ChangeNotifier).
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
+// גבול-הפלטפורמה מבודד ב-conditional-import: web ⇒ localStorage · אחר ⇒ no-op (טהור).
+import 'ds_persist_stub.dart' if (dart.library.js_interop) 'ds_persist_web.dart';
 
 class AppStore extends ChangeNotifier {
   // ממופתח ב-slug יציב (app_entN) — לא בשם-תצוגה חתוך (שמנע דליפת-נתונים בין ישויות).
@@ -10,6 +13,32 @@ class AppStore extends ChangeNotifier {
 
   static const idKey = '__id';       // מזהה-רשומה יציב
   static const stageKey = '__stage'; // אינדקס שלב-המסע הנוכחי
+  static const _pkey = 'ds_app_v1';  // מפתח-ההתמדה
+
+  AppStore() { _load(); }
+
+  // התמדה: טעינה בלידה, שמירה בכל שינוי (מרוכב על notifyListeners). נכשל-רך.
+  void _load() {
+    final raw = persistLoad(_pkey);
+    if (raw == null || raw.isEmpty) return;
+    try {
+      final data = jsonDecode(raw) as Map<String, dynamic>;
+      _seq = (data['seq'] as num?)?.toInt() ?? 0;
+      (data['rec'] as Map<String, dynamic>).forEach((k, v) {
+        _rec[k] = (v as List)
+            .map((e) => (e as Map).map((kk, vv) => MapEntry(kk.toString(), vv.toString())))
+            .toList();
+      });
+    } catch (_) {}
+  }
+
+  @override
+  void notifyListeners() {
+    try {
+      persistSave(_pkey, jsonEncode({'seq': _seq, 'rec': _rec}));
+    } catch (_) {}
+    super.notifyListeners();
+  }
 
   List<Map<String, String>> records(String entity) => _rec[entity] ?? const [];
   int count(String entity) => _rec[entity]?.length ?? 0;
