@@ -1,4 +1,4 @@
-// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→חנות→טבלה + לוגיקה). אל תערוך ידנית.
+// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→קשרים→מסע→חנות→טבלה + לוגיקה). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_app_ent68_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
@@ -18,7 +18,7 @@ class _GenAppEnt68ScreenState extends State<GenAppEnt68Screen> {
 
   void _save() {
     if (_v.values.where((x) => x.trim().isNotEmpty).isEmpty) return;
-    appStore.add(gen_app_ent68_c7, <String, String>{gen_app_ent68_c8: _v[0] ?? '', gen_app_ent68_c9: _v[1] ?? '', gen_app_ent68_c10: _v[2] ?? '', gen_app_ent68_c11: _v[3] ?? '', gen_app_ent68_c12: _v[4] ?? '', gen_app_ent68_c13: _v[5] ?? '', gen_app_ent68_c14: _v[6] ?? '', gen_app_ent68_c15: _v[7] ?? '', gen_app_ent68_c16: _v[8] ?? '', gen_app_ent68_c18: _v[9] ?? '', gen_app_ent68_c19: _v[10] ?? '', gen_app_ent68_c20: _v[11] ?? ''});
+    appStore.add(gen_app_ent68_c7, <String, String>{gen_app_ent68_c8: _v[0] ?? '', gen_app_ent68_c9: _v[1] ?? '', gen_app_ent68_c10: _v[2] ?? '', gen_app_ent68_c11: _v[3] ?? '', gen_app_ent68_c12: _v[4] ?? '', gen_app_ent68_c13: _v[5] ?? '', gen_app_ent68_c14: _v[6] ?? '', gen_app_ent68_c15: _v[7] ?? '', gen_app_ent68_c16: _v[8] ?? '', gen_app_ent68_c18: _v[9] ?? '', gen_app_ent68_c19: _v[10] ?? '', gen_app_ent68_c20: _v[11] ?? '', '__stage': '0'});
     setState(() => _v.clear());
   }
 
@@ -44,7 +44,7 @@ class _GenAppEnt68ScreenState extends State<GenAppEnt68Screen> {
       icon: gen_app_ent68_c2,
       bottomBar: DsPrimaryButton(label: gen_app_ent68_c3, onTap: _save),
       children: [
-        DsWorkflow(steps: const [gen_app_ent68_c21, gen_app_ent68_c22, gen_app_ent68_c23, gen_app_ent68_c24], current: 2),
+        DsWorkflow(steps: const [gen_app_ent68_c21, gen_app_ent68_c22, gen_app_ent68_c23, gen_app_ent68_c24], current: 0),
         DsSection(title: gen_app_ent68_c4, children: [
           DsField(label: gen_app_ent68_c8, hint: '', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
           DsField(label: gen_app_ent68_c9, hint: '', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
@@ -67,8 +67,8 @@ class _GenAppEnt68ScreenState extends State<GenAppEnt68Screen> {
               final rs = appStore.records(gen_app_ent68_c7);
               if (rs.isEmpty) return const DsEmpty(label: gen_app_ent68_c6);
               return Column(children: [
-                for (final r in rs)
-                  DsRecordCard(labels: const [gen_app_ent68_c8, gen_app_ent68_c9, gen_app_ent68_c10, gen_app_ent68_c11, gen_app_ent68_c12, gen_app_ent68_c13, gen_app_ent68_c14, gen_app_ent68_c15, gen_app_ent68_c16, gen_app_ent68_c18, gen_app_ent68_c19, gen_app_ent68_c20], values: [r[gen_app_ent68_c8] ?? '', r[gen_app_ent68_c9] ?? '', r[gen_app_ent68_c10] ?? '', r[gen_app_ent68_c11] ?? '', r[gen_app_ent68_c12] ?? '', r[gen_app_ent68_c13] ?? '', r[gen_app_ent68_c14] ?? '', r[gen_app_ent68_c15] ?? '', r[gen_app_ent68_c16] ?? '', r[gen_app_ent68_c18] ?? '', r[gen_app_ent68_c19] ?? '', r[gen_app_ent68_c20] ?? '']),
+                for (var i = 0; i < rs.length; i++)
+                  DsRecordCard(labels: const [gen_app_ent68_c8, gen_app_ent68_c9, gen_app_ent68_c10, gen_app_ent68_c11, gen_app_ent68_c12, gen_app_ent68_c13, gen_app_ent68_c14, gen_app_ent68_c15, gen_app_ent68_c16, gen_app_ent68_c18, gen_app_ent68_c19, gen_app_ent68_c20], values: [rs[i][gen_app_ent68_c8] ?? '', rs[i][gen_app_ent68_c9] ?? '', rs[i][gen_app_ent68_c10] ?? '', rs[i][gen_app_ent68_c11] ?? '', rs[i][gen_app_ent68_c12] ?? '', rs[i][gen_app_ent68_c13] ?? '', rs[i][gen_app_ent68_c14] ?? '', rs[i][gen_app_ent68_c15] ?? '', rs[i][gen_app_ent68_c16] ?? '', rs[i][gen_app_ent68_c18] ?? '', rs[i][gen_app_ent68_c19] ?? '', rs[i][gen_app_ent68_c20] ?? ''], stage: (const [gen_app_ent68_c21, gen_app_ent68_c22, gen_app_ent68_c23, gen_app_ent68_c24])[appStore.stageOf(gen_app_ent68_c7, i)], stageDone: appStore.stageOf(gen_app_ent68_c7, i) >= 3, onAdvance: () => appStore.advance(gen_app_ent68_c7, i, 4)),
               ]);
             },
           ),

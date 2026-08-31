@@ -1,4 +1,4 @@
-// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→חנות→טבלה + לוגיקה). אל תערוך ידנית.
+// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→קשרים→מסע→חנות→טבלה + לוגיקה). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_app_ent21_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
@@ -77,8 +77,8 @@ class _GenAppEnt21ScreenState extends State<GenAppEnt21Screen> {
               final rs = appStore.records(gen_app_ent21_c7);
               if (rs.isEmpty) return const DsEmpty(label: gen_app_ent21_c6);
               return Column(children: [
-                for (final r in rs)
-                  DsRecordCard(labels: const [gen_app_ent21_c8, gen_app_ent21_c9, gen_app_ent21_c10, gen_app_ent21_c11, gen_app_ent21_c12, gen_app_ent21_c14, gen_app_ent21_c15, gen_app_ent21_c17, gen_app_ent21_c19, gen_app_ent21_c20, gen_app_ent21_c21, gen_app_ent21_c22, gen_app_ent21_c23, gen_app_ent21_c24, gen_app_ent21_c25, gen_app_ent21_c26, gen_app_ent21_c27, gen_app_ent21_c28, gen_app_ent21_c29, gen_app_ent21_c30], values: [r[gen_app_ent21_c8] ?? '', r[gen_app_ent21_c9] ?? '', r[gen_app_ent21_c10] ?? '', r[gen_app_ent21_c11] ?? '', r[gen_app_ent21_c12] ?? '', r[gen_app_ent21_c14] ?? '', r[gen_app_ent21_c15] ?? '', r[gen_app_ent21_c17] ?? '', r[gen_app_ent21_c19] ?? '', r[gen_app_ent21_c20] ?? '', r[gen_app_ent21_c21] ?? '', r[gen_app_ent21_c22] ?? '', r[gen_app_ent21_c23] ?? '', r[gen_app_ent21_c24] ?? '', r[gen_app_ent21_c25] ?? '', r[gen_app_ent21_c26] ?? '', r[gen_app_ent21_c27] ?? '', r[gen_app_ent21_c28] ?? '', r[gen_app_ent21_c29] ?? '', r[gen_app_ent21_c30] ?? '']),
+                for (var i = 0; i < rs.length; i++)
+                  DsRecordCard(labels: const [gen_app_ent21_c8, gen_app_ent21_c9, gen_app_ent21_c10, gen_app_ent21_c11, gen_app_ent21_c12, gen_app_ent21_c14, gen_app_ent21_c15, gen_app_ent21_c17, gen_app_ent21_c19, gen_app_ent21_c20, gen_app_ent21_c21, gen_app_ent21_c22, gen_app_ent21_c23, gen_app_ent21_c24, gen_app_ent21_c25, gen_app_ent21_c26, gen_app_ent21_c27, gen_app_ent21_c28, gen_app_ent21_c29, gen_app_ent21_c30], values: [rs[i][gen_app_ent21_c8] ?? '', rs[i][gen_app_ent21_c9] ?? '', rs[i][gen_app_ent21_c10] ?? '', rs[i][gen_app_ent21_c11] ?? '', rs[i][gen_app_ent21_c12] ?? '', rs[i][gen_app_ent21_c14] ?? '', rs[i][gen_app_ent21_c15] ?? '', rs[i][gen_app_ent21_c17] ?? '', rs[i][gen_app_ent21_c19] ?? '', rs[i][gen_app_ent21_c20] ?? '', rs[i][gen_app_ent21_c21] ?? '', rs[i][gen_app_ent21_c22] ?? '', rs[i][gen_app_ent21_c23] ?? '', rs[i][gen_app_ent21_c24] ?? '', rs[i][gen_app_ent21_c25] ?? '', rs[i][gen_app_ent21_c26] ?? '', rs[i][gen_app_ent21_c27] ?? '', rs[i][gen_app_ent21_c28] ?? '', rs[i][gen_app_ent21_c29] ?? '', rs[i][gen_app_ent21_c30] ?? '']),
               ]);
             },
           ),

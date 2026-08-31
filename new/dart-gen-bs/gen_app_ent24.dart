@@ -1,10 +1,10 @@
-// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→חנות→טבלה + לוגיקה). אל תערוך ידנית.
+// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→קשרים→מסע→חנות→טבלה + לוגיקה). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_app_ent24_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
+import '../dart-ui-bs/ds/ds_select.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/fmt-date.dart';
-import '../dart-maor/task-identity.dart';
 import 'package:flutter/material.dart';
 
 class GenAppEnt24Screen extends StatefulWidget {
@@ -46,8 +46,7 @@ class _GenAppEnt24ScreenState extends State<GenAppEnt24Screen> {
       bottomBar: DsPrimaryButton(label: gen_app_ent24_c3, onTap: _save),
       children: [
         DsSection(title: gen_app_ent24_c4, children: [
-          DsField(label: gen_app_ent24_c8, hint: '', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
-          if ((_v[0] ?? '').trim().isNotEmpty) _live(gen_app_ent24_c9, taskIdentity((_v[0] ?? ''))),
+          DsSelect(label: gen_app_ent24_c8, entity: gen_app_ent24_c9, value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
           DsField(label: gen_app_ent24_c10, hint: '', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
           if ((_v[1] ?? '').trim().isNotEmpty) _live(gen_app_ent24_c11, fmtDate((_v[1] ?? ''))),
           DsField(label: gen_app_ent24_c12, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
@@ -65,8 +64,8 @@ class _GenAppEnt24ScreenState extends State<GenAppEnt24Screen> {
               final rs = appStore.records(gen_app_ent24_c7);
               if (rs.isEmpty) return const DsEmpty(label: gen_app_ent24_c6);
               return Column(children: [
-                for (final r in rs)
-                  DsRecordCard(labels: const [gen_app_ent24_c8, gen_app_ent24_c10, gen_app_ent24_c12, gen_app_ent24_c13, gen_app_ent24_c14, gen_app_ent24_c15, gen_app_ent24_c16, gen_app_ent24_c17, gen_app_ent24_c18], values: [r[gen_app_ent24_c8] ?? '', r[gen_app_ent24_c10] ?? '', r[gen_app_ent24_c12] ?? '', r[gen_app_ent24_c13] ?? '', r[gen_app_ent24_c14] ?? '', r[gen_app_ent24_c15] ?? '', r[gen_app_ent24_c16] ?? '', r[gen_app_ent24_c17] ?? '', r[gen_app_ent24_c18] ?? '']),
+                for (var i = 0; i < rs.length; i++)
+                  DsRecordCard(labels: const [gen_app_ent24_c8, gen_app_ent24_c10, gen_app_ent24_c12, gen_app_ent24_c13, gen_app_ent24_c14, gen_app_ent24_c15, gen_app_ent24_c16, gen_app_ent24_c17, gen_app_ent24_c18], values: [rs[i][gen_app_ent24_c8] ?? '', rs[i][gen_app_ent24_c10] ?? '', rs[i][gen_app_ent24_c12] ?? '', rs[i][gen_app_ent24_c13] ?? '', rs[i][gen_app_ent24_c14] ?? '', rs[i][gen_app_ent24_c15] ?? '', rs[i][gen_app_ent24_c16] ?? '', rs[i][gen_app_ent24_c17] ?? '', rs[i][gen_app_ent24_c18] ?? '']),
               ]);
             },
           ),

@@ -1,4 +1,4 @@
-// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→חנות→טבלה + לוגיקה). אל תערוך ידנית.
+// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→קשרים→מסע→חנות→טבלה + לוגיקה). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_app_ent69_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
@@ -67,8 +67,8 @@ class _GenAppEnt69ScreenState extends State<GenAppEnt69Screen> {
               final rs = appStore.records(gen_app_ent69_c7);
               if (rs.isEmpty) return const DsEmpty(label: gen_app_ent69_c6);
               return Column(children: [
-                for (final r in rs)
-                  DsRecordCard(labels: const [gen_app_ent69_c8, gen_app_ent69_c10, gen_app_ent69_c11, gen_app_ent69_c12, gen_app_ent69_c13, gen_app_ent69_c14, gen_app_ent69_c15, gen_app_ent69_c16, gen_app_ent69_c17, gen_app_ent69_c18, gen_app_ent69_c19, gen_app_ent69_c20, gen_app_ent69_c21], values: [r[gen_app_ent69_c8] ?? '', r[gen_app_ent69_c10] ?? '', r[gen_app_ent69_c11] ?? '', r[gen_app_ent69_c12] ?? '', r[gen_app_ent69_c13] ?? '', r[gen_app_ent69_c14] ?? '', r[gen_app_ent69_c15] ?? '', r[gen_app_ent69_c16] ?? '', r[gen_app_ent69_c17] ?? '', r[gen_app_ent69_c18] ?? '', r[gen_app_ent69_c19] ?? '', r[gen_app_ent69_c20] ?? '', r[gen_app_ent69_c21] ?? '']),
+                for (var i = 0; i < rs.length; i++)
+                  DsRecordCard(labels: const [gen_app_ent69_c8, gen_app_ent69_c10, gen_app_ent69_c11, gen_app_ent69_c12, gen_app_ent69_c13, gen_app_ent69_c14, gen_app_ent69_c15, gen_app_ent69_c16, gen_app_ent69_c17, gen_app_ent69_c18, gen_app_ent69_c19, gen_app_ent69_c20, gen_app_ent69_c21], values: [rs[i][gen_app_ent69_c8] ?? '', rs[i][gen_app_ent69_c10] ?? '', rs[i][gen_app_ent69_c11] ?? '', rs[i][gen_app_ent69_c12] ?? '', rs[i][gen_app_ent69_c13] ?? '', rs[i][gen_app_ent69_c14] ?? '', rs[i][gen_app_ent69_c15] ?? '', rs[i][gen_app_ent69_c16] ?? '', rs[i][gen_app_ent69_c17] ?? '', rs[i][gen_app_ent69_c18] ?? '', rs[i][gen_app_ent69_c19] ?? '', rs[i][gen_app_ent69_c20] ?? '', rs[i][gen_app_ent69_c21] ?? '']),
               ]);
             },
           ),

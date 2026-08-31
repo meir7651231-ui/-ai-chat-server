@@ -1,7 +1,8 @@
-// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→חנות→טבלה + לוגיקה). אל תערוך ידנית.
+// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→קשרים→מסע→חנות→טבלה + לוגיקה). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_app_ent2_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
+import '../dart-ui-bs/ds/ds_select.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/norm-email.dart';
 import '../dart-maor/phone-region.dart';
@@ -19,7 +20,7 @@ class _GenAppEnt2ScreenState extends State<GenAppEnt2Screen> {
 
   void _save() {
     if (_v.values.where((x) => x.trim().isNotEmpty).isEmpty) return;
-    appStore.add(gen_app_ent2_c7, <String, String>{gen_app_ent2_c8: _v[0] ?? '', gen_app_ent2_c9: _v[1] ?? '', gen_app_ent2_c10: _v[2] ?? '', gen_app_ent2_c11: _v[3] ?? '', gen_app_ent2_c12: _v[4] ?? '', gen_app_ent2_c13: _v[5] ?? '', gen_app_ent2_c14: _v[6] ?? '', gen_app_ent2_c15: _v[7] ?? '', gen_app_ent2_c17: _v[8] ?? '', gen_app_ent2_c18: _v[9] ?? '', gen_app_ent2_c20: _v[10] ?? '', gen_app_ent2_c21: _v[11] ?? '', gen_app_ent2_c22: _v[12] ?? '', gen_app_ent2_c23: _v[13] ?? '', gen_app_ent2_c24: _v[14] ?? '', gen_app_ent2_c25: _v[15] ?? '', gen_app_ent2_c26: _v[16] ?? '', gen_app_ent2_c27: _v[17] ?? ''});
+    appStore.add(gen_app_ent2_c7, <String, String>{gen_app_ent2_c8: _v[0] ?? '', gen_app_ent2_c9: _v[1] ?? '', gen_app_ent2_c10: _v[2] ?? '', gen_app_ent2_c11: _v[3] ?? '', gen_app_ent2_c12: _v[4] ?? '', gen_app_ent2_c13: _v[5] ?? '', gen_app_ent2_c14: _v[6] ?? '', gen_app_ent2_c15: _v[7] ?? '', gen_app_ent2_c17: _v[8] ?? '', gen_app_ent2_c18: _v[9] ?? '', gen_app_ent2_c20: _v[10] ?? '', gen_app_ent2_c21: _v[11] ?? '', gen_app_ent2_c22: _v[12] ?? '', gen_app_ent2_c23: _v[13] ?? '', gen_app_ent2_c24: _v[14] ?? '', gen_app_ent2_c25: _v[15] ?? '', gen_app_ent2_c26: _v[16] ?? '', gen_app_ent2_c28: _v[17] ?? ''});
     setState(() => _v.clear());
   }
 
@@ -64,8 +65,8 @@ class _GenAppEnt2ScreenState extends State<GenAppEnt2Screen> {
           DsField(label: gen_app_ent2_c23, hint: '', value: _v[13] ?? '', onChanged: (v) => setState(() => _v[13] = v)),
           DsField(label: gen_app_ent2_c24, hint: '', value: _v[14] ?? '', onChanged: (v) => setState(() => _v[14] = v)),
           DsField(label: gen_app_ent2_c25, hint: '', value: _v[15] ?? '', onChanged: (v) => setState(() => _v[15] = v)),
-          DsField(label: gen_app_ent2_c26, hint: '', value: _v[16] ?? '', onChanged: (v) => setState(() => _v[16] = v)),
-          DsField(label: gen_app_ent2_c27, hint: '', value: _v[17] ?? '', onChanged: (v) => setState(() => _v[17] = v)),
+          DsSelect(label: gen_app_ent2_c26, entity: gen_app_ent2_c27, value: _v[16] ?? '', onChanged: (v) => setState(() => _v[16] = v)),
+          DsField(label: gen_app_ent2_c28, hint: '', value: _v[17] ?? '', onChanged: (v) => setState(() => _v[17] = v)),
         ]),
         DsSection(title: gen_app_ent2_c5, children: [
           AnimatedBuilder(
@@ -74,8 +75,8 @@ class _GenAppEnt2ScreenState extends State<GenAppEnt2Screen> {
               final rs = appStore.records(gen_app_ent2_c7);
               if (rs.isEmpty) return const DsEmpty(label: gen_app_ent2_c6);
               return Column(children: [
-                for (final r in rs)
-                  DsRecordCard(labels: const [gen_app_ent2_c8, gen_app_ent2_c9, gen_app_ent2_c10, gen_app_ent2_c11, gen_app_ent2_c12, gen_app_ent2_c13, gen_app_ent2_c14, gen_app_ent2_c15, gen_app_ent2_c17, gen_app_ent2_c18, gen_app_ent2_c20, gen_app_ent2_c21, gen_app_ent2_c22, gen_app_ent2_c23, gen_app_ent2_c24, gen_app_ent2_c25, gen_app_ent2_c26, gen_app_ent2_c27], values: [r[gen_app_ent2_c8] ?? '', r[gen_app_ent2_c9] ?? '', r[gen_app_ent2_c10] ?? '', r[gen_app_ent2_c11] ?? '', r[gen_app_ent2_c12] ?? '', r[gen_app_ent2_c13] ?? '', r[gen_app_ent2_c14] ?? '', r[gen_app_ent2_c15] ?? '', r[gen_app_ent2_c17] ?? '', r[gen_app_ent2_c18] ?? '', r[gen_app_ent2_c20] ?? '', r[gen_app_ent2_c21] ?? '', r[gen_app_ent2_c22] ?? '', r[gen_app_ent2_c23] ?? '', r[gen_app_ent2_c24] ?? '', r[gen_app_ent2_c25] ?? '', r[gen_app_ent2_c26] ?? '', r[gen_app_ent2_c27] ?? '']),
+                for (var i = 0; i < rs.length; i++)
+                  DsRecordCard(labels: const [gen_app_ent2_c8, gen_app_ent2_c9, gen_app_ent2_c10, gen_app_ent2_c11, gen_app_ent2_c12, gen_app_ent2_c13, gen_app_ent2_c14, gen_app_ent2_c15, gen_app_ent2_c17, gen_app_ent2_c18, gen_app_ent2_c20, gen_app_ent2_c21, gen_app_ent2_c22, gen_app_ent2_c23, gen_app_ent2_c24, gen_app_ent2_c25, gen_app_ent2_c26, gen_app_ent2_c28], values: [rs[i][gen_app_ent2_c8] ?? '', rs[i][gen_app_ent2_c9] ?? '', rs[i][gen_app_ent2_c10] ?? '', rs[i][gen_app_ent2_c11] ?? '', rs[i][gen_app_ent2_c12] ?? '', rs[i][gen_app_ent2_c13] ?? '', rs[i][gen_app_ent2_c14] ?? '', rs[i][gen_app_ent2_c15] ?? '', rs[i][gen_app_ent2_c17] ?? '', rs[i][gen_app_ent2_c18] ?? '', rs[i][gen_app_ent2_c20] ?? '', rs[i][gen_app_ent2_c21] ?? '', rs[i][gen_app_ent2_c22] ?? '', rs[i][gen_app_ent2_c23] ?? '', rs[i][gen_app_ent2_c24] ?? '', rs[i][gen_app_ent2_c25] ?? '', rs[i][gen_app_ent2_c26] ?? '', rs[i][gen_app_ent2_c28] ?? '']),
               ]);
             },
           ),

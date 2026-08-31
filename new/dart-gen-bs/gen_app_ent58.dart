@@ -1,7 +1,8 @@
-// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→חנות→טבלה + לוגיקה). אל תערוך ידנית.
+// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→קשרים→מסע→חנות→טבלה + לוגיקה). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_app_ent58_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
+import '../dart-ui-bs/ds/ds_select.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/fmt-date.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class _GenAppEnt58ScreenState extends State<GenAppEnt58Screen> {
 
   void _save() {
     if (_v.values.where((x) => x.trim().isNotEmpty).isEmpty) return;
-    appStore.add(gen_app_ent58_c7, <String, String>{gen_app_ent58_c8: _v[0] ?? '', gen_app_ent58_c9: _v[1] ?? '', gen_app_ent58_c10: _v[2] ?? '', gen_app_ent58_c11: _v[3] ?? '', gen_app_ent58_c12: _v[4] ?? '', gen_app_ent58_c13: _v[5] ?? '', gen_app_ent58_c15: _v[6] ?? ''});
+    appStore.add(gen_app_ent58_c7, <String, String>{gen_app_ent58_c8: _v[0] ?? '', gen_app_ent58_c10: _v[1] ?? '', gen_app_ent58_c11: _v[2] ?? '', gen_app_ent58_c12: _v[3] ?? '', gen_app_ent58_c13: _v[4] ?? '', gen_app_ent58_c15: _v[5] ?? '', gen_app_ent58_c17: _v[6] ?? '', '__stage': '0'});
     setState(() => _v.clear());
   }
 
@@ -44,16 +45,16 @@ class _GenAppEnt58ScreenState extends State<GenAppEnt58Screen> {
       icon: gen_app_ent58_c2,
       bottomBar: DsPrimaryButton(label: gen_app_ent58_c3, onTap: _save),
       children: [
-        DsWorkflow(steps: const [gen_app_ent58_c16, gen_app_ent58_c17], current: 1),
+        DsWorkflow(steps: const [gen_app_ent58_c18, gen_app_ent58_c19], current: 0),
         DsSection(title: gen_app_ent58_c4, children: [
-          DsField(label: gen_app_ent58_c8, hint: '', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
-          DsField(label: gen_app_ent58_c9, hint: '', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
-          DsField(label: gen_app_ent58_c10, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
-          DsField(label: gen_app_ent58_c11, hint: '', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
-          DsField(label: gen_app_ent58_c12, hint: '', value: _v[4] ?? '', onChanged: (v) => setState(() => _v[4] = v)),
-          DsField(label: gen_app_ent58_c13, hint: '', value: _v[5] ?? '', onChanged: (v) => setState(() => _v[5] = v)),
-          if ((_v[5] ?? '').trim().isNotEmpty) _live(gen_app_ent58_c14, fmtDate((_v[5] ?? ''))),
-          DsField(label: gen_app_ent58_c15, hint: '', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
+          DsSelect(label: gen_app_ent58_c8, entity: gen_app_ent58_c9, value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
+          DsField(label: gen_app_ent58_c10, hint: '', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
+          DsField(label: gen_app_ent58_c11, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
+          DsField(label: gen_app_ent58_c12, hint: '', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
+          DsSelect(label: gen_app_ent58_c13, entity: gen_app_ent58_c14, value: _v[4] ?? '', onChanged: (v) => setState(() => _v[4] = v)),
+          DsField(label: gen_app_ent58_c15, hint: '', value: _v[5] ?? '', onChanged: (v) => setState(() => _v[5] = v)),
+          if ((_v[5] ?? '').trim().isNotEmpty) _live(gen_app_ent58_c16, fmtDate((_v[5] ?? ''))),
+          DsField(label: gen_app_ent58_c17, hint: '', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
         ]),
         DsSection(title: gen_app_ent58_c5, children: [
           AnimatedBuilder(
@@ -62,8 +63,8 @@ class _GenAppEnt58ScreenState extends State<GenAppEnt58Screen> {
               final rs = appStore.records(gen_app_ent58_c7);
               if (rs.isEmpty) return const DsEmpty(label: gen_app_ent58_c6);
               return Column(children: [
-                for (final r in rs)
-                  DsRecordCard(labels: const [gen_app_ent58_c8, gen_app_ent58_c9, gen_app_ent58_c10, gen_app_ent58_c11, gen_app_ent58_c12, gen_app_ent58_c13, gen_app_ent58_c15], values: [r[gen_app_ent58_c8] ?? '', r[gen_app_ent58_c9] ?? '', r[gen_app_ent58_c10] ?? '', r[gen_app_ent58_c11] ?? '', r[gen_app_ent58_c12] ?? '', r[gen_app_ent58_c13] ?? '', r[gen_app_ent58_c15] ?? '']),
+                for (var i = 0; i < rs.length; i++)
+                  DsRecordCard(labels: const [gen_app_ent58_c8, gen_app_ent58_c10, gen_app_ent58_c11, gen_app_ent58_c12, gen_app_ent58_c13, gen_app_ent58_c15, gen_app_ent58_c17], values: [rs[i][gen_app_ent58_c8] ?? '', rs[i][gen_app_ent58_c10] ?? '', rs[i][gen_app_ent58_c11] ?? '', rs[i][gen_app_ent58_c12] ?? '', rs[i][gen_app_ent58_c13] ?? '', rs[i][gen_app_ent58_c15] ?? '', rs[i][gen_app_ent58_c17] ?? ''], stage: (const [gen_app_ent58_c18, gen_app_ent58_c19])[appStore.stageOf(gen_app_ent58_c7, i)], stageDone: appStore.stageOf(gen_app_ent58_c7, i) >= 1, onAdvance: () => appStore.advance(gen_app_ent58_c7, i, 2)),
               ]);
             },
           ),

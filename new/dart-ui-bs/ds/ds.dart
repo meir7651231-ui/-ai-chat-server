@@ -302,10 +302,13 @@ class DsNavTile extends StatelessWidget {
       );
 }
 
-// ── כרטיס-רשומה: תווית:ערך לכל שדה (מציג רשומה חיה מהחנות) ──
+// ── כרטיס-רשומה: תווית:ערך לכל שדה + שבב-שלב-מסע חי וכפתור-קידום (מציג רשומה מהחנות) ──
 class DsRecordCard extends StatelessWidget {
-  const DsRecordCard({required this.labels, required this.values, super.key});
+  const DsRecordCard({required this.labels, required this.values, this.stage = '', this.stageDone = false, this.onAdvance, super.key});
   final List<String> labels, values;
+  final String stage;         // שם השלב-הנוכחי (ריק = לישות אין מסע)
+  final bool stageDone;       // האם הגיע לשלב-האחרון
+  final VoidCallback? onAdvance;
   @override
   Widget build(BuildContext context) {
     final rows = <Widget>[];
@@ -331,7 +334,38 @@ class DsRecordCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(DsTokens.rSm),
         border: Border.all(color: DsTokens.line),
       ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: rows.isEmpty ? [const Text('—', style: TextStyle(color: DsTokens.faint))] : rows),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (stage.isNotEmpty) Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Row(
+              children: [
+                DsChip(label: stage, tone: stageDone ? 1 : 0),
+                const Spacer(),
+                if (!stageDone && onAdvance != null)
+                  Material(
+                    color: DsTokens.accentSoft,
+                    borderRadius: BorderRadius.circular(20),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(20),
+                      onTap: onAdvance,
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        child: Row(mainAxisSize: MainAxisSize.min, children: [
+                          Text('קדם שלב', style: TextStyle(color: DsTokens.accentDark, fontSize: 12, fontWeight: FontWeight.w700)),
+                          SizedBox(width: 4),
+                          Icon(Icons.arrow_back, size: 14, color: DsTokens.accentDark),
+                        ]),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          ...rows.isEmpty ? [const Text('—', style: TextStyle(color: DsTokens.faint))] : rows,
+        ],
+      ),
     );
   }
 }

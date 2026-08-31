@@ -26,4 +26,5 @@ const String gen_app_ent2_c23 = 'רכזים';
 const String gen_app_ent2_c24 = 'יועצים';
 const String gen_app_ent2_c25 = 'שעות פעילות';
 const String gen_app_ent2_c26 = 'שנת לימודים';
-const String gen_app_ent2_c27 = 'סטטוס';
+const String gen_app_ent2_c27 = 'שנת לימודים';
+const String gen_app_ent2_c28 = 'סטטוס';

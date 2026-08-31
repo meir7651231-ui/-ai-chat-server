@@ -1,7 +1,8 @@
-// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→חנות→טבלה + לוגיקה). אל תערוך ידנית.
+// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→קשרים→מסע→חנות→טבלה + לוגיקה). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_app_ent71_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
+import '../dart-ui-bs/ds/ds_select.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/norm-email.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class _GenAppEnt71ScreenState extends State<GenAppEnt71Screen> {
 
   void _save() {
     if (_v.values.where((x) => x.trim().isNotEmpty).isEmpty) return;
-    appStore.add(gen_app_ent71_c7, <String, String>{gen_app_ent71_c8: _v[0] ?? '', gen_app_ent71_c9: _v[1] ?? '', gen_app_ent71_c10: _v[2] ?? '', gen_app_ent71_c11: _v[3] ?? '', gen_app_ent71_c12: _v[4] ?? '', gen_app_ent71_c13: _v[5] ?? '', gen_app_ent71_c14: _v[6] ?? '', gen_app_ent71_c16: _v[7] ?? '', gen_app_ent71_c17: _v[8] ?? '', gen_app_ent71_c18: _v[9] ?? '', gen_app_ent71_c19: _v[10] ?? '', gen_app_ent71_c20: _v[11] ?? '', gen_app_ent71_c21: _v[12] ?? ''});
+    appStore.add(gen_app_ent71_c7, <String, String>{gen_app_ent71_c8: _v[0] ?? '', gen_app_ent71_c9: _v[1] ?? '', gen_app_ent71_c10: _v[2] ?? '', gen_app_ent71_c11: _v[3] ?? '', gen_app_ent71_c12: _v[4] ?? '', gen_app_ent71_c13: _v[5] ?? '', gen_app_ent71_c15: _v[6] ?? '', gen_app_ent71_c17: _v[7] ?? '', gen_app_ent71_c18: _v[8] ?? '', gen_app_ent71_c19: _v[9] ?? '', gen_app_ent71_c20: _v[10] ?? '', gen_app_ent71_c21: _v[11] ?? '', gen_app_ent71_c22: _v[12] ?? ''});
     setState(() => _v.clear());
   }
 
@@ -50,15 +51,15 @@ class _GenAppEnt71ScreenState extends State<GenAppEnt71Screen> {
           DsField(label: gen_app_ent71_c10, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
           DsField(label: gen_app_ent71_c11, hint: '', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
           DsField(label: gen_app_ent71_c12, hint: '', value: _v[4] ?? '', onChanged: (v) => setState(() => _v[4] = v)),
-          DsField(label: gen_app_ent71_c13, hint: '', value: _v[5] ?? '', onChanged: (v) => setState(() => _v[5] = v)),
-          DsField(label: gen_app_ent71_c14, hint: '', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
-          if ((_v[6] ?? '').trim().isNotEmpty) _live(gen_app_ent71_c15, normEmail((_v[6] ?? ''))),
-          DsField(label: gen_app_ent71_c16, hint: '', value: _v[7] ?? '', onChanged: (v) => setState(() => _v[7] = v)),
-          DsField(label: gen_app_ent71_c17, hint: '', value: _v[8] ?? '', onChanged: (v) => setState(() => _v[8] = v)),
-          DsField(label: gen_app_ent71_c18, hint: '', value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
-          DsField(label: gen_app_ent71_c19, hint: '', value: _v[10] ?? '', onChanged: (v) => setState(() => _v[10] = v)),
-          DsField(label: gen_app_ent71_c20, hint: '', value: _v[11] ?? '', onChanged: (v) => setState(() => _v[11] = v)),
-          DsField(label: gen_app_ent71_c21, hint: '', value: _v[12] ?? '', onChanged: (v) => setState(() => _v[12] = v)),
+          DsSelect(label: gen_app_ent71_c13, entity: gen_app_ent71_c14, value: _v[5] ?? '', onChanged: (v) => setState(() => _v[5] = v)),
+          DsField(label: gen_app_ent71_c15, hint: '', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
+          if ((_v[6] ?? '').trim().isNotEmpty) _live(gen_app_ent71_c16, normEmail((_v[6] ?? ''))),
+          DsField(label: gen_app_ent71_c17, hint: '', value: _v[7] ?? '', onChanged: (v) => setState(() => _v[7] = v)),
+          DsField(label: gen_app_ent71_c18, hint: '', value: _v[8] ?? '', onChanged: (v) => setState(() => _v[8] = v)),
+          DsField(label: gen_app_ent71_c19, hint: '', value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
+          DsField(label: gen_app_ent71_c20, hint: '', value: _v[10] ?? '', onChanged: (v) => setState(() => _v[10] = v)),
+          DsField(label: gen_app_ent71_c21, hint: '', value: _v[11] ?? '', onChanged: (v) => setState(() => _v[11] = v)),
+          DsField(label: gen_app_ent71_c22, hint: '', value: _v[12] ?? '', onChanged: (v) => setState(() => _v[12] = v)),
         ]),
         DsSection(title: gen_app_ent71_c5, children: [
           AnimatedBuilder(
@@ -67,8 +68,8 @@ class _GenAppEnt71ScreenState extends State<GenAppEnt71Screen> {
               final rs = appStore.records(gen_app_ent71_c7);
               if (rs.isEmpty) return const DsEmpty(label: gen_app_ent71_c6);
               return Column(children: [
-                for (final r in rs)
-                  DsRecordCard(labels: const [gen_app_ent71_c8, gen_app_ent71_c9, gen_app_ent71_c10, gen_app_ent71_c11, gen_app_ent71_c12, gen_app_ent71_c13, gen_app_ent71_c14, gen_app_ent71_c16, gen_app_ent71_c17, gen_app_ent71_c18, gen_app_ent71_c19, gen_app_ent71_c20, gen_app_ent71_c21], values: [r[gen_app_ent71_c8] ?? '', r[gen_app_ent71_c9] ?? '', r[gen_app_ent71_c10] ?? '', r[gen_app_ent71_c11] ?? '', r[gen_app_ent71_c12] ?? '', r[gen_app_ent71_c13] ?? '', r[gen_app_ent71_c14] ?? '', r[gen_app_ent71_c16] ?? '', r[gen_app_ent71_c17] ?? '', r[gen_app_ent71_c18] ?? '', r[gen_app_ent71_c19] ?? '', r[gen_app_ent71_c20] ?? '', r[gen_app_ent71_c21] ?? '']),
+                for (var i = 0; i < rs.length; i++)
+                  DsRecordCard(labels: const [gen_app_ent71_c8, gen_app_ent71_c9, gen_app_ent71_c10, gen_app_ent71_c11, gen_app_ent71_c12, gen_app_ent71_c13, gen_app_ent71_c15, gen_app_ent71_c17, gen_app_ent71_c18, gen_app_ent71_c19, gen_app_ent71_c20, gen_app_ent71_c21, gen_app_ent71_c22], values: [rs[i][gen_app_ent71_c8] ?? '', rs[i][gen_app_ent71_c9] ?? '', rs[i][gen_app_ent71_c10] ?? '', rs[i][gen_app_ent71_c11] ?? '', rs[i][gen_app_ent71_c12] ?? '', rs[i][gen_app_ent71_c13] ?? '', rs[i][gen_app_ent71_c15] ?? '', rs[i][gen_app_ent71_c17] ?? '', rs[i][gen_app_ent71_c18] ?? '', rs[i][gen_app_ent71_c19] ?? '', rs[i][gen_app_ent71_c20] ?? '', rs[i][gen_app_ent71_c21] ?? '', rs[i][gen_app_ent71_c22] ?? '']),
               ]);
             },
           ),

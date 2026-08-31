@@ -1,4 +1,4 @@
-// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→חנות→טבלה + לוגיקה). אל תערוך ידנית.
+// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→קשרים→מסע→חנות→טבלה + לוגיקה). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_app_ent13_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
@@ -50,8 +50,8 @@ class _GenAppEnt13ScreenState extends State<GenAppEnt13Screen> {
               final rs = appStore.records(gen_app_ent13_c7);
               if (rs.isEmpty) return const DsEmpty(label: gen_app_ent13_c6);
               return Column(children: [
-                for (final r in rs)
-                  DsRecordCard(labels: const [gen_app_ent13_c8, gen_app_ent13_c9, gen_app_ent13_c10, gen_app_ent13_c11, gen_app_ent13_c12, gen_app_ent13_c13, gen_app_ent13_c14, gen_app_ent13_c15, gen_app_ent13_c16, gen_app_ent13_c17, gen_app_ent13_c18], values: [r[gen_app_ent13_c8] ?? '', r[gen_app_ent13_c9] ?? '', r[gen_app_ent13_c10] ?? '', r[gen_app_ent13_c11] ?? '', r[gen_app_ent13_c12] ?? '', r[gen_app_ent13_c13] ?? '', r[gen_app_ent13_c14] ?? '', r[gen_app_ent13_c15] ?? '', r[gen_app_ent13_c16] ?? '', r[gen_app_ent13_c17] ?? '', r[gen_app_ent13_c18] ?? '']),
+                for (var i = 0; i < rs.length; i++)
+                  DsRecordCard(labels: const [gen_app_ent13_c8, gen_app_ent13_c9, gen_app_ent13_c10, gen_app_ent13_c11, gen_app_ent13_c12, gen_app_ent13_c13, gen_app_ent13_c14, gen_app_ent13_c15, gen_app_ent13_c16, gen_app_ent13_c17, gen_app_ent13_c18], values: [rs[i][gen_app_ent13_c8] ?? '', rs[i][gen_app_ent13_c9] ?? '', rs[i][gen_app_ent13_c10] ?? '', rs[i][gen_app_ent13_c11] ?? '', rs[i][gen_app_ent13_c12] ?? '', rs[i][gen_app_ent13_c13] ?? '', rs[i][gen_app_ent13_c14] ?? '', rs[i][gen_app_ent13_c15] ?? '', rs[i][gen_app_ent13_c16] ?? '', rs[i][gen_app_ent13_c17] ?? '', rs[i][gen_app_ent13_c18] ?? '']),
               ]);
             },
           ),

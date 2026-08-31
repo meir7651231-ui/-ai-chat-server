@@ -117,8 +117,21 @@ const write = (slug, code, content) => {
   fs.writeFileSync(path.join(DATA, `gen_${slug}_content.dart`), '// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.\n' + content);
 };
 
-// ── ישות: מסך-חי מחווט — טופס→שמירה→חנות→טבלה→דשבורד, + לוגיקת-אימפריה פר-שדה ──
-export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [] }) {
+// 🔗 זיהוי שדה-קשר: שדה שכל-מילות-שם-ישות-אחרת מופיעות בו כמילים-שלמות ⇒ הפניה חיה.
+// התאמה-מדויקת (לא קידומת) — 'כיתה נוכחית'→ישות 'כיתה', אבל 'תאריך לידה'≠'ליד' (מונע
+// גלישת-קידומת לידה→ליד ומחזיר את השדה ללוגיקת-תאריך). טהור-מבני: נגזר משמות-האפיון.
+function pickRelation(label, selfName, entityNames) {
+  const fw = new Set(heWords(label));
+  for (const en of entityNames) {
+    if (en === selfName) continue;
+    const ew = heWords(en);
+    if (ew.length && ew.every((w) => fw.has(w))) return en;
+  }
+  return null;
+}
+
+// ── ישות: מסך-חי מחווט — טופס→שמירה→חנות→טבלה→דשבורד, + קשרים + מסע + לוגיקת-אימפריה ──
+export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [] }) {
   const { k, dump } = makeConsts(slug);
   const cTitle = k(name);
   const cSub = k(`${schema.length} שדות${stages.length ? ` · ${stages.length} שלבים` : ''}`);
@@ -133,14 +146,23 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const labelConst = [];
   const fieldBlocks = [];
   let hasLive = false;
+  let hasRel = false;
   schema.forEach((s, i) => {
     const cl = k(s.label); labelConst.push(cl);
+    // (1) שדה-קשר גובר: אם השדה נוקב בישות-אחרת ⇒ בורר-רשומה חי (לא טקסט, לא לוגיקה).
+    const rel = pickRelation(s.label, name, entityNames);
+    if (rel) {
+      hasRel = true;
+      const ce = k(rel);
+      fieldBlocks.push(`          DsSelect(label: ${cl}, entity: ${ce}, value: _v[${i}] ?? '', onChanged: (v) => setState(() => _v[${i}] = v)),`);
+      return;
+    }
+    // (2) שדה-טקסט + לוגיקת-אימפריה חיה מכוונת-מטרה (טיפוס+IDF+קידומת+מובהקות).
     fieldBlocks.push(`          DsField(label: ${cl}, hint: '', value: _v[${i}] ?? '', onChanged: (v) => setState(() => _v[${i}] = v)),`);
-    const xf = pickXform(s.label, typeOf(s.label));   // 🎯 מנוע-אימפריה מכוון-מטרה (טיפוס+IDF+מרווח)
+    const xf = pickXform(s.label, typeOf(s.label));
     if (xf) {
       funcImports.add(`import '../${xf.shelf.replace(/^new\//, '')}/${xf.file}';`);
       const cx = k(xf.label);   // תווית עברית מתיאור-האטום — לא מזהה-קוד גולמי (טוהר-תצוגה)
-      // המרת-קלט לפי-חתימה: מנוע-מספרי מקבל מספר בטיפוסו המדויק, אחר מקבל טקסט (טהור מהחוזה).
       const nt = xf.inType.replace(/\?$/, '');
       const arg = nt === 'int' ? `(int.tryParse(_v[${i}] ?? '') ?? 0)`
         : nt === 'double' ? `(double.tryParse(_v[${i}] ?? '') ?? 0)`
@@ -150,19 +172,28 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
       hasLive = true;
     }
   });
-  const stepsDart = stages.length >= 2
-    ? `        DsWorkflow(steps: const [${stages.map((x) => k(x)).join(', ')}], current: ${Math.min(2, stages.length - 1)}),\n`
+  const hasStages = stages.length >= 2;
+  const stageConsts = hasStages ? stages.map((x) => k(x)) : [];
+  const stageList = `[${stageConsts.join(', ')}]`;
+  const stepsDart = hasStages
+    ? `        DsWorkflow(steps: const ${stageList}, current: 0),\n`
     : '';
-  const saveEntries = labelConst.map((cl, i) => `${cl}: _v[${i}] ?? ''`).join(', ');
-  const recValues = labelConst.map((cl) => `r[${cl}] ?? ''`).join(', ');
+  // שמירה: מפת-השדות + שלב-פתיחה '0' לישות-עם-מסע (מנוע-המסע החי).
+  const saveEntries = [...labelConst.map((cl, i) => `${cl}: _v[${i}] ?? ''`), ...(hasStages ? [`'__stage': '0'`] : [])].join(', ');
+  const recValues = labelConst.map((cl) => `rs[i][${cl}] ?? ''`).join(', ');
   const labelsList = labelConst.join(', ');
+  // כרטיס-רשומה חי: שלב-נוכחי מהחנות + כפתור-קידום (רק לישות-עם-מסע).
+  const recCard = hasStages
+    ? `DsRecordCard(labels: const [${labelsList}], values: [${recValues}], stage: (const ${stageList})[appStore.stageOf(${cEntity}, i)], stageDone: appStore.stageOf(${cEntity}, i) >= ${stages.length - 1}, onAdvance: () => appStore.advance(${cEntity}, i, ${stages.length}))`
+    : `DsRecordCard(labels: const [${labelsList}], values: [${recValues}])`;
 
+  const relImport = hasRel ? "import '../dart-ui-bs/ds/ds_select.dart';\n" : '';
   const cls = pascal(slug);
-  const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→חנות→טבלה + לוגיקה). אל תערוך ידנית.
+  const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→קשרים→מסע→חנות→טבלה + לוגיקה). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
-import '../dart-ui-bs/ds/ds_store.dart';
+${relImport}import '../dart-ui-bs/ds/ds_store.dart';
 ${[...funcImports].sort().join('\n')}
 import 'package:flutter/material.dart';
 
@@ -214,8 +245,8 @@ ${fieldBlocks.join('\n')}
               final rs = appStore.records(${cEntity});
               if (rs.isEmpty) return const DsEmpty(label: ${cEmpty});
               return Column(children: [
-                for (final r in rs)
-                  DsRecordCard(labels: const [${labelsList}], values: [${recValues}]),
+                for (var i = 0; i < rs.length; i++)
+                  ${recCard},
               ]);
             },
           ),
@@ -229,13 +260,20 @@ ${fieldBlocks.join('\n')}
   return { slug, cls };
 }
 
-// ── דשבורד: רשת אריחי-KPI מנתוני-הישויות של האפליקציה (נתוני-אמת, לא משפט חוזר) ──
-export function renderDashboard(slug, { title, icon = '📊', entities }) {
+// ── דשבורד: רשת אריחי-KPI מנתוני-הישויות. metrics = המילים אחרי 'עם' באפיון ⇒ מציג
+//    בדיוק את המדדים שביקשת (מותאמים-קידומת לישויות-אמת), לא את כל-הישויות. נופל-לכל אם אין. ──
+export function renderDashboard(slug, { title, icon = '📊', entities, metrics = [] }) {
   const { k, dump } = makeConsts(slug);
   const cTitle = k(title);
-  const cSub = k(`${entities.length} מודולים · סקירת-על`);
+  let shown = entities;
+  if (metrics.length) {
+    const mw = metrics.flatMap(heWords);
+    const picked = entities.filter((e) => heWords(e.name).some((n) => mw.some((m) => prefixMatch(m, n))));
+    if (picked.length) shown = picked;
+  }
+  const cSub = k(`${shown.length} מדדים · סקירת-על`);
   const cIcon = k(icon);
-  const tiles = entities.map((e) => {
+  const tiles = shown.map((e) => {
     const lbl = k(e.name);
     const sub = k(`${e.fields} שדות${e.stages ? ` · ${e.stages} שלבים` : ''}`);
     const g = k(e.icon || '🗂️');
@@ -275,11 +313,12 @@ ${rows.join('\n')}
   return { slug, cls };
 }
 
-// ── לוח-ניווט: כרטיסי-ניווט לכל המסכים ──
-export function renderHub(slug, { title, icon = '🏗️', screens }) {
+// ── לוח-ניווט + שער-הרשאות: בורר-תפקיד מסנן את המסכים-הגלויים (אכיפה חיה) ──
+//    roles = [{name, all, ents}] מהאפיון. גלוּת פר-תפקיד מחושבת-מראש (התאמת-קידומת
+//    שם-הישות ↔ הרשאות-התפקיד; 'הכל'⇒כל · 'דוחות'⇒דשבורדים · מערכת רק ל-'הכל'). טהור-מבני.
+export function renderHub(slug, { title, icon = '🏗️', screens, roles = [] }) {
   const { k, dump } = makeConsts(slug);
   const cTitle = k(title);
-  const cSub = k(`${screens.length} מסכים · אפליקציה שלמה`);
   const cIcon = k(icon);
   const imports = new Set();
   const tiles = screens.map((s) => {
@@ -287,26 +326,80 @@ export function renderHub(slug, { title, icon = '🏗️', screens }) {
     const t = k(s.name);
     const sub = k(s.sub || '');
     imports.add(`import 'gen_${s.slug}.dart';`);
-    return `      DsNavTile(glyph: ${g}, title: ${t}, sub: ${sub}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${s.cls}()))),`;
+    return `        DsNavTile(glyph: ${g}, title: ${t}, sub: ${sub}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${s.cls}()))),`;
   });
+
+  const effRoles = roles.length ? roles : [{ name: 'הכל', all: true, ents: [] }];
+  const roleVis = effRoles.map((role) => {
+    if (role.all) return screens.map((_, i) => i);
+    const out = [];
+    screens.forEach((s, i) => {
+      if (s.kind === 'system') return;                                   // מסכי-מערכת רק למנהל-על
+      if (s.kind === 'dashboard') { if (role.ents.some((e) => /דוח/.test(e))) out.push(i); return; }
+      const nw = heWords(s.name);
+      if (role.ents.some((e) => { const ew = heWords(e); return ew.length && ew.every((w) => nw.some((x) => prefixMatch(x, w))); })) out.push(i);
+    });
+    return out;
+  });
+  const showChips = effRoles.length >= 2;
+  const visList = `[${roleVis.map((v) => `[${v.join(', ')}]`).join(', ')}]`;
+  const roleChips = effRoles.map((r, i) => `_roleChip(${i}, ${k(r.name || 'הכל')})`).join(', ');
+
   const cls = pascal(slug);
-  const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — לוח-ניווט. אל תערוך ידנית.
+  const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — לוח-ניווט + שער-הרשאות (בורר-תפקיד חי). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 ${[...imports].sort().join('\n')}
 import 'package:flutter/material.dart';
 
-class ${cls} extends StatelessWidget {
+class ${cls} extends StatefulWidget {
   const ${cls}({super.key});
 
   @override
+  State<${cls}> createState() => _${cls}State();
+}
+
+class _${cls}State extends State<${cls}> {
+  int _role = 0;
+  static const List<List<int>> _vis = ${visList};
+
+  List<Widget> _tiles(BuildContext context) => [
+${tiles.join('\n')}
+  ];
+${showChips ? `
+  Widget _roleChip(int i, String label) {
+    final sel = _role == i;
+    return Padding(
+      padding: const EdgeInsets.only(left: 8, bottom: 8),
+      child: Material(
+        color: sel ? DsTokens.accent : const Color(0xFFF1F5F9),
+        borderRadius: BorderRadius.circular(20),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20),
+          onTap: () => setState(() => _role = i),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            child: Text(label, style: TextStyle(color: sel ? Colors.white : DsTokens.muted, fontSize: 13, fontWeight: FontWeight.w700)),
+          ),
+        ),
+      ),
+    );
+  }
+` : ''}
+  @override
   Widget build(BuildContext context) {
+    final all = _tiles(context);
+    final vis = _vis[_role];
     return DsScaffold(
       title: ${cTitle},
-      subtitle: ${cSub},
+      subtitle: '\${vis.length} מסכים גלויים',
       icon: ${cIcon},
       children: [
-${tiles.join('\n')}
+${showChips ? `        Container(
+          margin: const EdgeInsets.only(bottom: 4),
+          child: Wrap(children: [${roleChips}]),
+        ),
+` : ''}        for (final i in vis) all[i],
       ],
     );
   }
