@@ -66,6 +66,33 @@ const XFORM = atlas.functions
     };
   });
 
+// 🧩 מנועי-רשומה (הכרעה 21): אטום-לוגיקה שאוכל Map (רשומה שלמה) ⇒ פלט-מוצג. מחווט **רק**
+// כשהמשתמש נוקב בשמו בדקדוק (שדה = engineName) — הוא-האחראי להתאמת-המפתחות; המנוע רץ על
+// הרשומה-האמיתית ומציג את פלטו האמיתי (אפס-זיוף — לא בחירה-עיוורת). פרמטרי-עוזר סטנדרטיים
+// (term זהותי · מפרסר-תאריך) מוזרקים ע"י המנוע — ברירות-מחדל נכונות לאפליקציה טרייה.
+const injectHelper = (ty) => {
+  const t = (ty || '').replace(/\s+/g, ' ').trim();
+  if (/^String Function\(\s*String\s*\)$/.test(t)) return '(s) => s';
+  if (/^DateTime Function\(\s*String\s*\)$/.test(t)) return "(s) => DateTime.tryParse(s.length == 10 ? s + 'T12:00:00' : s) ?? DateTime.now()";
+  return null;
+};
+// טיפוסי-הפרמטרים מ-sig (‏atlas.params שבור על פסיק-פנימי של Map<String, X> — פרסור-נכון מ-sig).
+const sigParamTypes = (sig) => {
+  const m = (sig || '').match(/\(([\s\S]*)\)/); if (!m) return [];
+  const s = m[1]; const out = []; let d = 0, cur = '';
+  for (const ch of s.replace(/[{}\[\]]/g, ' ')) {
+    if ('<(['.includes(ch)) d++; else if ('>)]'.includes(ch)) d--;
+    if (ch === ',' && d === 0) { out.push(cur.trim()); cur = ''; } else cur += ch;
+  }
+  if (cur.trim()) out.push(cur.trim());
+  return out.map((p) => { const mm = p.replace(/\brequired\b/g, '').trim().match(/^([\s\S]+?)\s+[a-z_]\w*(\s*=[\s\S]*)?$/); return (mm ? mm[1] : p).trim(); });
+};
+const MAP_ENGINES = atlas.functions.filter((f) => {
+  const ps = sigParamTypes(f.sig);
+  return ps.length && /^Map</.test(ps[0]) && RET_OK.has(f.ret) && (f.he || []).length
+    && selfContained(f.shelf, f.file) && ps.slice(1).every((t) => injectHelper(t) !== null);
+}).reduce((m, f) => { m[f.name] = { ...f, ptypes: sigParamTypes(f.sig) }; return m; }, {});
+
 // 🎯 שכבה-1 · בחירה מכוונת-מטרה (לא הכי-קרוב, הכי-מתאים) — שלושה אותות טהורים:
 // (א) IDF: מילה-נדירה-ספציפית ('טלפון') שווה יותר ממילה-נפוצה ('מספר') ⇒ מסלק רעש.
 const xdf = new Map();
@@ -260,6 +287,26 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
           return;
         }
         // קשר-בן לא-נמצא ⇒ נפילה ל-compileFormula (התנהגות היום)
+      }
+      // (0-engine) מנוע-רשומה: 'שדה = engineName' ⇒ המנוע (מהמצע) רץ על הרשומה השלמה.
+      // המשתמש נקב בשם ⇒ טהור, אפס-זיוף; פלטו מוצג תחת תווית-השדה. עוזרים סטנדרטיים מוזרקים.
+      const em = s.formula.trim().match(/^([a-zA-Z_]\w*)(?:\(\s*\))?$/);
+      if (em && MAP_ENGINES[em[1]]) {
+        const f = MAP_ENGINES[em[1]];
+        funcImports.add(`import '../${f.shelf.replace(/^new\//, '')}/${f.file}';`);
+        const helpers = (f.ptypes || []).slice(1).map((t) => injectHelper(t));
+        const hz = helpers.length ? ', ' + helpers.join(', ') : '';
+        const wrap = (call) => f.ret === 'bool' ? `(${call} ? ${k('כן')} : ${k('לא')})`
+          : /^(int|num|double)$/.test(f.ret) ? `${call}.toString()`
+          : f.ret === 'String?' ? `(${call} ?? '')` : call;
+        // רשומת-טופס (מ-_v החי) ורשומת-כרטיס (מ-r השמור) — אותו מנוע, שני מקורות.
+        const formRec = `<String, String>{${labelIdx.map((l) => `${labelConst[l.idx]}: (_v[${l.idx}] ?? '')`).join(', ')}}`;
+        const cardRec = `<String, String>{${labelIdx.map((l) => `${labelConst[l.idx]}: (r[${labelConst[l.idx]}] ?? '')`).join(', ')}}`;
+        hasLive = true;
+        addField(i, `_live(${cl}, ${wrap(`${f.name}(${formRec}${hz})`)})`, `true`);
+        recValsR.push(wrap(`${f.name}(${cardRec}${hz})`));   // כרטיס/CSV: המנוע על הרשומה-השמורה
+        mapVals.push(`${cl}: ''`);   // נגזר — לא מאוחסן
+        return;
       }
       const expr = compileFormula(s.formula, labelIdx);
       if (expr) {
