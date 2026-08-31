@@ -7,6 +7,7 @@ import '../dart-ui-bs/ds/ds_date_field.dart';
 import '../dart-ui-bs/ds/ds_number_field.dart';
 import '../dart-ui-bs/ds/ds_select.dart';
 import '../dart-ui-bs/ds/ds_multi_select.dart';
+import '../dart-ui-bs/ds/ds_board.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/advance-status.dart';
 import '../dart/angle_digits.dart';
@@ -24,6 +25,7 @@ class _GenAppEnt11ScreenState extends State<GenAppEnt11Screen> {
   Map<int, String> _v = {};
   String? _editId;   // ריק = הוספה · מזהה = עריכת-רשומה קיימת
   String _q = '';    // מחרוזת-חיפוש (סינון-רשומות חי)
+  bool _board = false;   // מתג תצוגת-לוח מול רשימה
 
 
   void _save() {
@@ -43,6 +45,22 @@ class _GenAppEnt11ScreenState extends State<GenAppEnt11Screen> {
       _v = {0: r[gen_app_ent11_c9] ?? '', 1: r[gen_app_ent11_c10] ?? '', 2: r[gen_app_ent11_c12] ?? '', 3: r[gen_app_ent11_c13] ?? '', 4: r[gen_app_ent11_c14] ?? '', 5: r[gen_app_ent11_c15] ?? '', 6: r[gen_app_ent11_c16] ?? '', 7: r[gen_app_ent11_c17] ?? '', 8: r[gen_app_ent11_c18] ?? '', 9: r[gen_app_ent11_c19] ?? '', 10: r[gen_app_ent11_c20] ?? '', 11: r[gen_app_ent11_c21] ?? '', 12: r[gen_app_ent11_c22] ?? '', 13: r[gen_app_ent11_c23] ?? '', 14: r[gen_app_ent11_c24] ?? '', 15: r[gen_app_ent11_c25] ?? '', 16: r[gen_app_ent11_c26] ?? '', 17: r[gen_app_ent11_c27] ?? '', 18: r[gen_app_ent11_c28] ?? '', 19: r[gen_app_ent11_c29] ?? '', 20: r[gen_app_ent11_c30] ?? '', 21: r[gen_app_ent11_c31] ?? ''};
     });
   }
+
+  Widget _viewToggle(BuildContext context) => AnimatedBuilder(
+    animation: appStore,
+    builder: (context, _) => Material(
+      color: const Color(0xFFF1F5F9),
+      borderRadius: BorderRadius.circular(20),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(20),
+        onTap: () => setState(() => _board = !_board),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          child: Text(_board ? '☰ רשימה' : '📋 לוח', style: const TextStyle(color: DsTokens.muted, fontSize: 12.5, fontWeight: FontWeight.w700)),
+        ),
+      ),
+    ),
+  );
 
   Widget _card(Map<String, String> r) {
     final rid = r['__id'] ?? '';
@@ -134,7 +152,7 @@ class _GenAppEnt11ScreenState extends State<GenAppEnt11Screen> {
           DsField(label: gen_app_ent11_c31, hint: '', value: _v[21] ?? '', onChanged: (v) => setState(() => _v[21] = v)),
           if ((_v[21] ?? '').trim().isNotEmpty) _live(gen_app_ent11_c32, advanceStatus((_v[21] ?? ''))),
         ]),
-        DsSection(title: gen_app_ent11_c6, trailing: _csvBtn(context), children: [
+        DsSection(title: gen_app_ent11_c6, trailing: Row(mainAxisSize: MainAxisSize.min, children: [_viewToggle(context), const SizedBox(width: 8), _csvBtn(context)]), children: [
           AnimatedBuilder(
             animation: appStore,
             builder: (context, _) {
@@ -142,6 +160,7 @@ class _GenAppEnt11ScreenState extends State<GenAppEnt11Screen> {
               if (all.isEmpty) return const DsEmpty(label: gen_app_ent11_c7);
               final q = _q.trim().toLowerCase();
               final rs = q.isEmpty ? all : all.where((r) => r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q))).toList();
+              if (_board) return DsBoard(stages: const [gen_app_ent11_c33, gen_app_ent11_c34, gen_app_ent11_c35, gen_app_ent11_c36, gen_app_ent11_c37, gen_app_ent11_c38, gen_app_ent11_c39], records: rs, stageOf: (r) => appStore.stageOf('app_ent11', r['__id'] ?? ''), titleOf: (r) => r[gen_app_ent11_c9] ?? '', onMove: (id, to) => appStore.setStage('app_ent11', id, to));
               return Column(children: [
                 DsSearch(value: _q, onChanged: (v) => setState(() => _q = v)),
                 if (rs.isEmpty) const DsEmpty(label: gen_app_ent11_c8),

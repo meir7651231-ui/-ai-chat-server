@@ -452,12 +452,23 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   }`;
   const relImport = hasRel ? "import '../dart-ui-bs/ds/ds_select.dart';\n" : '';
   const multiImport = hasMulti ? "import '../dart-ui-bs/ds/ds_multi_select.dart';\n" : '';
+  // 📋 תצוגת-לוח (Kanban) — רק לישות-workflow. תפר-דאטה אמיתי: records+stages ⇒ עמודות.
+  const boardImport = hasStages ? "import '../dart-ui-bs/ds/ds_board.dart';\n" : '';
+  const boardTitle = labelConst[0] || "''";
+  const boardField = hasStages ? "  bool _board = false;   // מתג תצוגת-לוח מול רשימה\n" : '';
+  const boardToggle = hasStages
+    ? `\n  Widget _viewToggle(BuildContext context) => AnimatedBuilder(\n    animation: appStore,\n    builder: (context, _) => Material(\n      color: const Color(0xFFF1F5F9),\n      borderRadius: BorderRadius.circular(20),\n      child: InkWell(\n        borderRadius: BorderRadius.circular(20),\n        onTap: () => setState(() => _board = !_board),\n        child: Padding(\n          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),\n          child: Text(_board ? '☰ רשימה' : '📋 לוח', style: const TextStyle(color: DsTokens.muted, fontSize: 12.5, fontWeight: FontWeight.w700)),\n        ),\n      ),\n    ),\n  );\n`
+    : '';
+  const recordsTrailing = hasStages ? 'Row(mainAxisSize: MainAxisSize.min, children: [_viewToggle(context), const SizedBox(width: 8), _csvBtn(context)])' : '_csvBtn(context)';
+  const boardBranch = hasStages
+    ? `if (_board) return DsBoard(stages: const ${stageList}, records: rs, stageOf: (r) => appStore.stageOf(${SK}, r['__id'] ?? ''), titleOf: (r) => r[${boardTitle}] ?? '', onMove: (id, to) => appStore.setStage(${SK}, id, to));\n              `
+    : '';
   const cls = pascal(slug);
   const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→קשרים→מסע→חנות→טבלה + לוגיקה). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_search.dart';
-${usedField ? "import '../dart-ui-bs/ds/ds_field.dart';\n" : ''}${[...typedImports].sort().map((x) => x + '\n').join('')}${enumImport}${relImport}${multiImport}import '../dart-ui-bs/ds/ds_store.dart';
+${usedField ? "import '../dart-ui-bs/ds/ds_field.dart';\n" : ''}${[...typedImports].sort().map((x) => x + '\n').join('')}${enumImport}${relImport}${multiImport}${boardImport}import '../dart-ui-bs/ds/ds_store.dart';
 ${[...funcImports].sort().join('\n')}
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -473,7 +484,7 @@ class _${cls}State extends State<${cls}> {
   Map<int, String> _v = ${defInit};
   String? _editId;   // ריק = הוספה · מזהה = עריכת-רשומה קיימת
   String _q = '';    // מחרוזת-חיפוש (סינון-רשומות חי)
-${hasVal ? '  String? _err;      // שגיאת-ולידציה (שדות-חובה חסרים)\n' : ''}
+${boardField}${hasVal ? '  String? _err;      // שגיאת-ולידציה (שדות-חובה חסרים)\n' : ''}
 
   void _save() {
     if (_v.values.where((x) => x.trim().isNotEmpty).isEmpty) return;
@@ -497,7 +508,7 @@ ${hasVal ? `    final miss = <String>[];
       _v = {${editLoad}};
     });
   }
-${guardMethod}${rlsFields}
+${guardMethod}${rlsFields}${boardToggle}
   ${cardSig}
     final rid = r['__id'] ?? '';
     return DsRecordCard(labels: const [${labelsList}], values: [${recValues}], ${stageArgs}onEdit: () => _edit(r), onDelete: () => appStore.removeById(${SK}, rid)${backFooter}${delArgs}${cardHiddenArg});
@@ -575,7 +586,7 @@ ${stepsDart}${hasVal ? `        if (_err != null) Container(
           child: Row(children: [const Icon(Icons.error_outline, size: 16, color: Color(0xFFDC2626)), const SizedBox(width: 8), Expanded(child: Text(_err!, style: const TextStyle(color: Color(0xFFDC2626), fontSize: 13, fontWeight: FontWeight.w600)))]),
         ),
 ` : ''}        ${formSection}
-        DsSection(title: ${cRecords}, trailing: _csvBtn(context), children: [
+        DsSection(title: ${cRecords}, trailing: ${recordsTrailing}, children: [
           AnimatedBuilder(
             animation: appStore,
             builder: (context, _) {
@@ -583,7 +594,7 @@ ${stepsDart}${hasVal ? `        if (_err != null) Container(
               if (all.isEmpty) return const DsEmpty(label: ${cEmpty});
               final q = _q.trim().toLowerCase();
               final rs = q.isEmpty ? all : all.where((r) => r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q))).toList();
-              return Column(children: [
+              ${boardBranch}return Column(children: [
                 DsSearch(value: _q, onChanged: (v) => setState(() => _q = v)),
                 if (rs.isEmpty) const DsEmpty(label: ${cNoMatch}),
                 for (var i = 0; i < rs.length; i++)
