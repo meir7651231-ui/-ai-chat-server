@@ -5,6 +5,7 @@ import '../dart-ui-bs/ds/ds_search.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_date_field.dart';
 import '../dart-ui-bs/ds/ds_select.dart';
+import '../dart-ui-bs/ds/ds_calendar.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/advance-status.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class _GenAppEnt55ScreenState extends State<GenAppEnt55Screen> {
   Map<int, String> _v = {};
   String? _editId;   // ריק = הוספה · מזהה = עריכת-רשומה קיימת
   String _q = '';    // מחרוזת-חיפוש (סינון-רשומות חי)
+  int _view = 0;   // 0=רשימה · 1=לוח · 2=לוח-שנה
 
 
   void _save() {
@@ -39,6 +41,28 @@ class _GenAppEnt55ScreenState extends State<GenAppEnt55Screen> {
       _editId = r['__id'];
       _v = {0: r[gen_app_ent55_c9] ?? '', 1: r[gen_app_ent55_c10] ?? '', 2: r[gen_app_ent55_c11] ?? '', 3: r[gen_app_ent55_c12] ?? '', 4: r[gen_app_ent55_c13] ?? '', 5: r[gen_app_ent55_c14] ?? '', 6: r[gen_app_ent55_c15] ?? '', 7: r[gen_app_ent55_c16] ?? ''};
     });
+  }
+
+  Widget _viewBar(BuildContext context) {
+    const labels = ['☰ רשימה', '📅 לוח-שנה'];
+    return Row(mainAxisSize: MainAxisSize.min, children: [
+      for (var i = 0; i < labels.length; i++)
+        Padding(
+          padding: const EdgeInsets.only(left: 6),
+          child: Material(
+            color: _view == i ? DsTokens.accentSoft : const Color(0xFFF1F5F9),
+            borderRadius: BorderRadius.circular(20),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(20),
+              onTap: () => setState(() => _view = i),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
+                child: Text(labels[i], style: TextStyle(color: _view == i ? DsTokens.accentDark : DsTokens.muted, fontSize: 12, fontWeight: FontWeight.w700)),
+              ),
+            ),
+          ),
+        ),
+    ]);
   }
 
   Widget _card(Map<String, String> r) {
@@ -115,7 +139,7 @@ class _GenAppEnt55ScreenState extends State<GenAppEnt55Screen> {
           DsField(label: gen_app_ent55_c16, hint: '', value: _v[7] ?? '', onChanged: (v) => setState(() => _v[7] = v)),
           if ((_v[7] ?? '').trim().isNotEmpty) _live(gen_app_ent55_c17, advanceStatus((_v[7] ?? ''))),
         ]),
-        DsSection(title: gen_app_ent55_c6, trailing: _csvBtn(context), children: [
+        DsSection(title: gen_app_ent55_c6, trailing: Row(mainAxisSize: MainAxisSize.min, children: [_viewBar(context), const SizedBox(width: 8), _csvBtn(context)]), children: [
           AnimatedBuilder(
             animation: appStore,
             builder: (context, _) {
@@ -123,6 +147,7 @@ class _GenAppEnt55ScreenState extends State<GenAppEnt55Screen> {
               if (all.isEmpty) return const DsEmpty(label: gen_app_ent55_c7);
               final q = _q.trim().toLowerCase();
               final rs = q.isEmpty ? all : all.where((r) => r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q))).toList();
+              if (_view == 1) return DsCalendar(records: rs, dateOf: (r) => r[gen_app_ent55_c12] ?? '', titleOf: (r) => r[gen_app_ent55_c9] ?? '');
               return Column(children: [
                 DsSearch(value: _q, onChanged: (v) => setState(() => _q = v)),
                 if (rs.isEmpty) const DsEmpty(label: gen_app_ent55_c8),

@@ -23,7 +23,7 @@ class _GenAppEnt7ScreenState extends State<GenAppEnt7Screen> {
   Map<int, String> _v = {};
   String? _editId;   // ריק = הוספה · מזהה = עריכת-רשומה קיימת
   String _q = '';    // מחרוזת-חיפוש (סינון-רשומות חי)
-  bool _board = false;   // מתג תצוגת-לוח מול רשימה
+  int _view = 0;   // 0=רשימה · 1=לוח · 2=לוח-שנה
 
 
   void _save() {
@@ -44,21 +44,27 @@ class _GenAppEnt7ScreenState extends State<GenAppEnt7Screen> {
     });
   }
 
-  Widget _viewToggle(BuildContext context) => AnimatedBuilder(
-    animation: appStore,
-    builder: (context, _) => Material(
-      color: const Color(0xFFF1F5F9),
-      borderRadius: BorderRadius.circular(20),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(20),
-        onTap: () => setState(() => _board = !_board),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          child: Text(_board ? '☰ רשימה' : '📋 לוח', style: const TextStyle(color: DsTokens.muted, fontSize: 12.5, fontWeight: FontWeight.w700)),
+  Widget _viewBar(BuildContext context) {
+    const labels = ['☰ רשימה', '📋 לוח'];
+    return Row(mainAxisSize: MainAxisSize.min, children: [
+      for (var i = 0; i < labels.length; i++)
+        Padding(
+          padding: const EdgeInsets.only(left: 6),
+          child: Material(
+            color: _view == i ? DsTokens.accentSoft : const Color(0xFFF1F5F9),
+            borderRadius: BorderRadius.circular(20),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(20),
+              onTap: () => setState(() => _view = i),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
+                child: Text(labels[i], style: TextStyle(color: _view == i ? DsTokens.accentDark : DsTokens.muted, fontSize: 12, fontWeight: FontWeight.w700)),
+              ),
+            ),
+          ),
         ),
-      ),
-    ),
-  );
+    ]);
+  }
 
   Widget _card(Map<String, String> r) {
     final rid = r['__id'] ?? '';
@@ -139,7 +145,7 @@ class _GenAppEnt7ScreenState extends State<GenAppEnt7Screen> {
           DsField(label: gen_app_ent7_c26, hint: '', value: _v[16] ?? '', onChanged: (v) => setState(() => _v[16] = v)),
           if ((_v[16] ?? '').trim().isNotEmpty) _live(gen_app_ent7_c27, advanceStatus((_v[16] ?? ''))),
         ]),
-        DsSection(title: gen_app_ent7_c6, trailing: Row(mainAxisSize: MainAxisSize.min, children: [_viewToggle(context), const SizedBox(width: 8), _csvBtn(context)]), children: [
+        DsSection(title: gen_app_ent7_c6, trailing: Row(mainAxisSize: MainAxisSize.min, children: [_viewBar(context), const SizedBox(width: 8), _csvBtn(context)]), children: [
           AnimatedBuilder(
             animation: appStore,
             builder: (context, _) {
@@ -147,7 +153,7 @@ class _GenAppEnt7ScreenState extends State<GenAppEnt7Screen> {
               if (all.isEmpty) return const DsEmpty(label: gen_app_ent7_c7);
               final q = _q.trim().toLowerCase();
               final rs = q.isEmpty ? all : all.where((r) => r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q))).toList();
-              if (_board) return DsBoard(stages: const [gen_app_ent7_c28, gen_app_ent7_c29, gen_app_ent7_c30, gen_app_ent7_c31, gen_app_ent7_c32, gen_app_ent7_c33, gen_app_ent7_c34, gen_app_ent7_c35, gen_app_ent7_c36, gen_app_ent7_c37, gen_app_ent7_c38, gen_app_ent7_c39], records: rs, stageOf: (r) => appStore.stageOf('app_ent7', r['__id'] ?? ''), titleOf: (r) => r[gen_app_ent7_c9] ?? '', onMove: (id, to) => appStore.setStage('app_ent7', id, to));
+              if (_view == 1) return DsBoard(stages: const [gen_app_ent7_c28, gen_app_ent7_c29, gen_app_ent7_c30, gen_app_ent7_c31, gen_app_ent7_c32, gen_app_ent7_c33, gen_app_ent7_c34, gen_app_ent7_c35, gen_app_ent7_c36, gen_app_ent7_c37, gen_app_ent7_c38, gen_app_ent7_c39], records: rs, stageOf: (r) => appStore.stageOf('app_ent7', r['__id'] ?? ''), titleOf: (r) => r[gen_app_ent7_c9] ?? '', onMove: (id, to) => appStore.setStage('app_ent7', id, to));
               return Column(children: [
                 DsSearch(value: _q, onChanged: (v) => setState(() => _q = v)),
                 if (rs.isEmpty) const DsEmpty(label: gen_app_ent7_c8),
