@@ -75,6 +75,8 @@ export function buildApp(specText) {
     const F = entRes[li.i]; const fslug = `app_ent${li.i}`;
     const dp = F.delPolicy || [];
     for (const s of F.schema) {
+      // רק שדות שמתרנדרים כקשר: לא נוסחה/צבירה, לא enum, לא מקונן (משקף את קדימות render-ds).
+      if (s.formula || (s.enumVals && s.enumVals.length) || (s.members && s.members.length)) continue;
       const hit = relOf(s.label, F.entity);
       if (hit) (backRefs[hit.en] ??= []).push({ fslug, ffield: s.label, fname: F.entity, multi: hit.multi });
       const decl = hit ? dp.find((d) => d.field === s.label) : null;

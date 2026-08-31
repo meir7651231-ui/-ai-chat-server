@@ -118,6 +118,23 @@ class AppStore extends ChangeNotifier {
     return n == 0 ? 0 : sum(entity, field) / n;
   }
 
+  // ── שדה-צבירה (Rollup): אגרגט חי על רשומות-הבן שמצביעות על id-ההורה, דרך referencing
+  //    (מודע-CSV). נגזרת טהורה פר-רשומת-הורה — קריאה-בלבד, לא-מתמיד.
+  double sumRef(String child, String field, String pid, String col) {
+    var t = 0.0;
+    for (final r in referencing(child, field, pid)) {
+      t += double.tryParse((r[col] ?? '').replaceAll(RegExp(r'[^0-9.\-]'), '')) ?? 0;
+    }
+    return t;
+  }
+
+  int countRef(String child, String field, String pid) => referencing(child, field, pid).length;
+
+  double avgRef(String child, String field, String pid, String col) {
+    final n = countRef(child, field, pid);
+    return n == 0 ? 0 : sumRef(child, field, pid, col) / n;
+  }
+
   String add(String entity, Map<String, String> record) {
     final id = 'r${++_seq}';
     final rec = <String, String>{idKey: id, ...record};

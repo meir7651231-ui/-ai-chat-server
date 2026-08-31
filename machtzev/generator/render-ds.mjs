@@ -149,6 +149,10 @@ function pickMultiRelation(label, selfName, entityNames) {
   return null;
 }
 
+// 📊 שדה-צבירה (Rollup): 'סכום(ישות.שדה)' — אותו דקדוק-אגרגט של הדשבורדים, אך מכוון
+// לרשומה-הנוכחית דרך קשר-הבן הידוע. מובחן מנוסחת-אחות ('סכום - הנחה') לפי מילת-מפתח + '('.
+const ROLLUP_RE = /^(סכום|ממוצע|מונה)\(([^.)]+)(?:\.([^)]+))?\)$/;
+
 // 🧮 מהדר-נוסחה (שורש-4): 'סכום - הנחה - תשלום' ⇒ ביטוי-Dart מספרי מעל שדות-האחות.
 // שמות-שדה (הארוך-קודם) ⇒ קריאת-הערך; אופרטורים/מספרים/סוגריים עוברים. שארית לא-מזוהה ⇒ null
 // (השדה נשאר רגיל — כנות > קוד-שבור). דטרמיניסטי, קומפילציית-זמן, אפס-eval בזמן-ריצה.
@@ -209,6 +213,24 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
     if (s.def != null && !s.formula) defEntries.push(`${i}: ${k(s.def)}`);
     // (0) שדה-מחושב (שורש-4): נוסחה מעל שדות-אחות ⇒ ערך-נגזר קריאה-בלבד (לא קלט).
     if (s.formula) {
+      // (0-rollup) שדה-צבירה: 'סכום(הוצאה.סכום)' ⇒ אגרגט חי על רשומות-הבן המצביעות על
+      // הרשומה-הזו. הקשר מתגלה מ-backRefs (שמות-האפיון) — טהור. אין קלט, לא-מתמיד.
+      const rm = s.formula.match(ROLLUP_RE);
+      if (rm) {
+        const link = backRefs.find((b) => b.fname === rm[2].trim());
+        if (link) {
+          const col = k((rm[3] || '').trim() || s.label);
+          const pid = `r['__id'] ?? ''`;
+          const v = rm[1] === 'מונה'
+            ? `appStore.countRef('${link.fslug}', ${k(link.ffield)}, ${pid}).toString()`
+            : rm[1] === 'ממוצע'
+            ? `appStore.avgRef('${link.fslug}', ${k(link.ffield)}, ${pid}, ${col}).toStringAsFixed(1)`
+            : `appStore.sumRef('${link.fslug}', ${k(link.ffield)}, ${pid}, ${col}).toStringAsFixed(2)`;
+          recValsR.push(v);   // ערך-כרטיס יחיד ⇒ נשמר labelConst[i]↔recValsR[i]; אין fieldBlocks/mapVals (נגזר)
+          return;
+        }
+        // קשר-בן לא-נמצא ⇒ נפילה ל-compileFormula (התנהגות היום)
+      }
       const expr = compileFormula(s.formula, labelIdx);
       if (expr) {
         hasCalc = true;

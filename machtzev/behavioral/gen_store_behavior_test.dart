@@ -103,6 +103,20 @@ void main() {
     expect(s4.byId('תלמיד', t4)?['מקצועות'], m2);       // רק m1 הוסר מהרשימה
   });
 
+  // ratchet · פאזה-2: שדה-צבירה (rollup) — sumRef/countRef/avgRef על רשומות-הבן.
+  test('rollup · sumRef/countRef/avgRef על בני-הרשומה', () {
+    final s = AppStore();
+    final p = s.add('פרויקט', {'שם': 'בית'});
+    final q = s.add('פרויקט', {'שם': 'גינה'});
+    s.add('הוצאה', {'פרויקט': p, 'סכום': '1000'});
+    s.add('הוצאה', {'פרויקט': p, 'סכום': '₪2,500'});
+    s.add('הוצאה', {'פרויקט': q, 'סכום': '400'});
+    expect(s.sumRef('הוצאה', 'פרויקט', p, 'סכום'), 3500.0);
+    expect(s.countRef('הוצאה', 'פרויקט', p), 2);
+    expect(s.avgRef('הוצאה', 'פרויקט', p, 'סכום'), 1750.0);
+    expect(s.sumRef('הוצאה', 'פרויקט', q, 'סכום'), 400.0);
+  });
+
   test('options/displayOf — מפתח-זר מזהה⇒שם-תצוגה', () {
     final s = AppStore();
     final id = s.add('לקוח', {'שם': 'חברת X', 'טלפון': '050'});
