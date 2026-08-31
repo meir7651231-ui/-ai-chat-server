@@ -34,7 +34,7 @@ class DsDateField extends StatelessWidget {
               child: Text(label, style: const TextStyle(color: DsTokens.muted, fontSize: 12.5, fontWeight: FontWeight.w600)),
             ),
             Material(
-              color: const Color(0xFFF8FAFC),
+              color: DsTokens.cardAlt,
               borderRadius: BorderRadius.circular(DsTokens.rSm),
               child: InkWell(
                 borderRadius: BorderRadius.circular(DsTokens.rSm),

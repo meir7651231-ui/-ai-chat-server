@@ -34,7 +34,7 @@ class DsBoard extends StatelessWidget {
           return Container(
             width: 210,
             decoration: BoxDecoration(
-              color: const Color(0xFFF8FAFC),
+              color: DsTokens.cardAlt,
               borderRadius: BorderRadius.circular(DsTokens.rSm),
               border: Border.all(color: DsTokens.line),
             ),
@@ -66,7 +66,7 @@ class DsBoard extends StatelessWidget {
                               margin: const EdgeInsets.only(bottom: 8),
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: DsTokens.cardAlt,
                                 borderRadius: BorderRadius.circular(DsTokens.rSm),
                                 border: Border.all(color: DsTokens.line),
                               ),
@@ -106,7 +106,7 @@ class _MoveBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: accent ? DsTokens.accentSoft : const Color(0xFFF1F5F9),
+      color: accent ? DsTokens.accentSoft : DsTokens.track,
       borderRadius: BorderRadius.circular(8),
       child: InkWell(
         borderRadius: BorderRadius.circular(8),

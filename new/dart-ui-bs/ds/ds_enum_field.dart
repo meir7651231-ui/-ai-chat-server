@@ -22,7 +22,7 @@ class DsEnumField extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
-              color: const Color(0xFFF8FAFC),
+              color: DsTokens.cardAlt,
               borderRadius: BorderRadius.circular(DsTokens.rSm),
               border: Border.all(color: DsTokens.line),
             ),

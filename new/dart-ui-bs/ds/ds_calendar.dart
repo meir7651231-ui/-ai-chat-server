@@ -96,7 +96,7 @@ class _NavBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Material(
-        color: const Color(0xFFF1F5F9),
+        color: DsTokens.track,
         borderRadius: BorderRadius.circular(8),
         child: InkWell(
           borderRadius: BorderRadius.circular(8),
