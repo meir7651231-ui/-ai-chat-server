@@ -130,6 +130,19 @@ function pickRelation(label, selfName, entityNames) {
   return null;
 }
 
+// 🧮 מהדר-נוסחה (שורש-4): 'סכום - הנחה - תשלום' ⇒ ביטוי-Dart מספרי מעל שדות-האחות.
+// שמות-שדה (הארוך-קודם) ⇒ קריאת-הערך; אופרטורים/מספרים/סוגריים עוברים. שארית לא-מזוהה ⇒ null
+// (השדה נשאר רגיל — כנות > קוד-שבור). דטרמיניסטי, קומפילציית-זמן, אפס-eval בזמן-ריצה.
+function compileFormula(formula, labels) {
+  const sorted = labels.slice().sort((a, b) => b.label.length - a.label.length);
+  let e = ' ' + formula + ' ';
+  for (const f of sorted) e = e.split(f.label).join(` @${f.idx}@ `);
+  const residue = e.replace(/@\d+@/g, ' ').replace(/[0-9.+\-*/()\s]/g, '');
+  if (residue.trim().length) return null;                       // מילה לא-מזוהה ⇒ לא נוסחה-בטוחה
+  const dart = e.replace(/@(\d+)@/g, "(num.tryParse(_v[$1] ?? '') ?? 0)").trim();
+  return /@|[֐-׿]/.test(dart) ? null : (dart || null);
+}
+
 // ── ישות: מסך-חי מחווט — טופס→שמירה→חנות→טבלה→דשבורד, + קשרים(מזהה) + מסע + עריכה/מחיקה ──
 export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {} }) {
   const { k, dump } = makeConsts(slug);
@@ -147,31 +160,51 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const typedImports = new Set();
   const labelConst = [];
   const fieldBlocks = [];
-  const recValsR = [];   // ערך-תצוגה בטבלה פר-שדה (מפתח-זר ⇒ שם-היעד; אחר ⇒ הערך הגולמי)
-  let hasLive = false;
-  let hasRel = false;
-  let usedField = false;
+  const recValsR = [];   // ערך-תצוגה בטבלה פר-שדה
+  const mapVals = [];    // ערך-שמירה פר-שדה (מחושב ⇒ תוצאת-הנוסחה; אחר ⇒ _v[i])
+  const requiredIdx = [];
+  let hasLive = false, hasRel = false, hasEnum = false, hasCalc = false, usedField = false;
+  const labelIdx = schema.map((s, i) => ({ label: s.label, idx: i }));
   schema.forEach((s, i) => {
     const cl = k(s.label); labelConst.push(cl);
     const bind = `value: _v[${i}] ?? '', onChanged: (v) => setState(() => _v[${i}] = v)`;
-    // (1) שדה-קשר גובר: השדה נוקב בישות-אחרת ⇒ בורר-רשומה ששומר מזהה-יעד יציב (לא מחרוזת).
+    if (s.required) requiredIdx.push(i);
+    // (0) שדה-מחושב (שורש-4): נוסחה מעל שדות-אחות ⇒ ערך-נגזר קריאה-בלבד (לא קלט).
+    if (s.formula) {
+      const expr = compileFormula(s.formula, labelIdx);
+      if (expr) {
+        hasCalc = true;
+        fieldBlocks.push(`          _calc(${cl}, ${expr}),`);
+        recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: (${expr}).toStringAsFixed(2)`);
+        return;
+      }
+    }
+    // (1) ערכים-מותרים (enum, שורש-6): בורר על קבוצה-סגורה מהאפיון (לא טקסט-חופשי).
+    if (s.enumVals && s.enumVals.length) {
+      hasEnum = true;
+      const opts = s.enumVals.map((v) => k(v)).join(', ');
+      fieldBlocks.push(`          DsEnumField(label: ${cl}, options: const [${opts}], ${bind}),`);
+      recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: _v[${i}] ?? ''`);
+      return;
+    }
+    // (2) שדה-קשר: השדה נוקב בישות-אחרת ⇒ בורר-רשומה ששומר מזהה-יעד יציב.
     const rel = pickRelation(s.label, name, entityNames);
     const tslug = rel ? (nameToSlug[rel] || null) : null;
     if (tslug) {
       hasRel = true;
       fieldBlocks.push(`          DsSelect(label: ${cl}, entity: '${tslug}', ${bind}),`);
-      recValsR.push(`appStore.displayOf('${tslug}', r[${cl}] ?? '')`);
+      recValsR.push(`appStore.displayOf('${tslug}', r[${cl}] ?? '')`); mapVals.push(`${cl}: _v[${i}] ?? ''`);
       return;
     }
-    // (2) טיפוס נאחז-מהאטומים ⇒ הווידג'ט האמיתי: תאריך→בורר · מספר→מקלדת · דו-ערכי→מתג.
+    // (3) טיפוס נאחז-מהאטומים ⇒ הווידג'ט האמיתי: תאריך→בורר · מספר→מקלדת · דו-ערכי→מתג.
     const ft = typeOf(s.label);
-    if (ft === 'date') { typedImports.add("import '../dart-ui-bs/ds/ds_date_field.dart';"); fieldBlocks.push(`          DsDateField(label: ${cl}, ${bind}),`); recValsR.push(`r[${cl}] ?? ''`); return; }
-    if (ft === 'num')  { typedImports.add("import '../dart-ui-bs/ds/ds_number_field.dart';"); fieldBlocks.push(`          DsNumberField(label: ${cl}, ${bind}),`); recValsR.push(`r[${cl}] ?? ''`); return; }
-    if (ft === 'bool') { typedImports.add("import '../dart-ui-bs/ds/ds_toggle_tile.dart';"); fieldBlocks.push(`          DsToggleTile(label: ${cl}, ${bind}),`); recValsR.push(`r[${cl}] ?? ''`); return; }
-    // (3) טקסט: שדה חופשי + לוגיקת-אימפריה חיה מכוונת-מטרה (טיפוס+IDF+קידומת+מובהקות).
+    if (ft === 'date') { typedImports.add("import '../dart-ui-bs/ds/ds_date_field.dart';"); fieldBlocks.push(`          DsDateField(label: ${cl}, ${bind}),`); recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: _v[${i}] ?? ''`); return; }
+    if (ft === 'num')  { typedImports.add("import '../dart-ui-bs/ds/ds_number_field.dart';"); fieldBlocks.push(`          DsNumberField(label: ${cl}, ${bind}),`); recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: _v[${i}] ?? ''`); return; }
+    if (ft === 'bool') { typedImports.add("import '../dart-ui-bs/ds/ds_toggle_tile.dart';"); fieldBlocks.push(`          DsToggleTile(label: ${cl}, ${bind}),`); recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: _v[${i}] ?? ''`); return; }
+    // (4) טקסט: שדה חופשי + לוגיקת-אימפריה חיה מכוונת-מטרה (טיפוס+IDF+קידומת+מובהקות).
     usedField = true;
     fieldBlocks.push(`          DsField(label: ${cl}, hint: '', ${bind}),`);
-    recValsR.push(`r[${cl}] ?? ''`);
+    recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: _v[${i}] ?? ''`);
     const xf = pickXform(s.label, ft);
     if (xf) {
       funcImports.add(`import '../${xf.shelf.replace(/^new\//, '')}/${xf.file}';`);
@@ -185,13 +218,15 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
       hasLive = true;
     }
   });
+  const reqChecks = requiredIdx.map((i) => `if ((_v[${i}] ?? '').trim().isEmpty) miss.add(${labelConst[i]});`).join('\n      ');
+  const enumImport = hasEnum ? "import '../dart-ui-bs/ds/ds_enum_field.dart';\n" : '';
   const hasStages = stages.length >= 2;
   const stageConsts = hasStages ? stages.map((x) => k(x)) : [];
   const stageList = `[${stageConsts.join(', ')}]`;
   const stepsDart = hasStages
     ? `        DsWorkflow(steps: const ${stageList}, current: 0),\n`
     : '';
-  const mapEntries = labelConst.map((cl, i) => `${cl}: _v[${i}] ?? ''`).join(', ');     // שדות ⇒ מפה
+  const mapEntries = mapVals.join(', ');                                                  // שדות ⇒ מפה (מחושב=נוסחה)
   const editLoad = labelConst.map((cl, i) => `${i}: r[${cl}] ?? ''`).join(', ');         // רשומה ⇒ טופס (עריכה)
   const recValues = recValsR.join(', ');
   const labelsList = labelConst.join(', ');
@@ -204,7 +239,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→קשרים→מסע→חנות→טבלה + לוגיקה). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
-${usedField ? "import '../dart-ui-bs/ds/ds_field.dart';\n" : ''}${[...typedImports].sort().map((x) => x + '\n').join('')}${relImport}import '../dart-ui-bs/ds/ds_store.dart';
+${usedField ? "import '../dart-ui-bs/ds/ds_field.dart';\n" : ''}${[...typedImports].sort().map((x) => x + '\n').join('')}${enumImport}${relImport}import '../dart-ui-bs/ds/ds_store.dart';
 ${[...funcImports].sort().join('\n')}
 import 'package:flutter/material.dart';
 
@@ -218,16 +253,20 @@ class ${cls} extends StatefulWidget {
 class _${cls}State extends State<${cls}> {
   Map<int, String> _v = {};
   String? _editId;   // ריק = הוספה · מזהה = עריכת-רשומה קיימת
+${requiredIdx.length ? '  String? _err;      // שגיאת-ולידציה (שדות-חובה חסרים)\n' : ''}
 
   void _save() {
     if (_v.values.where((x) => x.trim().isNotEmpty).isEmpty) return;
-    final map = <String, String>{${mapEntries}};
+${requiredIdx.length ? `    final miss = <String>[];
+      ${reqChecks}
+    if (miss.isNotEmpty) { setState(() => _err = 'יש למלא: ' + miss.join(', ')); return; }
+` : ''}    final map = <String, String>{${mapEntries}};
     if (_editId != null) {
       appStore.update(${SK}, _editId!, map);
     } else {
       appStore.add(${SK}, <String, String>{...map${hasStages ? `, '__stage': '0'` : ''}});
     }
-    setState(() { _v.clear(); _editId = null; });
+    setState(() { _v.clear(); _editId = null;${requiredIdx.length ? ' _err = null;' : ''} });
   }
 
   void _edit(Map<String, String> r) {
@@ -242,7 +281,21 @@ class _${cls}State extends State<${cls}> {
     return DsRecordCard(labels: const [${labelsList}], values: [${recValues}], ${stageArgs}onEdit: () => _edit(r), onDelete: () => appStore.removeById(${SK}, rid));
   }
 
-${hasLive ? `  Widget _live(String label, String out) => Padding(
+${hasCalc ? `  Widget _calc(String label, num v) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Container(
+          padding: const EdgeInsets.all(13),
+          decoration: BoxDecoration(color: DsTokens.successSoft, borderRadius: BorderRadius.circular(DsTokens.rSm)),
+          child: Row(children: [
+            const Icon(Icons.calculate_outlined, size: 16, color: DsTokens.success),
+            const SizedBox(width: 8),
+            Expanded(child: Text(label, style: const TextStyle(color: DsTokens.ink, fontSize: 13.5, fontWeight: FontWeight.w700))),
+            Text(v.toStringAsFixed(2), style: const TextStyle(color: DsTokens.success, fontSize: 15.5, fontWeight: FontWeight.w800)),
+          ]),
+        ),
+      );
+
+` : ''}${hasLive ? `  Widget _live(String label, String out) => Padding(
         padding: const EdgeInsets.only(top: 2, bottom: 6),
         child: Container(
           width: double.infinity,
@@ -264,7 +317,13 @@ ${hasLive ? `  Widget _live(String label, String out) => Padding(
       icon: ${cIcon},
       bottomBar: DsPrimaryButton(label: _editId == null ? ${cSave} : ${cUpdate}, onTap: _save),
       children: [
-${stepsDart}        DsSection(title: ${cForm}, children: [
+${stepsDart}${requiredIdx.length ? `        if (_err != null) Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(color: const Color(0x14DC2626), borderRadius: BorderRadius.circular(DsTokens.rSm), border: Border.all(color: const Color(0x40DC2626))),
+          child: Row(children: [const Icon(Icons.error_outline, size: 16, color: Color(0xFFDC2626)), const SizedBox(width: 8), Expanded(child: Text(_err!, style: const TextStyle(color: Color(0xFFDC2626), fontSize: 13, fontWeight: FontWeight.w600)))]),
+        ),
+` : ''}        DsSection(title: ${cForm}, children: [
 ${fieldBlocks.join('\n')}
         ]),
         DsSection(title: ${cRecords}, children: [

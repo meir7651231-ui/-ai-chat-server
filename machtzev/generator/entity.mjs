@@ -35,22 +35,39 @@ const inputAtom = (type) => {
 };
 
 export function interpret(text) {
-  // '|' מפריד שדות משלבי-workflow: "ישות X עם <שדות> | שלבים: a, b, c"
-  const [main, stagesPart] = text.split('|');
+  // '|' מפריד שדות משלבי-workflow — אבל רק ה-'|' שלפני "שלבים:" (כדי ש-'|' בתוך enum
+  // ‏{א|ב|ג} לא יישבר). "ישות X עם <שדות> | שלבים: a, b, c"
+  const stM = text.match(/\|\s*(?=שלבים|סטטוסים|מצבים)/);
+  const main = stM ? text.slice(0, stM.index) : text;
+  const stagesPart = stM ? text.slice(stM.index + 1) : '';
   // שם-הישות + רשימת-השדות (בלי \b — לא עובד על עברית ב-JS)
   const body = main.replace(/^\s*(צור|תוסיף|בנה|הוסף)?\s*(ישות|טבלה|טופס)\s+/, '');
   const [namePart, ...rest] = body.split(/\s+עם\s+|\s+שדות[:\s]+|\s*:\s*/);
   const entity = clean(namePart).slice(0, 40) || 'רשומה';
   const fieldsPart = rest.join(' ') || '';
   // אין חיתוך-שקט: כל השדות נשמרים (קודם נחתך ל-20 ⇒ 'סטטוס'/'התאמות' נעלמו). תקרת-שפיות בלבד.
-  const fields = fieldsPart.split(/[,\n]|\s+ו(?=[א-ת])/).map((s) => clean(s)).filter((s) => s.length > 1).slice(0, 200);
+  // 🔤 פעלי-שפה (תואמי-לאחור): שדה* = חובה · שדה{א|ב|ג} = ערכים-מותרים · שדה=נוסחה = מחושב.
+  const rawFields = fieldsPart.split(/[,\n]/).map((s) => s.trim()).filter(Boolean).slice(0, 200);
+  const annots = [];   // { label, required, enumVals, formula }
+  for (const raw of rawFields) {
+    let f = raw;
+    let required = false, enumVals = null, formula = null;
+    const eq = f.indexOf('=');
+    if (eq > 0) { formula = f.slice(eq + 1).trim(); f = f.slice(0, eq); }          // שדה=נוסחה
+    const em = f.match(/\{([^}]*)\}/);
+    if (em) { enumVals = em[1].split('|').map((x) => clean(x)).filter((x) => x.length > 0); f = f.replace(/\{[^}]*\}/, ''); }   // {א|ב|ג}
+    if (/\*/.test(f)) { required = true; f = f.replace(/\*/g, ''); }               // שדה*
+    const label = clean(f);
+    if (label.length > 1) annots.push({ label, required, enumVals: enumVals && enumVals.length ? enumVals : null, formula });
+  }
+  const fields = annots.map((a) => a.label);
   // 🔄 שלבי-workflow (אם ניתנו): שרשרת-סטטוס. בלי '|' ⇒ אין workflow (לא ברירת-מחדל).
   // אין חיתוך ל-8 (קודם הפיל 'ועדה/התקבל/נדחה' — שלבי-ההכרעה שה-workflow קיים בשבילם).
   const stages = stagesPart
     ? stagesPart.replace(/^\s*(שלבים|סטטוסים|מצבים)[:\s]*/, '').split(/[,\n]|\s*→\s*/).map((s) => heWords(s).join(' ').trim()).filter((s) => s.length > 1).slice(0, 30)
     : [];
 
-  const schema = fields.map((f) => ({ label: f, type: inferType(f) }));
+  const schema = annots.map((a) => ({ label: a.label, type: inferType(a.label), required: a.required, enumVals: a.enumVals, formula: a.formula }));
   const used = new Set();
   const lines = [`הירו 🗂️ ${entity} | ישות מורכבת — טופס + טבלה`];
   // 🔄 workflow: פס-שלבים מתוייג (BreadcrumbTrail labels) — מציג את מסע-הרשומה

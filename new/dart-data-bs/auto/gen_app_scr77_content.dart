@@ -9,5 +9,5 @@ const String gen_app_scr77_c6 = 'מועמד';
 const String gen_app_scr77_c7 = '19 שדות · 7 שלבים';
 const String gen_app_scr77_c8 = '🗂️';
 const String gen_app_scr77_c9 = 'בקשת קבלה';
-const String gen_app_scr77_c10 = '15 שדות · 5 שלבים';
+const String gen_app_scr77_c10 = '14 שדות · 5 שלבים';
 const String gen_app_scr77_c11 = '🗂️';

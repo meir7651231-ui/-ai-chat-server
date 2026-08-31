@@ -1,8 +1,8 @@
 {
  "counts": {
-  "widgets": 479,
+  "widgets": 480,
   "functions": 445,
-  "data": 3865
+  "data": 3864
  },
  "widgets": [
   {
@@ -10574,6 +10574,29 @@
     "סיום",
     "תווית",
     "בורר"
+   ]
+  },
+  {
+   "cls": "DsEnumField",
+   "file": "ds/ds_enum_field.dart",
+   "props": [
+    "label",
+    "value",
+    "options",
+    "onChanged"
+   ],
+   "required": [
+    "label",
+    "options",
+    "value",
+    "onChanged"
+   ],
+   "positional": [],
+   "he": [
+    "לא",
+    "טקסט",
+    "חופשי",
+    "מעל"
    ]
   },
   {
@@ -50785,19 +50808,6 @@
   },
   {
    "name": "gen_app_ent9_c27",
-   "type": "String",
-   "he": [
-    "תוכן",
-    "מהבקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_app_ent9_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_app_ent9_c28",
    "type": "String",
    "he": [
     "תוכן",

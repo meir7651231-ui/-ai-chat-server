@@ -19,6 +19,7 @@ class _GenAppEnt26ScreenState extends State<GenAppEnt26Screen> {
   Map<int, String> _v = {};
   String? _editId;   // ריק = הוספה · מזהה = עריכת-רשומה קיימת
 
+
   void _save() {
     if (_v.values.where((x) => x.trim().isNotEmpty).isEmpty) return;
     final map = <String, String>{gen_app_ent26_c8: _v[0] ?? '', gen_app_ent26_c9: _v[1] ?? '', gen_app_ent26_c10: _v[2] ?? '', gen_app_ent26_c11: _v[3] ?? '', gen_app_ent26_c12: _v[4] ?? '', gen_app_ent26_c13: _v[5] ?? '', gen_app_ent26_c14: _v[6] ?? '', gen_app_ent26_c15: _v[7] ?? '', gen_app_ent26_c16: _v[8] ?? '', gen_app_ent26_c17: _v[9] ?? '', gen_app_ent26_c18: _v[10] ?? '', gen_app_ent26_c19: _v[11] ?? '', gen_app_ent26_c20: _v[12] ?? '', gen_app_ent26_c21: _v[13] ?? '', gen_app_ent26_c22: _v[14] ?? ''};
