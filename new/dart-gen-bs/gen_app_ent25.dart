@@ -4,7 +4,7 @@ import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_select.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
-
+import '../dart-maor/advance-status.dart';
 import 'package:flutter/material.dart';
 
 class GenAppEnt25Screen extends StatefulWidget {
@@ -38,8 +38,22 @@ class _GenAppEnt25ScreenState extends State<GenAppEnt25Screen> {
 
   Widget _card(Map<String, String> r) {
     final rid = r['__id'] ?? '';
-    return DsRecordCard(labels: const [gen_app_ent25_c8, gen_app_ent25_c9, gen_app_ent25_c10, gen_app_ent25_c11, gen_app_ent25_c12, gen_app_ent25_c13, gen_app_ent25_c14, gen_app_ent25_c15, gen_app_ent25_c16, gen_app_ent25_c17, gen_app_ent25_c18], values: [appStore.displayOf('app_ent21', r[gen_app_ent25_c8] ?? ''), appStore.displayOf('app_ent5', r[gen_app_ent25_c9] ?? ''), r[gen_app_ent25_c10] ?? '', r[gen_app_ent25_c11] ?? '', r[gen_app_ent25_c12] ?? '', r[gen_app_ent25_c13] ?? '', r[gen_app_ent25_c14] ?? '', r[gen_app_ent25_c15] ?? '', r[gen_app_ent25_c16] ?? '', r[gen_app_ent25_c17] ?? '', r[gen_app_ent25_c18] ?? ''], stage: (const [gen_app_ent25_c19, gen_app_ent25_c20])[appStore.stageOf('app_ent25', rid)], stageDone: appStore.stageOf('app_ent25', rid) >= 1, onAdvance: () => appStore.advance('app_ent25', rid, 2), onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent25', rid));
+    return DsRecordCard(labels: const [gen_app_ent25_c8, gen_app_ent25_c9, gen_app_ent25_c10, gen_app_ent25_c11, gen_app_ent25_c12, gen_app_ent25_c13, gen_app_ent25_c14, gen_app_ent25_c15, gen_app_ent25_c16, gen_app_ent25_c17, gen_app_ent25_c18], values: [appStore.displayOf('app_ent21', r[gen_app_ent25_c8] ?? ''), appStore.displayOf('app_ent5', r[gen_app_ent25_c9] ?? ''), r[gen_app_ent25_c10] ?? '', r[gen_app_ent25_c11] ?? '', r[gen_app_ent25_c12] ?? '', r[gen_app_ent25_c13] ?? '', r[gen_app_ent25_c14] ?? '', r[gen_app_ent25_c15] ?? '', r[gen_app_ent25_c16] ?? '', r[gen_app_ent25_c17] ?? '', r[gen_app_ent25_c18] ?? ''], stage: (const [gen_app_ent25_c20, gen_app_ent25_c21])[appStore.stageOf('app_ent25', rid)], stageDone: appStore.stageOf('app_ent25', rid) >= 1, onAdvance: () => appStore.advance('app_ent25', rid, 2), onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent25', rid));
   }
+
+  Widget _live(String label, String out) => Padding(
+        padding: const EdgeInsets.only(top: 2, bottom: 6),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(11),
+          decoration: BoxDecoration(color: DsTokens.accentSoft, borderRadius: BorderRadius.circular(DsTokens.rSm)),
+          child: Row(children: [
+            const Icon(Icons.bolt, size: 15, color: DsTokens.accentDark),
+            const SizedBox(width: 7),
+            Expanded(child: Text('$label · $out', style: const TextStyle(color: DsTokens.accentDark, fontSize: 13, fontWeight: FontWeight.w700))),
+          ]),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +63,7 @@ class _GenAppEnt25ScreenState extends State<GenAppEnt25Screen> {
       icon: gen_app_ent25_c2,
       bottomBar: DsPrimaryButton(label: _editId == null ? gen_app_ent25_c3 : gen_app_ent25_c4, onTap: _save),
       children: [
-        DsWorkflow(steps: const [gen_app_ent25_c19, gen_app_ent25_c20], current: 0),
+        DsWorkflow(steps: const [gen_app_ent25_c20, gen_app_ent25_c21], current: 0),
         DsSection(title: gen_app_ent25_c5, children: [
           DsSelect(label: gen_app_ent25_c8, entity: 'app_ent21', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
           DsSelect(label: gen_app_ent25_c9, entity: 'app_ent5', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
@@ -62,6 +76,7 @@ class _GenAppEnt25ScreenState extends State<GenAppEnt25Screen> {
           DsField(label: gen_app_ent25_c16, hint: '', value: _v[8] ?? '', onChanged: (v) => setState(() => _v[8] = v)),
           DsField(label: gen_app_ent25_c17, hint: '', value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
           DsField(label: gen_app_ent25_c18, hint: '', value: _v[10] ?? '', onChanged: (v) => setState(() => _v[10] = v)),
+          if ((_v[10] ?? '').trim().isNotEmpty) _live(gen_app_ent25_c19, advanceStatus((_v[10] ?? ''))),
         ]),
         DsSection(title: gen_app_ent25_c6, children: [
           AnimatedBuilder(

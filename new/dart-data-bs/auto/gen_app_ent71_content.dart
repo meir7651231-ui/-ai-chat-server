@@ -21,3 +21,4 @@ const String gen_app_ent71_c18 = 'הסכמה ליצירת קשר';
 const String gen_app_ent71_c19 = 'תרומות';
 const String gen_app_ent71_c20 = 'אירועים';
 const String gen_app_ent71_c21 = 'סטטוס';
+const String gen_app_ent71_c22 = 'סטטוס בא';

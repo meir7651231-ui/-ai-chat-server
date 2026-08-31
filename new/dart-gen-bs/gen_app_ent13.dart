@@ -3,7 +3,7 @@ import '../dart-data-bs/auto/gen_app_ent13_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
-
+import '../dart-maor/advance-status.dart';
 import 'package:flutter/material.dart';
 
 class GenAppEnt13Screen extends StatefulWidget {
@@ -40,6 +40,20 @@ class _GenAppEnt13ScreenState extends State<GenAppEnt13Screen> {
     return DsRecordCard(labels: const [gen_app_ent13_c8, gen_app_ent13_c9, gen_app_ent13_c10, gen_app_ent13_c11, gen_app_ent13_c12, gen_app_ent13_c13, gen_app_ent13_c14, gen_app_ent13_c15, gen_app_ent13_c16, gen_app_ent13_c17, gen_app_ent13_c18], values: [r[gen_app_ent13_c8] ?? '', r[gen_app_ent13_c9] ?? '', r[gen_app_ent13_c10] ?? '', r[gen_app_ent13_c11] ?? '', r[gen_app_ent13_c12] ?? '', r[gen_app_ent13_c13] ?? '', r[gen_app_ent13_c14] ?? '', r[gen_app_ent13_c15] ?? '', r[gen_app_ent13_c16] ?? '', r[gen_app_ent13_c17] ?? '', r[gen_app_ent13_c18] ?? ''], onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent13', rid));
   }
 
+  Widget _live(String label, String out) => Padding(
+        padding: const EdgeInsets.only(top: 2, bottom: 6),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(11),
+          decoration: BoxDecoration(color: DsTokens.accentSoft, borderRadius: BorderRadius.circular(DsTokens.rSm)),
+          child: Row(children: [
+            const Icon(Icons.bolt, size: 15, color: DsTokens.accentDark),
+            const SizedBox(width: 7),
+            Expanded(child: Text('$label · $out', style: const TextStyle(color: DsTokens.accentDark, fontSize: 13, fontWeight: FontWeight.w700))),
+          ]),
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     return DsScaffold(
@@ -60,6 +74,7 @@ class _GenAppEnt13ScreenState extends State<GenAppEnt13Screen> {
           DsField(label: gen_app_ent13_c16, hint: '', value: _v[8] ?? '', onChanged: (v) => setState(() => _v[8] = v)),
           DsField(label: gen_app_ent13_c17, hint: '', value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
           DsField(label: gen_app_ent13_c18, hint: '', value: _v[10] ?? '', onChanged: (v) => setState(() => _v[10] = v)),
+          if ((_v[10] ?? '').trim().isNotEmpty) _live(gen_app_ent13_c19, advanceStatus((_v[10] ?? ''))),
         ]),
         DsSection(title: gen_app_ent13_c6, children: [
           AnimatedBuilder(

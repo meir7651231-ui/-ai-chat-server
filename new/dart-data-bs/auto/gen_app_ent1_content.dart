@@ -22,3 +22,4 @@ const String gen_app_ent1_c19 = 'דוחות';
 const String gen_app_ent1_c20 = 'משתמשים';
 const String gen_app_ent1_c21 = 'הרשאות';
 const String gen_app_ent1_c22 = 'סטטוס';
+const String gen_app_ent1_c23 = 'סטטוס בא';

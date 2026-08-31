@@ -19,3 +19,4 @@ const String gen_app_ent48_c16 = 'מצב';
 const String gen_app_ent48_c17 = 'מחיר';
 const String gen_app_ent48_c18 = 'גיל מומלץ';
 const String gen_app_ent48_c19 = 'סטטוס';
+const String gen_app_ent48_c20 = 'סטטוס בא';

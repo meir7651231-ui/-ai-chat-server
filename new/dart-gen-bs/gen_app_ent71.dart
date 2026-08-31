@@ -2,8 +2,10 @@
 import '../dart-data-bs/auto/gen_app_ent71_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
+import '../dart-ui-bs/ds/ds_date_field.dart';
 import '../dart-ui-bs/ds/ds_select.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
+import '../dart-maor/advance-status.dart';
 import '../dart-maor/norm-email.dart';
 import 'package:flutter/material.dart';
 
@@ -65,7 +67,7 @@ class _GenAppEnt71ScreenState extends State<GenAppEnt71Screen> {
       children: [
         DsSection(title: gen_app_ent71_c5, children: [
           DsField(label: gen_app_ent71_c8, hint: '', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
-          DsField(label: gen_app_ent71_c9, hint: '', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
+          DsDateField(label: gen_app_ent71_c9, value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
           DsField(label: gen_app_ent71_c10, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
           DsField(label: gen_app_ent71_c11, hint: '', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
           DsField(label: gen_app_ent71_c12, hint: '', value: _v[4] ?? '', onChanged: (v) => setState(() => _v[4] = v)),
@@ -78,6 +80,7 @@ class _GenAppEnt71ScreenState extends State<GenAppEnt71Screen> {
           DsField(label: gen_app_ent71_c19, hint: '', value: _v[10] ?? '', onChanged: (v) => setState(() => _v[10] = v)),
           DsField(label: gen_app_ent71_c20, hint: '', value: _v[11] ?? '', onChanged: (v) => setState(() => _v[11] = v)),
           DsField(label: gen_app_ent71_c21, hint: '', value: _v[12] ?? '', onChanged: (v) => setState(() => _v[12] = v)),
+          if ((_v[12] ?? '').trim().isNotEmpty) _live(gen_app_ent71_c22, advanceStatus((_v[12] ?? ''))),
         ]),
         DsSection(title: gen_app_ent71_c6, children: [
           AnimatedBuilder(

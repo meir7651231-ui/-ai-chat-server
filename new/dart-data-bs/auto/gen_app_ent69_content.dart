@@ -21,3 +21,4 @@ const String gen_app_ent69_c18 = 'עלות';
 const String gen_app_ent69_c19 = 'תוקף';
 const String gen_app_ent69_c20 = 'אצווה';
 const String gen_app_ent69_c21 = 'סטטוס';
+const String gen_app_ent69_c22 = 'סטטוס בא';

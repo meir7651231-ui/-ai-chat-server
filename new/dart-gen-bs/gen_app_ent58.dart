@@ -2,9 +2,10 @@
 import '../dart-data-bs/auto/gen_app_ent58_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
+import '../dart-ui-bs/ds/ds_date_field.dart';
 import '../dart-ui-bs/ds/ds_select.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
-import '../dart-maor/fmt-date.dart';
+import '../dart-maor/advance-status.dart';
 import 'package:flutter/material.dart';
 
 class GenAppEnt58Screen extends StatefulWidget {
@@ -20,7 +21,7 @@ class _GenAppEnt58ScreenState extends State<GenAppEnt58Screen> {
 
   void _save() {
     if (_v.values.where((x) => x.trim().isNotEmpty).isEmpty) return;
-    final map = <String, String>{gen_app_ent58_c8: _v[0] ?? '', gen_app_ent58_c9: _v[1] ?? '', gen_app_ent58_c10: _v[2] ?? '', gen_app_ent58_c11: _v[3] ?? '', gen_app_ent58_c12: _v[4] ?? '', gen_app_ent58_c13: _v[5] ?? '', gen_app_ent58_c15: _v[6] ?? ''};
+    final map = <String, String>{gen_app_ent58_c8: _v[0] ?? '', gen_app_ent58_c9: _v[1] ?? '', gen_app_ent58_c10: _v[2] ?? '', gen_app_ent58_c11: _v[3] ?? '', gen_app_ent58_c12: _v[4] ?? '', gen_app_ent58_c13: _v[5] ?? '', gen_app_ent58_c14: _v[6] ?? ''};
     if (_editId != null) {
       appStore.update('app_ent58', _editId!, map);
     } else {
@@ -32,13 +33,13 @@ class _GenAppEnt58ScreenState extends State<GenAppEnt58Screen> {
   void _edit(Map<String, String> r) {
     setState(() {
       _editId = r['__id'];
-      _v = {0: r[gen_app_ent58_c8] ?? '', 1: r[gen_app_ent58_c9] ?? '', 2: r[gen_app_ent58_c10] ?? '', 3: r[gen_app_ent58_c11] ?? '', 4: r[gen_app_ent58_c12] ?? '', 5: r[gen_app_ent58_c13] ?? '', 6: r[gen_app_ent58_c15] ?? ''};
+      _v = {0: r[gen_app_ent58_c8] ?? '', 1: r[gen_app_ent58_c9] ?? '', 2: r[gen_app_ent58_c10] ?? '', 3: r[gen_app_ent58_c11] ?? '', 4: r[gen_app_ent58_c12] ?? '', 5: r[gen_app_ent58_c13] ?? '', 6: r[gen_app_ent58_c14] ?? ''};
     });
   }
 
   Widget _card(Map<String, String> r) {
     final rid = r['__id'] ?? '';
-    return DsRecordCard(labels: const [gen_app_ent58_c8, gen_app_ent58_c9, gen_app_ent58_c10, gen_app_ent58_c11, gen_app_ent58_c12, gen_app_ent58_c13, gen_app_ent58_c15], values: [appStore.displayOf('app_ent11', r[gen_app_ent58_c8] ?? ''), r[gen_app_ent58_c9] ?? '', r[gen_app_ent58_c10] ?? '', r[gen_app_ent58_c11] ?? '', appStore.displayOf('app_ent46', r[gen_app_ent58_c12] ?? ''), r[gen_app_ent58_c13] ?? '', r[gen_app_ent58_c15] ?? ''], stage: (const [gen_app_ent58_c16, gen_app_ent58_c17])[appStore.stageOf('app_ent58', rid)], stageDone: appStore.stageOf('app_ent58', rid) >= 1, onAdvance: () => appStore.advance('app_ent58', rid, 2), onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent58', rid));
+    return DsRecordCard(labels: const [gen_app_ent58_c8, gen_app_ent58_c9, gen_app_ent58_c10, gen_app_ent58_c11, gen_app_ent58_c12, gen_app_ent58_c13, gen_app_ent58_c14], values: [appStore.displayOf('app_ent11', r[gen_app_ent58_c8] ?? ''), r[gen_app_ent58_c9] ?? '', r[gen_app_ent58_c10] ?? '', r[gen_app_ent58_c11] ?? '', appStore.displayOf('app_ent46', r[gen_app_ent58_c12] ?? ''), r[gen_app_ent58_c13] ?? '', r[gen_app_ent58_c14] ?? ''], stage: (const [gen_app_ent58_c16, gen_app_ent58_c17])[appStore.stageOf('app_ent58', rid)], stageDone: appStore.stageOf('app_ent58', rid) >= 1, onAdvance: () => appStore.advance('app_ent58', rid, 2), onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent58', rid));
   }
 
   Widget _live(String label, String out) => Padding(
@@ -70,9 +71,9 @@ class _GenAppEnt58ScreenState extends State<GenAppEnt58Screen> {
           DsField(label: gen_app_ent58_c10, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
           DsField(label: gen_app_ent58_c11, hint: '', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
           DsSelect(label: gen_app_ent58_c12, entity: 'app_ent46', value: _v[4] ?? '', onChanged: (v) => setState(() => _v[4] = v)),
-          DsField(label: gen_app_ent58_c13, hint: '', value: _v[5] ?? '', onChanged: (v) => setState(() => _v[5] = v)),
-          if ((_v[5] ?? '').trim().isNotEmpty) _live(gen_app_ent58_c14, fmtDate((_v[5] ?? ''))),
-          DsField(label: gen_app_ent58_c15, hint: '', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
+          DsDateField(label: gen_app_ent58_c13, value: _v[5] ?? '', onChanged: (v) => setState(() => _v[5] = v)),
+          DsField(label: gen_app_ent58_c14, hint: '', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
+          if ((_v[6] ?? '').trim().isNotEmpty) _live(gen_app_ent58_c15, advanceStatus((_v[6] ?? ''))),
         ]),
         DsSection(title: gen_app_ent58_c6, children: [
           AnimatedBuilder(

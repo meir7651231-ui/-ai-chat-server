@@ -2,6 +2,8 @@
 import '../dart-data-bs/auto/gen_app_ent57_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
+import '../dart-ui-bs/ds/ds_date_field.dart';
+import '../dart-ui-bs/ds/ds_number_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 
 import 'package:flutter/material.dart';
@@ -49,13 +51,13 @@ class _GenAppEnt57ScreenState extends State<GenAppEnt57Screen> {
       bottomBar: DsPrimaryButton(label: _editId == null ? gen_app_ent57_c3 : gen_app_ent57_c4, onTap: _save),
       children: [
         DsSection(title: gen_app_ent57_c5, children: [
-          DsField(label: gen_app_ent57_c8, hint: '', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
+          DsDateField(label: gen_app_ent57_c8, value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
           DsField(label: gen_app_ent57_c9, hint: '', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
           DsField(label: gen_app_ent57_c10, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
           DsField(label: gen_app_ent57_c11, hint: '', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
           DsField(label: gen_app_ent57_c12, hint: '', value: _v[4] ?? '', onChanged: (v) => setState(() => _v[4] = v)),
           DsField(label: gen_app_ent57_c13, hint: '', value: _v[5] ?? '', onChanged: (v) => setState(() => _v[5] = v)),
-          DsField(label: gen_app_ent57_c14, hint: '', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
+          DsNumberField(label: gen_app_ent57_c14, value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
           DsField(label: gen_app_ent57_c15, hint: '', value: _v[7] ?? '', onChanged: (v) => setState(() => _v[7] = v)),
           DsField(label: gen_app_ent57_c16, hint: '', value: _v[8] ?? '', onChanged: (v) => setState(() => _v[8] = v)),
         ]),

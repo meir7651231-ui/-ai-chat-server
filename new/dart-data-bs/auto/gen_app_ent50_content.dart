@@ -17,3 +17,4 @@ const String gen_app_ent50_c14 = 'ביטוח';
 const String gen_app_ent50_c15 = 'תוקף רישוי';
 const String gen_app_ent50_c16 = 'בדיקות';
 const String gen_app_ent50_c17 = 'סטטוס';
+const String gen_app_ent50_c18 = 'סטטוס בא';

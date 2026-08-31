@@ -14,3 +14,4 @@ const String gen_app_ent49_c11 = 'מספר חבר';
 const String gen_app_ent49_c12 = 'מגבלת השאלה';
 const String gen_app_ent49_c13 = 'קנסות';
 const String gen_app_ent49_c14 = 'סטטוס';
+const String gen_app_ent49_c15 = 'סטטוס בא';

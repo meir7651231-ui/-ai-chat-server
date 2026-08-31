@@ -2,6 +2,7 @@
 import '../dart-data-bs/auto/gen_app_ent18_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
+import '../dart-ui-bs/ds/ds_toggle_tile.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/gen-join-code.dart';
 import 'package:flutter/material.dart';
@@ -74,7 +75,7 @@ class _GenAppEnt18ScreenState extends State<GenAppEnt18Screen> {
           DsField(label: gen_app_ent18_c16, hint: '', value: _v[7] ?? '', onChanged: (v) => setState(() => _v[7] = v)),
           DsField(label: gen_app_ent18_c17, hint: '', value: _v[8] ?? '', onChanged: (v) => setState(() => _v[8] = v)),
           DsField(label: gen_app_ent18_c18, hint: '', value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
-          DsField(label: gen_app_ent18_c19, hint: '', value: _v[10] ?? '', onChanged: (v) => setState(() => _v[10] = v)),
+          DsToggleTile(label: gen_app_ent18_c19, value: _v[10] ?? '', onChanged: (v) => setState(() => _v[10] = v)),
         ]),
         DsSection(title: gen_app_ent18_c6, children: [
           AnimatedBuilder(

@@ -4,6 +4,7 @@ import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_select.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
+import '../dart-maor/advance-status.dart';
 import '../dart-maor/norm-email.dart';
 import 'package:flutter/material.dart';
 
@@ -80,6 +81,7 @@ class _GenAppEnt12ScreenState extends State<GenAppEnt12Screen> {
           DsField(label: gen_app_ent12_c21, hint: '', value: _v[12] ?? '', onChanged: (v) => setState(() => _v[12] = v)),
           DsField(label: gen_app_ent12_c22, hint: '', value: _v[13] ?? '', onChanged: (v) => setState(() => _v[13] = v)),
           DsField(label: gen_app_ent12_c23, hint: '', value: _v[14] ?? '', onChanged: (v) => setState(() => _v[14] = v)),
+          if ((_v[14] ?? '').trim().isNotEmpty) _live(gen_app_ent12_c24, advanceStatus((_v[14] ?? ''))),
         ]),
         DsSection(title: gen_app_ent12_c6, children: [
           AnimatedBuilder(

@@ -2,8 +2,11 @@
 import '../dart-data-bs/auto/gen_app_ent2_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
+import '../dart-ui-bs/ds/ds_number_field.dart';
+import '../dart-ui-bs/ds/ds_toggle_tile.dart';
 import '../dart-ui-bs/ds/ds_select.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
+import '../dart-maor/advance-status.dart';
 import '../dart-maor/norm-email.dart';
 import '../dart-maor/phone-region.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +71,7 @@ class _GenAppEnt2ScreenState extends State<GenAppEnt2Screen> {
           DsField(label: gen_app_ent2_c8, hint: '', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
           DsField(label: gen_app_ent2_c9, hint: '', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
           DsField(label: gen_app_ent2_c10, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
-          DsField(label: gen_app_ent2_c11, hint: '', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
+          DsNumberField(label: gen_app_ent2_c11, value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
           DsField(label: gen_app_ent2_c12, hint: '', value: _v[4] ?? '', onChanged: (v) => setState(() => _v[4] = v)),
           DsField(label: gen_app_ent2_c13, hint: '', value: _v[5] ?? '', onChanged: (v) => setState(() => _v[5] = v)),
           DsField(label: gen_app_ent2_c14, hint: '', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
@@ -82,9 +85,10 @@ class _GenAppEnt2ScreenState extends State<GenAppEnt2Screen> {
           DsField(label: gen_app_ent2_c22, hint: '', value: _v[12] ?? '', onChanged: (v) => setState(() => _v[12] = v)),
           DsField(label: gen_app_ent2_c23, hint: '', value: _v[13] ?? '', onChanged: (v) => setState(() => _v[13] = v)),
           DsField(label: gen_app_ent2_c24, hint: '', value: _v[14] ?? '', onChanged: (v) => setState(() => _v[14] = v)),
-          DsField(label: gen_app_ent2_c25, hint: '', value: _v[15] ?? '', onChanged: (v) => setState(() => _v[15] = v)),
+          DsToggleTile(label: gen_app_ent2_c25, value: _v[15] ?? '', onChanged: (v) => setState(() => _v[15] = v)),
           DsSelect(label: gen_app_ent2_c26, entity: 'app_ent4', value: _v[16] ?? '', onChanged: (v) => setState(() => _v[16] = v)),
           DsField(label: gen_app_ent2_c27, hint: '', value: _v[17] ?? '', onChanged: (v) => setState(() => _v[17] = v)),
+          if ((_v[17] ?? '').trim().isNotEmpty) _live(gen_app_ent2_c28, advanceStatus((_v[17] ?? ''))),
         ]),
         DsSection(title: gen_app_ent2_c6, children: [
           AnimatedBuilder(

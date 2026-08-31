@@ -18,5 +18,4 @@ const String gen_app_ent65_c15 = 'הוראות';
 const String gen_app_ent65_c16 = 'ציוד';
 const String gen_app_ent65_c17 = 'תרגולים';
 const String gen_app_ent65_c18 = 'תאריך עדכון';
-const String gen_app_ent65_c19 = 'תאריך לתצוגה';
-const String gen_app_ent65_c20 = 'גרסה';
+const String gen_app_ent65_c19 = 'גרסה';

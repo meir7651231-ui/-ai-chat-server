@@ -2,8 +2,10 @@
 import '../dart-data-bs/auto/gen_app_ent7_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
+import '../dart-ui-bs/ds/ds_number_field.dart';
 import '../dart-ui-bs/ds/ds_select.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
+import '../dart-maor/advance-status.dart';
 import '../dart-maor/norm-email.dart';
 import 'package:flutter/material.dart';
 
@@ -38,7 +40,7 @@ class _GenAppEnt7ScreenState extends State<GenAppEnt7Screen> {
 
   Widget _card(Map<String, String> r) {
     final rid = r['__id'] ?? '';
-    return DsRecordCard(labels: const [gen_app_ent7_c8, gen_app_ent7_c9, gen_app_ent7_c10, gen_app_ent7_c11, gen_app_ent7_c12, gen_app_ent7_c13, gen_app_ent7_c15, gen_app_ent7_c16, gen_app_ent7_c17, gen_app_ent7_c18, gen_app_ent7_c19, gen_app_ent7_c20, gen_app_ent7_c21, gen_app_ent7_c22, gen_app_ent7_c23, gen_app_ent7_c24, gen_app_ent7_c25], values: [r[gen_app_ent7_c8] ?? '', r[gen_app_ent7_c9] ?? '', r[gen_app_ent7_c10] ?? '', appStore.displayOf('app_ent11', r[gen_app_ent7_c11] ?? ''), r[gen_app_ent7_c12] ?? '', r[gen_app_ent7_c13] ?? '', r[gen_app_ent7_c15] ?? '', r[gen_app_ent7_c16] ?? '', appStore.displayOf('app_ent2', r[gen_app_ent7_c17] ?? ''), appStore.displayOf('app_ent4', r[gen_app_ent7_c18] ?? ''), appStore.displayOf('app_ent14', r[gen_app_ent7_c19] ?? ''), appStore.displayOf('app_ent15', r[gen_app_ent7_c20] ?? ''), r[gen_app_ent7_c21] ?? '', r[gen_app_ent7_c22] ?? '', r[gen_app_ent7_c23] ?? '', r[gen_app_ent7_c24] ?? '', r[gen_app_ent7_c25] ?? ''], stage: (const [gen_app_ent7_c26, gen_app_ent7_c27, gen_app_ent7_c28, gen_app_ent7_c29, gen_app_ent7_c30, gen_app_ent7_c31, gen_app_ent7_c32, gen_app_ent7_c33, gen_app_ent7_c34, gen_app_ent7_c35, gen_app_ent7_c36, gen_app_ent7_c37])[appStore.stageOf('app_ent7', rid)], stageDone: appStore.stageOf('app_ent7', rid) >= 11, onAdvance: () => appStore.advance('app_ent7', rid, 12), onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent7', rid));
+    return DsRecordCard(labels: const [gen_app_ent7_c8, gen_app_ent7_c9, gen_app_ent7_c10, gen_app_ent7_c11, gen_app_ent7_c12, gen_app_ent7_c13, gen_app_ent7_c15, gen_app_ent7_c16, gen_app_ent7_c17, gen_app_ent7_c18, gen_app_ent7_c19, gen_app_ent7_c20, gen_app_ent7_c21, gen_app_ent7_c22, gen_app_ent7_c23, gen_app_ent7_c24, gen_app_ent7_c25], values: [r[gen_app_ent7_c8] ?? '', r[gen_app_ent7_c9] ?? '', r[gen_app_ent7_c10] ?? '', appStore.displayOf('app_ent11', r[gen_app_ent7_c11] ?? ''), r[gen_app_ent7_c12] ?? '', r[gen_app_ent7_c13] ?? '', r[gen_app_ent7_c15] ?? '', r[gen_app_ent7_c16] ?? '', appStore.displayOf('app_ent2', r[gen_app_ent7_c17] ?? ''), appStore.displayOf('app_ent4', r[gen_app_ent7_c18] ?? ''), appStore.displayOf('app_ent14', r[gen_app_ent7_c19] ?? ''), appStore.displayOf('app_ent15', r[gen_app_ent7_c20] ?? ''), r[gen_app_ent7_c21] ?? '', r[gen_app_ent7_c22] ?? '', r[gen_app_ent7_c23] ?? '', r[gen_app_ent7_c24] ?? '', r[gen_app_ent7_c25] ?? ''], stage: (const [gen_app_ent7_c27, gen_app_ent7_c28, gen_app_ent7_c29, gen_app_ent7_c30, gen_app_ent7_c31, gen_app_ent7_c32, gen_app_ent7_c33, gen_app_ent7_c34, gen_app_ent7_c35, gen_app_ent7_c36, gen_app_ent7_c37, gen_app_ent7_c38])[appStore.stageOf('app_ent7', rid)], stageDone: appStore.stageOf('app_ent7', rid) >= 11, onAdvance: () => appStore.advance('app_ent7', rid, 12), onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent7', rid));
   }
 
   Widget _live(String label, String out) => Padding(
@@ -63,9 +65,9 @@ class _GenAppEnt7ScreenState extends State<GenAppEnt7Screen> {
       icon: gen_app_ent7_c2,
       bottomBar: DsPrimaryButton(label: _editId == null ? gen_app_ent7_c3 : gen_app_ent7_c4, onTap: _save),
       children: [
-        DsWorkflow(steps: const [gen_app_ent7_c26, gen_app_ent7_c27, gen_app_ent7_c28, gen_app_ent7_c29, gen_app_ent7_c30, gen_app_ent7_c31, gen_app_ent7_c32, gen_app_ent7_c33, gen_app_ent7_c34, gen_app_ent7_c35, gen_app_ent7_c36, gen_app_ent7_c37], current: 0),
+        DsWorkflow(steps: const [gen_app_ent7_c27, gen_app_ent7_c28, gen_app_ent7_c29, gen_app_ent7_c30, gen_app_ent7_c31, gen_app_ent7_c32, gen_app_ent7_c33, gen_app_ent7_c34, gen_app_ent7_c35, gen_app_ent7_c36, gen_app_ent7_c37, gen_app_ent7_c38], current: 0),
         DsSection(title: gen_app_ent7_c5, children: [
-          DsField(label: gen_app_ent7_c8, hint: '', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
+          DsNumberField(label: gen_app_ent7_c8, value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
           DsField(label: gen_app_ent7_c9, hint: '', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
           DsField(label: gen_app_ent7_c10, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
           DsSelect(label: gen_app_ent7_c11, entity: 'app_ent11', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
@@ -78,11 +80,12 @@ class _GenAppEnt7ScreenState extends State<GenAppEnt7Screen> {
           DsSelect(label: gen_app_ent7_c18, entity: 'app_ent4', value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
           DsSelect(label: gen_app_ent7_c19, entity: 'app_ent14', value: _v[10] ?? '', onChanged: (v) => setState(() => _v[10] = v)),
           DsSelect(label: gen_app_ent7_c20, entity: 'app_ent15', value: _v[11] ?? '', onChanged: (v) => setState(() => _v[11] = v)),
-          DsField(label: gen_app_ent7_c21, hint: '', value: _v[12] ?? '', onChanged: (v) => setState(() => _v[12] = v)),
+          DsNumberField(label: gen_app_ent7_c21, value: _v[12] ?? '', onChanged: (v) => setState(() => _v[12] = v)),
           DsField(label: gen_app_ent7_c22, hint: '', value: _v[13] ?? '', onChanged: (v) => setState(() => _v[13] = v)),
           DsField(label: gen_app_ent7_c23, hint: '', value: _v[14] ?? '', onChanged: (v) => setState(() => _v[14] = v)),
           DsField(label: gen_app_ent7_c24, hint: '', value: _v[15] ?? '', onChanged: (v) => setState(() => _v[15] = v)),
           DsField(label: gen_app_ent7_c25, hint: '', value: _v[16] ?? '', onChanged: (v) => setState(() => _v[16] = v)),
+          if ((_v[16] ?? '').trim().isNotEmpty) _live(gen_app_ent7_c26, advanceStatus((_v[16] ?? ''))),
         ]),
         DsSection(title: gen_app_ent7_c6, children: [
           AnimatedBuilder(

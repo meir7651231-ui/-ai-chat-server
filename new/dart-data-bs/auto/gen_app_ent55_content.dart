@@ -15,3 +15,4 @@ const String gen_app_ent55_c12 = 'ימים';
 const String gen_app_ent55_c13 = 'טווח שעות';
 const String gen_app_ent55_c14 = 'אישור אפוטרופוס';
 const String gen_app_ent55_c15 = 'סטטוס';
+const String gen_app_ent55_c16 = 'סטטוס בא';

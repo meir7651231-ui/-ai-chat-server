@@ -17,5 +17,4 @@ const String gen_app_ent41_c14 = 'אישורי רופא';
 const String gen_app_ent41_c15 = 'תוכנית חירום';
 const String gen_app_ent41_c16 = 'איש קשר';
 const String gen_app_ent41_c17 = 'תאריך עדכון';
-const String gen_app_ent41_c18 = 'תאריך לתצוגה';
-const String gen_app_ent41_c19 = 'הרשאות';
+const String gen_app_ent41_c18 = 'הרשאות';

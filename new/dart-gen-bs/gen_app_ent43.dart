@@ -2,6 +2,7 @@
 import '../dart-data-bs/auto/gen_app_ent43_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
+import '../dart-ui-bs/ds/ds_date_field.dart';
 import '../dart-ui-bs/ds/ds_select.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 
@@ -56,7 +57,7 @@ class _GenAppEnt43ScreenState extends State<GenAppEnt43Screen> {
           DsField(label: gen_app_ent43_c11, hint: '', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
           DsField(label: gen_app_ent43_c12, hint: '', value: _v[4] ?? '', onChanged: (v) => setState(() => _v[4] = v)),
           DsField(label: gen_app_ent43_c13, hint: '', value: _v[5] ?? '', onChanged: (v) => setState(() => _v[5] = v)),
-          DsField(label: gen_app_ent43_c14, hint: '', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
+          DsDateField(label: gen_app_ent43_c14, value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
           DsSelect(label: gen_app_ent43_c15, entity: 'app_ent70', value: _v[7] ?? '', onChanged: (v) => setState(() => _v[7] = v)),
           DsField(label: gen_app_ent43_c16, hint: '', value: _v[8] ?? '', onChanged: (v) => setState(() => _v[8] = v)),
         ]),

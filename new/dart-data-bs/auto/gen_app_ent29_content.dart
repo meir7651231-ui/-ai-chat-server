@@ -19,5 +19,5 @@ const String gen_app_ent29_c16 = 'מטלות';
 const String gen_app_ent29_c17 = 'הערכה';
 const String gen_app_ent29_c18 = 'התאמות';
 const String gen_app_ent29_c19 = 'תאריך';
-const String gen_app_ent29_c20 = 'תאריך לתצוגה';
-const String gen_app_ent29_c21 = 'סטטוס';
+const String gen_app_ent29_c20 = 'סטטוס';
+const String gen_app_ent29_c21 = 'סטטוס בא';

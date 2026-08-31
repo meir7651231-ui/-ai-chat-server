@@ -18,3 +18,4 @@ const String gen_app_ent13_c15 = 'תשלומים';
 const String gen_app_ent13_c16 = 'מסמכים';
 const String gen_app_ent13_c17 = 'אנשי קשר';
 const String gen_app_ent13_c18 = 'סטטוס';
+const String gen_app_ent13_c19 = 'סטטוס בא';

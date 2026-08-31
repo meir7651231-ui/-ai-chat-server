@@ -15,3 +15,4 @@ const String gen_app_ent16_c12 = 'תלמידים';
 const String gen_app_ent16_c13 = 'שעות';
 const String gen_app_ent16_c14 = 'חדר';
 const String gen_app_ent16_c15 = 'סטטוס';
+const String gen_app_ent16_c16 = 'סטטוס בא';

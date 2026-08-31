@@ -2,8 +2,10 @@
 import '../dart-data-bs/auto/gen_app_ent51_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
+import '../dart-ui-bs/ds/ds_number_field.dart';
 import '../dart-ui-bs/ds/ds_select.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
+import '../dart-maor/advance-status.dart';
 import '../dart-maor/phone-region.dart';
 import 'package:flutter/material.dart';
 
@@ -74,8 +76,9 @@ class _GenAppEnt51ScreenState extends State<GenAppEnt51Screen> {
           DsField(label: gen_app_ent51_c15, hint: '', value: _v[7] ?? '', onChanged: (v) => setState(() => _v[7] = v)),
           DsField(label: gen_app_ent51_c16, hint: '', value: _v[8] ?? '', onChanged: (v) => setState(() => _v[8] = v)),
           if ((_v[8] ?? '').trim().isNotEmpty) _live(gen_app_ent51_c17, phoneRegion((_v[8] ?? ''))),
-          DsField(label: gen_app_ent51_c18, hint: '', value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
+          DsNumberField(label: gen_app_ent51_c18, value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
           DsField(label: gen_app_ent51_c19, hint: '', value: _v[10] ?? '', onChanged: (v) => setState(() => _v[10] = v)),
+          if ((_v[10] ?? '').trim().isNotEmpty) _live(gen_app_ent51_c20, advanceStatus((_v[10] ?? ''))),
         ]),
         DsSection(title: gen_app_ent51_c6, children: [
           AnimatedBuilder(

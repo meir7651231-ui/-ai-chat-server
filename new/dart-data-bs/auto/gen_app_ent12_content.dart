@@ -23,3 +23,4 @@ const String gen_app_ent12_c20 = 'מורשה ציונים';
 const String gen_app_ent12_c21 = 'מורשה מידע רפואי';
 const String gen_app_ent12_c22 = 'העדפות תקשורת';
 const String gen_app_ent12_c23 = 'סטטוס';
+const String gen_app_ent12_c24 = 'סטטוס בא';

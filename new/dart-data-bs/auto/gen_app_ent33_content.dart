@@ -18,3 +18,4 @@ const String gen_app_ent33_c15 = 'ניקוד';
 const String gen_app_ent33_c16 = 'גרסה';
 const String gen_app_ent33_c17 = 'מקור';
 const String gen_app_ent33_c18 = 'סטטוס';
+const String gen_app_ent33_c19 = 'סטטוס בא';

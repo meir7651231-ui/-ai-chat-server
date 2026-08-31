@@ -2,8 +2,9 @@
 import '../dart-data-bs/auto/gen_app_ent1_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
+import '../dart-ui-bs/ds/ds_number_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
-
+import '../dart-maor/advance-status.dart';
 import 'package:flutter/material.dart';
 
 class GenAppEnt1Screen extends StatefulWidget {
@@ -40,6 +41,20 @@ class _GenAppEnt1ScreenState extends State<GenAppEnt1Screen> {
     return DsRecordCard(labels: const [gen_app_ent1_c8, gen_app_ent1_c9, gen_app_ent1_c10, gen_app_ent1_c11, gen_app_ent1_c12, gen_app_ent1_c13, gen_app_ent1_c14, gen_app_ent1_c15, gen_app_ent1_c16, gen_app_ent1_c17, gen_app_ent1_c18, gen_app_ent1_c19, gen_app_ent1_c20, gen_app_ent1_c21, gen_app_ent1_c22], values: [r[gen_app_ent1_c8] ?? '', r[gen_app_ent1_c9] ?? '', r[gen_app_ent1_c10] ?? '', r[gen_app_ent1_c11] ?? '', r[gen_app_ent1_c12] ?? '', r[gen_app_ent1_c13] ?? '', r[gen_app_ent1_c14] ?? '', r[gen_app_ent1_c15] ?? '', r[gen_app_ent1_c16] ?? '', r[gen_app_ent1_c17] ?? '', r[gen_app_ent1_c18] ?? '', r[gen_app_ent1_c19] ?? '', r[gen_app_ent1_c20] ?? '', r[gen_app_ent1_c21] ?? '', r[gen_app_ent1_c22] ?? ''], onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent1', rid));
   }
 
+  Widget _live(String label, String out) => Padding(
+        padding: const EdgeInsets.only(top: 2, bottom: 6),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(11),
+          decoration: BoxDecoration(color: DsTokens.accentSoft, borderRadius: BorderRadius.circular(DsTokens.rSm)),
+          child: Row(children: [
+            const Icon(Icons.bolt, size: 15, color: DsTokens.accentDark),
+            const SizedBox(width: 7),
+            Expanded(child: Text('$label · $out', style: const TextStyle(color: DsTokens.accentDark, fontSize: 13, fontWeight: FontWeight.w700))),
+          ]),
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     return DsScaffold(
@@ -55,7 +70,7 @@ class _GenAppEnt1ScreenState extends State<GenAppEnt1Screen> {
           DsField(label: gen_app_ent1_c11, hint: '', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
           DsField(label: gen_app_ent1_c12, hint: '', value: _v[4] ?? '', onChanged: (v) => setState(() => _v[4] = v)),
           DsField(label: gen_app_ent1_c13, hint: '', value: _v[5] ?? '', onChanged: (v) => setState(() => _v[5] = v)),
-          DsField(label: gen_app_ent1_c14, hint: '', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
+          DsNumberField(label: gen_app_ent1_c14, value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
           DsField(label: gen_app_ent1_c15, hint: '', value: _v[7] ?? '', onChanged: (v) => setState(() => _v[7] = v)),
           DsField(label: gen_app_ent1_c16, hint: '', value: _v[8] ?? '', onChanged: (v) => setState(() => _v[8] = v)),
           DsField(label: gen_app_ent1_c17, hint: '', value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
@@ -64,6 +79,7 @@ class _GenAppEnt1ScreenState extends State<GenAppEnt1Screen> {
           DsField(label: gen_app_ent1_c20, hint: '', value: _v[12] ?? '', onChanged: (v) => setState(() => _v[12] = v)),
           DsField(label: gen_app_ent1_c21, hint: '', value: _v[13] ?? '', onChanged: (v) => setState(() => _v[13] = v)),
           DsField(label: gen_app_ent1_c22, hint: '', value: _v[14] ?? '', onChanged: (v) => setState(() => _v[14] = v)),
+          if ((_v[14] ?? '').trim().isNotEmpty) _live(gen_app_ent1_c23, advanceStatus((_v[14] ?? ''))),
         ]),
         DsSection(title: gen_app_ent1_c6, children: [
           AnimatedBuilder(

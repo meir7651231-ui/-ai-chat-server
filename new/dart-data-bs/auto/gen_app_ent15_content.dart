@@ -20,3 +20,4 @@ const String gen_app_ent15_c17 = 'מקצועות';
 const String gen_app_ent15_c18 = 'שעות';
 const String gen_app_ent15_c19 = 'הורים';
 const String gen_app_ent15_c20 = 'סטטוס';
+const String gen_app_ent15_c21 = 'סטטוס בא';

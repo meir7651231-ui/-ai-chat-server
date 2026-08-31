@@ -18,3 +18,4 @@ const String gen_app_ent62_c15 = 'מיקום';
 const String gen_app_ent62_c16 = 'שעות פעילות';
 const String gen_app_ent62_c17 = 'הזמנות';
 const String gen_app_ent62_c18 = 'סטטוס';
+const String gen_app_ent62_c19 = 'סטטוס בא';

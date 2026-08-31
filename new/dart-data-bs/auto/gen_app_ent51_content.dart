@@ -19,3 +19,4 @@ const String gen_app_ent51_c16 = 'אזור';
 const String gen_app_ent51_c17 = 'סיווג אזור';
 const String gen_app_ent51_c18 = 'מחיר';
 const String gen_app_ent51_c19 = 'סטטוס';
+const String gen_app_ent51_c20 = 'סטטוס בא';

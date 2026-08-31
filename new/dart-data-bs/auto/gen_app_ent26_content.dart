@@ -22,3 +22,4 @@ const String gen_app_ent26_c19 = 'קבוצה';
 const String gen_app_ent26_c20 = 'ציוד';
 const String gen_app_ent26_c21 = 'סוג שיעור';
 const String gen_app_ent26_c22 = 'סטטוס';
+const String gen_app_ent26_c23 = 'סטטוס בא';

@@ -144,26 +144,35 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const SK = `'${slug}'`;   // מפתח-חנות = slug יציב (לא שם-תצוגה חתוך ⇒ אפס דליפת-נתונים בין ישויות)
 
   const funcImports = new Set();
+  const typedImports = new Set();
   const labelConst = [];
   const fieldBlocks = [];
   const recValsR = [];   // ערך-תצוגה בטבלה פר-שדה (מפתח-זר ⇒ שם-היעד; אחר ⇒ הערך הגולמי)
   let hasLive = false;
   let hasRel = false;
+  let usedField = false;
   schema.forEach((s, i) => {
     const cl = k(s.label); labelConst.push(cl);
+    const bind = `value: _v[${i}] ?? '', onChanged: (v) => setState(() => _v[${i}] = v)`;
     // (1) שדה-קשר גובר: השדה נוקב בישות-אחרת ⇒ בורר-רשומה ששומר מזהה-יעד יציב (לא מחרוזת).
     const rel = pickRelation(s.label, name, entityNames);
     const tslug = rel ? (nameToSlug[rel] || null) : null;
     if (tslug) {
       hasRel = true;
-      fieldBlocks.push(`          DsSelect(label: ${cl}, entity: '${tslug}', value: _v[${i}] ?? '', onChanged: (v) => setState(() => _v[${i}] = v)),`);
+      fieldBlocks.push(`          DsSelect(label: ${cl}, entity: '${tslug}', ${bind}),`);
       recValsR.push(`appStore.displayOf('${tslug}', r[${cl}] ?? '')`);
       return;
     }
-    // (2) שדה-טקסט + לוגיקת-אימפריה חיה מכוונת-מטרה (טיפוס+IDF+קידומת+מובהקות).
-    fieldBlocks.push(`          DsField(label: ${cl}, hint: '', value: _v[${i}] ?? '', onChanged: (v) => setState(() => _v[${i}] = v)),`);
+    // (2) טיפוס נאחז-מהאטומים ⇒ הווידג'ט האמיתי: תאריך→בורר · מספר→מקלדת · דו-ערכי→מתג.
+    const ft = typeOf(s.label);
+    if (ft === 'date') { typedImports.add("import '../dart-ui-bs/ds/ds_date_field.dart';"); fieldBlocks.push(`          DsDateField(label: ${cl}, ${bind}),`); recValsR.push(`r[${cl}] ?? ''`); return; }
+    if (ft === 'num')  { typedImports.add("import '../dart-ui-bs/ds/ds_number_field.dart';"); fieldBlocks.push(`          DsNumberField(label: ${cl}, ${bind}),`); recValsR.push(`r[${cl}] ?? ''`); return; }
+    if (ft === 'bool') { typedImports.add("import '../dart-ui-bs/ds/ds_toggle_tile.dart';"); fieldBlocks.push(`          DsToggleTile(label: ${cl}, ${bind}),`); recValsR.push(`r[${cl}] ?? ''`); return; }
+    // (3) טקסט: שדה חופשי + לוגיקת-אימפריה חיה מכוונת-מטרה (טיפוס+IDF+קידומת+מובהקות).
+    usedField = true;
+    fieldBlocks.push(`          DsField(label: ${cl}, hint: '', ${bind}),`);
     recValsR.push(`r[${cl}] ?? ''`);
-    const xf = pickXform(s.label, typeOf(s.label));
+    const xf = pickXform(s.label, ft);
     if (xf) {
       funcImports.add(`import '../${xf.shelf.replace(/^new\//, '')}/${xf.file}';`);
       const cx = k(xf.label);   // תווית עברית מתיאור-האטום — לא מזהה-קוד גולמי (טוהר-תצוגה)
@@ -195,8 +204,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→קשרים→מסע→חנות→טבלה + לוגיקה). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
-import '../dart-ui-bs/ds/ds_field.dart';
-${relImport}import '../dart-ui-bs/ds/ds_store.dart';
+${usedField ? "import '../dart-ui-bs/ds/ds_field.dart';\n" : ''}${[...typedImports].sort().map((x) => x + '\n').join('')}${relImport}import '../dart-ui-bs/ds/ds_store.dart';
 ${[...funcImports].sort().join('\n')}
 import 'package:flutter/material.dart';
 
