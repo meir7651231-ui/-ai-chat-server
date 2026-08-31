@@ -6,6 +6,7 @@ import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_date_field.dart';
 import '../dart-ui-bs/ds/ds_number_field.dart';
 import '../dart-ui-bs/ds/ds_select.dart';
+import '../dart-ui-bs/ds/ds_multi_select.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/advance-status.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,7 @@ class _GenAppEnt44ScreenState extends State<GenAppEnt44Screen> {
 
   Widget _card(Map<String, String> r) {
     final rid = r['__id'] ?? '';
-    return DsRecordCard(labels: const [gen_app_ent44_c9, gen_app_ent44_c10, gen_app_ent44_c11, gen_app_ent44_c12, gen_app_ent44_c13, gen_app_ent44_c14, gen_app_ent44_c15, gen_app_ent44_c16, gen_app_ent44_c17, gen_app_ent44_c18, gen_app_ent44_c19, gen_app_ent44_c20, gen_app_ent44_c21, gen_app_ent44_c22], values: [appStore.displayOf('app_ent4', r[gen_app_ent44_c9] ?? ''), appStore.displayOf('app_ent14', r[gen_app_ent44_c10] ?? ''), r[gen_app_ent44_c11] ?? '', appStore.displayOf('app_ent11', r[gen_app_ent44_c12] ?? ''), r[gen_app_ent44_c13] ?? '', r[gen_app_ent44_c14] ?? '', r[gen_app_ent44_c15] ?? '', r[gen_app_ent44_c16] ?? '', appStore.displayOf('app_ent47', r[gen_app_ent44_c17] ?? ''), r[gen_app_ent44_c18] ?? '', r[gen_app_ent44_c19] ?? '', r[gen_app_ent44_c20] ?? '', r[gen_app_ent44_c21] ?? '', r[gen_app_ent44_c22] ?? ''], stage: (const [gen_app_ent44_c24, gen_app_ent44_c25, gen_app_ent44_c26, gen_app_ent44_c27])[appStore.stageOf('app_ent44', rid)], stageDone: appStore.stageOf('app_ent44', rid) >= 3, stages: const [gen_app_ent44_c24, gen_app_ent44_c25, gen_app_ent44_c26, gen_app_ent44_c27], stageIndex: appStore.stageOf('app_ent44', rid), onStage: (i) => appStore.setStage('app_ent44', rid, i), onAdvance: () => appStore.advance('app_ent44', rid, 4), onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent44', rid), footer: Wrap(spacing: 6, runSpacing: 6, children: [_backChip(gen_app_ent44_c28, appStore.referencing('app_ent45', gen_app_ent44_c29, rid).length)]));
+    return DsRecordCard(labels: const [gen_app_ent44_c9, gen_app_ent44_c10, gen_app_ent44_c11, gen_app_ent44_c12, gen_app_ent44_c13, gen_app_ent44_c14, gen_app_ent44_c15, gen_app_ent44_c16, gen_app_ent44_c17, gen_app_ent44_c18, gen_app_ent44_c19, gen_app_ent44_c20, gen_app_ent44_c21, gen_app_ent44_c22], values: [appStore.displayOf('app_ent4', r[gen_app_ent44_c9] ?? ''), appStore.displayOf('app_ent14', r[gen_app_ent44_c10] ?? ''), r[gen_app_ent44_c11] ?? '', appStore.displayOf('app_ent11', r[gen_app_ent44_c12] ?? ''), r[gen_app_ent44_c13] ?? '', r[gen_app_ent44_c14] ?? '', r[gen_app_ent44_c15] ?? '', r[gen_app_ent44_c16] ?? '', appStore.displayOf('app_ent47', r[gen_app_ent44_c17] ?? ''), r[gen_app_ent44_c18] ?? '', r[gen_app_ent44_c19] ?? '', appStore.displayList('app_ent46', r[gen_app_ent44_c20] ?? ''), r[gen_app_ent44_c21] ?? '', r[gen_app_ent44_c22] ?? ''], stage: (const [gen_app_ent44_c24, gen_app_ent44_c25, gen_app_ent44_c26, gen_app_ent44_c27])[appStore.stageOf('app_ent44', rid)], stageDone: appStore.stageOf('app_ent44', rid) >= 3, stages: const [gen_app_ent44_c24, gen_app_ent44_c25, gen_app_ent44_c26, gen_app_ent44_c27], stageIndex: appStore.stageOf('app_ent44', rid), onStage: (i) => appStore.setStage('app_ent44', rid, i), onAdvance: () => appStore.advance('app_ent44', rid, 4), onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent44', rid), footer: Wrap(spacing: 6, runSpacing: 6, children: [_backChip(gen_app_ent44_c28, appStore.referencing('app_ent45', gen_app_ent44_c29, rid).length)]));
   }
 
   Widget _backChip(String label, int n) => Container(
@@ -58,7 +59,7 @@ class _GenAppEnt44ScreenState extends State<GenAppEnt44Screen> {
     final b = StringBuffer();
     b.writeln(const [gen_app_ent44_c9, gen_app_ent44_c10, gen_app_ent44_c11, gen_app_ent44_c12, gen_app_ent44_c13, gen_app_ent44_c14, gen_app_ent44_c15, gen_app_ent44_c16, gen_app_ent44_c17, gen_app_ent44_c18, gen_app_ent44_c19, gen_app_ent44_c20, gen_app_ent44_c21, gen_app_ent44_c22].map((h) => '"' + h.replaceAll('"', '""') + '"').join(','));
     for (final r in appStore.records('app_ent44')) {
-      b.writeln([appStore.displayOf('app_ent4', r[gen_app_ent44_c9] ?? ''), appStore.displayOf('app_ent14', r[gen_app_ent44_c10] ?? ''), r[gen_app_ent44_c11] ?? '', appStore.displayOf('app_ent11', r[gen_app_ent44_c12] ?? ''), r[gen_app_ent44_c13] ?? '', r[gen_app_ent44_c14] ?? '', r[gen_app_ent44_c15] ?? '', r[gen_app_ent44_c16] ?? '', appStore.displayOf('app_ent47', r[gen_app_ent44_c17] ?? ''), r[gen_app_ent44_c18] ?? '', r[gen_app_ent44_c19] ?? '', r[gen_app_ent44_c20] ?? '', r[gen_app_ent44_c21] ?? '', r[gen_app_ent44_c22] ?? ''].map((v) => '"' + v.replaceAll('"', '""') + '"').join(','));
+      b.writeln([appStore.displayOf('app_ent4', r[gen_app_ent44_c9] ?? ''), appStore.displayOf('app_ent14', r[gen_app_ent44_c10] ?? ''), r[gen_app_ent44_c11] ?? '', appStore.displayOf('app_ent11', r[gen_app_ent44_c12] ?? ''), r[gen_app_ent44_c13] ?? '', r[gen_app_ent44_c14] ?? '', r[gen_app_ent44_c15] ?? '', r[gen_app_ent44_c16] ?? '', appStore.displayOf('app_ent47', r[gen_app_ent44_c17] ?? ''), r[gen_app_ent44_c18] ?? '', r[gen_app_ent44_c19] ?? '', appStore.displayList('app_ent46', r[gen_app_ent44_c20] ?? ''), r[gen_app_ent44_c21] ?? '', r[gen_app_ent44_c22] ?? ''].map((v) => '"' + v.replaceAll('"', '""') + '"').join(','));
     }
     return b.toString();
   }
@@ -118,7 +119,7 @@ class _GenAppEnt44ScreenState extends State<GenAppEnt44Screen> {
           DsSelect(label: gen_app_ent44_c17, entity: 'app_ent47', value: _v[8] ?? '', onChanged: (v) => setState(() => _v[8] = v)),
           DsDateField(label: gen_app_ent44_c18, value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
           DsDateField(label: gen_app_ent44_c19, value: _v[10] ?? '', onChanged: (v) => setState(() => _v[10] = v)),
-          DsNumberField(label: gen_app_ent44_c20, value: _v[11] ?? '', onChanged: (v) => setState(() => _v[11] = v)),
+          DsMultiSelect(label: gen_app_ent44_c20, entity: 'app_ent46', value: _v[11] ?? '', onChanged: (v) => setState(() => _v[11] = v)),
           DsField(label: gen_app_ent44_c21, hint: '', value: _v[12] ?? '', onChanged: (v) => setState(() => _v[12] = v)),
           DsField(label: gen_app_ent44_c22, hint: '', value: _v[13] ?? '', onChanged: (v) => setState(() => _v[13] = v)),
           if ((_v[13] ?? '').trim().isNotEmpty) _live(gen_app_ent44_c23, advanceStatus((_v[13] ?? ''))),

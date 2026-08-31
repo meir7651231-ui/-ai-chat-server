@@ -4,6 +4,7 @@ import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_search.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_select.dart';
+import '../dart-ui-bs/ds/ds_multi_select.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 
 import 'package:flutter/material.dart';
@@ -42,7 +43,7 @@ class _GenAppEnt14ScreenState extends State<GenAppEnt14Screen> {
 
   Widget _card(Map<String, String> r) {
     final rid = r['__id'] ?? '';
-    return DsRecordCard(labels: const [gen_app_ent14_c9, gen_app_ent14_c10, gen_app_ent14_c11, gen_app_ent14_c12, gen_app_ent14_c13, gen_app_ent14_c14, gen_app_ent14_c15, gen_app_ent14_c16], values: [r[gen_app_ent14_c9] ?? '', r[gen_app_ent14_c10] ?? '', r[gen_app_ent14_c11] ?? '', appStore.displayOf('app_ent4', r[gen_app_ent14_c12] ?? ''), r[gen_app_ent14_c13] ?? '', r[gen_app_ent14_c14] ?? '', r[gen_app_ent14_c15] ?? '', r[gen_app_ent14_c16] ?? ''], onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent14', rid), footer: Wrap(spacing: 6, runSpacing: 6, children: [_backChip(gen_app_ent14_c17, appStore.referencing('app_ent7', gen_app_ent14_c18, rid).length), _backChip(gen_app_ent14_c19, appStore.referencing('app_ent15', gen_app_ent14_c20, rid).length), _backChip(gen_app_ent14_c21, appStore.referencing('app_ent16', gen_app_ent14_c22, rid).length), _backChip(gen_app_ent14_c23, appStore.referencing('app_ent19', gen_app_ent14_c24, rid).length), _backChip(gen_app_ent14_c25, appStore.referencing('app_ent20', gen_app_ent14_c26, rid).length), _backChip(gen_app_ent14_c27, appStore.referencing('app_ent26', gen_app_ent14_c28, rid).length), _backChip(gen_app_ent14_c29, appStore.referencing('app_ent32', gen_app_ent14_c30, rid).length), _backChip(gen_app_ent14_c31, appStore.referencing('app_ent44', gen_app_ent14_c32, rid).length), _backChip(gen_app_ent14_c33, appStore.referencing('app_ent61', gen_app_ent14_c34, rid).length)]));
+    return DsRecordCard(labels: const [gen_app_ent14_c9, gen_app_ent14_c10, gen_app_ent14_c11, gen_app_ent14_c12, gen_app_ent14_c13, gen_app_ent14_c14, gen_app_ent14_c15, gen_app_ent14_c16], values: [r[gen_app_ent14_c9] ?? '', r[gen_app_ent14_c10] ?? '', r[gen_app_ent14_c11] ?? '', appStore.displayOf('app_ent4', r[gen_app_ent14_c12] ?? ''), r[gen_app_ent14_c13] ?? '', appStore.displayList('app_ent15', r[gen_app_ent14_c14] ?? ''), appStore.displayList('app_ent11', r[gen_app_ent14_c15] ?? ''), r[gen_app_ent14_c16] ?? ''], onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent14', rid), footer: Wrap(spacing: 6, runSpacing: 6, children: [_backChip(gen_app_ent14_c17, appStore.referencing('app_ent7', gen_app_ent14_c18, rid).length), _backChip(gen_app_ent14_c19, appStore.referencing('app_ent15', gen_app_ent14_c20, rid).length), _backChip(gen_app_ent14_c21, appStore.referencing('app_ent16', gen_app_ent14_c22, rid).length), _backChip(gen_app_ent14_c23, appStore.referencing('app_ent19', gen_app_ent14_c24, rid).length), _backChip(gen_app_ent14_c25, appStore.referencing('app_ent20', gen_app_ent14_c26, rid).length), _backChip(gen_app_ent14_c27, appStore.referencing('app_ent26', gen_app_ent14_c28, rid).length), _backChip(gen_app_ent14_c29, appStore.referencing('app_ent32', gen_app_ent14_c30, rid).length), _backChip(gen_app_ent14_c31, appStore.referencing('app_ent44', gen_app_ent14_c32, rid).length), _backChip(gen_app_ent14_c33, appStore.referencing('app_ent61', gen_app_ent14_c34, rid).length)]));
   }
 
   Widget _backChip(String label, int n) => Container(
@@ -56,7 +57,7 @@ class _GenAppEnt14ScreenState extends State<GenAppEnt14Screen> {
     final b = StringBuffer();
     b.writeln(const [gen_app_ent14_c9, gen_app_ent14_c10, gen_app_ent14_c11, gen_app_ent14_c12, gen_app_ent14_c13, gen_app_ent14_c14, gen_app_ent14_c15, gen_app_ent14_c16].map((h) => '"' + h.replaceAll('"', '""') + '"').join(','));
     for (final r in appStore.records('app_ent14')) {
-      b.writeln([r[gen_app_ent14_c9] ?? '', r[gen_app_ent14_c10] ?? '', r[gen_app_ent14_c11] ?? '', appStore.displayOf('app_ent4', r[gen_app_ent14_c12] ?? ''), r[gen_app_ent14_c13] ?? '', r[gen_app_ent14_c14] ?? '', r[gen_app_ent14_c15] ?? '', r[gen_app_ent14_c16] ?? ''].map((v) => '"' + v.replaceAll('"', '""') + '"').join(','));
+      b.writeln([r[gen_app_ent14_c9] ?? '', r[gen_app_ent14_c10] ?? '', r[gen_app_ent14_c11] ?? '', appStore.displayOf('app_ent4', r[gen_app_ent14_c12] ?? ''), r[gen_app_ent14_c13] ?? '', appStore.displayList('app_ent15', r[gen_app_ent14_c14] ?? ''), appStore.displayList('app_ent11', r[gen_app_ent14_c15] ?? ''), r[gen_app_ent14_c16] ?? ''].map((v) => '"' + v.replaceAll('"', '""') + '"').join(','));
     }
     return b.toString();
   }
@@ -95,8 +96,8 @@ class _GenAppEnt14ScreenState extends State<GenAppEnt14Screen> {
           DsField(label: gen_app_ent14_c11, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
           DsSelect(label: gen_app_ent14_c12, entity: 'app_ent4', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
           DsField(label: gen_app_ent14_c13, hint: '', value: _v[4] ?? '', onChanged: (v) => setState(() => _v[4] = v)),
-          DsField(label: gen_app_ent14_c14, hint: '', value: _v[5] ?? '', onChanged: (v) => setState(() => _v[5] = v)),
-          DsField(label: gen_app_ent14_c15, hint: '', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
+          DsMultiSelect(label: gen_app_ent14_c14, entity: 'app_ent15', value: _v[5] ?? '', onChanged: (v) => setState(() => _v[5] = v)),
+          DsMultiSelect(label: gen_app_ent14_c15, entity: 'app_ent11', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
           DsField(label: gen_app_ent14_c16, hint: '', value: _v[7] ?? '', onChanged: (v) => setState(() => _v[7] = v)),
         ]),
         DsSection(title: gen_app_ent14_c6, trailing: _csvBtn(context), children: [

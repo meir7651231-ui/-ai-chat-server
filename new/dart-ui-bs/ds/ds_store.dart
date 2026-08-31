@@ -81,6 +81,15 @@ class AppStore extends ChangeNotifier {
     return r == null ? '' : _display(r);
   }
 
+  // קשר-רבים: מחרוזת-מזהים מופרדת-פסיק ⇒ שמות-התצוגה מצורפים (', ').
+  String displayList(String entity, String csv) => csv
+      .split(',')
+      .map((x) => x.trim())
+      .where((x) => x.isNotEmpty)
+      .map((id) => displayOf(entity, id))
+      .where((d) => d.isNotEmpty)
+      .join(', ');
+
   // אינדקס-הפוך (קשר-נגדי): רשומות של entity ששדה-הקשר שלהן מצביע על id.
   List<Map<String, String>> referencing(String entity, String field, String id) =>
       records(entity).where((r) => r[field] == id).toList();

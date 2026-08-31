@@ -6,6 +6,7 @@ import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_date_field.dart';
 import '../dart-ui-bs/ds/ds_number_field.dart';
 import '../dart-ui-bs/ds/ds_select.dart';
+import '../dart-ui-bs/ds/ds_multi_select.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/advance-status.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,7 @@ class _GenAppEnt36ScreenState extends State<GenAppEnt36Screen> {
 
   Widget _card(Map<String, String> r) {
     final rid = r['__id'] ?? '';
-    return DsRecordCard(labels: const [gen_app_ent36_c9, gen_app_ent36_c10, gen_app_ent36_c11, gen_app_ent36_c12, gen_app_ent36_c13, gen_app_ent36_c14, gen_app_ent36_c15, gen_app_ent36_c16, gen_app_ent36_c17, gen_app_ent36_c18, gen_app_ent36_c19, gen_app_ent36_c20], values: [appStore.displayOf('app_ent11', r[gen_app_ent36_c9] ?? ''), r[gen_app_ent36_c10] ?? '', r[gen_app_ent36_c11] ?? '', r[gen_app_ent36_c12] ?? '', r[gen_app_ent36_c13] ?? '', r[gen_app_ent36_c14] ?? '', r[gen_app_ent36_c15] ?? '', r[gen_app_ent36_c16] ?? '', r[gen_app_ent36_c17] ?? '', r[gen_app_ent36_c18] ?? '', r[gen_app_ent36_c19] ?? '', r[gen_app_ent36_c20] ?? ''], stage: (const [gen_app_ent36_c22, gen_app_ent36_c23, gen_app_ent36_c24, gen_app_ent36_c25])[appStore.stageOf('app_ent36', rid)], stageDone: appStore.stageOf('app_ent36', rid) >= 3, stages: const [gen_app_ent36_c22, gen_app_ent36_c23, gen_app_ent36_c24, gen_app_ent36_c25], stageIndex: appStore.stageOf('app_ent36', rid), onStage: (i) => appStore.setStage('app_ent36', rid, i), onAdvance: () => appStore.advance('app_ent36', rid, 4), onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent36', rid));
+    return DsRecordCard(labels: const [gen_app_ent36_c9, gen_app_ent36_c10, gen_app_ent36_c11, gen_app_ent36_c12, gen_app_ent36_c13, gen_app_ent36_c14, gen_app_ent36_c15, gen_app_ent36_c16, gen_app_ent36_c17, gen_app_ent36_c18, gen_app_ent36_c19, gen_app_ent36_c20], values: [appStore.displayOf('app_ent11', r[gen_app_ent36_c9] ?? ''), r[gen_app_ent36_c10] ?? '', r[gen_app_ent36_c11] ?? '', appStore.displayList('app_ent37', r[gen_app_ent36_c12] ?? ''), r[gen_app_ent36_c13] ?? '', r[gen_app_ent36_c14] ?? '', r[gen_app_ent36_c15] ?? '', r[gen_app_ent36_c16] ?? '', r[gen_app_ent36_c17] ?? '', appStore.displayList('app_ent70', r[gen_app_ent36_c18] ?? ''), r[gen_app_ent36_c19] ?? '', r[gen_app_ent36_c20] ?? ''], stage: (const [gen_app_ent36_c22, gen_app_ent36_c23, gen_app_ent36_c24, gen_app_ent36_c25])[appStore.stageOf('app_ent36', rid)], stageDone: appStore.stageOf('app_ent36', rid) >= 3, stages: const [gen_app_ent36_c22, gen_app_ent36_c23, gen_app_ent36_c24, gen_app_ent36_c25], stageIndex: appStore.stageOf('app_ent36', rid), onStage: (i) => appStore.setStage('app_ent36', rid, i), onAdvance: () => appStore.advance('app_ent36', rid, 4), onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent36', rid));
   }
 
 
@@ -52,7 +53,7 @@ class _GenAppEnt36ScreenState extends State<GenAppEnt36Screen> {
     final b = StringBuffer();
     b.writeln(const [gen_app_ent36_c9, gen_app_ent36_c10, gen_app_ent36_c11, gen_app_ent36_c12, gen_app_ent36_c13, gen_app_ent36_c14, gen_app_ent36_c15, gen_app_ent36_c16, gen_app_ent36_c17, gen_app_ent36_c18, gen_app_ent36_c19, gen_app_ent36_c20].map((h) => '"' + h.replaceAll('"', '""') + '"').join(','));
     for (final r in appStore.records('app_ent36')) {
-      b.writeln([appStore.displayOf('app_ent11', r[gen_app_ent36_c9] ?? ''), r[gen_app_ent36_c10] ?? '', r[gen_app_ent36_c11] ?? '', r[gen_app_ent36_c12] ?? '', r[gen_app_ent36_c13] ?? '', r[gen_app_ent36_c14] ?? '', r[gen_app_ent36_c15] ?? '', r[gen_app_ent36_c16] ?? '', r[gen_app_ent36_c17] ?? '', r[gen_app_ent36_c18] ?? '', r[gen_app_ent36_c19] ?? '', r[gen_app_ent36_c20] ?? ''].map((v) => '"' + v.replaceAll('"', '""') + '"').join(','));
+      b.writeln([appStore.displayOf('app_ent11', r[gen_app_ent36_c9] ?? ''), r[gen_app_ent36_c10] ?? '', r[gen_app_ent36_c11] ?? '', appStore.displayList('app_ent37', r[gen_app_ent36_c12] ?? ''), r[gen_app_ent36_c13] ?? '', r[gen_app_ent36_c14] ?? '', r[gen_app_ent36_c15] ?? '', r[gen_app_ent36_c16] ?? '', r[gen_app_ent36_c17] ?? '', appStore.displayList('app_ent70', r[gen_app_ent36_c18] ?? ''), r[gen_app_ent36_c19] ?? '', r[gen_app_ent36_c20] ?? ''].map((v) => '"' + v.replaceAll('"', '""') + '"').join(','));
     }
     return b.toString();
   }
@@ -104,13 +105,13 @@ class _GenAppEnt36ScreenState extends State<GenAppEnt36Screen> {
           DsSelect(label: gen_app_ent36_c9, entity: 'app_ent11', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
           DsField(label: gen_app_ent36_c10, hint: '', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
           DsField(label: gen_app_ent36_c11, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
-          DsField(label: gen_app_ent36_c12, hint: '', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
+          DsMultiSelect(label: gen_app_ent36_c12, entity: 'app_ent37', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
           DsField(label: gen_app_ent36_c13, hint: '', value: _v[4] ?? '', onChanged: (v) => setState(() => _v[4] = v)),
           DsField(label: gen_app_ent36_c14, hint: '', value: _v[5] ?? '', onChanged: (v) => setState(() => _v[5] = v)),
           DsNumberField(label: gen_app_ent36_c15, value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
           DsDateField(label: gen_app_ent36_c16, value: _v[7] ?? '', onChanged: (v) => setState(() => _v[7] = v)),
           DsDateField(label: gen_app_ent36_c17, value: _v[8] ?? '', onChanged: (v) => setState(() => _v[8] = v)),
-          DsField(label: gen_app_ent36_c18, hint: '', value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
+          DsMultiSelect(label: gen_app_ent36_c18, entity: 'app_ent70', value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
           DsField(label: gen_app_ent36_c19, hint: '', value: _v[10] ?? '', onChanged: (v) => setState(() => _v[10] = v)),
           DsField(label: gen_app_ent36_c20, hint: '', value: _v[11] ?? '', onChanged: (v) => setState(() => _v[11] = v)),
           if ((_v[11] ?? '').trim().isNotEmpty) _live(gen_app_ent36_c21, advanceStatus((_v[11] ?? ''))),

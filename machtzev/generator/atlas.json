@@ -1,8 +1,8 @@
 {
  "counts": {
-  "widgets": 482,
+  "widgets": 483,
   "functions": 445,
-  "data": 4195
+  "data": 4202
  },
  "widgets": [
   {
@@ -10661,6 +10661,37 @@
     "טקסט",
     "פרטים",
     "כותרת"
+   ]
+  },
+  {
+   "cls": "DsMultiSelect",
+   "file": "ds/ds_multi_select.dart",
+   "props": [
+    "label",
+    "entity",
+    "value",
+    "onChanged"
+   ],
+   "required": [
+    "label",
+    "entity",
+    "value",
+    "onChanged"
+   ],
+   "positional": [],
+   "he": [
+    "שדה",
+    "לנתון",
+    "קשר",
+    "רבים",
+    "בחירה",
+    "מרובה",
+    "רשומות",
+    "מישות",
+    "אחרת",
+    "שיוך",
+    "רבים",
+    "רשימת"
    ]
   },
   {
@@ -58667,6 +58698,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_main_c0",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_main_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_scr72_c0",
    "type": "String",
    "he": [
@@ -58901,6 +58945,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_scr72_c18",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_scr72_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_scr73_c0",
    "type": "String",
    "he": [
@@ -59057,6 +59114,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_scr73_c12",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_scr73_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_scr74_c0",
    "type": "String",
    "he": [
@@ -59162,6 +59232,19 @@
   },
   {
    "name": "gen_app_scr74_c8",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_scr74_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_scr74_c9",
    "type": "String",
    "he": [
     "תוכן",
@@ -59408,6 +59491,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_scr75_c18",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_scr75_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_scr76_c0",
    "type": "String",
    "he": [
@@ -59603,6 +59699,19 @@
    "shelf": "new/dart-data-bs"
   },
   {
+   "name": "gen_app_scr76_c15",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_scr76_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
    "name": "gen_app_scr77_c0",
    "type": "String",
    "he": [
@@ -59747,6 +59856,19 @@
   },
   {
    "name": "gen_app_scr77_c11",
+   "type": "String",
+   "he": [
+    "תוכן",
+    "מהבקשה",
+    "אל",
+    "תערוך",
+    "ידנית"
+   ],
+   "file": "auto/gen_app_scr77_content.dart",
+   "shelf": "new/dart-data-bs"
+  },
+  {
+   "name": "gen_app_scr77_c12",
    "type": "String",
    "he": [
     "תוכן",

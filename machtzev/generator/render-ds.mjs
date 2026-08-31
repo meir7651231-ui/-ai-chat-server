@@ -130,6 +130,25 @@ function pickRelation(label, selfName, entityNames) {
   return null;
 }
 
+// 🔗🔗 קשר-רבים: שדה שהוא צורת-רבים של שם-ישות (‏תלמידים←תלמיד · מקצועות←מקצוע ·
+// כיתות←כיתה) ⇒ בחירה-מרובה. מטפל בסופיות (ך→כ) ובסיומת ה→ות. טהור-מבני, נגזר מהאפיון.
+const definal = (w) => w.replace(/ך$/, 'כ').replace(/ם$/, 'מ').replace(/ן$/, 'נ').replace(/ף$/, 'פ').replace(/ץ$/, 'צ');
+function pluralForms(en) {
+  const b = definal(en.replace(/ה$/, ''));
+  const b2 = definal(en);
+  return new Set([`${b}ים`, `${b}ות`, `${b2}ים`, `${b2}ות`]);
+}
+function pickMultiRelation(label, selfName, entityNames) {
+  const fw = new Set(heWords(label));
+  for (const en of entityNames) {
+    if (en === selfName) continue;
+    if (heWords(en).length !== 1) continue;          // ריבוי רק לישויות חד-מיליות
+    const forms = pluralForms(en);
+    for (const w of fw) if (forms.has(w)) return en;
+  }
+  return null;
+}
+
 // 🧮 מהדר-נוסחה (שורש-4): 'סכום - הנחה - תשלום' ⇒ ביטוי-Dart מספרי מעל שדות-האחות.
 // שמות-שדה (הארוך-קודם) ⇒ קריאת-הערך; אופרטורים/מספרים/סוגריים עוברים. שארית לא-מזוהה ⇒ null
 // (השדה נשאר רגיל — כנות > קוד-שבור). דטרמיניסטי, קומפילציית-זמן, אפס-eval בזמן-ריצה.
@@ -164,7 +183,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const recValsR = [];   // ערך-תצוגה בטבלה פר-שדה
   const mapVals = [];    // ערך-שמירה פר-שדה (מחושב ⇒ תוצאת-הנוסחה; אחר ⇒ _v[i])
   const requiredIdx = [];
-  let hasLive = false, hasRel = false, hasEnum = false, hasCalc = false, usedField = false;
+  let hasLive = false, hasRel = false, hasEnum = false, hasCalc = false, hasMulti = false, usedField = false;
   const labelIdx = schema.map((s, i) => ({ label: s.label, idx: i }));
   schema.forEach((s, i) => {
     const cl = k(s.label); labelConst.push(cl);
@@ -195,6 +214,15 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
       hasRel = true;
       fieldBlocks.push(`          DsSelect(label: ${cl}, entity: '${tslug}', ${bind}),`);
       recValsR.push(`appStore.displayOf('${tslug}', r[${cl}] ?? '')`); mapVals.push(`${cl}: _v[${i}] ?? ''`);
+      return;
+    }
+    // (2b) קשר-רבים: שדה בצורת-רבים של ישות ⇒ בחירה-מרובה ששומרת רשימת-מזהים.
+    const mrel = pickMultiRelation(s.label, name, entityNames);
+    const mslug = mrel ? (nameToSlug[mrel] || null) : null;
+    if (mslug) {
+      hasMulti = true;
+      fieldBlocks.push(`          DsMultiSelect(label: ${cl}, entity: '${mslug}', ${bind}),`);
+      recValsR.push(`appStore.displayList('${mslug}', r[${cl}] ?? '')`); mapVals.push(`${cl}: _v[${i}] ?? ''`);
       return;
     }
     // (3) טיפוס נאחז-מהאטומים ⇒ הווידג'ט האמיתי: תאריך→בורר · מספר→מקלדת · דו-ערכי→מתג.
@@ -239,12 +267,13 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
     : '';
 
   const relImport = hasRel ? "import '../dart-ui-bs/ds/ds_select.dart';\n" : '';
+  const multiImport = hasMulti ? "import '../dart-ui-bs/ds/ds_multi_select.dart';\n" : '';
   const cls = pascal(slug);
   const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מסך-חי מחווט (טופס→קשרים→מסע→חנות→טבלה + לוגיקה). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_search.dart';
-${usedField ? "import '../dart-ui-bs/ds/ds_field.dart';\n" : ''}${[...typedImports].sort().map((x) => x + '\n').join('')}${enumImport}${relImport}import '../dart-ui-bs/ds/ds_store.dart';
+${usedField ? "import '../dart-ui-bs/ds/ds_field.dart';\n" : ''}${[...typedImports].sort().map((x) => x + '\n').join('')}${enumImport}${relImport}${multiImport}import '../dart-ui-bs/ds/ds_store.dart';
 ${[...funcImports].sort().join('\n')}
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
