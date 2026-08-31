@@ -8,6 +8,7 @@ import '../dart-ui-bs/ds/ds_number_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/advance-status.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class GenAppEnt66Screen extends StatefulWidget {
   const GenAppEnt66Screen({super.key});
@@ -44,6 +45,35 @@ class _GenAppEnt66ScreenState extends State<GenAppEnt66Screen> {
     final rid = r['__id'] ?? '';
     return DsRecordCard(labels: const [gen_app_ent66_c9, gen_app_ent66_c10, gen_app_ent66_c11, gen_app_ent66_c12, gen_app_ent66_c13, gen_app_ent66_c14, gen_app_ent66_c15, gen_app_ent66_c16, gen_app_ent66_c17, gen_app_ent66_c18, gen_app_ent66_c19, gen_app_ent66_c20, gen_app_ent66_c21, gen_app_ent66_c22, gen_app_ent66_c23, gen_app_ent66_c24], values: [r[gen_app_ent66_c9] ?? '', r[gen_app_ent66_c10] ?? '', r[gen_app_ent66_c11] ?? '', r[gen_app_ent66_c12] ?? '', r[gen_app_ent66_c13] ?? '', r[gen_app_ent66_c14] ?? '', r[gen_app_ent66_c15] ?? '', r[gen_app_ent66_c16] ?? '', r[gen_app_ent66_c17] ?? '', r[gen_app_ent66_c18] ?? '', r[gen_app_ent66_c19] ?? '', r[gen_app_ent66_c20] ?? '', r[gen_app_ent66_c21] ?? '', r[gen_app_ent66_c22] ?? '', r[gen_app_ent66_c23] ?? '', r[gen_app_ent66_c24] ?? ''], stage: (const [gen_app_ent66_c26, gen_app_ent66_c27, gen_app_ent66_c28, gen_app_ent66_c29])[appStore.stageOf('app_ent66', rid)], stageDone: appStore.stageOf('app_ent66', rid) >= 3, onAdvance: () => appStore.advance('app_ent66', rid, 4), onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent66', rid));
   }
+
+  String _csv() {
+    final b = StringBuffer();
+    b.writeln(const [gen_app_ent66_c9, gen_app_ent66_c10, gen_app_ent66_c11, gen_app_ent66_c12, gen_app_ent66_c13, gen_app_ent66_c14, gen_app_ent66_c15, gen_app_ent66_c16, gen_app_ent66_c17, gen_app_ent66_c18, gen_app_ent66_c19, gen_app_ent66_c20, gen_app_ent66_c21, gen_app_ent66_c22, gen_app_ent66_c23, gen_app_ent66_c24].map((h) => '"' + h.replaceAll('"', '""') + '"').join(','));
+    for (final r in appStore.records('app_ent66')) {
+      b.writeln([r[gen_app_ent66_c9] ?? '', r[gen_app_ent66_c10] ?? '', r[gen_app_ent66_c11] ?? '', r[gen_app_ent66_c12] ?? '', r[gen_app_ent66_c13] ?? '', r[gen_app_ent66_c14] ?? '', r[gen_app_ent66_c15] ?? '', r[gen_app_ent66_c16] ?? '', r[gen_app_ent66_c17] ?? '', r[gen_app_ent66_c18] ?? '', r[gen_app_ent66_c19] ?? '', r[gen_app_ent66_c20] ?? '', r[gen_app_ent66_c21] ?? '', r[gen_app_ent66_c22] ?? '', r[gen_app_ent66_c23] ?? '', r[gen_app_ent66_c24] ?? ''].map((v) => '"' + v.replaceAll('"', '""') + '"').join(','));
+    }
+    return b.toString();
+  }
+
+  Widget _csvBtn(BuildContext context) => Material(
+        color: const Color(0xFFF1F5F9),
+        borderRadius: BorderRadius.circular(9),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(9),
+          onTap: () {
+            Clipboard.setData(ClipboardData(text: _csv()));
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('הועתק כ-CSV'), duration: Duration(seconds: 2)));
+          },
+          child: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            child: Row(mainAxisSize: MainAxisSize.min, children: [
+              Icon(Icons.copy_all_outlined, size: 15, color: DsTokens.muted),
+              SizedBox(width: 5),
+              Text('CSV', style: TextStyle(color: DsTokens.muted, fontSize: 12, fontWeight: FontWeight.w700)),
+            ]),
+          ),
+        ),
+      );
 
   Widget _live(String label, String out) => Padding(
         padding: const EdgeInsets.only(top: 2, bottom: 6),
@@ -87,7 +117,7 @@ class _GenAppEnt66ScreenState extends State<GenAppEnt66Screen> {
           DsField(label: gen_app_ent66_c24, hint: '', value: _v[15] ?? '', onChanged: (v) => setState(() => _v[15] = v)),
           if ((_v[15] ?? '').trim().isNotEmpty) _live(gen_app_ent66_c25, advanceStatus((_v[15] ?? ''))),
         ]),
-        DsSection(title: gen_app_ent66_c6, children: [
+        DsSection(title: gen_app_ent66_c6, trailing: _csvBtn(context), children: [
           AnimatedBuilder(
             animation: appStore,
             builder: (context, _) {

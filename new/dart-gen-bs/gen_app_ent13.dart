@@ -6,6 +6,7 @@ import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/advance-status.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class GenAppEnt13Screen extends StatefulWidget {
   const GenAppEnt13Screen({super.key});
@@ -43,6 +44,35 @@ class _GenAppEnt13ScreenState extends State<GenAppEnt13Screen> {
     return DsRecordCard(labels: const [gen_app_ent13_c9, gen_app_ent13_c10, gen_app_ent13_c11, gen_app_ent13_c12, gen_app_ent13_c13, gen_app_ent13_c14, gen_app_ent13_c15, gen_app_ent13_c16, gen_app_ent13_c17, gen_app_ent13_c18, gen_app_ent13_c19], values: [r[gen_app_ent13_c9] ?? '', r[gen_app_ent13_c10] ?? '', r[gen_app_ent13_c11] ?? '', r[gen_app_ent13_c12] ?? '', r[gen_app_ent13_c13] ?? '', r[gen_app_ent13_c14] ?? '', r[gen_app_ent13_c15] ?? '', r[gen_app_ent13_c16] ?? '', r[gen_app_ent13_c17] ?? '', r[gen_app_ent13_c18] ?? '', r[gen_app_ent13_c19] ?? ''], onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent13', rid));
   }
 
+  String _csv() {
+    final b = StringBuffer();
+    b.writeln(const [gen_app_ent13_c9, gen_app_ent13_c10, gen_app_ent13_c11, gen_app_ent13_c12, gen_app_ent13_c13, gen_app_ent13_c14, gen_app_ent13_c15, gen_app_ent13_c16, gen_app_ent13_c17, gen_app_ent13_c18, gen_app_ent13_c19].map((h) => '"' + h.replaceAll('"', '""') + '"').join(','));
+    for (final r in appStore.records('app_ent13')) {
+      b.writeln([r[gen_app_ent13_c9] ?? '', r[gen_app_ent13_c10] ?? '', r[gen_app_ent13_c11] ?? '', r[gen_app_ent13_c12] ?? '', r[gen_app_ent13_c13] ?? '', r[gen_app_ent13_c14] ?? '', r[gen_app_ent13_c15] ?? '', r[gen_app_ent13_c16] ?? '', r[gen_app_ent13_c17] ?? '', r[gen_app_ent13_c18] ?? '', r[gen_app_ent13_c19] ?? ''].map((v) => '"' + v.replaceAll('"', '""') + '"').join(','));
+    }
+    return b.toString();
+  }
+
+  Widget _csvBtn(BuildContext context) => Material(
+        color: const Color(0xFFF1F5F9),
+        borderRadius: BorderRadius.circular(9),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(9),
+          onTap: () {
+            Clipboard.setData(ClipboardData(text: _csv()));
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('הועתק כ-CSV'), duration: Duration(seconds: 2)));
+          },
+          child: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            child: Row(mainAxisSize: MainAxisSize.min, children: [
+              Icon(Icons.copy_all_outlined, size: 15, color: DsTokens.muted),
+              SizedBox(width: 5),
+              Text('CSV', style: TextStyle(color: DsTokens.muted, fontSize: 12, fontWeight: FontWeight.w700)),
+            ]),
+          ),
+        ),
+      );
+
   Widget _live(String label, String out) => Padding(
         padding: const EdgeInsets.only(top: 2, bottom: 6),
         child: Container(
@@ -79,7 +109,7 @@ class _GenAppEnt13ScreenState extends State<GenAppEnt13Screen> {
           DsField(label: gen_app_ent13_c19, hint: '', value: _v[10] ?? '', onChanged: (v) => setState(() => _v[10] = v)),
           if ((_v[10] ?? '').trim().isNotEmpty) _live(gen_app_ent13_c20, advanceStatus((_v[10] ?? ''))),
         ]),
-        DsSection(title: gen_app_ent13_c6, children: [
+        DsSection(title: gen_app_ent13_c6, trailing: _csvBtn(context), children: [
           AnimatedBuilder(
             animation: appStore,
             builder: (context, _) {

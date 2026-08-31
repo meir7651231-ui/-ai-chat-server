@@ -9,6 +9,7 @@ import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/advance-status.dart';
 import '../dart-maor/favicon-data-uri.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class GenAppEnt31Screen extends StatefulWidget {
   const GenAppEnt31Screen({super.key});
@@ -45,6 +46,35 @@ class _GenAppEnt31ScreenState extends State<GenAppEnt31Screen> {
     final rid = r['__id'] ?? '';
     return DsRecordCard(labels: const [gen_app_ent31_c9, gen_app_ent31_c10, gen_app_ent31_c11, gen_app_ent31_c13, gen_app_ent31_c14, gen_app_ent31_c15, gen_app_ent31_c16, gen_app_ent31_c17, gen_app_ent31_c18, gen_app_ent31_c19, gen_app_ent31_c20], values: [appStore.displayOf('app_ent11', r[gen_app_ent31_c9] ?? ''), appStore.displayOf('app_ent30', r[gen_app_ent31_c10] ?? ''), r[gen_app_ent31_c11] ?? '', r[gen_app_ent31_c13] ?? '', r[gen_app_ent31_c14] ?? '', r[gen_app_ent31_c15] ?? '', r[gen_app_ent31_c16] ?? '', r[gen_app_ent31_c17] ?? '', r[gen_app_ent31_c18] ?? '', r[gen_app_ent31_c19] ?? '', r[gen_app_ent31_c20] ?? ''], stage: (const [gen_app_ent31_c22, gen_app_ent31_c23, gen_app_ent31_c24])[appStore.stageOf('app_ent31', rid)], stageDone: appStore.stageOf('app_ent31', rid) >= 2, onAdvance: () => appStore.advance('app_ent31', rid, 3), onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent31', rid));
   }
+
+  String _csv() {
+    final b = StringBuffer();
+    b.writeln(const [gen_app_ent31_c9, gen_app_ent31_c10, gen_app_ent31_c11, gen_app_ent31_c13, gen_app_ent31_c14, gen_app_ent31_c15, gen_app_ent31_c16, gen_app_ent31_c17, gen_app_ent31_c18, gen_app_ent31_c19, gen_app_ent31_c20].map((h) => '"' + h.replaceAll('"', '""') + '"').join(','));
+    for (final r in appStore.records('app_ent31')) {
+      b.writeln([appStore.displayOf('app_ent11', r[gen_app_ent31_c9] ?? ''), appStore.displayOf('app_ent30', r[gen_app_ent31_c10] ?? ''), r[gen_app_ent31_c11] ?? '', r[gen_app_ent31_c13] ?? '', r[gen_app_ent31_c14] ?? '', r[gen_app_ent31_c15] ?? '', r[gen_app_ent31_c16] ?? '', r[gen_app_ent31_c17] ?? '', r[gen_app_ent31_c18] ?? '', r[gen_app_ent31_c19] ?? '', r[gen_app_ent31_c20] ?? ''].map((v) => '"' + v.replaceAll('"', '""') + '"').join(','));
+    }
+    return b.toString();
+  }
+
+  Widget _csvBtn(BuildContext context) => Material(
+        color: const Color(0xFFF1F5F9),
+        borderRadius: BorderRadius.circular(9),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(9),
+          onTap: () {
+            Clipboard.setData(ClipboardData(text: _csv()));
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('הועתק כ-CSV'), duration: Duration(seconds: 2)));
+          },
+          child: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            child: Row(mainAxisSize: MainAxisSize.min, children: [
+              Icon(Icons.copy_all_outlined, size: 15, color: DsTokens.muted),
+              SizedBox(width: 5),
+              Text('CSV', style: TextStyle(color: DsTokens.muted, fontSize: 12, fontWeight: FontWeight.w700)),
+            ]),
+          ),
+        ),
+      );
 
   Widget _live(String label, String out) => Padding(
         padding: const EdgeInsets.only(top: 2, bottom: 6),
@@ -84,7 +114,7 @@ class _GenAppEnt31ScreenState extends State<GenAppEnt31Screen> {
           DsField(label: gen_app_ent31_c20, hint: '', value: _v[10] ?? '', onChanged: (v) => setState(() => _v[10] = v)),
           if ((_v[10] ?? '').trim().isNotEmpty) _live(gen_app_ent31_c21, advanceStatus((_v[10] ?? ''))),
         ]),
-        DsSection(title: gen_app_ent31_c6, children: [
+        DsSection(title: gen_app_ent31_c6, trailing: _csvBtn(context), children: [
           AnimatedBuilder(
             animation: appStore,
             builder: (context, _) {

@@ -244,6 +244,7 @@ import '../dart-ui-bs/ds/ds_search.dart';
 ${usedField ? "import '../dart-ui-bs/ds/ds_field.dart';\n" : ''}${[...typedImports].sort().map((x) => x + '\n').join('')}${enumImport}${relImport}import '../dart-ui-bs/ds/ds_store.dart';
 ${[...funcImports].sort().join('\n')}
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ${cls} extends StatefulWidget {
   const ${cls}({super.key});
@@ -283,6 +284,35 @@ ${requiredIdx.length ? `    final miss = <String>[];
     final rid = r['__id'] ?? '';
     return DsRecordCard(labels: const [${labelsList}], values: [${recValues}], ${stageArgs}onEdit: () => _edit(r), onDelete: () => appStore.removeById(${SK}, rid));
   }
+
+  String _csv() {
+    final b = StringBuffer();
+    b.writeln(const [${labelsList}].map((h) => '"' + h.replaceAll('"', '""') + '"').join(','));
+    for (final r in appStore.records(${SK})) {
+      b.writeln([${recValues}].map((v) => '"' + v.replaceAll('"', '""') + '"').join(','));
+    }
+    return b.toString();
+  }
+
+  Widget _csvBtn(BuildContext context) => Material(
+        color: const Color(0xFFF1F5F9),
+        borderRadius: BorderRadius.circular(9),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(9),
+          onTap: () {
+            Clipboard.setData(ClipboardData(text: _csv()));
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('הועתק כ-CSV'), duration: Duration(seconds: 2)));
+          },
+          child: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            child: Row(mainAxisSize: MainAxisSize.min, children: [
+              Icon(Icons.copy_all_outlined, size: 15, color: DsTokens.muted),
+              SizedBox(width: 5),
+              Text('CSV', style: TextStyle(color: DsTokens.muted, fontSize: 12, fontWeight: FontWeight.w700)),
+            ]),
+          ),
+        ),
+      );
 
 ${hasCalc ? `  Widget _calc(String label, num v) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -329,7 +359,7 @@ ${stepsDart}${requiredIdx.length ? `        if (_err != null) Container(
 ` : ''}        DsSection(title: ${cForm}, children: [
 ${fieldBlocks.join('\n')}
         ]),
-        DsSection(title: ${cRecords}, children: [
+        DsSection(title: ${cRecords}, trailing: _csvBtn(context), children: [
           AnimatedBuilder(
             animation: appStore,
             builder: (context, _) {
