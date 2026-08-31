@@ -7,7 +7,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { interpret as entInterpret } from './entity.mjs';
-import { renderEntity, renderDashboard, renderHub, renderSystem, renderMain, renderScreenBind } from './render-ds.mjs';
+import { renderEntity, renderDashboard, renderHub, renderSystem, renderMain, renderScreenBind, SCREEN_REGISTRY } from './render-ds.mjs';
 
 const ROOT = new URL('../../', import.meta.url).pathname;
 const OUT = path.join(ROOT, 'new/dart-gen-bs');
@@ -135,12 +135,16 @@ export function buildApp(specText) {
     }
   }
 
-  // 🖥 מחבר-ישות-למסך (POC): הישות-הראשונה ממלאת מסך-Composed מפורק (AiHub) — הוכחת-פרדיגמה.
-  const firstEnt = entMeta[0];
+  // 🖥 מחבר-ישות-למסך: הישויות-הראשונות ממלאות מסכי-Composed מפורקים אמיתיים, מחזוריות
+  // על רישום-המסכים (כל ישות ⇒ תבנית-מסך אחרת) — הוכחת-הכללה על 3 צורות-שקע גנריות.
   const bindScreens = [];
-  if (firstEnt) {
-    const { cls } = renderScreenBind('app_bind', { entitySlug: firstEnt.slug, entityName: firstEnt.name });
-    bindScreens.push({ slug: 'app_bind', cls, kind: 'entity', name: `🖥 ${firstEnt.name} · מסך`, icon: '🖥', sub: 'מסך-אמת מפורק · מחווט-מהישות' });
+  const bindN = Math.min(entMeta.length, SCREEN_REGISTRY.length);
+  for (let bi = 0; bi < bindN; bi++) {
+    const ent = entMeta[bi];
+    const spec = SCREEN_REGISTRY[bi % SCREEN_REGISTRY.length];
+    const bslug = `app_bind${bi + 1}`;
+    const { cls } = renderScreenBind(bslug, { entitySlug: ent.slug, entityName: ent.name, spec });
+    bindScreens.push({ slug: bslug, cls, kind: 'entity', name: `🖥 ${ent.name} · מסך`, icon: '🖥', sub: `מסך-אמת מפורק (${spec.cls.replace('Composed', '')}) · מחווט-מהישות` });
   }
 
   // מסכי-מערכת (kind='system' — גלויים רק לתפקיד 'הכל')

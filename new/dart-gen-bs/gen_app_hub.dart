@@ -3,7 +3,9 @@ import '../dart-data-bs/auto/gen_app_hub_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import 'gen_app_audit.dart';
-import 'gen_app_bind.dart';
+import 'gen_app_bind1.dart';
+import 'gen_app_bind2.dart';
+import 'gen_app_bind3.dart';
 import 'gen_app_ent1.dart';
 import 'gen_app_ent10.dart';
 import 'gen_app_ent11.dart';
@@ -93,7 +95,7 @@ class GenAppHubScreen extends StatefulWidget {
 }
 
 class _GenAppHubScreenState extends State<GenAppHubScreen> {
-  static const List<List<int>> _vis = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80], [10, 14, 15, 20, 21, 23, 24, 25, 27, 33, 41, 58, 65, 71, 72, 73, 74, 75, 76], [6, 7, 12, 16, 69], [14, 23, 27, 28, 29, 33], [14, 23, 27, 33, 37], [35, 37, 38], [40, 41, 42], [43, 44, 45, 46], [10, 15, 23, 27, 33, 45, 59], [23, 27, 28, 29, 31, 33]];
+  static const List<List<int>> _vis = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82], [10, 14, 15, 20, 21, 23, 24, 25, 27, 33, 41, 58, 65, 71, 72, 73, 74, 75, 76], [6, 7, 12, 16, 69], [14, 23, 27, 28, 29, 33], [14, 23, 27, 33, 37], [35, 37, 38], [40, 41, 42], [43, 44, 45, 46], [10, 15, 23, 27, 33, 45, 59], [23, 27, 28, 29, 31, 33]];
 
   List<Widget> _tiles(BuildContext context) => [
         DsNavTile(glyph: gen_app_hub_c2, title: gen_app_hub_c3, sub: gen_app_hub_c4, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppEnt1Screen()))),
@@ -173,10 +175,12 @@ class _GenAppHubScreenState extends State<GenAppHubScreen> {
         DsNavTile(glyph: gen_app_hub_c224, title: gen_app_hub_c225, sub: gen_app_hub_c226, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppScr75Screen()))),
         DsNavTile(glyph: gen_app_hub_c227, title: gen_app_hub_c228, sub: gen_app_hub_c229, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppScr76Screen()))),
         DsNavTile(glyph: gen_app_hub_c230, title: gen_app_hub_c231, sub: gen_app_hub_c232, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppScr77Screen()))),
-        DsNavTile(glyph: gen_app_hub_c233, title: gen_app_hub_c234, sub: gen_app_hub_c235, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppBindScreen()))),
-        DsNavTile(glyph: gen_app_hub_c236, title: gen_app_hub_c237, sub: gen_app_hub_c238, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppAuditScreen()))),
-        DsNavTile(glyph: gen_app_hub_c239, title: gen_app_hub_c240, sub: gen_app_hub_c241, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppFlagsScreen()))),
-        DsNavTile(glyph: gen_app_hub_c242, title: gen_app_hub_c243, sub: gen_app_hub_c244, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppSettingsScreen()))),
+        DsNavTile(glyph: gen_app_hub_c233, title: gen_app_hub_c234, sub: gen_app_hub_c235, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppBind1Screen()))),
+        DsNavTile(glyph: gen_app_hub_c236, title: gen_app_hub_c237, sub: gen_app_hub_c238, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppBind2Screen()))),
+        DsNavTile(glyph: gen_app_hub_c239, title: gen_app_hub_c240, sub: gen_app_hub_c241, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppBind3Screen()))),
+        DsNavTile(glyph: gen_app_hub_c242, title: gen_app_hub_c243, sub: gen_app_hub_c244, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppAuditScreen()))),
+        DsNavTile(glyph: gen_app_hub_c245, title: gen_app_hub_c246, sub: gen_app_hub_c247, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppFlagsScreen()))),
+        DsNavTile(glyph: gen_app_hub_c248, title: gen_app_hub_c249, sub: gen_app_hub_c250, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GenAppSettingsScreen()))),
   ];
 
   Widget _roleChip(int i, String label) {
@@ -209,7 +213,7 @@ class _GenAppHubScreenState extends State<GenAppHubScreen> {
       children: [
         Container(
           margin: const EdgeInsets.only(bottom: 4),
-          child: Wrap(children: [_roleChip(0, gen_app_hub_c245), _roleChip(1, gen_app_hub_c246), _roleChip(2, gen_app_hub_c247), _roleChip(3, gen_app_hub_c248), _roleChip(4, gen_app_hub_c249), _roleChip(5, gen_app_hub_c250), _roleChip(6, gen_app_hub_c251), _roleChip(7, gen_app_hub_c252), _roleChip(8, gen_app_hub_c253), _roleChip(9, gen_app_hub_c254)]),
+          child: Wrap(children: [_roleChip(0, gen_app_hub_c251), _roleChip(1, gen_app_hub_c252), _roleChip(2, gen_app_hub_c253), _roleChip(3, gen_app_hub_c254), _roleChip(4, gen_app_hub_c255), _roleChip(5, gen_app_hub_c256), _roleChip(6, gen_app_hub_c257), _roleChip(7, gen_app_hub_c258), _roleChip(8, gen_app_hub_c259), _roleChip(9, gen_app_hub_c260)]),
         ),
         for (final i in vis) all[i],
       ],

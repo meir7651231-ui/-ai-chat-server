@@ -875,17 +875,25 @@ class ${cls} extends StatelessWidget {
 }
 
 // ── מסך-מערכת גנרי: כותרת + סקשן עם ילדים (מתגים/מצב-ריק) ──
-// ── 🖥 מחבר-ישות-למסך (POC): ממלא מסך-Composed מפורק (AiHubScreenComposed) מרשומות-ישות.
-//    מוכיח את הפרדיגמה: המסכים-המפורקים ניתנים-להרכבה עם דאטה גנרית (שקע {אייקון/כותרת/תת/פעולה}).
-//    כל רשומה ⇒ AiFinTileItem; הכותרת = הערך-הראשון-הלא-ריק (כמו _display). AnimatedBuilder חי.
-export function renderScreenBind(slug, { entitySlug, entityName }) {
+// ── 🖥 מחבר-ישות-למסך: ממלא מסך-Composed מפורק מרשומות-ישות. הוכח שהמסכים ניתנים-
+//    להרכבה עם דאטה גנרית (76% מהשקעים בצורת {כותרת/תווית/מונה/צבע/פעולה}). כל רשומה ⇒
+//    פריט-שקע; הכותרת = הערך-הראשון-הלא-ריק. AnimatedBuilder חי. רישום-מסכים ⇒ הכללה.
+// build(disp, cIc, cSub) מחזיר ביטוי-פריט; disp = ביטוי-הכותרת-מרשומה.
+// build(disp, k, entityName): k(label) יוצר const-תוכן רק כשצריך ⇒ אין import-מיותם.
+export const SCREEN_REGISTRY = [
+  { file: 'ai_hub_screen.g.dart', cls: 'AiHubScreenComposed', tokens: 'AiHubScreenTokens', list: 'aiFinTileItems', build: (disp, k, en) => `AiFinTileItem(ic: ${k('🗂️')}, title: ${disp}, sub: ${k(en)}, onTap: () {})` },
+  { file: 'persona_portal.g.dart', cls: 'PersonaPortalComposed', tokens: 'PersonaPortalTokens', list: 'portalTileButtonItems', build: (disp, k, en) => `PortalTileButtonItem(title: ${disp}, sub: ${k(en)}, onTap: () {})` },
+  { file: 'courier_certs_screen.g.dart', cls: 'CourierCertsScreenComposed', tokens: 'CourierCertsScreenTokens', list: 'presetChipItems', build: (disp) => `PresetChipItem(label: ${disp}, selected: false, onTap: () {})` },
+];
+
+export function renderScreenBind(slug, { entitySlug, entityName, spec }) {
   const { k, dump } = makeConsts(slug);
-  const cIc = k('🗂️');
-  const cSub = k(entityName);
   const cls = pascal(slug);
+  const disp = `r.entries.firstWhere((e) => !e.key.startsWith('__') && e.value.trim().isNotEmpty, orElse: () => MapEntry('', r['__id'] ?? '')).value.trim()`;
+  const itemExpr = spec.build(disp, k, entityName);
+  const contentImport = itemExpr.includes(`gen_${slug}_c`) ? `import '../dart-data-bs/auto/gen_${slug}_content.dart';\n` : '';
   const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — מחבר-ישות-למסך: רשומות-ישות ⇒ מסך-Composed מפורק. אל תערוך ידנית.
-import '../dart-data-bs/auto/gen_${slug}_content.dart';
-import '../dart-screens-bs/ai_hub_screen.g.dart';
+${contentImport}import '../dart-screens-bs/${spec.file}';
 import '../dart-ui-bs/ds/ds_store.dart';
 import 'package:flutter/material.dart';
 
@@ -895,14 +903,9 @@ class ${cls} extends StatelessWidget {
   @override
   Widget build(BuildContext context) => AnimatedBuilder(
         animation: appStore,
-        builder: (context, _) => AiHubScreenComposed(
-          aiFinTileItems: appStore.records('${entitySlug}').map((r) => AiFinTileItem(
-                ic: ${cIc},
-                title: r.entries.firstWhere((e) => !e.key.startsWith('__') && e.value.trim().isNotEmpty, orElse: () => MapEntry('', r['__id'] ?? '')).value.trim(),
-                sub: ${cSub},
-                onTap: () {},
-              )).toList(),
-          t: const AiHubScreenTokens(),
+        builder: (context, _) => ${spec.cls}(
+          ${spec.list}: appStore.records('${entitySlug}').map((r) => ${itemExpr}).toList(),
+          t: const ${spec.tokens}(),
         ),
       );
 }
