@@ -47,6 +47,7 @@ class _GenAppEnt69ScreenState extends State<GenAppEnt69Screen> {
     return DsRecordCard(labels: const [gen_app_ent69_c9, gen_app_ent69_c11, gen_app_ent69_c12, gen_app_ent69_c13, gen_app_ent69_c14, gen_app_ent69_c15, gen_app_ent69_c16, gen_app_ent69_c17, gen_app_ent69_c18, gen_app_ent69_c19, gen_app_ent69_c20, gen_app_ent69_c21, gen_app_ent69_c22], values: [r[gen_app_ent69_c9] ?? '', r[gen_app_ent69_c11] ?? '', r[gen_app_ent69_c12] ?? '', r[gen_app_ent69_c13] ?? '', r[gen_app_ent69_c14] ?? '', r[gen_app_ent69_c15] ?? '', r[gen_app_ent69_c16] ?? '', r[gen_app_ent69_c17] ?? '', r[gen_app_ent69_c18] ?? '', r[gen_app_ent69_c19] ?? '', r[gen_app_ent69_c20] ?? '', r[gen_app_ent69_c21] ?? '', r[gen_app_ent69_c22] ?? ''], onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent69', rid));
   }
 
+
   String _csv() {
     final b = StringBuffer();
     b.writeln(const [gen_app_ent69_c9, gen_app_ent69_c11, gen_app_ent69_c12, gen_app_ent69_c13, gen_app_ent69_c14, gen_app_ent69_c15, gen_app_ent69_c16, gen_app_ent69_c17, gen_app_ent69_c18, gen_app_ent69_c19, gen_app_ent69_c20, gen_app_ent69_c21, gen_app_ent69_c22].map((h) => '"' + h.replaceAll('"', '""') + '"').join(','));

@@ -26,3 +26,5 @@ const String gen_app_ent45_c23 = 'הופקה';
 const String gen_app_ent45_c24 = 'נשלחה';
 const String gen_app_ent45_c25 = 'שולמה';
 const String gen_app_ent45_c26 = 'בפיגור';
+const String gen_app_ent45_c27 = 'תשלום';
+const String gen_app_ent45_c28 = 'חשבונית';

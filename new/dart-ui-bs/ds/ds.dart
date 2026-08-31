@@ -313,8 +313,9 @@ class DsNavTile extends StatelessWidget {
 
 // ── כרטיס-רשומה: תווית:ערך לכל שדה + שבב-שלב חי + קידום + עריכה (הקשה) + מחיקה ──
 class DsRecordCard extends StatelessWidget {
-  const DsRecordCard({required this.labels, required this.values, this.stage = '', this.stageDone = false, this.stages = const [], this.stageIndex = 0, this.onStage, this.onAdvance, this.onEdit, this.onDelete, super.key});
+  const DsRecordCard({required this.labels, required this.values, this.stage = '', this.stageDone = false, this.stages = const [], this.stageIndex = 0, this.onStage, this.onAdvance, this.onEdit, this.onDelete, this.footer, super.key});
   final List<String> labels, values;
+  final Widget? footer;   // תוכן-תחתית (למשל שבבי קשר-הפוך)
   final String stage;         // שם השלב-הנוכחי (ריק = לישות אין מסע)
   final bool stageDone;       // האם הגיע לשלב-האחרון
   final List<String> stages;  // כל השלבים (למסע לא-ליניארי — קפיצה לכל שלב)
@@ -402,6 +403,7 @@ class DsRecordCard extends StatelessWidget {
           ),
         ),
         ...rows.isEmpty ? [const Text('—', style: TextStyle(color: DsTokens.faint))] : rows,
+        if (footer != null) Padding(padding: const EdgeInsets.only(top: 10), child: footer),
       ],
     );
     return Container(

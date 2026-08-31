@@ -27,3 +27,5 @@ const String gen_app_ent35_c24 = 'סטטוס בא';
 const String gen_app_ent35_c25 = 'טיוטה';
 const String gen_app_ent35_c26 = 'אושרה';
 const String gen_app_ent35_c27 = 'פורסמה';
+const String gen_app_ent35_c28 = 'מבקר';
+const String gen_app_ent35_c29 = 'תעודה';

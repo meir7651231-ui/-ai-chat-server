@@ -44,8 +44,15 @@ class _GenAppEnt31ScreenState extends State<GenAppEnt31Screen> {
 
   Widget _card(Map<String, String> r) {
     final rid = r['__id'] ?? '';
-    return DsRecordCard(labels: const [gen_app_ent31_c9, gen_app_ent31_c10, gen_app_ent31_c11, gen_app_ent31_c13, gen_app_ent31_c14, gen_app_ent31_c15, gen_app_ent31_c16, gen_app_ent31_c17, gen_app_ent31_c18, gen_app_ent31_c19, gen_app_ent31_c20], values: [appStore.displayOf('app_ent11', r[gen_app_ent31_c9] ?? ''), appStore.displayOf('app_ent30', r[gen_app_ent31_c10] ?? ''), r[gen_app_ent31_c11] ?? '', r[gen_app_ent31_c13] ?? '', r[gen_app_ent31_c14] ?? '', r[gen_app_ent31_c15] ?? '', r[gen_app_ent31_c16] ?? '', r[gen_app_ent31_c17] ?? '', r[gen_app_ent31_c18] ?? '', r[gen_app_ent31_c19] ?? '', r[gen_app_ent31_c20] ?? ''], stage: (const [gen_app_ent31_c22, gen_app_ent31_c23, gen_app_ent31_c24])[appStore.stageOf('app_ent31', rid)], stageDone: appStore.stageOf('app_ent31', rid) >= 2, stages: const [gen_app_ent31_c22, gen_app_ent31_c23, gen_app_ent31_c24], stageIndex: appStore.stageOf('app_ent31', rid), onStage: (i) => appStore.setStage('app_ent31', rid, i), onAdvance: () => appStore.advance('app_ent31', rid, 3), onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent31', rid));
+    return DsRecordCard(labels: const [gen_app_ent31_c9, gen_app_ent31_c10, gen_app_ent31_c11, gen_app_ent31_c13, gen_app_ent31_c14, gen_app_ent31_c15, gen_app_ent31_c16, gen_app_ent31_c17, gen_app_ent31_c18, gen_app_ent31_c19, gen_app_ent31_c20], values: [appStore.displayOf('app_ent11', r[gen_app_ent31_c9] ?? ''), appStore.displayOf('app_ent30', r[gen_app_ent31_c10] ?? ''), r[gen_app_ent31_c11] ?? '', r[gen_app_ent31_c13] ?? '', r[gen_app_ent31_c14] ?? '', r[gen_app_ent31_c15] ?? '', r[gen_app_ent31_c16] ?? '', r[gen_app_ent31_c17] ?? '', r[gen_app_ent31_c18] ?? '', r[gen_app_ent31_c19] ?? '', r[gen_app_ent31_c20] ?? ''], stage: (const [gen_app_ent31_c22, gen_app_ent31_c23, gen_app_ent31_c24])[appStore.stageOf('app_ent31', rid)], stageDone: appStore.stageOf('app_ent31', rid) >= 2, stages: const [gen_app_ent31_c22, gen_app_ent31_c23, gen_app_ent31_c24], stageIndex: appStore.stageOf('app_ent31', rid), onStage: (i) => appStore.setStage('app_ent31', rid, i), onAdvance: () => appStore.advance('app_ent31', rid, 3), onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent31', rid), footer: Wrap(spacing: 6, runSpacing: 6, children: [_backChip(gen_app_ent31_c25, appStore.referencing('app_ent30', gen_app_ent31_c26, rid).length)]));
   }
+
+  Widget _backChip(String label, int n) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+        decoration: BoxDecoration(color: const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(20)),
+        child: Text('$label · $n', style: const TextStyle(color: DsTokens.muted, fontSize: 11.5, fontWeight: FontWeight.w700)),
+      );
+
 
   String _csv() {
     final b = StringBuffer();

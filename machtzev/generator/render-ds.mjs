@@ -144,7 +144,7 @@ function compileFormula(formula, labels) {
 }
 
 // ── ישות: מסך-חי מחווט — טופס→שמירה→חנות→טבלה→דשבורד, + קשרים(מזהה) + מסע + עריכה/מחיקה ──
-export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {} }) {
+export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [] }) {
   const { k, dump } = makeConsts(slug);
   const cTitle = k(name);
   const cSub = k(`${schema.length} שדות${stages.length ? ` · ${stages.length} שלבים` : ''}`);
@@ -231,6 +231,9 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const editLoad = labelConst.map((cl, i) => `${i}: r[${cl}] ?? ''`).join(', ');         // רשומה ⇒ טופס (עריכה)
   const recValues = recValsR.join(', ');
   const labelsList = labelConst.join(', ');
+  // קשר-הפוך: שבב פר-ישות-מצביעה עם מונה-חי (appStore.referencing).
+  const backChips = backRefs.map((b) => `_backChip(${k(b.fname)}, appStore.referencing('${b.fslug}', ${k(b.ffield)}, rid).length)`).join(', ');
+  const backFooter = backRefs.length ? `, footer: Wrap(spacing: 6, runSpacing: 6, children: [${backChips}])` : '';
   const stageArgs = hasStages
     ? `stage: (const ${stageList})[appStore.stageOf(${SK}, rid)], stageDone: appStore.stageOf(${SK}, rid) >= ${stages.length - 1}, stages: const ${stageList}, stageIndex: appStore.stageOf(${SK}, rid), onStage: (i) => appStore.setStage(${SK}, rid, i), onAdvance: () => appStore.advance(${SK}, rid, ${stages.length}), `
     : '';
@@ -282,8 +285,15 @@ ${requiredIdx.length ? `    final miss = <String>[];
 
   Widget _card(Map<String, String> r) {
     final rid = r['__id'] ?? '';
-    return DsRecordCard(labels: const [${labelsList}], values: [${recValues}], ${stageArgs}onEdit: () => _edit(r), onDelete: () => appStore.removeById(${SK}, rid));
+    return DsRecordCard(labels: const [${labelsList}], values: [${recValues}], ${stageArgs}onEdit: () => _edit(r), onDelete: () => appStore.removeById(${SK}, rid)${backFooter});
   }
+${backRefs.length ? `
+  Widget _backChip(String label, int n) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+        decoration: BoxDecoration(color: const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(20)),
+        child: Text('\$label · \$n', style: const TextStyle(color: DsTokens.muted, fontSize: 11.5, fontWeight: FontWeight.w700)),
+      );
+` : ''}
 
   String _csv() {
     final b = StringBuffer();

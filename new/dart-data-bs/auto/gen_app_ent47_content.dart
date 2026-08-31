@@ -22,3 +22,7 @@ const String gen_app_ent47_c19 = 'סטטוס בא';
 const String gen_app_ent47_c20 = 'בקשה';
 const String gen_app_ent47_c21 = 'אושרה';
 const String gen_app_ent47_c22 = 'נדחתה';
+const String gen_app_ent47_c23 = 'חיוב';
+const String gen_app_ent47_c24 = 'מלגה';
+const String gen_app_ent47_c25 = 'חשבונית';
+const String gen_app_ent47_c26 = 'מלגה';

@@ -45,6 +45,20 @@ export function buildApp(specText) {
     if (!(r.entity in nameToSlug)) nameToSlug[r.entity] = eslug;   // שם ⇒ slug-היעד לקשרים
   }
   const entityNames = entMeta.map((e) => e.name);
+  // 🔁 קשר-הפוך: לכל ישות-יעד — מי מצביע עליה (ישות F · שדה). התאמה-מדויקת כמו pickRelation.
+  const hw = (s) => [...String(s || '').matchAll(/[֐-׿][֐-׿״׳]*/g)].map((m) => m[0]);
+  const backRefs = {};
+  for (const li of info) if (li.isEnt) {
+    const F = entRes[li.i]; const fslug = `app_ent${li.i}`;
+    for (const s of F.schema) {
+      const fw = new Set(hw(s.label));
+      for (const en of entityNames) {
+        if (en === F.entity) continue;
+        const ew = hw(en);
+        if (ew.length && ew.every((w) => fw.has(w))) { (backRefs[en] ??= []).push({ fslug, ffield: s.label, fname: F.entity }); break; }
+      }
+    }
+  }
 
   // ניקוי פלט-app קודם
   for (const f of fs.readdirSync(OUT)) if (/^gen_app_.*\.dart$/.test(f)) fs.unlinkSync(path.join(OUT, f));
@@ -55,7 +69,7 @@ export function buildApp(specText) {
     if (li.isEnt) {
       const r = entRes[li.i];
       const slug = `app_ent${li.i}`;
-      const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames, nameToSlug });
+      const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames, nameToSlug, backRefs: backRefs[r.entity] || [] });
       screens.push({ slug, cls, kind: 'entity', name: r.entity, icon: '🗂️', sub: `${r.schema.length} שדות${(r.stages || []).length ? ` · ${r.stages.length} שלבים` : ''}` });
     } else {
       const slug = `app_scr${li.i}`;

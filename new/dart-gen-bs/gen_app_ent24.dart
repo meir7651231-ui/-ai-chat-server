@@ -46,6 +46,7 @@ class _GenAppEnt24ScreenState extends State<GenAppEnt24Screen> {
     return DsRecordCard(labels: const [gen_app_ent24_c9, gen_app_ent24_c10, gen_app_ent24_c11, gen_app_ent24_c12, gen_app_ent24_c13, gen_app_ent24_c14, gen_app_ent24_c15, gen_app_ent24_c16, gen_app_ent24_c17], values: [appStore.displayOf('app_ent21', r[gen_app_ent24_c9] ?? ''), r[gen_app_ent24_c10] ?? '', r[gen_app_ent24_c11] ?? '', r[gen_app_ent24_c12] ?? '', r[gen_app_ent24_c13] ?? '', r[gen_app_ent24_c14] ?? '', r[gen_app_ent24_c15] ?? '', r[gen_app_ent24_c16] ?? '', r[gen_app_ent24_c17] ?? ''], onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent24', rid));
   }
 
+
   String _csv() {
     final b = StringBuffer();
     b.writeln(const [gen_app_ent24_c9, gen_app_ent24_c10, gen_app_ent24_c11, gen_app_ent24_c12, gen_app_ent24_c13, gen_app_ent24_c14, gen_app_ent24_c15, gen_app_ent24_c16, gen_app_ent24_c17].map((h) => '"' + h.replaceAll('"', '""') + '"').join(','));

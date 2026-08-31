@@ -43,8 +43,15 @@ class _GenAppEnt5ScreenState extends State<GenAppEnt5Screen> {
 
   Widget _card(Map<String, String> r) {
     final rid = r['__id'] ?? '';
-    return DsRecordCard(labels: const [gen_app_ent5_c9, gen_app_ent5_c10, gen_app_ent5_c11, gen_app_ent5_c12, gen_app_ent5_c13, gen_app_ent5_c14, gen_app_ent5_c15, gen_app_ent5_c16], values: [appStore.displayOf('app_ent4', r[gen_app_ent5_c9] ?? ''), r[gen_app_ent5_c10] ?? '', r[gen_app_ent5_c11] ?? '', r[gen_app_ent5_c12] ?? '', r[gen_app_ent5_c13] ?? '', appStore.displayOf('app_ent34', r[gen_app_ent5_c14] ?? ''), r[gen_app_ent5_c15] ?? '', r[gen_app_ent5_c16] ?? ''], onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent5', rid));
+    return DsRecordCard(labels: const [gen_app_ent5_c9, gen_app_ent5_c10, gen_app_ent5_c11, gen_app_ent5_c12, gen_app_ent5_c13, gen_app_ent5_c14, gen_app_ent5_c15, gen_app_ent5_c16], values: [appStore.displayOf('app_ent4', r[gen_app_ent5_c9] ?? ''), r[gen_app_ent5_c10] ?? '', r[gen_app_ent5_c11] ?? '', r[gen_app_ent5_c12] ?? '', r[gen_app_ent5_c13] ?? '', appStore.displayOf('app_ent34', r[gen_app_ent5_c14] ?? ''), r[gen_app_ent5_c15] ?? '', r[gen_app_ent5_c16] ?? ''], onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent5', rid), footer: Wrap(spacing: 6, runSpacing: 6, children: [_backChip(gen_app_ent5_c18, appStore.referencing('app_ent25', gen_app_ent5_c19, rid).length), _backChip(gen_app_ent5_c20, appStore.referencing('app_ent26', gen_app_ent5_c21, rid).length), _backChip(gen_app_ent5_c22, appStore.referencing('app_ent32', gen_app_ent5_c23, rid).length), _backChip(gen_app_ent5_c24, appStore.referencing('app_ent34', gen_app_ent5_c25, rid).length), _backChip(gen_app_ent5_c26, appStore.referencing('app_ent35', gen_app_ent5_c27, rid).length)]));
   }
+
+  Widget _backChip(String label, int n) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+        decoration: BoxDecoration(color: const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(20)),
+        child: Text('$label · $n', style: const TextStyle(color: DsTokens.muted, fontSize: 11.5, fontWeight: FontWeight.w700)),
+      );
+
 
   String _csv() {
     final b = StringBuffer();

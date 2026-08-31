@@ -31,3 +31,7 @@ const String gen_app_ent59_c28 = 'מתוכנן';
 const String gen_app_ent59_c29 = 'פורסם';
 const String gen_app_ent59_c30 = 'התקיים';
 const String gen_app_ent59_c31 = 'בוטל';
+const String gen_app_ent59_c32 = 'נסיעת הסעה';
+const String gen_app_ent59_c33 = 'אירוע';
+const String gen_app_ent59_c34 = 'אישור הורה';
+const String gen_app_ent59_c35 = 'אירוע';

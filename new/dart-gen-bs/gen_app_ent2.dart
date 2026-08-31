@@ -46,8 +46,15 @@ class _GenAppEnt2ScreenState extends State<GenAppEnt2Screen> {
 
   Widget _card(Map<String, String> r) {
     final rid = r['__id'] ?? '';
-    return DsRecordCard(labels: const [gen_app_ent2_c9, gen_app_ent2_c10, gen_app_ent2_c11, gen_app_ent2_c12, gen_app_ent2_c13, gen_app_ent2_c14, gen_app_ent2_c15, gen_app_ent2_c16, gen_app_ent2_c18, gen_app_ent2_c19, gen_app_ent2_c21, gen_app_ent2_c22, gen_app_ent2_c23, gen_app_ent2_c24, gen_app_ent2_c25, gen_app_ent2_c26, gen_app_ent2_c27, gen_app_ent2_c28], values: [r[gen_app_ent2_c9] ?? '', r[gen_app_ent2_c10] ?? '', r[gen_app_ent2_c11] ?? '', r[gen_app_ent2_c12] ?? '', r[gen_app_ent2_c13] ?? '', r[gen_app_ent2_c14] ?? '', r[gen_app_ent2_c15] ?? '', r[gen_app_ent2_c16] ?? '', r[gen_app_ent2_c18] ?? '', r[gen_app_ent2_c19] ?? '', r[gen_app_ent2_c21] ?? '', r[gen_app_ent2_c22] ?? '', r[gen_app_ent2_c23] ?? '', r[gen_app_ent2_c24] ?? '', r[gen_app_ent2_c25] ?? '', r[gen_app_ent2_c26] ?? '', appStore.displayOf('app_ent4', r[gen_app_ent2_c27] ?? ''), r[gen_app_ent2_c28] ?? ''], onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent2', rid));
+    return DsRecordCard(labels: const [gen_app_ent2_c9, gen_app_ent2_c10, gen_app_ent2_c11, gen_app_ent2_c12, gen_app_ent2_c13, gen_app_ent2_c14, gen_app_ent2_c15, gen_app_ent2_c16, gen_app_ent2_c18, gen_app_ent2_c19, gen_app_ent2_c21, gen_app_ent2_c22, gen_app_ent2_c23, gen_app_ent2_c24, gen_app_ent2_c25, gen_app_ent2_c26, gen_app_ent2_c27, gen_app_ent2_c28], values: [r[gen_app_ent2_c9] ?? '', r[gen_app_ent2_c10] ?? '', r[gen_app_ent2_c11] ?? '', r[gen_app_ent2_c12] ?? '', r[gen_app_ent2_c13] ?? '', r[gen_app_ent2_c14] ?? '', r[gen_app_ent2_c15] ?? '', r[gen_app_ent2_c16] ?? '', r[gen_app_ent2_c18] ?? '', r[gen_app_ent2_c19] ?? '', r[gen_app_ent2_c21] ?? '', r[gen_app_ent2_c22] ?? '', r[gen_app_ent2_c23] ?? '', r[gen_app_ent2_c24] ?? '', r[gen_app_ent2_c25] ?? '', r[gen_app_ent2_c26] ?? '', appStore.displayOf('app_ent4', r[gen_app_ent2_c27] ?? ''), r[gen_app_ent2_c28] ?? ''], onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent2', rid), footer: Wrap(spacing: 6, runSpacing: 6, children: [_backChip(gen_app_ent2_c30, appStore.referencing('app_ent7', gen_app_ent2_c31, rid).length), _backChip(gen_app_ent2_c32, appStore.referencing('app_ent8', gen_app_ent2_c33, rid).length), _backChip(gen_app_ent2_c34, appStore.referencing('app_ent11', gen_app_ent2_c35, rid).length), _backChip(gen_app_ent2_c36, appStore.referencing('app_ent17', gen_app_ent2_c37, rid).length), _backChip(gen_app_ent2_c38, appStore.referencing('app_ent26', gen_app_ent2_c39, rid).length), _backChip(gen_app_ent2_c40, appStore.referencing('app_ent64', gen_app_ent2_c41, rid).length), _backChip(gen_app_ent2_c42, appStore.referencing('app_ent67', gen_app_ent2_c43, rid).length), _backChip(gen_app_ent2_c44, appStore.referencing('app_ent70', gen_app_ent2_c45, rid).length)]));
   }
+
+  Widget _backChip(String label, int n) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+        decoration: BoxDecoration(color: const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(20)),
+        child: Text('$label · $n', style: const TextStyle(color: DsTokens.muted, fontSize: 11.5, fontWeight: FontWeight.w700)),
+      );
+
 
   String _csv() {
     final b = StringBuffer();

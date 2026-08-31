@@ -42,8 +42,15 @@ class _GenAppEnt14ScreenState extends State<GenAppEnt14Screen> {
 
   Widget _card(Map<String, String> r) {
     final rid = r['__id'] ?? '';
-    return DsRecordCard(labels: const [gen_app_ent14_c9, gen_app_ent14_c10, gen_app_ent14_c11, gen_app_ent14_c12, gen_app_ent14_c13, gen_app_ent14_c14, gen_app_ent14_c15, gen_app_ent14_c16], values: [r[gen_app_ent14_c9] ?? '', r[gen_app_ent14_c10] ?? '', r[gen_app_ent14_c11] ?? '', appStore.displayOf('app_ent4', r[gen_app_ent14_c12] ?? ''), r[gen_app_ent14_c13] ?? '', r[gen_app_ent14_c14] ?? '', r[gen_app_ent14_c15] ?? '', r[gen_app_ent14_c16] ?? ''], onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent14', rid));
+    return DsRecordCard(labels: const [gen_app_ent14_c9, gen_app_ent14_c10, gen_app_ent14_c11, gen_app_ent14_c12, gen_app_ent14_c13, gen_app_ent14_c14, gen_app_ent14_c15, gen_app_ent14_c16], values: [r[gen_app_ent14_c9] ?? '', r[gen_app_ent14_c10] ?? '', r[gen_app_ent14_c11] ?? '', appStore.displayOf('app_ent4', r[gen_app_ent14_c12] ?? ''), r[gen_app_ent14_c13] ?? '', r[gen_app_ent14_c14] ?? '', r[gen_app_ent14_c15] ?? '', r[gen_app_ent14_c16] ?? ''], onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent14', rid), footer: Wrap(spacing: 6, runSpacing: 6, children: [_backChip(gen_app_ent14_c17, appStore.referencing('app_ent7', gen_app_ent14_c18, rid).length), _backChip(gen_app_ent14_c19, appStore.referencing('app_ent15', gen_app_ent14_c20, rid).length), _backChip(gen_app_ent14_c21, appStore.referencing('app_ent16', gen_app_ent14_c22, rid).length), _backChip(gen_app_ent14_c23, appStore.referencing('app_ent19', gen_app_ent14_c24, rid).length), _backChip(gen_app_ent14_c25, appStore.referencing('app_ent20', gen_app_ent14_c26, rid).length), _backChip(gen_app_ent14_c27, appStore.referencing('app_ent26', gen_app_ent14_c28, rid).length), _backChip(gen_app_ent14_c29, appStore.referencing('app_ent32', gen_app_ent14_c30, rid).length), _backChip(gen_app_ent14_c31, appStore.referencing('app_ent44', gen_app_ent14_c32, rid).length), _backChip(gen_app_ent14_c33, appStore.referencing('app_ent61', gen_app_ent14_c34, rid).length)]));
   }
+
+  Widget _backChip(String label, int n) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+        decoration: BoxDecoration(color: const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(20)),
+        child: Text('$label · $n', style: const TextStyle(color: DsTokens.muted, fontSize: 11.5, fontWeight: FontWeight.w700)),
+      );
+
 
   String _csv() {
     final b = StringBuffer();

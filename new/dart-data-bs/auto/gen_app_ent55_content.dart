@@ -17,3 +17,5 @@ const String gen_app_ent55_c14 = 'טווח שעות';
 const String gen_app_ent55_c15 = 'אישור אפוטרופוס';
 const String gen_app_ent55_c16 = 'סטטוס';
 const String gen_app_ent55_c17 = 'סטטוס בא';
+const String gen_app_ent55_c18 = 'אפוטרופוס';
+const String gen_app_ent55_c19 = 'מורשה איסוף';

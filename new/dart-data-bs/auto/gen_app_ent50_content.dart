@@ -19,3 +19,5 @@ const String gen_app_ent50_c16 = 'תוקף רישוי';
 const String gen_app_ent50_c17 = 'בדיקות';
 const String gen_app_ent50_c18 = 'סטטוס';
 const String gen_app_ent50_c19 = 'סטטוס בא';
+const String gen_app_ent50_c20 = 'מסלול הסעה';
+const String gen_app_ent50_c21 = 'אוטובוס';

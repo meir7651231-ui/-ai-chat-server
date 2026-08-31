@@ -35,3 +35,7 @@ const String gen_app_ent8_c32 = 'מבחן';
 const String gen_app_ent8_c33 = 'ועדה';
 const String gen_app_ent8_c34 = 'התקבל';
 const String gen_app_ent8_c35 = 'נדחה';
+const String gen_app_ent8_c36 = 'בקשת קבלה';
+const String gen_app_ent8_c37 = 'מועמד';
+const String gen_app_ent8_c38 = 'רשימת המתנה';
+const String gen_app_ent8_c39 = 'מועמד';

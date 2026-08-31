@@ -27,3 +27,5 @@ const String gen_app_ent28_c24 = 'יציאה מוקדמת';
 const String gen_app_ent28_c25 = 'נעדר מוצדק';
 const String gen_app_ent28_c26 = 'נעדר לא מוצדק';
 const String gen_app_ent28_c27 = 'מקוון';
+const String gen_app_ent28_c28 = 'תעודה';
+const String gen_app_ent28_c29 = 'נוכחות';

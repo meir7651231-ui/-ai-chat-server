@@ -46,6 +46,7 @@ class _GenAppEnt53ScreenState extends State<GenAppEnt53Screen> {
     return DsRecordCard(labels: const [gen_app_ent53_c9, gen_app_ent53_c10, gen_app_ent53_c11, gen_app_ent53_c12, gen_app_ent53_c13, gen_app_ent53_c14, gen_app_ent53_c15, gen_app_ent53_c16, gen_app_ent53_c17, gen_app_ent53_c18, gen_app_ent53_c19], values: [r[gen_app_ent53_c9] ?? '', r[gen_app_ent53_c10] ?? '', r[gen_app_ent53_c11] ?? '', r[gen_app_ent53_c12] ?? '', r[gen_app_ent53_c13] ?? '', r[gen_app_ent53_c14] ?? '', r[gen_app_ent53_c15] ?? '', r[gen_app_ent53_c16] ?? '', r[gen_app_ent53_c17] ?? '', appStore.displayOf('app_ent59', r[gen_app_ent53_c18] ?? ''), r[gen_app_ent53_c19] ?? ''], stage: (const [gen_app_ent53_c21, gen_app_ent53_c22, gen_app_ent53_c23])[appStore.stageOf('app_ent53', rid)], stageDone: appStore.stageOf('app_ent53', rid) >= 2, stages: const [gen_app_ent53_c21, gen_app_ent53_c22, gen_app_ent53_c23], stageIndex: appStore.stageOf('app_ent53', rid), onStage: (i) => appStore.setStage('app_ent53', rid, i), onAdvance: () => appStore.advance('app_ent53', rid, 3), onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent53', rid));
   }
 
+
   String _csv() {
     final b = StringBuffer();
     b.writeln(const [gen_app_ent53_c9, gen_app_ent53_c10, gen_app_ent53_c11, gen_app_ent53_c12, gen_app_ent53_c13, gen_app_ent53_c14, gen_app_ent53_c15, gen_app_ent53_c16, gen_app_ent53_c17, gen_app_ent53_c18, gen_app_ent53_c19].map((h) => '"' + h.replaceAll('"', '""') + '"').join(','));

@@ -45,6 +45,7 @@ class _GenAppEnt6ScreenState extends State<GenAppEnt6Screen> {
     return DsRecordCard(labels: const [gen_app_ent6_c9, gen_app_ent6_c10, gen_app_ent6_c11, gen_app_ent6_c12, gen_app_ent6_c13, gen_app_ent6_c14, gen_app_ent6_c15, gen_app_ent6_c16, gen_app_ent6_c17, gen_app_ent6_c18, gen_app_ent6_c19, gen_app_ent6_c21, gen_app_ent6_c22], values: [r[gen_app_ent6_c9] ?? '', r[gen_app_ent6_c10] ?? '', r[gen_app_ent6_c11] ?? '', r[gen_app_ent6_c12] ?? '', r[gen_app_ent6_c13] ?? '', r[gen_app_ent6_c14] ?? '', r[gen_app_ent6_c15] ?? '', r[gen_app_ent6_c16] ?? '', r[gen_app_ent6_c17] ?? '', r[gen_app_ent6_c18] ?? '', r[gen_app_ent6_c19] ?? '', r[gen_app_ent6_c21] ?? '', r[gen_app_ent6_c22] ?? ''], stage: (const [gen_app_ent6_c23, gen_app_ent6_c24, gen_app_ent6_c25, gen_app_ent6_c26])[appStore.stageOf('app_ent6', rid)], stageDone: appStore.stageOf('app_ent6', rid) >= 3, stages: const [gen_app_ent6_c23, gen_app_ent6_c24, gen_app_ent6_c25, gen_app_ent6_c26], stageIndex: appStore.stageOf('app_ent6', rid), onStage: (i) => appStore.setStage('app_ent6', rid, i), onAdvance: () => appStore.advance('app_ent6', rid, 4), onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent6', rid));
   }
 
+
   String _csv() {
     final b = StringBuffer();
     b.writeln(const [gen_app_ent6_c9, gen_app_ent6_c10, gen_app_ent6_c11, gen_app_ent6_c12, gen_app_ent6_c13, gen_app_ent6_c14, gen_app_ent6_c15, gen_app_ent6_c16, gen_app_ent6_c17, gen_app_ent6_c18, gen_app_ent6_c19, gen_app_ent6_c21, gen_app_ent6_c22].map((h) => '"' + h.replaceAll('"', '""') + '"').join(','));

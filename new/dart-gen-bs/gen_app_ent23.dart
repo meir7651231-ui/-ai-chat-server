@@ -47,6 +47,7 @@ class _GenAppEnt23ScreenState extends State<GenAppEnt23Screen> {
     return DsRecordCard(labels: const [gen_app_ent23_c9, gen_app_ent23_c10, gen_app_ent23_c11, gen_app_ent23_c12, gen_app_ent23_c13, gen_app_ent23_c14, gen_app_ent23_c15, gen_app_ent23_c16, gen_app_ent23_c17], values: [appStore.displayOf('app_ent21', r[gen_app_ent23_c9] ?? ''), r[gen_app_ent23_c10] ?? '', r[gen_app_ent23_c11] ?? '', r[gen_app_ent23_c12] ?? '', r[gen_app_ent23_c13] ?? '', r[gen_app_ent23_c14] ?? '', r[gen_app_ent23_c15] ?? '', r[gen_app_ent23_c16] ?? '', r[gen_app_ent23_c17] ?? ''], stage: (const [gen_app_ent23_c19, gen_app_ent23_c20, gen_app_ent23_c21])[appStore.stageOf('app_ent23', rid)], stageDone: appStore.stageOf('app_ent23', rid) >= 2, stages: const [gen_app_ent23_c19, gen_app_ent23_c20, gen_app_ent23_c21], stageIndex: appStore.stageOf('app_ent23', rid), onStage: (i) => appStore.setStage('app_ent23', rid, i), onAdvance: () => appStore.advance('app_ent23', rid, 3), onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent23', rid));
   }
 
+
   String _csv() {
     final b = StringBuffer();
     b.writeln(const [gen_app_ent23_c9, gen_app_ent23_c10, gen_app_ent23_c11, gen_app_ent23_c12, gen_app_ent23_c13, gen_app_ent23_c14, gen_app_ent23_c15, gen_app_ent23_c16, gen_app_ent23_c17].map((h) => '"' + h.replaceAll('"', '""') + '"').join(','));

@@ -46,6 +46,7 @@ class _GenAppEnt26ScreenState extends State<GenAppEnt26Screen> {
     return DsRecordCard(labels: const [gen_app_ent26_c9, gen_app_ent26_c10, gen_app_ent26_c11, gen_app_ent26_c12, gen_app_ent26_c13, gen_app_ent26_c14, gen_app_ent26_c15, gen_app_ent26_c16, gen_app_ent26_c17, gen_app_ent26_c18, gen_app_ent26_c19, gen_app_ent26_c20, gen_app_ent26_c21, gen_app_ent26_c22, gen_app_ent26_c23], values: [appStore.displayOf('app_ent4', r[gen_app_ent26_c9] ?? ''), appStore.displayOf('app_ent5', r[gen_app_ent26_c10] ?? ''), appStore.displayOf('app_ent2', r[gen_app_ent26_c11] ?? ''), appStore.displayOf('app_ent14', r[gen_app_ent26_c12] ?? ''), appStore.displayOf('app_ent15', r[gen_app_ent26_c13] ?? ''), appStore.displayOf('app_ent18', r[gen_app_ent26_c14] ?? ''), r[gen_app_ent26_c15] ?? '', r[gen_app_ent26_c16] ?? '', r[gen_app_ent26_c17] ?? '', r[gen_app_ent26_c18] ?? '', r[gen_app_ent26_c19] ?? '', r[gen_app_ent26_c20] ?? '', r[gen_app_ent26_c21] ?? '', appStore.displayOf('app_ent29', r[gen_app_ent26_c22] ?? ''), r[gen_app_ent26_c23] ?? ''], onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent26', rid));
   }
 
+
   String _csv() {
     final b = StringBuffer();
     b.writeln(const [gen_app_ent26_c9, gen_app_ent26_c10, gen_app_ent26_c11, gen_app_ent26_c12, gen_app_ent26_c13, gen_app_ent26_c14, gen_app_ent26_c15, gen_app_ent26_c16, gen_app_ent26_c17, gen_app_ent26_c18, gen_app_ent26_c19, gen_app_ent26_c20, gen_app_ent26_c21, gen_app_ent26_c22, gen_app_ent26_c23].map((h) => '"' + h.replaceAll('"', '""') + '"').join(','));

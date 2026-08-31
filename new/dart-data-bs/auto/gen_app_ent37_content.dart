@@ -17,3 +17,5 @@ const String gen_app_ent37_c14 = 'שיעורים';
 const String gen_app_ent37_c15 = 'הוראות';
 const String gen_app_ent37_c16 = 'בעלי הרשאה';
 const String gen_app_ent37_c17 = 'אישור';
+const String gen_app_ent37_c18 = 'ציונים';
+const String gen_app_ent37_c19 = 'התאמה';

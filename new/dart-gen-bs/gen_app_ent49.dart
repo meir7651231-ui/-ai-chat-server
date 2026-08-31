@@ -46,6 +46,7 @@ class _GenAppEnt49ScreenState extends State<GenAppEnt49Screen> {
     return DsRecordCard(labels: const [gen_app_ent49_c9, gen_app_ent49_c10, gen_app_ent49_c11, gen_app_ent49_c12, gen_app_ent49_c13, gen_app_ent49_c14, gen_app_ent49_c15], values: [appStore.displayOf('app_ent11', r[gen_app_ent49_c9] ?? ''), appStore.displayOf('app_ent21', r[gen_app_ent49_c10] ?? ''), appStore.displayOf('app_ent15', r[gen_app_ent49_c11] ?? ''), r[gen_app_ent49_c12] ?? '', r[gen_app_ent49_c13] ?? '', r[gen_app_ent49_c14] ?? '', r[gen_app_ent49_c15] ?? ''], onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent49', rid));
   }
 
+
   String _csv() {
     final b = StringBuffer();
     b.writeln(const [gen_app_ent49_c9, gen_app_ent49_c10, gen_app_ent49_c11, gen_app_ent49_c12, gen_app_ent49_c13, gen_app_ent49_c14, gen_app_ent49_c15].map((h) => '"' + h.replaceAll('"', '""') + '"').join(','));

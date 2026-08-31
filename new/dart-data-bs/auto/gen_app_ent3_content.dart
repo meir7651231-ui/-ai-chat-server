@@ -24,3 +24,7 @@ const String gen_app_ent3_c21 = 'חניונים';
 const String gen_app_ent3_c22 = 'תחנות הסעה';
 const String gen_app_ent3_c23 = 'ציוד';
 const String gen_app_ent3_c24 = 'משתמשים';
+const String gen_app_ent3_c25 = 'תלמיד';
+const String gen_app_ent3_c26 = 'קמפוס';
+const String gen_app_ent3_c27 = 'הרשמה';
+const String gen_app_ent3_c28 = 'קמפוס';

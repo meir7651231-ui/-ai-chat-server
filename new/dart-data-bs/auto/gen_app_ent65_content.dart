@@ -20,3 +20,5 @@ const String gen_app_ent65_c17 = 'ציוד';
 const String gen_app_ent65_c18 = 'תרגולים';
 const String gen_app_ent65_c19 = 'תאריך עדכון';
 const String gen_app_ent65_c20 = 'גרסה';
+const String gen_app_ent65_c21 = 'תיק בריאות';
+const String gen_app_ent65_c22 = 'תוכנית חירום';

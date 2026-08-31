@@ -41,8 +41,15 @@ class _GenAppEnt13ScreenState extends State<GenAppEnt13Screen> {
 
   Widget _card(Map<String, String> r) {
     final rid = r['__id'] ?? '';
-    return DsRecordCard(labels: const [gen_app_ent13_c9, gen_app_ent13_c10, gen_app_ent13_c11, gen_app_ent13_c12, gen_app_ent13_c13, gen_app_ent13_c14, gen_app_ent13_c15, gen_app_ent13_c16, gen_app_ent13_c17, gen_app_ent13_c18, gen_app_ent13_c19], values: [r[gen_app_ent13_c9] ?? '', r[gen_app_ent13_c10] ?? '', r[gen_app_ent13_c11] ?? '', r[gen_app_ent13_c12] ?? '', r[gen_app_ent13_c13] ?? '', r[gen_app_ent13_c14] ?? '', r[gen_app_ent13_c15] ?? '', r[gen_app_ent13_c16] ?? '', r[gen_app_ent13_c17] ?? '', r[gen_app_ent13_c18] ?? '', r[gen_app_ent13_c19] ?? ''], onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent13', rid));
+    return DsRecordCard(labels: const [gen_app_ent13_c9, gen_app_ent13_c10, gen_app_ent13_c11, gen_app_ent13_c12, gen_app_ent13_c13, gen_app_ent13_c14, gen_app_ent13_c15, gen_app_ent13_c16, gen_app_ent13_c17, gen_app_ent13_c18, gen_app_ent13_c19], values: [r[gen_app_ent13_c9] ?? '', r[gen_app_ent13_c10] ?? '', r[gen_app_ent13_c11] ?? '', r[gen_app_ent13_c12] ?? '', r[gen_app_ent13_c13] ?? '', r[gen_app_ent13_c14] ?? '', r[gen_app_ent13_c15] ?? '', r[gen_app_ent13_c16] ?? '', r[gen_app_ent13_c17] ?? '', r[gen_app_ent13_c18] ?? '', r[gen_app_ent13_c19] ?? ''], onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent13', rid), footer: Wrap(spacing: 6, runSpacing: 6, children: [_backChip(gen_app_ent13_c21, appStore.referencing('app_ent11', gen_app_ent13_c22, rid).length), _backChip(gen_app_ent13_c23, appStore.referencing('app_ent45', gen_app_ent13_c24, rid).length), _backChip(gen_app_ent13_c25, appStore.referencing('app_ent46', gen_app_ent13_c26, rid).length), _backChip(gen_app_ent13_c27, appStore.referencing('app_ent47', gen_app_ent13_c28, rid).length), _backChip(gen_app_ent13_c29, appStore.referencing('app_ent70', gen_app_ent13_c30, rid).length)]));
   }
+
+  Widget _backChip(String label, int n) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+        decoration: BoxDecoration(color: const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(20)),
+        child: Text('$label · $n', style: const TextStyle(color: DsTokens.muted, fontSize: 11.5, fontWeight: FontWeight.w700)),
+      );
+
 
   String _csv() {
     final b = StringBuffer();

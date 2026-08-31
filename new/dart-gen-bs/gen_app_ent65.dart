@@ -42,8 +42,15 @@ class _GenAppEnt65ScreenState extends State<GenAppEnt65Screen> {
 
   Widget _card(Map<String, String> r) {
     final rid = r['__id'] ?? '';
-    return DsRecordCard(labels: const [gen_app_ent65_c9, gen_app_ent65_c10, gen_app_ent65_c12, gen_app_ent65_c13, gen_app_ent65_c14, gen_app_ent65_c15, gen_app_ent65_c16, gen_app_ent65_c17, gen_app_ent65_c18, gen_app_ent65_c19, gen_app_ent65_c20], values: [r[gen_app_ent65_c9] ?? '', r[gen_app_ent65_c10] ?? '', r[gen_app_ent65_c12] ?? '', r[gen_app_ent65_c13] ?? '', r[gen_app_ent65_c14] ?? '', r[gen_app_ent65_c15] ?? '', r[gen_app_ent65_c16] ?? '', r[gen_app_ent65_c17] ?? '', r[gen_app_ent65_c18] ?? '', r[gen_app_ent65_c19] ?? '', r[gen_app_ent65_c20] ?? ''], onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent65', rid));
+    return DsRecordCard(labels: const [gen_app_ent65_c9, gen_app_ent65_c10, gen_app_ent65_c12, gen_app_ent65_c13, gen_app_ent65_c14, gen_app_ent65_c15, gen_app_ent65_c16, gen_app_ent65_c17, gen_app_ent65_c18, gen_app_ent65_c19, gen_app_ent65_c20], values: [r[gen_app_ent65_c9] ?? '', r[gen_app_ent65_c10] ?? '', r[gen_app_ent65_c12] ?? '', r[gen_app_ent65_c13] ?? '', r[gen_app_ent65_c14] ?? '', r[gen_app_ent65_c15] ?? '', r[gen_app_ent65_c16] ?? '', r[gen_app_ent65_c17] ?? '', r[gen_app_ent65_c18] ?? '', r[gen_app_ent65_c19] ?? '', r[gen_app_ent65_c20] ?? ''], onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent65', rid), footer: Wrap(spacing: 6, runSpacing: 6, children: [_backChip(gen_app_ent65_c21, appStore.referencing('app_ent41', gen_app_ent65_c22, rid).length)]));
   }
+
+  Widget _backChip(String label, int n) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+        decoration: BoxDecoration(color: const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(20)),
+        child: Text('$label · $n', style: const TextStyle(color: DsTokens.muted, fontSize: 11.5, fontWeight: FontWeight.w700)),
+      );
+
 
   String _csv() {
     final b = StringBuffer();

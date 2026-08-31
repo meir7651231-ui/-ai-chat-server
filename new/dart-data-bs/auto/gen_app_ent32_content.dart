@@ -29,3 +29,5 @@ const String gen_app_ent32_c26 = 'מתוכנן';
 const String gen_app_ent32_c27 = 'פעיל';
 const String gen_app_ent32_c28 = 'הסתיים';
 const String gen_app_ent32_c29 = 'נבדק';
+const String gen_app_ent32_c30 = 'בקשת קבלה';
+const String gen_app_ent32_c31 = 'מבחן';

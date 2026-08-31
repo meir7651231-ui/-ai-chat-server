@@ -45,6 +45,7 @@ class _GenAppEnt20ScreenState extends State<GenAppEnt20Screen> {
     return DsRecordCard(labels: const [gen_app_ent20_c9, gen_app_ent20_c11, gen_app_ent20_c12, gen_app_ent20_c13, gen_app_ent20_c14, gen_app_ent20_c15, gen_app_ent20_c16, gen_app_ent20_c17, gen_app_ent20_c18, gen_app_ent20_c19], values: [r[gen_app_ent20_c9] ?? '', appStore.displayOf('app_ent18', r[gen_app_ent20_c11] ?? ''), r[gen_app_ent20_c12] ?? '', appStore.displayOf('app_ent14', r[gen_app_ent20_c13] ?? ''), r[gen_app_ent20_c14] ?? '', r[gen_app_ent20_c15] ?? '', r[gen_app_ent20_c16] ?? '', r[gen_app_ent20_c17] ?? '', r[gen_app_ent20_c18] ?? '', r[gen_app_ent20_c19] ?? ''], onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent20', rid));
   }
 
+
   String _csv() {
     final b = StringBuffer();
     b.writeln(const [gen_app_ent20_c9, gen_app_ent20_c11, gen_app_ent20_c12, gen_app_ent20_c13, gen_app_ent20_c14, gen_app_ent20_c15, gen_app_ent20_c16, gen_app_ent20_c17, gen_app_ent20_c18, gen_app_ent20_c19].map((h) => '"' + h.replaceAll('"', '""') + '"').join(','));

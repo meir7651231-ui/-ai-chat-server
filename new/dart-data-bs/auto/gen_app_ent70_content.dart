@@ -29,3 +29,7 @@ const String gen_app_ent70_c26 = 'טיוטה';
 const String gen_app_ent70_c27 = 'אושר';
 const String gen_app_ent70_c28 = 'פג תוקף';
 const String gen_app_ent70_c29 = 'ארכב';
+const String gen_app_ent70_c30 = 'תוכנית תרופות';
+const String gen_app_ent70_c31 = 'מסמך';
+const String gen_app_ent70_c32 = 'חשבונית';
+const String gen_app_ent70_c33 = 'מסמך';

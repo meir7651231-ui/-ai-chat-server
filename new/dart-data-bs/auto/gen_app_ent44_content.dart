@@ -27,3 +27,5 @@ const String gen_app_ent44_c24 = 'טיוטה';
 const String gen_app_ent44_c25 = 'פעיל';
 const String gen_app_ent44_c26 = 'שולם';
 const String gen_app_ent44_c27 = 'בוטל';
+const String gen_app_ent44_c28 = 'חשבונית';
+const String gen_app_ent44_c29 = 'סוג חיוב';
