@@ -81,7 +81,7 @@ export function buildAtlas() {
         if (w.length >= 2) { he = w.slice(0, 10); break; }
       }
     }
-    for (const fm of src.matchAll(/(?:^|\n)((?:Future<[^>\n]+>|Iterable<[^>\n]+>|List<[^>\n]+>|Map<[^>\n]+>|Set<[^>\n]+>|[A-Z]\w*(?:<[^>\n]+>)?\??|void|bool|int|double|num|String\??|dynamic)\s+([a-z]\w*)\s*\(([^)]*)\))\s*(?:=>|\{|async)/g)) {
+    for (const fm of src.matchAll(/(?:^|\n)((?:Future<[^>\n]+>|Iterable<[^>\n]+>|List<[^>\n]+>|Map<[^>\n]+>|Set<[^>\n]+>|[A-Z]\w*(?:<[^>\n]+>)?\??|void|bool|int|double|num|String\??|dynamic)\s+([a-z]\w*)\s*\(((?:[^()]|\([^()]*\))*)\))\s*(?:=>|\{|async)/g)) {
       const ret = fm[1].split(/\s+/)[0];
       // פיצול-פרמטרים מודע-עומק: Map<String, X> הוא פרמטר-אחד (הפסיק הפנימי אינו מפריד).
       const splitTop = (s) => { const out = []; let d = 0, cur = ''; for (const ch of s.replace(/[\[\]]/g, ' ')) { if ('<('.includes(ch)) d++; else if ('>)'.includes(ch)) d--; if (ch === ',' && d === 0) { out.push(cur); cur = ''; } else cur += ch; } if (cur.trim()) out.push(cur); return out; };
