@@ -1,0 +1,22 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_over11_c0 = 'דוח יומי';
+const String gen_app_over11_c1 = 'שעות';
+const String gen_app_over11_c2 = 'שעות';
+const String gen_app_over11_c3 = 'אחוז התקדמות';
+const String gen_app_over11_c4 = 'אחוז התקדמות';
+const String gen_app_over11_c5 = 'שעות';
+const String gen_app_over11_c6 = 'פרויקט';
+const String gen_app_over11_c7 = 'פרויקט';
+const String gen_app_over11_c8 = 'תאריך';
+const String gen_app_over11_c9 = 'מזג אוויר';
+const String gen_app_over11_c10 = 'עובדים';
+const String gen_app_over11_c11 = 'שעות';
+const String gen_app_over11_c12 = 'אחוז התקדמות';
+const String gen_app_over11_c13 = 'סטטוס';
+const String gen_app_over11_c14 = 'פרויקט';
+const String gen_app_over11_c15 = 'תאריך';
+const String gen_app_over11_c16 = 'מזג אוויר';
+const String gen_app_over11_c17 = 'עובדים';
+const String gen_app_over11_c18 = 'שעות';
+const String gen_app_over11_c19 = 'אחוז התקדמות';
+const String gen_app_over11_c20 = 'סטטוס';

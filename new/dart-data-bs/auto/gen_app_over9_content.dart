@@ -1,0 +1,24 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_over9_c0 = 'תקציב';
+const String gen_app_over9_c1 = 'תקציב מאושר';
+const String gen_app_over9_c2 = 'תקציב מאושר';
+const String gen_app_over9_c3 = 'עלות מחויבת';
+const String gen_app_over9_c4 = 'עלות מחויבת';
+const String gen_app_over9_c5 = 'עלות בפועל';
+const String gen_app_over9_c6 = 'עלות בפועל';
+const String gen_app_over9_c7 = 'תקציב מאושר';
+const String gen_app_over9_c8 = 'פרויקט';
+const String gen_app_over9_c9 = 'פרויקט';
+const String gen_app_over9_c10 = 'סעיף';
+const String gen_app_over9_c11 = 'תקציב מאושר';
+const String gen_app_over9_c12 = 'עלות מחויבת';
+const String gen_app_over9_c13 = 'עלות בפועל';
+const String gen_app_over9_c14 = 'תחזית';
+const String gen_app_over9_c15 = 'סטייה';
+const String gen_app_over9_c16 = 'פרויקט';
+const String gen_app_over9_c17 = 'סעיף';
+const String gen_app_over9_c18 = 'תקציב מאושר';
+const String gen_app_over9_c19 = 'עלות מחויבת';
+const String gen_app_over9_c20 = 'עלות בפועל';
+const String gen_app_over9_c21 = 'תחזית';
+const String gen_app_over9_c22 = 'סטייה';

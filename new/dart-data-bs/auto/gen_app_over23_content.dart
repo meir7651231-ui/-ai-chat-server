@@ -1,0 +1,20 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_over23_c0 = 'נוכחות';
+const String gen_app_over23_c1 = 'שעות';
+const String gen_app_over23_c2 = 'שעות';
+const String gen_app_over23_c3 = 'שעות';
+const String gen_app_over23_c4 = 'עובד';
+const String gen_app_over23_c5 = 'עובד';
+const String gen_app_over23_c6 = 'פרויקט';
+const String gen_app_over23_c7 = 'תאריך';
+const String gen_app_over23_c8 = 'כניסה';
+const String gen_app_over23_c9 = 'יציאה';
+const String gen_app_over23_c10 = 'שעות';
+const String gen_app_over23_c11 = 'אישור';
+const String gen_app_over23_c12 = 'עובד';
+const String gen_app_over23_c13 = 'פרויקט';
+const String gen_app_over23_c14 = 'תאריך';
+const String gen_app_over23_c15 = 'כניסה';
+const String gen_app_over23_c16 = 'יציאה';
+const String gen_app_over23_c17 = 'שעות';
+const String gen_app_over23_c18 = 'אישור';

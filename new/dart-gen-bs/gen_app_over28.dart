@@ -1,0 +1,39 @@
+// ✨ חולל ע"י מנוע-ההרכבה (render-ds/compose) — אטום+אטום ⇒ מסך-סקירה מורכב מנתוני-הישות. אל תערוך ידנית.
+import '../dart-ui-bs/ds/ds_store.dart';
+import 'package:flutter/material.dart';
+import '../dart-ui-bs/auto/callout.dart';
+import '../dart-ui-bs/auto/ai_bar.dart';
+import '../dart-ui-bs/ds/ds_bars.dart';
+import '../dart-ui-bs/ds/ds_board.dart';
+import '../dart-data-bs/auto/gen_app_over28_content.dart';
+
+class GenAppOver28Screen extends StatelessWidget {
+  const GenAppOver28Screen({super.key});
+
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(
+        animation: appStore,
+        builder: (context, _) => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Wrap(spacing: 10, runSpacing: 10, children: [
+              Callout(value: appStore.count('app_ent29').toString(), label: gen_app_over28_c0),
+              Callout(value: appStore.sum('app_ent29', gen_app_over28_c1).toStringAsFixed(0), label: gen_app_over28_c2),
+              Callout(value: appStore.sum('app_ent29', gen_app_over28_c3).toStringAsFixed(0), label: gen_app_over28_c4),
+            ]),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: AiBar(pct: appStore.count('app_ent29') == 0 ? 0 : (appStore.records('app_ent29').where((r) => appStore.stageOf('app_ent29', r['__id'] ?? '') >= 4).length * 100 ~/ appStore.count('app_ent29'))),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: DsBars(labels: appStore.records('app_ent29').take(12).map((r) => r[gen_app_over28_c6] ?? '').toList(), values: appStore.records('app_ent29').take(12).map((r) => double.tryParse(r[gen_app_over28_c5] ?? '') ?? 0).toList()),
+          ),
+          Expanded(child: DsBoard(stages: const [gen_app_over28_c7, gen_app_over28_c8, gen_app_over28_c9, gen_app_over28_c10, gen_app_over28_c11], records: appStore.records('app_ent29'), stageOf: (r) => appStore.stageOf('app_ent29', r['__id'] ?? ''), titleOf: (r) => r[gen_app_over28_c12] ?? '', onMove: (id, to) => appStore.setStage('app_ent29', id, to))),
+          ],
+        ),
+      );
+}

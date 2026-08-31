@@ -148,12 +148,15 @@ export function buildApp(specText) {
   }
 
   // 🧩 מסכי-הרכבה: אטום+אטום ⇒ מסך-סקירה חדש (לא ממחזר מסך-מוכן — מרכיב מלבנים).
-  // v1: מסך-סקירה לישות-הראשונה (KPI מצבירות + טבלת-רשומות), אטומים נבחרים מהמצע.
+  // לכל ישות "עשירה" (שדה-מספרי ו/או שלבים) נבנה מסך-סקירה: KPI + מגמה + התקדמות +
+  // מבט-ראשי (לוח/טבלה), האטומים נבחרים מהמצע לפי-צורה. ישות דלה ⇒ מסך-הישות מספיק.
   const composeScreens = [];
-  if (entMeta.length) {
-    const e0 = entMeta[0];
-    const c = renderCompose('app_over1', { entitySlug: e0.slug, entityName: e0.name, fields: e0.labels || [], numFields: e0.numFields || [], stages: e0.stageLabels || [] });
-    if (c) composeScreens.push({ slug: c.slug, cls: c.cls, kind: 'entity', name: `🧩 ${e0.name} · סקירה`, icon: '🧩', sub: 'מורכב-מאטומים (KPI + טבלה) · מנתוני-הישות' });
+  let overN = 0;
+  for (const e of entMeta) {
+    if (!(e.stageLabels || []).length && !(e.numFields || []).length) continue;   // אין מה להרכיב מעבר ללי מסך-הישות
+    const c = renderCompose(`app_over${++overN}`, { entitySlug: e.slug, entityName: e.name, fields: e.labels || [], numFields: e.numFields || [], stages: e.stageLabels || [] });
+    if (c) composeScreens.push({ slug: c.slug, cls: c.cls, kind: 'entity', name: `🧩 ${e.name} · סקירה`, icon: '🧩', sub: 'מורכב-מאטומים · מנתוני-הישות' });
+    else overN--;
   }
 
   // מסכי-מערכת (kind='system' — גלויים רק לתפקיד 'הכל')

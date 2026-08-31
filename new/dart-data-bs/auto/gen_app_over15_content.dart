@@ -1,0 +1,20 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_over15_c0 = 'חומר';
+const String gen_app_over15_c1 = 'מחיר';
+const String gen_app_over15_c2 = 'מחיר';
+const String gen_app_over15_c3 = 'מחיר';
+const String gen_app_over15_c4 = 'קוד';
+const String gen_app_over15_c5 = 'קוד';
+const String gen_app_over15_c6 = 'שם';
+const String gen_app_over15_c7 = 'קטגוריה';
+const String gen_app_over15_c8 = 'יחידת מידה';
+const String gen_app_over15_c9 = 'מחיר';
+const String gen_app_over15_c10 = 'מינימום';
+const String gen_app_over15_c11 = 'נקודת הזמנה';
+const String gen_app_over15_c12 = 'קוד';
+const String gen_app_over15_c13 = 'שם';
+const String gen_app_over15_c14 = 'קטגוריה';
+const String gen_app_over15_c15 = 'יחידת מידה';
+const String gen_app_over15_c16 = 'מחיר';
+const String gen_app_over15_c17 = 'מינימום';
+const String gen_app_over15_c18 = 'נקודת הזמנה';

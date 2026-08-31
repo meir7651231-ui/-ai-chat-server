@@ -1,0 +1,26 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_over5_c0 = 'סעיף כתב כמויות';
+const String gen_app_over5_c1 = 'כמות';
+const String gen_app_over5_c2 = 'כמות';
+const String gen_app_over5_c3 = 'מחיר יחידה';
+const String gen_app_over5_c4 = 'מחיר יחידה';
+const String gen_app_over5_c5 = 'מחיר מכירה';
+const String gen_app_over5_c6 = 'מחיר מכירה';
+const String gen_app_over5_c7 = 'כמות';
+const String gen_app_over5_c8 = 'קוד';
+const String gen_app_over5_c9 = 'קוד';
+const String gen_app_over5_c10 = 'פרק';
+const String gen_app_over5_c11 = 'תיאור';
+const String gen_app_over5_c12 = 'יחידת מידה';
+const String gen_app_over5_c13 = 'כמות';
+const String gen_app_over5_c14 = 'מחיר יחידה';
+const String gen_app_over5_c15 = 'מחיר מכירה';
+const String gen_app_over5_c16 = 'סטטוס';
+const String gen_app_over5_c17 = 'קוד';
+const String gen_app_over5_c18 = 'פרק';
+const String gen_app_over5_c19 = 'תיאור';
+const String gen_app_over5_c20 = 'יחידת מידה';
+const String gen_app_over5_c21 = 'כמות';
+const String gen_app_over5_c22 = 'מחיר יחידה';
+const String gen_app_over5_c23 = 'מחיר מכירה';
+const String gen_app_over5_c24 = 'סטטוס';
