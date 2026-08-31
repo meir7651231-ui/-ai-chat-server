@@ -1,0 +1,25 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_ent31_c0 = 'הגשה';
+const String gen_app_ent31_c1 = '11 שדות · 3 שלבים';
+const String gen_app_ent31_c2 = '🗂️';
+const String gen_app_ent31_c3 = 'שמירה';
+const String gen_app_ent31_c4 = 'פרטי הרשומה';
+const String gen_app_ent31_c5 = 'רשומות';
+const String gen_app_ent31_c6 = 'אין הגשה עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_ent31_c7 = 'הגשה';
+const String gen_app_ent31_c8 = 'תלמיד';
+const String gen_app_ent31_c9 = 'מטלה';
+const String gen_app_ent31_c10 = 'טקסט';
+const String gen_app_ent31_c11 = 'faviconDataUri';
+const String gen_app_ent31_c12 = 'קובץ';
+const String gen_app_ent31_c13 = 'תאריך';
+const String gen_app_ent31_c14 = 'fmtDate';
+const String gen_app_ent31_c15 = 'איחור';
+const String gen_app_ent31_c16 = 'גרסה';
+const String gen_app_ent31_c17 = 'ציון';
+const String gen_app_ent31_c18 = 'משוב';
+const String gen_app_ent31_c19 = 'ערעור';
+const String gen_app_ent31_c20 = 'סטטוס';
+const String gen_app_ent31_c21 = 'הוגשה';
+const String gen_app_ent31_c22 = 'נבדקה';
+const String gen_app_ent31_c23 = 'ציון פורסם';

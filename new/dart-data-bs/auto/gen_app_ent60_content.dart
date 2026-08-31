@@ -1,0 +1,27 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_ent60_c0 = 'אישור הורה';
+const String gen_app_ent60_c1 = '13 שדות · 3 שלבים';
+const String gen_app_ent60_c2 = '🗂️';
+const String gen_app_ent60_c3 = 'שמירה';
+const String gen_app_ent60_c4 = 'פרטי הרשומה';
+const String gen_app_ent60_c5 = 'רשומות';
+const String gen_app_ent60_c6 = 'אין אישור הורה עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_ent60_c7 = 'אישור הורה';
+const String gen_app_ent60_c8 = 'הורה';
+const String gen_app_ent60_c9 = 'roomInfoLabel';
+const String gen_app_ent60_c10 = 'תלמיד';
+const String gen_app_ent60_c11 = 'אירוע';
+const String gen_app_ent60_c12 = 'השתתפות';
+const String gen_app_ent60_c13 = 'הסעה';
+const String gen_app_ent60_c14 = 'צילום';
+const String gen_app_ent60_c15 = 'מזון';
+const String gen_app_ent60_c16 = 'טיפול רפואי';
+const String gen_app_ent60_c17 = 'תשלום';
+const String gen_app_ent60_c18 = 'הערה';
+const String gen_app_ent60_c19 = 'חתימה';
+const String gen_app_ent60_c20 = 'תאריך';
+const String gen_app_ent60_c21 = 'fmtDate';
+const String gen_app_ent60_c22 = 'סטטוס';
+const String gen_app_ent60_c23 = 'ממתין';
+const String gen_app_ent60_c24 = 'אושר';
+const String gen_app_ent60_c25 = 'נדחה';

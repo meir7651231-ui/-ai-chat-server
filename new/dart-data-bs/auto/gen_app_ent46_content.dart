@@ -1,0 +1,25 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_ent46_c0 = 'תשלום';
+const String gen_app_ent46_c1 = '10 שדות · 4 שלבים';
+const String gen_app_ent46_c2 = '🗂️';
+const String gen_app_ent46_c3 = 'שמירה';
+const String gen_app_ent46_c4 = 'פרטי הרשומה';
+const String gen_app_ent46_c5 = 'רשומות';
+const String gen_app_ent46_c6 = 'אין תשלום עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_ent46_c7 = 'תשלום';
+const String gen_app_ent46_c8 = 'חשבונית';
+const String gen_app_ent46_c9 = 'משפחה';
+const String gen_app_ent46_c10 = 'תלמיד';
+const String gen_app_ent46_c11 = 'סכום';
+const String gen_app_ent46_c12 = 'amountInWords';
+const String gen_app_ent46_c13 = 'אמצעי תשלום';
+const String gen_app_ent46_c14 = 'תאריך';
+const String gen_app_ent46_c15 = 'fmtDate';
+const String gen_app_ent46_c16 = 'אסמכתא';
+const String gen_app_ent46_c17 = 'עמלה';
+const String gen_app_ent46_c18 = 'החזר';
+const String gen_app_ent46_c19 = 'סטטוס';
+const String gen_app_ent46_c20 = 'נקלט';
+const String gen_app_ent46_c21 = 'אושר';
+const String gen_app_ent46_c22 = 'נכשל';
+const String gen_app_ent46_c23 = 'הוחזר';

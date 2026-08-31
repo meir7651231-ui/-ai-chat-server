@@ -1,0 +1,21 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_ent33_c0 = 'בנק שאלות';
+const String gen_app_ent33_c1 = '11 שדות';
+const String gen_app_ent33_c2 = '🗂️';
+const String gen_app_ent33_c3 = 'שמירה';
+const String gen_app_ent33_c4 = 'פרטי הרשומה';
+const String gen_app_ent33_c5 = 'רשומות';
+const String gen_app_ent33_c6 = 'אין בנק שאלות עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_ent33_c7 = 'בנק שאלות';
+const String gen_app_ent33_c8 = 'שאלה';
+const String gen_app_ent33_c9 = 'מקצוע';
+const String gen_app_ent33_c10 = 'נושא';
+const String gen_app_ent33_c11 = 'רמת קושי';
+const String gen_app_ent33_c12 = 'תוצאה לימודית';
+const String gen_app_ent33_c13 = 'סוג';
+const String gen_app_ent33_c14 = 'תשובה';
+const String gen_app_ent33_c15 = 'ניקוד';
+const String gen_app_ent33_c16 = 'normSearch';
+const String gen_app_ent33_c17 = 'גרסה';
+const String gen_app_ent33_c18 = 'מקור';
+const String gen_app_ent33_c19 = 'סטטוס';

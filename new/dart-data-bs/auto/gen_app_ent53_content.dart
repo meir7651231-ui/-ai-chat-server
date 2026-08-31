@@ -1,0 +1,25 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_ent53_c0 = 'נסיעת הסעה';
+const String gen_app_ent53_c1 = '11 שדות · 3 שלבים';
+const String gen_app_ent53_c2 = '🗂️';
+const String gen_app_ent53_c3 = 'שמירה';
+const String gen_app_ent53_c4 = 'פרטי הרשומה';
+const String gen_app_ent53_c5 = 'רשומות';
+const String gen_app_ent53_c6 = 'אין נסיעת הסעה עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_ent53_c7 = 'נסיעת הסעה';
+const String gen_app_ent53_c8 = 'מסלול';
+const String gen_app_ent53_c9 = 'purposeKeyOf';
+const String gen_app_ent53_c10 = 'תאריך';
+const String gen_app_ent53_c11 = 'fmtDate';
+const String gen_app_ent53_c12 = 'שעה';
+const String gen_app_ent53_c13 = 'נהג';
+const String gen_app_ent53_c14 = 'מלווה';
+const String gen_app_ent53_c15 = 'תלמידים';
+const String gen_app_ent53_c16 = 'עלייה';
+const String gen_app_ent53_c17 = 'ירידה';
+const String gen_app_ent53_c18 = 'איחור';
+const String gen_app_ent53_c19 = 'אירוע';
+const String gen_app_ent53_c20 = 'סטטוס';
+const String gen_app_ent53_c21 = 'מתוכננת';
+const String gen_app_ent53_c22 = 'בדרך';
+const String gen_app_ent53_c23 = 'הושלמה';

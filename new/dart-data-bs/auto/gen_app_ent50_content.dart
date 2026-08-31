@@ -1,0 +1,19 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_ent50_c0 = 'אוטובוס';
+const String gen_app_ent50_c1 = '10 שדות';
+const String gen_app_ent50_c2 = '🗂️';
+const String gen_app_ent50_c3 = 'שמירה';
+const String gen_app_ent50_c4 = 'פרטי הרשומה';
+const String gen_app_ent50_c5 = 'רשומות';
+const String gen_app_ent50_c6 = 'אין אוטובוס עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_ent50_c7 = 'אוטובוס';
+const String gen_app_ent50_c8 = 'מספר';
+const String gen_app_ent50_c9 = 'סוג';
+const String gen_app_ent50_c10 = 'קיבולת';
+const String gen_app_ent50_c11 = 'נהג';
+const String gen_app_ent50_c12 = 'מלווה';
+const String gen_app_ent50_c13 = 'ספק';
+const String gen_app_ent50_c14 = 'ביטוח';
+const String gen_app_ent50_c15 = 'תוקף רישוי';
+const String gen_app_ent50_c16 = 'בדיקות';
+const String gen_app_ent50_c17 = 'סטטוס';

@@ -1,0 +1,22 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_ent56_c0 = 'אישור יציאה';
+const String gen_app_ent56_c1 = '9 שדות · 3 שלבים';
+const String gen_app_ent56_c2 = '🗂️';
+const String gen_app_ent56_c3 = 'שמירה';
+const String gen_app_ent56_c4 = 'פרטי הרשומה';
+const String gen_app_ent56_c5 = 'רשומות';
+const String gen_app_ent56_c6 = 'אין אישור יציאה עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_ent56_c7 = 'אישור יציאה';
+const String gen_app_ent56_c8 = 'תלמיד';
+const String gen_app_ent56_c9 = 'סיבה';
+const String gen_app_ent56_c10 = 'תאריך';
+const String gen_app_ent56_c11 = 'fmtDate';
+const String gen_app_ent56_c12 = 'זמן יציאה';
+const String gen_app_ent56_c13 = 'זמן חזרה';
+const String gen_app_ent56_c14 = 'אדם אוסף';
+const String gen_app_ent56_c15 = 'אישור';
+const String gen_app_ent56_c16 = 'חתימה';
+const String gen_app_ent56_c17 = 'סטטוס';
+const String gen_app_ent56_c18 = 'מבוקש';
+const String gen_app_ent56_c19 = 'אושר';
+const String gen_app_ent56_c20 = 'בוצע';

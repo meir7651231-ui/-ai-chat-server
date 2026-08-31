@@ -1,0 +1,21 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_ent48_c0 = 'פריט ספרייה';
+const String gen_app_ent48_c1 = '12 שדות';
+const String gen_app_ent48_c2 = '🗂️';
+const String gen_app_ent48_c3 = 'שמירה';
+const String gen_app_ent48_c4 = 'פרטי הרשומה';
+const String gen_app_ent48_c5 = 'רשומות';
+const String gen_app_ent48_c6 = 'אין פריט ספרייה עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_ent48_c7 = 'פריט ספרייה';
+const String gen_app_ent48_c8 = 'כותרת';
+const String gen_app_ent48_c9 = 'מסת';
+const String gen_app_ent48_c10 = 'מחבר';
+const String gen_app_ent48_c11 = 'הוצאה';
+const String gen_app_ent48_c12 = 'קטגוריה';
+const String gen_app_ent48_c13 = 'שפה';
+const String gen_app_ent48_c14 = 'מדף';
+const String gen_app_ent48_c15 = 'עותקים';
+const String gen_app_ent48_c16 = 'מצב';
+const String gen_app_ent48_c17 = 'מחיר';
+const String gen_app_ent48_c18 = 'גיל מומלץ';
+const String gen_app_ent48_c19 = 'סטטוס';

@@ -1,0 +1,25 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_ent67_c0 = 'בקשת רכש';
+const String gen_app_ent67_c1 = '11 שדות · 4 שלבים';
+const String gen_app_ent67_c2 = '🗂️';
+const String gen_app_ent67_c3 = 'שמירה';
+const String gen_app_ent67_c4 = 'פרטי הרשומה';
+const String gen_app_ent67_c5 = 'רשומות';
+const String gen_app_ent67_c6 = 'אין בקשת רכש עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_ent67_c7 = 'בקשת רכש';
+const String gen_app_ent67_c8 = 'מבקש';
+const String gen_app_ent67_c9 = 'בית ספר';
+const String gen_app_ent67_c10 = 'מחלקה';
+const String gen_app_ent67_c11 = 'waMeDigits';
+const String gen_app_ent67_c12 = 'פריט';
+const String gen_app_ent67_c13 = 'כמות';
+const String gen_app_ent67_c14 = 'מפרט';
+const String gen_app_ent67_c15 = 'תקציב';
+const String gen_app_ent67_c16 = 'מועד נדרש';
+const String gen_app_ent67_c17 = 'דחיפות';
+const String gen_app_ent67_c18 = 'ספק מועדף';
+const String gen_app_ent67_c19 = 'סטטוס';
+const String gen_app_ent67_c20 = 'בקשה';
+const String gen_app_ent67_c21 = 'אושרה';
+const String gen_app_ent67_c22 = 'הוזמן';
+const String gen_app_ent67_c23 = 'נדחתה';

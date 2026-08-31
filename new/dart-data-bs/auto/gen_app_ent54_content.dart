@@ -1,0 +1,22 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_ent54_c0 = 'מבקר';
+const String gen_app_ent54_c1 = '10 שדות · 2 שלבים';
+const String gen_app_ent54_c2 = '🗂️';
+const String gen_app_ent54_c3 = 'שמירה';
+const String gen_app_ent54_c4 = 'פרטי הרשומה';
+const String gen_app_ent54_c5 = 'רשומות';
+const String gen_app_ent54_c6 = 'אין מבקר עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_ent54_c7 = 'מבקר';
+const String gen_app_ent54_c8 = 'שם';
+const String gen_app_ent54_c9 = 'טלפון';
+const String gen_app_ent54_c10 = 'מטרת ביקור';
+const String gen_app_ent54_c11 = 'אדם מארח';
+const String gen_app_ent54_c12 = 'תאריך';
+const String gen_app_ent54_c13 = 'fmtDate';
+const String gen_app_ent54_c14 = 'זמן כניסה';
+const String gen_app_ent54_c15 = 'זמן יציאה';
+const String gen_app_ent54_c16 = 'תעודה';
+const String gen_app_ent54_c17 = 'תג';
+const String gen_app_ent54_c18 = 'סטטוס';
+const String gen_app_ent54_c19 = 'נכנס';
+const String gen_app_ent54_c20 = 'יצא';

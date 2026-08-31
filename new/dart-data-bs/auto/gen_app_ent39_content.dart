@@ -1,0 +1,24 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_ent39_c0 = 'פגישת ייעוץ';
+const String gen_app_ent39_c1 = '10 שדות · 3 שלבים';
+const String gen_app_ent39_c2 = '🗂️';
+const String gen_app_ent39_c3 = 'שמירה';
+const String gen_app_ent39_c4 = 'פרטי הרשומה';
+const String gen_app_ent39_c5 = 'רשומות';
+const String gen_app_ent39_c6 = 'אין פגישת ייעוץ עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_ent39_c7 = 'פגישת ייעוץ';
+const String gen_app_ent39_c8 = 'תלמיד';
+const String gen_app_ent39_c9 = 'יועץ';
+const String gen_app_ent39_c10 = 'תאריך';
+const String gen_app_ent39_c11 = 'fmtDate';
+const String gen_app_ent39_c12 = 'סוג פגישה';
+const String gen_app_ent39_c13 = 'מטרות';
+const String gen_app_ent39_c14 = 'סיכום';
+const String gen_app_ent39_c15 = 'משימות';
+const String gen_app_ent39_c16 = 'הפניה';
+const String gen_app_ent39_c17 = 'פגישה הבאה';
+const String gen_app_ent39_c18 = 'advanceStatus';
+const String gen_app_ent39_c19 = 'סטטוס';
+const String gen_app_ent39_c20 = 'מתוכננת';
+const String gen_app_ent39_c21 = 'התקיימה';
+const String gen_app_ent39_c22 = 'בוטלה';

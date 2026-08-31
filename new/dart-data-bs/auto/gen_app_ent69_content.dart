@@ -1,0 +1,23 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_ent69_c0 = 'פריט מלאי';
+const String gen_app_ent69_c1 = '13 שדות';
+const String gen_app_ent69_c2 = '🗂️';
+const String gen_app_ent69_c3 = 'שמירה';
+const String gen_app_ent69_c4 = 'פרטי הרשומה';
+const String gen_app_ent69_c5 = 'רשומות';
+const String gen_app_ent69_c6 = 'אין פריט מלאי עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_ent69_c7 = 'פריט מלאי';
+const String gen_app_ent69_c8 = 'קוד';
+const String gen_app_ent69_c9 = 'genJoinCode';
+const String gen_app_ent69_c10 = 'שם';
+const String gen_app_ent69_c11 = 'קטגוריה';
+const String gen_app_ent69_c12 = 'יחידה';
+const String gen_app_ent69_c13 = 'כמות';
+const String gen_app_ent69_c14 = 'מיקום';
+const String gen_app_ent69_c15 = 'מינימום';
+const String gen_app_ent69_c16 = 'מקסימום';
+const String gen_app_ent69_c17 = 'ספק';
+const String gen_app_ent69_c18 = 'עלות';
+const String gen_app_ent69_c19 = 'תוקף';
+const String gen_app_ent69_c20 = 'אצווה';
+const String gen_app_ent69_c21 = 'סטטוס';

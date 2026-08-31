@@ -1,0 +1,21 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_ent51_c0 = 'מסלול הסעה';
+const String gen_app_ent51_c1 = '11 שדות';
+const String gen_app_ent51_c2 = '🗂️';
+const String gen_app_ent51_c3 = 'שמירה';
+const String gen_app_ent51_c4 = 'פרטי הרשומה';
+const String gen_app_ent51_c5 = 'רשומות';
+const String gen_app_ent51_c6 = 'אין מסלול הסעה עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_ent51_c7 = 'מסלול הסעה';
+const String gen_app_ent51_c8 = 'שם';
+const String gen_app_ent51_c9 = 'תחנות';
+const String gen_app_ent51_c10 = 'שעות';
+const String gen_app_ent51_c11 = 'אוטובוס';
+const String gen_app_ent51_c12 = 'נהג';
+const String gen_app_ent51_c13 = 'מלווה';
+const String gen_app_ent51_c14 = 'תלמידים';
+const String gen_app_ent51_c15 = 'קיבולת';
+const String gen_app_ent51_c16 = 'אזור';
+const String gen_app_ent51_c17 = 'phoneRegion';
+const String gen_app_ent51_c18 = 'מחיר';
+const String gen_app_ent51_c19 = 'סטטוס';

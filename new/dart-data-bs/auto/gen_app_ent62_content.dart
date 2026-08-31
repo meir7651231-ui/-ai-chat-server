@@ -1,0 +1,22 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_ent62_c0 = 'מתקן';
+const String gen_app_ent62_c1 = '11 שדות';
+const String gen_app_ent62_c2 = '🗂️';
+const String gen_app_ent62_c3 = 'שמירה';
+const String gen_app_ent62_c4 = 'פרטי הרשומה';
+const String gen_app_ent62_c5 = 'רשומות';
+const String gen_app_ent62_c6 = 'אין מתקן עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_ent62_c7 = 'מתקן';
+const String gen_app_ent62_c8 = 'מבנה';
+const String gen_app_ent62_c9 = 'קומה';
+const String gen_app_ent62_c10 = 'חדר';
+const String gen_app_ent62_c11 = 'roomInfoLabel';
+const String gen_app_ent62_c12 = 'סוג';
+const String gen_app_ent62_c13 = 'קיבולת';
+const String gen_app_ent62_c14 = 'ציוד';
+const String gen_app_ent62_c15 = 'נגישות';
+const String gen_app_ent62_c16 = 'מיקום';
+const String gen_app_ent62_c17 = 'שעות פעילות';
+const String gen_app_ent62_c18 = 'הזמנות';
+const String gen_app_ent62_c19 = 'genJoinCode';
+const String gen_app_ent62_c20 = 'סטטוס';

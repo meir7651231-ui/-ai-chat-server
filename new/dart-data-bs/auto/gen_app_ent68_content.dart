@@ -1,0 +1,26 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_ent68_c0 = 'הזמנת רכש';
+const String gen_app_ent68_c1 = '12 שדות · 4 שלבים';
+const String gen_app_ent68_c2 = '🗂️';
+const String gen_app_ent68_c3 = 'שמירה';
+const String gen_app_ent68_c4 = 'פרטי הרשומה';
+const String gen_app_ent68_c5 = 'רשומות';
+const String gen_app_ent68_c6 = 'אין הזמנת רכש עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_ent68_c7 = 'הזמנת רכש';
+const String gen_app_ent68_c8 = 'מספר';
+const String gen_app_ent68_c9 = 'ספק';
+const String gen_app_ent68_c10 = 'פריטים';
+const String gen_app_ent68_c11 = 'כמויות';
+const String gen_app_ent68_c12 = 'מחיר';
+const String gen_app_ent68_c13 = 'מס';
+const String gen_app_ent68_c14 = 'משלוח';
+const String gen_app_ent68_c15 = 'יעד';
+const String gen_app_ent68_c16 = 'תאריך אספקה';
+const String gen_app_ent68_c17 = 'fmtDate';
+const String gen_app_ent68_c18 = 'תקציב';
+const String gen_app_ent68_c19 = 'אישורים';
+const String gen_app_ent68_c20 = 'סטטוס';
+const String gen_app_ent68_c21 = 'טיוטה';
+const String gen_app_ent68_c22 = 'אושרה';
+const String gen_app_ent68_c23 = 'נשלחה';
+const String gen_app_ent68_c24 = 'נמסרה';

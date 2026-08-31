@@ -1,0 +1,21 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_ent41_c0 = 'תיק בריאות';
+const String gen_app_ent41_c1 = '11 שדות';
+const String gen_app_ent41_c2 = '🗂️';
+const String gen_app_ent41_c3 = 'שמירה';
+const String gen_app_ent41_c4 = 'פרטי הרשומה';
+const String gen_app_ent41_c5 = 'רשומות';
+const String gen_app_ent41_c6 = 'אין תיק בריאות עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_ent41_c7 = 'תיק בריאות';
+const String gen_app_ent41_c8 = 'תלמיד';
+const String gen_app_ent41_c9 = 'אלרגיות';
+const String gen_app_ent41_c10 = 'מצבים רפואיים';
+const String gen_app_ent41_c11 = 'תרופות';
+const String gen_app_ent41_c12 = 'מגבלות';
+const String gen_app_ent41_c13 = 'חיסונים';
+const String gen_app_ent41_c14 = 'אישורי רופא';
+const String gen_app_ent41_c15 = 'תוכנית חירום';
+const String gen_app_ent41_c16 = 'איש קשר';
+const String gen_app_ent41_c17 = 'תאריך עדכון';
+const String gen_app_ent41_c18 = 'fmtDate';
+const String gen_app_ent41_c19 = 'הרשאות';

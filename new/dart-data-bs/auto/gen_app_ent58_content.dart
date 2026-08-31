@@ -1,0 +1,19 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_ent58_c0 = 'הזמנת ארוחה';
+const String gen_app_ent58_c1 = '7 שדות · 2 שלבים';
+const String gen_app_ent58_c2 = '🗂️';
+const String gen_app_ent58_c3 = 'שמירה';
+const String gen_app_ent58_c4 = 'פרטי הרשומה';
+const String gen_app_ent58_c5 = 'רשומות';
+const String gen_app_ent58_c6 = 'אין הזמנת ארוחה עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_ent58_c7 = 'הזמנת ארוחה';
+const String gen_app_ent58_c8 = 'תלמיד';
+const String gen_app_ent58_c9 = 'ארוחה';
+const String gen_app_ent58_c10 = 'מנה';
+const String gen_app_ent58_c11 = 'אלרגיה';
+const String gen_app_ent58_c12 = 'תשלום';
+const String gen_app_ent58_c13 = 'תאריך';
+const String gen_app_ent58_c14 = 'fmtDate';
+const String gen_app_ent58_c15 = 'סטטוס';
+const String gen_app_ent58_c16 = 'הוזמן';
+const String gen_app_ent58_c17 = 'סופק';

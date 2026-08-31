@@ -1,0 +1,25 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_ent71_c0 = 'בוגר';
+const String gen_app_ent71_c1 = '13 שדות';
+const String gen_app_ent71_c2 = '🗂️';
+const String gen_app_ent71_c3 = 'שמירה';
+const String gen_app_ent71_c4 = 'פרטי הרשומה';
+const String gen_app_ent71_c5 = 'רשומות';
+const String gen_app_ent71_c6 = 'אין בוגר עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_ent71_c7 = 'בוגר';
+const String gen_app_ent71_c8 = 'שם';
+const String gen_app_ent71_c9 = 'שנת סיום';
+const String gen_app_ent71_c10 = 'מסלול';
+const String gen_app_ent71_c11 = 'purposeKeyOf';
+const String gen_app_ent71_c12 = 'הישגים';
+const String gen_app_ent71_c13 = 'השכלה המשך';
+const String gen_app_ent71_c14 = 'מקצוע';
+const String gen_app_ent71_c15 = 'מייל';
+const String gen_app_ent71_c16 = 'normEmail';
+const String gen_app_ent71_c17 = 'טלפון';
+const String gen_app_ent71_c18 = 'עיר';
+const String gen_app_ent71_c19 = 'הסכמה ליצירת קשר';
+const String gen_app_ent71_c20 = 'תרומות';
+const String gen_app_ent71_c21 = 'purposeKeyOf';
+const String gen_app_ent71_c22 = 'אירועים';
+const String gen_app_ent71_c23 = 'סטטוס';

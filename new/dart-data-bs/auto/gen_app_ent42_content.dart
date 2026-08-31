@@ -1,0 +1,26 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_ent42_c0 = 'אירוע רפואי';
+const String gen_app_ent42_c1 = '12 שדות · 3 שלבים';
+const String gen_app_ent42_c2 = '🗂️';
+const String gen_app_ent42_c3 = 'שמירה';
+const String gen_app_ent42_c4 = 'פרטי הרשומה';
+const String gen_app_ent42_c5 = 'רשומות';
+const String gen_app_ent42_c6 = 'אין אירוע רפואי עדיין — הרשומה הראשונה תופיע כאן';
+const String gen_app_ent42_c7 = 'אירוע רפואי';
+const String gen_app_ent42_c8 = 'תלמיד';
+const String gen_app_ent42_c9 = 'תאריך';
+const String gen_app_ent42_c10 = 'fmtDate';
+const String gen_app_ent42_c11 = 'שעה';
+const String gen_app_ent42_c12 = 'מקום';
+const String gen_app_ent42_c13 = 'איש צוות';
+const String gen_app_ent42_c14 = 'תיאור';
+const String gen_app_ent42_c15 = 'טיפול';
+const String gen_app_ent42_c16 = 'תרופה';
+const String gen_app_ent42_c17 = 'פינוי';
+const String gen_app_ent42_c18 = 'הורה עודכן';
+const String gen_app_ent42_c19 = 'roomInfoLabel';
+const String gen_app_ent42_c20 = 'מסמכים';
+const String gen_app_ent42_c21 = 'סטטוס';
+const String gen_app_ent42_c22 = 'נפתח';
+const String gen_app_ent42_c23 = 'טופל';
+const String gen_app_ent42_c24 = 'נסגר';
