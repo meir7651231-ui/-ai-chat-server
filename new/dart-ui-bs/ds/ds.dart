@@ -226,10 +226,12 @@ class DsChip extends StatelessWidget {
 
 // ── אריח-KPI (דשבורד) ──
 class DsStat extends StatelessWidget {
-  const DsStat({required this.label, required this.value, required this.sub, required this.glyph, super.key});
+  const DsStat({required this.label, required this.value, required this.sub, required this.glyph, this.onTap, super.key});
   final String label, value, sub, glyph;
+  final VoidCallback? onTap;
   @override
-  Widget build(BuildContext context) => Container(
+  Widget build(BuildContext context) {
+    final card = Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(color: DsTokens.card, borderRadius: BorderRadius.circular(DsTokens.r), boxShadow: DsTokens.shadow),
         child: Column(
@@ -255,6 +257,13 @@ class DsStat extends StatelessWidget {
           ],
         ),
       );
+    if (onTap == null) return card;
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(DsTokens.r),
+      child: InkWell(borderRadius: BorderRadius.circular(DsTokens.r), onTap: onTap, child: card),
+    );
+  }
 }
 
 // ── שורת-ניווט (לוח) ──

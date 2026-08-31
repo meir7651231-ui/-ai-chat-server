@@ -399,6 +399,13 @@ export function renderDashboard(slug, { title, icon = '📊', entities, metrics 
     shown = [];   // רק אגרגטים בוקשו ⇒ בלי אריחי-מונה של כל-הישויות
   }
   const cIcon = k(icon);
+  const imports = new Set();
+  // drill-down: הקשה על אריח ⇒ מסך-הישות שלו (Navigator). מחייב ייבוא-המסך.
+  const nav = (tslug) => {
+    if (!tslug) return '';
+    imports.add(`import 'gen_${tslug}.dart';`);
+    return `, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${pascal(tslug)}()))`;
+  };
   // אריחי-אגרגט (שורש-4): סכום/ממוצע על שדה-מספרי · מונה על ישות — ערך-אמת, לא ספירה עיוורת.
   const aggTiles = aggs.filter((a) => a.slug && (a.kind === 'מונה' || a.field)).map((a) => {
     const lbl = k(a.field || a.entityName);
@@ -407,14 +414,14 @@ export function renderDashboard(slug, { title, icon = '📊', entities, metrics 
     const call = a.kind === 'סכום' ? `appStore.sum('${a.slug}', ${k(a.field)}).toStringAsFixed(0)`
       : a.kind === 'ממוצע' ? `appStore.avg('${a.slug}', ${k(a.field)}).toStringAsFixed(1)`
       : `appStore.count('${a.slug}').toString()`;
-    return `AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: ${lbl}, value: ${call}, sub: ${sub}, glyph: ${g}))`;
+    return `AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: ${lbl}, value: ${call}, sub: ${sub}, glyph: ${g}${nav(a.slug)}))`;
   });
   const countTiles = shown.map((e) => {
     const lbl = k(e.name);
     const sub = k(`${e.fields} שדות${e.stages ? ` · ${e.stages} שלבים` : ''}`);
     const g = k(e.icon || '🗂️');
     // ערך-חי: סופר את הרשומות בחנות לפי-slug (מפתח-החנות היציב), מגיב לשמירה
-    return `AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: ${lbl}, value: appStore.count('${e.slug || ''}').toString(), sub: ${sub}, glyph: ${g}))`;
+    return `AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: ${lbl}, value: appStore.count('${e.slug || ''}').toString(), sub: ${sub}, glyph: ${g}${nav(e.slug)}))`;
   });
   const tiles = [...aggTiles, ...countTiles];
   const cSub = k(`${tiles.length} מדדים · סקירת-על`);
@@ -425,10 +432,11 @@ export function renderDashboard(slug, { title, icon = '📊', entities, metrics 
     rows.push(`      Padding(padding: const EdgeInsets.only(bottom: 12), child: IntrinsicHeight(child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [Expanded(child: ${a}), const SizedBox(width: 12), ${second}]))),`);
   }
   const cls = pascal(slug);
-  const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — דשבורד מנתוני-הישויות החיים. אל תערוך ידנית.
+  const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — דשבורד מנתוני-הישויות החיים (drill-down). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
+${[...imports].sort().join('\n')}
 import 'package:flutter/material.dart';
 
 class ${cls} extends StatelessWidget {
