@@ -574,6 +574,45 @@ ${showChips ? `        Container(
   return { slug, cls };
 }
 
+// ── שורש-האפליקציה: main() + MaterialApp + ערכת-נושא + RTL ⇒ אפליקציה עצמאית שלמה ──
+//    (טהור: דטרמיניסטי, אפס-סודות, אפס-דאטה. פותח את לוח-הניווט; ה-DS נותן את המראה.)
+export function renderMain(slug, { title, hubSlug, hubCls }) {
+  const { k, dump } = makeConsts(slug);
+  const cTitle = k(title);
+  const cls = pascal(slug);
+  const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — שורש-האפליקציה (main + MaterialApp + theme + RTL). אל תערוך ידנית.
+import '../dart-data-bs/auto/gen_${slug}_content.dart';
+import '../dart-ui-bs/ds/ds.dart';
+import 'gen_${hubSlug}.dart';
+import 'package:flutter/material.dart';
+
+void main() => runApp(const ${cls}());
+
+class ${cls} extends StatelessWidget {
+  const ${cls}({super.key});
+
+  @override
+  Widget build(BuildContext context) => MaterialApp(
+        title: ${cTitle},
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          useMaterial3: true,
+          fontFamily: 'Heebo',
+          scaffoldBackgroundColor: DsTokens.bg,
+          colorScheme: ColorScheme.fromSeed(seedColor: DsTokens.accent),
+        ),
+        builder: (context, child) => Directionality(
+          textDirection: TextDirection.rtl,
+          child: child ?? const SizedBox.shrink(),
+        ),
+        home: const ${hubCls}(),
+      );
+}
+`;
+  write(slug, code, dump());
+  return { slug, cls };
+}
+
 // ── מסך-מערכת גנרי: כותרת + סקשן עם ילדים (מתגים/מצב-ריק) ──
 export function renderSystem(slug, { title, icon, sectionTitle, kind, items = [] }) {
   const { k, dump } = makeConsts(slug);

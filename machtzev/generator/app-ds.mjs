@@ -7,7 +7,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { interpret as entInterpret } from './entity.mjs';
-import { renderEntity, renderDashboard, renderHub, renderSystem } from './render-ds.mjs';
+import { renderEntity, renderDashboard, renderHub, renderSystem, renderMain } from './render-ds.mjs';
 
 const ROOT = new URL('../../', import.meta.url).pathname;
 const OUT = path.join(ROOT, 'new/dart-gen-bs');
@@ -96,7 +96,9 @@ export function buildApp(specText) {
   const st = renderSystem('app_settings', { title: 'הגדרות', icon: '⚙️', sectionTitle: 'סנכרון · גיבוי · הרשאות', kind: 'toggles', items: ['עבודה אופליין', 'גיבוי אוטומטי', 'הצפנת-ענן'] });
   sys.push({ ...st, kind: 'system', name: 'הגדרות', icon: '⚙️', sub: 'סנכרון · הרשאות' });
 
-  renderHub('app_hub', { title: 'האפליקציה שלי', icon: '🏗️', screens: [...screens, ...sys], roles });
+  const hub = renderHub('app_hub', { title: 'האפליקציה שלי', icon: '🏗️', screens: [...screens, ...sys], roles });
+  // שורש-האפליקציה: main + MaterialApp ⇒ אפליקציה עצמאית שרצה בלי entry-זמני.
+  renderMain('app_main', { title: 'האפליקציה שלי', hubSlug: 'app_hub', hubCls: hub.cls });
 
   return { screens, sys, roles };
 }
