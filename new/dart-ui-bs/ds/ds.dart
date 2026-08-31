@@ -5,6 +5,9 @@
 import 'package:flutter/material.dart';
 
 class DsTokens {
+  // ── זהות · בהירות-הערכה (טוקן=דאטה · המנוע קורא-עיוור, לא מכריע) ──
+  // חילוף כהה↔בהיר = שינוי הטוקן הזה בלבד. הכרעה 19.
+  static const brightness = Brightness.dark;
   // ── פלטה · כהה-קולנועי + מבטא-ניאון ──
   static const bg = Color(0xFF07070D);
   static const bg2 = Color(0xFF0B0B16);
