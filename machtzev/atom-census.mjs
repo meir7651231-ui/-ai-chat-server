@@ -11,8 +11,20 @@
 import fs from 'node:fs'; import path from 'node:path';
 const ROOT = new URL('../new/', import.meta.url).pathname;
 const OUT = new URL('./generator/atom-census.json', import.meta.url).pathname;
-const DIRS = ['dart-ui-bs/auto', 'dart-ui-bs/ds'];
+const SCAN = 'dart-ui-bs';   // כל מדף-החזות — רקורסיבי (root + auto + ds + screens__*)
 const NUM = new Set(['int', 'double', 'num']);
+
+// הליכה רקורסיבית ⇒ כל קבצי ה-.dart תחת SCAN, נתיב יחסי ל-new/.
+function walk(rel) {
+  const abs = path.join(ROOT, rel); const out = [];
+  let ents; try { ents = fs.readdirSync(abs, { withFileTypes: true }); } catch { return out; }
+  for (const e of ents.sort((a, b) => a.name.localeCompare(b.name))) {
+    const r = rel + '/' + e.name;
+    if (e.isDirectory()) out.push(...walk(r));
+    else if (e.name.endsWith('.dart')) out.push(r);
+  }
+  return out;
+}
 
 // סיווג-שדה טהור — לפי הטיפוס בלבד (חוזה-האטום, לא ידע-דומייני):
 export function fieldKind(ty) {
@@ -61,14 +73,15 @@ export function analyzeAtom(src, cls, file) {
 }
 
 export function census() {
-  const atoms = [];
-  for (const dir of DIRS) {
-    let files; try { files = fs.readdirSync(path.join(ROOT, dir)).filter((x) => x.endsWith('.dart')); } catch { continue; }
-    for (const f of files.sort()) {
-      const s = fs.readFileSync(path.join(ROOT, dir, f), 'utf8');
-      const cm = s.match(/class ([A-Za-z0-9]+) extends (StatelessWidget|StatefulWidget)/);
-      if (!cm) continue;
-      atoms.push(analyzeAtom(s, cm[1], dir + '/' + f));
+  const atoms = []; const seen = new Set();
+  for (const rel of walk(SCAN)) {
+    const s = fs.readFileSync(path.join(ROOT, rel), 'utf8');
+    // כל מחלקות-ה-widget בקובץ (יכולות להיות כמה) — לא רק הראשונה.
+    for (const m of s.matchAll(/class ([A-Za-z0-9]+) extends (?:StatelessWidget|StatefulWidget)/g)) {
+      const cls = m[1];
+      if (seen.has(cls)) continue;   // שם-מחלקה ייחודי (דדופ חוצה-קבצים)
+      seen.add(cls);
+      atoms.push(analyzeAtom(s, cls, rel));
     }
   }
   atoms.sort((a, b) => a.cls.localeCompare(b.cls));

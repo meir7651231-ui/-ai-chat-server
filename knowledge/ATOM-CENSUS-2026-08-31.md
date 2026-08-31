@@ -11,19 +11,22 @@
 עצמו. זהו המצע שמנוע-ההרכבה יקרא כדי לבחור-ולחווט אטומים לפי המשפט.
 
 ## היקף
-274 אטומי-חזות ב-`new/dart-ui-bs/` (‏auto=262 · ds=16) — קטלוג-החזות שממנו
-`render-ds` כבר מייבא. (מנועי-הלוגיקה של maor וה-boards נספרים בנפרד.)
+**487 אטומי-חזות** בכל `new/dart-ui-bs/` — **רקורסיבי** (root 94 · auto 261 · ds 21 ·
+תת-תיקיות `screens__*` 111) — כל מדף-החזות של buildsmart. (מנועי-הלוגיקה של maor
+וה-boards נספרים בנפרד.) ⚠️ **לקח:** הסריקה המקורית כיסתה רק `auto/`+`ds/` (274) —
+כמעט חצי-קטלוג. הסורק כעת רקורסיבי + תופס כל מחלקות-ה-widget בקובץ (לא רק הראשונה) +
+דדופ-לפי-שם. אל תצמצם שוב.
 
 ## תפר-נתונים (seam) — מה כל אטום אוכל
 | seam | כמות | פירוש | דוגמה |
 |---|---|---|---|
-| `fields` | **251** | ערכים-בודדים ⇒ **רשומה-אחת** | ActionCard(title,sub) · Stat(value,label) |
-| `zero` | 15 | רק callbacks/style ⇒ כרום/סטטי | Dot · DsField · BarcodeReticle |
-| `collection` | 7 | רשימת-פריטים ⇒ **N רשומות** | DsTable · DsBoard · AccRow · ChipWrap |
+| `fields` | **400** | ערכים-בודדים ⇒ **רשומה-אחת** | ActionCard(title,sub) · Callout(value,label) |
+| `zero` | 54 | רק callbacks/style ⇒ כרום/סטטי | Dot · DsField · BarcodeReticle |
+| `collection` | 32 | רשימת-פריטים ⇒ **N רשומות** | DsTable · DsBoard · AccRow · ChipWrap |
 | `series` | **1** | סדרת-מספרים ⇒ תרשים/השוואה | **DsBars בלבד** |
 
 ## ייעוד (capability) — נגזר-מצורה
-`detail 181 · kpi 46 · card 22 · chrome 15 · list 7 · progress 7 · status 3 · trend 1`
+`detail 326 · chrome 54 · kpi 50 · list 32 · card 22 · status 11 · progress 7 · trend 1`
 
 ## שלוש מסקנות שמכתיבות את מנוע-ההרכבה
 1. **הלגו האמיתי = 251 אטומי-`fields`.** רובם לבנים-קטנות (כרטיס · שורה · תג · Stat)
