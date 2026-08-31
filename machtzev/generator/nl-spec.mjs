@@ -7,6 +7,7 @@
 //  אחרי-מפריד=שדות. ⇒ app-ds.buildApp ⇒ אפליקציה עובדת (רצפת-§22). זיהוי-חלקי ⇒ פשוט יותר.
 // ══════════════════════════════════════════════════════════════════════════
 import fs from 'node:fs';
+import { stem } from './match.mjs';
 const LANG = JSON.parse(fs.readFileSync(new URL('./nl-lang.data.json', import.meta.url), 'utf8'));
 const LEAD = new Set(LANG.leadins || []);
 const MARK = LANG.fieldMarks || [];
@@ -83,7 +84,15 @@ export function nlToSpec(text) {
     }
   }
   if (!ents.length) push(nameOf(t) || FALLBACK, []);
-  return ents.map((e) => `${TPL_ENT} ${e.name} ${TPL_WITH} ${e.fields.join(', ')}`).join('\n');
+  // דדופ לפי-גזע: 'רכבים'/'רכב' · 'משימות'/'משימה' = מושג-אחד ⇒ מיזוג. שומר את בעל-שדות-האמת.
+  const isReal = (e) => e.fields !== DEF_FIELDS;
+  const byStem = new Map();
+  for (const e of ents) {
+    const key = stem(content(heWords(e.name))[0] || e.name);
+    const prev = byStem.get(key);
+    if (!prev || (isReal(e) && !isReal(prev))) byStem.set(key, e);
+  }
+  return [...byStem.values()].map((e) => `${TPL_ENT} ${e.name} ${TPL_WITH} ${e.fields.join(', ')}`).join('\n');
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
