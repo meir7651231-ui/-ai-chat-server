@@ -927,7 +927,7 @@ export function selectAtom(roleSpecs, pred = () => true) {
 // 🧩 מסך-סקירה מונחה-מטרה: המטרה "סקירה" = היבטים {מדדים · רשומות}. לכל היבט נבחר
 // **האטום שמגשים אותו הכי-טוב** (selectAtom מדורג); ההרכבה **משלבת** את אטומי-ההיבטים
 // יחד עד שהמטרה מושגת. שקעי-דאטה⇐נתוני-אמת · שקעים-נותרים⇐סגנון-בטוח (לא דאטה מזויף).
-const _rS = /^String\??$/, _rLS = /^List<String>\??$/, _rLLS = /^List<List<String>>\??$/;
+const _rS = /^String\??$/, _rLS = /^List<String>\??$/, _rLLS = /^List<List<String>>\??$/, _rLD = /^List<double>\??$/, _rI = /^int\??$/;
 export function renderCompose(slug, { entitySlug, entityName, fields = [], numFields = [], stages = [] }) {
   const { k, dump } = makeConsts(slug);
   const cls = pascal(slug);
@@ -939,7 +939,13 @@ export function renderCompose(slug, { entitySlug, entityName, fields = [], numFi
     (a) => a.seam === 'collection') : null;
   const tbl = board ? null : selectAtom({ labels: { re: /^(labels|cols|columns|headers)$/, ty: _rLS }, rows: { re: /^(rows|data)$/, ty: _rLLS } },
     (a) => a.caps.includes('list') && a.seam === 'collection');
-  if (!kpi && !tbl && !board) return null;   // אין לבנים שמגשימות ⇒ אין מסך
+  // היבט-מגמה: ישות עם שדה-מספרי ⇒ תרשים-עמודות (ערך-פר-רשומה). האטום אוכל סדרת-מספרים.
+  const trend = numFields.length ? selectAtom({ labels: { re: /^(labels|cols)$/, ty: _rLS }, values: { re: /^(values|data|series)$/, ty: _rLD } },
+    (a) => a.caps.includes('trend') && a.seam === 'series') : null;
+  // היבט-התקדמות: ישות עם שלבים ⇒ פס-התקדמות (אחוז-הרשומות בשלב-הסופי).
+  const prog = stages.length ? selectAtom({ pct: { re: /^(pct|percent|value|val)$/, ty: _rI } },
+    (a) => a.caps.includes('progress') && a.seam === 'fields') : null;
+  if (!kpi && !tbl && !board && !trend && !prog) return null;   // אין לבנים שמגשימות ⇒ אין מסך
 
   const imports = new Set(["import '../dart-ui-bs/ds/ds_store.dart';", "import 'package:flutter/material.dart';"]);
   const blocks = [];
@@ -951,6 +957,22 @@ export function renderCompose(slug, { entitySlug, entityName, fields = [], numFi
     const tiles = [tile(`appStore.count('${entitySlug}').toString()`, k(entityName))];
     for (const f of numFields.slice(0, 3)) tiles.push(tile(`appStore.sum('${entitySlug}', ${k(f)}).toStringAsFixed(0)`, k(f)));
     blocks.push(`Padding(\n            padding: const EdgeInsets.all(12),\n            child: Wrap(spacing: 10, runSpacing: 10, children: [\n              ${tiles.join(',\n              ')},\n            ]),\n          )`);
+  }
+  if (prog) {
+    imports.add(`import '../${prog.file}';`);
+    const extra = prog.fills.length ? ', ' + prog.fills.join(', ') : '';
+    const last = Math.max(0, stages.length - 1);
+    const pctExpr = `appStore.count('${entitySlug}') == 0 ? 0 : (appStore.records('${entitySlug}').where((r) => appStore.stageOf('${entitySlug}', r['__id'] ?? '') >= ${last}).length * 100 ~/ appStore.count('${entitySlug}'))`;
+    blocks.push(`Padding(\n            padding: const EdgeInsets.symmetric(horizontal: 12),\n            child: ${prog.cls}(${prog.p.pct}: ${pctExpr}${extra}),\n          )`);
+  }
+  if (trend) {
+    imports.add(`import '../${trend.file}';`);
+    const extra = trend.fills.length ? ', ' + trend.fills.join(', ') : '';
+    const nf = k(numFields[0]);
+    const titleF = fields.length ? k(fields[0]) : "''";
+    const vals = `appStore.records('${entitySlug}').take(12).map((r) => double.tryParse(r[${nf}] ?? '') ?? 0).toList()`;
+    const labs = `appStore.records('${entitySlug}').take(12).map((r) => r[${titleF}] ?? '').toList()`;
+    blocks.push(`Padding(\n            padding: const EdgeInsets.all(12),\n            child: ${trend.cls}(${trend.p.labels}: ${labs}, ${trend.p.values}: ${vals}${extra}),\n          )`);
   }
   if (board) {
     imports.add(`import '../${board.file}';`);
