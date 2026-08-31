@@ -1,0 +1,3 @@
+dynamic deliveriesOfDay(dynamic db, dynamic dayId) {
+  return db.deliveries.where((d) => d.dayId == dayId);
+}

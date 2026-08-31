@@ -1,0 +1,3 @@
+dynamic setAuditContext(dynamic uid, dynamic email, dynamic canRead) {
+  return {'auditUid': uid, 'auditEmail': email.trim().toLowerCase(), 'auditReadable': canRead};
+}

@@ -1,0 +1,5 @@
+dynamic revertPatch(dynamic stage, dynamic stageIndex) {
+  var patch = {'stage': stage};
+  if (stageIndex(stage) < stageIndex('answer')) patch.answerPushed = false;
+  return patch;
+}

@@ -1,0 +1,3 @@
+dynamic emptyDiff(dynamic d) {
+  return d.sets.length == 0 && d.deletes.length == 0 && d.meta == null;
+}

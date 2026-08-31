@@ -1,0 +1,3 @@
+dynamic orgJoinFullCode(dynamic slug, dynamic code) {
+  return slug + '.' + code;
+}

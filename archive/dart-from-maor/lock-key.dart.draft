@@ -1,0 +1,4 @@
+var LOCK_BASE = 'maor_lock';
+dynamic lockKey(dynamic nsLsKey) {
+  return nsLsKey(LOCK_BASE);
+}

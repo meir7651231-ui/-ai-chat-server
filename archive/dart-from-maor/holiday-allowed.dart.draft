@@ -1,0 +1,3 @@
+dynamic holidayAllowed(dynamic ri, dynamic holidayName) {
+  return (_falsy(ri.holidays.length) || ri.holidays.contains(holidayName));
+}

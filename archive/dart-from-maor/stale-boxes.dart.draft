@@ -1,0 +1,10 @@
+dynamic staleBoxes(dynamic boxes, dynamic todayIso, [dynamic days = 90], dynamic isoOf, dynamic lastCollectionIso) {
+  var cutoff = DateTime.parse(todayIso + 'T12:00:00');
+  cutoff.setDate(cutoff.day - days);
+  var cut = isoOf(cutoff);
+  return boxes.where((b) {
+  if (b.status != 'home') return false;
+  var last = (lastCollectionIso(b) ?? b.since);
+  return _falsy(_falsy(last)) && last <= cut;
+});
+}

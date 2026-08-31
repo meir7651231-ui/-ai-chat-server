@@ -1,0 +1,16 @@
+dynamic ZERO_COUNTS() => ({'donated': 0, 'noanswer': 0, 'refused': 0, 'callback': 0, 'done': 0, 'skip': 0});
+dynamic progress(dynamic c, dynamic requeueOutcomes) {
+  var pending = <dynamic>{...c.queue};
+  var remaining = pending.size;
+  var counts = ZERO_COUNTS();
+  var seen = {};
+  for (final e in c.log) {
+  if (requeueOutcomes.contains(e.outcome)) {
+  var s = (seen[e.outcome] ??= <dynamic>{});
+  if (s.has(e.id)) continue;
+  s.add(e.id);
+}
+  counts[e.outcome]++;
+}
+  return {'total': c.total, 'remaining': remaining, 'finalized': max(0, c.total - remaining), 'counts': counts};
+}

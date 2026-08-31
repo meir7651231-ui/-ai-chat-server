@@ -1,0 +1,14 @@
+dynamic strongMatchForCharge(dynamic charge, dynamic supporters, dynamic keysOf) {
+  var ck = <dynamic>{...keysOf({'extId': charge.toremId, 'zeout': charge.zeout, 'phone': charge.phone, 'email': charge.email})};
+  if (_falsy(ck.size)) return null;
+  var best = null;
+  for (final sp in supporters) {
+  var score = 0;
+  for (final k in keysOf({'extId': sp.extId, 'idNum': sp.idNum, 'phone': sp.phone, 'email': sp.email})) {
+  if (!ck.has(k)) continue;
+  if (k.startsWith('ext:')) score = max(score, 5); else if (k.startsWith('id:')) score = max(score, 4); else if (k.startsWith('ph:')) score = max(score, 3); else if (k.startsWith('em:')) score = max(score, 2);
+}
+  if (score && ((_falsy(best) || score > best.score))) best = {'sp': sp, 'score': score};
+}
+  return (best.sp ?? null);
+}

@@ -1,0 +1,11 @@
+var HP_CACHE_MAX = 3000;
+var hpCacheShared = <dynamic, dynamic>{};
+dynamic hebPartsOfIso(dynamic iso, dynamic hebParts) {
+  var hp = hpCacheShared.get(iso);
+  if (_falsy(hp)) {
+  if (hpCacheShared.size >= HP_CACHE_MAX) hpCacheShared.clear();
+  hp = hebParts(DateTime.parse(iso.sublist(0, 10) + 'T12:00:00'));
+  hpCacheShared.set(iso, hp);
+}
+  return hp;
+}

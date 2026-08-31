@@ -1,0 +1,12 @@
+dynamic supportDayLabel(dynamic at, dynamic todayIso) {
+  var day = at.sublist(0, 10);
+  if (day == todayIso) return 'היום';
+  var t = DateTime.parse(todayIso + 'T12:00:00');
+  t.setDate(t.day - 1);
+  var y = t.year;
+  var m = (t.month - 1) + 1.toString()._padStart(2, '0');
+  var dd = t.day.toString()._padStart(2, '0');
+  if (day == '${y}-${m}-${dd}') return 'אתמול';
+  var undefined = day.split('-');
+  return d2 && mm && yy ? '${d2}/${mm}/${yy}' : day;
+}

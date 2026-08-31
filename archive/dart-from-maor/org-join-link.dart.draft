@@ -1,0 +1,3 @@
+dynamic orgJoinLink(dynamic origin, dynamic basePath, dynamic slug, dynamic code) {
+  return origin + basePath + '?org=' + slug + '&join=' + code;
+}

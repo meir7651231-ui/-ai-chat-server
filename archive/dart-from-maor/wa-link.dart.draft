@@ -1,0 +1,6 @@
+dynamic waLink(dynamic phone, [dynamic text = ''], dynamic waDigits) {
+  var digits = waDigits(phone);
+  if (_falsy(digits)) return null;
+  var t = text.trim();
+  return 'https://wa.me/' + digits + (t ? '?text=' + encodeURIComponent(t) : '');
+}

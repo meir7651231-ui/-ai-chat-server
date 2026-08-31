@@ -1,0 +1,3 @@
+dynamic leaderboard(dynamic coordinators, dynamic boxes, dynamic coordinatorTotal, dynamic coordinatorBoxes) {
+  return (coordinators.where((c) => c.active).map((c) => ({'coordinator': c, 'total': coordinatorTotal(boxes, c.id), 'boxCount': coordinatorBoxes(boxes, c.id).length})).toList()..sort((a, b) => (b.coordinator.score - a.coordinator.score ?? b.total - a.total)));
+}

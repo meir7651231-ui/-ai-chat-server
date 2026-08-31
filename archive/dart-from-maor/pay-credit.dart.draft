@@ -1,0 +1,3 @@
+dynamic payCredit(dynamic e, dynamic paidOf) {
+  return max(0, paidOf(e) - ((e.totalDue ?? 0)) - ((e.carryBalance ?? 0)));
+}

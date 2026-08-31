@@ -1,0 +1,4 @@
+dynamic roomInfoLabel(dynamic room) {
+  var eqOn = Object.entries((room.eq ?? {})).where(() => v).map(() => k).toList();
+  return ('משבצות של ' + ((room.slot ?? 60)) + ' דק׳' + (room.cap ? ' · עד ' + room.cap + ' משתתפים' : '') + (room.access ? ' · נגיש' : '') + (eqOn.length ? ' · ' + eqOn.sublist(0, 3).join(', ') : ''));
+}

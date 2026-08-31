@@ -1,0 +1,4 @@
+dynamic offerNewFamily(dynamic families, dynamic q, dynamic normName) {
+  var t = q.trim();
+  return t.length >= 2 && !families.any((f) => normName(f.name) == normName(t));
+}

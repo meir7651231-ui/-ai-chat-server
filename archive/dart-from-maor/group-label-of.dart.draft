@@ -1,0 +1,3 @@
+dynamic groupLabelOf(dynamic ss, dynamic i) {
+  return (ss.label ?? 'קבוצה ' + (i + 1));
+}

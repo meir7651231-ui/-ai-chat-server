@@ -1,0 +1,6 @@
+dynamic assignmentRedeemed(dynamic a, dynamic componentId, dynamic holiday, dynamic liveRedemptions, dynamic hebYearOf) {
+  var live = liveRedemptions(a);
+  if (_falsy(holiday)) return live.any((r) => r.componentId == componentId);
+  var year = hebYearOf(holiday.iso);
+  return live.any((r) => r.componentId == componentId && r.holiday == holiday.name && _falsy(_falsy(r.date)) && hebYearOf(r.date) == year);
+}

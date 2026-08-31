@@ -1,0 +1,19 @@
+dynamic wizardStepError(dynamic step, dynamic s, dynamic signUpError) {
+  switch (step) {
+case 0:
+return s.industry ? null : 'בחרו את תחום העסק כדי להמשיך';
+case 1:
+return s.size ? null : 'בחרו את גודל הארגון';
+case 2:
+return null;
+case 3:
+if (!s.orgName.trim()) return 'שם הארגון חובה';
+if (!s.contactName.trim()) return 'שם איש קשר חובה';
+if (!s.phone.trim()) return 'טלפון חובה — נחזור אליכם לאישור';
+return null;
+case 4:
+return (signUpError(s.orgName, s.contactName, s.phone, s.email, s.password, s.password2) ?? null);
+default:
+return null;
+}
+}

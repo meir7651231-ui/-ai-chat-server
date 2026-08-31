@@ -1,0 +1,8 @@
+var fmtHM = Intl.DateTimeFormat('he-u-ca-hebrew', {'month': 'long'});
+var fmtHY = Intl.DateTimeFormat('he-u-ca-hebrew', {'year': 'numeric'});
+dynamic hebDateFull(dynamic iso, dynamic gem, dynamic gemYear, dynamic hebParts) {
+  if (_falsy(iso)) return '';
+  var d = DateTime.parse(iso.sublist(0, 10) + 'T12:00:00');
+  if ((d.millisecondsSinceEpoch).isNaN) return '';
+  return '${gem(hebParts(d).day)} ${fmtHM.format(d)} ${gemYear(fmtHY.format(d))}';
+}

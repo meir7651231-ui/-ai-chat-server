@@ -1,0 +1,5 @@
+dynamic approveMember(dynamic org, dynamic email, dynamic normEmail) {
+  var e = normEmail(email);
+  var members = [...<dynamic>{...[...((org.members ?? [])).map((m) => m.trim().toLowerCase()).toList(), e]}];
+  return {'members': members};
+}

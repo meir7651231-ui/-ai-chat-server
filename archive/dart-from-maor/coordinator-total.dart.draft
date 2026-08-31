@@ -1,0 +1,3 @@
+dynamic coordinatorTotal(dynamic boxes, dynamic coordId, dynamic coordinatorBoxes, dynamic boxTotal) {
+  return coordinatorBoxes(boxes, coordId).fold(0, (a, b) => a + boxTotal(b));
+}

@@ -1,0 +1,4 @@
+dynamic nextStage(dynamic stage, dynamic stageIndex, dynamic AYIN_STAGES) {
+  var i = stageIndex(stage);
+  return i < AYIN_STAGES.length - 1 ? AYIN_STAGES[i + 1] : null;
+}

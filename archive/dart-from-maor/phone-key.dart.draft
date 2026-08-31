@@ -1,0 +1,8 @@
+dynamic phoneKey(dynamic raw) {
+  var d = ((raw ?? '')).replaceFirst(RegExp(r'\D'), '');
+  if (_falsy(d)) return '';
+  if (d.startsWith('00')) d = d.sublist(2);
+  if (d.startsWith('972')) d = d.sublist(3);
+  d = d.replaceFirst(RegExp(r'^0+'), '');
+  return d;
+}

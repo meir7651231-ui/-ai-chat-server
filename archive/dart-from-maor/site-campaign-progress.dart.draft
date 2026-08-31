@@ -1,0 +1,14 @@
+dynamic campaignProgress(dynamic c, dynamic nowMs) {
+  var goal = c.goal is num && c.goal > 0 ? c.goal : 0;
+  var raised = c.raised is num && c.raised > 0 ? c.raised : 0;
+  var pct = goal > 0 ? max(0, min(100, _round((raised / goal) * 100))) : 0;
+  var daysLeft = null;
+  if (c.end) {
+  var t = Date.parse(c.end.sublist(0, 10) + 'T00:00:00');
+  if (_isFinite(t)) {
+  var diff = _ceil((t - nowMs) / 86400000);
+  daysLeft = diff > 0 ? diff : 0;
+}
+}
+  return {'goal': goal, 'raised': raised, 'pct': pct, 'currency': (c.currency ?? '₪'), 'daysLeft': daysLeft, 'show': goal > 0};
+}

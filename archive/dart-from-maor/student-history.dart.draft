@@ -1,0 +1,12 @@
+dynamic studentHistory(dynamic db, dynamic memberId, dynamic academicYearLabel, dynamic enrollSummary) {
+  var renewTargetIds = <dynamic>{...db.enrollments.map((e) => e.renewedToId).toList().where(Boolean)};
+  var out = [];
+  for (final e in db.enrollments) {
+  if (e.memberId != memberId) continue;
+  var course = (db.courses.firstWhere((c) => c.id == e.courseId) ?? null);
+  var start = (course.start ?? '');
+  out.add({'enrollment': e, 'courseId': e.courseId, 'courseName': (course.name ?? '—'), 'group': (e.group ?? ''), 'yearLabel': (course.year || (start ? academicYearLabel(start) : '')), 'start': start, 'end': (course.end ?? ''), 'summary': enrollSummary(e), 'fromRenewal': renewTargetIds.has(e.id), 'renewedForward': _falsy(_falsy(e.renewedToId))});
+}
+  (out..sort((a, b) => (((b.start ?? '')).localeCompare((a.start ?? '')) ?? ((b.enrollment.enrolledAt ?? '')).localeCompare((a.enrollment.enrolledAt ?? '')))));
+  return out;
+}

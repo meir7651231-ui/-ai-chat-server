@@ -1,0 +1,24 @@
+dynamic roomsNow(dynamic db, dynamic now, dynamic sessionsOf) {
+  var day = now.weekday % 7;
+  var mins = now.hour * 60 + now.minute;
+  dynamic toMin(dynamic t) {
+  var undefined = t.split(':').map(Number).toList();
+  return ((h ?? 0)) * 60 + ((m ?? 0));
+}
+  return db.rooms.where((r) => r.active).map((room) {
+  var busyWith = ;
+  for (final c in db.courses) {
+  if (c.roomId != room.id) continue;
+  for (final s in sessionsOf(c)) {
+  if ((s.day != day || _falsy(s.time))) continue;
+  var start = toMin(s.time);
+  if (mins >= start && mins < start + ((room.slot ?? 60))) {
+  busyWith = c;
+  break;
+}
+}
+  if (busyWith) break;
+}
+  return {'room': room, 'busyWith': busyWith};
+}).toList();
+}

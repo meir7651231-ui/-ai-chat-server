@@ -1,0 +1,4 @@
+dynamic intakeLog(dynamic db) {
+  var rows = (db.shopIntakes.map((intake) => ({'intake': intake, 'itemName': (db.shopItems.firstWhere((i) => i.id == intake.itemId).name ?? '—')})).toList()..sort((a, b) => b.intake.date.localeCompare(a.intake.date)));
+  return {'rows': rows, 'totalCost': rows.fold(0, (s, r) => s + r.intake.cost)};
+}

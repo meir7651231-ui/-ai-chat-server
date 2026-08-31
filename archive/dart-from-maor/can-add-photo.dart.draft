@@ -1,0 +1,3 @@
+dynamic canAddPhoto(dynamic current, [dynamic photoMax = 5]) {
+  return ((current.length ?? 0)) < photoMax;
+}

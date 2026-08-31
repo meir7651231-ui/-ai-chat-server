@@ -1,0 +1,10 @@
+dynamic gradeFits(dynamic c, dynamic childGrade, dynamic gradeIndex) {
+  if (_falsy(c.gradeMin) && _falsy(c.gradeMax)) return true;
+  var gi = gradeIndex(childGrade);
+  if (gi < 0) return true;
+  var lo = gradeIndex(c.gradeMin);
+  var hi = gradeIndex(c.gradeMax);
+  if (lo >= 0 && gi < lo) return false;
+  if (hi >= 0 && gi > hi) return false;
+  return true;
+}

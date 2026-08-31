@@ -1,0 +1,4 @@
+dynamic dayProgress(dynamic db, dynamic dayId, dynamic deliveriesOfDay) {
+  var list = deliveriesOfDay(db, dayId);
+  return {'total': list.length, 'pickup': list.where((d) => d.status == 'pickup').length, 'enroute': list.where((d) => d.status == 'enroute').length, 'delivered': list.where((d) => d.status == 'delivered').length};
+}

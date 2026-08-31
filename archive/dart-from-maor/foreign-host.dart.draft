@@ -1,0 +1,11 @@
+var LOCAL_HOSTS = <dynamic>{...['localhost', '127.0.0.1', '0.0.0.0', '::1']};
+dynamic normHost(dynamic h) {
+  return ((h ?? '')).toLowerCase().trim().replaceFirst(RegExp(r':\d+$'), '').replaceFirst(RegExp(r'^www\.'), '');
+}
+dynamic foreignHost(dynamic hostname, dynamic allowed) {
+  if ((_falsy(allowed) || allowed.length == 0)) return false;
+  var h = normHost(hostname);
+  if (((_falsy(h) || LOCAL_HOSTS.has(h)) || h.endsWith('.local'))) return false;
+  var list = allowed.map(normHost).toList().where(Boolean);
+  return !list.any((a) => (h == a || h.endsWith('.' + a)));
+}

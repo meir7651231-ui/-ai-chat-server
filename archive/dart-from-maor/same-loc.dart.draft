@@ -1,0 +1,3 @@
+dynamic sameLoc(dynamic a, dynamic b) {
+  return a.view == b.view && a.selFamilyId == b.selFamilyId && a.selCourseId == b.selCourseId;
+}

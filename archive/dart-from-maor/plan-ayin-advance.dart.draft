@@ -1,0 +1,22 @@
+dynamic planAyinAdvance(dynamic cfg, dynamic name, dynamic a, dynamic sockets) {
+  var undefined = sockets;
+  if (!ayinActionVisible(a)) return null;
+  var feat = featLabel(cfg);
+  var item = itemLabel(cfg);
+  var unit = unitLabel(cfg);
+  var st = a.stage;
+  if (st == 'new') {
+  return {'patch': {'stage': 'lead'}, 'event': {'title': '${feat}: ${stageLabel(cfg, 'lead')} — ${name} (${a.names.length} ${item})', 'done': false}, 'toast': 'נרשמו ${a.names.length} — נכנס ללוח: ${stageLabel(cfg, 'lead')}'};
+}
+  if (st == 'lead') {
+  return {'patch': {'stage': 'eyes'}, 'event': {'title': '${feat}: ${stageLabel(cfg, 'lead')} ✓ — ${name}', 'done': true}, 'toast': 'אושר — נרשם בלוח ובדוח. עכשיו: ${stageLabel(cfg, 'eyes')}'};
+}
+  if (st == 'eyes') {
+  var eyes = eyesTotal(a);
+  return {'patch': {'stage': 'answer'}, 'event': {'title': '${feat}: ${stageLabel(cfg, 'answer')} — ${name} (${eyes} ${unit})', 'done': false}, 'toast': 'נרשם — נכנס ללוח: ${stageLabel(cfg, 'answer')}'};
+}
+  if (_falsy(a.answerPushed)) {
+  return {'patch': {'answerPushed': true}, 'event': {'title': '${feat}: ${stageLabel(cfg, 'answer')} — ${name}', 'done': false}, 'toast': 'נמסר — נרשם בלוח היומי ובכרטיס'};
+}
+  return {'patch': {'stage': 'done'}, 'event': {'title': '${feat}: ${stageLabel(cfg, 'done')} — ${name}', 'done': true}, 'toast': 'הטיפול הושלם ✓ — נרשם בלוח'};
+}

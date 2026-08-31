@@ -1,0 +1,7 @@
+dynamic supportersImportFormatRows(dynamic db) {
+  var rows = [['שם', 'טלפון', 'אימייל', 'ת"ז', 'כתובת', 'קטגוריה', 'עבור']];
+  for (final sp in db.supporters) {
+  rows.add([sp.name, sp.phone, sp.email, sp.idNum, sp.address, sp.cat, sp.forWho]);
+}
+  return rows;
+}

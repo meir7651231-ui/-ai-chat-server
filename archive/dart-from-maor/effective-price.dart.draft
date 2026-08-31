@@ -1,0 +1,5 @@
+dynamic effectivePrice(dynamic basePrice, dynamic criterionIds, dynamic criteria, dynamic maxDiscountPct) {
+  var pct = maxDiscountPct(criterionIds, criteria);
+  var base = _isFinite(basePrice) ? basePrice : 0;
+  return max(0, _round(base * (1 - pct / 100)));
+}

@@ -1,0 +1,3 @@
+dynamic setExportBlocked(dynamic isBlocked, dynamic onBlocked) {
+  return {'blocked': isBlocked, 'notify': (onBlocked ?? null)};
+}

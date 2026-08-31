@@ -1,0 +1,3 @@
+dynamic eyesTotal(dynamic a) {
+  return a.names.fold(0, (t, x) => t + ((+x.eyes || 0)));
+}

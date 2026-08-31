@@ -1,0 +1,12 @@
+dynamic sup12m(dynamic supporters, dynamic todayIso, dynamic supLast) {
+  var d = DateTime.parse(todayIso + 'T12:00:00');
+  d.setDate(d.day - 365);
+  dynamic p2(dynamic n) => n.toString()._padStart(2, '0');
+  var cut = '${d.year}-${p2((d.month - 1) + 1)}-${p2(d.day)}';
+  var n = 0;
+  for (final sp in supporters) {
+  var last = supLast(sp);
+  if (last && last >= cut) n++;
+}
+  return n;
+}

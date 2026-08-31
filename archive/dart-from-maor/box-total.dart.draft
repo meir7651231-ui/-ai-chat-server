@@ -1,0 +1,3 @@
+dynamic boxTotal(dynamic box) {
+  return box.collections.fold(0, (a, c) => a + (_isFinite(c.amount) ? c.amount : 0));
+}

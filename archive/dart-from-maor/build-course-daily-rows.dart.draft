@@ -1,0 +1,53 @@
+var DAY_NAMES = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+dynamic isoOf(dynamic d) {
+  dynamic p2(dynamic n) => n.toString()._padStart(2, '0');
+  return '${d.year}-${p2((d.month - 1) + 1)}-${p2(d.day)}';
+}
+dynamic fmtD(dynamic iso) {
+  var undefined = iso.split('-');
+  return '${d}/${m}/${y}';
+}
+dynamic buildCourseDailyRows(dynamic c, dynamic db, dynamic config, dynamic termOf, dynamic hebDateFull) {
+  dynamic T(dynamic k, dynamic fb) => (config ? termOf(config, k, fb) : fb);
+  var rows = [['תאריך עברי', 'תאריך לועזי', 'יום', 'קבוצה/שעה', 'סטטוס יום', 'תלמידה פעילה', T('entity.family', 'משפחה'), 'סטטוס נוכחות']];
+  if ((_falsy(c.start) || _falsy(c.end))) return {'rows': rows, 'days': 0};
+  var memberFam = <dynamic, dynamic>{};
+  for (final f in db.families) for (final m in f.members) memberFam.set(m.id, {'first': m.first, 'famName': f.name});
+  var enrolls = db.enrollments.where((e) => e.courseId == c.id);
+  var sessions = c.sessions && c.sessions.length ? c.sessions : [{'day': c.weekday, 'time': c.time, 'label': ''}];
+  var start = DateTime.parse(c.start + 'T12:00:00');
+  var end = DateTime.parse(c.end + 'T12:00:00');
+  var MAX_DAYS = 500;
+  var days = 0;
+  var truncated = false;
+  for (var d = DateTime.parse(start); d <= end; d.setDate(d.day + 1)) {
+  var iso = isoOf(d);
+  var dow = d.weekday % 7;
+  var sess = sessions.where((ss) => ss.day == dow);
+  if (_falsy(sess.length)) continue;
+  if (days >= MAX_DAYS) {
+  truncated = true;
+  break;
+}
+  days++;
+  for (final ss in sess) {
+  var slot = ((ss.label ?? 'קבוצה')) + ' · ' + ((ss.time ?? ''));
+  var active = enrolls.where((e) => e.status != 'wait' && ((_falsy(e.enrolledAt) || e.enrolledAt <= iso)) && (((_falsy(ss.label) || _falsy(e.group)) || e.group == ss.label)) && ((e.status != 'ended' || (_falsy(_falsy(e.endedAt)) && iso < e.endedAt))));
+  if (_falsy(active.length)) {
+  rows.add([hebDateFull(iso), fmtD(iso), DAY_NAMES[dow], slot, 'אין רשומות', '', '', '']);
+  continue;
+}
+  for (final e in active) {
+  var mf = memberFam.get(e.memberId);
+  var abs = e.absences.firstWhere((a) => a.date == iso);
+  var dayStatus = e.status == 'paused' ? 'מוקפא' : 'מתקיים';
+  var attend = e.status == 'paused' ? 'מוקפא' : abs ? abs.noshow ? 'לא הופיעה' : 'חיסור' + (abs.reason ? ' · ' + abs.reason : '') : 'פעיל';
+  rows.add([hebDateFull(iso), fmtD(iso), DAY_NAMES[dow], slot, dayStatus, (mf.first ?? ''), (mf.famName ?? ''), attend]);
+}
+}
+}
+  if (truncated) {
+  rows.add(['—', '—', '—', '—', 'הדוח נקטע ב-${MAX_DAYS} ימי מפגש — בדקו את תאריך הסיום של ה${T('entity.course', 'חוג')}', '', '', '']);
+}
+  return {'rows': rows, 'days': days};
+}

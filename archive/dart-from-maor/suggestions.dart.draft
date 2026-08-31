@@ -1,0 +1,31 @@
+dynamic suggestions(dynamic db, dynamic todayIso, dynamic config, dynamic undefined) {
+  dynamic T(dynamic k, dynamic fb) => (config ? termOf(config, k, fb) : fb);
+  dynamic modOn(dynamic m) => (_falsy(config) || moduleOn(config, m));
+  var out = [];
+  var activeFams = db.families.where((f) => f.status == 'active');
+  var hol = upcomingHoliday(todayIso, 30);
+  if (modOn('shop') && hol && activeFams.length > 0) {
+  out.add({'key': 'sug:holiday:${hol.name}:${hol.hebYear}', 'emoji': '🎁', 'title': 'מתנת-חג · ${hol.name} בעוד ${hol.inDays} ימים', 'detail': '${activeFams.length} ${T('nav.families', 'משפחות')} פעילות — שקלו חלוקת מתנות לקראת החג', 'act': 'shop'});
+}
+  for (final f in activeFams) {
+  for (final m in f.members) {
+  if (m.isParent) continue;
+  var age = ageAt(m.birth, todayIso);
+  if ((age == 6 || age == 5)) {
+  out.add({'key': 'sug:school:${m.id}:${age}', 'emoji': '🎒', 'title': 'ערכת בית-ספר · ${m.first} (${f.name})', 'detail': 'בן/בת ${age} — לקראת/בתחילת כיתה א׳', 'famId': f.id, 'act': 'families'});
+} else if (age == 0) {
+  out.add({'key': 'sug:baby:${m.id}', 'emoji': '👶', 'title': 'ערכת תינוק · ${T('entity.familyOf', 'משפחת')} ${f.name}', 'detail': '${m.first} — תינוק/ת חדש/ה ב${T('entity.family', 'משפחה')}', 'famId': f.id, 'act': 'families'});
+}
+}
+}
+  for (final e in modOn('courses') ? db.enrollments : []) {
+  if ((e.plan != 'punch' || e.status != 'active')) continue;
+  var rem = e.purchased - e.used;
+  if ((rem > 2 || rem < 0)) continue;
+  var course = db.courses.firstWhere((c) => c.id == e.courseId);
+  var fam = db.families.firstWhere((f) => f.members.any((m) => m.id == e.memberId));
+  var member = fam.members.firstWhere((m) => m.id == e.memberId);
+  out.add({'key': 'sug:renew:${e.id}:${e.purchased}', 'emoji': '🎫', 'title': 'חידוש כרטיסייה · ${(member.first ?? '—')} · ${(course.name ?? '—')}', 'detail': rem <= 0 ? 'הכרטיסייה נגמרה' : 'נותרו ${rem} ניקובים', 'famId': fam.id, 'courseId': e.courseId, 'act': 'courses'});
+}
+  return out;
+}

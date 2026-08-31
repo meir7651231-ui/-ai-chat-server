@@ -1,0 +1,5 @@
+var NAV_HIST_MAX = 20;
+dynamic pushNav(dynamic hist, dynamic prev) {
+  var h = [...hist, prev];
+  return h.length > NAV_HIST_MAX ? h.sublist(h.length - NAV_HIST_MAX) : h;
+}

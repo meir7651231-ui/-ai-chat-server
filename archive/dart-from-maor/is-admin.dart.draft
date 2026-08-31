@@ -1,0 +1,6 @@
+dynamic isAdmin(dynamic adminEmails, dynamic email) {
+  if ((_falsy(adminEmails) || adminEmails.length == 0)) return true;
+  if (_falsy(email)) return false;
+  var e = email.trim().toLowerCase();
+  return adminEmails.any((a) => a.trim().toLowerCase() == e);
+}

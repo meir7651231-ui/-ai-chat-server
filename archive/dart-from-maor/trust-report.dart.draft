@@ -1,0 +1,38 @@
+var SEV = {'critical': 3, 'high': 2, 'info': 1};
+dynamic trustReport(dynamic bundle, [dynamic opt = {}], [dynamic eng = {}]) {
+  var undefined = eng;
+  var tenant = (bundle.tenant ?? {});
+  var checks = [];
+  dynamic add(dynamic key, dynamic label, dynamic pass, dynamic severity, dynamic detail) => checks.add({'key': key, 'label': label, 'pass': _falsy(_falsy(pass)), 'severity': severity, 'detail': detail});
+  var ar = auditRoutes(bundle);
+  add('route-closure', 'סגירת-מסלולים (אין ניתוב-יתום)', ar.ok, 'critical', ar.ok ? 'כל גשר/transfer/שער מוביל ליעד-קיים' : 'יתומים: ${[...ar.dangling, ...ar.orphanTransfers, ...ar.missingGateways].join(', ')}');
+  var fs = failsafeRoute(tenant);
+  add('failsafe', 'מסלול-חירום (השיחה תמיד עונה)', fs.ok, 'critical', fs.ok ? 'נפילה למנהל ${fs.fallback}' : 'אין מנהל — מבוי-סתום אפשרי');
+  var toll = featureOn(tenant, 'voice.hardening');
+  add('toll-caps', 'תקרות חיוג-יוצא (toll-fraud)', toll, 'high', toll ? 'בו-זמניות+משך מוגבלים' : 'כבוי — cred-גנוב יכול להצטבר (voice.hardening)');
+  if (featureOn(tenant, 'voice.kosher')) {
+  var hasK = ((tenant.numbers ?? [])).any((n) => n.kosher && n.onramp == 'sim-in-gateway' && Number.isInteger(n.gatewayChannel) && ((n.channels ?? [])).contains('voice'));
+  add('kosher-integrity', 'שלמות-כשרות (יציאה כשרה)', hasK, 'high', hasK ? 'יש SIM-כשר ליציאה' : 'מצב-כשר בלי SIM-כשר — יציאה מושבתת');
+}
+  if (featureOn(tenant, 'recording')) {
+  var rec = recordingEncryption(tenant);
+  add('recording-encryption', 'הצפנת-הקלטות', false, 'high', rec.enabled ? 'מוגדר אך דורמנטי — record_session כותב .wav גולמי, REC_KEY טרם מחווט (חלון-בעלים)' : 'הקלטות פעילות בלי הצפנה');
+}
+  if (opt.env) {
+  var pf = secretPreflight([bundle], opt.env);
+  add('secrets', 'סודות-סביבה מוזרקים', pf.ok, 'critical', pf.ok ? 'כל הסודות קיימים' : 'חסרים ${pf.missing.length} (שער-דומם)');
+}
+  if ((opt.peers is List) && opt.peers.length) {
+  var leak = crossTenantLeakScan([bundle, ...opt.peers]);
+  add('isolation', 'בידוד חוצה-דיירים', leak.clean, 'critical', leak.clean ? 'אין דליפת-סוד/זהות בין-לקוחות' : '${leak.violations.length} דליפות');
+}
+  add('downstream', 'pure-downstream (אין תלות-ספק)', true, 'info', 'מדבר רק עם ציוד-הלקוח');
+  add('cti-readonly', 'זיהוי-מתקשר קריאה-בלבד', true, 'info', 'לעולם לא כותב למאור');
+  var failing = checks.where((c) => _falsy(c.pass));
+  var totalW = checks.fold(0, (s, c) => s + SEV[c.severity]);
+  var gotW = checks.fold(0, (s, c) => s + (c.pass ? SEV[c.severity] : 0));
+  var score = totalW ? _round((gotW / totalW) * 100) : 100;
+  var anyCritical = failing.any((c) => c.severity == 'critical');
+  var grade = anyCritical ? 'F' : score >= 95 ? 'A' : score >= 85 ? 'B' : score >= 70 ? 'C' : 'D';
+  return {'tenantId': tenant.tenantId, 'checks': checks, 'failing': failing, 'score': score, 'grade': grade, 'ready': _falsy(anyCritical)};
+}

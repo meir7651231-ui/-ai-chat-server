@@ -1,0 +1,8 @@
+dynamic docSkey(dynamic col, dynamic data, dynamic supKeyBySpId, dynamic supKeyOf, dynamic sharedSupKey) {
+  if (col == 'supporters') return supKeyOf(data);
+  if (col == 'events') {
+  var spId = data.spId is String ? data.spId : '';
+  return spId ? ((supKeyBySpId.get(spId) ?? sharedSupKey)) : sharedSupKey;
+}
+  return '';
+}

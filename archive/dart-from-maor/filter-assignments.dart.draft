@@ -1,0 +1,20 @@
+dynamic filterAssignments(dynamic db, dynamic q, dynamic status, dynamic pendingOnly, dynamic productId, dynamic sort, dynamic todayIso, dynamic upcomingHolidays, dynamic SHOP_HOLIDAY_DUE_DAYS, dynamic pendingCount, dynamic smartFilter, dynamic progressOf) {
+  var holidays = todayIso ? upcomingHolidays(todayIso, SHOP_HOLIDAY_DUE_DAYS) : undefined;
+  var list = [...db.shopAssignments];
+  if (status) list = list.where((a) => a.status == status);
+  if (productId) list = list.where((a) => a.productId == productId);
+  if (pendingOnly) list = list.where((a) => pendingCount(db, a, holidays) > 0);
+  list = smartFilter(q, list, (a) {
+  var fam = db.families.firstWhere((f) => f.id == a.famId);
+  var product = db.shopProducts.firstWhere((p) => p.id == a.productId);
+  return [(fam.name ?? ''), ...((fam.name.split(RegExp(r'\s+')) ?? [])), (product.name ?? '')];
+});
+  dynamic famName(dynamic a) => (db.families.firstWhere((f) => f.id == a.famId).name ?? '');
+  var cmp = {'pending': (a, b) {
+  var pa = pendingCount(db, a, holidays) > 0 ? 0 : 1;
+  var pb = pendingCount(db, b, holidays) > 0 ? 0 : 1;
+  if (pa != pb) return pa - pb;
+  return ((a.since ?? '9999')).localeCompare((b.since ?? '9999'));
+}, 'name': (a, b) => famName(a).localeCompare(famName(b), 'he'), 'progress': (a, b) => progressOf(db, a, holidays) - progressOf(db, b, holidays)};
+  return (list..sort(cmp[sort]));
+}

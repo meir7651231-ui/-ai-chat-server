@@ -1,0 +1,3 @@
+dynamic famLiveEnrollments(dynamic db, dynamic fam, dynamic famEnrollments) {
+  return famEnrollments(db, fam).where((e) => e.status != 'ended' && e.status != 'wait');
+}

@@ -1,0 +1,8 @@
+var leapCache = <dynamic, dynamic>{};
+dynamic isHebLeapYear(dynamic hebYear, dynamic hebToIsoEn) {
+  var hit = leapCache.get(hebYear);
+  if (hit != undefined) return hit;
+  var leap = hebToIsoEn(1, 'Adar I', hebYear) != null;
+  leapCache.set(hebYear, leap);
+  return leap;
+}

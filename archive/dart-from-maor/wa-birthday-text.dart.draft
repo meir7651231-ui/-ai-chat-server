@@ -1,0 +1,3 @@
+dynamic waBirthdayText(dynamic orgName, dynamic firstName, dynamic cfg, dynamic renderTemplate, dynamic orgOf) {
+  return renderTemplate(cfg, 'wa.birthday', {'first': firstName, 'org': orgOf(orgName)});
+}

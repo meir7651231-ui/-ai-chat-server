@@ -1,0 +1,5 @@
+dynamic lastCollectionIso(dynamic box) {
+  var last = '';
+  for (final c in box.collections) if (c.date > last) last = c.date;
+  return last;
+}

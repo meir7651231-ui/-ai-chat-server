@@ -1,0 +1,36 @@
+var CORAL_PALETTE = {'c1': '#EC9C9C', 'c2': '#D97F7F', 'c3': '#B95F5F', 'word': '#E29392', 'ink': '#33272A', 'paper': '#FFFCFA', 'cream': '#FBF1EF', 'blush': '#FFF3F0', 'marquee': '#F9E4E1', 'rgb1': '236,156,156', 'rgb2': '217,127,127', 'inkRgb': '51,39,42'};
+dynamic hexToRgb(dynamic hex) {
+  var m = RegExp(r'^#?([0-9a-f]{3}|[0-9a-f]{6})$').exec(hex.trim());
+  if (_falsy(m)) return null;
+  var h = m[1];
+  if (h.length == 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+  var n = int.tryParse(h.toString()) ?? 0;
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+dynamic rgbToHsl(dynamic r, dynamic g, dynamic b) {
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  var max = max(r, g, b);
+  var l = (max + min) / 2;
+  var h = 0;
+  if (d) {
+  s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+  if (max == r) h = ((g - b) / d + (g < b ? 6 : 0)); else if (max == g) h = (b - r) / d + 2; else h = (r - g) / d + 4;
+  h *= 60;
+}
+  return [h, s, l];
+}
+dynamic hslToRgb(dynamic h, dynamic s, dynamic l) {
+  h = ((h % 360) + 360) % 360;
+  var c = (1 - _abs(2 * l - 1)) * s;
+  var x = c * (1 - _abs(((h / 60) % 2) - 1));
+  var m = l - c / 2;
+  var r = 0;
+  if (h < 60) [r, g, b] = [c, x, 0]; else if (h < 120) [r, g, b] = [x, c, 0]; else if (h < 180) [r, g, b] = [0, c, x]; else if (h < 240) [r, g, b] = [0, x, c]; else if (h < 300) [r, g, b] = [x, 0, c]; else [r, g, b] = [c, 0, x];
+  return [_round((r + m) * 255), _round((g + m) * 255), _round((b + m) * 255)];
+}
+dynamic toHex(dynamic undefined) {
+  return '#' + [r, g, b].map((v) => max(0, min(255, v))function toString() { [native code] }._padStart(2, '0')).toList().join('');
+}
+dynamic rgbStr(dynamic undefined) => '${r},${g},${b}';

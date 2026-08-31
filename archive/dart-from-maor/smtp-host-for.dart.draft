@@ -1,0 +1,7 @@
+var SMTP_HOSTS = {'gmail.com': 'smtp.gmail.com:465', 'googlemail.com': 'smtp.gmail.com:465', 'outlook.com': 'smtp-mail.outlook.com:587', 'hotmail.com': 'smtp-mail.outlook.com:587', 'yahoo.com': 'smtp.mail.yahoo.com:465', 'walla.co.il': 'out.walla.co.il:465'};
+dynamic smtpHostFor(dynamic email) {
+  var at = email.lastIndexOf('@');
+  if (at < 1) return '';
+  var domain = email.sublist(at + 1).trim().toLowerCase();
+  return (SMTP_HOSTS[domain] ?? '');
+}

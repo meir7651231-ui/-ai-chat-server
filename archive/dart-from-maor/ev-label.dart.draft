@@ -1,0 +1,3 @@
+dynamic evLabel(dynamic ev, dynamic evMeta) {
+  return ((ev.type == 'custom' && ev.customType) || evMeta[ev.type].label);
+}

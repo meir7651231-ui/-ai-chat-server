@@ -1,0 +1,10 @@
+dynamic filterAyinBoard(dynamic items, dynamic q, dynamic status, dynamic stage, dynamic normSearch) {
+  var nq = normSearch(q);
+  return items.where((it) {
+  if (status == 'wait' && it.done) return false;
+  if (status == 'done' && _falsy(it.done)) return false;
+  if (stage && it.stage != stage) return false;
+  if (_falsy(nq)) return true;
+  return normSearch([it.supporter, it.name, it.note].join(' ')).contains(nq);
+});
+}

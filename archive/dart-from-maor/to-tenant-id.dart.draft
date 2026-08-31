@@ -1,0 +1,5 @@
+dynamic toTenantId(dynamic slug, dynamic orgName) {
+  var base = (slug && slug != 'default' ? slug : (orgName ?? 'org')).toLowerCase().replaceFirst(RegExp(r'[^a-z0-9-]+'), '-').replaceFirst(RegExp(r'^-+|-+$'), '').sublist(0, 38);
+  var padded = base.length >= 3 ? base : '${base}-org';
+  return RegExp(r'^[a-z0-9]').test(padded) ? padded : 'x-${padded}'.sublist(0, 40);
+}

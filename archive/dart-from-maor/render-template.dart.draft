@@ -1,0 +1,6 @@
+dynamic renderTemplate(dynamic cfg, dynamic key, dynamic vars, dynamic defs) {
+  var def = (defs.firstWhere((d) => d.key == key).def ?? '');
+  var t = (((cfg.templates[key] ?? '')).trim() ?? def);
+  for (final undefined in Object.entries(vars)) t = t.split('{' + k + '}').join(v);
+  return t;
+}

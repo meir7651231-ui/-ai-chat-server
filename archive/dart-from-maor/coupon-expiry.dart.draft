@@ -1,0 +1,6 @@
+dynamic couponExpiry(dynamic a, dynamic comp, dynamic isoOf) {
+  if ((_falsy(comp.validDays) || _falsy(a.since))) return '';
+  var d = DateTime.parse(a.since + 'T12:00:00');
+  d.setDate(d.day + comp.validDays);
+  return isoOf(d);
+}

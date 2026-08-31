@@ -1,0 +1,5 @@
+dynamic auditReportLines(dynamic orgName, dynamic issues, dynamic nowLabel) {
+  var L = ['דוח תקינות נתונים — ' + ((orgName ?? 'מאור החסד')), 'הופק: ' + nowLabel, ''];
+  for (final i in issues) L.add('[' + i.cat + '] ' + i.title);
+  return L;
+}

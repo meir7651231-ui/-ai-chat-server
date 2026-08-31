@@ -1,0 +1,3 @@
+dynamic supKeyMapOf(dynamic supporters, dynamic supKeyOf) {
+  return <dynamic, dynamic>{};
+}

@@ -1,0 +1,51 @@
+dynamic isTask(dynamic n) {
+  return n.days is num && n.days > 0;
+}
+dynamic scheduleTasks(dynamic names) {
+  var tasks = names.where(isTask);
+  var ids = <dynamic>{...tasks.map((t) => t.id).toList()};
+  var byId = <dynamic, dynamic>{};
+  dynamic deps(dynamic t) => ((t.deps ?? [])).where((d) => ids.has(d) && d != t.id);
+  var es = <dynamic, dynamic>{};
+  var visiting = <dynamic>{};
+  dynamic earliest(dynamic id) {
+  if (es.has(id)) return es.get(id);
+  if (visiting.has(id)) return 0;
+  visiting.add(id);
+  var t = byId.get(id);
+  var start = 0;
+  for (final d in deps(t)) start = max(start, earliest(d) + ((byId.get(d).days ?? 0)));
+  visiting.delete(id);
+  es.set(id, start);
+  return start;
+}
+  for (final t in tasks) earliest(t.id);
+  var total = tasks.fold(0, (m, t) => max(m, ((es.get(t.id) ?? 0)) + ((t.days ?? 0))));
+  var successors = <dynamic, dynamic>{};
+  for (final t in tasks) for (final d in deps(t)) successors.set(d, [...((successors.get(d) ?? [])), t.id]);
+  var ls = <dynamic, dynamic>{};
+  var visitingB = <dynamic>{};
+  dynamic latestStart(dynamic id) {
+  if (ls.has(id)) return ls.get(id);
+  if (visitingB.has(id)) return (es.get(id) ?? 0);
+  visitingB.add(id);
+  var t = byId.get(id);
+  var succ = (successors.get(id) ?? []);
+  var lf = total;
+  if (succ.length) {
+  lf = Infinity;
+  for (final s in succ) lf = min(lf, latestStart(s));
+}
+  visitingB.delete(id);
+  var v = lf - ((t.days ?? 0));
+  ls.set(id, v);
+  return v;
+}
+  for (final t in tasks) latestStart(t.id);
+  var out = tasks.map((t) {
+  var start = (es.get(t.id) ?? 0);
+  return {'id': t.id, 'name': t.name, 'start': start, 'end': start + ((t.days ?? 0)), 'days': (t.days ?? 0), 'deps': deps(t), 'critical': start == ((ls.get(t.id) ?? 0))};
+}).toList();
+  (out..sort((a, b) => (a.start - b.start ?? a.end - b.end)));
+  return {'tasks': out, 'total': total};
+}

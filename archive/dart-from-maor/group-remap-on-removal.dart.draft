@@ -1,0 +1,10 @@
+dynamic groupRemapOnRemoval(dynamic sessions, dynamic removeIdx, dynamic groupLabelOf) {
+  var removed = groupLabelOf(sessions[removeIdx], removeIdx);
+  var remap = <dynamic, dynamic>{};
+  for (var k = removeIdx + 1; k < sessions.length; k++) {
+  var oldLabel = groupLabelOf(sessions[k], k);
+  var newLabel = groupLabelOf(sessions[k], k - 1);
+  if (oldLabel != newLabel) remap.set(oldLabel, newLabel);
+}
+  return {'removed': removed, 'remap': remap};
+}

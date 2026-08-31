@@ -1,0 +1,17 @@
+dynamic candidateSupportersForCharge(dynamic charge, dynamic supporters, [dynamic limit = 8], dynamic keysOf, dynamic nameSortKey) {
+  var ck = <dynamic>{...keysOf({'extId': charge.toremId, 'zeout': charge.zeout, 'phone': charge.phone, 'email': charge.email})};
+  var cName = nameSortKey((charge.name ?? ''));
+  var scored = [];
+  for (final sp in supporters) {
+  var sk = keysOf({'extId': sp.extId, 'idNum': sp.idNum, 'phone': sp.phone, 'email': sp.email});
+  var score = 0;
+  for (final k in sk) {
+  if (!ck.has(k)) continue;
+  if (k.startsWith('ext:')) score = max(score, 5); else if (k.startsWith('id:')) score = max(score, 4); else if (k.startsWith('ph:')) score = max(score, 3); else if (k.startsWith('em:')) score = max(score, 2);
+}
+  if (_falsy(score) && cName && cName.contains(' ') && nameSortKey(sp.name) == cName) score = 1;
+  if (score) scored.add({'sp': sp, 'score': score});
+}
+  (scored..sort((a, b) => b.score - a.score));
+  return scored.sublist(0, limit).map((x) => x.sp).toList();
+}

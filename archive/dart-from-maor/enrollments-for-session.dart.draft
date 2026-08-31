@@ -1,0 +1,7 @@
+dynamic enrollmentsForSession(dynamic db, dynamic c, dynamic sessionIndex, dynamic sessionsOf, dynamic groupLabelOf) {
+  var all = db.enrollments.where((e) => e.courseId == c.id);
+  var ss = sessionsOf(c);
+  if (ss.length <= 1) return all;
+  var label = groupLabelOf(ss[min(sessionIndex, ss.length - 1)], sessionIndex);
+  return all.where((e) => (_falsy(e.group) || e.group == label));
+}

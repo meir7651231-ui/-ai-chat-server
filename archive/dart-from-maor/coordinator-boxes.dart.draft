@@ -1,0 +1,3 @@
+dynamic coordinatorBoxes(dynamic boxes, dynamic coordId) {
+  return boxes.where((b) => b.coordinatorId == coordId);
+}

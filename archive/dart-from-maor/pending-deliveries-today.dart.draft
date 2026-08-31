@@ -1,0 +1,4 @@
+dynamic pendingDeliveriesToday(dynamic db, dynamic todayIso) {
+  var openDays = <dynamic>{...db.distributionDays.where((d) => d.date <= todayIso && _falsy(d.closed)).map((d) => d.id).toList()};
+  return db.deliveries.where((d) => openDays.has(d.dayId) && d.status != 'delivered');
+}

@@ -1,0 +1,3 @@
+dynamic openCloudKey(dynamic env, dynamic secret, dynamic via, dynamic openDek) {
+  return openDek(env, secret, via);
+}

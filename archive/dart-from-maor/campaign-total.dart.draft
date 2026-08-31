@@ -1,0 +1,5 @@
+dynamic campaignTotal(dynamic boxes, dynamic campaignId) {
+  var sum = 0;
+  for (final b in boxes) for (final c in b.collections) if (c.campaignId == campaignId) sum += _isFinite(c.amount) ? c.amount : 0;
+  return sum;
+}

@@ -1,0 +1,12 @@
+dynamic bulkMailRecipients(dynamic sups, dynamic normEmail) {
+  var seen = <dynamic>{};
+  var out = [];
+  for (final sp in sups) {
+  var e = normEmail((sp.email ?? ''));
+  if ((_falsy(e) || !e.contains('@'))) continue;
+  if (seen.has(e)) continue;
+  seen.add(e);
+  out.add({'id': sp.id, 'name': (sp.name ?? ''), 'email': sp.email.trim()});
+}
+  return out;
+}

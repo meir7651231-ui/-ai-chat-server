@@ -1,0 +1,6 @@
+dynamic normId(dynamic s) {
+  var d = ((s ?? '')).replaceFirst(RegExp(r'\D'), '');
+  if ((_falsy(d) || RegExp(r'^0+$').test(d))) return '';
+  if (d.replaceFirst(RegExp(r'^0+'), '').length < 4) return '';
+  return d.length >= 5 ? d : '';
+}

@@ -1,0 +1,3 @@
+dynamic warehouseValue(dynamic warehouse) {
+  return _round(warehouse.fold(0, (a, w) => a + ((+w.qty || 0)) * ((+w.cost || 0))));
+}

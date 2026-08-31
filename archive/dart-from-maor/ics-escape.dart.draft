@@ -1,0 +1,4 @@
+dynamic icsEscape(dynamic s) {
+  return ((s ?? '')).replaceFirst(RegExp(r'\\'), '\\').replaceFirst(RegExp(r';'), '\;').replaceFirst(RegExp(r','), '\,').replaceFirst(RegExp(r'\r?\n'), '\n');
+}
+var enc = TextEncoder();

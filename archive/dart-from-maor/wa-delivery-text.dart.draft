@@ -1,0 +1,3 @@
+dynamic waDeliveryText(dynamic orgName, dynamic famName, dynamic cfg, dynamic renderTemplate, dynamic orgOf) {
+  return renderTemplate(cfg, 'wa.delivery', {'name': ('משפחת ' + famName).trim(), 'org': orgOf(orgName)});
+}

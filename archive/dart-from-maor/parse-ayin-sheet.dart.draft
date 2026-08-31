@@ -1,0 +1,40 @@
+dynamic parseAyinSheet(dynamic rows, dynamic supporters, dynamic normName) {
+  if (rows.length < 2) return {'upds': [], 'miss': 0, 'error': 'הקובץ ריק או לא בפורמט CSV'};
+  dynamic clean(dynamic x) => ((x ?? '')).replaceFirst(RegExp(r'\s+'), ' ').trim();
+  var header = ((rows[0] ?? [])).map((h) => clean(h)).toList();
+  dynamic hIdx(dynamic keys) => header.indexWhere((h) => keys.any((k) => h.contains(k)));
+  var iSup = hIdx(['תומכת', 'תומך']);
+  var iNm = hIdx(['שם למסירה', 'שם לעופרת', 'שם']);
+  var iEyes = hIdx(['עיניים']);
+  var iDone = hIdx(['נמסר']);
+  var iPaid = hIdx(['שולם', 'תשלום']);
+  var iAns = hIdx(['תשובה', 'הערה']);
+  var iLead = hIdx(['עופרת']);
+  if ((iNm < 0 || iEyes < 0)) {
+  return {'upds': [], 'miss': 0, 'error': 'חסרות עמודות "שם למסירה" ו/או "כמה עיניים"'};
+}
+  dynamic yes(dynamic v) => RegExp(r'כן|yes|✓|v|שולם').test(v);
+  var upds = [];
+  var miss = 0;
+  for (var r = 1; r < rows.length; r++) {
+  var row = (rows[r] ?? []);
+  var supN = clean(iSup >= 0 ? row[iSup] : '');
+  var nm = clean(row[iNm]);
+  if (_falsy(nm)) continue;
+  var raw = clean(row[iEyes]);
+  var eyes = RegExp(r'^\d+$').test(raw) ? +raw : null;
+  var doneRaw = clean(iDone >= 0 ? row[iDone] : '');
+  var paidRaw = iPaid >= 0 ? clean(row[iPaid]) : '';
+  var ansRaw = iAns >= 0 ? clean(row[iAns]) : '';
+  var leadRaw = iLead >= 0 ? clean(row[iLead]) : '';
+  var sp = supporters.firstWhere((x) => ((_falsy(supN) || normName(x.name) == normName(supN))) && ((x.ayin.names ?? [])).any((n) => normName(n.name) == normName(nm)));
+  if (_falsy(sp)) {
+  miss++;
+  continue;
+}
+  var rec = ((sp.ayin.names ?? [])).firstWhere((n) => normName(n.name) == normName(nm));
+  if (eyes == null && _falsy(doneRaw) && _falsy(paidRaw) && _falsy(ansRaw) && _falsy(leadRaw)) continue;
+  upds.add({'supporterId': sp.id, 'nameId': rec.id, 'eyes': eyes, 'done': doneRaw ? yes(doneRaw) : null, 'paid': paidRaw ? yes(paidRaw) : null, 'answer': (ansRaw ?? null), 'lead': leadRaw ? yes(leadRaw) : null});
+}
+  return {'upds': upds, 'miss': miss};
+}

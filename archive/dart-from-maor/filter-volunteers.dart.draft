@@ -1,0 +1,4 @@
+dynamic filterVolunteers(dynamic vols, dynamic q, dynamic smartFilter) {
+  if (!q.trim()) return vols;
+  return smartFilter(q, vols, (v) => [v.name, v.phone, (v.area ?? '')]);
+}

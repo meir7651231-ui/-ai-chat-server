@@ -1,0 +1,5 @@
+dynamic rangeLabel(dynamic r, dynamic fmtDate) {
+  if (_falsy(r.from) && _falsy(r.to)) return 'כל התאריכים';
+  if (r.from && r.to) return '${fmtDate(r.from)} – ${fmtDate(r.to)}';
+  return r.from ? 'מ-' + fmtDate(r.from) : 'עד ' + fmtDate(r.to);
+}

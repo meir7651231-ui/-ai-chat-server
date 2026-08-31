@@ -1,0 +1,29 @@
+dynamic famHistoryOf(dynamic db, dynamic fam, dynamic config, dynamic termOf) {
+  var out = [];
+  dynamic push(dynamic date, dynamic tag, dynamic bg, dynamic c, dynamic text) {
+  if (date) out.add({'date': date, 'tag': tag, 'bg': bg, 'c': c, 'text': text});
+}
+  if (fam.createdAt) push(fam.createdAt, 'הצטרפות', '#e7edf5', '#3a5a86', 'ה' + termOf(config, 'entity.family', 'משפחה') + ' הצטרפה');
+  for (final ev in db.events) {
+  if ((ev.famId != fam.id || _falsy(ev.date))) continue;
+  push(ev.date, 'אירוע', '#efe7f3', '#7c3aed', ev.title + (ev.time ? ' · ' + ev.time : '') + (ev.done ? ' · ✓ בוצע' : ''));
+}
+  for (final l in (fam.cred.log ?? [])) {
+  push(l.date, termOf(config, 'entity.cred', 'אמינות'), '#f6ead1', '#9a6414', l.reason + ' (' + (l.delta > 0 ? '+' : '') + l.delta + ' נק׳)');
+}
+  for (final d in fam.docs) push(d.addedAt, 'מסמך', '#eceae2', '#4d463c', 'מסמך נוסף: ' + d.name);
+  var ids = <dynamic>{...fam.members.map((m) => m.id).toList()};
+  for (final e in db.enrollments) {
+  if (!ids.has(e.memberId)) continue;
+  var first = (fam.members.firstWhere((x) => x.id == e.memberId).first ?? '');
+  var cname = (db.courses.firstWhere((x) => x.id == e.courseId).name ?? '');
+  push(e.enrolledAt, termOf(config, 'entity.enrollment', 'שיבוץ'), '#eef7e6', '#3f6212', 'נרשמ/ה ' + first + ' ל' + cname + (e.group ? ' · ' + e.group : '') + (e.status == 'wait' ? ' · ברשימת-המתנה' : ''));
+  for (final p in e.payments) {
+  push(p.date, 'תשלום', '#e4f5ea', '#12803c', 'תשלום ₪' + p.amount + ' (' + p.method + ') — ' + cname + ' · ' + p.rid);
+}
+  for (final a in e.absences) {
+  push(a.date, a.noshow ? 'No-Show' : 'היעדרות', '#fdeaea', '#b91c1c', 'היעדרות — ' + cname + (a.reason ? ' · ' + a.reason : '') + (a.makeup ? ' · זכאי/ת השלמה' : ''));
+}
+}
+  return (out..sort((a, b) => b.date.localeCompare(a.date))).sublist(0, 40);
+}

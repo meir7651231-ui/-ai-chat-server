@@ -1,0 +1,13 @@
+dynamic supporterAggregates(dynamic sp) {
+  var dons = (sp.donations is List) ? sp.donations : [];
+  var ils = 0;
+  var usd = 0;
+  var dates = [];
+  for (final d in dons) {
+  var amt = _isFinite(d.amount) ? d.amount : 0;
+  if (d.cur == '$') usd += amt; else ils += amt;
+  if (d.date) dates.add(d.date);
+}
+  (dates..sort());
+  return {'count': dons.length, 'ils': ils, 'usd': usd, 'first': (dates[0] ?? ''), 'last': (dates[dates.length - 1] ?? '')};
+}

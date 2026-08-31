@@ -1,0 +1,7 @@
+var AUDIT_CAP = 500;
+dynamic pushAuditRing(dynamic entries, dynamic dek, dynamic auditUid, dynamic db, dynamic scopedCol, dynamic fs, dynamic encryptDoc) {
+  if (_falsy(auditUid)) return ;
+  var ring = entries.sublist(-AUDIT_CAP);
+  var body = dek ? /*?AwaitExpression?*/ : {'entries': ring};
+  /*?AwaitExpression?*/;
+}

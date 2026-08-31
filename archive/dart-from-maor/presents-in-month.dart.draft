@@ -1,0 +1,4 @@
+dynamic presentsInMonth(dynamic presents, dynamic todayIso) {
+  var ym = todayIso.sublist(0, 7);
+  return ((presents ?? [])).where((d) => d is String && d.sublist(0, 7) == ym).length;
+}

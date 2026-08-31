@@ -1,0 +1,5 @@
+dynamic collectedPaid(dynamic assignments, dynamic liveRedemptions) {
+  var sum = 0;
+  for (final a in assignments) for (final r in liveRedemptions(a)) sum += _isFinite(r.paid) ? r.paid : 0;
+  return sum;
+}

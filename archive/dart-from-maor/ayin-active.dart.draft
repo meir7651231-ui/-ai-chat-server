@@ -1,0 +1,4 @@
+dynamic ayinActive(dynamic a) {
+  if (_falsy(a)) return false;
+  return (((((a.stage != 'new' || a.names.length > 0) || _falsy(_falsy(a.lastTouch))) || a.answers.length > 0) || a.log.length > 0));
+}

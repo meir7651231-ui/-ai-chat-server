@@ -1,0 +1,3 @@
+dynamic donationsOfYear(dynamic donations, dynamic year) {
+  return (donations.where((d) => ((d.date ?? '')).startsWith(year + '-'))..sort((a, b) => a.date.localeCompare(b.date)));
+}

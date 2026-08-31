@@ -1,0 +1,24 @@
+dynamic parseFamiliesCsv(dynamic rows, dynamic existing, dynamic clean, dynamic normName, dynamic digits) {
+  var news = [];
+  var upds = [];
+  for (final r in rows.sublist(1)) {
+  var name = clean(r[0]);
+  if ((_falsy(name) || name.contains('שם פרטי שם משפחה'))) continue;
+  var isFair = false;
+  if (RegExp(r'יריד חנוכה').test(name)) {
+  isFair = true;
+  name = clean(name.replaceFirst(RegExp(r'-?\s*יריד חנוכה תשפ..?'), ''));
+}
+  name = clean(name.replaceFirst('#NAME?', ''));
+  if (_falsy(name)) continue;
+  var city = clean(r[6]);
+  if (city == 'רגיל') city = '';
+  if ((city == 'ביתר' || city == 'ביתר עלית')) city = 'ביתר עילית';
+  var noteRaw = (r[12] ?? '');
+  var stc = clean((((noteRaw.match(RegExp(r'סטטוס:\s*([^\n]+)')) ?? []))[1] ?? ''));
+  var obj = {'name': name, 'father': '', 'mother': clean(r[3]), 'fatherId': clean(r[1]), 'motherId': clean(r[4]), 'phone': clean(r[2]) == '-' ? '' : clean(r[2]), 'phone2': clean(r[5]) == '-' ? '' : clean(r[5]), 'email': '', 'address': clean([r[7], r[8]].map(clean).toList().where(Boolean).join(' ')), 'city': city, 'status': stc.contains('לא פעיל') ? 'inactive' : 'active', 'maritalStatus': (stc.contains('אלמנ') ?? ((r[9] ?? '')).contains('אלמן')) ? 'אלמן/ה' : stc.contains('גרוש') ? 'גרושים' : 'נשואים', 'language': 'עברית', 'community': (clean(r[10]) ?? 'חסידי'), 'notes': isFair ? 'השתתפה ביריד חנוכה תשפ"ו' : ''};
+  var ex = existing.firstWhere((f) => normName(f.name) == normName(name) && (((!digits(obj.phone) || !digits(f.phone)) || digits(f.phone) == digits(obj.phone))));
+  if (ex) upds.add({'id': ex.id, 'obj': obj}); else news.add(obj);
+}
+  return {'news': news, 'upds': upds};
+}

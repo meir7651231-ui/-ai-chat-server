@@ -1,0 +1,3 @@
+dynamic isEncrypted(dynamic raw) {
+  return _falsy(_falsy(raw)) && raw is Map && raw.$enc == 2;
+}

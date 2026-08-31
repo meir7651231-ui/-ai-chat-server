@@ -1,0 +1,3 @@
+dynamic itemLabel(dynamic cfg, dynamic termOf) {
+  return termOf(cfg, 'entity.ayinItem', 'שם לטיפול');
+}

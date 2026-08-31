@@ -1,0 +1,8 @@
+dynamic beneficiaryLabel(dynamic db, dynamic a, dynamic config, dynamic termOf) {
+  dynamic T(dynamic k, dynamic fb) => (config ? termOf(config, k, fb) : fb);
+  var fam = db.families.firstWhere((f) => f.id == a.famId);
+  var famLabel = fam ? T('entity.familyOf', 'משפחת') + ' ' + fam.name : T('entity.family', 'משפחה') + ' לא ידועה';
+  if ((_falsy(a.memberId) || _falsy(fam))) return famLabel;
+  var m = fam.members.firstWhere((x) => x.id == a.memberId);
+  return m ? famLabel + ' — ' + m.first : famLabel;
+}

@@ -1,0 +1,11 @@
+dynamic nextClosure(dynamic config, dynamic todayIso, dynamic hebrewClosedWindows, dynamic CITIES) {
+  var tel = config.telephony;
+  if (_falsy(tel)) return null;
+  var city = (tel.city ?? 'default');
+  var tenant = {'city': city, 'timezone': 'Asia/Jerusalem'};
+  var wins = hebrewClosedWindows(todayIso, 10, tenant, {});
+  var w = wins[0];
+  if (_falsy(w)) return null;
+  var cityHe = (tel.city && CITIES[tel.city]) ? CITIES[tel.city].he : CITIES.jerusalem.he;
+  return {'reason': w.reason, 'kind': w.kind, 'startIso': w.startIso, 'candle': w.startTime, 'endIso': w.endIso, 'tzeis': w.endTime, 'cityHe': cityHe};
+}

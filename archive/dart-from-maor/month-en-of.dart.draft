@@ -1,0 +1,4 @@
+var MONTHS = [['Tishri', 'תשרי'], ['Heshvan', 'חשוון'], ['Kislev', 'כסלו'], ['Tevet', 'טבת'], ['Shevat', 'שבט'], ['Adar', 'אדר'], ['Adar I', 'אדר א׳'], ['Adar II', 'אדר ב׳'], ['Nisan', 'ניסן'], ['Iyar', 'אייר'], ['Sivan', 'סיוון'], ['Tamuz', 'תמוז'], ['Av', 'אב'], ['Elul', 'אלול']];
+dynamic monthEnOf(dynamic he) {
+  return (MONTHS.firstWhere((m) => m[1] == he)[0] ?? null);
+}

@@ -1,0 +1,12 @@
+dynamic orgCalEntries(dynamic supporters, dynamic supDonEvents) {
+  var out = [];
+  for (final sp in supporters) {
+  for (final e in supDonEvents(sp)) out.add({'date': e.date, 'amount': e.amount, 'cur': e.cur, 'src': e.src, 'name': sp.name, 'spId': sp.id});
+  for (final l in (sp.ayin.log ?? [])) {
+  out.add({'date': l.date, 'amount': 0, 'cur': '', 'src': '🧿 ' + l.eyes + (l.name ? ' — ' + l.name : ''), 'name': sp.name, 'spId': sp.id});
+}
+  for (final an in (sp.ayin.answers ?? [])) out.add({'date': an.date, 'amount': 0, 'cur': '', 'src': '📞 תשובה: ' + an.note, 'name': sp.name, 'spId': sp.id});
+  if (sp.ayin.nextTalk) out.add({'date': sp.ayin.nextTalk, 'amount': 0, 'cur': '', 'src': '🔁 לדבר שוב', 'name': sp.name, 'spId': sp.id});
+}
+  return out.where((e) => _falsy(_falsy(e.date)));
+}

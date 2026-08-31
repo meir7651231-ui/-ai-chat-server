@@ -1,0 +1,9 @@
+dynamic signUpError(dynamic orgName, dynamic contactName, dynamic phone, dynamic email, dynamic password, dynamic password2) {
+  if (!orgName.trim()) return 'שם הארגון הוא שדה חובה';
+  if (!contactName.trim()) return 'שם איש הקשר הוא שדה חובה';
+  if (!RegExp(r'^[\d+][\d\s-]{6,}$').test(phone.trim())) return 'מספר טלפון תקין הוא שדה חובה — נחזור אליכם לאישור';
+  if (!RegExp(r'^\S+@\S+\.\S+$').test(email.trim())) return 'כתובת האימייל אינה תקינה';
+  if (password.length < 6) return 'הסיסמה חייבת להיות לפחות 6 תווים';
+  if (password != password2) return 'הסיסמאות אינן זהות';
+  return '';
+}

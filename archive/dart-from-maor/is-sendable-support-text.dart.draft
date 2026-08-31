@@ -1,0 +1,3 @@
+dynamic isSendableSupportText(dynamic raw, dynamic sanitizeSupportText) {
+  return sanitizeSupportText(raw).length > 0;
+}

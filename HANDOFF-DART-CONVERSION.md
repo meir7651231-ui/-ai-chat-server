@@ -36,14 +36,14 @@
 ### שלב א׳ — הכן אצווה (בחר 16 אטומי-מאור טהורים שטרם-מומרו):
 ```bash
 cd /home/user/-ai-chat-server
-done=$(ls new/dart-maor/*.dart 2>/dev/null|grep -v _test|sed 's#.*/##;s#.dart##'; ls new/dart-maor/QUARANTINE/*.dart 2>/dev/null|grep -v _test|sed 's#.*/##;s#.dart##'; ls dart-from-maor/*.draft 2>/dev/null|sed 's#.*/##;s#.dart.draft##')
+done=$(ls new/dart-maor/*.dart 2>/dev/null|grep -v _test|sed 's#.*/##;s#.dart##'; ls new/dart-maor/QUARANTINE/*.dart 2>/dev/null|grep -v _test|sed 's#.*/##;s#.dart##'; ls archive/dart-from-maor/*.draft 2>/dev/null|sed 's#.*/##;s#.dart.draft##')
 picked=""; c=0
 for f in $(ls new/atoms/*.mjs|grep -v test|sed 's#.*/##;s#.mjs##'); do
   echo "$done"|grep -qxF "$f" && continue
   grep -qE 'crypto|fetch|navigator|localStorage|document|await|onSnapshot|requireDb' new/atoms/$f.mjs && continue
   grep -q 'export function\|=> ' new/atoms/$f.mjs || continue
   [ -f "new/atoms/$f.test.mjs" ] || continue
-  node machtzev/emit/ast-js-to-dart.mjs new/atoms/$f.mjs > dart-from-maor/$f.dart.draft 2>/dev/null
+  node machtzev/emit/ast-js-to-dart.mjs new/atoms/$f.mjs > archive/dart-from-maor/$f.dart.draft 2>/dev/null
   picked="$picked $f"; c=$((c+1)); [ $c -ge 16 ] && break
 done
 git add dart-from-maor; git commit -q -m "אצווה · טיוטות"; git push -q -u origin claude/mah-kora-0by8kw

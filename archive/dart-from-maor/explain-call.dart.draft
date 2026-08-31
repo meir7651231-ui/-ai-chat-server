@@ -1,0 +1,60 @@
+var DOW_HE = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+dynamic closedTag(dynamic reason) {
+  return reason && reason != 'מחוץ-לשעות' && reason != 'שעות-פעילות' ? ' (${reason})' : '';
+}
+dynamic explainCall(dynamic tenant, [dynamic call = {}], [dynamic opts = {}], [dynamic eng = {}]) {
+  var undefined = eng;
+  var sim = simulateCall(tenant, call, opts);
+  var lines = [];
+  var office = (tenant.destinations.office.ext.join(', ') ?? '—');
+  var manager = (tenant.destinations.manager.ext ?? '—');
+  var vm = (tenant.destinations.voicemail.box ?? '—');
+  var when = call.dow != null ? 'יום ${DOW_HE[call.dow]} ${(call.hhmm ?? '')}' : call.date ? '${call.date} ${(call.hhmm ?? '')}' : '';
+  if (call.direction == 'outbound') {
+  lines.add('📞 חיוג-יוצא: ${(call.did ?? '')}');
+  if (sim.outcome == 'non-kosher-blocked') lines.add('⛔ מצב-כשר: ניסיון-יציאה דרך SIM לא-כשר — נחסם.'); else if (sim.outcome == 'no-such-sim') lines.add('⚠️ הערוץ שנבחר לא-קיים.'); else if (sim.outcome == 'no-default') lines.add('⚠️ אין SIM ליציאת-ברירת-מחדל.'); else lines.add('✅ יוצא דרך: ${sim.outcome.replaceFirst('via:', '')}');
+  return {'outcome': sim.outcome, 'reason': '', 'summary': lines.join(' '), 'lines': lines, 'sim': sim};
+}
+  if (call.callerId) lines.add('📲 מתקשר ${call.callerId}${when ? ' · ${when}' : ''}');
+  switch (sim.outcome) {
+case 'unknown-did':
+lines.add('❓ המספר שחויג אינו מוכר למרכזייה — לא ינותב.');
+break;
+case 'blocked':
+lines.add(sim.path.contains('allowlist') ? '⛔ המתקשר אינו ברשימת-ההיתר (או חסוי) — נותק.' : '⛔ המתקשר ברשימת-החסומים — נותק.');
+break;
+case 'priority':
+lines.add('🆘 מוקד-מצוקה: מתקשר-בסיכון — מנותב ישירות לאחראי (${(sim.path.firstWhere((p) => p.startsWith('resp:')).sublist(5) ?? manager)}), עוקף שעות/חג.');
+break;
+case 'mourning':
+lines.add('🕯️ מצב-שבעה פעיל: מנותב למחליף (${(sim.path.firstWhere((p) => p.startsWith('sub:')).sublist(4) ?? manager)}).');
+break;
+case 'announcement':
+lines.add('📢 קו-הכרזה: משמיע הודעה מוקלטת ומנתק.');
+break;
+case 'office':
+lines.add('✅ בשעות-פעילות → מצלצל במשרד (${office}).');
+break;
+case 'ivr-menu':
+lines.add('✅ בשעות → תפריט-קולי (IVR) ממתין לבחירה.');
+break;
+case 'queue':
+lines.add('✅ בשעות → תור-המתנה עד שנציג מושך את השיחה.');
+break;
+case 'voicemail':
+lines.add('🌙 מחוץ-לשעות${closedTag(sim.reason)} → מנהל (${manager}) → תא-קולי (${vm}).');
+break;
+case 'manager':
+lines.add('🌙 מחוץ-לשעות${closedTag(sim.reason)} → מנהל (${manager}) (בלי תא-קולי).');
+break;
+case 'afterhours':
+{
+  var trg = sim.path.contains('ivr-invalid') ? 'בחירה לא-תקינה ב-IVR' : 'אין-מענה במשרד';
+  lines.add(featureOn(tenant, 'voicemail') ? '🌙 ${trg} → מנהל (${manager}) → תא-קולי.' : '🌙 ${trg} → מנהל (${manager}) → צליל-תפוס (אין תא-קולי).');
+  break;
+}
+default:
+if (sim.outcome.toString().startsWith('ivr:')) lines.add('✅ בחירת-IVR → ${sim.outcome.sublist(4)}.'); else lines.add('תוצאה: ${sim.outcome}');
+}
+  return {'outcome': sim.outcome, 'reason': (sim.reason ?? ''), 'summary': lines.join(' '), 'lines': lines, 'sim': sim};
+}

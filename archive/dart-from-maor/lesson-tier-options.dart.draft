@@ -1,0 +1,7 @@
+dynamic lessonTierOptions(dynamic c) {
+  var out = [{'v': '', 't': 'מחיר מלא · ₪' + ((c.lessonPrice ?? 0))}];
+  if (c.lessonPrice1) out.add({'v': '1', 't': ((c.price1Name ?? 'הנחה 1')) + ' · ₪' + c.lessonPrice1});
+  if (c.lessonPrice2) out.add({'v': '2', 't': ((c.price2Name ?? 'הנחה 2')) + ' · ₪' + c.lessonPrice2});
+  if (c.lessonPrice3) out.add({'v': '3', 't': ((c.price3Name ?? 'הנחה 3')) + ' · ₪' + c.lessonPrice3});
+  return out;
+}
