@@ -24,3 +24,7 @@ const String gen_app_ent1_c21 = 'משתמשים';
 const String gen_app_ent1_c22 = 'הרשאות';
 const String gen_app_ent1_c23 = 'סטטוס';
 const String gen_app_ent1_c24 = 'סטטוס בא';
+const String gen_app_ent1_c25 = 'סכום';
+const String gen_app_ent1_c26 = '🧮';
+const String gen_app_ent1_c27 = 'סה"כ רשומות';
+const String gen_app_ent1_c28 = '🗂️';

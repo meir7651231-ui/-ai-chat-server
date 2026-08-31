@@ -30,3 +30,5 @@ const String gen_app_ent29_c27 = 'נוכחות';
 const String gen_app_ent29_c28 = 'שיעור';
 const String gen_app_ent29_c29 = 'התאמה';
 const String gen_app_ent29_c30 = 'שיעורים';
+const String gen_app_ent29_c31 = 'סה"כ רשומות';
+const String gen_app_ent29_c32 = '🗂️';

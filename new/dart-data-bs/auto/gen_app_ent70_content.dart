@@ -51,3 +51,5 @@ const String gen_app_ent70_c48 = 'חשבונית';
 const String gen_app_ent70_c49 = 'מסמך';
 const String gen_app_ent70_c50 = 'מלגה';
 const String gen_app_ent70_c51 = 'מסמכים';
+const String gen_app_ent70_c52 = 'סה"כ רשומות';
+const String gen_app_ent70_c53 = '🗂️';

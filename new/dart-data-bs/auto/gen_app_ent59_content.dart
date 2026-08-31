@@ -37,3 +37,7 @@ const String gen_app_ent59_c34 = 'אישור הורה';
 const String gen_app_ent59_c35 = 'אירוע';
 const String gen_app_ent59_c36 = 'בוגר';
 const String gen_app_ent59_c37 = 'אירועים';
+const String gen_app_ent59_c38 = 'סכום';
+const String gen_app_ent59_c39 = '🧮';
+const String gen_app_ent59_c40 = 'סה"כ רשומות';
+const String gen_app_ent59_c41 = '🗂️';

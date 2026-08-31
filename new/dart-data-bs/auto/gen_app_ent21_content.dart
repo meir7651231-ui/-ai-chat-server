@@ -43,3 +43,5 @@ const String gen_app_ent21_c40 = 'חבר ספרייה';
 const String gen_app_ent21_c41 = 'עובד';
 const String gen_app_ent21_c42 = 'מסמך';
 const String gen_app_ent21_c43 = 'עובד';
+const String gen_app_ent21_c44 = 'סה"כ רשומות';
+const String gen_app_ent21_c45 = '🗂️';

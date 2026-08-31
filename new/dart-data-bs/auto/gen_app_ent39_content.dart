@@ -22,3 +22,5 @@ const String gen_app_ent39_c19 = 'סטטוס בא';
 const String gen_app_ent39_c20 = 'מתוכננת';
 const String gen_app_ent39_c21 = 'התקיימה';
 const String gen_app_ent39_c22 = 'בוטלה';
+const String gen_app_ent39_c23 = 'סה"כ רשומות';
+const String gen_app_ent39_c24 = '🗂️';

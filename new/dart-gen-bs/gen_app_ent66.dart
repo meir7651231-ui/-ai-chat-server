@@ -125,6 +125,7 @@ class _GenAppEnt66ScreenState extends State<GenAppEnt66Screen> {
       icon: gen_app_ent66_c2,
       bottomBar: DsPrimaryButton(label: _editId == null ? gen_app_ent66_c3 : gen_app_ent66_c4, onTap: _save),
       children: [
+        AnimatedBuilder(animation: appStore, builder: (context, _) => Padding(padding: const EdgeInsets.only(bottom: 12), child: Row(children: [Expanded(child: DsStat(label: gen_app_ent66_c0, value: appStore.count('app_ent66').toString(), sub: gen_app_ent66_c32, glyph: gen_app_ent66_c33)), const SizedBox(width: 10), Expanded(child: DsStat(label: gen_app_ent66_c9, value: appStore.sum('app_ent66', gen_app_ent66_c9).toStringAsFixed(0), sub: gen_app_ent66_c30, glyph: gen_app_ent66_c31))]))),
         DsWorkflow(steps: const [gen_app_ent66_c26, gen_app_ent66_c27, gen_app_ent66_c28, gen_app_ent66_c29], current: 0),
         DsSection(title: gen_app_ent66_c5, children: [
           DsNumberField(label: gen_app_ent66_c9, value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),

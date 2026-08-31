@@ -23,3 +23,5 @@ const String gen_app_ent53_c20 = 'סטטוס בא';
 const String gen_app_ent53_c21 = 'מתוכננת';
 const String gen_app_ent53_c22 = 'בדרך';
 const String gen_app_ent53_c23 = 'הושלמה';
+const String gen_app_ent53_c24 = 'סה"כ רשומות';
+const String gen_app_ent53_c25 = '🗂️';

@@ -21,3 +21,5 @@ const String gen_app_ent54_c18 = 'סטטוס';
 const String gen_app_ent54_c19 = 'סטטוס בא';
 const String gen_app_ent54_c20 = 'נכנס';
 const String gen_app_ent54_c21 = 'יצא';
+const String gen_app_ent54_c22 = 'סה"כ רשומות';
+const String gen_app_ent54_c23 = '🗂️';

@@ -16,3 +16,5 @@ const String gen_app_ent52_c13 = 'ימים';
 const String gen_app_ent52_c14 = 'תוקף';
 const String gen_app_ent52_c15 = 'אפוטרופוס';
 const String gen_app_ent52_c16 = 'אישור';
+const String gen_app_ent52_c17 = 'סה"כ רשומות';
+const String gen_app_ent52_c18 = '🗂️';

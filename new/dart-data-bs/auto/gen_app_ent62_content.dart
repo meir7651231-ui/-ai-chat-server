@@ -22,3 +22,5 @@ const String gen_app_ent62_c19 = 'סטטוס';
 const String gen_app_ent62_c20 = 'סטטוס בא';
 const String gen_app_ent62_c21 = 'אירוע חירום';
 const String gen_app_ent62_c22 = 'פעולות מתקנות';
+const String gen_app_ent62_c23 = 'סה"כ רשומות';
+const String gen_app_ent62_c24 = '🗂️';

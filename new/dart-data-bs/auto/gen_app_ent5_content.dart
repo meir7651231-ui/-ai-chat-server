@@ -27,3 +27,5 @@ const String gen_app_ent5_c24 = 'ציונים';
 const String gen_app_ent5_c25 = 'תקופה';
 const String gen_app_ent5_c26 = 'תעודה';
 const String gen_app_ent5_c27 = 'תקופה';
+const String gen_app_ent5_c28 = 'סה"כ רשומות';
+const String gen_app_ent5_c29 = '🗂️';

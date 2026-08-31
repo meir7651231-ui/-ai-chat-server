@@ -125,6 +125,7 @@ class _GenAppEnt71ScreenState extends State<GenAppEnt71Screen> {
       icon: gen_app_ent71_c2,
       bottomBar: DsPrimaryButton(label: _editId == null ? gen_app_ent71_c3 : gen_app_ent71_c4, onTap: _save),
       children: [
+        AnimatedBuilder(animation: appStore, builder: (context, _) => Padding(padding: const EdgeInsets.only(bottom: 12), child: Row(children: [Expanded(child: DsStat(label: gen_app_ent71_c0, value: appStore.count('app_ent71').toString(), sub: gen_app_ent71_c24, glyph: gen_app_ent71_c25))]))),
         DsSection(title: gen_app_ent71_c5, children: [
           DsField(label: gen_app_ent71_c9, hint: '', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
           DsDateField(label: gen_app_ent71_c10, value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),

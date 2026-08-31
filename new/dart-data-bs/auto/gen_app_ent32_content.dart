@@ -39,3 +39,5 @@ const String gen_app_ent32_c36 = 'תוצאת למידה';
 const String gen_app_ent32_c37 = 'מבחנים';
 const String gen_app_ent32_c38 = 'התאמה';
 const String gen_app_ent32_c39 = 'מבחנים';
+const String gen_app_ent32_c40 = 'סה"כ רשומות';
+const String gen_app_ent32_c41 = '🗂️';

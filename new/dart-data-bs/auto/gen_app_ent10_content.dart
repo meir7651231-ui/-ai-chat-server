@@ -22,3 +22,5 @@ const String gen_app_ent10_c19 = 'ממתין';
 const String gen_app_ent10_c20 = 'הוצע מקום';
 const String gen_app_ent10_c21 = 'שובץ';
 const String gen_app_ent10_c22 = 'בוטל';
+const String gen_app_ent10_c23 = 'סה"כ רשומות';
+const String gen_app_ent10_c24 = '🗂️';

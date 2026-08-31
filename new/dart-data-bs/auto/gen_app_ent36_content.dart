@@ -25,3 +25,7 @@ const String gen_app_ent36_c22 = 'טיוטה';
 const String gen_app_ent36_c23 = 'פעילה';
 const String gen_app_ent36_c24 = 'בבדיקה';
 const String gen_app_ent36_c25 = 'הסתיימה';
+const String gen_app_ent36_c26 = 'סכום';
+const String gen_app_ent36_c27 = '🧮';
+const String gen_app_ent36_c28 = 'סה"כ רשומות';
+const String gen_app_ent36_c29 = '🗂️';

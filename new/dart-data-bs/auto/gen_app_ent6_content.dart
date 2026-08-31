@@ -26,3 +26,5 @@ const String gen_app_ent6_c23 = 'טיוטה';
 const String gen_app_ent6_c24 = 'נבדק';
 const String gen_app_ent6_c25 = 'פורסם';
 const String gen_app_ent6_c26 = 'הוסר';
+const String gen_app_ent6_c27 = 'סה"כ רשומות';
+const String gen_app_ent6_c28 = '🗂️';

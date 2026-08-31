@@ -27,3 +27,5 @@ const String gen_app_ent38_c24 = 'נפתח';
 const String gen_app_ent38_c25 = 'בטיפול';
 const String gen_app_ent38_c26 = 'בהסלמה';
 const String gen_app_ent38_c27 = 'נסגר';
+const String gen_app_ent38_c28 = 'סה"כ רשומות';
+const String gen_app_ent38_c29 = '🗂️';

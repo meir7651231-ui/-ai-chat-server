@@ -225,6 +225,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const patternSpecs = []; // ולידציית-תבנית: {i, pattern}
   let hasLive = false, hasRel = false, hasEnum = false, hasCalc = false, hasMulti = false, usedField = false;
   let firstDateConst = null;   // תפר-לוח-שנה: הקבוע של שדה-התאריך הראשון (null ⇒ אין תאריך)
+  const numFields = [];        // תפר-KPI: קבועי השדות-המספריים (לסכום/ממוצע חי)
   const labelIdx = schema.map((s, i) => ({ label: s.label, idx: i }));
   schema.forEach((s, i) => {
     const cl = k(s.label); labelConst.push(cl);
@@ -312,7 +313,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
     // (3) טיפוס נאחז-מהאטומים ⇒ הווידג'ט האמיתי: תאריך→בורר · מספר→מקלדת · דו-ערכי→מתג.
     const ft = typeOf(s.label);
     if (ft === 'date') { typedImports.add("import '../dart-ui-bs/ds/ds_date_field.dart';"); if (firstDateConst === null) firstDateConst = cl; addField(i, `DsDateField(label: ${cl}, ${bind})`); recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: _v[${i}] ?? ''`); return; }
-    if (ft === 'num')  { typedImports.add("import '../dart-ui-bs/ds/ds_number_field.dart';"); addField(i, `DsNumberField(label: ${cl}, ${bind})`); recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: _v[${i}] ?? ''`); return; }
+    if (ft === 'num')  { typedImports.add("import '../dart-ui-bs/ds/ds_number_field.dart';"); numFields.push(cl); addField(i, `DsNumberField(label: ${cl}, ${bind})`); recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: _v[${i}] ?? ''`); return; }
     if (ft === 'bool') { typedImports.add("import '../dart-ui-bs/ds/ds_toggle_tile.dart';"); addField(i, `DsToggleTile(label: ${cl}, ${bind})`); recValsR.push(`r[${cl}] ?? ''`); mapVals.push(`${cl}: _v[${i}] ?? ''`); return; }
     // (4) טקסט: שדה חופשי + לוגיקת-אימפריה חיה מכוונת-מטרה (טיפוס+IDF+קידומת+מובהקות).
     usedField = true;
@@ -427,6 +428,10 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const formSection = rlsWrite
     ? `AnimatedBuilder(animation: appStore, builder: (context, _) => DsSection(title: ${cForm}, children: [\n${fieldsGated}\n        ])),`
     : `DsSection(title: ${cForm}, children: [\n${fieldsPlain}\n        ]),`;
+  // 📊 תפר-KPI: רצועת-סטטיסטיקה חיה מעל הישות — מונה-רשומות + סכום פר-שדה-מספרי (עד 2).
+  // נגזרת טהורה מהחנות (count/sum), מגיבה לכל שינוי. אוניברסלי (כל ישות מקבלת מונה).
+  const kpiNumTiles = numFields.slice(0, 2).map((fc) => `const SizedBox(width: 10), Expanded(child: DsStat(label: ${fc}, value: appStore.sum(${SK}, ${fc}).toStringAsFixed(0), sub: ${k('סכום')}, glyph: ${k('🧮')}))`).join(', ');
+  const kpiStrip = `AnimatedBuilder(animation: appStore, builder: (context, _) => Padding(padding: const EdgeInsets.only(bottom: 12), child: Row(children: [Expanded(child: DsStat(label: ${cTitle}, value: appStore.count(${SK}).toString(), sub: ${k('סה"כ רשומות')}, glyph: ${k('🗂️')}))${kpiNumTiles ? ', ' + kpiNumTiles : ''}]))),`;
   const listRead = hasScope ? `appStore.scoped(${SK}, _rlsScope[_rlsRole])` : `appStore.records(${SK})`;
   const cardSig = rlsActive ? 'Widget _card(Map<String, String> r, Set<int> hidden) {' : 'Widget _card(Map<String, String> r) {';
   const cardHiddenArg = rlsActive ? ', hidden: hidden' : '';
@@ -592,6 +597,7 @@ ${hasCalc ? `  Widget _calc(String label, num v) => Padding(
       icon: ${cIcon},
       bottomBar: DsPrimaryButton(label: _editId == null ? ${cSave} : ${cUpdate}, onTap: _save),
       children: [
+        ${kpiStrip}
 ${stepsDart}${hasVal ? `        if (_err != null) Container(
           margin: const EdgeInsets.only(bottom: 12),
           padding: const EdgeInsets.all(12),

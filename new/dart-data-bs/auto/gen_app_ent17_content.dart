@@ -24,3 +24,5 @@ const String gen_app_ent17_c21 = 'טיוטה';
 const String gen_app_ent17_c22 = 'פעילה';
 const String gen_app_ent17_c23 = 'הסתיימה';
 const String gen_app_ent17_c24 = 'בוטלה';
+const String gen_app_ent17_c25 = 'סה"כ רשומות';
+const String gen_app_ent17_c26 = '🗂️';

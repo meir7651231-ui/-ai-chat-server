@@ -27,3 +27,7 @@ const String gen_app_ent64_c24 = 'נפתחה';
 const String gen_app_ent64_c25 = 'בטיפול';
 const String gen_app_ent64_c26 = 'הושלמה';
 const String gen_app_ent64_c27 = 'נסגרה';
+const String gen_app_ent64_c28 = 'סכום';
+const String gen_app_ent64_c29 = '🧮';
+const String gen_app_ent64_c30 = 'סה"כ רשומות';
+const String gen_app_ent64_c31 = '🗂️';

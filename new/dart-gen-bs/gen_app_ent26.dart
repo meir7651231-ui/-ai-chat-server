@@ -123,6 +123,7 @@ class _GenAppEnt26ScreenState extends State<GenAppEnt26Screen> {
       icon: gen_app_ent26_c2,
       bottomBar: DsPrimaryButton(label: _editId == null ? gen_app_ent26_c3 : gen_app_ent26_c4, onTap: _save),
       children: [
+        AnimatedBuilder(animation: appStore, builder: (context, _) => Padding(padding: const EdgeInsets.only(bottom: 12), child: Row(children: [Expanded(child: DsStat(label: gen_app_ent26_c0, value: appStore.count('app_ent26').toString(), sub: gen_app_ent26_c25, glyph: gen_app_ent26_c26))]))),
         DsSection(title: gen_app_ent26_c5, children: [
           DsSelect(label: gen_app_ent26_c9, entity: 'app_ent4', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
           DsSelect(label: gen_app_ent26_c10, entity: 'app_ent5', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),

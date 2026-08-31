@@ -21,3 +21,5 @@ const String gen_app_ent51_c18 = 'סיווג אזור';
 const String gen_app_ent51_c19 = 'מחיר';
 const String gen_app_ent51_c20 = 'סטטוס';
 const String gen_app_ent51_c21 = 'סטטוס בא';
+const String gen_app_ent51_c22 = 'סה"כ רשומות';
+const String gen_app_ent51_c23 = '🗂️';

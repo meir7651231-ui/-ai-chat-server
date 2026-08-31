@@ -25,3 +25,5 @@ const String gen_app_ent60_c22 = 'סטטוס בא';
 const String gen_app_ent60_c23 = 'ממתין';
 const String gen_app_ent60_c24 = 'אושר';
 const String gen_app_ent60_c25 = 'נדחה';
+const String gen_app_ent60_c26 = 'סה"כ רשומות';
+const String gen_app_ent60_c27 = '🗂️';

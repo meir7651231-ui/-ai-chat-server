@@ -31,3 +31,5 @@ const String gen_app_ent35_c28 = 'שנת לימודים';
 const String gen_app_ent35_c29 = 'מועדי תעודות';
 const String gen_app_ent35_c30 = 'מבקר';
 const String gen_app_ent35_c31 = 'תעודה';
+const String gen_app_ent35_c32 = 'סה"כ רשומות';
+const String gen_app_ent35_c33 = '🗂️';

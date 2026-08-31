@@ -29,3 +29,7 @@ const String gen_app_ent66_c26 = 'דווח';
 const String gen_app_ent66_c27 = 'בטיפול';
 const String gen_app_ent66_c28 = 'בתחקיר';
 const String gen_app_ent66_c29 = 'נסגר';
+const String gen_app_ent66_c30 = 'סכום';
+const String gen_app_ent66_c31 = '🧮';
+const String gen_app_ent66_c32 = 'סה"כ רשומות';
+const String gen_app_ent66_c33 = '🗂️';

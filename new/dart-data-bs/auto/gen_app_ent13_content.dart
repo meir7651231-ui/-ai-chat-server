@@ -30,3 +30,5 @@ const String gen_app_ent13_c27 = 'מלגה';
 const String gen_app_ent13_c28 = 'משפחה';
 const String gen_app_ent13_c29 = 'מסמך';
 const String gen_app_ent13_c30 = 'משפחה';
+const String gen_app_ent13_c31 = 'סה"כ רשומות';
+const String gen_app_ent13_c32 = '🗂️';

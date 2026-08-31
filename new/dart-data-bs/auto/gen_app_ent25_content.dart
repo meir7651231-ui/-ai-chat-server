@@ -22,3 +22,5 @@ const String gen_app_ent25_c19 = 'סטטוס';
 const String gen_app_ent25_c20 = 'סטטוס בא';
 const String gen_app_ent25_c21 = 'טיוטה';
 const String gen_app_ent25_c22 = 'הושלמה';
+const String gen_app_ent25_c23 = 'סה"כ רשומות';
+const String gen_app_ent25_c24 = '🗂️';

@@ -35,3 +35,7 @@ const String gen_app_ent46_c32 = 'אירוע';
 const String gen_app_ent46_c33 = 'תשלום';
 const String gen_app_ent46_c34 = 'אישור הורה';
 const String gen_app_ent46_c35 = 'תשלום';
+const String gen_app_ent46_c36 = 'סכום';
+const String gen_app_ent46_c37 = '🧮';
+const String gen_app_ent46_c38 = 'סה"כ רשומות';
+const String gen_app_ent46_c39 = '🗂️';

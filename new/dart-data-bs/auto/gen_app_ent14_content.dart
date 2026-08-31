@@ -42,3 +42,5 @@ const String gen_app_ent14_c39 = 'אירוע';
 const String gen_app_ent14_c40 = 'שכבות';
 const String gen_app_ent14_c41 = 'הודעה';
 const String gen_app_ent14_c42 = 'שכבה';
+const String gen_app_ent14_c43 = 'סה"כ רשומות';
+const String gen_app_ent14_c44 = '🗂️';

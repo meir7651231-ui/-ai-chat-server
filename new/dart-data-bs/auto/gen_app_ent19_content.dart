@@ -26,3 +26,5 @@ const String gen_app_ent19_c23 = 'אישור';
 const String gen_app_ent19_c24 = 'טיוטה';
 const String gen_app_ent19_c25 = 'אושרה';
 const String gen_app_ent19_c26 = 'פעילה';
+const String gen_app_ent19_c27 = 'סה"כ רשומות';
+const String gen_app_ent19_c28 = '🗂️';

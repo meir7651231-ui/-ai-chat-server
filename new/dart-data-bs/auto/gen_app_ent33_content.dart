@@ -20,3 +20,5 @@ const String gen_app_ent33_c17 = 'גרסה';
 const String gen_app_ent33_c18 = 'מקור';
 const String gen_app_ent33_c19 = 'סטטוס';
 const String gen_app_ent33_c20 = 'סטטוס בא';
+const String gen_app_ent33_c21 = 'סה"כ רשומות';
+const String gen_app_ent33_c22 = '🗂️';

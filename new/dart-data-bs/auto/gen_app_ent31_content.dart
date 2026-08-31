@@ -26,3 +26,5 @@ const String gen_app_ent31_c23 = 'נבדקה';
 const String gen_app_ent31_c24 = 'ציון פורסם';
 const String gen_app_ent31_c25 = 'מטלה';
 const String gen_app_ent31_c26 = 'מועד הגשה';
+const String gen_app_ent31_c27 = 'סה"כ רשומות';
+const String gen_app_ent31_c28 = '🗂️';

@@ -21,3 +21,7 @@ const String gen_app_ent23_c18 = 'סטטוס בא';
 const String gen_app_ent23_c19 = 'הוגשה';
 const String gen_app_ent23_c20 = 'אושרה';
 const String gen_app_ent23_c21 = 'נדחתה';
+const String gen_app_ent23_c22 = 'סכום';
+const String gen_app_ent23_c23 = '🧮';
+const String gen_app_ent23_c24 = 'סה"כ רשומות';
+const String gen_app_ent23_c25 = '🗂️';

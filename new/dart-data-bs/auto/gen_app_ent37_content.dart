@@ -33,3 +33,7 @@ const String gen_app_ent37_c30 = 'ציונים';
 const String gen_app_ent37_c31 = 'התאמה';
 const String gen_app_ent37_c32 = 'תוכנית תמיכה';
 const String gen_app_ent37_c33 = 'התאמות';
+const String gen_app_ent37_c34 = 'סכום';
+const String gen_app_ent37_c35 = '🧮';
+const String gen_app_ent37_c36 = 'סה"כ רשומות';
+const String gen_app_ent37_c37 = '🗂️';

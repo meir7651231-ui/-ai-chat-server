@@ -30,3 +30,5 @@ const String gen_app_ent3_c27 = 'תלמיד';
 const String gen_app_ent3_c28 = 'קמפוס';
 const String gen_app_ent3_c29 = 'הרשמה';
 const String gen_app_ent3_c30 = 'קמפוס';
+const String gen_app_ent3_c31 = 'סה"כ רשומות';
+const String gen_app_ent3_c32 = '🗂️';

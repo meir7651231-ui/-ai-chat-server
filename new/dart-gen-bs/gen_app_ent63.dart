@@ -123,6 +123,7 @@ class _GenAppEnt63ScreenState extends State<GenAppEnt63Screen> {
       icon: gen_app_ent63_c2,
       bottomBar: DsPrimaryButton(label: _editId == null ? gen_app_ent63_c3 : gen_app_ent63_c4, onTap: _save),
       children: [
+        AnimatedBuilder(animation: appStore, builder: (context, _) => Padding(padding: const EdgeInsets.only(bottom: 12), child: Row(children: [Expanded(child: DsStat(label: gen_app_ent63_c0, value: appStore.count('app_ent63').toString(), sub: gen_app_ent63_c24, glyph: gen_app_ent63_c25)), const SizedBox(width: 10), Expanded(child: DsStat(label: gen_app_ent63_c10, value: appStore.sum('app_ent63', gen_app_ent63_c10).toStringAsFixed(0), sub: gen_app_ent63_c20, glyph: gen_app_ent63_c21)), const SizedBox(width: 10), Expanded(child: DsStat(label: gen_app_ent63_c16, value: appStore.sum('app_ent63', gen_app_ent63_c16).toStringAsFixed(0), sub: gen_app_ent63_c22, glyph: gen_app_ent63_c23))]))),
         DsSection(title: gen_app_ent63_c5, children: [
           DsField(label: gen_app_ent63_c9, hint: '', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
           DsNumberField(label: gen_app_ent63_c10, value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),

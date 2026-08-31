@@ -39,3 +39,7 @@ const String gen_app_ent8_c36 = 'בקשת קבלה';
 const String gen_app_ent8_c37 = 'מועמד';
 const String gen_app_ent8_c38 = 'רשימת המתנה';
 const String gen_app_ent8_c39 = 'מועמד';
+const String gen_app_ent8_c40 = 'סכום';
+const String gen_app_ent8_c41 = '🧮';
+const String gen_app_ent8_c42 = 'סה"כ רשומות';
+const String gen_app_ent8_c43 = '🗂️';

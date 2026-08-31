@@ -19,3 +19,5 @@ const String gen_app_ent20_c16 = 'מדד';
 const String gen_app_ent20_c17 = 'מטלות';
 const String gen_app_ent20_c18 = 'מבחנים';
 const String gen_app_ent20_c19 = 'ציון';
+const String gen_app_ent20_c20 = 'סה"כ רשומות';
+const String gen_app_ent20_c21 = '🗂️';

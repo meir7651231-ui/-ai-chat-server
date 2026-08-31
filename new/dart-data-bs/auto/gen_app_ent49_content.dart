@@ -16,3 +16,7 @@ const String gen_app_ent49_c13 = 'מגבלת השאלה';
 const String gen_app_ent49_c14 = 'קנסות';
 const String gen_app_ent49_c15 = 'סטטוס';
 const String gen_app_ent49_c16 = 'סטטוס בא';
+const String gen_app_ent49_c17 = 'סכום';
+const String gen_app_ent49_c18 = '🧮';
+const String gen_app_ent49_c19 = 'סה"כ רשומות';
+const String gen_app_ent49_c20 = '🗂️';

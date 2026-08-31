@@ -17,3 +17,5 @@ const String gen_app_ent24_c14 = 'היעדרות';
 const String gen_app_ent24_c15 = 'איחור';
 const String gen_app_ent24_c16 = 'מיקום';
 const String gen_app_ent24_c17 = 'אישור';
+const String gen_app_ent24_c18 = 'סה"כ רשומות';
+const String gen_app_ent24_c19 = '🗂️';

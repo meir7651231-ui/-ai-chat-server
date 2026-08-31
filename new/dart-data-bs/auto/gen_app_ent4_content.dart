@@ -48,3 +48,5 @@ const String gen_app_ent4_c45 = 'חיוב';
 const String gen_app_ent4_c46 = 'שנת לימודים';
 const String gen_app_ent4_c47 = 'מסמך';
 const String gen_app_ent4_c48 = 'שנת לימודים';
+const String gen_app_ent4_c49 = 'סה"כ רשומות';
+const String gen_app_ent4_c50 = '🗂️';

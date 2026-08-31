@@ -124,6 +124,7 @@ class _GenAppEnt7ScreenState extends State<GenAppEnt7Screen> {
       icon: gen_app_ent7_c2,
       bottomBar: DsPrimaryButton(label: _editId == null ? gen_app_ent7_c3 : gen_app_ent7_c4, onTap: _save),
       children: [
+        AnimatedBuilder(animation: appStore, builder: (context, _) => Padding(padding: const EdgeInsets.only(bottom: 12), child: Row(children: [Expanded(child: DsStat(label: gen_app_ent7_c0, value: appStore.count('app_ent7').toString(), sub: gen_app_ent7_c44, glyph: gen_app_ent7_c45)), const SizedBox(width: 10), Expanded(child: DsStat(label: gen_app_ent7_c9, value: appStore.sum('app_ent7', gen_app_ent7_c9).toStringAsFixed(0), sub: gen_app_ent7_c40, glyph: gen_app_ent7_c41)), const SizedBox(width: 10), Expanded(child: DsStat(label: gen_app_ent7_c22, value: appStore.sum('app_ent7', gen_app_ent7_c22).toStringAsFixed(0), sub: gen_app_ent7_c42, glyph: gen_app_ent7_c43))]))),
         DsWorkflow(steps: const [gen_app_ent7_c28, gen_app_ent7_c29, gen_app_ent7_c30, gen_app_ent7_c31, gen_app_ent7_c32, gen_app_ent7_c33, gen_app_ent7_c34, gen_app_ent7_c35, gen_app_ent7_c36, gen_app_ent7_c37, gen_app_ent7_c38, gen_app_ent7_c39], current: 0),
         DsSection(title: gen_app_ent7_c5, children: [
           DsNumberField(label: gen_app_ent7_c9, value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),

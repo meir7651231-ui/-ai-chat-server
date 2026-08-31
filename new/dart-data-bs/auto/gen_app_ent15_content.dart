@@ -62,3 +62,5 @@ const String gen_app_ent15_c59 = 'הודעה';
 const String gen_app_ent15_c60 = 'כיתה';
 const String gen_app_ent15_c61 = 'מסמך';
 const String gen_app_ent15_c62 = 'כיתה';
+const String gen_app_ent15_c63 = 'סה"כ רשומות';
+const String gen_app_ent15_c64 = '🗂️';

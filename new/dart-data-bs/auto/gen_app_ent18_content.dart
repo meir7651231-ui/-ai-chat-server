@@ -48,3 +48,5 @@ const String gen_app_ent18_c45 = 'התאמה';
 const String gen_app_ent18_c46 = 'מקצוע';
 const String gen_app_ent18_c47 = 'בוגר';
 const String gen_app_ent18_c48 = 'מקצוע';
+const String gen_app_ent18_c49 = 'סה"כ רשומות';
+const String gen_app_ent18_c50 = '🗂️';

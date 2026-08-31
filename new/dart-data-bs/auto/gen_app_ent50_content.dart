@@ -21,3 +21,7 @@ const String gen_app_ent50_c18 = 'סטטוס';
 const String gen_app_ent50_c19 = 'סטטוס בא';
 const String gen_app_ent50_c20 = 'מסלול הסעה';
 const String gen_app_ent50_c21 = 'אוטובוס';
+const String gen_app_ent50_c22 = 'סכום';
+const String gen_app_ent50_c23 = '🧮';
+const String gen_app_ent50_c24 = 'סה"כ רשומות';
+const String gen_app_ent50_c25 = '🗂️';

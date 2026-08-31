@@ -17,3 +17,5 @@ const String gen_app_ent57_c14 = 'כשרות';
 const String gen_app_ent57_c15 = 'מחיר';
 const String gen_app_ent57_c16 = 'זמינות';
 const String gen_app_ent57_c17 = 'שכבות';
+const String gen_app_ent57_c18 = 'סה"כ רשומות';
+const String gen_app_ent57_c19 = '🗂️';

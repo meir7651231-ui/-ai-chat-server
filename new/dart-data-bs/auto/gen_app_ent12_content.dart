@@ -33,3 +33,5 @@ const String gen_app_ent12_c30 = 'שיוך הסעה';
 const String gen_app_ent12_c31 = 'אפוטרופוס';
 const String gen_app_ent12_c32 = 'מורשה איסוף';
 const String gen_app_ent12_c33 = 'אישור אפוטרופוס';
+const String gen_app_ent12_c34 = 'סה"כ רשומות';
+const String gen_app_ent12_c35 = '🗂️';

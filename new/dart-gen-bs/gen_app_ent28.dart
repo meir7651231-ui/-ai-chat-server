@@ -116,6 +116,7 @@ class _GenAppEnt28ScreenState extends State<GenAppEnt28Screen> {
       icon: gen_app_ent28_c2,
       bottomBar: DsPrimaryButton(label: _editId == null ? gen_app_ent28_c3 : gen_app_ent28_c4, onTap: _save),
       children: [
+        AnimatedBuilder(animation: appStore, builder: (context, _) => Padding(padding: const EdgeInsets.only(bottom: 12), child: Row(children: [Expanded(child: DsStat(label: gen_app_ent28_c0, value: appStore.count('app_ent28').toString(), sub: gen_app_ent28_c30, glyph: gen_app_ent28_c31))]))),
         DsWorkflow(steps: const [gen_app_ent28_c21, gen_app_ent28_c22, gen_app_ent28_c23, gen_app_ent28_c24, gen_app_ent28_c25, gen_app_ent28_c26, gen_app_ent28_c27], current: 0),
         DsSection(title: gen_app_ent28_c5, children: [
           DsSelect(label: gen_app_ent28_c9, entity: 'app_ent11', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),

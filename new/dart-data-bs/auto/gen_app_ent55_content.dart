@@ -19,3 +19,5 @@ const String gen_app_ent55_c16 = 'סטטוס';
 const String gen_app_ent55_c17 = 'סטטוס בא';
 const String gen_app_ent55_c18 = 'אפוטרופוס';
 const String gen_app_ent55_c19 = 'מורשה איסוף';
+const String gen_app_ent55_c20 = 'סה"כ רשומות';
+const String gen_app_ent55_c21 = '🗂️';

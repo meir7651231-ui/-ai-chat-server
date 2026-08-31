@@ -17,3 +17,5 @@ const String gen_app_ent43_c14 = 'אחסון';
 const String gen_app_ent43_c15 = 'תוקף';
 const String gen_app_ent43_c16 = 'מסמך';
 const String gen_app_ent43_c17 = 'חתימה';
+const String gen_app_ent43_c18 = 'סה"כ רשומות';
+const String gen_app_ent43_c19 = '🗂️';

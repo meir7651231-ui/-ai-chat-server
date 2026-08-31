@@ -23,3 +23,7 @@ const String gen_app_ent69_c20 = 'תוקף';
 const String gen_app_ent69_c21 = 'אצווה';
 const String gen_app_ent69_c22 = 'סטטוס';
 const String gen_app_ent69_c23 = 'סטטוס בא';
+const String gen_app_ent69_c24 = 'סכום';
+const String gen_app_ent69_c25 = '🧮';
+const String gen_app_ent69_c26 = 'סה"כ רשומות';
+const String gen_app_ent69_c27 = '🗂️';

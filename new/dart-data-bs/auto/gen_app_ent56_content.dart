@@ -21,3 +21,5 @@ const String gen_app_ent56_c18 = 'סטטוס בא';
 const String gen_app_ent56_c19 = 'מבוקש';
 const String gen_app_ent56_c20 = 'אושר';
 const String gen_app_ent56_c21 = 'בוצע';
+const String gen_app_ent56_c22 = 'סה"כ רשומות';
+const String gen_app_ent56_c23 = '🗂️';

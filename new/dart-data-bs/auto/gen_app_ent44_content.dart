@@ -31,3 +31,7 @@ const String gen_app_ent44_c28 = 'משפחה';
 const String gen_app_ent44_c29 = 'חיובים';
 const String gen_app_ent44_c30 = 'חשבונית';
 const String gen_app_ent44_c31 = 'סוג חיוב';
+const String gen_app_ent44_c32 = 'סכום';
+const String gen_app_ent44_c33 = '🧮';
+const String gen_app_ent44_c34 = 'סה"כ רשומות';
+const String gen_app_ent44_c35 = '🗂️';

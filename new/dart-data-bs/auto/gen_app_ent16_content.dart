@@ -17,3 +17,5 @@ const String gen_app_ent16_c14 = 'שעות';
 const String gen_app_ent16_c15 = 'חדר';
 const String gen_app_ent16_c16 = 'סטטוס';
 const String gen_app_ent16_c17 = 'סטטוס בא';
+const String gen_app_ent16_c18 = 'סה"כ רשומות';
+const String gen_app_ent16_c19 = '🗂️';

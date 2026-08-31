@@ -127,6 +127,7 @@ class _GenAppEnt13ScreenState extends State<GenAppEnt13Screen> {
       icon: gen_app_ent13_c2,
       bottomBar: DsPrimaryButton(label: _editId == null ? gen_app_ent13_c3 : gen_app_ent13_c4, onTap: _save),
       children: [
+        AnimatedBuilder(animation: appStore, builder: (context, _) => Padding(padding: const EdgeInsets.only(bottom: 12), child: Row(children: [Expanded(child: DsStat(label: gen_app_ent13_c0, value: appStore.count('app_ent13').toString(), sub: gen_app_ent13_c31, glyph: gen_app_ent13_c32))]))),
         DsSection(title: gen_app_ent13_c5, children: [
           DsField(label: gen_app_ent13_c9, hint: '', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
           DsMultiSelect(label: gen_app_ent13_c10, entity: 'app_ent11', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),

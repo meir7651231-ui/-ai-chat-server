@@ -26,3 +26,5 @@ const String gen_app_ent22_c23 = 'טיוטה';
 const String gen_app_ent22_c24 = 'נחתם';
 const String gen_app_ent22_c25 = 'פעיל';
 const String gen_app_ent22_c26 = 'הסתיים';
+const String gen_app_ent22_c27 = 'סה"כ רשומות';
+const String gen_app_ent22_c28 = '🗂️';

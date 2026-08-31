@@ -21,3 +21,5 @@ const String gen_app_ent48_c18 = 'מחיר';
 const String gen_app_ent48_c19 = 'גיל מומלץ';
 const String gen_app_ent48_c20 = 'סטטוס';
 const String gen_app_ent48_c21 = 'סטטוס בא';
+const String gen_app_ent48_c22 = 'סה"כ רשומות';
+const String gen_app_ent48_c23 = '🗂️';

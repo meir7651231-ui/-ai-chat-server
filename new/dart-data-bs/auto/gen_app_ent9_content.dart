@@ -28,3 +28,5 @@ const String gen_app_ent9_c25 = 'בבדיקה';
 const String gen_app_ent9_c26 = 'ועדה';
 const String gen_app_ent9_c27 = 'אושרה';
 const String gen_app_ent9_c28 = 'נדחתה';
+const String gen_app_ent9_c29 = 'סה"כ רשומות';
+const String gen_app_ent9_c30 = '🗂️';

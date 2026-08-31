@@ -29,3 +29,5 @@ const String gen_app_ent61_c26 = 'נשלחה';
 const String gen_app_ent61_c27 = 'נקראה';
 const String gen_app_ent61_c28 = 'אירוע חירום';
 const String gen_app_ent61_c29 = 'הודעות';
+const String gen_app_ent61_c30 = 'סה"כ רשומות';
+const String gen_app_ent61_c31 = '🗂️';

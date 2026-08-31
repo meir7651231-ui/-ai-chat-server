@@ -24,3 +24,5 @@ const String gen_app_ent26_c21 = 'ציוד';
 const String gen_app_ent26_c22 = 'סוג שיעור';
 const String gen_app_ent26_c23 = 'סטטוס';
 const String gen_app_ent26_c24 = 'סטטוס בא';
+const String gen_app_ent26_c25 = 'סה"כ רשומות';
+const String gen_app_ent26_c26 = '🗂️';

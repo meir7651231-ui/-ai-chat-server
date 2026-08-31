@@ -33,3 +33,5 @@ const String gen_app_ent34_c30 = 'אפוטרופוס';
 const String gen_app_ent34_c31 = 'מורשה ציונים';
 const String gen_app_ent34_c32 = 'תעודה';
 const String gen_app_ent34_c33 = 'ציונים';
+const String gen_app_ent34_c34 = 'סה"כ רשומות';
+const String gen_app_ent34_c35 = '🗂️';

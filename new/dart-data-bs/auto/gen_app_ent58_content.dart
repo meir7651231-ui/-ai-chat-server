@@ -18,3 +18,5 @@ const String gen_app_ent58_c15 = 'סטטוס';
 const String gen_app_ent58_c16 = 'סטטוס בא';
 const String gen_app_ent58_c17 = 'הוזמן';
 const String gen_app_ent58_c18 = 'סופק';
+const String gen_app_ent58_c19 = 'סה"כ רשומות';
+const String gen_app_ent58_c20 = '🗂️';

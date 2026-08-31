@@ -29,3 +29,5 @@ const String gen_app_ent28_c26 = 'נעדר לא מוצדק';
 const String gen_app_ent28_c27 = 'מקוון';
 const String gen_app_ent28_c28 = 'תעודה';
 const String gen_app_ent28_c29 = 'נוכחות';
+const String gen_app_ent28_c30 = 'סה"כ רשומות';
+const String gen_app_ent28_c31 = '🗂️';

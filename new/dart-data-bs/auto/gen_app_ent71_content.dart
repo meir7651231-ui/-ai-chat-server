@@ -23,3 +23,5 @@ const String gen_app_ent71_c20 = 'תרומות';
 const String gen_app_ent71_c21 = 'אירועים';
 const String gen_app_ent71_c22 = 'סטטוס';
 const String gen_app_ent71_c23 = 'סטטוס בא';
+const String gen_app_ent71_c24 = 'סה"כ רשומות';
+const String gen_app_ent71_c25 = '🗂️';

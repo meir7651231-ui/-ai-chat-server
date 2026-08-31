@@ -45,3 +45,7 @@ const String gen_app_ent2_c42 = 'בקשת רכש';
 const String gen_app_ent2_c43 = 'בית ספר';
 const String gen_app_ent2_c44 = 'מסמך';
 const String gen_app_ent2_c45 = 'בית ספר';
+const String gen_app_ent2_c46 = 'סכום';
+const String gen_app_ent2_c47 = '🧮';
+const String gen_app_ent2_c48 = 'סה"כ רשומות';
+const String gen_app_ent2_c49 = '🗂️';

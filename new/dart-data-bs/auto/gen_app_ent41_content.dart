@@ -19,3 +19,5 @@ const String gen_app_ent41_c16 = 'תוכנית חירום';
 const String gen_app_ent41_c17 = 'איש קשר';
 const String gen_app_ent41_c18 = 'תאריך עדכון';
 const String gen_app_ent41_c19 = 'הרשאות';
+const String gen_app_ent41_c20 = 'סה"כ רשומות';
+const String gen_app_ent41_c21 = '🗂️';

@@ -24,3 +24,7 @@ const String gen_app_ent67_c21 = 'בקשה';
 const String gen_app_ent67_c22 = 'אושרה';
 const String gen_app_ent67_c23 = 'הוזמן';
 const String gen_app_ent67_c24 = 'נדחתה';
+const String gen_app_ent67_c25 = 'סכום';
+const String gen_app_ent67_c26 = '🧮';
+const String gen_app_ent67_c27 = 'סה"כ רשומות';
+const String gen_app_ent67_c28 = '🗂️';

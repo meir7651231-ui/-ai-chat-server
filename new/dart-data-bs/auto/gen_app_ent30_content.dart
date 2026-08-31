@@ -35,3 +35,5 @@ const String gen_app_ent30_c32 = 'שיעור';
 const String gen_app_ent30_c33 = 'מטלות';
 const String gen_app_ent30_c34 = 'הגשה';
 const String gen_app_ent30_c35 = 'מטלה';
+const String gen_app_ent30_c36 = 'סה"כ רשומות';
+const String gen_app_ent30_c37 = '🗂️';
