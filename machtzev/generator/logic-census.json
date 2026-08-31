@@ -1,5 +1,15 @@
 [
  {
+  "file": "dart-maor/absence-reason-chips.dart",
+  "name": "absenceReasonChips",
+  "ret": "List<String>",
+  "params": [
+   "String Function(String) term"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/academic-year-label.dart",
   "name": "academicYearLabel",
   "ret": "String",
@@ -8,6 +18,18 @@
    "DateTime Function(String) atNoon"
   ],
   "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/access_password_matches.dart",
+  "name": "accessPasswordMatches",
+  "ret": "bool",
+  "params": [
+   "String",
+   "String",
+   "String Function(String) hashAccessPassword"
+  ],
+  "argc": 3,
   "wireable": false
  },
  {
@@ -32,6 +54,17 @@
   "wireable": false
  },
  {
+  "file": "dart/action_he.dart",
+  "name": "actionHe",
+  "ret": "String?",
+  "params": [
+   "String",
+   "ActionDescriptor? Function(String) actionDescriptor"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart/action_id_of.dart",
   "name": "actionIdOf",
   "ret": "String?",
@@ -39,6 +72,42 @@
    "Map<String, dynamic>"
   ],
   "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart/action_ids_for.dart",
+  "name": "actionIdsFor",
+  "ret": "Set<String>",
+  "params": [
+   "String",
+   "Iterable<String>? Function(String id) allowedActionsOf"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/action_label_he.dart",
+  "name": "actionLabelHe",
+  "ret": "String",
+  "params": [
+   "String",
+   "List<( String id, String labelHe )> actions"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/portfolio-active-by-month.dart",
+  "name": "activeByMonth",
+  "ret": "List<int>",
+  "params": [
+   "List",
+   "String",
+   "int",
+   "num",
+   "Map Function(dynamic, String, num, int) donorScan"
+  ],
+  "argc": 5,
   "wireable": false
  },
  {
@@ -70,6 +139,17 @@
   ],
   "argc": 1,
   "wireable": true
+ },
+ {
+  "file": "dart/advisory_he.dart",
+  "name": "advisoryHe",
+  "ret": "String",
+  "params": [
+   "int",
+   "String Function(String) term"
+  ],
+  "argc": 2,
+  "wireable": false
  },
  {
   "file": "dart-maor/age-of.dart",
@@ -125,7 +205,7 @@
   "ret": "String",
   "params": [
    "dynamic",
-   "[dynamic currency = '₪']"
+   "dynamic"
   ],
   "argc": 2,
   "wireable": false
@@ -141,13 +221,30 @@
   "wireable": true
  },
  {
+  "file": "dart-maor/annual-all-lines.dart",
+  "name": "annualAllLines",
+  "ret": "List<String>",
+  "params": [
+   "String",
+   "String?",
+   "String",
+   "List<Map<String, dynamic>>",
+   "dynamic",
+   "List<dynamic> Function(dynamic donations, String year) donationsOfYear",
+   "List<String> Function(Map<String, dynamic> input) annualReportLines",
+   "String Function(String) term"
+  ],
+  "argc": 8,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/annual-report-lines.dart",
   "name": "annualReportLines",
   "ret": "List<String>",
   "params": [
    "Map<String, dynamic>",
    "List<dynamic> Function(dynamic donations, dynamic year) donationsOfYear",
-   "String Function(dynamic amount, [dynamic cur]) money"
+   "String Function(dynamic amount,  dynamic cur ) money"
   ],
   "argc": 3,
   "wireable": false
@@ -269,6 +366,32 @@
   "wireable": false
  },
  {
+  "file": "dart/assistant_categories.dart",
+  "name": "assistantCategories",
+  "ret": "List<String>",
+  "params": [
+   "Iterable<String>"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart/assistant_intent_prompt.dart",
+  "name": "assistantIntentPrompt",
+  "ret": "String",
+  "params": [
+   "List<IntentTurn>",
+   "String",
+   "int",
+   "List<String>",
+   "List<( String key, String name )> recipes",
+   "String Function(String text,   int maxLen ) promptSafeText",
+   "Map<String, String>"
+  ],
+  "argc": 7,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/attach-charges-bulk.dart",
   "name": "attachChargesBulk",
   "ret": "Map<String, dynamic>",
@@ -299,6 +422,67 @@
    "Map Function(Map, Map) withNedarimHok"
   ],
   "argc": 8,
+  "wireable": false
+ },
+ {
+  "file": "dart/attention_items.dart",
+  "name": "attentionItems",
+  "ret": "List<AttentionItem>",
+  "params": [
+   "AttentionInput",
+   "String Function(String) term",
+   "String Function(String key, String fallback) termOf",
+   "int",
+   "int"
+  ],
+  "argc": 5,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/audit-cat-colors.dart",
+  "name": "auditCatColors",
+  "ret": "Map<String, List<String>>",
+  "params": [
+   "String Function(String) term"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart/audit_line.dart",
+  "name": "auditLine",
+  "ret": "String",
+  "params": [
+   "String",
+   "String",
+   "String"
+  ],
+  "argc": 3,
+  "wireable": true
+ },
+ {
+  "file": "dart-maor/audit-report-lines.dart",
+  "name": "auditReportLines",
+  "ret": "List<String>",
+  "params": [
+   "String?",
+   "Iterable<Map<String, String>>",
+   "String",
+   "String Function(String) term"
+  ],
+  "argc": 4,
+  "wireable": false
+ },
+ {
+  "file": "dart/audit_rows.dart",
+  "name": "auditRows",
+  "ret": "QualityReport",
+  "params": [
+   "List<QualityRow>",
+   "String Function(String) term",
+   "String Function(String) normName"
+  ],
+  "argc": 3,
   "wireable": false
  },
  {
@@ -344,6 +528,34 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/ayin-advance-label.dart",
+  "name": "ayinAdvanceLabel",
+  "ret": "String",
+  "params": [
+   "dynamic",
+   "Map<String, dynamic>",
+   "String Function(dynamic cfg, String st) stageLabel",
+   "String Function(String) term"
+  ],
+  "argc": 4,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/ayin-all-rows.dart",
+  "name": "ayinAllRows",
+  "ret": "List<List<Object?>>",
+  "params": [
+   "Object?",
+   "List<dynamic>",
+   "String Function(Object? cfg) unitLabel",
+   "Map<dynamic, dynamic> Function() emptyAyin",
+   "String Function(Object? cfg, Object? stage) stageLabel",
+   "String Function(String) term"
+  ],
+  "argc": 6,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/ayin-board-items.dart",
   "name": "ayinBoardItems",
   "ret": "List<Map<String, Object?>>",
@@ -352,6 +564,24 @@
    "Map<String, Object?> Function() emptyAyin"
   ],
   "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/ayin-daily-rows.dart",
+  "name": "ayinDailyRows",
+  "ret": "List<List<Object?>>",
+  "params": [
+   "Object?",
+   "List<dynamic>",
+   "String",
+   "String Function(Object? cfg) unitLabel",
+   "String Function(Object? cfg) itemLabel",
+   "Map<dynamic, dynamic> Function() emptyAyin",
+   "num Function(Map<dynamic, dynamic> a) eyesTotal",
+   "String Function(Object? cfg, Object? stage) stageLabel",
+   "String Function(String) term"
+  ],
+  "argc": 9,
   "wireable": false
  },
  {
@@ -398,6 +628,45 @@
   "wireable": true
  },
  {
+  "file": "dart/batch_reject_he.dart",
+  "name": "batchRejectHe",
+  "ret": "String",
+  "params": [
+   "int",
+   "String Function(String) term",
+   "int"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/beneficiary-label.dart",
+  "name": "beneficiaryLabel",
+  "ret": "String",
+  "params": [
+   "Map<String, dynamic>",
+   "Map<String, dynamic>",
+   "Map<String, dynamic>?",
+   "String Function(Map<String, dynamic> config, String key, String fallback) termOf",
+   "String Function(String) term"
+  ],
+  "argc": 5,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/block-reason.dart",
+  "name": "blockReason",
+  "ret": "String?",
+  "params": [
+   "DateTime",
+   "( int day, String month, int year ) Function(DateTime d) hebParts",
+   "Map<String, String>",
+   "bool"
+  ],
+  "argc": 4,
+  "wireable": false
+ },
+ {
   "file": "dart/bom_rows.dart",
   "name": "bomRows",
   "ret": "List<BomRow>",
@@ -429,6 +698,17 @@
   "wireable": false
  },
  {
+  "file": "dart/bore_meters.dart",
+  "name": "boreMeters",
+  "ret": "double?",
+  "params": [
+   "ConnectorEnd",
+   "Map<String, int>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/boxes-overview.dart",
   "name": "boxesOverview",
   "ret": "List<Map<String, dynamic>>",
@@ -455,6 +735,18 @@
   "wireable": false
  },
  {
+  "file": "dart/branch_label.dart",
+  "name": "branchLabel",
+  "ret": "String",
+  "params": [
+   "int",
+   "String Function(String) term",
+   "List<String>"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
   "file": "dart/brand_by_id.dart",
   "name": "brandById",
   "ret": "Brand?",
@@ -475,12 +767,36 @@
   "wireable": false
  },
  {
+  "file": "dart/broadcast_row.dart",
+  "name": "broadcastRow",
+  "ret": "DiffLine",
+  "params": [
+   "List<ConfigOp>",
+   "String Function(String) term",
+   "String Function(ConfigOpKind kind) kindEmoji",
+   "String Function(ConfigOpKind kind, bool allColor) kindPlural"
+  ],
+  "argc": 4,
+  "wireable": false
+ },
+ {
   "file": "dart/build_cohort.dart",
   "name": "buildCohort",
   "ret": "RetentionCohort",
   "params": [
    "DateTime",
    "List<Set<DateTime>>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/commands-build-commands.dart",
+  "name": "buildCommands",
+  "ret": "List<Map<String, dynamic>>",
+  "params": [
+   "Map<String, dynamic>",
+   "String Function(String) term"
   ],
   "argc": 2,
   "wireable": false
@@ -533,6 +849,21 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/build-reenroll-rows.dart",
+  "name": "buildReenrollRows",
+  "ret": "List<Map<String, Object?>>",
+  "params": [
+   "Map<String, Object?>",
+   "Map<String, Object?>?",
+   "bool Function(Map<String, Object?> e) isRenewed",
+   "String Function(Map<String, Object?> e) renewOf",
+   "Object? Function(Map<String, Object?> e) enrollSummary",
+   "Map<String, Object?> Function(Map<String, Object?> db, Object? id) findMember"
+  ],
+  "argc": 6,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/build-slots.dart",
   "name": "buildSlots",
   "ret": "List<Map<String, dynamic>>",
@@ -547,9 +878,21 @@
    "List<dynamic> Function(dynamic c) sessionsOf",
    "bool Function(dynamic c, dynamic iso) courseOnDate",
    "String Function(dynamic cfg, dynamic key, dynamic fb) termOf",
-   "[\n  bool cleaningOn = true,\n]"
+   "bool"
   ],
   "argc": 11,
+  "wireable": false
+ },
+ {
+  "file": "dart/build_tasks_gantt.dart",
+  "name": "buildTasksGantt",
+  "ret": "TasksGanttLayout",
+  "params": [
+   "List<TaskItem>",
+   "int Function(DateTime a, DateTime b) daysBetweenDst",
+   "int Function(TaskItem t) donePercent"
+  ],
+  "argc": 3,
   "wireable": false
  },
  {
@@ -624,6 +967,19 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/campaign-csv-rows.dart",
+  "name": "campaignCsvRows",
+  "ret": "List<List<String>>",
+  "params": [
+   "Map<String, dynamic>",
+   "String Function(dynamic) nameOf",
+   "Map<dynamic, dynamic>",
+   "String Function(String) term"
+  ],
+  "argc": 4,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/campaign-progress.dart",
   "name": "campaignProgress",
   "ret": "Map<String, num>",
@@ -652,9 +1008,35 @@
   "ret": "bool",
   "params": [
    "List<Object?>?",
-   "[int photoMax = 5]"
+   "int"
   ],
   "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/can_connect.dart",
+  "name": "canConnect",
+  "ret": "bool",
+  "params": [
+   "ConnPart",
+   "ConnPart",
+   "bool? Function(String skuA, String skuB) verifiedCompat = _noVerified"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/candidate-supporters-for-charge.dart",
+  "name": "candidateSupportersForCharge",
+  "ret": "List<Map<String, Object?>>",
+  "params": [
+   "Map<String, Object?>",
+   "List<Map<String, Object?>>",
+   "List<String> Function(Map<String, Object?>) keysOf",
+   "String Function(Object?) nameSortKey",
+   "int"
+  ],
+  "argc": 5,
   "wireable": false
  },
  {
@@ -669,6 +1051,87 @@
    "bool Function(Map<String, dynamic> config, String email) isAdminUser"
   ],
   "argc": 5,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/can-issue-receipt.dart",
+  "name": "canIssueReceipt",
+  "ret": "bool",
+  "params": [
+   "bool",
+   "bool",
+   "bool",
+   "bool"
+  ],
+  "argc": 4,
+  "wireable": true
+ },
+ {
+  "file": "dart/catalog_action_ids_for.dart",
+  "name": "catalogActionIdsFor",
+  "ret": "Set<String>",
+  "params": [
+   "String",
+   "bool",
+   "Iterable<CatalogAction>"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart/catalog_product_for_brand.dart",
+  "name": "catalogProductForBrand",
+  "ret": "LipskeyCatalogProduct?",
+  "params": [
+   "SmartBrand",
+   "Map<String, LipskeyCatalogProduct>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/category_id.dart",
+  "name": "categoryId",
+  "ret": "String",
+  "params": [
+   "String",
+   "String"
+  ],
+  "argc": 2,
+  "wireable": true
+ },
+ {
+  "file": "dart/cat_node_product_count.dart",
+  "name": "catNodeProductCount",
+  "ret": "int",
+  "params": [
+   "CatalogNode",
+   "Iterable<CatProduct>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/cat_value_label.dart",
+  "name": "catValueLabel",
+  "ret": "String",
+  "params": [
+   "String",
+   "String",
+   "Map<String, Map<String, String>>"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart/cert_expiry_status.dart",
+  "name": "certExpiryStatus",
+  "ret": "CertExpiryStatus",
+  "params": [
+   "DateTime",
+   "DateTime"
+  ],
+  "argc": 2,
   "wireable": false
  },
  {
@@ -742,14 +1205,39 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/cities.dart",
+  "name": "cities",
+  "ret": "Map<String, Map<String, dynamic>>",
+  "params": [
+   "String Function(String) term"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/clamp-scale.dart",
   "name": "clampScale",
   "ret": "num",
   "params": [
    "dynamic",
-   "[num min = 0.8, num max = 1.6]"
+   "num",
+   "num"
   ],
-  "argc": 2,
+  "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart/classify_scope.dart",
+  "name": "classifyScope",
+  "ret": "String?",
+  "params": [
+   "String",
+   "List<String>",
+   "List<String>",
+   "String",
+   "String? Function(Iterable<String> ids, String reply) matchId"
+  ],
+  "argc": 5,
   "wireable": false
  },
  {
@@ -820,13 +1308,32 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/cockpit-calls.dart",
+  "name": "cockpitCalls",
+  "ret": "List<Map<String, dynamic>>",
+  "params": [
+   "List",
+   "String",
+   "num",
+   "int",
+   "num Function(Map) supIls",
+   "num Function(Map) supUsd",
+   "String Function(Map) supLast",
+   "num Function(String, String) daysSince",
+   "List Function(List, String, int) cockpitAtRisk",
+   "String Function(String) term"
+  ],
+  "argc": 10,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/cockpit-collected-this-month.dart",
   "name": "cockpitCollectedThisMonth",
   "ret": "int",
   "params": [
    "List",
    "String",
-   "[num rate = 3.7]"
+   "num"
   ],
   "argc": 3,
   "wireable": false
@@ -851,6 +1358,32 @@
   ],
   "argc": 2,
   "wireable": true
+ },
+ {
+  "file": "dart-maor/cockpit-feed.dart",
+  "name": "cockpitFeed",
+  "ret": "List<Map<String, dynamic>>",
+  "params": [
+   "List",
+   "int",
+   "List Function(List) orgCalEntries",
+   "String Function(String) term"
+  ],
+  "argc": 4,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/cockpit-hok-tasks.dart",
+  "name": "cockpitHokTasks",
+  "ret": "List<Map<String, dynamic>>",
+  "params": [
+   "List",
+   "String",
+   "List Function(List, String) hokDue",
+   "String Function(String) term"
+  ],
+  "argc": 4,
+  "wireable": false
  },
  {
   "file": "dart-maor/cockpit-kpis.dart",
@@ -894,6 +1427,20 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/cockpit-thanks.dart",
+  "name": "cockpitThanks",
+  "ret": "List<Map<String, dynamic>>",
+  "params": [
+   "List",
+   "String",
+   "int",
+   "num Function(String, String) daysSince",
+   "String Function(String) term"
+  ],
+  "argc": 5,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/cockpit-work-list-text.dart",
   "name": "cockpitWorkListText",
   "ret": "String",
@@ -923,9 +1470,33 @@
    "String",
    "num",
    "String Function(dynamic) lastCollectionIso",
-   "[\n  Map<String, num>? rules,\n]"
+   "Map<String, num>?"
   ],
   "argc": 5,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/collections-csv-rows.dart",
+  "name": "collectionsCsvRows",
+  "ret": "List<List<Object>>",
+  "params": [
+   "Map<String, dynamic>",
+   "Map<String, dynamic>?",
+   "String Function(Map<String, dynamic> config, String key, String fallback) termOf",
+   "String Function(String) term"
+  ],
+  "argc": 4,
+  "wireable": false
+ },
+ {
+  "file": "dart/color_he.dart",
+  "name": "colorHe",
+  "ret": "String",
+  "params": [
+   "String",
+   "String Function(String) term"
+  ],
+  "argc": 2,
   "wireable": false
  },
  {
@@ -971,6 +1542,43 @@
   "wireable": true
  },
  {
+  "file": "dart/company_complements_for.dart",
+  "name": "companyComplementsFor",
+  "ret": "List<LipskeyCatalogProduct>",
+  "params": [
+   "LipskeyCatalogProduct",
+   "List<LipskeyCatalogProduct>",
+   "String Function(String) term"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart/compatible_with.dart",
+  "name": "compatibleWith",
+  "ret": "List<CompatNode>",
+  "params": [
+   "CompatNode",
+   "List<CompatNode>",
+   "bool Function(CompatNode a, CompatNode b) canConnect",
+   "bool Function(CompatNode p, int tempC) suitableForTemp",
+   "int"
+  ],
+  "argc": 5,
+  "wireable": false
+ },
+ {
+  "file": "dart/completion.dart",
+  "name": "completion",
+  "ret": "List<CompletionIssue>",
+  "params": [
+   "List<ProductConnectorSpec>",
+   "List<CompletionRule>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/component-counts.dart",
   "name": "componentCounts",
   "ret": "Map<String, int>",
@@ -991,7 +1599,7 @@
    "Object?",
    "Map Function(Object?, Object?) itemOf",
    "bool Function(Object?, Object?) holidayAllowed",
-   "Object? Function(Object?, Object?, [Object?]) assignmentRedeemed"
+   "Object? Function(Object?, Object?,  Object? ) assignmentRedeemed"
   ],
   "argc": 7,
   "wireable": false
@@ -1042,9 +1650,23 @@
    "Map<String, dynamic>",
    "String Function(String m) nameOf",
    "List<String>",
-   "[\n  List<Map<String, dynamic>> addons = const [],\n  String mode = 'subscription',\n]"
+   "List<Map<String, dynamic>>",
+   "String"
   ],
-  "argc": 6,
+  "argc": 7,
+  "wireable": false
+ },
+ {
+  "file": "dart/connection_fail_reason.dart",
+  "name": "connectionFailReason",
+  "ret": "String",
+  "params": [
+   "InferPart",
+   "InferPart",
+   "VerifiedView? Function(String sku) verifiedOf = _noVerified",
+   "Map<String, String>"
+  ],
+  "argc": 4,
   "wireable": false
  },
  {
@@ -1138,6 +1760,18 @@
   "wireable": false
  },
  {
+  "file": "dart/coupler.dart",
+  "name": "coupler",
+  "ret": "Map<String, double>",
+  "params": [
+   "int",
+   "Map<String, double> Function(int) base",
+   "double Function(double) r1"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/coupon-expiry.dart",
   "name": "couponExpiry",
   "ret": "String",
@@ -1147,6 +1781,32 @@
    "String Function(DateTime) isoOf"
   ],
   "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart/courier_day_stats.dart",
+  "name": "courierDayStats",
+  "ret": "CourierDayStats",
+  "params": [
+   "List<CourierDelivery>",
+   "String",
+   "DateTime"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/course-date-error.dart",
+  "name": "courseDateError",
+  "ret": "String?",
+  "params": [
+   "String?",
+   "String?",
+   "Object?",
+   "String Function(Object, String, String) termOf",
+   "String Function(String) term"
+  ],
+  "argc": 5,
   "wireable": false
  },
  {
@@ -1171,6 +1831,30 @@
    "OpenDek"
   ],
   "argc": 4,
+  "wireable": false
+ },
+ {
+  "file": "dart/critical_business_kind.dart",
+  "name": "criticalBusinessKind",
+  "ret": "CriticalKind?",
+  "params": [
+   "String Function(String) term",
+   "String",
+   "String"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart/critical_open.dart",
+  "name": "criticalOpen",
+  "ret": "int",
+  "params": [
+   "int",
+   "Set<String>",
+   "List<( bool satisfied, bool critical )> Function(\n          int tempC, Set<String> accessories)\n      compliance"
+  ],
+  "argc": 3,
   "wireable": false
  },
  {
@@ -1318,6 +2002,27 @@
   "wireable": true
  },
  {
+  "file": "dart/day_label.dart",
+  "name": "dayLabel",
+  "ret": "String",
+  "params": [
+   "int",
+   "String Function(String) term"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/day-letters.dart",
+  "name": "dayLetters",
+  "ret": "List<String>",
+  "params": [
+   "String Function(String) term"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/day-names.dart",
   "name": "dayNames",
   "ret": "List<String>",
@@ -1411,6 +2116,16 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/default-kit-labels.dart",
+  "name": "defaultKitLabels",
+  "ret": "List<String>",
+  "params": [
+   "String Function(String) term"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/default-prices.dart",
   "name": "defaultPrices",
   "ret": "Map<String, dynamic>",
@@ -1428,6 +2143,20 @@
    "AttributeDef"
   ],
   "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/deliveries-csv-rows.dart",
+  "name": "deliveriesCsvRows",
+  "ret": "List<List<String>>",
+  "params": [
+   "Map<String, dynamic>",
+   "dynamic",
+   "String Function(dynamic config, String key, String fallback) termOf",
+   "String Function(dynamic status) statusLabel",
+   "String Function(String) term"
+  ],
+  "argc": 5,
   "wireable": false
  },
  {
@@ -1459,7 +2188,7 @@
   "params": [
    "Map<String, dynamic>",
    "dynamic",
-   "[dynamic dayId]"
+   "dynamic"
   ],
   "argc": 3,
   "wireable": false
@@ -1475,6 +2204,29 @@
    "void Function(dynamic) downloadReceipt"
   ],
   "argc": 4,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/delivery-list-lines.dart",
+  "name": "deliveryListLines",
+  "ret": "List<String>",
+  "params": [
+   "List<Map<String, dynamic>>",
+   "String Function(dynamic status) statusLabel",
+   "String Function(String) term"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart/delivery_note_title.dart",
+  "name": "deliveryNoteTitle",
+  "ret": "String",
+  "params": [
+   "NoteOrder",
+   "String Function(String) term"
+  ],
+  "argc": 2,
   "wireable": false
  },
  {
@@ -1514,6 +2266,18 @@
    "dynamic Function(Map<String, dynamic> db) metaOf"
   ],
   "argc": 6,
+  "wireable": false
+ },
+ {
+  "file": "dart/directional_context.dart",
+  "name": "directionalContext",
+  "ret": "String",
+  "params": [
+   "List<String>",
+   "int",
+   "String Function(String) term"
+  ],
+  "argc": 3,
   "wireable": false
  },
  {
@@ -1622,6 +2386,32 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/don-cal-month-line.dart",
+  "name": "donCalMonthLine",
+  "ret": "String",
+  "params": [
+   "Iterable",
+   "bool Function(dynamic date) inMonth",
+   "Map?",
+   "String Function(Map config, String key, String fallback)? termOf",
+   "String Function(String) term"
+  ],
+  "argc": 5,
+  "wireable": false
+ },
+ {
+  "file": "dart/done_percent.dart",
+  "name": "donePercent",
+  "ret": "int",
+  "params": [
+   "List<Object?>",
+   "List<Object?>",
+   "String"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/done-today-for.dart",
   "name": "doneTodayFor",
   "ret": "int",
@@ -1635,15 +2425,47 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/intel-donor-intel.dart",
+  "name": "donorIntel",
+  "ret": "Map<String, dynamic>",
+  "params": [
+   "Map<String, dynamic>",
+   "String",
+   "num",
+   "int",
+   "Map<String, dynamic> Function(Map<String, dynamic>, String, num, int) donorScan",
+   "Map<String, dynamic> Function(Map<String, dynamic>, String) rfmFromScan",
+   "num Function(Map<String, dynamic>, String) churnFromScan",
+   "Map<String, dynamic>? Function(Map<String, dynamic>, String) forecastFromScan",
+   "Map<String, dynamic> Function(Map<String, dynamic>) trendFromScan"
+  ],
+  "argc": 9,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/intel-donor-scan.dart",
   "name": "donorScan",
   "ret": "Map<String, dynamic>",
   "params": [
    "Map<String, dynamic>",
    "String",
-   "[num rate = 3.7, int months = 12]"
+   "num",
+   "int"
   ],
-  "argc": 3,
+  "argc": 4,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/duplicate-course.dart",
+  "name": "duplicateCourse",
+  "ret": "Map<String, dynamic>",
+  "params": [
+   "Map<String, dynamic>",
+   "String",
+   "Map<String, dynamic>",
+   "String Function(String) term"
+  ],
+  "argc": 4,
   "wireable": false
  },
  {
@@ -1654,6 +2476,21 @@
    "Object?"
   ],
   "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart/edge_cost.dart",
+  "name": "edgeCost",
+  "ret": "int",
+  "params": [
+   "EdgeNode",
+   "EdgeNode",
+   "SpecView? Function(String sku) verifiedSpec = _noSpec",
+   "double? Function(String sku) minBoreMm = _noBore",
+   "bool Function(EndPart a, EndPart b) directMates = _directMatesDefault",
+   "bool Function(String categoryHe) isFitting = _isFittingDefault"
+  ],
+  "argc": 6,
   "wireable": false
  },
  {
@@ -1685,6 +2522,31 @@
   "wireable": false
  },
  {
+  "file": "dart/elbow_auto.dart",
+  "name": "elbowAuto",
+  "ret": "Map<String, double>",
+  "params": [
+   "int",
+   "int",
+   "Map<String, double> Function(int) miteredElbow",
+   "Map<String, double> Function(int,  int angle ) elbow"
+  ],
+  "argc": 4,
+  "wireable": false
+ },
+ {
+  "file": "dart/element_line.dart",
+  "name": "elementLine",
+  "ret": "String",
+  "params": [
+   "String",
+   "Iterable<String> Function(String id) propKeysFor",
+   "Iterable<String> Function(String id) actionIdsFor"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/eligible-assignments-for-day.dart",
   "name": "eligibleAssignmentsForDay",
   "ret": "List",
@@ -1708,11 +2570,35 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/employee-sign-up-error.dart",
+  "name": "employeeSignUpError",
+  "ret": "String",
+  "params": [
+   "String",
+   "String",
+   "String",
+   "String",
+   "String Function(String) term"
+  ],
+  "argc": 5,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/empty-diff.dart",
   "name": "emptyDiff",
   "ret": "bool",
   "params": [
    "Map"
+  ],
+  "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/empty-telephony-config.dart",
+  "name": "emptyTelephonyConfig",
+  "ret": "Map<String, dynamic>",
+  "params": [
+   "String Function(String) term"
   ],
   "argc": 1,
   "wireable": false
@@ -1757,6 +2643,19 @@
    "SupKeyMapOf"
   ],
   "argc": 5,
+  "wireable": false
+ },
+ {
+  "file": "dart/end_pair.dart",
+  "name": "endPair",
+  "ret": "ConnectResult",
+  "params": [
+   "ProductEnd",
+   "ProductEnd",
+   "List<CompatibilityRule>",
+   "String Function(String) normalizeSize"
+  ],
+  "argc": 4,
   "wireable": false
  },
  {
@@ -1806,6 +2705,17 @@
    "String Function(dynamic, int) groupLabelOf"
   ],
   "argc": 5,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/enroll-status-meta.dart",
+  "name": "enrollStatusMeta",
+  "ret": "Map<String, String>",
+  "params": [
+   "Map<String, dynamic>",
+   "String Function(String) term"
+  ],
+  "argc": 2,
   "wireable": false
  },
  {
@@ -1899,6 +2809,25 @@
   "wireable": false
  },
  {
+  "file": "dart/expand_scope.dart",
+  "name": "expandScope",
+  "ret": "List<String>",
+  "params": [
+   "String",
+   "Iterable<String> Function() elementIds",
+   "Iterable<String> Function(String id) actionIdsFor",
+   "String? Function(String raw) matchElementId",
+   "Iterable<String> Function(String token) scopeElementIds",
+   "String",
+   "String",
+   "String",
+   "String",
+   "String"
+  ],
+  "argc": 10,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/expiring-intakes.dart",
   "name": "expiringIntakes",
   "ret": "List<Map<String, dynamic>>",
@@ -1906,7 +2835,7 @@
    "Map<String, dynamic>",
    "String",
    "String Function(DateTime) isoOf",
-   "[\n  int windowDays = 7,\n]"
+   "int"
   ],
   "argc": 4,
   "wireable": false
@@ -1923,6 +2852,24 @@
    "bool Function(dynamic tenant, String key) featureOn"
   ],
   "argc": 5,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/explain-one.dart",
+  "name": "explainOne",
+  "ret": "Map<String, dynamic>",
+  "params": [
+   "dynamic",
+   "dynamic",
+   "dynamic",
+   "dynamic",
+   "dynamic",
+   "dynamic",
+   "dynamic",
+   "dynamic",
+   "String Function(String) term"
+  ],
+  "argc": 9,
   "wireable": false
  },
  {
@@ -1978,6 +2925,28 @@
    "String Function(dynamic config, dynamic key, dynamic fallback) termOf"
   ],
   "argc": 4,
+  "wireable": false
+ },
+ {
+  "file": "dart/families_by_kind.dart",
+  "name": "familiesByKind",
+  "ret": "List<VariantFamily>",
+  "params": [
+   "AttrKind?",
+   "List<VariantFamily>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/families-import-format-rows.dart",
+  "name": "familiesImportFormatRows",
+  "ret": "List<List<dynamic>>",
+  "params": [
+   "Map<String, dynamic>",
+   "String Function(String) term"
+  ],
+  "argc": 2,
   "wireable": false
  },
  {
@@ -2045,6 +3014,29 @@
    "bool Function(Map<String, dynamic> cfg, String moduleKey) moduleOn"
   ],
   "argc": 4,
+  "wireable": false
+ },
+ {
+  "file": "dart/few_shot_example.dart",
+  "name": "fewShotExample",
+  "ret": "String?",
+  "params": [
+   "List<String>",
+   "String Function(String) term",
+   "Iterable<String> Function(String id) propKeysFor"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart/field_label_he.dart",
+  "name": "fieldLabelHe",
+  "ret": "String",
+  "params": [
+   "String",
+   "List<( String id, String labelHe )> fields"
+  ],
+  "argc": 2,
   "wireable": false
  },
  {
@@ -2116,7 +3108,7 @@
   "params": [
    "List<Map<String, dynamic>>",
    "String",
-   "[\n  int limit = 12,\n]"
+   "int"
   ],
   "argc": 3,
   "wireable": false
@@ -2136,6 +3128,19 @@
    "String Function(dynamic, dynamic) coordinatorLastCollection"
   ],
   "argc": 8,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/filter-deliveries.dart",
+  "name": "filterDeliveries",
+  "ret": "dynamic",
+  "params": [
+   "dynamic",
+   "String",
+   "dynamic Function(String, dynamic, List<dynamic> Function(dynamic)) smartFilter",
+   "String Function(String) term"
+  ],
+  "argc": 4,
   "wireable": false
  },
  {
@@ -2180,6 +3185,18 @@
   "wireable": false
  },
  {
+  "file": "dart/filter_smart_by_system.dart",
+  "name": "filterSmartBySystem",
+  "ret": "List<SmartProduct>",
+  "params": [
+   "List<SmartProduct>",
+   "WaterSystem?",
+   "bool Function(SmartProduct p, WaterSystem system) inSystem"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/filter-volunteers.dart",
   "name": "filterVolunteers",
   "ret": "dynamic",
@@ -2199,6 +3216,43 @@
    "dynamic"
   ],
   "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart/find_alternative_paths.dart",
+  "name": "findAlternativePaths",
+  "ret": "List<List<AltNode>>",
+  "params": [
+   "AltNode",
+   "AltNode",
+   "int",
+   "int",
+   "int",
+   "List<AltNode>? Function(\n          AltNode from, AltNode to, int maxDepth, int tempC)\n      shortestPath",
+   "List<AltNode>? Function(AltNode from, AltNode to, int maxDepth,\n          int tempC, Set<(String, String)> blocked)\n      shortestPathExcluding",
+   "int Function(List<AltNode> path) pathCost"
+  ],
+  "argc": 8,
+  "wireable": false
+ },
+ {
+  "file": "dart/find_attr_siblings.dart",
+  "name": "findAttrSiblings",
+  "ret": "List<LipRow>",
+  "params": [
+   "LipRow",
+   "String",
+   "AttrKind",
+   "List<LipRow>",
+   "List<String>",
+   "List<String>",
+   "List<String>",
+   "List<String>",
+   "Set<String>",
+   "Set<String>",
+   "String"
+  ],
+  "argc": 11,
   "wireable": false
  },
  {
@@ -2226,6 +3280,35 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/finder-axes.dart",
+  "name": "finderAxes",
+  "ret": "List<List<String>>",
+  "params": [
+   "Map<String, dynamic>",
+   "String Function(Map<String, dynamic> config, String key, String fallback) termOf",
+   "String Function(String) term"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/finder-axis-value.dart",
+  "name": "finderAxisValue",
+  "ret": "String",
+  "params": [
+   "dynamic",
+   "Map<String, dynamic>",
+   "String",
+   "dynamic",
+   "String Function(dynamic config, String key, String fallback) termOf",
+   "Map<String, dynamic> Function(num score) tierOf",
+   "List<dynamic> Function(dynamic db, Map<String, dynamic> f)\n      famLiveEnrollments",
+   "Map<String, dynamic> STATUS_META"
+  ],
+  "argc": 8,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/finder-matches.dart",
   "name": "finderMatches",
   "ret": "List<dynamic>",
@@ -2235,6 +3318,75 @@
    "dynamic Function(Map<dynamic, dynamic> db, dynamic f, dynamic axis) finderAxisValue"
   ],
   "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart/find_shortest_path.dart",
+  "name": "findShortestPath",
+  "ret": "List<GraphNode>?",
+  "params": [
+   "GraphNode",
+   "GraphNode",
+   "int",
+   "int",
+   "Set<String> Function(GraphNode p) systemsOf",
+   "bool Function(GraphNode a, GraphNode b) canConnect",
+   "List<GraphNode> Function(GraphNode tail, int tempC) neighbors",
+   "bool Function(GraphNode p) usableConnector",
+   "int Function(GraphNode a, GraphNode b) edgeCost"
+  ],
+  "argc": 9,
+  "wireable": false
+ },
+ {
+  "file": "dart/find_shortest_path_excluding.dart",
+  "name": "findShortestPathExcluding",
+  "ret": "List<GraphNode>?",
+  "params": [
+   "GraphNode",
+   "GraphNode",
+   "int",
+   "int",
+   "Set<(String, String)> blocked",
+   "Set<String> Function(GraphNode p) systemsOf",
+   "bool Function(GraphNode a, GraphNode b) canConnect",
+   "List<GraphNode> Function(GraphNode tail, int tempC) neighbors",
+   "bool Function(GraphNode p) usableConnector",
+   "int Function(GraphNode a, GraphNode b) edgeCost"
+  ],
+  "argc": 10,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/find-supporter-dup-groups.dart",
+  "name": "findSupporterDupGroups",
+  "ret": "List<List<dynamic>>",
+  "params": [
+   "List<Map<String, dynamic>>",
+   "String Function(dynamic) normPhone",
+   "String Function(dynamic) normId",
+   "String Function(Map<String, dynamic>) supNameCityKey",
+   "String Function(dynamic) nameSortKey"
+  ],
+  "argc": 5,
+  "wireable": false
+ },
+ {
+  "file": "dart/find_type_siblings.dart",
+  "name": "findTypeSiblings",
+  "ret": "List<LipRow>",
+  "params": [
+   "LipRow",
+   "List<LipRow>",
+   "List<String>",
+   "List<String>",
+   "List<String>",
+   "List<String>",
+   "Set<String>",
+   "Set<String>",
+   "String"
+  ],
+  "argc": 9,
   "wireable": false
  },
  {
@@ -2268,6 +3420,18 @@
    "String Function(dynamic) formatIsraeliPhone"
   ],
   "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/flow_role.dart",
+  "name": "flowRole",
+  "ret": "FlowRole",
+  "params": [
+   "String",
+   "String",
+   "Set<String>"
+  ],
+  "argc": 3,
   "wireable": false
  },
  {
@@ -2354,6 +3518,32 @@
   "wireable": false
  },
  {
+  "file": "dart/format_nis.dart",
+  "name": "formatNis",
+  "ret": "String",
+  "params": [
+   "int",
+   "String",
+   "String Function(int) groupThousands"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart/free_value_ok.dart",
+  "name": "freeValueOk",
+  "ret": "bool",
+  "params": [
+   "String",
+   "String",
+   "String?",
+   "Iterable<String> Function(String target, String prop) allowedValues",
+   "String? Function(String target, String prop, String value) matchValue"
+  ],
+  "argc": 5,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/freshen-demo-db.dart",
   "name": "freshenDemoDb",
   "ret": "Map<String, dynamic>",
@@ -2375,7 +3565,46 @@
    "String",
    "String",
    "String",
-   "[\n  Object? groupOverride,\n]"
+   "Object?"
+  ],
+  "argc": 5,
+  "wireable": false
+ },
+ {
+  "file": "dart/friction_factor.dart",
+  "name": "frictionFactor",
+  "ret": "double",
+  "params": [
+   "double",
+   "double Function(double) pow025"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/frozen.dart",
+  "name": "frozen",
+  "ret": "FrozenRegistryView",
+  "params": [
+   "Set<String> Function() elementIds",
+   "Set<String> Function(String id) propKeysFor",
+   "Set<String> Function(String id, String propKey) allowedValues",
+   "Set<String> Function(String id) actionIdsFor",
+   "Set<String> Function() componentTypes"
+  ],
+  "argc": 5,
+  "wireable": false
+ },
+ {
+  "file": "dart/frozen.dart",
+  "name": "frozenRegistrySnapshot",
+  "ret": "FrozenRegistryView",
+  "params": [
+   "Set<String> Function() elementIds",
+   "Set<String> Function(String id) propKeysFor",
+   "Set<String> Function(String id, String propKey) allowedValues",
+   "Set<String> Function(String id) actionIdsFor",
+   "Set<String> Function() componentTypes"
   ],
   "argc": 5,
   "wireable": false
@@ -2390,6 +3619,46 @@
    "dynamic Function(Map<String, dynamic>) metaOf"
   ],
   "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart/fuzzy_match.dart",
+  "name": "fuzzyMatch",
+  "ret": "bool",
+  "params": [
+   "String",
+   "String",
+   "String Function(String) normSearch",
+   "int Function(String, String) damerauLevenshtein",
+   "int Function(int) fuzzyTolerance"
+  ],
+  "argc": 5,
+  "wireable": false
+ },
+ {
+  "file": "dart/fuzzy_name_match.dart",
+  "name": "fuzzyNameMatch",
+  "ret": "bool",
+  "params": [
+   "String",
+   "String",
+   "bool Function(String query, String candidate) fuzzyMatch"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart/fuzzy_score.dart",
+  "name": "fuzzyScore",
+  "ret": "int",
+  "params": [
+   "String",
+   "String",
+   "String Function(String) normSearch",
+   "int Function(String, String) damerauLevenshtein",
+   "int Function(int) fuzzyTolerance"
+  ],
+  "argc": 5,
   "wireable": false
  },
  {
@@ -2429,6 +3698,17 @@
   "params": [
    "Object?",
    "String Function(num) gem"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/generate_csv_template.dart",
+  "name": "generateCsvTemplate",
+  "ret": "String",
+  "params": [
+   "List<String>",
+   "List<String>"
   ],
   "argc": 2,
   "wireable": false
@@ -2499,6 +3779,18 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/group-label-of.dart",
+  "name": "groupLabelOf",
+  "ret": "String",
+  "params": [
+   "Map",
+   "int",
+   "String Function(String) term"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/group-palette-results.dart",
   "name": "groupPaletteResults",
   "ret": "List<Map<String, Object?>>",
@@ -2509,6 +3801,17 @@
    "int Function(Object? key) bucketOf"
   ],
   "argc": 4,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/groups-hint-from-audience.dart",
+  "name": "groupsHintFromAudience",
+  "ret": "int?",
+  "params": [
+   "String?",
+   "String Function(String) term"
+  ],
+  "argc": 2,
   "wireable": false
  },
  {
@@ -2530,6 +3833,21 @@
    "void Function()? notify"
   ],
   "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/guide-sections-of.dart",
+  "name": "guideSections",
+  "ret": "List<Map<String, dynamic>>",
+  "params": [
+   "bool Function(String module) isModuleOn",
+   "Map<String, dynamic>?",
+   "List<Map<String, dynamic>>",
+   "String Function(Map<String, dynamic> config, String key, String fallback)\n      termOf",
+   "String Function(String s, String from, String to) swap",
+   "String Function(String) term"
+  ],
+  "argc": 6,
   "wireable": false
  },
  {
@@ -2561,6 +3879,18 @@
    "String?"
   ],
   "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/heb-annual-eq.dart",
+  "name": "hebAnnualEq",
+  "ret": "bool",
+  "params": [
+   "( int day, String month ) anchor",
+   "( int day, String month, int? year ) query",
+   "( List<String> seq, Set<String> has30 ) Function(int year) scanHebYear"
+  ],
+  "argc": 3,
   "wireable": false
  },
  {
@@ -2655,6 +3985,19 @@
   "wireable": false
  },
  {
+  "file": "dart/he_for_op.dart",
+  "name": "heForOp",
+  "ret": "String",
+  "params": [
+   "ConfigOp",
+   "String Function(String) term",
+   "String? Function(String kind) actionHe",
+   "String Function(String id, OpStyle? style) styleHe"
+  ],
+  "argc": 4,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/hok-due.dart",
   "name": "hokDue",
   "ret": "List<Map<String, Object?>>",
@@ -2679,15 +4022,27 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/hok-method-label.dart",
+  "name": "hokMethodLabel",
+  "ret": "String",
+  "params": [
+   "String",
+   "String Function(String) term"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/hok-monthly-total.dart",
   "name": "hokMonthlyTotal",
   "ret": "int",
   "params": [
    "List",
    "num",
-   "[\n  Object? todayIso,\n  bool Function(dynamic, dynamic)? hokEffectivelyActive,\n]"
+   "Object?",
+   "bool Function(dynamic, dynamic)? hokEffectivelyActive"
   ],
-  "argc": 3,
+  "argc": 4,
   "wireable": false
  },
  {
@@ -2721,6 +4076,31 @@
    "Object? Function(DateTime) holidayOf"
   ],
   "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/holiday-of.dart",
+  "name": "holidayOf",
+  "ret": "String?",
+  "params": [
+   "DateTime",
+   "Map Function(DateTime d) hebParts",
+   "Map Function(dynamic year) scanHebYear",
+   "Map<String, String>",
+   "String Function(String) term"
+  ],
+  "argc": 5,
+  "wireable": false
+ },
+ {
+  "file": "dart/humanize.dart",
+  "name": "humanize",
+  "ret": "String",
+  "params": [
+   "String",
+   "String Function(String) term"
+  ],
+  "argc": 2,
   "wireable": false
  },
  {
@@ -2771,12 +4151,34 @@
   "wireable": false
  },
  {
+  "file": "dart/indexable_word.dart",
+  "name": "indexableWord",
+  "ret": "bool",
+  "params": [
+   "String",
+   "int"
+  ],
+  "argc": 2,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/industry-label.dart",
   "name": "industryLabel",
   "ret": "String",
   "params": [
    "String?",
    "List<Map<String, dynamic>>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/in-range.dart",
+  "name": "inRange",
+  "ret": "bool",
+  "params": [
+   "String?",
+   "( String? from, String? to ) r"
   ],
   "argc": 2,
   "wireable": false
@@ -2802,6 +4204,20 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/integer-in-words.dart",
+  "name": "integerInWords",
+  "ret": "String?",
+  "params": [
+   "num",
+   "String Function(List<String>) joinHeb",
+   "List<String> Function(int) words0_999",
+   "List<String> Function(int) thousandWords",
+   "String Function(String) term"
+  ],
+  "argc": 5,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/integration-on.dart",
   "name": "integrationOn",
   "ret": "bool",
@@ -2823,6 +4239,29 @@
   ],
   "argc": 3,
   "wireable": false
+ },
+ {
+  "file": "dart/invoice_title.dart",
+  "name": "invoiceTitle",
+  "ret": "String",
+  "params": [
+   "String",
+   "String Function(String) term",
+   "bool"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart/invoice_vat_of.dart",
+  "name": "invoiceVatOf",
+  "ret": "int",
+  "params": [
+   "int",
+   "double"
+  ],
+  "argc": 2,
+  "wireable": true
  },
  {
   "file": "dart/is45.dart",
@@ -2857,6 +4296,17 @@
   "wireable": false
  },
  {
+  "file": "dart/is_bright_image.dart",
+  "name": "isBrightImage",
+  "ret": "bool",
+  "params": [
+   "String?",
+   "int Function(String?) imageBrightness"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart/is_contiguous_subsequence.dart",
   "name": "isContiguousSubsequence",
   "ret": "bool",
@@ -2875,6 +4325,17 @@
    "dynamic"
   ],
   "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart/is_directional_device.dart",
+  "name": "isDirectionalDevice",
+  "ret": "bool",
+  "params": [
+   "DevicePart",
+   "String Function(String) term"
+  ],
+  "argc": 2,
   "wireable": false
  },
  {
@@ -2908,6 +4369,17 @@
   "wireable": false
  },
  {
+  "file": "dart/is_fitting.dart",
+  "name": "isFitting",
+  "ret": "bool",
+  "params": [
+   "FittingPart",
+   "bool"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/is-grantable-feature.dart",
   "name": "isGrantableFeature",
   "ret": "bool",
@@ -2930,12 +4402,34 @@
   "wireable": false
  },
  {
+  "file": "dart/is_hot_potential.dart",
+  "name": "isHotPotential",
+  "ret": "bool",
+  "params": [
+   "LipskeyCatalogProduct",
+   "String Function(String) term"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/is-junk-contact.dart",
   "name": "isJunkContact",
   "ret": "bool",
   "params": [
    "Map",
    "dynamic Function(dynamic) digitsOnly"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/is_manifold.dart",
+  "name": "isManifold",
+  "ret": "bool",
+  "params": [
+   "LipskeyCatalogProduct",
+   "String Function(String) term"
   ],
   "argc": 2,
   "wireable": false
@@ -2952,6 +4446,17 @@
   ],
   "argc": 4,
   "wireable": false
+ },
+ {
+  "file": "dart/is_nav_structural.dart",
+  "name": "isNavStructural",
+  "ret": "bool",
+  "params": [
+   "String",
+   "bool"
+  ],
+  "argc": 2,
+  "wireable": true
  },
  {
   "file": "dart-maor/iso-days-ago.dart",
@@ -2992,7 +4497,7 @@
   "ret": "String",
   "params": [
    "String Function(DateTime) isoLocal",
-   "[DateTime? now]"
+   "DateTime?"
   ],
   "argc": 2,
   "wireable": false
@@ -3010,6 +4515,17 @@
   "wireable": false
  },
  {
+  "file": "dart/is_owner_email.dart",
+  "name": "isOwnerEmail",
+  "ret": "bool",
+  "params": [
+   "String?",
+   "Set<String>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart/is_pipe.dart",
   "name": "isPipe",
   "ret": "bool",
@@ -3018,6 +4534,17 @@
   ],
   "argc": 1,
   "wireable": true
+ },
+ {
+  "file": "dart/is_pipe_product_e.dart",
+  "name": "isPipeProductE",
+  "ret": "bool",
+  "params": [
+   "String?",
+   "String Function(String) term"
+  ],
+  "argc": 2,
+  "wireable": false
  },
  {
   "file": "dart-maor/is-renewed.dart",
@@ -3061,6 +4588,19 @@
   "wireable": false
  },
  {
+  "file": "dart/is_shutoff.dart",
+  "name": "isShutoff",
+  "ret": "bool",
+  "params": [
+   "String Function(String) term",
+   "String",
+   "String?",
+   "String"
+  ],
+  "argc": 4,
+  "wireable": false
+ },
+ {
   "file": "dart/find_attr_siblings.dart",
   "name": "isSizeToken",
   "ret": "bool",
@@ -3077,6 +4617,17 @@
   "params": [
    "String?",
    "List<String>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/is_true_color.dart",
+  "name": "isTrueColor",
+  "ret": "bool",
+  "params": [
+   "String",
+   "Set<String>"
   ],
   "argc": 2,
   "wireable": false
@@ -3166,6 +4717,18 @@
   "wireable": false
  },
  {
+  "file": "dart/kind_plural.dart",
+  "name": "kindPlural",
+  "ret": "String",
+  "params": [
+   "ConfigOpKind",
+   "bool",
+   "String Function(String) term"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/kit-progress.dart",
   "name": "kitProgress",
   "ret": "Map<String, Object>",
@@ -3173,6 +4736,17 @@
    "Map?"
   ],
   "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart/label.dart",
+  "name": "label",
+  "ret": "String",
+  "params": [
+   "String",
+   "String Function(String) term"
+  ],
+  "argc": 2,
   "wireable": false
  },
  {
@@ -3227,7 +4801,7 @@
    "dynamic",
    "dynamic",
    "dynamic",
-   "[dynamic months = 1]"
+   "dynamic"
   ],
   "argc": 4,
   "wireable": false
@@ -3267,11 +4841,36 @@
   "wireable": true
  },
  {
+  "file": "dart/line_compliance_checklist.dart",
+  "name": "lineComplianceChecklist",
+  "ret": "List<LineCheck>",
+  "params": [
+   "List<ChainPart>",
+   "int",
+   "Set<String>",
+   "String? Function(String sku) materialOf",
+   "bool Function(String sku) isSupplySku"
+  ],
+  "argc": 5,
+  "wireable": false
+ },
+ {
   "file": "dart/line_install_reminders.dart",
   "name": "lineInstallReminders",
   "ret": "List<String>",
   "params": [],
   "argc": 0,
+  "wireable": false
+ },
+ {
+  "file": "dart/linked_budget.dart",
+  "name": "linkedBudget",
+  "ret": "int",
+  "params": [
+   "int",
+   "double Function() buildIndexDeltaPct"
+  ],
+  "argc": 2,
   "wireable": false
  },
  {
@@ -3283,6 +4882,18 @@
    "String"
   ],
   "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/lipskey_category_to_id.dart",
+  "name": "lipskeyCategoryToId",
+  "ret": "Map<String, String>",
+  "params": [
+   "List<CatalogNode>",
+   "String Function(String key) categoryIdOf",
+   "LipskeyCategoryToIdCache"
+  ],
+  "argc": 3,
   "wireable": false
  },
  {
@@ -3362,6 +4973,30 @@
   "wireable": false
  },
  {
+  "file": "dart/manager_copilot_prompt.dart",
+  "name": "managerCopilotPrompt",
+  "ret": "String",
+  "params": [
+   "String",
+   "String",
+   "String Function(String) term",
+   "String Function(String text,  int maxLen ) promptSafeText"
+  ],
+  "argc": 4,
+  "wireable": false
+ },
+ {
+  "file": "dart/manager_morning_brief_prompt.dart",
+  "name": "managerMorningBriefPrompt",
+  "ret": "String",
+  "params": [
+   "String",
+   "String Function(String) term"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/maps-route-url.dart",
   "name": "mapsRouteUrl",
   "ret": "String?",
@@ -3377,9 +5012,21 @@
   "ret": "String?",
   "params": [
    "String",
-   "[String city = '']"
+   "String"
   ],
   "argc": 2,
+  "wireable": true
+ },
+ {
+  "file": "dart/match_action_id.dart",
+  "name": "matchActionId",
+  "ret": "String?",
+  "params": [
+   "String",
+   "String",
+   "Set<String> Function(String id) actionIdsFor"
+  ],
+  "argc": 3,
   "wireable": false
  },
  {
@@ -3406,12 +5053,100 @@
   "wireable": false
  },
  {
+  "file": "dart/match_all_element_ids.dart",
+  "name": "matchAllElementIds",
+  "ret": "Set<String>",
+  "params": [
+   "String",
+   "Set<String> Function() elementIds"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/match_assistant_category.dart",
+  "name": "matchAssistantCategory",
+  "ret": "String?",
+  "params": [
+   "String",
+   "List<String>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/match_assistant_recipe_key.dart",
+  "name": "matchAssistantRecipeKey",
+  "ret": "String?",
+  "params": [
+   "String",
+   "List<String>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/match_catalog_action_id.dart",
+  "name": "matchCatalogActionId",
+  "ret": "String?",
+  "params": [
+   "String",
+   "Set<String>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart/match_closed.dart",
   "name": "matchClosed",
   "ret": "String?",
   "params": [
    "Set<String>",
    "String"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/match_component_type.dart",
+  "name": "matchComponentType",
+  "ret": "String?",
+  "params": [
+   "String",
+   "Set<String> Function() componentTypes"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/match_component_type_name.dart",
+  "name": "matchComponentTypeName",
+  "ret": "String?",
+  "params": [
+   "String",
+   "Set<String>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/match_condition_field.dart",
+  "name": "matchConditionField",
+  "ret": "String?",
+  "params": [
+   "String",
+   "Set<String>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/match_element_id.dart",
+  "name": "matchElementId",
+  "ret": "String?",
+  "params": [
+   "String",
+   "Set<String> Function() elementIds"
   ],
   "argc": 2,
   "wireable": false
@@ -3427,6 +5162,59 @@
    "num Function(String isoA, String isoB) dayDiff"
   ],
   "argc": 4,
+  "wireable": false
+ },
+ {
+  "file": "dart/match_prop_key.dart",
+  "name": "matchPropKey",
+  "ret": "String?",
+  "params": [
+   "String",
+   "String",
+   "Set<String> Function(String id) propKeysFor"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart/match_rule_op.dart",
+  "name": "matchRuleOp",
+  "ret": "String?",
+  "params": [
+   "String",
+   "String? Function(Set<String>, String) matchClosed"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/segments-match-segment.dart",
+  "name": "matchSegment",
+  "ret": "bool",
+  "params": [
+   "dynamic",
+   "String",
+   "List",
+   "String",
+   "dynamic",
+   "List Function(List, String) cockpitAtRisk",
+   "num Function(dynamic) supIls",
+   "num Function(dynamic) supUsd",
+   "dynamic Function(dynamic) supLast",
+   "num Function(dynamic, String) daysSince"
+  ],
+  "argc": 10,
+  "wireable": false
+ },
+ {
+  "file": "dart/match_trigger_id.dart",
+  "name": "matchTriggerId",
+  "ret": "String?",
+  "params": [
+   "String",
+   "String? Function(Set<String>, String) matchClosed"
+  ],
+  "argc": 2,
   "wireable": false
  },
  {
@@ -3447,6 +5235,17 @@
    "LipskeyCatalogProduct"
   ],
   "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart/material_rank.dart",
+  "name": "materialRank",
+  "ret": "int",
+  "params": [
+   "String",
+   "List<dynamic>"
+  ],
+  "argc": 2,
   "wireable": false
  },
  {
@@ -3480,6 +5279,20 @@
    "Map<String, dynamic>"
   ],
   "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/merge-families.dart",
+  "name": "mergeFamilies",
+  "ret": "Map<String, dynamic>",
+  "params": [
+   "Map<String, dynamic>",
+   "List<Map<String, dynamic>>",
+   "String Function(String) normPhone",
+   "List<dynamic> Function(List<dynamic>) dedupById",
+   "String Function(String) term"
+  ],
+  "argc": 5,
   "wireable": false
  },
  {
@@ -3592,6 +5405,17 @@
   "wireable": false
  },
  {
+  "file": "dart/method_he.dart",
+  "name": "methodHe",
+  "ret": "String",
+  "params": [
+   "String",
+   "String Function(String) term"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart/mgr_customer_list.dart",
   "name": "mgrCustomerList",
   "ret": "List<ManagerCustomer>",
@@ -3627,6 +5451,17 @@
   "wireable": true
  },
  {
+  "file": "dart/min_bore_mm_of.dart",
+  "name": "minBoreMmOf",
+  "ret": "double?",
+  "params": [
+   "List<( EndType type, String size )>? ends",
+   "Map<String, double>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/mint-feed-token.dart",
   "name": "mintFeedToken",
   "ret": "String",
@@ -3643,6 +5478,20 @@
    "String Function(int) pad2"
   ],
   "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/mk2.dart",
+  "name": "mk2",
+  "ret": "Envelope?",
+  "params": [
+   "double?",
+   "double",
+   "double?",
+   "double?",
+   "Envelope? Function(double?, double?,  double? ) mk"
+  ],
+  "argc": 5,
   "wireable": false
  },
  {
@@ -3775,6 +5624,19 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/next-academic-year-label.dart",
+  "name": "nextAcademicYearLabel",
+  "ret": "String",
+  "params": [
+   "String",
+   "DateTime Function(String) atNoon",
+   "String Function(int) gemYear",
+   "( int year ) Function(String) hebPartsOfIso"
+  ],
+  "argc": 4,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/next-closure.dart",
   "name": "nextClosure",
   "ret": "Map<String, dynamic>?",
@@ -3823,6 +5685,20 @@
    "String Function(DateTime) toIso"
   ],
   "argc": 4,
+  "wireable": false
+ },
+ {
+  "file": "dart/node_has_system.dart",
+  "name": "nodeHasSystem",
+  "ret": "bool",
+  "params": [
+   "CatalogNode",
+   "WaterSystem",
+   "Set<String>",
+   "Map<String, ( int sup, int dr )> catSystemTally",
+   "Map<String, bool>"
+  ],
+  "argc": 5,
   "wireable": false
  },
  {
@@ -3968,6 +5844,17 @@
   "params": [
    "dynamic",
    "num"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/od2_of.dart",
+  "name": "od2Of",
+  "ret": "int?",
+  "params": [
+   "LipskeyCatalogProduct",
+   "String Function(String) term"
   ],
   "argc": 2,
   "wireable": false
@@ -4253,6 +6140,20 @@
   "wireable": false
  },
  {
+  "file": "dart/parse_assistant_intent.dart",
+  "name": "parseAssistantIntent",
+  "ret": "AssistantIntent",
+  "params": [
+   "String",
+   "String Function(String) term",
+   "AssistantAction? Function(String) actionFromString",
+   "String? Function(String) matchCategory",
+   "String? Function(String) matchRecipeKey"
+  ],
+  "argc": 5,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/parse-ayin-sheet.dart",
   "name": "parseAyinSheet",
   "ret": "Map<String, dynamic>",
@@ -4265,6 +6166,40 @@
   "wireable": false
  },
  {
+  "file": "dart/parse_bore.dart",
+  "name": "parseBore",
+  "ret": "double?",
+  "params": [
+   "Map<String, dynamic>?",
+   "String?",
+   "BoreParseStrategy"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart/parse_chips.dart",
+  "name": "parseChips",
+  "ret": "ChipPath",
+  "params": [
+   "String",
+   "Set<String>",
+   "Set<String>",
+   "Set<String>",
+   "Set<String>",
+   "Set<String>",
+   "Set<String>",
+   "Set<String>",
+   "Set<String>",
+   "Set<String>",
+   "Set<String>",
+   "Set<String>",
+   "Set<String>"
+  ],
+  "argc": 13,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/parse-csv.dart",
   "name": "parseCsv",
   "ret": "List<List<String>>",
@@ -4272,6 +6207,21 @@
    "String"
   ],
   "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/parse-families-csv.dart",
+  "name": "parseFamiliesCsv",
+  "ret": "Map<String, List>",
+  "params": [
+   "List",
+   "List",
+   "String Function(dynamic) clean",
+   "String Function(dynamic) normName",
+   "String Function(dynamic) digits",
+   "String Function(String) term"
+  ],
+  "argc": 6,
   "wireable": false
  },
  {
@@ -4357,9 +6307,10 @@
   "params": [
    "String",
    "num",
-   "[String name = '', String? Function(String)? safeHttpsUrl]"
+   "String",
+   "String? Function(String)? safeHttpsUrl"
   ],
-  "argc": 3,
+  "argc": 4,
   "wireable": false
  },
  {
@@ -4389,7 +6340,7 @@
   "ret": "List<Map<String, Object?>>",
   "params": [
    "List<dynamic>",
-   "[String? courseId]"
+   "String?"
   ],
   "argc": 2,
   "wireable": false
@@ -4443,6 +6394,18 @@
    "Object?"
   ],
   "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart/plain_classifications.dart",
+  "name": "plainClassifications",
+  "ret": "List<String>",
+  "params": [
+   "String",
+   "List<PlainNode> Function() allNodes",
+   "bool Function(PlainNode) reaches"
+  ],
+  "argc": 3,
   "wireable": false
  },
  {
@@ -4527,6 +6490,56 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/plan-word.dart",
+  "name": "planWord",
+  "ret": "String",
+  "params": [
+   "String",
+   "String Function(String) term"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/plug.dart",
+  "name": "plug",
+  "ret": "Map<String, double>",
+  "params": [
+   "int",
+   "Map<String, double> Function(int) base",
+   "double Function(double) r1"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart/plumbing_accessories.dart",
+  "name": "plumbingAccessories",
+  "ret": "List<AccessoryRule>",
+  "params": [
+   "List<SmartProduct>",
+   "Map<String, String>",
+   "String",
+   "String"
+  ],
+  "argc": 4,
+  "wireable": false
+ },
+ {
+  "file": "dart/plumbing_categories.dart",
+  "name": "plumbingCategories",
+  "ret": "List<TradeCategory>",
+  "params": [
+   "List<CatalogNode>",
+   "String Function(String) term",
+   "String Function(String key) categoryId",
+   "String",
+   "String"
+  ],
+  "argc": 5,
+  "wireable": false
+ },
+ {
   "file": "dart/plumbing_connector_types.dart",
   "name": "plumbingConnectorTypes",
   "ret": "List<ConnectorType>",
@@ -4537,6 +6550,19 @@
   "wireable": false
  },
  {
+  "file": "dart/plumbing_fixtures.dart",
+  "name": "plumbingFixtures",
+  "ret": "List<SmartFixture>",
+  "params": [
+   "List<SmartProduct>",
+   "Map<String, String>",
+   "String",
+   "String"
+  ],
+  "argc": 4,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/pop-call.dart",
   "name": "popCall",
   "ret": "dynamic",
@@ -4544,6 +6570,36 @@
    "dynamic"
   ],
   "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart/port_count_for.dart",
+  "name": "portCountFor",
+  "ret": "int",
+  "params": [
+   "LipskeyCatalogProduct",
+   "String Function(String) term"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/portfolio-portfolio-intel.dart",
+  "name": "portfolioIntel",
+  "ret": "Map<String, dynamic>",
+  "params": [
+   "List",
+   "String",
+   "num",
+   "int",
+   "Map Function(dynamic, String, num, int) donorScan",
+   "num Function(dynamic, String) dayDiff",
+   "Map Function(Map, String) rfmFromScan",
+   "num Function(Map, String) churnFromScan",
+   "Map? Function(Map, String) forecastFromScan",
+   "Map Function(num) supTier"
+  ],
+  "argc": 10,
   "wireable": false
  },
  {
@@ -4590,6 +6646,20 @@
   "wireable": false
  },
  {
+  "file": "dart/to_string.dart",
+  "name": "pressureDropToString",
+  "ret": "String",
+  "params": [
+   "double",
+   "double",
+   "double",
+   "double",
+   "String?"
+  ],
+  "argc": 5,
+  "wireable": true
+ },
+ {
   "file": "dart/pressure_from_dims.dart",
   "name": "pressureFromDims",
   "ret": "String?",
@@ -4597,6 +6667,36 @@
    "LipskeyCatalogProduct"
   ],
   "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/preview-telephony.dart",
+  "name": "previewTelephony",
+  "ret": "Map<String, dynamic>",
+  "params": [
+   "Map<String, dynamic>",
+   "String",
+   "String",
+   "dynamic Function(Map<String, dynamic>, String, String) telephonyToTenant",
+   "String Function() anchorToday",
+   "Map<String, dynamic> Function(dynamic) validateTenant",
+   "Map<String, dynamic> Function(dynamic, Map<String, dynamic>) buildTenant",
+   "Map<String, dynamic> Function(dynamic, Map<String, dynamic>, Map<String, dynamic>)\n      explainCall",
+   "Map<String, dynamic> Function(dynamic) trustReport",
+   "String Function(String) term"
+  ],
+  "argc": 10,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/price-suffix.dart",
+  "name": "priceSuffix",
+  "ret": "String",
+  "params": [
+   "String",
+   "String Function(String) term"
+  ],
+  "argc": 2,
   "wireable": false
  },
  {
@@ -4611,6 +6711,18 @@
   "wireable": false
  },
  {
+  "file": "dart/product_division_systems.dart",
+  "name": "productDivisionSystems",
+  "ret": "Set<WaterSystem>",
+  "params": [
+   "String",
+   "String Function(String) term",
+   "Set<WaterSystem>?"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
   "file": "dart/products_of_material.dart",
   "name": "productsOfMaterial",
   "ret": "List<LipskeyCatalogProduct>",
@@ -4619,6 +6731,30 @@
    "String"
   ],
   "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/product_systems.dart",
+  "name": "productSystems",
+  "ret": "Set<WaterSystem>",
+  "params": [
+   "String",
+   "Set<WaterSystem>? Function() endSystemsOf"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/project_quote_text.dart",
+  "name": "projectQuoteText",
+  "ret": "String",
+  "params": [
+   "String",
+   "List<QuoteLineItem>",
+   "int? Function(String sku) unitPriceOf = _noPrice",
+   "String"
+  ],
+  "argc": 4,
   "wireable": false
  },
  {
@@ -4636,6 +6772,17 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/provider-clearer.dart",
+  "name": "providerClearer",
+  "ret": "String",
+  "params": [
+   "String?",
+   "String Function(String) term"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/public-site-on.dart",
   "name": "publicSiteOn",
   "ret": "bool",
@@ -4644,6 +6791,22 @@
    "bool Function(dynamic cfg, String key) featureOn"
   ],
   "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/publish-ics-feed.dart",
+  "name": "publishIcsFeed",
+  "ret": "Future<dynamic>",
+  "params": [
+   "dynamic",
+   "dynamic",
+   "dynamic",
+   "ReadToken",
+   "MintToken",
+   "WriteFeed",
+   "NowIso?"
+  ],
+  "argc": 7,
   "wireable": false
  },
  {
@@ -4707,6 +6870,20 @@
   "wireable": false
  },
  {
+  "file": "dart/quote_text_for.dart",
+  "name": "quoteTextFor",
+  "ret": "String",
+  "params": [
+   "QuoteProduct",
+   "int",
+   "_Cost? Function(int idx) lineCostEstimate = _noCost",
+   "String Function(int idx) deepLink = _noLink",
+   "String"
+  ],
+  "argc": 5,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/range-label.dart",
   "name": "rangeLabel",
   "ret": "String",
@@ -4718,6 +6895,18 @@
   "wireable": false
  },
  {
+  "file": "dart/rank.dart",
+  "name": "rank",
+  "ret": "int",
+  "params": [
+   "String",
+   "String",
+   "Map<String, List<String>>"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
   "file": "dart/raw_ops.dart",
   "name": "rawOps",
   "ret": "List<Object?>",
@@ -4725,6 +6914,17 @@
    "Object?"
   ],
   "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart/reaches.dart",
+  "name": "reaches",
+  "ret": "bool",
+  "params": [
+   "PlainNode",
+   "List<Object?> Function(PlainNode) plainProductsFor"
+  ],
+  "argc": 2,
   "wireable": false
  },
  {
@@ -4853,6 +7053,43 @@
   "wireable": false
  },
  {
+  "file": "dart/recommended_kit_for.dart",
+  "name": "recommendedKitFor",
+  "ret": "List<KitItem>",
+  "params": [
+   "List<ChainProduct>",
+   "Map<String, KitSpec>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/recommended_kit_for_product.dart",
+  "name": "recommendedKitForProduct",
+  "ret": "List<KitItem>",
+  "params": [
+   "KitProduct",
+   "String Function(String) term",
+   "Map<String, KitSpec>"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/redemptions-csv-rows.dart",
+  "name": "redemptionsCsvRows",
+  "ret": "List<List<dynamic>>",
+  "params": [
+   "Map<String, dynamic>",
+   "dynamic",
+   "String Function(Map<String, dynamic> db, dynamic a, dynamic config) beneficiaryLabel",
+   "dynamic Function(Map<String, dynamic> db, dynamic comp) itemOf",
+   "String Function(String) term"
+  ],
+  "argc": 5,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/reencrypt-db.dart",
   "name": "reencryptDb",
   "ret": "Future<Map<String, dynamic>>",
@@ -4883,6 +7120,17 @@
    "List<Map<String, Object?>>"
   ],
   "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/reenroll-list-text.dart",
+  "name": "reenrollListText",
+  "ret": "String",
+  "params": [
+   "List<Map<String, dynamic>>",
+   "String Function(String) term"
+  ],
+  "argc": 2,
   "wireable": false
  },
  {
@@ -4946,6 +7194,18 @@
   "wireable": false
  },
  {
+  "file": "dart/resolve_cat_title.dart",
+  "name": "resolveCatTitle",
+  "ret": "CatalogNode?",
+  "params": [
+   "String",
+   "List<CatalogNode>",
+   "Iterable<CatProduct>"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/resolve-enroll-family.dart",
   "name": "resolveEnrollFamily",
   "ret": "Map<String, dynamic>",
@@ -4982,6 +7242,30 @@
   "wireable": false
  },
  {
+  "file": "dart/restore_final.dart",
+  "name": "restoreFinal",
+  "ret": "String",
+  "params": [
+   "String",
+   "Map<String, dynamic>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/retention_pct.dart",
+  "name": "retentionPct",
+  "ret": "double",
+  "params": [
+   "int",
+   "int",
+   "int Function(int dayOffset) returning",
+   "double"
+  ],
+  "argc": 4,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/intel-rfm-from-scan.dart",
   "name": "rfmFromScan",
   "ret": "Map<String, dynamic>",
@@ -4991,6 +7275,21 @@
    "num Function(String, String) dayDiff"
   ],
   "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart/role_floor_block.dart",
+  "name": "roleFloorBlock",
+  "ret": "String?",
+  "params": [
+   "String Function(String) term",
+   "String",
+   "String",
+   "bool",
+   "String?",
+   "String"
+  ],
+  "argc": 6,
   "wireable": false
  },
  {
@@ -5037,6 +7336,17 @@
   "wireable": false
  },
  {
+  "file": "dart/rule_action_is_mutating.dart",
+  "name": "ruleActionIsMutating",
+  "ret": "bool",
+  "params": [
+   "String",
+   "List<( String id, bool mutating )> actions"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/rule-contains.dart",
   "name": "ruleContains",
   "ret": "int?",
@@ -5056,6 +7366,18 @@
    "dynamic"
   ],
   "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/rule-plural.dart",
+  "name": "rulePlural",
+  "ret": "int?",
+  "params": [
+   "String",
+   "String",
+   "String Function(String) term"
+  ],
+  "argc": 3,
   "wireable": false
  },
  {
@@ -5081,14 +7403,32 @@
   "wireable": false
  },
  {
+  "file": "dart/rule_summary_he.dart",
+  "name": "ruleSummaryHe",
+  "ret": "String",
+  "params": [
+   "String",
+   "String",
+   "String",
+   "Object",
+   "String",
+   "Map<String, String>"
+  ],
+  "argc": 6,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/run-audit.dart",
   "name": "runAudit",
   "ret": "List",
   "params": [
    "dynamic",
-   "[dynamic todayIso = '', dynamic extra = true, dynamic config, Map? deps]"
+   "dynamic",
+   "dynamic",
+   "dynamic",
+   "Map?"
   ],
-  "argc": 2,
+  "argc": 5,
   "wireable": false
  },
  {
@@ -5099,6 +7439,20 @@
    "dynamic"
   ],
   "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart/safe_prop.dart",
+  "name": "safeProp",
+  "ret": "String",
+  "params": [
+   "String",
+   "String",
+   "Set<String>",
+   "Set<String>",
+   "String Function(String value,\n           int maxLen, bool collapseWhitespace )\n      promptSafeText"
+  ],
+  "argc": 5,
   "wireable": false
  },
  {
@@ -5130,9 +7484,10 @@
   "params": [
    "dynamic",
    "dynamic",
-   "[dynamic photoMaxLen = 460000, dynamic photoMax = 5]"
+   "dynamic",
+   "dynamic"
   ],
-  "argc": 3,
+  "argc": 4,
   "wireable": false
  },
  {
@@ -5141,7 +7496,7 @@
   "ret": "dynamic",
   "params": [
    "dynamic",
-   "[dynamic supportMsgMax = 2000]"
+   "dynamic"
   ],
   "argc": 2,
   "wireable": false
@@ -5155,9 +7510,14 @@
    "dynamic",
    "dynamic",
    "dynamic",
-   "[\n  dynamic dayNames = const ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי'],\n]"
+   "dynamic",
+   "'שני'",
+   "'שלישי'",
+   "'רביעי'",
+   "'חמישי'",
+   "'שישי'"
   ],
-  "argc": 5,
+  "argc": 10,
   "wireable": false
  },
  {
@@ -5182,6 +7542,80 @@
   "wireable": true
  },
  {
+  "file": "dart/scope_element_ids.dart",
+  "name": "scopeElementIds",
+  "ret": "Set<String>",
+  "params": [
+   "String",
+   "Set<String>",
+   "String Function(String id) namespaceOf",
+   "String",
+   "String",
+   "String"
+  ],
+  "argc": 6,
+  "wireable": false
+ },
+ {
+  "file": "dart/scope_he.dart",
+  "name": "scopeHe",
+  "ret": "String",
+  "params": [
+   "String",
+   "String Function(String) term",
+   "String",
+   "String",
+   "String",
+   "String",
+   "String"
+  ],
+  "argc": 7,
+  "wireable": false
+ },
+ {
+  "file": "dart/scope_label.dart",
+  "name": "scopeLabel",
+  "ret": "String",
+  "params": [
+   "String",
+   "String Function(String) term",
+   "String",
+   "String",
+   "String"
+  ],
+  "argc": 5,
+  "wireable": false
+ },
+ {
+  "file": "dart/scope_token_he.dart",
+  "name": "scopeTokenHe",
+  "ret": "String",
+  "params": [
+   "String",
+   "String Function(String) term",
+   "String",
+   "String"
+  ],
+  "argc": 4,
+  "wireable": false
+ },
+ {
+  "file": "dart/score_customer.dart",
+  "name": "scoreCustomer",
+  "ret": "CustomerScore",
+  "params": [
+   "RfmInput",
+   "num",
+   "num",
+   "num",
+   "num",
+   "int",
+   "int"
+  ],
+  "argc": 7,
+  "wireable": false
+ },
+ {
   "file": "dart/seed_pool.dart",
   "name": "seedPool",
   "ret": "List<LipskeyCatalogProduct>",
@@ -5193,14 +7627,57 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/segments-segment-counts.dart",
+  "name": "segmentCounts",
+  "ret": "List<Map<String, dynamic>>",
+  "params": [
+   "List",
+   "String",
+   "String Function(String) term",
+   "dynamic",
+   "List Function(List, String) cockpitAtRisk",
+   "num Function(dynamic) supIls",
+   "num Function(dynamic) supUsd",
+   "dynamic Function(dynamic) supLast",
+   "num Function(dynamic, String) daysSince"
+  ],
+  "argc": 9,
+  "wireable": false
+ },
+ {
+  "file": "dart/segment_key_of.dart",
+  "name": "segmentKeyOf",
+  "ret": "String",
+  "params": [
+   "String?",
+   "String?",
+   "String"
+  ],
+  "argc": 3,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/segula-reminders.dart",
   "name": "segulaReminders",
   "ret": "dynamic",
   "params": [
    "dynamic",
-   "[dynamic offsets]"
+   "dynamic"
   ],
   "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/segula-title.dart",
+  "name": "segulaTitle",
+  "ret": "String",
+  "params": [
+   "dynamic",
+   "dynamic",
+   "dynamic",
+   "String Function(String) term"
+  ],
+  "argc": 4,
   "wireable": false
  },
  {
@@ -5275,7 +7752,7 @@
   "ret": "Map<String, dynamic>",
   "params": [
    "dynamic",
-   "[dynamic onBlocked]"
+   "dynamic"
   ],
   "argc": 2,
   "wireable": false
@@ -5323,6 +7800,22 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/sign-up-error.dart",
+  "name": "signUpError",
+  "ret": "String",
+  "params": [
+   "String",
+   "String",
+   "String",
+   "String",
+   "String",
+   "String",
+   "String Function(String) term"
+  ],
+  "argc": 7,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/site-donate-url.dart",
   "name": "siteDonateUrl",
   "ret": "dynamic",
@@ -5362,6 +7855,18 @@
    "dynamic",
    "dynamic",
    "dynamic"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/site-vocab.dart",
+  "name": "siteVocab",
+  "ret": "dynamic",
+  "params": [
+   "dynamic",
+   "dynamic",
+   "String Function(String) term"
   ],
   "argc": 3,
   "wireable": false
@@ -5418,6 +7923,18 @@
   "wireable": false
  },
  {
+  "file": "dart/size_table_eq.dart",
+  "name": "sizeTableEq",
+  "ret": "bool",
+  "params": [
+   "List<List<String>>?",
+   "List<List<String>>?",
+   "bool Function(List<String> x, List<String> y) rowEq = _listEq"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
   "file": "dart/size_table_hash.dart",
   "name": "sizeTableHash",
   "ret": "int",
@@ -5425,6 +7942,18 @@
    "List<List<String>>?"
   ],
   "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/slugify.dart",
+  "name": "slugify",
+  "ret": "dynamic",
+  "params": [
+   "dynamic",
+   "dynamic",
+   "Map<String, dynamic>"
+  ],
+  "argc": 3,
   "wireable": false
  },
  {
@@ -5437,9 +7966,78 @@
    "dynamic",
    "dynamic",
    "dynamic",
-   "[dynamic limit = _undefined]"
+   "dynamic"
   ],
   "argc": 6,
+  "wireable": false
+ },
+ {
+  "file": "dart/smart_key_to_id.dart",
+  "name": "smartKeyToId",
+  "ret": "Map<String, String>",
+  "params": [
+   "List<CatalogNode>",
+   "String Function(String key) categoryIdOf",
+   "SmartKeyToIdCache"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart/smart_product_by_key.dart",
+  "name": "smartProductByKey",
+  "ret": "SmartProduct?",
+  "params": [
+   "String",
+   "List<SmartProduct>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/smart_products_for_cat.dart",
+  "name": "smartProductsForCat",
+  "ret": "List<SmartProduct>",
+  "params": [
+   "String",
+   "List<SmartProduct>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/snap_od_to_dn.dart",
+  "name": "snapOdToDn",
+  "ret": "int",
+  "params": [
+   "num",
+   "List<int>"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/ports_face.dart",
+  "name": "snapToGrid",
+  "ret": "GridStep?",
+  "params": [
+   "Vec3",
+   "double"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/soft_batch_warn_he.dart",
+  "name": "softBatchWarnHe",
+  "ret": "String?",
+  "params": [
+   "int",
+   "String Function(String) term",
+   "int",
+   "int"
+  ],
+  "argc": 4,
   "wireable": false
  },
  {
@@ -5504,7 +8102,7 @@
    "dynamic",
    "dynamic",
    "dynamic",
-   "[dynamic pad = 10]"
+   "dynamic"
   ],
   "argc": 4,
   "wireable": false
@@ -5530,15 +8128,30 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/stage-label.dart",
+  "name": "stageLabel",
+  "ret": "dynamic",
+  "params": [
+   "dynamic",
+   "dynamic",
+   "dynamic",
+   "Map<String, dynamic>"
+  ],
+  "argc": 4,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/stale-boxes.dart",
   "name": "staleBoxes",
   "ret": "dynamic",
   "params": [
    "dynamic",
    "dynamic",
-   "[dynamic days = _undefined,\n    dynamic isoOf = _undefined,\n    dynamic lastCollectionIso = _undefined]"
+   "dynamic",
+   "dynamic",
+   "dynamic"
   ],
-  "argc": 3,
+  "argc": 5,
   "wireable": false
  },
  {
@@ -5577,6 +8190,17 @@
   "wireable": true
  },
  {
+  "file": "dart/stock_merkaz.dart",
+  "name": "stockMerkaz",
+  "ret": "int",
+  "params": [
+   "String",
+   "int Function(String, int) tail"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart/string_field.dart",
   "name": "stringField",
   "ret": "String",
@@ -5594,6 +8218,18 @@
    "dynamic"
   ],
   "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart/strip_kind.dart",
+  "name": "stripKind",
+  "ret": "String",
+  "params": [
+   "String",
+   "AttrKind",
+   "AttrKind? Function(String) kindOf"
+  ],
+  "argc": 3,
   "wireable": false
  },
  {
@@ -5660,6 +8296,59 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/student-history-text.dart",
+  "name": "studentHistoryText",
+  "ret": "String",
+  "params": [
+   "List<dynamic>",
+   "String Function(String) term"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart/studio_scope_prompt.dart",
+  "name": "studioScopePrompt",
+  "ret": "String",
+  "params": [
+   "String",
+   "String Function(String) term",
+   "String Function(String) safeText",
+   "Set<String> Function() scopeTokens",
+   "String Function(String) scopeTokenHe",
+   "String"
+  ],
+  "argc": 6,
+  "wireable": false
+ },
+ {
+  "file": "dart/studio_scope_tokens.dart",
+  "name": "studioScopeTokens",
+  "ret": "Set<String>",
+  "params": [
+   "Iterable<String> Function() elementIds",
+   "String Function(String) namespaceOf",
+   "String",
+   "String"
+  ],
+  "argc": 4,
+  "wireable": false
+ },
+ {
+  "file": "dart/style_he.dart",
+  "name": "styleHe",
+  "ret": "String",
+  "params": [
+   "String",
+   "String Function(String) term",
+   "String?",
+   "List<String> Function(String id, String attr) allowedValues",
+   "String Function(String) colorHe"
+  ],
+  "argc": 5,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/subsidy-total.dart",
   "name": "subsidyTotal",
   "ret": "dynamic",
@@ -5715,7 +8404,7 @@
    "dynamic",
    "dynamic",
    "dynamic",
-   "[dynamic rate = 3.7]"
+   "dynamic"
   ],
   "argc": 4,
   "wireable": false
@@ -5736,7 +8425,7 @@
   "ret": "List<Map<String, dynamic>>",
   "params": [
    "dynamic",
-   "[dynamic Function(String key, String fallback)? term]"
+   "dynamic Function(String key, String fallback)? term"
   ],
   "argc": 2,
   "wireable": false
@@ -5863,6 +8552,17 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/supporters-import-format-rows.dart",
+  "name": "supportersImportFormatRows",
+  "ret": "List<List<dynamic>>",
+  "params": [
+   "Map<String, dynamic>",
+   "String Function(String) term"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/supporter-visible-for-designations.dart",
   "name": "supporterVisibleForDesignations",
   "ret": "bool",
@@ -5895,6 +8595,33 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/sup-score.dart",
+  "name": "supScore",
+  "ret": "int",
+  "params": [
+   "dynamic",
+   "dynamic",
+   "dynamic",
+   "dynamic Function(dynamic sp, dynamic rate) supTotalIls",
+   "dynamic Function(dynamic sp) supLast",
+   "dynamic Function(dynamic sp) supCount"
+  ],
+  "argc": 6,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/sup-score-bins.dart",
+  "name": "supScoreBins",
+  "ret": "List<int>",
+  "params": [
+   "List<dynamic>",
+   "dynamic",
+   "dynamic Function(dynamic sp, dynamic rate) supScore"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/sup-tier.dart",
   "name": "supTier",
   "ret": "Map<String, String>",
@@ -5902,6 +8629,19 @@
    "dynamic"
   ],
   "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart-maor/sup-total-ils.dart",
+  "name": "supTotalIls",
+  "ret": "dynamic",
+  "params": [
+   "dynamic",
+   "dynamic",
+   "dynamic Function(dynamic sp) supIls",
+   "dynamic Function(dynamic sp) supUsd"
+  ],
+  "argc": 4,
   "wireable": false
  },
  {
@@ -5925,6 +8665,32 @@
   ],
   "argc": 3,
   "wireable": true
+ },
+ {
+  "file": "dart/synthetic_pipe.dart",
+  "name": "syntheticPipe",
+  "ret": "LipskeyCatalogProduct",
+  "params": [
+   "String",
+   "String",
+   "String Function(String) term",
+   "Map<String, LipskeyCatalogProduct>",
+   "Map<String, VerifiedSpec>"
+  ],
+  "argc": 5,
+  "wireable": false
+ },
+ {
+  "file": "dart/system_coherence.dart",
+  "name": "systemCoherence",
+  "ret": "SystemCoherence",
+  "params": [
+   "List<ProductConnectorSpec>",
+   "List<ConnectorType>",
+   "List<SystemDef>"
+  ],
+  "argc": 3,
+  "wireable": false
  },
  {
   "file": "dart/system_id.dart",
@@ -6092,6 +8858,23 @@
   "wireable": false
  },
  {
+  "file": "dart-maor/portfolio-tier-trend-counts.dart",
+  "name": "tierTrendCounts",
+  "ret": "List<Map<String, dynamic>>",
+  "params": [
+   "List",
+   "String",
+   "String Function(String) term",
+   "num",
+   "Map Function(dynamic, String, num, int) donorScan",
+   "Map Function(Map, String) rfmFromScan",
+   "Map Function(Map) trendFromScan",
+   "Map Function(num) supTier"
+  ],
+  "argc": 8,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/time-cost-total.dart",
   "name": "timeCostTotal",
   "ret": "num",
@@ -6142,6 +8925,17 @@
   "wireable": true
  },
  {
+  "file": "dart/toks.dart",
+  "name": "toks",
+  "ret": "List<String>",
+  "params": [
+   "String",
+   "String Function(String) term"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/total-label.dart",
   "name": "totalLabel",
   "ret": "dynamic",
@@ -6184,7 +8978,7 @@
    "List<dynamic>",
    "dynamic",
    "dynamic",
-   "[dynamic config]"
+   "dynamic"
   ],
   "argc": 4,
   "wireable": false
@@ -6197,6 +8991,17 @@
    "Map<String, dynamic>"
   ],
   "argc": 1,
+  "wireable": false
+ },
+ {
+  "file": "dart/trigger_label_he.dart",
+  "name": "triggerLabelHe",
+  "ret": "String",
+  "params": [
+   "String",
+   "List<( String id, String labelHe )> triggers"
+  ],
+  "argc": 2,
   "wireable": false
  },
  {
@@ -6250,7 +9055,7 @@
    "String",
    "dynamic Function(DateTime) holidayOf",
    "String Function(DateTime) isoOf",
-   "[\n  int days = 45,\n]"
+   "int"
   ],
   "argc": 4,
   "wireable": false
@@ -6262,7 +9067,22 @@
   "params": [
    "Map<String, Object?>",
    "String",
-   "[\n  num days = 2,\n  Map<String, Object?>? config,\n  String Function(DateTime d)? isoOf,\n  Object? Function(Map<String, Object?> db, Map<String, Object?> a,\n          Map<String, Object?>? config)?\n      beneficiaryLabel,\n]"
+   "num",
+   "Map<String, Object?>?",
+   "String Function(DateTime d)? isoOf",
+   "Object? Function(Map<String, Object?> db, Map<String, Object?> a,\n          Map<String, Object?>? config)?\n      beneficiaryLabel"
+  ],
+  "argc": 6,
+  "wireable": false
+ },
+ {
+  "file": "dart/usable_connector.dart",
+  "name": "usableConnector",
+  "ret": "bool",
+  "params": [
+   "String",
+   "bool Function(String sku) isFlowConnector",
+   "bool Function(String sku) hasVerifiedSpec"
   ],
   "argc": 3,
   "wireable": false
@@ -6277,6 +9097,25 @@
    "Set<Object?>"
   ],
   "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart/validate_op.dart",
+  "name": "validateOp",
+  "ret": "ConfigOp?",
+  "params": [
+   "Object?",
+   "ConfigOp? Function(Map<String, dynamic> m) opFromJson",
+   "String? Function(String id) matchElementId",
+   "String? Function(String target, String axis) matchPropKey",
+   "String Function(ConfigOp op) axisOf",
+   "bool Function(String target, String prop, String? value) freeValueOk",
+   "( bool ok, Object? style ) Function(String target, Object? style)\n      resolveStyle",
+   "String? Function(Map<String, dynamic> m) actionIdOf",
+   "String? Function(String target, String id) matchActionId",
+   "String? Function(String id) matchCatalogActionId"
+  ],
+  "argc": 10,
   "wireable": false
  },
  {
@@ -6349,6 +9188,18 @@
   ],
   "argc": 1,
   "wireable": true
+ },
+ {
+  "file": "dart/variant_value.dart",
+  "name": "variantValue",
+  "ret": "String",
+  "params": [
+   "LipskeyCatalogProduct",
+   "AttrKind",
+   "AttrKind? Function(String w) kindOf"
+  ],
+  "argc": 3,
+  "wireable": false
  },
  {
   "file": "dart/verified_spec_to_doc.dart",
@@ -6551,6 +9402,23 @@
   "wireable": false
  },
  {
+  "file": "dart/wf_daily_rows.dart",
+  "name": "wfDailyRows",
+  "ret": "List<List<Object>>",
+  "params": [
+   "OrgConfig",
+   "List<( String name, String phone, WfCase? wf )> entities",
+   "String",
+   "String Function(String) term",
+   "String Function(OrgConfig) unitLabel",
+   "String Function(OrgConfig) itemLabel",
+   "String Function(OrgConfig, WfStage) stageLabel",
+   "int Function(WfCase) unitsTotal"
+  ],
+  "argc": 8,
+  "wireable": false
+ },
+ {
   "file": "dart/wf_next_stage.dart",
   "name": "wfNextStage",
   "ret": "WfStage?",
@@ -6644,6 +9512,29 @@
    "dynamic Function(dynamic, dynamic, dynamic, dynamic, dynamic, dynamic) signUpError"
   ],
   "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart/worker_short_name.dart",
+  "name": "workerShortName",
+  "ret": "String",
+  "params": [
+   "int",
+   "String Function(String) term",
+   "List<String>"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
+  "file": "dart/write_filtered_mode.dart",
+  "name": "writeFilteredMode",
+  "ret": "void",
+  "params": [
+   "EdgeKvStore",
+   "bool"
+  ],
+  "argc": 2,
   "wireable": false
  }
 ]

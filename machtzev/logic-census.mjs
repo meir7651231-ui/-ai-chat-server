@@ -15,6 +15,7 @@ const PRIM = new Set(['String', 'int', 'double', 'num', 'bool']);
 // פיצול רשימת-פרמטרים ברמה-העליונה בלבד (מכבד <> ו-() של טיפוסי-פונקציה/גנריות).
 function splitParams(s) {
   const out = []; let depth = 0, cur = '';
+  s = s.replace(/[{}\[\]]/g, ' ');   // שטוח את סמני-named/optional ⇒ פסיקי-הפרמטרים ברמה-עליונה
   for (const ch of s) {
     if (ch === '<' || ch === '(' || ch === '[' || ch === '{') depth++;
     else if (ch === '>' || ch === ')' || ch === ']' || ch === '}') depth--;
@@ -38,8 +39,8 @@ export function logicCensus() {
     let files; try { files = fs.readdirSync(path.join(ROOT, dir)).filter((f) => f.endsWith('.dart') && !f.endsWith('_test.dart')); } catch { continue; }
     for (const f of files.sort()) {
       const src = fs.readFileSync(path.join(ROOT, dir, f), 'utf8');
-      // פונקציה-עליונה חד-שורתית: <ret> <name>(<params>) { | => | async
-      for (const m of src.matchAll(/^([A-Za-z_][A-Za-z0-9_<>?,. ]*?)\s+([a-z][A-Za-z0-9_]*)\(([^;{]*?)\)\s*(?:\{|=>|async)/gm)) {
+      // פונקציה-עליונה (כולל רב-שורתית + named-params): <ret> <name>(<params>) { | => | async
+      for (const m of src.matchAll(/^([A-Za-z_][A-Za-z0-9_<>?,. ]*?)\s+([a-z][A-Za-z0-9_]*)\(([\s\S]*?)\)\s*(?:\{|=>|async)/gm)) {
         const [, ret0, name, paramStr] = m;
         const ret = ret0.trim();
         if (['if', 'for', 'while', 'switch', 'return', 'else', 'final', 'const', 'var'].includes(ret) || seen.has(name)) continue;

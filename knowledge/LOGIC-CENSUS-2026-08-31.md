@@ -11,9 +11,12 @@
 לחיווט** כשדה-מחושב (`שדה = fn(שדה-אחר)`).
 
 ## מספרים
-- **586 פונקציות** (חתימות חד-שורתיות; רב-שורתיות ⇒ סבב-הרחבה עתידי).
-- **95 ניתנות-לחיווט** (קלט-פרימיטיבי⇒פלט-מוצג): String 44 · int 17 · bool 16 ·
-  String? 6 · List<String> 4 · double 4 · num 2 · int? 2.
+- **810 פונקציות** (כולל רב-שורתיות + named-params; מ-586 בסבב הראשון — לקח: אל תצמצם).
+  מתוך ~951 שמות-ייחודיים ב-dart-maor+dart; השארית = ‏Future/generic-return, סבב עתידי.
+- **104 ניתנות-לחיווט** (קלט-פרימיטיבי⇒פלט-מוצג): String 48 · bool 19 · int 18 ·
+  String? 7 · List<String> 4 · double 4 · num 2 · int? 2.
+- ⚠️ **פער-חיווט-בפועל:** הייצור מחווט לוגיקה דרך `atlas.json`/XFORM (86 מחוברות) —
+  ‏atlas מכסה 445/951, כלומר תת-קבוצה. סגירת-הפער = הרחבת-atlas לכל-הלוגיקה (retrofit הבא).
 - דוגמאות: `adarNorm(String)→String` (נורמול שם-חודש) · `advanceStatus(String)→String`
   (השלב-הבא) · `cockpitDaysSince(String,String)→num` (ימים בין תאריכים) ·
   `chipPriority(String)→int` · `colRefToIndex(String)→int`.
