@@ -875,6 +875,76 @@ class ${cls} extends StatelessWidget {
 }
 
 // ── מסך-מערכת גנרי: כותרת + סקשן עם ילדים (מתגים/מצב-ריק) ──
+// ══════════════════════════════════════════════════════════════════════════
+//  🧩 מנוע-הרכבה (compose) — החזון: אטום+אטום ⇒ מסך חדש שאיש לא בנה ביד.
+//  קורא את מפקד-האטומים (atom-census.json), בורר אטומים **לפי צורת-הדאטה** של
+//  הישות (kpi⇐צבירה · list⇐רשומות), ומחווט נתוני-אמת דרך התפר שלהם. מחלקת-האטום
+//  נבחרת מהמצע — לא קשיחה; שקעי-דאטה⇐ערך-נגזר-מהישות, שקעי-סגנון/התנהגות⇐ברירת-מחדל.
+// ══════════════════════════════════════════════════════════════════════════
+let _census = null;
+const loadCensus = () => { if (_census) return _census; try { _census = JSON.parse(fs.readFileSync(path.join(HERE, 'atom-census.json'), 'utf8')); } catch { _census = []; } return _census; };
+const atomCtorParams = (relFile) => { let s; try { s = fs.readFileSync(path.join(ROOT, 'new', relFile), 'utf8'); } catch { return []; } const ctor = s.match(/const [A-Za-z0-9]+\(\{([^}]*)\}\)/); return ctor ? [...ctor[1].matchAll(/required this\.([a-zA-Z][a-zA-Z0-9_]*)/g)].map((m) => m[1]) : []; };
+// בורר-אטום: predicate על רשומת-המצע ⇒ מיפוי-תפקידים על פרמטרי-הבנאי (בטוח: null ⇒ דילוג).
+function pickAtom(pred, roles) {
+  for (const a of loadCensus().filter(pred).sort((x, y) => x.cls.localeCompare(y.cls))) {
+    const ps = atomCtorParams(a.file); if (!ps.length) continue;
+    const bound = {}; let ok = true;
+    for (const [role, re] of Object.entries(roles)) { const p = ps.find((x) => re.test(x) && !Object.values(bound).includes(x)); if (!p) { ok = false; break; } bound[role] = p; }
+    if (ok) return { cls: a.cls, file: a.file, p: bound };
+  }
+  return null;
+}
+
+// 🧩 מסך-סקירה מורכב-מאטומים: רצועת-KPI (Stat-כמו) מצבירות + טבלת-רשומות (DsTable-כמו).
+// שני האטומים נבחרים מהמצע לפי-צורה; אם אין מתאים ⇒ הבלוק מדולג (אפס-קוד-שבור).
+export function renderCompose(slug, { entitySlug, entityName, fields = [], numFields = [] }) {
+  const { k, dump } = makeConsts(slug);
+  const cls = pascal(slug);
+  const kpi = pickAtom((a) => a.caps.includes('kpi') && a.seam === 'fields' && a.str === 2 && a.num === 0 && a.list === 0 && a.cb === 0 && a.style === 0,
+    { value: /^(value|val|amount|total|count)$/, label: /^(label|title|caption|name)$/ });
+  const tbl = pickAtom((a) => a.caps.includes('list') && a.seam === 'collection' && a.list >= 2 && a.str === 0 && a.num === 0 && a.cb === 0 && a.style === 0,
+    { labels: /^(labels|cols|columns|headers)$/, rows: /^(rows|data)$/ });
+  if (!kpi && !tbl) return null;   // אין לבנים מתאימות ⇒ אין מסך
+
+  const imports = new Set(["import '../dart-ui-bs/ds/ds_store.dart';", "import 'package:flutter/material.dart';"]);
+  const blocks = [];
+  if (kpi) {
+    imports.add(`import '../${kpi.file}';`);
+    const tiles = [`${kpi.cls}(${kpi.p.value}: appStore.count('${entitySlug}').toString(), ${kpi.p.label}: ${k(entityName)})`];
+    for (const f of numFields.slice(0, 3)) tiles.push(`${kpi.cls}(${kpi.p.value}: appStore.sum('${entitySlug}', ${k(f)}).toStringAsFixed(0), ${kpi.p.label}: ${k(f)})`);
+    blocks.push(`Padding(\n            padding: const EdgeInsets.all(12),\n            child: Wrap(spacing: 10, runSpacing: 10, children: [\n              ${tiles.join(',\n              ')},\n            ]),\n          )`);
+  }
+  if (tbl && fields.length) {
+    imports.add(`import '../${tbl.file}';`);
+    const labelList = fields.map((f) => k(f)).join(', ');
+    const rowCells = fields.map((f) => `r[${k(f)}] ?? ''`).join(', ');
+    blocks.push(`Expanded(\n            child: SingleChildScrollView(\n              child: ${tbl.cls}(${tbl.p.labels}: const [${labelList}], ${tbl.p.rows}: appStore.records('${entitySlug}').map((r) => [${rowCells}]).toList()),\n            ),\n          )`);
+  }
+  if (!blocks.length) return null;
+
+  const code = `// ✨ חולל ע"י מנוע-ההרכבה (render-ds/compose) — אטום+אטום ⇒ מסך-סקירה מורכב מנתוני-הישות. אל תערוך ידנית.
+${[...imports].join('\n')}
+import '../dart-data-bs/auto/gen_${slug}_content.dart';
+
+class ${cls} extends StatelessWidget {
+  const ${cls}({super.key});
+
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(
+        animation: appStore,
+        builder: (context, _) => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+          ${blocks.join(',\n          ')},
+          ],
+        ),
+      );
+}
+`;
+  write(slug, code, dump());
+  return { slug, cls };
+}
+
 // ── 🖥 מחבר-ישות-למסך · סורק-אוטומטי: עובר על כל מסכי-Composed המפורקים, ומזהה את הניתנים-
 //    לחיבור — רשימה-ראשית עם פריט-נושא-כותרת שכל-שדותיו ממופים בהיוריסטיקה, + סקלרים/רשימות-
 //    משניות שניתנים-למילוי-בטוח. כל רשומה ⇒ פריט (הכותרת = הערך-הראשון-הלא-ריק). אפס-Hebrew

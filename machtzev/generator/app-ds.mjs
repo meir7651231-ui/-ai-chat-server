@@ -7,7 +7,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { interpret as entInterpret } from './entity.mjs';
-import { renderEntity, renderDashboard, renderHub, renderSystem, renderMain, renderScreenBind, SCREEN_REGISTRY } from './render-ds.mjs';
+import { renderEntity, renderDashboard, renderHub, renderSystem, renderMain, renderScreenBind, renderCompose, SCREEN_REGISTRY } from './render-ds.mjs';
 
 const ROOT = new URL('../../', import.meta.url).pathname;
 const OUT = path.join(ROOT, 'new/dart-gen-bs');
@@ -56,7 +56,7 @@ export function buildApp(specText) {
   for (const li of info) if (li.isEnt) {
     const r = entRes[li.i];
     const eslug = `app_ent${li.i}`;
-    entMeta.push({ name: r.entity, slug: eslug, fields: r.schema.length, stages: (r.stages || []).length, icon: '🗂️', numFields: r.schema.filter((s) => s.type === 'num').map((s) => s.label) });
+    entMeta.push({ name: r.entity, slug: eslug, fields: r.schema.length, stages: (r.stages || []).length, icon: '🗂️', numFields: r.schema.filter((s) => s.type === 'num').map((s) => s.label), labels: r.schema.map((s) => s.label) });
     if (!(r.entity in nameToSlug)) nameToSlug[r.entity] = eslug;   // שם ⇒ slug-היעד לקשרים
   }
   const entityNames = entMeta.map((e) => e.name);
@@ -147,6 +147,15 @@ export function buildApp(specText) {
     bindScreens.push({ slug: bslug, cls, kind: 'entity', name: `🖥 ${ent.name} · מסך`, icon: '🖥', sub: `מסך-אמת מפורק (${spec.cls.replace('Composed', '')}) · מחווט-מהישות` });
   }
 
+  // 🧩 מסכי-הרכבה: אטום+אטום ⇒ מסך-סקירה חדש (לא ממחזר מסך-מוכן — מרכיב מלבנים).
+  // v1: מסך-סקירה לישות-הראשונה (KPI מצבירות + טבלת-רשומות), אטומים נבחרים מהמצע.
+  const composeScreens = [];
+  if (entMeta.length) {
+    const e0 = entMeta[0];
+    const c = renderCompose('app_over1', { entitySlug: e0.slug, entityName: e0.name, fields: e0.labels || [], numFields: e0.numFields || [] });
+    if (c) composeScreens.push({ slug: c.slug, cls: c.cls, kind: 'entity', name: `🧩 ${e0.name} · סקירה`, icon: '🧩', sub: 'מורכב-מאטומים (KPI + טבלה) · מנתוני-הישות' });
+  }
+
   // מסכי-מערכת (kind='system' — גלויים רק לתפקיד 'הכל')
   const sys = [];
   const a = renderSystem('app_audit', { title: 'יומן פעולות', icon: '🧾', sectionTitle: 'פעולות אחרונות', kind: 'empty', items: ['כל שינוי במערכת יתועד כאן'] });
@@ -159,7 +168,7 @@ export function buildApp(specText) {
   // RLS · שדות-היקף ייחודיים (slug+שדה) — למילוי בורר-"מי-אני" בלוח.
   const scopeFields = [];
   for (const role of roles) for (const sc of (role.scope || [])) { const sl = nameToSlug[sc.ent]; if (sl && !scopeFields.some((x) => x.slug === sl && x.field === sc.field)) scopeFields.push({ slug: sl, field: sc.field }); }
-  const hub = renderHub('app_hub', { title: 'האפליקציה שלי', icon: '🏗️', screens: [...screens, ...bindScreens, ...sys], roles, scopeFields });
+  const hub = renderHub('app_hub', { title: 'האפליקציה שלי', icon: '🏗️', screens: [...screens, ...composeScreens, ...bindScreens, ...sys], roles, scopeFields });
   // שורש-האפליקציה: main + MaterialApp ⇒ אפליקציה עצמאית שרצה בלי entry-זמני.
   renderMain('app_main', { title: 'האפליקציה שלי', hubSlug: 'app_hub', hubCls: hub.cls, edges });
 

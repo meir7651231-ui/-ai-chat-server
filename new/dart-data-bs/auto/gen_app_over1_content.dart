@@ -1,0 +1,22 @@
+// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.
+const String gen_app_over1_c0 = 'ליד';
+const String gen_app_over1_c1 = 'תקציב';
+const String gen_app_over1_c2 = 'תקציב';
+const String gen_app_over1_c3 = 'שם';
+const String gen_app_over1_c4 = 'חברה';
+const String gen_app_over1_c5 = 'טלפון';
+const String gen_app_over1_c6 = 'מייל';
+const String gen_app_over1_c7 = 'סוג פרויקט';
+const String gen_app_over1_c8 = 'מיקום';
+const String gen_app_over1_c9 = 'תקציב';
+const String gen_app_over1_c10 = 'ציון';
+const String gen_app_over1_c11 = 'סטטוס';
+const String gen_app_over1_c12 = 'שם';
+const String gen_app_over1_c13 = 'חברה';
+const String gen_app_over1_c14 = 'טלפון';
+const String gen_app_over1_c15 = 'מייל';
+const String gen_app_over1_c16 = 'סוג פרויקט';
+const String gen_app_over1_c17 = 'מיקום';
+const String gen_app_over1_c18 = 'תקציב';
+const String gen_app_over1_c19 = 'ציון';
+const String gen_app_over1_c20 = 'סטטוס';
