@@ -56,7 +56,10 @@ export function interpret(text) {
   const fieldsPart = rest.join(' ') || '';
   // אין חיתוך-שקט: כל השדות נשמרים (קודם נחתך ל-20 ⇒ 'סטטוס'/'התאמות' נעלמו). תקרת-שפיות בלבד.
   // 🔤 פעלי-שפה (תואמי-לאחור): שדה* = חובה · שדה{א|ב|ג} = ערכים-מותרים · שדה=נוסחה = מחושב.
-  const rawFields = fieldsPart.split(/[,\n]/).map((s) => s.trim()).filter(Boolean).slice(0, 200);
+  // פיצול-שדות מודע-עומק: פסיק/שורה מפרידים רק ברמה-העליונה — פסיק בתוך ()/{}/[]/<>
+  // (למשל קריאת-מנוע 'engine(שדה→מפתח, שדה→מפתח)') אינו מפריד-שדות.
+  const splitFields = (str) => { const out = []; let d = 0, cur = ''; for (const ch of str) { if ('({[<'.includes(ch)) d++; else if (')}]>'.includes(ch)) d = Math.max(0, d - 1); if ((ch === ',' || ch === '\n') && d === 0) { out.push(cur); cur = ''; } else cur += ch; } if (cur.trim()) out.push(cur); return out; };
+  const rawFields = splitFields(fieldsPart).map((s) => s.trim()).filter(Boolean).slice(0, 200);
   const annots = [];   // { label, required, unique, enumVals, formula, def }
   for (const raw of rawFields) {
     let f = raw;
