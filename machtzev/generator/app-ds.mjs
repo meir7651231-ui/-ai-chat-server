@@ -9,6 +9,7 @@ import path from 'node:path';
 import { interpret as entInterpret } from './entity.mjs';
 import { renderEntity, renderDashboard, renderHub, renderSystem, renderMain, renderScreenBind, renderCompose, renderRecordDetail, SCREEN_REGISTRY } from './render-ds.mjs';
 import { nlToSpec } from './nl-spec.mjs';
+import { L, T } from './chrome.mjs';
 
 const ROOT = new URL('../../', import.meta.url).pathname;
 const OUT = path.join(ROOT, 'new/dart-gen-bs');
@@ -126,7 +127,7 @@ export function buildApp(specText) {
         readonly: roles.map((role) => r.schema.map((s, i) => (role.ro || []).some((h) => h.ent === r.entity && h.field === s.label) ? i : -1).filter((i) => i >= 0)),
       } : null;
       const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames, nameToSlug, backRefs: backRefs[r.entity] || [], vrules: r.vrules || [], delGuard: delGuardByName[r.entity], guards: r.guards || [], authz });
-      screens.push({ slug, cls, kind: 'entity', name: r.entity, icon: '🗂️', sub: `${r.schema.length} שדות${(r.stages || []).length ? ` · ${r.stages.length} שלבים` : ''}` });
+      screens.push({ slug, cls, kind: 'entity', name: r.entity, icon: '🗂️', sub: `${r.schema.length} ${L.fieldsWord}${(r.stages || []).length ? ` · ${r.stages.length} ${L.stagesWord}` : ''}` });
     } else {
       const slug = `app_scr${li.i}`;
       const title = (li.line.split(/\s+עם\s+/)[0] || li.line).trim();     // כותרת = לפני 'עם'
@@ -139,7 +140,7 @@ export function buildApp(specText) {
         else countWords.push(t);
       }
       const { cls } = renderDashboard(slug, { title: clean(title), icon: '📊', entities: entMeta, metrics: countWords, aggs });
-      screens.push({ slug, cls, kind: 'dashboard', name: clean(title), icon: '📊', sub: `${(countWords.length + aggs.length) || entMeta.length} מדדים` });
+      screens.push({ slug, cls, kind: 'dashboard', name: clean(title), icon: '📊', sub: `${(countWords.length + aggs.length) || entMeta.length} ${L.metricsWord}` });
     }
   }
 
@@ -157,7 +158,7 @@ export function buildApp(specText) {
     const spec = SCREEN_REGISTRY[bi % SCREEN_REGISTRY.length];
     const bslug = `app_bind${bi + 1}`;
     const { cls } = renderScreenBind(bslug, { entitySlug: ent.slug, spec, scopeField: scopeByEnt[ent.slug] || null });
-    bindScreens.push({ slug: bslug, cls, kind: 'entity', name: `🖥 ${ent.name} · מסך`, icon: '🖥', sub: `מסך-אמת מפורק (${spec.cls.replace('Composed', '')}) · מחווט-מהישות` });
+    bindScreens.push({ slug: bslug, cls, kind: 'entity', name: `🖥 ${ent.name} · ${L.screenTag}`, icon: '🖥', sub: T('realScreenSub', { cls: spec.cls.replace('Composed', '') }) });
   }
 
   // 🔎 מסכי-רשומה-בודדת: בורר-רשומה ⇒ שדות + KPI-יחסים (ילדים שמצביעים על הרשומה).
@@ -169,7 +170,7 @@ export function buildApp(specText) {
   for (const e of entMeta) {
     const rels = (backRefs[e.name] || []).map((b) => ({ childSlug: b.fslug, childField: b.ffield, childName: b.fname }));
     const d = renderRecordDetail(`app_rec${++detN}`, { entitySlug: e.slug, entityName: e.name, fields: e.labels || [], relations: rels, scopeField: scopeByEnt[e.slug] || null });
-    if (d) { detailScreens.push({ slug: d.slug, cls: d.cls, kind: 'entity', name: `🔎 ${e.name} · כרטיס`, icon: '🔎', sub: rels.length ? `רשומה + ${rels.length} קשרים` : 'רשומה בודדת' }); detailByEnt[e.slug] = { cls: d.cls, slug: d.slug }; }
+    if (d) { detailScreens.push({ slug: d.slug, cls: d.cls, kind: 'entity', name: `🔎 ${e.name} · ${L.cardTag}`, icon: '🔎', sub: rels.length ? T('recordRels', { n: rels.length }) : L.singleRecord }); detailByEnt[e.slug] = { cls: d.cls, slug: d.slug }; }
     else detN--;
   }
 
@@ -181,25 +182,25 @@ export function buildApp(specText) {
   for (const e of entMeta) {
     if (!(e.stageLabels || []).length && !(e.numFields || []).length) continue;   // אין מה להרכיב מעבר ללי מסך-הישות
     const c = renderCompose(`app_over${++overN}`, { entitySlug: e.slug, entityName: e.name, fields: e.labels || [], numFields: e.numFields || [], stages: e.stageLabels || [], detail: detailByEnt[e.slug] || null, scopeField: scopeByEnt[e.slug] || null });
-    if (c) composeScreens.push({ slug: c.slug, cls: c.cls, kind: 'entity', name: `🧩 ${e.name} · סקירה`, icon: '🧩', sub: 'מורכב-מאטומים · מנתוני-הישות' });
+    if (c) composeScreens.push({ slug: c.slug, cls: c.cls, kind: 'entity', name: `🧩 ${e.name} · ${L.overviewTag}`, icon: '🧩', sub: L.composedSub });
     else overN--;
   }
 
   // מסכי-מערכת (kind='system' — גלויים רק לתפקיד 'הכל')
   const sys = [];
-  const a = renderSystem('app_audit', { title: 'יומן פעולות', icon: '🧾', sectionTitle: 'פעולות אחרונות', kind: 'empty', items: ['כל שינוי במערכת יתועד כאן'] });
-  sys.push({ ...a, kind: 'system', name: 'יומן פעולות', icon: '🧾', sub: 'audit · תיעוד מלא' });
-  const fl = renderSystem('app_flags', { title: 'דגלי-יכולת', icon: '🎚️', sectionTitle: 'מודולים', kind: 'toggles', items: entMeta.slice(0, 12).map((e) => e.name) });
-  sys.push({ ...fl, kind: 'system', name: 'דגלי-יכולת', icon: '🎚️', sub: 'הפעלה/כיבוי מודולים' });
-  const st = renderSystem('app_settings', { title: 'הגדרות', icon: '⚙️', sectionTitle: 'סנכרון · גיבוי · הרשאות', kind: 'toggles', items: ['עבודה אופליין', 'גיבוי אוטומטי', 'הצפנת-ענן'] });
-  sys.push({ ...st, kind: 'system', name: 'הגדרות', icon: '⚙️', sub: 'סנכרון · הרשאות' });
+  const a = renderSystem('app_audit', { title: L.auditTitle, icon: '🧾', sectionTitle: L.auditSection, kind: 'empty', items: [L.auditEmpty] });
+  sys.push({ ...a, kind: 'system', name: L.auditTitle, icon: '🧾', sub: L.auditSub });
+  const fl = renderSystem('app_flags', { title: L.flagsTitle, icon: '🎚️', sectionTitle: L.flagsSection, kind: 'toggles', items: entMeta.slice(0, 12).map((e) => e.name) });
+  sys.push({ ...fl, kind: 'system', name: L.flagsTitle, icon: '🎚️', sub: L.flagsSub });
+  const st = renderSystem('app_settings', { title: L.settingsTitle, icon: '⚙️', sectionTitle: L.settingsSection, kind: 'toggles', items: [L.settingsItem1, L.settingsItem2, L.settingsItem3] });
+  sys.push({ ...st, kind: 'system', name: L.settingsTitle, icon: '⚙️', sub: L.settingsSub });
 
   // RLS · שדות-היקף ייחודיים (slug+שדה) — למילוי בורר-"מי-אני" בלוח.
   const scopeFields = [];
   for (const role of roles) for (const sc of (role.scope || [])) { const sl = nameToSlug[sc.ent]; if (sl && !scopeFields.some((x) => x.slug === sl && x.field === sc.field)) scopeFields.push({ slug: sl, field: sc.field }); }
-  const hub = renderHub('app_hub', { title: 'האפליקציה שלי', icon: '🏗️', screens: [...screens, ...composeScreens, ...detailScreens, ...bindScreens, ...sys], roles, scopeFields });
+  const hub = renderHub('app_hub', { title: L.appTitle, icon: '🏗️', screens: [...screens, ...composeScreens, ...detailScreens, ...bindScreens, ...sys], roles, scopeFields });
   // שורש-האפליקציה: main + MaterialApp ⇒ אפליקציה עצמאית שרצה בלי entry-זמני.
-  renderMain('app_main', { title: 'האפליקציה שלי', hubSlug: 'app_hub', hubCls: hub.cls, edges });
+  renderMain('app_main', { title: L.appTitle, hubSlug: 'app_hub', hubCls: hub.cls, edges });
 
   return { screens, sys, roles };
 }

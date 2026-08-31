@@ -55,6 +55,10 @@ const rdSrc = fs.readFileSync(new URL('./generator/render-ds.mjs', import.meta.u
 ok(/from '\.\/chrome\.mjs'/.test(rdSrc), 'render-ds מייבא chrome (תוויות מהדאטה, לא קשיח)');
 const rdHe = (rdSrc.split('\n').map((l) => l.replace(/\/\/.*$/, '')).join('\n').match(/[֐-׿]{2,}/g) || []).filter((w) => !/^[֐׿׳״]+$/.test(w));
 ok(rdHe.length <= 34, `render-ds חוב-עברית-במנוע ${rdHe.length} ≤ 34 (רק-יורד; היה 100)`);
+const adSrc = fs.readFileSync(new URL('./generator/app-ds.mjs', import.meta.url), 'utf8');
+ok(/from '\.\/chrome\.mjs'/.test(adSrc), 'app-ds מייבא chrome (תוויות-מערכת מהדאטה)');
+const adHe = (adSrc.split('\n').map((l) => l.replace(/\/\/.*$/, '')).join('\n').match(/[֐-׿]{2,}/g) || []).filter((w) => !/^[֐׿׳״]+$/.test(w));
+ok(adHe.length <= 39, `app-ds חוב-עברית-במנוע ${adHe.length} ≤ 39 (רק-יורד; היה 96)`);
 
 // 3) RLS — scoped כשיש שדה-היקף
 buildApp('ישות חוג עם שם, מורה, מחיר, סטטוס | שלבים: פתוח, מלא\nישות תלמיד עם שם, מורה, ממוצע\nתפקיד מזכירה: הכל\nתפקיד מורה: חוג, תלמיד | היקף: חוג.מורה, תלמיד.מורה');
