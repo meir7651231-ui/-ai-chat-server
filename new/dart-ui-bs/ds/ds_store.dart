@@ -131,6 +131,14 @@ class AppStore extends ChangeNotifier {
     }
   }
 
+  // קפיצה לכל שלב (מסע לא-ליניארי — כולל דחייה/חזרה/הסתעפות).
+  void setStage(String entity, String id, int i) {
+    final r = byId(entity, id);
+    if (r == null || i < 0) return;
+    r[stageKey] = '$i';
+    notifyListeners();
+  }
+
   void removeById(String entity, String id) {
     _rec[entity]?.removeWhere((r) => r[idKey] == id);
     notifyListeners();

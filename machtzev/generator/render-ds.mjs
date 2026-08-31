@@ -232,7 +232,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const recValues = recValsR.join(', ');
   const labelsList = labelConst.join(', ');
   const stageArgs = hasStages
-    ? `stage: (const ${stageList})[appStore.stageOf(${SK}, rid)], stageDone: appStore.stageOf(${SK}, rid) >= ${stages.length - 1}, onAdvance: () => appStore.advance(${SK}, rid, ${stages.length}), `
+    ? `stage: (const ${stageList})[appStore.stageOf(${SK}, rid)], stageDone: appStore.stageOf(${SK}, rid) >= ${stages.length - 1}, stages: const ${stageList}, stageIndex: appStore.stageOf(${SK}, rid), onStage: (i) => appStore.setStage(${SK}, rid, i), onAdvance: () => appStore.advance(${SK}, rid, ${stages.length}), `
     : '';
 
   const relImport = hasRel ? "import '../dart-ui-bs/ds/ds_select.dart';\n" : '';

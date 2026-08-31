@@ -43,7 +43,7 @@ class _GenAppEnt58ScreenState extends State<GenAppEnt58Screen> {
 
   Widget _card(Map<String, String> r) {
     final rid = r['__id'] ?? '';
-    return DsRecordCard(labels: const [gen_app_ent58_c9, gen_app_ent58_c10, gen_app_ent58_c11, gen_app_ent58_c12, gen_app_ent58_c13, gen_app_ent58_c14, gen_app_ent58_c15], values: [appStore.displayOf('app_ent11', r[gen_app_ent58_c9] ?? ''), r[gen_app_ent58_c10] ?? '', r[gen_app_ent58_c11] ?? '', r[gen_app_ent58_c12] ?? '', appStore.displayOf('app_ent46', r[gen_app_ent58_c13] ?? ''), r[gen_app_ent58_c14] ?? '', r[gen_app_ent58_c15] ?? ''], stage: (const [gen_app_ent58_c17, gen_app_ent58_c18])[appStore.stageOf('app_ent58', rid)], stageDone: appStore.stageOf('app_ent58', rid) >= 1, onAdvance: () => appStore.advance('app_ent58', rid, 2), onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent58', rid));
+    return DsRecordCard(labels: const [gen_app_ent58_c9, gen_app_ent58_c10, gen_app_ent58_c11, gen_app_ent58_c12, gen_app_ent58_c13, gen_app_ent58_c14, gen_app_ent58_c15], values: [appStore.displayOf('app_ent11', r[gen_app_ent58_c9] ?? ''), r[gen_app_ent58_c10] ?? '', r[gen_app_ent58_c11] ?? '', r[gen_app_ent58_c12] ?? '', appStore.displayOf('app_ent46', r[gen_app_ent58_c13] ?? ''), r[gen_app_ent58_c14] ?? '', r[gen_app_ent58_c15] ?? ''], stage: (const [gen_app_ent58_c17, gen_app_ent58_c18])[appStore.stageOf('app_ent58', rid)], stageDone: appStore.stageOf('app_ent58', rid) >= 1, stages: const [gen_app_ent58_c17, gen_app_ent58_c18], stageIndex: appStore.stageOf('app_ent58', rid), onStage: (i) => appStore.setStage('app_ent58', rid, i), onAdvance: () => appStore.advance('app_ent58', rid, 2), onEdit: () => _edit(r), onDelete: () => appStore.removeById('app_ent58', rid));
   }
 
   String _csv() {

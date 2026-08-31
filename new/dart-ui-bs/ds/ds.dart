@@ -304,10 +304,13 @@ class DsNavTile extends StatelessWidget {
 
 // ── כרטיס-רשומה: תווית:ערך לכל שדה + שבב-שלב חי + קידום + עריכה (הקשה) + מחיקה ──
 class DsRecordCard extends StatelessWidget {
-  const DsRecordCard({required this.labels, required this.values, this.stage = '', this.stageDone = false, this.onAdvance, this.onEdit, this.onDelete, super.key});
+  const DsRecordCard({required this.labels, required this.values, this.stage = '', this.stageDone = false, this.stages = const [], this.stageIndex = 0, this.onStage, this.onAdvance, this.onEdit, this.onDelete, super.key});
   final List<String> labels, values;
   final String stage;         // שם השלב-הנוכחי (ריק = לישות אין מסע)
   final bool stageDone;       // האם הגיע לשלב-האחרון
+  final List<String> stages;  // כל השלבים (למסע לא-ליניארי — קפיצה לכל שלב)
+  final int stageIndex;       // אינדקס השלב-הנוכחי
+  final ValueChanged<int>? onStage;   // קפיצה לשלב שנבחר
   final VoidCallback? onAdvance, onEdit, onDelete;
   @override
   Widget build(BuildContext context) {
@@ -333,7 +336,29 @@ class DsRecordCard extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 8),
           child: Row(
             children: [
-              if (stage.isNotEmpty) DsChip(label: stage, tone: stageDone ? 1 : 0),
+              if (stage.isNotEmpty && (stages.isEmpty || onStage == null))
+                DsChip(label: stage, tone: stageDone ? 1 : 0),
+              if (stage.isNotEmpty && stages.isNotEmpty && onStage != null)
+                PopupMenuButton<int>(
+                  onSelected: onStage,
+                  tooltip: 'קפוץ לשלב',
+                  itemBuilder: (_) => [
+                    for (var i = 0; i < stages.length; i++)
+                      PopupMenuItem<int>(
+                        value: i,
+                        child: Row(children: [
+                          Icon(i == stageIndex ? Icons.radio_button_checked : Icons.radio_button_off, size: 16, color: i == stageIndex ? DsTokens.accent : DsTokens.faint),
+                          const SizedBox(width: 8),
+                          Text(stages[i], style: const TextStyle(fontSize: 13.5)),
+                        ]),
+                      ),
+                  ],
+                  child: Row(mainAxisSize: MainAxisSize.min, children: [
+                    DsChip(label: stage, tone: stageDone ? 1 : 0),
+                    const SizedBox(width: 2),
+                    const Icon(Icons.expand_more, size: 15, color: DsTokens.faint),
+                  ]),
+                ),
               const Spacer(),
               if (stage.isNotEmpty && !stageDone && onAdvance != null)
                 Material(
