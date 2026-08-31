@@ -928,7 +928,7 @@ export function selectAtom(roleSpecs, pred = () => true) {
 // **האטום שמגשים אותו הכי-טוב** (selectAtom מדורג); ההרכבה **משלבת** את אטומי-ההיבטים
 // יחד עד שהמטרה מושגת. שקעי-דאטה⇐נתוני-אמת · שקעים-נותרים⇐סגנון-בטוח (לא דאטה מזויף).
 const _rS = /^String\??$/, _rLS = /^List<String>\??$/, _rLLS = /^List<List<String>>\??$/, _rLD = /^List<double>\??$/, _rI = /^int\??$/;
-export function renderCompose(slug, { entitySlug, entityName, fields = [], numFields = [], stages = [] }) {
+export function renderCompose(slug, { entitySlug, entityName, fields = [], numFields = [], stages = [], detail = null }) {
   const { k, dump } = makeConsts(slug);
   const cls = pascal(slug);
   // היבט-מדדים: האטום שמגשים "ערך+תווית" הכי-טוב (הכי-מעט שקעים-נותרים).
@@ -937,7 +937,10 @@ export function renderCompose(slug, { entitySlug, entityName, fields = [], numFi
   // היבט-מבט-ראשי: אם לישות שלבים ⇒ לוח-סטטוס (המגשים-הטוב-יותר לזרימה); אחרת ⇒ טבלה.
   const board = stages.length ? selectAtom({ stages: { re: /^stages$/ }, records: { re: /^records$/ }, stageOf: { re: /^stageOf$/ }, titleOf: { re: /^titleOf$/ }, onMove: { re: /^onMove$/ } },
     (a) => a.seam === 'collection') : null;
-  const tbl = board ? null : selectAtom({ labels: { re: /^(labels|cols|columns|headers)$/, ty: _rLS }, rows: { re: /^(rows|data)$/, ty: _rLLS } },
+  // ניווט-בהקלקה: אם קיים כרטיס-רשומה ⇒ מבט-הרשומות = רשימה-לחיצה (שורה⇒כרטיס-הרשומה).
+  const nav = (!board && detail) ? selectAtom({ label: { re: /^(label|title|name|text)$/, ty: _rS }, onTap: { re: /^onTap$/ } },
+    (a) => a.seam === 'fields') : null;
+  const tbl = (board || nav) ? null : selectAtom({ labels: { re: /^(labels|cols|columns|headers)$/, ty: _rLS }, rows: { re: /^(rows|data)$/, ty: _rLLS } },
     (a) => a.caps.includes('list') && a.seam === 'collection');
   // היבט-מגמה: ישות עם שדה-מספרי ⇒ תרשים-עמודות (ערך-פר-רשומה). האטום אוכל סדרת-מספרים.
   const trend = numFields.length ? selectAtom({ labels: { re: /^(labels|cols)$/, ty: _rLS }, values: { re: /^(values|data|series)$/, ty: _rLD } },
@@ -945,7 +948,7 @@ export function renderCompose(slug, { entitySlug, entityName, fields = [], numFi
   // היבט-התקדמות: ישות עם שלבים ⇒ פס-התקדמות (אחוז-הרשומות בשלב-הסופי).
   const prog = stages.length ? selectAtom({ pct: { re: /^(pct|percent|value|val)$/, ty: _rI } },
     (a) => a.caps.includes('progress') && a.seam === 'fields') : null;
-  if (!kpi && !tbl && !board && !trend && !prog) return null;   // אין לבנים שמגשימות ⇒ אין מסך
+  if (!kpi && !tbl && !board && !trend && !prog && !nav) return null;   // אין לבנים שמגשימות ⇒ אין מסך
 
   const imports = new Set(["import '../dart-ui-bs/ds/ds_store.dart';", "import 'package:flutter/material.dart';"]);
   const blocks = [];
@@ -980,6 +983,13 @@ export function renderCompose(slug, { entitySlug, entityName, fields = [], numFi
     const titleF = fields.length ? k(fields[0]) : "''";
     const b = `${board.cls}(${board.p.stages}: const [${stageConsts}], ${board.p.records}: appStore.records('${entitySlug}'), ${board.p.stageOf}: (r) => appStore.stageOf('${entitySlug}', r['__id'] ?? ''), ${board.p.titleOf}: (r) => r[${titleF}] ?? '', ${board.p.onMove}: (id, to) => appStore.setStage('${entitySlug}', id, to))`;
     blocks.push(`Expanded(child: ${b})`);
+  } else if (nav) {
+    imports.add(`import '../${nav.file}';`);
+    imports.add(`import 'gen_${detail.slug}.dart';`);
+    const ex = nav.fills.length ? ', ' + nav.fills.join(', ') : '';
+    const titleF = fields.length ? k(fields[0]) : "''";
+    const row = `${nav.cls}(${nav.p.label}: (r[${titleF}] ?? '').isEmpty ? (r['__id'] ?? '') : (r[${titleF}] ?? ''), ${nav.p.onTap}: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${detail.cls}(initialId: r['__id'] ?? '')))${ex})`;
+    blocks.push(`Expanded(\n            child: ListView(\n              children: [\n                for (final r in appStore.records('${entitySlug}'))\n                  Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3), child: ${row}),\n              ],\n            ),\n          )`);
   } else if (tbl && fields.length) {
     imports.add(`import '../${tbl.file}';`);
     const extra = tbl.fills.length ? ', ' + tbl.fills.join(', ') : '';
@@ -1033,14 +1043,16 @@ export function renderRecordDetail(slug, { entitySlug, entityName, fields = [], 
 ${[...imports].join('\n')}
 
 class ${cls} extends StatefulWidget {
-  const ${cls}({super.key});
+  const ${cls}({this.initialId, super.key});
+
+  final String? initialId;   // רשומה-פתיחה מניווט (הקלקה על שורה); null ⇒ הראשונה.
 
   @override
   State<${cls}> createState() => _${cls}State();
 }
 
 class _${cls}State extends State<${cls}> {
-  int _sel = 0;
+  int? _sel;   // null ⇒ טרם-נבחר-ידנית (משתמשים ב-initialId).
 
   @override
   Widget build(BuildContext context) => AnimatedBuilder(
@@ -1048,7 +1060,8 @@ class _${cls}State extends State<${cls}> {
         builder: (context, _) {
           final recs = appStore.records('${entitySlug}');
           if (recs.isEmpty) return Center(child: Text(${k('אין רשומות עדיין')}));
-          final i = _sel.clamp(0, recs.length - 1);
+          final i0 = _sel ?? (widget.initialId != null ? recs.indexWhere((r) => r['__id'] == widget.initialId) : 0);
+          final i = (i0 < 0 ? 0 : i0).clamp(0, recs.length - 1);
           final r = recs[i];
           final id = r['__id'] ?? '';
           return ListView(

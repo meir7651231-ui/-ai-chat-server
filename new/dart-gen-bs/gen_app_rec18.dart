@@ -5,14 +5,16 @@ import '../dart-ui-bs/auto/callout.dart';
 import '../dart-data-bs/auto/gen_app_rec18_content.dart';
 
 class GenAppRec18Screen extends StatefulWidget {
-  const GenAppRec18Screen({super.key});
+  const GenAppRec18Screen({this.initialId, super.key});
+
+  final String? initialId;   // רשומה-פתיחה מניווט (הקלקה על שורה); null ⇒ הראשונה.
 
   @override
   State<GenAppRec18Screen> createState() => _GenAppRec18ScreenState();
 }
 
 class _GenAppRec18ScreenState extends State<GenAppRec18Screen> {
-  int _sel = 0;
+  int? _sel;   // null ⇒ טרם-נבחר-ידנית (משתמשים ב-initialId).
 
   @override
   Widget build(BuildContext context) => AnimatedBuilder(
@@ -20,7 +22,8 @@ class _GenAppRec18ScreenState extends State<GenAppRec18Screen> {
         builder: (context, _) {
           final recs = appStore.records('app_ent18');
           if (recs.isEmpty) return Center(child: Text(gen_app_rec18_c17));
-          final i = _sel.clamp(0, recs.length - 1);
+          final i0 = _sel ?? (widget.initialId != null ? recs.indexWhere((r) => r['__id'] == widget.initialId) : 0);
+          final i = (i0 < 0 ? 0 : i0).clamp(0, recs.length - 1);
           final r = recs[i];
           final id = r['__id'] ?? '';
           return ListView(

@@ -3,7 +3,8 @@ import '../dart-ui-bs/ds/ds_store.dart';
 import 'package:flutter/material.dart';
 import '../dart-ui-bs/auto/callout.dart';
 import '../dart-ui-bs/ds/ds_bars.dart';
-import '../dart-ui-bs/ds/ds_table.dart';
+import '../dart-ui-bs/auto/action_row.dart';
+import 'gen_app_rec4.dart';
 import '../dart-data-bs/auto/gen_app_over4_content.dart';
 
 class GenAppOver4Screen extends StatelessWidget {
@@ -29,8 +30,11 @@ class GenAppOver4Screen extends StatelessWidget {
             child: DsBars(labels: appStore.records('app_ent4').take(12).map((r) => r[gen_app_over4_c8] ?? '').toList(), values: appStore.records('app_ent4').take(12).map((r) => double.tryParse(r[gen_app_over4_c7] ?? '') ?? 0).toList()),
           ),
           Expanded(
-            child: SingleChildScrollView(
-              child: DsTable(labels: const [gen_app_over4_c9, gen_app_over4_c10, gen_app_over4_c11, gen_app_over4_c12, gen_app_over4_c13, gen_app_over4_c14, gen_app_over4_c15, gen_app_over4_c16, gen_app_over4_c17, gen_app_over4_c18], rows: appStore.records('app_ent4').map((r) => [r[gen_app_over4_c19] ?? '', r[gen_app_over4_c20] ?? '', r[gen_app_over4_c21] ?? '', r[gen_app_over4_c22] ?? '', r[gen_app_over4_c23] ?? '', r[gen_app_over4_c24] ?? '', r[gen_app_over4_c25] ?? '', r[gen_app_over4_c26] ?? '', r[gen_app_over4_c27] ?? '', r[gen_app_over4_c28] ?? '']).toList()),
+            child: ListView(
+              children: [
+                for (final r in appStore.records('app_ent4'))
+                  Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3), child: ActionRow(label: (r[gen_app_over4_c9] ?? '').isEmpty ? (r['__id'] ?? '') : (r[gen_app_over4_c9] ?? ''), onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => GenAppRec4Screen(initialId: r['__id'] ?? ''))))),
+              ],
             ),
           ),
           ],
