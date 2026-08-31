@@ -59,22 +59,33 @@ export function interpret(text) {
   const annots = [];   // { label, required, unique, enumVals, formula, def }
   for (const raw of rawFields) {
     let f = raw;
-    let required = false, unique = false, enumVals = null, formula = null, def = null, members = null;
+    let required = false, unique = false, enumVals = null, formula = null, def = null, members = null, pattern = null, range = null;
+    // שדה ~/regex/ — תבנית-קלט. מחולץ *ראשון*: regex מכיל = [] {} * ! ⇒ חייב לצאת לפני
+    // כל שאר-המרקרים. הערך גלמי (לא clean — היה הורס את ה-regex). regex גולמי = טהור.
+    const tp = f.match(/~\/(.*)\//);
+    if (tp) { pattern = tp[1]; f = f.replace(/~\/.*\//, ''); }
     const eq = f.indexOf('=');
     if (eq > 0) { formula = f.slice(eq + 1).trim(); f = f.slice(0, eq); }          // שדה=נוסחה
     const dm = f.match(/\[([^\]]*)\]/);
     if (dm) { def = dm[1].trim() || null; f = f.replace(/\[[^\]]*\]/, ''); }        // שדה[ברירת-מחדל] (ערך-גלמי: מספר/מטבע/מילה)
+    // שדה(0..100) — טווח מספרי. מחולץ לפני המקונן (שניהם פרנתזה): דורש '..' או '-' עם
+    // גבול-מספרי אחד לפחות ⇒ פרנתזה עברית (מקונן) לא נדלקת. טהור: המנוע רק משווה מספרים.
+    const rp = f.match(/\(\s*(-?\d+(?:\.\d+)?)?\s*(?:\.\.|-)\s*(-?\d+(?:\.\d+)?)?\s*\)/);
+    if (rp && (rp[1] !== undefined || rp[2] !== undefined)) {
+      range = { min: rp[1] !== undefined ? Number(rp[1]) : null, max: rp[2] !== undefined ? Number(rp[2]) : null };
+      f = f.replace(rp[0], '');
+    }
     // שדה(תת/תת/תת) — אובייקט-מקונן (Value Object). עומק-1. תת-שדות = תוויות פשוטות
-    // מופרדות-'/'. פרנתזה מספרית (טווח עתידי) ⇒ 0 חברים-עבריים ⇒ לא-מקונן (הפרדה טבעית).
+    // מופרדות-'/'. פרנתזה מספרית ⇒ נבלעה לעיל ⇒ 0 חברים-עבריים ⇒ לא-מקונן (הפרדה טבעית).
     const pm = f.match(/\(([^)]*)\)/);
     if (pm) { const subs = pm[1].split('/').map((x) => clean(x)).filter((x) => x.length > 1); if (subs.length) { members = subs; f = f.replace(/\([^)]*\)/, ''); } }
     const em = f.match(/\{([^}]*)\}/);
     if (em) { enumVals = em[1].split('|').map((x) => clean(x)).filter((x) => x.length > 0); f = f.replace(/\{[^}]*\}/, ''); }   // {א|ב|ג}
     if (/\*/.test(f)) { required = true; f = f.replace(/\*/g, ''); }               // שדה* = חובה
     if (/!/.test(f)) { unique = true; f = f.replace(/!/g, ''); }                   // שדה! = ייחודי
-    if (members) { required = false; unique = false; formula = null; enumVals = null; }   // מקונן: אין חובה/ייחודי/נוסחה/enum (v1)
+    if (members) { required = false; unique = false; formula = null; enumVals = null; pattern = null; range = null; }   // מקונן: אין חובה/ייחודי/נוסחה/enum/תבנית/טווח (v1)
     const label = clean(f);
-    if (label.length > 1) annots.push({ label, required, unique, enumVals: enumVals && enumVals.length ? enumVals : null, formula, def, members });
+    if (label.length > 1) annots.push({ label, required, unique, enumVals: enumVals && enumVals.length ? enumVals : null, formula, def, members, pattern, range });
   }
   const fields = annots.map((a) => a.label);
   // 🔄 שלבי-workflow (אם ניתנו): שרשרת-סטטוס. בלי '|' ⇒ אין workflow (לא ברירת-מחדל).
@@ -83,7 +94,7 @@ export function interpret(text) {
     ? stagesPart.replace(/^\s*(שלבים|סטטוסים|מצבים)[:\s]*/, '').split(/[,\n]|\s*→\s*/).map((s) => heWords(s).join(' ').trim()).filter((s) => s.length > 1).slice(0, 30)
     : [];
 
-  const schema = annots.map((a) => ({ label: a.label, type: inferType(a.label), required: a.required, unique: a.unique, enumVals: a.enumVals, formula: a.formula, def: a.def, members: a.members }));
+  const schema = annots.map((a) => ({ label: a.label, type: inferType(a.label), required: a.required, unique: a.unique, enumVals: a.enumVals, formula: a.formula, def: a.def, members: a.members, pattern: a.pattern, range: a.range }));
   const used = new Set();
   const lines = [`הירו 🗂️ ${entity} | ישות מורכבת — טופס + טבלה`];
   // 🔄 workflow: פס-שלבים מתוייג (BreadcrumbTrail labels) — מציג את מסע-הרשומה

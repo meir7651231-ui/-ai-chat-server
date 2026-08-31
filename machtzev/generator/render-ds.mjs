@@ -202,6 +202,8 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const defEntries = [];   // ברירות-מחדל: {idx: 'ערך'} לזריעת-טופס-חדש
   let subCounter = schema.length;   // מקצה מקומות-_v לתת-שדות-מקוננים (מעל אינדקסי-הסכמה)
   const subEditLoad = [];  // טעינת תת-תאים לעריכה: `si: r['הורה/בן']`
+  const rangeSpecs = [];   // ולידציית-טווח: {i, min, max}
+  const patternSpecs = []; // ולידציית-תבנית: {i, pattern}
   let hasLive = false, hasRel = false, hasEnum = false, hasCalc = false, hasMulti = false, usedField = false;
   const labelIdx = schema.map((s, i) => ({ label: s.label, idx: i }));
   schema.forEach((s, i) => {
@@ -209,6 +211,10 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
     const bind = `value: _v[${i}] ?? '', onChanged: (v) => setState(() => _v[${i}] = v)`;
     if (s.required) requiredIdx.push(i);
     if (s.unique) uniqueIdx.push(i);
+    // ולידציית-שדה (טווח/תבנית) — רק על שדות-קלט חופשיים (לא נוסחה/מקונן/enum).
+    const plain = !s.formula && !s.members && !(s.enumVals && s.enumVals.length);
+    if (plain && s.range) rangeSpecs.push({ i, min: s.range.min, max: s.range.max });
+    if (plain && s.pattern) patternSpecs.push({ i, pattern: s.pattern });
     // ברירת-מחדל ('שדה[ערך]'): ערך-פתיחה לרשומה-חדשה. לא על שדה-מחושב (נגזר ממילא).
     if (s.def != null && !s.formula) defEntries.push(`${i}: ${k(s.def)}`);
     // (0) שדה-מחושב (שורש-4): נוסחה מעל שדות-אחות ⇒ ערך-נגזר קריאה-בלבד (לא קלט).
@@ -311,7 +317,22 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   // שני-הצדדים ריקים ⇒ מדולג (החוק חל רק על ערכים-מוזנים); מספר-מול-מספר=מספרי, אחרת לקסיקלי.
   const ruleSpecs = vrules.map((v) => compileRule(v, labelIdx)).filter(Boolean);
   const ruleChecks = ruleSpecs.map((rc) => `{ final l = (_v[${rc.li}] ?? '').trim(); final rr = (_v[${rc.ri}] ?? '').trim(); if (l.isNotEmpty && rr.isNotEmpty) { final nl = num.tryParse(l); final nr = num.tryParse(rr); final ok = (nl != null && nr != null) ? (nl ${rc.op} nr) : (l.compareTo(rr) ${rc.op} 0); if (!ok) miss.add(${k(rc.text)}); } }`).join('\n      ');
-  const hasVal = requiredIdx.length + uniqueIdx.length + ruleSpecs.length > 0;
+  // 🔢 ולידציית-טווח: ערך-מספרי בין min ל-max (גבול-חסר ⇒ מדולג). לא-מספר ⇒ נכשל. ריק ⇒ מדולג.
+  const rangeChecks = rangeSpecs.map((r) => {
+    const parts = [];
+    if (r.min !== null) parts.push(`n < ${r.min}`);
+    if (r.max !== null) parts.push(`n > ${r.max}`);
+    const bound = r.min !== null && r.max !== null ? ` (${r.min}–${r.max})` : r.min !== null ? ` (≥${r.min})` : ` (≤${r.max})`;
+    return `{ final v = (_v[${r.i}] ?? '').trim(); if (v.isNotEmpty) { final n = num.tryParse(v); if (n == null || ${parts.join(' || ')}) miss.add(${k(`טווח ${schema[r.i].label}${bound}`)}); } }`;
+  }).join('\n      ');
+  // 🔤 ולידציית-תבנית: regex גולמי מהאפיון ⇒ RegExp בזמן-קומפילציה (דרך k() לבריחה נכונה).
+  // אימות בזמן-חילול: regex פסול ⇒ מדולג בשקט (כנות > קוד-שבור בזמן-ריצה). ריק ⇒ מדולג.
+  const validPatterns = patternSpecs.filter((p) => { try { new RegExp(p.pattern); return true; } catch { return false; } });
+  // מחרוזת-Dart בטוחה ל-regex: בורח \ · ' · $ (אינטרפולציה!) · שורה-חדשה. הרגקס אינליין
+  // (ערך-קונפיג צמוד-קוד), לא דרך k()/dump שאינם בורחים '$' ⇒ היו שוברים עוגן-סוף '$'.
+  const dartStr = (s) => "'" + String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\$/g, '\\$').replace(/\n/g, '\\n').replace(/\r/g, '\\r') + "'";
+  const patternChecks = validPatterns.map((p) => `{ final v = (_v[${p.i}] ?? '').trim(); if (v.isNotEmpty && !RegExp(${dartStr(p.pattern)}).hasMatch(v)) miss.add(${k(`תבנית שגויה: ${schema[p.i].label}`)}); }`).join('\n      ');
+  const hasVal = requiredIdx.length + uniqueIdx.length + ruleSpecs.length + rangeSpecs.length + validPatterns.length > 0;
   const defInit = defEntries.length ? `{${defEntries.join(', ')}}` : '{}';   // זריעת-פתיחה (ריק ⇒ ביט-זהה לקודם)
   const enumImport = hasEnum ? "import '../dart-ui-bs/ds/ds_enum_field.dart';\n" : '';
   const hasStages = stages.length >= 2;
@@ -369,7 +390,7 @@ ${hasVal ? '  String? _err;      // שגיאת-ולידציה (שדות-חובה
 ${hasVal ? `    final miss = <String>[];
       ${reqChecks}
       ${uniqChecks}
-      ${ruleChecks}
+      ${ruleChecks}${rangeChecks ? '\n      ' + rangeChecks : ''}${patternChecks ? '\n      ' + patternChecks : ''}
     if (miss.isNotEmpty) { setState(() => _err = miss.join(' · ')); return; }
 ` : ''}    final map = <String, String>{${mapEntries}};
     if (_editId != null) {
