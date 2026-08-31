@@ -288,9 +288,10 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
         }
         // קשר-בן לא-נמצא ⇒ נפילה ל-compileFormula (התנהגות היום)
       }
-      // (0-engine) מנוע-רשומה: 'שדה = engineName' ⇒ המנוע (מהמצע) רץ על הרשומה השלמה.
-      // המשתמש נקב בשם ⇒ טהור, אפס-זיוף; פלטו מוצג תחת תווית-השדה. עוזרים סטנדרטיים מוזרקים.
-      const em = s.formula.trim().match(/^([a-zA-Z_]\w*)(?:\(\s*\))?$/);
+      // (0-engine) מנוע-רשומה: 'שדה = engineName' (רשומה שלמה) או 'engineName(שדה→מפתח, …)'
+      // (מיפוי-שדות-למפתחות שהמנוע קורא — מחבר **כל** מנוע-רשומה, גם כשמפתחותיו זרים לשמות-השדה).
+      // המשתמש נקב בשם ומיפה ⇒ טהור, אפס-זיוף, אפס-מילון. עוזרים סטנדרטיים מוזרקים.
+      const em = s.formula.trim().match(/^([a-zA-Z_]\w*)\s*(?:\(([^)]*)\))?$/);
       if (em && MAP_ENGINES[em[1]]) {
         const f = MAP_ENGINES[em[1]];
         funcImports.add(`import '../${f.shelf.replace(/^new\//, '')}/${f.file}';`);
@@ -299,9 +300,16 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
         const wrap = (call) => f.ret === 'bool' ? `(${call} ? ${k('כן')} : ${k('לא')})`
           : /^(int|num|double)$/.test(f.ret) ? `${call}.toString()`
           : f.ret === 'String?' ? `(${call} ?? '')` : call;
-        // רשומת-טופס (מ-_v החי) ורשומת-כרטיס (מ-r השמור) — אותו מנוע, שני מקורות.
-        const formRec = `<String, String>{${labelIdx.map((l) => `${labelConst[l.idx]}: (_v[${l.idx}] ?? '')`).join(', ')}}`;
-        const cardRec = `<String, String>{${labelIdx.map((l) => `${labelConst[l.idx]}: (r[${labelConst[l.idx]}] ?? '')`).join(', ')}}`;
+        // מיפוי מפורש 'שדה→מפתח'? ⇒ רשומה ממופתחת; אחרת ⇒ הרשומה השלמה (תוויות-השדה כמפתחות).
+        const maps = (em[2] || '').split(',').map((x) => x.trim()).filter(Boolean)
+          .map((p) => p.split(/→|->/).map((y) => y.trim()))
+          .filter((pair) => pair.length === 2 && labelIdx.some((l) => l.label === pair[0]))
+          .map(([fld, key]) => ({ idx: labelIdx.find((l) => l.label === fld).idx, key }));
+        const recOf = (src) => maps.length
+          ? `<String, String>{${maps.map((m) => `${k(m.key)}: (${src(m.idx)} ?? '')`).join(', ')}}`
+          : `<String, String>{${labelIdx.map((l) => `${labelConst[l.idx]}: (${src(l.idx)} ?? '')`).join(', ')}}`;
+        const formRec = recOf((idx) => `_v[${idx}]`);
+        const cardRec = recOf((idx) => `r[${labelConst[idx]}]`);
         hasLive = true;
         addField(i, `_live(${cl}, ${wrap(`${f.name}(${formRec}${hz})`)})`, `true`);
         recValsR.push(wrap(`${f.name}(${cardRec}${hz})`));   // כרטיס/CSV: המנוע על הרשומה-השמורה
