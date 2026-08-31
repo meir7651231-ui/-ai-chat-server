@@ -18,7 +18,7 @@ class _GenAppEnt6ScreenState extends State<GenAppEnt6Screen> {
 
   void _save() {
     if (_v.values.where((x) => x.trim().isNotEmpty).isEmpty) return;
-    appStore.add(gen_app_ent6_c7, <String, String>{gen_app_ent6_c8: _v[0] ?? '', gen_app_ent6_c9: _v[1] ?? '', gen_app_ent6_c10: _v[2] ?? '', gen_app_ent6_c11: _v[3] ?? '', gen_app_ent6_c12: _v[4] ?? '', gen_app_ent6_c13: _v[5] ?? '', gen_app_ent6_c14: _v[6] ?? '', gen_app_ent6_c15: _v[7] ?? '', gen_app_ent6_c16: _v[8] ?? '', gen_app_ent6_c18: _v[9] ?? '', gen_app_ent6_c19: _v[10] ?? '', gen_app_ent6_c20: _v[11] ?? '', gen_app_ent6_c21: _v[12] ?? ''});
+    appStore.add(gen_app_ent6_c7, <String, String>{gen_app_ent6_c8: _v[0] ?? '', gen_app_ent6_c9: _v[1] ?? '', gen_app_ent6_c10: _v[2] ?? '', gen_app_ent6_c11: _v[3] ?? '', gen_app_ent6_c12: _v[4] ?? '', gen_app_ent6_c13: _v[5] ?? '', gen_app_ent6_c14: _v[6] ?? '', gen_app_ent6_c15: _v[7] ?? '', gen_app_ent6_c16: _v[8] ?? '', gen_app_ent6_c18: _v[9] ?? '', gen_app_ent6_c20: _v[10] ?? '', gen_app_ent6_c21: _v[11] ?? '', gen_app_ent6_c22: _v[12] ?? ''});
     setState(() => _v.clear());
   }
 
@@ -44,7 +44,7 @@ class _GenAppEnt6ScreenState extends State<GenAppEnt6Screen> {
       icon: gen_app_ent6_c2,
       bottomBar: DsPrimaryButton(label: gen_app_ent6_c3, onTap: _save),
       children: [
-        DsWorkflow(steps: const [gen_app_ent6_c22, gen_app_ent6_c23, gen_app_ent6_c24, gen_app_ent6_c25], current: 2),
+        DsWorkflow(steps: const [gen_app_ent6_c23, gen_app_ent6_c24, gen_app_ent6_c25, gen_app_ent6_c26], current: 2),
         DsSection(title: gen_app_ent6_c4, children: [
           DsField(label: gen_app_ent6_c8, hint: '', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
           DsField(label: gen_app_ent6_c9, hint: '', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
@@ -57,9 +57,10 @@ class _GenAppEnt6ScreenState extends State<GenAppEnt6Screen> {
           DsField(label: gen_app_ent6_c16, hint: '', value: _v[8] ?? '', onChanged: (v) => setState(() => _v[8] = v)),
           if ((_v[8] ?? '').trim().isNotEmpty) _live(gen_app_ent6_c17, fmtDate((_v[8] ?? ''))),
           DsField(label: gen_app_ent6_c18, hint: '', value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
-          DsField(label: gen_app_ent6_c19, hint: '', value: _v[10] ?? '', onChanged: (v) => setState(() => _v[10] = v)),
-          DsField(label: gen_app_ent6_c20, hint: '', value: _v[11] ?? '', onChanged: (v) => setState(() => _v[11] = v)),
-          DsField(label: gen_app_ent6_c21, hint: '', value: _v[12] ?? '', onChanged: (v) => setState(() => _v[12] = v)),
+          if ((_v[9] ?? '').trim().isNotEmpty) _live(gen_app_ent6_c19, fmtDate((_v[9] ?? ''))),
+          DsField(label: gen_app_ent6_c20, hint: '', value: _v[10] ?? '', onChanged: (v) => setState(() => _v[10] = v)),
+          DsField(label: gen_app_ent6_c21, hint: '', value: _v[11] ?? '', onChanged: (v) => setState(() => _v[11] = v)),
+          DsField(label: gen_app_ent6_c22, hint: '', value: _v[12] ?? '', onChanged: (v) => setState(() => _v[12] = v)),
         ]),
         DsSection(title: gen_app_ent6_c5, children: [
           AnimatedBuilder(
@@ -69,7 +70,7 @@ class _GenAppEnt6ScreenState extends State<GenAppEnt6Screen> {
               if (rs.isEmpty) return const DsEmpty(label: gen_app_ent6_c6);
               return Column(children: [
                 for (final r in rs)
-                  DsRecordCard(labels: const [gen_app_ent6_c8, gen_app_ent6_c9, gen_app_ent6_c10, gen_app_ent6_c11, gen_app_ent6_c12, gen_app_ent6_c13, gen_app_ent6_c14, gen_app_ent6_c15, gen_app_ent6_c16, gen_app_ent6_c18, gen_app_ent6_c19, gen_app_ent6_c20, gen_app_ent6_c21], values: [r[gen_app_ent6_c8] ?? '', r[gen_app_ent6_c9] ?? '', r[gen_app_ent6_c10] ?? '', r[gen_app_ent6_c11] ?? '', r[gen_app_ent6_c12] ?? '', r[gen_app_ent6_c13] ?? '', r[gen_app_ent6_c14] ?? '', r[gen_app_ent6_c15] ?? '', r[gen_app_ent6_c16] ?? '', r[gen_app_ent6_c18] ?? '', r[gen_app_ent6_c19] ?? '', r[gen_app_ent6_c20] ?? '', r[gen_app_ent6_c21] ?? '']),
+                  DsRecordCard(labels: const [gen_app_ent6_c8, gen_app_ent6_c9, gen_app_ent6_c10, gen_app_ent6_c11, gen_app_ent6_c12, gen_app_ent6_c13, gen_app_ent6_c14, gen_app_ent6_c15, gen_app_ent6_c16, gen_app_ent6_c18, gen_app_ent6_c20, gen_app_ent6_c21, gen_app_ent6_c22], values: [r[gen_app_ent6_c8] ?? '', r[gen_app_ent6_c9] ?? '', r[gen_app_ent6_c10] ?? '', r[gen_app_ent6_c11] ?? '', r[gen_app_ent6_c12] ?? '', r[gen_app_ent6_c13] ?? '', r[gen_app_ent6_c14] ?? '', r[gen_app_ent6_c15] ?? '', r[gen_app_ent6_c16] ?? '', r[gen_app_ent6_c18] ?? '', r[gen_app_ent6_c20] ?? '', r[gen_app_ent6_c21] ?? '', r[gen_app_ent6_c22] ?? '']),
               ]);
             },
           ),

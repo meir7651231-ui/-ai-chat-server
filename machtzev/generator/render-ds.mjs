@@ -20,6 +20,11 @@ const pascal = (slug) => 'GenApp' + slug.replace(/^app_/, '').replace(/(^|[_-])(
 // לתיאור-העצמי — אפס regex, אפס רשימת-מילים במנוע. מבחן-קונכייה: מחליף אטום ⇒ לומד מחדש.
 const atlas = JSON.parse(fs.readFileSync(path.join(HERE, 'atlas.json'), 'utf8'));
 const heToks = (s) => [...String(s || '').matchAll(/[֐-׿]{2,}/g)].map((m) => stem(m[0])).filter((t) => t.length > 1);
+// מילים-עבריות שלמות (לא-גזומות) — לאימות-חפיפה מול הגזם (הגזם מקבץ, המילה מאשרת).
+const heWords = (s) => [...String(s || '').matchAll(/[֐-׿]{2,}/g)].map((m) => m[0]);
+// שער-קידומת: גזם משותף נחשב-אמת רק אם המילים-המקוריות חולקות קידומת-אמת (≥3 · ≥70%).
+// מבטל התנגשויות-גזם (מ/ה/ל נשמט ⇒ מספר→ספר · לידה→מידה · הורים→שורת) — טהור, מבני.
+const prefixMatch = (a, b) => { let n = 0; const m = Math.min(a.length, b.length); while (n < m && a[n] === b[n]) n++; return n >= 3 && n >= 0.7 * m; };
 // אטומי-קלט = אלה שמצהירים "שדה לנתון…" בתיאור-העצמי (הצהרת-האטום, לא כלל-מנוע).
 const INPUTS = atlas.widgets
   .filter((w) => (w.he || []).slice(0, 2).join(' ') === 'שדה לנתון')
@@ -38,10 +43,25 @@ function pickInput(label) {
 // 🔌 מנועי-טרנספורם לשדה: פונקציה טהורה String f(קלט[, אופ]) — ניתן להריץ על ערך-שדה
 // בודד. עצמאיות בלבד (אפס import חוצה-אטום ⇒ סינכרון בטוח). הידע (he) על הפונקציה.
 const PRIM = new Set(['dynamic', 'String', 'num', 'int', 'double', 'String?', 'num?']);
-const selfContained = (shelf, file) => { try { return !/^import\s+'(?!dart:|package:flutter)/m.test(fs.readFileSync(path.join(ROOT, shelf, file), 'utf8')); } catch { return false; } };
+const srcOf = (shelf, file) => { try { return fs.readFileSync(path.join(ROOT, shelf, file), 'utf8'); } catch { return null; } };
+const selfContained = (shelf, file) => { const s = srcOf(shelf, file); return s != null && !/^import\s+'(?!dart:|package:flutter)/m.test(s); };
+// 🧱 טרנספורם-סקלרי בלבד: אטום שמטיל את-קלטו ל-Map/List (‏as Map / as List) צורך אובייקט
+// מובנה, לא ערך-שדה בודד — פוסלים אותו מבריכת-הטרנספורם (מבני-טהור, לא רשימת-שמות). זה גם
+// מסלק את התאמות-הרעש (‎'מידע רפואי'→שורת-מידע-על-חדר) וגם מונע Map-גולמי בניתוח-הקפדני.
+const scalarBody = (shelf, file) => { const s = srcOf(shelf, file); return s != null && !/\bas\s+(Map|List)\b/.test(s); };
 const XFORM = atlas.functions
-  .filter((f) => f.ret === 'String' && (f.params || []).length >= 1 && PRIM.has(f.params[0].type) && ((f.params.length === 1) || /\[/.test(f.sig || '')) && (f.he || []).length && selfContained(f.shelf, f.file))
-  .map((f) => ({ name: f.name, file: f.file, shelf: f.shelf, inType: f.params[0].type.replace(/\?$/, ''), st: [...new Set((f.he || []).flatMap(heToks))] }));
+  .filter((f) => f.ret === 'String' && (f.params || []).length >= 1 && PRIM.has(f.params[0].type) && ((f.params.length === 1) || /\[/.test(f.sig || '')) && (f.he || []).length && selfContained(f.shelf, f.file) && scalarBody(f.shelf, f.file))
+  .map((f) => {
+    const hw = (f.he || []).filter((w) => w.length >= 2);            // מילות-ה-he המקוריות
+    return {
+      name: f.name, file: f.file, shelf: f.shelf, inType: f.params[0].type.replace(/\?$/, ''),
+      hwords: hw,                                                    // לאימות-קידומת
+      subj: stem(hw[0] || ''),                                       // נושא-האטום (המילה-הראשונה בתיאורו-העצמי)
+      head: new Set(hw.slice(0, 2).flatMap(heToks)),                 // כותרת = שתי-המילים-הראשונות
+      label: hw.slice(0, 2).join(' ') || f.name,                    // תווית-תצוגה עברית (מהאטום, לא מזהה-הקוד)
+      st: [...new Set(hw.flatMap(heToks))],
+    };
+  });
 
 // 🎯 שכבה-1 · בחירה מכוונת-מטרה (לא הכי-קרוב, הכי-מתאים) — שלושה אותות טהורים:
 // (א) IDF: מילה-נדירה-ספציפית ('טלפון') שווה יותר ממילה-נפוצה ('מספר') ⇒ מסלק רעש.
@@ -53,18 +73,29 @@ const xidf = (t) => Math.log((XN + 1) / ((xdf.get(t) || 0) + 1)) + 1;
 const TYPE_COMPAT = { num: ['num', 'int', 'double', 'dynamic', 'Object'], text: ['String', 'dynamic', 'Object'], date: ['String', 'dynamic', 'DateTime', 'Object'], bool: ['dynamic'] };
 const INPUT_TYPE = { DsNumberField: 'num', DsDateField: 'date', DsToggleTile: 'bool', DsField: 'text' };
 const typeOf = (label) => INPUT_TYPE[pickInput(label)] || 'text';
-// בוחר מנוע-טרנספורם מכוון-מטרה: התאמת-טיפוס + ניקוד-IDF מובהק + מרווח-ברור מהשני.
+// בוחר מנוע-טרנספורם מכוון-מטרה. ארבעה אותות-טהורים, מצטברים — כל אחד מסלק מחלקת-רעש:
+//  (ב) שער-טיפוס · (שער-קידומת) מילה-מקורית מאשרת את הגזם (לא התנגשות-חיתוך) ·
+//  (מובהקות) מילה נחשבת רק אם ספציפית (df≤3) או נושא-האטום (he[0]) — מסלק מילות-כמות
+//  גנריות ('מספר') · (כותרת) מילה-חופפת בשתי-הראשונות · (מיקוד) תיאור-אטום קצר (≤6).
 function pickXform(label, ftype) {
-  const q = [...new Set(heToks(label))];
+  const fw = heWords(label).filter((w) => w.length >= 2);
   const ok = TYPE_COMPAT[ftype] || TYPE_COMPAT.text;
-  let best = null, bs = 0, second = 0;
+  let best = null, bs = 0, second = 0, bestHead = false;
   for (const f of XFORM) {
-    if (!ok.includes(f.inType)) continue;   // (ב) שער-טיפוס
-    let s = 0; for (const t of q) if (f.st.includes(t)) s += xidf(t);   // (א) ניקוד-IDF
-    if (s > bs) { second = bs; bs = s; best = f; } else if (s > second) second = s;
+    if (!ok.includes(f.inType)) continue;                      // (ב) שער-טיפוס
+    let s = 0, hh = false;
+    for (const w of fw) {
+      const t = stem(w);
+      if (!f.st.includes(t)) continue;
+      if (!f.hwords.some((ew) => prefixMatch(w, ew))) continue;   // שער-קידומת: מילה-מקורית מאשרת
+      if (!((xdf.get(t) || 0) <= 3 || t === f.subj)) continue;    // מובהקות: ספציפית או נושא-האטום
+      s += xidf(t);
+      if (f.head.has(t)) hh = true;                               // חפיפה-בכותרת
+    }
+    if (s > bs) { second = bs; bs = s; best = f; bestHead = hh; } else if (s > second) second = s;
   }
-  // (ג) דורש ניקוד-מטרה מובהק + מנצח-ברור (לא צירוף-מקרי, לא עמום) — אחרת לא מחווט (כנות > רעש).
-  return (best && bs >= 2.4 && bs >= second * 1.4) ? best : null;
+  // מחווט רק במטרה-מובהקת + חפיפה-בכותרת + אטום-ממוקד — אחרת אין-חיווט (כנות > רעש).
+  return (best && bs >= 2.4 && bestHead && best.st.length <= 6) ? best : null;
 }
 
 // מחולל-תוכן: אוסף מחרוזות-עברית ⇒ const; מחזיר את שם-הקבוע לשיבוץ בקוד.
@@ -101,13 +132,14 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const funcImports = new Set();
   const labelConst = [];
   const fieldBlocks = [];
+  let hasLive = false;
   schema.forEach((s, i) => {
     const cl = k(s.label); labelConst.push(cl);
     fieldBlocks.push(`          DsField(label: ${cl}, hint: '', value: _v[${i}] ?? '', onChanged: (v) => setState(() => _v[${i}] = v)),`);
     const xf = pickXform(s.label, typeOf(s.label));   // 🎯 מנוע-אימפריה מכוון-מטרה (טיפוס+IDF+מרווח)
     if (xf) {
       funcImports.add(`import '../${xf.shelf.replace(/^new\//, '')}/${xf.file}';`);
-      const cx = k(xf.name);
+      const cx = k(xf.label);   // תווית עברית מתיאור-האטום — לא מזהה-קוד גולמי (טוהר-תצוגה)
       // המרת-קלט לפי-חתימה: מנוע-מספרי מקבל מספר בטיפוסו המדויק, אחר מקבל טקסט (טהור מהחוזה).
       const nt = xf.inType.replace(/\?$/, '');
       const arg = nt === 'int' ? `(int.tryParse(_v[${i}] ?? '') ?? 0)`
@@ -115,6 +147,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
         : nt === 'num' ? `(num.tryParse(_v[${i}] ?? '') ?? 0)`
         : `(_v[${i}] ?? '')`;
       fieldBlocks.push(`          if ((_v[${i}] ?? '').trim().isNotEmpty) _live(${cx}, ${xf.name}(${arg})),`);
+      hasLive = true;
     }
   });
   const stepsDart = stages.length >= 2
@@ -149,7 +182,7 @@ class _${cls}State extends State<${cls}> {
     setState(() => _v.clear());
   }
 
-  Widget _live(String label, String out) => Padding(
+${hasLive ? `  Widget _live(String label, String out) => Padding(
         padding: const EdgeInsets.only(top: 2, bottom: 6),
         child: Container(
           width: double.infinity,
@@ -163,7 +196,7 @@ class _${cls}State extends State<${cls}> {
         ),
       );
 
-  @override
+` : ''}  @override
   Widget build(BuildContext context) {
     return DsScaffold(
       title: ${cTitle},
@@ -254,7 +287,7 @@ export function renderHub(slug, { title, icon = '🏗️', screens }) {
     const t = k(s.name);
     const sub = k(s.sub || '');
     imports.add(`import 'gen_${s.slug}.dart';`);
-    return `      DsNavTile(glyph: ${g}, title: ${t}, sub: ${sub}, onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ${s.cls}()))),`;
+    return `      DsNavTile(glyph: ${g}, title: ${t}, sub: ${sub}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${s.cls}()))),`;
   });
   const cls = pascal(slug);
   const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — לוח-ניווט. אל תערוך ידנית.

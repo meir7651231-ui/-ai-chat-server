@@ -4,7 +4,6 @@ import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/gen-join-code.dart';
-import '../dart-maor/room-info-label.dart';
 import 'package:flutter/material.dart';
 
 class GenAppEnt18Screen extends StatefulWidget {
@@ -19,7 +18,7 @@ class _GenAppEnt18ScreenState extends State<GenAppEnt18Screen> {
 
   void _save() {
     if (_v.values.where((x) => x.trim().isNotEmpty).isEmpty) return;
-    appStore.add(gen_app_ent18_c7, <String, String>{gen_app_ent18_c8: _v[0] ?? '', gen_app_ent18_c9: _v[1] ?? '', gen_app_ent18_c11: _v[2] ?? '', gen_app_ent18_c12: _v[3] ?? '', gen_app_ent18_c13: _v[4] ?? '', gen_app_ent18_c14: _v[5] ?? '', gen_app_ent18_c15: _v[6] ?? '', gen_app_ent18_c16: _v[7] ?? '', gen_app_ent18_c17: _v[8] ?? '', gen_app_ent18_c19: _v[9] ?? '', gen_app_ent18_c20: _v[10] ?? ''});
+    appStore.add(gen_app_ent18_c7, <String, String>{gen_app_ent18_c8: _v[0] ?? '', gen_app_ent18_c9: _v[1] ?? '', gen_app_ent18_c11: _v[2] ?? '', gen_app_ent18_c12: _v[3] ?? '', gen_app_ent18_c13: _v[4] ?? '', gen_app_ent18_c14: _v[5] ?? '', gen_app_ent18_c15: _v[6] ?? '', gen_app_ent18_c16: _v[7] ?? '', gen_app_ent18_c17: _v[8] ?? '', gen_app_ent18_c18: _v[9] ?? '', gen_app_ent18_c19: _v[10] ?? ''});
     setState(() => _v.clear());
   }
 
@@ -56,9 +55,8 @@ class _GenAppEnt18ScreenState extends State<GenAppEnt18Screen> {
           DsField(label: gen_app_ent18_c15, hint: '', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
           DsField(label: gen_app_ent18_c16, hint: '', value: _v[7] ?? '', onChanged: (v) => setState(() => _v[7] = v)),
           DsField(label: gen_app_ent18_c17, hint: '', value: _v[8] ?? '', onChanged: (v) => setState(() => _v[8] = v)),
-          if ((_v[8] ?? '').trim().isNotEmpty) _live(gen_app_ent18_c18, roomInfoLabel((_v[8] ?? ''))),
-          DsField(label: gen_app_ent18_c19, hint: '', value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
-          DsField(label: gen_app_ent18_c20, hint: '', value: _v[10] ?? '', onChanged: (v) => setState(() => _v[10] = v)),
+          DsField(label: gen_app_ent18_c18, hint: '', value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
+          DsField(label: gen_app_ent18_c19, hint: '', value: _v[10] ?? '', onChanged: (v) => setState(() => _v[10] = v)),
         ]),
         DsSection(title: gen_app_ent18_c5, children: [
           AnimatedBuilder(
@@ -68,7 +66,7 @@ class _GenAppEnt18ScreenState extends State<GenAppEnt18Screen> {
               if (rs.isEmpty) return const DsEmpty(label: gen_app_ent18_c6);
               return Column(children: [
                 for (final r in rs)
-                  DsRecordCard(labels: const [gen_app_ent18_c8, gen_app_ent18_c9, gen_app_ent18_c11, gen_app_ent18_c12, gen_app_ent18_c13, gen_app_ent18_c14, gen_app_ent18_c15, gen_app_ent18_c16, gen_app_ent18_c17, gen_app_ent18_c19, gen_app_ent18_c20], values: [r[gen_app_ent18_c8] ?? '', r[gen_app_ent18_c9] ?? '', r[gen_app_ent18_c11] ?? '', r[gen_app_ent18_c12] ?? '', r[gen_app_ent18_c13] ?? '', r[gen_app_ent18_c14] ?? '', r[gen_app_ent18_c15] ?? '', r[gen_app_ent18_c16] ?? '', r[gen_app_ent18_c17] ?? '', r[gen_app_ent18_c19] ?? '', r[gen_app_ent18_c20] ?? '']),
+                  DsRecordCard(labels: const [gen_app_ent18_c8, gen_app_ent18_c9, gen_app_ent18_c11, gen_app_ent18_c12, gen_app_ent18_c13, gen_app_ent18_c14, gen_app_ent18_c15, gen_app_ent18_c16, gen_app_ent18_c17, gen_app_ent18_c18, gen_app_ent18_c19], values: [r[gen_app_ent18_c8] ?? '', r[gen_app_ent18_c9] ?? '', r[gen_app_ent18_c11] ?? '', r[gen_app_ent18_c12] ?? '', r[gen_app_ent18_c13] ?? '', r[gen_app_ent18_c14] ?? '', r[gen_app_ent18_c15] ?? '', r[gen_app_ent18_c16] ?? '', r[gen_app_ent18_c17] ?? '', r[gen_app_ent18_c18] ?? '', r[gen_app_ent18_c19] ?? '']),
               ]);
             },
           ),

@@ -22,20 +22,6 @@ class _GenAppEnt14ScreenState extends State<GenAppEnt14Screen> {
     setState(() => _v.clear());
   }
 
-  Widget _live(String label, String out) => Padding(
-        padding: const EdgeInsets.only(top: 2, bottom: 6),
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(11),
-          decoration: BoxDecoration(color: DsTokens.accentSoft, borderRadius: BorderRadius.circular(DsTokens.rSm)),
-          child: Row(children: [
-            const Icon(Icons.bolt, size: 15, color: DsTokens.accentDark),
-            const SizedBox(width: 7),
-            Expanded(child: Text('$label · $out', style: const TextStyle(color: DsTokens.accentDark, fontSize: 13, fontWeight: FontWeight.w700))),
-          ]),
-        ),
-      );
-
   @override
   Widget build(BuildContext context) {
     return DsScaffold(

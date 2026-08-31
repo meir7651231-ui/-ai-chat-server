@@ -3,7 +3,6 @@ import '../dart-data-bs/auto/gen_app_ent39_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
-import '../dart-maor/advance-status.dart';
 import '../dart-maor/fmt-date.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +18,7 @@ class _GenAppEnt39ScreenState extends State<GenAppEnt39Screen> {
 
   void _save() {
     if (_v.values.where((x) => x.trim().isNotEmpty).isEmpty) return;
-    appStore.add(gen_app_ent39_c7, <String, String>{gen_app_ent39_c8: _v[0] ?? '', gen_app_ent39_c9: _v[1] ?? '', gen_app_ent39_c10: _v[2] ?? '', gen_app_ent39_c12: _v[3] ?? '', gen_app_ent39_c13: _v[4] ?? '', gen_app_ent39_c14: _v[5] ?? '', gen_app_ent39_c15: _v[6] ?? '', gen_app_ent39_c16: _v[7] ?? '', gen_app_ent39_c17: _v[8] ?? '', gen_app_ent39_c19: _v[9] ?? ''});
+    appStore.add(gen_app_ent39_c7, <String, String>{gen_app_ent39_c8: _v[0] ?? '', gen_app_ent39_c9: _v[1] ?? '', gen_app_ent39_c10: _v[2] ?? '', gen_app_ent39_c12: _v[3] ?? '', gen_app_ent39_c13: _v[4] ?? '', gen_app_ent39_c14: _v[5] ?? '', gen_app_ent39_c15: _v[6] ?? '', gen_app_ent39_c16: _v[7] ?? '', gen_app_ent39_c17: _v[8] ?? '', gen_app_ent39_c18: _v[9] ?? ''});
     setState(() => _v.clear());
   }
 
@@ -45,7 +44,7 @@ class _GenAppEnt39ScreenState extends State<GenAppEnt39Screen> {
       icon: gen_app_ent39_c2,
       bottomBar: DsPrimaryButton(label: gen_app_ent39_c3, onTap: _save),
       children: [
-        DsWorkflow(steps: const [gen_app_ent39_c20, gen_app_ent39_c21, gen_app_ent39_c22], current: 2),
+        DsWorkflow(steps: const [gen_app_ent39_c19, gen_app_ent39_c20, gen_app_ent39_c21], current: 2),
         DsSection(title: gen_app_ent39_c4, children: [
           DsField(label: gen_app_ent39_c8, hint: '', value: _v[0] ?? '', onChanged: (v) => setState(() => _v[0] = v)),
           DsField(label: gen_app_ent39_c9, hint: '', value: _v[1] ?? '', onChanged: (v) => setState(() => _v[1] = v)),
@@ -57,8 +56,7 @@ class _GenAppEnt39ScreenState extends State<GenAppEnt39Screen> {
           DsField(label: gen_app_ent39_c15, hint: '', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
           DsField(label: gen_app_ent39_c16, hint: '', value: _v[7] ?? '', onChanged: (v) => setState(() => _v[7] = v)),
           DsField(label: gen_app_ent39_c17, hint: '', value: _v[8] ?? '', onChanged: (v) => setState(() => _v[8] = v)),
-          if ((_v[8] ?? '').trim().isNotEmpty) _live(gen_app_ent39_c18, advanceStatus((_v[8] ?? ''))),
-          DsField(label: gen_app_ent39_c19, hint: '', value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
+          DsField(label: gen_app_ent39_c18, hint: '', value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
         ]),
         DsSection(title: gen_app_ent39_c5, children: [
           AnimatedBuilder(
@@ -68,7 +66,7 @@ class _GenAppEnt39ScreenState extends State<GenAppEnt39Screen> {
               if (rs.isEmpty) return const DsEmpty(label: gen_app_ent39_c6);
               return Column(children: [
                 for (final r in rs)
-                  DsRecordCard(labels: const [gen_app_ent39_c8, gen_app_ent39_c9, gen_app_ent39_c10, gen_app_ent39_c12, gen_app_ent39_c13, gen_app_ent39_c14, gen_app_ent39_c15, gen_app_ent39_c16, gen_app_ent39_c17, gen_app_ent39_c19], values: [r[gen_app_ent39_c8] ?? '', r[gen_app_ent39_c9] ?? '', r[gen_app_ent39_c10] ?? '', r[gen_app_ent39_c12] ?? '', r[gen_app_ent39_c13] ?? '', r[gen_app_ent39_c14] ?? '', r[gen_app_ent39_c15] ?? '', r[gen_app_ent39_c16] ?? '', r[gen_app_ent39_c17] ?? '', r[gen_app_ent39_c19] ?? '']),
+                  DsRecordCard(labels: const [gen_app_ent39_c8, gen_app_ent39_c9, gen_app_ent39_c10, gen_app_ent39_c12, gen_app_ent39_c13, gen_app_ent39_c14, gen_app_ent39_c15, gen_app_ent39_c16, gen_app_ent39_c17, gen_app_ent39_c18], values: [r[gen_app_ent39_c8] ?? '', r[gen_app_ent39_c9] ?? '', r[gen_app_ent39_c10] ?? '', r[gen_app_ent39_c12] ?? '', r[gen_app_ent39_c13] ?? '', r[gen_app_ent39_c14] ?? '', r[gen_app_ent39_c15] ?? '', r[gen_app_ent39_c16] ?? '', r[gen_app_ent39_c17] ?? '', r[gen_app_ent39_c18] ?? '']),
               ]);
             },
           ),

@@ -16,6 +16,6 @@ const String gen_app_ent51_c13 = 'מלווה';
 const String gen_app_ent51_c14 = 'תלמידים';
 const String gen_app_ent51_c15 = 'קיבולת';
 const String gen_app_ent51_c16 = 'אזור';
-const String gen_app_ent51_c17 = 'phoneRegion';
+const String gen_app_ent51_c17 = 'סיווג אזור';
 const String gen_app_ent51_c18 = 'מחיר';
 const String gen_app_ent51_c19 = 'סטטוס';

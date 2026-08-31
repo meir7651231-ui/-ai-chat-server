@@ -3,7 +3,7 @@ import '../dart-data-bs/auto/gen_app_ent26_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
-import '../dart-maor/room-info-label.dart';
+
 import 'package:flutter/material.dart';
 
 class GenAppEnt26Screen extends StatefulWidget {
@@ -18,23 +18,9 @@ class _GenAppEnt26ScreenState extends State<GenAppEnt26Screen> {
 
   void _save() {
     if (_v.values.where((x) => x.trim().isNotEmpty).isEmpty) return;
-    appStore.add(gen_app_ent26_c7, <String, String>{gen_app_ent26_c8: _v[0] ?? '', gen_app_ent26_c9: _v[1] ?? '', gen_app_ent26_c10: _v[2] ?? '', gen_app_ent26_c11: _v[3] ?? '', gen_app_ent26_c12: _v[4] ?? '', gen_app_ent26_c13: _v[5] ?? '', gen_app_ent26_c14: _v[6] ?? '', gen_app_ent26_c16: _v[7] ?? '', gen_app_ent26_c18: _v[8] ?? '', gen_app_ent26_c19: _v[9] ?? '', gen_app_ent26_c20: _v[10] ?? '', gen_app_ent26_c21: _v[11] ?? '', gen_app_ent26_c22: _v[12] ?? '', gen_app_ent26_c23: _v[13] ?? '', gen_app_ent26_c24: _v[14] ?? ''});
+    appStore.add(gen_app_ent26_c7, <String, String>{gen_app_ent26_c8: _v[0] ?? '', gen_app_ent26_c9: _v[1] ?? '', gen_app_ent26_c10: _v[2] ?? '', gen_app_ent26_c11: _v[3] ?? '', gen_app_ent26_c12: _v[4] ?? '', gen_app_ent26_c13: _v[5] ?? '', gen_app_ent26_c14: _v[6] ?? '', gen_app_ent26_c15: _v[7] ?? '', gen_app_ent26_c16: _v[8] ?? '', gen_app_ent26_c17: _v[9] ?? '', gen_app_ent26_c18: _v[10] ?? '', gen_app_ent26_c19: _v[11] ?? '', gen_app_ent26_c20: _v[12] ?? '', gen_app_ent26_c21: _v[13] ?? '', gen_app_ent26_c22: _v[14] ?? ''});
     setState(() => _v.clear());
   }
-
-  Widget _live(String label, String out) => Padding(
-        padding: const EdgeInsets.only(top: 2, bottom: 6),
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(11),
-          decoration: BoxDecoration(color: DsTokens.accentSoft, borderRadius: BorderRadius.circular(DsTokens.rSm)),
-          child: Row(children: [
-            const Icon(Icons.bolt, size: 15, color: DsTokens.accentDark),
-            const SizedBox(width: 7),
-            Expanded(child: Text('$label · $out', style: const TextStyle(color: DsTokens.accentDark, fontSize: 13, fontWeight: FontWeight.w700))),
-          ]),
-        ),
-      );
 
   @override
   Widget build(BuildContext context) {
@@ -52,16 +38,14 @@ class _GenAppEnt26ScreenState extends State<GenAppEnt26Screen> {
           DsField(label: gen_app_ent26_c12, hint: '', value: _v[4] ?? '', onChanged: (v) => setState(() => _v[4] = v)),
           DsField(label: gen_app_ent26_c13, hint: '', value: _v[5] ?? '', onChanged: (v) => setState(() => _v[5] = v)),
           DsField(label: gen_app_ent26_c14, hint: '', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
-          if ((_v[6] ?? '').trim().isNotEmpty) _live(gen_app_ent26_c15, roomInfoLabel((_v[6] ?? ''))),
-          DsField(label: gen_app_ent26_c16, hint: '', value: _v[7] ?? '', onChanged: (v) => setState(() => _v[7] = v)),
-          if ((_v[7] ?? '').trim().isNotEmpty) _live(gen_app_ent26_c17, roomInfoLabel((_v[7] ?? ''))),
-          DsField(label: gen_app_ent26_c18, hint: '', value: _v[8] ?? '', onChanged: (v) => setState(() => _v[8] = v)),
-          DsField(label: gen_app_ent26_c19, hint: '', value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
-          DsField(label: gen_app_ent26_c20, hint: '', value: _v[10] ?? '', onChanged: (v) => setState(() => _v[10] = v)),
-          DsField(label: gen_app_ent26_c21, hint: '', value: _v[11] ?? '', onChanged: (v) => setState(() => _v[11] = v)),
-          DsField(label: gen_app_ent26_c22, hint: '', value: _v[12] ?? '', onChanged: (v) => setState(() => _v[12] = v)),
-          DsField(label: gen_app_ent26_c23, hint: '', value: _v[13] ?? '', onChanged: (v) => setState(() => _v[13] = v)),
-          DsField(label: gen_app_ent26_c24, hint: '', value: _v[14] ?? '', onChanged: (v) => setState(() => _v[14] = v)),
+          DsField(label: gen_app_ent26_c15, hint: '', value: _v[7] ?? '', onChanged: (v) => setState(() => _v[7] = v)),
+          DsField(label: gen_app_ent26_c16, hint: '', value: _v[8] ?? '', onChanged: (v) => setState(() => _v[8] = v)),
+          DsField(label: gen_app_ent26_c17, hint: '', value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
+          DsField(label: gen_app_ent26_c18, hint: '', value: _v[10] ?? '', onChanged: (v) => setState(() => _v[10] = v)),
+          DsField(label: gen_app_ent26_c19, hint: '', value: _v[11] ?? '', onChanged: (v) => setState(() => _v[11] = v)),
+          DsField(label: gen_app_ent26_c20, hint: '', value: _v[12] ?? '', onChanged: (v) => setState(() => _v[12] = v)),
+          DsField(label: gen_app_ent26_c21, hint: '', value: _v[13] ?? '', onChanged: (v) => setState(() => _v[13] = v)),
+          DsField(label: gen_app_ent26_c22, hint: '', value: _v[14] ?? '', onChanged: (v) => setState(() => _v[14] = v)),
         ]),
         DsSection(title: gen_app_ent26_c5, children: [
           AnimatedBuilder(
@@ -71,7 +55,7 @@ class _GenAppEnt26ScreenState extends State<GenAppEnt26Screen> {
               if (rs.isEmpty) return const DsEmpty(label: gen_app_ent26_c6);
               return Column(children: [
                 for (final r in rs)
-                  DsRecordCard(labels: const [gen_app_ent26_c8, gen_app_ent26_c9, gen_app_ent26_c10, gen_app_ent26_c11, gen_app_ent26_c12, gen_app_ent26_c13, gen_app_ent26_c14, gen_app_ent26_c16, gen_app_ent26_c18, gen_app_ent26_c19, gen_app_ent26_c20, gen_app_ent26_c21, gen_app_ent26_c22, gen_app_ent26_c23, gen_app_ent26_c24], values: [r[gen_app_ent26_c8] ?? '', r[gen_app_ent26_c9] ?? '', r[gen_app_ent26_c10] ?? '', r[gen_app_ent26_c11] ?? '', r[gen_app_ent26_c12] ?? '', r[gen_app_ent26_c13] ?? '', r[gen_app_ent26_c14] ?? '', r[gen_app_ent26_c16] ?? '', r[gen_app_ent26_c18] ?? '', r[gen_app_ent26_c19] ?? '', r[gen_app_ent26_c20] ?? '', r[gen_app_ent26_c21] ?? '', r[gen_app_ent26_c22] ?? '', r[gen_app_ent26_c23] ?? '', r[gen_app_ent26_c24] ?? '']),
+                  DsRecordCard(labels: const [gen_app_ent26_c8, gen_app_ent26_c9, gen_app_ent26_c10, gen_app_ent26_c11, gen_app_ent26_c12, gen_app_ent26_c13, gen_app_ent26_c14, gen_app_ent26_c15, gen_app_ent26_c16, gen_app_ent26_c17, gen_app_ent26_c18, gen_app_ent26_c19, gen_app_ent26_c20, gen_app_ent26_c21, gen_app_ent26_c22], values: [r[gen_app_ent26_c8] ?? '', r[gen_app_ent26_c9] ?? '', r[gen_app_ent26_c10] ?? '', r[gen_app_ent26_c11] ?? '', r[gen_app_ent26_c12] ?? '', r[gen_app_ent26_c13] ?? '', r[gen_app_ent26_c14] ?? '', r[gen_app_ent26_c15] ?? '', r[gen_app_ent26_c16] ?? '', r[gen_app_ent26_c17] ?? '', r[gen_app_ent26_c18] ?? '', r[gen_app_ent26_c19] ?? '', r[gen_app_ent26_c20] ?? '', r[gen_app_ent26_c21] ?? '', r[gen_app_ent26_c22] ?? '']),
               ]);
             },
           ),

@@ -5,7 +5,6 @@ import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/fmt-date.dart';
 import '../dart-maor/phone-region.dart';
-import '../dart/namespace_of.dart';
 import 'package:flutter/material.dart';
 
 class GenAppEnt65Screen extends StatefulWidget {
@@ -20,7 +19,7 @@ class _GenAppEnt65ScreenState extends State<GenAppEnt65Screen> {
 
   void _save() {
     if (_v.values.where((x) => x.trim().isNotEmpty).isEmpty) return;
-    appStore.add(gen_app_ent65_c7, <String, String>{gen_app_ent65_c8: _v[0] ?? '', gen_app_ent65_c9: _v[1] ?? '', gen_app_ent65_c11: _v[2] ?? '', gen_app_ent65_c12: _v[3] ?? '', gen_app_ent65_c13: _v[4] ?? '', gen_app_ent65_c15: _v[5] ?? '', gen_app_ent65_c16: _v[6] ?? '', gen_app_ent65_c17: _v[7] ?? '', gen_app_ent65_c18: _v[8] ?? '', gen_app_ent65_c19: _v[9] ?? '', gen_app_ent65_c21: _v[10] ?? ''});
+    appStore.add(gen_app_ent65_c7, <String, String>{gen_app_ent65_c8: _v[0] ?? '', gen_app_ent65_c9: _v[1] ?? '', gen_app_ent65_c11: _v[2] ?? '', gen_app_ent65_c12: _v[3] ?? '', gen_app_ent65_c13: _v[4] ?? '', gen_app_ent65_c14: _v[5] ?? '', gen_app_ent65_c15: _v[6] ?? '', gen_app_ent65_c16: _v[7] ?? '', gen_app_ent65_c17: _v[8] ?? '', gen_app_ent65_c18: _v[9] ?? '', gen_app_ent65_c20: _v[10] ?? ''});
     setState(() => _v.clear());
   }
 
@@ -53,14 +52,13 @@ class _GenAppEnt65ScreenState extends State<GenAppEnt65Screen> {
           DsField(label: gen_app_ent65_c11, hint: '', value: _v[2] ?? '', onChanged: (v) => setState(() => _v[2] = v)),
           DsField(label: gen_app_ent65_c12, hint: '', value: _v[3] ?? '', onChanged: (v) => setState(() => _v[3] = v)),
           DsField(label: gen_app_ent65_c13, hint: '', value: _v[4] ?? '', onChanged: (v) => setState(() => _v[4] = v)),
-          if ((_v[4] ?? '').trim().isNotEmpty) _live(gen_app_ent65_c14, namespaceOf((_v[4] ?? ''))),
-          DsField(label: gen_app_ent65_c15, hint: '', value: _v[5] ?? '', onChanged: (v) => setState(() => _v[5] = v)),
-          DsField(label: gen_app_ent65_c16, hint: '', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
-          DsField(label: gen_app_ent65_c17, hint: '', value: _v[7] ?? '', onChanged: (v) => setState(() => _v[7] = v)),
-          DsField(label: gen_app_ent65_c18, hint: '', value: _v[8] ?? '', onChanged: (v) => setState(() => _v[8] = v)),
-          DsField(label: gen_app_ent65_c19, hint: '', value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
-          if ((_v[9] ?? '').trim().isNotEmpty) _live(gen_app_ent65_c20, fmtDate((_v[9] ?? ''))),
-          DsField(label: gen_app_ent65_c21, hint: '', value: _v[10] ?? '', onChanged: (v) => setState(() => _v[10] = v)),
+          DsField(label: gen_app_ent65_c14, hint: '', value: _v[5] ?? '', onChanged: (v) => setState(() => _v[5] = v)),
+          DsField(label: gen_app_ent65_c15, hint: '', value: _v[6] ?? '', onChanged: (v) => setState(() => _v[6] = v)),
+          DsField(label: gen_app_ent65_c16, hint: '', value: _v[7] ?? '', onChanged: (v) => setState(() => _v[7] = v)),
+          DsField(label: gen_app_ent65_c17, hint: '', value: _v[8] ?? '', onChanged: (v) => setState(() => _v[8] = v)),
+          DsField(label: gen_app_ent65_c18, hint: '', value: _v[9] ?? '', onChanged: (v) => setState(() => _v[9] = v)),
+          if ((_v[9] ?? '').trim().isNotEmpty) _live(gen_app_ent65_c19, fmtDate((_v[9] ?? ''))),
+          DsField(label: gen_app_ent65_c20, hint: '', value: _v[10] ?? '', onChanged: (v) => setState(() => _v[10] = v)),
         ]),
         DsSection(title: gen_app_ent65_c5, children: [
           AnimatedBuilder(
@@ -70,7 +68,7 @@ class _GenAppEnt65ScreenState extends State<GenAppEnt65Screen> {
               if (rs.isEmpty) return const DsEmpty(label: gen_app_ent65_c6);
               return Column(children: [
                 for (final r in rs)
-                  DsRecordCard(labels: const [gen_app_ent65_c8, gen_app_ent65_c9, gen_app_ent65_c11, gen_app_ent65_c12, gen_app_ent65_c13, gen_app_ent65_c15, gen_app_ent65_c16, gen_app_ent65_c17, gen_app_ent65_c18, gen_app_ent65_c19, gen_app_ent65_c21], values: [r[gen_app_ent65_c8] ?? '', r[gen_app_ent65_c9] ?? '', r[gen_app_ent65_c11] ?? '', r[gen_app_ent65_c12] ?? '', r[gen_app_ent65_c13] ?? '', r[gen_app_ent65_c15] ?? '', r[gen_app_ent65_c16] ?? '', r[gen_app_ent65_c17] ?? '', r[gen_app_ent65_c18] ?? '', r[gen_app_ent65_c19] ?? '', r[gen_app_ent65_c21] ?? '']),
+                  DsRecordCard(labels: const [gen_app_ent65_c8, gen_app_ent65_c9, gen_app_ent65_c11, gen_app_ent65_c12, gen_app_ent65_c13, gen_app_ent65_c14, gen_app_ent65_c15, gen_app_ent65_c16, gen_app_ent65_c17, gen_app_ent65_c18, gen_app_ent65_c20], values: [r[gen_app_ent65_c8] ?? '', r[gen_app_ent65_c9] ?? '', r[gen_app_ent65_c11] ?? '', r[gen_app_ent65_c12] ?? '', r[gen_app_ent65_c13] ?? '', r[gen_app_ent65_c14] ?? '', r[gen_app_ent65_c15] ?? '', r[gen_app_ent65_c16] ?? '', r[gen_app_ent65_c17] ?? '', r[gen_app_ent65_c18] ?? '', r[gen_app_ent65_c20] ?? '']),
               ]);
             },
           ),

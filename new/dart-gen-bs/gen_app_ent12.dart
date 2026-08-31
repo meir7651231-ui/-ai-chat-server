@@ -4,7 +4,6 @@ import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-maor/norm-email.dart';
-import '../dart-maor/room-info-label.dart';
 import 'package:flutter/material.dart';
 
 class GenAppEnt12Screen extends StatefulWidget {
@@ -19,7 +18,7 @@ class _GenAppEnt12ScreenState extends State<GenAppEnt12Screen> {
 
   void _save() {
     if (_v.values.where((x) => x.trim().isNotEmpty).isEmpty) return;
-    appStore.add(gen_app_ent12_c7, <String, String>{gen_app_ent12_c8: _v[0] ?? '', gen_app_ent12_c9: _v[1] ?? '', gen_app_ent12_c10: _v[2] ?? '', gen_app_ent12_c11: _v[3] ?? '', gen_app_ent12_c13: _v[4] ?? '', gen_app_ent12_c14: _v[5] ?? '', gen_app_ent12_c15: _v[6] ?? '', gen_app_ent12_c16: _v[7] ?? '', gen_app_ent12_c17: _v[8] ?? '', gen_app_ent12_c18: _v[9] ?? '', gen_app_ent12_c19: _v[10] ?? '', gen_app_ent12_c20: _v[11] ?? '', gen_app_ent12_c21: _v[12] ?? '', gen_app_ent12_c23: _v[13] ?? '', gen_app_ent12_c24: _v[14] ?? ''});
+    appStore.add(gen_app_ent12_c7, <String, String>{gen_app_ent12_c8: _v[0] ?? '', gen_app_ent12_c9: _v[1] ?? '', gen_app_ent12_c10: _v[2] ?? '', gen_app_ent12_c11: _v[3] ?? '', gen_app_ent12_c13: _v[4] ?? '', gen_app_ent12_c14: _v[5] ?? '', gen_app_ent12_c15: _v[6] ?? '', gen_app_ent12_c16: _v[7] ?? '', gen_app_ent12_c17: _v[8] ?? '', gen_app_ent12_c18: _v[9] ?? '', gen_app_ent12_c19: _v[10] ?? '', gen_app_ent12_c20: _v[11] ?? '', gen_app_ent12_c21: _v[12] ?? '', gen_app_ent12_c22: _v[13] ?? '', gen_app_ent12_c23: _v[14] ?? ''});
     setState(() => _v.clear());
   }
 
@@ -60,9 +59,8 @@ class _GenAppEnt12ScreenState extends State<GenAppEnt12Screen> {
           DsField(label: gen_app_ent12_c19, hint: '', value: _v[10] ?? '', onChanged: (v) => setState(() => _v[10] = v)),
           DsField(label: gen_app_ent12_c20, hint: '', value: _v[11] ?? '', onChanged: (v) => setState(() => _v[11] = v)),
           DsField(label: gen_app_ent12_c21, hint: '', value: _v[12] ?? '', onChanged: (v) => setState(() => _v[12] = v)),
-          if ((_v[12] ?? '').trim().isNotEmpty) _live(gen_app_ent12_c22, roomInfoLabel((_v[12] ?? ''))),
-          DsField(label: gen_app_ent12_c23, hint: '', value: _v[13] ?? '', onChanged: (v) => setState(() => _v[13] = v)),
-          DsField(label: gen_app_ent12_c24, hint: '', value: _v[14] ?? '', onChanged: (v) => setState(() => _v[14] = v)),
+          DsField(label: gen_app_ent12_c22, hint: '', value: _v[13] ?? '', onChanged: (v) => setState(() => _v[13] = v)),
+          DsField(label: gen_app_ent12_c23, hint: '', value: _v[14] ?? '', onChanged: (v) => setState(() => _v[14] = v)),
         ]),
         DsSection(title: gen_app_ent12_c5, children: [
           AnimatedBuilder(
@@ -72,7 +70,7 @@ class _GenAppEnt12ScreenState extends State<GenAppEnt12Screen> {
               if (rs.isEmpty) return const DsEmpty(label: gen_app_ent12_c6);
               return Column(children: [
                 for (final r in rs)
-                  DsRecordCard(labels: const [gen_app_ent12_c8, gen_app_ent12_c9, gen_app_ent12_c10, gen_app_ent12_c11, gen_app_ent12_c13, gen_app_ent12_c14, gen_app_ent12_c15, gen_app_ent12_c16, gen_app_ent12_c17, gen_app_ent12_c18, gen_app_ent12_c19, gen_app_ent12_c20, gen_app_ent12_c21, gen_app_ent12_c23, gen_app_ent12_c24], values: [r[gen_app_ent12_c8] ?? '', r[gen_app_ent12_c9] ?? '', r[gen_app_ent12_c10] ?? '', r[gen_app_ent12_c11] ?? '', r[gen_app_ent12_c13] ?? '', r[gen_app_ent12_c14] ?? '', r[gen_app_ent12_c15] ?? '', r[gen_app_ent12_c16] ?? '', r[gen_app_ent12_c17] ?? '', r[gen_app_ent12_c18] ?? '', r[gen_app_ent12_c19] ?? '', r[gen_app_ent12_c20] ?? '', r[gen_app_ent12_c21] ?? '', r[gen_app_ent12_c23] ?? '', r[gen_app_ent12_c24] ?? '']),
+                  DsRecordCard(labels: const [gen_app_ent12_c8, gen_app_ent12_c9, gen_app_ent12_c10, gen_app_ent12_c11, gen_app_ent12_c13, gen_app_ent12_c14, gen_app_ent12_c15, gen_app_ent12_c16, gen_app_ent12_c17, gen_app_ent12_c18, gen_app_ent12_c19, gen_app_ent12_c20, gen_app_ent12_c21, gen_app_ent12_c22, gen_app_ent12_c23], values: [r[gen_app_ent12_c8] ?? '', r[gen_app_ent12_c9] ?? '', r[gen_app_ent12_c10] ?? '', r[gen_app_ent12_c11] ?? '', r[gen_app_ent12_c13] ?? '', r[gen_app_ent12_c14] ?? '', r[gen_app_ent12_c15] ?? '', r[gen_app_ent12_c16] ?? '', r[gen_app_ent12_c17] ?? '', r[gen_app_ent12_c18] ?? '', r[gen_app_ent12_c19] ?? '', r[gen_app_ent12_c20] ?? '', r[gen_app_ent12_c21] ?? '', r[gen_app_ent12_c22] ?? '', r[gen_app_ent12_c23] ?? '']),
               ]);
             },
           ),
