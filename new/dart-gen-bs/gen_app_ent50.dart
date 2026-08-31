@@ -31,7 +31,7 @@ class _GenAppEnt50ScreenState extends State<GenAppEnt50Screen> {
     } else {
       appStore.add('app_ent50', <String, String>{...map});
     }
-    setState(() { _v.clear(); _editId = null; });
+    setState(() { _v = {}; _editId = null; });
   }
 
   void _edit(Map<String, String> r) {

@@ -32,7 +32,7 @@ class _GenAppEnt12ScreenState extends State<GenAppEnt12Screen> {
     } else {
       appStore.add('app_ent12', <String, String>{...map});
     }
-    setState(() { _v.clear(); _editId = null; });
+    setState(() { _v = {}; _editId = null; });
   }
 
   void _edit(Map<String, String> r) {

@@ -33,7 +33,7 @@ class _GenAppEnt44ScreenState extends State<GenAppEnt44Screen> {
     } else {
       appStore.add('app_ent44', <String, String>{...map, '__stage': '0'});
     }
-    setState(() { _v.clear(); _editId = null; });
+    setState(() { _v = {}; _editId = null; });
   }
 
   void _edit(Map<String, String> r) {

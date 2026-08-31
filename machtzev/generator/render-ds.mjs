@@ -195,6 +195,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const mapVals = [];    // ערך-שמירה פר-שדה (מחושב ⇒ תוצאת-הנוסחה; אחר ⇒ _v[i])
   const requiredIdx = [];
   const uniqueIdx = [];
+  const defEntries = [];   // ברירות-מחדל: {idx: 'ערך'} לזריעת-טופס-חדש
   let hasLive = false, hasRel = false, hasEnum = false, hasCalc = false, hasMulti = false, usedField = false;
   const labelIdx = schema.map((s, i) => ({ label: s.label, idx: i }));
   schema.forEach((s, i) => {
@@ -202,6 +203,8 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
     const bind = `value: _v[${i}] ?? '', onChanged: (v) => setState(() => _v[${i}] = v)`;
     if (s.required) requiredIdx.push(i);
     if (s.unique) uniqueIdx.push(i);
+    // ברירת-מחדל ('שדה[ערך]'): ערך-פתיחה לרשומה-חדשה. לא על שדה-מחושב (נגזר ממילא).
+    if (s.def != null && !s.formula) defEntries.push(`${i}: ${k(s.def)}`);
     // (0) שדה-מחושב (שורש-4): נוסחה מעל שדות-אחות ⇒ ערך-נגזר קריאה-בלבד (לא קלט).
     if (s.formula) {
       const expr = compileFormula(s.formula, labelIdx);
@@ -267,6 +270,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const ruleSpecs = vrules.map((v) => compileRule(v, labelIdx)).filter(Boolean);
   const ruleChecks = ruleSpecs.map((rc) => `{ final l = (_v[${rc.li}] ?? '').trim(); final rr = (_v[${rc.ri}] ?? '').trim(); if (l.isNotEmpty && rr.isNotEmpty) { final nl = num.tryParse(l); final nr = num.tryParse(rr); final ok = (nl != null && nr != null) ? (nl ${rc.op} nr) : (l.compareTo(rr) ${rc.op} 0); if (!ok) miss.add(${k(rc.text)}); } }`).join('\n      ');
   const hasVal = requiredIdx.length + uniqueIdx.length + ruleSpecs.length > 0;
+  const defInit = defEntries.length ? `{${defEntries.join(', ')}}` : '{}';   // זריעת-פתיחה (ריק ⇒ ביט-זהה לקודם)
   const enumImport = hasEnum ? "import '../dart-ui-bs/ds/ds_enum_field.dart';\n" : '';
   const hasStages = stages.length >= 2;
   const stageConsts = hasStages ? stages.map((x) => k(x)) : [];
@@ -305,7 +309,7 @@ class ${cls} extends StatefulWidget {
 }
 
 class _${cls}State extends State<${cls}> {
-  Map<int, String> _v = {};
+  Map<int, String> _v = ${defInit};
   String? _editId;   // ריק = הוספה · מזהה = עריכת-רשומה קיימת
   String _q = '';    // מחרוזת-חיפוש (סינון-רשומות חי)
 ${hasVal ? '  String? _err;      // שגיאת-ולידציה (שדות-חובה חסרים)\n' : ''}
@@ -323,7 +327,7 @@ ${hasVal ? `    final miss = <String>[];
     } else {
       appStore.add(${SK}, <String, String>{...map${hasStages ? `, '__stage': '0'` : ''}});
     }
-    setState(() { _v.clear(); _editId = null;${hasVal ? ' _err = null;' : ''} });
+    setState(() { _v = ${defInit}; _editId = null;${hasVal ? ' _err = null;' : ''} });
   }
 
   void _edit(Map<String, String> r) {
