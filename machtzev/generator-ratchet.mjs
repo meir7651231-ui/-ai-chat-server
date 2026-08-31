@@ -8,6 +8,7 @@
 import fs from 'node:fs'; import path from 'node:path';
 import { buildApp } from './generator/app-ds.mjs';
 import { SCREEN_REGISTRY, selectAtom } from './generator/render-ds.mjs';
+import { nlToSpec } from './generator/nl-spec.mjs';
 
 const ROOT = new URL('../new/', import.meta.url).pathname;
 const GEN = path.join(ROOT, 'dart-gen-bs');
@@ -36,6 +37,16 @@ ok(/Callout\(|DsTable\(|DsBoard\(/.test(s2), 'מסך-הרכבה מרכיב אט�
 ok(/boqLineAmount\(<String, String>\{/.test(s2), 'מנוע-רשומה מחווט על הרשומה');
 ok(/isRenewed\(<String, String>\{/.test(s2) && /\? gen_app_\w+ : gen_app_\w+\)/.test(s2), 'מנוע-bool ⇒ כן/לא');
 ok(/Navigator\.of\(context\)\.push/.test(s2), 'ניווט שורה⇒כרטיס');
+
+// 2.5) צפן §22 — עברית-חופשית ⇒ אפיון + אפליקציה-עובדת · המנוע-העיוור (אפס-מילה-בקוד)
+const nl = nlToSpec('מערכת עם תלמידים, מורים וכיתות');
+ok(nl.split('\n').filter((l) => l.trim()).length >= 3, `NL: 'מערכת עם A,B,C' ⇒ ${nl.split('\n').length} ישויות`);
+buildApp('מערכת לניהול מרפאה עם מטופלים, תורים ורופאים');   // קלט-חופשי ישיר לדלת ⇒ לא-קורס
+ok(/GenApp\w+Screen/.test(all()), 'NL: משפט-חופשי ⇒ אפליקציה נבנתה (רצפת-§22)');
+// המנוע עצמו עיוור: אפס מילה-עברית בקוד nl-spec (מחוץ להערות/טווח-יוניקוד)
+const nlSrc = fs.readFileSync(new URL('./generator/nl-spec.mjs', import.meta.url), 'utf8').split('\n').map((l) => l.replace(/\/\/.*$/, '')).join('\n');   // מסיר הערות (מלאות+פנימיות)
+const heInCode = (nlSrc.match(/[֐-׿]{2,}/g) || []).filter((w) => !/^[֐׿׳״]+$/.test(w));
+ok(heInCode.length === 0, `NL-engine עיוור: ${heInCode.length} מילות-עברית בקוד (חייב 0)`);
 
 // 3) RLS — scoped כשיש שדה-היקף
 buildApp('ישות חוג עם שם, מורה, מחיר, סטטוס | שלבים: פתוח, מלא\nישות תלמיד עם שם, מורה, ממוצע\nתפקיד מזכירה: הכל\nתפקיד מורה: חוג, תלמיד | היקף: חוג.מורה, תלמיד.מורה');
