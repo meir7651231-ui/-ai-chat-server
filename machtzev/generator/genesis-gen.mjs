@@ -19,6 +19,8 @@ import path from 'node:path';
 import { stripComments, snake } from '../assemble/lift-lib.mjs';
 import { dartLit } from './twins.mjs';
 import { buildAtlas, writeAtlas } from './atlas.mjs';
+import { pickLook } from '../../new/atoms/pick-look.mjs';
+const LOOKS = JSON.parse(fs.readFileSync(new URL('./knowledge/looks.json', import.meta.url), 'utf8'));
 
 const ROOT = new URL('../../', import.meta.url).pathname;
 const HERE = new URL('.', import.meta.url).pathname;
@@ -128,6 +130,8 @@ function generate(slug, specText) {
   // שורה-מוזחת (שני-רווחים/טאב) = ענף של החלק שמעליה — חיבור אטום⇒אטום (הבורר מחליף ענפים)
   const rawLines = specText.split('\n').filter(l => l.trim());
   const lines = rawLines.map(s => s.trim().replace(/,$/, ''));
+  // 🎨 שכבה E — בחירת-מראה מהמשפט (חסר=null ⇒ ברירת-מחדל ⇒ פלט ביט-זהה)
+  const look = pickLook(specText, LOOKS);
   const first = lines[0];
   const oneLine = lines.length === 1;
   const rawTitle = (oneLine ? (first.includes(':') ? first.slice(0, first.indexOf(':')) : '') : first.replace(/:$/, '')).trim();
@@ -205,6 +209,7 @@ function generate(slug, specText) {
   };
   const stateDecls = [];
   const imports = new Set(["import 'package:flutter/material.dart';", "import '../dart-ui-bs/auto/bs_tokens.dart';", `import '../dart-data-bs/auto/gen_${slug}_content.dart';`]);
+  if (look === 'dark') imports.add("import '../dart-ui-bs/ds/ds_scale.dart';");  // 🎨 שכבה E — טוקן-כהה קיים (DsDark)
   let sIdx = 0;
 
   // מפת-הורים (לחיבור שדה⇒חישוב) + חיווט-ניווט בין-מסכים
@@ -419,7 +424,7 @@ function generate(slug, specText) {
 // 🧬 שם: ${title}
 // 🧬 בקשה: ${lines.join(' · ')}
 // 🧬 אטומים שנבחרו: ${chosen.map(c => c.atom.cls).join(' · ')}
-${[...imports].sort().join('\n')}
+${look ? `// 🎨 מראה: ${look}\n` : ''}${[...imports].sort().join('\n')}
 
 class ${cls} extends StatefulWidget {
   const ${cls}({super.key});
@@ -440,7 +445,7 @@ class _${cls}State extends State<${cls}> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: BsTokens.bgLight,
+        backgroundColor: ${look === 'dark' ? 'DsDark.bg' : 'BsTokens.bgLight'},
         appBar: AppBar(title: Text(${titleConst})),
         body: ListView(
           padding: const EdgeInsets.symmetric(vertical: 12),
