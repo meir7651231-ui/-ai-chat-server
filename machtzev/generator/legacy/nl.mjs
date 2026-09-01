@@ -9,7 +9,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { retrieve, retrieveLogic } from './match.mjs';
+import { retrieve, retrieveLogic } from '../match.mjs';
 import { board } from './compose.mjs';
 import { teach } from './teach.mjs';
 

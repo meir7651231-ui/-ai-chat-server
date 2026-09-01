@@ -10,8 +10,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { interpret as nlInterpret } from './nl.mjs';
-import { interpret as entInterpret } from './entity.mjs';
-import { retrieveLogic } from './match.mjs';
+import { interpret as entInterpret } from '../entity.mjs';
+import { retrieveLogic } from '../match.mjs';
 
 const HERE = new URL('.', import.meta.url).pathname;
 const ENTITY_RE = /^\s*(צור\s+)?(ישות|טופס|טבלת)(\s|$)/;

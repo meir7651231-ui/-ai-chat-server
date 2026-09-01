@@ -9,7 +9,7 @@
 // ══════════════════════════════════════════════════════════════════════════
 import fs from 'node:fs';
 import path from 'node:path';
-import { stem, matchClass } from './match.mjs';
+import { stem, matchClass } from '../match.mjs';
 
 const HERE = new URL('.', import.meta.url).pathname;
 const SEED = path.join(HERE, '../../screens-seed/machine');
