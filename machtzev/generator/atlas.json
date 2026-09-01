@@ -1,8 +1,8 @@
 {
  "counts": {
-  "widgets": 486,
+  "widgets": 529,
   "functions": 724,
-  "data": 3845
+  "data": 3844
  },
  "widgets": [
   {
@@ -14949,6 +14949,1039 @@
     "המדף",
     "בלי",
     "תת"
+   ]
+  },
+  {
+   "cls": "FabAction",
+   "file": "premium/actions/fab_action.dart",
+   "props": [
+    "icon",
+    "onTap"
+   ],
+   "required": [
+    "icon"
+   ],
+   "positional": [],
+   "he": [
+    "כפתור",
+    "פעולה",
+    "צף",
+    "עגול",
+    "גרדיאנט",
+    "סגול",
+    "מגנטה",
+    "זוהר",
+    "ניאון",
+    "כפול",
+    "מקבל"
+   ]
+  },
+  {
+   "cls": "GlassButton",
+   "file": "premium/actions/glass_button.dart",
+   "props": [
+    "label",
+    "onTap",
+    "icon"
+   ],
+   "required": [
+    "label"
+   ],
+   "positional": [],
+   "he": [
+    "כפתור",
+    "זכוכית",
+    "גבול",
+    "אור",
+    "עדין",
+    "ורקע",
+    "שקוף",
+    "מקבל",
+    "אופציונלי"
+   ]
+  },
+  {
+   "cls": "GradButton",
+   "file": "premium/actions/grad_button.dart",
+   "props": [
+    "label",
+    "onTap",
+    "icon"
+   ],
+   "required": [
+    "label"
+   ],
+   "positional": [],
+   "he": [
+    "כפתור",
+    "פעולה",
+    "גרדיאנט",
+    "סגול",
+    "מגנטה",
+    "זוהר",
+    "ניאון",
+    "ומסגרת",
+    "לבנה",
+    "שקופה",
+    "מקבל",
+    "אופציונלי"
+   ]
+  },
+  {
+   "cls": "NeonButton",
+   "file": "premium/actions/neon_button.dart",
+   "props": [
+    "label",
+    "onTap",
+    "icon"
+   ],
+   "required": [
+    "label"
+   ],
+   "positional": [],
+   "he": [
+    "טבעת",
+    "ניאון",
+    "סגול",
+    "מגנטה",
+    "ציאן",
+    "סביב",
+    "מילוי",
+    "כהה",
+    "זוהר",
+    "מקבל",
+    "אופציונלי"
+   ]
+  },
+  {
+   "cls": "SegmentedSwitch",
+   "file": "premium/actions/segmented_switch.dart",
+   "props": [
+    "items",
+    "selected",
+    "onSelect"
+   ],
+   "required": [
+    "items",
+    "selected",
+    "onSelect"
+   ],
+   "positional": [],
+   "he": [
+    "בורר",
+    "מקטעים",
+    "בקופסת",
+    "זכוכית",
+    "כהה",
+    "המקטע",
+    "הנבחר",
+    "בגרדיאנט",
+    "סגול",
+    "מגנטה",
+    "זוהר",
+    "מקבל"
+   ]
+  },
+  {
+   "cls": "SoftButton",
+   "file": "premium/actions/soft_button.dart",
+   "props": [
+    "label",
+    "onTap",
+    "tone"
+   ],
+   "required": [
+    "label"
+   ],
+   "positional": [],
+   "he": [
+    "כפתור",
+    "רך",
+    "שקוף",
+    "גוון",
+    "גבול",
+    "עדין",
+    "סגול",
+    "ציאן",
+    "ירקרק",
+    "מגנטה",
+    "אדום",
+    "מקבל"
+   ]
+  },
+  {
+   "cls": "SplitAction",
+   "file": "premium/actions/split_action.dart",
+   "props": [
+    "label",
+    "onMain",
+    "onMore"
+   ],
+   "required": [
+    "label"
+   ],
+   "positional": [],
+   "he": [
+    "כפתור",
+    "פיצול",
+    "פעולה",
+    "ראשית",
+    "אזור",
+    "חץ",
+    "משני",
+    "מופרד",
+    "בקו",
+    "אור",
+    "גרדיאנט",
+    "כהה"
+   ]
+  },
+  {
+   "cls": "DonutChart",
+   "file": "premium/dataviz/donut_chart.dart",
+   "props": [
+    "values",
+    "size"
+   ],
+   "required": [
+    "values"
+   ],
+   "positional": [],
+   "he": [
+    "טבעת",
+    "דונאט",
+    "מפולחת",
+    "פלטת",
+    "ניאון",
+    "סכום",
+    "במרכז"
+   ]
+  },
+  {
+   "cls": "GaugeMeter",
+   "file": "premium/dataviz/gauge_meter.dart",
+   "props": [
+    "value",
+    "size"
+   ],
+   "required": [
+    "value"
+   ],
+   "positional": [],
+   "he": [
+    "מד",
+    "קשת",
+    "גרדיאנט",
+    "ניאון",
+    "מחוג",
+    "זוהר"
+   ]
+  },
+  {
+   "cls": "KpiTile",
+   "file": "premium/dataviz/kpi_tile.dart",
+   "props": [
+    "glyph",
+    "value",
+    "label"
+   ],
+   "required": [
+    "glyph",
+    "value",
+    "label"
+   ],
+   "positional": [],
+   "he": [
+    "אריח",
+    "בגרדיאנט",
+    "טקסט",
+    "על",
+    "כרטיס",
+    "זכוכית"
+   ]
+  },
+  {
+   "cls": "NeonBars",
+   "file": "premium/dataviz/neon_bars.dart",
+   "props": [
+    "labels",
+    "values"
+   ],
+   "required": [
+    "labels",
+    "values"
+   ],
+   "positional": [],
+   "he": [
+    "עמודות",
+    "אופקיות",
+    "גרדיאנט",
+    "ניאון",
+    "מנורמלות",
+    "למקסימום",
+    "ערך",
+    "טבלאי"
+   ]
+  },
+  {
+   "cls": "ProgressRing",
+   "file": "premium/dataviz/progress_ring.dart",
+   "props": [
+    "value",
+    "label",
+    "size"
+   ],
+   "required": [
+    "value"
+   ],
+   "positional": [],
+   "he": [
+    "טבעת",
+    "התקדמות",
+    "גרדיאנט",
+    "זוהר",
+    "אחוז",
+    "במרכז"
+   ]
+  },
+  {
+   "cls": "Sparkline",
+   "file": "premium/dataviz/sparkline.dart",
+   "props": [
+    "values",
+    "height"
+   ],
+   "required": [
+    "values"
+   ],
+   "positional": [],
+   "he": [
+    "קו",
+    "מגמה",
+    "זעיר",
+    "מילוי",
+    "גרדיאנט",
+    "ונקודת",
+    "קצה",
+    "מודגשת"
+   ]
+  },
+  {
+   "cls": "TrendStat",
+   "file": "premium/dataviz/trend_stat.dart",
+   "props": [
+    "value",
+    "delta",
+    "label"
+   ],
+   "required": [
+    "value",
+    "delta",
+    "label"
+   ],
+   "positional": [],
+   "he": [
+    "ערך",
+    "תווית",
+    "צ׳יפ",
+    "מגמה",
+    "ירוק",
+    "אדום"
+   ]
+  },
+  {
+   "cls": "AlertBanner",
+   "file": "premium/feedback/alert_banner.dart",
+   "props": [
+    "message",
+    "tone",
+    "glyph"
+   ],
+   "required": [
+    "message"
+   ],
+   "positional": [],
+   "he": [
+    "באנר",
+    "התראה",
+    "זכוכית",
+    "פס",
+    "דאטה"
+   ]
+  },
+  {
+   "cls": "BadgeCount",
+   "file": "premium/feedback/badge_count.dart",
+   "props": [
+    "count",
+    "max"
+   ],
+   "required": [
+    "count"
+   ],
+   "positional": [],
+   "he": [
+    "תג",
+    "מונה",
+    "עגול",
+    "גרדיאנט",
+    "זוהר",
+    "דאטה",
+    "מוצג",
+    "מעל",
+    "התקרה"
+   ]
+  },
+  {
+   "cls": "EmptyState",
+   "file": "premium/feedback/empty_state.dart",
+   "props": [
+    "glyph",
+    "message"
+   ],
+   "required": [
+    "glyph",
+    "message"
+   ],
+   "positional": [],
+   "he": [
+    "מצב",
+    "ריק",
+    "אייקון",
+    "בעיגול",
+    "כהה",
+    "זוהר",
+    "דאטה"
+   ]
+  },
+  {
+   "cls": "RatingStars",
+   "file": "premium/feedback/rating_stars.dart",
+   "props": [
+    "value",
+    "size"
+   ],
+   "required": [
+    "value"
+   ],
+   "positional": [],
+   "he": [
+    "כוכבים",
+    "לפי",
+    "מלא",
+    "חצי",
+    "ריק",
+    "זהב",
+    "זוהר",
+    "דאטה"
+   ]
+  },
+  {
+   "cls": "SkeletonBlock",
+   "file": "premium/feedback/skeleton_block.dart",
+   "props": [
+    "width",
+    "height",
+    "radius"
+   ],
+   "required": [],
+   "positional": [],
+   "he": [
+    "טוען",
+    "שלד",
+    "נע",
+    "דאטה",
+    "מידות",
+    "בלבד"
+   ]
+  },
+  {
+   "cls": "StatusChip",
+   "file": "premium/feedback/status_chip.dart",
+   "props": [
+    "label",
+    "tone"
+   ],
+   "required": [
+    "label"
+   ],
+   "positional": [],
+   "he": [
+    "שבב",
+    "סטטוס",
+    "מואר",
+    "מסגרת",
+    "שקופה",
+    "דאטה"
+   ]
+  },
+  {
+   "cls": "StatusDot",
+   "file": "premium/feedback/status_dot.dart",
+   "props": [
+    "tone",
+    "size"
+   ],
+   "required": [],
+   "positional": [],
+   "he": [
+    "נקודת",
+    "סטטוס",
+    "זוהרת",
+    "הילה",
+    "כפולה",
+    "דאטה"
+   ]
+  },
+  {
+   "cls": "ToastCard",
+   "file": "premium/feedback/toast_card.dart",
+   "props": [
+    "message",
+    "tone",
+    "glyph"
+   ],
+   "required": [
+    "message"
+   ],
+   "positional": [],
+   "he": [
+    "כרטיס",
+    "טוסט",
+    "זכוכית",
+    "גרדיאנט",
+    "דאטה"
+   ]
+  },
+  {
+   "cls": "AvatarTile",
+   "file": "premium/lists/avatar_tile.dart",
+   "props": [
+    "initials",
+    "title",
+    "subtitle"
+   ],
+   "required": [
+    "initials",
+    "title",
+    "subtitle"
+   ],
+   "positional": [],
+   "he": [
+    "אריח",
+    "אווטאר",
+    "ראשי",
+    "תיבות",
+    "בגרדיאנט",
+    "זוהר",
+    "כותרת",
+    "תת",
+    "כותרת"
+   ]
+  },
+  {
+   "cls": "ExpandableTile",
+   "file": "premium/lists/expandable_tile.dart",
+   "props": [
+    "title",
+    "body"
+   ],
+   "required": [
+    "title",
+    "body"
+   ],
+   "positional": [],
+   "he": [
+    "אריח",
+    "מתקפל",
+    "כותרת",
+    "גוף",
+    "נחשף",
+    "באנימציה",
+    "חץ",
+    "מסתובב"
+   ]
+  },
+  {
+   "cls": "GlassListTile",
+   "file": "premium/lists/glass_list_tile.dart",
+   "props": [
+    "title",
+    "subtitle",
+    "trailing"
+   ],
+   "required": [
+    "title",
+    "subtitle"
+   ],
+   "positional": [],
+   "he": [
+    "שורת",
+    "זכוכית",
+    "מטושטש",
+    "כותרת",
+    "תת"
+   ]
+  },
+  {
+   "cls": "MediaRow",
+   "file": "premium/lists/media_row.dart",
+   "props": [
+    "title",
+    "subtitle",
+    "glyph",
+    "trailing"
+   ],
+   "required": [
+    "title",
+    "subtitle",
+    "glyph"
+   ],
+   "positional": [],
+   "he": [
+    "שורת",
+    "מדיה",
+    "אייקון",
+    "גרדיאנט",
+    "כותרת",
+    "תת",
+    "כותרת",
+    "אופציונלי"
+   ]
+  },
+  {
+   "cls": "NavRow",
+   "file": "premium/lists/nav_row.dart",
+   "props": [
+    "glyph",
+    "title",
+    "sub",
+    "onTap"
+   ],
+   "required": [
+    "glyph",
+    "title",
+    "sub"
+   ],
+   "positional": [],
+   "he": [
+    "שורת",
+    "ניווט",
+    "אייקון",
+    "גרדיאנט",
+    "כותרת",
+    "תת",
+    "לוגי"
+   ]
+  },
+  {
+   "cls": "StatRow",
+   "file": "premium/lists/stat_row.dart",
+   "props": [
+    "label",
+    "value",
+    "fraction"
+   ],
+   "required": [
+    "label",
+    "value",
+    "fraction"
+   ],
+   "positional": [],
+   "he": [
+    "שורת",
+    "סטטיסטיקה",
+    "תווית",
+    "פס",
+    "התקדמות",
+    "ניאון",
+    "ערך"
+   ]
+  },
+  {
+   "cls": "TimelineItem",
+   "file": "premium/lists/timeline_item.dart",
+   "props": [
+    "title",
+    "time",
+    "body"
+   ],
+   "required": [
+    "title",
+    "time"
+   ],
+   "positional": [],
+   "he": [
+    "פריט",
+    "ציר",
+    "זמן",
+    "נקודה",
+    "קו",
+    "זוהרים",
+    "כותרת",
+    "שעה",
+    "גוף"
+   ]
+  },
+  {
+   "cls": "GoldButton",
+   "file": "premium/showcase/gold_button.dart",
+   "props": [
+    "label",
+    "onTap",
+    "icon",
+    "loading",
+    "kind"
+   ],
+   "required": [
+    "label"
+   ],
+   "positional": [],
+   "he": [
+    "כפתור",
+    "פרימיום",
+    "מקסימלי",
+    "פאס",
+    "מקסימום",
+    "כל",
+    "הסקילים",
+    "שכבה",
+    "על",
+    "שכבה",
+    "יחיד",
+    "טבעת"
+   ]
+  },
+  {
+   "cls": "PremiumAvatar",
+   "file": "premium/showcase/premium_avatar.dart",
+   "props": [
+    "name",
+    "size",
+    "status",
+    "image"
+   ],
+   "required": [
+    "name"
+   ],
+   "positional": [],
+   "he": [
+    "אווטאר",
+    "פרימיום",
+    "טבעת",
+    "קונכית",
+    "סביב",
+    "מילוי",
+    "גרדיאנט",
+    "דטרמיניסטי",
+    "לפי",
+    "שם",
+    "ראשי",
+    "תיבות"
+   ]
+  },
+  {
+   "cls": "PremiumChip",
+   "file": "premium/showcase/premium_chip.dart",
+   "props": [
+    "label",
+    "icon",
+    "selected",
+    "onTap",
+    "count"
+   ],
+   "required": [
+    "label"
+   ],
+   "positional": [],
+   "he": [
+    "צ׳יפ",
+    "פרימיום",
+    "מילוי",
+    "גרדיאנט",
+    "וזוהר",
+    "מבטא",
+    "בנבחר",
+    "משטח",
+    "בלא",
+    "נבחר",
+    "נקודת",
+    "מצב"
+   ]
+  },
+  {
+   "cls": "PremiumField",
+   "file": "premium/showcase/premium_field.dart",
+   "props": [
+    "label",
+    "value",
+    "hint",
+    "icon",
+    "onChanged",
+    "obscure"
+   ],
+   "required": [
+    "label"
+   ],
+   "positional": [],
+   "he": [
+    "שדה",
+    "קלט",
+    "פרימיום",
+    "תווית",
+    "צפה",
+    "שעולה",
+    "בפוקוס",
+    "טבעת",
+    "פוקוס",
+    "זוהרת",
+    "קו",
+    "אורורה"
+   ]
+  },
+  {
+   "cls": "PremiumRing",
+   "file": "premium/showcase/premium_ring.dart",
+   "props": [
+    "value",
+    "label",
+    "caption",
+    "size"
+   ],
+   "required": [
+    "value"
+   ],
+   "positional": [],
+   "he": [
+    "טבעת",
+    "התקדמות",
+    "מעגלית",
+    "קשת",
+    "קצה",
+    "מעוגל",
+    "וזוהר",
+    "מסילת",
+    "רקע",
+    "במרכז",
+    "בלבד",
+    "פיגמנט"
+   ]
+  },
+  {
+   "cls": "PremiumStat",
+   "file": "premium/showcase/premium_stat.dart",
+   "props": [
+    "label",
+    "value",
+    "unit",
+    "delta",
+    "trend",
+    "glyph",
+    "onTap"
+   ],
+   "required": [
+    "label",
+    "value"
+   ],
+   "positional": [],
+   "he": [
+    "אריח",
+    "מקסימלי",
+    "מקבל",
+    "מיישם",
+    "את",
+    "מלוא",
+    "סטאק",
+    "הסקילים",
+    "סקאלות",
+    "היררכיה",
+    "מבטא",
+    "יחיד"
+   ]
+  },
+  {
+   "cls": "PremiumToggle",
+   "file": "premium/showcase/premium_toggle.dart",
+   "props": [
+    "value",
+    "onChanged",
+    "label"
+   ],
+   "required": [
+    "value"
+   ],
+   "positional": [],
+   "he": [
+    "מתג",
+    "פרימיום",
+    "מסילת",
+    "גרדיאנט",
+    "זוהרת",
+    "במצב",
+    "דלוק",
+    "כפתור",
+    "קפיץ",
+    "שמחליק",
+    "זוהר",
+    "מבטא"
+   ]
+  },
+  {
+   "cls": "ElevatedCard",
+   "file": "premium/surfaces/elevated_card.dart",
+   "props": [
+    "child"
+   ],
+   "required": [
+    "child"
+   ],
+   "positional": [],
+   "he": [
+    "כרטיס",
+    "כהה",
+    "ראמפת",
+    "צל",
+    "עמוקה",
+    "כפולה",
+    "ותאורת",
+    "קצה",
+    "עדינה",
+    "מקבל",
+    "כתוכן"
+   ]
+  },
+  {
+   "cls": "FeaturePanel",
+   "file": "premium/surfaces/feature_panel.dart",
+   "props": [
+    "title",
+    "body",
+    "glyph"
+   ],
+   "required": [
+    "title",
+    "body",
+    "glyph"
+   ],
+   "positional": [],
+   "he": [
+    "פאנל",
+    "פיצ",
+    "אייקון",
+    "זוהר",
+    "כותרת",
+    "וגוף",
+    "טקסט",
+    "מקבל"
+   ]
+  },
+  {
+   "cls": "GlassCard",
+   "file": "premium/surfaces/glass_card.dart",
+   "props": [
+    "child"
+   ],
+   "required": [
+    "child"
+   ],
+   "positional": [],
+   "he": [
+    "כרטיס",
+    "זכוכית",
+    "עליון",
+    "מקבל",
+    "כתוכן"
+   ]
+  },
+  {
+   "cls": "GradientCard",
+   "file": "premium/surfaces/gradient_card.dart",
+   "props": [
+    "child"
+   ],
+   "required": [
+    "child"
+   ],
+   "positional": [],
+   "he": [
+    "כרטיס",
+    "משטח",
+    "גרדיאנט",
+    "כהה",
+    "צל",
+    "רך",
+    "מקבל",
+    "כתוכן"
+   ]
+  },
+  {
+   "cls": "HeroHeader",
+   "file": "premium/surfaces/hero_header.dart",
+   "props": [
+    "title",
+    "subtitle",
+    "glyph"
+   ],
+   "required": [
+    "title",
+    "subtitle",
+    "glyph"
+   ],
+   "positional": [],
+   "he": [
+    "כותרת",
+    "על",
+    "אייקון",
+    "גרדיאנט",
+    "זוהר",
+    "ורקע",
+    "רדיאלי",
+    "מקבל"
+   ]
+  },
+  {
+   "cls": "NeonCard",
+   "file": "premium/surfaces/neon_card.dart",
+   "props": [
+    "child"
+   ],
+   "required": [
+    "child"
+   ],
+   "positional": [],
+   "he": [
+    "כרטיס",
+    "טבעת",
+    "גרדיאנט",
+    "ניאון",
+    "זוהרת",
+    "סביב",
+    "גוף",
+    "כהה",
+    "מקבל",
+    "כתוכן"
+   ]
+  },
+  {
+   "cls": "StatHero",
+   "file": "premium/surfaces/stat_hero.dart",
+   "props": [
+    "value",
+    "label"
+   ],
+   "required": [
+    "value",
+    "label"
+   ],
+   "positional": [],
+   "he": [
+    "מספר",
+    "ענק",
+    "בגרדיאנט",
+    "טקסט",
+    "תווית",
+    "מתחת",
+    "מקבל"
    ]
   }
  ],
@@ -45004,19 +46037,6 @@
   },
   {
    "name": "gen_app_ent29_c25",
-   "type": "String",
-   "he": [
-    "תוכן",
-    "מהבקשה",
-    "אל",
-    "תערוך",
-    "ידנית"
-   ],
-   "file": "auto/gen_app_ent29_content.dart",
-   "shelf": "new/dart-data-bs"
-  },
-  {
-   "name": "gen_app_ent29_c26",
    "type": "String",
    "he": [
     "תוכן",

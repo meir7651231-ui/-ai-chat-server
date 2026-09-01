@@ -612,6 +612,24 @@
   "style": 0
  },
  {
+  "cls": "AvatarTile",
+  "file": "dart-ui-bs/premium/lists/avatar_tile.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
   "cls": "AxisChip",
   "file": "dart-ui-bs/auto/axis_chip.dart",
   "seam": "fields",
@@ -627,6 +645,24 @@
   "series": 0,
   "widget": 0,
   "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "BadgeCount",
+  "file": "dart-ui-bs/premium/feedback/badge_count.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 0,
+  "num": 2,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
   "style": 0
  },
  {
@@ -2421,6 +2457,24 @@
   "style": 0
  },
  {
+  "cls": "ElevatedCard",
+  "file": "dart-ui-bs/premium/surfaces/elevated_card.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 0,
+  "style": 0
+ },
+ {
   "cls": "EmojiSectionTitle",
   "file": "dart-ui-bs/screens__lipskey_product_sheet/emoji_section_title.dart",
   "seam": "fields",
@@ -2619,6 +2673,42 @@
   "style": 0
  },
  {
+  "cls": "ExpandableTile",
+  "file": "dart-ui-bs/premium/lists/expandable_tile.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "FabAction",
+  "file": "dart-ui-bs/premium/actions/fab_action.dart",
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "fields": 2,
+  "dataFields": 0,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 1
+ },
+ {
   "cls": "FabMenu",
   "file": "dart-ui-bs/fab_menu.dart",
   "seam": "zero",
@@ -2671,6 +2761,24 @@
   "series": 0,
   "widget": 0,
   "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "FeaturePanel",
+  "file": "dart-ui-bs/premium/surfaces/feature_panel.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
   "style": 0
  },
  {
@@ -2998,6 +3106,24 @@
   "style": 0
  },
  {
+  "cls": "GaugeMeter",
+  "file": "dart-ui-bs/premium/dataviz/gauge_meter.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 0,
+  "num": 3,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
   "cls": "GenerativeCanvas",
   "file": "dart-ui-bs/generative_canvas.dart",
   "seam": "fields",
@@ -3016,6 +3142,24 @@
   "style": 0
  },
  {
+  "cls": "GlassButton",
+  "file": "dart-ui-bs/premium/actions/glass_button.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 1
+ },
+ {
   "cls": "GlassCard",
   "file": "dart-ui-bs/glass_card.dart",
   "seam": "zero",
@@ -3025,6 +3169,24 @@
   "fields": 0,
   "dataFields": 0,
   "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "GlassListTile",
+  "file": "dart-ui-bs/premium/lists/glass_list_tile.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 3,
   "num": 0,
   "bool": 0,
   "list": 0,
@@ -3084,6 +3246,60 @@
   "list": 0,
   "series": 0,
   "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "GoldButton",
+  "file": "dart-ui-bs/premium/showcase/gold_button.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 9,
+  "dataFields": 6,
+  "str": 1,
+  "num": 3,
+  "bool": 2,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 1
+ },
+ {
+  "cls": "GradButton",
+  "file": "dart-ui-bs/premium/actions/grad_button.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 1
+ },
+ {
+  "cls": "GradientCard",
+  "file": "dart-ui-bs/premium/surfaces/gradient_card.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
   "cb": 0,
   "style": 0
  },
@@ -3247,6 +3463,24 @@
   "series": 0,
   "widget": 1,
   "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "HeroHeader",
+  "file": "dart-ui-bs/premium/surfaces/hero_header.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
   "style": 0
  },
  {
@@ -3697,6 +3931,24 @@
   "series": 0,
   "widget": 0,
   "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "KpiTile",
+  "file": "dart-ui-bs/premium/dataviz/kpi_tile.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
   "style": 0
  },
  {
@@ -4242,6 +4494,24 @@
   "style": 0
  },
  {
+  "cls": "MediaRow",
+  "file": "dart-ui-bs/premium/lists/media_row.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 4,
+  "dataFields": 4,
+  "str": 4,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
   "cls": "MenuRow",
   "file": "dart-ui-bs/screens__home_shell/menu_row.dart",
   "seam": "fields",
@@ -4440,6 +4710,43 @@
   "style": 0
  },
  {
+  "cls": "NavRow",
+  "file": "dart-ui-bs/premium/lists/nav_row.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 4,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "NeonBars",
+  "file": "dart-ui-bs/premium/dataviz/neon_bars.dart",
+  "seam": "series",
+  "caps": [
+   "trend",
+   "kpi"
+  ],
+  "fields": 5,
+  "dataFields": 5,
+  "str": 1,
+  "num": 2,
+  "bool": 0,
+  "list": 1,
+  "series": 1,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
   "cls": "NeonButton",
   "file": "dart-ui-bs/neon_button.dart",
   "seam": "fields",
@@ -4455,6 +4762,24 @@
   "series": 0,
   "widget": 0,
   "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "NeonCard",
+  "file": "dart-ui-bs/premium/surfaces/neon_card.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 1,
+  "dataFields": 1,
+  "str": 0,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 1,
+  "cb": 0,
   "style": 0
  },
  {
@@ -5124,6 +5449,117 @@
   "style": 0
  },
  {
+  "cls": "PremiumAvatar",
+  "file": "dart-ui-bs/premium/showcase/premium_avatar.dart",
+  "seam": "fields",
+  "caps": [
+   "status"
+  ],
+  "fields": 4,
+  "dataFields": 2,
+  "str": 1,
+  "num": 1,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "PremiumChip",
+  "file": "dart-ui-bs/premium/showcase/premium_chip.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 5,
+  "dataFields": 3,
+  "str": 1,
+  "num": 1,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 1
+ },
+ {
+  "cls": "PremiumField",
+  "file": "dart-ui-bs/premium/showcase/premium_field.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 6,
+  "dataFields": 4,
+  "str": 3,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 1
+ },
+ {
+  "cls": "PremiumRing",
+  "file": "dart-ui-bs/premium/showcase/premium_ring.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi",
+   "card"
+  ],
+  "fields": 5,
+  "dataFields": 5,
+  "str": 2,
+  "num": 3,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "PremiumStat",
+  "file": "dart-ui-bs/premium/showcase/premium_stat.dart",
+  "seam": "series",
+  "caps": [
+   "trend",
+   "kpi",
+   "progress"
+  ],
+  "fields": 9,
+  "dataFields": 8,
+  "str": 3,
+  "num": 3,
+  "bool": 0,
+  "list": 0,
+  "series": 2,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "PremiumToggle",
+  "file": "dart-ui-bs/premium/showcase/premium_toggle.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 1,
+  "num": 0,
+  "bool": 1,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
   "cls": "PresetChip",
   "file": "dart-ui-bs/auto/preset_chip.dart",
   "seam": "fields",
@@ -5395,15 +5831,15 @@
  },
  {
   "cls": "ProgressRing",
-  "file": "dart-ui-bs/progress_ring.dart",
+  "file": "dart-ui-bs/premium/dataviz/progress_ring.dart",
   "seam": "fields",
   "caps": [
-   "detail"
+   "kpi"
   ],
-  "fields": 1,
-  "dataFields": 1,
-  "str": 0,
-  "num": 1,
+  "fields": 4,
+  "dataFields": 4,
+  "str": 1,
+  "num": 3,
   "bool": 0,
   "list": 0,
   "series": 0,
@@ -5746,6 +6182,24 @@
   "dataFields": 4,
   "str": 0,
   "num": 4,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "RatingStars",
+  "file": "dart-ui-bs/premium/feedback/rating_stars.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 0,
+  "num": 3,
   "bool": 0,
   "list": 0,
   "series": 0,
@@ -6256,6 +6710,24 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "SegmentedSwitch",
+  "file": "dart-ui-bs/premium/actions/segmented_switch.dart",
+  "seam": "collection",
+  "caps": [
+   "list"
+  ],
+  "fields": 6,
+  "dataFields": 4,
+  "str": 1,
+  "num": 1,
+  "bool": 1,
+  "list": 1,
+  "series": 0,
+  "widget": 0,
+  "cb": 2,
   "style": 0
  },
  {
@@ -6853,6 +7325,24 @@
   "style": 0
  },
  {
+  "cls": "SkeletonBlock",
+  "file": "dart-ui-bs/premium/feedback/skeleton_block.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 0,
+  "num": 3,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
   "cls": "SkeletonCard",
   "file": "dart-ui-bs/skeleton_card.dart",
   "seam": "zero",
@@ -6980,6 +7470,42 @@
   "style": 0
  },
  {
+  "cls": "SoftButton",
+  "file": "dart-ui-bs/premium/actions/soft_button.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 2,
+  "str": 1,
+  "num": 1,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 1,
+  "style": 0
+ },
+ {
+  "cls": "Sparkline",
+  "file": "dart-ui-bs/premium/dataviz/sparkline.dart",
+  "seam": "series",
+  "caps": [
+   "trend"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 0,
+  "num": 1,
+  "bool": 0,
+  "list": 0,
+  "series": 2,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
   "cls": "SpecialtyDerivedRow",
   "file": "dart-ui-bs/auto/specialty_derived_row.dart",
   "seam": "fields",
@@ -7031,6 +7557,24 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "SplitAction",
+  "file": "dart-ui-bs/premium/actions/split_action.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 1,
+  "str": 1,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 2,
   "style": 0
  },
  {
@@ -7196,6 +7740,42 @@
   "style": 0
  },
  {
+  "cls": "StatHero",
+  "file": "dart-ui-bs/premium/surfaces/stat_hero.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 2,
+  "dataFields": 2,
+  "str": 2,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "StatRow",
+  "file": "dart-ui-bs/premium/lists/stat_row.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 2,
+  "num": 1,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
   "cls": "StatsCard",
   "file": "dart-ui-bs/auto/stats_card.dart",
   "seam": "fields",
@@ -7252,21 +7832,21 @@
  },
  {
   "cls": "StatusDot",
-  "file": "dart-ui-bs/screens__manager_dashboard_screen/status_dot.dart",
+  "file": "dart-ui-bs/premium/feedback/status_dot.dart",
   "seam": "fields",
   "caps": [
    "detail"
   ],
   "fields": 2,
-  "dataFields": 1,
+  "dataFields": 2,
   "str": 0,
-  "num": 1,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 1
+  "style": 0
  },
  {
   "cls": "StatusDotChip",
@@ -8026,6 +8606,24 @@
   "style": 0
  },
  {
+  "cls": "TimelineItem",
+  "file": "dart-ui-bs/premium/lists/timeline_item.dart",
+  "seam": "fields",
+  "caps": [
+   "card"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 3,
+  "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
   "cls": "TintedBadgeRow",
   "file": "dart-ui-bs/screens__lipskey_product_sheet/tinted_badge_row.dart",
   "seam": "zero",
@@ -8114,6 +8712,24 @@
   "widget": 1,
   "cb": 0,
   "style": 1
+ },
+ {
+  "cls": "ToastCard",
+  "file": "dart-ui-bs/premium/feedback/toast_card.dart",
+  "seam": "fields",
+  "caps": [
+   "detail"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 2,
+  "num": 1,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
  },
  {
   "cls": "TodayStat",
@@ -8252,6 +8868,24 @@
   "dataFields": 0,
   "str": 0,
   "num": 0,
+  "bool": 0,
+  "list": 0,
+  "series": 0,
+  "widget": 0,
+  "cb": 0,
+  "style": 0
+ },
+ {
+  "cls": "TrendStat",
+  "file": "dart-ui-bs/premium/dataviz/trend_stat.dart",
+  "seam": "fields",
+  "caps": [
+   "kpi"
+  ],
+  "fields": 3,
+  "dataFields": 3,
+  "str": 2,
+  "num": 1,
   "bool": 0,
   "list": 0,
   "series": 0,
