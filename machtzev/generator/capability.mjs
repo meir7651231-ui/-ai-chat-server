@@ -56,29 +56,67 @@ export function pickAtom(phrase) {
   return r.length ? r[0].cls : null;
 }
 
-// פולט מוניטור מהמסגרת-המבנית. **הפירוק נגזר, לא חרוט:** התפקידים (ערך-להצגה · קריאה · התראה)
-// עולים ממבנה-המשפט; האטום לכל תפקיד **נבחר** — ערך/קריאה לפי-**צורה** (selectAtom · שם-שקע+טיפוס)
-// והתראה לפי-**מטרה** (match). אין שם-אטום חרוט. ה-op מהדקדוק-היחסי · x,y מהמשפט (§20-א/§23).
 const NUM_RE = /^(value|val|pct|level|amount|reading|num|score|percent)$/;
 const STR_RE = /^(label|title|caption|name|text|msg|message)$/;
-export function emitMonitor(frame, cls = 'GenCapScreen') {
-  // תפקיד "מד-ערך" — צורה: שקע-ערך-מספרי (בלי תווית ⇒ הטהור-לתפקיד). תפקיד "קריאה" — ערך+תווית.
+
+// רב-סעיפים: פיצול לפי מחברי-ריבוי **דקדוקיים** (וגם/גם/;/שורה) ⇒ סעיף-תנאי בכל מקטע. כך "A וגם B"
+// = 2 מסגרות (יכולת-ההתראה מופעלת פעמיים). מחברים = חלקיקים מבניים (כמו של/עם), אפס-מילון-דומייני.
+export function detectAllClauses(text) {
+  const out = [];
+  for (const s of String(text || '').split(/\s+וגם\s+|\s+גם\s+|;|\n/)) {
+    const d = detectAlertClause(s);
+    if (d && !out.some((o) => o.x === d.x && o.op === d.op && o.y === d.y)) out.push(d);
+  }
+  return out;
+}
+
+// 🧩 מרכיב (compositor): המבנה **נגזר** ממספר-הצרכים במשפט, לא חרוט. סורק את **כל** מופעי-הצורך,
+// ולכל אחד בונה יחידה (ערך + קריאה + התראה-מותנית). אפס תנאים ⇒ תצוגה-בלבד (עוגן דקדוקי 'את',
+// מושא-ישיר — חלקיק, לא מילון). N תנאים ⇒ N יחידות (יכולת-ההתראה חוזרת). האטומים נגזרים פעם-אחת.
+export function emitApp(text, cls = 'GenCapScreen') {
+  const clauses = detectAllClauses(text);
+  let units;
+  if (clauses.length) {
+    units = clauses.map((f, i) => ({ i, label: f.x, op: f.op === '<' ? '<' : '>', alert: true, trigger: f.trigger }));
+  } else {
+    // אין תנאי ⇒ צורך של יכולת-**אחת** (תצוגה). עוגן: מושא-ישיר 'את X' (חלקיק דקדוקי, אפס-מילון).
+    const m = String(text || '').match(/(?:^|\s)את\s+(.+)/);
+    const val = m ? cleanPhrase(hw(m[1]).slice(0, 3)) : '';
+    if (!val) throw new Error('לא נמצאו יכולות במשפט (אין תנאי ואין מושא-ישיר להצגה)');
+    units = [{ i: 0, label: val, op: null, alert: false, trigger: '' }];
+  }
+  // אטומים נגזרים פעם-אחת: ערך/קריאה לפי-צורה (selectAtom), התראה לפי-מטרה (match).
   const gauge = selectAtom({ value: { re: NUM_RE, ty: /double|num/ } });
   const readout = selectAtom({ value: { re: NUM_RE, ty: /double|num/ }, label: { re: STR_RE, ty: /String/ } });
-  // תפקיד "התראה" — לפי-מטרה (match על אות-הכוונה). נפילה בטוחה ל-AlertBanner (תקינות-פלט).
-  const picked = pickAtom(frame.trigger);
-  const alertAtom = new Set(['AlertBanner']).has(picked) ? picked : 'AlertBanner';
   if (!gauge || !readout) throw new Error('לא נגזר אטום-ערך/קריאה מהמצע');
+  const trig = units.find((u) => u.alert)?.trigger || '';
+  const picked = pickAtom(trig);
+  const alertAtom = new Set(['AlertBanner']).has(picked) ? picked : 'AlertBanner';
   const alertFile = (fileOf(alertAtom) || 'dart-ui-bs/alert_banner.dart').replace(/\.dart$/, '');
-  const xLbl = frame.x, yLbl = frame.y, op = frame.op === '<' ? '<' : '>';
   const gFills = gauge.fills.length ? ', ' + gauge.fills.join(', ') : '';
   const rFills = readout.fills.length ? ', ' + readout.fills.join(', ') : '';
-  // ייבואים — נגזרים מקבצי-האטומים-שנבחרו (dedup), לא רשימה חרוטה.
-  const imps = [...new Set([`../${gauge.file.replace(/\.dart$/, '')}.dart`, `../${readout.file.replace(/\.dart$/, '')}.dart`, `../${alertFile}.dart`])]
-    .map((p) => `import '${p}';`).join('\n');
-  return `// ✨ חולל ע"י capability.mjs — כוונה⇒הרכבה (§23). המשפט: "${frame._src || ''}".
-// הפירוק נגזר: ערך⇒${gauge.cls} · קריאה⇒${readout.cls} (selectAtom·צורה) · התראה⇒${alertAtom} (match·מטרה).
-// השוואה("${op}") מהדקדוק-היחסי · אפס שם-אטום חרוט · אפס-מילון-דומייני (§20-א).
+  const hasAlert = units.some((u) => u.alert);   // ייבוא-התראה רק כשיש התראה בפועל (אחרת ייבוא-מת)
+  const impPaths = [`../${gauge.file.replace(/\.dart$/, '')}.dart`, `../${readout.file.replace(/\.dart$/, '')}.dart`];
+  if (hasAlert) impPaths.push(`../${alertFile}.dart`);
+  const imps = [...new Set(impPaths)].map((p) => `import '${p}';`).join('\n');
+  const stateVars = units.map((u) => `  double _v${u.i} = 55;`).join('\n');
+  // גוף-הילדים **נבנה בלולאה** על היחידות — כאן המבנה נגזר (כמה, ואילו) ולא נחרט.
+  const body = units.map((u) => {
+    const cmp = u.alert ? `_v${u.i} ${u.op} 60` : 'false';
+    const rLabel = u.alert ? `(${cmp}) ? 'חריגה · ${u.label}' : 'תקין · ${u.label}'` : `'${u.label}'`;
+    const alertW = u.alert
+      ? `\n        if (${cmp})\n          Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: ${alertAtom}(label: 'חריגה — ${u.label}', height: 46, radius: 14, accentColor: DsPure.err, baseColor: DsPure.raised, fillColor: DsPure.surface)),`
+      : '';
+    return `        Padding(padding: const EdgeInsets.only(top: 10, right: 14), child: Align(alignment: Alignment.centerRight, child: Text('${u.label}', style: const TextStyle(color: DsPure.mut, fontSize: 13)))),
+        Padding(padding: const EdgeInsets.symmetric(vertical: 6), child: Center(child: ${gauge.cls}(${gauge.p.value}: (_v${u.i} / 100).clamp(0.0, 1.0)${gFills}))),
+        Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: ${readout.cls}(${readout.p.value}: _v${u.i}, ${readout.p.label}: ${rLabel}${rFills})),${alertW}
+        Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Slider(value: _v${u.i}, max: 100, onChanged: (v) => setState(() => _v${u.i} = v))),
+        const Divider(color: DsPure.hair, height: 24),`;
+  }).join('\n');
+  const heCount = units.length + (clauses.length ? ' ניטורים' : ' תצוגה');
+  return `// ✨ חולל ע"י capability.mjs (מרכיב) — כוונה⇒הרכבה (§23). המשפט: "${String(text).replace(/"/g, "'")}".
+// **המבנה נגזר, לא חרוט:** ${units.length} יחידות (${clauses.length} תנאים) ⇒ ${units.length}× ערך⇒${gauge.cls}/${readout.cls} + ${units.filter((u) => u.alert).length}× התראה⇒${alertAtom}.
+// אפס שם-אטום חרוט · אפס-מילון-דומייני · מספר-היחידות מהמבנה (§20-ב · הרכבה-עד-שמושג).
 import 'package:flutter/material.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_pure.dart';
@@ -104,22 +142,15 @@ class ${cls} extends StatefulWidget {
 }
 
 class _${cls}State extends State<${cls}> {
-  double _x = 55; // ${xLbl}
-  final double _y = 70; // ${yLbl}
+${stateVars}
   @override
   Widget build(BuildContext context) {
-    final bool over = _x ${op} _y; // ← פעולת-היסוד מהמשפט
-    final double norm = (_x / (_y == 0 ? 1 : _y * 1.4)).clamp(0.0, 1.0);
     return DsScaffold(
-      title: 'ניטור ${xLbl}',
-      subtitle: 'חוּלל ממשפט · ${xLbl} ${op} ${yLbl}',
+      title: 'מסך שחולל',
+      subtitle: '${units.length}${heCount}',
       icon: '📟',
       children: [
-        Padding(padding: const EdgeInsets.symmetric(vertical: 8), child: Center(child: ${gauge.cls}(${gauge.p.value}: norm${gFills}))),
-        Padding(padding: const EdgeInsets.all(12), child: ${readout.cls}(${readout.p.value}: _x, ${readout.p.label}: over ? 'חריגה · ${xLbl}' : 'תקין · ${xLbl}'${rFills})),
-        if (over)
-          const Padding(padding: EdgeInsets.all(12), child: ${alertAtom}(label: 'חריגה — ${xLbl} ${op === '>' ? 'מעל' : 'מתחת ל'} ${yLbl}', height: 46, radius: 14, accentColor: DsPure.err, baseColor: DsPure.raised, fillColor: DsPure.surface)),
-        Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6), child: Slider(value: _x, max: 100, onChanged: (v) => setState(() => _x = v))),
+${body}
       ],
     );
   }
@@ -129,15 +160,6 @@ class _${cls}State extends State<${cls}> {
 
 if (import.meta.url === 'file://' + process.argv[1]) {
   const arg = process.argv.slice(2).join(' ');
-  if (arg && arg !== '--test') {
-    const d = detectAlertClause(arg);
-    if (!d) { console.error('אין סעיף-תנאי במשפט'); process.exit(1); }
-    d._src = arg;
-    process.stdout.write(emitMonitor(d));
-  } else {
-    for (const s of ['אני צריך לנטר מערכת ולקבל התראה כשהטמפרטורה חורגת מהמקסימום', 'התראה כשהמלאי יורד מהמינימום', 'הודעה כשהדלק נמוך מהסף', 'סתם משפט בלי תנאי']) {
-      const d = detectAlertClause(s);
-      console.log('· "' + s + '" ⇒', d ? JSON.stringify(d) + ' · atom=' + pickAtom(d.trigger) : '(אין)');
-    }
-  }
+  if (arg) { process.stdout.write(emitApp(arg)); }
+  else { console.error('שימוש: node capability.mjs "<משפט-צורך>"'); process.exit(1); }
 }
