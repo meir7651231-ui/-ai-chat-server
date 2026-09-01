@@ -977,12 +977,16 @@ class ${cls} extends StatelessWidget {
 // ══════════════════════════════════════════════════════════════════════════
 let _census = null;
 const loadCensus = () => { if (_census) return _census; try { _census = JSON.parse(fs.readFileSync(path.join(HERE, 'atom-census.json'), 'utf8')); } catch { _census = []; } return _census; };
-// פרמטרי-בנאי של אטום עם טיפוסים: [{nm, ty}] (required בלבד).
+// פרמטרי-בנאי של אטום עם טיפוסים: [{nm, ty, req}] — **כל** השקעים (required+אופציונלי),
+// כי שקע-דאטה יכול להיות אופציונלי. תיקון (§21): קודם רק required ⇒ המרכיב היה עיוור
+// לרוב ה-347 האטומים-הבינדבילים. typeOf תופס גם הצהרה-משותפת ('final double a, b;').
 const atomCtor = (relFile, cls) => {
   let s; try { s = fs.readFileSync(path.join(ROOT, 'new', relFile), 'utf8'); } catch { return null; }
-  const ctor = s.match(new RegExp('const ' + cls + '\\(\\{([^}]*)\\}\\)')); if (!ctor) return null;
-  const typeOf = (p) => { const m = s.match(new RegExp('final ([A-Za-z0-9<>?]+) ' + p + ';')); return m ? m[1] : null; };
-  return [...ctor[1].matchAll(/required this\.([a-zA-Z][a-zA-Z0-9_]*)/g)].map((m) => ({ nm: m[1], ty: typeOf(m[1]) }));
+  const ctor = s.match(new RegExp('(?:const )?' + cls + '\\(\\{([\\s\\S]*?)\\}\\)')); if (!ctor) return null;
+  const typeOf = (p) => { const m = s.match(new RegExp('final ([A-Za-z0-9<>?]+)[^;]*\\b' + p + '\\b[^;]*;')); return m ? m[1] : null; };
+  const out = []; const seen = new Set();
+  for (const m of ctor[1].matchAll(/(required\s+)?this\.([a-zA-Z][a-zA-Z0-9_]*)/g)) { if (seen.has(m[2])) continue; seen.add(m[2]); out.push({ nm: m[2], ty: typeOf(m[2]), req: !!m[1] }); }
+  return out;
 };
 // מילוי-שקע-לא-דאטה (סגנון/התנהגות/ווידג'ט/טוקן) — לעולם לא דאטה. null ⇒ לא-בטוח-למילוי.
 const _fillStyle = (ty) => {
@@ -1010,9 +1014,12 @@ export function selectAtom(roleSpecs, pred = () => true) {
     if (!ok) continue;
     const rest = ps.filter((x) => !Object.values(bound).includes(x.nm));
     const fills = []; let safe = true;
-    for (const x of rest) { const f = _fillStyle(x.ty); if (f === null) { safe = false; break; } fills.push(`${x.nm}: ${f}`); }
-    if (!safe) continue;                                  // שקע-דאטה-נוסף שאין-לי-למלא ⇒ פסול (לא נזייף)
-    const score = -rest.length;                           // פחות-מילויי-ברירת-מחדל = מגשים-הייעוד-שלם-יותר
+    for (const x of rest) {
+      if (!x.req) continue;                               // שקע אופציונלי לא-מחווט ⇒ מושמט (ברירת-Dart)
+      const f = _fillStyle(x.ty); if (f === null) { safe = false; break; } fills.push(`${x.nm}: ${f}`);   // required בלבד חייב מילוי; שקע-דאטה-required לא-ממופה ⇒ פסול (לא נזייף)
+    }
+    if (!safe) continue;
+    const score = -fills.length;                          // פחות-מילויי-required = מגשים-הייעוד-שלם-יותר
     if (!best || score > best.score || (score === best.score && a.cls < best.cls)) best = { cls: a.cls, file: a.file, p: bound, fills, score };
   }
   return best;
