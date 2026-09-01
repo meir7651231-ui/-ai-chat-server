@@ -17,8 +17,9 @@ export const PURE_LOOK = {
   "--hair2": "rgba(236, 233, 226, 0.05)"
  },
  "semantic": {
-  "--err": "#E0574E",
+  "--ok": "#43D08C",
   "--warn": "#E6B84F",
+  "--err": "#E0574E",
   "--gold": "#E6C766"
  },
  "themes": {

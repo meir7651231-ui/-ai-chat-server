@@ -26,6 +26,7 @@ for (const v of allColors) {
 // אינווריאנט-המורף: אקצנט מתחלף בין ערכות · נייטרל+סמנטי קבועים (לא מאונדקסים-לערכה)
 assert.notStrictEqual(PURE_LOOK.themes['t-indigo']['--a'], PURE_LOOK.themes['t-teal']['--a'], 'accent מורף');
 assert.notStrictEqual(PURE_LOOK.themes['t-teal']['--a'], PURE_LOOK.themes['t-amber']['--a'], 'accent מורף');
+assert.strictEqual(PURE_LOOK.semantic['--ok'], '#43D08C', 'ok קבוע — נשאר ירוק בכל ערכה');
 assert.strictEqual(PURE_LOOK.semantic['--err'], '#E0574E', 'error קבוע — נשאר אדום בכל ערכה');
 assert.strictEqual(PURE_LOOK.semantic['--gold'], '#E6C766', 'gold קבוע — נשאר זהב בכל ערכה');
 assert.strictEqual(PURE_LOOK.neutral['--canvas'], '#0C0C0E', 'עוגן-נייטרל');
@@ -34,7 +35,7 @@ assert.strictEqual(PURE_LOOK.neutral['--canvas'], '#0C0C0E', 'עוגן-נייט�
 const SNAP = {
   defaultTheme: 't-indigo',
   neutral: { '--canvas': '#0C0C0E', '--sunken': '#0A0A0C', '--surface': '#151517', '--raised': '#1B1B1E', '--raised2': '#212126', '--ink': '#ECE9E2', '--mut': '#9B968C', '--faint': '#6E6A62', '--hair': 'rgba(236, 233, 226, 0.09)', '--hair2': 'rgba(236, 233, 226, 0.05)' },
-  semantic: { '--err': '#E0574E', '--warn': '#E6B84F', '--gold': '#E6C766' },
+  semantic: { '--ok': '#43D08C', '--warn': '#E6B84F', '--err': '#E0574E', '--gold': '#E6C766' },
   themes: {
     't-indigo': { '--a-hi': '#B0A4FF', '--a': '#7A6BF0', '--a-800': '#4B3ECB', '--gl': 'rgba(122, 107, 240, 0.42)', '--c2': '#4CC6E6', '--c3': '#B57BE6' },
     't-teal': { '--a-hi': '#6FE6D5', '--a': '#1FB8A6', '--a-800': '#0C7E72', '--gl': 'rgba(31, 184, 166, 0.42)', '--c2': '#4FB6E6', '--c3': '#43D08C' },
@@ -43,4 +44,4 @@ const SNAP = {
 };
 assert.deepStrictEqual(PURE_LOOK, SNAP, 'צילום-ערך-מלא');
 
-console.log('OK pure-look — 3 ערכות · אקצנט-מורף · err/gold קבועים · ' + allColors.length + ' פיגמנטים ליטרליים');
+console.log('OK pure-look — 3 ערכות · אקצנט-מורף · ok/warn/err/gold קבועים · ' + allColors.length + ' פיגמנטים ליטרליים');

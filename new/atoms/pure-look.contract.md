@@ -6,7 +6,7 @@
 
 **מבנה:** `{ defaultTheme, neutral{}, semantic{}, themes{} }`
 - `neutral` — סולם-רקע/דיו/קו (canvas…hair2). **לא מורף** בהחלפת-ערכה.
-- `semantic` — `err/warn/gold`. **קבוע — לא מאונדקס-לערכה** (error נשאר אדום, gold נשאר זהב).
+- `semantic` — `ok/warn/err/gold`. **קבוע — לא מאונדקס-לערכה** (error נשאר אדום, gold נשאר זהב).
 - `themes` — שלוש ערכות (`t-indigo/t-teal/t-amber`), כל אחת חושפת בדיוק את סט-האקצנט
   `--a-hi --a --a-800 --gl --c2 --c3`. **מורף יחד** בהחלפת-ערכה; המבנה לא זז.
 
