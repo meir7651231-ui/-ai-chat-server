@@ -20,12 +20,12 @@ class _GenAppRec4ScreenState extends State<GenAppRec4Screen> {
   Widget build(BuildContext context) => AnimatedBuilder(
         animation: appStore,
         builder: (context, _) {
-          final recs = appStore.records('app_ent4');
-          if (recs.isEmpty) return Center(child: Text(gen_app_rec4_c21));
+          final recs = appStore.scoped('app_ent4', gen_app_rec4_c11);
+          if (recs.isEmpty) return Center(child: Text(gen_app_rec4_c12));
           final i0 = _sel ?? (widget.initialId != null ? recs.indexWhere((r) => r['__id'] == widget.initialId) : 0);
           final i = (i0 < 0 ? 0 : i0).clamp(0, recs.length - 1);
           final r = recs[i];
-          final id = r['__id'] ?? '';
+          
           return ListView(
             padding: const EdgeInsets.only(bottom: 24, top: 8),
             children: [
@@ -47,11 +47,6 @@ class _GenAppRec4ScreenState extends State<GenAppRec4Screen> {
               Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec4_c5] ?? '', label: gen_app_rec4_c6)),
               Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec4_c7] ?? '', label: gen_app_rec4_c8)),
               Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec4_c9] ?? '', label: gen_app_rec4_c10)),
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec4_c11] ?? '', label: gen_app_rec4_c12)),
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec4_c13] ?? '', label: gen_app_rec4_c14)),
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec4_c15] ?? '', label: gen_app_rec4_c16)),
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec4_c17] ?? '', label: gen_app_rec4_c18)),
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec4_c19] ?? '', label: gen_app_rec4_c20)),
             ],
           );
         },

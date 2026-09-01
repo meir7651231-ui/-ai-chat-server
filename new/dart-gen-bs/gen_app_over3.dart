@@ -1,10 +1,11 @@
 // ✨ חולל ע"י מנוע-ההרכבה (render-ds/compose) — אטום+אטום ⇒ מסך-סקירה מורכב מנתוני-הישות. אל תערוך ידנית.
 import '../dart-ui-bs/ds/ds_store.dart';
 import 'package:flutter/material.dart';
-import '../dart-ui-bs/auto/callout.dart';
-import '../dart-ui-bs/auto/ai_bar.dart';
-import '../dart-ui-bs/ds/ds_bars.dart';
-import '../dart-ui-bs/ds/ds_board.dart';
+import '../dart-ui-bs/auto/today_stat.dart';
+import '../dart-ui-bs/premium/lists/glass_list_tile.dart';
+import '../dart-ui-bs/premium/dataviz/neon_bars.dart';
+import '../dart-ui-bs/auto/ai_card_btn.dart';
+import 'gen_app_rec6.dart';
 import '../dart-data-bs/auto/gen_app_over3_content.dart';
 
 class GenAppOver3Screen extends StatelessWidget {
@@ -19,21 +20,30 @@ class GenAppOver3Screen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(12),
             child: Wrap(spacing: 10, runSpacing: 10, children: [
-              Callout(value: appStore.count('app_ent3').toString(), label: gen_app_over3_c0),
-              Callout(value: appStore.sum('app_ent3', gen_app_over3_c1).toStringAsFixed(0), label: gen_app_over3_c2),
-              Callout(value: appStore.sum('app_ent3', gen_app_over3_c3).toStringAsFixed(0), label: gen_app_over3_c4),
-              Callout(value: appStore.sum('app_ent3', gen_app_over3_c5).toStringAsFixed(0), label: gen_app_over3_c6),
+              TodayStat(value: appStore.count('app_ent6').toString(), label: gen_app_over3_c0),
+              TodayStat(value: appStore.sum('app_ent6', gen_app_over3_c1).toStringAsFixed(0), label: gen_app_over3_c2),
             ]),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: AiBar(pct: appStore.count('app_ent3') == 0 ? 0 : (appStore.records('app_ent3').where((r) => appStore.stageOf('app_ent3', r['__id'] ?? '') >= 5).length * 100 ~/ appStore.count('app_ent3'))),
-          ),
+          if (appStore.records('app_ent6').isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Builder(builder: (context) {
+                final r = appStore.records('app_ent6').first;
+                return GlassListTile(title: r[gen_app_over3_c3] ?? '', subtitle: r[gen_app_over3_c4] ?? '');
+              }),
+            ),
           Padding(
             padding: const EdgeInsets.all(12),
-            child: DsBars(labels: appStore.records('app_ent3').take(12).map((r) => r[gen_app_over3_c8] ?? '').toList(), values: appStore.records('app_ent3').take(12).map((r) => double.tryParse(r[gen_app_over3_c7] ?? '') ?? 0).toList()),
+            child: NeonBars(labels: appStore.records('app_ent6').take(12).map((r) => r[gen_app_over3_c6] ?? '').toList(), values: appStore.records('app_ent6').take(12).map((r) => double.tryParse(r[gen_app_over3_c5] ?? '') ?? 0).toList()),
           ),
-          Expanded(child: DsBoard(stages: const [gen_app_over3_c9, gen_app_over3_c10, gen_app_over3_c11, gen_app_over3_c12, gen_app_over3_c13, gen_app_over3_c14], records: appStore.records('app_ent3'), stageOf: (r) => appStore.stageOf('app_ent3', r['__id'] ?? ''), titleOf: (r) => r[gen_app_over3_c15] ?? '', onMove: (id, to) => appStore.setStage('app_ent3', id, to))),
+          Expanded(
+            child: ListView(
+              children: [
+                for (final r in appStore.records('app_ent6'))
+                  Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3), child: AiCardBtn(label: (r[gen_app_over3_c7] ?? '').isEmpty ? (r['__id'] ?? '') : (r[gen_app_over3_c7] ?? ''), onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => GenAppRec6Screen(initialId: r['__id'] ?? ''))))),
+              ],
+            ),
+          ),
           ],
         ),
       );

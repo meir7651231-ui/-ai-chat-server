@@ -21,11 +21,11 @@ class _GenAppRec3ScreenState extends State<GenAppRec3Screen> {
         animation: appStore,
         builder: (context, _) {
           final recs = appStore.records('app_ent3');
-          if (recs.isEmpty) return Center(child: Text(gen_app_rec3_c60));
+          if (recs.isEmpty) return Center(child: Text(gen_app_rec3_c11));
           final i0 = _sel ?? (widget.initialId != null ? recs.indexWhere((r) => r['__id'] == widget.initialId) : 0);
           final i = (i0 < 0 ? 0 : i0).clamp(0, recs.length - 1);
           final r = recs[i];
-          final id = r['__id'] ?? '';
+          
           return ListView(
             padding: const EdgeInsets.only(bottom: 24, top: 8),
             children: [
@@ -47,37 +47,6 @@ class _GenAppRec3ScreenState extends State<GenAppRec3Screen> {
               Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec3_c5] ?? '', label: gen_app_rec3_c6)),
               Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec3_c7] ?? '', label: gen_app_rec3_c8)),
               Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec3_c9] ?? '', label: gen_app_rec3_c10)),
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec3_c11] ?? '', label: gen_app_rec3_c12)),
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec3_c13] ?? '', label: gen_app_rec3_c14)),
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec3_c15] ?? '', label: gen_app_rec3_c16)),
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec3_c17] ?? '', label: gen_app_rec3_c18)),
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec3_c19] ?? '', label: gen_app_rec3_c20)),
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec3_c21] ?? '', label: gen_app_rec3_c22)),
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec3_c23] ?? '', label: gen_app_rec3_c24)),
-              const SizedBox(height: 8),
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: Text(gen_app_rec3_c59, style: const TextStyle(fontWeight: FontWeight.w800))),
-              Padding(
-                padding: const EdgeInsets.all(12),
-                child: Wrap(spacing: 10, runSpacing: 10, children: [
-                Callout(value: appStore.countRef('app_ent1', gen_app_rec3_c25, id).toString(), label: gen_app_rec3_c26),
-                Callout(value: appStore.countRef('app_ent6', gen_app_rec3_c27, id).toString(), label: gen_app_rec3_c28),
-                Callout(value: appStore.countRef('app_ent7', gen_app_rec3_c29, id).toString(), label: gen_app_rec3_c30),
-                Callout(value: appStore.countRef('app_ent8', gen_app_rec3_c31, id).toString(), label: gen_app_rec3_c32),
-                Callout(value: appStore.countRef('app_ent9', gen_app_rec3_c33, id).toString(), label: gen_app_rec3_c34),
-                Callout(value: appStore.countRef('app_ent11', gen_app_rec3_c35, id).toString(), label: gen_app_rec3_c36),
-                Callout(value: appStore.countRef('app_ent14', gen_app_rec3_c37, id).toString(), label: gen_app_rec3_c38),
-                Callout(value: appStore.countRef('app_ent17', gen_app_rec3_c39, id).toString(), label: gen_app_rec3_c40),
-                Callout(value: appStore.countRef('app_ent18', gen_app_rec3_c41, id).toString(), label: gen_app_rec3_c42),
-                Callout(value: appStore.countRef('app_ent19', gen_app_rec3_c43, id).toString(), label: gen_app_rec3_c44),
-                Callout(value: appStore.countRef('app_ent20', gen_app_rec3_c45, id).toString(), label: gen_app_rec3_c46),
-                Callout(value: appStore.countRef('app_ent21', gen_app_rec3_c47, id).toString(), label: gen_app_rec3_c48),
-                Callout(value: appStore.countRef('app_ent24', gen_app_rec3_c49, id).toString(), label: gen_app_rec3_c50),
-                Callout(value: appStore.countRef('app_ent26', gen_app_rec3_c51, id).toString(), label: gen_app_rec3_c52),
-                Callout(value: appStore.countRef('app_ent27', gen_app_rec3_c53, id).toString(), label: gen_app_rec3_c54),
-                Callout(value: appStore.countRef('app_ent28', gen_app_rec3_c55, id).toString(), label: gen_app_rec3_c56),
-                Callout(value: appStore.countRef('app_ent29', gen_app_rec3_c57, id).toString(), label: gen_app_rec3_c58),
-                ]),
-              ),
             ],
           );
         },

@@ -21,11 +21,11 @@ class _GenAppRec2ScreenState extends State<GenAppRec2Screen> {
         animation: appStore,
         builder: (context, _) {
           final recs = appStore.records('app_ent2');
-          if (recs.isEmpty) return Center(child: Text(gen_app_rec2_c28));
+          if (recs.isEmpty) return Center(child: Text(gen_app_rec2_c13));
           final i0 = _sel ?? (widget.initialId != null ? recs.indexWhere((r) => r['__id'] == widget.initialId) : 0);
           final i = (i0 < 0 ? 0 : i0).clamp(0, recs.length - 1);
           final r = recs[i];
-          final id = r['__id'] ?? '';
+          
           return ListView(
             padding: const EdgeInsets.only(bottom: 24, top: 8),
             children: [
@@ -48,20 +48,6 @@ class _GenAppRec2ScreenState extends State<GenAppRec2Screen> {
               Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec2_c7] ?? '', label: gen_app_rec2_c8)),
               Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec2_c9] ?? '', label: gen_app_rec2_c10)),
               Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec2_c11] ?? '', label: gen_app_rec2_c12)),
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec2_c13] ?? '', label: gen_app_rec2_c14)),
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Callout(value: r[gen_app_rec2_c15] ?? '', label: gen_app_rec2_c16)),
-              const SizedBox(height: 8),
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: Text(gen_app_rec2_c27, style: const TextStyle(fontWeight: FontWeight.w800))),
-              Padding(
-                padding: const EdgeInsets.all(12),
-                child: Wrap(spacing: 10, runSpacing: 10, children: [
-                Callout(value: appStore.countRef('app_ent3', gen_app_rec2_c17, id).toString(), label: gen_app_rec2_c18),
-                Callout(value: appStore.countRef('app_ent6', gen_app_rec2_c19, id).toString(), label: gen_app_rec2_c20),
-                Callout(value: appStore.countRef('app_ent7', gen_app_rec2_c21, id).toString(), label: gen_app_rec2_c22),
-                Callout(value: appStore.countRef('app_ent26', gen_app_rec2_c23, id).toString(), label: gen_app_rec2_c24),
-                Callout(value: appStore.countRef('app_ent28', gen_app_rec2_c25, id).toString(), label: gen_app_rec2_c26),
-                ]),
-              ),
             ],
           );
         },

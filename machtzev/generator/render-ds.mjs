@@ -761,20 +761,20 @@ export function renderDashboard(slug, { title, icon = '📊', entities, metrics 
       : a.kind === L.avg ? `appStore.avg('${a.slug}', ${cf})`
       : `appStore.count('${a.slug}').toDouble()`;
     const disp = a.kind === L.avg ? `${num}.toStringAsFixed(1)` : `${num}.toStringAsFixed(0)`;
-    tiles.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: ${lbl}, value: ${disp}, sub: ${sub}, glyph: ${g}${nav(a.slug)}))`);
+    tiles.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => PremiumStat(label: ${lbl}, value: ${num}, glyph: ${g}${nav(a.slug)}))`);
     barLabels.push(lbl); barVals.push(num);
   }
   for (const e of shown) {
     const lbl = k(e.name);
     const sub = k(`${e.fields} ${L.fieldsWord}${e.stages ? ` · ${e.stages} ${L.stagesWord}` : ''}`);
     const g = k(e.icon || '🗂️');
-    tiles.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => DsStat(label: ${lbl}, value: appStore.count('${e.slug || ''}').toString(), sub: ${sub}, glyph: ${g}${nav(e.slug)}))`);
+    tiles.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => PremiumStat(label: ${lbl}, value: appStore.count('${e.slug || ''}').toDouble(), glyph: ${g}${nav(e.slug)}))`);
     barLabels.push(lbl); barVals.push(`appStore.count('${e.slug || ''}').toDouble()`);
   }
   const cSub = k(`${tiles.length} ${L.metricsWord} · ${L.overview}`);
   const cChart = k(L.liveCompare);
   const barsBlock = barVals.length >= 2
-    ? `      AnimatedBuilder(animation: appStore, builder: (context, _) => DsBars(title: ${cChart}, labels: const [${barLabels.join(', ')}], values: [${barVals.join(', ')}])),\n`
+    ? `      AnimatedBuilder(animation: appStore, builder: (context, _) => NeonBars(labels: const [${barLabels.join(', ')}], values: [${barVals.join(', ')}])),\n`
     : '';
   const rows = [];
   for (let i = 0; i < tiles.length; i += 2) {
@@ -786,7 +786,7 @@ export function renderDashboard(slug, { title, icon = '📊', entities, metrics 
   const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — דשבורד מנתוני-הישויות החיים (drill-down). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
-${tiles.length ? "import '../dart-ui-bs/ds/ds_store.dart';\n" : ''}${barsBlock ? "import '../dart-ui-bs/ds/ds_bars.dart';\n" : ''}${[...imports].sort().join('\n')}
+${tiles.length ? "import '../dart-ui-bs/ds/ds_store.dart';\nimport '../dart-ui-bs/premium/showcase/premium_stat.dart';\n" : ''}${barsBlock ? "import '../dart-ui-bs/premium/dataviz/neon_bars.dart';\n" : ''}${[...imports].sort().join('\n')}
 import 'package:flutter/material.dart';
 
 class ${cls} extends StatelessWidget {
