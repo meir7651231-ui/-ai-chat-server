@@ -2,7 +2,7 @@
  *  · קופסאות-מאור (dart-boxes/*.dart, ללא bs-) לא מייבאות אטומי-בנייה-חכמה (../dart/).
  *  · קופסאות-בנייה-חכמה (bs-*.dart) לא מייבאות אטומי-מאור (../dart-maor/).
  *  · רק לוח-האם (board.dart) מגשר בין השניים.
- *  הפרה ⇒ exit 1. הרצה: node new/independence-check.mjs */
+ *  הפרה ⇒ exit 1. הרצה: node machtzev/purity/independence-check.mjs */
 import { readFileSync, readdirSync } from 'node:fs';
 const DIR = new URL('../../new/dart-boxes/', import.meta.url);
 const files = readdirSync(DIR).filter((f) => f.endsWith('.dart') && !f.endsWith('-proof.dart') && f !== 'atoms.dart');

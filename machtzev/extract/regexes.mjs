@@ -9,7 +9,7 @@ for (const f of census.files.filter(f => f.domain === 'engines' && /\.(ts|mjs)$/
     if (/^\s*(\/\/|\*)/.test(line)) return;
     for (const m of line.matchAll(/(?:^|[=(,\s])\/((?:[^\/\\\n]|\\.){6,})\/([gimsuy]*)/g))
       atoms.push({ id: `L12:${census.repo}:${f.path}:${i+1}:${m.index}`, level: 'L12-regex',
-        pattern: m[1].slice(0, 80), flags: m[3], source: `${census.repo}/${f.path}:${i+1}` });
+        pattern: m[1].slice(0, 80), flags: m[2], source: `${census.repo}/${f.path}:${i+1}` });
   });
 }
 fs.writeFileSync(new URL(`../registry/atoms-L12-${census.repo}.json`, import.meta.url), JSON.stringify(atoms, null, 1));

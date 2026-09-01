@@ -2,12 +2,12 @@
 // 🔩 מנרמל-const · ממיר אטום-const-דאטה לפונקציה-אפס-ארג (שומר שם מדויק), כדי ש-ast-purify
 //    יחלץ את העברית למטרה. 3 צורות → `Type NAME() => <literal>;` (const מוסר ⇒ עברית 'חופשית').
 //    צרכנים: הפניה-חשופה `NAME` (שאינה כבר `NAME(`) ⇒ `NAME()`. דטרמיניסטי · revert-on-fail.
-//    שימוש: node machtzev/const-normalize.mjs <dir/base>  |  --list
+//    שימוש: node machtzev/purity/const-normalize.mjs <dir/base>  |  --list
 import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 const ROOT = new URL('../../new/', import.meta.url).pathname;
-const DART = '/tmp/claude-0/-home-user/65886fc0-dc27-5a35-9058-e6a50b9adaff/scratchpad/dart-sdk-dl/dart-sdk/bin';
+const DART = process.env.DART_SDK_BIN || '/home/user/flutter/bin';
 const env = { ...process.env, PATH: `${DART}:${process.env.PATH}` };
 const HEB = /[֐-׿]/;
 
@@ -69,4 +69,4 @@ if (a === '--list') {
     if (HEB.test(c) && /^(const\s+[\w<>,\s?]+\s+[A-Za-z_]\w*\s*=\s*[\[{]|[\w<>,\s?]+\s+get\s)/m.test(c)) console.log(base);
   }
 } else if (a) normalize(a);
-else console.log('שימוש: node machtzev/const-normalize.mjs <dir/base> | --list');
+else console.log('שימוש: node machtzev/purity/const-normalize.mjs <dir/base> | --list');

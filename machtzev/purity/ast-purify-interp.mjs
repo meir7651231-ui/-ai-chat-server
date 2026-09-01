@@ -8,8 +8,8 @@ import path from 'node:path';
 import { execSync } from 'node:child_process';
 
 const ROOT = new URL('../../new/', import.meta.url).pathname;
-const AST = '/tmp/claude-0/-home-user/65886fc0-dc27-5a35-9058-e6a50b9adaff/scratchpad/asttest';
-const DART = '/tmp/claude-0/-home-user/65886fc0-dc27-5a35-9058-e6a50b9adaff/scratchpad/dart-sdk-dl/dart-sdk/bin';
+const AST = process.env.AST_DIR || new URL('../carve/', import.meta.url).pathname;
+const DART = process.env.DART_SDK_BIN || '/home/user/flutter/bin';
 const env = { ...process.env, PATH: `${DART}:${process.env.PATH}` };
 const DATADIR = { 'dart': 'dart-data', 'dart-maor': 'dart-data-maor', 'atoms': 'atoms-data' };
 

@@ -4,9 +4,9 @@
 // ומחלץ אותו לקובץ-דאטה + משאיר במנוע הפניה-לשקע.
 //
 // שימוש:
-//   node machtzev/purify.mjs --scan            # אינוונטר: כל מנוע נושא-דאטה
-//   node machtzev/purify.mjs --scan --json      # פלט-מכונה
-//   node machtzev/purify.mjs --extract <file>   # חילוץ בלוק-הדאטה (מנוע→שקע, דאטה→קובץ)
+//   node machtzev/purity/purify.mjs --scan            # אינוונטר: כל מנוע נושא-דאטה
+//   node machtzev/purity/purify.mjs --scan --json      # פלט-מכונה
+//   node machtzev/purity/purify.mjs --extract <file>   # חילוץ בלוק-הדאטה (מנוע→שקע, דאטה→קובץ)
 //
 // גבול (חוק-מנגנון): בלוק ≥MIN ערכי-מחרוזת = דאטה-עסקית. פונקציה/control-flow
 // אינם נתפסים (רק const/final ברמת-המודול). קבועי-פיזיקה קטנים (<MIN) לא-נתפסים.
@@ -194,7 +194,7 @@ function extract(rel) {
   const dataAbs = path.join(ROOT, dataRel);
 
   // 1) קובץ-דאטה
-  const dataHdr = `// 🗄️ דאטה · חולץ מ-${rel} ע"י machtzev/purify.mjs. נערך בלי לגעת במנוע.\n`;
+  const dataHdr = `// 🗄️ דאטה · חולץ מ-${rel} ע"י machtzev/purity/purify.mjs. נערך בלי לגעת במנוע.\n`;
   const dataContent = cfg.lang === 'js'
     ? `${dataHdr}export const ${pub} = ${lit};\n`
     : `${dataHdr}const ${pub} = ${lit};\n// re-export שם-המקור לנוחות-הזרקה:\nfinal ${b.name.replace(/^_/, '')} = ${pub};\n`;
@@ -276,5 +276,5 @@ if (args[0] === '--all') {
 } else if (args[0] === '--extract' && args[1]) {
   extract(args[1]);
 } else {
-  console.log('שימוש: node machtzev/purify.mjs --scan [--json] | --extract <file> | --all');
+  console.log('שימוש: node machtzev/purity/purify.mjs --scan [--json] | --extract <file> | --all');
 }

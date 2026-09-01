@@ -7,7 +7,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { classBody, stripComments, maskComments, snake, loopContext, parseCallArgs } from './lift-lib.mjs';
 const ROOT = new URL('../../', import.meta.url).pathname;
-const SCRATCH = process.argv[2] || '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens';
+const SCRATCH = process.argv[2] || '/tmp/genesis-all-screens';
 const SHELF = path.join(ROOT, 'new/dart-ui-bs');
 const CONTENT = path.join(ROOT, 'new/dart-data-bs/auto');
 const OUT_FULL = path.join(ROOT, 'screens-seed/manifests');

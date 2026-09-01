@@ -3,7 +3,7 @@
  *  כל אטום-דאטה JS (‏*-strings/*-data/*-terms שנולדו בטיהור, הכרעה 19) נפלט כתאום-Dart
  *  מוקלד ב-new/dart-data-maor — כך שהמדף, האטלס והמחולל מקבלים את הדאטה גם בצד-Dart.
  *  מכני ובטוח: ערכי-JSON בלבד ⇒ ליטרלי-Dart; שמות-הייצוא נשמרים. תאום קיים משוכתב.
- *  שימוש: node machtzev/reconvert-data.mjs [--dry] */
+ *  שימוש: node machtzev/purity/reconvert-data.mjs [--dry] */
 import fs from 'node:fs';
 import path from 'node:path';
 const ROOT = new URL('../../', import.meta.url).pathname;

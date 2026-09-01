@@ -4,7 +4,7 @@
 //  לכל אטום-חזות: מחלקה · קובץ · מקור-מסך · **מטרה-אמיתית** (מונחי-מסך-המקור אם
 //  הורם, אחרת התיאור-העצמי מנוקה-בוילרפלייט) · **טוהר** (עברית-בקוד=חוב) · תפר · ייעוד.
 //  כל האמת במקום אחד ⇒ סוכן לא צריך להצליב 5 קבצים ולנחש מדוגמה. דטרמיניסטי.
-//  פלט: machtzev/generator/atom-index.json + סיכום-אמת. ריצה: node machtzev/atom-index.mjs
+//  פלט: machtzev/generator/atom-index.json + סיכום-אמת. ריצה: node machtzev/census/atom-index.mjs
 // ══════════════════════════════════════════════════════════════════════════
 import fs from 'node:fs'; import path from 'node:path';
 import { analyzeAtom } from './atom-census.mjs';

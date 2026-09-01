@@ -9,7 +9,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 const ROOT = new URL('../', import.meta.url).pathname;
 const FULL = process.argv.includes('--full');
-const SCRATCH = '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens';
+const SCRATCH = '/tmp/genesis-all-screens';
 const BS = '/home/user/buildsmart';
 const t0 = Date.now();
 const rows = [];

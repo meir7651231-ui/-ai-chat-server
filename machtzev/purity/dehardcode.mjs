@@ -4,7 +4,7 @@
 // אוסף {key→שם} לקובץ-דאטה, מוסיף שקע `term`, מחווט הבדיקה, מאמת, מחזיר-אם-נכשל.
 // המנוע נשאר מדבר ב**מטרות** בלבד; השם מוזרק (מתחלף פר-וורטיקל: תרומה/תשלום/חשבונית).
 //
-// שימוש: node machtzev/dehardcode.mjs <file>   (dart-maor/atoms/dart)
+// שימוש: node machtzev/purity/dehardcode.mjs <file>   (dart-maor/atoms/dart)
 import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
@@ -99,5 +99,5 @@ function dehardcode(rel) {
 }
 
 const f = process.argv[2];
-if (!f) console.log('שימוש: node machtzev/dehardcode.mjs <file>');
+if (!f) console.log('שימוש: node machtzev/purity/dehardcode.mjs <file>');
 else dehardcode(f);

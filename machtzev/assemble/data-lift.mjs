@@ -11,7 +11,7 @@ import path from 'node:path';
 import { execFileSync, execSync } from 'node:child_process';
 import { inferImports, classBody, stripComments, maskComments, HEB_STR, IO_PAT, RIVERPOD, blind, snake, screenPascal, okType, FOUNDATION, FOUNDATION_FN, maskLitsKeepInterp } from './lift-lib.mjs';
 const ROOT = new URL('../../', import.meta.url).pathname;
-const SCRATCH = process.argv[2] || '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/all-screens';
+const SCRATCH = process.argv[2] || '/tmp/genesis-all-screens';
 const SHELF = path.join(ROOT, 'new/dart-ui-bs');
 const OUT = path.join(SHELF, 'auto');
 const CONTENT_OUT = path.join(ROOT, 'new/dart-data-bs/auto');

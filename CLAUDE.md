@@ -57,8 +57,8 @@ node machtzev/police.mjs          # לסוף-גל: + selftest + mutation (דקו
 node machtzev/one.mjs             # ⚡ המנוע-האחד: רענון-מקור→פירוק-מסכים→דדופ→מונחים→הרכבה→טוהר→משטרה→ONE-STATUS.md (‏--full למשטרה-מלאה)
 node machtzev/run.mjs             # (במאור) מפקד+מחלצים+זיקוק+משטרה — פר-גל
 node machtzev/run.mjs --fast      # משטרה בלבד
-node machtzev/factory/gen-wires.mjs <genesis> maor    # חציבת-טיוטות (TS→JS)
-node machtzev/factory/gen-wires-dart.mjs <genesis>    # חציבת-טיוטות-Dart מ-app_flutter (בנייה-חכמה החי)
+node machtzev/factory/gen-wires.mjs <genesis> maor    # (ב-maor-system) חציבת-טיוטות (TS→JS)
+node machtzev/factory/gen-wires-dart.mjs <genesis>    # (ב-maor-system) חציבת-טיוטות-Dart מ-app_flutter
 node machtzev/tools/promote-auto.mjs    # (בגנסיס) קידום-חינם: צילום/Golden
 node machtzev/tools/gen-wiring-doc.mjs  # (בגנסיס) חילול מפת-החיווט
 node machtzev/tools/box-coverage.mjs    # (בגנסיס) מד-מוכנות-קופסאות ⇒ box-drafts/READINESS.md

@@ -4,7 +4,7 @@
 import fs from 'node:fs'; import os from 'node:os'; import path from 'node:path';
 import { execSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
-const DART = '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/dart-sdk/bin/dart';
+const DART = process.env.DART || '/home/user/flutter/bin/dart';
 const A = new URL('../../new/atoms/', import.meta.url).pathname;
 const D = new URL('../../new/dart-maor/', import.meta.url).pathname;
 

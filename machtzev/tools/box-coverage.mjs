@@ -9,7 +9,7 @@
 import fs from 'node:fs';
 const ROOT = new URL('../..', import.meta.url).pathname;
 const atoms = new Set(fs.readdirSync(ROOT + 'new/atoms').map(f => f.replace(/\..*$/, '')));
-const quarry = new Set(fs.readdirSync(ROOT + 'quarry').map(f => f.replace(/@.*$/, '')));
+const quarry = new Set((fs.existsSync(ROOT + 'quarry') ? fs.readdirSync(ROOT + 'quarry') : []).map(f => f.replace(/@.*$/, '')));
 // טיוטות שהוכרעו כחיווט-קופסה (מדף io-wiring — סוף ריקון-המחצבה 24.8)
 // אליאסים מדדופ-המדף (הכרעה 5): שם-ישן ⇒ קנוני. החוט קיים, רק התוכנית לא עודכנה.
 const DEDUP_ALIAS = { gem: 'gematria', 'local-iso': 'iso-local', localIso: 'iso-local' };
@@ -57,7 +57,7 @@ for (const bd of fs.readdirSync(ROOT + 'box-drafts').filter(f => f.endsWith('.bo
   rows.push({ box, total: wires.length, have, inq, clustered, io, law6, missing, ready });
 }
 
-const md = ['# 📏 מוכנות-הקופסאות (מחולל — node machtzev/box-coverage.mjs)', '',
+const md = ['# 📏 מוכנות-הקופסאות (מחולל — node machtzev/tools/box-coverage.mjs)', '',
   '| קופסה | חוטים | בחוזה | במחצבה | אשכול | גבול-IO | חוק-6 | חסר | מצב |', '|---|---|---|---|---|---|---|---|---|'];
 for (const r of rows) {
   md.push(`| ${r.box} | ${r.total} | ${r.have} | ${r.inq} | ${r.clustered} | ${r.io.length} | ${r.law6.length} | ${r.missing.join(' ') || '—'} | ${r.ready} |`);

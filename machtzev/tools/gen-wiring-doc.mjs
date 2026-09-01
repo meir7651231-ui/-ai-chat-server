@@ -5,7 +5,7 @@ import fs from 'node:fs';
 const ROOT = new URL('../..', import.meta.url).pathname;
 const boxes = fs.readdirSync(ROOT + 'new/boxes').filter(f => f.endsWith('.mjs') && !f.endsWith('.test.mjs'));
 const atoms = fs.readdirSync(ROOT + 'new/atoms').filter(f => f.endsWith('.mjs') && !f.endsWith('.test.mjs'));
-let md = `# WIRING — מפת-החיווט החיה של Genesis\n> **מחולל אוטומטית מה-imports — אל תערוך ידנית** (\`node machtzev/gen-wiring-doc.mjs\`).\n> כל קופסה: אילו חוטים היא מחווטת + ההכרעה-החתומה שלה (מהחוזה) + הזהב שלה.\n\n`;
+let md = `# WIRING — מפת-החיווט החיה של Genesis\n> **מחולל אוטומטית מה-imports — אל תערוך ידנית** (\`node machtzev/tools/gen-wiring-doc.mjs\`).\n> כל קופסה: אילו חוטים היא מחווטת + ההכרעה-החתומה שלה (מהחוזה) + הזהב שלה.\n\n`;
 md += `**מלאי:** ${atoms.length} אטומים · ${boxes.length} קופסאות · מחווטים: `;
 const wired = new Set();
 const rows = [];

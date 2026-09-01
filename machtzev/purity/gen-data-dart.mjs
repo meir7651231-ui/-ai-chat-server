@@ -4,7 +4,7 @@
  * ~90% מנוע. קורא את הערך-החי (import דינמי), פולט getter-Dart + בדיקת-זהב
  * שמשווה jsonEncode(Dart) ≡ JSON.stringify(JS) — ההוכחה החזקה-ביותר לנתון-טהור.
  *
- * שימוש:  node machtzev/gen-data-dart.mjs <atom-name> [<atom-name> ...]
+ * שימוש:  node machtzev/purity/gen-data-dart.mjs <atom-name> [<atom-name> ...]
  * פלט:    new/dart-maor/<name>.dart + <name>_test.dart · מדפיס GO/SKIP פר-אטום.
  * SKIP:   אטום עם export שהוא פונקציה (לא-דאטה — שייך למסלול-הלוגיקה) או ערך
  *         לא-סריאליזבל (undefined/Symbol/BigInt).

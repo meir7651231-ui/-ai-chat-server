@@ -16,7 +16,7 @@ let promoted = 0, residue = 0, skipped = 0;
 const why = {}; const R = (k, f) => { why[k] = (why[k] || []).concat(f).slice(0, 3); residue++; };
 const taken = new Set(fs.readdirSync(A).map(f => f.replace(/\..*$/, '')));
 
-for (const file of fs.readdirSync(Q).filter(x => x.endsWith('.mjs'))) {
+for (const file of (fs.existsSync(Q) ? fs.readdirSync(Q) : []).filter(x => x.endsWith('.mjs'))) {
   if (EXCLUDE.has(file)) { skipped++; continue; }
   const kebab = file.split('@')[0].replace(/_/g, '-');
   if (taken.has(kebab)) { skipped++; continue; }
