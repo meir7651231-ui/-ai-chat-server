@@ -8,7 +8,7 @@
 - **קנוני/חתימה** — הגיעו מ-`.nm` (האטום המוצג + וריאנטיו).
 - **יורש** — הגיעו מ-`.chip` (אותה תבנית, נבדל בדאטה — §3 canonical+inherit).
 
-**התחייבויות:** 10 אטומים · שמות ייחודיים ולא-ריקים · kind מ-allowlist · אפס-import
+**התחייבויות:** 8 אטומים · שמות ייחודיים ולא-ריקים · kind מ-allowlist · אפס-import
 (חוק-1) · אפס תוכן-דומיין/₪ (§0) · regen ביט-זהה ממקור-האמת (אחרת `--check` אדום).
 
 **מוצא:** machtzev/pure/motion-family.html · **מנוע:** machtzev/pure/pure-decompose.mjs · **שער:** pure-lint + police.

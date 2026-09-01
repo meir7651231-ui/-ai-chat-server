@@ -1,6 +1,6 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- PURE — Archetype 14 · Motion / Generative. Ambient life: everything breathing, flowing, computing. accent morphs · semantic fixed · reduced-motion freezes. -->
-<title>Motion Family</title>
+<!-- PURE — Motion Appendix. A motion layer over the existing 13 archetypes (NOT a 14th). accent morphs · semantic fixed · reduced-motion freezes every cell. -->
+<title>Motion Appendix</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Frank+Ruhl+Libre:wght@700&family=Space+Grotesk:wght@400;500;600;700&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -65,7 +65,7 @@
 </style>
 
 <div class="bar"><div class="in">
-  <div class="mk">Pure<i>.</i><small>Motion Family</small></div>
+  <div class="mk">Pure<i>.</i><small>Motion Appendix</small></div>
   <div class="seg" id="seg" role="group" aria-label="Theme"><span class="ind" id="ind"></span>
     <button data-t="t-indigo" aria-pressed="true"><span class="d" style="background:#7A6BF0"></span>Indigo</button>
     <button data-t="t-teal" aria-pressed="false"><span class="d" style="background:#1FB8A6"></span>Teal</button>
@@ -75,12 +75,12 @@
 
 <div class="wrap">
   <header class="hero">
-    <div class="eyebrow"><span class="tick"></span>Archetype 14 · Motion / Generative</div>
-    <h1>משפחת התנועה</h1>
-    <p class="sub">The living layer. Ambient fields, generative canvases and micro-motion — everything breathing, flowing, computing. The accent morphs with the theme; the pulse-of-life dot stays semantic green. Reduced-motion freezes every cell to a still frame.</p>
+    <div class="eyebrow"><span class="tick"></span>Motion Appendix · a layer over the 13</div>
+    <h1>נספח התנועה</h1>
+    <p class="sub">Not a 14th archetype — a motion layer the existing families borrow. Ambient fields and micro-motion, each a different role. The accent morphs with the theme; the live-status dot stays semantic green. Reduced-motion freezes every cell to a still frame.</p>
   </header>
 
-  <div class="lead">8 canonical · accent-morph · reduced-motion freezes · rest inherit → chips</div>
+  <div class="lead">8 motions · accent-morph · reduced-motion freezes · one role each</div>
   <div class="grid" id="grid">
     <div class="cell"><div class="stage"><span class="live"><i></i>Aurora</span><div class="aurora"></div></div>
       <div class="foot"><span class="nm">AuroraField</span><span class="seam">fields</span></div></div>
@@ -97,30 +97,25 @@
     <div class="cell"><div class="stage"><div class="sweep"></div></div>
       <div class="foot"><span class="nm">GradientSweep · shimmer</span><span class="seam">fields</span></div></div>
 
-    <div class="cell"><div class="stage"><span class="live"><i></i>Count</span><canvas data-fx="wave"></canvas></div>
-      <div class="foot"><span class="nm">WaveBars</span><span class="seam">fields</span></div></div>
-
     <div class="cell"><div class="stage"><div class="tilt" id="tiltStage"><b id="tiltCard"></b></div></div>
       <div class="foot"><span class="nm">ParallaxTilt · hover</span><span class="seam">fields</span></div></div>
 
     <div class="cell"><div class="stage"><div class="tw" id="twText">Label</div></div>
       <div class="foot"><span class="nm">TypeWriter</span><span class="seam">self</span></div></div>
 
-    <div class="cell"><div class="stage"><div class="burst" id="burst" role="button" tabindex="0" aria-label="Trigger confetti burst"><span class="hint">tap to burst</span></div><canvas data-fx="confetti"></canvas></div>
+    <div class="cell"><div class="stage"><div class="burst" id="burst" role="button" tabindex="0" aria-label="Trigger confetti burst"><span class="hint">Action · burst</span></div><canvas data-fx="confetti"></canvas></div>
       <div class="foot"><span class="nm">ConfettiBurst · trigger</span><span class="seam">self</span></div></div>
-
-    <div class="cell"><div class="stage"><span class="live"><i></i>Count-up</span><div style="position:absolute;inset:0;display:grid;place-items:center"><span class="val" id="cu" style="font-size:38px">0</span></div></div>
-      <div class="foot"><span class="nm">CountUp · tnum</span><span class="seam">fields</span></div></div>
   </div>
 
-  <div class="lead">inherit — same living layer, different motion signature</div>
+  <div class="lead">inherit — motion signatures borrowed by existing atoms</div>
   <div class="inherit" id="chips"></div>
 
-  <footer><div>PURE — <b>Motion / Generative</b> · the 14th archetype · everything breathing</div><div>accent morphs · semantic fixed · reduced-motion freezes</div></footer>
+  <footer><div>PURE — <b>Motion Appendix</b> · a layer over the 13 · not an archetype</div><div>accent morphs · live dot fixed · reduced-motion freezes</div></footer>
 </div>
 
 <script>
-  var INH=["MorphBlob","OrbitRing","RippleTap","NoiseGrain","ScrollReveal","BreathingDot","FloatDrift","ShimmerSweep","BlurIn","StaggerRise","MarqueeStream","GlowTrail","PlasmaField","StarfieldDrift"];
+  // borrowed motion signatures — each already used by an existing atom (Skeleton→Shimmer, Stat→Count-up, Button→Ripple, Card→Float)
+  var INH=["Ripple","Shimmer","Count-up","Float"];
   document.getElementById('chips').innerHTML=INH.map(function(n){return '<span class="chip"><i></i>'+n+'</span>';}).join('');
 
   var root=document.documentElement;root.className='t-indigo';
@@ -139,9 +134,8 @@
     var ctx=cv.getContext('2d'),DPR=Math.min(2,devicePixelRatio||1),W=0,H=0,fx=cv.dataset.fx,st={};
     function rs(){var r=cv.getBoundingClientRect();W=r.width;H=r.height;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);init();}
     function init(){
-      if(fx==='particles'){st.p=[];for(var i=0;i<46;i++)st.p.push({x:Math.random(),y:Math.random(),z:Math.random(),v:.1+Math.random()*.4});}
-      if(fx==='organism'){st.o=[];for(var j=0;j<7;j++)st.o.push({x:.15+Math.random()*.7,y:.2+Math.random()*.6,r:3+Math.random()*7,ph:Math.random()*6.3,br:.6+Math.random()});}
-      if(fx==='wave'){st.n=26;}
+      if(fx==='particles'){st.p=[];for(var i=0;i<24;i++)st.p.push({x:Math.random(),y:Math.random(),z:Math.random(),v:.1+Math.random()*.4});}
+      if(fx==='organism'){st.o=[];for(var j=0;j<5;j++)st.o.push({x:.18+Math.random()*.64,y:.22+Math.random()*.56,r:4+Math.random()*7,ph:Math.random()*6.3,br:.6+Math.random()});}
       if(fx==='confetti'){st.c=[];}
     }
     function draw(t){
@@ -153,20 +147,12 @@
           ctx.fillStyle=A.a;ctx.globalAlpha=.15+p.z*.45;ctx.beginPath();ctx.arc(x,y,.7+p.z*2,0,6.283);ctx.fill();}
         ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
       } else if(fx==='organism'){
+        // up to 5 breathing bodies, contrast on canvas — no connecting mesh (no spaghetti)
         ctx.globalCompositeOperation='lighter';
-        for(var a=0;a<st.o.length;a++)for(var b=a+1;b<st.o.length;b++){var o1=st.o[a],o2=st.o[b],dx=o1.x-o2.x,dy=o1.y-o2.y;if(Math.hypot(dx,dy)<.34){
-          ctx.strokeStyle=A.c2;ctx.globalAlpha=.14;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(o1.x*W,o1.y*H);ctx.lineTo(o2.x*W,o2.y*H);ctx.stroke();
-          var tt=(t*.0004+a)%1,fx2=o1.x+(o2.x-o1.x)*tt,fy=o1.y+(o2.y-o1.y)*tt;ctx.globalAlpha=.8;ctx.fillStyle=A.hi;ctx.beginPath();ctx.arc(fx2*W,fy*H,1.4,0,6.283);ctx.fill();}}
-        for(var k=0;k<st.o.length;k++){var o=st.o[k],br=1+Math.sin(t*.002*o.br+o.ph)*.25,r=o.r*br;
-          var g=ctx.createRadialGradient(o.x*W,o.y*H,0,o.x*W,o.y*H,r*3);g.addColorStop(0,A.a);g.addColorStop(1,'rgba(0,0,0,0)');
-          ctx.globalAlpha=.5;ctx.fillStyle=g;ctx.beginPath();ctx.arc(o.x*W,o.y*H,r*3,0,6.283);ctx.fill();
+        for(var k=0;k<st.o.length;k++){var o=st.o[k],br=1+Math.sin(t*.0018*o.br+o.ph)*.22,r=o.r*br;
+          var g=ctx.createRadialGradient(o.x*W,o.y*H,0,o.x*W,o.y*H,r*3.4);g.addColorStop(0,A.a);g.addColorStop(1,'rgba(0,0,0,0)');
+          ctx.globalAlpha=.55;ctx.fillStyle=g;ctx.beginPath();ctx.arc(o.x*W,o.y*H,r*3.4,0,6.283);ctx.fill();
           ctx.globalAlpha=1;ctx.fillStyle=A.hi;ctx.beginPath();ctx.arc(o.x*W,o.y*H,r*.5,0,6.283);ctx.fill();}
-        ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
-      } else if(fx==='wave'){
-        var bw=W/st.n;ctx.globalCompositeOperation='lighter';
-        for(var w=0;w<st.n;w++){var h=(.2+.5*(.5+.5*Math.sin(t*.003+w*.5)))*H,x=w*bw+bw*.2;
-          var g2=ctx.createLinearGradient(0,H,0,H-h);g2.addColorStop(0,A.a);g2.addColorStop(1,A.hi);
-          ctx.fillStyle=g2;ctx.globalAlpha=.85;ctx.fillRect(x,H-h,bw*.6,h);}
         ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
       } else if(fx==='confetti'){
         ctx.globalCompositeOperation='lighter';
@@ -188,24 +174,19 @@
   function fire(){if(burstCanvas&&burstCanvas._st.burst)burstCanvas._st.burst();}
   burstBtn.addEventListener('click',fire);
   burstBtn.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();fire();}});
-  if(reduce)fire();
+  // reduced-motion: no auto-burst — one still frame, wait for the trigger
 
-  // typewriter
-  var tw=document.getElementById('twText'),words=["Label","Value","Meta","Motion"],wi=0,ci=0,del=false;
+  // typewriter · Label → Value → Meta
+  var tw=document.getElementById('twText'),words=["Label","Value","Meta"],wi=0,ci=0,del=false;
   function type(){var w=words[wi];tw.textContent=w.slice(0,ci);
     if(!del&&ci<w.length){ci++;}else if(!del&&ci===w.length){del=true;setTimeout(type,900);return;}
     else if(del&&ci>0){ci--;}else{del=false;wi=(wi+1)%words.length;}
     setTimeout(type,del?55:110);}
-  if(reduce){tw.textContent="Motion";}else type();
+  if(reduce){tw.textContent="Label";}else type();
 
   // parallax tilt
   var ts=document.getElementById('tiltStage'),tc=document.getElementById('tiltCard');
   if(!reduce&&ts){ts.addEventListener('pointermove',function(e){var r=ts.getBoundingClientRect(),px=(e.clientX-r.left)/r.width-.5,py=(e.clientY-r.top)/r.height-.5;
     tc.style.transform='rotateY('+(px*22)+'deg) rotateX('+(-py*22)+'deg)';tc.style.setProperty('--gx',(50+px*60)+'%');tc.style.setProperty('--gy',(30+py*60)+'%');});
     ts.addEventListener('pointerleave',function(){tc.style.transform='';});}
-
-  // count-up
-  var cu=document.getElementById('cu'),cuV=0,cuT=204871;
-  if(reduce){cu.textContent=cuT.toLocaleString();}
-  else (function cup(){cuV+=Math.ceil((cuT-cuV)*.04);if(cuV>=cuT){cuV=cuT;}cu.textContent=cuV.toLocaleString();if(cuV<cuT)requestAnimationFrame(cup);})();
 </script>

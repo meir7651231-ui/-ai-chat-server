@@ -5,7 +5,7 @@
 export const PURE_MOTION_SHELF = {
  "family": "motion",
  "source": "machtzev/pure/motion-family.html",
- "count": 10,
+ "count": 8,
  "atoms": [
   {
    "name": "AuroraField",
@@ -38,12 +38,6 @@ export const PURE_MOTION_SHELF = {
    "seam": "fields"
   },
   {
-   "name": "WaveBars",
-   "note": "",
-   "kind": "signature",
-   "seam": "fields"
-  },
-  {
    "name": "ParallaxTilt",
    "note": "hover",
    "kind": "signature",
@@ -60,12 +54,6 @@ export const PURE_MOTION_SHELF = {
    "note": "trigger",
    "kind": "signature",
    "seam": "self"
-  },
-  {
-   "name": "CountUp",
-   "note": "tnum",
-   "kind": "signature",
-   "seam": "fields"
   }
  ]
 };
