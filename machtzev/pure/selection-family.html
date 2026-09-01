@@ -1,0 +1,415 @@
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+  PURE — Selection / Chip Family. Archetype 04. representative atoms from atlas.json.
+  Pure · content = Label/Value/Meta · numbers LTR · selected/checked = accent (var(--a)) · semantic err/warn/ok FIXED.
+  Selection controls are the signature: checkbox / radio / switch / choice-chip / segmented / tag / rating. canonical+inherit for the Chip/Pill/Tag cluster.
+-->
+<title>Pure — Selection Family</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Frank+Ruhl+Libre:wght@700&family=Space+Grotesk:wght@400;500;600;700&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--canvas:#0C0C0E;--sunken:#0A0A0C;--surface:#151517;--raised:#1B1B1E;--raised2:#212126;--ink:#ECE9E2;--mut:#9B968C;--faint:#6E6A62;--hair:rgba(236,233,226,.09);--hair2:rgba(236,233,226,.05);
+    --err:#E0574E;--warn:#E6B84F;--ok:#43D08C;
+    --serif:"Fraunces",Georgia,serif;--serifHe:"Frank Ruhl Libre",serif;--grotesk:"Space Grotesk",ui-monospace,monospace;--he:"Heebo","Segoe UI",sans-serif;--ease:cubic-bezier(.2,.7,.15,1);--spring:cubic-bezier(.34,1.4,.5,1)}
+  .t-indigo{--a-hi:#B0A4FF;--a:#7A6BF0;--a-800:#4B3ECB;--gl:rgba(122,107,240,.42);--c2:#4CC6E6;--c3:#B57BE6}
+  .t-teal{--a-hi:#6FE6D5;--a:#1FB8A6;--a-800:#0C7E72;--gl:rgba(31,184,166,.42);--c2:#4FB6E6;--c3:#43D08C}
+  .t-amber{--a-hi:#F2C87E;--a:#D99A3C;--a-800:#9E6B1E;--gl:rgba(217,154,60,.42);--c2:#E8863C;--c3:#E67BA6}
+  *{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}
+  body{background:var(--canvas);color:var(--ink);direction:rtl;font-family:var(--he);-webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden;transition:background-color .6s var(--ease);background-image:radial-gradient(120% 36% at 84% -6%,var(--gl),transparent 60%)}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.038;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 40px;position:relative;z-index:1}::selection{background:var(--a);color:#0A0A0C}
+  .bar{position:sticky;top:0;z-index:60;background:linear-gradient(180deg,rgba(12,12,14,.94),rgba(12,12,14,.62));backdrop-filter:blur(14px);border-bottom:1px solid var(--hair)}
+  .bar .in{max-width:1200px;margin:0 auto;padding:12px 40px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .bar .mk{font-family:var(--serif);font-size:20px;font-weight:600;letter-spacing:-.02em;direction:ltr}.bar .mk i{color:var(--a);transition:color .55s var(--ease)}.bar .mk small{font-family:var(--grotesk);font-size:10px;color:var(--faint);letter-spacing:2px;margin-inline-start:10px;text-transform:uppercase}
+  .seg{display:flex;padding:3px;background:var(--sunken);border:1px solid var(--hair);border-radius:999px;position:relative}
+  .seg button{position:relative;z-index:2;border:0;background:none;cursor:pointer;padding:8px 17px;border-radius:999px;font-family:var(--grotesk);font-size:12px;font-weight:600;color:var(--mut);transition:color .35s;display:flex;align-items:center;gap:7px;min-height:38px}.seg button .d{width:9px;height:9px;border-radius:50%}.seg button[aria-pressed="true"]{color:var(--ink)}.seg button:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+  .seg .ind{position:absolute;z-index:1;top:3px;bottom:3px;left:0;border-radius:999px;background:var(--raised);box-shadow:0 2px 8px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06);transition:transform .45s var(--ease),width .45s var(--ease)}
+  .intro{padding:40px 0 6px}.intro .kick{display:flex;align-items:center;gap:14px;margin-bottom:16px}.intro .kick .tick{width:34px;height:1px;background:var(--a);transition:background-color .55s var(--ease)}
+  .eyebrow{font-family:var(--grotesk);font-size:11px;font-weight:600;letter-spacing:3px;color:var(--faint);text-transform:uppercase;direction:ltr}
+  .intro h1{font-family:var(--serifHe);font-weight:700;font-size:clamp(28px,5vw,44px);letter-spacing:-.01em}.intro .he{font-family:var(--grotesk);font-size:12.5px;color:var(--mut);margin-top:10px;direction:ltr}
+  .band{padding:22px 0;border-top:1px solid var(--hair)}
+  .bhd{display:flex;align-items:baseline;gap:12px;margin-bottom:16px;flex-wrap:wrap}.bhd h2{font-family:var(--serifHe);font-weight:700;font-size:19px}.bhd .en{font-family:var(--grotesk);font-size:10px;color:var(--faint);letter-spacing:1.5px;text-transform:uppercase;direction:ltr} .bhd .ct{font-family:var(--grotesk);font-size:10px;color:var(--mut);direction:ltr;margin-inline-start:auto}
+  .fam{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+  .fam.sm{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+  .cell{display:flex;flex-direction:column;gap:10px}
+  .cell.full{grid-column:1/-1}
+  .foot{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .nm{font-family:var(--grotesk);font-size:10px;font-weight:600;color:var(--ink);direction:ltr;line-height:1.3}
+  .seam{font-family:var(--grotesk);font-size:7.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:1px 5px;border-radius:999px;direction:ltr;border:1px solid var(--hair);color:var(--mut);flex:none}
+  .seam.coll{color:var(--c2);border-color:rgba(76,198,230,.35)}.seam.series{color:var(--c3);border-color:rgba(181,123,230,.35)}
+  .inh{width:100%;display:flex;align-items:center;gap:14px;flex-wrap:wrap}.inh .lead{font-family:var(--grotesk);font-size:9px;color:var(--faint);direction:ltr;text-transform:uppercase;letter-spacing:1px;flex:none}
+  .inh .chips{display:flex;flex-wrap:wrap;gap:6px;flex:1}.inh .chip{font-family:var(--grotesk);font-size:10px;color:var(--mut);direction:ltr;padding:4px 9px;border:1px solid var(--hair);border-radius:999px;background:var(--sunken)}
+  svg.i{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+  /* ============ SELECTION FAMILY — component CSS ============ */
+  /* shared control surface */
+  .ctl{border:1px solid var(--hair);border-radius:15px;background:linear-gradient(180deg,var(--surface),var(--sunken));padding:16px;display:flex;flex-direction:column;gap:11px;min-height:130px}
+  .ctl.pad{gap:8px}
+  .lbl{font-family:var(--he);font-size:13px;font-weight:500;color:var(--ink)}
+  .lbl.mut{color:var(--mut)}.lbl.faint{color:var(--faint)}
+  .meta{font-family:var(--grotesk);font-size:10px;color:var(--faint);direction:ltr}
+  .val{font-family:var(--grotesk);font-size:11px;color:var(--mut);direction:ltr;font-feature-settings:"tnum"}
+
+  /* --- checkbox --- */
+  .opt{display:flex;align-items:center;gap:11px;min-height:44px;cursor:pointer;user-select:none}
+  .opt.dis{cursor:not-allowed;opacity:.42}
+  .cbx{width:22px;height:22px;border-radius:7px;border:1.5px solid color-mix(in srgb,var(--ink) 26%,transparent);background:var(--sunken);display:grid;place-items:center;flex:none;color:#0A0A0C;transition:background .2s var(--ease),border-color .2s}
+  .cbx svg{width:14px;height:14px;stroke-width:2.6;opacity:0;transition:opacity .18s}
+  .cbx.on{background:linear-gradient(160deg,var(--a-hi),var(--a));border-color:var(--a)}
+  .cbx.on svg{opacity:1}
+  .cbx.ind{background:linear-gradient(160deg,var(--a-hi),var(--a));border-color:var(--a)}
+  .cbx.ind::after{content:"";width:11px;height:2.4px;border-radius:2px;background:#0A0A0C}
+  .opt:focus-visible{outline:2px solid var(--a-hi);outline-offset:3px;border-radius:8px}
+  .opt .otx{display:flex;flex-direction:column;gap:1px;flex:1}
+
+  /* --- radio --- */
+  .grp{display:flex;flex-direction:column;gap:2px}
+  .rdo{width:22px;height:22px;border-radius:50%;border:1.5px solid color-mix(in srgb,var(--ink) 26%,transparent);background:var(--sunken);display:grid;place-items:center;flex:none;transition:border-color .2s}
+  .rdo::after{content:"";width:10px;height:10px;border-radius:50%;background:linear-gradient(160deg,var(--a-hi),var(--a));transform:scale(0);transition:transform .2s var(--spring)}
+  .opt.sel .rdo{border-color:var(--a)}
+  .opt.sel .rdo::after{transform:scale(1)}
+  .opt.sel .otx .lbl{color:var(--ink)}
+
+  /* --- switch --- */
+  .swrow{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px}
+  .sw{width:46px;height:26px;border-radius:999px;background:var(--raised2);border:1px solid var(--hair);position:relative;flex:none;cursor:pointer;transition:background .28s var(--ease),border-color .28s}
+  .sw .kn{position:absolute;top:2px;inset-inline-start:2px;width:20px;height:20px;border-radius:50%;background:var(--mut);box-shadow:0 2px 5px rgba(0,0,0,.5);transition:transform .28s var(--spring),background .28s}
+  .sw.on{background:linear-gradient(160deg,var(--a-hi),var(--a));border-color:var(--a)}
+  .sw.on .kn{transform:translateX(-20px);background:#0A0A0C}
+  body[dir] .sw.on .kn{transform:translateX(-20px)}
+  .sw.dis{opacity:.42;cursor:not-allowed}
+  .sw:focus-visible{outline:2px solid var(--a-hi);outline-offset:3px}
+
+  /* --- choice / filter chips --- */
+  .chiprow{display:flex;flex-wrap:wrap;gap:8px}
+  .fchip{font-family:var(--grotesk);font-size:11px;font-weight:600;color:var(--mut);direction:ltr;padding:7px 13px;min-height:36px;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--hair);border-radius:999px;background:var(--sunken);cursor:pointer;transition:color .2s,border-color .2s,background .2s}
+  .fchip svg{width:13px;height:13px}
+  .fchip.sel{color:#0A0A0C;background:linear-gradient(160deg,var(--a-hi),var(--a));border-color:var(--a)}
+  .fchip.sel .ck{display:inline-flex}
+  .fchip .ck{display:none}
+  .fchip:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+  .fchip.ghost{border-style:dashed}
+
+  /* --- segmented control --- */
+  .segc{display:inline-flex;padding:3px;background:var(--sunken);border:1px solid var(--hair);border-radius:11px;position:relative;gap:0}
+  .segc .sgi{position:absolute;z-index:1;top:3px;bottom:3px;left:0;border-radius:8px;background:linear-gradient(160deg,var(--a-hi),var(--a));box-shadow:0 2px 8px var(--gl);transition:transform .4s var(--ease),width .4s var(--ease)}
+  .segc button{position:relative;z-index:2;border:0;background:none;cursor:pointer;padding:8px 16px;min-height:38px;border-radius:8px;font-family:var(--grotesk);font-size:11px;font-weight:600;color:var(--mut);transition:color .3s}
+  .segc button[aria-pressed="true"]{color:#0A0A0C}
+  .segc button:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+
+  /* --- tag input --- */
+  .tagf{border:1px solid var(--hair);border-radius:12px;background:var(--sunken);padding:9px;display:flex;flex-wrap:wrap;gap:7px;align-items:center;min-height:48px}
+  .tagf:focus-within{border-color:color-mix(in srgb,var(--a) 45%,var(--hair))}
+  .tg{font-family:var(--grotesk);font-size:11px;font-weight:600;color:var(--a-hi);direction:ltr;padding:5px 6px 5px 11px;display:inline-flex;align-items:center;gap:5px;border:1px solid color-mix(in srgb,var(--a) 34%,transparent);border-radius:999px;background:color-mix(in srgb,var(--a) 14%,transparent)}
+  .tg button{border:0;background:none;color:currentColor;cursor:pointer;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;opacity:.75;transition:opacity .15s,background .15s}
+  .tg button:hover{opacity:1;background:color-mix(in srgb,var(--a) 22%,transparent)}
+  .tg button:focus-visible{outline:2px solid var(--a-hi);outline-offset:1px}
+  .tg button svg{width:11px;height:11px;stroke-width:2.4}
+  .tagf .ti{flex:1;min-width:70px;border:0;background:none;outline:none;color:var(--ink);font-family:var(--he);font-size:12.5px;padding:4px}
+  .tagf .ti::placeholder{color:var(--faint)}
+
+  /* --- rating --- */
+  .rate{display:inline-flex;gap:4px}
+  .rate button{border:0;background:none;cursor:pointer;padding:3px;color:color-mix(in srgb,var(--ink) 20%,transparent);transition:color .15s,transform .15s var(--spring);line-height:0}
+  .rate button svg{width:26px;height:26px;stroke:currentColor;stroke-width:1.4;fill:none}
+  .rate button.on{color:var(--a)}
+  .rate button.on svg{fill:var(--a);stroke:var(--a)}
+  .rate button:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px;border-radius:6px}
+  .rbars{display:flex;align-items:flex-end;gap:5px;height:34px}
+  .rbars i{width:16px;border-radius:3px 3px 0 0;background:var(--raised2)}
+  .rbars i.on{background:linear-gradient(180deg,var(--a-hi),var(--a))}
+
+  /* --- drop select --- */
+  .dsel{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--hair);border-radius:11px;background:var(--sunken);padding:11px 14px;min-height:44px;cursor:pointer}
+  .dsel .cur{font-family:var(--he);font-size:12.5px;color:var(--ink)}
+  .dsel .cur.ph{color:var(--faint)}
+  .dsel svg{width:15px;height:15px;color:var(--faint)}
+
+  /* semantic-tinted chips (FIXED colors — never morph) */
+  .schip{font-family:var(--grotesk);font-size:10px;font-weight:700;padding:3px 9px;border-radius:999px;direction:ltr;display:inline-flex;align-items:center;gap:5px}
+  .schip.ok{color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent);border:1px solid color-mix(in srgb,var(--ok) 30%,transparent)}
+  .schip.warn{color:var(--warn);background:color-mix(in srgb,var(--warn) 14%,transparent);border:1px solid color-mix(in srgb,var(--warn) 30%,transparent)}
+  .schip.err{color:var(--err);background:color-mix(in srgb,var(--err) 14%,transparent);border:1px solid color-mix(in srgb,var(--err) 30%,transparent)}
+
+  footer{padding:30px 0 70px;border-top:1px solid var(--hair);margin-top:6px}.colo{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--grotesk);font-size:11px;color:var(--faint);direction:ltr}.colo b{color:var(--ink)}
+  @media(max-width:820px){.wrap{padding:0 18px}.bar .in{padding:11px 18px}.bar .mk small{display:none}}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="bar"><div class="in">
+  <div class="mk">Pure<i>.</i><small>Selection Family</small></div>
+  <div class="seg" id="seg" role="group" aria-label="Theme"><span class="ind" id="ind"></span>
+    <button data-t="t-indigo" aria-pressed="true"><span class="d" style="background:#7A6BF0"></span>Indigo</button>
+    <button data-t="t-teal" aria-pressed="false"><span class="d" style="background:#1FB8A6"></span>Teal</button>
+    <button data-t="t-amber" aria-pressed="false"><span class="d" style="background:#D99A3C"></span>Amber</button>
+  </div>
+</div></div>
+
+<div class="wrap">
+  <header class="intro">
+    <div class="kick"><span class="tick"></span><span class="eyebrow">Archetype 04 · Selection</span></div>
+    <h1>משפחת הבורר</h1>
+    <p class="he">checkbox · radio · switch · choice-chip · segmented · tag · rating · selected = accent · semantic ok/warn/err fixed · content = Label/Value/Meta · numbers LTR</p>
+  </header>
+
+  <!-- CHECKBOX -->
+  <section class="band">
+    <div class="bhd"><h2>Checkbox</h2><span class="en">unchecked / checked / indeterminate / disabled · check = accent fill</span><span class="ct">6</span></div>
+    <div class="fam">
+      <div class="cell"><div class="ctl">
+        <div class="opt" tabindex="0" role="checkbox" aria-checked="false"><span class="cbx"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span><span class="otx"><span class="lbl">Label</span><span class="meta">Meta</span></span></div>
+        <div class="opt" tabindex="0" role="checkbox" aria-checked="false"><span class="cbx"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span><span class="otx"><span class="lbl">Label</span><span class="meta">Meta</span></span></div>
+      </div><div class="foot"><span class="nm">CheckRow · canonical</span><span class="seam">state</span></div></div>
+
+      <div class="cell"><div class="ctl">
+        <div class="opt" tabindex="0" role="checkbox" aria-checked="true"><span class="cbx on"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span><span class="otx"><span class="lbl">Label</span><span class="meta">Meta</span></span></div>
+        <div class="opt" tabindex="0" role="checkbox" aria-checked="true"><span class="cbx on"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span><span class="otx"><span class="lbl">Label</span><span class="meta">Meta</span></span></div>
+      </div><div class="foot"><span class="nm">PendingCheckRow · checked</span><span class="seam">state</span></div></div>
+
+      <div class="cell"><div class="ctl">
+        <div class="opt" tabindex="0" role="checkbox" aria-checked="mixed"><span class="cbx ind"></span><span class="otx"><span class="lbl">Label</span><span class="meta">Meta · partial</span></span></div>
+        <div class="opt" tabindex="0" role="checkbox" aria-checked="true"><span class="cbx on"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span><span class="otx"><span class="lbl">Label</span><span class="meta">Meta</span></span></div>
+      </div><div class="foot"><span class="nm">CheckPop · indeterminate</span><span class="seam">state</span></div></div>
+
+      <div class="cell"><div class="ctl">
+        <div class="opt dis" aria-disabled="true" role="checkbox" aria-checked="true"><span class="cbx on"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span><span class="otx"><span class="lbl">Label</span><span class="meta">Meta · locked</span></span></div>
+        <div class="opt dis" aria-disabled="true" role="checkbox" aria-checked="false"><span class="cbx"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span><span class="otx"><span class="lbl">Label</span><span class="meta">Meta</span></span></div>
+      </div><div class="foot"><span class="nm">RegressionPanelCheckRow · disabled</span><span class="seam">state</span></div></div>
+    </div>
+  </section>
+
+  <!-- RADIO -->
+  <section class="band">
+    <div class="bhd"><h2>Radio · Single choice</h2><span class="en">group — exactly one selected · dot = accent</span><span class="ct">4</span></div>
+    <div class="fam">
+      <div class="cell"><div class="ctl grp" role="radiogroup" aria-label="Label">
+        <div class="opt sel" tabindex="0" role="radio" aria-checked="true"><span class="rdo"></span><span class="otx"><span class="lbl">Label</span><span class="meta">Meta</span></span></div>
+        <div class="opt" tabindex="-1" role="radio" aria-checked="false"><span class="rdo"></span><span class="otx"><span class="lbl">Label</span><span class="meta">Meta</span></span></div>
+        <div class="opt" tabindex="-1" role="radio" aria-checked="false"><span class="rdo"></span><span class="otx"><span class="lbl">Label</span><span class="meta">Meta</span></span></div>
+      </div><div class="foot"><span class="nm">PickerOptionsPanel · canonical</span><span class="seam">group</span></div></div>
+
+      <div class="cell"><div class="ctl grp" role="radiogroup" aria-label="Label">
+        <div class="opt" tabindex="-1" role="radio" aria-checked="false"><span class="rdo"></span><span class="otx"><span class="lbl">Label</span><span class="val">248</span></span></div>
+        <div class="opt sel" tabindex="0" role="radio" aria-checked="true"><span class="rdo"></span><span class="otx"><span class="lbl">Label</span><span class="val">1,024</span></span></div>
+        <div class="opt dis" aria-disabled="true" role="radio" aria-checked="false"><span class="rdo"></span><span class="otx"><span class="lbl">Label</span><span class="val">—</span></span></div>
+      </div><div class="foot"><span class="nm">PickerOption · with value</span><span class="seam">group</span></div></div>
+
+      <div class="cell full"><div class="ctl pad">
+        <div class="inh"><span class="lead">inherit PickerOptionsPanel →</span><div class="chips"><span class="chip">SegPicker</span><span class="chip">PersonaPickingSheetBanner</span><span class="chip">DeliveryOptionCard</span><span class="chip">FacetRow</span></div></div>
+      </div><div class="foot"><span class="nm">4 atoms · same single-choice pattern · differ by option payload</span><span class="seam">group</span></div></div>
+    </div>
+  </section>
+
+  <!-- SWITCH -->
+  <section class="band">
+    <div class="bhd"><h2>Switch · Toggle</h2><span class="en">on / off / disabled · knob slides · on = accent track</span><span class="ct">many</span></div>
+    <div class="fam">
+      <div class="cell"><div class="ctl">
+        <div class="swrow"><span class="otx"><span class="lbl">Label</span><span class="meta">Meta</span></span><span class="sw on" tabindex="0" role="switch" aria-checked="true"><span class="kn"></span></span></div>
+        <div class="swrow"><span class="otx"><span class="lbl mut">Label</span><span class="meta">Meta</span></span><span class="sw" tabindex="0" role="switch" aria-checked="false"><span class="kn"></span></span></div>
+      </div><div class="foot"><span class="nm">SwitchRow · canonical</span><span class="seam">state</span></div></div>
+
+      <div class="cell"><div class="ctl">
+        <div class="swrow"><span class="otx"><span class="lbl">Label</span><span class="meta">Meta</span></span><span class="sw on" tabindex="0" role="switch" aria-checked="true"><span class="kn"></span></span></div>
+        <div class="swrow"><span class="otx"><span class="lbl faint">Label</span><span class="meta">Meta · locked</span></span><span class="sw on dis" role="switch" aria-checked="true" aria-disabled="true"><span class="kn"></span></span></div>
+      </div><div class="foot"><span class="nm">AnimatedToggle · disabled-on</span><span class="seam">state</span></div></div>
+
+      <div class="cell"><div class="ctl">
+        <div class="swrow"><span class="otx"><span class="lbl">Label</span><span class="meta">Meta</span></span><span class="sw" tabindex="0" role="switch" aria-checked="false"><span class="kn"></span></span></div>
+        <div class="swrow"><span class="otx"><span class="lbl">Label</span><span class="schip ok">ON</span></span><span class="sw on" tabindex="0" role="switch" aria-checked="true"><span class="kn"></span></span></div>
+      </div><div class="foot"><span class="nm">SettingsSwitchRow · status pill fixed</span><span class="seam">state</span></div></div>
+
+      <div class="cell full"><div class="ctl pad">
+        <div class="inh"><span class="sw on" style="flex:none"><span class="kn"></span></span><span class="lead">inherit SwitchRow →</span><div class="chips"><span class="chip">DsToggleTile</span><span class="chip">ChatSettingsSwitchRow</span><span class="chip">CourierSettingsSwitchRow</span><span class="chip">NotifSettingsSwitchRow</span></div></div>
+      </div><div class="foot"><span class="nm">4 atoms · same track+knob · differ by settings surface</span><span class="seam">state</span></div></div>
+    </div>
+  </section>
+
+  <!-- CHOICE CHIPS -->
+  <section class="band">
+    <div class="bhd"><h2>Choice Chips · Filter</h2><span class="en">multi-select · selected = accent fill + check · toggles live</span><span class="ct">many</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="ctl pad">
+        <div class="chiprow" id="fc1" role="group" aria-label="Label">
+          <button class="fchip sel" aria-pressed="true"><span class="ck"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span>Label</button>
+          <button class="fchip" aria-pressed="false"><span class="ck"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span>Label</button>
+          <button class="fchip sel" aria-pressed="true"><span class="ck"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span>Label</button>
+          <button class="fchip" aria-pressed="false"><span class="ck"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span>Label</button>
+          <button class="fchip" aria-pressed="false"><span class="ck"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span>Label</button>
+          <button class="fchip sel" aria-pressed="true"><span class="ck"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span>Label</button>
+        </div>
+      </div><div class="foot"><span class="nm">FacetChip · canonical · click to toggle</span><span class="seam coll">collection</span></div></div>
+
+      <div class="cell"><div class="ctl pad">
+        <div class="chiprow">
+          <button class="fchip sel" aria-pressed="true">Label</button>
+          <button class="fchip" aria-pressed="false">Label</button>
+          <button class="fchip ghost" aria-pressed="false"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Label</button>
+        </div>
+      </div><div class="foot"><span class="nm">PresetChip · add-affordance</span><span class="seam">choice</span></div></div>
+
+      <div class="cell"><div class="ctl pad">
+        <div class="chiprow">
+          <button class="fchip sel" aria-pressed="true"><span class="ck"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></span>Label</button>
+          <button class="fchip" aria-pressed="false">Label</button>
+          <button class="fchip" aria-pressed="false">Label</button>
+        </div>
+      </div><div class="foot"><span class="nm">MustChip · required facet</span><span class="seam">choice</span></div></div>
+
+      <div class="cell full"><div class="ctl pad">
+        <div class="inh"><span class="lead">inherit FacetChip →</span><div class="chips"><span class="chip">FilterChipPill</span><span class="chip">ChipWrap</span><span class="chip">ChipScroll</span><span class="chip">ChipCloud</span><span class="chip">MatchChip</span><span class="chip">DateChip</span></div></div>
+      </div><div class="foot"><span class="nm">6 atoms · same toggle-chip · differ by facet source/layout</span><span class="seam coll">collection</span></div></div>
+    </div>
+  </section>
+
+  <!-- SEGMENTED -->
+  <section class="band">
+    <div class="bhd"><h2>Segmented Control</h2><span class="en">exclusive · sliding indicator via getBoundingClientRect · live</span><span class="ct">3</span></div>
+    <div class="fam">
+      <div class="cell"><div class="ctl"><div style="margin:auto 0">
+        <div class="segc jsseg" role="group" aria-label="Label"><span class="sgi"></span>
+          <button aria-pressed="true">Label</button><button aria-pressed="false">Label</button><button aria-pressed="false">Label</button>
+        </div></div>
+      </div><div class="foot"><span class="nm">UnitSegmentToggle · canonical</span><span class="seam">exclusive</span></div></div>
+
+      <div class="cell"><div class="ctl"><div style="margin:auto 0">
+        <div class="segc jsseg" role="group" aria-label="Label"><span class="sgi"></span>
+          <button aria-pressed="false">Label</button><button aria-pressed="true">Label</button>
+        </div></div>
+      </div><div class="foot"><span class="nm">SegmentedPillToggle · two-up</span><span class="seam">exclusive</span></div></div>
+
+      <div class="cell"><div class="ctl"><div style="margin:auto 0">
+        <div class="segc jsseg" role="group" aria-label="Label"><span class="sgi"></span>
+          <button aria-pressed="false">Label</button><button aria-pressed="false">Label</button><button aria-pressed="true">Label</button><button aria-pressed="false">Label</button>
+        </div></div>
+      </div><div class="foot"><span class="nm">SegPicker · four-up</span><span class="seam">exclusive</span></div></div>
+    </div>
+  </section>
+
+  <!-- TAG INPUT -->
+  <section class="band">
+    <div class="bhd"><h2>Tag Input</h2><span class="en">removable tokens · accent-tinted · × removes live</span><span class="ct">3</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="ctl pad">
+        <div class="tagf" id="tg1">
+          <span class="tg">Label<button aria-label="remove"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></span>
+          <span class="tg">Label<button aria-label="remove"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></span>
+          <span class="tg">Label<button aria-label="remove"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></span>
+          <span class="tg">Label<button aria-label="remove"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></span>
+          <input class="ti" placeholder="Value…" aria-label="Label">
+        </div>
+      </div><div class="foot"><span class="nm">TagInput · canonical · removable</span><span class="seam coll">collection</span></div></div>
+
+      <div class="cell"><div class="ctl pad">
+        <div class="chiprow" style="align-items:center">
+          <span class="tg" style="cursor:default">Label<button aria-label="remove"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></span>
+          <span class="tg" style="cursor:default">Label<button aria-label="remove"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></span>
+        </div>
+      </div><div class="foot"><span class="nm">TintedTag · read row</span><span class="seam">token</span></div></div>
+
+      <div class="cell"><div class="ctl pad">
+        <div class="swrow" style="min-height:auto"><span class="lbl">Label</span><span class="val">Meta</span></div>
+        <div class="swrow" style="min-height:auto;border-top:1px solid var(--hair2);padding-top:9px"><span class="lbl mut">Label</span><span class="tg" style="cursor:default">Value<button aria-label="remove"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></span></div>
+      </div><div class="foot"><span class="nm">TagDetailRow · key + token</span><span class="seam">token</span></div></div>
+    </div>
+  </section>
+
+  <!-- RATING -->
+  <section class="band">
+    <div class="bhd"><h2>Rating</h2><span class="en">stars — filled = accent · bar variant · live click sets value</span><span class="ct">2</span></div>
+    <div class="fam">
+      <div class="cell"><div class="ctl"><div style="margin:auto 0">
+        <div class="rate jsrate" role="radiogroup" aria-label="Label" data-val="3">
+          <button role="radio" aria-checked="true" data-v="1"><svg viewBox="0 0 24 24"><path d="M12 3l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.3 6.1 21.4l1.1-6.5L2.5 10.3l6.5-.9z"/></svg></button>
+          <button role="radio" aria-checked="false" data-v="2"><svg viewBox="0 0 24 24"><path d="M12 3l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.3 6.1 21.4l1.1-6.5L2.5 10.3l6.5-.9z"/></svg></button>
+          <button role="radio" aria-checked="false" data-v="3"><svg viewBox="0 0 24 24"><path d="M12 3l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.3 6.1 21.4l1.1-6.5L2.5 10.3l6.5-.9z"/></svg></button>
+          <button role="radio" aria-checked="false" data-v="4"><svg viewBox="0 0 24 24"><path d="M12 3l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.3 6.1 21.4l1.1-6.5L2.5 10.3l6.5-.9z"/></svg></button>
+          <button role="radio" aria-checked="false" data-v="5"><svg viewBox="0 0 24 24"><path d="M12 3l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.3 6.1 21.4l1.1-6.5L2.5 10.3l6.5-.9z"/></svg></button>
+        </div>
+        <div class="meta" style="margin-top:10px">Value <b id="rv" style="color:var(--a-hi)">3</b> / 5</div>
+      </div></div><div class="foot"><span class="nm">StarRating · canonical · click to set</span><span class="seam">value</span></div></div>
+
+      <div class="cell"><div class="ctl"><div style="margin:auto 0">
+        <div class="rbars"><i class="on" style="height:40%"></i><i class="on" style="height:58%"></i><i class="on" style="height:72%"></i><i style="height:86%"></i><i style="height:100%"></i></div>
+        <div class="meta" style="margin-top:10px">Value <b style="color:var(--a-hi)">3</b> / 5</div>
+      </div></div><div class="foot"><span class="nm">RatingBars · bar scale</span><span class="seam">value</span></div></div>
+    </div>
+  </section>
+
+  <!-- SELECT / DROPDOWN -->
+  <section class="band">
+    <div class="bhd"><h2>Select</h2><span class="en">closed trigger · placeholder vs chosen value</span><span class="ct">2</span></div>
+    <div class="fam">
+      <div class="cell"><div class="ctl">
+        <span class="meta">Label</span>
+        <div class="dsel" tabindex="0" role="button" aria-haspopup="listbox"><span class="cur">Value</span><svg class="i" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+      </div><div class="foot"><span class="nm">DropSelect · chosen</span><span class="seam">value</span></div></div>
+
+      <div class="cell"><div class="ctl">
+        <span class="meta">Label</span>
+        <div class="dsel" tabindex="0" role="button" aria-haspopup="listbox"><span class="cur ph">Value…</span><svg class="i" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+      </div><div class="foot"><span class="nm">DropSelect · placeholder</span><span class="seam">value</span></div></div>
+    </div>
+  </section>
+
+  <!-- CHIP / PILL / TAG CLUSTER (canonical + inherit) -->
+  <section class="band">
+    <div class="bhd"><h2>Chip · Pill · Tag</h2><span class="en">the big display cluster · one atom pattern · semantic tints FIXED</span><span class="ct">many</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="ctl pad">
+        <div class="chiprow" style="align-items:center">
+          <span class="fchip" style="cursor:default;pointer-events:none">Label</span>
+          <span class="fchip sel" style="cursor:default;pointer-events:none">Label</span>
+          <span class="schip ok"><span style="width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block"></span>Label</span>
+          <span class="schip warn">Label</span>
+          <span class="schip err">Label</span>
+          <span class="fchip" style="cursor:default;pointer-events:none">Value 248</span>
+        </div>
+      </div><div class="foot"><span class="nm">DsChip · canonical · accent (selected) vs semantic (status) fixed</span><span class="seam series">series</span></div></div>
+
+      <div class="cell full"><div class="ctl pad">
+        <div class="inh"><span class="fchip sel" style="cursor:default;pointer-events:none;padding:4px 10px;min-height:auto">Label</span><span class="lead">inherit DsChip →</span><div class="chips"><span class="chip">Pill</span><span class="chip">BadgePill</span><span class="chip">ValueChip</span><span class="chip">PriceChip</span><span class="chip">NameChip</span><span class="chip">AttributeChip</span><span class="chip">StageChip</span><span class="chip">SectionPill</span><span class="chip">SummaryChip</span><span class="chip">ProjectChip</span><span class="chip">IntelPill</span><span class="chip">StorePill</span><span class="chip">ScoreBandChip</span><span class="chip">PickerOptionChip</span></div></div>
+      </div><div class="foot"><span class="nm">14 atoms · same chip/pill frame · differ by field payload</span><span class="seam series">series</span></div></div>
+
+      <div class="cell full"><div class="ctl pad">
+        <div class="inh"><span class="lead">semantic (FIXED) →</span><div class="chips"><span class="chip">StatusChip</span><span class="chip">SeverityChip</span><span class="chip">WarnChip</span><span class="chip">StatusDotChip</span><span class="chip">MatchChip</span></div></div>
+      </div><div class="foot"><span class="nm">5 atoms · ok/warn/err tint · never morph with theme</span><span class="seam">state</span></div></div>
+    </div>
+  </section>
+
+  <footer><div class="colo"><div>PURE — <b>Selection Family</b></div><div>~50 atoms · checkbox / radio / switch / chip / segmented / tag / rating · theme = parameter</div><div>selected = accent · semantic ok/warn/err fixed · content = Label / Value / Meta</div></div></footer>
+</div>
+
+<script>
+  var root=document.documentElement;root.className='t-indigo';
+  var seg=document.getElementById('seg'),ind=document.getElementById('ind'),btns=[].slice.call(seg.querySelectorAll('button'));
+  function place(el,indEl,box){var sr=box.getBoundingClientRect(),br=el.getBoundingClientRect();indEl.style.width=br.width+'px';indEl.style.transform='translateX('+(br.left-sr.left-3)+'px)';}
+  btns.forEach(function(b){b.addEventListener('click',function(){root.className=b.dataset.t;btns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});place(b,ind,seg);setTimeout(allSegs,60);});});
+  place(btns[0],ind,seg);if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){place(seg.querySelector('[aria-pressed="true"]'),ind,seg);allSegs();});}
+  window.addEventListener('resize',function(){place(seg.querySelector('[aria-pressed="true"]'),ind,seg);allSegs();});
+
+  // segmented controls — slide indicator to pressed button via getBoundingClientRect
+  function placeSeg(sc){var on=sc.querySelector('button[aria-pressed="true"]')||sc.querySelector('button');var gi=sc.querySelector('.sgi');if(!on||!gi)return;var sr=sc.getBoundingClientRect(),br=on.getBoundingClientRect();gi.style.width=br.width+'px';gi.style.transform='translateX('+(br.left-sr.left-3)+'px)';}
+  function allSegs(){document.querySelectorAll('.segc.jsseg').forEach(placeSeg);}
+  document.querySelectorAll('.segc.jsseg').forEach(function(sc){sc.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){sc.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});placeSeg(sc);});});});
+  allSegs();
+
+  // choice chips — toggle selected
+  document.querySelectorAll('.fchip[aria-pressed]').forEach(function(c){c.addEventListener('click',function(){var on=c.getAttribute('aria-pressed')==='true';c.setAttribute('aria-pressed',on?'false':'true');c.classList.toggle('sel',!on);});});
+
+  // switches — toggle
+  document.querySelectorAll('.sw[role="switch"]:not(.dis)').forEach(function(s){function t(){var on=s.getAttribute('aria-checked')==='true';s.setAttribute('aria-checked',on?'false':'true');s.classList.toggle('on',!on);}s.addEventListener('click',t);s.addEventListener('keydown',function(e){if(e.key===' '||e.key==='Enter'){e.preventDefault();t();}});});
+
+  // checkboxes — cycle (skip disabled)
+  document.querySelectorAll('.opt[role="checkbox"]:not(.dis)').forEach(function(o){var b=o.querySelector('.cbx');function t(){var on=b.classList.contains('on')||b.classList.contains('ind');if(on){b.classList.remove('on','ind');o.setAttribute('aria-checked','false');}else{b.classList.add('on');o.setAttribute('aria-checked','true');}}o.addEventListener('click',t);o.addEventListener('keydown',function(e){if(e.key===' '){e.preventDefault();t();}});});
+
+  // radios — single select within group
+  document.querySelectorAll('[role="radiogroup"] .opt[role="radio"]').forEach(function(o){if(o.classList.contains('dis'))return;o.addEventListener('click',function(){o.closest('[role="radiogroup"]').querySelectorAll('.opt[role="radio"]').forEach(function(x){x.classList.remove('sel');x.setAttribute('aria-checked','false');x.tabIndex=-1;});o.classList.add('sel');o.setAttribute('aria-checked','true');o.tabIndex=0;});});
+
+  // star rating — set value
+  document.querySelectorAll('.rate.jsrate').forEach(function(r){var out=document.getElementById('rv');function set(v){r.querySelectorAll('button').forEach(function(b){var on=+b.dataset.v<=v;b.classList.toggle('on',on);b.setAttribute('aria-checked',+b.dataset.v===v?'true':'false');});r.dataset.val=v;if(out)out.textContent=v;}
+    r.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){set(+b.dataset.v);});});set(+r.dataset.val||0);});
+
+  // tag input — remove tag on ×
+  document.querySelectorAll('.tg button').forEach(function(x){x.addEventListener('click',function(e){e.preventDefault();x.closest('.tg').remove();});});
+</script>
