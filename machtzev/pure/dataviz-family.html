@@ -1,0 +1,408 @@
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+  PURE — Data-Viz Family. Archetype 06. representative atoms from atlas.json.
+  Pure · content = Label/Value/Meta · numbers LTR tnum · trend up green / down red FIXED · accent morphs.
+  Charts = inline SVG. categorical series = var(--a)/--c2/--c3, distinguished by hue+lightness. single-series = var(--a) gradient. grid = var(--hair). no chartjunk.
+-->
+<title>Pure — Data-Viz Family</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Frank+Ruhl+Libre:wght@700&family=Space+Grotesk:wght@400;500;600;700&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--canvas:#0C0C0E;--sunken:#0A0A0C;--surface:#151517;--raised:#1B1B1E;--raised2:#212126;--ink:#ECE9E2;--mut:#9B968C;--faint:#6E6A62;--hair:rgba(236,233,226,.09);--hair2:rgba(236,233,226,.05);
+    --err:#E0574E;--warn:#E6B84F;--ok:#43D08C;
+    --serif:"Fraunces",Georgia,serif;--serifHe:"Frank Ruhl Libre",serif;--grotesk:"Space Grotesk",ui-monospace,monospace;--he:"Heebo","Segoe UI",sans-serif;--ease:cubic-bezier(.2,.7,.15,1);--spring:cubic-bezier(.34,1.4,.5,1)}
+  .t-indigo{--a-hi:#B0A4FF;--a:#7A6BF0;--a-800:#4B3ECB;--gl:rgba(122,107,240,.42);--c2:#4CC6E6;--c3:#B57BE6}
+  .t-teal{--a-hi:#6FE6D5;--a:#1FB8A6;--a-800:#0C7E72;--gl:rgba(31,184,166,.42);--c2:#4FB6E6;--c3:#43D08C}
+  .t-amber{--a-hi:#F2C87E;--a:#D99A3C;--a-800:#9E6B1E;--gl:rgba(217,154,60,.42);--c2:#E8863C;--c3:#E67BA6}
+  *{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}
+  body{background:var(--canvas);color:var(--ink);direction:rtl;font-family:var(--he);-webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden;transition:background-color .6s var(--ease);background-image:radial-gradient(120% 36% at 84% -6%,var(--gl),transparent 60%)}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.038;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 40px;position:relative;z-index:1}::selection{background:var(--a);color:#0A0A0C}
+  .bar{position:sticky;top:0;z-index:60;background:linear-gradient(180deg,rgba(12,12,14,.94),rgba(12,12,14,.62));backdrop-filter:blur(14px);border-bottom:1px solid var(--hair)}
+  .bar .in{max-width:1200px;margin:0 auto;padding:12px 40px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .bar .mk{font-family:var(--serif);font-size:20px;font-weight:600;letter-spacing:-.02em;direction:ltr}.bar .mk i{color:var(--a);transition:color .55s var(--ease)}.bar .mk small{font-family:var(--grotesk);font-size:10px;color:var(--faint);letter-spacing:2px;margin-inline-start:10px;text-transform:uppercase}
+  .seg{display:flex;padding:3px;background:var(--sunken);border:1px solid var(--hair);border-radius:999px;position:relative}
+  .seg button{position:relative;z-index:2;border:0;background:none;cursor:pointer;padding:8px 17px;border-radius:999px;font-family:var(--grotesk);font-size:12px;font-weight:600;color:var(--mut);transition:color .35s;display:flex;align-items:center;gap:7px;min-height:38px}.seg button .d{width:9px;height:9px;border-radius:50%}.seg button[aria-pressed="true"]{color:var(--ink)}.seg button:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+  .seg .ind{position:absolute;z-index:1;top:3px;bottom:3px;left:0;border-radius:999px;background:var(--raised);box-shadow:0 2px 8px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06);transition:transform .45s var(--ease),width .45s var(--ease)}
+  .intro{padding:40px 0 6px}.intro .kick{display:flex;align-items:center;gap:14px;margin-bottom:16px}.intro .kick .tick{width:34px;height:1px;background:var(--a);transition:background-color .55s var(--ease)}
+  .eyebrow{font-family:var(--grotesk);font-size:11px;font-weight:600;letter-spacing:3px;color:var(--faint);text-transform:uppercase;direction:ltr}
+  .intro h1{font-family:var(--serifHe);font-weight:700;font-size:clamp(28px,5vw,44px);letter-spacing:-.01em}.intro .he{font-family:var(--grotesk);font-size:12.5px;color:var(--mut);margin-top:10px;direction:ltr}
+  .band{padding:22px 0;border-top:1px solid var(--hair)}
+  .bhd{display:flex;align-items:baseline;gap:12px;margin-bottom:16px;flex-wrap:wrap}.bhd h2{font-family:var(--serifHe);font-weight:700;font-size:19px}.bhd .en{font-family:var(--grotesk);font-size:10px;color:var(--faint);letter-spacing:1.5px;text-transform:uppercase;direction:ltr} .bhd .ct{font-family:var(--grotesk);font-size:10px;color:var(--mut);direction:ltr;margin-inline-start:auto}
+  .fam{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+  .fam.sm{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+  .cell{display:flex;flex-direction:column;gap:10px}
+  .cell.full{grid-column:1/-1}
+  .foot{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .nm{font-family:var(--grotesk);font-size:10px;font-weight:600;color:var(--ink);direction:ltr;line-height:1.3}
+  .seam{font-family:var(--grotesk);font-size:7.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:1px 5px;border-radius:999px;direction:ltr;border:1px solid var(--hair);color:var(--mut);flex:none}
+  .seam.coll{color:var(--c2);border-color:rgba(76,198,230,.35)}.seam.series{color:var(--c3);border-color:rgba(181,123,230,.35)}
+  .inh{width:100%;display:flex;align-items:center;gap:14px;flex-wrap:wrap}.inh .lead{font-family:var(--grotesk);font-size:9px;color:var(--faint);direction:ltr;text-transform:uppercase;letter-spacing:1px;flex:none}
+  .inh .chips{display:flex;flex-wrap:wrap;gap:6px;flex:1}.inh .chip{font-family:var(--grotesk);font-size:10px;color:var(--mut);direction:ltr;padding:4px 9px;border:1px solid var(--hair);border-radius:999px;background:var(--sunken)}
+  svg.i{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  /* --- base surface --- */
+  .surf{position:relative;border:1px solid var(--hair);border-radius:16px;background:linear-gradient(180deg,var(--surface),var(--sunken));padding:18px;min-height:130px;overflow:hidden;transition:transform .25s var(--spring),border-color .25s,box-shadow .3s}
+  .surf .st{font-family:var(--he);font-size:14px;font-weight:600}.surf .sm2{font-size:11.5px;color:var(--mut);margin-top:3px}
+  .surf .tag{position:absolute;top:14px;inset-inline-start:14px;font-family:var(--grotesk);font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--faint);direction:ltr}
+  /* --- stat --- */
+  .stat{border:1px solid var(--hair);border-radius:14px;background:linear-gradient(180deg,var(--surface),var(--sunken));padding:15px 16px;display:flex;flex-direction:column;gap:6px}
+  .stat .k{font-family:var(--he);font-size:11px;font-weight:600;color:var(--mut)}
+  .stat .v{font-family:var(--grotesk);font-size:30px;font-weight:700;letter-spacing:-.02em;font-feature-settings:"tnum";direction:ltr;line-height:1}
+  .stat .d{display:inline-flex;align-items:center;gap:4px;font-family:var(--grotesk);font-size:11px;font-weight:600;direction:ltr;font-feature-settings:"tnum"}
+  .stat .d.up{color:var(--ok)}.stat .d.dn{color:var(--err)}
+  .stat.accent .v{color:var(--a-hi)}
+  /* ========================= DATA-VIZ FAMILY CSS ========================= */
+  .chart{position:relative;border:1px solid var(--hair);border-radius:16px;background:linear-gradient(180deg,var(--surface),var(--sunken));padding:16px 16px 13px;overflow:hidden;display:flex;flex-direction:column;gap:11px;min-height:150px}
+  .chart .chd{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  .chart .chd .ck{font-family:var(--he);font-size:12px;font-weight:600;color:var(--mut)}
+  .chart .chd .cv{font-family:var(--grotesk);font-size:22px;font-weight:700;letter-spacing:-.02em;font-feature-settings:"tnum";direction:ltr;line-height:1}
+  .chart .chd .cv.accent{color:var(--a-hi)}
+  .chart .cbody{position:relative;flex:1}
+  .chart svg{display:block;width:100%;overflow:visible;direction:ltr}
+  /* svg helpers */
+  .axis{stroke:var(--hair);stroke-width:1}
+  .grid{stroke:var(--hair2);stroke-width:1}
+  .lbl{font-family:var(--grotesk);font-size:9px;fill:var(--faint);font-feature-settings:"tnum"}
+  .vlbl{font-family:var(--grotesk);font-size:9.5px;fill:var(--mut);font-weight:600;font-feature-settings:"tnum"}
+  .bar-r{fill:color-mix(in srgb,var(--a) 26%,transparent);transition:fill .4s}
+  .bar-hi{fill:url(#gA)}
+  .cdelta{display:inline-flex;align-items:center;gap:3px;font-family:var(--grotesk);font-size:10.5px;font-weight:700;direction:ltr;font-feature-settings:"tnum"}
+  .cdelta.up{color:var(--ok)}.cdelta.dn{color:var(--err)}
+  .cdelta svg{width:11px;height:11px}
+  /* legend */
+  .legend{display:flex;flex-wrap:wrap;gap:12px}
+  .legend .lg{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;color:var(--mut)}
+  .legend .sw{width:11px;height:11px;border-radius:3px;flex:none}
+  .legend .val{font-family:var(--grotesk);font-weight:700;font-feature-settings:"tnum";direction:ltr;color:var(--ink);margin-inline-start:auto}
+  /* progress meters */
+  .meter{display:flex;flex-direction:column;gap:6px}
+  .meter .mh{display:flex;justify-content:space-between;align-items:baseline;font-size:11.5px}
+  .meter .mh .mk{color:var(--mut);font-weight:600}
+  .meter .mh .mv{font-family:var(--grotesk);font-weight:700;font-feature-settings:"tnum";direction:ltr}
+  .track{height:8px;border-radius:999px;background:var(--sunken);border:1px solid var(--hair2);overflow:hidden}
+  .track .fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--a-800),var(--a),var(--a-hi))}
+  .segbar{display:flex;gap:3px;height:9px}
+  .segbar i{flex:1;border-radius:2px;background:var(--sunken);border:1px solid var(--hair2)}
+  .segbar i.on{background:linear-gradient(180deg,var(--a-hi),var(--a));border-color:transparent}
+  /* heatmap */
+  .heat{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:22px;gap:4px}
+  .heat i{border-radius:3px;background:var(--sunken)}
+  /* sparkline inline row */
+  .sprow{display:flex;align-items:center;gap:12px;padding:3px 2px}
+  .sprow .sk{font-size:12px;color:var(--mut);flex:none;width:58px}
+  .sprow svg{flex:1;height:30px}
+  .sprow .sv{font-family:var(--grotesk);font-size:14px;font-weight:700;font-feature-settings:"tnum";direction:ltr;flex:none;min-width:44px;text-align:end}
+  /* rating bars */
+  .rate{display:flex;flex-direction:column;gap:7px}
+  .rate .rr{display:grid;grid-template-columns:34px 1fr 30px;align-items:center;gap:9px;font-size:11px}
+  .rate .rr .rk{color:var(--faint);font-family:var(--grotesk);direction:ltr}
+  .rate .rr .rv{font-family:var(--grotesk);font-weight:700;font-feature-settings:"tnum";color:var(--mut);direction:ltr;text-align:end}
+  @media(max-width:820px){.wrap{padding:0 18px}.bar .in{padding:11px 18px}.bar .mk small{display:none}}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="bar"><div class="in">
+  <div class="mk">Pure<i>.</i><small>Data-Viz Family</small></div>
+  <div class="seg" id="seg" role="group" aria-label="Theme"><span class="ind" id="ind"></span>
+    <button data-t="t-indigo" aria-pressed="true"><span class="d" style="background:#7A6BF0"></span>Indigo</button>
+    <button data-t="t-teal" aria-pressed="false"><span class="d" style="background:#1FB8A6"></span>Teal</button>
+    <button data-t="t-amber" aria-pressed="false"><span class="d" style="background:#D99A3C"></span>Amber</button>
+  </div>
+</div></div>
+
+<div class="wrap">
+  <header class="intro">
+    <div class="kick"><span class="tick"></span><span class="eyebrow">Archetype 06 · Data-Viz</span></div>
+    <h1>משפחת הדאטה-ויז</h1>
+    <p class="he">bar · line/area · donut · sparkline · gauge · heatmap · meters · legend · series = accent / c2 / c3 · one highlight per chart · numbers LTR tnum · up green / down red fixed</p>
+  </header>
+
+  <!-- BAR -->
+  <section class="band">
+    <div class="bhd"><h2>Bar · Column</h2><span class="en">vertical bars · one highlighted · thin axis · value labels tnum</span><span class="ct">many</span></div>
+    <div class="fam">
+      <div class="cell"><div class="chart">
+        <div class="chd"><span class="ck">Label</span><span class="cdelta up"><svg viewBox="0 0 24 24" class="i" style="stroke-width:2.4"><path d="M7 17L17 7M17 7H9M17 7v8"/></svg>12%</span></div>
+        <div class="cbody"><svg viewBox="0 0 240 96" role="img" aria-label="Bar chart">
+          <defs><linearGradient id="gA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--a-hi)"/><stop offset="1" stop-color="var(--a)"/></linearGradient></defs>
+          <line class="grid" x1="0" y1="24" x2="240" y2="24"/><line class="grid" x1="0" y1="52" x2="240" y2="52"/>
+          <line class="axis" x1="0" y1="80" x2="240" y2="80"/>
+          <rect class="bar-r" x="8"  y="52" width="22" height="28" rx="3"/>
+          <rect class="bar-r" x="42" y="40" width="22" height="40" rx="3"/>
+          <rect class="bar-r" x="76" y="58" width="22" height="22" rx="3"/>
+          <rect class="bar-r" x="110" y="34" width="22" height="46" rx="3"/>
+          <rect class="bar-hi" x="144" y="14" width="22" height="66" rx="3"/>
+          <rect class="bar-r" x="178" y="46" width="22" height="34" rx="3"/>
+          <rect class="bar-r" x="212" y="56" width="22" height="24" rx="3"/>
+          <text class="vlbl" x="155" y="9" text-anchor="middle">86</text>
+          <text class="lbl" x="19" y="92">01</text><text class="lbl" x="121" y="92">04</text><text class="lbl" x="223" y="92">07</text>
+        </svg></div>
+      </div><div class="foot"><span class="nm">BarChart · canonical</span><span class="seam">fields</span></div></div>
+
+      <div class="cell"><div class="chart">
+        <div class="chd"><span class="ck">Label</span><span class="cv accent">248</span></div>
+        <div class="cbody"><svg viewBox="0 0 240 96" role="img" aria-label="Horizontal bars">
+          <line class="axis" x1="52" y1="6" x2="52" y2="86"/>
+          <rect class="bar-r" x="52" y="8"  width="120" height="14" rx="3"/><text class="vlbl" x="178" y="19">120</text><text class="lbl" x="46" y="19" text-anchor="end">A</text>
+          <rect class="bar-r" x="52" y="30" width="86"  height="14" rx="3"/><text class="vlbl" x="144" y="41">86</text><text class="lbl" x="46" y="41" text-anchor="end">B</text>
+          <rect class="bar-hi" x="52" y="52" width="164" height="14" rx="3"/><text class="vlbl" x="222" y="63">164</text><text class="lbl" x="46" y="63" text-anchor="end">C</text>
+          <rect class="bar-r" x="52" y="74" width="64"  height="14" rx="3"/><text class="vlbl" x="122" y="85">64</text><text class="lbl" x="46" y="85" text-anchor="end">D</text>
+        </svg></div>
+      </div><div class="foot"><span class="nm">RatingBars · horizontal</span><span class="seam">fields</span></div></div>
+
+      <div class="cell"><div class="chart">
+        <div class="chd"><span class="ck">Label</span><span class="cdelta dn"><svg viewBox="0 0 24 24" class="i" style="stroke-width:2.4"><path d="M7 7l10 10M17 17H9M17 17V9"/></svg>4%</span></div>
+        <div class="cbody"><svg viewBox="0 0 240 96" role="img" aria-label="Grouped bars">
+          <line class="axis" x1="0" y1="80" x2="240" y2="80"/>
+          <g><rect x="14" y="44" width="14" height="36" rx="2" fill="var(--a)"/><rect x="30" y="30" width="14" height="50" rx="2" fill="var(--c2)"/><rect x="46" y="54" width="14" height="26" rx="2" fill="var(--c3)"/></g>
+          <g><rect x="86" y="38" width="14" height="42" rx="2" fill="var(--a)"/><rect x="102" y="50" width="14" height="30" rx="2" fill="var(--c2)"/><rect x="118" y="34" width="14" height="46" rx="2" fill="var(--c3)"/></g>
+          <g><rect x="158" y="52" width="14" height="28" rx="2" fill="var(--a)"/><rect x="174" y="24" width="14" height="56" rx="2" fill="var(--c2)"/><rect x="190" y="46" width="14" height="34" rx="2" fill="var(--c3)"/></g>
+          <text class="lbl" x="37" y="92" text-anchor="middle">Q1</text><text class="lbl" x="109" y="92" text-anchor="middle">Q2</text><text class="lbl" x="181" y="92" text-anchor="middle">Q3</text>
+        </svg></div>
+      </div><div class="foot"><span class="nm">StackedBarGroup · 3-series</span><span class="seam series">series</span></div></div>
+
+      <div class="cell full"><div class="inh"><span class="lead">inherit BarChart →</span><div class="chips"><span class="chip">BarChart</span><span class="chip">Bar</span><span class="chip">RatingBars</span><span class="chip">WaveformBars</span><span class="chip">GanttBar</span><span class="chip">CreditBar</span><span class="chip">ManagerDashboardCreditBar</span><span class="chip">AiBar</span><span class="chip">IntelBar</span></div></div>
+        <div class="foot"><span class="nm">9 atoms · same bar primitive · differ by orientation/source</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- LINE / AREA -->
+  <section class="band">
+    <div class="bhd"><h2>Line · Area</h2><span class="en">smooth path · gradient fill under · single-series accent</span><span class="ct">many</span></div>
+    <div class="fam">
+      <div class="cell"><div class="chart">
+        <div class="chd"><span class="ck">Label</span><span class="cv accent">7.4<span style="font-size:13px;color:var(--mut)">k</span></span></div>
+        <div class="cbody"><svg viewBox="0 0 240 100" role="img" aria-label="Area chart">
+          <defs><linearGradient id="gArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--a)" stop-opacity=".38"/><stop offset="1" stop-color="var(--a)" stop-opacity="0"/></linearGradient></defs>
+          <line class="grid" x1="0" y1="28" x2="240" y2="28"/><line class="grid" x1="0" y1="58" x2="240" y2="58"/>
+          <path d="M2,72 C30,66 44,40 70,44 C96,48 108,22 134,26 C160,30 176,54 200,46 C222,39 232,30 238,26 L238,88 L2,88 Z" fill="url(#gArea)"/>
+          <path d="M2,72 C30,66 44,40 70,44 C96,48 108,22 134,26 C160,30 176,54 200,46 C222,39 232,30 238,26" fill="none" stroke="var(--a-hi)" stroke-width="2.4" stroke-linecap="round"/>
+          <circle cx="134" cy="26" r="3.4" fill="var(--a-hi)" stroke="var(--canvas)" stroke-width="1.6"/>
+          <line class="axis" x1="0" y1="88" x2="240" y2="88"/>
+        </svg></div>
+      </div><div class="foot"><span class="nm">AreaChart · canonical</span><span class="seam">fields</span></div></div>
+
+      <div class="cell"><div class="chart">
+        <div class="chd"><span class="ck">Label</span><span class="cdelta up"><svg viewBox="0 0 24 24" class="i" style="stroke-width:2.4"><path d="M7 17L17 7M17 7H9M17 7v8"/></svg>9%</span></div>
+        <div class="cbody"><svg viewBox="0 0 240 100" role="img" aria-label="Multi-line chart">
+          <line class="grid" x1="0" y1="30" x2="240" y2="30"/><line class="grid" x1="0" y1="60" x2="240" y2="60"/>
+          <line class="axis" x1="0" y1="88" x2="240" y2="88"/>
+          <path d="M2,60 C34,54 54,40 84,44 C114,48 128,30 160,34 C192,38 214,26 238,22" fill="none" stroke="var(--a-hi)" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M2,74 C34,72 54,66 84,68 C114,70 128,58 160,62 C192,66 214,58 238,54" fill="none" stroke="var(--c2)" stroke-width="1.8" stroke-linecap="round" opacity=".85"/>
+          <path d="M2,80 C34,82 54,78 84,80 C114,82 128,74 160,78 C192,82 214,78 238,72" fill="none" stroke="var(--c3)" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="3 3" opacity=".7"/>
+        </svg></div>
+      </div><div class="foot"><span class="nm">TrendChart · 3-series</span><span class="seam series">series</span></div></div>
+
+      <div class="cell"><div class="chart">
+        <div class="chd"><span class="ck">Label</span><span class="cv">92<span style="font-size:13px;color:var(--mut)">%</span></span></div>
+        <div class="cbody"><svg viewBox="0 0 240 100" role="img" aria-label="Stepped line">
+          <line class="axis" x1="0" y1="88" x2="240" y2="88"/>
+          <path d="M2,68 H40 V50 H78 V58 H116 V32 H154 V40 H192 V22 H238" fill="none" stroke="var(--a-hi)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+          <path d="M2,68 H40 V50 H78 V58 H116 V32 H154 V40 H192 V22 H238 V88 H2 Z" fill="var(--a)" opacity=".1"/>
+        </svg></div>
+      </div><div class="foot"><span class="nm">StepAreaChart</span><span class="seam">fields</span></div></div>
+
+      <div class="cell full"><div class="inh"><span class="lead">inherit LineChart →</span><div class="chips"><span class="chip">LineSpark</span><span class="chip">TrendChart</span><span class="chip">AreaChart</span><span class="chip">Timeline</span><span class="chip">OrderTimeline</span><span class="chip">DecisionLine</span><span class="chip">PipelineRow</span></div></div>
+        <div class="foot"><span class="nm">7 atoms · same path primitive · differ by fill/series</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- DONUT / RADIAL -->
+  <section class="band">
+    <div class="bhd"><h2>Donut · Radial · Gauge</h2><span class="en">accent arc + track · value in center · gauge sweep</span><span class="ct">many</span></div>
+    <div class="fam sm">
+      <div class="cell"><div class="chart" style="align-items:center;min-height:170px">
+        <div class="chd" style="width:100%"><span class="ck">Label</span></div>
+        <div class="cbody" style="display:grid;place-items:center;width:100%">
+          <svg viewBox="0 0 120 120" width="118" height="118" role="img" aria-label="Donut">
+            <circle cx="60" cy="60" r="46" fill="none" stroke="var(--hair)" stroke-width="13"/>
+            <circle cx="60" cy="60" r="46" fill="none" stroke="url(#gA)" stroke-width="13" stroke-linecap="round" stroke-dasharray="203 289" transform="rotate(-90 60 60)"/>
+            <text x="60" y="58" text-anchor="middle" style="font-family:var(--grotesk);font-size:26px;font-weight:700;fill:var(--a-hi);font-feature-settings:'tnum'">70<tspan style="font-size:13px;fill:var(--mut)">%</tspan></text>
+            <text x="60" y="76" text-anchor="middle" class="lbl" style="font-size:9px">Meta</text>
+          </svg>
+        </div>
+      </div><div class="foot"><span class="nm">DonutChart · canonical</span><span class="seam">fields</span></div></div>
+
+      <div class="cell"><div class="chart" style="align-items:center;min-height:170px">
+        <div class="chd" style="width:100%"><span class="ck">Label</span></div>
+        <div class="cbody" style="display:grid;place-items:center;width:100%">
+          <svg viewBox="0 0 120 120" width="118" height="118" role="img" aria-label="Segmented pie">
+            <circle cx="60" cy="60" r="46" fill="none" stroke="var(--a)" stroke-width="15" stroke-dasharray="130 159" transform="rotate(-90 60 60)"/>
+            <circle cx="60" cy="60" r="46" fill="none" stroke="var(--c2)" stroke-width="15" stroke-dasharray="86 203" stroke-dashoffset="-130" transform="rotate(-90 60 60)"/>
+            <circle cx="60" cy="60" r="46" fill="none" stroke="var(--c3)" stroke-width="15" stroke-dasharray="73 216" stroke-dashoffset="-216" transform="rotate(-90 60 60)"/>
+            <circle cx="60" cy="60" r="30" fill="var(--sunken)"/>
+          </svg>
+        </div>
+      </div><div class="foot"><span class="nm">PieChart · 3-series</span><span class="seam series">series</span></div></div>
+
+      <div class="cell"><div class="chart" style="align-items:center;min-height:170px">
+        <div class="chd" style="width:100%"><span class="ck">Label</span></div>
+        <div class="cbody" style="display:grid;place-items:center;width:100%">
+          <svg viewBox="0 0 120 78" width="118" height="78" role="img" aria-label="Gauge">
+            <path d="M12,68 A48,48 0 0 1 108,68" fill="none" stroke="var(--hair)" stroke-width="11" stroke-linecap="round"/>
+            <path d="M12,68 A48,48 0 0 1 92,32" fill="none" stroke="url(#gA)" stroke-width="11" stroke-linecap="round"/>
+            <text x="60" y="60" text-anchor="middle" style="font-family:var(--grotesk);font-size:24px;font-weight:700;fill:var(--a-hi);font-feature-settings:'tnum'">248</text>
+            <text x="12" y="76" class="lbl">0</text><text x="108" y="76" class="lbl" text-anchor="end">500</text>
+          </svg>
+        </div>
+      </div><div class="foot"><span class="nm">RadialGauge · sweep</span><span class="seam">fields</span></div></div>
+
+      <div class="cell"><div class="chart" style="align-items:center;min-height:170px">
+        <div class="chd" style="width:100%"><span class="ck">Label</span></div>
+        <div class="cbody" style="display:grid;place-items:center;width:100%">
+          <svg viewBox="0 0 120 120" width="118" height="118" role="img" aria-label="Progress ring">
+            <circle cx="60" cy="60" r="40" fill="none" stroke="var(--hair)" stroke-width="8"/>
+            <circle cx="60" cy="60" r="40" fill="none" stroke="var(--a-hi)" stroke-width="8" stroke-linecap="round" stroke-dasharray="188 251" transform="rotate(-90 60 60)"/>
+            <circle cx="60" cy="60" r="28" fill="none" stroke="var(--hair2)" stroke-width="6"/>
+            <circle cx="60" cy="60" r="28" fill="none" stroke="var(--c2)" stroke-width="6" stroke-linecap="round" stroke-dasharray="110 176" transform="rotate(-90 60 60)"/>
+            <text x="60" y="65" text-anchor="middle" style="font-family:var(--grotesk);font-size:22px;font-weight:700;fill:var(--ink);font-feature-settings:'tnum'">14</text>
+          </svg>
+        </div>
+      </div><div class="foot"><span class="nm">ProgressRing · nested</span><span class="seam series">series</span></div></div>
+
+      <div class="cell full"><div class="inh"><span class="lead">inherit DonutChart →</span><div class="chips"><span class="chip">DonutChart</span><span class="chip">RadialGauge</span><span class="chip">ProgressRing</span><span class="chip">RadarChart</span><span class="chip">StoryRing</span></div></div>
+        <div class="foot"><span class="nm">5 atoms · same arc primitive · differ by sweep/nesting</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- SPARKLINE -->
+  <section class="band">
+    <div class="bhd"><h2>Sparkline · Inline Trend</h2><span class="en">mini trend beside a value · no axis · single accent</span><span class="ct">many</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="chart" style="min-height:auto;gap:2px;padding:12px 16px">
+        <div class="sprow"><span class="sk">Label</span>
+          <svg viewBox="0 0 200 30" preserveAspectRatio="none" role="img" aria-label="Sparkline">
+            <path d="M2,22 L26,18 L50,20 L74,10 L98,14 L122,6 L146,12 L170,4 L198,8" fill="none" stroke="var(--a-hi)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+            <circle cx="170" cy="4" r="2.6" fill="var(--a-hi)"/>
+          </svg>
+          <span class="sv" style="color:var(--ok)">+18%</span></div>
+        <div class="sprow" style="border-top:1px solid var(--hair2)"><span class="sk">Label</span>
+          <svg viewBox="0 0 200 30" preserveAspectRatio="none" role="img" aria-label="Sparkline">
+            <path d="M2,8 L26,12 L50,10 L74,16 L98,14 L122,20 L146,18 L170,24 L198,22" fill="none" stroke="var(--c2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+            <circle cx="170" cy="24" r="2.6" fill="var(--c2)"/>
+          </svg>
+          <span class="sv" style="color:var(--err)">-6%</span></div>
+        <div class="sprow" style="border-top:1px solid var(--hair2)"><span class="sk">Label</span>
+          <svg viewBox="0 0 200 30" preserveAspectRatio="none" role="img" aria-label="Sparkline">
+            <path d="M2,16 L26,14 L50,18 L74,12 L98,15 L122,11 L146,14 L170,9 L198,12" fill="none" stroke="var(--c3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+            <circle cx="170" cy="9" r="2.6" fill="var(--c3)"/>
+          </svg>
+          <span class="sv" style="color:var(--ok)">+3%</span></div>
+      </div><div class="foot"><span class="nm">LineSpark · inline rows</span><span class="seam coll">collection</span></div></div>
+
+      <div class="cell"><div class="chart" style="min-height:auto">
+        <div class="chd"><span class="ck">Label</span><span class="cv accent">1,024</span></div>
+        <div class="cbody"><svg viewBox="0 0 240 46" preserveAspectRatio="none" role="img" aria-label="Bar sparkline" style="height:46px">
+          <g fill="color-mix(in srgb,var(--a) 30%,transparent)">
+            <rect x="4" y="26" width="10" height="20" rx="2"/><rect x="20" y="20" width="10" height="26" rx="2"/><rect x="36" y="30" width="10" height="16" rx="2"/><rect x="52" y="16" width="10" height="30" rx="2"/><rect x="68" y="24" width="10" height="22" rx="2"/><rect x="84" y="12" width="10" height="34" rx="2"/><rect x="100" y="22" width="10" height="24" rx="2"/><rect x="116" y="18" width="10" height="28" rx="2"/><rect x="132" y="28" width="10" height="18" rx="2"/><rect x="148" y="14" width="10" height="32" rx="2"/><rect x="164" y="20" width="10" height="26" rx="2"/><rect x="180" y="10" width="10" height="36" rx="2"/>
+          </g>
+          <rect x="196" y="4" width="10" height="42" rx="2" fill="url(#gA)"/><rect x="212" y="16" width="10" height="30" rx="2" fill="color-mix(in srgb,var(--a) 30%,transparent)"/>
+        </svg></div>
+      </div><div class="foot"><span class="nm">WaveformBars · spark</span><span class="seam">fields</span></div></div>
+
+      <div class="cell"><div class="chart" style="min-height:auto">
+        <div class="chd"><span class="ck">Label</span><span class="cdelta up"><svg viewBox="0 0 24 24" class="i" style="stroke-width:2.4"><path d="M7 17L17 7M17 7H9M17 7v8"/></svg>21%</span></div>
+        <div class="cbody"><svg viewBox="0 0 240 46" preserveAspectRatio="none" role="img" aria-label="Filled sparkline" style="height:46px">
+          <defs><linearGradient id="gSp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--a)" stop-opacity=".4"/><stop offset="1" stop-color="var(--a)" stop-opacity="0"/></linearGradient></defs>
+          <path d="M2,34 L34,28 L66,32 L98,18 L130,24 L162,10 L194,16 L238,6 L238,46 L2,46 Z" fill="url(#gSp)"/>
+          <path d="M2,34 L34,28 L66,32 L98,18 L130,24 L162,10 L194,16 L238,6" fill="none" stroke="var(--a-hi)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+        </svg></div>
+      </div><div class="foot"><span class="nm">SparkArea · trend</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- HEATMAP -->
+  <section class="band">
+    <div class="bhd"><h2>Heatmap · Grid</h2><span class="en">tinted cells · lightness = value · single-hue accent scale</span><span class="ct">2</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="chart" style="min-height:auto">
+        <div class="chd"><span class="ck">Label</span><span class="cv">Meta</span></div>
+        <div class="cbody heat" id="heat"></div>
+      </div><div class="foot"><span class="nm">HeatGrid · 12×5 · accent scale</span><span class="seam coll">collection</span></div></div>
+
+      <div class="cell"><div class="chart" style="min-height:auto">
+        <div class="chd"><span class="ck">Label</span></div>
+        <div class="cbody"><div class="segbar" style="height:24px" id="segheat"></div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px" class="lbl-row"><span class="lbl" style="font-family:var(--grotesk);font-size:9px;color:var(--faint)">low</span><span class="lbl" style="font-family:var(--grotesk);font-size:9px;color:var(--faint)">high</span></div>
+        </div>
+      </div><div class="foot"><span class="nm">IntensityStrip</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- PROGRESS METERS -->
+  <section class="band">
+    <div class="bhd"><h2>Progress · Meters</h2><span class="en">linear track + segmented · accent fill · value tnum</span><span class="ct">many</span></div>
+    <div class="fam">
+      <div class="cell"><div class="chart" style="min-height:auto;gap:14px">
+        <div class="meter"><div class="mh"><span class="mk">Label</span><span class="mv">72%</span></div><div class="track"><span class="fill" style="width:72%"></span></div></div>
+        <div class="meter"><div class="mh"><span class="mk">Label</span><span class="mv">45%</span></div><div class="track"><span class="fill" style="width:45%"></span></div></div>
+        <div class="meter"><div class="mh"><span class="mk">Label</span><span class="mv">91%</span></div><div class="track"><span class="fill" style="width:91%"></span></div></div>
+      </div><div class="foot"><span class="nm">LinearProgress · stack</span><span class="seam coll">collection</span></div></div>
+
+      <div class="cell"><div class="chart" style="min-height:auto;gap:14px">
+        <div class="meter"><div class="mh"><span class="mk">Label</span><span class="mv">7 / 10</span></div><div class="segbar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div></div>
+        <div class="meter"><div class="mh"><span class="mk">Label</span><span class="mv">4 / 10</span></div><div class="segbar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+        <div class="meter"><div class="mh"><span class="mk">Label</span><span class="mv">9 / 10</span></div><div class="segbar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div></div>
+      </div><div class="foot"><span class="nm">SegmentedMeter · steps</span><span class="seam">fields</span></div></div>
+
+      <div class="cell"><div class="chart" style="min-height:auto;gap:11px">
+        <div class="rate">
+          <div class="rr"><span class="rk">5★</span><div class="track" style="height:7px"><span class="fill" style="width:78%"></span></div><span class="rv">78</span></div>
+          <div class="rr"><span class="rk">4★</span><div class="track" style="height:7px"><span class="fill" style="width:52%"></span></div><span class="rv">52</span></div>
+          <div class="rr"><span class="rk">3★</span><div class="track" style="height:7px"><span class="fill" style="width:24%"></span></div><span class="rv">24</span></div>
+          <div class="rr"><span class="rk">2★</span><div class="track" style="height:7px"><span class="fill" style="width:11%"></span></div><span class="rv">11</span></div>
+          <div class="rr"><span class="rk">1★</span><div class="track" style="height:7px"><span class="fill" style="width:5%"></span></div><span class="rv">5</span></div>
+        </div>
+      </div><div class="foot"><span class="nm">RatingBars · distribution</span><span class="seam">fields</span></div></div>
+
+      <div class="cell full"><div class="inh"><span class="lead">inherit LinearProgress →</span><div class="chips"><span class="chip">LinearProgress</span><span class="chip">ProgressStatRow</span><span class="chip">CreditBar</span><span class="chip">RatingBars</span><span class="chip">SegmentedMeter</span><span class="chip">ManagerDashboardCreditBar</span></div></div>
+        <div class="foot"><span class="nm">6 atoms · same track primitive · differ by fill mode</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- LEGEND / STAT-TILE -->
+  <section class="band">
+    <div class="bhd"><h2>Legend · Series</h2><span class="en">swatch + label + value · series colors = accent / c2 / c3</span><span class="ct">3</span></div>
+    <div class="fam">
+      <div class="cell"><div class="chart" style="min-height:auto">
+        <div class="chd"><span class="ck">Label</span></div>
+        <div class="cbody legend" style="flex-direction:column;gap:10px">
+          <div class="lg"><span class="sw" style="background:var(--a)"></span>Label<span class="val">164</span></div>
+          <div class="lg"><span class="sw" style="background:var(--c2)"></span>Label<span class="val">86</span></div>
+          <div class="lg"><span class="sw" style="background:var(--c3)"></span>Label<span class="val">73</span></div>
+        </div>
+      </div><div class="foot"><span class="nm">ChartLegend · series key</span><span class="seam series">series</span></div></div>
+
+      <div class="cell"><div class="chart" style="min-height:auto">
+        <div class="chd"><span class="ck">Label</span></div>
+        <div class="cbody legend">
+          <div class="lg"><span class="sw" style="background:var(--a)"></span>Label</div>
+          <div class="lg"><span class="sw" style="background:var(--c2)"></span>Label</div>
+          <div class="lg"><span class="sw" style="background:var(--c3)"></span>Label</div>
+          <div class="lg"><span class="sw" style="background:var(--faint)"></span>Label</div>
+        </div>
+      </div><div class="foot"><span class="nm">LegendRow · inline swatches</span><span class="seam">fields</span></div></div>
+
+      <div class="cell"><div class="chart" style="min-height:auto;gap:9px">
+        <div class="stat" style="border:0;padding:0;background:none"><span class="k">Label</span><span class="v accent" style="color:var(--a-hi)">248</span><span class="d up"><svg viewBox="0 0 24 24" class="i" style="width:12px;height:12px;stroke-width:2.4"><path d="M7 17L17 7M17 7H9M17 7v8"/></svg>12% Meta</span></div>
+      </div><div class="foot"><span class="nm">StatBlock · viz KPI</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <footer style="padding:30px 0 70px;border-top:1px solid var(--hair);margin-top:6px"><div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--grotesk);font-size:11px;color:var(--faint);direction:ltr"><div>PURE — <b style="color:var(--ink)">Data-Viz Family</b></div><div>~35 atoms · inline SVG · series = accent / c2 / c3 · delta semantic fixed · theme = parameter</div><div>content = Label / Value / Meta · numbers LTR tnum</div></div></footer>
+</div>
+
+<script>
+  var root=document.documentElement;root.className='t-indigo';
+  var seg=document.getElementById('seg'),ind=document.getElementById('ind'),btns=[].slice.call(seg.querySelectorAll('button'));
+  function place(el,indEl,box){var sr=box.getBoundingClientRect(),br=el.getBoundingClientRect();indEl.style.width=br.width+'px';indEl.style.transform='translateX('+(br.left-sr.left-3)+'px)';}
+  btns.forEach(function(b){b.addEventListener('click',function(){root.className=b.dataset.t;btns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});place(b,ind,seg);});});
+  place(btns[0],ind,seg);if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){place(seg.querySelector('[aria-pressed="true"]'),ind,seg);});}
+  window.addEventListener('resize',function(){place(seg.querySelector('[aria-pressed="true"]'),ind,seg);});
+  // heatmap — tint by value via lightness (single accent hue, opacity scale)
+  var vals=[3,7,2,8,5,9,4,6,1,7,3,8, 5,2,9,4,7,3,8,5,6,2,9,4, 8,4,6,2,7,5,3,9,4,7,2,6, 2,9,5,7,3,8,4,6,9,3,7,5, 6,3,8,4,9,2,7,5,3,8,4,6];
+  var heat=document.getElementById('heat');
+  if(heat){vals.forEach(function(v){var i=document.createElement('i');var op=(0.10+v/9*0.85).toFixed(2);i.style.background='color-mix(in srgb, var(--a) '+Math.round(op*100)+'%, var(--sunken))';heat.appendChild(i);});}
+  var segheat=document.getElementById('segheat');
+  if(segheat){for(var k=0;k<12;k++){var s=document.createElement('i');var o=(0.12+k/11*0.88).toFixed(2);s.style.borderColor='transparent';s.style.background='color-mix(in srgb, var(--a) '+Math.round(o*100)+'%, var(--sunken))';segheat.appendChild(s);}}
+</script>

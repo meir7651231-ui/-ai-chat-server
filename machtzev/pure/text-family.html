@@ -1,0 +1,240 @@
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+  PURE — Text / Typography Family. Archetype 11. representative atoms from atlas.json.
+  Pure · content = Label / Meta / neutral lorem · NO ₪ / domain / emoji. accent via var(--a)/--c2/--c3/color-mix.
+  This family SHOWCASES the type system — Frank Ruhl Hebrew headline · Fraunces Latin serif · Space Grotesk mono · Heebo body.
+-->
+<title>Pure — Text Family</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Frank+Ruhl+Libre:wght@700&family=Space+Grotesk:wght@400;500;600;700&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--canvas:#0C0C0E;--sunken:#0A0A0C;--surface:#151517;--raised:#1B1B1E;--raised2:#212126;--ink:#ECE9E2;--mut:#9B968C;--faint:#6E6A62;--hair:rgba(236,233,226,.09);--hair2:rgba(236,233,226,.05);
+    --err:#E0574E;--warn:#E6B84F;--ok:#43D08C;
+    --serif:"Fraunces",Georgia,serif;--serifHe:"Frank Ruhl Libre",serif;--grotesk:"Space Grotesk",ui-monospace,monospace;--he:"Heebo","Segoe UI",sans-serif;--ease:cubic-bezier(.2,.7,.15,1);--spring:cubic-bezier(.34,1.4,.5,1)}
+  .t-indigo{--a-hi:#B0A4FF;--a:#7A6BF0;--a-800:#4B3ECB;--gl:rgba(122,107,240,.42);--c2:#4CC6E6;--c3:#B57BE6}
+  .t-teal{--a-hi:#6FE6D5;--a:#1FB8A6;--a-800:#0C7E72;--gl:rgba(31,184,166,.42);--c2:#4FB6E6;--c3:#43D08C}
+  .t-amber{--a-hi:#F2C87E;--a:#D99A3C;--a-800:#9E6B1E;--gl:rgba(217,154,60,.42);--c2:#E8863C;--c3:#E67BA6}
+  *{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}
+  body{background:var(--canvas);color:var(--ink);direction:rtl;font-family:var(--he);-webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden;transition:background-color .6s var(--ease);background-image:radial-gradient(120% 36% at 84% -6%,var(--gl),transparent 60%)}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.038;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 40px;position:relative;z-index:1}::selection{background:var(--a);color:#0A0A0C}
+  .bar{position:sticky;top:0;z-index:60;background:linear-gradient(180deg,rgba(12,12,14,.94),rgba(12,12,14,.62));backdrop-filter:blur(14px);border-bottom:1px solid var(--hair)}
+  .bar .in{max-width:1200px;margin:0 auto;padding:12px 40px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .bar .mk{font-family:var(--serif);font-size:20px;font-weight:600;letter-spacing:-.02em;direction:ltr}.bar .mk i{color:var(--a);transition:color .55s var(--ease)}.bar .mk small{font-family:var(--grotesk);font-size:10px;color:var(--faint);letter-spacing:2px;margin-inline-start:10px;text-transform:uppercase}
+  .seg{display:flex;padding:3px;background:var(--sunken);border:1px solid var(--hair);border-radius:999px;position:relative}
+  .seg button{position:relative;z-index:2;border:0;background:none;cursor:pointer;padding:8px 17px;border-radius:999px;font-family:var(--grotesk);font-size:12px;font-weight:600;color:var(--mut);transition:color .35s;display:flex;align-items:center;gap:7px;min-height:38px}.seg button .d{width:9px;height:9px;border-radius:50%}.seg button[aria-pressed="true"]{color:var(--ink)}.seg button:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+  .seg .ind{position:absolute;z-index:1;top:3px;bottom:3px;left:0;border-radius:999px;background:var(--raised);box-shadow:0 2px 8px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06);transition:transform .45s var(--ease),width .45s var(--ease)}
+  .intro{padding:40px 0 6px}.intro .kick{display:flex;align-items:center;gap:14px;margin-bottom:16px}.intro .kick .tick{width:34px;height:1px;background:var(--a);transition:background-color .55s var(--ease)}
+  .eyebrow{font-family:var(--grotesk);font-size:11px;font-weight:600;letter-spacing:3px;color:var(--faint);text-transform:uppercase;direction:ltr}
+  .intro h1{font-family:var(--serifHe);font-weight:700;font-size:clamp(28px,5vw,44px);letter-spacing:-.01em}.intro .he{font-family:var(--grotesk);font-size:12.5px;color:var(--mut);margin-top:10px;direction:ltr}
+  .band{padding:22px 0;border-top:1px solid var(--hair)}
+  .bhd{display:flex;align-items:baseline;gap:12px;margin-bottom:16px;flex-wrap:wrap}.bhd h2{font-family:var(--serifHe);font-weight:700;font-size:19px}.bhd .en{font-family:var(--grotesk);font-size:10px;color:var(--faint);letter-spacing:1.5px;text-transform:uppercase;direction:ltr} .bhd .ct{font-family:var(--grotesk);font-size:10px;color:var(--mut);direction:ltr;margin-inline-start:auto}
+  .fam{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+  .fam.sm{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+  .cell{display:flex;flex-direction:column;gap:10px}
+  .cell.full{grid-column:1/-1}
+  .foot{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .nm{font-family:var(--grotesk);font-size:10px;font-weight:600;color:var(--ink);direction:ltr;line-height:1.3}
+  .seam{font-family:var(--grotesk);font-size:7.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:1px 5px;border-radius:999px;direction:ltr;border:1px solid var(--hair);color:var(--mut);flex:none}
+  .seam.coll{color:var(--c2);border-color:rgba(76,198,230,.35)}.seam.series{color:var(--c3);border-color:rgba(181,123,230,.35)}
+  .inh{width:100%;display:flex;align-items:center;gap:14px;flex-wrap:wrap}.inh .lead{font-family:var(--grotesk);font-size:9px;color:var(--faint);direction:ltr;text-transform:uppercase;letter-spacing:1px;flex:none}
+  .inh .chips{display:flex;flex-wrap:wrap;gap:6px;flex:1}.inh .chip{font-family:var(--grotesk);font-size:10px;color:var(--mut);direction:ltr;padding:4px 9px;border:1px solid var(--hair);border-radius:999px;background:var(--sunken)}
+  svg.i{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  /* ============ TEXT FAMILY ============ */
+  .panel{border:1px solid var(--hair);border-radius:16px;background:linear-gradient(180deg,var(--surface),var(--sunken));padding:22px 24px;position:relative;overflow:hidden}
+  /* --- type scale ramp --- */
+  .ramp{display:flex;flex-direction:column;gap:2px;border-inline-start:2px solid color-mix(in srgb,var(--a) 42%,var(--hair));padding-inline-start:22px}
+  .ramp .row{display:flex;align-items:baseline;gap:18px;padding:7px 0;border-bottom:1px solid var(--hair2)}
+  .ramp .row:last-child{border:0}
+  .ramp .lbl{font-family:var(--grotesk);font-size:10px;font-weight:600;color:var(--faint);direction:ltr;flex:none;width:96px;letter-spacing:.5px;line-height:1.4}
+  .ramp .lbl b{color:var(--a-hi);display:block;font-size:11px;letter-spacing:1px;text-transform:uppercase}
+  .ramp .sp{font-family:var(--serifHe);font-weight:700;color:var(--ink);line-height:1.04;letter-spacing:-.01em}
+  .ramp .sp.body{font-family:var(--he);font-weight:400;color:var(--mut);line-height:1.6;max-width:34em}
+  .s-disp{font-size:clamp(38px,7vw,64px)}.s-h1{font-size:clamp(30px,5vw,44px)}.s-h2{font-size:clamp(24px,3.6vw,32px)}.s-h3{font-size:22px}.s-body{font-size:15px}.s-cap{font-size:12px}
+  /* --- voice pairing --- */
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--hair);border:1px solid var(--hair);border-radius:16px;overflow:hidden}
+  .pair .vc{background:linear-gradient(180deg,var(--surface),var(--sunken));padding:24px}
+  .pair .vc .tag{font-family:var(--grotesk);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--faint);direction:ltr;margin-bottom:14px}
+  .pair .vc .lat{font-family:var(--serif);font-weight:600;font-size:clamp(26px,3.4vw,38px);line-height:1.08;letter-spacing:-.02em;direction:ltr;color:var(--ink)}
+  .pair .vc .heb{font-family:var(--serifHe);font-weight:700;font-size:clamp(26px,3.4vw,38px);line-height:1.15;color:var(--ink)}
+  .pair .vc .sub{margin-top:12px;font-family:var(--he);font-size:13px;color:var(--mut);line-height:1.65;max-width:30em}
+  .pair .vc .meta{margin-top:14px;font-family:var(--grotesk);font-size:10px;color:var(--a-hi);direction:ltr;letter-spacing:.5px}
+  /* --- pull-quote --- */
+  .pq{border-inline-start:3px solid var(--a);padding:8px 24px;max-width:38em}
+  .pq p{font-family:var(--serifHe);font-weight:700;font-size:clamp(21px,3vw,32px);line-height:1.32;color:var(--ink)}
+  .pq .mk{color:var(--a-hi)}
+  .pq cite{display:block;font-family:var(--grotesk);font-style:normal;font-size:11px;color:var(--faint);margin-top:14px;direction:ltr;letter-spacing:1.5px;text-transform:uppercase}
+  /* --- code block --- */
+  .code{background:var(--sunken);border:1px solid var(--hair);border-inline-start:2px solid color-mix(in srgb,var(--a) 50%,var(--hair));border-radius:12px;padding:15px 18px;font-family:var(--grotesk);font-size:12.5px;color:var(--mut);direction:ltr;line-height:1.75;overflow-x:auto}
+  .code .cm{color:var(--faint)}.code .kw{color:var(--a-hi)}.code .st{color:var(--c2)}.code .fn{color:var(--c3)}
+  /* --- links --- */
+  .lkbox{max-width:34em;font-family:var(--he);font-size:14.5px;line-height:1.9;color:var(--mut)}
+  .lnk{color:var(--a-hi);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--a) 40%,transparent);transition:color .3s var(--ease),border-color .3s}
+  .lnk:hover,.lnk:focus-visible{color:var(--a);border-bottom-color:var(--a);outline:none}
+  .lnk.und{border:0;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;text-decoration-color:color-mix(in srgb,var(--a) 45%,transparent)}
+  .lnk.und:hover{text-decoration-color:var(--a)}
+  .lnk.strong{font-weight:600}
+  .lkrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .pipe{display:inline-flex;align-items:center;gap:10px;font-family:var(--grotesk);font-size:12px;direction:ltr;color:var(--mut)}
+  .pipe a{color:var(--a-hi);text-decoration:none}.pipe a:hover{color:var(--a)}.pipe .sep{color:var(--faint)}
+  /* --- lists --- */
+  .lst{max-width:34em;color:var(--mut);font-family:var(--he);font-size:14px;line-height:1.75}
+  .lst.bul{list-style:none}
+  .lst.bul li{position:relative;padding-inline-start:22px;margin:8px 0}
+  .lst.bul li::before{content:"";position:absolute;inset-inline-start:3px;top:.62em;width:7px;height:7px;border-radius:50%;background:var(--a)}
+  .lst.num{list-style:none;counter-reset:n}
+  .lst.num li{counter-increment:n;position:relative;padding-inline-start:32px;margin:9px 0}
+  .lst.num li::before{content:counter(n);position:absolute;inset-inline-start:0;top:.05em;width:20px;height:20px;font-family:var(--grotesk);font-size:11px;font-weight:700;color:var(--a-hi);border:1px solid color-mix(in srgb,var(--a) 35%,var(--hair));border-radius:7px;display:grid;place-items:center;direction:ltr}
+  .lst b{color:var(--ink);font-weight:600}
+  /* --- gradient text --- */
+  .gt{font-family:var(--serifHe);font-weight:700;font-size:clamp(34px,6vw,60px);line-height:1.08;letter-spacing:-.01em;background:linear-gradient(100deg,var(--c2),var(--a) 48%,var(--c3));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;background-size:200% 100%;animation:gsh 7s linear infinite}
+  @keyframes gsh{to{background-position:-200% 0}}
+  .gt.mono{font-family:var(--grotesk);font-size:clamp(22px,3.4vw,34px);letter-spacing:2px;text-transform:uppercase;direction:ltr}
+  .mq{overflow:hidden;white-space:nowrap;border-block:1px solid var(--hair);padding:12px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+  .mq .track{display:inline-block;animation:mv 20s linear infinite;will-change:transform}
+  @keyframes mv{to{transform:translateX(-50%)}}
+  .mq span{font-family:var(--grotesk);font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--faint);direction:ltr;margin:0 26px}
+  .mq span b{color:var(--a-hi)}
+  /* --- overline / eyebrow --- */
+  .ovl{font-family:var(--grotesk);font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--faint);direction:ltr;display:inline-flex;align-items:center;gap:12px}
+  .ovl.ac{color:var(--a-hi)}
+  .ovl .tick{width:26px;height:1px;background:var(--a)}
+  .ovl.dot::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--a)}
+  .seclbl{font-family:var(--grotesk);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--mut);direction:ltr}
+  /* --- emphasis three-tone --- */
+  .tri{max-width:36em;font-family:var(--he);font-size:15px;line-height:1.9}
+  .tri .ink{color:var(--ink);font-weight:600}.tri .mut{color:var(--mut)}.tri .faint{color:var(--faint)}
+  .swatchrow{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+  .sw{display:flex;align-items:center;gap:8px;font-family:var(--grotesk);font-size:10px;direction:ltr;color:var(--mut)}
+  .sw i{width:12px;height:12px;border-radius:4px;flex:none}
+  .sw i.ink{background:var(--ink)}.sw i.mut{background:var(--mut)}.sw i.faint{background:var(--faint)}
+  /* --- truncation --- */
+  .trunc{max-width:300px}
+  .trunc .one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--he);font-size:14px;color:var(--mut)}
+  .trunc .two{display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-family:var(--he);font-size:14px;color:var(--mut);line-height:1.6}
+  .trunc .cap{font-family:var(--grotesk);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--faint);direction:ltr;margin-bottom:6px}
+  footer{padding:30px 0 70px;border-top:1px solid var(--hair);margin-top:6px}.colo{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--grotesk);font-size:11px;color:var(--faint);direction:ltr}.colo b{color:var(--ink)}
+  @media(max-width:820px){.wrap{padding:0 18px}.bar .in{padding:11px 18px}.bar .mk small{display:none}.pair{grid-template-columns:1fr}}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="bar"><div class="in">
+  <div class="mk">Pure<i>.</i><small>Text Family</small></div>
+  <div class="seg" id="seg" role="group" aria-label="Theme"><span class="ind" id="ind"></span>
+    <button data-t="t-indigo" aria-pressed="true"><span class="d" style="background:#7A6BF0"></span>Indigo</button>
+    <button data-t="t-teal" aria-pressed="false"><span class="d" style="background:#1FB8A6"></span>Teal</button>
+    <button data-t="t-amber" aria-pressed="false"><span class="d" style="background:#D99A3C"></span>Amber</button>
+  </div>
+</div></div>
+
+<div class="wrap">
+  <header class="intro">
+    <div class="kick"><span class="tick"></span><span class="eyebrow">Archetype 11 · Text</span></div>
+    <h1>משפחת הטקסט</h1>
+    <p class="he">type scale · voice pairing · pull-quote · code · links · lists · gradient · overline · emphasis · truncation · content = Label / Meta / lorem</p>
+  </header>
+
+  <!-- TYPE SCALE -->
+  <section class="band">
+    <div class="bhd"><h2>Type Scale · הסולם</h2><span class="en">Frank Ruhl Hebrew headline · Heebo body · one modular ramp</span><span class="ct">6 steps</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="panel"><div class="ramp">
+        <div class="row"><span class="lbl"><b>Display</b>64 / 700</span><span class="sp s-disp">כותרת ראשית</span></div>
+        <div class="row"><span class="lbl"><b>H1</b>44 / 700</span><span class="sp s-h1">כותרת עמוד</span></div>
+        <div class="row"><span class="lbl"><b>H2</b>32 / 700</span><span class="sp s-h2">כותרת מקטע</span></div>
+        <div class="row"><span class="lbl"><b>H3</b>22 / 700</span><span class="sp s-h3">תת כותרת</span></div>
+        <div class="row"><span class="lbl"><b>Body</b>15 / 400</span><span class="sp body s-body">לורם איפסום דולור סיט אמט, קונסקטורר אדיפיסינג אלית. נתונים נטענים בזרם, השורות נשמרות ברוחב נוח לקריאה.</span></div>
+        <div class="row"><span class="lbl"><b>Caption</b>12 / 400</span><span class="sp body s-cap">Meta · טקסט משני קטן</span></div>
+      </div></div><div class="foot"><span class="nm">TypeScale · modular ramp</span><span class="seam series">series</span></div></div>
+    </div>
+  </section>
+
+  <!-- VOICE PAIRING -->
+  <section class="band">
+    <div class="bhd"><h2>Voice · Pairing</h2><span class="en">Fraunces serif (Latin) + Frank Ruhl Libre (Hebrew) — one editorial voice</span><span class="ct">2</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="pair">
+        <div class="vc"><div class="tag">Latin · Fraunces</div><div class="lat">The quiet system</div><div class="sub">A serif display face carries the Latin headline — high contrast, optical sizing, an editorial register that reads as considered rather than default.</div><div class="meta">Fraunces · opsz 9–144</div></div>
+        <div class="vc"><div class="tag">עברית · Frank Ruhl Libre</div><div class="heb">המערכת השקטה</div><div class="sub">פרנק-רוהל נושא את הכותרת העברית — נגזרת קלאסית, משקל אחד כבד, קול עורכי שקורא כמכוון ולא כברירת-מחדל.</div><div class="meta">Frank Ruhl Libre · 700</div></div>
+      </div><div class="foot"><span class="nm">VoicePair · serif duet</span><span class="seam coll">collection</span></div></div>
+    </div>
+  </section>
+
+  <!-- PULL-QUOTE -->
+  <section class="band">
+    <div class="bhd"><h2>Pull-quote</h2><span class="en">large serif · accent rule · muted citation</span><span class="ct">1</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="panel"><div class="pq"><p><span class="mk">”</span>הטיפוגרפיה היא הקול של הממשק לפני שאמרנו מילה — הסולם, המשקל והמרווח מכריעים מה נקרא ראשון.<span class="mk">“</span></p><cite>Meta · Label</cite></div></div><div class="foot"><span class="nm">PullQuote · accent rule</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- CODE + LINKS -->
+  <section class="band">
+    <div class="bhd"><h2>Code · Links</h2><span class="en">Space Grotesk mono · sunken block · accent link states</span><span class="ct">2</span></div>
+    <div class="fam" style="grid-template-columns:1fr 1fr">
+      <div class="cell"><div class="panel" style="padding:18px"><div class="code"><span class="cm">// tokens</span><br><span class="kw">const</span> scale = <span class="fn">ramp</span>(<span class="st">"1.25"</span>);<br><span class="kw">return</span> scale.<span class="fn">step</span>(<span class="st">"body"</span>);</div></div><div class="foot"><span class="nm">CodeBlock · mono</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="panel" style="padding:18px"><div class="lkbox">שורה עם <a href="#" class="lnk strong">קישור מודגש</a> וגם <a href="#" class="lnk und">קו תחתון</a> בתוך פסקה — כל מצב נגזר מ-var(--a).<div class="lkrow"><span class="pipe"><a href="#">Label</a><span class="sep">·</span><a href="#">Label</a><span class="sep">·</span><a href="#">Meta</a></span></div></div></div><div class="foot"><span class="nm">LinkRow · PipeLink</span><span class="seam coll">collection</span></div></div>
+    </div>
+  </section>
+
+  <!-- LISTS -->
+  <section class="band">
+    <div class="bhd"><h2>Lists</h2><span class="en">bulleted (accent dot) · numbered (grotesk marker)</span><span class="ct">2</span></div>
+    <div class="fam" style="grid-template-columns:1fr 1fr">
+      <div class="cell"><div class="panel"><ul class="lst bul">
+        <li><b>Label</b> — לורם איפסום דולור סיט אמט קונסקטורר.</li>
+        <li>אדיפיסינג אלית, שורה שנייה ברוחב נוח.</li>
+        <li>Meta · פריט שלישי קצר.</li>
+      </ul></div><div class="foot"><span class="nm">BulletList · accent dot</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="panel"><ol class="lst num">
+        <li><b>Label</b> — שלב ראשון בתהליך.</li>
+        <li>שלב שני, טקסט ממשיך בשורה נוחה.</li>
+        <li>Meta · שלב שלישי.</li>
+      </ol></div><div class="foot"><span class="nm">NumberedList · marker</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- GRADIENT TEXT -->
+  <section class="band">
+    <div class="bhd"><h2>Gradient · Text</h2><span class="en">GradientText — c2 → a → c3 clip · shimmer · live marquee</span><span class="ct">3</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="panel"><div class="gt">כותרת מדורגת</div><div class="gt mono" style="margin-top:16px">GRADIENT · TEXT</div></div><div class="foot"><span class="nm">GradientText · clip + shimmer</span><span class="seam series">series</span></div></div>
+      <div class="cell full"><div class="panel" style="padding:0"><div class="mq"><span class="track"><span>Label · <b>Pure</b> · Meta</span><span>Type · <b>Scale</b> · Voice</span><span>Label · <b>Pure</b> · Meta</span><span>Type · <b>Scale</b> · Voice</span></span></div></div><div class="foot"><span class="nm">Marquee · live · reduced-motion halts</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- OVERLINE / EYEBROW -->
+  <section class="band">
+    <div class="bhd"><h2>Overline · Eyebrow</h2><span class="en">Space Grotesk · uppercase · letterspaced · accent variants</span><span class="ct">4</span></div>
+    <div class="fam">
+      <div class="cell"><div class="panel" style="min-height:auto"><span class="ovl"><span class="tick"></span>Overline · Meta</span></div><div class="foot"><span class="nm">Overline · tick</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="panel" style="min-height:auto"><span class="ovl ac dot">Eyebrow · Label</span></div><div class="foot"><span class="nm">Eyebrow · accent dot</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="panel" style="min-height:auto"><span class="seclbl">Section · Label</span></div><div class="foot"><span class="nm">SectionLabel</span><span class="seam">fields</span></div></div>
+      <div class="cell full"><div class="inh"><span class="ovl" style="flex:none">ABC · 123</span><span class="lead">inherit Overline →</span><div class="chips"><span class="chip">Eyebrow</span><span class="chip">Overline</span><span class="chip">SectionLabel</span><span class="chip">SectionTitle</span><span class="chip">CaSubTitle</span><span class="chip">FieldLabel</span><span class="chip">EmojiSectionTitle</span></div></div>
+        <div class="foot"><span class="nm">7 atoms · same grotesk label · differ by source</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- EMPHASIS + TRUNCATION -->
+  <section class="band">
+    <div class="bhd"><h2>Emphasis · Truncation</h2><span class="en">three-tone ink / mut / faint · single-line ellipsis · 2-line clamp</span><span class="ct">3</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="panel"><p class="tri"><span class="ink">טקסט ראשי בדגש</span> נושא את המשקל, <span class="mut">טקסט משני מוסר הקשר</span>, ו<span class="faint">טקסט עמום נושא מטא-דאטה</span> בשוליים — שלוש דרגות מאותו טוקן.</p>
+        <div class="swatchrow"><span class="sw"><i class="ink"></i>--ink</span><span class="sw"><i class="mut"></i>--mut</span><span class="sw"><i class="faint"></i>--faint</span></div></div>
+        <div class="foot"><span class="nm">EmphasisText · three-tone</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="panel"><div class="trunc"><div class="cap">single-line · ellipsis</div><div class="one">לורם איפסום דולור סיט אמט קונסקטורר אדיפיסינג אלית נתונים בזרם</div></div></div><div class="foot"><span class="nm">TruncOne · ellipsis</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="panel"><div class="trunc"><div class="cap">2-line · clamp</div><div class="two">לורם איפסום דולור סיט אמט, קונסקטורר אדיפיסינג אלית. נתונים נטענים בזרם והשורה נחתכת בגבול השני בדיוק כאן.</div></div></div><div class="foot"><span class="nm">TruncClamp · 2 lines</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <footer><div class="colo"><div>PURE — <b>Text Family</b></div><div>10 bands · ~24 atoms · Frank Ruhl · Fraunces · Space Grotesk · Heebo · theme = parameter</div><div>content = Label / Meta / lorem · no ₪ / domain</div></div></footer>
+</div>
+
+<script>
+  var root=document.documentElement;root.className='t-indigo';
+  var seg=document.getElementById('seg'),ind=document.getElementById('ind'),btns=[].slice.call(seg.querySelectorAll('button'));
+  function place(el,indEl,box){var sr=box.getBoundingClientRect(),br=el.getBoundingClientRect();indEl.style.width=br.width+'px';indEl.style.transform='translateX('+(br.left-sr.left-3)+'px)';}
+  btns.forEach(function(b){b.addEventListener('click',function(){root.className=b.dataset.t;btns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});place(b,ind,seg);});});
+  place(btns[0],ind,seg);if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){place(seg.querySelector('[aria-pressed="true"]'),ind,seg);});}
+  window.addEventListener('resize',function(){place(seg.querySelector('[aria-pressed="true"]'),ind,seg);});
+</script>
