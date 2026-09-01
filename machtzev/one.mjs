@@ -123,9 +123,9 @@ stage('הרכבה-מחוללת (gen-screen)', () => {
 // ── 4ג · מחולל-הלוחות: חיווט המסכים-המורכבים למקורות-החיים ──
 stage('מנוע-הסינתזה (חלום + יכולות-מוזמנות)', () => last(run('machtzev/generator/synth.mjs', ['--dream'])), { optional: true });
 // 4ג¼ · מנועי-העיצוב: זרע→מערכת-טוקנים+מוֹשֶׁן+גרפיקה+וריאנטים (הכרעה 19: זרע=דאטה, מנוע=נוסחה)
-stage('מנועי-העיצוב (tokens·motion·graphics·variants)', () => {
-  for (const e of ['ds-tokens', 'ds-motion', 'ds-graphics', 'ds-variants']) run(`machtzev/${e}.mjs`);
-  return 'ds_scale·ds_anim·ds_graphics·ds_surface חוללו-מהזרע';
+stage('מנועי-העיצוב (tokens·motion·graphics·variants·pure)', () => {
+  for (const e of ['ds-tokens', 'ds-motion', 'ds-graphics', 'ds-variants', 'ds-pure']) run(`machtzev/${e}.mjs`);
+  return 'ds_scale·ds_anim·ds_graphics·ds_surface·ds_pure חוללו-מהזרע';
 }, { optional: true });
 
 stage('המחולל (genesis-gen · הכרעה 17)', () => run('machtzev/generator/genesis-gen.mjs').split('\n').find(l => l.includes('המחולל'))?.trim());
