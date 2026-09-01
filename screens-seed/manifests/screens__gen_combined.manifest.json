@@ -1,0 +1,199 @@
+{
+ "generated": true,
+ "src": "combine:מסך שמציג את התקציב לפי אתר וגם את קטלוג המוצרים",
+ "screen": "gen_combined",
+ "content": [
+  "auto/screens__worker_employer_stock_sheet_content.dart",
+  "auto/screens__catalog_screen_content.dart",
+  "auto/screens__catalog_screen_content2.dart"
+ ],
+ "sections": [
+  {
+   "id": "worker_employer_stock_sheet_stock_row",
+   "atom": "WorkerEmployerStockSheetStockRow",
+   "props": {
+    "label": "$: worker_employer_stock_sheet_stock_row_label",
+    "label2": "$: worker_employer_stock_sheet_stock_row_label2",
+    "location": "?:String",
+    "name": "?:String"
+   }
+  },
+  {
+   "id": "request_composer",
+   "atom": "RequestComposer",
+   "props": {
+    "fallback": "$: request_composer_fallback",
+    "fallback2": "$: request_composer_fallback2",
+    "fallback3": "$: request_composer_fallback3",
+    "hintText": "$: request_composer_hint_text",
+    "labelText": "$: request_composer_label_text",
+    "hintText2": "$: request_composer_hint_text2",
+    "fallback4": "$: request_composer_fallback4",
+    "fallback5": "$: request_composer_fallback5",
+    "composing": "?:bool",
+    "itemsCtrl": "?:TextEditingController",
+    "noteCtrl": "?:TextEditingController",
+    "onToggle": "@:onToggle",
+    "onSend": "@:onSend"
+   }
+  },
+  {
+   "id": "company_catalog_import_card",
+   "atom": "CompanyCatalogImportCard",
+   "props": {
+    "label": "$: company_catalog_import_card_label",
+    "label2": "$: company_catalog_import_card_label2",
+    "label3": "$: company_catalog_import_card_label3",
+    "label4": "$: company_catalog_import_card_label4",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "section_header",
+   "atom": "SectionHeader",
+   "props": {
+    "title": "?:String"
+   }
+  },
+  {
+   "id": "empty_section",
+   "atom": "EmptySection",
+   "props": {
+    "fallback": "$: empty_section_fallback",
+    "emoji": "$: empty_section_emoji",
+    "label": "?:String"
+   }
+  },
+  {
+   "id": "facet_row",
+   "atom": "FacetRow",
+   "props": {
+    "label2": "$: facet_row_label2",
+    "label": "~:",
+    "desc": "~:",
+    "count": "~:",
+    "onTap": "~:"
+   },
+   "repeat": {
+    "as": "o",
+    "item": "FacetRowItem"
+   }
+  },
+  {
+   "id": "tree_coming_soon",
+   "atom": "TreeComingSoon",
+   "props": {
+    "fallback": "$: tree_coming_soon_fallback",
+    "fallback2": "$: tree_coming_soon_fallback2",
+    "title": "?:String",
+    "emoji": "?:String"
+   }
+  },
+  {
+   "id": "catalog_count_badge",
+   "atom": "CatalogCountBadge",
+   "props": {
+    "label": "?:String",
+    "count": "?:int",
+    "color": "#:color"
+   }
+  },
+  {
+   "id": "sheet_section",
+   "atom": "SheetSection",
+   "props": {
+    "title": "?:String",
+    "value": "?:String",
+    "expanded": "?:bool",
+    "onToggle": "@:onToggle",
+    "child": "?:Widget"
+   }
+  },
+  {
+   "id": "chip_wrap",
+   "atom": "ChipWrap",
+   "props": {
+    "options": "?:List<String>",
+    "selected": "?:String?",
+    "onSelect": "@:onSelect|void Function(String)"
+   }
+  },
+  {
+   "id": "saved_version_chip",
+   "atom": "SavedVersionChip",
+   "props": {
+    "message": "$: saved_version_chip_message",
+    "label2": "$: saved_version_chip_label2",
+    "message2": "$: saved_version_chip_message2",
+    "label3": "$: saved_version_chip_label3",
+    "label": "~:",
+    "onLoad": "~:",
+    "onDelete": "~:"
+   },
+   "repeat": {
+    "as": "v",
+    "item": "SavedVersionChipItem"
+   }
+  },
+  {
+   "id": "acc_row",
+   "atom": "AccRow",
+   "props": {
+    "label": "$: acc_row_label",
+    "label2": "$: acc_row_label2",
+    "name": "?:String",
+    "emoji": "?:String",
+    "why": "?:String",
+    "price": "?:int?",
+    "onTap": "@:onTap",
+    "label3": "$: acc_row_label3",
+    "label4": "$: acc_row_label4",
+    "selected": "?:bool",
+    "qty": "?:int",
+    "onToggle": "@:onToggle2|ValueChanged<bool>?",
+    "onQtyChanged": "@:onQtyChanged|ValueChanged<int>",
+    "activeMatch": "?:List<String>?"
+   }
+  },
+  {
+   "id": "mini_qty_btn",
+   "atom": "MiniQtyBtn",
+   "props": {
+    "label": "$: mini_qty_btn_label",
+    "label2": "$: mini_qty_btn_label2",
+    "icon": "?:IconData",
+    "onTap": "@:onTap2|VoidCallback?"
+   }
+  },
+  {
+   "id": "value_chip",
+   "atom": "ValueChip",
+   "props": {
+    "text": "?:String"
+   }
+  },
+  {
+   "id": "axis_chip",
+   "atom": "AxisChip",
+   "props": {
+    "label": "~:",
+    "isSelected": "~:",
+    "onTap": "~:"
+   },
+   "repeat": {
+    "as": "axis",
+    "item": "AxisChipItem"
+   }
+  },
+  {
+   "id": "facet_chip",
+   "atom": "FacetChip",
+   "props": {
+    "label": "?:String",
+    "count": "?:int",
+    "isSelected": "?:bool",
+    "onTap": "@:onTap"
+   }
+  }
+ ]
+}
