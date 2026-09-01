@@ -786,8 +786,7 @@ export function renderDashboard(slug, { title, icon = '📊', entities, metrics 
   const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — דשבורד מנתוני-הישויות החיים (drill-down). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
-import '../dart-ui-bs/ds/ds_store.dart';
-${barsBlock ? "import '../dart-ui-bs/ds/ds_bars.dart';\n" : ''}${[...imports].sort().join('\n')}
+${tiles.length ? "import '../dart-ui-bs/ds/ds_store.dart';\n" : ''}${barsBlock ? "import '../dart-ui-bs/ds/ds_bars.dart';\n" : ''}${[...imports].sort().join('\n')}
 import 'package:flutter/material.dart';
 
 class ${cls} extends StatelessWidget {
@@ -1334,7 +1333,7 @@ export function renderSystem(slug, { title, icon, sectionTitle, kind, items = []
   const cIcon = k(icon);
   const cSection = k(sectionTitle);
   let kids, extraImport = '';
-  if (kind === 'toggles') {
+  if (kind === 'toggles' && items.length) {   // רשימה-ריקה ⇒ נפילה ל-DsEmpty (אחרת ייבוא-מת)
     kids = items.map((it) => `        DsToggleTile(label: ${k(it)}),`);
     extraImport = "import '../dart-ui-bs/ds/ds_toggle_tile.dart';\n";
   } else {
