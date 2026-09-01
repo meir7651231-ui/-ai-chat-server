@@ -9,7 +9,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 
-const ROOT = new URL('../new/', import.meta.url).pathname;
+const ROOT = new URL('../../new/', import.meta.url).pathname;
 const DIRS = { 'dart': 'dart', 'dart-maor': 'dart-maor', 'atoms': 'atoms' };
 const HEB = /[\u0590-\u05FF]/;
 

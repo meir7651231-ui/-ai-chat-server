@@ -1,7 +1,7 @@
 # מפקד-האטומים — המצע להרכבה-חופשית (2026-08-31)
 
-> כלי: `machtzev/atom-census.mjs` · artifact: `machtzev/generator/atom-census.json`
-> ריצה: `node machtzev/atom-census.mjs`. דטרמיניסטי · אפס-רשת · אפס-LLM ·
+> כלי: `machtzev/census/atom-census.mjs` · artifact: `machtzev/generator/atom-census.json`
+> ריצה: `node machtzev/census/atom-census.mjs`. דטרמיניסטי · אפס-רשת · אפס-LLM ·
 > קורא **רק את חוזה-האטום** (הטיפוסים שהוא מכריז) — לא מילון-דומייני.
 
 ## למה זה קיים

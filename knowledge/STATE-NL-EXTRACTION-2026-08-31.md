@@ -7,7 +7,7 @@
 ## איפה עומדים (מאומת מהבייטים)
 - **רצפת-§22 (בונה+מתקמפל):** 46 משפטים בשני stress-corpora — **0 קריסות · 0 אפס-ישויות ·
   0 כשל-בנייה**. 6 אפליקציות מורכבות עוברות `flutter analyze` ב-**0 errors**.
-- **יַרְד-המידה (`machtzev/nl-quality.mjs` · קורפוס `generator/nl-quality.txt`):**
+- **יַרְד-המידה (`machtzev/mahulal/nl-quality.mjs` · קורפוס `generator/nl-quality.txt`):**
   20 משפטים · 56 שמות-ישות · **100% נקיים** (רצפה 92% · רק-עולה).
 
 ## הכללים המבניים שנבנו (טהורים · data-driven)
@@ -33,5 +33,5 @@
 ל-`nl-quality.txt` + העלאת-הרצפה ⇒ push. כל תיקון ננעל ומונע רגרסיה.
 
 ## גייטים
-`node machtzev/nl-smoke.mjs` (בונה) · `node machtzev/nl-quality.mjs` (איכות) ·
+`node machtzev/mahulal/nl-smoke.mjs` (בונה) · `node machtzev/mahulal/nl-quality.mjs` (איכות) ·
 `generator-ratchet` (4 בדיקות-איכות מבניות ננעלו) · שער-קומפילציה (genesis-compile).

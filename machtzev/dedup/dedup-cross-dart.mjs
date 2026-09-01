@@ -5,7 +5,7 @@
  *  (מועמד-לאיחוד: יכולת בשני הענפים ⇒ קופסה אחת משותפת). */
 import fs from 'node:fs';
 import crypto from 'node:crypto';
-const R = new URL('../new/', import.meta.url).pathname;
+const R = new URL('../../new/', import.meta.url).pathname;
 const read = (dir) => fs.existsSync(R + dir) ? fs.readdirSync(R + dir)
   .filter(f => f.endsWith('.dart') && !f.endsWith('_test.dart')).map(f => ({ name: f.replace('.dart', ''), dir, src: fs.readFileSync(R + dir + '/' + f, 'utf8') })) : [];
 const norm = (s) => s.split('\n').filter(l => !/^\s*\/\//.test(l)).join('\n')

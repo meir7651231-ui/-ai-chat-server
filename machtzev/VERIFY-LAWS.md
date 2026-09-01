@@ -22,7 +22,7 @@
 ‏"~15" שהתגלה כ-~40 = הפרת-V2. אם אתה כותב "~" — עצור, ספור, כתוב את המספר.
 
 **V3 · האינדקס הוא האורקל.** כל שאלה על אטום (כמה · מטרה · טוהר · תפר · ייעוד) נענית
-מ-`generator/atom-index.json` (‏`node machtzev/atom-index.mjs`), **לא** מקריאת-אטום-בודד.
+מ-`generator/atom-index.json` (‏`node machtzev/census/atom-index.mjs`), **לא** מקריאת-אטום-בודד.
 כל שאלה על מסך → `screens-seed/machine/`. על מונח → `screens-seed/terms-catalog.json`.
 
 **V4 · השער נבדק ב-exit-code ישיר (L26).** ‏`cmd | grep | head; echo $?` בודק את head —
@@ -125,7 +125,7 @@ fetch עם retry עד `merge-base --is-ancestor` מאשר.
 ---
 
 ## 🚨 האכיפה (איך החוק בדיק, לא כוונה)
-- V3/atom-index — `node machtzev/atom-index.mjs` (516 אטומים · מטרה · טוהר).
+- V3/atom-index — `node machtzev/census/atom-index.mjs` (516 אטומים · מטרה · טוהר).
 - V4/exit — `police.mjs` עם ran-ledger + pipefail.
 - V6/זהב — `behavioral/run.mjs` (חוזה-אמת, לא fixture-גנרי).
 - P1–P3/טוהר — `police.mjs` datapurity/deeppurity (רק-יורד) + `generator-ratchet` (0 עברית-בקוד-מנוע).

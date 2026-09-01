@@ -13,7 +13,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
-const REPO = new URL('..', import.meta.url).pathname;
+const REPO = new URL('../..', import.meta.url).pathname;
 
 /** kebab-case → camelCase (שם-ה-getter, כמו tier-order⇒tierOrder). */
 function camel(name) {

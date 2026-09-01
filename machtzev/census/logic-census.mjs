@@ -7,8 +7,8 @@
 //  דטרמיניסטי · אפס-רשת · קורא רק חתימות (חוק-4). פלט: generator/logic-census.json.
 // ══════════════════════════════════════════════════════════════════════════
 import fs from 'node:fs'; import path from 'node:path';
-const ROOT = new URL('../new/', import.meta.url).pathname;
-const OUT = new URL('./generator/logic-census.json', import.meta.url).pathname;
+const ROOT = new URL('../../new/', import.meta.url).pathname;
+const OUT = new URL('../generator/logic-census.json', import.meta.url).pathname;
 const SCAN = ['dart-maor', 'dart'];
 const PRIM = new Set(['String', 'int', 'double', 'num', 'bool']);
 

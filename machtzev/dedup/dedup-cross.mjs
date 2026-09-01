@@ -4,7 +4,7 @@
  *  מטרה: לזהות "ליבה-אימפריאלית" — יכולת שקיימת בשתי המערכות ⇒ מועמדת-לאיחוד
  *  (לא כפילות-למחיקה: שתי שפות, שני מוצרים-חיים; אבל דגל לתשומת-לב באיחוד). */
 import fs from 'node:fs';
-const R = new URL('../new/', import.meta.url).pathname;
+const R = new URL('../../new/', import.meta.url).pathname;
 const norm = (s) => s.replace(/[^a-z0-9]/gi, '').toLowerCase();
 const js = fs.existsSync(R + 'atoms') ? fs.readdirSync(R + 'atoms')
   .filter(f => f.endsWith('.mjs') && !f.endsWith('.test.mjs')).map(f => f.replace('.mjs', '')) : [];

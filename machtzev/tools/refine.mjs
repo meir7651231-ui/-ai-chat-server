@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /** מחצב · שלב 2 — זיקוק: איתור מנועים-תאומים בין ריפו + ריכוז מחרוזות-קשיחות. */
 import fs from 'node:fs';
-const R = new URL('./registry/', import.meta.url).pathname;
+const R = new URL('../registry/', import.meta.url).pathname;
 const load = f => { try { return JSON.parse(fs.readFileSync(R + f)); } catch { return []; } };
 
 // 1) מנועים-תאומים: חפיפת שמות-יצוא בין maor ל-buildsmart

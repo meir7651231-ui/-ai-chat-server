@@ -53,9 +53,9 @@
 
 ## 🚦 שערים (הרץ בסאבשל · אמת exit)
 ```bash
-( cd /home/user/-ai-chat-server && node machtzev/spec-acceptance.mjs; echo $? )   # 12/12 מערכת-מלאה
+( cd /home/user/-ai-chat-server && node machtzev/mahulal/spec-acceptance.mjs; echo $? )   # 12/12 מערכת-מלאה
 ( cd /home/user/-ai-chat-server && node machtzev/behavioral/run.mjs; echo $? )    # golden 14/14 (זמן-ריצה)
-( cd /home/user/-ai-chat-server && node machtzev/generator-ratchet.mjs; echo $? ) # יכולות-נעולות
+( cd /home/user/-ai-chat-server && node machtzev/mahulal/generator-ratchet.mjs; echo $? ) # יכולות-נעולות
 ( cd /home/user/-ai-chat-server && node machtzev/police.mjs --fast )              # 11/11
 # compile: node scratchpad/closure.mjs ⇒ ( cd buildsmart/app_flutter && flutter analyze --no-fatal-infos lib/genesis | grep -c 'error •' ) ⇒ 0
 ```
@@ -64,7 +64,7 @@ HEAD בעצירה: `01f6e963`. הכל committed+pushed. עץ נקי.
 ## 🔎 נמצא · מנגנון-הטוהר-אחרי-המרה (2026-09-01, byte-proven)
 **השאלה:** "ה-Dart חייב להיות טהור אחרי המרה, והמנגנון קיים — תמצא אותו."
 **המנגנון (שלישייה, כולו קיים בריפו):**
-1. **`machtzev/ast-purify.mjs` + `machtzev/carve/ast_dehardcode.dart`** — מנוע דה-הרדקוד Dart-נייטיב:
+1. **`machtzev/purity/ast-purify.mjs` + `machtzev/carve/ast_dehardcode.dart`** — מנוע דה-הרדקוד Dart-נייטיב:
    מחלץ עברית ל-`dart-data-maor/<base>-terms.dart`, משכתב, משחיל `term:(k)=>kTerms[k]!`
    דרך test+צרכנים, מאמת analyze+זהב, מחזיר-אם-נכשל. **הוכחה שהוא-שעשה:** 58 אטומי-dart-maor
    נושאים את חתימתו המדויקת (`import ... as td_<base>` + `term:(k)=>td_<base>.kTerms[k]!`).

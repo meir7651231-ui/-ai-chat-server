@@ -1,7 +1,7 @@
 # מפקד אטומי-הלוגיקה — שכבה 2 של המצע (2026-08-31)
 
 > הכרעה 21: המחולל מחובר לכל האטומים — גם **לוגיקה**, לא רק תצוגה.
-> כלי: `machtzev/logic-census.mjs` · artifact: `machtzev/generator/logic-census.json`.
+> כלי: `machtzev/census/logic-census.mjs` · artifact: `machtzev/generator/logic-census.json`.
 > דטרמיניסטי · קורא רק חתימות (חוק-4).
 
 ## מה זה

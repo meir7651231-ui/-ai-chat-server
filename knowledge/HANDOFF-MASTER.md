@@ -117,18 +117,18 @@ node machtzev/police.mjs          # לסוף-גל (דקות): + selftest + mutat
 ### 4.3 המחצבה והדדופ
 ```bash
 node machtzev/census.mjs           # רישום-100% (orphan=אזעקה)
-node machtzev/refine.mjs           # זיקוק-טיוטות
-node machtzev/dedup-atoms.mjs      # כפליות-מדף (גוף/שם/מוצא)
-node machtzev/dedup-cross.mjs      # כפליות maor-JS ↔ buildsmart-Dart לפי-שם
-node machtzev/dedup-cross-dart.mjs # כפליות Dart↔Dart לפי-גוף (ליבה-אימפריאלית)
-node machtzev/box-coverage.mjs     # מד-מוכנות-קופסאות ⇒ box-drafts/READINESS.md
-node machtzev/gen-wiring-doc.mjs   # מחולל WIRING.md
-node machtzev/promote-auto.mjs     # קידום-חינם (צילום/Golden)
-node machtzev/dart-test.mjs        # מריץ _test.dart דרך ה-SDK
+node machtzev/tools/refine.mjs           # זיקוק-טיוטות
+node machtzev/dedup/dedup-atoms.mjs      # כפליות-מדף (גוף/שם/מוצא)
+node machtzev/dedup/dedup-cross.mjs      # כפליות maor-JS ↔ buildsmart-Dart לפי-שם
+node machtzev/dedup/dedup-cross-dart.mjs # כפליות Dart↔Dart לפי-גוף (ליבה-אימפריאלית)
+node machtzev/tools/box-coverage.mjs     # מד-מוכנות-קופסאות ⇒ box-drafts/READINESS.md
+node machtzev/tools/gen-wiring-doc.mjs   # מחולל WIRING.md
+node machtzev/tools/promote-auto.mjs     # קידום-חינם (צילום/Golden)
+node machtzev/tools/dart-test.mjs        # מריץ _test.dart דרך ה-SDK
 ```
 
 ### 4.4 Dart SDK
-לא ב-PATH. נמצא ב-scratchpad. ה-Dart-tests רצים דרך `machtzev/dart-test.mjs` /
+לא ב-PATH. נמצא ב-scratchpad. ה-Dart-tests רצים דרך `machtzev/tools/dart-test.mjs` /
 מפורשות `dart --enable-asserts <atom>_test.dart`. אם ה-SDK נעלם (מכולה מתאתחלת) —
 הורד מחדש 3.5.4 ל-scratchpad.
 

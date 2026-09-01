@@ -5,7 +5,7 @@
  *  ג) תאומי-מוצא: שני אטומים שמצביעים על אותו מקור (קובץ:שורות). */
 import fs from 'node:fs';
 import crypto from 'node:crypto';
-const DIR = new URL('../new/atoms/', import.meta.url).pathname;
+const DIR = new URL('../../new/atoms/', import.meta.url).pathname;
 const files = fs.readdirSync(DIR).filter(f => f.endsWith('.mjs') && !f.endsWith('.test.mjs'));
 const norm = (s) => s
   .replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '')   // הערות

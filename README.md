@@ -43,10 +43,11 @@ dart-quarry/       1  ⚪ סמן-מחצבה (רוקנה — הטיוטות קו�
 
 ## 🏭 `machtzev/` — המפעל
 מפת-הכלים המלאה: **`machtzev/INDEX.md`**. בקצרה:
-- **כניסות:** `one.mjs` (המנוע-האחד) · `run.mjs` · `police.mjs` · `census.mjs`
-- **תת-תיקיות:** `generator/` (28 · המחולל) · `assemble/` (16 · הרכבה) · `extract/` (15) ·
-  `emit/` (14 · JS↔Dart) · `carve/` (9 · חצב-AST) · `behavioral/` (4 · זהב-ריצה)
-- **41 סקריפטים-בודדים** = שערים · טוהר · דדופ · מפקד · קבלת-מחולל · כלֵי-עזר (קטלוג ב-INDEX).
+- **בשורש-`machtzev/`:** כניסות-על (`one` · `run` · `police` · `census`) + השערים-הנעולים
+  (`wiring/contract/quarry/selftest/mutation/pins-check` · `data-purity-check` · `deep-purity-scan`) + `gates.tsv`/`pins.sha256`/מסמכים.
+- **תת-תיקיות לפי-תפקיד:** `generator/` (28 · המחולל) · `assemble/` (16) · `extract/` (15) ·
+  `emit/` (14 · JS↔Dart) · `purity/` (11 · טוהר) · `carve/` (9) · `dedup/` (6) · `tools/` (5) ·
+  `mahulal/` (4 · קבלת-מחולל) · `census/` (3) · `behavioral/` (4).
 
 ## 📚 `knowledge/` — היכן להתחיל משימה
 - `SESSION-LOG-2026-09-01.md` — היומן החי (הכי-עדכני · קרא ראשון בהמשך-סשן).
@@ -63,10 +64,5 @@ node machtzev/police.mjs          # + selftest + mutation · לסוף-גל
 ```bash
 node machtzev/one.mjs             # רענון→פירוק→דדופ→מונחים→הרכבה→טוהר→משטרה→ONE-STATUS.md
 ```
-
-## ⚠️ למה לא מזיזים קבצים במפעל
-סקריפטי-`machtzev/` מחווטים בנתיב-מחרוזת מתוך `one.mjs`, workflows של CI, ו-`CLAUDE.md`
-הנעול-חתימה — הזזה עיוורת שוברת שערים. הארגון כאן = **מיפוי** (README + INDEX), לא רה-ארגון
-פיזי. רה-ארגון פיזי אפשרי רק בסביבה שבה שערי-ה-dart רצים (לא-root) לאימות שאין שבר.
 
 מקור-האמת המלא + מרשם-האטומים: ריפו `maor-system`, ‏`machtzev/registry/`.

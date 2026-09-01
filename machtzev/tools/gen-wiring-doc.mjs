@@ -2,7 +2,7 @@
 /** מחצב · מחולל-מפת-החיווט — WIRING.md נגזר מהעץ עצמו (imports אמיתיים),
  *  לא נכתב ביד ⇒ לא מרקיב (הלקח מרקב-מספרי-הדגלים). פורמט: WIRING של buildsmart. */
 import fs from 'node:fs';
-const ROOT = new URL('..', import.meta.url).pathname;
+const ROOT = new URL('../..', import.meta.url).pathname;
 const boxes = fs.readdirSync(ROOT + 'new/boxes').filter(f => f.endsWith('.mjs') && !f.endsWith('.test.mjs'));
 const atoms = fs.readdirSync(ROOT + 'new/atoms').filter(f => f.endsWith('.mjs') && !f.endsWith('.test.mjs'));
 let md = `# WIRING — מפת-החיווט החיה של Genesis\n> **מחולל אוטומטית מה-imports — אל תערוך ידנית** (\`node machtzev/gen-wiring-doc.mjs\`).\n> כל קופסה: אילו חוטים היא מחווטת + ההכרעה-החתומה שלה (מהחוזה) + הזהב שלה.\n\n`;

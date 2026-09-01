@@ -7,7 +7,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-const ROOT = new URL('..', import.meta.url).pathname;
+const ROOT = new URL('../..', import.meta.url).pathname;
 const Q = ROOT + 'quarry/', A = ROOT + 'new/atoms/';
 const EXCLUDE = new Set(JSON.parse(fs.readFileSync(process.argv[2] || '/dev/null', 'utf8').toString() || '[]'));
 const POOL = ['123456782', '039217369', {amount: 100}, {payments: [{amount: 100}, {amount: 50}]}, {name: 'כהן', phone: '0501234567'}, [{amount: 100}], ['2026-08-24'], 3.14, 1000, 2026, '', 'אבג', 'כהן לוי', 'abc', 'a@b.com', '2026-08-24', '2026-08-24T12:00:00', '0501234567', '03-1234567', 'https://x.co', 'שלום עולם', '12', 0, 1, 2, 5, 15, 100, 786, 5786, -3, 0.5, null, undefined, true, false, [], ['א', 'ב'], {}];

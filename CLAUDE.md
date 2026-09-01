@@ -3,7 +3,7 @@
 
 ## 🔴 אינדקס-האמת של אטומים (חובה לפני כל טענה על אטום)
 כל שאלה על אטום — **כמה · מטרה · טוהר · תפר · ייעוד** — נענית מ-`machtzev/generator/atom-index.json`
-(כלי: `node machtzev/atom-index.mjs`). **אסור להסיק מדוגמה-אחת; אסור לנחש.** ‏516 אטומים,
+(כלי: `node machtzev/census/atom-index.mjs`). **אסור להסיק מדוגמה-אחת; אסור לנחש.** ‏516 אטומים,
 כל אחד עם מטרה-אמיתית (ממסך-המקור) + טוהר + תפר במקום אחד. דוח: `knowledge/ATOM-TRUTH-INDEX-2026-08-31.md`.
 הרקע: 5 טעויות-הסקה-מדוגמה באותו סשן ⇒ האינדקס מונע אותן. תת-ספירה/הכללה = אזעקה.
 
@@ -59,12 +59,12 @@ node machtzev/run.mjs             # (במאור) מפקד+מחלצים+זיקו�
 node machtzev/run.mjs --fast      # משטרה בלבד
 node machtzev/factory/gen-wires.mjs <genesis> maor    # חציבת-טיוטות (TS→JS)
 node machtzev/factory/gen-wires-dart.mjs <genesis>    # חציבת-טיוטות-Dart מ-app_flutter (בנייה-חכמה החי)
-node machtzev/promote-auto.mjs    # (בגנסיס) קידום-חינם: צילום/Golden
-node machtzev/gen-wiring-doc.mjs  # (בגנסיס) חילול מפת-החיווט
-node machtzev/box-coverage.mjs    # (בגנסיס) מד-מוכנות-קופסאות ⇒ box-drafts/READINESS.md
-node machtzev/dedup-atoms.mjs     # (בגנסיס) בודק-כפליות-מדף (הכרעה 5): גוף/שם/מוצא — אחרי כל גל
-node machtzev/dedup-cross.mjs     # (בגנסיס) כפליות חוצה-מערכות לפי-שם (מאור-JS מול בנייה-חכמה-Dart)
-node machtzev/dedup-cross-dart.mjs # (בגנסיס) כפליות חוצה-ענפים לפי-גוף (Dart↔Dart) — ליבה-אימפריאלית, אחרי המרת-מאור
+node machtzev/tools/promote-auto.mjs    # (בגנסיס) קידום-חינם: צילום/Golden
+node machtzev/tools/gen-wiring-doc.mjs  # (בגנסיס) חילול מפת-החיווט
+node machtzev/tools/box-coverage.mjs    # (בגנסיס) מד-מוכנות-קופסאות ⇒ box-drafts/READINESS.md
+node machtzev/dedup/dedup-atoms.mjs     # (בגנסיס) בודק-כפליות-מדף (הכרעה 5): גוף/שם/מוצא — אחרי כל גל
+node machtzev/dedup/dedup-cross.mjs     # (בגנסיס) כפליות חוצה-מערכות לפי-שם (מאור-JS מול בנייה-חכמה-Dart)
+node machtzev/dedup/dedup-cross-dart.mjs # (בגנסיס) כפליות חוצה-ענפים לפי-גוף (Dart↔Dart) — ליבה-אימפריאלית, אחרי המרת-מאור
 ```
 מרשם-האטומים: maor-system/machtzev/registry/ · טיוטות: quarry/ · תוכניות-קופסה: box-drafts/
 🏁 **מבחן-הקומפילציה (שער-קבוע):** תוצרי-המנועים מוזרקים ל-buildsmart (ענף-העבודה,

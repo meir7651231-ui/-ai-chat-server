@@ -13,7 +13,7 @@ import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 const _req = createRequire('/home/user/maor-system/');
 const ts = _req('typescript');
-const ROOT = new URL('../', import.meta.url).pathname;
+const ROOT = new URL('../../', import.meta.url).pathname;
 const ATOMS = path.join(ROOT, 'new/atoms');
 const HEB = /[\u0590-\u05FF]/;
 

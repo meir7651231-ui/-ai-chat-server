@@ -10,7 +10,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-const ROOT = new URL('../', import.meta.url).pathname;
+const ROOT = new URL('../../', import.meta.url).pathname;
 const ATOMS = path.join(ROOT, 'new/atoms');
 const SCOPES = ['new/atoms', 'new/boxes', 'new'];
 const strip = (s) => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');

@@ -4,7 +4,7 @@
  *  ‏--gate: ratchet מול baseline — אטום-mixed חדש נחסם; הקיימים = חוב-שרק-יורד. */
 import fs from 'node:fs';
 import path from 'node:path';
-const ROOT = new URL('../', import.meta.url).pathname;
+const ROOT = new URL('../../', import.meta.url).pathname;
 const MODE = process.argv[2] || '';
 const DIRS = [['new/atoms', '.mjs'], ['new/dart-maor', '.dart'], ['new/dart', '.dart']];
 const HEB = /'[^'\n]*[֐-׿][^'\n]*'/g;

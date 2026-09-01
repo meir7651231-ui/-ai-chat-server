@@ -14,7 +14,7 @@
 - **פאזר-דיפרנציאלי:** `node machtzev/emit/fuzz-parity.mjs '[["atom-name","num"|"str"]]'` — JS↔Dart על קלטי-קצה.
 - **סורק-הפניות:** `node machtzev/emit/free-ref-scan.mjs` — שער-משטרה 7 (אפס-הפניה-חופשית).
 - **משטרה:** `node machtzev/police.mjs --fast` — **חובה ירוקה לפני כל commit** (7 שערים).
-- **דדופ:** `node machtzev/dedup-atoms.mjs` (מדף) · `node machtzev/dedup-cross-dart.mjs` (מאור↔בנייה-חכמה).
+- **דדופ:** `node machtzev/dedup/dedup-atoms.mjs` (מדף) · `node machtzev/dedup/dedup-cross-dart.mjs` (מאור↔בנייה-חכמה).
 - **11 כללי-המרה שנלמדו-בדם:** `machtzev/emit/DART-PORTING-RULES.md` — הסוכן-הממיר חייב לכבד.
 
 ## 3. הזרימה — מנוע-הייצור: K נחילי-אטום-בודד במקביל (L22)

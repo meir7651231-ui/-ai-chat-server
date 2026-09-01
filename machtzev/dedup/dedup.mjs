@@ -2,7 +2,7 @@
 /** מחצב · שלב 2ב — הכרעת-כפילויות: קבוצות ⇒ קנוני-מנצח או תוכנית-שילוב ("הכל-הכל").
  *  אינווריאנט: הקנוני חייב להכיל 100% מכל כפיל. קבוצה בלי הכרעה = אדום בדוח. */
 import fs from 'node:fs';
-const R = new URL('./registry/', import.meta.url).pathname;
+const R = new URL('../registry/', import.meta.url).pathname;
 const load = f => { try { return JSON.parse(fs.readFileSync(R + f)); } catch { return []; } };
 const groups = [];
 

@@ -13,7 +13,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const ROOT = new URL('../new/', import.meta.url).pathname;
+const ROOT = new URL('../../new/', import.meta.url).pathname;
 const DIRS = [
   { dir: 'dart', data: 'dart-data', lang: 'dart' },
   { dir: 'dart-maor', data: 'dart-data-maor', lang: 'dart' },

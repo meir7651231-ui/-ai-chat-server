@@ -38,7 +38,7 @@ sup-last/sup-usd). כלומר הם שקעים-מוכרים: בפירוק, הזר
 **שלב א׳ · פירוק (TS→JS-atom):** לכל פונקציה-מיוצאת ⇒ אטום-JS עצמאי ב-`new/atoms/<name>.mjs`:
 - הפשט טיפוסי-TS; הפוך private-helpers ל-`_`-inline; שכני-`./lib` ⇒ פרמטרי-שקע (deps).
 - כתוב `<name>.contract.md` + `<name>.test.mjs` (golden — הרץ node, הקלט פלטים דטרמיניסטיים).
-- דדופ מול הקיים (`node machtzev/dedup-atoms.mjs`); אטום-שקול-קיים ⇒ דלג.
+- דדופ מול הקיים (`node machtzev/dedup/dedup-atoms.mjs`); אטום-שקול-קיים ⇒ דלג.
 **שלב ב׳ · המרה (JS→Dart):** הפעל את צינור-ההמרה הקיים (release.js / swarm) עם **אימות-עוין
 מול Node** (bytes-not-prose) — בדיוק כמו כל מאור. js-compat-reference מוטבע inline לפי-צורך.
 משטרה 7/7 · commit+push כל נחיתה.

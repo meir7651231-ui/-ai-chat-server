@@ -58,8 +58,8 @@ stage('מיפוי-כל-המסכים (screen-decomp)', () => {
 
 // ── 3 · דדופ: widgets + אטומי-מדף ──
 stage('דדופ-widgets (הכרעה-5)', () => last(run('machtzev/carve/widget-dedup.mjs', [SCRATCH])) && /ייחודיים: (\d+)/.exec(run('machtzev/carve/widget-dedup.mjs', [SCRATCH]))?.[0]);
-stage('דדופ-אטומי-מדף', () => last(run('machtzev/dedup-atoms.mjs')), { optional: true });
-stage('דדופ-אימפריאלי (Dart↔Dart)', () => last(run('machtzev/dedup-cross-dart.mjs')), { optional: true });
+stage('דדופ-אטומי-מדף', () => last(run('machtzev/dedup/dedup-atoms.mjs')), { optional: true });
+stage('דדופ-אימפריאלי (Dart↔Dart)', () => last(run('machtzev/dedup/dedup-cross-dart.mjs')), { optional: true });
 
 // ── 4 · קטלוג-המונחים המאוחד (מנוע-פנימי — נגזרת-דטרמיניסטית של המפות) ──
 stage('קטלוג-מונחים מאוחד', () => {
@@ -105,18 +105,18 @@ stage('מחולל-הלוחות (board-gen)', () => run('machtzev/assemble/board-
 
 // ── 5 · ביקורות-ההרכבה והטוהר (שערי-ratchet) ──
 stage('ביקורת-הרכבה (box-audit)', () => last(run('machtzev/assemble/box-audit.mjs', ['--gate'])));
-stage('טוהר-דאטה (purity-data)', () => last(run('machtzev/purity-data.mjs', ['--gate'])));
+stage('טוהר-דאטה (purity-data)', () => last(run('machtzev/purity/purity-data.mjs', ['--gate'])));
 // הכרעה 19 · מכונת-הטיהור המלאה: קופסאות⇒קינון⇒טבלאות⇒מחרוזות (נקודת-שבת) + מנוע-הקשיחים + השער
 stage('מכונת-הטיהור (הכרעה 19)', () => {
-  run('machtzev/purify-engine.mjs', ['--all']);
-  const h = run('machtzev/purify-hard.mjs', ['--run', '300']).split('\n').find(l => l.includes('טוהרו')) || '';
+  run('machtzev/purity/purify-engine.mjs', ['--all']);
+  const h = run('machtzev/purity/purify-hard.mjs', ['--run', '300']).split('\n').find(l => l.includes('טוהרו')) || '';
   return (last(run('machtzev/deep-purity-scan.mjs', ['--gate'])) + ' · ' + h.trim()).trim();
 }, { optional: true });
-stage('מד-מוכנות-קופסאות', () => last(run('machtzev/box-coverage.mjs')), { optional: true });
-stage('מפת-חיווט (gen-wiring-doc)', () => last(run('machtzev/gen-wiring-doc.mjs')), { optional: true });
+stage('מד-מוכנות-קופסאות', () => last(run('machtzev/tools/box-coverage.mjs')), { optional: true });
+stage('מפת-חיווט (gen-wiring-doc)', () => last(run('machtzev/tools/gen-wiring-doc.mjs')), { optional: true });
 
 // ── 6 · המשטרה (כל שערי-ה-ratchet הפנימיים) ──
-stage('מנוע-ההמרה-מחדש · דאטה (reconvert-data)', () => last(run('machtzev/reconvert-data.mjs')), { optional: true });
+stage('מנוע-ההמרה-מחדש · דאטה (reconvert-data)', () => last(run('machtzev/purity/reconvert-data.mjs')), { optional: true });
 // ── הזרקת-המדף לתצוגה (buildsmart) + נחיתה — בתוך המנוע (הכרעת-בעלים "למה הם לא בפנים") ──
 stage('הזרקת-המדף ל-buildsmart (8 מדפים)', () => {
   const B = '/home/user/buildsmart/app_flutter/lib/genesis';

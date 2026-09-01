@@ -6,7 +6,7 @@
  *  שימוש: node machtzev/reconvert-data.mjs [--dry] */
 import fs from 'node:fs';
 import path from 'node:path';
-const ROOT = new URL('../', import.meta.url).pathname;
+const ROOT = new URL('../../', import.meta.url).pathname;
 const SRC = path.join(ROOT, 'new/atoms');
 const OUT = path.join(ROOT, 'new/dart-data-maor');
 const dry = process.argv.includes('--dry');

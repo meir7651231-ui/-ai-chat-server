@@ -3,7 +3,7 @@
  *  regex זהים, ועיצוב-מולחם שכבר יש לו אטום בפלטה (מועמד-חיווט-מיידי). */
 import fs from 'node:fs';
 import crypto from 'node:crypto';
-const R = new URL('./registry/', import.meta.url).pathname;
+const R = new URL('../registry/', import.meta.url).pathname;
 const load = f => { try { return JSON.parse(fs.readFileSync(R + f)); } catch { return []; } };
 const roots = Object.fromEntries(fs.readdirSync(R).filter(f=>f.startsWith('census-')).map(f=>{const c=JSON.parse(fs.readFileSync(R+f));return [c.repo,c.root];}));
 const findings = { bodyTwins: [], nameTwins: [], regexTwins: [], styleRewire: [] };

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /** מחצב · 🚨 המשטרה — משוואות-השלמות. כל הפרה = exit 1 אדום. */
 import fs from 'node:fs';
-const R = new URL('./registry/', import.meta.url).pathname;
+const R = new URL('../registry/', import.meta.url).pathname;
 let fail = 0;
 const alarm = (msg) => { console.error('🚨 ' + msg); fail = 1; };
 const ok = (msg) => console.log('✓ ' + msg);

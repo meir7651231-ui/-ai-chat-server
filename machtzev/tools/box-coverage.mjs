@@ -7,7 +7,7 @@
  *  שמות: camelCase⇒kebab (מספר נצמד: pad2) · UPPER_SNAKE⇒lower_snake במחצבה,
  *  ובדרגת-חוזה גם kebab (הסוכנים מקדמים לשם-kebab). */
 import fs from 'node:fs';
-const ROOT = new URL('..', import.meta.url).pathname;
+const ROOT = new URL('../..', import.meta.url).pathname;
 const atoms = new Set(fs.readdirSync(ROOT + 'new/atoms').map(f => f.replace(/\..*$/, '')));
 const quarry = new Set(fs.readdirSync(ROOT + 'quarry').map(f => f.replace(/@.*$/, '')));
 // טיוטות שהוכרעו כחיווט-קופסה (מדף io-wiring — סוף ריקון-המחצבה 24.8)
