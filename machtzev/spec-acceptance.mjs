@@ -25,6 +25,7 @@ const caps = {
   'אגרגט חוצה-ישות': /appStore\.(sum|avg|count)\(/.test(all),
   'הרשאות (RLS · בורר-תפקיד)': /_roleChip\(|appStore\.scoped\(/.test(all),
   'התנהגות (שדה-מותנה חי)': /num\.tryParse[^\n]*[<>][^\n]*\?\s*gen_app_\w+\s*:\s*gen_app_\w+/.test(all),
+  'התנהגות-על (מונה-מסונן "בסיכון")': /appStore\.records\('[^']+'\)\.where\([^\n]*\.length/.test(all),
 };
 const entities = r.screens.filter((s) => s.kind === 'entity').length;
 console.log(`§22 קבלה · מערכת-חלל · ${entities} ישויות · ${r.roles.length} תפקידים · ${Object.keys(caps).length} יכולות-נבדקות`);

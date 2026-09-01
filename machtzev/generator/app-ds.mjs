@@ -131,10 +131,17 @@ export function buildApp(specText) {
     } else {
       const slug = `app_scr${li.i}`;
       const title = (li.line.split(/\s+עם\s+/)[0] || li.line).trim();     // כותרת = לפני 'עם'
-      const rawMetrics = (li.line.split(/\s+עם\s+/)[1] || '').split(/[\s,]+/).filter(Boolean);   // מדדים = אחרי 'עם'
+      // פיצול-מדדים מודע-עומק: רווח/פסיק מפרידים רק ברמה-0 — רווח בתוך '(...)' (מונה-מסונן
+      // 'מונה(מערכת: סטטוס=קריטי)') אינו מפריד. באג-קודם: split גלובלי שבר אגרגט-עם-רווח.
+      const splitMetrics = (str) => { const out = []; let d = 0, cur = ''; for (const ch of str) { if (ch === '(') d++; else if (ch === ')') d = Math.max(0, d - 1); if ((ch === ' ' || ch === ',' || ch === '\t') && d === 0) { if (cur.trim()) out.push(cur.trim()); cur = ''; } else cur += ch; } if (cur.trim()) out.push(cur.trim()); return out; };
+      const rawMetrics = splitMetrics(li.line.split(/\s+עם\s+/)[1] || '');   // מדדים = אחרי 'עם'
       // אגרגט מהאפיון: סכום(ישות.שדה) · ממוצע(ישות.שדה) · מונה(ישות). בלי-סוגריים ⇒ מונה-לפי-שם.
       const aggs = [], countWords = [];
+      // מונה-מסונן (KPI 'בסיכון' · דשבורד-מפקד): 'מונה(ישות: שדה=ערך)' ⇒ סופר רשומות במצב.
+      const FILT_RE = new RegExp('^' + L.count + '\\(([^:)]+):\\s*([^=)]+)=([^)]+)\\)$');
       for (const t of rawMetrics) {
+        const mf = t.match(FILT_RE);
+        if (mf) { const en = mf[1].trim(); aggs.push({ kind: L.count, entityName: en, field: mf[2].trim(), value: mf[3].trim(), slug: nameToSlug[en] || '', filtered: true }); continue; }
         const m = t.match(/^(סכום|ממוצע|מונה)\(([^.)]+)(?:\.([^)]+))?\)$/);
         if (m) aggs.push({ kind: m[1], entityName: m[2].trim(), field: (m[3] || '').trim(), slug: nameToSlug[m[2].trim()] || '' });
         else countWords.push(t);

@@ -749,11 +749,13 @@ export function renderDashboard(slug, { title, icon = '📊', entities, metrics 
   const barLabels = [];   // תוויות לתרשים-העמודות
   const barVals = [];     // ביטויי-double חיים לתרשים
   for (const a of aggs.filter((a) => a.slug && (a.kind === L.count || a.field))) {
-    const lbl = k(a.field || a.entityName);
-    const sub = k(`${a.kind} · ${a.entityName}`);
-    const g = k(a.kind === L.avg ? '📈' : a.kind === L.sum ? '🧮' : '🔢');
+    const lbl = k(a.filtered ? a.value : (a.field || a.entityName));
+    const sub = k(a.filtered ? `${a.entityName} · ${a.value}` : `${a.kind} · ${a.entityName}`);
+    const g = k(a.filtered ? '⚠️' : a.kind === L.avg ? '📈' : a.kind === L.sum ? '🧮' : '🔢');
     const cf = a.field ? k(a.field) : null;
-    const num = a.kind === L.sum ? `appStore.sum('${a.slug}', ${cf})`
+    // מונה-מסונן ('בסיכון'): סופר רשומות ששדה-מצב שלהן = הערך (התנהגות-על · דשבורד-מפקד).
+    const num = a.filtered ? `appStore.records('${a.slug}').where((r) => (r[${k(a.field)}] ?? '') == ${k(a.value)}).length.toDouble()`
+      : a.kind === L.sum ? `appStore.sum('${a.slug}', ${cf})`
       : a.kind === L.avg ? `appStore.avg('${a.slug}', ${cf})`
       : `appStore.count('${a.slug}').toDouble()`;
     const disp = a.kind === L.avg ? `${num}.toStringAsFixed(1)` : `${num}.toStringAsFixed(0)`;
