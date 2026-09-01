@@ -30,6 +30,7 @@ const semantic = Object.entries(PURE_LOOK.semantic).map(([k, v]) => `  static co
 const themeIds = Object.keys(PURE_LOOK.themes);
 const themeConsts = themeIds.map(id => `  static const ${camel(id.replace('t-', ''))} = ${themeEntry(PURE_LOOK.themes[id])};`).join('\n');
 const themeMap = themeIds.map(id => `'${id}': ${camel(id.replace('t-', ''))}`).join(', ');
+const def = PURE_LOOK.themes[PURE_LOOK.defaultTheme]; // קיצורי-אקצנט לברירת-המחדל (טוקנים דורמנטיים)
 
 const out = `// ✨ מאגר-העיצוב · שפת-Pure (Layer B · הטמעה) — **מחולל ע"י machtzev/ds-pure.mjs מ-new/atoms/pure-look.mjs.**
 // אל תערוך ידנית: שנה את הזרע (pure-look) והרץ את המנוע. נייטרל+סמנטי **קבועים**; אקצנט **מורף**
@@ -65,6 +66,11 @@ ${semantic}
 
   // ── ערכות-אקצנט · מורפות יחד ──
 ${themeConsts}
+
+  // ── קיצורי-אקצנט לברירת-המחדל (Color ישיר — לטוקנים דורמנטיים כמו BsPure) ──
+  static const accentHi = ${color(def['--a-hi'])};
+  static const accent = ${color(def['--a'])};
+  static const accentDark = ${color(def['--a-800'])};
 
   static const String defaultTheme = '${PURE_LOOK.defaultTheme}';
   static const Map<String, DsPureTheme> themes = {${themeMap}};

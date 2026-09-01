@@ -38,7 +38,9 @@ const pascalOf = (slug) => slug.replace(/(^|[_-])([a-z])/g, (_, __, c) => c.toUp
 const ROLE_RULES = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/roles.json'), 'utf8')).rules.map(r => ({ re: new RegExp(r.pattern), role: r.role }));
 const TOKEN_RULES = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/tokens.json'), 'utf8')).rules.map(r => ({ re: new RegExp(r.pattern, 'i'), token: r.token }));
 const roleOf = (cls) => ROLE_RULES.find(r => r.re.test(cls))?.role || 'other';
-const tokenFor = (n) => TOKEN_RULES.find(r => r.re.test(n)).token;
+const PURE = process.argv.includes('--pure'); // 🎨 מתג-Pure הפיך (חוק-7): מלביש את הרבנייה ב-BsPure במקום BsTokens
+const TOK = PURE ? 'BsPure' : 'BsTokens';
+const tokenFor = (n) => TOKEN_RULES.find(r => r.re.test(n)).token.replace('BsTokens', TOK);
 const LOGIC_RULES = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/logic-lexicon.json'), 'utf8')).rules;
 let termKeyOf = new Map();
 try {
@@ -208,7 +210,7 @@ function generate(slug, specText) {
     return n;
   };
   const stateDecls = [];
-  const imports = new Set(["import 'package:flutter/material.dart';", "import '../dart-ui-bs/auto/bs_tokens.dart';", `import '../dart-data-bs/auto/gen_${slug}_content.dart';`]);
+  const imports = new Set(["import 'package:flutter/material.dart';", `import '../dart-ui-bs/auto/${PURE ? 'bs_pure_tokens' : 'bs_tokens'}.dart';`, `import '../dart-data-bs/auto/gen_${slug}_content.dart';`]);
   if (look === 'dark') imports.add("import '../dart-ui-bs/ds/ds_scale.dart';");  // 🎨 שכבה E — טוקן-כהה קיים (DsDark)
   let sIdx = 0;
 
@@ -445,7 +447,7 @@ class _${cls}State extends State<${cls}> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: ${look === 'dark' ? 'DsDark.bg' : 'BsTokens.bgLight'},
+        backgroundColor: ${look === 'dark' ? 'DsDark.bg' : TOK + '.bgLight'},
         appBar: AppBar(title: Text(${titleConst})),
         body: ListView(
           padding: const EdgeInsets.symmetric(vertical: 12),
