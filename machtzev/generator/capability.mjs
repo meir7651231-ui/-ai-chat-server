@@ -2,6 +2,7 @@
 // אפס-מילון-דומייני: ה"מילון" היחיד = דקדוק-יחסי (אופרטורים) + מרקרי-תנאי מבניים. האטומים
 // נבחרים דרך match (מטרות-אטומים · נלמד מ-254 מסכים), לא מיפוי-קשיח. עיוור-דומיין.
 import { retrieve } from './match.mjs';
+import { selectAtom } from './render-ds.mjs';
 import fs from 'node:fs';
 const ATOM_INDEX = JSON.parse(fs.readFileSync(new URL('./atom-index.json', import.meta.url), 'utf8'));
 const fileOf = (cls) => { const a = ATOM_INDEX.find((e) => e.cls === cls); return a ? a.file : null; };
@@ -55,26 +56,33 @@ export function pickAtom(phrase) {
   return r.length ? r[0].cls : null;
 }
 
-// פולט מוניטור מהמסגרת-המבנית: פעולת-יסוד השוואה (op) מחווטת ל-3 אטומי-Pure שנבחרו לפי-מטרה/צורה:
-// GaugeMeter (רמה · צורה-מספרית) · PremiumStat (קריאה+דלתא) · AlertBanner (התראה · match מהכוונה).
-// x,y = שמות-שדות מהמשפט. ה-op מהדקדוק-היחסי. אפס-מתכון: התנאי+ההשוואה נקראו ממבנה-המשפט.
+// פולט מוניטור מהמסגרת-המבנית. **הפירוק נגזר, לא חרוט:** התפקידים (ערך-להצגה · קריאה · התראה)
+// עולים ממבנה-המשפט; האטום לכל תפקיד **נבחר** — ערך/קריאה לפי-**צורה** (selectAtom · שם-שקע+טיפוס)
+// והתראה לפי-**מטרה** (match). אין שם-אטום חרוט. ה-op מהדקדוק-היחסי · x,y מהמשפט (§20-א/§23).
+const NUM_RE = /^(value|val|pct|level|amount|reading|num|score|percent)$/;
+const STR_RE = /^(label|title|caption|name|text|msg|message)$/;
 export function emitMonitor(frame, cls = 'GenCapScreen') {
-  // בחירת אטום-התראה: match על אות-הכוונה, מוגבל לאטום בעל-צורת-באנר (label+צבעים). נפילה
-  // בטוחה ל-AlertBanner אם הבחירה אינה בעלת-צורה (שמירה על תקינות-הפלט, לא מיפוי-דומייני).
-  const BANNER_SHAPED = new Set(['AlertBanner']);
+  // תפקיד "מד-ערך" — צורה: שקע-ערך-מספרי (בלי תווית ⇒ הטהור-לתפקיד). תפקיד "קריאה" — ערך+תווית.
+  const gauge = selectAtom({ value: { re: NUM_RE, ty: /double|num/ } });
+  const readout = selectAtom({ value: { re: NUM_RE, ty: /double|num/ }, label: { re: STR_RE, ty: /String/ } });
+  // תפקיד "התראה" — לפי-מטרה (match על אות-הכוונה). נפילה בטוחה ל-AlertBanner (תקינות-פלט).
   const picked = pickAtom(frame.trigger);
-  const alertAtom = BANNER_SHAPED.has(picked) ? picked : 'AlertBanner';
+  const alertAtom = new Set(['AlertBanner']).has(picked) ? picked : 'AlertBanner';
+  if (!gauge || !readout) throw new Error('לא נגזר אטום-ערך/קריאה מהמצע');
   const alertFile = (fileOf(alertAtom) || 'dart-ui-bs/alert_banner.dart').replace(/\.dart$/, '');
   const xLbl = frame.x, yLbl = frame.y, op = frame.op === '<' ? '<' : '>';
+  const gFills = gauge.fills.length ? ', ' + gauge.fills.join(', ') : '';
+  const rFills = readout.fills.length ? ', ' + readout.fills.join(', ') : '';
+  // ייבואים — נגזרים מקבצי-האטומים-שנבחרו (dedup), לא רשימה חרוטה.
+  const imps = [...new Set([`../${gauge.file.replace(/\.dart$/, '')}.dart`, `../${readout.file.replace(/\.dart$/, '')}.dart`, `../${alertFile}.dart`])]
+    .map((p) => `import '${p}';`).join('\n');
   return `// ✨ חולל ע"י capability.mjs — כוונה⇒הרכבה (§23). המשפט: "${frame._src || ''}".
-// פירוק ממבנה-המשפט: תנאי("כש") + השוואה("${op}") ⇒ ${alertAtom} מותנה + מד-רמה + קריאה.
-// אפס-מתכון · אפס-מילון-דומייני · אטומים נבחרו לפי-מטרה/צורה (§20-א).
+// הפירוק נגזר: ערך⇒${gauge.cls} · קריאה⇒${readout.cls} (selectAtom·צורה) · התראה⇒${alertAtom} (match·מטרה).
+// השוואה("${op}") מהדקדוק-היחסי · אפס שם-אטום חרוט · אפס-מילון-דומייני (§20-א).
 import 'package:flutter/material.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_pure.dart';
-import '../dart-ui-bs/premium/dataviz/gauge_meter.dart';
-import '../dart-ui-bs/premium/showcase/premium_stat.dart';
-import '../${alertFile}.dart';
+${imps}
 
 void main() => runApp(const _CapApp());
 
@@ -107,10 +115,10 @@ class _${cls}State extends State<${cls}> {
       subtitle: 'חוּלל ממשפט · ${xLbl} ${op} ${yLbl}',
       icon: '📟',
       children: [
-        Padding(padding: const EdgeInsets.symmetric(vertical: 8), child: Center(child: GaugeMeter(value: norm, size: 170))),
-        Padding(padding: const EdgeInsets.all(12), child: PremiumStat(label: over ? 'חריגה · ${xLbl}' : 'תקין · ${xLbl}', value: _x, unit: '/ ${yLbl}', delta: _x - _y)),
+        Padding(padding: const EdgeInsets.symmetric(vertical: 8), child: Center(child: ${gauge.cls}(${gauge.p.value}: norm${gFills}))),
+        Padding(padding: const EdgeInsets.all(12), child: ${readout.cls}(${readout.p.value}: _x, ${readout.p.label}: over ? 'חריגה · ${xLbl}' : 'תקין · ${xLbl}'${rFills})),
         if (over)
-          const Padding(padding: EdgeInsets.all(12), child: ${alertAtom}(label: 'חריגה — ${xLbl} מעל ${yLbl}', height: 46, radius: 14, accentColor: DsPure.err, baseColor: DsPure.raised, fillColor: DsPure.surface)),
+          const Padding(padding: EdgeInsets.all(12), child: ${alertAtom}(label: 'חריגה — ${xLbl} ${op === '>' ? 'מעל' : 'מתחת ל'} ${yLbl}', height: 46, radius: 14, accentColor: DsPure.err, baseColor: DsPure.raised, fillColor: DsPure.surface)),
         Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6), child: Slider(value: _x, max: 100, onChanged: (v) => setState(() => _x = v))),
       ],
     );
