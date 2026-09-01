@@ -1,0 +1,44 @@
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>pure-look · atom proof</title>
+<style>
+:root{--err:#E0574E;--warn:#E6B84F;--gold:#E6C766}
+body{margin:0;background:#050506;font-family:"Space Grotesk",system-ui,sans-serif;direction:rtl;padding:26px;color:#ECE9E2}
+h1{font-size:15px;font-weight:600;letter-spacing:.06em;color:#9B968C;margin:0 0 4px;direction:ltr}
+.sub{font-size:11px;color:#6E6A62;margin:0 0 20px;direction:ltr}
+.row{display:flex;gap:16px;flex-wrap:wrap}
+.panel{--canvas:#0C0C0E;--sunken:#0A0A0C;--surface:#151517;--raised:#1B1B1E;--raised2:#212126;--ink:#ECE9E2;--mut:#9B968C;--faint:#6E6A62;--hair:rgba(236, 233, 226, 0.09);--hair2:rgba(236, 233, 226, 0.05);flex:1;min-width:230px;background:var(--surface);border:1px solid var(--hair);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px;color:var(--ink)}
+.t-indigo{--a-hi:#B0A4FF;--a:#7A6BF0;--a-800:#4B3ECB;--gl:rgba(122, 107, 240, 0.42);--c2:#4CC6E6;--c3:#B57BE6}
+.t-teal{--a-hi:#6FE6D5;--a:#1FB8A6;--a-800:#0C7E72;--gl:rgba(31, 184, 166, 0.42);--c2:#4FB6E6;--c3:#43D08C}
+.t-amber{--a-hi:#F2C87E;--a:#D99A3C;--a-800:#9E6B1E;--gl:rgba(217, 154, 60, 0.42);--c2:#E8863C;--c3:#E67BA6}
+.th{font-family:ui-monospace,monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);direction:ltr}
+.btn{height:44px;border:0;border-radius:11px;font-weight:700;font-size:13px;color:#0B0B0D;cursor:pointer;
+  background:linear-gradient(180deg,var(--a-hi),var(--a) 55%,var(--a-800));
+  box-shadow:0 1px 2px rgba(0,0,0,.4),0 7px 18px var(--gl),inset 0 1px 0 rgba(255,255,255,.4)}
+.fld{display:flex;flex-direction:column;gap:6px}
+.lbl{font-size:11px;font-weight:600;color:var(--mut)}
+.inp{height:44px;border-radius:11px;background:var(--sunken);border:1px solid var(--hair);color:var(--ink);
+  padding:0 13px;text-align:right;box-shadow:0 0 0 3px var(--gl);border-color:var(--a)}
+.inp.err{box-shadow:0 0 0 3px rgba(224,87,78,.26);border-color:var(--err)}
+.eh{font-size:9.5px;color:var(--err);direction:ltr}
+</style>
+<h1>pure-look — single atom proof</h1>
+<p class="sub">every color below is read from new/atoms/pure-look.mjs · theme switch morphs accent · error stays red (semantic-fixed)</p>
+<div class="row">
+  <div class="panel t-indigo">
+    <div class="th">t-indigo</div>
+    <button class="btn">Action</button>
+    <div class="fld"><span class="lbl">Label</span><input class="inp" value="Value"></div>
+    <div class="fld"><span class="lbl">Label</span><input class="inp err" value="Value"><span class="eh">error</span></div>
+  </div>
+  <div class="panel t-teal">
+    <div class="th">t-teal</div>
+    <button class="btn">Action</button>
+    <div class="fld"><span class="lbl">Label</span><input class="inp" value="Value"></div>
+    <div class="fld"><span class="lbl">Label</span><input class="inp err" value="Value"><span class="eh">error</span></div>
+  </div>
+  <div class="panel t-amber">
+    <div class="th">t-amber</div>
+    <button class="btn">Action</button>
+    <div class="fld"><span class="lbl">Label</span><input class="inp" value="Value"></div>
+    <div class="fld"><span class="lbl">Label</span><input class="inp err" value="Value"><span class="eh">error</span></div>
+  </div></div>
