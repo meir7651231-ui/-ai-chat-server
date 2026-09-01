@@ -105,6 +105,29 @@
   .hint{font-family:var(--grotesk);font-size:9px;color:var(--faint);direction:ltr;text-align:center;margin-top:7px;text-transform:uppercase;letter-spacing:1px}
   /* inherit strip inside list */
   .inhrow{display:flex;align-items:center;gap:12px;padding:11px 15px;min-height:44px}
+  /* ---- density: compact variant (same row, tighter) ---- */
+  .dens{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+  @media(max-width:820px){.dens{grid-template-columns:1fr}}
+  .denslab{font-family:var(--grotesk);font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--faint);direction:ltr;margin-bottom:7px;display:flex;align-items:center;gap:8px}
+  .denslab .px{color:var(--mut)}
+  .list.compact .row{min-height:40px;padding:7px 13px;gap:10px}
+  .list.compact .row .lab{font-size:12.5px}
+  .list.compact .row .met{font-size:10px;margin-top:1px}
+  .list.compact .row .av{width:30px;height:30px;font-size:12px}
+  .list.compact .row .val{font-size:12px}
+  .list.compact .row .chev svg{width:15px;height:15px}
+  /* ---- overflow ⋯ menu — anchored popup ---- */
+  .list.ovfhost{overflow:visible}
+  .ovf{position:relative;flex:none}
+  .ovf .ovf-t{width:44px;height:44px;border-radius:12px}
+  .ovf .menu{position:absolute;z-index:30;top:calc(100% + 6px);inset-inline-start:0;min-width:176px;background:var(--raised);border:1px solid var(--hair);border-radius:12px;padding:5px;box-shadow:0 14px 36px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.05);transition:opacity .16s var(--ease),transform .16s var(--ease)}
+  .ovf .mi{display:flex;align-items:center;gap:10px;width:100%;min-height:40px;padding:8px 11px;border:0;border-radius:8px;background:none;color:var(--ink);font-family:var(--he);font-size:12.5px;font-weight:500;cursor:pointer;text-align:start;transition:background-color .16s,color .16s}
+  .ovf .mi:hover{background:color-mix(in srgb,var(--a) 12%,transparent);color:var(--a-hi)}
+  .ovf .mi:focus-visible{outline:2px solid var(--a-hi);outline-offset:-2px}
+  .ovf .mi svg{width:16px;height:16px;flex:none;color:var(--mut);transition:color .16s}
+  .ovf .mi:hover svg{color:var(--a-hi)}
+  .ovf .mi.danger:hover{background:color-mix(in srgb,var(--err) 14%,transparent);color:var(--err)}
+  .ovf .mi.danger:hover svg{color:var(--err)}
   footer{padding:30px 0 70px;border-top:1px solid var(--hair);margin-top:6px}.colo{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--grotesk);font-size:11px;color:var(--faint);direction:ltr}.colo b{color:var(--ink)}
   @media(max-width:820px){.wrap{padding:0 18px}.bar .in{padding:11px 18px}.bar .mk small{display:none}}
   @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.swipe:hover .face{transform:none}}
@@ -248,6 +271,59 @@
     </div>
   </section>
 
+  <!-- DENSITY — same row, two densities -->
+  <section class="band">
+    <div class="bhd"><h2>Density · default + compact</h2><span class="en">same ProfileRow · default comfortable ~52px · compact ~40px · tighter padding + smaller avatar/meta</span><span class="ct">2</span></div>
+    <div class="dens">
+      <div>
+        <div class="denslab">Default<span class="px">· ~52px · comfortable</span></div>
+        <div class="list">
+          <div class="row" tabindex="0"><span class="av">L</span><span class="main"><span class="lab">Label</span><span class="met">Meta</span></span><span class="val">92</span><span class="chev"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></span></div>
+          <div class="row" tabindex="0"><span class="av">L</span><span class="main"><span class="lab">Label</span><span class="met">Meta</span></span><span class="val acc">1,024</span><span class="chev"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></span></div>
+          <div class="row" tabindex="0"><span class="av">L</span><span class="main"><span class="lab">Label</span><span class="met">Meta</span></span><span class="val">14</span><span class="chev"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></span></div>
+        </div>
+      </div>
+      <div>
+        <div class="denslab">Compact<span class="px">· ~40px · dense</span></div>
+        <div class="list compact">
+          <div class="row" tabindex="0"><span class="av">L</span><span class="main"><span class="lab">Label</span><span class="met">Meta</span></span><span class="val">92</span><span class="chev"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></span></div>
+          <div class="row" tabindex="0"><span class="av">L</span><span class="main"><span class="lab">Label</span><span class="met">Meta</span></span><span class="val acc">1,024</span><span class="chev"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></span></div>
+          <div class="row" tabindex="0"><span class="av">L</span><span class="main"><span class="lab">Label</span><span class="met">Meta</span></span><span class="val">14</span><span class="chev"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="foot" style="margin-top:12px"><span class="nm">ProfileRow · density = default | compact</span><span class="seam">fields</span></div>
+  </section>
+
+  <!-- OVERFLOW ⋯ MENU -->
+  <section class="band">
+    <div class="bhd"><h2>Overflow · ⋯ menu</h2><span class="en">live — trailing ⋯ opens an anchored action menu · SVG-icon items · opens toward inline-start · click outside closes</span><span class="ct">1</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="list ovfhost">
+        <div class="row"><span class="av sq">L</span><span class="main"><span class="lab">Label</span><span class="met">Meta</span></span>
+          <span class="ovf">
+            <button class="ibtn ovf-t" aria-haspopup="menu" aria-expanded="true" aria-label="More actions"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="19" r="1.4"/></svg></button>
+            <div class="menu" role="menu" aria-label="Actions">
+              <button class="mi" role="menuitem"><svg class="i" viewBox="0 0 24 24"><path d="M4 20h4L18 10l-4-4L4 16v4z"/><path d="M13 6l4 4"/></svg>Action</button>
+              <button class="mi" role="menuitem"><svg class="i" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Label</button>
+              <button class="mi danger" role="menuitem"><svg class="i" viewBox="0 0 24 24"><path d="M5 7h14M9 7V5h6v2M7 7l1 12h8l1-12"/></svg>Action</button>
+            </div>
+          </span>
+        </div>
+        <div class="row"><span class="av sq">L</span><span class="main"><span class="lab">Label</span><span class="met">Meta</span></span>
+          <span class="ovf">
+            <button class="ibtn ovf-t" aria-haspopup="menu" aria-expanded="false" aria-label="More actions"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="19" r="1.4"/></svg></button>
+            <div class="menu" role="menu" aria-label="Actions" hidden>
+              <button class="mi" role="menuitem"><svg class="i" viewBox="0 0 24 24"><path d="M4 20h4L18 10l-4-4L4 16v4z"/><path d="M13 6l4 4"/></svg>Action</button>
+              <button class="mi" role="menuitem"><svg class="i" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Label</button>
+              <button class="mi danger" role="menuitem"><svg class="i" viewBox="0 0 24 24"><path d="M5 7h14M9 7V5h6v2M7 7l1 12h8l1-12"/></svg>Action</button>
+            </div>
+          </span>
+        </div>
+      </div><div class="hint">tap ⋯ to open · click outside to close</div><div class="foot" style="margin-top:8px"><span class="nm">ManageRow · overflow menu</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
   <footer><div class="colo"><div>PURE — <b>List Family</b></div><div>~40 atoms · 8 row types · semantic --err/--warn/--ok fixed · theme = parameter</div><div>content = Label / Value / Meta · numbers LTR tnum</div></div></footer>
 </div>
 
@@ -264,4 +340,16 @@
   document.querySelectorAll('.cbx[role="checkbox"]').forEach(function(c){c.addEventListener('click',function(){var on=c.getAttribute('aria-checked')==='true';c.setAttribute('aria-checked',on?'false':'true');c.closest('.row').classList.toggle('done',!on);});});
   // swipe rows: tap toggles open
   document.querySelectorAll('.swipe').forEach(function(r){r.addEventListener('click',function(){r.classList.toggle('open');});});
+  // overflow ⋯ menus: click toggles, click outside closes (theme bar excluded so demo stays open across theme swaps)
+  (function(){
+    var ovfs=[].slice.call(document.querySelectorAll('.ovf'));
+    function closeAll(except){ovfs.forEach(function(o){if(o===except)return;o.querySelector('.menu').hidden=true;o.querySelector('.ovf-t').setAttribute('aria-expanded','false');});}
+    ovfs.forEach(function(o){
+      var t=o.querySelector('.ovf-t'),m=o.querySelector('.menu');
+      t.addEventListener('click',function(e){e.stopPropagation();var open=t.getAttribute('aria-expanded')==='true';closeAll(o);t.setAttribute('aria-expanded',open?'false':'true');m.hidden=open;});
+      m.addEventListener('click',function(e){e.stopPropagation();});
+    });
+    document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('.bar'))return;closeAll(null);});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')closeAll(null);});
+  })();
 </script>
