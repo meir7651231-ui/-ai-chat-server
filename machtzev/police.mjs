@@ -41,6 +41,7 @@ gate('puredata', 'purity/purity-data.mjs', ['--gate']);
 gateDirty('acceptance', 'mahulal/spec-acceptance.mjs');
 gateDirty('nlsmoke', 'mahulal/nl-smoke.mjs', [], FAST);
 gateDirty('nlquality', 'mahulal/nl-quality.mjs', [], FAST);
+gate('oracle', 'census/oracle.mjs', ['--gate']);
 gate('truth', 'truth.mjs', ['--gate']);
 gate('pins', 'pins-check.mjs');
 gate('selftest', 'police-selftest.mjs', [], FAST);
