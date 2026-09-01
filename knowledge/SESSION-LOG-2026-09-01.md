@@ -60,3 +60,22 @@
 # compile: node scratchpad/closure.mjs ⇒ ( cd buildsmart/app_flutter && flutter analyze --no-fatal-infos lib/genesis | grep -c 'error •' ) ⇒ 0
 ```
 HEAD בעצירה: `01f6e963`. הכל committed+pushed. עץ נקי.
+
+## 🔎 נמצא · מנגנון-הטוהר-אחרי-המרה (2026-09-01, byte-proven)
+**השאלה:** "ה-Dart חייב להיות טהור אחרי המרה, והמנגנון קיים — תמצא אותו."
+**המנגנון (שלישייה, כולו קיים בריפו):**
+1. **`machtzev/ast-purify.mjs` + `machtzev/carve/ast_dehardcode.dart`** — מנוע דה-הרדקוד Dart-נייטיב:
+   מחלץ עברית ל-`dart-data-maor/<base>-terms.dart`, משכתב, משחיל `term:(k)=>kTerms[k]!`
+   דרך test+צרכנים, מאמת analyze+זהב, מחזיר-אם-נכשל. **הוכחה שהוא-שעשה:** 58 אטומי-dart-maor
+   נושאים את חתימתו המדויקת (`import ... as td_<base>` + `term:(k)=>td_<base>.kTerms[k]!`).
+2. **`machtzev/emit/ast-js-to-dart.mjs`** — לאטומי-הזרקת-פרמטר (amount-in-words): ממיר-מחדש
+   את ה-JS-הטהור ⇒ Dart-טהור. **מוכח:** הרצה על amount-in-words.mjs ⇒ `amountInWords(...,
+   dynamic ONES, dynamic TEENS, ...)`, **0 שורות const+עברית**.
+3. **שערי-רַצֶ'ט:** `data-purity-check.mjs` (הכרעה 16, 124 מעורבים) + `purity-data.mjs`
+   (28.8, 220 מעורבים) — חוב-רק-יורד; +454 תאומי-דאטה טהורים ב-dart-data-maor.
+**שורש-הלכלוך שהכללתי ממנו:** `dart-maor/amount-in-words.dart` הומר **24.8**, ה-JS טוהר **30.8**
+(git; "מנוע-הקשיחים · מכת-המספרים 101 טוהרו, 286⇒216") — ה-Dart artifact-ישן, 6 ימים לפני-הטיהור.
+**למה פספסתי:** קראתי artifact-ישן והכללתי מדגימה-אחת (V1/V2), בלי git-dates, בלי להריץ מנוע,
+בלי לפתוח dart-data-maor/ או carve/.
+**חסם-הרצה בסשן-הזה (לא חסר-מנגנון):** carve/ בלי pubspec/analyzer · dart/flutter מסרב root ⇒
+ast-purify + כל שער-dart-analyze לא-רצים כאן. הסגירה = מעבר-המרה-מחדש בסשן לא-root עם analyzer.
