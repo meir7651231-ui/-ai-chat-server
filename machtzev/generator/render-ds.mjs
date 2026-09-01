@@ -93,6 +93,8 @@ const MAP_ENGINES = atlas.functions.filter((f) => {
   return ps.length && /^Map</.test(ps[0]) && RET_OK.has(f.ret) && (f.he || []).length
     && selfContained(f.shelf, f.file) && ps.slice(1).every((t) => injectHelper(t) !== null);
 }).reduce((m, f) => { m[f.name] = { ...f, ptypes: sigParamTypes(f.sig) }; return m; }, {});
+// 🔎 חשיפת סט-המנועים הנגישים (למדידת-אמת truth.mjs) — שמות בלבד, אפס תופעות-לוואי.
+export const listMapEngines = () => Object.keys(MAP_ENGINES).sort();
 
 // 🎯 שכבה-1 · בחירה מכוונת-מטרה (לא הכי-קרוב, הכי-מתאים) — שלושה אותות טהורים:
 // (א) IDF: מילה-נדירה-ספציפית ('טלפון') שווה יותר ממילה-נפוצה ('מספר') ⇒ מסלק רעש.

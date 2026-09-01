@@ -48,7 +48,7 @@ retrofit-תפר** (להוסיף `data:` לאטמי-האפס-דאטה + `render-d
 node machtzev/police.mjs --fast   # לכל commit: חיווט+חוזה+מחצבה+pins (שניות)
 node machtzev/police.mjs          # לסוף-גל: + selftest + mutation (דקות)
 ```
-‏17 שערים עם ran-ledger (מרשם: machtzev/gates.tsv) · 11 קבצים נעולי-חתימה
+‏18 שערים עם ran-ledger (מרשם: machtzev/gates.tsv) · 11 קבצים נעולי-חתימה
 (pins.sha256; עדכון-שוטר = `node machtzev/pins-check.mjs --write` באותו commit).
 פסק-דין רק על עץ נח (L14). קופסה גמורה רק עם: חוטים+חוזים+בדיקות+מגן-הכרעה+רתמת-זהב.
 
