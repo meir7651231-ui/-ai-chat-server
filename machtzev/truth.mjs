@@ -43,7 +43,9 @@ const engines = listMapEngines();
 const gatesTsv = rd('machtzev/gates.tsv').split('\n').filter((l) => l && !l.startsWith('#')).length;
 const gateCalls = (rd('machtzev/police.mjs').match(/^\s*gate(Dirty)?\(/gm) || []).length;
 
+const totalAtoms = census.length + logic.length;
 const layers = {
+  '🔢 סה"כ אטומים מאונדקסים (תצוגה+לוגיקה)': totalAtoms,
   'תצוגה · atom-census (widgets)': census.length,
   '  ↳ seam': JSON.stringify(seam),
   '  ↳ נגישים-בהרכבה (selectVaried×400)': dispAll.size,
