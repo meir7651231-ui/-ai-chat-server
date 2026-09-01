@@ -52,6 +52,8 @@
 
 **13 STATUS** — Dot+Label · LiveDot pulse (כבוי ב-reduced-motion) · אין נקודה בלי הקשר · Loader≠Dot.
 
+**14 TEMPORAL** — MiniCalendar גריד-חודש RTL (מספרי-יום LTR+tnum) · WeekStrip · DateCell תיאטרון (default/today/selected/event/disabled) · CountdownTimer/LiveClock tnum-מתקתק · MetaTicker (Label·Value, reduced-motion פארק) · today/selected=accent · live=--ok קבוע.
+
 **נספח · MOTION** (לא ארכיטיפ) — שכבת-תנועה מעל 13 הארכיטיפים: aurora/particles/organism/pulse/sweep/tilt/typewriter/confetti · accent ממורף · נקודת-live קבועה (--ok) · **reduced-motion מקפיא כל תא** · canvas לגנרטיבי · תוכן Label/Value/Meta/Action · 8 תאים תפקיד-אחד-לכל.
 
 ## 5. נגישות (פסילה)
