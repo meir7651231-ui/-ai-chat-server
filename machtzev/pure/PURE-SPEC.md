@@ -54,7 +54,7 @@
 
 **14 TEMPORAL** — MiniCalendar גריד-חודש RTL (מספרי-יום LTR+tnum) · WeekStrip · DateCell תיאטרון (default/today/selected/event/disabled) · CountdownTimer/LiveClock tnum-מתקתק · MetaTicker (Label·Value, reduced-motion פארק) · today/selected=accent · live=--ok קבוע.
 
-**15 SPATIAL · DATA** — MapSurface טרֵין-מופשט (אפס-גאוגרפיה-אמיתית) + markers(default/selected/cluster/disabled)+route+rnode · DataTable header-נלחץ עם חץ-מיון (unsorted/asc/desc) · zebra · hover · שורה-נבחרת פס inset-inline-start(RTL)+tint · עמודת-Value tnum LTR · תא-Status dot+Label (ok/warn/err קבועים) · Minimap viewport-rect · TreeGrid שורות-מקוננות עם caret(open/leaf) tnum · תוכן Label/Value/Meta בלבד · אפס דומיין/מטבע/דשבורד · יורשים(Carousel→03 · Pagination→10 · Heatmap→06 · Legend · ColumnResize) ב-chip.
+**נספח · SPATIAL · DATA** (לא ארכיטיפ) — שכבה מעל 01 Card + 05 List + 06 DataViz: המשטחים שמחזיקים הרבה רשומות בבת-אחת. MapSurface טרֵין-מופשט (אפס-גאוגרפיה, אפס שם-עיר/מדינה) + markers(default/selected/cluster/disabled)+route+rnode · DataTable **מיון-חי** (לחיצה על header-Value ממזגת שורות asc/desc; zebra מחושב-מחדש; שורה-נבחרת פס inset-inline-start(RTL)+tint; עמודת-Value tnum LTR; תא-Status dot+Label ok/warn/err קבועים) · SortHeader theater(unsorted/asc/desc) · Minimap viewport-rect · TreeGrid **caret-חי** (open/close ילדים רקורסיבי, leaf ללא-פעולה) tnum · תוכן Label/Value/Meta בלבד · אפס דומיין/מטבע/דשבורד · יורשים(Carousel→03 · Pagination→10 · Legend · ColumnResize) ב-chip.
 
 **נספח · MOTION** (לא ארכיטיפ) — שכבת-תנועה מעל 13 הארכיטיפים: aurora/particles/organism/pulse/sweep/tilt/typewriter/confetti · accent ממורף · נקודת-live קבועה (--ok) · **reduced-motion מקפיא כל תא** · canvas לגנרטיבי · תוכן Label/Value/Meta/Action · 8 תאים תפקיד-אחד-לכל.
 
