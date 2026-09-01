@@ -29,6 +29,9 @@ const kpi = selectAtom({ value: { re: /^(value|val|count)$/, ty: /^String\??$/ }
 ok(kpi && kpi.cls, `בורר-מטרה מחזיר אטום-KPI (${kpi && kpi.cls})`);
 const bad = selectAtom({ title: { re: /^title$/, ty: /^String\??$/ } }, (a) => a.cls === 'ActionCard');
 ok(bad === null, 'בורר פוסל אטום עם שקע-דאטה לא-ממופה (אנטי-זיוף)');
+// §21: atomCtor רואה כל שקעי-הדאטה (347 בינדבילים) ⇒ selectAtom בורר מהמאגר-הרחב, לא DS-בלבד
+const wide = selectAtom({ value: { re: /^(value|val|amount)$/, ty: /^String\??$/ }, label: { re: /^(label|title|name)$/, ty: /^String\??$/ } }, (a) => a.seam === 'fields');
+ok(wide && wide.cls && !/^Ds/.test(wide.cls), `§21: בורר-המטרה מגיע למאגר-הרחב (${wide && wide.cls})`);
 
 // 2) הרכבה + ניווט + מנוע-רשומה + מיפוי-מפתחות
 buildApp('ישות סעיף עם קוד, כמות, מחיר, סכום=boqLineAmount(כמות→qty, מחיר→price)\nישות תורם עם שם, טלפון, חידוש=isRenewed');
