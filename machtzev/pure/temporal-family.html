@@ -1,5 +1,5 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- PURE — Temporal family. Calendar · week · date-cell states · countdown · clock · ticker. numbers LTR+tnum · accent morphs · semantic fixed · reduced-motion freezes tickers. -->
+<!-- PURE — Temporal family. Time layer over 07 Input + 01 Card. Calendar · range · week · date-cell states · time-slot · countdown · clock · relative · ticker. numbers LTR+tnum · accent morphs · semantic fixed · reduced-motion freezes tickers/clock. -->
 <title>Temporal Family</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Frank+Ruhl+Libre:wght@700&family=Space+Grotesk:wght@400;500;600;700&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -35,15 +35,16 @@
   /* calendar */
   .calhd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
   .calhd .mo{font-family:var(--serifHe);font-size:17px;color:var(--ink)}.calhd .yr{font-size:12px;color:var(--mut);margin-inline-start:6px}
-  .navb{width:40px;height:40px;flex:none;border-radius:10px;border:1px solid var(--hair);background:var(--sunken);color:var(--mut);cursor:pointer;display:grid;place-items:center;transition:color .2s,border-color .2s}
-  .navb:hover{color:var(--a-hi);border-color:var(--a)}.navb:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}.navb svg{width:15px;height:15px}
+  .navb{width:44px;height:44px;flex:none;border-radius:11px;border:1px solid var(--hair);background:var(--sunken);color:var(--mut);cursor:pointer;display:grid;place-items:center;transition:color .2s,border-color .2s}
+  .navb:hover{color:var(--a-hi);border-color:var(--a)}.navb:active{background:var(--raised)}.navb:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}.navb svg{width:15px;height:15px}
   .dow{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:5px}
   .dow span{text-align:center;font-family:var(--grotesk);font-size:9.5px;color:var(--faint);text-transform:uppercase;letter-spacing:.05em}
   .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
   .day{aspect-ratio:1;display:grid;place-items:center;border-radius:9px;font-family:var(--grotesk);font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--ink);position:relative;direction:ltr}
   .day.mut{color:var(--faint)}
+  .day.rng{background:color-mix(in oklab,var(--a) 20%,transparent);border-radius:3px}
   .day.today{box-shadow:inset 0 0 0 1.5px var(--a-hi);color:var(--a-hi)}
-  .day.sel{background:linear-gradient(160deg,var(--a-hi),var(--a));color:#0B0B0D;font-weight:700}
+  .day.sel{background:linear-gradient(160deg,var(--a-hi),var(--a));color:#0B0B0D;font-weight:700;border-radius:9px}
   .day.ev::after{content:"";position:absolute;bottom:4px;width:4px;height:4px;border-radius:50%;background:var(--a)}
   .day.sel.ev::after{background:#0B0B0D}
 
@@ -64,6 +65,12 @@
   .dc.dis{color:var(--faint);background:transparent}
   .ds small{font-family:var(--grotesk);font-size:8.5px;color:var(--faint);text-transform:uppercase;letter-spacing:.08em}
 
+  /* time-slot row */
+  .slots{display:flex;flex-wrap:wrap;gap:7px}
+  .slot{font-family:var(--grotesk);font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--mut);border:1px solid var(--hair);border-radius:10px;padding:0 13px;min-height:44px;display:inline-flex;align-items:center;background:var(--sunken);direction:ltr}
+  .slot.on{border-color:transparent;background:linear-gradient(160deg,var(--a-hi),var(--a));color:#0B0B0D;font-weight:700}
+  .slot.dis{color:var(--faint);background:transparent}
+
   /* countdown + clock */
   .count{display:flex;gap:8px;align-items:flex-start;justify-content:center;padding:8px 0}
   .unit{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:56px}
@@ -74,6 +81,8 @@
   .clock .t{font-family:var(--grotesk);font-variant-numeric:tabular-nums;font-size:44px;font-weight:700;letter-spacing:.02em;direction:ltr;color:var(--ink)}
   .clock .t i{color:var(--faint);font-style:normal;animation:blink 1.1s steps(1) infinite}
   .clock .m{font-family:var(--grotesk);font-size:11px;color:var(--mut);margin-top:4px;direction:ltr}
+  .rel{display:inline-flex;align-items:center;gap:7px;margin-top:10px;font-family:var(--grotesk);font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.12em;direction:ltr}
+  .rel b{color:var(--a-hi);font-weight:700;letter-spacing:0;transition:color .55s var(--ease)}.rel .dt{width:6px;height:6px;border-radius:50%;background:var(--a);transition:background-color .55s var(--ease)}
 
   /* ticker */
   .tick-wrap{position:relative;overflow:hidden;border-top:1px solid var(--hair2);border-bottom:1px solid var(--hair2);background:var(--sunken)}
@@ -105,23 +114,28 @@
 
 <div class="wrap">
   <header class="hero">
-    <div class="eyebrow"><span class="tick"></span>Time · Calendar · Countdown</div>
+    <div class="eyebrow"><span class="tick"></span>Time layer over 07 Input + 01 Card</div>
     <h1>משפחת הזמן</h1>
-    <p class="sub">Everything that measures time. Month grid opens RTL; day numbers stay LTR + tabular. Today and selected morph with the accent; the live dot stays semantic green. Countdown and clock tick — reduced-motion freezes them to a still reading.</p>
+    <p class="sub">A time layer, not a new archetype. Month grid opens RTL; weekday heads sit on their columns; day numbers stay LTR + tabular. Arrows page the month live. Today and selected morph with the accent; the range fills weak accent; the live dot stays semantic green. Countdown and clock tick — reduced-motion freezes them to a still reading.</p>
   </header>
 
-  <div class="lead">6 canonical · numbers LTR + tnum · accent-morph · reduced-motion freezes</div>
+  <div class="lead">7 canonical · numbers LTR + tnum · accent-morph · reduced-motion freezes clock &amp; ticker</div>
   <div class="grid" id="grid">
 
     <div class="cell"><div class="body">
       <div class="calhd">
-        <button class="navb" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
-        <div><span class="mo">Label</span><span class="yr num">2026</span></div>
-        <button class="navb" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <button class="navb" id="cprev" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+        <div><span class="mo" id="cmo">Label</span><span class="yr num" id="cyr">2026</span></div>
+        <button class="navb" id="cnext" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
       </div>
       <div class="dow"><span>א</span><span>ב</span><span>ג</span><span>ד</span><span>ה</span><span>ו</span><span>ש</span></div>
       <div class="cal" id="cal"></div>
     </div><div class="foot"><span class="nm">MiniCalendar · month grid</span><span class="seam">fields</span></div></div>
+
+    <div class="cell"><div class="body">
+      <div class="dow"><span>א</span><span>ב</span><span>ג</span><span>ד</span><span>ה</span><span>ו</span><span>ש</span></div>
+      <div class="cal" id="rangecal"></div>
+    </div><div class="foot"><span class="nm">RangePicker · two ends + fill</span><span class="seam">fields</span></div></div>
 
     <div class="cell"><div class="body">
       <div class="week" id="week"></div>
@@ -135,6 +149,10 @@
     </div><div class="foot"><span class="nm">WeekStrip + DateCell theater</span><span class="seam">fields</span></div></div>
 
     <div class="cell"><div class="body">
+      <div class="slots" id="slots"></div>
+    </div><div class="foot"><span class="nm">TimeSlot · one selected</span><span class="seam">fields</span></div></div>
+
+    <div class="cell"><div class="body">
       <div class="count">
         <div class="unit"><b class="num" id="cd-d">02</b><small>days</small></div><span class="sep">:</span>
         <div class="unit"><b class="num" id="cd-h">08</b><small>hrs</small></div><span class="sep">:</span>
@@ -145,7 +163,8 @@
 
     <div class="cell"><div class="body">
       <div class="clock"><div class="t num"><span id="clk">14:32:07</span></div><div class="m">Label · Meta</div></div>
-    </div><div class="foot"><span class="nm">LiveClock · ticking</span><span class="seam">fields</span></div></div>
+      <div class="rel"><span class="dt"></span>RelativeTime · <b>Meta</b></div>
+    </div><div class="foot"><span class="nm">LiveClock + RelativeTime</span><span class="seam">fields</span></div></div>
 
     <div class="cell wide">
       <div class="tick-wrap"><div class="track" id="track"></div></div>
@@ -158,26 +177,63 @@
   <div class="lead">inherit — same temporal frame, different shape</div>
   <div class="inherit" id="chips"></div>
 
-  <footer><div>PURE — <b>Temporal</b> · time · calendar · countdown · clock · ticker</div><div>numbers LTR + tnum · accent morphs · live dot fixed</div></footer>
+  <footer><div>PURE — <b>Temporal</b> · calendar · range · week · time-slot · countdown · clock · ticker</div><div>numbers LTR + tnum · accent morphs · live dot fixed</div></footer>
 </div>
 
 <script>
   var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var p2=function(n){return('0'+n).slice(-2);};
 
-  // calendar — a static month (starts Sunday, RTL grid). Today=14, selected=18, events on 9,21,27.
+  // MiniCalendar — Prev/Next page the month LIVE. Numbers LTR+tnum; weekday heads sit on columns
+  // (same RTL 7-col grid as .dow). Anchor month (idx 0) carries today/selected/events; year is
+  // neutral meta and rolls over at the ring edges to prove live paging with a hard numeric delta.
   (function(){
-    var cal=document.getElementById('cal'),start=3,days=31,today=14,sel=18,ev={9:1,21:1,27:1},html='';
-    for(var i=0;i<start;i++) html+='<span class="day mut num">'+(28+i-start+1)+'</span>';
-    for(var d=1;d<=days;d++){var c='day num';if(d===today)c+=' today';if(d===sel)c+=' sel';if(ev[d])c+=' ev';html+='<span class="'+c+'">'+d+'</span>';}
-    var rest=(start+days)%7; if(rest) for(var k=1;k<=7-rest;k++) html+='<span class="day mut num">'+k+'</span>';
-    cal.innerHTML=html;
+    var MONTHS=[
+      {start:3,days:31,year:2026,today:14,sel:18,ev:{9:1,21:1,27:1}},
+      {start:6,days:30,year:2026},
+      {start:1,days:31,year:2026},
+      {start:4,days:30,year:2027}
+    ];
+    var cal=document.getElementById('cal'),cyr=document.getElementById('cyr'),i=0;
+    function draw(){
+      var m=MONTHS[i],prevDays=MONTHS[(i-1+MONTHS.length)%MONTHS.length].days,html='';
+      for(var b=0;b<m.start;b++) html+='<span class="day mut num">'+(prevDays-m.start+1+b)+'</span>';
+      for(var d=1;d<=m.days;d++){var c='day num';
+        if(m.today&&d===m.today)c+=' today';
+        if(m.sel&&d===m.sel)c+=' sel';
+        if(m.ev&&m.ev[d])c+=' ev';
+        html+='<span class="'+c+'">'+d+'</span>';}
+      var rest=(m.start+m.days)%7; if(rest) for(var k=1;k<=7-rest;k++) html+='<span class="day mut num">'+k+'</span>';
+      cal.innerHTML=html; cyr.textContent=m.year;
+    }
+    document.getElementById('cprev').addEventListener('click',function(){i=(i-1+MONTHS.length)%MONTHS.length;draw();});
+    document.getElementById('cnext').addEventListener('click',function(){i=(i+1)%MONTHS.length;draw();});
+    draw();
   })();
 
-  // week strip
+  // RangePicker — same calendar, two ends selected (8, 15) + the days between filled weak accent.
+  (function(){
+    var el=document.getElementById('rangecal'),start=4,days=31,a=8,b=15,html='';
+    for(var i=0;i<start;i++) html+='<span class="day mut num">'+(28+i-start+1)+'</span>';
+    for(var d=1;d<=days;d++){var c='day num';
+      if(d===a||d===b)c+=' sel';else if(d>a&&d<b)c+=' rng';
+      html+='<span class="'+c+'">'+d+'</span>';}
+    var rest=(start+days)%7; if(rest) for(var k=1;k<=7-rest;k++) html+='<span class="day mut num">'+k+'</span>';
+    el.innerHTML=html;
+  })();
+
+  // week strip — one day on, the rest off
   (function(){
     var wk=document.getElementById('week'),L=['א','ב','ג','ד','ה','ו','ש'],n=[12,13,14,15,16,17,18],on=2,html='';
     for(var i=0;i<7;i++) html+='<div class="wd'+(i===on?' on':'')+'"><div class="l">'+L[i]+'</div><div class="n num">'+n[i]+'</div></div>';
     wk.innerHTML=html;
+  })();
+
+  // TimeSlot — a row of hours, one selected, one disabled
+  (function(){
+    var el=document.getElementById('slots'),hrs=['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'],on=3,dis=6,html='';
+    for(var i=0;i<hrs.length;i++){var c='slot num';if(i===on)c+=' on';else if(i===dis)c+=' dis';html+='<span class="'+c+'">'+hrs[i]+'</span>';}
+    el.innerHTML=html;
   })();
 
   // ticker
@@ -187,8 +243,8 @@
     tk.innerHTML=h+h;
   })();
 
-  // inherit chips — real temporal siblings
-  document.getElementById('chips').innerHTML=['RangePicker','TimeSlot','Agenda','RelativeTime','MonthStrip','DateField'].map(function(n){return '<span class="chip"><i></i>'+n+'</span>';}).join('');
+  // inherit chips — real temporal siblings NOT given a full cell (DateField belongs to 07 → chip only)
+  document.getElementById('chips').innerHTML=['Agenda','MonthStrip','DateField'].map(function(n){return '<span class="chip"><i></i>'+n+'</span>';}).join('');
 
   // theme switch
   var root=document.documentElement;root.className='t-indigo';
@@ -198,14 +254,13 @@
   place(btns[0]);if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){place(seg.querySelector('[aria-pressed="true"]'));});}
   window.addEventListener('resize',function(){place(seg.querySelector('[aria-pressed="true"]'));});
 
-  var p2=function(n){return('0'+n).slice(-2);};
-  // countdown (deterministic start, ticks down; reduced-motion = static reading)
+  // countdown (deterministic start, ticks down; reduced-motion = the static markup reading)
   var rem=2*86400+8*3600+45*60+9;
   function cd(){var d=Math.floor(rem/86400),h=Math.floor(rem/3600)%24,m=Math.floor(rem/60)%60,s=rem%60;
     document.getElementById('cd-d').textContent=p2(d);document.getElementById('cd-h').textContent=p2(h);
     document.getElementById('cd-m').textContent=p2(m);document.getElementById('cd-s').textContent=p2(s);}
   cd();
-  // clock (real wall time, ticking; reduced-motion = the static reading already in markup)
+  // clock (real wall time, ticking; reduced-motion = the static reading already in markup, plain colons, no blink)
   function clk(){var t=new Date();document.getElementById('clk').innerHTML=p2(t.getHours())+'<i>:</i>'+p2(t.getMinutes())+'<i>:</i>'+p2(t.getSeconds());}
   if(!reduce){clk();setInterval(function(){clk();if(rem>0){rem--;cd();}},1000);}
 </script>

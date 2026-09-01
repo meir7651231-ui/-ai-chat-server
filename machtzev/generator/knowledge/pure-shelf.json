@@ -66,8 +66,8 @@
       "inherit": 27
     },
     "temporal": {
-      "count": 5,
-      "canonical": 5,
+      "count": 7,
+      "canonical": 7,
       "inherit": 0
     },
     "text": {
@@ -76,6 +76,6 @@
       "inherit": 4
     }
   },
-  "total": 543,
+  "total": 545,
   "generatedBy": "machtzev/pure/pure-decompose.mjs"
 }

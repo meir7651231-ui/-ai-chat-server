@@ -5,11 +5,17 @@
 export const PURE_TEMPORAL_SHELF = {
  "family": "temporal",
  "source": "machtzev/pure/temporal-family.html",
- "count": 5,
+ "count": 7,
  "atoms": [
   {
    "name": "MiniCalendar",
    "note": "month grid",
+   "kind": "signature",
+   "seam": "fields"
+  },
+  {
+   "name": "RangePicker",
+   "note": "two ends + fill",
    "kind": "signature",
    "seam": "fields"
   },
@@ -20,14 +26,20 @@ export const PURE_TEMPORAL_SHELF = {
    "seam": "fields"
   },
   {
+   "name": "TimeSlot",
+   "note": "one selected",
+   "kind": "signature",
+   "seam": "fields"
+  },
+  {
    "name": "CountdownTimer",
    "note": "tnum",
    "kind": "signature",
    "seam": "fields"
   },
   {
-   "name": "LiveClock",
-   "note": "ticking",
+   "name": "LiveClock + RelativeTime",
+   "note": "",
    "kind": "signature",
    "seam": "fields"
   },
