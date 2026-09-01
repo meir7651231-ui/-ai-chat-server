@@ -32,7 +32,7 @@ const caps = {
 const entities = r.screens.filter((s) => s.kind === 'entity').length;
 // §21: מגוון-אטומים נפלטים (רק-עולה) — המחולל מפזר שימוש על המאגר-הבינדבילי, לא DS-בלבד.
 const atomIdx = new Set(JSON.parse(fs.readFileSync(new URL('./generator/atom-index.json', import.meta.url), 'utf8')).map((a) => a.cls));
-const emitted = new Set([...all.matchAll(/\b([A-Z][A-Za-z0-9]+)\(/g)].map((m) => m[1])].filter((c) => atomIdx.has(c)));
+const emitted = new Set([...all.matchAll(/\b([A-Z][A-Za-z0-9]+)\(/g)].map((m) => m[1]).filter((c) => atomIdx.has(c)));
 const ATOM_FLOOR = 23;
 caps[`§21 מגוון-אטומים ≥${ATOM_FLOOR} (נפלטו ${emitted.size})`] = emitted.size >= ATOM_FLOOR;
 console.log(`§22 קבלה · מערכת-חלל · ${entities} ישויות · ${r.roles.length} תפקידים · ${Object.keys(caps).length} יכולות-נבדקות · ${emitted.size} אטומי-אימפריה`);
