@@ -89,10 +89,20 @@ ${stamp(structure)}
 המחולל מחובר: תצוגה=${dispAll.size} נגישים · לוגיקה=${engines.length} מנועים · מתוך מאגר גדול בהרבה שנחסם ע"י §20-ג (אל-תזייף).
 `;
 
-if (process.argv.includes('--write')) { fs.writeFileSync(path.join(ROOT, 'TRUTH.md'), body); console.log('📐 TRUTH.md נכתב (' + census.length + ' תצוגה · ' + logic.length + ' לוגיקה · ' + engines.length + ' מנועים-מחוברים)'); process.exit(0); }
+// 🔒 רַצֶ'ט-אי-נסיגה: חיווט רק-עולה. floor נשמר; --gate נכשל אם ירד מתחתיו (מונע חזרה-אחורה למטרה).
+const FLOOR = path.join(ROOT, 'machtzev/wired-floor.json');
+const readFloor = () => { try { return JSON.parse(fs.readFileSync(FLOOR, 'utf8')).wired || 0; } catch { return 0; } };
+if (process.argv.includes('--write')) {
+  fs.writeFileSync(path.join(ROOT, 'TRUTH.md'), body);
+  const floor = Math.max(readFloor(), wiredTotal);   // מונוטוני — לעולם לא יורד
+  fs.writeFileSync(FLOOR, JSON.stringify({ wired: floor, total: totalAtoms, note: 'רצפת-חיווט — רק-עולה. §21 ל-100% = wired≡total-הכשיר.' }, null, 1) + '\n');
+  console.log('📐 TRUTH.md + wired-floor=' + floor + ' נכתבו (' + wiredTotal + '/' + totalAtoms + ' מחווט)'); process.exit(0);
+}
 if (process.argv.includes('--gate')) {
   const cur = rd('TRUTH.md');
   if (cur.trim() !== body.trim()) { console.error('🔴 TRUTH.md סטה מהמדידה החיה — הרץ `node machtzev/truth.mjs --write` וקבֵּע.'); process.exit(1); }
-  console.log('✓ אמת: TRUTH.md ≡ מדידה-חיה (' + census.length + '/' + logic.length + '/' + engines.length + ')'); process.exit(0);
+  const floor = readFloor();
+  if (wiredTotal < floor) { console.error(`🔴 נסיגת-חיווט! ${wiredTotal} < רצפה ${floor} — §21 חזר-אחורה. אסור.`); process.exit(1); }
+  console.log(`✓ אמת: TRUTH.md ≡ מדידה · חיווט ${wiredTotal}/${totalAtoms} ≥ רצפה ${floor} (רק-עולה)`); process.exit(0);
 }
 process.stdout.write(body + '\n');
