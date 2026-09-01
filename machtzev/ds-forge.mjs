@@ -95,30 +95,50 @@ const num = v => { const m = v && String(v).match(/-?\d+(?:\.\d+)?/); return m ?
 // single: .a ⇒ decl · compound: .a.b(.c) ⇒ {set,decl,order} (חל כשלאלמנט כל המחלקות).
 // סלקטורים עם צאצא/[attr]/psuedo מדולגים. מחזיר {single, compound}.
 function parseStyle(css) {
-  const single = {}, compound = []; let order = 0;
+  const single = {}, compound = [], descend = []; let order = 0;
   css = css.replace(/\/\*[\s\S]*?\*\//g, '');
   const re = /([^{}]+)\{([^{}]*)\}/g; let m;
+  const simple = tok => /^(\.[a-z0-9-]+)+$/i.test(tok) ? tok.split('.').filter(Boolean) : null;  // .a / .a.b ⇒ [classes]
   while ((m = re.exec(css))) {
     const sels = m[1].split(',').map(s => s.trim());
     const decl = {};
     for (const d of m[2].split(';')) { const i = d.indexOf(':'); if (i < 0) continue; decl[d.slice(0, i).trim().toLowerCase()] = d.slice(i + 1).trim(); }
     for (const sel of sels) {
-      if (/^\.([a-z0-9-]+)$/i.test(sel)) { const c = sel.slice(1); single[c] = Object.assign(single[c] || {}, decl); }
-      else if (/^(\.[a-z0-9-]+){2,}$/i.test(sel)) { const set = sel.split('.').filter(Boolean); compound.push({ set, decl, order: order++ }); }
+      if (/^\.([a-z0-9-]+)$/i.test(sel)) { const c = sel.slice(1); single[c] = Object.assign(single[c] || {}, decl); continue; }
+      if (/^(\.[a-z0-9-]+){2,}$/i.test(sel)) { compound.push({ set: sel.split('.').filter(Boolean), decl, order: order++ }); continue; }
+      // צאצא: ".a .b .c" — רק מחלקות מופרדות-רווח (בלי > ~ [attr] :pseudo tag)
+      if (/^\.[a-z0-9-]+(\.[a-z0-9-]+)*( +\.[a-z0-9-]+(\.[a-z0-9-]+)*)+$/i.test(sel)) {
+        const parts = sel.split(/\s+/).filter(Boolean).map(simple);
+        if (parts.every(Boolean)) descend.push({ chain: parts, decl, order: order++ });
+      }
     }
   }
-  return { single, compound };
+  return { single, compound, descend };
 }
 function parseInline(style) {
   const d = {}; if (!style) return d;
   for (const p of style.split(';')) { const i = p.indexOf(':'); if (i < 0) continue; d[p.slice(0, i).trim().toLowerCase()] = p.slice(i + 1).trim(); }
   return d;
 }
-// מיזוג-סגנון לאלמנט: מחלקות-בודדות (בסדר) → מורכבים-תואמים (בסדר-מקור) → inline (גובר). מודל-cascade מקורב.
-function styleOf(node, map) {
+// האם שרשרת-האבות (חלקים) תואמת רצף-משנה בעצי-האבות (ancestors = מערך-מחלקות שורש→אב)
+function chainMatches(chain, ancestors) {
+  let i = 0;
+  for (const part of chain) {
+    let found = false;
+    while (i < ancestors.length) { if (part.every(c => ancestors[i].includes(c))) { found = true; i++; break; } i++; }
+    if (!found) return false;
+  }
+  return true;
+}
+// מיזוג-cascade מקורב: בודדים → מורכבים → צאצא-תואם → inline (גובר).
+function styleOf(node, map, ancestors = []) {
   const s = {}, classes = node.classes || [];
   for (const c of classes) if (map.single[c]) Object.assign(s, map.single[c]);
   for (const r of map.compound) if (r.set.every(c => classes.includes(c))) Object.assign(s, r.decl);
+  for (const r of map.descend) {
+    const target = r.chain[r.chain.length - 1];
+    if (target.every(c => classes.includes(c)) && chainMatches(r.chain.slice(0, -1), ancestors)) Object.assign(s, r.decl);
+  }
   Object.assign(s, parseInline(node.attrs && node.attrs.style));
   return s;
 }
@@ -232,57 +252,69 @@ function svgToPathData(node) {
   walk(node);
   return d.trim().replace(/\s+/g, ' ');
 }
-// אלמנט ⇒ ביטוי-widget. עלה-טקסט ⇒ Text; מיכל ⇒ Container(+Row/Column). svg ⇒ CustomPaint (path אמיתי).
-function emit(node, map, depth = 0) {
-  if (depth > 14) return 'const SizedBox.shrink()';
+// טקסט-סטייל עם צבע-ברירת-מחדל (skin.ink) — לעולם לא "בלתי-נראה" תחת Material
+function textStyleC(st) { const ts = textStyle(st); if (!ts.some(x => /^color:/.test(x))) ts.unshift('color: skin.ink'); if (!ts.some(x => /^fontFamily:/.test(x))) ts.push('fontFamily: fonts.he'); return ts; }
+// אלמנט ⇒ ביטוי-widget. ancestors = מחלקות-האבות (שורש→אב) לסלקטורי-צאצא.
+function emit(node, map, ancestors = [], depth = 0) {
+  if (depth > 16) return 'const SizedBox.shrink()';
   if (node.tag === 'svg') {
     const d = svgToPathData(node);
     if (!d) return '_icon(skin.mut)';                           // אין path ⇒ נפילה לאייקון
     const vb = (node.attrs.viewbox || '0 0 24 24').split(/\s+/)[2] || '24';
     const sw = node.attrs['stroke-width'] || '1.8';
-    const filled = /^(?!none)/.test(node.attrs.fill || 'none') && node.attrs.fill !== 'none' && node.attrs.fill !== undefined;
-    return `CustomPaint(size: const Size(16, 16), painter: _SvgPaint(${dq(d)}, skin.mut, ${sw}, ${filled ? 'true' : 'false'}, ${vb}))`;
+    const st0 = styleOf(node, map, ancestors);
+    const w = px(st0['width']) || '16', h = px(st0['height']) || w;
+    const stroke = colorExpr(st0['color'] || st0['stroke']) || 'skin.mut';
+    const filled = (node.attrs.fill && node.attrs.fill !== 'none') || /^(?!none)/.test(st0['fill'] || 'none') && (st0['fill'] || '') !== 'none' && st0['fill'];
+    return `CustomPaint(size: const Size(${w}, ${h}), painter: _SvgPaint(${dq(d)}, ${stroke}, ${sw}, ${filled ? 'true' : 'false'}, ${vb}))`;
   }
   if (node.tag === 'input') {
     const ph = node.attrs.placeholder || node.attrs.value || 'Label';
     const filled = !!node.attrs.value;
-    const ist = styleOf(node, map);
+    const ist = styleOf(node, map, ancestors);
     const t = `Text(${dq(ph)}, style: TextStyle(color: ${filled ? 'skin.ink' : 'skin.faint'}, fontFamily: fonts.he, fontSize: 13))`;
     return wrapBox(Object.assign({ 'min-height': '44px' }, ist), t, node);
   }
-  const st = styleOf(node, map);
+  const st = styleOf(node, map, ancestors);
   const kids = elemChildren(node);
   const txt = textOf(node);
   const ta = st['text-align'];
   const taExpr = ta === 'center' ? ', textAlign: TextAlign.center' : ta === 'left' ? ', textAlign: TextAlign.left' : ta === 'right' ? ', textAlign: TextAlign.right' : '';
 
-  // עלה עם טקסט בלבד ⇒ Text
+  // עלה עם טקסט בלבד ⇒ Text (תמיד עם צבע)
   if (!kids.length && txt) {
-    const ts = textStyle(st);
-    return wrapBox(st, `Text(${dq(txt)}${taExpr}${ts.length ? `, style: TextStyle(${ts.join(', ')})` : ''})`, node);
+    return wrapBox(st, `Text(${dq(txt)}${taExpr}, style: TextStyle(${textStyleC(st).join(', ')}))`, node);
   }
-  // בונה ילדים
-  const childExprs = [];
+  // בונה ילדים (מפריד אבסולוטיים ל-Stack)
+  const childAnc = ancestors.concat([node.classes || []]);
+  const flow = [], abs = [];
   for (const c of node.children) {
-    if (c.text != null) { const t = c.text.trim(); if (t) childExprs.push(`Text(${dq(t)}, style: TextStyle(color: skin.ink, fontFamily: fonts.he))`); }
-    else if (c.tag === 'br') continue;
-    else childExprs.push(emit(c, map, depth + 1));
+    if (c.text != null) { const t = c.text.trim(); if (t) flow.push(`Text(${dq(t)}, style: TextStyle(color: skin.ink, fontFamily: fonts.he))`); continue; }
+    if (c.tag === 'br') continue;
+    const cst = styleOf(c, map, childAnc);
+    const e = emit(c, map, childAnc, depth + 1);
+    if (cst['position'] === 'absolute') abs.push({ e, st: cst }); else flow.push(e);
   }
   let inner;
   const disp = st['display'] || '', fd = st['flex-direction'] || '';
   const gap = px(st['gap']);
-  const listSep = gap ? `, spacing: ${gap}` : '';   // Flutter 3.24+ Row/Column spacing
+  const listSep = gap ? `, spacing: ${gap}` : '';
   const isFlex = /flex/.test(disp), col = /column/.test(fd);
   const maj = JUST[st['justify-content']], min = ALIGN[st['align-items']];
   const majE = maj ? `, mainAxisAlignment: MainAxisAlignment.${maj}` : '';
-  if (childExprs.length === 0) inner = null;
-  else if (childExprs.length === 1 && !isFlex) inner = childExprs[0];
-  else if (isFlex && !col) {
-    const cross = min ? ALIGN[st['align-items']] : 'center';
-    inner = `Row(mainAxisSize: MainAxisSize.min${majE}, crossAxisAlignment: CrossAxisAlignment.${cross}${listSep}, children: [${childExprs.join(', ')}])`;
-  } else {
-    const cross = min || 'start';
-    inner = `Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.${cross}${majE}${listSep}, children: [${childExprs.join(', ')}])`;
+  if (flow.length === 0) inner = null;
+  else if (flow.length === 1 && !isFlex) inner = flow[0];
+  else if (isFlex && !col) inner = `Row(mainAxisSize: MainAxisSize.min${majE}, crossAxisAlignment: CrossAxisAlignment.${min || 'center'}${listSep}, children: [${flow.join(', ')}])`;
+  else inner = `Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.${min || 'start'}${majE}${listSep}, children: [${flow.join(', ')}])`;
+  // אבסולוטיים ⇒ Stack + Positioned
+  if (abs.length) {
+    const pos = abs.map(a => {
+      const p = [];
+      const t = px(a.st['top']), b = px(a.st['bottom']), l = px(a.st['left'] || a.st['inset-inline-start']), r = px(a.st['right'] || a.st['inset-inline-end']);
+      if (t != null) p.push(`top: ${t}`); if (b != null) p.push(`bottom: ${b}`); if (l != null) p.push(`left: ${l}`); if (r != null) p.push(`right: ${r}`);
+      return p.length ? `Positioned(${p.join(', ')}, child: ${a.e})` : `Positioned.fill(child: ${a.e})`;
+    });
+    inner = `Stack(clipBehavior: Clip.none, children: [${(inner ? [inner] : []).concat(pos).join(', ')}])`;
   }
   return wrapBox(st, inner, node);
 }
