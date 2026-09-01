@@ -2,6 +2,14 @@
 > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
 > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
 
+## L30 · "analyze=0 errors" ≠ שער-ירוק — לבדוק את exit-code של השער עצמו (1.9)
+שלושה קומיטים (buildsmart genesis-compile #115/#116/#118) טענו "dart analyze=0" ונדחו-בשקט:
+`flutter analyze --no-fatal-infos` **מפיל גם על warnings**, לא רק errors. ספרתי error-severity
+בלבד (0) והנחתי ירוק — אבל 23 warnings (מהמדף-המראר: unused-var/cast/import · super.key-יתום ·
+unicode-בהערה · הערה-שהחלה-ב-Dart⇒invalid_language_version_override) הפילו את ה-CI. **הלקח:**
+טענת-ירוק = הרצת השער האמיתי ובדיקת exit-code שלו (`&& echo PASS || echo FAIL`), לא ספירת-
+severity חלקית. bytes-not-prose חל גם על שערים: להריץ, לא להסיק. תוקן #121 (0 errors · 0 warnings).
+
 ## L21 · מד-מוכנות לפני גל — שמות מהמכונה, לא מהמרה-ידנית (24.8)
 ביקורת-כיסוי של box-drafts מול new/atoms+quarry נכשלה פעמיים בגלל המרת-שמות ידנית
 (pad2≠pad-2 · A11Y⇒a11-y · UPPER_SNAKE נשאר snake במחצבה אבל kebab בחוזה).
