@@ -41,7 +41,12 @@ export function fieldKind(ty) {
 }
 
 export function analyzeAtom(src, cls, file) {
-  const fields = [...src.matchAll(/^\s*final ([A-Za-z0-9<>?]+) ([a-z][A-Za-z0-9_]*);/gm)].map((m) => ({ ty: m[1], nm: m[2], k: fieldKind(m[1]) }));
+  // תופס גם הכרזה-מרובה בשורה `final Type a, b, c;` (תיקון-תפר: value+label נראו כ-zero) — שם אחד לכל פסיק, אותו טיפוס.
+  const fields = [];
+  for (const m of src.matchAll(/^\s*final ([A-Za-z0-9<>?]+) ([a-z][A-Za-z0-9_]*(?:\s*,\s*[a-z][A-Za-z0-9_]*)*);/gm)) {
+    const k = fieldKind(m[1]);
+    for (const nm of m[2].split(',').map((s) => s.trim())) fields.push({ ty: m[1], nm, k });
+  }
   const by = (k) => fields.filter((f) => f.k === k);
   const data = fields.filter((f) => ['str', 'num', 'bool', 'list', 'series', 'widget'].includes(f.k));
   const names = new Set(fields.map((f) => f.nm.toLowerCase()));

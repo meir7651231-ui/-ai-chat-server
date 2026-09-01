@@ -6,16 +6,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 2,
-  "dataFields": 1,
-  "str": 1,
+  "fields": 6,
+  "dataFields": 3,
+  "str": 3,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 1
+  "style": 3
  },
  {
   "cls": "AccessoryTile",
@@ -42,34 +42,34 @@
   "caps": [
    "list"
   ],
-  "fields": 1,
-  "dataFields": 1,
+  "fields": 6,
+  "dataFields": 3,
   "str": 0,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 1,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "AccordionSectionCard",
   "file": "dart-ui-bs/screens__manager_dashboard_screen/accordion_section_card.dart",
   "seam": "fields",
   "caps": [
-   "detail"
+   "card"
   ],
-  "fields": 7,
-  "dataFields": 6,
-  "str": 1,
+  "fields": 18,
+  "dataFields": 11,
+  "str": 6,
   "num": 2,
   "bool": 1,
   "list": 0,
   "series": 0,
   "widget": 2,
   "cb": 1,
-  "style": 0
+  "style": 4
  },
  {
   "cls": "AccRow",
@@ -384,7 +384,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
+  "fields": 4,
   "dataFields": 1,
   "str": 1,
   "num": 0,
@@ -393,25 +393,25 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "AnimatedEmpty",
   "file": "dart-ui-bs/animated_empty.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "card"
   ],
-  "fields": 1,
-  "dataFields": 0,
-  "str": 0,
-  "num": 0,
+  "fields": 8,
+  "dataFields": 4,
+  "str": 2,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 1
+  "style": 4
  },
  {
   "cls": "AnimatedTabs",
@@ -420,16 +420,16 @@
   "caps": [
    "list"
   ],
-  "fields": 1,
-  "dataFields": 1,
+  "fields": 6,
+  "dataFields": 3,
   "str": 0,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 1,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "AnimatedToggle",
@@ -438,16 +438,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
-  "dataFields": 1,
+  "fields": 6,
+  "dataFields": 3,
   "str": 1,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "ApprovalButton",
@@ -492,16 +492,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 4,
-  "dataFields": 3,
-  "str": 0,
+  "fields": 11,
+  "dataFields": 6,
+  "str": 3,
   "num": 1,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 2,
   "cb": 0,
-  "style": 0
+  "style": 4
  },
  {
   "cls": "AppSettingsBody",
@@ -546,10 +546,10 @@
   "caps": [
    "detail"
   ],
-  "fields": 3,
-  "dataFields": 1,
-  "str": 0,
-  "num": 1,
+  "fields": 7,
+  "dataFields": 5,
+  "str": 2,
+  "num": 3,
   "bool": 0,
   "list": 0,
   "series": 0,
@@ -562,18 +562,18 @@
   "file": "dart-ui-bs/screens__lipskey_product_sheet/attribute_chip.dart",
   "seam": "fields",
   "caps": [
-   "detail"
+   "kpi"
   ],
-  "fields": 4,
-  "dataFields": 2,
-  "str": 0,
+  "fields": 8,
+  "dataFields": 4,
+  "str": 2,
   "num": 0,
   "bool": 2,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 1
+  "style": 3
  },
  {
   "cls": "AuroraField",
@@ -582,7 +582,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 12,
+  "fields": 15,
   "dataFields": 9,
   "str": 0,
   "num": 9,
@@ -591,7 +591,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 3
+  "style": 6
  },
  {
   "cls": "AvatarStack",
@@ -600,7 +600,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 3,
+  "fields": 6,
   "dataFields": 3,
   "str": 0,
   "num": 3,
@@ -609,7 +609,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "AvatarTile",
@@ -672,7 +672,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 2,
+  "fields": 4,
   "dataFields": 1,
   "str": 1,
   "num": 0,
@@ -681,7 +681,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 1
+  "style": 3
  },
  {
   "cls": "BadgePill",
@@ -690,7 +690,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
+  "fields": 4,
   "dataFields": 1,
   "str": 1,
   "num": 0,
@@ -699,7 +699,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "Bar",
@@ -726,16 +726,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 5,
-  "dataFields": 5,
+  "fields": 12,
+  "dataFields": 7,
   "str": 0,
-  "num": 5,
+  "num": 7,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 5
  },
  {
   "cls": "BarcodeReticle",
@@ -758,20 +758,20 @@
  {
   "cls": "BareStat",
   "file": "dart-ui-bs/bare_stat.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "kpi"
   ],
-  "fields": 0,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 4,
+  "dataFields": 2,
+  "str": 2,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "BigButton",
@@ -816,16 +816,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
-  "dataFields": 1,
-  "str": 0,
+  "fields": 7,
+  "dataFields": 5,
+  "str": 4,
   "num": 1,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "BreadcrumbTrail",
@@ -834,16 +834,16 @@
   "caps": [
    "list"
   ],
-  "fields": 1,
-  "dataFields": 1,
+  "fields": 6,
+  "dataFields": 3,
   "str": 0,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 1,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "CaCard",
@@ -996,16 +996,16 @@
   "caps": [
    "list"
   ],
-  "fields": 1,
-  "dataFields": 1,
+  "fields": 6,
+  "dataFields": 3,
   "str": 0,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 1,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "CartChatBubble",
@@ -1014,16 +1014,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
-  "dataFields": 1,
-  "str": 1,
+  "fields": 19,
+  "dataFields": 7,
+  "str": 7,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
-  "cb": 0,
-  "style": 0
+  "cb": 2,
+  "style": 10
  },
  {
   "cls": "CartFabButton",
@@ -1032,7 +1032,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 3,
+  "fields": 9,
   "dataFields": 1,
   "str": 1,
   "num": 0,
@@ -1041,25 +1041,25 @@
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 6
  },
  {
   "cls": "CartItemRow",
   "file": "dart-ui-bs/screens__store_screen/cart_item_row.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "detail"
   ],
-  "fields": 1,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 14,
+  "dataFields": 8,
+  "str": 6,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
-  "widget": 0,
+  "widget": 2,
   "cb": 1,
-  "style": 0
+  "style": 5
  },
  {
   "cls": "CartSummaryCard",
@@ -1068,16 +1068,16 @@
   "caps": [
    "list"
   ],
-  "fields": 1,
-  "dataFields": 1,
-  "str": 0,
+  "fields": 7,
+  "dataFields": 3,
+  "str": 2,
   "num": 0,
   "bool": 0,
   "list": 1,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 4
  },
  {
   "cls": "CaSub",
@@ -1266,16 +1266,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
-  "dataFields": 1,
+  "fields": 6,
+  "dataFields": 3,
   "str": 1,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "CheckRow",
@@ -1302,16 +1302,16 @@
   "caps": [
    "list"
   ],
-  "fields": 1,
-  "dataFields": 1,
+  "fields": 6,
+  "dataFields": 3,
   "str": 0,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 1,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "ChipScroll",
@@ -1356,16 +1356,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 3,
-  "dataFields": 2,
+  "fields": 7,
+  "dataFields": 4,
   "str": 1,
-  "num": 0,
+  "num": 2,
   "bool": 1,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "CircleFab",
@@ -1410,7 +1410,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
+  "fields": 4,
   "dataFields": 1,
   "str": 0,
   "num": 1,
@@ -1419,7 +1419,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "CompanyCatalogImportCard",
@@ -1446,7 +1446,7 @@
   "caps": [
    "list"
   ],
-  "fields": 11,
+  "fields": 15,
   "dataFields": 10,
   "str": 0,
   "num": 9,
@@ -1455,7 +1455,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 1
+  "style": 5
  },
  {
   "cls": "ConfirmDialog",
@@ -1514,20 +1514,20 @@
  {
   "cls": "ContactTile",
   "file": "dart-ui-bs/screens__store_screen/contact_tile.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "detail"
   ],
-  "fields": 2,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 7,
+  "dataFields": 2,
+  "str": 2,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 1
+  "style": 4
  },
  {
   "cls": "ContractorToolsSheetsSheetHandle",
@@ -1572,7 +1572,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 3,
+  "fields": 5,
   "dataFields": 3,
   "str": 2,
   "num": 1,
@@ -1581,7 +1581,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "Countdown",
@@ -1590,7 +1590,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
+  "fields": 4,
   "dataFields": 1,
   "str": 0,
   "num": 1,
@@ -1599,7 +1599,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "CountUp",
@@ -1608,7 +1608,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 4,
+  "fields": 7,
   "dataFields": 4,
   "str": 1,
   "num": 3,
@@ -1617,7 +1617,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "CourierAttendanceSendReportButton",
@@ -1734,16 +1734,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 2,
-  "dataFields": 2,
+  "fields": 6,
+  "dataFields": 4,
   "str": 1,
-  "num": 1,
+  "num": 3,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "CustomerCard",
@@ -1752,16 +1752,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 4,
-  "dataFields": 2,
-  "str": 1,
-  "num": 1,
+  "fields": 18,
+  "dataFields": 12,
+  "str": 5,
+  "num": 3,
   "bool": 0,
   "list": 0,
   "series": 0,
-  "widget": 0,
+  "widget": 4,
   "cb": 1,
-  "style": 0
+  "style": 4
  },
  {
   "cls": "CutTile",
@@ -1788,7 +1788,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 3,
+  "fields": 6,
   "dataFields": 3,
   "str": 0,
   "num": 3,
@@ -1797,7 +1797,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "DateChip",
@@ -1842,7 +1842,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
+  "fields": 4,
   "dataFields": 1,
   "str": 0,
   "num": 1,
@@ -1851,7 +1851,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "DecideButton",
@@ -1896,34 +1896,34 @@
   "caps": [
    "detail"
   ],
-  "fields": 2,
-  "dataFields": 1,
-  "str": 0,
+  "fields": 10,
+  "dataFields": 4,
+  "str": 3,
   "num": 0,
   "bool": 1,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 5
  },
  {
   "cls": "DirectoryRow",
   "file": "dart-ui-bs/screens__home_shell/directory_row.dart",
   "seam": "fields",
   "caps": [
-   "detail"
+   "card"
   ],
-  "fields": 2,
-  "dataFields": 1,
-  "str": 1,
+  "fields": 7,
+  "dataFields": 3,
+  "str": 3,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "DismissibleFavRow",
@@ -1932,7 +1932,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 4,
+  "fields": 6,
   "dataFields": 2,
   "str": 0,
   "num": 0,
@@ -1941,7 +1941,7 @@
   "series": 0,
   "widget": 1,
   "cb": 1,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "DoneAll",
@@ -1968,16 +1968,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 5,
-  "dataFields": 5,
+  "fields": 13,
+  "dataFields": 7,
   "str": 0,
-  "num": 5,
+  "num": 7,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 6
  },
  {
   "cls": "Dot",
@@ -2000,20 +2000,20 @@
  {
   "cls": "DotsLoader",
   "file": "dart-ui-bs/dots_loader.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "detail"
   ],
-  "fields": 0,
-  "dataFields": 0,
+  "fields": 4,
+  "dataFields": 2,
   "str": 0,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "DraftBadge",
@@ -2040,7 +2040,7 @@
   "caps": [
    "list"
   ],
-  "fields": 1,
+  "fields": 4,
   "dataFields": 1,
   "str": 0,
   "num": 0,
@@ -2049,7 +2049,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "DsBars",
@@ -2111,29 +2111,31 @@
   "seam": "collection",
   "caps": [
    "list",
-   "status"
+   "kpi",
+   "status",
+   "card"
   ],
-  "fields": 23,
-  "dataFields": 18,
-  "str": 7,
+  "fields": 38,
+  "dataFields": 30,
+  "str": 17,
   "num": 3,
   "bool": 1,
-  "list": 2,
+  "list": 4,
   "series": 0,
   "widget": 5,
-  "cb": 4,
+  "cb": 7,
   "style": 0
  },
  {
   "cls": "DsDateField",
   "file": "dart-ui-bs/ds/ds_date_field.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "kpi"
   ],
-  "fields": 1,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 3,
+  "dataFields": 2,
+  "str": 2,
   "num": 0,
   "bool": 0,
   "list": 0,
@@ -2148,17 +2150,19 @@
   "seam": "collection",
   "caps": [
    "list",
-   "status"
+   "kpi",
+   "status",
+   "card"
   ],
-  "fields": 23,
-  "dataFields": 18,
-  "str": 7,
+  "fields": 38,
+  "dataFields": 30,
+  "str": 17,
   "num": 3,
   "bool": 1,
-  "list": 2,
+  "list": 4,
   "series": 0,
   "widget": 5,
-  "cb": 4,
+  "cb": 7,
   "style": 0
  },
  {
@@ -2166,11 +2170,12 @@
   "file": "dart-ui-bs/ds/ds_enum_field.dart",
   "seam": "collection",
   "caps": [
-   "list"
+   "list",
+   "kpi"
   ],
-  "fields": 2,
-  "dataFields": 1,
-  "str": 0,
+  "fields": 4,
+  "dataFields": 3,
+  "str": 2,
   "num": 0,
   "bool": 0,
   "list": 1,
@@ -2182,13 +2187,13 @@
  {
   "cls": "DsField",
   "file": "dart-ui-bs/ds/ds_field.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "kpi"
   ],
-  "fields": 1,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 4,
+  "dataFields": 3,
+  "str": 3,
   "num": 0,
   "bool": 0,
   "list": 0,
@@ -2200,13 +2205,13 @@
  {
   "cls": "DsMultiSelect",
   "file": "dart-ui-bs/ds/ds_multi_select.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "kpi"
   ],
-  "fields": 1,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 4,
+  "dataFields": 3,
+  "str": 3,
   "num": 0,
   "bool": 0,
   "list": 0,
@@ -2221,29 +2226,31 @@
   "seam": "collection",
   "caps": [
    "list",
-   "status"
+   "kpi",
+   "status",
+   "card"
   ],
-  "fields": 23,
-  "dataFields": 18,
-  "str": 7,
+  "fields": 38,
+  "dataFields": 30,
+  "str": 17,
   "num": 3,
   "bool": 1,
-  "list": 2,
+  "list": 4,
   "series": 0,
   "widget": 5,
-  "cb": 4,
+  "cb": 7,
   "style": 0
  },
  {
   "cls": "DsNumberField",
   "file": "dart-ui-bs/ds/ds_number_field.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "kpi"
   ],
-  "fields": 1,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 3,
+  "dataFields": 2,
+  "str": 2,
   "num": 0,
   "bool": 0,
   "list": 0,
@@ -2258,17 +2265,19 @@
   "seam": "collection",
   "caps": [
    "list",
-   "status"
+   "kpi",
+   "status",
+   "card"
   ],
-  "fields": 23,
-  "dataFields": 18,
-  "str": 7,
+  "fields": 38,
+  "dataFields": 30,
+  "str": 17,
   "num": 3,
   "bool": 1,
-  "list": 2,
+  "list": 4,
   "series": 0,
   "widget": 5,
-  "cb": 4,
+  "cb": 7,
   "style": 0
  },
  {
@@ -2277,17 +2286,19 @@
   "seam": "collection",
   "caps": [
    "list",
-   "status"
+   "kpi",
+   "status",
+   "card"
   ],
-  "fields": 23,
-  "dataFields": 18,
-  "str": 7,
+  "fields": 38,
+  "dataFields": 30,
+  "str": 17,
   "num": 3,
   "bool": 1,
-  "list": 2,
+  "list": 4,
   "series": 0,
   "widget": 5,
-  "cb": 4,
+  "cb": 7,
   "style": 0
  },
  {
@@ -2296,17 +2307,19 @@
   "seam": "collection",
   "caps": [
    "list",
-   "status"
+   "kpi",
+   "status",
+   "card"
   ],
-  "fields": 23,
-  "dataFields": 18,
-  "str": 7,
+  "fields": 38,
+  "dataFields": 30,
+  "str": 17,
   "num": 3,
   "bool": 1,
-  "list": 2,
+  "list": 4,
   "series": 0,
   "widget": 5,
-  "cb": 4,
+  "cb": 7,
   "style": 0
  },
  {
@@ -2333,29 +2346,31 @@
   "seam": "collection",
   "caps": [
    "list",
-   "status"
+   "kpi",
+   "status",
+   "card"
   ],
-  "fields": 23,
-  "dataFields": 18,
-  "str": 7,
+  "fields": 38,
+  "dataFields": 30,
+  "str": 17,
   "num": 3,
   "bool": 1,
-  "list": 2,
+  "list": 4,
   "series": 0,
   "widget": 5,
-  "cb": 4,
+  "cb": 7,
   "style": 0
  },
  {
   "cls": "DsSelect",
   "file": "dart-ui-bs/ds/ds_select.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "kpi"
   ],
-  "fields": 1,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 4,
+  "dataFields": 3,
+  "str": 3,
   "num": 0,
   "bool": 0,
   "list": 0,
@@ -2370,17 +2385,19 @@
   "seam": "collection",
   "caps": [
    "list",
-   "status"
+   "kpi",
+   "status",
+   "card"
   ],
-  "fields": 23,
-  "dataFields": 18,
-  "str": 7,
+  "fields": 38,
+  "dataFields": 30,
+  "str": 17,
   "num": 3,
   "bool": 1,
-  "list": 2,
+  "list": 4,
   "series": 0,
   "widget": 5,
-  "cb": 4,
+  "cb": 7,
   "style": 0
  },
  {
@@ -2404,13 +2421,13 @@
  {
   "cls": "DsToggleTile",
   "file": "dart-ui-bs/ds/ds_toggle_tile.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "kpi"
   ],
-  "fields": 1,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 3,
+  "dataFields": 2,
+  "str": 2,
   "num": 0,
   "bool": 0,
   "list": 0,
@@ -2425,36 +2442,38 @@
   "seam": "collection",
   "caps": [
    "list",
-   "status"
+   "kpi",
+   "status",
+   "card"
   ],
-  "fields": 23,
-  "dataFields": 18,
-  "str": 7,
+  "fields": 38,
+  "dataFields": 30,
+  "str": 17,
   "num": 3,
   "bool": 1,
-  "list": 2,
+  "list": 4,
   "series": 0,
   "widget": 5,
-  "cb": 4,
+  "cb": 7,
   "style": 0
  },
  {
   "cls": "DualRange",
   "file": "dart-ui-bs/dual_range.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "detail"
   ],
-  "fields": 0,
-  "dataFields": 0,
+  "fields": 5,
+  "dataFields": 2,
   "str": 0,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "ElevatedCard",
@@ -2479,18 +2498,18 @@
   "file": "dart-ui-bs/screens__lipskey_product_sheet/emoji_section_title.dart",
   "seam": "fields",
   "caps": [
-   "detail"
+   "card"
   ],
-  "fields": 1,
-  "dataFields": 1,
-  "str": 1,
+  "fields": 5,
+  "dataFields": 3,
+  "str": 3,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "Empty",
@@ -2643,16 +2662,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
-  "dataFields": 1,
-  "str": 0,
+  "fields": 6,
+  "dataFields": 3,
+  "str": 2,
   "num": 1,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "EquipmentButton",
@@ -2711,20 +2730,20 @@
  {
   "cls": "FabMenu",
   "file": "dart-ui-bs/fab_menu.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "detail"
   ],
-  "fields": 0,
-  "dataFields": 0,
+  "fields": 5,
+  "dataFields": 2,
   "str": 0,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "FacetChip",
@@ -2820,20 +2839,20 @@
  {
   "cls": "FieldRow",
   "file": "dart-ui-bs/field_row.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "kpi"
   ],
-  "fields": 1,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 9,
+  "dataFields": 3,
+  "str": 3,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 5
  },
  {
   "cls": "FilledCtaButton",
@@ -2842,16 +2861,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 3,
-  "dataFields": 2,
+  "fields": 7,
+  "dataFields": 4,
   "str": 1,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 1,
   "cb": 1,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "FilterChipPill",
@@ -2860,7 +2879,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 4,
+  "fields": 9,
   "dataFields": 3,
   "str": 1,
   "num": 1,
@@ -2869,7 +2888,7 @@
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 5
  },
  {
   "cls": "FinCallout",
@@ -3000,20 +3019,20 @@
  {
   "cls": "FlipTile",
   "file": "dart-ui-bs/flip_tile.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "detail"
   ],
-  "fields": 0,
-  "dataFields": 0,
-  "str": 0,
-  "num": 0,
+  "fields": 7,
+  "dataFields": 4,
+  "str": 2,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "FormCard",
@@ -3076,7 +3095,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 4,
+  "fields": 7,
   "dataFields": 4,
   "str": 0,
   "num": 4,
@@ -3085,7 +3104,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "GateButton",
@@ -3130,7 +3149,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 9,
+  "fields": 15,
   "dataFields": 9,
   "str": 0,
   "num": 9,
@@ -3139,7 +3158,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 6
  },
  {
   "cls": "GlassButton",
@@ -3162,20 +3181,20 @@
  {
   "cls": "GlassCard",
   "file": "dart-ui-bs/glass_card.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "card"
   ],
-  "fields": 0,
-  "dataFields": 0,
-  "str": 0,
-  "num": 0,
+  "fields": 7,
+  "dataFields": 4,
+  "str": 2,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "GlassListTile",
@@ -3202,16 +3221,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
-  "dataFields": 1,
+  "fields": 6,
+  "dataFields": 3,
   "str": 1,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "GlowPulse",
@@ -3220,7 +3239,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 5,
+  "fields": 11,
   "dataFields": 5,
   "str": 0,
   "num": 5,
@@ -3229,7 +3248,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 6
  },
  {
   "cls": "GlowSlider",
@@ -3238,16 +3257,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
-  "dataFields": 1,
+  "fields": 6,
+  "dataFields": 3,
   "str": 1,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "GoldButton",
@@ -3308,18 +3327,18 @@
   "file": "dart-ui-bs/screens__manager_dashboard_screen/gradient_hero_card.dart",
   "seam": "fields",
   "caps": [
-   "detail"
+   "card"
   ],
-  "fields": 7,
-  "dataFields": 4,
-  "str": 1,
+  "fields": 12,
+  "dataFields": 7,
+  "str": 4,
   "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 1,
   "cb": 1,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "GradientPulseButton",
@@ -3328,16 +3347,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 2,
-  "dataFields": 1,
+  "fields": 7,
+  "dataFields": 3,
   "str": 1,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "GradientSweep",
@@ -3346,7 +3365,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 3,
+  "fields": 7,
   "dataFields": 3,
   "str": 0,
   "num": 3,
@@ -3355,7 +3374,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 4
  },
  {
   "cls": "GradientText",
@@ -3364,16 +3383,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
-  "dataFields": 1,
+  "fields": 6,
+  "dataFields": 3,
   "str": 1,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "GridHubCard",
@@ -3382,16 +3401,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 2,
-  "dataFields": 2,
-  "str": 1,
+  "fields": 17,
+  "dataFields": 7,
+  "str": 6,
   "num": 0,
   "bool": 1,
   "list": 0,
   "series": 0,
   "widget": 0,
-  "cb": 0,
-  "style": 0
+  "cb": 2,
+  "style": 8
  },
  {
   "cls": "Grip",
@@ -3418,16 +3437,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 5,
-  "dataFields": 5,
+  "fields": 12,
+  "dataFields": 7,
   "str": 0,
-  "num": 5,
+  "num": 7,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 5
  },
  {
   "cls": "HelpFreezeOverlay",
@@ -3436,34 +3455,34 @@
   "caps": [
    "detail"
   ],
-  "fields": 5,
-  "dataFields": 3,
+  "fields": 12,
+  "dataFields": 7,
   "str": 2,
-  "num": 0,
+  "num": 4,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 1,
   "cb": 2,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "HeroCard",
   "file": "dart-ui-bs/hero_card.dart",
   "seam": "fields",
   "caps": [
-   "detail"
+   "card"
   ],
-  "fields": 3,
-  "dataFields": 2,
-  "str": 0,
+  "fields": 10,
+  "dataFields": 5,
+  "str": 3,
   "num": 1,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 1,
   "cb": 1,
-  "style": 0
+  "style": 4
  },
  {
   "cls": "HeroHeader",
@@ -3580,16 +3599,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 2,
-  "dataFields": 1,
+  "fields": 6,
+  "dataFields": 3,
   "str": 1,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 1
+  "style": 3
  },
  {
   "cls": "IconGrid",
@@ -3598,7 +3617,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 3,
+  "fields": 6,
   "dataFields": 3,
   "str": 0,
   "num": 3,
@@ -3607,7 +3626,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "ImageFacePager",
@@ -3616,7 +3635,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 9,
+  "fields": 16,
   "dataFields": 8,
   "str": 3,
   "num": 1,
@@ -3624,8 +3643,8 @@
   "list": 0,
   "series": 0,
   "widget": 3,
-  "cb": 0,
-  "style": 1
+  "cb": 2,
+  "style": 6
  },
  {
   "cls": "InfoBulletLine",
@@ -3686,18 +3705,18 @@
   "file": "dart-ui-bs/screens__lipskey_product_sheet/info_strip_row.dart",
   "seam": "fields",
   "caps": [
-   "detail"
+   "kpi"
   ],
-  "fields": 4,
-  "dataFields": 1,
-  "str": 0,
+  "fields": 9,
+  "dataFields": 4,
+  "str": 3,
   "num": 0,
   "bool": 1,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 2
+  "style": 4
  },
  {
   "cls": "InlineTextRow",
@@ -3742,10 +3761,10 @@
   "caps": [
    "detail"
   ],
-  "fields": 2,
-  "dataFields": 1,
+  "fields": 4,
+  "dataFields": 3,
   "str": 0,
-  "num": 1,
+  "num": 3,
   "bool": 0,
   "list": 0,
   "series": 0,
@@ -3756,20 +3775,20 @@
  {
   "cls": "InstallStageRow",
   "file": "dart-ui-bs/screens__lipskey_product_sheet/install_stage_row.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "card"
   ],
-  "fields": 1,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 15,
+  "dataFields": 6,
+  "str": 4,
   "num": 0,
-  "bool": 0,
+  "bool": 2,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 8
  },
  {
   "cls": "IntelBar",
@@ -3904,16 +3923,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 3,
-  "dataFields": 3,
-  "str": 1,
-  "num": 0,
+  "fields": 12,
+  "dataFields": 8,
+  "str": 4,
+  "num": 2,
   "bool": 1,
   "list": 0,
   "series": 0,
   "widget": 1,
   "cb": 0,
-  "style": 0
+  "style": 4
  },
  {
   "cls": "KpiBox",
@@ -4028,18 +4047,18 @@
   "file": "dart-ui-bs/screens__manager_dashboard_screen/label_value_row.dart",
   "seam": "fields",
   "caps": [
-   "detail"
+   "kpi"
   ],
-  "fields": 2,
-  "dataFields": 2,
-  "str": 0,
-  "num": 0,
+  "fields": 12,
+  "dataFields": 8,
+  "str": 2,
+  "num": 4,
   "bool": 2,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "LbRow",
@@ -4080,20 +4099,20 @@
  {
   "cls": "LinearProgress",
   "file": "dart-ui-bs/linear_progress.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "detail"
   ],
-  "fields": 0,
-  "dataFields": 0,
+  "fields": 5,
+  "dataFields": 2,
   "str": 0,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "LineSpark",
@@ -4102,16 +4121,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 6,
-  "dataFields": 5,
+  "fields": 11,
+  "dataFields": 7,
   "str": 0,
-  "num": 5,
+  "num": 7,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 1
+  "style": 4
  },
  {
   "cls": "LinkBtn",
@@ -4210,7 +4229,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
+  "fields": 4,
   "dataFields": 1,
   "str": 1,
   "num": 0,
@@ -4219,7 +4238,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "LiveStatusPill",
@@ -4228,7 +4247,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 3,
+  "fields": 5,
   "dataFields": 3,
   "str": 1,
   "num": 2,
@@ -4237,7 +4256,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "LocationButton",
@@ -4282,16 +4301,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 2,
-  "dataFields": 1,
+  "fields": 6,
+  "dataFields": 3,
   "str": 1,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "ManageHint",
@@ -4410,7 +4429,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 7,
+  "fields": 13,
   "dataFields": 7,
   "str": 0,
   "num": 7,
@@ -4419,7 +4438,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 6
  },
  {
   "cls": "Marquee",
@@ -4428,16 +4447,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
-  "dataFields": 1,
+  "fields": 6,
+  "dataFields": 3,
   "str": 1,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "MatchChip",
@@ -4518,9 +4537,9 @@
   "caps": [
    "detail"
   ],
-  "fields": 2,
-  "dataFields": 1,
-  "str": 0,
+  "fields": 4,
+  "dataFields": 3,
+  "str": 2,
   "num": 0,
   "bool": 0,
   "list": 0,
@@ -4534,36 +4553,36 @@
   "file": "dart-ui-bs/screens__manager_dashboard_screen/metric_tile.dart",
   "seam": "fields",
   "caps": [
-   "detail"
+   "kpi"
   ],
-  "fields": 5,
-  "dataFields": 3,
-  "str": 1,
+  "fields": 12,
+  "dataFields": 6,
+  "str": 4,
   "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 4
  },
  {
   "cls": "MiniCalendar",
   "file": "dart-ui-bs/mini_calendar.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "detail"
   ],
-  "fields": 0,
-  "dataFields": 0,
+  "fields": 5,
+  "dataFields": 2,
   "str": 0,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "MiniQtyBtn",
@@ -4590,7 +4609,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 3,
+  "fields": 5,
   "dataFields": 3,
   "str": 0,
   "num": 3,
@@ -4599,7 +4618,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "MiniTracker",
@@ -4622,20 +4641,20 @@
  {
   "cls": "ModalDialog",
   "file": "dart-ui-bs/modal_dialog.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "card"
   ],
-  "fields": 0,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 5,
+  "dataFields": 2,
+  "str": 2,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "ModeFrame",
@@ -4698,16 +4717,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 2,
-  "dataFields": 1,
-  "str": 1,
+  "fields": 6,
+  "dataFields": 3,
+  "str": 3,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "NavRow",
@@ -4753,16 +4772,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 2,
-  "dataFields": 1,
+  "fields": 6,
+  "dataFields": 3,
   "str": 1,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "NeonCard",
@@ -4803,20 +4822,20 @@
  {
   "cls": "NotifItem",
   "file": "dart-ui-bs/notif_item.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "card"
   ],
-  "fields": 0,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 5,
+  "dataFields": 2,
+  "str": 2,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "NotifRow",
@@ -4879,16 +4898,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 2,
-  "dataFields": 1,
+  "fields": 7,
+  "dataFields": 3,
   "str": 0,
-  "num": 1,
+  "num": 3,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 1
+  "style": 4
  },
  {
   "cls": "NumberRow",
@@ -4915,7 +4934,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
+  "fields": 4,
   "dataFields": 1,
   "str": 1,
   "num": 0,
@@ -4924,7 +4943,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "NumBox",
@@ -4951,34 +4970,34 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
-  "dataFields": 1,
+  "fields": 7,
+  "dataFields": 3,
   "str": 0,
-  "num": 1,
+  "num": 3,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 4
  },
  {
   "cls": "OrderCard",
   "file": "dart-ui-bs/order_card.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "detail"
   ],
-  "fields": 1,
-  "dataFields": 0,
-  "str": 0,
-  "num": 0,
+  "fields": 10,
+  "dataFields": 5,
+  "str": 3,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 4
  },
  {
   "cls": "OrderListRow",
@@ -4987,16 +5006,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 2,
-  "dataFields": 1,
-  "str": 0,
+  "fields": 9,
+  "dataFields": 5,
+  "str": 4,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 1,
   "cb": 1,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "OrderRowCard",
@@ -5005,34 +5024,34 @@
   "caps": [
    "detail"
   ],
-  "fields": 9,
-  "dataFields": 7,
+  "fields": 16,
+  "dataFields": 10,
   "str": 4,
   "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
-  "widget": 1,
+  "widget": 4,
   "cb": 1,
-  "style": 0
+  "style": 4
  },
  {
   "cls": "OrdersHiddenNotice",
   "file": "dart-ui-bs/screens__store_screen/orders_hidden_notice.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "detail"
   ],
-  "fields": 1,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 7,
+  "dataFields": 4,
+  "str": 4,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "OrderTimeline",
@@ -5041,7 +5060,7 @@
   "caps": [
    "list"
   ],
-  "fields": 2,
+  "fields": 8,
   "dataFields": 2,
   "str": 0,
   "num": 1,
@@ -5050,7 +5069,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 6
  },
  {
   "cls": "OtpInput",
@@ -5059,7 +5078,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
+  "fields": 4,
   "dataFields": 1,
   "str": 0,
   "num": 1,
@@ -5068,7 +5087,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "OutlinedActionButton",
@@ -5077,16 +5096,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 3,
-  "dataFields": 2,
+  "fields": 8,
+  "dataFields": 5,
   "str": 1,
-  "num": 0,
+  "num": 3,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 1,
   "cb": 1,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "OutlinedCardSection",
@@ -5095,16 +5114,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 6,
-  "dataFields": 3,
+  "fields": 12,
+  "dataFields": 6,
   "str": 1,
-  "num": 0,
+  "num": 3,
   "bool": 1,
   "list": 0,
   "series": 0,
   "widget": 1,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "Pad",
@@ -5131,7 +5150,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 4,
+  "fields": 7,
   "dataFields": 4,
   "str": 0,
   "num": 4,
@@ -5140,7 +5159,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "ParticleField",
@@ -5149,7 +5168,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 9,
+  "fields": 15,
   "dataFields": 9,
   "str": 0,
   "num": 9,
@@ -5158,7 +5177,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 6
  },
  {
   "cls": "PaymentChip",
@@ -5167,16 +5186,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 2,
-  "dataFields": 1,
-  "str": 0,
+  "fields": 9,
+  "dataFields": 3,
+  "str": 2,
   "num": 0,
   "bool": 1,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 5
  },
  {
   "cls": "PenaltyCard",
@@ -5203,16 +5222,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 2,
-  "dataFields": 1,
-  "str": 0,
+  "fields": 9,
+  "dataFields": 5,
+  "str": 2,
   "num": 1,
-  "bool": 0,
+  "bool": 2,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "PersonaPickingSheetBanner",
@@ -5257,7 +5276,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 3,
+  "fields": 7,
   "dataFields": 2,
   "str": 1,
   "num": 0,
@@ -5266,7 +5285,7 @@
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 4
  },
  {
   "cls": "PickerOptionsPanel",
@@ -5275,7 +5294,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
+  "fields": 3,
   "dataFields": 1,
   "str": 0,
   "num": 0,
@@ -5284,7 +5303,7 @@
   "series": 0,
   "widget": 1,
   "cb": 0,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "Pill",
@@ -5311,7 +5330,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 4,
+  "fields": 8,
   "dataFields": 3,
   "str": 1,
   "num": 1,
@@ -5320,7 +5339,7 @@
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 4
  },
  {
   "cls": "PillCtaButton",
@@ -5329,34 +5348,34 @@
   "caps": [
    "detail"
   ],
-  "fields": 4,
-  "dataFields": 2,
+  "fields": 10,
+  "dataFields": 6,
   "str": 1,
-  "num": 0,
+  "num": 4,
   "bool": 1,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 1
+  "style": 3
  },
  {
   "cls": "PinPad",
   "file": "dart-ui-bs/pin_pad.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "detail"
   ],
-  "fields": 0,
-  "dataFields": 0,
+  "fields": 5,
+  "dataFields": 2,
   "str": 0,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "PipelineRow",
@@ -5383,7 +5402,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 7,
+  "fields": 9,
   "dataFields": 5,
   "str": 2,
   "num": 2,
@@ -5392,7 +5411,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 2
+  "style": 4
  },
  {
   "cls": "PlaceholderNotice",
@@ -5415,20 +5434,20 @@
  {
   "cls": "PlaceholderRow",
   "file": "dart-ui-bs/placeholder_row.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "detail"
   ],
-  "fields": 1,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 5,
+  "dataFields": 2,
+  "str": 2,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "PortalTileButton",
@@ -5602,16 +5621,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
-  "dataFields": 1,
-  "str": 1,
+  "fields": 9,
+  "dataFields": 5,
+  "str": 5,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 4
  },
  {
   "cls": "PriceTicker",
@@ -5620,7 +5639,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 4,
+  "fields": 7,
   "dataFields": 4,
   "str": 1,
   "num": 3,
@@ -5629,25 +5648,25 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "PricingCard",
   "file": "dart-ui-bs/pricing_card.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "card"
   ],
-  "fields": 0,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 5,
+  "dataFields": 2,
+  "str": 2,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "Primary",
@@ -5706,20 +5725,20 @@
  {
   "cls": "ProductCard",
   "file": "dart-ui-bs/product_card.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "card"
   ],
-  "fields": 0,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 5,
+  "dataFields": 2,
+  "str": 2,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "ProductMiniCard",
@@ -5728,16 +5747,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 5,
-  "dataFields": 4,
-  "str": 1,
-  "num": 1,
+  "fields": 21,
+  "dataFields": 14,
+  "str": 3,
+  "num": 9,
   "bool": 1,
   "list": 0,
   "series": 0,
   "widget": 1,
   "cb": 1,
-  "style": 0
+  "style": 6
  },
  {
   "cls": "ProductTile",
@@ -5778,20 +5797,20 @@
  {
   "cls": "ProfileCard",
   "file": "dart-ui-bs/profile_card.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "card"
   ],
-  "fields": 0,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 5,
+  "dataFields": 2,
+  "str": 2,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "ProfileHeaderRow",
@@ -5800,7 +5819,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 6,
+  "fields": 10,
   "dataFields": 4,
   "str": 3,
   "num": 1,
@@ -5809,7 +5828,7 @@
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 1
+  "style": 5
  },
  {
   "cls": "ProfileRow",
@@ -5854,16 +5873,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 5,
-  "dataFields": 4,
-  "str": 1,
+  "fields": 10,
+  "dataFields": 6,
+  "str": 3,
   "num": 3,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "ProjectChip",
@@ -5872,7 +5891,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 3,
+  "fields": 7,
   "dataFields": 2,
   "str": 1,
   "num": 0,
@@ -5881,7 +5900,7 @@
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 4
  },
  {
   "cls": "ProjectDone",
@@ -6034,7 +6053,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 2,
+  "fields": 5,
   "dataFields": 1,
   "str": 0,
   "num": 1,
@@ -6043,7 +6062,7 @@
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "QuickAction",
@@ -6070,7 +6089,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 4,
+  "fields": 9,
   "dataFields": 2,
   "str": 1,
   "num": 1,
@@ -6079,7 +6098,7 @@
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 1
+  "style": 6
  },
  {
   "cls": "QuickActionsSection",
@@ -6124,7 +6143,7 @@
   "caps": [
    "list"
   ],
-  "fields": 2,
+  "fields": 6,
   "dataFields": 2,
   "str": 0,
   "num": 1,
@@ -6133,7 +6152,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 4
  },
  {
   "cls": "RadarChart",
@@ -6142,7 +6161,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 7,
+  "fields": 12,
   "dataFields": 7,
   "str": 0,
   "num": 7,
@@ -6151,7 +6170,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 5
  },
  {
   "cls": "RadialGauge",
@@ -6160,16 +6179,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
-  "dataFields": 1,
+  "fields": 8,
+  "dataFields": 3,
   "str": 0,
-  "num": 1,
+  "num": 3,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 5
  },
  {
   "cls": "RatingBars",
@@ -6178,7 +6197,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 4,
+  "fields": 7,
   "dataFields": 4,
   "str": 0,
   "num": 4,
@@ -6187,7 +6206,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "RatingStars",
@@ -6228,20 +6247,20 @@
  {
   "cls": "RecommendedKitBanner",
   "file": "dart-ui-bs/screens__lipskey_product_sheet/recommended_kit_banner.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "card"
   ],
-  "fields": 1,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 11,
+  "dataFields": 4,
+  "str": 4,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 6
  },
  {
   "cls": "Referral",
@@ -6355,20 +6374,20 @@
  {
   "cls": "RevealCard",
   "file": "dart-ui-bs/reveal_card.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "card"
   ],
-  "fields": 0,
-  "dataFields": 0,
-  "str": 0,
-  "num": 0,
+  "fields": 7,
+  "dataFields": 4,
+  "str": 2,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "RewardsHubFinRow",
@@ -6413,16 +6432,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 2,
-  "dataFields": 1,
+  "fields": 6,
+  "dataFields": 3,
   "str": 1,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "RoleRequestsInboxEmpty",
@@ -6521,7 +6540,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
+  "fields": 4,
   "dataFields": 1,
   "str": 1,
   "num": 0,
@@ -6530,18 +6549,18 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "SearchEmptyState",
   "file": "dart-ui-bs/screens__store_screen/search_empty_state.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "detail"
   ],
-  "fields": 1,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 3,
+  "dataFields": 2,
+  "str": 2,
   "num": 0,
   "bool": 0,
   "list": 0,
@@ -6557,16 +6576,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
-  "dataFields": 1,
+  "fields": 6,
+  "dataFields": 3,
   "str": 1,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "SecH",
@@ -6647,7 +6666,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 3,
+  "fields": 7,
   "dataFields": 2,
   "str": 1,
   "num": 0,
@@ -6656,7 +6675,7 @@
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 4
  },
  {
   "cls": "SectionTile",
@@ -6701,7 +6720,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 4,
+  "fields": 8,
   "dataFields": 3,
   "str": 0,
   "num": 3,
@@ -6710,7 +6729,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 4
  },
  {
   "cls": "SegmentedSwitch",
@@ -6737,16 +6756,16 @@
   "caps": [
    "list"
   ],
-  "fields": 1,
-  "dataFields": 1,
+  "fields": 6,
+  "dataFields": 3,
   "str": 0,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 1,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "SelectionBand",
@@ -6809,16 +6828,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 3,
-  "dataFields": 2,
-  "str": 1,
+  "fields": 7,
+  "dataFields": 4,
+  "str": 3,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 1,
   "cb": 1,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "SettingsActionRow",
@@ -7021,14 +7040,14 @@
  {
   "cls": "SheetDragHandle",
   "file": "dart-ui-bs/screens__lipskey_product_sheet/sheet_drag_handle.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "detail"
   ],
-  "fields": 1,
-  "dataFields": 0,
+  "fields": 5,
+  "dataFields": 4,
   "str": 0,
-  "num": 0,
+  "num": 4,
   "bool": 0,
   "list": 0,
   "series": 0,
@@ -7059,36 +7078,36 @@
   "file": "dart-ui-bs/screens__manager_dashboard_screen/sheet_header.dart",
   "seam": "fields",
   "caps": [
-   "detail"
+   "card"
   ],
-  "fields": 1,
-  "dataFields": 1,
-  "str": 0,
+  "fields": 6,
+  "dataFields": 4,
+  "str": 3,
   "num": 1,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "SheetScaffold",
   "file": "dart-ui-bs/screens__store_screen/sheet_scaffold.dart",
   "seam": "fields",
   "caps": [
-   "detail"
+   "card"
   ],
-  "fields": 4,
-  "dataFields": 3,
-  "str": 1,
+  "fields": 8,
+  "dataFields": 5,
+  "str": 3,
   "num": 1,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 1,
   "cb": 0,
-  "style": 1
+  "style": 3
  },
  {
   "cls": "SheetSection",
@@ -7113,29 +7132,29 @@
   "file": "dart-ui-bs/screens__manager_dashboard_screen/sheet_stat_tile.dart",
   "seam": "fields",
   "caps": [
-   "detail"
+   "kpi"
   ],
-  "fields": 1,
-  "dataFields": 1,
-  "str": 0,
+  "fields": 7,
+  "dataFields": 3,
+  "str": 2,
   "num": 1,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 4
  },
  {
   "cls": "SheetTile",
   "file": "dart-ui-bs/screens__store_screen/sheet_tile.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "detail"
   ],
-  "fields": 2,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 4,
+  "dataFields": 2,
+  "str": 2,
   "num": 0,
   "bool": 0,
   "list": 0,
@@ -7151,7 +7170,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 7,
+  "fields": 13,
   "dataFields": 7,
   "str": 0,
   "num": 7,
@@ -7160,7 +7179,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 6
  },
  {
   "cls": "ShutterButton",
@@ -7345,38 +7364,38 @@
  {
   "cls": "SkeletonCard",
   "file": "dart-ui-bs/skeleton_card.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "detail"
   ],
-  "fields": 0,
-  "dataFields": 0,
+  "fields": 5,
+  "dataFields": 2,
   "str": 0,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "SlideSheet",
   "file": "dart-ui-bs/slide_sheet.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "card"
   ],
-  "fields": 0,
-  "dataFields": 0,
-  "str": 0,
-  "num": 0,
+  "fields": 7,
+  "dataFields": 4,
+  "str": 2,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "SmartCartLineCard",
@@ -7385,16 +7404,16 @@
   "caps": [
    "list"
   ],
-  "fields": 2,
-  "dataFields": 1,
-  "str": 0,
+  "fields": 15,
+  "dataFields": 7,
+  "str": 4,
   "num": 0,
   "bool": 0,
   "list": 1,
   "series": 0,
-  "widget": 0,
+  "widget": 2,
   "cb": 1,
-  "style": 0
+  "style": 7
  },
  {
   "cls": "SmartProjectHero",
@@ -7422,16 +7441,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
-  "dataFields": 1,
-  "str": 0,
+  "fields": 7,
+  "dataFields": 3,
+  "str": 2,
   "num": 1,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
-  "cb": 0,
-  "style": 0
+  "cb": 2,
+  "style": 2
  },
  {
   "cls": "SnackToast",
@@ -7440,16 +7459,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
-  "dataFields": 1,
+  "fields": 6,
+  "dataFields": 3,
   "str": 1,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "SnoozeSheet",
@@ -7526,38 +7545,38 @@
  {
   "cls": "SpecMonoRow",
   "file": "dart-ui-bs/screens__lipskey_product_sheet/spec_mono_row.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "kpi"
   ],
-  "fields": 0,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 4,
+  "dataFields": 2,
+  "str": 2,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "SpecRow",
   "file": "dart-ui-bs/screens__lipskey_product_sheet/spec_row.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "kpi"
   ],
-  "fields": 0,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 5,
+  "dataFields": 3,
+  "str": 3,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "SplitAction",
@@ -7600,18 +7619,18 @@
   "file": "dart-ui-bs/spotlight_card.dart",
   "seam": "fields",
   "caps": [
-   "detail"
+   "card"
   ],
-  "fields": 1,
-  "dataFields": 1,
-  "str": 0,
-  "num": 1,
+  "fields": 10,
+  "dataFields": 5,
+  "str": 2,
+  "num": 3,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 5
  },
  {
   "cls": "SStat",
@@ -7638,10 +7657,10 @@
   "caps": [
    "detail"
   ],
-  "fields": 2,
-  "dataFields": 1,
+  "fields": 6,
+  "dataFields": 5,
   "str": 1,
-  "num": 0,
+  "num": 4,
   "bool": 0,
   "list": 0,
   "series": 0,
@@ -7674,16 +7693,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
-  "dataFields": 1,
+  "fields": 6,
+  "dataFields": 3,
   "str": 0,
-  "num": 1,
+  "num": 3,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "StarRating",
@@ -7692,7 +7711,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 4,
+  "fields": 7,
   "dataFields": 4,
   "str": 1,
   "num": 3,
@@ -7701,7 +7720,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "Stat",
@@ -7728,7 +7747,7 @@
   "caps": [
    "list"
   ],
-  "fields": 1,
+  "fields": 4,
   "dataFields": 1,
   "str": 0,
   "num": 0,
@@ -7737,7 +7756,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "StatHero",
@@ -7799,18 +7818,18 @@
   "file": "dart-ui-bs/stat_tile.dart",
   "seam": "fields",
   "caps": [
-   "detail"
+   "kpi"
   ],
-  "fields": 1,
-  "dataFields": 1,
-  "str": 0,
+  "fields": 6,
+  "dataFields": 3,
+  "str": 2,
   "num": 1,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "StatusChip",
@@ -7855,7 +7874,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 4,
+  "fields": 7,
   "dataFields": 2,
   "str": 2,
   "num": 0,
@@ -7864,7 +7883,7 @@
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "StepBtn",
@@ -7873,7 +7892,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 3,
+  "fields": 5,
   "dataFields": 1,
   "str": 1,
   "num": 0,
@@ -7882,7 +7901,7 @@
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 1
+  "style": 3
  },
  {
   "cls": "StepFlow",
@@ -7891,7 +7910,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 3,
+  "fields": 6,
   "dataFields": 3,
   "str": 0,
   "num": 3,
@@ -7900,7 +7919,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "StockRow",
@@ -7981,16 +8000,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 3,
-  "dataFields": 2,
-  "str": 1,
+  "fields": 13,
+  "dataFields": 6,
+  "str": 5,
   "num": 0,
   "bool": 1,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 6
  },
  {
   "cls": "StorePill",
@@ -8175,20 +8194,20 @@
  {
   "cls": "StoryRing",
   "file": "dart-ui-bs/story_ring.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "detail"
   ],
-  "fields": 0,
-  "dataFields": 0,
+  "fields": 5,
+  "dataFields": 2,
   "str": 0,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "StripGroupCard",
@@ -8197,7 +8216,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
+  "fields": 3,
   "dataFields": 1,
   "str": 0,
   "num": 0,
@@ -8206,7 +8225,7 @@
   "series": 0,
   "widget": 1,
   "cb": 0,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "StripPanelFrame",
@@ -8321,18 +8340,18 @@
   "file": "dart-ui-bs/screens__store_screen/summary_line.dart",
   "seam": "fields",
   "caps": [
-   "detail"
+   "kpi"
   ],
-  "fields": 1,
-  "dataFields": 1,
-  "str": 0,
+  "fields": 5,
+  "dataFields": 3,
+  "str": 2,
   "num": 0,
   "bool": 1,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "SummaryStatStrip",
@@ -8341,7 +8360,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 2,
+  "fields": 6,
   "dataFields": 1,
   "str": 0,
   "num": 1,
@@ -8350,25 +8369,25 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 4
  },
  {
   "cls": "SupplierHeader",
   "file": "dart-ui-bs/screens__store_screen/supplier_header.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "detail"
   ],
-  "fields": 0,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 4,
+  "dataFields": 2,
+  "str": 2,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "SupplierTile",
@@ -8431,16 +8450,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 4,
-  "dataFields": 2,
-  "str": 0,
+  "fields": 11,
+  "dataFields": 5,
+  "str": 3,
   "num": 1,
   "bool": 1,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 2
+  "style": 4
  },
  {
   "cls": "TagInput",
@@ -8449,7 +8468,7 @@
   "caps": [
    "list"
   ],
-  "fields": 1,
+  "fields": 4,
   "dataFields": 1,
   "str": 0,
   "num": 0,
@@ -8458,7 +8477,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "Tappable",
@@ -8499,20 +8518,20 @@
  {
   "cls": "TestimonialCard",
   "file": "dart-ui-bs/testimonial_card.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "card"
   ],
-  "fields": 0,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 5,
+  "dataFields": 2,
+  "str": 2,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "ThreeCol",
@@ -8594,7 +8613,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 3,
+  "fields": 6,
   "dataFields": 3,
   "str": 0,
   "num": 3,
@@ -8603,7 +8622,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "TimelineItem",
@@ -8626,20 +8645,20 @@
  {
   "cls": "TintedBadgeRow",
   "file": "dart-ui-bs/screens__lipskey_product_sheet/tinted_badge_row.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "detail"
   ],
-  "fields": 0,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 6,
+  "dataFields": 2,
+  "str": 2,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 4
  },
  {
   "cls": "TintedBanner",
@@ -8648,16 +8667,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 2,
-  "dataFields": 1,
+  "fields": 7,
+  "dataFields": 4,
   "str": 1,
-  "num": 0,
+  "num": 3,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "TintedNoticeBar",
@@ -8666,16 +8685,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
-  "dataFields": 1,
+  "fields": 6,
+  "dataFields": 4,
   "str": 1,
-  "num": 0,
+  "num": 3,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "TintedTag",
@@ -8684,10 +8703,10 @@
   "caps": [
    "detail"
   ],
-  "fields": 3,
-  "dataFields": 1,
+  "fields": 8,
+  "dataFields": 6,
   "str": 1,
-  "num": 0,
+  "num": 5,
   "bool": 0,
   "list": 0,
   "series": 0,
@@ -8756,7 +8775,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
+  "fields": 4,
   "dataFields": 1,
   "str": 1,
   "num": 0,
@@ -8765,7 +8784,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "TradeBuilderAccessoryRuleEditorPillButton",
@@ -8860,20 +8879,20 @@
  {
   "cls": "TrendCard",
   "file": "dart-ui-bs/trend_card.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "card"
   ],
-  "fields": 0,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 5,
+  "dataFields": 2,
+  "str": 2,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "TrendStat",
@@ -8918,16 +8937,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
-  "dataFields": 1,
+  "fields": 6,
+  "dataFields": 3,
   "str": 1,
-  "num": 0,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "Typing",
@@ -8972,7 +8991,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 1,
+  "fields": 4,
   "dataFields": 1,
   "str": 1,
   "num": 0,
@@ -8981,7 +9000,7 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "UnitSegmentToggle",
@@ -8990,7 +9009,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 2,
+  "fields": 7,
   "dataFields": 1,
   "str": 0,
   "num": 1,
@@ -8999,7 +9018,7 @@
   "series": 0,
   "widget": 0,
   "cb": 1,
-  "style": 0
+  "style": 5
  },
  {
   "cls": "VacationRequestCard",
@@ -9008,16 +9027,16 @@
   "caps": [
    "detail"
   ],
-  "fields": 2,
-  "dataFields": 1,
-  "str": 0,
+  "fields": 10,
+  "dataFields": 5,
+  "str": 2,
   "num": 1,
   "bool": 0,
   "list": 0,
   "series": 0,
-  "widget": 0,
+  "widget": 2,
   "cb": 0,
-  "style": 0
+  "style": 4
  },
  {
   "cls": "VacationRow",
@@ -9098,7 +9117,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 3,
+  "fields": 6,
   "dataFields": 3,
   "str": 0,
   "num": 3,
@@ -9107,25 +9126,25 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "WeatherCard",
   "file": "dart-ui-bs/weather_card.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "card"
   ],
-  "fields": 0,
-  "dataFields": 0,
-  "str": 0,
+  "fields": 5,
+  "dataFields": 2,
+  "str": 2,
   "num": 0,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 3
  },
  {
   "cls": "WideWarning",
@@ -9364,20 +9383,20 @@
  {
   "cls": "WorkPathCard",
   "file": "dart-ui-bs/work_path_card.dart",
-  "seam": "zero",
+  "seam": "fields",
   "caps": [
-   "chrome"
+   "card"
   ],
-  "fields": 0,
-  "dataFields": 0,
-  "str": 0,
-  "num": 0,
+  "fields": 7,
+  "dataFields": 5,
+  "str": 3,
+  "num": 2,
   "bool": 0,
   "list": 0,
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 0
+  "style": 2
  },
  {
   "cls": "ZoomHint",
@@ -9404,7 +9423,7 @@
   "caps": [
    "detail"
   ],
-  "fields": 2,
+  "fields": 5,
   "dataFields": 1,
   "str": 1,
   "num": 0,
@@ -9413,6 +9432,6 @@
   "series": 0,
   "widget": 0,
   "cb": 0,
-  "style": 1
+  "style": 4
  }
 ]
