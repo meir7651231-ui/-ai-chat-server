@@ -48,9 +48,14 @@ export function buildApp(specText) {
   // 🗣️ צפן §22: קלט חסר-מבנה לגמרי (אף ישות/דשבורד/תפקיד) ⇒ עברית-חופשית ⇒ nlToSpec.
   // מבנה קיים ⇒ ביט-זהה (לא נוגעים). כך אותה דלת מקבלת גם משפט-חופשי וגם אפיון-מדויק.
   const raw = specText.split(/\n+/).map((l) => l.trim()).filter((l) => l.length > 2);
-  if (raw.length && !raw.some((l) => ENTITY_RE.test(l) || ROLE_RE.test(l))) {
-    const nl = nlToSpec(specText);
-    if (nl.trim()) specText = nl;   // חסר-מבנה ⇒ עברית-חופשית; אחרת ביט-זהה
+  // חסר ישות-מפורשת ⇒ עברית-חופשית לשורות-שאינן-תפקיד (שורות-תפקיד נשמרות כמות-שהן ומצורפות
+  // בחזרה). באג-שנתפס: קלט מעורב (משפט-ישויות-חופשי + 'תפקיד ...') דילג על nlToSpec כי שורת-
+  // תפקיד קיימת ⇒ 0 ישויות, אפליקציה מנוונת. עכשיו רק ישות-מפורשת ⇒ ביט-זהה; אחרת החופשי מתפרש.
+  if (raw.length && !raw.some((l) => ENTITY_RE.test(l))) {
+    const roleLines = raw.filter((l) => ROLE_RE.test(l));
+    const freeLines = raw.filter((l) => !ROLE_RE.test(l));
+    const nl = nlToSpec(freeLines.join('\n'));
+    if (nl.trim()) specText = [nl, ...roleLines].join('\n');   // חסר-מבנה ⇒ עברית-חופשית + תפקידים
   }
   const all = specText.split(/\n+/).map((l) => l.trim()).filter((l) => l.length > 2);
   const roles = all.filter((l) => ROLE_RE.test(l)).map(parseRole);
