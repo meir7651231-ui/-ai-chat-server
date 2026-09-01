@@ -136,14 +136,24 @@
   @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
   .dsel:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+  .controls{display:flex;gap:10px;align-items:center}
+  .faceseg{display:flex;padding:3px;background:var(--sunken);border:1px solid var(--hair);border-radius:999px;gap:2px}
+  .faceseg button{border:0;background:none;cursor:pointer;padding:8px 14px;border-radius:999px;font-family:var(--grotesk);font-size:12px;font-weight:600;color:var(--mut);min-height:44px;transition:color .3s,background-color .3s}
+  .faceseg button[aria-pressed="true"]{color:var(--ink);background:var(--raised);box-shadow:0 2px 8px rgba(0,0,0,.4)}
+  .faceseg button:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+  :root[data-face="grotesk"]{--serifHe:"Space Grotesk",ui-monospace,monospace;--serif:"Space Grotesk",ui-monospace,monospace}
+  @media(max-width:820px){.faceseg button{padding:8px 11px}}
 </style>
 
 <div class="bar"><div class="in">
   <div class="mk">Pure<i>.</i><small>Selection Family</small></div>
+  <div class="controls">
+    <div class="faceseg" id="faceseg" role="group" aria-label="Typeface"><button data-f="serif" aria-pressed="true">Serif</button><button data-f="grotesk" aria-pressed="false">Grotesk</button></div>
   <div class="seg" id="seg" role="group" aria-label="Theme"><span class="ind" id="ind"></span>
     <button data-t="t-indigo" aria-pressed="true"><span class="d" style="background:#7A6BF0"></span>Indigo</button>
     <button data-t="t-teal" aria-pressed="false"><span class="d" style="background:#1FB8A6"></span>Teal</button>
     <button data-t="t-amber" aria-pressed="false"><span class="d" style="background:#D99A3C"></span>Amber</button>
+  </div>
   </div>
 </div></div>
 
@@ -383,7 +393,10 @@
 </div>
 
 <script>
-  var root=document.documentElement;root.className='t-indigo';
+  var root=document.documentElement;root.dataset.face='serif';
+  var faceBtns=[].slice.call(document.querySelectorAll('#faceseg button'));
+  faceBtns.forEach(function(b){b.addEventListener('click',function(){root.dataset.face=b.dataset.f;faceBtns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});});});
+  root.className='t-indigo';
   var seg=document.getElementById('seg'),ind=document.getElementById('ind'),btns=[].slice.call(seg.querySelectorAll('button'));
   function place(el,indEl,box){var sr=box.getBoundingClientRect(),br=el.getBoundingClientRect();indEl.style.width=br.width+'px';indEl.style.transform='translateX('+(br.left-sr.left-3)+'px)';}
   btns.forEach(function(b){b.addEventListener('click',function(){root.className=b.dataset.t;btns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});place(b,ind,seg);setTimeout(allSegs,60);});});
