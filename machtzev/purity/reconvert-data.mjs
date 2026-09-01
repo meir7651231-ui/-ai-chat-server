@@ -19,6 +19,7 @@ const dartLit = (v, ind = '') => {
   return '{\n' + Object.entries(v).map(([k, x]) => ind + '  ' + dartLit(k) + ': ' + dartLit(x, ind + '  ') + ',').join('\n') + '\n' + ind + '}';
 };
 const dartType = (v) => {
+  if (v === null) return 'Object?'; // null חייב טיפוס-nullable (Object לא-nullable ⇒ שגיאת-קומפילציה)
   if (typeof v === 'string') return 'String';
   if (typeof v === 'number') return Number.isInteger(v) ? 'int' : 'double';
   if (typeof v === 'boolean') return 'bool';
