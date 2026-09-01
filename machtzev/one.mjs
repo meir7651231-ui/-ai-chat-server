@@ -132,6 +132,9 @@ stage('המחולל (genesis-gen · הכרעה 17)', () => run('machtzev/generat
 stage('מחולל-הלוחות (board-gen)', () => run('machtzev/assemble/board-gen.mjs', [SCRATCH]).split('\n').find(l => l.includes('לוחות'))?.trim());
 // שער-איכות-העיצוב: design-judge מזוקק על פלט-המחולל (חוב-עיצוב רק-יורד)
 stage('שער-איכות-העיצוב (ds-critic)', () => last(run('machtzev/ds-critic.mjs', ['--gate'])), { optional: true });
+// שער-שפת-העיצוב: pure-lint על קטלוג-ה-HTML של Pure (bytes-not-prose). selftest מוכיח שהשער נושך; --strict = 0B/0M.
+stage('אימות-מנוע-Pure (pure-lint --selftest)', () => last(run('machtzev/pure/pure-lint.mjs', ['--selftest'])));
+stage('שער-שפת-העיצוב (pure-lint --strict)', () => last(run('machtzev/pure/pure-lint.mjs', ['--strict'])));
 
 // ── 5 · ביקורות-ההרכבה והטוהר (שערי-ratchet) ──
 stage('ביקורת-הרכבה (box-audit)', () => last(run('machtzev/assemble/box-audit.mjs', ['--gate'])));
