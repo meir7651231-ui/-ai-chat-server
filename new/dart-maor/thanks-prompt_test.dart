@@ -1,3 +1,4 @@
+import '../dart-data-maor/thanks-prompt-sockets.dart' as sk_thanks_prompt;
 // בדיקת-חוזה (רתמת-זהב) · thanksPrompt — מייבאת אך ורק את האטום-שלה (חוק-4).
 // ארבע דוגמאות-החוזה + בדיקות-ה-JS (new/atoms/thanks-prompt.test.mjs) ביט-אחר-ביט:
 //   1) מינימלי ⇒ 4 שורות בדיוק, נוסח מלא.
@@ -33,7 +34,7 @@ void main() {
     'orgName': 'מאור',
     'supporterName': 'דנה לוי',
     'lastAmount': '₪500',
-  });
+  }, sk_thanks_prompt.thanksPrompt_T);
   _eq(
     min,
     'כתוב מכתב תודה קצר (4-6 שורות), חם ואישי, בעברית, מארגון "מאור"\n'
@@ -53,7 +54,7 @@ void main() {
     'lastAmount': '₪500',
     'designation': 'אמץ חתן',
     'totalSoFar': '₪2,000',
-  });
+  }, sk_thanks_prompt.thanksPrompt_T);
   final lines = full.split('\n');
   _eqLines(
     lines,
@@ -84,14 +85,14 @@ void main() {
     'orgName': '',
     'supporterName': 'א',
     'lastAmount': '₪1',
-  });
+  }, sk_thanks_prompt.thanksPrompt_T);
   if (!emptyOrg.split('\n')[0].endsWith('מארגון "הארגון"')) {
     throw StateError('FAIL: orgName ריק לא נפל ל"הארגון"');
   }
   n++;
 
   // 3ב) orgName חסר לגמרי (undefined) ⇒ אותו נפילת-ברירת-מחדל.
-  final noOrg = thanksPrompt({'supporterName': 'א', 'lastAmount': '₪1'});
+  final noOrg = thanksPrompt({'supporterName': 'א', 'lastAmount': '₪1'}, sk_thanks_prompt.thanksPrompt_T);
   if (!noOrg.split('\n')[0].endsWith('מארגון "הארגון"')) {
     throw StateError('FAIL: orgName חסר לא נפל ל"הארגון"');
   }
@@ -103,7 +104,7 @@ void main() {
     'supporterName': 'א',
     'lastAmount': '₪1',
     'totalSoFar': '₪9',
-  });
+  }, sk_thanks_prompt.thanksPrompt_T);
   _eq(half.split('\n').length, 5, 'מספר-שורות חלקי שגוי');
   n++;
   if (half.contains('התרומה יועדה')) {
@@ -117,7 +118,7 @@ void main() {
           'orgName': 'x',
           'supporterName': 'y',
           'lastAmount': 'z',
-        }).split('\n').length ==
+        }, sk_thanks_prompt.thanksPrompt_T).split('\n').length ==
         4,
     'assert-live guard',
   );

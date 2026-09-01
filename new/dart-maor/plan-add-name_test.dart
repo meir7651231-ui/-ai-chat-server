@@ -1,3 +1,4 @@
+import '../dart-data-maor/plan-add-name-sockets.dart' as sk_plan_add_name;
 // בדיקת-חוזה (רתמת-זהב) · planAddName — מייבאת אך ורק את האטום-שלה (חוק-4).
 // עשר דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/plan-add-name.test.mjs
 // (אותם קלטים → אותם פלטים). אם עובר ⇒ Dart≡JS.
@@ -40,18 +41,18 @@ void main() {
   var n = 0;
 
   // 1) שם ריק ⇒ {ok:false, error:'הקלידו שם לפני ההוספה'}.
-  final r1 = planAddName(mkA(), '  ', '', 'n2', normName, isoToday);
+  final r1 = planAddName(mkA(), '  ', '', 'n2', normName, isoToday, sk_plan_add_name.planAddName_T);
   assert(deepEq(r1, {'ok': false, 'error': 'הקלידו שם לפני ההוספה'}), 'FAIL r1: $r1');
   n++;
 
   // 2) dedup מנורמל (רווחים שונים — אותו מפתח).
-  final r2 = planAddName(mkA(), 'משה  לוי', '', 'n2', normName, isoToday);
+  final r2 = planAddName(mkA(), 'משה  לוי', '', 'n2', normName, isoToday, sk_plan_add_name.planAddName_T);
   assert(r2['ok'] == false && r2['error'] == 'השם "משה  לוי" כבר ברשימה', 'FAIL r2: $r2');
   n++;
 
   // 3) הוספה בלי מונה — ok · names.length=2.
   final a3 = mkA();
-  final r3 = planAddName(a3, ' דוד ', '', 'n2', normName, isoToday);
+  final r3 = planAddName(a3, ' דוד ', '', 'n2', normName, isoToday, sk_plan_add_name.planAddName_T);
   assert(r3['ok'] == true && (r3['names'] as List).length == 2, 'FAIL r3 ok/len: $r3');
   n++;
 
@@ -69,7 +70,7 @@ void main() {
   n++;
 
   // 7) הוספה עם מונה — eyes=5 ⇒ log.length=2.
-  final r4 = planAddName(mkA(), 'רות', 5, 'n3', normName, isoToday);
+  final r4 = planAddName(mkA(), 'רות', 5, 'n3', normName, isoToday, sk_plan_add_name.planAddName_T);
   assert(r4['ok'] == true && (r4['log'] as List).length == 2, 'FAIL r4 ok/loglen: $r4');
   n++;
 
@@ -83,7 +84,7 @@ void main() {
   n++;
 
   // 10) eyes=0 — מונה שסופק ⇒ log עם eyes=0.
-  final r5 = planAddName(mkA(), 'חנה', 0, 'n4', normName, isoToday);
+  final r5 = planAddName(mkA(), 'חנה', 0, 'n4', normName, isoToday, sk_plan_add_name.planAddName_T);
   assert(r5['ok'] == true && r5['log'] != null && ((r5['log'] as List)[0] as Map)['eyes'] == 0,
       'FAIL r5: $r5');
   n++;

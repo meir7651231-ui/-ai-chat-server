@@ -3,6 +3,8 @@
 // זהו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart) מתחברות לאותה קופסה: אותם קלטים ⇒ אותו פלט.
 // החיווט (איזה-שכן מוזרק לכל חוט) חי כאן verbatim מהקופסה-שלה — לא באטומים (חוקי-החשמלאי).
 // האטומים טהורים ומזריקים את שכניהם כשקעים; הקופסה בלבד מחליטה מי-שכן.
+import '../dart-data-maor/task-identity-sockets.dart' as skb_ti;
+import '../dart-data-maor/overdue-contact-task-drafts-sockets.dart' as skb_octd;
 import '../dart-maor/task-identity.dart' as ti;
 import '../dart-maor/open-tasks-for.dart' as otf;
 import '../dart-maor/done-today-for.dart' as dtf;
@@ -18,7 +20,7 @@ import '../dart-maor/pri-labels.dart' as pl;
 // taskIdentity ב-Dart הוא `String Function(dynamic)`; done-today ו-contact-drafts
 // מצפים ל-`String Function(Object?)` — מתאם דק מיישר את חתימת-השקע. open-tasks
 // מקבל את `ti.taskIdentity` כלשונו (חתימת-dynamic זהה).
-String _idObj(Object? e) => ti.taskIdentity(e);
+String _idObj(Object? e) => ti.taskIdentity(e, skb_ti.taskIdentity_T);
 
 // ── החיווט (איזה-שכן מוזרק לכל חוט; זו *המשמעות*, והיא חיה כאן) ──
 //   openTasksFor             ← taskIdentity
@@ -27,10 +29,10 @@ String _idObj(Object? e) => ti.taskIdentity(e);
 //   overdueContactTaskDrafts ← taskIdentity
 
 // ── ה-API הפומבי (ביט-זהה לחתימות worktasks.mjs) ─────────────────────────────
-String identityOf(dynamic email) => ti.taskIdentity(email);
+String identityOf(dynamic email) => ti.taskIdentity(email, skb_ti.taskIdentity_T);
 
 List<Map<String, dynamic>> openTasks(List<Map<String, dynamic>> tasks, dynamic identity) =>
-    otf.openTasksFor(tasks, identity, ti.taskIdentity);
+    otf.openTasksFor(tasks, identity, (e) => ti.taskIdentity(e, skb_ti.taskIdentity_T));
 
 int doneToday(List<Map<String, dynamic>> tasks, dynamic identity, String todayIso) =>
     dtf.doneTodayFor(tasks, identity, todayIso, _idObj);
@@ -38,7 +40,7 @@ int doneToday(List<Map<String, dynamic>> tasks, dynamic identity, String todayIs
 bool isOverdue(dynamic t, dynamic todayIso) => tov.taskOverdue(t, todayIso);
 
 Map<String, dynamic> stats(dynamic tasks, dynamic identity, dynamic todayIso) =>
-    (tsf.taskStatsFor(tasks, identity, todayIso, ti.taskIdentity, tov.taskOverdue) as Map)
+    (tsf.taskStatsFor(tasks, identity, todayIso, (e) => ti.taskIdentity(e, skb_ti.taskIdentity_T), tov.taskOverdue) as Map)
         .cast<String, dynamic>();
 
 List<Map<String, dynamic>> contactDrafts(
@@ -47,7 +49,7 @@ List<Map<String, dynamic>> contactDrafts(
   dynamic assignee,
   String todayIso,
 ) =>
-    octd.overdueContactTaskDrafts(supporters, existing, assignee, todayIso, _idObj);
+    octd.overdueContactTaskDrafts(supporters, existing, assignee, todayIso, _idObj, skb_octd.overdueContactTaskDrafts_T);
 
 // תווית-עדיפות לתצוגה (מילון-הקופסה — נחשף כלשונו מהאטום-הקבוע).
 // JS: `PRI_LABELS[pri]` — מפתחות-אובייקט הם מחרוזות, מספר מוקש ל-'1'/'2'/'3'.

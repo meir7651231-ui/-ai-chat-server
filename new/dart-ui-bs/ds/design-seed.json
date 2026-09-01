@@ -1,0 +1,14 @@
+{
+  "_": "זרע-העיצוב (design-seed) — הקלט הקומפקטי שהסקיל מייצר, המנוע מרחיב למערכת-מלאה. שנה כאן ⇒ הרץ ds-tokens.mjs ⇒ כל הטוקנים נולדים-מחדש. אפס-Dart ידני.",
+  "palette": {
+    "bg": "F4F6FA", "card": "FFFFFF", "ink": "0F172A", "muted": "64748B",
+    "faint": "94A3B8", "line": "E6E9F0", "accent": "F97316", "success": "16A34A"
+  },
+  "typeBase": 15,
+  "typeRatio": 1.28,
+  "gridUnit": 4,
+  "radiusBase": 8,
+  "elevTint": "101828",
+  "motion": { "fast": 140, "base": 240, "slow": 420, "ambient": 6000 },
+  "gradientHues": { "sunset": ["FB923C", "F43F5E"], "ocean": ["38BDF8", "4F46E5"], "aurora": ["34E0C8", "6366F1", "A855F7"], "forest": ["34D399", "059669"], "dusk": ["6366F1", "EC4899"] }
+}

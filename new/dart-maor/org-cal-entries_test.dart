@@ -1,3 +1,4 @@
+import '../dart-data-maor/org-cal-entries-sockets.dart' as sk_org_cal_entries;
 import 'org-cal-entries.dart';
 
 // רתמת-זהב: אותם קלטים→פלטים של new/atoms/org-cal-entries.test.mjs. Dart≡JS.
@@ -22,7 +23,7 @@ bool mapEq(Map<String, dynamic> a, Map<String, dynamic> b) {
 void main() {
   // תומכת עם אירוע-תרומה בלבד — name+spId מוצמדים
   final sp1 = {'id': 's1', 'name': 'רות'};
-  final r1 = orgCalEntries([sp1], supDonEvents);
+  final r1 = orgCalEntries([sp1], supDonEvents, sk_org_cal_entries.orgCalEntries_T);
   assert(r1.length == 1 &&
       mapEq(r1[0], {
         'date': '2026-01-05',
@@ -47,7 +48,7 @@ void main() {
       'nextTalk': '2026-04-01',
     },
   };
-  final r2 = orgCalEntries([sp2], supDonEvents);
+  final r2 = orgCalEntries([sp2], supDonEvents, sk_org_cal_entries.orgCalEntries_T);
   assert(r2.length == 3);
   assert(r2[0]['src'] == '🧿 ה.כ — רות' && r2[0]['date'] == '2026-02-01');
   assert(r2[1]['src'] == '📞 תשובה: יחזור' && r2[1]['date'] == '2026-03-01');
@@ -68,7 +69,7 @@ void main() {
       ]
     }
   };
-  final r3 = orgCalEntries([sp3], supDonEvents);
+  final r3 = orgCalEntries([sp3], supDonEvents, sk_org_cal_entries.orgCalEntries_T);
   assert(r3.length == 1 && r3[0]['src'] == '🧿 ב.ל');
 
   // רישום עם date ריק — מסונן
@@ -81,13 +82,13 @@ void main() {
       ]
     }
   };
-  assert(orgCalEntries([sp4], supDonEvents).isEmpty);
+  assert(orgCalEntries([sp4], supDonEvents, sk_org_cal_entries.orgCalEntries_T).isEmpty);
 
   // ריקים
-  assert(orgCalEntries([], supDonEvents).isEmpty);
+  assert(orgCalEntries([], supDonEvents, sk_org_cal_entries.orgCalEntries_T).isEmpty);
   assert(orgCalEntries([
         {'id': 's5', 'name': 'חנה'}
-      ], supDonEvents).isEmpty);
+      ], supDonEvents, sk_org_cal_entries.orgCalEntries_T).isEmpty);
 
   print('✓ org-cal-entries: 10 דוגמאות-חוזה — ירוק');
 }

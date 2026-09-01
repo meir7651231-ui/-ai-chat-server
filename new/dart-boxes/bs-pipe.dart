@@ -1,3 +1,9 @@
+import '../dart-data/connection_method_label-terms.dart' as td_connection_method_label;
+import '../dart-data/galvanically_dissimilar-terms.dart' as td_galvanically_dissimilar;
+import '../dart-data/product_systems-data.dart' as tdb_ps;
+import '../dart-data/flow_role-data.dart' as tdb_fr;
+import '../dart-data/is_pipe-data.dart' as tdb_isp;
+import '../dart-data/is_fitting-data.dart' as tdb_isf;
 import '../dart-data/recommended_kit_for_product-terms.dart' as td_recommended_kit_for_product;
 import '../dart-data/estimate_pressure_drop-terms.dart' as td_estimate_pressure_drop;
 import '../dart-data/branch_label-terms.dart' as td_branch_label;
@@ -78,6 +84,7 @@ import '../dart/directional_context.dart' as dc;
 import '../dart/install_add_item.dart' as iai;
 import '../dart/kit_add_item.dart' as kai;
 import '../dart/branch_label.dart' as bl;
+import '../dart-data/k_for_type-data.dart' as kd_kft;
 
 // ── טיפוסי-הנתונים שהאטומים פועלים עליהם — נחשפים דרך הקופסה (data-shapes) ──────
 export '../dart/estimate_pressure_drop.dart'
@@ -272,7 +279,7 @@ class PipeBox {
       verifiedSpec: _ecSpec,
       minBoreMm: _minBoreMm,
       isFitting: (cat) =>
-          isf.isFitting(isf.FittingPart(cat), companyCatalogActive: companyCatalogActive),
+          isf.isFitting(isf.FittingPart(cat), companyCatalogActive: companyCatalogActive, fittingCats: tdb_isf.fittingCats, fittingTypes: tdb_isf.fittingTypes),
     );
   }
 
@@ -388,7 +395,7 @@ class PipeBox {
         verticalRiseMeters: verticalRiseMeters,
         skuOf: (p) => p.sku,
         nameHeOf: (p) => p.nameHe,
-        kOf: (p) => kft.kForType(p.productType),
+        kOf: (p) => kft.kForType(p.productType, table: kd_kft.kKFactors),
         minBoreOf: (p) => _minBoreMeters(p.sku),
         widerSiblingOf: (p) => widerSiblingOf(p),
         frictionFactor: (re) => ff.frictionFactor(re, pow025: pw.pow025),
@@ -481,7 +488,7 @@ class PipeBox {
 
   /// שם-שיטת-החיבור הפיזית בין שני מוצרים, או '' כשלא-ניתן-לגזור.
   String connectionLabel(PipeProduct a, PipeProduct b) =>
-      cml.connectionMethodLabel<PipeProduct>(a, b, endsOf: (p) => _cmlEnds(p.sku));
+      cml.connectionMethodLabel<PipeProduct>(a, b, endsOf: (p) => _cmlEnds(p.sku), term: (k)=>td_connection_method_label.kTerms[k]!);
 
   List<cml.ConnEnd>? _cmlEnds(String sku) {
     if (!_hasSpec(sku)) return null;
@@ -510,19 +517,20 @@ class PipeBox {
   // ═══ אשכול ה׳ · פרדיקטים ════════════════════════════════════════════════════
 
   /// תפקיד המוצר בנתיב-זרימה: connector / fixture / accessory.
-  fr.FlowRole flowRole(PipeProduct p) => fr.flowRole(p.sku, p.categoryHe);
+  fr.FlowRole flowRole(PipeProduct p) => fr.flowRole(p.sku, p.categoryHe, fixtureCats: tdb_fr.fixtureCats, structuralCats: tdb_fr.structuralCats);
 
   /// האם המוצר הוא צינור (נמכר לפי-מטר).
-  bool isPipe(PipeProduct p) => ip.isPipe(p.categoryHe);
+  bool isPipe(PipeProduct p) => ip.isPipe(p.categoryHe, pipeCats: tdb_isp.pipeCats);
 
   /// האם המוצר הוא אביזר-מחבר (fitting).
   bool isFitting(PipeProduct p) => isf.isFitting(
       isf.FittingPart(p.categoryHe, productType: p.productType),
-      companyCatalogActive: companyCatalogActive);
+      companyCatalogActive: companyCatalogActive,
+      fittingCats: tdb_isf.fittingCats, fittingTypes: tdb_isf.fittingTypes);
 
   /// קבוצת-מערכות-המים שהמוצר משתייך אליהן (אספקה/ניקוז).
   Set<ps.WaterSystem> productSystems(PipeProduct p) =>
-      ps.productSystems(p.categoryHe, endSystemsOf: () => _psEndSystems(p.sku));
+      ps.productSystems(p.categoryHe, endSystemsOf: () => _psEndSystems(p.sku), supplyCats: tdb_ps.supplyCats, drainCats: tdb_ps.drainCats, fixtureCats: tdb_ps.fixtureCats, structuralCats: tdb_ps.structuralCats, allSystems: tdb_ps.allSystems);
 
   Set<ps.WaterSystem>? _psEndSystems(String sku) =>
       _endSystems(sku)?.map((s) => ps.WaterSystem.values.byName(s)).toSet();
@@ -575,7 +583,7 @@ class PipeBox {
 
   /// האם יש חצייה בין קבוצת-נחושת לקבוצת-ברזל (דורש רקורד-דיאלקטרי).
   bool galvanicallyDissimilar(Iterable<String> mats) =>
-      gd.galvanicallyDissimilar(mats);
+      gd.galvanicallyDissimilar(mats, term: (k)=>td_galvanically_dissimilar.kTerms[k]!);
 
   /// האם המוצר הוא התקן חד-כיווני (שסתום אל-חזור).
   bool isDirectionalDevice(PipeProduct p) => idd.isDirectionalDevice(

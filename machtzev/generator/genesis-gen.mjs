@@ -19,6 +19,8 @@ import path from 'node:path';
 import { stripComments, snake } from '../assemble/lift-lib.mjs';
 import { dartLit } from './twins.mjs';
 import { buildAtlas, writeAtlas } from './atlas.mjs';
+import { pickLook } from '../../new/atoms/pick-look.mjs';
+const LOOKS = JSON.parse(fs.readFileSync(new URL('./knowledge/looks.json', import.meta.url), 'utf8'));
 
 const ROOT = new URL('../../', import.meta.url).pathname;
 const HERE = new URL('.', import.meta.url).pathname;
@@ -36,7 +38,9 @@ const pascalOf = (slug) => slug.replace(/(^|[_-])([a-z])/g, (_, __, c) => c.toUp
 const ROLE_RULES = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/roles.json'), 'utf8')).rules.map(r => ({ re: new RegExp(r.pattern), role: r.role }));
 const TOKEN_RULES = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/tokens.json'), 'utf8')).rules.map(r => ({ re: new RegExp(r.pattern, 'i'), token: r.token }));
 const roleOf = (cls) => ROLE_RULES.find(r => r.re.test(cls))?.role || 'other';
-const tokenFor = (n) => TOKEN_RULES.find(r => r.re.test(n)).token;
+const PURE = process.argv.includes('--pure'); // 🎨 מתג-Pure הפיך (חוק-7): מלביש את הרבנייה ב-BsPure במקום BsTokens
+const TOK = PURE ? 'BsPure' : 'BsTokens';
+const tokenFor = (n) => TOKEN_RULES.find(r => r.re.test(n)).token.replace('BsTokens', TOK);
 const LOGIC_RULES = JSON.parse(fs.readFileSync(path.join(HERE, 'knowledge/logic-lexicon.json'), 'utf8')).rules;
 let termKeyOf = new Map();
 try {
@@ -92,7 +96,7 @@ function parsePart(txt) {
 }
 
 // ── בחירה: האטום-הוויזואלי המנוקד-הכי-גבוה שכל ה-required שלו ניתנים-למילוי ──
-const FILLABLE = /^(String|bool|int|double|Color|IconData|TextEditingController|VoidCallback|void Function\(\)|ValueChanged<(bool|int|String)>|void Function\((bool|int|String)\)|List<String>)/;
+const FILLABLE = /^(String|bool|int|double|Color|IconData|TextEditingController|VoidCallback|void Function\(\)|ValueChanged<(bool|int|String|TimeOfDay)>|void Function\((bool|int|String|TimeOfDay)( \w+)?\)|List<String>|EdgeInsets(Geometry)?|FontWeight|TimeOfDay|Key|Object|Future<void> Function\(\)|List<[A-Z]\w*>|List<\([^)]*\)>|\(\{[^}]*\}\))/;
 const INTERACTIVE = new Set(['textfield', 'number', 'switch', 'radio', 'chip', 'button', 'slider']);
 function pickAtom(part) {
   if (part.pin) return atlas.widgets.find(a => a.cls === part.pin) || null;
@@ -109,7 +113,7 @@ function pickAtom(part) {
     for (const rq of [...a.required, ...a.positional]) {
       const t = (a.types.get(rq) || '').replace(/\?$/, '');
       if (/^Widget\b/.test(t) || /^List<Widget>/.test(t)) { widgetFills++; continue; }
-      if (/^List<\(\{/.test(t)) { if (!part.options?.length) { fillable = false; break; } continue; }
+      if (/^List<\(/.test(t)) { if (!part.options?.length) { fillable = false; break; } continue; }
       if (!FILLABLE.test(t)) { fillable = false; break; }
     }
     if (!fillable) continue;
@@ -128,6 +132,8 @@ function generate(slug, specText) {
   // שורה-מוזחת (שני-רווחים/טאב) = ענף של החלק שמעליה — חיבור אטום⇒אטום (הבורר מחליף ענפים)
   const rawLines = specText.split('\n').filter(l => l.trim());
   const lines = rawLines.map(s => s.trim().replace(/,$/, ''));
+  // 🎨 שכבה E — בחירת-מראה מהמשפט (חסר=null ⇒ ברירת-מחדל ⇒ פלט ביט-זהה)
+  const look = pickLook(specText, LOOKS);
   const first = lines[0];
   const oneLine = lines.length === 1;
   const rawTitle = (oneLine ? (first.includes(':') ? first.slice(0, first.indexOf(':')) : '') : first.replace(/:$/, '')).trim();
@@ -159,7 +165,15 @@ function generate(slug, specText) {
     // 🌾 זנב-הקציר: אמת-קרקע מבדיקת-האטום (twin-tails.json, נכתב ע"י רתמת-התאומים) —
     // פרמטרי-הזנב של מנוע רב-פרמטרי נפלטים כליטרלים ⇒ המסך שקול לתאום-ה-JS שהוכיח.
     const tailMeta = TWIN_TAILS[fn.name];
-    const tailLits = tailMeta && tailMeta.simple && tailMeta.tail.length === fn.params.length - 1 ? tailMeta.tail.map(x => dartLit(x)) : null;
+    // טוהר-המסך: מחרוזת-עברית בזנב יורדת לקובץ-התוכן (const) והליטרל מפנה אליה — אפס עברית בקוד
+    const tl = (v) => {
+      if (v === null) return 'null';
+      if (typeof v === 'string') return /[֐-׿]/.test(v) ? pendingHebArg(v) : dartLit(v);
+      if (typeof v === 'number' || typeof v === 'boolean') return dartLit(v);
+      if (Array.isArray(v)) return 'const [' + v.map(tl).join(', ') + ']';
+      return 'const {' + Object.entries(v).map(([k, x]) => `${tl(k)}: ${tl(x)}`).join(', ') + '}';
+    };
+    const tailLits = tailMeta && tailMeta.simple && tailMeta.tail.length === fn.params.length - 1 ? tailMeta.tail.map(tl) : null;
     const args = [];
     let pi = -1;
     for (const p of fn.params) {
@@ -196,7 +210,8 @@ function generate(slug, specText) {
     return n;
   };
   const stateDecls = [];
-  const imports = new Set(["import 'package:flutter/material.dart';", "import '../dart-ui-bs/auto/bs_tokens.dart';", `import '../dart-data-bs/auto/gen_${slug}_content.dart';`]);
+  const imports = new Set(["import 'package:flutter/material.dart';", `import '../dart-ui-bs/auto/${PURE ? 'bs_pure_tokens' : 'bs_tokens'}.dart';`, `import '../dart-data-bs/auto/gen_${slug}_content.dart';`]);
+  if (look === 'dark') imports.add("import '../dart-ui-bs/ds/ds_scale.dart';");  // 🎨 שכבה E — טוקן-כהה קיים (DsDark)
   let sIdx = 0;
 
   // מפת-הורים (לחיבור שדה⇒חישוב) + חיווט-ניווט בין-מסכים
@@ -298,9 +313,9 @@ function generate(slug, specText) {
     if (t === 'TextEditingController') { const c = '_c' + (++sIdx); stateDecls.push(`final TextEditingController ${c} = TextEditingController();`); return { expr: c }; }
     if (part.navExpr && (t === 'VoidCallback' || t === 'void Function()')) return { expr: part.navExpr };
     if (t === 'VoidCallback' || t === 'void Function()') return { expr: `() => _toast(${constFor(part.label, part.role + '_toast')})` };
-    if (/^ValueChanged<bool>$|^void Function\(bool\)$/.test(t)) { if (!shared.b) { shared.b = '_v' + (++sIdx); stateDecls.push(`bool ${shared.b} = false;`); } return { expr: `(v) => setState(() => ${shared.b} = v)` }; }
-    if (/^ValueChanged<int>$|^void Function\(int\)$/.test(t)) { if (!shared.i) { shared.i = '_n' + (++sIdx); stateDecls.push(`int ${shared.i} = 0;`); } return { expr: `(v) => setState(() => ${shared.i} = v)` }; }
-    if (/^ValueChanged<String>$|^void Function\(String\)$/.test(t)) { if (!shared.s) { shared.s = '_t' + (++sIdx); stateDecls.push(`String ${shared.s} = '';`); } return { expr: `(v) => setState(() => ${shared.s} = v)` }; }
+    if (/^ValueChanged<bool>$|^void Function\(bool( \w+)?\)$/.test(t)) { if (!shared.b) { shared.b = '_v' + (++sIdx); stateDecls.push(`bool ${shared.b} = false;`); } return { expr: `(v) => setState(() => ${shared.b} = v)` }; }
+    if (/^ValueChanged<int>$|^void Function\(int( \w+)?\)$/.test(t)) { if (!shared.i) { shared.i = '_n' + (++sIdx); stateDecls.push(`int ${shared.i} = 0;`); } return { expr: `(v) => setState(() => ${shared.i} = v)` }; }
+    if (/^ValueChanged<String>$|^void Function\(String( \w+)?\)$/.test(t)) { if (!shared.s) { shared.s = '_t' + (++sIdx); stateDecls.push(`String ${shared.s} = '';`); } return { expr: `(v) => setState(() => ${shared.s} = v)` }; }
     if (/^List<String>/.test(t)) return { expr: part.options?.length ? `const <String>[${part.options.map(o => constFor(o, part.role + '_option')).join(', ')}]` : 'const <String>[]' };
     const rm2 = t.match(/^List<(\(\{[^}]*\}\))>$/);
     if (rm2 && part.options?.length) {
@@ -309,6 +324,26 @@ function generate(slug, specText) {
       const items = part.options.map(o => '(' + fields2.map(([, ft, fn]) => `${fn}: ${ft === 'String' ? constFor(o, part.role + '_option') : ft === 'bool' ? 'true' : '0'}`).join(', ') + ')');
       return { expr: `const <${recT}>[${items.join(', ')}]` };
     }
+    // 🧱 מתאמי-הלבנים (מבצע-המאה, פאזה 4): טיפוסי-עיצוב/מבנה שחסמו 25 לבנים
+    if (t === 'EdgeInsetsGeometry' || t === 'EdgeInsets') return { expr: 'const EdgeInsets.all(12)' };
+    if (t === 'FontWeight') return { expr: 'FontWeight.w600' };
+    if (t === 'TimeOfDay') return { expr: 'const TimeOfDay(hour: 8, minute: 0)' };
+    if (/^ValueChanged<TimeOfDay>$|^void Function\(TimeOfDay( \w+)?\)$/.test(t)) return { expr: '(v) {}' };
+    if (t === 'Key') return { expr: `ValueKey(${constFor(part.label, part.role + '_key')})` };
+    if (t === 'Object') return { expr: constFor(part.label, part.role + '_tag') };
+    if (t === 'Future<void> Function()') return { expr: `() async => _toast(${constFor(part.label, part.role + '_toast')})` };
+    const rmT = t.match(/^List<\(([^{}()]+)\)>$/);                  // רשומות-מיקומיות (String, String, bool)
+    if (rmT && part.options?.length) {
+      const fts = rmT[1].split(',').map(x => x.trim());
+      const items = part.options.map(o => '(' + fts.map(ft => ft === 'String' ? constFor(o, part.role + '_cell') : ft === 'bool' ? 'true' : '0').join(', ') + ')');
+      return { expr: `const <(${rmT[1]})>[${items.join(', ')}]` };
+    }
+    const rmR = t.match(/^\(\{([^}]*)\}\)$/);                       // רשומה-שמית יחידה ({String img, String why})
+    if (rmR) {
+      const fields3 = [...rmR[1].matchAll(/(String|bool|int)\s+(\w+)/g)];
+      if (fields3.length) return { expr: '(' + fields3.map(([, ft, fn]) => `${fn}: ${ft === 'String' ? constFor(part.sub || part.label, part.role + '_' + snake(fn)) : ft === 'bool' ? 'false' : '0'}`).join(', ') + ')' };
+    }
+    if (/^List<[A-Z]\w*>$/.test(t)) return { expr: `const <${t.slice(5, -1)}>[]` };
     if (t === 'Widget') return { expr: 'const SizedBox(height: 4)' };
     if (/^List<Widget>/.test(t)) return { expr: 'const <Widget>[]' };
     return null;
@@ -391,7 +426,7 @@ function generate(slug, specText) {
 // 🧬 שם: ${title}
 // 🧬 בקשה: ${lines.join(' · ')}
 // 🧬 אטומים שנבחרו: ${chosen.map(c => c.atom.cls).join(' · ')}
-${[...imports].sort().join('\n')}
+${look ? `// 🎨 מראה: ${look}\n` : ''}${[...imports].sort().join('\n')}
 
 class ${cls} extends StatefulWidget {
   const ${cls}({super.key});
@@ -412,7 +447,7 @@ class _${cls}State extends State<${cls}> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: BsTokens.bgLight,
+        backgroundColor: ${look === 'dark' ? 'DsDark.bg' : TOK + '.bgLight'},
         appBar: AppBar(title: Text(${titleConst})),
         body: ListView(
           padding: const EdgeInsets.symmetric(vertical: 12),
@@ -477,6 +512,21 @@ function writeShowcaseSpec() {
     `כותרת ${W.synthTitle}`,
     ...(has('StatsCard') ? [`אטום StatsCard ${proven} 0 0 ${orders} ${W.synthLabel}: הוכחו / בבדיקה / נדחו`] : []),
     ...(has('ManagerDashboardCreditBar') ? [`אטום ManagerDashboardCreditBar ${pct} ${W.barLabel}`] : []),
+    ...(() => {
+      // 📈 צירי-מבצע-המאה: אחוזים חיים משער-הכיסוי (coverage-baseline.json — נמדד בכל משטרה)
+      try {
+        const c = JSON.parse(fs.readFileSync(path.join(ROOT, 'machtzev/coverage-baseline.json'), 'utf8'));
+        const pc = (a2, b2) => b2 ? Math.round(a2 / b2 * 100) : 0;
+        if (!has('ManagerDashboardCreditBar') || !W.axesTitle) return [];
+        return [
+          `כותרת ${W.axesTitle}`,
+          `אטום ManagerDashboardCreditBar ${pc(c.widgetsFillable, c.widgetsTotal)} ${W.axisWidgets}`,
+          `אטום ManagerDashboardCreditBar ${pc(c.enginesRunnable, c.enginesTotal)} ${W.axisEngines}`,
+          `אטום ManagerDashboardCreditBar ${pc(c.essence, c.enginesTotal)} ${W.axisEssence}`,
+          `אטום ManagerDashboardCreditBar ${pc(c.dataTwinned, c.dataTotal)} ${W.axisData}`,
+        ];
+      } catch { return []; }
+    })(),
     `כותרת ${W.capsTitle}`,
     ...navs,
     `באנר ${gates} ${W.gatesBanner}`,

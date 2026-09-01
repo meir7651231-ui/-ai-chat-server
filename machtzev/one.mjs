@@ -28,6 +28,26 @@ function stage(name, fn, { optional = false } = {}) {
 const run = (script, args = []) => execFileSync('node', [path.join(ROOT, script), ...args], { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
 const last = (s) => s.trim().split('\n').pop();
 
+// ── 0 · רענון-מקור maor + census (חיבור-מאור-למנוע · הכרעה 19: "מנוע-אחד תופס-הכל") ──
+//    fetch origin/main → merge לענף-העבודה (abort-על-קונפליקט, לעולם-לא-force) → run.mjs (census+extract+שערים).
+//    כך `one` תופס את עדכוני-מאור האחרונים לבד — לא ידנית.
+const MAOR = '/home/user/maor-system';
+stage('רענון-מאור + census', () => {
+  if (!fs.existsSync(MAOR)) return 'דולג (אין maor)';
+  execSync('git fetch -q origin main', { cwd: MAOR });
+  const behind = +execSync('git rev-list --count HEAD..origin/main', { cwd: MAOR, encoding: 'utf8' }).trim();
+  let merged = 'מעודכן';
+  if (behind > 0) {
+    try { execSync('git merge origin/main --no-edit', { cwd: MAOR, stdio: 'pipe' }); merged = `מוזגו ${behind} קומיטים`; }
+    catch { try { execSync('git merge --abort', { cwd: MAOR, stdio: 'pipe' }); } catch { } throw new Error('מיזוג-main-של-מאור נכשל (קונפליקט) — דורש-יד; לא בוצע force'); }
+  }
+  execSync('node machtzev/run.mjs', { cwd: MAOR, stdio: 'pipe', timeout: 600000 });   // census + 15 מחלצים + reconcile + שערים
+  // נחיתת-מאור: registry+census שהשתנו (בלבד) — commit+push לענף-העבודה (סימטרי להזרקת-buildsmart)
+  const dirty = execSync('git status --short machtzev/registry machtzev/STATUS.md', { cwd: MAOR, encoding: 'utf8' }).trim();
+  if (dirty) execSync(`cd ${MAOR} && git add machtzev/registry machtzev/STATUS.md && git commit -q -m "עדכון-מקור · census אוטומטי מהמנוע-האחד (${merged})" -m "Co-Authored-By: Claude <noreply@anthropic.com>" && git push -q -u origin claude/mah-kora-0by8kw`);
+  return `${merged} · census רוענן${dirty ? ' + נחת' : ''}`;
+}, { optional: true });
+
 // ── 1 · רענון-מקור-המסכים (בנייה-חכמה main — קו-האמת, הכרעה-9) ──
 stage('רענון-מסכים ממקור-חי', () => {
   if (!fs.existsSync(BS)) throw new Error('אין clone של buildsmart');
@@ -85,6 +105,8 @@ import crypto from 'node:crypto';
 // ── 4א · מנוע-המדף: הרמת widgets נקיים-מלידה, בלי-סוכן (הכרעה-11) ──
 stage('מנוע-המדף (shelf-lift)', () => run('machtzev/assemble/shelf-lift.mjs', [SCRATCH]).split('\n').find(l => l.includes('הורמו'))?.trim());
 stage('מנוע-הליטוש (data-lift)', () => run('machtzev/assemble/data-lift.mjs', [SCRATCH]).split('\n').find(l => l.includes('לוטשו'))?.trim());
+// 4א² · המנוע-המלא: חציבת-קופסאות מקבצי-לוגיקת-maor (assemble+שקע→autoPurify→data/magic/purify), רק-ירוק ננחת
+stage('חציבת-קופסאות (chisel-all)', () => fs.existsSync('/home/user/maor-system') ? last(run('machtzev/chisel-all.mjs')) : 'דולג (אין maor)', { optional: true });
 
 // ── 4ב½ · מנוע-המניפסטים: הוראות-הרכבה אוטומטיות לכל מסך ──
 stage('מנוע-המניפסטים (gen-manifest)', () => run('machtzev/assemble/gen-manifest.mjs', [SCRATCH]).split('\n').find(l => l.includes('שלמים'))?.trim());
@@ -100,8 +122,21 @@ stage('הרכבה-מחוללת (gen-screen)', () => {
 
 // ── 4ג · מחולל-הלוחות: חיווט המסכים-המורכבים למקורות-החיים ──
 stage('מנוע-הסינתזה (חלום + יכולות-מוזמנות)', () => last(run('machtzev/generator/synth.mjs', ['--dream'])), { optional: true });
+// 4ג¼ · מנועי-העיצוב: זרע→מערכת-טוקנים+מוֹשֶׁן+גרפיקה+וריאנטים (הכרעה 19: זרע=דאטה, מנוע=נוסחה)
+stage('מנועי-העיצוב (tokens·motion·graphics·variants·pure)', () => {
+  for (const e of ['ds-tokens', 'ds-motion', 'ds-graphics', 'ds-variants', 'ds-pure']) run(`machtzev/${e}.mjs`);
+  return 'ds_scale·ds_anim·ds_graphics·ds_surface·ds_pure חוללו-מהזרע';
+}, { optional: true });
+
 stage('המחולל (genesis-gen · הכרעה 17)', () => run('machtzev/generator/genesis-gen.mjs').split('\n').find(l => l.includes('המחולל'))?.trim());
 stage('מחולל-הלוחות (board-gen)', () => run('machtzev/assemble/board-gen.mjs', [SCRATCH]).split('\n').find(l => l.includes('לוחות'))?.trim());
+// שער-איכות-העיצוב: design-judge מזוקק על פלט-המחולל (חוב-עיצוב רק-יורד)
+stage('שער-איכות-העיצוב (ds-critic)', () => last(run('machtzev/ds-critic.mjs', ['--gate'])), { optional: true });
+// שער-שפת-העיצוב: pure-lint על קטלוג-ה-HTML של Pure (bytes-not-prose). selftest מוכיח שהשער נושך; --strict = 0B/0M.
+stage('אימות-מנוע-Pure (pure-lint --selftest)', () => last(run('machtzev/pure/pure-lint.mjs', ['--selftest'])));
+stage('שער-שפת-העיצוב (pure-lint --strict)', () => last(run('machtzev/pure/pure-lint.mjs', ['--strict'])));
+// פירוק-התצוגה: הופך את 13 משפחות-Pure לאטומי-תצוגה מפורקים ורשומים (regen דטרמיניסטי, contract+test)
+stage('פירוק-התצוגה (pure-decompose)', () => last(run('machtzev/pure/pure-decompose.mjs')));
 
 // ── 5 · ביקורות-ההרכבה והטוהר (שערי-ratchet) ──
 stage('ביקורת-הרכבה (box-audit)', () => last(run('machtzev/assemble/box-audit.mjs', ['--gate'])));
@@ -117,10 +152,14 @@ stage('מפת-חיווט (gen-wiring-doc)', () => last(run('machtzev/tools/gen-w
 
 // ── 6 · המשטרה (כל שערי-ה-ratchet הפנימיים) ──
 stage('מנוע-ההמרה-מחדש · דאטה (reconvert-data)', () => last(run('machtzev/purity/reconvert-data.mjs')), { optional: true });
+// 5½ · רענון-הוכחות-רהיצות (proof-records) לפני-המשטרה — Dart-gated (בלי בינארי: מדלג, לא-מוחק מטמון)
+const HAS_DART = [process.env.DART_BIN, process.env.HOME && path.join(process.env.HOME, 'dart-sdk/bin/dart'), '/root/dart-sdk/bin/dart', '/home/user/flutter/bin/dart'].filter(Boolean).some(c => { try { return fs.existsSync(c); } catch { return false; } });
+stage('אימות-רהיצות-Dart (verify-dart-tests)', () => HAS_DART ? last(run('machtzev/verify-dart-tests.mjs', ['-j12'])) : 'דולג (אין בינארי Dart — מטמון-ההוכחות נשמר)', { optional: true });
+stage('אימות-arg0-Dart (verify-dart-arg0)', () => HAS_DART ? last(run('machtzev/verify-dart-arg0.mjs')) : 'דולג (אין בינארי Dart)', { optional: true });
 // ── הזרקת-המדף לתצוגה (buildsmart) + נחיתה — בתוך המנוע (הכרעת-בעלים "למה הם לא בפנים") ──
 stage('הזרקת-המדף ל-buildsmart (8 מדפים)', () => {
   const B = '/home/user/buildsmart/app_flutter/lib/genesis';
-  const DIRS8 = ['dart-ui-bs', 'dart-data-bs', 'dart-data-maor', 'dart-screens-bs', 'dart-boards-bs', 'dart-gen-bs', 'dart-maor', 'dart'];
+  const DIRS8 = ['dart-ui-bs', 'dart-data-bs', 'dart-data-maor', 'dart-data', 'dart-screens-bs', 'dart-boards-bs', 'dart-gen-bs', 'dart-maor', 'dart'];
   let n = 0;
   for (const d of DIRS8) {
     execSync(`rm -rf ${B}/${d}`);
@@ -156,6 +195,7 @@ ${rows.map(r => '| ' + r.join(' | ') + ' |').join('\n')}
 | UI-משותף (dart-ui-bs) | ${count('new/dart-ui-bs', '.dart')} |
 | דאטה (dart-data-bs+maor) | ${count('new/dart-data-bs', '.dart') + count('new/dart-data-maor', '.dart')} |
 | מחצבה (dart-quarry) | ${count('dart-quarry', '.dart')} |
+| תצוגת-Pure מפורקת (pure-shelf) | ${(() => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'machtzev/generator/knowledge/pure-shelf.json'), 'utf8')).total; } catch { return 0; } })()} |
 `;
 fs.writeFileSync(path.join(ROOT, 'machtzev/ONE-STATUS.md'), status);
 console.log(status);

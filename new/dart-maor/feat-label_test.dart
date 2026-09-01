@@ -1,3 +1,4 @@
+import '../dart-data-maor/feat-label-sockets.dart' as sk_feat_label;
 // רתמת-זהב · feat-label — assert-ים = בדיוק דוגמאות-החוזה של בדיקת-ה-JS (feat-label.test.mjs).
 // אם עובר, Dart ≡ JS.
 import 'feat-label.dart';
@@ -5,7 +6,7 @@ import 'feat-label.dart';
 void main() {
   // 1) מונח-ארגון גובר — termOf מתעלם מהארגומנטים ומחזיר 'פרויקטים'.
   assert(
-    featLabel(<String, Object?>{}, (c, k, fb) => 'פרויקטים') == 'פרויקטים',
+    featLabel(<String, Object?>{}, (c, k, fb) => 'פרויקטים', sk_feat_label.featLabel_T) == 'פרויקטים',
     '✗ מונח-הארגון לא גבר',
   );
 
@@ -17,7 +18,7 @@ void main() {
   }
 
   assert(
-    featLabel(<String, Object?>{}, termOf) == 'מעקב טיפול',
+    featLabel(<String, Object?>{}, termOf, sk_feat_label.featLabel_T) == 'מעקב טיפול',
     '✗ ברירת-המחדל שגויה',
   );
 
@@ -29,7 +30,7 @@ void main() {
     calls++;
     got = [c, k, fb];
     return 'x';
-  });
+  }, sk_feat_label.featLabel_T);
   assert(
     calls == 1 &&
         identical(got![0], cfg) &&

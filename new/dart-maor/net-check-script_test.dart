@@ -1,3 +1,4 @@
+import '../dart-data-maor/net-check-script-sockets.dart' as sk_net_check_script;
 // בדיקת-חוזה (רתמת-זהב) · netCheckScript — מייבאת אך ורק את האטום-שלה (חוק-4).
 // ארבע דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/net-check-script.test.mjs
 // (אותם קלטים→פלטים, מומרים לערכי-Dart):
@@ -20,25 +21,25 @@ void main() {
   final want1 = [_head1, _head2, '• undefined', _tail].join('\n');
   final got1 = netCheckScript([
     {'amount': 100}
-  ]);
+  ], sk_net_check_script.netCheckScript_T);
   assert(got1 == want1, 'FAIL case1:\n$got1\n≠\n$want1');
   n++;
 
   // 2) ["2026-08-24"] — אלמנט-String ללא ok/domain ⇒ חסום, domain=undefined.
   final want2 = [_head1, _head2, '• undefined', _tail].join('\n');
-  final got2 = netCheckScript(['2026-08-24']);
+  final got2 = netCheckScript(['2026-08-24'], sk_net_check_script.netCheckScript_T);
   assert(got2 == want2, 'FAIL case2:\n$got2\n≠\n$want2');
   n++;
 
   // 3) [] — אין תוצאות ⇒ מחרוזת-ריקה.
-  final got3 = netCheckScript(<dynamic>[]);
+  final got3 = netCheckScript(<dynamic>[], sk_net_check_script.netCheckScript_T);
   assert(got3 == '', "FAIL case3: '$got3' ≠ ''");
   n++;
 
   // 4) ["א","ב"] — שני Strings חסומים ⇒ שתי שורות '• undefined'.
   final want4 =
       [_head1, _head2, '• undefined', '• undefined', _tail].join('\n');
-  final got4 = netCheckScript(['א', 'ב']);
+  final got4 = netCheckScript(['א', 'ב'], sk_net_check_script.netCheckScript_T);
   assert(got4 == want4, 'FAIL case4:\n$got4\n≠\n$want4');
   n++;
 

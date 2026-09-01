@@ -732,3 +732,95 @@ if (mode === '--run') {
   for (const c of cands) { if (ok >= N) break; if (purifyOne(c, (s) => console.log('  ' + s)) === true) ok++; }
   console.log(`🧼 טוהרו: ${ok}`);
 }
+
+// ── 🧲 v7: מרים-קבועי-קופסה — const-מנוים ברמת-המודול שערכו קסם-מספרי/מחרוזת-דומיין
+// יורד לאטום-דאטה <box>-wiring-data שהקופסה מייבאת ישירות; מגני-מקור בבדיקה מוסבים
+// מצורת-המקור ("const X = v;") לאימות-ערך על האטום (X === v). ולידציה: בדיקת-הקופסה חיה. ──
+function purifyBoxConsts(file, log) {
+  const base = file.replace(/\.mjs$/, '');
+  const bp = path.join(BOXES, file);
+  let src = fs.readFileSync(bp, 'utf8');
+  const orig = src;
+  const magic = (txt) => {
+    const val = parseFloat(txt.replace(/_/g, ''));
+    return /^-?[\d_]+(\.\d+)?$/.test(txt) && val >= 10 && !(Number.isInteger(val) && (val & (val - 1)) === 0);
+  };
+  const decls = [];
+  for (const m of src.matchAll(/(?:^|\n)const\s+([A-Z][A-Z0-9_]*)\s*=\s*([^;\n]+);[^\n]*/g)) {
+    const name = m[1], val = m[2].trim();
+    const isNum = magic(val);
+    if (!isNum) continue;                                          // מחרוזות = שיפוט-משמעות (חוק-6/יד)
+    if (/חוק-6|פרוטוקול-חיצוני/.test(src.slice(Math.max(0, m.index - 160), m.index + m[0].length))) continue;
+    decls.push({ name, val, at: m.index, len: m[0].length, txt: m[0] });
+  }
+  if (!decls.length) return log(`~ ${base}: אין קבועי-מודול ברי-הרמה`);
+  const dataBase = base + '-wiring-data';
+  const dataPath = path.join(ATOMS, dataBase + '.mjs');
+  const priorSrc = fs.existsSync(dataPath) ? fs.readFileSync(dataPath, 'utf8') : null;
+  // הסרה מהקופסה (מהסוף) + ייבוא
+  for (const d of [...decls].sort((a, b) => b.at - a.at))
+    src = src.slice(0, d.at) + src.slice(d.at + d.len);
+  const names = decls.map(d => d.name);
+  const lastIm = [...src.matchAll(/^import[^\n]*$/gm)].pop();
+  if (!lastIm) return log(`~ ${base}: קופסה בלי imports — חריג`);
+  const prior = priorSrc ? [...priorSrc.matchAll(/export const (\w+)/g)].map(x => x[1]) : [];
+  const imLine = `import { ${[...new Set([...prior, ...names])].join(', ')} } from '../atoms/${dataBase}.mjs';`;
+  if (src.includes(`from '../atoms/${dataBase}.mjs'`))
+    src = src.replace(new RegExp(`import \\{[^}]*\\} from '\\.\\./atoms/${dataBase}\\.mjs';`), imLine);
+  else
+    src = src.slice(0, lastIm.index + lastIm[0].length) + '\n' + imLine + src.slice(lastIm.index + lastIm[0].length);
+  // אטום-הדאטה (מצטבר) + חוזה + בדיקת-צילום
+  const exports = (priorSrc ? priorSrc.replace(/\/\*\*[\s\S]*?\*\/\n/, '').trim() + '\n' : '')
+    + decls.map(d => `export const ${d.name} = ${d.val};`).join('\n') + '\n';
+  const dataSrc = `/** אטום-דאטה · ${dataBase} — קבועי-החיווט של קופסת-${base} (מנוע-הטיהור v7, הכרעה 19). חוזה: ${dataBase}.contract.md\n *  מהות-המוצא: קבועי חיווט של קופסת ${base.replace(/-/g, ' ')} */\n${exports}`;
+  const contract = `# חוזה · ${dataBase}\nקבועי-חיווט (מספרי-קסם/מחרוזות-דומיין מנוימים) שהורמו מכנית מקופסת-${base} (הכרעה 19).\nהקופסה מייבאת ישירות (קופסה⇐אטום מותר). אפס לוגיקה.\n\n## דוגמאות-זהב\nצילום-ערך ב-${dataBase}.test.mjs.\n`;
+  const allNames = [...new Set([...prior, ...names])];
+  const testSrc = `// בדיקת-צילום · ${dataBase} — הערכים זהים ביט-אחר-ביט למקור בקופסה.\nimport * as D from './${dataBase}.mjs';\nimport assert from 'node:assert';\nassert.strictEqual(JSON.stringify([${allNames.map(n2 => 'D.' + n2).join(', ')}]), JSON.stringify(${'['}${allNames.map(n2 => `__V_${n2}`).join(', ')}]));\nconsole.log('OK ${dataBase}');\n`
+    .replace(new RegExp(allNames.map(n2 => `__V_${n2}`).join('|'), 'g'), (mm) => {
+      const nm = mm.slice(4);
+      const d = decls.find(x => x.name === nm);
+      if (d) return d.val;
+      const pm = priorSrc && priorSrc.match(new RegExp(`export const ${nm} = ([^;]+);`));
+      return pm ? pm[1] : 'undefined';
+    });
+  // ניתוח-מגנים בבדיקת-הקופסה: includes("const X = v;") ⇒ אימות-ערך על האטום
+  const adjP = path.join(BOXES, base + '.test.mjs');
+  const adjOrig = fs.existsSync(adjP) ? fs.readFileSync(adjP, 'utf8') : null;
+  let adj = adjOrig;
+  if (adj) {
+    let touched = false;
+    for (const d of decls) {
+      const pats = [`src.includes("const ${d.name} = ${d.val};")`, `src.includes('const ${d.name} = ${d.val};')`, `src.includes("${d.name} = ${d.val}")`, `src.includes('${d.name} = ${d.val}')`];
+      for (const pt of pats) if (adj.includes(pt)) { adj = adj.split(pt).join(`${d.name} === ${d.val}`); touched = true; }
+    }
+    if (touched && !adj.includes(`from '../atoms/${dataBase}.mjs'`))
+      adj = `import { ${names.join(', ')} } from '../atoms/${dataBase}.mjs';\n` + adj;
+  }
+  // כתיבה + ולידציה + החזרה
+  fs.writeFileSync(bp, src);
+  fs.writeFileSync(dataPath, dataSrc);
+  fs.writeFileSync(path.join(ATOMS, dataBase + '.contract.md'), contract);
+  fs.writeFileSync(path.join(ATOMS, dataBase + '.test.mjs'), testSrc);
+  if (adj !== null) fs.writeFileSync(adjP, adj);
+  try {
+    execFileSync('node', ['--check', bp], { stdio: 'pipe' });
+    execFileSync('node', [path.join(ATOMS, dataBase + '.test.mjs')], { stdio: 'pipe' });
+    if (adjOrig !== null) execFileSync('node', [adjP], { stdio: 'pipe' });
+    log(`✅ ${base}: הורמו ${names.join(', ')}`);
+    return true;
+  } catch (e) {
+    fs.writeFileSync(bp, orig);
+    if (adjOrig !== null) fs.writeFileSync(adjP, adjOrig);
+    if (priorSrc) fs.writeFileSync(dataPath, priorSrc);
+    else { fs.rmSync(dataPath, { force: true }); fs.rmSync(path.join(ATOMS, dataBase + '.contract.md'), { force: true }); fs.rmSync(path.join(ATOMS, dataBase + '.test.mjs'), { force: true }); }
+    return log(`🫱 ${base}: ולידציה-נכשלה ⇒ הוחזר — ${String(e.stderr || e.message).slice(0, 100).replace(/\n/g, ' ')}`);
+  }
+}
+if (mode === '--consts') {
+  let ok = 0;
+  for (const f of fs.readdirSync(BOXES).filter(x => x.endsWith('.mjs') && !x.endsWith('.test.mjs'))) {
+    if (ok >= N) break;
+    if (purifyBoxConsts(f, (x) => console.log('  ' + x)) === true) ok++;
+  }
+  console.log(`🧲 קבועי-קופסה הורמו: ${ok}`);
+}

@@ -71,9 +71,10 @@ import { HEB_CAL } from '../atoms/heb-cal-data.mjs';
 const src = readFileSync(new URL('./hebdate.mjs', import.meta.url), 'utf8');
 if (HEB_CAL.hebYearOffset !== 3761 || !src.includes('hebYear - HEB_CAL.hebYearOffset')) bad('מגן: עוגן-הסריקה (−3761) שונה');   // הכרעה 19: על ערך-הדאטה
 if (HEB_CAL.scanWindowDays !== 440 || !src.includes('i < HEB_CAL.scanWindowDays')) bad('מגן: חלון-440 שונה');
-if (!src.includes('new Date(gy, 7, 1 + i, 12)')) bad('מגן: צהריים/1-באוגוסט שונה');
+if (HEB_CAL.noonHour !== 12 || !src.includes('new Date(gy, 7, 1 + i, HEB_CAL.noonHour)')) bad('מגן: צהריים/1-באוגוסט שונה');   // הכרעה 19: על ערך-הדאטה
+if (HEB_CAL.yearMin !== 4000 || HEB_CAL.yearMax !== 7000 || HEB_CAL.longLen !== 30) bad('מגן: גבולות-הסריקה (30/4000/7000) שונו');
 if (!src.includes('now = new Date()')) bad('מגן: ברירת-מחדל-השעון שונתה');
-if (!src.includes('⚠ שם חודש עברי לא-צפוי מ-Intl — ייתכן שינוי CLDR שישבור המרות תאריך. הריצו validateHebMonthNames().')) bad('מגן: הודעת-ה-warn שונתה');
+if (HEB_CAL.cldrWarn !== '⚠ שם חודש עברי לא-צפוי מ-Intl — ייתכן שינוי CLDR שישבור המרות תאריך. הריצו validateHebMonthNames().' || !src.includes('warn(HEB_CAL.cldrWarn)')) bad('מגן: הודעת-ה-warn שונתה');
 const imports = [...src.matchAll(/from '([^']+)'/g)].map((m) => m[1]);
 if (!imports.length || !imports.every((i) => i.startsWith('../atoms/'))) bad('מגן: ייבוא שאינו מ-atoms: ' + imports);
 if (/^\s*console\.warn\(/m.test(src)) bad('מגן: console.warn ברמת-מודול — השער חייב להיות שקע-מוזרק');

@@ -1,6 +1,7 @@
 // רתמת-הזהב · enroll-new-family — בדיוק דוגמת-החוזה מ-new/atoms/enroll-new-family.test.mjs.
 // המקור הוא אטום-קבוע (צילום-ערך): ההתחייבות היחידה = ENROLL_NEW_FAMILY == '__new'.
 // אם עובר, Dart ≡ JS. הרצה: dart run --enable-asserts enroll-new-family_test.dart
+import '../dart-data-maor/norm-search-sockets.dart' as sk_ns;
 import 'enroll-new-family.dart';
 
 void main() {

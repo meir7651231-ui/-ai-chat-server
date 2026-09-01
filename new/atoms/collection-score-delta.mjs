@@ -7,6 +7,7 @@ export function collectionScoreDelta(
   date,
   amount,
   lastCollectionIso,
+  // קבוע-מתמטי: משקלי-ניקוד ברירת-מחדל (מוזרקים דרך rules להתאמת-הארגון)
   rules = { emptyPts: 10, ilsPerPoint: 50, streakDays: 60, streakPts: 5 }, T) {
   let pts = rules.emptyPts + Math.floor(amount / rules.ilsPerPoint);
   const prev = lastCollectionIso(box);

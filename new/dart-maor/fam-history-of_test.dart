@@ -1,3 +1,4 @@
+import '../dart-data-maor/fam-history-of-sockets.dart' as sk_fam_history_of;
 // 🥇 רתמת-זהב · famHistoryOf — אותם קלטים→פלטים בדיוק כמו new/atoms/fam-history-of.test.mjs.
 // עובר ⇒ Dart ≡ JS (חוק-4). ריצה: dart run --enable-asserts fam-history-of_test.dart
 import 'fam-history-of.dart';
@@ -25,7 +26,7 @@ void main() {
   };
 
   // 1) משפחה מינימלית — רשומת-הצטרפות יחידה
-  final r1 = famHistoryOf(emptyDb, Map.of(minFam), {}, termOf);
+  final r1 = famHistoryOf(emptyDb, Map.of(minFam), {}, termOf, sk_fam_history_of.famHistoryOf_T);
   assert(r1.length == 1);
   assert(rs(r1[0]) == '2026-01-05|הצטרפות|#e7edf5|#3a5a86|המשפחה הצטרפה',
       'רשומת-ההצטרפות שגויה: ${rs(r1[0])}');
@@ -33,7 +34,7 @@ void main() {
   // 2) מילון-הארגון
   final r2 = famHistoryOf(emptyDb, Map.of(minFam), {
     'terms': {'entity.family': 'לקוחה'}
-  }, termOf);
+  }, termOf, sk_fam_history_of.famHistoryOf_T);
   assert(r2[0]['text'] == 'הלקוחה הצטרפה', 'termOf לא הוחל על entity.family');
 
   // 3) אירוע-לוח — שלי נכנס (עם time+done), זר בחוץ, בלי-date נדלג
@@ -46,7 +47,7 @@ void main() {
     'enrollments': [],
     'courses': []
   };
-  final r3 = famHistoryOf(db3, {...minFam, 'createdAt': ''}, {}, termOf);
+  final r3 = famHistoryOf(db3, {...minFam, 'createdAt': ''}, {}, termOf, sk_fam_history_of.famHistoryOf_T);
   assert(
       r3.length == 1 &&
           r3[0]['tag'] == 'אירוע' &&
@@ -64,7 +65,7 @@ void main() {
       ]
     }
   };
-  final r4 = famHistoryOf(emptyDb, fam4, {}, termOf);
+  final r4 = famHistoryOf(emptyDb, fam4, {}, termOf, sk_fam_history_of.famHistoryOf_T);
   assert(
       r4.length == 2 &&
           r4[1]['tag'] == 'אמינות' &&
@@ -101,7 +102,7 @@ void main() {
     ],
     'docs': []
   };
-  final r5 = famHistoryOf(db5, fam5, {}, termOf);
+  final r5 = famHistoryOf(db5, fam5, {}, termOf, sk_fam_history_of.famHistoryOf_T);
   final r5pairs = r5.map((x) => '${x['tag']}|${x['text']}').toList();
   assert(
       r5pairs.length == 3 &&
@@ -129,7 +130,7 @@ void main() {
       }
     ]
   };
-  final r5b = famHistoryOf(db5b, fam5, {}, termOf);
+  final r5b = famHistoryOf(db5b, fam5, {}, termOf, sk_fam_history_of.famHistoryOf_T);
   assert(
       r5b[0]['tag'] == 'היעדרות' &&
           r5b[0]['text'] == 'היעדרות — ציור · מחלה · זכאי/ת השלמה',
@@ -142,7 +143,7 @@ void main() {
     'docs': [
       {'addedAt': '2026-05-01', 'name': 'ספח'}
     ]
-  }, {}, termOf);
+  }, {}, termOf, sk_fam_history_of.famHistoryOf_T);
   assert(
       r6.length == 1 && r6[0]['tag'] == 'מסמך' && r6[0]['text'] == 'מסמך נוסף: ספח',
       'רשומת-המסמך שגויה');
@@ -152,11 +153,7 @@ void main() {
     final n = (i + 1).toString().padLeft(2, '0');
     return {'famId': 'f1', 'date': '2026-06-$n', 'title': 'e${i + 1}'};
   });
-  final r7 = famHistoryOf(
-      {'events': evs, 'enrollments': [], 'courses': []},
-      {...minFam, 'createdAt': ''},
-      {},
-      termOf);
+  final r7 = famHistoryOf({'events': evs, 'enrollments': [], 'courses': []}, {...minFam, 'createdAt': ''}, {}, termOf, sk_fam_history_of.famHistoryOf_T);
   assert(r7.length == 40, 'הקציצה ל-40 נכשלה (אורך ${r7.length})');
   assert(r7[0]['date'] == '2026-06-45' && r7[39]['date'] == '2026-06-06',
       'המיון-היורד/הקצה שגויים');

@@ -1,3 +1,4 @@
+import '../dart-data-maor/telephony-to-tenant-sockets.dart' as sk_telephony_to_tenant;
 /// בדיקות-חוזה · telephony-to-tenant — כל 7 דוגמאות-החוזה + בדיקת-ה-JS.
 /// מערכים = אורך + איבר-איבר; כשל ⇒ StateError.
 import 'telephony-to-tenant.dart';
@@ -38,17 +39,13 @@ Map<String, dynamic> findNum(Map<String, dynamic> t, String id) =>
         );
 
 void main() {
-  final t = telephonyToTenant(
-    baseTc([
+  final t = telephonyToTenant(baseTc([
       {'id': 'n1', 'e164': ' +972501234567 ', 'label': 'קו ראשי', 'kind': 'sim'},
       {'id': 'n2', 'e164': '', 'label': 'ריק', 'kind': 'virtual'},
       {'id': 'n3', 'e164': '+97277', 'kind': 'virtual'},
       {'id': 'n4', 'e164': '+97252', 'kind': 'whatsapp', 'kosher': true},
       {'id': 'n5', 'e164': '+972521111111', 'label': 'שער ב', 'kind': 'sim'},
-    ]),
-    '',
-    'maor-test',
-  );
+    ]), '', 'maor-test', sk_telephony_to_tenant.telephonyToTenant_T);
   final nums = t['numbers'] as List;
 
   // 1) קו בלי e164 מסונן
@@ -83,15 +80,12 @@ void main() {
   // 4) outbound: ה-SIM הראשון; בלי SIM ⇒ ראשון; אפס-קווים ⇒ 'n1'
   ok((t['outbound'] as Map)['defaultNumberId'] == 'n1',
       'דוגמה 4: default לא ה-SIM הראשון');
-  final tNoSim = telephonyToTenant(
-      baseTc([
+  final tNoSim = telephonyToTenant(baseTc([
         {'id': 'v9', 'e164': '+9721', 'kind': 'virtual'}
-      ]),
-      'א',
-      'x-org');
+      ]), 'א', 'x-org', sk_telephony_to_tenant.telephonyToTenant_T);
   ok((tNoSim['outbound'] as Map)['defaultNumberId'] == 'v9',
       'דוגמה 4: בלי-SIM לא נפל לקו הראשון');
-  final tEmpty = telephonyToTenant(baseTc([]), 'א', 'x-org');
+  final tEmpty = telephonyToTenant(baseTc([]), 'א', 'x-org', sk_telephony_to_tenant.telephonyToTenant_T);
   ok((tEmpty['outbound'] as Map)['defaultNumberId'] == 'n1',
       "דוגמה 4: אפס-קווים לא 'n1'");
 
@@ -126,8 +120,7 @@ void main() {
   ok(t['orgName'] == 'ארגון', "דוגמה 6: orgName ריק לא 'ארגון'");
   ok(!t.containsKey('city'), 'דוגמה 6: city ריק הופיע');
   ok(t['timezone'] == 'Asia/Jerusalem', 'דוגמה 6: timezone שגוי');
-  final tCity = telephonyToTenant(
-      <String, dynamic>{...baseTc([]), 'city': 'צפת'}, 'מאור', 'x-org');
+  final tCity = telephonyToTenant(<String, dynamic>{...baseTc([]), 'city': 'צפת'}, 'מאור', 'x-org', sk_telephony_to_tenant.telephonyToTenant_T);
   ok(tCity['city'] == 'צפת' && tCity['orgName'] == 'מאור',
       'דוגמה 6: city/orgName מלאים שגויים');
 

@@ -1,4 +1,11 @@
-import '../dart-data-maor/gematria-terms.dart' as td_gematria;
+import '../dart-data-maor/exp-field-defs-sockets.dart' as skb_efd;
+import '../dart-data-maor/build-custom-export-sockets.dart' as skb_bce;
+import '../dart-data-maor/feat-label-sockets.dart' as skb_feat_label;
+import '../dart-data-maor/item-label-sockets.dart' as skb_item_label;
+import '../dart-data-maor/unit-label-sockets.dart' as skb_unit_label;
+import '../dart-data-maor/gematria-sockets.dart' as skb_gematria;
+import '../dart-data-maor/sup-tier-sockets.dart' as skb_sup_tier;
+import '../dart-data-maor/gematria-sockets.dart' as td_gematria;
 import '../dart-data-maor/exp-field-defs-terms.dart';
 import '../dart-data-maor/stage-label.dart';
 // 📦 קופסת-חיבורים · דו"ח מותאם (Dart) — מחווטת 26 אטומי-Dart. מקבילה ל-new/boxes/custom-export.mjs.
@@ -37,6 +44,7 @@ import '../dart-maor/sessions-of.dart' as so;
 import '../dart-maor/enroll-count.dart' as ec;
 import '../dart-maor/heb-parts.dart' as hp;
 import '../dart-maor/heb-annual-eq.dart' as hae;
+import '../dart-data-maor/heb-date-full-sockets.dart' as sk_hdf;
 import '../dart-maor/heb-date-full.dart' as hdf;
 import '../dart-maor/gematria.dart' as gm;
 import '../dart-maor/gem-year.dart' as gy;
@@ -85,11 +93,11 @@ dynamic _termOfDyn(dynamic cfg, String key, String fb) => tof.termOf(cfg, key, f
 
 // ── חיווט-שכנים (השקעים של האטומים ⇐ אטומים אחרים) ──
 bool _featureOn(dynamic cfg, String key) => fo.featureOn(cfg as Map<String, dynamic>, key, NAV_MODULE_KEYS, mo.moduleOn);
-String _featLabel(dynamic cfg) => fl.featLabel(cfg, _termOfObj);
-String _itemLabel(dynamic cfg) => il.itemLabel(cfg as Map<String, dynamic>, _termOfMap);
-String _unitLabel(dynamic cfg) => ul.unitLabel(cfg, _termOfDyn) as String;
-String _gemYear(String y) => gy.gemYear(y, gm.gem);
-String _hebDateFull(String iso) => hdf.hebDateFull(iso, gm.gem, _gemYear, (d) => hp.hebParts(d));
+String _featLabel(dynamic cfg) => fl.featLabel(cfg, _termOfObj, skb_feat_label.featLabel_T);
+String _itemLabel(dynamic cfg) => il.itemLabel(cfg as Map<String, dynamic>, _termOfMap, skb_item_label.itemLabel_T);
+String _unitLabel(dynamic cfg) => ul.unitLabel(cfg, _termOfDyn, skb_unit_label.unitLabel_T) as String;
+String _gemYear(String y) => gy.gemYear(y, (a0) => gm.gem(a0, skb_gematria.gematria_U, skb_gematria.gematria_T, skb_gematria.gematria_H, skb_gematria.gematria_T2));
+String _hebDateFull(String iso) => hdf.hebDateFull(iso, (a0) => gm.gem(a0, skb_gematria.gematria_U, skb_gematria.gematria_T, skb_gematria.gematria_H, skb_gematria.gematria_T2), _gemYear, (d) => hp.hebParts(d), sk_hdf.hebDateFull_monthNames);
 dynamic _supTotalIls(dynamic sp, dynamic rate) => sti.supTotalIls(sp, rate: rate, supIls: si.supIls, supUsd: su.supUsd);
 
 // ── מטמון פר-שנה-עברית (רצף-חודשים + has30) — חיווט-השכן של hebAnnualEq,
@@ -127,7 +135,7 @@ bool _hebAnnualEq(dynamic anchor, dynamic query) {
 // ── החשיפה (חתימות-המקור) ──────────────────────────────────────────────────
 /// הגדרות-שדות (key+label) של הדו"ח המותאם לפי יעד: חוגים / אירועים / תומכות.
 List<Map<String, String>> expFieldDefs(dynamic cfg, String target) =>
-    efd.expFieldDefs<dynamic>(cfg, target, _featureOn, _termOfS, _featLabel, _itemLabel, _unitLabel, term: (k)=>kTerms[k]!);
+    efd.expFieldDefs<dynamic>(cfg, target, _featureOn, _termOfS, _featLabel, _itemLabel, _unitLabel, term: (k)=>kTerms[k]!, T: skb_efd.expFieldDefs_T);
 
 /// דריסת עמודה בשורות (כותרת חסינה, אי-מוטציה, colIdx<0 ⇒ כניסה-כיציאה).
 List<dynamic> overrideColumn(List<dynamic> rows, int colIdx, Map overrides) =>
@@ -166,11 +174,12 @@ List<List<String>> buildCustomExport(
       supIls: (sp) => _jsNum(si.supIls(sp)),
       supUsd: (sp) => _jsNum(su.supUsd(sp)),
       supScore: supScore,
-      supTier: (score) => st.supTier(score),
+      supTier: (score) => st.supTier(score, skb_sup_tier.supTier_T),
       stageLabel: (c, stage) => sla.stageLabel(c, stage, tof.termOf, stageFallback: kStageFallback) as String,
       evMeta: em.evMeta,
       hebrewRecurring: HEBREW_RECURRING,
       dayNames: DAY_NAMES,
     ),
+    skb_bce.buildCustomExport_T,
   );
 }

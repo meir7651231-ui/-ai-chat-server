@@ -1,3 +1,7 @@
+import '../dart-data-maor/build-slots-sockets.dart' as skb_bs;
+import '../dart-data-maor/block-reason-sockets.dart' as skb_block_reason;
+import '../dart-data-maor/inactive-room-courses-sockets.dart' as skb_inactive_room_courses;
+import '../dart-data-maor/room-info-label-sockets.dart' as skb_room_info_label;
 import '../dart-data-maor/group-label-of-terms.dart' as td_group_label_of;
 import '../dart-data-maor/absence-reason-chips-terms.dart' as td_absence_reason_chips;
 import '../dart-data-maor/plan-word-terms.dart';
@@ -81,19 +85,19 @@ List<String> get ABSENCE_REASON_CHIPS => arc.absenceReasonChips(term: (k)=>td_ab
 Map<String, bool> makeupEligibility(String kind, bool justified, num? rawHrs) =>
     me.makeupEligibility(kind, justified, rawHrs);
 Map<String, dynamic> chipStyle(String bg, String c) => cs.chipStyle(bg, c);
-String roomInfoLabel(dynamic room) => ril.roomInfoLabel(room);
+String roomInfoLabel(dynamic room) => ril.roomInfoLabel(room, skb_room_info_label.roomInfoLabel_T);
 
 // ── חיווט-פנימי: שכן-שוקע (חוק-1) ──
 String localIso(DateTime d) => il.isoLocal(d); // diary localIso(d) ≡ isoLocal(d)
 String isoToday([DateTime? now]) => it.isoToday(il.isoLocal, now);
 String minToHM(int min) => mh.minToHM(min, p2.pad2);
 String? blockReason(DateTime d, [bool blockingOn = true]) =>
-    br.blockReason(d, _hebPartsRec, hd.HOLIDAYS, blockingOn);
+    br.blockReason(d, _hebPartsRec, hd.HOLIDAYS, skb_block_reason.blockReason_FULL_HOLIDAYS, skb_block_reason.blockReason_T, blockingOn);
 num weeklyRoomSessions(Map<String, dynamic> db, dynamic roomId, String iso) =>
     wrs.weeklyRoomSessions(db, roomId, iso, _sessionsOf);
 List<Map<String, dynamic>> inactiveRoomCourses(
         Map<String, dynamic> db, String iso, dynamic config) =>
-    irc.inactiveRoomCourses(db, iso, config, _termOf);
+    irc.inactiveRoomCourses(db, iso, config, _termOf, skb_inactive_room_courses.inactiveRoomCourses_T);
 List<Map<String, dynamic>> enrollmentsForSession(
         Map<String, dynamic> db, Map<String, dynamic> c, int sessionIndex) =>
     efs.enrollmentsForSession(db, c, sessionIndex, _sessionsOf, groupLabelOf);
@@ -103,7 +107,7 @@ List<Map<String, dynamic>> buildSlots(Map<String, dynamic> db, Map<String, dynam
         String iso, dynamic blocked, Map<String, dynamic> config,
         [bool cleaningOn = true]) =>
     bs.buildSlots(db, room, iso, blocked, config, _timeToMinSock, _minToHMSlot,
-        _sessionsOf, _courseOnDate, _termOf, cleaningOn);
+        _sessionsOf, _courseOnDate, _termOf, skb_bs.buildSlots_T, cleaningOn);
 
 // ── הכרעת-קופסה: וריאנט-היומן של planLabelOf (מקור: lib.ts:261-266) ──
 // שונה מוריאנט-הקורסים (atom plan-label-of): יתרת-כרטיסייה purchased-used, בלי status/חוב.

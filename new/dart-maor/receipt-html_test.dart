@@ -1,9 +1,10 @@
+import '../dart-data-maor/receipt-html-sockets.dart' as sk_receipt_html;
 // בדיקת-חוזה (רתמת-זהב) · receiptHtml — מייבאת אך ורק את האטום-שלה (חוק-4).
 // דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/receipt-html.test.mjs:
 //   1) XSS: !html.includes('<script>') · html.includes('&lt;script&gt;') · '&amp; בניו'
 //   2) מבנה: mark = שורה-ראשונה · ריקות מסוננות · סדר-גוף נשמר · 3 שורות-ln
 //   3) מעטפת: dir="rtl" · lang="he" · charset · @media print · 'קבלה R-77'
-//   4) דטרמיניזם: html == receiptHtml(o, fakeLines)
+//   4) דטרמיניזם: html == receiptHtml(o, fakeLines, sk_receipt_html.receiptHtml_T)
 // אם עובר ⇒ Dart≡JS.
 // הרצה: dart run --enable-asserts new/dart-maor/receipt-html_test.dart  ⇒ exit 0
 import 'receipt-html.dart';
@@ -23,7 +24,7 @@ void main() {
     'rid': 'R-77',
     'name': 'ישראל <script>alert(1)</script> & בניו',
   };
-  final html = receiptHtml(o, fakeLines);
+  final html = receiptHtml(o, fakeLines, sk_receipt_html.receiptHtml_T);
 
   // 1) XSS — הקלט העוין לא מגיע חי.
   assert(!html.contains('<script>'), 'FAIL: script חי ב-HTML!');
@@ -63,7 +64,7 @@ void main() {
   }
 
   // 4) דטרמיניזם.
-  assert(html == receiptHtml(o, fakeLines), 'FAIL: לא-דטרמיניסטי');
+  assert(html == receiptHtml(o, fakeLines, sk_receipt_html.receiptHtml_T), 'FAIL: לא-דטרמיניסטי');
   n++;
 
   print('OK receiptHtml: $n asserts passed');

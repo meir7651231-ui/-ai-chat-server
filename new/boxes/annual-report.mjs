@@ -40,6 +40,7 @@ export function downloadAnnualReport({ filename, lines }, io) {
   a.href = io.makeBlobUrl(reportText(lines), ANNUAL_REPORT_TERMS.k1);
   a.download = filename;
   a.click();
+  // קבוע-מתמטי: השהיית-revoke למשאב-הורדה (מ"ש)
   io.schedule(() => io.revokeUrl(a.href), 5000);
   return true;
 }

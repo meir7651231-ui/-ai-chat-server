@@ -43,7 +43,9 @@ gateDirty('nlsmoke', 'mahulal/nl-smoke.mjs', [], FAST);
 gateDirty('nlquality', 'mahulal/nl-quality.mjs', [], FAST);
 gate('oracle', 'census/oracle.mjs', ['--gate']);
 gate('truth', 'truth.mjs', ['--gate']);
+gate('coverage', 'coverage-gate.mjs');
 gate('pins', 'pins-check.mjs');
+gate('boxes', 'box-proofs-check.mjs', ['--gate'], FAST);
 gate('selftest', 'police-selftest.mjs', [], FAST);
 gate('mutation', 'mutation-check.mjs', [], FAST);
 // פריטי מרשם⇄ריצה — דו-כיווני

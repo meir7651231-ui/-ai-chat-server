@@ -1,3 +1,6 @@
+import '../dart-data-maor/norm-search-sockets.dart' as skb_norm_search;
+import '../dart-data-maor/sup-dup-fields-sockets.dart' as skb_sdf;
+import '../dart-data-maor/dup-fields-sockets.dart' as skb_df;
 import '../dart-data-maor/merge-families-terms.dart';
 // 📦 קופסת-חיבורים · dedup (Dart) — מחווטת 17 אטומי-Dart. מקבילה ל-new/boxes/dedup.mjs.
 // חוזה משותף: new/boxes/dedup.contract.md. מקור-האמת: maor/src/lib/dedup.ts.
@@ -55,7 +58,7 @@ List<dynamic> _dedupById(List<dynamic> items) {
   }
   return out;
 }
-String _nameSortKey(dynamic t) => nsk.nameSortKey(t, ns.normSearch, _nameTitles);
+String _nameSortKey(dynamic t) => nsk.nameSortKey(t, (a0) => ns.normSearch(a0, skb_norm_search.normSearch_T), _nameTitles);
 
 // ── מתאמי-טיפוס לשקעים (Dart קשיח-טיפוס) ─────────────────────────────────────
 String _npDyn(dynamic s) => np.normPhone(s as String?);
@@ -64,19 +67,19 @@ List<dynamic> _mh(dynamic a, dynamic b) => mh.mergeHist(a, b);
 
 // ── גישור פער-הייצוג: רשומות-שדה → Maps (מה שהאטומים-הצרכנים מצפים) ────────────
 final List<Map<String, dynamic>> _dupFieldMaps = [
-  for (final fld in df.dupFields)
+  for (final fld in DUP_FIELDS)
     <String, dynamic>{'key': fld.key, 'label': fld.label, 'get': (dynamic x) => fld.get(x as Map<String, dynamic>)},
 ];
 final List<Map<String, dynamic>> _supDupFieldMaps = [
-  for (final fld in sdf.supDupFields)
+  for (final fld in SUP_DUP_FIELDS)
     <String, dynamic>{'key': fld.key, 'label': fld.label, 'get': (dynamic x) => fld.get(x as Map<String, dynamic>)},
 ];
 
 // ── ה-API הפומבי (ביט-זהה לחתימות dedup.ts) ──────────────────────────────────
 String normPhone(String? s) => np.normPhone(s);
 String normId(String? s) => ni.normId(s);
-final List<df.DupField> DUP_FIELDS = df.dupFields; // ignore: constant_identifier_names, non_constant_identifier_names
-final List<sdf.SupDupField> SUP_DUP_FIELDS = sdf.supDupFields; // ignore: non_constant_identifier_names
+final List<df.DupField> DUP_FIELDS = df.makeDupFields(skb_df.dupFields_T); // ignore: constant_identifier_names, non_constant_identifier_names
+final List<sdf.SupDupField> SUP_DUP_FIELDS = sdf.makeSupDupFields(skb_sdf.supDupFields_T); // ignore: non_constant_identifier_names
 dynamic dupFieldValue(List fams, Map def, Map pick, Map edit) => dfv.dupFieldValue(fams, def, pick, edit);
 dynamic supDupFieldValue(dynamic sups, dynamic def, dynamic pick, dynamic edit) =>
     sdfv.supDupFieldValue(sups, def, pick, edit);

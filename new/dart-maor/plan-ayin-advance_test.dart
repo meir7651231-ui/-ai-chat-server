@@ -1,3 +1,4 @@
+import '../dart-data-maor/plan-ayin-advance-sockets.dart' as sk_plan_ayin_advance;
 // בדיקת-חוזה (רתמת-זהב) · planAyinAdvance — מייבאת אך ורק את האטום-שלה (חוק-4).
 // 15 דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/plan-ayin-advance.test.mjs:
 //   new(2 שמות)     ⇒ patch{stage:lead} · event 'בהכנה — רות (2 שם לטיפול)' done:false · toast
@@ -77,8 +78,7 @@ num eyesTotal(Map a) {
 Map<String, Object?> nm(Object? eyes) =>
     {'id': 'n', 'name': 'x', 'eyes': eyes, 'done': false};
 
-Map? plan(Map cfg, String name, Map a) => planAyinAdvance(cfg, name, a,
-    ayinActionVisible, featLabel, itemLabel, unitLabel, stageLabel, eyesTotal);
+Map? plan(Map cfg, String name, Map a) => planAyinAdvance(cfg, name, a, ayinActionVisible, featLabel, itemLabel, unitLabel, stageLabel, eyesTotal, sk_plan_ayin_advance.planAyinAdvance_T);
 
 void main() {
   var n = 0;

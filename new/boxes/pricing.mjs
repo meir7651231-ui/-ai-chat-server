@@ -20,12 +20,13 @@ import { SHEKEL_T as __d_shekel_SHEKEL_T } from '../atoms/shekel-strings.mjs';
 const shekel = (...a) => __pure_shekel(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_shekel_SHEKEL_T);
 import { ALL_MODULES } from '../atoms/all-modules.mjs';
 import { DEFAULT_INTEGRATION_PRICES } from '../atoms/integration-prices.mjs';
+import { DEFAULT_QUOTE_MODE } from '../atoms/pricing-default-mode.mjs';
 
 // ── שקעי-הכרעה (מילון-הקופסה — נתון-בעלים עריך, חי כאן ולא באטומים) ──
 // מחירי-ברירת-המחדל להרחבות (maor/src/lib/pricing.ts:36-49) — placeholder עריך
 // שהבעלים דורס באשף. המפתחות = INTEGRATION_LABELS.
 
-// מפתח-האחסון המקומי (maor/src/lib/pricing.ts:192) — הכרעת-הקופסה, לא של החוטים.
+// חוק-6: מפתח-אחסון-מקומי (namespace-זהות, לא נתון-דומיין) — maor/src/lib/pricing.ts:192
 const PRICES_LS_KEY = 'maor_prices';
 
 // ── החיווט ──
@@ -47,7 +48,7 @@ export const normalize = (raw) =>
 
 // חישוב הצעת-מחיר: החוט computeQuote מקבל את ALL_MODULES כשקע (pricing.ts:152-185).
 // nameOf היה כבר פרמטר במקור (מכבד termOf של הלקוח).
-export const quote = (cfg, size, prices, nameOf, addons = [], mode = 'subscription') =>
+export const quote = (cfg, size, prices, nameOf, addons = [], mode = DEFAULT_QUOTE_MODE) =>
   computeQuote(cfg, size, prices, nameOf, ALL_MODULES, addons, mode);
 
 // ── שקעי-IO (localStorage — פרמטרים-מוזרקים, לא מימוש) ──

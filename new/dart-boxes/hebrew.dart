@@ -1,4 +1,4 @@
-import '../dart-data-maor/gematria-terms.dart' as td_gematria;
+import '../dart-data-maor/gematria-sockets.dart' as td_gematria;
 import '../dart-data-maor/holiday-of-terms.dart';
 // 📦 קופסת-חיבורים · hebrew (Dart) — הלוח העברי המלא, מחווטת אטומי-Dart בלבד.
 // מקבילה זהת-ביט ל-new/boxes/hebrew.mjs. חוזה משותף: hebrew.contract.md · מקור-האמת (L4):
@@ -20,6 +20,7 @@ import '../dart-maor/adar-norm.dart' as an;
 import '../dart-maor/heb-annual-eq.dart' as hae;
 import '../dart-maor/heb-parts.dart' as hp;
 import '../dart-maor/heb-parts-of-iso.dart' as hpi;
+import '../dart-data-maor/heb-date-full-sockets.dart' as sk_hdf;
 import '../dart-maor/heb-date-full.dart' as hdf;
 import '../dart-maor/holidays.dart' as hol;
 import '../dart-maor/holiday-of.dart' as ho;
@@ -56,10 +57,10 @@ Map _hebPartsForHoliday(DateTime d) => hp.hebParts(d);
 // ── חשיפה: שמות-המקור verbatim (חוק-7 — החלפה-הפיכה) ──
 
 /// גימטריה — מספר⇒אותיות עבריות (טו/טז, גרש/גרשיים). קלט לא-חוקי ⇒ ''.
-String gem(num n) => g.gem(n, term: (k)=>td_gematria.kTerms[k]!);
+String gem(num n) => g.gem(n, td_gematria.gematria_U, td_gematria.gematria_T, td_gematria.gematria_H, td_gematria.gematria_T2);
 
 /// שנה עברית⇒גימטריה מקוצרת (mod 1000). מקבל int או String (ToNumber של JS).
-String gemYear(Object? y) => gy.gemYear(y, g.gem);
+String gemYear(Object? y) => gy.gemYear(y, gem);
 
 /// דין-אדר לנרמול: 'Adar II' ⇒ 'Adar'; כל שם-אחר עובר כמו-שהוא.
 String adarNorm(String monthEn) => an.adarNorm(monthEn);
@@ -79,7 +80,7 @@ Map<String, dynamic> hebPartsOfIso(String iso) =>
     hpi.hebPartsOfIso(iso, (dynamic date) => hp.hebParts(date as DateTime?));
 
 /// 'ט״ו אלול תשפ״ו' מתוך ISO (צהריים-מקומי — חסין-אזורי-זמן). ריק/שבור ⇒ ''.
-String hebDateFull(String? iso) => hdf.hebDateFull(iso, g.gem, gemYear, (DateTime d) => hp.hebParts(d));
+String hebDateFull(String? iso) => hdf.hebDateFull(iso, gem, gemYear, (DateTime d) => hp.hebParts(d), sk_hdf.hebDateFull_monthNames);
 
 /// מפת "חודש-עברי יום" ⇒ שם-חג (33 מפתחות סטטיים).
 const Map<String, String> HOLIDAYS = hol.HOLIDAYS; // ignore: constant_identifier_names

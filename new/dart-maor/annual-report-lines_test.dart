@@ -1,3 +1,4 @@
+import '../dart-data-maor/annual-report-lines-sockets.dart' as sk_annual_report_lines;
 // בדיקת-חוזה (רתמת-זהב) · annualReportLines — מייבאת אך ורק את האטום-שלה (חוק-4).
 // 13 דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/annual-report-lines.test.mjs
 // (אותם קלטים→פלטים). השקעים נאמנים למקור (annualReport.ts):
@@ -38,8 +39,7 @@ void main() {
     {'date': '2025-12-31', 'amount': 999},
   ];
 
-  final L = annualReportLines(
-    {
+  final L = annualReportLines({
       'orgName': 'מאור',
       'orgTaxId': '580123456',
       'supporterName': 'דוד לוי',
@@ -47,10 +47,7 @@ void main() {
       'year': '2026',
       'donations': donations,
       'site': 'maor.org',
-    },
-    _donationsOfYear,
-    _money,
-  );
+    }, _donationsOfYear, _money, sk_annual_report_lines.annualReportLines_T);
 
   _ok(L.length == 20, 'אורך ' + L.length.toString() + ' ≠ 20');
   _ok(L[0] == '=' * 46, "[0] ≠ 46 סימני '='");
@@ -65,11 +62,7 @@ void main() {
   _ok(L[19] == 'maor.org', '[19]: ' + L[19]);
 
   // אפס-תרומות, בלי taxId/site:
-  final E = annualReportLines(
-    {'orgName': 'מאור', 'supporterName': 'רות', 'year': '2027', 'donations': donations},
-    _donationsOfYear,
-    _money,
-  );
+  final E = annualReportLines({'orgName': 'מאור', 'supporterName': 'רות', 'year': '2027', 'donations': donations}, _donationsOfYear, _money, sk_annual_report_lines.annualReportLines_T);
   _ok(E.contains('אין תרומות רשומות בשנת 2027.'), 'חסרה שורת אין-תרומות');
   _ok(!E.any((l) => l.contains('סעיף 46')), 'בלי taxId ⇒ בלי פסקת-§46');
 

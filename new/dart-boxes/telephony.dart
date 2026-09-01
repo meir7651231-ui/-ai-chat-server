@@ -1,3 +1,4 @@
+import '../dart-data-maor/telephony-to-tenant-sockets.dart' as skb_telephony_to_tenant;
 import '../dart-data-maor/preview-telephony-terms.dart' as td_preview_telephony;
 import '../dart-data-maor/empty-telephony-config-terms.dart' as td_empty_telephony_config;
 import '../dart-data-maor/explain-one-terms.dart';
@@ -21,12 +22,12 @@ Map<String, dynamic> emptyTelephonyConfig() => etc.emptyTelephonyConfig(term: (k
 dynamic toTenantId(dynamic slug, dynamic orgName) => tti.toTenantId(slug, orgName);
 Map<String, dynamic> telephonyToTenant(
         dynamic tc, dynamic orgName, dynamic tenantId) =>
-    t2t.telephonyToTenant(tc, orgName, tenantId);
+    t2t.telephonyToTenant(tc, orgName, tenantId, skb_telephony_to_tenant.telephonyToTenant_T);
 
 // ── מתאם-טיפוס: שקע-ההמרה של preview דורש חתימה טיפוסית קשיחה; הקופסה עוטפת
 //    את חוט-telephonyToTenant-שלה לתוכו (ההכרעה החיה). ──
 dynamic _t2tSocket(Map<String, dynamic> tc, String orgName, String tenantId) =>
-    t2t.telephonyToTenant(tc, orgName, tenantId);
+    t2t.telephonyToTenant(tc, orgName, tenantId, skb_telephony_to_tenant.telephonyToTenant_T);
 
 // ── החיווט (ההכרעות החיות בקופסה) ──
 

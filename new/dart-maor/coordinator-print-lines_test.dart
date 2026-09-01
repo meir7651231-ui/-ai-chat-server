@@ -1,3 +1,4 @@
+import '../dart-data-maor/coordinator-print-lines-sockets.dart' as sk_coordinator_print_lines;
 import 'coordinator-print-lines.dart';
 
 /// רתמת-זהב: אותן 3 דוגמאות-חוזה (8 בדיקות) בדיוק מ-new/atoms/coordinator-print-lines.test.mjs.
@@ -47,7 +48,7 @@ void main() {
   };
 
   // 1) בלי config — נוסח היסטורי
-  final r1 = coordinatorPrintLines(db, 'c1', null, termOf, coordinatorBoxes, lastCollectionIso);
+  final r1 = coordinatorPrintLines(db, 'c1', null, termOf, coordinatorBoxes, lastCollectionIso, sk_coordinator_print_lines.coordinatorPrintLines_T2);
   ok(r1.length == 4, '1: מספר-שורות ≠ 4 (קיבלנו ' + r1.length.toString() + ')');
   ok(r1[0] == 'רשימת קופות — רחל', '1: כותרת שגויה: "' + r1[0] + '"');
   ok(r1[1] == '=' * 30, '1: קו-מפריד ≠ 30×"="');
@@ -56,11 +57,11 @@ void main() {
 
   // 2) עם config — דריסת-מונח
   final cfg = <String, dynamic>{'terms': {'entity.familyOf': 'בית'}};
-  final r2 = coordinatorPrintLines(db, 'c1', cfg, termOf, coordinatorBoxes, lastCollectionIso);
+  final r2 = coordinatorPrintLines(db, 'c1', cfg, termOf, coordinatorBoxes, lastCollectionIso, sk_coordinator_print_lines.coordinatorPrintLines_T2);
   ok(r2[2].startsWith('#7 · בית לוי · '), '2: דריסת-מונח לא כובדה: "' + r2[2] + '"');
 
   // 3) רכז לא-מוכר
-  final r3 = coordinatorPrintLines(db, 'cX', null, termOf, coordinatorBoxes, lastCollectionIso);
+  final r3 = coordinatorPrintLines(db, 'cX', null, termOf, coordinatorBoxes, lastCollectionIso, sk_coordinator_print_lines.coordinatorPrintLines_T2);
   ok(r3.length == 3 && r3[0] == 'רשימת קופות — ' && r3[2] == 'אין קופות פעילות', '3: מקרה-רכז-לא-מוכר שגוי');
 
   if (f != 0) throw StateError('coordinator-print-lines: סטייה מהמקור');

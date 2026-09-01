@@ -8,6 +8,7 @@
 //
 // ⚠️ גבול-פלטפורמה (חוק-6): הקופסה טהורה לגמרי — פתיחת-הקישור בדפדפן/אפליקציה = שקע
 //   של לוח-האם, לא כאן. מה שמוכח כאן = בניית-הספרות/הקישור/הנוסחים, חוצה-שפות זהה-ביט.
+import '../dart-data-maor/wa-delivery-text-sockets.dart' as skb_wa_delivery_text;
 import '../dart-maor/wa-digits.dart' as dig;
 import '../dart-maor/wa-link.dart' as lnk;
 import '../dart-maor/wa-delivery-text.dart' as del;
@@ -73,7 +74,7 @@ dynamic waLink(dynamic phone, [dynamic text = '']) =>
 
 /// הודעת-מסירה (חלוקה): נשלחת למשפחה כשהמשלוח יוצא/בדרך.
 dynamic waDeliveryText(dynamic orgName, dynamic famName, [dynamic cfg]) =>
-    del.waDeliveryText(orgName, famName, cfg, _wiredRender, _orgOf);
+    del.waDeliveryText(orgName, famName, cfg, _wiredRender, _orgOf, skb_wa_delivery_text.waDeliveryText_T);
 
 /// תזכורת-תשלום ידידותית (חוגים): שם-הפריט + היתרה (₪, מעוגל, he-IL).
 dynamic waPaymentText(dynamic orgName, dynamic what, dynamic balance,

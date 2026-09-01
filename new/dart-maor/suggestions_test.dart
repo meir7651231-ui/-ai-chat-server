@@ -1,3 +1,4 @@
+import '../dart-data-maor/suggestions-sockets.dart' as sk_suggestions;
 // בדיקת-חוזה · suggestions.dart — 6 דוגמאות-חוזה מ-suggestions.test.mjs
 // + נסיגת-הסגר: purchased בטווח [2^53,1e21) ⇒ אין ".0" במפתח (בעיית-הרג'קס).
 import 'suggestions.dart';
@@ -52,7 +53,7 @@ void main() {
         {'id': 'f2', 'name': 'לוי', 'status': 'active', 'members': []},
       ],
     };
-    final out = suggestions(db, TODAY, null, sockets(holPesach));
+    final out = suggestions(db, TODAY, null, sockets(holPesach), sk_suggestions.suggestions_T2);
     ok(out.length == 1, 'דוגמה 1: מספר-הצעות ≠ 1');
     final s = out[0] as Map;
     ok(s['key'] == 'sug:holiday:פסח:5786', 'דוגמה 1: key שגוי — ${s['key']}');
@@ -79,7 +80,7 @@ void main() {
         }
       ],
     };
-    final out = suggestions(db, TODAY, null, sockets(holNone));
+    final out = suggestions(db, TODAY, null, sockets(holNone), sk_suggestions.suggestions_T2);
     ok(out.length == 2, 'דוגמה 2: מספר-הצעות ≠ 2 (גיל 5 וגם 6)');
     final s6 = _find(out, (x) => (x as Map)['key'] == 'sug:school:m1:6');
     final s5 = _find(out, (x) => (x as Map)['key'] == 'sug:school:m2:5');
@@ -105,7 +106,7 @@ void main() {
         }
       ],
     };
-    final out = suggestions(db, TODAY, null, sockets(holNone));
+    final out = suggestions(db, TODAY, null, sockets(holNone), sk_suggestions.suggestions_T2);
     ok(out.length == 1, 'דוגמה 3: מספר-הצעות ≠ 1 (isParent לא דולג?)');
     final s = out[0] as Map;
     ok(s['key'] == 'sug:baby:b1' &&
@@ -137,16 +138,16 @@ void main() {
           'courses': [course],
           'enrollments': [enr(used)],
         };
-    final out2 = suggestions(db(8), TODAY, null, sockets(holNone));
+    final out2 = suggestions(db(8), TODAY, null, sockets(holNone), sk_suggestions.suggestions_T2);
     ok(out2.length == 1 && (out2[0] as Map)['key'] == 'sug:renew:e1:10',
         'דוגמה 4: key-חידוש שגוי');
     ok((out2[0] as Map)['detail'] == 'נותרו 2 ניקובים' &&
         (out2[0] as Map)['courseId'] == 'c1' &&
         (out2[0] as Map)['famId'] == 'f1', 'דוגמה 4: פרטי-חידוש שגויים');
-    final out0 = suggestions(db(10), TODAY, null, sockets(holNone));
+    final out0 = suggestions(db(10), TODAY, null, sockets(holNone), sk_suggestions.suggestions_T2);
     ok(out0.length == 1 && (out0[0] as Map)['detail'] == 'הכרטיסייה נגמרה',
         'דוגמה 4: "הכרטיסייה נגמרה" חסר');
-    final out3 = suggestions(db(7), TODAY, null, sockets(holNone));
+    final out3 = suggestions(db(7), TODAY, null, sockets(holNone), sk_suggestions.suggestions_T2);
     ok(out3.length == 0, 'דוגמה 4: נותרו 3 — לא הייתה אמורה לעלות הצעה');
   }
   // 5) גידור-מודולים — shop כבוי ⇒ אין חג; courses כבוי ⇒ אין חידוש
@@ -178,13 +179,11 @@ void main() {
         }
       ],
     };
-    final noShop = suggestions(
-        db, TODAY, cfg, sockets(holPesach, (c, m) => m != 'shop'));
+    final noShop = suggestions(db, TODAY, cfg, sockets(holPesach, (c, m) => m != 'shop'), sk_suggestions.suggestions_T2);
     ok(!noShop.any((x) => (x as Map)['act'] == 'shop') &&
         noShop.any((x) => (x as Map)['act'] == 'courses'),
         'דוגמה 5: shop כבוי לא גודר');
-    final noCourses = suggestions(
-        db, TODAY, cfg, sockets(holPesach, (c, m) => m != 'courses'));
+    final noCourses = suggestions(db, TODAY, cfg, sockets(holPesach, (c, m) => m != 'courses'), sk_suggestions.suggestions_T2);
     ok(!noCourses.any((x) => (x as Map)['act'] == 'courses') &&
         noCourses.any((x) => (x as Map)['act'] == 'shop'),
         'דוגמה 5: courses כבוי לא גודר');
@@ -204,7 +203,7 @@ void main() {
         }
       ],
     };
-    final out = suggestions(db, TODAY, null, sockets(holPesach));
+    final out = suggestions(db, TODAY, null, sockets(holPesach), sk_suggestions.suggestions_T2);
     ok(out.length == 0, 'דוגמה 6: משפחה סגורה הציפה הצעות');
   }
   // 7) נסיגת-הסגר — purchased בטווח [2^53,1e21): המפתח ללא ".0"
@@ -236,7 +235,7 @@ void main() {
         }
       ],
     };
-    final out = suggestions(db, TODAY, null, sockets(holNone));
+    final out = suggestions(db, TODAY, null, sockets(holNone), sk_suggestions.suggestions_T2);
     ok(out.length == 1, 'דוגמה 7: הצעת-חידוש לא עלתה');
     ok((out[0] as Map)['key'] == 'sug:renew:e1:9007199254740994',
         'דוגמה 7: key עם ".0" — הרג\'קס-הישן. קיבלנו ${(out[0] as Map)['key']}');

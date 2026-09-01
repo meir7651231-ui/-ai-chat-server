@@ -1,3 +1,4 @@
+import '../dart-data-maor/annual-report-lines-sockets.dart' as skb_annual_report_lines;
 import '../dart-data-maor/annual-all-lines-terms.dart';
 // 📦 קופסת-חיבורים · דוח-שנתי-לתורם (Dart) — מחווטת 5 אטומי-Dart. מקבילה ל-new/boxes/annual-report.mjs.
 // חוזה משותף: new/boxes/annual-report.contract.md. מקור-האמת (L4): maor/src/lib/annualReport.ts
@@ -48,7 +49,7 @@ List<dynamic> _ofYearSocket(dynamic donations, dynamic year) =>
 
 // ── החיווט: reportLines מחווט את donationsOfYear+money (זהה ל-wiredReportLines ב-JS) ──
 List<String> reportLines(Map<String, dynamic> inp) =>
-    arl.annualReportLines(inp, _ofYearSocket, money);
+    arl.annualReportLines(inp, _ofYearSocket, money, skb_annual_report_lines.annualReportLines_T);
 
 // ── החשיפה (אותו API כמו הקופסה ב-JS) ────────────────────────────────────────
 List<String> years(List<Map<String, dynamic>> donations) => dy.donationYears(donations);

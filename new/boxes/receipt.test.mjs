@@ -1,3 +1,4 @@
+import { REVOKE_MS, FRAME_MS } from '../atoms/receipt-wiring-data.mjs';
 /** בדיקת-קצה: קופסת-הקבלה — תוכן (§46/רגילה/S-/שבור) + מסירה (io מזויף) + שער-הרשאה.
  *  ‏DoD (דיבר 12): node receipt.test.mjs ⇒ exit 0. מייבאת אך-ורק את הקופסה-שלה (חוק-4).
  *  amountInWords = שקע-שכן מוזרק (סטאב, כמו בבדיקת אטום receipt-lines) — ראה כותרת-הקופסה. */
@@ -127,8 +128,8 @@ ok(src.indexOf('if (!guardExport(io)) return;') < src.indexOf('receiptHtml(o, am
 // קבועי-המסירה verbatim
 ok(src.includes("const BOM = '﻿';"), 'מגן: BOM verbatim');
 ok(src.includes('`receipt-${o.rid}.txt`'), 'מגן: שם-קובץ verbatim');
-ok(src.includes('const REVOKE_MS = 5000;'), 'מגן: revoke 5000');
-ok(src.includes('const FRAME_MS = 60_000;'), 'מגן: frame 60000');
+ok(REVOKE_MS === 5000, 'מגן: revoke 5000');
+ok(FRAME_MS === 60_000, 'מגן: frame 60000');
 // מילון NAV_MODULE_KEYS (9 מודולי-ניווט) + כלל-הצהריים
 ok(JSON.stringify(NAV_MODULE_KEYS) === '["families","courses","calendar","diary","supporters","reports","tzedaka","shop","shop7"]', 'מגן: NAV_MODULE_KEYS 9-מודולים verbatim (הכרעה 19: על ערך-הדאטה)');
 ok(src.includes("'T12:00:00'"), 'מגן: hebrewLocaleDate צהריים-מקומי');

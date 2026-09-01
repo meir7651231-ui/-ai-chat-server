@@ -1,3 +1,4 @@
+import '../dart-data-maor/wa-delivery-text-sockets.dart' as sk_wa_delivery_text;
 // בדיקת-חוזה (רתמת-זהב) · waDeliveryText — מייבאת אך ורק את האטום-שלה (חוק-4).
 // חמש דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/wa-delivery-text.test.mjs,
 // כולל שקעי-האמת המקומיים כהתנהגות maor (renderTemplate — lib/templates.ts:57-66
@@ -45,7 +46,7 @@ void main() {
   // 1) הרכבה מלאה — org+fam מלאים, בלי cfg.
   _check(
       "('מאור החסד','כהן',undefined)",
-      waDeliveryText('מאור החסד', 'כהן', null, _renderTemplate, _orgOf)
+      waDeliveryText('מאור החסד', 'כהן', null, _renderTemplate, _orgOf, sk_wa_delivery_text.waDeliveryText_T)
           as String,
       'שלום משפחת כהן, משלוח ממאור החסד בדרך אליכם היום 🚚');
   n++;
@@ -53,42 +54,32 @@ void main() {
   // 2) נפילת-ארגון — orgName ריק ⇒ 'העמותה'.
   _check(
       "('','לוי',undefined)",
-      waDeliveryText('', 'לוי', null, _renderTemplate, _orgOf) as String,
+      waDeliveryText('', 'לוי', null, _renderTemplate, _orgOf, sk_wa_delivery_text.waDeliveryText_T) as String,
       'שלום משפחת לוי, משלוח מהעמותה בדרך אליכם היום 🚚');
   n++;
 
   // 3) טרים — famName ריק ⇒ 'משפחת' לבדו (הרווח הנגרר נגזם).
   _check(
       "('מאור החסד','',undefined)",
-      waDeliveryText('מאור החסד', '', null, _renderTemplate, _orgOf) as String,
+      waDeliveryText('מאור החסד', '', null, _renderTemplate, _orgOf, sk_wa_delivery_text.waDeliveryText_T) as String,
       'שלום משפחת, משלוח ממאור החסד בדרך אליכם היום 🚚');
   n++;
 
   // 4) דריסת-ארגון — תבנית מ-cfg.templates גוברת.
   _check(
       "('מאור','לוי',{templates:{'wa.delivery':'היי {name} — מ-{org}!'}})",
-      waDeliveryText(
-          'מאור',
-          'לוי',
-          {
+      waDeliveryText('מאור', 'לוי', {
             'templates': {'wa.delivery': 'היי {name} — מ-{org}!'}
-          },
-          _renderTemplate,
-          _orgOf) as String,
+          }, _renderTemplate, _orgOf, sk_wa_delivery_text.waDeliveryText_T) as String,
       'היי משפחת לוי — מ-מאור!');
   n++;
 
   // 5) דריסה ריקה-אחרי-טרים לא גוברת ⇒ ברירת-המחדל.
   _check(
       "('מאור','לוי',{templates:{'wa.delivery':'  '}})",
-      waDeliveryText(
-          'מאור',
-          'לוי',
-          {
+      waDeliveryText('מאור', 'לוי', {
             'templates': {'wa.delivery': '  '}
-          },
-          _renderTemplate,
-          _orgOf) as String,
+          }, _renderTemplate, _orgOf, sk_wa_delivery_text.waDeliveryText_T) as String,
       'שלום משפחת לוי, משלוח ממאור בדרך אליכם היום 🚚');
   n++;
 

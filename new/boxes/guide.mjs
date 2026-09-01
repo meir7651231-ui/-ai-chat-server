@@ -1,6 +1,7 @@
 /** קופסת-חיבורים · המדריך המהיר 📖 (lib-guide). חוזה: guide.contract.md
  *  זה המקום היחיד שבו חוטי-המדריך נפגשים (חוקי-החשמלאי, LAW.md).
  *  מקור-האמת: maor/src/lib/guide.ts — תוכן "המדריך המהיר" מהקובץ החי (legacy:2891-2912). */
+import { RECIPE_SWAPS } from '../atoms/guide-recipe-swaps.mjs';
 import { GUIDE_INTRO_LABEL } from '../atoms/guide-intro-label.mjs';
 import { GUIDE_INTRO } from '../atoms/guide-intro.mjs';
 import { GUIDE_SECTIONS } from '../atoms/guide-sections.mjs';
@@ -24,20 +25,7 @@ const termOf = (...a) => __pure_termOf(...a, ...Array(Math.max(0, 3 - a.length))
 // מוזרק כשקע לחוט guide-sections-of (החוט הצהיר עליו, הקופסה מספקת).
 const swap = (s, from, to) => s.split(from).join(to);
 
-// מילון-ההחלפות של "המתכונים המהירים" (guide.ts:124-132) — הכרעת-הקופסה.
-// הסדר הוא *המשמעות* (כל החלפה רצה על תוצאת קודמתה) — סידור-מחדש = שינוי-מוצר.
-// שורה: [from, קידומת, מפתח-termOf, fallback, סיפא] ⇒ ההחלפה = קידומת+T(מפתח,fallback)+סיפא.
-const RECIPE_SWAPS = [
-  ['ליד השיבוץ', 'ליד ה', 'entity.enrollment', 'שיבוץ', ''],
-  ['כדי שיבוץ', 'כדי ', 'entity.enrollment', 'שיבוץ', ''],
-  ['משפחה חדשה', '', 'entity.family', 'משפחה', ' חדשה'],
-  ['חוג מתאים', '', 'entity.course', 'חוג', ' מתאים'],
-  ['מצא חוג', 'מצא ', 'entity.course', 'חוג', ''],
-  ['החוג', 'ה', 'entity.course', 'חוג', ''],
-  ['למורה', 'ל', 'entity.teacher', 'מורה', ''],
-  ['← ＋ תרומה', '← ＋ ', 'entity.donation', 'תרומה', ''],
-  ['תרומה ←', '', 'entity.donation', 'תרומה', ' ←'],
-];
+
 
 // ── החשיפה ──
 export { GUIDE_INTRO_LABEL, GUIDE_INTRO, GUIDE_SECTIONS, GUIDE_RECIPES_LABEL, GUIDE_RECIPES, GUIDE_FOOT };

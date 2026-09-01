@@ -3,6 +3,7 @@
  *  OrgSecretsSection.tsx (שורות 45, 61-71) — עכשיו חיווט גלוי אחד.
  *  שקעי-IO (שמירת-הענן writeOrgSecrets · toast · שדות-הטופס) = לוח-האם; הקופסה טהורה. */
 import { SMTP_HOSTS } from '../atoms/smtp-hosts.mjs';
+import { SMTP_STATE } from '../atoms/smtp-account-state.mjs';
 import { smtpHostFor as __pure_smtpHostFor } from '../atoms/smtp-host-for.mjs';
 import { SMTP_HOSTS as __d_smtpHostFor_SMTP_HOSTS } from '../atoms/smtp-hosts.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v2): הדאטה נכרכת כאן — ה-API החיצוני זהה
@@ -35,12 +36,12 @@ export function buildSmtpAccount({ email, password, manualHost } = {}) {
   const em = String(email ?? '');
   const pw = String(password ?? '');
   const mh = String(manualHost ?? '');
-  if (!em.trim() && !pw.trim()) return { state: 'empty' };
+  if (!em.trim() && !pw.trim()) return { state: SMTP_STATE.empty };
   const knownHost = smtpHostFor(em); // הכרעה 2: ספק-מוכר גובר על השדה-הידני
   const url = composeSmtpUrl(em, pw, knownHost || mh);
   if (!url) {
     // הכרעה 3: הבורר בין ההודעות = קיום-שרת לא-מקוצץ (knownHost || mh), כמו במקור
-    return { state: 'error', message: knownHost || mh ? MSG_MISSING_FIELDS : MSG_UNKNOWN_PROVIDER };
+    return { state: SMTP_STATE.error, message: knownHost || mh ? MSG_MISSING_FIELDS : MSG_UNKNOWN_PROVIDER };
   }
-  return { state: 'ok', url, host: (knownHost || mh).trim(), known: !!knownHost };
+  return { state: SMTP_STATE.ok, url, host: (knownHost || mh).trim(), known: !!knownHost };
 }

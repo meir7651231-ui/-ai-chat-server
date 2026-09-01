@@ -1,3 +1,4 @@
+import '../dart-data-maor/explain-call-sockets.dart' as sk_explain_call;
 // 🏅 רתמת-זהב · explainCall — void main + assert-ים שהם **בדיוק** דוגמאות-החוזה של
 //    בדיקת-ה-JS (new/atoms/explain-call.test.mjs / explain-call.contract.md). אותם
 //    קלטים→פלטים. עובר ⇒ Dart ≡ JS (חוק-4). הרצה: dart run --enable-asserts.
@@ -42,7 +43,7 @@ void main() {
   };
   final call1 = <String, dynamic>{};
   final opts1 = <String, dynamic>{};
-  final out1 = explainCall(tenant1, call1, opts1, e1.simulateCall, e1.featureOn);
+  final out1 = explainCall(tenant1, call1, opts1, e1.simulateCall, e1.featureOn, sk_explain_call.explainCall_DOW_HE, sk_explain_call.explainCall_T);
   assert(_listEq(out1['lines'], ['✅ בשעות-פעילות → מצלצל במשרד (101, 102).']),
       '1 office lines');
   assert(out1['reason'] == 'שעות-פעילות', '1 reason');
@@ -54,12 +55,7 @@ void main() {
   assert(identical(e1.calls[0][2], opts1), '1 arg opts');
 
   // 2+7) callerId + dow ⇒ שורת-מתקשר, summary = join(' ')
-  final out2 = explainCall(
-      tenant1,
-      <String, dynamic>{'callerId': '0501234567', 'dow': 2, 'hhmm': '10:00'},
-      <String, dynamic>{},
-      e1.simulateCall,
-      e1.featureOn);
+  final out2 = explainCall(tenant1, <String, dynamic>{'callerId': '0501234567', 'dow': 2, 'hhmm': '10:00'}, <String, dynamic>{}, e1.simulateCall, e1.featureOn, sk_explain_call.explainCall_DOW_HE, sk_explain_call.explainCall_T);
   assert(out2['lines'][0] == '📲 מתקשר 0501234567 · יום שלישי 10:00', '2 caller line');
   assert(
       out2['summary'] ==
@@ -78,16 +74,14 @@ void main() {
     'outcome': 'voicemail',
     'reason': 'חג'
   });
-  final a = explainCall(tenant3, <String, dynamic>{}, <String, dynamic>{},
-      eh.simulateCall, eh.featureOn);
+  final a = explainCall(tenant3, <String, dynamic>{}, <String, dynamic>{}, eh.simulateCall, eh.featureOn, sk_explain_call.explainCall_DOW_HE, sk_explain_call.explainCall_T);
   assert(a['lines'][0] == '🌙 מחוץ-לשעות (חג) → מנהל (200) → תא-קולי (300).', '3א חג');
   final eg = _Eng(<String, dynamic>{
     'path': ['closed'],
     'outcome': 'voicemail',
     'reason': 'מחוץ-לשעות'
   });
-  final b = explainCall(tenant3, <String, dynamic>{}, <String, dynamic>{},
-      eg.simulateCall, eg.featureOn);
+  final b = explainCall(tenant3, <String, dynamic>{}, <String, dynamic>{}, eg.simulateCall, eg.featureOn, sk_explain_call.explainCall_DOW_HE, sk_explain_call.explainCall_T);
   assert(b['lines'][0] == '🌙 מחוץ-לשעות → מנהל (200) → תא-קולי (300).', '3ב גנרית');
 
   // 4) afterhours F11 — מודע-voicemail + יעדים חסרים ⇒ '—' + טריגר ivr-invalid
@@ -97,21 +91,18 @@ void main() {
     'reason': ''
   };
   final e4off = _Eng(sim4, vmOn: false);
-  final off = explainCall(<String, dynamic>{}, <String, dynamic>{},
-      <String, dynamic>{}, e4off.simulateCall, e4off.featureOn);
+  final off = explainCall(<String, dynamic>{}, <String, dynamic>{}, <String, dynamic>{}, e4off.simulateCall, e4off.featureOn, sk_explain_call.explainCall_DOW_HE, sk_explain_call.explainCall_T);
   assert(off['lines'][0] == '🌙 אין-מענה במשרד → מנהל (—) → צליל-תפוס (אין תא-קולי).',
       '4א voicemail כבוי');
   final e4on = _Eng(sim4, vmOn: true);
-  final on = explainCall(<String, dynamic>{}, <String, dynamic>{},
-      <String, dynamic>{}, e4on.simulateCall, e4on.featureOn);
+  final on = explainCall(<String, dynamic>{}, <String, dynamic>{}, <String, dynamic>{}, e4on.simulateCall, e4on.featureOn, sk_explain_call.explainCall_DOW_HE, sk_explain_call.explainCall_T);
   assert(on['lines'][0] == '🌙 אין-מענה במשרד → מנהל (—) → תא-קולי.', '4ב voicemail דלוק');
   final einv = _Eng(<String, dynamic>{
     'path': ['open', 'ivr', 'ivr-invalid'],
     'outcome': 'afterhours',
     'reason': ''
   }, vmOn: true);
-  final inv = explainCall(<String, dynamic>{}, <String, dynamic>{},
-      <String, dynamic>{}, einv.simulateCall, einv.featureOn);
+  final inv = explainCall(<String, dynamic>{}, <String, dynamic>{}, <String, dynamic>{}, einv.simulateCall, einv.featureOn, sk_explain_call.explainCall_DOW_HE, sk_explain_call.explainCall_T);
   assert(inv['lines'][0] == '🌙 בחירה לא-תקינה ב-IVR → מנהל (—) → תא-קולי.', '4ג ivr-invalid');
 
   // 5) חיוג-יוצא: via + כשר-חסום, reason='' תמיד
@@ -119,12 +110,7 @@ void main() {
     'path': ['outbound'],
     'outcome': 'via:sim1'
   });
-  final via = explainCall(
-      <String, dynamic>{},
-      <String, dynamic>{'direction': 'outbound', 'did': '035551234'},
-      <String, dynamic>{},
-      ev.simulateCall,
-      ev.featureOn);
+  final via = explainCall(<String, dynamic>{}, <String, dynamic>{'direction': 'outbound', 'did': '035551234'}, <String, dynamic>{}, ev.simulateCall, ev.featureOn, sk_explain_call.explainCall_DOW_HE, sk_explain_call.explainCall_T);
   assert(_listEq(via['lines'], ['📞 חיוג-יוצא: 035551234', '✅ יוצא דרך: sim1']),
       '5א via lines');
   assert(via['reason'] == '', '5א reason');
@@ -133,12 +119,7 @@ void main() {
     'path': ['outbound'],
     'outcome': 'non-kosher-blocked'
   });
-  final kosher = explainCall(
-      <String, dynamic>{},
-      <String, dynamic>{'direction': 'outbound', 'did': '035551234'},
-      <String, dynamic>{},
-      ek.simulateCall,
-      ek.featureOn);
+  final kosher = explainCall(<String, dynamic>{}, <String, dynamic>{'direction': 'outbound', 'did': '035551234'}, <String, dynamic>{}, ek.simulateCall, ek.featureOn, sk_explain_call.explainCall_DOW_HE, sk_explain_call.explainCall_T);
   assert(kosher['lines'][1] == '⛔ מצב-כשר: ניסיון-יציאה דרך SIM לא-כשר — נחסם.',
       '5ב כשר-חסום');
 
@@ -148,12 +129,10 @@ void main() {
     'outcome': 'ivr:office',
     'reason': 'שעות-פעילות'
   });
-  final ivr = explainCall(<String, dynamic>{}, <String, dynamic>{},
-      <String, dynamic>{}, ei.simulateCall, ei.featureOn);
+  final ivr = explainCall(<String, dynamic>{}, <String, dynamic>{}, <String, dynamic>{}, ei.simulateCall, ei.featureOn, sk_explain_call.explainCall_DOW_HE, sk_explain_call.explainCall_T);
   assert(ivr['lines'][0] == '✅ בחירת-IVR → office.', '6א בחירת-IVR');
   final eo = _Eng(<String, dynamic>{'path': [], 'outcome': 'zzz', 'reason': ''});
-  final odd = explainCall(<String, dynamic>{}, <String, dynamic>{},
-      <String, dynamic>{}, eo.simulateCall, eo.featureOn);
+  final odd = explainCall(<String, dynamic>{}, <String, dynamic>{}, <String, dynamic>{}, eo.simulateCall, eo.featureOn, sk_explain_call.explainCall_DOW_HE, sk_explain_call.explainCall_T);
   assert(odd['lines'][0] == 'תוצאה: zzz', '6ב לא-מוכר');
 
   print('✓ explain-call (Dart): 7 דוגמאות-חוזה — ירוק (Dart ≡ JS)');

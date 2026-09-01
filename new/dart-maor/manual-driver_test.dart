@@ -6,7 +6,10 @@
 //                · ''→null · '12'→null · 'ללא'→null
 // אפס import חיצוני (בלי dart:convert) — מסדר-JSON נבנה ידנית כדי לשקף JSON.stringify.
 // הרצה: dart run --enable-asserts new/dart-maor/manual-driver_test.dart  ⇒ exit 0
+import '../dart-data-maor/manual-driver-sockets.dart' as sk_md;
 import 'manual-driver.dart';
+
+final Map<String, dynamic> manualDriver = makeManualDriver(sk_md.manualDriver_T);
 
 void _ok(bool cond, String msg) {
   if (!cond) throw StateError('FAIL: $msg');

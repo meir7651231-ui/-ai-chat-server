@@ -1,3 +1,4 @@
+import '../dart-data-maor/inactive-room-courses-sockets.dart' as sk_inactive_room_courses;
 // בדיקת-חוזה (רתמת-זהב) · inactiveRoomCourses — מייבאת אך ורק את האטום-שלה (חוק-4).
 // שש דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/inactive-room-courses.test.mjs:
 //   1) חדר-חסר rX, terms={}                    ⇒ [{course:cMissing, roomName:'חדר לא קיים'}]
@@ -50,55 +51,48 @@ void main() {
   // 1) חדר לא קיים — fallback 'חדר'
   _eq(
       'חדר-חסר',
-      inactiveRoomCourses(
-          {'courses': [cMissing], 'rooms': rooms}, iso, {'terms': {}}, _termOf),
+      inactiveRoomCourses({'courses': [cMissing], 'rooms': rooms}, iso, {'terms': {}}, _termOf, sk_inactive_room_courses.inactiveRoomCourses_T),
       [{'course': cMissing, 'roomName': 'חדר לא קיים'}]);
   n++;
 
   // 2) מונח פר-ארגון דרך השקע
   _eq(
       'מונח-ארגוני',
-      inactiveRoomCourses({'courses': [cMissing], 'rooms': rooms}, iso,
-          {'terms': {'entity.room': 'אולם'}}, _termOf),
+      inactiveRoomCourses({'courses': [cMissing], 'rooms': rooms}, iso, {'terms': {'entity.room': 'אולם'}}, _termOf, sk_inactive_room_courses.inactiveRoomCourses_T),
       [{'course': cMissing, 'roomName': 'אולם לא קיים'}]);
   n++;
 
   // 3) חדר לא-פעיל — שם החדר
   _eq(
       'חדר-לא-פעיל',
-      inactiveRoomCourses(
-          {'courses': [cInactive], 'rooms': rooms}, iso, {'terms': {}}, _termOf),
+      inactiveRoomCourses({'courses': [cInactive], 'rooms': rooms}, iso, {'terms': {}}, _termOf, sk_inactive_room_courses.inactiveRoomCourses_T),
       [{'course': cInactive, 'roomName': 'סטודיו ב'}]);
   n++;
 
   // 4) חדר פעיל — לא אזהרה
   _eq(
       'חדר-פעיל',
-      inactiveRoomCourses(
-          {'courses': [cActive], 'rooms': rooms}, iso, {'terms': {}}, _termOf),
+      inactiveRoomCourses({'courses': [cActive], 'rooms': rooms}, iso, {'terms': {}}, _termOf, sk_inactive_room_courses.inactiveRoomCourses_T),
       const []);
   n++;
 
   // 5) חוג שהסתיים — מדולג גם כשחדרו לא-פעיל
   _eq(
       'חוג-שהסתיים',
-      inactiveRoomCourses(
-          {'courses': [cEnded], 'rooms': rooms}, iso, {'terms': {}}, _termOf),
+      inactiveRoomCourses({'courses': [cEnded], 'rooms': rooms}, iso, {'terms': {}}, _termOf, sk_inactive_room_courses.inactiveRoomCourses_T),
       const []);
   n++;
 
   // 6) בלי roomId — מדולג · מסתיים-היום (iso ≤ end) — נכלל
   _eq(
       'בלי-חדר+מסתיים-היום',
-      inactiveRoomCourses({'courses': [cNoRoom, cEndsToday], 'rooms': rooms},
-          iso, {'terms': {}}, _termOf),
+      inactiveRoomCourses({'courses': [cNoRoom, cEndsToday], 'rooms': rooms}, iso, {'terms': {}}, _termOf, sk_inactive_room_courses.inactiveRoomCourses_T),
       [{'course': cEndsToday, 'roomName': 'סטודיו ב'}]);
   n++;
 
   // assert חי (חוק: --enable-asserts) — מוכיח שהמנגנון פעיל.
   assert(
-      inactiveRoomCourses(
-              {'courses': [cMissing], 'rooms': rooms}, iso, {'terms': {}}, _termOf)
+      inactiveRoomCourses({'courses': [cMissing], 'rooms': rooms}, iso, {'terms': {}}, _termOf, sk_inactive_room_courses.inactiveRoomCourses_T)
           .length ==
       1,
       'assert-live guard');

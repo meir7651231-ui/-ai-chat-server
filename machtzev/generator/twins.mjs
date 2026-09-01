@@ -25,8 +25,10 @@ export const dartLit = (v, top = true) => {
 const jsonable = (v) => {
   try { const s = JSON.stringify(v); return s !== undefined && s.length <= 2000 && JSON.stringify(JSON.parse(s)) === s; } catch { return false; }
 };
-const simpleVal = (v) => v === null || ['string', 'number', 'boolean'].includes(typeof v)
-  || (Array.isArray(v) && v.length <= 24 && v.every(x => x === null || ['string', 'number', 'boolean'].includes(typeof x)));
+const prim = (v) => v === null || ['string', 'number', 'boolean'].includes(typeof v);
+const simpleVal = (v) => prim(v)
+  || (Array.isArray(v) && v.length <= 60 && v.every(prim))
+  || (v && typeof v === 'object' && !Array.isArray(v) && Object.keys(v).length <= 60 && Object.values(v).every(prim));
 
 // חיתוך-מאוזן: מ-start עד סוגר-הסיום התואם (start מצביע אחרי הפותח)
 const balanced = (s, start, open = '(', close = ')') => {
@@ -76,6 +78,38 @@ const buildCtx = (tt) => {
   return ctx;
 };
 const evalIn = (expr, ctx) => Function('ctx', 'with(ctx){ return (' + expr + '); }')(ctx);
+
+// 🎬 קציר-שידור-חוזר: מריץ את בדיקת-האטום עם עטיפת-הקלטה על fnName ומחזיר ארגומנטי-הקריאה-הראשונה
+//    (חיים — כולל callbacks). מנטרל process.exit ובולע כשלי-אימות (הלכידה קורית לפני-אימות).
+async function replayCapture(base, fnName, testSrc) {
+  const atomsDir = path.join(ROOT, 'new/atoms');
+  // גוף-הבדיקה בלי שורות-import; קריאות process.exit מנוטרלות; יבוא-ערך-זר (מלבד האטום) ⇒ פסילה
+  const stray = [...testSrc.matchAll(/^import\s+(?!type)([^;]*?)from\s+['"]([^'"]+)['"]/gm)]
+    .filter(m => m[2] !== `./${base}.mjs` && !/^node:/.test(m[2]));  // node: builtins בטוחים (assert וכו')
+  if (stray.length) return null;                                    // תלוי-מדף-זר — לא-בטוח לשידור
+  // שורות-import של node: נשמרות (assert דרוש לגוף); רק יבוא-האטום מוסר
+  const keepNode = [...testSrc.matchAll(/^import\s+.*from\s+['"]node:[^'"]+['"];?$/gm)].map(m => m[0]);
+  const body = testSrc.replace(/^import\s+.*$/gm, '').replace(/process\.exit\s*\([^)]*\)/g, 'void 0');
+  const runner = path.join(atomsDir, `__twinreplay_${base}.mjs`);
+  // שאר-יצואי-האטום מוזרקים כ-const — רק אלו שהבדיקה מזכירה ואינה מגדירה בעצמה (מניעת-התנגשות)
+  const others = [];
+  { const m = await import('file://' + path.join(atomsDir, base + '.mjs') + '?t=' + Date.now());
+    for (const n of Object.keys(m)) if (n !== fnName
+      && new RegExp('\\b' + n + '\\b').test(body)
+      && !new RegExp('(?:const|let|var|function|class)\\s+' + n + '\\b').test(body)) others.push(n); }
+  fs.writeFileSync(runner,
+    keepNode.join('\n') + (keepNode.length ? '\n' : '') +
+    `import * as __atom from './${base}.mjs';\n` +
+    `const __rec = { args: null };\n` +
+    `const ${fnName} = (...a) => { if (!__rec.args) __rec.args = a; return __atom.${fnName}(...a); };\n` +
+    others.map(n => `const ${n} = __atom.${n};`).join('\n') + '\n' +
+    `const describe = (n, fn) => { try { fn && fn(); } catch {} };\nconst it = describe, test = describe, beforeEach=()=>{}, afterEach=()=>{}, beforeAll=()=>{}, afterAll=()=>{};\n` +
+    `try {\n${body}\n} catch {}\nexport const RECIPE = __rec;\n`);
+  try {
+    const rm = await import('file://' + runner + '?t=' + Date.now());
+    return rm.RECIPE?.args || null;
+  } finally { try { fs.unlinkSync(runner); } catch { } }
+}
 
 export async function buildTwinRegistry(fns) {
   const twins = new Map();
@@ -137,6 +171,14 @@ export async function buildTwinRegistry(fns) {
         }
       } else if (extra !== null && extra.length && jsonable(extra)) {
         twinMeta.set(f.name, { tail: extra, simple: extra.every(simpleVal) });
+      }
+      // 🎬 קציר-שידור-חוזר: זנב לא-JSON-י (callbacks/DI) ⇒ מריצים את בדיקת-האטום עם עטיפת-הקלטה
+      //    ולוכדים את הארגומנטים החיים (כולל פונקציות) — מנוע רהיץ אף שאינו-simple (לא-פליט-Dart).
+      if (fn0.length > 1 && extra === null && tt) {
+        try {
+          const rec = await replayCapture(base, f.name, tt);
+          if (rec && rec.length === fn0.length) { extra = rec.slice(1); twinMeta.set(f.name, { tail: [], simple: false, live: true }); }
+        } catch { }
       }
       if (fn0.length > 1 && extra === null) continue;               // רב-פרמטרי שלא נקצר — לא נרשם (כנות)
       const tail = extra || [];

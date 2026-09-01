@@ -5,7 +5,7 @@
     "k1": 100
    }
   ],
-  "simple": false
+  "simple": true
  },
  "adarNorm": {
   "tail": [
@@ -14,7 +14,7 @@
     "k2": "Adar"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "advanceStatus": {
   "tail": [
@@ -27,7 +27,7 @@
     "k1": "delivered"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "allOffConfig": {
   "tail": [
@@ -40,7 +40,12 @@
     "theme": "x"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "allowedDesignationsFor": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "annualAllLines": {
   "tail": [
@@ -48,7 +53,7 @@
     "k1": "אין תורמים עם תרומות בשנת "
    }
   ],
-  "simple": false
+  "simple": true
  },
  "annualReportLines": {
   "tail": [
@@ -70,7 +75,12 @@
     "k15": 12
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "applyAyinNames": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "applyAyinSheet": {
   "tail": [
@@ -80,7 +90,17 @@
     "k3": "done"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "applyConfig": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "applyEntityPartial": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "applyMetaPartial": {
   "tail": [
@@ -102,7 +122,12 @@
     "k15": "shopReceiptSeq"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "applyOutcome": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "applyVerticalPack": {
   "tail": [
@@ -128,6 +153,16 @@
   ],
   "simple": false
  },
+ "attachChargeTo": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "attachChargesBulk": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "auditReportLines": {
   "tail": [
    {
@@ -136,7 +171,7 @@
     "k3": "הופק: "
    }
   ],
-  "simple": false
+  "simple": true
  },
  "ayinActionVisible": {
   "tail": [
@@ -146,7 +181,7 @@
     "k3": "eyes"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "ayinActive": {
   "tail": [
@@ -154,7 +189,7 @@
     "k1": "new"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "ayinAdvanceLabel": {
   "tail": [
@@ -168,7 +203,12 @@
     "k7": "📞 דחיפה ללוח"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "balanceOf": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "beneficiaryLabel": {
   "tail": [
@@ -180,7 +220,12 @@
     "k5": " לא ידועה"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "boqTotal": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "buildCourseDailyRows": {
   "tail": [
@@ -220,7 +265,7 @@
     "k24": 500
    }
   ],
-  "simple": false
+  "simple": true
  },
  "buildIcs": {
   "tail": [
@@ -246,7 +291,7 @@
     "k19": 3600000
    }
   ],
-  "simple": false
+  "simple": true
  },
  "buildMonthGrid": {
   "tail": [
@@ -259,7 +304,12 @@
     "k6": 31
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "buildTzGrid": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "callStats": {
   "tail": [
@@ -267,7 +317,7 @@
     "k1": "noanswer"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "callerKindLabel": {
   "tail": [
@@ -289,7 +339,7 @@
     "k15": "רכז/ת"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "campaignProgress": {
   "tail": [
@@ -297,13 +347,18 @@
     "k1": 100
    }
   ],
-  "simple": false
+  "simple": true
  },
  "campaignTotal": {
   "tail": [
    "c1"
   ],
   "simple": true
+ },
+ "canGrantedAction": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "changePassword": {
   "tail": [
@@ -317,7 +372,7 @@
     "k7": "הסיסמה החדשה חלשה מדי — לפחות 6 תווים"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "chargeDedupKey": {
   "tail": [
@@ -326,7 +381,7 @@
     "k2": "ref:"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "chargeToHist": {
   "tail": [
@@ -334,7 +389,7 @@
     "k1": 10
    }
   ],
-  "simple": false
+  "simple": true
  },
  "chipStyle": {
   "tail": [
@@ -346,7 +401,7 @@
     "k5": 700
    }
   ],
-  "simple": false
+  "simple": true
  },
  "cloudCfgCacheKey": {
   "tail": [
@@ -354,7 +409,7 @@
     "k1": "maor_cloudcfg:"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "cloudDb": {
   "tail": [
@@ -362,7 +417,7 @@
     "k1": "הענן לא אותחל — פנו למנהל המערכת"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "cockpitAtRisk": {
   "tail": [
@@ -370,7 +425,7 @@
     "k1": 60
    }
   ],
-  "simple": false
+  "simple": true
  },
  "cockpitCsvRows": {
   "tail": [
@@ -384,7 +439,7 @@
     "k7": "סיבה"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "cockpitDaysSince": {
   "tail": [
@@ -392,7 +447,7 @@
     "k1": 86400000
    }
   ],
-  "simple": false
+  "simple": true
  },
  "cockpitWorkListText": {
   "tail": [
@@ -403,7 +458,7 @@
     "k4": "ללא שם"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "colPath": {
   "tail": [
@@ -411,7 +466,7 @@
     "k1": "orgs/"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "colRefToIndex": {
   "tail": [
@@ -419,7 +474,7 @@
     "k1": 26
    }
   ],
-  "simple": false
+  "simple": true
  },
  "collectionScoreDelta": {
   "tail": [
@@ -427,7 +482,7 @@
     "k1": 86400000
    }
   ],
-  "simple": false
+  "simple": true
  },
  "componentRedeemedNow": {
   "tail": [
@@ -435,7 +490,7 @@
     "k1": "holidayGift"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "composeSmtpUrl": {
   "tail": [
@@ -444,7 +499,7 @@
     "k2": "smtp"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "computeQuote": {
   "tail": [
@@ -456,7 +511,7 @@
     "k5": 10
    }
   ],
-  "simple": false
+  "simple": true
  },
  "cooldownForFails": {
   "tail": [
@@ -466,7 +521,7 @@
     "k3": 5000
    }
   ],
-  "simple": false
+  "simple": true
  },
  "coordinatorPrintLines": {
   "tail": [
@@ -483,7 +538,17 @@
     "k10": 30
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "coordinatorTotal": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "couponExpiry": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "courseDateError": {
   "tail": [
@@ -494,7 +559,20 @@
     "k4": " לא יופיע בלוח. תקנו את התאריכים"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "courseFitsMember": {
+  "tail": [
+   {
+    "k1": "all"
+   }
+  ],
+  "simple": true
+ },
+ "coursesOfTeacher": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "cycleCarry": {
   "tail": [
@@ -514,6 +592,11 @@
   ],
   "simple": true
  },
+ "dateInRange": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "dayProgress": {
   "tail": [
    {
@@ -522,7 +605,7 @@
     "k3": "delivered"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "decodeCsvBuffer": {
   "tail": [
@@ -536,7 +619,7 @@
     "k7": 400
    }
   ],
-  "simple": false
+  "simple": true
  },
  "decodeQuotedPrintable": {
   "tail": [
@@ -553,7 +636,12 @@
     "k10": 63
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "decryptDb": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "defaultCourseDates": {
   "tail": [
@@ -561,7 +649,7 @@
     "k1": 10
    }
   ],
-  "simple": false
+  "simple": true
  },
  "defaultPrices": {
   "tail": [
@@ -578,7 +666,7 @@
     "k10": 9000
    }
   ],
-  "simple": false
+  "simple": true
  },
  "deliverReceipt": {
   "tail": [
@@ -586,7 +674,7 @@
     "k1": "pdf"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "deliveriesOfDay": {
   "tail": [
@@ -600,7 +688,7 @@
     "k1": " מסירות)"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "detectRecurringHok": {
   "tail": [
@@ -615,7 +703,12 @@
     "k8": 10
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "diffDb": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "distributionListLines": {
   "tail": [
@@ -627,7 +720,7 @@
     "k5": 30
    }
   ],
-  "simple": false
+  "simple": true
  },
  "docSkey": {
   "tail": [
@@ -637,7 +730,7 @@
     "k3": "string"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "donAllowedKeys": {
   "tail": [
@@ -645,7 +738,7 @@
     "k1": 29
    }
   ],
-  "simple": false
+  "simple": true
  },
  "donCalMonthLine": {
   "tail": [
@@ -658,7 +751,17 @@
     "k6": "סכומים מהקובץ ההיסטורי"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "donationPartitionDiff": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "donationsPath": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "doneTodayFor": {
   "tail": [
@@ -666,7 +769,12 @@
     "k1": 10
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "dupFieldValue": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "duplicateCourse": {
   "tail": [
@@ -674,7 +782,12 @@
     "k1": " (עותק)"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "effectiveConfigFor": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "effectivePrice": {
   "tail": [
@@ -682,7 +795,7 @@
     "k1": 100
    }
   ],
-  "simple": false
+  "simple": true
  },
  "eligibleAssignmentsForDay": {
   "tail": [
@@ -690,7 +803,7 @@
     "k1": "active"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "employeeSignUpError": {
   "tail": [
@@ -701,7 +814,12 @@
     "k4": "קוד-ההזמנה מהמנהל הוא שדה חובה"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "encryptExistingCloud": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "enrollCount": {
   "tail": [
@@ -710,7 +828,7 @@
     "k2": "wait"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "enrollStatusMeta": {
   "tail": [
@@ -727,7 +845,7 @@
     "k10": "פעיל"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "enrollSummary": {
   "tail": [
@@ -738,7 +856,7 @@
     "k4": "רשימת-המתנה"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "enrollmentPaidStatus": {
   "tail": [
@@ -748,7 +866,12 @@
     "k3": "unpaid"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "enrollmentQuote": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "envPath": {
   "tail": [
@@ -758,7 +881,7 @@
     "k3": "/_enc/envelope"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "evLabel": {
   "tail": [
@@ -766,7 +889,7 @@
     "k1": "custom"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "excelSerialToIso": {
   "tail": [
@@ -775,7 +898,12 @@
     "k2": 86400000
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "expandQuery": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "explainOne": {
   "tail": [
@@ -785,7 +913,7 @@
     "k3": 400
    }
   ],
-  "simple": false
+  "simple": true
  },
  "famEnrollments": {
   "tail": [
@@ -809,7 +937,7 @@
     "k2": "active"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "faviconDataUri": {
   "tail": [
@@ -819,7 +947,7 @@
     "k3": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text x='50' y='52' font-size='72' text-anchor='middle' dominant-baseline='central'>"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "featLabel": {
   "tail": [
@@ -828,7 +956,22 @@
     "k2": "מעקב טיפול"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "featureOn": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "fillCardFromCharge": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "filterRedemptions": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "findAllOpenPlans": {
   "tail": [
@@ -838,7 +981,7 @@
     "k3": "shopAssignment"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "findCaller": {
   "tail": [
@@ -854,7 +997,7 @@
     "k9": "tzedaka"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "finderAxisValue": {
   "tail": [
@@ -880,7 +1023,22 @@
     "k19": 700
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "finderMatches": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "fitDimensions": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "fixPhone": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "fmtDate": {
   "tail": [
@@ -888,7 +1046,7 @@
     "k1": 10
    }
   ],
-  "simple": false
+  "simple": true
  },
  "foldIcsLine": {
   "tail": [
@@ -896,7 +1054,7 @@
     "k1": 75
    }
   ],
-  "simple": false
+  "simple": true
  },
  "foreignHost": {
   "tail": [
@@ -905,7 +1063,7 @@
     "k2": ".local"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "formatIsraeliPhone": {
   "tail": [
@@ -913,7 +1071,7 @@
     "k1": 10
    }
   ],
-  "simple": false
+  "simple": true
  },
  "freshNextYearEnrollment": {
   "tail": [
@@ -921,7 +1079,7 @@
     "k1": "active"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "freshenDemoDb": {
   "tail": [
@@ -930,7 +1088,12 @@
     "k2": 10
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "fullDbDiff": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "gemYear": {
   "tail": [
@@ -938,7 +1101,7 @@
     "k1": 1000
    }
   ],
-  "simple": false
+  "simple": true
  },
  "gem": {
   "tail": [
@@ -988,7 +1151,7 @@
     "k7": 10
    }
   ],
-  "simple": false
+  "simple": true
  },
  "genJoinCode": {
   "tail": [
@@ -998,7 +1161,7 @@
     "k3": 36
    }
   ],
-  "simple": false
+  "simple": true
  },
  "genRecoveryKey": {
   "tail": [
@@ -1007,7 +1170,17 @@
     "k2": 24
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "givenValue": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "gradeFits": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "gradeIndex": {
   "tail": [
@@ -1029,13 +1202,31 @@
   ],
   "simple": true
  },
+ "grandTotal": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "groupLabelOf": {
   "tail": [
    {
     "k1": "קבוצה "
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "groupOptionsOf": {
+  "tail": [
+   {
+    "k1": " · יום "
+   }
+  ],
+  "simple": true
+ },
+ "guardExport": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "hebAnnualEq": {
   "tail": [
@@ -1046,7 +1237,7 @@
     "k4": 30
    }
   ],
-  "simple": false
+  "simple": true
  },
  "hebDateFull": {
   "tail": [
@@ -1057,7 +1248,7 @@
     "k4": 10
    }
   ],
-  "simple": false
+  "simple": true
  },
  "hebMonthsOf": {
   "tail": [
@@ -1110,13 +1301,18 @@
     "k6": "year"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "hebToIso": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "hebYearNow": {
   "tail": [
    null
   ],
-  "simple": false
+  "simple": true
  },
  "hokEffectivelyActive": {
   "tail": [
@@ -1126,7 +1322,7 @@
     "k3": 12
    }
   ],
-  "simple": false
+  "simple": true
  },
  "hokMethodLabel": {
   "tail": [
@@ -1140,7 +1336,7 @@
     "k7": "אחר"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "hokRecordedThisMonth": {
   "tail": [
@@ -1149,7 +1345,12 @@
     "k2": "סולה"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "holidayAllowed": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "holidayNames": {
   "tail": [
@@ -1157,7 +1358,7 @@
     "k1": 400
    }
   ],
-  "simple": false
+  "simple": true
  },
  "holidayOf": {
   "tail": [
@@ -1182,7 +1383,7 @@
     "k18": 11
    }
   ],
-  "simple": false
+  "simple": true
  },
  "icsFeedUrl": {
   "tail": [
@@ -1192,7 +1393,17 @@
     "k3": "&key="
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "importableContacts": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "inRange": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "industryLabel": {
   "tail": [
@@ -1221,7 +1432,12 @@
     "k7": 1000
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "integrationOn": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "integrationSetting": {
   "tail": [
@@ -1229,7 +1445,7 @@
     "k1": "string"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "churnFromScan": {
   "tail": [
@@ -1240,7 +1456,7 @@
     "k4": 50
    }
   ],
-  "simple": false
+  "simple": true
  },
  "dayDiff": {
   "tail": [
@@ -1249,7 +1465,7 @@
     "k2": 10
    }
   ],
-  "simple": false
+  "simple": true
  },
  "donorIntel": {
   "tail": [
@@ -1257,7 +1473,7 @@
     "k1": 12
    }
   ],
-  "simple": false
+  "simple": true
  },
  "donorScan": {
   "tail": [
@@ -1265,7 +1481,7 @@
     "k1": 12
    }
   ],
-  "simple": false
+  "simple": true
  },
  "forecastFromScan": {
   "tail": [
@@ -1279,7 +1495,7 @@
     "k7": 25
    }
   ],
-  "simple": false
+  "simple": true
  },
  "rfmFromScan": {
   "tail": [
@@ -1309,7 +1525,7 @@
     "k23": 99999
    }
   ],
-  "simple": false
+  "simple": true
  },
  "trendFromScan": {
   "tail": [
@@ -1319,7 +1535,17 @@
     "k3": 100
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "isAdminUser": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "isAdmin": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "isDataImage": {
   "tail": [
@@ -1327,7 +1553,7 @@
     "k1": "string"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "isEncDoc": {
   "tail": [
@@ -1336,7 +1562,7 @@
     "k2": "string"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "isEncrypted": {
   "tail": [
@@ -1344,13 +1570,13 @@
     "k1": "object"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "isGrantableFeature": {
   "tail": [
    {}
   ],
-  "simple": false
+  "simple": true
  },
  "isHebLeapYear": {
   "tail": [
@@ -1358,7 +1584,27 @@
     "k1": "Adar I"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "isJunkContact": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "isMember": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "isOrgManager": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "isSendableSupportText": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "isSuperAdmin": {
   "tail": [
@@ -1368,6 +1614,16 @@
   ],
   "simple": true
  },
+ "isoDaysAgo": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "isoToHebParts": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "itemLabel": {
   "tail": [
    {
@@ -1375,7 +1631,7 @@
     "k2": "שם לטיפול"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "itemOf": {
   "tail": [
@@ -1386,7 +1642,7 @@
     "storeId": "sX"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "kitProgress": {
   "tail": [
@@ -1394,7 +1650,7 @@
     "k1": 100
    }
   ],
-  "simple": false
+  "simple": true
  },
  "lessonPriceForTier": {
   "tail": [
@@ -1416,7 +1672,12 @@
     "k9": "year"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "levenshtein": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "linCycles": {
   "tail": [
@@ -1426,13 +1687,18 @@
   ],
   "simple": true
  },
+ "liveSuggestions": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "lockKey": {
   "tail": [
    {
     "k1": "maor_lock"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "makeupEligibility": {
   "tail": [
@@ -1441,7 +1707,7 @@
     "k2": 48
    }
   ],
-  "simple": false
+  "simple": true
  },
  "mapsRouteUrl": {
   "tail": [
@@ -1451,7 +1717,7 @@
     "k3": "https://www.google.com/maps/dir/?api=1&travelmode=driving&destination="
    }
   ],
-  "simple": false
+  "simple": true
  },
  "matchIncomingToPlanned": {
   "tail": [
@@ -1461,7 +1727,7 @@
     "k3": 60
    }
   ],
-  "simple": false
+  "simple": true
  },
  "maxDiscountPct": {
   "tail": [
@@ -1469,7 +1735,7 @@
     "k1": 100
    }
   ],
-  "simple": false
+  "simple": true
  },
  "mergeDonationsPreserving": {
   "tail": [
@@ -1478,7 +1744,7 @@
     "k2": "number"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "mergeFamiliesByFields": {
   "tail": [
@@ -1503,7 +1769,7 @@
     "k18": "notes"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "mergeFamilies": {
   "tail": [
@@ -1514,7 +1780,27 @@
     "k4": "| מוזג: "
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "mergeFamilyImport": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "mergeHist": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "mergeSupporterInto": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "mergeSupporterRow": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "mergeSupportersByFields": {
   "tail": [
@@ -1530,7 +1816,12 @@
     "k9": "notes"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "mergeSupportersGroup": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "metaPath": {
   "tail": [
@@ -1540,7 +1831,7 @@
     "k3": "/meta/org"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "migrateSupportersToKeyed": {
   "tail": [
@@ -1550,7 +1841,7 @@
     "k3": 400
    }
   ],
-  "simple": false
+  "simple": true
  },
  "minToHM": {
   "tail": [
@@ -1558,7 +1849,7 @@
     "k1": 60
    }
   ],
-  "simple": false
+  "simple": true
  },
  "modelMeta": {
   "tail": [
@@ -1577,13 +1868,76 @@
     "k12": "מנוי חודשי"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "moduleOn": {
   "tail": [
    "families"
   ],
   "simple": true
+ },
+ "monthEnOf": {
+  "tail": [
+   [
+    [
+     "Tishri",
+     "תשרי"
+    ],
+    [
+     "Heshvan",
+     "חשוון"
+    ],
+    [
+     "Kislev",
+     "כסלו"
+    ],
+    [
+     "Tevet",
+     "טבת"
+    ],
+    [
+     "Shevat",
+     "שבט"
+    ],
+    [
+     "Adar",
+     "אדר"
+    ],
+    [
+     "Adar I",
+     "אדר א׳"
+    ],
+    [
+     "Adar II",
+     "אדר ב׳"
+    ],
+    [
+     "Nisan",
+     "ניסן"
+    ],
+    [
+     "Iyar",
+     "אייר"
+    ],
+    [
+     "Sivan",
+     "סיוון"
+    ],
+    [
+     "Tamuz",
+     "תמוז"
+    ],
+    [
+     "Av",
+     "אב"
+    ],
+    [
+     "Elul",
+     "אלול"
+    ]
+   ]
+  ],
+  "simple": false
  },
  "monthHeOf": {
   "tail": [
@@ -1648,6 +2002,21 @@
   ],
   "simple": false
  },
+ "nameIndex": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "nameMatches": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "nameSortKey": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "needLabel": {
   "tail": [
    [
@@ -1698,7 +2067,17 @@
     "k3": "תודה רבה!"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "newSupporterFromRow": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "nextAcademicYearLabel": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "nextClosure": {
   "tail": [
@@ -1708,7 +2087,27 @@
     "k3": 10
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "nextStage": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "nextYearCourseDraft": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "nextYearDates": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "normName": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "normalizePrices": {
   "tail": [
@@ -1717,7 +2116,7 @@
     "k2": "number"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "normalizeTelephony": {
   "tail": [
@@ -1736,7 +2135,22 @@
     "k7": 20
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "numMatch": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "offerNewFamily": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "openCloudKey": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "orbitTheme": {
   "tail": [
@@ -1763,7 +2177,7 @@
     "k20": 265
    }
   ],
-  "simple": false
+  "simple": true
  },
  "orgEnabledModules": {
   "tail": [
@@ -1775,6 +2189,11 @@
   ],
   "simple": true
  },
+ "orgJoinFullCode": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "orgJoinLink": {
   "tail": [
    {
@@ -1782,7 +2201,7 @@
     "k2": "&join="
    }
   ],
-  "simple": false
+  "simple": true
  },
  "orgLink": {
   "tail": [
@@ -1790,7 +2209,7 @@
     "k1": "?org="
    }
   ],
-  "simple": false
+  "simple": true
  },
  "orgSlugFromUrl": {
   "tail": [
@@ -1798,7 +2217,7 @@
     "k1": "org"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "overrideColumn": {
   "tail": [
@@ -1807,7 +2226,17 @@
     "1": "חדש"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "overrideOf": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "paidInRange": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "parseAnyDate": {
   "tail": [
@@ -1823,7 +2252,7 @@
     "k9": 30
    }
   ],
-  "simple": false
+  "simple": true
  },
  "parseAyinSheet": {
   "tail": [
@@ -1844,7 +2273,7 @@
     "k14": "חסרות עמודות \"שם למסירה\" ו/או \"כמה עיניים\""
    }
   ],
-  "simple": false
+  "simple": true
  },
  "parseFamiliesCsv": {
   "tail": [
@@ -1871,7 +2300,22 @@
     "k20": 10
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "parseJoinFullCode": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "payBal": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "payCredit": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "payLink": {
   "tail": [
@@ -1885,7 +2329,7 @@
     "k7": 100
    }
   ],
-  "simple": false
+  "simple": true
  },
  "phoneIssue": {
   "tail": [
@@ -1898,7 +2342,7 @@
     "k6": 10
    }
   ],
-  "simple": false
+  "simple": true
  },
  "phoneRegion": {
   "tail": [
@@ -1906,7 +2350,7 @@
     "k1": "intl"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "pickName": {
   "tail": [
@@ -1922,7 +2366,7 @@
     "k3": "\" כבר ברשימה"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "planAyinAdvance": {
   "tail": [
@@ -1940,7 +2384,57 @@
     "k11": "נרשם — נכנס ללוח: "
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "planDemoCleanup": {
+  "tail": [
+   {
+    "k1": "name",
+    "k2": "father",
+    "k3": "mother",
+    "k4": "phone",
+    "k5": "phone2",
+    "k6": "city",
+    "k7": "address",
+    "k8": "email",
+    "k9": "idNum",
+    "k10": "cat",
+    "k11": "forWho",
+    "k12": "description",
+    "k13": "price",
+    "k14": "price1",
+    "k15": "price2",
+    "k16": "specialty",
+    "k17": "location",
+    "k18": "cap",
+    "k19": "title",
+    "k20": "type",
+    "k21": "customType",
+    "k22": "notes",
+    "k23": "time",
+    "k24": "area",
+    "k25": "note",
+    "k26": "goal",
+    "k27": "kind",
+    "k28": "value",
+    "k29": "basePrice",
+    "k30": "label",
+    "k31": "desc",
+    "k32": "sku",
+    "k33": "(ללא שם)",
+    "k34": "families",
+    "k35": "enrollments",
+    "k36": "courses",
+    "k37": "deliveries",
+    "k38": "distributionDays",
+    "k39": "volunteers",
+    "k40": "shopAssignments",
+    "k41": "shopProducts",
+    "k42": "tzBoxes",
+    "k43": "tzCoordinators"
+   }
+  ],
+  "simple": true
  },
  "planLabelOf": {
   "tail": [
@@ -1954,7 +2448,7 @@
     "k7": " חיס׳"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "planNedarimSync": {
   "tail": [
@@ -1967,7 +2461,12 @@
     "k6": 40
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "planSupporterImport": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "planWord": {
   "tail": [
@@ -1981,7 +2480,7 @@
     "k7": "מנוי חודשי"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "activeByMonth": {
   "tail": [
@@ -1989,7 +2488,7 @@
     "k1": 12
    }
   ],
-  "simple": false
+  "simple": true
  },
  "portfolioIntel": {
   "tail": [
@@ -2003,7 +2502,7 @@
     "k1": "string"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "previewTelephony": {
   "tail": [
@@ -2017,7 +2516,7 @@
    },
    "050-1234567"
   ],
-  "simple": false
+  "simple": true
  },
  "priceSuffix": {
   "tail": [
@@ -2030,7 +2529,16 @@
     "k6": "לחודש"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "progress": {
+  "tail": [
+   [
+    "noanswer",
+    "skip"
+   ]
+  ],
+  "simple": true
  },
  "providerClearer": {
   "tail": [
@@ -2039,7 +2547,7 @@
     "k2": "נדרים"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "publicSiteOn": {
   "tail": [
@@ -2047,7 +2555,7 @@
     "k1": "shell.publicsite"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "publishIcsFeed": {
   "tail": [
@@ -2056,7 +2564,7 @@
     "tbl1": 900000
    }
   ],
-  "simple": false
+  "simple": true
  },
  "punchConfirmStep": {
   "tail": [
@@ -2064,7 +2572,7 @@
     "k1": 3000
    }
   ],
-  "simple": false
+  "simple": true
  },
  "purposeKeyOf": {
   "tail": [
@@ -2072,7 +2580,24 @@
     "k1": "_shared_"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "pushAuditRing": {
+  "tail": [
+   {
+    "k1": "auditlog",
+    "tbl1": 500
+   }
+  ],
+  "simple": true
+ },
+ "pushDiff": {
+  "tail": [
+   {
+    "k1": 400
+   }
+  ],
+  "simple": true
  },
  "pushDonations": {
   "tail": [
@@ -2080,7 +2605,7 @@
     "k1": 400
    }
   ],
-  "simple": false
+  "simple": true
  },
  "pushNav": {
   "tail": [
@@ -2102,7 +2627,7 @@
     "k3": "עד "
    }
   ],
-  "simple": false
+  "simple": true
  },
  "readCloudEnvelope": {
   "tail": [
@@ -2110,7 +2635,7 @@
     "k1": "object"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "readIcsFeedToken": {
   "tail": [
@@ -2119,7 +2644,7 @@
     "k2": "string"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "reassembleDonations": {
   "tail": [
@@ -2164,7 +2689,7 @@
     "k1": "core.receipt.pdf"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "receiptHtml": {
   "tail": [
@@ -2188,7 +2713,7 @@
     "k17": "</div></body></html>"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "receiptLines": {
   "tail": [
@@ -2224,7 +2749,7 @@
     "k29": 10
    }
   ],
-  "simple": false
+  "simple": true
  },
  "receiptVerifyCode": {
   "tail": [
@@ -2235,7 +2760,7 @@
     "k4": 36
    }
   ],
-  "simple": false
+  "simple": true
  },
  "reenrollCounts": {
   "tail": [
@@ -2244,7 +2769,7 @@
     "k2": "hold"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "reenrollListText": {
   "tail": [
@@ -2260,7 +2785,7 @@
     "k9": " ✓נרשם"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "relabelHistByTxn": {
   "tail": [
@@ -2268,6 +2793,11 @@
    "סולה"
   ],
   "simple": true
+ },
+ "removeMember": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "renderTemplate": {
   "tail": [
@@ -2291,7 +2821,12 @@
     "k1": "yes"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "repairCardsFromRows": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "resetPassword": {
   "tail": [
@@ -2302,7 +2837,7 @@
     "k4": "כתובת האימייל אינה תקינה"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "resolveEnrollFamily": {
   "tail": [
@@ -2310,7 +2845,7 @@
     "k1": "__new"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "resolveLocalized": {
   "tail": [
@@ -2318,7 +2853,20 @@
     "k1": "string"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "resolveOrgConfig": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "revertPatch": {
+  "tail": [
+   {
+    "k1": "answer"
+   }
+  ],
+  "simple": true
  },
  "roleOf": {
   "tail": [
@@ -2328,7 +2876,7 @@
     "k3": "teacher"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "roomInfoLabel": {
   "tail": [
@@ -2340,7 +2888,7 @@
     "k5": " · נגיש"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "roomsNow": {
   "tail": [
@@ -2348,7 +2896,7 @@
     "k1": 60
    }
   ],
-  "simple": false
+  "simple": true
  },
  "round2": {
   "tail": [
@@ -2356,7 +2904,7 @@
     "k1": 100
    }
   ],
-  "simple": false
+  "simple": true
  },
  "ruleExact": {
   "tail": [
@@ -2364,7 +2912,7 @@
     "k1": 100
    }
   ],
-  "simple": false
+  "simple": true
  },
  "ruleSkeleton": {
   "tail": [
@@ -2372,7 +2920,15 @@
     "k1": 58
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "ruleTypo": {
+  "tail": [
+   {
+    "k1": 52
+   }
+  ],
+  "simple": true
  },
  "safeHttpsUrl": {
   "tail": [
@@ -2380,7 +2936,12 @@
     "k1": "https:"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "sameLoc": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "sanitizeIncoming": {
   "tail": [
@@ -2398,7 +2959,7 @@
     "k11": "waits"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "sanitizePhotos": {
   "tail": [
@@ -2406,7 +2967,7 @@
     "k1": 460000
    }
   ],
-  "simple": false
+  "simple": true
  },
  "sanitizeSupportText": {
   "tail": [
@@ -2414,17 +2975,25 @@
     "k1": 2000
    }
   ],
-  "simple": false
+  "simple": true
  },
  "scheduleClashText": {
   "tail": [
+   [
+    "ראשון",
+    "שני",
+    "שלישי",
+    "רביעי",
+    "חמישי",
+    "שישי"
+   ],
    {
     "k1": "ended",
     "k2": "⚠ התנגשות לו\"ז: כבר משובצ/ת ל\"",
     "k3": "\" — יום "
    }
   ],
-  "simple": false
+  "simple": true
  },
  "scheduleTasks": {
   "tail": [
@@ -2432,7 +3001,7 @@
     "k1": "number"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "matchSegment": {
   "tail": [
@@ -2447,7 +3016,7 @@
     "k8": 365
    }
   ],
-  "simple": false
+  "simple": true
  },
  "segulaTitle": {
   "tail": [
@@ -2457,7 +3026,7 @@
     "k3": " · יום "
    }
   ],
-  "simple": false
+  "simple": true
  },
  "setAuditContext": {
   "tail": [
@@ -2472,6 +3041,11 @@
   ],
   "simple": true
  },
+ "setEmployeeOverride": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "setExportBlocked": {
   "tail": [
    null
@@ -2485,7 +3059,7 @@
     "k2": "wait"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "sheetSummary": {
   "tail": [
@@ -2499,7 +3073,7 @@
     "k1": "maor_prices"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "signUpError": {
   "tail": [
@@ -2512,7 +3086,7 @@
     "k6": "הסיסמאות אינן זהות"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "siteDonateUrl": {
   "tail": [
@@ -2520,7 +3094,7 @@
     "k1": "string"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "siteLangs": {
   "tail": [
@@ -2544,7 +3118,12 @@
     "k7": 300
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "siteUi": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "siteVocab": {
   "tail": [
@@ -2563,7 +3142,7 @@
     "k12": "התרומה שלך"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "sizeLabel": {
   "tail": [
@@ -2619,7 +3198,28 @@
     "k1": "org"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "smartScore": {
+  "tail": [
+   {
+    "k1": 100
+   }
+  ],
+  "simple": true
+ },
+ "smtpHostFor": {
+  "tail": [
+   {
+    "gmail.com": "smtp.gmail.com:465",
+    "googlemail.com": "smtp.gmail.com:465",
+    "outlook.com": "smtp-mail.outlook.com:587",
+    "hotmail.com": "smtp-mail.outlook.com:587",
+    "yahoo.com": "smtp.mail.yahoo.com:465",
+    "walla.co.il": "out.walla.co.il:465"
+   }
+  ],
+  "simple": true
  },
  "sortSupportThreads": {
   "tail": [
@@ -2628,7 +3228,7 @@
     "k2": "number"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "spanCorrection": {
   "tail": [
@@ -2645,7 +3245,7 @@
     "k1": 10
    }
   ],
-  "simple": false
+  "simple": true
  },
  "stageIndex": {
   "tail": [
@@ -2670,7 +3270,7 @@
     "k6": "ayin.stage."
    }
   ],
-  "simple": false
+  "simple": true
  },
  "staleBoxes": {
   "tail": [
@@ -2679,7 +3279,7 @@
     "k2": 90
    }
   ],
-  "simple": false
+  "simple": true
  },
  "startCampaign": {
   "tail": [
@@ -2702,13 +3302,21 @@
   ],
   "simple": true
  },
+ "stepScale": {
+  "tail": [
+   {
+    "k1": 10
+   }
+  ],
+  "simple": true
+ },
  "stripAuditMeta": {
   "tail": [
    {
     "k1": "audit"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "stripSupKey": {
   "tail": [
@@ -2716,7 +3324,7 @@
     "k1": "skey"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "stripSupporterDonations": {
   "tail": [
@@ -2725,7 +3333,15 @@
     "k2": "object"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "strongMatchForCharge": {
+  "tail": [
+   {
+    "k1": "ext:"
+   }
+  ],
+  "simple": true
  },
  "studentHistoryText": {
   "tail": [
@@ -2734,7 +3350,12 @@
     "k2": ", חיסורים "
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "subsidyTotal": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "suggestions": {
   "tail": [
@@ -2770,7 +3391,7 @@
     "k29": 30
    }
   ],
-  "simple": false
+  "simple": true
  },
  "supAllowedKeys": {
   "tail": [
@@ -2778,7 +3399,7 @@
     "k1": 29
    }
   ],
-  "simple": false
+  "simple": true
  },
  "supDupFieldValue": {
   "tail": [
@@ -2794,11 +3415,26 @@
   ],
   "simple": false
  },
+ "supHasRegion": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "supKeyMapOf": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "supKeyOf": {
   "tail": [
    "_shared_"
   ],
   "simple": true
+ },
+ "supLastInPeriod": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "supTier": {
   "tail": [
@@ -2816,7 +3452,7 @@
     "k11": 400
    }
   ],
-  "simple": false
+  "simple": true
  },
  "sup12m": {
   "tail": [
@@ -2824,7 +3460,7 @@
     "k1": 365
    }
   ],
-  "simple": false
+  "simple": true
  },
  "supportDayLabel": {
   "tail": [
@@ -2834,7 +3470,7 @@
     "k3": 10
    }
   ],
-  "simple": false
+  "simple": true
  },
  "supportMsgTime": {
   "tail": [
@@ -2842,7 +3478,15 @@
     "k1": "2-digit"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "supportPreview": {
+  "tail": [
+   {
+    "k1": 40
+   }
+  ],
+  "simple": true
  },
  "supportUnread": {
   "tail": [
@@ -2851,7 +3495,12 @@
     "k2": "number"
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "supporterVisibleForDesignations": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "taskIdentity": {
   "tail": [
@@ -2859,7 +3508,7 @@
     "k1": "מקומי"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "taskOverdue": {
   "tail": [
@@ -2874,7 +3523,7 @@
     "k2": 86400000
    }
   ],
-  "simple": false
+  "simple": true
  },
  "teacherIdOf": {
   "tail": [
@@ -2903,7 +3552,12 @@
     "k16": 30
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "templateLinesToNames": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "termLabel": {
   "tail": [
@@ -2912,7 +3566,7 @@
     "k2": " חודשים"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "termOf": {
   "tail": [
@@ -2920,7 +3574,7 @@
     "k1": "string"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "thanksPrompt": {
   "tail": [
@@ -2936,7 +3590,27 @@
     "k9": "להחזיר את המכתב בלבד — בלי הקדמות."
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "tierOf": {
+  "tail": [
+   {
+    "k1": "titan",
+    "k2": "טיטאן",
+    "k3": "#fdf3dd",
+    "k4": "lion",
+    "k5": "לביאה",
+    "k6": "pale",
+    "k7": "טעון שיפור",
+    "k8": "#fdf1d4",
+    "k9": "red",
+    "k10": "סיכון נטישה",
+    "k11": "#fdeaea",
+    "k12": 950,
+    "k13": 800
+   }
+  ],
+  "simple": true
  },
  "timeToMin": {
   "tail": [
@@ -2944,7 +3618,12 @@
     "k1": 60
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "toCsv": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "toTenantId": {
   "tail": [
@@ -2956,7 +3635,12 @@
     "k5": 40
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "totalLabel": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "tourSteps": {
   "tail": [
@@ -2976,7 +3660,7 @@
     "k13": "חוג"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "undoLast": {
   "tail": [
@@ -2994,7 +3678,7 @@
     "k2": "כמות"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "validIsraeliId": {
   "tail": [
@@ -3002,7 +3686,7 @@
     "k1": 10
    }
   ],
-  "simple": false
+  "simple": true
  },
  "validateHebMonthNames": {
   "tail": [
@@ -3012,7 +3696,27 @@
     "k3": 12
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "visibleEventsForDesignations": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "visibleSupportersForDesignations": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "volunteerLoadHint": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "volunteerRouteStops": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "waBirthdayText": {
   "tail": [
@@ -3020,7 +3724,7 @@
     "k1": "wa.birthday"
    }
   ],
-  "simple": false
+  "simple": true
  },
  "waDeliveryText": {
   "tail": [
@@ -3029,7 +3733,47 @@
     "k2": "משפחת "
    }
   ],
-  "simple": false
+  "simple": true
+ },
+ "waDigits": {
+  "tail": [
+   {
+    "k1": 10,
+    "k2": 15
+   }
+  ],
+  "simple": true
+ },
+ "waHref": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "waPaymentText": {
+  "tail": [
+   {
+    "k1": "wa.payment"
+   }
+  ],
+  "simple": true
+ },
+ "waitlistFor": {
+  "tail": [
+   {
+    "k1": "wait"
+   }
+  ],
+  "simple": true
+ },
+ "weeklyRoomSessions": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "weightedQuote": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "wheelIndexUnderPointer": {
   "tail": [
@@ -3037,7 +3781,7 @@
     "k1": 360
    }
   ],
-  "simple": false
+  "simple": true
  },
  "withNedarimHok": {
   "tail": [
@@ -3047,7 +3791,7 @@
     "k3": 10
    }
   ],
-  "simple": false
+  "simple": true
  },
  "wizardStepError": {
   "tail": [
@@ -3059,6 +3803,6 @@
     "k5": "טלפון חובה — נחזור אליכם לאישור"
    }
   ],
-  "simple": false
+  "simple": true
  }
 }

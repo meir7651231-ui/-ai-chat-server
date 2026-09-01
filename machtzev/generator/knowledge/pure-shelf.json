@@ -10,6 +10,11 @@
       "canonical": 31,
       "inherit": 26
     },
+    "chat": {
+      "count": 6,
+      "canonical": 6,
+      "inherit": 0
+    },
     "composite": {
       "count": 32,
       "canonical": 18,
@@ -31,8 +36,8 @@
       "inherit": 6
     },
     "input": {
-      "count": 30,
-      "canonical": 26,
+      "count": 31,
+      "canonical": 27,
       "inherit": 4
     },
     "list": {
@@ -81,6 +86,6 @@
       "inherit": 4
     }
   },
-  "total": 551,
+  "total": 558,
   "generatedBy": "machtzev/pure/pure-decompose.mjs"
 }

@@ -5,7 +5,7 @@
 export const PURE_INPUT_SHELF = {
  "family": "input",
  "source": "machtzev/pure/input-family.html",
- "count": 30,
+ "count": 31,
  "atoms": [
   {
    "name": "DsField",
@@ -160,6 +160,12 @@ export const PURE_INPUT_SHELF = {
   {
    "name": "PinPad",
    "note": "numeric keypad · live",
+   "kind": "signature",
+   "seam": "self"
+  },
+  {
+   "name": "WheelPicker",
+   "note": "rotating drum · center = value · live snap",
    "kind": "signature",
    "seam": "self"
   },

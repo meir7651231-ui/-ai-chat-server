@@ -1,3 +1,4 @@
+import '../dart-data-maor/build-course-daily-rows-sockets.dart' as sk_build_course_daily_rows;
 // בדיקת-חוזה (רתמת-זהב) · buildCourseDailyRows — מייבאת אך ורק את האטום-שלה (חוק-4).
 // שש דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/build-course-daily-rows.test.mjs.
 // שקעים: hebDateFull=iso⇒'ע:'+iso · termOf=(cfg,k,fb)⇒cfg.terms[k]??fb (נאמן למקור).
@@ -57,7 +58,7 @@ void main() {
   final c1 = <String, Object?>{'id': 'c1', 'start': '2026-08-23', 'end': '2026-08-30', 'weekday': 0, 'time': '16:00'};
 
   // דוגמה 1
-  final r1 = buildCourseDailyRows(c1, db1, null, termOf, hebDateFull);
+  final r1 = buildCourseDailyRows(c1, db1, null, termOf, hebDateFull, sk_build_course_daily_rows.buildCourseDailyRows_DAY_NAMES, sk_build_course_daily_rows.buildCourseDailyRows_T2);
   eq('1 · days', r1['days'], 2);
   eq('1 · rows.length', _rowsOf(r1).length, 6);
   eq('1 · רות 23.8', _rowsOf(r1)[1], ['ע:2026-08-23', '23/08/2026', 'ראשון', 'קבוצה · 16:00', 'מתקיים', 'רות', 'פרץ', 'פעיל']);
@@ -68,16 +69,16 @@ void main() {
   eq('1 · אין נעמי/יעל ב-30.8', _rowsOf(r1).where((r) => r[1] == '30/08/2026').map((r) => r[5]).toList(), ['רות', 'תמר']);
 
   // דוגמה 2 — termOf על כותרת-המשפחה
-  final r2 = buildCourseDailyRows(c1, db1, {'terms': {'entity.family': 'לקוח'}}, termOf, hebDateFull);
+  final r2 = buildCourseDailyRows(c1, db1, {'terms': {'entity.family': 'לקוח'}}, termOf, hebDateFull, sk_build_course_daily_rows.buildCourseDailyRows_DAY_NAMES, sk_build_course_daily_rows.buildCourseDailyRows_T2);
   eq('2 · כותרת עם config', _rowsOf(r2)[0][6], 'לקוח');
   eq('2 · כותרת בלי config', _rowsOf(r1)[0][6], 'משפחה');
 
   // דוגמה 3 — start ריק
-  final r3 = buildCourseDailyRows({'id': 'c1', 'start': '', 'end': '2026-08-30'}, db1, null, termOf, hebDateFull);
+  final r3 = buildCourseDailyRows({'id': 'c1', 'start': '', 'end': '2026-08-30'}, db1, null, termOf, hebDateFull, sk_build_course_daily_rows.buildCourseDailyRows_DAY_NAMES, sk_build_course_daily_rows.buildCourseDailyRows_T2);
   eq('3 · start ריק', {'n': _rowsOf(r3).length, 'days': r3['days']}, {'n': 1, 'days': 0});
 
   // דוגמה 4 — אין שיבוצים ⇒ 'אין רשומות'
-  final r4 = buildCourseDailyRows({'id': 'cX', 'start': '2026-08-23', 'end': '2026-08-23', 'weekday': 0, 'time': '16:00'}, db1, null, termOf, hebDateFull);
+  final r4 = buildCourseDailyRows({'id': 'cX', 'start': '2026-08-23', 'end': '2026-08-23', 'weekday': 0, 'time': '16:00'}, db1, null, termOf, hebDateFull, sk_build_course_daily_rows.buildCourseDailyRows_DAY_NAMES, sk_build_course_daily_rows.buildCourseDailyRows_T2);
   eq('4 · אין רשומות', _rowsOf(r4)[1], ['ע:2026-08-23', '23/08/2026', 'ראשון', 'קבוצה · 16:00', 'אין רשומות', '', '', '']);
 
   // דוגמה 5 — קבוצות מרובות
@@ -89,13 +90,13 @@ void main() {
       {'courseId': 'c5', 'memberId': 'm3', 'status': 'active', 'absences': []},
     ],
   };
-  final r5 = buildCourseDailyRows(c5, db5, null, termOf, hebDateFull);
+  final r5 = buildCourseDailyRows(c5, db5, null, termOf, hebDateFull, sk_build_course_daily_rows.buildCourseDailyRows_DAY_NAMES, sk_build_course_daily_rows.buildCourseDailyRows_T2);
   eq('5 · days', r5['days'], 1);
   eq('5 · סלוט א', _rowsOf(r5).where((r) => r[3] == 'א · 10:00').map((r) => r[5]).toList(), ['רות', 'נעמי']);
   eq('5 · סלוט ב', _rowsOf(r5).where((r) => r[3] == 'ב · 12:00').map((r) => r[5]).toList(), ['נעמי']);
 
   // דוגמה 6 — קטיעה ב-MAX_DAYS=500
-  final r6 = buildCourseDailyRows({'id': 'cY', 'start': '2026-01-04', 'end': '2036-12-31', 'weekday': 0, 'time': ''}, {'families': [], 'enrollments': []}, null, termOf, hebDateFull);
+  final r6 = buildCourseDailyRows({'id': 'cY', 'start': '2026-01-04', 'end': '2036-12-31', 'weekday': 0, 'time': ''}, {'families': [], 'enrollments': []}, null, termOf, hebDateFull, sk_build_course_daily_rows.buildCourseDailyRows_DAY_NAMES, sk_build_course_daily_rows.buildCourseDailyRows_T2);
   eq('6 · days=500', r6['days'], 500);
   eq('6 · rows=502', _rowsOf(r6).length, 502);
   eq('6 · שורת-הקטיעה', _rowsOf(r6)[501], ['—', '—', '—', '—', 'הדוח נקטע ב-500 ימי מפגש — בדקו את תאריך הסיום של החוג', '', '', '']);

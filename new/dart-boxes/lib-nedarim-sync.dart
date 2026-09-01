@@ -1,3 +1,6 @@
+import '../dart-data-maor/norm-search-sockets.dart' as skb_ns;
+import '../dart-data-maor/with-nedarim-hok-sockets.dart' as skb_wnh;
+import '../dart-data-maor/detect-recurring-hok-sockets.dart' as skb_drh;
 import '../dart-data-maor/provider-clearer-terms.dart';
 // 📦 קופסת-חיבורים · lib-nedarim-sync (Dart) — מנוע-סנכרון נדרים→מאור (כיוון-נכנס).
 // מקבילה ל-new/boxes/lib-nedarim-sync.mjs · חוזה משותף: lib-nedarim-sync.contract.md.
@@ -82,8 +85,8 @@ List<String> keysOf(Map<String, dynamic> o) {
   }
   final em = _s(o['email']).trim().toLowerCase();
   if (em.isNotEmpty) ks.add('em:$em');
-  final n = _ns.normSearch(_s(o['name']));
-  final c = _ns.normSearch(_s(o['city']));
+  final n = _ns.normSearch(_s(o['name']), skb_ns.normSearch_T);
+  final c = _ns.normSearch(_s(o['city']), skb_ns.normSearch_T);
   if (n.isNotEmpty && c.isNotEmpty) ks.add('nc:$n|$c');
   return ks;
 }
@@ -162,7 +165,7 @@ String modeStr(List<String> strs) {
 }
 
 // מפתח-שם חסין-סדר: name-sort-key מוזרק normSearch (אטום) + NAME_TITLES (מילון-קופסה).
-String nameSortKey(dynamic t) => _nsk.nameSortKey(t, _ns.normSearch, _nameTitles);
+String nameSortKey(dynamic t) => _nsk.nameSortKey(t, (x) => _ns.normSearch(x, skb_ns.normSearch_T), _nameTitles);
 
 // nedarimSync.ts:471-498 — כרטיס-תומך חדש מרשומת-תורם נדרים (מזהה דטרמיניסטי).
 Map<String, dynamic> supFromDonor(Map<String, dynamic> d) {
@@ -263,6 +266,7 @@ Map<String, dynamic> withNedarimHok(Map<String, dynamic> sp, Map<String, dynamic
     charge.cast<String, Object?>(),
     (Map<String, Object?> ch) => curOf(ch.cast<String, dynamic>()),
     hokDayFromDate,
+    skb_wnh.withNedarimHok_T,
   );
   return r.cast<String, dynamic>();
 }
@@ -281,6 +285,7 @@ Map<String, Object?> detectRecurringHok(
       modeStr,
       modeOf,
       monthsAgo,
+      skb_drh.detectRecurringHok_T,
     );
 
 /// מועמדים לשיוך עסקה לכרטיס-תורם — מוזרק keysOf + nameSortKey (מתאמי Object?).

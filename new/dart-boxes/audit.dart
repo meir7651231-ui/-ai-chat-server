@@ -1,3 +1,6 @@
+import '../dart-data-maor/norm-search-sockets.dart' as skb_norm_search;
+import '../dart-data-maor/phone-issue-sockets.dart' as skb_phone_issue;
+import '../dart-data-maor/run-audit-sockets.dart' as skb_run_audit;
 import '../dart-data-maor/audit-cat-colors-terms.dart' as td_audit_cat_colors;
 import '../dart-data-maor/audit-report-lines-terms.dart';
 // 📦 קופסת-חיבורים · audit (Dart) — מחווטת אטומי-Dart. מקבילה ל-new/boxes/audit.mjs.
@@ -22,14 +25,14 @@ import '../dart-maor/supporter-aggregates.dart' as sa;
 
 // ── תפר-הנרמול: normName של המקור = normSearch + הסרת-רווחים (validate.ts:65-67) ──
 // דבק-חיווט module-private (חוק-5), מקביל ל-wiredNormName ב-audit.mjs.
-String _wiredNormName(dynamic t) => nn.normName(t, ns.normSearch);
+String _wiredNormName(dynamic t) => nn.normName(t, (a0) => ns.normSearch(a0, skb_norm_search.normSearch_T));
 
 // ── ה-API הפומבי (ביט-זהה לחתימות audit.ts / audit.mjs) ──────────────────────
 // קבועי-התצוגה — חוטים בלי-שקעים, מוגשים כמות-שהם (החיווט: בחירת-האטום בלבד).
 final Map<String, List<String>> AUDIT_CAT_COLORS = acc.auditCatColors(term: (k)=>td_audit_cat_colors.kTerms[k]!); // ignore: non_constant_identifier_names
 const List<String> AUDIT_CATEGORIES = acat.auditCategories; // ignore: constant_identifier_names
 
-String? phoneIssue(String? p) => pi.phoneIssue(p);
+String? phoneIssue(String? p) => pi.phoneIssue(p, skb_phone_issue.phoneIssue_T);
 
 List<String> auditReportLines(String? orgName, Iterable<Map<String, String>> issues, String nowLabel) =>
     arl.auditReportLines(orgName, issues, nowLabel, term: (k)=>kTerms[k]!);
@@ -41,11 +44,11 @@ List<String> auditReportLines(String? orgName, Iterable<Map<String, String>> iss
 List runAudit(dynamic db,
     [dynamic todayIso = '', dynamic extra = true, dynamic config, DateTime? now]) {
   final n = now ?? DateTime.now();
-  return ra.runAudit(db, todayIso, extra, config, {
+  return ra.runAudit(db, skb_run_audit.runAudit_T2, todayIso, extra, config, {
     'termOf': (dynamic cfg, dynamic k, dynamic fb) => to.termOf(cfg, k, fb),
     'normName': _wiredNormName,
     'validIsraeliId': (dynamic id) => vii.validIsraeliId(id),
-    'phoneIssue': (dynamic p) => pi.phoneIssue(p as String?),
+    'phoneIssue': (dynamic p) => pi.phoneIssue(p as String?, skb_phone_issue.phoneIssue_T),
     'ageOf': (dynamic birth) => ao.ageOf(birth as String?, n),
     'supporterAggregates': (dynamic sp) => sa.supporterAggregates(sp),
   });

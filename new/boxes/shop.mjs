@@ -175,6 +175,7 @@ export function filterRedemptions(a, fromIso, toIso, includeVoided) {
 /* ── חוטים עם שקע-מנוע-שכנה מוזרק (holidayOf/smartFilter/featureOn) ── */
 
 /** החגים-הקרובים — holidayOf (מנוע לוח-עברי) שקע-מוזרק; isoOf מחווט פנימית. */
+// קבוע-מתמטי: חלון ברירת-מחדל לחגים-קרובים (ימים) — ההתאמה עוברת דרך days המוזרק
 export function upcomingHolidays(fromIso, days = 45, holidayOf) {
   return _upcomingHolidays(fromIso, days, holidayOf, isoLocal);
 }

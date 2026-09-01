@@ -62,6 +62,7 @@ export function orbitTheme(accent, fallback, T) {
   const accentRgb = rgbStr(base);
   const accent2 = hslToRgb(h + 6, sat, Math.min(0.74, l + 0.1));
   // קרקע — כהה מאוד, גוון-האקסנט עם עומק (הסטה קלה לעבר מגנטה לחום/ורוד)
+  // קבוע-מתמטי: הסטת-גוון (מעלות) לקרקע מגנטה→חום/ורוד
   const groundHueShift = h >= T.k16 && h <= T.k17 ? -12 : 0;
   const g1 = hslToRgb(h + groundHueShift, Math.min(0.5, sat * 0.6), 0.13);
   const g2 = hslToRgb(h + groundHueShift, Math.min(0.55, sat * 0.62), 0.075);

@@ -152,6 +152,7 @@ const orgCalEntries = (supporters) => orgCalEntriesAtom(supporters, supDonEvents
 const daysSince = cockpitDaysSince; // כינוי-שקע: השם שהחוטים-האחים מצפים לו
 
 // ── שכבה-פנימית 2: נגזרות שמקבלות את הבסיס כרוך ──────────────────────────────
+// קבוע-מתמטי: ברירות-מחדל-אלגוריתם (silentDays/months/topN) — ההתאמה עוברת דרך השקעים המוזרקים
 const cockpitAtRisk = (supporters, todayIso, silentDays = 60) =>
   cockpitAtRiskAtom(supporters, todayIso, silentDays, { supCount, supLast, daysSince });
 const cockpitThanks = (supporters, todayIso, windowDays = 3) =>
@@ -161,6 +162,7 @@ const churnFromScan = (scan, todayIso) => churnFromScanAtom(scan, todayIso, { da
 const forecastFromScan = (scan, todayIso) => forecastFromScanAtom(scan, todayIso, { dayDiff });
 
 // ── שכבה-פנימית 3: מורכבי-על (מקבלים את השכנים כבר-כרוכים) ────────────────────
+// קבוע-מתמטי: חלון-שתיקה ברירת-מחדל (מוזרק להתאמה)
 const cockpitCalls = (supporters, todayIso, rate = 3.7, silentDays = 60) =>
   cockpitCallsAtom(supporters, todayIso, rate, silentDays,
     { supIls, supUsd, supLast, daysSince, cockpitAtRisk });
@@ -175,6 +177,7 @@ const cockpitQueue = (supporters, todayIso, rate = 3.7) =>
   cockpitQueueAtom(supporters, todayIso, rate,
     { cockpitCalls, cockpitThanks, cockpitHokTasks });
 
+// קבוע-מתמטי: חלון-סריקה ברירת-מחדל (חודשי-שנה, מוזרק להתאמה)
 const donorIntel = (sp, todayIso, rate = 3.7, months = 12) =>
   donorIntelAtom(sp, todayIso, rate, months,
     { donorScan, rfmFromScan, churnFromScan, forecastFromScan, trendFromScan });
@@ -186,8 +189,10 @@ const segmentCounts = (supporters, todayIso, rate = 3.7) =>
   segmentCountsAtom(supporters, todayIso, rate,
     { cockpitAtRisk, supIls, supUsd, supLast, daysSince });
 
+// קבוע-מתמטי: חלון-חודשים ברירת-מחדל (מוזרק להתאמה)
 const activeByMonth = (supporters, todayIso, months = 12, rate = 3.7) =>
   activeByMonthAtom(supporters, todayIso, months, rate, { donorScan });
+// קבוע-מתמטי: topN ברירת-מחדל (מוזרק להתאמה)
 const portfolioIntel = (supporters, todayIso, rate = 3.7, topN = 10) =>
   portfolioIntelAtom(supporters, todayIso, rate, topN,
     { donorScan, dayDiff, rfmFromScan, churnFromScan, forecastFromScan, supTier });

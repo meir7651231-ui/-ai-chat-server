@@ -1,3 +1,4 @@
+import '../dart-data-maor/receipt-lines-sockets.dart' as sk_receipt_lines;
 // בדיקת-חוזה (רתמת-זהב) · receiptLines — מייבאת אך ורק את האטום-שלה (חוק-4).
 // 27 דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/receipt-lines.test.mjs
 // (אותם קלטים→פלטים; הערכים הומרו ל-Dart). השקעים נאמנים למקור.
@@ -30,8 +31,7 @@ void _ok(bool cond, String msg) {
 
 void main() {
   // דוגמה 1 — קבלת-§46:
-  final A = receiptLines(
-    {
+  final A = receiptLines({
       'rid': 'D-0007',
       'amount': 1234,
       'date': '2026-08-05',
@@ -45,12 +45,7 @@ void main() {
       'signatory': 'הרב כהן',
       'site': 'maor.org',
       'verify': true,
-    },
-    _hebDateFull,
-    _amountInWords,
-    _verifyCode,
-    _hebrewLocaleDate,
-  );
+    }, _hebDateFull, _amountInWords, _verifyCode, _hebrewLocaleDate, sk_receipt_lines.receiptLines_T);
   _ok(A.length == 23, '§46 אורך ' + A.length.toString() + ' ≠ 23');
   _ok(A[0] == 'מקור', '§46 [0]: ' + A[0]);
   _ok(A[1] == 'מאור', '§46 [1]: ' + A[1]);
@@ -66,8 +61,7 @@ void main() {
   _ok(A[22] == 'אתר: maor.org', '§46 [22]: ' + A[22]);
 
   // דוגמה 2 — קבלה רגילה עם סיכום-עסקה:
-  final B = receiptLines(
-    {
+  final B = receiptLines({
       'rid': 'R-0042',
       'amount': 400,
       'date': '2026-08-05',
@@ -75,12 +69,7 @@ void main() {
       'forWhat': 'כרטיסייה',
       'copy': true,
       'summary': {'totalDue': 1000, 'paidSoFar': 400, 'balance': 600, 'nextDate': '2026-09-01'},
-    },
-    _hebDateFull,
-    _amountInWords,
-    _verifyCode,
-    _hebrewLocaleDate,
-  );
+    }, _hebDateFull, _amountInWords, _verifyCode, _hebrewLocaleDate, sk_receipt_lines.receiptLines_T);
   _ok(B.length == 12, 'רגילה אורך ' + B.length.toString() + ' ≠ 12');
   _ok(B[0] == 'העתק נאמן למקור', 'רגילה [0]: ' + B[0]);
   _ok(B[1] == 'קבלה — מאור החסד', 'רגילה [1]: ' + B[1]);
@@ -93,8 +82,7 @@ void main() {
   _ok(B[11] == 'תודה על תמיכתכם', 'רגילה [11]: ' + B[11]);
 
   // דוגמה 3 — אישור-חנות S- בלי סימון:
-  final C = receiptLines(
-    {
+  final C = receiptLines({
       'rid': 'S-0003',
       'amount': 20,
       'date': '2026-08-05',
@@ -102,12 +90,7 @@ void main() {
       'forWhat': 'מימוש קופון',
       'mark': false,
       'currency': '₪',
-    },
-    _hebDateFull,
-    _amountInWords,
-    _verifyCode,
-    _hebrewLocaleDate,
-  );
+    }, _hebDateFull, _amountInWords, _verifyCode, _hebrewLocaleDate, sk_receipt_lines.receiptLines_T);
   _ok(C[0] == 'אישור תשלום — מאור החסד', 'S- [0]: ' + C[0]);
   _ok(C[1] == 'אישור מס׳: S-0003', 'S- [1]: ' + C[1]);
   _ok(C[4] == 'סכום: ₪20', 'S- [4]: ' + C[4]);
@@ -115,13 +98,7 @@ void main() {
   _ok(!C.contains('מקור'), 'S- mark:false ⇒ אין שורת-מקור');
 
   // דוגמה 4 — תאריך שבור:
-  final D = receiptLines(
-    {'rid': 'R-1', 'amount': 5, 'date': 'שטויות', 'payer': 'א', 'forWhat': 'ב'},
-    _hebDateFull,
-    _amountInWords,
-    _verifyCode,
-    _hebrewLocaleDate,
-  );
+  final D = receiptLines({'rid': 'R-1', 'amount': 5, 'date': 'שטויות', 'payer': 'א', 'forWhat': 'ב'}, _hebDateFull, _amountInWords, _verifyCode, _hebrewLocaleDate, sk_receipt_lines.receiptLines_T);
   _ok(D.contains('תאריך: שטויות'),
       'תאריך-שבור: ' + D.firstWhere((l) => l.startsWith('תאריך'), orElse: () => '<none>'));
 

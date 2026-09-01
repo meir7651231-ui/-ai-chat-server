@@ -65,6 +65,7 @@ import { planWord as __pure_planWord } from '../atoms/plan-word.mjs';
 import { PLAN_WORD_T as __d_planWord_PLAN_WORD_T } from '../atoms/plan-word-strings.mjs';
 // עטיפת-כריכה (מנוע-הטיהור v3): מחרוזות-הדאטה נכרכות כאן
 const planWord = (...a) => __pure_planWord(...a, ...Array(Math.max(0, 1 - a.length)).fill(undefined), __d_planWord_PLAN_WORD_T);
+import { PLAN_PUNCH, PUNCH_LABEL_PREFIX, ENROLL_STATUS_META } from '../atoms/diary-status-labels.mjs';
 
 // ── חוטים טהורים — חשיפה ישירה (אפס שקע) ──
 export { fmtDate, DAY_NAMES, pad2, timeToMin, groupLabelOf, ABSENCE_REASON_CHIPS,
@@ -90,15 +91,10 @@ export const buildSlots = (db, room, iso, blocked, config, cleaningOn = true) =>
 // ── הכרעת-קופסה: וריאנט-היומן של planLabelOf (מקור: lib.ts:261-266) ──
 // שונה מוריאנט-הקורסים (atom plan-label-of): יתרת-כרטיסייה purchased-used, בלי status/חוב.
 export const planLabelOf = (e) =>
-  e.plan === 'punch'
-    ? `כרטיסייה · יתרה ${Math.max(0, e.purchased - e.used)}/${e.purchased}`
+  e.plan === PLAN_PUNCH
+    ? `${PUNCH_LABEL_PREFIX}${Math.max(0, e.purchased - e.used)}/${e.purchased}`
     : planWord(e.plan);
 
 // ── הכרעת-קופסה: וריאנט-היומן של enrollStatusMeta (מקור: lib.ts:268-275) ──
-// מילון-תוויות; ברירת-מחדל **null** (שונה מוריאנט-הקורסים שמחזיר {label:'פעיל'…}).
-export const enrollStatusMeta = (e) => {
-  if (e.status === 'paused') return { label: 'מוקפא', bg: '#fdf1d4', c: '#9a6414' };
-  if (e.status === 'ended') return { label: 'הסתיים', bg: '#eceae2', c: '#8b8474' };
-  if (e.status === 'wait') return { label: 'רשימת-המתנה ⏳', bg: '#e7edf5', c: '#3a5a86' };
-  return null;
-};
+// מילון-תוויות (אטום-דאטה diary-status-labels); ברירת-מחדל **null** (שונה מוריאנט-הקורסים).
+export const enrollStatusMeta = (e) => ENROLL_STATUS_META[e.status] ?? null;

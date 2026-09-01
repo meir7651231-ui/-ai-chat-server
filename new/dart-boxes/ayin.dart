@@ -1,3 +1,10 @@
+import '../dart-data-maor/norm-search-sockets.dart' as skb_norm_search;
+import '../dart-data-maor/parse-ayin-sheet-sockets.dart' as skb_parse_ayin_sheet;
+import '../dart-data-maor/feat-label-sockets.dart' as skb_fl;
+import '../dart-data-maor/item-label-sockets.dart' as skb_il;
+import '../dart-data-maor/unit-label-sockets.dart' as skb_ul;
+import '../dart-data-maor/plan-ayin-advance-sockets.dart' as skb_pa;
+import '../dart-data-maor/plan-add-name-sockets.dart' as skb_pan;
 import '../dart-data-maor/ayin-sheet-rows-terms.dart' as td_ayin_sheet_rows;
 import '../dart-data-maor/ayin-daily-rows-terms.dart' as td_ayin_daily_rows;
 import '../dart-data-maor/ayin-all-rows-terms.dart' as td_ayin_all_rows;
@@ -54,9 +61,9 @@ Map<String, dynamic> _cfgMap(dynamic cfg) => (cfg is Map) ? cfg.cast<String, dyn
 // ── החיווט ──
 // תוויות-העין: termOf האטום מחווט לכל אחת (הפער בין תצוגה למפתח-קבוע חי כאן).
 String stageLabel(dynamic cfg, dynamic stage) => sl.stageLabel(cfg, stage, tof.termOf, stageFallback: kStageFallback) as String;
-String featLabel(dynamic cfg) => fl.featLabel(cfg, _termOfStr);
-String itemLabel(dynamic cfg) => il.itemLabel(_cfgMap(cfg), _termOfMap);
-String unitLabel(dynamic cfg) => ul.unitLabel(cfg, tof.termOf) as String;
+String featLabel(dynamic cfg) => fl.featLabel(cfg, _termOfStr, skb_fl.featLabel_T);
+String itemLabel(dynamic cfg) => il.itemLabel(_cfgMap(cfg), _termOfMap, skb_il.itemLabel_T);
+String unitLabel(dynamic cfg) => ul.unitLabel(cfg, tof.termOf, skb_ul.unitLabel_T) as String;
 
 // סדר-השלבים: nextStage מחווט ל-stageIndex+ayinStages; revertPatch ל-stageIndex.
 int stageIndex(dynamic stage) => si.stageIndex(stage);
@@ -64,7 +71,7 @@ String? nextStage(dynamic stage) => nsg.nextStage(stage as String, si.stageIndex
 Map<String, dynamic> revertPatch(dynamic stage) => rp.revertPatch(stage, si.stageIndex);
 
 // נרמול-שם: normSearch האטום שוקע לתוך normName; דרכו dedup+סינון-הלוח.
-String normName(dynamic s) => nn.normName(s, ns.normSearch);
+String normName(dynamic s) => nn.normName(s, (a0) => ns.normSearch(a0, skb_norm_search.normSearch_T));
 
 // אגרגטים טהורים (אפס שקעים, פרט ל-boqTotal↔boqLineAmount).
 num eyesTotal(dynamic a) => et.eyesTotal(_cfgMap(a));
@@ -92,11 +99,12 @@ dynamic planAyinAdvance(dynamic cfg, dynamic name, dynamic a) => pa.planAyinAdva
       (m) => unitLabel(m),
       (m, st) => stageLabel(m, st),
       (m) => eyesTotal(m),
+      skb_pa.planAyinAdvance_T,
     );
 
 // הוספת-פריט: normName המחווט + isoToday מוזרק (שעון = שקע-IO).
 Map<String, dynamic> planAddName(dynamic a, dynamic rawName, dynamic eyes, dynamic id, String Function() isoToday) =>
-    pan.planAddName(_cfgMap(a), rawName as String, eyes, id as String, normName, isoToday);
+    pan.planAddName(_cfgMap(a), rawName as String, eyes, id as String, normName, isoToday, skb_pan.planAddName_T);
 
 // דוחות-העין: emptyAyin מוזרק (מפעל-domain = שקע-דאטה); תוויות ואגרגטים מחווטים.
 bool ayinActive(dynamic a) => aa.ayinActive(a);
@@ -128,13 +136,13 @@ List<Map<String, dynamic>> filterAyinBoard(dynamic items, dynamic q, dynamic sta
       q,
       status,
       stage,
-      ns.normSearch,
+      (a0) => ns.normSearch(a0, skb_norm_search.normSearch_T),
     );
 
 // גיליון-העיניים (round-trip): normName המחווט לפענוח; ייצוא/החלה טהורים.
 List<List<String>> ayinSheetRows(dynamic supporters) => asr.ayinSheetRows(supporters as List, ayinSheetHeader: kAyinSheetHeader, term: (k)=>td_ayin_sheet_rows.kTerms[k]!);
 Map<String, dynamic> parseAyinSheet(dynamic rows, dynamic supporters) =>
-    pas.parseAyinSheet(rows as List, supporters as List, normName);
+    pas.parseAyinSheet(rows as List, supporters as List, normName, skb_parse_ayin_sheet.parseAyinSheet_T);
 Map<String, dynamic> applyAyinSheet(dynamic supporters, dynamic upds, dynamic today) =>
     aps.applyAyinSheet(supporters as List, upds as List, today as String);
 

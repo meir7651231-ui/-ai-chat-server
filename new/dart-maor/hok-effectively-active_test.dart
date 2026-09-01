@@ -1,3 +1,4 @@
+import '../dart-data-maor/hok-effectively-active-sockets.dart' as sk_hok_effectively_active;
 // רתמת-זהב · hok-effectively-active — מוכיחה את 7 דוגמאות-החוזה (זהות-ביט למקור-ה-JS).
 // מייבאת רק את האטום-שלה. אותם קלטים→פלטים של new/atoms/hok-effectively-active.test.mjs.
 import 'hok-effectively-active.dart';
@@ -6,11 +7,11 @@ const T = '2026-08-24';
 
 void main() {
   // 1) בלי hok / דגל כבוי
-  assert(hokEffectivelyActive(<String, Object?>{}, T) == false, 'בלי hok לא false');
+  assert(hokEffectivelyActive(<String, Object?>{}, T, sk_hok_effectively_active.hokEffectivelyActive_T) == false, 'בלי hok לא false');
   assert(
       hokEffectivelyActive(<String, Object?>{
             'hok': {'active': false}
-          }, T) ==
+          }, T, sk_hok_effectively_active.hokEffectivelyActive_T) ==
           false,
       'active:false לא false');
 
@@ -18,7 +19,7 @@ void main() {
   assert(
       hokEffectivelyActive(<String, Object?>{
             'hok': {'active': true, 'day': 10}
-          }, T) ==
+          }, T, sk_hok_effectively_active.hokEffectivelyActive_T) ==
           true,
       'הו"ק ידני פעיל לא true');
 
@@ -26,7 +27,7 @@ void main() {
   assert(
       hokEffectivelyActive(<String, Object?>{
             'hok': {'active': true, 'kevaId': 'k1'}
-          }, T) ==
+          }, T, sk_hok_effectively_active.hokEffectivelyActive_T) ==
           true,
       'keva בלי hist לא true');
 
@@ -37,7 +38,7 @@ void main() {
             'hist': [
               {'clearer': 'נדרים', 'd': '2026-06-15'}
             ]
-          }, T) ==
+          }, T, sk_hok_effectively_active.hokEffectivelyActive_T) ==
           true,
       '2 חודשים (סף) לא true');
 
@@ -48,7 +49,7 @@ void main() {
             'hist': [
               {'clearer': 'נדרים', 'd': '2026-05-20'}
             ]
-          }, T) ==
+          }, T, sk_hok_effectively_active.hokEffectivelyActive_T) ==
           false,
       '3 חודשים לא false');
 
@@ -60,7 +61,7 @@ void main() {
               {'clearer': 'נדרים', 'd': '2026-04-10'},
               {'clearer': 'סולה', 'd': '2026-07-15'}
             ]
-          }, T) ==
+          }, T, sk_hok_effectively_active.hokEffectivelyActive_T) ==
           true,
       'חיוב-סולה טרי לא החיה (C7)');
 
@@ -72,7 +73,7 @@ void main() {
               {'clearer': 'אשראי', 'd': '2026-08-01'},
               {'clearer': 'נדרים', 'd': '2026-03-01'}
             ]
-          }, T) ==
+          }, T, sk_hok_effectively_active.hokEffectivelyActive_T) ==
           false,
       'חיוב-אשראי החיה בטעות');
 

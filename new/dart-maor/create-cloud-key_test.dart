@@ -1,3 +1,4 @@
+import '../dart-data-maor/create-cloud-key-sockets.dart' as sk_create_cloud_key;
 // בדיקת-חוזה (רתמת-זהב) · createCloudKey — מייבאת אך ורק את האטום-שלה (חוק-4).
 // חמש דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/create-cloud-key.test.mjs.
 // אם עובר ⇒ Dart≡JS.
@@ -29,7 +30,7 @@ Future<void> main() async {
     return 'DEK:$s';
   }
 
-  final out = await createCloudKey('סוד7', 'REC-42', encryptDb, openDek);
+  final out = await createCloudKey('סוד7', 'REC-42', encryptDb, openDek, sk_create_cloud_key.createCloudKey_T);
   _ok(
     out['dek'] == 'DEK:סוד7' &&
         out['env']['v'] == 2 &&
@@ -56,12 +57,7 @@ Future<void> main() async {
   // 4 — openDek⇒null זורק
   String threw = '';
   try {
-    await createCloudKey(
-      'x',
-      'y',
-      (j, p, r) async => <String, dynamic>{},
-      (env, s, via) async => null,
-    );
+    await createCloudKey('x', 'y', (j, p, r) async => <String, dynamic>{}, (env, s, via) async => null, sk_create_cloud_key.createCloudKey_T);
   } catch (e) {
     threw = _msgOf(e);
   }
@@ -70,12 +66,7 @@ Future<void> main() async {
   // 5 — שגיאת encryptDb מבעבעת
   String bubbled = '';
   try {
-    await createCloudKey(
-      'x',
-      'y',
-      (j, p, r) async => throw StateError('boom'),
-      (env, s, via) async => 'd',
-    );
+    await createCloudKey('x', 'y', (j, p, r) async => throw StateError('boom'), (env, s, via) async => 'd', sk_create_cloud_key.createCloudKey_T);
   } catch (e) {
     bubbled = _msgOf(e);
   }
@@ -84,8 +75,7 @@ Future<void> main() async {
   // assert חי (חוק: --enable-asserts) — מוכיח שהמנגנון פעיל.
   var guardThrew = false;
   try {
-    await createCloudKey('x', 'y', (j, p, r) async => <String, dynamic>{},
-        (env, s, via) async => null);
+    await createCloudKey('x', 'y', (j, p, r) async => <String, dynamic>{}, (env, s, via) async => null, sk_create_cloud_key.createCloudKey_T);
   } catch (_) {
     guardThrew = true;
   }

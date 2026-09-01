@@ -69,7 +69,7 @@ if (HEB_CAL.hebYearOffset !== 3761 || HEB_CAL.scanWindowDays !== 440) { console.
 for (const anchor of [
   'i < HEB_CAL.scanWindowDays',                     // חלון-הסריקה (הכרעה 19: הערך באטום-הדאטה)
   'hebYear - HEB_CAL.hebYearOffset',                // עוגן-השנה הלועזית
-  'new Date(gy, 7, 1 + i, 12)',                     // 1 באוגוסט, צהריים
+  'new Date(gy, 7, 1 + i, HEB_CAL.noonHour)',       // 1 באוגוסט, צהריים (הכרעה 19: הערך באטום-הדאטה)
   'gemYearWire(y, gem)',                            // שקע-גימטריה
   'hebAnnualEqWire(anchor, query, scanHebYear)',    // שקע-סריקת-שנה
   'hebPartsOfIsoWire(iso, hebParts)',               // שקע-הפירוק

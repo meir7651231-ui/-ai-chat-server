@@ -1,3 +1,4 @@
+import '../dart-data-maor/hok-recorded-this-month-sockets.dart' as sk_hok_recorded_this_month;
 // בדיקת-חוזה (רתמת-זהב) · hokRecordedThisMonth — מייבאת אך ורק את האטום-שלה (חוק-4).
 // דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/hok-recorded-this-month.test.mjs:
 //   HOK_CAT='הו"ק' · T='2026-08-24' · hok={amount:100,cur:'₪'} · 8 מקרים.
@@ -18,7 +19,7 @@ void main() {
   var n = 0;
 
   // 1 בלי-הו"ק ⇒ false
-  _eq(hokRecordedThisMonth({'donations': []}, T, hokCat), false, '1 no-hok');
+  _eq(hokRecordedThisMonth({'donations': []}, T, hokCat, sk_hok_recorded_this_month.hokRecordedThisMonth_T), false, '1 no-hok');
   n++;
 
   // 2 קטגוריית-הו"ק ⇒ true
@@ -28,7 +29,7 @@ void main() {
         'donations': [
           {'date': '2026-08-05', 'cat': 'הו"ק', 'amount': 50}
         ]
-      }, T, hokCat),
+      }, T, hokCat, sk_hok_recorded_this_month.hokRecordedThisMonth_T),
       true,
       '2 hok-category');
   n++;
@@ -40,7 +41,7 @@ void main() {
         'donations': [
           {'date': '2026-08-05', 'cat': 'כללי', 'amount': 100}
         ]
-      }, T, hokCat),
+      }, T, hokCat, sk_hok_recorded_this_month.hokRecordedThisMonth_T),
       true,
       '3 exact-amount+missing-cur');
   n++;
@@ -52,7 +53,7 @@ void main() {
         'donations': [
           {'date': '2026-07-30', 'cat': 'הו"ק', 'amount': 100}
         ]
-      }, T, hokCat),
+      }, T, hokCat, sk_hok_recorded_this_month.hokRecordedThisMonth_T),
       false,
       '4 previous-month');
   n++;
@@ -65,7 +66,7 @@ void main() {
         'hist': [
           {'d': '2026-08-12', 'clearer': 'נדרים', 'a': 37}
         ]
-      }, T, hokCat),
+      }, T, hokCat, sk_hok_recorded_this_month.hokRecordedThisMonth_T),
       true,
       '5 nedarim-no-amount');
   n++;
@@ -78,7 +79,7 @@ void main() {
         'hist': [
           {'d': '2026-08-12', 'clearer': 'סולה', 'a': 5}
         ]
-      }, T, hokCat),
+      }, T, hokCat, sk_hok_recorded_this_month.hokRecordedThisMonth_T),
       true,
       '5b sola-no-amount');
   n++;
@@ -91,7 +92,7 @@ void main() {
         'hist': [
           {'d': '2026-08-12', 'a': 100}
         ]
-      }, T, hokCat),
+      }, T, hokCat, sk_hok_recorded_this_month.hokRecordedThisMonth_T),
       true,
       '6 legacy-hist-exact');
   n++;
@@ -104,13 +105,13 @@ void main() {
         'hist': [
           {'d': '2026-08-12', 'a': 70}
         ]
-      }, T, hokCat),
+      }, T, hokCat, sk_hok_recorded_this_month.hokRecordedThisMonth_T),
       false,
       '7 hist-wrong-amount');
   n++;
 
   // assert חי (חוק: --enable-asserts) — מוכיח שהמנגנון פעיל.
-  assert(hokRecordedThisMonth({'donations': []}, T, hokCat) == false,
+  assert(hokRecordedThisMonth({'donations': []}, T, hokCat, sk_hok_recorded_this_month.hokRecordedThisMonth_T) == false,
       'assert-live guard');
 
   print('OK hokRecordedThisMonth: $n asserts passed');

@@ -14,19 +14,19 @@
 - **לוגיקה · logic-census:** 810
 - **  ↳ wireable:** 104
 - **  ↳ מחוברים-למחולל (MAP_ENGINES):** 8
-- **דאטה · new/dart-data-maor:** 454
-- **מקור-JS · new/atoms:** 1130
-- **המרה · new/dart-maor:** 626
+- **דאטה · new/dart-data-maor:** 548
+- **מקור-JS · new/atoms:** 1160
+- **המרה · new/dart-maor:** 665
 
 ## מבנה הענף
-- **machtzev/ שורש (.mjs):** 14
+- **machtzev/ שורש (.mjs):** 34
 - **machtzev/ תת-תיקיות:** 12
-- **generator/ קנוני:** 14
+- **generator/ קנוני:** 15
 - **generator/legacy/:** 5
-- **knowledge/ פעיל:** 19
+- **knowledge/ פעיל:** 20
 - **knowledge/archive/:** 11
-- **שערי-משטרה (gates.tsv):** 19
-- **שערי-משטרה (police gate()):** 19
+- **שערי-משטרה (gates.tsv):** 21
+- **שערי-משטרה (police gate()):** 21
 
 ## אזהרת-אמת (הלקח שנקנה ביוקר)
 "סידור-הענף" = פריסת-קבצים. "כמה/מה-מחובר" = **מדידה חוצת-3-שכבות**. אל תסיק תקרה משכבה-אחת.

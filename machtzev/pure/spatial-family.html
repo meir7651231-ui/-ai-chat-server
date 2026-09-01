@@ -1,6 +1,6 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- PURE — Spatial · Data family. Surfaces that hold many records at once: the map and the table. Abstract terrain (zero real geography) · markers · route · data-table sortable+selectable · minimap viewport · tree-grid. numbers LTR+tnum · accent morphs · semantic fixed · reduced-motion still. -->
-<title>Spatial · Data Family</title>
+<!-- PURE — Spatial · Data APPENDIX (not an archetype). Surfaces that hold many records at once: the map and the table, over 01 Card + 05 List + 06 DataViz. Abstract terrain (zero real geography, zero city/country names) · markers · route · data-table with a LIVE sort header · minimap · tree-grid with LIVE carets. numbers LTR+tnum · accent morphs · semantic fixed · reduced-motion still. -->
+<title>Spatial · Data Appendix</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Frank+Ruhl+Libre:wght@700&family=Space+Grotesk:wght@400;500;600;700&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -60,12 +60,14 @@
   /* data table */
   .dt{display:flex;flex-direction:column;border:1px solid var(--hair);border-radius:12px;overflow:hidden;background:var(--sunken)}
   .thead,.trow{display:grid;grid-template-columns:1.5fr .85fr 1.1fr 1fr;align-items:center;gap:10px;padding:0 13px}
-  .thead{min-height:40px;background:var(--surface);border-bottom:1px solid var(--hair)}
+  .thead{min-height:44px;background:var(--surface);border-bottom:1px solid var(--hair)}
   .th{font-family:var(--grotesk);font-size:9.5px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.08em;display:flex;align-items:center;gap:5px}
   .th.n{justify-content:flex-start;direction:ltr}
   .th .sar{display:inline-flex;flex-direction:column;line-height:0}.th .sar svg{width:9px;height:6px}
   .th .sar .up{color:var(--faint)}.th .sar .dn{color:var(--faint)}
   .th.asc .up{color:var(--a-hi)}.th.desc .dn{color:var(--a-hi)}.th.asc,.th.desc{color:var(--ink)}
+  button.th{font-family:var(--grotesk);border:0;background:none;cursor:pointer;min-height:44px}
+  button.th:hover{color:var(--ink)}button.th:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px;border-radius:6px}
   .trow{min-height:42px;border-top:1px solid var(--hair2);position:relative;transition:background-color .2s}
   .trow.alt{background:rgba(236,233,226,.018)}
   .trow:hover{background:rgba(236,233,226,.04)}
@@ -89,9 +91,13 @@
   .tree{display:flex;flex-direction:column;border:1px solid var(--hair);border-radius:12px;overflow:hidden;background:var(--sunken)}
   .tr{display:flex;align-items:center;gap:9px;min-height:40px;padding:0 13px;border-top:1px solid var(--hair2)}
   .tr:first-child{border-top:0}
-  .tr .car{width:15px;height:15px;flex:none;display:grid;place-items:center;color:var(--mut)}.tr .car svg{width:11px;height:11px}
-  .tr .car.leaf{opacity:0}
-  .tr .car.open{color:var(--a-hi);transform:rotate(90deg)}
+  .tr[hidden]{display:none}
+  .car{width:15px;height:15px;flex:none;display:grid;place-items:center;color:var(--mut)}.car svg{width:11px;height:11px}
+  span.car.leaf{opacity:0}
+  .car.open{color:var(--a-hi);transform:rotate(90deg)}
+  button.car{border:0;background:none;padding:0;cursor:pointer;position:relative;transition:color .2s,transform .2s var(--ease)}
+  button.car::before{content:"";position:absolute;inset:-15px}
+  button.car:hover{color:var(--a-hi)}button.car:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px;border-radius:6px}
   .tr .tl{font-family:var(--he);font-size:12.5px;color:var(--ink)}
   .tr.lv1{padding-inline-start:34px}.tr.lv1 .tl{color:var(--mut)}
   .tr.lv2{padding-inline-start:55px}.tr.lv2 .tl{color:var(--mut);font-size:12px}
@@ -105,25 +111,35 @@
 
   @media(max-width:820px){.bar .mk small{display:none}.cell.wide{grid-column:auto}}
   @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  .controls{display:flex;gap:10px;align-items:center}
+  .faceseg{display:flex;padding:3px;background:var(--sunken);border:1px solid var(--hair);border-radius:999px;gap:2px}
+  .faceseg button{border:0;background:none;cursor:pointer;padding:8px 14px;border-radius:999px;font-family:var(--grotesk);font-size:12px;font-weight:600;color:var(--mut);min-height:44px;transition:color .3s,background-color .3s}
+  .faceseg button[aria-pressed="true"]{color:var(--ink);background:var(--raised);box-shadow:0 2px 8px rgba(0,0,0,.4)}
+  .faceseg button:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+  :root[data-face="grotesk"]{--serifHe:"Space Grotesk",ui-monospace,monospace;--serif:"Space Grotesk",ui-monospace,monospace}
+  @media(max-width:820px){.faceseg button{padding:8px 11px}}
 </style>
 
 <div class="bar"><div class="in">
-  <div class="mk">Pure<i>.</i><small>Spatial · Data Family</small></div>
+  <div class="mk">Pure<i>.</i><small>Spatial · Data Appendix</small></div>
+  <div class="controls">
+    <div class="faceseg" id="faceseg" role="group" aria-label="Typeface"><button data-f="serif" aria-pressed="true">Serif</button><button data-f="grotesk" aria-pressed="false">Grotesk</button></div>
   <div class="seg" id="seg" role="group" aria-label="Theme"><span class="ind" id="ind"></span>
     <button data-t="t-indigo" aria-pressed="true"><span class="d" style="background:#7A6BF0"></span>Indigo</button>
     <button data-t="t-teal" aria-pressed="false"><span class="d" style="background:#1FB8A6"></span>Teal</button>
     <button data-t="t-amber" aria-pressed="false"><span class="d" style="background:#D99A3C"></span>Amber</button>
   </div>
+  </div>
 </div></div>
 
 <div class="wrap">
   <header class="hero">
-    <div class="eyebrow"><span class="tick"></span>Surfaces that hold many records at once</div>
+    <div class="eyebrow"><span class="tick"></span>Appendix · surfaces that hold many records at once</div>
     <h1>מרחב · דאטה</h1>
-    <p class="sub">The two surfaces that arrange many points at once — the map and the table. Terrain is abstract, never real geography; markers, route and cluster morph with the accent. The table sorts and selects; numbers stay LTR + tabular; the selected row carries an inset-inline-start bar. Status stays semantic. No domain, no dashboard.</p>
+    <p class="sub">An appendix, not an archetype — the two surfaces that arrange many points at once, sitting over Card, List and DataViz. Terrain is abstract, never real geography and never a city or country name; markers, route and cluster morph with the accent. Click the Value header to merge the rows ascending or descending; click a caret to open or close its children. Numbers stay LTR + tabular; status stays semantic.</p>
   </header>
 
-  <div class="lead">6 canonical · numbers LTR + tnum · accent-morph · semantic fixed · zero geography</div>
+  <div class="lead">6 canonical · sort &amp; tree are live · numbers LTR + tnum · accent-morph · zero geography</div>
   <div class="grid" id="grid">
 
     <div class="cell wide"><div class="body">
@@ -154,20 +170,20 @@
     </div><div class="foot"><span class="nm">Marker states</span><span class="seam">fields</span></div></div>
 
     <div class="cell wide"><div class="body">
-      <div class="dt">
+      <div class="dt" id="dttable">
         <div class="thead">
           <span class="th">Label</span>
-          <span class="th n desc">Value<span class="sar"><span class="up"><svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6l4-4 4 4"/></svg></span><span class="dn"><svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l4 4 4-4"/></svg></span></span></span>
+          <button class="th n desc" id="sortv" aria-label="Sort by Value">Value<span class="sar"><span class="up"><svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6l4-4 4 4"/></svg></span><span class="dn"><svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l4 4 4-4"/></svg></span></span></button>
           <span class="th">Meta</span>
           <span class="th">Status</span>
         </div>
-        <div class="trow"><span class="tc">Label</span><span class="tc val">1,024</span><span class="tc mut">Meta</span><span class="tc st"><span class="sd" style="background:var(--ok)"></span>Label</span></div>
-        <div class="trow sel"><span class="tc">Label</span><span class="tc val">512</span><span class="tc mut">Meta</span><span class="tc st"><span class="sd" style="background:var(--warn)"></span>Label</span></div>
-        <div class="trow alt"><span class="tc">Label</span><span class="tc val">248</span><span class="tc mut">Meta</span><span class="tc st"><span class="sd" style="background:var(--ok)"></span>Label</span></div>
-        <div class="trow"><span class="tc">Label</span><span class="tc val">92</span><span class="tc mut">Meta</span><span class="tc st"><span class="sd" style="background:var(--err)"></span>Label</span></div>
-        <div class="trow alt"><span class="tc">Label</span><span class="tc val">37</span><span class="tc mut">Meta</span><span class="tc st"><span class="sd" style="background:var(--ok)"></span>Label</span></div>
+        <div class="trow" data-v="1024"><span class="tc">Label</span><span class="tc val">1,024</span><span class="tc mut">Meta</span><span class="tc st"><span class="sd" style="background:var(--ok)"></span>Label</span></div>
+        <div class="trow sel" data-v="512"><span class="tc">Label</span><span class="tc val">512</span><span class="tc mut">Meta</span><span class="tc st"><span class="sd" style="background:var(--warn)"></span>Label</span></div>
+        <div class="trow alt" data-v="248"><span class="tc">Label</span><span class="tc val">248</span><span class="tc mut">Meta</span><span class="tc st"><span class="sd" style="background:var(--ok)"></span>Label</span></div>
+        <div class="trow" data-v="92"><span class="tc">Label</span><span class="tc val">92</span><span class="tc mut">Meta</span><span class="tc st"><span class="sd" style="background:var(--err)"></span>Label</span></div>
+        <div class="trow alt" data-v="37"><span class="tc">Label</span><span class="tc val">37</span><span class="tc mut">Meta</span><span class="tc st"><span class="sd" style="background:var(--ok)"></span>Label</span></div>
       </div>
-    </div><div class="foot"><span class="nm">DataTable · sortable · selectable</span><span class="seam">fields</span></div></div>
+    </div><div class="foot"><span class="nm">DataTable · sort merges rows</span><span class="seam">fields</span></div></div>
 
     <div class="cell"><div class="body">
       <div class="theater" style="gap:18px">
@@ -189,12 +205,13 @@
     </div><div class="foot"><span class="nm">Minimap · viewport</span><span class="seam">fields</span></div></div>
 
     <div class="cell"><div class="body">
-      <div class="tree">
-        <div class="tr"><span class="car open"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2l5 4-5 4"/></svg></span><span class="tl">Label</span><span class="tv num">1,024</span></div>
-        <div class="tr lv1"><span class="car open"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2l5 4-5 4"/></svg></span><span class="tl">Label</span><span class="tv num">640</span></div>
-        <div class="tr lv2"><span class="car leaf"><svg viewBox="0 0 12 12"><path d="M4 2l5 4-5 4"/></svg></span><span class="tl">Label</span><span class="tv num">248</span></div>
-        <div class="tr lv2"><span class="car leaf"><svg viewBox="0 0 12 12"><path d="M4 2l5 4-5 4"/></svg></span><span class="tl">Label</span><span class="tv num">392</span></div>
-        <div class="tr"><span class="car"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2l5 4-5 4"/></svg></span><span class="tl">Label</span><span class="tv num">384</span></div>
+      <div class="tree" id="tree">
+        <div class="tr" data-id="n1"><button class="car open" aria-label="Collapse"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2l5 4-5 4"/></svg></button><span class="tl">Label</span><span class="tv num">1,024</span></div>
+        <div class="tr lv1" data-id="n2" data-parent="n1"><button class="car open" aria-label="Collapse"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2l5 4-5 4"/></svg></button><span class="tl">Label</span><span class="tv num">640</span></div>
+        <div class="tr lv2" data-parent="n2"><span class="car leaf"><svg viewBox="0 0 12 12"><path d="M4 2l5 4-5 4"/></svg></span><span class="tl">Label</span><span class="tv num">248</span></div>
+        <div class="tr lv2" data-parent="n2"><span class="car leaf"><svg viewBox="0 0 12 12"><path d="M4 2l5 4-5 4"/></svg></span><span class="tl">Label</span><span class="tv num">392</span></div>
+        <div class="tr" data-id="n5"><button class="car" aria-label="Expand"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2l5 4-5 4"/></svg></button><span class="tl">Label</span><span class="tv num">384</span></div>
+        <div class="tr lv1" data-parent="n5" hidden><span class="car leaf"><svg viewBox="0 0 12 12"><path d="M4 2l5 4-5 4"/></svg></span><span class="tl">Label</span><span class="tv num">240</span></div>
       </div>
     </div><div class="foot"><span class="nm">TreeGrid · nested rows</span><span class="seam">fields</span></div></div>
 
@@ -203,13 +220,49 @@
   <div class="lead">inherit — same data surface, different shape</div>
   <div class="inherit" id="chips"></div>
 
-  <footer><div>PURE — <b>Spatial · Data</b> · map · marker · route · data-table · minimap · tree-grid</div><div>numbers LTR + tnum · accent morphs · semantic fixed</div></footer>
+  <footer><div>PURE — <b>Spatial · Data</b> appendix · map · marker · route · data-table · minimap · tree-grid</div><div>numbers LTR + tnum · accent morphs · semantic fixed</div></footer>
 </div>
 
 <script>
-  document.getElementById('chips').innerHTML=['Carousel','Pagination','Heatmap','Legend','ColumnResize'].map(function(n){return '<span class="chip"><i></i>'+n+'</span>';}).join('');
+  document.getElementById('chips').innerHTML=['Carousel','Pagination','Legend','ColumnResize'].map(function(n){return '<span class="chip"><i></i>'+n+'</span>';}).join('');
 
-  var root=document.documentElement;root.className='t-indigo';
+  // SortHeader — click merges the Value rows ascending / descending (live)
+  (function(){
+    var btn=document.getElementById('sortv'),dt=document.getElementById('dttable');
+    btn.addEventListener('click',function(){
+      var asc=btn.classList.contains('desc');
+      btn.classList.toggle('asc',asc);btn.classList.toggle('desc',!asc);
+      var rows=[].slice.call(dt.querySelectorAll('.trow'));
+      rows.sort(function(a,b){var d=(+a.dataset.v)-(+b.dataset.v);return asc?d:-d;});
+      rows.forEach(function(r,i){r.classList.toggle('alt',i%2===1);dt.appendChild(r);});
+    });
+  })();
+
+  // TreeGrid — caret opens / closes children (live), recursively
+  (function(){
+    function setHidden(id,hide){
+      [].slice.call(document.querySelectorAll('.tr[data-parent="'+id+'"]')).forEach(function(row){
+        row.hidden=hide;var cid=row.dataset.id;if(!cid)return;
+        var car=row.querySelector('button.car');
+        if(hide)setHidden(cid,true);
+        else if(car&&car.classList.contains('open'))setHidden(cid,false);
+      });
+    }
+    [].slice.call(document.querySelectorAll('#tree button.car')).forEach(function(car){
+      car.addEventListener('click',function(){
+        var row=car.closest('.tr'),id=row.dataset.id;if(!id)return;
+        var open=car.classList.toggle('open');
+        car.setAttribute('aria-label',open?'Collapse':'Expand');
+        setHidden(id,!open);
+      });
+    });
+  })();
+
+  // theme switch
+  var root=document.documentElement;root.dataset.face='serif';
+  var faceBtns=[].slice.call(document.querySelectorAll('#faceseg button'));
+  faceBtns.forEach(function(b){b.addEventListener('click',function(){root.dataset.face=b.dataset.f;faceBtns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});});});
+  root.className='t-indigo';
   var seg=document.getElementById('seg'),ind=document.getElementById('ind'),btns=[].slice.call(seg.querySelectorAll('button'));
   function place(el){var sr=seg.getBoundingClientRect(),br=el.getBoundingClientRect();ind.style.width=br.width+'px';ind.style.transform='translateX('+(br.left-sr.left-3)+'px)';}
   btns.forEach(function(b){b.addEventListener('click',function(){root.className=b.dataset.t;btns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});place(b);});});

@@ -29,7 +29,7 @@ const dartType = (v) => {
 
 let made = 0;
 for (const f of fs.readdirSync(SRC)) {
-  if (!/-(strings|data|terms)\.mjs$/.test(f) || f.endsWith('.test.mjs')) continue;
+  if (!/-(strings|data|terms|nums)\.mjs$/.test(f) || f.endsWith('.test.mjs')) continue;
   const mod = await import('file://' + path.join(SRC, f));
   const outName = f.replace(/\.mjs$/, '.dart');
   // מגן-דריסה: תאום קיים שאינו פליטה-של-המנוע (אין חותם-מקור) — לא נוגעים (קובץ ידני קדוש)

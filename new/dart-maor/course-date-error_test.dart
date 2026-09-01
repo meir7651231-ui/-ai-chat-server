@@ -1,3 +1,4 @@
+import '../dart-data-maor/course-date-error-sockets.dart' as sk_course_date_error;
 import '../dart-data-maor/course-date-error-terms.dart';
 // רתמת-זהב · course-date-error — assert-ים = דוגמאות-החוזה של בדיקת-ה-JS (זהות).
 // שקע termOf מקומי לבדיקה (3 ארגומנטים כמו במקור; undefined⇒null).
@@ -9,26 +10,25 @@ void main() {
 
   // 1 — הפוך, בלי config
   assert(
-      courseDateError('2026-09-01', '2026-08-01', null, termHeb, term: (k)=>kTerms[k]!) ==
+      courseDateError('2026-09-01', '2026-08-01', null, termHeb, term: (k)=>kTerms[k]!, T: sk_course_date_error.courseDateError_T) ==
           'תאריך הסיום מוקדם מתאריך ההתחלה — החוג לא יופיע בלוח. תקנו את התאריכים',
       '✗ 1 הפוך בלי config');
 
   // 2 — הפוך עם config ומונח מותאם
   assert(
-      (courseDateError('2026-09-01', '2026-08-01',
-                  <String, Object>{'terms': <String, Object>{}}, termHeb, term: (k)=>kTerms[k]!) ??
+      (courseDateError('2026-09-01', '2026-08-01', <String, Object>{'terms': <String, Object>{}}, termHeb, term: (k)=>kTerms[k]!, T: sk_course_date_error.courseDateError_T) ??
               '')
           .contains('— השיעור לא'),
       '✗ 2 מונח מותאם');
 
   // 3–6 — תקין/שווה/חסר ⇒ null
-  assert(courseDateError('2026-08-01', '2026-09-01', null, termHeb, term: (k)=>kTerms[k]!) == null,
+  assert(courseDateError('2026-08-01', '2026-09-01', null, termHeb, term: (k)=>kTerms[k]!, T: sk_course_date_error.courseDateError_T) == null,
       '✗ 3 טווח תקין');
-  assert(courseDateError('2026-08-01', '2026-08-01', null, termHeb, term: (k)=>kTerms[k]!) == null,
+  assert(courseDateError('2026-08-01', '2026-08-01', null, termHeb, term: (k)=>kTerms[k]!, T: sk_course_date_error.courseDateError_T) == null,
       '✗ 4 שווים');
-  assert(courseDateError('', '2026-08-01', null, termHeb, term: (k)=>kTerms[k]!) == null,
+  assert(courseDateError('', '2026-08-01', null, termHeb, term: (k)=>kTerms[k]!, T: sk_course_date_error.courseDateError_T) == null,
       '✗ 5 start ריק');
-  assert(courseDateError('2026-09-01', '', null, termHeb, term: (k)=>kTerms[k]!) == null,
+  assert(courseDateError('2026-09-01', '', null, termHeb, term: (k)=>kTerms[k]!, T: sk_course_date_error.courseDateError_T) == null,
       '✗ 6 end ריק');
 
   // 7 — בלי config השקע termOf לא נקרא
@@ -36,7 +36,7 @@ void main() {
   courseDateError('2026-09-01', '2026-08-01', null, (c, k, d) {
     called++;
     return 'X';
-  }, term: (k)=>kTerms[k]!);
+  }, term: (k)=>kTerms[k]!, T: sk_course_date_error.courseDateError_T);
   assert(called == 0, '✗ 7 termOf לא נקרא בלי config');
 
   print('✓ course-date-error (Dart): 7 דוגמאות-חוזה (שקע termOf) — ירוק');

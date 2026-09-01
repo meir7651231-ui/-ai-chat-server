@@ -3,6 +3,7 @@
 // זהו ההוכחה ש-מאור(JS) ובנייה-חכמה(Dart) מתחברות לאותה קופסה: אותם קלטים ⇒ אותו פלט.
 // מילון-התסריט (TOUR_STEPS) הוא הכרעת-הקופסה — חי כאן בלבד (LAW חוק-5), verbatim מ-tour.mjs;
 // הקבועים והחוטים מוזרקים כשקעים (חוק-1: הקופסה מייבאת אך-ורק אטומים).
+import '../dart-data-maor/tour-steps-sockets.dart' as skb_tour_steps;
 import '../dart-maor/tour-stop-label.dart' as tsl; // הקבוע (getter tourStopLabel)
 import '../dart-maor/tour-steps.dart' as ts; // חוט הסינון+המיתוג
 import '../dart-maor/tour-advance.dart' as ta; // חוט הניווט
@@ -42,7 +43,7 @@ final List<Map<String, dynamic>> TOUR_STEPS = [
 // (moduleOn), לא כאן. config (OrgConfig) אופציונלי — בלעדיו הנוסח המקורי מילה-במילה
 // וזהות-האובייקט נשמרת (tour.ts:65,72). termOf מוזרק כשקע לחוט (חוק-1).
 List<dynamic> steps(dynamic isModuleOn, [dynamic config]) =>
-    ts.tourSteps(TOUR_STEPS, isModuleOn, tof.termOf, config);
+    ts.tourSteps(TOUR_STEPS, isModuleOn, tof.termOf, skb_tour_steps.tourSteps_T2, config);
 
 // ניווט הבא/הקודם: לפני-ההתחלה נצמד ל-0, אחרי-הסוף = null (סיום). tour.ts:80-85.
 // tear-off ישיר של האטום (מקביל ל-export const advance = tourAdvance).

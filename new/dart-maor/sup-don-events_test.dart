@@ -1,3 +1,4 @@
+import '../dart-data-maor/sup-don-events-sockets.dart' as sk_sup_don_events;
 // בדיקת-חוזה · supDonEvents — 7 דוגמאות-החוזה מ-new/atoms/sup-don-events.test.mjs
 // + ratchet חוק-18 (‏pays מחרוזתי עם NEL ⇒ NaN, לא "N תשלומים").
 import 'sup-don-events.dart';
@@ -17,7 +18,7 @@ void main() {
       'donations': [
         {'date': '2026-01-05', 'amount': 100, 'rid': 'R-3'}
       ]
-    });
+    }, sk_sup_don_events.supDonEvents_T2);
     ok(r.length == 1, 'תרומה יחידה ⇒ שורה אחת');
     ok(r[0]['date'] == '2026-01-05' && r[0]['amount'] == 100, 'תאריך וסכום עוברים כמות-שהם');
     ok(r[0]['cur'] == '₪', "cur חסר ⇒ '₪'");
@@ -29,7 +30,7 @@ void main() {
       'hist': [
         {'d': '2026-02-01', 'a': 250, 'c': '\$', 'clearer': 'נדרים', 'last4': '1234', 'pays': 3}
       ]
-    });
+    }, sk_sup_don_events.supDonEvents_T2);
     ok(r.length == 1, 'שורת-hist אחת');
     ok(r[0]['amount'] == 250 && r[0]['cur'] == '\$', 'סכום 250 ומטבע \$');
     ok(r[0]['src'] == 'תרומה · •1234 · נדרים · 3 תשלומים', 'clearer ⇒ תרומה + מטא: ' + r[0]['src'].toString());
@@ -40,13 +41,13 @@ void main() {
       'hist': [
         {'d': '2026-03-01', 'a': 80}
       ]
-    });
+    }, sk_sup_don_events.supDonEvents_T2);
     ok(r[0]['src'] == 'מהקובץ ההיסטורי', 'בלי clearer ⇒ מהקובץ ההיסטורי');
     ok(r[0]['cur'] == '₪' && r[0]['rid'] == null, "c חסר ⇒ '₪'; אין rid");
   }
   // 4) אפס donations/hist + first/last ⇒ 2 שורות-אפס ממוינות מהחדש לישן
   {
-    final r = supDonEvents({'first': '2025-01-01', 'last': '2025-06-01'});
+    final r = supDonEvents({'first': '2025-01-01', 'last': '2025-06-01'}, sk_sup_don_events.supDonEvents_T2);
     ok(r.length == 2, 'first+last ⇒ 2 שורות');
     ok(r[0]['date'] == '2025-06-01' && r[0]['src'] == 'תרומה אחרונה (מהקובץ)', 'האחרונה ראשונה (מיון desc)');
     ok(r[1]['date'] == '2025-01-01' && r[1]['src'] == 'תרומה ראשונה (מהקובץ)', 'הראשונה שנייה');
@@ -59,7 +60,7 @@ void main() {
         {'date': '2025-01-01', 'amount': 10, 'rid': 'R-1'}
       ],
       'first': '2025-01-01'
-    });
+    }, sk_sup_don_events.supDonEvents_T2);
     ok(r.length == 1 && r[0]['src'] == 'קבלה R-1', 'תאריך-first שנראה כבר לא מוסיף שורה');
   }
   // 6) יש hist ⇒ שורות first/last לא נוצרות כלל
@@ -69,7 +70,7 @@ void main() {
         {'d': '2026-02-01', 'a': 5}
       ],
       'first': '2020-01-01'
-    });
+    }, sk_sup_don_events.supDonEvents_T2);
     ok(r.length == 1 && r[0]['src'] == 'מהקובץ ההיסטורי', 'hist קיים ⇒ בלי שורות מהקובץ-first/last');
   }
   // 7) שקע-מונחים מוזרק + pays:1 לא מציג "תשלומים"
@@ -79,7 +80,7 @@ void main() {
       'hist': [
         {'d': '2026-02-01', 'a': 250, 'clearer': 'נדרים', 'pays': 1}
       ]
-    }, term);
+    }, sk_sup_don_events.supDonEvents_T2, term);
     ok(r[0]['src'] == 'נדבה · נדרים', 'שקע-המונחים מחליף התווית; pays=1 מושמט: ' + r[0]['src'].toString());
   }
   // 8) ratchet חוק-18: pays מחרוזתי עם NEL (U+0085) ⇒ Number(str)=NaN ⇒ ללא "תשלומים".
@@ -89,7 +90,7 @@ void main() {
       'hist': [
         {'d': '2026-02-01', 'a': 5, 'clearer': 'x', 'pays': '2'}
       ]
-    });
+    }, sk_sup_don_events.supDonEvents_T2);
     ok(r[0]['src'] == 'תרומה · x', 'pays="2\\u0085" ⇒ NaN>1=false ⇒ לא-מוצג: ' + r[0]['src'].toString());
   }
 

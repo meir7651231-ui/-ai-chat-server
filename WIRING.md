@@ -2,7 +2,7 @@
 > **מחולל אוטומטית מה-imports — אל תערוך ידנית** (`node machtzev/tools/gen-wiring-doc.mjs`).
 > כל קופסה: אילו חוטים היא מחווטת + ההכרעה-החתומה שלה (מהחוזה) + הזהב שלה.
 
-**מלאי:** 1112 אטומים · 64 קופסאות · מחווטים: 984/1112 (88%)
+**מלאי:** 1160 אטומים · 78 קופסאות · מחווטים: 1012/1160 (87%)
 
 ## #a11y
 הקופסה של סולם-הגופן ומתגי-הנגישות (P2 פער 31) — זום 0.8–1.6 בצעדי 0.1
@@ -23,6 +23,11 @@
 קופסת-החיווט של מודול-העין — כל הלוגיקה הטהורה של `feature supporters.ayin`
 - **חוטים (51):** ayin-stages · stage-label · stage-label-strings · feat-label · feat-label-strings · item-label · item-label-strings · unit-label · unit-label-strings · stage-index · ayin-stages · next-stage · revert-patch · revert-patch-strings · norm-name · ayin-active · ayin-active-strings · eyes-total · boq-line-amount · boq-total · time-hours-total · time-cost-total · mat-cost-total · names-to-template-lines · template-lines-to-names · ayin-action-visible · ayin-action-visible-strings · ayin-advance-label · ayin-advance-label-strings · plan-ayin-advance · plan-ayin-advance-strings · plan-add-name · plan-add-name-strings · ayin-daily-rows · ayin-daily-rows-strings · ayin-all-rows · ayin-all-rows-strings · ayin-board-items · filter-ayin-board · filter-ayin-board-strings · ayin-sheet-header · ayin-sheet-rows · ayin-sheet-rows-strings · parse-ayin-sheet · parse-ayin-sheet-strings · apply-ayin-sheet · apply-ayin-sheet-strings · term-of · integration-setting-strings · norm-search · norm-search-strings
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #broadcast
+
+- **חוטים (1):** broadcast-strings
+- 🛡 מגן-הכרעה: — · 🏆 רתמת-זהב: ⏳
 
 ## #caller-id
 
@@ -51,7 +56,7 @@
 
 ## #csvx
 קופסת עזרי-ה-CSV המשותפים — ייצוא (בריחת-תא + הגנת-הזרקה + BOM),
-- **חוטים (10):** csv-escape · to-csv · decode-csv-buffer · decode-csv-buffer-strings · read-csv-file-text · parse-csv · parse-any-date · parse-any-date-strings · guard-export · csvx-terms
+- **חוטים (11):** csv-escape · to-csv · decode-csv-buffer · decode-csv-buffer-strings · read-csv-file-text · parse-csv · parse-any-date · parse-any-date-strings · guard-export · csvx-terms · csvx-wiring-data
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
 ## #custom-export
@@ -76,7 +81,7 @@
 
 ## #diary
 
-- **חוטים (36):** fmt-date · fmt-date-strings · iso-local · iso-today · week-day-names · pad2 · time-to-min · time-to-min-strings · min-to-hm · min-to-hm-strings · group-label-of · group-label-of-strings · absence-reason-chips · makeup-eligibility · makeup-eligibility-strings · block-reason · block-reason-strings · block-reason-data · build-slots · build-slots-strings · enrollments-for-session · weekly-room-sessions · inactive-room-courses · inactive-room-courses-strings · chip-style · chip-style-strings · room-info-label · room-info-label-strings · heb-parts · heb-parts-strings · holidays · sessions-of · term-of · integration-setting-strings · plan-word · plan-word-strings
+- **חוטים (37):** fmt-date · fmt-date-strings · iso-local · iso-today · week-day-names · pad2 · time-to-min · time-to-min-strings · min-to-hm · min-to-hm-strings · group-label-of · group-label-of-strings · absence-reason-chips · makeup-eligibility · makeup-eligibility-strings · block-reason · block-reason-strings · block-reason-data · build-slots · build-slots-strings · enrollments-for-session · weekly-room-sessions · inactive-room-courses · inactive-room-courses-strings · chip-style · chip-style-strings · room-info-label · room-info-label-strings · heb-parts · heb-parts-strings · holidays · sessions-of · term-of · integration-setting-strings · plan-word · plan-word-strings · diary-status-labels
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
 ## #distribution
@@ -111,7 +116,7 @@
 
 ## #guide
 הקופסה של תוכן-המדריך — הקבועים מילה-במילה + שתי פונקציות-ההתאמה-פר-עסק,
-- **חוטים (11):** guide-intro-label · guide-intro · guide-sections · guide-recipes-label · guide-recipes · guide-foot · guide-foot-strings · guide-sections-of · guide-sections-of-strings · term-of · integration-setting-strings
+- **חוטים (12):** guide-recipe-swaps · guide-intro-label · guide-intro · guide-sections · guide-recipes-label · guide-recipes · guide-foot · guide-foot-strings · guide-sections-of · guide-sections-of-strings · term-of · integration-setting-strings
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
 ## #heb-cal-box
@@ -134,15 +139,30 @@
 - **חוטים (19):** gematria · gematria-strings · gematria-data · gem-year · gem-year-strings · adar-norm · adar-norm-strings · heb-annual-eq · heb-annual-eq-strings · heb-parts · heb-parts-strings · heb-parts-of-iso · heb-parts-of-iso-data · heb-date-full · heb-date-full-strings · holidays · holiday-of · holiday-of-strings · heb-cal-data
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
+## #helpers
+
+- **חוטים (2):** helpers-strings · iso-today
+- 🛡 מגן-הכרעה: — · 🏆 רתמת-זהב: ⏳
+
 ## #ics-feed
 מנוי-יומן חי (הרחבת gcal, 9.8) — במקום קובץ-ICS חד-פעמי, המערכת
 - **חוטים (8):** mint-feed-token · read-ics-feed-token · read-ics-feed-token-strings · publish-ics-feed · publish-ics-feed-strings · ics-feed-url · ics-feed-url-strings · ics-feed-terms
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
+## #ids
+
+- **חוטים (1):** ids-data
+- 🛡 מגן-הכרעה: — · 🏆 רתמת-זהב: ⏳
+
 ## #image-pick
 שתי זרימות של פיצ׳ר-הגלריה/ההטמעה, מחווטות במקום אחד:
 - **חוטים (5):** max-upload-bytes · max-embed-bytes · read-file-as-data-url · read-file-as-data-url-strings · image-pick-terms
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #intel
+
+- **חוטים (2):** intel-strings · intel-nums
+- 🛡 מגן-הכרעה: — · 🏆 רתמת-זהב: ⏳
 
 ## #lib-ai
 קופסת הרחבת 🤖 `ai` ("עד-המפתח") — כל מה שהיה מולחם ב-`maor/src/lib/ai.ts`
@@ -161,7 +181,7 @@
 
 ## #lib-config
 
-- **חוטים (43):** module-on · feature-on · donation-split-on · sup-enforce-on · integration-on · telephony-on · integration-setting · integration-setting-strings · safe-https-url · safe-https-url-strings · term-of · integration-setting-strings · normalize-telephony · normalize-telephony-strings · normalize-telephony-data · make-normalize-site · make-normalize-site-data · make-normalize-site-strings · make-normalize-config · make-normalize-config-strings · public-site-on · public-site-on-strings · role-of · role-of-strings · teacher-id-of · is-admin-user · can-granted-action · is-super-admin · sign-up-error · sign-up-error-strings · employee-sign-up-error · employee-sign-up-error-strings · cloud-cfg-cache-key · cloud-cfg-cache-key-strings · resolve-org-config · org-slug-from-url · org-slug-from-url-strings · is-safe-accent · default-favicon · favicon-data-uri · favicon-data-uri-strings · apply-config · lib-config-terms
+- **חוטים (44):** site-langs-allow · module-on · feature-on · donation-split-on · sup-enforce-on · integration-on · telephony-on · integration-setting · integration-setting-strings · safe-https-url · safe-https-url-strings · term-of · integration-setting-strings · normalize-telephony · normalize-telephony-strings · normalize-telephony-data · make-normalize-site · make-normalize-site-data · make-normalize-site-strings · make-normalize-config · make-normalize-config-strings · public-site-on · public-site-on-strings · role-of · role-of-strings · teacher-id-of · is-admin-user · can-granted-action · is-super-admin · sign-up-error · sign-up-error-strings · employee-sign-up-error · employee-sign-up-error-strings · cloud-cfg-cache-key · cloud-cfg-cache-key-strings · resolve-org-config · org-slug-from-url · org-slug-from-url-strings · is-safe-accent · default-favicon · favicon-data-uri · favicon-data-uri-strings · apply-config · lib-config-terms
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
 ## #lib-crypto
@@ -186,7 +206,7 @@
 
 ## #lib-pwa
 קופסת-החיבורים של מודול ה-PWA — רישום service-worker, זיהוי מצב-התקנה,
-- **חוטים (6):** install-available · prompt-install · prompt-install-strings · is-ios · is-ios-strings · feature-on
+- **חוטים (7):** install-available · prompt-install · prompt-install-strings · is-ios · is-ios-strings · feature-on · pwa-manifest-spec
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
 ## #names-export
@@ -204,10 +224,25 @@
 - **חוטים (5):** run-net-check · run-net-check-strings · net-check-script · net-check-script-strings · net-check-terms
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
+## #origin-guard
+
+- **חוטים (1):** origin-guard-strings
+- 🛡 מגן-הכרעה: — · 🏆 רתמת-זהב: ⏳
+
+## #pareto
+
+- **חוטים (3):** pareto-nums · pareto-data · intel-donor-scan
+- 🛡 מגן-הכרעה: — · 🏆 רתמת-זהב: ⏳
+
 ## #photo-gallery
 
 - **חוטים (9):** photo-max · photo-max-dim · photo-max-len · can-add-photo · is-data-image · integration-setting-strings · fit-dimensions · sanitize-photos · sanitize-photos-strings
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #planned
+
+- **חוטים (0):** 
+- 🛡 מגן-הכרעה: — · 🏆 רתמת-זהב: ⏳
 
 ## #platform
 
@@ -216,7 +251,7 @@
 
 ## #pricing
 מחווטת את מנוע-התמחור המלא של המטמיע — טבלת-מחירי-ברירת-מחדל,
-- **חוטים (11):** default-prices · default-prices-strings · size-labels · normalize-prices · normalize-prices-strings · compute-quote · compute-quote-strings · shekel · shekel-strings · all-modules · integration-prices
+- **חוטים (12):** default-prices · default-prices-strings · size-labels · normalize-prices · normalize-prices-strings · compute-quote · compute-quote-strings · shekel · shekel-strings · all-modules · integration-prices · pricing-default-mode
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
 ## #public-site
@@ -224,9 +259,14 @@
 - **חוטים (17):** is-rtl-lang · coral-palette · coral-palette-strings · site-palette · site-palette-strings · site-vocab · site-vocab-strings · resolve-localized · integration-setting-strings · site-langs · site-ui · site-ui-labels · site-campaign-progress · site-campaign-progress-strings · has-public-site · site-donate-url · integration-setting-strings
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
+## #quiet-hours
+
+- **חוטים (2):** quiet-hours-data · quiet-hours-data
+- 🛡 מגן-הכרעה: — · 🏆 רתמת-זהב: ⏳
+
 ## #receipt
 מסירת-קבלה שלמה — התוכן הטהור (שורות/HTML/קוד-אימות/פורמט) + נתיבי-המסירה
-- **חוטים (24):** receipt-verify-code · receipt-verify-code-strings · receipt-lines · receipt-lines-strings · receipt-html · receipt-html-strings · receipt-fmt-of · receipt-fmt-of-strings · deliver-receipt · deliver-receipt-strings · heb-date-full · heb-date-full-strings · feature-on · module-on · gematria · gematria-strings · gematria-data · gem-year · gem-year-strings · heb-parts · heb-parts-strings · guard-export · receipt-terms · nav-module-keys
+- **חוטים (25):** receipt-verify-code · receipt-verify-code-strings · receipt-lines · receipt-lines-strings · receipt-html · receipt-html-strings · receipt-fmt-of · receipt-fmt-of-strings · deliver-receipt · deliver-receipt-strings · heb-date-full · heb-date-full-strings · feature-on · module-on · gematria · gematria-strings · gematria-data · gem-year · gem-year-strings · heb-parts · heb-parts-strings · guard-export · receipt-terms · nav-module-keys · receipt-wiring-data
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
 ## #reenroll
@@ -239,15 +279,35 @@
 - **חוטים (15):** fmt-date · fmt-date-strings · in-range · range-label · range-label-strings · paid-of · round2 · round2-strings · paid-in-range · balance-of · month-key · month-label · name-index · status-label · count-by
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
+## #retention
+
+- **חוטים (3):** retention-nums · intel-day-diff · intel-donor-scan
+- 🛡 מגן-הכרעה: — · 🏆 רתמת-זהב: ⏳
+
 ## #search
 חיפוש-חכם מלא: נרמול עברי + תעתיקים (עברית/אנגלית/רוסית/כינויים) +
 - **חוטים (20):** levenshtein · norm-search · norm-search-strings · xlat · xlat-strings · rule-exact · rule-exact-strings · rule-prefix · rule-prefix-strings · rule-plural · rule-plural-strings · rule-contains · rule-contains-strings · rule-skeleton · rule-skeleton-strings · rule-typo · rule-typo-strings · smart-score · smart-score-strings · smart-filter
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
+## #seasonality
+
+- **חוטים (0):** 
+- 🛡 מגן-הכרעה: — · 🏆 רתמת-זהב: ⏳
+
+## #sections
+
+- **חוטים (1):** sections-strings
+- 🛡 מגן-הכרעה: — · 🏆 רתמת-זהב: ⏳
+
 ## #shop
 מחווטת את 31 חוטי-מודול-החנות לכדי ה-API של העמודה. מקור-האמת:
 - **חוטים (49):** live-redemptions · item-of · holiday-allowed · item-remaining · effective-price · effective-price-strings · max-discount-pct · max-discount-pct-strings · upcoming-holidays · upcoming-holidays-strings · holiday-names · holiday-names-strings · assignment-redeemed · component-remaining · coupon-expiry · shop-holiday-due-days · needs-care-shop · needs-care-shop-strings · shop-expiry-warn-days · expiring-intakes · upcoming-meetings · upcoming-meetings-strings · given-value · collected-paid · subsidy-total · product-assignments · component-redeemed-now · component-redeemed-now-strings · filter-assignments · filter-products · filter-items · filter-items-strings · filter-redemptions · intake-log · eligible-families · eligible-assignments-for-day-strings · distribution-list-lines · distribution-list-lines-strings · redemptions-csv-rows · redemptions-csv-rows-strings · beneficiary-label · beneficiary-label-strings · component-counts · term-of · integration-setting-strings · date-in-range · heb-parts · heb-parts-strings · iso-local
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #signals
+
+- **חוטים (5):** signals-strings · signals-nums · signals-data · signals-data · intel-day-diff
+- 🛡 מגן-הכרעה: — · 🏆 רתמת-זהב: ⏳
 
 ## #signup-wizard
 הקופסה של אשף-ההרשמה 5-השלבים של אורביט (SIGNUP3): תחום → גודל →
@@ -256,7 +316,7 @@
 
 ## #smtp-url
 הלקוח מקליד כתובת-מייל + סיסמת-אפליקציה — הקופסה מרכיבה לבד את
-- **חוטים (6):** smtp-hosts · smtp-host-for · smtp-hosts · compose-smtp-url · compose-smtp-url-strings · smtp-url-terms
+- **חוטים (7):** smtp-hosts · smtp-account-state · smtp-host-for · smtp-hosts · compose-smtp-url · compose-smtp-url-strings · smtp-url-terms
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
 ## #sup-partition
@@ -274,6 +334,11 @@
 - **חוטים (67):** fmt-date · fmt-date-strings · supporter-purposes · supporter-visible-for-designations · all-donation-purposes · sup-ils · sup-usd · sup-count · sup-last · sup-last-in-period · sup-total-ils · sup-score · sup-score-strings · sup-tier · sup-tier-strings · tier-order · sup-score-bins · sup-score-bins-strings · sup-avg-don · sup12m · sup12m-strings · chip-style · chip-style-strings · fix-phone · total-label · sup-don-events · sup-don-events-strings · personal-cal-entries · personal-cal-entries-strings · org-cal-entries · org-cal-entries-strings · don-cal-month-line · don-cal-month-line-strings · norm-name · sup-name-keys · excel-serial-to-iso · excel-serial-to-iso-strings · parse-supporter-grid · parse-supporter-grid-strings · parse-supporter-csv · apply-ayin-names · merge-hist · plan-supporter-import · merge-supporter-row · new-supporter-from-row · hok-cat · hok-cat-strings · hok-effectively-active · hok-effectively-active-strings · hok-recorded-this-month · hok-effectively-active-strings · hok-due · hok-monthly-total · hok-method-label · hok-method-label-strings · term-of · integration-setting-strings · norm-search · norm-search-strings · format-israeli-phone · format-israeli-phone-strings · parse-any-date · parse-any-date-strings · parse-csv · plan-add-name · plan-add-name-strings · supporters-terms
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
+## #team-intel
+
+- **חוטים (3):** team-intel-strings · team-intel-nums · team-intel-data
+- 🛡 מגן-הכרעה: — · 🏆 רתמת-זהב: ⏳
+
 ## #telephony
 הגשר בין אשף-ההקמה של מאור למנוע-הטלפוניה הטהור. ממיר שדות-אשף
 - **חוטים (13):** empty-telephony-config · empty-telephony-config-strings · to-tenant-id · to-tenant-id-strings · telephony-to-tenant · telephony-to-tenant-strings · preview-telephony · preview-telephony-data · preview-telephony-strings · next-closure · next-closure-strings · explain-one · explain-one-strings
@@ -286,12 +351,17 @@
 
 ## #theme
 מחווטת תפקידים (שקעים: ‎--bg, ‎--ink…) לפיגמנטים מהפלטה, פר-מצב
-- **חוטים (2):** palette · theme-terms
+- **חוטים (3):** palette · theme-terms · theme-wiring
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
+
+## #tier-migration
+
+- **חוטים (2):** tier-migration-data · sup-tier
+- 🛡 מגן-הכרעה: — · 🏆 רתמת-זהב: ⏳
 
 ## #tour
 הסיור-המודרך (spotlight) על המסכים האמיתיים — תסריט-הלגאסי מילה-במילה,
-- **חוטים (8):** tour-stop-label · tour-steps · tour-steps-strings · tour-advance · spotlight-box · spotlight-box-strings · term-of · integration-setting-strings
+- **חוטים (9):** tour-stop-label · tour-script · tour-steps · tour-steps-strings · tour-advance · spotlight-box · spotlight-box-strings · term-of · integration-setting-strings
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
 ## #tzedaka
@@ -324,5 +394,5 @@
 - **חוטים (11):** task-identity · task-identity-strings · open-tasks-for · done-today-for · done-today-for-strings · task-overdue · task-stats-for · task-stats-for-strings · overdue-contact-task-drafts · overdue-contact-task-drafts-strings · pri-labels
 - 🛡 מגן-הכרעה: ✅ · 🏆 רתמת-זהב: ⏳
 
-## אטומים-במלאי (טרם-חווטו): 128
+## אטומים-במלאי (טרם-חווטו): 148
 _ההתקדמות האמיתית = אחוז-המחווט (L10)._

@@ -1,3 +1,4 @@
+import '../dart-data-maor/enroll-summary-sockets.dart' as sk_enroll_summary;
 import 'enroll-summary.dart';
 
 /// רתמת-זהב: אותן 5 דוגמאות-חוזה בדיוק מ-new/atoms/enroll-summary.test.mjs.
@@ -121,7 +122,7 @@ void main() {
   for (final row in c) {
     final e = row[0];
     final w = row[1];
-    final g = enrollSummary(e, _payBal, _paidOf);
+    final g = enrollSummary(e, _payBal, _paidOf, sk_enroll_summary.enrollSummary_T);
     if (!_eq(g, w)) {
       print('✗ $e ⇒ $g ≠ $w');
       f = 1;

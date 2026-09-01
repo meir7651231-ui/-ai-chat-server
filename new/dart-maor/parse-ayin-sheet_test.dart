@@ -1,3 +1,4 @@
+import '../dart-data-maor/parse-ayin-sheet-sockets.dart' as sk_parse_ayin_sheet;
 // בדיקת-חוזה (רתמת-זהב) · parseAyinSheet — מייבאת אך ורק את האטום-שלה (חוק-4).
 // 7 דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/parse-ayin-sheet.test.mjs:
 //   אותם קלטים (rows/supporters/normName) ⇒ אותם פלטים. אם עובר ⇒ Dart≡JS.
@@ -53,7 +54,7 @@ void main() {
   }
 
   // 1. פחות מ-2 שורות ⇒ שגיאת קובץ-ריק
-  check('1 empty-file', parseAyinSheet([header], sups, normName),
+  check('1 empty-file', parseAyinSheet([header], sups, normName, sk_parse_ayin_sheet.parseAyinSheet_T),
       {'upds': [], 'miss': 0, 'error': 'הקובץ ריק או לא בפורמט CSV'});
 
   // 2. חסרה עמודת עיניים ⇒ שגיאת עמודות-חובה
@@ -62,7 +63,7 @@ void main() {
       parseAyinSheet([
         ['תומכת', 'שם למסירה'],
         ['רחל כהן', 'דוד']
-      ], sups, normName),
+      ], sups, normName, sk_parse_ayin_sheet.parseAyinSheet_T),
       {'upds': [], 'miss': 0, 'error': 'חסרות עמודות "שם למסירה" ו/או "כמה עיניים"'});
 
   // 3. שורה מלאה — התאמת תומכת+שם, clean בולע רווח-כפול
@@ -71,7 +72,7 @@ void main() {
       parseAyinSheet([
         header,
         ['רחל כהן', 'משה  בן שרה', '5', 'כן', '', '', '']
-      ], sups, normName),
+      ], sups, normName, sk_parse_ayin_sheet.parseAyinSheet_T),
       {
         'upds': [
           {'supporterId': 's1', 'nameId': 'n1', 'eyes': 5, 'done': true, 'paid': null, 'answer': null, 'lead': null}
@@ -85,7 +86,7 @@ void main() {
       parseAyinSheet([
         header,
         ['', 'דוד', '0', '', 'שולם', 'יש תשובה', 'כן']
-      ], sups, normName),
+      ], sups, normName, sk_parse_ayin_sheet.parseAyinSheet_T),
       {
         'upds': [
           {'supporterId': 's1', 'nameId': 'n2', 'eyes': 0, 'done': null, 'paid': true, 'answer': 'יש תשובה', 'lead': true}
@@ -99,7 +100,7 @@ void main() {
       parseAyinSheet([
         header,
         ['רחל כהן', 'לא קיים', '3', '', '', '', '']
-      ], sups, normName),
+      ], sups, normName, sk_parse_ayin_sheet.parseAyinSheet_T),
       {'upds': [], 'miss': 1});
 
   // 6. שורה בלי שום ערך ⇒ מדולגת בשקט
@@ -108,7 +109,7 @@ void main() {
       parseAyinSheet([
         header,
         ['רחל כהן', 'דוד', '', '', '', '', '']
-      ], sups, normName),
+      ], sups, normName, sk_parse_ayin_sheet.parseAyinSheet_T),
       {'upds': [], 'miss': 0});
 
   // 7. עיניים לא-ספרתיות ובלי ערך אחר ⇒ מדולגת
@@ -117,7 +118,7 @@ void main() {
       parseAyinSheet([
         header,
         ['רחל כהן', 'דוד', 'אבג', '', '', '', '']
-      ], sups, normName),
+      ], sups, normName, sk_parse_ayin_sheet.parseAyinSheet_T),
       {'upds': [], 'miss': 0});
 
   // assert חי (חוק: --enable-asserts) — מוכיח שהמנגנון פעיל.
@@ -126,7 +127,7 @@ void main() {
           parseAyinSheet([
             header,
             ['רחל כהן', 'משה בן שרה', '7', 'כן', 'שולם', 'הערה', 'לא']
-          ], sups, normName),
+          ], sups, normName, sk_parse_ayin_sheet.parseAyinSheet_T),
           {
             'upds': [
               {'supporterId': 's1', 'nameId': 'n1', 'eyes': 7, 'done': true, 'paid': true, 'answer': 'הערה', 'lead': false}

@@ -2,6 +2,7 @@
  * מוצא: intel.ts:49 (donorScan) + monthsBefore:25 (inline) + MS_DAY (לא נחוץ כאן). חוק-4 verbatim.
  * מעבר-יחיד על אירועי-הנתינה: count/ils/first/last + סדרה-חודשית (ישן→חדש). טהור.
  */
+// קבוע-מתמטי: חלון-סריקה ברירת-מחדל (חודשי-שנה) — ההתאמה עוברת דרך months המוזרק
 export function donorScan(sp, todayIso, rate = 3.7, months = 12, T) {
   const monthsBefore = (iso) => {
     const y = +iso.slice(0, 4), m = +iso.slice(5, 7);

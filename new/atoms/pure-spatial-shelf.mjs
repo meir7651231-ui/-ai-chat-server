@@ -21,7 +21,7 @@ export const PURE_SPATIAL_SHELF = {
   },
   {
    "name": "DataTable",
-   "note": "sortable · selectable",
+   "note": "sort merges rows",
    "kind": "signature",
    "seam": "fields"
   },

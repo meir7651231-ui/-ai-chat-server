@@ -7,6 +7,7 @@
 //    ['2024-03-24','י״ד אדר ב׳ תשפ״ד'],['2026-08-24T23:59:00','י״א אלול תשפ״ו'],
 //    ['',''],['שטויות','']]
 // הרצה: dart run --enable-asserts new/dart-maor/heb-date-full_test.dart ⇒ exit 0
+import '../dart-data-maor/heb-date-full-sockets.dart' as sk_heb_date_full;
 import 'heb-date-full.dart';
 
 // ── שקע gem — עותק-Dart של gem() מ-JS-הבדיקה ──
@@ -107,25 +108,25 @@ void _eq(String got, String want, String label) {
 
 void main() {
   var n = 0;
-  _eq(hebDateFull('2026-08-24', _gem, _gemYear, _hebParts), 'י״א אלול תשפ״ו',
+  _eq(hebDateFull('2026-08-24', _gem, _gemYear, _hebParts, sk_heb_date_full.hebDateFull_monthNames), 'י״א אלול תשפ״ו',
       '1 2026-08-24');
   n++;
-  _eq(hebDateFull('2026-04-02', _gem, _gemYear, _hebParts), 'ט״ו ניסן תשפ״ו',
+  _eq(hebDateFull('2026-04-02', _gem, _gemYear, _hebParts, sk_heb_date_full.hebDateFull_monthNames), 'ט״ו ניסן תשפ״ו',
       '2 2026-04-02 פסח');
   n++;
-  _eq(hebDateFull('2024-03-24', _gem, _gemYear, _hebParts), 'י״ד אדר ב׳ תשפ״ד',
+  _eq(hebDateFull('2024-03-24', _gem, _gemYear, _hebParts, sk_heb_date_full.hebDateFull_monthNames), 'י״ד אדר ב׳ תשפ״ד',
       '3 2024-03-24 פורים-מעוברת');
   n++;
-  _eq(hebDateFull('2026-08-24T23:59:00', _gem, _gemYear, _hebParts),
+  _eq(hebDateFull('2026-08-24T23:59:00', _gem, _gemYear, _hebParts, sk_heb_date_full.hebDateFull_monthNames),
       'י״א אלול תשפ״ו', '4 זנב-שעה נחתך');
   n++;
-  _eq(hebDateFull('', _gem, _gemYear, _hebParts), '', '5 ריק');
+  _eq(hebDateFull('', _gem, _gemYear, _hebParts, sk_heb_date_full.hebDateFull_monthNames), '', '5 ריק');
   n++;
-  _eq(hebDateFull('שטויות', _gem, _gemYear, _hebParts), '', '6 שבור');
+  _eq(hebDateFull('שטויות', _gem, _gemYear, _hebParts, sk_heb_date_full.hebDateFull_monthNames), '', '6 שבור');
   n++;
 
   // assert חי (חוק: --enable-asserts) — מוכיח שהמנגנון פעיל.
-  assert(hebDateFull('2026-04-02', _gem, _gemYear, _hebParts) == 'ט״ו ניסן תשפ״ו',
+  assert(hebDateFull('2026-04-02', _gem, _gemYear, _hebParts, sk_heb_date_full.hebDateFull_monthNames) == 'ט״ו ניסן תשפ״ו',
       'assert-live guard');
 
   print('✓ hebDateFull: $n דוגמאות-חוזה — Dart≡JS ירוק');

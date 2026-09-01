@@ -1,3 +1,4 @@
+import '../dart-data-maor/publish-ics-feed-sockets.dart' as sk_publish_ics_feed;
 // בדיקת-חוזה (רתמת-זהב) · publishIcsFeed — מייבאת אך ורק את האטום-שלה (חוק-4).
 // שש דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/publish-ics-feed.test.mjs.
 // אם עובר ⇒ Dart≡JS.
@@ -43,15 +44,7 @@ class Fake {
 }
 
 Future<dynamic> _publish(Fake fk, dynamic slug, dynamic ics, dynamic opts) {
-  return publishIcsFeed(
-    slug,
-    ics,
-    opts,
-    readToken: fk.readToken,
-    mintToken: fk.mintToken,
-    writeFeed: fk.writeFeed,
-    nowIso: fk.nowIso,
-  );
+  return publishIcsFeed(slug, ics, opts, readToken: fk.readToken, mintToken: fk.mintToken, writeFeed: fk.writeFeed, nowIso: fk.nowIso, T: sk_publish_ics_feed.publishIcsFeed_T);
 }
 
 Future<void> main() async {

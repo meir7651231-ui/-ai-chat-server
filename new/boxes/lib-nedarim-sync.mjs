@@ -99,6 +99,7 @@ const histDedupKey = (h) => {
 };
 // nedarimSync.ts:165-168 — יום-החיוב מתאריך-העסקה (1–28 — כך קיים בכל חודש). ברירת-מחדל 1.
 const hokDayFromDate = (iso) => {
+  // קבוע-מתמטי: מיקום-היום ב-ISO (8..10) + תקרת-יום-חיוב 28 (קיים בכל חודש)
   const d = Number((iso || '').slice(8, 10));
   return isFinite(d) && d >= 1 ? Math.min(28, Math.floor(d)) : 1;
 };
@@ -106,6 +107,7 @@ const hokDayFromDate = (iso) => {
 const monthsAgo = (dateIso, todayIso) => {
   const [y1, m1] = dateIso.slice(0, 7).split('-').map(Number);
   const [y2, m2] = todayIso.slice(0, 7).split('-').map(Number);
+  // קבוע-מתמטי: סנטינל-שגיאה (999) + חודשי-שנה (12)
   if (!y1 || !m1 || !y2 || !m2) return 999;
   return (y2 - y1) * 12 + (m2 - m1);
 };

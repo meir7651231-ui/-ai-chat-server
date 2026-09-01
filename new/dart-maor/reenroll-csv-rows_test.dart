@@ -1,6 +1,7 @@
 // בדיקת-חוזה (רתמת-זהב) · reenrollCsvRows — מייבאת אך ורק את האטום-שלה (חוק-4).
 // שש דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/reenroll-csv-rows.test.mjs.
 // הרצה: dart run --enable-asserts new/dart-maor/reenroll-csv-rows_test.dart ⇒ exit 0
+import '../dart-data-maor/reenroll-csv-rows-sockets.dart' as sk_rcr;
 import 'reenroll-csv-rows.dart';
 
 bool _deepEq(Object? a, Object? b) {
@@ -42,7 +43,7 @@ void main() {
     'e': <String, Object?>{},
   };
 
-  final R = reenrollCsvRows([r1, r2]);
+  final R = reenrollCsvRows([r1, r2], sk_rcr.reenrollCsvRows_head, sk_rcr.reenrollCsvRows_T);
 
   ok(
       _deepEq(R[0], [
@@ -54,12 +55,12 @@ void main() {
 
   // 'no' ⇒ 'לא ממשיך'; חסר ⇒ '':
   final rNo = <String, Object?>{...r2, 'decision': 'no'};
-  ok(reenrollCsvRows([rNo])[1][7] == 'לא ממשיך', "decision 'no'");
+  ok(reenrollCsvRows([rNo], sk_rcr.reenrollCsvRows_head, sk_rcr.reenrollCsvRows_T)[1][7] == 'לא ממשיך', "decision 'no'");
   final rUndecided = <String, Object?>{...r2}..remove('decision'); // decision undefined ⇒ ''
-  ok(reenrollCsvRows([rUndecided])[1][7] == '', 'decision חסר ⇒ ריק (לא "טרם הוחלט")');
+  ok(reenrollCsvRows([rUndecided], sk_rcr.reenrollCsvRows_head, sk_rcr.reenrollCsvRows_T)[1][7] == '', 'decision חסר ⇒ ריק (לא "טרם הוחלט")');
 
   // ריק ⇒ כותרת בלבד:
-  ok(reenrollCsvRows([]).length == 1, 'rows=[] ⇒ אורך 1');
+  ok(reenrollCsvRows([], sk_rcr.reenrollCsvRows_head, sk_rcr.reenrollCsvRows_T).length == 1, 'rows=[] ⇒ אורך 1');
 
   if (_f != 0) throw StateError('reenroll-csv-rows: דוגמאות-חוזה נכשלו');
   print('✓ reenroll-csv-rows: 6 דוגמאות-חוזה — ירוק');

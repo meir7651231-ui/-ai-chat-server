@@ -20,6 +20,7 @@ import { LIB_ICS_TERMS } from '../atoms/lib-ics-terms.mjs';
 // mime יומן, בלי BOM (בניגוד ל-CSV — יומנים לא אוהבים BOM). — ics.ts:132,136
 const CAL_MIME = LIB_ICS_TERMS.k1;
 // חלון-שחרור ה-object-URL אחרי ה-click. — ics.ts:139
+// קבוע-מתמטי: השהיית-revoke למשאב-הורדה (מ"ש)
 const REVOKE_MS = 5000;
 
 // ── החשיפה (ממשק lib/ics.ts אחד-לאחד — L4) ──

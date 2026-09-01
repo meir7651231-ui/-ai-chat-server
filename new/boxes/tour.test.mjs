@@ -63,15 +63,17 @@ if (clamped.left + clamped.width > 100 || clamped.top + clamped.height > 100)
 /* 🛡 מגן-הכרעה: הכרעות-הקופסה verbatim במקור-הקופסה (דפוס theme.test). */
 import { readFileSync } from 'node:fs';
 const src = readFileSync(new URL('./tour.mjs', import.meta.url), 'utf8');
+// התסריט חי כדאטה באטום tour-script (הכרעה 19) — הכיתובים מאומתים שם
+const script = readFileSync(new URL('../atoms/tour-script.mjs', import.meta.url), 'utf8');
 for (const verbatim of [
   '👋 הדמיה מלאה — המערכת מדגימה את עצמה, על הנתונים האמיתיים',
   '🪙 קופות צדקה — רכזים, קופות בבתים, ריקונים ומבצעים',
   '🛍 החנות — חבילות שירות, מלאי משותף ומימושים עם אישור',
   'זו המערכת. חיה, מלאה, במקום אחד ✦',
   "anchorText: 'מצא חוג'",
-]) if (!src.includes(verbatim)) bad(`מגן: כיתוב-לגאסי נעלם מהקופסה: "${verbatim}"`);
+]) if (!script.includes(verbatim)) bad(`מגן: כיתוב-לגאסי נעלם מהתסריט: "${verbatim}"`);
 // סדר-הלגאסי: העמודות-המבודדות tzedaka ⇒ shop ⇒ settings
-const order = ["view: 'tzedaka'", "view: 'shop'", "view: 'settings'"].map((k) => src.indexOf(k));
+const order = ["view: 'tzedaka'", "view: 'shop'", "view: 'settings'"].map((k) => script.indexOf(k));
 if (!(order[0] > 0 && order[0] < order[1] && order[1] < order[2])) bad('מגן: סדר-התסריט השתנה');
 // חוק-2/3: הקופסה מייבאת אך-ורק מ-atoms/
 const imports = [...src.matchAll(/from '([^']+)'/g)].map((m) => m[1]);

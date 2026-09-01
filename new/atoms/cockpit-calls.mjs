@@ -3,6 +3,7 @@
  * שיחות מומלצות = יעד-קשר שעבר ∪ בסיכון-נטישה. כל תורם פעם-אחת. ממוין לפי sort יורד.
  * שקעים: supIls, supUsd, supLast (Genesis) · daysSince, cockpitAtRisk (אחים cockpit).
  */
+// קבוע-מתמטי: חלון-שתיקה ברירת-מחדל (ימים) — ההתאמה עוברת דרך silentDays המוזרק
 export function cockpitCalls(supporters, todayIso, rate = 3.7, silentDays = 60, { supIls, supUsd, supLast, daysSince, cockpitAtRisk }, T) {
   const valueTag = (sp) => {
     const ils = supIls(sp) + supUsd(sp) * rate;

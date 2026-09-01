@@ -1,3 +1,4 @@
+import '../dart-data-maor/sup-tier-sockets.dart' as sk_sup_tier;
 // בדיקת-חוזה (רתמת-זהב) · supTier — מייבאת אך ורק את האטום-שלה (חוק-4).
 // כל 12 הקלטות-ה-Golden זהות ביט-אחר-ביט למקור new/atoms/sup-tier.test.mjs
 // (ולחוזה sup-tier.contract.md): אותם קלטים ⇒ אותן מחרוזות-JSON בדיוק.
@@ -42,7 +43,7 @@ void main() {
 
   var f = 0;
   for (final row in cases) {
-    final got = _stringify(supTier(row[0]));
+    final got = _stringify(supTier(row[0], sk_sup_tier.supTier_T));
     if (got != row[1]) {
       print('✗ "${row[0]}" ⇒ $got ≠ ${row[1]}');
       f = 1;

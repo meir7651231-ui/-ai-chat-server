@@ -1,4 +1,6 @@
-import '../dart-data-maor/gematria-terms.dart' as td_gematria;
+import '../dart-data-maor/gematria-sockets.dart' as skb_gematria;
+import '../dart-data-maor/events-csv-rows-sockets.dart' as skb_events_csv_rows;
+import '../dart-data-maor/gematria-sockets.dart' as td_gematria;
 import '../dart-data-maor/supporters-import-format-rows-terms.dart' as td_supporters_import_format_rows;
 import '../dart-data-maor/families-import-format-rows-terms.dart';
 // 📦 קופסת-חיבורים · שורות-הייצוא (Dart) — מחווטת 9 אטומי-Dart. מקבילה ל-new/boxes/export-rows.mjs.
@@ -15,6 +17,7 @@ import '../dart-maor/families-import-format-rows.dart' as fif;
 import '../dart-maor/supporters-import-format-rows.dart' as sif;
 import '../dart-maor/events-csv-rows.dart' as ecr;
 import '../dart-maor/term-of.dart' as tof;
+import '../dart-data-maor/heb-date-full-sockets.dart' as sk_hdf;
 import '../dart-maor/heb-date-full.dart' as hdf;
 import '../dart-maor/gematria.dart' as gm;
 import '../dart-maor/gem-year.dart' as gy;
@@ -25,7 +28,7 @@ import '../dart-maor/ev-meta.dart' as em;
 // JS: const hebFull = (iso) => hebDateFull(iso, gem, (y) => gemYear(y, gem), hebParts);
 // סדר-השקעים (iso, gem, gemYear(·,gem), hebParts) verbatim; gemYear מקבל את gem כשקע (חוק-1).
 String _hebFull(dynamic iso) =>
-    hdf.hebDateFull(iso as String?, gm.gem, (y) => gy.gemYear(y, gm.gem), hp.hebParts);
+    hdf.hebDateFull(iso as String?, (a0) => gm.gem(a0, skb_gematria.gematria_U, skb_gematria.gematria_T, skb_gematria.gematria_H, skb_gematria.gematria_T2), (y) => gy.gemYear(y, (a0) => gm.gem(a0, skb_gematria.gematria_U, skb_gematria.gematria_T, skb_gematria.gematria_H, skb_gematria.gematria_T2)), hp.hebParts, sk_hdf.hebDateFull_monthNames);
 
 // ── החשיפה ──────────────────────────────────────────────────────────────────
 /// משפחות בפורמט-הייבוא (13 עמודות) — חוט ישיר, בלי שקעים (כבמקור).
@@ -39,4 +42,4 @@ List<List<dynamic>> supportersImportFormatRows(Map<String, dynamic> db) =>
 /// שורות ייצוא-CSV של האירועים (9 עמודות, ממוין לפי תאריך) — החוט מחווט
 /// עם termOf + שרשרת-התאריך-העברי + מילון-הסוגים (EV_META). config אופציונלי כבמקור.
 List<List<dynamic>> eventsCsvRows(dynamic db, [dynamic config]) =>
-    ecr.eventsCsvRows(db, config, tof.termOf, _hebFull, em.evMeta);
+    ecr.eventsCsvRows(db, config, tof.termOf, _hebFull, em.evMeta, skb_events_csv_rows.eventsCsvRows_T2);

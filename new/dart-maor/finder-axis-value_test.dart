@@ -1,3 +1,4 @@
+import '../dart-data-maor/finder-axis-value-sockets.dart' as sk_finder_axis_value;
 // בדיקת-חוזה (רתמת-זהב) · finderAxisValue — מייבאת אך ורק את האטום-שלה (חוק-4).
 // שבע דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/finder-axis-value.test.mjs
 // (אותם קלטים→פלטים; אותם שקעי-ייחוס, הומרו ל-Dart). אם עובר ⇒ Dart≡JS.
@@ -30,16 +31,7 @@ final Map<String, dynamic> _base = {'status': 'active', 'members': <dynamic>[]};
 // V — ממזג base+fam (כמו {...base, ...fam} במקור) וקורא לאטום עם השקעים.
 // config אופציונלי: היעדרו (null) = undefined של JS (⇒ fallback); {} = truthy (⇒ termOf).
 String V(Map<String, dynamic> fam, String axis, [dynamic config]) =>
-    finderAxisValue(
-      _db,
-      {..._base, ...fam},
-      axis,
-      config,
-      termOf: termOf,
-      tierOf: tierOf,
-      famLiveEnrollments: famLiveEnrollments,
-      STATUS_META: STATUS_META,
-    );
+    finderAxisValue(_db, {..._base, ...fam}, axis, config, termOf: termOf, tierOf: tierOf, famLiveEnrollments: famLiveEnrollments, STATUS_META: STATUS_META, T2: sk_finder_axis_value.finderAxisValue_T2);
 
 void _ok(bool cond, String msg) {
   if (!cond) throw StateError('FAIL: $msg');

@@ -37,8 +37,11 @@ const twins = await buildTwinRegistry(pool);
 const fnsBy = new Map(pool.map(f => [f.name, f]));
 // קבילות-למסך: המנוע רץ ב-JS, אבל spec חייב להיות ניתן-לחיווט Dart שקול —
 // זנב אופציונלי (null) או זנב-קציר פשוט באורך-הפרמטרים (נפלט כליטרלים).
+const FEEDABLE0 = /^(String|dynamic|Object|num|int|double)\??$/;
 const wirable = (f) => {
   if (!twins.has(f.name)) return false;
+  // חוליית-שרשרת ניזונה מ-String (השחלת-המסך) — פרמטר-ראשון מוקלד-מכולה (List/Map) אינו בר-הזנה ב-Dart
+  if (!FEEDABLE0.test(f.params[0].type)) return false;
   // ‏Dart קובע את החיווט: תאום-Dart חד-פרמטרי / זנב-אופציונלי ⇒ תמיד ניתן (שקעי-JS הם
   // פרט-מימוש של הטיהור); אחרת נדרש זנב-קציר פשוט תואם-אורך שנפלט כליטרלים.
   if (f.params.length === 1 || f.params.slice(1).every(p => p.type.endsWith('?'))) return true;
@@ -177,7 +180,7 @@ if (GATE) {
       const out = execFileSync(dartBin, ['run', tf], { timeout: 120000 }).toString();
       if (out.includes('DARTOK')) dartNote = '✓ שקילות-Dart אומתה (השחלת-המסך ביט-זהה לדוגמאות)';
       else { console.error('🚨 שער-הסינתזה: שקילות-Dart נשברה:\n' + out.trim()); bad = 1; dartNote = ''; }
-    } catch (e) { console.error('🚨 שער-הסינתזה: הרצת-dart כשלה: ' + String(e.stdout || e.message).slice(0, 400)); bad = 1; dartNote = ''; }
+    } catch (e) { console.error('🚨 שער-הסינתזה: הרצת-dart כשלה: ' + String(e.stderr || '') .slice(0, 500) + ' | ' + String(e.stdout || e.message).slice(0, 200)); bad = 1; dartNote = ''; }
     fs.rmSync(tmpDir, { recursive: true, force: true });
   }
   if (!bad) console.log(`✓ שער-הסינתזה: ${n} יכולות-מוזמנות מוכחות-חי · ${dartNote}`);

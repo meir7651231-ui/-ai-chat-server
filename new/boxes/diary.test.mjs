@@ -78,8 +78,11 @@ eq(inactiveRoomCourses({ courses: [course], rooms: [{ id: 'r1', active: false, n
 /* 🛡 מגן-הכרעה (דפוס הגנת-מקור): וריאנטי-היומן של planLabelOf/enrollStatusMeta
    ו-courseOnDate = הכרעות-קופסה חתומות מול המקור. */
 const src = readFileSync(new URL('./diary.mjs', import.meta.url), 'utf8');
-if (!src.includes('כרטיסייה · יתרה ${Math.max(0, e.purchased - e.used)}/${e.purchased}')) { console.error('✗ מגן: planLabelOf וריאנט-יומן שונה'); f = 1; }
-if (!/enrollStatusMeta[\s\S]*?return null;/.test(src)) { console.error('✗ מגן: enrollStatusMeta ברירת-מחדל null נמחקה'); f = 1; }
+const labels = readFileSync(new URL('../atoms/diary-status-labels.mjs', import.meta.url), 'utf8');
+// תווית-הכרטיסייה = תחילית-דאטה + interp-קופסה; ברירת-מחדל null נשמרת בחיווט הקופסה
+if (!labels.includes("PUNCH_LABEL_PREFIX = 'כרטיסייה · יתרה '")) { console.error('✗ מגן: תחילית-הכרטיסייה שונתה באטום-הדאטה'); f = 1; }
+if (!src.includes('${PUNCH_LABEL_PREFIX}${Math.max(0, e.purchased - e.used)}/${e.purchased}')) { console.error('✗ מגן: planLabelOf וריאנט-יומן שונה'); f = 1; }
+if (!src.includes('ENROLL_STATUS_META[e.status] ?? null')) { console.error('✗ מגן: enrollStatusMeta ברירת-מחדל null נמחקה'); f = 1; }
 if (!src.includes("(!c.start || iso >= c.start) && (!c.end || iso <= c.end)")) { console.error('✗ מגן: courseOnDate שונה מהמקור'); f = 1; }
 // אימות אי-ייבוא וריאנטי-הקורסים (הכרעת L4 — אסור לחווט את atom plan-label-of/enroll-status-meta)
 if (/atoms\/(plan-label-of|enroll-status-meta)\.mjs/.test(src)) { console.error('✗ מגן: יובא וריאנט-קורסים במקום וריאנט-יומן'); f = 1; }

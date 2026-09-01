@@ -1,3 +1,4 @@
+import '../dart-data-maor/parse-supporter-grid-sockets.dart' as sk_parse_supporter_grid;
 // בדיקת-חוזה (רתמת-זהב) · parseSupporterGrid — מייבאת אך ורק את האטום-שלה (חוק-4).
 // שבע דוגמאות-החוזה זהות ביט-אחר-ביט למקור-ה-JS new/atoms/parse-supporter-grid.test.mjs.
 // מימושי-השקע (supNameKeys/parseAnyDate/excelSerialToIso) = ההתנהגות-המוצהרת-בחוזה.
@@ -11,7 +12,7 @@ String parseAnyDate(String s) => s == '09/08/26' ? '2026-08-09' : '';
 String excelSerialToIso(num n) => n == 45878 ? '2025-08-09' : '';
 
 List<Map<String, dynamic>> run(List<List<Object?>> rows) =>
-    parseSupporterGrid(rows, supNameKeys, parseAnyDate, excelSerialToIso);
+    parseSupporterGrid(rows, supNameKeys, parseAnyDate, excelSerialToIso, sk_parse_supporter_grid.parseSupporterGrid_T);
 
 // השוואה-עמוקה: מספרים דרך == (3≡3.0), רשימות/מפות איבר-איבר + זהות-מפתחות.
 bool deepEq(Object? a, Object? b) {

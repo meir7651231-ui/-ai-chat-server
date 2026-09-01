@@ -1,3 +1,4 @@
+import '../dart-data-maor/distribution-list-lines-sockets.dart' as sk_distribution_list_lines;
 // 🥇 רתמת-זהב · distributionListLines — Dart ≡ JS.
 // ה-assert-ים הם *בדיוק* דוגמאות-החוזה של new/atoms/distribution-list-lines.test.mjs
 // (אותם קלטים → אותם פלטים), מומרים ל-Dart. עובר ⇒ הפורט זהה-התנהגות למקור.
@@ -63,7 +64,7 @@ void eq(String name, List<String> got, List<String> want) {
 
 void main() {
   // דוגמאות 1+2 — חבילה עם 2 שיוכים active (ה-redeemed לא נספר; ריקים מסוננים)
-  eq('p1', distributionListLines(db, 'p1', null, itemOf, beneficiaryLabel), [
+  eq('p1', distributionListLines(db, 'p1', null, itemOf, beneficiaryLabel, sk_distribution_list_lines.distributionListLines_T), [
     'רשימת חלוקה — סל חג',
     '=' * 30,
     'כהן · הרצל 3, צפת · 050-1 · עוף + יין · ☐ נמסר',
@@ -71,14 +72,14 @@ void main() {
   ]);
 
   // דוגמה 3 — חבילה לא-קיימת ובלי שיוכים
-  eq('p3', distributionListLines(db, 'p3', null, itemOf, beneficiaryLabel), [
+  eq('p3', distributionListLines(db, 'p3', null, itemOf, beneficiaryLabel, sk_distribution_list_lines.distributionListLines_T), [
     'רשימת חלוקה — ',
     '=' * 30,
     'אין שיוכים פעילים לחבילה',
   ]);
 
   // דוגמה 4 — שיוך active לחבילה שאינה בקטלוג ⇒ בלי שם-חבילה ובלי רכיבים
-  eq('p2', distributionListLines(db, 'p2', null, itemOf, beneficiaryLabel), [
+  eq('p2', distributionListLines(db, 'p2', null, itemOf, beneficiaryLabel, sk_distribution_list_lines.distributionListLines_T), [
     'רשימת חלוקה — ',
     '=' * 30,
     'כהן · הרצל 3, צפת · 050-1 · ☐ נמסר',

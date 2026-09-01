@@ -1,3 +1,4 @@
+import '../dart-data-maor/events-csv-rows-sockets.dart' as sk_events_csv_rows;
 // רתמת-זהב · events-csv-rows — דוגמאות-החוזה בדיוק כמו בדיקת-ה-JS (Dart≡JS).
 import 'dart:convert';
 import 'events-csv-rows.dart';
@@ -48,18 +49,18 @@ void eq(dynamic a, dynamic b, String msg) {
 }
 
 void main() {
-  final R = eventsCsvRows(db, null, termOf, hebDateFull, evMeta);
+  final R = eventsCsvRows(db, null, termOf, hebDateFull, evMeta, sk_events_csv_rows.eventsCsvRows_T2);
   ok(R.length == 3, 'אורך ${R.length} ≠ 3');
   eq(R[0], ['כותרת', 'סוג אירוע', 'תאריך עברי', 'תאריך לועזי', 'שעה', 'משפחה', 'עדיפות', 'הערות', 'בוצע'], 'כותרת');
   eq(R[1], ['שיחה', 'טלפון', 'ע(2026-08-20)', '20/08/2026', '', '', 'רגיל (ירוק)', '', 'כן'], 'שורה-1 (מיון הפך סדר)');
   eq(R[2], ['ברית', 'ברית מילה', 'ע(2026-09-01)', '01/09/2026', '19:00', 'כהן', 'דחוף (אדום)', '', 'לא'], 'שורה-2');
 
   // עם config — המונח מהשקע:
-  final R2 = eventsCsvRows(db, {'terms': {'entity.family': 'בית-אב'}}, termOf, hebDateFull, evMeta);
+  final R2 = eventsCsvRows(db, {'terms': {'entity.family': 'בית-אב'}}, termOf, hebDateFull, evMeta, sk_events_csv_rows.eventsCsvRows_T2);
   ok(R2[0][5] == 'בית-אב', 'כותרת-משפחה עם config: ${R2[0][5]}');
 
   // בלי-תאריך + עדיפות לא-מוכרת:
-  final R3 = eventsCsvRows({'events': [{'title': 'x', 'type': 'org', 'priority': 'x', 'date': '', 'done': false}], 'families': []}, null, termOf, hebDateFull, evMeta);
+  final R3 = eventsCsvRows({'events': [{'title': 'x', 'type': 'org', 'priority': 'x', 'date': '', 'done': false}], 'families': []}, null, termOf, hebDateFull, evMeta, sk_events_csv_rows.eventsCsvRows_T2);
   eq(R3[1], ['x', 'אירוע', '', '', '', '', 'x', '', 'לא'], 'אירוע ריק-תאריך');
 
   if (f != 0) {

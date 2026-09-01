@@ -5,9 +5,12 @@
 // וגם ‏jsonEncode מלא מול מחרוזת-הצילום המקורית.
 // אם עובר ⇒ Dart≡JS.
 // הרצה: dart run --enable-asserts new/dart-maor/sup-dup-fields_test.dart  ⇒ exit 0
+import '../dart-data-maor/sup-dup-fields-sockets.dart' as sk_sdf;
 import 'dart:convert' show jsonEncode;
 
 import 'sup-dup-fields.dart';
+
+final List<SupDupField> supDupFields = makeSupDupFields(sk_sdf.supDupFields_T);
 
 int _f = 0;
 void ok(bool cond, String msg) {
