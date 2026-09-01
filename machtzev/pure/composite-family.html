@@ -1,0 +1,464 @@
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+  PURE — Composite / Molecule Family. Archetype 03. atoms COMBINED into working assemblies.
+  STAGE→HEAD/RHYTHM/FOOT: a container surface (owns spacing) with a header zone, a body of child atoms, an actions/footer zone.
+  Nesting rhythm: air AROUND a group > air WITHIN it (outer gap > inner gap by one step) · radius decreases inward · ONE padding source per seam.
+  Pure · content = Label/Value/Meta · numbers LTR tnum · accent morphs · semantic err/warn/ok FIXED.
+-->
+<title>Pure — Composite Family</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Frank+Ruhl+Libre:wght@700&family=Space+Grotesk:wght@400;500;600;700&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--canvas:#0C0C0E;--sunken:#0A0A0C;--surface:#151517;--raised:#1B1B1E;--raised2:#212126;--ink:#ECE9E2;--mut:#9B968C;--faint:#6E6A62;--hair:rgba(236,233,226,.09);--hair2:rgba(236,233,226,.05);
+    --err:#E0574E;--warn:#E6B84F;--ok:#43D08C;
+    --serif:"Fraunces",Georgia,serif;--serifHe:"Frank Ruhl Libre",serif;--grotesk:"Space Grotesk",ui-monospace,monospace;--he:"Heebo","Segoe UI",sans-serif;--ease:cubic-bezier(.2,.7,.15,1);--spring:cubic-bezier(.34,1.4,.5,1)}
+  .t-indigo{--a-hi:#B0A4FF;--a:#7A6BF0;--a-800:#4B3ECB;--gl:rgba(122,107,240,.42);--c2:#4CC6E6;--c3:#B57BE6}
+  .t-teal{--a-hi:#6FE6D5;--a:#1FB8A6;--a-800:#0C7E72;--gl:rgba(31,184,166,.42);--c2:#4FB6E6;--c3:#43D08C}
+  .t-amber{--a-hi:#F2C87E;--a:#D99A3C;--a-800:#9E6B1E;--gl:rgba(217,154,60,.42);--c2:#E8863C;--c3:#E67BA6}
+  *{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}
+  body{background:var(--canvas);color:var(--ink);direction:rtl;font-family:var(--he);-webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden;transition:background-color .6s var(--ease);background-image:radial-gradient(120% 36% at 84% -6%,var(--gl),transparent 60%)}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.038;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 40px;position:relative;z-index:1}::selection{background:var(--a);color:#0A0A0C}
+  .bar{position:sticky;top:0;z-index:60;background:linear-gradient(180deg,rgba(12,12,14,.94),rgba(12,12,14,.62));backdrop-filter:blur(14px);border-bottom:1px solid var(--hair)}
+  .bar .in{max-width:1200px;margin:0 auto;padding:12px 40px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .bar .mk{font-family:var(--serif);font-size:20px;font-weight:600;letter-spacing:-.02em;direction:ltr}.bar .mk i{color:var(--a);transition:color .55s var(--ease)}.bar .mk small{font-family:var(--grotesk);font-size:10px;color:var(--faint);letter-spacing:2px;margin-inline-start:10px;text-transform:uppercase}
+  .seg{display:flex;padding:3px;background:var(--sunken);border:1px solid var(--hair);border-radius:999px;position:relative}
+  .seg button{position:relative;z-index:2;border:0;background:none;cursor:pointer;padding:8px 17px;border-radius:999px;font-family:var(--grotesk);font-size:12px;font-weight:600;color:var(--mut);transition:color .35s;display:flex;align-items:center;gap:7px;min-height:38px}.seg button .d{width:9px;height:9px;border-radius:50%}.seg button[aria-pressed="true"]{color:var(--ink)}.seg button:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+  .seg .ind{position:absolute;z-index:1;top:3px;bottom:3px;left:0;border-radius:999px;background:var(--raised);box-shadow:0 2px 8px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06);transition:transform .45s var(--ease),width .45s var(--ease)}
+  .intro{padding:40px 0 6px}.intro .kick{display:flex;align-items:center;gap:14px;margin-bottom:16px}.intro .kick .tick{width:34px;height:1px;background:var(--a);transition:background-color .55s var(--ease)}
+  .eyebrow{font-family:var(--grotesk);font-size:11px;font-weight:600;letter-spacing:3px;color:var(--faint);text-transform:uppercase;direction:ltr}
+  .intro h1{font-family:var(--serifHe);font-weight:700;font-size:clamp(28px,5vw,44px);letter-spacing:-.01em}.intro .he{font-family:var(--grotesk);font-size:12.5px;color:var(--mut);margin-top:10px;direction:ltr}
+  .band{padding:22px 0;border-top:1px solid var(--hair)}
+  .bhd{display:flex;align-items:baseline;gap:12px;margin-bottom:16px;flex-wrap:wrap}.bhd h2{font-family:var(--serifHe);font-weight:700;font-size:19px}.bhd .en{font-family:var(--grotesk);font-size:10px;color:var(--faint);letter-spacing:1.5px;text-transform:uppercase;direction:ltr} .bhd .ct{font-family:var(--grotesk);font-size:10px;color:var(--mut);direction:ltr;margin-inline-start:auto}
+  /* composite grid — WIDE cells, generous outer gap */
+  .fam{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+  .cell{display:flex;flex-direction:column;gap:10px}
+  .cell.full{grid-column:1/-1}
+  .foot{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .nm{font-family:var(--grotesk);font-size:10px;font-weight:600;color:var(--ink);direction:ltr;line-height:1.3}
+  .seam{font-family:var(--grotesk);font-size:7.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:1px 5px;border-radius:999px;direction:ltr;border:1px solid var(--hair);color:var(--mut);flex:none}
+  .seam.coll{color:var(--c2);border-color:rgba(76,198,230,.35)}.seam.self{color:var(--warn);border-color:rgba(230,184,79,.3)}
+  .inh{width:100%;display:flex;align-items:center;gap:14px;flex-wrap:wrap}.inh .lead{font-family:var(--grotesk);font-size:9px;color:var(--faint);direction:ltr;text-transform:uppercase;letter-spacing:1px;flex:none}
+  .inh .chips{display:flex;flex-wrap:wrap;gap:6px;flex:1}.inh .chip{font-family:var(--grotesk);font-size:10px;color:var(--mut);direction:ltr;padding:4px 9px;border:1px solid var(--hair);border-radius:999px;background:var(--sunken)}
+  svg.i{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+  /* ===== SHARED COMPOSITE SHELL — STAGE (container owns ALL padding) ===== */
+  .cmp{border:1px solid var(--hair);border-radius:18px;background:linear-gradient(180deg,var(--surface),var(--sunken));overflow:hidden;transition:border-color .25s}
+  /* HEAD zone */
+  .chd{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--hair)}
+  .chd .ci{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;color:var(--a-hi);background:radial-gradient(120% 120% at 30% 20%,var(--gl),transparent 60%),var(--sunken);border:1px solid var(--hair);flex:none}.chd .ci svg{width:19px;height:19px}
+  .chd .ct{flex:1;min-width:0}.chd .ct b{font-size:14px;font-weight:600;display:block}.chd .ct span{font-size:11px;color:var(--faint);font-family:var(--grotesk);direction:ltr}
+  .chd .cx{color:var(--faint);background:none;border:0;cursor:pointer;display:flex;padding:4px;border-radius:8px}.chd .cx:hover{color:var(--a-hi)}.chd .cx svg{width:18px;height:18px}
+  /* RHYTHM zone — body owns horizontal padding; children margin:0, vertical rhythm only. inner gap (12) < shell edge (18) */
+  .cbd{padding:18px;display:flex;flex-direction:column;gap:14px}
+  /* FOOT zone */
+  .cft{display:flex;align-items:center;gap:10px;padding:14px 18px;border-top:1px solid var(--hair)}
+  .cft .sp{flex:1}
+
+  /* buttons (borrowed) */
+  .btn{height:42px;min-height:42px;border-radius:11px;font-family:var(--he);font-size:13px;font-weight:600;border:1px solid var(--hair);background:var(--raised);color:var(--ink);cursor:pointer;padding:0 18px;display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:.2s var(--ease)}
+  .btn:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+  .btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+  .btn.pri{background:linear-gradient(180deg,var(--a-hi),var(--a));color:#0B0B0D;border:0}.btn.pri:hover{filter:brightness(1.07)}
+  .btn.gho{background:none}.btn.gho:hover{border-color:var(--a);color:var(--a-hi)}
+  .btn.sm{height:36px;min-height:36px;padding:0 13px;font-size:12px;border-radius:10px}
+
+  /* fields (borrowed) — inner gap 6 < body gap 14 */
+  .fld{display:flex;flex-direction:column;gap:6px}
+  .lbl{font-family:var(--he);font-size:11px;font-weight:600;color:var(--mut);text-align:right}.lbl .req{color:var(--a-hi);margin-inline-start:2px}
+  .inp{width:100%;height:44px;border-radius:11px;background:var(--sunken);border:1px solid var(--hair);color:var(--ink);font-family:var(--he);font-size:14px;padding:0 13px;text-align:right;direction:rtl;transition:border-color .25s,box-shadow .25s,background .25s}
+  .inp::placeholder{color:var(--faint)}
+  .inp:focus,.inp.is-focus{outline:none;border-color:var(--a);box-shadow:0 0 0 3px var(--gl);background:var(--surface)}
+  .inp.is-error{border-color:var(--err);box-shadow:0 0 0 3px color-mix(in srgb,var(--err) 26%,transparent)}
+  .help{font-family:var(--grotesk);font-size:9.5px;color:var(--faint);direction:ltr;text-align:right}.help.err{color:var(--err)}.edot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--err);margin-inline-end:5px;vertical-align:middle}
+  .frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .ig{position:relative;display:flex;align-items:center}.ig svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .ig .lic{position:absolute;inset-inline-start:13px;color:var(--mut);pointer-events:none;display:flex}.ig .lic ~ .inp{padding-inline-start:40px}
+  .cv{position:absolute;inset-inline-start:12px;top:50%;transform:translateY(-50%);color:var(--mut);pointer-events:none;display:flex}.cv~.inp{padding-inline-start:38px}
+
+  /* ===== FILTER BAR ===== */
+  .fbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 16px;border:1px solid var(--hair);border-radius:16px;background:linear-gradient(180deg,var(--surface),var(--sunken))}
+  .fbar .srch{flex:1;min-width:170px}
+  .fchips{display:flex;gap:7px;flex-wrap:wrap}
+  .fchip{display:inline-flex;align-items:center;gap:6px;font-family:var(--he);font-size:12px;font-weight:600;padding:8px 13px;border-radius:999px;border:1px solid var(--hair);background:var(--raised);color:var(--mut);cursor:pointer;transition:.2s;min-height:36px}
+  .fchip:hover{border-color:var(--a)}
+  .fchip[aria-pressed="true"]{border-color:var(--a);color:var(--a-hi);background:color-mix(in srgb,var(--a) 12%,transparent)}
+  .fchip svg{width:13px;height:13px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .sortc{display:inline-flex;align-items:center;gap:8px;font-family:var(--he);font-size:12px;font-weight:600;color:var(--ink);padding:8px 13px;border-radius:11px;border:1px solid var(--hair);background:var(--sunken);cursor:pointer;min-height:36px;transition:.2s}.sortc:hover{border-color:var(--a);color:var(--a-hi)}.sortc svg{width:15px;height:15px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .fbar .div{width:1px;align-self:stretch;background:var(--hair);margin:0 2px}
+
+  /* ===== WIZARD ===== */
+  .wzhead{display:flex;align-items:center;gap:12px}
+  .wzstep{font-family:var(--grotesk);font-size:11px;font-weight:700;color:var(--a-hi);direction:ltr;flex:none;padding:5px 11px;border:1px solid color-mix(in srgb,var(--a) 30%,transparent);border-radius:999px;background:color-mix(in srgb,var(--a) 12%,transparent);font-feature-settings:"tnum"}
+  .wzprog{flex:1;height:6px;border-radius:999px;background:var(--raised2);overflow:hidden}
+  .wzprog i{display:block;height:100%;width:50%;border-radius:999px;background:linear-gradient(90deg,var(--a-hi),var(--a));box-shadow:0 0 12px var(--gl)}
+  .wzdots{display:flex;gap:6px}.wzdots i{width:8px;height:8px;border-radius:50%;background:var(--raised2)}.wzdots i.on{background:var(--a)}.wzdots i.now{background:var(--a-hi);box-shadow:0 0 0 3px var(--gl)}
+  .wztitle{font-family:var(--serifHe);font-size:16px;font-weight:700}
+
+  /* ===== COMPOSER ===== */
+  .composer{border:1px solid var(--hair);border-radius:16px;background:var(--sunken);overflow:hidden;transition:border-color .2s,box-shadow .2s}
+  .composer:focus-within{border-color:var(--a);box-shadow:0 0 0 3px var(--gl)}
+  .composer textarea{display:block;width:100%;min-height:84px;background:none;border:0;color:var(--ink);font-family:var(--he);font-size:14px;line-height:1.55;padding:14px 16px;resize:none;direction:rtl;text-align:right}
+  .composer textarea:focus{outline:none}.composer textarea::placeholder{color:var(--faint)}
+  .ctoolbar{display:flex;align-items:center;gap:4px;padding:8px 10px;border-top:1px solid var(--hair)}
+  .tb{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;color:var(--mut);background:none;border:0;cursor:pointer;transition:.2s}.tb:hover{background:var(--raised2);color:var(--a-hi)}.tb:focus-visible{outline:2px solid var(--a-hi);outline-offset:1px}.tb svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .send{width:38px;height:38px;border-radius:50%;background:linear-gradient(180deg,var(--a-hi),var(--a));color:#0B0B0D;display:grid;place-items:center;border:0;cursor:pointer;flex:none;transition:.2s}.send:hover{filter:brightness(1.07)}.send:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}.send svg{width:17px;height:17px;stroke:currentColor;stroke-width:1.9;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+  /* ===== CART / SUMMARY ===== */
+  .crow{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--hair2)}
+  .crow:last-of-type{border:0}
+  .cqty{width:32px;height:32px;border-radius:9px;background:var(--sunken);border:1px solid var(--hair);display:grid;place-items:center;font-family:var(--grotesk);font-size:12px;font-weight:600;color:var(--mut);flex:none;direction:ltr}
+  .cnm{flex:1;min-width:0}.cnm b{font-size:13px;font-weight:600;display:block}.cnm span{font-size:10px;color:var(--faint);font-family:var(--grotesk);direction:ltr}
+  .cval{font-family:var(--grotesk);font-feature-settings:"tnum";direction:ltr;font-size:13.5px}
+  .ctot{display:flex;justify-content:space-between;align-items:baseline;padding-top:14px;border-top:1px solid var(--hair)}
+  .ctot .k{font-size:13px;font-weight:700}.ctot .v{font-family:var(--grotesk);font-size:22px;font-weight:700;font-feature-settings:"tnum";direction:ltr;color:var(--a-hi);letter-spacing:-.02em}
+  .cline{display:flex;justify-content:space-between;font-size:12px;color:var(--mut)}.cline .v{font-family:var(--grotesk);font-feature-settings:"tnum";direction:ltr;color:var(--ink)}
+
+  /* ===== SETTINGS GROUP ===== */
+  .srow{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--hair2)}
+  .srow:last-child{border:0}
+  .sico{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;color:var(--mut);background:var(--sunken);border:1px solid var(--hair);flex:none}.sico svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .stxt{flex:1;min-width:0}.stxt b{font-size:13px;font-weight:600;display:block}.stxt span{font-size:10.5px;color:var(--faint);font-family:var(--grotesk);direction:ltr}
+  .sw{position:relative;width:42px;height:24px;border-radius:999px;background:var(--raised2);border:1px solid var(--hair);cursor:pointer;transition:background .25s,border-color .25s;flex:none;padding:0}
+  .sw::after{content:"";position:absolute;top:2px;inset-inline-start:2px;width:18px;height:18px;border-radius:50%;background:var(--ink);transition:transform .28s var(--spring),background .25s}
+  .sw[aria-checked="true"]{background:linear-gradient(180deg,var(--a-hi),var(--a));border-color:transparent}
+  .sw[aria-checked="true"]::after{transform:translateX(-18px);background:#0B0B0D}
+  .sw:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+  .spick{display:inline-flex;align-items:center;gap:8px;font-family:var(--he);font-size:12px;font-weight:600;color:var(--ink);padding:7px 12px;border-radius:9px;border:1px solid var(--hair);background:var(--sunken);cursor:pointer;flex:none;transition:.2s}.spick:hover{border-color:var(--a);color:var(--a-hi)}.spick svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+  /* ===== MASTER–DETAIL SPLIT ===== */
+  .md{display:grid;grid-template-columns:210px 1fr;border:1px solid var(--hair);border-radius:18px;overflow:hidden;background:linear-gradient(180deg,var(--surface),var(--sunken))}
+  .md .mlist{border-inline-end:1px solid var(--hair);background:var(--sunken);display:flex;flex-direction:column}
+  .md .mli{display:flex;align-items:center;gap:10px;padding:13px 14px;border-bottom:1px solid var(--hair2);cursor:pointer;transition:background .2s;position:relative}
+  .md .mli:hover{background:var(--raised)}
+  .md .mli.sel{background:radial-gradient(120% 130% at 100% 50%,var(--gl),transparent 60%),var(--raised)}
+  .md .mli.sel::before{content:"";position:absolute;inset-block:9px;inset-inline-start:0;width:3px;border-radius:999px;background:linear-gradient(180deg,var(--a-hi),var(--a))}
+  .md .mav{width:32px;height:32px;border-radius:9px;background:linear-gradient(140deg,var(--a-hi),var(--a));color:#0B0B0D;display:grid;place-items:center;font-family:var(--grotesk);font-weight:700;font-size:12px;flex:none}
+  .md .mt{flex:1;min-width:0}.md .mt b{font-size:12.5px;font-weight:600;display:block}.md .mt span{font-size:10px;color:var(--faint);font-family:var(--grotesk);direction:ltr}
+  .md .mdet{padding:18px;display:flex;flex-direction:column;gap:14px}
+  .md .mdet .dh{display:flex;align-items:center;gap:12px}
+  .md .mdet .dav{width:46px;height:46px;border-radius:13px;background:linear-gradient(140deg,var(--a-hi),var(--a));color:#0B0B0D;display:grid;place-items:center;font-family:var(--grotesk);font-weight:700;font-size:17px;flex:none}
+  .kv{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--hair2);font-size:12.5px}.kv:last-child{border:0}.kv .kk{color:var(--mut)}.kv .vv{font-family:var(--grotesk);font-feature-settings:"tnum";direction:ltr}
+  .mchip{font-family:var(--grotesk);font-size:9px;font-weight:700;padding:2px 8px;border-radius:999px;direction:ltr;color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent);border:1px solid color-mix(in srgb,var(--ok) 30%,transparent)}
+
+  /* ===== STAT CLUSTER ===== */
+  .strip{display:flex;border:1px solid var(--hair);border-radius:14px;overflow:hidden;background:var(--sunken)}
+  .strip .s{flex:1;padding:15px 16px;border-inline-start:1px solid var(--hair);display:flex;flex-direction:column;gap:6px}.strip .s:last-child{border-inline-start:0}
+  .strip .k{font-size:10.5px;color:var(--mut);font-weight:600}
+  .strip .v{font-family:var(--grotesk);font-size:26px;font-weight:700;font-feature-settings:"tnum";direction:ltr;letter-spacing:-.02em;line-height:1}
+  .strip .d{display:inline-flex;align-items:center;gap:4px;font-family:var(--grotesk);font-size:11px;font-weight:600;direction:ltr;font-feature-settings:"tnum"}
+  .strip .d.up{color:var(--ok)}.strip .d.dn{color:var(--err)}.strip .d svg{width:11px;height:11px}
+  .strip .v.accent{color:var(--a-hi)}
+
+  footer{padding:30px 0 70px;border-top:1px solid var(--hair);margin-top:6px}.colo{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--grotesk);font-size:11px;color:var(--faint);direction:ltr}.colo b{color:var(--ink)}
+  @media(max-width:820px){.wrap{padding:0 18px}.bar .in{padding:11px 18px}.bar .mk small{display:none}}
+  @media(max-width:760px){.fam{grid-template-columns:1fr}.md{grid-template-columns:1fr}.md .mlist{flex-direction:row;overflow-x:auto;border-inline-end:0;border-bottom:1px solid var(--hair)}.md .mli{border-bottom:0;flex:none}.frow{grid-template-columns:1fr}}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="bar"><div class="in">
+  <div class="mk">Pure<i>.</i><small>Composite Family</small></div>
+  <div class="seg" id="seg" role="group" aria-label="Theme"><span class="ind" id="ind"></span>
+    <button data-t="t-indigo" aria-pressed="true"><span class="d" style="background:#7A6BF0"></span>Indigo</button>
+    <button data-t="t-teal" aria-pressed="false"><span class="d" style="background:#1FB8A6"></span>Teal</button>
+    <button data-t="t-amber" aria-pressed="false"><span class="d" style="background:#D99A3C"></span>Amber</button>
+  </div>
+</div></div>
+
+<div class="wrap">
+  <header class="intro">
+    <div class="kick"><span class="tick"></span><span class="eyebrow">Archetype 03 · Composite</span></div>
+    <h1>משפחת המורכב</h1>
+    <p class="he">atoms assembled into working units · STAGE → head / rhythm / foot · air around a group &gt; within it · content = Label/Value/Meta · numbers LTR tnum</p>
+  </header>
+
+  <!-- FORM CARD -->
+  <section class="band">
+    <div class="bhd"><h2>Form Card</h2><span class="en">header + labeled fields + primary / secondary actions</span><span class="ct">2</span></div>
+    <div class="fam">
+      <div class="cell full">
+        <div class="cmp">
+          <div class="chd"><span class="ci"><svg class="i" viewBox="0 0 24 24"><path d="M12 20h9M3 20h3l11-11a2.1 2.1 0 00-3-3L3 17v3z"/></svg></span><div class="ct"><b>Label</b><span>Meta · form assembly</span></div><button class="cx" aria-label="close"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+          <div class="cbd">
+            <div class="frow">
+              <div class="fld"><span class="lbl">Label<span class="req">*</span></span><input class="inp" placeholder="Value" aria-label="field-a"></div>
+              <div class="fld"><span class="lbl">Label</span><input class="inp" placeholder="Value" aria-label="field-b"></div>
+            </div>
+            <div class="fld"><span class="lbl">Label</span><div class="ig"><span class="lic"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h16"/></svg></span><input class="inp" value="Value" aria-label="field-c"></div><span class="help">Meta · helper</span></div>
+          </div>
+          <div class="cft"><span class="sp"></span><button class="btn gho">Label</button><button class="btn pri">Label</button></div>
+        </div>
+        <div class="foot"><span class="nm">FormCard · header + 3 fields + actions</span><span class="seam self">self</span></div>
+      </div>
+      <div class="cell">
+        <div class="cmp">
+          <div class="chd" style="padding-bottom:14px"><span class="ci"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0116 0"/></svg></span><div class="ct"><b>Label</b><span>Meta</span></div></div>
+          <div class="cbd">
+            <div class="fld"><span class="lbl">Label</span><div class="ig"><span class="lic"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4zM4 7l8 6 8-6"/></svg></span><input class="inp" placeholder="Value" aria-label="login-id"></div></div>
+            <div class="fld"><span class="lbl">Label</span><input class="inp" type="password" value="••••••••" aria-label="login-secret"></div>
+          </div>
+          <div class="cft"><button class="btn pri" style="flex:1">Label</button></div>
+        </div>
+        <div class="foot"><span class="nm">SignInForm · compact</span><span class="seam self">self</span></div>
+      </div>
+      <div class="cell">
+        <div class="cmp">
+          <div class="chd" style="padding-bottom:14px"><span class="ci"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><div class="ct"><b>Label</b><span>Meta</span></div></div>
+          <div class="cbd">
+            <div class="fld"><span class="lbl">Label</span><input class="inp is-error" value="Value" aria-invalid="true" aria-describedby="fcErr" aria-label="err-field"><span class="help err" id="fcErr" role="alert"><span class="edot"></span>Meta · error</span></div>
+          </div>
+          <div class="cft"><span class="sp"></span><button class="btn gho sm">Label</button><button class="btn pri sm">Label</button></div>
+        </div>
+        <div class="foot"><span class="nm">QuickAddForm · error state</span><span class="seam self">self</span></div>
+      </div>
+      <div class="cell full"><div class="inh"><span class="lead">inherit FormCard →</span><div class="chips"><span class="chip">FamilyForm</span><span class="chip">CourseForm</span><span class="chip">SupporterForm</span><span class="chip">DonationModal</span><span class="chip">RoomForm</span><span class="chip">ManageModal</span><span class="chip">CallbackModal</span><span class="chip">IntakePanel</span></div></div>
+        <div class="foot"><span class="nm">8 assemblies · same head/rhythm/foot · differ by field set</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- FILTER BAR -->
+  <section class="band">
+    <div class="bhd"><h2>Filter Bar</h2><span class="en">search + choice chips + sort — one working row</span><span class="ct">2</span></div>
+    <div class="fam">
+      <div class="cell full">
+        <div class="fbar">
+          <div class="srch"><div class="ig"><span class="lic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg></span><input class="inp" placeholder="Label" aria-label="filter-search"></div></div>
+          <span class="div"></span>
+          <div class="fchips">
+            <button class="fchip" aria-pressed="true"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Label</button>
+            <button class="fchip" aria-pressed="false">Label</button>
+            <button class="fchip" aria-pressed="false">Label</button>
+          </div>
+          <button class="sortc" aria-label="sort"><svg viewBox="0 0 24 24"><path d="M3 6h18M6 12h12M9 18h6"/></svg>Label</button>
+        </div>
+        <div class="foot"><span class="nm">FilterBar · search + chips + sort</span><span class="seam coll">collection</span></div>
+      </div>
+      <div class="cell full">
+        <div class="fbar" style="justify-content:space-between">
+          <div class="fchips">
+            <button class="fchip" aria-pressed="true">Label</button>
+            <button class="fchip" aria-pressed="false">Label</button>
+            <button class="fchip" aria-pressed="false">Label</button>
+            <button class="fchip" aria-pressed="false">Label</button>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button class="sortc" aria-label="grid"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg></button>
+            <button class="sortc" aria-label="sort"><svg viewBox="0 0 24 24"><path d="M7 4v16M7 20l-3-3M7 4l3 3M17 4v16M17 4l-3 3M17 4l3 3"/></svg>Label</button>
+          </div>
+        </div>
+        <div class="foot"><span class="nm">FilterToolbar · segments + view + sort</span><span class="seam coll">collection</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WIZARD STEP -->
+  <section class="band">
+    <div class="bhd"><h2>Wizard Step</h2><span class="en">step indicator + progress + title + field + back / next</span><span class="ct">2</span></div>
+    <div class="fam">
+      <div class="cell full">
+        <div class="cmp">
+          <div class="chd"><div class="wzhead" style="flex:1"><span class="wzstep">2 / 4</span><div class="wzprog"><i></i></div></div></div>
+          <div class="cbd">
+            <span class="wztitle">Label</span>
+            <div class="fld"><span class="lbl">Label</span><div class="ig"><span class="lic"><svg viewBox="0 0 24 24"><path d="M3 12l9-8 9 8M5 10v10h14V10"/></svg></span><input class="inp" placeholder="Value" aria-label="wiz-field"></div><span class="help">Meta · helper</span></div>
+          </div>
+          <div class="cft"><button class="btn gho"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>Label</button><span class="sp"></span><button class="btn pri">Label<svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button></div>
+        </div>
+        <div class="foot"><span class="nm">WizardHeader · step 2/4 · progress bar</span><span class="seam self">self</span></div>
+      </div>
+      <div class="cell full">
+        <div class="cmp">
+          <div class="chd"><span class="ci"><svg class="i" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6 4.4 2.3 7.2-6.3-4.6L5.7 21 8 13.8 2 9.4h7.6z"/></svg></span><div class="ct"><b>Label</b><span>Meta · step 3 of 5</span></div><div class="wzdots"><i class="on"></i><i class="on"></i><i class="now"></i><i></i><i></i></div></div>
+          <div class="cbd">
+            <div class="frow">
+              <div class="fld"><span class="lbl">Label</span><input class="inp" value="Value" aria-label="wiz2-a"></div>
+              <div class="fld"><span class="lbl">Label</span><div class="ig"><span class="cv"><svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke-width:2"><path d="M6 9l6 6 6-6"/></svg></span><input class="inp" value="Option" readonly aria-label="wiz2-b"></div></div>
+            </div>
+          </div>
+          <div class="cft"><button class="btn gho">Label</button><span class="sp"></span><button class="btn pri">Label</button></div>
+        </div>
+        <div class="foot"><span class="nm">WizardStep · dotted indicator + 2-up fields</span><span class="seam self">self</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPOSER -->
+  <section class="band">
+    <div class="bhd"><h2>Composer</h2><span class="en">multiline input + toolbar + send</span><span class="ct">2</span></div>
+    <div class="fam">
+      <div class="cell full">
+        <div class="cmp">
+          <div class="chd" style="padding-bottom:14px"><span class="ci"><svg class="i" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span><div class="ct"><b>Label</b><span>Meta</span></div></div>
+          <div class="cbd" style="padding-bottom:14px">
+            <div class="composer">
+              <textarea placeholder="Label" aria-label="composer-body">Value</textarea>
+              <div class="ctoolbar">
+                <button class="tb" aria-label="attach"><svg viewBox="0 0 24 24"><path d="M21 12l-9 9a5 5 0 01-7-7l9-9a3.5 3.5 0 015 5l-9 9a2 2 0 01-3-3l8-8"/></svg></button>
+                <button class="tb" aria-label="image"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg></button>
+                <button class="tb" aria-label="mention"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 006 0v-1a10 10 0 10-4 8"/></svg></button>
+                <span style="flex:1"></span>
+                <button class="send" aria-label="send"><svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="foot"><span class="nm">RequestComposer · textarea + toolbar + send</span><span class="seam self">self</span></div>
+      </div>
+      <div class="cell full">
+        <div class="cmp">
+          <div class="chd" style="padding-bottom:14px"><span class="ci"><svg class="i" viewBox="0 0 24 24"><path d="M8 12h8M8 8h8M8 16h5"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg></span><div class="ct"><b>Label</b><span>Meta · reply row</span></div></div>
+          <div class="cbd" style="padding-bottom:14px;flex-direction:row;align-items:center;gap:10px">
+            <div class="ig" style="flex:1"><input class="inp" placeholder="Label" aria-label="reply-body" style="border-radius:999px"></div>
+            <button class="tb" aria-label="emoji" style="flex:none"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg></button>
+            <button class="send" aria-label="send"><svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg></button>
+          </div>
+        </div>
+        <div class="foot"><span class="nm">ReplyComposer · single-line + send</span><span class="seam self">self</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUMMARY / CART -->
+  <section class="band">
+    <div class="bhd"><h2>Summary · Cart</h2><span class="en">label…value rows + total · numbers tnum</span><span class="ct">2</span></div>
+    <div class="fam">
+      <div class="cell full">
+        <div class="cmp">
+          <div class="chd"><span class="ci"><svg class="i" viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12zM6 6L5 3H2M9 20a1 1 0 11-2 0 1 1 0 012 0zM19 20a1 1 0 11-2 0 1 1 0 012 0z"/></svg></span><div class="ct"><b>Label</b><span>Meta · 3 items</span></div></div>
+          <div class="cbd" style="gap:0">
+            <div class="crow"><span class="cqty">2</span><div class="cnm"><b>Label</b><span>Meta</span></div><span class="cval">124</span></div>
+            <div class="crow"><span class="cqty">1</span><div class="cnm"><b>Label</b><span>Meta</span></div><span class="cval">86</span></div>
+            <div class="crow"><span class="cqty">4</span><div class="cnm"><b>Label</b><span>Meta</span></div><span class="cval">212</span></div>
+          </div>
+          <div class="cft" style="flex-direction:column;align-items:stretch;gap:8px">
+            <div class="cline"><span>Label</span><span class="v">422</span></div>
+            <div class="cline"><span>Label</span><span class="v">38</span></div>
+            <div class="ctot"><span class="k">Label</span><span class="v">460</span></div>
+          </div>
+        </div>
+        <div class="foot"><span class="nm">CartSummaryCard · line rows + total</span><span class="seam coll">collection</span></div>
+      </div>
+      <div class="cell full">
+        <div class="cmp">
+          <div class="chd" style="padding-bottom:14px"><span class="ci"><svg class="i" viewBox="0 0 24 24"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg></span><div class="ct"><b>Label</b><span>Meta</span></div></div>
+          <div class="cbd" style="gap:0">
+            <div class="kv"><span class="kk">Label</span><span class="vv">248</span></div>
+            <div class="kv"><span class="kk">Label</span><span class="vv">1,024</span></div>
+            <div class="kv"><span class="kk">Label</span><span class="vv">92%</span></div>
+            <div class="kv"><span class="kk">Label</span><span class="vv" style="color:var(--a-hi);font-weight:700">340</span></div>
+          </div>
+        </div>
+        <div class="foot"><span class="nm">SummaryCard · label/value ledger</span><span class="seam">fields</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SETTINGS GROUP -->
+  <section class="band">
+    <div class="bhd"><h2>Settings Group</h2><span class="en">section header + switch / select rows</span><span class="ct">2</span></div>
+    <div class="fam">
+      <div class="cell full">
+        <div class="cmp">
+          <div class="chd" style="padding-bottom:14px"><span class="ci"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.6 1.6 0 00-2.7 1.1V21a2 2 0 11-4 0v-.1A1.6 1.6 0 007.5 19a1.6 1.6 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1A1.6 1.6 0 003 13.5H3a2 2 0 010-4h.1A1.6 1.6 0 005 7.5a1.6 1.6 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1A1.6 1.6 0 009 3.1V3a2 2 0 014 0v.1a1.6 1.6 0 002.7 1.1 1.6 1.6 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.6 1.6 0 00-.3 1.8V9a2 2 0 010 4z"/></svg></span><div class="ct"><b>Label</b><span>Meta · preferences</span></div></div>
+          <div class="cbd" style="gap:0">
+            <div class="srow"><span class="sico"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 01-3.4 0"/></svg></span><div class="stxt"><b>Label</b><span>Meta</span></div><button class="sw" role="switch" aria-checked="true" aria-label="pref-a"></button></div>
+            <div class="srow"><span class="sico"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></span><div class="stxt"><b>Label</b><span>Meta</span></div><button class="sw" role="switch" aria-checked="false" aria-label="pref-b"></button></div>
+            <div class="srow"><span class="sico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div class="stxt"><b>Label</b><span>Meta</span></div><button class="spick" aria-label="pref-c">Option<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></div>
+          </div>
+        </div>
+        <div class="foot"><span class="nm">SettingsGroup · switches + select row</span><span class="seam">fields</span></div>
+      </div>
+      <div class="cell full">
+        <div class="cmp">
+          <div class="chd" style="padding-bottom:14px"><span class="ci"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span><div class="ct"><b>Label</b><span>Meta</span></div><button class="sw" role="switch" aria-checked="true" aria-label="group-master"></button></div>
+          <div class="cbd" style="gap:0">
+            <div class="srow"><div class="stxt"><b>Label</b><span>Meta</span></div><span class="cval" style="color:var(--mut)">Value</span></div>
+            <div class="srow"><div class="stxt"><b>Label</b><span>Meta</span></div><button class="sw" role="switch" aria-checked="true" aria-label="grow-b"></button></div>
+            <div class="srow"><div class="stxt"><b>Label</b><span>Meta</span></div><button class="sw" role="switch" aria-checked="false" aria-label="grow-c"></button></div>
+          </div>
+        </div>
+        <div class="foot"><span class="nm">StripGroupCard · master + child rows</span><span class="seam">fields</span></div>
+      </div>
+      <div class="cell full"><div class="inh"><span class="lead">inherit SettingsGroup →</span><div class="chips"><span class="chip">SettingsSwitchRow</span><span class="chip">SettingsSectionTile</span><span class="chip">SettingsRadioGroupRow</span><span class="chip">SettingsTimeRow</span><span class="chip">SettingsActionRow</span><span class="chip">RegressionPanelCheckRow</span></div></div>
+        <div class="foot"><span class="nm">6 row atoms · same section rhythm · differ by control</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- MASTER–DETAIL -->
+  <section class="band">
+    <div class="bhd"><h2>Master · Detail</h2><span class="en">a narrow list column + a detail panel</span><span class="ct">1</span></div>
+    <div class="fam">
+      <div class="cell full">
+        <div class="md">
+          <div class="mlist">
+            <div class="mli sel"><span class="mav">L</span><div class="mt"><b>Label</b><span>Meta</span></div></div>
+            <div class="mli"><span class="mav" style="background:var(--raised2);color:var(--mut)">L</span><div class="mt"><b>Label</b><span>Meta</span></div></div>
+            <div class="mli"><span class="mav" style="background:var(--raised2);color:var(--mut)">L</span><div class="mt"><b>Label</b><span>Meta</span></div></div>
+            <div class="mli"><span class="mav" style="background:var(--raised2);color:var(--mut)">L</span><div class="mt"><b>Label</b><span>Meta</span></div></div>
+          </div>
+          <div class="mdet">
+            <div class="dh"><span class="dav">L</span><div style="flex:1"><b style="font-size:15px;font-weight:600;display:block">Label</b><span style="font-size:11px;color:var(--faint);font-family:var(--grotesk);direction:ltr">Meta</span></div><span class="mchip">LIVE</span></div>
+            <div>
+              <div class="kv"><span class="kk">Label</span><span class="vv">248</span></div>
+              <div class="kv"><span class="kk">Label</span><span class="vv">1,024</span></div>
+              <div class="kv"><span class="kk">Label</span><span class="vv">Meta</span></div>
+            </div>
+            <div style="display:flex;gap:10px"><button class="btn gho sm">Label</button><button class="btn pri sm">Label</button></div>
+          </div>
+        </div>
+        <div class="foot"><span class="nm">SplitControl · master list + detail panel</span><span class="seam coll">collection</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAT CLUSTER -->
+  <section class="band">
+    <div class="bhd"><h2>Stat Cluster</h2><span class="en">header + 3-up strip of stats · trend up green / down red fixed</span><span class="ct">2</span></div>
+    <div class="fam">
+      <div class="cell full">
+        <div class="cmp">
+          <div class="chd" style="padding-bottom:14px"><span class="ci"><svg class="i" viewBox="0 0 24 24"><path d="M4 20V10M12 20V4M20 20v-6"/></svg></span><div class="ct"><b>Label</b><span>Meta · overview</span></div><button class="spick" aria-label="range">Option<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></div>
+          <div class="cbd">
+            <div class="strip">
+              <div class="s"><span class="k">Label</span><span class="v accent">248</span><span class="d up"><svg class="i" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7v8"/></svg>12%</span></div>
+              <div class="s"><span class="k">Label</span><span class="v">1,024</span><span class="d dn"><svg class="i" viewBox="0 0 24 24"><path d="M7 7l10 10M17 17H9M17 17V9"/></svg>4%</span></div>
+              <div class="s"><span class="k">Label</span><span class="v">92%</span><span class="d up"><svg class="i" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7v8"/></svg>8%</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="foot"><span class="nm">StatClusterCard · header + 3-up strip</span><span class="seam coll">collection</span></div>
+      </div>
+      <div class="cell full">
+        <div class="cmp">
+          <div class="chd" style="padding-bottom:14px"><span class="ci"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span><div class="ct"><b>Label</b><span>Meta</span></div></div>
+          <div class="cbd">
+            <div class="strip">
+              <div class="s"><span class="k">Label</span><span class="v">14</span></div>
+              <div class="s"><span class="k">Label</span><span class="v accent">7.4<span style="font-size:14px;color:var(--mut)">k</span></span></div>
+              <div class="s"><span class="k">Label</span><span class="v">36</span></div>
+              <div class="s"><span class="k">Label</span><span class="v">5</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="foot"><span class="nm">SummaryStatStrip · 4-up · no trend</span><span class="seam coll">collection</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer><div class="colo"><div>PURE — <b>Composite Family</b></div><div>atoms assembled · STAGE head/rhythm/foot · air around &gt; within · theme = parameter</div><div>content = Label / Value / Meta · numbers LTR tnum · semantic fixed</div></div></footer>
+</div>
+
+<script>
+  var root=document.documentElement;root.className='t-indigo';
+  var seg=document.getElementById('seg'),ind=document.getElementById('ind'),btns=[].slice.call(seg.querySelectorAll('button'));
+  function place(el,indEl,box){var sr=box.getBoundingClientRect(),br=el.getBoundingClientRect();indEl.style.width=br.width+'px';indEl.style.transform='translateX('+(br.left-sr.left-3)+'px)';}
+  btns.forEach(function(b){b.addEventListener('click',function(){root.className=b.dataset.t;btns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});place(b,ind,seg);});});
+  place(btns[0],ind,seg);if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){place(seg.querySelector('[aria-pressed="true"]'),ind,seg);});}
+  window.addEventListener('resize',function(){place(seg.querySelector('[aria-pressed="true"]'),ind,seg);});
+  // switches
+  document.querySelectorAll('.sw[role="switch"]').forEach(function(s){s.addEventListener('click',function(){s.setAttribute('aria-checked',s.getAttribute('aria-checked')==='true'?'false':'true');});});
+  // filter chips
+  document.querySelectorAll('.fchip').forEach(function(c){c.addEventListener('click',function(){c.setAttribute('aria-pressed',c.getAttribute('aria-pressed')==='true'?'false':'true');});});
+  // master-detail select
+  document.querySelectorAll('.md').forEach(function(m){m.querySelectorAll('.mli').forEach(function(li){li.addEventListener('click',function(){m.querySelectorAll('.mli').forEach(function(x){x.classList.remove('sel');var av=x.querySelector('.mav');if(av){av.style.background='var(--raised2)';av.style.color='var(--mut)';}});li.classList.add('sel');var av=li.querySelector('.mav');if(av){av.style.background='';av.style.color='';}});});});
+</script>
