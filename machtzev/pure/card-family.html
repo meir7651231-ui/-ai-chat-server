@@ -22,7 +22,7 @@
   .bar .in{max-width:1200px;margin:0 auto;padding:12px 40px;display:flex;align-items:center;justify-content:space-between;gap:16px}
   .bar .mk{font-family:var(--serif);font-size:20px;font-weight:600;letter-spacing:-.02em;direction:ltr}.bar .mk i{color:var(--a);transition:color .55s var(--ease)}.bar .mk small{font-family:var(--grotesk);font-size:10px;color:var(--faint);letter-spacing:2px;margin-inline-start:10px;text-transform:uppercase}
   .seg{display:flex;padding:3px;background:var(--sunken);border:1px solid var(--hair);border-radius:999px;position:relative}
-  .seg button{position:relative;z-index:2;border:0;background:none;cursor:pointer;padding:8px 17px;border-radius:999px;font-family:var(--grotesk);font-size:12px;font-weight:600;color:var(--mut);transition:color .35s;display:flex;align-items:center;gap:7px;min-height:38px}.seg button .d{width:9px;height:9px;border-radius:50%}.seg button[aria-pressed="true"]{color:var(--ink)}.seg button:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+  .seg button{position:relative;z-index:2;border:0;background:none;cursor:pointer;padding:8px 17px;border-radius:999px;font-family:var(--grotesk);font-size:12px;font-weight:600;color:var(--mut);transition:color .35s;display:flex;align-items:center;gap:7px;min-height:44px}.seg button .d{width:9px;height:9px;border-radius:50%}.seg button[aria-pressed="true"]{color:var(--ink)}.seg button:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
   .seg .ind{position:absolute;z-index:1;top:3px;bottom:3px;left:0;border-radius:999px;background:var(--raised);box-shadow:0 2px 8px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06);transition:transform .45s var(--ease),width .45s var(--ease)}
   .intro{padding:40px 0 6px}.intro .kick{display:flex;align-items:center;gap:14px;margin-bottom:16px}.intro .kick .tick{width:34px;height:1px;background:var(--a);transition:background-color .55s var(--ease)}
   .eyebrow{font-family:var(--grotesk);font-size:11px;font-weight:600;letter-spacing:3px;color:var(--faint);text-transform:uppercase;direction:ltr}
@@ -106,6 +106,8 @@
   footer{padding:30px 0 70px;border-top:1px solid var(--hair);margin-top:6px}.colo{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--grotesk);font-size:11px;color:var(--faint);direction:ltr}.colo b{color:var(--ink)}
   @media(max-width:820px){.wrap{padding:0 18px}.bar .in{padding:11px 18px}.bar .mk small{display:none}}
   @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+  .hub:focus-visible,.sect .shd:focus-visible,.flip:focus-visible,.reveal:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
 </style>
 
 <div class="bar"><div class="in">
@@ -168,9 +170,9 @@
   <section class="band">
     <div class="bhd"><h2>Hub · Tile</h2><span class="en">icon + title + meta + chevron · tappable surface</span><span class="ct">many</span></div>
     <div class="fam">
-      <div class="cell"><div class="hub sel" aria-selected="true"><span class="hi"><svg class="i" viewBox="0 0 24 24"><path d="M3 12l9-8 9 8M5 10v10h14V10"/></svg></span><div><b>Label</b><div class="hm">Meta</div></div></div><div class="foot"><span class="nm">HubTile · selected</span><span class="seam">fields</span></div></div>
-      <div class="cell"><div class="hub"><span class="hi"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></span><div><b>Label</b><div class="hm">Meta</div></div></div><div class="foot"><span class="nm">GridHubCard</span><span class="seam">fields</span></div></div>
-      <div class="cell"><div class="hub" style="flex-direction:row;align-items:center"><span class="hi" style="width:36px;height:36px"><svg class="i" viewBox="0 0 24 24" style="width:17px;height:17px"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0116 0"/></svg></span><div style="flex:1"><b>Label</b><div class="hm">Meta</div></div><span class="arr">‹</span></div><div class="foot"><span class="nm">ContactTile · row</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="hub sel" role="button" tabindex="0" aria-selected="true"><span class="hi"><svg class="i" viewBox="0 0 24 24"><path d="M3 12l9-8 9 8M5 10v10h14V10"/></svg></span><div><b>Label</b><div class="hm">Meta</div></div></div><div class="foot"><span class="nm">HubTile · selected</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="hub" role="button" tabindex="0"><span class="hi"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></span><div><b>Label</b><div class="hm">Meta</div></div></div><div class="foot"><span class="nm">GridHubCard</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="hub" role="button" tabindex="0" style="flex-direction:row;align-items:center"><span class="hi" style="width:36px;height:36px"><svg class="i" viewBox="0 0 24 24" style="width:17px;height:17px"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0116 0"/></svg></span><div style="flex:1"><b>Label</b><div class="hm">Meta</div></div><span class="arr"><svg class="i" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></span></div><div class="foot"><span class="nm">ContactTile · row</span><span class="seam">fields</span></div></div>
       <div class="cell full"><div class="inh"><span class="hi" style="width:30px;height:30px"><svg class="i" viewBox="0 0 24 24" style="width:15px;height:15px"><rect x="4" y="4" width="16" height="16" rx="3"/></svg></span><span class="lead">inherit HubTile →</span><div class="chips"><span class="chip">DsNavTile</span><span class="chip">CategoryTile</span><span class="chip">ServiceTile</span><span class="chip">ConnectorTile</span><span class="chip">AccessoryTile</span><span class="chip">SiteHubCaCard</span></div></div>
         <div class="foot"><span class="nm">6 atoms · same tile · differ by icon/target</span><span class="seam">fields</span></div></div>
     </div>
@@ -180,8 +182,8 @@
   <section class="band">
     <div class="bhd"><h2>Section · Accordion</h2><span class="en">collapsible · panel frame · estimate</span><span class="ct">4</span></div>
     <div class="fam">
-      <div class="cell"><div class="sect open"><div class="shd"><b>Label</b><span class="ch">⌄</span></div><div class="sbd" style="min-height:48px"><div class="kv" style="border-color:var(--hair2)"><span class="kk">Label</span><span class="vv">Meta</span></div><div class="kv" style="border:0"><span class="kk">Label</span><span class="vv">Meta</span></div></div></div><div class="foot"><span class="nm">AccordionPanel · open</span><span class="seam">fields</span></div></div>
-      <div class="cell"><div class="sect"><div class="shd"><b>Label</b><span class="ch">⌄</span></div><div class="sbd">Meta</div></div><div class="foot"><span class="nm">AccordionSectionCard · closed</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="sect open"><div class="shd" role="button" tabindex="0"><b>Label</b><span class="ch"><svg class="i" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div><div class="sbd" style="min-height:48px"><div class="kv" style="border-color:var(--hair2)"><span class="kk">Label</span><span class="vv">Meta</span></div><div class="kv" style="border:0"><span class="kk">Label</span><span class="vv">Meta</span></div></div></div><div class="foot"><span class="nm">AccordionPanel · open</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="sect"><div class="shd" role="button" tabindex="0"><b>Label</b><span class="ch"><svg class="i" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div><div class="sbd">Meta</div></div><div class="foot"><span class="nm">AccordionSectionCard · closed</span><span class="seam">fields</span></div></div>
       <div class="cell"><div class="estp"><div class="er"><span>Label</span><span class="v">248</span></div><div class="er"><span>Label</span><span class="v">92</span></div><div class="er tot"><span>Label</span><span class="v" style="color:var(--a-hi)">340</span></div></div><div class="foot"><span class="nm">PriceEstimatePanel</span><span class="seam">fields</span></div></div>
       <div class="cell"><div class="surf out" style="min-height:auto;padding:14px"><div class="st" style="font-size:12.5px">Label</div><div class="sm2">Meta</div></div><div class="foot"><span class="nm">StripPanelFrame</span><span class="seam">fields</span></div></div>
     </div>
@@ -202,8 +204,8 @@
   <section class="band">
     <div class="bhd"><h2>Motion Surface</h2><span class="en">live — hover flip / reveal</span><span class="ct">2</span></div>
     <div class="fam">
-      <div class="cell"><div class="flip"><div class="in"><div class="fc fr">Label</div><div class="fc bk">Meta</div></div></div><div class="foot"><span class="nm">FlipCard · hover</span><span class="seam">fields</span></div></div>
-      <div class="cell"><div class="reveal">Label<div class="rv">Action</div></div><div class="foot"><span class="nm">RevealCard · hover</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="flip" role="button" tabindex="0"><div class="in"><div class="fc fr">Label</div><div class="fc bk">Meta</div></div></div><div class="foot"><span class="nm">FlipCard · hover</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="reveal" role="button" tabindex="0">Label<div class="rv">Action</div></div><div class="foot"><span class="nm">RevealCard · hover</span><span class="seam">fields</span></div></div>
     </div>
   </section>
 

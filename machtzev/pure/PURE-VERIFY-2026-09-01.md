@@ -39,9 +39,12 @@
 - `--faint #6E6A62` ‏~3.3–3.7:1 על טקסט-מטא קטן — מתח מובנה בטוקן §1/§11, חוצה-משפחות.
 - באגים ייחודיים-אמת שהמנוע לא רואה: List אגודל-מתג-RTL · Composite `.mli` מקלדת · Input תאריך-RTL · Nav pager-8px + שורות-תפריט מקלדת · Action selected≡focus.
 
-## הבא (תיקון-מונחה-מנוע — pointed, לא rebuild)
-1. **מגע:** hit-area ≥44 לפקדי-טקסט (`.seg/.mseg/.ptabs/.chiprail/.btn/.sortc/.fchip/.mb/.ec/.act`); למתגים/צ׳קבוקס/איקון-עיגול — הרחבת-שטח דרך padding/pseudo (לא מתיחת-הויזואל).
-2. **BLOCKER ₪:** לנקות את הערת-הכותרת-התחתונה ב-`text-family`.
-3. **גליפים:** `‹ › ★ ⌄` → inline SVG.
-4. **באגי-עין:** מתג-RTL (List) · `.mli` role/tabindex+focus (Composite) · תאריך `direction:ltr` (Input) · pager hit-box (Nav) · selected≠focus (Action).
-5. re-run `pure-lint` עד ‏0 BLOCKER/0 MAJOR; שכבת-העין רק על 5 באגי-האמת.
+## בוצע (תיקון-מונחה-מנוע — pointed, לא rebuild) ✅
+`pure-lint --strict` = **ירוק · 0 BLOCKER · 0 MAJOR** (מ-1B/43M). נותרו 14 minor = **אך ורק** `--faint 3.39:1` — הטוקן-הקבוע של §1/§11 (#6E6A62), המקום היחיד שבו חוזה-הטוקן ו-WCAG חלוקים במכוון.
+1. **מגע:** `.seg` המשותף + ~15 פקדי-טקסט → `min-height:44`; ~7 איקוני-ריבוע → `40×40`; **מתגים/צ׳קבוקס/toggle (`.sw/.cbx/.tg`)** → הרחבת-שטח `::before{position:absolute;inset:-10px}` **שקופה — הויזואל ביט-זהה** (אומת ברנדר). **המנוע לומד לזכות בהרחבת-שטח** (זיהוי pseudo שלילי-inset → גובה-אפקטיבי).
+2. **BLOCKER ₪:** נוקה מ-`text-family`.
+3. **גליפים `‹ › ★ ⌄` → inline SVG** (5 קבצים, chevron/star, currentColor).
+4. **מקלדת:** `.mli`/`.mrow`/`.hub`/`.flip`/`.reveal`/`.shd` → `role`+`tabindex` · **focus-visible** ל-33 פקדים · **tnum** ל-4 קבצים.
+5. **רנדר-אימות:** card+selection — אפס-רגרסיה (chevrons-SVG · מתגים קומפקטיים · trend-סמנטי-קבוע · gradient-hero).
+
+**נותר לשכבת-העין (5 באגי-אמת שהמנוע לא רואה):** מתג-RTL נע-הפוך (List) · תאריך-RTL מתהפך (Input) · selected≡focus (Action) · amber info≈warn (Status, מובחן ע"י איקון) · pager-dots hit-box (Nav — כוסה חלקית ב-role/tabindex).

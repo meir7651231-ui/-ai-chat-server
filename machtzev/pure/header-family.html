@@ -22,7 +22,7 @@
   .bar .in{max-width:1200px;margin:0 auto;padding:12px 40px;display:flex;align-items:center;justify-content:space-between;gap:16px}
   .bar .mk{font-family:var(--serif);font-size:20px;font-weight:600;letter-spacing:-.02em;direction:ltr}.bar .mk i{color:var(--a);transition:color .55s var(--ease)}.bar .mk small{font-family:var(--grotesk);font-size:10px;color:var(--faint);letter-spacing:2px;margin-inline-start:10px;text-transform:uppercase}
   .seg{display:flex;padding:3px;background:var(--sunken);border:1px solid var(--hair);border-radius:999px;position:relative}
-  .seg button{position:relative;z-index:2;border:0;background:none;cursor:pointer;padding:8px 17px;border-radius:999px;font-family:var(--grotesk);font-size:12px;font-weight:600;color:var(--mut);transition:color .35s;display:flex;align-items:center;gap:7px;min-height:38px}.seg button .d{width:9px;height:9px;border-radius:50%}.seg button[aria-pressed="true"]{color:var(--ink)}.seg button:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+  .seg button{position:relative;z-index:2;border:0;background:none;cursor:pointer;padding:8px 17px;border-radius:999px;font-family:var(--grotesk);font-size:12px;font-weight:600;color:var(--mut);transition:color .35s;display:flex;align-items:center;gap:7px;min-height:44px}.seg button .d{width:9px;height:9px;border-radius:50%}.seg button[aria-pressed="true"]{color:var(--ink)}.seg button:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
   .seg .ind{position:absolute;z-index:1;top:3px;bottom:3px;left:0;border-radius:999px;background:var(--raised);box-shadow:0 2px 8px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06);transition:transform .45s var(--ease),width .45s var(--ease)}
   .intro{padding:40px 0 6px}.intro .kick{display:flex;align-items:center;gap:14px;margin-bottom:16px}.intro .kick .tick{width:34px;height:1px;background:var(--a);transition:background-color .55s var(--ease)}
   .eyebrow{font-family:var(--grotesk);font-size:11px;font-weight:600;letter-spacing:3px;color:var(--faint);text-transform:uppercase;direction:ltr}
@@ -51,11 +51,11 @@
   .big{font-family:var(--serifHe);font-weight:700;letter-spacing:-.01em;line-height:1.05;color:var(--ink)}
   .sub{font-size:12.5px;color:var(--mut);margin-top:7px;line-height:1.45;max-width:52ch}
   /* generic pressable */
-  .act{display:inline-flex;align-items:center;gap:7px;font-family:var(--he);font-size:12px;font-weight:600;padding:9px 15px;border-radius:11px;cursor:pointer;border:1px solid var(--hair);background:var(--raised);color:var(--ink);min-height:38px;transition:border-color .25s,background-color .25s}
+  .act{display:inline-flex;align-items:center;gap:7px;font-family:var(--he);font-size:12px;font-weight:600;padding:9px 15px;border-radius:11px;cursor:pointer;border:1px solid var(--hair);background:var(--raised);color:var(--ink);min-height:44px;transition:border-color .25s,background-color .25s}
   .act:hover{border-color:color-mix(in srgb,var(--a) 45%,var(--hair))}.act:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
   .act.pri{background:linear-gradient(180deg,var(--a-hi),var(--a));border:0;color:#0A0A0C}
   .act.gho{background:none}
-  .ico{width:38px;height:38px;flex:none;border-radius:11px;display:grid;place-items:center;color:var(--mut);border:1px solid var(--hair);background:var(--sunken);cursor:pointer;transition:color .25s,border-color .25s}
+  .ico{width:40px;height:40px;flex:none;border-radius:11px;display:grid;place-items:center;color:var(--mut);border:1px solid var(--hair);background:var(--sunken);cursor:pointer;transition:color .25s,border-color .25s}
   .ico:hover{color:var(--a-hi);border-color:color-mix(in srgb,var(--a) 40%,var(--hair))}.ico:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
   .ico svg{width:18px;height:18px}
   .lnk{display:inline-flex;align-items:center;gap:5px;font-family:var(--grotesk);font-size:11px;font-weight:600;color:var(--a-hi);direction:ltr;cursor:pointer;transition:color .35s var(--ease);text-decoration:none}
@@ -63,7 +63,7 @@
   .ctpill{font-family:var(--grotesk);font-size:10px;font-weight:700;color:var(--a-hi);background:color-mix(in srgb,var(--a) 15%,transparent);border:1px solid color-mix(in srgb,var(--a) 32%,transparent);padding:2px 9px;border-radius:999px;direction:ltr;flex:none}
   /* PAGE header */
   .hdr.page .big{font-size:clamp(24px,3.2vw,34px)}
-  .backb{width:34px;height:34px;flex:none;border-radius:10px;display:grid;place-items:center;color:var(--mut);border:1px solid var(--hair);background:var(--sunken);cursor:pointer}.backb svg{width:16px;height:16px}
+  .backb{width:40px;height:40px;flex:none;border-radius:10px;display:grid;place-items:center;color:var(--mut);border:1px solid var(--hair);background:var(--sunken);cursor:pointer}.backb svg{width:16px;height:16px}
   /* SECTION header */
   .hdr.sect{padding:15px 18px}
   .hdr.sect .big{font-size:17px}
@@ -133,6 +133,10 @@
   footer{padding:30px 0 70px;border-top:1px solid var(--hair);margin-top:6px}.colo{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--grotesk);font-size:11px;color:var(--faint);direction:ltr}.colo b{color:var(--ink)}
   @media(max-width:820px){.wrap{padding:0 18px}.bar .in{padding:11px 18px}.bar .mk small{display:none}.nav{width:100%;margin-inline-start:0}.hdr.hero{padding:26px 20px}}
   @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+  .backb:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+
+  body{font-variant-numeric:tabular-nums}
 </style>
 
 <div class="bar"><div class="in">

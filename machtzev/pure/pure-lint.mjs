@@ -125,7 +125,17 @@ function lintHtml(html) {
     const h = pxOf(r.body, 'min-height') ?? pxOf(r.body, 'height'); if (h == null) continue;
     const w = pxOf(r.body, 'width'); const square = w != null && w === h;
     const floor = square ? 40 : 44;
-    if (h < floor) add('MAJOR', '§5', `"${r.sel}" target ${h}px < ${floor}px`);
+    if (h >= floor) continue;
+    // credit a hit-area extension: SEL::before/::after{position:absolute; inset|top|bottom:-Npx}
+    // (WCAG target-size allows the tappable region to exceed the painted visual)
+    const esc = r.sel.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const ext = rules.find(rr => new RegExp('^' + esc + '::(before|after)$').test(rr.sel.trim())
+      && /position\s*:\s*absolute/i.test(rr.body) && /(inset|top|bottom)\s*:\s*-\d/.test(rr.body));
+    if (ext) {
+      const neg = Math.max(0, ...[...ext.body.matchAll(/(?:inset|top|bottom)\s*:\s*-(\d+(?:\.\d+)?)px/g)].map(m => parseFloat(m[1])));
+      if (h + 2 * neg >= floor) continue;             // effective tap target meets the floor
+    }
+    add('MAJOR', '§5', `"${r.sel}" target ${h}px < ${floor}px`);
   }
 
   // §5 focus-visible coverage: an interactive selector with NO focus rule sharing any class token
