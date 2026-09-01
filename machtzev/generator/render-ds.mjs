@@ -1061,7 +1061,10 @@ export function renderCompose(slug, { entitySlug, entityName, fields = [], numFi
   // היבט-התקדמות: ישות עם שלבים ⇒ פס-התקדמות (אחוז-הרשומות בשלב-הסופי).
   const prog = stages.length ? selectVaried({ pct: { re: /^(pct|percent|value|val)$/, ty: _rI } },
     (a) => a.caps.includes('progress') && a.seam === 'fields', seed + 5) : null;
-  if (!kpi && !tbl && !board && !trend && !prog && !nav) return null;   // אין לבנים שמגשימות ⇒ אין מסך
+  // היבט-כרטיס: ישות עם ≥2 שדות-טקסט ⇒ כרטיס-רשומה-מובחרת (הראשונה: שם⇒כותרת · שדה⇒תת-כותרת). כריכת-אמת, אפס-זיוף.
+  const card = (fields.length >= 2) ? selectVaried({ title: { re: /^(title|name|label|head|caption)$/, ty: _rS }, sub: { re: /^(sub|subtitle|desc|body|note|caption)$/, ty: _rS } },
+    (a) => a.caps.includes('card') && a.seam === 'fields', seed + 6) : null;
+  if (!kpi && !tbl && !board && !trend && !prog && !nav && !card) return null;   // אין לבנים שמגשימות ⇒ אין מסך
 
   const imports = new Set(["import '../dart-ui-bs/ds/ds_store.dart';", "import 'package:flutter/material.dart';"]);
   const blocks = [];
@@ -1073,6 +1076,12 @@ export function renderCompose(slug, { entitySlug, entityName, fields = [], numFi
     const tiles = [tile(`appStore.count('${entitySlug}').toString()`, k(entityName))];
     for (const f of numFields.slice(0, 3)) tiles.push(tile(`appStore.sum('${entitySlug}', ${k(f)}).toStringAsFixed(0)`, k(f)));
     blocks.push(`Padding(\n            padding: const EdgeInsets.all(12),\n            child: Wrap(spacing: 10, runSpacing: 10, children: [\n              ${tiles.join(',\n              ')},\n            ]),\n          )`);
+  }
+  if (card) {
+    imports.add(`import '../${card.file}';`);
+    const extra = card.fills.length ? ', ' + card.fills.join(', ') : '';
+    const tF = k(fields[0]), sF = k(fields[1]);
+    blocks.push(`if (${recsExpr}.isNotEmpty)\n            Padding(\n              padding: const EdgeInsets.all(12),\n              child: Builder(builder: (context) {\n                final r = ${recsExpr}.first;\n                return ${card.cls}(${card.p.title}: r[${tF}] ?? '', ${card.p.sub}: r[${sF}] ?? ''${extra});\n              }),\n            )`);
   }
   if (prog) {
     imports.add(`import '../${prog.file}';`);
