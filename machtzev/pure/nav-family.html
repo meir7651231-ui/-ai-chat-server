@@ -73,7 +73,7 @@
   .chiprail button[aria-selected="true"]{color:#0B0B0D;background:linear-gradient(180deg,var(--a-hi),var(--a));border-color:transparent;box-shadow:0 4px 12px var(--gl)}
   /* pager */
   .pager{display:flex;flex-direction:column;gap:11px;align-items:center}
-  .dots{display:flex;gap:7px}.dots i{width:8px;height:8px;border-radius:50%;background:var(--raised2);transition:.3s}.dots i.on{width:22px;border-radius:999px;background:linear-gradient(90deg,var(--a-hi),var(--a))}
+  .dots{display:flex;gap:7px}.dots i{position:relative;width:8px;height:8px;border-radius:50%;background:var(--raised2);transition:.3s}.dots i::before{content:"";position:absolute;inset:-16px}.dots i.on{width:22px;border-radius:999px;background:linear-gradient(90deg,var(--a-hi),var(--a))}
   .thumbs{display:flex;gap:8px}.thumbs i{width:40px;height:40px;border-radius:10px;background:var(--raised2);border:2px solid transparent}.thumbs i.on{border-color:var(--a);box-shadow:0 0 0 3px var(--gl)}
   /* fab menu */
   .fabm{display:flex;flex-direction:column;align-items:flex-end;gap:9px}

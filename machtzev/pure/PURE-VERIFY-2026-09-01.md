@@ -47,4 +47,11 @@
 4. **מקלדת:** `.mli`/`.mrow`/`.hub`/`.flip`/`.reveal`/`.shd` → `role`+`tabindex` · **focus-visible** ל-33 פקדים · **tnum** ל-4 קבצים.
 5. **רנדר-אימות:** card+selection — אפס-רגרסיה (chevrons-SVG · מתגים קומפקטיים · trend-סמנטי-קבוע · gradient-hero).
 
-**נותר לשכבת-העין (5 באגי-אמת שהמנוע לא רואה):** מתג-RTL נע-הפוך (List) · תאריך-RTL מתהפך (Input) · selected≡focus (Action) · amber info≈warn (Status, מובחן ע"י איקון) · pager-dots hit-box (Nav — כוסה חלקית ב-role/tabindex).
+## שכבת-העין — 5 באגי-האמת (סגירה, אומת-ברנדר) ✅
+1. **List מתג-RTL** — `.sw::after` הבסיס `inset-inline-end`→`inset-inline-start` (OFF=start/ימין, ON גולש פנימה שמאלה). אומת: האגודל **בתוך** הפיל, אפס-חריגה.
+2. **Input תאריך-RTL** — `DsDateField` קיבל `direction:ltr;text-align:left;tnum` (כמו DsNumberField). הערך `01 · 09 · 26` כבר לא מתהפך.
+3. **Action selected≡focus** — selected הפך ל-`box-shadow:inset` (טבעת-פנים+זוהר) מול focus שנשאר outline-חוץ. אומת בתיאטרון-6-המצבים: נבדלים בעין.
+4. **Nav pager-dots** — `.dots i::before{position:absolute;inset:-16px}` → שטח-מגע 40px סביב נקודת-8px (הויזואל ביט-זהה).
+5. **Status amber info≈warn** — **אומת non-defect לפי-ספק:** chip-ה-warn נושא **משולש-SVG** מול נקודת-info; שני dot-chips נושאים **Label** (⇒ אינו צבע-לבד, §4); ו-amber accent≈warn = חפיפה מסונקציה מפורשות. לא שונה — אין תיקון-בעיוור לאי-באג.
+
+**מצב סופי:** `pure-lint --strict` ירוק (0B/0M/14m-faint-מתועד) · 4 באגי-עין תוקנו+אומתו-ברנדר · 1 אומת non-defect. אפס-רגרסיה.

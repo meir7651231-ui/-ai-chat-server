@@ -70,7 +70,7 @@
   .ibtn svg{width:17px;height:17px}
   /* switch / toggle */
   .sw{flex:none;width:44px;height:26px;border-radius:999px;background:var(--raised2);border:1px solid var(--hair);position:relative;cursor:pointer;transition:background-color .25s var(--ease);padding:0}
-  .sw::before{content:"";position:absolute;inset:-10px}.sw::after{content:"";position:absolute;top:2px;inset-inline-end:2px;width:20px;height:20px;border-radius:50%;background:var(--faint);transition:transform .25s var(--spring),background-color .25s}
+  .sw::before{content:"";position:absolute;inset:-10px}.sw::after{content:"";position:absolute;top:2px;inset-inline-start:2px;width:20px;height:20px;border-radius:50%;background:var(--faint);transition:transform .25s var(--spring),background-color .25s}
   .sw[aria-checked="true"]{background:color-mix(in srgb,var(--a) 55%,transparent);border-color:color-mix(in srgb,var(--a) 60%,var(--hair))}
   .sw[aria-checked="true"]::after{transform:translateX(-18px);background:var(--a-hi)}
   .sw:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}

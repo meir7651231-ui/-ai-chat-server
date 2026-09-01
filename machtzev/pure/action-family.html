@@ -52,7 +52,7 @@
   /* full-row cell + state theater + inherited-names list */
   .cell.full{grid-column:1/-1;align-items:stretch}
   .spin{width:14px;height:14px;border-radius:50%;border:2px solid rgba(11,11,13,.4);border-top-color:#0B0B0D;animation:sp .7s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
-  .btn.selected{outline:2px solid var(--a-hi);outline-offset:2px}
+  .btn.selected{box-shadow:inset 0 0 0 2px var(--a-hi),inset 0 0 12px color-mix(in srgb,var(--a) 40%,transparent)}
   .theater{width:100%;display:flex;flex-wrap:wrap;gap:18px;justify-content:center;align-items:flex-start;padding:4px 0 2px}
   .st{display:flex;flex-direction:column;align-items:center;gap:8px}.st .lb{font-family:var(--grotesk);font-size:8.5px;letter-spacing:1px;text-transform:uppercase;color:var(--faint);direction:ltr}
   .inh{width:100%;display:flex;align-items:center;gap:14px;flex-wrap:wrap}.inh .lead{font-family:var(--grotesk);font-size:9px;color:var(--faint);direction:ltr;text-transform:uppercase;letter-spacing:1px;flex:none}
