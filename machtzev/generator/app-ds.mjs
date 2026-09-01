@@ -156,6 +156,19 @@ export function buildApp(specText) {
     }
   }
 
+  // 🎯 לוח-בקרה נגזר-ממטרה (§22 · "המחולל מבין מטרה"): מטרת מערכת-ניהול = פיקוח. אם המשתמש
+  // לא ביקש דשבורד מפורש, המחולל נגזר אותו **מצורת-הדאטה בלבד** (§20-ד · אפס-מילון-דומייני,
+  // אפס-מילת-מפתח-במשפט): מונה לכל ישות (פיקוח-נפח) + סכום לכל שדה-מספרי (פיקוח-גודל — אותה
+  // הכרעת-צבירה שמסך-ההרכבה כבר עושה, render-ds:1078). הכוונה לא במילים אלא במבנה: יש ישויות
+  // ⇒ המטרה לפקח עליהן. additive · הפיך: קלט עם דשבורד-מפורש ⇒ hasDash חוסם ⇒ ביט-זהה.
+  const hasDash = screens.some((s) => s.kind === 'dashboard');
+  if (!hasDash && entMeta.length) {
+    const autoAggs = entMeta.map((e) => ({ kind: L.count, entityName: e.name, field: '', slug: e.slug }));
+    for (const e of entMeta) for (const nf of (e.numFields || [])) { if (autoAggs.length >= 12) break; autoAggs.push({ kind: L.sum, entityName: e.name, field: nf, slug: e.slug }); }
+    const { cls } = renderDashboard('app_dash', { title: L.dashTitle, icon: '📊', entities: entMeta, metrics: [], aggs: autoAggs });
+    screens.unshift({ slug: 'app_dash', cls, kind: 'dashboard', name: L.dashTitle, icon: '📊', sub: `${autoAggs.length} ${L.metricsWord}` });
+  }
+
   // 🖥 מחבר-ישות-למסך: הישויות-הראשונות ממלאות מסכי-Composed מפורקים אמיתיים, מחזוריות
   // על רישום-המסכים (כל ישות ⇒ תבנית-מסך אחרת) — הוכחת-הכללה על 3 צורות-שקע גנריות.
   // 🔐 היקף-RLS פר-ישות: שדה-ההיקף שתפקיד מגביל לפיו (role.scope). כל מסכי-החיווט
