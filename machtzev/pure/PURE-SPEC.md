@@ -56,6 +56,8 @@
 
 **נספח · SPATIAL · DATA** (לא ארכיטיפ) — שכבה מעל 01 Card + 05 List + 06 DataViz: המשטחים שמחזיקים הרבה רשומות בבת-אחת. MapSurface טרֵין-מופשט (אפס-גאוגרפיה, אפס שם-עיר/מדינה) + markers(default/selected/cluster/disabled)+route+rnode · DataTable **מיון-חי** (לחיצה על header-Value ממזגת שורות asc/desc; zebra מחושב-מחדש; שורה-נבחרת פס inset-inline-start(RTL)+tint; עמודת-Value tnum LTR; תא-Status dot+Label ok/warn/err קבועים) · SortHeader theater(unsorted/asc/desc) · Minimap viewport-rect · TreeGrid **caret-חי** (open/close ילדים רקורסיבי, leaf ללא-פעולה) tnum · תוכן Label/Value/Meta בלבד · אפס דומיין/מטבע/דשבורד · יורשים(Carousel→03 · Pagination→10 · Legend · ColumnResize) ב-chip.
 
+**נספח · CONVERSATION** (לא ארכיטיפ) — שכבה מעל 05 List + 07 Input + 08 Feedback: משטח-השיחה. MessageThread — בועה נכנסת≠יוצאת בלי תווית (in=משטח-נייטרל · out=מילוי-אקצנט, tail א-סימטרי inline-start/end ב-RTL) + system-bubble (dashed, מרוכז) + sending(pend) · Bubble theater · TypingIndicator 3-נקודות (accent, **reduced-motion מקפיא**) · Composer field+send-FAB(accent, seam=self) · QuickReply chips · DeliveryTicks sent(faint)/delivered(mut)/read(accent-מורף) SVG-only · timestamp LTR+tnum · תוכן Label/Value/Meta בלבד · אפס דומיין/מטבע/אימוג'י · יורשים(Reaction·Attachment·VoiceNote·Mention·Thread) ב-chip.
+
 **נספח · MOTION** (לא ארכיטיפ) — שכבת-תנועה מעל 13 הארכיטיפים: aurora/particles/organism/pulse/sweep/tilt/typewriter/confetti · accent ממורף · נקודת-live קבועה (--ok) · **reduced-motion מקפיא כל תא** · canvas לגנרטיבי · תוכן Label/Value/Meta/Action · 8 תאים תפקיד-אחד-לכל.
 
 ## 5. נגישות (פסילה)
