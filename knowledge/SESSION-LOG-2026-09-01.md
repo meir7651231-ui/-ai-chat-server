@@ -79,3 +79,14 @@ HEAD בעצירה: `01f6e963`. הכל committed+pushed. עץ נקי.
 בלי לפתוח dart-data-maor/ או carve/.
 **חסם-הרצה בסשן-הזה (לא חסר-מנגנון):** carve/ בלי pubspec/analyzer · dart/flutter מסרב root ⇒
 ast-purify + כל שער-dart-analyze לא-רצים כאן. הסגירה = מעבר-המרה-מחדש בסשן לא-root עם analyzer.
+
+## 🧭 המשך-סשן · סידור-מלא + הרחבת-§21 (2026-09-01 · חלק ב׳)
+**סודר 100% (מאומת · נדחף · משטרה 17/17):**
+- `machtzev/` פוזר ל-11 תת-תיקיות (12 שורש) · `generator/legacy/` (מחולל-v1 המת) · `knowledge/archive/` (10 היסטוריים).
+- **המשטרה 11⇒17 שערים** — המחולל-האמיתי (`app-ds`/`render-ds`) היה **יתום ולא-נבדק**; חוּוט: genratchet·acceptance·nlsmoke·nlquality·independence·puredata. +`gateDirty` (snapshot/restore ל-dart-gen-bs, L14).
+- תיקוני-אמת: 8 נתיבי-SDK-מתים⇒env · run.mjs שבור-מהזזה · purity-data false-positive (spread≠דאטה) · ספירות 516⇒522·6⇒17 שערים · 3 ארטיפקטים רועננו.
+- **§21 pool: 430⇒511 אטומים מחוברים** (תיקון-מפקד: `final String a, b;` מרובה-בשורה נקרא כשם-אחד ⇒ 44 אטומים חבויים שוחררו). zero-seam 55⇒11 (11 באמת-דקורטיביים: Dot·Grip·SheetHandle·…).
+
+**נותר (חסום-root · המשך בסביבה שבה `flutter analyze` רץ):**
+- **מנוף-ההיבטים:** פליטה-פר-אפיון=27, חסומה ע"י 6 היבטי-renderCompose. caps מאוכלסים-לא-מנוצלים: **card(63)·status(12)**. כל אספקט-חדש פולט Dart ⇒ **חובה compile-check** (genratchet/acceptance מאמתים JS בלבד, לא-קומפילציה). לא-נדחף בלי אימות.
+- הצעד: בסביבה לא-root — להוסיף היבט-card (רשומה-מובחרת: name→title, שדה→sub) + היבט-status, לאמת `flutter analyze`=0 + police 17/17, לולאה עד פליטה-מלאה.
