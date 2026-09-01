@@ -100,6 +100,15 @@
   .pillb.draft{color:var(--warn);background:color-mix(in srgb,var(--warn) 14%,transparent);border:1px solid color-mix(in srgb,var(--warn) 34%,transparent)}
   .pillb.wip{color:var(--a-hi);background:color-mix(in srgb,var(--a) 14%,transparent);border:1px solid color-mix(in srgb,var(--a) 32%,transparent)}
   .pillb.ok{color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent);border:1px solid color-mix(in srgb,var(--ok) 34%,transparent)}
+  /* --- contained overlay stage (dialog scrim · toast dock · bottom sheet) --- */
+  .stage{position:relative;height:236px;border-radius:14px;overflow:hidden;background:var(--sunken);border:1px solid var(--hair)}
+  .stage .bgc{position:absolute;inset:0;display:flex;flex-direction:column;gap:9px;padding:16px;opacity:.4}
+  .stage .bgc .l{height:11px;border-radius:6px;background:var(--raised2)}.stage .bgc .l.t{height:16px;width:50%;background:var(--raised)}
+  .scrim{position:absolute;inset:0;background:rgba(6,6,8,.58);backdrop-filter:blur(1.5px);display:grid;place-items:center;padding:16px}
+  .scrim .dlg{width:100%;max-width:290px;box-shadow:0 30px 80px rgba(0,0,0,.7)}
+  .dock{position:absolute;inset-inline:12px;bottom:12px}
+  .sheetdock{position:absolute;inset-inline:0;bottom:0}.sheetdock .sheet{box-shadow:0 -18px 50px rgba(0,0,0,.6)}
+  .ovl{font-family:var(--grotesk);font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--faint);direction:ltr;position:absolute;top:8px;inset-inline-start:10px;z-index:2}
   footer{padding:30px 0 70px;border-top:1px solid var(--hair);margin-top:6px}.colo{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--grotesk);font-size:11px;color:var(--faint);direction:ltr}.colo b{color:var(--ink)}
   @media(max-width:820px){.wrap{padding:0 18px}.bar .in{padding:11px 18px}.bar .mk small{display:none}}
   @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
@@ -125,7 +134,7 @@
   <section class="band">
     <div class="bhd"><h2>Toast · Snackbar</h2><span class="en">transient · slide-in · live</span><span class="ct">2</span></div>
     <div class="fam">
-      <div class="cell"><div class="toast"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></span><div class="tx"><div class="tl">Label</div><div class="tm">Meta</div></div></div><div class="foot"><span class="nm">SnackToast</span><span class="seam">fields</span></div></div>
+      <div class="cell full"><div class="stage"><span class="ovl">docked · over content</span><div class="bgc"><div class="l t"></div><div class="l"></div><div class="l" style="width:80%"></div><div class="l" style="width:90%"></div></div><div class="dock"><div class="toast"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></span><div class="tx"><div class="tl">Label</div><div class="tm">Meta</div></div></div></div></div><div class="foot"><span class="nm">SnackToast · docked (bottom, over content)</span><span class="seam">fields</span></div></div>
       <div class="cell"><div class="toast"><span class="ic" style="background:var(--raised2);color:var(--a-hi)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg></span><div class="tx"><div class="tl">Label</div></div><button class="act">Action</button></div><div class="foot"><span class="nm">SnackToast · with action</span><span class="seam">fields</span></div></div>
     </div>
   </section>
@@ -155,7 +164,7 @@
   <section class="band">
     <div class="bhd"><h2>Dialog · Modal</h2><span class="en">centered · confirm / consent / destructive</span><span class="ct">4</span></div>
     <div class="fam">
-      <div class="cell"><div class="dlg"><div class="dt">Label</div><div class="dm">Meta</div><div class="row"><button class="mb p">Action</button><button class="mb g">Action</button></div></div><div class="foot"><span class="nm">ModalDialog</span><span class="seam">fields</span></div></div>
+      <div class="cell full"><div class="stage"><span class="ovl">modal · over scrim</span><div class="bgc"><div class="l t"></div><div class="l"></div><div class="l" style="width:85%"></div><div class="l" style="width:70%"></div></div><div class="scrim"><div class="dlg"><div class="dt">Label</div><div class="dm">Meta</div><div class="row"><button class="mb p">Action</button><button class="mb g">Action</button></div></div></div></div><div class="foot"><span class="nm">ModalDialog · centered over contained scrim</span><span class="seam">fields</span></div></div>
       <div class="cell"><div class="dlg"><div class="dt">Label</div><div class="dm">Meta</div><div class="row"><button class="mb d">Action</button><button class="mb g">Action</button></div></div><div class="foot"><span class="nm">ConfirmDialog · destructive</span><span class="seam">fields</span></div></div>
       <div class="cell"><div class="dlg"><div class="dt">Label</div><div class="dm">Meta · consent</div><label style="display:flex;gap:8px;align-items:center;font-size:12px;color:var(--mut)"><span style="width:16px;height:16px;border-radius:5px;border:1.5px solid var(--a);background:color-mix(in srgb,var(--a) 20%,transparent);display:grid;place-items:center"><svg class="i" viewBox="0 0 24 24" style="width:11px;height:11px;stroke:var(--a-hi)"><path d="M5 13l4 4L19 7"/></svg></span>Label</label><div class="row"><button class="mb p">Action</button></div></div><div class="foot"><span class="nm">ConsentDialog</span><span class="seam">fields</span></div></div>
       <div class="cell"><div class="dlg"><div class="dt">Label</div><div class="dm" style="font-family:var(--grotesk);font-size:11px;background:var(--sunken);border:1px solid var(--hair);border-radius:8px;padding:8px;direction:ltr">Meta · rule</div><div class="row"><button class="mb g">Action</button></div></div><div class="foot"><span class="nm">RuleInspectDialog</span><span class="seam coll" style="border-color:rgba(76,198,230,.35);color:#4CC6E6">collection</span></div></div>
@@ -166,8 +175,8 @@
   <section class="band">
     <div class="bhd"><h2>Bottom Sheet</h2><span class="en">handle · header · close · section</span><span class="ct">6</span></div>
     <div class="fam">
-      <div class="cell full"><div class="sheet"><span class="handle"></span><div class="sh"><b>Label</b><button class="x"><svg class="i" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="sec">Meta</div></div>
-        <div class="foot"><span class="nm">SlideSheet · SheetDragHandle · SheetHeader · SheetClose · SheetSection</span><span class="seam">fields</span></div></div>
+      <div class="cell full"><div class="stage" style="height:210px"><span class="ovl">rises from bottom</span><div class="bgc"><div class="l t"></div><div class="l"></div><div class="l" style="width:75%"></div></div><div class="sheetdock"><div class="sheet"><span class="handle"></span><div class="sh"><b>Label</b><button class="x"><svg class="i" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="sec">Meta</div></div></div></div>
+        <div class="foot"><span class="nm">SlideSheet · handle · header · close · section (top radius only)</span><span class="seam">fields</span></div></div>
       <div class="cell full"><div class="inh"><span class="handle" style="align-self:center"></span><span class="lead">inherit SlideSheet →</span><div class="chips"><span class="chip">SheetScaffold</span><span class="chip">StoreSheetScaffold</span><span class="chip">SnoozeSheet</span><span class="chip">SichaSheet</span><span class="chip">SheetTile</span><span class="chip">SheetStatTile</span></div></div>
         <div class="foot"><span class="nm">6 atoms · same sheet frame · differ by content</span><span class="seam">fields</span></div></div>
     </div>
