@@ -343,3 +343,12 @@ surface/raised` **קבוע בגוף** — הפרת כלל-הזהב של החרי
 nullable ל-null; וקבצי-פלט-מחולל שאיבדו את מקורם (מניפסט/אטום/חתימה) הם חוב-שקט — המשטרה
 (JS) ירוקה כי אינה מקמפלת Dart; רק שער-הקומפילציה (genesis-compile) תופס. אימות: הזרקה ⇒
 `flutter analyze` = 0 errors (נותרו 23 warnings נפרדים — חוב-המרה רחב יותר, לא 4-השבורים).
+
+## L46 · קומפילציה ≠ פריסה — אטום שמחזיר Expanded לא-כשיר כילד-ישיר-של-ListView (1.9)
+בסגירת פער-'תורמים' + רינדור: `supporters_screen` הורכב מ-NumBox/SiteRow/Field, עבר analyze נקי,
+אבל בדפדפן NumBox נפרס כאזור-אפור-שבור (והסתיר את מה-שאחריו). השורש: `num_box.dart build ⇒ Expanded(...)`
+— חוקי רק בתוך Row/Column/Flex; כילד-ישיר-של-ListView זו שגיאת-פריסה (release-web ⇒ אפור). **לקח:**
+שער-הקומפילציה (genesis-compile) תופס טיפוסים, לא **פריסה**. המרכיב (gen-screen) חייב לדעת אילו
+אטומים הם Row-children (מחזירים Expanded/Flexible) ולעטוף אותם ב-Row, או להעדיף אטומים-standalone.
+תיקון-מיידי: `supporters_screen` הורכב מ-Tappable+SiteRow+Field (standalone) ⇒ נפרס-מלא ואומת חזותית.
+מהלך-הבא-למרכיב: גלאי-Expanded ⇒ עטיפת-Row אוטומטית. הרינדור = שכבת-אימות מעל הקומפילציה.

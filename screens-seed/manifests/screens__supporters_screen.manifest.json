@@ -1,0 +1,36 @@
+{
+ "generated": true,
+ "src": "screens__supporters_screen",
+ "screen": "supporters_screen",
+ "content": [
+  "auto/screens__supporters_screen_content.dart"
+ ],
+ "sections": [
+  {
+   "id": "tappable",
+   "atom": "Tappable",
+   "props": {
+    "child": "?:Widget",
+    "onTap": "@:onTap"
+   }
+  },
+  {
+   "id": "site_row",
+   "atom": "SiteRow",
+   "props": {
+    "name": "?:String",
+    "value": "?:String"
+   }
+  },
+  {
+   "id": "field",
+   "atom": "Field",
+   "props": {
+    "label": "$: field_label",
+    "controller": "?:TextEditingController",
+    "number": "?:bool",
+    "validator": "@:validator|String? Function(String value)?"
+   }
+  }
+ ]
+}
