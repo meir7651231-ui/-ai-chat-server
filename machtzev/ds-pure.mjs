@@ -27,6 +27,11 @@ const themeEntry = (t) => `DsPureTheme(${ACCENT.map(k => `${camel(k)}: ${color(t
 
 const neutral = Object.entries(PURE_LOOK.neutral).map(([k, v]) => `  static const ${camel(k)} = ${color(v)};`).join('\n');
 const semantic = Object.entries(PURE_LOOK.semantic).map(([k, v]) => `  static const ${camel(k)} = ${color(v)};`).join('\n');
+// ── עור-העיצוב = פרמטר הפיך (לא קבוע): חבילת נייטרל+סמנטי שזורמת דרך החריץ; ברירת-מחדל = טוקני-Pure ──
+const skinKeys = [...Object.keys(PURE_LOOK.neutral), ...Object.keys(PURE_LOOK.semantic)].map(camel);
+const skinFields = skinKeys.map(k => `  final Color ${k};`).join('\n');
+const skinCtor = skinKeys.map(k => `    required this.${k}`).join(',\n');
+const skinDefault = skinKeys.map(k => `${k}: ${k}`).join(', ');
 const themeIds = Object.keys(PURE_LOOK.themes);
 const themeConsts = themeIds.map(id => `  static const ${camel(id.replace('t-', ''))} = ${themeEntry(PURE_LOOK.themes[id])};`).join('\n');
 const themeMap = themeIds.map(id => `'${id}': ${camel(id.replace('t-', ''))}`).join(', ');
@@ -38,8 +43,8 @@ const fontCtor = fontKeys.map(k => `    required this.${k}`).join(',\n');
 const fontDefault = fontKeys.map(k => `${k}: ${JSON.stringify(PURE_LOOK.fonts[k])}`).join(', ');
 
 const out = `// ✨ מאגר-העיצוב · שפת-Pure (Layer B · הטמעה) — **מחולל ע"י machtzev/ds-pure.mjs מ-new/atoms/pure-look.mjs.**
-// אל תערוך ידנית: שנה את הזרע (pure-look) והרץ את המנוע. נייטרל+סמנטי **קבועים**; אקצנט **מורף**
-// פר-ערכה (${themeIds.join(' / ')}). דורמנטי לצד DsScale/DsDark — הזהות מוזרקת בחיווט (חוק-6). material בלבד.
+// אל תערוך ידנית: שנה את הזרע (pure-look) והרץ את המנוע. נייטרל+סמנטי זורמים כ-DsPureSkin **הפיך**
+// (ברירת-מחדל=טוקני-Pure); אקצנט **מורף** פר-ערכה (${themeIds.join(' / ')}). הזהות מוזרקת בחיווט (חוק-6). material בלבד.
 import 'package:flutter/material.dart';
 
 /// ערכת-אקצנט אחת — מורפת יחד בהחלפת-ערכה (חוק-5: האטום לא יודע איזו ערכה).
@@ -71,6 +76,17 @@ ${fontCtor},
   });
 }
 
+/// עור-העיצוב · נייטרל+סמנטי — **פרמטר הפיך, לא קבוע**: כל טוקני-הרקע/דיו/קו/סמנטי כחבילה
+/// שזורמת דרך PureScope. ברירת-המחדל = טוקני-Pure (חוק-7: היעדר-הזרקה ⇒ פלט ביט-זהה). כך
+/// האטום קורא את **מלוא-העיצוב** מהחריץ — שום צבע אינו צרוב באטום (חוק-5/6). material בלבד.
+@immutable
+class DsPureSkin {
+${skinFields}
+  const DsPureSkin({
+${skinCtor},
+  });
+}
+
 /// שפת-Pure כטוקני-Dart. נייטרל+סמנטי קבועים; ${themeIds.length} ערכות-אקצנט; themeOf() = resolver.
 class DsPure {
   // ── נייטרל · סולם-רקע/דיו/קו — לא מורף בהחלפת-ערכה ──
@@ -89,6 +105,9 @@ ${themeConsts}
 
   // ── חבילת-פונט · ברירת-מחדל (פרמטר הפיך — ניתנת להחלפה דרך PureScope, אינה מורפת פר-ערכה) ──
   static const DsPureFonts fonts = DsPureFonts(${fontDefault});
+
+  // ── עור-העיצוב · ברירת-מחדל (פרמטר הפיך — נייטרל+סמנטי כחבילה שזורמת דרך PureScope) ──
+  static const DsPureSkin skin = DsPureSkin(${skinDefault});
 
   static const String defaultTheme = '${PURE_LOOK.defaultTheme}';
   static const Map<String, DsPureTheme> themes = {${themeMap}};
