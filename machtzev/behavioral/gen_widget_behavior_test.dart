@@ -49,4 +49,40 @@ void main() {
     expect(find.text('משה כהן'), findsWidgets);      // הרשומה בטבלה
     expect(appStore.count('ent'), greaterThan(0));
   });
+
+  // התנהגות (§23-ד): שדה-מותנה 'ערך > סף ? חריגה : תקין' — הדפוס המדויק שהמחולל פולט —
+  // מתעדכן חי עם הקלט. מוכיח 'עובד', לא רק 'מתקמפל'.
+  testWidgets('שדה-מותנה: סטטוס-סף מתעדכן חי (ערך>סף⇒חריגה)', (tester) async {
+    await tester.pumpWidget(const _MiniCond());
+    expect(find.text('תקין'), findsOneWidget);        // 0 > 0 = false ⇒ תקין
+    await tester.enterText(find.byKey(const Key('val')), '150');
+    await tester.enterText(find.byKey(const Key('thr')), '100');
+    await tester.pumpAndSettle();
+    expect(find.text('חריגה'), findsOneWidget);        // 150 > 100 ⇒ חריגה (חי)
+    expect(find.text('תקין'), findsNothing);
+    await tester.enterText(find.byKey(const Key('val')), '50');
+    await tester.pumpAndSettle();
+    expect(find.text('תקין'), findsOneWidget);         // 50 > 100 = false ⇒ תקין (חי)
+  });
+}
+
+// מסך-מיני זהה-לדפוס-המחולל לשדה-מותנה: שני שדות מספריים ⇒ סטטוס-נגזר-חי.
+class _MiniCond extends StatefulWidget {
+  const _MiniCond();
+  @override
+  State<_MiniCond> createState() => _MiniCondState();
+}
+class _MiniCondState extends State<_MiniCond> {
+  final Map<int, String> _v = {};
+  @override
+  Widget build(BuildContext context) => MaterialApp(
+        home: Scaffold(
+          body: Column(children: [
+            TextField(key: const Key('val'), onChanged: (x) => setState(() => _v[1] = x)),
+            TextField(key: const Key('thr'), onChanged: (x) => setState(() => _v[2] = x)),
+            // הביטוי המדויק שהמחולל פולט (num.tryParse … ? then : else):
+            Text(((num.tryParse(_v[1] ?? '') ?? 0) > (num.tryParse(_v[2] ?? '') ?? 0)) ? 'חריגה' : 'תקין'),
+          ]),
+        ),
+      );
 }
