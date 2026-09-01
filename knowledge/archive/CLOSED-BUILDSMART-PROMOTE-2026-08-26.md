@@ -6,7 +6,7 @@
 ## מספרים
 - new/dart: 33 → **161 אטומי-חוזה** (+128).
 - כל אטום מקודם: `dart analyze` נקי + `dart run --enable-asserts` golden ירוק + חוזה + כותרת-מוצא. משטרה 7/7 פר-נחיתה.
-- 45 חסומים (backlog: `knowledge/BOX-BACKLOG-BUILDSMART-2026-08-26.md`) — data-classes/const-tables · state/IO · sealed-hierarchy · Flutter · טיוטה-קטומה. **אפס אובדן** (הטיוטות נשמרות ב-dart-quarry).
+- 45 חסומים (backlog: `knowledge/archive/BOX-BACKLOG-BUILDSMART-2026-08-26.md`) — data-classes/const-tables · state/IO · sealed-hierarchy · Flutter · טיוטה-קטומה. **אפס אובדן** (הטיוטות נשמרות ב-dart-quarry).
 
 ## ביצוע
 10 אצוות × ~18, בנחילי-≤3 מקבילים (Agent-tool); כל אטום אומת עצמאית ע"י המפקד (analyze+test) לפני commit. דגם: `new/dart/branch_label.*`.

@@ -81,7 +81,7 @@ git commit -q -m "אצווה N Dart · X GO"; git push -q -u origin claude/mah-k
 ## 5. מצב מדויק (עדכן בכל אצווה)
 - **🏁 מאור-הלוגיקה = גמור (26.8).** מאור-Dart בחוזה: **625** · בהסגר: **1** (waitlist-for
   בלבד — אטום-שקע-קולציה לגיטימי, מקביל ל-hebrew-calendar-socket; לא כשל-המרה).
-  כל אטום טהור של מאור הומר Dart שקול-ביט (זהב + אימות-עוין מול Node). דוח: `knowledge/CLOSED-MAOR-DART-2026-08-26.md`.
+  כל אטום טהור של מאור הומר Dart שקול-ביט (זהב + אימות-עוין מול Node). דוח: `knowledge/archive/CLOSED-MAOR-DART-2026-08-26.md`.
 - גבול-IO: ~74 — לא-המרה, שקעים בשכבת-הקופסה.
 - **js-compat-reference.dart** (machtzev/emit) — ספריית-העוזרים המאומתת (חוקים 6/7/10/12/13/16/17/18):
   jsTruthy · jsTrim · jsLower · jsStrToNum/jsNum · jsStr · **_expandIntFromDart** (shortest-round-trip

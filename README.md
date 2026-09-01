@@ -50,9 +50,10 @@ dart-quarry/       1  ⚪ סמן-מחצבה (רוקנה — הטיוטות קו�
   `mahulal/` (4 · קבלת-מחולל) · `census/` (3) · `behavioral/` (4).
 
 ## 📚 `knowledge/` — היכן להתחיל משימה
-- `SESSION-LOG-2026-09-01.md` — היומן החי (הכי-עדכני · קרא ראשון בהמשך-סשן).
-- `INVENTORY-EMPIRE-RAW-MATERIAL-*.md` · `ATOM-TRUTH-INDEX-*.md` — census + אינדקס-אמת.
-- `CLOSED-*.md` — דוחות-סגירה פר-מהלך.
+- **שורש = 13 דוחות פעילים:** `SESSION-LOG-*` (היומן החי · קרא ראשון) · `HANDOFF-MASTER` ·
+  census (`ATOM-CENSUS`/`LOGIC-CENSUS`/`WIREABILITY-CEILING`/`ATOM-TRUTH-INDEX`/`INVENTORY-EMPIRE-*`) ·
+  generator-close (`CLOSED-ENGINE-GAPMAP`/`CLOSED-COMPOSER`/`CLOSED-CHROME-PURITY`/`BUILD-ORDER-INTENT`/`STATE-NL`).
+- **`knowledge/archive/` = 10 דוחות היסטוריים** (עידן-ההמרה 26–28.8 · לעיון בלבד).
 
 ## 🚨 בדיקת-הכול (המשטרה — ירוקה לפני כל commit)
 ```bash
