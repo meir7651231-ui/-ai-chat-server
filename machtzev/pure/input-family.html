@@ -1,0 +1,270 @@
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+  PURE — Input Family. Archetype 07 (קלט). ALL 29 input/field atoms from atom-index.json, each a named specimen.
+  Pure language · content = Label/Value/Meta · states live (empty/focus/filled/error/disabled).
+  seam honest: fields / collection / self. self = typing IS the data (real control). zero (debt) would be a dashed tile — this family has none.
+-->
+<title>Pure — Input Family · 29</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Frank+Ruhl+Libre:wght@700&family=Space+Grotesk:wght@400;500;600;700&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--canvas:#0C0C0E;--sunken:#0A0A0C;--surface:#151517;--raised:#1B1B1E;--raised2:#212126;--ink:#ECE9E2;--mut:#9B968C;--faint:#6E6A62;--hair:rgba(236,233,226,.09);--hair2:rgba(236,233,226,.05);--warn:#E6B84F;--err:#E0574E;
+    --serif:"Fraunces",Georgia,serif;--serifHe:"Frank Ruhl Libre",serif;--grotesk:"Space Grotesk",ui-monospace,monospace;--he:"Heebo","Segoe UI",sans-serif;--ease:cubic-bezier(.2,.7,.15,1);--spring:cubic-bezier(.34,1.4,.5,1)}
+  .t-indigo{--a-hi:#B0A4FF;--a:#7A6BF0;--a-800:#4B3ECB;--gl:rgba(122,107,240,.42);--c2:#4CC6E6;--c3:#B57BE6}
+  .t-teal{--a-hi:#6FE6D5;--a:#1FB8A6;--a-800:#0C7E72;--gl:rgba(31,184,166,.42);--c2:#4FB6E6;--c3:#43D08C}
+  .t-amber{--a-hi:#F2C87E;--a:#D99A3C;--a-800:#9E6B1E;--gl:rgba(217,154,60,.42);--c2:#E8863C;--c3:#E67BA6}
+  *{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}
+  body{background:var(--canvas);color:var(--ink);direction:rtl;font-family:var(--he);-webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden;transition:background-color .6s var(--ease);background-image:radial-gradient(120% 36% at 84% -6%,var(--gl),transparent 60%)}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.038;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 40px;position:relative;z-index:1}::selection{background:var(--a);color:#0A0A0C}
+  .bar{position:sticky;top:0;z-index:60;background:linear-gradient(180deg,rgba(12,12,14,.94),rgba(12,12,14,.62));backdrop-filter:blur(14px);border-bottom:1px solid var(--hair)}
+  .bar .in{max-width:1200px;margin:0 auto;padding:12px 40px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .bar .mk{font-family:var(--serif);font-size:20px;font-weight:600;letter-spacing:-.02em;direction:ltr}.bar .mk i{color:var(--a);transition:color .55s var(--ease)}.bar .mk small{font-family:var(--grotesk);font-size:10px;color:var(--faint);letter-spacing:2px;margin-inline-start:10px;text-transform:uppercase}
+  .seg{display:flex;padding:3px;background:var(--sunken);border:1px solid var(--hair);border-radius:999px;position:relative}
+  .seg button{position:relative;z-index:2;border:0;background:none;cursor:pointer;padding:8px 17px;border-radius:999px;font-family:var(--grotesk);font-size:12px;font-weight:600;color:var(--mut);transition:color .35s;display:flex;align-items:center;gap:7px;min-height:38px}.seg button .d{width:9px;height:9px;border-radius:50%}.seg button[aria-pressed="true"]{color:var(--ink)}.seg button:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+  .seg .ind{position:absolute;z-index:1;top:3px;bottom:3px;left:0;border-radius:999px;background:var(--raised);box-shadow:0 2px 8px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06);transition:transform .45s var(--ease),width .45s var(--ease)}
+  .intro{padding:40px 0 6px}.intro .kick{display:flex;align-items:center;gap:14px;margin-bottom:16px}.intro .kick .tick{width:34px;height:1px;background:var(--a);transition:background-color .55s var(--ease)}
+  .eyebrow{font-family:var(--grotesk);font-size:11px;font-weight:600;letter-spacing:3px;color:var(--faint);text-transform:uppercase;direction:ltr}
+  .intro h1{font-family:var(--serifHe);font-weight:700;font-size:clamp(28px,5vw,44px);letter-spacing:-.01em}.intro .he{font-family:var(--grotesk);font-size:12.5px;color:var(--mut);margin-top:10px;direction:ltr}
+  .band{padding:22px 0;border-top:1px solid var(--hair)}
+  .bhd{display:flex;align-items:baseline;gap:12px;margin-bottom:16px;flex-wrap:wrap}.bhd h2{font-family:var(--serifHe);font-weight:700;font-size:19px}.bhd .en{font-family:var(--grotesk);font-size:10px;color:var(--faint);letter-spacing:1.5px;text-transform:uppercase;direction:ltr} .bhd .ct{font-family:var(--grotesk);font-size:10px;color:var(--mut);direction:ltr;margin-inline-start:auto}
+  .fam{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+  .fam.narrow{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+  .cell{border:1px solid var(--hair);border-radius:12px;background:linear-gradient(180deg,var(--surface),var(--sunken));padding:16px;display:flex;flex-direction:column;align-items:stretch;gap:12px;min-height:118px;justify-content:center}
+  .cell.full{grid-column:1/-1}.cell.w2{grid-column:span 2}
+  .cell .nm{font-family:var(--grotesk);font-size:10px;font-weight:600;color:var(--ink);direction:ltr;line-height:1.3;white-space:normal;word-break:keep-all;overflow-wrap:normal}
+  .foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:2px}
+  .seam{font-family:var(--grotesk);font-size:7.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:1px 5px;border-radius:999px;direction:ltr;border:1px solid var(--hair);color:var(--mut);flex:none}
+  .seam.coll{color:var(--c2);border-color:rgba(76,198,230,.35)}.seam.self{color:var(--warn);border-color:rgba(230,184,79,.3)}
+  /* --- field core --- */
+  .fld{display:flex;flex-direction:column;gap:6px}
+  .lbl{font-family:var(--he);font-size:11px;font-weight:600;color:var(--mut);text-align:right}.lbl .req{color:var(--a-hi);margin-inline-start:2px}
+  .inp{width:100%;height:44px;border-radius:11px;background:var(--sunken);border:1px solid var(--hair);color:var(--ink);font-family:var(--he);font-size:14px;padding:0 13px;text-align:right;direction:rtl;transition:border-color .25s,box-shadow .25s,background .25s}
+  .inp::placeholder{color:var(--faint)}
+  .inp:focus,.inp.is-focus{outline:none;border-color:var(--a);box-shadow:0 0 0 3px var(--gl);background:var(--surface)}
+  .inp.is-error{border-color:var(--err);box-shadow:0 0 0 3px color-mix(in srgb,var(--err) 26%,transparent)}
+  .inp.is-disabled{opacity:.45;pointer-events:none}
+  .help{font-family:var(--grotesk);font-size:9.5px;color:var(--faint);direction:ltr;text-align:right}.help.err{color:var(--err)}.edot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--err);margin-inline-end:5px;vertical-align:middle}
+  /* input group w/ leading + trailing icon */
+  .ig{position:relative;display:flex;align-items:center}.ig svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .ig .lic{position:absolute;inset-inline-start:13px;color:var(--mut);pointer-events:none;display:flex}.ig .lic ~ .inp{padding-inline-start:40px}
+  .ig .tic{position:absolute;inset-inline-end:12px;color:var(--mut);display:flex;cursor:pointer;background:none;border:0}.ig .tic:hover{color:var(--a-hi)}.ig .tic ~ .inp,.ig .inp.hastic{padding-inline-end:38px}
+  /* state theater */
+  .theater{width:100%;display:flex;flex-wrap:wrap;gap:16px}
+  .st{flex:1;min-width:150px;display:flex;flex-direction:column;gap:7px}.st .slb{font-family:var(--grotesk);font-size:8.5px;letter-spacing:1px;text-transform:uppercase;color:var(--faint);direction:ltr}
+  /* inherited names */
+  .inh{width:100%;display:flex;align-items:center;gap:14px;flex-wrap:wrap}.inh .lead{font-family:var(--grotesk);font-size:9px;color:var(--faint);direction:ltr;text-transform:uppercase;letter-spacing:1px;flex:none}
+  .inh .chips{display:flex;flex-wrap:wrap;gap:6px;flex:1}.inh .chip{font-family:var(--grotesk);font-size:10px;color:var(--mut);direction:ltr;padding:4px 9px;border:1px solid var(--hair);border-radius:999px;background:var(--sunken)}
+  /* PremiumField — floating label + aurora underline + leading icon */
+  .pf{position:relative;padding-top:6px}
+  .pf .fin{width:100%;height:52px;border-radius:12px;background:transparent;border:1px solid var(--hair);color:var(--ink);font-family:var(--he);font-size:14px;padding:0 42px 0 14px;direction:rtl;text-align:right;transition:border-color .25s,box-shadow .25s}
+  .pf .fin:focus{outline:none}
+  .pf .fl{position:absolute;inset-inline-start:42px;top:24px;color:var(--faint);font-size:14px;pointer-events:none;transition:all .24s var(--ease);background:linear-gradient(180deg,transparent 45%,var(--surface) 45%);padding:0 4px}
+  .pf .lic{position:absolute;inset-inline-start:15px;top:50%;transform:translateY(-50%);color:var(--a-hi);display:flex}.pf .lic svg{width:17px;height:17px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .pf .au{position:absolute;left:14px;right:14px;bottom:0;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--c2),var(--a),var(--c3));transform:scaleX(.001);transform-origin:center;transition:transform .32s var(--ease)}
+  .pf.up .fl,.pf .fin:focus~.fl{top:-1px;inset-inline-start:16px;font-size:10px;color:var(--a-hi);font-family:var(--grotesk)}
+  .pf.up .fin,.pf .fin:focus{border-color:var(--a);box-shadow:0 0 0 3px var(--gl)}
+  .pf.up .au,.pf .fin:focus~.au{transform:scaleX(1)}
+  /* GlowField */
+  .gf .inp{background:var(--sunken)}.gf .inp:focus,.gf .inp.is-focus{box-shadow:0 0 0 3px var(--gl),0 0 34px var(--gl),0 0 66px var(--gl);border-color:var(--a-hi)}
+  /* enum / select */
+  .sel{position:relative}.sel .inp{cursor:pointer;padding-inline-start:38px}.sel .cv{position:absolute;inset-inline-start:12px;top:50%;transform:translateY(-50%);color:var(--mut);pointer-events:none}
+  /* stepper */
+  .stepper{display:inline-flex;align-items:center;border:1px solid var(--hair);border-radius:11px;overflow:hidden;background:var(--sunken)}.stepper button{width:42px;height:44px;background:none;border:0;color:var(--ink);font-size:18px;cursor:pointer;transition:background .2s,color .2s}.stepper button:hover{background:var(--raised2);color:var(--a-hi)}.stepper button:focus-visible{outline:2px solid var(--a-hi);outline-offset:-2px}.stepper .n{min-width:46px;text-align:center;font-family:var(--grotesk);font-weight:600;font-feature-settings:"tnum";border-inline:1px solid var(--hair);direction:ltr}
+  .stepper.box{border:0;background:none;gap:8px}.stepper.box button{border:1px solid var(--hair);border-radius:10px;background:var(--raised)}.stepper.box .n{border:1px solid var(--hair);border-radius:10px;height:44px;display:grid;place-items:center;background:var(--sunken)}
+  .smart{display:flex;flex-direction:column;gap:8px}.sgg{display:flex;gap:6px}.sgg .s{font-family:var(--grotesk);font-size:11px;color:var(--a-hi);direction:ltr;padding:4px 10px;border:1px solid color-mix(in srgb,var(--a) 30%,transparent);border-radius:999px;background:color-mix(in srgb,var(--a) 12%,transparent);cursor:pointer}.sgg .s:hover{background:color-mix(in srgb,var(--a) 22%,transparent)}
+  /* slider / range */
+  .slider{padding:14px 4px 6px}.track{position:relative;height:6px;border-radius:999px;background:var(--raised2)}
+  .track .fill{position:absolute;top:0;bottom:0;border-radius:999px;background:linear-gradient(90deg,var(--a-hi),var(--a));box-shadow:0 0 12px var(--gl)}
+  .track .thumb{position:absolute;top:50%;transform:translate(50%,-50%);width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.4),0 0 0 4px var(--gl);cursor:grab}
+  .slider .val{font-family:var(--grotesk);font-size:11px;color:var(--mut);direction:ltr;text-align:center;margin-top:12px;font-feature-settings:"tnum"}
+  /* native range */
+  input[type=range].rng{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:999px;background:var(--raised2);outline:none;cursor:pointer;margin:8px 0}
+  input[type=range].rng::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.4),0 0 0 4px var(--gl);cursor:grab;transition:box-shadow .2s}
+  input[type=range].rng::-moz-range-thumb{width:20px;height:20px;border:0;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.4),0 0 0 4px var(--gl);cursor:grab}
+  input[type=range].rng:focus-visible::-webkit-slider-thumb{box-shadow:0 2px 6px rgba(0,0,0,.4),0 0 0 5px var(--a-hi)}
+  input[type=range].rng:active::-webkit-slider-thumb{cursor:grabbing;box-shadow:0 2px 6px rgba(0,0,0,.4),0 0 0 6px var(--gl)}
+  /* tag input */
+  .taginp{display:flex;flex-wrap:wrap;gap:7px;align-items:center;min-height:44px;border:1px solid var(--hair);border-radius:11px;background:var(--sunken);padding:7px 10px}
+  .tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--he);font-size:12px;color:var(--a-hi);background:color-mix(in srgb,var(--a) 14%,transparent);border:1px solid color-mix(in srgb,var(--a) 28%,transparent);border-radius:999px;padding:4px 6px 4px 10px}.tag b{cursor:pointer;color:var(--mut);font-family:var(--grotesk)}.tag b:hover{color:var(--err)}
+  .taginp .te{flex:1;min-width:60px;background:none;border:0;color:var(--ink);font-family:var(--he);font-size:13px;direction:rtl;text-align:right}.taginp .te:focus{outline:none}
+  /* picker options */
+  .opt{display:flex;align-items:center;gap:11px;padding:11px 13px;border:1px solid var(--hair);border-radius:11px;background:var(--raised);cursor:pointer;transition:border-color .2s,background .2s}.opt:hover{border-color:var(--a)}.opt[aria-checked="true"]{border-color:var(--a);background:color-mix(in srgb,var(--a) 10%,transparent)}
+  .opt .rk{width:19px;height:19px;border-radius:50%;border:2px solid var(--hair);flex:none;display:grid;place-items:center;transition:border-color .2s}.opt[aria-checked="true"] .rk{border-color:var(--a)}.opt[aria-checked="true"] .rk::after{content:"";width:9px;height:9px;border-radius:50%;background:var(--a)}
+  .opt .ol{font-family:var(--he);font-size:13px;font-weight:600;flex:1;text-align:right}.opt .om{font-family:var(--grotesk);font-size:9.5px;color:var(--faint);direction:ltr}
+  .optpanel{display:flex;flex-direction:column;gap:7px;border:1px solid var(--hair);border-radius:12px;background:var(--sunken);padding:8px}
+  .optchip{display:inline-flex;align-items:center;gap:7px;font-family:var(--he);font-size:12.5px;font-weight:600;padding:8px 14px;border-radius:999px;border:1px solid var(--hair);background:var(--raised);color:var(--mut);cursor:pointer;transition:.2s}.optchip[aria-checked="true"]{border-color:var(--a);color:var(--a-hi);background:color-mix(in srgb,var(--a) 12%,transparent)}.chiprow{display:flex;flex-wrap:wrap;gap:8px}
+  /* segmented picker */
+  .mseg{display:inline-flex;padding:3px;background:var(--sunken);border:1px solid var(--hair);border-radius:11px;position:relative;width:100%}.mseg button{position:relative;z-index:2;flex:1;border:0;background:none;cursor:pointer;padding:9px;border-radius:8px;font-family:var(--he);font-size:12px;font-weight:600;color:var(--mut);transition:color .3s;min-height:40px}.mseg button[aria-pressed="true"]{color:var(--ink)}.mseg button:focus-visible{outline:2px solid var(--a-hi);outline-offset:1px}.mseg .mind{position:absolute;z-index:1;top:3px;bottom:3px;left:0;border-radius:8px;background:linear-gradient(180deg,var(--raised2),var(--raised));box-shadow:0 2px 6px rgba(0,0,0,.4);transition:transform .4s var(--spring),width .4s var(--spring)}
+  /* OTP */
+  .otp{display:flex;gap:9px;direction:ltr}.otp .b{width:44px;height:52px;border-radius:11px;border:1px solid var(--hair);background:var(--sunken);display:grid;place-items:center;font-family:var(--grotesk);font-size:20px;font-weight:600;color:var(--ink)}.otp .b.on{border-color:var(--a);box-shadow:0 0 0 3px var(--gl);background:var(--surface)}.otp .b.cur{border-color:var(--a-hi);box-shadow:0 0 0 3px var(--gl)}.otp .b .car{width:2px;height:22px;background:var(--a-hi);animation:blink 1s steps(2) infinite}@keyframes blink{50%{opacity:0}}
+  /* pin pad */
+  .pinpad{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;max-width:230px}.pinpad button{height:52px;border-radius:12px;border:1px solid var(--hair);background:var(--raised);color:var(--ink);font-family:var(--grotesk);font-size:19px;font-weight:600;cursor:pointer;transition:transform .12s var(--spring),background .2s}.pinpad button:hover{background:var(--raised2);color:var(--a-hi)}.pinpad button:active{transform:scale(.94)}.pinpad button:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}.pinpad .del{color:var(--mut)}.pinpad .del svg{width:20px;height:20px;stroke:currentColor;stroke-width:1.8;fill:none}
+  footer{padding:30px 0 70px;border-top:1px solid var(--hair);margin-top:6px}.colo{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--grotesk);font-size:11px;color:var(--faint);direction:ltr}.colo b{color:var(--ink)}
+  @media(max-width:820px){.wrap{padding:0 18px}.bar .in{padding:11px 18px}.bar .mk small{display:none}}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="bar"><div class="in">
+  <div class="mk">Pure<i>.</i><small>Input Family · 29</small></div>
+  <div class="seg" id="seg" role="group" aria-label="Theme"><span class="ind" id="ind"></span>
+    <button data-t="t-indigo" aria-pressed="true"><span class="d" style="background:#7A6BF0"></span>Indigo</button>
+    <button data-t="t-teal" aria-pressed="false"><span class="d" style="background:#1FB8A6"></span>Teal</button>
+    <button data-t="t-amber" aria-pressed="false"><span class="d" style="background:#D99A3C"></span>Amber</button>
+  </div>
+</div></div>
+
+<div class="wrap">
+  <header class="intro">
+    <div class="kick"><span class="tick"></span><span class="eyebrow">Archetype 07 · Input</span></div>
+    <h1>משפחת הקלט · 29</h1>
+    <p class="he">every named field atom · Pure · content = Label/Value/Meta · states live · seam: fields / collection / self (typing is the data)</p>
+  </header>
+
+  <!-- TEXT FIELD -->
+  <section class="band">
+    <div class="bhd"><h2>Text Field</h2><span class="en">base · label · row — one canonical + state theater</span><span class="ct">5</span></div>
+    <div class="fam">
+      <div class="cell full">
+        <div class="theater">
+          <div class="st"><span class="slb">empty</span><div class="fld"><span class="lbl">Label</span><input class="inp" placeholder="Value" aria-label="empty"></div></div>
+          <div class="st"><span class="slb">focus</span><div class="fld"><span class="lbl">Label</span><input class="inp is-focus" value="Value" aria-label="focus"></div></div>
+          <div class="st"><span class="slb">filled</span><div class="fld"><span class="lbl">Label</span><input class="inp" value="Value" aria-label="filled"></div></div>
+          <div class="st"><span class="slb">error</span><div class="fld"><span class="lbl">Label</span><input class="inp is-error" value="Value" aria-invalid="true" aria-describedby="dsfErr" aria-label="error"><span class="help err" id="dsfErr" role="alert"><span class="edot"></span>Meta · error</span></div></div>
+          <div class="st"><span class="slb">disabled</span><div class="fld"><span class="lbl">Label</span><input class="inp is-disabled" value="Value" disabled aria-label="disabled"></div></div>
+        </div>
+        <div class="foot"><span class="nm">DsField · text · full state theater</span><span class="seam self">self</span></div>
+      </div>
+      <div class="cell"><div class="fld"><input class="inp" placeholder="Value" aria-label="Field"></div><div class="foot"><span class="nm">Field · bare</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="fld"><span class="lbl">Label</span><input class="inp" placeholder="Value" aria-label="LabeledField"><span class="help">Meta · helper</span></div><div class="foot"><span class="nm">LabeledField · label + helper</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="fld" style="flex-direction:row;align-items:center;gap:12px"><span class="lbl" style="flex:none;width:64px">Label</span><input class="inp" placeholder="Value" aria-label="FieldRow"></div><div class="foot"><span class="nm">FieldRow · inline</span><span class="seam self">self</span></div></div>
+      <div class="cell" style="justify-content:flex-start"><span class="lbl" style="font-size:13px">Label<span class="req">*</span></span><span class="help" style="text-align:right">Meta · required label atom</span><div class="foot"><span class="nm">FieldLabel · label only</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- SIGNATURE FIELD -->
+  <section class="band">
+    <div class="bhd"><h2>Signature Field</h2><span class="en">floating label + aurora · focus glow</span><span class="ct">2</span></div>
+    <div class="fam">
+      <div class="cell w2">
+        <div class="theater">
+          <div class="st"><span class="slb">rest</span><div class="pf"><span class="lic"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 100-8 4 4 0 000 8zM4 20a8 8 0 0116 0"/></svg></span><input class="fin" aria-label="rest"><span class="fl">Label</span><span class="au"></span></div></div>
+          <div class="st"><span class="slb">focus · filled</span><div class="pf up"><span class="lic"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 100-8 4 4 0 000 8zM4 20a8 8 0 0116 0"/></svg></span><input class="fin" value="Value" aria-label="filled"><span class="fl">Label</span><span class="au"></span></div></div>
+        </div>
+        <div class="foot"><span class="nm">PremiumField · floating label · aurora underline · leading icon</span><span class="seam">fields</span></div>
+      </div>
+      <div class="cell"><div class="fld gf"><span class="lbl">Label</span><input class="inp is-focus" value="Value" aria-label="GlowField"></div><div class="foot"><span class="nm">GlowField · focus glow</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- TYPED FIELD -->
+  <section class="band">
+    <div class="bhd"><h2>Typed Field</h2><span class="en">date · number · enum — distinct affordance</span><span class="ct">3</span></div>
+    <div class="fam">
+      <div class="cell"><div class="fld"><span class="lbl">Label</span><div class="ig"><span class="lic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg></span><input class="inp" value="01 · 09 · 26" aria-label="DsDateField"></div></div><div class="foot"><span class="nm">DsDateField · date</span><span class="seam self">self</span></div></div>
+      <div class="cell"><div class="fld"><span class="lbl">Label</span><div class="ig"><span class="lic"><svg viewBox="0 0 24 24"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg></span><input class="inp" value="12" style="text-align:left;direction:ltr;font-feature-settings:'tnum'" aria-label="DsNumberField"></div></div><div class="foot"><span class="nm">DsNumberField · number</span><span class="seam self">self</span></div></div>
+      <div class="cell"><div class="fld"><span class="lbl">Label</span><div class="sel"><span class="cv"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none"><path d="M6 9l6 6 6-6"/></svg></span><input class="inp" value="Option" readonly aria-label="DsEnumField"></div></div><div class="foot"><span class="nm">DsEnumField · select</span><span class="seam coll">collection</span></div></div>
+    </div>
+  </section>
+
+  <!-- SEARCH -->
+  <section class="band">
+    <div class="bhd"><h2>Search · Composer</h2><span class="en">icon + clear · send bar</span><span class="ct">3</span></div>
+    <div class="fam">
+      <div class="cell"><div class="ig"><span class="lic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg></span><input class="inp hastic" placeholder="Label" aria-label="DsSearch"><button class="tic" aria-label="clear"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="foot"><span class="nm">DsSearch · search + clear</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="ig"><span class="lic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg></span><input class="inp hastic is-focus" value="Value" aria-label="SearchField"><button class="tic" aria-label="clear"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="foot"><span class="nm">SearchField · animated · active</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="ig"><input class="inp hastic" placeholder="Label" aria-label="InputBar" style="border-radius:999px"><button class="tic" aria-label="send" style="inset-inline-end:6px;width:34px;height:34px;border-radius:50%;background:linear-gradient(180deg,var(--a-hi),var(--a));color:#0B0B0D;display:grid;place-items:center;top:5px;transform:none"><svg viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg></button></div><div class="foot"><span class="nm">InputBar · composer + send</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- NUMBER STEPPER -->
+  <section class="band">
+    <div class="bhd"><h2>Number · Stepper</h2><span class="en">numeric input — one base + variants, rest inherit</span><span class="ct">7</span></div>
+    <div class="fam">
+      <div class="cell full">
+        <div class="theater">
+          <div class="st"><span class="slb">default · live</span><div class="stepper"><button aria-label="minus">−</button><span class="n" id="s1">2</span><button aria-label="plus">+</button></div></div>
+          <div class="st"><span class="slb">focus</span><div class="stepper" style="border-color:var(--a);box-shadow:0 0 0 3px var(--gl)"><button aria-label="minus">−</button><span class="n">3</span><button aria-label="plus">+</button></div></div>
+          <div class="st"><span class="slb">min · disabled −</span><div class="stepper"><button aria-label="minus" disabled style="opacity:.35">−</button><span class="n">0</span><button aria-label="plus">+</button></div></div>
+        </div>
+        <div class="foot"><span class="nm">NumberStepper · − value + · state theater</span><span class="seam">fields</span></div>
+      </div>
+      <div class="cell"><div class="stepper box"><button aria-label="plus">+</button><span class="n">4</span><button aria-label="minus">−</button></div><div class="foot"><span class="nm">QtyStepperBox · boxed</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="smart"><div class="stepper"><button aria-label="minus">−</button><span class="n" id="s2">1</span><button aria-label="plus">+</button></div><div class="sgg"><span class="s">+5</span><span class="s">+10</span><span class="s">Max</span></div></div><div class="foot"><span class="nm">SmartQtyStepper · quick-add</span><span class="seam">fields</span></div></div>
+      <div class="cell full">
+        <div class="inh">
+          <div class="stepper" tabindex="-1" aria-hidden="true" style="pointer-events:none"><button>−</button><span class="n">2</span><button>+</button></div>
+          <span class="lead">inherit&nbsp;NumberStepper&nbsp;→</span>
+          <div class="chips"><span class="chip">QtyStepper</span><span class="chip">StoreSmartQtyStepper</span><span class="chip">NumberRow</span><span class="chip">SettingsNumberRow</span></div>
+        </div>
+        <div class="foot"><span class="nm">4 atoms · same numeric control · differ only by data seam / row wrapper</span><span class="seam">fields</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RANGE -->
+  <section class="band">
+    <div class="bhd"><h2>Range · Slider</h2><span class="en">glow track · dual thumb · live</span><span class="ct">2</span></div>
+    <div class="fam">
+      <div class="cell"><div class="slider"><input type="range" class="rng" id="glowRng" min="0" max="100" value="58" aria-label="GlowSlider"><div class="val" id="glowVal">58</div></div><div class="foot"><span class="nm">GlowSlider · native range · live</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="slider"><div class="track" id="drTrack"><div class="fill" id="drFill"></div><div class="thumb" id="drMin" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="26" aria-label="min"></div><div class="thumb" id="drMax" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="74" aria-label="max"></div></div><div class="val" id="drVal">26 — 74</div></div><div class="foot"><span class="nm">DualRange · two-thumb · live</span><span class="seam self">self</span></div></div>
+    </div>
+  </section>
+
+  <!-- PICKER / SELECT -->
+  <section class="band">
+    <div class="bhd"><h2>Picker · Select</h2><span class="en">segmented · options · chips · tags</span><span class="ct">5</span></div>
+    <div class="fam">
+      <div class="cell"><div class="mseg" data-seg><span class="mind"></span><button aria-pressed="true">Label</button><button aria-pressed="false">Label</button><button aria-pressed="false">Label</button></div><div class="foot"><span class="nm">SegPicker · sliding indicator</span><span class="seam coll">collection</span></div></div>
+      <div class="cell"><div class="opt" role="radio" aria-checked="true" tabindex="0"><span class="rk"></span><span class="ol">Label</span><span class="om">Meta</span></div><div class="foot"><span class="nm">PickerOption · selected row</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="chiprow"><button class="optchip" aria-checked="true"><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;stroke-width:2.4;fill:none"><path d="M5 13l4 4L19 7"/></svg>Label</button><button class="optchip" aria-checked="false">Label</button></div><div class="foot"><span class="nm">PickerOptionChip · chip select</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="optpanel"><div class="opt" role="radio" aria-checked="true"><span class="rk"></span><span class="ol">Label</span><span class="om">Meta</span></div><div class="opt" role="radio" aria-checked="false"><span class="rk"></span><span class="ol">Label</span><span class="om">Meta</span></div></div><div class="foot"><span class="nm">PickerOptionsPanel · grouped</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="taginp"><span class="tag">Label<b>×</b></span><span class="tag">Label<b>×</b></span><input class="te" placeholder="Add…" aria-label="TagInput"></div><div class="foot"><span class="nm">TagInput · removable tags</span><span class="seam coll">collection</span></div></div>
+    </div>
+  </section>
+
+  <!-- CODE -->
+  <section class="band">
+    <div class="bhd"><h2>Code · Keypad</h2><span class="en">otp boxes · numeric pad · live</span><span class="ct">2</span></div>
+    <div class="fam">
+      <div class="cell"><div class="otp"><span class="b on">2</span><span class="b on">6</span><span class="b cur"><span class="car"></span></span><span class="b"></span></div><div class="foot"><span class="nm">OtpInput · advancing boxes</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="pinpad" id="pinpad"><button>1</button><button>2</button><button>3</button><button>4</button><button>5</button><button>6</button><button>7</button><button>8</button><button>9</button><span></span><button>0</button><button class="del" aria-label="delete"><svg viewBox="0 0 24 24"><path d="M20 6H9L4 12l5 6h11a1 1 0 001-1V7a1 1 0 00-1-1zM17 9l-5 6M12 9l5 6"/></svg></button></div><div class="foot"><span class="nm">PinPad · numeric keypad · live</span><span class="seam self">self</span></div></div>
+    </div>
+  </section>
+
+  <footer><div class="colo"><div>PURE — <b>Input Family</b></div><div>29 atoms · seam: fields / collection / self=typing-is-data · theme = parameter</div><div>content = Label / Value / Meta · states live</div></div></footer>
+</div>
+
+<script>
+  var root=document.documentElement;root.className='t-indigo';
+  var seg=document.getElementById('seg'),ind=document.getElementById('ind'),btns=[].slice.call(seg.querySelectorAll('button'));
+  function place(el,indEl,box){var sr=box.getBoundingClientRect(),br=el.getBoundingClientRect();indEl.style.width=br.width+'px';indEl.style.transform='translateX('+(br.left-sr.left-3)+'px)';}
+  btns.forEach(function(b){b.addEventListener('click',function(){root.className=b.dataset.t;btns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});place(b,ind,seg);});});
+  place(btns[0],ind,seg);if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){place(seg.querySelector('[aria-pressed="true"]'),ind,seg);segAll();});}
+  window.addEventListener('resize',function(){place(seg.querySelector('[aria-pressed="true"]'),ind,seg);segAll();});
+  function segAll(){document.querySelectorAll('[data-seg]').forEach(function(m){var mind=m.querySelector('.mind'),on=m.querySelector('[aria-pressed="true"]');if(on)place(on,mind,m);});}
+  document.querySelectorAll('[data-seg]').forEach(function(m){m.querySelectorAll('button').forEach(function(bn){bn.addEventListener('click',function(){m.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',x===bn?'true':'false');});place(bn,m.querySelector('.mind'),m);});});});
+  setTimeout(segAll,120);
+  // steppers
+  document.querySelectorAll('.stepper').forEach(function(s){var n=s.querySelector('.n');if(!n)return;s.querySelectorAll('button').forEach(function(bn){if(bn.disabled)return;bn.addEventListener('click',function(){var v=parseInt(n.textContent,10)+(bn.getAttribute('aria-label')==='plus'?1:-1);n.textContent=Math.max(0,v);});});});
+  // smart quick-add
+  document.querySelectorAll('.sgg .s').forEach(function(s){s.addEventListener('click',function(){var n=document.getElementById('s2');var t=s.textContent;n.textContent=t==='Max'?99:(parseInt(n.textContent,10)+parseInt(t.replace('+',''),10));});});
+  // options radio
+  document.querySelectorAll('.opt[role="radio"],.optchip').forEach(function(o){o.addEventListener('click',function(){var scope=o.closest('.optpanel')||o.closest('.chiprow')||document;scope.querySelectorAll(o.classList.contains('optchip')?'.optchip':'.opt').forEach(function(x){x.setAttribute('aria-checked','false');});o.setAttribute('aria-checked','true');});});
+  // tag remove
+  document.querySelectorAll('.tag b').forEach(function(b){b.addEventListener('click',function(){b.parentElement.remove();});});
+  // GlowSlider — native input[type=range], live number + fill
+  (function(){var r=document.getElementById('glowRng'),v=document.getElementById('glowVal');if(!r)return;function paint(){var p=+r.value;v.textContent=p;r.style.background='linear-gradient(90deg,var(--a-hi),var(--a) '+p+'%,var(--raised2) '+p+'%)';}r.addEventListener('input',paint);paint();})();
+  // DualRange — two live thumbs (RTL: right% = value)
+  (function(){var t=document.getElementById('drTrack'),f=document.getElementById('drFill'),mn=document.getElementById('drMin'),mx=document.getElementById('drMax'),v=document.getElementById('drVal');if(!t)return;var lo=26,hi=74,drag=null;
+  function paint(){mn.style.right=lo+'%';mx.style.right=hi+'%';f.style.right=lo+'%';f.style.left=(100-hi)+'%';v.textContent=lo+' — '+hi;mn.setAttribute('aria-valuenow',lo);mx.setAttribute('aria-valuenow',hi);}
+  function fromX(x){var r=t.getBoundingClientRect();return Math.max(0,Math.min(100,Math.round((1-(x-r.left)/r.width)*100)));}
+  mn.addEventListener('pointerdown',function(){drag='lo';});mx.addEventListener('pointerdown',function(){drag='hi';});
+  window.addEventListener('pointerup',function(){drag=null;});
+  window.addEventListener('pointermove',function(e){if(!drag)return;var p=fromX(e.clientX);if(drag==='lo')lo=Math.min(p,hi-1);else hi=Math.max(p,lo+1);paint();});
+  mn.addEventListener('keydown',function(e){if(e.key==='ArrowRight')lo=Math.min(lo+2,hi-1);if(e.key==='ArrowLeft')lo=Math.max(0,lo-2);paint();});
+  mx.addEventListener('keydown',function(e){if(e.key==='ArrowRight')hi=Math.min(100,hi+2);if(e.key==='ArrowLeft')hi=Math.max(hi-2,lo+1);paint();});
+  paint();})();
+  // pinpad ripple-ish (visual only)
+  document.querySelectorAll('#pinpad button').forEach(function(b){b.addEventListener('click',function(){b.style.background='var(--raised2)';setTimeout(function(){b.style.background='';},140);});});
+</script>
