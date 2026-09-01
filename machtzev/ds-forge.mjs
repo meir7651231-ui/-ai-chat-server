@@ -51,6 +51,39 @@ function colorExpr(val) {
   if (lit) return lit;
   return null;                                // גרדיאנט/לא-מזוהה ⇒ null (הקורא מדלג)
 }
+// פיצול לפי פסיק ברמה-העליונה (מכבד סוגריים של rgba()/color-mix())
+function splitTop(s) {
+  const out = []; let d = 0, cur = '';
+  for (const ch of s) {
+    if (ch === '(') d++; else if (ch === ')') d--;
+    if (ch === ',' && d === 0) { out.push(cur.trim()); cur = ''; } else cur += ch;
+  }
+  if (cur.trim()) out.push(cur.trim());
+  return out;
+}
+// linear-gradient(angle, stopA, stopB…) ⇒ LinearGradient(...) | null (אם צבע לא-מזוהה)
+function gradientExpr(val) {
+  const m = val && val.match(/linear-gradient\((.*)\)\s*$/i);
+  if (!m) return null;
+  const parts = splitTop(m[1]);
+  let begin = 'Alignment.topCenter', end = 'Alignment.bottomCenter';
+  if (/deg/.test(parts[0]) || /^to\s/.test(parts[0])) {
+    const a = parts.shift();
+    const deg = /(-?\d+)deg/.test(a) ? +RegExp.$1 : (/to right/.test(a) ? 90 : /to left/.test(a) ? 270 : 180);
+    const map = { 0: ['bottomCenter', 'topCenter'], 90: ['centerLeft', 'centerRight'], 180: ['topCenter', 'bottomCenter'],
+      270: ['centerRight', 'centerLeft'], 135: ['topLeft', 'bottomRight'], 45: ['bottomLeft', 'topRight'], 225: ['topRight', 'bottomLeft'] };
+    const mm = map[(deg % 360 + 360) % 360] || ['topCenter', 'bottomCenter'];
+    begin = `Alignment.${mm[0]}`; end = `Alignment.${mm[1]}`;
+  }
+  const cols = [];
+  for (const p of parts) {
+    const c = colorExpr(p.replace(/\s+\d+%\s*$/, ''));
+    if (!c) return null;
+    cols.push(c);
+  }
+  if (cols.length < 2) return null;
+  return `LinearGradient(colors: [${cols.join(', ')}], begin: ${begin}, end: ${end})`;
+}
 function fontExpr(val) {
   const m = val && val.match(/var\(--(serif|serifHe|grotesk|he)\)/);
   return m ? `fonts.${FONT[m[1]]}` : null;
@@ -120,8 +153,10 @@ function elemChildren(node) { return node.children.filter(c => c.tag && c.tag !=
 
 function decoration(st) {                       // {prop} ⇒ BoxDecoration(...) | null
   const parts = [];
-  const bg = colorExpr(st['background'] || st['background-color']);
-  if (bg) parts.push(`color: ${bg}`);
+  const bgRaw = st['background'] || st['background-color'];
+  const grad = gradientExpr(bgRaw);
+  if (grad) parts.push(`gradient: ${grad}`);     // גרדיאנט גובר על מילוי-אחיד
+  else { const bg = colorExpr(bgRaw); if (bg) parts.push(`color: ${bg}`); }
   const br = st['border'];
   if (br) { const bc = colorExpr(br); if (bc) parts.push(`border: Border.all(color: ${bc}${/\b2px\b/.test(br) ? ', width: 2' : ''})`); }
   const rad = st['border-radius'];
@@ -147,10 +182,35 @@ function textStyle(st) {
   return p;
 }
 
-// אלמנט ⇒ ביטוי-widget. עלה-טקסט ⇒ Text; מיכל ⇒ Container(+Row/Column). svg ⇒ אייקון-פלייסהולדר.
+// SVG ⇒ path-data מנורמל (circle/rect/line/polyline ⇒ פקודות-path); <path d> נשמר כמו-שהוא
+function svgToPathData(node) {
+  let d = '';
+  const walk = n => {
+    for (const ch of n.children) {
+      if (!ch.tag) continue;
+      const a = ch.attrs;
+      if (ch.tag === 'path' && a.d) d += ' ' + a.d;
+      else if (ch.tag === 'circle') { const cx = +a.cx, cy = +a.cy, r = +a.r; d += ` M ${cx - r} ${cy} a ${r} ${r} 0 1 0 ${r * 2} 0 a ${r} ${r} 0 1 0 ${-r * 2} 0`; }
+      else if (ch.tag === 'rect') { const x = +a.x || 0, y = +a.y || 0, w = +a.width, h = +a.height; d += ` M ${x} ${y} h ${w} v ${h} h ${-w} Z`; }
+      else if (ch.tag === 'line') { d += ` M ${a.x1} ${a.y1} L ${a.x2} ${a.y2}`; }
+      else if ((ch.tag === 'polyline' || ch.tag === 'polygon') && a.points) { const pts = a.points.trim().split(/[\s,]+/); d += ' M ' + pts[0] + ' ' + pts[1]; for (let k = 2; k < pts.length; k += 2) d += ` L ${pts[k]} ${pts[k + 1]}`; if (ch.tag === 'polygon') d += ' Z'; }
+      walk(ch);
+    }
+  };
+  walk(node);
+  return d.trim().replace(/\s+/g, ' ');
+}
+// אלמנט ⇒ ביטוי-widget. עלה-טקסט ⇒ Text; מיכל ⇒ Container(+Row/Column). svg ⇒ CustomPaint (path אמיתי).
 function emit(node, map, depth = 0) {
   if (depth > 14) return 'const SizedBox.shrink()';
-  if (node.tag === 'svg') return '_icon(skin.mut)';             // אייקון ניטרלי (SVG לא מתורגם)
+  if (node.tag === 'svg') {
+    const d = svgToPathData(node);
+    if (!d) return '_icon(skin.mut)';                           // אין path ⇒ נפילה לאייקון
+    const vb = (node.attrs.viewbox || '0 0 24 24').split(/\s+/)[2] || '24';
+    const sw = node.attrs['stroke-width'] || '1.8';
+    const filled = /^(?!none)/.test(node.attrs.fill || 'none') && node.attrs.fill !== 'none' && node.attrs.fill !== undefined;
+    return `CustomPaint(size: const Size(16, 16), painter: _SvgPaint(${dq(d)}, skin.mut, ${sw}, ${filled ? 'true' : 'false'}, ${vb}))`;
+  }
   if (node.tag === 'input') {
     const ph = node.attrs.placeholder || node.attrs.value || 'Label';
     return `Text(${dq(ph)}, style: TextStyle(color: skin.faint, fontFamily: fonts.he, fontSize: 13))`;
@@ -195,6 +255,30 @@ function emit(node, map, depth = 0) {
 const snake = s => s.replace(/[^A-Za-z0-9]+/g, '_').replace(/([a-z0-9])([A-Z])/g, '$1_$2').replace(/^_+|_+$/g, '').toLowerCase();
 const pascal = s => s.replace(/[^A-Za-z0-9]+/g, ' ').trim().split(/\s+/).map(w => w[0].toUpperCase() + w.slice(1)).join('');
 
+// חוצב בלוקי <div class="…cls…"> מאוזנים, ללא-חפיפה (מדלג על הפנימיים)
+function divBlocks(html, cls) {
+  const out = [], re = new RegExp(`<div class="([^"]*\\b${cls}\\b[^"]*)"[^>]*>`, 'g'); let m;
+  while ((m = re.exec(html))) {
+    const start = m.index; let i = re.lastIndex, depth = 1;
+    const tre = /<(\/?)div\b[^>]*>/g; tre.lastIndex = i; let t;
+    while (depth > 0 && (t = tre.exec(html))) { depth += t[1] ? -1 : 1; i = tre.lastIndex; }
+    out.push(html.slice(start, i)); re.lastIndex = i;
+  }
+  return out;
+}
+// theater ⇒ [{label, html}] · כל .st = מצב (label מ-.slb, גוף = השאר)
+function theaterStates(body) {
+  const th = divBlocks(body, 'theater')[0]; if (!th) return null;
+  const sts = divBlocks(th, 'st'); if (sts.length < 2) return null;
+  return sts.map(st => {
+    const lb = st.match(/<span class="slb">([^<]+)<\/span>/);
+    const label = lb ? decode(lb[1]).trim() : 'state';
+    const inner = st.replace(/<div class="([^"]*\bst\b[^"]*)"[^>]*>/, '').replace(/<span class="slb">[^<]*<\/span>/, '').replace(/<\/div>\s*$/, '');
+    return { label, html: inner };
+  });
+}
+const enumId = (s, i) => { let id = s.replace(/[^A-Za-z0-9]+/g, ' ').trim().split(/\s+/).map((w, k) => k ? w[0].toUpperCase() + w.slice(1) : w.toLowerCase()).join(''); if (!id || /^\d/.test(id)) id = 's' + i + (id || ''); return id; };
+
 // חוצב בלוקי .cell ומחזיר {name, seam, bodyHtml}
 function cells(html) {
   const out = [];
@@ -226,8 +310,53 @@ const HEADER = (fam, seamUse) => `// 🔨 אטום-Dart מחושל (forge) · מ
 import 'package:flutter/material.dart';
 ${seamUse ? "import '../../dart-ui-bs/ds/ds_seam.dart';\n" : ''}`;
 const ICON = `
-// אייקון-פלייסהולדר ניטרלי (SVG המקורי אינו מתורגם — נשמר כתצורה, לא כפיקסל)
+// אייקון-פלייסהולדר ניטרלי (svg ללא path)
 Widget _icon(Color c) => Icon(Icons.circle_outlined, size: 15, color: c);
+`;
+// צייר-SVG אמיתי · פרסר path-data ב-runtime (M/L/H/V/C/Q/A/Z + יחסי) ⇒ Path מוקטן ל-viewBox
+const SVGHELPER = `
+class _SvgPaint extends CustomPainter {
+  final String d; final Color color; final double sw; final bool filled; final double vb;
+  const _SvgPaint(this.d, this.color, this.sw, this.filled, this.vb);
+  @override
+  void paint(Canvas canvas, Size size) {
+    Path raw;
+    try { raw = _parse(d); } catch (_) { return; }   // path פגום ⇒ ריקון-רך, לא זריקה
+    final m = Matrix4.identity()..scale(size.width / vb, size.height / vb);
+    final p = raw.transform(m.storage);
+    canvas.drawPath(p, Paint()
+      ..color = color
+      ..style = filled ? PaintingStyle.fill : PaintingStyle.stroke
+      ..strokeWidth = sw
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round);
+  }
+  @override
+  bool shouldRepaint(_SvgPaint o) => o.d != d || o.color != color || o.sw != sw || o.filled != filled;
+}
+Path _parse(String d) {
+  final path = Path();
+  final t = RegExp(r'[a-zA-Z]|-?\\d*\\.?\\d+(?:e-?\\d+)?').allMatches(d).map((x) => x.group(0)!).toList();
+  double cx = 0, cy = 0, sx = 0, sy = 0; String cmd = ''; int i = 0;
+  double n() => double.parse(t[i++]);
+  while (i < t.length) {
+    if (RegExp(r'[a-zA-Z]').hasMatch(t[i])) { cmd = t[i]; i++; }
+    if (i > t.length) break;
+    final rel = cmd == cmd.toLowerCase(); final C = cmd.toUpperCase();
+    switch (C) {
+      case 'M': { double x = n(), y = n(); if (rel) { x += cx; y += cy; } path.moveTo(x, y); cx = x; cy = y; sx = x; sy = y; cmd = rel ? 'l' : 'L'; break; }
+      case 'L': { double x = n(), y = n(); if (rel) { x += cx; y += cy; } path.lineTo(x, y); cx = x; cy = y; break; }
+      case 'H': { double x = n(); if (rel) x += cx; path.lineTo(x, cy); cx = x; break; }
+      case 'V': { double y = n(); if (rel) y += cy; path.lineTo(cx, y); cy = y; break; }
+      case 'C': { double x1 = n(), y1 = n(), x2 = n(), y2 = n(), x = n(), y = n(); if (rel) { x1 += cx; y1 += cy; x2 += cx; y2 += cy; x += cx; y += cy; } path.cubicTo(x1, y1, x2, y2, x, y); cx = x; cy = y; break; }
+      case 'Q': { double x1 = n(), y1 = n(), x = n(), y = n(); if (rel) { x1 += cx; y1 += cy; x += cx; y += cy; } path.quadraticBezierTo(x1, y1, x, y); cx = x; cy = y; break; }
+      case 'A': { double rx = n(), ry = n(), rot = n(), laf = n(), sf = n(), x = n(), y = n(); if (rel) { x += cx; y += cy; } path.arcToPoint(Offset(x, y), radius: Radius.elliptical(rx, ry), rotation: rot, largeArc: laf != 0, clockwise: sf != 0); cx = x; cy = y; break; }
+      case 'Z': path.close(); cx = sx; cy = sy; break;
+      default: if (i < t.length) i++;
+    }
+  }
+  return path;
+}
 `;
 
 function forgeFamily(fam) {
@@ -242,21 +371,37 @@ function forgeFamily(fam) {
     const cls = 'Forge' + pascal(c.name);
     if (seen.has(cls)) continue; seen.add(cls);
     const file = snake(c.name) + '.dart';
-    const dom = parseDOM(c.body);
-    let bodyExpr;
-    try { bodyExpr = emit(dom, map); } catch { bodyExpr = 'const SizedBox.shrink()'; }
+    // מצבים (theater) ⇒ enum + switch; אחרת ⇒ אטום-יחיד
+    const states = theaterStates(c.body);
+    let bodyExpr, enumBlock = '', stateField = '', ctorState = '';
+    if (states) {
+      const ids = []; const seenId = new Set();
+      const arms = states.map((s, i) => {
+        let id = enumId(s.label, i); while (seenId.has(id)) id += i; seenId.add(id); ids.push(id);
+        let e; try { e = emit(parseDOM(s.html), map); } catch { e = 'const SizedBox.shrink()'; }
+        return { id, e };
+      });
+      enumBlock = `enum ${cls}State { ${ids.join(', ')} }\n\n`;
+      stateField = `  final ${cls}State state;\n`;
+      ctorState = `this.state = ${cls}State.${ids[0]}`;
+      bodyExpr = `switch (state) {\n${arms.map(a => `      ${cls}State.${a.id} => ${a.e},`).join('\n')}\n    }`;
+    } else {
+      const dom = parseDOM(c.body);
+      try { bodyExpr = emit(dom, map); } catch { bodyExpr = 'const SizedBox.shrink()'; }
+    }
     // הכרז רק על מה שבשימוש (למניעת unused_local_variable / unused_element)
     const useSkin = /\bskin\./.test(bodyExpr), useTheme = /\btheme\./.test(bodyExpr);
     const useFonts = /\bfonts\./.test(bodyExpr), useIcon = /_icon\(/.test(bodyExpr);
+    const useSvg = /_SvgPaint\(/.test(bodyExpr);
     const decls = [
       useSkin && '    final skin = DsSeam.skinOf(context);   // מלוא-העיצוב מהחריץ',
       useTheme && '    final theme = DsSeam.of(context);       // אקצנט (מורף)',
       useFonts && '    final fonts = DsSeam.fontsOf(context);  // פונט',
     ].filter(Boolean).join('\n');
-    const src = HEADER(fam, useSkin || useTheme || useFonts || useIcon) + (useIcon ? ICON : '') + `
-/// ${c.name} — seam:${c.seam}
-class ${cls} extends StatelessWidget {
-  const ${cls}({super.key});
+    const src = HEADER(fam, useSkin || useTheme || useFonts || useIcon || useSvg) + (useIcon ? ICON : '') + (useSvg ? SVGHELPER : '') + `
+/// ${c.name} — seam:${c.seam}${states ? ' · מצבים חיים' : ''}
+${enumBlock}class ${cls} extends StatelessWidget {
+${stateField}  const ${cls}({super.key${ctorState ? ', ' + ctorState : ''}});
   @override
   Widget build(BuildContext context) {
 ${decls}${decls ? '\n' : ''}    return ${bodyExpr};
