@@ -52,6 +52,12 @@ class DsPure {
   static const accent = Color(0xFF7A6BF0);
   static const accentDark = Color(0xFF4B3ECB);
 
+  // ── טיפוגרפיה · Pure (PURE-SPEC): כותרת-עברית · גוף · utility · לטינית. מקור-יחיד. ──
+  static const String fontHead = 'FrankRuhlLibre'; // כותרות עברית (סריף)
+  static const String fontBody = 'Heebo';          // גוף
+  static const String fontUtil = 'Space Grotesk';  // מספרים / utility
+  static const String fontLatin = 'Fraunces';      // כותרת לטינית
+
   static const String defaultTheme = 't-indigo';
   static const Map<String, DsPureTheme> themes = {'t-indigo': indigo, 't-teal': teal, 't-amber': amber};
 

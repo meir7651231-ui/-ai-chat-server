@@ -26,6 +26,7 @@ class PureMarker extends StatelessWidget {
           '$count',
           textDirection: TextDirection.ltr,
           style: const TextStyle(
+            fontFamily: DsPure.fontUtil,
             color: DsPure.sunken,
             fontWeight: FontWeight.w700,
             fontSize: 13,

@@ -52,7 +52,7 @@ class PureTableRow extends StatelessWidget {
         children: [
           Expanded(
             flex: 3,
-            child: Text(label, style: const TextStyle(color: DsPure.ink, fontSize: 13)),
+            child: Text(label, style: const TextStyle(color: DsPure.ink, fontSize: 13, fontFamily: DsPure.fontHead)),
           ),
           Expanded(
             flex: 2,
@@ -61,6 +61,7 @@ class PureTableRow extends StatelessWidget {
               textDirection: TextDirection.ltr,
               textAlign: TextAlign.left,
               style: const TextStyle(
+                fontFamily: DsPure.fontUtil,
                 color: DsPure.ink,
                 fontSize: 13,
                 fontWeight: FontWeight.w600,

@@ -50,6 +50,7 @@ class PureDateCell extends StatelessWidget {
             '$day',
             textDirection: TextDirection.ltr,
             style: TextStyle(
+              fontFamily: DsPure.fontUtil,
               color: textColor,
               fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
               fontFeatures: const [FontFeature.tabularFigures()],
