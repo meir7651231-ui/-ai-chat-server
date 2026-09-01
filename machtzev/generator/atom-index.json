@@ -8503,6 +8503,266 @@
   "cb": 0
  },
  {
+  "cls": "ForgedChat",
+  "file": "dart-ui-bs/forged/forged_chat.dart",
+  "origin": null,
+  "purpose": [
+   "חושל",
+   "ממקור",
+   "האמת"
+  ],
+  "purposeFrom": "own-he",
+  "purityHe": 0,
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "str": 0,
+  "num": 0,
+  "list": 0,
+  "cb": 0
+ },
+ {
+  "cls": "ForgedComposite",
+  "file": "dart-ui-bs/forged/forged_composite.dart",
+  "origin": null,
+  "purpose": [
+   "חושל",
+   "ממקור",
+   "האמת"
+  ],
+  "purposeFrom": "own-he",
+  "purityHe": 0,
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "str": 0,
+  "num": 0,
+  "list": 0,
+  "cb": 0
+ },
+ {
+  "cls": "ForgedFeedback",
+  "file": "dart-ui-bs/forged/forged_feedback.dart",
+  "origin": null,
+  "purpose": [
+   "חושל",
+   "ממקור",
+   "האמת"
+  ],
+  "purposeFrom": "own-he",
+  "purityHe": 0,
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "str": 0,
+  "num": 0,
+  "list": 0,
+  "cb": 0
+ },
+ {
+  "cls": "ForgedHeader",
+  "file": "dart-ui-bs/forged/forged_header.dart",
+  "origin": null,
+  "purpose": [
+   "חושל",
+   "ממקור",
+   "האמת"
+  ],
+  "purposeFrom": "own-he",
+  "purityHe": 0,
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "str": 0,
+  "num": 0,
+  "list": 0,
+  "cb": 0
+ },
+ {
+  "cls": "ForgedInput",
+  "file": "dart-ui-bs/forged/forged_input.dart",
+  "origin": null,
+  "purpose": [
+   "חושל",
+   "ממקור",
+   "האמת"
+  ],
+  "purposeFrom": "own-he",
+  "purityHe": 0,
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "str": 0,
+  "num": 0,
+  "list": 0,
+  "cb": 0
+ },
+ {
+  "cls": "ForgedList",
+  "file": "dart-ui-bs/forged/forged_list.dart",
+  "origin": null,
+  "purpose": [
+   "חושל",
+   "ממקור",
+   "האמת"
+  ],
+  "purposeFrom": "own-he",
+  "purityHe": 0,
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "str": 0,
+  "num": 0,
+  "list": 0,
+  "cb": 0
+ },
+ {
+  "cls": "ForgedMotion",
+  "file": "dart-ui-bs/forged/forged_motion.dart",
+  "origin": null,
+  "purpose": [
+   "חושל",
+   "ממקור",
+   "האמת"
+  ],
+  "purposeFrom": "own-he",
+  "purityHe": 0,
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "str": 0,
+  "num": 0,
+  "list": 0,
+  "cb": 0
+ },
+ {
+  "cls": "ForgedNav",
+  "file": "dart-ui-bs/forged/forged_nav.dart",
+  "origin": null,
+  "purpose": [
+   "חושל",
+   "ממקור",
+   "האמת"
+  ],
+  "purposeFrom": "own-he",
+  "purityHe": 0,
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "str": 0,
+  "num": 0,
+  "list": 0,
+  "cb": 0
+ },
+ {
+  "cls": "ForgedSelection",
+  "file": "dart-ui-bs/forged/forged_selection.dart",
+  "origin": null,
+  "purpose": [
+   "חושל",
+   "ממקור",
+   "האמת"
+  ],
+  "purposeFrom": "own-he",
+  "purityHe": 0,
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "str": 0,
+  "num": 0,
+  "list": 0,
+  "cb": 0
+ },
+ {
+  "cls": "ForgedSpatial",
+  "file": "dart-ui-bs/forged/forged_spatial.dart",
+  "origin": null,
+  "purpose": [
+   "חושל",
+   "ממקור",
+   "האמת"
+  ],
+  "purposeFrom": "own-he",
+  "purityHe": 0,
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "str": 0,
+  "num": 0,
+  "list": 0,
+  "cb": 0
+ },
+ {
+  "cls": "ForgedStatus",
+  "file": "dart-ui-bs/forged/forged_status.dart",
+  "origin": null,
+  "purpose": [
+   "חושל",
+   "ממקור",
+   "האמת"
+  ],
+  "purposeFrom": "own-he",
+  "purityHe": 0,
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "str": 0,
+  "num": 0,
+  "list": 0,
+  "cb": 0
+ },
+ {
+  "cls": "ForgedTemporal",
+  "file": "dart-ui-bs/forged/forged_temporal.dart",
+  "origin": null,
+  "purpose": [
+   "חושל",
+   "ממקור",
+   "האמת"
+  ],
+  "purposeFrom": "own-he",
+  "purityHe": 0,
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "str": 0,
+  "num": 0,
+  "list": 0,
+  "cb": 0
+ },
+ {
+  "cls": "ForgedText",
+  "file": "dart-ui-bs/forged/forged_text.dart",
+  "origin": null,
+  "purpose": [
+   "חושל",
+   "ממקור",
+   "האמת"
+  ],
+  "purposeFrom": "own-he",
+  "purityHe": 27,
+  "seam": "zero",
+  "caps": [
+   "chrome"
+  ],
+  "str": 0,
+  "num": 0,
+  "list": 0,
+  "cb": 0
+ },
+ {
   "cls": "FormCard",
   "file": "dart-ui-bs/auto/form_card.dart",
   "origin": "screens__courier_forms_screen",
