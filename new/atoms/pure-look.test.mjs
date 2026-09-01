@@ -3,7 +3,8 @@ import { PURE_LOOK } from './pure-look.mjs';
 import assert from 'node:assert';
 
 // מבנה
-assert.deepStrictEqual(Object.keys(PURE_LOOK), ['defaultTheme', 'neutral', 'semantic', 'themes'], 'מפתחות-על');
+assert.deepStrictEqual(Object.keys(PURE_LOOK), ['defaultTheme', 'neutral', 'semantic', 'themes', 'fonts'], 'מפתחות-על');
+assert.deepStrictEqual(Object.keys(PURE_LOOK.fonts), ['serif', 'serifHe', 'grotesk', 'he'], 'ארבע משפחות-פונט');
 assert.deepStrictEqual(Object.keys(PURE_LOOK.themes), ['t-indigo', 't-teal', 't-amber'], 'שלוש ערכות');
 assert.ok(PURE_LOOK.themes[PURE_LOOK.defaultTheme], 'defaultTheme קיים בערכות');
 
@@ -41,6 +42,7 @@ const SNAP = {
     't-teal': { '--a-hi': '#6FE6D5', '--a': '#1FB8A6', '--a-800': '#0C7E72', '--gl': 'rgba(31, 184, 166, 0.42)', '--c2': '#4FB6E6', '--c3': '#43D08C' },
     't-amber': { '--a-hi': '#F2C87E', '--a': '#D99A3C', '--a-800': '#9E6B1E', '--gl': 'rgba(217, 154, 60, 0.42)', '--c2': '#E8863C', '--c3': '#E67BA6' },
   },
+  fonts: { serif: 'Fraunces', serifHe: 'Frank Ruhl Libre', grotesk: 'Space Grotesk', he: 'Heebo' },
 };
 assert.deepStrictEqual(PURE_LOOK, SNAP, 'צילום-ערך-מלא');
 

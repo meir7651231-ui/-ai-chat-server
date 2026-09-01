@@ -31,6 +31,11 @@ const themeIds = Object.keys(PURE_LOOK.themes);
 const themeConsts = themeIds.map(id => `  static const ${camel(id.replace('t-', ''))} = ${themeEntry(PURE_LOOK.themes[id])};`).join('\n');
 const themeMap = themeIds.map(id => `'${id}': ${camel(id.replace('t-', ''))}`).join(', ');
 const def = PURE_LOOK.themes[PURE_LOOK.defaultTheme]; // קיצורי-אקצנט לברירת-המחדל (טוקנים דורמנטיים)
+// ── פונט = פרמטר הפיך (לא קבוע): חבילת-פונט שזורמת דרך החריץ; ברירת-מחדל = פונטי-Pure ──
+const fontKeys = Object.keys(PURE_LOOK.fonts);
+const fontFields = fontKeys.map(k => `  final String ${k};`).join('\n');
+const fontCtor = fontKeys.map(k => `    this.${k}`).join(',\n');
+const fontDefault = fontKeys.map(k => `${k}: ${JSON.stringify(PURE_LOOK.fonts[k])}`).join(', ');
 
 const out = `// ✨ מאגר-העיצוב · שפת-Pure (Layer B · הטמעה) — **מחולל ע"י machtzev/ds-pure.mjs מ-new/atoms/pure-look.mjs.**
 // אל תערוך ידנית: שנה את הזרע (pure-look) והרץ את המנוע. נייטרל+סמנטי **קבועים**; אקצנט **מורף**
@@ -56,6 +61,16 @@ class DsPureTheme {
   });
 }
 
+/// חבילת-פונט — **פרמטר הפיך, לא קבוע**: ברירת-המחדל היא פונטי-Pure, אך ניתנת להזרקה דרך
+/// PureScope (חוק-6: הזהות בחיווט; חוק-7: היעדר-הזרקה ⇒ ברירת-המחדל ⇒ פלט ביט-זהה). material בלבד.
+@immutable
+class DsPureFonts {
+${fontFields}
+  const DsPureFonts({
+${fontCtor},
+  });
+}
+
 /// שפת-Pure כטוקני-Dart. נייטרל+סמנטי קבועים; ${themeIds.length} ערכות-אקצנט; themeOf() = resolver.
 class DsPure {
   // ── נייטרל · סולם-רקע/דיו/קו — לא מורף בהחלפת-ערכה ──
@@ -71,6 +86,9 @@ ${themeConsts}
   static const accentHi = ${color(def['--a-hi'])};
   static const accent = ${color(def['--a'])};
   static const accentDark = ${color(def['--a-800'])};
+
+  // ── חבילת-פונט · ברירת-מחדל (פרמטר הפיך — ניתנת להחלפה דרך PureScope, אינה מורפת פר-ערכה) ──
+  static const DsPureFonts fonts = DsPureFonts(${fontDefault});
 
   static const String defaultTheme = '${PURE_LOOK.defaultTheme}';
   static const Map<String, DsPureTheme> themes = {${themeMap}};

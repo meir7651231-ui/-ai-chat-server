@@ -1,5 +1,5 @@
 /** אטום-דאטה · pure-look — שפת-Pure כתכנית role→pigment (שכבה A · הכרעה 19: מראה=דאטה).
- *  מבנה: neutral (סולם, לא-מורף) · semantic (err/warn/gold — קבוע) · themes (סט-אקצנט מורף פר-ערכה).
+ *  מבנה: neutral (סולם, לא-מורף) · semantic (err/warn/gold — קבוע) · themes (סט-אקצנט מורף פר-ערכה) · fonts (משפחות קבועות — לא מורף).
  *  ערכים ליטרליים בלבד, אפס var(), אפס-import (חוק-1). הזהות מוזרקת בקופסה, לא באטום (חוק-5/6).
  *  מקור: machtzev/pure/action-family.html:11-15 (טוקני-Pure מאומתים-בעין). חוזה: pure-look.contract.md */
 export const PURE_LOOK = {
@@ -47,5 +47,11 @@ export const PURE_LOOK = {
    "--c2": "#E8863C",
    "--c3": "#E67BA6"
   }
+ },
+ "fonts": {
+  "serif": "Fraunces",
+  "serifHe": "Frank Ruhl Libre",
+  "grotesk": "Space Grotesk",
+  "he": "Heebo"
  }
 };

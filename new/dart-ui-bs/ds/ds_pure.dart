@@ -22,6 +22,22 @@ class DsPureTheme {
   });
 }
 
+/// חבילת-פונט — **פרמטר הפיך, לא קבוע**: ברירת-המחדל היא פונטי-Pure, אך ניתנת להזרקה דרך
+/// PureScope (חוק-6: הזהות בחיווט; חוק-7: היעדר-הזרקה ⇒ ברירת-המחדל ⇒ פלט ביט-זהה). material בלבד.
+@immutable
+class DsPureFonts {
+  final String serif;
+  final String serifHe;
+  final String grotesk;
+  final String he;
+  const DsPureFonts({
+    this.serif,
+    this.serifHe,
+    this.grotesk,
+    this.he,
+  });
+}
+
 /// שפת-Pure כטוקני-Dart. נייטרל+סמנטי קבועים; 3 ערכות-אקצנט; themeOf() = resolver.
 class DsPure {
   // ── נייטרל · סולם-רקע/דיו/קו — לא מורף בהחלפת-ערכה ──
@@ -52,11 +68,8 @@ class DsPure {
   static const accent = Color(0xFF7A6BF0);
   static const accentDark = Color(0xFF4B3ECB);
 
-  // ── טיפוגרפיה · Pure (PURE-SPEC): כותרת-עברית · גוף · utility · לטינית. מקור-יחיד. ──
-  static const String fontHead = 'FrankRuhlLibre'; // כותרות עברית (סריף)
-  static const String fontBody = 'Heebo';          // גוף
-  static const String fontUtil = 'Space Grotesk';  // מספרים / utility
-  static const String fontLatin = 'Fraunces';      // כותרת לטינית
+  // ── חבילת-פונט · ברירת-מחדל (פרמטר הפיך — ניתנת להחלפה דרך PureScope, אינה מורפת פר-ערכה) ──
+  static const DsPureFonts fonts = DsPureFonts(serif: "Fraunces", serifHe: "Frank Ruhl Libre", grotesk: "Space Grotesk", he: "Heebo");
 
   static const String defaultTheme = 't-indigo';
   static const Map<String, DsPureTheme> themes = {'t-indigo': indigo, 't-teal': teal, 't-amber': amber};

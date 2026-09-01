@@ -22,6 +22,7 @@ class PureDateCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = DsSeam.of(context); // ערכת-האקצנט הפעילה — הזרקת-חיווט
+    final fonts = DsSeam.fontsOf(context); // חבילת-הפונט הפעילה — פרמטר הפיך
     final selected = state == PureDateState.selected;
     final today = state == PureDateState.today;
     final disabled = state == PureDateState.disabled;
@@ -50,8 +51,8 @@ class PureDateCell extends StatelessWidget {
             '$day',
             textDirection: TextDirection.ltr,
             style: TextStyle(
-              fontFamily: DsPure.fontUtil,
               color: textColor,
+              fontFamily: fonts.grotesk,
               fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
               fontFeatures: const [FontFeature.tabularFigures()],
             ),
