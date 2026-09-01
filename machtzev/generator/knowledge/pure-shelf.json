@@ -60,6 +60,11 @@
       "canonical": 26,
       "inherit": 31
     },
+    "spatial": {
+      "count": 6,
+      "canonical": 6,
+      "inherit": 0
+    },
     "status": {
       "count": 54,
       "canonical": 27,
@@ -76,6 +81,6 @@
       "inherit": 4
     }
   },
-  "total": 545,
+  "total": 551,
   "generatedBy": "machtzev/pure/pure-decompose.mjs"
 }
