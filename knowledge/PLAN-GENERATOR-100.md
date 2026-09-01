@@ -49,6 +49,10 @@
 - **חיבור הפיך:** `auto/bs_pure_tokens.dart` (`BsPure`) + דגל `genesis-gen.mjs --pure` ⇒ מלביש את כל הרבנייה ב-Pure; **בלי הדגל = ביט-זהה להיום** (חוק-7).
 - **מחווט למנוע-האחד** (`one.mjs`): שער-שפת-עיצוב + פירוק-תצוגה + מנוע-עיצוב-6.
 - **אימות:** `#104` ds_pure · `#106` ds_seam+pure_surface · `#109` BsPure+DsPure.accent — כולם ✅ ירוקים.
+- **✅ השלמת-החיווט (1.9, CI #117):** `one.mjs` auto-discovery — Temporal+Spatial+Motion זורמים דרך
+  pure-lint/decompose/ds-pure **ללא רשימה-קשיחה** · `DsPure.ok` נוסף (סגירת פער spec §1, חולל-מהזרע) ·
+  **אטומי-רפרנס Dart** `PureDateCell`·`PureMarker`·`PureTableRow` שמרכיבים **DsPure+DsSeam הרינטיים**
+  (ה-seam כבר לא דורמנטי) · police 13/13 · לבנים 496/496 · `dart analyze` ✅.
 - **גבול-כנות:** אין פה אפליקציה חיה — הכל במחצב, בדרך למחולל. הלקוח-החי לא זז.
 
 ## 2 · המדד היחיד
