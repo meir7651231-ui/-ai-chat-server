@@ -1,0 +1,251 @@
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+  PURE — Feedback / Overlay Family. Archetype 08 (משוב · על). representative atoms from atlas.json.
+  Pure · content = Label/Meta only · states live · semantic (ok/warn/err) FIXED · info morphs with theme.
+  canonical + inherit for the Empty*/Badge* clusters (§4 no-wall).
+-->
+<title>Pure — Feedback Family</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Frank+Ruhl+Libre:wght@700&family=Space+Grotesk:wght@400;500;600;700&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--canvas:#0C0C0E;--sunken:#0A0A0C;--surface:#151517;--raised:#1B1B1E;--raised2:#212126;--ink:#ECE9E2;--mut:#9B968C;--faint:#6E6A62;--hair:rgba(236,233,226,.09);--hair2:rgba(236,233,226,.05);
+    --err:#E0574E;--warn:#E6B84F;--ok:#43D08C;
+    --serif:"Fraunces",Georgia,serif;--serifHe:"Frank Ruhl Libre",serif;--grotesk:"Space Grotesk",ui-monospace,monospace;--he:"Heebo","Segoe UI",sans-serif;--ease:cubic-bezier(.2,.7,.15,1);--spring:cubic-bezier(.34,1.4,.5,1)}
+  .t-indigo{--a-hi:#B0A4FF;--a:#7A6BF0;--a-800:#4B3ECB;--gl:rgba(122,107,240,.42);--c2:#4CC6E6;--c3:#B57BE6}
+  .t-teal{--a-hi:#6FE6D5;--a:#1FB8A6;--a-800:#0C7E72;--gl:rgba(31,184,166,.42);--c2:#4FB6E6;--c3:#43D08C}
+  .t-amber{--a-hi:#F2C87E;--a:#D99A3C;--a-800:#9E6B1E;--gl:rgba(217,154,60,.42);--c2:#E8863C;--c3:#E67BA6}
+  *{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}
+  body{background:var(--canvas);color:var(--ink);direction:rtl;font-family:var(--he);-webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden;transition:background-color .6s var(--ease);background-image:radial-gradient(120% 36% at 84% -6%,var(--gl),transparent 60%)}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.038;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 40px;position:relative;z-index:1}::selection{background:var(--a);color:#0A0A0C}
+  .bar{position:sticky;top:0;z-index:60;background:linear-gradient(180deg,rgba(12,12,14,.94),rgba(12,12,14,.62));backdrop-filter:blur(14px);border-bottom:1px solid var(--hair)}
+  .bar .in{max-width:1200px;margin:0 auto;padding:12px 40px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .bar .mk{font-family:var(--serif);font-size:20px;font-weight:600;letter-spacing:-.02em;direction:ltr}.bar .mk i{color:var(--a);transition:color .55s var(--ease)}.bar .mk small{font-family:var(--grotesk);font-size:10px;color:var(--faint);letter-spacing:2px;margin-inline-start:10px;text-transform:uppercase}
+  .seg{display:flex;padding:3px;background:var(--sunken);border:1px solid var(--hair);border-radius:999px;position:relative}
+  .seg button{position:relative;z-index:2;border:0;background:none;cursor:pointer;padding:8px 17px;border-radius:999px;font-family:var(--grotesk);font-size:12px;font-weight:600;color:var(--mut);transition:color .35s;display:flex;align-items:center;gap:7px;min-height:44px}.seg button .d{width:9px;height:9px;border-radius:50%}.seg button[aria-pressed="true"]{color:var(--ink)}.seg button:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+  .seg .ind{position:absolute;z-index:1;top:3px;bottom:3px;left:0;border-radius:999px;background:var(--raised);box-shadow:0 2px 8px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06);transition:transform .45s var(--ease),width .45s var(--ease)}
+  .intro{padding:40px 0 6px}.intro .kick{display:flex;align-items:center;gap:14px;margin-bottom:16px}.intro .kick .tick{width:34px;height:1px;background:var(--a);transition:background-color .55s var(--ease)}
+  .eyebrow{font-family:var(--grotesk);font-size:11px;font-weight:600;letter-spacing:3px;color:var(--faint);text-transform:uppercase;direction:ltr}
+  .intro h1{font-family:var(--serifHe);font-weight:700;font-size:clamp(28px,5vw,44px);letter-spacing:-.01em}.intro .he{font-family:var(--grotesk);font-size:12.5px;color:var(--mut);margin-top:10px;direction:ltr}
+  .band{padding:22px 0;border-top:1px solid var(--hair)}
+  .bhd{display:flex;align-items:baseline;gap:12px;margin-bottom:16px;flex-wrap:wrap}.bhd h2{font-family:var(--serifHe);font-weight:700;font-size:19px}.bhd .en{font-family:var(--grotesk);font-size:10px;color:var(--faint);letter-spacing:1.5px;text-transform:uppercase;direction:ltr} .bhd .ct{font-family:var(--grotesk);font-size:10px;color:var(--mut);direction:ltr;margin-inline-start:auto}
+  .fam{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+  .fam.sm{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+  .cell{border:1px solid var(--hair);border-radius:12px;background:linear-gradient(180deg,var(--surface),var(--sunken));padding:16px;display:flex;flex-direction:column;gap:12px;min-height:120px;justify-content:center}
+  .cell.full{grid-column:1/-1}
+  .cell .nm{font-family:var(--grotesk);font-size:10px;font-weight:600;color:var(--ink);direction:ltr;line-height:1.3}
+  .foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:2px}
+  .seam{font-family:var(--grotesk);font-size:7.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:1px 5px;border-radius:999px;direction:ltr;border:1px solid var(--hair);color:var(--mut);flex:none}
+  .inh{width:100%;display:flex;align-items:center;gap:14px;flex-wrap:wrap}.inh .lead{font-family:var(--grotesk);font-size:9px;color:var(--faint);direction:ltr;text-transform:uppercase;letter-spacing:1px;flex:none}
+  .inh .chips{display:flex;flex-wrap:wrap;gap:6px;flex:1}.inh .chip{font-family:var(--grotesk);font-size:10px;color:var(--mut);direction:ltr;padding:4px 9px;border:1px solid var(--hair);border-radius:999px;background:var(--sunken)}
+  .theater{display:flex;flex-direction:column;gap:10px}
+  svg.i{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+  /* --- toast --- */
+  .toast{display:flex;align-items:center;gap:12px;background:var(--raised2);border:1px solid var(--hair);border-radius:13px;padding:13px 15px;box-shadow:0 14px 40px rgba(0,0,0,.5);animation:slideUp .5s var(--spring)}
+  @keyframes slideUp{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
+  .toast .tx{flex:1}.toast .tl{font-weight:600;font-size:13px}.toast .tm{font-size:11px;color:var(--mut)}
+  .toast .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none;color:#0B0B0D;background:linear-gradient(180deg,var(--a-hi),var(--a))}
+  .toast .act{font-family:var(--he);font-size:12px;font-weight:700;color:var(--a-hi);background:none;border:0;cursor:pointer;padding:6px 8px}
+  /* --- banner (semantic theater) --- */
+  .banner{display:flex;align-items:flex-start;gap:11px;border-radius:12px;padding:12px 14px;border:1px solid;font-size:12.5px}
+  .banner .ic{flex:none}.banner b{font-weight:700}.banner .bm{color:var(--mut);display:block;font-size:11px;margin-top:1px}
+  .banner.info{background:color-mix(in srgb,var(--a) 12%,transparent);border-color:color-mix(in srgb,var(--a) 34%,transparent);color:var(--a-hi)}
+  .banner.ok{background:color-mix(in srgb,var(--ok) 12%,transparent);border-color:color-mix(in srgb,var(--ok) 34%,transparent);color:var(--ok)}
+  .banner.warn{background:color-mix(in srgb,var(--warn) 12%,transparent);border-color:color-mix(in srgb,var(--warn) 34%,transparent);color:var(--warn)}
+  .banner.err{background:color-mix(in srgb,var(--err) 14%,transparent);border-color:color-mix(in srgb,var(--err) 38%,transparent);color:var(--err)}
+  .banner .bt b{color:var(--ink)}
+  /* --- dialog --- */
+  .dlg{border:1px solid var(--hair);border-radius:16px;background:linear-gradient(180deg,var(--raised),var(--surface));padding:18px;box-shadow:0 30px 80px rgba(0,0,0,.6);display:flex;flex-direction:column;gap:12px}
+  .dlg .dt{font-family:var(--serifHe);font-weight:700;font-size:16px}.dlg .dm{font-size:12.5px;color:var(--mut)}
+  .dlg .row{display:flex;gap:9px;justify-content:flex-start;margin-top:2px}
+  .mb{height:44px;padding:0 15px;border-radius:10px;font-family:var(--he);font-size:12.5px;font-weight:700;cursor:pointer;border:0}
+  .mb.p{color:#0B0B0D;background:linear-gradient(180deg,var(--a-hi),var(--a));box-shadow:0 6px 16px var(--gl)}
+  .mb.g{background:var(--raised2);color:var(--ink);border:1px solid var(--hair)}
+  .mb.d{color:#fff;background:linear-gradient(180deg,#E8756C,var(--err))}
+  /* --- sheet --- */
+  .sheet{border:1px solid var(--hair);border-top-left-radius:18px;border-top-right-radius:18px;background:linear-gradient(180deg,var(--raised),var(--surface));padding:8px 16px 16px;display:flex;flex-direction:column;gap:12px;box-shadow:0 -14px 50px rgba(0,0,0,.5)}
+  .sheet .handle{width:38px;height:4px;border-radius:999px;background:var(--faint);align-self:center;margin:2px 0 6px}
+  .sheet .sh{display:flex;align-items:center;justify-content:space-between}.sheet .sh b{font-family:var(--serifHe);font-weight:700;font-size:15px}
+  .sheet .x{width:40px;height:40px;border-radius:8px;border:1px solid var(--hair);background:var(--sunken);color:var(--mut);cursor:pointer;display:grid;place-items:center}
+  .sheet .sec{border-top:1px solid var(--hair);padding-top:10px;font-size:12px;color:var(--mut)}
+  /* --- tooltip --- */
+  .tip{position:relative;display:inline-block;background:var(--ink);color:var(--canvas);font-size:12px;font-weight:600;padding:8px 11px;border-radius:9px;box-shadow:0 8px 22px rgba(0,0,0,.5)}
+  .tip::after{content:"";position:absolute;bottom:-5px;inset-inline-start:18px;width:10px;height:10px;background:var(--ink);transform:rotate(45deg)}
+  /* --- empty --- */
+  .empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:18px 10px}
+  .empty .il{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;color:var(--a-hi);background:radial-gradient(120% 120% at 30% 20%,var(--gl),transparent 60%),var(--sunken);border:1px solid var(--hair)}
+  .empty .il svg{width:26px;height:26px}
+  .empty .et{font-family:var(--serifHe);font-weight:700;font-size:15px}.empty .em{font-size:12px;color:var(--mut);max-width:34ch}
+  .empty .ec{margin-top:4px;height:44px;padding:0 16px;border-radius:10px;color:#0B0B0D;font-weight:700;font-size:12.5px;border:0;cursor:pointer;background:linear-gradient(180deg,var(--a-hi),var(--a));box-shadow:0 6px 16px var(--gl)}
+  .empty.anim .il{animation:float 3s var(--ease) infinite}@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  /* --- skeleton --- */
+  .sk{display:flex;flex-direction:column;gap:10px}
+  .skline{height:12px;border-radius:7px;background:linear-gradient(90deg,var(--raised) 25%,var(--raised2) 37%,var(--raised) 63%);background-size:400% 100%;animation:sh 1.4s ease infinite}
+  .skcard{display:flex;gap:12px;align-items:center}.skav{width:44px;height:44px;border-radius:12px;background:linear-gradient(90deg,var(--raised) 25%,var(--raised2) 37%,var(--raised) 63%);background-size:400% 100%;animation:sh 1.4s ease infinite;flex:none}
+  @keyframes sh{0%{background-position:100% 0}100%{background-position:-100% 0}}
+  /* --- progress --- */
+  .pg{display:flex;flex-direction:column;gap:9px;align-items:center}
+  .bar2{width:100%;height:8px;border-radius:999px;background:var(--raised2);overflow:hidden}.bar2 .f{height:100%;width:62%;border-radius:999px;background:linear-gradient(90deg,var(--a-hi),var(--a));box-shadow:0 0 12px var(--gl)}
+  .ring{width:56px;height:56px;transform:rotate(-90deg)}.ring circle{fill:none;stroke-width:6}.ring .bg{stroke:var(--raised2)}.ring .fg{stroke:var(--a);stroke-linecap:round;stroke-dasharray:151;stroke-dashoffset:52;filter:drop-shadow(0 0 4px var(--gl))}
+  .story{width:56px;height:56px;border-radius:50%;padding:3px;background:conic-gradient(var(--c2),var(--a),var(--c3),var(--a-hi),var(--c2))}.story i{display:block;width:100%;height:100%;border-radius:50%;background:var(--sunken);border:2px solid var(--canvas)}
+  .dots{display:flex;gap:7px}.dots i{width:10px;height:10px;border-radius:50%;background:var(--a);animation:bounce 1.2s ease infinite}.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}@keyframes bounce{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(-7px);opacity:1}}
+  .spin{width:34px;height:34px;border-radius:50%;border:3px solid var(--raised2);border-top-color:var(--a);animation:rot .8s linear infinite}@keyframes rot{to{transform:rotate(360deg)}}
+  .plabel{font-family:var(--grotesk);font-size:11px;color:var(--mut);font-feature-settings:"tnum"}
+  /* --- badge --- */
+  .bwrap{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+  .bic{position:relative;width:40px;height:40px;border-radius:11px;border:1px solid var(--hair);background:var(--raised);color:var(--mut);display:grid;place-items:center}
+  .dotb{position:absolute;top:-3px;inset-inline-start:-3px;width:12px;height:12px;border-radius:50%;background:var(--err);border:2px solid var(--surface)}
+  .cntb{position:absolute;top:-6px;inset-inline-start:-6px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:var(--err);color:#fff;font-family:var(--grotesk);font-size:9px;font-weight:700;display:grid;place-items:center;border:2px solid var(--surface)}
+  .pillb{font-family:var(--grotesk);font-size:10px;font-weight:700;letter-spacing:.5px;padding:3px 8px;border-radius:999px;direction:ltr}
+  .pillb.draft{color:var(--warn);background:color-mix(in srgb,var(--warn) 14%,transparent);border:1px solid color-mix(in srgb,var(--warn) 34%,transparent)}
+  .pillb.wip{color:var(--a-hi);background:color-mix(in srgb,var(--a) 14%,transparent);border:1px solid color-mix(in srgb,var(--a) 32%,transparent)}
+  .pillb.ok{color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent);border:1px solid color-mix(in srgb,var(--ok) 34%,transparent)}
+  /* --- contained overlay stage (dialog scrim · toast dock · bottom sheet) --- */
+  .stage{position:relative;height:236px;border-radius:14px;overflow:hidden;background:var(--sunken);border:1px solid var(--hair)}
+  .stage .bgc{position:absolute;inset:0;display:flex;flex-direction:column;gap:9px;padding:16px;opacity:.4}
+  .stage .bgc .l{height:11px;border-radius:6px;background:var(--raised2)}.stage .bgc .l.t{height:16px;width:50%;background:var(--raised)}
+  .scrim{position:absolute;inset:0;background:rgba(6,6,8,.58);backdrop-filter:blur(1.5px);display:grid;place-items:center;padding:16px}
+  .scrim .dlg{width:100%;max-width:290px;box-shadow:0 30px 80px rgba(0,0,0,.7)}
+  .dock{position:absolute;inset-inline:12px;bottom:12px}
+  .sheetdock{position:absolute;inset-inline:0;bottom:0}.sheetdock .sheet{box-shadow:0 -18px 50px rgba(0,0,0,.6)}
+  .ovl{font-family:var(--grotesk);font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--faint);direction:ltr;position:absolute;top:8px;inset-inline-start:10px;z-index:2}
+  footer{padding:30px 0 70px;border-top:1px solid var(--hair);margin-top:6px}.colo{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--grotesk);font-size:11px;color:var(--faint);direction:ltr}.colo b{color:var(--ink)}
+  @media(max-width:820px){.wrap{padding:0 18px}.bar .in{padding:11px 18px}.bar .mk small{display:none}}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+  .toast .act:focus-visible,.mb:focus-visible,.sheet .x:focus-visible,.empty .ec:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+</style>
+
+<div class="bar"><div class="in">
+  <div class="mk">Pure<i>.</i><small>Feedback Family</small></div>
+  <div class="seg" id="seg" role="group" aria-label="Theme"><span class="ind" id="ind"></span>
+    <button data-t="t-indigo" aria-pressed="true"><span class="d" style="background:#7A6BF0"></span>Indigo</button>
+    <button data-t="t-teal" aria-pressed="false"><span class="d" style="background:#1FB8A6"></span>Teal</button>
+    <button data-t="t-amber" aria-pressed="false"><span class="d" style="background:#D99A3C"></span>Amber</button>
+  </div>
+</div></div>
+
+<div class="wrap">
+  <header class="intro">
+    <div class="kick"><span class="tick"></span><span class="eyebrow">Archetype 08 · Feedback / Overlay</span></div>
+    <h1>משפחת המשוב</h1>
+    <p class="he">toast · banner · dialog · sheet · tooltip · empty · skeleton · progress · badge · content = Label/Meta · semantic (ok/warn/err) FIXED · info morphs</p>
+  </header>
+
+  <!-- TOAST -->
+  <section class="band">
+    <div class="bhd"><h2>Toast · Snackbar</h2><span class="en">transient · slide-in · live</span><span class="ct">2</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="stage"><span class="ovl">docked · over content</span><div class="bgc"><div class="l t"></div><div class="l"></div><div class="l" style="width:80%"></div><div class="l" style="width:90%"></div></div><div class="dock"><div class="toast"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></span><div class="tx"><div class="tl">Label</div><div class="tm">Meta</div></div></div></div></div><div class="foot"><span class="nm">SnackToast · docked (bottom, over content)</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="toast"><span class="ic" style="background:var(--raised2);color:var(--a-hi)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg></span><div class="tx"><div class="tl">Label</div></div><button class="act">Action</button></div><div class="foot"><span class="nm">SnackToast · with action</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- BANNER -->
+  <section class="band">
+    <div class="bhd"><h2>Alert · Banner</h2><span class="en">semantic theater — info morphs · ok/warn/err fixed</span><span class="ct">6</span></div>
+    <div class="fam">
+      <div class="cell full">
+        <div class="theater">
+          <div class="banner info"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg><div class="bt"><b>Label</b><span class="bm">info · morphs with theme</span></div></div>
+          <div class="banner ok"><svg class="i" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg><div class="bt"><b>Label</b><span class="bm">success · fixed green</span></div></div>
+          <div class="banner warn"><svg class="i" viewBox="0 0 24 24"><path d="M12 3l9 16H3zM12 10v4M12 17h.01"/></svg><div class="bt"><b>Label</b><span class="bm">warning · fixed amber</span></div></div>
+          <div class="banner err"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg><div class="bt"><b>Label</b><span class="bm">error · fixed red</span></div></div>
+        </div>
+        <div class="foot"><span class="nm">AlertBanner · info / success / warning / error</span><span class="seam">fields</span></div>
+      </div>
+      <div class="cell full">
+        <div class="inh"><div class="banner info" style="min-width:180px"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/></svg><b>Label</b></div><span class="lead">inherit AlertBanner →</span>
+          <div class="chips"><span class="chip">TintedBanner</span><span class="chip">CoinBanner</span><span class="chip">QuickReplyBanner</span><span class="chip">RecommendedKitBanner</span><span class="chip">PersonaPickingSheetBanner</span></div></div>
+        <div class="foot"><span class="nm">5 atoms · same banner type · differ only by data/icon</span><span class="seam">fields</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIALOG -->
+  <section class="band">
+    <div class="bhd"><h2>Dialog · Modal</h2><span class="en">centered · confirm / consent / destructive</span><span class="ct">4</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="stage"><span class="ovl">modal · over scrim</span><div class="bgc"><div class="l t"></div><div class="l"></div><div class="l" style="width:85%"></div><div class="l" style="width:70%"></div></div><div class="scrim"><div class="dlg"><div class="dt">Label</div><div class="dm">Meta</div><div class="row"><button class="mb p">Action</button><button class="mb g">Action</button></div></div></div></div><div class="foot"><span class="nm">ModalDialog · centered over contained scrim</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="dlg"><div class="dt">Label</div><div class="dm">Meta</div><div class="row"><button class="mb d">Action</button><button class="mb g">Action</button></div></div><div class="foot"><span class="nm">ConfirmDialog · destructive</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="dlg"><div class="dt">Label</div><div class="dm">Meta · consent</div><label style="display:flex;gap:8px;align-items:center;font-size:12px;color:var(--mut)"><span style="width:16px;height:16px;border-radius:5px;border:1.5px solid var(--a);background:color-mix(in srgb,var(--a) 20%,transparent);display:grid;place-items:center"><svg class="i" viewBox="0 0 24 24" style="width:11px;height:11px;stroke:var(--a-hi)"><path d="M5 13l4 4L19 7"/></svg></span>Label</label><div class="row"><button class="mb p">Action</button></div></div><div class="foot"><span class="nm">ConsentDialog</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="dlg"><div class="dt">Label</div><div class="dm" style="font-family:var(--grotesk);font-size:11px;background:var(--sunken);border:1px solid var(--hair);border-radius:8px;padding:8px;direction:ltr">Meta · rule</div><div class="row"><button class="mb g">Action</button></div></div><div class="foot"><span class="nm">RuleInspectDialog</span><span class="seam coll" style="border-color:rgba(76,198,230,.35);color:#4CC6E6">collection</span></div></div>
+    </div>
+  </section>
+
+  <!-- SHEET -->
+  <section class="band">
+    <div class="bhd"><h2>Bottom Sheet</h2><span class="en">handle · header · close · section</span><span class="ct">6</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="stage" style="height:210px"><span class="ovl">rises from bottom</span><div class="bgc"><div class="l t"></div><div class="l"></div><div class="l" style="width:75%"></div></div><div class="sheetdock"><div class="sheet"><span class="handle"></span><div class="sh"><b>Label</b><button class="x"><svg class="i" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="sec">Meta</div></div></div></div>
+        <div class="foot"><span class="nm">SlideSheet · handle · header · close · section (top radius only)</span><span class="seam">fields</span></div></div>
+      <div class="cell full"><div class="inh"><span class="handle" style="align-self:center"></span><span class="lead">inherit SlideSheet →</span><div class="chips"><span class="chip">SheetScaffold</span><span class="chip">StoreSheetScaffold</span><span class="chip">SnoozeSheet</span><span class="chip">SichaSheet</span><span class="chip">SheetTile</span><span class="chip">SheetStatTile</span></div></div>
+        <div class="foot"><span class="nm">6 atoms · same sheet frame · differ by content</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- TOOLTIP -->
+  <section class="band">
+    <div class="bhd"><h2>Tooltip · Hint</h2><span class="en">pointer bubble · inline hint</span><span class="ct">3</span></div>
+    <div class="fam sm">
+      <div class="cell" style="align-items:center;justify-content:center;padding-top:26px"><div class="tip">Label</div><div class="foot" style="width:100%"><span class="nm">TooltipBubble</span><span class="seam">fields</span></div></div>
+      <div class="cell" style="align-items:center;justify-content:center"><span style="display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--mut)"><svg class="i" viewBox="0 0 24 24" style="width:15px;height:15px;stroke:var(--a-hi)"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 12h1v4h1"/></svg>Label · hint</span><div class="foot" style="width:100%"><span class="nm">EmptyHint</span><span class="seam">fields</span></div></div>
+      <div class="cell" style="align-items:center;justify-content:center"><span style="display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--mut)"><svg class="i" viewBox="0 0 24 24" style="width:15px;height:15px;stroke:var(--a-hi)"><path d="M15 3h6v6M10 14L21 3M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/></svg>Label</span><div class="foot" style="width:100%"><span class="nm">ZoomHint</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- EMPTY -->
+  <section class="band">
+    <div class="bhd"><h2>Empty State</h2><span class="en">illustration + Label + CTA · canonical + animated + inherit</span><span class="ct">13</span></div>
+    <div class="fam">
+      <div class="cell"><div class="empty"><span class="il"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M8 15h5"/></svg></span><div class="et">Label</div><div class="em">Meta</div><button class="ec">Action</button></div><div class="foot"><span class="nm">EmptyState · canonical</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="empty anim"><span class="il"><svg class="i" viewBox="0 0 24 24"><path d="M12 3l2.5 6H21l-5 4 2 7-6-4-6 4 2-7-5-4h6.5z"/></svg></span><div class="et">Label</div><div class="em">Meta</div></div><div class="foot"><span class="nm">AnimatedEmpty · floating</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="empty"><span class="il"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg></span><div class="et">Label</div><div class="em">Meta · no results</div></div><div class="foot"><span class="nm">SearchEmptyState</span><span class="seam">fields</span></div></div>
+      <div class="cell full"><div class="inh"><span class="il" style="width:34px;height:34px"><svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px"><rect x="3" y="5" width="18" height="14" rx="2"/></svg></span><span class="lead">inherit EmptyState →</span><div class="chips"><span class="chip">DsEmpty</span><span class="chip">Empty</span><span class="chip">CaEmpty</span><span class="chip">EmptyProducts</span><span class="chip">EmptyConnectors</span><span class="chip">EmptyAccessories</span><span class="chip">EmptySection</span><span class="chip">JourneyEmpty</span><span class="chip">StoreEmptyState</span><span class="chip">RoleRequestsInboxEmpty</span></div></div>
+        <div class="foot"><span class="nm">10 atoms · same empty pattern · differ by glyph/copy</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- SKELETON -->
+  <section class="band">
+    <div class="bhd"><h2>Skeleton · Shimmer</h2><span class="en">loading placeholder · live shimmer</span><span class="ct">2</span></div>
+    <div class="fam">
+      <div class="cell"><div class="sk"><div class="skline" style="width:70%"></div><div class="skline" style="width:100%"></div><div class="skline" style="width:45%"></div></div><div class="foot"><span class="nm">ShimmerSkeleton</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="skcard"><span class="skav"></span><div class="sk" style="flex:1"><div class="skline" style="width:60%"></div><div class="skline" style="width:90%"></div></div></div><div class="foot"><span class="nm">SkeletonCard</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- PROGRESS -->
+  <section class="band">
+    <div class="bhd"><h2>Progress · Loader</h2><span class="en">all live · determinate + indeterminate</span><span class="ct">5</span></div>
+    <div class="fam sm">
+      <div class="cell"><div class="pg"><div class="bar2"><span class="f"></span></div><span class="plabel">62%</span></div><div class="foot"><span class="nm">LinearProgress</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="pg"><svg class="ring" viewBox="0 0 56 56"><circle class="bg" cx="28" cy="28" r="24"/><circle class="fg" cx="28" cy="28" r="24"/></svg><span class="plabel">65%</span></div><div class="foot"><span class="nm">ProgressRing</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="pg"><span class="spin"></span></div><div class="foot"><span class="nm">OrbitSpinner</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="pg"><div class="dots"><i></i><i></i><i></i></div></div><div class="foot"><span class="nm">DotsLoader · MaterialDots</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="pg"><span class="story"><i></i></span></div><div class="foot"><span class="nm">StoryRing</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- BADGE -->
+  <section class="band">
+    <div class="bhd"><h2>Badge · Status pill</h2><span class="en">dot · count · state pill</span><span class="ct">8</span></div>
+    <div class="fam">
+      <div class="cell"><div class="bwrap"><span class="bic"><svg class="i" viewBox="0 0 24 24"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/></svg><span class="dotb"></span></span><span class="bic"><svg class="i" viewBox="0 0 24 24"><path d="M4 4h16v12H5l-1 4z"/></svg><span class="cntb">3</span></span></div><div class="foot"><span class="nm">NotifyBadge · CountBadge · BadgedIcon</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="bwrap"><span class="pillb draft">DRAFT</span><span class="pillb wip">WIP</span><span class="pillb ok">LIVE</span></div><div class="foot"><span class="nm">DraftBadge · UnderConstructionBadge · StatusChip</span><span class="seam">fields</span></div></div>
+      <div class="cell full"><div class="inh"><span class="cntb" style="position:static;border-color:var(--surface)">9</span><span class="lead">inherit CountBadge →</span><div class="chips"><span class="chip">CatalogCountBadge</span><span class="chip">ManagerDashboardCountBadge</span><span class="chip">NotifyBadge</span><span class="chip">ZoomHintBadge</span></div></div>
+        <div class="foot"><span class="nm">4 atoms · same count badge · differ by source</span><span class="seam coll" style="border-color:rgba(76,198,230,.35);color:#4CC6E6">collection</span></div></div>
+    </div>
+  </section>
+
+  <footer><div class="colo"><div>PURE — <b>Feedback Family</b></div><div>~50 atoms · semantic ok/warn/err FIXED · info morphs · theme = parameter</div><div>content = Label / Meta · states live</div></div></footer>
+</div>
+
+<script>
+  var root=document.documentElement;root.className='t-indigo';
+  var seg=document.getElementById('seg'),ind=document.getElementById('ind'),btns=[].slice.call(seg.querySelectorAll('button'));
+  function place(el,indEl,box){var sr=box.getBoundingClientRect(),br=el.getBoundingClientRect();indEl.style.width=br.width+'px';indEl.style.transform='translateX('+(br.left-sr.left-3)+'px)';}
+  btns.forEach(function(b){b.addEventListener('click',function(){root.className=b.dataset.t;btns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});place(b,ind,seg);});});
+  place(btns[0],ind,seg);if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){place(seg.querySelector('[aria-pressed="true"]'),ind,seg);});}
+  window.addEventListener('resize',function(){place(seg.querySelector('[aria-pressed="true"]'),ind,seg);});
+</script>

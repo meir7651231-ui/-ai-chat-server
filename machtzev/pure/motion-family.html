@@ -1,0 +1,192 @@
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- PURE — Motion Appendix. A motion layer over the existing 13 archetypes (NOT a 14th). accent morphs · semantic fixed · reduced-motion freezes every cell. -->
+<title>Motion Appendix</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Frank+Ruhl+Libre:wght@700&family=Space+Grotesk:wght@400;500;600;700&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--canvas:#0C0C0E;--sunken:#0A0A0C;--surface:#151517;--raised:#1B1B1E;--raised2:#212126;--ink:#ECE9E2;--mut:#9B968C;--faint:#6E6A62;--hair:rgba(236,233,226,.09);--hair2:rgba(236,233,226,.05);--ok:#43D08C;--warn:#E6B84F;--err:#E0574E;--gold:#E6C766;
+    --serif:"Fraunces",Georgia,serif;--serifHe:"Frank Ruhl Libre",serif;--grotesk:"Space Grotesk",ui-monospace,monospace;--he:"Heebo","Segoe UI",sans-serif;--ease:cubic-bezier(.2,.7,.15,1);--spring:cubic-bezier(.34,1.4,.5,1)}
+  .t-indigo{--a-hi:#B0A4FF;--a:#7A6BF0;--a-800:#4B3ECB;--gl:rgba(122,107,240,.42);--c2:#4CC6E6;--c3:#B57BE6}
+  .t-teal{--a-hi:#6FE6D5;--a:#1FB8A6;--a-800:#0C7E72;--gl:rgba(31,184,166,.42);--c2:#4FB6E6;--c3:#43D08C}
+  .t-amber{--a-hi:#F2C87E;--a:#D99A3C;--a-800:#9E6B1E;--gl:rgba(217,154,60,.42);--c2:#E8863C;--c3:#E67BA6}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--canvas);color:var(--ink);direction:rtl;font-family:var(--he);-webkit-font-smoothing:antialiased;line-height:1.5;transition:background-color .6s var(--ease);background-image:radial-gradient(130% 42% at 84% -8%,var(--gl),transparent 60%)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 clamp(16px,3vw,40px)}
+  .bar{position:sticky;top:0;z-index:60;background:linear-gradient(180deg,rgba(12,12,14,.94),rgba(12,12,14,.6));backdrop-filter:blur(14px);border-bottom:1px solid var(--hair)}
+  .bar .in{max-width:1180px;margin:0 auto;padding:12px clamp(16px,3vw,40px);display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .mk{font-family:var(--serif);font-size:20px;font-weight:600;letter-spacing:-.02em;direction:ltr}.mk i{color:var(--a);transition:color .55s var(--ease)}.mk small{font-family:var(--grotesk);font-size:10px;color:var(--faint);letter-spacing:2px;margin-inline-start:10px;text-transform:uppercase}
+  .seg{display:flex;padding:3px;background:var(--sunken);border:1px solid var(--hair);border-radius:999px;position:relative}
+  .seg button{position:relative;z-index:2;border:0;background:none;cursor:pointer;padding:8px 17px;border-radius:999px;font-family:var(--grotesk);font-size:12px;font-weight:600;color:var(--mut);transition:color .35s;display:flex;align-items:center;gap:7px;min-height:44px}.seg button .d{width:9px;height:9px;border-radius:50%}.seg button[aria-pressed="true"]{color:var(--ink)}.seg button:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+  .seg .ind{position:absolute;z-index:1;top:3px;bottom:3px;left:0;border-radius:999px;background:var(--raised);box-shadow:0 2px 8px rgba(0,0,0,.4);transition:transform .45s var(--ease),width .45s var(--ease)}
+
+  header.hero{padding:52px 0 22px}
+  .eyebrow{font-family:var(--grotesk);font-size:11px;font-weight:600;letter-spacing:3px;color:var(--faint);text-transform:uppercase;direction:ltr;display:flex;align-items:center;gap:12px}.eyebrow .tick{width:34px;height:1px;background:var(--a);transition:background-color .55s var(--ease)}
+  header.hero h1{font-family:var(--serifHe);font-weight:700;font-size:clamp(34px,6.4vw,60px);letter-spacing:-.02em;margin:14px 0 8px}
+  header.hero .sub{font-family:var(--grotesk);font-size:13px;color:var(--mut);direction:ltr;max-width:62ch}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:16px;padding:14px 0 24px}
+  .cell{border:1px solid var(--hair);border-radius:16px;background:linear-gradient(180deg,var(--surface),var(--sunken));overflow:hidden;position:relative;display:flex;flex-direction:column}
+  .stage{position:relative;height:150px;overflow:hidden;background:var(--sunken)}
+  .stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .foot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 13px;border-top:1px solid var(--hair2)}
+  .nm{font-family:var(--grotesk);font-size:11.5px;font-weight:600;color:var(--ink);direction:ltr}
+  .seam{font-family:var(--grotesk);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);border:1px solid var(--hair);border-radius:5px;padding:2px 6px}
+  .live{position:absolute;top:10px;inset-inline-start:10px;z-index:3;display:flex;align-items:center;gap:6px;font-family:var(--grotesk);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
+  .live i{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 9px var(--ok);animation:beat 2.4s ease-in-out infinite}
+  .val{font-family:var(--grotesk);font-variant-numeric:tabular-nums;font-weight:700;color:var(--a-hi);transition:color .55s var(--ease)}
+
+  /* pure-CSS motion cells */
+  .aurora{position:absolute;inset:-30%;background:conic-gradient(from 0deg,var(--c2),var(--a),var(--c3),var(--a-hi),var(--c2));filter:blur(34px);opacity:.55;animation:spin 14s linear infinite}
+  .sweep{position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.14) 46%,var(--gl) 50%,transparent 66%);background-size:280% 100%;animation:sweep 3.2s var(--ease) infinite}
+  .pulse{position:absolute;inset:0;display:grid;place-items:center}
+  .pulse b{width:56px;height:56px;border-radius:50%;background:radial-gradient(circle,var(--a-hi),var(--a) 60%,transparent 72%);box-shadow:0 0 40px var(--gl);animation:breathe 2.8s var(--ease) infinite}
+  .tw{position:absolute;inset:0;display:flex;align-items:center;padding:0 16px;font-family:var(--grotesk);font-size:15px;color:var(--a-hi);transition:color .55s var(--ease)}
+  .tw::after{content:"";width:2px;height:18px;background:var(--a-hi);margin-inline-start:3px;animation:blink 1s steps(1) infinite}
+  .tilt{position:absolute;inset:0;display:grid;place-items:center;perspective:600px}
+  .tilt b{width:120px;height:78px;border-radius:12px;background:linear-gradient(140deg,var(--raised2),var(--surface));border:1px solid var(--hair);box-shadow:0 20px 40px -18px #000, inset 0 1px 0 rgba(255,255,255,.06);transition:transform .12s var(--ease);will-change:transform}
+  .tilt b::before{content:"";position:absolute;inset:0;border-radius:12px;background:radial-gradient(120px 80px at var(--gx,50%) var(--gy,20%),var(--gl),transparent 60%);opacity:.9}
+  .burst{position:absolute;inset:0;cursor:pointer;display:grid;place-items:center}
+  .burst .hint{font-family:var(--grotesk);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);border:1px dashed var(--hair);border-radius:999px;padding:9px 15px;min-height:44px;display:flex;align-items:center}
+  .burst:focus-visible{outline:2px solid var(--a-hi);outline-offset:-4px;border-radius:16px}
+
+  footer{padding:24px 0 64px;border-top:1px solid var(--hair);font-family:var(--grotesk);font-size:11px;color:var(--faint);direction:ltr;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}footer b{color:var(--ink)}
+  .inherit{display:flex;flex-wrap:wrap;gap:7px;padding:2px 0 8px}
+  .lead{font-family:var(--grotesk);font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.14em;direction:ltr;padding:14px 0 8px;display:flex;align-items:center;gap:10px}.lead::before{content:"";flex:none;width:16px;height:1px;background:var(--a)}
+  .chip{font-family:var(--grotesk);font-size:11px;color:var(--mut);border:1px solid var(--hair);border-radius:999px;padding:7px 12px;background:var(--sunken);min-height:34px;display:inline-flex;align-items:center;gap:6px}
+  .chip i{width:6px;height:6px;border-radius:50%;background:var(--a);transition:background-color .55s var(--ease)}
+
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes sweep{0%{background-position:180% 0}100%{background-position:-120% 0}}
+  @keyframes breathe{0%,100%{transform:scale(.82);opacity:.75}50%{transform:scale(1.12);opacity:1}}
+  @keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+  @keyframes beat{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.7);opacity:.5}}
+  @media(max-width:820px){.bar .mk small{display:none}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.tw::after{opacity:1}}
+</style>
+
+<div class="bar"><div class="in">
+  <div class="mk">Pure<i>.</i><small>Motion Appendix</small></div>
+  <div class="seg" id="seg" role="group" aria-label="Theme"><span class="ind" id="ind"></span>
+    <button data-t="t-indigo" aria-pressed="true"><span class="d" style="background:#7A6BF0"></span>Indigo</button>
+    <button data-t="t-teal" aria-pressed="false"><span class="d" style="background:#1FB8A6"></span>Teal</button>
+    <button data-t="t-amber" aria-pressed="false"><span class="d" style="background:#D99A3C"></span>Amber</button>
+  </div>
+</div></div>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow"><span class="tick"></span>Motion Appendix · a layer over the 13</div>
+    <h1>נספח התנועה</h1>
+    <p class="sub">Not a 14th archetype — a motion layer the existing families borrow. Ambient fields and micro-motion, each a different role. The accent morphs with the theme; the live-status dot stays semantic green. Reduced-motion freezes every cell to a still frame.</p>
+  </header>
+
+  <div class="lead">8 motions · accent-morph · reduced-motion freezes · one role each</div>
+  <div class="grid" id="grid">
+    <div class="cell"><div class="stage"><span class="live"><i></i>Aurora</span><div class="aurora"></div></div>
+      <div class="foot"><span class="nm">AuroraField</span><span class="seam">fields</span></div></div>
+
+    <div class="cell"><div class="stage"><span class="live"><i></i>Particles</span><canvas data-fx="particles"></canvas></div>
+      <div class="foot"><span class="nm">ParticleField</span><span class="seam">fields</span></div></div>
+
+    <div class="cell"><div class="stage"><span class="live"><i></i>Organism</span><canvas data-fx="organism"></canvas></div>
+      <div class="foot"><span class="nm">GenerativeCanvas</span><span class="seam">fields</span></div></div>
+
+    <div class="cell"><div class="stage"><div class="pulse"><b></b></div></div>
+      <div class="foot"><span class="nm">GlowPulse · breathing</span><span class="seam">fields</span></div></div>
+
+    <div class="cell"><div class="stage"><div class="sweep"></div></div>
+      <div class="foot"><span class="nm">GradientSweep · shimmer</span><span class="seam">fields</span></div></div>
+
+    <div class="cell"><div class="stage"><div class="tilt" id="tiltStage"><b id="tiltCard"></b></div></div>
+      <div class="foot"><span class="nm">ParallaxTilt · hover</span><span class="seam">fields</span></div></div>
+
+    <div class="cell"><div class="stage"><div class="tw" id="twText">Label</div></div>
+      <div class="foot"><span class="nm">TypeWriter</span><span class="seam">self</span></div></div>
+
+    <div class="cell"><div class="stage"><div class="burst" id="burst" role="button" tabindex="0" aria-label="Trigger confetti burst"><span class="hint">Action · burst</span></div><canvas data-fx="confetti"></canvas></div>
+      <div class="foot"><span class="nm">ConfettiBurst · trigger</span><span class="seam">self</span></div></div>
+  </div>
+
+  <div class="lead">inherit — motion signatures borrowed by existing atoms</div>
+  <div class="inherit" id="chips"></div>
+
+  <footer><div>PURE — <b>Motion Appendix</b> · a layer over the 13 · not an archetype</div><div>accent morphs · live dot fixed · reduced-motion freezes</div></footer>
+</div>
+
+<script>
+  // borrowed motion signatures — each already used by an existing atom (Skeleton→Shimmer, Stat→Count-up, Button→Ripple, Card→Float)
+  var INH=["Ripple","Shimmer","Count-up","Float"];
+  document.getElementById('chips').innerHTML=INH.map(function(n){return '<span class="chip"><i></i>'+n+'</span>';}).join('');
+
+  var root=document.documentElement;root.className='t-indigo';
+  var seg=document.getElementById('seg'),ind=document.getElementById('ind'),btns=[].slice.call(seg.querySelectorAll('button'));
+  function place(el){var sr=seg.getBoundingClientRect(),br=el.getBoundingClientRect();ind.style.width=br.width+'px';ind.style.transform='translateX('+(br.left-sr.left-3)+'px)';}
+  btns.forEach(function(b){b.addEventListener('click',function(){root.className=b.dataset.t;btns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});place(b);});});
+  place(btns[0]);if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){place(seg.querySelector('[aria-pressed="true"]'));});}
+  window.addEventListener('resize',function(){place(seg.querySelector('[aria-pressed="true"]'));});
+
+  var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  function accent(){var s=getComputedStyle(root);return {a:s.getPropertyValue('--a').trim(),hi:s.getPropertyValue('--a-hi').trim(),c2:s.getPropertyValue('--c2').trim(),c3:s.getPropertyValue('--c3').trim()};}
+
+  // ---- canvas fx registry --------------------------------------------------
+  var cells=[].slice.call(document.querySelectorAll('canvas[data-fx]'));
+  cells.forEach(function(cv){
+    var ctx=cv.getContext('2d'),DPR=Math.min(2,devicePixelRatio||1),W=0,H=0,fx=cv.dataset.fx,st={};
+    function rs(){var r=cv.getBoundingClientRect();W=r.width;H=r.height;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);init();}
+    function init(){
+      if(fx==='particles'){st.p=[];for(var i=0;i<24;i++)st.p.push({x:Math.random(),y:Math.random(),z:Math.random(),v:.1+Math.random()*.4});}
+      if(fx==='organism'){st.o=[];for(var j=0;j<5;j++)st.o.push({x:.18+Math.random()*.64,y:.22+Math.random()*.56,r:4+Math.random()*7,ph:Math.random()*6.3,br:.6+Math.random()});}
+      if(fx==='confetti'){st.c=[];}
+    }
+    function draw(t){
+      var A=accent();ctx.clearRect(0,0,W,H);
+      if(fx==='particles'){
+        ctx.globalCompositeOperation='lighter';
+        for(var i=0;i<st.p.length;i++){var p=st.p[i];p.y-=p.v*p.z*.004;if(p.y<-.05)p.y=1.05;
+          var x=(p.x+Math.sin(t*.0004+i)*.03)*W,y=((p.y%1)+1)%1*H;
+          ctx.fillStyle=A.a;ctx.globalAlpha=.15+p.z*.45;ctx.beginPath();ctx.arc(x,y,.7+p.z*2,0,6.283);ctx.fill();}
+        ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
+      } else if(fx==='organism'){
+        // up to 5 breathing bodies, contrast on canvas — no connecting mesh (no spaghetti)
+        ctx.globalCompositeOperation='lighter';
+        for(var k=0;k<st.o.length;k++){var o=st.o[k],br=1+Math.sin(t*.0018*o.br+o.ph)*.22,r=o.r*br;
+          var g=ctx.createRadialGradient(o.x*W,o.y*H,0,o.x*W,o.y*H,r*3.4);g.addColorStop(0,A.a);g.addColorStop(1,'rgba(0,0,0,0)');
+          ctx.globalAlpha=.55;ctx.fillStyle=g;ctx.beginPath();ctx.arc(o.x*W,o.y*H,r*3.4,0,6.283);ctx.fill();
+          ctx.globalAlpha=1;ctx.fillStyle=A.hi;ctx.beginPath();ctx.arc(o.x*W,o.y*H,r*.5,0,6.283);ctx.fill();}
+        ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
+      } else if(fx==='confetti'){
+        ctx.globalCompositeOperation='lighter';
+        for(var c=st.c.length-1;c>=0;c--){var q=st.c[c];q.vy+=.02;q.x+=q.vx;q.y+=q.vy;q.life-=.012;q.rot+=q.vr;
+          if(q.life<=0){st.c.splice(c,1);continue;}
+          ctx.save();ctx.translate(q.x,q.y);ctx.rotate(q.rot);ctx.globalAlpha=Math.max(0,q.life);ctx.fillStyle=q.col;ctx.fillRect(-2.5,-2.5,5,5);ctx.restore();}
+        ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
+      }
+    }
+    st.burst=function(){var A=accent(),pal=[A.a,A.hi,A.c2,A.c3];for(var i=0;i<60;i++)st.c.push({x:W/2,y:H/2,vx:(Math.random()-.5)*6,vy:(Math.random()-.9)*6,rot:Math.random()*6.3,vr:(Math.random()-.5)*.3,life:1,col:pal[i%4]});};
+    cv._st=st;
+    addEventListener('resize',rs);rs();
+    if(reduce){draw(600);/* single frame */}
+    else (function loop(now){draw(now);requestAnimationFrame(loop);})(0);
+  });
+
+  // confetti trigger
+  var burstCanvas=document.querySelector('canvas[data-fx="confetti"]'),burstBtn=document.getElementById('burst');
+  function fire(){if(burstCanvas&&burstCanvas._st.burst)burstCanvas._st.burst();}
+  burstBtn.addEventListener('click',fire);
+  burstBtn.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();fire();}});
+  // reduced-motion: no auto-burst — one still frame, wait for the trigger
+
+  // typewriter · Label → Value → Meta
+  var tw=document.getElementById('twText'),words=["Label","Value","Meta"],wi=0,ci=0,del=false;
+  function type(){var w=words[wi];tw.textContent=w.slice(0,ci);
+    if(!del&&ci<w.length){ci++;}else if(!del&&ci===w.length){del=true;setTimeout(type,900);return;}
+    else if(del&&ci>0){ci--;}else{del=false;wi=(wi+1)%words.length;}
+    setTimeout(type,del?55:110);}
+  if(reduce){tw.textContent="Label";}else type();
+
+  // parallax tilt
+  var ts=document.getElementById('tiltStage'),tc=document.getElementById('tiltCard');
+  if(!reduce&&ts){ts.addEventListener('pointermove',function(e){var r=ts.getBoundingClientRect(),px=(e.clientX-r.left)/r.width-.5,py=(e.clientY-r.top)/r.height-.5;
+    tc.style.transform='rotateY('+(px*22)+'deg) rotateX('+(-py*22)+'deg)';tc.style.setProperty('--gx',(50+px*60)+'%');tc.style.setProperty('--gy',(30+py*60)+'%');});
+    ts.addEventListener('pointerleave',function(){tc.style.transform='';});}
+</script>

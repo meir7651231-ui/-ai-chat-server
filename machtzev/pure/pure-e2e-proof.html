@@ -1,0 +1,22 @@
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>pure e2e</title><style>
+body{margin:0;background:#0C0C0E;color:#ECE9E2;direction:rtl;
+  font-family:"Space Grotesk",system-ui,sans-serif;padding:30px}
+h1{font-size:16px;margin:0 0 4px}.s{font-size:11px;color:#6E6A62;margin:0 0 24px;direction:ltr}
+.row{display:flex;gap:20px;flex-wrap:wrap}
+.cell{background:#151517;border:1px solid rgba(236, 233, 226, 0.09);border-radius:16px;padding:22px;min-width:240px;display:flex;flex-direction:column;gap:14px}
+.th{font-family:ui-monospace,monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#6E6A62;direction:ltr}
+button{height:46px;border:0;font-weight:700;font-size:13px;cursor:pointer}
+.cap{font-family:ui-monospace,monospace;font-size:10px;color:#9B968C;direction:ltr;line-height:1.5}
+</style>
+<h1>pure — אטום אחד, קצה-לקצה</h1>
+<p class="s">same button builder · same source (pure-look.mjs) · pigments resolved by pure-resolve.mjs · only the layers (the choice) differ · atom files untouched</p>
+<div class="row"><div class="cell"><div class="th">בחירה A</div>
+    <button style="color:#0B0B0D;border-radius:11px;
+      background:linear-gradient(180deg,#B0A4FF,#7A6BF0 55%,#4B3ECB);
+      box-shadow:0 1px 2px rgba(0,0,0,.4),0 7px 18px rgba(122, 107, 240, 0.42),inset 0 1px 0 rgba(255,255,255,.4)">Action</button>
+    <div class="cap">theme=t-indigo · אפס override</div></div><div class="cell"><div class="th">בחירה B</div>
+    <button style="color:#3A2C05;border-radius:22px;
+      background:linear-gradient(180deg,#FBEFC0,#E6C766 55%,#B98F2E);
+      box-shadow:0 1px 2px rgba(0,0,0,.4),0 7px 18px rgba(200,150,40,0.45),inset 0 1px 0 rgba(255,255,255,.4)">Action</button>
+    <div class="cap">theme=t-indigo · instance override: מראה-זהב + radius 22</div></div></div>

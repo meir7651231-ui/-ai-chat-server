@@ -1,0 +1,245 @@
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+  PURE — Media / Identity Family. Archetype 12. representative atoms from atlas.json.
+  Pure · content = Label/Meta + initial "L" · NO real photos — identity via accent gradient + initial + inline SVG placeholders.
+  online-dot = --ok green FIXED · busy = --warn · offline = --faint. accent (gradient/ring/selected border) morphs. canonical+inherit for Avatar* cluster.
+-->
+<title>Pure — Media Family</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Frank+Ruhl+Libre:wght@700&family=Space+Grotesk:wght@400;500;600;700&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--canvas:#0C0C0E;--sunken:#0A0A0C;--surface:#151517;--raised:#1B1B1E;--raised2:#212126;--ink:#ECE9E2;--mut:#9B968C;--faint:#6E6A62;--hair:rgba(236,233,226,.09);--hair2:rgba(236,233,226,.05);
+    --err:#E0574E;--warn:#E6B84F;--ok:#43D08C;
+    --serif:"Fraunces",Georgia,serif;--serifHe:"Frank Ruhl Libre",serif;--grotesk:"Space Grotesk",ui-monospace,monospace;--he:"Heebo","Segoe UI",sans-serif;--ease:cubic-bezier(.2,.7,.15,1);--spring:cubic-bezier(.34,1.4,.5,1)}
+  .t-indigo{--a-hi:#B0A4FF;--a:#7A6BF0;--a-800:#4B3ECB;--gl:rgba(122,107,240,.42);--c2:#4CC6E6;--c3:#B57BE6}
+  .t-teal{--a-hi:#6FE6D5;--a:#1FB8A6;--a-800:#0C7E72;--gl:rgba(31,184,166,.42);--c2:#4FB6E6;--c3:#43D08C}
+  .t-amber{--a-hi:#F2C87E;--a:#D99A3C;--a-800:#9E6B1E;--gl:rgba(217,154,60,.42);--c2:#E8863C;--c3:#E67BA6}
+  *{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}
+  body{background:var(--canvas);color:var(--ink);direction:rtl;font-family:var(--he);-webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden;transition:background-color .6s var(--ease);background-image:radial-gradient(120% 36% at 84% -6%,var(--gl),transparent 60%)}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.038;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 40px;position:relative;z-index:1}::selection{background:var(--a);color:#0A0A0C}
+  .bar{position:sticky;top:0;z-index:60;background:linear-gradient(180deg,rgba(12,12,14,.94),rgba(12,12,14,.62));backdrop-filter:blur(14px);border-bottom:1px solid var(--hair)}
+  .bar .in{max-width:1200px;margin:0 auto;padding:12px 40px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .bar .mk{font-family:var(--serif);font-size:20px;font-weight:600;letter-spacing:-.02em;direction:ltr}.bar .mk i{color:var(--a);transition:color .55s var(--ease)}.bar .mk small{font-family:var(--grotesk);font-size:10px;color:var(--faint);letter-spacing:2px;margin-inline-start:10px;text-transform:uppercase}
+  .seg{display:flex;padding:3px;background:var(--sunken);border:1px solid var(--hair);border-radius:999px;position:relative}
+  .seg button{position:relative;z-index:2;border:0;background:none;cursor:pointer;padding:8px 17px;border-radius:999px;font-family:var(--grotesk);font-size:12px;font-weight:600;color:var(--mut);transition:color .35s;display:flex;align-items:center;gap:7px;min-height:44px}.seg button .d{width:9px;height:9px;border-radius:50%}.seg button[aria-pressed="true"]{color:var(--ink)}.seg button:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+  .seg .ind{position:absolute;z-index:1;top:3px;bottom:3px;left:0;border-radius:999px;background:var(--raised);box-shadow:0 2px 8px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06);transition:transform .45s var(--ease),width .45s var(--ease)}
+  .intro{padding:40px 0 6px}.intro .kick{display:flex;align-items:center;gap:14px;margin-bottom:16px}.intro .kick .tick{width:34px;height:1px;background:var(--a);transition:background-color .55s var(--ease)}
+  .eyebrow{font-family:var(--grotesk);font-size:11px;font-weight:600;letter-spacing:3px;color:var(--faint);text-transform:uppercase;direction:ltr}
+  .intro h1{font-family:var(--serifHe);font-weight:700;font-size:clamp(28px,5vw,44px);letter-spacing:-.01em}.intro .he{font-family:var(--grotesk);font-size:12.5px;color:var(--mut);margin-top:10px;direction:ltr}
+  .band{padding:22px 0;border-top:1px solid var(--hair)}
+  .bhd{display:flex;align-items:baseline;gap:12px;margin-bottom:16px;flex-wrap:wrap}.bhd h2{font-family:var(--serifHe);font-weight:700;font-size:19px}.bhd .en{font-family:var(--grotesk);font-size:10px;color:var(--faint);letter-spacing:1.5px;text-transform:uppercase;direction:ltr} .bhd .ct{font-family:var(--grotesk);font-size:10px;color:var(--mut);direction:ltr;margin-inline-start:auto}
+  .fam{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+  .fam.sm{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+  .cell{display:flex;flex-direction:column;gap:10px}
+  .cell.full{grid-column:1/-1}
+  .foot{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .nm{font-family:var(--grotesk);font-size:10px;font-weight:600;color:var(--ink);direction:ltr;line-height:1.3}
+  .seam{font-family:var(--grotesk);font-size:7.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:1px 5px;border-radius:999px;direction:ltr;border:1px solid var(--hair);color:var(--mut);flex:none}
+  .seam.coll{color:var(--c2);border-color:rgba(76,198,230,.35)}.seam.series{color:var(--c3);border-color:rgba(181,123,230,.35)}
+  .inh{width:100%;display:flex;align-items:center;gap:14px;flex-wrap:wrap}.inh .lead{font-family:var(--grotesk);font-size:9px;color:var(--faint);direction:ltr;text-transform:uppercase;letter-spacing:1px;flex:none}
+  .inh .chips{display:flex;flex-wrap:wrap;gap:6px;flex:1}.inh .chip{font-family:var(--grotesk);font-size:10px;color:var(--mut);direction:ltr;padding:4px 9px;border:1px solid var(--hair);border-radius:999px;background:var(--sunken)}
+  svg.i{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+  /* ================= MEDIA / IDENTITY FAMILY ================= */
+  .mrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap;min-height:88px}
+  .mrow.top{align-items:flex-start}
+  /* --- avatar: initial "L" on accent gradient --- */
+  .av{--sz:44px;width:var(--sz);height:var(--sz);border-radius:calc(var(--sz)*.3);flex:none;display:grid;place-items:center;color:#0B0B0D;font-family:var(--grotesk);font-weight:700;font-size:calc(var(--sz)*.4);line-height:1;background:linear-gradient(140deg,var(--a-hi),var(--a));box-shadow:inset 0 1px 0 rgba(255,255,255,.22);user-select:none}
+  .av.xs{--sz:26px}.av.s{--sz:34px}.av.m{--sz:44px}.av.l{--sz:62px}
+  .av.cir{border-radius:50%}
+  .av.g2{background:linear-gradient(140deg,var(--c2),var(--a) 60%,var(--c3))}
+  .av.mut{background:linear-gradient(140deg,var(--raised2),var(--surface));color:var(--mut);box-shadow:inset 0 0 0 1px var(--hair)}
+  /* --- avatar with status --- */
+  .avw{position:relative;flex:none;line-height:0}
+  .avw .dot{position:absolute;inset-inline-end:-2px;bottom:-2px;width:14px;height:14px;border-radius:50%;border:2.5px solid var(--canvas)}
+  .avw .dot.on{background:var(--ok)}
+  .avw .dot.busy{background:var(--warn)}
+  .avw .dot.off{background:var(--faint)}
+  .avw.ring .av{box-shadow:0 0 0 2px var(--canvas),0 0 0 4px var(--a),inset 0 1px 0 rgba(255,255,255,.22)}
+  /* --- avatar group / stack --- */
+  .stack{display:flex;align-items:center}
+  .stack .av,.stack .more{margin-inline-start:-14px;box-shadow:0 0 0 2.5px var(--canvas),inset 0 1px 0 rgba(255,255,255,.2)}
+  .stack>:first-child{margin-inline-start:0}
+  .stack .more{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;flex:none;font-family:var(--grotesk);font-weight:700;font-size:12px;color:var(--a-hi);background:var(--raised2);direction:ltr}
+  /* --- story ring: conic accent gradient around avatar --- */
+  .story{position:relative;width:66px;height:66px;border-radius:50%;flex:none;display:grid;place-items:center;background:conic-gradient(from 210deg,var(--a-hi),var(--c2),var(--c3),var(--a),var(--a-hi));padding:3px}
+  .story::before{content:"";position:absolute;inset:0;border-radius:50%;padding:3px;background:conic-gradient(from 210deg,var(--a-hi),var(--c2),var(--c3),var(--a),var(--a-hi))}
+  .story .gap{position:absolute;inset:3px;border-radius:50%;background:var(--canvas)}
+  .story .av{position:relative;z-index:2}
+  .story.seen{background:none;box-shadow:inset 0 0 0 2px var(--hair)}.story.seen::before{display:none}
+  /* --- image / thumbnail placeholder (inline SVG, NO real photo) --- */
+  .ph{position:relative;border-radius:12px;overflow:hidden;background:radial-gradient(120% 120% at 30% 20%,color-mix(in srgb,var(--a) 12%,var(--raised2)),var(--sunken));border:1px solid var(--hair);display:grid;place-items:center;aspect-ratio:1/1}
+  .ph.wide{aspect-ratio:16/9}
+  .ph svg{width:38%;height:38%;color:var(--faint);opacity:.8}
+  .ph.wide svg{width:22%}
+  /* --- thumbnail strip: one selected = accent border --- */
+  .tstrip{display:flex;gap:8px;overflow-x:auto;padding:2px}
+  .tstrip .ph{width:64px;height:64px;flex:none;aspect-ratio:auto;border-radius:10px}
+  .tstrip .ph.sel{border:2px solid var(--a);box-shadow:0 0 0 3px var(--gl)}
+  .tstrip .ph.sel svg{color:var(--a-hi);opacity:1}
+  /* --- cover / banner --- */
+  .cover{position:relative;border-radius:16px;overflow:hidden;min-height:132px;padding:18px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;background:radial-gradient(130% 150% at 82% -25%,var(--gl),transparent 55%),linear-gradient(135deg,var(--a-800),var(--a) 58%,var(--c3));border:1px solid var(--hair)}
+  .cover .ct{font-family:var(--serifHe);font-weight:700;font-size:18px;color:#fff;position:relative;z-index:2;text-shadow:0 1px 8px rgba(0,0,0,.45)}
+  .cover .cm{font-family:var(--grotesk);font-size:11px;color:rgba(255,255,255,.85);direction:ltr;position:relative;z-index:2}
+  .cover .scr{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.4),transparent 60%);z-index:1}
+  .cover.avatop{justify-content:flex-end;padding-top:40px}
+  .cover .band-av{position:absolute;top:16px;inset-inline-start:16px;z-index:2}
+  /* --- logo mark + wordmark --- */
+  .lock{display:flex;align-items:center;gap:11px}
+  .mark{width:44px;height:44px;border-radius:12px;flex:none;display:grid;place-items:center;color:#0B0B0D;background:linear-gradient(140deg,var(--a-hi),var(--a));box-shadow:inset 0 1px 0 rgba(255,255,255,.25)}
+  .mark svg{width:24px;height:24px;fill:currentColor;stroke:none}
+  .mark.out{background:none;color:var(--a-hi);box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--a) 45%,var(--hair))}
+  .wm{font-family:var(--serif);font-weight:700;font-size:19px;letter-spacing:-.01em;direction:ltr}
+  .wm small{display:block;font-family:var(--grotesk);font-size:8.5px;font-weight:600;letter-spacing:2.5px;color:var(--faint);text-transform:uppercase}
+  /* --- gallery grid --- */
+  .gal{display:grid;gap:6px}
+  .gal.g4{grid-template-columns:repeat(2,1fr)}
+  .gal.g3{grid-template-columns:repeat(3,1fr)}
+  .gal .ph{aspect-ratio:1/1;border-radius:8px}
+  .gal .ph.span{grid-row:span 2;aspect-ratio:auto}
+  .gal .allbtn{position:relative;display:grid;place-items:center;border-radius:8px;background:var(--sunken);border:1px solid var(--hair);font-family:var(--grotesk);font-size:12px;font-weight:700;color:var(--a-hi);direction:ltr;aspect-ratio:1/1}
+  /* --- empty / broken media placeholder --- */
+  .broken{border:1.5px dashed var(--hair);border-radius:12px;background:var(--sunken);display:grid;place-items:center;gap:8px;padding:22px;min-height:120px;text-align:center}
+  .broken svg{width:30px;height:30px;color:var(--faint)}
+  .broken .bt{font-family:var(--grotesk);font-size:10px;color:var(--faint);direction:ltr}
+
+  body{font-variant-numeric:tabular-nums}
+</style>
+
+<div class="bar"><div class="in">
+  <div class="mk">Pure<i>.</i><small>Media Family</small></div>
+  <div class="seg" id="seg" role="group" aria-label="Theme"><span class="ind" id="ind"></span>
+    <button data-t="t-indigo" aria-pressed="true"><span class="d" style="background:#7A6BF0"></span>Indigo</button>
+    <button data-t="t-teal" aria-pressed="false"><span class="d" style="background:#1FB8A6"></span>Teal</button>
+    <button data-t="t-amber" aria-pressed="false"><span class="d" style="background:#D99A3C"></span>Amber</button>
+  </div>
+</div></div>
+
+<div class="wrap">
+  <header class="intro">
+    <div class="kick"><span class="tick"></span><span class="eyebrow">Archetype 12 · Media / Identity</span></div>
+    <h1>משפחת המדיה</h1>
+    <p class="he">avatar · status · stack · story ring · thumbnail · strip · cover · logo mark · gallery · empty — identity via accent gradient + initial "L" + inline SVG · online-dot green fixed · accent morphs</p>
+  </header>
+
+  <!-- AVATAR SIZES + SHAPE -->
+  <section class="band">
+    <div class="bhd"><h2>Avatar · sizes &amp; shape</h2><span class="en">initial "L" on accent gradient · square-rounded + circle · xs / s / m / l</span><span class="ct">canonical</span></div>
+    <div class="fam">
+      <div class="cell"><div class="mrow"><span class="av xs">L</span><span class="av s">L</span><span class="av m">L</span><span class="av l">L</span></div><div class="foot"><span class="nm">Avatar · square-rounded xs→l</span><span class="seam series">series</span></div></div>
+      <div class="cell"><div class="mrow"><span class="av xs cir">L</span><span class="av s cir">L</span><span class="av m cir">L</span><span class="av l cir">L</span></div><div class="foot"><span class="nm">Avatar · circle xs→l</span><span class="seam series">series</span></div></div>
+      <div class="cell"><div class="mrow"><span class="av m">L</span><span class="av m g2">L</span><span class="av m mut">L</span></div><div class="foot"><span class="nm">Avatar · fill variants</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- AVATAR WITH STATUS -->
+  <section class="band">
+    <div class="bhd"><h2>Avatar · status &amp; ring</h2><span class="en">online-dot = green fixed · busy = amber · offline = faint · accent ring morphs</span><span class="ct">semantic</span></div>
+    <div class="fam">
+      <div class="cell"><div class="mrow"><span class="avw"><span class="av m cir">L</span><span class="dot on"></span></span><span class="avw"><span class="av m cir">L</span><span class="dot busy"></span></span><span class="avw"><span class="av m cir">L</span><span class="dot off"></span></span></div><div class="foot"><span class="nm">AvatarStatus · online / busy / offline</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="mrow"><span class="avw ring"><span class="av m cir">L</span></span><span class="avw ring"><span class="av m cir">L</span><span class="dot on"></span></span></div><div class="foot"><span class="nm">AvatarRing · accent halo</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="mrow"><span class="avw"><span class="av l">L</span><span class="dot on"></span></span></div><div class="foot"><span class="nm">ProfileAvatar · square + status</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- AVATAR GROUP / STACK -->
+  <section class="band">
+    <div class="bhd"><h2>Avatar · group / stack</h2><span class="en">overlapping + "+N" overflow · shared roster</span><span class="ct">collection</span></div>
+    <div class="fam">
+      <div class="cell"><div class="mrow"><div class="stack"><span class="av s cir">L</span><span class="av s cir g2">L</span><span class="av s cir">L</span><span class="more">+8</span></div></div><div class="foot"><span class="nm">AvatarStack · +N</span><span class="seam coll">collection</span></div></div>
+      <div class="cell"><div class="mrow"><div class="stack"><span class="av s cir">L</span><span class="av s cir g2">L</span><span class="av s cir">L</span><span class="av s cir mut">L</span></div></div><div class="foot"><span class="nm">AvatarGroup · 4-up</span><span class="seam coll">collection</span></div></div>
+      <div class="cell"><div class="mrow"><div class="stack"><span class="av m">L</span><span class="av m g2">L</span><span class="more" style="width:44px;height:44px;font-size:13px">+3</span></div></div><div class="foot"><span class="nm">FacePileGroup · square</span><span class="seam coll">collection</span></div></div>
+    </div>
+  </section>
+
+  <!-- STORY RING -->
+  <section class="band">
+    <div class="bhd"><h2>Story Ring</h2><span class="en">conic accent gradient around avatar · unseen morphs · seen = faint hairline</span><span class="ct">3</span></div>
+    <div class="fam">
+      <div class="cell"><div class="mrow"><span class="story"><span class="gap"></span><span class="av cir" style="--sz:54px">L</span></span><span class="story"><span class="gap"></span><span class="av cir g2" style="--sz:54px">L</span></span></div><div class="foot"><span class="nm">StoryRing · unseen</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="mrow"><span class="story seen"><span class="gap"></span><span class="av cir" style="--sz:54px">L</span></span><span class="story seen"><span class="gap"></span><span class="av cir mut" style="--sz:54px">L</span></span></div><div class="foot"><span class="nm">StoryRing · seen</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="mrow"><span class="story"><span class="gap"></span><span class="av cir" style="--sz:54px">L</span></span><span class="story seen"><span class="gap"></span><span class="av cir g2" style="--sz:54px">L</span></span><span class="story"><span class="gap"></span><span class="av cir" style="--sz:54px">L</span></span></div><div class="foot"><span class="nm">StoryReel · row</span><span class="seam coll">collection</span></div></div>
+    </div>
+  </section>
+
+  <!-- IMAGE / THUMBNAIL -->
+  <section class="band">
+    <div class="bhd"><h2>Image · Thumbnail</h2><span class="en">inline SVG placeholder tile · rounded · no real photo</span><span class="ct">many</span></div>
+    <div class="fam sm">
+      <div class="cell"><div class="ph"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 4"/></svg></div><div class="foot"><span class="nm">Thumbnail · canonical</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="ph wide"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 4"/></svg></div><div class="foot"><span class="nm">ImageTile · 16:9</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="ph"><svg class="i" viewBox="0 0 24 24"><path d="M12 3l7 4v6c0 4-3 6.5-7 8-4-1.5-7-4-7-8V7z"/><path d="M9.5 12l1.8 1.8L15 10"/></svg></div><div class="foot"><span class="nm">ProofThumb · verified</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="ph"><svg class="i" viewBox="0 0 24 24"><path d="M10 8l6 4-6 4z"/><rect x="3" y="4" width="18" height="16" rx="2.5"/></svg></div><div class="foot"><span class="nm">MediaThumb · play</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- THUMBNAIL STRIP -->
+  <section class="band">
+    <div class="bhd"><h2>Thumbnail Strip</h2><span class="en">row · one selected = accent border morphs</span><span class="ct">2</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="tstrip"><div class="ph sel"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 4"/></svg></div><div class="ph"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 4"/></svg></div><div class="ph"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 4"/></svg></div><div class="ph"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 4"/></svg></div><div class="ph"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 4"/></svg></div></div><div class="foot"><span class="nm">ThumbStrip · selected morphs</span><span class="seam coll">collection</span></div></div>
+      <div class="cell full"><div class="tstrip"><div class="ph"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 4"/></svg></div><div class="ph"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 4"/></svg></div><div class="ph sel"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 4"/></svg></div><div class="ph"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 4"/></svg></div></div><div class="foot"><span class="nm">ImageFacePager · middle selected</span><span class="seam coll">collection</span></div></div>
+    </div>
+  </section>
+
+  <!-- COVER / BANNER -->
+  <section class="band">
+    <div class="bhd"><h2>Cover · Banner</h2><span class="en">wide aura header · overlaid title · accent gradient morphs</span><span class="ct">3</span></div>
+    <div class="fam">
+      <div class="cell"><div class="cover"><div class="scr"></div><div class="ct">Label</div><div class="cm">Meta</div></div><div class="foot"><span class="nm">CoverBanner · canonical</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="cover avatop"><div class="scr"></div><span class="avw band-av"><span class="av m cir" style="box-shadow:0 0 0 3px var(--canvas)">L</span><span class="dot on"></span></span><div class="ct">Label</div><div class="cm">Meta</div></div><div class="foot"><span class="nm">ProfileCover · avatar overlay</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="cover" style="min-height:132px;justify-content:center;align-items:center;text-align:center"><span class="mark out" style="background:rgba(255,255,255,.14);color:#fff;box-shadow:none"><svg viewBox="0 0 24 24"><path d="M4 4h7v7H4z"/><path d="M13 4h7v7h-7z" opacity=".65"/><path d="M4 13h7v7H4z" opacity=".65"/><circle cx="16.5" cy="16.5" r="3.5"/></svg></span></div><div class="foot"><span class="nm">HeroCoverMark · centered</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- LOGO MARK -->
+  <section class="band">
+    <div class="bhd"><h2>Logo Mark</h2><span class="en">geometric SVG mark + wordmark "Label" · accent fill morphs</span><span class="ct">canonical</span></div>
+    <div class="fam">
+      <div class="cell"><div class="mrow"><div class="lock"><span class="mark"><svg viewBox="0 0 24 24"><path d="M4 4h7v7H4z"/><path d="M13 4h7v7h-7z" opacity=".65"/><path d="M4 13h7v7H4z" opacity=".65"/><circle cx="16.5" cy="16.5" r="3.5"/></svg></span><span class="wm">Label<small>Meta</small></span></div></div><div class="foot"><span class="nm">LogoMark · solid</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="mrow"><div class="lock"><span class="mark out"><svg viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 3v18M4 7.5l8 4.5 8-4.5" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".55"/></svg></span><span class="wm">Label<small>Meta</small></span></div></div><div class="foot"><span class="nm">LogoMark · outlined</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="mrow"><span class="mark"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="4"/><circle cx="16" cy="16" r="4" opacity=".6"/><circle cx="16" cy="8" r="4" opacity=".8"/></svg></span><span class="mark out"><svg viewBox="0 0 24 24"><path d="M12 2l2.6 6.6L21 9.5l-5 4.3 1.6 6.7L12 16.9 6.4 20.5 8 13.8 3 9.5l6.4-.9z"/></svg></span></div><div class="foot"><span class="nm">BrandMark · glyphs</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- GALLERY GRID -->
+  <section class="band">
+    <div class="bhd"><h2>Gallery Grid</h2><span class="en">2×2 / 3-up placeholder tiles + "+N" all-button</span><span class="ct">3</span></div>
+    <div class="fam">
+      <div class="cell"><div class="gal g4"><div class="ph"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 4"/></svg></div><div class="ph"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 4"/></svg></div><div class="ph"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 4"/></svg></div><div class="allbtn">+12</div></div><div class="foot"><span class="nm">GalleryGrid · 2×2 + all</span><span class="seam coll">collection</span></div></div>
+      <div class="cell"><div class="gal g3"><div class="ph span"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 4"/></svg></div><div class="ph"><svg class="i" viewBox="0 0 24 24"><path d="M10 8l6 4-6 4z"/><rect x="3" y="4" width="18" height="16" rx="2.5"/></svg></div><div class="ph"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 4"/></svg></div><div class="ph"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 4"/></svg></div><div class="ph"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 4"/></svg></div></div><div class="foot"><span class="nm">GalleryMosaic · feature + grid</span><span class="seam coll">collection</span></div></div>
+      <div class="cell"><div class="gal g3"><div class="ph"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 4"/></svg></div><div class="ph"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 4"/></svg></div><div class="ph"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 4"/></svg></div></div><div class="foot"><span class="nm">GalleryAllBtn · 3-up row</span><span class="seam coll">collection</span></div></div>
+    </div>
+  </section>
+
+  <!-- EMPTY / BROKEN -->
+  <section class="band">
+    <div class="bhd"><h2>Empty · Broken Media</h2><span class="en">no source / failed load placeholder</span><span class="ct">3</span></div>
+    <div class="fam sm">
+      <div class="cell"><div class="broken"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 16l5-4 4 3 3-2 6 4" opacity=".6"/><path d="M4 4l16 16"/></svg><span class="bt">no media</span></div><div class="foot"><span class="nm">ThumbPlaceholder · broken</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="broken"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9" r="1.6"/><path d="M4 18l5-5 3.5 3.5"/></svg><span class="bt">empty</span></div><div class="foot"><span class="nm">MediaPlaceholder · empty</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="broken"><span class="av m mut" style="border-radius:50%">L</span><span class="bt">no avatar</span></div><div class="foot"><span class="nm">AvatarFallback · initial only</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- AVATAR CLUSTER · CANONICAL + INHERIT -->
+  <section class="band">
+    <div class="bhd"><h2>Avatar Cluster</h2><span class="en">one canonical avatar · many atoms differ by source / shape</span><span class="ct">many</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="inh"><span class="av s cir">L</span><span class="lead">inherit Avatar →</span><div class="chips"><span class="chip">Avatar</span><span class="chip">AvatarGroup</span><span class="chip">AvatarStack</span><span class="chip">ProfileAvatar</span><span class="chip">UserAvatar</span><span class="chip">StoryRing</span><span class="chip">ImageFacePager</span><span class="chip">GalleryThumb</span><span class="chip">ProofThumb</span><span class="chip">ThumbPlaceholder</span><span class="chip">GalleryAllBtn</span><span class="chip">FacePile</span></div></div>
+        <div class="foot"><span class="nm">12 atoms · same identity primitive · differ by source / shape</span><span class="seam series">series</span></div></div>
+    </div>
+  </section>
+
+  <footer><div class="colo"><div>PURE — <b>Media Family</b></div><div>~30 atoms · identity via accent gradient + initial "L" + inline SVG · online-dot green fixed</div><div>content = Label / Meta · no real photos · theme = parameter</div></div></footer>
+</div>
+
+<script>
+  var root=document.documentElement;root.className='t-indigo';
+  var seg=document.getElementById('seg'),ind=document.getElementById('ind'),btns=[].slice.call(seg.querySelectorAll('button'));
+  function place(el,indEl,box){var sr=box.getBoundingClientRect(),br=el.getBoundingClientRect();indEl.style.width=br.width+'px';indEl.style.transform='translateX('+(br.left-sr.left-3)+'px)';}
+  btns.forEach(function(b){b.addEventListener('click',function(){root.className=b.dataset.t;btns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});place(b,ind,seg);});});
+  place(btns[0],ind,seg);if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){place(seg.querySelector('[aria-pressed="true"]'),ind,seg);});}
+  window.addEventListener('resize',function(){place(seg.querySelector('[aria-pressed="true"]'),ind,seg);});
+</script>

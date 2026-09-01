@@ -15,12 +15,12 @@
 - **  ↳ wireable:** 104
 - **  ↳ מחוברים-למחולל (MAP_ENGINES):** 8
 - **דאטה · new/dart-data-maor:** 454
-- **מקור-JS · new/atoms:** 1112
+- **מקור-JS · new/atoms:** 1130
 - **המרה · new/dart-maor:** 626
 
 ## מבנה הענף
-- **machtzev/ שורש (.mjs):** 13
-- **machtzev/ תת-תיקיות:** 11
+- **machtzev/ שורש (.mjs):** 14
+- **machtzev/ תת-תיקיות:** 12
 - **generator/ קנוני:** 11
 - **generator/legacy/:** 5
 - **knowledge/ פעיל:** 18

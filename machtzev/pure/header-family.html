@@ -1,0 +1,304 @@
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+  PURE — Header / Section Family. Archetype 09. representative atoms from atlas.json.
+  Pure · content = Label/Value/Meta · numbers LTR · big titles = var(--serifHe) · accent morphs (eyebrow/link/progress/aura/mark).
+  Header TYPE is the signature — page / section / hero / brand / wizard / profile / date. canonical + inherit for the *Header cluster.
+-->
+<title>Pure — Header Family</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Frank+Ruhl+Libre:wght@700&family=Space+Grotesk:wght@400;500;600;700&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--canvas:#0C0C0E;--sunken:#0A0A0C;--surface:#151517;--raised:#1B1B1E;--raised2:#212126;--ink:#ECE9E2;--mut:#9B968C;--faint:#6E6A62;--hair:rgba(236,233,226,.09);--hair2:rgba(236,233,226,.05);
+    --err:#E0574E;--warn:#E6B84F;--ok:#43D08C;
+    --serif:"Fraunces",Georgia,serif;--serifHe:"Frank Ruhl Libre",serif;--grotesk:"Space Grotesk",ui-monospace,monospace;--he:"Heebo","Segoe UI",sans-serif;--ease:cubic-bezier(.2,.7,.15,1);--spring:cubic-bezier(.34,1.4,.5,1)}
+  .t-indigo{--a-hi:#B0A4FF;--a:#7A6BF0;--a-800:#4B3ECB;--gl:rgba(122,107,240,.42);--c2:#4CC6E6;--c3:#B57BE6}
+  .t-teal{--a-hi:#6FE6D5;--a:#1FB8A6;--a-800:#0C7E72;--gl:rgba(31,184,166,.42);--c2:#4FB6E6;--c3:#43D08C}
+  .t-amber{--a-hi:#F2C87E;--a:#D99A3C;--a-800:#9E6B1E;--gl:rgba(217,154,60,.42);--c2:#E8863C;--c3:#E67BA6}
+  *{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}
+  body{background:var(--canvas);color:var(--ink);direction:rtl;font-family:var(--he);-webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden;transition:background-color .6s var(--ease);background-image:radial-gradient(120% 36% at 84% -6%,var(--gl),transparent 60%)}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.038;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 40px;position:relative;z-index:1}::selection{background:var(--a);color:#0A0A0C}
+  .bar{position:sticky;top:0;z-index:60;background:linear-gradient(180deg,rgba(12,12,14,.94),rgba(12,12,14,.62));backdrop-filter:blur(14px);border-bottom:1px solid var(--hair)}
+  .bar .in{max-width:1200px;margin:0 auto;padding:12px 40px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .bar .mk{font-family:var(--serif);font-size:20px;font-weight:600;letter-spacing:-.02em;direction:ltr}.bar .mk i{color:var(--a);transition:color .55s var(--ease)}.bar .mk small{font-family:var(--grotesk);font-size:10px;color:var(--faint);letter-spacing:2px;margin-inline-start:10px;text-transform:uppercase}
+  .seg{display:flex;padding:3px;background:var(--sunken);border:1px solid var(--hair);border-radius:999px;position:relative}
+  .seg button{position:relative;z-index:2;border:0;background:none;cursor:pointer;padding:8px 17px;border-radius:999px;font-family:var(--grotesk);font-size:12px;font-weight:600;color:var(--mut);transition:color .35s;display:flex;align-items:center;gap:7px;min-height:44px}.seg button .d{width:9px;height:9px;border-radius:50%}.seg button[aria-pressed="true"]{color:var(--ink)}.seg button:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+  .seg .ind{position:absolute;z-index:1;top:3px;bottom:3px;left:0;border-radius:999px;background:var(--raised);box-shadow:0 2px 8px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06);transition:transform .45s var(--ease),width .45s var(--ease)}
+  .intro{padding:40px 0 6px}.intro .kick{display:flex;align-items:center;gap:14px;margin-bottom:16px}.intro .kick .tick{width:34px;height:1px;background:var(--a);transition:background-color .55s var(--ease)}
+  .eyebrow{font-family:var(--grotesk);font-size:11px;font-weight:600;letter-spacing:3px;color:var(--faint);text-transform:uppercase;direction:ltr}
+  .intro h1{font-family:var(--serifHe);font-weight:700;font-size:clamp(28px,5vw,44px);letter-spacing:-.01em}.intro .he{font-family:var(--grotesk);font-size:12.5px;color:var(--mut);margin-top:10px;direction:ltr}
+  .band{padding:22px 0;border-top:1px solid var(--hair)}
+  .bhd{display:flex;align-items:baseline;gap:12px;margin-bottom:16px;flex-wrap:wrap}.bhd h2{font-family:var(--serifHe);font-weight:700;font-size:19px}.bhd .en{font-family:var(--grotesk);font-size:10px;color:var(--faint);letter-spacing:1.5px;text-transform:uppercase;direction:ltr} .bhd .ct{font-family:var(--grotesk);font-size:10px;color:var(--mut);direction:ltr;margin-inline-start:auto}
+  .fam{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+  .fam.sm{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+  .cell{display:flex;flex-direction:column;gap:10px}
+  .cell.full{grid-column:1/-1}
+  .foot{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .nm{font-family:var(--grotesk);font-size:10px;font-weight:600;color:var(--ink);direction:ltr;line-height:1.3}
+  .seam{font-family:var(--grotesk);font-size:7.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:1px 5px;border-radius:999px;direction:ltr;border:1px solid var(--hair);color:var(--mut);flex:none}
+  .seam.coll{color:var(--c2);border-color:rgba(76,198,230,.35)}.seam.series{color:var(--c3);border-color:rgba(181,123,230,.35)}
+  .inh{width:100%;display:flex;align-items:center;gap:14px;flex-wrap:wrap}.inh .lead{font-family:var(--grotesk);font-size:9px;color:var(--faint);direction:ltr;text-transform:uppercase;letter-spacing:1px;flex:none}
+  .inh .chips{display:flex;flex-wrap:wrap;gap:6px;flex:1}.inh .chip{font-family:var(--grotesk);font-size:10px;color:var(--mut);direction:ltr;padding:4px 9px;border:1px solid var(--hair);border-radius:999px;background:var(--sunken)}
+  svg.i{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+  /* ============ HEADER FAMILY ============ */
+  /* shared building blocks */
+  .hdr{position:relative;border:1px solid var(--hair);border-radius:16px;background:linear-gradient(180deg,var(--surface),var(--sunken));padding:20px 22px;overflow:hidden}
+  .hrow{display:flex;align-items:center;gap:16px}
+  .htitles{flex:1;min-width:0}
+  .kt{font-family:var(--grotesk);font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--faint);direction:ltr;margin-bottom:8px;display:inline-flex;align-items:center;gap:8px}
+  .kt::before{content:"";width:22px;height:1px;background:var(--a);transition:background-color .55s var(--ease);flex:none}
+  .big{font-family:var(--serifHe);font-weight:700;letter-spacing:-.01em;line-height:1.05;color:var(--ink)}
+  .sub{font-size:12.5px;color:var(--mut);margin-top:7px;line-height:1.45;max-width:52ch}
+  /* generic pressable */
+  .act{display:inline-flex;align-items:center;gap:7px;font-family:var(--he);font-size:12px;font-weight:600;padding:9px 15px;border-radius:11px;cursor:pointer;border:1px solid var(--hair);background:var(--raised);color:var(--ink);min-height:44px;transition:border-color .25s,background-color .25s}
+  .act:hover{border-color:color-mix(in srgb,var(--a) 45%,var(--hair))}.act:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+  .act.pri{background:linear-gradient(180deg,var(--a-hi),var(--a));border:0;color:#0A0A0C}
+  .act.gho{background:none}
+  .ico{width:40px;height:40px;flex:none;border-radius:11px;display:grid;place-items:center;color:var(--mut);border:1px solid var(--hair);background:var(--sunken);cursor:pointer;transition:color .25s,border-color .25s}
+  .ico:hover{color:var(--a-hi);border-color:color-mix(in srgb,var(--a) 40%,var(--hair))}.ico:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+  .ico svg{width:18px;height:18px}
+  .lnk{display:inline-flex;align-items:center;gap:5px;font-family:var(--grotesk);font-size:11px;font-weight:600;color:var(--a-hi);direction:ltr;cursor:pointer;transition:color .35s var(--ease);text-decoration:none}
+  .lnk:hover{color:var(--a)}.lnk:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px;border-radius:4px}
+  .ctpill{font-family:var(--grotesk);font-size:10px;font-weight:700;color:var(--a-hi);background:color-mix(in srgb,var(--a) 15%,transparent);border:1px solid color-mix(in srgb,var(--a) 32%,transparent);padding:2px 9px;border-radius:999px;direction:ltr;flex:none}
+  /* PAGE header */
+  .hdr.page .big{font-size:clamp(24px,3.2vw,34px)}
+  .backb{width:40px;height:40px;flex:none;border-radius:10px;display:grid;place-items:center;color:var(--mut);border:1px solid var(--hair);background:var(--sunken);cursor:pointer}.backb svg{width:16px;height:16px}
+  /* SECTION header */
+  .hdr.sect{padding:15px 18px}
+  .hdr.sect .big{font-size:17px}
+  .sicon{width:32px;height:32px;flex:none;border-radius:9px;display:grid;place-items:center;color:var(--a-hi);background:radial-gradient(120% 120% at 30% 20%,var(--gl),transparent 60%),var(--sunken);border:1px solid var(--hair)}.sicon svg{width:16px;height:16px}
+  /* HERO header */
+  .hdr.hero{padding:34px 26px;min-height:170px;display:flex;flex-direction:column;justify-content:center;background:radial-gradient(120% 130% at 82% -12%,var(--gl),transparent 55%),linear-gradient(180deg,var(--raised),var(--sunken));border-color:color-mix(in srgb,var(--a) 20%,var(--hair))}
+  .hdr.hero .big{font-size:clamp(30px,4.6vw,46px)}
+  .hdr.hero .sub{font-size:13.5px;max-width:46ch}
+  .hdr.hero .cta{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+  .hdr.hero.grad{background:linear-gradient(135deg,var(--c2),var(--a) 55%,var(--c3));border:0;color:#0A0A0C}
+  .hdr.hero.grad .big,.hdr.hero.grad .sub{color:#0A0A0C}.hdr.hero.grad .sub{opacity:.82}.hdr.hero.grad .kt{color:rgba(10,10,12,.62)}.hdr.hero.grad .kt::before{background:rgba(10,10,12,.5)}
+  .hdr.hero.grad .act.gho{border-color:rgba(10,10,12,.32);color:#0A0A0C}
+  /* BRAND header */
+  .brnd{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .mark{width:42px;height:42px;flex:none;border-radius:12px;display:grid;place-items:center;color:#0A0A0C;font-family:var(--grotesk);font-weight:700;font-size:18px;background:linear-gradient(140deg,var(--a-hi),var(--a));box-shadow:0 6px 18px var(--gl);transition:box-shadow .5s var(--ease)}
+  .bname{font-family:var(--serif);font-size:19px;font-weight:600;letter-spacing:-.02em;color:var(--ink);direction:ltr}
+  .bname small{display:block;font-family:var(--grotesk);font-size:9px;letter-spacing:2px;color:var(--faint);text-transform:uppercase;margin-top:2px}
+  .nav{display:flex;gap:4px;margin-inline-start:auto;flex-wrap:wrap}
+  .nav a{font-family:var(--he);font-size:12.5px;color:var(--mut);padding:7px 12px;border-radius:9px;cursor:pointer;transition:color .25s,background-color .25s}
+  .nav a:hover{color:var(--ink);background:var(--raised)}.nav a[aria-current="page"]{color:var(--ink)}.nav a[aria-current="page"]::after{content:"";display:block;height:2px;border-radius:2px;background:var(--a);margin-top:5px;transition:background-color .55s var(--ease)}
+  .nav a:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+  /* WIZARD header */
+  .wiz .steps{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+  .wiz .stepn{font-family:var(--grotesk);font-size:11px;font-weight:600;color:var(--mut);direction:ltr}.wiz .stepn b{color:var(--a-hi);font-weight:700}
+  .prog{height:6px;border-radius:999px;background:var(--sunken);overflow:hidden;border:1px solid var(--hair2)}
+  .prog i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--a),var(--a-hi));transition:width .5s var(--spring),background .5s}
+  .wiz .big{font-size:20px;margin-top:14px}
+  .dots{display:flex;gap:7px}.dots i{width:8px;height:8px;border-radius:50%;background:var(--hair);flex:none}.dots i.on{background:var(--a)}.dots i.now{background:var(--a-hi);box-shadow:0 0 0 3px color-mix(in srgb,var(--a) 22%,transparent)}
+  /* SHEET header */
+  .hdr.sheet{padding:16px 18px;border-radius:16px 16px 0 0}
+  .grab{position:absolute;top:8px;inset-inline:0;margin:auto;width:38px;height:4px;border-radius:999px;background:var(--hair)}
+  /* PROFILE header */
+  .av{flex:none;border-radius:50%;display:grid;place-items:center;color:#0A0A0C;font-family:var(--grotesk);font-weight:700;background:linear-gradient(140deg,var(--a-hi),var(--a));position:relative}
+  .av.lg{width:64px;height:64px;font-size:24px;border-radius:20px}
+  .av.md{width:46px;height:46px;font-size:17px}
+  .av .rng{position:absolute;inset:-4px;border-radius:inherit;border:1.5px solid color-mix(in srgb,var(--a) 45%,transparent)}
+  .pname{font-family:var(--serifHe);font-weight:700;font-size:18px;color:var(--ink)}
+  .pmeta{font-family:var(--grotesk);font-size:11px;color:var(--faint);direction:ltr;margin-top:4px;display:flex;gap:10px;flex-wrap:wrap}
+  .pmeta span{display:inline-flex;align-items:center;gap:4px}
+  .hdr.prof.center{text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;padding:24px}
+  .hdr.prof.center .pmeta{justify-content:center}
+  /* DATE header (list divider) */
+  .dhd{display:flex;align-items:center;gap:12px;padding:6px 2px}
+  .dhd .dlab{font-family:var(--grotesk);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--mut);direction:ltr;flex:none}
+  .dhd .dnum{font-family:var(--serifHe);font-size:15px;font-weight:700;color:var(--a-hi)}
+  .dhd .rule{flex:1;height:1px;background:linear-gradient(90deg,var(--hair),transparent)}
+  .dhd .dct{font-family:var(--grotesk);font-size:10px;color:var(--faint);direction:ltr;flex:none}
+  .dchip{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:52px;height:56px;border-radius:13px;border:1px solid var(--hair);background:linear-gradient(180deg,var(--surface),var(--sunken));flex:none}
+  .dchip .dm{font-family:var(--grotesk);font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--a-hi);direction:ltr}
+  .dchip .dd{font-family:var(--grotesk);font-size:22px;font-weight:700;color:var(--ink);line-height:1;direction:ltr}
+  .dpills{display:flex;gap:7px;flex-wrap:wrap}
+  .dpill{font-family:var(--grotesk);font-size:11px;font-weight:600;color:var(--mut);direction:ltr;padding:7px 12px;border-radius:999px;border:1px solid var(--hair);background:var(--sunken);cursor:pointer}
+  .dpill.on{color:#0A0A0C;background:linear-gradient(180deg,var(--a-hi),var(--a));border:0}
+  .dpill:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+  /* STICKY header — proof inside a short contained scroll stage */
+  .stage{position:relative;height:230px;overflow:auto;border:1px solid var(--hair);border-radius:16px;background:linear-gradient(180deg,var(--surface),var(--sunken))}
+  .stage .shead{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;padding:14px 18px;background:linear-gradient(180deg,color-mix(in srgb,var(--surface) 92%,transparent),color-mix(in srgb,var(--surface) 60%,transparent));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--hair)}
+  .stage .shead .big{font-size:17px}
+  .stage .shead .lnk{min-height:44px}
+  .stage .fill{padding:16px 18px 20px;display:flex;flex-direction:column;gap:13px}
+  .frow{display:flex;align-items:center;gap:12px;opacity:.5}
+  .frow .fl{font-family:var(--grotesk);font-size:11px;color:var(--faint);direction:ltr;flex:none;width:46px}
+  .frow .gl{height:9px;border-radius:999px;background:var(--hair);flex:1}
+  .frow .fv{font-family:var(--grotesk);font-size:11px;color:var(--mut);direction:ltr;flex:none}
+  .seam.live{color:var(--a-hi);border-color:color-mix(in srgb,var(--a) 34%,transparent)}
+
+  footer{padding:30px 0 70px;border-top:1px solid var(--hair);margin-top:6px}.colo{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--grotesk);font-size:11px;color:var(--faint);direction:ltr}.colo b{color:var(--ink)}
+  @media(max-width:820px){.wrap{padding:0 18px}.bar .in{padding:11px 18px}.bar .mk small{display:none}.nav{width:100%;margin-inline-start:0}.hdr.hero{padding:26px 20px}}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+  .backb:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+
+  body{font-variant-numeric:tabular-nums}
+</style>
+
+<div class="bar"><div class="in">
+  <div class="mk">Pure<i>.</i><small>Header Family</small></div>
+  <div class="seg" id="seg" role="group" aria-label="Theme"><span class="ind" id="ind"></span>
+    <button data-t="t-indigo" aria-pressed="true"><span class="d" style="background:#7A6BF0"></span>Indigo</button>
+    <button data-t="t-teal" aria-pressed="false"><span class="d" style="background:#1FB8A6"></span>Teal</button>
+    <button data-t="t-amber" aria-pressed="false"><span class="d" style="background:#D99A3C"></span>Amber</button>
+  </div>
+</div></div>
+
+<div class="wrap">
+  <header class="intro">
+    <div class="kick"><span class="tick"></span><span class="eyebrow">Archetype 09 · Header / Section</span></div>
+    <h1>משפחת הכותרת</h1>
+    <p class="he">page · section · hero · brand · wizard · profile · date — header TYPE is the signature · big titles = serif · accent morphs on eyebrow / link / progress / aura / mark · content = Label / Value / Meta</p>
+  </header>
+
+  <!-- PAGE HEADER -->
+  <section class="band">
+    <div class="bhd"><h2>Page Header</h2><span class="en">big serif title + subtitle + trailing actions — the screen's masthead</span><span class="ct">3</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="hdr page"><div class="hrow"><div class="htitles"><div class="kt">Section</div><div class="big">Label</div><div class="sub">Meta · a one-line summary of what this page holds, kept quiet in muted ink.</div></div>
+        <button class="ico" aria-label="Action"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg></button>
+        <button class="ico" aria-label="Action"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+        <button class="act pri"><svg class="i" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M12 5v14M5 12h14"/></svg>Action</button></div></div>
+        <div class="foot"><span class="nm">PageHeader · canonical</span><span class="seam">title+actions</span></div></div>
+      <div class="cell full"><div class="hdr page"><div class="hrow"><button class="backb" aria-label="Back"><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><div class="htitles"><div class="kt">Section</div><div class="big" style="font-size:26px">Label</div></div><span class="act gho">Action</span></div></div>
+        <div class="foot"><span class="nm">DetailHeader · back + eyebrow</span><span class="seam">title+actions</span></div></div>
+      <div class="cell"><div class="hdr page" style="text-align:center;padding:26px"><div class="kt" style="justify-content:center">Section</div><div class="big" style="font-size:24px">Label</div><div class="sub" style="margin-inline:auto">Meta</div></div>
+        <div class="foot"><span class="nm">CenteredPageHeader</span><span class="seam">title</span></div></div>
+      <div class="cell"><div class="hdr page" style="padding:20px"><div class="big" style="font-size:22px">Label</div><div class="sub">Meta</div><div style="margin-top:14px;display:flex;gap:8px"><span class="act">Action</span><span class="act gho">Action</span></div></div>
+        <div class="foot"><span class="nm">TitledSection · stacked</span><span class="seam">title+actions</span></div></div>
+    </div>
+  </section>
+
+  <!-- SECTION HEADER -->
+  <section class="band">
+    <div class="bhd"><h2>Section Header</h2><span class="en">title + count + "see all" link — the list divider that leads a group</span><span class="ct">cluster</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="hdr sect"><div class="hrow"><div class="sicon"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div><div class="htitles"><div class="big">Label</div></div><span class="ctpill">24</span><a class="lnk">See all<svg class="i" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M9 6l6 6-6 6"/></svg></a></div></div>
+        <div class="foot"><span class="nm">SectionHeader · canonical</span><span class="seam">title+link</span></div></div>
+      <div class="cell"><div class="hdr sect"><div class="hrow"><div class="htitles"><div class="big">Label</div><div class="sub" style="margin-top:3px">Meta</div></div><a class="lnk">More</a></div></div>
+        <div class="foot"><span class="nm">SectionTitle · subtitle</span><span class="seam">title+link</span></div></div>
+      <div class="cell"><div class="hdr sect"><div class="hrow"><div class="sicon"><svg class="i" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/></svg></div><div class="htitles"><div class="big">Label</div></div><span class="ctpill">8</span></div></div>
+        <div class="foot"><span class="nm">EmojiSectionTitle · count</span><span class="seam">title</span></div></div>
+      <div class="cell"><div class="hdr sect"><div class="hrow"><div class="htitles"><div class="kt" style="margin-bottom:4px">Group</div><div class="big" style="font-size:15px">Label</div></div><a class="lnk">Edit</a></div></div>
+        <div class="foot"><span class="nm">LensGroupHeader</span><span class="seam">title+link</span></div></div>
+      <div class="cell full"><div class="inh"><div class="sicon" style="width:26px;height:26px"><svg class="i" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div><span class="lead">inherit SectionHeader →</span><div class="chips"><span class="chip">TitledSection</span><span class="chip">SectionTitle</span><span class="chip">EmojiSectionTitle</span><span class="chip">LensGroupHeader</span><span class="chip">CaSubTitle</span><span class="chip">SettingsSectionHead</span></div></div>
+        <div class="foot"><span class="nm">6 atoms · same title+trailing pattern · differ by lead-in</span><span class="seam">title+link</span></div></div>
+    </div>
+  </section>
+
+  <!-- STICKY HEADER (proof in stage) -->
+  <section class="band">
+    <div class="bhd"><h2>Sticky Header</h2><span class="en">a section header proven pinned — it stays at top while its own content scrolls under it</span><span class="ct">proof</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="stage" id="stage-sticky">
+        <div class="shead">
+          <div class="sicon"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div>
+          <div class="htitles"><div class="big">Label</div></div>
+          <span class="ctpill">12</span>
+          <a class="lnk" tabindex="0">Action<svg class="i" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M9 6l6 6-6 6"/></svg></a>
+        </div>
+        <div class="fill">
+          <div class="frow"><span class="fl">Label</span><span class="gl"></span><span class="fv">Value</span></div>
+          <div class="frow"><span class="fl">Label</span><span class="gl" style="max-width:70%"></span><span class="fv">Value</span></div>
+          <div class="frow"><span class="fl">Label</span><span class="gl" style="max-width:88%"></span><span class="fv">Value</span></div>
+          <div class="frow"><span class="fl">Label</span><span class="gl" style="max-width:54%"></span><span class="fv">Value</span></div>
+          <div class="frow"><span class="fl">Label</span><span class="gl" style="max-width:80%"></span><span class="fv">Value</span></div>
+          <div class="frow"><span class="fl">Label</span><span class="gl" style="max-width:64%"></span><span class="fv">Value</span></div>
+          <div class="frow"><span class="fl">Label</span><span class="gl"></span><span class="fv">Value</span></div>
+          <div class="frow"><span class="fl">Label</span><span class="gl" style="max-width:76%"></span><span class="fv">Value</span></div>
+          <div class="frow"><span class="fl">Label</span><span class="gl" style="max-width:60%"></span><span class="fv">Value</span></div>
+          <div class="frow"><span class="fl">Label</span><span class="gl" style="max-width:84%"></span><span class="fv">Value</span></div>
+        </div>
+      </div>
+        <div class="foot"><span class="nm">StickyHeader · pinned in short stage</span><span class="seam live">sticky · pinned over scroll</span></div></div>
+    </div>
+  </section>
+
+  <!-- HERO HEADER -->
+  <section class="band">
+    <div class="bhd"><h2>Hero Header</h2><span class="en">large serif title + eyebrow + aura background — the landing statement</span><span class="ct">3</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="hdr hero"><div class="kt">Eyebrow</div><div class="big">Label</div><div class="sub">Meta · the one sentence that frames everything below, set larger and calmer.</div><div class="cta"><span class="act pri">Action</span><span class="act gho">Action</span></div></div>
+        <div class="foot"><span class="nm">HeroHeader · aura · canonical</span><span class="seam">title+cta</span></div></div>
+      <div class="cell full"><div class="hdr hero grad"><div class="kt">Eyebrow</div><div class="big" style="font-size:34px">Label</div><div class="sub">Meta</div><div class="cta"><span class="act gho">Action</span></div></div>
+        <div class="foot"><span class="nm">GradientHeroCard · full-bleed</span><span class="seam">title+cta</span></div></div>
+      <div class="cell full"><div class="hdr hero" style="min-height:auto;padding:24px 26px"><div class="hrow" style="align-items:flex-start"><div class="htitles"><div class="kt">Project</div><div class="big" style="font-size:28px">Label</div><div class="sub">Meta</div></div><div class="dots" style="margin-top:6px"><i class="on"></i><i class="now"></i><i></i></div></div></div>
+        <div class="foot"><span class="nm">SmartProjectHero · with status</span><span class="seam">title</span></div></div>
+    </div>
+  </section>
+
+  <!-- BRAND HEADER -->
+  <section class="band">
+    <div class="bhd"><h2>Brand Header</h2><span class="en">mark + name + nav slot — the top-of-app identity bar</span><span class="ct">3</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="hdr" style="padding:15px 18px"><div class="brnd"><div class="mark">L</div><div class="bname">Label<small>Meta</small></div><nav class="nav" aria-label="Primary"><a aria-current="page">Label</a><a>Label</a><a>Label</a><a>Label</a></nav><button class="ico" aria-label="Account"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0116 0"/></svg></button></div></div>
+        <div class="foot"><span class="nm">BrandHeader · canonical</span><span class="seam">mark+nav</span></div></div>
+      <div class="cell"><div class="hdr" style="padding:15px 16px"><div class="brnd"><div class="mark" style="width:34px;height:34px;font-size:15px;border-radius:10px">L</div><div class="bname" style="font-size:16px">Label</div></div></div>
+        <div class="foot"><span class="nm">BrandListRow · compact</span><span class="seam">mark</span></div></div>
+      <div class="cell"><div class="hdr" style="padding:15px 16px"><div class="brnd"><div class="mark" style="border-radius:50%">L</div><div class="bname" style="font-size:16px">Label<small>Meta</small></div><span class="ctpill" style="margin-inline-start:auto">Live</span></div></div>
+        <div class="foot"><span class="nm">StoreSupplierHeader · generic</span><span class="seam">mark</span></div></div>
+    </div>
+  </section>
+
+  <!-- WIZARD / SHEET HEADER -->
+  <section class="band">
+    <div class="bhd"><h2>Wizard &amp; Sheet Header</h2><span class="en">step N of M + progress · sheet title + dismiss — headers that lead a flow</span><span class="ct">4</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="hdr wiz"><div class="steps"><span class="stepn">Step <b>2</b> of 5</span><div class="dots"><i class="on"></i><i class="now"></i><i></i><i></i><i></i></div></div><div class="prog"><i style="width:40%"></i></div><div class="big">Label</div><div class="sub">Meta</div></div>
+        <div class="foot"><span class="nm">WizardHeader · canonical</span><span class="seam">progress</span></div></div>
+      <div class="cell"><div class="hdr wiz" style="padding:16px 18px"><div class="steps"><span class="stepn"><b>3</b> / 4</span><a class="lnk">Skip</a></div><div class="prog"><i style="width:75%"></i></div></div>
+        <div class="foot"><span class="nm">StepProgressHeader</span><span class="seam">progress</span></div></div>
+      <div class="cell"><div class="hdr sheet"><span class="grab"></span><div class="hrow" style="margin-top:6px"><div class="htitles"><div class="big" style="font-size:16px">Label</div></div><button class="ico" style="width:32px;height:32px" aria-label="Close"><svg class="i" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div></div>
+        <div class="foot"><span class="nm">SheetHeader · grabber + close</span><span class="seam">title</span></div></div>
+      <div class="cell"><div class="hdr" style="padding:14px 16px"><div class="hrow"><button class="backb" aria-label="Back"><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><div class="htitles" style="text-align:center"><div class="big" style="font-size:15px">Label</div></div><button class="ico" style="width:32px;height:32px" aria-label="Done"><svg class="i" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M5 13l4 4L19 7"/></svg></button></div></div>
+        <div class="foot"><span class="nm">ModalHeader · nav bar</span><span class="seam">title</span></div></div>
+    </div>
+  </section>
+
+  <!-- PROFILE HEADER -->
+  <section class="band">
+    <div class="bhd"><h2>Profile Header</h2><span class="en">avatar + name + meta + action — the identity masthead of a record</span><span class="ct">cluster</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="hdr prof" style="padding:18px 20px"><div class="hrow"><div class="av md"><span class="rng"></span>L</div><div class="htitles"><div class="pname">Label</div><div class="pmeta"><span><svg class="i" viewBox="0 0 24 24" style="width:12px;height:12px"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Meta</span><span>Meta</span></div></div><span class="act">Action</span></div></div>
+        <div class="foot"><span class="nm">ProfileHeaderRow · canonical</span><span class="seam">avatar+meta</span></div></div>
+      <div class="cell"><div class="hdr prof center"><div class="av lg"><span class="rng"></span>L</div><div class="pname" style="margin-top:10px">Label</div><div class="pmeta"><span>Meta</span></div><span class="act gho" style="margin-top:10px">Action</span></div>
+        <div class="foot"><span class="nm">ProfileCard · centered</span><span class="seam">avatar+meta</span></div></div>
+      <div class="cell"><div class="hdr" style="padding:14px 16px"><div class="hrow"><div class="av md" style="width:38px;height:38px;font-size:14px;border-radius:12px">L</div><div class="htitles"><div class="pname" style="font-size:14px">Label</div><div class="pmeta" style="margin-top:2px"><span>Meta</span></div></div><span class="ctpill">Live</span></div></div>
+        <div class="foot"><span class="nm">ProfileRow · compact</span><span class="seam">avatar</span></div></div>
+      <div class="cell full"><div class="inh"><div class="av md" style="width:26px;height:26px;font-size:11px;border-radius:8px">L</div><span class="lead">inherit ProfileHeaderRow →</span><div class="chips"><span class="chip">ProfileCard</span><span class="chip">ProfileRow</span><span class="chip">WorkerProfileStat</span><span class="chip">SupplierHeader</span><span class="chip">ContactHeader</span><span class="chip">MemberHeader</span></div></div>
+        <div class="foot"><span class="nm">6 atoms · same avatar+name+meta frame · differ by source</span><span class="seam">avatar+meta</span></div></div>
+    </div>
+  </section>
+
+  <!-- DATE HEADER -->
+  <section class="band">
+    <div class="bhd"><h2>Date Header</h2><span class="en">a grouping divider that leads a dated list — label, rule, count · numbers LTR</span><span class="ct">4</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="hdr" style="padding:12px 18px"><div class="dhd"><span class="dnum">03</span><span class="dlab">Label</span><span class="rule"></span><span class="dct">4 items</span></div></div>
+        <div class="foot"><span class="nm">DateHeader · list divider · canonical</span><span class="seam">divider</span></div></div>
+      <div class="cell"><div class="hdr" style="padding:14px 16px"><div class="hrow"><div class="dchip"><span class="dm">Label</span><span class="dd">12</span></div><div class="htitles"><div class="big" style="font-size:15px">Label</div><div class="sub" style="margin-top:2px">Meta</div></div></div></div>
+        <div class="foot"><span class="nm">DateChip · block</span><span class="seam">date</span></div></div>
+      <div class="cell"><div class="hdr" style="padding:16px"><div class="dpills"><span class="dpill on">Label</span><span class="dpill">Label</span><span class="dpill">Label</span><span class="dpill">Label</span></div></div>
+        <div class="foot"><span class="nm">DatePills · range select</span><span class="seam">date</span></div></div>
+      <div class="cell"><div class="hdr" style="padding:12px 16px"><div class="dhd"><span class="dlab" style="color:var(--faint)">Label</span><span class="rule"></span><a class="lnk">Today</a></div></div>
+        <div class="foot"><span class="nm">DsDateField · label + jump</span><span class="seam">divider</span></div></div>
+    </div>
+  </section>
+
+  <footer><div class="colo"><div>PURE — <b>Header Family</b></div><div>~28 atoms · header type is the signature · big titles serif · theme = parameter</div><div>content = Label / Value / Meta · numbers LTR</div></div></footer>
+</div>
+
+<script>
+  var root=document.documentElement;root.className='t-indigo';
+  var seg=document.getElementById('seg'),ind=document.getElementById('ind'),btns=[].slice.call(seg.querySelectorAll('button'));
+  function place(el,indEl,box){var sr=box.getBoundingClientRect(),br=el.getBoundingClientRect();indEl.style.width=br.width+'px';indEl.style.transform='translateX('+(br.left-sr.left-3)+'px)';}
+  btns.forEach(function(b){b.addEventListener('click',function(){root.className=b.dataset.t;btns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});place(b,ind,seg);});});
+  place(btns[0],ind,seg);if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){place(seg.querySelector('[aria-pressed="true"]'),ind,seg);});}
+  window.addEventListener('resize',function(){place(seg.querySelector('[aria-pressed="true"]'),ind,seg);});
+  /* pre-scroll the proof stage so the pinned bar visibly overlaps content in a static render */
+  var stg=document.getElementById('stage-sticky');if(stg){stg.scrollTop=78;}
+</script>

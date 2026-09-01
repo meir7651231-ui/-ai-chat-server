@@ -1,0 +1,350 @@
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+  PURE — Indicator / Status Family. Archetype 13. representative atoms from atlas.json.
+  Pure · content = Label/Meta + neutral numbers · numbers LTR tnum · SVG only, no emoji.
+  SEMANTIC-HEAVY: info/accent/stage = var(--a*) MORPH with theme · success=--ok warning=--warn error=--err trend up/down = ok/err ALL FIXED.
+  canonical + inherit for Chip/Pill/Badge clusters (§4).
+-->
+<title>Pure — Status Family</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Frank+Ruhl+Libre:wght@700&family=Space+Grotesk:wght@400;500;600;700&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--canvas:#0C0C0E;--sunken:#0A0A0C;--surface:#151517;--raised:#1B1B1E;--raised2:#212126;--ink:#ECE9E2;--mut:#9B968C;--faint:#6E6A62;--hair:rgba(236,233,226,.09);--hair2:rgba(236,233,226,.05);
+    --err:#E0574E;--warn:#E6B84F;--ok:#43D08C;
+    --serif:"Fraunces",Georgia,serif;--serifHe:"Frank Ruhl Libre",serif;--grotesk:"Space Grotesk",ui-monospace,monospace;--he:"Heebo","Segoe UI",sans-serif;--ease:cubic-bezier(.2,.7,.15,1);--spring:cubic-bezier(.34,1.4,.5,1)}
+  .t-indigo{--a-hi:#B0A4FF;--a:#7A6BF0;--a-800:#4B3ECB;--gl:rgba(122,107,240,.42);--c2:#4CC6E6;--c3:#B57BE6}
+  .t-teal{--a-hi:#6FE6D5;--a:#1FB8A6;--a-800:#0C7E72;--gl:rgba(31,184,166,.42);--c2:#4FB6E6;--c3:#43D08C}
+  .t-amber{--a-hi:#F2C87E;--a:#D99A3C;--a-800:#9E6B1E;--gl:rgba(217,154,60,.42);--c2:#E8863C;--c3:#E67BA6}
+  *{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}
+  body{background:var(--canvas);color:var(--ink);direction:rtl;font-family:var(--he);-webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden;transition:background-color .6s var(--ease);background-image:radial-gradient(120% 36% at 84% -6%,var(--gl),transparent 60%)}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.038;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 40px;position:relative;z-index:1}::selection{background:var(--a);color:#0A0A0C}
+  .bar{position:sticky;top:0;z-index:60;background:linear-gradient(180deg,rgba(12,12,14,.94),rgba(12,12,14,.62));backdrop-filter:blur(14px);border-bottom:1px solid var(--hair)}
+  .bar .in{max-width:1200px;margin:0 auto;padding:12px 40px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .bar .mk{font-family:var(--serif);font-size:20px;font-weight:600;letter-spacing:-.02em;direction:ltr}.bar .mk i{color:var(--a);transition:color .55s var(--ease)}.bar .mk small{font-family:var(--grotesk);font-size:10px;color:var(--faint);letter-spacing:2px;margin-inline-start:10px;text-transform:uppercase}
+  .seg{display:flex;padding:3px;background:var(--sunken);border:1px solid var(--hair);border-radius:999px;position:relative}
+  .seg button{position:relative;z-index:2;border:0;background:none;cursor:pointer;padding:8px 17px;border-radius:999px;font-family:var(--grotesk);font-size:12px;font-weight:600;color:var(--mut);transition:color .35s;display:flex;align-items:center;gap:7px;min-height:44px}.seg button .d{width:9px;height:9px;border-radius:50%}.seg button[aria-pressed="true"]{color:var(--ink)}.seg button:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+  .seg .ind{position:absolute;z-index:1;top:3px;bottom:3px;left:0;border-radius:999px;background:var(--raised);box-shadow:0 2px 8px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06);transition:transform .45s var(--ease),width .45s var(--ease)}
+  .intro{padding:40px 0 6px}.intro .kick{display:flex;align-items:center;gap:14px;margin-bottom:16px}.intro .kick .tick{width:34px;height:1px;background:var(--a);transition:background-color .55s var(--ease)}
+  .eyebrow{font-family:var(--grotesk);font-size:11px;font-weight:600;letter-spacing:3px;color:var(--faint);text-transform:uppercase;direction:ltr}
+  .intro h1{font-family:var(--serifHe);font-weight:700;font-size:clamp(28px,5vw,44px);letter-spacing:-.01em}.intro .he{font-family:var(--grotesk);font-size:12.5px;color:var(--mut);margin-top:10px;direction:ltr}
+  .band{padding:22px 0;border-top:1px solid var(--hair)}
+  .bhd{display:flex;align-items:baseline;gap:12px;margin-bottom:16px;flex-wrap:wrap}.bhd h2{font-family:var(--serifHe);font-weight:700;font-size:19px}.bhd .en{font-family:var(--grotesk);font-size:10px;color:var(--faint);letter-spacing:1.5px;text-transform:uppercase;direction:ltr} .bhd .ct{font-family:var(--grotesk);font-size:10px;color:var(--mut);direction:ltr;margin-inline-start:auto}
+  .fam{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+  .fam.sm{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+  .cell{display:flex;flex-direction:column;gap:10px}
+  .cell.full{grid-column:1/-1}
+  .foot{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .nm{font-family:var(--grotesk);font-size:10px;font-weight:600;color:var(--ink);direction:ltr;line-height:1.3}
+  .seam{font-family:var(--grotesk);font-size:7.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:1px 5px;border-radius:999px;direction:ltr;border:1px solid var(--hair);color:var(--mut);flex:none}
+  .seam.coll{color:var(--c2);border-color:rgba(76,198,230,.35)}.seam.series{color:var(--c3);border-color:rgba(181,123,230,.35)}
+  .inh{width:100%;display:flex;align-items:center;gap:14px;flex-wrap:wrap}.inh .lead{font-family:var(--grotesk);font-size:9px;color:var(--faint);direction:ltr;text-transform:uppercase;letter-spacing:1px;flex:none}
+  .inh .chips{display:flex;flex-wrap:wrap;gap:6px;flex:1}.inh .chip{font-family:var(--grotesk);font-size:10px;color:var(--mut);direction:ltr;padding:4px 9px;border:1px solid var(--hair);border-radius:999px;background:var(--sunken)}
+  svg.i{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  /* --- base surface --- */
+  .surf{position:relative;border:1px solid var(--hair);border-radius:16px;background:linear-gradient(180deg,var(--surface),var(--sunken));padding:18px;min-height:130px;overflow:hidden;transition:transform .25s var(--spring),border-color .25s,box-shadow .3s}
+  .surf .st{font-family:var(--he);font-size:14px;font-weight:600}.surf .sm2{font-size:11.5px;color:var(--mut);margin-top:3px}
+  .surf .tag{position:absolute;top:14px;inset-inline-start:14px;font-family:var(--grotesk);font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--faint);direction:ltr}
+  /* variants */
+  .surf.flat{background:var(--surface);box-shadow:none;border-color:var(--hair2)}
+  .surf.elev{background:linear-gradient(180deg,var(--raised2),var(--raised));box-shadow:0 22px 50px rgba(0,0,0,.62),0 4px 10px rgba(0,0,0,.4);border-color:rgba(236,233,226,.13)}
+  .surf.out{background:none;border:1.5px solid color-mix(in srgb,var(--a) 40%,var(--hair))}
+  .surf.glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(12px);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 12px 34px rgba(0,0,0,.4)}
+  .surf.grad{background:linear-gradient(135deg,var(--c2),var(--a) 55%,var(--c3));border:0;color:#0B0B0D}.surf.grad .sm2{color:rgba(11,11,13,.7)}.surf.grad .tag{color:rgba(11,11,13,.55)}
+  .surf.spot{background:radial-gradient(130% 120% at 22% 12%,var(--gl),transparent 55%),var(--surface);border-color:color-mix(in srgb,var(--a) 26%,var(--hair))}
+  .surf.hero{background:radial-gradient(120% 130% at 80% -10%,var(--gl),transparent 55%),linear-gradient(180deg,var(--raised),var(--sunken));border-color:var(--hair)}
+  .surf .halo{position:absolute;inset:0;pointer-events:none;background:radial-gradient(180px 120px at var(--mx,30%) var(--my,20%),var(--gl),transparent 60%);opacity:0;transition:opacity .3s}
+  .surf.spot:hover .halo{opacity:1}
+  /* --- stat --- */
+  .stat{border:1px solid var(--hair);border-radius:14px;background:linear-gradient(180deg,var(--surface),var(--sunken));padding:15px 16px;display:flex;flex-direction:column;gap:6px}
+  .stat .k{font-family:var(--he);font-size:11px;font-weight:600;color:var(--mut)}
+  .stat .v{font-family:var(--grotesk);font-size:30px;font-weight:700;letter-spacing:-.02em;font-feature-settings:"tnum";direction:ltr;line-height:1}
+  .stat .d{display:inline-flex;align-items:center;gap:4px;font-family:var(--grotesk);font-size:11px;font-weight:600;direction:ltr;font-feature-settings:"tnum"}
+  .stat .d.up{color:var(--ok)}.stat .d.dn{color:var(--err)}
+  .stat.accent .v{color:var(--a-hi)}
+  .stat .spark{display:flex;align-items:flex-end;gap:3px;height:26px;margin-top:2px}.stat .spark i{flex:1;background:linear-gradient(180deg,var(--a-hi),var(--a));border-radius:2px;opacity:.85}
+  .stat.kpi{background:radial-gradient(120% 130% at 85% -20%,var(--gl),transparent 55%),var(--surface)}
+  .strip{display:flex;border:1px solid var(--hair);border-radius:14px;overflow:hidden;background:var(--surface)}
+  .strip .s{flex:1;padding:13px 14px;border-inline-start:1px solid var(--hair)}.strip .s:last-child{border:0}.strip .k{font-size:10px;color:var(--mut);font-weight:600}.strip .v{font-family:var(--grotesk);font-size:19px;font-weight:700;font-feature-settings:"tnum";direction:ltr}
+  /* --- record card --- */
+  .rec{border:1px solid var(--hair);border-radius:15px;background:linear-gradient(180deg,var(--surface),var(--sunken));overflow:hidden}
+  .rec .rh{display:flex;align-items:center;gap:11px;padding:14px 15px;border-bottom:1px solid var(--hair)}
+  .rec .rav{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;color:#0B0B0D;font-family:var(--grotesk);font-weight:700;background:linear-gradient(140deg,var(--a-hi),var(--a));flex:none}
+  .rec .rt{flex:1}.rec .rt b{font-size:13.5px;font-weight:600;display:block}.rec .rt span{font-size:11px;color:var(--faint);font-family:var(--grotesk);direction:ltr}
+  .rec .rb{padding:6px 15px 12px}
+  .kv{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--hair2);font-size:12.5px}.kv:last-child{border:0}.kv .kk{color:var(--mut)}.kv .vv{font-family:var(--grotesk);font-feature-settings:"tnum";direction:ltr}
+  .rec .chip{font-family:var(--grotesk);font-size:9px;font-weight:700;padding:2px 7px;border-radius:999px;direction:ltr;color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent);border:1px solid color-mix(in srgb,var(--ok) 30%,transparent)}
+  /* --- hub tile --- */
+  .hub{border:1px solid var(--hair);border-radius:15px;background:linear-gradient(180deg,var(--surface),var(--sunken));padding:16px;display:flex;flex-direction:column;gap:11px;cursor:pointer;transition:transform .25s var(--spring),border-color .25s}
+  .hub:hover{transform:translateY(-3px);border-color:var(--a)}
+  .hub.sel{position:relative;border-color:var(--a);background:radial-gradient(120% 130% at 90% -20%,var(--gl),transparent 55%),var(--surface)}
+  .hub.sel::before{content:"";position:absolute;inset-block:14px;inset-inline-start:0;width:3px;border-radius:999px;background:linear-gradient(180deg,var(--a-hi),var(--a))}
+  .hub .hi{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;color:var(--a-hi);background:radial-gradient(120% 120% at 30% 20%,var(--gl),transparent 60%),var(--sunken);border:1px solid var(--hair)}.hub .hi svg{width:20px;height:20px}
+  .hub b{font-size:13.5px;font-weight:600}.hub .hm{font-size:11px;color:var(--mut)}
+  .hub .arr{align-self:flex-start;color:var(--faint)}
+  /* --- section / accordion --- */
+  .sect{border:1px solid var(--hair);border-radius:14px;background:var(--surface);overflow:hidden}
+  .sect .shd{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;cursor:pointer}
+  .sect .shd b{font-size:13px;font-weight:600}.sect .shd .ch{color:var(--faint);transition:transform .3s}
+  .sect.open .shd .ch{transform:rotate(180deg)}
+  .sect .sbd{padding:0 15px 13px;font-size:12px;color:var(--mut)}.sect:not(.open) .sbd{display:none}
+  .estp{border:1px solid var(--hair);border-radius:14px;background:var(--surface);padding:14px}.estp .er{display:flex;justify-content:space-between;padding:5px 0;font-size:12px}.estp .er.tot{border-top:1px solid var(--hair);margin-top:6px;padding-top:9px;font-weight:700}.estp .er .v{font-family:var(--grotesk);font-feature-settings:"tnum";direction:ltr}
+  /* --- status --- */
+  .stwrap{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+  .sd{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--mut)}
+  .sd .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .sd .dot.live{background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 25%,transparent)}
+  .sd .dot.live.pulse{animation:pl 1.6s ease infinite}@keyframes pl{0%,100%{box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 25%,transparent)}50%{box-shadow:0 0 0 7px color-mix(in srgb,var(--ok) 6%,transparent)}}
+  .sd .dot.off{background:var(--faint)}.sd .dot.warn{background:var(--warn)}
+  .spill{display:inline-flex;align-items:center;gap:6px;font-family:var(--grotesk);font-size:10px;font-weight:700;padding:4px 10px;border-radius:999px;direction:ltr;color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent);border:1px solid color-mix(in srgb,var(--ok) 30%,transparent)}
+  .spill .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);animation:pl 1.6s ease infinite}
+  /* --- motion --- */
+  .flip{perspective:900px;cursor:pointer}.flip .in{position:relative;height:120px;transition:transform .6s var(--spring);transform-style:preserve-3d}.flip:hover .in{transform:rotateY(180deg)}
+  .flip .fc{position:absolute;inset:0;backface-visibility:hidden;border:1px solid var(--hair);border-radius:15px;display:grid;place-items:center;font-weight:600}
+  .flip .fr{background:linear-gradient(180deg,var(--surface),var(--sunken))}.flip .bk{background:linear-gradient(135deg,var(--c2),var(--a) 55%,var(--c3));color:#0B0B0D;transform:rotateY(180deg)}
+  .reveal{position:relative;border:1px solid var(--hair);border-radius:15px;background:var(--surface);height:120px;overflow:hidden;display:grid;place-items:center;font-weight:600;cursor:pointer}
+  .reveal .rv{position:absolute;inset:0;background:linear-gradient(135deg,var(--a-hi),var(--a));color:#0B0B0D;display:grid;place-items:center;transform:translateY(100%);transition:transform .4s var(--ease)}.reveal:hover .rv{transform:none}
+  footer{padding:30px 0 70px;border-top:1px solid var(--hair);margin-top:6px}.colo{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--grotesk);font-size:11px;color:var(--faint);direction:ltr}.colo b{color:var(--ink)}
+  @media(max-width:820px){.wrap{padding:0 18px}.bar .in{padding:11px 18px}.bar .mk small{display:none}}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+  /* ============ STATUS / INDICATOR FAMILY (added) ============ */
+  /* the 5-tone theater: info morphs with accent · ok/warn/err/neutral fixed */
+  .tone-info{--tone:var(--a-hi)}    /* MORPHS with theme */
+  .tone-ok{--tone:var(--ok)}        /* FIXED green */
+  .tone-warn{--tone:var(--warn)}    /* FIXED amber */
+  .tone-err{--tone:var(--err)}      /* FIXED red */
+  .tone-neutral{--tone:var(--mut)}  /* FIXED grey */
+  /* semantic chip */
+  .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px 2px}
+  .schip{display:inline-flex;align-items:center;gap:6px;font-family:var(--grotesk);font-size:10.5px;font-weight:700;padding:5px 11px;border-radius:999px;direction:ltr;line-height:1;min-height:26px;color:var(--tone);background:color-mix(in srgb,var(--tone) 14%,transparent);border:1px solid color-mix(in srgb,var(--tone) 32%,transparent)}
+  .schip .dt{width:6px;height:6px;border-radius:50%;background:var(--tone);flex:none}
+  .schip.solid{color:#0B0B0D;background:var(--tone);border-color:transparent}
+  .schip.solid .dt{background:#0B0B0D;opacity:.55}
+  .schip svg{width:12px;height:12px}
+  /* dot + label (never bare) */
+  .sd .dot.busy{background:var(--warn)}
+  /* count / notify badge */
+  .nbwrap{display:flex;gap:18px;align-items:center;padding:8px 2px}
+  .nbadge{position:relative;display:inline-grid;place-items:center;width:40px;height:40px;border-radius:12px;background:var(--sunken);border:1px solid var(--hair);color:var(--mut)}
+  .nbadge svg{width:19px;height:19px}
+  .nbadge .cnt{position:absolute;top:-6px;inset-inline-start:-6px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:var(--err);color:#fff;font-family:var(--grotesk);font-size:9.5px;font-weight:700;display:grid;place-items:center;direction:ltr;border:2px solid var(--canvas);font-feature-settings:"tnum"}
+  .nbadge .pip{position:absolute;top:-2px;inset-inline-start:-2px;width:10px;height:10px;border-radius:50%;background:var(--err);border:2px solid var(--canvas)}
+  .tbadge{display:inline-flex;align-items:center;gap:5px;font-family:var(--grotesk);font-size:9.5px;font-weight:700;padding:3px 8px;border-radius:6px;direction:ltr;text-transform:uppercase;letter-spacing:.5px;color:var(--tone);background:color-mix(in srgb,var(--tone) 13%,transparent);border:1px solid color-mix(in srgb,var(--tone) 28%,transparent)}
+  /* severity — escalating ok -> warn -> err */
+  .sev{display:flex;flex-direction:column;gap:10px}
+  .sevrow{display:flex;align-items:center;gap:10px}
+  .sevrow .lb{font-family:var(--grotesk);font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;direction:ltr;color:var(--tone);width:64px;flex:none}
+  .sevrow .bars{display:inline-flex;gap:3px}
+  .sevrow .bars i{width:5px;height:13px;border-radius:1.5px;background:var(--tone);opacity:.22}
+  .sevrow .bars i.on{opacity:1}
+  .sevrow .mt{font-family:var(--grotesk);font-size:10px;color:var(--faint);direction:ltr;margin-inline-start:auto;font-feature-settings:"tnum"}
+  /* meter / bar */
+  .meter{display:flex;flex-direction:column;gap:7px}
+  .meter .mtop{display:flex;justify-content:space-between;align-items:baseline}
+  .meter .ml{font-size:11px;color:var(--mut);font-weight:600}
+  .meter .mv{font-family:var(--grotesk);font-size:12px;font-weight:700;font-feature-settings:"tnum";direction:ltr}
+  .meter .track{height:8px;border-radius:999px;background:var(--sunken);overflow:hidden;border:1px solid var(--hair2)}
+  .meter .fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--a),var(--a-hi))}
+  .meter.ok .fill{background:linear-gradient(90deg,var(--ok),color-mix(in srgb,var(--ok) 55%,#fff))}
+  .meter.warn .fill{background:var(--warn)}
+  .meter.err .fill{background:var(--err)}
+  .meter.ok .mv{color:var(--ok)}.meter.warn .mv{color:var(--warn)}.meter.err .mv{color:var(--err)}
+  .seg-meter{display:flex;gap:3px;height:9px}
+  .seg-meter i{flex:1;border-radius:2px;background:var(--sunken);border:1px solid var(--hair2)}
+  .seg-meter i.on{background:linear-gradient(180deg,var(--a-hi),var(--a));border-color:transparent}
+  /* gauge / radial */
+  .gwrap{display:flex;gap:20px;justify-content:center;align-items:center;flex-wrap:wrap;padding:4px 0}
+  .gauge{position:relative;width:112px;height:112px}
+  .gauge svg{transform:rotate(-90deg)}
+  .gauge .tk{stroke:var(--sunken);stroke-width:9;fill:none}
+  .gauge .vl{stroke:var(--a);stroke-width:9;fill:none;stroke-linecap:round;transition:stroke .55s var(--ease)}
+  .gauge.ok .vl{stroke:var(--ok)}
+  .gauge .lab{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+  .gauge .lab b{font-family:var(--grotesk);font-size:23px;font-weight:700;font-feature-settings:"tnum";direction:ltr;line-height:1}
+  .gauge .lab span{font-family:var(--grotesk);font-size:8.5px;color:var(--faint);text-transform:uppercase;letter-spacing:1px;direction:ltr}
+  .ring{position:relative;width:66px;height:66px}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .tk{stroke:var(--sunken);stroke-width:6;fill:none}
+  .ring .vl{stroke:var(--a);stroke-width:6;fill:none;stroke-linecap:round}
+  .ring .lab{position:absolute;inset:0;display:grid;place-content:center;font-family:var(--grotesk);font-size:13px;font-weight:700;font-feature-settings:"tnum";direction:ltr}
+  /* score band — segmented 0-100 with marker */
+  .score{display:flex;flex-direction:column;gap:10px}
+  .score .bar2{position:relative;height:9px;border-radius:999px;overflow:hidden;display:flex}
+  .score .bar2 .z{height:100%}
+  .score .zl{background:color-mix(in srgb,var(--err) 78%,transparent)}
+  .score .zm{background:color-mix(in srgb,var(--warn) 78%,transparent)}
+  .score .zh{background:color-mix(in srgb,var(--ok) 82%,transparent)}
+  .score .track2{position:relative;height:20px}
+  .score .mk2{position:absolute;top:-16px;transform:translateX(50%);display:flex;flex-direction:column;align-items:center}
+  .score .mk2 b{font-family:var(--grotesk);font-size:11px;font-weight:700;font-feature-settings:"tnum";direction:ltr;color:var(--ink)}
+  .score .mk2 .pt{width:0;height:0;border-inline:5px solid transparent;border-top:7px solid var(--ink);margin-top:2px}
+  .score .sc{display:flex;justify-content:space-between;font-family:var(--grotesk);font-size:8.5px;color:var(--faint);direction:ltr;font-feature-settings:"tnum"}
+  .scband{display:inline-flex;align-items:center;gap:7px;font-family:var(--grotesk);font-size:11px;font-weight:700;direction:ltr;padding:5px 11px;border-radius:999px;color:var(--tone);background:color-mix(in srgb,var(--tone) 14%,transparent);border:1px solid color-mix(in srgb,var(--tone) 30%,transparent)}
+  .scband .n{font-feature-settings:"tnum"}
+  /* stage pill — pipeline, accent */
+  .stages{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+  .stg{font-family:var(--grotesk);font-size:9.5px;font-weight:600;padding:6px 11px;border-radius:999px;direction:ltr;color:var(--faint);background:var(--sunken);border:1px solid var(--hair);white-space:nowrap}
+  .stg.done{color:var(--a-hi);border-color:color-mix(in srgb,var(--a) 38%,var(--hair))}
+  .stg.on{color:#0B0B0D;background:linear-gradient(180deg,var(--a-hi),var(--a));border-color:transparent}
+  .stgsep{color:var(--faint);font-size:10px}
+  /* trend indicator — up ok / down err FIXED */
+  .trend{display:inline-flex;align-items:center;gap:5px;font-family:var(--grotesk);font-size:13px;font-weight:700;direction:ltr;font-feature-settings:"tnum"}
+  .trend svg{width:14px;height:14px}
+  .trend.up{color:var(--ok)}.trend.dn{color:var(--err)}.trend.flat{color:var(--mut)}
+
+  .hub:focus-visible,.sect .shd:focus-visible,.flip:focus-visible,.reveal:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
+</style>
+
+<div class="bar"><div class="in">
+  <div class="mk">Pure<i>.</i><small>Status Family</small></div>
+  <div class="seg" id="seg" role="group" aria-label="Theme"><span class="ind" id="ind"></span>
+    <button data-t="t-indigo" aria-pressed="true"><span class="d" style="background:#7A6BF0"></span>Indigo</button>
+    <button data-t="t-teal" aria-pressed="false"><span class="d" style="background:#1FB8A6"></span>Teal</button>
+    <button data-t="t-amber" aria-pressed="false"><span class="d" style="background:#D99A3C"></span>Amber</button>
+  </div>
+</div></div>
+
+<div class="wrap">
+  <header class="intro">
+    <div class="kick"><span class="tick"></span><span class="eyebrow">Archetype 13 · Indicator / Status</span></div>
+    <h1>משפחת המדד</h1>
+    <p class="he">semantic theater — info/accent/stage MORPH with theme · success=ok · warning=warn · error=err · trend up/down FIXED · content = Label/Meta · numbers LTR tnum · SVG only</p>
+  </header>
+
+  <!-- STATUS CHIP — the 5-tone theater -->
+  <section class="band">
+    <div class="bhd"><h2>Status Chip</h2><span class="en">the semantic theater — info morphs with accent · success/warning/error/neutral fixed</span><span class="ct">many</span></div>
+    <div class="fam">
+      <div class="cell full">
+        <div class="row" style="gap:10px">
+          <span class="schip tone-info"><span class="dt"></span>Label · info</span>
+          <span class="schip tone-ok"><svg class="i" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Label · success</span>
+          <span class="schip tone-warn"><svg class="i" viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01M10.3 4.3 2.6 18a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0Z"/></svg>Label · warning</span>
+          <span class="schip tone-err"><svg class="i" viewBox="0 0 24 24"><path d="M12 8v5M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>Label · error</span>
+          <span class="schip tone-neutral"><span class="dt"></span>Label · neutral</span>
+        </div>
+        <div class="foot"><span class="nm">StatusChip · canonical · 5-tone (info accent-morph · rest fixed)</span><span class="seam series">series</span></div>
+      </div>
+      <div class="cell"><div class="row"><span class="schip solid tone-info">Label</span><span class="schip solid tone-ok">Label</span><span class="schip solid tone-err">Label</span></div><div class="foot"><span class="nm">StatusChip · solid fill</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="row"><span class="schip tone-ok"><span class="dt"></span>Label</span><span class="schip tone-warn"><span class="dt"></span>Label</span></div><div class="foot"><span class="nm">StatusDotChip · dot + text</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="row"><span class="schip tone-info">Label</span><span class="schip tone-info" style="border-radius:7px">Label</span></div><div class="foot"><span class="nm">HierarchyChipPill · info</span><span class="seam">fields</span></div></div>
+      <div class="cell full"><div class="inh"><span class="schip tone-neutral" style="padding:4px 9px">Label</span><span class="lead">inherit StatusChip →</span><div class="chips"><span class="chip">Pill</span><span class="chip">BadgePill</span><span class="chip">CaPill</span><span class="chip">StorePill</span><span class="chip">IntelPill</span><span class="chip">RewardsHubPill</span><span class="chip">SectionPill</span><span class="chip">FilterChipPill</span><span class="chip">DraftBadge</span></div></div>
+        <div class="foot"><span class="nm">9 atoms · same chip frame · differ by tone/label</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- STATUS DOT -->
+  <section class="band">
+    <div class="bhd"><h2>Status Dot</h2><span class="en">live=ok pulse · busy=warn · off=faint · always beside a Label, never bare</span><span class="ct">many</span></div>
+    <div class="fam">
+      <div class="cell"><div class="row"><span class="sd"><span class="dot live"></span>Label</span><span class="sd"><span class="dot busy"></span>Label</span><span class="sd"><span class="dot off"></span>Label</span></div><div class="foot"><span class="nm">StatusDot · live / busy / off</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="row"><span class="sd"><span class="dot live pulse"></span>Label</span></div><div class="foot"><span class="nm">LiveStatusDot · pulsing</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="row"><span class="spill"><span class="dot"></span>LIVE</span></div><div class="foot"><span class="nm">LiveStatusPill</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="row"><span class="sd"><span class="dot live pulse"></span>Label · Meta</span></div><div class="foot"><span class="nm">PulsingStatus · with meta</span><span class="seam">fields</span></div></div>
+      <div class="cell full"><div class="inh"><span class="sd" style="gap:6px"><span class="dot live"></span></span><span class="lead">inherit StatusDot →</span><div class="chips"><span class="chip">Dot</span><span class="chip">LiveDot</span><span class="chip">StatusDotChip</span><span class="chip">MaterialDots</span><span class="chip">DotsLoader</span><span class="chip">BadgedIcon</span></div></div>
+        <div class="foot"><span class="nm">6 atoms · same dot primitive · differ by state/host</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- COUNT / NOTIFY BADGE -->
+  <section class="band">
+    <div class="bhd"><h2>Count · Notify Badge</h2><span class="en">dot pip vs number · rides an icon host · notify red fixed</span><span class="ct">many</span></div>
+    <div class="fam">
+      <div class="cell"><div class="nbwrap"><span class="nbadge"><svg class="i" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg><span class="cnt">8</span></span><span class="nbadge"><svg class="i" viewBox="0 0 24 24"><path d="M4 4h16v12H7l-3 3z"/></svg><span class="cnt">24</span></span></div><div class="foot"><span class="nm">NotifyBadge · number</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="nbwrap"><span class="nbadge"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 8h18"/></svg><span class="pip"></span></span><span class="nbadge"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg><span class="pip"></span></span></div><div class="foot"><span class="nm">CountBadge · dot pip (unread)</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="row"><span class="tbadge tone-info">Label 3</span><span class="tbadge tone-neutral">Label 12</span><span class="tbadge tone-err">Label 99+</span></div><div class="foot"><span class="nm">TintedBadgeRow · inline count</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="row"><span class="tbadge tone-warn"><svg class="i" viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5z"/></svg>Draft</span><span class="tbadge tone-neutral">WIP</span></div><div class="foot"><span class="nm">DraftBadge · UnderConstructionBadge</span><span class="seam">fields</span></div></div>
+      <div class="cell full"><div class="inh"><span class="nbadge" style="width:28px;height:28px"><span class="cnt" style="top:-5px;inset-inline-start:-5px;min-width:15px;height:15px">5</span></span><span class="lead">inherit NotifyBadge →</span><div class="chips"><span class="chip">CatalogCountBadge</span><span class="chip">ManagerDashboardCountBadge</span><span class="chip">CatalogConfigCountBadge</span><span class="chip">ZoomHintBadge</span><span class="chip">HomeShellBadgedIcon</span></div></div>
+        <div class="foot"><span class="nm">5 atoms · same badge overlay · differ by host icon</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- SEVERITY -->
+  <section class="band">
+    <div class="bhd"><h2>Severity Levels</h2><span class="en">escalating ok → warn → err · bars fill with level · color is the message</span><span class="ct">1</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="sev" style="padding:6px 4px 2px">
+        <div class="sevrow tone-ok"><span class="lb">Low</span><span class="bars"><i class="on"></i><i></i><i></i><i></i></span><span class="mt">Meta</span></div>
+        <div class="sevrow tone-warn"><span class="lb">Medium</span><span class="bars"><i class="on"></i><i class="on"></i><i></i><i></i></span><span class="mt">Meta</span></div>
+        <div class="sevrow tone-warn"><span class="lb" style="--tone:var(--err)">High</span><span class="bars" style="--tone:var(--err)"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="mt">Meta</span></div>
+        <div class="sevrow tone-err"><span class="lb">Critical</span><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="mt">Meta</span></div>
+      </div><div class="foot"><span class="nm">SeverityChip · low / medium / high / critical</span><span class="seam series">series</span></div></div>
+    </div>
+  </section>
+
+  <!-- METER / BAR -->
+  <section class="band">
+    <div class="bhd"><h2>Meter · Bar</h2><span class="en">labeled fill, value tnum % · accent morphs · ok/warn/err meters fixed</span><span class="ct">many</span></div>
+    <div class="fam">
+      <div class="cell"><div class="meter" style="padding:6px 0"><div class="mtop"><span class="ml">Label</span><span class="mv">72%</span></div><div class="track"><div class="fill" style="width:72%"></div></div></div><div class="foot"><span class="nm">LinearProgress · canonical (accent)</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="meter ok" style="padding:6px 0"><div class="mtop"><span class="ml">Label</span><span class="mv">94%</span></div><div class="track"><div class="fill" style="width:94%"></div></div></div><div class="foot"><span class="nm">Meter · success (fixed green)</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="meter warn" style="padding:6px 0"><div class="mtop"><span class="ml">Label</span><span class="mv">58%</span></div><div class="track"><div class="fill" style="width:58%"></div></div></div><div class="foot"><span class="nm">Meter · warning (fixed amber)</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="meter err" style="padding:6px 0"><div class="mtop"><span class="ml">Label</span><span class="mv">17%</span></div><div class="track"><div class="fill" style="width:17%"></div></div></div><div class="foot"><span class="nm">Meter · error (fixed red)</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div style="padding:6px 0"><div class="mtop" style="margin-bottom:7px;display:flex;justify-content:space-between"><span class="ml">Label</span><span class="mv" style="font-family:var(--grotesk)">4 / 6</span></div><div class="seg-meter"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div></div><div class="foot"><span class="nm">ProgressStatRow · segmented</span><span class="seam">fields</span></div></div>
+      <div class="cell full"><div class="inh"><div class="track" style="width:60px;flex:none"><div class="fill" style="width:66%"></div></div><span class="lead">inherit LinearProgress →</span><div class="chips"><span class="chip">ProgressStatRow</span><span class="chip">MaterialDots</span><span class="chip">CapacityBar</span><span class="chip">BudgetMeter</span></div></div>
+        <div class="foot"><span class="nm">4 atoms · same track/fill · differ by value source</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- GAUGE / RADIAL -->
+  <section class="band">
+    <div class="bhd"><h2>Gauge · Radial</h2><span class="en">arc value · accent stroke morphs · success gauge fixed green</span><span class="ct">many</span></div>
+    <div class="fam">
+      <div class="cell"><div class="gwrap"><div class="gauge"><svg viewBox="0 0 112 112"><circle class="tk" cx="56" cy="56" r="46"/><circle class="vl" cx="56" cy="56" r="46" stroke-dasharray="289" stroke-dashoffset="80"/></svg><div class="lab"><b>72</b><span>Label</span></div></div></div><div class="foot"><span class="nm">RadialGauge · canonical (accent)</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="gwrap"><div class="gauge ok"><svg viewBox="0 0 112 112"><circle class="tk" cx="56" cy="56" r="46"/><circle class="vl" cx="56" cy="56" r="46" stroke-dasharray="289" stroke-dashoffset="26"/></svg><div class="lab"><b>91</b><span>Label</span></div></div></div><div class="foot"><span class="nm">RadialGauge · success fixed</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="gwrap"><div class="ring"><svg viewBox="0 0 66 66"><circle class="tk" cx="33" cy="33" r="28"/><circle class="vl" cx="33" cy="33" r="28" stroke-dasharray="176" stroke-dashoffset="62"/></svg><div class="lab">65</div></div><div class="ring"><svg viewBox="0 0 66 66"><circle class="tk" cx="33" cy="33" r="28"/><circle class="vl" cx="33" cy="33" r="28" stroke-dasharray="176" stroke-dashoffset="35"/></svg><div class="lab">80</div></div></div><div class="foot"><span class="nm">ProgressRing · StoryRing</span><span class="seam">fields</span></div></div>
+      <div class="cell full"><div class="inh"><div class="ring" style="width:34px;height:34px"><svg viewBox="0 0 66 66"><circle class="tk" cx="33" cy="33" r="28"/><circle class="vl" cx="33" cy="33" r="28" stroke-dasharray="176" stroke-dashoffset="50"/></svg></div><span class="lead">inherit RadialGauge →</span><div class="chips"><span class="chip">ProgressRing</span><span class="chip">StoryRing</span><span class="chip">ScoreDial</span><span class="chip">UtilizationGauge</span></div></div>
+        <div class="foot"><span class="nm">4 atoms · same arc primitive · differ by radius/value</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- SCORE BAND -->
+  <section class="band">
+    <div class="bhd"><h2>Score Band</h2><span class="en">segmented 0-100 · fixed risk zones red/amber/green · marker at value</span><span class="ct">2</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="score" style="padding:14px 4px 4px">
+        <div class="track2"><div class="mk2" style="inset-inline-start:76%"><b>76</b><span class="pt"></span></div></div>
+        <div class="bar2"><div class="z zl" style="width:40%"></div><div class="z zm" style="width:30%"></div><div class="z zh" style="width:30%"></div></div>
+        <div class="sc"><span>0</span><span>40</span><span>70</span><span>100</span></div>
+      </div><div class="foot"><span class="nm">ScoreBandChip · segmented + marker</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="row"><span class="scband tone-ok"><span class="n">86</span> Label</span></div><div class="foot"><span class="nm">ScoreBandChip · banded (high=ok)</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="row"><span class="scband tone-warn"><span class="n">54</span> Label</span><span class="scband tone-err"><span class="n">21</span> Label</span></div><div class="foot"><span class="nm">ScoreBandChip · mid / low</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- STAGE PILL -->
+  <section class="band">
+    <div class="bhd"><h2>Stage Pill</h2><span class="en">pipeline position · current stage = accent (MORPHS) · done tinted, pending faint</span><span class="ct">many</span></div>
+    <div class="fam">
+      <div class="cell full"><div class="row" style="padding:10px 2px"><div class="stages"><span class="stg done">Label</span><span class="stgsep"><svg class="i" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span><span class="stg done">Label</span><span class="stgsep"><svg class="i" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span><span class="stg on">Label</span><span class="stgsep"><svg class="i" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span><span class="stg">Label</span><span class="stgsep"><svg class="i" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span><span class="stg">Label</span></div></div><div class="foot"><span class="nm">StagePill · pipeline (accent current)</span><span class="seam series">series</span></div></div>
+      <div class="cell"><div class="row"><span class="stg on">Label</span><span class="stg done">Label</span></div><div class="foot"><span class="nm">StagePill · single</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="row"><span class="stg done">Label</span><span class="stg">Label</span></div><div class="foot"><span class="nm">SectionPill · CaPill</span><span class="seam">fields</span></div></div>
+      <div class="cell full"><div class="inh"><span class="stg on" style="padding:4px 9px">Label</span><span class="lead">inherit StagePill →</span><div class="chips"><span class="chip">CaPill</span><span class="chip">SectionPill</span><span class="chip">StorePill</span><span class="chip">RewardsHubPill</span><span class="chip">StageProgress</span><span class="chip">StepperPill</span></div></div>
+        <div class="foot"><span class="nm">6 atoms · same stage pill · differ by pipeline</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <!-- TREND INDICATOR -->
+  <section class="band">
+    <div class="bhd"><h2>Trend Indicator</h2><span class="en">up = ok green · down = err red · FIXED regardless of theme (direction is meaning)</span><span class="ct">many</span></div>
+    <div class="fam">
+      <div class="cell"><div class="row" style="gap:16px"><span class="trend up"><svg class="i" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7v8"/></svg>12%</span><span class="trend dn"><svg class="i" viewBox="0 0 24 24"><path d="M7 7l10 10M17 17H9M17 17V9"/></svg>4%</span><span class="trend flat"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14"/></svg>0%</span></div><div class="foot"><span class="nm">TrendIndicator · up / down / flat</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="row"><span class="trend up"><svg class="i" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M21 7v6M21 7h-6"/></svg>Label</span></div><div class="foot"><span class="nm">IntelPill · trend up</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="stat accent" style="gap:5px"><span class="k">Label</span><span class="v">248</span><span class="d up"><svg class="i" viewBox="0 0 24 24" style="width:12px;height:12px"><path d="M7 17L17 7M17 7H9M17 7v8"/></svg>8%</span></div><div class="foot"><span class="nm">StatTile · embedded trend</span><span class="seam">fields</span></div></div>
+      <div class="cell full"><div class="inh"><span class="trend up" style="font-size:11px"><svg class="i" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7v8"/></svg></span><span class="lead">inherit TrendIndicator →</span><div class="chips"><span class="chip">DeltaChip</span><span class="chip">ChangeArrow</span><span class="chip">IntelPill</span><span class="chip">SparkTrend</span><span class="chip">MetricTile</span></div></div>
+        <div class="foot"><span class="nm">5 atoms · same up/down semantic · never morphs</span><span class="seam">fields</span></div></div>
+    </div>
+  </section>
+
+  <footer><div class="colo"><div>PURE — <b>Status Family</b></div><div>~40 atoms · info/accent/stage morph · ok/warn/err/trend fixed · theme = parameter</div><div>content = Label / Meta · numbers LTR tnum · SVG only</div></div></footer>
+</div>
+
+<script>
+  var root=document.documentElement;root.className='t-indigo';
+  var seg=document.getElementById('seg'),ind=document.getElementById('ind'),btns=[].slice.call(seg.querySelectorAll('button'));
+  function place(el,indEl,box){var sr=box.getBoundingClientRect(),br=el.getBoundingClientRect();indEl.style.width=br.width+'px';indEl.style.transform='translateX('+(br.left-sr.left-3)+'px)';}
+  btns.forEach(function(b){b.addEventListener('click',function(){root.className=b.dataset.t;btns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});place(b,ind,seg);});});
+  place(btns[0],ind,seg);if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){place(seg.querySelector('[aria-pressed="true"]'),ind,seg);});}
+  window.addEventListener('resize',function(){place(seg.querySelector('[aria-pressed="true"]'),ind,seg);});
+</script>
