@@ -1187,7 +1187,7 @@ class _${cls}State extends State<${cls}> {
           final i0 = _sel ?? (widget.initialId != null ? recs.indexWhere((r) => r['__id'] == widget.initialId) : 0);
           final i = (i0 < 0 ? 0 : i0).clamp(0, recs.length - 1);
           final r = recs[i];
-          final id = r['__id'] ?? '';
+          ${relations.length ? `final id = r['__id'] ?? '';` : ''}
           return ListView(
             padding: const EdgeInsets.only(bottom: 24, top: 8),
             children: [
