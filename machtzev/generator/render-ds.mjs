@@ -224,6 +224,25 @@ function compileGuard(cond, labels) {
   return { kind: 'filled', li: bi };
 }
 
+// 🔁 מהדר-תנאי-מבני: תנאי-guard ⇒ ביטוי-bool ב-Dart מעל _v[] (מספרי או "מלא"). עיוור-דומיין.
+function guardBool(g) {
+  const V = (i) => `(num.tryParse(_v[${i}] ?? '') ?? 0)`;
+  if (g.kind === 'num') return `${V(g.li)} ${g.op} ${g.num}`;
+  if (g.kind === 'ff') return `${V(g.li)} ${g.op} ${V(g.ri)}`;
+  if (g.kind === 'filled') return `(_v[${g.li}] ?? '').trim().isNotEmpty`;
+  return null;
+}
+// ⚡ שדה-נגזר-מותנה (התנהגות · §23-ד): 'ערך > סף ? חריגה : תקין' ⇒ ערך-חי המשתנה עם
+// הקלט. ההשוואה מ-compileGuard (מבנית); הערכים (then/else) מהאפיון (מוכנסים ל-content, לא
+// מילון-מנוע). מד-ניטור/סטטוס-סף אמיתי — לא CRUD סטטי. מילה-לא-מזוהה ⇒ null (כנות).
+function compileCond(formula, labels) {
+  const m = formula.match(/^(.+?)\s*\?\s*([^?:]+?)\s*:\s*([^?:]+)$/);
+  if (!m) return null;
+  const g = compileGuard(m[1].trim(), labels); if (!g) return null;
+  const b = guardBool(g); if (!b) return null;
+  return { bool: b, then: m[2].trim(), els: m[3].trim() };
+}
+
 // ── ישות: מסך-חי מחווט — טופס→שמירה→חנות→טבלה→דשבורד, + קשרים(מזהה) + מסע + עריכה/מחיקה ──
 export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard, guards = [], authz = null }) {
   const { k, dump } = makeConsts(slug);
@@ -315,6 +334,15 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
         addField(i, `_live(${cl}, ${wrap(`${f.name}(${formRec}${hz})`)})`, `true`);
         recValsR.push(wrap(`${f.name}(${cardRec}${hz})`));   // כרטיס/CSV: המנוע על הרשומה-השמורה
         mapVals.push(`${cl}: ''`);   // נגזר — לא מאוחסן
+        return;
+      }
+      // (0-cond) שדה-נגזר-מותנה: 'A op B ? then : else' ⇒ סטטוס-חי מהשוואה (התנהגות §23-ד).
+      const cd = compileCond(s.formula, labelIdx);
+      if (cd) {
+        hasLive = true;
+        const ce = `((${cd.bool}) ? ${k(cd.then)} : ${k(cd.els)})`;
+        addField(i, `_live(${cl}, ${ce})`, `true`);
+        recValsR.push(ce); mapVals.push(`${cl}: ''`);   // נגזר — לא מאוחסן
         return;
       }
       const expr = compileFormula(s.formula, labelIdx);

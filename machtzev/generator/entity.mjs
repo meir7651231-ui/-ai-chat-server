@@ -58,9 +58,12 @@ export function interpret(text) {
   });
   // שם-הישות + רשימת-השדות (בלי \b — לא עובד על עברית ב-JS)
   const body = main.replace(new RegExp('^\\s*' + alt(G.createVerbs) + '?\\s*' + alt(G.entityNouns) + '\\s+'), '');
-  const [namePart, ...rest] = body.split(new RegExp('\\s+' + G.withWord + '\\s+|\\s+' + G.fieldsWord + '[:\\s]+|\\s*:\\s*'));
+  // פיצול שם|שדות **פעם-אחת** במפריד-הראשון (עם/שדות/':') — כדי ש-':' בתוך שדה
+  // (למשל שדה-מותנה 'A ? כן : לא') לא ייבלע. באג-קודם: split גלובלי בלע כל ':'.
+  const nameSplit = body.match(new RegExp('\\s+' + G.withWord + '\\s+|\\s+' + G.fieldsWord + '[:\\s]+|\\s*:\\s*'));
+  const namePart = nameSplit ? body.slice(0, nameSplit.index) : body;
   const entity = clean(namePart).slice(0, 40) || G.fallbackEntity;
-  const fieldsPart = rest.join(' ') || '';
+  const fieldsPart = nameSplit ? body.slice(nameSplit.index + nameSplit[0].length) : '';
   // אין חיתוך-שקט: כל השדות נשמרים (קודם נחתך ל-20 ⇒ 'סטטוס'/'התאמות' נעלמו). תקרת-שפיות בלבד.
   // 🔤 פעלי-שפה (תואמי-לאחור): שדה* = חובה · שדה{א|ב|ג} = ערכים-מותרים · שדה=נוסחה = מחושב.
   // פיצול-שדות מודע-עומק: פסיק/שורה מפרידים רק ברמה-העליונה — פסיק בתוך ()/{}/[]/<>

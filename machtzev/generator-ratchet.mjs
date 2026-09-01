@@ -38,6 +38,11 @@ ok(/boqLineAmount\(<String, String>\{/.test(s2), 'מנוע-רשומה מחווט
 ok(/isRenewed\(<String, String>\{/.test(s2) && /\? gen_app_\w+ : gen_app_\w+\)/.test(s2), 'מנוע-bool ⇒ כן/לא');
 ok(/Navigator\.of\(context\)\.push/.test(s2), 'ניווט שורה⇒כרטיס');
 
+// 2.4) התנהגות (§23-ד) — שדה-מותנה 'A op B ? then : else' ⇒ סטטוס-חי (מד-ניטור/סף אמיתי)
+buildApp('ישות מד עם ערך(0..100), סף(0..100), מצב = ערך > סף ? חריגה : תקין');
+const s3 = all();
+ok(/num\.tryParse[^\n]*[<>][^\n]*\?\s*gen_app_\w+\s*:\s*gen_app_\w+/.test(s3), 'שדה-מותנה ⇒ סטטוס-חי מהשוואת-סף (התנהגות, לא CRUD סטטי)');
+
 // 2.5) צפן §22 — עברית-חופשית ⇒ אפיון + אפליקציה-עובדת · המנוע-העיוור (אפס-מילה-בקוד)
 const nl = nlToSpec('מערכת עם תלמידים, מורים וכיתות');
 ok(nl.split('\n').filter((l) => l.trim()).length >= 3, `NL: 'מערכת עם A,B,C' ⇒ ${nl.split('\n').length} ישויות`);
