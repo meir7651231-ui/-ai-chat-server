@@ -14,6 +14,29 @@ const norm = (w) => { let s = definalize(w); if (/^מה../.test(s)) s = s.slice(
 const STOP = new Set(['של', 'עמ', 'את', 'או', 'גמ', 'אני', 'צריכ', 'רוצה', 'מסכ', 'זה', 'יש', 'על', 'לי', 'כל', 'הזה', 'שמציג', 'לנהל', 'לראות', 'עמוד', 'בשביל']);
 const toks = (s) => (String(s).match(HE) || []).map(norm).filter((w) => w.length > 1 && !STOP.has(w));
 
+// אינדקס-מטרת-אטום: class ⇒ מונחי-מטרה עבריים (נגזרים ממסך-המקור — atom-index). מעשיר את אוצר-
+// המילים של כל מסך במונחי-המטרה של האטומים שממנו הוא מורכב ⇒ מצמצם נרדפוּת בלי מילון-דומייני.
+const MAN = new URL('../../screens-seed/manifests/', import.meta.url).pathname;
+const AIDX = JSON.parse(fs.readFileSync(new URL('./atom-index.json', import.meta.url), 'utf8'));
+const PURPOSE = {};
+for (const e of AIDX) PURPOSE[e.cls] = (e.purpose || []).map(norm).filter((w) => w.length > 1 && !STOP.has(w));
+
+function screenAtomTerms() {
+  // screen(קצר) ⇒ איחוד מונחי-המטרה של אטומי-הסקציות שלו (מהמניפסט)
+  const byScreen = {};
+  if (!fs.existsSync(MAN)) return byScreen;
+  for (const f of fs.readdirSync(MAN)) {
+    const mm = f.match(/^screens__(.+?)\.manifest\.json$/);
+    if (!mm) continue;
+    let man; try { man = JSON.parse(fs.readFileSync(path.join(MAN, f), 'utf8')); } catch { continue; }
+    const key = man.screen || mm[1];
+    const terms = [];
+    for (const sec of man.sections || []) for (const t of PURPOSE[sec.atom] || []) terms.push(t);
+    (byScreen[key] ??= []).push(...terms);
+  }
+  return byScreen;
+}
+
 function loadScreens() {
   const byScreen = {};
   for (const f of fs.readdirSync(DIR)) {
@@ -22,6 +45,8 @@ function loadScreens() {
     const strs = [...fs.readFileSync(path.join(DIR, f), 'utf8').matchAll(/'([^']*)'/g)].map((x) => x[1]).join(' ');
     (byScreen[m[1]] ??= []).push(...toks(strs));
   }
+  // העשרה: מונחי-מטרת-האטומים של כל מסך (רק אם יש מפתח-מסך תואם — לא ממציא מסכים)
+  for (const [k, terms] of Object.entries(screenAtomTerms())) if (byScreen[k]) byScreen[k].push(...terms);
   return byScreen;
 }
 
