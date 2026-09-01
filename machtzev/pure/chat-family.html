@@ -49,7 +49,7 @@
   .msg.pend{align-self:flex-end;background:var(--raised);color:var(--mut);border-start-end-radius:5px}
   /* delivery ticks */
   .tick{display:inline-flex}.tick svg{width:15px;height:11px}
-  .tick.sent{color:rgba(11,11,13,.55)}.tick.deliv{color:rgba(11,11,13,.55)}.tick.read{color:var(--a-800)}
+  .tick.sent,.tick.deliv{color:rgba(11,11,13,.42)}.tick.read{color:var(--a-800)}
 
   /* day divider */
   .dayd{display:flex;align-items:center;gap:12px;padding:6px 0;color:var(--faint)}
@@ -68,8 +68,11 @@
 
   /* composer */
   .composer{display:flex;align-items:center;gap:10px}
-  .cinput{flex:1;min-height:44px;display:flex;align-items:center;padding:0 16px;border-radius:999px;background:var(--sunken);border:1px solid var(--hair);color:var(--faint);font-size:13px;gap:10px}
+  .cinput{flex:1;min-height:44px;display:flex;align-items:center;padding:0 16px;border-radius:999px;background:var(--sunken);border:1px solid var(--hair);font-size:13px;gap:10px}
+  .cinput:focus-within{border-color:var(--a)}
   .cinput .clip{color:var(--mut);display:inline-flex}.cinput .clip svg{width:17px;height:17px}
+  .cfield{flex:1;align-self:stretch;border:0;background:none;outline:none;font-family:var(--he);font-size:13px;color:var(--ink);min-width:0}
+  .cfield::placeholder{color:var(--faint);opacity:1}
   .send{width:44px;height:44px;border-radius:50%;border:0;background:linear-gradient(160deg,var(--a-hi),var(--a));display:grid;place-items:center;cursor:pointer;flex:none;transition:background .5s,transform .15s var(--spring)}
   .send:hover{transform:scale(1.06)}.send:active{transform:scale(.94)}.send:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
   .send svg{width:18px;height:18px;color:#0B0B0D}
@@ -78,12 +81,12 @@
   .qr{display:flex;flex-wrap:wrap;gap:8px}
   .qchip{font-family:var(--he);font-size:12.5px;color:var(--a-hi);border:1px solid var(--a-800);border-radius:999px;padding:8px 14px;background:color-mix(in oklab,var(--a) 10%,transparent);min-height:38px;display:inline-flex;align-items:center;transition:color .5s,border-color .5s,background-color .5s}
 
-  /* receipt theater */
-  .rcp{display:flex;gap:16px;flex-wrap:wrap}
-  .rc{display:flex;flex-direction:column;align-items:center;gap:7px}
-  .rc .b{background:linear-gradient(160deg,var(--a-hi),var(--a));color:#0B0B0D;border-radius:12px;padding:7px 12px;font-size:12.5px;display:inline-flex;align-items:center;gap:7px;transition:background .5s}
-  .rc .b .num{font-family:var(--grotesk);font-variant-numeric:tabular-nums;direction:ltr;font-size:9.5px;color:rgba(11,11,13,.6);display:inline-flex;align-items:center;gap:4px}
-  .rc small{font-family:var(--grotesk);font-size:8.5px;color:var(--faint);text-transform:uppercase;letter-spacing:.08em}
+  /* receipt theater — שלושת המצבים זה-ליד-זה על אותה בועת outgoing */
+  .rcgrp{display:flex;gap:18px;margin-top:9px;align-items:flex-end}
+  .rcg{display:flex;flex-direction:column;align-items:center;gap:4px}
+  .rcg .tk{display:inline-flex}.rcg .tk svg{width:22px;height:14px}
+  .rcg .tk.sent,.rcg .tk.deliv{color:rgba(11,11,13,.42)}.rcg .tk.read{color:var(--a-800)}
+  .rcg small{font-family:var(--grotesk);font-size:8px;text-transform:uppercase;letter-spacing:.06em;color:rgba(11,11,13,.5)}
 
   .lead{font-family:var(--grotesk);font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.14em;direction:ltr;padding:14px 0 8px;display:flex;align-items:center;gap:10px}.lead::before{content:"";flex:none;width:16px;height:1px;background:var(--a)}
   .inherit{display:flex;flex-wrap:wrap;gap:7px;padding:2px 0 8px}
@@ -143,7 +146,7 @@
 
     <div class="cell wide"><div class="body">
       <div class="composer">
-        <div class="cinput"><span class="clip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.5l-8 8a5 5 0 0 1-7-7l8.5-8.5a3 3 0 0 1 4.5 4.5L9 13.5"/></svg></span>Label</div>
+        <div class="cinput"><span class="clip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.5l-8 8a5 5 0 0 1-7-7l8.5-8.5a3 3 0 0 1 4.5 4.5L9 13.5"/></svg></span><input class="cfield" placeholder="Label" aria-label="Message"></div>
         <button class="send" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4L10 14"/><path d="M20 4l-6 17-4-7-7-4z"/></svg></button>
       </div>
     </div><div class="foot"><span class="nm">Composer · field + send</span><span class="seam">self</span></div></div>
@@ -153,11 +156,13 @@
     </div><div class="foot"><span class="nm">QuickReply</span><span class="seam">fields</span></div></div>
 
     <div class="cell"><div class="body">
-      <div class="rcp">
-        <div class="rc"><span class="b">Label<span class="num tick sent"><svg viewBox="0 0 18 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l3.2 3.2L14 2.5"/></svg></span></span><small>sent</small></div>
-        <div class="rc"><span class="b">Label<span class="num tick deliv"><svg viewBox="0 0 18 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6l3.2 3.2L11 2.5"/><path d="M7 9.2L13.6 2.5"/></svg></span></span><small>delivered</small></div>
-        <div class="rc"><span class="b">Label<span class="num tick read" style="color:var(--a-800)"><svg viewBox="0 0 18 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6l3.2 3.2L11 2.5"/><path d="M7 9.2L13.6 2.5"/></svg></span></span><small>read</small></div>
-      </div>
+      <div class="thread"><div class="msg out" style="max-width:none;align-self:stretch">Label
+        <div class="rcgrp">
+          <div class="rcg"><span class="tk sent"><svg viewBox="0 0 18 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l3.2 3.2L14 2.5"/></svg></span><small>sent</small></div>
+          <div class="rcg"><span class="tk deliv"><svg viewBox="0 0 18 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6l3.2 3.2L11 2.5"/><path d="M7 9.2L13.6 2.5"/></svg></span><small>delivered</small></div>
+          <div class="rcg"><span class="tk read"><svg viewBox="0 0 18 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6l3.2 3.2L11 2.5"/><path d="M7 9.2L13.6 2.5"/></svg></span><small>read</small></div>
+        </div>
+      </div></div>
     </div><div class="foot"><span class="nm">DeliveryTicks · sent/delivered/read</span><span class="seam">fields</span></div></div>
 
   </div>
