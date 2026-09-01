@@ -1002,8 +1002,8 @@ const _fillStyle = (ty) => {
 // 🥇 בורר-אטום מונחה-מטרה: לא "הראשון-שמתאים" אלא **הכי-טוב לייעוד**. לכל מועמד-מהמצע:
 // (1) שקעי-התפקיד חייבים להיקשר (שם+טיפוס תואמים למה שנזין); (2) כל שקע-חובה אחר חייב להיות
 // בטוח-למילוי (סגנון/התנהגות — לא דאטה, אחרת נזייף). ניקוד = פחות-שקעים-נותרים ⇒ טהור-יותר-לייעוד.
-export function selectAtom(roleSpecs, pred = () => true) {
-  let best = null;
+function _candidates(roleSpecs, pred) {
+  const out = [];
   for (const a of loadCensus().filter(pred)) {
     const ps = atomCtor(a.file, a.cls); if (!ps || !ps.length) continue;
     const bound = {}; let ok = true;
@@ -1019,10 +1019,18 @@ export function selectAtom(roleSpecs, pred = () => true) {
       const f = _fillStyle(x.ty); if (f === null) { safe = false; break; } fills.push(`${x.nm}: ${f}`);   // required בלבד חייב מילוי; שקע-דאטה-required לא-ממופה ⇒ פסול (לא נזייף)
     }
     if (!safe) continue;
-    const score = -fills.length;                          // פחות-מילויי-required = מגשים-הייעוד-שלם-יותר
-    if (!best || score > best.score || (score === best.score && a.cls < best.cls)) best = { cls: a.cls, file: a.file, p: bound, fills, score };
+    out.push({ cls: a.cls, file: a.file, p: bound, fills, score: -fills.length });   // פחות-מילויי-required = מגשים-שלם-יותר
   }
-  return best;
+  return out.sort((a, b) => b.score - a.score || (a.cls < b.cls ? -1 : 1));
+}
+export function selectAtom(roleSpecs, pred = () => true) { return _candidates(roleSpecs, pred)[0] || null; }
+// 🎨 בורר-מגוון (§21): בין האטומים ה**שקולים-בטובם** (אותו score-מיטבי) בוחר לפי seed (פר-ישות)
+// ⇒ פיזור-שימוש על כל המאגר-הבינדבילי. אינו פוגע ב"הכי-טוב-למטרה" (כל התיקו מיטביים) ואינו מזייף
+// (כל מועמד קושר-דאטה-אמת ונבדק-בטוח). אין תיקו ⇒ המיטבי-היחיד. מבחן-שקילות: קונכייה.
+export function selectVaried(roleSpecs, pred = () => true, seed = 0) {
+  const c = _candidates(roleSpecs, pred); if (!c.length) return null;
+  const ties = c.filter((x) => x.score === c[0].score);
+  return ties[((seed % ties.length) + ties.length) % ties.length];
 }
 
 // 🧩 מסך-סקירה מונחה-מטרה: המטרה "סקירה" = היבטים {מדדים · רשומות}. לכל היבט נבחר
@@ -1034,23 +1042,25 @@ export function renderCompose(slug, { entitySlug, entityName, fields = [], numFi
   const cls = pascal(slug);
   // 🔐 מקור-הרשומות מכבד RLS: יש שדה-היקף ⇒ scoped (מסונן ל-actor), אחרת records (הכל).
   const recsExpr = scopeField ? `appStore.scoped('${entitySlug}', ${k(scopeField)})` : `appStore.records('${entitySlug}')`;
-  // היבט-מדדים: האטום שמגשים "ערך+תווית" הכי-טוב (הכי-מעט שקעים-נותרים).
-  const kpi = selectAtom({ value: { re: /^(value|val|amount|total|count|num)$/, ty: _rS }, label: { re: /^(label|title|caption|name|sub)$/, ty: _rS } },
-    (a) => a.caps.includes('kpi') && a.seam === 'fields');
+  // 🎨 seed פר-ישות (§21): מפזר את בחירת-האטום בין השקולים-בטובם ⇒ מגוון-אטומים חוצה-מסכים.
+  const seed = [...entitySlug].reduce((h, c) => h + c.charCodeAt(0), 0);
+  // היבט-מדדים: האטום שמגשים "ערך+תווית" הכי-טוב (מגוון בין השקולים לפי-seed).
+  const kpi = selectVaried({ value: { re: /^(value|val|amount|total|count|num)$/, ty: _rS }, label: { re: /^(label|title|caption|name|sub)$/, ty: _rS } },
+    (a) => a.caps.includes('kpi') && a.seam === 'fields', seed);
   // היבט-מבט-ראשי: אם לישות שלבים ⇒ לוח-סטטוס (המגשים-הטוב-יותר לזרימה); אחרת ⇒ טבלה.
-  const board = stages.length ? selectAtom({ stages: { re: /^stages$/ }, records: { re: /^records$/ }, stageOf: { re: /^stageOf$/ }, titleOf: { re: /^titleOf$/ }, onMove: { re: /^onMove$/ } },
-    (a) => a.seam === 'collection') : null;
+  const board = stages.length ? selectVaried({ stages: { re: /^stages$/ }, records: { re: /^records$/ }, stageOf: { re: /^stageOf$/ }, titleOf: { re: /^titleOf$/ }, onMove: { re: /^onMove$/ } },
+    (a) => a.seam === 'collection', seed + 1) : null;
   // ניווט-בהקלקה: אם קיים כרטיס-רשומה ⇒ מבט-הרשומות = רשימה-לחיצה (שורה⇒כרטיס-הרשומה).
-  const nav = (!board && detail) ? selectAtom({ label: { re: /^(label|title|name|text)$/, ty: _rS }, onTap: { re: /^onTap$/ } },
-    (a) => a.seam === 'fields') : null;
-  const tbl = (board || nav) ? null : selectAtom({ labels: { re: /^(labels|cols|columns|headers)$/, ty: _rLS }, rows: { re: /^(rows|data)$/, ty: _rLLS } },
-    (a) => a.caps.includes('list') && a.seam === 'collection');
+  const nav = (!board && detail) ? selectVaried({ label: { re: /^(label|title|name|text)$/, ty: _rS }, onTap: { re: /^onTap$/ } },
+    (a) => a.seam === 'fields', seed + 2) : null;
+  const tbl = (board || nav) ? null : selectVaried({ labels: { re: /^(labels|cols|columns|headers)$/, ty: _rLS }, rows: { re: /^(rows|data)$/, ty: _rLLS } },
+    (a) => a.caps.includes('list') && a.seam === 'collection', seed + 3);
   // היבט-מגמה: ישות עם שדה-מספרי ⇒ תרשים-עמודות (ערך-פר-רשומה). האטום אוכל סדרת-מספרים.
-  const trend = numFields.length ? selectAtom({ labels: { re: /^(labels|cols)$/, ty: _rLS }, values: { re: /^(values|data|series)$/, ty: _rLD } },
-    (a) => a.caps.includes('trend') && a.seam === 'series') : null;
+  const trend = numFields.length ? selectVaried({ labels: { re: /^(labels|cols)$/, ty: _rLS }, values: { re: /^(values|data|series)$/, ty: _rLD } },
+    (a) => a.caps.includes('trend') && a.seam === 'series', seed + 4) : null;
   // היבט-התקדמות: ישות עם שלבים ⇒ פס-התקדמות (אחוז-הרשומות בשלב-הסופי).
-  const prog = stages.length ? selectAtom({ pct: { re: /^(pct|percent|value|val)$/, ty: _rI } },
-    (a) => a.caps.includes('progress') && a.seam === 'fields') : null;
+  const prog = stages.length ? selectVaried({ pct: { re: /^(pct|percent|value|val)$/, ty: _rI } },
+    (a) => a.caps.includes('progress') && a.seam === 'fields', seed + 5) : null;
   if (!kpi && !tbl && !board && !trend && !prog && !nav) return null;   // אין לבנים שמגשימות ⇒ אין מסך
 
   const imports = new Set(["import '../dart-ui-bs/ds/ds_store.dart';", "import 'package:flutter/material.dart';"]);
