@@ -45,6 +45,11 @@
       "canonical": 27,
       "inherit": 3
     },
+    "motion": {
+      "count": 10,
+      "canonical": 10,
+      "inherit": 0
+    },
     "nav": {
       "count": 12,
       "canonical": 12,
@@ -66,6 +71,6 @@
       "inherit": 4
     }
   },
-  "total": 530,
+  "total": 540,
   "generatedBy": "machtzev/pure/pure-decompose.mjs"
 }

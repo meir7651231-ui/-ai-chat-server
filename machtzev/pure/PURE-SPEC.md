@@ -52,6 +52,8 @@
 
 **13 STATUS** — Dot+Label · LiveDot pulse (כבוי ב-reduced-motion) · אין נקודה בלי הקשר · Loader≠Dot.
 
+**14 MOTION/GENERATIVE** — שכבת-חיים: aurora/particles/organism/pulse/sweep/wave/tilt/typewriter/confetti/count-up · accent ממורף · semantic-חי (dot) קבוע · **reduced-motion מקפיא כל תא לפריים-סטילס** · canvas לגנרטיבי (לא SVG-ארוך) · תוכן Label/Value/Meta.
+
 ## 5. נגישות (פסילה)
 ניגוד ≥4.5:1 · יעד ≥44px (איקון-מעגל ≥40) · focus-visible · Tab/Enter/Space · error=`aria-invalid`+`role="alert"` · reduced-motion.
 
