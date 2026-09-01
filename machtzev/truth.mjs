@@ -44,8 +44,13 @@ const gatesTsv = rd('machtzev/gates.tsv').split('\n').filter((l) => l && !l.star
 const gateCalls = (rd('machtzev/police.mjs').match(/^\s*gate(Dirty)?\(/gm) || []).length;
 
 const totalAtoms = census.length + logic.length;
+const wiredTotal = dispAll.size + engines.length;
+const wiredPct = (wiredTotal / totalAtoms * 100).toFixed(1);
 const layers = {
   '🔢 סה"כ אטומים מאונדקסים (תצוגה+לוגיקה)': totalAtoms,
+  '🔌 מחווטים-למחולל בפועל': `${wiredTotal} (${wiredPct}%) · ${totalAtoms - wiredTotal} מפורקים-אך-לא-מחווטים`,
+  '  ↳ חיווט-תצוגה': `${dispAll.size}/${census.length} (${(dispAll.size / census.length * 100).toFixed(1)}%)`,
+  '  ↳ חיווט-לוגיקה': `${engines.length}/${logic.length} (${(engines.length / logic.length * 100).toFixed(1)}%)`,
   'תצוגה · atom-census (widgets)': census.length,
   '  ↳ seam': JSON.stringify(seam),
   '  ↳ נגישים-בהרכבה (selectVaried×400)': dispAll.size,
