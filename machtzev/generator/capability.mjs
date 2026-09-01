@@ -7,15 +7,19 @@ const ATOM_INDEX = JSON.parse(fs.readFileSync(new URL('./atom-index.json', impor
 const fileOf = (cls) => { const a = ATOM_INDEX.find((e) => e.cls === cls); return a ? a.file : null; };
 
 // דקדוק-יחסי — קבוצה סגורה של אופרטורי-השוואה (כמו >,< במתמטיקה). לא דומיין. \S* סופג נטיית-מין/מספר.
+// דפוסים בצורה מנוטרלת-סופיות (definalize) — סופג ך/כ · ם/מ · נטיית-מין/מספר.
 const REL = [
   { re: /חורג\S*|עולה\S*\s*על|מעל|גדול\S*|יותר|למעלה\s*מ/, op: '>' },
-  { re: /נמוך\S*|מתחת|קטן\S*|פחות|יורד\S*/, op: '<' },
+  { re: /נמוכ\S*|מתחת|קטנ\S*|פחות|יורד\S*/, op: '<' },
 ];
+const definalize = (s) => String(s).replace(/ך/g, 'כ').replace(/ם/g, 'מ').replace(/ן/g, 'נ').replace(/ף/g, 'פ').replace(/ץ/g, 'צ');
 // מרקרי-תנאי מבניים (כמו 'עם' מפריד-שדות) — סגור. בלי \b (ASCII-בלבד, לא נדלק על עברית).
 const WHEN = /(כאשר|ברגע ש|כש)/;
 const hw = (s) => [...String(s || '').matchAll(/[֐-׿][֐-׿״׳]*/g)].map((m) => m[0]);
 // קילוף-קידומת חד-אותית (ה/ו/ש/כ/ל/ב/מ) לצורך התאמת-שדה — רק אם המילה נשארת ≥2 אותיות.
-const deprefix = (w) => { let s = String(w); for (let i = 0; i < 2 && /^[הושכלבמ]./.test(s) && s.length > 2; i++) s = s.slice(1); return s; };
+// קילוף-קידומת שמרני: "מה..." (מן-ה) ⇒ קלף 2 · "ה..." (יידוע) ⇒ קלף 1. לעולם לא מ' בודדת
+// (שורש: מעבד/מלאי/מחיר) ⇒ מונע over-strip. עיוור-דומיין, מבני.
+const deprefix = (w) => { const s = String(w); if (/^מה../.test(s)) return s.slice(2); if (/^ה./.test(s) && s.length > 2) return s.slice(1); return s; };
 
 // גלאי סעיף-התראה-מותנית: "<trigger> ... כש <X> <REL> <Y>". מבני בלבד.
 // מחזיר {trigger, xWords, op, yWords} או null. אינו יודע מה X/Y — רק צורתם.
@@ -25,8 +29,10 @@ export function detectAlertClause(text) {
   if (!wm) return null;
   const before = t.slice(0, wm.index);          // ראש-הסעיף — כוונת-התצוגה (יתורגם ע"י match)
   const after = t.slice(wm.index + wm[0].length); // תנאי — X REL Y
+  // התאמת-יחס על טקסט מנוטרל-סופיות (אורך זהה ⇒ אינדקסים תואמים ל-after המקורי).
+  const afterN = definalize(after);
   let rel = null, relM = null;
-  for (const r of REL) { const m = after.match(r.re); if (m) { rel = r; relM = m; break; } }
+  for (const r of REL) { const m = afterN.match(r.re); if (m) { rel = r; relM = m; break; } }
   if (!rel) return null;
   const xPart = after.slice(0, relM.index);
   const yPart = after.slice(relM.index + relM[0].length);
