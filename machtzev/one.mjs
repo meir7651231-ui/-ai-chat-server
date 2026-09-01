@@ -135,6 +135,8 @@ stage('שער-איכות-העיצוב (ds-critic)', () => last(run('machtzev/ds-
 // שער-שפת-העיצוב: pure-lint על קטלוג-ה-HTML של Pure (bytes-not-prose). selftest מוכיח שהשער נושך; --strict = 0B/0M.
 stage('אימות-מנוע-Pure (pure-lint --selftest)', () => last(run('machtzev/pure/pure-lint.mjs', ['--selftest'])));
 stage('שער-שפת-העיצוב (pure-lint --strict)', () => last(run('machtzev/pure/pure-lint.mjs', ['--strict'])));
+// פירוק-התצוגה: הופך את 13 משפחות-Pure לאטומי-תצוגה מפורקים ורשומים (regen דטרמיניסטי, contract+test)
+stage('פירוק-התצוגה (pure-decompose)', () => last(run('machtzev/pure/pure-decompose.mjs')));
 
 // ── 5 · ביקורות-ההרכבה והטוהר (שערי-ratchet) ──
 stage('ביקורת-הרכבה (box-audit)', () => last(run('machtzev/assemble/box-audit.mjs', ['--gate'])));
@@ -193,6 +195,7 @@ ${rows.map(r => '| ' + r.join(' | ') + ' |').join('\n')}
 | UI-משותף (dart-ui-bs) | ${count('new/dart-ui-bs', '.dart')} |
 | דאטה (dart-data-bs+maor) | ${count('new/dart-data-bs', '.dart') + count('new/dart-data-maor', '.dart')} |
 | מחצבה (dart-quarry) | ${count('dart-quarry', '.dart')} |
+| תצוגת-Pure מפורקת (pure-shelf) | ${(() => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'machtzev/generator/knowledge/pure-shelf.json'), 'utf8')).total; } catch { return 0; } })()} |
 `;
 fs.writeFileSync(path.join(ROOT, 'machtzev/ONE-STATUS.md'), status);
 console.log(status);
