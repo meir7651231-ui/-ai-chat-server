@@ -4,7 +4,7 @@ import assert from 'node:assert';
 
 assert.deepStrictEqual(Object.keys(S), ['family', 'source', 'count', 'atoms'], 'מפתחות-על');
 assert.strictEqual(S.family, "input", 'שם-משפחה');
-assert.ok(Array.isArray(S.atoms) && S.atoms.length === 30, 'צילום-מונה 30');
+assert.ok(Array.isArray(S.atoms) && S.atoms.length === 31, 'צילום-מונה 31');
 assert.strictEqual(S.count, S.atoms.length, 'count תואם');
 const KINDS = ["canonical","signature","inherit"];
 for (const a of S.atoms) {
