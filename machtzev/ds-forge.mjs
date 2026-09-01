@@ -91,31 +91,35 @@ function fontExpr(val) {
 const px = v => { const m = v && String(v).match(/(-?\d+(?:\.\d+)?)px/); return m ? m[1] : null; };
 const num = v => { const m = v && String(v).match(/-?\d+(?:\.\d+)?/); return m ? m[0] : null; };
 
-// ───────────────────────── פרסר-CSS (תת-קבוצה) ─────────────────────────
-// מפה שטוחה: מחלקה-בודדת ⇒ מיזוג-כללים. סלקטורים מורכבים (.a .b / .a.b / [x]) מדולגים לפשטות.
+// ───────────────────────── פרסר-CSS (תת-קבוצה + מורכבים) ─────────────────────────
+// single: .a ⇒ decl · compound: .a.b(.c) ⇒ {set,decl,order} (חל כשלאלמנט כל המחלקות).
+// סלקטורים עם צאצא/[attr]/psuedo מדולגים. מחזיר {single, compound}.
 function parseStyle(css) {
-  const map = {};                              // class → {prop:val}
+  const single = {}, compound = []; let order = 0;
   css = css.replace(/\/\*[\s\S]*?\*\//g, '');
   const re = /([^{}]+)\{([^{}]*)\}/g; let m;
   while ((m = re.exec(css))) {
     const sels = m[1].split(',').map(s => s.trim());
     const decl = {};
-    for (const d of m[2].split(';')) {
-      const i = d.indexOf(':'); if (i < 0) continue;
-      decl[d.slice(0, i).trim()] = d.slice(i + 1).trim();
-    }
+    for (const d of m[2].split(';')) { const i = d.indexOf(':'); if (i < 0) continue; decl[d.slice(0, i).trim().toLowerCase()] = d.slice(i + 1).trim(); }
     for (const sel of sels) {
-      const mm = sel.match(/^\.([a-z0-9-]+)$/i);   // מחלקה-בודדת בלבד
-      if (!mm) continue;
-      map[mm[1]] = Object.assign(map[mm[1]] || {}, decl);
+      if (/^\.([a-z0-9-]+)$/i.test(sel)) { const c = sel.slice(1); single[c] = Object.assign(single[c] || {}, decl); }
+      else if (/^(\.[a-z0-9-]+){2,}$/i.test(sel)) { const set = sel.split('.').filter(Boolean); compound.push({ set, decl, order: order++ }); }
     }
   }
-  return map;
+  return { single, compound };
 }
-// מיזוג-סגנון לאלמנט לפי כל מחלקותיו
-function styleOf(classes, map) {
-  const s = {};
-  for (const c of classes) if (map[c]) Object.assign(s, map[c]);
+function parseInline(style) {
+  const d = {}; if (!style) return d;
+  for (const p of style.split(';')) { const i = p.indexOf(':'); if (i < 0) continue; d[p.slice(0, i).trim().toLowerCase()] = p.slice(i + 1).trim(); }
+  return d;
+}
+// מיזוג-סגנון לאלמנט: מחלקות-בודדות (בסדר) → מורכבים-תואמים (בסדר-מקור) → inline (גובר). מודל-cascade מקורב.
+function styleOf(node, map) {
+  const s = {}, classes = node.classes || [];
+  for (const c of classes) if (map.single[c]) Object.assign(s, map.single[c]);
+  for (const r of map.compound) if (r.set.every(c => classes.includes(c))) Object.assign(s, r.decl);
+  Object.assign(s, parseInline(node.attrs && node.attrs.style));
   return s;
 }
 
@@ -161,16 +165,44 @@ function decoration(st) {                       // {prop} ⇒ BoxDecoration(...)
   if (br) { const bc = colorExpr(br); if (bc) parts.push(`border: Border.all(color: ${bc}${/\b2px\b/.test(br) ? ', width: 2' : ''})`); }
   const rad = st['border-radius'];
   if (rad) { const r = /999/.test(rad) ? '999' : (px(rad) || num(rad)); if (r) parts.push(`borderRadius: BorderRadius.circular(${r})`); }
+  const sh = shadowExpr(st['box-shadow']);
+  if (sh) parts.push(`boxShadow: [${sh}]`);
   return parts.length ? `BoxDecoration(${parts.join(', ')})` : null;
 }
-function padExpr(st) {
-  const p = st['padding']; if (!p) return null;
-  const ns = p.trim().split(/\s+/).map(x => px(x) || num(x) || '0');
-  if (ns.length === 1) return `const EdgeInsets.all(${ns[0]})`;
-  if (ns.length === 2) return `const EdgeInsets.symmetric(vertical: ${ns[0]}, horizontal: ${ns[1]})`;
-  const [t, r, b = t, l = r] = ns;
+// EdgeInsets מ-shorthand (padding/margin) + פר-צד (margin-top…). null אם אין.
+function edge(st, prop) {
+  const sh = st[prop];
+  const per = { top: px(st[`${prop}-top`]), right: px(st[`${prop}-right`]), bottom: px(st[`${prop}-bottom`]), left: px(st[`${prop}-left`]) };
+  const hasPer = Object.values(per).some(v => v != null);
+  if (!sh && !hasPer) return null;
+  let t = 0, r = 0, b = 0, l = 0;
+  if (sh) {
+    const ns = sh.trim().split(/\s+/).map(x => (px(x) != null ? px(x) : (num(x) || '0')));
+    if (ns.length === 1) [t, r, b, l] = [ns[0], ns[0], ns[0], ns[0]];
+    else if (ns.length === 2) [t, r, b, l] = [ns[0], ns[1], ns[0], ns[1]];
+    else if (ns.length === 3) [t, r, b, l] = [ns[0], ns[1], ns[2], ns[1]];
+    else [t, r, b, l] = [ns[0], ns[1], ns[2], ns[3]];
+  }
+  if (per.top != null) t = per.top; if (per.right != null) r = per.right; if (per.bottom != null) b = per.bottom; if (per.left != null) l = per.left;
   return `const EdgeInsets.fromLTRB(${l}, ${t}, ${r}, ${b})`;
 }
+// box-shadow ⇒ [BoxShadow(...)] (מדלג inset — Flutter לא תומך חיצוני-בלבד)
+function shadowExpr(val) {
+  if (!val || val === 'none') return null;
+  const out = [];
+  for (const s of splitTop(val)) {
+    if (/^\s*inset/.test(s)) continue;
+    const cm = s.match(/(rgba?\([^)]*\)|#[0-9a-f]{3,8}|var\(--[a-z0-9-]+\))/i);
+    const col = cm ? (colorExpr(cm[1]) || litColor(cm[1])) : null;
+    if (!col) continue;
+    const nums = (s.replace(/(rgba?\([^)]*\)|#[0-9a-f]{3,8}|var\(--[a-z0-9-]+\))/ig, '').match(/-?\d+(?:\.\d+)?/g) || []).map(x => parseFloat(x));
+    const [ox = 0, oy = 0, blur = 0, spread = 0] = nums;
+    out.push(`BoxShadow(color: ${col}, offset: const Offset(${ox}, ${oy}), blurRadius: ${blur}, spreadRadius: ${spread})`);
+  }
+  return out.length ? out.join(', ') : null;
+}
+const JUST = { 'center': 'center', 'flex-end': 'end', 'end': 'end', 'flex-start': 'start', 'start': 'start', 'space-between': 'spaceBetween', 'space-around': 'spaceAround', 'space-evenly': 'spaceEvenly' };
+const ALIGN = { 'center': 'center', 'flex-start': 'start', 'start': 'start', 'flex-end': 'end', 'end': 'end', 'stretch': 'stretch', 'baseline': 'baseline' };
 function textStyle(st) {
   const p = [];
   const c = colorExpr(st['color']); if (c) p.push(`color: ${c}`);
@@ -213,16 +245,21 @@ function emit(node, map, depth = 0) {
   }
   if (node.tag === 'input') {
     const ph = node.attrs.placeholder || node.attrs.value || 'Label';
-    return `Text(${dq(ph)}, style: TextStyle(color: skin.faint, fontFamily: fonts.he, fontSize: 13))`;
+    const filled = !!node.attrs.value;
+    const ist = styleOf(node, map);
+    const t = `Text(${dq(ph)}, style: TextStyle(color: ${filled ? 'skin.ink' : 'skin.faint'}, fontFamily: fonts.he, fontSize: 13))`;
+    return wrapBox(Object.assign({ 'min-height': '44px' }, ist), t, node);
   }
-  const st = styleOf(node.classes, map);
+  const st = styleOf(node, map);
   const kids = elemChildren(node);
   const txt = textOf(node);
+  const ta = st['text-align'];
+  const taExpr = ta === 'center' ? ', textAlign: TextAlign.center' : ta === 'left' ? ', textAlign: TextAlign.left' : ta === 'right' ? ', textAlign: TextAlign.right' : '';
 
   // עלה עם טקסט בלבד ⇒ Text
   if (!kids.length && txt) {
     const ts = textStyle(st);
-    return `Text(${dq(txt)}${ts.length ? `, style: TextStyle(${ts.join(', ')})` : ''})`;
+    return wrapBox(st, `Text(${dq(txt)}${taExpr}${ts.length ? `, style: TextStyle(${ts.join(', ')})` : ''})`, node);
   }
   // בונה ילדים
   const childExprs = [];
@@ -235,20 +272,38 @@ function emit(node, map, depth = 0) {
   const disp = st['display'] || '', fd = st['flex-direction'] || '';
   const gap = px(st['gap']);
   const listSep = gap ? `, spacing: ${gap}` : '';   // Flutter 3.24+ Row/Column spacing
+  const isFlex = /flex/.test(disp), col = /column/.test(fd);
+  const maj = JUST[st['justify-content']], min = ALIGN[st['align-items']];
+  const majE = maj ? `, mainAxisAlignment: MainAxisAlignment.${maj}` : '';
   if (childExprs.length === 0) inner = null;
-  else if (childExprs.length === 1 && !/flex/.test(disp)) inner = childExprs[0];
-  else if (/flex/.test(disp) && !/column/.test(fd))
-    inner = `Row(mainAxisSize: MainAxisSize.min${listSep}, children: [${childExprs.join(', ')}])`;
-  else
-    inner = `Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min${listSep}, children: [${childExprs.join(', ')}])`;
+  else if (childExprs.length === 1 && !isFlex) inner = childExprs[0];
+  else if (isFlex && !col) {
+    const cross = min ? ALIGN[st['align-items']] : 'center';
+    inner = `Row(mainAxisSize: MainAxisSize.min${majE}, crossAxisAlignment: CrossAxisAlignment.${cross}${listSep}, children: [${childExprs.join(', ')}])`;
+  } else {
+    const cross = min || 'start';
+    inner = `Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.${cross}${majE}${listSep}, children: [${childExprs.join(', ')}])`;
+  }
+  return wrapBox(st, inner, node);
+}
 
-  const deco = decoration(st), pad = padExpr(st);
-  if (!deco && !pad) return inner || 'const SizedBox.shrink()';
+// עוטף ביטוי ב-Container (רקע/מסגרת/צל/מידות/שוליים) + Opacity, לפי הסגנון
+function wrapBox(st, inner, node) {
+  const deco = decoration(st), pad = edge(st, 'padding'), mg = edge(st, 'margin');
+  const w = px(st['width']), h = px(st['height']), minH = px(st['min-height']), minW = px(st['min-width']);
   const cp = [];
+  if (w) cp.push(`width: ${w}`);
+  if (h) cp.push(`height: ${h}`);
+  if (minH != null || minW != null) cp.push(`constraints: const BoxConstraints(${[minH != null ? `minHeight: ${minH}` : '', minW != null ? `minWidth: ${minW}` : ''].filter(Boolean).join(', ')})`);
+  if (mg) cp.push(`margin: ${mg}`);
   if (pad) cp.push(`padding: ${pad}`);
   if (deco) cp.push(`decoration: ${deco}`);
-  if (inner) cp.push(`child: ${inner}`);
-  return `Container(${cp.join(', ')})`;
+  let out;
+  if (!cp.length) out = inner || 'const SizedBox.shrink()';
+  else { if (inner) cp.push(`child: ${inner}`); out = `Container(${cp.join(', ')})`; }
+  const op = st['opacity'] != null ? parseFloat(st['opacity']) : null;
+  if (op != null && !isNaN(op) && op < 1) out = `Opacity(opacity: ${op}, child: ${out})`;
+  return out;
 }
 
 // ───────────────────────── חציבת-תאים ⇒ אטומים ─────────────────────────
