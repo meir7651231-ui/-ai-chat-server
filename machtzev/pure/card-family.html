@@ -45,8 +45,8 @@
   .surf .st{font-family:var(--he);font-size:14px;font-weight:600}.surf .sm2{font-size:11.5px;color:var(--mut);margin-top:3px}
   .surf .tag{position:absolute;top:14px;inset-inline-start:14px;font-family:var(--grotesk);font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--faint);direction:ltr}
   /* variants */
-  .surf.flat{background:var(--surface);box-shadow:none}
-  .surf.elev{box-shadow:0 18px 40px rgba(0,0,0,.5);border-color:var(--hair)}
+  .surf.flat{background:var(--surface);box-shadow:none;border-color:var(--hair2)}
+  .surf.elev{background:linear-gradient(180deg,var(--raised2),var(--raised));box-shadow:0 22px 50px rgba(0,0,0,.62),0 4px 10px rgba(0,0,0,.4);border-color:rgba(236,233,226,.13)}
   .surf.out{background:none;border:1.5px solid color-mix(in srgb,var(--a) 40%,var(--hair))}
   .surf.glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(12px);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 12px 34px rgba(0,0,0,.4)}
   .surf.grad{background:linear-gradient(135deg,var(--c2),var(--a) 55%,var(--c3));border:0;color:#0B0B0D}.surf.grad .sm2{color:rgba(11,11,13,.7)}.surf.grad .tag{color:rgba(11,11,13,.55)}
@@ -76,6 +76,8 @@
   /* --- hub tile --- */
   .hub{border:1px solid var(--hair);border-radius:15px;background:linear-gradient(180deg,var(--surface),var(--sunken));padding:16px;display:flex;flex-direction:column;gap:11px;cursor:pointer;transition:transform .25s var(--spring),border-color .25s}
   .hub:hover{transform:translateY(-3px);border-color:var(--a)}
+  .hub.sel{position:relative;border-color:var(--a);background:radial-gradient(120% 130% at 90% -20%,var(--gl),transparent 55%),var(--surface)}
+  .hub.sel::before{content:"";position:absolute;inset-block:14px;inset-inline-start:0;width:3px;border-radius:999px;background:linear-gradient(180deg,var(--a-hi),var(--a))}
   .hub .hi{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;color:var(--a-hi);background:radial-gradient(120% 120% at 30% 20%,var(--gl),transparent 60%),var(--sunken);border:1px solid var(--hair)}.hub .hi svg{width:20px;height:20px}
   .hub b{font-size:13.5px;font-weight:600}.hub .hm{font-size:11px;color:var(--mut)}
   .hub .arr{align-self:flex-start;color:var(--faint)}
@@ -166,7 +168,7 @@
   <section class="band">
     <div class="bhd"><h2>Hub · Tile</h2><span class="en">icon + title + meta + chevron · tappable surface</span><span class="ct">many</span></div>
     <div class="fam">
-      <div class="cell"><div class="hub"><span class="hi"><svg class="i" viewBox="0 0 24 24"><path d="M3 12l9-8 9 8M5 10v10h14V10"/></svg></span><div><b>Label</b><div class="hm">Meta</div></div></div><div class="foot"><span class="nm">HubTile</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="hub sel" aria-selected="true"><span class="hi"><svg class="i" viewBox="0 0 24 24"><path d="M3 12l9-8 9 8M5 10v10h14V10"/></svg></span><div><b>Label</b><div class="hm">Meta</div></div></div><div class="foot"><span class="nm">HubTile · selected</span><span class="seam">fields</span></div></div>
       <div class="cell"><div class="hub"><span class="hi"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></span><div><b>Label</b><div class="hm">Meta</div></div></div><div class="foot"><span class="nm">GridHubCard</span><span class="seam">fields</span></div></div>
       <div class="cell"><div class="hub" style="flex-direction:row;align-items:center"><span class="hi" style="width:36px;height:36px"><svg class="i" viewBox="0 0 24 24" style="width:17px;height:17px"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0116 0"/></svg></span><div style="flex:1"><b>Label</b><div class="hm">Meta</div></div><span class="arr">‹</span></div><div class="foot"><span class="nm">ContactTile · row</span><span class="seam">fields</span></div></div>
       <div class="cell full"><div class="inh"><span class="hi" style="width:30px;height:30px"><svg class="i" viewBox="0 0 24 24" style="width:15px;height:15px"><rect x="4" y="4" width="16" height="16" rx="3"/></svg></span><span class="lead">inherit HubTile →</span><div class="chips"><span class="chip">DsNavTile</span><span class="chip">CategoryTile</span><span class="chip">ServiceTile</span><span class="chip">ConnectorTile</span><span class="chip">AccessoryTile</span><span class="chip">SiteHubCaCard</span></div></div>
@@ -178,7 +180,7 @@
   <section class="band">
     <div class="bhd"><h2>Section · Accordion</h2><span class="en">collapsible · panel frame · estimate</span><span class="ct">4</span></div>
     <div class="fam">
-      <div class="cell"><div class="sect open"><div class="shd"><b>Label</b><span class="ch">⌄</span></div><div class="sbd">Meta</div></div><div class="foot"><span class="nm">AccordionPanel · open</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="sect open"><div class="shd"><b>Label</b><span class="ch">⌄</span></div><div class="sbd" style="min-height:48px"><div class="kv" style="border-color:var(--hair2)"><span class="kk">Label</span><span class="vv">Meta</span></div><div class="kv" style="border:0"><span class="kk">Label</span><span class="vv">Meta</span></div></div></div><div class="foot"><span class="nm">AccordionPanel · open</span><span class="seam">fields</span></div></div>
       <div class="cell"><div class="sect"><div class="shd"><b>Label</b><span class="ch">⌄</span></div><div class="sbd">Meta</div></div><div class="foot"><span class="nm">AccordionSectionCard · closed</span><span class="seam">fields</span></div></div>
       <div class="cell"><div class="estp"><div class="er"><span>Label</span><span class="v">248</span></div><div class="er"><span>Label</span><span class="v">92</span></div><div class="er tot"><span>Label</span><span class="v" style="color:var(--a-hi)">340</span></div></div><div class="foot"><span class="nm">PriceEstimatePanel</span><span class="seam">fields</span></div></div>
       <div class="cell"><div class="surf out" style="min-height:auto;padding:14px"><div class="st" style="font-size:12.5px">Label</div><div class="sm2">Meta</div></div><div class="foot"><span class="nm">StripPanelFrame</span><span class="seam">fields</span></div></div>
