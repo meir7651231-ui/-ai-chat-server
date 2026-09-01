@@ -34,7 +34,7 @@ const def = PURE_LOOK.themes[PURE_LOOK.defaultTheme]; // קיצורי-אקצנט
 // ── פונט = פרמטר הפיך (לא קבוע): חבילת-פונט שזורמת דרך החריץ; ברירת-מחדל = פונטי-Pure ──
 const fontKeys = Object.keys(PURE_LOOK.fonts);
 const fontFields = fontKeys.map(k => `  final String ${k};`).join('\n');
-const fontCtor = fontKeys.map(k => `    this.${k}`).join(',\n');
+const fontCtor = fontKeys.map(k => `    required this.${k}`).join(',\n');
 const fontDefault = fontKeys.map(k => `${k}: ${JSON.stringify(PURE_LOOK.fonts[k])}`).join(', ');
 
 const out = `// ✨ מאגר-העיצוב · שפת-Pure (Layer B · הטמעה) — **מחולל ע"י machtzev/ds-pure.mjs מ-new/atoms/pure-look.mjs.**
