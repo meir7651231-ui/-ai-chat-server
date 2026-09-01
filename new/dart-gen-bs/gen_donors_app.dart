@@ -13,12 +13,13 @@ class _DonorsApp extends StatelessWidget {
         theme: ThemeData(
           useMaterial3: true,
           fontFamily: 'Heebo',
-          scaffoldBackgroundColor: const Color(0xFFF4F5F7),
-          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF7A6BF0), brightness: Brightness.light),
+          scaffoldBackgroundColor: const Color(0xFF0C0C0E), // DsPure.canvas — שחור-חמים (העיצוב החדש)
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF7A6BF0), brightness: Brightness.dark),
         ),
         builder: (c, ch) => Directionality(textDirection: TextDirection.rtl, child: ch ?? const SizedBox.shrink()),
         home: Scaffold(
-          appBar: AppBar(title: const Text('תורמים ותרומות'), centerTitle: true),
+          backgroundColor: const Color(0xFF0C0C0E),
+          appBar: AppBar(title: const Text('תורמים ותרומות'), centerTitle: true, backgroundColor: const Color(0xFF151517)),
           body: GenDonorsComposed(
             onTap: () {},
             validator: (v) => null,
