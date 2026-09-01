@@ -105,13 +105,13 @@ export function emitApp(text, cls = 'GenCapScreen') {
     const cmp = u.alert ? `_v${u.i} ${u.op} 60` : 'false';
     const rLabel = u.alert ? `(${cmp}) ? 'חריגה · ${u.label}' : 'תקין · ${u.label}'` : `'${u.label}'`;
     const alertW = u.alert
-      ? `\n        if (${cmp})\n          Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: ${alertAtom}(label: 'חריגה — ${u.label}', height: 46, radius: 14, accentColor: DsPure.err, baseColor: DsPure.raised, fillColor: DsPure.surface)),`
+      ? `\n        if (${cmp})\n          Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: ${alertAtom}(label: 'חריגה — ${u.label}', height: 46, radius: 14, accentColor: skin.err, baseColor: skin.raised, fillColor: skin.surface)),`
       : '';
-    return `        Padding(padding: const EdgeInsets.only(top: 10, right: 14), child: Align(alignment: Alignment.centerRight, child: Text('${u.label}', style: const TextStyle(color: DsPure.mut, fontSize: 13)))),
+    return `        Padding(padding: const EdgeInsets.only(top: 10, right: 14), child: Align(alignment: Alignment.centerRight, child: Text('${u.label}', style: TextStyle(color: skin.mut, fontSize: 13)))),
         Padding(padding: const EdgeInsets.symmetric(vertical: 6), child: Center(child: ${gauge.cls}(${gauge.p.value}: (_v${u.i} / 100).clamp(0.0, 1.0)${gFills}))),
         Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: ${readout.cls}(${readout.p.value}: _v${u.i}, ${readout.p.label}: ${rLabel}${rFills})),${alertW}
         Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Slider(value: _v${u.i}, max: 100, onChanged: (v) => setState(() => _v${u.i} = v))),
-        const Divider(color: DsPure.hair, height: 24),`;
+        Divider(color: skin.hair, height: 24),`;
   }).join('\n');
   const heCount = units.length + (clauses.length ? ' ניטורים' : ' תצוגה');
   return `// ✨ חולל ע"י capability.mjs (מרכיב) — כוונה⇒הרכבה (§23). המשפט: "${String(text).replace(/"/g, "'")}".
@@ -119,7 +119,7 @@ export function emitApp(text, cls = 'GenCapScreen') {
 // אפס שם-אטום חרוט · אפס-מילון-דומייני · מספר-היחידות מהמבנה (§20-ב · הרכבה-עד-שמושג).
 import 'package:flutter/material.dart';
 import '../dart-ui-bs/ds/ds.dart';
-import '../dart-ui-bs/ds/ds_pure.dart';
+import '../dart-ui-bs/ds/ds_seam.dart';
 ${imps}
 
 void main() => runApp(const _CapApp());
@@ -145,6 +145,7 @@ class _${cls}State extends State<${cls}> {
 ${stateVars}
   @override
   Widget build(BuildContext context) {
+    final skin = DsSeam.skinOf(context); // מלוא-העיצוב מהחריץ (חוק-7: נופל ל-DsPure.skin בלי PureScope)
     return DsScaffold(
       title: 'מסך שחולל',
       subtitle: '${units.length}${heCount}',

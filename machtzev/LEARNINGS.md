@@ -323,3 +323,13 @@ twins ∪ dartReg ∪ testProven. 3 בדיקות-דארט חסרות-main נספ
 הרשומים (מבנה+קומפילציה; "רץ" = הלבשת-לוח, אותו שלב לכולם). יציב-יותר מהמרכיב-מגרמר (אפס-המצאה),
 אבל תלוי-כיסוי-קורפוס — פסוקית אפס-חופפת ⇒ מדווחת כ-miss, לא-מזויפת (§20-ג). המבנה **נגזר מהאחזור,
 לא נחרט** — אפס-מילון-דומייני.
+
+## L44 · פלט-המחולל זורם דרך החריץ — skin.* לא DsPure.* קבוע (1.9, בריף SKIN-HANDOFF)
+אחרי מיזוג mah-kora (מנגנון DsPureSkin), הפלט של capability.mjs עדיין נקב `DsPure.err/mut/hair/
+surface/raised` **קבוע בגוף** — הפרת כלל-הזהב של החריץ (SKIN-HANDOFF): כל אטום/מסך קורא
+`DsSeam.skinOf(context)` ומצייר `skin.*`, לעולם לא קבוע-Pure בגוף. תוקן: הפולט מזריק
+`final skin = DsSeam.skinOf(context)` ב-build ומחליף ל-skin.*, ומוריד `const` מ-Text/Divider
+(skin=ערך-ריצה). ייבוא ds_pure→ds_seam (אין נקיבת-טיפוס ⇒ ds_pure מיותר, L31). **חוק-7 נשמר:**
+בלי PureScope, skinOf נופל ל-DsPure.skin ⇒ ביט-זהה. אומת: gen_cap `flutter analyze: No issues`.
+**לקח:** כשמנגנון-עיצוב מתקדם (theme-only ⇒ skin+fonts), פלט-המחולל חייב להתקדם איתו —
+עיצוב זורם-בחריץ, לא נחרט-בפלט; אחרת "עובד" אבל לא-לובש-עיצוב-חדש.
