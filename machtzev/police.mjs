@@ -26,6 +26,7 @@ gate('assembly', 'assemble/box-audit.mjs', ['--gate']);
 gate('synth', 'generator/synth.mjs', ['--gate']);
 gate('genratchet', 'mahulal/generator-ratchet.mjs');
 gate('independence', 'purity/independence-check.mjs');
+gate('puredata', 'purity/purity-data.mjs', ['--gate']);
 gate('pins', 'pins-check.mjs');
 gate('selftest', 'police-selftest.mjs', [], FAST);
 gate('mutation', 'mutation-check.mjs', [], FAST);

@@ -18,7 +18,8 @@ for (const [dir, ext] of DIRS) {
     const src = fs.readFileSync(path.join(d, f), 'utf8');
     const body = src.replace(/\/\*[\s\S]*?\*\//g, '').split('\n').filter(l => !l.trim().startsWith('//') && !l.trim().startsWith('///')).join('\n');
     const heb = body.match(HEB) || [];
-    const constData = (body.match(/const\s+\w+\s*=\s*[\[{]/g) || []).length;
+    // דאטה-צרובה = ליטרל בלבד; מערך/אובייקט-מחושב (spread `[...`) אינו דאטה. עברית-דאטה עדיין נתפסת דרך heb.
+    const constData = (body.match(/const\s+\w+\s*=\s*(?:\{(?!\s*\.\.\.)|\[(?!\s*\.\.\.))/g) || []).length;
     const logic = body.split('\n').filter(l => /\bif\b|\bfor\b|\breturn\b|\bswitch\b/.test(l)).length;
     if (!heb.length && !constData) out.clean++;
     else if (logic <= 1) out.data++;
