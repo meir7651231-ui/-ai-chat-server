@@ -20,6 +20,9 @@ const hw = (s) => [...String(s || '').matchAll(/[֐-׿][֐-׿״׳]*/g)].map((m) 
 // קילוף-קידומת שמרני: "מה..." (מן-ה) ⇒ קלף 2 · "ה..." (יידוע) ⇒ קלף 1. לעולם לא מ' בודדת
 // (שורש: מעבד/מלאי/מחיר) ⇒ מונע over-strip. עיוור-דומיין, מבני.
 const deprefix = (w) => { const s = String(w); if (/^מה../.test(s)) return s.slice(2); if (/^ה./.test(s) && s.length > 2) return s.slice(1); return s; };
+// שם-הערך = צירוף-השם המלא של סעיף-הערך (לא מילה בודדת) — כך סמיכות/שייכות נשמרות נכון:
+// "עומס המעבד"·"יתרת החשבון"·"לחות הקרקע"·"דופק של המטופל". קילוף-יידוע על המילה הראשונה בלבד.
+const cleanPhrase = (words) => words.length ? [deprefix(words[0]), ...words.slice(1)].join(' ') : '';
 
 // גלאי סעיף-התראה-מותנית: "<trigger> ... כש <X> <REL> <Y>". מבני בלבד.
 // מחזיר {trigger, xWords, op, yWords} או null. אינו יודע מה X/Y — רק צורתם.
@@ -40,7 +43,7 @@ export function detectAlertClause(text) {
   if (!xWords.length || !yWords.length) return null;
   return {
     trigger: hw(before).slice(-2).join(' '),      // 2 המילים לפני 'כש' = אות-הכוונה (בלי שם-הערך)
-    x: deprefix(xWords[xWords.length - 1]),        // שדה-הערך (המילה הצמודה לתנאי)
+    x: cleanPhrase(xWords),                        // שדה-הערך = צירוף-השם המלא (סמיכות נשמרת)
     op: rel.op,
     y: deprefix(yWords[0]),                        // שדה-הסף (המילה הצמודה לתנאי)
   };
