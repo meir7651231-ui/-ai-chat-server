@@ -907,16 +907,25 @@ ${decls}${decls ? '\n' : ''}    return ${bodyExpr};
   return made.length;
 }
 
-// ───────────────────────── main ─────────────────────────
-const all = fs.readdirSync(PURE).filter(f => /-family\.html$/.test(f)).map(f => f.replace('-family.html', '')).sort();
-const wanted = process.argv.slice(2).filter(a => !a.startsWith('-'));
-const fams = wanted.length ? wanted : all;
-fs.mkdirSync(OUT, { recursive: true });
-const manifest = { families: {}, total: 0, generatedBy: 'machtzev/ds-forge.mjs' };
-for (const fam of fams) {
-  const n = forgeFamily(fam);
-  manifest.families[fam] = n; manifest.total += n;
-  console.log(`🔨 forge ${fam}: ${n} אטומי-Dart`);
+// ───────────────────────── ייצוא לכלי-הביקורת (pixel-forge-audit) ─────────────────────────
+// מנוע-הביקורת מייבא את אותה חציבת-תאים (מקור-אמת יחיד) כדי למסגר ORIG בדיוק כמו ה-FORGE.
+export { cells, theaterStates, pascal, snake, PURE, OUT };
+const familiesOf = () => fs.readdirSync(PURE).filter(f => /-family\.html$/.test(f)).map(f => f.replace('-family.html', '')).sort();
+export { familiesOf };
+
+// ───────────────────────── main (רק בהרצה-ישירה, לא ב-import) ─────────────────────────
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isMain) {
+  const all = familiesOf();
+  const wanted = process.argv.slice(2).filter(a => !a.startsWith('-'));
+  const fams = wanted.length ? wanted : all;
+  fs.mkdirSync(OUT, { recursive: true });
+  const manifest = { families: {}, total: 0, generatedBy: 'machtzev/ds-forge.mjs' };
+  for (const fam of fams) {
+    const n = forgeFamily(fam);
+    manifest.families[fam] = n; manifest.total += n;
+    console.log(`🔨 forge ${fam}: ${n} אטומי-Dart`);
+  }
+  fs.writeFileSync(path.join(OUT, 'forge-manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
+  console.log(`✓ ds-forge: ${fams.length} משפחות · ${manifest.total} אטומי-Dart מחושלים ⇒ new/dart-forge-bs/`);
 }
-fs.writeFileSync(path.join(OUT, 'forge-manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
-console.log(`✓ ds-forge: ${fams.length} משפחות · ${manifest.total} אטומי-Dart מחושלים ⇒ new/dart-forge-bs/`);
