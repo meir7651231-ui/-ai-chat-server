@@ -214,9 +214,12 @@ function decoration(st) {                       // {prop} ⇒ BoxDecoration(...)
   const grad = gradientExpr(bgRaw);
   if (grad) parts.push(`gradient: ${grad}`);     // גרדיאנט גובר על מילוי-אחיד
   else if (bgRaw) {                               // רקע רב-שכבתי: שכבת-בסיס-אחיד + זוהר-radial (עומק)
-    let bg = null;
-    for (const seg of splitTop(bgRaw)) { if (!/gradient\(/i.test(seg)) { const c = colorExpr(seg.trim()); if (c) { bg = c; break; } } }
-    const rad = radialExpr(bgRaw, bg || 'skin.sunken');
+    let bg = null, radSeg = null;
+    for (const seg of splitTop(bgRaw)) {          // בידוד שכבות (לא-חמדני — כל שכבה בנפרד)
+      if (/radial-gradient/i.test(seg)) radSeg = seg;
+      else if (!/gradient\(/i.test(seg) && !bg) { const c = colorExpr(seg.trim()); if (c) bg = c; }
+    }
+    const rad = radSeg ? radialExpr(radSeg, bg || 'skin.sunken') : null;
     if (rad) parts.push(`gradient: ${rad}`);       // RadialGradient עם צבע-הבסיס כעצירה-אחרונה (זוהר מתמזג)
     else if (bg) parts.push(`color: ${bg}`);
     else { const c = colorExpr(bgRaw); if (c) parts.push(`color: ${c}`); }
