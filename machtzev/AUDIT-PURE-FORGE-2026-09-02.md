@@ -114,6 +114,18 @@
 - **אומת:** רזולוציה-מלאה — פער-שורות ~66px, תואם ORIG. אפס-רגרסיה: bullet/form_card/
   alert_banner/severity (flex — לא מושפעים) זהים.
 
+### B14 · line-height ללא leadingDistribution.even — טקסט לא-ממורכז בקופסת-השורה ✅ (תוקן ואומת)
+- **תסמין:** ב-`numbered_list` המונה (1/2/3) **גבוה מדי** — לא ממורכז-אנכית מול שורת-הטקסט
+  (נגלה רק בהגדלת-שורה-בודדת ×2; בהשוואה-רגילה נראה "כמעט").
+- **שורש:** CSS `line-height` מחלק את הליווי (line-height − גובה-גליף) **שווה** מעל+מתחת לגליף
+  ⇒ הגליף ממורכז בקופסת-השורה. Flutter דיפולטי `TextLeadingDistribution.proportional` ⇒ הגליף
+  גבוה-יותר בקופסה ⇒ המונה (ממוקם top:.05em) יצא מעל-מרכז-הטקסט.
+- **תיקון:** כל `height:<line-height>` ב-TextStyle מקבל גם `leadingDistribution:
+  TextLeadingDistribution.even` — התאמה-לדפדפן. `ds-forge.mjs` ~ל.375. (גם הספרה בתוך המונה
+  התמרכזה טוב-יותר.)
+- **אומת:** הגדלת-שורה ×2 — המונה ממורכז מול הטקסט, תואם ORIG. אפס-רגרסיה: emphasis_text/
+  status_chip/form_card (טקסט-כבד) זהים.
+
 ---
 
 ## נותר לבדיקה ממוקדת

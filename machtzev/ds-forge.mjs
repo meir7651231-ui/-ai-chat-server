@@ -372,7 +372,10 @@ function textStyle(st) {
     if (v == null) v = num(ls);
     if (v != null && +v !== 0) p.push(`letterSpacing: ${v}`);
   }
-  const lh = st['line-height']; if (lh && lh !== 'normal' && !/px|%/.test(lh)) { const v = num(lh); if (v) p.push(`height: ${v}`); }
+  // line-height ⇒ height + leadingDistribution.even: CSS מחלק את הליווי (line-height פחות גובה-הגליף)
+  // באופן שווה מעל+מתחת לגליף. Flutter דיפולטית proportional ⇒ הגליף גבוה-מדי בקופסת-השורה, מה שהזיז
+  // את המונה ברשימה-ממוספרת מהמרכז. even = התאמה-לדפדפן (הגליף ממורכז-אנכית בקופסת-השורה).
+  const lh = st['line-height']; if (lh && lh !== 'normal' && !/px|%/.test(lh)) { const v = num(lh); if (v) { p.push(`height: ${v}`); p.push('leadingDistribution: TextLeadingDistribution.even'); } }
   if (/tabular/.test(st['font-feature-settings'] || '') || /tabular/.test(st['font-variant-numeric'] || ''))
     p.push('fontFeatures: const [FontFeature.tabularFigures()]');
   return p;
