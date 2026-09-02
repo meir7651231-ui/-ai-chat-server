@@ -69,6 +69,15 @@ class _InvData {
     {'name': 'ערכות מעבדה', 'cur': 6, 'target': 40, 'rate': 0.5, 'lead': 10, 'supplier': 'סיינס-לאב', 'price': 240},
     {'name': 'מקרנים (חלופיים)', 'cur': 22, 'target': 30, 'rate': 0.2, 'lead': 14},
   ];
+  // חוזה-תצוגה של שדות-מטא = דאטה (לא קוד-פר-שדה). המקום-השמור: הרינדור לולאה גנרית מעל זה.
+  // הוספת שורה כאן ⇒ השדה מופיע לכל רשומה שנושאת אותו, אפס-שינוי-קוד (מבחן-הקונכייה, חוק-7).
+  static const metaFields = <Map<String, String>>[
+    {'key': 'cur', 'prefix': '', 'suffix': ' ביד'},
+    {'key': 'rate', 'prefix': '', 'suffix': '/יום'},
+    {'key': 'supplier', 'prefix': '🏭 ', 'suffix': ''},
+    {'key': 'price', 'prefix': '₪ ', 'suffix': ' ליח׳'},
+  ];
+
   static double daysLeft(Map<String, dynamic> s) => (s['cur'] as int) / (s['rate'] as double);
   // כמה ימים עד שחייבים להזמין = ימים-עד-ריקון − זמן-אספקה (שלילי ⇒ כבר עברת)
   static double mustOrderIn(Map<String, dynamic> s) => daysLeft(s) - (s['lead'] as int);
@@ -113,13 +122,11 @@ class _InventoryState extends State<_Inventory> {
     );
   }
 
-  // המקום-השמור (חוק-7): שורת-facts = נגזרת-טהורה של חוזה-הפריט — כל שדה שקיים ⇒ שבב, חסר ⇒ שקט.
-  // supplier/price אופציונליים: מופיעים ברגע שהרשומה נושאת אותם, אפס-שינוי-קוד (מבחן-הקונכייה).
+  // המקום-השמור (חוק-7): לולאה גנרית מעל חוזה-התצוגה (_InvData.metaFields) — לא קוד-פר-שדה.
+  // כל שדה-מטא שהרשומה נושאת ⇒ שבב; חסר ⇒ שקט. שדה חדש בחוזה מופיע כאן לבד (אפס-רישום-ביד).
   List<Widget> _facts(Map<String, dynamic> s) => [
-        StatusChip(label: '${s['cur']} ביד', tone: 0),
-        StatusChip(label: '${s['rate']}/יום', tone: 0),
-        if (s['supplier'] != null) StatusChip(label: '🏭 ${s['supplier']}', tone: 0),
-        if (s['price'] != null) StatusChip(label: '₪ ${s['price']} ליח׳', tone: 0),
+        for (final f in _InvData.metaFields)
+          if (s[f['key']] != null) StatusChip(label: '${f['prefix']}${s[f['key']]}${f['suffix']}', tone: 0),
       ];
 
   Widget _wrap(List<Widget> kids, {double top = 6}) => Padding(
