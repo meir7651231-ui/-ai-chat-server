@@ -307,10 +307,12 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink') {
   const isFlex = /flex/.test(disp), col = /column/.test(fd);
   const maj = JUST[st['justify-content']], min = ALIGN[st['align-items']];
   const majE = maj ? `, mainAxisAlignment: MainAxisAlignment.${maj}` : '';
+  const rowCross = min || 'center', colCross = min || 'start';
+  const tb = c => c === 'baseline' ? ', textBaseline: TextBaseline.alphabetic' : '';
   if (flow.length === 0) inner = null;
   else if (flow.length === 1 && !isFlex) inner = flow[0];
-  else if (isFlex && !col) inner = `Row(mainAxisSize: MainAxisSize.min${majE}, crossAxisAlignment: CrossAxisAlignment.${min || 'center'}${listSep}, children: [${flow.join(', ')}])`;
-  else inner = `Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.${min || 'start'}${majE}${listSep}, children: [${flow.join(', ')}])`;
+  else if (isFlex && !col) inner = `Row(mainAxisSize: MainAxisSize.min${majE}, crossAxisAlignment: CrossAxisAlignment.${rowCross}${tb(rowCross)}${listSep}, children: [${flow.join(', ')}])`;
+  else inner = `Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.${colCross}${tb(colCross)}${majE}${listSep}, children: [${flow.join(', ')}])`;
   // אבסולוטיים ⇒ Stack + Positioned · ה-padding עוטף רק את הזרימה (CSS: absolute יחסי ל-padding-box)
   let noPad = false;
   if (abs.length) {
