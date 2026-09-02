@@ -261,9 +261,9 @@ function shadowExpr(val) {
     if (!col) continue;
     const nums = (s.replace(/(rgba?\([^)]*\)|#[0-9a-f]{3,8}|var\(--[a-z0-9-]+\))/ig, '').match(/-?\d+(?:\.\d+)?/g) || []).map(x => parseFloat(x));
     const [ox = 0, oy = 0, blur = 0, spread = 0] = nums;
-    // צל-CSS מתפזר רחב/רך יותר מ-blurRadius זהה ב-Flutter ⇒ פקטור-כיול ~1.5 (זוהר-כפתור תואם-מקור)
-    const fblur = +(blur * 1.5).toFixed(1);
-    out.push(`BoxShadow(color: ${col}, offset: const Offset(${ox}, ${oy}), blurRadius: ${fblur}, spreadRadius: ${spread})`);
+    // blurRadius = blur של CSS (תרגום נאמן). הערה: flutter test (headless) לא מרנדר gaussian-blur —
+    // הצל נראה שם צמוד, אך ב-web/device עם GPU הוא זוהר רך תואם-CSS. אין לכייל לפי תמונת-הבדיקה!
+    out.push(`BoxShadow(color: ${col}, offset: const Offset(${ox}, ${oy}), blurRadius: ${blur}, spreadRadius: ${spread})`);
   }
   return out.length ? out.join(', ') : null;
 }
