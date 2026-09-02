@@ -112,6 +112,7 @@ function fontExpr(val) {
   return m ? `fonts.${FONT[m[1]]}` : null;
 }
 const px = v => { const m = v && String(v).match(/(-?\d+(?:\.\d+)?)px/); return m ? m[1] : null; };
+const pct = v => { const m = v && String(v).match(/^\s*(\d+(?:\.\d+)?)%\s*$/); return m ? (+m[1] / 100).toFixed(3) : null; };  // רוחב/גובה יחסי
 const num = v => { const m = v && String(v).match(/-?(?:\d+\.?\d*|\.\d+)/); if (!m) return null; return m[0].replace(/^-\./, '-0.').replace(/^\./, '0.'); };
 
 // ───────────────────────── פרסר-CSS (תת-קבוצה + מורכבים) ─────────────────────────
@@ -459,6 +460,11 @@ function wrapBox(st, inner, node, noPad) {
   if (bf && /blur/.test(bf) && cp.length) { const rad = /999/.test(st['border-radius'] || '') ? '999' : (px(st['border-radius']) || '0'); const bl = px(bf) || '12'; out = `ClipRRect(borderRadius: BorderRadius.circular(${rad}), child: BackdropFilter(filter: ImageFilter.blur(sigmaX: ${bl}, sigmaY: ${bl}), child: ${out}))`; }
   const op = st['opacity'] != null ? parseFloat(st['opacity']) : null;
   if (op != null && !isNaN(op) && op < 1) out = `Opacity(opacity: ${op}, child: ${out})`;
+  // רוחב/גובה יחסי חלקי (%<100) ⇒ FractionallySizedBox · יישור-התחלה RTL = ימין (סקלטון/מילוי-בר).
+  // 100% מדלגים — הוא ממילא ממלא (עטיפה תשבש מרכוז grid/place-items).
+  const wp = pct(st['width']), hp = pct(st['height']);
+  const wpct = wp && +wp < 1 ? wp : null, hpct = hp && +hp < 1 ? hp : null;
+  if (wpct || hpct) out = `FractionallySizedBox(${wpct ? `widthFactor: ${wpct}, ` : ''}${hpct ? `heightFactor: ${hpct}, ` : ''}alignment: Alignment.centerRight, child: ${out})`;
   return out;
 }
 
