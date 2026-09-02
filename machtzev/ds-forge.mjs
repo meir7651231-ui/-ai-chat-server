@@ -448,8 +448,16 @@ function wrapBox(st, inner, node, noPad) {
   // ⇒ alignment:center מעביר constraints רופפים ⇒ הילד שומר גודלו וממורכז (אריח-אייקון, נקודה, אווטאר).
   const pl = `${st['place-items'] || ''} ${st['place-content'] || ''} ${st['justify-items'] || ''}`;
   const bothCenter = ALIGN[st['align-items']] === 'center' && JUST[st['justify-content']] === 'center';
-  const centered = /center/.test(pl) || bothCenter;
-  if ((w || h) && centered) cp.push('alignment: Alignment.center');
+  // <button> ממרכז את הטקסט שלו כברירת-מחדל (text-align:center + מרכוז-אנכי) — כמו grid/place-items:center
+  const centered = /center/.test(pl) || bothCenter || (node && node.tag === 'button');
+  // מרכוז: שני-ממדים-קבועים ⇒ alignment בטוח. ממד-בודד ⇒ Center עם factor על הציר-החופשי (מכווץ-לתוכן,
+  // אחרת alignment מרחיב למלוא-הרוחב בהקשר-חסום כמו טור — כפתור שהתנפח למלוא-השורה).
+  if (centered && inner) {
+    if (w && h) cp.push('alignment: Alignment.center');
+    else if (h) inner = `Center(widthFactor: 1.0, child: ${inner})`;
+    else if (w) inner = `Center(heightFactor: 1.0, child: ${inner})`;
+    else cp.push('alignment: Alignment.center');
+  } else if ((w || h) && centered) cp.push('alignment: Alignment.center');
   if (minH != null || minW != null) cp.push(`constraints: const BoxConstraints(${[minH != null ? `minHeight: ${minH}` : '', minW != null ? `minWidth: ${minW}` : ''].filter(Boolean).join(', ')})`);
   if (mg) cp.push(`margin: ${mg}`);
   if (pad) cp.push(`padding: ${pad}`);
