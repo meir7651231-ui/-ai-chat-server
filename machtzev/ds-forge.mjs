@@ -229,6 +229,8 @@ function textStyle(st) {
   const f = fontExpr(st['font-family']); if (f) p.push(`fontFamily: ${f}`);
   const fs = px(st['font-size']); if (fs) p.push(`fontSize: ${fs}`);
   const fw = st['font-weight']; if (fw && +fw >= 600) p.push(`fontWeight: FontWeight.w${fw >= 700 ? 700 : 600}`);
+  const ls = st['letter-spacing']; if (ls && ls !== 'normal') { const v = px(ls) || num(ls); if (v) p.push(`letterSpacing: ${v}`); }
+  const lh = st['line-height']; if (lh && lh !== 'normal' && !/px|%/.test(lh)) { const v = num(lh); if (v) p.push(`height: ${v}`); }
   if (/tabular/.test(st['font-feature-settings'] || '') || /tabular/.test(st['font-variant-numeric'] || ''))
     p.push('fontFeatures: const [FontFeature.tabularFigures()]');
   return p;
@@ -309,7 +311,8 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink') {
   else if (flow.length === 1 && !isFlex) inner = flow[0];
   else if (isFlex && !col) inner = `Row(mainAxisSize: MainAxisSize.min${majE}, crossAxisAlignment: CrossAxisAlignment.${min || 'center'}${listSep}, children: [${flow.join(', ')}])`;
   else inner = `Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.${min || 'start'}${majE}${listSep}, children: [${flow.join(', ')}])`;
-  // אבסולוטיים ⇒ Stack + Positioned
+  // אבסולוטיים ⇒ Stack + Positioned · ה-padding עוטף רק את הזרימה (CSS: absolute יחסי ל-padding-box)
+  let noPad = false;
   if (abs.length) {
     const pos = abs.map(a => {
       const p = [];
@@ -317,14 +320,17 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink') {
       if (t != null) p.push(`top: ${t}`); if (b != null) p.push(`bottom: ${b}`); if (l != null) p.push(`left: ${l}`); if (r != null) p.push(`right: ${r}`);
       return p.length ? `Positioned(${p.join(', ')}, child: ${a.e})` : `Positioned.fill(child: ${a.e})`;
     });
-    inner = `Stack(clipBehavior: Clip.none, children: [${(inner ? [inner] : []).concat(pos).join(', ')}])`;
+    const pad = edge(st, 'padding');
+    const flowW = pad && inner ? `Padding(padding: ${pad}, child: ${inner})` : inner;
+    inner = `Stack(clipBehavior: Clip.none, children: [${(flowW ? [flowW] : []).concat(pos).join(', ')}])`;
+    noPad = true;                                       // ה-padding כבר בתוך ה-Stack
   }
-  return wrapBox(st, inner, node);
+  return wrapBox(st, inner, node, noPad);
 }
 
 // עוטף ביטוי ב-Container (רקע/מסגרת/צל/מידות/שוליים) + Opacity, לפי הסגנון
-function wrapBox(st, inner, node) {
-  const deco = decoration(st), pad = edge(st, 'padding'), mg = edge(st, 'margin');
+function wrapBox(st, inner, node, noPad) {
+  const deco = decoration(st), pad = noPad ? null : edge(st, 'padding'), mg = edge(st, 'margin');
   const w = px(st['width']), h = px(st['height']), minH = px(st['min-height']), minW = px(st['min-width']);
   const cp = [];
   if (w) cp.push(`width: ${w}`);
