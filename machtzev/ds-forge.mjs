@@ -361,7 +361,7 @@ function gradStops(gnode, inherit) {
 // טקסט-סטייל עם צבע-יורש (CSS color inheritance) — לעולם לא "בלתי-נראה"
 function textStyleC(st, inherit) { const ts = textStyle(st); if (!ts.some(x => /^color:/.test(x))) ts.unshift(`color: ${inherit}`); if (!ts.some(x => /^fontFamily:/.test(x))) ts.push('fontFamily: fonts.he'); return ts; }
 // אלמנט ⇒ ביטוי-widget. ancestors=מחלקות-אבות (צאצא) · inherit=צבע-טקסט-יורש.
-function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink') {
+function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parentFlex = false) {
   if (depth > 16) return 'const SizedBox.shrink()';
   if (node.tag === 'svg') {
     const sc = svgScene(node, map, ancestors, inherit);
@@ -397,13 +397,15 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink') {
   // בונה ילדים (מפריד אבסולוטיים ל-Stack) · מעביר צבע-יורש
   const childAnc = ancestors.concat([node.classes || []]);
   const pFlexRow = /flex/.test(st['display'] || '') && !/column/.test(st['flex-direction'] || '');
+  // ילד של קונטיינר flex/grid עובר blockification (used-display⇒block) ⇒ width/height חלים גם על span-item.
+  const selfFlexGrid = /flex|grid/.test(st['display'] || '');
   const flow = [], abs = [];
   for (const c of node.children) {
     // טקסט-חופשי בתוך אלמנט יורש את סגנון-ההורה (גודל/משקל/צבע/פונט) — CSS inheritance
     if (c.text != null) { const t = c.text.trim(); if (t) flow.push(`Text(${dq(t)}, style: TextStyle(${textStyleC(st, myColor).join(', ')}))`); continue; }
     if (c.tag === 'br') continue;
     const cst = styleOf(c, map, childAnc);
-    let e = emit(c, map, childAnc, depth + 1, myColor);
+    let e = emit(c, map, childAnc, depth + 1, myColor, selfFlexGrid);
     if (cst['position'] === 'absolute') { abs.push({ e, st: cst }); continue; }
     // flex-grow חיובי בשורה ⇒ Expanded (מוסר אי-חסימת-רוחב לצאצא כמו svg-ספארק)
     if (pFlexRow) { const fx = (cst['flex'] || '').trim(); if (fx && fx !== 'none' && fx !== '0' && !/^0\b/.test(fx)) e = `Expanded(child: ${e})`; }
@@ -439,11 +441,18 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink') {
     inner = `Stack(clipBehavior: Clip.none, children: [${(flowW ? [flowW] : []).concat(pos).join(', ')}])`;
     noPad = true;                                       // ה-padding כבר בתוך ה-Stack
   }
-  return wrapBox(st, inner, node, noPad);
+  return wrapBox(st, inner, node, noPad, parentFlex);
 }
 
 // עוטף ביטוי ב-Container (רקע/מסגרת/צל/מידות/שוליים) + Opacity, לפי הסגנון
-function wrapBox(st, inner, node, noPad) {
+const INLINE_TAGS = new Set(['span', 'a', 'em', 'strong', 'b', 'i', 'small', 'code', 'abbr', 'mark', 'sub', 'sup', 'cite', 'q', 's', 'u', 'time', 'kbd', 'samp', 'var', 'label', 'bdi', 'bdo']);
+function wrapBox(st, inner, node, noPad, parentFlex = false) {
+  // אלמנט inline-בזרימה (span/a/em… בלי display-בלוק, ולא פריט-flex/grid) מתעלם מ-width/height ב-CSS.
+  // ריק ⇒ מתמוטט ל-0×0 ואינו נצבע (נאמנות-למקור L4: .bar2 .f = span-מילוי inline שלא נראה במקור).
+  const dispRaw = (st['display'] || '').trim();
+  const effInline = !parentFlex && (dispRaw ? dispRaw === 'inline' : !!(node && INLINE_TAGS.has(node.tag)));
+  if (effInline && !inner) return 'const SizedBox.shrink()';
+  if (effInline) st = Object.assign({}, st, { width: undefined, height: undefined });  // inline עם-תוכן ⇒ מידות לא-חלות
   const deco = decoration(st), pad = noPad ? null : edge(st, 'padding'), mg = edge(st, 'margin');
   const w = px(st['width']), h = px(st['height']), minH = px(st['min-height']), minW = px(st['min-width']);
   const cp = [];
@@ -480,6 +489,8 @@ function wrapBox(st, inner, node, noPad) {
   const wp = pct(st['width']), hp = pct(st['height']);
   const wpct = wp && +wp < 1 ? wp : null, hpct = hp && +hp < 1 ? hp : null;
   if (wpct || hpct) out = `FractionallySizedBox(${wpct ? `widthFactor: ${wpct}, ` : ''}${hpct ? `heightFactor: ${hpct}, ` : ''}alignment: Alignment.centerRight, child: ${out})`;
+  // width:100% ⇒ מילוי-רוחב-מלא גם בטור-ממורכז (align-items:center לא מותח) — SizedBox אינסופי, לא FractionallySizedBox
+  else if (wp === '1.000' && !w) out = `SizedBox(width: double.infinity, child: ${out})`;
   // direction:ltr/rtl מפורש ⇒ Directionality (הופך סדר-Row: חץ+אחוז, ספרות — מבטל RTL-אב)
   const dir = st['direction'];
   if (dir === 'ltr' || dir === 'rtl') out = `Directionality(textDirection: TextDirection.${dir}, child: ${out})`;
