@@ -137,7 +137,7 @@ const num = v => { const m = v && String(v).match(/-?(?:\d+\.?\d*|\.\d+)/); if (
 // single: .a ⇒ decl · compound: .a.b(.c) ⇒ {set,decl,order} (חל כשלאלמנט כל המחלקות).
 // סלקטורים עם צאצא/[attr]/psuedo מדולגים. מחזיר {single, compound}.
 function parseStyle(css) {
-  const single = {}, compound = [], descend = [], tagcls = [], pseudo = []; let order = 0;
+  const single = {}, compound = [], descend = [], tagcls = [], pseudo = [], sibling = []; let order = 0;
   css = css.replace(/\/\*[\s\S]*?\*\//g, '');
   const re = /([^{}]+)\{([^{}]*)\}/g; let m;
   // חלק-שרשרת ⇒ {cls:[...]} (מחלקות) | {tag:'svg'} (תג-בודד) | null
@@ -165,6 +165,15 @@ function parseStyle(css) {
       if (/^(\.[a-z0-9-]+){2,}$/i.test(sel)) { compound.push({ set: sel.split('.').filter(Boolean), decl, order: order++ }); continue; }
       // תג-מוכשר-מחלקה: "svg.i" / "button.p" ⇒ תואם כשהתג+כל-המחלקות
       if (/^[a-z][a-z0-9]*(\.[a-z0-9-]+)+$/i.test(sel)) { const ps = sel.split('.'); tagcls.push({ tag: ps[0].toLowerCase(), set: ps.slice(1).filter(Boolean), decl, order: order++ }); continue; }
+      // אח-עוקב: "A ~ B" (אולי עם אבות "P A ~ B") — B שאחרי אח-שמאלי A. משמש לפינוי-מקום (padding
+      // ל-.inp שאחרי אייקון-.lic). בלי > [attr] :pseudo #id. הרשומה: אבות + אח-שמאלי + מטרה-ימנית.
+      if (/~/.test(sel) && !/[>[\]:()#]/.test(sel)) {
+        const [ls, rs] = sel.split('~');
+        const leftParts = ls.trim().split(/\s+/).filter(Boolean).map(simple);
+        const right = simple((rs || '').trim());
+        if (right && leftParts.length && leftParts.every(Boolean)) sibling.push({ anc: leftParts.slice(0, -1), left: leftParts[leftParts.length - 1], right, decl, order: order++ });
+        continue;
+      }
       // צאצא: ".a .b" / ".a svg" — מחלקות/תגים מופרדי-רווח (בלי > ~ [attr] :pseudo #id)
       if (/ /.test(sel) && !/[>~[\]:()#]/.test(sel)) {
         const parts = sel.split(/\s+/).filter(Boolean).map(simple);
@@ -172,7 +181,7 @@ function parseStyle(css) {
       }
     }
   }
-  return { single, compound, descend, tagcls, pseudo };
+  return { single, compound, descend, tagcls, pseudo, sibling };
 }
 // פסבדו-אלמנטים (::before/::after) התואמים לצומת ⇒ צמתי-span סינתטיים (decl כ-inline + content כטקסט).
 function pseudoKids(node, map, ancestors, sibIdx = 0) {
@@ -296,6 +305,10 @@ function decoration(st) {                       // {prop} ⇒ BoxDecoration(...)
 function edge(st, prop) {
   const sh = st[prop];
   const per = { top: px(st[`${prop}-top`]), right: px(st[`${prop}-right`]), bottom: px(st[`${prop}-bottom`]), left: px(st[`${prop}-left`]) };
+  // תכונות-לוגיות (RTL): inline-start⇒right · inline-end⇒left · block-start⇒top · block-end⇒bottom.
+  // בלי זה padding-inline-start (הזחת-מרקר-רשימה) לא חל ⇒ מספר/נקודה חופפים לטקסט.
+  const iis = px(st[`${prop}-inline-start`]), iie = px(st[`${prop}-inline-end`]), ibs = px(st[`${prop}-block-start`]), ibe = px(st[`${prop}-block-end`]);
+  if (iis != null) per.right = iis; if (iie != null) per.left = iie; if (ibs != null) per.top = ibs; if (ibe != null) per.bottom = ibe;
   const hasPer = Object.values(per).some(v => v != null);
   if (!sh && !hasPer) return null;
   let t = 0, r = 0, b = 0, l = 0;
@@ -432,7 +445,7 @@ function toRichSpan(w) {
   if (m && !/,\s*text(Align|Direction):/.test(m[1])) return `TextSpan(text: ${m[1]}, style: ${m[2]})`;
   return `WidgetSpan(alignment: PlaceholderAlignment.middle, child: ${w})`;
 }
-function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parentFlex = false, inhFont = {}, inhVars = {}, sibIdx = 0) {
+function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parentFlex = false, inhFont = {}, inhVars = {}, sibIdx = 0, parentWrap = false, styleOverride = null) {
   if (depth > 16) return 'const SizedBox.shrink()';
   if (node.tag === 'svg') {
     const sc = svgScene(node, map, ancestors, inherit);
@@ -449,7 +462,11 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     const ph = node.attrs.placeholder || node.attrs.value || 'Label';
     const filled = !!node.attrs.value;
     const ist = styleOf(node, map, ancestors);
-    const t = `Text(${dq(ph)}, style: TextStyle(color: ${filled ? 'skin.ink' : 'skin.faint'}, fontFamily: fonts.he, fontSize: 13))`;
+    if (styleOverride) Object.assign(ist, styleOverride);   // דריסת אח-עוקב (.lic ~ .inp ⇒ padding לפינוי-אייקון)
+    // טקסט-הקלט ממורכז-אנכית (CSS input: line-height מלוא-הגובה) · אופקית לפי text-align (RTL: ברירת-מחדל ימין)
+    const ta2 = resolveVars(ist['text-align'] || '', {});
+    const alignH = ta2 === 'center' ? 'center' : ta2 === 'left' ? 'centerLeft' : 'centerRight';
+    const t = `Align(alignment: Alignment.${alignH}, child: Text(${dq(ph)}, style: TextStyle(color: ${filled ? 'skin.ink' : 'skin.faint'}, fontFamily: fonts.he, fontSize: 13)))`;
     return wrapBox(Object.assign({ 'min-height': '44px' }, ist), t, node);
   }
   const st0 = styleOf(node, map, ancestors);
@@ -457,6 +474,7 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   const ownVars = {}; for (const k in st0) if (k[0] === '-' && k[1] === '-') ownVars[k] = st0[k];
   const nextVars = Object.assign({}, inhVars, ownVars);
   const st = {}; for (const k in st0) st[k] = resolveVars(st0[k], nextVars);
+  if (styleOverride) for (const k in styleOverride) st[k] = resolveVars(styleOverride[k], nextVars);   // דריסת אח-עוקב (A ~ B)
   // סגנון-טקסט אפקטיבי = תכונות-תורשה מהאב + הסגנון-העצמי (העצמי גובר). רק לטקסט (לא לקופסה).
   const effText = Object.assign({}, inhFont, st);
   const myColor = colorExpr(st['color']) || inherit;            // צבע-הטקסט האפקטיבי (עובר לילדים)
@@ -466,8 +484,12 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   const ta = st['text-align'];
   const taExpr = ta === 'center' ? ', textAlign: TextAlign.center' : ta === 'left' ? ', textAlign: TextAlign.left' : ta === 'right' ? ', textAlign: TextAlign.right' : '';
 
-  // עלה עם טקסט בלבד ⇒ Text (צבע-יורש · text-transform · גודל/פונט-יורשים)
-  if (!kids.length && txt) {
+  // פסבדו-אלמנטים (::before/::after) של הצומת — מחושבים מראש כדי שגם עלה-טקסט-בלבד עם ::before
+  // (למשל li::before{content:counter} ברשימה ממוספרת) יזכה בהם ולא ייחתך במסלול-העלה.
+  const pk = pseudoKids(node, map, ancestors, sibIdx);   // ::before/::after ⇒ צמתים סינתטיים לפני/אחרי הזרימה
+  const hasPseudo = pk.before.length || pk.after.length;
+  // עלה עם טקסט בלבד (ובלי פסבדו) ⇒ Text (צבע-יורש · text-transform · גודל/פונט-יורשים)
+  if (!kids.length && txt && !hasPseudo) {
     const tt = effText['text-transform'];
     const shown = tt === 'uppercase' ? txt.toUpperCase() : tt === 'lowercase' ? txt.toLowerCase() : tt === 'capitalize' ? txt.replace(/\b\w/g, c => c.toUpperCase()) : txt;
     return wrapBox(st, `Text(${dq(shown)}${taExpr}, style: TextStyle(${textStyleC(effText, inherit).join(', ')}))`, node);
@@ -477,11 +499,15 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   const pFlexRow = /flex/.test(st['display'] || '') && !/column/.test(st['flex-direction'] || '');
   // ילד של קונטיינר flex/grid עובר blockification (used-display⇒block) ⇒ width/height חלים גם על span-item.
   const selfFlexGrid = /flex|grid/.test(st['display'] || '');
+  // האם המיכל הזה הוא Wrap (flex-wrap בשורה) — ילדיו חייבים גודל-תוכן (min), אחרת פריט-max ממלא-שורה ונערם.
+  const selfWrap = /flex/.test(st['display'] || '') && !/column/.test(st['flex-direction'] || '') && /wrap/.test(st['flex-wrap'] || '') && !/nowrap/.test(st['flex-wrap'] || '');
   const flow = [], abs = [];
   let flowInline = true, flowAllText = true;   // כל-הילדים inline-level ⇒ זרימת-inline (שורה, לא טור)
-  const pk = pseudoKids(node, map, ancestors, sibIdx);   // ::before/::after ⇒ צמתים סינתטיים לפני/אחרי הזרימה
-  const allKids = pk.before.length || pk.after.length ? [...pk.before, ...node.children, ...pk.after] : node.children;
+  const allKids = hasPseudo ? [...pk.before, ...node.children, ...pk.after] : node.children;
   let elemIdx = 0;
+  const seenLeft = new Set();   // כללי אח-עוקב (A ~ B) שאחיהם-השמאלי כבר נראה ⇒ המטרה-הימנית תדרס
+  const sibRules = (map.sibling || []).filter(r => chainMatches(r.anc, childAnc));   // רק כללים שהאבות תואמים למיכל
+  const clsHit = (t, c) => (t.tag ? c.tag === t.tag : true) && (t.cls ? t.cls.every(x => (c.classes || []).includes(x)) : true);
   for (const c of allKids) {
     // טקסט-חופשי בתוך אלמנט יורש את סגנון-ההורה (גודל/משקל/צבע/פונט) — CSS inheritance.
     // רווחי-גבול בין-אלמנטים משמעותיים ב-CSS (inline) — משמרים רווח-בודד (לא trim מלא ⇒
@@ -489,7 +515,10 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     if (c.text != null) { const raw = c.text.replace(/\s+/g, ' '); if (raw.trim()) flow.push(`Text(${dq(raw)}, style: TextStyle(${textStyleC(effText, myColor).join(', ')}))`); continue; }
     if (c.tag === 'br') { flow.push(`Text("\\n", style: TextStyle(${textStyleC(effText, myColor).join(', ')}))`); continue; }   // <br> ⇒ שבירת-שורה (נשמרת ב-Text.rich)
     const cst = styleOf(c, map, childAnc);
-    let e = emit(c, map, childAnc, depth + 1, myColor, selfFlexGrid, nextInh, nextVars, elemIdx++);
+    let sibOv = null;
+    for (const r of sibRules) { if (seenLeft.has(r) && clsHit(r.right, c)) { sibOv = sibOv || {}; Object.assign(sibOv, r.decl); } }   // אח-שמאלי נראה + c=מטרה ⇒ דריסה
+    for (const r of sibRules) if (clsHit(r.left, c)) seenLeft.add(r);   // c הוא אח-שמאלי ⇒ יחול על אחיו-הבאים
+    let e = emit(c, map, childAnc, depth + 1, myColor, selfFlexGrid, nextInh, nextVars, elemIdx++, selfWrap, sibOv);
     if (cst['position'] === 'absolute') { abs.push({ e, st: cst }); continue; }
     // inline-level? display:inline* מפורש, או תג-inline כברירת-מחדל. אחרת בלוק ⇒ ביטול זרימת-inline.
     const cInline = cst['display'] ? /^inline/.test(cst['display']) : INLINE_TAGS.has(c.tag);
@@ -511,7 +540,8 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   const tb = c => c === 'baseline' ? ', textBaseline: TextBaseline.alphabetic' : '';
   // display:flex (בלוק) = רוחב-מלא ⇒ MainAxisSize.max · inline-flex = כיווץ-לתוכן ⇒ min · space-* דורש max
   const isInlineFlex = /inline-flex/.test(disp);
-  const rowSize = ((isFlex && !isInlineFlex) || /^space-/.test(st['justify-content'] || '')) ? 'MainAxisSize.max' : 'MainAxisSize.min';
+  // פריט בתוך Wrap אב ⇒ גודל-תוכן (min), אחרת שורת-max ממלאת-שורה ⇒ פריט-אחד-בשורה (נערם). CSS: פריט-flex-wrap מתכווץ-לתוכן.
+  const rowSize = parentWrap ? 'MainAxisSize.min' : (((isFlex && !isInlineFlex) || /^space-/.test(st['justify-content'] || '')) ? 'MainAxisSize.max' : 'MainAxisSize.min');
   // flex-wrap:wrap בשורה ⇒ Wrap (Flutter Row לא עוטף ⇒ overflow). spacing=gap, runSpacing=gap.
   const flexWrap = /wrap/.test(st['flex-wrap'] || '') && !/nowrap/.test(st['flex-wrap'] || '');
   // display:grid עם grid-template-columns של fr — עמודות-שוות בשורה-אחת ⇒ Row של Expanded (flex לפי fr).
@@ -532,7 +562,7 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   let noPad = false;
   if (abs.length) {
     const emBase = +(px(effText['font-size']) || 14);
-    const pxe = v => { if (v == null) return null; const p = px(v); if (p != null) return p; const em = /(-?\d*\.?\d+)em/.exec(v); return em ? (parseFloat(em[1]) * emBase).toFixed(2) : null; };
+    const pxe = v => { if (v == null) return null; if (/^0(px)?$/.test(String(v).trim())) return '0'; const p = px(v); if (p != null) return p; const em = /(-?\d*\.?\d+)em/.exec(v); return em ? (parseFloat(em[1]) * emBase).toFixed(2) : null; };
     const pos = abs.map(a => {
       const p = [];
       // inset-block = top+bottom (קיצור), inset-block-start/end = top/bottom. בלי זה פס-אקצנט
@@ -551,6 +581,9 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     const pad = edge(st, 'padding');
     const flowW = pad && inner ? `Padding(padding: ${pad}, child: ${inner})` : inner;
     inner = `Stack(clipBehavior: Clip.none, children: [${(flowW ? [flowW] : []).concat(pos).join(', ')}])`;
+    // בלוק-במסגרת-בלוק (לא פריט-flex) בלי רוחב-מפורש = מילוי-רוחב-הורה (CSS block) ⇒ Positioned right:0
+    // מתיישר לקצה-המיכל (li ברשימה: המספר/הנקודה בשוליים), לא לקצה-הטקסט. פריט-flex (avw) נשאר גודל-תוכן.
+    if (!parentFlex && !st['width'] && !/^inline/.test(st['display'] || '')) inner = `SizedBox(width: double.infinity, child: ${inner})`;
     noPad = true;                                       // ה-padding כבר בתוך ה-Stack
   }
   return wrapBox(st, inner, node, noPad, parentFlex);
@@ -741,6 +774,9 @@ Path _parse(String d) {
   final t = RegExp(r'[a-zA-Z]|-?\\d*\\.?\\d+(?:e-?\\d+)?').allMatches(d).map((x) => x.group(0)!).toList();
   double cx = 0, cy = 0, sx = 0, sy = 0; String cmd = ''; int i = 0;
   double n() => double.parse(t[i++]);
+  // דגל-קשת (largeArc/sweep) = ספרה-בודדת 0/1 · ה-SVG מתיר צמידות ("00-3-3") ⇒ הטוקנייזר מיזג ל"00";
+  // קולפים תו-אחד ומשאירים את השארית לטוקן הבא (בלי זה קשת-מעוגלת בעיפרון/אייקון נשברת ⇒ אייקון-ריק).
+  double fl() { final tok = t[i]; if (tok.length <= 1) { i++; return double.parse(tok); } t[i] = tok.substring(1); return double.parse(tok[0]); }
   while (i < t.length) {
     if (RegExp(r'[a-zA-Z]').hasMatch(t[i])) { cmd = t[i]; i++; }
     if (i > t.length) break;
@@ -752,7 +788,7 @@ Path _parse(String d) {
       case 'V': { double y = n(); if (rel) y += cy; path.lineTo(cx, y); cy = y; break; }
       case 'C': { double x1 = n(), y1 = n(), x2 = n(), y2 = n(), x = n(), y = n(); if (rel) { x1 += cx; y1 += cy; x2 += cx; y2 += cy; x += cx; y += cy; } path.cubicTo(x1, y1, x2, y2, x, y); cx = x; cy = y; break; }
       case 'Q': { double x1 = n(), y1 = n(), x = n(), y = n(); if (rel) { x1 += cx; y1 += cy; x += cx; y += cy; } path.quadraticBezierTo(x1, y1, x, y); cx = x; cy = y; break; }
-      case 'A': { double rx = n(), ry = n(), rot = n(), laf = n(), sf = n(), x = n(), y = n(); if (rel) { x += cx; y += cy; } path.arcToPoint(Offset(x, y), radius: Radius.elliptical(rx, ry), rotation: rot, largeArc: laf != 0, clockwise: sf != 0); cx = x; cy = y; break; }
+      case 'A': { double rx = n(), ry = n(), rot = n(), laf = fl(), sf = fl(), x = n(), y = n(); if (rel) { x += cx; y += cy; } path.arcToPoint(Offset(x, y), radius: Radius.elliptical(rx, ry), rotation: rot, largeArc: laf != 0, clockwise: sf != 0); cx = x; cy = y; break; }
       case 'Z': path.close(); cx = sx; cy = sy; break;
       default: if (i < t.length) i++;
     }
