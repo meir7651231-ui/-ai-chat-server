@@ -119,7 +119,17 @@ function fontExpr(val) {
   const m = val && val.match(/var\(--(serif|serifHe|grotesk|he)\)/);
   return m ? `fonts.${FONT[m[1]]}` : null;
 }
-const px = v => { const m = v && String(v).match(/(-?\d+(?:\.\d+)?)px/); return m ? m[1] : null; };
+// calc(A op B) דו-אופרנדי (px/מספר) ⇒ תוצאה מספרית · null אם לא-מזוהה. (var(--x) כבר הורחב ב-resolveVars.)
+const evalCalc = v => {
+  if (typeof v !== 'string' || !/calc\(/i.test(v)) return null;
+  const m = /calc\(\s*(-?[\d.]+)(?:px)?\s*([*/+-])\s*(-?[\d.]+)(?:px)?\s*\)/i.exec(v);
+  if (!m) return null;
+  const a = parseFloat(m[1]), b = parseFloat(m[3]), op = m[2];
+  const r = op === '*' ? a * b : op === '/' ? a / b : op === '+' ? a + b : a - b;
+  return isFinite(r) ? r : null;
+};
+// ‏px: מחשב calc() · תומך ב-.5px (נקודה-מובילה) ומחזיר מספר-Dart-תקין (0.5, לא .5). ‏(?<![\d.]) מונע חטיפת "5px" מ-".5px".
+const px = v => { const c = evalCalc(v); if (c != null) return (+c.toFixed(3)).toString(); const m = v && String(v).match(/(?<![\d.])(-?(?:\d+(?:\.\d+)?|\.\d+))px/); return m ? m[1].replace(/^(-?)\./, '$10.') : null; };
 const pct = v => { const m = v && String(v).match(/^\s*(\d+(?:\.\d+)?)%\s*$/); return m ? (+m[1] / 100).toFixed(3) : null; };  // רוחב/גובה יחסי
 const num = v => { const m = v && String(v).match(/-?(?:\d+\.?\d*|\.\d+)/); if (!m) return null; return m[0].replace(/^-\./, '-0.').replace(/^\./, '0.'); };
 
@@ -165,7 +175,7 @@ function parseStyle(css) {
   return { single, compound, descend, tagcls, pseudo };
 }
 // פסבדו-אלמנטים (::before/::after) התואמים לצומת ⇒ צמתי-span סינתטיים (decl כ-inline + content כטקסט).
-function pseudoKids(node, map, ancestors) {
+function pseudoKids(node, map, ancestors, sibIdx = 0) {
   if (!map.pseudo || !map.pseudo.length) return { before: [], after: [] };
   const classes = node.classes || [];
   const out = { before: [], after: [] };
@@ -175,7 +185,9 @@ function pseudoKids(node, map, ancestors) {
     if (!hit || !chainMatches(r.chain.slice(0, -1), ancestors)) continue;
     const cm = /content\s*:\s*(?:"([^"]*)"|'([^']*)'|([^;]+))/.exec(Object.entries(r.decl).map(([k, v]) => `${k}:${v}`).join(';'));
     let text = '';
-    if (cm) { const raw = cm[1] != null ? cm[1] : cm[2] != null ? cm[2] : (cm[3] || '').trim(); if (!/counter\(|attr\(|url\(/.test(raw)) text = raw; }
+    if (cm) { const raw = cm[1] != null ? cm[1] : cm[2] != null ? cm[2] : (cm[3] || '').trim();
+      if (/counter\(/.test(raw)) text = String(sibIdx + 1);   // content:counter(n) ⇒ מספר-הסידור (1-מבוסס)
+      else if (!/attr\(|url\(/.test(raw)) text = raw; }
     const style = Object.entries(r.decl).filter(([k]) => k !== 'content').map(([k, v]) => `${k}:${v}`).join(';');
     const kid = { tag: 'span', classes: [], attrs: { style }, children: text ? [{ text }] : [] };
     out[r.pos].push(kid);
@@ -267,6 +279,12 @@ function decoration(st) {                       // {prop} ⇒ BoxDecoration(...)
     const wm = /(\d+(?:\.\d+)?)px/.exec(br || '');
     const bw = wm ? wm[1] : '1';
     if (bc) parts.push(`border: Border.all(color: ${bc}${+bw !== 1 ? `, width: ${bw}` : ''})`);
+  } else {
+    // גבולות-כיווניים (border-inline-start/end · border-left/right/top/bottom) — RTL: start=right, end=left.
+    const sideMap = { 'border-top': 'top', 'border-bottom': 'bottom', 'border-left': 'left', 'border-right': 'right', 'border-inline-start': 'right', 'border-inline-end': 'left', 'border-block-start': 'top', 'border-block-end': 'bottom' };
+    const sides = [];
+    for (const prop in sideMap) { const v = st[prop]; if (!v) continue; const c = colorExpr(v); if (!c) continue; const wm = /(\d+(?:\.\d+)?)px/.exec(v); sides.push(`${sideMap[prop]}: BorderSide(color: ${c}, width: ${wm ? wm[1] : '1'})`); }
+    if (sides.length) parts.push(`border: Border(${sides.join(', ')})`);
   }
   const rad = st['border-radius'];
   if (rad) { const r = /999/.test(rad) ? '999' : (px(rad) || num(rad)); if (r) parts.push(`borderRadius: BorderRadius.circular(${r})`); }
@@ -356,8 +374,11 @@ function svgScene(node, map, anc, inherit) {
       else if (ch.tag === 'circle' && a['stroke-dasharray']) {          // dasharray+rotate(-90) ⇒ קשת
         const r = +a.r || 0, circ = 2 * Math.PI * r;
         const dash = a['stroke-dasharray'].trim().split(/[\s,]+/).map(Number);
-        const drawn = Math.min(dash[0] || 0, circ), off = a['stroke-dashoffset'] != null ? +a['stroke-dashoffset'] : 0;
-        const start = (-Math.PI / 2 + ((-off) / circ) * 2 * Math.PI).toFixed(4), sweep = ((drawn / circ) * 2 * Math.PI).toFixed(4);
+        const off = a['stroke-dashoffset'] != null ? +a['stroke-dashoffset'] : 0;
+        // אורך-הקשת-הנראה = dash[0] פחות ה-offset (מוסכמת-מד: dasharray=היקף, dashoffset=(1-חלק)·היקף ⇒
+        // נראה = היקף−offset; מוסכמת-דונאט: dasharray="קשת פער", off=0 ⇒ נראה=dash[0]). מתחיל מלמעלה.
+        const drawn = Math.max(0, Math.min(dash[0] || 0, circ) - Math.max(0, off));
+        const start = (-Math.PI / 2).toFixed(4), sweep = ((drawn / circ) * 2 * Math.PI).toFixed(4);
         ops.push(`_Op.arc(${+a.cx || 0}, ${+a.cy || 0}, ${r}, ${start}, ${sweep}, ${col}, ${sw}${gArgs(gd)})`);
       }
       else if (ch.tag === 'circle') ops.push(`_Op.circle(${+a.cx || 0}, ${+a.cy || 0}, ${+a.r || 0}, ${col}, ${filled}, ${sw})`);
@@ -411,7 +432,7 @@ function toRichSpan(w) {
   if (m && !/,\s*text(Align|Direction):/.test(m[1])) return `TextSpan(text: ${m[1]}, style: ${m[2]})`;
   return `WidgetSpan(alignment: PlaceholderAlignment.middle, child: ${w})`;
 }
-function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parentFlex = false, inhFont = {}, inhVars = {}) {
+function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parentFlex = false, inhFont = {}, inhVars = {}, sibIdx = 0) {
   if (depth > 16) return 'const SizedBox.shrink()';
   if (node.tag === 'svg') {
     const sc = svgScene(node, map, ancestors, inherit);
@@ -458,23 +479,25 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   const selfFlexGrid = /flex|grid/.test(st['display'] || '');
   const flow = [], abs = [];
   let flowInline = true, flowAllText = true;   // כל-הילדים inline-level ⇒ זרימת-inline (שורה, לא טור)
-  const pk = pseudoKids(node, map, ancestors);   // ::before/::after ⇒ צמתים סינתטיים לפני/אחרי הזרימה
+  const pk = pseudoKids(node, map, ancestors, sibIdx);   // ::before/::after ⇒ צמתים סינתטיים לפני/אחרי הזרימה
   const allKids = pk.before.length || pk.after.length ? [...pk.before, ...node.children, ...pk.after] : node.children;
+  let elemIdx = 0;
   for (const c of allKids) {
     // טקסט-חופשי בתוך אלמנט יורש את סגנון-ההורה (גודל/משקל/צבע/פונט) — CSS inheritance.
     // רווחי-גבול בין-אלמנטים משמעותיים ב-CSS (inline) — משמרים רווח-בודד (לא trim מלא ⇒
     // "בדגש נושא" נשמר, לא "בדגשנושא"); דילוג רק על רווח-טהור.
     if (c.text != null) { const raw = c.text.replace(/\s+/g, ' '); if (raw.trim()) flow.push(`Text(${dq(raw)}, style: TextStyle(${textStyleC(effText, myColor).join(', ')}))`); continue; }
-    if (c.tag === 'br') continue;
+    if (c.tag === 'br') { flow.push(`Text("\\n", style: TextStyle(${textStyleC(effText, myColor).join(', ')}))`); continue; }   // <br> ⇒ שבירת-שורה (נשמרת ב-Text.rich)
     const cst = styleOf(c, map, childAnc);
-    let e = emit(c, map, childAnc, depth + 1, myColor, selfFlexGrid, nextInh, nextVars);
+    let e = emit(c, map, childAnc, depth + 1, myColor, selfFlexGrid, nextInh, nextVars, elemIdx++);
     if (cst['position'] === 'absolute') { abs.push({ e, st: cst }); continue; }
     // inline-level? display:inline* מפורש, או תג-inline כברירת-מחדל. אחרת בלוק ⇒ ביטול זרימת-inline.
     const cInline = cst['display'] ? /^inline/.test(cst['display']) : INLINE_TAGS.has(c.tag);
     if (!cInline) flowInline = false;
     if (!(cInline && /^(?:Text\(|Directionality\(textDirection: TextDirection\.\w+, child: Text\()/.test(e))) flowAllText = false;
-    // flex-grow חיובי בשורה ⇒ Expanded (מוסר אי-חסימת-רוחב לצאצא כמו svg-ספארק)
-    if (pFlexRow) { const fx = (cst['flex'] || '').trim(); if (fx && fx !== 'none' && fx !== '0' && !/^0\b/.test(fx)) e = `Expanded(child: ${e})`; }
+    // flex-grow חיובי או width:100% בשורת-flex ⇒ Expanded (ממלא · מוסר אי-חסימת-רוחב; SizedBox אינסופי
+    // בתוך Row-לא-חסום קורס — Expanded נותן רוחב-חסום שה-SizedBox ממלא).
+    if (pFlexRow) { const fx = (cst['flex'] || '').trim(); if ((fx && fx !== 'none' && fx !== '0' && !/^0\b/.test(fx)) || pct(cst['width']) === '1.000') e = `Expanded(child: ${e})`; }
     flow.push(e);
   }
   let inner;
@@ -491,8 +514,14 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   const rowSize = ((isFlex && !isInlineFlex) || /^space-/.test(st['justify-content'] || '')) ? 'MainAxisSize.max' : 'MainAxisSize.min';
   // flex-wrap:wrap בשורה ⇒ Wrap (Flutter Row לא עוטף ⇒ overflow). spacing=gap, runSpacing=gap.
   const flexWrap = /wrap/.test(st['flex-wrap'] || '') && !/nowrap/.test(st['flex-wrap'] || '');
+  // display:grid עם grid-template-columns של fr — עמודות-שוות בשורה-אחת ⇒ Row של Expanded (flex לפי fr).
+  // (שורה-אחת בלבד — flow.length<=cols; רשתות רב-שורות כמו לוח-שנה נשארות בזרימה הקיימת.)
+  const isGrid = /grid/.test(disp), gtc = st['grid-template-columns'];
+  let gridCols = null;
+  if (isGrid && gtc) { const rep = /repeat\(\s*(\d+)\s*,\s*([\d.]+)fr/.exec(gtc); if (rep) gridCols = Array(+rep[1]).fill(+rep[2]); else { const fr = gtc.match(/([\d.]+)fr/g); if (fr) gridCols = fr.map(parseFloat); } }
   if (flow.length === 0) inner = null;
   else if (flow.length === 1 && !isFlex) inner = flow[0];
+  else if (isGrid && gridCols && flow.length > 1 && flow.length <= gridCols.length) inner = `Row(crossAxisAlignment: CrossAxisAlignment.${rowCross}${tb(rowCross)}${listSep}, children: [${flow.map((e, i) => `Expanded(flex: ${Math.max(1, Math.round(gridCols[i] || 1))}, child: ${e})`).join(', ')}])`;
   else if (isFlex && !col && flexWrap) inner = `Wrap(spacing: ${gap || 0}, runSpacing: ${gap || 0}, crossAxisAlignment: WrapCrossAlignment.${rowCross === 'start' ? 'start' : rowCross === 'end' ? 'end' : 'center'}, children: [${flow.join(', ')}])`;
   else if (isFlex && !col) inner = `Row(mainAxisSize: ${rowSize}${majE}, crossAxisAlignment: CrossAxisAlignment.${rowCross}${tb(rowCross)}${listSep}, children: [${flow.join(', ')}])`;
   // מיכל לא-flex עם ילדים inline-level בלבד ⇒ זרימת-inline אמיתית דרך Text.rich (עוטף-שורות +
@@ -506,7 +535,12 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     const pxe = v => { if (v == null) return null; const p = px(v); if (p != null) return p; const em = /(-?\d*\.?\d+)em/.exec(v); return em ? (parseFloat(em[1]) * emBase).toFixed(2) : null; };
     const pos = abs.map(a => {
       const p = [];
-      const t = pxe(a.st['top']), b = pxe(a.st['bottom']);
+      // inset-block = top+bottom (קיצור), inset-block-start/end = top/bottom. בלי זה פס-אקצנט
+      // (mrow.sel::before, inset-block:8px) נשאר בלי גובה ⇒ מילא את כל השורה.
+      let t = pxe(a.st['top']), b = pxe(a.st['bottom']);
+      const ib = a.st['inset-block']; if (ib != null) { const parts = ib.trim().split(/\s+/); if (t == null) t = pxe(parts[0]); if (b == null) b = pxe(parts[1] || parts[0]); }
+      if (t == null && a.st['inset-block-start'] != null) t = pxe(a.st['inset-block-start']);
+      if (b == null && a.st['inset-block-end'] != null) b = pxe(a.st['inset-block-end']);
       // RTL (ברירת-המחדל של האטומים): inset-inline-start ⇒ right · inset-inline-end ⇒ left.
       let l = pxe(a.st['left']), r = pxe(a.st['right']);
       if (r == null && a.st['inset-inline-start'] != null) r = pxe(a.st['inset-inline-start']);
