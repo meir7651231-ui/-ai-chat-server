@@ -461,8 +461,10 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   const pk = pseudoKids(node, map, ancestors);   // ::before/::after ⇒ צמתים סינתטיים לפני/אחרי הזרימה
   const allKids = pk.before.length || pk.after.length ? [...pk.before, ...node.children, ...pk.after] : node.children;
   for (const c of allKids) {
-    // טקסט-חופשי בתוך אלמנט יורש את סגנון-ההורה (גודל/משקל/צבע/פונט) — CSS inheritance
-    if (c.text != null) { const t = c.text.trim(); if (t) flow.push(`Text(${dq(t)}, style: TextStyle(${textStyleC(effText, myColor).join(', ')}))`); continue; }
+    // טקסט-חופשי בתוך אלמנט יורש את סגנון-ההורה (גודל/משקל/צבע/פונט) — CSS inheritance.
+    // רווחי-גבול בין-אלמנטים משמעותיים ב-CSS (inline) — משמרים רווח-בודד (לא trim מלא ⇒
+    // "בדגש נושא" נשמר, לא "בדגשנושא"); דילוג רק על רווח-טהור.
+    if (c.text != null) { const raw = c.text.replace(/\s+/g, ' '); if (raw.trim()) flow.push(`Text(${dq(raw)}, style: TextStyle(${textStyleC(effText, myColor).join(', ')}))`); continue; }
     if (c.tag === 'br') continue;
     const cst = styleOf(c, map, childAnc);
     let e = emit(c, map, childAnc, depth + 1, myColor, selfFlexGrid, nextInh, nextVars);
@@ -526,9 +528,13 @@ function wrapBox(st, inner, node, noPad, parentFlex = false) {
   // אלמנט inline-בזרימה (span/a/em… בלי display-בלוק, ולא פריט-flex/grid) מתעלם מ-width/height ב-CSS.
   // ריק ⇒ מתמוטט ל-0×0 ואינו נצבע (נאמנות-למקור L4: .bar2 .f = span-מילוי inline שלא נראה במקור).
   const dispRaw = (st['display'] || '').trim();
-  const effInline = !parentFlex && (dispRaw ? dispRaw === 'inline' : !!(node && INLINE_TAGS.has(node.tag)));
+  // position:absolute/fixed מבצע blockification (האלמנט יוצא מזרימת-inline) ⇒ אינו-inline גם אם span.
+  const posAbs = /^(absolute|fixed)$/.test((st['position'] || '').trim());
+  const effInline = !parentFlex && !posAbs && (dispRaw ? dispRaw === 'inline' : !!(node && INLINE_TAGS.has(node.tag)));
   if (effInline && !inner) return 'const SizedBox.shrink()';
-  if (effInline) st = Object.assign({}, st, { width: undefined, height: undefined });  // inline עם-תוכן ⇒ מידות לא-חלות
+  // inline עם-תוכן ⇒ width/height ושוליים-אנכיים לא-חלים ב-CSS. השמטתם שומרת אותו כ-TextSpan נקי
+  // (Container-שוליים היה הופך ל-WidgetSpan ושובר סדר-bidi — Label/Meta התחלפו).
+  if (effInline) st = Object.assign({}, st, { width: undefined, height: undefined, margin: undefined, 'margin-top': undefined, 'margin-bottom': undefined });
   const deco = decoration(st), pad = noPad ? null : edge(st, 'padding'), mg = edge(st, 'margin');
   const w = px(st['width']), h = px(st['height']), minH = px(st['min-height']), minW = px(st['min-width']);
   const cp = [];
