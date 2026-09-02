@@ -34,18 +34,18 @@ function litColor(v) {                       // #hex / rgba() ⇒ Color(0x…) �
 // value ⇒ {expr, alpha?} · מזהה var(--token) (עם עטיפת color-mix/גרדיאנט ⇒ מפשט לטוקן-הבסיס)
 function colorExpr(val) {
   if (!val) return null;
-  const vm = val.match(/var\(--([a-z0-9-]+)\)/i);
-  if (vm) {
-    const k = vm[1];
-    if (SKIN[k]) return `skin.${SKIN[k]}`;
-    if (THEME[k]) return `theme.${THEME[k]}`;
-  }
-  // color-mix(in …, var(--a) N%, transparent) ⇒ theme/skin.withValues(alpha:N/100)
+  // color-mix(in …, var(--a) N%, transparent) ⇒ theme/skin.withValues(alpha:N/100) — לפני var-פשוט (ה-var בפנים)
   const cm = val.match(/color-mix\([^,]+,\s*var\(--([a-z0-9-]+)\)\s*(\d+)%/i);
   if (cm) {
     const k = cm[1], a = (+cm[2] / 100).toFixed(2);
     const base = SKIN[k] ? `skin.${SKIN[k]}` : THEME[k] ? `theme.${THEME[k]}` : null;
     if (base) return `${base}.withValues(alpha: ${a})`;
+  }
+  const vm = val.match(/var\(--([a-z0-9-]+)\)/i);
+  if (vm) {
+    const k = vm[1];
+    if (SKIN[k]) return `skin.${SKIN[k]}`;
+    if (THEME[k]) return `theme.${THEME[k]}`;
   }
   const lit = litColor(val);
   if (lit) return lit;
@@ -89,7 +89,7 @@ function fontExpr(val) {
   return m ? `fonts.${FONT[m[1]]}` : null;
 }
 const px = v => { const m = v && String(v).match(/(-?\d+(?:\.\d+)?)px/); return m ? m[1] : null; };
-const num = v => { const m = v && String(v).match(/-?\d+(?:\.\d+)?/); return m ? m[0] : null; };
+const num = v => { const m = v && String(v).match(/-?(?:\d+\.?\d*|\.\d+)/); if (!m) return null; return m[0].replace(/^-\./, '-0.').replace(/^\./, '0.'); };
 
 // ───────────────────────── פרסר-CSS (תת-קבוצה + מורכבים) ─────────────────────────
 // single: .a ⇒ decl · compound: .a.b(.c) ⇒ {set,decl,order} (חל כשלאלמנט כל המחלקות).
@@ -98,7 +98,12 @@ function parseStyle(css) {
   const single = {}, compound = [], descend = []; let order = 0;
   css = css.replace(/\/\*[\s\S]*?\*\//g, '');
   const re = /([^{}]+)\{([^{}]*)\}/g; let m;
-  const simple = tok => /^(\.[a-z0-9-]+)+$/i.test(tok) ? tok.split('.').filter(Boolean) : null;  // .a / .a.b ⇒ [classes]
+  // חלק-שרשרת ⇒ {cls:[...]} (מחלקות) | {tag:'svg'} (תג-בודד) | null
+  const simple = tok => {
+    if (/^(\.[a-z0-9-]+)+$/i.test(tok)) return { cls: tok.split('.').filter(Boolean) };
+    if (/^[a-z][a-z0-9]*$/i.test(tok)) return { tag: tok.toLowerCase() };
+    return null;
+  };
   while ((m = re.exec(css))) {
     const sels = m[1].split(',').map(s => s.trim());
     const decl = {};
@@ -106,10 +111,10 @@ function parseStyle(css) {
     for (const sel of sels) {
       if (/^\.([a-z0-9-]+)$/i.test(sel)) { const c = sel.slice(1); single[c] = Object.assign(single[c] || {}, decl); continue; }
       if (/^(\.[a-z0-9-]+){2,}$/i.test(sel)) { compound.push({ set: sel.split('.').filter(Boolean), decl, order: order++ }); continue; }
-      // צאצא: ".a .b .c" — רק מחלקות מופרדות-רווח (בלי > ~ [attr] :pseudo tag)
-      if (/^\.[a-z0-9-]+(\.[a-z0-9-]+)*( +\.[a-z0-9-]+(\.[a-z0-9-]+)*)+$/i.test(sel)) {
+      // צאצא: ".a .b" / ".a svg" — מחלקות/תגים מופרדי-רווח (בלי > ~ [attr] :pseudo #id)
+      if (/ /.test(sel) && !/[>~[\]:()#]/.test(sel)) {
         const parts = sel.split(/\s+/).filter(Boolean).map(simple);
-        if (parts.every(Boolean)) descend.push({ chain: parts, decl, order: order++ });
+        if (parts.length >= 2 && parts.every(Boolean)) descend.push({ chain: parts, decl, order: order++ });
       }
     }
   }
@@ -124,8 +129,9 @@ function parseInline(style) {
 function chainMatches(chain, ancestors) {
   let i = 0;
   for (const part of chain) {
+    const cls = part.cls || [];            // אבות נושאים מחלקות בלבד; חלק-תג-אב לא-תואם (נדיר ב-CSS זה)
     let found = false;
-    while (i < ancestors.length) { if (part.every(c => ancestors[i].includes(c))) { found = true; i++; break; } i++; }
+    while (i < ancestors.length) { if (cls.length && cls.every(c => ancestors[i].includes(c))) { found = true; i++; break; } i++; }
     if (!found) return false;
   }
   return true;
@@ -137,7 +143,8 @@ function styleOf(node, map, ancestors = []) {
   for (const r of map.compound) if (r.set.every(c => classes.includes(c))) Object.assign(s, r.decl);
   for (const r of map.descend) {
     const target = r.chain[r.chain.length - 1];
-    if (target.every(c => classes.includes(c)) && chainMatches(r.chain.slice(0, -1), ancestors)) Object.assign(s, r.decl);
+    const hit = target.tag ? node.tag === target.tag : target.cls.every(c => classes.includes(c));
+    if (hit && chainMatches(r.chain.slice(0, -1), ancestors)) Object.assign(s, r.decl);
   }
   Object.assign(s, parseInline(node.attrs && node.attrs.style));
   return s;
@@ -229,30 +236,83 @@ function textStyle(st) {
   const f = fontExpr(st['font-family']); if (f) p.push(`fontFamily: ${f}`);
   const fs = px(st['font-size']); if (fs) p.push(`fontSize: ${fs}`);
   const fw = st['font-weight']; if (fw && +fw >= 600) p.push(`fontWeight: FontWeight.w${fw >= 700 ? 700 : 600}`);
-  const ls = st['letter-spacing']; if (ls && ls !== 'normal') { const v = px(ls) || num(ls); if (v) p.push(`letterSpacing: ${v}`); }
+  const ls = st['letter-spacing'];
+  if (ls && ls !== 'normal') {
+    let v = px(ls);
+    if (v == null) { const em = String(ls).match(/(-?\d*\.?\d+)em/); const fs2 = px(st['font-size']); if (em && fs2) v = (parseFloat(em[1]) * +fs2).toFixed(2); }  // em ⇒ פיקסלים לפי font-size
+    if (v == null) v = num(ls);
+    if (v != null && +v !== 0) p.push(`letterSpacing: ${v}`);
+  }
   const lh = st['line-height']; if (lh && lh !== 'normal' && !/px|%/.test(lh)) { const v = num(lh); if (v) p.push(`height: ${v}`); }
   if (/tabular/.test(st['font-feature-settings'] || '') || /tabular/.test(st['font-variant-numeric'] || ''))
     p.push('fontFeatures: const [FontFeature.tabularFigures()]');
   return p;
 }
 
-// SVG ⇒ path-data מנורמל (circle/rect/line/polyline ⇒ פקודות-path); <path d> נשמר כמו-שהוא
-function svgToPathData(node) {
-  let d = '';
-  const walk = n => {
+// SVG ⇒ סצנת-ציור רב-אלמנטית: כל <rect>/<circle>/<line>/<path>/<polygon> = op עם צבע-משלו (fill/stroke).
+// כל צבע נפתר דרך colorExpr (skin/theme); ברירת-מחדל = inherit. שומר per-shape fill (לא flatten).
+function svgScene(node, map, anc, inherit) {
+  const vb = (node.attrs.viewbox || '0 0 24 24').split(/\s+/).map(Number);
+  const vbw = vb[2] || 24, vbh = vb[3] || 24;
+  const ops = [];
+  // מרשם-גרדיאנטים: גלובלי-למסמך (defs מוגדר פעם, מופנה מכל svg) + מקומי-לצומת. objectBoundingBox.
+  const grads = { ...GLOBAL_GRADS };
+  const collect = n => { for (const ch of n.children) { if (!ch.tag) continue; if (ch.tag === 'lineargradient' && ch.attrs.id) grads[ch.attrs.id] = gradStops(ch, inherit); collect(ch); } };
+  collect(node);
+  const gArgs = gd => gd ? `, g: [${gd.cols.join(', ')}], gs: [${gd.offs.join(', ')}], gv: [${gd.v.join(', ')}]` : '';
+  const urlId = v => { const m = v && v.match(/url\(#([\w-]+)\)/); return m ? grads[m[1]] : null; };
+  const allText = n => n.children.map(c => c.text != null ? c.text : (c.tag ? allText(c) : '')).join('');
+  const walk = (n, panc) => {
     for (const ch of n.children) {
       if (!ch.tag) continue;
-      const a = ch.attrs;
-      if (ch.tag === 'path' && a.d) d += ' ' + a.d;
-      else if (ch.tag === 'circle') { const cx = +a.cx, cy = +a.cy, r = +a.r; d += ` M ${cx - r} ${cy} a ${r} ${r} 0 1 0 ${r * 2} 0 a ${r} ${r} 0 1 0 ${-r * 2} 0`; }
-      else if (ch.tag === 'rect') { const x = +a.x || 0, y = +a.y || 0, w = +a.width, h = +a.height; d += ` M ${x} ${y} h ${w} v ${h} h ${-w} Z`; }
-      else if (ch.tag === 'line') { d += ` M ${a.x1} ${a.y1} L ${a.x2} ${a.y2}`; }
-      else if ((ch.tag === 'polyline' || ch.tag === 'polygon') && a.points) { const pts = a.points.trim().split(/[\s,]+/); d += ' M ' + pts[0] + ' ' + pts[1]; for (let k = 2; k < pts.length; k += 2) d += ` L ${pts[k]} ${pts[k + 1]}`; if (ch.tag === 'polygon') d += ' Z'; }
-      walk(ch);
+      const est = styleOf(ch, map, panc), a = ch.attrs;
+      const fillRaw = a.fill || est['fill'];
+      const strokeRaw = a.stroke || est['stroke'] || est['color'];
+      const filled = !!(fillRaw && fillRaw !== 'none');
+      const gd = filled ? urlId(fillRaw) : urlId(strokeRaw);          // גרדיאנט על מילוי/קו
+      const col = filled ? (colorExpr(fillRaw) || inherit) : (colorExpr(strokeRaw) || inherit);
+      const sw = num(a['stroke-width'] || est['stroke-width'] || '1.8') || '1.8';
+      if (ch.tag === 'rect') ops.push(`_Op.rect(${+a.x || 0}, ${+a.y || 0}, ${+a.width || 0}, ${+a.height || 0}, ${a.rx ? +a.rx : 0}, ${col}, ${filled}, ${sw}${gArgs(gd)})`);
+      else if (ch.tag === 'circle' && a['stroke-dasharray']) {          // dasharray+rotate(-90) ⇒ קשת
+        const r = +a.r || 0, circ = 2 * Math.PI * r;
+        const dash = a['stroke-dasharray'].trim().split(/[\s,]+/).map(Number);
+        const drawn = Math.min(dash[0] || 0, circ), off = a['stroke-dashoffset'] != null ? +a['stroke-dashoffset'] : 0;
+        const start = (-Math.PI / 2 + ((-off) / circ) * 2 * Math.PI).toFixed(4), sweep = ((drawn / circ) * 2 * Math.PI).toFixed(4);
+        ops.push(`_Op.arc(${+a.cx || 0}, ${+a.cy || 0}, ${r}, ${start}, ${sweep}, ${col}, ${sw}${gArgs(gd)})`);
+      }
+      else if (ch.tag === 'circle') ops.push(`_Op.circle(${+a.cx || 0}, ${+a.cy || 0}, ${+a.r || 0}, ${col}, ${filled}, ${sw})`);
+      else if (ch.tag === 'line') ops.push(`_Op.line(${+a.x1 || 0}, ${+a.y1 || 0}, ${+a.x2 || 0}, ${+a.y2 || 0}, ${col}, ${sw})`);
+      else if (ch.tag === 'path' && a.d) ops.push(`_Op.path(${dq(a.d)}, ${col}, ${filled}, ${sw}${gArgs(gd)})`);
+      else if (ch.tag === 'text') {
+        const s = allText(ch).replace(/\s+/g, ' ').trim();
+        if (s) { const anchr = { middle: 1, end: 2 }[a['text-anchor'] || est['text-anchor']] || 0; const size = px(est['font-size']) || 9; const tc = colorExpr(est['fill'] || est['color']) || inherit; const ff = fontExpr(est['font-family']) || 'fonts.grotesk'; ops.push(`_Op.text(${dq(decode(s))}, ${+a.x || 0}, ${+a.y || 0}, ${size}, ${tc}, ${anchr}, ${ff})`); }
+      }
+      else if ((ch.tag === 'polyline' || ch.tag === 'polygon') && a.points) {
+        const pts = a.points.trim().split(/[\s,]+/); let d = 'M ' + pts[0] + ' ' + pts[1];
+        for (let k = 2; k < pts.length; k += 2) d += ` L ${pts[k]} ${pts[k + 1]}`; if (ch.tag === 'polygon') d += ' Z';
+        ops.push(`_Op.path(${dq(d)}, ${col}, ${ch.tag === 'polygon' && filled}, ${sw}${gArgs(gd)})`);
+      }
+      if (ch.tag !== 'text') walk(ch, panc.concat([ch.classes || []]));
     }
   };
-  walk(node);
-  return d.trim().replace(/\s+/g, ' ');
+  walk(node, anc.concat([node.classes || []]));
+  return { ops, vbw, vbh };
+}
+// <linearGradient> ⇒ {cols:[Color…], offs:[0..1…], v:[x1,y1,x2,y2]} (שברי objectBoundingBox)
+function gradStops(gnode, inherit) {
+  const cols = [], offs = [];
+  for (const s of gnode.children) {
+    if (s.tag !== 'stop') continue;
+    let col = colorExpr(s.attrs['stop-color']) || inherit;
+    const so = s.attrs['stop-opacity'];
+    if (so != null && +so < 1) col += `.withValues(alpha: ${(+so).toFixed(2)})`;
+    cols.push(col);
+    let o = s.attrs.offset != null ? parseFloat(s.attrs.offset) : 0; if (o > 1) o /= 100;
+    offs.push(o.toFixed(2));
+  }
+  const g = gnode.attrs;
+  const v = [(+g.x1 || 0).toFixed(2), (+g.y1 || 0).toFixed(2), (+g.x2 || 0).toFixed(2), (g.y2 != null ? +g.y2 : 1).toFixed(2)];
+  return { cols, offs, v };
 }
 // טקסט-סטייל עם צבע-יורש (CSS color inheritance) — לעולם לא "בלתי-נראה"
 function textStyleC(st, inherit) { const ts = textStyle(st); if (!ts.some(x => /^color:/.test(x))) ts.unshift(`color: ${inherit}`); if (!ts.some(x => /^fontFamily:/.test(x))) ts.push('fontFamily: fonts.he'); return ts; }
@@ -260,15 +320,15 @@ function textStyleC(st, inherit) { const ts = textStyle(st); if (!ts.some(x => /
 function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink') {
   if (depth > 16) return 'const SizedBox.shrink()';
   if (node.tag === 'svg') {
-    const d = svgToPathData(node);
-    if (!d) return `_icon(${inherit})`;                         // אין path ⇒ נפילה לאייקון
-    const vb = (node.attrs.viewbox || '0 0 24 24').split(/\s+/)[2] || '24';
-    const sw = node.attrs['stroke-width'] || '1.8';
+    const sc = svgScene(node, map, ancestors, inherit);
+    if (!sc.ops.length) return `_icon(${inherit})`;
     const st0 = styleOf(node, map, ancestors);
-    const w = px(st0['width']) || '16', h = px(st0['height']) || w;
-    const stroke = colorExpr(st0['color'] || st0['stroke']) || inherit;
-    const filled = (node.attrs.fill && node.attrs.fill !== 'none') || /^(?!none)/.test(st0['fill'] || 'none') && (st0['fill'] || '') !== 'none' && st0['fill'];
-    return `CustomPaint(size: const Size(${w}, ${h}), painter: _SvgPaint(${dq(d)}, ${stroke}, ${sw}, ${filled ? 'true' : 'false'}, ${vb}))`;
+    const wpx = px(st0['width']) || num(node.attrs.width);   // CSS או attr HTML (donut/gauge width="118")
+    const hpx = px(st0['height']) || num(node.attrs.height);
+    const body = `CustomPaint(painter: _SvgScene([${sc.ops.join(', ')}], ${sc.vbw}, ${sc.vbh}))`;
+    if (wpx) return `SizedBox(width: ${wpx}, height: ${hpx || (wpx / (sc.vbw / sc.vbh)).toFixed(2)}, child: ${body})`;  // אייקון/טבעת גודל-קבוע
+    if (hpx) return `SizedBox(height: ${hpx}, child: ${body})`;                          // גובה-קבוע, רוחב מהאב (ספארק)
+    return `AspectRatio(aspectRatio: ${(sc.vbw / sc.vbh).toFixed(4)}, child: ${body})`;  // width:100% ⇒ מילוי-רוחב לפי יחס-viewBox
   }
   if (node.tag === 'input') {
     const ph = node.attrs.placeholder || node.attrs.value || 'Label';
@@ -292,13 +352,18 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink') {
   }
   // בונה ילדים (מפריד אבסולוטיים ל-Stack) · מעביר צבע-יורש
   const childAnc = ancestors.concat([node.classes || []]);
+  const pFlexRow = /flex/.test(st['display'] || '') && !/column/.test(st['flex-direction'] || '');
   const flow = [], abs = [];
   for (const c of node.children) {
-    if (c.text != null) { const t = c.text.trim(); if (t) flow.push(`Text(${dq(t)}, style: TextStyle(color: ${myColor}, fontFamily: fonts.he))`); continue; }
+    // טקסט-חופשי בתוך אלמנט יורש את סגנון-ההורה (גודל/משקל/צבע/פונט) — CSS inheritance
+    if (c.text != null) { const t = c.text.trim(); if (t) flow.push(`Text(${dq(t)}, style: TextStyle(${textStyleC(st, myColor).join(', ')}))`); continue; }
     if (c.tag === 'br') continue;
     const cst = styleOf(c, map, childAnc);
-    const e = emit(c, map, childAnc, depth + 1, myColor);
-    if (cst['position'] === 'absolute') abs.push({ e, st: cst }); else flow.push(e);
+    let e = emit(c, map, childAnc, depth + 1, myColor);
+    if (cst['position'] === 'absolute') { abs.push({ e, st: cst }); continue; }
+    // flex-grow חיובי בשורה ⇒ Expanded (מוסר אי-חסימת-רוחב לצאצא כמו svg-ספארק)
+    if (pFlexRow) { const fx = (cst['flex'] || '').trim(); if (fx && fx !== 'none' && fx !== '0' && !/^0\b/.test(fx)) e = `Expanded(child: ${e})`; }
+    flow.push(e);
   }
   let inner;
   const disp = st['display'] || '', fd = st['flex-direction'] || '';
@@ -309,9 +374,11 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink') {
   const majE = maj ? `, mainAxisAlignment: MainAxisAlignment.${maj}` : '';
   const rowCross = min || 'center', colCross = min || 'start';
   const tb = c => c === 'baseline' ? ', textBaseline: TextBaseline.alphabetic' : '';
+  // justify-content: space-* דורש רוחב-מלא כדי לפזר (min מקריס אותו) — כמו chd/legend/mh
+  const rowSize = /^space-/.test(st['justify-content'] || '') ? 'MainAxisSize.max' : 'MainAxisSize.min';
   if (flow.length === 0) inner = null;
   else if (flow.length === 1 && !isFlex) inner = flow[0];
-  else if (isFlex && !col) inner = `Row(mainAxisSize: MainAxisSize.min${majE}, crossAxisAlignment: CrossAxisAlignment.${rowCross}${tb(rowCross)}${listSep}, children: [${flow.join(', ')}])`;
+  else if (isFlex && !col) inner = `Row(mainAxisSize: ${rowSize}${majE}, crossAxisAlignment: CrossAxisAlignment.${rowCross}${tb(rowCross)}${listSep}, children: [${flow.join(', ')}])`;
   else inner = `Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.${colCross}${tb(colCross)}${majE}${listSep}, children: [${flow.join(', ')}])`;
   // אבסולוטיים ⇒ Stack + Positioned · ה-padding עוטף רק את הזרימה (CSS: absolute יחסי ל-padding-box)
   let noPad = false;
@@ -414,26 +481,60 @@ const ICON = `
 // אייקון-פלייסהולדר ניטרלי (svg ללא path)
 Widget _icon(Color c) => Icon(Icons.circle_outlined, size: 15, color: c);
 `;
-// צייר-SVG אמיתי · פרסר path-data ב-runtime (M/L/H/V/C/Q/A/Z + יחסי) ⇒ Path מוקטן ל-viewBox
+// צייר-SVG רב-אלמנטי · כל אלמנט = _Op עם צבע-משלו; פרסר path-data ל-runtime; מוקטן ל-viewBox
 const SVGHELPER = `
-class _SvgPaint extends CustomPainter {
-  final String d; final Color color; final double sw; final bool filled; final double vb;
-  const _SvgPaint(this.d, this.color, this.sw, this.filled, this.vb);
-  @override
-  void paint(Canvas canvas, Size size) {
-    Path raw;
-    try { raw = _parse(d); } catch (_) { return; }   // path פגום ⇒ ריקון-רך, לא זריקה
-    final m = Matrix4.identity()..scale(size.width / vb, size.height / vb);
-    final p = raw.transform(m.storage);
-    canvas.drawPath(p, Paint()
-      ..color = color
-      ..style = filled ? PaintingStyle.fill : PaintingStyle.stroke
-      ..strokeWidth = sw
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round);
+// ignore_for_file: unused_element
+class _Op {
+  final int k;            // 0 rect · 1 circle · 2 line · 3 path · 4 text · 5 arc
+  final List<double> a; final Color c; final bool f; final double sw; final String d;
+  final List<Color>? g; final List<double>? gs; final List<double>? gv;  // גרדיאנט: צבעים · עצירות · וקטור-שבר
+  final int anchor;       // עוגן-טקסט: 0 start · 1 middle · 2 end
+  _Op(this.k, this.a, this.c, this.f, this.sw, this.d, {this.g, this.gs, this.gv, this.anchor = 0, this.font = ''});
+  static _Op rect(double x, double y, double w, double h, double r, Color c, bool f, double sw, {List<Color>? g, List<double>? gs, List<double>? gv}) => _Op(0, [x, y, w, h, r], c, f, sw, '', g: g, gs: gs, gv: gv);
+  static _Op circle(double x, double y, double r, Color c, bool f, double sw) => _Op(1, [x, y, r], c, f, sw, '');
+  static _Op line(double x1, double y1, double x2, double y2, Color c, double sw) => _Op(2, [x1, y1, x2, y2], c, false, sw, '');
+  static _Op path(String d, Color c, bool f, double sw, {List<Color>? g, List<double>? gs, List<double>? gv}) => _Op(3, const [], c, f, sw, d, g: g, gs: gs, gv: gv);
+  final String font;
+  static _Op text(String s, double x, double y, double size, Color c, int anchor, String font) => _Op(4, [x, y, size], c, true, 0, s, anchor: anchor, font: font);
+  static _Op arc(double cx, double cy, double r, double start, double sweep, Color c, double sw, {List<Color>? g, List<double>? gs, List<double>? gv}) => _Op(5, [cx, cy, r, start, sweep], c, false, sw, '', g: g, gs: gs, gv: gv);
+}
+class _SvgScene extends CustomPainter {
+  final List<_Op> ops; final double vbw, vbh;
+  const _SvgScene(this.ops, this.vbw, this.vbh);
+  Alignment _al(double fx, double fy) => Alignment(fx * 2 - 1, fy * 2 - 1);
+  Path? _safe(String d) { try { return _parse(d); } catch (_) { return null; } }
+  void _paintText(Canvas cv, _Op o) {
+    final tp = TextPainter(text: TextSpan(text: o.d, style: TextStyle(color: o.c, fontSize: o.a[2], fontFamily: o.font.isEmpty ? null : o.font, fontWeight: FontWeight.w600, fontFeatures: const [FontFeature.tabularFigures()])), textDirection: TextDirection.ltr)..layout();
+    double dx = o.a[0]; if (o.anchor == 1) dx -= tp.width / 2; else if (o.anchor == 2) dx -= tp.width;
+    tp.paint(cv, Offset(dx, o.a[1] - tp.height * 0.82));
   }
   @override
-  bool shouldRepaint(_SvgPaint o) => o.d != d || o.color != color || o.sw != sw || o.filled != filled;
+  void paint(Canvas cv, Size s) {
+    if (vbw <= 0 || vbh <= 0) return;
+    cv.save(); cv.scale(s.width / vbw, s.height / vbh);
+    for (final o in ops) {
+      if (o.k == 4) { _paintText(cv, o); continue; }
+      final p = Paint()..style = o.f ? PaintingStyle.fill : PaintingStyle.stroke..strokeWidth = o.sw..strokeCap = StrokeCap.round..strokeJoin = StrokeJoin.round;
+      Rect b = Rect.zero; Path? pa;
+      switch (o.k) {
+        case 0: b = Rect.fromLTWH(o.a[0], o.a[1], o.a[2], o.a[3]); break;
+        case 5: b = Rect.fromCircle(center: Offset(o.a[0], o.a[1]), radius: o.a[2]); break;
+        case 3: pa = _safe(o.d); if (pa != null) b = pa.getBounds(); break;
+      }
+      if (o.g != null && o.g!.isNotEmpty) { final v = o.gv ?? const [0, 0, 0, 1]; p.shader = LinearGradient(begin: _al(v[0], v[1]), end: _al(v[2], v[3]), colors: o.g!, stops: o.gs).createShader(b.isEmpty ? const Rect.fromLTWH(0, 0, 1, 1) : b); }
+      else { p.color = o.c; }
+      switch (o.k) {
+        case 0: cv.drawRRect(RRect.fromRectAndRadius(b, Radius.circular(o.a[4])), p); break;
+        case 1: cv.drawCircle(Offset(o.a[0], o.a[1]), o.a[2], p); break;
+        case 2: cv.drawLine(Offset(o.a[0], o.a[1]), Offset(o.a[2], o.a[3]), p); break;
+        case 3: if (pa != null) cv.drawPath(pa, p); break;
+        case 5: cv.drawArc(Rect.fromCircle(center: Offset(o.a[0], o.a[1]), radius: o.a[2]), o.a[3], o.a[4], false, p); break;
+      }
+    }
+    cv.restore();
+  }
+  @override
+  bool shouldRepaint(_SvgScene o) => true;
 }
 Path _parse(String d) {
   final path = Path();
@@ -460,10 +561,16 @@ Path _parse(String d) {
 }
 `;
 
+let GLOBAL_GRADS = {};   // מרשם-גרדיאנטים למסמך-שלם (defs מוגדר פעם, מופנה מכל התאים)
+function collectGlobalGrads(html) {
+  GLOBAL_GRADS = {};
+  try { const dom = parseDOM(html); const go = n => { for (const ch of n.children || []) { if (ch.tag === 'lineargradient' && ch.attrs.id) GLOBAL_GRADS[ch.attrs.id] = gradStops(ch, 'skin.ink'); go(ch); } }; go(dom); } catch { /* עמיד */ }
+}
 function forgeFamily(fam) {
   const html = fs.readFileSync(path.join(PURE, `${fam}-family.html`), 'utf8');
   const styleM = html.match(/<style>([\s\S]*?)<\/style>/);
   const map = parseStyle(styleM ? styleM[1] : '');
+  collectGlobalGrads(html);
   const list = cells(html);
   const dir = path.join(OUT, fam);
   fs.mkdirSync(dir, { recursive: true });
@@ -493,7 +600,7 @@ function forgeFamily(fam) {
     // הכרז רק על מה שבשימוש (למניעת unused_local_variable / unused_element)
     const useSkin = /\bskin\./.test(bodyExpr), useTheme = /\btheme\./.test(bodyExpr);
     const useFonts = /\bfonts\./.test(bodyExpr), useIcon = /_icon\(/.test(bodyExpr);
-    const useSvg = /_SvgPaint\(/.test(bodyExpr);
+    const useSvg = /_SvgScene\(/.test(bodyExpr);
     const useUi = /ImageFilter\./.test(bodyExpr);
     const decls = [
       useSkin && '    final skin = DsSeam.skinOf(context);   // מלוא-העיצוב מהחריץ',
