@@ -95,7 +95,7 @@ const num = v => { const m = v && String(v).match(/-?(?:\d+\.?\d*|\.\d+)/); if (
 // single: .a ⇒ decl · compound: .a.b(.c) ⇒ {set,decl,order} (חל כשלאלמנט כל המחלקות).
 // סלקטורים עם צאצא/[attr]/psuedo מדולגים. מחזיר {single, compound}.
 function parseStyle(css) {
-  const single = {}, compound = [], descend = []; let order = 0;
+  const single = {}, compound = [], descend = [], tagcls = []; let order = 0;
   css = css.replace(/\/\*[\s\S]*?\*\//g, '');
   const re = /([^{}]+)\{([^{}]*)\}/g; let m;
   // חלק-שרשרת ⇒ {cls:[...]} (מחלקות) | {tag:'svg'} (תג-בודד) | null
@@ -111,6 +111,8 @@ function parseStyle(css) {
     for (const sel of sels) {
       if (/^\.([a-z0-9-]+)$/i.test(sel)) { const c = sel.slice(1); single[c] = Object.assign(single[c] || {}, decl); continue; }
       if (/^(\.[a-z0-9-]+){2,}$/i.test(sel)) { compound.push({ set: sel.split('.').filter(Boolean), decl, order: order++ }); continue; }
+      // תג-מוכשר-מחלקה: "svg.i" / "button.p" ⇒ תואם כשהתג+כל-המחלקות
+      if (/^[a-z][a-z0-9]*(\.[a-z0-9-]+)+$/i.test(sel)) { const ps = sel.split('.'); tagcls.push({ tag: ps[0].toLowerCase(), set: ps.slice(1).filter(Boolean), decl, order: order++ }); continue; }
       // צאצא: ".a .b" / ".a svg" — מחלקות/תגים מופרדי-רווח (בלי > ~ [attr] :pseudo #id)
       if (/ /.test(sel) && !/[>~[\]:()#]/.test(sel)) {
         const parts = sel.split(/\s+/).filter(Boolean).map(simple);
@@ -118,7 +120,7 @@ function parseStyle(css) {
       }
     }
   }
-  return { single, compound, descend };
+  return { single, compound, descend, tagcls };
 }
 function parseInline(style) {
   const d = {}; if (!style) return d;
@@ -140,6 +142,7 @@ function chainMatches(chain, ancestors) {
 function styleOf(node, map, ancestors = []) {
   const s = {}, classes = node.classes || [];
   for (const c of classes) if (map.single[c]) Object.assign(s, map.single[c]);
+  for (const r of map.tagcls || []) if (node.tag === r.tag && r.set.every(c => classes.includes(c))) Object.assign(s, r.decl);
   for (const r of map.compound) if (r.set.every(c => classes.includes(c))) Object.assign(s, r.decl);
   for (const r of map.descend) {
     const target = r.chain[r.chain.length - 1];
@@ -187,7 +190,12 @@ function decoration(st) {                       // {prop} ⇒ BoxDecoration(...)
   const bgRaw = st['background'] || st['background-color'];
   const grad = gradientExpr(bgRaw);
   if (grad) parts.push(`gradient: ${grad}`);     // גרדיאנט גובר על מילוי-אחיד
-  else { const bg = colorExpr(bgRaw); if (bg) parts.push(`color: ${bg}`); }
+  else if (bgRaw) {                               // רקע רב-שכבתי / radial (לא-נתמך) ⇒ שכבת-הצבע-האחיד (הבסיס)
+    let bg = null;
+    for (const seg of splitTop(bgRaw)) { if (!/gradient\(/i.test(seg)) { const c = colorExpr(seg.trim()); if (c) { bg = c; break; } } }
+    if (!bg) bg = colorExpr(bgRaw);
+    if (bg) parts.push(`color: ${bg}`);
+  }
   const br = st['border'];
   if (br) { const bc = colorExpr(br); if (bc) parts.push(`border: Border.all(color: ${bc}${/\b2px\b/.test(br) ? ', width: 2' : ''})`); }
   const rad = st['border-radius'];
@@ -374,8 +382,9 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink') {
   const majE = maj ? `, mainAxisAlignment: MainAxisAlignment.${maj}` : '';
   const rowCross = min || 'center', colCross = min || 'start';
   const tb = c => c === 'baseline' ? ', textBaseline: TextBaseline.alphabetic' : '';
-  // justify-content: space-* דורש רוחב-מלא כדי לפזר (min מקריס אותו) — כמו chd/legend/mh
-  const rowSize = /^space-/.test(st['justify-content'] || '') ? 'MainAxisSize.max' : 'MainAxisSize.min';
+  // display:flex (בלוק) = רוחב-מלא ⇒ MainAxisSize.max · inline-flex = כיווץ-לתוכן ⇒ min · space-* דורש max
+  const isInlineFlex = /inline-flex/.test(disp);
+  const rowSize = ((isFlex && !isInlineFlex) || /^space-/.test(st['justify-content'] || '')) ? 'MainAxisSize.max' : 'MainAxisSize.min';
   if (flow.length === 0) inner = null;
   else if (flow.length === 1 && !isFlex) inner = flow[0];
   else if (isFlex && !col) inner = `Row(mainAxisSize: ${rowSize}${majE}, crossAxisAlignment: CrossAxisAlignment.${rowCross}${tb(rowCross)}${listSep}, children: [${flow.join(', ')}])`;
