@@ -31,6 +31,14 @@ function litColor(v) {                       // #hex / rgba() ⇒ Color(0x…) �
   if (m) { const [r,g,b,a='1'] = m[1].split(',').map(s=>s.trim()); return `const Color(0x${hx(parseFloat(a)*255)}${hx(+r)}${hx(+g)}${hx(+b)})`; }
   return null;
 }
+// פתירת custom-properties מוגדרי-משתמש (‏.tone-info{--tone:var(--a-hi)}): מרחיב var(--X) לערכו
+// מהקסקד (‏vars), רקורסיבית, עד טוקן-ערכה מוכר (--a-hi) או ליטרל. טוקני-ערכה נשארים ל-colorExpr.
+function resolveVars(val, vars) {
+  if (!val || typeof val !== 'string' || !val.includes('var(') || !vars) return val;
+  let out = val, prev, guard = 0;
+  do { prev = out; out = out.replace(/var\(\s*(--[a-z0-9-]+)\s*(?:,[^()]*)?\)/gi, (m, name) => (vars[name] != null ? vars[name] : m)); } while (out !== prev && ++guard < 12);
+  return out;
+}
 // value ⇒ {expr, alpha?} · מזהה var(--token) (עם עטיפת color-mix/גרדיאנט ⇒ מפשט לטוקן-הבסיס)
 function colorExpr(val) {
   if (!val) return null;
@@ -363,7 +371,7 @@ function textStyleC(st, inherit) { const ts = textStyle(st); if (!ts.some(x => /
 // אלמנט ⇒ ביטוי-widget. ancestors=מחלקות-אבות (צאצא) · inherit=צבע-טקסט-יורש.
 // תכונות-טקסט תורשתיות (CSS inheritance) — יורדות מאב לצאצא; הצאצא-עם-ערך-משלו גובר.
 const INHERIT_PROPS = ['font-size', 'font-family', 'font-weight', 'font-style', 'letter-spacing', 'line-height', 'text-transform', 'font-feature-settings', 'font-variant-numeric'];
-function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parentFlex = false, inhFont = {}) {
+function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parentFlex = false, inhFont = {}, inhVars = {}) {
   if (depth > 16) return 'const SizedBox.shrink()';
   if (node.tag === 'svg') {
     const sc = svgScene(node, map, ancestors, inherit);
@@ -383,7 +391,11 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     const t = `Text(${dq(ph)}, style: TextStyle(color: ${filled ? 'skin.ink' : 'skin.faint'}, fontFamily: fonts.he, fontSize: 13))`;
     return wrapBox(Object.assign({ 'min-height': '44px' }, ist), t, node);
   }
-  const st = styleOf(node, map, ancestors);
+  const st0 = styleOf(node, map, ancestors);
+  // custom-properties: אוסף עצמי + מורש (יורש כמו ב-CSS); מרחיב var(--X) בכל ערכי-הסגנון.
+  const ownVars = {}; for (const k in st0) if (k[0] === '-' && k[1] === '-') ownVars[k] = st0[k];
+  const nextVars = Object.assign({}, inhVars, ownVars);
+  const st = {}; for (const k in st0) st[k] = resolveVars(st0[k], nextVars);
   // סגנון-טקסט אפקטיבי = תכונות-תורשה מהאב + הסגנון-העצמי (העצמי גובר). רק לטקסט (לא לקופסה).
   const effText = Object.assign({}, inhFont, st);
   const myColor = colorExpr(st['color']) || inherit;            // צבע-הטקסט האפקטיבי (עובר לילדים)
@@ -410,7 +422,7 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     if (c.text != null) { const t = c.text.trim(); if (t) flow.push(`Text(${dq(t)}, style: TextStyle(${textStyleC(effText, myColor).join(', ')}))`); continue; }
     if (c.tag === 'br') continue;
     const cst = styleOf(c, map, childAnc);
-    let e = emit(c, map, childAnc, depth + 1, myColor, selfFlexGrid, nextInh);
+    let e = emit(c, map, childAnc, depth + 1, myColor, selfFlexGrid, nextInh, nextVars);
     if (cst['position'] === 'absolute') { abs.push({ e, st: cst }); continue; }
     // flex-grow חיובי בשורה ⇒ Expanded (מוסר אי-חסימת-רוחב לצאצא כמו svg-ספארק)
     if (pFlexRow) { const fx = (cst['flex'] || '').trim(); if (fx && fx !== 'none' && fx !== '0' && !/^0\b/.test(fx)) e = `Expanded(child: ${e})`; }
@@ -428,8 +440,11 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   // display:flex (בלוק) = רוחב-מלא ⇒ MainAxisSize.max · inline-flex = כיווץ-לתוכן ⇒ min · space-* דורש max
   const isInlineFlex = /inline-flex/.test(disp);
   const rowSize = ((isFlex && !isInlineFlex) || /^space-/.test(st['justify-content'] || '')) ? 'MainAxisSize.max' : 'MainAxisSize.min';
+  // flex-wrap:wrap בשורה ⇒ Wrap (Flutter Row לא עוטף ⇒ overflow). spacing=gap, runSpacing=gap.
+  const flexWrap = /wrap/.test(st['flex-wrap'] || '') && !/nowrap/.test(st['flex-wrap'] || '');
   if (flow.length === 0) inner = null;
   else if (flow.length === 1 && !isFlex) inner = flow[0];
+  else if (isFlex && !col && flexWrap) inner = `Wrap(spacing: ${gap || 0}, runSpacing: ${gap || 0}, crossAxisAlignment: WrapCrossAlignment.${rowCross === 'start' ? 'start' : rowCross === 'end' ? 'end' : 'center'}, children: [${flow.join(', ')}])`;
   else if (isFlex && !col) inner = `Row(mainAxisSize: ${rowSize}${majE}, crossAxisAlignment: CrossAxisAlignment.${rowCross}${tb(rowCross)}${listSep}, children: [${flow.join(', ')}])`;
   else inner = `Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.${colCross}${tb(colCross)}${majE}${listSep}, children: [${flow.join(', ')}])`;
   // אבסולוטיים ⇒ Stack + Positioned · ה-padding עוטף רק את הזרימה (CSS: absolute יחסי ל-padding-box)
@@ -475,7 +490,9 @@ function wrapBox(st, inner, node, noPad, parentFlex = false) {
     if (w && h) cp.push('alignment: Alignment.center');
     else if (h) inner = `Center(widthFactor: 1.0, child: ${inner})`;
     else if (w) inner = `Center(heightFactor: 1.0, child: ${inner})`;
-    else cp.push('alignment: Alignment.center');
+    // אין ממד-קבוע ⇒ Center מכווץ-לתוכן בשני-הצירים (widthFactor+heightFactor). alignment:center לבדו
+    // היה חמדני בהקשר-רופף (Stack/גובה-לא-חסום) ומותח את הקופסה למלוא-הגובה (כפתורי-טאבים ⇒ 600px).
+    else inner = `Center(widthFactor: 1.0, heightFactor: 1.0, child: ${inner})`;
   } else if ((w || h) && centered) cp.push('alignment: Alignment.center');
   if (minH != null || minW != null) cp.push(`constraints: const BoxConstraints(${[minH != null ? `minHeight: ${minH}` : '', minW != null ? `minWidth: ${minW}` : ''].filter(Boolean).join(', ')})`);
   if (mg) cp.push(`margin: ${mg}`);
