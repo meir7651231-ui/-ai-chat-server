@@ -225,8 +225,13 @@ function decoration(st) {                       // {prop} ⇒ BoxDecoration(...)
     else if (bg) parts.push(`color: ${bg}`);
     else { const c = colorExpr(bgRaw); if (c) parts.push(`color: ${c}`); }
   }
-  const br = st['border'];
-  if (br) { const bc = colorExpr(br); if (bc) parts.push(`border: Border.all(color: ${bc}${/\b2px\b/.test(br) ? ', width: 2' : ''})`); }
+  const br = st['border'], bcRaw = st['border-color'];   // צבע-גבול יכול לבוא ב-property נפרד (border-color)
+  if (br || bcRaw) {
+    const bc = (br && colorExpr(br)) || (bcRaw && colorExpr(bcRaw)) || null;
+    const wm = /(\d+(?:\.\d+)?)px/.exec(br || '');
+    const bw = wm ? wm[1] : '1';
+    if (bc) parts.push(`border: Border.all(color: ${bc}${+bw !== 1 ? `, width: ${bw}` : ''})`);
+  }
   const rad = st['border-radius'];
   if (rad) { const r = /999/.test(rad) ? '999' : (px(rad) || num(rad)); if (r) parts.push(`borderRadius: BorderRadius.circular(${r})`); }
   const sh = shadowExpr(st['box-shadow']);
