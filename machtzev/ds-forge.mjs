@@ -84,6 +84,29 @@ function gradientExpr(val) {
   if (cols.length < 2) return null;
   return `LinearGradient(colors: [${cols.join(', ')}], begin: ${begin}, end: ${end})`;
 }
+// radial-gradient(SIZE at X% Y%, colorA, colorB N%) ⇒ RadialGradient(...) | null · transparent ⇒ צבע-הבסיס
+function radialExpr(val, baseColor) {
+  const m = val && val.match(/radial-gradient\((.*)\)/i);
+  if (!m) return null;
+  const inner = splitTop(m[1]);
+  let center = 'Alignment.center', radius = '0.8';
+  if (inner.length && /\bat\b|%/.test(inner[0]) && !colorExpr(inner[0].replace(/\s+[\d.]+%.*$/, '').trim())) {
+    const seg = inner.shift();
+    const at = seg.match(/at\s+([\d.]+)%\s+([\d.]+)%/);
+    if (at) center = `Alignment(${(+at[1] / 50 - 1).toFixed(2)}, ${(+at[2] / 50 - 1).toFixed(2)})`;
+    const sz = seg.match(/([\d.]+)%/); if (sz) radius = (+sz[1] / 100).toFixed(2);
+  }
+  const cols = [], stops = [];
+  for (const seg of inner) {
+    const sm = seg.trim().match(/^(.*?)(?:\s+([\d.]+)%)?$/);
+    const cexpr = /transparent/.test(sm[1]) ? baseColor : colorExpr(sm[1].trim());
+    if (!cexpr) return null;
+    cols.push(cexpr);
+    stops.push(sm[2] != null ? (+sm[2] / 100).toFixed(2) : (stops.length ? '1.0' : '0.0'));
+  }
+  if (cols.length < 2) return null;
+  return `RadialGradient(center: ${center}, radius: ${radius}, colors: [${cols.join(', ')}], stops: [${stops.join(', ')}])`;
+}
 function fontExpr(val) {
   const m = val && val.match(/var\(--(serif|serifHe|grotesk|he)\)/);
   return m ? `fonts.${FONT[m[1]]}` : null;
@@ -190,11 +213,13 @@ function decoration(st) {                       // {prop} ⇒ BoxDecoration(...)
   const bgRaw = st['background'] || st['background-color'];
   const grad = gradientExpr(bgRaw);
   if (grad) parts.push(`gradient: ${grad}`);     // גרדיאנט גובר על מילוי-אחיד
-  else if (bgRaw) {                               // רקע רב-שכבתי / radial (לא-נתמך) ⇒ שכבת-הצבע-האחיד (הבסיס)
+  else if (bgRaw) {                               // רקע רב-שכבתי: שכבת-בסיס-אחיד + זוהר-radial (עומק)
     let bg = null;
     for (const seg of splitTop(bgRaw)) { if (!/gradient\(/i.test(seg)) { const c = colorExpr(seg.trim()); if (c) { bg = c; break; } } }
-    if (!bg) bg = colorExpr(bgRaw);
-    if (bg) parts.push(`color: ${bg}`);
+    const rad = radialExpr(bgRaw, bg || 'skin.sunken');
+    if (rad) parts.push(`gradient: ${rad}`);       // RadialGradient עם צבע-הבסיס כעצירה-אחרונה (זוהר מתמזג)
+    else if (bg) parts.push(`color: ${bg}`);
+    else { const c = colorExpr(bgRaw); if (c) parts.push(`color: ${c}`); }
   }
   const br = st['border'];
   if (br) { const bc = colorExpr(br); if (bc) parts.push(`border: Border.all(color: ${bc}${/\b2px\b/.test(br) ? ', width: 2' : ''})`); }
@@ -413,6 +438,12 @@ function wrapBox(st, inner, node, noPad) {
   const cp = [];
   if (w) cp.push(`width: ${w}`);
   if (h) cp.push(`height: ${h}`);
+  // תיבה בגודל-קבוע מהדקת את הילד (constraints הדוקים) ⇒ מותחת אותו. אם ה-CSS ממרכז (grid/place-items/align+justify)
+  // ⇒ alignment:center מעביר constraints רופפים ⇒ הילד שומר גודלו וממורכז (אריח-אייקון, נקודה, אווטאר).
+  const pl = `${st['place-items'] || ''} ${st['place-content'] || ''} ${st['justify-items'] || ''}`;
+  const bothCenter = ALIGN[st['align-items']] === 'center' && JUST[st['justify-content']] === 'center';
+  const centered = /center/.test(pl) || bothCenter;
+  if ((w || h) && centered) cp.push('alignment: Alignment.center');
   if (minH != null || minW != null) cp.push(`constraints: const BoxConstraints(${[minH != null ? `minHeight: ${minH}` : '', minW != null ? `minWidth: ${minW}` : ''].filter(Boolean).join(', ')})`);
   if (mg) cp.push(`margin: ${mg}`);
   if (pad) cp.push(`padding: ${pad}`);
