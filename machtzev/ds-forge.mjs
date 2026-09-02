@@ -296,7 +296,9 @@ function decoration(st) {                       // {prop} ⇒ BoxDecoration(...)
     if (sides.length) parts.push(`border: Border(${sides.join(', ')})`);
   }
   const rad = st['border-radius'];
-  if (rad) { const r = /999/.test(rad) ? '999' : (px(rad) || num(rad)); if (r) parts.push(`borderRadius: BorderRadius.circular(${r})`); }
+  // border-radius:50% = עגול-מלא ביחס-לגודל · Flutter circular(פיקסלים) — לא אחוז; המנוע לא יודע את הגודל
+  // בזמן-חילול ⇒ ערך-גדול (999) שנחתך לעיגול/גלולה בכל מידה. circular(50) פיקסלים היה נכשל על קופסה >100px.
+  if (rad) { const r = /%|999/.test(rad) ? '999' : (px(rad) || num(rad)); if (r) parts.push(`borderRadius: BorderRadius.circular(${r})`); }
   const sh = shadowExpr(st['box-shadow']);
   if (sh) parts.push(`boxShadow: [${sh}]`);
   return parts.length ? `BoxDecoration(${parts.join(', ')})` : null;
@@ -492,7 +494,7 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   if (!kids.length && txt && !hasPseudo) {
     const tt = effText['text-transform'];
     const shown = tt === 'uppercase' ? txt.toUpperCase() : tt === 'lowercase' ? txt.toLowerCase() : tt === 'capitalize' ? txt.replace(/\b\w/g, c => c.toUpperCase()) : txt;
-    return wrapBox(st, `Text(${dq(shown)}${taExpr}, style: TextStyle(${textStyleC(effText, inherit).join(', ')}))`, node);
+    return wrapBox(st, `Text(${dq(shown)}${taExpr}, style: TextStyle(${textStyleC(effText, inherit).join(', ')}))`, node, false, parentFlex);   // parentFlex ⇒ פריט-flex-עלה שומר width (blockification), למשל .sevrow .lb width:64px
   }
   // בונה ילדים (מפריד אבסולוטיים ל-Stack) · מעביר צבע-יורש
   const childAnc = ancestors.concat([node.classes || []]);
@@ -571,11 +573,21 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
       const ib = a.st['inset-block']; if (ib != null) { const parts = ib.trim().split(/\s+/); if (t == null) t = pxe(parts[0]); if (b == null) b = pxe(parts[1] || parts[0]); }
       if (t == null && a.st['inset-block-start'] != null) t = pxe(a.st['inset-block-start']);
       if (b == null && a.st['inset-block-end'] != null) b = pxe(a.st['inset-block-end']);
-      // RTL (ברירת-המחדל של האטומים): inset-inline-start ⇒ right · inset-inline-end ⇒ left.
+      // logical ⇒ physical לפי direction של האלמנט עצמו (לא ההקשר): rtl (ברירת-המחדל) ⇒ inline-start=right ·
+      // ltr (למשל המונה ברשימה-ממוספרת, direction:ltr) ⇒ inline-start=left. בלי זה המונה נופל לצד-הלא-נכון.
+      const isLtr = /ltr/.test(a.st['direction'] || '');
       let l = pxe(a.st['left']), r = pxe(a.st['right']);
-      if (r == null && a.st['inset-inline-start'] != null) r = pxe(a.st['inset-inline-start']);
-      if (l == null && a.st['inset-inline-end'] != null) l = pxe(a.st['inset-inline-end']);
+      const iss = a.st['inset-inline-start'] != null ? pxe(a.st['inset-inline-start']) : null;
+      const ise = a.st['inset-inline-end'] != null ? pxe(a.st['inset-inline-end']) : null;
+      if (isLtr) { if (l == null && iss != null) l = iss; if (r == null && ise != null) r = ise; }
+      else { if (r == null && iss != null) r = iss; if (l == null && ise != null) l = ise; }
       if (t != null) p.push(`top: ${t}`); if (b != null) p.push(`bottom: ${b}`); if (l != null) p.push(`left: ${l}`); if (r != null) p.push(`right: ${r}`);
+      // abs בלי inset-אנכי + הורה align-items:center ⇒ המיקום-הסטטי ממורכז-אנכית (CSS). בלי זה
+      // Positioned(right:X) בלי top מיישר-לראש. פותרים ע"י top:0/bottom:0 + Align(center) על הילד.
+      if (t == null && b == null && /center/.test(st['align-items'] || '')) {
+        const lr = [l != null ? `left: ${l}` : '', r != null ? `right: ${r}` : ''].filter(Boolean).join(', ');
+        return `Positioned(${lr ? lr + ', ' : ''}top: 0, bottom: 0, child: Align(alignment: Alignment.center, child: ${a.e}))`;
+      }
       return p.length ? `Positioned(${p.join(', ')}, child: ${a.e})` : `Positioned.fill(child: ${a.e})`;
     });
     const pad = edge(st, 'padding');
@@ -632,7 +644,7 @@ function wrapBox(st, inner, node, noPad, parentFlex = false) {
   else { if (inner) cp.push(`child: ${inner}`); out = `Container(${cp.join(', ')})`; }
   // backdrop-filter: blur ⇒ ClipRRect + BackdropFilter (זכוכית אמיתית)
   const bf = st['backdrop-filter'] || st['-webkit-backdrop-filter'];
-  if (bf && /blur/.test(bf) && cp.length) { const rad = /999/.test(st['border-radius'] || '') ? '999' : (px(st['border-radius']) || '0'); const bl = px(bf) || '12'; out = `ClipRRect(borderRadius: BorderRadius.circular(${rad}), child: BackdropFilter(filter: ImageFilter.blur(sigmaX: ${bl}, sigmaY: ${bl}), child: ${out}))`; }
+  if (bf && /blur/.test(bf) && cp.length) { const rad = /%|999/.test(st['border-radius'] || '') ? '999' : (px(st['border-radius']) || '0'); const bl = px(bf) || '12'; out = `ClipRRect(borderRadius: BorderRadius.circular(${rad}), child: BackdropFilter(filter: ImageFilter.blur(sigmaX: ${bl}, sigmaY: ${bl}), child: ${out}))`; }
   const op = st['opacity'] != null ? parseFloat(st['opacity']) : null;
   if (op != null && !isNaN(op) && op < 1) out = `Opacity(opacity: ${op}, child: ${out})`;
   // רוחב/גובה יחסי חלקי (%<100) ⇒ FractionallySizedBox · יישור-התחלה RTL = ימין (סקלטון/מילוי-בר).
