@@ -127,13 +127,15 @@ const num = v => { const m = v && String(v).match(/-?(?:\d+\.?\d*|\.\d+)/); if (
 // single: .a ⇒ decl · compound: .a.b(.c) ⇒ {set,decl,order} (חל כשלאלמנט כל המחלקות).
 // סלקטורים עם צאצא/[attr]/psuedo מדולגים. מחזיר {single, compound}.
 function parseStyle(css) {
-  const single = {}, compound = [], descend = [], tagcls = []; let order = 0;
+  const single = {}, compound = [], descend = [], tagcls = [], pseudo = []; let order = 0;
   css = css.replace(/\/\*[\s\S]*?\*\//g, '');
   const re = /([^{}]+)\{([^{}]*)\}/g; let m;
   // חלק-שרשרת ⇒ {cls:[...]} (מחלקות) | {tag:'svg'} (תג-בודד) | null
   const simple = tok => {
     if (/^(\.[a-z0-9-]+)+$/i.test(tok)) return { cls: tok.split('.').filter(Boolean) };
     if (/^[a-z][a-z0-9]*$/i.test(tok)) return { tag: tok.toLowerCase() };
+    const tc = /^([a-z][a-z0-9]*)((?:\.[a-z0-9-]+)+)$/i.exec(tok);   // תג+מחלקה: "i.ink"
+    if (tc) return { tag: tc[1].toLowerCase(), cls: tc[2].split('.').filter(Boolean) };
     return null;
   };
   while ((m = re.exec(css))) {
@@ -141,6 +143,14 @@ function parseStyle(css) {
     const decl = {};
     for (const d of m[2].split(';')) { const i = d.indexOf(':'); if (i < 0) continue; decl[d.slice(0, i).trim().toLowerCase()] = d.slice(i + 1).trim(); }
     for (const sel of sels) {
+      // ::before / ::after — פסבדו-אלמנט מעוצב. השרשרת = מארח (כמו descend); ה-decl כולל content.
+      const pm = /^(.+?)::?(before|after)$/i.exec(sel);
+      if (pm && /content\s*:/.test(m[2])) {
+        const base = pm[1].trim(), pos = pm[2].toLowerCase();
+        const parts = (base.includes(' ') ? base.split(/\s+/).filter(Boolean) : [base]).map(simple);
+        if (parts.length && parts.every(Boolean)) pseudo.push({ chain: parts, pos, decl, order: order++ });
+        continue;
+      }
       if (/^\.([a-z0-9-]+)$/i.test(sel)) { const c = sel.slice(1); single[c] = Object.assign(single[c] || {}, decl); continue; }
       if (/^(\.[a-z0-9-]+){2,}$/i.test(sel)) { compound.push({ set: sel.split('.').filter(Boolean), decl, order: order++ }); continue; }
       // תג-מוכשר-מחלקה: "svg.i" / "button.p" ⇒ תואם כשהתג+כל-המחלקות
@@ -152,7 +162,25 @@ function parseStyle(css) {
       }
     }
   }
-  return { single, compound, descend, tagcls };
+  return { single, compound, descend, tagcls, pseudo };
+}
+// פסבדו-אלמנטים (::before/::after) התואמים לצומת ⇒ צמתי-span סינתטיים (decl כ-inline + content כטקסט).
+function pseudoKids(node, map, ancestors) {
+  if (!map.pseudo || !map.pseudo.length) return { before: [], after: [] };
+  const classes = node.classes || [];
+  const out = { before: [], after: [] };
+  for (const r of map.pseudo) {
+    const target = r.chain[r.chain.length - 1];
+    const hit = (target.tag ? node.tag === target.tag : true) && (target.cls ? target.cls.every(c => classes.includes(c)) : true);
+    if (!hit || !chainMatches(r.chain.slice(0, -1), ancestors)) continue;
+    const cm = /content\s*:\s*(?:"([^"]*)"|'([^']*)'|([^;]+))/.exec(Object.entries(r.decl).map(([k, v]) => `${k}:${v}`).join(';'));
+    let text = '';
+    if (cm) { const raw = cm[1] != null ? cm[1] : cm[2] != null ? cm[2] : (cm[3] || '').trim(); if (!/counter\(|attr\(|url\(/.test(raw)) text = raw; }
+    const style = Object.entries(r.decl).filter(([k]) => k !== 'content').map(([k, v]) => `${k}:${v}`).join(';');
+    const kid = { tag: 'span', classes: [], attrs: { style }, children: text ? [{ text }] : [] };
+    out[r.pos].push(kid);
+  }
+  return out;
 }
 function parseInline(style) {
   const d = {}; if (!style) return d;
@@ -178,7 +206,7 @@ function styleOf(node, map, ancestors = []) {
   for (const r of map.compound) if (r.set.every(c => classes.includes(c))) Object.assign(s, r.decl);
   for (const r of map.descend) {
     const target = r.chain[r.chain.length - 1];
-    const hit = target.tag ? node.tag === target.tag : target.cls.every(c => classes.includes(c));
+    const hit = (target.tag ? node.tag === target.tag : true) && (target.cls ? target.cls.every(c => classes.includes(c)) : true);
     if (hit && chainMatches(r.chain.slice(0, -1), ancestors)) Object.assign(s, r.decl);
   }
   Object.assign(s, parseInline(node.attrs && node.attrs.style));
@@ -371,6 +399,18 @@ function textStyleC(st, inherit) { const ts = textStyle(st); if (!ts.some(x => /
 // אלמנט ⇒ ביטוי-widget. ancestors=מחלקות-אבות (צאצא) · inherit=צבע-טקסט-יורש.
 // תכונות-טקסט תורשתיות (CSS inheritance) — יורדות מאב לצאצא; הצאצא-עם-ערך-משלו גובר.
 const INHERIT_PROPS = ['font-size', 'font-family', 'font-weight', 'font-style', 'letter-spacing', 'line-height', 'text-transform', 'font-feature-settings', 'font-variant-numeric'];
+// ווידג'ט-זרימה ⇒ InlineSpan עבור Text.rich (זרימת-inline אמיתית: עוטף-שורות + bidi + baseline).
+// Text פשוט ⇒ TextSpan; כל השאר (איקון/Directionality/Container) ⇒ WidgetSpan מיושר-אמצע.
+function toRichSpan(w) {
+  w = w.trim();
+  // Directionality(ltr/rtl, child: Text(...)) ⇒ TextSpan (ה-bidi של Text.rich מטפל בכיוון; עטיפת
+  // WidgetSpan הייתה הופכת את סדר-ה-runs ב-RTL — Label/Meta התחלפו).
+  const d = /^Directionality\(textDirection: TextDirection\.\w+, child: (Text\(.+\))\)$/s.exec(w);
+  if (d) w = d[1];
+  const m = /^Text\((.+), style: (TextStyle\(.*\))\)$/s.exec(w);
+  if (m && !/,\s*text(Align|Direction):/.test(m[1])) return `TextSpan(text: ${m[1]}, style: ${m[2]})`;
+  return `WidgetSpan(alignment: PlaceholderAlignment.middle, child: ${w})`;
+}
 function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parentFlex = false, inhFont = {}, inhVars = {}) {
   if (depth > 16) return 'const SizedBox.shrink()';
   if (node.tag === 'svg') {
@@ -417,13 +457,20 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   // ילד של קונטיינר flex/grid עובר blockification (used-display⇒block) ⇒ width/height חלים גם על span-item.
   const selfFlexGrid = /flex|grid/.test(st['display'] || '');
   const flow = [], abs = [];
-  for (const c of node.children) {
+  let flowInline = true, flowAllText = true;   // כל-הילדים inline-level ⇒ זרימת-inline (שורה, לא טור)
+  const pk = pseudoKids(node, map, ancestors);   // ::before/::after ⇒ צמתים סינתטיים לפני/אחרי הזרימה
+  const allKids = pk.before.length || pk.after.length ? [...pk.before, ...node.children, ...pk.after] : node.children;
+  for (const c of allKids) {
     // טקסט-חופשי בתוך אלמנט יורש את סגנון-ההורה (גודל/משקל/צבע/פונט) — CSS inheritance
     if (c.text != null) { const t = c.text.trim(); if (t) flow.push(`Text(${dq(t)}, style: TextStyle(${textStyleC(effText, myColor).join(', ')}))`); continue; }
     if (c.tag === 'br') continue;
     const cst = styleOf(c, map, childAnc);
     let e = emit(c, map, childAnc, depth + 1, myColor, selfFlexGrid, nextInh, nextVars);
     if (cst['position'] === 'absolute') { abs.push({ e, st: cst }); continue; }
+    // inline-level? display:inline* מפורש, או תג-inline כברירת-מחדל. אחרת בלוק ⇒ ביטול זרימת-inline.
+    const cInline = cst['display'] ? /^inline/.test(cst['display']) : INLINE_TAGS.has(c.tag);
+    if (!cInline) flowInline = false;
+    if (!(cInline && /^(?:Text\(|Directionality\(textDirection: TextDirection\.\w+, child: Text\()/.test(e))) flowAllText = false;
     // flex-grow חיובי בשורה ⇒ Expanded (מוסר אי-חסימת-רוחב לצאצא כמו svg-ספארק)
     if (pFlexRow) { const fx = (cst['flex'] || '').trim(); if (fx && fx !== 'none' && fx !== '0' && !/^0\b/.test(fx)) e = `Expanded(child: ${e})`; }
     flow.push(e);
@@ -446,13 +493,22 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   else if (flow.length === 1 && !isFlex) inner = flow[0];
   else if (isFlex && !col && flexWrap) inner = `Wrap(spacing: ${gap || 0}, runSpacing: ${gap || 0}, crossAxisAlignment: WrapCrossAlignment.${rowCross === 'start' ? 'start' : rowCross === 'end' ? 'end' : 'center'}, children: [${flow.join(', ')}])`;
   else if (isFlex && !col) inner = `Row(mainAxisSize: ${rowSize}${majE}, crossAxisAlignment: CrossAxisAlignment.${rowCross}${tb(rowCross)}${listSep}, children: [${flow.join(', ')}])`;
+  // מיכל לא-flex עם ילדים inline-level בלבד ⇒ זרימת-inline אמיתית דרך Text.rich (עוטף-שורות +
+  // bidi-RTL + baseline) במקום Row (שלא עוטף ⇒ overflow בפסקה). textAlign מהמיכל.
+  else if (!isFlex && flowInline) inner = `Text.rich(TextSpan(children: [${flow.map(toRichSpan).join(', ')}])${ta === 'center' ? ', textAlign: TextAlign.center' : ta === 'left' ? ', textAlign: TextAlign.left' : ta === 'right' ? ', textAlign: TextAlign.right' : ''})`;
   else inner = `Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.${colCross}${tb(colCross)}${majE}${listSep}, children: [${flow.join(', ')}])`;
   // אבסולוטיים ⇒ Stack + Positioned · ה-padding עוטף רק את הזרימה (CSS: absolute יחסי ל-padding-box)
   let noPad = false;
   if (abs.length) {
+    const emBase = +(px(effText['font-size']) || 14);
+    const pxe = v => { if (v == null) return null; const p = px(v); if (p != null) return p; const em = /(-?\d*\.?\d+)em/.exec(v); return em ? (parseFloat(em[1]) * emBase).toFixed(2) : null; };
     const pos = abs.map(a => {
       const p = [];
-      const t = px(a.st['top']), b = px(a.st['bottom']), l = px(a.st['left'] || a.st['inset-inline-start']), r = px(a.st['right'] || a.st['inset-inline-end']);
+      const t = pxe(a.st['top']), b = pxe(a.st['bottom']);
+      // RTL (ברירת-המחדל של האטומים): inset-inline-start ⇒ right · inset-inline-end ⇒ left.
+      let l = pxe(a.st['left']), r = pxe(a.st['right']);
+      if (r == null && a.st['inset-inline-start'] != null) r = pxe(a.st['inset-inline-start']);
+      if (l == null && a.st['inset-inline-end'] != null) l = pxe(a.st['inset-inline-end']);
       if (t != null) p.push(`top: ${t}`); if (b != null) p.push(`bottom: ${b}`); if (l != null) p.push(`left: ${l}`); if (r != null) p.push(`right: ${r}`);
       return p.length ? `Positioned(${p.join(', ')}, child: ${a.e})` : `Positioned.fill(child: ${a.e})`;
     });
