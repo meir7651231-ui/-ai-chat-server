@@ -101,6 +101,19 @@
   לקח: לא כל `margin:auto` דורש Spacer — תלוי אם לשורה יש מרווח-חופשי בפועל.
 - **אומת:** רזולוציה-מלאה — 4 השורות מיושרות-בטור, תואם ORIG.
 
+### B13 · אין קריסת-שוליים אנכית (CSS margin collapsing) ✅ (תוקן ואומת)
+- **תסמין:** ב-`numbered_list`/`bullet_list` השורות פרוסות-יותר ב-FORGE — פער ~84px מול ~66px
+  ב-ORIG (נגלה רק ברזולוציה-מלאה; במוקטנת נראה "כמעט").
+- **שורש:** `.lst li{margin:9px 0}` — ב-CSS שוליים-אנכיים של אחים-סמוכים **קורסים** ל-max
+  (9px בין-שורות), אך Flutter Column **מסכם** (9+9=18px).
+- **תיקון:** קריסת-שוליים ל-block flow: ילד-בלוק במיכל-בלוק ⇒ שוליו-האנכיים מוסרים
+  (`edge(...,noV)` + `noVMargin` ל-`emit`/`wrapBox`) ונבנים-מחדש ברמת-ה-Column כ-SizedBox:
+  קצה-עליון=שוליים-ראשון · פער-בין-אחים=`max(תחתון,עליון)` · קצה-תחתון=שוליים-אחרון.
+  מיכל-flex/grid **לא** מושפע (flex לא קורס שוליים — נכון-CSS). `ds-forge.mjs` — `vMarginOf`,
+  `parentBlock`/`collapseChild` בלולאה, `collapsedCol` בענף-Column, Padding בענף-ילד-יחיד.
+- **אומת:** רזולוציה-מלאה — פער-שורות ~66px, תואם ORIG. אפס-רגרסיה: bullet/form_card/
+  alert_banner/severity (flex — לא מושפעים) זהים.
+
 ---
 
 ## נותר לבדיקה ממוקדת
@@ -122,7 +135,7 @@
 |------|-------|
 | emphasis_text | ✅ זהה |
 | bullet_list | ✅ זהה |
-| numbered_list | ✅ זהה (אחרי B8) |
+| numbered_list | ✅ זהה (אחרי B8 + B13 — פער-שורות) |
 | avatar_status | ✅ זהה (שני עיגולים; B9 latent תוקן) |
 | severity_chip | ✅ זהה (אחרי B12b) |
 | form_card | ✅ זהה (אחרי B10; מרווחי-middot/רוחב-כפתור זניחים — C3) |

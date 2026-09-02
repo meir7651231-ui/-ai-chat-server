@@ -303,8 +303,9 @@ function decoration(st) {                       // {prop} ⇒ BoxDecoration(...)
   if (sh) parts.push(`boxShadow: [${sh}]`);
   return parts.length ? `BoxDecoration(${parts.join(', ')})` : null;
 }
-// EdgeInsets מ-shorthand (padding/margin) + פר-צד (margin-top…). null אם אין.
-function edge(st, prop) {
+// EdgeInsets מ-shorthand (padding/margin) + פר-צד (margin-top…). null אם אין. noV=אפס-שוליים-אנכיים
+// (לקריסת-שוליים ב-block flow — השוליים-האנכיים נבנים-מחדש כ-SizedBox-מקוריס ברמת-ה-Column).
+function edge(st, prop, noV) {
   const sh = st[prop];
   const per = { top: px(st[`${prop}-top`]), right: px(st[`${prop}-right`]), bottom: px(st[`${prop}-bottom`]), left: px(st[`${prop}-left`]) };
   // תכונות-לוגיות (RTL): inline-start⇒right · inline-end⇒left · block-start⇒top · block-end⇒bottom.
@@ -322,7 +323,22 @@ function edge(st, prop) {
     else [t, r, b, l] = [ns[0], ns[1], ns[2], ns[3]];
   }
   if (per.top != null) t = per.top; if (per.right != null) r = per.right; if (per.bottom != null) b = per.bottom; if (per.left != null) l = per.left;
+  if (noV) { t = 0; b = 0; if (!r && !l) return null; }
   return `const EdgeInsets.fromLTRB(${l}, ${t}, ${r}, ${b})`;
+}
+// שוליים-אנכיים (מספריים, px) של אלמנט — מ-shorthand + margin-top/bottom + margin-block(-start/end).
+// משמש לקריסת-שוליים (margin collapsing) ב-block flow: הפער בין אחים = max(תחתון-קודם, עליון-נוכחי).
+function vMarginOf(st) {
+  const v = x => { const p = px(x); return p != null ? +p : (num(x) || 0); };
+  let mt = 0, mb = 0;
+  const sh = st['margin'];
+  if (sh) { const ns = sh.trim().split(/\s+/); if (ns.length === 1) { mt = mb = v(ns[0]); } else if (ns.length === 2) { mt = mb = v(ns[0]); } else { mt = v(ns[0]); mb = v(ns[2]); } }
+  const mbk = st['margin-block']; if (mbk) { const ns = mbk.trim().split(/\s+/); mt = v(ns[0]); mb = v(ns[1] != null ? ns[1] : ns[0]); }
+  if (st['margin-block-start'] != null) mt = v(st['margin-block-start']);
+  if (st['margin-block-end'] != null) mb = v(st['margin-block-end']);
+  if (st['margin-top'] != null) mt = v(st['margin-top']);
+  if (st['margin-bottom'] != null) mb = v(st['margin-bottom']);
+  return { mt, mb };
 }
 // box-shadow ⇒ [BoxShadow(...)] (מדלג inset — Flutter לא תומך חיצוני-בלבד)
 function shadowExpr(val) {
@@ -447,7 +463,7 @@ function toRichSpan(w) {
   if (m && !/,\s*text(Align|Direction):/.test(m[1])) return `TextSpan(text: ${m[1]}, style: ${m[2]})`;
   return `WidgetSpan(alignment: PlaceholderAlignment.middle, child: ${w})`;
 }
-function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parentFlex = false, inhFont = {}, inhVars = {}, sibIdx = 0, parentWrap = false, styleOverride = null) {
+function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parentFlex = false, inhFont = {}, inhVars = {}, sibIdx = 0, parentWrap = false, styleOverride = null, noVMargin = false) {
   if (depth > 16) return 'const SizedBox.shrink()';
   if (node.tag === 'svg') {
     const sc = svgScene(node, map, ancestors, inherit);
@@ -494,7 +510,7 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   if (!kids.length && txt && !hasPseudo) {
     const tt = effText['text-transform'];
     const shown = tt === 'uppercase' ? txt.toUpperCase() : tt === 'lowercase' ? txt.toLowerCase() : tt === 'capitalize' ? txt.replace(/\b\w/g, c => c.toUpperCase()) : txt;
-    return wrapBox(st, `Text(${dq(shown)}${taExpr}, style: TextStyle(${textStyleC(effText, inherit).join(', ')}))`, node, false, parentFlex);   // parentFlex ⇒ פריט-flex-עלה שומר width (blockification), למשל .sevrow .lb width:64px
+    return wrapBox(st, `Text(${dq(shown)}${taExpr}, style: TextStyle(${textStyleC(effText, inherit).join(', ')}))`, node, false, parentFlex, noVMargin);   // parentFlex ⇒ פריט-flex-עלה שומר width (blockification), למשל .sevrow .lb width:64px
   }
   // בונה ילדים (מפריד אבסולוטיים ל-Stack) · מעביר צבע-יורש
   const childAnc = ancestors.concat([node.classes || []]);
@@ -503,7 +519,9 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   const selfFlexGrid = /flex|grid/.test(st['display'] || '');
   // האם המיכל הזה הוא Wrap (flex-wrap בשורה) — ילדיו חייבים גודל-תוכן (min), אחרת פריט-max ממלא-שורה ונערם.
   const selfWrap = /flex/.test(st['display'] || '') && !/column/.test(st['flex-direction'] || '') && /wrap/.test(st['flex-wrap'] || '') && !/nowrap/.test(st['flex-wrap'] || '');
-  const flow = [], abs = [];
+  // מיכל-בלוק (לא flex/grid) ⇒ ילדי-הבלוק שבו עוברים קריסת-שוליים אנכית (CSS margin collapsing).
+  const parentBlock = !/flex|grid/.test(st['display'] || '');
+  const flow = [], abs = [], flowVM = [];   // flowVM מקביל ל-flow: {mt,mb} לילד-בלוק שהוסרו-לו שוליים, אחרת null
   let flowInline = true, flowAllText = true;   // כל-הילדים inline-level ⇒ זרימת-inline (שורה, לא טור)
   const allKids = hasPseudo ? [...pk.before, ...node.children, ...pk.after] : node.children;
   let elemIdx = 0;
@@ -514,22 +532,25 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     // טקסט-חופשי בתוך אלמנט יורש את סגנון-ההורה (גודל/משקל/צבע/פונט) — CSS inheritance.
     // רווחי-גבול בין-אלמנטים משמעותיים ב-CSS (inline) — משמרים רווח-בודד (לא trim מלא ⇒
     // "בדגש נושא" נשמר, לא "בדגשנושא"); דילוג רק על רווח-טהור.
-    if (c.text != null) { const raw = c.text.replace(/\s+/g, ' '); if (raw.trim()) flow.push(`Text(${dq(raw)}, style: TextStyle(${textStyleC(effText, myColor).join(', ')}))`); continue; }
-    if (c.tag === 'br') { flow.push(`Text("\\n", style: TextStyle(${textStyleC(effText, myColor).join(', ')}))`); continue; }   // <br> ⇒ שבירת-שורה (נשמרת ב-Text.rich)
+    if (c.text != null) { const raw = c.text.replace(/\s+/g, ' '); if (raw.trim()) { flow.push(`Text(${dq(raw)}, style: TextStyle(${textStyleC(effText, myColor).join(', ')}))`); flowVM.push(null); } continue; }
+    if (c.tag === 'br') { flow.push(`Text("\\n", style: TextStyle(${textStyleC(effText, myColor).join(', ')}))`); flowVM.push(null); continue; }   // <br> ⇒ שבירת-שורה (נשמרת ב-Text.rich)
     const cst = styleOf(c, map, childAnc);
     let sibOv = null;
     for (const r of sibRules) { if (seenLeft.has(r) && clsHit(r.right, c)) { sibOv = sibOv || {}; Object.assign(sibOv, r.decl); } }   // אח-שמאלי נראה + c=מטרה ⇒ דריסה
     for (const r of sibRules) if (clsHit(r.left, c)) seenLeft.add(r);   // c הוא אח-שמאלי ⇒ יחול על אחיו-הבאים
-    let e = emit(c, map, childAnc, depth + 1, myColor, selfFlexGrid, nextInh, nextVars, elemIdx++, selfWrap, sibOv);
-    if (cst['position'] === 'absolute') { abs.push({ e, st: cst }); continue; }
     // inline-level? display:inline* מפורש, או תג-inline כברירת-מחדל. אחרת בלוק ⇒ ביטול זרימת-inline.
     const cInline = cst['display'] ? /^inline/.test(cst['display']) : INLINE_TAGS.has(c.tag);
+    const posAbsC = /^(?:absolute|fixed)$/.test((cst['position'] || '').trim());
+    // ילד-בלוק במיכל-בלוק ⇒ מסירים שוליים-אנכיים (ייבנו-מחדש מקוריסים ברמת-ה-Column). לא ל-abs/inline/flex.
+    const collapseChild = parentBlock && !cInline && !posAbsC;
+    let e = emit(c, map, childAnc, depth + 1, myColor, selfFlexGrid, nextInh, nextVars, elemIdx++, selfWrap, sibOv, collapseChild);
+    if (cst['position'] === 'absolute') { abs.push({ e, st: cst }); continue; }
     if (!cInline) flowInline = false;
     if (!(cInline && /^(?:Text\(|Directionality\(textDirection: TextDirection\.\w+, child: Text\()/.test(e))) flowAllText = false;
     // flex-grow חיובי או width:100% בשורת-flex ⇒ Expanded (ממלא · מוסר אי-חסימת-רוחב; SizedBox אינסופי
     // בתוך Row-לא-חסום קורס — Expanded נותן רוחב-חסום שה-SizedBox ממלא).
     if (pFlexRow) { const fx = (cst['flex'] || '').trim(); if ((fx && fx !== 'none' && fx !== '0' && !/^0\b/.test(fx)) || pct(cst['width']) === '1.000') e = `Expanded(child: ${e})`; }
-    flow.push(e);
+    flow.push(e); flowVM.push(collapseChild ? vMarginOf(cst) : null);
   }
   let inner;
   const disp = st['display'] || '', fd = st['flex-direction'] || '';
@@ -551,15 +572,25 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   const isGrid = /grid/.test(disp), gtc = st['grid-template-columns'];
   let gridCols = null;
   if (isGrid && gtc) { const rep = /repeat\(\s*(\d+)\s*,\s*([\d.]+)fr/.exec(gtc); if (rep) gridCols = Array(+rep[1]).fill(+rep[2]); else { const fr = gtc.match(/([\d.]+)fr/g); if (fr) gridCols = fr.map(parseFloat); } }
+  // קריסת-שוליים ב-block Column: השוליים-האנכיים שהוסרו מהילדים נבנים-מחדש כ-SizedBox — פער בין-אחים =
+  // max(תחתון-קודם, עליון-נוכחי) (לא סכום, כמו CSS); שוליים-קצה (ראשון-עליון/אחרון-תחתון) נשמרים.
+  const hasVM = flowVM.some(Boolean);
+  const collapsedCol = () => {
+    const kids = []; const mAt = i => flowVM[i] || { mt: 0, mb: 0 };
+    if (mAt(0).mt > 0) kids.push(`const SizedBox(height: ${mAt(0).mt})`);
+    for (let i = 0; i < flow.length; i++) { if (i > 0) { const g = Math.max(mAt(i - 1).mb, mAt(i).mt); if (g > 0) kids.push(`const SizedBox(height: ${g})`); } kids.push(flow[i]); }
+    const lb = mAt(flow.length - 1).mb; if (lb > 0) kids.push(`const SizedBox(height: ${lb})`);
+    return kids.join(', ');
+  };
   if (flow.length === 0) inner = null;
-  else if (flow.length === 1 && !isFlex) inner = flow[0];
+  else if (flow.length === 1 && !isFlex) { const m = flowVM[0]; inner = (m && (m.mt || m.mb)) ? `Padding(padding: const EdgeInsets.only(top: ${m.mt}, bottom: ${m.mb}), child: ${flow[0]})` : flow[0]; }
   else if (isGrid && gridCols && flow.length > 1 && flow.length <= gridCols.length) inner = `Row(crossAxisAlignment: CrossAxisAlignment.${rowCross}${tb(rowCross)}${listSep}, children: [${flow.map((e, i) => `Expanded(flex: ${Math.max(1, Math.round(gridCols[i] || 1))}, child: ${e})`).join(', ')}])`;
   else if (isFlex && !col && flexWrap) inner = `Wrap(spacing: ${gap || 0}, runSpacing: ${gap || 0}, crossAxisAlignment: WrapCrossAlignment.${rowCross === 'start' ? 'start' : rowCross === 'end' ? 'end' : 'center'}, children: [${flow.join(', ')}])`;
   else if (isFlex && !col) inner = `Row(mainAxisSize: ${rowSize}${majE}, crossAxisAlignment: CrossAxisAlignment.${rowCross}${tb(rowCross)}${listSep}, children: [${flow.join(', ')}])`;
   // מיכל לא-flex עם ילדים inline-level בלבד ⇒ זרימת-inline אמיתית דרך Text.rich (עוטף-שורות +
   // bidi-RTL + baseline) במקום Row (שלא עוטף ⇒ overflow בפסקה). textAlign מהמיכל.
   else if (!isFlex && flowInline) inner = `Text.rich(TextSpan(children: [${flow.map(toRichSpan).join(', ')}])${ta === 'center' ? ', textAlign: TextAlign.center' : ta === 'left' ? ', textAlign: TextAlign.left' : ta === 'right' ? ', textAlign: TextAlign.right' : ''})`;
-  else inner = `Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.${colCross}${tb(colCross)}${majE}${listSep}, children: [${flow.join(', ')}])`;
+  else inner = `Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.${colCross}${tb(colCross)}${majE}${hasVM ? '' : listSep}, children: [${hasVM ? collapsedCol() : flow.join(', ')}])`;
   // אבסולוטיים ⇒ Stack + Positioned · ה-padding עוטף רק את הזרימה (CSS: absolute יחסי ל-padding-box)
   let noPad = false;
   if (abs.length) {
@@ -598,12 +629,12 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     if (!parentFlex && !st['width'] && !/^inline/.test(st['display'] || '')) inner = `SizedBox(width: double.infinity, child: ${inner})`;
     noPad = true;                                       // ה-padding כבר בתוך ה-Stack
   }
-  return wrapBox(st, inner, node, noPad, parentFlex);
+  return wrapBox(st, inner, node, noPad, parentFlex, noVMargin);
 }
 
 // עוטף ביטוי ב-Container (רקע/מסגרת/צל/מידות/שוליים) + Opacity, לפי הסגנון
 const INLINE_TAGS = new Set(['span', 'a', 'em', 'strong', 'b', 'i', 'small', 'code', 'abbr', 'mark', 'sub', 'sup', 'cite', 'q', 's', 'u', 'time', 'kbd', 'samp', 'var', 'label', 'bdi', 'bdo']);
-function wrapBox(st, inner, node, noPad, parentFlex = false) {
+function wrapBox(st, inner, node, noPad, parentFlex = false, noVMargin = false) {
   // אלמנט inline-בזרימה (span/a/em… בלי display-בלוק, ולא פריט-flex/grid) מתעלם מ-width/height ב-CSS.
   // ריק ⇒ מתמוטט ל-0×0 ואינו נצבע (נאמנות-למקור L4: .bar2 .f = span-מילוי inline שלא נראה במקור).
   const dispRaw = (st['display'] || '').trim();
@@ -614,7 +645,7 @@ function wrapBox(st, inner, node, noPad, parentFlex = false) {
   // inline עם-תוכן ⇒ width/height ושוליים-אנכיים לא-חלים ב-CSS. השמטתם שומרת אותו כ-TextSpan נקי
   // (Container-שוליים היה הופך ל-WidgetSpan ושובר סדר-bidi — Label/Meta התחלפו).
   if (effInline) st = Object.assign({}, st, { width: undefined, height: undefined, margin: undefined, 'margin-top': undefined, 'margin-bottom': undefined });
-  const deco = decoration(st), pad = noPad ? null : edge(st, 'padding'), mg = edge(st, 'margin');
+  const deco = decoration(st), pad = noPad ? null : edge(st, 'padding'), mg = edge(st, 'margin', noVMargin);
   const w = px(st['width']), h = px(st['height']), minH = px(st['min-height']), minW = px(st['min-width']);
   const cp = [];
   if (w) cp.push(`width: ${w}`);
