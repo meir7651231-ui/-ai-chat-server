@@ -361,7 +361,9 @@ function gradStops(gnode, inherit) {
 // טקסט-סטייל עם צבע-יורש (CSS color inheritance) — לעולם לא "בלתי-נראה"
 function textStyleC(st, inherit) { const ts = textStyle(st); if (!ts.some(x => /^color:/.test(x))) ts.unshift(`color: ${inherit}`); if (!ts.some(x => /^fontFamily:/.test(x))) ts.push('fontFamily: fonts.he'); return ts; }
 // אלמנט ⇒ ביטוי-widget. ancestors=מחלקות-אבות (צאצא) · inherit=צבע-טקסט-יורש.
-function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parentFlex = false) {
+// תכונות-טקסט תורשתיות (CSS inheritance) — יורדות מאב לצאצא; הצאצא-עם-ערך-משלו גובר.
+const INHERIT_PROPS = ['font-size', 'font-family', 'font-weight', 'font-style', 'letter-spacing', 'line-height', 'text-transform', 'font-feature-settings', 'font-variant-numeric'];
+function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parentFlex = false, inhFont = {}) {
   if (depth > 16) return 'const SizedBox.shrink()';
   if (node.tag === 'svg') {
     const sc = svgScene(node, map, ancestors, inherit);
@@ -382,17 +384,20 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     return wrapBox(Object.assign({ 'min-height': '44px' }, ist), t, node);
   }
   const st = styleOf(node, map, ancestors);
+  // סגנון-טקסט אפקטיבי = תכונות-תורשה מהאב + הסגנון-העצמי (העצמי גובר). רק לטקסט (לא לקופסה).
+  const effText = Object.assign({}, inhFont, st);
   const myColor = colorExpr(st['color']) || inherit;            // צבע-הטקסט האפקטיבי (עובר לילדים)
+  const nextInh = {}; for (const k of INHERIT_PROPS) if (effText[k] != null) nextInh[k] = effText[k];  // תורשה מצטברת לצאצאים
   const kids = elemChildren(node);
   const txt = textOf(node);
   const ta = st['text-align'];
   const taExpr = ta === 'center' ? ', textAlign: TextAlign.center' : ta === 'left' ? ', textAlign: TextAlign.left' : ta === 'right' ? ', textAlign: TextAlign.right' : '';
 
-  // עלה עם טקסט בלבד ⇒ Text (צבע-יורש · text-transform)
+  // עלה עם טקסט בלבד ⇒ Text (צבע-יורש · text-transform · גודל/פונט-יורשים)
   if (!kids.length && txt) {
-    const tt = st['text-transform'];
+    const tt = effText['text-transform'];
     const shown = tt === 'uppercase' ? txt.toUpperCase() : tt === 'lowercase' ? txt.toLowerCase() : tt === 'capitalize' ? txt.replace(/\b\w/g, c => c.toUpperCase()) : txt;
-    return wrapBox(st, `Text(${dq(shown)}${taExpr}, style: TextStyle(${textStyleC(st, inherit).join(', ')}))`, node);
+    return wrapBox(st, `Text(${dq(shown)}${taExpr}, style: TextStyle(${textStyleC(effText, inherit).join(', ')}))`, node);
   }
   // בונה ילדים (מפריד אבסולוטיים ל-Stack) · מעביר צבע-יורש
   const childAnc = ancestors.concat([node.classes || []]);
@@ -402,10 +407,10 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   const flow = [], abs = [];
   for (const c of node.children) {
     // טקסט-חופשי בתוך אלמנט יורש את סגנון-ההורה (גודל/משקל/צבע/פונט) — CSS inheritance
-    if (c.text != null) { const t = c.text.trim(); if (t) flow.push(`Text(${dq(t)}, style: TextStyle(${textStyleC(st, myColor).join(', ')}))`); continue; }
+    if (c.text != null) { const t = c.text.trim(); if (t) flow.push(`Text(${dq(t)}, style: TextStyle(${textStyleC(effText, myColor).join(', ')}))`); continue; }
     if (c.tag === 'br') continue;
     const cst = styleOf(c, map, childAnc);
-    let e = emit(c, map, childAnc, depth + 1, myColor, selfFlexGrid);
+    let e = emit(c, map, childAnc, depth + 1, myColor, selfFlexGrid, nextInh);
     if (cst['position'] === 'absolute') { abs.push({ e, st: cst }); continue; }
     // flex-grow חיובי בשורה ⇒ Expanded (מוסר אי-חסימת-רוחב לצאצא כמו svg-ספארק)
     if (pFlexRow) { const fx = (cst['flex'] || '').trim(); if (fx && fx !== 'none' && fx !== '0' && !/^0\b/.test(fx)) e = `Expanded(child: ${e})`; }
@@ -491,6 +496,10 @@ function wrapBox(st, inner, node, noPad, parentFlex = false) {
   if (wpct || hpct) out = `FractionallySizedBox(${wpct ? `widthFactor: ${wpct}, ` : ''}${hpct ? `heightFactor: ${hpct}, ` : ''}alignment: Alignment.centerRight, child: ${out})`;
   // width:100% ⇒ מילוי-רוחב-מלא גם בטור-ממורכז (align-items:center לא מותח) — SizedBox אינסופי, לא FractionallySizedBox
   else if (wp === '1.000' && !w) out = `SizedBox(width: double.infinity, child: ${out})`;
+  // אלמנט-בלוק (track) עם ילד-אחוז ישיר (FractionallySizedBox) וללא רוחב מפורש ⇒ מילוי-רוחב-מלא,
+  // כדי שהאחוז יימדד מול הרוחב-המלא של האב (CSS: track=block width:auto=מלא, fill=% ממנו). בלי זה
+  // ה-Container מתכווץ לרוחב-המילוי והרקע/מסגרת של ה-track נעלמים מהחלק-הריק.
+  else if (!w && !effInline && /^FractionallySizedBox\(/.test((inner || '').trim())) out = `SizedBox(width: double.infinity, child: ${out})`;
   // direction:ltr/rtl מפורש ⇒ Directionality (הופך סדר-Row: חץ+אחוז, ספרות — מבטל RTL-אב)
   const dir = st['direction'];
   if (dir === 'ltr' || dir === 'rtl') out = `Directionality(textDirection: TextDirection.${dir}, child: ${out})`;
