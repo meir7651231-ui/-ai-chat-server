@@ -252,19 +252,19 @@ function svgToPathData(node) {
   walk(node);
   return d.trim().replace(/\s+/g, ' ');
 }
-// טקסט-סטייל עם צבע-ברירת-מחדל (skin.ink) — לעולם לא "בלתי-נראה" תחת Material
-function textStyleC(st) { const ts = textStyle(st); if (!ts.some(x => /^color:/.test(x))) ts.unshift('color: skin.ink'); if (!ts.some(x => /^fontFamily:/.test(x))) ts.push('fontFamily: fonts.he'); return ts; }
-// אלמנט ⇒ ביטוי-widget. ancestors = מחלקות-האבות (שורש→אב) לסלקטורי-צאצא.
-function emit(node, map, ancestors = [], depth = 0) {
+// טקסט-סטייל עם צבע-יורש (CSS color inheritance) — לעולם לא "בלתי-נראה"
+function textStyleC(st, inherit) { const ts = textStyle(st); if (!ts.some(x => /^color:/.test(x))) ts.unshift(`color: ${inherit}`); if (!ts.some(x => /^fontFamily:/.test(x))) ts.push('fontFamily: fonts.he'); return ts; }
+// אלמנט ⇒ ביטוי-widget. ancestors=מחלקות-אבות (צאצא) · inherit=צבע-טקסט-יורש.
+function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink') {
   if (depth > 16) return 'const SizedBox.shrink()';
   if (node.tag === 'svg') {
     const d = svgToPathData(node);
-    if (!d) return '_icon(skin.mut)';                           // אין path ⇒ נפילה לאייקון
+    if (!d) return `_icon(${inherit})`;                         // אין path ⇒ נפילה לאייקון
     const vb = (node.attrs.viewbox || '0 0 24 24').split(/\s+/)[2] || '24';
     const sw = node.attrs['stroke-width'] || '1.8';
     const st0 = styleOf(node, map, ancestors);
     const w = px(st0['width']) || '16', h = px(st0['height']) || w;
-    const stroke = colorExpr(st0['color'] || st0['stroke']) || 'skin.mut';
+    const stroke = colorExpr(st0['color'] || st0['stroke']) || inherit;
     const filled = (node.attrs.fill && node.attrs.fill !== 'none') || /^(?!none)/.test(st0['fill'] || 'none') && (st0['fill'] || '') !== 'none' && st0['fill'];
     return `CustomPaint(size: const Size(${w}, ${h}), painter: _SvgPaint(${dq(d)}, ${stroke}, ${sw}, ${filled ? 'true' : 'false'}, ${vb}))`;
   }
@@ -276,23 +276,26 @@ function emit(node, map, ancestors = [], depth = 0) {
     return wrapBox(Object.assign({ 'min-height': '44px' }, ist), t, node);
   }
   const st = styleOf(node, map, ancestors);
+  const myColor = colorExpr(st['color']) || inherit;            // צבע-הטקסט האפקטיבי (עובר לילדים)
   const kids = elemChildren(node);
   const txt = textOf(node);
   const ta = st['text-align'];
   const taExpr = ta === 'center' ? ', textAlign: TextAlign.center' : ta === 'left' ? ', textAlign: TextAlign.left' : ta === 'right' ? ', textAlign: TextAlign.right' : '';
 
-  // עלה עם טקסט בלבד ⇒ Text (תמיד עם צבע)
+  // עלה עם טקסט בלבד ⇒ Text (צבע-יורש · text-transform)
   if (!kids.length && txt) {
-    return wrapBox(st, `Text(${dq(txt)}${taExpr}, style: TextStyle(${textStyleC(st).join(', ')}))`, node);
+    const tt = st['text-transform'];
+    const shown = tt === 'uppercase' ? txt.toUpperCase() : tt === 'lowercase' ? txt.toLowerCase() : tt === 'capitalize' ? txt.replace(/\b\w/g, c => c.toUpperCase()) : txt;
+    return wrapBox(st, `Text(${dq(shown)}${taExpr}, style: TextStyle(${textStyleC(st, inherit).join(', ')}))`, node);
   }
-  // בונה ילדים (מפריד אבסולוטיים ל-Stack)
+  // בונה ילדים (מפריד אבסולוטיים ל-Stack) · מעביר צבע-יורש
   const childAnc = ancestors.concat([node.classes || []]);
   const flow = [], abs = [];
   for (const c of node.children) {
-    if (c.text != null) { const t = c.text.trim(); if (t) flow.push(`Text(${dq(t)}, style: TextStyle(color: skin.ink, fontFamily: fonts.he))`); continue; }
+    if (c.text != null) { const t = c.text.trim(); if (t) flow.push(`Text(${dq(t)}, style: TextStyle(color: ${myColor}, fontFamily: fonts.he))`); continue; }
     if (c.tag === 'br') continue;
     const cst = styleOf(c, map, childAnc);
-    const e = emit(c, map, childAnc, depth + 1);
+    const e = emit(c, map, childAnc, depth + 1, myColor);
     if (cst['position'] === 'absolute') abs.push({ e, st: cst }); else flow.push(e);
   }
   let inner;
@@ -333,6 +336,9 @@ function wrapBox(st, inner, node) {
   let out;
   if (!cp.length) out = inner || 'const SizedBox.shrink()';
   else { if (inner) cp.push(`child: ${inner}`); out = `Container(${cp.join(', ')})`; }
+  // backdrop-filter: blur ⇒ ClipRRect + BackdropFilter (זכוכית אמיתית)
+  const bf = st['backdrop-filter'] || st['-webkit-backdrop-filter'];
+  if (bf && /blur/.test(bf) && cp.length) { const rad = /999/.test(st['border-radius'] || '') ? '999' : (px(st['border-radius']) || '0'); const bl = px(bf) || '12'; out = `ClipRRect(borderRadius: BorderRadius.circular(${rad}), child: BackdropFilter(filter: ImageFilter.blur(sigmaX: ${bl}, sigmaY: ${bl}), child: ${out}))`; }
   const op = st['opacity'] != null ? parseFloat(st['opacity']) : null;
   if (op != null && !isNaN(op) && op < 1) out = `Opacity(opacity: ${op}, child: ${out})`;
   return out;
@@ -391,10 +397,10 @@ function cells(html) {
 }
 
 // ───────────────────────── פליטת-קובץ-אטום ─────────────────────────
-const HEADER = (fam, seamUse) => `// 🔨 אטום-Dart מחושל (forge) · משפחת-Pure "${fam}" · מחולל ע"י machtzev/ds-forge.mjs ממקור-האמת
+const HEADER = (fam, seamUse, uiUse) => `// 🔨 אטום-Dart מחושל (forge) · משפחת-Pure "${fam}" · מחולל ע"י machtzev/ds-forge.mjs ממקור-האמת
 // machtzev/pure/${fam}-family.html (אל תערוך ידנית — regen). לובש עיצוב מהחריץ בלבד (DsSeam.skinOf/of/fontsOf,
-// חוק-5/6): אפס צבע-קבוע. תוכן Label/Value/Meta. material בלבד.
-import 'package:flutter/material.dart';
+// חוק-5/6): אפס צבע-קבוע. תוכן Label/Value/Meta.
+${uiUse ? "import 'dart:ui' show ImageFilter;\n" : ''}import 'package:flutter/material.dart';
 ${seamUse ? "import '../../dart-ui-bs/ds/ds_seam.dart';\n" : ''}`;
 const ICON = `
 // אייקון-פלייסהולדר ניטרלי (svg ללא path)
@@ -480,12 +486,13 @@ function forgeFamily(fam) {
     const useSkin = /\bskin\./.test(bodyExpr), useTheme = /\btheme\./.test(bodyExpr);
     const useFonts = /\bfonts\./.test(bodyExpr), useIcon = /_icon\(/.test(bodyExpr);
     const useSvg = /_SvgPaint\(/.test(bodyExpr);
+    const useUi = /ImageFilter\./.test(bodyExpr);
     const decls = [
       useSkin && '    final skin = DsSeam.skinOf(context);   // מלוא-העיצוב מהחריץ',
       useTheme && '    final theme = DsSeam.of(context);       // אקצנט (מורף)',
       useFonts && '    final fonts = DsSeam.fontsOf(context);  // פונט',
     ].filter(Boolean).join('\n');
-    const src = HEADER(fam, useSkin || useTheme || useFonts || useIcon || useSvg) + (useIcon ? ICON : '') + (useSvg ? SVGHELPER : '') + `
+    const src = HEADER(fam, useSkin || useTheme || useFonts || useIcon || useSvg, useUi) + (useIcon ? ICON : '') + (useSvg ? SVGHELPER : '') + `
 /// ${c.name} — seam:${c.seam}${states ? ' · מצבים חיים' : ''}
 ${enumBlock}class ${cls} extends StatelessWidget {
 ${stateField}  const ${cls}({super.key${ctorState ? ', ' + ctorState : ''}});
