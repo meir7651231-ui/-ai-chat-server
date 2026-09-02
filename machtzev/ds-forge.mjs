@@ -475,6 +475,9 @@ function wrapBox(st, inner, node, noPad) {
   const wp = pct(st['width']), hp = pct(st['height']);
   const wpct = wp && +wp < 1 ? wp : null, hpct = hp && +hp < 1 ? hp : null;
   if (wpct || hpct) out = `FractionallySizedBox(${wpct ? `widthFactor: ${wpct}, ` : ''}${hpct ? `heightFactor: ${hpct}, ` : ''}alignment: Alignment.centerRight, child: ${out})`;
+  // direction:ltr/rtl מפורש ⇒ Directionality (הופך סדר-Row: חץ+אחוז, ספרות — מבטל RTL-אב)
+  const dir = st['direction'];
+  if (dir === 'ltr' || dir === 'rtl') out = `Directionality(textDirection: TextDirection.${dir}, child: ${out})`;
   return out;
 }
 
