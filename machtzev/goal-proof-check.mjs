@@ -2,7 +2,7 @@
 /** מחצב · goal-proof-check — שער `goal-proof` (הדרך צעדים 1·3·6 · 23-ד · שלב 9): מסך/לוח שנוסף או השתנה ⇒ כרטיס-מטרה תקף + תמונה.
  *  בודק בבייטים (לא שופט): כרטיס קיים · sig · screenSha == תוכן-המסך ב-index (הכרטיס לא ישן) · תמונה קיימת, PNG/JPEG אמיתי, ≥400×300,
  *  pictureSha תואם · goal ≥40 · models/atoms לא-ריקים וכל אחד מופיע בקוד-המסך · accept מספרי.
- *  שימוש: --files a,b (מסכים staged מ-pre-commit). יציאה 0/1. */
+ *  שימוש: --files a,b (כל ה-.dart ה-staged תחת new/ — הכלי מסנן: תיקיות-מסכים/לוחות, או Scaffold מחוץ למדף ולפלט-המחולל · L50). יציאה 0/1. */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
@@ -11,12 +11,15 @@ import * as R from './root.mjs';
 const argv = process.argv.slice(2);
 const fi = argv.indexOf('--files');
 const files = fi >= 0 ? argv[fi + 1].split(',').filter(Boolean) : [];
-const SCOPE = /^new\/(dart-screens-bs|dart-boards-bs)\/[^/]+\.dart$/;
-const targets = files.filter((f) => SCOPE.test(f) && !/_test\.dart$|-proof\.dart$/.test(f));
+const staged = (f) => { try { return execFileSync('git', ['show', ':' + f], { cwd: R.ROOT, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 }); } catch { try { return fs.readFileSync(path.join(R.ROOT, f), 'utf8'); } catch { return ''; } } };
+// מסך = מה-שהוא, לא איפה-שהוא (L50 · גל 11 של המלאי חי ב-new/dart-gen-bs/schoolos.dart ועקף את השער):
+//   תיקיות-המסכים/לוחות תמיד · וכל .dart אחר ב-new/ שבונה Scaffold/DsScaffold/MaterialApp — למעט המדף (dart-ui-bs: קונכיות-sheet) ופלט-המחולל (gen_*.dart · compose-determinism)
+const SCOPE = /^new\/(dart-screens-bs|dart-boards-bs)\/[^/]+\.dart$/, SHELF = /^new\/dart-ui-bs\//, GENOUT = /\/gen_[^/]+\.dart$/, EXEMPT = /_test\.dart$|-proof\.dart$/;
+const isScreen = (f) => /^new\/.+\.dart$/.test(f) && !EXEMPT.test(f) && (SCOPE.test(f) || (!SHELF.test(f) && !GENOUT.test(f) && /\w*Scaffold\s*\(|\brunApp\s*\(|\bMaterialApp\s*\(/.test(staged(f))));
+const targets = files.filter(isScreen);
 if (!targets.length) { console.log('✓ goal-proof: אין מסכים/לוחות ב-staged'); process.exit(0); }
 const sha = (b) => crypto.createHash('sha256').update(b).digest('hex');
 const DIR = R.MACH + 'audit/goals/';
-const staged = (f) => { try { return execFileSync('git', ['show', ':' + f], { cwd: R.ROOT, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 }); } catch { return fs.readFileSync(path.join(R.ROOT, f), 'utf8'); } };
 const bad = [];
 for (const t of targets) {
   const cf = DIR + path.basename(t).replace(/\.dart$/, '') + '.json';

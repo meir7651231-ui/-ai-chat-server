@@ -49,7 +49,8 @@ if [ -n "$ADDED" ]; then
 fi
 
 # ── הדרך צעדים 1·3·6 (שלב 9): מסך/לוח שנוסף או השתנה ⇒ כרטיס-מטרה (הסוכן מזין: מטרה · מודלים · אטומים · קבלה) + תמונה ──
-SCREENS=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '^new/(dart-screens-bs|dart-boards-bs)/[^/]+\.dart$' | tr '\n' ',' || true)
+# כל .dart תחת new/ — goal-proof-check מזהה מסך לפי מה-שהוא (Scaffold), לא לפי תיקייה (L50: גל 11 עקף דרך dart-gen-bs)
+SCREENS=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '^new/.+\.dart$' | tr '\n' ',' || true)
 if [ -n "$SCREENS" ]; then
   GP=$(node machtzev/goal-proof-check.mjs --files "$SCREENS" 2>&1); GPRC=$?
   echo "$GP" | grep -E '✗' | head -6
