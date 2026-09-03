@@ -1,5 +1,14 @@
 {
  "unparsed": 150,
+ "vacuous": [
+  "new/dart-maor/enroll-new-family_test.dart",
+  "new/dart-maor/guide-foot_test.dart",
+  "new/dart/is_owner_email_test.dart",
+  "new/dart/is_true_color_test.dart",
+  "new/dart/num_map_test.dart",
+  "new/dart/read_filtered_url_param_test.dart",
+  "new/dart/size_table_test.dart"
+ ],
  "pairs": 997,
  "untested": 1645
 }

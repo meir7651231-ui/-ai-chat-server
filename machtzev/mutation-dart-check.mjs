@@ -94,12 +94,16 @@ for (const p of pairs) {
   else real++;
 }
 const unparsedN = unparsedFiles.length + compileFail.length;
-if (argv.includes('--write')) { fs.writeFileSync(BL, JSON.stringify({ unparsed: unparsedN, pairs: total, untested }, null, 1) + '\n'); console.log(`✍️ mutation-dart baseline ⇒ unparsed ${unparsedN} · זוגות ${total} · בלי-בדיקה ${untested}`); process.exit(0); }
+// חוב-קיים (R3 שדה): בדיקות-חלולות ידועות = רשימה רק-יורדת בבייסליין; דגימה יומית מאדימה רק על חלולה **חדשה** (לא ב-baseline) — כמו כל שער-ראצ׳ט
+const vacNames = vacuous.map((v) => v.replace(/ \(.*$/, ''));
+if (argv.includes('--write')) { fs.writeFileSync(BL, JSON.stringify({ unparsed: unparsedN, vacuous: vacNames, pairs: total, untested }, null, 1) + '\n'); console.log(`✍️ mutation-dart baseline ⇒ unparsed ${unparsedN} · חלולות-ידועות ${vacNames.length} · זוגות ${total} · בלי-בדיקה ${untested}`); process.exit(0); }
+const baseV = new Set(fs.existsSync(BL) ? (JSON.parse(fs.readFileSync(BL, 'utf8')).vacuous || []) : []);
+const freshVac = vacuous.filter((v) => !baseV.has(v.replace(/ \(.*$/, '')));
 const scope = opt('--files') ? 'files' : argv.includes('--all') ? 'מלא' : `דגימה ${pairs.length}/${total}`;
-if (vacuous.length) { console.log(`🔴 mutation-dart: ${vacuous.length} בדיקות ירוקות-על-חלול (${scope}):`); vacuous.forEach((v) => console.log('   ✗ ' + v)); process.exit(1); }
+if (freshVac.length) { console.log(`🔴 mutation-dart: ${freshVac.length} בדיקות ירוקות-על-חלול **חדשות** (${scope}; חוב-ידוע ${baseV.size} רק-יורד):`); freshVac.forEach((v) => console.log('   ✗ ' + v)); process.exit(1); }
 if (argv.includes('--all')) {
   if (!fs.existsSync(BL)) { console.log('🔴 mutation-dart: אין mutation-dart-baseline.json — --write (fail-closed)'); process.exit(1); }
   const base = JSON.parse(fs.readFileSync(BL, 'utf8'));
   if (unparsedN > (base.unparsed ?? 0)) { console.log(`🔴 mutation-dart: unparsed עלה ${base.unparsed} → ${unparsedN} (חוב רק-יורד): ${[...unparsedFiles, ...compileFail].slice(0, 5).join(' · ')}`); process.exit(1); }
 }
-console.log(`✓ מוטציה-Dart: ${real}/${pairs.length} מאדימות-על-חלול (${scope}) · unparsed ${unparsedFiles.length} · לא-קומפל ${compileFail.length} · timeout ${broken.length} · זוגות ${total} · בלי-בדיקה ${untested} (מוצהר)`);
+console.log(`✓ מוטציה-Dart: ${real}/${pairs.length} מאדימות-על-חלול (${scope}) · חלולות-ידועות בדגימה ${vacuous.length}/${baseV.size} · unparsed ${unparsedFiles.length} · לא-קומפל ${compileFail.length} · timeout ${broken.length} · זוגות ${total} · בלי-בדיקה ${untested} (מוצהר)`);
