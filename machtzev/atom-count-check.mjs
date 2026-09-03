@@ -5,7 +5,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import * as R from './root.mjs';
-const count = (d) => { let n = 0; (function walk(x) { for (const e of fs.readdirSync(x, { withFileTypes: true })) { const f = path.join(x, e.name); if (e.isDirectory()) { if (e.name !== 'node_modules') walk(f); } else if ((e.name.endsWith('.mjs') && !e.name.endsWith('.test.mjs')) || e.name.endsWith('.dart')) n++; } })(d); return n; };   // R3-3.11 (בדיקות אינן אטומים) — ב-commit העוקב, אחרי שפרסור-Allow החדש ב-HEAD
+const count = (d) => { let n = 0; (function walk(x) { for (const e of fs.readdirSync(x, { withFileTypes: true })) { const f = path.join(x, e.name); if (e.isDirectory()) { if (e.name !== 'node_modules') walk(f); } else if ((e.name.endsWith('.mjs') && !e.name.endsWith('.test.mjs')) || (e.name.endsWith('.dart') && !e.name.endsWith('_test.dart'))) n++; } })(d); return n; };   // R3-3.11: בדיקות אינן אטומים
 const cur = {};
 for (const e of fs.readdirSync(R.NEW, { withFileTypes: true })) if (e.isDirectory()) cur[e.name] = count(path.join(R.NEW, e.name));
 const BL = R.MACH + 'atom-count-baseline.json';

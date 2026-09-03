@@ -70,7 +70,8 @@ if [ -n "$CODE" ] && [ -s "$RETRY" ]; then
 fi
 
 # ── ג · ראצ׳ט-כיוון מול merge-base (לא מול HEAD — R2-6.1) ──
-BASE=$(git merge-base HEAD origin/claude/hei-rxv1v1 2>/dev/null || git rev-parse HEAD)
+# בסיס-הראצ׳ט בטבעת-commit = HEAD (ה-commit הקודם): החלשה שאושרה ב-Allow ב-commit קודם לא חוזרת; הרצף המלא נבדק פר-commit ב-pre-push/CI (R3 שדה)
+BASE=$(git rev-parse HEAD)
 # אוכפים רצים מהעותק המחויב ב-HEAD (R3-1.1): עריכה לא-מחויבת שלהם לא משפיעה על הטבעת הזו
 ENF=$(mktemp -d); for e in ratchet-direction allow-check; do git show "HEAD:machtzev/$e.mjs" > "$ENF/$e.mjs" 2>/dev/null || cp "machtzev/$e.mjs" "$ENF/$e.mjs"; done
 RD=$(node "$ENF/ratchet-direction.mjs" "$BASE" --index --repo "$ROOT" 2>&1); RDRC=$?
