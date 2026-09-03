@@ -97,7 +97,8 @@ export function census() {
 // ריצה-ישירה ⇒ כתיבת-artifact + סיכום. import ⇒ שקט.
 if (import.meta.url === `file://${process.argv[1]}`) {
   const atoms = census();
-  fs.writeFileSync(OUT, JSON.stringify(atoms, null, 1) + '\n');
+  // c4ב · הכרעה C: atom-census.json בוטל (תת-קבוצה של atom-index.json בלי צרכן ייחודי). census() נשאר כספרייה ל-analyzeAtom.
+  console.log('ℹ️ atom-census.json בוטל (c4ב) — האינדקס: node machtzev/census/atom-index.mjs');
   const bySeam = {}, byCap = {};
   for (const a of atoms) { bySeam[a.seam] = (bySeam[a.seam] || 0) + 1; for (const c of a.caps) byCap[c] = (byCap[c] || 0) + 1; }
   console.log(`מפקד-האטומים · ${atoms.length} אטומים · → ${path.relative(ROOT + '..', OUT)}`);

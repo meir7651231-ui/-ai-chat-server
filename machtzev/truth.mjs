@@ -17,7 +17,7 @@ const rj = (p) => { try { return JSON.parse(fs.readFileSync(path.join(G, p), 'ut
 const nd = (d, re = /\.(mjs|dart)$/) => { try { return fs.readdirSync(path.join(ROOT, d)).filter((f) => re.test(f) && !/\.test\.|_test\.|\.contract\./.test(f)).length; } catch { return 0; } };
 
 // ── שכבת-תצוגה ──
-const census = rj('atom-census.json');
+const census = rj('atom-index.json');   // c4ב · הכרעה C: האינדקס הוא האורקל (554); atom-census.json (522, ישן) נמחק
 const seam = {}; for (const a of census) seam[a.seam] = (seam[a.seam] || 0) + 1;
 const _rS = /^String\??$/, _rLS = /^List<String>\??$/, _rLLS = /^List<List<String>>\??$/, _rLD = /^List<double>\??$/, _rI = /^int\??$/;
 const ASPECTS = {
@@ -56,7 +56,7 @@ const layers = {
   '  ↳ מול כשירים-לחיווט (eligible)': `${wiredTotal}/${eligible} (${(wiredTotal / (eligible || 1) * 100).toFixed(1)}%) · כשירים: תצוגה ${eligibleDisp} (fields∧str≥1 ∪ collection ∪ series) + לוגיקה ${wireable} (wireable)`,
   '  ↳ חיווט-תצוגה': `${dispAll.size}/${census.length} (${(dispAll.size / census.length * 100).toFixed(1)}%)`,
   '  ↳ חיווט-לוגיקה': `${engines.length}/${logic.length} (${(engines.length / logic.length * 100).toFixed(1)}%)`,
-  'תצוגה · atom-census (widgets)': census.length,
+  'תצוגה · atom-index (widgets · הכרעה C)': census.length,
   '  ↳ seam': JSON.stringify(seam),
   '  ↳ נגישים-בהרכבה (selectVaried×400)': dispAll.size,
   '  ↳ פר-היבט': JSON.stringify(dispReach),

@@ -977,8 +977,9 @@ class ${cls} extends StatelessWidget {
 //  הישות (kpi⇐צבירה · list⇐רשומות), ומחווט נתוני-אמת דרך התפר שלהם. מחלקת-האטום
 //  נבחרת מהמצע — לא קשיחה; שקעי-דאטה⇐ערך-נגזר-מהישות, שקעי-סגנון/התנהגות⇐ברירת-מחדל.
 // ══════════════════════════════════════════════════════════════════════════
+// c4ב · הכרעה C: האינדקס (atom-index.json) הוא האורקל; atom-census.json בוטל.
 let _census = null;
-const loadCensus = () => { if (_census) return _census; try { _census = JSON.parse(fs.readFileSync(path.join(HERE, 'atom-census.json'), 'utf8')); } catch { _census = []; } return _census; };
+const loadCensus = () => { if (_census) return _census; try { _census = JSON.parse(fs.readFileSync(path.join(HERE, 'atom-index.json'), 'utf8')); } catch { _census = []; } return _census; };
 // פרמטרי-בנאי של אטום עם טיפוסים: [{nm, ty, req}] — **כל** השקעים (required+אופציונלי),
 // כי שקע-דאטה יכול להיות אופציונלי. תיקון (§21): קודם רק required ⇒ המרכיב היה עיוור
 // לרוב ה-347 האטומים-הבינדבילים. typeOf תופס גם הצהרה-משותפת ('final double a, b;').

@@ -19,7 +19,8 @@ const STATIC = [
   'machtzev/tools/gen-wiring-doc.mjs', 'machtzev/one.mjs',
   'machtzev/wired-floor.json', 'machtzev/coverage-baseline.json', 'machtzev/data-purity-baseline.json',
   'machtzev/deep-purity-baseline.json', 'machtzev/box-proofs-baseline.json', 'machtzev/purity-baseline.json',
-  'machtzev/ds-critic-baseline.json', 'machtzev/contract-quality-baseline.json',
+  'machtzev/ds-critic-baseline.json', 'machtzev/contract-quality-baseline.json', 'machtzev/dup-class-baseline.json',
+  'machtzev/assemble/box-coverage-baseline.json', 'machtzev/generator/atom-index.json', 'machtzev/generator/logic-census.json', 'machtzev/generator/atom-index-full.json',
 ];
 const OPTIONAL = ['.githooks/pre-commit', '.githooks/commit-msg', '.githooks/pre-push', '.claude/settings.json',
   '.claude/hooks/pre-tool.sh', '.claude/hooks/session-start.sh', '.github/workflows/police.yml', '.gitattributes'];
