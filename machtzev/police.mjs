@@ -128,6 +128,7 @@ gate('truth', 'truth.mjs', ['--gate']);
 gate('coverage', 'coverage-gate.mjs');
 gate('pins', 'pins-check.mjs');
 gate('boxes', 'box-proofs-check.mjs', ['--gate'], FAST);
+gate('pretool', 'pretool-selftest.mjs');
 gate('selftest', 'police-selftest.mjs', [], FAST);
 gate('mutation', 'mutation-check.mjs', [...filesArg()], FAST && !INC_FILES);   // תחת --inc: מוטציה על הדיף בלבד (לא מדולג)
 

@@ -1,0 +1,71 @@
+#	מחצב · fixtures ל-pre-tool (שלב 2) — expect · tool · input (Bash: command · Edit/Write: file_path). 2 = חסום · 0 = עובר.
+#	כל שורה = הרגל-מודל אחד. הוספת לקח = שורה, לא pins-write (R2-3.2).
+2	Bash	git commit --no-verify -m "x"
+2	Bash	git commit -n -m "x"
+2	Bash	git commit -anm "x"
+2	Bash	git merge --no-verify feature
+2	Bash	git -c core.hooksPath=/dev/null commit -m x
+2	Bash	git -c core.HooksPath=.git/hooks push
+2	Bash	git config core.hooksPath .git/hooks
+2	Bash	git config --unset core.hooksPath
+0	Bash	git config core.hooksPath .githooks
+0	Bash	git config --get core.hooksPath
+2	Bash	git config alias.ci "commit --no-verify"
+2	Bash	git commit-tree HEAD^{tree} -m x
+2	Bash	git update-ref refs/heads/claude/hei-rxv1v1 abc123
+2	Bash	git cherry-pick abc123
+0	Bash	git cherry-pick -n abc123 && git commit -m "picked"
+0	Bash	git cherry-pick --continue
+2	Bash	git push --force origin claude/hei-rxv1v1
+2	Bash	git push -f origin HEAD
+2	Bash	git push --force-with-lease origin x
+2	Bash	git push origin +claude/hei-rxv1v1
+2	Bash	git push --mirror origin
+2	Bash	git push origin :old-branch
+2	Bash	git push origin --delete old
+2	Bash	git push origin main
+2	Bash	git push origin HEAD:main
+2	Bash	git push origin claude/x:refs/heads/master
+0	Bash	git push -u origin claude/hei-rxv1v1
+0	Bash	git push origin refs/heads/protocol-good-2026-09-03:refs/heads/protocol-good-2026-09-03
+2	Bash	git checkout origin/x -- .githooks/pre-commit
+2	Bash	git restore --source=HEAD~3 .claude/hooks/pre-tool.sh
+2	Bash	rm -f .githooks/pre-push
+2	Bash	rm -rf .githooks
+2	Bash	rm -rf .claude/hooks && ls
+2	Bash	mv .githooks/pre-commit /tmp/x
+2	Bash	chmod -x .githooks/pre-commit
+2	Bash	chmod 644 .githooks/pre-push
+0	Bash	chmod +x .githooks/pre-commit
+2	Bash	sed -i 's/exit 1/exit 0/' .githooks/pre-commit
+2	Bash	echo x > .claude/settings.json
+2	Bash	cat /tmp/h >> .githooks/pre-push
+2	Bash	cp /tmp/h .githooks/pre-commit
+0	Bash	cp .githooks/pre-commit .git/hooks/pre-commit
+2	Bash	echo '{}' > machtzev/generator/atom-index.json
+2	Bash	sed -i 's/x/y/' TRUTH.md
+2	Bash	find .githooks -name 'pre-*' -delete
+2	Bash	eval "git commit -m x"
+2	Bash	git checkout -- .
+2	Bash	git restore .
+0	Bash	( git checkout -- . )
+0	Bash	git checkout -- new/atoms/x.mjs
+2	Bash	sleep 5 && ls
+2	Bash	while true; do sleep 2; done
+0	Bash	node machtzev/police.mjs --inc
+0	Bash	node machtzev/pins-check.mjs --write
+0	Bash	git commit -m "אטום חדש" && git push -u origin claude/hei-rxv1v1
+0	Bash	git log --oneline -5 | head -3
+0	Bash	grep -n "no-verify" machtzev/PROTOCOL.md
+2	Edit	/x/.githooks/pre-commit
+2	Write	/x/.claude/hooks/pre-tool.sh
+2	Write	/x/.claude/settings.json
+2	Edit	/x/.github/workflows/police.yml
+2	Edit	/x/TRUTH.md
+2	Write	/x/machtzev/generator/atom-index.json
+2	Edit	/x/machtzev/pins.sha256
+0	Edit	/x/machtzev/police.mjs
+0	Edit	/x/new/atoms/fix-phone.mjs
+0	Write	/x/machtzev/PROTOCOL.md
+0	Read	/x/.githooks/pre-commit
+0	Grep	/x/.claude/settings.json

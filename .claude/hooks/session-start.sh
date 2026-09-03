@@ -12,7 +12,7 @@ git config core.hooksPath .githooks 2>/dev/null
 chmod +x .githooks/* 2>/dev/null
 git config merge.regen.driver "node machtzev/merge-regen.mjs %O %A %B %P" 2>/dev/null
 git config merge.regen.name "regenerate generated docs (TRUTH/WIRING)" 2>/dev/null
-echo "🔒 מחצב: hooksPath=.githooks · merge.regen · $(ls .githooks 2>/dev/null | wc -l) hooks" >&2
+echo "🔒 מחצב: hooksPath=.githooks · merge.regen · $(ls .githooks 2>/dev/null | wc -l) hooks · pre-tool $([ -x .claude/hooks/pre-tool.sh ] && echo פעיל || echo חסר) (שלב 2)" >&2
 
 # ── 2 · Dart (אטומי · לא-פטאלי) ──
 DART_VER="3.13.2"
@@ -47,6 +47,6 @@ AHEAD=$(git rev-list --count "origin/$BR..HEAD" 2>/dev/null || echo "?"); BEHIND
 TB=$(sed -n '/truth:begin/,/truth:end/p' CLAUDE.md 2>/dev/null | grep -v 'truth:' | head -1 | cut -c1-160)
 echo "🏛 מחצב · $BR · HEAD $(git rev-parse --short HEAD 2>/dev/null) · ahead $AHEAD / behind $BEHIND מול origin" >&2
 [ -n "$TB" ] && echo "📐 $TB" >&2
-echo "🚨 המשטרה: node machtzev/police.mjs --fast (commit) · מלא (push) — מופעלת אוטומטית ב-hooks (שלב 1). מאמת: node machtzev/verify-independent.mjs protocol-good-2026-09-03 HEAD" >&2
+echo "🚨 המשטרה: node machtzev/police.mjs --inc (commit) · מלא (push) — מופעלת אוטומטית ב-hooks (שלב 1). מאמת: node machtzev/verify-independent.mjs protocol-good-2026-09-03 HEAD" >&2
 echo "📖 סדר-קריאה-חובה: CLAUDE.md §📖 (VERIFY-LAWS → LAW → LEARNINGS → AGENT-CODE → CURRICULUM → DECISIONS → WIRING) · הפרוטוקול: machtzev/PROTOCOL.md" >&2
 exit 0
