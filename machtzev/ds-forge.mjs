@@ -42,6 +42,7 @@ function resolveVars(val, vars) {
 // value ⇒ {expr, alpha?} · מזהה var(--token) (עם עטיפת color-mix/גרדיאנט ⇒ מפשט לטוקן-הבסיס)
 function colorExpr(val) {
   if (!val) return null;
+  if (/^\s*transparent\s*$/i.test(val)) return 'const Color(0x00000000)';   // עצירת-transparent בגרדיאנט (scrim/fade) — בלי זה gradientExpr נכשל ונצבע צבע-אחיד-כהה
   // color-mix(in …, A N%, B): A במשקל N% + B ב-(100-N)%. B=transparent ⇒ A.withValues(alpha:N/100) (שקיפות);
   // B=צבע-אטום (למשל var(--raised2)) ⇒ Color.lerp(B, A, N/100) — מיזוג-אמת. בלי זה נצבע A שקוף במקום המיזוג-הכהה.
   const cm = val.match(/color-mix\(\s*in\s+[^,]+,\s*([^,]+?)\s*(\d+(?:\.\d+)?)%\s*,\s*(var\(--[a-z0-9-]+\)|[^,)]+)\s*\)/i);
@@ -700,12 +701,17 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     // (reveal_card "Label" מעל .rv האבסולוטי) נדבק לימין במקום מרכז. Positioned/Positioned.fill לא מושפעים.
     const _plS = `${st['place-items'] || ''} ${st['place-content'] || ''} ${st['justify-items'] || ''}`;
     const stackCentered = /center/.test(_plS) || (ALIGN[st['align-items']] === 'center' && JUST[st['justify-content']] === 'center');
+    // מיכל flex-column עם justify-content:flex-end (+ min-height) ⇒ הזרימה יורדת לתחתית (cover_banner: Label/Meta
+    // בתחתית). בלי זה ה-Column (MainAxisSize.min) נשאר בראש-ה-Stack. אופקי מ-align-items (RTL: start=ימין).
+    let stackAlign = stackCentered ? 'Alignment.center' : null;
+    if (!stackAlign && /column/.test(st['flex-direction'] || '') && JUST[st['justify-content']] === 'end')
+      stackAlign = ALIGN[st['align-items']] === 'center' ? 'Alignment.bottomCenter' : ALIGN[st['align-items']] === 'end' ? 'Alignment.bottomLeft' : 'Alignment.bottomRight';
     // סדר-ציור לפי z-index: זרימה (flowW, z=flowMaxZ) מול האבסולוטיים (כל אחד ו-z שלו). מיון-יציב עולה ⇒
     // ברירת-מחדל (הכל z=0) נשמרת [זרימה, abs], אך ילד-זרימה בעל z גבוה (.av z:2) נצבע אחרי abs נמוך (.gap z:0).
     const zItems = (flowW ? [{ w: flowW, z: flowMaxZ }] : []).concat(pos.map((w, i) => ({ w, z: abs[i].z })));
     zItems.forEach((it, i) => (it.i = i));
     zItems.sort((a, b) => a.z - b.z || a.i - b.i);
-    inner = `Stack(clipBehavior: Clip.none${stackCentered ? ', alignment: Alignment.center' : ''}, children: [${zItems.map(it => it.w).join(', ')}])`;
+    inner = `Stack(clipBehavior: Clip.none${stackAlign ? `, alignment: ${stackAlign}` : ''}, children: [${zItems.map(it => it.w).join(', ')}])`;
     // בלוק-במסגרת-בלוק (לא פריט-flex) בלי רוחב-מפורש = מילוי-רוחב-הורה (CSS block) ⇒ Positioned right:0
     // מתיישר לקצה-המיכל (li ברשימה: המספר/הנקודה בשוליים), לא לקצה-הטקסט. פריט-flex (avw) נשאר גודל-תוכן.
     if (!parentFlex && !st['width'] && !/^inline/.test(st['display'] || '')) inner = `SizedBox(width: double.infinity, child: ${inner})`;
