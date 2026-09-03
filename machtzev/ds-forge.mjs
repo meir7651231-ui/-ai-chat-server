@@ -42,12 +42,16 @@ function resolveVars(val, vars) {
 // value ⇒ {expr, alpha?} · מזהה var(--token) (עם עטיפת color-mix/גרדיאנט ⇒ מפשט לטוקן-הבסיס)
 function colorExpr(val) {
   if (!val) return null;
-  // color-mix(in …, var(--a) N%, transparent) ⇒ theme/skin.withValues(alpha:N/100) — לפני var-פשוט (ה-var בפנים)
-  const cm = val.match(/color-mix\([^,]+,\s*var\(--([a-z0-9-]+)\)\s*(\d+)%/i);
+  // color-mix(in …, A N%, B): A במשקל N% + B ב-(100-N)%. B=transparent ⇒ A.withValues(alpha:N/100) (שקיפות);
+  // B=צבע-אטום (למשל var(--raised2)) ⇒ Color.lerp(B, A, N/100) — מיזוג-אמת. בלי זה נצבע A שקוף במקום המיזוג-הכהה.
+  const cm = val.match(/color-mix\(\s*in\s+[^,]+,\s*([^,]+?)\s*(\d+(?:\.\d+)?)%\s*,\s*(var\(--[a-z0-9-]+\)|[^,)]+)\s*\)/i);
   if (cm) {
-    const k = cm[1], a = (+cm[2] / 100).toFixed(2);
-    const base = SKIN[k] ? `skin.${SKIN[k]}` : THEME[k] ? `theme.${THEME[k]}` : null;
-    if (base) return `${base}.withValues(alpha: ${a})`;
+    const cA = colorExpr(cm[1].trim()), p = (+cm[2] / 100).toFixed(3), second = cm[3].trim();
+    if (cA) {
+      if (/^transparent$/i.test(second)) return `${cA}.withValues(alpha: ${p})`;
+      const cB = colorExpr(second);
+      if (cB) return `Color.lerp(${cB}, ${cA}, ${p})!`;
+    }
   }
   const vm = val.match(/var\(--([a-z0-9-]+)\)/i);
   if (vm) {
