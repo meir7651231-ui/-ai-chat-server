@@ -22,6 +22,7 @@ const ATOM = {
   match:     { atom: 'smartFilter',   seam: 'dart-maor/smart-filter.dart:84 ⊕smartScore⊕normSearch (לוגיקה §21)' }, // איתור · מנוע
   filter:    { atom: 'FilterChipPill', seam: 'screens__manager_dashboard_screen/filter_chip_pill.dart:7 selected+onTap (מבוקר)' }, // חריגה · תצוגה
   predicate: { atom: 'finderMatches', seam: 'dart-maor/finder-matches.dart:23 locks+axisValue (לוגיקה §21)' }, // חריגה · מנוע
+  serialize: { atom: 'toCsv',         seam: 'dart-maor/to-csv.dart ⊕csvEscape⊕exportAllowed (לוגיקה §21)' }, // ייצוא · מנוע
   table:     { atom: 'DsTable',       seam: 'ds/ds_table.dart:7 labels+rows+מיון' },                      // הצגת-אוסף (לא DataGrid)
   panel:     { atom: 'GlassCard',     seam: 'premium/surfaces/glass_card.dart:5 required this.child' },   // מיכל-פריט-נבחר
   timeline:  { atom: 'TimelineItem',  seam: 'premium/lists/timeline_item.dart title+time+body' },         // שורת-תנועה (לא timeline_flow)
@@ -57,6 +58,8 @@ function ops(formula) {
     return [{ op: 'filter', why: 'צ׳יפ-סינון מבוקר (selected+onTap)' }, { op: 'predicate', why: 'מנוע-פרדיקט: finderMatches (נעילות-AND, לא בוליאני-ידני)' }];
   if (f.kind === 'table')     return [{ op: 'table', why: 'הצגת-אוסף = טבלה (labels+rows+מיון); DataGrid מזייף ⇒ נחסם' }];
   if (f.kind === 'empty')     return [{ op: 'empty', why: 'מצב אין-תוצאות = glyph+message' }];
+  if (f.kind === 'export')    // ייצוא = תובנה: תצוגה(כפתור-הפעלה) ⊕ לוגיקה(סריאליזציה-בטוחה) — 23-ג
+    return [{ op: 'action', why: 'כפתור-הפעלת-הייצוא (label+onTap)' }, { op: 'serialize', why: 'מנוע: toCsv⊕csvEscape (BOM+חסימת-הזרקה, לא join ידני)' }];
   if (f.kind === 'log')       // יומן = תובנה: כותרת-קיבוץ (Σ) + שורת-תנועה פר-רשומה (2 אטומים)
     return [{ op: 'group', label: 'כותרת+Σ', why: 'כותרת-היומן נושאת מונה+Σעלות' }, { op: 'timeline', why: 'שורת-תנועה פר-רשומה (title/time/body); timeline_flow מזייף ⇒ נחסם' }];
   if (f.kind === 'panel')     // פאנל-פריט = תובנה: מיכל + זהות + מצב(יחס) + תנועות + פעולה (5 אטומים)
@@ -92,6 +95,7 @@ const PARTICLES = [
   { id: 'movements',  name: 'תנועות',      f: { kind: 'log',       expr: 'intakeLog ⇒ rows+Σcost' } },
   { id: 'itempanel',  name: 'פאנל-פריט',   f: { kind: 'panel',     expr: 'GlassCard(זהות+מצב+תנועות+פעולה)' } },
   { id: 'emptyst',    name: 'מצב-ריק',     f: { kind: 'empty',     expr: 'shown==0' } },
+  { id: 'export',     name: 'ייצוא',       f: { kind: 'export',    expr: 'items ⇒ CSV+BOM (toCsv⊕csvEscape)' } },
 ];
 
 function compose(p) {
