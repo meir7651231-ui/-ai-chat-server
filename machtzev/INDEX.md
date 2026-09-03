@@ -17,6 +17,8 @@
 | `verify-independent.mjs` | 🔍 **המאמת-העצמאי** (PROTOCOL §5.2): כלי-משטרה מ-tag ידוע-טוב על HEAD · ראצ׳ט-כיוון פר-commit · הוכחת-ירי · שתי משטרות. עד, לא חומה. |
 | `census/import-graph.mjs` | 🕸️ גרף-imports סטטי ל-`police --inc` (שלב 1): דיף ⇒ דיף+צרכנים-טרנזיטיביים (+זוג בדיקה/חוזה). `import()` דינמי / קובץ-חוץ / >50 ⇒ unknown ⇒ המשטרה מריצה מלא (fail-closed). |
 | `../.github/workflows/police.yml` | 🛡️ CI-עד (שלב 3 · §7.3): non-required. G1 pins · G9 ראצ׳ט מול event.before/סמן · G8 Protocol-Ran על הטווח + dart analyze · G3+G7 truth/wiring ⇒ diff ריק · G2+G10 משטרה מלאה (צהוב=אדום) + מס · G0 מאמת מכלי הסמן (ללא קידום). ערוץ = job summary. |
+| `learn-check.mjs` | 📚 שער `learn` (§8 · שלב 4): parity (GATE: לכל לקח, id מוכר) · antipattern-scan (regex לא תופס אף קובץ ב-new/) · learn-on-retry (טיוטת-M4: regex תופס blob-לפני, לא אחרי, לא ליטרל, תופס fixture ב-`selftest-fixtures/learn/`) · stuck-loop (3 כשלים רצופים ⇒ בעלים). |
+| `learn-draft.mjs` | 📝 מנוע-M4: `--record <gates> --stage <files>` ⇒ רשומות ב-`audit/retry.jsonl` (gate·path·sha·blob-before) · `--stage` בלבד ⇒ טיוטת `## L<תאריך>-<gate>-<sha6>` ב-LEARNINGS.md ל-retry לא-פתור + סימון resolved. |
 | `pretool-selftest.mjs` | 🪤 הוכחת-ירי ל-`.claude/hooks/pre-tool.sh` (שלב 2 · §6): כל שורה ב-`selftest-fixtures/pretool.tsv` מוזנת ל-hook כ-PreToolUse; חסום=2 · עובר=0. לקח חדש = שורה. |
 | `selftest-fixtures/` | fixtures של `police-selftest.mjs` — **לא נעולים**: לקח חדש = fixture חדש בלי pins-write. |
 | `BUILDSMART-PROTOCOL-MAP.md` | 🗺️ מפת-הפרוטוקול של buildsmart (4 שכבות · 99 שערים · ערכת-אורקסטרטור · סטיות) — חומר-הגלם שממנו נגזר `PROTOCOL.md` (v1→v4). קריאה בלבד, לא הנחיה. |

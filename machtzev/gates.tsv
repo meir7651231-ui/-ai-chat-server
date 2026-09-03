@@ -6,6 +6,7 @@ wiring	חוקי-החשמלאי: אטום לא מייבא אטום, קופסה ל
 contract	חוק-החוזה: לכל אטום חוזה+בדיקה ירוקה + סריקת-PII (חוק-6)	commit	contract-quality-baseline.json;shrink
 quarry	משטרת-המחצבה: כל טיוטה עם מוצא + parse	commit	
 pins	נעילת-השוטרים: חתימות-hash על החוקה והמשטרה	commit	
+learn	למידה מוכחת (§8): GATE: לכל לקח · אנטי-פטרן לא חזר ב-new/ · טיוטת-M4 מוכחת מול blob-לפני/אחרי+fixture · stuck-loop	commit	
 pretool	הוכחת-ירי ל-pre-tool: כל הרגל-עקיפה נחסם (2) וכל פקודה כשרה עוברת (0) — fixtures/pretool.tsv	commit	
 selftest	הוכחת-ירי: כל חוק יורה על fixture מורעל + ביקורת-שלילית	push	
 mutation	בדוק-את-הבדיקה: אדום-על-חלול, ירוק-על-אמיתי	commit	

@@ -54,6 +54,13 @@ if [ -n "$CODE" ]; then
   rm -rf "$TMP"
 fi
 
+# ── M4 · learn-draft (§8 · שלב 4): retry לא-פתור שנתיביו staged ⇒ טיוטת-לקח ב-LEARNINGS.md (ref: blob, לא hunks — R2-3.4) ──
+RETRY=machtzev/audit/retry.jsonl
+if [ -n "$CODE" ] && [ -s "$RETRY" ]; then
+  DR=$(node machtzev/learn-draft.mjs --stage "$(echo "$STAGED" | tr '\n' ',')" 2>&1); DRC=$?
+  if [ $DRC -eq 0 ] && [ -n "$DR" ]; then echo "  📝 [learn-draft] $DR"; git add -- machtzev/LEARNINGS.md "$RETRY"; fi
+fi
+
 # ── ג · ראצ׳ט-כיוון מול merge-base (לא מול HEAD — R2-6.1) ──
 BASE=$(git merge-base HEAD origin/claude/hei-rxv1v1 2>/dev/null || git rev-parse HEAD)
 RD=$(node machtzev/ratchet-direction.mjs "$BASE" --index 2>&1); RDRC=$?
@@ -69,6 +76,8 @@ if [ -n "$CODE" ]; then
     2) yel police "$PSUM (צהוב לא חוסם commit; חוסם push)";;
     *) echo "$POUT" | grep -E '^failed |🚨|🔴' | head -8; err police "$PSUM";;
   esac
+  FAILED_GATES=$(echo "$POUT" | grep -oE '^failed [a-z-]+' | cut -d' ' -f2 | tr '\n' ',')
+  node machtzev/learn-draft.mjs --record "$FAILED_GATES" --stage "$(echo "$STAGED" | tr '\n' ',')" >/dev/null 2>&1 && [ -f "$RETRY" ] && git add -- "$RETRY"
 else skipg police "commit-תיעוד בלבד (allowlist) — המשטרה מדולגת"; fi
 
 # ── מדדים: מס-פרוטוקול · wired ──
