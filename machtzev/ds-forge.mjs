@@ -576,6 +576,8 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   // אב = flex-column עם align-items לא-מפורש ⇒ ברירת-CSS = stretch: ילד-בלוק ללא-רוחב-קבוע ובעל-יישור-עצמי
   // (direction/text-align) ממלא-רוחב ומתיישר-פנימית. ממקדים לילד-הטקסט בלבד — אח בגודל-קבוע (avatar 44) לא-נמתח.
   const pColStretch = /flex/.test(st['display'] || '') && /column/.test(st['flex-direction'] || '') && !ALIGN[st['align-items']];
+  const zOf = s => { const v = s['z-index']; return /^-?\d+$/.test((v || '').trim()) ? +v : 0; };   // z-index מספרי (ברירת 0)
+  let flowMaxZ = 0;   // z-index-מרבי בזרימה — אם גבוה מ-abs, הזרימה נצבעת אחריהם (av מעל .gap ב-story ring)
   for (const c of allKids) {
     // טקסט-חופשי בתוך אלמנט יורש את סגנון-ההורה (גודל/משקל/צבע/פונט) — CSS inheritance.
     // רווחי-גבול בין-אלמנטים משמעותיים ב-CSS (inline) — משמרים רווח-בודד (לא trim מלא ⇒
@@ -592,7 +594,8 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     // ילד-בלוק במיכל-בלוק ⇒ מסירים שוליים-אנכיים (ייבנו-מחדש מקוריסים ברמת-ה-Column). לא ל-abs/inline/flex.
     const collapseChild = parentBlock && !cInline && !posAbsC;
     let e = emit(c, map, childAnc, depth + 1, myColor, selfFlexGrid, nextInh, nextVars, elemIdx++, selfWrap, sibOv, collapseChild);
-    if (cst['position'] === 'absolute') { abs.push({ e, st: cst }); continue; }
+    if (cst['position'] === 'absolute') { abs.push({ e, st: cst, z: zOf(cst) }); continue; }
+    { const cz = zOf(cst); if (cz > flowMaxZ) flowMaxZ = cz; }   // ילד-זרימה בעל z-index גבוה
     // ילד-טקסט בעל-יישור-עצמי בטור-stretch, בלי רוחב-קבוע ⇒ ממלא-רוחב כדי שיישורו-הפנימי יחול (kpi "92"
     // direction:ltr ⇒ שמאל; "no avatar"/"+12"/"Meta" כנ"ל). אח בגודל-קבוע לא-מושפע (לא נכנס לתנאי).
     if (pColStretch && (cst['direction'] || cst['text-align']) && !px(cst['width'])) e = `SizedBox(width: double.infinity, child: ${e})`;   // ילד-flex מבוקק (גם span) ⇒ אין תנאי-inline
@@ -679,7 +682,12 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     // (reveal_card "Label" מעל .rv האבסולוטי) נדבק לימין במקום מרכז. Positioned/Positioned.fill לא מושפעים.
     const _plS = `${st['place-items'] || ''} ${st['place-content'] || ''} ${st['justify-items'] || ''}`;
     const stackCentered = /center/.test(_plS) || (ALIGN[st['align-items']] === 'center' && JUST[st['justify-content']] === 'center');
-    inner = `Stack(clipBehavior: Clip.none${stackCentered ? ', alignment: Alignment.center' : ''}, children: [${(flowW ? [flowW] : []).concat(pos).join(', ')}])`;
+    // סדר-ציור לפי z-index: זרימה (flowW, z=flowMaxZ) מול האבסולוטיים (כל אחד ו-z שלו). מיון-יציב עולה ⇒
+    // ברירת-מחדל (הכל z=0) נשמרת [זרימה, abs], אך ילד-זרימה בעל z גבוה (.av z:2) נצבע אחרי abs נמוך (.gap z:0).
+    const zItems = (flowW ? [{ w: flowW, z: flowMaxZ }] : []).concat(pos.map((w, i) => ({ w, z: abs[i].z })));
+    zItems.forEach((it, i) => (it.i = i));
+    zItems.sort((a, b) => a.z - b.z || a.i - b.i);
+    inner = `Stack(clipBehavior: Clip.none${stackCentered ? ', alignment: Alignment.center' : ''}, children: [${zItems.map(it => it.w).join(', ')}])`;
     // בלוק-במסגרת-בלוק (לא פריט-flex) בלי רוחב-מפורש = מילוי-רוחב-הורה (CSS block) ⇒ Positioned right:0
     // מתיישר לקצה-המיכל (li ברשימה: המספר/הנקודה בשוליים), לא לקצה-הטקסט. פריט-flex (avw) נשאר גודל-תוכן.
     if (!parentFlex && !st['width'] && !/^inline/.test(st['display'] || '')) inner = `SizedBox(width: double.infinity, child: ${inner})`;
