@@ -614,7 +614,7 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     // טקסט-חופשי בתוך אלמנט יורש את סגנון-ההורה (גודל/משקל/צבע/פונט) — CSS inheritance.
     // רווחי-גבול בין-אלמנטים משמעותיים ב-CSS (inline) — משמרים רווח-בודד (לא trim מלא ⇒
     // "בדגש נושא" נשמר, לא "בדגשנושא"); דילוג רק על רווח-טהור.
-    if (c.text != null) { const raw = c.text.replace(/\s+/g, ' '); if (raw.trim()) { flow.push(`Text(${dq(raw)}, style: TextStyle(${textStyleC(effText, myColor).join(', ')}))`); flowVM.push(null); } continue; }
+    if (c.text != null) { const raw = c.text.replace(/\s+/g, ' '); if (raw.trim()) { const tt = effText['text-transform']; const shown = tt === 'uppercase' ? raw.toUpperCase() : tt === 'lowercase' ? raw.toLowerCase() : tt === 'capitalize' ? raw.replace(/\b\w/g, ch => ch.toUpperCase()) : raw; flow.push(`Text(${dq(shown)}, style: TextStyle(${textStyleC(effText, myColor).join(', ')}))`); flowVM.push(null); } continue; }   // text-transform חל גם על טקסט-בזרימה (‏.kt SECTION עם ::before-קו)
     if (c.tag === 'br') { flow.push(`Text("\\n", style: TextStyle(${textStyleC(effText, myColor).join(', ')}))`); flowVM.push(null); continue; }   // <br> ⇒ שבירת-שורה (נשמרת ב-Text.rich)
     const cst = styleOf(c, map, childAnc);
     let sibOv = null;
