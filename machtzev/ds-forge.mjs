@@ -485,12 +485,19 @@ function toRichSpan(w) {
 function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parentFlex = false, inhFont = {}, inhVars = {}, sibIdx = 0, parentWrap = false, styleOverride = null, noVMargin = false) {
   if (depth > 16) return 'const SizedBox.shrink()';
   if (node.tag === 'svg') {
-    const sc = svgScene(node, map, ancestors, inherit);
-    if (!sc.ops.length) return `_icon(${inherit})`;
-    const st0 = styleOf(node, map, ancestors);
+    const st0r = styleOf(node, map, ancestors);
+    const st0 = {}; for (const k in st0r) st0[k] = resolveVars(st0r[k], inhVars);   // פתירת var(--faint) וכו'
+    const svgCol = colorExpr(st0['color']) || inherit;   // צבע-svg עצמי (.ph svg{color:var(--faint)}) גובר על היורש
+    const sc = svgScene(node, map, ancestors, svgCol);
+    if (!sc.ops.length) return `_icon(${svgCol})`;
     const wpx = px(st0['width']) || num(node.attrs.width);   // CSS או attr HTML (donut/gauge width="118")
     const hpx = px(st0['height']) || num(node.attrs.height);
-    const body = `CustomPaint(painter: _SvgScene([${sc.ops.join(', ')}], ${sc.vbw}, ${sc.vbh}))`;
+    const _op = st0['opacity'] != null ? parseFloat(st0['opacity']) : null;   // .ph svg{opacity:.8}
+    const _b0 = `CustomPaint(painter: _SvgScene([${sc.ops.join(', ')}], ${sc.vbw}, ${sc.vbh}))`;
+    const body = (_op != null && !isNaN(_op) && _op < 1) ? `Opacity(opacity: ${_op}, child: ${_b0})` : _b0;
+    const wpctS = pct(st0['width']), hpctS = pct(st0['height']);   // svg בגודל-אחוז מהמיכל (.ph svg{width:38%}) — בלי זה מילא את כל האריח
+    // FittedBox(contain) משמר יחס-viewBox ומתאים את האייקון בתוך תיבת-האחוז (CSS preserveAspectRatio) — ממורכז.
+    if (wpctS || hpctS) return `FractionallySizedBox(widthFactor: ${wpctS || hpctS}, heightFactor: ${hpctS || wpctS}, child: FittedBox(fit: BoxFit.contain, child: SizedBox(width: ${sc.vbw}, height: ${sc.vbh}, child: ${body})))`;
     if (wpx) return `SizedBox(width: ${wpx}, height: ${hpx || (wpx / (sc.vbw / sc.vbh)).toFixed(2)}, child: ${body})`;  // אייקון/טבעת גודל-קבוע
     if (hpx) return `SizedBox(height: ${hpx}, child: ${body})`;                          // גובה-קבוע, רוחב מהאב (ספארק)
     return `AspectRatio(aspectRatio: ${(sc.vbw / sc.vbh).toFixed(4)}, child: ${body})`;  // width:100% ⇒ מילוי-רוחב לפי יחס-viewBox
