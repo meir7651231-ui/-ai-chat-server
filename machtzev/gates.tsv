@@ -12,6 +12,8 @@ index-complete	M3: כל סקריפט ב-machtzev/ עם שורה ב-INDEX.md · �
 atom-count	מספר-אטומים לאזור (new/*) לא יורד (1.7 שהושמט)	commit	atom-count-baseline.json;grow
 learn	למידה מוכחת (§8): GATE: לכל לקח · אנטי-פטרן לא חזר ב-new/ · טיוטת-M4 מוכחת מול blob-לפני/אחרי+fixture · stuck-loop	commit	
 pretool	הוכחת-ירי ל-pre-tool: כל הרגל-עקיפה נחסם (2) וכל פקודה כשרה עוברת (0) — fixtures/pretool.tsv	commit	
+audit-gates	G5: כל שער-staging/commit-msg חוסם בפועל על הפרה מוזרעת ב-clone זמני (hooksPath) + ביקורת-שלילית	push	
+mutation-dart	בדוק-את-הבדיקה ל-Dart (L11): בדיקה ירוקה-על-אטום-חלול ⇒ אדום · דגימה 12/יום ב-push, --all ב-CI	push	
 selftest	הוכחת-ירי: כל חוק יורה על fixture מורעל + ביקורת-שלילית	push	selftest-coverage-baseline.json;grow
 mutation	בדוק-את-הבדיקה: אדום-על-חלול, ירוק-על-אמיתי	commit	
 freeref	סורק-הפניות-חופשיות: אפס מזהה לא-מוגדר (חוק-1 — שכן לא-מוזרק)	commit	

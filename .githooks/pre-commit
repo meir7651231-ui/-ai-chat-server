@@ -95,6 +95,8 @@ WIRED=$(grep -oE 'מחווטים-למחולל בפועל:\*\* [0-9]+' TRUTH.md 2
 ELIG=$(grep -oE 'eligible\):\*\* [0-9]+/[0-9]+' TRUTH.md 2>/dev/null | grep -oE '/[0-9]+' | tr -d / | head -1)
 echo "⏱ protocol ${DUR}s · 🔌 wired ${WIRED:-?}/${ELIG:-?}"
 if [ "$DUR" -gt 60 ]; then echo "  ⚠️ מס-פרוטוקול ${DUR}s > 60s (הכרעה G) — 🚨 על הפרוטוקול, לא על הקוד: הזז שער ל-push"; fi
+SLOW=$(grep -E '^ran [a-z-]+ [0-9]+ms' "$LEDGER" | awk '{ms=$3+0; if (ms>20000) printf "%s %ds · ", $2, ms/1000}')
+if [ -n "$SLOW" ]; then echo "  ⚠️ שער > 20s בטבעת-commit (§9 גיזום — עלות, לא שקט): ${SLOW}⇒ מועמד למעבר ל-push"; fi
 echo "{\"ts\":$(date +%s),\"dur\":$DUR,\"fail\":$FAIL,\"files\":$(echo "$STAGED" | grep -c .)}" >> "$GD/protocol_stats.jsonl"
 if [ $FAIL -ne 0 ]; then echo "🚨 pre-commit: נחסם ($(grep -c '^failed' "$LEDGER") שערים)"; exit 1; fi
 echo "✅ pre-commit: עבר"

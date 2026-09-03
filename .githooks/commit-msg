@@ -15,6 +15,13 @@ if [ -n "$DOD" ]; then
   T=$(printf '%s' "$DOD" | grep -oE '[A-Za-z0-9_./-]+\.(test\.mjs|dart|mjs)' | head -1)
   if [ -n "$T" ] && ! git diff --cached --name-only | grep -qF "$(basename "$T")"; then echo "❌ DoD: '$T' לא מופיע ב-diff (שם-הבדיקה חייב להיות בשינוי — בלי הרצה)" >&2; exit 1; fi
 fi
+# ── שלב 7 · Wave: k/N (L20 גלים-של-10 · R2-5.15): פורמט + ≤10 קבצי-קוד ב-new/ בגל; בלי השדה ⇒ הצעה בלבד (wave-partition --staged)
+WAVE=$(grep -E '^Wave:' "$MSG" | head -1)
+NCODE=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '^new/.*\.(mjs|js|dart)$' | grep -vE '\.test\.mjs$|_test\.dart$' | wc -l)
+if [ -n "$WAVE" ]; then
+  if ! printf '%s' "$WAVE" | grep -qE '^Wave:[[:space:]]*[0-9]+/[0-9]+([[:space:]]*·.*)?$'; then echo "❌ Wave: פורמט — 'Wave: k/N · m קבצים'" >&2; exit 1; fi
+  if [ "$NCODE" -gt 10 ]; then echo "❌ Wave: $NCODE קבצי-קוד ב-new/ > 10 (L20: גל ≤10 — node machtzev/wave-partition.mjs --staged)" >&2; exit 1; fi
+elif [ "$NCODE" -gt 10 ]; then echo "ℹ️ commit-msg: $NCODE קבצי-קוד ב-new/ ללא Wave: — לחלוקה: node machtzev/wave-partition.mjs --staged" >&2; fi
 N=$(grep -c '^Protocol-Ran:' "$MSG" || true)
 if [ "${N:-0}" -gt 1 ]; then echo "❌ יותר מ-trailer Protocol-Ran אחד" >&2; exit 1; fi
 if [ -f "$GD/protocol_ledger" ]; then

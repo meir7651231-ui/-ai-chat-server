@@ -135,6 +135,8 @@ gate('atom-count', 'atom-count-check.mjs');
 gate('learn', 'learn-check.mjs');
 gate('pretool', 'pretool-selftest.mjs');
 gate('selftest', 'police-selftest.mjs', [], FAST);
+gate('audit-gates', 'audit-gates.mjs', process.env.CI ? ['--full'] : [], FAST);
+gate('mutation-dart', 'mutation-dart-check.mjs', process.env.CI ? ['--sample', '100'] : [], FAST);   // CI: 100/יום · push: 12/יום · --all ידני
 gate('mutation', 'mutation-check.mjs', [...filesArg()], FAST && !INC_FILES);   // תחת --inc: מוטציה על הדיף בלבד (לא מדולג)
 
 // ── פריטי מרשם⇄ריצה — דו-כיווני; skipped/yellow/failed "נראו", לא "רצו" ──
