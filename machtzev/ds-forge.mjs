@@ -770,7 +770,17 @@ function wrapBox(st, inner, node, noPad, parentFlex = false, noVMargin = false) 
     // היה חמדני בהקשר-רופף (Stack/גובה-לא-חסום) ומותח את הקופסה למלוא-הגובה (כפתורי-טאבים ⇒ 600px).
     else inner = `Center(widthFactor: 1.0, heightFactor: 1.0, child: ${inner})`;
   } else if ((w || h) && centered) cp.push('alignment: Alignment.center');
-  if (minH != null || minW != null) cp.push(`constraints: const BoxConstraints(${[minH != null ? `minHeight: ${minH}` : '', minW != null ? `minWidth: ${minW}` : ''].filter(Boolean).join(', ')})`);
+  // שורת-flex עוטפת (‏.mrow avatars: align-items:center · flex-wrap · min-height:88 · בלי justify) ⇒ ה-Wrap
+  // מכווץ-לגובה-התוכן ויושב בראש-הרצועה; ‏CSS ממרכז אנכית. הפתרון: גובה-קבוע=min-height + alignment:centerRight
+  // ⇒ ממרכז ברצועת-ה-88 (RTL: התחלה=ימין). גובה-קבוע (ולא minHeight+alignment) כי alignment לבדו מתרחב למלוא-
+  // הגובה-הלא-חסום של מסגרת-הביקורת. בטוח: כל תוכן-ה-.mrow ≤88. מצומצם ל-flex-wrap+ללא-justify (לא טורים/רוחב-מלא).
+  const isMrowCtr = minH != null && !w && !h && !centered && inner &&
+    /\bflex\b/.test(st['display'] || '') && (st['flex-direction'] || 'row') !== 'column' &&
+    /wrap/.test(st['flex-wrap'] || '') && !/nowrap/.test(st['flex-wrap'] || '') &&
+    (!st['justify-content'] || /^(?:flex-)?start$/.test(st['justify-content'])) &&
+    ALIGN[st['align-items']] === 'center';
+  if (isMrowCtr) { cp.push(`height: ${minH}`, 'alignment: Alignment.centerRight'); if (minW != null) cp.push(`constraints: const BoxConstraints(minWidth: ${minW})`); }
+  else if (minH != null || minW != null) cp.push(`constraints: const BoxConstraints(${[minH != null ? `minHeight: ${minH}` : '', minW != null ? `minWidth: ${minW}` : ''].filter(Boolean).join(', ')})`);
   if (mg) cp.push(`margin: ${mg}`);
   if (pad) cp.push(`padding: ${pad}`);
   if (deco) cp.push(`decoration: ${deco}`);
