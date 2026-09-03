@@ -1,10 +1,10 @@
 3c488f6ad962c328  LAW.md
 924c937900355c18  CLAUDE.md
-dd881f9b244e44b5  machtzev/wiring-check.mjs
-f6776015e40d7645  machtzev/contract-check.mjs
+672b9670b59b063e  machtzev/wiring-check.mjs
+1e59f361a82c6931  machtzev/contract-check.mjs
 de164f642b1f82d5  machtzev/quarry-check.mjs
 36f84ca54a71357d  machtzev/police-selftest.mjs
-b4a31c72caafef7e  machtzev/mutation-check.mjs
+d21215e0a5470b0a  machtzev/mutation-check.mjs
 cf401fbf5788202e  machtzev/police.mjs
 1eea54e6ed13078c  machtzev/gates.tsv
 884436c8354c9f51  machtzev/AGENT-CODE.md
