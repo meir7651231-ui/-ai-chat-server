@@ -17,7 +17,7 @@ const staged = (opt('--stage') || '').split(',').filter(Boolean);
 const inNew = staged.filter((f) => f.startsWith('new/') && /\.(mjs|js|dart)$/.test(f));
 const git = (...a) => { try { return execFileSync('git', a, { cwd: R.ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch { return null; } };
 const rows = fs.existsSync(RETRY) ? fs.readFileSync(RETRY, 'utf8').split('\n').filter(Boolean).map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean) : [];
-const save = () => { fs.mkdirSync(path.dirname(RETRY), { recursive: true }); fs.writeFileSync(RETRY, rows.map((r) => JSON.stringify(r)).join('\n') + (rows.length ? '\n' : '')); };
+const save = () => { if (!rows.length && !fs.existsSync(RETRY)) return; fs.mkdirSync(path.dirname(RETRY), { recursive: true }); fs.writeFileSync(RETRY, rows.map((r) => JSON.stringify(r)).join('\n') + (rows.length ? '\n' : '')); };   // אין רשומות ואין קובץ ⇒ לא יוצרים (TRUTH סופר תת-תיקיות)
 
 if (argv.includes('--record')) {
   const gates = (opt('--record') || '').split(',').filter(Boolean);

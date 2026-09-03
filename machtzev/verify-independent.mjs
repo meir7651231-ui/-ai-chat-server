@@ -79,11 +79,16 @@ out('fires', { selftestHonH: st.status, pairsH: Number(pairsH ?? -1), pairsT: Nu
 const police = (tools, root, label) => {
   const r = spawnSync('node', [path.join(tools, 'machtzev/police.mjs')], { env: { ...process.env, MACHTZEV_ROOT: root }, encoding: 'utf8', timeout: 1800000, maxBuffer: 64 * 1024 * 1024 });
   const sum = (r.stdout.match(/המשטרה [^\n]*/) || [''])[0];
-  out(label, { status: r.status, summary: sum, failed: (r.stdout.match(/^failed [^\n]*/gm) || []), yellow: (r.stdout.match(/^yellow [^\n]*/gm) || []) });
-  return r.status;
+  const rec = { status: r.status, summary: sum, failed: (r.stdout.match(/^failed [^\n]*/gm) || []), yellow: (r.stdout.match(/^yellow [^\n]*/gm) || []),
+    ran: (r.stdout.match(/^ran ([a-z-]+)/gm) || []).map((l) => l.slice(4)), unknownToTools: (r.stderr.match(/שער רשום שלא רץ ולא דווח: ([a-z-]+)/g) || []).map((l) => l.split(': ')[1]) };
+  out(label, rec); return rec;
 };
-const hh = police(H, H, 'police_H_on_H');
-const th = police(T, H, 'police_T_on_H');
+const hhR = police(H, H, 'police_H_on_H'), hh = hhR.status;
+const thR = police(T, H, 'police_T_on_H'); let th = thR.status;
+// שער שנוסף ב-H (במרשם, לא מוכר לכלי-T): T לא יכול לערוב לו — H-on-H ערב (ran). אדום רק אם T-tools נכשלו/צהובים/שער-T נעלם.
+if (th === 1 && !thR.failed.length && !thR.yellow.length && thR.unknownToTools.length && thR.unknownToTools.every((id) => hhR.ran.includes(id))) {
+  out('extra_gates_vouched_by_H', thR.unknownToTools); th = 0;
+}
 
 // ── פסק-דין ──
 if (weak) done('red', 1);
