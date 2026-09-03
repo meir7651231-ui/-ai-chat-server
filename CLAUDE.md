@@ -2,8 +2,11 @@
 > **זה שער-הכניסה. כל מה שנלמד בדם — כבר כתוב. אל תלמד מחדש, קרא.**
 
 ## 🔴 אינדקס-האמת של אטומים (חובה לפני כל טענה על אטום)
-כל שאלה על אטום — **כמה · מטרה · טוהר · תפר · ייעוד** — נענית מ-`machtzev/generator/atom-index-full.json` (מאוחד · 1332) או `atom-index.json` (תצוגה · 522)
-(כלי: `node machtzev/census/atom-index.mjs`). **אסור להסיק מדוגמה-אחת; אסור לנחש.** ‏1332 אטומים (522 תצוגה + 810 לוגיקה),
+כל שאלה על אטום — **כמה · מטרה · טוהר · תפר · ייעוד** — נענית מ-`machtzev/generator/atom-index-full.json` (מאוחד · 3 שכבות · §21) או `atom-index.json` (תצוגה · V3)
+(כלי: `node machtzev/census/atom-index.mjs` · `logic-census.mjs` · `oracle.mjs --write`; שער `oracle` מאמת אינדקס ≡ עץ-חי). **אסור להסיק מדוגמה-אחת; אסור לנחש.** המספרים כאן **מחוללים** (הכרעה C · בלוק-אמת, לא יד):
+<!-- truth:begin · מחולל ע"י node machtzev/truth.mjs --write · אל תערוך ידנית -->
+‏**1402** אטומים מאונדקסים (תצוגה **554** · לוגיקה **848**) · מחווטים-למחולל **53** מתוך **534** כשירים (9.9%) · ‏**21** שערי-משטרה (gates.tsv) · **57** קבצים נעולי-חתימה (pins.sha256)
+<!-- truth:end -->
 כל אחד עם מטרה-אמיתית (ממסך-המקור) + טוהר + תפר במקום אחד. דוח: `knowledge/ATOM-TRUTH-INDEX-2026-08-31.md`.
 הרקע: 5 טעויות-הסקה-מדוגמה באותו סשן ⇒ האינדקס מונע אותן. תת-ספירה/הכללה = אזעקה.
 
@@ -48,8 +51,9 @@ retrofit-תפר** (להוסיף `data:` לאטמי-האפס-דאטה + `render-d
 node machtzev/police.mjs --fast   # לכל commit: חיווט+חוזה+מחצבה+pins (שניות)
 node machtzev/police.mjs          # לסוף-גל: + selftest + mutation (דקות)
 ```
-‏19 שערים עם ran-ledger (מרשם: machtzev/gates.tsv) · 11 קבצים נעולי-חתימה
-(pins.sha256; עדכון-שוטר = `node machtzev/pins-check.mjs --write` באותו commit).
+שערים עם ran-ledger ב-4 מצבים (ran·skipped·yellow·failed — מרשם: machtzev/gates.tsv; המספר בבלוק-האמת למעלה) · קבצים נעולי-חתימה sha256 ברשימה **נגזרת** (pins.sha256; עדכון-שוטר = `node machtzev/pins-check.mjs --write` באותו commit).
+selftest: `node machtzev/police-selftest.mjs` (fixtures ב-selftest-fixtures/, לא נעולים). מאמת-עצמאי: `node machtzev/verify-independent.mjs <tag> HEAD` (PROTOCOL v4 §5.2).
+הפרוטוקול המלא: `machtzev/PROTOCOL.md` · יומן-שבירה: `machtzev/RED-TEAM-PROTOCOL.md`.
 פסק-דין רק על עץ נח (L14). קופסה גמורה רק עם: חוטים+חוזים+בדיקות+מגן-הכרעה+רתמת-זהב.
 
 ## 🏭 המפעל (המכונות)

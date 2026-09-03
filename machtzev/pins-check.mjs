@@ -13,7 +13,7 @@ const STATIC = [
   'LAW.md', 'CLAUDE.md', 'PURPOSE.md',
   'machtzev/VERIFY-LAWS.md', 'machtzev/THE-WAY.md', 'machtzev/AGENT-CODE.md', 'machtzev/DECISIONS.md', 'machtzev/LEARNINGS.md',
   'machtzev/gates.tsv', 'machtzev/police.mjs', 'machtzev/pins-check.mjs', 'machtzev/police-selftest.mjs',
-  'machtzev/root.mjs', 'machtzev/dart-bin.mjs', 'machtzev/lib-ts.mjs',
+  'machtzev/root.mjs', 'machtzev/dart-bin.mjs', 'machtzev/lib-ts.mjs', 'machtzev/verify-independent.mjs',
   'machtzev/truth.mjs', 'machtzev/generator/render-ds.mjs', 'machtzev/generator/acceptance-space.txt',
   'machtzev/census/atom-index.mjs', 'machtzev/census/atom-census.mjs', 'machtzev/census/logic-census.mjs',
   'machtzev/tools/gen-wiring-doc.mjs', 'machtzev/one.mjs',

@@ -12,6 +12,11 @@
 | `run.mjs` | המפעיל פר-גל: מפקד←מחלצים←זיקוק←משטרה. `--fast`=משטרה בלבד. |
 | `police.mjs` | 🚨 **המשטרה המאוחדת** (ran-ledger). `--fast`=11 שערי-Node · מלא=+selftest+mutation. |
 | `census.mjs` | מפקד-המחצבה (census חוצה-שכבות). |
+| `root.mjs` | 🌳 שורש-העץ-הנמדד (c3): `MACHTZEV_ROOT` ⇒ כלים מודדים עץ אחר; `GEN_OUT` ⇒ פלט-מחולל זמני. כל fs-path של שער עובר כאן. |
+| `dart-bin.mjs` · `lib-ts.mjs` | פותרי-כלים משותפים (Dart · typescript) — אין-כלי ⇒ `exit 2 tool=<שם>` (L34). |
+| `verify-independent.mjs` | 🔍 **המאמת-העצמאי** (PROTOCOL §5.2): כלי-משטרה מ-tag ידוע-טוב על HEAD · ראצ׳ט-כיוון פר-commit · הוכחת-ירי · שתי משטרות. עד, לא חומה. |
+| `selftest-fixtures/` | fixtures של `police-selftest.mjs` — **לא נעולים**: לקח חדש = fixture חדש בלי pins-write. |
+| `PROTOCOL.md` · `RED-TEAM-PROTOCOL.md` | תוכנית-האכיפה (v4) ויומן-השבירה (2 סבבים, 133 ממצאים). |
 
 ## 🔒 שערים נעולי-חתימה (pins.sha256 — לא-מוזזים · שינוי⇒`pins-check.mjs --write`)
 `police.mjs` · `wiring-check.mjs` · `contract-check.mjs` · `quarry-check.mjs` ·

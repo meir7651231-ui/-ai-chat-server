@@ -26,7 +26,7 @@ const run = (script, { dir, root, args = [] }) => {
   return r.error ? -1 : r.status ?? -1;
 };
 let fail = 0; const seen = {};
-const fixturesDir = TOOLS + 'selftest-fixtures/';
+const fixturesDir = (process.env.SELFTEST_FIXTURES ? process.env.SELFTEST_FIXTURES.replace(/\/?$/, '/') : TOOLS + 'selftest-fixtures/');   // c5 · המאמת-העצמאי מזריק fixtures של T
 const files = fs.existsSync(fixturesDir) ? fs.readdirSync(fixturesDir).filter((f) => f.endsWith('.mjs') && !f.startsWith('_')).sort() : [];
 for (const f of files) {
   const cases = (await import(pathToFileURL(fixturesDir + f).href)).default;

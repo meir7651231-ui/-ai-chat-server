@@ -99,6 +99,18 @@ const FLOOR = path.join(ROOT, 'machtzev/wired-floor.json');
 const readFloor = () => { try { return JSON.parse(fs.readFileSync(FLOOR, 'utf8')).wired || 0; } catch { return 0; } };
 if (process.argv.includes('--write')) {
   fs.writeFileSync(path.join(ROOT, 'TRUTH.md'), body);
+  // c5 · בלוק-אמת מחולל ב-CLAUDE.md (בין <!-- truth:begin --> ל-<!-- truth:end -->): המספרים בשער-הכניסה
+  // נגזרים מהמדידה, לא נכתבים ביד (R2-4.7 · D1 תת-ספירה=אזעקה). הקובץ נעול — הבלוק פטור מכוונה: הוא פלט של truth.
+  try {
+    const cf = path.join(ROOT, 'CLAUDE.md'); const cur = fs.readFileSync(cf, 'utf8');
+    const gatesN = (rd('machtzev/gates.tsv').split('\n').filter((l) => l && !l.startsWith('#'))).length;
+    const pinsN = (rd('machtzev/pins.sha256').split('\n').filter(Boolean)).length;
+    const block = `<!-- truth:begin · מחולל ע"י node machtzev/truth.mjs --write · אל תערוך ידנית -->\n` +
+      `‏**${totalAtoms}** אטומים מאונדקסים (תצוגה **${census.length}** · לוגיקה **${logic.length}**) · מחווטים-למחולל **${wiredTotal}** מתוך **${eligible}** כשירים (${(wiredTotal / (eligible || 1) * 100).toFixed(1)}%) · ` +
+      `‏**${gatesN}** שערי-משטרה (gates.tsv) · **${pinsN}** קבצים נעולי-חתימה (pins.sha256)\n<!-- truth:end -->`;
+    const re = /<!-- truth:begin[^]*?<!-- truth:end -->/;
+    if (re.test(cur)) { const next = cur.replace(re, block); if (next !== cur) { fs.writeFileSync(cf, next); console.log('📐 CLAUDE.md truth-block עודכן'); } }
+  } catch {}
   // c3ג · הרצפה זזה רק עם --floor (טבעת-push/CI, floor-advance) — לעולם לא מתוך hook (R2-4.5 · R2-5.7).
   if (process.argv.includes('--floor')) {
     const floor = Math.max(readFloor(), wiredTotal);   // מונוטוני — לעולם לא יורד
