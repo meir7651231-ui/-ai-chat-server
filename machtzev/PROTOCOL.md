@@ -183,6 +183,11 @@
 
 ### §7.2 push (worktree detached · freshness לכל commit בטווח · ratchets מול merge-base)
 `police` מלא + `mutation-dart` · `hebrew-in-engine` · `goal-anchor` (hash sha256-8 של השורה-המעוגנת) · `dedup` · `exempt-count` · `wordlist-ratchet` · `atom-count` (מספר-אטומים לאזור לא יורד — 1.7 שהושמט) · `selftest-coverage` (זוג: 1 בדיוק / 0; `run()` גולמי; ראצ׳ט מ-3, baseline ב-`gates.tsv`) · `learn-parity` · `truth` · `index-complete` · `onestatus-fresh` · `flag-reversible` · `baseline-shrink` (מחיל כיווצים) · `dup-class` (הכרעה K) · שמירת-ענף.
+**חוקים חדשים מ-3.9 (סשן מקביל; הכרעות 23-ב/23-ג · מגן-בלי-סטיות · חוזה-הדאטה) — 4 שערים מוצעים לשלב 5:**
+· **`no-fakers`** (מגן-בלי-סטיות · §20-ג): אף מחלקה מ-`FAKERS` של `compose-engine.mjs` (stat_block · linear_progress · radial_gauge · bar_chart · sparkline · …) לא מופיעה בפלט-המחולל (`outDir()`) ולא בקופסה מחווטת. SSOT = הרשימה במנוע (נעול). מורעל: `gen_x.dart` עם `Sparkline(` ⇒ 1.
+· **`compose-determinism`** (23-ג · §20-ד): `compose-engine.mjs` על 15 החלקיקים ≡ `compose-engine-report.md` (ראצ׳ט כמו `genratchet`); שינוי בטבלת-ATOM = אירוע-ראצ׳ט מוצהר. דורש: המנוע מקבל `--gate` ומחזיר exit (היום 0 exports, 0 exit codes).
+· **`render-verify`** (23-ב · L46): הרכבה חדשה ⇒ צילום-רנדר + שורה ב-`knowledge/` ("נמדד מול-המטרה בעין"); מכני-חלקית: G8 compile + `dart analyze` תופסים קומפילציה, לא פריסה — עד renderer headless השער = נוכחות-ראיה (קובץ-צילום + תאריך), לא שיפוט.
+· **`data-contract-slots`** (חוזה-הדאטה · חוק-7): לכל שדה בחוזה-הדאטה של מסך קיים slot מחווט; שדה חסר ⇒ לא-מרונדר. מכני: diff בין שדות-החוזה לשקעי-הקופסה. מוצע, לא מפורט — תלוי בפורמט-חוזה אחיד.
 **מתוקנים:** `mutation` רקורסיבי, fail-closed על export, hollow שומר-טיפוס · `contract` דוגמה-מספרית + import + assertion, `--files` · `oracle --gate` = **הליכה-בזיכרון** (`atomIndex()` + `logicCensus()`) ≡ committed — השער החי היחיד בשרשרת TRUTH→full→index (`atom-census.json` **נמחק**; `render-ds:980` ו-`truth:19` קוראים `atom-index.json`) · `coverage` מפוצל: `coverage-static` (push) · `coverage-dart` (`layer=ci`).
 
 ### §7.3 CI-עד — `police.yml` (non-required)
@@ -268,7 +273,7 @@ retry #3 ⇒ stuck-loop 🚨 ⇒ בעלים. אין allow-retry.
 | **c4** | `pins-check`: 64-hex, PINNED נגזר+מורחב, דו-כיווני · `police-selftest`: `run()` גולמי, זוגות, fixtures ל-`selftest-fixtures/` · `gates.tsv` +layer +baseline-manifest · `oracle --gate` הליכה-בזיכרון · מחיקת `atom-census.json` (C) · `dup-class` (K) | `pins-check` ⇒ `✓ N`; police עם `gate('x','x.mjs')` זמני ⇒ `1`; זוגות: מורעל 1 / נקי 0 לכל שער שנגע |
 | **c5** | `TRUTH`/`CLAUDE` (truth-block) → 1364/554 · tag `protocol-good-<תאריך>` על HEAD **ירוק-מלא** · Routine המאמת (§5.2) עם SHA מחוץ לריפו · ערוץ-דיווח | ריצת-מאמת ראשונה: `gates ⊆ · tuples ⊆ · baselines-dir ✓ · fires 21/21 (unproven 0)` בדוח |
 
-**אחר כך:** 1 hooks (§3, כולל `pre-applypatch`/`post-commit`/`post-rewrite`, `.gitattributes`, `import-graph.mjs`) · 2 `pre-tool` + `settings.json` **במחצב** · 3 CI-עד G0–G10 · 4 למידה v4 + מיגרציה E · 5 שערים חסרים + I/N · 6 trailers ALLOW + כרטיס · 7 נחיל (`wave-partition` וכו׳) · 8 `audit_gates` + `mutation-dart` + גיזום. כל שלב: DoD פקודה⇒פלט, גל ≤10 (L20 נבדק בשדה `Wave:` של הכרטיס), תקוע 2/3 ⇒ בעלים.
+**אחר כך:** 1 hooks (§3, כולל `pre-applypatch`/`post-commit`/`post-rewrite`, `.gitattributes`, `import-graph.mjs`) · 2 `pre-tool` + `settings.json` **במחצב** · 3 CI-עד G0–G10 · 4 למידה v4 + מיגרציה E · 5 שערים חסרים (+4 לחוקי-3.9: `no-fakers` · `compose-determinism` · `render-verify` · `data-contract-slots`) + I/N · 6 trailers ALLOW + כרטיס · 7 נחיל (`wave-partition` וכו׳) · 8 `audit_gates` + `mutation-dart` + גיזום. כל שלב: DoD פקודה⇒פלט, גל ≤10 (L20 נבדק בשדה `Wave:` של הכרטיס), תקוע 2/3 ⇒ בעלים.
 
 ---
 
