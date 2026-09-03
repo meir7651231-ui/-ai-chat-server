@@ -33,7 +33,7 @@ else if (!argv.includes('--all') && !argv.includes('--write')) {
   pairs = arr.slice(0, n).sort((x, y) => x.atom.localeCompare(y.atom));
 }
 // ── מחליל ──
-const DEF = { int: '0', double: '0.0', num: '0', String: "''", bool: 'false' };
+const DEF = { int: '0', double: '0.0', num: '0', String: "''", bool: 'false', dynamic: 'null', Object: 'null' };   // dynamic/Object ⇒ null (חוקי-טיפוסית)
 const hollowVal = (ret) => { const t = ret.trim(); if (t === 'void') return 'return;'; if (t.endsWith('?')) return 'return null;'; if (DEF[t] !== undefined) return `return ${DEF[t]};`; if (/^(List|Iterable)\b/.test(t)) return 'return const [];'; if (/^(Map|Set)\b/.test(t)) return 'return const {};'; return null; };
 /** מדלג על מחרוזות/הערות בעת ספירת-סוגריים (R3-5.5: `'}'` בתוך מחרוזת שבר את המונה) */
 const skipLiteral = (src, i) => {
@@ -47,7 +47,7 @@ const matchParen = (src, i) => { let d = 0, j = i; while (j < src.length) { cons
 const matchBrace = (src, i) => { let d = 0, j = i; while (j < src.length) { const s = skipLiteral(src, j); if (s >= 0) { j = s; continue; } if (src[j] === '{') d++; else if (src[j] === '}') { d--; if (!d) return j; } j++; } return -1; };
 const HEAD_RE = /^([A-Za-z_][\w<>,?\s]*?)\s+([a-z_][\w]*)(<[^>]*>)?\s*\(/gm;   // <ret> <name>[<T>](
 export function hollow(src) {
-  let out = '', last = 0, n = 0, unparsed = 0;
+  let out = '', last = 0, n = 0, unparsed = 0, pub = 0;   // pub = פונקציות ציבוריות שהוחללו; רק-פרטיות ⇒ הוכחה חלשה ⇒ unparsed
   for (const m of src.matchAll(HEAD_RE)) {
     if (m.index < last) continue;
     const ret = m[1].trim(); if (/^(return|else|if|for|while|switch|class|enum|new|await|throw|case|typedef|extension|mixin|final|const|var)$/.test(ret) || /\b(class|enum)\b/.test(ret)) continue;
@@ -62,9 +62,9 @@ export function hollow(src) {
       while (j < src.length) { const s = skipLiteral(src, j); if (s >= 0) { j = s; continue; } if (src[j] === '(' || src[j] === '{' || src[j] === '[') { const e = src[j] === '(' ? matchParen(src, j) : src[j] === '{' ? matchBrace(src, j) : src.indexOf(']', j); if (e < 0) break; j = e + 1; continue; } if (src[j] === ';') break; j++; }
       out += src.slice(last, bodyStart - after[0].length) + ` { ${val} }`; last = j + 1;
     }
-    n++;
+    n++; if (!m[2].startsWith('_')) pub++;
   }
-  return { src: out + src.slice(last), n, unparsed };
+  return { src: out + src.slice(last), n, unparsed, pub };
 }
 // ── הרצה ב-sandbox ──
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'mut-dart-'));
@@ -72,7 +72,7 @@ process.on('exit', () => fs.rmSync(tmp, { recursive: true, force: true }));
 let vacuous = [], real = 0, unparsedFiles = [], compileFail = [], broken = [];
 for (const p of pairs) {
   const h = hollow(fs.readFileSync(p.atom, 'utf8'));
-  if (!h.n) { unparsedFiles.push(path.relative(R.ROOT, p.atom)); continue; }
+  if (!h.n || !h.pub) { unparsedFiles.push(path.relative(R.ROOT, p.atom) + (h.n && !h.pub ? ' (רק-פרטיות)' : '')); continue; }   // בלי פונקציה-ציבורית-מוחללת אין הוכחה על הבדיקה
   const d = fs.mkdtempSync(path.join(tmp, 'p-'));
   fs.writeFileSync(path.join(d, path.basename(p.atom)), h.src);
   fs.writeFileSync(path.join(d, path.basename(p.test)), fs.readFileSync(p.test, 'utf8'));
