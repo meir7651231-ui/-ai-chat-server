@@ -42,6 +42,10 @@ if [ -n "$ADDED" ]; then
   CS=$(node machtzev/cross-source-check.mjs --files "$ADDED" 2>&1); CSRC=$?
   echo "$CS" | grep -E 'ℹ️|✗' | head -6
   if [ $CSRC -eq 0 ]; then ok cross-source "$(echo "$CS" | tail -1)"; else err cross-source "אטום חדש שכבר קיים במקור אחר (23-ד)"; fi
+  # הדרך צעד 2/3 (שלב 9 · "שיפוט ⇒ ראיה"): אטום/קופסה חדשים ⇒ רשומת-חיפוש חתומה על האורקל הנוכחי עם "אין" מנומק
+  SP=$(node machtzev/search-proof-check.mjs --files "$ADDED" 2>&1); SPRC=$?
+  echo "$SP" | grep -E '✗' | head -6
+  if [ $SPRC -eq 0 ]; then ok search-proof "$(echo "$SP" | tail -1)"; else err search-proof "אטום חדש בלי הוכחת-חיפוש (node machtzev/search-record.mjs)"; fi
 fi
 
 # ── tiering הפוך: המשטרה מדולגת רק אם הכל ב-allowlist-docs ──

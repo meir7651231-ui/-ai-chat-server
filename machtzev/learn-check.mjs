@@ -11,7 +11,7 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import * as R from './root.mjs';
 const LEARN = R.MACH + 'LEARNINGS.md', GATES = R.MACH + 'gates.tsv', RETRY = R.MACH + 'audit/retry.jsonl', FX = R.MACH + 'selftest-fixtures/learn', FLOOR = R.MACH + 'learn-baseline.json';
-const HOOK_GATES = ['hooks', 'layers', 'exit-direct', 'no-conflict-markers', 'secrets', 'nobinary', 'no-registry', 'gitignore-guard', 'no-export-ignore', 'truth-fresh', 'wiring-fresh', 'ratchet-down', 'cross-source', 'pins-write', 'police', 'commit-msg', 'pre-push', 'pre-tool', 'none'];
+const HOOK_GATES = ['hooks', 'layers', 'exit-direct', 'no-conflict-markers', 'secrets', 'nobinary', 'no-registry', 'gitignore-guard', 'no-export-ignore', 'truth-fresh', 'wiring-fresh', 'ratchet-down', 'cross-source', 'search-proof', 'pins-write', 'police', 'commit-msg', 'pre-push', 'pre-tool', 'none'];
 const gateIds = new Set([...fs.readFileSync(GATES, 'utf8').split('\n').filter((l) => l && !l.startsWith('#')).map((l) => l.split('\t')[0]), ...HOOK_GATES]);
 const src = fs.readFileSync(LEARN, 'utf8').split('\n');
 const bad = [];
