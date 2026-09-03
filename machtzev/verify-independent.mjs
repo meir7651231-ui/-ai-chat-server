@@ -27,7 +27,7 @@ const done = (verdict, code) => { report.verdict = verdict; report.advance = fal
 let tSha, hSha;
 try { tSha = git('rev-parse', `${T_REF}^{commit}`); hSha = git('rev-parse', `${H_REF}^{commit}`); } catch (e) { out('identity', 'rev-parse failed: ' + e.message); done('yellow', 2); }
 report.tSha = tSha; report.hSha = hSha;
-if (EXPECT && EXPECT !== tSha) { out('identity', `tag ${T_REF}=${tSha} ≠ recorded ${EXPECT}`); done('tamper', 3); }
+if (EXPECT && (EXPECT.length < 12 || !tSha.startsWith(EXPECT))) { out('identity', `tag ${T_REF}=${tSha} ≠ recorded ${EXPECT} (קידומת ≥ 12 תווים)`); done('tamper', 3); }
 out('identity', { tSha, hSha, ancestor: (() => { try { git('merge-base', '--is-ancestor', tSha, hSha); return true; } catch { return false; } })() });
 if (!report.steps.identity.ancestor) { out('identity_note', 'T אינו אב של H — היסטוריה שוכתבה (force/rebase של הענף)'); done('red', 1); }
 
