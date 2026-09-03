@@ -452,9 +452,12 @@ function svgScene(node, map, anc, inherit) {
         const dash = a['stroke-dasharray'].trim().split(/[\s,]+/).map(Number);
         const off = a['stroke-dashoffset'] != null ? +a['stroke-dashoffset'] : 0;
         // אורך-הקשת-הנראה = dash[0] פחות ה-offset (מוסכמת-מד: dasharray=היקף, dashoffset=(1-חלק)·היקף ⇒
-        // נראה = היקף−offset; מוסכמת-דונאט: dasharray="קשת פער", off=0 ⇒ נראה=dash[0]). מתחיל מלמעלה.
-        const drawn = Math.max(0, Math.min(dash[0] || 0, circ) - Math.max(0, off));
-        const start = (-Math.PI / 2).toFixed(4), sweep = ((drawn / circ) * 2 * Math.PI).toFixed(4);
+        // נראה = היקף−offset; מוסכמת-דונאט: dasharray="קשת פער", offset שלילי = נקודת-ההתחלה קדימה (‏PieChart:
+        // seg2 off=-130 מתחיל היכן ש-seg1 נגמר). offset שלילי ⇒ מסובב את זווית-ההתחלה; חיובי ⇒ גוזם מלמעלה.
+        let drawn, startPos;
+        if (off < 0) { startPos = Math.min(-off, circ); drawn = Math.max(0, Math.min(dash[0] || 0, circ)); }
+        else { startPos = 0; drawn = Math.max(0, Math.min(dash[0] || 0, circ) - off); }
+        const start = (-Math.PI / 2 + (startPos / circ) * 2 * Math.PI).toFixed(4), sweep = ((drawn / circ) * 2 * Math.PI).toFixed(4);
         ops.push(`_Op.arc(${+a.cx || 0}, ${+a.cy || 0}, ${r}, ${start}, ${sweep}, ${col}, ${sw}${gArgs(gd)})`);
       }
       else if (ch.tag === 'circle') ops.push(`_Op.circle(${+a.cx || 0}, ${+a.cy || 0}, ${+a.r || 0}, ${col}, ${filled}, ${sw})`);
