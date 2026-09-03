@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# מחצב · post-commit — שלב 1: מסנכרן את ה-index האמיתי עם הקבצים-המחוללים שנכנסו ל-commit
+# (ב-`git commit <paths>`/`--only` ה-hook עובד על index זמני והקבצים נשארים "modified" — R2-2.7, אומת).
+cd "$(git rev-parse --show-toplevel)" || exit 0
+for f in TRUTH.md WIRING.md CLAUDE.md; do
+  if [ -f "$f" ] && git diff --quiet HEAD -- "$f" 2>/dev/null; then git add -- "$f" 2>/dev/null; fi
+done
+exit 0

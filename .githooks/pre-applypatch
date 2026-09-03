@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# מחצב · pre-applypatch — שלב 1: `git am` עוקף pre-commit (אומת) ⇒ אותה טבעת לפני שה-patch הופך ל-commit.
+exec "$(git rev-parse --show-toplevel)/.githooks/pre-commit"

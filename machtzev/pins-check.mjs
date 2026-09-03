@@ -28,7 +28,10 @@ const police = fs.readFileSync(ROOT + 'machtzev/police.mjs', 'utf8');
 const DERIVED = [...police.matchAll(/^\s*gate(?:Dirty)?\(\s*'([^']+)'\s*,\s*'([^']+)'/gm)].map((m) => 'machtzev/' + m[2]);
 const PINNED = [...new Set([...STATIC, ...DERIVED, ...OPTIONAL.filter((f) => fs.existsSync(ROOT + f))])].sort();
 const PIN_FILE = ROOT + 'machtzev/pins.sha256';
-const hash = (f) => crypto.createHash('sha256').update(fs.readFileSync(ROOT + f)).digest('hex');
+// בלוק-האמת ב-CLAUDE.md (<!-- truth:begin --> … <!-- truth:end -->) מחולל ע"י truth.mjs בתוך pre-commit (M1) ⇒ פטור מהחתימה
+// (PROTOCOL §4 M1): חותמים את הקובץ עם הבלוק מנוטרל. שאר הקובץ נעול כרגיל.
+const canon = (f, buf) => f === 'CLAUDE.md' ? Buffer.from(buf.toString('utf8').replace(/<!-- truth:begin[^]*?<!-- truth:end -->/, '<!-- truth-block:pinned-out -->')) : buf;
+const hash = (f) => crypto.createHash('sha256').update(canon(f, fs.readFileSync(ROOT + f))).digest('hex');
 if (process.argv.includes('--write')) {
   fs.writeFileSync(PIN_FILE, PINNED.map((f) => hash(f) + '  ' + f).join('\n') + '\n');
   console.log(`✍️ חתימות עודכנו (${PINNED.length} קבצים מקובעים: ${STATIC.length} static · ${DERIVED.length} נגזרים מ-police · ${PINNED.length - new Set([...STATIC, ...DERIVED]).size} hooks/workflow)`); process.exit(0);

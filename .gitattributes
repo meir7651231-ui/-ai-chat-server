@@ -1,0 +1,5 @@
+# מחצב · שלב 1 (R2-2.6): קבצים מחוללים לא ממוזגים כטקסט — מחודשים מהעץ ע"י machtzev/merge-regen.mjs.
+# ה-driver מוגדר ב-.claude/hooks/session-start.sh (git config merge.regen.driver). clone טרי בלי ה-driver ⇒ conflict רגיל,
+# ושער no-conflict-markers ב-pre-commit תופס. אין export-ignore/export-subst (שער no-export-ignore).
+TRUTH.md merge=regen
+WIRING.md merge=regen

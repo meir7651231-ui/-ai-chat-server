@@ -40,7 +40,7 @@ for (const wt of [T, H]) { const nm = path.join(REPO, 'machtzev/node_modules'); 
 
 // ── 4 · כיוון פר-commit ──
 const tuples = (sha) => { const s = show(sha, 'machtzev/police.mjs') || ''; return Object.fromEntries([...s.matchAll(/^\s*gate(?:Dirty)?\(\s*'([^']+)'\s*,\s*'([^']+)'(?:\s*,\s*\[[^\]]*\])?(?:\s*,\s*([^)]+))?\)/gm)].map((m) => [m[1], { script: m[2], skip: (m[3] || '').trim() }])); };
-const manifest = (sha) => { const s = show(sha, 'machtzev/gates.tsv') || ''; const m = {}; for (const l of s.split('\n')) { if (!l || l.startsWith('#')) continue; const p = l.split('\t'); const b = (p[3] || '').match(/baseline=([^;]+);dir=(shrink|grow)/); m[p[0]] = { layer: p[2] || '', baseline: b ? { file: 'machtzev/' + b[1], dir: b[2] } : null }; } return m; };
+const manifest = (sha) => { const s = show(sha, 'machtzev/gates.tsv') || ''; const m = {}; for (const l of s.split('\n')) { if (!l || l.startsWith('#')) continue; const p = l.split('\t'); const b = (p[3] || '').match(/^(?:baseline=)?([^;]+);(?:dir=)?(shrink|grow)$/); m[p[0]] = { layer: p[2] || '', baseline: b ? { file: 'machtzev/' + b[1], dir: b[2] } : null }; } return m; };
 const commits = git('rev-list', '--reverse', `${tSha}..${hSha}`).split('\n').filter(Boolean);
 const direction = [];
 let prev = tSha, weak = 0;

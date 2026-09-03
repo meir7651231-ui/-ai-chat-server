@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+# מחצב · pre-commit — טבעת-commit (PROTOCOL v4 §3 · §4 · §7.1 · שלב 1, הופעל באישור-בעלים 3.9.2026).
+# רץ תמיד (אין scoping לפי ענף-מקומי — RED-TEAM R2-1.2). סדר: הגנה → staging → מנועים (TRUTH/WIRING מהעותק-של-ה-index)
+# → ראצ׳ט-כיוון מול merge-base → המשטרה (--fast עד import-graph) → ledger + מס-פרוטוקול.
+# exit 1 = אדום. צהוב לא חוסם (מוצהר). פסק-דין = exit ישיר, לעולם לא דרך pipe (V4 · L30).
+set -uo pipefail
+ROOT="$(git rev-parse --show-toplevel)"; cd "$ROOT" || exit 1
+GD="$(git rev-parse --absolute-git-dir)"
+T0=$(date +%s)
+LEDGER="$GD/protocol_ledger"; : > "$LEDGER"
+FAIL=0
+ok()   { echo "ran $1" >> "$LEDGER";       echo "  ✓ [$1] $2"; }
+err()  { echo "failed $1" >> "$LEDGER";    echo "  🚨 [$1] $2"; FAIL=1; }
+yel()  { echo "yellow $1" >> "$LEDGER";    echo "  🟡 [$1] $2"; }
+skipg(){ echo "skipped $1" >> "$LEDGER";   echo "  · [$1] $2"; }
+
+STAGED=$(git diff --cached --name-only --diff-filter=ACMR)
+echo "🛡️ מחצב · pre-commit (שלב 1) · $(echo "$STAGED" | grep -c . ) קבצים"
+
+# ── א · הגנה-עצמית ──
+HP=$(git config core.hooksPath 2>/dev/null || true)
+if [ "$HP" = ".githooks" ] && [ -x .githooks/pre-commit ] && [ -x .githooks/pre-push ] && [ -x .githooks/commit-msg ]; then ok hooks "hooksPath=.githooks · executable"; else err hooks "hooksPath='$HP' או hooks לא executable — הרץ .claude/hooks/session-start.sh"; fi
+if [ -f .claude/hooks/session-start.sh ] && [ -f .claude/settings.json ]; then ok layers "session-start · settings (שלב 1; pre-tool=שלב 2, CI=שלב 3)"; else err layers "חסר .claude/hooks/session-start.sh או .claude/settings.json"; fi
+# exit-direct (V4 · L26 · L30): פסק-דין שנגזר מ-pipe (`cmd | tail; exit $?`) או שער שרץ ברקע. grep-כתנאי (`if … | grep -q`) מותר.
+if grep -nE '\|[[:space:]]*(tail|head|grep)[^;|&]*;[[:space:]]*(exit|return)\b|[^&]&[[:space:]]*$|\bnohup\b|\bsetsid\b|\bdisown\b' .githooks/* 2>/dev/null | grep -v ':[[:space:]]*#' | grep -q .; then err exit-direct "פסק-דין דרך pipe / הרצה-ברקע ב-.githooks"; else ok exit-direct "אין pipe/רקע על פסק-דין"; fi
+# עץ-נח (L14): קבצי-קוד לא-staged/untracked ב-machtzev|new משנים את מדידת-המשטרה (עץ-עבודה) מול M1 (index) ⇒ truth יאדים.
+DIRTY=$(git status --porcelain -- machtzev new 2>/dev/null | grep -E '^( M|\?\?) .*\.(mjs|dart|json|tsv)$' | grep -vE 'node_modules|/audit/' | cut -c4- | head -5 | tr '\n' ' ')
+if [ -n "$DIRTY" ]; then echo "  ⚠️ עץ לא-נח (L14): לא-staged/untracked בתיקיות-נמדדות — $DIRTY· stage או stash לפני commit, אחרת truth ≠ index"; fi
+if git diff --cached -U0 | grep -qE '^\+(<<<<<<< |=======$|>>>>>>> )'; then err no-conflict-markers "סימני-conflict ב-staged"; else ok no-conflict-markers "נקי"; fi
+
+# ── ב · staging ──
+if git diff --cached -U0 -- . ':!machtzev/selftest-fixtures' ':!machtzev/police-selftest.mjs' ':!machtzev/contract-check.mjs' ':!machtzev/RED-TEAM-PROTOCOL.md' ':!.githooks/pre-commit' | grep -E '^\+' | grep -vE '^\+\+\+' | grep -qE '[A-Za-z0-9._%+-]+@(gmail|walla|outlook|yahoo|hotmail)\.[a-z.]+|AIzaSy[A-Za-z0-9_-]{20,}|BEGIN [A-Z ]*PRIVATE KEY|ghp_[A-Za-z0-9]{30,}|AKIA[0-9A-Z]{16}'; then err secrets "זהות/סוד ב-staged (חוק-6) — הרם לשקע-הצבה (patch בלבד, השער לא מתקן)"; else ok secrets "אין סודות ב-staged"; fi
+BIG=""; for f in $STAGED; do case "$f" in design/assets/*) continue;; esac; if [ -f "$f" ] && [ "$(stat -c %s "$f")" -gt 1048576 ]; then BIG="$BIG $f"; fi; done
+if [ -z "$BIG" ]; then ok nobinary "אין קובץ > 1MB"; else err nobinary "קובץ > 1MB ב-staging:$BIG"; fi
+if echo "$STAGED" | grep -qE '^machtzev/(registry|node_modules)/|^\.allow_'; then err no-registry "registry/ · node_modules/ · .allow_* ב-staging"; else ok no-registry "נקי"; fi
+if echo "$STAGED" | grep -qx '.gitignore' && git diff --cached -U0 -- .gitignore | grep -E '^-' | grep -vE '^---' | grep -qE 'node_modules|\.allow_|\.env|\.claude|registry'; then err gitignore-guard "הוסר כיסוי מ-.gitignore"; else ok gitignore-guard "נקי"; fi
+if echo "$STAGED" | grep -qx '.gitattributes' && git diff --cached -- .gitattributes | grep -E '^\+' | grep -vE '^\+[[:space:]]*#' | grep -qE 'export-(ignore|subst)'; then err no-export-ignore "export-ignore/subst ב-.gitattributes (R2-2.5)"; else ok no-export-ignore "נקי"; fi
+
+# ── tiering הפוך: המשטרה מדולגת רק אם הכל ב-allowlist-docs ──
+CODE=$(echo "$STAGED" | grep -vE '^(knowledge/|design/|archive/|machtzev/audit/|[^/]+\.md$|machtzev/[^/]+\.md$)' || true)
+
+# ── מנועי-hook: M1 truth-write · M2 wiring-doc — על עותק של ה-index, לא עץ-העבודה (L14 · R2-4.3) ──
+if [ -n "$CODE" ]; then
+  TMP=$(mktemp -d)
+  git checkout-index -a --prefix="$TMP/" 2>/dev/null
+  if node "$TMP/machtzev/truth.mjs" --write >/dev/null 2>"$TMP/truth.err"; then
+    for f in TRUTH.md CLAUDE.md; do if ! cmp -s "$TMP/$f" "$f"; then cp "$TMP/$f" "$f"; fi; git add -- "$f"; done
+    ok truth-fresh "TRUTH.md + בלוק-CLAUDE ≡ index"
+  else err truth-fresh "truth.mjs נכשל על העותק: $(tail -1 "$TMP/truth.err" | cut -c1-120)"; fi
+  if node "$TMP/machtzev/tools/gen-wiring-doc.mjs" >/dev/null 2>&1 && [ -f "$TMP/WIRING.md" ]; then
+    if ! cmp -s "$TMP/WIRING.md" WIRING.md; then cp "$TMP/WIRING.md" WIRING.md; fi; git add -- WIRING.md
+    ok wiring-fresh "WIRING.md ≡ index"
+  else yel wiring-fresh "gen-wiring-doc לא רץ על העותק"; fi
+  rm -rf "$TMP"
+fi
+
+# ── ג · ראצ׳ט-כיוון מול merge-base (לא מול HEAD — R2-6.1) ──
+BASE=$(git merge-base HEAD origin/claude/hei-rxv1v1 2>/dev/null || git rev-parse HEAD)
+RD=$(node machtzev/ratchet-direction.mjs "$BASE" --index 2>&1); RDRC=$?
+if [ $RDRC -eq 0 ]; then ok ratchet-down "$RD"; else echo "$RD" | tail -4; err ratchet-down "החלשה מול merge-base $(echo "$BASE" | cut -c1-8)"; fi
+
+# ── ד · המשטרה (טבעת-commit = --fast עד שקיים import-graph ל---inc; R2-5.3) ──
+if [ -n "$CODE" ]; then
+  POUT=$(node machtzev/police.mjs --fast 2>&1); PRC=$?
+  echo "$POUT" | grep -E '^(ran|skipped|yellow|failed) ' >> "$LEDGER"
+  PSUM=$(echo "$POUT" | grep -E 'המשטרה' | tail -1)
+  case $PRC in
+    0) ok police "$PSUM";;
+    2) yel police "$PSUM (צהוב לא חוסם commit; חוסם push)";;
+    *) echo "$POUT" | grep -E '^failed |🚨|🔴' | head -8; err police "$PSUM";;
+  esac
+else skipg police "commit-תיעוד בלבד (allowlist) — המשטרה מדולגת"; fi
+
+# ── מדדים: מס-פרוטוקול · wired ──
+DUR=$(( $(date +%s) - T0 )); echo "tax $DUR" >> "$LEDGER"
+WIRED=$(grep -oE 'מחווטים-למחולל בפועל:\*\* [0-9]+' TRUTH.md 2>/dev/null | grep -oE '[0-9]+$' | head -1)
+ELIG=$(grep -oE 'eligible\):\*\* [0-9]+/[0-9]+' TRUTH.md 2>/dev/null | grep -oE '/[0-9]+' | tr -d / | head -1)
+echo "⏱ protocol ${DUR}s · 🔌 wired ${WIRED:-?}/${ELIG:-?}"
+if [ "$DUR" -gt 60 ]; then echo "  ⚠️ מס-פרוטוקול ${DUR}s > 60s (הכרעה G) — 🚨 על הפרוטוקול, לא על הקוד: הזז שער ל-push"; fi
+echo "{\"ts\":$(date +%s),\"dur\":$DUR,\"fail\":$FAIL,\"files\":$(echo "$STAGED" | grep -c .)}" >> "$GD/protocol_stats.jsonl"
+if [ $FAIL -ne 0 ]; then echo "🚨 pre-commit: נחסם ($(grep -c '^failed' "$LEDGER") שערים)"; exit 1; fi
+echo "✅ pre-commit: עבר"
+exit 0

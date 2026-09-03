@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# מחצב · pre-push — טבעת-push (PROTOCOL v4 §3 · §7.2 · שלב 1). סקופ לפי **יעד** (remote_ref), לא ענף-מקומי (R2-1.2).
+# לכל ref נדחף: main/master/production ⇒ חסום בלי .allow_push_main · מחיקה/לא-fast-forward ⇒ חסום ·
+# ענף-פרוטוקול ⇒ ראצ׳ט-כיוון (merge-base → sha) · Protocol-Ran על כל commit בטווח (rebase/cherry-pick/am — R2-2.2) ·
+# משטרה **מלאה** על worktree detached של ה-sha הנדחף (לא archive — R2-2.5). צהוב = חוסם (אין עדיין Allow: yellow-push).
+set -uo pipefail
+ROOT="$(git rev-parse --show-toplevel)"; cd "$ROOT" || exit 1
+PROTO='claude/hei-rxv1v1|claude/mah-kora-0by8kw'
+PROTECTED='main|master|production'
+Z=0000000000000000000000000000000000000000
+FAIL=0
+mapfile -t LINES
+for line in "${LINES[@]}"; do
+  set -- $line; lref=${1:-}; lsha=${2:-}; rref=${3:-}; rsha=${4:-}
+  [ -z "$rref" ] && continue
+  if printf '%s' "$rref" | grep -qE "^refs/heads/($PROTECTED)$" && [ ! -f .allow_push_main ]; then echo "❌ push ל-$rref ללא .allow_push_main (הכרעה A: main לעולם לא בלי אישור-בעלים)" >&2; exit 1; fi
+  if [ "$lsha" = "$Z" ]; then
+    if printf '%s' "$rref" | grep -qE "^refs/heads/($PROTO|$PROTECTED)$"; then echo "❌ מחיקת $rref חסומה" >&2; exit 1; fi
+    continue
+  fi
+  if [ "$rsha" != "$Z" ] && ! git merge-base --is-ancestor "$rsha" "$lsha" 2>/dev/null; then echo "❌ $rref: השרת קדימה (לא fast-forward) — git fetch && git rebase; לעולם לא force" >&2; exit 1; fi
+  if ! printf '%s' "$rref" | grep -qE "^refs/heads/($PROTO)$"; then echo "ℹ️ $rref אינו ענף-פרוטוקול — ללא טבעת-push"; continue; fi
+  if [ "$rsha" = "$Z" ]; then BASE=$(git merge-base "$lsha" origin/claude/hei-rxv1v1 2>/dev/null || git rev-parse "$lsha~1"); else BASE="$rsha"; fi
+  echo "🛡️ מחצב · pre-push: $rref · $(printf '%s' "$lsha" | cut -c1-8) (base $(printf '%s' "$BASE" | cut -c1-8))"
+  if node machtzev/ratchet-direction.mjs "$BASE" "$lsha"; then :; else echo "❌ ראצ׳ט-כיוון: החלשה בטווח הנדחף" >&2; FAIL=1; fi
+  MISSING=""
+  for c in $(git rev-list "$BASE".."$lsha"); do
+    if ! git log -1 --format=%B "$c" | grep -q '^Protocol-Ran:'; then MISSING="$MISSING $(printf '%s' "$c" | cut -c1-8)"; fi
+  done
+  if [ -n "$MISSING" ]; then echo "❌ commits בלי Protocol-Ran (נוצרו בלי pre-commit — rebase/cherry-pick/am?):$MISSING" >&2; FAIL=1; fi
+  WT=$(mktemp -d)
+  if git worktree add --detach -q "$WT" "$lsha" 2>/dev/null; then
+    if [ -d machtzev/node_modules ]; then cp -r machtzev/node_modules "$WT/machtzev/" 2>/dev/null; fi
+    ( cd "$WT" && node machtzev/police.mjs ); RC=$?
+    git worktree remove --force "$WT" >/dev/null 2>&1; rm -rf "$WT"
+    case $RC in
+      0) echo "✅ משטרה מלאה ירוקה על $(printf '%s' "$lsha" | cut -c1-8)";;
+      2) echo "❌ משטרה צהובה — push דורש ירוק מלא (Allow: yellow-push = שלב 6)" >&2; FAIL=1;;
+      *) echo "❌ משטרה אדומה על ה-sha הנדחף" >&2; FAIL=1;;
+    esac
+  else echo "❌ worktree add נכשל" >&2; FAIL=1; fi
+done
+if [ $FAIL -ne 0 ]; then echo "🚨 pre-push: נחסם" >&2; exit 1; fi
+exit 0

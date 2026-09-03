@@ -4,3 +4,7 @@ machtzev/registry/
 
 # תלות-כלים vendored (c1) — נוצר מ-package.json, לא מקור
 machtzev/node_modules/
+
+# bypass-זמני של pre-tool (הוראת-בעלים בתוכו; נמחק בסוף-שלב) — לעולם לא נדחף
+.allow_protocol_edit
+.allow_*

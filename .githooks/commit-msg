@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# מחצב · commit-msg — שלב 1: הודעה ≥ 15 תווים · לא-זבל · trailer Protocol-Ran = sha256(tree-id ‖ ledger) (R2-2.3).
+# ה-trailer הוא **עקביות-עצמית** (הראיה לריצת-שערים = CI/pre-push שמריצים משטרה מחדש), לא הוכחה. >1 trailer ⇒ נדחה.
+MSG="$1"
+GD="$(git rev-parse --absolute-git-dir)"
+CLEAN=$(grep -v '^#' "$MSG")
+LEN=$(printf '%s' "$CLEAN" | tr -d '[:space:]' | wc -c)
+if [ "$LEN" -lt 15 ]; then echo "❌ הודעת commit קצרה מדי ($LEN תווים, מינימום 15)" >&2; exit 1; fi
+FIRST=$(printf '%s\n' "$CLEAN" | head -1 | tr '[:upper:]' '[:lower:]')
+if printf '%s' "$FIRST" | grep -qE '^(wip|test|asdf|tmp|fix|update|change|123|aaa|xxx|todo)[[:space:]]*$'; then echo "❌ הודעת commit לא-תיאורית: '$FIRST'" >&2; exit 1; fi
+N=$(grep -c '^Protocol-Ran:' "$MSG" || true)
+if [ "${N:-0}" -gt 1 ]; then echo "❌ יותר מ-trailer Protocol-Ran אחד" >&2; exit 1; fi
+if [ -f "$GD/protocol_ledger" ]; then
+  TREE=$(git write-tree 2>/dev/null || echo none)
+  H=$( { printf '%s\n' "$TREE"; cat "$GD/protocol_ledger"; } | sha256sum | cut -c1-16)
+  sed -i '/^Protocol-Ran:/d' "$MSG"
+  printf '\nProtocol-Ran: %s\n' "$H" >> "$MSG"
+fi
+exit 0

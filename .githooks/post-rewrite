@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# מחצב · post-rewrite — שלב 1: אחרי rebase/amend הקבצים-המחוללים (TRUTH/WIRING) עשויים להיות ישנים בכל commit
+# שנכתב-מחדש. לא מבצעים amend מכאן (רקורסיה · מתקן רק tip — R2-2.1 אומת). מסמנים; pre-push מאמת כל commit בטווח.
+GD="$(git rev-parse --absolute-git-dir)"
+printf '%s %s\n' "$(date +%s)" "${1:-rewrite}" >> "$GD/REGEN_NEEDED"
+echo "ℹ️ post-rewrite (${1:-rewrite}): TRUTH/WIRING עשויים להיות ישנים ב-commits שנכתבו-מחדש — pre-push יאמת; לרענון ידני: node machtzev/truth.mjs --write"
+exit 0
