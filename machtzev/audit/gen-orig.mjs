@@ -9,7 +9,7 @@ const only = process.argv.slice(2).filter(a => !a.startsWith('-'));
 const atoms = allAtoms().filter(a => !only.length || only.includes(a.family));
 const origDir = path.join(SHOTS, 'orig'); fs.mkdirSync(origDir, { recursive: true });
 
-fs.writeFileSync(path.join(SHOTS, 'index.json'), JSON.stringify(atoms.map(a => ({ family: a.family, slug: a.slug, cls: a.cls, name: a.name, seam: a.seam, theater: a.theater })), null, 2));
+fs.writeFileSync(path.join(SHOTS, 'index.json'), JSON.stringify(atoms.map(a => ({ family: a.family, slug: a.slug, cls: a.cls, name: a.name, seam: a.seam, theater: a.theater, hug: a.hug })), null, 2));
 
 const b = await pw.chromium.launch({ executablePath: '/opt/pw-browsers/chromium', args: ['--disable-lcd-text', '--font-render-hinting=none'] });
 let i = 0;

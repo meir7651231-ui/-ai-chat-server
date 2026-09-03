@@ -11,7 +11,7 @@ const fams = [...new Set(idx.map(a => a.family))].sort();
 const forgeDir = path.join(SHOTS, 'forge');
 
 const imports = fams.map(f => `import 'package:buildsmart/genesis/dart-forge-bs/${f}/${f}.dart' as f_${f};`).join('\n');
-const shots = idx.map(a => `  await s('${a.family}__${a.slug}.png', const f_${a.family}.${a.cls}());`).join('\n');
+const shots = idx.map(a => `  await s('${a.family}__${a.slug}.png', ${a.hug}, const f_${a.family}.${a.cls}());`).join('\n');
 
 const src = `// מחולל-אוטומטית ע"י machtzev/audit/gen-forge-dart.mjs — אל תערוך. מצייר כל אטום-FORGE ל-PNG לביקורת-פיקסל.
 import 'dart:io';
@@ -25,9 +25,14 @@ ${imports}
 const forgeDir='${forgeDir}';
 const fonts='${FONTS}';
 Future<void> _load(String f,List<String> p)async{final l=FontLoader(f);for(final x in p){final b=await File(x).readAsBytes();l.addFont(Future.value(ByteData.view(Uint8List.fromList(b).buffer)));}await l.load();}
-Future<void> _shot(WidgetTester t,String name,Widget a)async{final k=GlobalKey();
+Future<void> _shot(WidgetTester t,String name,bool hug,Widget a)async{final k=GlobalKey();
  try{
-  await t.pumpWidget(MediaQuery(data:const MediaQueryData(devicePixelRatio:2.0),child:Directionality(textDirection:TextDirection.rtl,child:Align(alignment:Alignment.topLeft,child:RepaintBoundary(key:k,child:Container(width:438,color:const Color(0xFF08080A),padding:const EdgeInsets.all(16),child:a))))));
+  // מסגור נאמן ל-Pure (רוחב-תוכן 406, מסגרת 438 עם pad16):
+  //  hug (inline/inline-flex/גודל-קבוע כפתור/צ'יפ/FAB) ⇒ Align(topRight,heightFactor) ⇒ הילד loose ⇒ מתכווץ-לימין.
+  //  block (כרטיס/פאנל בלי רוחב) ⇒ SizedBox(406) הדוק ⇒ הילד ממלא-רוחב. (SizedBox מכתיב רוחב לילד — נכון לבלוק.)
+  final inner=hug?Align(alignment:Alignment.topRight,heightFactor:1.0,child:a):a;
+  final framed=Container(color:const Color(0xFF08080A),padding:const EdgeInsets.all(16),child:SizedBox(width:406,child:inner));
+  await t.pumpWidget(MediaQuery(data:const MediaQueryData(devicePixelRatio:2.0),child:Directionality(textDirection:TextDirection.rtl,child:Align(alignment:Alignment.topLeft,child:RepaintBoundary(key:k,child:framed)))));
   await t.pump(const Duration(milliseconds:50));
   // בליעת שגיאות-פריסה (hasSize/unbounded) — נרשמות ע"י ה-binding, לא נזרקות. אטום-שנכשל = ממצא (no-forge בדיף).
   final ex=t.takeException();
@@ -46,7 +51,7 @@ void main(){testWidgets('pixel-audit',(t)async{
   await _load('Heebo',['\$fonts/Heebo-Regular.ttf','\$fonts/Heebo-SemiBold.ttf','\$fonts/Heebo-Bold.ttf']);
   await _load('JetBrains Mono',['\$fonts/JetBrainsMono-Regular.ttf','\$fonts/JetBrainsMono-Bold.ttf']);
  });
- Future<void> s(String n,Widget w)=>_shot(t,n,w);
+ Future<void> s(String n,bool h,Widget w)=>_shot(t,n,h,w);
 ${shots}
 });}
 `;

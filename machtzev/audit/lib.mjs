@@ -3,7 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { cells, theaterStates, pascal, snake, PURE, familiesOf } from '../ds-forge.mjs';
+import { cells, theaterStates, pascal, snake, PURE, familiesOf, parseStyle, styleOf, parseDOM, INLINE_TAGS } from '../ds-forge.mjs';
 
 export const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const FONTS = path.join(HERE, 'fonts');
@@ -26,10 +26,28 @@ export const faces = `<style>
 @font-face{font-family:'JetBrains Mono';font-weight:700;src:url('file://${FONTS}/JetBrainsMono-Bold.ttf')}
 </style>`;
 
-const cache = {};
+const cache = {}, mapCache = {};
 function familyHtml(fam) {
   if (!cache[fam]) cache[fam] = fs.readFileSync(path.join(PURE, `${fam}-family.html`), 'utf8');
   return cache[fam];
+}
+function styleMap(fam) {
+  if (!mapCache[fam]) { const m = familyHtml(fam).match(/<style>([\s\S]*?)<\/style>/); mapCache[fam] = parseStyle(m ? m[1] : ''); }
+  return mapCache[fam];
+}
+// האם שורש-האטום "מתכווץ-לתוכן" (inline/inline-flex/inline-block/תג-inline) ⇒ hug · אחרת block ⇒ ממלא-רוחב.
+// קובע איך למסגר את ה-FORGE (loose+ימין להצמדה · tight למילוי) כדי לשקף את בלוק-ה-ORIG של Pure.
+function rootHug(fam, body) {
+  try {
+    let root = parseDOM(body);
+    // parseDOM עוטף ב-#root סינתטי — יורדים לאלמנט-האמת הראשון (מדלגים טקסט/עטיפות-#).
+    while (root && (!root.tag || /^#/.test(root.tag))) root = (root.children || []).find(c => c.tag);
+    if (!root) return false;
+    const rs = styleOf(root, styleMap(fam), []);
+    const disp = (rs['display'] || '').trim();
+    const fixedW = /^\d/.test(rs['width'] || '') && !/%/.test(rs['width'] || '');   // רוחב-קבוע (52px) ⇒ מתכווץ
+    return fixedW || /^inline/.test(disp) || (!disp && INLINE_TAGS.has(root.tag));
+  } catch { return false; }
 }
 
 // כל האטומים של משפחה, בדדופ זהה ל-ds-forge (seen על שם-המחלקה). לתאטרון ⇒ מצב-ראשון (מה שה-FORGE מצייר).
@@ -41,7 +59,8 @@ export function atomsOf(fam) {
     const cls = 'Forge' + pascal(c.name);
     if (seen.has(cls)) continue; seen.add(cls);
     const th = theaterStates(c.body);
-    out.push({ family: fam, slug: snake(c.name), cls, name: c.name, seam: c.seam, theater: !!th, origBody: th ? th[0].html : c.body });
+    const origBody = th ? th[0].html : c.body;
+    out.push({ family: fam, slug: snake(c.name), cls, name: c.name, seam: c.seam, theater: !!th, hug: rootHug(fam, origBody), origBody });
   }
   return out;
 }

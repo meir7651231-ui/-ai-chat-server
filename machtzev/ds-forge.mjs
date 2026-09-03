@@ -909,7 +909,7 @@ ${decls}${decls ? '\n' : ''}    return ${bodyExpr};
 
 // ───────────────────────── ייצוא לכלי-הביקורת (pixel-forge-audit) ─────────────────────────
 // מנוע-הביקורת מייבא את אותה חציבת-תאים (מקור-אמת יחיד) כדי למסגר ORIG בדיוק כמו ה-FORGE.
-export { cells, theaterStates, pascal, snake, PURE, OUT };
+export { cells, theaterStates, pascal, snake, PURE, OUT, parseStyle, styleOf, parseDOM, INLINE_TAGS };
 const familiesOf = () => fs.readdirSync(PURE).filter(f => /-family\.html$/.test(f)).map(f => f.replace('-family.html', '')).sort();
 export { familiesOf };
 
