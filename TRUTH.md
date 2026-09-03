@@ -21,7 +21,7 @@
 
 ## מבנה הענף
 - **machtzev/ שורש (.mjs):** 37
-- **machtzev/ תת-תיקיות:** 12
+- **machtzev/ תת-תיקיות:** 13
 - **generator/ קנוני:** 16
 - **generator/legacy/:** 5
 - **knowledge/ פעיל:** 22
