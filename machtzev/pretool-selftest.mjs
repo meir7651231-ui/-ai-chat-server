@@ -12,6 +12,11 @@ const HOOK = path.join(R.ROOT, '.claude/hooks/pre-tool.sh');
 const TSV = path.join(path.dirname(fileURLToPath(import.meta.url)), 'selftest-fixtures/pretool.tsv');
 if (!fs.existsSync(HOOK)) { console.log('🚨 pre-tool.sh חסר — שלב 2 לא מותקן'); process.exit(1); }
 const rows = fs.readFileSync(TSV, 'utf8').split('\n').filter((l) => l && !l.startsWith('#')).map((l) => l.split('\t'));
+const FLOOR = R.MACH + 'pretool-fixtures-baseline.json';
+if (process.argv.includes('--floor')) { fs.writeFileSync(FLOOR, JSON.stringify({ rows: rows.length }, null, 1) + '\n'); console.log(`✍️ pretool floor ⇒ ${rows.length}`); process.exit(0); }
+if (!fs.existsSync(FLOOR)) { console.log('🚨 pre-tool: אין pretool-fixtures-baseline.json — fail-closed (R3-3.6)'); process.exit(1); }
+const floor = JSON.parse(fs.readFileSync(FLOOR, 'utf8')).rows ?? 1;
+if (rows.length < floor) { console.log(`🚨 pre-tool: ${rows.length} fixtures < רצפה ${floor} — fixtures נמחקו`); process.exit(1); }
 let ok = 0; const bad = [];
 for (const [exp, tool, input] of rows) {
   const tool_input = tool === 'Bash' ? { command: input } : { file_path: input.replace(/^\/x\//, R.ROOT + '/') };

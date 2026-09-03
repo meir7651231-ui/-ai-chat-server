@@ -48,7 +48,7 @@ const cur = {
   dataTotal: jsData.length,
 };
 let base = {};
-try { base = JSON.parse(fs.readFileSync(BASE, 'utf8')); } catch { }
+try { base = JSON.parse(fs.readFileSync(BASE, 'utf8')); } catch { console.error('🚨 coverage-baseline.json חסר/שבור — fail-closed (R3-3.16)'); process.exit(1); }
 let bad = 0;
 for (const k of ['widgetsFillable', 'enginesRunnable', 'essence', 'dataTwinned'])
   if (base[k] !== undefined && cur[k] < base[k]) { console.error(`🚨 שער-הכיסוי: נסיגה ב-${k}: ${cur[k]} < ${base[k]}`); bad = 1; }

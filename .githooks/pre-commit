@@ -84,7 +84,7 @@ else
   else yel ratchet-down "החלשת-baseline/floor — נדרש trailer Allow: בהודעה (commit-msg מאמת): $(echo "$RD" | grep -cE '^\s*·') פריטים"; fi
 fi
 # קובצי-פרוטוקול (R3-4.11): חוקה + אוכפים + hooks + settings + workflow + מרשם ⇒ pins-write מוצהר עם סיבה
-CONST=$(echo "$STAGED" | grep -xE 'LAW\.md|PURPOSE\.md|CLAUDE\.md|machtzev/(VERIFY-LAWS|THE-WAY|AGENT-CODE|DECISIONS|LEARNINGS)\.md|machtzev/(police|pins-check|ratchet-direction|allow-check|verify-independent|police-selftest|truth)\.mjs|machtzev/gates\.tsv|\.githooks/[a-z-]+|\.claude/settings\.json|\.claude/hooks/[a-z-]+\.sh|\.github/workflows/police\.yml' || true)
+CONST=$(echo "$STAGED" | grep -xE 'LAW\.md|PURPOSE\.md|machtzev/(VERIFY-LAWS|THE-WAY|AGENT-CODE|DECISIONS|LEARNINGS)\.md|machtzev/(police|pins-check|ratchet-direction|allow-check|verify-independent|police-selftest|truth)\.mjs|machtzev/gates\.tsv|\.githooks/[a-z-]+|\.claude/settings\.json|\.claude/hooks/[a-z-]+\.sh|\.github/workflows/police\.yml' || true)
 if [ -n "$CONST" ]; then echo "$CONST" > "$GD/protocol_pins_edits"; yel pins-write "קובצי-חוקה ב-staged ($(echo "$CONST" | tr '\n' ' ')) — נדרש Allow: pins-write:<קובץ> <L-id|הכרעה-N> (commit-msg מאמת)"; fi
 
 # ── ד · המשטרה (טבעת-commit = --fast עד שקיים import-graph ל---inc; R2-5.3) ──
@@ -97,8 +97,8 @@ if [ -n "$CODE" ]; then
     2) yel police "$PSUM (צהוב לא חוסם commit; חוסם push)";;
     *) echo "$POUT" | grep -E '^failed |🚨|🔴' | head -8; err police "$PSUM";;
   esac
-  FAILED_GATES=$( { echo "$POUT"; cat "$LEDGER"; } | grep -oE '^failed [a-z-]+' | cut -d' ' -f2 | sort -u | tr '\n' ',')   # R3-5.7: גם שערי-hook
-  [ $PRC -eq 0 ] || FAILED_GATES="${FAILED_GATES:-police}"   # R3-5.3: אדום בלי failed-line ⇒ לא מסמנים resolved
+  FAILED_GATES=$( { echo "$POUT"; cat "$LEDGER"; } | grep -oE '^failed [a-z-]+' | cut -d' ' -f2 | grep -vxE 'police|learn' | sort -u | tr '\n' ',')   # R3-5.7: גם שערי-hook; police=מצרף, learn=מטא — לא נרשמים כלקח
+  [ $PRC -eq 0 ] || FAILED_GATES="${FAILED_GATES:-police}"   # R3-5.3: אדום בלי שום failed-line ספציפי ⇒ fallback 'police' (לא בנוסף)
   node machtzev/learn-draft.mjs --record "$FAILED_GATES" --stage "$(echo "$STAGED" | tr '\n' ',')" >/dev/null 2>&1 && [ -f "$RETRY" ] && git add -- "$RETRY"
 else skipg police "commit-תיעוד בלבד (allowlist) — המשטרה מדולגת"; fi
 

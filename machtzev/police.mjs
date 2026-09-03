@@ -80,7 +80,7 @@ const toolMissing = (tool) => {
 
 const runGate = (id, script, args) => {
   const t0 = Date.now();
-  const argv = hasTimeout ? ['-s', 'KILL', `${GATE_TIMEOUT_S}s`, 'node', TOOLS + script, ...args] : [TOOLS + script, ...args];
+  const argv = hasTimeout ? ['-s', 'TERM', '-k', '10', `${GATE_TIMEOUT_S}s`, 'node', TOOLS + script, ...args] : [TOOLS + script, ...args];   // R3-3.15: TERM קודם (שערים משחזרים), KILL אחרי 10s
   const r = spawnSync(hasTimeout ? 'timeout' : 'node', argv, { stdio: ['ignore', 'inherit', 'pipe'], timeout: hasTimeout ? undefined : GATE_TIMEOUT_S * 1000, killSignal: 'SIGKILL', encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
   const ms = Date.now() - t0;
   if (r.stderr) process.stderr.write(r.stderr);

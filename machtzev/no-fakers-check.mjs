@@ -12,7 +12,7 @@ const m = src.match(/const FAKERS = new Set\(\[([^\]]*)\]\)/);
 if (!m) { console.log('🔴 no-fakers: לא נמצא FAKERS ב-compose-engine.mjs (SSOT)'); process.exit(1); }
 const fakers = [...m[1].matchAll(/'([a-z_]+)'/g)].map((x) => x[1]);
 const classes = fakers.map((f) => f.split('_').map((s) => s[0].toUpperCase() + s.slice(1)).join(''));
-const re = new RegExp(`\\b(${classes.join('|')})\\(`);
+const re = new RegExp(`\\b(${classes.join('|')})\\s*(\\.\\w+\\s*)?\\(`);   // R3-3.10: StatBlock.named( · StatBlock (
 const dirs = [R.outDir(), path.join(R.NEW, 'dart-boards-bs'), path.join(R.NEW, 'dart-screens-bs')].filter((d) => fs.existsSync(d));
 const hits = [];
 for (const d of dirs) (function walk(x) { for (const e of fs.readdirSync(x, { withFileTypes: true })) { const f = path.join(x, e.name); if (e.isDirectory()) walk(f); else if (e.name.endsWith('.dart') && re.test(fs.readFileSync(f, 'utf8'))) hits.push(path.relative(R.ROOT, f)); } })(d);

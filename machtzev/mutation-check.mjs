@@ -20,6 +20,10 @@ if (fi >= 0) files = argv[fi + 1].split(',').map(s => path.resolve(s)).filter(f 
 else (function walk(d) { for (const e of fs.readdirSync(d, { withFileTypes: true })) { const f = path.join(d, e.name); if (e.isDirectory()) walk(f); else if (isAtom(e.name)) files.push(f); } })(A);
 files.sort();
 let ok = 0, vacuous = [], broken = [], unparsed = [], untested = 0;
+// R3-3.15: החללה במקום ⇒ שחזור מובטח גם על TERM/INT/חריגה (police מריץ timeout -s TERM -k)
+let CUR = null; const restore = () => { if (CUR) { try { fs.writeFileSync(CUR.wire, CUR.orig); } catch {} CUR = null; } };
+for (const sig of ['SIGTERM', 'SIGINT', 'SIGHUP']) process.on(sig, () => { restore(); process.exit(1); });
+process.on('uncaughtException', (e) => { restore(); console.error(e); process.exit(1); });
 for (const wire of files) {
   const test = wire.replace(/\.mjs$/, '.test.mjs'), rel = path.relative(A, wire);
   if (!fs.existsSync(test)) { untested++; continue; }
@@ -29,6 +33,7 @@ for (const wire of files) {
   if (!names.length || other) { unparsed.push(rel); continue; }
   const hollow = '/* מוטציה-חלולה */\n' + names.map(n => `export const ${n} = (..._a) => undefined;`).join('\n') + '\n';
   try {
+    CUR = { wire, orig };
     fs.writeFileSync(wire, hollow);
     const redOnHollow = runTest(test) === 1;
     fs.writeFileSync(wire, orig);
@@ -36,7 +41,7 @@ for (const wire of files) {
     if (redOnHollow && greenOnReal) ok++;
     else if (!redOnHollow) vacuous.push(rel);
     else broken.push(rel);
-  } finally { fs.writeFileSync(wire, orig); }
+  } finally { fs.writeFileSync(wire, orig); CUR = null; }
 }
 if (unparsed.length) { console.error(`🚨 export לא-מפורסר (default/{…}) — fail-closed: ${unparsed.length}`); unparsed.slice(0, 10).forEach(v => console.error('   ✗ ' + v)); }
 if (vacuous.length) { console.error(`🚨 בדיקות-ריקות (ירוקות גם על חוט-חלול!): ${vacuous.length}`); vacuous.slice(0, 15).forEach(v => console.error('   ✗ ' + v)); }

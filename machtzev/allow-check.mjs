@@ -45,12 +45,12 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     for (const raw of fs.readFileSync(issuesFile, 'utf8').split('\n').map((l) => l.replace(/^\s*·\s*/, '').trim()).filter(Boolean)) {
       let m;
       if ((m = raw.match(/^baseline גדל \(([^)]+)\)/)) || (m = raw.match(/^baseline נמחק \(([^)]+)\)/))) { const f = path.basename(m[1]); if (!covers(allows, 'baseline', f)) errs.push(`החלשה בלי Allow: ${raw} ⇒ נדרש "Allow: baseline:${f} <L-id|הכרעה-N>"`); }
-      else if ((m = raw.match(/^ראצ׳ט ירד \(([^)]+?)\.([^)]+)\): (\d+) → (\d+)/))) {
+      else if ((m = raw.match(/^ראצ׳ט ירד \((.+?\.json)\.(.+?)\): (\d+) → (\d+)/))) {   // הקובץ = עד ה-.json הראשון; אחריו מפתח
         const f = path.basename(m[1]), to = m[4];
         const ok = f === 'wired-floor.json' ? allows.some((a) => a.kind === 'floor' && a.scope === to) : covers(allows, 'baseline', f);
         if (!ok) errs.push(`החלשה בלי Allow: ${raw} ⇒ נדרש "Allow: ${f === 'wired-floor.json' ? 'floor:' + to : 'baseline:' + f} <L-id|הכרעה-N>"`);
       }
-      else if ((m = raw.match(/^ראצ׳ט ירד \(([^)]+?)\.(.+)\)$/))) { const f = path.basename(m[1]); if (f === 'wired-floor.json' || !covers(allows, 'baseline', f)) errs.push(`החלשה בלי Allow: ${raw} ⇒ נדרש "Allow: baseline:${f} <L-id|הכרעה-N>"`); }
+      else if ((m = raw.match(/^ראצ׳ט ירד \((.+?\.json)\.(.+)\)$/))) { const f = path.basename(m[1]); if (f === 'wired-floor.json' || !covers(allows, 'baseline', f)) errs.push(`החלשה בלי Allow: ${raw} ⇒ נדרש "Allow: baseline:${f} <L-id|הכרעה-N>"`); }
       else if ((m = raw.match(/^ארגומנטים השתנו: ([a-z-]+)/))) { if (!allows.some((a) => a.kind === 'gate-args' && a.scope === m[1])) errs.push(`שינוי-ארגומנטים בלי Allow: ${raw} ⇒ נדרש "Allow: gate-args:${m[1]} <L-id|הכרעה-N>"`); }
       else errs.push(`החלשת-פרוטוקול שאין לה Allow (שער/skip/סקריפט/מניפסט — הכרעת-בעלים ממוספרת + עריכת gates.tsv/police בלבד): ${raw}`);
     }

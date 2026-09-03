@@ -25,6 +25,7 @@
 | `no-fakers-check.mjs` · `no-fakers-baseline.json` | 🛡️ שער `no-fakers` (שלב 5): FAKERS מ-compose-engine (SSOT) ⇒ PascalCase ⇒ סריקת gen/boards/screens; חוב 3 קבצים (gen_charts · gen_dash11 · gen_feedback10) רק-יורד. |
 | `index-check.mjs` · `index-baseline.json` | 📇 שער `index-complete` (M3): סקריפט בלי שורה ב-INDEX.md ⇒ אדום; חוב-קיים ברשימה רק-יורדת. |
 | `atom-count-check.mjs` · `atom-count-baseline.json` | 🔢 שער `atom-count`: מספר-אטומים לאזור new/* לא יורד; מחיקה מכוונת = `--write` + ציון ב-commit. |
+| `learn-baseline.json` · `pretool-fixtures-baseline.json` · `mutation-dart-baseline.json` | 📈 רצפות סבב-3: מספר-לקחים (grow) · מספר-fixtures של pre-tool (grow) · unparsed של מוטציה-Dart (shrink). |
 | `selftest-coverage-baseline.json` | 📈 רצפת-הזוגות-המוכחים של `police-selftest` (grow; `--floor` מעלה). |
 | `learn-check.mjs` | 📚 שער `learn` (§8 · שלב 4): parity (GATE: לכל לקח, id מוכר) · antipattern-scan (regex לא תופס אף קובץ ב-new/) · learn-on-retry (טיוטת-M4: regex תופס blob-לפני, לא אחרי, לא ליטרל, תופס fixture ב-`selftest-fixtures/learn/`) · stuck-loop (3 כשלים רצופים ⇒ בעלים). |
 | `learn-draft.mjs` | 📝 מנוע-M4: `--record <gates> --stage <files>` ⇒ רשומות ב-`audit/retry.jsonl` (gate·path·sha·blob-before) · `--stage` בלבד ⇒ טיוטת `## L<תאריך>-<gate>-<sha6>` ב-LEARNINGS.md ל-retry לא-פתור + סימון resolved. |

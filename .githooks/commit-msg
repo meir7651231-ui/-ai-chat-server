@@ -4,7 +4,7 @@
 MSG="$1"
 GD="$(git rev-parse --absolute-git-dir)"
 CLEAN=$(grep -v '^#' "$MSG")
-LEN=$(printf '%s' "$CLEAN" | tr -d '[:space:]' | wc -c)
+LEN=$(printf '%s' "$CLEAN" | tr -d '[:space:]' | wc -m)   # R3-5.10: תווים, לא בייטים (עברית = 2 בייטים)
 if [ "$LEN" -lt 15 ]; then echo "❌ הודעת commit קצרה מדי ($LEN תווים, מינימום 15)" >&2; exit 1; fi
 FIRST=$(printf '%s\n' "$CLEAN" | head -1 | tr '[:upper:]' '[:lower:]')
 if printf '%s' "$FIRST" | grep -qE '^(wip|test|asdf|tmp|fix|update|change|123|aaa|xxx|todo)[[:space:]]*$'; then echo "❌ הודעת commit לא-תיאורית: '$FIRST'" >&2; exit 1; fi

@@ -23,8 +23,11 @@ if (argv.includes('--record')) {
   const gates = (opt('--record') || '').split(',').filter(Boolean);
   const sha = git('rev-parse', 'HEAD') || '';
   if (gates.length) {
-    for (const g of gates) for (const p of inNew) rows.push({ ts: Math.floor(Date.now() / 1000), gate: g, path: p, sha, blob_before: git('rev-parse', `HEAD:${p}`), resolved: false });
-    if (gates.length && !inNew.length) rows.push({ ts: Math.floor(Date.now() / 1000), gate: gates[0], path: null, sha, blob_before: null, resolved: false });
+    const attempt = Math.floor(Date.now() / 1000);
+    // R3-5.2: שורה רק לקובץ שבאמת השתנה מול HEAD (blob-לפני ≠ תוכן-נוכחי); אחרת הטיוטה בלתי-ניתנת-לסיפוק
+    const changed = inNew.filter((p) => { const b = git('rev-parse', `HEAD:${p}`); if (!b) return true; try { return git('hash-object', p) !== b; } catch { return true; } });
+    for (const g of gates) for (const p of changed) rows.push({ ts: attempt, attempt, gate: g, path: p, sha, blob_before: git('rev-parse', `HEAD:${p}`), resolved: false });
+    if (gates.length && !changed.length) for (const g of gates) rows.push({ ts: attempt, attempt, gate: g, path: null, sha, blob_before: null, resolved: false });
   } else {
     for (const r of rows) if (!r.resolved && (r.path === null || staged.includes(r.path))) r.resolved = true;
   }
@@ -37,7 +40,7 @@ const today = new Date().toISOString().slice(0, 10);
 const made = [];
 const seen = new Set();
 for (const r of rows) {
-  if (r.resolved || !r.path || !r.blob_before || !staged.includes(r.path)) continue;
+  if (r.resolved || !r.path || !r.blob_before || !staged.includes(r.path)) continue;   // בלי נתיב = כשל-כלי: נספר ל-stuck-loop, לא מטויט (אין blob להוכיח מולו)
   const id = `L${today}-${r.gate}-${r.blob_before.slice(0, 6)}`;
   if (seen.has(id) || learn.includes(`## ${id}`) || learn.includes(`ref: ${r.blob_before}:${r.path}`)) continue;
   seen.add(id); made.push({ id, r });

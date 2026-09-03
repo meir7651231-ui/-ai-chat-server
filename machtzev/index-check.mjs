@@ -8,7 +8,7 @@ import * as R from './root.mjs';
 const idx = fs.readFileSync(R.MACH + 'INDEX.md', 'utf8');
 const files = [];
 (function walk(d) { for (const e of fs.readdirSync(d, { withFileTypes: true })) { const f = path.join(d, e.name); if (e.isDirectory()) { if (!['node_modules', 'selftest-fixtures'].includes(e.name)) walk(f); } else if (e.name.endsWith('.mjs')) files.push(path.relative(R.MACH, f)); } })(R.MACH);
-const covered = (rel) => { const dir = rel.includes('/') ? rel.split('/')[0] + '/' : null; return idx.includes(rel) || idx.includes(path.basename(rel)) || (dir && idx.includes('`' + dir)); };
+const covered = (rel) => idx.includes('`' + rel + '`') || idx.includes('`' + path.basename(rel) + '`') || idx.includes('`' + rel.replace(/\.mjs$/, '') + '`') || idx.includes('`' + path.basename(rel, '.mjs') + '`');   // R3-3.7: רק אסימון-בגרשיים מדויק
 const missing = files.filter((f) => !covered(f)).sort();
 const BL = R.MACH + 'index-baseline.json';
 if (process.argv.includes('--write')) { fs.writeFileSync(BL, JSON.stringify(missing, null, 1) + '\n'); console.log(`✍️ index baseline ⇒ ${missing.length} בלי-שורה`); process.exit(0); }

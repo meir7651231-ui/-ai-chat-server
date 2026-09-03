@@ -5,12 +5,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import * as R from './root.mjs';
-const count = (d) => { let n = 0; (function walk(x) { for (const e of fs.readdirSync(x, { withFileTypes: true })) { const f = path.join(x, e.name); if (e.isDirectory()) { if (e.name !== 'node_modules') walk(f); } else if ((e.name.endsWith('.mjs') && !e.name.endsWith('.test.mjs')) || e.name.endsWith('.dart')) n++; } })(d); return n; };
+const count = (d) => { let n = 0; (function walk(x) { for (const e of fs.readdirSync(x, { withFileTypes: true })) { const f = path.join(x, e.name); if (e.isDirectory()) { if (e.name !== 'node_modules') walk(f); } else if ((e.name.endsWith('.mjs') && !e.name.endsWith('.test.mjs')) || e.name.endsWith('.dart')) n++; } })(d); return n; };   // R3-3.11 (בדיקות אינן אטומים) — ב-commit העוקב, אחרי שפרסור-Allow החדש ב-HEAD
 const cur = {};
 for (const e of fs.readdirSync(R.NEW, { withFileTypes: true })) if (e.isDirectory()) cur[e.name] = count(path.join(R.NEW, e.name));
 const BL = R.MACH + 'atom-count-baseline.json';
 if (process.argv.includes('--write')) { fs.writeFileSync(BL, JSON.stringify(cur, null, 1) + '\n'); console.log(`✍️ atom-count baseline ⇒ ${Object.keys(cur).length} אזורים · ${Object.values(cur).reduce((a, b) => a + b, 0)} אטומים`); process.exit(0); }
-const base = fs.existsSync(BL) ? JSON.parse(fs.readFileSync(BL, 'utf8')) : {};
+if (!fs.existsSync(BL)) { console.log('🔴 atom-count: אין atom-count-baseline.json — fail-closed (R3-3.4); --write'); process.exit(1); }
+let base; try { base = JSON.parse(fs.readFileSync(BL, 'utf8')); } catch { console.log('🔴 atom-count: baseline לא-JSON — fail-closed'); process.exit(1); }
 const drops = Object.entries(base).filter(([k, v]) => (cur[k] ?? 0) < v).map(([k, v]) => `${k} ${v}→${cur[k] ?? 0}`);
 if (drops.length) { console.log(`🔴 atom-count: אזור ירד: ${drops.join(' · ')} — מחיקה מכוונת? node machtzev/atom-count-check.mjs --write וציין ב-commit`); process.exit(1); }
 const total = Object.values(cur).reduce((a, b) => a + b, 0);

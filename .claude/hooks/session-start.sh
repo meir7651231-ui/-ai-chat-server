@@ -47,6 +47,6 @@ AHEAD=$(git rev-list --count "origin/$BR..HEAD" 2>/dev/null || echo "?"); BEHIND
 TB=$(sed -n '/truth:begin/,/truth:end/p' CLAUDE.md 2>/dev/null | grep -v 'truth:' | head -1 | cut -c1-160)
 echo "🏛 מחצב · $BR · HEAD $(git rev-parse --short HEAD 2>/dev/null) · ahead $AHEAD / behind $BEHIND מול origin" >&2
 [ -n "$TB" ] && echo "📐 $TB" >&2
-echo "🚨 המשטרה: node machtzev/police.mjs --inc (commit) · מלא (push) — מופעלת אוטומטית ב-hooks (שלב 1). מאמת: node machtzev/verify-independent.mjs protocol-good-2026-09-03 HEAD" >&2
+echo "🚨 המשטרה: node machtzev/police.mjs --inc (commit) · מלא (push) — מופעלת אוטומטית ב-hooks (שלב 1). מאמת: node machtzev/verify-independent.mjs refs/remotes/origin/protocol-good-2026-09-03 HEAD" >&2
 echo "📖 סדר-קריאה-חובה: CLAUDE.md §📖 (VERIFY-LAWS → LAW → LEARNINGS → AGENT-CODE → CURRICULUM → DECISIONS → WIRING) · הפרוטוקול: machtzev/PROTOCOL.md" >&2
 exit 0

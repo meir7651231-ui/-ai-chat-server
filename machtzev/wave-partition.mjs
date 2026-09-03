@@ -15,7 +15,10 @@ if (argv.includes('--staged')) targets = execFileSync('git', ['diff', '--cached'
 if (!targets.length) { console.log('usage: wave-partition <file…> | --staged [--json] [--max 10]'); process.exit(0); }
 const MAX = Number((argv[argv.indexOf('--max') + 1] || 10)) || 10;
 const graph = buildGraph();
-const radius = new Map(targets.map((t) => [t, new Set(consumersOf([t], graph).files)]));
+const cons = new Map(targets.map((t) => [t, consumersOf([t], graph)]));
+const radius = new Map(targets.map((t) => [t, new Set(cons.get(t).files)]));
+const UNKNOWN = new Set(targets.filter((t) => cons.get(t).unknown.length));   // R3-5.12: רדיוס לא-ידוע ⇒ כל אלה בתא אחד (fail-closed)
+for (const u of UNKNOWN) for (const v of UNKNOWN) radius.get(u).add(v);
 // תאים = רכיבי-קשירות של יחס "רדיוסים נחתכים"
 const cells = []; const seen = new Set();
 for (const t of targets) {

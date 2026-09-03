@@ -19,7 +19,9 @@ export function buildGraph() {
     if (/\bimport\s*\(/.test(src.replace(/\/\/.*$/gm, ''))) dynamic.add(f);
     const re = /\b(?:import|export)\s+[^'"]*?from\s*['"]([^'"]+)['"]|\bimport\s*['"]([^'"]+)['"]|\brequire\s*\(\s*['"]([^'"]+)['"]\s*\)|\bpart\s+['"]([^'"]+)['"]/g;
     for (const m of src.matchAll(re)) {
-      const spec = m[1] || m[2] || m[3] || m[4]; if (!spec || !spec.startsWith('.')) continue;
+      const spec = m[1] || m[2] || m[3] || m[4]; if (!spec) continue;
+      const dartBare = f.endsWith('.dart') && !/^(package|dart):/.test(spec) && spec.endsWith('.dart');   // R3-3.14: Dart import 'x.dart' = יחסי
+      if (!spec.startsWith('.') && !dartBare) continue;
       const t = path.resolve(path.dirname(f), spec);
       (importers.get(t) || importers.set(t, new Set()).get(t)).add(f);
     }
