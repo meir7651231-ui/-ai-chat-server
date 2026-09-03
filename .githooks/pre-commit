@@ -48,6 +48,14 @@ if [ -n "$ADDED" ]; then
   if [ $SPRC -eq 0 ]; then ok search-proof "$(echo "$SP" | tail -1)"; else err search-proof "אטום חדש בלי הוכחת-חיפוש (node machtzev/search-record.mjs)"; fi
 fi
 
+# ── הדרך צעדים 1·3·6 (שלב 9): מסך/לוח שנוסף או השתנה ⇒ כרטיס-מטרה (הסוכן מזין: מטרה · מודלים · אטומים · קבלה) + תמונה ──
+SCREENS=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '^new/(dart-screens-bs|dart-boards-bs)/[^/]+\.dart$' | tr '\n' ',' || true)
+if [ -n "$SCREENS" ]; then
+  GP=$(node machtzev/goal-proof-check.mjs --files "$SCREENS" 2>&1); GPRC=$?
+  echo "$GP" | grep -E '✗' | head -6
+  if [ $GPRC -eq 0 ]; then ok goal-proof "$(echo "$GP" | tail -1)"; else err goal-proof "מסך בלי כרטיס-מטרה תקף + תמונה (node machtzev/goal-card.mjs)"; fi
+fi
+
 # ── tiering הפוך: המשטרה מדולגת רק אם הכל ב-allowlist-docs ──
 CODE=$(echo "$STAGED" | grep -vE '^(knowledge/|design/|archive/|machtzev/audit/|[^/]+\.md$|machtzev/[^/]+\.md$)' || true)
 
