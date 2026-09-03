@@ -12,13 +12,14 @@ const [FROM, TO] = argv.filter((a, i) => (a === '--index' || !a.startsWith('--')
 const REPO = path.resolve(opt('--repo', '.'));
 const git = (...a) => execFileSync('git', ['-C', REPO, ...a], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
 const show = (ref, p) => { try { return ref === '--index' ? git('show', `:${p}`) : git('show', `${ref}:${p}`); } catch { return null; } };
+const narrowsFast = (skip) => skip === 'FAST' || /^FAST(\s*&&\s*!?[A-Za-z_$][\w$]*)+$/.test(skip);   // FAST && X מדלג רק כש-FAST מדלג ⇒ צמצום, לא החלשה
 const tuples = (ref) => Object.fromEntries([...(show(ref, 'machtzev/police.mjs') || '').matchAll(/^\s*gate(?:Dirty)?\(\s*'([^']+)'\s*,\s*'([^']+)'(?:\s*,\s*\[[^\]]*\])?(?:\s*,\s*([^)]+))?\)/gm)].map((m) => [m[1], { script: m[2], skip: (m[3] || '').trim() }]));
 const manifest = (ref) => { const m = {}; for (const l of (show(ref, 'machtzev/gates.tsv') || '').split('\n')) { if (!l || l.startsWith('#')) continue; const p = l.split('\t'); const b = (p[3] || '').match(/^(?:baseline=)?([^;]+);(?:dir=)?(shrink|grow)$/); m[p[0]] = b ? { file: 'machtzev/' + b[1], dir: b[2] } : null; } return m; };
 const a = tuples(FROM), b = tuples(TO), ma = manifest(FROM), mb = manifest(TO);
 const issues = [];
 for (const id of Object.keys(a)) {
   if (!b[id]) issues.push(`שער נמחק מ-police.mjs: ${id}`);
-  else { if (b[id].script !== a[id].script) issues.push(`סקריפט הוחלף: ${id} ${a[id].script} → ${b[id].script}`); if (b[id].skip && b[id].skip !== a[id].skip && b[id].skip !== 'FAST') issues.push(`skip חדש: ${id}=${b[id].skip}`); }
+  else { if (b[id].script !== a[id].script) issues.push(`סקריפט הוחלף: ${id} ${a[id].script} → ${b[id].script}`); if (b[id].skip && b[id].skip !== a[id].skip && !narrowsFast(b[id].skip)) issues.push(`skip חדש: ${id}=${b[id].skip}`); }
 }
 for (const id of Object.keys(ma)) if (!(id in mb)) issues.push(`רשומת-מרשם נמחקה: ${id}`);
 for (const id of Object.keys(mb)) {

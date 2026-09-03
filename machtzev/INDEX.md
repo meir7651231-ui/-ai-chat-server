@@ -15,6 +15,7 @@
 | `root.mjs` | 🌳 שורש-העץ-הנמדד (c3): `MACHTZEV_ROOT` ⇒ כלים מודדים עץ אחר; `GEN_OUT` ⇒ פלט-מחולל זמני. כל fs-path של שער עובר כאן. |
 | `dart-bin.mjs` · `lib-ts.mjs` | פותרי-כלים משותפים (Dart · typescript) — אין-כלי ⇒ `exit 2 tool=<שם>` (L34). |
 | `verify-independent.mjs` | 🔍 **המאמת-העצמאי** (PROTOCOL §5.2): כלי-משטרה מ-tag ידוע-טוב על HEAD · ראצ׳ט-כיוון פר-commit · הוכחת-ירי · שתי משטרות. עד, לא חומה. |
+| `census/import-graph.mjs` | 🕸️ גרף-imports סטטי ל-`police --inc` (שלב 1): דיף ⇒ דיף+צרכנים-טרנזיטיביים (+זוג בדיקה/חוזה). `import()` דינמי / קובץ-חוץ / >50 ⇒ unknown ⇒ המשטרה מריצה מלא (fail-closed). |
 | `selftest-fixtures/` | fixtures של `police-selftest.mjs` — **לא נעולים**: לקח חדש = fixture חדש בלי pins-write. |
 | `PROTOCOL.md` · `RED-TEAM-PROTOCOL.md` | תוכנית-האכיפה (v4) ויומן-השבירה (2 סבבים, 133 ממצאים). |
 | `compose-engine.mjs` | 🧩 קומפוזר-דטרמיניסטי (הכרעה 23-ג · §20-ד): חלקיק+נוסחה ⇒ פעולות-הצגה ⇒ אטום-אמיתי-הכי-טוב-לייעוד; טבלת-ATOM + FAKERS (מזייפים חסומים). טרם שער — `compose-determinism` מוצע. |

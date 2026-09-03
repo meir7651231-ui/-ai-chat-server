@@ -61,7 +61,7 @@ if [ $RDRC -eq 0 ]; then ok ratchet-down "$RD"; else echo "$RD" | tail -4; err r
 
 # ── ד · המשטרה (טבעת-commit = --fast עד שקיים import-graph ל---inc; R2-5.3) ──
 if [ -n "$CODE" ]; then
-  POUT=$(node machtzev/police.mjs --fast 2>&1); PRC=$?
+  POUT=$(node machtzev/police.mjs --inc 2>&1); PRC=$?   # --inc: דיף+צרכנים (import-graph) · fail-closed ⇒ מלא (שלב 1 סגור)
   echo "$POUT" | grep -E '^(ran|skipped|yellow|failed) ' >> "$LEDGER"
   PSUM=$(echo "$POUT" | grep -E 'המשטרה' | tail -1)
   case $PRC in

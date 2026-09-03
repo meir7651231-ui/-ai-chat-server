@@ -16,7 +16,7 @@ const A = dirArg || (R.NEW + 'atoms/');
 const isAtom = (f) => f.endsWith('.mjs') && !f.endsWith('.test.mjs');
 const runTest = (test) => { const dir = path.dirname(test); const r = spawnSync('node', ['--permission', `--allow-fs-read=${path.resolve(A, '..')}/*`, test], { cwd: dir, env: { PATH: process.env.PATH || '' }, stdio: 'pipe', timeout: 15000, killSignal: 'SIGKILL' }); return r.status === 0 ? 0 : 1; };
 let files = [];
-if (fi >= 0) files = argv[fi + 1].split(',').map(s => path.resolve(s)).filter(f => isAtom(f) && fs.existsSync(f));
+if (fi >= 0) files = argv[fi + 1].split(',').map(s => path.resolve(s)).filter(f => isAtom(f) && f.startsWith(path.resolve(A) + path.sep) && fs.existsSync(f));   // --files: אותה אוכלוסייה כמו ההליכה המלאה (אטומים בלבד; תיבות ⇒ boxes-gate)
 else (function walk(d) { for (const e of fs.readdirSync(d, { withFileTypes: true })) { const f = path.join(d, e.name); if (e.isDirectory()) walk(f); else if (isAtom(e.name)) files.push(f); } })(A);
 files.sort();
 let ok = 0, vacuous = [], broken = [], unparsed = [], untested = 0;

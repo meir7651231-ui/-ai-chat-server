@@ -19,9 +19,33 @@ import { fileURLToPath } from 'node:url';
 // HERE = machtzev/ של העץ **הנמדד** (gates.tsv · node_modules · baselines) — שונה רק כש-MACHTZEV_ROOT מוגדר.
 const TOOLS = path.dirname(fileURLToPath(import.meta.url)) + '/';
 const HERE = R.MACH;
-const FAST = process.argv.includes('--fast');
 const INC = process.argv.includes('--inc');
+const FAST = process.argv.includes('--fast') || INC;   // --inc = טבעת-commit: היקרים מדולגים כמו --fast
 const GATE_TIMEOUT_S = Number(process.env.POLICE_GATE_TIMEOUT || 600);
+
+// ── --inc (שלב 1 · R2-5.3): רק דיף+צרכנים ל-contract/wiring/mutation. fail-closed ⇒ מלא (R2-1.10 · R2-2.12) ──
+// מקור-השינויים: --files a,b,c או git diff --cached. הרחבה: census/import-graph.mjs (סטטי; import() דינמי ⇒ unknown ⇒ מלא).
+let INC_FILES = null;   // null = מלא; אחרת רשימת-נתיבים מוחלטים
+if (INC) {
+  const fi = process.argv.indexOf('--files');
+  let changed = fi >= 0 ? process.argv[fi + 1].split(',') : [];
+  if (!changed.length) { try { changed = execFileSync('git', ['diff', '--cached', '--name-only', '--diff-filter=ACMRD'], { cwd: R.ROOT, encoding: 'utf8' }).split('\n').filter(Boolean).map((f) => path.join(R.ROOT, f)); } catch {} }
+  const inNew = changed.filter((f) => f.startsWith(R.NEW.replace(/\/$/, '')));
+  const outside = changed.filter((f) => !f.startsWith(R.NEW.replace(/\/$/, '')) && /\.(mjs|dart|json|tsv)$/.test(f) && !/\/machtzev\/(PROTOCOL|RED-TEAM|LAWS-MAP|INDEX)/.test(f));
+  let why = '';
+  if (!changed.length) why = 'אין דיף';
+  else if (outside.length) why = `שינוי מחוץ ל-new/ (${path.relative(R.ROOT, outside[0])}${outside.length > 1 ? ' +' + (outside.length - 1) : ''}) — כלים/מנוע ⇒ מלא`;
+  else {
+    const { consumersOf } = await import('./census/import-graph.mjs');
+    const r = consumersOf(inNew);
+    if (r.unknown.length) why = `import() דינמי / קובץ בלי-בעלים (${r.unknown.length}) — צרכנים לא-ידועים`;
+    else if (r.files.length > 50) why = `${r.files.length} קבצים > 50`;
+    else INC_FILES = r.files;
+  }
+  if (INC_FILES) console.log(`ℹ️ inc: ${inNew.length} שונו ⇒ ${INC_FILES.length} לבדיקה (דיף+צרכנים, import-graph)`);
+  else console.log(`ℹ️ inc → full (fail-closed): ${why}`);
+}
+const filesArg = () => (INC_FILES ? ['--files', INC_FILES.join(',')] : []);
 
 // ── מרשם (עמודה 0; עמודות נוספות — layer/baseline — נקראות ע"י ה-hooks, לא כאן) ──
 const registry = new Set(fs.readFileSync(HERE + 'gates.tsv', 'utf8').split('\n')
@@ -85,9 +109,8 @@ const gateDirty = (id, script, args = [], skip = false) => {
   try { runGate(id, script, args); } finally { restoreD(GENd, GAP, s1); restoreD(DATAd, GAP, s2); }
 };
 
-if (INC) console.log('ℹ️ inc → full: no-graph (census/import-graph.mjs מגיע ב-c3) — fail-closed, מריץ מלא');
-gate('wiring', 'wiring-check.mjs', [R.NEW]);
-gate('contract', 'contract-check.mjs', [R.NEW]);
+gate('wiring', 'wiring-check.mjs', [R.NEW, ...filesArg()]);
+gate('contract', 'contract-check.mjs', [R.NEW, ...filesArg()]);
 gate('quarry', 'quarry-check.mjs', [R.p('quarry')]);
 gate('freeref', 'emit/free-ref-scan.mjs', ['--gate']);
 gate('datapurity', 'data-purity-check.mjs', ['--gate']);
@@ -106,7 +129,7 @@ gate('coverage', 'coverage-gate.mjs');
 gate('pins', 'pins-check.mjs');
 gate('boxes', 'box-proofs-check.mjs', ['--gate'], FAST);
 gate('selftest', 'police-selftest.mjs', [], FAST);
-gate('mutation', 'mutation-check.mjs', [], FAST);
+gate('mutation', 'mutation-check.mjs', [...filesArg()], FAST && !INC_FILES);   // תחת --inc: מוטציה על הדיף בלבד (לא מדולג)
 
 // ── פריטי מרשם⇄ריצה — דו-כיווני; skipped/yellow/failed "נראו", לא "רצו" ──
 let fail = failed.size > 0;

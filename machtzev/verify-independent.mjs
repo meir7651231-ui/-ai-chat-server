@@ -39,6 +39,7 @@ process.on('exit', () => { try { git('worktree', 'remove', '--force', T); git('w
 for (const wt of [T, H]) { const nm = path.join(REPO, 'machtzev/node_modules'); if (fs.existsSync(nm) && !fs.existsSync(path.join(wt, 'machtzev/node_modules'))) fs.cpSync(nm, path.join(wt, 'machtzev/node_modules'), { recursive: true }); }
 
 // ── 4 · כיוון פר-commit ──
+const narrowsFast = (skip) => skip === 'FAST' || /^FAST(\s*&&\s*!?[A-Za-z_$][\w$]*)+$/.test(skip);   // FAST && X מדלג רק כש-FAST מדלג ⇒ צמצום, לא החלשה
 const tuples = (sha) => { const s = show(sha, 'machtzev/police.mjs') || ''; return Object.fromEntries([...s.matchAll(/^\s*gate(?:Dirty)?\(\s*'([^']+)'\s*,\s*'([^']+)'(?:\s*,\s*\[[^\]]*\])?(?:\s*,\s*([^)]+))?\)/gm)].map((m) => [m[1], { script: m[2], skip: (m[3] || '').trim() }])); };
 const manifest = (sha) => { const s = show(sha, 'machtzev/gates.tsv') || ''; const m = {}; for (const l of s.split('\n')) { if (!l || l.startsWith('#')) continue; const p = l.split('\t'); const b = (p[3] || '').match(/^(?:baseline=)?([^;]+);(?:dir=)?(shrink|grow)$/); m[p[0]] = { layer: p[2] || '', baseline: b ? { file: 'machtzev/' + b[1], dir: b[2] } : null }; } return m; };
 const commits = git('rev-list', '--reverse', `${tSha}..${hSha}`).split('\n').filter(Boolean);
@@ -49,7 +50,7 @@ for (const sha of commits) {
   const issues = [];
   for (const id of Object.keys(a)) {
     if (!b[id]) issues.push(`שער נמחק: ${id}`);
-    else { if (b[id].script !== a[id].script) issues.push(`סקריפט הוחלף: ${id} ${a[id].script}→${b[id].script}`); if (b[id].skip && b[id].skip !== a[id].skip && b[id].skip !== 'FAST') issues.push(`skip חדש: ${id}=${b[id].skip}`); }
+    else { if (b[id].script !== a[id].script) issues.push(`סקריפט הוחלף: ${id} ${a[id].script}→${b[id].script}`); if (b[id].skip && b[id].skip !== a[id].skip && !narrowsFast(b[id].skip)) issues.push(`skip חדש: ${id}=${b[id].skip}`); }
   }
   for (const id of Object.keys(ma)) if (!mb[id]) issues.push(`רשומת-מרשם נמחקה: ${id}`);
   for (const id of Object.keys(mb)) {
