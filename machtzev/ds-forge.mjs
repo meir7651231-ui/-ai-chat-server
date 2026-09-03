@@ -284,6 +284,9 @@ const dq = s => '"' + String(s).replace(/\\/g,'\\\\').replace(/"/g,'\\"').replac
 // ───────────────────────── DOM ⇒ Flutter ─────────────────────────
 function textOf(node) { return node.children.filter(c => c.text != null).map(c => c.text).join('').trim(); }
 function elemChildren(node) { return node.children.filter(c => c.tag && c.tag !== 'br'); }
+// ילד עם margin אנכי-auto (‏margin:auto / margin:auto 0) בטור-flex ⇒ מרכוז-אנכי בתוך min-height (‏.ctl segment).
+// margin:0 auto (אופקי) לא-נכלל — הטוקן-הראשון חייב להיות auto.
+function hasVAutoChild(node) { return elemChildren(node).some(c => /margin\s*:\s*auto(?:[\s;"]|$)/.test((c.attrs && c.attrs.style) || '')); }
 
 function decoration(st) {                       // {prop} ⇒ BoxDecoration(...) | null
   const parts = [];
@@ -650,6 +653,9 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   const listSep = gap ? `, spacing: ${gap}` : '';
   const isFlex = /flex/.test(disp), col = /column/.test(fd);
   const maj = JUST[st['justify-content']], min = ALIGN[st['align-items']];
+  // טור-flex עם ילד margin אנכי-auto ובלי justify ⇒ מרכוז-אנכי (‏.ctl > div[margin:auto 0] > segment). Column
+  // ממלא-גובה (max) וממרכז; wrapBox קובע גובה=min-height כדי שהמרכוז יחול (כמו תיקון-האווטארים).
+  const colVAuto = isFlex && col && !maj && hasVAutoChild(node);
   const majE = maj ? `, mainAxisAlignment: MainAxisAlignment.${maj}` : '';
   const rowCross = min || 'center', colCross = min || 'start';
   const tb = c => c === 'baseline' ? ', textBaseline: TextBaseline.alphabetic' : '';
@@ -682,7 +688,7 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   // מיכל לא-flex עם ילדים inline-level בלבד ⇒ זרימת-inline אמיתית דרך Text.rich (עוטף-שורות +
   // bidi-RTL + baseline) במקום Row (שלא עוטף ⇒ overflow בפסקה). textAlign מהמיכל.
   else if (!isFlex && flowInline) inner = `Text.rich(TextSpan(children: [${flow.map(toRichSpan).join(', ')}])${ta === 'center' ? ', textAlign: TextAlign.center' : ta === 'left' ? ', textAlign: TextAlign.left' : ta === 'right' ? ', textAlign: TextAlign.right' : ''})`;
-  else inner = `Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.${colCross}${tb(colCross)}${majE}${hasVM ? '' : listSep}, children: [${hasVM ? collapsedCol() : flow.join(', ')}])`;
+  else inner = `Column(mainAxisSize: ${colVAuto ? 'MainAxisSize.max' : 'MainAxisSize.min'}, ${colVAuto ? 'mainAxisAlignment: MainAxisAlignment.center, ' : ''}crossAxisAlignment: CrossAxisAlignment.${colCross}${tb(colCross)}${majE}${hasVM ? '' : listSep}, children: [${hasVM ? collapsedCol() : flow.join(', ')}])`;
   // אבסולוטיים ⇒ Stack + Positioned · ה-padding עוטף רק את הזרימה (CSS: absolute יחסי ל-padding-box)
   let noPad = false;
   if (abs.length) {
@@ -782,7 +788,12 @@ function wrapBox(st, inner, node, noPad, parentFlex = false, noVMargin = false) 
     /wrap/.test(st['flex-wrap'] || '') && !/nowrap/.test(st['flex-wrap'] || '') &&
     (!st['justify-content'] || /^(?:flex-)?start$/.test(st['justify-content'])) &&
     ALIGN[st['align-items']] === 'center';
+  // טור-flex עם ילד margin אנכי-auto ובלי justify ⇒ גובה-קבוע=min-height כדי שה-Column (max+center מ-emit) ימרכז
+  // אנכית ברצועה (‏.ctl segment). גובה-קבוע (לא minHeight) — אחרת ה-max קורס בגובה-לא-חסום של מסגרת-הביקורת.
+  const isColVCtr = minH != null && !w && !h && !centered && inner && node &&
+    /\bflex\b/.test(st['display'] || '') && (st['flex-direction'] || '') === 'column' && !st['justify-content'] && hasVAutoChild(node);
   if (isMrowCtr) { cp.push(`height: ${minH}`, 'alignment: Alignment.centerRight'); if (minW != null) cp.push(`constraints: const BoxConstraints(minWidth: ${minW})`); }
+  else if (isColVCtr) { cp.push(`height: ${minH}`); if (minW != null) cp.push(`constraints: const BoxConstraints(minWidth: ${minW})`); }
   else if (minH != null || minW != null) cp.push(`constraints: const BoxConstraints(${[minH != null ? `minHeight: ${minH}` : '', minW != null ? `minWidth: ${minW}` : ''].filter(Boolean).join(', ')})`);
   if (mg) cp.push(`margin: ${mg}`);
   if (pad) cp.push(`padding: ${pad}`);
