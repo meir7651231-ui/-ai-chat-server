@@ -4,12 +4,13 @@ import fs from 'node:fs';
 import path from 'node:path';
 import pw from '/opt/node22/lib/node_modules/playwright/index.js';
 import { allAtoms, frameOrig, SHOTS, key } from './lib.mjs';
+import { fingerprint } from './features.mjs';
 
 const only = process.argv.slice(2).filter(a => !a.startsWith('-'));
 const atoms = allAtoms().filter(a => !only.length || only.includes(a.family));
 const origDir = path.join(SHOTS, 'orig'); fs.mkdirSync(origDir, { recursive: true });
 
-fs.writeFileSync(path.join(SHOTS, 'index.json'), JSON.stringify(atoms.map(a => ({ family: a.family, slug: a.slug, cls: a.cls, name: a.name, seam: a.seam, theater: a.theater, hug: a.hug })), null, 2));
+fs.writeFileSync(path.join(SHOTS, 'index.json'), JSON.stringify(atoms.map(a => ({ family: a.family, slug: a.slug, cls: a.cls, name: a.name, seam: a.seam, theater: a.theater, hug: a.hug, feats: fingerprint(a.family, a.origBody) })), null, 2));
 
 const b = await pw.chromium.launch({ executablePath: '/opt/pw-browsers/chromium', args: ['--disable-lcd-text', '--font-render-hinting=none'] });
 let i = 0;

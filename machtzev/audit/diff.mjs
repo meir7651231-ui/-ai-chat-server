@@ -80,34 +80,65 @@ for (let r = 0; r < worst.length; r++) {
 }
 await b.close();
 
-// דוחות
+// ── מעקב: baseline + היסטוריה + זיהוי-רגרסיה ──────────────────────────────
+// baseline.json נשמר בגיט (machtzev/audit/) = חוזה-האיכות. השוואה מול-baseline מסמנת רגרסיות/שיפורים.
+const AUDIT = path.dirname(SHOTS);
+const baseFile = path.join(AUDIT, 'baseline.json');
+const setBaseline = process.argv.includes('--baseline');
+const base = fs.existsSync(baseFile) ? JSON.parse(fs.readFileSync(baseFile, 'utf8')) : null;
+const EPS = 1.5;   // סף-שינוי-משמעותי (מעל רעש-רסטור)
+const cur = {};
+for (const r of rows) cur[r.k] = r.note ? -1 : r.diffPct;   // -1 = חסר-render
+const deltas = [];
+if (base) for (const r of rows) {
+  const b = base[r.k]; if (b == null) { r.trend = 'new'; continue; }
+  const now = cur[r.k];
+  if (b === -1 && now >= 0) { r.trend = 'fixed-render'; deltas.push({ k: r.k, from: 'no-render', to: now }); }
+  else if (b >= 0 && now === -1) { r.trend = 'broke-render'; deltas.push({ k: r.k, from: b, to: 'no-render' }); }
+  else if (now - b > EPS && now > 2) { r.trend = 'REGRESSED'; r.delta = +(now - b).toFixed(2); deltas.push({ k: r.k, from: b, to: now, d: r.delta }); }
+  else if (b - now > EPS) { r.trend = 'improved'; r.delta = +(now - b).toFixed(2); }
+}
+
 fs.writeFileSync(path.join(SHOTS, 'report.json'), JSON.stringify(rows, null, 2));
 const miss = rows.filter(r => r.note);
 const withDiff = rows.filter(r => r.note === '');
-const FLOOR = 8;   // רצפת-רסטור-טקסט משוערת — מעליה = חשוד-אמיתי
+const FLOOR = 8;
 const clean = withDiff.filter(r => r.diffPct < 2).length;
 const suspect = withDiff.filter(r => r.diffPct >= FLOOR).length;
-const mean = withDiff.length ? (withDiff.reduce((s, r) => s + r.diffPct, 0) / withDiff.length).toFixed(3) : 0;
+const mean = withDiff.length ? +(withDiff.reduce((s, r) => s + r.diffPct, 0) / withDiff.length).toFixed(3) : 0;
+const regressed = rows.filter(r => r.trend === 'REGRESSED');
+const improved = rows.filter(r => r.trend === 'improved');
+const brokeRender = rows.filter(r => r.trend === 'broke-render');
+const fixedRender = rows.filter(r => r.trend === 'fixed-render');
+
+// היסטוריה (מצטברת) — קו-מגמה לאורך זמן.
+fs.appendFileSync(path.join(AUDIT, 'history.jsonl'), JSON.stringify({ t: new Date().toISOString(), atoms: rows.length, compared: withDiff.length, mean, clean, suspect, miss: miss.length, regressed: regressed.length, improved: improved.length }) + '\n');
+
+if (setBaseline) { fs.writeFileSync(baseFile, JSON.stringify(cur, null, 0)); console.log(`✓ baseline נשמר (${Object.keys(cur).length} אטומים) ⇒ ${baseFile}`); }
+
+const feat = r => (r.feats && r.feats.length ? r.feats.slice(0, 2).join(',') : '');
 const md = [
-  `# pixel-forge-audit — דוח (${new Date().toISOString().slice(0, 10)})`,
+  `# pixel-forge-audit — דוח (${new Date().toISOString().slice(0, 16).replace('T', ' ')})`,
   ``,
   `סף-פיקסל-שונה: הפרש-אפור > ${THRESH}. אטומי-תאטרון = מצב-ראשון בלבד (כמו ה-FORGE).`,
   ``,
   `- אטומים: **${rows.length}** · הושוו: **${withDiff.length}** · חסרי-render: **${miss.length}**`,
   `- diff ממוצע: **${mean}%** · נמוכים (<2%): **${clean}** · חשודים (≥${FLOOR}%): **${suspect}**`,
-  `- גיליונות-הפרש ל-${worst.length} הגרועים: \`shots/diff/\``,
-  `- **raw%** = הפרש-פיקסל אפור (מעל ~5-7% = רצפת-רסטור-טקסט; חריגה גבוהה/גוש-רציף = באג-אמיתי).`,
-  `  **struct%** = אחרי הקטנה ×0.25 (משני). כלי-ההכרעה הוא ה-heatmap, לא המספר לבדו.`,
+  base ? `- מול-baseline: 🔴 רגרסיות **${regressed.length}** · 🟢 שיפורים **${improved.length}** · ✅ תוקן-render **${fixedRender.length}** · 💥 נשבר-render **${brokeRender.length}**` : `- _אין baseline — הרץ עם \`--baseline\` לקיבוע חוזה-איכות._`,
+  `- **raw%** = הפרש-פיקסל אפור (~5-7% = רצפת-רסטור-טקסט) · **feats** = תכונות-CSS-קשות חשודות · ה-heatmap מכריע.`,
   ``,
+  ...(regressed.length ? [`## 🔴 רגרסיות (החמירו מול baseline)`, ``, `| אטום | baseline% | עכשיו% | Δ | feats |`, `|---|---|---|---|---|`, ...regressed.sort((a, b) => b.delta - a.delta).map(r => `| ${r.k} | ${base[r.k]} | ${r.diffPct} | +${r.delta} | ${feat(r)} |`), ``] : []),
+  ...(brokeRender.length ? [`## 💥 נשבר-render מול baseline`, brokeRender.map(r => `- ${r.k}`).join('\n'), ``] : []),
   `## 40 הגרועים (מהגרוע לטוב, לפי raw%)`,
   ``,
-  `| # | אטום | raw% | struct% | theater | הערה |`,
-  `|---|------|------|---------|---------|------|`,
-  ...rows.slice(0, 40).map((r, n) => `| ${n + 1} | ${r.k} | ${r.note ? '—' : r.diffPct} | ${r.note ? '—' : r.structPct} | ${r.theater ? '✓' : ''} | ${r.note} |`),
+  `| # | אטום | raw% | struct% | feats | מגמה | הערה |`,
+  `|---|------|------|---------|-------|------|------|`,
+  ...rows.slice(0, 40).map((r, n) => `| ${n + 1} | ${r.k} | ${r.note ? '—' : r.diffPct} | ${r.note ? '—' : r.structPct} | ${feat(r)} | ${r.trend === 'REGRESSED' ? '🔴' : r.trend === 'improved' ? '🟢' : r.trend === 'new' ? '🆕' : ''} | ${r.note} |`),
   ``,
   `## חסרי-render (${miss.length})`,
-  miss.length ? miss.map(r => `- ${r.k} — ${r.note}`).join('\n') : '_אין_',
+  miss.length ? miss.map(r => `- ${r.k}${r.feats && r.feats.length ? ' · ' + r.feats.slice(0, 2).join(',') : ''}`).join('\n') : '_אין_',
   ``,
 ].join('\n');
 fs.writeFileSync(path.join(SHOTS, 'report.md'), md);
-console.log(`✓ diff: ${withDiff.length} הושוו · נקיים ${clean} · diff ממוצע ${mean}% · גרועים→shots/diff · report.md`);
+console.log(`✓ diff: ${withDiff.length} הושוו · נקי ${clean} · ממוצע ${mean}%${base ? ` · 🔴${regressed.length} 🟢${improved.length}` : ''} · report.md`);
+if (regressed.length) console.log(`⚠ רגרסיות: ${regressed.map(r => r.k).join(', ')}`);

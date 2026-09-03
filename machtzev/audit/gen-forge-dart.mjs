@@ -6,7 +6,10 @@ import path from 'node:path';
 import { SHOTS, FONTS } from './lib.mjs';
 
 const TEST = '/home/user/buildsmart/app_flutter/test/zz_pixel_audit_test.dart';
-const idx = JSON.parse(fs.readFileSync(path.join(SHOTS, 'index.json'), 'utf8'));
+let idx = JSON.parse(fs.readFileSync(path.join(SHOTS, 'index.json'), 'utf8'));
+// ONLY=fam__slug,fam__slug… ⇒ מרנדר תת-קבוצה בלבד (ל-self-heal ממוקד ומהיר).
+const only = (process.env.ONLY || '').split(',').filter(Boolean);
+if (only.length) idx = idx.filter(a => only.includes(`${a.family}__${a.slug}`));
 const fams = [...new Set(idx.map(a => a.family))].sort();
 const forgeDir = path.join(SHOTS, 'forge');
 

@@ -31,6 +31,28 @@ node machtzev/audit/run.mjs text status  # משפחות נבחרות
   אדום-בגוש/מיקום-שונה/צבע-שונה = פער-אמיתי.
 - **no-forge** = האטום לא-צויר עצמאית (בעיית-פריסה) — ממצא בפני-עצמו.
 
+## 🩺 תיקון-עצמי מוגן (self-heal)
+```bash
+node machtzev/audit/heal.mjs text__gradient_text   # אמת תיקון-מנוע (עץ-העבודה) מול baseline
+node machtzev/audit/heal.mjs --suspects            # כל החשודים (raw≥8%)
+```
+מנגנון: אחרי עריכת-מנוע (ידנית או ע"י אסטרטגיה), `heal` **מרנדר את המטרות + 12 קנרים**, מודד,
+ומכריע — **קידום** (השארת השינוי) אם המטרות השתפרו **ואף קנרי לא-נסוג**, אחרת **ביטול-אוטומטי**
+(`git checkout ds-forge.mjs` + regen + mirror). כל תיקון-מנוע נעשה בטוח ואוטו-מתבטל ברגרסיה.
+בקידום — `baseline.json` מתעדכן למטרות (מעקב עתידי מהמצב-החדש). דוגמה שהוכחה: `background-clip:text`
+(gradient_text) ‏17.2%→5.5% · אפס-רגרסיה · קודם אוטומטית.
+
+## 📈 מעקב (baseline + היסטוריה)
+- `baseline.json` (נשמר בגיט) = חוזה-האיכות: diff% פר-אטום. כל ריצת-diff משווה מולו ⇒ מסמנת
+  🔴 **רגרסיות** · 🟢 **שיפורים** · 💥 **נשבר-render** · ✅ **תוקן-render** בראש ה-report.md.
+- `node machtzev/audit/diff.mjs --baseline` (או `run.mjs`… ואז diff --baseline) — מקבע baseline חדש.
+- `history.jsonl` — שורת-מגמה פר-ריצה (mean · clean · suspect · regressed · improved).
+
+## 🔎 אבחון (feature-fingerprint)
+`features.mjs` מסמן לכל אטום אילו תכונות-CSS-קשות הוא משתמש (`background-clip:text` · `transform-3d` ·
+`object-fit` · `clip-path` · `conic-gradient` · `bg-image-url` …). מופיע בעמודת **feats** ב-report ⇒
+"‏diff 17% · background-clip:text" = אבחון-שורש מיידי + כיוון-ל-heal.
+
 ## תלויות
 Playwright (מערכתי), flutter (buildsmart), פונטים מקומיים ב-`fonts/` (Fraunces · Frank Ruhl Libre ·
 Space Grotesk · Heebo · JetBrains Mono). `shots/` ב-.gitignore (מתחדש).

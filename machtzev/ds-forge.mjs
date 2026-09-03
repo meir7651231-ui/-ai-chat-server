@@ -513,6 +513,17 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   if (!kids.length && txt && !hasPseudo) {
     const tt = effText['text-transform'];
     const shown = tt === 'uppercase' ? txt.toUpperCase() : tt === 'lowercase' ? txt.toLowerCase() : tt === 'capitalize' ? txt.replace(/\b\w/g, c => c.toUpperCase()) : txt;
+    // background-clip:text (+ color/fill:transparent) = טקסט-גרדיאנט. Flutter: ShaderMask עם הגרדיאנט על
+    // הטקסט (srcIn), צבע-טקסט לבן, וביטול רקע-הקופסה. בלי זה הגרדיאנט צויר כרקע-מלבן מאחורי טקסט-שקוף.
+    const clipText = /text/.test(st['background-clip'] || st['-webkit-background-clip'] || '');
+    const grad = clipText ? gradientExpr(st['background'] || '') : null;
+    if (grad) {
+      const ef2 = Object.assign({}, effText); delete ef2['color'];
+      const tw = `Text(${dq(shown)}${taExpr}, style: TextStyle(${textStyleC(ef2, 'const Color(0xFFFFFFFF)').join(', ')}))`;
+      const masked = `ShaderMask(shaderCallback: (b) => ${grad}.createShader(b), blendMode: BlendMode.srcIn, child: ${tw})`;
+      const st2 = Object.assign({}, st, { background: undefined, 'background-clip': undefined, '-webkit-background-clip': undefined, color: undefined });
+      return wrapBox(st2, masked, node, false, parentFlex, noVMargin);
+    }
     return wrapBox(st, `Text(${dq(shown)}${taExpr}, style: TextStyle(${textStyleC(effText, inherit).join(', ')}))`, node, false, parentFlex, noVMargin);   // parentFlex ⇒ פריט-flex-עלה שומר width (blockification), למשל .sevrow .lb width:64px
   }
   // בונה ילדים (מפריד אבסולוטיים ל-Stack) · מעביר צבע-יורש
