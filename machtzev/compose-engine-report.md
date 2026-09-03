@@ -17,8 +17,8 @@
 | 13 | עובדות | `rate/supplier/price` | עובדה·1 | StatusChip |
 | 14 | זהות | `name+glyph+summary` | עובדה·1 | MediaRow |
 | 15 | פעולה | `mark ordered` | עובדה·1 | SoftButton |
-| 16 | איתור | `q ⇒ contains(name/sku/cat)` | עובדה·1 | DsSearch |
-| 17 | זיהוי-חריגה | `belowMin/expiring/isOut` | עובדה·1 | FilterChipPill |
+| 16 | איתור | `q ⇒ ניקוד-רב-מילתי-מנורמל (smartScore)` | תובנה·2 | DsSearch + smartFilter |
+| 17 | זיהוי-חריגה | `נעילת-ציר-AND (finderMatches)` | תובנה·2 | FilterChipPill + finderMatches |
 | 18 | טבלה | `records × 10 שדות-אמת` | עובדה·1 | DsTable |
 | 19 | תנועות | `intakeLog ⇒ rows+Σcost` | תובנה·2 | DsSection(כותרת+Σ) + TimelineItem |
 | 20 | פאנל-פריט | `GlassCard(זהות+מצב+תנועות+פעולה)` | תובנה·5 | GlassCard + MediaRow + StatRow(מלאי מול יעד) + TimelineItem + SoftButton |
@@ -35,7 +35,9 @@
 - `MediaRow` ← premium/lists/media_row.dart:12-15 title/subtitle/glyph
 - `SoftButton` ← premium/actions/soft_button.dart:7 label+onTap
 - `DsSearch` ← ds/ds_search.dart:5 value+onChanged (מבוקר)
+- `smartFilter` ← dart-maor/smart-filter.dart:84 ⊕smartScore⊕normSearch (לוגיקה §21)
 - `FilterChipPill` ← screens__manager_dashboard_screen/filter_chip_pill.dart:7 selected+onTap (מבוקר)
+- `finderMatches` ← dart-maor/finder-matches.dart:23 locks+axisValue (לוגיקה §21)
 - `DsTable` ← ds/ds_table.dart:7 labels+rows+מיון
 - `TimelineItem` ← premium/lists/timeline_item.dart title+time+body
 - `GlassCard` ← premium/surfaces/glass_card.dart:5 required this.child
@@ -43,4 +45,4 @@
 
 **מזייפים חסומים במנוע (בחירה בהם ⇒ throw):** stat_block · linear_progress · radial_gauge · bar_chart · sparkline
 
-**סיכום:** 4 תובנות (מרובות-אטומים) · 17 עובדות (אטום-יחיד). המנוע דטרמיניסטי — אותה נוסחה תיתן תמיד אותה הרכבה, ואף פעם לא מזייף.
+**סיכום:** 6 תובנות (מרובות-אטומים) · 15 עובדות (אטום-יחיד). המנוע דטרמיניסטי — אותה נוסחה תיתן תמיד אותה הרכבה, ואף פעם לא מזייף.

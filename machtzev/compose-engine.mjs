@@ -18,8 +18,10 @@ const ATOM = {
   identity:  { atom: 'MediaRow',   seam: 'premium/lists/media_row.dart:12-15 title/subtitle/glyph' },
   action:    { atom: 'SoftButton', seam: 'premium/actions/soft_button.dart:7 label+onTap' },
   // ── פעולות-מסך-מלא (גלים 2–4 · אטומי-מדף-אמת, סוכני-חקר 3.9) ──
-  search:    { atom: 'DsSearch',      seam: 'ds/ds_search.dart:5 value+onChanged (מבוקר)' },              // איתור
-  filter:    { atom: 'FilterChipPill', seam: 'screens__manager_dashboard_screen/filter_chip_pill.dart:7 selected+onTap (מבוקר)' }, // זיהוי-חריגה
+  search:    { atom: 'DsSearch',      seam: 'ds/ds_search.dart:5 value+onChanged (מבוקר)' },              // איתור · תצוגה
+  match:     { atom: 'smartFilter',   seam: 'dart-maor/smart-filter.dart:84 ⊕smartScore⊕normSearch (לוגיקה §21)' }, // איתור · מנוע
+  filter:    { atom: 'FilterChipPill', seam: 'screens__manager_dashboard_screen/filter_chip_pill.dart:7 selected+onTap (מבוקר)' }, // חריגה · תצוגה
+  predicate: { atom: 'finderMatches', seam: 'dart-maor/finder-matches.dart:23 locks+axisValue (לוגיקה §21)' }, // חריגה · מנוע
   table:     { atom: 'DsTable',       seam: 'ds/ds_table.dart:7 labels+rows+מיון' },                      // הצגת-אוסף (לא DataGrid)
   panel:     { atom: 'GlassCard',     seam: 'premium/surfaces/glass_card.dart:5 required this.child' },   // מיכל-פריט-נבחר
   timeline:  { atom: 'TimelineItem',  seam: 'premium/lists/timeline_item.dart title+time+body' },         // שורת-תנועה (לא timeline_flow)
@@ -49,8 +51,10 @@ function ops(formula) {
   if (f.kind === 'vs')        // השוואה = תובנה: שני-גדלים + הפרש + יחס (3 אטומים)
     return [{ op: 'compare', why: 'שני הגדלים זה-מול-זה' }, { op: 'diff', label: 'מרווח', why: 'ההפרש בין הגדלים' }, { op: 'magnitude', label: 'כיסוי%', why: 'יחס-הכיסוי' }];
   // ── פעולות-מסך-מלא ──
-  if (f.kind === 'search')    return [{ op: 'search', why: 'איתור = חיפוש-מבוקר (value+onChanged) ⇒ סינון' }];
-  if (f.kind === 'filter')    return [{ op: 'filter', why: 'זיהוי-חריגה = צ׳יפ-סינון-מבוקר (selected+onTap)' }];
+  if (f.kind === 'search')    // איתור = תובנה: תצוגה(קלט-מבוקר) ⊕ לוגיקה(ניקוד-רב-מילתי+נרמול-עברי) — 23-ג
+    return [{ op: 'search', why: 'קלט-חיפוש מבוקר (value+onChanged)' }, { op: 'match', why: 'מנוע-התאמה: smartFilter⊕smartScore⊕normSearch (רב-מילתי AND, לא .contains)' }];
+  if (f.kind === 'filter')    // חריגה = תובנה: תצוגה(צ׳יפ) ⊕ לוגיקה(מנוע-פרדיקט-רב-צירי) — 23-ג
+    return [{ op: 'filter', why: 'צ׳יפ-סינון מבוקר (selected+onTap)' }, { op: 'predicate', why: 'מנוע-פרדיקט: finderMatches (נעילות-AND, לא בוליאני-ידני)' }];
   if (f.kind === 'table')     return [{ op: 'table', why: 'הצגת-אוסף = טבלה (labels+rows+מיון); DataGrid מזייף ⇒ נחסם' }];
   if (f.kind === 'empty')     return [{ op: 'empty', why: 'מצב אין-תוצאות = glyph+message' }];
   if (f.kind === 'log')       // יומן = תובנה: כותרת-קיבוץ (Σ) + שורת-תנועה פר-רשומה (2 אטומים)
@@ -82,8 +86,8 @@ const PARTICLES = [
   { id: 'identity',   name: 'זהות',        f: { kind: 'name',      expr: 'name+glyph+summary' } },
   { id: 'action',     name: 'פעולה',       f: { kind: 'act',       expr: 'mark ordered' } },
   // ── גלים 2–4: פעולות מסך-מלא (איתור · חריגה · אוסף · יומן · פאנל · ריק) ──
-  { id: 'locate',     name: 'איתור',       f: { kind: 'search',    expr: 'q ⇒ contains(name/sku/cat)' } },
-  { id: 'exception',  name: 'זיהוי-חריגה', f: { kind: 'filter',    expr: 'belowMin/expiring/isOut' } },
+  { id: 'locate',     name: 'איתור',       f: { kind: 'search',    expr: 'q ⇒ ניקוד-רב-מילתי-מנורמל (smartScore)' } },
+  { id: 'exception',  name: 'זיהוי-חריגה', f: { kind: 'filter',    expr: 'נעילת-ציר-AND (finderMatches)' } },
   { id: 'table',      name: 'טבלה',        f: { kind: 'table',     expr: 'records × 10 שדות-אמת' } },
   { id: 'movements',  name: 'תנועות',      f: { kind: 'log',       expr: 'intakeLog ⇒ rows+Σcost' } },
   { id: 'itempanel',  name: 'פאנל-פריט',   f: { kind: 'panel',     expr: 'GlassCard(זהות+מצב+תנועות+פעולה)' } },
