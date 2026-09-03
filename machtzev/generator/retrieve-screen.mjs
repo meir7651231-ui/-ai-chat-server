@@ -3,8 +3,9 @@
 // (stem משותף עם match). אפס-מילון-דומייני · אפס-שפה-מומצאת — רק התאמה לקורפוס-המסכים הרשום.
 import fs from 'node:fs';
 import path from 'node:path';
+import * as R from '../root.mjs';
 
-const DIR = new URL('../../new/dart-data-bs/auto/', import.meta.url).pathname;
+const DIR = (R.dataOutDir() + '/');
 const HE = /[֐-׿][֐-׿״׳]*/g;
 // נרמול-**עדין** (לא ה-stem ההורס): הגדרה-בלבד (מה/ה) + נטרול-סופיות. אותיות-שורש (מ/ש/ל/ב)
 // נשמרות ⇒ מלאי/מסך/שיחות/לוח לא נהרסים. עיוור-דומיין, מבני.
@@ -17,7 +18,7 @@ const toks = (s) => (String(s).match(HE) || []).map(norm).filter((w) => w.length
 // אינדקס-מטרת-אטום: class ⇒ מונחי-מטרה עבריים (נגזרים ממסך-המקור — atom-index). מעשיר את אוצר-
 // המילים של כל מסך במונחי-המטרה של האטומים שממנו הוא מורכב ⇒ מצמצם נרדפוּת בלי מילון-דומייני.
 const MAN = new URL('../../screens-seed/manifests/', import.meta.url).pathname;
-const AIDX = JSON.parse(fs.readFileSync(new URL('./atom-index.json', import.meta.url), 'utf8'));
+const AIDX = JSON.parse(fs.readFileSync((R.GEN_DIR + 'atom-index.json'), 'utf8'));
 const PURPOSE = {};
 for (const e of AIDX) PURPOSE[e.cls] = (e.purpose || []).map(norm).filter((w) => w.length > 1 && !STOP.has(w));
 

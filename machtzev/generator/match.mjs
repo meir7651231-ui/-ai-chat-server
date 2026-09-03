@@ -7,8 +7,9 @@
 // ══════════════════════════════════════════════════════════════════════════
 import fs from 'node:fs';
 import path from 'node:path';
+import * as R from '../root.mjs';
 
-const HERE = new URL('.', import.meta.url).pathname;
+const HERE = R.GEN_DIR;
 const readJson = (p, d) => { try { return JSON.parse(fs.readFileSync(path.join(HERE, p), 'utf8')); } catch { return d; } };
 
 const atlas = readJson('atlas.json', { widgets: [] });

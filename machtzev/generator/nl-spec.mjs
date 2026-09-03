@@ -8,7 +8,8 @@
 // ══════════════════════════════════════════════════════════════════════════
 import fs from 'node:fs';
 import { stem } from './match.mjs';
-const LANG = JSON.parse(fs.readFileSync(new URL('./nl-lang.data.json', import.meta.url), 'utf8'));
+import * as R from '../root.mjs';
+const LANG = JSON.parse(fs.readFileSync((R.GEN_DIR + 'nl-lang.data.json'), 'utf8'));
 const LEAD = new Set(LANG.leadins || []);
 const MARK = LANG.fieldMarks || [];
 const CONJ = LANG.listConj || [];

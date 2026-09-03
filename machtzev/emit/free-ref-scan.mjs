@@ -3,8 +3,9 @@
  *  import/גלובל) = חור-חילוץ (קבוע-שכן/שקע שלא-הוטמע, כמו HEX2). סטטי, מהיר, פר-681. */
 import fs from 'node:fs';
 import { requireTs } from '../lib-ts.mjs';
+import * as R from '../root.mjs';
 const ts = requireTs();
-const DIR = new URL('../../new/atoms/', import.meta.url).pathname;
+const DIR = (R.NEW + 'atoms/');
 
 const GLOBALS = new Set(['Math','Number','String','Object','Array','JSON','Date','RegExp','Boolean','Map','Set','Symbol','Promise','parseInt','parseFloat','isNaN','isFinite','undefined','null','NaN','Infinity','console','globalThis','encodeURIComponent','decodeURIComponent','structuredClone','Intl','BigInt','Error','TypeError','arguments','require','process','fetch','crypto','navigator','URL','URLSearchParams','Uint8Array','Uint16Array','TextDecoder','TextEncoder','Blob','FileReader','atob','btoa','localStorage','sessionStorage','document','window','setTimeout','clearTimeout','AbortController','WeakMap','DataView','Function']);
 

@@ -6,9 +6,10 @@
  *  שימוש: node machtzev/ds-critic.mjs [--gate] */
 import fs from 'node:fs';
 import path from 'node:path';
-const ROOT = new URL('../', import.meta.url).pathname;
+import * as R from './root.mjs';
+const ROOT = R.ROOT;
 const GATE = process.argv.includes('--gate');
-const SCAN = path.join(ROOT, 'new/dart-gen-bs');
+const SCAN = R.outDir();
 const BASE = path.join(ROOT, 'machtzev/ds-critic-baseline.json');
 
 const walk = (d, o = []) => { if (!fs.existsSync(d)) return o; for (const e of fs.readdirSync(d, { withFileTypes: true })) { const p = path.join(d, e.name); e.isDirectory() ? walk(p, o) : o.push(p); } return o; };

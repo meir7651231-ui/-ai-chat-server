@@ -10,10 +10,11 @@ import { interpret as entInterpret } from './entity.mjs';
 import { renderEntity, renderDashboard, renderHub, renderSystem, renderMain, renderScreenBind, renderCompose, renderRecordDetail, SCREEN_REGISTRY } from './render-ds.mjs';
 import { nlToSpec } from './nl-spec.mjs';
 import { L, T } from './chrome.mjs';
+import * as R from '../root.mjs';
 
-const ROOT = new URL('../../', import.meta.url).pathname;
-const OUT = path.join(ROOT, 'new/dart-gen-bs');
-const DATA = path.join(ROOT, 'new/dart-data-bs/auto');
+const ROOT = R.ROOT;
+const OUT = R.outDir();
+const DATA = R.dataOutDir();
 const ENTITY_RE = /^\s*(צור\s+)?(ישות|טופס|טבלת)(\s|$)/;
 const ROLE_RE = /^\s*(תפקיד|הרשאת)\s+/;
 const clean = (s) => [...String(s || '').matchAll(/[֐-׿][֐-׿״׳]*/g)].map((m) => m[0]).join(' ').slice(0, 40);

@@ -4,8 +4,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { buildApp } from '../generator/app-ds.mjs';
-const GEN = new URL('../../new/dart-gen-bs/', import.meta.url).pathname;
-const spec = fs.readFileSync(new URL('../generator/acceptance-space-need.txt', import.meta.url), 'utf8');
+import * as R from '../root.mjs';
+const GEN = (R.outDir() + '/');
+const spec = fs.readFileSync((R.GEN_DIR + 'acceptance-space-need.txt'), 'utf8');
 let r;
 try { r = buildApp(spec); } catch (e) { console.log('🚨 קרס:', e.message); process.exit(1); }
 const all = fs.readdirSync(GEN).filter((f) => /^gen_app_.*\.dart$/.test(f)).map((f) => fs.readFileSync(path.join(GEN, f), 'utf8')).join('\n');

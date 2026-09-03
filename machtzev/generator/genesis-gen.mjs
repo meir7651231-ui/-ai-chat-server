@@ -20,12 +20,13 @@ import { stripComments, snake } from '../assemble/lift-lib.mjs';
 import { dartLit } from './twins.mjs';
 import { buildAtlas, writeAtlas } from './atlas.mjs';
 import { pickLook } from '../../new/atoms/pick-look.mjs';
-const LOOKS = JSON.parse(fs.readFileSync(new URL('./knowledge/looks.json', import.meta.url), 'utf8'));
+import * as R from '../root.mjs';
+const LOOKS = JSON.parse(fs.readFileSync((R.GEN_DIR + 'knowledge/looks.json'), 'utf8'));
 
-const ROOT = new URL('../../', import.meta.url).pathname;
-const HERE = new URL('.', import.meta.url).pathname;
-const OUT = path.join(ROOT, 'new/dart-gen-bs');
-const DATA = path.join(ROOT, 'new/dart-data-bs/auto');
+const ROOT = R.ROOT;
+const HERE = R.GEN_DIR;
+const OUT = R.outDir();
+const DATA = R.dataOutDir();
 const SPECS = path.join(HERE, 'specs');
 
 // ── הידע — נטען, לא-מוטמע ──

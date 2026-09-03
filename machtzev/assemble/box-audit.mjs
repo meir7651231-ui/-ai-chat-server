@@ -4,7 +4,8 @@
  *  מצבים: (ברירת-מחדל) דוח · --write ‏baseline · --gate ‏ratchet-נסיגה · --selftest אדום-על-חלול. */
 import fs from 'node:fs';
 import path from 'node:path';
-const ROOT = new URL('../../', import.meta.url).pathname;
+import * as R from '../root.mjs';
+const ROOT = R.ROOT;
 const p = (...s) => path.join(ROOT, ...s);
 const MODE = process.argv[2] || '';
 

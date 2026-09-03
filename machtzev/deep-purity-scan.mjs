@@ -11,7 +11,7 @@
  *  פלט: machtzev/emit/DEEP-PURITY-FINDINGS.md ממוין לפי חומרה + סיכום למסוף. */
 import fs from 'node:fs';
 import path from 'node:path';
-const ROOT = new URL('../', import.meta.url).pathname;
+const ROOT = R.ROOT;
 const DIRS = ['new/atoms', 'new/boxes'];
 const HEB = /[֐-׿]/;
 const strip = (s) => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '').replace(/(^|[^:])\/\/[^\n]*/g, '$1');
@@ -26,6 +26,7 @@ const isPureData = (code) => {
 };
 // ── ליבת-הסריקה v2: AST-אמת (typescript) — אותו לקסר של מנוע-הטיהור, אפס-רגקס-על-קוד ──
 import { requireTs } from './lib-ts.mjs';
+import * as R from './root.mjs';
 const _ts = requireTs();
 const findings = [];
 const staticLit = (n) => {

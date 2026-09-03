@@ -8,8 +8,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { selectVaried, listMapEngines } from './generator/render-ds.mjs';
+import * as R from './root.mjs';
 
-const ROOT = new URL('../', import.meta.url).pathname;
+const ROOT = R.ROOT;
 const G = path.join(ROOT, 'machtzev/generator');
 const rd = (p) => { try { return fs.readFileSync(path.join(ROOT, p), 'utf8'); } catch { return ''; } };
 const rj = (p) => { try { return JSON.parse(fs.readFileSync(path.join(G, p), 'utf8')); } catch { return []; } };

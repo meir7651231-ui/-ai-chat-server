@@ -8,7 +8,8 @@
 // ══════════════════════════════════════════════════════════════════════════
 import fs from 'node:fs';
 import { retrieve } from './match.mjs';
-const IDX = JSON.parse(fs.readFileSync(new URL('./atom-index.json', import.meta.url), 'utf8'));
+import * as R from '../root.mjs';
+const IDX = JSON.parse(fs.readFileSync((R.GEN_DIR + 'atom-index.json'), 'utf8'));
 const CAPS = {}; for (const a of IDX) CAPS[a.cls] = a.caps || [];
 // detail = ~65% מהאטומים (רועש) · chrome = לא-יכולת. שאר-התגים = סיגנל-אמת.
 const NOISE = new Set(['detail', 'chrome']);

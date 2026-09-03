@@ -9,7 +9,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { resolveDart } from './dart-bin.mjs';
-const ROOT = new URL('..', import.meta.url).pathname;
+import * as R from './root.mjs';
+const ROOT = R.ROOT;
 const BOXES = path.join(ROOT, 'new/dart-boxes');
 const BASE = path.join(ROOT, 'machtzev/box-proofs-baseline.json');
 

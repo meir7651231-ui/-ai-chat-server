@@ -2,7 +2,8 @@
 /** מחצב · משוואה 4 — אכיפת חוקי-החשמלאי על העץ החדש (new/). ריק = עובר. */
 import fs from 'node:fs';
 import path from 'node:path';
-const NEW = process.argv[2] || new URL('./new/', import.meta.url).pathname;
+import * as R from './root.mjs';
+const NEW = process.argv[2] || R.NEW;
 if (!fs.existsSync(NEW)) { console.log('✓ חוקי-החשמלאי: העץ החדש טרם קיים — אין מה לאכוף'); process.exit(0); }
 let fail = 0;
 const files = [];

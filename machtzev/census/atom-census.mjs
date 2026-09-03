@@ -9,8 +9,9 @@
 //  פלט: machtzev/generator/atom-census.json (נצרך ע"י מנוע-ההרכבה) + סיכום-מסך.
 // ══════════════════════════════════════════════════════════════════════════
 import fs from 'node:fs'; import path from 'node:path';
-const ROOT = new URL('../../new/', import.meta.url).pathname;
-const OUT = new URL('../generator/atom-census.json', import.meta.url).pathname;
+import * as R from '../root.mjs';
+const ROOT = R.NEW;
+const OUT = (R.GEN_DIR + 'atom-census.json');
 const SCAN = 'dart-ui-bs';   // כל מדף-החזות — רקורסיבי (root + auto + ds + screens__*)
 const NUM = new Set(['int', 'double', 'num']);
 

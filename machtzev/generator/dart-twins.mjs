@@ -5,7 +5,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-const ROOT = new URL('../../', import.meta.url).pathname;
+import * as R from '../root.mjs';
+const ROOT = R.ROOT;
 const DDIR = path.join(ROOT, 'new/dart');
 // מדפי-הילידים הנקצרים + מדף-הדאטה התואם לכל אחד (מנוע-מפלצת: גם dart-maor, לא רק dart)
 const SHELVES = new Set(['new/dart', 'new/dart-maor']);

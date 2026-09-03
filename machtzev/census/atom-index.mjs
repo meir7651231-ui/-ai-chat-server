@@ -8,9 +8,10 @@
 // ══════════════════════════════════════════════════════════════════════════
 import fs from 'node:fs'; import path from 'node:path';
 import { analyzeAtom } from './atom-census.mjs';
-const ROOT = new URL('../../new/', import.meta.url).pathname;
-const SEED = new URL('../../screens-seed/machine/', import.meta.url).pathname;
-const OUT = new URL('../generator/atom-index.json', import.meta.url).pathname;
+import * as R from '../root.mjs';
+const ROOT = R.NEW;
+const SEED = R.p('screens-seed/machine') + '/';
+const OUT = (R.GEN_DIR + 'atom-index.json');
 const BOILER = new Set(['מהמקור', 'אל', 'תערוך', 'ידנית', 'מוצא', 'בנייה', 'חכמה', 'הורם', 'ע"י', 'מנוע', 'המדף', 'verbatim', 'Stateless', 'Stateful', 'main', 'v2', 'shelf', 'lift']);
 const heToks = (s) => [...String(s || '').matchAll(/[֐-׿]{2,}/g)].map((m) => m[0]);
 

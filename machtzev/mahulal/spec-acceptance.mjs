@@ -8,8 +8,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { buildApp } from '../generator/app-ds.mjs';
-const GEN = new URL('../../new/dart-gen-bs/', import.meta.url).pathname;
-const spec = fs.readFileSync(new URL('../generator/acceptance-space.txt', import.meta.url), 'utf8');
+import * as R from '../root.mjs';
+const GEN = (R.outDir() + '/');
+const spec = fs.readFileSync((R.GEN_DIR + 'acceptance-space.txt'), 'utf8');
 
 let r;
 try { r = buildApp(spec); } catch (e) { console.log('🚨 המחולל קרס על אפיון-מערכת-מלאה:', e.message); process.exit(1); }
@@ -31,7 +32,7 @@ const caps = {
 };
 const entities = r.screens.filter((s) => s.kind === 'entity').length;
 // §21: מגוון-אטומים נפלטים (רק-עולה) — המחולל מפזר שימוש על המאגר-הבינדבילי, לא DS-בלבד.
-const atomIdx = new Set(JSON.parse(fs.readFileSync(new URL('../generator/atom-index.json', import.meta.url), 'utf8')).map((a) => a.cls));
+const atomIdx = new Set(JSON.parse(fs.readFileSync((R.GEN_DIR + 'atom-index.json'), 'utf8')).map((a) => a.cls));
 const emitted = new Set([...all.matchAll(/\b([A-Z][A-Za-z0-9]+)\(/g)].map((m) => m[1]).filter((c) => atomIdx.has(c)));
 const ATOM_FLOOR = 23;
 caps[`§21 מגוון-אטומים ≥${ATOM_FLOOR} (נפלטו ${emitted.size})`] = emitted.size >= ATOM_FLOOR;

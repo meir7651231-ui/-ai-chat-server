@@ -4,7 +4,8 @@
  *  עדכון: node machtzev/pins-check.mjs --write */
 import fs from 'node:fs';
 import crypto from 'node:crypto';
-const ROOT = new URL('..', import.meta.url).pathname;
+import * as R from './root.mjs';
+const ROOT = R.ROOT;
 const PINNED = ['LAW.md', 'CLAUDE.md', 'machtzev/wiring-check.mjs', 'machtzev/contract-check.mjs',
   'machtzev/quarry-check.mjs', 'machtzev/police-selftest.mjs', 'machtzev/mutation-check.mjs', 'machtzev/police.mjs', 'machtzev/gates.tsv', 'machtzev/AGENT-CODE.md', 'machtzev/pins-check.mjs'];
 const PIN_FILE = ROOT + 'machtzev/pins.sha256';

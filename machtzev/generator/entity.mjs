@@ -10,10 +10,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { retrieve, matchClass, retrieveLogic } from './match.mjs';
+import * as R from '../root.mjs';
 
-const HERE = new URL('.', import.meta.url).pathname;
+const HERE = R.GEN_DIR;
 // 📦 אוצר-מילות דקדוק-האפיון + רמזי-הטיפוס — אטום-דאטה (§19-ד: אפס-מילון-במנוע).
-const G = JSON.parse(fs.readFileSync(new URL('./spec-lang.data.json', import.meta.url), 'utf8'));
+const G = JSON.parse(fs.readFileSync((R.GEN_DIR + 'spec-lang.data.json'), 'utf8'));
 const alt = (arr) => '(' + arr.join('|') + ')';   // בונה אלטרנציית-regex מהדאטה
 const heWords = (s) => [...(s || '').matchAll(/[֐-׿][֐-׿״׳]*/g)].map((m) => m[0]);
 const clean = (s) => heWords(s).join(' ').slice(0, 60) || G.fallbackField;

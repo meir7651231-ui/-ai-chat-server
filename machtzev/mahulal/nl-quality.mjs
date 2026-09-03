@@ -8,10 +8,11 @@
 import fs from 'node:fs';
 import { nlToSpec } from '../generator/nl-spec.mjs';
 import { buildApp } from '../generator/app-ds.mjs';
+import * as R from '../root.mjs';
 
-const LANG = JSON.parse(fs.readFileSync(new URL('../generator/nl-lang.data.json', import.meta.url), 'utf8'));
+const LANG = JSON.parse(fs.readFileSync((R.GEN_DIR + 'nl-lang.data.json'), 'utf8'));
 const LEAD = new Set(LANG.leadins || []);
-const sents = fs.readFileSync(new URL('../generator/nl-quality.txt', import.meta.url), 'utf8').split('\n').map((s) => s.trim()).filter(Boolean);
+const sents = fs.readFileSync((R.GEN_DIR + 'nl-quality.txt'), 'utf8').split('\n').map((s) => s.trim()).filter(Boolean);
 
 const FLOOR_CLEAN = 0.92;   // רצפת-איכות: ≥92% משמות-הישויות נקיים מזבל-ראש (רק-עולה)
 let crash = 0, zero = 0, buildFail = 0, names = 0, leaked = 0;

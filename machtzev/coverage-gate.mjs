@@ -8,8 +8,9 @@ import path from 'node:path';
 import { buildAtlas } from './generator/atlas.mjs';
 import { buildTwinRegistry } from './generator/twins.mjs';
 import { harvestDartTwins } from './generator/dart-twins.mjs';
-const HERE = new URL('.', import.meta.url).pathname;
-const ROOT = new URL('..', import.meta.url).pathname;
+import * as R from './root.mjs';
+const HERE = R.MACH;
+const ROOT = R.ROOT;
 const BASE = path.join(HERE, 'coverage-baseline.json');
 
 const atlas = buildAtlas();

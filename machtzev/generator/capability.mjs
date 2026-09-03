@@ -4,7 +4,8 @@
 import { retrieve } from './match.mjs';
 import { selectAtom } from './render-ds.mjs';
 import fs from 'node:fs';
-const ATOM_INDEX = JSON.parse(fs.readFileSync(new URL('./atom-index.json', import.meta.url), 'utf8'));
+import * as R from '../root.mjs';
+const ATOM_INDEX = JSON.parse(fs.readFileSync((R.GEN_DIR + 'atom-index.json'), 'utf8'));
 const fileOf = (cls) => { const a = ATOM_INDEX.find((e) => e.cls === cls); return a ? a.file : null; };
 
 // דקדוק-יחסי — קבוצה סגורה של אופרטורי-השוואה (כמו >,< במתמטיקה). לא דומיין. \S* סופג נטיית-מין/מספר.

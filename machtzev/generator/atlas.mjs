@@ -9,8 +9,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { classBody, stripComments } from '../assemble/lift-lib.mjs';
+import * as R from '../root.mjs';
 
-const ROOT = new URL('../../', import.meta.url).pathname;
+const ROOT = R.ROOT;
 const WIDGET_SHELVES = ['new/dart-ui-bs'];
 const LOGIC_SHELVES = ['new/dart-maor', 'new/dart'];
 const DATA_SHELVES = ['new/dart-data-bs', 'new/dart-data-maor'];

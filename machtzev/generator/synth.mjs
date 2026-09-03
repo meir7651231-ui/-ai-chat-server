@@ -13,8 +13,9 @@ import { execFileSync, execSync } from 'node:child_process';
 import { buildAtlas } from './atlas.mjs';
 import { buildTwinRegistry, twinMeta, dartLit } from './twins.mjs';
 import { resolveDart, requireDart } from '../dart-bin.mjs';
-const HERE = new URL('.', import.meta.url).pathname;
-const ROOT = new URL('../../', import.meta.url).pathname;
+import * as R from '../root.mjs';
+const HERE = R.GEN_DIR;
+const ROOT = R.ROOT;
 const CAPS = path.join(HERE, 'capabilities');
 const SPECS = path.join(HERE, 'specs');
 const GATE = process.argv.includes('--gate');
@@ -242,7 +243,7 @@ if (fs.existsSync(CAPS)) for (const cf of fs.readdirSync(CAPS).filter(x => x.end
   if (!found) {
     console.log(`🧪 ${cf}: לא נמצאה הרכבה (עומק≤4) — כישלון כן`);
     // ניקוי-כן: spec/מסך ישנים של יכולת שכבר לא מוכחת לא נשארים על המדף
-    for (const stale of [path.join(SPECS, slug + '.txt'), path.join(ROOT, 'new/dart-gen-bs', `gen_${slug}.dart`), path.join(ROOT, 'new/dart-data-bs/auto', `gen_${slug}_content.dart`)])
+    for (const stale of [path.join(SPECS, slug + '.txt'), path.join(R.outDir(), `gen_${slug}.dart`), path.join(ROOT, 'new/dart-data-bs/auto', `gen_${slug}_content.dart`)])
       if (fs.existsSync(stale)) { fs.rmSync(stale); console.log(`🧹 הוסר יתום: ${path.relative(ROOT, stale)}`); }
     continue;
   }

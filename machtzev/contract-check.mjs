@@ -3,7 +3,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-const NEW = process.argv[2] || new URL('./new/', import.meta.url).pathname;
+import * as R from './root.mjs';
+const NEW = process.argv[2] || R.NEW;
 if (!fs.existsSync(NEW)) { console.log('✓ חוק-החוזה: העץ החדש טרם קיים'); process.exit(0); }
 let fail = 0, tested = 0;
 const PII = /[a-zA-Z0-9._%+-]+@(gmail|walla|outlook|yahoo|hotmail)\.[a-z.]+|AIzaSy[A-Za-z0-9_-]{20,}|BEGIN [A-Z ]*PRIVATE KEY/;

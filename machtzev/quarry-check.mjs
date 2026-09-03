@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /** משטרת-המחצבה — כל טיוטת-חוט חייבת: כותרת-מוצא + parse-תקין. קלה מדרגת-חוזה. */
 import fs from 'node:fs';
-const Q = process.argv[2] || new URL('../quarry/', import.meta.url).pathname;
+import * as R from './root.mjs';
+const Q = process.argv[2] || R.p('quarry') + '/';
 if (!fs.existsSync(Q)) { console.log('✓ מחצבה ריקה'); process.exit(0); }
 let f = 0, n = 0;
 for (const file of fs.readdirSync(Q).filter(x => x.endsWith('.mjs'))) {

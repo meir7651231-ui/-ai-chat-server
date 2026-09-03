@@ -8,11 +8,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { stem } from './match.mjs';
 import { L, T } from './chrome.mjs';
+import * as R from '../root.mjs';
 
-const ROOT = new URL('../../', import.meta.url).pathname;
-const HERE = new URL('.', import.meta.url).pathname;
-const OUT = path.join(ROOT, 'new/dart-gen-bs');
-const DATA = path.join(ROOT, 'new/dart-data-bs/auto');
+const ROOT = R.ROOT;
+const HERE = R.GEN_DIR;
+const OUT = R.outDir();
+const DATA = R.dataOutDir();
 
 const pascal = (slug) => 'GenApp' + slug.replace(/^app_/, '').replace(/(^|[_-])([a-z0-9])/g, (_, __, c) => c.toUpperCase()) + 'Screen';
 

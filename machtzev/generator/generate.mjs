@@ -11,8 +11,9 @@ import { execFileSync } from 'node:child_process';
 import { detectAllClauses, emitApp } from './capability.mjs';
 import { combine } from './combine-screens.mjs';
 import { retrieveScreen } from './retrieve-screen.mjs';
+import * as R from '../root.mjs';
 
-const ROOT = new URL('../../', import.meta.url).pathname;
+const ROOT = R.ROOT;
 const GEN = path.join(ROOT, 'machtzev/assemble/gen-screen.mjs');
 
 // פיצול-מבני לפסוקיות (מחברים בלבד) — לבדיקת-כיסוי-קורפוס.
@@ -24,7 +25,7 @@ export function generate(text, name = 'gen_out') {
   if (detectAllClauses(text).length) {
     const cls = name.replace(/(^|[_-])([a-z])/g, (_, __, c) => c.toUpperCase()) + 'Screen';
     const code = emitApp(text, cls);
-    const file = path.join(ROOT, 'new/dart-gen-bs', `${name}.dart`);
+    const file = path.join(R.outDir(), `${name}.dart`);
     fs.writeFileSync(file, code);
     return { ok: true, path: 'capability', runnable: true, file: path.relative(ROOT, file), units: detectAllClauses(text).length };
   }

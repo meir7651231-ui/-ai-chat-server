@@ -5,7 +5,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-const A = process.argv[2] || new URL('../new/atoms/', import.meta.url).pathname;
+import * as R from './root.mjs';
+const A = process.argv[2] || (R.NEW + 'atoms/');
 const runTest = (t) => { try { execFileSync('node', [t], { stdio: 'pipe', timeout: 15000 }); return 0; } catch { return 1; } };
 let ok = 0, vacuous = [], broken = [];
 const files = fs.readdirSync(A).filter(f => f.endsWith('.mjs') && !f.endsWith('.test.mjs'));

@@ -5,7 +5,8 @@
 //    החוב רק יורד: אטום שטוהר נגרע; אסור להוסיף. --gate יוצא 1 על הפרה · --baseline מרענן · --report מפרט.
 import fs from 'node:fs';
 import path from 'node:path';
-const HERE = new URL('.', import.meta.url).pathname;
+import * as R from './root.mjs';
+const HERE = R.MACH;
 const ROOT = path.join(HERE, '../new');
 const HEB = /[֐-׿]/;
 const DIRS = ['dart-maor', 'dart', 'atoms'];

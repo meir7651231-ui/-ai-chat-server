@@ -7,7 +7,8 @@
  *  אותו כליטרל-Dart במסך (שוויון JS⇄Dart נשמר); זנב מורכב משרת הרצת-JS בלבד. */
 import fs from 'node:fs';
 import path from 'node:path';
-const ROOT = new URL('../../', import.meta.url).pathname;
+import * as R from '../root.mjs';
+const ROOT = R.ROOT;
 
 /** מטא-הזנבות של הקציר האחרון: fnName ⇒ { tail:any[], simple:boolean } */
 export const twinMeta = new Map();

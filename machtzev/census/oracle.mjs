@@ -7,7 +7,8 @@
 // ══════════════════════════════════════════════════════════════════════════
 import fs from 'node:fs';
 import path from 'node:path';
-const G = new URL('../generator/', import.meta.url).pathname;
+import * as R from '../root.mjs';
+const G = R.GEN_DIR;
 const rj = (f) => JSON.parse(fs.readFileSync(path.join(G, f), 'utf8'));
 
 const disp = rj('atom-index.json');   // תצוגה (dart-ui-bs widgets)

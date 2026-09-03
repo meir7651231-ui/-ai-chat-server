@@ -13,7 +13,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync, execFileSync } from 'node:child_process';
 import { resolveDart } from './dart-bin.mjs';
-const HERE = new URL('.', import.meta.url).pathname;
+import * as R from './root.mjs';
+import { fileURLToPath } from 'node:url';
+// c3 · הפרדה קריטית (RED-TEAM R2-1.1): TOOLS = הסקריפטים של המשטרה הזו-עצמה (הקוד הרץ, למשל מ-tag ידוע-טוב);
+// HERE = machtzev/ של העץ **הנמדד** (gates.tsv · node_modules · baselines) — שונה רק כש-MACHTZEV_ROOT מוגדר.
+const TOOLS = path.dirname(fileURLToPath(import.meta.url)) + '/';
+const HERE = R.MACH;
 const FAST = process.argv.includes('--fast');
 const INC = process.argv.includes('--inc');
 const GATE_TIMEOUT_S = Number(process.env.POLICE_GATE_TIMEOUT || 600);
@@ -48,7 +53,7 @@ const toolMissing = (tool) => {
 
 const runGate = (id, script, args) => {
   const t0 = Date.now();
-  const argv = hasTimeout ? ['-s', 'KILL', `${GATE_TIMEOUT_S}s`, 'node', HERE + script, ...args] : [HERE + script, ...args];
+  const argv = hasTimeout ? ['-s', 'KILL', `${GATE_TIMEOUT_S}s`, 'node', TOOLS + script, ...args] : [TOOLS + script, ...args];
   const r = spawnSync(hasTimeout ? 'timeout' : 'node', argv, { stdio: ['ignore', 'inherit', 'pipe'], timeout: hasTimeout ? undefined : GATE_TIMEOUT_S * 1000, killSignal: 'SIGKILL', encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
   const ms = Date.now() - t0;
   if (r.stderr) process.stderr.write(r.stderr);
@@ -73,7 +78,7 @@ const gate = (id, script, args = [], skip = false) => {
 // (c3 מחליף ב-outDir()/GEN_OUT; עד אז — snapshot/restore תחת ה-lock, ב-finally.)
 const snapD = (d, re) => { try { return Object.fromEntries(fs.readdirSync(d).filter(f => re.test(f)).map(f => [f, fs.readFileSync(d + '/' + f, 'utf8')])); } catch { return {}; } };
 const restoreD = (d, re, s) => { try { for (const f of fs.readdirSync(d)) if (re.test(f)) fs.unlinkSync(d + '/' + f); } catch {} for (const [f, c] of Object.entries(s)) { try { fs.writeFileSync(d + '/' + f, c); } catch {} } };
-const GENd = HERE + '../new/dart-gen-bs', DATAd = HERE + '../new/dart-data-bs/auto', GAP = /^gen_app_.*\.dart$/;
+const GENd = R.outDir(), DATAd = R.dataOutDir(), GAP = /^gen_app_.*\.dart$/;
 const gateDirty = (id, script, args = [], skip = false) => {
   if (skip) { skipped.add(id); console.log(`skipped ${id} (--fast)`); return; }
   const s1 = snapD(GENd, GAP), s2 = snapD(DATAd, GAP);
@@ -81,9 +86,9 @@ const gateDirty = (id, script, args = [], skip = false) => {
 };
 
 if (INC) console.log('ℹ️ inc → full: no-graph (census/import-graph.mjs מגיע ב-c3) — fail-closed, מריץ מלא');
-gate('wiring', 'wiring-check.mjs', [HERE + '../new']);
-gate('contract', 'contract-check.mjs', [HERE + '../new']);
-gate('quarry', 'quarry-check.mjs', [HERE + '../quarry']);
+gate('wiring', 'wiring-check.mjs', [R.NEW]);
+gate('contract', 'contract-check.mjs', [R.NEW]);
+gate('quarry', 'quarry-check.mjs', [R.p('quarry')]);
 gate('freeref', 'emit/free-ref-scan.mjs', ['--gate']);
 gate('datapurity', 'data-purity-check.mjs', ['--gate']);
 gate('deeppurity', 'deep-purity-scan.mjs', ['--gate']);

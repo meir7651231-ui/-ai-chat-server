@@ -9,10 +9,11 @@ import fs from 'node:fs'; import path from 'node:path';
 import { buildApp } from '../generator/app-ds.mjs';
 import { SCREEN_REGISTRY, selectAtom } from '../generator/render-ds.mjs';
 import { nlToSpec } from '../generator/nl-spec.mjs';
+import * as R from '../root.mjs';
 
-const ROOT = new URL('../../new/', import.meta.url).pathname;
-const GEN = path.join(ROOT, 'dart-gen-bs');
-const DATA = path.join(ROOT, 'dart-data-bs/auto');
+const ROOT = R.NEW;
+const GEN = R.outDir();
+const DATA = R.dataOutDir();
 const read = (f) => { try { return fs.readFileSync(path.join(GEN, f), 'utf8'); } catch { return ''; } };
 const all = () => fs.readdirSync(GEN).filter((f) => /^gen_app_.*\.dart$/.test(f)).map(read).join('\n');
 // צילום פלט-הקנון (gen+data) לשחזור-מדויק בסוף — ללא תלות ב-/tmp (בטוח-CI).
@@ -52,22 +53,22 @@ ok(nl.split('\n').filter((l) => l.trim()).length >= 3, `NL: 'מערכת עם A,B
 buildApp('מערכת לניהול מרפאה עם מטופלים, תורים ורופאים');   // קלט-חופשי ישיר לדלת ⇒ לא-קורס
 ok(/GenApp\w+Screen/.test(all()), 'NL: משפט-חופשי ⇒ אפליקציה נבנתה (רצפת-§22)');
 // המנוע עצמו עיוור: אפס מילה-עברית בקוד nl-spec (מחוץ להערות/טווח-יוניקוד)
-const nlSrc = fs.readFileSync(new URL('../generator/nl-spec.mjs', import.meta.url), 'utf8').split('\n').map((l) => l.replace(/\/\/.*$/, '')).join('\n');   // מסיר הערות (מלאות+פנימיות)
+const nlSrc = fs.readFileSync((R.GEN_DIR + 'nl-spec.mjs'), 'utf8').split('\n').map((l) => l.replace(/\/\/.*$/, '')).join('\n');   // מסיר הערות (מלאות+פנימיות)
 const heInCode = (nlSrc.match(/[֐-׿]{2,}/g) || []).filter((w) => !/^[֐׿׳״]+$/.test(w));
 ok(heInCode.length === 0, `NL-engine עיוור: ${heInCode.length} מילות-עברית בקוד (חייב 0)`);
 
 // 2.6) טוהר-כרום (§19 · P4) — render-ds מושך תוויות-UI מאטום-דאטה chrome.data.json,
 // לא ממחרוזות-קשיחות. חוב-העברית-במנוע = רק-יורד (baseline 34; היה 100 לפני החילוץ).
-ok(fs.existsSync(new URL('../generator/chrome.data.json', import.meta.url)), 'אטום-דאטה chrome.data.json קיים');
-const rdSrc = fs.readFileSync(new URL('../generator/render-ds.mjs', import.meta.url), 'utf8');
+ok(fs.existsSync((R.GEN_DIR + 'chrome.data.json')), 'אטום-דאטה chrome.data.json קיים');
+const rdSrc = fs.readFileSync((R.GEN_DIR + 'render-ds.mjs'), 'utf8');
 ok(/from '\.\/chrome\.mjs'/.test(rdSrc), 'render-ds מייבא chrome (תוויות מהדאטה, לא קשיח)');
 const rdHe = (rdSrc.split('\n').map((l) => l.replace(/\/\/.*$/, '')).join('\n').match(/[֐-׿]{2,}/g) || []).filter((w) => !/^[֐׿׳״]+$/.test(w));
 ok(rdHe.length <= 34, `render-ds חוב-עברית-במנוע ${rdHe.length} ≤ 34 (רק-יורד; היה 100)`);
-const adSrc = fs.readFileSync(new URL('../generator/app-ds.mjs', import.meta.url), 'utf8');
+const adSrc = fs.readFileSync((R.GEN_DIR + 'app-ds.mjs'), 'utf8');
 ok(/from '\.\/chrome\.mjs'/.test(adSrc), 'app-ds מייבא chrome (תוויות-מערכת מהדאטה)');
 const adHe = (adSrc.split('\n').map((l) => l.replace(/\/\/.*$/, '')).join('\n').match(/[֐-׿]{2,}/g) || []).filter((w) => !/^[֐׿׳״]+$/.test(w));
 ok(adHe.length <= 39, `app-ds חוב-עברית-במנוע ${adHe.length} ≤ 39 (רק-יורד; היה 96)`);
-const enSrc = fs.readFileSync(new URL('../generator/entity.mjs', import.meta.url), 'utf8');
+const enSrc = fs.readFileSync((R.GEN_DIR + 'entity.mjs'), 'utf8');
 ok(/spec-lang\.data\.json/.test(enSrc), 'entity מושך דקדוק+רמזי-טיפוס מ-spec-lang.data.json');
 const enHe = (enSrc.split('\n').map((l) => l.replace(/\/\/.*$/, '')).join('\n').match(/[֐-׿]{2,}/g) || []).filter((w) => !/^[֐׿׳״]+$/.test(w));
 ok(enHe.length <= 45, `entity חוב-עברית-במנוע ${enHe.length} ≤ 45 (רק-יורד; היה 107 · המילון-הדומייני חולץ §19-ד)`);

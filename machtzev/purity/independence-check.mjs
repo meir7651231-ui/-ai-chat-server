@@ -4,7 +4,9 @@
  *  · רק לוח-האם (board.dart) מגשר בין השניים.
  *  הפרה ⇒ exit 1. הרצה: node machtzev/purity/independence-check.mjs */
 import { readFileSync, readdirSync } from 'node:fs';
-const DIR = new URL('../../new/dart-boxes/', import.meta.url);
+import * as R from '../root.mjs';
+import { pathToFileURL } from 'node:url';
+const DIR = pathToFileURL(R.NEW + 'dart-boxes/');
 const files = readdirSync(DIR).filter((f) => f.endsWith('.dart') && !f.endsWith('-proof.dart') && f !== 'atoms.dart');
 let viol = 0;
 for (const f of files) {
