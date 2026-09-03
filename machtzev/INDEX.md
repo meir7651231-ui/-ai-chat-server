@@ -17,13 +17,17 @@
 | `verify-independent.mjs` | 🔍 **המאמת-העצמאי** (PROTOCOL §5.2): כלי-משטרה מ-tag ידוע-טוב על HEAD · ראצ׳ט-כיוון פר-commit · הוכחת-ירי · שתי משטרות. עד, לא חומה. |
 | `census/import-graph.mjs` | 🕸️ גרף-imports סטטי ל-`police --inc` (שלב 1): דיף ⇒ דיף+צרכנים-טרנזיטיביים (+זוג בדיקה/חוזה). `import()` דינמי / קובץ-חוץ / >50 ⇒ unknown ⇒ המשטרה מריצה מלא (fail-closed). |
 | `../.github/workflows/police.yml` | 🛡️ CI-עד (שלב 3 · §7.3): non-required. G1 pins · G9 ראצ׳ט מול event.before/סמן · G8 Protocol-Ran על הטווח + dart analyze · G3+G7 truth/wiring ⇒ diff ריק · G2+G10 משטרה מלאה (צהוב=אדום) + מס · G0 מאמת מכלי הסמן (ללא קידום). ערוץ = job summary. |
+| `no-fakers-check.mjs` · `no-fakers-baseline.json` | 🛡️ שער `no-fakers` (שלב 5): FAKERS מ-compose-engine (SSOT) ⇒ PascalCase ⇒ סריקת gen/boards/screens; חוב 3 קבצים (gen_charts · gen_dash11 · gen_feedback10) רק-יורד. |
+| `index-check.mjs` · `index-baseline.json` | 📇 שער `index-complete` (M3): סקריפט בלי שורה ב-INDEX.md ⇒ אדום; חוב-קיים ברשימה רק-יורדת. |
+| `atom-count-check.mjs` · `atom-count-baseline.json` | 🔢 שער `atom-count`: מספר-אטומים לאזור new/* לא יורד; מחיקה מכוונת = `--write` + ציון ב-commit. |
+| `selftest-coverage-baseline.json` | 📈 רצפת-הזוגות-המוכחים של `police-selftest` (grow; `--floor` מעלה). |
 | `learn-check.mjs` | 📚 שער `learn` (§8 · שלב 4): parity (GATE: לכל לקח, id מוכר) · antipattern-scan (regex לא תופס אף קובץ ב-new/) · learn-on-retry (טיוטת-M4: regex תופס blob-לפני, לא אחרי, לא ליטרל, תופס fixture ב-`selftest-fixtures/learn/`) · stuck-loop (3 כשלים רצופים ⇒ בעלים). |
 | `learn-draft.mjs` | 📝 מנוע-M4: `--record <gates> --stage <files>` ⇒ רשומות ב-`audit/retry.jsonl` (gate·path·sha·blob-before) · `--stage` בלבד ⇒ טיוטת `## L<תאריך>-<gate>-<sha6>` ב-LEARNINGS.md ל-retry לא-פתור + סימון resolved. |
 | `pretool-selftest.mjs` | 🪤 הוכחת-ירי ל-`.claude/hooks/pre-tool.sh` (שלב 2 · §6): כל שורה ב-`selftest-fixtures/pretool.tsv` מוזנת ל-hook כ-PreToolUse; חסום=2 · עובר=0. לקח חדש = שורה. |
 | `selftest-fixtures/` | fixtures של `police-selftest.mjs` — **לא נעולים**: לקח חדש = fixture חדש בלי pins-write. |
 | `BUILDSMART-PROTOCOL-MAP.md` | 🗺️ מפת-הפרוטוקול של buildsmart (4 שכבות · 99 שערים · ערכת-אורקסטרטור · סטיות) — חומר-הגלם שממנו נגזר `PROTOCOL.md` (v1→v4). קריאה בלבד, לא הנחיה. |
 | `PROTOCOL.md` · `RED-TEAM-PROTOCOL.md` | תוכנית-האכיפה (v4) ויומן-השבירה (2 סבבים, 133 ממצאים). |
-| `compose-engine.mjs` | 🧩 קומפוזר-דטרמיניסטי (הכרעה 23-ג · §20-ד): חלקיק+נוסחה ⇒ פעולות-הצגה ⇒ אטום-אמיתי-הכי-טוב-לייעוד; טבלת-ATOM + FAKERS (מזייפים חסומים). טרם שער — `compose-determinism` מוצע. |
+| `compose-engine.mjs` | 🧩 קומפוזר-דטרמיניסטי (הכרעה 23-ג · §20-ד): חלקיק+נוסחה ⇒ פעולות-הצגה ⇒ אטום-אמיתי-הכי-טוב-לייעוד; טבלת-ATOM + FAKERS (מזייפים חסומים). שער `compose-determinism` חי (`--gate`, שלב 5). |
 | `compose-engine-report.md` · `compose-compare.md` | פלט-המנוע על 15 החלקיקים · השוואה מול 3 סוכנים (המגן עבד 100%; הסוכן מקסימלי ב-7/15). |
 | `LAWS-MAP.md` | מפת כל חוקי-המחצב (כולל 23-ב/23-ג · מגן-בלי-סטיות · חוזה-הדאטה). |
 

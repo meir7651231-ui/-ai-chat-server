@@ -86,6 +86,13 @@ out.forEach(p => p.atoms.forEach(a => { if (!seen.has(a.atom)) { seen.add(a.atom
 md += `\n**מזייפים חסומים במנוע (בחירה בהם ⇒ throw):** ${[...FAKERS].join(' · ')}\n`;
 md += `\n**סיכום:** ${out.filter(p => p.insight).length} תובנות (מרובות-אטומים) · ${out.filter(p => !p.insight).length} עובדות (אטום-יחיד). המנוע דטרמיניסטי — אותה נוסחה תיתן תמיד אותה הרכבה, ואף פעם לא מזייף.\n`;
 
-import { writeFileSync } from 'fs';
-writeFileSync(new URL('./compose-engine-report.md', import.meta.url), md);
+import { writeFileSync, readFileSync, existsSync } from 'fs';
+// --gate (שער compose-determinism · 23-ג): המנוע על 15 החלקיקים ≡ הדוח המחויב. שינוי בטבלת-ATOM/PARTICLES = אירוע-ראצ׳ט מוצהר ⇒ הרץ בלי --gate וקבֵּע.
+const REPORT = new URL('./compose-engine-report.md', import.meta.url);
+if (process.argv.includes('--gate')) {
+  const cur = existsSync(REPORT) ? readFileSync(REPORT, 'utf8') : '';
+  if (cur !== md) { console.log('🔴 compose-engine: הפלט סטה מ-compose-engine-report.md (טבלת-ATOM/חלקיקים/מזייפים השתנו) — node machtzev/compose-engine.mjs וקבֵּע'); process.exit(1); }
+  console.log(`✓ קומפוזר-דטרמיניסטי: ${out.length} חלקיקים ≡ הדוח · ${FAKERS.size} מזייפים חסומים`); process.exit(0);
+}
+writeFileSync(REPORT, md);
 process.stdout.write(md);

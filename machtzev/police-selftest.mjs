@@ -44,5 +44,11 @@ fs.rmSync(TMP, { recursive: true, force: true });
 const paired = gates.filter((g) => seen[g]?.has(1) && seen[g]?.has(0));
 const unpaired = gates.filter((g) => !paired.includes(g));
 console.log(`\nזוגות-הוכחה (מורעל⇒1 ∧ נקי⇒0): ${paired.length}/${gates.length} · לא-מוכחים: ${unpaired.join(', ') || '—'}`);
+// selftest-coverage (§7.2 · שלב 5): מספר-הזוגות-המוכחים לא יורד (selftest-coverage-baseline.json · grow; העלאה ידנית: --floor)
+const CB = new URL('./selftest-coverage-baseline.json', import.meta.url);
+const floor = fs.existsSync(CB) ? (JSON.parse(fs.readFileSync(CB, 'utf8')).pairs ?? 0) : 0;
+if (process.argv.includes('--floor')) { fs.writeFileSync(CB, JSON.stringify({ pairs: paired.length }, null, 1) + '\n'); console.log(`✍️ selftest-coverage floor ⇒ ${paired.length}`); }
+else if (paired.length < floor) { console.log(`🔴 selftest-coverage: ${paired.length} זוגות < רצפה ${floor} — fixture/זוג נמחק`); fail = 1; }
+else console.log(`✓ selftest-coverage: ${paired.length} ≥ רצפה ${floor}`);
 console.log(fail ? '\n❌ חוק לא יורה — המשטרה שבורה!' : '\n✅ כל ה-fixtures יורים כמצופה + ביקורת-שלילית עוברת');
 process.exit(fail);
