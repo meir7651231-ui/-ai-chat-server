@@ -500,6 +500,9 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   const effText = Object.assign({}, inhFont, st);
   const myColor = colorExpr(st['color']) || inherit;            // צבע-הטקסט האפקטיבי (עובר לילדים)
   const nextInh = {}; for (const k of INHERIT_PROPS) if (effText[k] != null) nextInh[k] = effText[k];  // תורשה מצטברת לצאצאים
+  // backface-visibility:hidden + rotateY/X(180) = פָּן-אחורי הפונה-מהצופה במנוחה (כרטיס-היפוך) ⇒ מוסתר.
+  // בלי זה שני-הפָּנים מצוירים וה-bk (אחרון) מכסה את ה-fr ⇒ FORGE הראה את הצד-האחורי.
+  if (/hidden/.test(st['backface-visibility'] || '') && /rotate[xy]\(\s*180/i.test(st['transform'] || '')) return 'const SizedBox.shrink()';
   const kids = elemChildren(node);
   const txt = textOf(node);
   const ta = st['text-align'];
