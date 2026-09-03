@@ -70,6 +70,8 @@ function ops(formula) {
     return [{ op: 'switch', why: 'בורר-תפקיד (זהות-מוזרקת, חוק-6)' }, { op: 'role', why: 'מנוע: roleOf ⇒ admin/teacher/staff' }, { op: 'grant', why: 'מנוע: canGrantedAction ⇒ הצג/הסתר-פעולה פר-מפתח' }];
   if (f.kind === 'auto')      // אוטומציה = תובנה: תצוגה(התראה) ⊕ לוגיקה(זיהוי-פקיעה + הון-כלוא) — 23-ג פרואקטיבי
     return [{ op: 'alert', why: 'באנר-התראה (message+tone+glyph)' }, { op: 'expiry', why: 'מנוע: expiringIntakes ⊕ shopExpiryWarnDays (מה פוקע תוך החלון)' }, { op: 'capital', why: 'מנוע: warehouseValue על מלאי-מת (הון-כלוא)' }];
+  if (f.kind === 'life')      // מחזור-חיים = תובנה: תג-מצב (StatusChip) ⊕ toggle (SoftButton) — 23-ב דגל=עובדה
+    return [{ op: 'fact', label: 'לא-פעיל', why: 'תג-מצב פריט-לא-פעיל (StatusChip)' }, { op: 'action', label: 'toggle', why: 'הפעלה/השבתה (SoftButton) — מגודר-הרשאה' }];
   if (f.kind === 'log')       // יומן = תובנה: כותרת-קיבוץ (Σ) + שורת-תנועה פר-רשומה (2 אטומים)
     return [{ op: 'group', label: 'כותרת+Σ', why: 'כותרת-היומן נושאת מונה+Σעלות' }, { op: 'timeline', why: 'שורת-תנועה פר-רשומה (title/time/body); timeline_flow מזייף ⇒ נחסם' }];
   if (f.kind === 'panel')     // פאנל-פריט = תובנה: מיכל + זהות + מצב(יחס) + תנועות + פעולה (5 אטומים)
@@ -108,6 +110,7 @@ const PARTICLES = [
   { id: 'export',     name: 'ייצוא',       f: { kind: 'export',    expr: 'items ⇒ CSV+BOM (toCsv⊕csvEscape)' } },
   { id: 'permissions', name: 'הרשאות',     f: { kind: 'perm',      expr: 'role ⇒ show/hide (roleOf⊕canGrantedAction)' } },
   { id: 'automation', name: 'אוטומציות',   f: { kind: 'auto',      expr: 'פקיעה + מלאי-מת ⇒ התראה (expiringIntakes⊕warehouseValue)' } },
+  { id: 'lifecycle',  name: 'מחזור-חיים',  f: { kind: 'life',      expr: 'active ⇒ תג + toggle (StatusChip⊕SoftButton)' } },
 ];
 
 function compose(p) {

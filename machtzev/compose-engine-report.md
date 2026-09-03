@@ -1,4 +1,4 @@
-# מנוע-ההרכבה — פלט על 24 החלקיקים
+# מנוע-ההרכבה — פלט על 25 החלקיקים
 
 | # | חלקיק | נוסחה | סוג | אטומים (הכי-טוב-לייעוד) |
 |---|---|---|---|---|
@@ -26,6 +26,7 @@
 | 22 | ייצוא | `items ⇒ CSV+BOM (toCsv⊕csvEscape)` | תובנה·2 | SoftButton + toCsv |
 | 23 | הרשאות | `role ⇒ show/hide (roleOf⊕canGrantedAction)` | תובנה·3 | SegmentedSwitch + roleOf + canGrantedAction |
 | 24 | אוטומציות | `פקיעה + מלאי-מת ⇒ התראה (expiringIntakes⊕warehouseValue)` | תובנה·3 | AlertBanner + expiringIntakes + warehouseValue |
+| 25 | מחזור-חיים | `active ⇒ תג + toggle (StatusChip⊕SoftButton)` | תובנה·2 | StatusChip(לא-פעיל) + SoftButton(toggle) |
 
 ## הוכחת-נושא-ערך (שקע-הדאטה פר-אטום) + מזייפים-חסומים
 - `StatusChip` ← premium/feedback/status_chip.dart:7 required this.label
@@ -55,4 +56,4 @@
 
 **מזייפים חסומים במנוע (בחירה בהם ⇒ throw):** stat_block · linear_progress · radial_gauge · bar_chart · sparkline
 
-**סיכום:** 9 תובנות (מרובות-אטומים) · 15 עובדות (אטום-יחיד). המנוע דטרמיניסטי — אותה נוסחה תיתן תמיד אותה הרכבה, ואף פעם לא מזייף.
+**סיכום:** 10 תובנות (מרובות-אטומים) · 15 עובדות (אטום-יחיד). המנוע דטרמיניסטי — אותה נוסחה תיתן תמיד אותה הרכבה, ואף פעם לא מזייף.
