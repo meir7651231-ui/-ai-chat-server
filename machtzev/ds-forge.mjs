@@ -156,7 +156,7 @@ const num = v => { const m = v && String(v).match(/-?(?:\d+\.?\d*|\.\d+)/); if (
 // single: .a ⇒ decl · compound: .a.b(.c) ⇒ {set,decl,order} (חל כשלאלמנט כל המחלקות).
 // סלקטורים עם צאצא/[attr]/psuedo מדולגים. מחזיר {single, compound}.
 function parseStyle(css) {
-  const single = {}, compound = [], descend = [], tagcls = [], pseudo = [], sibling = []; let order = 0;
+  const single = {}, compound = [], descend = [], tagcls = [], pseudo = [], sibling = [], attrsel = []; let order = 0;
   css = css.replace(/\/\*[\s\S]*?\*\//g, '');
   const re = /([^{}]+)\{([^{}]*)\}/g; let m;
   // חלק-שרשרת ⇒ {cls:[...]} (מחלקות) | {tag:'svg'} (תג-בודד) | null
@@ -184,6 +184,15 @@ function parseStyle(css) {
       if (/^(\.[a-z0-9-]+){2,}$/i.test(sel)) { compound.push({ set: sel.split('.').filter(Boolean), decl, order: order++ }); continue; }
       // תג-מוכשר-מחלקה: "svg.i" / "button.p" ⇒ תואם כשהתג+כל-המחלקות
       if (/^[a-z][a-z0-9]*(\.[a-z0-9-]+)+$/i.test(sel)) { const ps = sel.split('.'); tagcls.push({ tag: ps[0].toLowerCase(), set: ps.slice(1).filter(Boolean), decl, order: order++ }); continue; }
+      // סלקטור-תכונה: "‏<אבות> יעד[attr="val"]" (‏.segc button[aria-pressed="true"] ⇒ טאב-נבחר כהה). בלי > ~ : ( ) #.
+      const asm = /^(.*?)\s*([a-z][a-z0-9]*|\.[a-z0-9-]+)?\[([a-z-]+)\s*=\s*["']?([^"'\]]+)["']?\]$/i.exec(sel);
+      if (asm && !/[>~:()#]/.test(sel)) {
+        const chainStr = asm[1].trim();
+        const chain = chainStr ? chainStr.split(/\s+/).filter(Boolean).map(simple) : [];
+        const target = asm[2] ? simple(asm[2]) : {};
+        if ((!chainStr || chain.every(Boolean)) && target) attrsel.push({ chain, target, attr: asm[3].toLowerCase(), val: asm[4], decl, order: order++ });
+        continue;
+      }
       // אח-עוקב: "A ~ B" (אולי עם אבות "P A ~ B") — B שאחרי אח-שמאלי A. משמש לפינוי-מקום (padding
       // ל-.inp שאחרי אייקון-.lic). בלי > [attr] :pseudo #id. הרשומה: אבות + אח-שמאלי + מטרה-ימנית.
       if (/~/.test(sel) && !/[>[\]:()#]/.test(sel)) {
@@ -200,7 +209,7 @@ function parseStyle(css) {
       }
     }
   }
-  return { single, compound, descend, tagcls, pseudo, sibling };
+  return { single, compound, descend, tagcls, pseudo, sibling, attrsel };
 }
 // פסבדו-אלמנטים (::before/::after) התואמים לצומת ⇒ צמתי-span סינתטיים (decl כ-inline + content כטקסט).
 function pseudoKids(node, map, ancestors, sibIdx = 0) {
@@ -248,6 +257,12 @@ function styleOf(node, map, ancestors = []) {
     const target = r.chain[r.chain.length - 1];
     const hit = (target.tag ? node.tag === target.tag : true) && (target.cls ? target.cls.every(c => classes.includes(c)) : true);
     if (hit && chainMatches(r.chain.slice(0, -1), ancestors)) Object.assign(s, r.decl);
+  }
+  // סלקטורי-תכונה (‏button[aria-pressed="true"]) — אחרי descend כדי לגבור על צבע-הבסיס (טאב-נבחר).
+  for (const r of map.attrsel || []) {
+    const t = r.target || {};
+    const hit = (t.tag ? node.tag === t.tag : true) && (t.cls ? t.cls.every(c => classes.includes(c)) : true) && ((node.attrs && node.attrs[r.attr]) === r.val);
+    if (hit && chainMatches(r.chain, ancestors)) Object.assign(s, r.decl);
   }
   Object.assign(s, parseInline(node.attrs && node.attrs.style));
   return s;
