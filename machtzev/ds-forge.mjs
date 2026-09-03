@@ -595,6 +595,7 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   // אב = flex-column עם align-items לא-מפורש ⇒ ברירת-CSS = stretch: ילד-בלוק ללא-רוחב-קבוע ובעל-יישור-עצמי
   // (direction/text-align) ממלא-רוחב ומתיישר-פנימית. ממקדים לילד-הטקסט בלבד — אח בגודל-קבוע (avatar 44) לא-נמתח.
   const pColStretch = /flex/.test(st['display'] || '') && /column/.test(st['flex-direction'] || '') && !ALIGN[st['align-items']];
+  const pColAny = /flex/.test(st['display'] || '') && /column/.test(st['flex-direction'] || '');   // אב flex-column (ל-align-self)
   const zOf = s => { const v = s['z-index']; return /^-?\d+$/.test((v || '').trim()) ? +v : 0; };   // z-index מספרי (ברירת 0)
   let flowMaxZ = 0;   // z-index-מרבי בזרימה — אם גבוה מ-abs, הזרימה נצבעת אחריהם (av מעל .gap ב-story ring)
   for (const c of allKids) {
@@ -618,6 +619,9 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     // ילד-טקסט בעל-יישור-עצמי בטור-stretch, בלי רוחב-קבוע ⇒ ממלא-רוחב כדי שיישורו-הפנימי יחול (kpi "92"
     // direction:ltr ⇒ שמאל; "no avatar"/"+12"/"Meta" כנ"ל). אח בגודל-קבוע לא-מושפע (לא נכנס לתנאי).
     if (pColStretch && (cst['direction'] || cst['text-align']) && !px(cst['width'])) e = `SizedBox(width: double.infinity, child: ${e})`;   // ילד-flex מבוקק (גם span) ⇒ אין תנאי-inline
+    // align-self בילד-flex-column ⇒ יישור-עצמי חוצה (RTL: flex-end=שמאל · center=מרכז · flex-start=ימין ברירת-מחדל).
+    // עוטף Align ברוחב-מלא (chat: בועת .out לשמאל, .sys למרכז). ברירת-start ו-stretch לא-נוגעים.
+    { const asf = ALIGN[cst['align-self']]; if (pColAny && (asf === 'end' || asf === 'center') && !cInline) e = `SizedBox(width: double.infinity, child: Align(alignment: Alignment.${asf === 'end' ? 'centerLeft' : 'center'}, heightFactor: 1.0, child: ${e}))`; }
     if (!cInline) flowInline = false;
     if (!(cInline && /^(?:Text\(|Directionality\(textDirection: TextDirection\.\w+, child: Text\()/.test(e))) flowAllText = false;
     // flex-grow חיובי או width:100% בשורת-flex ⇒ Expanded (ממלא · מוסר אי-חסימת-רוחב; SizedBox אינסופי
@@ -762,6 +766,9 @@ function wrapBox(st, inner, node, noPad, parentFlex = false, noVMargin = false) 
   let out;
   if (!cp.length) out = inner || 'const SizedBox.shrink()';
   else { if (inner) cp.push(`child: ${inner}`); out = `Container(${cp.join(', ')})`; }
+  // max-width בלי width-קבוע (‏.msg{max-width:74%}) = תקרה בלבד; האלמנט מכווץ-לתוכן. IntrinsicWidth גורם לכיווץ
+  // כך שילד-בלוק מלא-רוחב (‏.ts timestamp, display:block) ממלא את הבועה-המכווצת במקום למתוח אותה למלוא-הרוחב.
+  if (st['max-width'] && st['max-width'] !== 'none' && !w && !pct(st['width']) && inner) out = `IntrinsicWidth(child: ${out})`;   // max-width:none = ללא-תקרה (מילוי) — לא IntrinsicWidth
   // CSS aspect-ratio (‏.ph{aspect-ratio:1/1} · .ph.wide{16/9}) — בלי זה האריח קרס לגובה-התוכן (438→250) והצורה
   // והאייקון יצאו שגויים. עוטפים ב-AspectRatio (מקבל רוחב-חסום מהבלוק ⇒ מחשב גובה). רק כשאין גובה-קבוע.
   const arRaw = st['aspect-ratio'];
