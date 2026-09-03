@@ -500,9 +500,14 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   const effText = Object.assign({}, inhFont, st);
   const myColor = colorExpr(st['color']) || inherit;            // צבע-הטקסט האפקטיבי (עובר לילדים)
   const nextInh = {}; for (const k of INHERIT_PROPS) if (effText[k] != null) nextInh[k] = effText[k];  // תורשה מצטברת לצאצאים
-  // backface-visibility:hidden + rotateY/X(180) = פָּן-אחורי הפונה-מהצופה במנוחה (כרטיס-היפוך) ⇒ מוסתר.
-  // בלי זה שני-הפָּנים מצוירים וה-bk (אחרון) מכסה את ה-fr ⇒ FORGE הראה את הצד-האחורי.
-  if (/hidden/.test(st['backface-visibility'] || '') && /rotate[xy]\(\s*180/i.test(st['transform'] || '')) return 'const SizedBox.shrink()';
+  // אלמנט מוסתר-במנוחה (מתגלה-בהובר) ⇒ לא-מצויר. שני דפוסים:
+  //  (א) פָּן-אחורי: backface-visibility:hidden + rotateY/X(180) — כרטיס-היפוך.
+  //  (ב) פאנל-מוחלק-החוצה: position:absolute + transform:translate ±100% — נדחף לגמרי מחוץ למסגרת (reveal).
+  // בלי זה FORGE צייר את הפָּן/הפאנל-המוסתר מעל התוכן (הראה Action/צד-אחורי במקום Label).
+  const _tf = st['transform'] || '';
+  const _backHidden = /hidden/.test(st['backface-visibility'] || '') && /rotate[xy]\(\s*180/i.test(_tf);
+  const _slidOut = /^(?:absolute|fixed)$/.test((st['position'] || '').trim()) && /translate[xy]?\([^)]*(?<!\d)-?100%/i.test(_tf);
+  if (_backHidden || _slidOut) return 'const SizedBox.shrink()';
   const kids = elemChildren(node);
   const txt = textOf(node);
   const ta = st['text-align'];
