@@ -12,6 +12,7 @@ import path from 'node:path';
 import { execFileSync, execSync } from 'node:child_process';
 import { buildAtlas } from './atlas.mjs';
 import { buildTwinRegistry, twinMeta, dartLit } from './twins.mjs';
+import { resolveDart, requireDart } from '../dart-bin.mjs';
 const HERE = new URL('.', import.meta.url).pathname;
 const ROOT = new URL('../../', import.meta.url).pathname;
 const CAPS = path.join(HERE, 'capabilities');
@@ -145,8 +146,10 @@ if (GATE) {
   // בדיקת-שקילות-Dart: משחזרת את השחלת-המסך (String בין-חוליות, tryParse לפרמטר מספרי)
   let dartNote = '~ dart מדולג (אין בינארי)';
   const dartBin = (() => {
-    if (process.env.DART_BIN && fs.existsSync(process.env.DART_BIN)) return process.env.DART_BIN;
-    try { return execSync('command -v dart', { shell: '/bin/bash' }).toString().trim() || null; } catch { return null; }
+    // c2 · פותר-Dart משותף (dart-bin.mjs). L34: יש עבודות-Dart ואין בינארי ⇒ exit 2 (היה: דילוג-שקט ⇒ ירוק-כוזב).
+    const d = resolveDart();
+    if (!d && dartJobs.length) requireDart('synth · שקילות-Dart');
+    return d;
   })();
   if (dartBin && dartJobs.length && !bad) {
     const esc = (s) => s.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\$/g, '\\$');
@@ -168,12 +171,18 @@ if (GATE) {
         const meta = twinMeta.get(c);
         const tail = meta && meta.simple && meta.tail.length === f.params.length - 1 ? meta.tail.map(x => dartLit(x)) : f.params.slice(1).map(() => 'null');
         const arg = (t === 'num' || t === 'double') ? `(num.tryParse(${expr}) ?? double.nan)` : t === 'int' ? `(int.tryParse(${expr}) ?? 0)` : expr;
-        expr = `${c}(${[arg, ...tail].join(', ')})${f.ret === 'String' ? '' : f.ret === 'String?' ? " ?? ''" : '.toString()'}`;
-        if (f.ret === 'String?') expr = `(${c}(${[arg, ...tail].join(', ')}) ?? '')`;
+        // c2 · שקילות-מחרוזת JS↔Dart: JS String([a,b]) = 'a,b'; Dart List.toString() = '[a, b]' ⇒ ל-List משתמשים ב-join(',')
+        // (באג-רתמה שהוסתר כי Dart מעולם לא רץ — התיקון במנוע, לא בפלט · L25).
+        // כל ערך שאינו String עובר jsStr() — מחרוזת-בסגנון-JS (List ⇒ join(','), int בלי .0, null ⇒ 'null'),
+        // גם ל-dynamic (sortSupportThreads('אחת') מחזיר List — Dart: '[א, ח, ת]', JS: 'א,ח,ת').
+        const call = `${c}(${[arg, ...tail].join(', ')})`;
+        expr = f.ret === 'String' ? call
+             : f.ret === 'String?' ? `(${call} ?? '')`
+             : `jsStr(${call})`;
       }
       body.push(`  check('${esc(cf)}', '${esc(ex.in)}', ${expr}, '${esc(ex.out)}');`);
     }
-    const script = `${imps}\nint bad = 0;\nvoid check(String cf, String inp, String got, String want) {\n  if (got != want) { print('DARTFAIL \$cf \$inp => \$got != \$want'); bad = 1; }\n}\nvoid main() {\n${body.join('\n')}\n  print(bad == 1 ? 'DARTBAD' : 'DARTOK');\n}\n`;
+    const script = `${imps}\nString jsStr(dynamic v) => v == null ? 'null' : v is List ? v.map(jsStr).join(',') : v is double && v == v.truncateToDouble() && v.isFinite ? v.toInt().toString() : v.toString();\nint bad = 0;\nvoid check(String cf, String inp, String got, String want) {\n  if (got != want) { print('DARTFAIL \$cf \$inp => \$got != \$want'); bad = 1; }\n}\nvoid main() {\n${body.join('\n')}\n  print(bad == 1 ? 'DARTBAD' : 'DARTOK');\n}\n`;
     const tf = path.join(tmpDir, 'gate.dart');
     fs.writeFileSync(tf, script);
     try {
@@ -181,7 +190,7 @@ if (GATE) {
       if (out.includes('DARTOK')) dartNote = '✓ שקילות-Dart אומתה (השחלת-המסך ביט-זהה לדוגמאות)';
       else { console.error('🚨 שער-הסינתזה: שקילות-Dart נשברה:\n' + out.trim()); bad = 1; dartNote = ''; }
     } catch (e) { console.error('🚨 שער-הסינתזה: הרצת-dart כשלה: ' + String(e.stderr || '') .slice(0, 500) + ' | ' + String(e.stdout || e.message).slice(0, 200)); bad = 1; dartNote = ''; }
-    fs.rmSync(tmpDir, { recursive: true, force: true });
+    if (bad) console.error('   gate.dart נשמר לאבחון: ' + tf); else fs.rmSync(tmpDir, { recursive: true, force: true });
   }
   if (!bad) console.log(`✓ שער-הסינתזה: ${n} יכולות-מוזמנות מוכחות-חי · ${dartNote}`);
   process.exit(bad);
