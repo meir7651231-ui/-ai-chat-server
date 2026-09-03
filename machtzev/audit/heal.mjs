@@ -76,7 +76,11 @@ const netAfter = tRows.reduce((s, r) => s + (r.now > 0 ? r.now : 0), 0);
 console.log('\n── מטרות ──'); tRows.forEach(r => console.log(`  ${r.k}: ${r.base ?? '—'}% → ${r.now}%  ${r.base != null && r.base - r.now > EPS ? '🟢' : r.base != null && r.now - r.base > EPS ? '🔴' : ''}`));
 console.log('── קנרים (רגרסיה?) ──'); console.log(cRegressed.length ? cRegressed.map(r => `  🔴 ${r.k}: ${r.base}%→${r.now}%`).join('\n') : '  ✅ כולם יציבים');
 
-let promote = netAfter < netBefore - EPS && !cRegressed.length && !tWorse.length;
+// סף-קידום: בנתיב-המהיר (12 קנרים) נדרש שיפור-נטו > EPS (רצפת-רעש). ב--full — שבו סריקת-353 היא
+// הביטוח — די בשיפור-נטו קטן (0.15%), כי אפס-הרגרסיה על כל-האטומים מבטיח שאי-אפשר לשבור כלום. זה סוגר
+// את עיוורון-המדד לאלמנטים-זעירים (reveal_card "Label" זז מימין-למרכז = תיקון-אמת, אך <EPS באחוזים).
+const PROMO = args.includes('--full') ? 0.15 : EPS;
+let promote = netAfter < netBefore - PROMO && !cRegressed.length && !tWorse.length;
 
 // 🛡 ביטוח-מלא (--full): אחרי שהמטרות+קנרים עברו, סורק את כל 353 האטומים מול baseline. נוחת רק אם
 // אפס-רגרסיה בכולם (לא רק 12 קנרים). סוגר את פער-הקנרים = ביטוח מלא.

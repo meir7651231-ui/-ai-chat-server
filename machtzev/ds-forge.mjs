@@ -645,7 +645,12 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     });
     const pad = edge(st, 'padding');
     const flowW = pad && inner ? `Padding(padding: ${pad}, child: ${inner})` : inner;
-    inner = `Stack(clipBehavior: Clip.none, children: [${(flowW ? [flowW] : []).concat(pos).join(', ')}])`;
+    // מיכל שממרכז-תוכן (grid/place-items:center · align+justify:center) ⇒ ה-Stack מיישר את הילדים
+    // הלא-ממוקמים (זרימת-הטקסט) למרכז. בלי זה ברירת-המחדל topStart = RTL ⇒ ימין-למעלה, והטקסט-בזרימה
+    // (reveal_card "Label" מעל .rv האבסולוטי) נדבק לימין במקום מרכז. Positioned/Positioned.fill לא מושפעים.
+    const _plS = `${st['place-items'] || ''} ${st['place-content'] || ''} ${st['justify-items'] || ''}`;
+    const stackCentered = /center/.test(_plS) || (ALIGN[st['align-items']] === 'center' && JUST[st['justify-content']] === 'center');
+    inner = `Stack(clipBehavior: Clip.none${stackCentered ? ', alignment: Alignment.center' : ''}, children: [${(flowW ? [flowW] : []).concat(pos).join(', ')}])`;
     // בלוק-במסגרת-בלוק (לא פריט-flex) בלי רוחב-מפורש = מילוי-רוחב-הורה (CSS block) ⇒ Positioned right:0
     // מתיישר לקצה-המיכל (li ברשימה: המספר/הנקודה בשוליים), לא לקצה-הטקסט. פריט-flex (avw) נשאר גודל-תוכן.
     if (!parentFlex && !st['width'] && !/^inline/.test(st['display'] || '')) inner = `SizedBox(width: double.infinity, child: ${inner})`;
