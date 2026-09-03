@@ -429,10 +429,14 @@ function svgScene(node, map, anc, inherit) {
   const gArgs = gd => gd ? `, g: [${gd.cols.join(', ')}], gs: [${gd.offs.join(', ')}], gv: [${gd.v.join(', ')}]` : '';
   const urlId = v => { const m = v && v.match(/url\(#([\w-]+)\)/); return m ? grads[m[1]] : null; };
   const allText = n => n.children.map(c => c.text != null ? c.text : (c.tag ? allText(c) : '')).join('');
-  const walk = (n, panc) => {
+  // תכונות-הצגה של SVG יורדות מ-<g> אל הילדים (fill/stroke/… ירושה כמו-CSS). בלי זה, 12 עמודות בתוך
+  // <g fill="…"> נופלות לברירת-קו-ink במקום מילוי-האקסנט (waveform_bars). מיזוג: תכונת-הילד גוברת על הירושה.
+  const SVG_INH = ['fill', 'stroke', 'stroke-width', 'fill-opacity', 'stroke-opacity', 'text-anchor'];
+  const walk = (n, panc, pattr) => {
     for (const ch of n.children) {
       if (!ch.tag) continue;
-      const est = styleOf(ch, map, panc), a = ch.attrs;
+      const est = styleOf(ch, map, panc), a = { ...ch.attrs };
+      for (const k of SVG_INH) if (a[k] == null && pattr[k] != null) a[k] = pattr[k];
       const fillRaw = a.fill || est['fill'];
       const strokeRaw = a.stroke || est['stroke'] || est['color'];
       const filled = !!(fillRaw && fillRaw !== 'none');
@@ -465,10 +469,10 @@ function svgScene(node, map, anc, inherit) {
         for (let k = 2; k < pts.length; k += 2) d += ` L ${pts[k]} ${pts[k + 1]}`; if (ch.tag === 'polygon') d += ' Z';
         ops.push(`_Op.path(${dq(d)}, ${col}, ${ch.tag === 'polygon' && filled}, ${sw}${gArgs(gd)})`);
       }
-      if (ch.tag !== 'text') walk(ch, panc.concat([ch.classes || []]));
+      if (ch.tag !== 'text') { const nattr = {}; for (const k of SVG_INH) if (a[k] != null) nattr[k] = a[k]; walk(ch, panc.concat([ch.classes || []]), nattr); }
     }
   };
-  walk(node, anc.concat([node.classes || []]));
+  walk(node, anc.concat([node.classes || []]), {});
   return { ops, vbw, vbh };
 }
 // <linearGradient> ⇒ {cols:[Color…], offs:[0..1…], v:[x1,y1,x2,y2]} (שברי objectBoundingBox)
@@ -524,7 +528,9 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     const wfp = wf && +wf < 1 ? wf : null, hfp = hf && +hf < 1 ? hf : null;
     if (wfp || hfp) return `FractionallySizedBox(${wfp ? `widthFactor: ${wfp}, ` : ''}${hfp ? `heightFactor: ${hfp}, ` : ''}child: FittedBox(fit: BoxFit.contain, child: SizedBox(width: ${sc.vbw}, height: ${sc.vbh}, child: ${body})))`;
     if (wpx) return `SizedBox(width: ${wpx}, height: ${hpx || (wpx / (sc.vbw / sc.vbh)).toFixed(2)}, child: ${body})`;  // אייקון/טבעת גודל-קבוע
-    if (hpx) return `SizedBox(height: ${hpx}, child: ${body})`;                          // גובה-קבוע, רוחב מהאב (ספארק)
+    // גובה-קבוע, רוחב-אוטו (block ⇒ ממלא-מיכל). CustomPaint חסר-ילד עם רוחב-לא-חסום צובע ברוחב-0 (הגל נעלם!) ⇒
+    // LayoutBuilder כובל את הרוחב למיכל (כשחסום) או ל-viewBox (בהקשר-רופף) ⇒ הצייר ממלא, preserveAspectRatio=none.
+    if (hpx) return `SizedBox(height: ${hpx}, child: LayoutBuilder(builder: (ctx, cns) => SizedBox(width: cns.maxWidth.isFinite ? cns.maxWidth : ${sc.vbw}, height: ${hpx}, child: ${body})))`;
     return `AspectRatio(aspectRatio: ${(sc.vbw / sc.vbh).toFixed(4)}, child: ${body})`;  // width:100% ⇒ מילוי-רוחב לפי יחס-viewBox
   }
   if (node.tag === 'input') {
