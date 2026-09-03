@@ -62,11 +62,19 @@ for (const p of pairs) {
   const d = fs.mkdtempSync(path.join(tmp, 'p-'));
   fs.writeFileSync(path.join(d, path.basename(p.atom)), h.src);
   fs.writeFileSync(path.join(d, path.basename(p.test)), fs.readFileSync(p.test, 'utf8'));
-  // תלויות-אחיות (import 'x.dart') — מועתקות כמו-שהן
-  for (const im of fs.readFileSync(p.test, 'utf8').matchAll(/import\s+'([^':]+\.dart)'/g)) { const s = path.join(path.dirname(p.test), im[1]); if (fs.existsSync(s) && !fs.existsSync(path.join(d, im[1]))) fs.writeFileSync(path.join(d, im[1]), fs.readFileSync(s)); }
-  for (const im of fs.readFileSync(p.atom, 'utf8').matchAll(/import\s+'([^':]+\.dart)'/g)) { const s = path.join(path.dirname(p.atom), im[1]); if (fs.existsSync(s) && !fs.existsSync(path.join(d, im[1]))) fs.writeFileSync(path.join(d, im[1]), fs.readFileSync(s)); }
+  // תלויות יחסיות (import '../x/y.dart') — מועתקות טרנזיטיבית לאותו מבנה-יחסי בתוך ה-sandbox (mkdir -p; לעולם לא מחוץ ל-tmp)
+  const copied = new Set([path.join(d, path.basename(p.atom)), path.join(d, path.basename(p.test))]);   // נתיבים מוחלטים — האטום-החלול לעולם לא נדרס ע"י העותק-המקורי
+  const copyDeps = (srcFile, dstFile, depth = 0) => {
+    if (depth > 6) return;
+    for (const im of fs.readFileSync(srcFile, 'utf8').matchAll(/import\s+'([^':]+\.dart)'/g)) {
+      const src = path.resolve(path.dirname(srcFile), im[1]), dst = path.resolve(path.dirname(dstFile), im[1]);
+      if (!fs.existsSync(src) || copied.has(dst) || !dst.startsWith(d)) { if (!dst.startsWith(d) && !copied.has(dst)) { copied.add(dst); fs.mkdirSync(path.dirname(dst), { recursive: true }); if (fs.existsSync(src)) { fs.copyFileSync(src, dst); copyDeps(src, dst, depth + 1); } } continue; }
+      copied.add(dst); fs.mkdirSync(path.dirname(dst), { recursive: true }); fs.copyFileSync(src, dst); copyDeps(src, dst, depth + 1);
+    }
+  };
+  copyDeps(p.test, path.join(d, path.basename(p.test))); copyDeps(p.atom, path.join(d, path.basename(p.atom)));
   const r = spawnSync(DART, ['run', '--enable-asserts', path.basename(p.test)], { cwd: d, encoding: 'utf8', timeout: 20000, killSignal: 'SIGKILL', env: { PATH: process.env.PATH || '', HOME: process.env.HOME || '' } });
-  if (r.status === 0) vacuous.push(path.relative(R.ROOT, p.test));
+  if (r.status === 0) vacuous.push(path.relative(R.ROOT, p.test) + ` (${h.n} פונקציות הוחללו)`);
   else if (r.status === null) broken.push(path.relative(R.ROOT, p.test) + ' (timeout)');
   else real++;
 }
