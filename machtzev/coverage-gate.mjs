@@ -52,7 +52,9 @@ try { base = JSON.parse(fs.readFileSync(BASE, 'utf8')); } catch { }
 let bad = 0;
 for (const k of ['widgetsFillable', 'enginesRunnable', 'essence', 'dataTwinned'])
   if (base[k] !== undefined && cur[k] < base[k]) { console.error(`🚨 שער-הכיסוי: נסיגה ב-${k}: ${cur[k]} < ${base[k]}`); bad = 1; }
-if (!bad) fs.writeFileSync(BASE, JSON.stringify(cur, null, 1) + '\n');
+// c3ג · עיקרון 5: שער לא כותב. גידול מדווח ומוחל בטבעת-push (--baseline מפורש); היה: כתיבה בכל ריצה ירוקה (R2-5.6).
+if (process.argv.includes('--baseline')) { fs.writeFileSync(BASE, JSON.stringify(cur, null, 1) + '\n'); console.log('✍️ coverage-baseline נכתב'); }
+else { const grew = ['widgetsFillable', 'enginesRunnable', 'essence', 'dataTwinned'].filter(k => base[k] === undefined || cur[k] > base[k]); if (!bad && grew.length) console.log(`ℹ️ baseline may grow: ${grew.map(k => k + ' ' + (base[k] ?? '∅') + '→' + cur[k]).join(' · ')} — מוחל בטבעת-push (--baseline)`); }
 const pct = (a, b) => b ? Math.round(a / b * 100) : 0;
 console.log(`${bad ? '🚨' : '✓'} שער-הכיסוי: לבנים ${cur.widgetsFillable}/${cur.widgetsTotal} (${pct(cur.widgetsFillable, cur.widgetsTotal)}%) · מנועים ${cur.enginesRunnable}/${cur.enginesTotal} (${pct(cur.enginesRunnable, cur.enginesTotal)}%) · מהות ${cur.essence}/${cur.enginesTotal} (${pct(cur.essence, cur.enginesTotal)}%) · תאומי-דאטה ${cur.dataTwinned}/${cur.dataTotal} (${pct(cur.dataTwinned, cur.dataTotal)}%)`);
 process.exit(bad);

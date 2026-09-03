@@ -39,6 +39,9 @@ for (const [n, [spec, pred]] of Object.entries(ASPECTS)) {
 const logic = rj('logic-census.json');
 const wireable = logic.filter((x) => x.wireable).length;
 const engines = listMapEngines();
+// c3ג · מכנה כן (הכרעה N): לא כל אטום ניתן-לחיווט. תצוגה: fields עם ≥1 שקע-String, collection, series; לוגיקה: wireable.
+const eligibleDisp = census.filter((a) => (a.seam === 'fields' && (a.str || 0) >= 1) || a.seam === 'collection' || a.seam === 'series').length;
+const eligible = eligibleDisp + wireable;
 
 // ── מבנה + שערים ──
 const gatesTsv = rd('machtzev/gates.tsv').split('\n').filter((l) => l && !l.startsWith('#')).length;
@@ -50,6 +53,7 @@ const wiredPct = (wiredTotal / totalAtoms * 100).toFixed(1);
 const layers = {
   '🔢 סה"כ אטומים מאונדקסים (תצוגה+לוגיקה)': totalAtoms,
   '🔌 מחווטים-למחולל בפועל': `${wiredTotal} (${wiredPct}%) · ${totalAtoms - wiredTotal} מפורקים-אך-לא-מחווטים`,
+  '  ↳ מול כשירים-לחיווט (eligible)': `${wiredTotal}/${eligible} (${(wiredTotal / (eligible || 1) * 100).toFixed(1)}%) · כשירים: תצוגה ${eligibleDisp} (fields∧str≥1 ∪ collection ∪ series) + לוגיקה ${wireable} (wireable)`,
   '  ↳ חיווט-תצוגה': `${dispAll.size}/${census.length} (${(dispAll.size / census.length * 100).toFixed(1)}%)`,
   '  ↳ חיווט-לוגיקה': `${engines.length}/${logic.length} (${(engines.length / logic.length * 100).toFixed(1)}%)`,
   'תצוגה · atom-census (widgets)': census.length,
@@ -65,7 +69,7 @@ const layers = {
 };
 const structure = {
   'machtzev/ שורש (.mjs)': nd('machtzev', /\.mjs$/),
-  'machtzev/ תת-תיקיות': (() => { try { return fs.readdirSync(path.join(ROOT, 'machtzev'), { withFileTypes: true }).filter((e) => e.isDirectory()).length; } catch { return 0; } })(),
+  'machtzev/ תת-תיקיות': (() => { try { return fs.readdirSync(path.join(ROOT, 'machtzev'), { withFileTypes: true }).filter((e) => e.isDirectory() && e.name !== 'node_modules' && !e.name.startsWith('.')).length; } catch { return 0; } })(),
   'generator/ קנוני': nd('machtzev/generator'),
   'generator/legacy/': nd('machtzev/generator/legacy'),
   'knowledge/ פעיל': nd('knowledge', /\.md$/),
@@ -95,9 +99,13 @@ const FLOOR = path.join(ROOT, 'machtzev/wired-floor.json');
 const readFloor = () => { try { return JSON.parse(fs.readFileSync(FLOOR, 'utf8')).wired || 0; } catch { return 0; } };
 if (process.argv.includes('--write')) {
   fs.writeFileSync(path.join(ROOT, 'TRUTH.md'), body);
-  const floor = Math.max(readFloor(), wiredTotal);   // מונוטוני — לעולם לא יורד
-  fs.writeFileSync(FLOOR, JSON.stringify({ wired: floor, total: totalAtoms, note: 'רצפת-חיווט — רק-עולה. §21 ל-100% = wired≡total-הכשיר.' }, null, 1) + '\n');
-  console.log('📐 TRUTH.md + wired-floor=' + floor + ' נכתבו (' + wiredTotal + '/' + totalAtoms + ' מחווט)'); process.exit(0);
+  // c3ג · הרצפה זזה רק עם --floor (טבעת-push/CI, floor-advance) — לעולם לא מתוך hook (R2-4.5 · R2-5.7).
+  if (process.argv.includes('--floor')) {
+    const floor = Math.max(readFloor(), wiredTotal);   // מונוטוני — לעולם לא יורד
+    fs.writeFileSync(FLOOR, JSON.stringify({ wired: floor, eligible, total: totalAtoms, note: 'רצפת-חיווט — רק-עולה. היעד: wired≡eligible (הכשירים-לחיווט), לא total.' }, null, 1) + '\n');
+    console.log('📐 TRUTH.md + wired-floor=' + floor + ' נכתבו (' + wiredTotal + '/' + eligible + ' כשירים · ' + totalAtoms + ' סה"כ)');
+  } else console.log('📐 TRUTH.md נכתב (' + wiredTotal + '/' + eligible + ' כשירים · ' + totalAtoms + ' סה"כ · רצפה ' + readFloor() + ' ללא שינוי; --floor להזזה)');
+  process.exit(0);
 }
 if (process.argv.includes('--gate')) {
   const cur = rd('TRUTH.md');

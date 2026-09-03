@@ -45,7 +45,7 @@ if (arg === '--baseline') {
     fresh.forEach(b => console.error('   + ' + b));
     process.exit(1);
   }
-  // חוב שירד ⇒ ה-baseline מתעדכן מעצמו (רק-יורד)
-  if (red.length < base.size) fs.writeFileSync(BASE, JSON.stringify(red, null, 0));
+  // c3ג · עיקרון 5: שער לא כותב. חוב שירד מדווח ומוחל בטבעת-push (--baseline); היה: כתיבה-עצמית (R2-5.6).
+  if (red.length < base.size) console.log(`ℹ️ baseline may shrink: box-proofs ${base.size}→${red.length} — מוחל בטבעת-push (--baseline)`);
   console.log(`✓ שער-הוכחות-הקופסאות: אפס הַאֲדָמָה · חוב-מנוהל ${red.length}/${boxes.length}`);
 }
