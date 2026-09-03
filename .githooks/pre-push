@@ -9,13 +9,14 @@ PROTO='claude/hei-rxv1v1|claude/mah-kora-0by8kw'
 PROTECTED='main|master|production'
 Z=0000000000000000000000000000000000000000
 FAIL=0
+ENF0=$(mktemp -d); git show HEAD:machtzev/allow-check.mjs > "$ENF0/allow-check.mjs" 2>/dev/null || cp machtzev/allow-check.mjs "$ENF0/allow-check.mjs"
 mapfile -t LINES
 for line in "${LINES[@]}"; do
   set -- $line; lref=${1:-}; lsha=${2:-}; rref=${3:-}; rsha=${4:-}
   [ -z "$rref" ] && continue
   if printf '%s' "$rref" | grep -qE "^refs/heads/($PROTECTED)$"; then
     TIPMSG=$(mktemp); git log -1 --format=%B "$lsha" > "$TIPMSG" 2>/dev/null
-    if ! node machtzev/allow-check.mjs --msg "$TIPMSG" --kind push-main >/dev/null 2>&1; then rm -f "$TIPMSG"; echo "❌ push ל-$rref בלי trailer 'Allow: push-main הכרעה-A' ב-commit הראש (הכרעה A: main לעולם לא בלי אישור-בעלים)" >&2; exit 1; fi
+    if ! node "$ENF0/allow-check.mjs" --msg "$TIPMSG" --kind push-main --root "$ROOT" >/dev/null 2>&1; then rm -f "$TIPMSG"; echo "❌ push ל-$rref בלי trailer 'Allow: push-main הכרעה-A' ב-commit הראש (הכרעה A: main לעולם לא בלי אישור-בעלים)" >&2; exit 1; fi
     rm -f "$TIPMSG"
   fi
   if [ "$lsha" = "$Z" ]; then
@@ -27,10 +28,12 @@ for line in "${LINES[@]}"; do
   if [ "$rsha" = "$Z" ]; then BASE=$(git merge-base "$lsha" origin/claude/hei-rxv1v1 2>/dev/null || git rev-parse "$lsha~1"); else BASE="$rsha"; fi
   echo "🛡️ מחצב · pre-push: $rref · $(printf '%s' "$lsha" | cut -c1-8) (base $(printf '%s' "$BASE" | cut -c1-8))"
   # ראצ׳ט-כיוון פר-commit: החלשת-baseline/floor מכוסה רק ע"י Allow: באותו commit (שלב 6); שער/skip/סקריפט — לעולם לא
+  ENF=$(mktemp -d); for e in ratchet-direction allow-check; do git show "$lsha:machtzev/$e.mjs" > "$ENF/$e.mjs" 2>/dev/null || cp "machtzev/$e.mjs" "$ENF/$e.mjs"; done   # R3-1.1: אוכפים מה-sha הנדחף, לא מעץ-העבודה
   for c in $(git rev-list --reverse "$BASE".."$lsha"); do
-    RDO=$(node machtzev/ratchet-direction.mjs "$c~1" "$c" 2>&1) && continue
+    RDO=$(node "$ENF/ratchet-direction.mjs" "$c~1" "$c" --repo "$ROOT" 2>&1); RDRC=$?; [ $RDRC -eq 0 ] && continue
+    if [ $RDRC -ne 1 ] || ! echo "$RDO" | grep -qE '^\s*·'; then echo "❌ ratchet-direction ב-$(printf '%s' "$c" | cut -c1-8): exit $RDRC בלי פירוט — fail-closed (R3-4.2)" >&2; FAIL=1; continue; fi
     ISS=$(mktemp); CM=$(mktemp); echo "$RDO" | grep -E '^\s*·' > "$ISS"; git log -1 --format=%B "$c" > "$CM"
-    if node machtzev/allow-check.mjs --msg "$CM" --issues "$ISS"; then echo "  ℹ️ $(printf '%s' "$c" | cut -c1-8): החלשה מכוסה ב-Allow"; else echo "❌ ראצ׳ט-כיוון ב-$(printf '%s' "$c" | cut -c1-8): החלשה בלי Allow" >&2; FAIL=1; fi
+    if node "$ENF/allow-check.mjs" --msg "$CM" --issues "$ISS" --root "$ROOT"; then echo "  ℹ️ $(printf '%s' "$c" | cut -c1-8): החלשה מכוסה ב-Allow"; else echo "❌ ראצ׳ט-כיוון ב-$(printf '%s' "$c" | cut -c1-8): החלשה בלי Allow" >&2; FAIL=1; fi
     rm -f "$ISS" "$CM"
   done
   MISSING=""
@@ -46,7 +49,7 @@ for line in "${LINES[@]}"; do
     case $RC in
       0) echo "✅ משטרה מלאה ירוקה על $(printf '%s' "$lsha" | cut -c1-8)";;
       2) TIPMSG=$(mktemp); git log -1 --format=%B "$lsha" > "$TIPMSG"
-         if node machtzev/allow-check.mjs --msg "$TIPMSG" --kind yellow-push >/dev/null 2>&1; then echo "🟡 משטרה צהובה — מותר ע״י 'Allow: yellow-push' ב-commit הראש (מוצהר)"; else echo "❌ משטרה צהובה — push דורש ירוק מלא או 'Allow: yellow-push <L-id|הכרעה-N>' ב-commit הראש" >&2; FAIL=1; fi
+         if node "$ENF0/allow-check.mjs" --msg "$TIPMSG" --kind yellow-push --root "$ROOT" >/dev/null 2>&1; then echo "🟡 משטרה צהובה — מותר ע״י 'Allow: yellow-push' ב-commit הראש (מוצהר)"; else echo "❌ משטרה צהובה — push דורש ירוק מלא או 'Allow: yellow-push <L-id|הכרעה-N>' ב-commit הראש" >&2; FAIL=1; fi
          rm -f "$TIPMSG";;
       *) echo "❌ משטרה אדומה על ה-sha הנדחף" >&2; FAIL=1;;
     esac

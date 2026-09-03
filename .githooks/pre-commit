@@ -66,21 +66,25 @@ fi
 RETRY=machtzev/audit/retry.jsonl
 if [ -n "$CODE" ] && [ -s "$RETRY" ]; then
   DR=$(node machtzev/learn-draft.mjs --stage "$(echo "$STAGED" | tr '\n' ',')" 2>&1); DRC=$?
-  if [ $DRC -eq 0 ] && [ -n "$DR" ]; then echo "  📝 [learn-draft] $DR"; git add -- machtzev/LEARNINGS.md "$RETRY"; fi
+  if [ $DRC -eq 0 ] && [ -n "$DR" ]; then echo "  📝 [learn-draft] $DR"; node machtzev/pins-check.mjs --write >/dev/null 2>&1; git add -- machtzev/LEARNINGS.md machtzev/pins.sha256 "$RETRY"; fi   # R3-5.4: העריכה-האוטומטית של קובץ-נעול נחתמת בו-במקום
 fi
 
 # ── ג · ראצ׳ט-כיוון מול merge-base (לא מול HEAD — R2-6.1) ──
 BASE=$(git merge-base HEAD origin/claude/hei-rxv1v1 2>/dev/null || git rev-parse HEAD)
-RD=$(node machtzev/ratchet-direction.mjs "$BASE" --index 2>&1); RDRC=$?
+# אוכפים רצים מהעותק המחויב ב-HEAD (R3-1.1): עריכה לא-מחויבת שלהם לא משפיעה על הטבעת הזו
+ENF=$(mktemp -d); for e in ratchet-direction allow-check; do git show "HEAD:machtzev/$e.mjs" > "$ENF/$e.mjs" 2>/dev/null || cp "machtzev/$e.mjs" "$ENF/$e.mjs"; done
+RD=$(node "$ENF/ratchet-direction.mjs" "$BASE" --index --repo "$ROOT" 2>&1); RDRC=$?
 rm -f "$GD/protocol_ratchet_issues" "$GD/protocol_pins_edits"
 if [ $RDRC -eq 0 ]; then ok ratchet-down "$RD"
 else
   # שלב 6: החלשה של baseline/floor ⇒ מותרת רק עם trailer Allow (commit-msg מאמת); שער/skip/סקריפט ⇒ אדום כאן
   echo "$RD" | grep -E '^\s*·' > "$GD/protocol_ratchet_issues"
-  if echo "$RD" | grep -E '^\s*·' | grep -qvE '(baseline גדל|ראצ׳ט ירד)'; then echo "$RD" | tail -4; err ratchet-down "החלשת-שער מול merge-base $(echo "$BASE" | cut -c1-8) — אין Allow לכך"
+  if [ $RDRC -ne 1 ] || ! grep -q . "$GD/protocol_ratchet_issues"; then echo "$RD" | tail -3; err ratchet-down "ratchet-direction נכשל (exit $RDRC) בלי פירוט — fail-closed (R3-4.2)"
+  elif echo "$RD" | grep -E '^\s*·' | grep -qvE '(baseline גדל|baseline נמחק|ראצ׳ט ירד|ארגומנטים השתנו)'; then echo "$RD" | tail -4; err ratchet-down "החלשת-שער מול merge-base $(echo "$BASE" | cut -c1-8) — אין Allow לכך"
   else yel ratchet-down "החלשת-baseline/floor — נדרש trailer Allow: בהודעה (commit-msg מאמת): $(echo "$RD" | grep -cE '^\s*·') פריטים"; fi
 fi
-CONST=$(echo "$STAGED" | grep -xE 'LAW\.md|PURPOSE\.md|machtzev/(VERIFY-LAWS|THE-WAY|AGENT-CODE|DECISIONS|LEARNINGS)\.md' || true)
+# קובצי-פרוטוקול (R3-4.11): חוקה + אוכפים + hooks + settings + workflow + מרשם ⇒ pins-write מוצהר עם סיבה
+CONST=$(echo "$STAGED" | grep -xE 'LAW\.md|PURPOSE\.md|CLAUDE\.md|machtzev/(VERIFY-LAWS|THE-WAY|AGENT-CODE|DECISIONS|LEARNINGS)\.md|machtzev/(police|pins-check|ratchet-direction|allow-check|verify-independent|police-selftest|truth)\.mjs|machtzev/gates\.tsv|\.githooks/[a-z-]+|\.claude/settings\.json|\.claude/hooks/[a-z-]+\.sh|\.github/workflows/police\.yml' || true)
 if [ -n "$CONST" ]; then echo "$CONST" > "$GD/protocol_pins_edits"; yel pins-write "קובצי-חוקה ב-staged ($(echo "$CONST" | tr '\n' ' ')) — נדרש Allow: pins-write:<קובץ> <L-id|הכרעה-N> (commit-msg מאמת)"; fi
 
 # ── ד · המשטרה (טבעת-commit = --fast עד שקיים import-graph ל---inc; R2-5.3) ──
@@ -93,7 +97,8 @@ if [ -n "$CODE" ]; then
     2) yel police "$PSUM (צהוב לא חוסם commit; חוסם push)";;
     *) echo "$POUT" | grep -E '^failed |🚨|🔴' | head -8; err police "$PSUM";;
   esac
-  FAILED_GATES=$(echo "$POUT" | grep -oE '^failed [a-z-]+' | cut -d' ' -f2 | tr '\n' ',')
+  FAILED_GATES=$( { echo "$POUT"; cat "$LEDGER"; } | grep -oE '^failed [a-z-]+' | cut -d' ' -f2 | sort -u | tr '\n' ',')   # R3-5.7: גם שערי-hook
+  [ $PRC -eq 0 ] || FAILED_GATES="${FAILED_GATES:-police}"   # R3-5.3: אדום בלי failed-line ⇒ לא מסמנים resolved
   node machtzev/learn-draft.mjs --record "$FAILED_GATES" --stage "$(echo "$STAGED" | tr '\n' ',')" >/dev/null 2>&1 && [ -f "$RETRY" ] && git add -- "$RETRY"
 else skipg police "commit-תיעוד בלבד (allowlist) — המשטרה מדולגת"; fi
 

@@ -255,6 +255,7 @@ retry #3 ⇒ stuck-loop 🚨 ⇒ בעלים. אין allow-retry.
 | **K** 🆕 | **8 שמות-מחלקה כפולים** | סורקים יוצאים 1 על כפילות; הבעלים בוחר: rename ל-`Premium*` או `key = file+cls` |
 | **L** 🆕 | tag-protection על `protocol-good-*` בלבד (חיצוני-זעיר, לא חוסם קוד) | כן — אחרת ה-tag בשליטת הסוכן |
 | **M** 🆕 | `police.yml` על push כעד (non-required) | כן — F אסר חסימה, לא ראייה |
+| **P** 🆕 | סבב-שבירה 3 (3.9, "תנסה לשבור"): 6 עדשות · ~92 ממצאים · תיקון בקבוצות | **כן — כל תיקון שמחליש-לכאורה baseline/ארגומנט מוצהר בטריילר Allow עם הסיבה הכרעה-P.** האוכפים (ratchet-direction · allow-check · pins-check) נעולים ב-pins + PROTECT ורצים מהעותק המחויב; skipped במצב-מלא = אדום; צהוב רק לכלי מוכר; ראצ׳ט רקורסיבי על baselines; Allow בלי scope-מאסטר ועם סיבה-קיימת; קובצי-פרוטוקול = pins-write מוצהר. הפירוט: RED-TEAM-PROTOCOL.md סבב 3 |
 | **O** 🆕 | pre-tool (שלב 2) נועל **רק** את שכבת-ההגנה (`.githooks/` · `.claude/` · workflow · `.gitattributes` · `.git/config`) + מחוללים (`TRUTH` · `WIRING` · `atom-index*` · `logic-census` · `pins.sha256`). שאר ה-PINNED (police/gates/baselines/LAW…) **לא** נעולים ב-pre-tool | ברירת-מחדל: כן. סיבה: הם כבר עדים ב-pins (commit) + ראצ׳ט-כיוון (commit+push) + מאמת; נעילה ב-pre-tool = מס על כל עבודת-פרוטוקול בלי ראיה נוספת. ה-bypass לשכבת-ההגנה = `.allow_protocol_edit` (24h) עד ש-trailer `Allow:` קיים (שלב 6) — אז הקובץ נמחק. `deny mcp__github` = כל השרת (R2-3.12) — הבעלים יכול לפתוח כלי-קריאה בשם מפורש |
 
 ---

@@ -23,7 +23,7 @@ if [ -d "$ROOT/.githooks" ]; then
 fi
 
 # ── שכבת-ההגנה (suffix על נתיב מוחלט) ──
-PROTECT='\.githooks(/[a-z-]+)?|\.claude/settings\.json|\.claude/hooks(/(pre-tool|session-start)\.sh)?|\.github/workflows/police\.yml|\.gitattributes|\.git/config|\.git/hooks(/[a-z-]+)?'
+PROTECT='machtzev/(ratchet-direction|allow-check|pins-check)\.mjs|\.githooks(/[a-z-]+)?|\.claude/settings\.json|\.claude/hooks(/(pre-tool|session-start)\.sh)?|\.github/workflows/police\.yml|\.gitattributes|\.git/config|\.git/hooks(/[a-z-]+)?'
 GENERATED='TRUTH\.md|WIRING\.md|atom-index(-full)?\.json|logic-census\.json|pins\.sha256'
 # bypass לשכבת-ההגנה בלבד: .allow_protocol_edit (3 שורות · <24h · ≥30 תווים) — מחוללים לעולם לא ביד
 allow_edit() {

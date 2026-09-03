@@ -6,6 +6,7 @@
  *  אם קיימים) — הרשימה לא יכולה לסחוף (R2-2.1, R2-1.5) · (ג) בדיקה דו-כיוונית: pins.sha256 ≡ הרשימה (שני ה-diffs מודפסים).
  *  עדכון: node machtzev/pins-check.mjs --write   (בעתיד: רק עם trailer Allow: pins-write) */
 import fs from 'node:fs';
+import path from 'node:path';
 import crypto from 'node:crypto';
 import * as R from './root.mjs';
 const ROOT = R.ROOT;
@@ -17,6 +18,8 @@ const STATIC = [
   'machtzev/truth.mjs', 'machtzev/generator/render-ds.mjs', 'machtzev/generator/acceptance-space.txt',
   'machtzev/census/atom-index.mjs', 'machtzev/census/atom-census.mjs', 'machtzev/census/logic-census.mjs',
   'machtzev/tools/gen-wiring-doc.mjs', 'machtzev/one.mjs',
+  'machtzev/ratchet-direction.mjs', 'machtzev/allow-check.mjs', 'machtzev/learn-draft.mjs', 'machtzev/cross-source-check.mjs',
+  'machtzev/merge-regen.mjs', 'machtzev/wave-partition.mjs', 'machtzev/census/import-graph.mjs', 'machtzev/compose-engine-report.md',
   'machtzev/wired-floor.json', 'machtzev/coverage-baseline.json', 'machtzev/data-purity-baseline.json',
   'machtzev/deep-purity-baseline.json', 'machtzev/box-proofs-baseline.json', 'machtzev/purity-baseline.json',
   'machtzev/ds-critic-baseline.json', 'machtzev/contract-quality-baseline.json', 'machtzev/dup-class-baseline.json',
@@ -26,7 +29,10 @@ const OPTIONAL = ['.githooks/pre-commit', '.githooks/commit-msg', '.githooks/pre
   '.claude/hooks/pre-tool.sh', '.claude/hooks/session-start.sh', '.github/workflows/police.yml', '.gitattributes'];
 const police = fs.readFileSync(ROOT + 'machtzev/police.mjs', 'utf8');
 const DERIVED = [...police.matchAll(/^\s*gate(?:Dirty)?\(\s*'([^']+)'\s*,\s*'([^']+)'/gm)].map((m) => 'machtzev/' + m[2]);
-const PINNED = [...new Set([...STATIC, ...DERIVED, ...OPTIONAL.filter((f) => fs.existsSync(ROOT + f))])].sort();
+// baselines מוצהרים ב-gates.tsv (עמודה 4) + כל selftest-fixtures/** (fixtures = הראיה; שינוי = pins-write מוצהר — R3-3.6)
+const MANIFEST = [...fs.readFileSync(ROOT + 'machtzev/gates.tsv', 'utf8').matchAll(/\t(?:baseline=)?([^\t;]+\.json);(?:dir=)?(?:shrink|grow)\s*$/gm)].map((m) => 'machtzev/' + m[1]);
+const FIXTURES = []; (function walk(d) { if (!fs.existsSync(d)) return; for (const e of fs.readdirSync(d, { withFileTypes: true })) { const f = path.join(d, e.name); if (e.isDirectory()) walk(f); else FIXTURES.push(path.relative(ROOT, f)); } })(ROOT + 'machtzev/selftest-fixtures');
+const PINNED = [...new Set([...STATIC, ...DERIVED, ...MANIFEST, ...FIXTURES, ...OPTIONAL.filter((f) => fs.existsSync(ROOT + f))])].filter((f) => fs.existsSync(ROOT + f)).sort();
 const PIN_FILE = ROOT + 'machtzev/pins.sha256';
 // בלוק-האמת ב-CLAUDE.md (<!-- truth:begin --> … <!-- truth:end -->) מחולל ע"י truth.mjs בתוך pre-commit (M1) ⇒ פטור מהחתימה
 // (PROTOCOL §4 M1): חותמים את הקובץ עם הבלוק מנוטרל. שאר הקובץ נעול כרגיל.

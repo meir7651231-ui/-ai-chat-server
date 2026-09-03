@@ -20,7 +20,8 @@ import { fileURLToPath } from 'node:url';
 const TOOLS = path.dirname(fileURLToPath(import.meta.url)) + '/';
 const HERE = R.MACH;
 const INC = process.argv.includes('--inc');
-const FAST = process.argv.includes('--fast') || INC;   // --inc = טבעת-commit: היקרים מדולגים כמו --fast
+const FAST = process.argv.includes('--fast') || INC;
+const FAST_ARGV = FAST;   // R3-4.3: skipped מותר רק כש-argv ביקש; במצב מלא כל skipped = אדום   // --inc = טבעת-commit: היקרים מדולגים כמו --fast
 const GATE_TIMEOUT_S = Number(process.env.POLICE_GATE_TIMEOUT || 600);
 
 // ── --inc (שלב 1 · R2-5.3): רק דיף+צרכנים ל-contract/wiring/mutation. fail-closed ⇒ מלא (R2-1.10 · R2-2.12) ──
@@ -31,7 +32,7 @@ if (INC) {
   let changed = fi >= 0 ? process.argv[fi + 1].split(',') : [];
   if (!changed.length) { try { changed = execFileSync('git', ['diff', '--cached', '--name-only', '--diff-filter=ACMRD'], { cwd: R.ROOT, encoding: 'utf8' }).split('\n').filter(Boolean).map((f) => path.join(R.ROOT, f)); } catch {} }
   const inNew = changed.filter((f) => f.startsWith(R.NEW.replace(/\/$/, '')));
-  const outside = changed.filter((f) => !f.startsWith(R.NEW.replace(/\/$/, '')) && /\.(mjs|dart|json|tsv)$/.test(f) && !/\/machtzev\/(PROTOCOL|RED-TEAM|LAWS-MAP|INDEX)/.test(f));
+  const outside = changed.filter((f) => !f.startsWith(R.NEW.replace(/\/$/, '')) && !/\.md$/.test(f));   // R3-3.9: כל קובץ מחוץ ל-new/ שאינו תיעוד ⇒ מלא
   let why = '';
   if (!changed.length) why = 'אין דיף';
   else if (outside.length) why = `שינוי מחוץ ל-new/ (${path.relative(R.ROOT, outside[0])}${outside.length > 1 ? ' +' + (outside.length - 1) : ''}) — כלים/מנוע ⇒ מלא`;
@@ -40,6 +41,7 @@ if (INC) {
     const r = consumersOf(inNew);
     if (r.unknown.length) why = `import() דינמי / קובץ בלי-בעלים (${r.unknown.length}) — צרכנים לא-ידועים`;
     else if (r.files.length > 50) why = `${r.files.length} קבצים > 50`;
+    else if (!r.files.length) why = 'סט-אינקרמנטלי ריק';   // R3-3.9: [] הוא truthy — לא מסננים לכלום
     else INC_FILES = r.files;
   }
   if (INC_FILES) console.log(`ℹ️ inc: ${inNew.length} שונו ⇒ ${INC_FILES.length} לבדיקה (דיף+צרכנים, import-graph)`);
@@ -69,6 +71,7 @@ const ran = new Set(), skipped = new Set(), yellow = new Map(), failed = new Set
 const hasTimeout = (() => { try { execFileSync('timeout', ['--version'], { stdio: 'ignore' }); return true; } catch { return false; } })();
 
 // אימות "הכלי באמת חסר" — צהוב-כוזב (exit 2 עם כלי קיים) = אדום.
+const KNOWN_TOOLS = new Set(['dart', 'typescript', 'node', 'git', 'jq', 'timeout']);   // R3-3.1: צהוב רק לכלי-חיצוני מוצהר, לא לכל מחרוזת
 const toolMissing = (tool) => {
   if (tool === 'dart') return !resolveDart();
   if (tool === 'typescript') return !fs.existsSync(HERE + 'node_modules/typescript/package.json') && !fs.existsSync('/home/user/maor-system/node_modules/typescript/package.json');
@@ -81,15 +84,15 @@ const runGate = (id, script, args) => {
   const r = spawnSync(hasTimeout ? 'timeout' : 'node', argv, { stdio: ['ignore', 'inherit', 'pipe'], timeout: hasTimeout ? undefined : GATE_TIMEOUT_S * 1000, killSignal: 'SIGKILL', encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
   const ms = Date.now() - t0;
   if (r.stderr) process.stderr.write(r.stderr);
-  const timedOut = r.error?.code === 'ETIMEDOUT' || (hasTimeout && (r.status === 124 || r.status === 137));
+  const timedOut = r.error?.code === 'ETIMEDOUT' || (hasTimeout && (r.status === 124 || r.status === 137) && ms >= GATE_TIMEOUT_S * 950);   // R3-3.8: קוד-124 של השער עצמו ≠ timeout
   if (r.error?.code === 'ENOENT') { yellow.set(id, 'tool=node'); console.log(`yellow ${id} ${ms}ms tool=node`); return; }
   if (timedOut) { yellow.set(id, 'timeout'); console.log(`yellow ${id} ${ms}ms timeout=${GATE_TIMEOUT_S}s`); return; }
   if (r.signal) { failed.add(id); console.log(`failed ${id} ${ms}ms signal=${r.signal}`); return; }
   if (r.status === 0) { ran.add(id); console.log(`ran ${id} ${ms}ms`); return; }
   if (r.status === 2) {
     const tool = (String(r.stderr || '').match(/tool=([A-Za-z0-9_.-]+)/) || [])[1];
-    if (tool && toolMissing(tool)) { yellow.set(id, 'tool=' + tool); console.log(`yellow ${id} ${ms}ms tool=${tool}`); return; }
-    failed.add(id); console.log(`failed ${id} ${ms}ms exit=2 ${tool ? 'צהוב-כוזב: הכלי ' + tool + ' קיים' : 'exit 2 בלי tool='}`); return;
+    if (tool && KNOWN_TOOLS.has(tool) && toolMissing(tool)) { yellow.set(id, 'tool=' + tool); console.log(`yellow ${id} ${ms}ms tool=${tool}`); return; }
+    failed.add(id); console.log(`failed ${id} ${ms}ms exit=2 ${tool ? (KNOWN_TOOLS.has(tool) ? 'צהוב-כוזב: הכלי ' + tool + ' קיים' : 'כלי לא-מוכר ' + tool + ' (R3-3.1: רק ' + [...KNOWN_TOOLS].join('/') + ')') : 'exit 2 בלי tool='}`); return;
   }
   failed.add(id); console.log(`failed ${id} ${ms}ms exit=${r.status}`);
 };
@@ -141,6 +144,7 @@ gate('mutation', 'mutation-check.mjs', [...filesArg()], FAST && !INC_FILES);   /
 
 // ── פריטי מרשם⇄ריצה — דו-כיווני; skipped/yellow/failed "נראו", לא "רצו" ──
 let fail = failed.size > 0;
+if (!FAST_ARGV && skipped.size) { console.error(`🚨 שערים דולגו במצב מלא (R3-4.3): ${[...skipped].join(', ')}`); fail = true; }
 const all = new Set([...ran, ...skipped, ...yellow.keys(), ...failed]);
 for (const id of registry) if (!all.has(id)) { console.error(`🚨 שער רשום שלא רץ ולא דווח: ${id}`); fail = true; }
 for (const id of all) if (!registry.has(id)) { console.error(`🚨 שער רץ שאינו במרשם: ${id}`); fail = true; }

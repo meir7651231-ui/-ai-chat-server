@@ -109,7 +109,7 @@ if (process.argv.includes('--write')) {
       `‏**${totalAtoms}** אטומים מאונדקסים (תצוגה **${census.length}** · לוגיקה **${logic.length}**) · מחווטים-למחולל **${wiredTotal}** מתוך **${eligible}** כשירים (${(wiredTotal / (eligible || 1) * 100).toFixed(1)}%) · ` +
       `‏**${gatesN}** שערי-משטרה (gates.tsv) · **${pinsN}** קבצים נעולי-חתימה (pins.sha256)\n<!-- truth:end -->`;
     const re = /<!-- truth:begin[^]*?<!-- truth:end -->/;
-    if (re.test(cur)) { const next = cur.replace(re, block); if (next !== cur) { fs.writeFileSync(cf, next); console.log('📐 CLAUDE.md truth-block עודכן'); } }
+    if (re.test(cur)) { const next = cur.replace(re, block); if (next !== cur) { if (process.argv.includes('--gate')) { console.log('🔴 בלוק-האמת ב-CLAUDE.md סטה מהמחולל (R3-4.9) — node machtzev/truth.mjs --write'); process.exit(1); } fs.writeFileSync(cf, next); console.log('📐 CLAUDE.md truth-block עודכן'); } }
   } catch {}
   // c3ג · הרצפה זזה רק עם --floor (טבעת-push/CI, floor-advance) — לעולם לא מתוך hook (R2-4.5 · R2-5.7).
   if (process.argv.includes('--floor')) {

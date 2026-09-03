@@ -9,7 +9,8 @@ if [ "$LEN" -lt 15 ]; then echo "❌ הודעת commit קצרה מדי ($LEN ת�
 FIRST=$(printf '%s\n' "$CLEAN" | head -1 | tr '[:upper:]' '[:lower:]')
 if printf '%s' "$FIRST" | grep -qE '^(wip|test|asdf|tmp|fix|update|change|123|aaa|xxx|todo)[[:space:]]*$'; then echo "❌ הודעת commit לא-תיאורית: '$FIRST'" >&2; exit 1; fi
 # ── שלב 6 · Allow: trailers (§6): פורמט + כיסוי-החלשות (מ-pre-commit) + pins-write לקובצי-חוקה. DoD: <שם> ⇒ חייב להופיע ב-diff (בלי הרצה — R2-3.5)
-if ! node machtzev/allow-check.mjs --msg "$MSG" --issues "$GD/protocol_ratchet_issues" --pins "$GD/protocol_pins_edits"; then echo "❌ commit-msg: Allow חסר/שגוי — ראה למעלה" >&2; exit 1; fi
+ENF=$(mktemp -d); git show HEAD:machtzev/allow-check.mjs > "$ENF/allow-check.mjs" 2>/dev/null || cp machtzev/allow-check.mjs "$ENF/allow-check.mjs"   # R3-1.1: אוכף מ-HEAD
+if ! node "$ENF/allow-check.mjs" --msg "$MSG" --issues "$GD/protocol_ratchet_issues" --pins "$GD/protocol_pins_edits" --root "$(git rev-parse --show-toplevel)"; then echo "❌ commit-msg: Allow חסר/שגוי — ראה למעלה" >&2; exit 1; fi
 DOD=$(grep -E '^DoD:' "$MSG" | head -1 | sed 's/^DoD:[[:space:]]*//')
 if [ -n "$DOD" ]; then
   T=$(printf '%s' "$DOD" | grep -oE '[A-Za-z0-9_./-]+\.(test\.mjs|dart|mjs)' | head -1)
