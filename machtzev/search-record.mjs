@@ -20,6 +20,8 @@ const oracle = { atomIndexSha: sha(fs.readFileSync(IDX)), logicCensusSha: sha(fs
 // ── טוקניזציה: עברית/לטינית, camelCase, מקפים; מסירים ו/ה/ל/ב/מ תחיליות עבריות בסיסיות ──
 const tok = (s) => String(s || '').replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase().split(/[^a-z0-9א-ת]+/).filter((t) => t.length > 1).map((t) => t.replace(/^[והלבמכש](?=[א-ת]{3,})/, ''));
 const q = [...new Set(tok(query))];
+// האורקל דו-לשוני: שמות-פונקציות/מחלקות באנגלית, purpose בעברית ⇒ שאילתה חייבת מילה אחת לפחות בכל שפה (אחרת חצי-מדף נעלם)
+if (!q.some((t) => /^[a-z]/.test(t)) || !q.some((t) => /^[א-ת]/.test(t))) { console.error('❌ השאילתה חייבת לכלול גם מילים באנגלית (שמות-אטומים/פונקציות) וגם בעברית (ייעוד) — אחרת חצי מהאורקל לא נסרק'); process.exit(1); }
 // התאמה: זהות, או קידומת של ≥4 תווים (age ⊄ image · pager) — לא substring חופשי
 const near = (x, t) => x === t || (t.length >= 4 && x.startsWith(t)) || (x.length >= 4 && t.startsWith(x));
 export function score(entry) {
