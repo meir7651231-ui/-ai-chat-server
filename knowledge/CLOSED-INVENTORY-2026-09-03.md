@@ -55,3 +55,9 @@
 ## אימות
 `flutter analyze lib/genesis` — אפס-errors · `compose-engine --gate` ירוק · `police --fast` 22/0 ·
 רנדר-אמת מצולם פר-גל. שני הריפו מסונכרנים (ref 0/0).
+
+**סגירת חוב-דרך (THE-WAY §6) לגל 11:** מצב-הטעינה לא צולם בחלון-ה-700ms; נסגר ב**בדיקת-widget
+דטרמיניסטית** `test/genesis_inventory_states_test.dart` (buildsmart) — מנווטת למסך, מקישה רענון,
+ומאמתת `CircularProgressIndicator`+"טוען מלאי…" מרונדרים ואז מתנקים. הבדיקה גם חשפה תיקון-מסגרת
+(`_loadingView`: Center→Column, כי Center דורש גובה-חסום שקורס ברשימה-נגללת). זו הדרך המלאה: §6
+מאומת דטרמיניסטית, לא ב"מתקמפל".
