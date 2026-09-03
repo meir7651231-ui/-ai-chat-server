@@ -17,8 +17,19 @@ const ATOM = {
   group:     { atom: 'DsSection',  seam: 'ds/ds.dart:155 title+tone' },                  // קיבוץ פר-מצב
   identity:  { atom: 'MediaRow',   seam: 'premium/lists/media_row.dart:12-15 title/subtitle/glyph' },
   action:    { atom: 'SoftButton', seam: 'premium/actions/soft_button.dart:7 label+onTap' },
+  // ── פעולות-מסך-מלא (גלים 2–4 · אטומי-מדף-אמת, סוכני-חקר 3.9) ──
+  search:    { atom: 'DsSearch',      seam: 'ds/ds_search.dart:5 value+onChanged (מבוקר)' },              // איתור
+  filter:    { atom: 'FilterChipPill', seam: 'screens__manager_dashboard_screen/filter_chip_pill.dart:7 selected+onTap (מבוקר)' }, // זיהוי-חריגה
+  table:     { atom: 'DsTable',       seam: 'ds/ds_table.dart:7 labels+rows+מיון' },                      // הצגת-אוסף (לא DataGrid)
+  panel:     { atom: 'GlassCard',     seam: 'premium/surfaces/glass_card.dart:5 required this.child' },   // מיכל-פריט-נבחר
+  timeline:  { atom: 'TimelineItem',  seam: 'premium/lists/timeline_item.dart title+time+body' },         // שורת-תנועה (לא timeline_flow)
+  empty:     { atom: 'EmptyState',    seam: 'premium/feedback/empty_state.dart glyph+message' },          // מצב אין-תוצאות
 };
 // מזייפים חסומים מפורשות (אם מישהו ינסה לבחור — נזרקת שגיאה):
+// הערה: הסוכנים זיהו בבייטים 4 מזייפים נוספים (DataGrid·timeline_flow·shimmer_skeleton·StatBlock,
+// ראה knowledge/COMPOSE-INVENTORY-2026-09-03.md). לא נוספו כאן במכוון — FAKERS = SSOT לשער no-fakers
+// חוצה-הריפו (בעלות-המחולל), והוספה תגרור חוב-מחולל קיים; שדרוג-הרשימה = הכרעת בעל-המחולל.
+// למסך-המלאי אין צורך: אף אחד מ-6 החלקיקים החדשים לא ממפה למזייף (הטבלה=DsTable, התנועות=TimelineItem — התחליפים).
 const FAKERS = new Set(['stat_block', 'linear_progress', 'radial_gauge', 'bar_chart', 'sparkline']);
 
 // ── גוזר-הפעולות: מנוסחת-החלקיק → רשימת פעולות-הצגה (deterministic) ──
@@ -37,6 +48,19 @@ function ops(formula) {
     return [{ op: 'magnitude', label: f.a }, { op: 'magnitude', label: f.b }, { op: 'diff', label: '=' + f.out, emphasize: true, why: 'תוצאת-המכפלה' }];
   if (f.kind === 'vs')        // השוואה = תובנה: שני-גדלים + הפרש + יחס (3 אטומים)
     return [{ op: 'compare', why: 'שני הגדלים זה-מול-זה' }, { op: 'diff', label: 'מרווח', why: 'ההפרש בין הגדלים' }, { op: 'magnitude', label: 'כיסוי%', why: 'יחס-הכיסוי' }];
+  // ── פעולות-מסך-מלא ──
+  if (f.kind === 'search')    return [{ op: 'search', why: 'איתור = חיפוש-מבוקר (value+onChanged) ⇒ סינון' }];
+  if (f.kind === 'filter')    return [{ op: 'filter', why: 'זיהוי-חריגה = צ׳יפ-סינון-מבוקר (selected+onTap)' }];
+  if (f.kind === 'table')     return [{ op: 'table', why: 'הצגת-אוסף = טבלה (labels+rows+מיון); DataGrid מזייף ⇒ נחסם' }];
+  if (f.kind === 'empty')     return [{ op: 'empty', why: 'מצב אין-תוצאות = glyph+message' }];
+  if (f.kind === 'log')       // יומן = תובנה: כותרת-קיבוץ (Σ) + שורת-תנועה פר-רשומה (2 אטומים)
+    return [{ op: 'group', label: 'כותרת+Σ', why: 'כותרת-היומן נושאת מונה+Σעלות' }, { op: 'timeline', why: 'שורת-תנועה פר-רשומה (title/time/body); timeline_flow מזייף ⇒ נחסם' }];
+  if (f.kind === 'panel')     // פאנל-פריט = תובנה: מיכל + זהות + מצב(יחס) + תנועות + פעולה (5 אטומים)
+    return [{ op: 'panel', why: 'מיכל-פריט-נבחר (GlassCard child) מארח את תת-החלקיקים' },
+            { op: 'identity', why: 'זהות-הפריט (שם/מק״ט/קטגוריה)' },
+            { op: 'ratio', label: 'מלאי מול יעד', why: 'מצב-אמת = יחס במילוי-בר' },
+            { op: 'timeline', why: 'תנועות-הפריט (intakeLog מסונן)' },
+            { op: 'action', why: 'פעולות על הפריט (קבלה/הוצאה/מלא/הזמן)' }];
   throw new Error('unknown formula kind: ' + f.kind);
 }
 
@@ -57,6 +81,13 @@ const PARTICLES = [
   { id: 'facts',      name: 'עובדות',       f: { kind: 'raw',       expr: 'rate/supplier/price' } },
   { id: 'identity',   name: 'זהות',        f: { kind: 'name',      expr: 'name+glyph+summary' } },
   { id: 'action',     name: 'פעולה',       f: { kind: 'act',       expr: 'mark ordered' } },
+  // ── גלים 2–4: פעולות מסך-מלא (איתור · חריגה · אוסף · יומן · פאנל · ריק) ──
+  { id: 'locate',     name: 'איתור',       f: { kind: 'search',    expr: 'q ⇒ contains(name/sku/cat)' } },
+  { id: 'exception',  name: 'זיהוי-חריגה', f: { kind: 'filter',    expr: 'belowMin/expiring/isOut' } },
+  { id: 'table',      name: 'טבלה',        f: { kind: 'table',     expr: 'records × 10 שדות-אמת' } },
+  { id: 'movements',  name: 'תנועות',      f: { kind: 'log',       expr: 'intakeLog ⇒ rows+Σcost' } },
+  { id: 'itempanel',  name: 'פאנל-פריט',   f: { kind: 'panel',     expr: 'GlassCard(זהות+מצב+תנועות+פעולה)' } },
+  { id: 'emptyst',    name: 'מצב-ריק',     f: { kind: 'empty',     expr: 'shown==0' } },
 ];
 
 function compose(p) {
@@ -73,7 +104,7 @@ function compose(p) {
 
 // ── דו"ח ──
 const out = PARTICLES.map(compose);
-let md = '# מנוע-ההרכבה — פלט על 15 החלקיקים\n\n';
+let md = `# מנוע-ההרכבה — פלט על ${PARTICLES.length} החלקיקים\n\n`;
 md += '| # | חלקיק | נוסחה | סוג | אטומים (הכי-טוב-לייעוד) |\n|---|---|---|---|---|\n';
 out.forEach((p, i) => {
   const kind = p.insight ? `תובנה·${p.atoms.length}` : 'עובדה·1';
