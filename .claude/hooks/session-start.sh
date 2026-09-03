@@ -12,7 +12,7 @@ git config core.hooksPath .githooks 2>/dev/null
 chmod +x .githooks/* 2>/dev/null
 git config merge.regen.driver "node machtzev/merge-regen.mjs %O %A %B %P" 2>/dev/null
 git config merge.regen.name "regenerate generated docs (TRUTH/WIRING)" 2>/dev/null
-echo "🔒 מחצב: hooksPath=.githooks · merge.regen · $(ls .githooks 2>/dev/null | wc -l) hooks · pre-tool $([ -x .claude/hooks/pre-tool.sh ] && echo פעיל || echo חסר) (שלב 2)" >&2
+echo "🔒 מחצב: hooksPath=.githooks · merge.regen · $(ls .githooks 2>/dev/null | wc -l) hooks · pre-tool $([ -x .claude/hooks/pre-tool.sh ] && echo פעיל || echo חסר) (שלב 2) · CI-עד $([ -f .github/workflows/police.yml ] && echo police.yml || echo חסר) (שלב 3)" >&2
 
 # ── 2 · Dart (אטומי · לא-פטאלי) ──
 DART_VER="3.13.2"

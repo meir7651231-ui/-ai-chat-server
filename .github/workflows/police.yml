@@ -1,0 +1,100 @@
+# 🛡️ מחצב · CI-עד (PROTOCOL v4 §7.3 · שלב 3). עד, לא חומה (הכרעה F/M): non-required — לא חוסם merge, מדווח.
+# סביבה נקייה: clone מלא (fetch-depth 0 — R2-2.6), כלים מה-commit הנבדק, ו-G0 = מאמת-עצמאי מכלי הסמן protocol-good-* (§5.2, ללא קידום).
+# G0 ראצ׳ט-כיוון+מאמת מול הסמן · G1 pins · G2 משטרה מלאה (צהוב=אדום, ledger מודפס) · G3 truth≡oracle+בלוק-CLAUDE · G4 hooks/settings/workflow ≡ pins (דרך G1)
+# G7 gen-wiring-doc ⇒ diff ריק · G8 dart analyze + Protocol-Ran על כל commit בטווח · G9 ראצ׳ט מול event.before/merge-base · G10 מס-פרוטוקול.
+# G5 (audit_gates) · G6 (selftest-coverage/learn-parity) — שלבים 4/8, טרם. הסמן-המצופה מחוץ לריפו: vars.PROTOCOL_GOOD_SHA (אופציונלי; חסר ⇒ המאמת רץ בלי --expect-sha ומדווח 🟡).
+name: police-witness
+on:
+  push:
+    branches: ['claude/**', 'main', 'master']
+  pull_request:
+  workflow_dispatch:
+concurrency:
+  group: police-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  witness:
+    name: 🛡️ עד (G0–G10)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      POLICE_GATE_TIMEOUT: '900'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+      - name: כלים (typescript vendored · Dart)
+        run: |
+          cd machtzev && npm ci --no-audit --no-fund
+          echo "DART_BIN=$(command -v dart)" >> "$GITHUB_ENV"
+          node -v; dart --version
+      - name: בסיס-השוואה (event.before → סמן protocol-good-* → HEAD~1)
+        id: base
+        run: |
+          MARKER=$(git for-each-ref --sort=-committerdate --format='%(refname:short)' 'refs/remotes/origin/protocol-good-*' | head -1)
+          MSHA=$([ -n "$MARKER" ] && git rev-parse "$MARKER" || echo "")
+          BEFORE='${{ github.event.before }}'
+          if [ -n "$BEFORE" ] && ! printf '%s' "$BEFORE" | grep -q '^0*$' && git cat-file -e "$BEFORE" 2>/dev/null && git merge-base --is-ancestor "$BEFORE" HEAD; then BASE="$BEFORE"
+          elif [ -n "$MSHA" ] && git merge-base --is-ancestor "$MSHA" HEAD; then BASE=$(git merge-base "$MSHA" HEAD)
+          else BASE=$(git rev-parse HEAD~1); fi
+          echo "marker=$MARKER" >> "$GITHUB_OUTPUT"; echo "msha=$MSHA" >> "$GITHUB_OUTPUT"; echo "base=$BASE" >> "$GITHUB_OUTPUT"
+          echo "base=$(git rev-parse --short "$BASE") · marker=${MARKER:-אין} ($(printf '%s' "$MSHA" | cut -c1-8))"
+      - name: G1 · pins (נגזר ≡ כתוב · 64-hex) — מכסה G4 (hooks/settings/workflow ב-PINNED)
+        run: node machtzev/pins-check.mjs
+      - name: G9 · ראצ׳ט-כיוון מול הבסיס (tuples · manifest · baselines)
+        run: node machtzev/ratchet-direction.mjs "${{ steps.base.outputs.base }}" HEAD
+      - name: G8 · Protocol-Ran על כל commit בטווח (rebase/cherry-pick/am — R2-2.2)
+        run: |
+          MISSING=""
+          for c in $(git rev-list "${{ steps.base.outputs.base }}"..HEAD); do
+            git log -1 --format=%B "$c" | grep -q '^Protocol-Ran:' || MISSING="$MISSING $(printf '%s' "$c" | cut -c1-8)"
+          done
+          if [ -n "$MISSING" ]; then echo "🚨 commits בלי Protocol-Ran (נוצרו בלי pre-commit):$MISSING"; exit 1; fi
+          echo "✓ Protocol-Ran על $(git rev-list --count "${{ steps.base.outputs.base }}"..HEAD) commits"
+      - name: G3+G7 · truth ≡ index · CLAUDE truth-block · gen-wiring-doc ⇒ diff ריק
+        run: |
+          node machtzev/truth.mjs --write >/dev/null
+          node machtzev/tools/gen-wiring-doc.mjs >/dev/null
+          if ! git diff --exit-code --stat -- TRUTH.md WIRING.md CLAUDE.md; then echo "🚨 מסמכים-מחוללים ישנים ב-commit (M1/M2 לא רצו?)"; exit 1; fi
+          echo "✓ TRUTH.md · WIRING.md · בלוק-CLAUDE ≡ index"
+      - name: G2+G10 · משטרה מלאה (צהוב = אדום · ledger מודפס · מס-פרוטוקול)
+        id: police
+        run: |
+          S=$(date +%s); set +e
+          node machtzev/police.mjs > police.log 2>&1; RC=$?; set -e
+          T=$(( $(date +%s) - S )); echo "tax=$T" >> "$GITHUB_OUTPUT"; echo "rc=$RC" >> "$GITHUB_OUTPUT"
+          grep -E '^(ran|skipped|yellow|failed) |המשטרה' police.log
+          echo "⏱ מס-פרוטוקול (CI מלא): ${T}s"
+          case $RC in 0) ;; 2) echo "🚨 צהוב ב-CI = אדום (כלי חסר בסביבה נקייה — L34)"; tail -40 police.log; exit 1;; *) echo "🚨 המשטרה אדומה"; grep -B3 -A12 '^failed ' police.log | head -80; exit 1;; esac
+      - name: G8 · dart analyze על new/dart-* (עד, לא שער — synth כבר מקמפל)
+        continue-on-error: true
+        run: |
+          for d in new/dart-*; do [ -d "$d" ] && dart analyze --no-fatal-warnings "$d" | tail -2; done
+      - name: G0 · מאמת-עצמאי מכלי הסמן (§5.2 · ללא קידום · דוח תמיד)
+        if: steps.base.outputs.msha != ''
+        run: |
+          set +e
+          if [ -n '${{ vars.PROTOCOL_GOOD_SHA }}' ]; then EXP="--expect-sha ${{ vars.PROTOCOL_GOOD_SHA }}"; else EXP=""; echo "🟡 vars.PROTOCOL_GOOD_SHA לא מוגדר — זהות-הסמן לא מאומתת מחוץ לריפו (R2-1.6)"; fi
+          node machtzev/verify-independent.mjs "${{ steps.base.outputs.msha }}" HEAD --report verify.json $EXP > verify.log 2>&1; RC=$?
+          set -e
+          grep -vE '^(ran|  ✅|✓) ' verify.log | tail -30
+          node -e 'const r=require("./verify.json");console.log("verdict:",r.verdict);for(const[k,v]of Object.entries(r.steps||{}))console.log(" ",k,"→",JSON.stringify(v).slice(0,200))'
+          case $RC in 0) echo "✅ ירוק — מועמד-לקידום (הקידום = ack-בעלים)";; 2) echo "🟡 צהוב/לא-מוכח";; 1) echo "🚨 אדום — החלשה מול הסמן"; exit 1;; *) echo "🚨 TAMPER"; exit 1;; esac
+      - name: סיכום (ערוץ-הדיווח = job summary; non-required)
+        if: always()
+        run: |
+          {
+            echo "## 🛡️ מחצב · עד"
+            echo "- HEAD \`$(git rev-parse --short HEAD)\` · base \`$(git rev-parse --short '${{ steps.base.outputs.base }}' 2>/dev/null)\` · סמן \`${{ steps.base.outputs.marker }}\`"
+            echo "- משטרה: rc=${{ steps.police.outputs.rc }} · מס-פרוטוקול ${{ steps.police.outputs.tax }}s"
+            [ -f verify.json ] && echo "- מאמת: $(node -e 'console.log(require("./verify.json").verdict)')"
+            echo '```'; grep -E '^(failed|yellow) |המשטרה' police.log 2>/dev/null; echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
