@@ -100,7 +100,7 @@ function radialExpr(val, baseColor) {
   let center = 'Alignment.center', radius = '0.8';
   if (inner.length && /\bat\b|%/.test(inner[0]) && !colorExpr(inner[0].replace(/\s+[\d.]+%.*$/, '').trim())) {
     const seg = inner.shift();
-    const at = seg.match(/at\s+([\d.]+)%\s+([\d.]+)%/);
+    const at = seg.match(/at\s+(-?[\d.]+)%\s+(-?[\d.]+)%/);   // ‏-? = מיקום שלילי (at 85% -20%) — בלעדיו הזוהר נפל למרכז
     if (at) center = `Alignment(${(+at[1] / 50 - 1).toFixed(2)}, ${(+at[2] / 50 - 1).toFixed(2)})`;
     const sz = seg.match(/([\d.]+)%/); if (sz) radius = (+sz[1] / 100).toFixed(2);
   }
@@ -302,6 +302,19 @@ function decoration(st) {                       // {prop} ⇒ BoxDecoration(...)
   const sh = shadowExpr(st['box-shadow']);
   if (sh) parts.push(`boxShadow: [${sh}]`);
   return parts.length ? `BoxDecoration(${parts.join(', ')})` : null;
+}
+// רקע דו-שכבתי radial-glow מעל linear-base: Flutter מגביל gradient-יחיד ל-BoxDecoration ⇒ ה-linear נבחר
+// ל-decoration (בסיס), וזוהר-ה-radial נצבע כ-foregroundDecoration מעליו — דוהה ל-transparent אמיתי כך שהבסיס
+// מציץ (hero_card: הזוהר הסגול חזר; קודם רק ה-linear הכהה נצבע). רק כשהבסיס הנבחר הוא linear + יש שכבת-radial.
+function bgOverlayGlow(st) {
+  const bgRaw = st['background'] || st['background-color'];
+  if (!bgRaw || !gradientExpr(bgRaw)) return null;
+  const radSeg = splitTop(bgRaw).find(s => /radial-gradient/i.test(s));
+  if (!radSeg) return null;
+  const rad = radialExpr(radSeg, 'const Color(0x00000000)');   // עצירת-transparent = שקוף-אמיתי (הבסיס נחשף)
+  if (!rad) return null;
+  const rv = st['border-radius'], r = rv ? (/%|999/.test(rv) ? '999' : (px(rv) || num(rv))) : null;
+  return `BoxDecoration(gradient: ${rad}${r ? `, borderRadius: BorderRadius.circular(${r})` : ''})`;
 }
 // EdgeInsets מ-shorthand (padding/margin) + פר-צד (margin-top…). null אם אין. noV=אפס-שוליים-אנכיים
 // (לקריסת-שוליים ב-block flow — השוליים-האנכיים נבנים-מחדש כ-SizedBox-מקוריס ברמת-ה-Column).
@@ -553,6 +566,9 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   const seenLeft = new Set();   // כללי אח-עוקב (A ~ B) שאחיהם-השמאלי כבר נראה ⇒ המטרה-הימנית תדרס
   const sibRules = (map.sibling || []).filter(r => chainMatches(r.anc, childAnc));   // רק כללים שהאבות תואמים למיכל
   const clsHit = (t, c) => (t.tag ? c.tag === t.tag : true) && (t.cls ? t.cls.every(x => (c.classes || []).includes(x)) : true);
+  // אב = flex-column עם align-items לא-מפורש ⇒ ברירת-CSS = stretch: ילד-בלוק ללא-רוחב-קבוע ובעל-יישור-עצמי
+  // (direction/text-align) ממלא-רוחב ומתיישר-פנימית. ממקדים לילד-הטקסט בלבד — אח בגודל-קבוע (avatar 44) לא-נמתח.
+  const pColStretch = /flex/.test(st['display'] || '') && /column/.test(st['flex-direction'] || '') && !ALIGN[st['align-items']];
   for (const c of allKids) {
     // טקסט-חופשי בתוך אלמנט יורש את סגנון-ההורה (גודל/משקל/צבע/פונט) — CSS inheritance.
     // רווחי-גבול בין-אלמנטים משמעותיים ב-CSS (inline) — משמרים רווח-בודד (לא trim מלא ⇒
@@ -570,6 +586,9 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     const collapseChild = parentBlock && !cInline && !posAbsC;
     let e = emit(c, map, childAnc, depth + 1, myColor, selfFlexGrid, nextInh, nextVars, elemIdx++, selfWrap, sibOv, collapseChild);
     if (cst['position'] === 'absolute') { abs.push({ e, st: cst }); continue; }
+    // ילד-טקסט בעל-יישור-עצמי בטור-stretch, בלי רוחב-קבוע ⇒ ממלא-רוחב כדי שיישורו-הפנימי יחול (kpi "92"
+    // direction:ltr ⇒ שמאל; "no avatar"/"+12"/"Meta" כנ"ל). אח בגודל-קבוע לא-מושפע (לא נכנס לתנאי).
+    if (pColStretch && (cst['direction'] || cst['text-align']) && !px(cst['width'])) e = `SizedBox(width: double.infinity, child: ${e})`;   // ילד-flex מבוקק (גם span) ⇒ אין תנאי-inline
     if (!cInline) flowInline = false;
     if (!(cInline && /^(?:Text\(|Directionality\(textDirection: TextDirection\.\w+, child: Text\()/.test(e))) flowAllText = false;
     // flex-grow חיובי או width:100% בשורת-flex ⇒ Expanded (ממלא · מוסר אי-חסימת-רוחב; SizedBox אינסופי
@@ -700,6 +719,7 @@ function wrapBox(st, inner, node, noPad, parentFlex = false, noVMargin = false) 
   if (mg) cp.push(`margin: ${mg}`);
   if (pad) cp.push(`padding: ${pad}`);
   if (deco) cp.push(`decoration: ${deco}`);
+  if (deco) { const glow = bgOverlayGlow(st); if (glow) cp.push(`foregroundDecoration: ${glow}`); }   // שכבת-זוהר radial מעל בסיס-linear
   let out;
   if (!cp.length) out = inner || 'const SizedBox.shrink()';
   else { if (inner) cp.push(`child: ${inner}`); out = `Container(${cp.join(', ')})`; }
