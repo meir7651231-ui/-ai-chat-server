@@ -119,6 +119,20 @@ function radialExpr(val, baseColor) {
   if (cols.length < 2) return null;
   return `RadialGradient(center: ${center}, radius: ${radius}, colors: [${cols.join(', ')}], stops: [${stops.join(', ')}])`;
 }
+// conic-gradient(from Ndeg, c1, c2, …) ⇒ SweepGradient. CSS: 0°=למעלה, עם-כיוון-השעון; Flutter SweepGradient:
+// 0=מזרח (3), עם-כיוון-השעון ⇒ סיבוב (from-90)°. טבעת-הסטורי (.story) חוזרת לצבעוניות במקום סגול-אחיד.
+function conicExpr(val) {
+  const m = val && val.match(/conic-gradient\((.*)\)/is);
+  if (!m) return null;
+  const parts = splitTop(m[1]);
+  let from = 0;
+  if (parts.length && /^\s*from\s/i.test(parts[0])) { const fm = parts.shift().match(/from\s+(-?[\d.]+)deg/i); if (fm) from = +fm[1]; }
+  const cols = [];
+  for (const seg of parts) { const c = colorExpr(seg.trim().replace(/\s+-?[\d.]+(?:deg|%)\s*$/i, '').trim()); if (!c) return null; cols.push(c); }
+  if (cols.length < 2) return null;
+  const rot = (((from - 90) % 360) * Math.PI / 180).toFixed(4);
+  return `SweepGradient(colors: [${cols.join(', ')}], transform: const GradientRotation(${rot}))`;
+}
 function fontExpr(val) {
   const m = val && val.match(/var\(--(serif|serifHe|grotesk|he)\)/);
   return m ? `fonts.${FONT[m[1]]}` : null;
@@ -273,7 +287,7 @@ function elemChildren(node) { return node.children.filter(c => c.tag && c.tag !=
 function decoration(st) {                       // {prop} ⇒ BoxDecoration(...) | null
   const parts = [];
   const bgRaw = st['background'] || st['background-color'];
-  const grad = gradientExpr(bgRaw);
+  const grad = gradientExpr(bgRaw) || conicExpr(bgRaw);   // linear או conic (SweepGradient)
   if (grad) parts.push(`gradient: ${grad}`);     // גרדיאנט גובר על מילוי-אחיד
   else if (bgRaw) {                               // רקע רב-שכבתי: שכבת-בסיס-אחיד + זוהר-radial (עומק)
     let bg = null, radSeg = null;
