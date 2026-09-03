@@ -1,4 +1,4 @@
-# מנוע-ההרכבה — פלט על 22 החלקיקים
+# מנוע-ההרכבה — פלט על 23 החלקיקים
 
 | # | חלקיק | נוסחה | סוג | אטומים (הכי-טוב-לייעוד) |
 |---|---|---|---|---|
@@ -24,6 +24,7 @@
 | 20 | פאנל-פריט | `GlassCard(זהות+מצב+תנועות+פעולה)` | תובנה·5 | GlassCard + MediaRow + StatRow(מלאי מול יעד) + TimelineItem + SoftButton |
 | 21 | מצב-ריק | `shown==0` | עובדה·1 | EmptyState |
 | 22 | ייצוא | `items ⇒ CSV+BOM (toCsv⊕csvEscape)` | תובנה·2 | SoftButton + toCsv |
+| 23 | הרשאות | `role ⇒ show/hide (roleOf⊕canGrantedAction)` | תובנה·3 | SegmentedSwitch + roleOf + canGrantedAction |
 
 ## הוכחת-נושא-ערך (שקע-הדאטה פר-אטום) + מזייפים-חסומים
 - `StatusChip` ← premium/feedback/status_chip.dart:7 required this.label
@@ -44,7 +45,10 @@
 - `GlassCard` ← premium/surfaces/glass_card.dart:5 required this.child
 - `EmptyState` ← premium/feedback/empty_state.dart glyph+message
 - `toCsv` ← dart-maor/to-csv.dart ⊕csvEscape⊕exportAllowed (לוגיקה §21)
+- `SegmentedSwitch` ← premium/actions/segmented_switch.dart items+selected+onSelect
+- `roleOf` ← dart-maor/role-of.dart admin/teacher/staff (לוגיקה §21)
+- `canGrantedAction` ← dart-maor/can-granted-action.dart גידור-פר-מפתח (לוגיקה §21)
 
 **מזייפים חסומים במנוע (בחירה בהם ⇒ throw):** stat_block · linear_progress · radial_gauge · bar_chart · sparkline
 
-**סיכום:** 7 תובנות (מרובות-אטומים) · 15 עובדות (אטום-יחיד). המנוע דטרמיניסטי — אותה נוסחה תיתן תמיד אותה הרכבה, ואף פעם לא מזייף.
+**סיכום:** 8 תובנות (מרובות-אטומים) · 15 עובדות (אטום-יחיד). המנוע דטרמיניסטי — אותה נוסחה תיתן תמיד אותה הרכבה, ואף פעם לא מזייף.
