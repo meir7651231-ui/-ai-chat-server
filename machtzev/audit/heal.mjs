@@ -76,16 +76,37 @@ const netAfter = tRows.reduce((s, r) => s + (r.now > 0 ? r.now : 0), 0);
 console.log('\n── מטרות ──'); tRows.forEach(r => console.log(`  ${r.k}: ${r.base ?? '—'}% → ${r.now}%  ${r.base != null && r.base - r.now > EPS ? '🟢' : r.base != null && r.now - r.base > EPS ? '🔴' : ''}`));
 console.log('── קנרים (רגרסיה?) ──'); console.log(cRegressed.length ? cRegressed.map(r => `  🔴 ${r.k}: ${r.base}%→${r.now}%`).join('\n') : '  ✅ כולם יציבים');
 
-const promote = netAfter < netBefore - EPS && !cRegressed.length && !tWorse.length;
+let promote = netAfter < netBefore - EPS && !cRegressed.length && !tWorse.length;
+
+// 🛡 ביטוח-מלא (--full): אחרי שהמטרות+קנרים עברו, סורק את כל 353 האטומים מול baseline. נוחת רק אם
+// אפס-רגרסיה בכולם (לא רק 12 קנרים). סוגר את פער-הקנרים = ביטוח מלא.
+let fullRegressed = [], fullRep = null;
+if (promote && args.includes('--full')) {
+  console.log('\n🛡 ביטוח-מלא: מרנדר את כל 353 האטומים + סריקה מול baseline…');
+  run('node', [path.join(AUDIT, 'gen-forge-dart.mjs')]);   // בלי ONLY = הכל
+  run(FORGE, ['test', 'test/zz_pixel_audit_test.dart'], { cwd: BS, env: { ...process.env, PATH: `/home/user/flutter/bin:${process.env.PATH}` } });
+  run('node', [path.join(AUDIT, 'diff.mjs')], { env: { ...process.env, TOPN: '0' } });   // TOPN=0 ⇒ בלי גיליונות (מהיר)
+  fullRep = JSON.parse(fs.readFileSync(path.join(SHOTS, 'report.json'), 'utf8'));
+  fullRegressed = fullRep.filter(r => !r.note && base[r.k] >= 0 && r.diffPct - base[r.k] > EPS && r.diffPct > 2 && !targets.includes(r.k));
+  if (fullRegressed.length) { promote = false; console.log(`   🔴 ${fullRegressed.length} רגרסיות מלאות: ${fullRegressed.slice(0, 10).map(r => `${r.k}(${base[r.k]}→${r.diffPct})`).join(', ')}`); }
+  else console.log('   ✅ אפס-רגרסיה על כל 353 — ביטוח-מלא עבר.');
+}
+
 if (promote) {
-  console.log(`\n✅ קידום: מטרות ${netBefore.toFixed(1)}%→${netAfter.toFixed(1)}% · אפס-רגרסיה. השינוי נשמר בעץ-העבודה.`);
-  // עדכון baseline למטרות שקודמו (וגם קנרים שנמדדו) ⇒ המעקב תופס רגרסיה עתידית מהמצב-החדש.
-  for (const r of [...tRows, ...cRows]) if (r.now >= 0) base[r.k] = r.now;
+  console.log(`\n✅ קידום: מטרות ${netBefore.toFixed(1)}%→${netAfter.toFixed(1)}% · אפס-רגרסיה${args.includes('--full') ? ' (מבוטח-מלא · 353)' : ''}. השינוי נשמר בעץ-העבודה.`);
+  // עדכון baseline: אם עבר ביטוח-מלא ⇒ מכל-האטומים; אחרת ⇒ מטרות+קנרים בלבד.
+  if (fullRep) for (const r of fullRep) if (!r.note) base[r.k] = r.diffPct;
+  else for (const r of [...tRows, ...cRows]) if (r.now >= 0) base[r.k] = r.now;
   fs.writeFileSync(path.join(AUDIT, 'baseline.json'), JSON.stringify(base, null, 0));
-  console.log('   baseline עודכן למטרות שקודמו.');
+  console.log('   baseline עודכן.');
+  if (args.includes('--commit')) {
+    console.log('   📌 commit+push (--commit)…');
+    run('bash', ['-c', `cd ${GEN} && git add machtzev/ds-forge.mjs new/dart-forge-bs machtzev/audit/baseline.json && git commit -q -m "שדרוג-מנוע מבוטח (heal --full): ${targets.join(' ')} · אפס-רגרסיה/353" && git push -u origin claude/mah-kora-0by8kw 2>&1 | tail -1`]);
+    run('bash', ['-c', `cd /home/user/buildsmart && git add app_flutter/lib/genesis/dart-forge-bs && git commit -q -m "מראה · שדרוג-מנוע מבוטח: ${targets.join(' ')}" && git push -u origin claude/mah-kora-0by8kw 2>&1 | tail -1`]);
+  }
 } else {
-  console.log(`\n↩ ביטול-אוטומטי: ${cRegressed.length ? 'רגרסיית-קנרי' : tWorse.length ? 'מטרה-החמירה' : 'אין-שיפור-נטו'}. משחזר ds-forge.mjs.`);
+  console.log(`\n↩ ביטול-אוטומטי: ${fullRegressed.length ? 'רגרסיה-מלאה (353)' : cRegressed.length ? 'רגרסיית-קנרי' : tWorse.length ? 'מטרה-החמירה' : 'אין-שיפור-נטו'}. משחזר ds-forge.mjs.`);
   run('bash', ['-c', `cd ${GEN} && git checkout -- machtzev/ds-forge.mjs && node machtzev/ds-forge.mjs >/dev/null && rm -rf ${BS}/lib/genesis/dart-forge-bs && cp -r new/dart-forge-bs ${BS}/lib/genesis/dart-forge-bs`]);
 }
-fs.writeFileSync(path.join(SHOTS, 'heal-report.json'), JSON.stringify({ targets: tRows, canaries: cRows, promoted: promote, netBefore, netAfter }, null, 2));
+fs.writeFileSync(path.join(SHOTS, 'heal-report.json'), JSON.stringify({ targets: tRows, canaries: cRows, fullRegressed: fullRegressed.map(r => r.k), promoted: promote, netBefore, netAfter }, null, 2));
 process.exit(promote ? 0 : 2);
