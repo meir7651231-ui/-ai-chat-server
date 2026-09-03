@@ -738,6 +738,10 @@ function wrapBox(st, inner, node, noPad, parentFlex = false, noVMargin = false) 
   let out;
   if (!cp.length) out = inner || 'const SizedBox.shrink()';
   else { if (inner) cp.push(`child: ${inner}`); out = `Container(${cp.join(', ')})`; }
+  // CSS aspect-ratio (‏.ph{aspect-ratio:1/1} · .ph.wide{16/9}) — בלי זה האריח קרס לגובה-התוכן (438→250) והצורה
+  // והאייקון יצאו שגויים. עוטפים ב-AspectRatio (מקבל רוחב-חסום מהבלוק ⇒ מחשב גובה). רק כשאין גובה-קבוע.
+  const arRaw = st['aspect-ratio'];
+  if (arRaw && !h) { const am = arRaw.trim().match(/^([\d.]+)\s*(?:\/\s*([\d.]+))?$/); if (am) { const ar = am[2] ? (+am[1] / +am[2]) : +am[1]; if (ar > 0) out = `AspectRatio(aspectRatio: ${ar.toFixed(4)}, child: ${out})`; } }
   // backdrop-filter: blur ⇒ ClipRRect + BackdropFilter (זכוכית אמיתית)
   const bf = st['backdrop-filter'] || st['-webkit-backdrop-filter'];
   if (bf && /blur/.test(bf) && cp.length) { const rad = /%|999/.test(st['border-radius'] || '') ? '999' : (px(st['border-radius']) || '0'); const bl = px(bf) || '12'; out = `ClipRRect(borderRadius: BorderRadius.circular(${rad}), child: BackdropFilter(filter: ImageFilter.blur(sigmaX: ${bl}, sigmaY: ${bl}), child: ${out}))`; }
