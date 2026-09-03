@@ -517,9 +517,12 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     const _op = st0['opacity'] != null ? parseFloat(st0['opacity']) : null;   // .ph svg{opacity:.8}
     const _b0 = `CustomPaint(painter: _SvgScene([${sc.ops.join(', ')}], ${sc.vbw}, ${sc.vbh}))`;
     const body = (_op != null && !isNaN(_op) && _op < 1) ? `Opacity(opacity: ${_op}, child: ${_b0})` : _b0;
-    const wpctS = pct(st0['width']), hpctS = pct(st0['height']);   // svg בגודל-אחוז מהמיכל (.ph svg{width:38%}) — בלי זה מילא את כל האריח
-    // FittedBox(contain) משמר יחס-viewBox ומתאים את האייקון בתוך תיבת-האחוז (CSS preserveAspectRatio) — ממורכז.
-    if (wpctS || hpctS) return `FractionallySizedBox(widthFactor: ${wpctS || hpctS}, heightFactor: ${hpctS || wpctS}, child: FittedBox(fit: BoxFit.contain, child: SizedBox(width: ${sc.vbw}, height: ${sc.vbh}, child: ${body})))`;
+    // svg בגודל-אחוז חלקי (‏.ph svg{width:38%}) ⇒ FractionallySizedBox+FittedBox(contain). רק אחוז <100% פר-ציר:
+    // height:100% (גרף .cbody svg) עם heightFactor:1 בהקשר-גובה-לא-חסום כופה אינסוף (קריסת-רינדור!) ⇒ נופל
+    // ל-AspectRatio (מילוי-רוחב לפי יחס-viewBox — תקף תמיד). כך גרפי-dataviz נצבעים במקום לזרוק.
+    const wf = pct(st0['width']), hf = pct(st0['height']);
+    const wfp = wf && +wf < 1 ? wf : null, hfp = hf && +hf < 1 ? hf : null;
+    if (wfp || hfp) return `FractionallySizedBox(${wfp ? `widthFactor: ${wfp}, ` : ''}${hfp ? `heightFactor: ${hfp}, ` : ''}child: FittedBox(fit: BoxFit.contain, child: SizedBox(width: ${sc.vbw}, height: ${sc.vbh}, child: ${body})))`;
     if (wpx) return `SizedBox(width: ${wpx}, height: ${hpx || (wpx / (sc.vbw / sc.vbh)).toFixed(2)}, child: ${body})`;  // אייקון/טבעת גודל-קבוע
     if (hpx) return `SizedBox(height: ${hpx}, child: ${body})`;                          // גובה-קבוע, רוחב מהאב (ספארק)
     return `AspectRatio(aspectRatio: ${(sc.vbw / sc.vbh).toFixed(4)}, child: ${body})`;  // width:100% ⇒ מילוי-רוחב לפי יחס-viewBox
