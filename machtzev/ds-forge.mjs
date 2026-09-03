@@ -363,7 +363,10 @@ function textStyle(st) {
   const p = [];
   const c = colorExpr(st['color']); if (c) p.push(`color: ${c}`);
   const f = fontExpr(st['font-family']); if (f) p.push(`fontFamily: ${f}`);
-  const fs = px(st['font-size']); if (fs) p.push(`fontSize: ${fs}`);
+  // font-size: הערך שנפתר (מפורש/יורש) ⇒ אותו. אין font-size כלל ⇒ ברירת-CSS (body ללא font-size = 16px);
+  // בלי הזרעה זו Flutter נופל ל-14px משלו ⇒ טקסט-בלי-גודל (reveal_card "Label") קטן-מהמקור ב-16/14.
+  // ערך קיים-אך-לא-נפתר (clamp/calc-מורכב) ⇒ לא-מזריקים (לא ניחוש) — נשאר כפי-שהיה.
+  const fs = px(st['font-size']); if (fs) p.push(`fontSize: ${fs}`); else if (st['font-size'] == null) p.push('fontSize: 16');
   const fw = st['font-weight']; if (fw && +fw >= 600) p.push(`fontWeight: FontWeight.w${fw >= 700 ? 700 : 600}`);
   const ls = st['letter-spacing'];
   if (ls && ls !== 'normal') {
