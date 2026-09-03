@@ -36,6 +36,14 @@ if echo "$STAGED" | grep -qE '^machtzev/(registry|node_modules)/|^\.allow_'; the
 if echo "$STAGED" | grep -qx '.gitignore' && git diff --cached -U0 -- .gitignore | grep -E '^-' | grep -vE '^---' | grep -qE 'node_modules|\.allow_|\.env|\.claude|registry'; then err gitignore-guard "הוסר כיסוי מ-.gitignore"; else ok gitignore-guard "נקי"; fi
 if echo "$STAGED" | grep -qx '.gitattributes' && git diff --cached -- .gitattributes | grep -E '^\+' | grep -vE '^\+[[:space:]]*#' | grep -qE 'export-(ignore|subst)'; then err no-export-ignore "export-ignore/subst ב-.gitattributes (R2-2.5)"; else ok no-export-ignore "נקי"; fi
 
+# ── 23-ד · cross-source: אטום חדש ששמו כבר קיים באותה שפה במקור אחר ⇒ "אין = לא-חיפשת" (החלק המכני של ההכרעה) ──
+ADDED=$(git diff --cached --name-only --diff-filter=A | grep -E '^new/.*\.(mjs|dart)$' | tr '\n' ',' || true)
+if [ -n "$ADDED" ]; then
+  CS=$(node machtzev/cross-source-check.mjs --files "$ADDED" 2>&1); CSRC=$?
+  echo "$CS" | grep -E 'ℹ️|✗' | head -6
+  if [ $CSRC -eq 0 ]; then ok cross-source "$(echo "$CS" | tail -1)"; else err cross-source "אטום חדש שכבר קיים במקור אחר (23-ד)"; fi
+fi
+
 # ── tiering הפוך: המשטרה מדולגת רק אם הכל ב-allowlist-docs ──
 CODE=$(echo "$STAGED" | grep -vE '^(knowledge/|design/|archive/|machtzev/audit/|[^/]+\.md$|machtzev/[^/]+\.md$)' || true)
 

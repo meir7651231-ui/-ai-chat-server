@@ -17,6 +17,7 @@
 | `verify-independent.mjs` | 🔍 **המאמת-העצמאי** (PROTOCOL §5.2): כלי-משטרה מ-tag ידוע-טוב על HEAD · ראצ׳ט-כיוון פר-commit · הוכחת-ירי · שתי משטרות. עד, לא חומה. |
 | `census/import-graph.mjs` | 🕸️ גרף-imports סטטי ל-`police --inc` (שלב 1): דיף ⇒ דיף+צרכנים-טרנזיטיביים (+זוג בדיקה/חוזה). `import()` דינמי / קובץ-חוץ / >50 ⇒ unknown ⇒ המשטרה מריצה מלא (fail-closed). |
 | `../.github/workflows/police.yml` | 🛡️ CI-עד (שלב 3 · §7.3): non-required. G1 pins · G9 ראצ׳ט מול event.before/סמן · G8 Protocol-Ran על הטווח + dart analyze · G3+G7 truth/wiring ⇒ diff ריק · G2+G10 משטרה מלאה (צהוב=אדום) + מס · G0 מאמת מכלי הסמן (ללא קידום). ערוץ = job summary. |
+| `cross-source-check.mjs` | 🔎 שער `cross-source` ב-pre-commit (23-ד): אטום חדש ששמו כבר קיים באותה שפה במקור אחר ⇒ אדום ("אין = לא-חיפשת"); תאום JS↔Dart ⇒ ℹ️. |
 | `wave-partition.mjs` | 🌊 שלב 7: קבצי-יעד ⇒ תאים דיסיונקטיים לפי רדיוס-פגיעה (import-graph) ⇒ גלים ≤10 (L20); תא-חורג מוצהר, לא נחתך. `Wave: k/N` ב-commit-msg מאומת. |
 | `audit-gates.mjs` | 🧪 שער `audit-gates` (G5 · שלב 8): worktree זמני + hooksPath ⇒ 9 הפרות מוזרעות ⇒ `git commit` נחסם · ביקורת-שלילית עוברת עם Protocol-Ran. |
 | `mutation-dart-check.mjs` | 🧬 שער `mutation-dart` (שלב 8 · L11): אטום-Dart מוחלל type-preserving ⇒ הבדיקה חייבת להאדים (sandbox, 20s). דגימה 12/יום ב-push · `--all` ב-CI · אין Dart ⇒ צהוב. |
