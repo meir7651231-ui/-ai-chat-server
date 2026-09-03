@@ -20,7 +20,7 @@
 - **המרה · new/dart-maor:** 665
 
 ## מבנה הענף
-- **machtzev/ שורש (.mjs):** 47
+- **machtzev/ שורש (.mjs):** 48
 - **machtzev/ תת-תיקיות:** 13
 - **generator/ קנוני:** 16
 - **generator/legacy/:** 5

@@ -67,7 +67,7 @@ has 'git[[:space:]]+(-[^[:space:]]+[[:space:]]+)*(commit-tree|update-ref)([[:spa
 if has 'git[[:space:]]+(-[^[:space:]]+[[:space:]]+)*cherry-pick([[:space:]]|$)'; then has 'cherry-pick[[:space:]]+([^;|&]*[[:space:]])?(-n|--no-commit|--continue|--abort|--skip|--quit)' || block 'cherry-pick ללא -n/--no-commit יוצר commit בלי pre-commit (R2-2.2): git cherry-pick -n X && git commit'; fi
 has 'git[[:space:]]+(-[^[:space:]]+[[:space:]]+)*am([[:space:]]|$)' && ! has 'am[[:space:]]+([^;|&]*[[:space:]])?(--continue|--abort|--skip|--show-current-patch)' && echo "ℹ️ pre-tool: git am ⇒ pre-applypatch מריץ את טבעת-ה-commit" >&2
 # git — push
-MAIN_OK=0; [ -f "$ROOT/.allow_push_main" ] && [ -z "${PRETOOL_SELFTEST:-}" ] && MAIN_OK=1
+MAIN_OK=0; [ -z "${PRETOOL_SELFTEST:-}" ] && git -C "$ROOT" log -1 --format=%B 2>/dev/null | grep -qE '^Allow: push-main ' && MAIN_OK=1   # שלב 6: trailer ב-HEAD, לא קובץ
 if has 'git[[:space:]]+(-[^[:space:]]+[[:space:]]+)*push([[:space:]]|$)'; then
   has 'push[[:space:]]+([^;|&]*[[:space:]])?(-f|--force|--force-with-lease(=[^[:space:]]*)?|--force-if-includes|--mirror|--prune|-[a-zA-Z]*f[a-zA-Z]*)([[:space:]]|$)' && block 'force/mirror/prune push — לעולם לא; origin קדימה ⇒ fetch+rebase (הכרעה A)'
   has 'push[[:space:]]+([^;|&]*[[:space:]])?\+[^[:space:]]' && block 'refspec +ref = force'

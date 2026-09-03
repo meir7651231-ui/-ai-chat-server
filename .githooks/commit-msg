@@ -8,6 +8,13 @@ LEN=$(printf '%s' "$CLEAN" | tr -d '[:space:]' | wc -c)
 if [ "$LEN" -lt 15 ]; then echo "❌ הודעת commit קצרה מדי ($LEN תווים, מינימום 15)" >&2; exit 1; fi
 FIRST=$(printf '%s\n' "$CLEAN" | head -1 | tr '[:upper:]' '[:lower:]')
 if printf '%s' "$FIRST" | grep -qE '^(wip|test|asdf|tmp|fix|update|change|123|aaa|xxx|todo)[[:space:]]*$'; then echo "❌ הודעת commit לא-תיאורית: '$FIRST'" >&2; exit 1; fi
+# ── שלב 6 · Allow: trailers (§6): פורמט + כיסוי-החלשות (מ-pre-commit) + pins-write לקובצי-חוקה. DoD: <שם> ⇒ חייב להופיע ב-diff (בלי הרצה — R2-3.5)
+if ! node machtzev/allow-check.mjs --msg "$MSG" --issues "$GD/protocol_ratchet_issues" --pins "$GD/protocol_pins_edits"; then echo "❌ commit-msg: Allow חסר/שגוי — ראה למעלה" >&2; exit 1; fi
+DOD=$(grep -E '^DoD:' "$MSG" | head -1 | sed 's/^DoD:[[:space:]]*//')
+if [ -n "$DOD" ]; then
+  T=$(printf '%s' "$DOD" | grep -oE '[A-Za-z0-9_./-]+\.(test\.mjs|dart|mjs)' | head -1)
+  if [ -n "$T" ] && ! git diff --cached --name-only | grep -qF "$(basename "$T")"; then echo "❌ DoD: '$T' לא מופיע ב-diff (שם-הבדיקה חייב להיות בשינוי — בלי הרצה)" >&2; exit 1; fi
+fi
 N=$(grep -c '^Protocol-Ran:' "$MSG" || true)
 if [ "${N:-0}" -gt 1 ]; then echo "❌ יותר מ-trailer Protocol-Ran אחד" >&2; exit 1; fi
 if [ -f "$GD/protocol_ledger" ]; then

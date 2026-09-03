@@ -17,6 +17,7 @@
 | `verify-independent.mjs` | 🔍 **המאמת-העצמאי** (PROTOCOL §5.2): כלי-משטרה מ-tag ידוע-טוב על HEAD · ראצ׳ט-כיוון פר-commit · הוכחת-ירי · שתי משטרות. עד, לא חומה. |
 | `census/import-graph.mjs` | 🕸️ גרף-imports סטטי ל-`police --inc` (שלב 1): דיף ⇒ דיף+צרכנים-טרנזיטיביים (+זוג בדיקה/חוזה). `import()` דינמי / קובץ-חוץ / >50 ⇒ unknown ⇒ המשטרה מריצה מלא (fail-closed). |
 | `../.github/workflows/police.yml` | 🛡️ CI-עד (שלב 3 · §7.3): non-required. G1 pins · G9 ראצ׳ט מול event.before/סמן · G8 Protocol-Ran על הטווח + dart analyze · G3+G7 truth/wiring ⇒ diff ריק · G2+G10 משטרה מלאה (צהוב=אדום) + מס · G0 מאמת מכלי הסמן (ללא קידום). ערוץ = job summary. |
+| `allow-check.mjs` | 🎫 trailers `Allow:` (§6 · שלב 6): `Allow: <kind>[:<scope>] <L-id|הכרעה-N>` — kinds pins-write · baseline · floor · corpus · yellow-push · push-main. commit-msg: פורמט + כיסוי-החלשות (מ-pre-commit) + pins-write לקובצי-חוקה + `DoD:` בשם-בדיקה-ב-diff. pre-push: push-main/yellow-push ב-tip, ראצ׳ט פר-commit מכוסה-Allow. pre-tool: push-main מ-HEAD. |
 | `no-fakers-check.mjs` · `no-fakers-baseline.json` | 🛡️ שער `no-fakers` (שלב 5): FAKERS מ-compose-engine (SSOT) ⇒ PascalCase ⇒ סריקת gen/boards/screens; חוב 3 קבצים (gen_charts · gen_dash11 · gen_feedback10) רק-יורד. |
 | `index-check.mjs` · `index-baseline.json` | 📇 שער `index-complete` (M3): סקריפט בלי שורה ב-INDEX.md ⇒ אדום; חוב-קיים ברשימה רק-יורדת. |
 | `atom-count-check.mjs` · `atom-count-baseline.json` | 🔢 שער `atom-count`: מספר-אטומים לאזור new/* לא יורד; מחיקה מכוונת = `--write` + ציון ב-commit. |

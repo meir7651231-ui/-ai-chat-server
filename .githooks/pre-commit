@@ -64,7 +64,16 @@ fi
 # ── ג · ראצ׳ט-כיוון מול merge-base (לא מול HEAD — R2-6.1) ──
 BASE=$(git merge-base HEAD origin/claude/hei-rxv1v1 2>/dev/null || git rev-parse HEAD)
 RD=$(node machtzev/ratchet-direction.mjs "$BASE" --index 2>&1); RDRC=$?
-if [ $RDRC -eq 0 ]; then ok ratchet-down "$RD"; else echo "$RD" | tail -4; err ratchet-down "החלשה מול merge-base $(echo "$BASE" | cut -c1-8)"; fi
+rm -f "$GD/protocol_ratchet_issues" "$GD/protocol_pins_edits"
+if [ $RDRC -eq 0 ]; then ok ratchet-down "$RD"
+else
+  # שלב 6: החלשה של baseline/floor ⇒ מותרת רק עם trailer Allow (commit-msg מאמת); שער/skip/סקריפט ⇒ אדום כאן
+  echo "$RD" | grep -E '^\s*·' > "$GD/protocol_ratchet_issues"
+  if echo "$RD" | grep -E '^\s*·' | grep -qvE '(baseline גדל|ראצ׳ט ירד)'; then echo "$RD" | tail -4; err ratchet-down "החלשת-שער מול merge-base $(echo "$BASE" | cut -c1-8) — אין Allow לכך"
+  else yel ratchet-down "החלשת-baseline/floor — נדרש trailer Allow: בהודעה (commit-msg מאמת): $(echo "$RD" | grep -cE '^\s*·') פריטים"; fi
+fi
+CONST=$(echo "$STAGED" | grep -xE 'LAW\.md|PURPOSE\.md|machtzev/(VERIFY-LAWS|THE-WAY|AGENT-CODE|DECISIONS|LEARNINGS)\.md' || true)
+if [ -n "$CONST" ]; then echo "$CONST" > "$GD/protocol_pins_edits"; yel pins-write "קובצי-חוקה ב-staged ($(echo "$CONST" | tr '\n' ' ')) — נדרש Allow: pins-write:<קובץ> <L-id|הכרעה-N> (commit-msg מאמת)"; fi
 
 # ── ד · המשטרה (טבעת-commit = --fast עד שקיים import-graph ל---inc; R2-5.3) ──
 if [ -n "$CODE" ]; then
