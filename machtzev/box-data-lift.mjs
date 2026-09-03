@@ -8,8 +8,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
+import { requireTs } from './lib-ts.mjs';
 import { pathToFileURL } from 'node:url';
-const ts = createRequire('/home/user/maor-system/')('typescript');
+const ts = requireTs();
 const file = process.argv[2];
 if (!file || !fs.existsSync(file)) { console.error('usage: box-data-lift.mjs <box.mjs>'); process.exit(2); }
 const base = path.basename(file).replace(/\.mjs$/, '');

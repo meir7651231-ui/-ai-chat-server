@@ -6,7 +6,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
-const ts = createRequire('/home/user/maor-system/')('typescript');
+import { requireTs } from './lib-ts.mjs';
+const ts = requireTs();
 const HEB = /[֐-׿]/;
 const file = process.argv[2];
 if (!file || !fs.existsSync(file)) { console.error('usage: box-purify.mjs <box.mjs>'); process.exit(2); }

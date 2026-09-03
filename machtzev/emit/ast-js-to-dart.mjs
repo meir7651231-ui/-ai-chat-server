@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 /** 🌳 מנוע-מורכב · JS→Dart מבוסס-AST (מפרש-TypeScript) — לא רגקס אלא הליכה על עץ-
  *  התחביר ⇒ עדיפויות/קינון/scope נכונים. ניב-האטומים: פונקציות טהורות. */
-import { createRequire } from 'node:module';
-const require = createRequire('/home/user/maor-system/');
-const ts = require('typescript');
+import { requireTs } from '../lib-ts.mjs';
+const ts = requireTs();
 
 const STD = { // מיפוי-מתודות JS→Dart (על property-access בקריאה)
   includes: 'contains', filter: 'where', push: 'add', some: 'any', every: 'every',

@@ -7,8 +7,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
+import { requireTs } from './lib-ts.mjs';
 import { pathToFileURL } from 'node:url';
-const ts = createRequire('/home/user/maor-system/')('typescript');
+const ts = requireTs();
 const ROOT = new URL('../', import.meta.url).pathname;
 const BOXES = path.join(ROOT, 'new/boxes');
 const SRCREL = process.argv[2];

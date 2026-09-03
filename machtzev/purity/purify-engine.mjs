@@ -285,9 +285,8 @@ function purifyOne(cand, log) {
 
 // 🎓 לקסר-אמת (typescript, כמו free-ref-scan): מחרוזות עם מיקום מדויק והקשר-הורה —
 // אפס-ניחושי-רגקס (הלקח מקריסת wa: parity-של-backticks איננו לקסר).
-import { createRequire } from 'node:module';
-const _req = createRequire('/home/user/maor-system/');
-const _ts = _req('typescript');
+import { requireTs } from '../lib-ts.mjs';
+const _ts = requireTs();
 function collectStringSites(src) {
   const sf = _ts.createSourceFile('x.mjs', src, _ts.ScriptTarget.ES2022, true);
   const sites = [];

@@ -1,0 +1,9 @@
+{
+  "name": "machtzev-tools",
+  "private": true,
+  "type": "module",
+  "description": "כלי-המחצב · תלות-אחת (typescript) vendored מקומית — L34: שער מבחין אין-כלי (exit 2) מכשל-אמת",
+  "dependencies": {
+    "typescript": "5.9.3"
+  }
+}

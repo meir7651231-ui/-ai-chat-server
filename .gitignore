@@ -1,3 +1,6 @@
 
 # רישום-חציבה — פלט-מחלץ מתחדש (נבנה מחדש בכל הרצה), לא מקור
 machtzev/registry/
+
+# תלות-כלים vendored (c1) — נוצר מ-package.json, לא מקור
+machtzev/node_modules/

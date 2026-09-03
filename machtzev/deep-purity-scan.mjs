@@ -25,9 +25,8 @@ const isPureData = (code) => {
   !/^(?:export\s+)?(?:const\s+\w+\s*=\s*(?:async\s*)?\(|function\s+\w+\s*\([^)])/m.test(skel);
 };
 // ── ליבת-הסריקה v2: AST-אמת (typescript) — אותו לקסר של מנוע-הטיהור, אפס-רגקס-על-קוד ──
-import { createRequire } from 'node:module';
-const _req = createRequire('/home/user/maor-system/');
-const _ts = _req('typescript');
+import { requireTs } from './lib-ts.mjs';
+const _ts = requireTs();
 const findings = [];
 const staticLit = (n) => {
   if (!n) return false;

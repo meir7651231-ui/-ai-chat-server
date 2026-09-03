@@ -2,9 +2,8 @@
 /** 🔎 סורק-הפניות-חופשיות — מוצא בכל אטום-JS מזהה שנקרא אך לא-מוגדר (לא פרמטר/מקומי/
  *  import/גלובל) = חור-חילוץ (קבוע-שכן/שקע שלא-הוטמע, כמו HEX2). סטטי, מהיר, פר-681. */
 import fs from 'node:fs';
-import { createRequire } from 'node:module';
-const require = createRequire('/home/user/maor-system/');
-const ts = require('typescript');
+import { requireTs } from '../lib-ts.mjs';
+const ts = requireTs();
 const DIR = new URL('../../new/atoms/', import.meta.url).pathname;
 
 const GLOBALS = new Set(['Math','Number','String','Object','Array','JSON','Date','RegExp','Boolean','Map','Set','Symbol','Promise','parseInt','parseFloat','isNaN','isFinite','undefined','null','NaN','Infinity','console','globalThis','encodeURIComponent','decodeURIComponent','structuredClone','Intl','BigInt','Error','TypeError','arguments','require','process','fetch','crypto','navigator','URL','URLSearchParams','Uint8Array','Uint16Array','TextDecoder','TextEncoder','Blob','FileReader','atob','btoa','localStorage','sessionStorage','document','window','setTimeout','clearTimeout','AbortController','WeakMap','DataView','Function']);
