@@ -781,6 +781,10 @@ function wrapBox(st, inner, node, noPad, parentFlex = false, noVMargin = false) 
   // max-width בלי width-קבוע (‏.msg{max-width:74%}) = תקרה בלבד; האלמנט מכווץ-לתוכן. IntrinsicWidth גורם לכיווץ
   // כך שילד-בלוק מלא-רוחב (‏.ts timestamp, display:block) ממלא את הבועה-המכווצת במקום למתוח אותה למלוא-הרוחב.
   if (st['max-width'] && st['max-width'] !== 'none' && !w && !pct(st['width']) && inner) out = `IntrinsicWidth(child: ${out})`;   // max-width:none = ללא-תקרה (מילוי) — לא IntrinsicWidth
+  // אלמנט ממוקם-align-self (end/center) בטור-flex = hug-לתוכן. אם הוא מכיל שורת-justify (Row max — חותם-מסירה
+  // .ts justify-end בבועת-out) ⇒ בלי IntrinsicWidth הבועה נמתחת למלוא-הרוחב. IntrinsicWidth כובל לרוחב-הילד-הרחב
+  // ⇒ שורת-ה-justify מיישרת-לימין בתוכו במקום למתוח. (max-width:none עוקף את הסעיף-הקודם ⇒ נדרש כאן בנפרד.)
+  else if (['end', 'center'].includes(ALIGN[st['align-self']]) && !w && !pct(st['width']) && inner && !/^IntrinsicWidth/.test(out)) out = `IntrinsicWidth(child: ${out})`;
   // CSS aspect-ratio (‏.ph{aspect-ratio:1/1} · .ph.wide{16/9}) — בלי זה האריח קרס לגובה-התוכן (438→250) והצורה
   // והאייקון יצאו שגויים. עוטפים ב-AspectRatio (מקבל רוחב-חסום מהבלוק ⇒ מחשב גובה). רק כשאין גובה-קבוע.
   const arRaw = st['aspect-ratio'];
