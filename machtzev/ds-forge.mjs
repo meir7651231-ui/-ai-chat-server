@@ -437,7 +437,10 @@ function svgScene(node, map, anc, inherit) {
       const strokeRaw = a.stroke || est['stroke'] || est['color'];
       const filled = !!(fillRaw && fillRaw !== 'none');
       const gd = filled ? urlId(fillRaw) : urlId(strokeRaw);          // גרדיאנט על מילוי/קו
-      const col = filled ? (colorExpr(fillRaw) || inherit) : (colorExpr(strokeRaw) || inherit);
+      let col = filled ? (colorExpr(fillRaw) || inherit) : (colorExpr(strokeRaw) || inherit);
+      // opacity/fill-opacity/stroke-opacity על צורת-SVG ⇒ אלפא על הצבע (step_area: fill var(--a) opacity=.1 = מילוי
+      // דהוי; בלי זה נצבע מלא-אטום). לא-חל כשיש גרדיאנט (לו יש אלפא-עצמי בעצירות). opacity חל על כל-הצורה.
+      { const so = parseFloat(a['opacity'] ?? est['opacity'] ?? '1'); const fso = parseFloat((filled ? a['fill-opacity'] : a['stroke-opacity']) ?? '1'); const al = (isNaN(so) ? 1 : so) * (isNaN(fso) ? 1 : fso); if (al < 1 && !gd) col = `${col}.withValues(alpha: ${al.toFixed(2)})`; }
       const sw = num(a['stroke-width'] || est['stroke-width'] || '1.8') || '1.8';
       if (ch.tag === 'rect') ops.push(`_Op.rect(${+a.x || 0}, ${+a.y || 0}, ${+a.width || 0}, ${+a.height || 0}, ${a.rx ? +a.rx : 0}, ${col}, ${filled}, ${sw}${gArgs(gd)})`);
       else if (ch.tag === 'circle' && a['stroke-dasharray']) {          // dasharray+rotate(-90) ⇒ קשת
