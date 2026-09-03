@@ -26,6 +26,9 @@ const ATOM = {
   switch:    { atom: 'SegmentedSwitch', seam: 'premium/actions/segmented_switch.dart items+selected+onSelect' }, // בורר · תצוגה
   role:      { atom: 'roleOf',         seam: 'dart-maor/role-of.dart admin/teacher/staff (לוגיקה §21)' },        // הרשאות · מנוע
   grant:     { atom: 'canGrantedAction', seam: 'dart-maor/can-granted-action.dart גידור-פר-מפתח (לוגיקה §21)' }, // הרשאות · מנוע
+  alert:     { atom: 'AlertBanner',    seam: 'premium/feedback/alert_banner.dart message+tone+glyph' },          // אוטומציה · תצוגה
+  expiry:    { atom: 'expiringIntakes', seam: 'dart-maor/expiring-intakes.dart ⊕shopExpiryWarnDays (לוגיקה §21)' }, // פקיעה · מנוע
+  capital:   { atom: 'warehouseValue', seam: 'dart-maor/warehouse-value.dart Σqty×cost (לוגיקה §21)' },          // הון-כלוא · מנוע
   table:     { atom: 'DsTable',       seam: 'ds/ds_table.dart:7 labels+rows+מיון' },                      // הצגת-אוסף (לא DataGrid)
   panel:     { atom: 'GlassCard',     seam: 'premium/surfaces/glass_card.dart:5 required this.child' },   // מיכל-פריט-נבחר
   timeline:  { atom: 'TimelineItem',  seam: 'premium/lists/timeline_item.dart title+time+body' },         // שורת-תנועה (לא timeline_flow)
@@ -65,6 +68,8 @@ function ops(formula) {
     return [{ op: 'action', why: 'כפתור-הפעלת-הייצוא (label+onTap)' }, { op: 'serialize', why: 'מנוע: toCsv⊕csvEscape (BOM+חסימת-הזרקה, לא join ידני)' }];
   if (f.kind === 'perm')      // הרשאות = תובנה: תצוגה(בורר-תפקיד) ⊕ לוגיקה(תפקיד + גידור-פעולה) — 23-ג · חוק-6
     return [{ op: 'switch', why: 'בורר-תפקיד (זהות-מוזרקת, חוק-6)' }, { op: 'role', why: 'מנוע: roleOf ⇒ admin/teacher/staff' }, { op: 'grant', why: 'מנוע: canGrantedAction ⇒ הצג/הסתר-פעולה פר-מפתח' }];
+  if (f.kind === 'auto')      // אוטומציה = תובנה: תצוגה(התראה) ⊕ לוגיקה(זיהוי-פקיעה + הון-כלוא) — 23-ג פרואקטיבי
+    return [{ op: 'alert', why: 'באנר-התראה (message+tone+glyph)' }, { op: 'expiry', why: 'מנוע: expiringIntakes ⊕ shopExpiryWarnDays (מה פוקע תוך החלון)' }, { op: 'capital', why: 'מנוע: warehouseValue על מלאי-מת (הון-כלוא)' }];
   if (f.kind === 'log')       // יומן = תובנה: כותרת-קיבוץ (Σ) + שורת-תנועה פר-רשומה (2 אטומים)
     return [{ op: 'group', label: 'כותרת+Σ', why: 'כותרת-היומן נושאת מונה+Σעלות' }, { op: 'timeline', why: 'שורת-תנועה פר-רשומה (title/time/body); timeline_flow מזייף ⇒ נחסם' }];
   if (f.kind === 'panel')     // פאנל-פריט = תובנה: מיכל + זהות + מצב(יחס) + תנועות + פעולה (5 אטומים)
@@ -102,6 +107,7 @@ const PARTICLES = [
   { id: 'emptyst',    name: 'מצב-ריק',     f: { kind: 'empty',     expr: 'shown==0' } },
   { id: 'export',     name: 'ייצוא',       f: { kind: 'export',    expr: 'items ⇒ CSV+BOM (toCsv⊕csvEscape)' } },
   { id: 'permissions', name: 'הרשאות',     f: { kind: 'perm',      expr: 'role ⇒ show/hide (roleOf⊕canGrantedAction)' } },
+  { id: 'automation', name: 'אוטומציות',   f: { kind: 'auto',      expr: 'פקיעה + מלאי-מת ⇒ התראה (expiringIntakes⊕warehouseValue)' } },
 ];
 
 function compose(p) {
