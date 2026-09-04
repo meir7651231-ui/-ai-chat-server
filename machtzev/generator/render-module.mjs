@@ -49,10 +49,24 @@ function siteResolvable(site, known, defIndex, importNames) {
 }
 const importNamesOf = (frags) => { const out = new Set(); for (const f of frags) if (f.cls === '(preamble)' || f.cls === '(top)') for (const l of f.lines) { const m = l.match(/^import '([^']+)'/); if (m && !/^package:|^dart:/.test(m[1])) for (const n of declaredNames(m[1])) out.add(n); } return out; };
 // לכל מחלקת-State: הפתיח + אתרי-הקריאה הפתירים של הבונים הנבחרים ⇒ {preludeLines, sites:[{name, site, spread}], unresolved:[…]}
-function socketPlan(frags, chosenSet, cls, defIndex, importNames) {
+// G8e · גיזום-פתיח לפי-שימוש: משפטי-הפתיח (רב-שורתיים, לפי סוגריים מאוזנים) ⇒ נשמרים רק אלה שמגדירים מקומי שנצרך ע"י אתרי-הקריאה/משפטים-שנשמרו, וכל משפט שאינו הגדרה (if/return/השמה) — אחורה עד נקודת-שבת
+function preludeStatements(lines) {
+  const out = []; let cur = [], depth = 0;
+  for (const l of lines) { cur.push(l); for (const ch of l.replace(/'(?:[^'\\]|\\.)*'/g, '')) { if ('([{'.includes(ch)) depth++; else if (')]}'.includes(ch)) depth--; } if (depth <= 0 && /;\s*(\/\/.*)?$/.test(l) || (depth <= 0 && /^\s*\/\//.test(l) && cur.length === 1)) { out.push(cur); cur = []; depth = 0; } }
+  if (cur.length) out.push(cur);
+  return out;
+}
+export function prunePrelude(preludeLines, usedText) {
+  const stmts = preludeStatements(preludeLines).map((ls) => ({ ls, defs: [...preludeLocals(ls)], ids: idsIn(ls.join('\n').replace(/'(?:[^'\\]|\\.)*'/g, "''")), decl: ls.some((l) => /^\s+(?:final|var|late|const)\s/.test(l)) }));
+  const need = new Set([...idsIn(usedText)]); const keep = new Set();
+  let grew = true; while (grew) { grew = false; stmts.forEach((st, i) => { if (keep.has(i)) return; if (!st.decl || st.defs.some((d) => need.has(d))) { keep.add(i); st.ids.forEach((x) => need.add(x)); grew = true; } }); }
+  return { lines: stmts.filter((st, i) => keep.has(i)).flatMap((st) => st.ls), dropped: stmts.filter((st, i) => !keep.has(i)).flatMap((st) => st.defs) };
+}
+function socketPlan(frags, chosenSet, cls, defIndex, importNames, prune = false) {
   const build = frags.find((f) => f.cls === cls && f.role === 'build');
   const src = frags[0]._src;
-  const preludeLines = build && build.prelude ? src.slice(build.prelude[0], build.prelude[1]) : [];
+  const preludeLinesAll = build && build.prelude ? src.slice(build.prelude[0], build.prelude[1]) : [];
+  let preludeLines = preludeLinesAll;
   const known = preludeLocals(preludeLines);
   const sites = [], unresolved = [];
   const candidates = frags.filter((f) => f.cls === cls && chosenSet.has(f.id) && (f.role === 'builder' || (f.role === 'member' && /^\s+List<Widget>\s+_\w+\(/.test(codeLine(f)))));
@@ -68,7 +82,9 @@ function socketPlan(frags, chosenSet, cls, defIndex, importNames) {
   const chosenText = frags.filter((f) => f.cls === cls && chosenSet.has(f.id) && f.role !== 'build').map((f) => f.lines.join('\n')).join('\n');
   const internal = unresolved.filter((n) => new RegExp(`(?<![\\w.])${n}\\(`).test(chosenText.replace(new RegExp(`(?:Widget|List<Widget>)\\s+${n}\\(`), '')));
   const reserved = unresolved.filter((n) => !internal.includes(n));
-  return { preludeLines, sites, unresolved: reserved, internal };
+  let pruned = [];
+  if (prune && preludeLinesAll.length) { const pr = prunePrelude(preludeLinesAll, sites.map((x) => x.site).join('\n')); preludeLines = pr.lines; pruned = pr.dropped; }
+  return { preludeLines, sites, unresolved: reserved, internal, pruned };
 }
 // שמות-מוצהרים בקובץ-מדף מיובא (top-level): class/enum/typedef/extension · פונקציות · const/final/getter — כולל export-ים של ספריית-ds (export '…')
 const _declCache = new Map();
@@ -97,11 +113,12 @@ function declaredNames(importPath) {
 // G8c · זריעה לפי פעולות-היסוד של ישות (L49): entityOpsSeed = שם-ישות ⇒ שברים שה-G2-ops שלהם (frag-ops.json, מהמפתחות שהם קוראים) חופפים ≥ minOverlap ל-entityOps(E)
 let _FO = null; const fragOps = () => { if (_FO === null) { const p = path.join(GEN, 'frag-ops.json'); _FO = fs.existsSync(p) ? JSON.parse(fs.readFileSync(p, 'utf8')).fragments : {}; } return _FO; };
 let _EO = null; const entityOpsOf = async (e) => { if (_EO === null) _EO = (await import('./shape-ops.mjs')).entityOps; return new Set(_EO(e).ops); };
-export function select({ module, all = false, particles = [], atoms = [], mode = 'minimal', declared = false, opsSeed = null, minOverlap = 2 }) {
+export function select({ module, all = false, particles = [], atoms = [], mode = 'minimal', declared = false, opsSeed = null, minOverlap = 2, prune = false, seedBuildersOnly = false }) {
   const frags = CAT.fragments.filter((f) => f.module === module);
   if (!frags.length) throw new Error('unknown module ' + module);
   const target = new Set([...atoms, ...particles.flatMap(atomsOfParticle), ...(declared ? frags.flatMap((f) => f.declaredAtoms) : [])]);
-  const opsSeedIds = opsSeed ? new Set(Object.entries(fragOps()).filter(([id, x]) => x.module === module && x.role !== 'build' && x.g2.filter((o) => opsSeed.has(o)).length >= minOverlap).map(([id]) => id)) : null;
+  // G8e · seedBuildersOnly: זורעים רק בוני-תצוגה (מה שהמשתמש רואה); שברי-דאטה מגיעים דרך סגירת-התלויות בלבד — לא נזרעים ישירות (אחרת כל member שנוגע בתאריך/מספר נבחר)
+  const opsSeedIds = opsSeed ? new Set(Object.entries(fragOps()).filter(([id, x]) => x.module === module && x.role !== 'build' && (!seedBuildersOnly || x.role === 'builder') && x.g2.filter((o) => opsSeed.has(o)).length >= minOverlap).map(([id]) => id)) : null;
   const byId = new Map(frags.map((f) => [f.id, f]));
   const defIndex = new Map();                                  // מזהה ⇒ שברים שמגדירים אותו
   for (const f of frags) for (const d of f.defs) { if (!defIndex.has(d)) defIndex.set(d, []); defIndex.get(d).push(f.id); }
@@ -132,7 +149,7 @@ export function select({ module, all = false, particles = [], atoms = [], mode =
       // (ה) G5a: הפתיח ואתרי-הקריאה שה-build הסינתטי ישחזר צורכים חברים/דאטה ⇒ נכנסים לסגירה כטקסט-פסאודו
       for (const c of classes) {
         if (!stateOf(c) || [...sel].some((id) => byId.get(id).cls === c && byId.get(id).role === 'build')) continue;
-        const plan = socketPlan(frags, sel, c, defIndex, importNames);
+        const plan = socketPlan(frags, sel, c, defIndex, importNames, prune);
         const text = plan.preludeLines.join('\n') + '\n' + plan.sites.map((x) => x.site).join('\n');
         for (const used of idsIn(text)) for (const did of defIndex.get(used) || []) { const g = byId.get(did); if (!sel.has(did) && g.role !== 'build') { sel.add(did); grew = true; } }
       }
@@ -166,7 +183,14 @@ function syntheticBuild({ title, subtitle, plan, rename = (l) => l }) {
   return out;
 }
 
-export async function assembleByOps({ module, entity, minOverlap = 2, opsOverride = null }) { return assemble({ module, opsSeed: opsOverride || await entityOpsOf(entity), minOverlap, mode: 'minimal' }); }
+export async function assembleByOps({ module, entity, minOverlap = 2, opsOverride = null, prune = false, seedBuildersOnly = false }) {
+  const opsSeed = opsOverride || await entityOpsOf(entity);
+  const res = assemble({ module, opsSeed, minOverlap, mode: 'minimal', prune, seedBuildersOnly });
+  // G8e · בונים-בלבד שלא הניבו אף אתר-קריאה פתיר ⇒ מסך ריק ⇒ נסיגה מוצהרת לזריעת-חברים (מדווח ב-seedMode)
+  const sites = Object.values(res.plans).reduce((a, p) => a + p.sites.length, 0);
+  if (seedBuildersOnly && sites === 0) { const wide = assemble({ module, opsSeed, minOverlap, mode: 'minimal', prune }); return { ...wide, seedMode: 'members(fallback: builders-only gave 0 sites)' }; }
+  return { ...res, seedMode: seedBuildersOnly ? 'builders-only' : 'members' };
+}
 export function assemble(req) {
   const { module, all = false } = req;
   const { frags, chosen, sel, target, defIndex, importNames } = select(req);
@@ -179,7 +203,7 @@ export function assemble(req) {
   for (const f of chosen) {
     if (f.role === 'class-close' && stateClasses.has(f.cls) && !hasBuild.has(f.cls)) {
       const nm = f.cls.replace(/^_|State$/g, '');
-      const plan = plans[f.cls] = socketPlan(frags, sel, f.cls, defIndex, importNames);
+      const plan = plans[f.cls] = socketPlan(frags, sel, f.cls, defIndex, importNames, !!req.prune);
       out.push(...syntheticBuild({ title: nm, subtitle: `${nm} · מודול-משנה מחולל · ${plan.sites.length} בונים מחווטים-לשקעי-הזהב`, plan }));
     }
     if (f.role === 'class-close' && widgetClasses.has(f.cls) && !hasBuild.has(f.cls) && !stateClasses.has(f.cls)) {
@@ -325,10 +349,10 @@ if (isMain && process.argv.includes('--gate')) {
 }
 const opsEntity = isMain ? arg('--entity-ops') : null;
 if (opsEntity && arg('--module')) {
-  const res = await assembleByOps({ module: arg('--module'), entity: opsEntity, minOverlap: +(arg('--min-overlap') || 2) });
+  const res = await assembleByOps({ module: arg('--module'), entity: opsEntity, minOverlap: +(arg('--min-overlap') || 2), prune: process.argv.includes('--prune'), seedBuildersOnly: process.argv.includes('--builders-only') });
   const out = arg('--out') || path.join(DIR, `gen_opsseed_${opsEntity.toLowerCase()}_from_${TAG[arg('--module').replace(/\.dart$/, '')] || 'x'}.dart`);
   fs.writeFileSync(out, res.code);
-  console.log(`✓ זריעה-לפי-ops: ${opsEntity} @ ${arg('--module')} ⇒ ${path.basename(out)} · שברים ${res.fragments}/${res.of} · ${res.code.split('\n').length} שורות · בונים מחווטים ${Object.values(res.plans).reduce((a, p) => a + p.sites.length, 0)}`);
+  console.log(`✓ זריעה-לפי-ops: ${opsEntity} @ ${arg('--module')} ⇒ ${path.basename(out)} · שברים ${res.fragments}/${res.of} · ${res.code.split('\n').length} שורות · בונים מחווטים ${Object.values(res.plans).reduce((a, p) => a + p.sites.length, 0)} · מצב-זריעה ${res.seedMode}`);
 }
 const modulesArg = isMain ? arg('--modules') : null;
 if (modulesArg) {
