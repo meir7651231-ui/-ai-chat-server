@@ -127,6 +127,14 @@ stage('מנועי-העיצוב (tokens·motion·graphics·variants·pure)', () =
   for (const e of ['ds-tokens', 'ds-motion', 'ds-graphics', 'ds-variants', 'ds-pure']) run(`machtzev/${e}.mjs`);
   return 'ds_scale·ds_anim·ds_graphics·ds_surface·ds_pure חוללו-מהזרע';
 }, { optional: true });
+// 4ג½ · מנוע-ds-forge: HTML-Pure ⇒ אטומי-Dart פיקסל-נאמנים (‏new/dart-forge-bs) + מראה ל-buildsmart.
+stage('מנוע-ds-forge (Pure→Dart · אטומי-forge)', () => {
+  run('machtzev/ds-forge.mjs');
+  const SRC = path.join(ROOT, 'new/dart-forge-bs'), DST = '/home/user/buildsmart/app_flutter/lib/genesis/dart-forge-bs';
+  if (fs.existsSync(SRC)) { try { fs.rmSync(DST, { recursive: true, force: true }); fs.cpSync(SRC, DST, { recursive: true }); } catch { /* אין buildsmart — מדלגים על-המראה */ } }
+  const n = fs.existsSync(SRC) ? fs.readdirSync(SRC, { recursive: true }).filter(f => String(f).endsWith('.dart')).length : 0;
+  return `${n} אטומי-forge חוללו${fs.existsSync(DST) ? ' + מוראו ל-buildsmart' : ''}`;
+}, { optional: true });
 
 stage('המחולל (genesis-gen · הכרעה 17)', () => run('machtzev/generator/genesis-gen.mjs').split('\n').find(l => l.includes('המחולל'))?.trim());
 stage('מחולל-הלוחות (board-gen)', () => run('machtzev/assemble/board-gen.mjs', [SCRATCH]).split('\n').find(l => l.includes('לוחות'))?.trim());
@@ -156,6 +164,25 @@ stage('מנוע-ההמרה-מחדש · דאטה (reconvert-data)', () => last(ru
 const HAS_DART = [process.env.DART_BIN, process.env.HOME && path.join(process.env.HOME, 'dart-sdk/bin/dart'), '/root/dart-sdk/bin/dart', '/home/user/flutter/bin/dart'].filter(Boolean).some(c => { try { return fs.existsSync(c); } catch { return false; } });
 stage('אימות-רהיצות-Dart (verify-dart-tests)', () => HAS_DART ? last(run('machtzev/verify-dart-tests.mjs', ['-j12'])) : 'דולג (אין בינארי Dart — מטמון-ההוכחות נשמר)', { optional: true });
 stage('אימות-arg0-Dart (verify-dart-arg0)', () => HAS_DART ? last(run('machtzev/verify-dart-arg0.mjs')) : 'דולג (אין בינארי Dart)', { optional: true });
+// 5¾ · ביקורת-פיקסל: ‏ds-forge מול Pure — רינדור-forge (flutter test) + דיף אפור מול baseline. ‏--full+כלים ⇒
+// רינדור-מלא ושער-רגרסיה (נכשל אם אטום סטה >1.5% מ-baseline); אחרת ⇒ דיווח-הדוח-האחרון בלבד (ללא רינדור-כבד).
+const HAS_FLUTTER = fs.existsSync('/home/user/flutter/bin/flutter'), HAS_PW = fs.existsSync('/opt/pw-browsers/chromium');
+const pixelRep = () => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'machtzev/audit/shots/report.json'), 'utf8')).filter(x => !x.note && x.diffPct >= 0); } catch { return null; } };
+const pixelMean = r => (r.reduce((s, x) => s + x.diffPct, 0) / r.length).toFixed(2);
+stage('ביקורת-פיקסל (pixel-audit · forge מול Pure)', () => {
+  const BS = '/home/user/buildsmart/app_flutter';
+  if (FULL && HAS_FLUTTER && HAS_PW && fs.existsSync(BS)) {
+    run('machtzev/audit/gen-forge-dart.mjs');   // מחולל בדיקת-flutter (משתמש ב-index.json+forge הקיימים)
+    execFileSync('/home/user/flutter/bin/flutter', ['test', 'test/zz_pixel_audit_test.dart'], { cwd: BS, env: { ...process.env, PATH: `/home/user/flutter/bin:${process.env.PATH}` }, stdio: ['ignore', 'ignore', 'ignore'] });
+    run('machtzev/audit/diff.mjs');
+    const rep = pixelRep(); let base = {}; try { base = JSON.parse(fs.readFileSync(path.join(ROOT, 'machtzev/audit/baseline.json'), 'utf8')); } catch { /* אין baseline */ }
+    const reg = rep.filter(x => base[x.k] >= 0 && x.diffPct - base[x.k] > 1.5 && x.diffPct > 2);
+    if (reg.length) throw new Error(`🔴 ${reg.length} רגרסיות-פיקסל: ${reg.slice(0, 6).map(r => `${r.k}(${base[r.k]}→${r.diffPct})`).join(', ')}`);
+    return `ממוצע ${pixelMean(rep)}% · ${rep.filter(x => x.diffPct < 4).length}/${rep.length} נקיים · אפס-רגרסיה מול baseline`;
+  }
+  const rep = pixelRep();
+  return rep ? `דולג-רינדור (${FULL ? 'אין flutter/playwright' : 'לא --full'}) · דוח-אחרון: ממוצע ${pixelMean(rep)}% · ${rep.filter(x => x.diffPct < 4).length}/${rep.length} נקיים` : 'דולג (אין דוח-פיקסל)';
+}, { optional: true });
 // ── הזרקת-המדף לתצוגה (buildsmart) + נחיתה — בתוך המנוע (הכרעת-בעלים "למה הם לא בפנים") ──
 stage('הזרקת-המדף ל-buildsmart (8 מדפים)', () => {
   const B = '/home/user/buildsmart/app_flutter/lib/genesis';
