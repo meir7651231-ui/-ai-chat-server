@@ -223,6 +223,27 @@ export function retarget({ module, entity }) {
     const heroHow = !hero ? 'אין מדדים ⇒ count' : hero.isHero ? 'ה-StatHero של הזהב (המטרה המוצהרת)' : hero.tone === 'danger' ? 'המדד הראשון שהזהב צובע-סכנה כשאינו-אפס' : 'אין StatHero/מדד-סכנה ⇒ המדד הראשון';
     const qd = (v) => `'${String(v).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\$/g, '\\$')}'`;
     const dt = termsFor(entity), label = dt ? (dt.plural || dt.singular) : E;
+    // G10a · שורות-המדד: getter בצורת `X.where(P).length` (where יחיד, בלי חיבור/חיסור) ⇒ `rowsOf_<key>` = אותו ביטוי עם toList — נשתל ליד ה-getter (אותו scope, P מילה-במילה); הרכזת קופצת לרשומה-הראשונה של ה-hero
+    const rowsOfKeys = [];
+    {
+      const ls = code.split('\n');
+      for (const mt of metrics) {
+        const gi = ls.findIndex((l) => new RegExp(`^\\s+static int get ${mt.key} => `).test(l));
+        if (gi < 0) continue;
+        const body = ls[gi].replace(/^\s+static int get \w+ => /, '').replace(/;\s*(\/\/.*)?$/, '');
+        const m = /^(.+)\.where\((.+)\)\.length$/.exec(body);
+        if (!m || (body.match(/\.where\(/g) || []).length !== 1 || /\.length\s*[+\-*\/]/.test(body) || /[+\-*\/]\s*\S+\.where\(/.test(body)) continue;
+        const ind = (ls[gi].match(/^\s+/) || [''])[0];
+        ls.splice(gi + 1, 0, `${ind}static List<Map<String, dynamic>> get rowsOf_${mt.key} => ${m[1]}.where(${m[2]}).cast<Map<String, dynamic>>().toList(); // G10a · שורות-המדד ${mt.key} (מהצורה של ה-getter, לא מילון)`);
+        rowsOfKeys.push({ key: mt.key, cls: clsAt(gi) });
+      }
+      code = ls.join('\n');
+    }
+    const idKey = (map.find((x) => x.src === 'id') || {}).dst || 'id';
+    const rowsExpr = !countExpr ? null : countHow === 'static-const' ? countExpr.replace(/\.length$/, '')
+      : countHow === 'seed-db' ? countExpr.replace(/^\(\((.+) as List\?\)\?\.length \?\? 0\)$/, '(($1 as List?) ?? const []).cast<Map<String, dynamic>>()')
+      : countExpr.replace(/\.fold<int>\(0, \(n, m\) => n \+ \(\(m\['(\w+)'\] as List\?\)\?\.length \?\? 0\)\)$/, ".expand((m) => ((m['$1'] as List?) ?? const []).cast<Map<String, dynamic>>()).toList()");
+
     const F = `${E}Facts`;
     const out = ['', `// ═══ תפר-עובדות ציבורי (G9b · לרכזת-האפליקציה): ${F} — נגזרות-אמת של דאטה-המודול; כל ערך = ביטוי חי על הזרע/המנועים (§20-ג), אפס ליטרל-מומצא. מחולל: retarget.mjs ═══`,
       `class ${F} {`, `  static const String entity = ${qd(entity)};`,
@@ -233,15 +254,41 @@ export function retarget({ module, entity }) {
       `  static const String heroKey = ${qd(hero ? hero.key : 'count')}; // ${heroHow}`,
       `  static String get hero => metrics[heroKey] ?? ${countExpr ? "'$count'" : "'—'"};`,
       `  static String get heroLabel => ${hero ? qd(hero.label) : 'label'};`,
+      ...(rowsExpr ? [`  static const String idKey = ${qd(idKey)}; // מפתח-המזהה בזרע (אחרי retarget)`,
+        `  static List<Map<String, dynamic>> get rows => ${rowsExpr}; // כל רשומות הזרע-הראשי (${countHow})`,
+        `  static Map<String, dynamic>? byId(String id) { for (final r in [for (final k in const <String>[${rowsOfKeys.map((x) => qd(x.key)).join(', ')}]) ...heroRows(k), ...rows]) { if ('${'$'}{r[idKey] ?? r['id']}' == id) return r; } return null; } // שורות-המדד קודם (הן מסוג-הרשומה שהפאנל צורך — בזהב-התלמידים הפאנל פותח תלמיד, הזרע-הראשי-לפי-מפתחות הוא families), ואז הזרע-הראשי`] : [`  // rows/byId: אין זרע-ראשי בצורה מוכרת ⇒ אין תפר-כניסה לפי מזהה`]),
+      `  static List<Map<String, dynamic>> heroRows(String key) { switch (key) { ${rowsOfKeys.map((x) => `case ${qd(x.key)}: return ${x.cls}.rowsOf_${x.key};`).join(' ')} default: return const []; } } // G10a · ${rowsOfKeys.length} מדדים עם שורות (צורת X.where(P).length)`,
+      rowsExpr ? `  static String? get heroFirstId { final r = heroRows(heroKey); return r.isEmpty ? null : '${'$'}{r.first[idKey]}'; } // הרשומה-הראשונה של ה-hero — יעד-הקפיצה מהרכזת` : `  static String? get heroFirstId => null;`,
       '}', ''];
+    // G10a · תפר-כניסה: `<E>Screen(initialPanelId: id)` ⇒ הכרטיס נפתח אחרי הפריים-הראשון — צורת initialPanel של זהב-המורים; מודול שכבר נושא initialPanel (מהזהב) שומר אותו
+    let entrySeam = null;
+    if (rowsExpr && /void _openPanel\(Map<String, dynamic> \w+/.test(code)) {
+      const ls = code.split('\n');
+      const ci = ls.findIndex((l) => new RegExp(`^\\s+const ${E}Screen\\(\\{`).test(l));
+      if (ci >= 0 && /this\.initialPanel\b/.test(ls[ci])) entrySeam = 'initialPanel';
+      else if (ci >= 0) {
+        ls[ci] = ls[ci].replace(`const ${E}Screen({`, `const ${E}Screen({this.initialPanelId, `);
+        ls.splice(ci + 1, 0, `  final String? initialPanelId; // G10a · תפר-כניסה: מזהה-רשומה שכרטיסה נפתח אחרי הפריים-הראשון (צורת initialPanel של זהב-המורים; הרכזת קופצת לרשומת-ה-hero)`);
+        const si = ls.findIndex((l) => new RegExp(`^class _${E}ScreenState extends State<${E}Screen>`).test(l));
+        if (si >= 0) {
+          const open = [`    final p0 = widget.initialPanelId == null ? null : ${F}.byId(widget.initialPanelId!); // G10a`,
+            `    if (p0 != null) WidgetsBinding.instance.addPostFrameCallback((_) { if (mounted) _openPanel(p0); });`];
+          let ii = -1; for (let j = si + 1; j < ls.length && !/^class /.test(ls[j]); j++) if (/^\s+void initState\(\) \{/.test(ls[j])) { ii = j; break; }
+          if (ii >= 0) { const sup = ls.findIndex((l, k) => k > ii && /^\s+super\.initState\(\);/.test(l)); ls.splice(sup + 1, 0, ...open); }
+          else ls.splice(si + 1, 0, '  @override', '  void initState() {', '    super.initState();', ...open, '  }');
+          entrySeam = 'initialPanelId';
+        }
+      }
+      code = ls.join('\n');
+    }
     code = code.replace(/\n*$/, '\n') + out.join('\n');
-    facts = { cls: F, label, count: countExpr ? { expr: countExpr, how: countHow, list: pn } : null, metrics: metrics.map(({ key, label, tone }) => ({ key, label, tone })), heroKey: hero ? hero.key : 'count', heroHow };
+    facts = { cls: F, label, count: countExpr ? { expr: countExpr, how: countHow, list: pn } : null, metrics: metrics.map(({ key, label, tone }) => ({ key, label, tone })), heroKey: hero ? hero.key : 'count', heroHow, rowsOf: rowsOfKeys.map((x) => x.key), entrySeam, coreWired };
   }
   const n = (how) => map.filter((x) => x.how.startsWith(how)).length;
   const header = [`// 🎯 ${E}Screen — retarget של ${module} לישות ${entity} (GENMAX·G5c/G5d · הכרעה-24) · מחולל דטרמיניסטי: retarget.mjs --module ${module} --entity ${entity}`,
     `//   זרע-ראשי: ${pk.name} (מועמדים: ${(pk.candidates || []).join(' ')}) · מיפוי שם ${n('name')} · ערוץ ${n('chan')} · טיפוס-יחיד ${n('unique')} · מקום-שמור ${n('reserved')} · חוזה-מנוע (לא משתנה) ${n('engine-contract')}`,
     `//   ${map.map((x) => `${x.src}⇒${x.dst || '∅'}(${x.how})`).join(' · ')}`,
-    `//   תפר-עובדות (G9b): ${facts.cls} · count=${facts.count ? `${facts.count.list}.length (${facts.count.how})` : '∅'} · מדדים ${facts.metrics.length} · hero=${facts.heroKey}`,
+    `//   תפר-עובדות (G9b): ${facts.cls} · count=${facts.count ? `${facts.count.list}.length (${facts.count.how})` : '∅'} · מדדים ${facts.metrics.length} · hero=${facts.heroKey} · שורות-מדד (G10a) ${facts.rowsOf.length ? facts.rowsOf.join('/') : '∅'} · תפר-כניסה ${facts.entrySeam || '∅'}`,
     `//   שדות-${entity} בלי מקור (מקום-שמור, יאירו כשיוזרם נתון): ${unusedFields.join(', ') || '—'} · תוויות: ${dstT && srcT ? `מונחי ${srcE} (${srcT.singular}/${srcT.plural || '—'}) ⇒ ${entity} (${dstT.singular}/${dstT.plural || '—'}) · ${sw.swaps} החלפות` : `אין מונח ל-${entity} ב-TERM_DEFS — תוויות של המקור (הצבה)`} · הזרע = זרע-הצבה של המקור, לא ערך-אמת של ${entity}`];
   code = header.join('\n') + '\n' + code;
   return { code, map, unusedFields, primary: pk.name, classes: clsMap, fragments: res.fragments, of: res.of, counts: { name: n('name'), chan: n('chan'), unique: n('unique'), reserved: n('reserved') }, terms: { src: srcE, dst: dstT ? dstT.singular : null, swaps: sw.swaps }, coreWired, columnsAdded, facts };

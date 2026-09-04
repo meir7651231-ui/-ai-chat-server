@@ -30,6 +30,7 @@ export function buildApp({ name, sentences }) {
   const hub = [`// 🏗️ ${N}App — אפליקציה ממשפטים (GENMAX·G9 · §22): ${mods.length} מודולים · מחולל דטרמיניסטי: app-from-sentences.mjs (sentence⇒entity⇒pickModule⇒retarget) — כל מודול חצוב מהזהב, לא נכתב`,
     ...mods.map((m) => `//   "${m.text}" ⇒ ${m.entity} ⇐ ${m.module} (${m.pick.strength} · שמות ${m.pick.names}/${m.pick.fields})`),
     ...skipped.map((s) => `//   ⚪ "${s.text}" ⇒ ${s.reason}`),
+    `//   G10a · אריח-hero ⇒ טאפ פותח את המודול על הרשומה-הראשונה של המדד (<E>Facts.heroFirstId ⇒ <E>Screen(initialPanelId)) — תפר-כניסה חצוב מצורת initialPanel של זהב-המורים: ${mods.map((m) => `${m.entity}:${m.facts.entrySeam || '∅'}`).join(' · ')}`,
     `//   G9b · KPI-רכזת נגזר: כל אריח = ${'<E>'}Facts של המודול (count חי של הזרע · hero = המדד שהזהב הכריז/צבע-סכנה) — אפס ערך מומצא: ${mods.map((m) => `${m.facts.cls}.${m.facts.heroKey}`).join(' · ')}`,
     `import 'package:flutter/material.dart';`, `import '../dart-ui-bs/ds/ds.dart';`, `import '../dart-ui-bs/premium/dataviz/kpi_tile.dart';`,
     `import '../dart-ui-bs/ds/ds_search.dart'; // איתור: חיפוש-מבוקר (value+onChanged)`, `import '../dart-ui-bs/premium/feedback/empty_state.dart'; // אין-תוצאות`,
@@ -62,7 +63,9 @@ export function buildApp({ name, sentences }) {
     `      const SizedBox(height: 8),`,
     `      Wrap(spacing: 12, runSpacing: 12, children: [ // KPI-רכזת (G9b): עובדות-אמת בלבד — כמו _Home של הזהב (מסכים-מחוברים + הדחוף של כל מודול)`,
     `        SizedBox(width: 168, child: KpiTile(glyph: '🧬', value: '${'$'}{vis.length}/${'$'}{modules.length}', label: 'מסכים מחוברים')),`,
-    ...mods.map((m, i) => `        if (vis.contains(${i})) SizedBox(width: 168, child: KpiTile(glyph: '🧬', value: ${m.facts.cls}.hero, label: ${m.facts.cls}.heroLabel)), // ${m.entity} · ${m.facts.heroHow}`),
+    ...mods.map((m, i) => m.facts.entrySeam
+      ? `        if (vis.contains(${i})) GestureDetector(key: const ValueKey('hero-${m.entity}'), onTap: () { final id = ${m.facts.cls}.heroFirstId; _go(context, id == null ? const ${m.screen}() : ${m.screen}(${m.facts.entrySeam}: id)); }, child: SizedBox(width: 168, child: KpiTile(glyph: '🧬', value: ${m.facts.cls}.hero, label: ${m.facts.cls}.heroLabel))), // ${m.entity} · ${m.facts.heroHow} · טאפ ⇒ המודול פתוח על רשומת-ה-hero הראשונה (G10a)`
+      : `        if (vis.contains(${i})) SizedBox(key: const ValueKey('hero-${m.entity}'), width: 168, child: KpiTile(glyph: '🧬', value: ${m.facts.cls}.hero, label: ${m.facts.cls}.heroLabel)), // ${m.entity} · ${m.facts.heroHow} · אין תפר-כניסה (אין זרע/פאנל)`),
     '      ]),', '      const SizedBox(height: 8),',
     `      if (vis.isEmpty) const EmptyState(glyph: '🔍', message: 'אין מודול שתואם לחיפוש') else DsSection(title: 'כלים · ${'$'}{vis.length}', children: [`,
     ...mods.map((m, i) => `        if (vis.contains(${i})) DsNavTile(glyph: '🧬', title: ${q(m.title)}, sub: ${m.facts.count ? `'${'$'}{${m.facts.cls}.count} ${'$'}{${m.facts.cls}.label} · ${q(m.text).slice(1, -1)}'` : q(m.text)}, onTap: () => _go(context, const ${m.screen}())),`),
@@ -97,6 +100,17 @@ export function buildApp({ name, sentences }) {
         `    expect(find.byType(DsNavTile), findsNWidgets(${mods.length})); expect(find.byType(EmptyState), findsNothing); expect(tester.takeException(), isNull);`,
         '  });'];
     })(),
+    ...mods.filter((m) => m.facts.entrySeam).flatMap((m) => [
+      `  testWidgets('${N}App · אריח-hero ⇒ ${m.title} (${m.entity}) נפתח על רשומת-ה-hero${m.facts.coreWired ? ' + מקטע-הגרעין על הרשומה' : ''}', (tester) async {`,
+      `    tester.view.physicalSize = const Size(800, 2400); tester.view.devicePixelRatio = 1.0; addTearDown(tester.view.reset);`,
+      `    await tester.pumpWidget(const ${N}App()); await tester.pump(const Duration(milliseconds: 300));`,
+      `    await tester.tap(find.byKey(const ValueKey('hero-${m.entity}'))); await tester.pump(); await tester.pump(const Duration(milliseconds: 600)); await tester.pump(const Duration(milliseconds: 600));`,
+      `    expect(find.byType(${m.screen}), findsOneWidget); expect(tester.takeException(), isNull);`,
+      `    final id = ${m.facts.cls}.heroFirstId; // null ⇒ ל-hero אין שורות (מדד בלי צורת where, או 0) — המסך נפתח רגיל; אחרת הכרטיס פתוח`,
+      `    if (id != null) { expect(find.byType(BottomSheet), findsOneWidget); ${m.facts.coreWired ? "expect(find.textContaining('מחזור-חיים · רשומה'), findsWidgets); " : ''}}`,
+      `    // ignore: avoid_print`,
+      `    print('hero-jump ${m.entity}: id=${'$'}id rows=${'$'}{${m.facts.cls}.heroRows(${m.facts.cls}.heroKey).length} panel=${'$'}{find.byType(BottomSheet).evaluate().length}');`,
+      '  });']),
     ...mods.flatMap((m) => [
       `  testWidgets('${N}App · בית ⇒ ${m.title} (${m.entity}) מרונדר וחוזר', (tester) async {`,
       `    tester.view.physicalSize = const Size(800, 2400); tester.view.devicePixelRatio = 1.0; addTearDown(tester.view.reset);`,

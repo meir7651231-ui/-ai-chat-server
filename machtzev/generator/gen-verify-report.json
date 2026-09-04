@@ -161,7 +161,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 5,
-   "widgets": 728,
+   "widgets": 748,
    "atomList": [
     "DsScaffold",
     "DsSearch",
@@ -258,7 +258,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 5,
-   "widgets": 874,
+   "widgets": 902,
    "atomList": [
     "DsScaffold",
     "DsSearch",
