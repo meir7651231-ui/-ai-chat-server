@@ -1,0 +1,303 @@
+{
+ "v": 1,
+ "ts": "2026-09-04T02:44:05.489Z",
+ "query": "גבייה תשלומים יתרה הוראת-קבע תזכורת balance payBal hokDue tierOf supScore segulaReminders maxDiscountPct",
+ "tokens": [
+  "גבייה",
+  "תשלומים",
+  "יתרה",
+  "וראת",
+  "קבע",
+  "תזכורת",
+  "balance",
+  "pay",
+  "bal",
+  "hok",
+  "due",
+  "tier",
+  "of",
+  "sup",
+  "score",
+  "segula",
+  "reminders",
+  "max",
+  "discount",
+  "pct"
+ ],
+ "oracle": {
+  "atomIndexSha": "7b7050510b62a04885765ed30a940c05aaecbe96def91f6ed9f563499417d57f",
+  "logicCensusSha": "359db54bd2e70a0ea956fbc39901e656de6229b80b8ddc917e49921e8ecf67bf",
+  "display": 1402,
+  "logic": 848
+ },
+ "candidates": [
+  {
+   "id": "maxDiscountPct",
+   "layer": "logic",
+   "file": "dart-maor/max-discount-pct.dart",
+   "score": 9,
+   "hits": [
+    "max",
+    "discount",
+    "pct"
+   ]
+  },
+  {
+   "id": "balanceOf",
+   "layer": "logic",
+   "file": "dart-maor/balance-of.dart",
+   "score": 6,
+   "hits": [
+    "balance",
+    "of"
+   ]
+  },
+  {
+   "id": "hokDue",
+   "layer": "logic",
+   "file": "dart-maor/hok-due.dart",
+   "score": 6,
+   "hits": [
+    "hok",
+    "due"
+   ]
+  },
+  {
+   "id": "payBal",
+   "layer": "logic",
+   "file": "dart-maor/pay-bal.dart",
+   "score": 6,
+   "hits": [
+    "pay",
+    "bal"
+   ]
+  },
+  {
+   "id": "segulaReminders",
+   "layer": "logic",
+   "file": "dart-maor/segula-reminders.dart",
+   "score": 6,
+   "hits": [
+    "segula",
+    "reminders"
+   ]
+  },
+  {
+   "id": "supKeyMapOf",
+   "layer": "logic",
+   "file": "dart-maor/sup-key-map-of.dart",
+   "score": 6,
+   "hits": [
+    "of",
+    "sup"
+   ]
+  },
+  {
+   "id": "supKeyOf",
+   "layer": "logic",
+   "file": "dart-maor/sup-key-of.dart",
+   "score": 6,
+   "hits": [
+    "of",
+    "sup"
+   ]
+  },
+  {
+   "id": "supScore",
+   "layer": "logic",
+   "file": "dart-maor/sup-score.dart",
+   "score": 6,
+   "hits": [
+    "sup",
+    "score"
+   ]
+  },
+  {
+   "id": "supScoreBins",
+   "layer": "logic",
+   "file": "dart-maor/sup-score-bins.dart",
+   "score": 6,
+   "hits": [
+    "sup",
+    "score"
+   ]
+  },
+  {
+   "id": "supTier",
+   "layer": "logic",
+   "file": "dart-maor/sup-tier.dart",
+   "score": 6,
+   "hits": [
+    "tier",
+    "sup"
+   ]
+  },
+  {
+   "id": "tierOf",
+   "layer": "logic",
+   "file": "dart-maor/tier-of.dart",
+   "score": 6,
+   "hits": [
+    "tier",
+    "of"
+   ]
+  },
+  {
+   "id": "actionIdOf",
+   "layer": "logic",
+   "file": "dart/action_id_of.dart",
+   "score": 3,
+   "hits": [
+    "of"
+   ]
+  },
+  {
+   "id": "ageOf",
+   "layer": "logic",
+   "file": "dart-maor/age-of.dart",
+   "score": 3,
+   "hits": [
+    "of"
+   ]
+  },
+  {
+   "id": "allSupPhones",
+   "layer": "logic",
+   "file": "dart-maor/all-sup-phones.dart",
+   "score": 3,
+   "hits": [
+    "sup"
+   ]
+  },
+  {
+   "id": "axisOf",
+   "layer": "logic",
+   "file": "dart/axis_of.dart",
+   "score": 3,
+   "hits": [
+    "of"
+   ]
+  },
+  {
+   "id": "cleanSupPhones",
+   "layer": "logic",
+   "file": "dart-maor/clean-sup-phones.dart",
+   "score": 3,
+   "hits": [
+    "sup"
+   ]
+  },
+  {
+   "id": "cockpitHokTasks",
+   "layer": "logic",
+   "file": "dart-maor/cockpit-hok-tasks.dart",
+   "score": 3,
+   "hits": [
+    "hok"
+   ]
+  },
+  {
+   "id": "collectionScoreDelta",
+   "layer": "logic",
+   "file": "dart-maor/collection-score-delta.dart",
+   "score": 3,
+   "hits": [
+    "score"
+   ]
+  },
+  {
+   "id": "coursesOfTeacher",
+   "layer": "logic",
+   "file": "dart-maor/courses-of-teacher.dart",
+   "score": 3,
+   "hits": [
+    "of"
+   ]
+  },
+  {
+   "id": "csvHeaderScore",
+   "layer": "logic",
+   "file": "dart/csv_header_score.dart",
+   "score": 3,
+   "hits": [
+    "score"
+   ]
+  },
+  {
+   "id": "deliveriesOfDay",
+   "layer": "logic",
+   "file": "dart-maor/deliveries-of-day.dart",
+   "score": 3,
+   "hits": [
+    "of"
+   ]
+  },
+  {
+   "id": "deliveriesOfFamily",
+   "layer": "logic",
+   "file": "dart-maor/deliveries-of-family.dart",
+   "score": 3,
+   "hits": [
+    "of"
+   ]
+  },
+  {
+   "id": "deliveriesOfVolunteer",
+   "layer": "logic",
+   "file": "dart-maor/deliveries-of-volunteer.dart",
+   "score": 3,
+   "hits": [
+    "of"
+   ]
+  },
+  {
+   "id": "detectRecurringHok",
+   "layer": "logic",
+   "file": "dart-maor/detect-recurring-hok.dart",
+   "score": 3,
+   "hits": [
+    "hok"
+   ]
+  },
+  {
+   "id": "donationsOfYear",
+   "layer": "logic",
+   "file": "dart-maor/donations-of-year.dart",
+   "score": 3,
+   "hits": [
+    "of"
+   ]
+  }
+ ],
+ "strong": [
+  "maxDiscountPct",
+  "balanceOf",
+  "hokDue",
+  "payBal",
+  "segulaReminders",
+  "supKeyMapOf",
+  "supKeyOf",
+  "supScore",
+  "supScoreBins",
+  "supTier",
+  "tierOf",
+  "actionIdOf",
+  "ageOf",
+  "allSupPhones",
+  "axisOf",
+  "cleanSupPhones",
+  "cockpitHokTasks",
+  "collectionScoreDelta",
+  "coursesOfTeacher",
+  "csvHeaderScore",
+  "deliveriesOfDay",
+  "deliveriesOfFamily",
+  "deliveriesOfVolunteer",
+  "detectRecurringHok",
+  "donationsOfYear"
+ ],
+ "creates": null,
+ "chosen": "payBal",
+ "why": null,
+ "sig": "68afcb66d8c8ccd231d94e7726ba78c839a99c51d7765ba2f119ac7863f73346"
+}
