@@ -15,13 +15,13 @@
 | 📋 נוכחות | `schoolos_attendance.dart` | CLOSED-ATTENDANCE | 109/123 · שמור 14 · ❌0 | 5 (חוב-§6 נסגר) | ✅ |
 | 💳 גבייה | `schoolos_fees.dart` | CLOSED-FEES | 101/113 | 10 (חוב-§6 נסגר) | ✅ |
 | 📚 חוגים/מערכת | `schoolos_courses.dart` | CLOSED-COURSES | 119/133 · שמור 14 · ❌0 | 7 | ✅ |
-| 👩‍🏫 מורים | `schoolos_teachers.dart` | **חסר** (הסשן נפל על מכסה לפני גל 8; הוער שוב 12:52Z) | — | 18 (עוברות אצל המנהל) | 🟡 קוד+בדיקות כן · דוח לא |
+| 👩‍🏫 מורים | `schoolos_teachers.dart` | CLOSED-TEACHERS (82a24c8c, אחרי הערה 12:52Z) | 104/121 · שמור 17 · ❌0 | 18 | ✅ |
 
 **החיווט (המנהל):** `_Home` ⇒ 9 `DsNavTile` ⇒ `Navigator.push` לכל מסך; `_Students` הדק הוחלף ב-`StudentsScreen`; KPI ביתי מומצא (`'1,248'`) הוחלף בעובדת-אמת (9 מסכים מחוברים — לקח M4 goal-proof-af3c91).
 **אימות-קצה-לקצה (THE-WAY §6, לא "מתקמפל"):** `genesis_schoolos_nav_test.dart` — בית⇒מסך⇒חזרה ל-9/9 מסכים, אפס-חריגות-רנדר; תפס טעות-בודק (V5: `.first` פגע ב-KPI). `flutter analyze lib/genesis/dart-gen-bs` = **No issues** · **84/84** בדיקות-genesis · police --fast ירוק · כרטיס-מטרה `machtzev/audit/goals/schoolos.*` עם golden-render 800×1400 של הבית המחווט.
 
 ## מה **לא** נסגר (D3 · אמור-מה-לא-בדקת)
-- **CLOSED-TEACHERS** — הקוד והבדיקות ברמוט, הדוח לא נכתב (מכסה); מוער שוב.
+- ~~CLOSED-TEACHERS~~ — נחת 13:05Z (104/121 · ❌0 · 18/18 אצל המנהל) ⇒ **9/9 מסכים DONE-מאומת-מנהל**.
 - **רישום חלקיקי-8-המודולים ב-`compose-engine.mjs`** — ראצ׳ט-מוצהר שלא בוצע במסגרת-הזמן (ה-`--gate` compose-determinism נשאר על 25 חלקיקי-המלאי). זה חוב-הדרך הפתוח הבא.
 - **חיבורי-בין-מודולים** (dashboard⇐נתוני-מודולים חיים · attendance⇐riskExternal מתלמידים · rooms⇐חוגים חיים): כל מודול מקבל אותם כשקעי-חוזה (מקום-שמור, חוק-7) — עדיין דמו-דאטה בצורת-מאור, לא מוזרם בין המסכים.
 - רנדר-דפדפן (`flutter build web` + Playwright) של הבית-המחווט לא צולם — אומת ב-golden-render של widget-test (אמוג׳י=ריבועים בסנדבוקס).
