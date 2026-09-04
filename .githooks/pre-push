@@ -45,7 +45,7 @@ for line in "${LINES[@]}"; do
   if git worktree add --detach -q "$WT" "$lsha" 2>/dev/null; then
     if [ -d machtzev/node_modules ]; then cp -r machtzev/node_modules "$WT/machtzev/" 2>/dev/null; fi
     # L63 · שערי-flutter (goldenharness · genverify · appgen --test) פותרים את buildsmart יחסית ל-ROOT ⇒ ב-worktree הזמני זה /tmp/… ⇒ "⚪ מדולג" שנספר-כ-ran (ירוק-שקר). מצביעים על ה-buildsmart האמיתי כשקיים.
-    if [ -z "$BUILDSMART" ] && [ -d "$PWD/../buildsmart/app_flutter" ]; then BUILDSMART="$(cd "$PWD/../buildsmart/app_flutter" && pwd)"; export BUILDSMART; echo "🔗 BUILDSMART=$BUILDSMART (שערי-flutter רצים באמת)"; fi
+    if [ -z "${BUILDSMART:-}" ] && [ -d "$PWD/../buildsmart/app_flutter" ]; then BUILDSMART="$(cd "$PWD/../buildsmart/app_flutter" && pwd)"; export BUILDSMART; echo "🔗 BUILDSMART=$BUILDSMART (שערי-flutter רצים באמת)"; fi
     ( cd "$WT" && node machtzev/police.mjs ); RC=$?
     git worktree remove --force "$WT" >/dev/null 2>&1; rm -rf "$WT"
     case $RC in
