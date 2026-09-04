@@ -78,7 +78,31 @@ export function quarry(file) {
     for (const m of body.matchAll(/^(?:abstract\s+)?(?:class|enum|typedef|mixin|extension)\s+(\w+)/gm)) defs.add(m[1]);
     // 'build' = רק השבר שמכיל את Widget build( (לא כל @override — didUpdateWidget/initState הם חברים)
     const role = isClass(first) ? 'class-head' : isClose(first) ? 'class-close' : /\bWidget\s+build\s*\(/.test(body) ? 'build' : /^\s+Widget\s+_\w+\(/.test(first) ? 'builder' : idx === 0 ? 'preamble' : 'member';
-    return { id: `${file.replace(/\.dart$/, '')}#${idx}`, module: file, cls: fragCls, role, range: [f.start, f.end], header, declaredAtoms: declared, atomsUsed: used, ops, imports: need, defs: [...defs].filter((d) => !/^(build|initState|dispose|createState|Widget|State)$/.test(d)), lines: code };
+    // G5a · שקעי-הבונים: ל-build מקורי — הפתיח (prelude = כל המשפטים לפני ה-return האחרון; הכנת-השקעים של הזהב: cls/visible/ranked…)
+    //   ואתרי-הקריאה של כל בונה (`_x(args)` בארגומנטים כפי שהזהב קרא לו, כולל `for (final s in visible) _row(s)`) — הערכים = של הזהב, לא מומצאים (§20-ג)
+    let prelude = null, callSites = null;
+    const grabSites = (tail) => {
+      const sites = {};
+      const grab = (str, at) => { let d = 0; for (let i = at; i < str.length; i++) { if (str[i] === '(') d++; else if (str[i] === ')') { d--; if (d === 0) return str.slice(at, i + 1); } } return null; };
+      for (const m of tail.matchAll(/(?<![\w.])(_\w+)\(/g)) {
+        const args = grab(tail, m.index + m[1].length); if (args === null) continue;
+        const before = tail.slice(Math.max(0, m.index - 80), m.index);
+        const fm = before.match(/for \(final (\w+) in ([\w.]+)\)\s*$/);
+        const site = fm ? `for (final ${fm[1]} in ${fm[2]}) ${m[1]}${args}` : `${m[1]}${args}`;
+        (sites[m[1]] ??= []); if (!sites[m[1]].includes(site) && sites[m[1]].length < 4) sites[m[1]].push(site);
+      }
+      return sites;
+    };
+    if (role === 'builder') { const bi = code.findIndex((l) => /^\s+Widget\s+_\w+\(/.test(l)); callSites = grabSites(code.slice(bi + 1).join('\n')); if (!Object.keys(callSites).length) callSites = null; }
+    if (role === 'build') {
+      const bi = code.findIndex((l) => /^\s+Widget\s+build\s*\(/.test(l));
+      let lastRet = -1; for (let i = bi + 1; i < code.length; i++) if (/^ {4}return\b/.test(code[i])) lastRet = i;
+      if (bi >= 0 && lastRet > bi) {
+        prelude = [f.start + bi + 1, f.start + lastRet];
+        callSites = grabSites(code.slice(lastRet).join('\n'));
+      }
+    }
+    return { id: `${file.replace(/\.dart$/, '')}#${idx}`, module: file, cls: fragCls, role, prelude, callSites, range: [f.start, f.end], header, declaredAtoms: declared, atomsUsed: used, ops, imports: need, defs: [...defs].filter((d) => !/^(build|initState|dispose|createState|Widget|State)$/.test(d)), lines: code };
   });
   const roundTrip = out.map((f) => f.lines.join('\n')).join('\n') === src;
   return { file, lines: lines.length, fragments: out, roundTrip };

@@ -20,7 +20,7 @@ const GEN = path.join(ROOT, 'machtzev/generator');
 const DIR = path.join(ROOT, 'new/dart-gen-bs');
 const CAT = JSON.parse(fs.readFileSync(path.join(GEN, 'golden-fragments.json'), 'utf8'));
 // הקטלוג נושא טווחים בלבד; הבייטים נקראים מהמקור (ה-fixture) — שבר = lines[range[0]..range[1])
-{ const srcCache = new Map(); for (const f of CAT.fragments) { if (!srcCache.has(f.module)) srcCache.set(f.module, fs.readFileSync(path.join(DIR, f.module), 'utf8').split('\n')); f.lines = srcCache.get(f.module).slice(f.range[0], f.range[1]); } }
+{ const srcCache = new Map(); for (const f of CAT.fragments) { if (!srcCache.has(f.module)) srcCache.set(f.module, fs.readFileSync(path.join(DIR, f.module), 'utf8').split('\n')); f.lines = srcCache.get(f.module).slice(f.range[0], f.range[1]); f._src = srcCache.get(f.module); } }
 const CE = fs.readFileSync(path.join(ROOT, 'machtzev/compose-engine.mjs'), 'utf8');
 
 // חלקיק ⇒ אטומים (מטבלת-ATOM ו-ops() של compose-engine — אותו מקור-אמת של הזהב)
@@ -35,6 +35,41 @@ const idsIn = (code) => new Set([...code.matchAll(/\b([A-Za-z_][A-Za-z0-9_]*)\b/
 // שורת-הקוד הראשונה של שבר (הערות-כותרת ו-@override דבוקים לפניה — חוקי-הדבק של החציבה)
 const codeLine = (f) => f.lines.find((l) => l.trim().length && !/^\s*\/\//.test(l) && !/^\s*@override\s*$/.test(l)) || '';
 const classLine = (f) => f.lines.find((l) => /^(abstract\s+)?class\s+\w+/.test(l)) || '';
+// ── G5a · שקעי-בונים = replay של הזהב: הפתיח (prelude) של build המקורי + אתר-הקריאה המקורי של כל בונה (§20-ג: אפס ערך-מומצא)
+const DART_KNOWN = new Set(['context', 'setState', 'widget', 'mounted', 'true', 'false', 'null', 'const', 'final', 'var', 'new', 'as', 'is', 'in', 'if', 'else', 'for', 'await', 'async', 'this', 'super', 'return', 'String', 'int', 'double', 'bool', 'num', 'List', 'Map', 'Set', 'Object', 'dynamic', 'void', 'print']);
+const preludeLocals = (lines) => new Set(lines.flatMap((l) => [...l.matchAll(/^\s+(?:final|var|late|const)\s+(?:[\w<>?, ]+?\s+)?(\w+)\s*=/g)].map((m) => m[1]).concat([...l.matchAll(/^\s+(?:final|var)\s+\(?(\w+)(?:,\s*(\w+))*\)?\s*=/g)].flatMap((m) => m.slice(1).filter(Boolean)))));
+const declaredInside = (site) => new Set([...site.matchAll(/\((\w+(?:,\s*\w+)*)\)\s*(?:=>|\{)/g)].flatMap((m) => m[1].split(/,\s*/)).concat([...site.matchAll(/for \(final (\w+) in/g)].map((m) => m[1])));
+function siteResolvable(site, known, defIndex, importNames) {
+  const local = declaredInside(site);
+  for (const id of idsIn(site.replace(/'(?:[^'\\]|\\.)*'/g, "''"))) {              // מחרוזות לא נספרות (אינטרפולציה ${…} נשארת — טוב: היא צורכת מזהים)
+    if (/^[A-Z]/.test(id) || /^\d/.test(id) || DART_KNOWN.has(id) || local.has(id) || known.has(id) || defIndex.has(id) || importNames.has(id)) continue;
+    return false;
+  }
+  return true;
+}
+const importNamesOf = (frags) => { const out = new Set(); for (const f of frags) if (f.cls === '(preamble)' || f.cls === '(top)') for (const l of f.lines) { const m = l.match(/^import '([^']+)'/); if (m && !/^package:|^dart:/.test(m[1])) for (const n of declaredNames(m[1])) out.add(n); } return out; };
+// לכל מחלקת-State: הפתיח + אתרי-הקריאה הפתירים של הבונים הנבחרים ⇒ {preludeLines, sites:[{name, site, spread}], unresolved:[…]}
+function socketPlan(frags, chosenSet, cls, defIndex, importNames) {
+  const build = frags.find((f) => f.cls === cls && f.role === 'build');
+  const src = frags[0]._src;
+  const preludeLines = build && build.prelude ? src.slice(build.prelude[0], build.prelude[1]) : [];
+  const known = preludeLocals(preludeLines);
+  const sites = [], unresolved = [];
+  const candidates = frags.filter((f) => f.cls === cls && chosenSet.has(f.id) && (f.role === 'builder' || (f.role === 'member' && /^\s+List<Widget>\s+_\w+\(/.test(codeLine(f)))));
+  const pool = {}; for (const f of frags) if (f.cls === cls && f.callSites && (f.role === 'build' || chosenSet.has(f.id))) for (const [k, v] of Object.entries(f.callSites)) (pool[k] ??= []).push(...v);
+  for (const f of candidates) {
+    const cl = codeLine(f); const m = cl.match(/(?:Widget|List<Widget>)\s+(_\w+)\(([^)]*)\)/); if (!m) continue;
+    const name = m[1], spread = /^\s+List<Widget>/.test(cl);
+    if (!m[2].trim()) { sites.push({ name, site: `${name}()`, spread }); continue; }
+    const hit = (pool[name] || []).find((st) => siteResolvable(st, known, defIndex, importNames));
+    if (hit) sites.push({ name, site: hit, spread }); else unresolved.push(name);
+  }
+  // בונה בלי אתר-פתיר ברמת-המסך אך נקרא מתוך בונה/חבר נבחר אחר = **פנימי** (כבר מורכב דרך הקורא שלו: `_table⇒_row`, `_tabView⇒_overview`) — לא מקום-שמור
+  const chosenText = frags.filter((f) => f.cls === cls && chosenSet.has(f.id) && f.role !== 'build').map((f) => f.lines.join('\n')).join('\n');
+  const internal = unresolved.filter((n) => new RegExp(`(?<![\\w.])${n}\\(`).test(chosenText.replace(new RegExp(`(?:Widget|List<Widget>)\\s+${n}\\(`), '')));
+  const reserved = unresolved.filter((n) => !internal.includes(n));
+  return { preludeLines, sites, unresolved: reserved, internal };
+}
 // שמות-מוצהרים בקובץ-מדף מיובא (top-level): class/enum/typedef/extension · פונקציות · const/final/getter — כולל export-ים של ספריית-ds (export '…')
 const _declCache = new Map();
 function declaredNames(importPath) {
@@ -74,6 +109,7 @@ export function select({ module, all = false, particles = [], atoms = [], mode =
     sel.add(frags[0].id);
     for (const f of frags) if (f.cls === '(preamble)' && f.lines.some((l) => /^import '/.test(l))) sel.add(f.id);
     const headOf = new Map(frags.filter((f) => f.role === 'class-head').map((f) => [f.cls, f]));
+    const importNames = importNamesOf(frags);
     const isWidgetCls = (c) => headOf.has(c) && /extends (StatefulWidget|StatelessWidget)\b/.test(classLine(headOf.get(c)));
     const stateOf = (c) => { const m = headOf.has(c) && classLine(headOf.get(c)).match(/extends State<(\w+)>/); return m ? m[1] : null; };
     // סגירת-תלויות עד נקודת-שבת: (א) מזהה-בשימוש ⇒ השבר שמגדיר אותו (בלי build של State — נבנה סינתטי) ·
@@ -89,6 +125,13 @@ export function select({ module, all = false, particles = [], atoms = [], mode =
         }
       }
       const classes = new Set([...sel].map((id) => byId.get(id).cls));
+      // (ה) G5a: הפתיח ואתרי-הקריאה שה-build הסינתטי ישחזר צורכים חברים/דאטה ⇒ נכנסים לסגירה כטקסט-פסאודו
+      for (const c of classes) {
+        if (!stateOf(c) || [...sel].some((id) => byId.get(id).cls === c && byId.get(id).role === 'build')) continue;
+        const plan = socketPlan(frags, sel, c, defIndex, importNames);
+        const text = plan.preludeLines.join('\n') + '\n' + plan.sites.map((x) => x.site).join('\n');
+        for (const used of idsIn(text)) for (const did of defIndex.get(used) || []) { const g = byId.get(did); if (!sel.has(did) && g.role !== 'build') { sel.add(did); grew = true; } }
+      }
       for (const c of classes) { const w = stateOf(c); if (w && headOf.has(w) && !sel.has(headOf.get(w).id)) { sel.add(headOf.get(w).id); grew = true; } }
       for (const f of frags) if (classes.has(f.cls) && isWidgetCls(f.cls) && !sel.has(f.id)) { sel.add(f.id); grew = true; }
       // (ג׳) חיבורי-מסגרת של State שנבחר: initState/dispose/didUpdateWidget/didChangeDependencies — Flutter קורא להם, לא הקוד ⇒ מבנה, לא תוכן
@@ -105,12 +148,24 @@ export function select({ module, all = false, particles = [], atoms = [], mode =
     for (const f of frags) if (classes.has(f.cls) && (f.role === 'class-head' || f.role === 'class-close')) sel.add(f.id);
   }
   const chosen = frags.filter((f) => sel.has(f.id));
-  return { frags, chosen, sel, target };
+  return { frags, chosen, sel, target, defIndex, importNames: importNamesOf(frags) };
+}
+// build סינתטי (G5a): פתיח-הזהב + DsScaffold עם אתרי-הקריאה המקוריים של הבונים הנבחרים (spread לבוני-List<Widget>); לא-פתיר ⇒ מקום-שמור מדווח (חוק-7)
+function syntheticBuild({ title, subtitle, plan, rename = (l) => l }) {
+  const out = ['  @override', '  Widget build(BuildContext context) {'];
+  out.push(...plan.preludeLines.map(rename));
+  out.push(`    return DsScaffold(title: '${title}', subtitle: '${subtitle}', icon: '🧬', children: [`);
+  for (const x of plan.sites) out.push('      ' + (x.spread ? '...' : '') + rename(x.site) + ',');
+  if (plan.internal.length) out.push(`      // בונים-פנימיים (מורכבים דרך הקורא שלהם, לא ברמת-המסך): ${plan.internal.join(', ')}`);
+  if (plan.unresolved.length) out.push(`      // מקום-שמור (חוק-7): בונים בלי שקע-פתיר במודול-המשנה — ${plan.unresolved.join(', ')}`);
+  out.push('    ]);', '  }');
+  return out;
 }
 
 export function assemble(req) {
   const { module, all = false } = req;
-  const { frags, chosen, sel, target } = select(req);
+  const { frags, chosen, sel, target, defIndex, importNames } = select(req);
+  const plans = {};
   // הרכבה בסדר-המקור; build() סינתטי למחלקות-State בלי build נבחר
   const out = [];
   const stateClasses = new Set(chosen.filter((f) => f.role === 'class-head' && /extends State</.test(classLine(f))).map((f) => f.cls));
@@ -118,9 +173,9 @@ export function assemble(req) {
   const widgetClasses = new Set(chosen.filter((f) => f.role === 'class-head' && /extends StatefulWidget|extends StatelessWidget/.test(classLine(f))).map((f) => f.cls));
   for (const f of chosen) {
     if (f.role === 'class-close' && stateClasses.has(f.cls) && !hasBuild.has(f.cls)) {
-      const builders = chosen.filter((g) => g.cls === f.cls && g.role === 'builder' && /^\s+Widget\s+(_\w+)\(\)\s*(=>|\{)/.test(codeLine(g))).map((g) => codeLine(g).match(/Widget\s+(_\w+)\(/)[1]);
       const nm = f.cls.replace(/^_|State$/g, '');
-      out.push('  @override', `  Widget build(BuildContext context) => DsScaffold(title: '${nm}', subtitle: '${nm} · מודול-משנה מחולל', icon: '🧬', children: [`, ...builders.map((b) => '    ' + b + '(),'), '  ]);');
+      const plan = plans[f.cls] = socketPlan(frags, sel, f.cls, defIndex, importNames);
+      out.push(...syntheticBuild({ title: nm, subtitle: `${nm} · מודול-משנה מחולל · ${plan.sites.length} בונים מחווטים-לשקעי-הזהב`, plan }));
     }
     if (f.role === 'class-close' && widgetClasses.has(f.cls) && !hasBuild.has(f.cls) && !stateClasses.has(f.cls)) {
       // StatefulWidget בלי createState (השבר שלו לא נבחר) — לא ייתכן בפועל כי createState נמצא בראש-המחלקה; שומר-מבנה בלבד
@@ -142,7 +197,7 @@ export function assemble(req) {
       return names.length === 0 || names.some((n) => used.has(n));
     }).join('\n');
   }
-  return { code, fragments: chosen.length, of: frags.length, target: [...target], ids: chosen.map((f) => f.id), unselected: frags.filter((f) => !sel.has(f.id)).map((f) => ({ id: f.id, cls: f.cls, role: f.role, first: (f.lines.find((l) => l.trim()) || '').trim().slice(0, 90), atomsUsed: f.atomsUsed, lines: f.lines.length })) };
+  return { code, fragments: chosen.length, of: frags.length, target: [...target], plans, ids: chosen.map((f) => f.id), unselected: frags.filter((f) => !sel.has(f.id)).map((f) => ({ id: f.id, cls: f.cls, role: f.role, first: (f.lines.find((l) => l.trim()) || '').trim().slice(0, 90), atomsUsed: f.atomsUsed, lines: f.lines.length })) };
 }
 
 
@@ -208,19 +263,26 @@ export function assembleMulti({ modules, particles = [], atoms = [], name = 'Gen
   }
   const N = name.replace(/[^A-Za-z0-9]/g, '');
   out.push('', `class ${N}Screen extends StatefulWidget {`, `  const ${N}Screen({super.key});`, '  @override', `  State<${N}Screen> createState() => _${N}ScreenState();`, '}', '', `class _${N}ScreenState extends State<${N}Screen> {`);
-  const builders = [];
+  // G5a: תוכנית-שקעים פר-מודול (פתיח + אתרי-קריאה); מקומיים-של-פתיח שמתנגשים בין מודולים ⇒ סיומת-מודול
+  const plansM = hoisted.map((p) => { const heads = new Map(p.chosen.filter((f) => f.role === 'class-head').map((f) => [f.cls, classLine(f)])); const sc = [...heads].filter(([c, l]) => /extends State</.test(l)).map(([c]) => c); return { tag: p.tag, plans: sc.map((c) => socketPlan(p.frags, p.sel, c, p.defIndex, p.importNames)) }; });
+  const localOwners = new Map(); for (const pm of plansM) for (const pl of pm.plans) for (const v of preludeLocals(pl.preludeLines)) (localOwners.has(v) ? localOwners.get(v) : localOwners.set(v, new Set()).get(v)).add(pm.tag);
+  for (const [v, tags] of localOwners) if (tags.size > 1) for (const t of tags) renameFor.get(t).set(v, `${v}_${t}`);
+  // גבולות-מילה: לא אחרי אות/ספרה/נקודה (‏`EdgeInsets.all(` אינו המקומי `all`; ‏`_X._row` אינו החבר `_row`) ולא לפני אות/ספרה
+  // (‏`$all` באינטרפולציה הוא המשתנה עצמו ⇒ `$` אינו גבול-שלילי; רק אות/ספרה/נקודה)
+  // (‏`...all` (spread) הוא המשתנה ⇒ נשלל רק `.` של גישה-לחבר: אות/`)`/`]` ואחריהם `.`)
+  const applyFor = (tag) => { const ren = renameFor.get(tag); return (l) => { for (const [a, b] of ren) l = l.replace(new RegExp(`(?<![\\w])(?<![\\w)\\]]\\.)${a.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?![\\w])`, 'g'), b); return l; }; };
+  let sitesN = 0;
   for (const p of hoisted) {
-    const ren = renameFor.get(p.tag);
-    const apply = (l) => { for (const [a, b] of ren) l = l.replace(new RegExp(`(?<![\\w$])${a.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?![\\w])`, 'g'), b); return l; };
+    const apply = applyFor(p.tag);
     out.push(`  // ── ${p.tag} · ${p.module} ──`);
-    for (const f of p.members) {
-      if (skipFrag.has(f.id)) continue;
-      const lines = f.lines.map(apply); out.push(...lines);
-      const cl = apply(codeLine(f)); const m = cl.match(/^\s+Widget\s+(_\w+)\(\)\s*(=>|\{)/); if (m) builders.push(m[1]);
-    }
+    for (const f of p.members) { if (skipFrag.has(f.id)) continue; out.push(...f.lines.map(apply)); }
   }
-  out.push('  @override', `  Widget build(BuildContext context) => DsScaffold(title: '${N}', subtitle: '${modules.map(tagOf).join(' ⊕ ')} · הרכבה חוצת-מודולים מחוללת', icon: '🧬', children: [`, ...builders.map((b) => '    ' + b + '(),'), '  ]);', '}');
-  return { code: out.join('\n') + '\n', report, builders: builders.length };
+  out.push('  @override', '  Widget build(BuildContext context) {');
+  for (const pm of plansM) { const apply = applyFor(pm.tag); for (const pl of pm.plans) { out.push(`    // ── פתיח-הזהב · ${pm.tag} ──`); out.push(...pl.preludeLines.map(apply)); } }
+  out.push(`    return DsScaffold(title: '${N}', subtitle: '${modules.map(tagOf).join(' ⊕ ')} · הרכבה חוצת-מודולים מחוללת', icon: '🧬', children: [`);
+  for (const pm of plansM) { const apply = applyFor(pm.tag); for (const pl of pm.plans) { for (const x of pl.sites) { out.push('      ' + (x.spread ? '...' : '') + apply(x.site) + ','); sitesN++; } if (pl.unresolved.length) { out.push(`      // מקום-שמור (חוק-7) · ${pm.tag}: ${pl.unresolved.join(', ')}`); report.dropped.push(...pl.unresolved.map((u) => `${pm.tag}:${u} (שקע-לא-פתיר)`)); } } }
+  out.push('    ]);', '  }', '}');
+  return { code: out.join('\n') + '\n', report, builders: sitesN };
 }
 
 // ── CLI / gate — רץ רק כשהקובץ הוא נקודת-הכניסה (import מ-golden-harness לא מפעיל CLI — לקח: --module של הרתמה כתב gen_teachers.dart בטעות)
