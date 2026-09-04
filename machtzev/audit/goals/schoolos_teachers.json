@@ -38,8 +38,8 @@
   "טריאז' 5 קבוצות לפי sev"
  ],
  "picture": "machtzev/audit/goals/schoolos_teachers.png",
- "pictureSha": "5f7290950310dd571bb5feff9a564973abf82b093e673d04b85299c061465306",
- "screenSha": "32e5637d172558a604285f2482b8e92587caf636bee0ca2e8a0cf48c2e106c75",
- "ts": "2026-09-04T03:04:11.886Z",
- "sig": "8963ced3419526cc55c658d98e9f10da92a022cd7d3ec10af86e0419eec8178b"
+ "pictureSha": "c59b5a95e5b131cdc18c4c0ae7486c594b44b29b287389a1f90eed81b07e128b",
+ "screenSha": "0341208e0a4a717d6e3685770b38d3c5ad0ed72594c25e83c4bbacc6d63aea3d",
+ "ts": "2026-09-04T03:44:18.103Z",
+ "sig": "59bf19efc021b93817214160ec66e9eda3a852ff40fc2a12cc47615326da995c"
 }
