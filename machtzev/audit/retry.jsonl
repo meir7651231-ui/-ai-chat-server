@@ -2,3 +2,4 @@
 {"ts":1788414465,"attempt":1788414465,"gate":"truth","path":null,"sha":"b601da1cc2e6f2baf0182a69aac93fab6cf5d1a4","blob_before":null,"resolved":true}
 {"ts":1788489168,"attempt":1788489168,"gate":"goal-proof","path":"new/dart-gen-bs/schoolos_courses.dart","sha":"3ca1563ab90c450dcba296b101bfc103d149e9b2","blob_before":null,"resolved":true}
 {"ts":1788490166,"attempt":1788490166,"gate":"police","path":"new/dart-gen-bs/schoolos_fees.dart","sha":"3ca1563ab90c450dcba296b101bfc103d149e9b2","blob_before":null,"resolved":false}
+{"ts":1788489680,"attempt":1788489680,"gate":"goal-proof","path":"new/dart-gen-bs/schoolos_dashboard.dart","sha":"3ca1563ab90c450dcba296b101bfc103d149e9b2","blob_before":null,"resolved":true}
