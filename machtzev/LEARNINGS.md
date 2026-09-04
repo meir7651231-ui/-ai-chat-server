@@ -604,3 +604,13 @@ GATE: fragops
 GATE: appgen
 retarget מיפה `amount⇒maxDeliveries` (Volunteer ⇐ fees, טיפוס-יחיד) ושכתב את כל `'amount'` במודול — עקבי בתוך המודול, אבל `hokMonthlyTotal` (מנוע-מדף מיובא, לא משוכתב) קורא `['amount']` ⇒ null ⇒ `as num` נפל. analyze ירוק, גם gen-verify של הזרע (המסך נפל רק בניווט מהרכזת — אותו קוד, הזרע הקודם היה rooms).
 **לקח:** גבול-השכתוב הוא גבול-הקובץ, אבל חוזה-המפתחות חוצה קבצים דרך המנועים: כל מפתח שמופיע כ-`['k']` בבייטים של מנוע-מדף שהמודול מייבא = **חוזה-מנוע**, נשאר כפי-שהוא (`engine-contract`, מדווח). ANTIPATTERN: שינוי-שם-מפתח בקובץ בלי לסרוק את המנועים שהוא מייבא.
+
+## L63 · ירוק-שקר בשער-push: שער שפותר שורש-חיצוני יחסית ל-ROOT "מדולג" ב-worktree הזמני — ונספר כ-ran (4.9, GENMAX·G9b)
+GATE: genverify
+pre-push מריץ משטרה-מלאה על worktree detached ב-`mktemp -d` (R2-2.5). `golden-harness.mjs` · `gen-verify.mjs` · `app-from-sentences.mjs --test` פותרים את buildsmart כ-`../buildsmart/app_flutter` יחסית ל-ROOT ⇒ ב-worktree זה `/tmp/…/buildsmart` שאינו קיים ⇒ הדפיסו "⚪ אין buildsmart — מדולג" ויצאו 0 ⇒ הלדג'ר ספר **44 ran · 0 skipped** ופסק "ירוקה". שלושת השערים הכבדים-והאמיתיים (רתמת-הזהב 87 בדיקות · רנדר-בפועל 77 מסכים · ניווט-אפליקציה) **מעולם לא רצו ב-push** — רק ביד. כך שער genverify אדום (L64) עבר push.
+**לקח:** נתיב-חיצוני בשער נפתר מ-env מפורש (`BUILDSMART`) שה-hook מייצא מהשורש האמיתי — לא מ-`ROOT/..` (השורש של worktree הוא לא השורש שלך). ו-"⚪ מדולג" עם exit 0 בשער-push הוא ירוק-שקר: הלדג'ר סופר ran/skipped לפי exit, לא לפי טקסט. שיורי (CI ללא flutter/buildsmart): השערים עדיין ⚪-ran — לתקן כ-yellow אמיתי (`tool=flutter`) כשה-CI יקבל buildsmart. ANTIPATTERN: `path\.resolve\(ROOT, '\.\./buildsmart` בשער בלי `process.env.BUILDSMART ||` לפניו — ובלי ייצוא ב-pre-push.
+
+## L64 · הרחבת-STRICT לפי קידומת-שם תפסה קבצים ישנים — ושער אדום שלא נראה כי exit-code לא נבדק (4.9, GENMAX·G9⇒G9b)
+GATE: genverify
+ב-G9 הורחב `STRICT` ב-gen-verify ל-`app_\w+` כדי שרכזת-האפליקציה (`gen_app_kehila.dart`) תיבדק בקפדנות — אבל `gen_app_rec1..6.dart` הישנים (render-ds/detail, מעולם לא רונדרו) התאימו לאותה קידומת ⇒ `🔴 genverify: פלטי-G4/G5 שלא רונדרו` — ואיש לא ראה: הריצה הידנית נקראה מהסיכום ("39/77 · 0 חריגות") ולא מ-exit, ה-baseline נכתב, ו-pre-push דילג (L63). נתפס רק בריצה הבאה.
+**לקח:** קפדנות = לפי **חותמת-המחולל** בבייטים של הקובץ (שורות-הכותרת: `app-from-sentences.mjs`), לא לפי קידומת-שם שקבצים-ישנים חולקים. וכל ריצת-שער ידנית נקראת מ-`echo $?`/`exit=` בלוג — סיכום-הצלחה שמודפס לפני שורת-ה-🔴 אינו פסק-דין. ANTIPATTERN: `\|app_\\w\+\)\\\.dart\$\/` (הקידומת `app_\w+` בתוך STRICT) — הרחבת-regex בלי `ls` של כל המתאימים-הקיימים (L5: רשימות-עבודה מ-ls).

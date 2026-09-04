@@ -41,7 +41,7 @@ export function fromSentence(text) {
   const p = pickModule(r.entity);
   const g = retarget({ module: p.module, entity: r.entity });
   const out = path.join(DIR, `gen_retarget_${r.entity.toLowerCase()}_from_${{ 'schoolos.dart': 'inv', schoolos_students: 'stu', schoolos_attendance: 'att', schoolos_courses: 'crs', schoolos_teachers: 'tch', schoolos_rooms: 'rm', schoolos_fees: 'fee', schoolos_parents: 'par', schoolos_dashboard: 'dash' }[p.module.replace(/\.dart$/, '')] || 'x'}.dart`);
-  return { ...r, pick: p, module: p.module, out, code: g.code, counts: g.counts };
+  return { ...r, pick: p, module: p.module, out, code: g.code, counts: g.counts, facts: g.facts };
 }
 // G8d · שדות-המשפט ⇒ פעולות-יסוד: "עם טלפון, אזור, תאריך הצטרפות" ⇒ interpret(text).schema (טיפוס מרמזי-השפה + rule מהמדף) ⇒ fieldOps (G2) ⇒ ops מבוקשים ⇒ זריעה ממוקדת (assembleByOps)
 const T2 = { date: 'IsoDate', num: 'number', bool: 'boolean', text: 'string', multiline: 'string' };

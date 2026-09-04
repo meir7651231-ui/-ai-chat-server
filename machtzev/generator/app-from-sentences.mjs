@@ -23,12 +23,13 @@ export function buildApp({ name, sentences }) {
     if (!r.entity) { skipped.push({ text, reason: r.reason }); continue; }
     if (mods.some((m) => m.entity === r.entity)) { skipped.push({ text, reason: `ישות חוזרת (${r.entity})` }); continue; }
     const t = termsFor(r.entity);
-    mods.push({ text, entity: r.entity, module: r.module, file: path.basename(r.out), screen: `${r.entity.replace(/[^A-Za-z0-9]/g, '')}Screen`, title: t ? (t.plural || t.singular) : r.entity, code: r.code, pick: r.pick });
+    mods.push({ text, entity: r.entity, module: r.module, file: path.basename(r.out), screen: `${r.entity.replace(/[^A-Za-z0-9]/g, '')}Screen`, title: t ? (t.plural || t.singular) : r.entity, code: r.code, pick: r.pick, facts: r.facts });
   }
   const hub = [`// 🏗️ ${N}App — אפליקציה ממשפטים (GENMAX·G9 · §22): ${mods.length} מודולים · מחולל דטרמיניסטי: app-from-sentences.mjs (sentence⇒entity⇒pickModule⇒retarget) — כל מודול חצוב מהזהב, לא נכתב`,
     ...mods.map((m) => `//   "${m.text}" ⇒ ${m.entity} ⇐ ${m.module} (${m.pick.strength} · שמות ${m.pick.names}/${m.pick.fields})`),
     ...skipped.map((s) => `//   ⚪ "${s.text}" ⇒ ${s.reason}`),
-    `import 'package:flutter/material.dart';`, `import '../dart-ui-bs/ds/ds.dart';`,
+    `//   G9b · KPI-רכזת נגזר: כל אריח = ${'<E>'}Facts של המודול (count חי של הזרע · hero = המדד שהזהב הכריז/צבע-סכנה) — אפס ערך מומצא: ${mods.map((m) => `${m.facts.cls}.${m.facts.heroKey}`).join(' · ')}`,
+    `import 'package:flutter/material.dart';`, `import '../dart-ui-bs/ds/ds.dart';`, `import '../dart-ui-bs/premium/dataviz/kpi_tile.dart';`,
     ...mods.map((m) => `import '${m.file}';`), '',
     `class ${N}App extends StatelessWidget {`, `  const ${N}App({super.key});`, '  @override',
     `  Widget build(BuildContext context) => MaterialApp(title: ${q(name)}, debugShowCheckedModeBanner: false, theme: ThemeData(brightness: Brightness.dark, useMaterial3: true), home: const ${N}HubScreen());`, '}', '',
@@ -38,8 +39,12 @@ export function buildApp({ name, sentences }) {
     `  static const modules = <String>[${mods.map((m) => q(m.title)).join(', ')}]; // ${mods.length} מסכים מחווטים`,
     '  @override',
     `  Widget build(BuildContext context) => DsScaffold(title: ${q(name)}, subtitle: '${mods.length} מודולים ממשפטים · כל אחד חצוב מהזהב', icon: '🧬', children: [`,
-    ...mods.map((m) => `    DsNavTile(glyph: '🧬', title: ${q(m.title)}, sub: ${q(m.text)}, onTap: () => _go(context, const ${m.screen}())),`),
-    '  ]);', '}', ''].join('\n');
+    `    Wrap(spacing: 12, runSpacing: 12, children: [ // KPI-רכזת (G9b): עובדות-אמת בלבד — כמו _Home של הזהב (מסכים-מחוברים + הדחוף של כל מודול)`,
+    `      SizedBox(width: 168, child: KpiTile(glyph: '🧬', value: '${'$'}{modules.length}', label: 'מסכים מחוברים')),`,
+    ...mods.map((m) => `      SizedBox(width: 168, child: KpiTile(glyph: '🧬', value: ${m.facts.cls}.hero, label: ${m.facts.cls}.heroLabel)), // ${m.entity} · ${m.facts.heroHow}`),
+    '    ]),', '    const SizedBox(height: 8),', `    DsSection(title: 'כלים', children: [`,
+    ...mods.map((m) => `      DsNavTile(glyph: '🧬', title: ${q(m.title)}, sub: ${m.facts.count ? `'${'$'}{${m.facts.cls}.count} ${'$'}{${m.facts.cls}.label} · ${q(m.text).slice(1, -1)}'` : q(m.text)}, onTap: () => _go(context, const ${m.screen}())),`),
+    '    ]),', '  ]);', '}', ''].join('\n');
   const test = [`// מחולל ע"י machtzev/generator/app-from-sentences.mjs — בדיקת-ניווט של ${N}App: בית ⇒ כל מודול מרונדר וחוזר, אפס-חריגות`,
     `import 'package:buildsmart/genesis/dart-gen-bs/gen_app_${name.toLowerCase()}.dart';`, ...mods.map((m) => `import 'package:buildsmart/genesis/dart-gen-bs/${m.file}';`),
     `import 'package:buildsmart/genesis/dart-ui-bs/ds/ds.dart';`, `import 'package:flutter/material.dart';`, `import 'package:flutter_test/flutter_test.dart';`, '',
@@ -48,6 +53,12 @@ export function buildApp({ name, sentences }) {
     `    tester.view.physicalSize = const Size(800, 2400); tester.view.devicePixelRatio = 1.0; addTearDown(tester.view.reset);`,
     `    await tester.pumpWidget(const ${N}App()); await tester.pump(const Duration(milliseconds: 300));`,
     `    expect(find.byType(DsNavTile), findsNWidgets(${mods.length})); expect(tester.takeException(), isNull);`,
+    `    expect(find.text('${mods.length}'), findsWidgets); // KPI מסכים-מחוברים = עובדה`,
+    ...mods.flatMap((m) => [
+      `    expect(${m.facts.cls}.metricDefs.length, ${m.facts.cls}.metrics.length); expect(${m.facts.cls}.heroKey == 'count' || ${m.facts.cls}.metrics.containsKey(${m.facts.cls}.heroKey), isTrue); // ${m.entity}: תפר-העובדות עקבי`,
+      `    expect(find.text(${m.facts.cls}.hero), findsWidgets); expect(find.text(${m.facts.cls}.heroLabel), findsWidgets); // ה-hero של ${m.entity} מרונדר ברכזת מהביטוי-החי, לא מליטרל`,
+      ...(m.facts.count ? [`    expect(find.textContaining('${'$'}{${m.facts.cls}.count} ${'$'}{${m.facts.cls}.label}'), findsOneWidget); // count חי של הזרע-הראשי (${m.facts.count.list} · ${m.facts.count.how})`] : []),
+    ]),
     '  });',
     ...mods.flatMap((m) => [
       `  testWidgets('${N}App · בית ⇒ ${m.title} (${m.entity}) מרונדר וחוזר', (tester) async {`,

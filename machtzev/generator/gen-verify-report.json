@@ -1,7 +1,7 @@
 {
  "rendered": 39,
  "screens": 77,
- "atoms": 37,
+ "atoms": 38,
  "passed": 39,
  "failed": 37,
  "taps": 132,
@@ -24,7 +24,7 @@
     "DsEmpty",
     "DsPrimaryButton"
    ],
-   "taps": 0,
+   "taps": null,
    "tapErrors": 0,
    "coreSeen": false,
    "coreExpected": false
@@ -48,7 +48,7 @@
     "DsEmpty",
     "DsPrimaryButton"
    ],
-   "taps": 0,
+   "taps": null,
    "tapErrors": 0,
    "coreSeen": false,
    "coreExpected": false
@@ -69,7 +69,7 @@
     "DsEmpty",
     "DsPrimaryButton"
    ],
-   "taps": 0,
+   "taps": null,
    "tapErrors": 0,
    "coreSeen": false,
    "coreExpected": false
@@ -91,7 +91,7 @@
     "DsEmpty",
     "DsPrimaryButton"
    ],
-   "taps": 0,
+   "taps": null,
    "tapErrors": 0,
    "coreSeen": false,
    "coreExpected": false
@@ -113,7 +113,7 @@
     "DsEmpty",
     "DsPrimaryButton"
    ],
-   "taps": 0,
+   "taps": null,
    "tapErrors": 0,
    "coreSeen": false,
    "coreExpected": false
@@ -134,7 +134,7 @@
     "DsEmpty",
     "DsPrimaryButton"
    ],
-   "taps": 0,
+   "taps": null,
    "tapErrors": 0,
    "coreSeen": false,
    "coreExpected": false
@@ -150,7 +150,7 @@
     "DsScaffold",
     "DsNavTile"
    ],
-   "taps": 0,
+   "taps": null,
    "tapErrors": 0,
    "coreSeen": false,
    "coreExpected": false
@@ -160,10 +160,12 @@
    "screen": "KehilaHubScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 2,
-   "widgets": 510,
+   "atoms": 4,
+   "widgets": 652,
    "atomList": [
     "DsScaffold",
+    "KpiTile",
+    "DsSection",
     "DsNavTile"
    ],
    "taps": 0,

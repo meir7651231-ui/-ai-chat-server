@@ -24,7 +24,10 @@ const screens = files.map((f) => ({ file: f, cls: fs.readFileSync(path.join(DIR,
 if (!screens.length) { console.log('⚪ genverify: אין פלטי-מחולל עם מסך'); process.exit(0); }
 // המראה חייב להיות ≡ המקור (סחף-מראה = כשל, כמו ברתמת-הזהב)
 const drift = screens.filter((s) => { const m = path.join(BS, 'lib/genesis/dart-gen-bs', s.file); return !fs.existsSync(m) || fs.readFileSync(m, 'utf8') !== fs.readFileSync(path.join(DIR, s.file), 'utf8'); }).map((s) => s.file);
-const STRICT = /^gen_(?:\w+_subset|composite_\w+|retarget_\w+|core_\w+|opsseed_\w+|app_\w+)\.dart$/;
+// קפדני = פלטי G4–G9 שלנו (חייבים לעבוד): לפי שם-משפחה, ורכזות-אפליקציה רק לפי חותמת-המחולל בכותרת (L64: 'app_\\w+' לבדו תפס גם gen_app_rec1..6 הישנים של render-ds ⇒ שער אדום שלא נראה)
+const STRICT_NAME = /^gen_(?:\w+_subset|composite_\w+|retarget_\w+|core_\w+|opsseed_\w+)\.dart$/;
+const _stampCache = new Map();
+const isStrict = (file) => { if (STRICT_NAME.test(file)) return true; if (!/^gen_app_\w+\.dart$/.test(file)) return false; if (!_stampCache.has(file)) { const f = path.join(DIR, file); _stampCache.set(file, fs.existsSync(f) && /app-from-sentences\.mjs/.test(fs.readFileSync(f, 'utf8').split('\n').slice(0, 3).join('\n'))); } return _stampCache.get(file); };
 const testPath = path.join(BS, 'test/genesis_gen_verify_test.dart');
 // רק קבצים שהמראה שלהם ≡ המקור נכנסים לבדיקה (קובץ-חסר/סחוף היה מפיל את קומפילציית כל הבדיקה ⇒ 0/57); הסחופים מדווחים ✗ בלי לייבא
 const live = screens.filter((s) => !drift.includes(s.file));
@@ -41,7 +44,7 @@ const dart = [`// מחולל ע"י machtzev/generator/gen-verify.mjs — אל ת
     `    expect(find.byType(DsScaffold), findsWidgets);`,
     `    final types = <String, int>{}; for (final w in tester.allWidgets) { final t = w.runtimeType.toString(); types[t] = (types[t] ?? 0) + 1; }`,
     // G7a · סריקת-אינטראקציה (פלטי G4–G6 בלבד): כל טאפ = pumpAndSettle + takeException; חריגה = ממצא (נספר, לא מפיל את הרנדר); מקטע-הגרעין-על-הרשומה מזוהה בטקסט
-    ...(STRICT.test(s.file) ? [
+    ...(isStrict(s.file) ? [
       `    var taps = 0, tapErrors = 0, coreSeen = false; final tapErrorAt = <String>[]; final details = <String>[];`,
       `    final prevOnError = FlutterError.onError; FlutterError.onError = (d) { details.add(d.toString()); prevOnError?.call(d); }; addTearDown(() => FlutterError.onError = prevOnError);`,
       `    // כל טאפ עטוף: חריגה (גם של המסגרת: hit-test/offstage) נספרת ולא מפילה את שאר הסריקה; החזרה מדיאלוג/sheet בטאפ-מחוץ`,
@@ -79,7 +82,7 @@ if (gate) {
   const base = fs.existsSync(BASE) ? JSON.parse(fs.readFileSync(BASE, 'utf8')) : { rendered: 0, atoms: 0 };
   if (only) process.exit(rendered === screens.length ? 0 : 1);
   // קפדני לפלטי G4/G5 (מודולי-משנה/הרכבות — שלנו, חייבים לעבוד) · ראצ׳ט לשאר פלטי-המחולל הישן (app-ds: gen_quest/rich/…): כשלים מדווחים, המספר רק-עולה
-  const strictFail = report.filter((r) => STRICT.test(r.file) && (!r.rendered || r.drift || r.tapErrors));   // גרעין-על-הרשומה = מדד (תלוי-ניווט לפאנל), לא קפדני
+  const strictFail = report.filter((r) => isStrict(r.file) && (!r.rendered || r.drift || r.tapErrors));   // גרעין-על-הרשומה = מדד (תלוי-ניווט לפאנל), לא קפדני
   if (strictFail.length) { console.log(`🔴 genverify: פלטי-G4/G5 שלא רונדרו/סחפו: ${strictFail.map((r) => r.file).join(', ')} — פלט-מחולל שלא עובד אינו פלט`); process.exit(1); }
   if (rendered < base.rendered || atomsAll.size < base.atoms) { console.log(`🔴 genverify: נסיגה מ-baseline ${base.rendered}/${base.atoms} ⇒ ${rendered}/${atomsAll.size}`); process.exit(1); }
   console.log(`✓ genverify: ${rendered}/${screens.length} פלטי-מחולל רונדרו בפועל · ${atomsAll.size} אטומי-תצוגה על המסך`);

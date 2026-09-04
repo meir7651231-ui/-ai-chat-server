@@ -185,13 +185,66 @@ export function retarget({ module, entity }) {
     }
     code = lines.join('\n');
   }
+  // G9b · תפר-עובדות ציבורי: <E>Facts — נגזרות-אמת של דאטה-המודול לרכזת-האפליקציה (§20-ג: כל ערך = ביטוי חי על הזרע/המנועים, אפס ליטרל-מומצא):
+  //   count = אורך הזרע-הראשי (static-const · seed-db · nested-arg — לפי צורת-ההצהרה; לא נמצא ⇒ אין count, מדווח) · metrics = כל BareStat/StatHero של הזהב שערכו getter-סטטי מספרי של מחלקת-הדאטה (מפתח·תווית·טון, אחרי החלפת-מונחים)
+  //   hero = המדד הראשון שהזהב צובע-סכנה כשאינו-אפס (inkColor: X > 0 ? _danger) — עובדת-מבנה מהקוד, לא מילון; אין כזה ⇒ המדד הראשון; אין מדדים ⇒ count.
+  let facts = null;
+  {
+    const lines = code.split('\n');
+    const clsAt = (i) => { for (let j = i; j >= 0; j--) { const m = /^(?:abstract\s+)?class\s+(\w+)/.exec(lines[j]); if (m) return m[1]; } return null; };
+    const pn = pk.name; let countExpr = null, countHow = null;
+    if (pn) {
+      const a = lines.findIndex((l) => new RegExp(`^\\s+static const ${pn} = <Map<String, dynamic>>\\[`).test(l));
+      if (a >= 0) { countExpr = `${clsAt(a)}.${pn}.length`; countHow = 'static-const'; }
+      else {
+        const b = lines.findIndex((l) => new RegExp(`^\\s+'${pn}': (?:<Map<String, dynamic>>)?\\[`).test(l));
+        if (b >= 0) {
+          const c = clsAt(b), dbi = lines.findIndex((l) => /^\s+static Map<String, dynamic> db = seed\(\);/.test(l));
+          if (dbi >= 0 && clsAt(dbi) === c) { countExpr = `((${c}.db['${pn}'] as List?)?.length ?? 0)`; countHow = 'seed-db'; }
+          else {
+            let arg = null, inst = null;
+            for (let j = b; j >= 0; j--) { const m1 = /^\s+(\w+): \[$/.exec(lines[j]); if (m1 && !arg) arg = m1[1]; const m2 = /^\s+static const (\w+) = (\w+)\($/.exec(lines[j]); if (m2) { inst = m2; break; } }
+            if (arg && inst && lines.some((l) => new RegExp(`^\\s+final List<Map<String, dynamic>> ${arg};`).test(l))) { countExpr = `${inst[2]}.${inst[1]}.${arg}.fold<int>(0, (n, m) => n + ((m['${pn}'] as List?)?.length ?? 0))`; countHow = 'nested-arg'; }
+          }
+        }
+      }
+    }
+    const numGetters = new Set([...code.matchAll(/^\s+static (?:int|double|num) get (\w+)/gm)].map((m) => m[1]));
+    const metrics = [], byKey = new Map();
+    for (const m of code.matchAll(/(BareStat|StatHero)\(value: '(\$\{(_\w+)\.(\w+)\}[^'\n]*)', label: '([^'\n]*)'(, inkColor: \3\.\4 > 0 \? _danger)?/g)) {
+      if (!numGetters.has(m[4])) continue;
+      const row = { key: m[4], value: m[2], label: m[5], tone: m[6] ? 'danger' : 'plain', atom: m[1], isHero: m[1] === 'StatHero' };
+      const prev = byKey.get(m[4]);
+      if (!prev) { byKey.set(m[4], row); metrics.push(row); }
+      else { if (prev.atom === 'StatHero' && row.atom === 'BareStat') { prev.label = row.label; prev.tone = row.tone; prev.value = row.value; } if (row.isHero) prev.isHero = true; if (row.tone === 'danger') prev.tone = 'danger'; }
+    }
+    // הזהב הכריז על ה-hero שלו (StatHero = "המטרה") ⇒ הוא ה-hero; אחרת המדד הראשון שנצבע-סכנה כשאינו-אפס; אחרת הראשון; אחרת count
+    const hero = metrics.find((x) => x.isHero) || metrics.find((x) => x.tone === 'danger') || metrics[0] || null;
+    const heroHow = !hero ? 'אין מדדים ⇒ count' : hero.isHero ? 'ה-StatHero של הזהב (המטרה המוצהרת)' : hero.tone === 'danger' ? 'המדד הראשון שהזהב צובע-סכנה כשאינו-אפס' : 'אין StatHero/מדד-סכנה ⇒ המדד הראשון';
+    const qd = (v) => `'${String(v).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\$/g, '\\$')}'`;
+    const dt = termsFor(entity), label = dt ? (dt.plural || dt.singular) : E;
+    const F = `${E}Facts`;
+    const out = ['', `// ═══ תפר-עובדות ציבורי (G9b · לרכזת-האפליקציה): ${F} — נגזרות-אמת של דאטה-המודול; כל ערך = ביטוי חי על הזרע/המנועים (§20-ג), אפס ליטרל-מומצא. מחולל: retarget.mjs ═══`,
+      `class ${F} {`, `  static const String entity = ${qd(entity)};`,
+      `  static const String label = ${qd(label)}; // ${dt ? 'מונח-הישות מ-entity-terms (דאטה)' : 'אין מונח ב-TERM_DEFS ⇒ שם-הישות (הצבה גלויה)'}`,
+      countExpr ? `  static int get count => ${countExpr}; // רשומות הזרע-הראשי "${pn}" (${countHow})` : `  // count: הזרע-הראשי "${pn || '—'}" לא נמצא בצורת-הצהרה מוכרת — אין count (לא מומצא)`,
+      `  static const List<Map<String, String>> metricDefs = <Map<String, String>>[${metrics.map((x) => `{'key': ${qd(x.key)}, 'label': ${qd(x.label)}, 'tone': ${qd(x.tone)}}`).join(', ')}]; // ${metrics.length} מדדים חצובים משורת-ה-KPI של הזהב (BareStat/StatHero ⇐ getter-סטטי מספרי)${metrics.length ? '' : ' — אין getter-סטטי בשורת-ה-KPI ⇒ ריק, לא מומצא'}`,
+      `  static Map<String, String> get metrics => <String, String>{${metrics.map((x) => `${qd(x.key)}: '${x.value}'`).join(', ')}};`,
+      `  static const String heroKey = ${qd(hero ? hero.key : 'count')}; // ${heroHow}`,
+      `  static String get hero => metrics[heroKey] ?? ${countExpr ? "'$count'" : "'—'"};`,
+      `  static String get heroLabel => ${hero ? qd(hero.label) : 'label'};`,
+      '}', ''];
+    code = code.replace(/\n*$/, '\n') + out.join('\n');
+    facts = { cls: F, label, count: countExpr ? { expr: countExpr, how: countHow, list: pn } : null, metrics: metrics.map(({ key, label, tone }) => ({ key, label, tone })), heroKey: hero ? hero.key : 'count', heroHow };
+  }
   const n = (how) => map.filter((x) => x.how.startsWith(how)).length;
   const header = [`// 🎯 ${E}Screen — retarget של ${module} לישות ${entity} (GENMAX·G5c/G5d · הכרעה-24) · מחולל דטרמיניסטי: retarget.mjs --module ${module} --entity ${entity}`,
     `//   זרע-ראשי: ${pk.name} (מועמדים: ${(pk.candidates || []).join(' ')}) · מיפוי שם ${n('name')} · ערוץ ${n('chan')} · טיפוס-יחיד ${n('unique')} · מקום-שמור ${n('reserved')} · חוזה-מנוע (לא משתנה) ${n('engine-contract')}`,
     `//   ${map.map((x) => `${x.src}⇒${x.dst || '∅'}(${x.how})`).join(' · ')}`,
+    `//   תפר-עובדות (G9b): ${facts.cls} · count=${facts.count ? `${facts.count.list}.length (${facts.count.how})` : '∅'} · מדדים ${facts.metrics.length} · hero=${facts.heroKey}`,
     `//   שדות-${entity} בלי מקור (מקום-שמור, יאירו כשיוזרם נתון): ${unusedFields.join(', ') || '—'} · תוויות: ${dstT && srcT ? `מונחי ${srcE} (${srcT.singular}/${srcT.plural || '—'}) ⇒ ${entity} (${dstT.singular}/${dstT.plural || '—'}) · ${sw.swaps} החלפות` : `אין מונח ל-${entity} ב-TERM_DEFS — תוויות של המקור (הצבה)`} · הזרע = זרע-הצבה של המקור, לא ערך-אמת של ${entity}`];
   code = header.join('\n') + '\n' + code;
-  return { code, map, unusedFields, primary: pk.name, classes: clsMap, fragments: res.fragments, of: res.of, counts: { name: n('name'), chan: n('chan'), unique: n('unique'), reserved: n('reserved') }, terms: { src: srcE, dst: dstT ? dstT.singular : null, swaps: sw.swaps }, coreWired, columnsAdded };
+  return { code, map, unusedFields, primary: pk.name, classes: clsMap, fragments: res.fragments, of: res.of, counts: { name: n('name'), chan: n('chan'), unique: n('unique'), reserved: n('reserved') }, terms: { src: srcE, dst: dstT ? dstT.singular : null, swaps: sw.swaps }, coreWired, columnsAdded, facts };
 }
 
 // ── G5e · module-picker: ישות ⇒ מודול-הזהב הקרוב ביותר — לפי עובדות-מבנה בלבד (§20-ד): (א) מספר שמות-שדה זהים בין הזרע-הראשי לסכמה · (ב) דמיון-פרופיל-טיפוסים (קוסינוס על ספירת-קטגוריות)
