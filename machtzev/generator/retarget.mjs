@@ -14,6 +14,39 @@ import { assemble, PARTICLE_IDS, TAG } from './render-module.mjs';
 import { FIELDS } from '../../new/atoms/schema-fields.mjs';
 
 const ROOT = R.ROOT, DIR = path.join(ROOT, 'new/dart-gen-bs');
+// G5g · מונחי-ישות (אטום-דאטה חצוב מ-TERM_DEFS — entity-terms.mjs): ישות ⇒ {יחיד, רבים, נרדפות}; ישות בלי מונח ⇒ null (תוויות נשארות של המקור, מדווח)
+const TERMS_FILE = path.join(ROOT, 'machtzev/generator/entity-terms.data.json');
+const TERMS = fs.existsSync(TERMS_FILE) ? JSON.parse(fs.readFileSync(TERMS_FILE, 'utf8')).terms : [];
+export function termsFor(entity) {
+  const rows = TERMS.filter((t) => t.entity === entity); if (!rows.length) return null;
+  const sing = rows.find((t) => !/s$/.test(t.key) && !/Of$/.test(t.key)) || rows[0], plur = rows.find((t) => /s$/.test(t.key));
+  return { singular: sing.forms[0], plural: plur ? plur.forms[0] : null, forms: [...new Set(rows.flatMap((t) => t.forms))] };
+}
+// מונחי-המקור של מודול: (א) מפתח-מונח ≡ גזע-שם-הקובץ (rooms⇒entity.room(s) · teachers⇒entity.teacher · students⇒entity.student(s) גם בלי ישות-סכמה) — עובדה-מבנית;
+//   (ב) אחרת ישות-הסכמה עם ≥5 שמות-שדה זהים לזרע (fees⇒Supporter 11); (ג) אחרת null — אין החלפה, מדווח. (זרע-חלש כמו items⇒Course(3) לא מחליף תוויות בטעות)
+export function sourceTerms(module) {
+  const stem = stemOf(module).toLowerCase(), sing = stem.replace(/s$/, '');
+  const rows = TERMS.filter((t) => t.key === 'entity.' + sing || t.key === 'entity.' + stem);
+  if (rows.length) { const s1 = rows.find((t) => t.key === 'entity.' + sing) || rows[0], p1 = rows.find((t) => t.key === 'entity.' + stem && stem !== sing); return { by: 'stem', name: sing, singular: s1.forms[0], plural: p1 ? p1.forms[0] : null }; }
+  const pk = primaryKeys(fs.readFileSync(path.join(DIR, module), 'utf8'), module);
+  const ents = [...new Set(FIELDS.map((f) => f.e))];
+  const best = ents.map((e) => ({ e, n: pk.keys.filter((k) => FIELDS.some((f) => f.e === e && f.n === k.key)).length })).sort((a, b) => b.n - a.n)[0];
+  if (best && best.n >= 5) { const t = termsFor(best.e); if (t) return { by: 'seed', name: best.e, ...t }; }
+  return null;
+}
+// החלפת מונחים בתוך ליטרלי-מחרוזת בלבד (לא מזהים, לא הערות): מילה-שלמה בעברית עם אות-שימוש אופציונלית — 'חדרים'⇒'מתנדבים' · 'לחדר'⇒'למתנדב'
+const HEB = '[\\u0590-\\u05FF]';
+function swapTerms(code, src, dst) {
+  if (!src || !dst) return { code, swaps: 0 };
+  const pairs = [[src.plural, dst.plural], [src.singular, dst.singular]].filter(([a, b]) => a && b && a !== b);
+  let swaps = 0;
+  const out = code.split('\n').map((l) => {
+    const i = l.indexOf('//'); const head = i >= 0 ? l.slice(0, i) : l, tail = i >= 0 ? l.slice(i) : '';
+    const h = head.replace(/'(?:[^'\\]|\\.)*'/g, (lit) => { let x = lit; for (const [a, b] of pairs) x = x.replace(new RegExp(`(?<!${HEB})([הולבמשכ]?)${a}(?!${HEB})`, 'g'), (m, pre) => { swaps++; return pre + b; }); return x; });
+    return h + tail;
+  }).join('\n');
+  return { code: out, swaps };
+}
 const cat = (t) => /^Id/.test(t) ? 'Id' : /IsoDate/.test(t) ? 'IsoDate' : /TimeHM/.test(t) ? 'TimeHM' : /^number/.test(t) ? 'number' : /^boolean/.test(t) ? 'boolean' : /^string/.test(t) ? 'string' : /\[\]$/.test(t) ? 'list' : /^Record</.test(t) ? 'map' : (/'/.test(t) || /^[A-Z]\w+$/.test(t)) ? 'enum' : 'other';
 const guess = (v) => /^'\d{4}-\d{2}-\d{2}'$/.test(v) ? 'IsoDate' : /^'\d{2}:\d{2}'$/.test(v) ? 'TimeHM' : /^'[a-z]{1,3}\d+'$/.test(v) ? 'Id' : /^'/.test(v) ? 'string' : /^(true|false)$/.test(v) ? 'boolean' : /^-?\d/.test(v) ? 'number' : /^\[/.test(v) ? 'list' : /^\{/.test(v) ? 'map' : /^null$/.test(v) ? 'null' : '?';
 // ערוץ מוצהר משם-השדה (אותו רמז-צורה של shape-ops G2 — מקטע-שם, לא תת-מחרוזת: `waits` אינו `wa`)
@@ -73,7 +106,7 @@ export function retarget({ module, entity }) {
   code = code.split('\n').map((l) => {
     const i = l.indexOf('//'); const head = i >= 0 ? l.slice(0, i) : l, tail = i >= 0 ? l.slice(i) : ''; let h = head;
     for (const x of ren) h = h.replace(new RegExp(`'${x.src}'`, 'g'), `'${x.dst}'`);
-    h = h.replace(new RegExp(`'entity\\.${stemSing}':\\s*'[^']*'`, 'g'), `'entity.${eLower}': '${E}'`);   // מונח-הישות ⇒ הצבה גלויה
+    h = h.replace(new RegExp(`'entity\\.${stemSing}':\\s*'[^']*'`, 'g'), `'entity.${eLower}': '${(termsFor(entity) || {}).singular || E}'`);   // מונח-הישות מהדאטה (או הצבה גלויה כשאין מונח)
     return h + tail;
   }).join('\n');
   const classes = [...new Set([...code.matchAll(/^(?:abstract\s+)?class\s+(\w+)/gm)].map((m) => m[1]))];
@@ -81,13 +114,16 @@ export function retarget({ module, entity }) {
   const stem = pub ? pub.replace(/Screen$/, '') : null;
   const clsMap = stem ? classes.filter((c) => c.includes(stem)).map((c) => [c, c.replace(stem, E)]) : [];
   for (const [a, b] of clsMap) code = code.replace(new RegExp(`\\b${a}\\b`, 'g'), b);
+  // G5g · תוויות: מונחי ישות-המקור (מהזרע) ⇒ מונחי ישות-היעד, בליטרלי-מחרוזת בלבד; אין מונח ליעד ⇒ תוויות נשארות ומדווח
+  const srcT = sourceTerms(module), srcE = srcT ? srcT.name : null, dstT = termsFor(entity);
+  const sw = swapTerms(code, srcT, dstT); code = sw.code;
   const n = (how) => map.filter((x) => x.how.startsWith(how)).length;
   const header = [`// 🎯 ${E}Screen — retarget של ${module} לישות ${entity} (GENMAX·G5c/G5d · הכרעה-24) · מחולל דטרמיניסטי: retarget.mjs --module ${module} --entity ${entity}`,
     `//   זרע-ראשי: ${pk.name} (מועמדים: ${(pk.candidates || []).join(' ')}) · מיפוי שם ${n('name')} · ערוץ ${n('chan')} · טיפוס-יחיד ${n('unique')} · מקום-שמור ${n('reserved')}`,
     `//   ${map.map((x) => `${x.src}⇒${x.dst || '∅'}(${x.how})`).join(' · ')}`,
-    `//   שדות-${entity} בלי מקור (מקום-שמור, יאירו כשיוזרם נתון): ${unusedFields.join(', ') || '—'} · תוויות-UI = של מודול-המקור (הצבה) · הזרע = זרע-הצבה של המקור, לא ערך-אמת של ${entity}`];
+    `//   שדות-${entity} בלי מקור (מקום-שמור, יאירו כשיוזרם נתון): ${unusedFields.join(', ') || '—'} · תוויות: ${dstT && srcT ? `מונחי ${srcE} (${srcT.singular}/${srcT.plural || '—'}) ⇒ ${entity} (${dstT.singular}/${dstT.plural || '—'}) · ${sw.swaps} החלפות` : `אין מונח ל-${entity} ב-TERM_DEFS — תוויות של המקור (הצבה)`} · הזרע = זרע-הצבה של המקור, לא ערך-אמת של ${entity}`];
   code = header.join('\n') + '\n' + code;
-  return { code, map, unusedFields, primary: pk.name, classes: clsMap, fragments: res.fragments, of: res.of, counts: { name: n('name'), chan: n('chan'), unique: n('unique'), reserved: n('reserved') } };
+  return { code, map, unusedFields, primary: pk.name, classes: clsMap, fragments: res.fragments, of: res.of, counts: { name: n('name'), chan: n('chan'), unique: n('unique'), reserved: n('reserved') }, terms: { src: srcE, dst: dstT ? dstT.singular : null, swaps: sw.swaps } };
 }
 
 // ── G5e · module-picker: ישות ⇒ מודול-הזהב הקרוב ביותר — לפי עובדות-מבנה בלבד (§20-ד): (א) מספר שמות-שדה זהים בין הזרע-הראשי לסכמה · (ב) דמיון-פרופיל-טיפוסים (קוסינוס על ספירת-קטגוריות)

@@ -26,7 +26,7 @@
 - **machtzev/ תת-תיקיות:** 14
 - **generator/ קנוני:** 26
 - **generator/legacy/:** 5
-- **knowledge/ פעיל:** 56
+- **knowledge/ פעיל:** 57
 - **knowledge/archive/:** 11
 - **שערי-משטרה (gates.tsv):** 39
 - **שערי-משטרה (police gate()):** 39
