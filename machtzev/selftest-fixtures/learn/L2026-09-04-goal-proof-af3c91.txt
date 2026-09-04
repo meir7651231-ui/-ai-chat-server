@@ -1,0 +1,2 @@
+// דוגמה מורעלת: KPI ביתי עם מספר-ליטרלי מעוצב-אלפים בלי מקור-אמת (§20-ג)
+const SizedBox(width: 168, child: KpiTile(glyph: '🎓', value: '1,248', label: 'תלמידים')),

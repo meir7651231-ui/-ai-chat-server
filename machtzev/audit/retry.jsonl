@@ -7,3 +7,6 @@
 {"ts":1788490166,"attempt":1788490166,"gate":"police","path":"new/dart-gen-bs/schoolos_fees.dart","sha":"3ca1563ab90c450dcba296b101bfc103d149e9b2","blob_before":null,"resolved":true}
 {"ts":1788491566,"attempt":1788491566,"gate":"truth","path":"new/dart-gen-bs/schoolos_fees.dart","sha":"408185832c870df313aec84062127c0f9b222bba","blob_before":"b66f4f7a62fb4382218baf5dfb353c2ea7d306cf","resolved":true}
 {"ts":1788491671,"attempt":1788491671,"gate":"truth","path":"new/dart-gen-bs/schoolos_fees.dart","sha":"408185832c870df313aec84062127c0f9b222bba","blob_before":"b66f4f7a62fb4382218baf5dfb353c2ea7d306cf","resolved":true}
+{"ts":1788525936,"attempt":1788525936,"gate":"goal-proof","path":"new/dart-gen-bs/schoolos.dart","sha":"f23aebf0a4c754094eb327b256f6da11d9992d19","blob_before":"af3c916e95aa0a4ce292e8eeb5cdf6458d12582c","resolved":true}
+{"ts":1788526084,"attempt":1788526084,"gate":"police","path":"new/dart-gen-bs/schoolos.dart","sha":"f23aebf0a4c754094eb327b256f6da11d9992d19","blob_before":"af3c916e95aa0a4ce292e8eeb5cdf6458d12582c","resolved":true}
+{"ts":1788526258,"attempt":1788526258,"gate":"goal-proof","path":"new/dart-gen-bs/schoolos.dart","sha":"f23aebf0a4c754094eb327b256f6da11d9992d19","blob_before":"af3c916e95aa0a4ce292e8eeb5cdf6458d12582c","resolved":true}

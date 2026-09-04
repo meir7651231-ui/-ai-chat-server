@@ -2,6 +2,13 @@
 > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
 > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
 
+## L2026-09-04-goal-proof-af3c91 · קובץ-רכזת (hub) שמחווט מסכים הוא מסך — צריך כרטיס-מטרה; ו-KPI ביתי עם מספר-ליטרלי = דאטה-מזויף (4.9, חיווט-SchoolOS)
+GATE: goal-proof
+ref: af3c916e95aa0a4ce292e8eeb5cdf6458d12582c:new/dart-gen-bs/schoolos.dart
+ANTIPATTERN: value: '\d{1,3},\d{3}'
+RULE: כל KpiTile/BareStat ב-`value:` מקבל ביטוי-נגזר (`'${…}'`) או מקום-שמור — לעולם לא ליטרל מעוצב-אלפים (`'1,248'`) שאין לו מקור-אמת (§20-ג); וקובץ-רכזת שמחווט מסכים (Navigator.push⇒XScreen) הוא מסך לכל דבר ⇒ כרטיס-מטרה+תמונת-רנדר לפני ה-commit, לא אחרי שהשער חוסם.
+מה נכשל: המנהל חיווט 8 מודולי-סשנים ל-`schoolos.dart` ו-commit נחסם ב-goal-proof (אין כרטיס-מטרה לרכזת). באותו blob-לפני ישב KPI ביתי `KpiTile(glyph: '🎓', value: '1,248', label: 'תלמידים')` — מספר-מומצא מגל-0 שאף אחד לא הרים, כי הבית לא נחשב "מסך". התיקון: KPI-אמת (`'${_Home.modules.length}'` = 9 מסכים מחוברים) + כרטיס-מטרה עם golden-render. הראיה: `git show af3c91…:new/dart-gen-bs/schoolos.dart` שורה 87.
+
 ## L2026-09-04-truth-b66f4f · חשבון-תאריך ב-clamp-בתוך-החודש = תאריך שקרי; TRUTH נמדד על עץ-העבודה (גם untracked) — commit-של-קוד+ידע יחד (4.9, סשן-FEES)
 GATE: truth
 ref: b66f4f7a62fb4382218baf5dfb353c2ea7d306cf:new/dart-gen-bs/schoolos_fees.dart
