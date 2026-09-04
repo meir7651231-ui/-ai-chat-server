@@ -1,0 +1,44 @@
+{
+ "v": 1,
+ "screen": "new/dart-gen-bs/schoolos_rooms.dart",
+ "goal": "שכל מרחב ינוצל נכון — אף חדר לא כפול-תפוס, אף שיעור לא בלי-חדר, אף ציוד לא נעלם — ורואים את השבוע של הבניין במבט-אחד (רכז/ת שיבוץ · אחזקה · מורים · הנהלה)",
+ "models": [
+  "roomsNow",
+  "weeklyRoomSessions",
+  "conflictsOf",
+  "blockReason",
+  "inactiveRoomCourses",
+  "missingEqFor"
+ ],
+ "atoms": [
+  "BareStat",
+  "StatHero",
+  "GradientCard",
+  "AlertBanner",
+  "EmptyState",
+  "buildSlots",
+  "timeToMin",
+  "minToHM",
+  "sessionsOf",
+  "termOf",
+  "hebParts",
+  "HOLIDAYS",
+  "isoLocal",
+  "countBy",
+  "startOfWeekSunday",
+  "DsScaffold",
+  "DsSection"
+ ],
+ "accept": [
+  "10 KPI מדאטה-אמת",
+  "2 התנגשויות-תפיסה מזוהות בשבוע",
+  "7 חדרים · 1 תפוס-עכשיו · 5 פנויים",
+  "0 Date.now במנוע",
+  "3 תקלות-פתוחות"
+ ],
+ "picture": "machtzev/audit/goals/schoolos_rooms.png",
+ "pictureSha": "578a233a16d1c489260c650e331645118cd1ec2929f0508fcf77de150eb8092b",
+ "screenSha": "8753762065a9b1a7fdeb974124cdc3a31269b76e796c05230af32275a7202179",
+ "ts": "2026-09-04T02:43:04.006Z",
+ "sig": "95c2e9679692bed23dd56693f10f7250fa49b36e45bf131330b1fbd7ce31dc0f"
+}
