@@ -165,13 +165,27 @@ export function retarget({ module, entity }) {
     }
     code = lines.join('\n');
   }
+  // G5h · חוזה-העמודות של הישות (חוק-7): שדות-הישות שלא קיבלו מקור נוספים ל-columnDefs כ-{'key','label'} — עמודה שמאירה רק כשהנתון מגיע (colShown); תווית = שם-השדה (הצבה גלויה — אין מונחי-שדה על המדף)
+  let columnsAdded = 0;
+  {
+    const q = (v) => `'${String(v).replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
+    const lines = code.split('\n');
+    const ci = lines.findIndex((l) => /^\s+static final List<Map<String, Object\?>> columnDefs = <Map<String, Object\?>>\[/.test(l));
+    if (ci >= 0 && unusedFields.length) {
+      const ind = (lines[ci].match(/^\s+/) || [''])[0] + '  ';
+      const mappedDst = new Set(map.filter((x) => x.dst).map((x) => x.dst));
+      const add = unusedFields.filter((f) => !mappedDst.has(f) && !/\[\]$/.test(FIELDS.find((x) => x.e === entity && x.n === f)?.t || '')).map((f) => `${ind}{'key': ${q(f)}, 'label': ${q(f)}}, // G5h · מקום-שמור: שדה-${entity} מהסכמה (${FIELDS.find((x) => x.e === entity && x.n === f)?.t || '?'}) — מאיר כשהנתון מוזרם`);
+      if (add.length) { lines.splice(ci + 1, 0, `${ind}// ═══ חוזה-העמודות של ${entity} (G5h · חוק-7): ${add.length} שדות-סכמה בלי מקור בזרע — עמודות-מקום-שמור, לא מזויפות ולא מושמטות ═══`, ...add); columnsAdded = add.length; }
+    }
+    code = lines.join('\n');
+  }
   const n = (how) => map.filter((x) => x.how.startsWith(how)).length;
   const header = [`// 🎯 ${E}Screen — retarget של ${module} לישות ${entity} (GENMAX·G5c/G5d · הכרעה-24) · מחולל דטרמיניסטי: retarget.mjs --module ${module} --entity ${entity}`,
     `//   זרע-ראשי: ${pk.name} (מועמדים: ${(pk.candidates || []).join(' ')}) · מיפוי שם ${n('name')} · ערוץ ${n('chan')} · טיפוס-יחיד ${n('unique')} · מקום-שמור ${n('reserved')}`,
     `//   ${map.map((x) => `${x.src}⇒${x.dst || '∅'}(${x.how})`).join(' · ')}`,
     `//   שדות-${entity} בלי מקור (מקום-שמור, יאירו כשיוזרם נתון): ${unusedFields.join(', ') || '—'} · תוויות: ${dstT && srcT ? `מונחי ${srcE} (${srcT.singular}/${srcT.plural || '—'}) ⇒ ${entity} (${dstT.singular}/${dstT.plural || '—'}) · ${sw.swaps} החלפות` : `אין מונח ל-${entity} ב-TERM_DEFS — תוויות של המקור (הצבה)`} · הזרע = זרע-הצבה של המקור, לא ערך-אמת של ${entity}`];
   code = header.join('\n') + '\n' + code;
-  return { code, map, unusedFields, primary: pk.name, classes: clsMap, fragments: res.fragments, of: res.of, counts: { name: n('name'), chan: n('chan'), unique: n('unique'), reserved: n('reserved') }, terms: { src: srcE, dst: dstT ? dstT.singular : null, swaps: sw.swaps }, coreWired };
+  return { code, map, unusedFields, primary: pk.name, classes: clsMap, fragments: res.fragments, of: res.of, counts: { name: n('name'), chan: n('chan'), unique: n('unique'), reserved: n('reserved') }, terms: { src: srcE, dst: dstT ? dstT.singular : null, swaps: sw.swaps }, coreWired, columnsAdded };
 }
 
 // ── G5e · module-picker: ישות ⇒ מודול-הזהב הקרוב ביותר — לפי עובדות-מבנה בלבד (§20-ד): (א) מספר שמות-שדה זהים בין הזרע-הראשי לסכמה · (ב) דמיון-פרופיל-טיפוסים (קוסינוס על ספירת-קטגוריות)
@@ -221,5 +235,5 @@ if (isMain && arg('--module') && arg('--entity')) {
   const r = retarget({ module: arg('--module'), entity: arg('--entity') });
   const out = arg('--out') || path.join(DIR, outName(arg('--module'), arg('--entity')));
   fs.writeFileSync(out, r.code);
-  console.log(`✓ ${arg('--module')} ⇒ ${arg('--entity')} ⇒ ${path.basename(out)} · זרע ${r.primary} · שם ${r.counts.name} · ערוץ ${r.counts.chan} · טיפוס-יחיד ${r.counts.unique} · מקום-שמור ${r.counts.reserved} · ${r.map.map((x) => `${x.src}⇒${x.dst || '∅'}`).join(' ')} · שדות-E בלי-מקור: ${r.unusedFields.join(',') || '—'} · ${r.code.split('\n').length} שורות`);
+  console.log(`✓ ${arg('--module')} ⇒ ${arg('--entity')} ⇒ ${path.basename(out)} · זרע ${r.primary} · שם ${r.counts.name} · ערוץ ${r.counts.chan} · טיפוס-יחיד ${r.counts.unique} · מקום-שמור ${r.counts.reserved} · עמודות-מקום-שמור ${r.columnsAdded} · ${r.map.map((x) => `${x.src}⇒${x.dst || '∅'}`).join(' ')} · שדות-E בלי-מקור: ${r.unusedFields.join(',') || '—'} · ${r.code.split('\n').length} שורות`);
 }

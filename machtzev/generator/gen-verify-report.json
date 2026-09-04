@@ -4,6 +4,9 @@
  "atoms": 37,
  "passed": 35,
  "failed": 37,
+ "taps": 116,
+ "tapErrors": 0,
+ "coreSeen": 0,
  "report": [
   {
    "file": "gen_app_ent1.dart",
@@ -20,7 +23,11 @@
     "DsEnumField",
     "DsEmpty",
     "DsPrimaryButton"
-   ]
+   ],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_app_ent2.dart",
@@ -40,7 +47,11 @@
     "DsDateField",
     "DsEmpty",
     "DsPrimaryButton"
-   ]
+   ],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_app_ent3.dart",
@@ -57,7 +68,11 @@
     "DsEnumField",
     "DsEmpty",
     "DsPrimaryButton"
-   ]
+   ],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_app_ent4.dart",
@@ -75,7 +90,11 @@
     "DsToggleTile",
     "DsEmpty",
     "DsPrimaryButton"
-   ]
+   ],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_app_ent5.dart",
@@ -93,7 +112,11 @@
     "DsDateField",
     "DsEmpty",
     "DsPrimaryButton"
-   ]
+   ],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_app_ent6.dart",
@@ -110,7 +133,11 @@
     "DsSelect",
     "DsEmpty",
     "DsPrimaryButton"
-   ]
+   ],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_app_hub.dart",
@@ -122,7 +149,11 @@
    "atomList": [
     "DsScaffold",
     "DsNavTile"
-   ]
+   ],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_app_rec1.dart",
@@ -131,7 +162,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_app_rec2.dart",
@@ -140,7 +175,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_app_rec3.dart",
@@ -149,7 +188,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_app_rec4.dart",
@@ -158,7 +201,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_app_rec5.dart",
@@ -167,7 +214,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_app_rec6.dart",
@@ -176,7 +227,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_attendance_subset.dart",
@@ -184,7 +239,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 7,
-   "widgets": 3078,
+   "widgets": 3084,
    "atomList": [
     "DsScaffold",
     "MediaRow",
@@ -193,7 +248,11 @@
     "DsSection",
     "DsCalendar",
     "StatusChip"
-   ]
+   ],
+   "taps": 12,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_business.dart",
@@ -202,7 +261,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_cap.dart",
@@ -215,7 +278,11 @@
     "DsScaffold",
     "GaugeMeter",
     "PremiumRing"
-   ]
+   ],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_capautodream.dart",
@@ -224,7 +291,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_capclockcalendar.dart",
@@ -233,7 +304,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_capmailphone.dart",
@@ -242,7 +317,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_captimegematria.dart",
@@ -251,7 +330,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_cards11.dart",
@@ -260,7 +343,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_charts.dart",
@@ -269,7 +356,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_components.dart",
@@ -278,7 +369,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_composite_att_fee.dart",
@@ -286,7 +381,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 7,
-   "widgets": 3078,
+   "widgets": 3084,
    "atomList": [
     "DsScaffold",
     "MediaRow",
@@ -295,7 +390,11 @@
     "DsSection",
     "DsCalendar",
     "StatusChip"
-   ]
+   ],
+   "taps": 12,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_composite_stu_att_fee.dart",
@@ -303,7 +402,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 7,
-   "widgets": 2441,
+   "widgets": 2453,
    "atomList": [
     "DsScaffold",
     "FilterChipPill",
@@ -312,7 +411,11 @@
     "StatRow",
     "StatusChip",
     "DsTable"
-   ]
+   ],
+   "taps": 5,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_controls.dart",
@@ -321,7 +424,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_core_ayincase.dart",
@@ -329,7 +436,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 6,
-   "widgets": 918,
+   "widgets": 923,
    "atomList": [
     "DsScaffold",
     "DsSection",
@@ -337,7 +444,11 @@
     "AlertBanner",
     "SoftButton",
     "DsTable"
-   ]
+   ],
+   "taps": 1,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_core_callentry.dart",
@@ -345,7 +456,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 6,
-   "widgets": 924,
+   "widgets": 930,
    "atomList": [
     "DsScaffold",
     "DsSection",
@@ -353,7 +464,11 @@
     "AlertBanner",
     "SoftButton",
     "DsTable"
-   ]
+   ],
+   "taps": 1,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_core_delivery.dart",
@@ -361,7 +476,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 6,
-   "widgets": 1335,
+   "widgets": 1338,
    "atomList": [
     "DsScaffold",
     "DsSection",
@@ -369,7 +484,11 @@
     "AlertBanner",
     "SoftButton",
     "DsTable"
-   ]
+   ],
+   "taps": 1,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_core_diallogentry.dart",
@@ -377,7 +496,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 6,
-   "widgets": 835,
+   "widgets": 841,
    "atomList": [
     "DsScaffold",
     "DsSection",
@@ -385,7 +504,11 @@
     "AlertBanner",
     "SoftButton",
     "DsTable"
-   ]
+   ],
+   "taps": 1,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_core_enrollment.dart",
@@ -393,7 +516,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 6,
-   "widgets": 1353,
+   "widgets": 1357,
    "atomList": [
     "DsScaffold",
     "DsSection",
@@ -401,7 +524,11 @@
     "AlertBanner",
     "SoftButton",
     "DsTable"
-   ]
+   ],
+   "taps": 1,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_core_family.dart",
@@ -409,7 +536,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 6,
-   "widgets": 1268,
+   "widgets": 1271,
    "atomList": [
     "DsScaffold",
     "DsSection",
@@ -417,7 +544,11 @@
     "AlertBanner",
     "SoftButton",
     "DsTable"
-   ]
+   ],
+   "taps": 1,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_core_shopassignment.dart",
@@ -425,7 +556,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 6,
-   "widgets": 1174,
+   "widgets": 1177,
    "atomList": [
     "DsScaffold",
     "DsSection",
@@ -433,7 +564,11 @@
     "AlertBanner",
     "SoftButton",
     "DsTable"
-   ]
+   ],
+   "taps": 1,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_core_tzbox.dart",
@@ -441,7 +576,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 6,
-   "widgets": 1187,
+   "widgets": 1191,
    "atomList": [
     "DsScaffold",
     "DsSection",
@@ -449,7 +584,11 @@
     "AlertBanner",
     "SoftButton",
     "DsTable"
-   ]
+   ],
+   "taps": 1,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_courses_subset.dart",
@@ -461,7 +600,11 @@
    "atomList": [
     "DsScaffold",
     "DsTable"
-   ]
+   ],
+   "taps": 0,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_crazy.dart",
@@ -470,7 +613,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_dash11.dart",
@@ -479,7 +626,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_dashboard_subset.dart",
@@ -494,7 +645,11 @@
     "DsSection",
     "TrendStat",
     "NeonBars"
-   ]
+   ],
+   "taps": 0,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_entry.dart",
@@ -503,7 +658,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_feedback10.dart",
@@ -512,7 +671,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_fees_subset.dart",
@@ -520,7 +683,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 12,
-   "widgets": 1275,
+   "widgets": 1278,
    "atomList": [
     "DsScaffold",
     "DsEnumField",
@@ -534,7 +697,11 @@
     "DsBars",
     "BareStat",
     "AlertBanner"
-   ]
+   ],
+   "taps": 4,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_form9.dart",
@@ -543,7 +710,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_improv.dart",
@@ -552,7 +723,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_input9.dart",
@@ -561,7 +736,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_media.dart",
@@ -570,7 +749,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_mission.dart",
@@ -579,7 +762,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_mon.dart",
@@ -588,7 +775,11 @@
    "drift": true,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_monitor.dart",
@@ -603,7 +794,11 @@
     "PremiumStat",
     "NeonBars",
     "AlertBanner"
-   ]
+   ],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_navflow.dart",
@@ -612,7 +807,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_overlay10.dart",
@@ -621,7 +820,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_parents_subset.dart",
@@ -642,7 +845,11 @@
     "BareStat",
     "StatRow",
     "AlertBanner"
-   ]
+   ],
+   "taps": 11,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_quest1.dart",
@@ -651,7 +858,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_quest2.dart",
@@ -660,7 +871,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_quest3.dart",
@@ -669,7 +884,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_retarget_donation_from_fee.dart",
@@ -677,7 +896,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 13,
-   "widgets": 2039,
+   "widgets": 2048,
    "atomList": [
     "DsScaffold",
     "SegmentedSwitch",
@@ -692,7 +911,11 @@
     "DsSection",
     "MediaRow",
     "StatusChip"
-   ]
+   ],
+   "taps": 6,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_retarget_family_from_stu.dart",
@@ -700,22 +923,26 @@
    "rendered": true,
    "drift": false,
    "atoms": 13,
-   "widgets": 1920,
+   "widgets": 2020,
    "atomList": [
     "DsScaffold",
-    "SegmentedSwitch",
+    "DsSection",
     "StatusChip",
+    "AlertBanner",
+    "SegmentedSwitch",
     "DsSearch",
     "SoftButton",
     "FilterChipPill",
     "GradientCard",
     "StatHero",
     "BareStat",
-    "AlertBanner",
-    "DsSection",
     "MediaRow",
     "StatRow"
-   ]
+   ],
+   "taps": 8,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": true
   },
   {
    "file": "gen_retarget_room_from_rm.dart",
@@ -735,7 +962,11 @@
     "SoftButton",
     "DsSearch",
     "FilterChipPill"
-   ]
+   ],
+   "taps": 8,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_retarget_shopitem_from_crs.dart",
@@ -743,7 +974,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 11,
-   "widgets": 2111,
+   "widgets": 2120,
    "atomList": [
     "DsScaffold",
     "SegmentedSwitch",
@@ -756,7 +987,11 @@
     "BareStat",
     "DsSection",
     "AlertBanner"
-   ]
+   ],
+   "taps": 8,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_retarget_supporter_from_tch.dart",
@@ -764,7 +999,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 14,
-   "widgets": 2537,
+   "widgets": 2538,
    "atomList": [
     "DsScaffold",
     "SegmentedSwitch",
@@ -780,31 +1015,36 @@
     "MediaRow",
     "StatRow",
     "StatusChip"
-   ]
+   ],
+   "taps": 4,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_retarget_tzbox_from_tch.dart",
    "screen": "TzBoxScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 14,
-   "widgets": 2537,
+   "atoms": 11,
+   "widgets": 2319,
    "atomList": [
     "DsScaffold",
+    "DsSection",
+    "StatusChip",
+    "AlertBanner",
     "SegmentedSwitch",
     "GradientCard",
     "StatHero",
     "BareStat",
-    "AlertBanner",
     "DsSearch",
     "SoftButton",
-    "FilterChipPill",
-    "DsSection",
-    "PremiumAvatar",
-    "MediaRow",
-    "StatRow",
-    "StatusChip"
-   ]
+    "FilterChipPill"
+   ],
+   "taps": 4,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": true
   },
   {
    "file": "gen_retarget_volunteer_from_rm.dart",
@@ -824,7 +1064,11 @@
     "SoftButton",
     "DsSearch",
     "FilterChipPill"
-   ]
+   ],
+   "taps": 8,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_retarget_worktask_from_dash.dart",
@@ -832,7 +1076,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 11,
-   "widgets": 2002,
+   "widgets": 2035,
    "atomList": [
     "DsScaffold",
     "SegmentedSwitch",
@@ -845,7 +1089,11 @@
     "StatHero",
     "StatRow",
     "BareStat"
-   ]
+   ],
+   "taps": 3,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_rich.dart",
@@ -854,7 +1102,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_rooms_subset.dart",
@@ -870,7 +1122,11 @@
     "DsSection",
     "AlertBanner",
     "SoftButton"
-   ]
+   ],
+   "taps": 6,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_shipping.dart",
@@ -879,7 +1135,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_showcase.dart",
@@ -888,7 +1148,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_states.dart",
@@ -897,7 +1161,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_students_subset.dart",
@@ -905,7 +1173,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 7,
-   "widgets": 2424,
+   "widgets": 2436,
    "atomList": [
     "DsScaffold",
     "FilterChipPill",
@@ -914,7 +1182,11 @@
     "StatRow",
     "StatusChip",
     "DsTable"
-   ]
+   ],
+   "taps": 5,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_teachers_subset.dart",
@@ -931,7 +1203,11 @@
     "MediaRow",
     "SoftButton",
     "AlertBanner"
-   ]
+   ],
+   "taps": 4,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_team.dart",
@@ -940,7 +1216,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_text.dart",
@@ -949,7 +1229,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_viz.dart",
@@ -958,7 +1242,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_widgets.dart",
@@ -967,7 +1255,11 @@
    "drift": false,
    "atoms": 0,
    "widgets": 0,
-   "atomList": []
+   "atomList": [],
+   "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   }
  ]
 }
