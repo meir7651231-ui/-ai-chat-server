@@ -1,0 +1,178 @@
+{
+ "v": 1,
+ "ts": "2026-09-04T02:26:39.167Z",
+ "query": "custody guardian block permission role visibility משמורת אפוטרופוס חסימה הרשאה תפקיד",
+ "tokens": [
+  "custody",
+  "guardian",
+  "block",
+  "permission",
+  "role",
+  "visibility",
+  "שמורת",
+  "אפוטרופוס",
+  "חסימה",
+  "רשאה",
+  "תפקיד"
+ ],
+ "oracle": {
+  "atomIndexSha": "7b7050510b62a04885765ed30a940c05aaecbe96def91f6ed9f563499417d57f",
+  "logicCensusSha": "359db54bd2e70a0ea956fbc39901e656de6229b80b8ddc917e49921e8ecf67bf",
+  "display": 1402,
+  "logic": 848
+ },
+ "candidates": [
+  {
+   "id": "roleFloorBlock",
+   "layer": "logic",
+   "file": "dart/role_floor_block.dart",
+   "score": 6,
+   "hits": [
+    "block",
+    "role"
+   ]
+  },
+  {
+   "id": "RoleRequestsInboxEmpty",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/role_requests_inbox_empty.dart",
+   "score": 4,
+   "hits": [
+    "role",
+    "תפקיד"
+   ]
+  },
+  {
+   "id": "blockReason",
+   "layer": "logic",
+   "file": "dart-maor/block-reason.dart",
+   "score": 3,
+   "hits": [
+    "block"
+   ]
+  },
+  {
+   "id": "flowRole",
+   "layer": "logic",
+   "file": "dart/flow_role.dart",
+   "score": 3,
+   "hits": [
+    "role"
+   ]
+  },
+  {
+   "id": "guardExport",
+   "layer": "logic",
+   "file": "dart-maor/guard-export.dart",
+   "score": 3,
+   "hits": [
+    "guardian"
+   ]
+  },
+  {
+   "id": "roleOf",
+   "layer": "logic",
+   "file": "dart-maor/role-of.dart",
+   "score": 3,
+   "hits": [
+    "role"
+   ]
+  },
+  {
+   "id": "setExportBlocked",
+   "layer": "logic",
+   "file": "dart-maor/set-export-blocked.dart",
+   "score": 3,
+   "hits": [
+    "block"
+   ]
+  },
+  {
+   "id": "SkeletonBlock",
+   "layer": "display",
+   "file": "dart-ui-bs/premium/feedback/skeleton_block.dart",
+   "score": 3,
+   "hits": [
+    "block"
+   ]
+  },
+  {
+   "id": "StatBlock",
+   "layer": "display",
+   "file": "dart-ui-bs/stat_block.dart",
+   "score": 3,
+   "hits": [
+    "block"
+   ]
+  },
+  {
+   "id": "AssignButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/assign_button.dart",
+   "score": 1,
+   "hits": [
+    "תפקיד"
+   ]
+  },
+  {
+   "id": "CourierPersonalAreaCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/courier_personal_area_card.dart",
+   "score": 1,
+   "hits": [
+    "תפקיד"
+   ]
+  },
+  {
+   "id": "CustomerCard",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__manager_dashboard_screen/customer_card.dart",
+   "score": 1,
+   "hits": [
+    "תפקיד"
+   ]
+  },
+  {
+   "id": "DirectoryRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__home_shell/directory_row.dart",
+   "score": 1,
+   "hits": [
+    "תפקיד"
+   ]
+  },
+  {
+   "id": "PendingCheckRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__manager_dashboard_screen/pending_check_row.dart",
+   "score": 1,
+   "hits": [
+    "תפקיד"
+   ]
+  },
+  {
+   "id": "ProfileCard",
+   "layer": "display",
+   "file": "dart-ui-bs/profile_card.dart",
+   "score": 1,
+   "hits": [
+    "תפקיד"
+   ]
+  }
+ ],
+ "strong": [
+  "roleFloorBlock",
+  "RoleRequestsInboxEmpty",
+  "blockReason",
+  "flowRole",
+  "guardExport",
+  "roleOf",
+  "setExportBlocked",
+  "SkeletonBlock",
+  "StatBlock"
+ ],
+ "creates": null,
+ "chosen": null,
+ "why": null,
+ "sig": "a5e20c42bb69a22c667c043e50cb834a8c979ba5f3149985687db0a0e8947036"
+}

@@ -1,0 +1,231 @@
+{
+ "v": 1,
+ "ts": "2026-09-04T02:26:38.485Z",
+ "query": "parent family messaging הורה משפחה הודעה שיחה unread read receipt",
+ "tokens": [
+  "parent",
+  "family",
+  "messaging",
+  "ורה",
+  "שפחה",
+  "ודעה",
+  "יחה",
+  "unread",
+  "read",
+  "receipt"
+ ],
+ "oracle": {
+  "atomIndexSha": "7b7050510b62a04885765ed30a940c05aaecbe96def91f6ed9f563499417d57f",
+  "logicCensusSha": "359db54bd2e70a0ea956fbc39901e656de6229b80b8ddc917e49921e8ecf67bf",
+  "display": 1402,
+  "logic": 848
+ },
+ "candidates": [
+  {
+   "id": "canIssueReceipt",
+   "layer": "logic",
+   "file": "dart-maor/can-issue-receipt.dart",
+   "score": 3,
+   "hits": [
+    "receipt"
+   ]
+  },
+  {
+   "id": "deliveriesOfFamily",
+   "layer": "logic",
+   "file": "dart-maor/deliveries-of-family.dart",
+   "score": 3,
+   "hits": [
+    "family"
+   ]
+  },
+  {
+   "id": "deliverReceipt",
+   "layer": "logic",
+   "file": "dart-maor/deliver-receipt.dart",
+   "score": 3,
+   "hits": [
+    "receipt"
+   ]
+  },
+  {
+   "id": "familyContext",
+   "layer": "logic",
+   "file": "dart-maor/family-context.dart",
+   "score": 3,
+   "hits": [
+    "family"
+   ]
+  },
+  {
+   "id": "familyOf",
+   "layer": "logic",
+   "file": "dart/family_of.dart",
+   "score": 3,
+   "hits": [
+    "family"
+   ]
+  },
+  {
+   "id": "mergeFamilyImport",
+   "layer": "logic",
+   "file": "dart-maor/merge-family-import.dart",
+   "score": 3,
+   "hits": [
+    "family"
+   ]
+  },
+  {
+   "id": "offerNewFamily",
+   "layer": "logic",
+   "file": "dart-maor/offer-new-family.dart",
+   "score": 3,
+   "hits": [
+    "family"
+   ]
+  },
+  {
+   "id": "readCloudEnvelope",
+   "layer": "logic",
+   "file": "dart-maor/read-cloud-envelope.dart",
+   "score": 3,
+   "hits": [
+    "read"
+   ]
+  },
+  {
+   "id": "readFilteredMode",
+   "layer": "logic",
+   "file": "dart/read_filtered_mode.dart",
+   "score": 3,
+   "hits": [
+    "read"
+   ]
+  },
+  {
+   "id": "readFilteredUrlParam",
+   "layer": "logic",
+   "file": "dart/read_filtered_url_param.dart",
+   "score": 3,
+   "hits": [
+    "read"
+   ]
+  },
+  {
+   "id": "readIcsFeedToken",
+   "layer": "logic",
+   "file": "dart-maor/read-ics-feed-token.dart",
+   "score": 3,
+   "hits": [
+    "read"
+   ]
+  },
+  {
+   "id": "readOrgSecretsMeta",
+   "layer": "logic",
+   "file": "dart-maor/read-org-secrets-meta.dart",
+   "score": 3,
+   "hits": [
+    "read"
+   ]
+  },
+  {
+   "id": "receiptFmtOf",
+   "layer": "logic",
+   "file": "dart-maor/receipt-fmt-of.dart",
+   "score": 3,
+   "hits": [
+    "receipt"
+   ]
+  },
+  {
+   "id": "receiptHtml",
+   "layer": "logic",
+   "file": "dart-maor/receipt-html.dart",
+   "score": 3,
+   "hits": [
+    "receipt"
+   ]
+  },
+  {
+   "id": "receiptLines",
+   "layer": "logic",
+   "file": "dart-maor/receipt-lines.dart",
+   "score": 3,
+   "hits": [
+    "receipt"
+   ]
+  },
+  {
+   "id": "receiptVerifyCode",
+   "layer": "logic",
+   "file": "dart-maor/receipt-verify-code.dart",
+   "score": 3,
+   "hits": [
+    "receipt"
+   ]
+  },
+  {
+   "id": "resolveEnrollFamily",
+   "layer": "logic",
+   "file": "dart-maor/resolve-enroll-family.dart",
+   "score": 3,
+   "hits": [
+    "family"
+   ]
+  },
+  {
+   "id": "supportUnread",
+   "layer": "logic",
+   "file": "dart-maor/support-unread.dart",
+   "score": 3,
+   "hits": [
+    "unread"
+   ]
+  },
+  {
+   "id": "CircleFab",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/circle_fab.dart",
+   "score": 2,
+   "hits": [
+    "ודעה",
+    "יחה"
+   ]
+  },
+  {
+   "id": "DateChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/date_chip.dart",
+   "score": 2,
+   "hits": [
+    "ודעה",
+    "יחה"
+   ]
+  }
+ ],
+ "strong": [
+  "canIssueReceipt",
+  "deliveriesOfFamily",
+  "deliverReceipt",
+  "familyContext",
+  "familyOf",
+  "mergeFamilyImport",
+  "offerNewFamily",
+  "readCloudEnvelope",
+  "readFilteredMode",
+  "readFilteredUrlParam",
+  "readIcsFeedToken",
+  "readOrgSecretsMeta",
+  "receiptFmtOf",
+  "receiptHtml",
+  "receiptLines",
+  "receiptVerifyCode",
+  "resolveEnrollFamily",
+  "supportUnread"
+ ],
+ "creates": null,
+ "chosen": null,
+ "why": null,
+ "sig": "255704c0c00a5db93e65476ffd394ac4e446c4f2411abf7c88472ed8aed810ef"
+}

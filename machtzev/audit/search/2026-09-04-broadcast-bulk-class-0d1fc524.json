@@ -1,0 +1,179 @@
+{
+ "v": 1,
+ "ts": "2026-09-04T02:26:38.972Z",
+ "query": "broadcast bulk class template render תבנית הודעה לכיתה מוסדי שידור",
+ "tokens": [
+  "broadcast",
+  "bulk",
+  "class",
+  "template",
+  "render",
+  "תבנית",
+  "ודעה",
+  "כיתה",
+  "וסדי",
+  "ידור"
+ ],
+ "oracle": {
+  "atomIndexSha": "7b7050510b62a04885765ed30a940c05aaecbe96def91f6ed9f563499417d57f",
+  "logicCensusSha": "359db54bd2e70a0ea956fbc39901e656de6229b80b8ddc917e49921e8ecf67bf",
+  "display": 1402,
+  "logic": 848
+ },
+ "candidates": [
+  {
+   "id": "renderTemplate",
+   "layer": "logic",
+   "file": "dart-maor/render-template.dart",
+   "score": 6,
+   "hits": [
+    "template",
+    "render"
+   ]
+  },
+  {
+   "id": "attachChargesBulk",
+   "layer": "logic",
+   "file": "dart-maor/attach-charges-bulk.dart",
+   "score": 3,
+   "hits": [
+    "bulk"
+   ]
+  },
+  {
+   "id": "broadcastRow",
+   "layer": "logic",
+   "file": "dart/broadcast_row.dart",
+   "score": 3,
+   "hits": [
+    "broadcast"
+   ]
+  },
+  {
+   "id": "bulkMailRecipients",
+   "layer": "logic",
+   "file": "dart-maor/bulk-mail-recipients.dart",
+   "score": 3,
+   "hits": [
+    "bulk"
+   ]
+  },
+  {
+   "id": "bulkWaRecipients",
+   "layer": "logic",
+   "file": "dart-maor/bulk-wa-recipients.dart",
+   "score": 3,
+   "hits": [
+    "bulk"
+   ]
+  },
+  {
+   "id": "classifyScope",
+   "layer": "logic",
+   "file": "dart/classify_scope.dart",
+   "score": 3,
+   "hits": [
+    "class"
+   ]
+  },
+  {
+   "id": "generateCsvTemplate",
+   "layer": "logic",
+   "file": "dart/generate_csv_template.dart",
+   "score": 3,
+   "hits": [
+    "template"
+   ]
+  },
+  {
+   "id": "namesToTemplateLines",
+   "layer": "logic",
+   "file": "dart-maor/names-to-template-lines.dart",
+   "score": 3,
+   "hits": [
+    "template"
+   ]
+  },
+  {
+   "id": "plainClassifications",
+   "layer": "logic",
+   "file": "dart/plain_classifications.dart",
+   "score": 3,
+   "hits": [
+    "class"
+   ]
+  },
+  {
+   "id": "templateKeys",
+   "layer": "logic",
+   "file": "dart-maor/template-keys.dart",
+   "score": 3,
+   "hits": [
+    "template"
+   ]
+  },
+  {
+   "id": "templateLinesToNames",
+   "layer": "logic",
+   "file": "dart-maor/template-lines-to-names.dart",
+   "score": 3,
+   "hits": [
+    "template"
+   ]
+  },
+  {
+   "id": "SearchEmptyState",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__store_screen/search_empty_state.dart",
+   "score": 2,
+   "hits": [
+    "תבנית",
+    "ודעה"
+   ]
+  },
+  {
+   "id": "AlertBanner",
+   "layer": "display",
+   "file": "dart-ui-bs/alert_banner.dart",
+   "score": 1,
+   "hits": [
+    "ודעה"
+   ]
+  },
+  {
+   "id": "AuroraField",
+   "layer": "display",
+   "file": "dart-ui-bs/aurora_field.dart",
+   "score": 1,
+   "hits": [
+    "תבנית"
+   ]
+  },
+  {
+   "id": "CartChatBubble",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__home_shell/cart_chat_bubble.dart",
+   "score": 1,
+   "hits": [
+    "תבנית"
+   ]
+  }
+ ],
+ "strong": [
+  "renderTemplate",
+  "attachChargesBulk",
+  "broadcastRow",
+  "bulkMailRecipients",
+  "bulkWaRecipients",
+  "classifyScope",
+  "generateCsvTemplate",
+  "namesToTemplateLines",
+  "plainClassifications",
+  "templateKeys",
+  "templateLinesToNames"
+ ],
+ "creates": null,
+ "chosen": null,
+ "why": null,
+ "sig": "0d1fc524806aea539fd92325e95e4a01943686c1b52a20327d87d480965fe58b"
+}

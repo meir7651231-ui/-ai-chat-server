@@ -1,0 +1,185 @@
+{
+ "v": 1,
+ "ts": "2026-09-04T02:26:38.774Z",
+ "query": "phone contact valid whatsapp channel wa link טלפון קשר תקין ערוץ וואטסאפ",
+ "tokens": [
+  "phone",
+  "contact",
+  "valid",
+  "whatsapp",
+  "channel",
+  "wa",
+  "link",
+  "טלפון",
+  "קשר",
+  "תקין",
+  "ערוץ",
+  "ואטסאפ"
+ ],
+ "oracle": {
+  "atomIndexSha": "7b7050510b62a04885765ed30a940c05aaecbe96def91f6ed9f563499417d57f",
+  "logicCensusSha": "359db54bd2e70a0ea956fbc39901e656de6229b80b8ddc917e49921e8ecf67bf",
+  "display": 1402,
+  "logic": 848
+ },
+ "candidates": [
+  {
+   "id": "waAppLink",
+   "layer": "logic",
+   "file": "dart-maor/wa-app-link.dart",
+   "score": 6,
+   "hits": [
+    "wa",
+    "link"
+   ]
+  },
+  {
+   "id": "waLink",
+   "layer": "logic",
+   "file": "dart-maor/wa-link.dart",
+   "score": 6,
+   "hits": [
+    "wa",
+    "link"
+   ]
+  },
+  {
+   "id": "allSupPhones",
+   "layer": "logic",
+   "file": "dart-maor/all-sup-phones.dart",
+   "score": 3,
+   "hits": [
+    "phone"
+   ]
+  },
+  {
+   "id": "bulkWaRecipients",
+   "layer": "logic",
+   "file": "dart-maor/bulk-wa-recipients.dart",
+   "score": 3,
+   "hits": [
+    "wa"
+   ]
+  },
+  {
+   "id": "cleanSupPhones",
+   "layer": "logic",
+   "file": "dart-maor/clean-sup-phones.dart",
+   "score": 3,
+   "hits": [
+    "phone"
+   ]
+  },
+  {
+   "id": "ContactTile",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__store_screen/contact_tile.dart",
+   "score": 3,
+   "hits": [
+    "contact"
+   ]
+  },
+  {
+   "id": "contactToRow",
+   "layer": "logic",
+   "file": "dart-maor/contact-to-row.dart",
+   "score": 3,
+   "hits": [
+    "contact"
+   ]
+  },
+  {
+   "id": "fixPhone",
+   "layer": "logic",
+   "file": "dart-maor/fix-phone.dart",
+   "score": 3,
+   "hits": [
+    "phone"
+   ]
+  },
+  {
+   "id": "formatIsraeliPhone",
+   "layer": "logic",
+   "file": "dart-maor/format-israeli-phone.dart",
+   "score": 3,
+   "hits": [
+    "phone"
+   ]
+  },
+  {
+   "id": "importableContacts",
+   "layer": "logic",
+   "file": "dart-maor/importable-contacts.dart",
+   "score": 3,
+   "hits": [
+    "contact"
+   ]
+  },
+  {
+   "id": "isJunkContact",
+   "layer": "logic",
+   "file": "dart-maor/is-junk-contact.dart",
+   "score": 3,
+   "hits": [
+    "contact"
+   ]
+  },
+  {
+   "id": "isValidPin",
+   "layer": "logic",
+   "file": "dart-maor/is-valid-pin.dart",
+   "score": 3,
+   "hits": [
+    "valid"
+   ]
+  },
+  {
+   "id": "isValidSlug",
+   "layer": "logic",
+   "file": "dart-maor/is-valid-slug.dart",
+   "score": 3,
+   "hits": [
+    "valid"
+   ]
+  },
+  {
+   "id": "LinkBtn",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/link_btn.dart",
+   "score": 3,
+   "hits": [
+    "link"
+   ]
+  },
+  {
+   "id": "linkedBudget",
+   "layer": "logic",
+   "file": "dart/linked_budget.dart",
+   "score": 3,
+   "hits": [
+    "link"
+   ]
+  }
+ ],
+ "strong": [
+  "waAppLink",
+  "waLink",
+  "allSupPhones",
+  "bulkWaRecipients",
+  "cleanSupPhones",
+  "ContactTile",
+  "contactToRow",
+  "fixPhone",
+  "formatIsraeliPhone",
+  "importableContacts",
+  "isJunkContact",
+  "isValidPin",
+  "isValidSlug",
+  "LinkBtn",
+  "linkedBudget"
+ ],
+ "creates": null,
+ "chosen": null,
+ "why": null,
+ "sig": "3fab6546dc47cf7b27e1952641ab356a312d00e94cd1e7ee0a38d98e713f4e22"
+}

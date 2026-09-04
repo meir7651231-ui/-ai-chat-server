@@ -1,0 +1,179 @@
+{
+ "v": 1,
+ "ts": "2026-09-04T02:26:38.674Z",
+ "query": "quiet hours night shabbat block send window שעות מנוחה שבת לילה שליחה",
+ "tokens": [
+  "quiet",
+  "hours",
+  "night",
+  "shabbat",
+  "block",
+  "send",
+  "window",
+  "עות",
+  "נוחה",
+  "שבת",
+  "ילה",
+  "ליחה"
+ ],
+ "oracle": {
+  "atomIndexSha": "7b7050510b62a04885765ed30a940c05aaecbe96def91f6ed9f563499417d57f",
+  "logicCensusSha": "359db54bd2e70a0ea956fbc39901e656de6229b80b8ddc917e49921e8ecf67bf",
+  "display": 1402,
+  "logic": 848
+ },
+ "candidates": [
+  {
+   "id": "CourierAttendanceSendReportButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/courier_attendance_send_report_button.dart",
+   "score": 4,
+   "hits": [
+    "send",
+    "עות"
+   ]
+  },
+  {
+   "id": "SendReportButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/send_report_button.dart",
+   "score": 4,
+   "hits": [
+    "send",
+    "עות"
+   ]
+  },
+  {
+   "id": "blockReason",
+   "layer": "logic",
+   "file": "dart-maor/block-reason.dart",
+   "score": 3,
+   "hits": [
+    "block"
+   ]
+  },
+  {
+   "id": "isSendableSupportText",
+   "layer": "logic",
+   "file": "dart-maor/is-sendable-support-text.dart",
+   "score": 3,
+   "hits": [
+    "send"
+   ]
+  },
+  {
+   "id": "roleFloorBlock",
+   "layer": "logic",
+   "file": "dart/role_floor_block.dart",
+   "score": 3,
+   "hits": [
+    "block"
+   ]
+  },
+  {
+   "id": "setExportBlocked",
+   "layer": "logic",
+   "file": "dart-maor/set-export-blocked.dart",
+   "score": 3,
+   "hits": [
+    "block"
+   ]
+  },
+  {
+   "id": "SkeletonBlock",
+   "layer": "display",
+   "file": "dart-ui-bs/premium/feedback/skeleton_block.dart",
+   "score": 3,
+   "hits": [
+    "block"
+   ]
+  },
+  {
+   "id": "StatBlock",
+   "layer": "display",
+   "file": "dart-ui-bs/stat_block.dart",
+   "score": 3,
+   "hits": [
+    "block"
+   ]
+  },
+  {
+   "id": "timeHoursTotal",
+   "layer": "logic",
+   "file": "dart-maor/time-hours-total.dart",
+   "score": 3,
+   "hits": [
+    "hours"
+   ]
+  },
+  {
+   "id": "AiBar",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_bar.dart",
+   "score": 1,
+   "hits": [
+    "עות"
+   ]
+  },
+  {
+   "id": "AiCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_card.dart",
+   "score": 1,
+   "hits": [
+    "עות"
+   ]
+  },
+  {
+   "id": "AiCardBtn",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_card_btn.dart",
+   "score": 1,
+   "hits": [
+    "עות"
+   ]
+  },
+  {
+   "id": "AiCardSub",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_card_sub.dart",
+   "score": 1,
+   "hits": [
+    "עות"
+   ]
+  },
+  {
+   "id": "AiCardTop",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_card_top.dart",
+   "score": 1,
+   "hits": [
+    "עות"
+   ]
+  },
+  {
+   "id": "AiFinTile",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_fin_tile.dart",
+   "score": 1,
+   "hits": [
+    "עות"
+   ]
+  }
+ ],
+ "strong": [
+  "CourierAttendanceSendReportButton",
+  "SendReportButton",
+  "blockReason",
+  "isSendableSupportText",
+  "roleFloorBlock",
+  "setExportBlocked",
+  "SkeletonBlock",
+  "StatBlock",
+  "timeHoursTotal"
+ ],
+ "creates": null,
+ "chosen": null,
+ "why": null,
+ "sig": "e7388aa576063a72b83bfa0c0fe2fbe38973df746523d3984a0a8d725f6b16ca"
+}

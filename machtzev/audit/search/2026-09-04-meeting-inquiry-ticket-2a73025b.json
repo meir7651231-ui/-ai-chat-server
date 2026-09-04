@@ -1,0 +1,183 @@
+{
+ "v": 1,
+ "ts": "2026-09-04T02:26:38.881Z",
+ "query": "meeting inquiry ticket overdue escalate response time פגישה פנייה זמן תגובה העלאה",
+ "tokens": [
+  "meeting",
+  "inquiry",
+  "ticket",
+  "overdue",
+  "escalate",
+  "response",
+  "time",
+  "פגישה",
+  "פנייה",
+  "זמן",
+  "תגובה",
+  "עלאה"
+ ],
+ "oracle": {
+  "atomIndexSha": "7b7050510b62a04885765ed30a940c05aaecbe96def91f6ed9f563499417d57f",
+  "logicCensusSha": "359db54bd2e70a0ea956fbc39901e656de6229b80b8ddc917e49921e8ecf67bf",
+  "display": 1402,
+  "logic": 848
+ },
+ "candidates": [
+  {
+   "id": "Timeline",
+   "layer": "display",
+   "file": "dart-ui-bs/timeline_flow.dart",
+   "score": 4,
+   "hits": [
+    "time",
+    "זמן"
+   ]
+  },
+  {
+   "id": "TimelineItem",
+   "layer": "display",
+   "file": "dart-ui-bs/premium/lists/timeline_item.dart",
+   "score": 4,
+   "hits": [
+    "time",
+    "זמן"
+   ]
+  },
+  {
+   "id": "Countdown",
+   "layer": "display",
+   "file": "dart-ui-bs/countdown_timer.dart",
+   "score": 3,
+   "hits": [
+    "time",
+    "זמן"
+   ]
+  },
+  {
+   "id": "OrderTimeline",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__store_screen/order_timeline.dart",
+   "score": 3,
+   "hits": [
+    "time"
+   ]
+  },
+  {
+   "id": "overdueContactTaskDrafts",
+   "layer": "logic",
+   "file": "dart-maor/overdue-contact-task-drafts.dart",
+   "score": 3,
+   "hits": [
+    "overdue"
+   ]
+  },
+  {
+   "id": "SettingsTimeRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_time_row.dart",
+   "score": 3,
+   "hits": [
+    "time"
+   ]
+  },
+  {
+   "id": "supportMsgTime",
+   "layer": "logic",
+   "file": "dart-maor/support-msg-time.dart",
+   "score": 3,
+   "hits": [
+    "time"
+   ]
+  },
+  {
+   "id": "taskOverdue",
+   "layer": "logic",
+   "file": "dart-maor/task-overdue.dart",
+   "score": 3,
+   "hits": [
+    "overdue"
+   ]
+  },
+  {
+   "id": "timeCostTotal",
+   "layer": "logic",
+   "file": "dart-maor/time-cost-total.dart",
+   "score": 3,
+   "hits": [
+    "time"
+   ]
+  },
+  {
+   "id": "timeHoursTotal",
+   "layer": "logic",
+   "file": "dart-maor/time-hours-total.dart",
+   "score": 3,
+   "hits": [
+    "time"
+   ]
+  },
+  {
+   "id": "timeToMin",
+   "layer": "logic",
+   "file": "dart-maor/time-to-min.dart",
+   "score": 3,
+   "hits": [
+    "time"
+   ]
+  },
+  {
+   "id": "upcomingMeetings",
+   "layer": "logic",
+   "file": "dart-maor/upcoming-meetings.dart",
+   "score": 3,
+   "hits": [
+    "meeting"
+   ]
+  },
+  {
+   "id": "DsCalendar",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_calendar.dart",
+   "score": 1,
+   "hits": [
+    "זמן"
+   ]
+  },
+  {
+   "id": "GoldButton",
+   "layer": "display",
+   "file": "dart-ui-bs/premium/showcase/gold_button.dart",
+   "score": 1,
+   "hits": [
+    "תגובה"
+   ]
+  },
+  {
+   "id": "JourneyRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__manager_dashboard_screen/journey_row.dart",
+   "score": 1,
+   "hits": [
+    "זמן"
+   ]
+  }
+ ],
+ "strong": [
+  "Timeline",
+  "TimelineItem",
+  "Countdown",
+  "OrderTimeline",
+  "overdueContactTaskDrafts",
+  "SettingsTimeRow",
+  "supportMsgTime",
+  "taskOverdue",
+  "timeCostTotal",
+  "timeHoursTotal",
+  "timeToMin",
+  "upcomingMeetings"
+ ],
+ "creates": null,
+ "chosen": null,
+ "why": null,
+ "sig": "2a73025bc497c736d43075edccf3ffa03a23e7133554f92b35796624297865f9"
+}

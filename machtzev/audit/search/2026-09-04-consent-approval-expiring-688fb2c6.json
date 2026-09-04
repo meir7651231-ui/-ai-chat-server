@@ -1,0 +1,174 @@
+{
+ "v": 1,
+ "ts": "2026-09-04T02:26:38.576Z",
+ "query": "consent approval expiring reminder אישור טיול מדיה תרופה תזכורת",
+ "tokens": [
+  "consent",
+  "approval",
+  "expiring",
+  "reminder",
+  "אישור",
+  "טיול",
+  "דיה",
+  "תרופה",
+  "תזכורת"
+ ],
+ "oracle": {
+  "atomIndexSha": "7b7050510b62a04885765ed30a940c05aaecbe96def91f6ed9f563499417d57f",
+  "logicCensusSha": "359db54bd2e70a0ea956fbc39901e656de6229b80b8ddc917e49921e8ecf67bf",
+  "display": 1402,
+  "logic": 848
+ },
+ "candidates": [
+  {
+   "id": "ApprovalCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/approval_card.dart",
+   "score": 4,
+   "hits": [
+    "approval",
+    "אישור"
+   ]
+  },
+  {
+   "id": "ApprovalTaskCard",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__manager_dashboard_screen/approval_task_card.dart",
+   "score": 4,
+   "hits": [
+    "approval",
+    "אישור"
+   ]
+  },
+  {
+   "id": "ApprovalButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/approval_button.dart",
+   "score": 3,
+   "hits": [
+    "approval"
+   ]
+  },
+  {
+   "id": "ConsentDialog",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/consent_dialog.dart",
+   "score": 3,
+   "hits": [
+    "consent"
+   ]
+  },
+  {
+   "id": "expiringIntakes",
+   "layer": "logic",
+   "file": "dart-maor/expiring-intakes.dart",
+   "score": 3,
+   "hits": [
+    "expiring"
+   ]
+  },
+  {
+   "id": "lineInstallReminders",
+   "layer": "logic",
+   "file": "dart/line_install_reminders.dart",
+   "score": 3,
+   "hits": [
+    "reminder"
+   ]
+  },
+  {
+   "id": "segulaReminders",
+   "layer": "logic",
+   "file": "dart-maor/segula-reminders.dart",
+   "score": 3,
+   "hits": [
+    "reminder"
+   ]
+  },
+  {
+   "id": "BarcodeReticle",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/barcode_reticle.dart",
+   "score": 1,
+   "hits": [
+    "אישור"
+   ]
+  },
+  {
+   "id": "CaEmpty",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ca_empty.dart",
+   "score": 1,
+   "hits": [
+    "אישור"
+   ]
+  },
+  {
+   "id": "CaPill",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ca_pill.dart",
+   "score": 1,
+   "hits": [
+    "אישור"
+   ]
+  },
+  {
+   "id": "CaPrimary",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ca_primary.dart",
+   "score": 1,
+   "hits": [
+    "אישור"
+   ]
+  },
+  {
+   "id": "CardDone",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/card_done.dart",
+   "score": 1,
+   "hits": [
+    "אישור"
+   ]
+  },
+  {
+   "id": "CardTop",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/card_top.dart",
+   "score": 1,
+   "hits": [
+    "אישור"
+   ]
+  },
+  {
+   "id": "CaSubTitle",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ca_sub_title.dart",
+   "score": 1,
+   "hits": [
+    "אישור"
+   ]
+  },
+  {
+   "id": "CourierFormsPillButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/courier_forms_pill_button.dart",
+   "score": 1,
+   "hits": [
+    "אישור"
+   ]
+  }
+ ],
+ "strong": [
+  "ApprovalCard",
+  "ApprovalTaskCard",
+  "ApprovalButton",
+  "ConsentDialog",
+  "expiringIntakes",
+  "lineInstallReminders",
+  "segulaReminders"
+ ],
+ "creates": null,
+ "chosen": null,
+ "why": null,
+ "sig": "688fb2c69cba2360fef89ef1e9bc5564e6deb95db32439132d37c4f7698aca97"
+}

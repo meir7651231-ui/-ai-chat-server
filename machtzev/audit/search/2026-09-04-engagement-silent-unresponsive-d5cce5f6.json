@@ -1,0 +1,175 @@
+{
+ "v": 1,
+ "ts": "2026-09-04T02:26:39.072Z",
+ "query": "engagement silent unresponsive days since risk הורה לא מגיב שקט ימים",
+ "tokens": [
+  "engagement",
+  "silent",
+  "unresponsive",
+  "days",
+  "since",
+  "risk",
+  "ורה",
+  "לא",
+  "גיב",
+  "שקט",
+  "ימים"
+ ],
+ "oracle": {
+  "atomIndexSha": "7b7050510b62a04885765ed30a940c05aaecbe96def91f6ed9f563499417d57f",
+  "logicCensusSha": "359db54bd2e70a0ea956fbc39901e656de6229b80b8ddc917e49921e8ecf67bf",
+  "display": 1402,
+  "logic": 848
+ },
+ "candidates": [
+  {
+   "id": "cockpitDaysSince",
+   "layer": "logic",
+   "file": "dart-maor/cockpit-days-since.dart",
+   "score": 6,
+   "hits": [
+    "days",
+    "since"
+   ]
+  },
+  {
+   "id": "cockpitAtRisk",
+   "layer": "logic",
+   "file": "dart-maor/cockpit-at-risk.dart",
+   "score": 3,
+   "hits": [
+    "risk"
+   ]
+  },
+  {
+   "id": "daysBetweenDst",
+   "layer": "logic",
+   "file": "dart/days_between_dst.dart",
+   "score": 3,
+   "hits": [
+    "days"
+   ]
+  },
+  {
+   "id": "isoDaysAgo",
+   "layer": "logic",
+   "file": "dart-maor/iso-days-ago.dart",
+   "score": 3,
+   "hits": [
+    "days"
+   ]
+  },
+  {
+   "id": "BrandListRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__manager_dashboard_screen/brand_list_row.dart",
+   "score": 2,
+   "hits": [
+    "ורה",
+    "לא"
+   ]
+  },
+  {
+   "id": "CartChatBubble",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__home_shell/cart_chat_bubble.dart",
+   "score": 2,
+   "hits": [
+    "ורה",
+    "לא"
+   ]
+  },
+  {
+   "id": "SettingsScreenShell",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_screen_shell.dart",
+   "score": 2,
+   "hits": [
+    "ורה",
+    "לא"
+   ]
+  },
+  {
+   "id": "AccessoryTile",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/accessory_tile.dart",
+   "score": 1,
+   "hits": [
+    "לא"
+   ]
+  },
+  {
+   "id": "AccordionPanel",
+   "layer": "display",
+   "file": "dart-ui-bs/accordion_panel.dart",
+   "score": 1,
+   "hits": [
+    "ורה"
+   ]
+  },
+  {
+   "id": "AiBar",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_bar.dart",
+   "score": 1,
+   "hits": [
+    "ימים"
+   ]
+  },
+  {
+   "id": "AiCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_card.dart",
+   "score": 1,
+   "hits": [
+    "ימים"
+   ]
+  },
+  {
+   "id": "AiCardBtn",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_card_btn.dart",
+   "score": 1,
+   "hits": [
+    "ימים"
+   ]
+  },
+  {
+   "id": "AiCardSub",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_card_sub.dart",
+   "score": 1,
+   "hits": [
+    "ימים"
+   ]
+  },
+  {
+   "id": "AiCardTop",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_card_top.dart",
+   "score": 1,
+   "hits": [
+    "ימים"
+   ]
+  },
+  {
+   "id": "AiFinTile",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_fin_tile.dart",
+   "score": 1,
+   "hits": [
+    "ימים"
+   ]
+  }
+ ],
+ "strong": [
+  "cockpitDaysSince",
+  "cockpitAtRisk",
+  "daysBetweenDst",
+  "isoDaysAgo"
+ ],
+ "creates": null,
+ "chosen": null,
+ "why": null,
+ "sig": "d5cce5f61fa69caaeb69b40c58d37bb71b1302bf65ddf8c747e0391ca7e3561e"
+}
