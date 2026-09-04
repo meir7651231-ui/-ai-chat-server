@@ -688,10 +688,11 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     if (!(cInline && /^(?:Text\(|Directionality\(textDirection: TextDirection\.\w+, child: Text\()/.test(e))) flowAllText = false;
     // ילד בעל max-width בשורת-flex (‏.ramp .sp.body{max-width:34em}) ⇒ מתכווץ-לזמין וגולש-שורות. ‏Row לא-חוסמת
     // ⇒ IntrinsicWidth (שנועד לחסימת-עמודה-אב) הופך לשורה-בודדת גולשת. Flexible חוסם-לזמין ⇒ הטקסט עוטף כמו במקור.
-    if (pFlexRow && !selfWrap && !selfWidthUnbounded && cst['max-width'] && cst['max-width'] !== 'none' && !px(cst['width']) && pct(cst['width']) !== '1.000') {
+    { const fxc = (cst['flex'] || '').trim(); const cGrow = (fxc && fxc !== 'none' && fxc !== '0' && !/^0\b/.test(fxc)) || pct(cst['width']) === '1.000';   // ילד-כזה יקבל Expanded בהמשך — לא לעטוף גם Flexible (ParentData מתחרה)
+    if (pFlexRow && !selfWrap && !selfWidthUnbounded && !cGrow && cst['max-width'] && cst['max-width'] !== 'none' && !px(cst['width'])) {
       e = e.replace(/^IntrinsicWidth\(child: ([\s\S]*)\)$/, '$1');
       e = `Flexible(child: ${e})`;
-    }
+    } }
     // flex-grow חיובי או width:100% בשורת-flex ⇒ Expanded (ממלא · מוסר אי-חסימת-רוחב; SizedBox אינסופי
     // בתוך Row-לא-חסום קורס — Expanded נותן רוחב-חסום שה-SizedBox ממלא).
     // ‏Expanded חוקי רק בתוך Flex (Row/Column) — לא בתוך Wrap (selfWrap ⇒ ParentData-crash). מיכל-Wrap ⇒ ילד גודל-תוכן.
@@ -720,8 +721,12 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   const tb = c => c === 'baseline' ? ', textBaseline: TextBaseline.alphabetic' : '';
   // display:flex (בלוק) = רוחב-מלא ⇒ MainAxisSize.max · inline-flex = כיווץ-לתוכן ⇒ min · space-* דורש max
   const isInlineFlex = /inline-flex/.test(disp);
+  // overflow-x:auto/scroll בשורת-flex (‏.chiprail) ⇒ גלילה-אופקית: ה-Row חייב MainAxisSize.min (בתוך scroll הרוחב
+  // לא-חסום ⇒ max קורס), ועוטפים ב-SingleChildScrollView אופקי. שומר על עודף-התוכן במקום overflow-error.
+  const ovfX = (st['overflow-x'] || st['overflow'] || '').trim();
+  const hScroll = isFlex && !col && /auto|scroll/.test(ovfX);
   // פריט בתוך Wrap אב ⇒ גודל-תוכן (min), אחרת שורת-max ממלאת-שורה ⇒ פריט-אחד-בשורה (נערם). CSS: פריט-flex-wrap מתכווץ-לתוכן.
-  const rowSize = (parentWrap || selfWidthUnbounded) ? 'MainAxisSize.min' : (((isFlex && !isInlineFlex) || /^space-/.test(st['justify-content'] || '')) ? 'MainAxisSize.max' : 'MainAxisSize.min');
+  const rowSize = (parentWrap || selfWidthUnbounded || hScroll) ? 'MainAxisSize.min' : (((isFlex && !isInlineFlex) || /^space-/.test(st['justify-content'] || '')) ? 'MainAxisSize.max' : 'MainAxisSize.min');
   // flex-wrap:wrap בשורה ⇒ Wrap (Flutter Row לא עוטף ⇒ overflow). spacing=gap, runSpacing=gap.
   const flexWrap = /wrap/.test(st['flex-wrap'] || '') && !/nowrap/.test(st['flex-wrap'] || '');
   // display:grid עם grid-template-columns של fr — עמודות-שוות בשורה-אחת ⇒ Row של Expanded (flex לפי fr).
@@ -742,6 +747,18 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   if (flow.length === 0) inner = null;
   else if (flow.length === 1 && !isFlex) { const m = flowVM[0]; inner = (m && (m.mt || m.mb)) ? `Padding(padding: const EdgeInsets.only(top: ${m.mt}, bottom: ${m.mb}), child: ${flow[0]})` : flow[0]; }
   else if (isGrid && gridCols && flow.length > 1 && flow.length <= gridCols.length) inner = `Row(crossAxisAlignment: CrossAxisAlignment.${rowCross}${tb(rowCross)}${listSep}, children: [${flow.map((e, i) => `Expanded(flex: ${Math.max(1, Math.round(gridCols[i] || 1))}, child: ${e})`).join(', ')}])`;
+  // grid רב-שורות ‏repeat(N,1fr) (‏.pinpad{grid-template-columns:repeat(3,1fr)} · 12 מקשים) ⇒ Column של שורות-N.
+  // בלי זה כל התאים נערמים אנכית בטור-אחד ⇒ overflow-bottom. תא-חסר בשורה-אחרונה מרופד לשמירת-רוחב-העמודות.
+  else if (isGrid && gridCols && gridCols.length > 1 && flow.length > gridCols.length) {
+    const ncol = gridCols.length, rows = [];
+    for (let i = 0; i < flow.length; i += ncol) {
+      const chunk = flow.slice(i, i + ncol);
+      const cells = chunk.map((e, j) => `Expanded(flex: ${Math.max(1, Math.round(gridCols[j] || 1))}, child: ${e})`);
+      for (let j = chunk.length; j < ncol; j++) cells.push(`Expanded(flex: ${Math.max(1, Math.round(gridCols[j] || 1))}, child: const SizedBox.shrink())`);
+      rows.push(`Row(crossAxisAlignment: CrossAxisAlignment.${rowCross}${tb(rowCross)}${gap ? `, spacing: ${gap}` : ''}, children: [${cells.join(', ')}])`);
+    }
+    inner = `Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch${gap ? `, spacing: ${gap}` : ''}, children: [${rows.join(', ')}])`;
+  }
   else if (isFlex && !col && flexWrap) inner = `Wrap(spacing: ${gap || 0}, runSpacing: ${gap || 0}, crossAxisAlignment: WrapCrossAlignment.${rowCross === 'start' ? 'start' : rowCross === 'end' ? 'end' : 'center'}, children: [${flow.join(', ')}])`;
   // שורת-חפיפה (‏margin-inline-start שלילי אחיד · חפיפת-אווטארים): Flutter לא תומך בשוליים/spacing שלילי ⇒
   // בונים Stack עם מיקום-מצטבר. pos[i]=pos[i-1]+w[i-1]+negMS[i] (הצעד קטן מהרוחב). RTL⇒right, LTR⇒left.
@@ -755,7 +772,7 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     const items = flow.map((e, i) => `Positioned(${side}: ${(+pos[i].toFixed(2))}, top: 0, bottom: 0, child: Center(widthFactor: 1.0, child: ${e}))`).join(', ');
     inner = `SizedBox(width: ${(+totalW.toFixed(2))}${maxH ? `, height: ${maxH}` : ''}, child: Stack(clipBehavior: Clip.none, children: [${items}]))`;
   }
-  else if (isFlex && !col) inner = `Row(mainAxisSize: ${rowSize}${majE}, crossAxisAlignment: CrossAxisAlignment.${rowCross}${tb(rowCross)}${listSep}, children: [${flow.join(', ')}])`;
+  else if (isFlex && !col) { inner = `Row(mainAxisSize: ${rowSize}${majE}, crossAxisAlignment: CrossAxisAlignment.${rowCross}${tb(rowCross)}${listSep}, children: [${flow.join(', ')}])`; if (hScroll) inner = `SingleChildScrollView(scrollDirection: Axis.horizontal, child: ${inner})`; }
   // מיכל לא-flex עם ילדים inline-level בלבד ⇒ זרימת-inline אמיתית דרך Text.rich (עוטף-שורות +
   // bidi-RTL + baseline) במקום Row (שלא עוטף ⇒ overflow בפסקה). textAlign מהמיכל.
   else if (!isFlex && flowInline) inner = `Text.rich(TextSpan(children: [${flow.map(toRichSpan).join(', ')}])${ta === 'center' ? ', textAlign: TextAlign.center' : ta === 'left' ? ', textAlign: TextAlign.left' : ta === 'right' ? ', textAlign: TextAlign.right' : ''})`;
@@ -785,6 +802,9 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
       if (isLtr) { if (l == null && iss != null) l = iss; if (r == null && ise != null) r = ise; }
       else { if (r == null && iss != null) r = iss; if (l == null && ise != null) l = ise; }
       if (t != null) p.push(`top: ${t}`); if (b != null) p.push(`bottom: ${b}`); if (l != null) p.push(`left: ${l}`); if (r != null) p.push(`right: ${r}`);
+      // anchor-אופקי-יחיד (רק left או רק right) ⇒ הרוחב לא-חסום. אם לאלמנט width/min-width — מזינים ל-Positioned
+      // (‏.menu absolute · inset-inline-start:0 · min-width:176 · ילדי-mi width:100% ⇒ אחרת infinity-crash).
+      { const aw = pxe(a.st['width']), amw = pxe(a.st['min-width']); if (!(l != null && r != null)) { if (aw != null) p.push(`width: ${aw}`); else if (amw != null) p.push(`width: ${amw}`); } }
       // abs בלי inset-אנכי + הורה align-items:center ⇒ המיקום-הסטטי ממורכז-אנכית (CSS). בלי זה
       // Positioned(right:X) בלי top מיישר-לראש. פותרים ע"י top:0/bottom:0 + Align(center) על הילד.
       if (t == null && b == null && /center/.test(st['align-items'] || '')) {
@@ -834,6 +854,12 @@ function wrapBox(st, inner, node, noPad, parentFlex = false, noVMargin = false) 
   if (effInline) st = Object.assign({}, st, { width: undefined, height: undefined, margin: undefined, 'margin-top': undefined, 'margin-bottom': undefined });
   const deco = decoration(st), pad = noPad ? null : edge(st, 'padding'), mg = edge(st, 'margin', noVMargin);
   const w = px(st['width']), h = px(st['height']), minH = px(st['min-height']), minW = px(st['min-width']);
+  // גובה-קבוע + overflow:auto/scroll ⇒ גלילה-אנכית (מציג-ראש כמו המקור) · overflow:hidden ⇒ חיתוך. בלי זה
+  // תוכן-גבוה-ממיכל-קבוע (‏.stage{height:230;overflow:auto}) זורק RenderFlex-overflow ב-flutter test.
+  // רק overflow:auto/scroll (גלילה מכוונת · ‏.stage). NOT overflow:hidden — הוא נפוץ לחיתוך-קישוט (‏.btn ripple)
+  // על תוכן-שנכנס, ו-OverflowBox היה משבש את מרכוזו. תוכן-גולש-אמת עם hidden נדיר ⇒ מדולג בכוונה.
+  const ovfY = (st['overflow-y'] || st['overflow'] || '').trim();
+  if (h && inner && /auto|scroll/.test(ovfY)) inner = `SingleChildScrollView(child: ${inner})`;
   const cp = [];
   if (w) cp.push(`width: ${w}`);
   if (h) cp.push(`height: ${h}`);
