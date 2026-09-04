@@ -260,9 +260,10 @@ function parseInline(style) {
 function chainMatches(chain, ancestors) {
   let i = 0;
   for (const part of chain) {
-    const cls = part.cls || [];            // אבות נושאים מחלקות בלבד; חלק-תג-אב לא-תואם (נדיר ב-CSS זה)
+    const cls = part.cls || [];            // אבות נושאים מחלקות בלבד. חלק-תג-אב (‏.rate button svg — 'button')
+    if (!cls.length) continue;             // אין מעקב-תגי-אב ⇒ חלק-תג מדולג (‏.rate button svg ≈ .rate svg) — עדיף על אי-התאמה+קריסה.
     let found = false;
-    while (i < ancestors.length) { if (cls.length && cls.every(c => ancestors[i].includes(c))) { found = true; i++; break; } i++; }
+    while (i < ancestors.length) { if (cls.every(c => ancestors[i].includes(c))) { found = true; i++; break; } i++; }
     if (!found) return false;
   }
   return true;
@@ -570,13 +571,18 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     // height:100% (גרף .cbody svg) עם heightFactor:1 בהקשר-גובה-לא-חסום כופה אינסוף (קריסת-רינדור!) ⇒ נופל
     // ל-AspectRatio (מילוי-רוחב לפי יחס-viewBox — תקף תמיד). כך גרפי-dataviz נצבעים במקום לזרוק.
     const wf = pct(st0['width']), hf = pct(st0['height']);
-    const wfp = wf && +wf < 1 ? wf : null, hfp = hf && +hf < 1 ? hf : null;
+    let wfp = wf && +wf < 1 ? wf : null, hfp = hf && +hf < 1 ? hf : null;
+    // ‏FittedBox(contain) כבר שומר יחס-viewBox ⇒ די בציר-אחד. יש גם width% וגם height% ⇒ משתמשים ב-widthFactor
+    // בלבד (הרוחב חסום כמעט-תמיד; heightFactor בהקשר-גובה-לא-חסום — תא aspect-ratio:auto/span — כופה אינסוף וקורס).
+    if (wfp && hfp) hfp = null;
     if (wfp || hfp) return `FractionallySizedBox(${wfp ? `widthFactor: ${wfp}, ` : ''}${hfp ? `heightFactor: ${hfp}, ` : ''}child: FittedBox(fit: BoxFit.contain, child: SizedBox(width: ${sc.vbw}, height: ${sc.vbh}, child: ${body})))`;
     if (wpx) return `SizedBox(width: ${wpx}, height: ${hpx || (wpx / (sc.vbw / sc.vbh)).toFixed(2)}, child: ${body})`;  // אייקון/טבעת גודל-קבוע
     // גובה-קבוע, רוחב-אוטו (block ⇒ ממלא-מיכל). CustomPaint חסר-ילד עם רוחב-לא-חסום צובע ברוחב-0 (הגל נעלם!) ⇒
     // LayoutBuilder כובל את הרוחב למיכל (כשחסום) או ל-viewBox (בהקשר-רופף) ⇒ הצייר ממלא, preserveAspectRatio=none.
     if (hpx) return `SizedBox(height: ${hpx}, child: LayoutBuilder(builder: (ctx, cns) => SizedBox(width: cns.maxWidth.isFinite ? cns.maxWidth : ${sc.vbw}, height: ${hpx}, child: ${body})))`;
-    return `AspectRatio(aspectRatio: ${(sc.vbw / sc.vbh).toFixed(4)}, child: ${body})`;  // width:100% ⇒ מילוי-רוחב לפי יחס-viewBox
+    // width:100%/ללא-גודל ⇒ מילוי-רוחב לפי יחס-viewBox. LayoutBuilder חוסם-עצמי: רוחב-חסום ⇒ ממלא (כמו AspectRatio) ·
+    // רוחב-לא-חסום (svg בכפתור-הוג בהקשר-דו-לא-חסום) ⇒ נופל ל-viewBox במקום לזרוק (AspectRatio דו-לא-חסום קורס).
+    return `LayoutBuilder(builder: (ctx, cns) { final _w = cns.maxWidth.isFinite ? cns.maxWidth : ${sc.vbw}.0; return SizedBox(width: _w, height: _w / ${(sc.vbw / sc.vbh).toFixed(4)}, child: ${body}); })`;
   }
   if (node.tag === 'input') {
     const ph = node.attrs.placeholder || node.attrs.value || 'Label';
@@ -696,7 +702,13 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     // flex-grow חיובי או width:100% בשורת-flex ⇒ Expanded (ממלא · מוסר אי-חסימת-רוחב; SizedBox אינסופי
     // בתוך Row-לא-חסום קורס — Expanded נותן רוחב-חסום שה-SizedBox ממלא).
     // ‏Expanded חוקי רק בתוך Flex (Row/Column) — לא בתוך Wrap (selfWrap ⇒ ParentData-crash). מיכל-Wrap ⇒ ילד גודל-תוכן.
-    if (pFlexRow && !selfWrap && !selfWidthUnbounded) { const fx = (cst['flex'] || '').trim(); if ((fx && fx !== 'none' && fx !== '0' && !/^0\b/.test(fx)) || pct(cst['width']) === '1.000') e = `Expanded(child: ${e})`; }
+    if (pFlexRow && !selfWrap && !selfWidthUnbounded) {
+      const fx = (cst['flex'] || '').trim(); const cpct = pct(cst['width']);
+      if ((fx && fx !== 'none' && fx !== '0' && !/^0\b/.test(fx)) || cpct === '1.000') e = `Expanded(child: ${e})`;
+      // אחוז-רוחב חלקי בשורת-flex (‏.z{width:40%}) ⇒ Expanded(flex=אחוז) פרופורציונלי. ‏FractionallySizedBox(widthFactor)
+      // ב-Row קורס (הציר-הראשי לא-חסום). מסירים את העטיפה שה-wrapBox יצר ומחליפים ב-Expanded משוקלל.
+      else if (cpct && +cpct > 0 && +cpct < 1) { e = e.replace(/^FractionallySizedBox\(widthFactor: [\d.]+, alignment: Alignment\.\w+, child: ([\s\S]*)\)$/, '$1'); e = `Expanded(flex: ${Math.max(1, Math.round(+cpct * 100))}, child: ${e})`; }
+    }
     // מטא לזיהוי שורת-חפיפה: margin-inline-start/left שלילי (‏.av{-14px}) + רוחב-קבוע ⇒ מיקום ב-Stack.
     // פותרים var() של הילד (‏.av.s{--sz:34px} ⇒ width:var(--sz)) לפני px — אחרת width לא-פתור ⇒ הענף מוחמץ.
     const cstVars = Object.assign({}, nextVars); for (const vk in cst) if (vk.startsWith('--')) cstVars[vk] = resolveVars(cst[vk], nextVars);
