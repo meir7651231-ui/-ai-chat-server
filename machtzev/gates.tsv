@@ -10,6 +10,9 @@ no-fakers	מגן-בלי-סטיות (§20-ג): אף מזייף מ-FAKERS של com
 opcensus	סנסוס-פעולות-היסוד (GENMAX·G1 · §20-ד): כל אטום באורקל+דאטה ממופה ל-op מצורת-שקעים/חתימה · 0 לא-ממופים · zero=תצוגה בלבד · אוצר-ops וספירה רק-עולים	commit	generator/ops-census-baseline.json;grow
 shapeops	סכמה⇒פעולות-יסוד (GENMAX·G2 · §20-ד): ops נגזרים מטיפוסי-השדות של schema-fields · כיסוי חלקיקי-הזהב (golden-modules.json) רק-עולה	commit	generator/shape-ops-baseline.json;grow
 cover	כיסוי-שקעים=הרכבה (GENMAX·G3 · §20-ב): שחזור טבלת-ATOM הידנית של compose-engine ע"י המנוע (top-1/top-3) — רק-עולה	commit	generator/cover-baseline.json;grow
+goldquarry	חציבת-הזהב (GENMAX·G4a · הכרעה-24 "חוצבים ומרכיבים"): 9 מודולי-הזהב ⇒ קטלוג-שברים דטרמיניסטי; הרכבה-חוזרת ביט-לביט 9/9 · הקטלוג ≡ חציבה-טרייה · תובנות רק-עולות	commit	generator/quarry-baseline.json;grow
+rendermodule	הרכבה-מהקטלוג (GENMAX·G4): --all ≡ מקור 9/9 · מודולי-משנה מינימליים (gen_*_subset.dart) ≡ הרכבה-דטרמיניסטית (סגירת-תלויות · build סינתטי) — קומפילציה בשער-buildsmart	commit	—
+goldenharness	רתמת-הזהב (GENMAX·G4 · השער הקשה): מודול מורכב-מחדש (compose+declared) מוחלף במראה ועובר את בדיקות-הזהב המקוריות בלי שינוי-בדיקה — רק-עולה (מודולים · בדיקות); מדולג בלי buildsmart	push	generator/render-module-baseline.json;grow
 compose-determinism	קומפוזר-דטרמיניסטי (23-ג): compose-engine על 15 החלקיקים ≡ compose-engine-report.md	commit	
 index-complete	M3: כל סקריפט ב-machtzev/ עם שורה ב-INDEX.md · חוב רק-יורד	commit	index-baseline.json;shrink
 atom-count	מספר-אטומים לאזור (new/*) לא יורד (1.7 שהושמט)	commit	atom-count-baseline.json;grow

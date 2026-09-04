@@ -50,8 +50,12 @@ const gateCalls = (rd('machtzev/police.mjs').match(/^\s*gate(Dirty)?\(/gm) || []
 const totalAtoms = census.length + logic.length;
 const wiredTotal = dispAll.size + engines.length;
 const wiredPct = (wiredTotal / totalAtoms * 100).toFixed(1);
+// GENMAX·G4 — רתמת-הזהב (golden-harness.mjs): מודולי-זהב שהמנוע מרכיב-מחדש מהקטלוג ועוברים את בדיקותיהם המקוריות
+const gh = (() => { try { return JSON.parse(rd('machtzev/generator/golden-harness-report.json')); } catch { return null; } })();
+const goldenLine = gh ? `${gh.regenerated}/${gh.modules} מודולים · ${gh.tests}/${gh.testsTotal} בדיקות` : '— (לא הורץ)';
 const layers = {
   '🔢 סה"כ אטומים מאונדקסים (תצוגה+לוגיקה)': totalAtoms,
+  '🏁 זהב-מורכב-מחדש (GENMAX·G4 · render-module compose)': goldenLine,
   '🔌 מחווטים-למחולל בפועל': `${wiredTotal} (${wiredPct}%) · ${totalAtoms - wiredTotal} מפורקים-אך-לא-מחווטים`,
   '  ↳ מול כשירים-לחיווט (eligible)': `${wiredTotal}/${eligible} (${(wiredTotal / (eligible || 1) * 100).toFixed(1)}%) · כשירים: תצוגה ${eligibleDisp} (fields∧str≥1 ∪ collection ∪ series) + לוגיקה ${wireable} (wireable)`,
   '  ↳ חיווט-תצוגה': `${dispAll.size}/${census.length} (${(dispAll.size / census.length * 100).toFixed(1)}%)`,
@@ -107,7 +111,7 @@ if (process.argv.includes('--write')) {
     const pinsN = (rd('machtzev/pins.sha256').split('\n').filter(Boolean)).length;
     const block = `<!-- truth:begin · מחולל ע"י node machtzev/truth.mjs --write · אל תערוך ידנית -->\n` +
       `‏**${totalAtoms}** אטומים מאונדקסים (תצוגה **${census.length}** · לוגיקה **${logic.length}**) · מחווטים-למחולל **${wiredTotal}** מתוך **${eligible}** כשירים (${(wiredTotal / (eligible || 1) * 100).toFixed(1)}%) · ` +
-      `‏**${gatesN}** שערי-משטרה (gates.tsv) · **${pinsN}** קבצים נעולי-חתימה (pins.sha256)\n<!-- truth:end -->`;
+      `‏**${gatesN}** שערי-משטרה (gates.tsv) · **${pinsN}** קבצים נעולי-חתימה (pins.sha256) · זהב-מורכב-מחדש-מהקטלוג (G4) **${goldenLine}**\n<!-- truth:end -->`;
     const re = /<!-- truth:begin[^]*?<!-- truth:end -->/;
     if (re.test(cur)) { const next = cur.replace(re, block); if (next !== cur) { if (process.argv.includes('--gate')) { console.log('🔴 בלוק-האמת ב-CLAUDE.md סטה מהמחולל (R3-4.9) — node machtzev/truth.mjs --write'); process.exit(1); } fs.writeFileSync(cf, next); console.log('📐 CLAUDE.md truth-block עודכן'); } }
   } catch {}

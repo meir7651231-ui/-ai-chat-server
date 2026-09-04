@@ -2,6 +2,27 @@
 > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
 > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
 
+## L2026-09-04-goal-proof-4feb63 · מסך שסונכרן מהמראה = מסך שהשתנה — כרטיס-מטרה מתרענן עם רנדר אמיתי לפני commit; כיוון-הסנכרון הוא genesis⇒מראה, ולכן בנאי שכותב רק למראה משאיר את genesis ישן (4.9, G4a · מורים)
+GATE: goal-proof
+ref: 4feb63e45e534d4f0217c4ca216fa21f1583943c:new/dart-gen-bs/schoolos_teachers.dart
+ANTIPATTERN: timeline_item\.dart';\s*// ציר-זמן \(היעדרויות
+RULE: קובץ-מסך ב-new/ שמוחלף בגרסה חדשה (גם מהמראה) עובר `goal-card.mjs --refresh --picture <רנדר-חדש>` באותו commit; ובנאי שכותב לגלים 6–7ב ב-buildsmart בלבד חייב לכתוב גם ל-genesis (הרתמה תופסת: mirror≢source = כשל).
+מה נכשל: `schoolos_teachers.dart` ב-genesis היה wave-5 בעוד המראה wave-7ב; הסנכרון-חזרה שינה את המסך ⇒ goal-proof חסם (הכרטיס ישן). הראיה = ref (הבלוב-לפני: חתימת-imports של wave-5). החוק: רענון-כרטיס+תמונה הוא חלק מהסנכרון, לא צעד נפרד.
+
+## L2026-09-04-nobinary-4feb63 · קטלוג-שברים נושא טווחים בלבד — הבייטים נקראים מהמקור (ה-fixture) בעת ההרכבה; JSON עם טקסט-המקור = 1.5MB ונחסם (4.9, G4a · quarry)
+GATE: nobinary
+ref: 4feb63e45e534d4f0217c4ca216fa21f1583943c:new/dart-gen-bs/schoolos_teachers.dart
+ANTIPATTERN: if \(!subjects\(t\)\.contains\([^)]+\) \|\| clashOf\(t, c\) != null\) continue;\s*$
+RULE: קטלוג/אינדקס מחולל לא מעתיק גוף-קוד: שומר `range`/`sha` ומרכיב מהמקור ב-runtime (`fs.readFileSync(module).slice(range)`); כל פלט-מנוע > 1MB = אזעקת-תכן, לא מועמד ל-Allow.
+מה נכשל: `golden-fragments.json` (1,668 שברים עם `lines`) עבר 1MB ⇒ nobinary. הבלוב-לפני (ref) הוא אחד מ-9 המקורות ששוכפלו לתוך הקטלוג — הרגקס מזהה שורת-מקור שהועתקה כטקסט. החוק: הקטלוג מצביע, המקור מחזיק את הבייטים (486KB אחרי).
+
+## L2026-09-04-ratchet-down-4feb63 · שם-שער חדש נבדק מול gates.tsv לפני הרישום — `quarry` כבר היה שער (quarry-check של המחצבה) ורישום-כפול נקרא כ"החלפת-סקריפט" = החלשת-ראצ׳ט (4.9, G4a)
+GATE: ratchet-down
+ref: 4feb63e45e534d4f0217c4ca216fa21f1583943c:new/dart-gen-bs/schoolos_teachers.dart
+ANTIPATTERN: clashOf\(t, c\) != null\) continue;\n[\s\S]{0,240}?availableAt\(t, x\['day'\] as int
+RULE: לפני `gate('<id>', …)` ב-police: `grep -c "^<id>\t" machtzev/gates.tsv` חייב להחזיר 0; שם-שער = תחום+מטרה (`goldquarry`, לא `quarry`). שער-קיים לעולם לא מוחלף בסקריפט אחר בלי Allow מפורש.
+מה נכשל: `gate('quarry', 'generator/quarry-golden.mjs')` דרס את `quarry`⇒`quarry-check.mjs` ⇒ ratchet-down "סקריפט הוחלף · ארגומנטים השתנו". הבלוב-לפני (ref) = מצב-העץ ברגע-החסימה (מורים wave-5). התיקון: `goldquarry` — אפס החלשה (35 שערים · 21 baselines).
+
 ## L2026-09-04-goal-proof-af3c91 · קובץ-רכזת (hub) שמחווט מסכים הוא מסך — צריך כרטיס-מטרה; ו-KPI ביתי עם מספר-ליטרלי = דאטה-מזויף (4.9, חיווט-SchoolOS)
 GATE: goal-proof
 ref: af3c916e95aa0a4ce292e8eeb5cdf6458d12582c:new/dart-gen-bs/schoolos.dart
@@ -484,3 +505,23 @@ GATE: oracle
 מייבאים (4 מהם) **אינם באורקל**, ושער `oracle` ("אינדקס ≡ עץ-חי") ירוק כי הוא סופר מחלקות, לא קבצים.
 **לקח:** זהות-אטום = מחלקה **+ קובץ**, לא שם בלבד; שער-שלמות סופר קבצים-מול-אינדקס, לא שמות. עד התיקון-השורשי
 ב-`census/atom-index.mjs`, `op-census.mjs` משלים את החסרים כ-`Class@dir` (0 אטומים נופלים · §21).
+
+## L51 · נחיל ≠ מנוע — שלב-מנוע נבנה כמכניזם, לא כסשן/נחיל של סוכנים (4.9, נתפס ע"י הבעלים: "לא הבנתי למה נחיל ולא מנוע")
+GATE: rendermodule
+G4 (חלקיקים ⇒ מודול) שוגר כסשן-בנאי ואז כ-Workflow של סוכני-LLM — בזמן שהכרעה-24 אומרת במפורש **"המנוע מחליף את הסשנים"**.
+הבעלים עצר: המחולל הוא קוד דטרמיניסטי (§20-ד: אפס LLM בייצור), ולכן גם **בנייתו** היא מכניזם: חוצבים את הזהב (`quarry-golden.mjs`),
+מרכיבים מהקטלוג (`render-module.mjs`), מוכיחים ברתמה (`golden-harness.mjs`) — שלושתם `.mjs` שרצים בשער, בלי סוכן.
+**לקח:** לפני כל create_session/Workflow לשלב-G שואלים: "האם זה יכול להיות סקריפט שרץ ב-police?" — אם כן, זה חייב להיות.
+סוכן-LLM נשאר רק למה שאינו מכניזם (הכרעת-בעלים, באג-אמת שדורש הבנה). ANTIPATTERN: לשגר נחיל למשימה שהיא "פירוק+הרכבה של קיים".
+
+## L52 · חציבת-הזהב — מה חותכים, מה מדביקים, ומה הרתמה תופסת שהאנלייזר לא (4.9, GENMAX·G4a)
+GATE: goldenharness
+שבעה כשלים שנתפסו בבייטים בדרך ל-9/9:
+1. **תת-כותרת (`// ───`) בתוך גוש-ה-imports** פיצלה אותו — 42 imports של fees אבדו (99 שגיאות "undefined"). כלל: כל שבר-פתיח הנושא `import` נבחר תמיד.
+2. **`@override` לבדו** נחתך מההצהרה שאחריו; **שבר-הערות-בלבד** (כותרת-⊕) נשאר יתום שאף הרכבה לא בוחרת. חוקי-דבק: אנוטציה וכותרת רוכבות על הקוד שאחריהן — כך `declaredAtoms` יושבים על השבר שמממש אותם.
+3. **getter עם גוף-בלוק (`get x {`) וטיפוס-רשומה (`List<(String, num?)>`)** לא נתפסו כהצהרות ⇒ `weekIsos`/`avgGrades`/`_goalDefs` "לא מוגדרים".
+4. **מחלקת-ווידג׳ט = מבנה**: constructor+createState אינם "תוכן" — נבחרים כולם כשהמחלקה נבחרה; `State<X>` ⇒ X; `initState/dispose/didUpdateWidget` נקראים ע"י Flutter, לא ע"י הקוד ⇒ סגירת-תלויות לא מגיעה אליהם לבד.
+5. **build() של State** = חיווט-ההרכבה: במצב-compose הוא שבר ככל שבר (נזרע לפי אטומי-יעד); במצב-minimal נבנה סינתטי (DsScaffold מבוני-אפס-ארגומנטים) — שני המצבים דטרמיניסטיים ומוצהרים.
+6. **סחף-מראה:** `schoolos_teachers.dart` במראה-buildsmart היה 3 גלים (6·7·7ב) לפני genesis — סשן-הגימור כתב רק למראה. האנלייזר ירוק; הרתמה תפסה "ביט-זהה ועדיין 16/18". כלל: הרתמה בודקת mirror≡source לפני ההחלפה ומדווחת סחף ככשל.
+7. **CLI-בייבוא:** קטע ה-CLI של render-module רץ גם כשהרתמה מייבאת אותו (`--module` של הרתמה כתב `gen_teachers.dart`). כלל: `isMain` (argv[1] ≡ import.meta.url) לפני כל פעולת-CLI.
+**מה נשאר כנה:** 3 חברים-פרטיים-מתים בזהב (`_RoomsScreenState._anyCap` · `_StuData.daysSince` · `_CoursesData.coursesInRoom`) — ההרכבה לא מגיעה אליהם כי אף אחד לא קורא להם; הרתמה מדווחת אותם, לא מחביאה.

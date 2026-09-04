@@ -1,0 +1,3 @@
+        if (!subjects(t).contains(c['subject']) || clashOf(t, c) != null) continue;
+        if ((sessionsOf(c) as List).every((x) => availableAt(t, x['day'] as int, '${x['time']}'))) return {'course': c, 'from': o};
+// דוגמה מורעלת: מצב-העץ ברגע דריסת שער-קיים בשם (quarry) — שתי שורות-המקור-הישן צמודות

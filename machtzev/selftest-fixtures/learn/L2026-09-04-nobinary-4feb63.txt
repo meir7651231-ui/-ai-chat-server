@@ -1,0 +1,2 @@
+// דוגמה מורעלת: שורת-מקור שהועתקה לתוך קטלוג-JSON במקום range
+        if (!subjects(t).contains(c['subject']) || clashOf(t, c) != null) continue;

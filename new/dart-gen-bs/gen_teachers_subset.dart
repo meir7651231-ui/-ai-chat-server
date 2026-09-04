@@ -248,7 +248,6 @@ class _TeamData {
   }
   static List<Map<String, dynamic>> get todaySubs => subs.where((s) => s['date'] == today).toList()..sort((a, b) => '${a['time'] ?? ''}'.compareTo('${b['time'] ?? ''}'));
   static List<Map<String, dynamic>> get uncoveredToday => todaySubs.where((s) => (s['stage'] as int) < 2).toList();
-  static int get openSubs => subs.where((s) => (s['stage'] as int) < 2).length;
   static bool subOverdue(Map<String, dynamic> s) => taskOverdue({'due': s['date'], 'doneAt': (s['stage'] as int) == 2 ? s['date'] : null}, today); // מדף
   static int subsDone(Map<String, dynamic> t) => subs.where((s) => s['subId'] == t['id'] && s['stage'] == 2).length;
   static int subsReceived(Map<String, dynamic> t) => subs.where((s) => s['absentId'] == t['id'] && s['stage'] == 2).length;
@@ -303,14 +302,6 @@ class _TeamData {
   // ─── KPI-10 (המפרט) — ספירות/סכומים על מנועי-מדף ושדות-אמת (אפס StatBlock) ───
   static List<Map<String, dynamic>> get active => everyone.where(isActive).toList();
   static List<Map<String, dynamic>> get staff => everyone.where((t) => !isGone(t)).toList();
-  static int get absentN => active.where(absentToday).length + everyone.where((t) => statusOf(t) == 'leave' || statusOf(t) == 'unpaid').length;
-  static double get avgHours => active.isEmpty ? 0 : grandTotal(active, (t) => hoursWeek(t as Map<String, dynamic>)) / active.length;
-  static int get overN => active.where(overLoad).length;
-  static int get underN => active.where(underLoad).length;
-  static int get contractsN => staff.where(contractEndsMonth).length;
-  static int get certsN => active.where(certMissing).length;
-  static List<List<Object>> get byRole => countBy(staff, (t) => roleLabel[roleOf_(t as Map<String, dynamic>)] ?? roleOf_(t)); // מדף
-
   // ═══ איתור (הכרעה 23-ג) = DsSearch ⊕ smartFilter ⊕ smartScore ⊕ normSearch — לא `.contains` שטוח ═══
   static const Map<String, String> _finals = {'k1': 'כ', 'k2': 'מ', 'k3': 'נ', 'k4': 'פ', 'k5': 'צ'};
   static String _norm(dynamic q) => normSearch(q, _finals);
@@ -347,9 +338,6 @@ class _TeamData {
     final simple = {for (final e in locks.entries) if (e.key != 'subject' && e.key != 'cls') e.key: e.value};
     return finderMatches({'families': rows}, simple, _axisValue).cast<Map<String, dynamic>>();
   }
-  static List<String> get allSubjects => [for (final r in countBy([for (final t in staff) for (final sj in subjects(t)) sj], (x) => '$x')) '${r[0]}'];
-  static List<String> get allClasses => [for (final r in countBy([for (final t in staff) for (final c in coursesOf(t)) '${c['cls']}'], (x) => '$x')) '${r[0]}'];
-
   // ═══ חוזה-עמודות · מקום-שמור (חוק-7 · מבחן-הקונכייה) — 16 עמודות-המפרט כשקעי-דאטה ═══
   //   נגזרת(get)=תמיד-מוצגת · שדה(key)=מוארת רק כשרשומה נושאת ערך, חסר ⇒ שקט. photo/contact/classAttendance/updatedAt
   //   אין להם מקור-אמת/מוזרקים-בהצבה (חוק-6) ⇒ מקום-שמור: הזרקת-שדה ⇒ העמודה מאירה לבד, אפס-שינוי-קוד.
@@ -388,10 +376,6 @@ class _TeamData {
   static String timetableCsv(Map<String, dynamic> t) => toCsv([
         ['חוג', 'כיתה', 'חדר', 'יום', 'שעה'],
         for (final c in coursesOf(t)) for (final s in sessionsOf(c) as List) [c['name'], c['cls'], c['roomId'], dayNames[s['day'] as int], s['time']],
-      ], csvEscape) as String;
-  static String rosterCsv(List<Map<String, dynamic>> rows, [Set<String> hidden = const {}]) => toCsv([
-        [for (final c in columnDefs) if (colShown(c, rows, hidden)) c['label']],
-        for (final t in rows) [for (final c in columnDefs) if (colShown(c, rows, hidden)) cell(c, t)],
       ], csvEscape) as String;
   static bool colShown(Map<String, Object?> c, List<Map<String, dynamic>> rows, [Set<String> hidden = const {}]) =>
       !hidden.contains(c['key']) && (c['get'] != null || rows.any((t) => t[c['key']] != null && '${t[c['key']]}'.trim().isNotEmpty));
@@ -434,24 +418,6 @@ class _TeamData {
     return out;
   }
 
-  // ═══ פנקס-המקומות-השמורים (חוק-7 · מבחן-הקונכייה) — כל שקע חסר-נתון, מאיר לבד כשהנתון מוזרק (אפס-שינוי-קוד) ═══
-  //   שדות-רשומה: מפתח בדאטה ⇒ עמודה/שבב/טאב מאירים. יכולות-הצבה: מוזרקות בלוח-האם (חוק-6/7).
-  static const reservedSlots = <Map<String, String>>[
-    {'key': 'photo', 'what': 'תמונה (WorkerCert.photo)', 'lights': 'עמודת-תמונה · שבב'},
-    {'key': 'contact', 'what': 'קשר — טלפון/מייל (חוק-6, מוזרק)', 'lights': 'עמודת-קשר · שלח-הודעה'},
-    {'key': 'salary', 'what': 'שכר (payRate — מוגן-כספים)', 'lights': 'עמודת-שכר (כספים/מנהל)'},
-    {'key': 'classAttendance', 'what': 'דירוג-נוכחות-כיתותיו (מודול-נוכחות)', 'lights': 'עמודה'},
-    {'key': 'classPerf', 'what': 'ביצועי-כיתות {labels,values,monthly} (נוכחות/ציונים)', 'lights': 'טאב-ביצועים · השוואה-למנהל'},
-    {'key': 'updatedAt', 'what': 'עדכון-אחרון', 'lights': 'עמודה'},
-    {'key': 'peerReview', 'what': 'הערכות-עמיתים', 'lights': 'שבב-סקירה'},
-    {'key': 'studentFeedback', 'what': 'משוב-תלמידים', 'lights': 'שבב-סקירה'},
-    {'key': 'personnelFile', 'what': 'תיק-אישי', 'lights': 'שבב-סקירה'},
-    {'key': '__docs', 'what': 'אחסון-קבצים למסמכים', 'lights': 'טאב-מסמכים (הרשומה נרשמת כבר)'},
-    {'key': '__pdf', 'what': 'מנוע-PDF לייצוא/הדפסה', 'lights': 'ייצוא PDF (CSV חי)'},
-    {'key': '__fetch', 'what': 'חיבור-אסינק (טעינה/שגיאה)', 'lights': 'מצבי טעינה/שגיאה (השלד חי)'},
-  ];
-  static bool slotLit(Map<String, String> r) => !r['key']!.startsWith('__') && everyone.any((t) => t[r['key']] != null);
-
   // ═══ הרשאות-פר-תפקיד (הכרעה 23-ג · חוק-6 זהות=הזרקה) = roleOf ⊕ teacherIdOf ⊕ canGrantedAction ═══
   //   6 תפקידי-המפרט כעקרונות-דמו אטומים ('p:...' — לא מיילים, לא זהות-אמת; בהצבה מוזרקת זהות-ההתחברות).
   //   roleOf ⇒ admin/teacher/staff · teacherIdOf ⇒ המורה-המחובר (כרטיס-שלו בלבד) · features ⇒ פעולות-מגודרות.
@@ -476,8 +442,6 @@ class _TeamData {
         if (roleName(role) != 'admin') 'notes',
         if (!can(role, 'team.contract') && !can(role, 'team.assign')) 'contractEnd',
       };
-  static bool canSee(int role, Map<String, dynamic> t) => ownId(role) == null || ownId(role) == t['id']; // מורה: לא-של-אחרים
-
   // ─── פנקס-פעולות (מצב=חיווט · הבסיס const נשאר מקור-האמת) ───
   static final Map<String, String> statusOverride = {};
   static String statusOf(Map<String, dynamic> t) => statusOverride[t['id']] ?? (t['status'] as String);
@@ -547,13 +511,6 @@ class _TeamData {
   }
   static final List<Map<String, dynamic>> audit = []; // אודיט (מי·מה·מתי) — TimelineItem
   static void log(String who, String what, String target) => audit.insert(0, {'who': who, 'what': what, 'target': target, 'date': today});
-  static int _seq = 0;
-  static void addTeacher(String who) { // מורה-חדש: רשומה בצורת-החוזה; זהות = מקום-שמור להזרקה (חוק-6)
-    _seq++;
-    added.add({'id': 'n$_seq', 'name': 'מורה חדש/ה $_seq', 'role': 'subject', 'subjects': <String>[], 'homeroom': <String>[], 'contractHours': 20, 'contractType': 'זמני', 'startDate': today, 'status': 'active',
-      'availability': <int, List<String>>{}, 'constraints': <String>[], 'extraRoles': <String>[], 'certs': <Map<String, dynamic>>[], 'attendance': <Map<String, dynamic>>[], 'absences': <Map<String, dynamic>>[], 'notes': ''});
-    log(who, 'מורה-חדש (ממתין לפרטים)', 'n$_seq');
-  }
   static void markAbsent(Map<String, dynamic> t, String reason, String who) {
     if (absentOn(t, today)) return;
     (extraAbsences[t['id'] as String] ??= []).insert(0, {'date': today, 'reason': reason});
@@ -589,15 +546,11 @@ class TeachersScreen extends StatefulWidget {
 }
 
 class _TeachersScreenState extends State<TeachersScreen> {
-  int _sort = 0; // 0=⚖️ עומס · 1=🤒 חיסורים · 2=🏫 כיתות
   final Map<String, int> _tab = {}; // טאב-נבחר פר-מורה (חיווט SegmentedSwitch→תצוגה)
   static const _tabNames = ['סקירה', 'מערכת', 'כיתות', 'היעדרויות', 'החלפות', 'ביצועים', 'הכשרות', 'מסמכים', 'אודיט'];
-  String _q = ''; // חיפוש-איתור (DsSearch→smartFilter)
-  final Map<String, String> _locks = {}; // נעילות-סינון (FilterChipPill→finderMatches)
   int _mode = 0; // 0=🎯 חכם (טריאז') · 1=📋 טבלה (DsTable כל-העמודות) · 2=🔁 לוח-החלפות-היום (DsBoard)
   int _role = 0; // בורר-תפקיד (חוק-6 · זהות-מוזרקת) — מדגים גידור פר-תפקיד
   String get _who => _TeamData.roleDefs[_role]['label'] as String; // זהות-הפועל לאודיט (מהתפקיד המוזרק)
-  bool _loading = false; // מצב-מסך שמור: טעינה
   String? _error; // מצב-מסך שמור: שגיאה (מקום-שמור — מאיר כש-fetch נכשל)
 
   @override
@@ -612,163 +565,9 @@ class _TeachersScreenState extends State<TeachersScreen> {
     } // אוטומציה: היעדרויות-של-היום ⇒ שיעורים-ללא-מורה
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final all = _TeamData.active;
-    final uncovered = _TeamData.uncoveredToday.length; // hero = המטרה: אף שיעור בלי מורה
-    final ranked = [..._TeamData.everyone.where((t) => !_TeamData.isGone(t) && _TeamData.canSee(_role, t))]; // מורה ⇒ הכרטיס-שלו בלבד
-    ranked.sort((a, b) {
-      switch (_sort) {
-        case 1:
-          return _TeamData.absencesMonth(b).compareTo(_TeamData.absencesMonth(a));
-        case 2:
-          return _TeamData.coursesOf(b).length.compareTo(_TeamData.coursesOf(a).length);
-        default:
-          return _TeamData.loadPct(b).compareTo(_TeamData.loadPct(a));
-      }
-    });
-    // איתור⊕חריגה (23-ג): search=DsSearch⊕smartFilter⊕smartScore⊕normSearch · filter=finderMatches — פייפליין אחד לטריאז'/טבלה/ייצוא
-    final visible = _TeamData.filter(_TeamData.search(ranked, _q), _locks);
-    // טריאז' — פעולת-יסוד "הכרעה" מקבצת פר-דחיפות-מאוחדת (sev)
-    final buckets = <int, List<Map<String, dynamic>>>{3: [], 2: [], 1: [], 0: [], -1: []};
-    for (final t in visible) {
-      buckets[_TeamData.sev(t)]!.add(t);
-    }
-    const secTitle = {3: '🔴 שיעור-ללא-מורה היום', 2: '🟠 דורש-טיפול', 1: '🟡 לתשומת-לב', 0: '🟢 תקין', -1: '⏸ לא-פעיל/חופשה'};
-    const secTone = {3: 2, 2: 3, 1: 3, 0: 1, -1: 0};
-    return DsScaffold(
-      title: 'מורים וצוות',
-      subtitle: '${_TeamData.staff.length} אנשי-צוות · ${_TeamData.byRole.map((r) => '${r[0]} ${r[1]}').join(' · ')}',
-      icon: '👩‍🏫',
-      children: [
-        // בורר-תפקיד (חוק-6 · זהות-מוזרקת) — roleOf⊕teacherIdOf⊕canGrantedAction מגדרים פעולות/עמודות/רשומות
-        //   6 תפקידים ב-2 שורות של SegmentedSwitch (Row-מבוקר; 6 פריטים גולשים ברוחב-המסך — נתפס בבדיקת-widget)
-        for (var r = 0; r < 2; r++) ...[
-          Align(alignment: Alignment.centerRight, child: SegmentedSwitch(items: [for (final d in _TeamData.roleDefs.sublist(r * 3, r * 3 + 3)) d['label'] as String], selected: _role ~/ 3 == r ? _role % 3 : -1, onSelect: (i) => setState(() => _role = r * 3 + i))),
-          _gap(6),
-        ],
-        _gap(4),
-        // KPI-10: hero=שיעורים-ללא-מורה-היום (המטרה) + 10 מדדי-מצב (BareStat נושאי-ערך-אמת)
-        GradientCard(
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            StatHero(value: '$uncovered', label: 'שיעורים ללא מורה היום'),
-            const SizedBox(height: 14),
-            Row(children: [
-              BareStat(value: '${_TeamData.staff.length}', label: '👥 סך-צוות', inkColor: _ink, mutedColor: _muted),
-              BareStat(value: '${all.length}', label: '✅ פעילים', inkColor: _ink, mutedColor: _muted),
-              BareStat(value: '${_TeamData.absentN}', label: '🤒 נעדרים היום', inkColor: _TeamData.absentN > 0 ? _danger : _ok, mutedColor: _muted),
-              BareStat(value: '$uncovered', label: '🚨 ללא-מורה', inkColor: uncovered > 0 ? _danger : _ok, mutedColor: _muted),
-              BareStat(value: '${_TeamData.openSubs}', label: '🔁 החלפות פתוחות', inkColor: _TeamData.openSubs > 0 ? _warning : _ok, mutedColor: _muted),
-            ]),
-            const SizedBox(height: 12),
-            Row(children: [
-              BareStat(value: _TeamData.avgHours.toStringAsFixed(1), label: '⚖️ עומס ממוצע ש׳/שב׳', inkColor: _acc, mutedColor: _muted),
-              BareStat(value: '${_TeamData.overN}', label: '🔥 עמוסים-מדי', inkColor: _TeamData.overN > 0 ? _danger : _ok, mutedColor: _muted),
-              BareStat(value: '${_TeamData.underN}', label: '🪫 בתת-עומס', inkColor: _TeamData.underN > 0 ? _warning : _ok, mutedColor: _muted),
-              BareStat(value: '${_TeamData.contractsN}', label: '📄 חוזים פגים החודש', inkColor: _TeamData.contractsN > 0 ? _warning : _ok, mutedColor: _muted),
-              BareStat(value: '${_TeamData.certsN}', label: '🎓 הכשרות חסרות', inkColor: _TeamData.certsN > 0 ? _danger : _ok, mutedColor: _muted),
-            ]),
-          ]),
-        ),
-        const SizedBox(height: 8),
-        // מרכז-אוטומציות (23-ג · פרואקטיבי): המערכת מתריעה לפני שדבר נשמט — 9 אוטומציות-המפרט
-        for (final a in _TeamData.alerts(_role)) ...[AlertBanner(glyph: a['g'] as String, tone: a['tone'] as int, message: a['m'] as String), _gap(6)],
-        const SizedBox(height: 4),
-        // פס-עליון: חיפוש-מבוקר (DsSearch) · מורה-חדש · לוח-החלפות-היום · ייצוא (רשימה-נראית)
-        Row(children: [
-          Expanded(child: DsSearch(value: _q, onChanged: (v) => setState(() => _q = v))),
-          const SizedBox(width: 6),
-          Padding(padding: const EdgeInsets.only(bottom: 12), child: SoftButton(label: '🔄', tone: 0, onTap: _refresh)),
-          if (_TeamData.can(_role, 'team.add')) ...[const SizedBox(width: 6), Padding(padding: const EdgeInsets.only(bottom: 12), child: SoftButton(label: '➕ מורה', tone: 0, onTap: () => setState(() => _TeamData.addTeacher(_who))))],
-          const SizedBox(width: 6),
-          Padding(padding: const EdgeInsets.only(bottom: 12), child: SoftButton(label: '🔁 היום', tone: _TeamData.uncoveredToday.isEmpty ? 0 : 2, onTap: () => setState(() => _mode = 2))),
-          if (_TeamData.can(_role, 'team.export') && exportAllowed(false)) ...[const SizedBox(width: 6), Padding(padding: const EdgeInsets.only(bottom: 12), child: SoftButton(label: '⬇ CSV', tone: 0, onTap: () => _openExport('רשימת-צוות · ${visible.length}', _TeamData.rosterCsv(visible, _TeamData.hiddenKeys(_role)))))],
-        ]),
-        // פילטרים (המפרט: 11) — צ׳יפי-חריגה (finderMatches) + תפקיד/סטטוס (SegmentedSwitch) + מקצוע/כיתה (FilterChipPill)
-        Wrap(spacing: 8, runSpacing: 6, children: [
-          _fchip('absent', '🤒 נעדר-היום · ${_TeamData.absentN}'),
-          _fchip('over', '🔥 עומס>סף · ${_TeamData.overN}'),
-          _fchip('under', '🪫 עומס<סף · ${_TeamData.underN}'),
-          _fchip('cert', '🎓 הכשרה-חסרה/פגה'),
-          _fchip('contract', '📄 חוזה-פג'),
-          _fchip('free', '🟢 זמין ב-${_TeamData.openSlot}'),
-        ]),
-        const SizedBox(height: 8),
-        Align(alignment: Alignment.centerRight, child: SegmentedSwitch(items: const ['כל תפקיד', 'מחנך', 'מקצועי', 'סייע', 'הנהלה'], selected: _segIdx('role', const ['homeroom', 'subject', 'aide', 'mgmt']), onSelect: (i) => _segSet('role', const ['homeroom', 'subject', 'aide', 'mgmt'], i))),
-        const SizedBox(height: 6),
-        Align(alignment: Alignment.centerRight, child: SegmentedSwitch(items: const ['כל סטטוס', 'פעיל', 'חופשה', 'חל״ת', 'עזב'], selected: _segIdx('status', const ['active', 'leave', 'unpaid', 'left']), onSelect: (i) => _segSet('status', const ['active', 'leave', 'unpaid', 'left'], i))),
-        const SizedBox(height: 8),
-        Wrap(spacing: 8, runSpacing: 6, children: [for (final sj in _TeamData.allSubjects) _vchip('subject', sj, '📚 $sj')]),
-        const SizedBox(height: 6),
-        Wrap(spacing: 8, runSpacing: 6, children: [for (final c in _TeamData.allClasses.take(10)) _vchip('cls', c, '🏫 $c')]),
-        const SizedBox(height: 10),
-        // מיון (המפרט: עומס · חיסורים · כיתות) — SegmentedSwitch מבוקר
-        Align(
-          alignment: Alignment.centerRight,
-          child: SegmentedSwitch(items: const ['⚖️ עומס', '🤒 חיסורים', '🏫 כיתות'], selected: _sort, onSelect: (i) => setState(() => _sort = i)),
-        ),
-        const SizedBox(height: 10),
-        // בורר-מבט (SegmentedSwitch מבוקר): 🎯 חכם (טריאז'-החלטה) · 📋 טבלה (חוזה-עמודות) · 🔁 לוח-החלפות-היום
-        Align(
-          alignment: Alignment.centerRight,
-          child: SegmentedSwitch(items: const ['🎯 חכם', '📋 טבלה', '🔁 החלפות היום'], selected: _mode, onSelect: (i) => setState(() => _mode = i)),
-        ),
-        const SizedBox(height: 10),
-        // מצבי-מסך שמורים: טעינה · שגיאה · אין-צוות · ללא-תוצאות — ואז התוכן
-        if (_loading)
-          _loadingView()
-        else if (_error != null)
-          AlertBanner(glyph: '⚠️', tone: 2, message: _error!)
-        else if (_TeamData.staff.isEmpty)
-          const Padding(padding: EdgeInsets.only(top: 24), child: EmptyState(glyph: '👥', message: 'אין צוות — הוסף מורה ראשון/ה'))
-        else if (_mode == 2)
-          _subsBoard()
-        else if (visible.isEmpty)
-          const Padding(padding: EdgeInsets.only(top: 24), child: EmptyState(glyph: '🔍', message: 'אין אנשי-צוות תואמים לחיפוש/סינון'))
-        else if (_mode == 1)
-          _table(visible)
-        else
-          for (final st in const [3, 2, 1, 0, -1])
-            if (buckets[st]!.isNotEmpty)
-              DsSection(title: '${secTitle[st]} · ${buckets[st]!.length}', tone: secTone[st]!, children: [
-                for (final t in buckets[st]!) _row(t),
-              ]),
-        // פנקס-המקומות-השמורים (חוק-7): שקוף לגבי מה עוד לא מואר — ExpandableTile (מתקפל)
-        _gap(6),
-        ExpandableTile(
-          title: '🔌 מקומות-שמורים · ${_TeamData.reservedSlots.where((r) => !_TeamData.slotLit(r)).length} ממתינים לנתון · ${_TeamData.reservedSlots.where(_TeamData.slotLit).length} מוארים',
-          body: [for (final r in _TeamData.reservedSlots) '${_TeamData.slotLit(r) ? '💡' : '⚫'} ${r['what']} ⇒ ${r['lights']}'].join('\n'),
-        ),
-      ],
-    );
-  }
-
   Widget _gap([double h = 10]) => SizedBox(height: h);
 
   // רענון-דאטה → מצב-טעינה שמור (700ms מדגים; חיבור-אסינק אמיתי יאיר אותו זהה; כשל ⇒ _error)
-  void _refresh() {
-    setState(() { _loading = true; _error = null; });
-    Future.delayed(const Duration(milliseconds: 700), () { if (mounted) setState(() => _loading = false); });
-  }
-  // מצב-טעינה: מחוון-מסגרת סטנדרטי (אפס ShimmerSkeleton מזייף); Column ולא Center (גובה-לא-חסום ברשימה)
-  Widget _loadingView() => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 48),
-        child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.center, children: [
-          CircularProgressIndicator(color: _acc), const SizedBox(height: 14),
-          const Text('טוען צוות…', style: TextStyle(color: _muted, fontSize: 14)),
-        ]),
-      );
-
-  // צ׳יפ-סינון מבוקר: הזרקת-צבעים (חוק-6) + נעילת-ציר ב-_locks (finderMatches)
-  Widget _fchip(String axis, String label) => _vchip(axis, '1', label);
-  Widget _vchip(String axis, String value, String label) => FilterChipPill(
-        label: label, selected: _locks[axis] == value,
-        onTap: () => setState(() => _locks[axis] == value ? _locks.remove(axis) : _locks[axis] = value),
-        activeFillColor: _acc, surfaceColor: const Color(0xFF14162E), activeTextColor: const Color(0xFF0B0B15), inkColor: _ink, outlineColor: const Color(0xFF2A2D4A), pillRadius: 999,
-      );
-  int _segIdx(String axis, List<String> vals) => _locks[axis] == null ? 0 : vals.indexOf(_locks[axis]!) + 1;
-  void _segSet(String axis, List<String> vals, int i) => setState(() => i == 0 ? _locks.remove(axis) : _locks[axis] = vals[i - 1]);
-
   // ═══ כרטיס-מורה-נבחר (צד) · GlassCard(child) · 9 טאבים (SegmentedSwitch×2) · 14 פעולות (SoftButton) ═══
   void _openPanel(Map<String, dynamic> t) {
     showModalBottomSheet<void>(
@@ -1148,4 +947,8 @@ class _TeachersScreenState extends State<TeachersScreen> {
       ),
     );
   }
+  @override
+  Widget build(BuildContext context) => DsScaffold(title: 'TeachersScreen', subtitle: 'TeachersScreen · מודול-משנה מחולל', icon: '🧬', children: [
+    _subsBoard(),
+  ]);
 }
