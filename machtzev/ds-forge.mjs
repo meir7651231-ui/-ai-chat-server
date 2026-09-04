@@ -437,7 +437,9 @@ const ALIGN = { 'center': 'center', 'flex-start': 'start', 'start': 'start', 'fl
 function textStyle(st) {
   const p = [];
   const c = colorExpr(st['color']); if (c) p.push(`color: ${c}`);
-  const f = fontExpr(st['font-family']); if (f) p.push(`fontFamily: ${f}`);
+  // פונט-לטיני (Space Grotesk/Fraunces — ללא-גליפי-עברית) עם תוכן מעורב ⇒ tofu (□□□). fontFamilyFallback ל-Heebo/Frank-Ruhl
+  // משחזר את fallback-הדפדפן (‏.tag "עברית · Fraunces"). לפונט-עברי-ראשי (he/serifHe) אין צורך.
+  const f = fontExpr(st['font-family']); if (f) { p.push(`fontFamily: ${f}`); if (f === 'fonts.grotesk' || f === 'fonts.serif') p.push(`fontFamilyFallback: [fonts.${f === 'fonts.serif' ? 'serifHe' : 'he'}]`); }
   // font-size: הערך שנפתר (מפורש/יורש) ⇒ אותו. אין font-size כלל ⇒ ברירת-CSS (body ללא font-size = 16px);
   // בלי הזרעה זו Flutter נופל ל-14px משלו ⇒ טקסט-בלי-גודל (reveal_card "Label") קטן-מהמקור ב-16/14.
   // ערך קיים-אך-לא-נפתר (clamp/calc-מורכב) ⇒ לא-מזריקים (לא ניחוש) — נשאר כפי-שהיה.
