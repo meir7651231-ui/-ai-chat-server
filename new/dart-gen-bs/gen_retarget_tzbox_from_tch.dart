@@ -1,7 +1,7 @@
-// 🎯 SupporterScreen — retarget של schoolos_teachers.dart לישות Supporter (GENMAX·G5c/G5d · הכרעה-24) · מחולל דטרמיניסטי: retarget.mjs --module schoolos_teachers.dart --entity Supporter
-//   זרע-ראשי: roster (מועמדים: roster(22/23) courses(8/11) subsSeed(6/6)) · מיפוי שם 3 · ערוץ 0 · טיפוס-יחיד 1 · מקום-שמור 19
-//   id⇒id(name) · name⇒name(name) · notes⇒notes(name) · role⇒∅(reserved(8 מועמדים)) · subjects⇒∅(reserved(2 מועמדים)) · homeroom⇒∅(reserved(2 מועמדים)) · contractHours⇒∅(reserved(3 מועמדים)) · contractType⇒∅(reserved(8 מועמדים)) · startDate⇒∅(reserved(3 מועמדים)) · status⇒∅(reserved(8 מועמדים)) · availability⇒∅(reserved) · constraints⇒∅(reserved(2 מועמדים)) · preferredSub⇒nextEventId(unique) · extraRoles⇒∅(reserved(2 מועמדים)) · certs⇒∅(reserved(2 מועמדים)) · issuer⇒∅(reserved(8 מועמדים)) · expiry⇒∅(reserved(3 מועמדים)) · attendance⇒∅(reserved) · absences⇒∅(reserved(2 מועמדים)) · reason⇒∅(reserved(8 מועמדים)) · date⇒∅(reserved(3 מועמדים)) · inTs⇒∅(reserved) · contractEnd⇒∅(reserved(3 מועמדים))
-//   שדות-Supporter בלי מקור (מקום-שמור, יאירו כשיוזרם נתון): phone, email, address, city, idNum, extId, cat, forWho, count, ils, usd, first, last, nextDate, nextNote, photos, donations, hok, ayin, calls · תוויות-UI = של מודול-המקור (הצבה) · הזרע = זרע-הצבה של המקור, לא ערך-אמת של Supporter
+// 🎯 TzBoxScreen — retarget של schoolos_teachers.dart לישות TzBox (GENMAX·G5c/G5d · הכרעה-24) · מחולל דטרמיניסטי: retarget.mjs --module schoolos_teachers.dart --entity TzBox
+//   זרע-ראשי: roster (מועמדים: roster(22/23) courses(8/11) subsSeed(6/6)) · מיפוי שם 3 · ערוץ 0 · טיפוס-יחיד 3 · מקום-שמור 17
+//   id⇒id(name) · status⇒status(name) · notes⇒notes(name) · name⇒num(unique) · role⇒∅(reserved) · subjects⇒collections(unique) · homeroom⇒∅(reserved) · contractHours⇒∅(reserved) · contractType⇒∅(reserved) · startDate⇒since(unique) · availability⇒∅(reserved) · constraints⇒∅(reserved) · preferredSub⇒∅(reserved(2 מועמדים)) · extraRoles⇒∅(reserved) · certs⇒∅(reserved) · issuer⇒∅(reserved) · expiry⇒∅(reserved) · attendance⇒∅(reserved) · absences⇒∅(reserved) · reason⇒∅(reserved) · date⇒∅(reserved) · inTs⇒∅(reserved) · contractEnd⇒∅(reserved)
+//   שדות-TzBox בלי מקור (מקום-שמור, יאירו כשיוזרם נתון): coordinatorId, famId, holderKind · תוויות-UI = של מודול-המקור (הצבה) · הזרע = זרע-הצבה של המקור, לא ערך-אמת של TzBox
 // 👩‍🏫 SchoolOS · מורים וצוות (TEACHERS) — נבנה בדרך (THE-WAY · הכרעה 23-ב/ג/ד). מפרט: knowledge/SPEC-TEACHERS-FULL-2026-09-04.md
 // מטרה: "שכל מורה יהיה במקום הנכון עם עומס נכון — ושהמנהל/ת יראה מי-עמוס-מדי, מי-חסר ומי-צריך-תמיכה לפני שזה פוגע בתלמידים."
 // פעולות-יסוד (לא אזורי-מפרט): איתור · הערכת-עומס · זיהוי-חריגה · הכרעה (מחליף-מוצע · דחיפות-מאוחדת) · ביצוע · אימות.
@@ -83,65 +83,65 @@ class _TeamData {
   static const underPct = 70; // סף תת-עומס: שעות < 70% מהחוזה
   static const frequentAbsences = 3; // דפוס: ≥3 היעדרויות ב-4 חודשים או מגמה עולה
 
-  // roster — זהות-תצוגה = שמות-דמו בדויים; בהצבה מוזרק roster אמיתי דרך SupporterScreen(roster:) (חוק-6).
+  // roster — זהות-תצוגה = שמות-דמו בדויים; בהצבה מוזרק roster אמיתי דרך TzBoxScreen(roster:) (חוק-6).
   static const roster = <Map<String, dynamic>>[
-    {'id': 't1', 'name': 'יעל ברק', 'role': 'homeroom', 'subjects': ['מתמטיקה'], 'homeroom': ['י-1'], 'contractHours': 24, 'contractType': 'קבוע', 'startDate': '2014-09-01', 'status': 'active',
-      'availability': {0: ['08:00', '15:00'], 1: ['08:00', '15:00'], 2: ['08:00', '15:00'], 3: ['08:00', '15:00'], 4: ['08:00', '13:00']}, 'constraints': ['לא-בשישי'], 'nextEventId': 't7', 'extraRoles': ['ריכוז-שכבה י׳'],
-      'certs': [{'name': 'תעודת-הוראה', 'issuer': 'משרד החינוך', 'expiry': '2030-06-30'}, {'name': 'עזרה-ראשונה', 'issuer': 'מד״א', 'expiry': '2026-09-20'}],
+    {'id': 't1', 'num': 'יעל ברק', 'role': 'homeroom', 'collections': ['מתמטיקה'], 'homeroom': ['י-1'], 'contractHours': 24, 'contractType': 'קבוע', 'since': '2014-09-01', 'status': 'active',
+      'availability': {0: ['08:00', '15:00'], 1: ['08:00', '15:00'], 2: ['08:00', '15:00'], 3: ['08:00', '15:00'], 4: ['08:00', '13:00']}, 'constraints': ['לא-בשישי'], 'preferredSub': 't7', 'extraRoles': ['ריכוז-שכבה י׳'],
+      'certs': [{'num': 'תעודת-הוראה', 'issuer': 'משרד החינוך', 'expiry': '2030-06-30'}, {'num': 'עזרה-ראשונה', 'issuer': 'מד״א', 'expiry': '2026-09-20'}],
       'attendance': <Map<String, dynamic>>[], 'absences': [{'date': '2026-09-03', 'reason': 'mchlh'}, {'date': '2026-05-12', 'reason': 'ayrva-mshpchty'}], 'notes': 'מועמדת לריכוז-פדגוגי בתשפ״ז'},
-    {'id': 't2', 'name': 'דוד כהן', 'role': 'subject', 'subjects': ['מתמטיקה', 'פיזיקה'], 'homeroom': <String>[], 'contractHours': 20, 'contractType': 'קבוע', 'startDate': '2019-09-01', 'status': 'active',
-      'availability': {0: ['08:00', '16:00'], 1: ['08:00', '16:00'], 2: ['08:00', '16:00'], 3: ['08:00', '16:00'], 4: ['08:00', '16:00']}, 'constraints': <String>[], 'nextEventId': 't7', 'extraRoles': <String>[],
-      'certs': [{'name': 'תעודת-הוראה', 'issuer': 'משרד החינוך', 'expiry': '2029-08-31'}],
+    {'id': 't2', 'num': 'דוד כהן', 'role': 'subject', 'collections': ['מתמטיקה', 'פיזיקה'], 'homeroom': <String>[], 'contractHours': 20, 'contractType': 'קבוע', 'since': '2019-09-01', 'status': 'active',
+      'availability': {0: ['08:00', '16:00'], 1: ['08:00', '16:00'], 2: ['08:00', '16:00'], 3: ['08:00', '16:00'], 4: ['08:00', '16:00']}, 'constraints': <String>[], 'preferredSub': 't7', 'extraRoles': <String>[],
+      'certs': [{'num': 'תעודת-הוראה', 'issuer': 'משרד החינוך', 'expiry': '2029-08-31'}],
       'attendance': [{'date': '2026-09-03', 'inTs': '07:41'}], 'absences': [{'date': '2026-09-01', 'reason': 'mchlh'}, {'date': '2026-08-25', 'reason': 'mchlh'}, {'date': '2026-08-18', 'reason': 'nsyah'}, {'date': '2026-07-02', 'reason': 'mchlh'}, {'date': '2026-06-10', 'reason': 'shmchh'}], 'notes': ''},
-    {'id': 't3', 'name': 'נועה לוי', 'role': 'subject', 'subjects': ['אנגלית'], 'homeroom': <String>[], 'contractHours': 18, 'contractType': 'זמני', 'contractEnd': '2026-09-25', 'startDate': '2025-09-01', 'status': 'active',
+    {'id': 't3', 'num': 'נועה לוי', 'role': 'subject', 'collections': ['אנגלית'], 'homeroom': <String>[], 'contractHours': 18, 'contractType': 'זמני', 'contractEnd': '2026-09-25', 'since': '2025-09-01', 'status': 'active',
       'availability': {0: ['08:00', '14:00'], 2: ['08:00', '14:00'], 4: ['08:00', '14:00']}, 'constraints': ['לא-בשני-ורביעי'], 'extraRoles': <String>[],
-      'certs': [{'name': 'תעודת-הוראה', 'issuer': 'משרד החינוך', 'expiry': '2031-06-30'}],
+      'certs': [{'num': 'תעודת-הוראה', 'issuer': 'משרד החינוך', 'expiry': '2031-06-30'}],
       'attendance': [{'date': '2026-09-03', 'inTs': '07:55'}], 'absences': <Map<String, dynamic>>[], 'notes': ''},
-    {'id': 't4', 'name': 'אמיר חדד', 'role': 'aide', 'subjects': ['סיוע-לימודי'], 'homeroom': <String>[], 'contractHours': 30, 'contractType': 'קבוע', 'startDate': '2021-09-01', 'status': 'active',
+    {'id': 't4', 'num': 'אמיר חדד', 'role': 'aide', 'collections': ['סיוע-לימודי'], 'homeroom': <String>[], 'contractHours': 30, 'contractType': 'קבוע', 'since': '2021-09-01', 'status': 'active',
       'availability': {0: ['08:00', '15:00'], 1: ['08:00', '15:00'], 2: ['08:00', '15:00'], 3: ['08:00', '15:00'], 4: ['08:00', '15:00']}, 'constraints': <String>[], 'extraRoles': <String>[],
-      'certs': [{'name': 'סייע-פדגוגי', 'issuer': 'משרד החינוך', 'expiry': '2026-05-01'}],
+      'certs': [{'num': 'סייע-פדגוגי', 'issuer': 'משרד החינוך', 'expiry': '2026-05-01'}],
       'attendance': [{'date': '2026-09-03', 'inTs': '07:50'}], 'absences': [{'date': '2026-08-30', 'reason': 'mzg-avvyr'}], 'notes': ''},
-    {'id': 't5', 'name': 'רות אזולאי', 'role': 'homeroom', 'subjects': ['היסטוריה', 'אזרחות'], 'homeroom': ['ט-2'], 'contractHours': 22, 'contractType': 'קבוע', 'startDate': '2010-09-01', 'status': 'active',
-      'availability': {0: ['08:00', '15:00'], 1: ['08:00', '15:00'], 2: ['08:00', '15:00'], 3: ['08:00', '15:00'], 4: ['08:00', '15:00']}, 'constraints': <String>[], 'nextEventId': 't1', 'extraRoles': ['יועצת'],
-      'certs': [{'name': 'תעודת-הוראה', 'issuer': 'משרד החינוך', 'expiry': '2028-06-30'}, {'name': 'ייעוץ-חינוכי', 'issuer': 'אונ׳ ת״א', 'expiry': '2027-12-31'}],
+    {'id': 't5', 'num': 'רות אזולאי', 'role': 'homeroom', 'collections': ['היסטוריה', 'אזרחות'], 'homeroom': ['ט-2'], 'contractHours': 22, 'contractType': 'קבוע', 'since': '2010-09-01', 'status': 'active',
+      'availability': {0: ['08:00', '15:00'], 1: ['08:00', '15:00'], 2: ['08:00', '15:00'], 3: ['08:00', '15:00'], 4: ['08:00', '15:00']}, 'constraints': <String>[], 'preferredSub': 't1', 'extraRoles': ['יועצת'],
+      'certs': [{'num': 'תעודת-הוראה', 'issuer': 'משרד החינוך', 'expiry': '2028-06-30'}, {'num': 'ייעוץ-חינוכי', 'issuer': 'אונ׳ ת״א', 'expiry': '2027-12-31'}],
       'attendance': [{'date': '2026-09-03', 'inTs': '07:38'}], 'absences': <Map<String, dynamic>>[], 'notes': ''},
-    {'id': 't6', 'name': 'מיכל שרון', 'role': 'subject', 'subjects': ['אנגלית'], 'homeroom': <String>[], 'contractHours': 20, 'contractType': 'קבוע', 'startDate': '2017-09-01', 'status': 'leave',
+    {'id': 't6', 'num': 'מיכל שרון', 'role': 'subject', 'collections': ['אנגלית'], 'homeroom': <String>[], 'contractHours': 20, 'contractType': 'קבוע', 'since': '2017-09-01', 'status': 'leave',
       'availability': <int, List<String>>{}, 'constraints': <String>[], 'extraRoles': <String>[],
-      'certs': [{'name': 'תעודת-הוראה', 'issuer': 'משרד החינוך', 'expiry': '2029-06-30'}],
+      'certs': [{'num': 'תעודת-הוראה', 'issuer': 'משרד החינוך', 'expiry': '2029-06-30'}],
       'attendance': <Map<String, dynamic>>[], 'absences': <Map<String, dynamic>>[], 'notes': 'חופשת-לידה עד 2027-01'},
-    {'id': 't7', 'name': 'יוסי מזרחי', 'role': 'mgmt', 'subjects': ['מתמטיקה'], 'homeroom': <String>[], 'contractHours': 8, 'contractType': 'קבוע', 'startDate': '2008-09-01', 'status': 'active',
+    {'id': 't7', 'num': 'יוסי מזרחי', 'role': 'mgmt', 'collections': ['מתמטיקה'], 'homeroom': <String>[], 'contractHours': 8, 'contractType': 'קבוע', 'since': '2008-09-01', 'status': 'active',
       'availability': {0: ['07:30', '16:00'], 1: ['07:30', '16:00'], 2: ['07:30', '16:00'], 3: ['07:30', '16:00'], 4: ['07:30', '16:00']}, 'constraints': <String>[], 'extraRoles': ['סגן-מנהל'],
-      'certs': [{'name': 'תעודת-הוראה', 'issuer': 'משרד החינוך', 'expiry': '2027-06-30'}, {'name': 'ניהול-חינוכי', 'issuer': 'אבני-ראשה', 'expiry': '2026-10-01'}],
+      'certs': [{'num': 'תעודת-הוראה', 'issuer': 'משרד החינוך', 'expiry': '2027-06-30'}, {'num': 'ניהול-חינוכי', 'issuer': 'אבני-ראשה', 'expiry': '2026-10-01'}],
       'attendance': [{'date': '2026-09-03', 'inTs': '07:20'}], 'absences': <Map<String, dynamic>>[], 'notes': ''},
-    {'id': 't8', 'name': 'שרה פרץ', 'role': 'subject', 'subjects': ['ביולוגיה'], 'homeroom': <String>[], 'contractHours': 16, 'contractType': 'שעתי', 'startDate': '2020-09-01', 'status': 'left',
+    {'id': 't8', 'num': 'שרה פרץ', 'role': 'subject', 'collections': ['ביולוגיה'], 'homeroom': <String>[], 'contractHours': 16, 'contractType': 'שעתי', 'since': '2020-09-01', 'status': 'left',
       'availability': <int, List<String>>{}, 'constraints': <String>[], 'extraRoles': <String>[],
       'certs': <Map<String, dynamic>>[], 'attendance': <Map<String, dynamic>>[], 'absences': <Map<String, dynamic>>[], 'notes': 'סיימה 2026-06-30'},
   ];
   // חוגים/שיעורים בצורת-Course של מאור (id·name·teacherId·roomId·sessions) + קלט-תכנון (subject·cls·minutes)
   static const courses = <Map<String, dynamic>>[
-    {'id': 'c1', 'name': 'מתמטיקה י-1', 'subject': 'מתמטיקה', 'cls': 'י-1', 'teacherId': 't1', 'roomId': 'ח-12', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '08:00'}, {'day': 2, 'time': '10:00'}, {'day': 4, 'time': '08:00'}, {'day': 1, 'time': '12:00'}]},
-    {'id': 'c3', 'name': 'מתמטיקה ט-1', 'subject': 'מתמטיקה', 'cls': 'ט-1', 'teacherId': 't1', 'roomId': 'ח-7', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 1, 'time': '09:00'}, {'day': 3, 'time': '11:00'}, {'day': 4, 'time': '11:00'}]},
-    {'id': 'c9', 'name': 'שעת-מחנך י-1', 'subject': 'חינוך', 'cls': 'י-1', 'teacherId': 't1', 'roomId': 'ח-12', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 2, 'time': '08:00'}]},
-    {'id': 'c2', 'name': 'מתמטיקה י-2', 'subject': 'מתמטיקה', 'cls': 'י-2', 'teacherId': 't2', 'roomId': 'ח-11', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '09:00'}, {'day': 1, 'time': '08:00'}, {'day': 2, 'time': '11:00'}, {'day': 4, 'time': '08:00'}]},
-    {'id': 'c4', 'name': 'פיזיקה יא-1', 'subject': 'פיזיקה', 'cls': 'יא-1', 'teacherId': 't2', 'roomId': 'מעבדה-2', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '11:00'}, {'day': 1, 'time': '10:00'}, {'day': 3, 'time': '08:00'}, {'day': 3, 'time': '12:00'}, {'day': 4, 'time': '09:00'}]},
-    {'id': 'c5', 'name': 'פיזיקה יב-1', 'subject': 'פיזיקה', 'cls': 'יב-1', 'teacherId': 't2', 'roomId': 'מעבדה-2', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '13:00'}, {'day': 2, 'time': '09:00'}, {'day': 3, 'time': '10:00'}, {'day': 4, 'time': '12:00'}]},
-    {'id': 'c11', 'name': 'מתמטיקה יב-2', 'subject': 'מתמטיקה', 'cls': 'יב-2', 'teacherId': 't2', 'roomId': 'ח-11', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '10:00'}, {'day': 1, 'time': '12:00'}, {'day': 2, 'time': '13:00'}, {'day': 3, 'time': '09:00'}, {'day': 4, 'time': '13:00'}]},
-    {'id': 'c12', 'name': 'פיזיקה י-3', 'subject': 'פיזיקה', 'cls': 'י-3', 'teacherId': 't2', 'roomId': 'מעבדה-1', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '12:00'}, {'day': 1, 'time': '09:00'}, {'day': 2, 'time': '08:00'}, {'day': 3, 'time': '13:00'}, {'day': 4, 'time': '10:00'}]},
-    {'id': 'c13', 'name': 'הכנה-לבגרות 5 יח׳', 'subject': 'מתמטיקה', 'cls': 'יב', 'teacherId': 't2', 'roomId': 'ח-11', 'start': '2026-09-01', 'end': '2027-03-30', 'sessions': [{'day': 1, 'time': '13:00'}, {'day': 3, 'time': '11:00'}, {'day': 0, 'time': '08:00'}, {'day': 2, 'time': '12:00'}]},
-    {'id': 'c6', 'name': 'אנגלית ט-2', 'subject': 'אנגלית', 'cls': 'ט-2', 'teacherId': 't3', 'roomId': 'ח-4', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '10:00'}, {'day': 2, 'time': '09:00'}, {'day': 4, 'time': '09:00'}]},
-    {'id': 'c14', 'name': 'אנגלית י-1', 'subject': 'אנגלית', 'cls': 'י-1', 'teacherId': 't3', 'roomId': 'ח-4', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '12:00'}, {'day': 2, 'time': '11:00'}]},
-    {'id': 'c7', 'name': 'סיוע-לימודי ז׳-ח׳', 'subject': 'סיוע-לימודי', 'cls': 'ז-ח', 'teacherId': 't4', 'roomId': 'ח-2', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '08:00'}, {'day': 0, 'time': '09:00'}, {'day': 0, 'time': '10:00'}, {'day': 1, 'time': '08:00'}, {'day': 1, 'time': '09:00'}, {'day': 1, 'time': '10:00'}, {'day': 2, 'time': '08:00'}, {'day': 2, 'time': '09:00'}, {'day': 2, 'time': '10:00'}, {'day': 3, 'time': '08:00'}, {'day': 3, 'time': '09:00'}, {'day': 3, 'time': '10:00'}, {'day': 4, 'time': '08:00'}, {'day': 4, 'time': '09:00'}, {'day': 4, 'time': '10:00'}, {'day': 0, 'time': '11:00'}, {'day': 1, 'time': '11:00'}, {'day': 2, 'time': '11:00'}, {'day': 3, 'time': '11:00'}, {'day': 4, 'time': '11:00'}, {'day': 0, 'time': '12:00'}, {'day': 1, 'time': '12:00'}, {'day': 2, 'time': '12:00'}, {'day': 3, 'time': '12:00'}, {'day': 4, 'time': '12:00'}]},
-    {'id': 'c8', 'name': 'היסטוריה ט-2', 'subject': 'היסטוריה', 'cls': 'ט-2', 'teacherId': 't5', 'roomId': 'ח-9', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '09:00'}, {'day': 1, 'time': '11:00'}, {'day': 3, 'time': '09:00'}, {'day': 4, 'time': '10:00'}]},
-    {'id': 'c15', 'name': 'אזרחות יא-2', 'subject': 'אזרחות', 'cls': 'יא-2', 'teacherId': 't5', 'roomId': 'ח-9', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '11:00'}, {'day': 2, 'time': '10:00'}, {'day': 3, 'time': '12:00'}, {'day': 4, 'time': '08:00'}]},
-    {'id': 'c16', 'name': 'היסטוריה יא-1', 'subject': 'היסטוריה', 'cls': 'יא-1', 'teacherId': 't5', 'roomId': 'ח-9', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 1, 'time': '08:00'}, {'day': 2, 'time': '12:00'}, {'day': 3, 'time': '10:00'}]},
-    {'id': 'c17', 'name': 'שעת-מחנך ט-2', 'subject': 'חינוך', 'cls': 'ט-2', 'teacherId': 't5', 'roomId': 'ח-9', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 2, 'time': '08:00'}]},
-    {'id': 'c18', 'name': 'אנגלית יא-1', 'subject': 'אנגלית', 'cls': 'יא-1', 'teacherId': 't6', 'roomId': 'ח-5', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '08:00'}, {'day': 2, 'time': '09:00'}, {'day': 4, 'time': '11:00'}]},
-    {'id': 'c19', 'name': 'מתמטיקה ח-2', 'subject': 'מתמטיקה', 'cls': 'ח-2', 'teacherId': 't1', 'roomId': 'ח-6', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '09:00'}, {'day': 1, 'time': '08:00'}, {'day': 2, 'time': '11:00'}, {'day': 3, 'time': '08:00'}, {'day': 4, 'time': '09:00'}]},
-    {'id': 'c20', 'name': 'מתמטיקה ט-3', 'subject': 'מתמטיקה', 'cls': 'ט-3', 'teacherId': 't1', 'roomId': 'ח-7', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '10:00'}, {'day': 1, 'time': '10:00'}, {'day': 2, 'time': '09:00'}, {'day': 3, 'time': '09:00'}, {'day': 4, 'time': '10:00'}]},
-    {'id': 'c21', 'name': 'היסטוריה ח-1', 'subject': 'היסטוריה', 'cls': 'ח-1', 'teacherId': 't5', 'roomId': 'ח-3', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '08:00'}, {'day': 1, 'time': '09:00'}, {'day': 3, 'time': '08:00'}, {'day': 4, 'time': '09:00'}]},
-    {'id': 'c22', 'name': 'אזרחות י-2', 'subject': 'אזרחות', 'cls': 'י-2', 'teacherId': 't5', 'roomId': 'ח-11', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '10:00'}, {'day': 1, 'time': '10:00'}, {'day': 2, 'time': '09:00'}, {'day': 4, 'time': '11:00'}]},
-    {'id': 'c23', 'name': 'מתמטיקה ז-1', 'subject': 'מתמטיקה', 'cls': 'ז-1', 'teacherId': 't7', 'roomId': 'ח-1', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '08:00'}, {'day': 1, 'time': '08:00'}, {'day': 3, 'time': '10:00'}, {'day': 4, 'time': '12:00'}]},
-    {'id': 'c10', 'name': 'מתמטיקה ח-1', 'subject': 'מתמטיקה', 'cls': 'ח-1', 'teacherId': 't7', 'roomId': 'ח-3', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '09:00'}, {'day': 2, 'time': '09:00'}, {'day': 4, 'time': '09:00'}]},
+    {'id': 'c1', 'num': 'מתמטיקה י-1', 'subject': 'מתמטיקה', 'cls': 'י-1', 'teacherId': 't1', 'roomId': 'ח-12', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '08:00'}, {'day': 2, 'time': '10:00'}, {'day': 4, 'time': '08:00'}, {'day': 1, 'time': '12:00'}]},
+    {'id': 'c3', 'num': 'מתמטיקה ט-1', 'subject': 'מתמטיקה', 'cls': 'ט-1', 'teacherId': 't1', 'roomId': 'ח-7', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 1, 'time': '09:00'}, {'day': 3, 'time': '11:00'}, {'day': 4, 'time': '11:00'}]},
+    {'id': 'c9', 'num': 'שעת-מחנך י-1', 'subject': 'חינוך', 'cls': 'י-1', 'teacherId': 't1', 'roomId': 'ח-12', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 2, 'time': '08:00'}]},
+    {'id': 'c2', 'num': 'מתמטיקה י-2', 'subject': 'מתמטיקה', 'cls': 'י-2', 'teacherId': 't2', 'roomId': 'ח-11', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '09:00'}, {'day': 1, 'time': '08:00'}, {'day': 2, 'time': '11:00'}, {'day': 4, 'time': '08:00'}]},
+    {'id': 'c4', 'num': 'פיזיקה יא-1', 'subject': 'פיזיקה', 'cls': 'יא-1', 'teacherId': 't2', 'roomId': 'מעבדה-2', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '11:00'}, {'day': 1, 'time': '10:00'}, {'day': 3, 'time': '08:00'}, {'day': 3, 'time': '12:00'}, {'day': 4, 'time': '09:00'}]},
+    {'id': 'c5', 'num': 'פיזיקה יב-1', 'subject': 'פיזיקה', 'cls': 'יב-1', 'teacherId': 't2', 'roomId': 'מעבדה-2', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '13:00'}, {'day': 2, 'time': '09:00'}, {'day': 3, 'time': '10:00'}, {'day': 4, 'time': '12:00'}]},
+    {'id': 'c11', 'num': 'מתמטיקה יב-2', 'subject': 'מתמטיקה', 'cls': 'יב-2', 'teacherId': 't2', 'roomId': 'ח-11', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '10:00'}, {'day': 1, 'time': '12:00'}, {'day': 2, 'time': '13:00'}, {'day': 3, 'time': '09:00'}, {'day': 4, 'time': '13:00'}]},
+    {'id': 'c12', 'num': 'פיזיקה י-3', 'subject': 'פיזיקה', 'cls': 'י-3', 'teacherId': 't2', 'roomId': 'מעבדה-1', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '12:00'}, {'day': 1, 'time': '09:00'}, {'day': 2, 'time': '08:00'}, {'day': 3, 'time': '13:00'}, {'day': 4, 'time': '10:00'}]},
+    {'id': 'c13', 'num': 'הכנה-לבגרות 5 יח׳', 'subject': 'מתמטיקה', 'cls': 'יב', 'teacherId': 't2', 'roomId': 'ח-11', 'start': '2026-09-01', 'end': '2027-03-30', 'sessions': [{'day': 1, 'time': '13:00'}, {'day': 3, 'time': '11:00'}, {'day': 0, 'time': '08:00'}, {'day': 2, 'time': '12:00'}]},
+    {'id': 'c6', 'num': 'אנגלית ט-2', 'subject': 'אנגלית', 'cls': 'ט-2', 'teacherId': 't3', 'roomId': 'ח-4', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '10:00'}, {'day': 2, 'time': '09:00'}, {'day': 4, 'time': '09:00'}]},
+    {'id': 'c14', 'num': 'אנגלית י-1', 'subject': 'אנגלית', 'cls': 'י-1', 'teacherId': 't3', 'roomId': 'ח-4', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '12:00'}, {'day': 2, 'time': '11:00'}]},
+    {'id': 'c7', 'num': 'סיוע-לימודי ז׳-ח׳', 'subject': 'סיוע-לימודי', 'cls': 'ז-ח', 'teacherId': 't4', 'roomId': 'ח-2', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '08:00'}, {'day': 0, 'time': '09:00'}, {'day': 0, 'time': '10:00'}, {'day': 1, 'time': '08:00'}, {'day': 1, 'time': '09:00'}, {'day': 1, 'time': '10:00'}, {'day': 2, 'time': '08:00'}, {'day': 2, 'time': '09:00'}, {'day': 2, 'time': '10:00'}, {'day': 3, 'time': '08:00'}, {'day': 3, 'time': '09:00'}, {'day': 3, 'time': '10:00'}, {'day': 4, 'time': '08:00'}, {'day': 4, 'time': '09:00'}, {'day': 4, 'time': '10:00'}, {'day': 0, 'time': '11:00'}, {'day': 1, 'time': '11:00'}, {'day': 2, 'time': '11:00'}, {'day': 3, 'time': '11:00'}, {'day': 4, 'time': '11:00'}, {'day': 0, 'time': '12:00'}, {'day': 1, 'time': '12:00'}, {'day': 2, 'time': '12:00'}, {'day': 3, 'time': '12:00'}, {'day': 4, 'time': '12:00'}]},
+    {'id': 'c8', 'num': 'היסטוריה ט-2', 'subject': 'היסטוריה', 'cls': 'ט-2', 'teacherId': 't5', 'roomId': 'ח-9', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '09:00'}, {'day': 1, 'time': '11:00'}, {'day': 3, 'time': '09:00'}, {'day': 4, 'time': '10:00'}]},
+    {'id': 'c15', 'num': 'אזרחות יא-2', 'subject': 'אזרחות', 'cls': 'יא-2', 'teacherId': 't5', 'roomId': 'ח-9', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '11:00'}, {'day': 2, 'time': '10:00'}, {'day': 3, 'time': '12:00'}, {'day': 4, 'time': '08:00'}]},
+    {'id': 'c16', 'num': 'היסטוריה יא-1', 'subject': 'היסטוריה', 'cls': 'יא-1', 'teacherId': 't5', 'roomId': 'ח-9', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 1, 'time': '08:00'}, {'day': 2, 'time': '12:00'}, {'day': 3, 'time': '10:00'}]},
+    {'id': 'c17', 'num': 'שעת-מחנך ט-2', 'subject': 'חינוך', 'cls': 'ט-2', 'teacherId': 't5', 'roomId': 'ח-9', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 2, 'time': '08:00'}]},
+    {'id': 'c18', 'num': 'אנגלית יא-1', 'subject': 'אנגלית', 'cls': 'יא-1', 'teacherId': 't6', 'roomId': 'ח-5', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '08:00'}, {'day': 2, 'time': '09:00'}, {'day': 4, 'time': '11:00'}]},
+    {'id': 'c19', 'num': 'מתמטיקה ח-2', 'subject': 'מתמטיקה', 'cls': 'ח-2', 'teacherId': 't1', 'roomId': 'ח-6', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '09:00'}, {'day': 1, 'time': '08:00'}, {'day': 2, 'time': '11:00'}, {'day': 3, 'time': '08:00'}, {'day': 4, 'time': '09:00'}]},
+    {'id': 'c20', 'num': 'מתמטיקה ט-3', 'subject': 'מתמטיקה', 'cls': 'ט-3', 'teacherId': 't1', 'roomId': 'ח-7', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '10:00'}, {'day': 1, 'time': '10:00'}, {'day': 2, 'time': '09:00'}, {'day': 3, 'time': '09:00'}, {'day': 4, 'time': '10:00'}]},
+    {'id': 'c21', 'num': 'היסטוריה ח-1', 'subject': 'היסטוריה', 'cls': 'ח-1', 'teacherId': 't5', 'roomId': 'ח-3', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '08:00'}, {'day': 1, 'time': '09:00'}, {'day': 3, 'time': '08:00'}, {'day': 4, 'time': '09:00'}]},
+    {'id': 'c22', 'num': 'אזרחות י-2', 'subject': 'אזרחות', 'cls': 'י-2', 'teacherId': 't5', 'roomId': 'ח-11', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '10:00'}, {'day': 1, 'time': '10:00'}, {'day': 2, 'time': '09:00'}, {'day': 4, 'time': '11:00'}]},
+    {'id': 'c23', 'num': 'מתמטיקה ז-1', 'subject': 'מתמטיקה', 'cls': 'ז-1', 'teacherId': 't7', 'roomId': 'ח-1', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '08:00'}, {'day': 1, 'time': '08:00'}, {'day': 3, 'time': '10:00'}, {'day': 4, 'time': '12:00'}]},
+    {'id': 'c10', 'num': 'מתמטיקה ח-1', 'subject': 'מתמטיקה', 'cls': 'ח-1', 'teacherId': 't7', 'roomId': 'ח-3', 'start': '2026-09-01', 'end': '2027-06-20', 'sessions': [{'day': 0, 'time': '09:00'}, {'day': 2, 'time': '09:00'}, {'day': 4, 'time': '09:00'}]},
   ];
   // החלפות (seed בצורת-רשומה: id·date·courseId·absentId·subId·stage 0=ללא-מחליף·1=הוצע·2=אושר)
   static const subsSeed = <Map<String, dynamic>>[
@@ -159,10 +159,10 @@ class _TeamData {
     }
     return null;
   }
-  static String nameOf(String? id) => id == null ? '—' : (byId(id)?['name'] as String? ?? id);
+  static String nameOf(String? id) => id == null ? '—' : (byId(id)?['num'] as String? ?? id);
   static const roleLabel = {'homeroom': 'מחנך/ת', 'subject': 'מקצועי/ת', 'aide': 'סייע/ת', 'mgmt': 'הנהלה'};
   static const statusLabel = {'active': 'פעיל', 'leave': 'חופשה', 'unpaid': 'חל״ת', 'left': 'עזב/ה'};
-  static List<String> subjects(Map<String, dynamic> t) => [...(t['subjects'] as List).cast<String>(), ...extraSubjects[t['id']] ?? const []];
+  static List<String> subjects(Map<String, dynamic> t) => [...(t['collections'] as List).cast<String>(), ...extraSubjects[t['id']] ?? const []];
   static bool isActive(Map<String, dynamic> t) => statusOf(t) == 'active';
   static bool isGone(Map<String, dynamic> t) => statusOf(t) == 'left';
   static int weekdayOf(String iso) => DateTime.parse('${iso}T12:00:00').weekday % 7; // JS getDay: 0=ראשון
@@ -219,7 +219,7 @@ class _TeamData {
   static num? contractDays(Map<String, dynamic> t) => t['contractEnd'] == null ? null : -dayDiff(t['contractEnd'] as String, today);
   static bool contractEndsMonth(Map<String, dynamic> t) => t['contractEnd'] != null && presentsInMonth([t['contractEnd']], today) > 0;
   static bool contractExpired(Map<String, dynamic> t) => (contractDays(t) ?? 1) < 0;
-  static int? tenure(Map<String, dynamic> t) => ageOf(t['startDate'] as String?, _now); // ותק בשנים (ageOf מהמדף)
+  static int? tenure(Map<String, dynamic> t) => ageOf(t['since'] as String?, _now); // ותק בשנים (ageOf מהמדף)
 
   // ─── שיעורים-ללא-מורה היום + לוח-החלפות (זיהוי-חריגה ⇒ הכרעה ⇒ ביצוע) ───
   static final List<Map<String, dynamic>> subs = [...subsSeed.map((s) => Map<String, dynamic>.from(s))];
@@ -279,7 +279,7 @@ class _TeamData {
     final slot = <String, dynamic>{...c, 'sessions': [{'day': todayWd, 'time': time}]};
     final list = everyone.where((t) => isActive(t) && t['id'] != absent['id'] && !absentToday(t) && subjects(t).contains(c['subject']) && availableAt(t, todayWd, time) && clashOf(t, slot) == null).toList();
     list.sort((a, b) { // מועדף ראשון, אחר-כך עומס עולה
-      final pa = absent['nextEventId'] == a['id'] ? 0 : 1, pb = absent['nextEventId'] == b['id'] ? 0 : 1;
+      final pa = absent['preferredSub'] == a['id'] ? 0 : 1, pb = absent['preferredSub'] == b['id'] ? 0 : 1;
       return pa != pb ? pa - pb : loadPct(a).compareTo(loadPct(b));
     });
     return list;
@@ -322,7 +322,7 @@ class _TeamData {
   static num _score(dynamic exp, dynamic term) => _norm(term).contains('$exp') ? 100 : 0;
   static num _scoreOf(dynamic q, dynamic terms) => smartScore(q, terms, _norm, _expand, _score) as num;
   static bool _hasQuery(dynamic q) => (q as String).trim().isNotEmpty;
-  static List<String> _termsOf(Map<String, dynamic> t) => ['${t['name']}', ...subjects(t), ...(t['homeroom'] as List).cast<String>(), roleLabel[roleOf_(t)] ?? '', for (final c in coursesOf(t)) '${c['cls']}', for (final r in (t['extraRoles'] as List)) '$r'];
+  static List<String> _termsOf(Map<String, dynamic> t) => ['${t['num']}', ...subjects(t), ...(t['homeroom'] as List).cast<String>(), roleLabel[roleOf_(t)] ?? '', for (final c in coursesOf(t)) '${c['cls']}', for (final r in (t['extraRoles'] as List)) '$r'];
   static List<Map<String, dynamic>> search(List<Map<String, dynamic>> items, String q) =>
       (smartFilter(q, items, (it) => _termsOf(it as Map<String, dynamic>), _hasQuery, _scoreOf) as List).cast<Map<String, dynamic>>();
 
@@ -359,7 +359,7 @@ class _TeamData {
   //   אין להם מקור-אמת/מוזרקים-בהצבה (חוק-6) ⇒ מקום-שמור: הזרקת-שדה ⇒ העמודה מאירה לבד, אפס-שינוי-קוד.
   static final List<Map<String, Object?>> columnDefs = <Map<String, Object?>>[
     {'key': 'photo', 'label': 'תמונה'},                                                                  // מקום-שמור (WorkerCert.photo)
-    {'label': 'שם', 'get': (Map<String, dynamic> t) => '${t['name']}'},
+    {'label': 'שם', 'get': (Map<String, dynamic> t) => '${t['num']}'},
     {'label': 'תפקיד', 'get': (Map<String, dynamic> t) => roleLabel[roleOf_(t)] ?? roleOf_(t)},
     {'label': 'מקצועות', 'get': (Map<String, dynamic> t) => subjects(t).join('·')},
     {'label': 'כיתות-מחנך', 'get': (Map<String, dynamic> t) => (t['homeroom'] as List).isEmpty ? '—' : (t['homeroom'] as List).join('·')},
@@ -380,8 +380,8 @@ class _TeamData {
   static const metaFields = <Map<String, String>>[
     {'key': 'contractType', 'prefix': '📄 חוזה ', 'suffix': ''},
     {'key': 'contractEnd', 'prefix': '⏳ סיום ', 'suffix': ''},
-    {'key': 'startDate', 'prefix': '🗓 מ-', 'suffix': ''},
-    {'key': 'nextEventId', 'prefix': '⭐ מחליף-מועדף: ', 'suffix': ''},
+    {'key': 'since', 'prefix': '🗓 מ-', 'suffix': ''},
+    {'key': 'preferredSub', 'prefix': '⭐ מחליף-מועדף: ', 'suffix': ''},
     {'key': 'photo', 'prefix': '🖼 ', 'suffix': ''},            // מקום-שמור
     {'key': 'contact', 'prefix': '📞 ', 'suffix': ''},          // מקום-שמור · חוק-6
     {'key': 'peerReview', 'prefix': '🤝 הערכת-עמיתים ', 'suffix': ''}, // מקום-שמור
@@ -391,7 +391,7 @@ class _TeamData {
   // ייצוא: מערכת-אישית ⇒ CSV (toCsv⊕csvEscape מהמדף) · רשימת-צוות ⇒ CSV מחוזה-העמודות
   static String timetableCsv(Map<String, dynamic> t) => toCsv([
         ['חוג', 'כיתה', 'חדר', 'יום', 'שעה'],
-        for (final c in coursesOf(t)) for (final s in sessionsOf(c) as List) [c['name'], c['cls'], c['roomId'], dayNames[s['day'] as int], s['time']],
+        for (final c in coursesOf(t)) for (final s in sessionsOf(c) as List) [c['num'], c['cls'], c['roomId'], dayNames[s['day'] as int], s['time']],
       ], csvEscape) as String;
   static String rosterCsv(List<Map<String, dynamic>> rows, [Set<String> hidden = const {}]) => toCsv([
         [for (final c in columnDefs) if (colShown(c, rows, hidden)) c['label']],
@@ -411,24 +411,24 @@ class _TeamData {
     final unc = uncoveredToday;
     if (unc.isNotEmpty) out.add({'g': '🚨', 'tone': 2, 'm': '${unc.length} שיעורים ללא מורה היום: ${unc.map((s) => '${s['time']} ${courseById(s['courseId'] as String)?['cls']}').join(' · ')} — ${unc.where((s) => candidates(s).isNotEmpty).length} עם מחליף-מוצע'});
     final over = active.where(overLoad).toList();
-    if (over.isNotEmpty) out.add({'g': '🔥', 'tone': 3, 'm': 'עומס-יתר: ${over.map((t) => '${t['name']} ${loadPct(t)}%').join(' · ')}'});
+    if (over.isNotEmpty) out.add({'g': '🔥', 'tone': 3, 'm': 'עומס-יתר: ${over.map((t) => '${t['num']} ${loadPct(t)}%').join(' · ')}'});
     final under = active.where(underLoad).toList();
-    if (under.isNotEmpty) out.add({'g': '🪫', 'tone': 3, 'm': 'תת-עומס: ${under.map((t) => '${t['name']} ${loadPct(t)}%').join(' · ')}'});
+    if (under.isNotEmpty) out.add({'g': '🪫', 'tone': 3, 'm': 'תת-עומס: ${under.map((t) => '${t['num']} ${loadPct(t)}%').join(' · ')}'});
     for (final t in active) {
       final b = balanceFor(t);
-      if (b != null) out.add({'g': '⚖️', 'tone': 0, 'm': 'הצעת-איזון: להעביר ${b['course']['name']} מ-${b['from']['name']} ל-${t['name']} (ללא התנגשות-שבועית)'});
+      if (b != null) out.add({'g': '⚖️', 'tone': 0, 'm': 'הצעת-איזון: להעביר ${b['course']['num']} מ-${b['from']['num']} ל-${t['num']} (ללא התנגשות-שבועית)'});
     }
     final soon = active.where((t) => certSoon(t) || certExpired(t)).toList();
-    if (soon.isNotEmpty) out.add({'g': '🎓', 'tone': 3, 'm': 'הכשרות: ${soon.map((t) => '${t['name']} (${certExpired(t) ? 'פגה' : 'פגה בקרוב'})').join(' · ')}'});
+    if (soon.isNotEmpty) out.add({'g': '🎓', 'tone': 3, 'm': 'הכשרות: ${soon.map((t) => '${t['num']} (${certExpired(t) ? 'פגה' : 'פגה בקרוב'})').join(' · ')}'});
     final ending = staff.where((t) => contractEndsMonth(t) || contractExpired(t)).toList();
-    if (ending.isNotEmpty && (role == 0 || can(role, 'team.contract') || can(role, 'team.assign'))) out.add({'g': '📄', 'tone': 3, 'm': 'חוזים מסתיימים: ${ending.map((t) => '${t['name']} בעוד ${contractDays(t)} י׳').join(' · ')}'});
+    if (ending.isNotEmpty && (role == 0 || can(role, 'team.contract') || can(role, 'team.assign'))) out.add({'g': '📄', 'tone': 3, 'm': 'חוזים מסתיימים: ${ending.map((t) => '${t['num']} בעוד ${contractDays(t)} י׳').join(' · ')}'});
     final freq = active.where(frequentAbsentee).toList();
-    if (freq.isNotEmpty && roleName(role) != 'teacher') out.add({'g': '🤒', 'tone': 3, 'm': 'דפוס-היעדרויות (לשיחת-תמיכה, לא פומבי): ${freq.map((t) => '${t['name']} · מגמה ${absenceTrend(t)['dir']}').join(' · ')}'});
+    if (freq.isNotEmpty && roleName(role) != 'teacher') out.add({'g': '🤒', 'tone': 3, 'm': 'דפוס-היעדרויות (לשיחת-תמיכה, לא פומבי): ${freq.map((t) => '${t['num']} · מגמה ${absenceTrend(t)['dir']}').join(' · ')}'});
     if (roleName(role) == 'admin') {
       final perf = active.where((t) => t['classPerf'] != null).toList();
       out.add(perf.isEmpty
           ? {'g': '📊', 'tone': 0, 'm': 'השוואת-ביצועי-כיתות (מי-צריך-תמיכה): מקום-שמור — יאיר כשיוזרמו נוכחות/ציונים ממודולי נוכחות/תלמידים'}
-          : {'g': '📊', 'tone': 3, 'm': 'ביצועי-כיתות: ${perf.map((t) => '${t['name']} ${trendFromScan({'monthly': t['classPerf']['monthly']})['dir']}').join(' · ')}'});
+          : {'g': '📊', 'tone': 3, 'm': 'ביצועי-כיתות: ${perf.map((t) => '${t['num']} ${trendFromScan({'monthly': t['classPerf']['monthly']})['dir']}').join(' · ')}'});
     }
     final own = ownId(role) == null ? null : byId(ownId(role)!);
     if (own != null) { // תזכורת-מערכת-יומית למורה-המחובר
@@ -500,7 +500,7 @@ class _TeamData {
     for (final sj in subjectPool) {
       if (!has.contains(sj)) {
         (extraSubjects[t['id'] as String] ??= []).add(sj);
-        log(who, 'הקצאת-מקצוע ($sj)', t['name'] as String);
+        log(who, 'הקצאת-מקצוע ($sj)', t['num'] as String);
         return;
       }
     }
@@ -509,28 +509,28 @@ class _TeamData {
     const order = ['homeroom', 'subject', 'aide', 'mgmt'];
     final next = order[(order.indexOf(roleOf_(t)) + 1) % order.length];
     roleOverride[t['id'] as String] = next;
-    log(who, 'עריכה: תפקיד ⇒ ${roleLabel[next]}', t['name'] as String);
+    log(who, 'עריכה: תפקיד ⇒ ${roleLabel[next]}', t['num'] as String);
   }
   static void toggleFriday(Map<String, dynamic> t, String who) { // עדכן-זמינות: חלון-שישי
     final cur = Map<int, List<String>>.from(availabilityOf(t));
     if (cur.containsKey(5)) { cur.remove(5); } else { cur[5] = ['08:00', '12:00']; }
     availOverride[t['id'] as String] = cur;
-    log(who, cur.containsKey(5) ? 'זמינות: נוסף חלון-שישי' : 'זמינות: הוסר חלון-שישי', t['name'] as String);
+    log(who, cur.containsKey(5) ? 'זמינות: נוסף חלון-שישי' : 'זמינות: הוסר חלון-שישי', t['num'] as String);
   }
   static void addCert(Map<String, dynamic> t, String who) {
-    (extraCerts[t['id'] as String] ??= []).add({'name': 'רענון עזרה-ראשונה', 'issuer': 'מד״א', 'expiry': '2028-09-03'});
-    log(who, 'הוספת-הכשרה (רענון עזרה-ראשונה)', t['name'] as String);
+    (extraCerts[t['id'] as String] ??= []).add({'num': 'רענון עזרה-ראשונה', 'issuer': 'מד״א', 'expiry': '2028-09-03'});
+    log(who, 'הוספת-הכשרה (רענון עזרה-ראשונה)', t['num'] as String);
   }
   static void addDoc(Map<String, dynamic> t, String who) {
-    (docs[t['id'] as String] ??= []).insert(0, {'name': 'מסמך ${(docs[t['id']]?.length ?? 0) + 1}', 'date': today});
-    log(who, 'צירוף-מסמך', t['name'] as String);
+    (docs[t['id'] as String] ??= []).insert(0, {'num': 'מסמך ${(docs[t['id']]?.length ?? 0) + 1}', 'date': today});
+    log(who, 'צירוף-מסמך', t['num'] as String);
   }
   static void cycleStatus(Map<String, dynamic> t, String who) { // סמן-עזב/חופשה: מחזור מבוקר
     const order = ['active', 'leave', 'unpaid', 'left'];
     final next = order[(order.indexOf(statusOf(t)) + 1) % order.length];
     statusOverride[t['id'] as String] = next;
     if (next != 'active') syncUncovered(); // חופשה/חל״ת ⇒ שיעורי-היום ללא-מורה
-    log(who, 'סטטוס ⇒ ${statusLabel[next]}', t['name'] as String);
+    log(who, 'סטטוס ⇒ ${statusLabel[next]}', t['num'] as String);
   }
   // איזון-עומס (הצעה · 23-ד): חוג של עמוס-מדי באותו-מקצוע שפנוי-לשבוע-שלם אצל תת-עומס (clashOf מלא + חלון-זמינות לכל מפגש)
   static Map<String, dynamic>? balanceFor(Map<String, dynamic> t) {
@@ -547,14 +547,14 @@ class _TeamData {
   }
   static void reassign(Map<String, dynamic> c, Map<String, dynamic> to, String who) {
     reassigned[c['id'] as String] = to['id'] as String;
-    log(who, 'הקצאת-כיתה (${c['name']})', to['name'] as String);
+    log(who, 'הקצאת-כיתה (${c['num']})', to['num'] as String);
   }
   static final List<Map<String, dynamic>> audit = []; // אודיט (מי·מה·מתי) — TimelineItem
   static void log(String who, String what, String target) => audit.insert(0, {'who': who, 'what': what, 'target': target, 'date': today});
   static int _seq = 0;
   static void addTeacher(String who) { // מורה-חדש: רשומה בצורת-החוזה; זהות = מקום-שמור להזרקה (חוק-6)
     _seq++;
-    added.add({'id': 'n$_seq', 'name': 'מורה חדש/ה $_seq', 'role': 'subject', 'subjects': <String>[], 'homeroom': <String>[], 'contractHours': 20, 'contractType': 'זמני', 'startDate': today, 'status': 'active',
+    added.add({'id': 'n$_seq', 'num': 'מורה חדש/ה $_seq', 'role': 'subject', 'collections': <String>[], 'homeroom': <String>[], 'contractHours': 20, 'contractType': 'זמני', 'since': today, 'status': 'active',
       'availability': <int, List<String>>{}, 'constraints': <String>[], 'extraRoles': <String>[], 'certs': <Map<String, dynamic>>[], 'attendance': <Map<String, dynamic>>[], 'absences': <Map<String, dynamic>>[], 'notes': ''});
     log(who, 'מורה-חדש (ממתין לפרטים)', 'n$_seq');
   }
@@ -562,12 +562,12 @@ class _TeamData {
     if (absentOn(t, today)) return;
     (extraAbsences[t['id'] as String] ??= []).insert(0, {'date': today, 'reason': reason});
     syncUncovered(); // אוטומציה: זיהוי שיעור-ללא-מורה ברגע-ההיעדרות
-    log(who, 'סימון-היעדרות (${reasonOf(reason)})', t['name'] as String);
+    log(who, 'סימון-היעדרות (${reasonOf(reason)})', t['num'] as String);
   }
   static void propose(Map<String, dynamic> s, Map<String, dynamic> t, String who) {
     s['subId'] = t['id'];
     s['stage'] = 1;
-    log(who, 'הצעת-מחליף', '${nameOf(t['id'] as String)} ⇐ ${courseById(s['courseId'] as String)?['name']}');
+    log(who, 'הצעת-מחליף', '${nameOf(t['id'] as String)} ⇐ ${courseById(s['courseId'] as String)?['num']}');
   }
   static void moveSub(String id, int toStage, String who) {
     final s = subs.firstWhere((x) => x['id'] == id);
@@ -578,21 +578,21 @@ class _TeamData {
     }
     s['stage'] = toStage.clamp(0, 2);
     if (toStage <= 0) s['subId'] = null;
-    log(who, toStage == 2 ? 'אישור-החלפה' : toStage == 1 ? 'הצעת-מחליף' : 'ביטול-החלפה', '${courseById(s['courseId'] as String)?['name']}');
+    log(who, toStage == 2 ? 'אישור-החלפה' : toStage == 1 ? 'הצעת-מחליף' : 'ביטול-החלפה', '${courseById(s['courseId'] as String)?['num']}');
   }
 }
 
 // ═══════════ המסך · מחלקה ציבורית יחידה (const · ללא main) ═══════════
-class SupporterScreen extends StatefulWidget {
-  const SupporterScreen({super.key, this.initialMode = 0, this.initialPanel, this.initialTab = 0}); // שקעי-הזרקה לתצוגה-מקדימה/בדיקה: מבט · כרטיס-פתוח · טאב
+class TzBoxScreen extends StatefulWidget {
+  const TzBoxScreen({super.key, this.initialMode = 0, this.initialPanel, this.initialTab = 0}); // שקעי-הזרקה לתצוגה-מקדימה/בדיקה: מבט · כרטיס-פתוח · טאב
   final int initialMode;
   final String? initialPanel; // מזהה-מורה שכרטיסו נפתח אחרי הפריים-הראשון
   final int initialTab;
   @override
-  State<SupporterScreen> createState() => _SupporterScreenState();
+  State<TzBoxScreen> createState() => _TzBoxScreenState();
 }
 
-class _SupporterScreenState extends State<SupporterScreen> {
+class _TzBoxScreenState extends State<TzBoxScreen> {
   int _sort = 0; // 0=⚖️ עומס · 1=🤒 חיסורים · 2=🏫 כיתות
   final Map<String, int> _tab = {}; // טאב-נבחר פר-מורה (חיווט SegmentedSwitch→תצוגה)
   static const _tabNames = ['סקירה', 'מערכת', 'כיתות', 'היעדרויות', 'החלפות', 'ביצועים', 'הכשרות', 'מסמכים', 'אודיט'];
@@ -790,9 +790,9 @@ class _SupporterScreenState extends State<SupporterScreen> {
               child: GlassCard(
                 child: ListView(controller: scroll, padding: const EdgeInsets.all(6), children: [
                   Row(children: [
-                    PremiumAvatar(name: t['name'] as String, size: 56, status: _TeamData.absentToday(t) ? AvatarStatus.busy : _TeamData.presentToday(t) ? AvatarStatus.online : AvatarStatus.none),
+                    PremiumAvatar(name: t['num'] as String, size: 56, status: _TeamData.absentToday(t) ? AvatarStatus.busy : _TeamData.presentToday(t) ? AvatarStatus.online : AvatarStatus.none),
                     const SizedBox(width: 10),
-                    Expanded(child: MediaRow(glyph: '🪪', title: '${t['name']} · ${_TeamData.roleLabel[_TeamData.roleOf_(t)]}', subtitle: '${_TeamData.subjects(t).join(' · ')} · ותק ${_TeamData.tenure(t) ?? '—'} ש׳ · ${_TeamData.statusLabel[_TeamData.statusOf(t)]}')),
+                    Expanded(child: MediaRow(glyph: '🪪', title: '${t['num']} · ${_TeamData.roleLabel[_TeamData.roleOf_(t)]}', subtitle: '${_TeamData.subjects(t).join(' · ')} · ותק ${_TeamData.tenure(t) ?? '—'} ש׳ · ${_TeamData.statusLabel[_TeamData.statusOf(t)]}')),
                   ]),
                   _gap(12),
                   StatRow(label: 'עומס מול חוזה', value: '${_TeamData.hoursWeek(t).round()} מתוך ${_TeamData.contractHours(t)} ש׳ · ${_TeamData.loadPct(t)}%', fraction: (_TeamData.loadPct(t) / 100).clamp(0.0, 1.0)),
@@ -845,7 +845,7 @@ class _SupporterScreenState extends State<SupporterScreen> {
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       Wrap(spacing: 8, runSpacing: 6, children: [
         for (final f in _TeamData.metaFields)
-          if (t[f['key']] != null) StatusChip(label: '${f['prefix']}${f['key'] == 'nextEventId' ? _TeamData.nameOf(t[f['key']] as String) : f['key']!.contains('Date') || f['key'] == 'contractEnd' ? fmtDate('${t[f['key']]}') : t[f['key']]}${f['suffix']}', tone: 0),
+          if (t[f['key']] != null) StatusChip(label: '${f['prefix']}${f['key'] == 'preferredSub' ? _TeamData.nameOf(t[f['key']] as String) : f['key']!.contains('Date') || f['key'] == 'contractEnd' ? fmtDate('${t[f['key']]}') : t[f['key']]}${f['suffix']}', tone: 0),
         for (final r in (t['extraRoles'] as List)) StatusChip(label: '🎖 $r', tone: 1),
         for (final c in (t['constraints'] as List)) StatusChip(label: '⛔ $c', tone: 3),
       ]),
@@ -860,7 +860,7 @@ class _SupporterScreenState extends State<SupporterScreen> {
       if (_TeamData.hiddenKeys(_role).contains('notes')) ...[_gap(10), const AlertBanner(glyph: '🔒', tone: 0, message: 'הערות-הנהלה מוגנות — למנהל/ת בלבד')],
       if (_TeamData.balanceFor(t) != null) ...[
         _gap(10),
-        AlertBanner(glyph: '⚖️', tone: 3, message: 'הצעת-איזון: להעביר ${_TeamData.balanceFor(t)!['course']['name']} מ-${_TeamData.balanceFor(t)!['from']['name']} (עמוס-מדי) לכאן'),
+        AlertBanner(glyph: '⚖️', tone: 3, message: 'הצעת-איזון: להעביר ${_TeamData.balanceFor(t)!['course']['num']} מ-${_TeamData.balanceFor(t)!['from']['num']} (עמוס-מדי) לכאן'),
       ],
     ]);
   }
@@ -895,10 +895,10 @@ class _SupporterScreenState extends State<SupporterScreen> {
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       if (cs.isEmpty) const EmptyState(glyph: '🏫', message: 'לא הוקצו חוגים'),
       for (final c in cs)
-        MediaRow(glyph: '📘', title: '${c['name']} · חדר ${c['roomId']}', subtitle: '${(sessionsOf(c) as List).length} מפגשים/שבוע · ${(sessionsOf(c) as List).map((s) => '${dayNames[s['day'] as int]} ${s['time']}').join(' · ')}'),
+        MediaRow(glyph: '📘', title: '${c['num']} · חדר ${c['roomId']}', subtitle: '${(sessionsOf(c) as List).length} מפגשים/שבוע · ${(sessionsOf(c) as List).map((s) => '${dayNames[s['day'] as int]} ${s['time']}').join(' · ')}'),
       if (bal != null && _TeamData.can(_role, 'team.assign')) ...[
         _gap(8),
-        Wrap(children: [SoftButton(label: '🏫 הקצה-כיתה: ${bal['course']['name']} מ-${bal['from']['name']}', tone: 1, onTap: () => act(() => _TeamData.reassign(bal['course'] as Map<String, dynamic>, t, _who)))]),
+        Wrap(children: [SoftButton(label: '🏫 הקצה-כיתה: ${bal['course']['num']} מ-${bal['from']['num']}', tone: 1, onTap: () => act(() => _TeamData.reassign(bal['course'] as Map<String, dynamic>, t, _who)))]),
       ],
     ]);
   }
@@ -934,7 +934,7 @@ class _SupporterScreenState extends State<SupporterScreen> {
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       for (final s in mine)
         TimelineItem(
-          title: '${s['subId'] == t['id'] ? '🟢 ביצע/ה' : '🟠 קיבל/ה'} · ${_TeamData.courseById(s['courseId'] as String)?['name']}',
+          title: '${s['subId'] == t['id'] ? '🟢 ביצע/ה' : '🟠 קיבל/ה'} · ${_TeamData.courseById(s['courseId'] as String)?['num']}',
           time: '${fmtDate(s['date'] as String)}${s['time'] != null ? ' ${s['time']}' : ''}',
           body: '${s['stage'] == 2 ? '✅ אושר' : s['stage'] == 1 ? '🟠 הוצע' : '🔴 ללא-מחליף'} · ${s['subId'] == t['id'] ? 'במקום ${_TeamData.nameOf(s['absentId'] as String)}' : 'מחליף: ${_TeamData.nameOf(s['subId'] as String?)}'}',
         ),
@@ -962,7 +962,7 @@ class _SupporterScreenState extends State<SupporterScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 3),
           child: Row(children: [
-            Expanded(child: MediaRow(glyph: '🎓', title: '${c['name']}', subtitle: '${c['issuer']} · תוקף ${fmtDate(c['expiry'] as String)}')),
+            Expanded(child: MediaRow(glyph: '🎓', title: '${c['num']}', subtitle: '${c['issuer']} · תוקף ${fmtDate(c['expiry'] as String)}')),
             () {
               final st = _TeamData.certStatus(c);
               return StatusChip(label: st == CertExpiryStatus.expired ? 'פג' : st == CertExpiryStatus.expiringSoon ? 'פג בקרוב' : 'בתוקף', tone: st == CertExpiryStatus.expired ? 2 : st == CertExpiryStatus.expiringSoon ? 3 : 1);
@@ -976,12 +976,12 @@ class _SupporterScreenState extends State<SupporterScreen> {
   Widget _docs(Map<String, dynamic> t) {
     final ds = _TeamData.docs[t['id']] ?? const [];
     if (ds.isEmpty) return const EmptyState(glyph: '📎', message: 'אין מסמכים — צרף-מסמך ירשום כאן (אחסון-קבצים = מקום-שמור להצבה)');
-    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [for (final d in ds) TimelineItem(title: '📎 ${d['name']}', time: fmtDate(d['date'] as String))]);
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [for (final d in ds) TimelineItem(title: '📎 ${d['num']}', time: fmtDate(d['date'] as String))]);
   }
 
   // אודיט: כל פעולה שנרשמה בפנקס (מי·מה·מתי) — TimelineItem
   Widget _audit(Map<String, dynamic> t) {
-    final rows = _TeamData.audit.where((a) => a['target'] == t['name'] || '${a['target']}'.contains('${t['name']}')).toList();
+    final rows = _TeamData.audit.where((a) => a['target'] == t['num'] || '${a['target']}'.contains('${t['num']}')).toList();
     if (rows.isEmpty) return const EmptyState(glyph: '🧾', message: 'אין רישומי-אודיט למורה זה');
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [for (final a in rows) TimelineItem(title: '${a['what']}', time: fmtDate(a['date'] as String), body: 'ע״י ${a['who']}')]);
   }
@@ -998,7 +998,7 @@ class _SupporterScreenState extends State<SupporterScreen> {
       if (_TeamData.can(r, 'team.avail')) SoftButton(label: '🗓 עדכן-זמינות (שישי)', tone: 0, onTap: () => act(() => _TeamData.toggleFriday(t, _who))),
       if (_TeamData.can(r, 'team.cert') || _TeamData.can(r, 'team.docs')) SoftButton(label: '🎓 הוסף-הכשרה', tone: 0, onTap: () => act(() => _TeamData.addCert(t, _who))),
       if (_TeamData.can(r, 'team.docs')) SoftButton(label: '📎 צרף-מסמך', tone: 0, onTap: () => act(() => _TeamData.addDoc(t, _who))),
-      SoftButton(label: '🖨 הדפס-מערכת', tone: 0, onTap: () => _openExport('מערכת אישית · ${t['name']}', _TeamData.timetableCsv(t))),
+      SoftButton(label: '🖨 הדפס-מערכת', tone: 0, onTap: () => _openExport('מערכת אישית · ${t['num']}', _TeamData.timetableCsv(t))),
       if (_TeamData.roleName(r) == 'admin') SoftButton(label: '⏸ ${_TeamData.statusOf(t) == 'active' ? 'סמן-חופשה' : 'שנה-סטטוס'}', tone: 2, onTap: () => act(() => _TeamData.cycleStatus(t, _who))),
     ];
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
@@ -1010,7 +1010,7 @@ class _SupporterScreenState extends State<SupporterScreen> {
       else if (t['contact'] == null)
         const AlertBanner(glyph: '💬', tone: 0, message: 'שלח-הודעה: פרטי-קשר מוזרקים בהצבה (חוק-6) — מקום-שמור, מאיר כשיוזרק contact')
       else
-        Wrap(children: [SoftButton(label: '💬 שלח-הודעה', tone: 1, onTap: () => act(() => _TeamData.log(_who, 'שליחת-הודעה', t['name'] as String)))]),
+        Wrap(children: [SoftButton(label: '💬 שלח-הודעה', tone: 1, onTap: () => act(() => _TeamData.log(_who, 'שליחת-הודעה', t['num'] as String)))]),
       _gap(8),
       if (!_TeamData.can(r, 'team.absence'))
         const SizedBox.shrink()
@@ -1072,7 +1072,7 @@ class _SupporterScreenState extends State<SupporterScreen> {
       else ...[
         DsBoard(
           stages: const ['🔴 ללא-מחליף', '🟠 הוצע', '✅ אושר'],
-          records: [for (final s in today) {'id': '${s['id']}', 'title': '${s['time'] ?? ''} ${_TeamData.courseById(s['courseId'] as String)?['name']} · במקום ${_TeamData.nameOf(s['absentId'] as String)}${s['subId'] != null ? ' ⇐ ${_TeamData.nameOf(s['subId'] as String)}' : ''}', 'stage': '${s['stage']}'}],
+          records: [for (final s in today) {'id': '${s['id']}', 'title': '${s['time'] ?? ''} ${_TeamData.courseById(s['courseId'] as String)?['num']} · במקום ${_TeamData.nameOf(s['absentId'] as String)}${s['subId'] != null ? ' ⇐ ${_TeamData.nameOf(s['subId'] as String)}' : ''}', 'stage': '${s['stage']}'}],
           stageOf: (r) => int.parse(r['stage']!),
           titleOf: (r) => r['title']!,
           onMove: (id, to) { if (_TeamData.can(_role, 'team.sub')) setState(() => _TeamData.moveSub(id, to, _who)); },
@@ -1095,17 +1095,17 @@ class _SupporterScreenState extends State<SupporterScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        MediaRow(glyph: '🚨', title: '${s['time'] ?? ''} · ${c['name']} · ${c['roomId']}', subtitle: 'במקום ${_TeamData.nameOf(s['absentId'] as String)} · ${s['stage'] == 1 ? 'הוצע: ${chosen?['name']}' : 'ללא-מחליף'}'),
+        MediaRow(glyph: '🚨', title: '${s['time'] ?? ''} · ${c['num']} · ${c['roomId']}', subtitle: 'במקום ${_TeamData.nameOf(s['absentId'] as String)} · ${s['stage'] == 1 ? 'הוצע: ${chosen?['num']}' : 'ללא-מחליף'}'),
         _gap(6),
         if (cands.isEmpty)
           const AlertBanner(glyph: '⚠️', tone: 3, message: 'אין מחליף זמין (מקצוע+חלון-זמינות+פנוי-בסלוט) — נדרשת הכרעה ידנית')
         else if (!_TeamData.can(_role, 'team.sub'))
-          Wrap(spacing: 8, children: [for (final t in cands.take(3)) StatusChip(label: '${t['name']} · ${_TeamData.loadPct(t)}%', tone: 0)])
+          Wrap(spacing: 8, children: [for (final t in cands.take(3)) StatusChip(label: '${t['num']} · ${_TeamData.loadPct(t)}%', tone: 0)])
         else
           Wrap(spacing: 8, runSpacing: 6, children: [
             for (final t in cands.take(3))
               SoftButton(
-                label: '${t == cands.first ? '⭐ ' : ''}${t['name']} · ${_TeamData.loadPct(t)}%${(_TeamData.byId(s['absentId'] as String)?['nextEventId']) == t['id'] ? ' · מועדף' : ''}',
+                label: '${t == cands.first ? '⭐ ' : ''}${t['num']} · ${_TeamData.loadPct(t)}%${(_TeamData.byId(s['absentId'] as String)?['preferredSub']) == t['id'] ? ' · מועדף' : ''}',
                 tone: t == cands.first ? 1 : 0,
                 onTap: () => setState(() => _TeamData.propose(s, t, _who)),
               ),
@@ -1127,14 +1127,14 @@ class _SupporterScreenState extends State<SupporterScreen> {
       child: GradientCard(
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Row(children: [
-            PremiumAvatar(name: t['name'] as String, size: 44, status: avatarStatus),
+            PremiumAvatar(name: t['num'] as String, size: 44, status: avatarStatus),
             const SizedBox(width: 10),
             // MediaRow בולע את הקליק (InkWell פנימי no-op) ⇒ כפתור-שברון נפרד כשקע-הפתיחה
             IconButton(onPressed: () => _openPanel(t), icon: const Icon(Icons.chevron_left, color: _acc, size: 26), tooltip: 'כרטיס-מורה ופעולות'),
             Expanded(
               child: MediaRow(
                 glyph: t['role'] == 'homeroom' ? '🏫' : t['role'] == 'aide' ? '🤝' : t['role'] == 'mgmt' ? '🧭' : '📚',
-                title: '${t['name']} · ${_TeamData.roleLabel[t['role']]}',
+                title: '${t['num']} · ${_TeamData.roleLabel[t['role']]}',
                 subtitle: '${_TeamData.subjects(t).join(' · ')}${(t['homeroom'] as List).isNotEmpty ? ' · מחנך/ת ${(t['homeroom'] as List).join(',')}' : ''} · ${_TeamData.coursesOf(t).length} חוגים',
               ),
             ),

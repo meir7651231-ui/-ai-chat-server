@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-// 🎯 retarget — שבר-זהב ⇒ ישות אחרת מהסכמה (GENMAX · G5c · הכרעה-24): הופך את המנוע מ"מרכיב" ל"מחולל".
+// 🎯 retarget — שבר-זהב ⇒ ישות אחרת מהסכמה (GENMAX · G5c+G5d · הכרעה-24): הופך את המנוע מ"מרכיב" ל"מחולל".
 //   קלט: מודול-זהב M (למשל schoolos_rooms.dart) + ישות E מ-`new/atoms/schema-fields.mjs` (54 ישויות · 492 שדות).
-//   1. הישות-הראשית של M = רשימת-המפות ה-const הראשונה ב-`_XData` (הזרע: rooms/students/teachers…) ⇒ מפתחות + טיפוס-משוער מהערך (§20-ד: מצורת-הדאטה).
-//   2. מיפוי מפתח⇒שדה-E דטרמיניסטי, בלי מילון: (א) שם-זהה · (ב) אותה קטגוריית-טיפוס (Id/string/number/boolean/IsoDate/TimeHM/enum/list/map) לפי סדר-ההצהרה בסכמה, כל שדה פעם-אחת · (ג) לא-ממופה ⇒ נשאר כמפתח-מקור ומדווח (מקום-שמור, חוק-7).
-//   3. שכתוב: כל ליטרל `'srcKey'` (מפתח-מפה/אינדקס/רשימת-עמודות) ⇒ `'dstKey'` מחוץ להערות · שמות-המחלקות של M ⇒ של E (`RoomsScreen`⇒`VolunteerScreen`) · הערכים-בזרע נשמרים (זרע-הצבה מוצהר — לא ערך-מומצא לשקע).
-//   4. הרכבה: compose+declared (המסך-השלם) ⇒ new/dart-gen-bs/gen_retarget_<e>_from_<tag>.dart ⇒ analyze + gen-verify (G5b) הם השער.
+//   1. הישות-הראשית של M = רשימת-המפות (const או בתוך seed()) שמפתחותיה **הנצרכים** בקוד הם הרבים ביותר (roleDefs מוחרג; תיקו ⇒ שם≡גזע-המודול ⇒ שורות) ⇒ מפתחות + טיפוס-משוער מהערך (§20-ד).
+//   2. מיפוי מפתח⇒שדה-E דטרמיניסטי, בלי מילון (L55): (א) שם-זהה · (ב) **ערוץ-מוצהר** (phone/email — רמז-הצורה של G2 על שם-השדה) · (ג) **צורת-טיפוס יחידה** (בדיוק שדה פנוי אחד בקטגוריה — לא "הראשון-הפנוי") · (ד) מקום-שמור (חוק-7).
+//   3. שכתוב: ליטרלי `'srcKey'` ⇒ `'dstKey'` מחוץ להערות · שמות-מחלקות · מפתח-מונח `'entity.<גזע>'` ⇒ `'entity.<e>'` עם ערך = שם-הישות (הצבה גלויה, לא עברית-שגויה) · ערכי-הזרע נשמרים כזרע-הצבה מוצהר.
+//   4. הרכבה compose+declared ⇒ new/dart-gen-bs/gen_retarget_<e>_from_<tag>.dart ⇒ analyze + gen-verify (G5b) הם השער.
 //   CLI: --module <file> --entity <E> [--out] · --gate: ההרכבות-המחויבות ≡ טריות.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -16,62 +16,126 @@ import { FIELDS } from '../../new/atoms/schema-fields.mjs';
 const ROOT = R.ROOT, DIR = path.join(ROOT, 'new/dart-gen-bs');
 const cat = (t) => /^Id/.test(t) ? 'Id' : /IsoDate/.test(t) ? 'IsoDate' : /TimeHM/.test(t) ? 'TimeHM' : /^number/.test(t) ? 'number' : /^boolean/.test(t) ? 'boolean' : /^string/.test(t) ? 'string' : /\[\]$/.test(t) ? 'list' : /^Record</.test(t) ? 'map' : (/'/.test(t) || /^[A-Z]\w+$/.test(t)) ? 'enum' : 'other';
 const guess = (v) => /^'\d{4}-\d{2}-\d{2}'$/.test(v) ? 'IsoDate' : /^'\d{2}:\d{2}'$/.test(v) ? 'TimeHM' : /^'[a-z]{1,3}\d+'$/.test(v) ? 'Id' : /^'/.test(v) ? 'string' : /^(true|false)$/.test(v) ? 'boolean' : /^-?\d/.test(v) ? 'number' : /^\[/.test(v) ? 'list' : /^\{/.test(v) ? 'map' : /^null$/.test(v) ? 'null' : '?';
+// ערוץ מוצהר משם-השדה (אותו רמז-צורה של shape-ops G2 — מקטע-שם, לא תת-מחרוזת: `waits` אינו `wa`)
+const chanKind = (n) => /(^|[_-])(mail|email)([_-]|$)|mail/i.test(n) ? 'email' : /(^|[_-])(phone|tel|mobile|wa|whatsapp)([_-]|$)|phone/i.test(n) ? 'phone' : null;
 const tagOf = (m) => TAG[m] || TAG[m.replace(/\.dart$/, '')] || 'x';
+const stemOf = (m) => m.replace(/^schoolos_?/, '').replace(/\.dart$/, '') || 'inventory';
 
-// הישות-הראשית: רשימת-המפות ה-const הראשונה של מחלקת-הדאטה ⇒ [{key, type}] לפי סדר-הופעה
-export function primaryKeys(src) {
-  const m = src.match(/static const (\w+) = <Map<String, dynamic>>\[\s*\n([\s\S]*?)\n\s*\];/);
-  if (!m) return { name: null, keys: [] };
-  const seen = new Map();
-  for (const row of m[2].split('\n')) for (const kv of row.matchAll(/'([a-zA-Z_]\w*)':\s*((?:'(?:[^'\\]|\\.)*'|[^,}\]]+))/g)) { const t = guess(kv[2].trim()); if (!seen.has(kv[1]) || seen.get(kv[1]) === 'null') seen.set(kv[1], t); }
-  return { name: m[1], keys: [...seen].map(([key, type]) => ({ key, type })) };
+// כל רשימות-הזרע: `static const NAME = <Map<String, dynamic>>[` וגם `'NAME': [`/`'NAME': <Map…>[` בתוך seed() — לפי סוגריים-מאוזנים
+export function seedLists(src) {
+  const out = [];
+  const re = /(?:static const (\w+) = <Map<String, dynamic>>\[|'(\w+)': (?:<Map<String, dynamic>>)?\[)\s*\n(\s*)\{/g;
+  for (const m of src.matchAll(re)) {
+    const name = m[1] || m[2]; let d = 0, i = m.index + m[0].lastIndexOf('[');
+    for (let j = i; j < src.length; j++) { if (src[j] === '[') d++; else if (src[j] === ']') { d--; if (d === 0) { out.push({ name, body: src.slice(i + 1, j), depth: m[3].length }); break; } } }
+  }
+  return out.filter((l) => l.name !== 'roleDefs');
+}
+export function primaryKeys(src, module = '') {
+  const lists = seedLists(src).map((l) => {
+    const seen = new Map();
+    for (const row of l.body.split('\n')) for (const kv of row.matchAll(/'([a-zA-Z_]\w*)':\s*((?:'(?:[^'\\]|\\.)*'|[^,}\]]+))/g)) { const t = guess(kv[2].trim()); if (!seen.has(kv[1]) || seen.get(kv[1]) === 'null') seen.set(kv[1], t); }
+    const keys = [...seen].map(([key, type]) => ({ key, type }));
+    const refd = keys.filter((k) => new RegExp(`\\['${k.key}'\\]`).test(src)).length;
+    const rows = l.body.split('\n').filter((x) => /^\s*\{/.test(x)).length;
+    return { name: l.name, keys, refd, rows };
+  }).filter((l) => l.keys.length);
+  if (!lists.length) return { name: null, keys: [] };
+  const stem = stemOf(module).toLowerCase();
+  lists.sort((a, b) => b.refd - a.refd || (b.name.toLowerCase() === stem) - (a.name.toLowerCase() === stem) || b.rows - a.rows);
+  return { name: lists[0].name, keys: lists[0].keys, candidates: lists.map((l) => `${l.name}(${l.refd}/${l.keys.length})`) };
 }
 export function mapKeys(keys, entity) {
-  const fields = FIELDS.filter((f) => f.e === entity).map((f) => ({ n: f.n, cat: cat(f.t), t: f.t }));
+  const fields = FIELDS.filter((f) => f.e === entity).map((f) => ({ n: f.n, cat: cat(f.t), t: f.t, chan: chanKind(f.n) }));
   if (!fields.length) throw new Error(`ישות לא בסכמה: ${entity}`);
   const used = new Set(), map = [];
-  for (const k of keys) { const f = fields.find((x) => x.n === k.key && !used.has(x.n)); if (f) { used.add(f.n); map.push({ src: k.key, dst: f.n, how: 'name', srcType: k.type, dstType: f.t }); } }
-  for (const k of keys) { if (map.some((x) => x.src === k.key)) continue; const f = fields.find((x) => x.cat === k.type && !used.has(x.n)); if (f) { used.add(f.n); map.push({ src: k.key, dst: f.n, how: 'type', srcType: k.type, dstType: f.t }); } else map.push({ src: k.key, dst: null, how: 'reserved', srcType: k.type, dstType: null }); }
+  const take = (k, f, how) => { used.add(f.n); map.push({ src: k.key, dst: f.n, how, srcType: k.type, dstType: f.t }); };
+  for (const k of keys) { const f = fields.find((x) => x.n === k.key && !used.has(x.n)); if (f) take(k, f, 'name'); }
+  for (const k of keys) { if (map.some((x) => x.src === k.key)) continue; const ck = chanKind(k.key); if (!ck) continue; const f = fields.find((x) => x.chan === ck && !used.has(x.n)); if (f) take(k, f, 'chan'); }
+  for (const k of keys) {
+    if (map.some((x) => x.src === k.key)) continue;
+    const cands = fields.filter((x) => x.cat === k.type && !used.has(x.n) && !x.chan);
+    if (cands.length === 1) take(k, cands[0], 'unique'); else map.push({ src: k.key, dst: null, how: cands.length ? `reserved(${cands.length} מועמדים)` : 'reserved', srcType: k.type, dstType: null });
+  }
   return { map, unusedFields: fields.filter((f) => !used.has(f.n)).map((f) => f.n) };
 }
 export function retarget({ module, entity }) {
   const src = fs.readFileSync(path.join(DIR, module), 'utf8');
-  const pk = primaryKeys(src);
+  const pk = primaryKeys(src, module);
   const { map, unusedFields } = mapKeys(pk.keys, entity);
   const tag = tagOf(module), k = module.replace(/\.dart$/, '');
   const ids = PARTICLE_IDS.filter((id) => (TAG[k] && TAG[k] !== 'inv' ? id.startsWith(tag + '.') : !id.includes('.')));
   const res = assemble({ module, particles: ids, mode: 'compose', declared: true });
   let code = res.code;
-  // שכתוב-מפתחות מחוץ להערות (שורה-שורה: החלק שלפני `//` בלבד) — רק מפתחות שממופים לשם אחר
   const ren = map.filter((x) => x.dst && x.dst !== x.src);
-  code = code.split('\n').map((l) => { const i = l.indexOf('//'); const head = i >= 0 ? l.slice(0, i) : l, tail = i >= 0 ? l.slice(i) : ''; let h = head; for (const x of ren) h = h.replace(new RegExp(`'${x.src}'`, 'g'), `'${x.dst}'`); return h + tail; }).join('\n');
-  // שמות-מחלקות: <Tag>Screen/_<Tag>ScreenState/_<Tag>Data ⇒ של הישות
-  const E = entity.replace(/[^A-Za-z0-9]/g, '');
+  const E = entity.replace(/[^A-Za-z0-9]/g, ''), eLower = E.toLowerCase();
+  const stemSing = stemOf(module).replace(/s$/, '').toLowerCase();
+  code = code.split('\n').map((l) => {
+    const i = l.indexOf('//'); const head = i >= 0 ? l.slice(0, i) : l, tail = i >= 0 ? l.slice(i) : ''; let h = head;
+    for (const x of ren) h = h.replace(new RegExp(`'${x.src}'`, 'g'), `'${x.dst}'`);
+    h = h.replace(new RegExp(`'entity\\.${stemSing}':\\s*'[^']*'`, 'g'), `'entity.${eLower}': '${E}'`);   // מונח-הישות ⇒ הצבה גלויה
+    return h + tail;
+  }).join('\n');
   const classes = [...new Set([...code.matchAll(/^(?:abstract\s+)?class\s+(\w+)/gm)].map((m) => m[1]))];
   const pub = classes.find((c) => /Screen$/.test(c) && !/^_/.test(c));
   const stem = pub ? pub.replace(/Screen$/, '') : null;
   const clsMap = stem ? classes.filter((c) => c.includes(stem)).map((c) => [c, c.replace(stem, E)]) : [];
   for (const [a, b] of clsMap) code = code.replace(new RegExp(`\\b${a}\\b`, 'g'), b);
-  const header = [`// 🎯 ${E}Screen — retarget של ${module} לישות ${entity} (GENMAX·G5c · הכרעה-24) · מחולל דטרמיניסטי: retarget.mjs --module ${module} --entity ${entity}`,
-    `//   מיפוי-מפתחות (שם-זהה ⇒ אותה צורת-טיפוס לפי סדר-הסכמה ⇒ מקום-שמור): ${map.map((x) => `${x.src}⇒${x.dst || '∅'}(${x.how})`).join(' · ')}`,
-    `//   שדות-E שלא קיבלו מקור (מקום-שמור, יאירו כשיוזרם נתון): ${unusedFields.join(', ') || '—'} · הזרע (${pk.name}) = זרע-הצבה של מודול-המקור, לא ערך-אמת של ${entity}`];
+  const n = (how) => map.filter((x) => x.how.startsWith(how)).length;
+  const header = [`// 🎯 ${E}Screen — retarget של ${module} לישות ${entity} (GENMAX·G5c/G5d · הכרעה-24) · מחולל דטרמיניסטי: retarget.mjs --module ${module} --entity ${entity}`,
+    `//   זרע-ראשי: ${pk.name} (מועמדים: ${(pk.candidates || []).join(' ')}) · מיפוי שם ${n('name')} · ערוץ ${n('chan')} · טיפוס-יחיד ${n('unique')} · מקום-שמור ${n('reserved')}`,
+    `//   ${map.map((x) => `${x.src}⇒${x.dst || '∅'}(${x.how})`).join(' · ')}`,
+    `//   שדות-${entity} בלי מקור (מקום-שמור, יאירו כשיוזרם נתון): ${unusedFields.join(', ') || '—'} · תוויות-UI = של מודול-המקור (הצבה) · הזרע = זרע-הצבה של המקור, לא ערך-אמת של ${entity}`];
   code = header.join('\n') + '\n' + code;
-  return { code, map, unusedFields, primary: pk.name, classes: clsMap, fragments: res.fragments, of: res.of };
+  return { code, map, unusedFields, primary: pk.name, classes: clsMap, fragments: res.fragments, of: res.of, counts: { name: n('name'), chan: n('chan'), unique: n('unique'), reserved: n('reserved') } };
 }
+
+// ── G5e · module-picker: ישות ⇒ מודול-הזהב הקרוב ביותר — לפי עובדות-מבנה בלבד (§20-ד): (א) מספר שמות-שדה זהים בין הזרע-הראשי לסכמה · (ב) דמיון-פרופיל-טיפוסים (קוסינוס על ספירת-קטגוריות)
+//   ניסוי-מדידה 4.9: G2-ops מול ops-הזהב אינם מבחינים (אוצרות-ops שונים, 20–40% אחיד, "students" תמיד) — שמות+צורה מבחינים (Family⇒students 19 · Course⇒courses 23 · Room⇒rooms 11 · Supporter⇒fees 11).
+export const MODULES = ['schoolos.dart', 'schoolos_students.dart', 'schoolos_attendance.dart', 'schoolos_courses.dart', 'schoolos_teachers.dart', 'schoolos_rooms.dart', 'schoolos_fees.dart', 'schoolos_parents.dart', 'schoolos_dashboard.dart'];
+const _seedCache = new Map();
+const seedOf = (m) => { if (!_seedCache.has(m)) _seedCache.set(m, primaryKeys(fs.readFileSync(path.join(DIR, m), 'utf8'), m)); return _seedCache.get(m); };
+const profile = (arr) => { const p = {}; for (const c of arr) p[c] = (p[c] || 0) + 1; return p; };
+const cosine = (a, b) => { const ks = new Set([...Object.keys(a), ...Object.keys(b)]); let d = 0, na = 0, nb = 0; for (const k of ks) { d += (a[k] || 0) * (b[k] || 0); na += (a[k] || 0) ** 2; nb += (b[k] || 0) ** 2; } return na && nb ? d / Math.sqrt(na * nb) : 0; };
+export function pickModule(entity) {
+  const fields = FIELDS.filter((f) => f.e === entity); if (!fields.length) throw new Error(`ישות לא בסכמה: ${entity}`);
+  const names = new Set(fields.map((f) => f.n)), ep = profile(fields.map((f) => cat(f.t)));
+  const rows = MODULES.map((m) => { const pk = seedOf(m); return { module: m, seed: pk.name, names: pk.keys.filter((k) => names.has(k.key)).length, sim: +cosine(ep, profile(pk.keys.map((k) => k.type))).toFixed(3) }; })
+    .sort((a, b) => b.names - a.names || b.sim - a.sim || MODULES.indexOf(a.module) - MODULES.indexOf(b.module));
+  const best = rows[0];
+  return { entity, module: best.module, seed: best.seed, names: best.names, sim: best.sim, fields: fields.length, confidence: +(best.names / fields.length).toFixed(2), strength: best.names >= 4 ? 'strong' : best.names >= 2 ? 'medium' : 'weak', alternatives: rows.slice(1, 3) };
+}
+export const ENTITIES = [...new Set(FIELDS.map((f) => f.e))].filter((e) => !/^(Db|UiPrefs|NotifPrefs|ReportPrefs|SecurityCfg)$/.test(e));   // ישויות-דומיין (לא הגדרות/מסד)
+export const picksTable = () => ENTITIES.map((e) => { const p = pickModule(e); return { entity: e, module: p.module, seed: p.seed, names: p.names, sim: p.sim, fields: p.fields, confidence: p.confidence, strength: p.strength }; });
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 const arg = (k) => { const i = process.argv.indexOf(k); return i > -1 ? process.argv[i + 1] : null; };
-export const COMMITTED = [{ module: 'schoolos_rooms.dart', entity: 'Volunteer' }, { module: 'schoolos_teachers.dart', entity: 'Supporter' }];
+// 1–4: זוגות-יד (G5c/d) · 5–6: הבורר (G5e) · 7–8: מהמשפט (G5f): "מעקב חדרים ושעות"⇒Room (retarget-זהות: rooms על Room — 0 מקום-שמור) · "קופות צדקה"⇒TzBox
+export const COMMITTED = [{ module: 'schoolos_rooms.dart', entity: 'Volunteer' }, { module: 'schoolos_teachers.dart', entity: 'Supporter' }, { module: 'schoolos_courses.dart', entity: 'ShopItem' }, { module: 'schoolos_students.dart', entity: 'Family' }, { module: 'schoolos_dashboard.dart', entity: 'WorkTask' }, { module: 'schoolos_fees.dart', entity: 'Donation' }, { module: 'schoolos_rooms.dart', entity: 'Room' }, { entity: 'TzBox' }];
+const resolved = (c) => c.module ? c : { ...c, module: pickModule(c.entity).module };
 const outName = (module, entity) => `gen_retarget_${entity.toLowerCase()}_from_${tagOf(module)}.dart`;
+const PICKS = path.join(ROOT, 'machtzev/generator/retarget-picks.json');
 if (isMain && process.argv.includes('--gate')) {
-  const errs = []; 
-  for (const c of COMMITTED) { const r = retarget(c); const f = path.join(DIR, outName(c.module, c.entity)); if (process.argv.includes('--write')) fs.writeFileSync(f, r.code); else if (!fs.existsSync(f) || fs.readFileSync(f, 'utf8') !== r.code) errs.push(`${path.basename(f)} ≠ retarget-טרי (הרץ --gate --write)`); }
+  const errs = [];
+  // G5e: טבלת-הבחירה לכל ישויות-הדומיין ≡ טרייה (דטרמיניזם של הבורר)
+  const fresh = JSON.stringify({ picks: picksTable() }, null, 1);
+  if (process.argv.includes('--write')) fs.writeFileSync(PICKS, fresh); else if (!fs.existsSync(PICKS) || fs.readFileSync(PICKS, 'utf8') !== fresh) errs.push('retarget-picks.json ≠ בורר-טרי (הרץ --gate --write)');
+  for (const c0 of COMMITTED) { const c = resolved(c0); const r = retarget(c); const f = path.join(DIR, outName(c.module, c.entity)); if (process.argv.includes('--write')) fs.writeFileSync(f, r.code); else if (!fs.existsSync(f) || fs.readFileSync(f, 'utf8') !== r.code) errs.push(`${path.basename(f)} ≠ retarget-טרי (הרץ --gate --write)`); }
   if (errs.length) { console.log('🔴 retarget: ' + errs.join(' · ')); process.exit(1); }
-  console.log(`✓ retarget: ${COMMITTED.length} מודולים-לישות-אחרת (gen_retarget_*.dart) ≡ מחולל-דטרמיניסטי · הרנדר-בפועל בשער genverify`); process.exit(0);
+  const pt = picksTable(); const st = { strong: pt.filter((p) => p.strength === 'strong').length, medium: pt.filter((p) => p.strength === 'medium').length, weak: pt.filter((p) => p.strength === 'weak').length };
+  console.log(`✓ retarget: ${COMMITTED.length} מודולים-לישות-אחרת (gen_retarget_*.dart) ≡ מחולל-דטרמיניסטי · בורר-מודול ${pt.length} ישויות (חזק ${st.strong} · בינוני ${st.medium} · חלש ${st.weak}) ≡ · הרנדר-בפועל בשער genverify`); process.exit(0);
+}
+if (isMain && arg('--entity') && !arg('--module')) {                // G5e: ישות בלבד ⇒ בחירת-מודול אוטומטית ⇒ retarget
+  const p = pickModule(arg('--entity'));
+  console.log(`🎯 בורר: ${p.entity} ⇒ ${p.module} (זרע ${p.seed} · שמות-זהים ${p.names}/${p.fields} · דמיון-צורה ${p.sim} · ${p.strength}) · חלופות: ${p.alternatives.map((a) => `${a.module}(${a.names}/${a.sim})`).join(' ')}`);
+  const r = retarget({ module: p.module, entity: p.entity });
+  const out = arg('--out') || path.join(DIR, outName(p.module, p.entity));
+  fs.writeFileSync(out, r.code);
+  console.log(`✓ ${p.entity} ⇒ ${path.basename(out)} · שם ${r.counts.name} · ערוץ ${r.counts.chan} · טיפוס-יחיד ${r.counts.unique} · מקום-שמור ${r.counts.reserved} · ${r.code.split('\n').length} שורות`);
 }
 if (isMain && arg('--module') && arg('--entity')) {
   const r = retarget({ module: arg('--module'), entity: arg('--entity') });
   const out = arg('--out') || path.join(DIR, outName(arg('--module'), arg('--entity')));
   fs.writeFileSync(out, r.code);
-  console.log(`✓ ${arg('--module')} ⇒ ${arg('--entity')} ⇒ ${path.basename(out)} · זרע ${r.primary} · מיפוי: ${r.map.map((x) => `${x.src}⇒${x.dst || '∅'}(${x.how[0]})`).join(' ')} · שדות-E בלי-מקור: ${r.unusedFields.join(',') || '—'} · מחלקות: ${r.classes.map((c) => c.join('⇒')).join(' ')} · ${r.code.split('\n').length} שורות`);
+  console.log(`✓ ${arg('--module')} ⇒ ${arg('--entity')} ⇒ ${path.basename(out)} · זרע ${r.primary} · שם ${r.counts.name} · ערוץ ${r.counts.chan} · טיפוס-יחיד ${r.counts.unique} · מקום-שמור ${r.counts.reserved} · ${r.map.map((x) => `${x.src}⇒${x.dst || '∅'}`).join(' ')} · שדות-E בלי-מקור: ${r.unusedFields.join(',') || '—'} · ${r.code.split('\n').length} שורות`);
 }

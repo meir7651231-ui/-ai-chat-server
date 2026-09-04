@@ -1,0 +1,34 @@
+[
+ {
+  "text": "ניהול מתנדבים עם טלפון ואזור",
+  "entity": "Volunteer"
+ },
+ {
+  "text": "רשימת תרומות לפי תאריך וסכום",
+  "entity": "Donation"
+ },
+ {
+  "text": "מסך משפחות עם כתובת",
+  "entity": "Family"
+ },
+ {
+  "text": "מעקב חדרים ושעות",
+  "entity": "Room"
+ },
+ {
+  "text": "שיבוצים לחוגים",
+  "entity": "Enrollment"
+ },
+ {
+  "text": "מורים ומדריכות",
+  "entity": "Teacher"
+ },
+ {
+  "text": "פריטי קטלוג במלאי",
+  "entity": "ShopItem"
+ },
+ {
+  "text": "רשימת ספקים עם מחירים",
+  "entity": null
+ }
+]

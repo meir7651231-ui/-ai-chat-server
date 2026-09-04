@@ -1,9 +1,9 @@
-// 🎯 VolunteerScreen — retarget של schoolos_rooms.dart לישות Volunteer (GENMAX·G5c/G5d · הכרעה-24) · מחולל דטרמיניסטי: retarget.mjs --module schoolos_rooms.dart --entity Volunteer
-//   זרע-ראשי: rooms (מועמדים: rooms(11/11) events(11/12) faults(8/9) teachers(2/2)) · מיפוי שם 3 · ערוץ 0 · טיפוס-יחיד 1 · מקום-שמור 7
-//   id⇒id(name) · name⇒name(name) · active⇒active(name) · slot⇒maxDeliveries(unique) · cap⇒∅(reserved) · location⇒∅(reserved(2 מועמדים)) · from⇒∅(reserved) · to⇒∅(reserved) · access⇒∅(reserved) · notes⇒∅(reserved(2 מועמדים)) · eq⇒∅(reserved)
-//   שדות-Volunteer בלי מקור (מקום-שמור, יאירו כשיוזרם נתון): phone, area, note, createdAt · תוויות-UI = של מודול-המקור (הצבה) · הזרע = זרע-הצבה של המקור, לא ערך-אמת של Volunteer
+// 🎯 RoomScreen — retarget של schoolos_rooms.dart לישות Room (GENMAX·G5c/G5d · הכרעה-24) · מחולל דטרמיניסטי: retarget.mjs --module schoolos_rooms.dart --entity Room
+//   זרע-ראשי: rooms (מועמדים: rooms(11/11) events(11/12) faults(8/9) teachers(2/2)) · מיפוי שם 11 · ערוץ 0 · טיפוס-יחיד 0 · מקום-שמור 0
+//   id⇒id(name) · name⇒name(name) · active⇒active(name) · slot⇒slot(name) · cap⇒cap(name) · location⇒location(name) · from⇒from(name) · to⇒to(name) · access⇒access(name) · notes⇒notes(name) · eq⇒eq(name)
+//   שדות-Room בלי מקור (מקום-שמור, יאירו כשיוזרם נתון): rate · תוויות-UI = של מודול-המקור (הצבה) · הזרע = זרע-הצבה של המקור, לא ערך-אמת של Room
 // 🏫 SchoolOS · חדרים ויומן-מרחבים (ROOMS) — נבנה בדרך (THE-WAY · הכרעה 23-ב/ג/ד) לפי
-// המפרט knowledge/SPEC-ROOMS-FULL-2026-09-04.md. קובץ יחיד · מחלקה ציבורית אחת: VolunteerScreen.
+// המפרט knowledge/SPEC-ROOMS-FULL-2026-09-04.md. קובץ יחיד · מחלקה ציבורית אחת: RoomScreen.
 //
 // 🎯 המטרה (צעד-1, ליבה): "שכל מרחב ינוצל נכון — אף חדר לא כפול-תפוס, אף שיעור לא בלי-חדר,
 //    אף ציוד לא נעלם — ורואים את השבוע של הבניין במבט-אחד."
@@ -99,7 +99,7 @@ const _warning = Color(0xFFF59E0B);
 //   סטטוס-אישור-הזמנה = אוצר-המילים של TaskItem.status (proposed=ממתין-אישור · pending=מאושר · rejected=נדחה)
 //   קלט-תכנון (כמו target/rate/lead במלאי): needsEq (ציוד-נדרש-לשיעור) · utilFloor (סף-ניצולת) · policy (מדיניות-הזמנה)
 //   ⛔ ללא-מקור ⇒ מקום-שמור (חוק-7), לא בדאטה: type·floor·owner·lastCheck·updatedAt·photo·floorMap·sensor·smartLock
-class _VolunteerData {
+class _RoomData {
   static const today = '2026-09-03'; // יום חמישי — תאריך-הזרקה דטרמיניסטי (אפס Date.now במנוע)
   static final DateTime now = DateTime(2026, 9, 3, 10, 15); // "עכשיו" מוזרק ל-roomsNow
   static const int utilFloor = 30; // סף-ניצולת (%) — מתחתיו "חדר-לא-מנוצל" (קלט-תכנון)
@@ -107,13 +107,13 @@ class _VolunteerData {
 
   // ── חדרים (מאור Room) ──
   static const rooms = <Map<String, dynamic>>[
-    {'id': 'r1', 'name': 'כיתה 101', 'active': true, 'maxDeliveries': 60, 'cap': 32, 'location': 'בניין א׳ · קומה 1', 'from': '08:00', 'to': '15:00', 'access': true, 'notes': '', 'eq': {'מקרן': true, 'לוח-חכם': true, 'מזגן': true}},
-    {'id': 'r2', 'name': 'מעבדת מדעים', 'active': true, 'maxDeliveries': 60, 'cap': 24, 'location': 'בניין ב׳ · קומה 2', 'from': '08:00', 'to': '16:00', 'access': false, 'notes': 'כיור-חירום בכניסה', 'eq': {'מקרן': true, 'מזגן': true, 'כיורים': true}},
-    {'id': 'r3', 'name': 'חדר מחשבים', 'active': true, 'maxDeliveries': 60, 'cap': 28, 'location': 'בניין א׳ · קומה 2', 'from': '08:00', 'to': '16:00', 'access': true, 'notes': '', 'eq': {'מחשבים': true, 'מקרן': true, 'מזגן': false}},
-    {'id': 'r4', 'name': 'אולם ספורט', 'active': true, 'maxDeliveries': 60, 'cap': 120, 'location': 'בניין ג׳ · קרקע', 'from': '08:00', 'to': '17:00', 'access': true, 'notes': '', 'eq': {'מזרנים': true, 'מגבר': true}},
-    {'id': 'r5', 'name': 'כיתה 204', 'active': true, 'maxDeliveries': 60, 'cap': 30, 'location': 'בניין ב׳ · קומה 2', 'from': '08:00', 'to': '15:00', 'access': true, 'notes': '', 'eq': {'מקרן': false, 'מזגן': true}},
-    {'id': 'r6', 'name': 'חדר מורים', 'active': true, 'maxDeliveries': 60, 'cap': 16, 'location': 'בניין א׳ · קומה 1', 'from': '08:00', 'to': '16:00', 'access': true, 'notes': '', 'eq': {'מדפסת': true, 'מזגן': true}},
-    {'id': 'r7', 'name': 'אודיטוריום', 'active': false, 'maxDeliveries': 60, 'cap': 220, 'location': 'בניין ג׳ · קומה 1', 'from': '08:00', 'to': '20:00', 'access': true, 'notes': 'בשיפוץ עד סוף אוקטובר', 'eq': {'מקרן': true, 'מגבר': true}},
+    {'id': 'r1', 'name': 'כיתה 101', 'active': true, 'slot': 60, 'cap': 32, 'location': 'בניין א׳ · קומה 1', 'from': '08:00', 'to': '15:00', 'access': true, 'notes': '', 'eq': {'מקרן': true, 'לוח-חכם': true, 'מזגן': true}},
+    {'id': 'r2', 'name': 'מעבדת מדעים', 'active': true, 'slot': 60, 'cap': 24, 'location': 'בניין ב׳ · קומה 2', 'from': '08:00', 'to': '16:00', 'access': false, 'notes': 'כיור-חירום בכניסה', 'eq': {'מקרן': true, 'מזגן': true, 'כיורים': true}},
+    {'id': 'r3', 'name': 'חדר מחשבים', 'active': true, 'slot': 60, 'cap': 28, 'location': 'בניין א׳ · קומה 2', 'from': '08:00', 'to': '16:00', 'access': true, 'notes': '', 'eq': {'מחשבים': true, 'מקרן': true, 'מזגן': false}},
+    {'id': 'r4', 'name': 'אולם ספורט', 'active': true, 'slot': 60, 'cap': 120, 'location': 'בניין ג׳ · קרקע', 'from': '08:00', 'to': '17:00', 'access': true, 'notes': '', 'eq': {'מזרנים': true, 'מגבר': true}},
+    {'id': 'r5', 'name': 'כיתה 204', 'active': true, 'slot': 60, 'cap': 30, 'location': 'בניין ב׳ · קומה 2', 'from': '08:00', 'to': '15:00', 'access': true, 'notes': '', 'eq': {'מקרן': false, 'מזגן': true}},
+    {'id': 'r6', 'name': 'חדר מורים', 'active': true, 'slot': 60, 'cap': 16, 'location': 'בניין א׳ · קומה 1', 'from': '08:00', 'to': '16:00', 'access': true, 'notes': '', 'eq': {'מדפסת': true, 'מזגן': true}},
+    {'id': 'r7', 'name': 'אודיטוריום', 'active': false, 'slot': 60, 'cap': 220, 'location': 'בניין ג׳ · קומה 1', 'from': '08:00', 'to': '20:00', 'access': true, 'notes': 'בשיפוץ עד סוף אוקטובר', 'eq': {'מקרן': true, 'מגבר': true}},
   ];
 
   // ── חוגים/שיעורים (מאור Course) — תפיסות-חוזרות (שבועיות) · sessions=[{day(0=ראשון),time}] ──
@@ -187,7 +187,7 @@ class _VolunteerData {
 
   // db בצורת-הקלט של מנועי-מאור (rooms·courses·events)
   static Map<String, dynamic> get db => {'rooms': rooms, 'courses': courses, 'events': events};
-  static const config = <String, dynamic>{'terms': {'entity.course': 'שיעור', 'entity.volunteer': 'Volunteer'}}; // termOf
+  static const config = <String, dynamic>{'terms': {'entity.course': 'שיעור', 'entity.room': 'Room'}}; // termOf
 
   // ── שקעים (חוק-1: השכנים מוזרקים, לא מיובאים ע"י האטומים) ──
   static num _t2m(dynamic t) => timeToMin(t) as num;
@@ -272,7 +272,7 @@ class _VolunteerData {
   // ניצולת-שבועית% = weeklyRoomSessions(מאור) ÷ קיבולת-משבצות-שבועית ((to−from)/slot × ימים) — יחס מפורק
   static int weeklyCap(Map<String, dynamic> r) {
     final from = _t2m(r['from']), to = _t2m(r['to']);
-    final slot = (r['maxDeliveries'] is num && (r['maxDeliveries'] as num) > 0) ? r['maxDeliveries'] as num : 60;
+    final slot = (r['slot'] is num && (r['slot'] as num) > 0) ? r['slot'] as num : 60;
     final f = from.isNaN ? 8 * 60 : from, t = to.isNaN ? 20 * 60 : to;
     return (((t - f) / slot).floor() * activeDays).clamp(1, 1 << 20);
   }
@@ -322,7 +322,7 @@ class _VolunteerData {
   // ═══ חריגה · כפל-תפיסה (התנגשות) = הרכבת פעולות-יסוד: לולאה(חדר×יום) ⊕ מרווח[t,t+slot) ⊕ השוואת-חפיפה ═══
   //   buildSlots מסתיר אירוע-מול-חוג (קדימות) ולכן ההתנגשות נגזרת מהמרווחים עצמם: חוג⊕חוג · חוג⊕אירוע · אירוע⊕אירוע.
   static List<Map<String, dynamic>> _intervals(Map<String, dynamic> r, String iso) {
-    final slot = (r['maxDeliveries'] is num && (r['maxDeliveries'] as num) > 0) ? (r['maxDeliveries'] as num) : 60;
+    final slot = (r['slot'] is num && (r['slot'] as num) > 0) ? (r['slot'] as num) : 60;
     final d = dow(iso);
     final out = <Map<String, dynamic>>[];
     for (final c in liveCourses) {
@@ -408,7 +408,7 @@ class _VolunteerData {
   }
   // ═══ הכרעה · חדר-חלופי = הרכבה: קיבולת≥נדרש ⊕ ציוד⊇נדרש ⊕ פנוי-במשבצת (אפס-חפיפה) ⊕ קרבה (אותו-בניין) ⇒ דירוג ═══
   static bool freeAt(Map<String, dynamic> r, String iso, num start, {String? exceptId}) {
-    final slot = (r['maxDeliveries'] is num && (r['maxDeliveries'] as num) > 0) ? (r['maxDeliveries'] as num) : 60;
+    final slot = (r['slot'] is num && (r['slot'] as num) > 0) ? (r['slot'] as num) : 60;
     final end = start + slot;
     if (blockOf(iso) != null || blockedDates.contains(iso)) return false;
     for (final iv in _intervals(r, iso)) {
@@ -654,23 +654,23 @@ class _VolunteerData {
       c['get'] != null || rows.any((r) => r[c['key']] != null && '${r[c['key']]}'.trim().isNotEmpty);
 }
 
-// ═══════════ המסך · VolunteerScreen (const · ללא main) ═══════════
-class VolunteerScreen extends StatefulWidget {
-  const VolunteerScreen({super.key});
+// ═══════════ המסך · RoomScreen (const · ללא main) ═══════════
+class RoomScreen extends StatefulWidget {
+  const RoomScreen({super.key});
   @override
-  State<VolunteerScreen> createState() => _VolunteerScreenState();
+  State<RoomScreen> createState() => _RoomScreenState();
 }
 
-class _VolunteerScreenState extends State<VolunteerScreen> {
+class _RoomScreenState extends State<RoomScreen> {
   int _view = 0; // 0=📅 יום (גריד חדרים×שעות) · 1=🗓 שבוע (חדרים×ימים) · 2=📋 רשימה (DsTable) — SegmentedSwitch
-  int _dayIdx = _VolunteerData.dow(_VolunteerData.today); // היום-הנבחר בשבוע (0=ראשון) — בורר-יום
+  int _dayIdx = _RoomData.dow(_RoomData.today); // היום-הנבחר בשבוע (0=ראשון) — בורר-יום
   bool _loading = false; // מצב-מסך שמור: טעינה
   String? _error; // מצב-מסך שמור: שגיאה (null בזרימה-התקינה)
   String _q = ''; // חיפוש-איתור (DsSearch → searchRooms)
   final Map<String, String> _locks = {}; // נעילות-סינון (FilterChipPill → finderMatches, AND)
   String _slotHour = '10:00'; // המשבצת לצ׳יפ "פנוי-במשבצת" (ביום-הנבחר)
 
-  String get _iso => _VolunteerData.weekIsos[_dayIdx];
+  String get _iso => _RoomData.weekIsos[_dayIdx];
 
   // צ׳יפ-סינון מבוקר (חוק-6 הזרקת-פיגמנטים) — נעילה=ציר→ערך; לחיצה-חוזרת משחררת
   Widget _fchip(String axis, String value, String label) => FilterChipPill(
@@ -704,21 +704,21 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final rooms = _VolunteerData.liveRooms;
-    final active = _VolunteerData.activeRooms;
-    final conflicts = _VolunteerData.weekConflicts;
-    final openFaults = _VolunteerData.openFaults;
-    final underN = active.where(_VolunteerData.underused).length;
+    final rooms = _RoomData.liveRooms;
+    final active = _RoomData.activeRooms;
+    final conflicts = _RoomData.weekConflicts;
+    final openFaults = _RoomData.openFaults;
+    final underN = active.where(_RoomData.underused).length;
     final names = dayNames();
     final letters = dayLetters(term: (k) => day_letters_terms.kTerms[k]!); // א׳…ו׳ (dayLetters ⊕ אטום-דאטה)
-    final blocked = _VolunteerData.blockOf(_iso);
+    final blocked = _RoomData.blockOf(_iso);
     // איתור⊕חריגה: searchRooms=DsSearch⊕smartFilter⊕smartScore⊕normSearch · filterRooms=finderMatches (AND על נעילות)
     if (_freeAtOn) { _locks.removeWhere((k, v) => k.startsWith('freeAt:')); _locks['freeAt:$_iso@$_slotHour'] = '1'; } // הציר עוקב אחרי היום-הנבחר
-    final visible = _VolunteerData.filterRooms(_VolunteerData.searchRooms(rooms, _q), _locks);
-    final hoursAll = _VolunteerData.gridHours(rooms, _iso);
+    final visible = _RoomData.filterRooms(_RoomData.searchRooms(rooms, _q), _locks);
+    final hoursAll = _RoomData.gridHours(rooms, _iso);
     return DsScaffold(
       title: 'חדרים ויומן-מרחבים',
-      subtitle: '${rooms.length} חדרים · ${_VolunteerData.byBuilding.length} בניינים · שבוע ${_VolunteerData.weekIsos.first}',
+      subtitle: '${rooms.length} חדרים · ${_RoomData.byBuilding.length} בניינים · שבוע ${_RoomData.weekIsos.first}',
       icon: '🏫',
       children: [
         // KPI-10 (המפרט): hero=התנגשויות (המטרה: אפס) + 10 מדדי-מצב BareStat — כולם מנועי-מדף/שדות-אמת
@@ -728,17 +728,17 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
             const SizedBox(height: 14),
             Row(children: [
               BareStat(value: '${rooms.length}', label: '🏫 חדרים', inkColor: _ink, mutedColor: _muted),
-              BareStat(value: '${_VolunteerData.busyNowN}', label: '🔴 תפוסים-עכשיו', inkColor: _ink, mutedColor: _muted),
-              BareStat(value: '${_VolunteerData.freeNowN}', label: '🟢 פנויים-עכשיו', inkColor: _ok, mutedColor: _muted),
-              BareStat(value: '${_VolunteerData.utilAvgPct}%', label: '📊 ניצולת-שבוע', inkColor: _acc, mutedColor: _muted),
+              BareStat(value: '${_RoomData.busyNowN}', label: '🔴 תפוסים-עכשיו', inkColor: _ink, mutedColor: _muted),
+              BareStat(value: '${_RoomData.freeNowN}', label: '🟢 פנויים-עכשיו', inkColor: _ok, mutedColor: _muted),
+              BareStat(value: '${_RoomData.utilAvgPct}%', label: '📊 ניצולת-שבוע', inkColor: _acc, mutedColor: _muted),
               BareStat(value: '${conflicts.length}', label: '⚠️ התנגשויות', inkColor: conflicts.isEmpty ? _ok : _danger, mutedColor: _muted),
             ]),
             const SizedBox(height: 12),
             Row(children: [
               BareStat(value: '${openFaults.length}', label: '🔧 תקלות-פתוחות', inkColor: openFaults.isEmpty ? _ok : _warning, mutedColor: _muted),
-              BareStat(value: '${_VolunteerData.unavailableN}', label: '⛔ לא-זמינים', inkColor: _VolunteerData.unavailableN > 0 ? _danger : _ok, mutedColor: _muted),
-              BareStat(value: '${_VolunteerData.pendingApprovals.length}', label: '⏳ ממתינות-אישור', inkColor: _warning, mutedColor: _muted),
-              BareStat(value: '${_VolunteerData.brokenEqN}', label: '🧰 ציוד-חסר/תקול', inkColor: _VolunteerData.brokenEqN > 0 ? _warning : _ok, mutedColor: _muted),
+              BareStat(value: '${_RoomData.unavailableN}', label: '⛔ לא-זמינים', inkColor: _RoomData.unavailableN > 0 ? _danger : _ok, mutedColor: _muted),
+              BareStat(value: '${_RoomData.pendingApprovals.length}', label: '⏳ ממתינות-אישור', inkColor: _warning, mutedColor: _muted),
+              BareStat(value: '${_RoomData.brokenEqN}', label: '🧰 ציוד-חסר/תקול', inkColor: _RoomData.brokenEqN > 0 ? _warning : _ok, mutedColor: _muted),
               BareStat(value: '$underN', label: '🪑 לא-מנוצלים', inkColor: underN > 0 ? _warning : _ok, mutedColor: _muted),
             ]),
           ]),
@@ -747,7 +747,7 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
         // בורר-תפקיד (חוק-6 · זהות-מוזרקת) — מדגים גידור-הרשאות פר-תפקיד (roleOf⊕canGrantedAction)
         Align(
           alignment: Alignment.centerRight,
-          child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: SegmentedSwitch(items: [for (final r in _VolunteerData.roleDefs) r['label'] as String], selected: _role, onSelect: (i) => setState(() => _role = i))),
+          child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: SegmentedSwitch(items: [for (final r in _RoomData.roleDefs) r['label'] as String], selected: _role, onSelect: (i) => setState(() => _role = i))),
         ),
         const SizedBox(height: 10),
         // 🚨 מרכז-דורש-פעולה (אוטומציות 1·3·5·6·7·9) — המערכת מתריעה ומציעה; כל שורה = מנוע-מדף ⊕ AlertBanner/SoftButton
@@ -760,22 +760,22 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
           const SizedBox(width: 6),
           if (_can('rooms.book')) Padding(padding: const EdgeInsets.only(bottom: 12), child: SoftButton(label: '📌 הזמן-חדר', tone: 1, onTap: () => _pickRoom(visible, (r) => _openBook(context, r, (f) { f(); setState(() {}); })))),
           if (_can('rooms.fault')) ...[const SizedBox(width: 6), Padding(padding: const EdgeInsets.only(bottom: 12), child: SoftButton(label: '🔧 דווח-תקלה', tone: 2, onTap: () => _pickRoom(visible, (r) => _openFault(context, r, (f) { f(); setState(() {}); }))))],
-          if (_VolunteerData.exportOk(_role)) ...[
+          if (_RoomData.exportOk(_role)) ...[
             const SizedBox(width: 6), Padding(padding: const EdgeInsets.only(bottom: 12), child: SoftButton(label: '⬇ CSV', tone: 0, onTap: () => _openExport(visible, ical: false))),
             const SizedBox(width: 6), Padding(padding: const EdgeInsets.only(bottom: 12), child: SoftButton(label: '📆 iCal', tone: 0, onTap: () => _openExport(visible, ical: true))),
           ],
         ]),
         // צ׳יפי-סינון (FilterChipPill ⊕ finderMatches) — 11 צירי-המפרט; סוג = מקום-שמור (מואר כשיגיע נתון)
         Wrap(spacing: 8, runSpacing: 6, children: [
-          for (final b in _VolunteerData.buildings) _fchip('building', b, '🏢 $b'),
-          for (final f in _VolunteerData.floors) _fchip('floor', f, '🪜 $f'),
-          for (final t in _VolunteerData.types) _fchip('type', t, '🏷 $t'),
-          for (final n in _VolunteerData.capSteps) FilterChipPill(label: '👥 ≥$n', selected: _locks['cap$n'] == '1', onTap: () => _setCap(_locks['cap$n'] == '1' ? null : n), activeFillColor: _acc, surfaceColor: const Color(0xFF14162E), activeTextColor: const Color(0xFF0B0B15), inkColor: _ink, outlineColor: const Color(0xFF2A2D4A), pillRadius: 999),
-          for (final k in _VolunteerData.eqKeys) _bchip('eq:$k', '🧰 יש $k'),
+          for (final b in _RoomData.buildings) _fchip('building', b, '🏢 $b'),
+          for (final f in _RoomData.floors) _fchip('floor', f, '🪜 $f'),
+          for (final t in _RoomData.types) _fchip('type', t, '🏷 $t'),
+          for (final n in _RoomData.capSteps) FilterChipPill(label: '👥 ≥$n', selected: _locks['cap$n'] == '1', onTap: () => _setCap(_locks['cap$n'] == '1' ? null : n), activeFillColor: _acc, surfaceColor: const Color(0xFF14162E), activeTextColor: const Color(0xFF0B0B15), inkColor: _ink, outlineColor: const Color(0xFF2A2D4A), pillRadius: 999),
+          for (final k in _RoomData.eqKeys) _bchip('eq:$k', '🧰 יש $k'),
           FilterChipPill(label: '🟢 פנוי-במשבצת $_slotHour', selected: _freeAtOn, onTap: () => _setFreeAt(!_freeAtOn), activeFillColor: _ok, surfaceColor: const Color(0xFF14162E), activeTextColor: const Color(0xFF0B0B15), inkColor: _ink, outlineColor: const Color(0xFF2A2D4A), pillRadius: 999),
           _bchip('busy', '🔴 תפוס-עכשיו'),
           _bchip('fault', '🔧 תקלה-פתוחה'),
-          _bchip('under', '🪑 ניצולת<${_VolunteerData.utilFloor}%'),
+          _bchip('under', '🪑 ניצולת<${_RoomData.utilFloor}%'),
           _bchip('access', '♿ נגיש'),
           if (_locks.isNotEmpty || _q.isNotEmpty) SoftButton(label: '✖ נקה (${visible.length}/${rooms.length})', tone: 2, onTap: () => setState(() { _locks.clear(); _q = ''; })),
         ]),
@@ -796,7 +796,7 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
             alignment: Alignment.centerRight,
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              child: SegmentedSwitch(items: [for (var i = 0; i < letters.length; i++) '${letters[i]} ${_VolunteerData.weekIsos[i].substring(8)}'], selected: _dayIdx, onSelect: (i) => setState(() => _dayIdx = i)),
+              child: SegmentedSwitch(items: [for (var i = 0; i < letters.length; i++) '${letters[i]} ${_RoomData.weekIsos[i].substring(8)}'], selected: _dayIdx, onSelect: (i) => setState(() => _dayIdx = i)),
             ),
           ),
         ],
@@ -813,7 +813,7 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
         else if (_view == 2)
           DsSection(title: '📋 רשימת-חדרים · ${visible.length}', children: [_table(visible)])
         else if (_view == 1)
-          DsSection(title: '🗓 שבוע-הבניין · ${_VolunteerData.weekIsos.first} → ${_VolunteerData.weekIsos.last}', children: [_weekGrid(visible, names)])
+          DsSection(title: '🗓 שבוע-הבניין · ${_RoomData.weekIsos.first} → ${_RoomData.weekIsos.last}', children: [_weekGrid(visible, names)])
         else ...[
           // מצב-מיוחד: יום-חסום (שבת/שישי/חג/צום-נדחה/חוה"מ) — blockReason מסנכרן-לוח ⇒ כל המשבצות הפנויות חסומות
           if (blocked != null) ...[
@@ -828,7 +828,7 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
 
   // 📅 גריד-יום: כותרת-שעות + שורה-פר-חדר (שם + תא-פר-שעה מ-buildSlots · ⚠ = כפל-תפיסה מ-conflictsOf)
   Widget _dayGrid(List<Map<String, dynamic>> rooms) {
-    final hours = _VolunteerData.gridHours(rooms, _iso);
+    final hours = _RoomData.gridHours(rooms, _iso);
     if (hours.isEmpty) return const EmptyState(glyph: '📅', message: 'אין משבצות ביום זה');
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -839,13 +839,13 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
         ]),
         for (final r in rooms)
           Row(children: [
-            InkWell(onTap: () => _openPanel(r), child: _cell('${r['name']}${_VolunteerData.activeOf(r) ? '' : ' ⛔'} ›', _VolunteerData.activeOf(r) ? _ink : _danger, alpha: 0.06, w: FontWeight.w800)),
+            InkWell(onTap: () => _openPanel(r), child: _cell('${r['name']}${_RoomData.activeOf(r) ? '' : ' ⛔'} ›', _RoomData.activeOf(r) ? _ink : _danger, alpha: 0.06, w: FontWeight.w800)),
             for (final h in hours)
               () {
-                final sl = _VolunteerData.cellSlots(r, _iso, h);
-                if (!_VolunteerData.activeOf(r)) return _cell('לא-זמין', _danger, alpha: 0.10);
+                final sl = _RoomData.cellSlots(r, _iso, h);
+                if (!_RoomData.activeOf(r)) return _cell('לא-זמין', _danger, alpha: 0.10);
                 if (sl.isEmpty) return _cell('—', _muted, alpha: 0.04);
-                final clash = _VolunteerData.cellConflict(r, _iso, h) || sl.where((x) => x['kind'] == 'course' || x['kind'] == 'event').length > 1;
+                final clash = _RoomData.cellConflict(r, _iso, h) || sl.where((x) => x['kind'] == 'course' || x['kind'] == 'event').length > 1;
                 final k = '${sl.first['kind']}';
                 final lbl = k == 'course' || k == 'event' ? '${sl.first['label']}'.replaceFirst(RegExp(r'^[^:]*: '), '') : k == 'blocked' ? 'חסום' : k == 'cleaning' ? 'ניקיון' : 'פנוי';
                 return _cell(clash ? '⚠ כפל-תפיסה' : '${_kindGlyph(k)} $lbl', clash ? _danger : _kindColor(k), alpha: clash ? 0.30 : k == 'free' ? 0.10 : 0.18);
@@ -861,15 +861,15 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(children: [
             _cell('חדר', _muted, alpha: 0.0, w: FontWeight.w800),
-            for (var i = 0; i < names.length; i++) _cell('${names[i]} ${_VolunteerData.weekIsos[i].substring(5)}', _ink, alpha: 0.08, w: FontWeight.w800),
+            for (var i = 0; i < names.length; i++) _cell('${names[i]} ${_RoomData.weekIsos[i].substring(5)}', _ink, alpha: 0.08, w: FontWeight.w800),
           ]),
           for (final r in rooms)
             Row(children: [
-              InkWell(onTap: () => _openPanel(r), child: _cell('${r['name']} · ${_VolunteerData.utilPct(r)}% ›', _VolunteerData.underused(r) ? _warning : _ink, alpha: 0.06, w: FontWeight.w800)),
-              for (final iso in _VolunteerData.weekIsos)
+              InkWell(onTap: () => _openPanel(r), child: _cell('${r['name']} · ${_RoomData.utilPct(r)}% ›', _RoomData.underused(r) ? _warning : _ink, alpha: 0.06, w: FontWeight.w800)),
+              for (final iso in _RoomData.weekIsos)
                 () {
-                  final c = _VolunteerData.dayCell(r, iso);
-                  if (!_VolunteerData.activeOf(r)) return _cell('לא-זמין', _danger, alpha: 0.10);
+                  final c = _RoomData.dayCell(r, iso);
+                  if (!_RoomData.activeOf(r)) return _cell('לא-זמין', _danger, alpha: 0.10);
                   if (c['blocked'] != null) return _cell('⛔ ${c['blocked']}', _danger, alpha: 0.14);
                   final used = c['used'] as int, total = c['total'] as int, conf = c['conflicts'] as int;
                   final frac = total == 0 ? 0.0 : used / total;
@@ -881,7 +881,7 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
 
   // 📋 רשימה: DsTable מונחה-חוזה (columnDefs · מקום-שמור חוק-7). אפס-DataGrid (מזייף int rows).
   Widget _table(List<Map<String, dynamic>> rows) {
-    final cols = [for (final c in _VolunteerData.columnDefs) if (_VolunteerData.colShown(c, rows)) c];
+    final cols = [for (final c in _RoomData.columnDefs) if (_RoomData.colShown(c, rows)) c];
     final labels = [for (final c in cols) c['label'] as String];
     final data = <List<String>>[
       for (final r in rows)
@@ -891,8 +891,8 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
   }
 
   int _role = 0; // 0=רכז/ת · 1=אחזקה · 2=מורה · 3=הנהלה · 4=מזכירות · 5=צפייה (חוק-6 זהות-מוזרקת; בורר-תפקיד מדגים גידור)
-  String get _who => _VolunteerData.whoOf(_role);
-  bool _can(String k) => _VolunteerData.can(_role, k);
+  String get _who => _RoomData.whoOf(_role);
+  bool _can(String k) => _RoomData.can(_role, k);
   Widget _gap([double h = 10]) => SizedBox(height: h);
   Widget _h(String t) => Padding(padding: const EdgeInsets.only(top: 12, bottom: 6), child: Text(t, style: const TextStyle(color: _muted, fontSize: 13, fontWeight: FontWeight.w800)));
   Widget _wrap(List<Widget> kids) => Wrap(spacing: 8, runSpacing: 8, children: kids);
@@ -905,29 +905,29 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (ctx) => StatefulBuilder(builder: (ctx, setSheet) {
-        final r = _VolunteerData.liveRooms.firstWhere((x) => x['id'] == room['id']);
+        final r = _RoomData.liveRooms.firstWhere((x) => x['id'] == room['id']);
         void act(void Function() f) { f(); setSheet(() {}); setState(() {}); }
-        final faults = _VolunteerData.faultsOf(r);
-        final conf = [for (final iso in _VolunteerData.weekIsos) ..._VolunteerData.conflictsOf(r, iso)];
-        final used = _VolunteerData.weeklyUsed(r), cap = _VolunteerData.weeklyCap(r);
+        final faults = _RoomData.faultsOf(r);
+        final conf = [for (final iso in _RoomData.weekIsos) ..._RoomData.conflictsOf(r, iso)];
+        final used = _RoomData.weeklyUsed(r), cap = _RoomData.weeklyCap(r);
         return DraggableScrollableSheet(
           initialChildSize: 0.78, minChildSize: 0.4, maxChildSize: 0.96, expand: false,
           builder: (ctx, scroll) => Padding(
             padding: const EdgeInsets.all(12),
             child: GlassCard(
               child: ListView(controller: scroll, padding: const EdgeInsets.all(6), children: [
-                MediaRow(glyph: _VolunteerData.activeOf(r) ? '🏫' : '⛔', title: '${r['name']}', subtitle: '${r['location']} · ${_VolunteerData.roomInfo(r)}'),
+                MediaRow(glyph: _RoomData.activeOf(r) ? '🏫' : '⛔', title: '${r['name']}', subtitle: '${r['location']} · ${_RoomData.roomInfo(r)}'),
                 _gap(8),
                 _wrap([
-                  StatusChip(label: _VolunteerData.statusOf(r), tone: switch (_VolunteerData.statusOf(r)) { 'זמין' => 1, 'תפוס' => 0, 'חסום' => 3, _ => 2 }),
+                  StatusChip(label: _RoomData.statusOf(r), tone: switch (_RoomData.statusOf(r)) { 'זמין' => 1, 'תפוס' => 0, 'חסום' => 3, _ => 2 }),
                   if (r['access'] == true) const StatusChip(label: '♿ נגיש', tone: 1),
                   if ('${r['notes']}'.isNotEmpty) StatusChip(label: '📝 ${r['notes']}', tone: 0),
-                  if (_VolunteerData.underused(r)) StatusChip(label: '🪑 לא-מנוצל (<${_VolunteerData.utilFloor}%)', tone: 3),
+                  if (_RoomData.underused(r)) StatusChip(label: '🪑 לא-מנוצל (<${_RoomData.utilFloor}%)', tone: 3),
                 ]),
                 _gap(12),
                 Row(children: [
                   BareStat(value: '${r['cap']}', label: 'קיבולת', inkColor: _ink, mutedColor: _muted),
-                  BareStat(value: '${_VolunteerData.utilPct(r)}%', label: 'ניצולת-שבוע', inkColor: _acc, mutedColor: _muted),
+                  BareStat(value: '${_RoomData.utilPct(r)}%', label: 'ניצולת-שבוע', inkColor: _acc, mutedColor: _muted),
                   BareStat(value: '${faults.length}', label: 'תקלות-פתוחות', inkColor: faults.isEmpty ? _ok : _warning, mutedColor: _muted),
                   BareStat(value: '${conf.length}', label: 'התנגשויות', inkColor: conf.isEmpty ? _ok : _danger, mutedColor: _muted),
                 ]),
@@ -935,10 +935,10 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
                 StatRow(label: 'תפיסות-שבוע מול קיבולת-משבצות', value: '$used מתוך $cap', fraction: cap == 0 ? 0 : used / cap),
                 // שדות-מתקדמים · מקום-שמור (חוק-7): נוכח ⇒ שבב · חסר ⇒ נרשם בחוזה (מאיר כשיגיע נתון, אפס-שינוי-קוד)
                 _gap(8),
-                _wrap([for (final f in _VolunteerData.presentFields(r)) StatusChip(label: '${f['glyph']} ${f['label']}: ${r[f['key']]}', tone: 1)]),
-                if (_VolunteerData.missingFields(r).isNotEmpty) ...[
+                _wrap([for (final f in _RoomData.presentFields(r)) StatusChip(label: '${f['glyph']} ${f['label']}: ${r[f['key']]}', tone: 1)]),
+                if (_RoomData.missingFields(r).isNotEmpty) ...[
                   _gap(6),
-                  Text('מקום-שמור (${_VolunteerData.missingFields(r).length}): ${_VolunteerData.missingFields(r).map((f) => '${f['glyph']} ${f['label']}').join(' · ')}', style: const TextStyle(color: _muted, fontSize: 11.5)),
+                  Text('מקום-שמור (${_RoomData.missingFields(r).length}): ${_RoomData.missingFields(r).map((f) => '${f['glyph']} ${f['label']}').join(' · ')}', style: const TextStyle(color: _muted, fontSize: 11.5)),
                 ],
                 // התנגשויות (אדום) — חוסם: כפל-תפיסה בחדר זה
                 for (final c in conf) ...[
@@ -967,12 +967,12 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
   List<Widget> _tabBody(BuildContext ctx, Map<String, dynamic> r, int tab, void Function(void Function()) act) {
     switch (tab) {
       case 0: // היום · ציר-שעות (buildSlots ⊕ TimelineItem) — תפוס/פנוי/חסום/ניקיון
-        final sl = _VolunteerData.slotsOf(r, _iso);
+        final sl = _RoomData.slotsOf(r, _iso);
         if (sl.isEmpty) return [const EmptyState(glyph: '📅', message: 'אין משבצות')];
         return [
           _h('ציר-שעות · ${dayNames()[_dayIdx]} $_iso'),
           for (final x in sl)
-            TimelineItem(title: '${_kindGlyph('${x['kind']}')} ${x['label']}', time: '${x['time']}', body: x['kind'] == 'course' ? '${_VolunteerData.teacherName((x['course'] as Map)['teacherId'])}' : x['kind'] == 'event' ? '${_VolunteerData.teacherName((x['event'] as Map)['requestedBy'])} · ${(x['event'] as Map)['status'] == 'proposed' ? 'ממתין-אישור' : 'מאושר'}' : null),
+            TimelineItem(title: '${_kindGlyph('${x['kind']}')} ${x['label']}', time: '${x['time']}', body: x['kind'] == 'course' ? '${_RoomData.teacherName((x['course'] as Map)['teacherId'])}' : x['kind'] == 'event' ? '${_RoomData.teacherName((x['event'] as Map)['requestedBy'])} · ${(x['event'] as Map)['status'] == 'proposed' ? 'ממתין-אישור' : 'מאושר'}' : null),
         ];
       case 1: // שבוע · מיני-גריד (dayCell × 6)
         final names = dayNames();
@@ -981,24 +981,24 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
           SingleChildScrollView(scrollDirection: Axis.horizontal, child: Row(children: [
             for (var i = 0; i < names.length; i++)
               () {
-                final c = _VolunteerData.dayCell(r, _VolunteerData.weekIsos[i]);
+                final c = _RoomData.dayCell(r, _RoomData.weekIsos[i]);
                 final blocked = c['blocked'] != null;
                 return _cell(blocked ? '${names[i]} ⛔' : '${names[i]} ${c['used']}/${c['total']}${(c['conflicts'] as int) > 0 ? ' ⚠' : ''}', blocked ? _danger : (c['conflicts'] as int) > 0 ? _danger : _acc, alpha: 0.14);
               }(),
           ])),
           _h('מי משתמש הכי-הרבה (מפגשים/שבוע)'),
-          _wrap([for (final u in _VolunteerData.topUsers(r)) StatusChip(label: '${u[0]}: ${u[1]}', tone: 0)]),
+          _wrap([for (final u in _RoomData.topUsers(r)) StatusChip(label: '${u[0]}: ${u[1]}', tone: 0)]),
         ];
       case 2: // תפיסות · כל תפיסות-השבוע + פעולות פר-תפיסה (בטל · העבר · אשר/דחה)
-        final occ = _VolunteerData.weekOccupancies(r);
+        final occ = _RoomData.weekOccupancies(r);
         if (occ.isEmpty) return [const EmptyState(glyph: '📭', message: 'אין תפיסות השבוע')];
         return [
           _h('תפיסות-השבוע · ${occ.length}'),
           for (final o in occ) _occRow(ctx, r, o, act),
         ];
       case 3: // ציוד · eq (מאור Room.eq) ⊕ תקלות-על-ציוד ⊕ פעולות · מקום-שמור: כמות/פריטי-מלאי (eqStock)
-        final eq = _VolunteerData.eqOf(r);
-        final broken = {for (final f in _VolunteerData.faultsOf(r)) if ('${f['detail']}'.isNotEmpty) '${f['detail']}'};
+        final eq = _RoomData.eqOf(r);
+        final broken = {for (final f in _RoomData.faultsOf(r)) if ('${f['detail']}'.isNotEmpty) '${f['detail']}'};
         return [
           _h('ציוד-קבוע'),
           _wrap([for (final e in eq.entries) StatusChip(label: '${e.key}${broken.contains(e.key) ? ' · תקול' : e.value ? '' : ' · חסר'}', tone: broken.contains(e.key) ? 2 : e.value ? 1 : 3)]),
@@ -1008,36 +1008,36 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
           ],
         ];
       case 4: // תקלות · פתוחות (TimelineItem) + סגור-תקלה
-        final fs = _VolunteerData.faultsOf(r);
+        final fs = _RoomData.faultsOf(r);
         if (fs.isEmpty) return [const EmptyState(glyph: '✅', message: 'אין תקלות פתוחות')];
         return [
           _h('תקלות פתוחות · ${fs.length}'),
           for (final f in fs)
             Row(children: [
-              Expanded(child: TimelineItem(title: '🔧 ${f['name']} · ${f['severity']}', time: '${f['date']}', body: '${f['status']} · דווח: ${_VolunteerData.teacherName(f['createdBy'])}${'${f['detail']}'.isNotEmpty ? ' · ציוד: ${f['detail']}' : ''}')),
-              if (_can('rooms.faultClose')) SoftButton(label: '✔ סגור', tone: 1, onTap: () => act(() => _VolunteerData.closeFault(_who, f))),
+              Expanded(child: TimelineItem(title: '🔧 ${f['name']} · ${f['severity']}', time: '${f['date']}', body: '${f['status']} · דווח: ${_RoomData.teacherName(f['createdBy'])}${'${f['detail']}'.isNotEmpty ? ' · ציוד: ${f['detail']}' : ''}')),
+              if (_can('rooms.faultClose')) SoftButton(label: '✔ סגור', tone: 1, onTap: () => act(() => _RoomData.closeFault(_who, f))),
             ]),
         ];
       case 5: // אחזקה · זמינות (שיפוץ/סגור) · בדיקה-תקופתית (lastCheck = מקום-שמור) · חסימות-תאריך
         return [
           _h('אחזקה'),
           _wrap([
-            StatusChip(label: _VolunteerData.activeOf(r) ? 'זמין לתפיסה' : 'לא-זמין / שיפוץ', tone: _VolunteerData.activeOf(r) ? 1 : 2),
+            StatusChip(label: _RoomData.activeOf(r) ? 'זמין לתפיסה' : 'לא-זמין / שיפוץ', tone: _RoomData.activeOf(r) ? 1 : 2),
             StatusChip(label: r['lastCheck'] == null ? 'בדיקה-תקופתית: אין נתון (מקום-שמור)' : 'בדיקה אחרונה: ${r['lastCheck']}', tone: r['lastCheck'] == null ? 3 : 1),
           ]),
-          if (_VolunteerData.blockedDates.isNotEmpty) ...[
+          if (_RoomData.blockedDates.isNotEmpty) ...[
             _h('חסימות-תאריך ידניות'),
-            _wrap([for (final d in _VolunteerData.blockedDates) SoftButton(label: '⛔ $d · בטל', tone: 2, onTap: () => act(() => _VolunteerData.unblockDate(_who, d)))]),
+            _wrap([for (final d in _RoomData.blockedDates) SoftButton(label: '⛔ $d · בטל', tone: 2, onTap: () => act(() => _RoomData.unblockDate(_who, d)))]),
           ],
         ];
       case 6: // היסטוריה · תקלות-שנסגרו ⊕ אירועים-שבוצעו/נדחו (TimelineItem)
         final hist = <Widget>[
-          for (final f in _VolunteerData.faultsOf(r, openOnly: false)) if (f['status'] == 'done') TimelineItem(title: '✔ תקלה נסגרה · ${f['name']}', time: '${f['date']}', body: '${f['severity']}'),
-          for (final e in _VolunteerData.liveEvents) if (e['roomId'] == r['id'] && e['done'] == true) TimelineItem(title: '${e['status'] == 'rejected' ? '✖ נדחה' : e['status'] == 'cancelled' ? '↩ בוטל' : '✔ בוצע'} · ${e['title']}', time: '${e['date']} ${e['time']}', body: '${_VolunteerData.teacherName(e['requestedBy'])}'),
+          for (final f in _RoomData.faultsOf(r, openOnly: false)) if (f['status'] == 'done') TimelineItem(title: '✔ תקלה נסגרה · ${f['name']}', time: '${f['date']}', body: '${f['severity']}'),
+          for (final e in _RoomData.liveEvents) if (e['roomId'] == r['id'] && e['done'] == true) TimelineItem(title: '${e['status'] == 'rejected' ? '✖ נדחה' : e['status'] == 'cancelled' ? '↩ בוטל' : '✔ בוצע'} · ${e['title']}', time: '${e['date']} ${e['time']}', body: '${_RoomData.teacherName(e['requestedBy'])}'),
         ];
         return hist.isEmpty ? [const EmptyState(glyph: '📜', message: 'אין היסטוריה')] : [_h('היסטוריה · ${hist.length}'), ...hist];
       default: // אודיט · פנקס-הפעולות של החדר (מי · מה · מתי)
-        final au = _VolunteerData.audit.where((a) => a['roomId'] == r['id']).toList();
+        final au = _RoomData.audit.where((a) => a['roomId'] == r['id']).toList();
         return au.isEmpty ? [const EmptyState(glyph: '🧾', message: 'אין רשומות-אודיט לחדר')] : [_h('אודיט · ${au.length}'), for (final a in au) TimelineItem(title: '${a['what']}', time: '${a['when']}', body: '${a['who']} · ${a['target']}')];
     }
   }
@@ -1047,13 +1047,13 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
     final isEv = o['kind'] == 'event';
     final st = isEv ? '${o['status']}' : 'שבועי';
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-      TimelineItem(title: '${isEv ? '📌' : '🎓'} ${o['name']}', time: '${dayNames()[o['dayIdx'] as int]} ${o['iso']} ${_VolunteerData._m2hm(o['start'])}', body: '${o['who']} · ${st == 'proposed' ? 'ממתין-אישור' : st == 'pending' ? 'מאושר' : st}'),
+      TimelineItem(title: '${isEv ? '📌' : '🎓'} ${o['name']}', time: '${dayNames()[o['dayIdx'] as int]} ${o['iso']} ${_RoomData._m2hm(o['start'])}', body: '${o['who']} · ${st == 'proposed' ? 'ממתין-אישור' : st == 'pending' ? 'מאושר' : st}'),
       _wrap([
         if (isEv && st == 'proposed' && _can('rooms.approve')) ...[
-          SoftButton(label: '✔ אשר', tone: 1, onTap: () => act(() => _VolunteerData.setEventStatus(_who, _VolunteerData.eventById(o['id'])!, 'pending'))),
-          SoftButton(label: '✖ דחה', tone: 2, onTap: () => act(() => _VolunteerData.setEventStatus(_who, _VolunteerData.eventById(o['id'])!, 'rejected'))),
+          SoftButton(label: '✔ אשר', tone: 1, onTap: () => act(() => _RoomData.setEventStatus(_who, _RoomData.eventById(o['id'])!, 'pending'))),
+          SoftButton(label: '✖ דחה', tone: 2, onTap: () => act(() => _RoomData.setEventStatus(_who, _RoomData.eventById(o['id'])!, 'rejected'))),
         ],
-        if (isEv && _can('rooms.cancel')) SoftButton(label: '↩ בטל-תפיסה', tone: 2, onTap: () => act(() => _VolunteerData.setEventStatus(_who, _VolunteerData.eventById(o['id'])!, 'cancelled'))),
+        if (isEv && _can('rooms.cancel')) SoftButton(label: '↩ בטל-תפיסה', tone: 2, onTap: () => act(() => _RoomData.setEventStatus(_who, _RoomData.eventById(o['id'])!, 'cancelled'))),
         if (_can('rooms.move')) SoftButton(label: '➡ העבר לחדר-אחר', tone: 0, onTap: () => _openMove(ctx, r, o, act)),
       ]),
       _gap(8),
@@ -1063,17 +1063,17 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
   // העבר-תפיסה: הצעת-חדר-חלופי (altRooms: קיבולת⊕ציוד⊕פנוי⊕קרבה) — הכרעה, לא ניחוש
   void _openMove(BuildContext ctx, Map<String, dynamic> from, Map<String, dynamic> o, void Function(void Function()) act) {
     final isEv = o['kind'] == 'event';
-    final ev = isEv ? _VolunteerData.eventById(o['id']) : null;
-    final c = isEv ? null : _VolunteerData.courseById(o['id']);
+    final ev = isEv ? _RoomData.eventById(o['id']) : null;
+    final c = isEv ? null : _RoomData.courseById(o['id']);
     final need = isEv ? ((ev?['attendees'] as int?) ?? 0) : ((c?['maxStudents'] as int?) ?? 0);
     final needsEq = isEv ? const <String>[] : [for (final k in (c?['needsEq'] as List? ?? const [])) '$k'];
-    final alts = _VolunteerData.altRooms(iso: '${o['iso']}', time: _VolunteerData._m2hm(o['start']), need: need, needsEq: needsEq, nearId: from['id'] as String, exceptId: '${o['id']}', excludeRoomId: from['id'] as String);
+    final alts = _RoomData.altRooms(iso: '${o['iso']}', time: _RoomData._m2hm(o['start']), need: need, needsEq: needsEq, nearId: from['id'] as String, exceptId: '${o['id']}', excludeRoomId: from['id'] as String);
     showModalBottomSheet<void>(
       context: ctx, backgroundColor: Colors.transparent,
       builder: (c2) => Padding(
         padding: const EdgeInsets.all(12),
         child: GlassCard(child: ListView(shrinkWrap: true, padding: const EdgeInsets.all(8), children: [
-          MediaRow(glyph: '➡', title: 'העבר: ${o['name']}', subtitle: '${o['iso']} ${_VolunteerData._m2hm(o['start'])} · נדרש ≥$need${needsEq.isNotEmpty ? ' · ציוד: ${needsEq.join(', ')}' : ''}'),
+          MediaRow(glyph: '➡', title: 'העבר: ${o['name']}', subtitle: '${o['iso']} ${_RoomData._m2hm(o['start'])} · נדרש ≥$need${needsEq.isNotEmpty ? ' · ציוד: ${needsEq.join(', ')}' : ''}'),
           _gap(8),
           if (alts.isEmpty)
             const EmptyState(glyph: '🚫', message: 'אין חדר חלופי פנוי שמקיים קיבולת+ציוד במשבצת')
@@ -1081,7 +1081,7 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
             for (final a in alts)
               Row(children: [
                 Expanded(child: MediaRow(glyph: a['sameBuilding'] == true ? '📍' : '🏫', title: '${a['name']}', subtitle: '${a['location']} · קיבולת ${a['cap']} (+${a['spare']})${a['sameBuilding'] == true ? ' · אותו בניין' : ''}')),
-                SoftButton(label: 'בחר', tone: 1, onTap: () { act(() => isEv ? _VolunteerData.moveEvent(_who, ev!, a) : _VolunteerData.moveCourse(_who, c!, a)); Navigator.of(c2).pop(); }),
+                SoftButton(label: 'בחר', tone: 1, onTap: () { act(() => isEv ? _RoomData.moveEvent(_who, ev!, a) : _RoomData.moveCourse(_who, c!, a)); Navigator.of(c2).pop(); }),
               ]),
         ])),
       ),
@@ -1095,13 +1095,13 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
     showModalBottomSheet<void>(
       context: ctx, backgroundColor: Colors.transparent, isScrollControlled: true,
       builder: (c2) => StatefulBuilder(builder: (c2, setB) {
-        final iso = _VolunteerData.weekIsos[day];
-        final free = _VolunteerData.slotsOf(r, iso).where((x) => x['kind'] == 'free').toList();
-        final blocked = _VolunteerData.blockOf(iso) ?? (_VolunteerData.blockedDates.contains(iso) ? 'חסימה-ידנית' : null);
+        final iso = _RoomData.weekIsos[day];
+        final free = _RoomData.slotsOf(r, iso).where((x) => x['kind'] == 'free').toList();
+        final blocked = _RoomData.blockOf(iso) ?? (_RoomData.blockedDates.contains(iso) ? 'חסימה-ידנית' : null);
         return Padding(
           padding: const EdgeInsets.all(12),
           child: GlassCard(child: ListView(shrinkWrap: true, padding: const EdgeInsets.all(8), children: [
-            MediaRow(glyph: weekly ? '🔁' : '📌', title: weekly ? 'הזמנה-חוזרת (שבועית) · ${r['name']}' : 'הזמן-חדר · ${r['name']}', subtitle: 'בחר יום ומשבצת פנויה · ${_VolunteerData.roomInfo(r)}'),
+            MediaRow(glyph: weekly ? '🔁' : '📌', title: weekly ? 'הזמנה-חוזרת (שבועית) · ${r['name']}' : 'הזמן-חדר · ${r['name']}', subtitle: 'בחר יום ומשבצת פנויה · ${_RoomData.roomInfo(r)}'),
             _gap(8),
             DsField(label: 'כותרת', hint: 'למה החדר נדרש', value: title, onChanged: (v) => title = v),
             SingleChildScrollView(scrollDirection: Axis.horizontal, child: SegmentedSwitch(items: dayNames(), selected: day, onSelect: (i) => setB(() => day = i))),
@@ -1111,7 +1111,7 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
             else if (free.isEmpty)
               const EmptyState(glyph: '🚫', message: 'אין משבצות פנויות ביום זה')
             else
-              _wrap([for (final f in free) SoftButton(label: '🟢 ${f['time']}', tone: 1, onTap: () { act(() => weekly ? _VolunteerData.bookWeekly(_who, r, day, '${f['time']}', title) : _VolunteerData.book(_who, r, iso, '${f['time']}', title, approved: _VolunteerData.autoApprove(_role))); Navigator.of(c2).pop(); })]),
+              _wrap([for (final f in free) SoftButton(label: '🟢 ${f['time']}', tone: 1, onTap: () { act(() => weekly ? _RoomData.bookWeekly(_who, r, day, '${f['time']}', title) : _RoomData.book(_who, r, iso, '${f['time']}', title, approved: _RoomData.autoApprove(_role))); Navigator.of(c2).pop(); })]),
             _gap(8),
           ])),
         );
@@ -1135,9 +1135,9 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
           DsField(label: 'תיאור', hint: 'מה התקלה', value: name, onChanged: (v) => name = v),
           SegmentedSwitch(items: sevs, selected: sev, onSelect: (i) => setB(() => sev = i)),
           _h('ציוד מעורב (אופציונלי)'),
-          _wrap([for (final k in _VolunteerData.eqOf(r).keys) SoftButton(label: detail == k ? '✔ $k' : k, tone: detail == k ? 1 : 0, onTap: () => setB(() => detail = detail == k ? '' : k))]),
+          _wrap([for (final k in _RoomData.eqOf(r).keys) SoftButton(label: detail == k ? '✔ $k' : k, tone: detail == k ? 1 : 0, onTap: () => setB(() => detail = detail == k ? '' : k))]),
           _gap(10),
-          SoftButton(label: '📨 שלח דיווח', tone: 2, onTap: () { act(() => _VolunteerData.reportFault(_who, r, name, sevs[sev], detail: detail)); Navigator.of(c2).pop(); }),
+          SoftButton(label: '📨 שלח דיווח', tone: 2, onTap: () { act(() => _RoomData.reportFault(_who, r, name, sevs[sev], detail: detail)); Navigator.of(c2).pop(); }),
           _gap(8),
         ])),
       )),
@@ -1146,26 +1146,26 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
 
   // 14 כפתורי-הפעולה (המפרט) — כל אחד מחווט לפנקס (state) ורושם אודיט
   List<Widget> _actions(BuildContext ctx, Map<String, dynamic> r, void Function(void Function()) act) {
-    final active = _VolunteerData.activeOf(r);
+    final active = _RoomData.activeOf(r);
     final acts = <Widget>[
-      if (active && _can('rooms.book')) SoftButton(label: _VolunteerData.autoApprove(_role) ? '📌 הזמן-חדר' : '📌 הזמן-חדר (לאישור)', tone: 1, onTap: () => _openBook(ctx, r, act)),
+      if (active && _can('rooms.book')) SoftButton(label: _RoomData.autoApprove(_role) ? '📌 הזמן-חדר' : '📌 הזמן-חדר (לאישור)', tone: 1, onTap: () => _openBook(ctx, r, act)),
       if (active && _can('rooms.bookWeekly')) SoftButton(label: '🔁 הזמנה-חוזרת', tone: 0, onTap: () => _openBook(ctx, r, act, weekly: true)),
       if (_can('rooms.fault')) SoftButton(label: '🔧 דווח-תקלה', tone: 2, onTap: () => _openFault(ctx, r, act)),
-      if (_can('rooms.availability')) SoftButton(label: active ? '⛔ סמן לא-זמין/שיפוץ' : '✅ החזר לזמינות', tone: active ? 2 : 1, onTap: () => act(() => _VolunteerData.setActive(_who, r, !active))),
-      if (_can('rooms.eq')) SoftButton(label: '➕ הוסף-ציוד: מקרן', tone: 0, onTap: () => act(() => _VolunteerData.setEq(_who, r, 'מקרן', true))),
-      if (_can('rooms.eq')) SoftButton(label: '📉 דווח ציוד-חסר: מקרן', tone: 2, onTap: () => act(() => _VolunteerData.setEq(_who, r, 'מקרן', false))),
-      if (_can('rooms.block')) SoftButton(label: '📅 חסום-תאריך: $_iso', tone: 2, onTap: () => act(() => _VolunteerData.blockDate(_who, _iso))),
-      if (_can('rooms.notify')) SoftButton(label: '✉ הודעה למשתמשי-החדר (${_VolunteerData.usersOf(r).length})', tone: 0, onTap: () => act(() => _VolunteerData.notifyUsers(_who, r, 'שינוי בחדר ${r['name']} — בדקו את היומן'))),
+      if (_can('rooms.availability')) SoftButton(label: active ? '⛔ סמן לא-זמין/שיפוץ' : '✅ החזר לזמינות', tone: active ? 2 : 1, onTap: () => act(() => _RoomData.setActive(_who, r, !active))),
+      if (_can('rooms.eq')) SoftButton(label: '➕ הוסף-ציוד: מקרן', tone: 0, onTap: () => act(() => _RoomData.setEq(_who, r, 'מקרן', true))),
+      if (_can('rooms.eq')) SoftButton(label: '📉 דווח ציוד-חסר: מקרן', tone: 2, onTap: () => act(() => _RoomData.setEq(_who, r, 'מקרן', false))),
+      if (_can('rooms.block')) SoftButton(label: '📅 חסום-תאריך: $_iso', tone: 2, onTap: () => act(() => _RoomData.blockDate(_who, _iso))),
+      if (_can('rooms.notify')) SoftButton(label: '✉ הודעה למשתמשי-החדר (${_RoomData.usersOf(r).length})', tone: 0, onTap: () => act(() => _RoomData.notifyUsers(_who, r, 'שינוי בחדר ${r['name']} — בדקו את היומן'))),
       if (_can('rooms.print')) SoftButton(label: '🖨 הדפס יומן-יומי', tone: 0, onTap: () => _openPrint(ctx, r)),
       // 4 · תקלה ⇒ העברת-שיעורים-אוטו + הודעה (רק כשהחדר תקול/לא-זמין ויש תפיסות)
-      if (!active || _VolunteerData.faulty(r)) if (_can('rooms.move') && _VolunteerData.affectedByFault(r).isNotEmpty) SoftButton(label: '🚚 העבר-אוטו ${_VolunteerData.affectedByFault(r).length} תפיסות + הודעה', tone: 2, onTap: () => act(() => _VolunteerData.autoRelocate(_who, r))),
+      if (!active || _RoomData.faulty(r)) if (_can('rooms.move') && _RoomData.affectedByFault(r).isNotEmpty) SoftButton(label: '🚚 העבר-אוטו ${_RoomData.affectedByFault(r).length} תפיסות + הודעה', tone: 2, onTap: () => act(() => _RoomData.autoRelocate(_who, r))),
     ];
     return acts.isEmpty ? [const AlertBanner(message: 'צפייה-בלבד — אין הרשאת-פעולה לתפקיד זה', glyph: '🔒', tone: 2)] : acts;
   }
 
   // הדפס-יומן-יומי: תצוגת-הדפסה (טקסט-נקי של buildSlots) — ההדפסה עצמה = שקע-פלטפורמה (הצבה)
   void _openPrint(BuildContext ctx, Map<String, dynamic> r) {
-    final lines = [for (final x in _VolunteerData.slotsOf(r, _iso)) '${x['time']}  ${x['label']}'].join('\n');
+    final lines = [for (final x in _RoomData.slotsOf(r, _iso)) '${x['time']}  ${x['label']}'].join('\n');
     showModalBottomSheet<void>(
       context: ctx, backgroundColor: Colors.transparent,
       builder: (c2) => Padding(
@@ -1181,42 +1181,42 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
 
   // ═══ מרכז-אוטומציות (23-ג · פרואקטיבי) — הרכבה: מנוע-מדף ⊕ AlertBanner ⊕ SoftButton(פעולה-מוצעת) ═══
   List<Widget> _automationCenter() {
-    final conf = _VolunteerData.weekConflicts;
-    final pend = _VolunteerData.pendingApprovals;
-    final miss = _VolunteerData.coursesMissingEq;
-    final orphan = _VolunteerData.orphanCourses;
-    final faultyRooms = _VolunteerData.liveRooms.where(_VolunteerData.faulty).toList();
-    final under = _VolunteerData.activeRooms.where(_VolunteerData.underused).toList();
-    final hol = _VolunteerData.upcoming;
-    final unknownCheck = _VolunteerData.liveRooms.where(_VolunteerData.checkUnknown).length;
-    final dueCheck = _VolunteerData.liveRooms.where(_VolunteerData.checkDue).toList();
+    final conf = _RoomData.weekConflicts;
+    final pend = _RoomData.pendingApprovals;
+    final miss = _RoomData.coursesMissingEq;
+    final orphan = _RoomData.orphanCourses;
+    final faultyRooms = _RoomData.liveRooms.where(_RoomData.faulty).toList();
+    final under = _RoomData.activeRooms.where(_RoomData.underused).toList();
+    final hol = _RoomData.upcoming;
+    final unknownCheck = _RoomData.liveRooms.where(_RoomData.checkUnknown).length;
+    final dueCheck = _RoomData.liveRooms.where(_RoomData.checkDue).toList();
     void act(void Function() f) { f(); setState(() {}); }
     return [
-      DsSection(title: '🚨 דורש-פעולה · ${_VolunteerData.actionItems}', tone: _VolunteerData.actionItems > 0 ? 2 : 1, children: [
-        if (_VolunteerData.actionItems == 0) const EmptyState(glyph: '✅', message: 'אין כפל-תפיסה · אין הזמנות ממתינות · כל שיעור בחדר עם הציוד הנדרש'),
+      DsSection(title: '🚨 דורש-פעולה · ${_RoomData.actionItems}', tone: _RoomData.actionItems > 0 ? 2 : 1, children: [
+        if (_RoomData.actionItems == 0) const EmptyState(glyph: '✅', message: 'אין כפל-תפיסה · אין הזמנות ממתינות · כל שיעור בחדר עם הציוד הנדרש'),
         // 1 · גילוי-כפל-תפיסה בזמן-אמת (חוסם) ⇒ פתור = העברה לחדר-חלופי (altRooms)
         for (final c in conf)
           Padding(padding: const EdgeInsets.only(bottom: 6), child: Row(children: [
             Expanded(child: AlertBanner(glyph: '⚠️', tone: 2, message: 'כפל-תפיסה ${(c['room'] as Map)['name']} · ${c['iso']} ${c['time']}: ${(c['a'] as Map)['name']} ⊕ ${(c['b'] as Map)['name']}')),
-            if (_can('rooms.move')) ...[const SizedBox(width: 6), SoftButton(label: '➡ פתור', tone: 2, onTap: () => _openMove(context, c['room'] as Map<String, dynamic>, {...(c['b'] as Map<String, dynamic>), 'iso': c['iso'], 'dayIdx': _VolunteerData.dow('${c['iso']}')}, act))],
+            if (_can('rooms.move')) ...[const SizedBox(width: 6), SoftButton(label: '➡ פתור', tone: 2, onTap: () => _openMove(context, c['room'] as Map<String, dynamic>, {...(c['b'] as Map<String, dynamic>), 'iso': c['iso'], 'dayIdx': _RoomData.dow('${c['iso']}')}, act))],
           ])),
         // 9 · הזמנות-ממתינות (מחוץ-למדיניות) ⇒ אשר/דחה (rooms.approve)
         for (final e in pend)
           Padding(padding: const EdgeInsets.only(bottom: 6), child: Row(children: [
-            Expanded(child: AlertBanner(glyph: '⏳', tone: 3, message: 'ממתין-אישור: ${e['title']} · ${_VolunteerData._room('${e['roomId']}')['name']} · ${e['date']} ${e['time']} · ${_VolunteerData.teacherName(e['requestedBy'])} · ${e['attendees']} משתתפים')),
+            Expanded(child: AlertBanner(glyph: '⏳', tone: 3, message: 'ממתין-אישור: ${e['title']} · ${_RoomData._room('${e['roomId']}')['name']} · ${e['date']} ${e['time']} · ${_RoomData.teacherName(e['requestedBy'])} · ${e['attendees']} משתתפים')),
             if (_can('rooms.approve')) ...[
-              const SizedBox(width: 6), SoftButton(label: '✔', tone: 1, onTap: () => act(() => _VolunteerData.setEventStatus(_who, e, 'pending'))),
-              const SizedBox(width: 4), SoftButton(label: '✖', tone: 2, onTap: () => act(() => _VolunteerData.setEventStatus(_who, e, 'rejected'))),
+              const SizedBox(width: 6), SoftButton(label: '✔', tone: 1, onTap: () => act(() => _RoomData.setEventStatus(_who, e, 'pending'))),
+              const SizedBox(width: 4), SoftButton(label: '✖', tone: 2, onTap: () => act(() => _RoomData.setEventStatus(_who, e, 'rejected'))),
             ],
           ])),
         // 7 · ציוד-נדרש-לשיעור חסר/תקול בחדר (התרעה) ⇒ העבר לחדר עם הציוד (altRooms needsEq)
         for (final c in miss)
           Padding(padding: const EdgeInsets.only(bottom: 6), child: Row(children: [
-            Expanded(child: AlertBanner(glyph: '🧰', tone: 3, message: 'ציוד חסר לשיעור: ${c['name']} ב-${_VolunteerData._room(_VolunteerData.roomOfCourse(c))['name']} — ${_VolunteerData.missingEqFor(c).join(', ')}')),
+            Expanded(child: AlertBanner(glyph: '🧰', tone: 3, message: 'ציוד חסר לשיעור: ${c['name']} ב-${_RoomData._room(_RoomData.roomOfCourse(c))['name']} — ${_RoomData.missingEqFor(c).join(', ')}')),
             if (_can('rooms.move')) ...[const SizedBox(width: 6), SoftButton(label: '➡ העבר', tone: 0, onTap: () {
-              final s0 = (_VolunteerData._sess(c).first as Map);
+              final s0 = (_RoomData._sess(c).first as Map);
               final d = s0['day'] as int;
-              _openMove(context, _VolunteerData._room(_VolunteerData.roomOfCourse(c)), {'kind': 'course', 'id': c['id'], 'name': c['name'], 'who': _VolunteerData.teacherName(c['teacherId']), 'start': _VolunteerData._t2m(s0['time']), 'iso': _VolunteerData.weekIsos[d.clamp(0, 5)], 'dayIdx': d.clamp(0, 5)}, act);
+              _openMove(context, _RoomData._room(_RoomData.roomOfCourse(c)), {'kind': 'course', 'id': c['id'], 'name': c['name'], 'who': _RoomData.teacherName(c['teacherId']), 'start': _RoomData._t2m(s0['time']), 'iso': _RoomData.weekIsos[d.clamp(0, 5)], 'dayIdx': d.clamp(0, 5)}, act);
             })],
           ])),
         // שיעור-בלי-חדר (inactiveRoomCourses ⊕ roomId ריק) ⇒ שבץ = חדר-חלופי
@@ -1225,24 +1225,24 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
         // 4 · חדר-תקול (תקלה-חמורה פתוחה) ⇒ העברת-שיעורים-אוטו + הודעה
         for (final r in faultyRooms)
           Padding(padding: const EdgeInsets.only(bottom: 6), child: Row(children: [
-            Expanded(child: AlertBanner(glyph: '🔧', tone: 2, message: 'חדר תקול (תקלה חמורה): ${r['name']} — ${_VolunteerData.affectedByFault(r).length} תפיסות השבוע מושפעות')),
-            if (_can('rooms.move') && _VolunteerData.affectedByFault(r).isNotEmpty) ...[const SizedBox(width: 6), SoftButton(label: '🚚 העבר-אוטו', tone: 2, onTap: () => act(() => _VolunteerData.autoRelocate(_who, r)))],
+            Expanded(child: AlertBanner(glyph: '🔧', tone: 2, message: 'חדר תקול (תקלה חמורה): ${r['name']} — ${_RoomData.affectedByFault(r).length} תפיסות השבוע מושפעות')),
+            if (_can('rooms.move') && _RoomData.affectedByFault(r).isNotEmpty) ...[const SizedBox(width: 6), SoftButton(label: '🚚 העבר-אוטו', tone: 2, onTap: () => act(() => _RoomData.autoRelocate(_who, r)))],
           ])),
       ]),
       // 6 · חדר-לא-מנוצל · 3 · סנכרון-לוח (חגים קרובים ⇒ חסימה-אוטו) · 5 · בדיקה-תקופתית (מקום-שמור)
-      if (under.isNotEmpty) ...[AlertBanner(glyph: '🪑', tone: 3, message: '${under.length} חדרים מתחת לסף-ניצולת ${_VolunteerData.utilFloor}%: ${under.map((r) => '${r['name']} ${_VolunteerData.utilPct(r)}%').join(' · ')}'), _gap(8)],
+      if (under.isNotEmpty) ...[AlertBanner(glyph: '🪑', tone: 3, message: '${under.length} חדרים מתחת לסף-ניצולת ${_RoomData.utilFloor}%: ${under.map((r) => '${r['name']} ${_RoomData.utilPct(r)}%').join(' · ')}'), _gap(8)],
       if (hol.isNotEmpty) ...[AlertBanner(glyph: '📆', tone: 0, message: 'סנכרון-לוח · ${hol.length} חגים ב-45 יום ⇒ חסימה-אוטו: ${hol.map((h) => '${h['name']} ${h['iso']}').join(' · ')}'), _gap(8)],
-      if (dueCheck.isNotEmpty) ...[AlertBanner(glyph: '🗓', tone: 3, message: 'בדיקה-תקופתית באיחור (>${_VolunteerData.checkEveryDays} יום): ${dueCheck.map((r) => r['name']).join(' · ')}'), _gap(8)],
+      if (dueCheck.isNotEmpty) ...[AlertBanner(glyph: '🗓', tone: 3, message: 'בדיקה-תקופתית באיחור (>${_RoomData.checkEveryDays} יום): ${dueCheck.map((r) => r['name']).join(' · ')}'), _gap(8)],
       if (unknownCheck > 0) ...[AlertBanner(glyph: '🗓', tone: 0, message: 'תזכורת-בדיקה-תקופתית (מזגן/כיבוי-אש): אין תאריך-בדיקה ל-$unknownCheck חדרים — מקום-שמור (lastCheck), מאיר כשיגיע נתון'), _gap(8)],
       // 8 · ניצולת-שבועית-להנהלה (admin): NeonBars על ערכי-אמת (utilPct) — לא bar_chart המזייף
-      if (_VolunteerData.roleName(_role) == 'admin') ...[
-        DsSection(title: '📊 ניצולת-שבועית להנהלה · ממוצע ${_VolunteerData.utilAvgPct}%', children: [
-          NeonBars(labels: [for (final r in _VolunteerData.utilRanked) '${r['name']}'], values: [for (final r in _VolunteerData.utilRanked) _VolunteerData.utilPct(r).toDouble()], tone: 0),
+      if (_RoomData.roleName(_role) == 'admin') ...[
+        DsSection(title: '📊 ניצולת-שבועית להנהלה · ממוצע ${_RoomData.utilAvgPct}%', children: [
+          NeonBars(labels: [for (final r in _RoomData.utilRanked) '${r['name']}'], values: [for (final r in _RoomData.utilRanked) _RoomData.utilPct(r).toDouble()], tone: 0),
           _gap(6),
           Row(children: [
-            BareStat(value: '${_VolunteerData.utilRanked.isEmpty ? '—' : _VolunteerData.utilRanked.first['name']}', label: 'הכי-מנוצל', inkColor: _acc, mutedColor: _muted),
-            BareStat(value: '${_VolunteerData.utilRanked.isEmpty ? '—' : _VolunteerData.utilRanked.last['name']}', label: 'הכי-פחות', inkColor: _warning, mutedColor: _muted),
-            BareStat(value: '${_VolunteerData.outbox.length}', label: 'הודעות שנשלחו', inkColor: _ink, mutedColor: _muted),
+            BareStat(value: '${_RoomData.utilRanked.isEmpty ? '—' : _RoomData.utilRanked.first['name']}', label: 'הכי-מנוצל', inkColor: _acc, mutedColor: _muted),
+            BareStat(value: '${_RoomData.utilRanked.isEmpty ? '—' : _RoomData.utilRanked.last['name']}', label: 'הכי-פחות', inkColor: _warning, mutedColor: _muted),
+            BareStat(value: '${_RoomData.outbox.length}', label: 'הודעות שנשלחו', inkColor: _ink, mutedColor: _muted),
           ]),
         ]),
       ],
@@ -1253,9 +1253,9 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
   //   guardExport(מדף) חוסם+מודיע; בסנדבוקס ההורדה חסומה ⇒ תצוגת-הקובץ לבדיקה+העתקה (SelectableText).
   void _openExport(List<Map<String, dynamic>> rs, {required bool ical}) {
     var blockedMsg = '';
-    final ok = guardExport(!_VolunteerData.exportOk(_role), () => blockedMsg = 'ייצוא חסום (שער-הרשאות)');
-    final body = !ok ? '' : ical ? _VolunteerData.icsOf(rs) : _VolunteerData.csvOf(rs);
-    final occN = ical ? [for (final r in rs) ..._VolunteerData.weekOccupancies(r)].length : 0;
+    final ok = guardExport(!_RoomData.exportOk(_role), () => blockedMsg = 'ייצוא חסום (שער-הרשאות)');
+    final body = !ok ? '' : ical ? _RoomData.icsOf(rs) : _RoomData.csvOf(rs);
+    final occN = ical ? [for (final r in rs) ..._RoomData.weekOccupancies(r)].length : 0;
     showModalBottomSheet<void>(
       context: context, backgroundColor: Colors.transparent, isScrollControlled: true,
       builder: (ctx) => DraggableScrollableSheet(
@@ -1264,7 +1264,7 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
           padding: const EdgeInsets.all(12),
           child: GlassCard(
             child: ListView(controller: scroll, padding: const EdgeInsets.all(6), children: [
-              MediaRow(glyph: ical ? '📆' : '⬇', title: ical ? 'ייצוא iCal (VCALENDAR)' : 'ייצוא CSV', subtitle: ical ? '${rs.length} חדרים · $occN תפיסות השבוע · RFC5545 (buildIcs)' : '${rs.length} חדרים · ${_VolunteerData.csvRows(rs).first.length} עמודות · BOM + חסימת-הזרקה'),
+              MediaRow(glyph: ical ? '📆' : '⬇', title: ical ? 'ייצוא iCal (VCALENDAR)' : 'ייצוא CSV', subtitle: ical ? '${rs.length} חדרים · $occN תפיסות השבוע · RFC5545 (buildIcs)' : '${rs.length} חדרים · ${_RoomData.csvRows(rs).first.length} עמודות · BOM + חסימת-הזרקה'),
               _gap(10),
               if (!ok)
                 AlertBanner(message: blockedMsg, glyph: '🔒', tone: 2)
@@ -1299,7 +1299,7 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
           if (rs.isEmpty) const EmptyState(glyph: '🔍', message: 'אין חדרים תואמים'),
           for (final r in rs)
             Row(children: [
-              Expanded(child: MediaRow(glyph: _VolunteerData.activeOf(r) ? '🏫' : '⛔', title: '${r['name']}', subtitle: '${r['location']} · ${_VolunteerData.statusOf(r)}')),
+              Expanded(child: MediaRow(glyph: _RoomData.activeOf(r) ? '🏫' : '⛔', title: '${r['name']}', subtitle: '${r['location']} · ${_RoomData.statusOf(r)}')),
               SoftButton(label: 'בחר', tone: 1, onTap: () { Navigator.of(c2).pop(); then(r); }),
             ]),
         ])),

@@ -2,6 +2,20 @@
 > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
 > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
 
+## L2026-09-04-truth-1f9f90 · אותו כשל-truth על קובץ-retarget שני — מיפוי-לפי-סדר (`role⇒phone`) הוא הצורה שנפסלה; דוח-רקע אחרי truth --write מפיל truth-fresh (4.9, GENMAX·G5c⇒G5d)
+GATE: truth
+ref: 1f9f909a0b6f71c03444a47071df0ad2be7a6977:new/dart-gen-bs/gen_retarget_supporter_from_tch.dart
+ANTIPATTERN: role⇒\w+\(type\)
+RULE: פלט-retarget שבו שדה-טקסט ממופה לשדה-ערוץ (`role⇒phone`) או לפי סדר-הצהרה — פסול (L55): רק שם-זהה/ערוץ/טיפוס-יחיד; והקימוט: דוחות-אימות לפני truth --write, לא אחריו.
+מה נכשל: אותו ניסיון-משטרה (retry.jsonl 1788539132) על `gen_retarget_supporter_from_tch.dart` בגרסת-G5c (ref): `role⇒phone(type)`, `status⇒address(type)` — נכון-בצורה, שקר-במשמעות; G5d החליף ל-name/chan/unique/reserved (19 מקום-שמור כנים). הלקח כפול: מיפוי שאינו עובדה-מבנית לא נכנס לפלט, ו-truth נמדד אחרון.
+
+## L2026-09-04-truth-e23e40 · בלוק-האמת נמדד על העץ כולו — truth --write רץ אחרי שכל דוחות-המנוע (gen-verify/harness/picks) סופיים, לא לפניהם (4.9, GENMAX·G5c⇒G5d)
+GATE: truth
+ref: e23e40e44919b2e18b4f3ec08aa75828f46a9587:new/dart-gen-bs/gen_retarget_volunteer_from_rm.dart
+ANTIPATTERN: ⇒\w+\(type\)
+RULE: סדר-הקימוט קבוע: (1) מנועים ופלטיהם (--gate --write) (2) דוחות-אימות (gen-verify/harness --write-baseline) (3) `truth --write` + `pins --write` (4) commit — כל דוח שנכתב אחרי truth מפיל truth-fresh; ופלט-retarget עם מיפוי-לפי-סדר (`x⇒y(type)`) הוא הגרסה שנפסלה ב-L55 ואסור שתחזור.
+מה נכשל: בין G5c ל-G5d נכתב דוח gen-verify ברקע אחרי `truth --write` ⇒ ניסיון-משטרה על העץ נפל ב-truth (retry.jsonl 1788539132, שלושת קובצי-ה-retarget) ונרשמה טיוטה זו; הבלוב-לפני (ref) הוא פלט-G5c עם מיפוי `slot⇒maxDeliveries(type)`/`location⇒phone(type)` — הצורה שהוחלפה ב-G5d ל-name/chan/unique/reserved. החוק: truth אחרון, ומיפוי-לפי-סדר לא חוזר.
+
 ## L2026-09-04-goal-proof-4feb63 · מסך שסונכרן מהמראה = מסך שהשתנה — כרטיס-מטרה מתרענן עם רנדר אמיתי לפני commit; כיוון-הסנכרון הוא genesis⇒מראה, ולכן בנאי שכותב רק למראה משאיר את genesis ישן (4.9, G4a · מורים)
 GATE: goal-proof
 ref: 4feb63e45e534d4f0217c4ca216fa21f1583943c:new/dart-gen-bs/schoolos_teachers.dart
@@ -547,3 +561,16 @@ GATE: retarget
 המנוע מיפה מפתחות-זרע לשדות-ישות לפי (א) שם-זהה (ב) צורת-טיפוס לפי סדר-הסכמה. (א) נתן `id/name/active/notes` נכונים תמיד;
 (ב) נתן `location⇒phone`, `status⇒address` — נכון-בצורה, שגוי-במשמעות, כי "string ראשון פנוי" אינו סיבה. מה שלא הומצא: הזרע נשאר זרע-מקור מוצהר, הלא-ממופה = מקום-שמור.
 **לקח:** בין שם-זהה לסדר-הצהרה יש שכבה שאינה מילון — **ערוץ** (G2 כבר מצהיר phone/email/address/date כערוץ מהשם); מפתח-מקור בערוץ ממופה רק לשדה באותו ערוץ, ורק אחר-כך צורת-טיפוס. ANTIPATTERN: לקרוא למיפוי-לפי-סדר "מחולל".
+
+## L56 · שני אוצרות-ops לא מבחינים — בורר-המודול נשען על עובדות-מבנה (שמות-שדה זהים + פרופיל-טיפוסים), והפער G1↔G2 נרשם כחוב (4.9, GENMAX·G5e)
+GATE: retarget
+ניסיון ראשון לבחור מודול-זהב לישות לפי `entityOps(E)` (G2) מול ops-השברים (G1): כיסוי 20–40% **אחיד** לכל 9 המודולים, ו-"students" זוכה תמיד כי סט-ה-ops שלו הגדול.
+הסיבה בבייטים: shape-ops מדבר aggregate/balance/broadcast/calendar/certs, ops-map מדבר collection/format/summary/table/panel — **אוצרות שונים**, חפיפה של מילים בודדות. זו אותה תהום ש-`OPFAM` הידני ב-G3 גישר על 15 שורות.
+מה כן מבחין (נמדד על 49 ישויות): מספר שמות-שדה זהים בין הזרע-הראשי של המודול לסכמת-הישות (Family⇒students 19 · Course⇒courses 23 · Room⇒rooms 11 · Supporter⇒fees 11) + קוסינוס על פרופיל-הטיפוסים כשובר-שוויון.
+**לקח:** לפני שבונים בורר על "פעולות-יסוד" (L49) חייבים אוצר-ops **אחד** לשלוש השכבות; עד אז הבורר מצהיר על עוצמתו (strong/medium/weak) ולא מתחזה. ANTIPATTERN: להשוות סטים משני אוצרות ולקרוא לזה "כיסוי".
+
+## L57 · גשר-מונחים = אטום-דאטה חצוב מהמקור, לא מילון-במנוע — ומה שאין לו מונח נשאר מקום-שמור (4.9, GENMAX·G5f)
+GATE: sentence
+"משפט-בעברית ⇒ ישות" נראה כמו מקום שבו מותר "מילון קטן". לא: המילון קיים כבר במקור-האמת — `TERM_DEFS` של maor (45 מונחי White-label, `entity.*` עם fallback) — וחציבתו לאטום-דאטה (`entity-terms.data.json`, שער ≡ חציבה-טרייה) שומרת על §19-ד/§20-ד: המנוע קורא דאטה, לא יודע עברית.
+מה שאין לו מונח ("ספקים") ⇒ ∅ מדווח, לא ניחוש; מה שיש לו שני מונחים ("קופות צדקה של הרכזים") ⇒ תיקו מדווח עם חלופה. המורפולוגיה שנוספה (־ים · ־ה⇒־ות · אות-שימוש) היא כלל-שפה כמו match.stem — לא ידע-דומיין.
+**לקח:** לפני שכותבים טבלת-מילים במנוע שואלים "איפה המקור-האמת שכבר מחזיק אותה?" ומחצבים משם עם שער-שוויון. ANTIPATTERN: `const HE = { 'מתנדב': 'Volunteer' … }` בתוך .mjs של המנוע.

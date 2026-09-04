@@ -1,0 +1,2 @@
+// דוגמה מורעלת: כותרת-retarget עם מיפוי-לפי-סדר-הצהרה (הצורה שנפסלה ב-L55)
+//   מיפוי-מפתחות: id⇒id(name) · slot⇒maxDeliveries(type) · location⇒phone(type)

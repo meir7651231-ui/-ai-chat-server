@@ -1,0 +1,2 @@
+// דוגמה מורעלת: שדה-טקסט ממופה לערוץ לפי סדר-הצהרה
+//   role⇒phone(type) · status⇒address(type)
