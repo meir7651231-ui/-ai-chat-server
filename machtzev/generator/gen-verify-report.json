@@ -1,10 +1,10 @@
 {
- "rendered": 47,
- "screens": 85,
+ "rendered": 52,
+ "screens": 90,
  "atoms": 38,
- "passed": 47,
+ "passed": 52,
  "failed": 37,
- "taps": 182,
+ "taps": 211,
  "tapErrors": 0,
  "coreSeen": 0,
  "report": [
@@ -248,6 +248,25 @@
    "widgets": 0,
    "atomList": [],
    "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
+  },
+  {
+   "file": "gen_app_studio.dart",
+   "screen": "StudioHubScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 5,
+   "widgets": 825,
+   "atomList": [
+    "DsScaffold",
+    "DsSearch",
+    "KpiTile",
+    "DsSection",
+    "DsNavTile"
+   ],
+   "taps": 0,
    "tapErrors": 0,
    "coreSeen": false,
    "coreExpected": false
@@ -972,6 +991,31 @@
    "coreExpected": false
   },
   {
+   "file": "gen_retarget_course_from_crs.dart",
+   "screen": "CourseScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 11,
+   "widgets": 2120,
+   "atomList": [
+    "DsScaffold",
+    "SegmentedSwitch",
+    "SoftButton",
+    "StatusChip",
+    "DsSearch",
+    "FilterChipPill",
+    "GradientCard",
+    "StatHero",
+    "BareStat",
+    "DsSection",
+    "AlertBanner"
+   ],
+   "taps": 8,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
+  },
+  {
    "file": "gen_retarget_donation_from_fee.dart",
    "screen": "DonationScreen",
    "rendered": true,
@@ -1053,6 +1097,33 @@
    "coreExpected": true
   },
   {
+   "file": "gen_retarget_member_from_stu.dart",
+   "screen": "MemberScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 13,
+   "widgets": 1925,
+   "atomList": [
+    "DsScaffold",
+    "SegmentedSwitch",
+    "StatusChip",
+    "DsSearch",
+    "SoftButton",
+    "FilterChipPill",
+    "GradientCard",
+    "StatHero",
+    "BareStat",
+    "AlertBanner",
+    "DsSection",
+    "MediaRow",
+    "StatRow"
+   ],
+   "taps": 9,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
+  },
+  {
    "file": "gen_retarget_room_from_rm.dart",
    "screen": "RoomScreen",
    "rendered": true,
@@ -1070,6 +1141,56 @@
     "SoftButton",
     "DsSearch",
     "FilterChipPill"
+   ],
+   "taps": 8,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
+  },
+  {
+   "file": "gen_retarget_shopassignment_from_tch.dart",
+   "screen": "ShopAssignmentScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 11,
+   "widgets": 2305,
+   "atomList": [
+    "DsScaffold",
+    "DsSection",
+    "StatusChip",
+    "AlertBanner",
+    "SegmentedSwitch",
+    "GradientCard",
+    "StatHero",
+    "BareStat",
+    "DsSearch",
+    "SoftButton",
+    "FilterChipPill"
+   ],
+   "taps": 4,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": true
+  },
+  {
+   "file": "gen_retarget_shopcriterion_from_crs.dart",
+   "screen": "ShopCriterionScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 11,
+   "widgets": 2120,
+   "atomList": [
+    "DsScaffold",
+    "SegmentedSwitch",
+    "SoftButton",
+    "StatusChip",
+    "DsSearch",
+    "FilterChipPill",
+    "GradientCard",
+    "StatHero",
+    "BareStat",
+    "DsSection",
+    "AlertBanner"
    ],
    "taps": 8,
    "tapErrors": 0,

@@ -38,5 +38,13 @@
  {
   "text": "רכזים לפי אזור",
   "entity": "TzCoordinator"
+ },
+ {
+  "text": "בני משפחה לפי גיל",
+  "entity": "Member"
+ },
+ {
+  "text": "בן משפחה עם תאריך לידה",
+  "entity": "Member"
  }
 ]

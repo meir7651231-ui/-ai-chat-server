@@ -25,7 +25,9 @@ export function resolve(text) {
   const words = heWords(text).map(nz);
   const votes = new Map();
   // ניקוד פר-צורה: הטוב-ביותר לכל מילת-הצורה, משוקלל בשלמות-הצורה (צורה דו-מילתית 'בן/בת משפחה' שרק חציה תאם ≠ 'משפחה' שלמה); לישות — המקסימום על צורותיה
-  for (const t of TERMS) for (const form of t.forms) {
+  // צורה עם '/' בתוך מילה = חלופות ("בן/בת משפחה" ⇒ "בן משפחה" · "בת משפחה") — כלל-פורמט של TERM_DEFS, לא מילון (L68)
+  const altForms = (f) => { const ws = f.split(' '); const i = ws.findIndex((w) => w.includes('/')); if (i < 0) return [f]; return ws[i].split('/').flatMap((a) => altForms([...ws.slice(0, i), a, ...ws.slice(i + 1)].join(' '))); };
+  for (const t of TERMS) for (const form of t.forms.flatMap(altForms)) {
     const fws = heWords(form).map(nz); if (!fws.length) continue;
     let sum = 0, hit = 0;
     for (const fw of fws) {
@@ -33,9 +35,10 @@ export function resolve(text) {
       for (const w of words) { let s = 0; if (w === fw) s = 3; else if (vs.has(w) || vs.has(strip(w))) s = 2; else if (fw.length >= 3 && w.includes(fw)) s = 1; if (s > best) best = s; }
       if (best) { sum += best; hit++; }
     }
-    if (hit) { const score = +(sum / fws.length).toFixed(2); if (score > (votes.get(t.entity) || 0)) votes.set(t.entity, score); }
+    // ספציפיות (L68): בשוויון-ציון, הצורה הארוכה-יותר שתאמה במלואה מנצחת ("בני משפחה" ⇒ Member, לא "משפחה" ⇒ Family)
+    if (hit) { const score = +(sum / fws.length).toFixed(2), prev = votes.get(t.entity); if (!prev || score > prev.score || (score === prev.score && fws.length > prev.len)) votes.set(t.entity, { score, len: fws.length }); }
   }
-  const ranked = [...votes.entries()].sort((a, b) => b[1] - a[1] || TERMS.findIndex((t) => t.entity === a[0]) - TERMS.findIndex((t) => t.entity === b[0]));
+  const ranked = [...votes.entries()].map(([e, v]) => [e, v.score, v.len]).sort((a, b) => b[1] - a[1] || b[2] - a[2] || TERMS.findIndex((t) => t.entity === a[0]) - TERMS.findIndex((t) => t.entity === b[0])).map(([e, sc]) => [e, sc]);
   return { text, words, entity: ranked.length ? ranked[0][0] : null, score: ranked.length ? ranked[0][1] : 0, ranked: ranked.slice(0, 4) };
 }
 export function fromSentence(text) {
