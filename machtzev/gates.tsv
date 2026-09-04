@@ -13,6 +13,7 @@ cover	כיסוי-שקעים=הרכבה (GENMAX·G3 · §20-ב): שחזור טב�
 goldquarry	חציבת-הזהב (GENMAX·G4a · הכרעה-24 "חוצבים ומרכיבים"): 9 מודולי-הזהב ⇒ קטלוג-שברים דטרמיניסטי; הרכבה-חוזרת ביט-לביט 9/9 · הקטלוג ≡ חציבה-טרייה · תובנות רק-עולות	commit	generator/quarry-baseline.json;grow
 rendermodule	הרכבה-מהקטלוג (GENMAX·G4): --all ≡ מקור 9/9 · מודולי-משנה מינימליים (gen_*_subset.dart) ≡ הרכבה-דטרמיניסטית (סגירת-תלויות · build סינתטי) — קומפילציה בשער-buildsmart	commit	—
 goldenharness	רתמת-הזהב (GENMAX·G4 · השער הקשה): מודול מורכב-מחדש (compose+declared) מוחלף במראה ועובר את בדיקות-הזהב המקוריות בלי שינוי-בדיקה — רק-עולה (מודולים · בדיקות); מדולג בלי buildsmart	push	generator/render-module-baseline.json;grow
+genverify	אימות-בפועל של פלטי-המחולל (GENMAX·G5b · L53): כל gen_*.dart עם מסך נטען ב-flutter test מחולל — אפס-חריגות · DsScaffold · ספירת אטומי-תצוגה שרונדרו — רק-עולה; פלט שלא רונדר = כשל; מדולג בלי buildsmart	push	generator/gen-verify-baseline.json;grow
 compose-determinism	קומפוזר-דטרמיניסטי (23-ג): compose-engine על 15 החלקיקים ≡ compose-engine-report.md	commit	
 index-complete	M3: כל סקריפט ב-machtzev/ עם שורה ב-INDEX.md · חוב רק-יורד	commit	index-baseline.json;shrink
 atom-count	מספר-אטומים לאזור (new/*) לא יורד (1.7 שהושמט)	commit	atom-count-baseline.json;grow

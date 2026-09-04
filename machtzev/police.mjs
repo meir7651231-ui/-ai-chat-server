@@ -139,6 +139,7 @@ gate('cover', 'generator/cover.mjs', ['--gate']);
 gate('goldquarry', 'generator/quarry-golden.mjs', ['--gate']);
 gate('rendermodule', 'generator/render-module.mjs', ['--gate']);
 gate('goldenharness', 'generator/golden-harness.mjs', ['--gate'], FAST);
+gate('genverify', 'generator/gen-verify.mjs', ['--gate'], FAST);
 gate('index-complete', 'index-check.mjs');
 gate('atom-count', 'atom-count-check.mjs');
 gate('learn', 'learn-check.mjs');

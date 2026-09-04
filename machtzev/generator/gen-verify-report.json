@@ -1,0 +1,669 @@
+{
+ "rendered": 19,
+ "screens": 57,
+ "atoms": 36,
+ "passed": 19,
+ "failed": 37,
+ "report": [
+  {
+   "file": "gen_app_ent1.dart",
+   "screen": "GenAppEnt1Screen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 7,
+   "widgets": 824,
+   "atomList": [
+    "DsScaffold",
+    "DsStat",
+    "DsSection",
+    "DsField",
+    "DsEnumField",
+    "DsEmpty",
+    "DsPrimaryButton"
+   ]
+  },
+  {
+   "file": "gen_app_ent2.dart",
+   "screen": "GenAppEnt2Screen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 10,
+   "widgets": 934,
+   "atomList": [
+    "DsScaffold",
+    "DsStat",
+    "DsWorkflow",
+    "DsSection",
+    "DsField",
+    "DsSelect",
+    "DsNumberField",
+    "DsDateField",
+    "DsEmpty",
+    "DsPrimaryButton"
+   ]
+  },
+  {
+   "file": "gen_app_ent3.dart",
+   "screen": "GenAppEnt3Screen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 7,
+   "widgets": 771,
+   "atomList": [
+    "DsScaffold",
+    "DsStat",
+    "DsSection",
+    "DsField",
+    "DsEnumField",
+    "DsEmpty",
+    "DsPrimaryButton"
+   ]
+  },
+  {
+   "file": "gen_app_ent4.dart",
+   "screen": "GenAppEnt4Screen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 8,
+   "widgets": 631,
+   "atomList": [
+    "DsScaffold",
+    "DsStat",
+    "DsSection",
+    "DsField",
+    "DsSelect",
+    "DsToggleTile",
+    "DsEmpty",
+    "DsPrimaryButton"
+   ]
+  },
+  {
+   "file": "gen_app_ent5.dart",
+   "screen": "GenAppEnt5Screen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 8,
+   "widgets": 762,
+   "atomList": [
+    "DsScaffold",
+    "DsStat",
+    "DsSection",
+    "DsField",
+    "DsEnumField",
+    "DsDateField",
+    "DsEmpty",
+    "DsPrimaryButton"
+   ]
+  },
+  {
+   "file": "gen_app_ent6.dart",
+   "screen": "GenAppEnt6Screen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 7,
+   "widgets": 675,
+   "atomList": [
+    "DsScaffold",
+    "DsStat",
+    "DsSection",
+    "DsField",
+    "DsSelect",
+    "DsEmpty",
+    "DsPrimaryButton"
+   ]
+  },
+  {
+   "file": "gen_app_hub.dart",
+   "screen": "GenAppHubScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 2,
+   "widgets": 1410,
+   "atomList": [
+    "DsScaffold",
+    "DsNavTile"
+   ]
+  },
+  {
+   "file": "gen_app_rec1.dart",
+   "screen": "GenAppRec1Screen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_app_rec2.dart",
+   "screen": "GenAppRec2Screen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_app_rec3.dart",
+   "screen": "GenAppRec3Screen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_app_rec4.dart",
+   "screen": "GenAppRec4Screen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_app_rec5.dart",
+   "screen": "GenAppRec5Screen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_app_rec6.dart",
+   "screen": "GenAppRec6Screen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_attendance_subset.dart",
+   "screen": "AttendanceScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 7,
+   "widgets": 3078,
+   "atomList": [
+    "DsScaffold",
+    "MediaRow",
+    "SoftButton",
+    "DsTable",
+    "DsSection",
+    "DsCalendar",
+    "StatusChip"
+   ]
+  },
+  {
+   "file": "gen_business.dart",
+   "screen": "GenBusinessScreen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_cap.dart",
+   "screen": "GenCapScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 3,
+   "widgets": 300,
+   "atomList": [
+    "DsScaffold",
+    "GaugeMeter",
+    "PremiumRing"
+   ]
+  },
+  {
+   "file": "gen_capautodream.dart",
+   "screen": "GenCapautodreamScreen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_capclockcalendar.dart",
+   "screen": "GenCapclockcalendarScreen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_capmailphone.dart",
+   "screen": "GenCapmailphoneScreen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_captimegematria.dart",
+   "screen": "GenCaptimegematriaScreen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_cards11.dart",
+   "screen": "GenCards11Screen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_charts.dart",
+   "screen": "GenChartsScreen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_components.dart",
+   "screen": "GenComponentsScreen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_composite_att_fee.dart",
+   "screen": "AttFeeScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 7,
+   "widgets": 3078,
+   "atomList": [
+    "DsScaffold",
+    "MediaRow",
+    "SoftButton",
+    "DsTable",
+    "DsSection",
+    "DsCalendar",
+    "StatusChip"
+   ]
+  },
+  {
+   "file": "gen_composite_stu_att_fee.dart",
+   "screen": "Student360Screen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 7,
+   "widgets": 2441,
+   "atomList": [
+    "DsScaffold",
+    "FilterChipPill",
+    "GradientCard",
+    "MediaRow",
+    "StatRow",
+    "StatusChip",
+    "DsTable"
+   ]
+  },
+  {
+   "file": "gen_controls.dart",
+   "screen": "GenControlsScreen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_courses_subset.dart",
+   "screen": "CoursesScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 2,
+   "widgets": 1908,
+   "atomList": [
+    "DsScaffold",
+    "DsTable"
+   ]
+  },
+  {
+   "file": "gen_crazy.dart",
+   "screen": "GenCrazyScreen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_dash11.dart",
+   "screen": "GenDash11Screen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_dashboard_subset.dart",
+   "screen": "DashboardScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 5,
+   "widgets": 1039,
+   "atomList": [
+    "DsScaffold",
+    "SegmentedSwitch",
+    "DsSection",
+    "TrendStat",
+    "NeonBars"
+   ]
+  },
+  {
+   "file": "gen_entry.dart",
+   "screen": "GenEntryScreen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_feedback10.dart",
+   "screen": "GenFeedback10Screen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_fees_subset.dart",
+   "screen": "FeesScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 12,
+   "widgets": 1275,
+   "atomList": [
+    "DsScaffold",
+    "DsEnumField",
+    "DsSection",
+    "TimelineItem",
+    "SoftButton",
+    "StatusDot",
+    "MediaRow",
+    "StatusChip",
+    "TrendStat",
+    "DsBars",
+    "BareStat",
+    "AlertBanner"
+   ]
+  },
+  {
+   "file": "gen_form9.dart",
+   "screen": "GenForm9Screen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_improv.dart",
+   "screen": "GenImprovScreen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_input9.dart",
+   "screen": "GenInput9Screen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_media.dart",
+   "screen": "GenMediaScreen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_mission.dart",
+   "screen": "GenMissionScreen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_mon.dart",
+   "screen": "GenMonScreen",
+   "rendered": false,
+   "drift": true,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_monitor.dart",
+   "screen": "GenMonitorScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 5,
+   "widgets": 390,
+   "atomList": [
+    "DsScaffold",
+    "GaugeMeter",
+    "PremiumStat",
+    "NeonBars",
+    "AlertBanner"
+   ]
+  },
+  {
+   "file": "gen_navflow.dart",
+   "screen": "GenNavflowScreen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_overlay10.dart",
+   "screen": "GenOverlay10Screen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_parents_subset.dart",
+   "screen": "ParentsScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 11,
+   "widgets": 2016,
+   "atomList": [
+    "DsScaffold",
+    "SegmentedSwitch",
+    "DsSearch",
+    "SoftButton",
+    "FilterChipPill",
+    "DsEnumField",
+    "GradientCard",
+    "StatHero",
+    "BareStat",
+    "StatRow",
+    "AlertBanner"
+   ]
+  },
+  {
+   "file": "gen_quest1.dart",
+   "screen": "GenQuest1Screen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_quest2.dart",
+   "screen": "GenQuest2Screen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_quest3.dart",
+   "screen": "GenQuest3Screen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_rich.dart",
+   "screen": "GenRichScreen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_rooms_subset.dart",
+   "screen": "RoomsScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 6,
+   "widgets": 2712,
+   "atomList": [
+    "DsScaffold",
+    "TintedTag",
+    "DsTable",
+    "DsSection",
+    "AlertBanner",
+    "SoftButton"
+   ]
+  },
+  {
+   "file": "gen_shipping.dart",
+   "screen": "GenShippingScreen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_showcase.dart",
+   "screen": "GenShowcaseScreen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_states.dart",
+   "screen": "GenStatesScreen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_students_subset.dart",
+   "screen": "StudentsScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 7,
+   "widgets": 2424,
+   "atomList": [
+    "DsScaffold",
+    "FilterChipPill",
+    "GradientCard",
+    "MediaRow",
+    "StatRow",
+    "StatusChip",
+    "DsTable"
+   ]
+  },
+  {
+   "file": "gen_teachers_subset.dart",
+   "screen": "TeachersScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 7,
+   "widgets": 2226,
+   "atomList": [
+    "DsScaffold",
+    "DsTable",
+    "DsBoard",
+    "DsSection",
+    "MediaRow",
+    "SoftButton",
+    "AlertBanner"
+   ]
+  },
+  {
+   "file": "gen_team.dart",
+   "screen": "GenTeamScreen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_text.dart",
+   "screen": "GenTextScreen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_viz.dart",
+   "screen": "GenVizScreen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  },
+  {
+   "file": "gen_widgets.dart",
+   "screen": "GenWidgetsScreen",
+   "rendered": false,
+   "drift": false,
+   "atoms": 0,
+   "widgets": 0,
+   "atomList": []
+  }
+ ]
+}
