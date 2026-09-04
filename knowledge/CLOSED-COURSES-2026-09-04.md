@@ -2,7 +2,7 @@
 
 > **מפרט (SSOT · "מה"):** `knowledge/SPEC-COURSES-FULL-2026-09-04.md` · **מגילת-הסשן:** `SCHOOLOS-ORCHESTRATION-2026-09-04.md`.
 > נבנה **בדרך** (THE-WAY · הכרעה 23-ב/ג/ד) — 8 גלים; כל גל: `flutter analyze` (אפס-errors) ⇒ בדיקת-widget ⇒ רנדר-Playwright (Chromium, CanvasKit מקומי) ⇒ כרטיס-מטרה (`goal-card --refresh` + תמונה) ⇒ משטרה ירוקה ⇒ commit+push בשני הריפו.
-> **קובץ יחיד:** `new/dart-gen-bs/schoolos_courses.dart` (1,721 שורות · `CoursesScreen` const · ללא main) · מראה: `buildsmart/app_flutter/lib/genesis/dart-gen-bs/` · בדיקה: `buildsmart/app_flutter/test/genesis_courses_test.dart` (7 בדיקות · 7/7 ירוק · 0 גלישות-RenderFlex).
+> **קובץ יחיד:** `new/dart-gen-bs/schoolos_courses.dart` (1,721 שורות · `CoursesScreen` const · ללא main) · מראה: `buildsmart/app_flutter/lib/genesis/dart-gen-bs/` · בדיקה: `buildsmart/app_flutter/test/genesis_courses_test.dart` (10 בדיקות · 10/10 ירוק · 0 גלישות-RenderFlex).
 
 ## הדרך (איך נבנה — לא מה)
 1. **מטרה:** *"שכל שיעור יקרה — עם מורה, בחדר, לתלמידים הנכונים, בזמן — ושאף שיבוץ לא יתנגש ואף מקום לא יתבזבז."* ⇒ ה-hero של המסך = **התנגשויות** (לא "מספר-חוגים").
@@ -11,7 +11,7 @@
 4. **הרכבה תמיד** — כל חלקיק-תובנה = כמה אטומים (תצוגה⊕לוגיקה). דוגמאות: שיבוץ-תלמיד = `courseFitsMember⊕gradeFits⊕gradeIndex⊕gradeOrder⊕ageOf` (קדם) ⊕ `scheduleClashText` (התנגשות) ⊕ `enrollCount`/`maxStudents` (קיבולת) ⇒ enrolled/waitlisted/blocked · סנכרון-חגים = `hebParts⊕HOLIDAYS⊕upcomingHolidays⊕nextSessionDate` ⇒ ביטול-אוטו.
 5. **חיווט-בשקעים, אפס-ציור-ביד:** `Table`/`Row`/`Wrap` = פריסה; כל ערך מגולם באטום-מדף. זהות (מיילים/טלפונים/תפקידים) מוזרקת ב-`roleDefs`/דאטה (חוק-6). **אין `DateTime.now`** — `today='2026-09-04'` ו-`nowAt` מוזרקים.
 6. **אימות-מול-המטרה ברנדר:** 5 צילומים (`machtzev/audit/goals/schoolos_courses.png` = האחרון) + 7 בדיקות-widget שמוכיחות **ערכים מחושבים-ידנית ≡ מסך** (V6).
-7. **באגים שהרנדר/הבדיקה תפסו והקומפילציה פספסה (7):** (א) ספירת-התנגשויות ידנית שגויה (6) — המנוע צדק (10 אירועים ⇒ 5 ייחודיים) · (ב) גלישת-StatusChip בתאי-גריד 112px ⇒ 150px+FittedBox · (ג) 9 טאבים בשורה גלשו ⇒ טאב לא-נגיש ⇒ 2 שורות+FittedBox · (ד) שבבי-עובדה ארוכים (roomInfoLabel) גלשו ⇒ MediaRow/FittedBox · (ה) ListView עצלה — אזורים מתחת ל-2400px לא נבנו בבדיקה ⇒ משטח 800×5200 · (ו) סגירת-גיליון בבדיקה דורשת pump-ריק+אנימציה · (ז) מפתח-ייחודיות של התנגשות-תלמיד (חוג×תלמיד ⇒ זוג-חוגים×תלמיד).
+7. **באגים שהרנדר/הבדיקה תפסו והקומפילציה פספסה (8):** (א) ספירת-התנגשויות ידנית שגויה (6) — המנוע צדק (10 אירועים ⇒ 5 ייחודיים) · (ב) גלישת-StatusChip בתאי-גריד 112px ⇒ 150px+FittedBox · (ג) 9 טאבים בשורה גלשו ⇒ טאב לא-נגיש ⇒ 2 שורות+FittedBox · (ד) שבבי-עובדה ארוכים (roomInfoLabel) גלשו ⇒ MediaRow/FittedBox · (ה) ListView עצלה — אזורים מתחת ל-2400px לא נבנו בבדיקה ⇒ משטח 800×5200 · (ו) סגירת-גיליון בבדיקה דורשת pump-ריק+אנימציה · (ז) מפתח-ייחודיות של התנגשות-תלמיד (חוג×תלמיד ⇒ זוג-חוגים×תלמיד) · (ח) **גל 8ב:** ➕ חוג-חדש נולד בלי מפגשים ⇒ `nextSessionDate` (תזכורות/חגים) ו-`sessionsLabel` עשו `as int` על weekday=null ⇒ קריסת-build — נתפס רק בבדיקת-widget של הפעולה (חוב-§6), תוקן ב-`hasSessions` guard.
 
 ## 8 הגלים (commits)
 | # | יכולת | הרכבה (הכי-טוב-לייעוד, מהמדף) | commit גנסיס |
@@ -23,7 +23,8 @@
 | 5 | מצבים-מיוחדים (10) + הרשאות (6 תפקידים) | `roleOf⊕canGrantedAction⊕teacherIdOf` · `SegmentedSwitch` (בורר-תפקיד) · `CircularProgressIndicator` (טעינה) · `EmptyState`×4 · הרשמה-עצמית (wait=אישור-רכז) | f2c5b7d* |
 | 6 | אוטומציות (11) | `hebParts⊕HOLIDAYS⊕upcomingHolidays⊕nextSessionDate` (חג⇒ביטול-אוטו) · חדר/מורה-חלופי (`_sameSlot` על `sessionsOf⊕timeToMin`) · `dayDiff` (מתחת-מינ׳ X ימים) · המתנה-עם-מקום · תזכורות-48h · אות-ביקוש · ניצולת (`weeklyRoomSessions`) · `AlertBanner⊕SoftButton⊕BareStat×3` | f2c5b7d* |
 | 7 | מקום-שמור + ייצוא | `columnDefs` (קוד) · `metaFields` (11 שדות-מתקדמים) · `enrollMetaFields` (מלגה) · `toCsv⊕csvEscape⊕exportAllowed` · `icsEscape` (iCal) · PDF=מקום-שמור | f2c5b7d* |
-| 8 | בדיקת-widget (7) + דוח-סגירה | `genesis_courses_test.dart` · מסמך זה | (זה) |
+| 8 | בדיקת-widget (7) + דוח-סגירה | `genesis_courses_test.dart` · מסמך זה | 5a7466b→1fb9e94 |
+| 8ב | **חוב-§6 = אפס** (הכוונת-מנהל 12:15Z): 3 בדיקות-widget לכל פעולה שנבדקה "בקוד בלבד" — שבץ·הזמן·העלה·העבר(חסימה⇒יעד-אחר)·בטל-שיעור·מורה-מחליף·ערוך-קיבולת⇒העלאה-אוטו·9 טאבים·הקצה-מורה(חסימה)·הקצה-חדר(פותר/נחסם)·שלח-הודעה(waLink)·חומרים·הדפס·חוג-חדש⇒הקצה⇒בטל-חוג·שכפל-חוג⇒התנגשות⇒סיים-חוג·שכפל-סמסטר·שבוע-הבא | (זה) |
 
 \* **סטייה מוצהרת:** גלים 5–7 נבנו ואומתו בנפרד (analyze+בדיקה+רנדר לכל אחד) אך **נדחפו ב-commit אחד** — עלות-push של ~10 דקות (משטרה-מלאה ב-pre-push × 4–5 התנגשויות-ref עם 7 סשנים-מקבילים) לכל commit. אפס-ויתור על אימות; רק צמצום-commits.
 
@@ -58,6 +59,6 @@
 
 ## אימות
 - `flutter analyze --no-fatal-infos lib/genesis/dart-gen-bs/schoolos_courses.dart` ⇒ **No issues found!**
-- `flutter test test/genesis_courses_test.dart` ⇒ **7/7 passed · 0 RenderFlex overflow** (גל 1 KPI ≡ חישוב-ידני · גל 2 גריד/טבלה/ניצולת · גל 3 המתנה-חסומה/העלאה-אוטו/קדם · גל 4 איתור/צירים/טריאז׳ · גל 5 הרשאות/מצבים · גל 6 חג⇒ביטול/חלופות/ביקוש · גל 7 CSV/iCal/PDF).
+- `flutter test test/genesis_courses_test.dart` ⇒ **10/10 passed · 0 RenderFlex overflow** (גל 1 KPI ≡ חישוב-ידני · גל 2 גריד/טבלה/ניצולת · גל 3 המתנה-חסומה/העלאה-אוטו/קדם · גל 4 איתור/צירים/טריאז׳ · גל 5 הרשאות/מצבים · גל 6 חג⇒ביטול/חלופות/ביקוש · גל 7 CSV/iCal/PDF · גל 8ב ×3: כל 17+ הפעולות + 9 הטאבים + חוג-חדש/שכפול/סיום/ביטול/שבוע-הבא). **חוב-§6 = 0:** אין יכולת שנבדקה בקוד/קומפילציה בלבד.
 - `police --fast` (pre-commit) ירוק בכל commit · `police` מלאה (pre-push, 29 שערים) ירוקה בכל push · `goal-proof` ✓ (כרטיס-מטרה חתום + תמונה לכל commit).
-- **מה לא אומת:** (א) פונטים/אמוג׳י ברנדר-הסנדבוקס = בוקסות (CDN חסום; זהה למלאי) · (ב) הפאנל (bottom-sheet) אומת בבדיקת-widget, לא בצילום · (ג) שלח-הודעה/ייצוא/הדפסה = תצוגות-מקדימות (אין launch/download בסנדבוקס) · (ד) חיבור-לניווט-הביתי ורישום-חלקיקים במנוע = המנהל.
+- **מה לא אומת / מחוץ-לסנדבוקס:** (א) פונטים/אמוג׳י ברנדר-הסנדבוקס = בוקסות (CDN חסום; זהה למלאי) · (ב) הפאנל (bottom-sheet) אומת בבדיקות-widget (7 מתוך 10), לא בצילום · (ג) שלח-הודעה/ייצוא/הדפסה = תצוגות-מקדימות מאומתות-בבדיקה (הקישור/הטקסט/השורות); ה-launch/download/print עצמם חסומים בסנדבוקס · (ד) מצב-שגיאה (`_error`) = מקום-שמור מחווט, אין fetch שיכשיל אותו ⇒ לא-מופעל · (ה) חיבור-לניווט-הביתי בוצע ע"י המנהל (buildsmart 670fdbb, בדיקת-ניווט 9/9); רישום-חלקיקים במנוע = המנהל.
