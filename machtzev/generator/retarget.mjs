@@ -281,14 +281,54 @@ export function retarget({ module, entity }) {
       }
       code = ls.join('\n');
     }
+    // G10b · סינון-לפי-מדד: `<E>Screen(initialMetric: key)` ⇒ הטבלה מסוננת לשורות-המדד (rowsOf_<key>) + AlertBanner "מסונן למדד" עם N/כולל + כפתור-ביטול — נשתל על שורת `final visible = …;` היחידה של build (צורה אחידה ב-9 הזהבים) ואחרי `children: [` של ה-DsScaffold הראשי (העוגן של G6c)
+    let metricSeam = false;
+    if (rowsOfKeys.length && /^\s+final visible = .+;\s*(\/\/.*)?$/m.test(code) && /import '\.\.\/dart-ui-bs\/premium\/feedback\/alert_banner\.dart'/.test(code)) {
+      const ls = code.split('\n');
+      const ci = ls.findIndex((l) => new RegExp(`^\\s+const ${E}Screen\\(\\{`).test(l));
+      const si = ls.findIndex((l) => new RegExp(`^class _${E}ScreenState extends State<${E}Screen>`).test(l));
+      const vi = ls.findIndex((l) => /^\s+final visible = .+;\s*(\/\/.*)?$/.test(l));
+      const stHead = si >= 0 ? ls.findIndex((l, k) => k > si && /^\s+(void initState\(\) \{|@override)/.test(l)) : -1;
+      if (ci >= 0 && si >= 0 && vi > si && stHead > si) {
+        ls[ci] = ls[ci].replace(`const ${E}Screen({`, `const ${E}Screen({this.initialMetric, `);
+        ls.splice(ci + 1, 0, `  final String? initialMetric; // G10b · תפר-סינון: מפתח-מדד (${F}.metricDefs) ⇒ הטבלה מסוננת לשורות-המדד; null ⇒ ביט-זהה`);
+        // state field + init (initState exists by now — G10a created it when missing; if the module carried its own, splice after super.initState())
+        const ii = ls.findIndex((l, k) => k > si && /^\s+void initState\(\) \{/.test(l));
+        const sup = ii >= 0 ? ls.findIndex((l, k) => k > ii && /^\s+super\.initState\(\);/.test(l)) : -1;
+        if (sup >= 0) ls.splice(sup + 1, 0, `    _metric = widget.initialMetric != null && ${F}.heroRows(widget.initialMetric!).isNotEmpty ? widget.initialMetric : null; // G10b · מדד בלי שורות ⇒ אין סינון (לא טבלה-ריקה בשקט)`);
+        else ls.splice(si + 1, 0, '  @override', '  void initState() {', '    super.initState();', `    _metric = widget.initialMetric != null && ${F}.heroRows(widget.initialMetric!).isNotEmpty ? widget.initialMetric : null; // G10b`, '  }');
+        ls.splice(si + 1, 0, `  String? _metric; // G10b · המדד הנעול (null = ללא סינון-מדד)`);
+        const vi2 = ls.findIndex((l) => /^\s+final visible = .+;\s*(\/\/.*)?$/.test(l));
+        const vl = ls[vi2], ind = (vl.match(/^\s+/) || [''])[0];
+        ls[vi2] = vl.replace(/final visible = /, 'final visibleAll = ');
+        ls.splice(vi2 + 1, 0, `${ind}final visible = _metric == null ? visibleAll : visibleAll.where((r) => ${F}.heroRows(_metric!).any((h) => '${'$'}{h[${F}.idKey] ?? h['id']}' == '${'$'}{r[${F}.idKey] ?? r['id']}')).toList(); // G10b · סינון-לפי-מדד (זהות לפי מזהה — שורות-המדד וטבלת-המסך אותו סוג-רשומה, L66)`);
+        // banner after the main DsScaffold children: [ (first `children: [` after the `return DsScaffold(` that follows visible)
+        const ri = ls.findIndex((l, k) => k > vi2 && /^\s+return DsScaffold\($/.test(l));
+        const chi = ri >= 0 ? ls.findIndex((l, k) => k > ri && /^\s+children: \[\s*$/.test(l)) : -1;
+        if (chi >= 0) {
+          const bind = (ls[chi].match(/^\s+/) || [''])[0] + '  ';
+          ls.splice(chi + 1, 0,
+            `${bind}// ═══ סינון-לפי-מדד (G10b): הרכזת שלחה מדד ⇒ הטבלה מוגבלת לשורותיו; הבאנר = עובדת-הסינון, הכפתור מסיר ═══`,
+            `${bind}if (_metric != null) AlertBanner(glyph: '🎯', tone: 1, message: 'מסונן למדד: ${'$'}{${F}.metricDefs.firstWhere((d) => d['key'] == _metric, orElse: () => const {'label': ''})['label']} · ${'$'}{visible.length} מתוך ${'$'}{visibleAll.length}'),`,
+            `${bind}if (_metric != null) Padding(padding: const EdgeInsets.only(bottom: 8), child: SoftButton(label: '✖ בטל סינון-מדד', tone: 2, onTap: () => setState(() => _metric = null))),`);
+          metricSeam = true;
+        } else { ls[vi2] = vl; ls.splice(vi2 + 1, 1); } // אין עוגן ⇒ מחזירים את visible המקורי (בלי סינון חלקי)
+        if (!metricSeam) { /* undo constructor/state splices is complex; keep seam inert (no filtering) */ }
+      }
+      code = ls.join('\n');
+    }
+    if (metricSeam && !/import '\.\.\/dart-ui-bs\/premium\/actions\/soft_button\.dart'/.test(code)) {
+      const ls = code.split('\n'); const li = ls.reduce((a, l, i) => (/^import '/.test(l) ? i : a), -1);
+      ls.splice(li + 1, 0, `import '../dart-ui-bs/premium/actions/soft_button.dart'; // G10b · כפתור-ביטול סינון-מדד`); code = ls.join('\n');
+    }
     code = code.replace(/\n*$/, '\n') + out.join('\n');
-    facts = { cls: F, label, count: countExpr ? { expr: countExpr, how: countHow, list: pn } : null, metrics: metrics.map(({ key, label, tone }) => ({ key, label, tone })), heroKey: hero ? hero.key : 'count', heroHow, rowsOf: rowsOfKeys.map((x) => x.key), entrySeam, coreWired };
+    facts = { cls: F, label, count: countExpr ? { expr: countExpr, how: countHow, list: pn } : null, metrics: metrics.map(({ key, label, tone }) => ({ key, label, tone })), heroKey: hero ? hero.key : 'count', heroHow, rowsOf: rowsOfKeys.map((x) => x.key), entrySeam, metricSeam, coreWired };
   }
   const n = (how) => map.filter((x) => x.how.startsWith(how)).length;
   const header = [`// 🎯 ${E}Screen — retarget של ${module} לישות ${entity} (GENMAX·G5c/G5d · הכרעה-24) · מחולל דטרמיניסטי: retarget.mjs --module ${module} --entity ${entity}`,
     `//   זרע-ראשי: ${pk.name} (מועמדים: ${(pk.candidates || []).join(' ')}) · מיפוי שם ${n('name')} · ערוץ ${n('chan')} · טיפוס-יחיד ${n('unique')} · מקום-שמור ${n('reserved')} · חוזה-מנוע (לא משתנה) ${n('engine-contract')}`,
     `//   ${map.map((x) => `${x.src}⇒${x.dst || '∅'}(${x.how})`).join(' · ')}`,
-    `//   תפר-עובדות (G9b): ${facts.cls} · count=${facts.count ? `${facts.count.list}.length (${facts.count.how})` : '∅'} · מדדים ${facts.metrics.length} · hero=${facts.heroKey} · שורות-מדד (G10a) ${facts.rowsOf.length ? facts.rowsOf.join('/') : '∅'} · תפר-כניסה ${facts.entrySeam || '∅'}`,
+    `//   תפר-עובדות (G9b): ${facts.cls} · count=${facts.count ? `${facts.count.list}.length (${facts.count.how})` : '∅'} · מדדים ${facts.metrics.length} · hero=${facts.heroKey} · שורות-מדד (G10a) ${facts.rowsOf.length ? facts.rowsOf.join('/') : '∅'} · תפר-כניסה ${facts.entrySeam || '∅'} · תפר-סינון-מדד ${facts.metricSeam ? 'initialMetric' : '∅'}`,
     `//   שדות-${entity} בלי מקור (מקום-שמור, יאירו כשיוזרם נתון): ${unusedFields.join(', ') || '—'} · תוויות: ${dstT && srcT ? `מונחי ${srcE} (${srcT.singular}/${srcT.plural || '—'}) ⇒ ${entity} (${dstT.singular}/${dstT.plural || '—'}) · ${sw.swaps} החלפות` : `אין מונח ל-${entity} ב-TERM_DEFS — תוויות של המקור (הצבה)`} · הזרע = זרע-הצבה של המקור, לא ערך-אמת של ${entity}`];
   code = header.join('\n') + '\n' + code;
   return { code, map, unusedFields, primary: pk.name, classes: clsMap, fragments: res.fragments, of: res.of, counts: { name: n('name'), chan: n('chan'), unique: n('unique'), reserved: n('reserved') }, terms: { src: srcE, dst: dstT ? dstT.singular : null, swaps: sw.swaps }, coreWired, columnsAdded, facts };
