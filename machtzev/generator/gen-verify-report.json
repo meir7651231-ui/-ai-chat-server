@@ -1,8 +1,8 @@
 {
- "rendered": 19,
- "screens": 57,
- "atoms": 36,
- "passed": 19,
+ "rendered": 21,
+ "screens": 59,
+ "atoms": 37,
+ "passed": 21,
  "failed": 37,
  "report": [
   {
@@ -542,6 +542,50 @@
    "atoms": 0,
    "widgets": 0,
    "atomList": []
+  },
+  {
+   "file": "gen_retarget_supporter_from_tch.dart",
+   "screen": "SupporterScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 14,
+   "widgets": 2537,
+   "atomList": [
+    "DsScaffold",
+    "SegmentedSwitch",
+    "GradientCard",
+    "StatHero",
+    "BareStat",
+    "AlertBanner",
+    "DsSearch",
+    "SoftButton",
+    "FilterChipPill",
+    "DsSection",
+    "PremiumAvatar",
+    "MediaRow",
+    "StatRow",
+    "StatusChip"
+   ]
+  },
+  {
+   "file": "gen_retarget_volunteer_from_rm.dart",
+   "screen": "VolunteerScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 10,
+   "widgets": 2129,
+   "atomList": [
+    "DsScaffold",
+    "GradientCard",
+    "StatHero",
+    "BareStat",
+    "SegmentedSwitch",
+    "DsSection",
+    "AlertBanner",
+    "SoftButton",
+    "DsSearch",
+    "FilterChipPill"
+   ]
   },
   {
    "file": "gen_rich.dart",

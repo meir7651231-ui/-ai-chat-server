@@ -12,6 +12,7 @@ shapeops	סכמה⇒פעולות-יסוד (GENMAX·G2 · §20-ד): ops נגזר�
 cover	כיסוי-שקעים=הרכבה (GENMAX·G3 · §20-ב): שחזור טבלת-ATOM הידנית של compose-engine ע"י המנוע (top-1/top-3) — רק-עולה	commit	generator/cover-baseline.json;grow
 goldquarry	חציבת-הזהב (GENMAX·G4a · הכרעה-24 "חוצבים ומרכיבים"): 9 מודולי-הזהב ⇒ קטלוג-שברים דטרמיניסטי; הרכבה-חוזרת ביט-לביט 9/9 · הקטלוג ≡ חציבה-טרייה · תובנות רק-עולות	commit	generator/quarry-baseline.json;grow
 rendermodule	הרכבה-מהקטלוג (GENMAX·G4): --all ≡ מקור 9/9 · מודולי-משנה מינימליים (gen_*_subset.dart) ≡ הרכבה-דטרמיניסטית (סגירת-תלויות · build סינתטי) — קומפילציה בשער-buildsmart	commit	—
+retarget	שבר-זהב ⇒ ישות אחרת (GENMAX·G5c · §20-ד): מיפוי-מפתחות שם-זהה⇒צורת-טיפוס⇒מקום-שמור, ללא מילון; gen_retarget_*.dart המחויבים ≡ מחולל-טרי — הרנדר-בפועל בשער genverify	commit	—
 goldenharness	רתמת-הזהב (GENMAX·G4 · השער הקשה): מודול מורכב-מחדש (compose+declared) מוחלף במראה ועובר את בדיקות-הזהב המקוריות בלי שינוי-בדיקה — רק-עולה (מודולים · בדיקות); מדולג בלי buildsmart	push	generator/render-module-baseline.json;grow
 genverify	אימות-בפועל של פלטי-המחולל (GENMAX·G5b · L53): כל gen_*.dart עם מסך נטען ב-flutter test מחולל — אפס-חריגות · DsScaffold · ספירת אטומי-תצוגה שרונדרו — רק-עולה; פלט שלא רונדר = כשל; מדולג בלי buildsmart	push	generator/gen-verify-baseline.json;grow
 compose-determinism	קומפוזר-דטרמיניסטי (23-ג): compose-engine על 15 החלקיקים ≡ compose-engine-report.md	commit	
