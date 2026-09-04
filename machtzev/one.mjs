@@ -164,17 +164,17 @@ stage('מנוע-ההמרה-מחדש · דאטה (reconvert-data)', () => last(ru
 const HAS_DART = [process.env.DART_BIN, process.env.HOME && path.join(process.env.HOME, 'dart-sdk/bin/dart'), '/root/dart-sdk/bin/dart', '/home/user/flutter/bin/dart'].filter(Boolean).some(c => { try { return fs.existsSync(c); } catch { return false; } });
 stage('אימות-רהיצות-Dart (verify-dart-tests)', () => HAS_DART ? last(run('machtzev/verify-dart-tests.mjs', ['-j12'])) : 'דולג (אין בינארי Dart — מטמון-ההוכחות נשמר)', { optional: true });
 stage('אימות-arg0-Dart (verify-dart-arg0)', () => HAS_DART ? last(run('machtzev/verify-dart-arg0.mjs')) : 'דולג (אין בינארי Dart)', { optional: true });
-// 5¾ · ביקורת-פיקסל: ‏ds-forge מול Pure — רינדור-forge (flutter test) + דיף אפור מול baseline. ‏--full+כלים ⇒
-// רינדור-מלא ושער-רגרסיה (נכשל אם אטום סטה >1.5% מ-baseline); אחרת ⇒ דיווח-הדוח-האחרון בלבד (ללא רינדור-כבד).
+// 5¾ · ביקורת-פיקסל: הצינור-המלא (audit/run.mjs = gen-orig→gen-forge-dart→flutter test→diff) — כל מנועי-הביקורת
+// בפנים. ‏--full+flutter+playwright ⇒ ריצה-מלאה ושער-רגרסיה (נכשל אם אטום סטה >1.5% מ-baseline); אחרת ⇒ דיווח-הדוח-האחרון.
 const HAS_FLUTTER = fs.existsSync('/home/user/flutter/bin/flutter'), HAS_PW = fs.existsSync('/opt/pw-browsers/chromium');
 const pixelRep = () => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'machtzev/audit/shots/report.json'), 'utf8')).filter(x => !x.note && x.diffPct >= 0); } catch { return null; } };
 const pixelMean = r => (r.reduce((s, x) => s + x.diffPct, 0) / r.length).toFixed(2);
 stage('ביקורת-פיקסל (pixel-audit · forge מול Pure)', () => {
   const BS = '/home/user/buildsmart/app_flutter';
   if (FULL && HAS_FLUTTER && HAS_PW && fs.existsSync(BS)) {
-    run('machtzev/audit/gen-forge-dart.mjs');   // מחולל בדיקת-flutter (משתמש ב-index.json+forge הקיימים)
-    execFileSync('/home/user/flutter/bin/flutter', ['test', 'test/zz_pixel_audit_test.dart'], { cwd: BS, env: { ...process.env, PATH: `/home/user/flutter/bin:${process.env.PATH}` }, stdio: ['ignore', 'ignore', 'ignore'] });
-    run('machtzev/audit/diff.mjs');
+    // הצינור-המלא: gen-orig (Playwright · רפרנס-Pure) → gen-forge-dart → flutter test (FORGE) → diff.
+    // כל 5 מנועי-הביקורת בפנים; רענון-orig מבטיח דיף מול Pure-עדכני (לא מקור-מיושן).
+    run('machtzev/audit/run.mjs');
     const rep = pixelRep(); let base = {}; try { base = JSON.parse(fs.readFileSync(path.join(ROOT, 'machtzev/audit/baseline.json'), 'utf8')); } catch { /* אין baseline */ }
     const reg = rep.filter(x => base[x.k] >= 0 && x.diffPct - base[x.k] > 1.5 && x.diffPct > 2);
     if (reg.length) throw new Error(`🔴 ${reg.length} רגרסיות-פיקסל: ${reg.slice(0, 6).map(r => `${r.k}(${base[r.k]}→${r.diffPct})`).join(', ')}`);
