@@ -2,6 +2,13 @@
 > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
 > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
 
+## L2026-09-04-truth-b66f4f · חשבון-תאריך ב-clamp-בתוך-החודש = תאריך שקרי; TRUTH נמדד על עץ-העבודה (גם untracked) — commit-של-קוד+ידע יחד (4.9, סשן-FEES)
+GATE: truth
+ref: b66f4f7a62fb4382218baf5dfb353c2ea7d306cf:new/dart-gen-bs/schoolos_fees.dart
+ANTIPATTERN: day - \d+\)\.clamp\(1, 31\)
+RULE: "לפני N ימים" = `DateTime(y, m, d - N)` (חוצה-חודש/שנה), לעולם לא `(day - N).clamp(1, 31)` בתוך אותו חודש; ו-TRUTH.md נמדד על עץ-העבודה כולל knowledge/ untracked ⇒ קובץ-ידע חדש נכנס לאותו commit עם הקוד (או truth --write אחריו), אחרת שער-truth אדום בלי קשר לקוד.
+מה נכשל: שער-truth האדים פעמיים על commit-הקוד כי `knowledge/CLOSED-FEES` לא-מעוקב הזיז "knowledge/ פעיל" 34⇒35 מול TRUTH.md של ה-index (וגם אחרי rebase על 5 commits מקבילים). באותו מחזור-retry הרנדר (THE-WAY §6) תפס ב-blob-לפני דוח-גזבר "שבועי" שחישב לפני-שבוע כ-`(t.day - 7).clamp(1, 31)` ⇒ 01/09 במקום 28/08 (חוצה-חודש נבלע). הראיה: `git show b66f4f…:new/dart-gen-bs/schoolos_fees.dart` שורה 1120.
+
 ## L50 · שער שתחום לפי תיקייה נעקף ע"י קובץ בתיקייה אחרת — תוחמים לפי מה-שהוא, לא איפה-שהוא (3.9, נתפס ע"י הבעלים)
 GATE: goal-proof
 שער goal-proof (כרטיס-מטרה + תמונה) תחם "מסך" כ-`new/(dart-screens-bs|dart-boards-bs)/*.dart`. מסך-המלאי של הסשן
