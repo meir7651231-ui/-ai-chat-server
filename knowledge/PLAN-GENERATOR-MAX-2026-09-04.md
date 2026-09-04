@@ -69,5 +69,6 @@
 | G2 shape-ops | ✅ 4.9 · `shape-ops.mjs`: 54 ישויות · 492 שדות · 100 טיפוסים ⇒ ops מצורה; כיסוי-זהב **58/60** (21 קבועים + 37 מטיפוסים) · שער `shapeops` (מרשם 31) | `CLOSED-GENMAX-G2-2026-09-04.md` |
 | G3 set-cover | ✅ 4.9 · `cover.mjs`: {op,need,goal} ⇒ אטומים (חמדני עד-4, FAKERS מחוץ, דרגת-מדף, מטרה-מכותרת-האטום); שחזור ATOM-ביד **top-1 18/58 · top-3 29/58** (כנה: לוגיקה צריכה צורת-דאטה — G4) · שער `cover` (מרשם 32) | `CLOSED-GENMAX-G3-2026-09-04.md` |
 | G4a quarry+assemble | ✅ 4.9 · **מנוע, לא נחיל** (L51): `quarry-golden.mjs` (9 מודולים ⇒ 1,668 שברים · round-trip ביט-לביט 9/9) · `render-module.mjs` (סגירת-תלויות · minimal/compose) · `golden-harness.mjs` (החלפה-במראה ⇒ בדיקות-הזהב המקוריות ⇒ שחזור): **golden-regenerated 9/9 · 87/87 בדיקות** · 9 מודולי-משנה מינימליים 0 שגיאות-analyze · שערים `goldquarry`/`rendermodule` (commit) + `goldenharness` (push) · תפס סחף-מראה במורים (3 גלים) | `CLOSED-GENMAX-G4a-2026-09-04.md` |
-| G4b הרכבה-חוצת-מודולים | 🔵 הבא: שברים מ-2+ מודולי-זהב ⇒ מודול חדש מתקמפל (אפס התנגשות-שמות בין 9 המודולים — נמדד) ⇒ ואז ישות-חדשה (G2 ops ⇒ cover ⇒ שברים-לפי-op) | — |
-| G5–G7 | ⚪ | — |
+| G4b הרכבה-חוצת-מודולים | ✅ 4.9 · `assembleMulti`: איחוד-imports · dedupe-הצהרות · מחלקות-דאטה כמו-שהן · חברי-State מורמים ל-State סינתטי (זהה⇒משותף · שונה⇒סיומת-מודול · חיבורי-מסגרת מושמטים-ומדווחים) — **attendance⊕fees 2,137 שורות · students⊕attendance⊕fees 3,220 שורות — analyze 0 · רנדר** · שער `rendermodule` (2 הרכבות ≡ טריות) | `CLOSED-GENMAX-G4b-2026-09-04.md` |
+| G5 verify-gen | 🔵 הבא: חיווט-שקעים לבונים-עם-ארגומנטים (ערך-אמת מהדאטה/state, אחרת מקום-שמור) · אסרטות-widget · golden · goal-card אוטומטי | — |
+| G6–G7 | ⚪ | — |

@@ -59,7 +59,7 @@ function declaredNames(importPath) {
 //   minimal — build() של State לא נזרע (נבנה סינתטי) ⇒ מודול-משנה מינימלי סביב אטומי-היעד (רתמת-הקומפילציה)
 //   compose — build() = חיווט-ההרכבה הוא שבר ככל שבר: נזרע אם משתמש באטום-יעד ⇒ המסך-השלם מורכב-מחדש מהקטלוג (רתמת-הזהב: הבדיקות המקוריות)
 //   declared=true ⇒ אטומי-היעד כוללים גם את הצהרות-ה-⊕ של המודול עצמו (`// ═══ מטרה = A ⊕ B` — שפת-ההצהרה של הזהב, לא טבלה חיצונית)
-export function assemble({ module, all = false, particles = [], atoms = [], mode = 'minimal', declared = false }) {
+export function select({ module, all = false, particles = [], atoms = [], mode = 'minimal', declared = false }) {
   const frags = CAT.fragments.filter((f) => f.module === module);
   if (!frags.length) throw new Error('unknown module ' + module);
   const target = new Set([...atoms, ...particles.flatMap(atomsOfParticle), ...(declared ? frags.flatMap((f) => f.declaredAtoms) : [])]);
@@ -104,9 +104,15 @@ export function assemble({ module, all = false, particles = [], atoms = [], mode
     const classes = new Set([...sel].map((id) => byId.get(id).cls));
     for (const f of frags) if (classes.has(f.cls) && (f.role === 'class-head' || f.role === 'class-close')) sel.add(f.id);
   }
+  const chosen = frags.filter((f) => sel.has(f.id));
+  return { frags, chosen, sel, target };
+}
+
+export function assemble(req) {
+  const { module, all = false } = req;
+  const { frags, chosen, sel, target } = select(req);
   // הרכבה בסדר-המקור; build() סינתטי למחלקות-State בלי build נבחר
   const out = [];
-  const chosen = frags.filter((f) => sel.has(f.id));
   const stateClasses = new Set(chosen.filter((f) => f.role === 'class-head' && /extends State</.test(classLine(f))).map((f) => f.cls));
   const hasBuild = new Set(chosen.filter((f) => f.role === 'build').map((f) => f.cls));
   const widgetClasses = new Set(chosen.filter((f) => f.role === 'class-head' && /extends StatefulWidget|extends StatelessWidget/.test(classLine(f))).map((f) => f.cls));
@@ -139,6 +145,84 @@ export function assemble({ module, all = false, particles = [], atoms = [], mode
   return { code, fragments: chosen.length, of: frags.length, target: [...target], ids: chosen.map((f) => f.id), unselected: frags.filter((f) => !sel.has(f.id)).map((f) => ({ id: f.id, cls: f.cls, role: f.role, first: (f.lines.find((l) => l.trim()) || '').trim().slice(0, 90), atomsUsed: f.atomsUsed, lines: f.lines.length })) };
 }
 
+
+// ── G4b · הרכבה חוצת-מודולים: שברים מ-2+ מודולי-זהב ⇒ מודול חדש אחד (מסך סינתטי) — דטרמיניסטי, אפס-LLM
+//   imports: איחוד (dedupe לפי הצהרה) · הצהרות-עליונות: dedupe כשהקוד זהה, התנגשות-קוד = שגיאה מדווחת ·
+//   מחלקות-דאטה (לא ווידג׳ט/State): כמו במודול-יחיד · חברי-State של כל המודולים מורמים ל-State סינתטי אחד:
+//   שם שמוגדר ב-2+ מודולים עם קוד זהה ⇒ עותק אחד משותף; קוד שונה ⇒ שינוי-שם פר-מודול (`_q` ⇒ `_q_att`) בגבולות-מילה ·
+//   חיבורי-מסגרת (initState…) ו-build מקוריים לא מורמים (מדווחים 'dropped') · build סינתטי = DsScaffold מבוני-אפס-ארגומנטים.
+export const TAG = { 'schoolos.dart': 'inv', schoolos_students: 'stu', schoolos_attendance: 'att', schoolos_courses: 'crs', schoolos_teachers: 'tch', schoolos_rooms: 'rm', schoolos_fees: 'fee', schoolos_parents: 'par', schoolos_dashboard: 'dash' };
+const tagOf = (m) => TAG[m] || TAG[m.replace(/\.dart$/, '')] || m.replace(/\W/g, '');
+const normCode = (lines) => lines.map((l) => l.replace(/\s*\/\/.*$/, '').trim()).filter(Boolean).join('\n');
+const isLifecycle = (f) => /^\s+(?:@override\s*\n\s+)?void\s+(initState|dispose|didUpdateWidget|didChangeDependencies)\s*\(/.test(f.lines.join('\n'));
+export function assembleMulti({ modules, particles = [], atoms = [], name = 'Gen', declared = false }) {
+  if (!modules || modules.length < 2) throw new Error('assembleMulti: נדרשים 2+ מודולים');
+  const parts = modules.map((m) => ({ module: m, tag: tagOf(m), ...select({ module: m, particles: particles.filter((id) => (TAG[m.replace(/\.dart$/, '')] ? id.startsWith({ stu: 'stu.', att: 'att.', crs: 'crs.', tch: 'tch.', rm: 'rm.', fee: 'fee.', par: 'par.', dash: 'dash.' }[tagOf(m)] || '∅') : !id.includes('.'))), atoms, mode: 'minimal', declared }) }));
+  const report = { modules: modules.length, imports: 0, topDedup: 0, sharedMembers: [], renamed: [], dropped: [], conflicts: [] };
+  const out = [];
+  out.push(`// 🧬 ${name} — הרכבה חוצת-מודולים (GENMAX·G4b · הכרעה-24): ${modules.join(' ⊕ ')} · מחולל דטרמיניסטי: render-module.mjs --modules ${modules.join(',')}`);
+  out.push('//   כל שבר כאן חצוב מהזהב (golden-fragments.json) — לא נכתב; חברי-State שהתנגשו קיבלו סיומת-מודול; אין Date.now במנוע.');
+  // imports — איחוד
+  const seenImp = new Set();
+  for (const p of parts) for (const f of p.chosen) if (f.cls === '(preamble)' || f.cls === '(top)') for (const l of f.lines) {
+    const m = l.match(/^(import '([^']+)'(?:\s+as\s+\w+)?;)/); if (!m) continue;
+    if (/^schoolos/.test(m[2])) continue;                                 // הרכזת מייבאת את המודולים עצמם — לא בתוך הרכבה
+    if (seenImp.has(m[1])) continue; seenImp.add(m[1]); out.push(l);
+  }
+  report.imports = seenImp.size;
+  // הצהרות-עליונות (לא-import, לא-הערה, לא main)
+  const topSeen = new Map();
+  for (const p of parts) for (const f of p.chosen) if (f.cls === '(preamble)' || f.cls === '(top)') {
+    const code = f.lines.filter((l) => !/^import '/.test(l) && !/^\s*\/\//.test(l) && l.trim() && !/^void main\(/.test(l));
+    for (const l of code) { const k = l.replace(/\s*\/\/.*$/, '').trim(); if (topSeen.has(k)) { report.topDedup++; continue; } topSeen.set(k, p.tag); out.push(l); }
+  }
+  // מחלקות-דאטה (לא ווידג׳ט/State) — כמו במודול-יחיד
+  for (const p of parts) {
+    const heads = new Map(p.chosen.filter((f) => f.role === 'class-head').map((f) => [f.cls, classLine(f)]));
+    const dataCls = new Set([...heads].filter(([c, l]) => !/extends (StatefulWidget|StatelessWidget|State<)/.test(l)).map(([c]) => c));
+    for (const f of p.chosen) if (dataCls.has(f.cls)) out.push(...f.lines);
+  }
+  // הרמת חברי-State ⇒ State סינתטי אחד
+  const hoisted = parts.map((p) => {
+    const heads = new Map(p.chosen.filter((f) => f.role === 'class-head').map((f) => [f.cls, classLine(f)]));
+    const stateCls = new Set([...heads].filter(([c, l]) => /extends State</.test(l)).map(([c]) => c));
+    const members = p.chosen.filter((f) => stateCls.has(f.cls) && (f.role === 'member' || f.role === 'builder'));
+    const keep = [];
+    for (const f of members) {
+      if (isLifecycle(f)) { report.dropped.push(`${p.tag}:${f.id} (חיבור-מסגרת)`); continue; }
+      if (/\bwidget\./.test(f.lines.join('\n'))) { report.dropped.push(`${p.tag}:${f.id} (widget.*)`); continue; }
+      keep.push(f);
+    }
+    return { ...p, members: keep };
+  });
+  const defOwners = new Map();                                            // שם ⇒ [{tag, code, frag}]
+  for (const p of hoisted) for (const f of p.members) for (const d of f.defs) { if (!defOwners.has(d)) defOwners.set(d, []); defOwners.get(d).push({ tag: p.tag, code: normCode(f.lines), id: f.id }); }
+  const renameFor = new Map(hoisted.map((p) => [p.tag, new Map()]));
+  const skipFrag = new Set();
+  for (const [d, owners] of defOwners) {
+    const tags = [...new Set(owners.map((o) => o.tag))]; if (tags.length < 2) continue;
+    const codes = new Set(owners.map((o) => o.code));
+    if (codes.size === 1) { report.sharedMembers.push(d); for (const o of owners.slice(1)) skipFrag.add(o.id); continue; }   // זהה ⇒ עותק אחד
+    for (const t of tags) { renameFor.get(t).set(d, `${d}_${t}`); }
+    report.renamed.push(`${d}⇒${tags.map((t) => `${d}_${t}`).join('/')}`);
+  }
+  const N = name.replace(/[^A-Za-z0-9]/g, '');
+  out.push('', `class ${N}Screen extends StatefulWidget {`, `  const ${N}Screen({super.key});`, '  @override', `  State<${N}Screen> createState() => _${N}ScreenState();`, '}', '', `class _${N}ScreenState extends State<${N}Screen> {`);
+  const builders = [];
+  for (const p of hoisted) {
+    const ren = renameFor.get(p.tag);
+    const apply = (l) => { for (const [a, b] of ren) l = l.replace(new RegExp(`(?<![\\w$])${a.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?![\\w])`, 'g'), b); return l; };
+    out.push(`  // ── ${p.tag} · ${p.module} ──`);
+    for (const f of p.members) {
+      if (skipFrag.has(f.id)) continue;
+      const lines = f.lines.map(apply); out.push(...lines);
+      const cl = apply(codeLine(f)); const m = cl.match(/^\s+Widget\s+(_\w+)\(\)\s*(=>|\{)/); if (m) builders.push(m[1]);
+    }
+  }
+  out.push('  @override', `  Widget build(BuildContext context) => DsScaffold(title: '${N}', subtitle: '${modules.map(tagOf).join(' ⊕ ')} · הרכבה חוצת-מודולים מחוללת', icon: '🧬', children: [`, ...builders.map((b) => '    ' + b + '(),'), '  ]);', '}');
+  return { code: out.join('\n') + '\n', report, builders: builders.length };
+}
+
 // ── CLI / gate — רץ רק כשהקובץ הוא נקודת-הכניסה (import מ-golden-harness לא מפעיל CLI — לקח: --module של הרתמה כתב gen_teachers.dart בטעות)
 const arg = (k) => { const i = process.argv.indexOf(k); return i > -1 ? process.argv[i + 1] : null; };
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
@@ -158,8 +242,29 @@ if (isMain && process.argv.includes('--gate')) {
       subsets++;
     }
   }
+  // G4b — הרכבות חוצות-מודולים מחויבות (דטרמיניזם: הפלט המחויב ≡ הרכבה-טרייה); הקומפילציה במראה-buildsmart
+  const COMPOSITES = [{ modules: ['schoolos_attendance.dart', 'schoolos_fees.dart'], name: 'AttFee' }, { modules: ['schoolos_students.dart', 'schoolos_attendance.dart', 'schoolos_fees.dart'], name: 'Student360', declared: true }];
+  let composites = 0;
+  for (const c of COMPOSITES) {
+    const res = assembleMulti({ ...c, particles: PARTICLE_IDS });
+    const outF = path.join(DIR, `gen_composite_${c.modules.map(tagOf).join('_')}.dart`);
+    if (process.argv.includes('--write')) fs.writeFileSync(outF, res.code);
+    else if (!fs.existsSync(outF) || fs.readFileSync(outF, 'utf8') !== res.code) errs.push(`${path.basename(outF)} ≠ הרכבה-חוצת-מודולים-טרייה (הרץ --gate --write)`);
+    if (res.report.conflicts.length) errs.push(`${c.name}: התנגשויות ${res.report.conflicts.join(',')}`);
+    composites++;
+  }
   if (errs.length) { console.log('🔴 rendermodule: ' + errs.join(' · ')); process.exit(1); }
-  console.log(`✓ rendermodule: --all ≡ מקור ${modules.length}/${modules.length} · ${subsets} מודולי-משנה (gen_*_subset.dart) ≡ הרכבה-דטרמיניסטית · הקומפילציה בשער-buildsmart`); process.exit(0);
+  console.log(`✓ rendermodule: --all ≡ מקור ${modules.length}/${modules.length} · ${subsets} מודולי-משנה (gen_*_subset.dart) + ${composites} הרכבות-חוצות-מודולים (gen_composite_*.dart) ≡ הרכבה-דטרמיניסטית · הקומפילציה בשער-buildsmart`); process.exit(0);
+}
+const modulesArg = isMain ? arg('--modules') : null;
+if (modulesArg) {
+  const modules = modulesArg.split(',').filter(Boolean), name = arg('--name') || 'Composite';
+  const res = assembleMulti({ modules, name, particles: (arg('--particles') || (modules.every((m) => TAG[m.replace(/\.dart$/, '')] || TAG[m]) ? PARTICLE_IDS.join(',') : '')).split(',').filter(Boolean), atoms: (arg('--atoms') || '').split(',').filter(Boolean), declared: process.argv.includes('--declared') });
+  const out = arg('--out') || path.join(DIR, `gen_composite_${modules.map(tagOf).join('_')}.dart`);
+  fs.writeFileSync(out, res.code);
+  console.log(`✓ ${modules.join(' ⊕ ')} ⇒ ${out} · imports ${res.report.imports} · בונים ${res.builders} · משותפים ${res.report.sharedMembers.length} · שונו-שם ${res.report.renamed.length} · הושמטו ${res.report.dropped.length} · ${res.code.split('\n').length} שורות`);
+  if (res.report.renamed.length) console.log('   renamed: ' + res.report.renamed.join(' · '));
+  if (res.report.dropped.length) console.log('   dropped: ' + res.report.dropped.join(' · '));
 }
 const module = isMain ? arg('--module') : null;
 if (module) {
