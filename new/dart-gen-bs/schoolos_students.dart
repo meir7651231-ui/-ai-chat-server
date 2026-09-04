@@ -48,6 +48,12 @@ import '../dart-maor/wa-link.dart'; // קישור-וואטסאפ להורה (pho
 import '../dart-maor/wa-digits.dart'; // נרמול-ספרות בינ״ל לוואטסאפ — שקע ל-waLink
 import '../dart-maor/tel-href.dart'; // קישור-חיוג tel:
 import '../dart-maor/parse-csv.dart'; // ייבוא: טקסט-CSV ⇒ שורות (מפריד אוטו · מרכאות)
+import '../dart-ui-bs/screens__manager_dashboard_screen/filter_chip_pill.dart'; // צ׳יפ-סינון מבוקר (selected+onTap)
+import '../dart-maor/smart-filter.dart'; // איתור: סינון+מיון-לפי-ציון (מדף)
+import '../dart-maor/smart-score.dart'; // איתור: ניקוד רב-מילתי AND (מדף)
+import '../dart-maor/finder-matches.dart'; // חריגה: סינון-רב-צירי AND (מדף)
+import '../dart-maor/num-match.dart'; // סף-מספרי ('0-79' · '80+') (מדף)
+import '../dart-maor/norm-phone.dart'; // נרמול-טלפון לחיפוש-הורה
 
 const _acc = DsTokens.accent;
 // פיגמנטים מוזרקים לאטומי-מדף טהורים (חוק-6: צבע=הצבה, לא ציור)
@@ -613,6 +619,65 @@ class _StuData {
         'הורה: ${parentName(s)} · ${parentPhone(s)}', 'כתובת: ${fam(s)['address']} ${fam(s)['city']}', 'פעולה: ${action(s)}', 'הודפס: ${fmt(today)}',
       ].join('\n');
 
+  // ═══ איתור (הכרעה 23-ג) = DsSearch ⊕ smartFilter ⊕ smartScore ⊕ normSearch ⊕ normPhone ═══
+  //   לא `.contains` שטוח — נרמול-עברי + ניקוד רב-מילתי AND + מיון-לפי-רלוונטיות. מונחים: שם · מס׳ · כיתה · מחנך · הורה · טלפון-הורה.
+  static Iterable _expand(dynamic q, dynamic norm) => [norm(q)];
+  static num _score(dynamic exp, dynamic term) => norm(term).contains('$exp') ? 100 : 0;
+  static num _scoreOf(dynamic q, dynamic terms) => smartScore(q, terms, norm, _expand, _score) as num;
+  static bool _hasQuery(dynamic q) => (q as String).trim().isNotEmpty;
+  static List<String> terms(Map<String, dynamic> s) => ['${s['name']}', '${s['id']}', className(s), teacherName(s), parentName(s), normPhone(fam(s)['phone'] as String?), '${fam(s)['city']}'];
+  static List<Map<String, dynamic>> search(List<Map<String, dynamic>> xs, String q) {
+    final nq = normPhone(q); // חיפוש-טלפון: ספרות בלבד
+    final query = RegExp(r'^[\d\s+-]{6,}$').hasMatch(q.trim()) && nq.isNotEmpty ? nq : q;
+    return (smartFilter(query, xs, (it) => terms(it as Map<String, dynamic>), _hasQuery, _scoreOf) as List).cast<Map<String, dynamic>>();
+  }
+
+  // ═══ חריגה/פילטרים (הכרעה 23-ג) = FilterChipPill⊕DsEnumField ⊕ finderMatches ⊕ numMatch ═══
+  //   locks = {ציר: ערך} — AND בין צירים. צירי-המפרט: כיתה · שכבה · מחנך · סטטוס · סיכון · נוכחות<סף · ציונים<סף (מקום-שמור) ·
+  //   דגל · ללא-אישור · פנייה · חדשים · יום-הולדת · אחים.
+  static bool birthdayThisMonth(Map<String, dynamic> s) { final b = '${s['birth'] ?? ''}'; return b.length >= 7 && b.substring(5, 7) == today.substring(5, 7); }
+  static bool noConsent(Map<String, dynamic> s) => consentDefs.any((c) => s[c['key']] != true) || consentSlot(s, 'trips').startsWith('⛔') || consentSlot(s, 'meds').startsWith('⛔');
+  static bool hasFlag(Map<String, dynamic> s) => flags(s).isNotEmpty;
+  static String level(Map<String, dynamic> s) => '${s['grade'] ?? ''}'.isEmpty ? '—' : '${s['grade']}׳';
+  static String axisValue(Map<dynamic, dynamic> db, dynamic f, dynamic axis) {
+    final s = f as Map<String, dynamic>;
+    switch (axis) {
+      case 'class': return className(s);
+      case 'level': return level(s);
+      case 'teacher': return teacherName(s);
+      case 'status': return status(s);
+      case 'risk': return '${band(s)}';
+      case 'attBelow80': return attendance(s) != null && numMatch('0-79', attendancePct(s)) ? '1' : '0'; // סף דרך numMatch (מדף)
+      case 'gradesBelow70': { final g = s['grades']; if (g is! Map || g.isEmpty) return '0'; return numMatch('0-69', grandTotal(g.values.toList(), (v) => v as num) / g.length) ? '1' : '0'; } // מקום-שמור
+      case 'flag': return hasFlag(s) ? '1' : '0';
+      case 'noConsent': return noConsent(s) ? '1' : '0';
+      case 'ticket': return hasOpenTicket(s) ? '1' : '0';
+      case 'noParent': return parentMissing(s) ? '1' : '0';
+      case 'isNew': return isNew(s) ? '1' : '0';
+      case 'birthday': return birthdayThisMonth(s) ? '1' : '0';
+      case 'siblings': return siblings(s).isNotEmpty ? '1' : '0';
+    }
+    return '';
+  }
+  static List<Map<String, dynamic>> filter(List<Map<String, dynamic>> xs, Map<String, String> locks) =>
+      finderMatches({'families': xs}, Map<dynamic, dynamic>.from(locks), axisValue).cast<Map<String, dynamic>>();
+  static List<String> options(String axis) { // אפשרויות-ציר מהדאטה (לא מילון קשיח)
+    final v = <String>{for (final s in students) axisValue({}, s, axis)}.toList()..sort();
+    return ['הכל', ...v];
+  }
+  // צ׳יפי-חריגה מהירים: {axis, label}; המונה מחושב פר-צ׳יפ (countBy-דומה: ספירה על הרשימה)
+  static const quickChips = [
+    {'axis': 'risk', 'value': '2', 'label': '🔴 סיכון-גבוה'}, {'axis': 'risk', 'value': '1', 'label': '🟠 סיכון-בינוני'},
+    {'axis': 'attBelow80', 'value': '1', 'label': '📉 נוכחות<80%'}, {'axis': 'gradesBelow70', 'value': '1', 'label': '📝 ציונים<70'},
+    {'axis': 'noParent', 'value': '1', 'label': '📵 ללא-הורה'}, {'axis': 'ticket', 'value': '1', 'label': '📨 פנייה-פתוחה'},
+    {'axis': 'flag', 'value': '1', 'label': '🚩 דגל'}, {'axis': 'noConsent', 'value': '1', 'label': '✗ ללא-אישור'},
+    {'axis': 'isNew', 'value': '1', 'label': '🆕 חדשים'}, {'axis': 'birthday', 'value': '1', 'label': '🎂 יום-הולדת החודש'}, {'axis': 'siblings', 'value': '1', 'label': '👪 אחים'},
+  ];
+  static String countAxis(List<Map<String, dynamic>> xs, String axis, String value) { // מקום-שמור: ציר בלי שום נתון ⇒ '—' (לא '0' מזויף)
+    if (axis == 'gradesBelow70' && !xs.any((s) => s['grades'] is Map && (s['grades'] as Map).isNotEmpty)) return '—';
+    return '${xs.where((s) => axisValue({}, s, axis) == value).length}';
+  }
+
   static bool colShown(Map<String, Object?> c, List<Map<String, dynamic>> rows) =>
       c['get'] != null || rows.any((s) => s[c['key']] != null && '${s[c['key']]}'.trim().isNotEmpty);
   static String cell(Map<String, Object?> c, Map<String, dynamic> s) {
@@ -635,6 +700,8 @@ class _StudentsScreenState extends State<StudentsScreen> {
   String _q = ''; // איתור (DsSearch)
   int _mode = 0; // 0=🎯 טריאז' (קיבוץ-פר-סיכון) · 1=📋 טבלה (columnDefs) — SegmentedSwitch→תצוגה
   int _sort = 0; // 0=סיכון · 1=כיתה · 2=שם — SegmentedSwitch→דירוג
+  final Map<String, String> _locks = {}; // צירי-סינון פעילים (finderMatches) — AND
+  bool _filtersOpen = false; // פאנל-פילטרים (כיתה/שכבה/מחנך/סטטוס)
   bool _importing = false; // מצב-מיוחד: ייבוא-בתהליך
   Map<String, int>? _importResult; // תוצאת-ייבוא אחרונה
   bool _loading = false; // מצב-מסך שמור: טעינה
@@ -647,14 +714,20 @@ class _StudentsScreenState extends State<StudentsScreen> {
   }
 
   Widget _gap([double h = 10]) => SizedBox(height: h);
+  // צ׳יפ-סינון מבוקר: הזרקת-צבעים (חוק-6) + selected/onTap
+  Widget _fchip(String label, bool selected, VoidCallback onTap) => FilterChipPill(
+        label: label, selected: selected, onTap: onTap,
+        activeFillColor: _acc, surfaceColor: const Color(0xFF14162E), activeTextColor: const Color(0xFF0B0B15), inkColor: _ink, outlineColor: const Color(0xFF2A2D4A), pillRadius: 999,
+      );
 
   @override
   Widget build(BuildContext context) {
     final all = _StuData.active;
     final avgAtt = _StuData.avgAttendance, avgGr = _StuData.avgGrades;
     // דירוג (מיון-נבחר) ⇒ הנראים (פעילים); לא-פעילים בסקשן-ארכיון נפרד
-    final visible = _StuData.sorted(all, _sort);
-    final inactiveVisible = _StuData.sorted(_StuData.inactive, _sort);
+    // איתור⊕חריגה (23-ג): search=smartFilter⊕smartScore⊕normSearch · filter=finderMatches. הפייפליין מזין טריאז' וטבלה וארכיון.
+    final visible = _StuData.filter(_StuData.search(_StuData.sorted(all, _sort), _q), _locks);
+    final inactiveVisible = _StuData.filter(_StuData.search(_StuData.sorted(_StuData.inactive, _sort), _q), _locks);
     final buckets = <int, List<Map<String, dynamic>>>{2: [], 1: [], 0: []};
     for (final s in visible) { buckets[_StuData.band(s)]!.add(s); }
     return DsScaffold(
@@ -673,6 +746,20 @@ class _StudentsScreenState extends State<StudentsScreen> {
         // מצב-מיוחד: ייבוא-בתהליך / תוצאת-ייבוא
         if (_importing) ...[const AlertBanner(glyph: '📥', tone: 3, message: 'ייבוא בתהליך… מעבד שורות'), _gap(8)],
         if (!_importing && _importResult != null) ...[AlertBanner(glyph: '📥', tone: 1, message: 'ייבוא הסתיים: ${_importResult!['ok']} נוספו · ${_importResult!['skipped']} נדחו'), _gap(8)],
+        // צ׳יפי-חריגה (FilterChipPill מבוקר ⊕ finderMatches) — פעולת-יסוד "זיהוי-חריגה"; המונה = ספירת-הציר על הפעילים
+        Wrap(spacing: 8, runSpacing: 6, children: [
+          _fchip('הכל', _locks.isEmpty, () => setState(() => _locks.clear())),
+          for (final c in _StuData.quickChips)
+            _fchip('${c['label']} · ${_StuData.countAxis(all, c['axis']!, c['value']!)}', _locks[c['axis']] == c['value'],
+                () => setState(() { if (_locks[c['axis']] == c['value']) { _locks.remove(c['axis']); } else { _locks[c['axis']!] = c['value']!; } })),
+          _fchip(_filtersOpen ? '⚙ פילטרים ▴' : '⚙ פילטרים ▾', _filtersOpen, () => setState(() => _filtersOpen = !_filtersOpen)),
+        ]),
+        if (_filtersOpen) Row(children: [
+          for (final ax in const [['class', 'כיתה'], ['level', 'שכבה'], ['teacher', 'מחנך/ת'], ['status', 'סטטוס']])
+            Expanded(child: Padding(padding: const EdgeInsets.symmetric(horizontal: 3), child: DsEnumField(label: ax[1], options: _StuData.options(ax[0]), value: _locks[ax[0]] ?? 'הכל',
+                onChanged: (v) => setState(() { if (v == 'הכל' || v.isEmpty) { _locks.remove(ax[0]); } else { _locks[ax[0]] = v; } })))),
+        ]),
+        const SizedBox(height: 12),
         // KPI-10 (המפרט): hero = המטרה (מי-נופל) + 10 מדדי-מצב (BareStat נושאי-ערך; חסר-נתון ⇒ '—' מקום-שמור)
         GradientCard(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
