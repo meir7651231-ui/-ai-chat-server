@@ -58,3 +58,11 @@ cd /home/user/buildsmart && git fetch origin claude/hei-rxv1v1 && git checkout c
 - **לא שואלים את האדם.** לולאה ירוקה+push. עוצרים רק על באג-אמת שלא נפתר ב-3 ניסיונות (אז מתעדים ב-`knowledge/BLOCKED-<MODULE>.md` וממשיכים לגלים אחרים).
 - **DONE** = כל סעיף במפרט ✅/מקום-שמור/❌-עם-סיבה · `knowledge/CLOSED-<MODULE>-2026-09-04.md` (טבלת בנוי-מול-יעד **כנה**, מקורות-האטומים, מה-לא-אומת) · שני הריפו pushed (ref 0/0).
 - ההודעה האחרונה שלך, מילה-במילה: `DONE <MODULE> · genesis <sha> · buildsmart <sha> · תואם-מפרט N/M · מקום-שמור K · ❌ J`.
+
+## 7. פרק-המנהל (סשן-האורקסטרציה · נחרט 4.9 אחרי הלילה · L48)
+- **פיקוח כל ~25׳ + רשת-ביטחון 60׳** דרך `send_later`; כל פיקוח = טבלת `rate_limit_info`+`cost_usd` לכל סשן ולמנהל, אימות-בייטים בשני הרמוטים (ls-tree · log · CLOSED), `flutter test` עצמאי לכל DONE.
+- **מכסה:** `allowed_warning` ⇒ פחות מקביליות + פיקוח ב-resetsAt; `rejected` ⇒ הערה ב-resetsAt+2׳. הלילה: 5-שעות אפס 06:30Z, 7-ימים אפס 13:00Z.
+- **מודל לפי שכבה:** A בנייה-בדרך=Fable · B סגירה/בדיקות/CLOSED/שיגור-מחדש=Sonnet · C בייטים=bash. נקבע ב-`create_session(model)`; סשן-רץ לא מוחלף.
+- **ערוץ:** `create_trigger(persistent_session_id)`→`fire_trigger` (בלי `text`!) נכנס לסשן; עם `text` = סשן-חדש. הטריגרים נרשמים ב-scratchpad `schoolos-pokes.tsv`.
+- **DONE = רק בלי חוב-§6** (ראה §1.6) ורק אחרי אימות-המנהל. סשן ממתין/שואל = פוק "אין אדם בלולאה".
+- **המנהל = כותב-יחיד** של `schoolos.dart` + `compose-engine.mjs`: החיווט מתחיל רק אחרי 8/8 DONE מאומתים.
