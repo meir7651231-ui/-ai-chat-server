@@ -172,7 +172,7 @@ export function retarget({ module, entity }) {
     code = lines.join('\n');
   }
   // G5h · חוזה-העמודות של הישות (חוק-7): שדות-הישות שלא קיבלו מקור נוספים ל-columnDefs כ-{'key','label'} — עמודה שמאירה רק כשהנתון מגיע (colShown); תווית = שם-השדה (הצבה גלויה — אין מונחי-שדה על המדף)
-  let columnsAdded = 0;
+  let columnsAdded = 0, reservedKeys = [];
   {
     const q = (v) => `'${String(v).replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
     const lines = code.split('\n');
@@ -181,7 +181,7 @@ export function retarget({ module, entity }) {
       const ind = (lines[ci].match(/^\s+/) || [''])[0] + '  ';
       const mappedDst = new Set(map.filter((x) => x.dst).map((x) => x.dst));
       const add = unusedFields.filter((f) => !mappedDst.has(f) && !/\[\]$/.test(FIELDS.find((x) => x.e === entity && x.n === f)?.t || '')).map((f) => `${ind}{'key': ${q(f)}, 'label': ${q(f)}}, // G5h · מקום-שמור: שדה-${entity} מהסכמה (${FIELDS.find((x) => x.e === entity && x.n === f)?.t || '?'}) — מאיר כשהנתון מוזרם`);
-      if (add.length) { lines.splice(ci + 1, 0, `${ind}// ═══ חוזה-העמודות של ${entity} (G5h · חוק-7): ${add.length} שדות-סכמה בלי מקור בזרע — עמודות-מקום-שמור, לא מזויפות ולא מושמטות ═══`, ...add); columnsAdded = add.length; }
+      if (add.length) { lines.splice(ci + 1, 0, `${ind}// ═══ חוזה-העמודות של ${entity} (G5h · חוק-7): ${add.length} שדות-סכמה בלי מקור בזרע — עמודות-מקום-שמור, לא מזויפות ולא מושמטות ═══`, ...add); columnsAdded = add.length; reservedKeys = unusedFields.filter((f) => !mappedDst.has(f) && !/\[\]$/.test(FIELDS.find((x) => x.e === entity && x.n === f)?.t || '')); }
     }
     code = lines.join('\n');
   }
@@ -240,6 +240,18 @@ export function retarget({ module, entity }) {
       code = ls.join('\n');
     }
     const idKey = (map.find((x) => x.src === 'id') || {}).dst || 'id';
+    let seedSeam = null;
+    if (countHow === 'seed-db' && new RegExp(`^\\s+const ${E}Screen\\(\\{[^)]*this\\.db\\b`, 'm').test(code) && /static Map<String, dynamic> seed\(\) =>/.test(code)) {
+      const ls = code.split('\n'); const di = ls.findIndex((l) => /^\s+static Map<String, dynamic> db = seed\(\);/.test(l));
+      const bi = ls.findIndex((l) => /^\s+static List<Map<String, dynamic>> _build\(\) \{/.test(l));
+      let rowList = null;
+      if (bi >= 0) { for (let j = bi + 1; j < Math.min(ls.length, bi + 12) && !/^\s+\}\s*$/.test(ls[j]); j++) { const m = /for \(final \w+ in \((\w+)\['(\w+)'\] as List\)/.exec(ls[j]); if (m && m[1] !== 'db') { rowList = m[2]; break; } } }
+      // בורר-המבט שמגלה את הטבלה: `if (_mode == N)` לפני `_table(` + ה-SegmentedSwitch שבוחר `_mode` ⇒ תווית-המבט (עובדת-מבנה של הזהב; הבדיקה מקישה עליה לפני שהיא מחפשת עמודות)
+      let tableLabel = null;
+      const ti = ls.findIndex((l, k) => /_table\(/.test(l) && k > 0 && /_mode == (\d+)\)/.test(ls[k - 1]));
+      if (ti > 0) { const n = +/_mode == (\d+)\)/.exec(ls[ti - 1])[1]; const sw = ls.find((l) => /SegmentedSwitch\(items: const \[([^\]]+)\], selected: _mode/.test(l)); if (sw) { const items = [...(/SegmentedSwitch\(items: const \[([^\]]+)\], selected: _mode/.exec(sw)[1]).matchAll(/'([^']*)'/g)].map((m) => m[1]); tableLabel = items[n] || null; } }
+      seedSeam = { cls: clsAt(di), list: pn, rowList, tableLabel };
+    }
     const rowsExpr = !countExpr ? null : countHow === 'static-const' ? countExpr.replace(/\.length$/, '')
       : countHow === 'seed-db' ? countExpr.replace(/^\(\((.+) as List\?\)\?\.length \?\? 0\)$/, '(($1 as List?) ?? const []).cast<Map<String, dynamic>>()')
       : countExpr.replace(/\.fold<int>\(0, \(n, m\) => n \+ \(\(m\['(\w+)'\] as List\?\)\?\.length \?\? 0\)\)$/, ".expand((m) => ((m['$1'] as List?) ?? const []).cast<Map<String, dynamic>>()).toList()");
@@ -259,6 +271,12 @@ export function retarget({ module, entity }) {
         `  static Map<String, dynamic>? byId(String id) { for (final r in [for (final k in const <String>[${rowsOfKeys.map((x) => qd(x.key)).join(', ')}]) ...heroRows(k), ...rows]) { if ('${'$'}{r[idKey] ?? r['id']}' == id) return r; } return null; } // שורות-המדד קודם (הן מסוג-הרשומה שהפאנל צורך — בזהב-התלמידים הפאנל פותח תלמיד, הזרע-הראשי-לפי-מפתחות הוא families), ואז הזרע-הראשי`] : [`  // rows/byId: אין זרע-ראשי בצורה מוכרת ⇒ אין תפר-כניסה לפי מזהה`]),
       `  static List<Map<String, dynamic>> heroRows(String key) { switch (key) { ${rowsOfKeys.map((x) => `case ${qd(x.key)}: return ${x.cls}.rowsOf_${x.key};`).join(' ')} default: return const []; } } // G10a · ${rowsOfKeys.length} מדדים עם שורות (צורת X.where(P).length)`,
       rowsExpr ? `  static String? get heroFirstId { final r = heroRows(heroKey); return r.isEmpty ? null : '${'$'}{r.first[idKey]}'; } // הרשומה-הראשונה של ה-hero — יעד-הקפיצה מהרכזת` : `  static String? get heroFirstId => null;`,
+      ...(seedSeam ? [`  // G10b-ב · תפר-הזרקה (חוק-6: הדאטה מוזרקת, לא מומצאת): seed() = זרע-ההצבה של הזהב · seedList/rowList = היכן רשומת-המסך חיה (מצורת _build()) · reservedColumns = עמודות-מקום-שמור של G5h`,
+        `  static Map<String, dynamic> seed() => ${seedSeam.cls}.seed();`,
+        `  static const String seedList = ${qd(seedSeam.list)};`,
+        `  static const String? rowList = ${seedSeam.rowList ? qd(seedSeam.rowList) : 'null'}; // null ⇒ רשומת-המסך = רשומת-הזרע עצמה`,
+        `  static const List<String> reservedColumns = <String>[${reservedKeys.map(qd).join(', ')}];`,
+        `  static const String? tableView = ${seedSeam.tableLabel ? qd(seedSeam.tableLabel) : 'null'}; // תווית-המבט שמגלה את הטבלה (null ⇒ הטבלה תמיד גלויה)`] : []),
       '}', ''];
     // G10a · תפר-כניסה: `<E>Screen(initialPanelId: id)` ⇒ הכרטיס נפתח אחרי הפריים-הראשון — צורת initialPanel של זהב-המורים; מודול שכבר נושא initialPanel (מהזהב) שומר אותו
     let entrySeam = null;
@@ -322,13 +340,13 @@ export function retarget({ module, entity }) {
       ls.splice(li + 1, 0, `import '../dart-ui-bs/premium/actions/soft_button.dart'; // G10b · כפתור-ביטול סינון-מדד`); code = ls.join('\n');
     }
     code = code.replace(/\n*$/, '\n') + out.join('\n');
-    facts = { cls: F, label, count: countExpr ? { expr: countExpr, how: countHow, list: pn } : null, metrics: metrics.map(({ key, label, tone }) => ({ key, label, tone })), heroKey: hero ? hero.key : 'count', heroHow, rowsOf: rowsOfKeys.map((x) => x.key), entrySeam, metricSeam, coreWired };
+    facts = { cls: F, label, count: countExpr ? { expr: countExpr, how: countHow, list: pn } : null, metrics: metrics.map(({ key, label, tone }) => ({ key, label, tone })), heroKey: hero ? hero.key : 'count', heroHow, rowsOf: rowsOfKeys.map((x) => x.key), entrySeam, metricSeam, coreWired, seedSeam: seedSeam ? { list: seedSeam.list, rowList: seedSeam.rowList, reserved: reservedKeys, tableLabel: seedSeam.tableLabel } : null };
   }
   const n = (how) => map.filter((x) => x.how.startsWith(how)).length;
   const header = [`// 🎯 ${E}Screen — retarget של ${module} לישות ${entity} (GENMAX·G5c/G5d · הכרעה-24) · מחולל דטרמיניסטי: retarget.mjs --module ${module} --entity ${entity}`,
     `//   זרע-ראשי: ${pk.name} (מועמדים: ${(pk.candidates || []).join(' ')}) · מיפוי שם ${n('name')} · ערוץ ${n('chan')} · טיפוס-יחיד ${n('unique')} · מקום-שמור ${n('reserved')} · חוזה-מנוע (לא משתנה) ${n('engine-contract')}`,
     `//   ${map.map((x) => `${x.src}⇒${x.dst || '∅'}(${x.how})`).join(' · ')}`,
-    `//   תפר-עובדות (G9b): ${facts.cls} · count=${facts.count ? `${facts.count.list}.length (${facts.count.how})` : '∅'} · מדדים ${facts.metrics.length} · hero=${facts.heroKey} · שורות-מדד (G10a) ${facts.rowsOf.length ? facts.rowsOf.join('/') : '∅'} · תפר-כניסה ${facts.entrySeam || '∅'} · תפר-סינון-מדד ${facts.metricSeam ? 'initialMetric' : '∅'}`,
+    `//   תפר-עובדות (G9b): ${facts.cls} · count=${facts.count ? `${facts.count.list}.length (${facts.count.how})` : '∅'} · מדדים ${facts.metrics.length} · hero=${facts.heroKey} · שורות-מדד (G10a) ${facts.rowsOf.length ? facts.rowsOf.join('/') : '∅'} · תפר-כניסה ${facts.entrySeam || '∅'} · תפר-סינון-מדד ${facts.metricSeam ? 'initialMetric' : '∅'} · תפר-הזרקה ${facts.seedSeam ? `db (${facts.seedSeam.list}${facts.seedSeam.rowList ? '/' + facts.seedSeam.rowList : ''} · ${facts.seedSeam.reserved.length} עמודות-שמורות)` : '∅'}`,
     `//   שדות-${entity} בלי מקור (מקום-שמור, יאירו כשיוזרם נתון): ${unusedFields.join(', ') || '—'} · תוויות: ${dstT && srcT ? `מונחי ${srcE} (${srcT.singular}/${srcT.plural || '—'}) ⇒ ${entity} (${dstT.singular}/${dstT.plural || '—'}) · ${sw.swaps} החלפות` : `אין מונח ל-${entity} ב-TERM_DEFS — תוויות של המקור (הצבה)`} · הזרע = זרע-הצבה של המקור, לא ערך-אמת של ${entity}`];
   code = header.join('\n') + '\n' + code;
   return { code, map, unusedFields, primary: pk.name, classes: clsMap, fragments: res.fragments, of: res.of, counts: { name: n('name'), chan: n('chan'), unique: n('unique'), reserved: n('reserved') }, terms: { src: srcE, dst: dstT ? dstT.singular : null, swaps: sw.swaps }, coreWired, columnsAdded, facts };

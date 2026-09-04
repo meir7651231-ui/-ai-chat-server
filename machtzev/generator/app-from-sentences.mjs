@@ -30,6 +30,7 @@ export function buildApp({ name, sentences }) {
   const hub = [`// 🏗️ ${N}App — אפליקציה ממשפטים (GENMAX·G9 · §22): ${mods.length} מודולים · מחולל דטרמיניסטי: app-from-sentences.mjs (sentence⇒entity⇒pickModule⇒retarget) — כל מודול חצוב מהזהב, לא נכתב`,
     ...mods.map((m) => `//   "${m.text}" ⇒ ${m.entity} ⇐ ${m.module} (${m.pick.strength} · שמות ${m.pick.names}/${m.pick.fields})`),
     ...skipped.map((s) => `//   ⚪ "${s.text}" ⇒ ${s.reason}`),
+    `//   G10b-ב · תפר-הזרקה (db) ⇒ בדיקה שמזריקה שדה-סכמה שמור על רשומת-המסך ורואה את העמודה מאירה: ${mods.map((m) => `${m.entity}:${m.facts.seedSeam ? `${m.facts.seedSeam.reserved.length} עמודות` : '∅'}`).join(' · ')}`,
     `//   G10b · עם הקפיצה נשלח גם initialMetric=heroKey ⇒ הטבלה במודול מסוננת לשורות-המדד (באנר + ביטול): ${mods.map((m) => `${m.entity}:${m.facts.metricSeam ? 'initialMetric' : '∅'}`).join(' · ')}`,
     `//   G10a · אריח-hero ⇒ טאפ פותח את המודול על הרשומה-הראשונה של המדד (<E>Facts.heroFirstId ⇒ <E>Screen(initialPanelId)) — תפר-כניסה חצוב מצורת initialPanel של זהב-המורים: ${mods.map((m) => `${m.entity}:${m.facts.entrySeam || '∅'}`).join(' · ')}`,
     `//   G9b · KPI-רכזת נגזר: כל אריח = ${'<E>'}Facts של המודול (count חי של הזרע · hero = המדד שהזהב הכריז/צבע-סכנה) — אפס ערך מומצא: ${mods.map((m) => `${m.facts.cls}.${m.facts.heroKey}`).join(' · ')}`,
@@ -101,6 +102,20 @@ export function buildApp({ name, sentences }) {
         `    expect(find.byType(DsNavTile), findsNWidgets(${mods.length})); expect(find.byType(EmptyState), findsNothing); expect(tester.takeException(), isNull);`,
         '  });'];
     })(),
+    ...mods.filter((m) => m.facts.seedSeam && m.facts.seedSeam.reserved.length).flatMap((m) => [ // G10b-ב · G5h מאומת-בפועל: עמודת-מקום-שמור מאירה רק כשהנתון מוזרם (הזרקה על רשומת-המסך — L66)
+      `  testWidgets('${N}App · הזרקת-שורה ⇒ עמודת-מקום-שמור "${m.facts.seedSeam.reserved[0]}" של ${m.entity} מאירה (G5h)', (tester) async {`,
+      `    tester.view.physicalSize = const Size(1400, 2400); tester.view.devicePixelRatio = 1.0; addTearDown(tester.view.reset);`,
+      `    final key = ${m.facts.cls}.reservedColumns.first;`,
+      `    await tester.pumpWidget(const MaterialApp(home: ${m.screen}())); await tester.pump(const Duration(milliseconds: 300));`,
+      `    Future<void> showTable() async { final v = ${m.facts.cls}.tableView; if (v != null) { await tester.tap(find.text(v).first); await tester.pump(const Duration(milliseconds: 300)); } } // המבט שמגלה את הטבלה (מהזהב)`,
+      `    await showTable(); expect(find.text(key), findsNothing); // בלי נתון — העמודה כבויה (חוק-7)`,
+      `    final db = ${m.facts.cls}.seed(); final seedRow = (db[${m.facts.cls}.seedList] as List).first as Map<String, dynamic>;`,
+      `    final row = ${m.facts.cls}.rowList == null ? seedRow : (seedRow[${m.facts.cls}.rowList!] as List).first as Map<String, dynamic>;`,
+      `    row[key] = 'מוזרק-${'$'}key';`,
+      `    await tester.pumpWidget(MaterialApp(home: ${m.screen}(db: db))); await tester.pump(const Duration(milliseconds: 300)); await showTable();`,
+      `    expect(find.text(key), findsWidgets); // כותרת-העמודה = שם-השדה (G5h) — מאירה כשהנתון זרם`,
+      `    expect(find.text('מוזרק-${'$'}key'), findsWidgets); expect(tester.takeException(), isNull);`,
+      '  });']),
     ...mods.filter((m) => m.facts.entrySeam).flatMap((m) => [
       `  testWidgets('${N}App · אריח-hero ⇒ ${m.title} (${m.entity}) נפתח על רשומת-ה-hero${m.facts.coreWired ? ' + מקטע-הגרעין על הרשומה' : ''}', (tester) async {`,
       `    tester.view.physicalSize = const Size(800, 2400); tester.view.devicePixelRatio = 1.0; addTearDown(tester.view.reset);`,
