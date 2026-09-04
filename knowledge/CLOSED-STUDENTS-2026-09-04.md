@@ -1,7 +1,7 @@
 # 🎓 סגירה · מודול-תלמידים (SchoolOS) — 4.9.2026
 
 > **SSOT:** `knowledge/SPEC-STUDENTS-FULL-2026-09-04.md` · **הקובץ:** `new/dart-gen-bs/schoolos_students.dart` (מחלקה ציבורית `StudentsScreen`, const, ללא main)
-> **מראה:** `buildsmart/app_flutter/lib/genesis/dart-gen-bs/schoolos_students.dart` · **בדיקה:** `buildsmart/app_flutter/test/genesis_students_test.dart` (5 מבחנים)
+> **מראה:** `buildsmart/app_flutter/lib/genesis/dart-gen-bs/schoolos_students.dart` · **בדיקה:** `buildsmart/app_flutter/test/genesis_students_test.dart` (6 מבחנים)
 > נבנה **בדרך** (THE-WAY · הכרעה 23-ב/ג/ד): 8 גלים, כל אחד analyze ⇒ רנדר (build web + צילום Playwright / בדיקת-widget) ⇒ משטרה ⇒ commit+push.
 
 ## הדרך (איך נבנה — לא מה)
@@ -10,7 +10,7 @@
 3. **חיפוש-מלא לפני בחירה:** 12 רשומות `search-record` באורקל-המאוחד (`machtzev/audit/search/2026-09-04-*.json`) — מאור + בנייה-חכמה + אינדקס.
 4. **הרכבה:** כל חלקיק-תובנה = כמה אטומים (תצוגה⊕לוגיקה). 37 מנועי-לוגיקה (dart-maor) ⊕ 22 אטומי-תצוגה (dart-ui-bs).
 5. **חיווט דרך שקעים:** today · db · roleDefs · פיגמנטים — מוזרקים (חוק-6). אין `DateTime.now` במנוע.
-6. **אימות-מול-המטרה ברנדר:** 7 צילומי-רנדר (`machtzev/audit/goals/schoolos_students.png` = האחרון) + 5 בדיקות-widget. הרנדר/הבדיקה תפסו **6 באגים** שהקומפילציה פספסה (למטה).
+6. **אימות-מול-המטרה ברנדר:** 7 צילומי-רנדר (`machtzev/audit/goals/schoolos_students.png` = האחרון) + 6 בדיקות-widget דטרמיניסטיות (חוב-§6 = אפס: כל פעולה/מצב במפרט מכוסה בבדיקה, לא רק ברנדר). הרנדר/הבדיקה תפסו **6 באגים** שהקומפילציה פספסה (למטה).
 
 ## 🔴 דאטה-אמת (§20-ג) — סכמת-maor (`dart-maor/schema-fields.dart`)
 | שדה-מפרט | מקור-אמת | | שדה-מפרט | מקור-אמת |
@@ -55,11 +55,12 @@
 - **מזייפים שנדחו:** StatBlock · LinearProgress · RadialGauge · BarChart · Sparkline · DataGrid · TimelineFlow · ShimmerSkeleton · TrendStat (אחוז, לא ימים/מגמת-נוכחות בפורמט-הנכון — הוחלף ב-BareStat). `cockpitAtRisk` מדלג על "מי שמעולם-לא" ⇒ הורכב ∪ ללא-הערה-מתוארכת.
 
 ## מה לא אומת / גבולות
+- אין יכולת שאומתה "בקוד/בקומפילציה בלבד" — כל יכולת: בדיקת-widget או רנדר-מצולם (רובן שניהם).
 - הרנדרים צולמו ב-800×1200 (משטח-GL תוכנתי בסנדבוקס נכשל ב-2400); אמוג׳י = קופסאות (פונט-סנדבוקס, CDN חסום) — טקסט ומספרים אומתו בעין מול הדאטה.
 - התמדה (pushAuditRing/encryptDoc/Firestore) לא מחוברת — פנקסים בזיכרון; `reset()` משחזר seed. ייבוא = הדבקת-CSV (אין file-picker בסנדבוקס).
 - `percentile` בשכבה של <2 תלמידים מחזיר 50 (מוצהר). דוח-יועץ/מעבר-שנה/כרטיס-הדפסה = טקסט (SelectableText), לא PDF.
 - ניווט-ביתי ורישום-חלקיקים במנוע = של המנהל (לא נגעתי ב-`schoolos.dart`/`compose-engine.mjs`).
 
 ## אימות
-`flutter analyze --no-fatal-infos lib/genesis/dart-gen-bs/schoolos_students.dart` ⇒ No issues found · `flutter test test/genesis_students_test.dart` ⇒ 5/5 ·
+`flutter analyze --no-fatal-infos lib/genesis/dart-gen-bs/schoolos_students.dart` ⇒ No issues found · `flutter test test/genesis_students_test.dart` ⇒ 6/6 (כרטיס+טאבים+פעולות · איתור+חריגה · 6 תפקידים · אוטומציות+מיזוג · מצבי-מסך+מקום-שמור-מאיר · רישום/ייבוא/שגיאה/עריכה/הדפסה/שלח-להורה/אישור/מחיקה/מעבר-שנה) ·
 `police --fast` ירוק בכל commit (22 ran · 0 yellow) · `pre-push` משטרה-מלאה ירוקה (29 ran) · כרטיס-מטרה חתום (`machtzev/audit/goals/schoolos_students.json`).
