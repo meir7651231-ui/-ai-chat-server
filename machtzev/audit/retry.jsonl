@@ -10,3 +10,7 @@
 {"ts":1788525936,"attempt":1788525936,"gate":"goal-proof","path":"new/dart-gen-bs/schoolos.dart","sha":"f23aebf0a4c754094eb327b256f6da11d9992d19","blob_before":"af3c916e95aa0a4ce292e8eeb5cdf6458d12582c","resolved":true}
 {"ts":1788526084,"attempt":1788526084,"gate":"police","path":"new/dart-gen-bs/schoolos.dart","sha":"f23aebf0a4c754094eb327b256f6da11d9992d19","blob_before":"af3c916e95aa0a4ce292e8eeb5cdf6458d12582c","resolved":true}
 {"ts":1788526258,"attempt":1788526258,"gate":"goal-proof","path":"new/dart-gen-bs/schoolos.dart","sha":"f23aebf0a4c754094eb327b256f6da11d9992d19","blob_before":"af3c916e95aa0a4ce292e8eeb5cdf6458d12582c","resolved":true}
+{"ts":1788532237,"attempt":1788532237,"gate":"index-complete","path":null,"sha":"8892f9cdccbe165e9f113ba694daea1ef8e24dfc","blob_before":null,"resolved":true}
+{"ts":1788532237,"attempt":1788532237,"gate":"pins","path":null,"sha":"8892f9cdccbe165e9f113ba694daea1ef8e24dfc","blob_before":null,"resolved":true}
+{"ts":1788532237,"attempt":1788532237,"gate":"truth","path":null,"sha":"8892f9cdccbe165e9f113ba694daea1ef8e24dfc","blob_before":null,"resolved":true}
+{"ts":1788532551,"attempt":1788532551,"gate":"truth","path":null,"sha":"8892f9cdccbe165e9f113ba694daea1ef8e24dfc","blob_before":null,"resolved":true}

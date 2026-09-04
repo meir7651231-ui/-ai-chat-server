@@ -37,6 +37,9 @@
 | `selftest-fixtures/` | fixtures של `police-selftest.mjs` — **לא נעולים**: לקח חדש = fixture חדש בלי pins-write. |
 | `BUILDSMART-PROTOCOL-MAP.md` | 🗺️ מפת-הפרוטוקול של buildsmart (4 שכבות · 99 שערים · ערכת-אורקסטרטור · סטיות) — חומר-הגלם שממנו נגזר `PROTOCOL.md` (v1→v4). קריאה בלבד, לא הנחיה. |
 | `PROTOCOL.md` · `RED-TEAM-PROTOCOL.md` | תוכנית-האכיפה (v4) ויומן-השבירה (2 סבבים, 133 ממצאים). |
+| `generator/op-census.mjs` · `generator/ops-map.json` · `ops-census-report.md` | 🧭 סנסוס-פעולות-היסוד (GENMAX·G1): 1950 אטומים (אורקל+דאטה) ⇒ op מצורת-שקעים/חתימה (§20-ד) · zero=מזייף אוטומטי · שער `opcensus` |
+| `generator/shape-ops.mjs` · `shape-ops.json` · `golden-modules.json` | 🧬 סכמה⇒פעולות-יסוד (GENMAX·G2): 54 ישויות/492 שדות ⇒ ops מצורת-הטיפוס בלבד · כיסוי חלקיקי-הזהב · שער `shapeops` |
+| `generator/cover.mjs` · `cover-report.md` | 🧩 כיסוי-שקעים=הרכבה (GENMAX·G3): בקשה {op,need,goal} ⇒ אטומים מכסים (תצוגה: שקעים+דרגת-מדף+מטרה; לוגיקה: מטרה-מכותרת-האטום IDF) · שער `cover` = שחזור ATOM-ביד |
 | `compose-engine.mjs` | 🧩 קומפוזר-דטרמיניסטי (הכרעה 23-ג · §20-ד): חלקיק+נוסחה ⇒ פעולות-הצגה ⇒ אטום-אמיתי-הכי-טוב-לייעוד; טבלת-ATOM + FAKERS (מזייפים חסומים). שער `compose-determinism` חי (`--gate`, שלב 5). |
 | `compose-engine-report.md` · `compose-compare.md` | פלט-המנוע על 15 החלקיקים · השוואה מול 3 סוכנים (המגן עבד 100%; הסוכן מקסימלי ב-7/15). |
 | `LAWS-MAP.md` | מפת כל חוקי-המחצב (כולל 23-ב/23-ג · מגן-בלי-סטיות · חוזה-הדאטה). |
