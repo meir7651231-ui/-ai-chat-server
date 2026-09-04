@@ -2,7 +2,7 @@
 
 > **מפרט (SSOT):** `knowledge/SPEC-ROOMS-FULL-2026-09-04.md` · **מגילת-הסשן:** `knowledge/SCHOOLOS-ORCHESTRATION-2026-09-04.md`.
 > נבנה **בדרך** (THE-WAY · הכרעה 23-ב/ג/ד) — 8 גלים, כל אחד: בנייה → analyze (אפס-errors) → רנדר-אמת → משטרה ירוקה → commit+push בשני הריפו.
-> קובץ יחיד: `new/dart-gen-bs/schoolos_rooms.dart` · מחלקה ציבורית `RoomsScreen` (const, ללא main) · מראה ל-buildsmart `app_flutter/lib/genesis/dart-gen-bs/` · בדיקת-widget `app_flutter/test/genesis_rooms_test.dart` (6 בדיקות).
+> קובץ יחיד: `new/dart-gen-bs/schoolos_rooms.dart` · מחלקה ציבורית `RoomsScreen` (const, ללא main) · מראה ל-buildsmart `app_flutter/lib/genesis/dart-gen-bs/` · בדיקת-widget `app_flutter/test/genesis_rooms_test.dart` (7 בדיקות).
 
 ## הדרך (איך נבנה)
 1. **מטרה (ליבה):** *"שכל מרחב ינוצל נכון — אף חדר לא כפול-תפוס, אף שיעור לא בלי-חדר, אף ציוד לא נעלם — ורואים את השבוע של הבניין במבט-אחד."*
@@ -23,7 +23,7 @@
 | 5 | 6 תפקידים + 10 מצבים | `roleOf`⊕`canGrantedAction` (admin/teacher/staff+features) · `AlertBanner`/`EmptyState`/`CircularProgressIndicator` | תצוגה+לוגיקה |
 | 6 | 9 אוטומציות | `conflictsOf`⊕`altRooms`⊕`autoRelocate`⊕`notifyUsers` · `upcomingHolidays`⊕`HOLIDAYS`⊕`hebParts` · `dayDiff` · `autoApprove` · `NeonBars`(ניצולת-להנהלה, ערכי-אמת) | לוגיקה+תצוגה |
 | 7 | מקום-שמור + ייצוא | `reservedFields`/`columnDefs` (חוזה-דאטה) · `toCsv`⊕`csvEscape`⊕`exportAllowed`⊕`guardExport` · `buildIcs`⊕`icsEscape`⊕`foldIcsLine` | חוזה-דאטה+לוגיקה |
-| 8 | בדיקת-widget + דוח-סגירה | 6 בדיקות (KPI · גריד/שבוע/רשימה · איתור+סינון · מרכז-פעולה+תפקידים · ייצוא+מקום-שמור · פאנל+אודיט) | אימות |
+| 8 | בדיקת-widget + דוח-סגירה | 7 בדיקות (KPI · גריד/שבוע/רשימה · איתור+סינון · מרכז-פעולה+תפקידים · ייצוא+מקום-שמור · פאנל+אודיט · **תקלה⇒העבר-אוטו**) | אימות |
 
 ## 🔴 דאטה-אמת (§20-ג · אפס-זיוף) — מקורות-השדות
 | ישות | שדות | מקור file:line |
@@ -63,8 +63,9 @@
 
 ## אימות
 - `flutter analyze --no-fatal-infos lib/genesis/dart-gen-bs/schoolos_rooms.dart` — **No issues found** (כל גל).
-- `flutter test test/genesis_rooms_test.dart` — **6/6 passed**. הבדיקות מפעילות את המנגנון (V6): ערכים חושבו ביד מהדאטה-הדטרמיניסטית (7 חדרים · 2 התנגשויות · 1 תפוס ב-10:15 · 3 תקלות · 10 פריטים דורשי-פעולה ⇒ 9 אחרי אישור).
-- **באגים שנתפסו ברנדר/בדיקה (לא בקומפילציה):** (1) בורר-יום 6×"ראשון 30" גלש 121px ⇒ `dayLetters`+גלילה · (2) אודיט סונן לפי שם ⇒ `closeFault` לא נרשם ⇒ `roomId` מפורש · (3) טאב/תפקיד 8/6 מחוץ-למסך ⇒ `ensureVisible` · (4) `.first` על 'כיתה 101' תפס באנר-התנגשות ולא תא-גריד ⇒ סלקטור 'כיתה 101 ›'.
+- `flutter test test/genesis_rooms_test.dart` — **7/7 passed**. הבדיקות מפעילות את המנגנון (V6): ערכים חושבו ביד מהדאטה-הדטרמיניסטית (7 חדרים · 2 התנגשויות · 1 תפוס ב-10:15 · 3 תקלות · 10 פריטים דורשי-פעולה ⇒ 9 אחרי אישור).
+- **באגים שנתפסו ברנדר/בדיקה (לא בקומפילציה):** (1) בורר-יום 6×"ראשון 30" גלש 121px ⇒ `dayLetters`+גלילה · (2) אודיט סונן לפי שם ⇒ `closeFault` לא נרשם ⇒ `roomId` מפורש · (3) טאב/תפקיד 8/6 מחוץ-למסך ⇒ `ensureVisible` · (4) `.first` על 'כיתה 101' תפס באנר-התנגשות ולא תא-גריד ⇒ סלקטור 'כיתה 101 ›' · (5) **טעות-בודק (V5)** ב-autoRelocate: חישבתי-ביד 20 מפגשים/8 נשארים; המנוע צדק — השיעורים מתחילים 1.9 ⇒ `_onDate` מוציא א׳–ב׳ ⇒ 12 מושפעות, 5 שיעורים עוברים לאולם-ספורט, 4 נשארות (היסטוריה י׳-2: 34>32+מקרן · אנגלית י׳-2: ג׳08/ה׳08 תפוסים).
+- **`autoRelocate` אומת דטרמיניסטית (בדיקה 7):** לחיצה על '🚚 העבר-אוטו' בכיתה-204 התקולה ⇒ הבאנר יורד 12⇒4 · פאנל אולם-ספורט: טאב-תפיסות מציג את השיעורים שהועברו · טאב-אודיט 5×'העברת-שיעור' · אודיט כיתה-204: הודעה למשתמשי-החדר "5 תפיסות הועברו".
 - **רנדר-אמת:** `machtzev/audit/goals/schoolos_rooms.png` (800×2400) — Chromium מקומי; gstatic חסום ⇒ CanvasKit מקומי + 404 מיידי לפונטי-Noto.
 - **משטרה:** `police --fast` ירוקה בכל commit (23 ran · 0 failed) · pre-push משטרה-מלאה ירוקה (29 ran).
 
@@ -73,5 +74,4 @@
 - הדפסה פיזית — אומתה תצוגת-ההדפסה (טקסט-נקי של buildSlots).
 - הורדת קובץ CSV/iCal — בסנדבוקס ההורדה חסומה; אומת התוכן (BOM · כותרות · VCALENDAR/VEVENT/SUMMARY/LOCATION) בתצוגה.
 - אמוג׳י ברנדר-headless מופיעים כריבועים (אין פונט-אמוג׳י בסנדבוקס) — לא באג-קוד.
-- `autoRelocate` אומת בבדיקת-מנוע-ידנית דרך הפאנל (כפתור קיים ומגודר), לא בבדיקת-widget ייעודית.
 - חוגים/אירועים מגיעים כדמו-דאטה בצורת-מאור; חיבור-חי למודולי COURSES/TEACHERS/INVENTORY = חיווט-המנהל (לא בקובץ-זה, לפי בעלות-הקבצים).
