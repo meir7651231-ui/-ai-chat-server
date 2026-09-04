@@ -40,7 +40,7 @@ export function buildApp({ name, sentences }) {
     `import '../dart-maor/norm-search.dart'; // איתור: נרמול-חיפוש עברי (מדף)`, `import '../dart-data-maor/norm-search-strings.dart'; // NORM_SEARCH_T (אטום-דאטה)`,
     ...mods.map((m) => `import '${m.file}' show ${m.screen}, ${m.facts.cls}; // רק התפר הציבורי (מסך+עובדות) — מחלקות-ציבוריות אחרות של הזהב (DashInput) לא מתנגשות`), '',
     `class ${N}App extends StatelessWidget {`, `  const ${N}App({super.key});`, '  @override',
-    `  Widget build(BuildContext context) => MaterialApp(title: ${q(name)}, debugShowCheckedModeBanner: false, theme: ThemeData(brightness: Brightness.dark, useMaterial3: true), home: const ${N}HubScreen());`, '}', '',
+    `  Widget build(BuildContext context) => MaterialApp(title: ${q(name)}, debugShowCheckedModeBanner: false, theme: ThemeData(brightness: Brightness.dark, useMaterial3: true, fontFamily: DsTokens.fontBody), home: const ${N}HubScreen()); // גופן-הגוף של ה-DS (מצורף לחבילה) — לא Roboto-מ-CDN: האתר-המחולל עצמאי גם בלי רשת (L69)`, '}', '',
     `class ${N}HubScreen extends StatefulWidget {`, `  const ${N}HubScreen({super.key});`, '  @override', `  State<${N}HubScreen> createState() => _${N}HubScreenState();`, '}', '',
     `class _${N}HubScreenState extends State<${N}HubScreen> {`,
     `  static void _go(BuildContext c, Widget screen) => Navigator.push(c, MaterialPageRoute(builder: (_) => screen));`,
@@ -136,7 +136,10 @@ export function buildApp({ name, sentences }) {
       `    tester.state<NavigatorState>(find.byType(Navigator).first).pop(); await tester.pump(); await tester.pump(const Duration(milliseconds: 600)); expect(find.byType(DsNavTile), findsNWidgets(${mods.length})); // DsScaffold ללא AppBar ⇒ pop דרך ה-Navigator, לא pageBack`,
       '  });']),
     '}', ''].join('\n');
-  return { name, N, mods, skipped, hub, test, hubFile: `gen_app_${name.toLowerCase()}.dart`, testFile: `genesis_gen_app_${name.toLowerCase()}_test.dart` };
+  // G11b · נקודת-כניסה לאתר/אפליקציה (§22 "אפליקציה+אתר"): קובץ main נפרד ⇒ `flutter build web -t <file>` בונה את האפליקציה-המחוללת כאתר עצמאי; אין main() ברכזת (הרכזת נשארת ווידג׳ט לבדיקות)
+  const entry = [`// 🌐 ${N}App · נקודת-כניסה (GENMAX·G11b): flutter build web -t lib/genesis/dart-gen-bs/gen_main_${name.toLowerCase()}.dart — האפליקציה-ממשפטים כאתר. מחולל: app-from-sentences.mjs`,
+    `import 'package:flutter/material.dart';`, `import 'gen_app_${name.toLowerCase()}.dart';`, '', `void main() => runApp(const ${N}App());`, ''].join('\n');
+  return { name, N, mods, skipped, hub, test, entry, hubFile: `gen_app_${name.toLowerCase()}.dart`, entryFile: `gen_main_${name.toLowerCase()}.dart`, testFile: `genesis_gen_app_${name.toLowerCase()}_test.dart` };
 }
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 const arg = (k) => { const i = process.argv.indexOf(k); return i > -1 ? process.argv[i + 1] : null; };
@@ -152,6 +155,7 @@ if (isMain) {
   const errs = [];
   for (const m of app.mods) { const f = path.join(DIR, m.file); if (write) fs.writeFileSync(f, m.code); else if (!fs.existsSync(f) || fs.readFileSync(f, 'utf8') !== m.code) errs.push(`${m.file} ≠ טרי`); }
   const hf = path.join(DIR, app.hubFile); if (write) fs.writeFileSync(hf, app.hub); else if (!fs.existsSync(hf) || fs.readFileSync(hf, 'utf8') !== app.hub) errs.push(`${app.hubFile} ≠ טרי`);
+  const ef = path.join(DIR, app.entryFile); if (write) fs.writeFileSync(ef, app.entry); else if (!fs.existsSync(ef) || fs.readFileSync(ef, 'utf8') !== app.entry) errs.push(`${app.entryFile} ≠ טרי`);
   const tf = path.join(BS, 'test', app.testFile); if (write && fs.existsSync(path.join(BS, 'pubspec.yaml'))) fs.writeFileSync(tf, app.test);
   if (process.argv.includes('--gate')) {
     if (errs.length) { console.log('🔴 appgen: ' + errs.join(' · ') + ' (הרץ app-from-sentences.mjs --gate --write)'); process.exit(1); }
@@ -161,11 +165,19 @@ if (isMain) {
       const res = spawnSync(FLUTTER, ['test', 'test/' + app.testFile, '--reporter', 'compact'], { cwd: BS, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, env: { ...process.env, PATH: path.dirname(FLUTTER) + ':' + process.env.PATH } });
       const out = (res.stdout || '') + (res.stderr || ''); const last = [...out.matchAll(/\+(\d+)(?:\s+-(\d+))?:/g)].pop(); const p = last ? +last[1] : 0, f = last && last[2] ? +last[2] : 0;
       if (res.status !== 0 || f) { console.log(`🔴 appgen: בדיקת-הניווט של ${app.N}App נכשלה (${p} passed · ${f} failed)`); console.log(out.split('\n').filter((l) => /Error|Exception|Expected|Actual/.test(l)).slice(0, 6).join('\n')); process.exit(1); }
-      app.tested = p; continue;
+      app.tested = p;
+    }
+    if (process.argv.includes('--build') && fs.existsSync(path.join(BS, 'pubspec.yaml'))) { // G11b · ראיית-אתר: build web של האפליקציה-המחוללת (כבד — ידני/ראיה, לא בטבעת-push)
+      fs.copyFileSync(ef, path.join(BS, 'lib/genesis/dart-gen-bs', app.entryFile));
+      const out = `build/web-${app.name.toLowerCase()}`;
+      const res = spawnSync(FLUTTER, ['build', 'web', '--release', '-t', 'lib/genesis/dart-gen-bs/' + app.entryFile, '-o', out], { cwd: BS, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, env: { ...process.env, PATH: path.dirname(FLUTTER) + ':' + process.env.PATH } });
+      const js = path.join(BS, out, 'main.dart.js');
+      if (res.status !== 0 || !fs.existsSync(js)) { console.log(`🔴 appgen: build web של ${app.N}App נכשל`); console.log(((res.stdout || '') + (res.stderr || '')).split('\n').filter((l) => /Error|error/.test(l)).slice(0, 6).join('\n')); process.exit(1); }
+      app.web = { out, bytes: fs.statSync(js).size };
     }
     continue;
   }
   console.log(`✓ ${app.N}App ⇒ ${app.hubFile} · ${app.mods.length} מודולים: ${app.mods.map((m) => `${m.title}(${m.entity}⇐${m.module.replace('schoolos_', '').replace('.dart', '')})`).join(' · ')} · בדיקה: test/${app.testFile}${app.skipped.length ? ' · ⚪ ' + app.skipped.map((s) => `"${s.text}": ${s.reason}`).join(' · ') : ''}`);
   }
-  if (process.argv.includes('--gate')) { console.log(`✓ appgen: ${results.map((a) => `${a.N}App ${a.mods.length} מודולים${a.tested != null ? ` · flutter test ${a.tested}/${a.tested}` : ''}`).join(' · ')} — רכזות+מודולים ≡ מחולל-טרי${process.argv.includes('--test') ? ' · ניווט+חיפוש-רכזת עוברים בפועל' : ''} (${results.reduce((n, a) => n + a.skipped.length, 0)} משפטים בלי-ישות מדווחים)`); process.exit(0); }
+  if (process.argv.includes('--gate')) { console.log(`✓ appgen: ${results.map((a) => `${a.N}App ${a.mods.length} מודולים${a.tested != null ? ` · flutter test ${a.tested}/${a.tested}` : ''}${a.web ? ` · אתר ${a.web.out} (${(a.web.bytes / 1048576).toFixed(1)} MB)` : ''}`).join(' · ')} — רכזות+מודולים ≡ מחולל-טרי${process.argv.includes('--test') ? ' · ניווט+חיפוש-רכזת עוברים בפועל' : ''} (${results.reduce((n, a) => n + a.skipped.length, 0)} משפטים בלי-ישות מדווחים)`); process.exit(0); }
 }
