@@ -49,6 +49,7 @@
 | `generator/sentence.mjs` · `sentence-golden.json` | 🗣️ משפט-בעברית ⇒ ישות ⇒ pickModule ⇒ retarget ⇒ מסך (GENMAX·G5f): התאמת-מילים לצורות-המונחים (זהה · אות-שימוש · ריבוי ־ים/־ות · הכלה) · אין-מונח ⇒ מקום-שמור · שער `sentence` |
 | `generator/enum-values.mjs` · `enum-values.data.json` | 🔢 ערכי-טיפוסים-מנויים (GENMAX·G6a): חציבת `export type X = 'a' \| 'b'` מ-domain.ts של maor (13 טיפוסים, סדר-הצהרה) — אטום-דאטה · שער `enumvalues` |
 | `generator/core-from-shape.mjs` · `core-registry.json` · `core-registry-report.md` | 🧠 שכבת-הגרעין מהסכמה (GENMAX·G6a): לכל ישות — Registry (מונח·שדות·id) · Relations (`xId`⇒ישות: שם/סיומת+מרחב/תחילית-קצרה/מילה-אחרונה/self) · Workflow (status/stage/outcome ⇒ מצבים חצובים; מעברים מאטום-מדף או 'declared' מוצהר) · Events (IsoDate מחזור-חיים) · Rules (חובה/enum/ref/unique) · Notification (ערוצים) · policy=שקע-בעלים · שער `core` |
+| `generator/core-dart.mjs` · `gen_core_*.dart` | 🧩 הגרעין כקוד (GENMAX·G6b): core-registry ⇒ מסך-Dart לכל ישות עם workflow — `_<E>Core` (מצבים · next() מאטום-מדף או declared · יחסים · חוקים · ערוצים · אירועים) + `<E>CoreScreen` מאטומי-DS בלבד · שער `coredart` |
 | `compose-engine.mjs` | 🧩 קומפוזר-דטרמיניסטי (הכרעה 23-ג · §20-ד): חלקיק+נוסחה ⇒ פעולות-הצגה ⇒ אטום-אמיתי-הכי-טוב-לייעוד; טבלת-ATOM + FAKERS (מזייפים חסומים). שער `compose-determinism` חי (`--gate`, שלב 5). |
 | `compose-engine-report.md` · `compose-compare.md` | פלט-המנוע על 15 החלקיקים · השוואה מול 3 סוכנים (המגן עבד 100%; הסוכן מקסימלי ב-7/15). |
 | `LAWS-MAP.md` | מפת כל חוקי-המחצב (כולל 23-ב/23-ג · מגן-בלי-סטיות · חוזה-הדאטה). |

@@ -1,8 +1,8 @@
 {
- "rendered": 27,
- "screens": 65,
+ "rendered": 35,
+ "screens": 73,
  "atoms": 37,
- "passed": 27,
+ "passed": 35,
  "failed": 37,
  "report": [
   {
@@ -322,6 +322,134 @@
    "atoms": 0,
    "widgets": 0,
    "atomList": []
+  },
+  {
+   "file": "gen_core_ayincase.dart",
+   "screen": "AyinCaseCoreScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 6,
+   "widgets": 918,
+   "atomList": [
+    "DsScaffold",
+    "DsSection",
+    "StatusChip",
+    "AlertBanner",
+    "SoftButton",
+    "DsTable"
+   ]
+  },
+  {
+   "file": "gen_core_callentry.dart",
+   "screen": "CallEntryCoreScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 6,
+   "widgets": 924,
+   "atomList": [
+    "DsScaffold",
+    "DsSection",
+    "StatusChip",
+    "AlertBanner",
+    "SoftButton",
+    "DsTable"
+   ]
+  },
+  {
+   "file": "gen_core_delivery.dart",
+   "screen": "DeliveryCoreScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 6,
+   "widgets": 1335,
+   "atomList": [
+    "DsScaffold",
+    "DsSection",
+    "StatusChip",
+    "AlertBanner",
+    "SoftButton",
+    "DsTable"
+   ]
+  },
+  {
+   "file": "gen_core_diallogentry.dart",
+   "screen": "DialLogEntryCoreScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 6,
+   "widgets": 835,
+   "atomList": [
+    "DsScaffold",
+    "DsSection",
+    "StatusChip",
+    "AlertBanner",
+    "SoftButton",
+    "DsTable"
+   ]
+  },
+  {
+   "file": "gen_core_enrollment.dart",
+   "screen": "EnrollmentCoreScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 6,
+   "widgets": 1353,
+   "atomList": [
+    "DsScaffold",
+    "DsSection",
+    "StatusChip",
+    "AlertBanner",
+    "SoftButton",
+    "DsTable"
+   ]
+  },
+  {
+   "file": "gen_core_family.dart",
+   "screen": "FamilyCoreScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 6,
+   "widgets": 1268,
+   "atomList": [
+    "DsScaffold",
+    "DsSection",
+    "StatusChip",
+    "AlertBanner",
+    "SoftButton",
+    "DsTable"
+   ]
+  },
+  {
+   "file": "gen_core_shopassignment.dart",
+   "screen": "ShopAssignmentCoreScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 6,
+   "widgets": 1174,
+   "atomList": [
+    "DsScaffold",
+    "DsSection",
+    "StatusChip",
+    "AlertBanner",
+    "SoftButton",
+    "DsTable"
+   ]
+  },
+  {
+   "file": "gen_core_tzbox.dart",
+   "screen": "TzBoxCoreScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 6,
+   "widgets": 1187,
+   "atomList": [
+    "DsScaffold",
+    "DsSection",
+    "StatusChip",
+    "AlertBanner",
+    "SoftButton",
+    "DsTable"
+   ]
   },
   {
    "file": "gen_courses_subset.dart",

@@ -64,7 +64,7 @@ if (gate) {
   const base = fs.existsSync(BASE) ? JSON.parse(fs.readFileSync(BASE, 'utf8')) : { rendered: 0, atoms: 0 };
   if (only) process.exit(rendered === screens.length ? 0 : 1);
   // קפדני לפלטי G4/G5 (מודולי-משנה/הרכבות — שלנו, חייבים לעבוד) · ראצ׳ט לשאר פלטי-המחולל הישן (app-ds: gen_quest/rich/…): כשלים מדווחים, המספר רק-עולה
-  const strictFail = report.filter((r) => /^gen_(?:\w+_subset|composite_\w+|retarget_\w+)\.dart$/.test(r.file) && (!r.rendered || r.drift));
+  const strictFail = report.filter((r) => /^gen_(?:\w+_subset|composite_\w+|retarget_\w+|core_\w+)\.dart$/.test(r.file) && (!r.rendered || r.drift));
   if (strictFail.length) { console.log(`🔴 genverify: פלטי-G4/G5 שלא רונדרו/סחפו: ${strictFail.map((r) => r.file).join(', ')} — פלט-מחולל שלא עובד אינו פלט`); process.exit(1); }
   if (rendered < base.rendered || atomsAll.size < base.atoms) { console.log(`🔴 genverify: נסיגה מ-baseline ${base.rendered}/${base.atoms} ⇒ ${rendered}/${atomsAll.size}`); process.exit(1); }
   console.log(`✓ genverify: ${rendered}/${screens.length} פלטי-מחולל רונדרו בפועל · ${atomsAll.size} אטומי-תצוגה על המסך`);

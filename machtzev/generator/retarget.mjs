@@ -117,13 +117,35 @@ export function retarget({ module, entity }) {
   // G5g · תוויות: מונחי ישות-המקור (מהזרע) ⇒ מונחי ישות-היעד, בליטרלי-מחרוזת בלבד; אין מונח ליעד ⇒ תוויות נשארות ומדווח
   const srcT = sourceTerms(module), srcE = srcT ? srcT.name : null, dstT = termsFor(entity);
   const sw = swapTerms(code, srcT, dstT); code = sw.code;
+  // G6c · הגרעין-בשימוש: כשקיים מסך-גרעין לישות (gen_core_<e>.dart, G6b) — מסך-הישות מייבא את <E>Core ומציג מקטע-מחזור-חיים חי (מצבים חצובים · המעבר מאטום-המדף · חוקים/ערוצים) מיד אחרי children: [ של ה-DsScaffold הראשי
+  const coreFile = `gen_core_${eLower}.dart`, coreWired = fs.existsSync(path.join(DIR, coreFile));
+  if (coreWired) {
+    const lines = code.split('\n');
+    const lastImp = lines.reduce((a, l, i) => (/^import '/.test(l) ? i : a), -1);
+    const need = [`import '${coreFile}'; // G6c · הגרעין-מהסכמה של ${E} (מצבים · מעבר · חוקים · ערוצים)`];
+    if (!lines.some((l) => /premium\/feedback\/status_chip\.dart/.test(l))) need.push(`import '../dart-ui-bs/premium/feedback/status_chip.dart';`);
+    if (!lines.some((l) => /premium\/feedback\/alert_banner\.dart/.test(l))) need.push(`import '../dart-ui-bs/premium/feedback/alert_banner.dart';`);
+    lines.splice(lastImp + 1, 0, ...need);
+    const ret = lines.findIndex((l) => /^\s+return DsScaffold\(/.test(l));
+    const ch = ret >= 0 ? lines.findIndex((l, i) => i > ret && /^\s+children: \[/.test(l)) : -1;
+    if (ch >= 0) {
+      const ind = (lines[ch].match(/^\s+/) || [''])[0] + '  ';
+      lines.splice(ch + 1, 0,
+        `${ind}// ═══ הגרעין-מהסכמה (G6c): ${E}Core — מצבים חצובים ⊕ מעבר מאטום-המדף ⊕ חוקים/ערוצים — לא מומצא, לא מצויר-ביד ═══`,
+        `${ind}DsSection(title: '🧠 מחזור-חיים · \${${E}Core.term} (גרעין)', children: [`,
+        `${ind}  Wrap(spacing: 6, runSpacing: 6, children: [for (final s in ${E}Core.states) StatusChip(label: s, tone: s == ${E}Core.states.first ? 1 : 0)]),`,
+        `${ind}  AlertBanner(message: 'הבא אחרי \${${E}Core.states.first}: \${${E}Core.next(${E}Core.states.first) ?? 'סופי'} · \${${E}Core.rules.length} חוקים · \${${E}Core.channels.length} ערוצים · \${${E}Core.relations.length} יחסים', tone: 0, glyph: '🧠'),`,
+        `${ind}]),`);
+    }
+    code = lines.join('\n');
+  }
   const n = (how) => map.filter((x) => x.how.startsWith(how)).length;
   const header = [`// 🎯 ${E}Screen — retarget של ${module} לישות ${entity} (GENMAX·G5c/G5d · הכרעה-24) · מחולל דטרמיניסטי: retarget.mjs --module ${module} --entity ${entity}`,
     `//   זרע-ראשי: ${pk.name} (מועמדים: ${(pk.candidates || []).join(' ')}) · מיפוי שם ${n('name')} · ערוץ ${n('chan')} · טיפוס-יחיד ${n('unique')} · מקום-שמור ${n('reserved')}`,
     `//   ${map.map((x) => `${x.src}⇒${x.dst || '∅'}(${x.how})`).join(' · ')}`,
     `//   שדות-${entity} בלי מקור (מקום-שמור, יאירו כשיוזרם נתון): ${unusedFields.join(', ') || '—'} · תוויות: ${dstT && srcT ? `מונחי ${srcE} (${srcT.singular}/${srcT.plural || '—'}) ⇒ ${entity} (${dstT.singular}/${dstT.plural || '—'}) · ${sw.swaps} החלפות` : `אין מונח ל-${entity} ב-TERM_DEFS — תוויות של המקור (הצבה)`} · הזרע = זרע-הצבה של המקור, לא ערך-אמת של ${entity}`];
   code = header.join('\n') + '\n' + code;
-  return { code, map, unusedFields, primary: pk.name, classes: clsMap, fragments: res.fragments, of: res.of, counts: { name: n('name'), chan: n('chan'), unique: n('unique'), reserved: n('reserved') }, terms: { src: srcE, dst: dstT ? dstT.singular : null, swaps: sw.swaps } };
+  return { code, map, unusedFields, primary: pk.name, classes: clsMap, fragments: res.fragments, of: res.of, counts: { name: n('name'), chan: n('chan'), unique: n('unique'), reserved: n('reserved') }, terms: { src: srcE, dst: dstT ? dstT.singular : null, swaps: sw.swaps }, coreWired };
 }
 
 // ── G5e · module-picker: ישות ⇒ מודול-הזהב הקרוב ביותר — לפי עובדות-מבנה בלבד (§20-ד): (א) מספר שמות-שדה זהים בין הזרע-הראשי לסכמה · (ב) דמיון-פרופיל-טיפוסים (קוסינוס על ספירת-קטגוריות)
