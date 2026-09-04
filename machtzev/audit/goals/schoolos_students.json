@@ -32,8 +32,8 @@
   "מצב-טעינה מרונדר תוך 700ms"
  ],
  "picture": "machtzev/audit/goals/schoolos_students.png",
- "pictureSha": "05073e861ef10c4a470fcf4571e76433ccd992624a3116925c3f5552c674324c",
- "screenSha": "33c46c4cbdbb9cfe26b66c953faa05184842ab63fd41586987bf3c771395f14a",
- "ts": "2026-09-04T02:53:36.177Z",
- "sig": "e2b45c6aa746ce6f866687012245b39249234a93734de7e2277d5ea086d8c1e2"
+ "pictureSha": "149210f0f70a6a7e54166c48385893e790fd176dbcc61b9f246bf0d192d22f5d",
+ "screenSha": "e958f6864005fbecae25dc19dcf28987c52abfca75096cf75509257bd6e1f027",
+ "ts": "2026-09-04T03:11:16.145Z",
+ "sig": "4b76b488afbef0f373e122bfb8e931b7c2d0ffeeb1f543c1d3abd02f4eeb0b61"
 }
