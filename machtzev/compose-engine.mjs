@@ -33,6 +33,40 @@ const ATOM = {
   panel:     { atom: 'GlassCard',     seam: 'premium/surfaces/glass_card.dart:5 required this.child' },   // מיכל-פריט-נבחר
   timeline:  { atom: 'TimelineItem',  seam: 'premium/lists/timeline_item.dart title+time+body' },         // שורת-תנועה (לא timeline_flow)
   empty:     { atom: 'EmptyState',    seam: 'premium/feedback/empty_state.dart glyph+message' },          // מצב אין-תוצאות
+  // ── 8 מודולי-SchoolOS (4.9 · תפרים מהאורקל atom-index-full.json — V3, לא grep-ידני; DsCalendar=תפר-zero ⇒ מחוץ לטבלה) ──
+  trend:     { atom: 'TrendStat',     seam: 'premium/dataviz/trend_stat.dart:8-10 value+delta+label (אחוז-אמת בלבד)' },
+  ring:      { atom: 'ProgressRing',  seam: 'premium/dataviz/progress_ring.dart:69 value 0..1' },
+  gauge:     { atom: 'GaugeMeter',    seam: 'premium/dataviz/gauge_meter.dart (index: fields)' },
+  bars:      { atom: 'DsBars',        seam: 'ds/ds_bars.dart (index: series)' },
+  avatar:    { atom: 'AvatarTile',    seam: 'premium/lists/avatar_tile.dart:11-13 initials+title+subtitle' },
+  expand:    { atom: 'ExpandableTile', seam: 'premium/lists/expandable_tile.dart:10-11 title+body' },
+  field:     { atom: 'DsField',       seam: 'ds/ds_field.dart:8 onChanged (מבוקר)' },
+  enumfield: { atom: 'DsEnumField',   seam: 'ds/ds_enum_field.dart:7 onChanged (index: collection)' },
+  board:     { atom: 'DsBoard',       seam: 'ds/ds_board.dart:9-12 stages+records+stageOf+titleOf' },
+  primary:   { atom: 'DsPrimaryButton', seam: 'ds/ds.dart:244 label+onTap' },
+  queue:     { atom: 'cockpitQueue',  seam: 'dart-maor/cockpit-queue.dart (List,String,num,…) (לוגיקה §21)' },
+  progress:  { atom: 'cockpitProgress', seam: 'dart-maor/cockpit-progress.dart (Map,Set) (לוגיקה §21)' },
+  sheet:     { atom: 'sheetSummary',  seam: 'dart-maor/sheet-summary.dart ⇒ {present,total} (לוגיקה §21)' },
+  makeup:    { atom: 'pendingMakeups', seam: 'dart-maor/pending-makeups.dart (List,String?) (לוגיקה §21)' },
+  balance:   { atom: 'payBal',        seam: 'dart-maor/pay-bal.dart (Map, paidOf) (לוגיקה §21)' },
+  paidstatus:{ atom: 'enrollmentPaidStatus', seam: 'dart-maor/enrollment-paid-status.dart (Map, payBal, paidOf) (לוגיקה §21)' },
+  hok:       { atom: 'hokDue',        seam: 'dart-maor/hok-due.dart (List, String, hokEffectivelyActive…) (לוגיקה §21)' },
+  clash:     { atom: 'scheduleClashText', seam: 'dart-maor/schedule-clash-text.dart (…, T) (לוגיקה §21)' },
+  slots:     { atom: 'buildSlots',    seam: 'dart-maor/build-slots.dart (Map,Map,String,…) (לוגיקה §21)' },
+  block:     { atom: 'blockReason',   seam: 'dart-maor/block-reason.dart (DateTime, hebParts, …) (לוגיקה §21)' },
+  holiday:   { atom: 'holidayOf',     seam: 'dart-maor/holiday-of.dart (DateTime, hebParts, scanHebYear, …) (לוגיקה §21)' },
+  weekly:    { atom: 'weeklyRoomSessions', seam: 'dart-maor/weekly-room-sessions.dart (Map, room, String, sessionsOf) (לוגיקה §21)' },
+  sessions:  { atom: 'sessionsOf',    seam: 'dart-maor/sessions-of.dart (course) (לוגיקה §21)' },
+  enrol:     { atom: 'enrollCount',   seam: 'dart-maor/enroll-count.dart (db, course) — מחריג wait (לוגיקה §21)' },
+  wait:      { atom: 'waitlistFor',   seam: 'dart-maor/waitlist-for.dart (db, course) (לוגיקה §21)' },
+  byteacher: { atom: 'coursesOfTeacher', seam: 'dart-maor/courses-of-teacher.dart (db, teacher) (לוגיקה §21)' },
+  whoami:    { atom: 'teacherIdOf',   seam: 'dart-maor/teacher-id-of.dart (db, email-מוזרק · חוק-6) (לוגיקה §21)' },
+  cert:      { atom: 'certExpiryStatus', seam: 'dart/cert_expiry_status.dart (DateTime, DateTime) (בנייה-חכמה §21)' },
+  contact:   { atom: 'waLink',        seam: 'dart-maor/wa-link.dart (phone-מוזרק · חוק-6) (לוגיקה §21)' },
+  recipients:{ atom: 'bulkWaRecipients', seam: 'dart-maor/bulk-wa-recipients.dart (List, waDigits) (לוגיקה §21)' },
+  template:  { atom: 'renderTemplate', seam: 'dart-maor/render-template.dart (Map?, String, Map, List) (לוגיקה §21)' },
+  parse:     { atom: 'parseCsv',      seam: 'dart-maor/parse-csv.dart (String) (לוגיקה §21)' },
+  trendengine:{ atom: 'trendFromScan', seam: 'dart-maor/intel-trend-from-scan.dart (Map) ⇒ {dir,pct} (לוגיקה §21)' },
 };
 // מזייפים חסומים מפורשות (אם מישהו ינסה לבחור — נזרקת שגיאה):
 // הערה: הסוכנים זיהו בבייטים 4 מזייפים נוספים (DataGrid·timeline_flow·shimmer_skeleton·StatBlock,
@@ -80,10 +114,31 @@ function ops(formula) {
             { op: 'ratio', label: 'מלאי מול יעד', why: 'מצב-אמת = יחס במילוי-בר' },
             { op: 'timeline', why: 'תנועות-הפריט (intakeLog מסונן)' },
             { op: 'action', why: 'פעולות על הפריט (קבלה/הוצאה/מלא/הזמן)' }];
+  // ── 8 מודולי-SchoolOS (4.9) — כל סוג = תובנה מרובת-אטומים (תצוגה⊕לוגיקה, 23-ג); סוכני-הבנייה הרכיבו, המנוע מקבע ──
+  if (f.kind === 'triage')     return [{ op: 'queue', why: 'מנוע: cockpitQueue ⇒ תור-משימות עם סיבה' }, { op: 'progress', why: 'מנוע: cockpitProgress ⇒ נעשה/סה"כ' }, { op: 'ratio', why: 'פס-התקדמות (StatRow)' }, { op: 'table', why: 'התור כטבלה-מונחית-חוזה' }];
+  if (f.kind === 'trend')      return [{ op: 'trendengine', why: 'מנוע: trendFromScan ⇒ {dir,pct} מסדרה-חודשית' }, { op: 'trend', why: 'TrendStat value+delta — אחוז-אמת (לא ימים)' }];
+  if (f.kind === 'roster')     return [{ op: 'sheet', why: 'מנוע: sheetSummary ⇒ present/total לתאריך' }, { op: 'table', why: 'גיליון-הכיתה כטבלה' }, { op: 'action', why: 'סימון-נוכחות/חיסור (SoftButton)' }];
+  if (f.kind === 'attendance') return [{ op: 'sheet', why: 'מנוע: sheetSummary' }, { op: 'ring', why: 'ProgressRing 0..1 = יחס-נוכחות' }];
+  if (f.kind === 'makeups')    return [{ op: 'makeup', why: 'מנוע: pendingMakeups (חיסור-זכאי בלי תאריך)' }, { op: 'timeline', why: 'שורת-השלמה (TimelineItem)' }, { op: 'action', why: 'תזמון-השלמה' }];
+  if (f.kind === 'holidayGuard') return [{ op: 'holiday', why: 'מנוע: holidayOf (לוח-עברי, today מוזרק)' }, { op: 'block', why: 'מנוע: blockReason (שבת/חג/צום-נדחה)' }, { op: 'fact', why: 'תג-חסימה (StatusChip)' }];
+  if (f.kind === 'clash')      return [{ op: 'slots', why: 'מנוע: buildSlots (מפגשים⇒משבצות)' }, { op: 'clash', why: 'מנוע: scheduleClashText (התנגשות חוג/חדר/מורה)' }, { op: 'alert', why: 'באנר-התנגשות' }];
+  if (f.kind === 'weekly')     return [{ op: 'sessions', why: 'מנוע: sessionsOf' }, { op: 'weekly', why: 'מנוע: weeklyRoomSessions (תפוסה-שבועית)' }, { op: 'table', why: 'גריד-שבועי כטבלה' }];
+  if (f.kind === 'enrollment') return [{ op: 'enrol', why: 'מנוע: enrollCount (מחריג wait)' }, { op: 'wait', why: 'מנוע: waitlistFor' }, { op: 'ratio', why: 'תפוסה/קיבולת (StatRow)' }];
+  if (f.kind === 'balance')    return [{ op: 'balance', why: 'מנוע: payBal' }, { op: 'paidstatus', why: 'מנוע: enrollmentPaidStatus' }, { op: 'diff', why: 'יתרה חתומה (BareStat לפי-סימן)' }];
+  if (f.kind === 'hok')        return [{ op: 'hok', why: 'מנוע: hokDue (הוראת-קבע לחודש)' }, { op: 'fact', why: 'תג נרשמה/ממתינה' }, { op: 'action', why: 'תזכורת (אפס-קבלה)' }];
+  if (f.kind === 'contact')    return [{ op: 'avatar', why: 'זהות (initials+title+subtitle)' }, { op: 'contact', why: 'מנוע: waLink על טלפון-מוזרק (חוק-6)' }, { op: 'action', why: 'פתיחת-ערוץ (SoftButton)' }];
+  if (f.kind === 'broadcast')  return [{ op: 'recipients', why: 'מנוע: bulkWaRecipients (דדופ-משפחה)' }, { op: 'template', why: 'מנוע: renderTemplate' }, { op: 'action', why: 'שלח (פר-נמען, wa.me)' }];
+  if (f.kind === 'import')     return [{ op: 'field', why: 'הדבקת-CSV (DsField מבוקר)' }, { op: 'parse', why: 'מנוע: parseCsv' }, { op: 'table', why: 'תצוגה-מקדימה דו-שלבית' }];
+  if (f.kind === 'form')       return [{ op: 'field', why: 'שדה-טקסט מבוקר' }, { op: 'enumfield', why: 'שדה-בחירה (collection)' }, { op: 'primary', why: 'שמירה (DsPrimaryButton)' }];
+  if (f.kind === 'load')       return [{ op: 'byteacher', why: 'מנוע: coursesOfTeacher' }, { op: 'sessions', why: 'מנוע: sessionsOf ⇒ שעות' }, { op: 'bars', why: 'DsBars series = עומס פר-מורה' }];
+  if (f.kind === 'certs')      return [{ op: 'cert', why: 'מנוע: certExpiryStatus (today מוזרק)' }, { op: 'fact', why: 'תג-תוקף' }, { op: 'alert', why: 'התראת-פקיעה' }];
+  if (f.kind === 'pipeline')   return [{ op: 'whoami', why: 'מנוע: teacherIdOf (מייל-מוזרק · חוק-6)' }, { op: 'board', why: 'DsBoard stages+records' }];
+  if (f.kind === 'risk')       return [{ op: 'trendengine', why: 'מנוע: trendFromScan (מגמת-נוכחות/ציון)' }, { op: 'gauge', why: 'GaugeMeter = ציון-סיכון 0–100' }, { op: 'fact', why: 'האות-המוביל (StatusChip)' }];
+  if (f.kind === 'details')    return [{ op: 'expand', why: 'ExpandableTile title+body' }, { op: 'identity', why: 'זהות (MediaRow)' }];
   throw new Error('unknown formula kind: ' + f.kind);
 }
 
-// ── 15 החלקיקים כצורות-דאטה (לא הרכבות — המנוע מרכיב) ──
+// ── החלקיקים כצורות-דאטה (25 מלאי + 35 SchoolOS) (לא הרכבות — המנוע מרכיב) ──
 const PARTICLES = [
   { id: 'runway',     name: 'ריצה',        f: { kind: 'raw',       expr: 'daysLeft=cur/rate' } },
   { id: 'comparison', name: 'השוואה',      f: { kind: 'vs',        expr: 'daysLeft vs lead' } },
@@ -111,6 +166,42 @@ const PARTICLES = [
   { id: 'permissions', name: 'הרשאות',     f: { kind: 'perm',      expr: 'role ⇒ show/hide (roleOf⊕canGrantedAction)' } },
   { id: 'automation', name: 'אוטומציות',   f: { kind: 'auto',      expr: 'פקיעה + מלאי-מת ⇒ התראה (expiringIntakes⊕warehouseValue)' } },
   { id: 'lifecycle',  name: 'מחזור-חיים',  f: { kind: 'life',      expr: 'active ⇒ תג + toggle (StatusChip⊕SoftButton)' } },
+  // ── 8 מודולי-SchoolOS (4.9 · סשני-בנאי; המנהל רושם — הרכבות שנבנו בדרך, מקובעות במנוע) ──
+  { id: 'dash.triage',   name: 'לוח·טריאז\'',      f: { kind: 'triage',      expr: 'cockpitQueue ⇒ תור+סיבה · cockpitProgress' } },
+  { id: 'dash.trend',    name: 'לוח·מגמה',         f: { kind: 'trend',       expr: 'trendFromScan(סדרה-חודשית) ⇒ {dir,pct}' } },
+  { id: 'dash.export',   name: 'לוח·ייצוא',        f: { kind: 'export',      expr: 'cockpitCsvRows ⇒ CSV' } },
+  { id: 'dash.perm',     name: 'לוח·הרשאות',       f: { kind: 'perm',        expr: 'הנהלה/ועד/מזכירות ⇒ show/hide' } },
+  { id: 'stu.form',      name: 'תלמידים·רישום',    f: { kind: 'form',        expr: 'שדות-ליבה + פרטים-נוספים' } },
+  { id: 'stu.import',    name: 'תלמידים·ייבוא',    f: { kind: 'import',      expr: 'parseCsv ⇒ תצוגה-מקדימה ⇒ רישום' } },
+  { id: 'stu.risk',      name: 'תלמידים·סיכון',    f: { kind: 'risk',        expr: 'חוזה-הסיכון (4 אותות) ⇒ 0–100' } },
+  { id: 'stu.contact',   name: 'תלמידים·קשר-הורה', f: { kind: 'contact',     expr: 'waLink(phone-מוזרק)' } },
+  { id: 'stu.locate',    name: 'תלמידים·איתור',    f: { kind: 'search',      expr: 'smartScore⊕normSearch' } },
+  { id: 'stu.exception', name: 'תלמידים·חריגה',    f: { kind: 'filter',      expr: 'finderMatches' } },
+  { id: 'att.roster',    name: 'נוכחות·גיליון',    f: { kind: 'roster',      expr: 'sheetSummary(date, roster)' } },
+  { id: 'att.ratio',     name: 'נוכחות·יחס',       f: { kind: 'attendance',  expr: 'present/total ⇒ 0..1' } },
+  { id: 'att.makeups',   name: 'נוכחות·השלמות',    f: { kind: 'makeups',     expr: 'pendingMakeups ⇒ תזמון' } },
+  { id: 'att.holiday',   name: 'נוכחות·חג/שבת',    f: { kind: 'holidayGuard', expr: 'holidayOf⊕blockReason(today)' } },
+  { id: 'att.trend',     name: 'נוכחות·מגמה',      f: { kind: 'trend',       expr: 'trendFromScan(נוכחות-חודשית)' } },
+  { id: 'crs.enroll',    name: 'חוגים·תפוסה',      f: { kind: 'enrollment',  expr: 'enrollCount / capacity · waitlistFor' } },
+  { id: 'crs.clash',     name: 'חוגים·התנגשות',    f: { kind: 'clash',       expr: 'buildSlots⊕scheduleClashText' } },
+  { id: 'crs.form',      name: 'חוגים·הקמה',       f: { kind: 'form',        expr: 'חוג+חדר(inline)+מורה' } },
+  { id: 'crs.table',     name: 'חוגים·טבלה',       f: { kind: 'table',       expr: 'courses × columnDefs' } },
+  { id: 'tch.load',      name: 'מורים·עומס',       f: { kind: 'load',        expr: 'coursesOfTeacher⊕sessionsOf ⇒ שעות/שבוע' } },
+  { id: 'tch.certs',     name: 'מורים·הסמכות',     f: { kind: 'certs',       expr: 'certExpiryStatus(today)' } },
+  { id: 'tch.pipeline',  name: 'מורים·לוח-משימות', f: { kind: 'pipeline',    expr: 'DsBoard(stages, records)' } },
+  { id: 'tch.contact',   name: 'מורים·קשר',        f: { kind: 'contact',     expr: 'waLink(phone-מוזרק · חוק-6)' } },
+  { id: 'rm.weekly',     name: 'חדרים·גריד-שבועי', f: { kind: 'weekly',      expr: 'weeklyRoomSessions ÷ קיבולת-משבצות' } },
+  { id: 'rm.clash',      name: 'חדרים·התנגשות',    f: { kind: 'clash',       expr: 'conflictsOf ⇒ altRooms ⇒ autoRelocate' } },
+  { id: 'rm.holiday',    name: 'חדרים·חסימה',      f: { kind: 'holidayGuard', expr: 'blockReason(שבת/חג/צום-נדחה)' } },
+  { id: 'rm.export',     name: 'חדרים·ייצוא',      f: { kind: 'export',      expr: 'CSV/iCal' } },
+  { id: 'fee.balance',   name: 'גבייה·יתרה',       f: { kind: 'balance',     expr: 'payBal⊕enrollmentPaidStatus' } },
+  { id: 'fee.hok',       name: 'גבייה·הוראת-קבע',  f: { kind: 'hok',         expr: 'hokDue(month)' } },
+  { id: 'fee.form',      name: 'גבייה·חיוב',       f: { kind: 'form',        expr: 'חיוב-יחיד/מרוכז + הסדר N/M' } },
+  { id: 'fee.export',    name: 'גבייה·ייצוא',      f: { kind: 'export',      expr: 'toCsv (אפס-קבלה)' } },
+  { id: 'par.contact',   name: 'הורים·קשר',        f: { kind: 'contact',     expr: 'waLink(phone-מוזרק · חוק-6)' } },
+  { id: 'par.broadcast', name: 'הורים·שידור',      f: { kind: 'broadcast',   expr: 'bulkWaRecipients⊕renderTemplate' } },
+  { id: 'par.details',   name: 'הורים·כרטיס',      f: { kind: 'details',     expr: 'ExpandableTile(הסכמות, לוג)' } },
+  { id: 'par.perm',      name: 'הורים·הרשאות',     f: { kind: 'perm',        expr: 'מחנך/הנהלה/הורה ⇒ show/hide' } },
 ];
 
 function compose(p) {
