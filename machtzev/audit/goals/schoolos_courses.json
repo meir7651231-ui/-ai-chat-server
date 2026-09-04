@@ -1,0 +1,36 @@
+{
+ "v": 1,
+ "screen": "new/dart-gen-bs/schoolos_courses.dart",
+ "goal": "שכל שיעור יקרה עם מורה, בחדר, לתלמידים הנכונים, בזמן — ואף שיבוץ לא יתנגש ואף מקום לא יתבזבז: הרכזת רואה התנגשות/ללא-מורה/ללא-חדר/מתחת-מינימום לפני שהשיעור נפגע",
+ "models": [
+  "enrollCount",
+  "waitlistFor",
+  "scheduleClashText",
+  "payBal",
+  "trendFromScan",
+  "inactiveRoomCourses",
+  "breakEven"
+ ],
+ "atoms": [
+  "BareStat",
+  "StatHero",
+  "GradientCard",
+  "MediaRow",
+  "StatusChip",
+  "SegmentedSwitch",
+  "DsSection",
+  "EmptyState"
+ ],
+ "accept": [
+  "10 KPI מנועי-מדף",
+  "5 התנגשויות ייחודיות (2 מורה/חדר + 3 תלמיד)",
+  "22 רשומים = Σ enrollCount",
+  "7 חוגים-חיים ברשימה ו-1 שהסתיים מוסתר",
+  "28% תפוסה-ממוצעת"
+ ],
+ "picture": "machtzev/audit/goals/schoolos_courses.png",
+ "pictureSha": "ace9b04c4a3bd60c519bbcb7f99b9edef08e9fef1f705202ab0cf6cd587619a0",
+ "screenSha": "0fd825a4fa5cb315b2ee1c1877eb6d2ab0720afc46d9f23334331ed276d2f5c5",
+ "ts": "2026-09-04T02:38:04.547Z",
+ "sig": "aee35bd464b07b527754de1bcbb70493cc5388b50343d04f60207c7a540a7299"
+}
