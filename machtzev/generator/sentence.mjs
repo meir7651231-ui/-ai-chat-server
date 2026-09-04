@@ -9,21 +9,24 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as R from '../root.mjs';
+import { normSearch } from '../../new/atoms/norm-search.mjs';          // L65 · נרמול-חיפוש עברי מהמדף (סופיות⇒רגילות) — לא טבלת-אותיות משלנו
+import { NORM_SEARCH_T } from '../../new/atoms/norm-search-strings.mjs'; // אטום-הדאטה התאום של norm-search (מקור ה-Dart)
 import { pickModule, retarget } from './retarget.mjs';
 
 const ROOT = R.ROOT, GEN = path.join(ROOT, 'machtzev/generator'), DIR = path.join(ROOT, 'new/dart-gen-bs');
 const TERMS = JSON.parse(fs.readFileSync(path.join(GEN, 'entity-terms.data.json'), 'utf8')).terms.filter((t) => t.entity);
 const heWords = (s) => [...(s || '').matchAll(/[֐-׿][֐-׿״׳\-\/]*/g)].map((m) => m[0]);
+const nz = (w) => normSearch(w, NORM_SEARCH_T); // L65: 'תורם'+'ים' = 'תורםים' ≠ 'תורמים' — הריבוי חייב אות-רגילה; normSearch של המדף עושה בדיוק את זה
 const PREFIX = /^[הולבמשכ]/;
 // מורפולוגיה מינימלית (כלל-שפה, לא דומיין): ריבוי ־ים · ריבוי ־ה⇒־ות · ־ות — צורות-נגזרות מצורת-המונח (כמו match.stem)
-const variants = (fw) => new Set([fw, fw + 'ים', fw.endsWith('ה') ? fw.slice(0, -1) + 'ות' : fw + 'ות']);
+const variants = (fw) => new Set([fw, nz(fw + 'ים'), nz(fw.endsWith('ה') ? fw.slice(0, -1) + 'ות' : fw + 'ות')]); // הצורות-הנגזרות מנורמלות גם הן (L65: 'רכז'+'ים' מסתיים ב-ם סופית, המילה המנורמלת לא)
 const strip = (w) => PREFIX.test(w) ? w.slice(1) : w;
 export function resolve(text) {
-  const words = heWords(text);
+  const words = heWords(text).map(nz);
   const votes = new Map();
   // ניקוד פר-צורה: הטוב-ביותר לכל מילת-הצורה, משוקלל בשלמות-הצורה (צורה דו-מילתית 'בן/בת משפחה' שרק חציה תאם ≠ 'משפחה' שלמה); לישות — המקסימום על צורותיה
   for (const t of TERMS) for (const form of t.forms) {
-    const fws = heWords(form); if (!fws.length) continue;
+    const fws = heWords(form).map(nz); if (!fws.length) continue;
     let sum = 0, hit = 0;
     for (const fw of fws) {
       const vs = variants(fw); let best = 0;
