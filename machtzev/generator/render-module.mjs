@@ -94,17 +94,21 @@ function declaredNames(importPath) {
 //   minimal — build() של State לא נזרע (נבנה סינתטי) ⇒ מודול-משנה מינימלי סביב אטומי-היעד (רתמת-הקומפילציה)
 //   compose — build() = חיווט-ההרכבה הוא שבר ככל שבר: נזרע אם משתמש באטום-יעד ⇒ המסך-השלם מורכב-מחדש מהקטלוג (רתמת-הזהב: הבדיקות המקוריות)
 //   declared=true ⇒ אטומי-היעד כוללים גם את הצהרות-ה-⊕ של המודול עצמו (`// ═══ מטרה = A ⊕ B` — שפת-ההצהרה של הזהב, לא טבלה חיצונית)
-export function select({ module, all = false, particles = [], atoms = [], mode = 'minimal', declared = false }) {
+// G8c · זריעה לפי פעולות-היסוד של ישות (L49): entityOpsSeed = שם-ישות ⇒ שברים שה-G2-ops שלהם (frag-ops.json, מהמפתחות שהם קוראים) חופפים ≥ minOverlap ל-entityOps(E)
+let _FO = null; const fragOps = () => { if (_FO === null) { const p = path.join(GEN, 'frag-ops.json'); _FO = fs.existsSync(p) ? JSON.parse(fs.readFileSync(p, 'utf8')).fragments : {}; } return _FO; };
+let _EO = null; const entityOpsOf = async (e) => { if (_EO === null) _EO = (await import('./shape-ops.mjs')).entityOps; return new Set(_EO(e).ops); };
+export function select({ module, all = false, particles = [], atoms = [], mode = 'minimal', declared = false, opsSeed = null, minOverlap = 2 }) {
   const frags = CAT.fragments.filter((f) => f.module === module);
   if (!frags.length) throw new Error('unknown module ' + module);
   const target = new Set([...atoms, ...particles.flatMap(atomsOfParticle), ...(declared ? frags.flatMap((f) => f.declaredAtoms) : [])]);
+  const opsSeedIds = opsSeed ? new Set(Object.entries(fragOps()).filter(([id, x]) => x.module === module && x.role !== 'build' && x.g2.filter((o) => opsSeed.has(o)).length >= minOverlap).map(([id]) => id)) : null;
   const byId = new Map(frags.map((f) => [f.id, f]));
   const defIndex = new Map();                                  // מזהה ⇒ שברים שמגדירים אותו
   for (const f of frags) for (const d of f.defs) { if (!defIndex.has(d)) defIndex.set(d, []); defIndex.get(d).push(f.id); }
   const sel = new Set();
   if (all) frags.forEach((f) => sel.add(f.id));
   else {
-    for (const f of frags) if ((f.role === 'member' || f.role === 'builder' || (mode === 'compose' && f.role === 'build')) && f.atomsUsed.some((a) => target.has(a))) sel.add(f.id);
+    for (const f of frags) if ((f.role === 'member' || f.role === 'builder' || (mode === 'compose' && f.role === 'build')) && (f.atomsUsed.some((a) => target.has(a)) || (opsSeedIds && opsSeedIds.has(f.id)))) sel.add(f.id);
     // אזור-הפתיח (לפני המחלקה הראשונה): הפתיח עצמו + כל שבר שנושא import — גם כשתת-כותרת (// ───) פיצלה את גוש-ה-imports (לקח: fees ⇒ 42 imports אבדו)
     sel.add(frags[0].id);
     for (const f of frags) if (f.cls === '(preamble)' && f.lines.some((l) => /^import '/.test(l))) sel.add(f.id);
@@ -162,6 +166,7 @@ function syntheticBuild({ title, subtitle, plan, rename = (l) => l }) {
   return out;
 }
 
+export async function assembleByOps({ module, entity, minOverlap = 2, opsOverride = null }) { return assemble({ module, opsSeed: opsOverride || await entityOpsOf(entity), minOverlap, mode: 'minimal' }); }
 export function assemble(req) {
   const { module, all = false } = req;
   const { frags, chosen, sel, target, defIndex, importNames } = select(req);
@@ -318,6 +323,13 @@ if (isMain && process.argv.includes('--gate')) {
   if (errs.length) { console.log('🔴 rendermodule: ' + errs.join(' · ')); process.exit(1); }
   console.log(`✓ rendermodule: --all ≡ מקור ${modules.length}/${modules.length} · ${subsets} מודולי-משנה (gen_*_subset.dart) + ${composites} הרכבות-חוצות-מודולים (gen_composite_*.dart) ≡ הרכבה-דטרמיניסטית · הקומפילציה בשער-buildsmart`); process.exit(0);
 }
+const opsEntity = isMain ? arg('--entity-ops') : null;
+if (opsEntity && arg('--module')) {
+  const res = await assembleByOps({ module: arg('--module'), entity: opsEntity, minOverlap: +(arg('--min-overlap') || 2) });
+  const out = arg('--out') || path.join(DIR, `gen_opsseed_${opsEntity.toLowerCase()}_from_${TAG[arg('--module').replace(/\.dart$/, '')] || 'x'}.dart`);
+  fs.writeFileSync(out, res.code);
+  console.log(`✓ זריעה-לפי-ops: ${opsEntity} @ ${arg('--module')} ⇒ ${path.basename(out)} · שברים ${res.fragments}/${res.of} · ${res.code.split('\n').length} שורות · בונים מחווטים ${Object.values(res.plans).reduce((a, p) => a + p.sites.length, 0)}`);
+}
 const modulesArg = isMain ? arg('--modules') : null;
 if (modulesArg) {
   const modules = modulesArg.split(',').filter(Boolean), name = arg('--name') || 'Composite';
@@ -328,7 +340,7 @@ if (modulesArg) {
   if (res.report.renamed.length) console.log('   renamed: ' + res.report.renamed.join(' · '));
   if (res.report.dropped.length) console.log('   dropped: ' + res.report.dropped.join(' · '));
 }
-const module = isMain ? arg('--module') : null;
+const module = isMain && !opsEntity ? arg('--module') : null;   // --entity-ops מטפל ב---module בעצמו
 if (module) {
   const res = assemble({ module, all: process.argv.includes('--all'), particles: (arg('--particles') || '').split(',').filter(Boolean), atoms: (arg('--atoms') || '').split(',').filter(Boolean) });
   const out = arg('--out') || path.join(DIR, 'gen_' + module.replace(/^schoolos_?/, '').replace(/\.dart$/, '').replace(/^$/, 'inventory') + '.dart');

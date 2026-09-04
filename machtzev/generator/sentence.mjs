@@ -43,6 +43,22 @@ export function fromSentence(text) {
   const out = path.join(DIR, `gen_retarget_${r.entity.toLowerCase()}_from_${{ 'schoolos.dart': 'inv', schoolos_students: 'stu', schoolos_attendance: 'att', schoolos_courses: 'crs', schoolos_teachers: 'tch', schoolos_rooms: 'rm', schoolos_fees: 'fee', schoolos_parents: 'par', schoolos_dashboard: 'dash' }[p.module.replace(/\.dart$/, '')] || 'x'}.dart`);
   return { ...r, pick: p, module: p.module, out, code: g.code, counts: g.counts };
 }
+// G8d · שדות-המשפט ⇒ פעולות-יסוד: "עם טלפון, אזור, תאריך הצטרפות" ⇒ interpret(text).schema (טיפוס מרמזי-השפה + rule מהמדף) ⇒ fieldOps (G2) ⇒ ops מבוקשים ⇒ זריעה ממוקדת (assembleByOps)
+const T2 = { date: 'IsoDate', num: 'number', bool: 'boolean', text: 'string', multiline: 'string' };
+export async function fieldOpsOfSentence(text) {
+  const { interpret } = await import('./entity.mjs'); const { fieldOps } = await import('./shape-ops.mjs');
+  const schema = interpret(text).schema || []; const ops = new Set(); const fields = [];
+  for (const f of schema) { const n = /phone|tel|טלפון/i.test(f.rule || '') || /טלפון|נייד/.test(f.label) ? 'phone' : /mail|מייל|אימייל/i.test((f.rule || '') + f.label) ? 'email' : 'f'; const fo = fieldOps({ n, t: T2[f.type] || 'string', o: false }); fo.forEach((o) => ops.add(o)); fields.push({ label: f.label, type: f.type, ops: fo }); }
+  return { fields, ops: [...ops] };
+}
+export async function subsetFromSentence(text) {
+  const r = resolve(text); if (!r.entity) return { ...r, reason: 'אין מונח-ישות במשפט' };
+  const p = pickModule(r.entity); const fo = await fieldOpsOfSentence(text);
+  const { assembleByOps } = await import('./render-module.mjs');
+  const minOverlap = Math.max(1, Math.min(3, fo.ops.length - 1));
+  const res = await assembleByOps({ module: p.module, entity: r.entity, minOverlap, opsOverride: new Set(fo.ops) });
+  return { ...r, pick: p, module: p.module, fields: fo.fields, ops: fo.ops, minOverlap, fragments: res.fragments, of: res.of, code: res.code, sites: Object.values(res.plans).reduce((a, x) => a + x.sites.length, 0) };
+}
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 const arg = (k) => { const i = process.argv.indexOf(k); return i > -1 ? process.argv[i + 1] : null; };
 const GOLDEN = path.join(GEN, 'sentence-golden.json');
@@ -52,7 +68,13 @@ if (isMain && process.argv.includes('--gate')) {
   if (bad.length) { console.log('🔴 sentence: ' + bad.join(' · ')); process.exit(1); }
   console.log(`✓ sentence: ${gold.length}/${gold.length} משפטי-זהב נפתרים לישות הצפויה (${TERMS.length} מונחי-ישות · אפס-LLM)`); process.exit(0);
 }
-if (isMain && arg('--text')) {
+if (isMain && arg('--text') && process.argv.includes('--subset')) {           // G8d: מודול-משנה סביב שדות-המשפט
+  const r = await subsetFromSentence(arg('--text'));
+  if (!r.entity) { console.log(`⚪ "${r.text}" ⇒ ${r.reason}`); process.exit(0); }
+  const out = arg('--out') || path.join(DIR, `gen_opsseed_${r.entity.toLowerCase()}_from_${{ 'schoolos.dart': 'inv', schoolos_students: 'stu', schoolos_attendance: 'att', schoolos_courses: 'crs', schoolos_teachers: 'tch', schoolos_rooms: 'rm', schoolos_fees: 'fee', schoolos_parents: 'par', schoolos_dashboard: 'dash' }[r.module.replace(/\.dart$/, '')] || 'x'}_sub.dart`);
+  if (!process.argv.includes('--dry')) fs.writeFileSync(out, r.code);
+  console.log(`🗣️ "${r.text}" ⇒ ${r.entity} ⇒ ${r.module} · שדות-המשפט: ${r.fields.map((f) => `${f.label}(${f.type}:${f.ops.join('/')})`).join(' · ')} ⇒ ops ${r.ops.join(',')} · minOverlap ${r.minOverlap} ⇒ ${path.basename(out)} · שברים ${r.fragments}/${r.of} · בונים מחווטים ${r.sites}`);
+} else if (isMain && arg('--text')) {
   const r = fromSentence(arg('--text'));
   if (!r.entity) { console.log(`⚪ "${r.text}" ⇒ ${r.reason}`); process.exit(0); }
   if (!process.argv.includes('--dry')) fs.writeFileSync(r.out, r.code);

@@ -1,10 +1,10 @@
 {
- "rendered": 35,
- "screens": 73,
+ "rendered": 37,
+ "screens": 75,
  "atoms": 37,
- "passed": 35,
+ "passed": 37,
  "failed": 37,
- "taps": 116,
+ "taps": 126,
  "tapErrors": 0,
  "coreSeen": 0,
  "report": [
@@ -809,6 +809,49 @@
    "widgets": 0,
    "atomList": [],
    "taps": null,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
+  },
+  {
+   "file": "gen_opsseed_volunteer_from_fee_sub.dart",
+   "screen": "FeesScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 11,
+   "widgets": 1515,
+   "atomList": [
+    "DsScaffold",
+    "DsSection",
+    "TimelineItem",
+    "SoftButton",
+    "StatusDot",
+    "MediaRow",
+    "StatusChip",
+    "AlertBanner",
+    "TrendStat",
+    "DsBars",
+    "BareStat"
+   ],
+   "taps": 4,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
+  },
+  {
+   "file": "gen_opsseed_volunteer_from_rm.dart",
+   "screen": "RoomsScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 4,
+   "widgets": 910,
+   "atomList": [
+    "DsScaffold",
+    "DsSection",
+    "AlertBanner",
+    "SoftButton"
+   ],
+   "taps": 6,
    "tapErrors": 0,
    "coreSeen": false,
    "coreExpected": false

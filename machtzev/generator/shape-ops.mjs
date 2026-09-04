@@ -12,6 +12,7 @@
 //   הרשומים ב-compose-engine (PARTICLES); היחס רק-עולה (shape-ops-baseline.json · grow).
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import * as R from '../root.mjs';
 
 const ROOT = R.ROOT;
@@ -25,7 +26,7 @@ const isEnum = (t) => /\|/.test(t) && /'[^']*'/.test(t) || (/^[A-Z][A-Za-z]+$/.t
 const isChannel = (n) => /(^|[_-])(phone|tel|mobile|mail|email|wa|whatsapp)([_-]|$)|phone|email/i.test(n);
 
 // שדה ⇒ ops (צורה בלבד)
-function fieldOps(f) {
+export function fieldOps(f) {
   const t = f.t.replace(/\s*\|\s*''$/, '');   // אופציונליות ('' ) אינה משנה צורה
   const ops = [];
   if (/^Id\[\]$/.test(t)) ops.push('relation-many');
@@ -91,12 +92,15 @@ md += `\n**סה"כ ${totH}/${totP} (${Math.round(100 * totH / totP)}%)**\n\n## o
 for (const a of all) md += `| ${a.entity} | ${a.fields} | ${a.ops.join(' · ')} |\n`;
 
 const OUT = path.join(GEN, 'shape-ops.json'), REPORT = path.join(GEN, 'shape-ops-report.md'), BASE = path.join(GEN, 'shape-ops-baseline.json');
-if (process.argv.includes('--gate')) {
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);   // L52-7: CLI רק בנקודת-הכניסה (frag-ops/op-bridge מייבאים)
+if (isMain && process.argv.includes('--gate')) {
   const base = fs.existsSync(BASE) ? JSON.parse(fs.readFileSync(BASE, 'utf8')) : { derivable: 0, particles: 0 };
   if (totH < base.derivable) { console.log(`🔴 shapeops: כיסוי-הזהב ירד ${base.derivable}⇒${totH}`); process.exit(1); }
   console.log(`✓ shapeops: ${ENTITIES.length} ישויות · ${FIELDS.length} שדות ⇒ כיסוי-זהב ${totH}/${totP}`); process.exit(0);
 }
+if (isMain) {
 fs.writeFileSync(OUT, JSON.stringify({ entities: all, coverage: cov }, null, 1));
 fs.writeFileSync(REPORT, md);
 if (process.argv.includes('--write-baseline') || !fs.existsSync(BASE)) fs.writeFileSync(BASE, JSON.stringify({ derivable: totH, particles: totP }));
 process.stdout.write(md.split('\n').slice(0, 20).join('\n') + '\n');
+}

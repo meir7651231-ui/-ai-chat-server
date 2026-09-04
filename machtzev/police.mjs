@@ -144,6 +144,7 @@ gate('sentence', 'generator/sentence.mjs', ['--gate']);
 gate('enumvalues', 'generator/enum-values.mjs', ['--gate']);
 gate('core', 'generator/core-from-shape.mjs', ['--gate']);
 gate('coredart', 'generator/core-dart.mjs', ['--gate']);
+gate('fragops', 'generator/frag-ops.mjs', ['--gate']);
 gate('goldenharness', 'generator/golden-harness.mjs', ['--gate'], FAST);
 gate('genverify', 'generator/gen-verify.mjs', ['--gate'], FAST);
 gate('index-complete', 'index-check.mjs');
