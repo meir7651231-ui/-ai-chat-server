@@ -137,6 +137,32 @@ export function retarget({ module, entity }) {
         `${ind}  AlertBanner(message: 'הבא אחרי \${${E}Core.states.first}: \${${E}Core.next(${E}Core.states.first) ?? 'סופי'} · \${${E}Core.rules.length} חוקים · \${${E}Core.channels.length} ערוצים · \${${E}Core.relations.length} יחסים', tone: 0, glyph: '🧠'),`,
         `${ind}]),`);
     }
+    // G6d · על הרשומה: פנקס-מצבים לפי id (overlay — הזרע const, לא כותבים אליו) + מקטע בפאנל-הרשומה (_openPanel) שמציג את מצב-הרשומה, המעבר מאטום-המדף וכפתור-קידום שכותב לפנקס
+    const stHead = lines.findIndex((l) => new RegExp(`^class _${E}ScreenState extends State<${E}Screen> \\{`).test(l));
+    if (stHead >= 0) lines.splice(stHead + 1, 0, `  final Map<String, String> _coreState = {}; // G6d · פנקס-מצבי-הגרעין לפי id — overlay על הזרע (הזרע const; אין כתיבה אליו)`);
+    const pn = lines.findIndex((l) => /^\s+void _openPanel\(Map<String, dynamic> \w+\) \{/.test(l));
+    if (pn >= 0) {
+      const pv = lines[pn].match(/Map<String, dynamic> (\w+)\)/)[1];
+      const hasAct = lines.slice(pn, pn + 14).some((l) => /void act\(/.test(l));
+      const ch = lines.findIndex((l, i) => i > pn && i < pn + 60 && /children: \[/.test(l));
+      if (ch >= 0) {
+        const ind = (lines[ch].match(/^\s+/) || [''])[0] + '  ';
+        const apply = hasAct ? `act(() => _coreState['\${${pv}['id']}'] = nx)` : `setState(() => _coreState['\${${pv}['id']}'] = nx)`;
+        lines.splice(ch + 1, 0,
+          `${ind}// ═══ הגרעין על הרשומה (G6d): מצב-הרשומה ⊕ ${E}Core.next ⊕ פנקס-overlay — מצב שאינו במחזור-החיים החצוב מדווח כפער, לא מתוקן בשקט ═══`,
+          `${ind}Builder(builder: (_) {`,
+          `${ind}  final cur = _coreState['\${${pv}['id']}'] ?? '\${${pv}['status'] ?? ${E}Core.states.first}';`,
+          `${ind}  if (!${E}Core.states.contains(cur)) return AlertBanner(message: 'מצב הרשומה "\$cur" אינו במחזור-החיים החצוב (\${${E}Core.states.join('→')}) — פער זרע/סכמה, מקום-שמור', tone: 3, glyph: '🧠');`,
+          `${ind}  final nx = ${E}Core.next(cur);`,
+          `${ind}  return DsSection(title: '🧠 מחזור-חיים · רשומה (גרעין)', children: [`,
+          `${ind}    Wrap(spacing: 6, runSpacing: 6, children: [for (final st in ${E}Core.states) StatusChip(label: st, tone: st == cur ? 1 : 0)]),`,
+          `${ind}    AlertBanner(message: nx == null ? 'מצב-סופי: \$cur' : 'הבא אחרי \$cur: \$nx', tone: 0, glyph: '🧠'),`,
+          `${ind}    SoftButton(label: nx == null ? 'אין מעבר' : 'קדם מצב ⇒ \$nx', onTap: nx == null ? null : () => ${apply}),`,
+          `${ind}  ]);`,
+          `${ind}}),`);
+        if (!lines.some((l) => /premium\/actions\/soft_button\.dart/.test(l))) { const li = lines.reduce((a, l, i) => (/^import '/.test(l) ? i : a), -1); lines.splice(li + 1, 0, `import '../dart-ui-bs/premium/actions/soft_button.dart';`); }
+      }
+    }
     code = lines.join('\n');
   }
   const n = (how) => map.filter((x) => x.how.startsWith(how)).length;
