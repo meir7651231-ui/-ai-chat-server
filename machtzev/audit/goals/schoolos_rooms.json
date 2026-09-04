@@ -10,7 +10,13 @@
   "inactiveRoomCourses",
   "missingEqFor",
   "altRooms",
-  "dayCell"
+  "dayCell",
+  "autoRelocate",
+  "autoApprove",
+  "upcomingHolidays",
+  "checkDue",
+  "searchRooms",
+  "filterRooms"
  ],
  "atoms": [
   "BareStat",
@@ -42,7 +48,17 @@
   "TimelineItem",
   "StatusChip",
   "SoftButton",
-  "DsField"
+  "DsField",
+  "DsSearch",
+  "FilterChipPill",
+  "smartFilter",
+  "smartScore",
+  "normSearch",
+  "finderMatches",
+  "roleOf",
+  "canGrantedAction",
+  "dayDiff",
+  "NeonBars"
  ],
  "accept": [
   "10 KPI מדאטה-אמת",
@@ -52,11 +68,15 @@
   "3 תקלות-פתוחות",
   "8 טאבים בפאנל",
   "14 פעולות מחווטות",
-  "16 עמודות-חוזה (4 מקום-שמור)"
+  "16 עמודות-חוזה (4 מקום-שמור)",
+  "11 צירי-סינון",
+  "6 תפקידים",
+  "9 אוטומציות",
+  "10 פריטים דורשי-פעולה"
  ],
  "picture": "machtzev/audit/goals/schoolos_rooms.png",
- "pictureSha": "221e0cc22a1007a26fde6087e2ef5ecefbc31971ef79845ef5c3fa523b3d394a",
- "screenSha": "100c6c56ddce2035b72684307893a5779f57266f909fc7abb446ce3786faf06d",
- "ts": "2026-09-04T03:14:39.571Z",
- "sig": "4cf73d86119f39e7e13e67e09315eb424537c160e79aaf2997e58af784f2b72e"
+ "pictureSha": "fc357348ebb6529907f14f0ada629449f6af279e9a166645156ac5f443ad545c",
+ "screenSha": "6423abaa96c842e31f1026280eb0d06d515fd5a11dffdfa00f8ada780903cae2",
+ "ts": "2026-09-04T03:32:49.120Z",
+ "sig": "70236451f3fc92f962062898c296a1d929971e9841c4d48009c1db0cf3cd7444"
 }
