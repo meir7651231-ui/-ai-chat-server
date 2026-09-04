@@ -147,8 +147,28 @@ const evalCalc = v => {
   const r = op === '*' ? a * b : op === '/' ? a / b : op === '+' ? a + b : a - b;
   return isFinite(r) ? r : null;
 };
-// ‏px: מחשב calc() · תומך ב-.5px (נקודה-מובילה) ומחזיר מספר-Dart-תקין (0.5, לא .5). ‏(?<![\d.]) מונע חטיפת "5px" מ-".5px".
-const px = v => { const c = evalCalc(v); if (c != null) return (+c.toFixed(3)).toString(); const m = v && String(v).match(/(?<![\d.])(-?(?:\d+(?:\.\d+)?|\.\d+))px/); return m ? m[1].replace(/^(-?)\./, '$10.') : null; };
+// יחידות-viewport נפתרות מול ה-viewport של אודיט-הפיקסל (gen-orig: 560×1400) — כדי שערך-ה-clamp
+// שנבחר יהיה זה שמצויר בפועל במקור (לא ה-min בעיוור). לדוגמה: clamp(38px,7vw,64px) ⇒ 7vw@560=39.2.
+const VW_PX = 560, VH_PX = 1400;
+const vwPx = v => {
+  const m = typeof v === 'string' && /^\s*(-?[\d.]+)(vw|vh|vmin|vmax)\s*$/i.exec(v);
+  if (!m) return null;
+  const n = parseFloat(m[1]), u = m[2].toLowerCase();
+  const base = u === 'vw' ? VW_PX : u === 'vh' ? VH_PX : u === 'vmin' ? Math.min(VW_PX, VH_PX) : Math.max(VW_PX, VH_PX);
+  return n / 100 * base;
+};
+// clamp(MIN, PREFERRED, MAX) ⇒ הערך-האמצעי (px/vw נפתר) חסום בין MIN ל-MAX. clamp() לא-פתיר (JS/מורכב) ⇒ null.
+const evalClamp = v => {
+  if (typeof v !== 'string' || !/clamp\(/i.test(v)) return null;
+  const m = /clamp\(\s*([^,]+?)\s*,\s*([^,]+?)\s*,\s*([^,)]+?)\s*\)/i.exec(v);
+  if (!m) return null;
+  const toN = x => { const p = px(x); if (p != null) return +p; const w = vwPx(x); return w != null ? w : null; };
+  const lo = toN(m[1]), pref = toN(m[2]), hi = toN(m[3]);
+  if (lo == null || pref == null || hi == null) return null;
+  return Math.min(Math.max(pref, lo), hi);
+};
+// ‏px: מחשב clamp()/calc()/vw · תומך ב-.5px (נקודה-מובילה) ומחזיר מספר-Dart-תקין (0.5, לא .5). ‏(?<![\d.]) מונע חטיפת "5px" מ-".5px".
+const px = v => { const cl = evalClamp(v); if (cl != null) return (+cl.toFixed(3)).toString(); const c = evalCalc(v); if (c != null) return (+c.toFixed(3)).toString(); const w = vwPx(v); if (w != null) return (+w.toFixed(3)).toString(); const m = v && String(v).match(/(?<![\d.])(-?(?:\d+(?:\.\d+)?|\.\d+))px/); return m ? m[1].replace(/^(-?)\./, '$10.') : null; };
 const pct = v => { const m = v && String(v).match(/^\s*(\d+(?:\.\d+)?)%\s*$/); return m ? (+m[1] / 100).toFixed(3) : null; };  // רוחב/גובה יחסי
 const num = v => { const m = v && String(v).match(/-?(?:\d+\.?\d*|\.\d+)/); if (!m) return null; return m[0].replace(/^-\./, '-0.').replace(/^\./, '0.'); };
 
@@ -374,6 +394,10 @@ function edge(st, prop, noV) {
   }
   if (per.top != null) t = per.top; if (per.right != null) r = per.right; if (per.bottom != null) b = per.bottom; if (per.left != null) l = per.left;
   if (noV) { t = 0; b = 0; if (!r && !l) return null; }
+  // Flutter לא תומך במרווח/ריפוד שלילי (‏Container.margin.isNonNegative). שלילי (חפיפת-אווטארים ‏.av{margin-inline-start:-14})
+  // נחסם ל-0 כאן — החפיפה משוחזרת כ-Stack ברמת-המיכל (ראה ענף overlap ב-emit). מונע קריסה.
+  const cl = x => { const n = parseFloat(x); return isFinite(n) && n < 0 ? '0' : x; };
+  t = cl(t); r = cl(r); b = cl(b); l = cl(l);
   return `const EdgeInsets.fromLTRB(${l}, ${t}, ${r}, ${b})`;
 }
 // שוליים-אנכיים (מספריים, px) של אלמנט — מ-shorthand + margin-top/bottom + margin-block(-start/end).
@@ -529,7 +553,7 @@ function toRichSpan(w) {
   if (m && !/,\s*text(Align|Direction):/.test(m[1])) return `TextSpan(text: ${m[1]}, style: ${m[2]})`;
   return `WidgetSpan(alignment: PlaceholderAlignment.middle, child: ${w})`;
 }
-function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parentFlex = false, inhFont = {}, inhVars = {}, sibIdx = 0, parentWrap = false, styleOverride = null, noVMargin = false) {
+function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parentFlex = false, inhFont = {}, inhVars = {}, sibIdx = 0, parentWrap = false, styleOverride = null, noVMargin = false, parentFlexRow = false) {
   if (depth > 16) return 'const SizedBox.shrink()';
   if (node.tag === 'svg') {
     const st0r = styleOf(node, map, ancestors);
@@ -618,7 +642,7 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   const selfWrap = /flex/.test(st['display'] || '') && !/column/.test(st['flex-direction'] || '') && /wrap/.test(st['flex-wrap'] || '') && !/nowrap/.test(st['flex-wrap'] || '');
   // מיכל-בלוק (לא flex/grid) ⇒ ילדי-הבלוק שבו עוברים קריסת-שוליים אנכית (CSS margin collapsing).
   const parentBlock = !/flex|grid/.test(st['display'] || '');
-  const flow = [], abs = [], flowVM = [];   // flowVM מקביל ל-flow: {mt,mb} לילד-בלוק שהוסרו-לו שוליים, אחרת null
+  const flow = [], abs = [], flowVM = [], flowMeta = [];   // flowVM: {mt,mb} · flowMeta: {negMS,w} לזיהוי שורת-חפיפה (negative margin)
   let flowInline = true, flowAllText = true;   // כל-הילדים inline-level ⇒ זרימת-inline (שורה, לא טור)
   const allKids = hasPseudo ? [...pk.before, ...node.children, ...pk.after] : node.children;
   let elemIdx = 0;
@@ -628,6 +652,11 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   // אב = flex-column עם align-items לא-מפורש ⇒ ברירת-CSS = stretch: ילד-בלוק ללא-רוחב-קבוע ובעל-יישור-עצמי
   // (direction/text-align) ממלא-רוחב ומתיישר-פנימית. ממקדים לילד-הטקסט בלבד — אח בגודל-קבוע (avatar 44) לא-נמתח.
   const pColStretch = /flex/.test(st['display'] || '') && /column/.test(st['flex-direction'] || '') && !ALIGN[st['align-items']];
+  // האם המיכל-הזה נטול-חסימת-רוחב: פריט-שורה (parentFlexRow) בלי flex-grow ובלי רוחב-מלא/קבוע ⇒ מתכווץ-לתוכן,
+  // וה-Row-האב מזין לו רוחב-אינסופי. במצב-זה SizedBox(width:infinity)/Align-מלא קורסים (BoxConstraints infinity).
+  const selfFx = (st['flex'] || '').trim();
+  const selfHasGrow = selfFx && selfFx !== 'none' && selfFx !== '0' && !/^0\b/.test(selfFx);
+  const selfWidthUnbounded = parentFlexRow && !selfHasGrow && !px(st['width']) && pct(st['width']) !== '1.000';
   const pColAny = /flex/.test(st['display'] || '') && /column/.test(st['flex-direction'] || '');   // אב flex-column (ל-align-self)
   const zOf = s => { const v = s['z-index']; return /^-?\d+$/.test((v || '').trim()) ? +v : 0; };   // z-index מספרי (ברירת 0)
   let flowMaxZ = 0;   // z-index-מרבי בזרימה — אם גבוה מ-abs, הזרימה נצבעת אחריהם (av מעל .gap ב-story ring)
@@ -646,20 +675,35 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     const posAbsC = /^(?:absolute|fixed)$/.test((cst['position'] || '').trim());
     // ילד-בלוק במיכל-בלוק ⇒ מסירים שוליים-אנכיים (ייבנו-מחדש מקוריסים ברמת-ה-Column). לא ל-abs/inline/flex.
     const collapseChild = parentBlock && !cInline && !posAbsC;
-    let e = emit(c, map, childAnc, depth + 1, myColor, selfFlexGrid, nextInh, nextVars, elemIdx++, selfWrap, sibOv, collapseChild);
+    let e = emit(c, map, childAnc, depth + 1, myColor, selfFlexGrid, nextInh, nextVars, elemIdx++, selfWrap, sibOv, collapseChild, pFlexRow);
     if (cst['position'] === 'absolute') { abs.push({ e, st: cst, z: zOf(cst) }); continue; }
     { const cz = zOf(cst); if (cz > flowMaxZ) flowMaxZ = cz; }   // ילד-זרימה בעל z-index גבוה
     // ילד-טקסט בעל-יישור-עצמי בטור-stretch, בלי רוחב-קבוע ⇒ ממלא-רוחב כדי שיישורו-הפנימי יחול (kpi "92"
     // direction:ltr ⇒ שמאל; "no avatar"/"+12"/"Meta" כנ"ל). אח בגודל-קבוע לא-מושפע (לא נכנס לתנאי).
-    if (pColStretch && (cst['direction'] || cst['text-align']) && !px(cst['width'])) e = `SizedBox(width: double.infinity, child: ${e})`;   // ילד-flex מבוקק (גם span) ⇒ אין תנאי-inline
+    if (pColStretch && (cst['direction'] || cst['text-align']) && !px(cst['width']) && !selfWidthUnbounded) e = `SizedBox(width: double.infinity, child: ${e})`;   // ילד-flex מבוקק · אבל לא כשהעמודה-האב עצמה נטולת-חסימת-רוחב (⇒ infinity קורס)
     // align-self בילד-flex-column ⇒ יישור-עצמי חוצה (RTL: flex-end=שמאל · center=מרכז · flex-start=ימין ברירת-מחדל).
     // עוטף Align ברוחב-מלא (chat: בועת .out לשמאל, .sys למרכז). ברירת-start ו-stretch לא-נוגעים.
-    { const asf = ALIGN[cst['align-self']]; if (pColAny && (asf === 'end' || asf === 'center') && !cInline) e = `SizedBox(width: double.infinity, child: Align(alignment: Alignment.${asf === 'end' ? 'centerLeft' : 'center'}, heightFactor: 1.0, child: ${e}))`; }
+    { const asf = ALIGN[cst['align-self']]; if (pColAny && (asf === 'end' || asf === 'center') && !cInline && !selfWidthUnbounded) e = `SizedBox(width: double.infinity, child: Align(alignment: Alignment.${asf === 'end' ? 'centerLeft' : 'center'}, heightFactor: 1.0, child: ${e}))`; }
     if (!cInline) flowInline = false;
     if (!(cInline && /^(?:Text\(|Directionality\(textDirection: TextDirection\.\w+, child: Text\()/.test(e))) flowAllText = false;
+    // ילד בעל max-width בשורת-flex (‏.ramp .sp.body{max-width:34em}) ⇒ מתכווץ-לזמין וגולש-שורות. ‏Row לא-חוסמת
+    // ⇒ IntrinsicWidth (שנועד לחסימת-עמודה-אב) הופך לשורה-בודדת גולשת. Flexible חוסם-לזמין ⇒ הטקסט עוטף כמו במקור.
+    if (pFlexRow && !selfWrap && !selfWidthUnbounded && cst['max-width'] && cst['max-width'] !== 'none' && !px(cst['width']) && pct(cst['width']) !== '1.000') {
+      e = e.replace(/^IntrinsicWidth\(child: ([\s\S]*)\)$/, '$1');
+      e = `Flexible(child: ${e})`;
+    }
     // flex-grow חיובי או width:100% בשורת-flex ⇒ Expanded (ממלא · מוסר אי-חסימת-רוחב; SizedBox אינסופי
     // בתוך Row-לא-חסום קורס — Expanded נותן רוחב-חסום שה-SizedBox ממלא).
-    if (pFlexRow) { const fx = (cst['flex'] || '').trim(); if ((fx && fx !== 'none' && fx !== '0' && !/^0\b/.test(fx)) || pct(cst['width']) === '1.000') e = `Expanded(child: ${e})`; }
+    // ‏Expanded חוקי רק בתוך Flex (Row/Column) — לא בתוך Wrap (selfWrap ⇒ ParentData-crash). מיכל-Wrap ⇒ ילד גודל-תוכן.
+    if (pFlexRow && !selfWrap && !selfWidthUnbounded) { const fx = (cst['flex'] || '').trim(); if ((fx && fx !== 'none' && fx !== '0' && !/^0\b/.test(fx)) || pct(cst['width']) === '1.000') e = `Expanded(child: ${e})`; }
+    // מטא לזיהוי שורת-חפיפה: margin-inline-start/left שלילי (‏.av{-14px}) + רוחב-קבוע ⇒ מיקום ב-Stack.
+    // פותרים var() של הילד (‏.av.s{--sz:34px} ⇒ width:var(--sz)) לפני px — אחרת width לא-פתור ⇒ הענף מוחמץ.
+    const cstVars = Object.assign({}, nextVars); for (const vk in cst) if (vk.startsWith('--')) cstVars[vk] = resolveVars(cst[vk], nextVars);
+    const rv = k => resolveVars(cst[k], cstVars);
+    const msRaw = cst['margin-inline-start'] != null ? rv('margin-inline-start') : rv('margin-left');
+    let negMS = 0; if (msRaw) { const mv = px(msRaw); if (mv != null && +mv < 0) negMS = +mv; }
+    const cwm = px(rv('width')), chm = px(rv('height'));
+    flowMeta.push({ negMS, w: cwm != null ? +cwm : null, h: chm != null ? +chm : null });
     flow.push(e); flowVM.push(collapseChild ? vMarginOf(cst) : null);
   }
   let inner;
@@ -677,7 +721,7 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   // display:flex (בלוק) = רוחב-מלא ⇒ MainAxisSize.max · inline-flex = כיווץ-לתוכן ⇒ min · space-* דורש max
   const isInlineFlex = /inline-flex/.test(disp);
   // פריט בתוך Wrap אב ⇒ גודל-תוכן (min), אחרת שורת-max ממלאת-שורה ⇒ פריט-אחד-בשורה (נערם). CSS: פריט-flex-wrap מתכווץ-לתוכן.
-  const rowSize = parentWrap ? 'MainAxisSize.min' : (((isFlex && !isInlineFlex) || /^space-/.test(st['justify-content'] || '')) ? 'MainAxisSize.max' : 'MainAxisSize.min');
+  const rowSize = (parentWrap || selfWidthUnbounded) ? 'MainAxisSize.min' : (((isFlex && !isInlineFlex) || /^space-/.test(st['justify-content'] || '')) ? 'MainAxisSize.max' : 'MainAxisSize.min');
   // flex-wrap:wrap בשורה ⇒ Wrap (Flutter Row לא עוטף ⇒ overflow). spacing=gap, runSpacing=gap.
   const flexWrap = /wrap/.test(st['flex-wrap'] || '') && !/nowrap/.test(st['flex-wrap'] || '');
   // display:grid עם grid-template-columns של fr — עמודות-שוות בשורה-אחת ⇒ Row של Expanded (flex לפי fr).
@@ -699,6 +743,18 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   else if (flow.length === 1 && !isFlex) { const m = flowVM[0]; inner = (m && (m.mt || m.mb)) ? `Padding(padding: const EdgeInsets.only(top: ${m.mt}, bottom: ${m.mb}), child: ${flow[0]})` : flow[0]; }
   else if (isGrid && gridCols && flow.length > 1 && flow.length <= gridCols.length) inner = `Row(crossAxisAlignment: CrossAxisAlignment.${rowCross}${tb(rowCross)}${listSep}, children: [${flow.map((e, i) => `Expanded(flex: ${Math.max(1, Math.round(gridCols[i] || 1))}, child: ${e})`).join(', ')}])`;
   else if (isFlex && !col && flexWrap) inner = `Wrap(spacing: ${gap || 0}, runSpacing: ${gap || 0}, crossAxisAlignment: WrapCrossAlignment.${rowCross === 'start' ? 'start' : rowCross === 'end' ? 'end' : 'center'}, children: [${flow.join(', ')}])`;
+  // שורת-חפיפה (‏margin-inline-start שלילי אחיד · חפיפת-אווטארים): Flutter לא תומך בשוליים/spacing שלילי ⇒
+  // בונים Stack עם מיקום-מצטבר. pos[i]=pos[i-1]+w[i-1]+negMS[i] (הצעד קטן מהרוחב). RTL⇒right, LTR⇒left.
+  else if (isFlex && !col && flow.length > 1 && flowMeta.some(m => m.negMS < 0) && flowMeta.every(m => m.w != null)) {
+    const isLtrOv = /ltr/.test(st['direction'] || '');
+    const pos = []; let acc = 0;
+    for (let i = 0; i < flow.length; i++) { if (i > 0) acc += flowMeta[i - 1].w + flowMeta[i].negMS; pos.push(acc); }
+    const totalW = pos[flow.length - 1] + flowMeta[flow.length - 1].w;
+    const maxH = Math.max(...flowMeta.map(m => m.h || 0));
+    const side = isLtrOv ? 'left' : 'right';
+    const items = flow.map((e, i) => `Positioned(${side}: ${(+pos[i].toFixed(2))}, top: 0, bottom: 0, child: Center(widthFactor: 1.0, child: ${e}))`).join(', ');
+    inner = `SizedBox(width: ${(+totalW.toFixed(2))}${maxH ? `, height: ${maxH}` : ''}, child: Stack(clipBehavior: Clip.none, children: [${items}]))`;
+  }
   else if (isFlex && !col) inner = `Row(mainAxisSize: ${rowSize}${majE}, crossAxisAlignment: CrossAxisAlignment.${rowCross}${tb(rowCross)}${listSep}, children: [${flow.join(', ')}])`;
   // מיכל לא-flex עם ילדים inline-level בלבד ⇒ זרימת-inline אמיתית דרך Text.rich (עוטף-שורות +
   // bidi-RTL + baseline) במקום Row (שלא עוטף ⇒ overflow בפסקה). textAlign מהמיכל.
@@ -721,6 +777,9 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
       // ltr (למשל המונה ברשימה-ממוספרת, direction:ltr) ⇒ inline-start=left. בלי זה המונה נופל לצד-הלא-נכון.
       const isLtr = /ltr/.test(a.st['direction'] || '');
       let l = pxe(a.st['left']), r = pxe(a.st['right']);
+      // inset-inline = start+end (קיצור לוגי; ‏.dock{inset-inline:12px} = left:12+right:12). בלי זה ה-Positioned
+      // מקבל רק inset-אנכי ⇒ רוחב לא-חסום ⇒ ילד-flex בעל-Expanded (‏.toast .tx{flex:1}) קורס.
+      const ii = a.st['inset-inline']; if (ii != null) { const parts = ii.trim().split(/\s+/); const s0 = pxe(parts[0]), s1 = pxe(parts[1] || parts[0]); if (isLtr) { if (l == null) l = s0; if (r == null) r = s1; } else { if (r == null) r = s0; if (l == null) l = s1; } }
       const iss = a.st['inset-inline-start'] != null ? pxe(a.st['inset-inline-start']) : null;
       const ise = a.st['inset-inline-end'] != null ? pxe(a.st['inset-inline-end']) : null;
       if (isLtr) { if (l == null && iss != null) l = iss; if (r == null && ise != null) r = ise; }
