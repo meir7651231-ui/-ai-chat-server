@@ -1,0 +1,109 @@
+{
+ "v": 1,
+ "ts": "2026-09-04T02:27:05.217Z",
+ "query": "substitute absence clash availability replace cover היעדרות מחליף החלפה זמינות התנגשות",
+ "tokens": [
+  "substitute",
+  "absence",
+  "clash",
+  "availability",
+  "replace",
+  "cover",
+  "יעדרות",
+  "חליף",
+  "חלפה",
+  "זמינות",
+  "תנגשות"
+ ],
+ "oracle": {
+  "atomIndexSha": "7b7050510b62a04885765ed30a940c05aaecbe96def91f6ed9f563499417d57f",
+  "logicCensusSha": "359db54bd2e70a0ea956fbc39901e656de6229b80b8ddc917e49921e8ecf67bf",
+  "display": 1402,
+  "logic": 848
+ },
+ "candidates": [
+  {
+   "id": "StudioPanesFindReplacePanePlaceholder",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/studio_panes_find_replace_pane_placeholder.dart",
+   "score": 4,
+   "hits": [
+    "replace",
+    "חלפה"
+   ]
+  },
+  {
+   "id": "absenceReasonChips",
+   "layer": "logic",
+   "file": "dart-maor/absence-reason-chips.dart",
+   "score": 3,
+   "hits": [
+    "absence"
+   ]
+  },
+  {
+   "id": "locationToAvailability",
+   "layer": "logic",
+   "file": "dart/location_to_availability.dart",
+   "score": 3,
+   "hits": [
+    "availability"
+   ]
+  },
+  {
+   "id": "scheduleClashText",
+   "layer": "logic",
+   "file": "dart-maor/schedule-clash-text.dart",
+   "score": 3,
+   "hits": [
+    "clash"
+   ]
+  },
+  {
+   "id": "SettingsScreenShell",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_screen_shell.dart",
+   "score": 1,
+   "hits": [
+    "חליף"
+   ]
+  },
+  {
+   "id": "WideWarning",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/wide_warning.dart",
+   "score": 1,
+   "hits": [
+    "חלפה"
+   ]
+  },
+  {
+   "id": "WorkerEquipmentChecklistSheetPrimaryBtn",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/worker_equipment_checklist_sheet_primary_btn.dart",
+   "score": 1,
+   "hits": [
+    "זמינות"
+   ]
+  },
+  {
+   "id": "WorkerEquipmentChecklistSheetSecH",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/worker_equipment_checklist_sheet_sec_h.dart",
+   "score": 1,
+   "hits": [
+    "זמינות"
+   ]
+  }
+ ],
+ "strong": [
+  "StudioPanesFindReplacePanePlaceholder",
+  "absenceReasonChips",
+  "locationToAvailability",
+  "scheduleClashText"
+ ],
+ "creates": null,
+ "chosen": null,
+ "why": null,
+ "sig": "ba177a965dcef1a3709bc8db831ca6f7594b03c4bb6ee1657914b611a4f6048c"
+}

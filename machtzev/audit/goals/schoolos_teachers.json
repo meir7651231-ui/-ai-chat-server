@@ -1,0 +1,45 @@
+{
+ "v": 1,
+ "screen": "new/dart-gen-bs/schoolos_teachers.dart",
+ "goal": "שכל מורה יהיה במקום הנכון עם עומס נכון — המנהל/ת רואה מי-עמוס-מדי, מי-חסר ומי-צריך-תמיכה לפני שזה פוגע בתלמידים; אף שיעור לא נשאר בלי מורה",
+ "models": [
+  "coursesOfTeacher",
+  "sessionsOf",
+  "volunteerLoadHint",
+  "scheduleClashText",
+  "certExpiryStatus",
+  "trendFromScan",
+  "presentsInMonth",
+  "dayDiff",
+  "ageOf",
+  "countBy",
+  "grandTotal",
+  "clampScale"
+ ],
+ "atoms": [
+  "StatHero",
+  "BareStat",
+  "StatRow",
+  "PremiumAvatar",
+  "MediaRow",
+  "StatusChip",
+  "SegmentedSwitch",
+  "DsSection",
+  "GradientCard",
+  "DsScaffold"
+ ],
+ "accept": [
+  "10 KPI מנועי-מדף",
+  "5 שיעורים-ללא-מורה היום (4 מהנעדרת + 1 מחופשה)",
+  "1 עמוס-מדי 135%",
+  "1 תת-עומס 28%",
+  "1 חוזה-פג-החודש",
+  "1 הכשרה-פגה",
+  "טריאז' 5 קבוצות לפי sev"
+ ],
+ "picture": "machtzev/audit/goals/schoolos_teachers.png",
+ "pictureSha": "0f084e89383ba15833a683049ebe5d5773ebd5334bcaf2a9858dadc4e66c502c",
+ "screenSha": "61a55fcabeea7dc8092df48d3bc6459f0c877031f1066ec69f34f214c1cc4be9",
+ "ts": "2026-09-04T02:38:49.608Z",
+ "sig": "23066b3c4a0d9c08a71dfacc59c6f963d8dd6dbe621f0d774e6678bd46e30db6"
+}

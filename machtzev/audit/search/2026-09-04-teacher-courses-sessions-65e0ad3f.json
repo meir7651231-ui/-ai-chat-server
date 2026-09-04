@@ -1,0 +1,231 @@
+{
+ "v": 1,
+ "ts": "2026-09-04T02:27:03.636Z",
+ "query": "teacher courses sessions workload hours schedule מורה חוגים מערכת עומס שעות",
+ "tokens": [
+  "teacher",
+  "courses",
+  "sessions",
+  "workload",
+  "hours",
+  "schedule",
+  "ורה",
+  "חוגים",
+  "ערכת",
+  "עומס",
+  "עות"
+ ],
+ "oracle": {
+  "atomIndexSha": "7b7050510b62a04885765ed30a940c05aaecbe96def91f6ed9f563499417d57f",
+  "logicCensusSha": "359db54bd2e70a0ea956fbc39901e656de6229b80b8ddc917e49921e8ecf67bf",
+  "display": 1402,
+  "logic": 848
+ },
+ "candidates": [
+  {
+   "id": "coursesOfTeacher",
+   "layer": "logic",
+   "file": "dart-maor/courses-of-teacher.dart",
+   "score": 6,
+   "hits": [
+    "teacher",
+    "courses"
+   ]
+  },
+  {
+   "id": "buildCourseDailyRows",
+   "layer": "logic",
+   "file": "dart-maor/build-course-daily-rows.dart",
+   "score": 3,
+   "hits": [
+    "courses"
+   ]
+  },
+  {
+   "id": "cockpitWorkListText",
+   "layer": "logic",
+   "file": "dart-maor/cockpit-work-list-text.dart",
+   "score": 3,
+   "hits": [
+    "workload"
+   ]
+  },
+  {
+   "id": "courseDateError",
+   "layer": "logic",
+   "file": "dart-maor/course-date-error.dart",
+   "score": 3,
+   "hits": [
+    "courses"
+   ]
+  },
+  {
+   "id": "courseFitsMember",
+   "layer": "logic",
+   "file": "dart-maor/course-fits-member.dart",
+   "score": 3,
+   "hits": [
+    "courses"
+   ]
+  },
+  {
+   "id": "defaultCourseDates",
+   "layer": "logic",
+   "file": "dart-maor/default-course-dates.dart",
+   "score": 3,
+   "hits": [
+    "courses"
+   ]
+  },
+  {
+   "id": "duplicateCourse",
+   "layer": "logic",
+   "file": "dart-maor/duplicate-course.dart",
+   "score": 3,
+   "hits": [
+    "courses"
+   ]
+  },
+  {
+   "id": "enrollmentsForSession",
+   "layer": "logic",
+   "file": "dart-maor/enrollments-for-session.dart",
+   "score": 3,
+   "hits": [
+    "sessions"
+   ]
+  },
+  {
+   "id": "inactiveRoomCourses",
+   "layer": "logic",
+   "file": "dart-maor/inactive-room-courses.dart",
+   "score": 3,
+   "hits": [
+    "courses"
+   ]
+  },
+  {
+   "id": "nextSessionDate",
+   "layer": "logic",
+   "file": "dart-maor/next-session-date.dart",
+   "score": 3,
+   "hits": [
+    "sessions"
+   ]
+  },
+  {
+   "id": "nextYearCourseDraft",
+   "layer": "logic",
+   "file": "dart-maor/next-year-course-draft.dart",
+   "score": 3,
+   "hits": [
+    "courses"
+   ]
+  },
+  {
+   "id": "scheduleClashText",
+   "layer": "logic",
+   "file": "dart-maor/schedule-clash-text.dart",
+   "score": 3,
+   "hits": [
+    "schedule"
+   ]
+  },
+  {
+   "id": "scheduleTasks",
+   "layer": "logic",
+   "file": "dart-maor/schedule-tasks.dart",
+   "score": 3,
+   "hits": [
+    "schedule"
+   ]
+  },
+  {
+   "id": "sessionsOf",
+   "layer": "logic",
+   "file": "dart-maor/sessions-of.dart",
+   "score": 3,
+   "hits": [
+    "sessions"
+   ]
+  },
+  {
+   "id": "teacherIdOf",
+   "layer": "logic",
+   "file": "dart-maor/teacher-id-of.dart",
+   "score": 3,
+   "hits": [
+    "teacher"
+   ]
+  },
+  {
+   "id": "timeHoursTotal",
+   "layer": "logic",
+   "file": "dart-maor/time-hours-total.dart",
+   "score": 3,
+   "hits": [
+    "hours"
+   ]
+  },
+  {
+   "id": "weeklyRoomSessions",
+   "layer": "logic",
+   "file": "dart-maor/weekly-room-sessions.dart",
+   "score": 3,
+   "hits": [
+    "sessions"
+   ]
+  },
+  {
+   "id": "WorkPathCard",
+   "layer": "display",
+   "file": "dart-ui-bs/work_path_card.dart",
+   "score": 3,
+   "hits": [
+    "workload"
+   ]
+  },
+  {
+   "id": "AccordionPanel",
+   "layer": "display",
+   "file": "dart-ui-bs/accordion_panel.dart",
+   "score": 1,
+   "hits": [
+    "ורה"
+   ]
+  },
+  {
+   "id": "AiBar",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_bar.dart",
+   "score": 1,
+   "hits": [
+    "עות"
+   ]
+  }
+ ],
+ "strong": [
+  "coursesOfTeacher",
+  "buildCourseDailyRows",
+  "cockpitWorkListText",
+  "courseDateError",
+  "courseFitsMember",
+  "defaultCourseDates",
+  "duplicateCourse",
+  "enrollmentsForSession",
+  "inactiveRoomCourses",
+  "nextSessionDate",
+  "nextYearCourseDraft",
+  "scheduleClashText",
+  "scheduleTasks",
+  "sessionsOf",
+  "teacherIdOf",
+  "timeHoursTotal",
+  "weeklyRoomSessions",
+  "WorkPathCard"
+ ],
+ "creates": null,
+ "chosen": null,
+ "why": null,
+ "sig": "65e0ad3f68483cac60774bfc0172933d0b3691061b391c57e3050df2ef9d27b5"
+}

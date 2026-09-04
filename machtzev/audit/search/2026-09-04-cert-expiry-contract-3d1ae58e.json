@@ -1,0 +1,292 @@
+{
+ "v": 1,
+ "ts": "2026-09-04T02:27:06.977Z",
+ "query": "cert expiry contract trend role permission export team intel הכשרה תוקף חוזה מגמה תפקיד הרשאה ייצוא צוות",
+ "tokens": [
+  "cert",
+  "expiry",
+  "contract",
+  "trend",
+  "role",
+  "permission",
+  "export",
+  "team",
+  "intel",
+  "כשרה",
+  "תוקף",
+  "חוזה",
+  "גמה",
+  "תפקיד",
+  "רשאה",
+  "ייצוא",
+  "צוות"
+ ],
+ "oracle": {
+  "atomIndexSha": "7b7050510b62a04885765ed30a940c05aaecbe96def91f6ed9f563499417d57f",
+  "logicCensusSha": "359db54bd2e70a0ea956fbc39901e656de6229b80b8ddc917e49921e8ecf67bf",
+  "display": 1402,
+  "logic": 848
+ },
+ "candidates": [
+  {
+   "id": "certExpiryStatus",
+   "layer": "logic",
+   "file": "dart/cert_expiry_status.dart",
+   "score": 6,
+   "hits": [
+    "cert",
+    "expiry"
+   ]
+  },
+  {
+   "id": "trendFromScan",
+   "layer": "logic",
+   "file": "dart-maor/intel-trend-from-scan.dart",
+   "score": 5,
+   "hits": [
+    "trend",
+    "intel"
+   ]
+  },
+  {
+   "id": "RoleRequestsInboxEmpty",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/role_requests_inbox_empty.dart",
+   "score": 4,
+   "hits": [
+    "role",
+    "תפקיד"
+   ]
+  },
+  {
+   "id": "TrendCard",
+   "layer": "display",
+   "file": "dart-ui-bs/trend_card.dart",
+   "score": 4,
+   "hits": [
+    "trend",
+    "גמה"
+   ]
+  },
+  {
+   "id": "TrendStat",
+   "layer": "display",
+   "file": "dart-ui-bs/premium/dataviz/trend_stat.dart",
+   "score": 4,
+   "hits": [
+    "trend",
+    "גמה"
+   ]
+  },
+  {
+   "id": "buildCustomExport",
+   "layer": "logic",
+   "file": "dart-maor/build-custom-export.dart",
+   "score": 3,
+   "hits": [
+    "export"
+   ]
+  },
+  {
+   "id": "contractorCredit",
+   "layer": "logic",
+   "file": "dart/contractor_credit.dart",
+   "score": 3,
+   "hits": [
+    "contract"
+   ]
+  },
+  {
+   "id": "ContractorToolsSheetsSheetHandle",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/contractor_tools_sheets_sheet_handle.dart",
+   "score": 3,
+   "hits": [
+    "contract"
+   ]
+  },
+  {
+   "id": "couponExpiry",
+   "layer": "logic",
+   "file": "dart-maor/coupon-expiry.dart",
+   "score": 3,
+   "hits": [
+    "expiry"
+   ]
+  },
+  {
+   "id": "donorIntel",
+   "layer": "logic",
+   "file": "dart-maor/intel-donor-intel.dart",
+   "score": 3,
+   "hits": [
+    "intel"
+   ]
+  },
+  {
+   "id": "exportAllowed",
+   "layer": "logic",
+   "file": "dart-maor/export-allowed.dart",
+   "score": 3,
+   "hits": [
+    "export"
+   ]
+  },
+  {
+   "id": "flowRole",
+   "layer": "logic",
+   "file": "dart/flow_role.dart",
+   "score": 3,
+   "hits": [
+    "role"
+   ]
+  },
+  {
+   "id": "guardExport",
+   "layer": "logic",
+   "file": "dart-maor/guard-export.dart",
+   "score": 3,
+   "hits": [
+    "export"
+   ]
+  },
+  {
+   "id": "IntelBar",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/intel_bar.dart",
+   "score": 3,
+   "hits": [
+    "intel"
+   ]
+  },
+  {
+   "id": "IntelCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/intel_card.dart",
+   "score": 3,
+   "hits": [
+    "intel"
+   ]
+  },
+  {
+   "id": "IntelIntro",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/intel_intro.dart",
+   "score": 3,
+   "hits": [
+    "intel"
+   ]
+  },
+  {
+   "id": "IntelPill",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/intel_pill.dart",
+   "score": 3,
+   "hits": [
+    "intel"
+   ]
+  },
+  {
+   "id": "IntelStat",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/intel_stat.dart",
+   "score": 3,
+   "hits": [
+    "intel"
+   ]
+  },
+  {
+   "id": "portfolioIntel",
+   "layer": "logic",
+   "file": "dart-maor/portfolio-portfolio-intel.dart",
+   "score": 3,
+   "hits": [
+    "intel"
+   ]
+  },
+  {
+   "id": "roleFloorBlock",
+   "layer": "logic",
+   "file": "dart/role_floor_block.dart",
+   "score": 3,
+   "hits": [
+    "role"
+   ]
+  },
+  {
+   "id": "roleOf",
+   "layer": "logic",
+   "file": "dart-maor/role-of.dart",
+   "score": 3,
+   "hits": [
+    "role"
+   ]
+  },
+  {
+   "id": "setExportBlocked",
+   "layer": "logic",
+   "file": "dart-maor/set-export-blocked.dart",
+   "score": 3,
+   "hits": [
+    "export"
+   ]
+  },
+  {
+   "id": "sortTeamMsgs",
+   "layer": "logic",
+   "file": "dart-maor/sort-team-msgs.dart",
+   "score": 3,
+   "hits": [
+    "team"
+   ]
+  },
+  {
+   "id": "tierTrendCounts",
+   "layer": "logic",
+   "file": "dart-maor/portfolio-tier-trend-counts.dart",
+   "score": 3,
+   "hits": [
+    "trend"
+   ]
+  },
+  {
+   "id": "churnFromScan",
+   "layer": "logic",
+   "file": "dart-maor/intel-churn-from-scan.dart",
+   "score": 2,
+   "hits": [
+    "intel"
+   ]
+  }
+ ],
+ "strong": [
+  "certExpiryStatus",
+  "trendFromScan",
+  "RoleRequestsInboxEmpty",
+  "TrendCard",
+  "TrendStat",
+  "buildCustomExport",
+  "contractorCredit",
+  "ContractorToolsSheetsSheetHandle",
+  "couponExpiry",
+  "donorIntel",
+  "exportAllowed",
+  "flowRole",
+  "guardExport",
+  "IntelBar",
+  "IntelCard",
+  "IntelIntro",
+  "IntelPill",
+  "IntelStat",
+  "portfolioIntel",
+  "roleFloorBlock",
+  "roleOf",
+  "setExportBlocked",
+  "sortTeamMsgs",
+  "tierTrendCounts"
+ ],
+ "creates": null,
+ "chosen": null,
+ "why": null,
+ "sig": "3d1ae58eabfdabb15d2b1c5d938975fc848857c774d384514c585cbd4860e89d"
+}
