@@ -8,7 +8,9 @@
   "conflictsOf",
   "blockReason",
   "inactiveRoomCourses",
-  "missingEqFor"
+  "missingEqFor",
+  "altRooms",
+  "dayCell"
  ],
  "atoms": [
   "BareStat",
@@ -27,18 +29,34 @@
   "countBy",
   "startOfWeekSunday",
   "DsScaffold",
-  "DsSection"
+  "DsSection",
+  "SegmentedSwitch",
+  "TintedTag",
+  "DsTable",
+  "dayNames",
+  "dayLetters",
+  "roomInfoLabel",
+  "GlassCard",
+  "MediaRow",
+  "StatRow",
+  "TimelineItem",
+  "StatusChip",
+  "SoftButton",
+  "DsField"
  ],
  "accept": [
   "10 KPI מדאטה-אמת",
   "2 התנגשויות-תפיסה מזוהות בשבוע",
   "7 חדרים · 1 תפוס-עכשיו · 5 פנויים",
   "0 Date.now במנוע",
-  "3 תקלות-פתוחות"
+  "3 תקלות-פתוחות",
+  "8 טאבים בפאנל",
+  "14 פעולות מחווטות",
+  "16 עמודות-חוזה (4 מקום-שמור)"
  ],
  "picture": "machtzev/audit/goals/schoolos_rooms.png",
- "pictureSha": "578a233a16d1c489260c650e331645118cd1ec2929f0508fcf77de150eb8092b",
- "screenSha": "8753762065a9b1a7fdeb974124cdc3a31269b76e796c05230af32275a7202179",
- "ts": "2026-09-04T02:43:04.006Z",
- "sig": "95c2e9679692bed23dd56693f10f7250fa49b36e45bf131330b1fbd7ce31dc0f"
+ "pictureSha": "221e0cc22a1007a26fde6087e2ef5ecefbc31971ef79845ef5c3fa523b3d394a",
+ "screenSha": "100c6c56ddce2035b72684307893a5779f57266f909fc7abb446ce3786faf06d",
+ "ts": "2026-09-04T03:14:39.571Z",
+ "sig": "4cf73d86119f39e7e13e67e09315eb424537c160e79aaf2997e58af784f2b72e"
 }
