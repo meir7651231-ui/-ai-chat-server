@@ -15,6 +15,8 @@ rendermodule	הרכבה-מהקטלוג (GENMAX·G4): --all ≡ מקור 9/9 · �
 retarget	שבר-זהב ⇒ ישות אחרת (GENMAX·G5c · §20-ד): מיפוי-מפתחות שם-זהה⇒צורת-טיפוס⇒מקום-שמור, ללא מילון; gen_retarget_*.dart המחויבים ≡ מחולל-טרי — הרנדר-בפועל בשער genverify	commit	—
 entityterms	גשר-מונחי-ישות כאטום-דאטה חצוב (GENMAX·G5f · §19-ד): entity-terms.data.json ≡ חציבה-טרייה מ-TERM_DEFS של maor + נרדפות-ורטיקל מהמדף; מדולג בלי maor-system	commit	—
 sentence	משפט-בעברית ⇒ ישות (GENMAX·G5f · §22): משפטי-הזהב ב-sentence-golden.json נפתרים לישות הצפויה — אפס-LLM, אפס-מילון-במנוע (מונחים=דאטה)	commit	—
+enumvalues	ערכי-טיפוסים-מנויים כאטום-דאטה חצוב (GENMAX·G6a · §19-ד): enum-values.data.json ≡ חציבה-טרייה מ-domain.ts של maor (13 טיפוסים); מדולג בלי maor-system	commit	—
+core	שכבת-הגרעין מהסכמה (GENMAX·G6a · §20-ד): core-registry.json (ישויות · יחסים · workflows מ-enum · אירועים · חוקים · ערוצים · policy=שקע) ≡ נגזרת-טרייה מהסכמה+דאטה-חצוב	commit	—
 goldenharness	רתמת-הזהב (GENMAX·G4 · השער הקשה): מודול מורכב-מחדש (compose+declared) מוחלף במראה ועובר את בדיקות-הזהב המקוריות בלי שינוי-בדיקה — רק-עולה (מודולים · בדיקות); מדולג בלי buildsmart	push	generator/render-module-baseline.json;grow
 genverify	אימות-בפועל של פלטי-המחולל (GENMAX·G5b · L53): כל gen_*.dart עם מסך נטען ב-flutter test מחולל — אפס-חריגות · DsScaffold · ספירת אטומי-תצוגה שרונדרו — רק-עולה; פלט שלא רונדר = כשל; מדולג בלי buildsmart	push	generator/gen-verify-baseline.json;grow
 compose-determinism	קומפוזר-דטרמיניסטי (23-ג): compose-engine על 15 החלקיקים ≡ compose-engine-report.md	commit	

@@ -79,4 +79,6 @@
 | G5g תוויות-הישות | ✅ 4.9 · `sourceTerms` (מפתח-מונח≡גזע-הקובץ · או זרע ≥5 שמות) ⇒ `swapTerms` בליטרלי-מחרוזת בלבד (רבים⇒רבים, יחיד⇒יחיד, אות-שימוש) — rooms⇒Volunteer **43 החלפות** (`'רשימת-מתנדבים'`) · ShopItem 21 · Supporter/TzBox 11 · WorkTask אין-מונח מדווח · 8/8 analyze 0 + רונדרו | `CLOSED-GENMAX-G5g-2026-09-04.md` |
 | G5h שדות-המשפט + אסרטת-טקסט | 🔵 הבא: "עם טלפון ואזור" ⇒ שדות-הישות (ערוץ/טיפוס מרמזי-spec-lang + rule מהמדף) כשוברי-תיקו במיפוי · אסרטת find.text למונח-המוחלף ב-gen-verify · student⇒Member = הכרעת-בעלים | — |
 | G1↔G2 איחוד-אוצרות-ops | ⚪ שני אוצרות-ops (shape-ops מול ops-map) ⇒ בחירה לפי פעולות-היסוד של המטרה (L49) במקום צורת-הזרע | — |
-| G6–G7 | ⚪ | — |
+| G6a גרעין-כנתונים | ✅ 4.9 · `enum-values.mjs` (13 טיפוסים חצובים מ-domain.ts) + `core-from-shape.mjs`: Registry · Relations **32/33** (שם/סיומת+מרחב/תחילית-קצרה/מילה-אחרונה⇒שורש/self) · Workflow 8 (2 אטום-מעבר · 6 declared מוצהר) · Events 35 · Rules 383 · Channels 14 · policy=שקע-בעלים · שערים `enumvalues`/`core` | `CLOSED-GENMAX-G6a-2026-09-04.md` |
+| G6b גרעין-כקוד | 🔵 הבא: פליטת `core_<entity>.dart` מה-registry (Workflow⇒nextStage/advanceStatus מהמדף · Rules⇒validate · Notification⇒outbox-socket) ⇒ analyze + gen-verify; מעברי-אמת/policy = הכרעת-בעלים | — |
+| G7 ראצ׳ט-זהב | ⚪ לאורך הדרך: goldenharness/genverify/core/retarget ≡ ראצ׳טים רק-עולים (פעילים כבר) | — |
