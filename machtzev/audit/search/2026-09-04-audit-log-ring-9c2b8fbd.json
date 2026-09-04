@@ -1,0 +1,236 @@
+{
+ "v": 1,
+ "ts": "2026-09-04T02:27:00.822Z",
+ "query": "audit log ring entries privacy encrypted protected field אודיט יומן חשיפה פרטיות הצפנה",
+ "tokens": [
+  "audit",
+  "log",
+  "ring",
+  "entries",
+  "privacy",
+  "encrypted",
+  "protected",
+  "field",
+  "אודיט",
+  "יומן",
+  "חשיפה",
+  "פרטיות",
+  "צפנה"
+ ],
+ "oracle": {
+  "atomIndexSha": "7b7050510b62a04885765ed30a940c05aaecbe96def91f6ed9f563499417d57f",
+  "logicCensusSha": "359db54bd2e70a0ea956fbc39901e656de6229b80b8ddc917e49921e8ecf67bf",
+  "display": 1402,
+  "logic": 848
+ },
+ "candidates": [
+  {
+   "id": "pullAuditRing",
+   "layer": "logic",
+   "file": "dart-maor/pull-audit-ring.dart",
+   "score": 6,
+   "hits": [
+    "audit",
+    "ring"
+   ]
+  },
+  {
+   "id": "pushAuditRing",
+   "layer": "logic",
+   "file": "dart-maor/push-audit-ring.dart",
+   "score": 6,
+   "hits": [
+    "audit",
+    "ring"
+   ]
+  },
+  {
+   "id": "auditCatColors",
+   "layer": "logic",
+   "file": "dart-maor/audit-cat-colors.dart",
+   "score": 3,
+   "hits": [
+    "audit"
+   ]
+  },
+  {
+   "id": "auditLine",
+   "layer": "logic",
+   "file": "dart/audit_line.dart",
+   "score": 3,
+   "hits": [
+    "audit"
+   ]
+  },
+  {
+   "id": "auditReportLines",
+   "layer": "logic",
+   "file": "dart-maor/audit-report-lines.dart",
+   "score": 3,
+   "hits": [
+    "audit"
+   ]
+  },
+  {
+   "id": "auditRows",
+   "layer": "logic",
+   "file": "dart/audit_rows.dart",
+   "score": 3,
+   "hits": [
+    "audit"
+   ]
+  },
+  {
+   "id": "AuroraField",
+   "layer": "display",
+   "file": "dart-ui-bs/aurora_field.dart",
+   "score": 3,
+   "hits": [
+    "field"
+   ]
+  },
+  {
+   "id": "decodeFields",
+   "layer": "logic",
+   "file": "dart/decode_value.dart",
+   "score": 3,
+   "hits": [
+    "field"
+   ]
+  },
+  {
+   "id": "DsDateField",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_date_field.dart",
+   "score": 3,
+   "hits": [
+    "field"
+   ]
+  },
+  {
+   "id": "DsEnumField",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_enum_field.dart",
+   "score": 3,
+   "hits": [
+    "field"
+   ]
+  },
+  {
+   "id": "DsField",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_field.dart",
+   "score": 3,
+   "hits": [
+    "field"
+   ]
+  },
+  {
+   "id": "DsNumberField",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_number_field.dart",
+   "score": 3,
+   "hits": [
+    "field"
+   ]
+  },
+  {
+   "id": "dupFieldValue",
+   "layer": "logic",
+   "file": "dart-maor/dup-field-value.dart",
+   "score": 3,
+   "hits": [
+    "field"
+   ]
+  },
+  {
+   "id": "encodeFields",
+   "layer": "logic",
+   "file": "dart/encode_value.dart",
+   "score": 3,
+   "hits": [
+    "field"
+   ]
+  },
+  {
+   "id": "encryptExistingCloud",
+   "layer": "logic",
+   "file": "dart-maor/encrypt-existing-cloud.dart",
+   "score": 3,
+   "hits": [
+    "encrypted"
+   ]
+  },
+  {
+   "id": "Field",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/field.dart",
+   "score": 3,
+   "hits": [
+    "field"
+   ]
+  },
+  {
+   "id": "FieldLabel",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/field_label.dart",
+   "score": 3,
+   "hits": [
+    "field"
+   ]
+  },
+  {
+   "id": "fieldLabelHe",
+   "layer": "logic",
+   "file": "dart/field_label_he.dart",
+   "score": 3,
+   "hits": [
+    "field"
+   ]
+  },
+  {
+   "id": "FieldRow",
+   "layer": "display",
+   "file": "dart-ui-bs/field_row.dart",
+   "score": 3,
+   "hits": [
+    "field"
+   ]
+  },
+  {
+   "id": "GlowField",
+   "layer": "display",
+   "file": "dart-ui-bs/glow_field.dart",
+   "score": 3,
+   "hits": [
+    "field"
+   ]
+  }
+ ],
+ "strong": [
+  "pullAuditRing",
+  "pushAuditRing",
+  "auditCatColors",
+  "auditLine",
+  "auditReportLines",
+  "auditRows",
+  "AuroraField",
+  "decodeFields",
+  "DsDateField",
+  "DsEnumField",
+  "DsField",
+  "DsNumberField",
+  "dupFieldValue",
+  "encodeFields",
+  "encryptExistingCloud",
+  "Field",
+  "FieldLabel",
+  "fieldLabelHe",
+  "FieldRow",
+  "GlowField"
+ ],
+ "creates": null,
+ "chosen": null,
+ "why": null,
+ "sig": "9c2b8fbd19a25ac2eeb5567e8e26e12e4a41896c4cbd0a7f4c94b5cb862c7cf1"
+}

@@ -1,0 +1,259 @@
+{
+ "v": 1,
+ "ts": "2026-09-04T02:27:00.717Z",
+ "query": "task overdue open tasks stats consent expiry reminder משימה פנייה איחור אישור תזכורת",
+ "tokens": [
+  "task",
+  "overdue",
+  "open",
+  "tasks",
+  "stats",
+  "consent",
+  "expiry",
+  "reminder",
+  "שימה",
+  "פנייה",
+  "איחור",
+  "אישור",
+  "תזכורת"
+ ],
+ "oracle": {
+  "atomIndexSha": "7b7050510b62a04885765ed30a940c05aaecbe96def91f6ed9f563499417d57f",
+  "logicCensusSha": "359db54bd2e70a0ea956fbc39901e656de6229b80b8ddc917e49921e8ecf67bf",
+  "display": 1402,
+  "logic": 848
+ },
+ "candidates": [
+  {
+   "id": "openTasksFor",
+   "layer": "logic",
+   "file": "dart-maor/open-tasks-for.dart",
+   "score": 9,
+   "hits": [
+    "task",
+    "open",
+    "tasks"
+   ]
+  },
+  {
+   "id": "overdueContactTaskDrafts",
+   "layer": "logic",
+   "file": "dart-maor/overdue-contact-task-drafts.dart",
+   "score": 9,
+   "hits": [
+    "task",
+    "overdue",
+    "tasks"
+   ]
+  },
+  {
+   "id": "taskOverdue",
+   "layer": "logic",
+   "file": "dart-maor/task-overdue.dart",
+   "score": 9,
+   "hits": [
+    "task",
+    "overdue",
+    "tasks"
+   ]
+  },
+  {
+   "id": "taskStatsFor",
+   "layer": "logic",
+   "file": "dart-maor/task-stats-for.dart",
+   "score": 9,
+   "hits": [
+    "task",
+    "tasks",
+    "stats"
+   ]
+  },
+  {
+   "id": "ApprovalTaskCard",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__manager_dashboard_screen/approval_task_card.dart",
+   "score": 8,
+   "hits": [
+    "task",
+    "tasks",
+    "שימה",
+    "אישור"
+   ]
+  },
+  {
+   "id": "NewTaskButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/new_task_button.dart",
+   "score": 7,
+   "hits": [
+    "task",
+    "tasks",
+    "אישור"
+   ]
+  },
+  {
+   "id": "ProposeTaskButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/propose_task_button.dart",
+   "score": 7,
+   "hits": [
+    "task",
+    "tasks",
+    "אישור"
+   ]
+  },
+  {
+   "id": "WorkerTaskDetailSheetPrimaryBtn",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/worker_task_detail_sheet_primary_btn.dart",
+   "score": 7,
+   "hits": [
+    "task",
+    "tasks",
+    "אישור"
+   ]
+  },
+  {
+   "id": "buildTasksGantt",
+   "layer": "logic",
+   "file": "dart/build_tasks_gantt.dart",
+   "score": 6,
+   "hits": [
+    "task",
+    "tasks"
+   ]
+  },
+  {
+   "id": "cockpitHokTasks",
+   "layer": "logic",
+   "file": "dart-maor/cockpit-hok-tasks.dart",
+   "score": 6,
+   "hits": [
+    "task",
+    "tasks"
+   ]
+  },
+  {
+   "id": "scheduleTasks",
+   "layer": "logic",
+   "file": "dart-maor/schedule-tasks.dart",
+   "score": 6,
+   "hits": [
+    "task",
+    "tasks"
+   ]
+  },
+  {
+   "id": "taskIdentity",
+   "layer": "logic",
+   "file": "dart-maor/task-identity.dart",
+   "score": 6,
+   "hits": [
+    "task",
+    "tasks"
+   ]
+  },
+  {
+   "id": "tasksFor",
+   "layer": "logic",
+   "file": "dart/tasks_for.dart",
+   "score": 6,
+   "hits": [
+    "task",
+    "tasks"
+   ]
+  },
+  {
+   "id": "StatsCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/stats_card.dart",
+   "score": 4,
+   "hits": [
+    "stats",
+    "אישור"
+   ]
+  },
+  {
+   "id": "WorkerAppStat",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/worker_app_stat.dart",
+   "score": 4,
+   "hits": [
+    "stats",
+    "אישור"
+   ]
+  },
+  {
+   "id": "WorkerProfileStat",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/worker_profile_stat.dart",
+   "score": 4,
+   "hits": [
+    "stats",
+    "אישור"
+   ]
+  },
+  {
+   "id": "BareStat",
+   "layer": "display",
+   "file": "dart-ui-bs/bare_stat.dart",
+   "score": 3,
+   "hits": [
+    "stats"
+   ]
+  },
+  {
+   "id": "callStats",
+   "layer": "logic",
+   "file": "dart-maor/call-stats.dart",
+   "score": 3,
+   "hits": [
+    "stats"
+   ]
+  },
+  {
+   "id": "certExpiryStatus",
+   "layer": "logic",
+   "file": "dart/cert_expiry_status.dart",
+   "score": 3,
+   "hits": [
+    "expiry"
+   ]
+  },
+  {
+   "id": "ConsentDialog",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/consent_dialog.dart",
+   "score": 3,
+   "hits": [
+    "consent"
+   ]
+  }
+ ],
+ "strong": [
+  "openTasksFor",
+  "overdueContactTaskDrafts",
+  "taskOverdue",
+  "taskStatsFor",
+  "ApprovalTaskCard",
+  "NewTaskButton",
+  "ProposeTaskButton",
+  "WorkerTaskDetailSheetPrimaryBtn",
+  "buildTasksGantt",
+  "cockpitHokTasks",
+  "scheduleTasks",
+  "taskIdentity",
+  "tasksFor",
+  "StatsCard",
+  "WorkerAppStat",
+  "WorkerProfileStat",
+  "BareStat",
+  "callStats",
+  "certExpiryStatus",
+  "ConsentDialog"
+ ],
+ "creates": null,
+ "chosen": null,
+ "why": null,
+ "sig": "bb84ed3d7dc1227964500ad4f1ef223830938c00d4765d67c2199d7b6236efce"
+}

@@ -1,0 +1,243 @@
+{
+ "v": 1,
+ "ts": "2026-09-04T02:27:00.257Z",
+ "query": "age birth date grade class order sort name key גיל תאריך-לידה כיתה שכבה מיון שם",
+ "tokens": [
+  "age",
+  "birth",
+  "date",
+  "grade",
+  "class",
+  "order",
+  "sort",
+  "name",
+  "key",
+  "גיל",
+  "תאריך",
+  "ידה",
+  "יתה",
+  "כבה",
+  "יון",
+  "שם"
+ ],
+ "oracle": {
+  "atomIndexSha": "7b7050510b62a04885765ed30a940c05aaecbe96def91f6ed9f563499417d57f",
+  "logicCensusSha": "359db54bd2e70a0ea956fbc39901e656de6229b80b8ddc917e49921e8ecf67bf",
+  "display": 1402,
+  "logic": 848
+ },
+ "candidates": [
+  {
+   "id": "nameSortKey",
+   "layer": "logic",
+   "file": "dart-maor/name-sort-key.dart",
+   "score": 9,
+   "hits": [
+    "sort",
+    "name",
+    "key"
+   ]
+  },
+  {
+   "id": "DsDateField",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_date_field.dart",
+   "score": 5,
+   "hits": [
+    "date",
+    "תאריך",
+    "ידה"
+   ]
+  },
+  {
+   "id": "DatePills",
+   "layer": "display",
+   "file": "dart-ui-bs/date_pills.dart",
+   "score": 4,
+   "hits": [
+    "date",
+    "תאריך"
+   ]
+  },
+  {
+   "id": "OrderListRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__store_screen/order_list_row.dart",
+   "score": 4,
+   "hits": [
+    "order",
+    "שם"
+   ]
+  },
+  {
+   "id": "ageOf",
+   "layer": "logic",
+   "file": "dart-maor/age-of.dart",
+   "score": 3,
+   "hits": [
+    "age"
+   ]
+  },
+  {
+   "id": "applyAyinNames",
+   "layer": "logic",
+   "file": "dart-maor/apply-ayin-names.dart",
+   "score": 3,
+   "hits": [
+    "name"
+   ]
+  },
+  {
+   "id": "chargeDedupKey",
+   "layer": "logic",
+   "file": "dart-maor/charge-dedup-key.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  },
+  {
+   "id": "classifyScope",
+   "layer": "logic",
+   "file": "dart/classify_scope.dart",
+   "score": 3,
+   "hits": [
+    "class"
+   ]
+  },
+  {
+   "id": "cloudCfgCacheKey",
+   "layer": "logic",
+   "file": "dart-maor/cloud-cfg-cache-key.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  },
+  {
+   "id": "componentTypeNames",
+   "layer": "logic",
+   "file": "dart/component_type_names.dart",
+   "score": 3,
+   "hits": [
+    "name"
+   ]
+  },
+  {
+   "id": "courseDateError",
+   "layer": "logic",
+   "file": "dart-maor/course-date-error.dart",
+   "score": 3,
+   "hits": [
+    "date"
+   ]
+  },
+  {
+   "id": "createCloudKey",
+   "layer": "logic",
+   "file": "dart-maor/create-cloud-key.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  },
+  {
+   "id": "DateChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/date_chip.dart",
+   "score": 3,
+   "hits": [
+    "date"
+   ]
+  },
+  {
+   "id": "DateHeader",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/date_header.dart",
+   "score": 3,
+   "hits": [
+    "date"
+   ]
+  },
+  {
+   "id": "dateInRange",
+   "layer": "logic",
+   "file": "dart-maor/date-in-range.dart",
+   "score": 3,
+   "hits": [
+    "date"
+   ]
+  },
+  {
+   "id": "dayNames",
+   "layer": "logic",
+   "file": "dart-maor/day-names.dart",
+   "score": 3,
+   "hits": [
+    "name"
+   ]
+  },
+  {
+   "id": "defaultCourseDates",
+   "layer": "logic",
+   "file": "dart-maor/default-course-dates.dart",
+   "score": 3,
+   "hits": [
+    "date"
+   ]
+  },
+  {
+   "id": "fmtDate",
+   "layer": "logic",
+   "file": "dart-maor/fmt-date.dart",
+   "score": 3,
+   "hits": [
+    "date"
+   ]
+  },
+  {
+   "id": "fuzzyNameMatch",
+   "layer": "logic",
+   "file": "dart/fuzzy_name_match.dart",
+   "score": 3,
+   "hits": [
+    "name"
+   ]
+  },
+  {
+   "id": "genRecoveryKey",
+   "layer": "logic",
+   "file": "dart-maor/gen-recovery-key.dart",
+   "score": 3,
+   "hits": [
+    "key"
+   ]
+  }
+ ],
+ "strong": [
+  "nameSortKey",
+  "DsDateField",
+  "DatePills",
+  "OrderListRow",
+  "ageOf",
+  "applyAyinNames",
+  "chargeDedupKey",
+  "classifyScope",
+  "cloudCfgCacheKey",
+  "componentTypeNames",
+  "courseDateError",
+  "createCloudKey",
+  "DateChip",
+  "DateHeader",
+  "dateInRange",
+  "dayNames",
+  "defaultCourseDates",
+  "fmtDate",
+  "fuzzyNameMatch",
+  "genRecoveryKey"
+ ],
+ "creates": null,
+ "chosen": null,
+ "why": null,
+ "sig": "32e47fecf03bac287dcfd2ced942299da4d717ac1eac2372f90c639908977321"
+}

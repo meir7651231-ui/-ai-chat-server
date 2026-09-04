@@ -1,0 +1,240 @@
+{
+ "v": 1,
+ "ts": "2026-09-04T02:27:01.504Z",
+ "query": "count by group total sum clamp scale days since ספירה קיבוץ סכום נרמול ימים",
+ "tokens": [
+  "count",
+  "by",
+  "group",
+  "total",
+  "sum",
+  "clamp",
+  "scale",
+  "days",
+  "since",
+  "ספירה",
+  "קיבוץ",
+  "סכום",
+  "נרמול",
+  "ימים"
+ ],
+ "oracle": {
+  "atomIndexSha": "7b7050510b62a04885765ed30a940c05aaecbe96def91f6ed9f563499417d57f",
+  "logicCensusSha": "359db54bd2e70a0ea956fbc39901e656de6229b80b8ddc917e49921e8ecf67bf",
+  "display": 1402,
+  "logic": 848
+ },
+ "candidates": [
+  {
+   "id": "clampScale",
+   "layer": "logic",
+   "file": "dart-maor/clamp-scale.dart",
+   "score": 6,
+   "hits": [
+    "clamp",
+    "scale"
+   ]
+  },
+  {
+   "id": "cockpitDaysSince",
+   "layer": "logic",
+   "file": "dart-maor/cockpit-days-since.dart",
+   "score": 6,
+   "hits": [
+    "days",
+    "since"
+   ]
+  },
+  {
+   "id": "countBy",
+   "layer": "logic",
+   "file": "dart-maor/count-by.dart",
+   "score": 6,
+   "hits": [
+    "count",
+    "by"
+   ]
+  },
+  {
+   "id": "CountBadge",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__manager_dashboard_screen/count_badge.dart",
+   "score": 4,
+   "hits": [
+    "count",
+    "ספירה"
+   ]
+  },
+  {
+   "id": "Countdown",
+   "layer": "display",
+   "file": "dart-ui-bs/countdown_timer.dart",
+   "score": 4,
+   "hits": [
+    "count",
+    "ספירה"
+   ]
+  },
+  {
+   "id": "activeByMonth",
+   "layer": "logic",
+   "file": "dart-maor/portfolio-active-by-month.dart",
+   "score": 3,
+   "hits": [
+    "by"
+   ]
+  },
+  {
+   "id": "BadgeCount",
+   "layer": "display",
+   "file": "dart-ui-bs/premium/feedback/badge_count.dart",
+   "score": 3,
+   "hits": [
+    "count"
+   ]
+  },
+  {
+   "id": "boqTotal",
+   "layer": "logic",
+   "file": "dart-maor/boq-total.dart",
+   "score": 3,
+   "hits": [
+    "total"
+   ]
+  },
+  {
+   "id": "boxTotal",
+   "layer": "logic",
+   "file": "dart-maor/box-total.dart",
+   "score": 3,
+   "hits": [
+    "total"
+   ]
+  },
+  {
+   "id": "brandById",
+   "layer": "logic",
+   "file": "dart/brand_by_id.dart",
+   "score": 3,
+   "hits": [
+    "by"
+   ]
+  },
+  {
+   "id": "campaignTotal",
+   "layer": "logic",
+   "file": "dart-maor/campaign-total.dart",
+   "score": 3,
+   "hits": [
+    "total"
+   ]
+  },
+  {
+   "id": "CatalogConfigCatalogConfigCountBadge",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/catalog_config_catalog_config_count_badge.dart",
+   "score": 3,
+   "hits": [
+    "count"
+   ]
+  },
+  {
+   "id": "CatalogCountBadge",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/catalog_count_badge.dart",
+   "score": 3,
+   "hits": [
+    "count"
+   ]
+  },
+  {
+   "id": "catNodeProductCount",
+   "layer": "logic",
+   "file": "dart/cat_node_product_count.dart",
+   "score": 3,
+   "hits": [
+    "count"
+   ]
+  },
+  {
+   "id": "componentCounts",
+   "layer": "logic",
+   "file": "dart-maor/component-counts.dart",
+   "score": 3,
+   "hits": [
+    "count"
+   ]
+  },
+  {
+   "id": "coordinatorTotal",
+   "layer": "logic",
+   "file": "dart-maor/coordinator-total.dart",
+   "score": 3,
+   "hits": [
+    "total"
+   ]
+  },
+  {
+   "id": "CountUp",
+   "layer": "display",
+   "file": "dart-ui-bs/count_up.dart",
+   "score": 3,
+   "hits": [
+    "count"
+   ]
+  },
+  {
+   "id": "daysBetweenDst",
+   "layer": "logic",
+   "file": "dart/days_between_dst.dart",
+   "score": 3,
+   "hits": [
+    "days"
+   ]
+  },
+  {
+   "id": "enrollCount",
+   "layer": "logic",
+   "file": "dart-maor/enroll-count.dart",
+   "score": 3,
+   "hits": [
+    "count"
+   ]
+  },
+  {
+   "id": "eyesTotal",
+   "layer": "logic",
+   "file": "dart-maor/eyes-total.dart",
+   "score": 3,
+   "hits": [
+    "total"
+   ]
+  }
+ ],
+ "strong": [
+  "clampScale",
+  "cockpitDaysSince",
+  "countBy",
+  "CountBadge",
+  "Countdown",
+  "activeByMonth",
+  "BadgeCount",
+  "boqTotal",
+  "boxTotal",
+  "brandById",
+  "campaignTotal",
+  "CatalogConfigCatalogConfigCountBadge",
+  "CatalogCountBadge",
+  "catNodeProductCount",
+  "componentCounts",
+  "coordinatorTotal",
+  "CountUp",
+  "daysBetweenDst",
+  "enrollCount",
+  "eyesTotal"
+ ],
+ "creates": null,
+ "chosen": null,
+ "why": null,
+ "sig": "5517cc5dd47e1e4553bfe0fd4b28e739ccbfd66a83434e38fdfb23bf161188e5"
+}

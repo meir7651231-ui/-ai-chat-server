@@ -1,0 +1,242 @@
+{
+ "v": 1,
+ "ts": "2026-09-04T02:27:01.299Z",
+ "query": "history enrollment year label summary presents month academic היסטוריה רישום שנה נוכחות חודש",
+ "tokens": [
+  "history",
+  "enrollment",
+  "year",
+  "label",
+  "summary",
+  "presents",
+  "month",
+  "academic",
+  "יסטוריה",
+  "רישום",
+  "שנה",
+  "נוכחות",
+  "חודש"
+ ],
+ "oracle": {
+  "atomIndexSha": "7b7050510b62a04885765ed30a940c05aaecbe96def91f6ed9f563499417d57f",
+  "logicCensusSha": "359db54bd2e70a0ea956fbc39901e656de6229b80b8ddc917e49921e8ecf67bf",
+  "display": 1402,
+  "logic": 848
+ },
+ "candidates": [
+  {
+   "id": "academicYearLabel",
+   "layer": "logic",
+   "file": "dart-maor/academic-year-label.dart",
+   "score": 9,
+   "hits": [
+    "year",
+    "label",
+    "academic"
+   ]
+  },
+  {
+   "id": "nextAcademicYearLabel",
+   "layer": "logic",
+   "file": "dart-maor/next-academic-year-label.dart",
+   "score": 9,
+   "hits": [
+    "year",
+    "label",
+    "academic"
+   ]
+  },
+  {
+   "id": "enrollSummary",
+   "layer": "logic",
+   "file": "dart-maor/enroll-summary.dart",
+   "score": 6,
+   "hits": [
+    "enrollment",
+    "summary"
+   ]
+  },
+  {
+   "id": "freshNextYearEnrollment",
+   "layer": "logic",
+   "file": "dart-maor/fresh-next-year-enrollment.dart",
+   "score": 6,
+   "hits": [
+    "enrollment",
+    "year"
+   ]
+  },
+  {
+   "id": "monthLabel",
+   "layer": "logic",
+   "file": "dart-maor/month-label.dart",
+   "score": 6,
+   "hits": [
+    "label",
+    "month"
+   ]
+  },
+  {
+   "id": "presentsInMonth",
+   "layer": "logic",
+   "file": "dart-maor/presents-in-month.dart",
+   "score": 6,
+   "hits": [
+    "presents",
+    "month"
+   ]
+  },
+  {
+   "id": "actionLabelHe",
+   "layer": "logic",
+   "file": "dart/action_label_he.dart",
+   "score": 3,
+   "hits": [
+    "label"
+   ]
+  },
+  {
+   "id": "activeByMonth",
+   "layer": "logic",
+   "file": "dart-maor/portfolio-active-by-month.dart",
+   "score": 3,
+   "hits": [
+    "month"
+   ]
+  },
+  {
+   "id": "ayinAdvanceLabel",
+   "layer": "logic",
+   "file": "dart-maor/ayin-advance-label.dart",
+   "score": 3,
+   "hits": [
+    "label"
+   ]
+  },
+  {
+   "id": "beneficiaryLabel",
+   "layer": "logic",
+   "file": "dart-maor/beneficiary-label.dart",
+   "score": 3,
+   "hits": [
+    "label"
+   ]
+  },
+  {
+   "id": "branchLabel",
+   "layer": "logic",
+   "file": "dart/branch_label.dart",
+   "score": 3,
+   "hits": [
+    "label"
+   ]
+  },
+  {
+   "id": "buildMonthGrid",
+   "layer": "logic",
+   "file": "dart-maor/build-month-grid.dart",
+   "score": 3,
+   "hits": [
+    "month"
+   ]
+  },
+  {
+   "id": "callerKindLabel",
+   "layer": "logic",
+   "file": "dart-maor/caller-kind-label.dart",
+   "score": 3,
+   "hits": [
+    "label"
+   ]
+  },
+  {
+   "id": "CartSummaryCard",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__store_screen/cart_summary_card.dart",
+   "score": 3,
+   "hits": [
+    "summary"
+   ]
+  },
+  {
+   "id": "catValueLabel",
+   "layer": "logic",
+   "file": "dart/cat_value_label.dart",
+   "score": 3,
+   "hits": [
+    "label"
+   ]
+  },
+  {
+   "id": "chargeToHist",
+   "layer": "logic",
+   "file": "dart-maor/charge-to-hist.dart",
+   "score": 3,
+   "hits": [
+    "history"
+   ]
+  },
+  {
+   "id": "cockpitCollectedThisMonth",
+   "layer": "logic",
+   "file": "dart-maor/cockpit-collected-this-month.dart",
+   "score": 3,
+   "hits": [
+    "month"
+   ]
+  },
+  {
+   "id": "dayLabel",
+   "layer": "logic",
+   "file": "dart/day_label.dart",
+   "score": 3,
+   "hits": [
+    "label"
+   ]
+  },
+  {
+   "id": "defaultKitLabels",
+   "layer": "logic",
+   "file": "dart-maor/default-kit-labels.dart",
+   "score": 3,
+   "hits": [
+    "label"
+   ]
+  },
+  {
+   "id": "donationsOfYear",
+   "layer": "logic",
+   "file": "dart-maor/donations-of-year.dart",
+   "score": 3,
+   "hits": [
+    "year"
+   ]
+  }
+ ],
+ "strong": [
+  "academicYearLabel",
+  "nextAcademicYearLabel",
+  "enrollSummary",
+  "freshNextYearEnrollment",
+  "monthLabel",
+  "presentsInMonth",
+  "actionLabelHe",
+  "activeByMonth",
+  "ayinAdvanceLabel",
+  "beneficiaryLabel",
+  "branchLabel",
+  "buildMonthGrid",
+  "callerKindLabel",
+  "CartSummaryCard",
+  "catValueLabel",
+  "chargeToHist",
+  "cockpitCollectedThisMonth",
+  "dayLabel",
+  "defaultKitLabels",
+  "donationsOfYear"
+ ],
+ "creates": null,
+ "chosen": null,
+ "why": null,
+ "sig": "b665f41e20427fac4d3525922fe45c52659f64f7f56afacafd87ff78f31017f7"
+}

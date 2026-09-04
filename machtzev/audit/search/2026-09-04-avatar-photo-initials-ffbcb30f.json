@@ -1,0 +1,266 @@
+{
+ "v": 1,
+ "ts": "2026-09-04T02:27:01.077Z",
+ "query": "avatar photo initials status chip banner table timeline section empty תמונה ראשי-תיבות שבב טבלה ציר-זמן",
+ "tokens": [
+  "avatar",
+  "photo",
+  "initials",
+  "status",
+  "chip",
+  "banner",
+  "table",
+  "timeline",
+  "section",
+  "empty",
+  "תמונה",
+  "ראשי",
+  "תיבות",
+  "שבב",
+  "טבלה",
+  "ציר",
+  "זמן"
+ ],
+ "oracle": {
+  "atomIndexSha": "7b7050510b62a04885765ed30a940c05aaecbe96def91f6ed9f563499417d57f",
+  "logicCensusSha": "359db54bd2e70a0ea956fbc39901e656de6229b80b8ddc917e49921e8ecf67bf",
+  "display": 1402,
+  "logic": 848
+ },
+ "candidates": [
+  {
+   "id": "EmptySection",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/empty_section.dart",
+   "score": 6,
+   "hits": [
+    "section",
+    "empty"
+   ]
+  },
+  {
+   "id": "PremiumAvatar",
+   "layer": "display",
+   "file": "dart-ui-bs/premium/showcase/premium_avatar.dart",
+   "score": 6,
+   "hits": [
+    "avatar",
+    "תמונה",
+    "ראשי",
+    "תיבות"
+   ]
+  },
+  {
+   "id": "StatusChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/status_chip.dart",
+   "score": 6,
+   "hits": [
+    "status",
+    "chip"
+   ]
+  },
+  {
+   "id": "StatusDotChip",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__home_shell/status_dot_chip.dart",
+   "score": 6,
+   "hits": [
+    "status",
+    "chip"
+   ]
+  },
+  {
+   "id": "TradeBuilderTradeBuilderHomeStatusChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/trade_builder_trade_builder_home_status_chip.dart",
+   "score": 6,
+   "hits": [
+    "status",
+    "chip"
+   ]
+  },
+  {
+   "id": "AvatarTile",
+   "layer": "display",
+   "file": "dart-ui-bs/premium/lists/avatar_tile.dart",
+   "score": 5,
+   "hits": [
+    "avatar",
+    "ראשי",
+    "תיבות"
+   ]
+  },
+  {
+   "id": "DsChip",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 5,
+   "hits": [
+    "chip",
+    "ראשי",
+    "שבב"
+   ]
+  },
+  {
+   "id": "DsEmpty",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 5,
+   "hits": [
+    "empty",
+    "ראשי",
+    "שבב"
+   ]
+  },
+  {
+   "id": "DsSection",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 5,
+   "hits": [
+    "section",
+    "ראשי",
+    "שבב"
+   ]
+  },
+  {
+   "id": "DsStat",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 5,
+   "hits": [
+    "status",
+    "ראשי",
+    "שבב"
+   ]
+  },
+  {
+   "id": "Timeline",
+   "layer": "display",
+   "file": "dart-ui-bs/timeline_flow.dart",
+   "score": 5,
+   "hits": [
+    "timeline",
+    "ציר",
+    "זמן"
+   ]
+  },
+  {
+   "id": "TimelineItem",
+   "layer": "display",
+   "file": "dart-ui-bs/premium/lists/timeline_item.dart",
+   "score": 5,
+   "hits": [
+    "timeline",
+    "ציר",
+    "זמן"
+   ]
+  },
+  {
+   "id": "DsTable",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_table.dart",
+   "score": 4,
+   "hits": [
+    "table",
+    "טבלה"
+   ]
+  },
+  {
+   "id": "MatchChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/match_chip.dart",
+   "score": 4,
+   "hits": [
+    "chip",
+    "ציר"
+   ]
+  },
+  {
+   "id": "PresetChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/preset_chip.dart",
+   "score": 4,
+   "hits": [
+    "chip",
+    "תמונה"
+   ]
+  },
+  {
+   "id": "PureTableRow",
+   "layer": "display",
+   "file": "dart-ui-bs/pure_table_row.dart",
+   "score": 4,
+   "hits": [
+    "table",
+    "טבלה"
+   ]
+  },
+  {
+   "id": "StoreDashboardChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/store_dashboard_chip.dart",
+   "score": 4,
+   "hits": [
+    "chip",
+    "תמונה"
+   ]
+  },
+  {
+   "id": "ValueChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/value_chip.dart",
+   "score": 4,
+   "hits": [
+    "chip",
+    "ציר"
+   ]
+  },
+  {
+   "id": "WarnChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/warn_chip.dart",
+   "score": 4,
+   "hits": [
+    "chip",
+    "ציר"
+   ]
+  },
+  {
+   "id": "absenceReasonChips",
+   "layer": "logic",
+   "file": "dart-maor/absence-reason-chips.dart",
+   "score": 3,
+   "hits": [
+    "chip"
+   ]
+  }
+ ],
+ "strong": [
+  "EmptySection",
+  "PremiumAvatar",
+  "StatusChip",
+  "StatusDotChip",
+  "TradeBuilderTradeBuilderHomeStatusChip",
+  "AvatarTile",
+  "DsChip",
+  "DsEmpty",
+  "DsSection",
+  "DsStat",
+  "Timeline",
+  "TimelineItem",
+  "DsTable",
+  "MatchChip",
+  "PresetChip",
+  "PureTableRow",
+  "StoreDashboardChip",
+  "ValueChip",
+  "WarnChip",
+  "absenceReasonChips"
+ ],
+ "creates": null,
+ "chosen": null,
+ "why": null,
+ "sig": "ffbcb30fa840ac65faa5fb996659924cfe74b59dfbbd1d68be0b5b8aead0ad6f"
+}

@@ -1,0 +1,259 @@
+{
+ "v": 1,
+ "ts": "2026-09-04T02:27:00.496Z",
+ "query": "search filter normalize hebrew smart score finder matches num match חיפוש סינון נרמול עברית התאמה צירים",
+ "tokens": [
+  "search",
+  "filter",
+  "normalize",
+  "hebrew",
+  "smart",
+  "score",
+  "finder",
+  "matches",
+  "num",
+  "match",
+  "חיפוש",
+  "סינון",
+  "נרמול",
+  "עברית",
+  "תאמה",
+  "צירים"
+ ],
+ "oracle": {
+  "atomIndexSha": "7b7050510b62a04885765ed30a940c05aaecbe96def91f6ed9f563499417d57f",
+  "logicCensusSha": "359db54bd2e70a0ea956fbc39901e656de6229b80b8ddc917e49921e8ecf67bf",
+  "display": 1402,
+  "logic": 848
+ },
+ "candidates": [
+  {
+   "id": "finderMatches",
+   "layer": "logic",
+   "file": "dart-maor/finder-matches.dart",
+   "score": 9,
+   "hits": [
+    "finder",
+    "matches",
+    "match"
+   ]
+  },
+  {
+   "id": "numMatch",
+   "layer": "logic",
+   "file": "dart-maor/num-match.dart",
+   "score": 9,
+   "hits": [
+    "matches",
+    "num",
+    "match"
+   ]
+  },
+  {
+   "id": "accessPasswordMatches",
+   "layer": "logic",
+   "file": "dart/access_password_matches.dart",
+   "score": 6,
+   "hits": [
+    "matches",
+    "match"
+   ]
+  },
+  {
+   "id": "autoMatchCharges",
+   "layer": "logic",
+   "file": "dart-maor/auto-match-charges.dart",
+   "score": 6,
+   "hits": [
+    "matches",
+    "match"
+   ]
+  },
+  {
+   "id": "filterSmartBySystem",
+   "layer": "logic",
+   "file": "dart/filter_smart_by_system.dart",
+   "score": 6,
+   "hits": [
+    "filter",
+    "smart"
+   ]
+  },
+  {
+   "id": "fuzzyMatch",
+   "layer": "logic",
+   "file": "dart/fuzzy_match.dart",
+   "score": 6,
+   "hits": [
+    "matches",
+    "match"
+   ]
+  },
+  {
+   "id": "fuzzyNameMatch",
+   "layer": "logic",
+   "file": "dart/fuzzy_name_match.dart",
+   "score": 6,
+   "hits": [
+    "matches",
+    "match"
+   ]
+  },
+  {
+   "id": "matchActionId",
+   "layer": "logic",
+   "file": "dart/match_action_id.dart",
+   "score": 6,
+   "hits": [
+    "matches",
+    "match"
+   ]
+  },
+  {
+   "id": "matchAll",
+   "layer": "logic",
+   "file": "dart-maor/match-all.dart",
+   "score": 6,
+   "hits": [
+    "matches",
+    "match"
+   ]
+  },
+  {
+   "id": "matchAllClosed",
+   "layer": "logic",
+   "file": "dart/match_all_closed.dart",
+   "score": 6,
+   "hits": [
+    "matches",
+    "match"
+   ]
+  },
+  {
+   "id": "matchAllElementIds",
+   "layer": "logic",
+   "file": "dart/match_all_element_ids.dart",
+   "score": 6,
+   "hits": [
+    "matches",
+    "match"
+   ]
+  },
+  {
+   "id": "matchAssistantCategory",
+   "layer": "logic",
+   "file": "dart/match_assistant_category.dart",
+   "score": 6,
+   "hits": [
+    "matches",
+    "match"
+   ]
+  },
+  {
+   "id": "matchAssistantRecipeKey",
+   "layer": "logic",
+   "file": "dart/match_assistant_recipe_key.dart",
+   "score": 6,
+   "hits": [
+    "matches",
+    "match"
+   ]
+  },
+  {
+   "id": "matchCatalogActionId",
+   "layer": "logic",
+   "file": "dart/match_catalog_action_id.dart",
+   "score": 6,
+   "hits": [
+    "matches",
+    "match"
+   ]
+  },
+  {
+   "id": "MatchChip",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/match_chip.dart",
+   "score": 6,
+   "hits": [
+    "matches",
+    "match"
+   ]
+  },
+  {
+   "id": "matchClosed",
+   "layer": "logic",
+   "file": "dart/match_closed.dart",
+   "score": 6,
+   "hits": [
+    "matches",
+    "match"
+   ]
+  },
+  {
+   "id": "matchComponentType",
+   "layer": "logic",
+   "file": "dart/match_component_type.dart",
+   "score": 6,
+   "hits": [
+    "matches",
+    "match"
+   ]
+  },
+  {
+   "id": "matchComponentTypeName",
+   "layer": "logic",
+   "file": "dart/match_component_type_name.dart",
+   "score": 6,
+   "hits": [
+    "matches",
+    "match"
+   ]
+  },
+  {
+   "id": "matchConditionField",
+   "layer": "logic",
+   "file": "dart/match_condition_field.dart",
+   "score": 6,
+   "hits": [
+    "matches",
+    "match"
+   ]
+  },
+  {
+   "id": "matchElementId",
+   "layer": "logic",
+   "file": "dart/match_element_id.dart",
+   "score": 6,
+   "hits": [
+    "matches",
+    "match"
+   ]
+  }
+ ],
+ "strong": [
+  "finderMatches",
+  "numMatch",
+  "accessPasswordMatches",
+  "autoMatchCharges",
+  "filterSmartBySystem",
+  "fuzzyMatch",
+  "fuzzyNameMatch",
+  "matchActionId",
+  "matchAll",
+  "matchAllClosed",
+  "matchAllElementIds",
+  "matchAssistantCategory",
+  "matchAssistantRecipeKey",
+  "matchCatalogActionId",
+  "MatchChip",
+  "matchClosed",
+  "matchComponentType",
+  "matchComponentTypeName",
+  "matchConditionField",
+  "matchElementId"
+ ],
+ "creates": null,
+ "chosen": null,
+ "why": null,
+ "sig": "c847fcfaf3b31dafae73901ce8982ed1558c5167385a847f364ed229280745ff"
+}

@@ -1,0 +1,236 @@
+{
+ "v": 1,
+ "ts": "2026-09-04T02:27:00.100Z",
+ "query": "student risk score dropout attendance absences trend churn סיכון נשירה תלמיד היעדרות מגמה",
+ "tokens": [
+  "student",
+  "risk",
+  "score",
+  "dropout",
+  "attendance",
+  "absences",
+  "trend",
+  "churn",
+  "סיכון",
+  "נשירה",
+  "תלמיד",
+  "יעדרות",
+  "גמה"
+ ],
+ "oracle": {
+  "atomIndexSha": "7b7050510b62a04885765ed30a940c05aaecbe96def91f6ed9f563499417d57f",
+  "logicCensusSha": "359db54bd2e70a0ea956fbc39901e656de6229b80b8ddc917e49921e8ecf67bf",
+  "display": 1402,
+  "logic": 848
+ },
+ "candidates": [
+  {
+   "id": "TrendCard",
+   "layer": "display",
+   "file": "dart-ui-bs/trend_card.dart",
+   "score": 4,
+   "hits": [
+    "trend",
+    "גמה"
+   ]
+  },
+  {
+   "id": "TrendStat",
+   "layer": "display",
+   "file": "dart-ui-bs/premium/dataviz/trend_stat.dart",
+   "score": 4,
+   "hits": [
+    "trend",
+    "גמה"
+   ]
+  },
+  {
+   "id": "absenceReasonChips",
+   "layer": "logic",
+   "file": "dart-maor/absence-reason-chips.dart",
+   "score": 3,
+   "hits": [
+    "absences"
+   ]
+  },
+  {
+   "id": "churnFromScan",
+   "layer": "logic",
+   "file": "dart-maor/intel-churn-from-scan.dart",
+   "score": 3,
+   "hits": [
+    "churn"
+   ]
+  },
+  {
+   "id": "cockpitAtRisk",
+   "layer": "logic",
+   "file": "dart-maor/cockpit-at-risk.dart",
+   "score": 3,
+   "hits": [
+    "risk"
+   ]
+  },
+  {
+   "id": "collectionScoreDelta",
+   "layer": "logic",
+   "file": "dart-maor/collection-score-delta.dart",
+   "score": 3,
+   "hits": [
+    "score"
+   ]
+  },
+  {
+   "id": "CourierAttendanceSendReportButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/courier_attendance_send_report_button.dart",
+   "score": 3,
+   "hits": [
+    "attendance"
+   ]
+  },
+  {
+   "id": "CourierAttendanceTableRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/courier_attendance_table_row.dart",
+   "score": 3,
+   "hits": [
+    "attendance"
+   ]
+  },
+  {
+   "id": "csvHeaderScore",
+   "layer": "logic",
+   "file": "dart/csv_header_score.dart",
+   "score": 3,
+   "hits": [
+    "score"
+   ]
+  },
+  {
+   "id": "DropSelect",
+   "layer": "display",
+   "file": "dart-ui-bs/dropdown_menu.dart",
+   "score": 3,
+   "hits": [
+    "dropout"
+   ]
+  },
+  {
+   "id": "fuzzyScore",
+   "layer": "logic",
+   "file": "dart/fuzzy_score.dart",
+   "score": 3,
+   "hits": [
+    "score"
+   ]
+  },
+  {
+   "id": "pressureDropToString",
+   "layer": "logic",
+   "file": "dart/to_string.dart",
+   "score": 3,
+   "hits": [
+    "dropout"
+   ]
+  },
+  {
+   "id": "ScoreBandChip",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/score_band_chip.dart",
+   "score": 3,
+   "hits": [
+    "score"
+   ]
+  },
+  {
+   "id": "scoreCustomer",
+   "layer": "logic",
+   "file": "dart/score_customer.dart",
+   "score": 3,
+   "hits": [
+    "score"
+   ]
+  },
+  {
+   "id": "smartScore",
+   "layer": "logic",
+   "file": "dart-maor/smart-score.dart",
+   "score": 3,
+   "hits": [
+    "score"
+   ]
+  },
+  {
+   "id": "studentHistory",
+   "layer": "logic",
+   "file": "dart-maor/student-history.dart",
+   "score": 3,
+   "hits": [
+    "student"
+   ]
+  },
+  {
+   "id": "studentHistoryText",
+   "layer": "logic",
+   "file": "dart-maor/student-history-text.dart",
+   "score": 3,
+   "hits": [
+    "student"
+   ]
+  },
+  {
+   "id": "supScore",
+   "layer": "logic",
+   "file": "dart-maor/sup-score.dart",
+   "score": 3,
+   "hits": [
+    "score"
+   ]
+  },
+  {
+   "id": "supScoreBins",
+   "layer": "logic",
+   "file": "dart-maor/sup-score-bins.dart",
+   "score": 3,
+   "hits": [
+    "score"
+   ]
+  },
+  {
+   "id": "tierTrendCounts",
+   "layer": "logic",
+   "file": "dart-maor/portfolio-tier-trend-counts.dart",
+   "score": 3,
+   "hits": [
+    "trend"
+   ]
+  }
+ ],
+ "strong": [
+  "TrendCard",
+  "TrendStat",
+  "absenceReasonChips",
+  "churnFromScan",
+  "cockpitAtRisk",
+  "collectionScoreDelta",
+  "CourierAttendanceSendReportButton",
+  "CourierAttendanceTableRow",
+  "csvHeaderScore",
+  "DropSelect",
+  "fuzzyScore",
+  "pressureDropToString",
+  "ScoreBandChip",
+  "scoreCustomer",
+  "smartScore",
+  "studentHistory",
+  "studentHistoryText",
+  "supScore",
+  "supScoreBins",
+  "tierTrendCounts"
+ ],
+ "creates": null,
+ "chosen": null,
+ "why": null,
+ "sig": "3b7af8ba45690d7088b242b0865b1ba422f01d5ad4a5900821748260fa4b5ea1"
+}

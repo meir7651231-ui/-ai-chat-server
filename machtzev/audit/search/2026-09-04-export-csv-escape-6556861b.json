@@ -1,0 +1,237 @@
+{
+ "v": 1,
+ "ts": "2026-09-04T02:27:00.923Z",
+ "query": "export csv escape allowed role permission granted action ייצוא הרשאה תפקיד גידור",
+ "tokens": [
+  "export",
+  "csv",
+  "escape",
+  "allowed",
+  "role",
+  "permission",
+  "granted",
+  "action",
+  "ייצוא",
+  "רשאה",
+  "תפקיד",
+  "גידור"
+ ],
+ "oracle": {
+  "atomIndexSha": "7b7050510b62a04885765ed30a940c05aaecbe96def91f6ed9f563499417d57f",
+  "logicCensusSha": "359db54bd2e70a0ea956fbc39901e656de6229b80b8ddc917e49921e8ecf67bf",
+  "display": 1402,
+  "logic": 848
+ },
+ "candidates": [
+  {
+   "id": "canGrantedAction",
+   "layer": "logic",
+   "file": "dart-maor/can-granted-action.dart",
+   "score": 6,
+   "hits": [
+    "granted",
+    "action"
+   ]
+  },
+  {
+   "id": "csvEscape",
+   "layer": "logic",
+   "file": "dart-maor/csv-escape.dart",
+   "score": 6,
+   "hits": [
+    "csv",
+    "escape"
+   ]
+  },
+  {
+   "id": "exportAllowed",
+   "layer": "logic",
+   "file": "dart-maor/export-allowed.dart",
+   "score": 6,
+   "hits": [
+    "export",
+    "allowed"
+   ]
+  },
+  {
+   "id": "RoleRequestsInboxEmpty",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/role_requests_inbox_empty.dart",
+   "score": 4,
+   "hits": [
+    "role",
+    "תפקיד"
+   ]
+  },
+  {
+   "id": "ActionButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/action_button.dart",
+   "score": 3,
+   "hits": [
+    "action"
+   ]
+  },
+  {
+   "id": "ActionCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/action_card.dart",
+   "score": 3,
+   "hits": [
+    "action"
+   ]
+  },
+  {
+   "id": "ActionChipRail",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/action_chip_rail.dart",
+   "score": 3,
+   "hits": [
+    "action"
+   ]
+  },
+  {
+   "id": "actionDescriptor",
+   "layer": "logic",
+   "file": "dart/action_descriptor.dart",
+   "score": 3,
+   "hits": [
+    "action"
+   ]
+  },
+  {
+   "id": "actionFromString",
+   "layer": "logic",
+   "file": "dart/action_from_string.dart",
+   "score": 3,
+   "hits": [
+    "action"
+   ]
+  },
+  {
+   "id": "actionHe",
+   "layer": "logic",
+   "file": "dart/action_he.dart",
+   "score": 3,
+   "hits": [
+    "action"
+   ]
+  },
+  {
+   "id": "actionIdOf",
+   "layer": "logic",
+   "file": "dart/action_id_of.dart",
+   "score": 3,
+   "hits": [
+    "action"
+   ]
+  },
+  {
+   "id": "actionIdsFor",
+   "layer": "logic",
+   "file": "dart/action_ids_for.dart",
+   "score": 3,
+   "hits": [
+    "action"
+   ]
+  },
+  {
+   "id": "actionLabelHe",
+   "layer": "logic",
+   "file": "dart/action_label_he.dart",
+   "score": 3,
+   "hits": [
+    "action"
+   ]
+  },
+  {
+   "id": "ActionRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/action_row.dart",
+   "score": 3,
+   "hits": [
+    "action"
+   ]
+  },
+  {
+   "id": "allowedDesignationsFor",
+   "layer": "logic",
+   "file": "dart-maor/allowed-designations-for.dart",
+   "score": 3,
+   "hits": [
+    "allowed"
+   ]
+  },
+  {
+   "id": "ayinActionVisible",
+   "layer": "logic",
+   "file": "dart-maor/ayin-action-visible.dart",
+   "score": 3,
+   "hits": [
+    "action"
+   ]
+  },
+  {
+   "id": "buildCustomExport",
+   "layer": "logic",
+   "file": "dart-maor/build-custom-export.dart",
+   "score": 3,
+   "hits": [
+    "export"
+   ]
+  },
+  {
+   "id": "campaignCsvRows",
+   "layer": "logic",
+   "file": "dart-maor/campaign-csv-rows.dart",
+   "score": 3,
+   "hits": [
+    "csv"
+   ]
+  },
+  {
+   "id": "catalogActionIdsFor",
+   "layer": "logic",
+   "file": "dart/catalog_action_ids_for.dart",
+   "score": 3,
+   "hits": [
+    "action"
+   ]
+  },
+  {
+   "id": "ChatSettingsActionRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/chat_settings_action_row.dart",
+   "score": 3,
+   "hits": [
+    "action"
+   ]
+  }
+ ],
+ "strong": [
+  "canGrantedAction",
+  "csvEscape",
+  "exportAllowed",
+  "RoleRequestsInboxEmpty",
+  "ActionButton",
+  "ActionCard",
+  "ActionChipRail",
+  "actionDescriptor",
+  "actionFromString",
+  "actionHe",
+  "actionIdOf",
+  "actionIdsFor",
+  "actionLabelHe",
+  "ActionRow",
+  "allowedDesignationsFor",
+  "ayinActionVisible",
+  "buildCustomExport",
+  "campaignCsvRows",
+  "catalogActionIdsFor",
+  "ChatSettingsActionRow"
+ ],
+ "creates": null,
+ "chosen": null,
+ "why": null,
+ "sig": "6556861be6a2946975a350beae36736705510094a7644657285052776cc6ae87"
+}

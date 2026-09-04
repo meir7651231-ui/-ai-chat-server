@@ -1,0 +1,39 @@
+{
+ "v": 1,
+ "screen": "new/dart-gen-bs/schoolos_students.dart",
+ "goal": "לדעת מי כל תלמיד באמת — לימודית, חברתית, רגשית ומשפחתית — ולראות את מי-שנופל לפני שהוא נופל: ציון-סיכון מאוחד מכל האותות (נוכחות·מגמה·משפחה + מקומות-שמורים לציונים·התנהגות·חברתי) והפעולה-הנכונה-עכשיו לכל תלמיד, בכרטיס אחד",
+ "models": [
+  "signalDefs",
+  "attendance",
+  "trendFromScan",
+  "enrollSummary",
+  "taskOverdue",
+  "ageOf",
+  "gradeIndex",
+  "clampScale",
+  "grandTotal",
+  "countBy"
+ ],
+ "atoms": [
+  "DsScaffold",
+  "DsSearch",
+  "GradientCard",
+  "StatHero",
+  "BareStat",
+  "SoftButton",
+  "AlertBanner",
+  "CircularProgressIndicator"
+ ],
+ "accept": [
+  "10 KPI נושאי-ערך (BareStat) + 1 hero",
+  "6 אותות בחוזה-הסיכון (3 עם מקור-אמת, 3 מקום-שמור)",
+  "10 תלמידים מסכמת-maor (Member/Family/Enrollment)",
+  "0 ערכים מ-math.sin/Random",
+  "מצב-טעינה מרונדר תוך 700ms"
+ ],
+ "picture": "machtzev/audit/goals/schoolos_students.png",
+ "pictureSha": "6dd2e98e928cc3039e0ef0cb91b4948cb84d34a1bb043c7e8dae3fa07546d81a",
+ "screenSha": "094ca035f71bad0d85a6aeab614409b4dd19e35589bb1dbbe61dd5eadccd1cba",
+ "ts": "2026-09-04T02:40:40.982Z",
+ "sig": "e1aa75293d7b79776c92eb81bf2d2b5107dee578b95b3f7b1dae73cebd83d4b6"
+}

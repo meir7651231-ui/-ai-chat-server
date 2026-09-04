@@ -1,0 +1,244 @@
+{
+ "v": 1,
+ "ts": "2026-09-04T02:27:01.402Z",
+ "query": "phone format israeli id valid parent contact whatsapp טלפון פורמט תעודת-זהות תקין הורה קשר",
+ "tokens": [
+  "phone",
+  "format",
+  "israeli",
+  "id",
+  "valid",
+  "parent",
+  "contact",
+  "whatsapp",
+  "טלפון",
+  "פורמט",
+  "תעודת",
+  "זהות",
+  "תקין",
+  "ורה",
+  "קשר"
+ ],
+ "oracle": {
+  "atomIndexSha": "7b7050510b62a04885765ed30a940c05aaecbe96def91f6ed9f563499417d57f",
+  "logicCensusSha": "359db54bd2e70a0ea956fbc39901e656de6229b80b8ddc917e49921e8ecf67bf",
+  "display": 1402,
+  "logic": 848
+ },
+ "candidates": [
+  {
+   "id": "formatIsraeliPhone",
+   "layer": "logic",
+   "file": "dart-maor/format-israeli-phone.dart",
+   "score": 9,
+   "hits": [
+    "phone",
+    "format",
+    "israeli"
+   ]
+  },
+  {
+   "id": "validIsraeliId",
+   "layer": "logic",
+   "file": "dart-maor/valid-israeli-id.dart",
+   "score": 9,
+   "hits": [
+    "israeli",
+    "id",
+    "valid"
+   ]
+  },
+  {
+   "id": "validBusinessId",
+   "layer": "logic",
+   "file": "dart/valid_business_id.dart",
+   "score": 6,
+   "hits": [
+    "id",
+    "valid"
+   ]
+  },
+  {
+   "id": "validIsraeliMobile",
+   "layer": "logic",
+   "file": "dart/valid_israeli_mobile.dart",
+   "score": 6,
+   "hits": [
+    "israeli",
+    "valid"
+   ]
+  },
+  {
+   "id": "actionIdOf",
+   "layer": "logic",
+   "file": "dart/action_id_of.dart",
+   "score": 3,
+   "hits": [
+    "id"
+   ]
+  },
+  {
+   "id": "allSupPhones",
+   "layer": "logic",
+   "file": "dart-maor/all-sup-phones.dart",
+   "score": 3,
+   "hits": [
+    "phone"
+   ]
+  },
+  {
+   "id": "brandById",
+   "layer": "logic",
+   "file": "dart/brand_by_id.dart",
+   "score": 3,
+   "hits": [
+    "id"
+   ]
+  },
+  {
+   "id": "categoryId",
+   "layer": "logic",
+   "file": "dart/category_id.dart",
+   "score": 3,
+   "hits": [
+    "id"
+   ]
+  },
+  {
+   "id": "cleanSupPhones",
+   "layer": "logic",
+   "file": "dart-maor/clean-sup-phones.dart",
+   "score": 3,
+   "hits": [
+    "phone"
+   ]
+  },
+  {
+   "id": "connTypeId",
+   "layer": "logic",
+   "file": "dart/conn_type_id.dart",
+   "score": 3,
+   "hits": [
+    "id"
+   ]
+  },
+  {
+   "id": "ContactTile",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__store_screen/contact_tile.dart",
+   "score": 3,
+   "hits": [
+    "contact"
+   ]
+  },
+  {
+   "id": "contactToRow",
+   "layer": "logic",
+   "file": "dart-maor/contact-to-row.dart",
+   "score": 3,
+   "hits": [
+    "contact"
+   ]
+  },
+  {
+   "id": "currentId",
+   "layer": "logic",
+   "file": "dart-maor/current-id.dart",
+   "score": 3,
+   "hits": [
+    "id"
+   ]
+  },
+  {
+   "id": "DirectoryRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__home_shell/directory_row.dart",
+   "score": 3,
+   "hits": [
+    "זהות",
+    "ורה",
+    "קשר"
+   ]
+  },
+  {
+   "id": "familiesImportFormatRows",
+   "layer": "logic",
+   "file": "dart-maor/families-import-format-rows.dart",
+   "score": 3,
+   "hits": [
+    "format"
+   ]
+  },
+  {
+   "id": "fixPhone",
+   "layer": "logic",
+   "file": "dart-maor/fix-phone.dart",
+   "score": 3,
+   "hits": [
+    "phone"
+   ]
+  },
+  {
+   "id": "formatNis",
+   "layer": "logic",
+   "file": "dart/format_nis.dart",
+   "score": 3,
+   "hits": [
+    "format"
+   ]
+  },
+  {
+   "id": "FormCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/form_card.dart",
+   "score": 3,
+   "hits": [
+    "format"
+   ]
+  },
+  {
+   "id": "importableContacts",
+   "layer": "logic",
+   "file": "dart-maor/importable-contacts.dart",
+   "score": 3,
+   "hits": [
+    "contact"
+   ]
+  },
+  {
+   "id": "isJunkContact",
+   "layer": "logic",
+   "file": "dart-maor/is-junk-contact.dart",
+   "score": 3,
+   "hits": [
+    "contact"
+   ]
+  }
+ ],
+ "strong": [
+  "formatIsraeliPhone",
+  "validIsraeliId",
+  "validBusinessId",
+  "validIsraeliMobile",
+  "actionIdOf",
+  "allSupPhones",
+  "brandById",
+  "categoryId",
+  "cleanSupPhones",
+  "connTypeId",
+  "ContactTile",
+  "contactToRow",
+  "currentId",
+  "DirectoryRow",
+  "familiesImportFormatRows",
+  "fixPhone",
+  "formatNis",
+  "FormCard",
+  "importableContacts",
+  "isJunkContact"
+ ],
+ "creates": null,
+ "chosen": null,
+ "why": null,
+ "sig": "d8e8b5f563ffed0a83a2d30ba6084fe8fb0803161159e821b88cf5045ba41a80"
+}

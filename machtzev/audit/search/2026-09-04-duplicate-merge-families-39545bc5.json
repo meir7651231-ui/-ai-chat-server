@@ -1,0 +1,237 @@
+{
+ "v": 1,
+ "ts": "2026-09-04T02:27:00.616Z",
+ "query": "duplicate merge families phone name levenshtein groups כפילות מיזוג משפחות טלפון שם",
+ "tokens": [
+  "duplicate",
+  "merge",
+  "families",
+  "phone",
+  "name",
+  "levenshtein",
+  "groups",
+  "פילות",
+  "יזוג",
+  "שפחות",
+  "טלפון",
+  "שם"
+ ],
+ "oracle": {
+  "atomIndexSha": "7b7050510b62a04885765ed30a940c05aaecbe96def91f6ed9f563499417d57f",
+  "logicCensusSha": "359db54bd2e70a0ea956fbc39901e656de6229b80b8ddc917e49921e8ecf67bf",
+  "display": 1402,
+  "logic": 848
+ },
+ "candidates": [
+  {
+   "id": "findDuplicateGroups",
+   "layer": "logic",
+   "file": "dart-maor/find-duplicate-groups.dart",
+   "score": 6,
+   "hits": [
+    "duplicate",
+    "groups"
+   ]
+  },
+  {
+   "id": "mergeFamilies",
+   "layer": "logic",
+   "file": "dart-maor/merge-families.dart",
+   "score": 6,
+   "hits": [
+    "merge",
+    "families"
+   ]
+  },
+  {
+   "id": "mergeFamiliesByFields",
+   "layer": "logic",
+   "file": "dart-maor/merge-families-by-fields.dart",
+   "score": 6,
+   "hits": [
+    "merge",
+    "families"
+   ]
+  },
+  {
+   "id": "mergeSupportersGroup",
+   "layer": "logic",
+   "file": "dart-maor/merge-supporters-group.dart",
+   "score": 6,
+   "hits": [
+    "merge",
+    "groups"
+   ]
+  },
+  {
+   "id": "allSupPhones",
+   "layer": "logic",
+   "file": "dart-maor/all-sup-phones.dart",
+   "score": 3,
+   "hits": [
+    "phone"
+   ]
+  },
+  {
+   "id": "applyAyinNames",
+   "layer": "logic",
+   "file": "dart-maor/apply-ayin-names.dart",
+   "score": 3,
+   "hits": [
+    "name"
+   ]
+  },
+  {
+   "id": "cleanSupPhones",
+   "layer": "logic",
+   "file": "dart-maor/clean-sup-phones.dart",
+   "score": 3,
+   "hits": [
+    "phone"
+   ]
+  },
+  {
+   "id": "componentTypeNames",
+   "layer": "logic",
+   "file": "dart/component_type_names.dart",
+   "score": 3,
+   "hits": [
+    "name"
+   ]
+  },
+  {
+   "id": "damerauLevenshtein",
+   "layer": "logic",
+   "file": "dart/damerau_levenshtein.dart",
+   "score": 3,
+   "hits": [
+    "levenshtein"
+   ]
+  },
+  {
+   "id": "dayNames",
+   "layer": "logic",
+   "file": "dart-maor/day-names.dart",
+   "score": 3,
+   "hits": [
+    "name"
+   ]
+  },
+  {
+   "id": "duplicateCourse",
+   "layer": "logic",
+   "file": "dart-maor/duplicate-course.dart",
+   "score": 3,
+   "hits": [
+    "duplicate"
+   ]
+  },
+  {
+   "id": "eligibleFamilies",
+   "layer": "logic",
+   "file": "dart-maor/eligible-families.dart",
+   "score": 3,
+   "hits": [
+    "families"
+   ]
+  },
+  {
+   "id": "familiesByKind",
+   "layer": "logic",
+   "file": "dart/families_by_kind.dart",
+   "score": 3,
+   "hits": [
+    "families"
+   ]
+  },
+  {
+   "id": "familiesImportFormatRows",
+   "layer": "logic",
+   "file": "dart-maor/families-import-format-rows.dart",
+   "score": 3,
+   "hits": [
+    "families"
+   ]
+  },
+  {
+   "id": "findSupporterDupGroups",
+   "layer": "logic",
+   "file": "dart-maor/find-supporter-dup-groups.dart",
+   "score": 3,
+   "hits": [
+    "groups"
+   ]
+  },
+  {
+   "id": "fixPhone",
+   "layer": "logic",
+   "file": "dart-maor/fix-phone.dart",
+   "score": 3,
+   "hits": [
+    "phone"
+   ]
+  },
+  {
+   "id": "formatIsraeliPhone",
+   "layer": "logic",
+   "file": "dart-maor/format-israeli-phone.dart",
+   "score": 3,
+   "hits": [
+    "phone"
+   ]
+  },
+  {
+   "id": "fuzzyNameMatch",
+   "layer": "logic",
+   "file": "dart/fuzzy_name_match.dart",
+   "score": 3,
+   "hits": [
+    "name"
+   ]
+  },
+  {
+   "id": "galvanicGroup",
+   "layer": "logic",
+   "file": "dart/galvanic_group.dart",
+   "score": 3,
+   "hits": [
+    "groups"
+   ]
+  },
+  {
+   "id": "groupLabelOf",
+   "layer": "logic",
+   "file": "dart-maor/group-label-of.dart",
+   "score": 3,
+   "hits": [
+    "groups"
+   ]
+  }
+ ],
+ "strong": [
+  "findDuplicateGroups",
+  "mergeFamilies",
+  "mergeFamiliesByFields",
+  "mergeSupportersGroup",
+  "allSupPhones",
+  "applyAyinNames",
+  "cleanSupPhones",
+  "componentTypeNames",
+  "damerauLevenshtein",
+  "dayNames",
+  "duplicateCourse",
+  "eligibleFamilies",
+  "familiesByKind",
+  "familiesImportFormatRows",
+  "findSupporterDupGroups",
+  "fixPhone",
+  "formatIsraeliPhone",
+  "fuzzyNameMatch",
+  "galvanicGroup",
+  "groupLabelOf"
+ ],
+ "creates": null,
+ "chosen": null,
+ "why": null,
+ "sig": "39545bc5e41f3957edfb17698c87e874bdb332cde5d2c652a3795bd11747f9d0"
+}

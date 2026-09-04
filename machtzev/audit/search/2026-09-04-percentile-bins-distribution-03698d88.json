@@ -1,0 +1,229 @@
+{
+ "v": 1,
+ "ts": "2026-09-04T02:27:01.184Z",
+ "query": "percentile bins distribution cohort compare score histogram leaderboard אחוזון התפלגות שכבה השוואה",
+ "tokens": [
+  "percentile",
+  "bins",
+  "distribution",
+  "cohort",
+  "compare",
+  "score",
+  "histogram",
+  "leaderboard",
+  "אחוזון",
+  "תפלגות",
+  "כבה",
+  "שוואה"
+ ],
+ "oracle": {
+  "atomIndexSha": "7b7050510b62a04885765ed30a940c05aaecbe96def91f6ed9f563499417d57f",
+  "logicCensusSha": "359db54bd2e70a0ea956fbc39901e656de6229b80b8ddc917e49921e8ecf67bf",
+  "display": 1402,
+  "logic": 848
+ },
+ "candidates": [
+  {
+   "id": "supScoreBins",
+   "layer": "logic",
+   "file": "dart-maor/sup-score-bins.dart",
+   "score": 6,
+   "hits": [
+    "bins",
+    "score"
+   ]
+  },
+  {
+   "id": "buildCohort",
+   "layer": "logic",
+   "file": "dart/build_cohort.dart",
+   "score": 3,
+   "hits": [
+    "cohort"
+   ]
+  },
+  {
+   "id": "chargeToHist",
+   "layer": "logic",
+   "file": "dart-maor/charge-to-hist.dart",
+   "score": 3,
+   "hits": [
+    "histogram"
+   ]
+  },
+  {
+   "id": "collectionScoreDelta",
+   "layer": "logic",
+   "file": "dart-maor/collection-score-delta.dart",
+   "score": 3,
+   "hits": [
+    "score"
+   ]
+  },
+  {
+   "id": "csvHeaderScore",
+   "layer": "logic",
+   "file": "dart/csv_header_score.dart",
+   "score": 3,
+   "hits": [
+    "score"
+   ]
+  },
+  {
+   "id": "distributionListLines",
+   "layer": "logic",
+   "file": "dart-maor/distribution-list-lines.dart",
+   "score": 3,
+   "hits": [
+    "distribution"
+   ]
+  },
+  {
+   "id": "donePercent",
+   "layer": "logic",
+   "file": "dart/done_percent.dart",
+   "score": 3,
+   "hits": [
+    "percentile"
+   ]
+  },
+  {
+   "id": "fuzzyScore",
+   "layer": "logic",
+   "file": "dart/fuzzy_score.dart",
+   "score": 3,
+   "hits": [
+    "score"
+   ]
+  },
+  {
+   "id": "leaderboard",
+   "layer": "logic",
+   "file": "dart-maor/leaderboard.dart",
+   "score": 3,
+   "hits": [
+    "leaderboard"
+   ]
+  },
+  {
+   "id": "mergeHist",
+   "layer": "logic",
+   "file": "dart-maor/merge-hist.dart",
+   "score": 3,
+   "hits": [
+    "histogram"
+   ]
+  },
+  {
+   "id": "relabelHistByTxn",
+   "layer": "logic",
+   "file": "dart-maor/relabel-hist-by-txn.dart",
+   "score": 3,
+   "hits": [
+    "histogram"
+   ]
+  },
+  {
+   "id": "ScoreBandChip",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/score_band_chip.dart",
+   "score": 3,
+   "hits": [
+    "score"
+   ]
+  },
+  {
+   "id": "scoreCustomer",
+   "layer": "logic",
+   "file": "dart/score_customer.dart",
+   "score": 3,
+   "hits": [
+    "score"
+   ]
+  },
+  {
+   "id": "smartScore",
+   "layer": "logic",
+   "file": "dart-maor/smart-score.dart",
+   "score": 3,
+   "hits": [
+    "score"
+   ]
+  },
+  {
+   "id": "supScore",
+   "layer": "logic",
+   "file": "dart-maor/sup-score.dart",
+   "score": 3,
+   "hits": [
+    "score"
+   ]
+  },
+  {
+   "id": "csvHeaderIndex",
+   "layer": "logic",
+   "file": "dart/csv_header_score.dart",
+   "score": 2,
+   "hits": [
+    "score"
+   ]
+  },
+  {
+   "id": "csvIsBlank",
+   "layer": "logic",
+   "file": "dart/csv_header_score.dart",
+   "score": 2,
+   "hits": [
+    "score"
+   ]
+  },
+  {
+   "id": "csvIsComment",
+   "layer": "logic",
+   "file": "dart/csv_header_score.dart",
+   "score": 2,
+   "hits": [
+    "score"
+   ]
+  },
+  {
+   "id": "normHeader",
+   "layer": "logic",
+   "file": "dart/csv_header_score.dart",
+   "score": 2,
+   "hits": [
+    "score"
+   ]
+  },
+  {
+   "id": "DsBars",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_bars.dart",
+   "score": 1,
+   "hits": [
+    "שוואה"
+   ]
+  }
+ ],
+ "strong": [
+  "supScoreBins",
+  "buildCohort",
+  "chargeToHist",
+  "collectionScoreDelta",
+  "csvHeaderScore",
+  "distributionListLines",
+  "donePercent",
+  "fuzzyScore",
+  "leaderboard",
+  "mergeHist",
+  "relabelHistByTxn",
+  "ScoreBandChip",
+  "scoreCustomer",
+  "smartScore",
+  "supScore"
+ ],
+ "creates": null,
+ "chosen": null,
+ "why": null,
+ "sig": "03698d888d9bee0b7fe046637fc2041a4f3866d333e80e202c719a50786c3283"
+}
