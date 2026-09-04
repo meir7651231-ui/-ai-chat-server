@@ -78,13 +78,19 @@ export function primaryKeys(src, module = '') {
   lists.sort((a, b) => b.refd - a.refd || (b.name.toLowerCase() === stem) - (a.name.toLowerCase() === stem) || b.rows - a.rows);
   return { name: lists[0].name, keys: lists[0].keys, candidates: lists.map((l) => `${l.name}(${l.refd}/${l.keys.length})`) };
 }
-export function mapKeys(keys, entity) {
+// חוזה-מנוע (G9 · נתפס בבדיקת-הניווט): מפתח שמנוע-מדף מיובא קורא (`s['amount']` בתוך ../dart-maor/*.dart) הוא חוזה של המנוע — לא משנים לו שם (המנוע לא נכתב-מחדש) ⇒ 'engine-contract'
+export function engineKeys(module) {
+  const src = fs.readFileSync(path.join(DIR, module), 'utf8'); const keys = new Set();
+  for (const m of src.matchAll(/^import '(\.\.\/dart-maor\/[^']+)'/gm)) { const f = path.resolve(DIR, m[1]); if (!fs.existsSync(f)) continue; for (const k of fs.readFileSync(f, 'utf8').matchAll(/\['([a-zA-Z_]\w*)'\]/g)) keys.add(k[1]); }
+  return keys;
+}
+export function mapKeys(keys, entity, locked = new Set()) {
   const fields = FIELDS.filter((f) => f.e === entity).map((f) => ({ n: f.n, cat: cat(f.t), t: f.t, chan: chanKind(f.n) }));
   if (!fields.length) throw new Error(`ישות לא בסכמה: ${entity}`);
   const used = new Set(), map = [];
   const take = (k, f, how) => { used.add(f.n); map.push({ src: k.key, dst: f.n, how, srcType: k.type, dstType: f.t }); };
-  for (const k of keys) { const f = fields.find((x) => x.n === k.key && !used.has(x.n)); if (f) take(k, f, 'name'); }
-  for (const k of keys) { if (map.some((x) => x.src === k.key)) continue; const ck = chanKind(k.key); if (!ck) continue; const f = fields.find((x) => x.chan === ck && !used.has(x.n)); if (f) take(k, f, 'chan'); }
+  for (const k of keys) { const f = fields.find((x) => x.n === k.key && !used.has(x.n)); if (f) take(k, f, 'name'); }   // שם-זהה תמיד בטוח (אין שינוי-שם)
+  for (const k of keys) { if (map.some((x) => x.src === k.key)) continue; if (locked.has(k.key)) { map.push({ src: k.key, dst: null, how: 'engine-contract', srcType: k.type, dstType: null }); continue; } const ck = chanKind(k.key); if (!ck) continue; const f = fields.find((x) => x.chan === ck && !used.has(x.n)); if (f) take(k, f, 'chan'); }
   for (const k of keys) {
     if (map.some((x) => x.src === k.key)) continue;
     const cands = fields.filter((x) => x.cat === k.type && !used.has(x.n) && !x.chan);
@@ -95,7 +101,7 @@ export function mapKeys(keys, entity) {
 export function retarget({ module, entity }) {
   const src = fs.readFileSync(path.join(DIR, module), 'utf8');
   const pk = primaryKeys(src, module);
-  const { map, unusedFields } = mapKeys(pk.keys, entity);
+  const { map, unusedFields } = mapKeys(pk.keys, entity, engineKeys(module));
   const tag = tagOf(module), k = module.replace(/\.dart$/, '');
   const ids = PARTICLE_IDS.filter((id) => (TAG[k] && TAG[k] !== 'inv' ? id.startsWith(tag + '.') : !id.includes('.')));
   const res = assemble({ module, particles: ids, mode: 'compose', declared: true });
@@ -181,7 +187,7 @@ export function retarget({ module, entity }) {
   }
   const n = (how) => map.filter((x) => x.how.startsWith(how)).length;
   const header = [`// 🎯 ${E}Screen — retarget של ${module} לישות ${entity} (GENMAX·G5c/G5d · הכרעה-24) · מחולל דטרמיניסטי: retarget.mjs --module ${module} --entity ${entity}`,
-    `//   זרע-ראשי: ${pk.name} (מועמדים: ${(pk.candidates || []).join(' ')}) · מיפוי שם ${n('name')} · ערוץ ${n('chan')} · טיפוס-יחיד ${n('unique')} · מקום-שמור ${n('reserved')}`,
+    `//   זרע-ראשי: ${pk.name} (מועמדים: ${(pk.candidates || []).join(' ')}) · מיפוי שם ${n('name')} · ערוץ ${n('chan')} · טיפוס-יחיד ${n('unique')} · מקום-שמור ${n('reserved')} · חוזה-מנוע (לא משתנה) ${n('engine-contract')}`,
     `//   ${map.map((x) => `${x.src}⇒${x.dst || '∅'}(${x.how})`).join(' · ')}`,
     `//   שדות-${entity} בלי מקור (מקום-שמור, יאירו כשיוזרם נתון): ${unusedFields.join(', ') || '—'} · תוויות: ${dstT && srcT ? `מונחי ${srcE} (${srcT.singular}/${srcT.plural || '—'}) ⇒ ${entity} (${dstT.singular}/${dstT.plural || '—'}) · ${sw.swaps} החלפות` : `אין מונח ל-${entity} ב-TERM_DEFS — תוויות של המקור (הצבה)`} · הזרע = זרע-הצבה של המקור, לא ערך-אמת של ${entity}`];
   code = header.join('\n') + '\n' + code;

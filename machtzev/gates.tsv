@@ -20,6 +20,7 @@ core	שכבת-הגרעין מהסכמה (GENMAX·G6a · §20-ד): core-registry.
 fragops	ייחוס-ops פר-שבר (GENMAX·G8b · L49/L60): כל שבר-זהב ⇒ G2-ops מהמפתחות שהוא קורא (טיפוס מהזרע ⇒ fieldOps) — frag-ops.json ≡ ייחוס-טרי; הסכמת-מודול מול בורר-השמות מדווחת (עד-שני, לא קפדני)	commit	—
 coredart	הגרעין כקוד (GENMAX·G6b): gen_core_<entity>.dart לכל ישות עם workflow — מצבים חצובים · מעבר מאטום-מדף (advanceStatus/nextStage) או declared מוצהר · יחסים/חוקים/ערוצים/אירועים · policy=שקע — ≡ פליטה-טרייה; הרנדר בשער genverify	commit	—
 goldenharness	רתמת-הזהב (GENMAX·G4 · השער הקשה): מודול מורכב-מחדש (compose+declared) מוחלף במראה ועובר את בדיקות-הזהב המקוריות בלי שינוי-בדיקה — רק-עולה (מודולים · בדיקות); מדולג בלי buildsmart	push	generator/render-module-baseline.json;grow
+appgen	משפטים ⇒ אפליקציה (GENMAX·G9 · §22): app-golden.json ⇒ N מודולי-retarget + רכזת-ניווט מחוללת + בדיקת-ניווט מחוללת ≡ טריים; ב-push: flutter test של בדיקת-הניווט (בית ⇒ כל מודול ⇒ חזרה, אפס-חריגות); מדולג בלי buildsmart	push	—
 genverify	אימות-בפועל של פלטי-המחולל (GENMAX·G5b · L53): כל gen_*.dart עם מסך נטען ב-flutter test מחולל — אפס-חריגות · DsScaffold · ספירת אטומי-תצוגה שרונדרו — רק-עולה; פלט שלא רונדר = כשל; מדולג בלי buildsmart	push	generator/gen-verify-baseline.json;grow
 compose-determinism	קומפוזר-דטרמיניסטי (23-ג): compose-engine על 15 החלקיקים ≡ compose-engine-report.md	commit	
 index-complete	M3: כל סקריפט ב-machtzev/ עם שורה ב-INDEX.md · חוב רק-יורד	commit	index-baseline.json;shrink

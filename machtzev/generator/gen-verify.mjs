@@ -24,7 +24,7 @@ const screens = files.map((f) => ({ file: f, cls: fs.readFileSync(path.join(DIR,
 if (!screens.length) { console.log('⚪ genverify: אין פלטי-מחולל עם מסך'); process.exit(0); }
 // המראה חייב להיות ≡ המקור (סחף-מראה = כשל, כמו ברתמת-הזהב)
 const drift = screens.filter((s) => { const m = path.join(BS, 'lib/genesis/dart-gen-bs', s.file); return !fs.existsSync(m) || fs.readFileSync(m, 'utf8') !== fs.readFileSync(path.join(DIR, s.file), 'utf8'); }).map((s) => s.file);
-const STRICT = /^gen_(?:\w+_subset|composite_\w+|retarget_\w+|core_\w+|opsseed_\w+)\.dart$/;
+const STRICT = /^gen_(?:\w+_subset|composite_\w+|retarget_\w+|core_\w+|opsseed_\w+|app_\w+)\.dart$/;
 const testPath = path.join(BS, 'test/genesis_gen_verify_test.dart');
 // רק קבצים שהמראה שלהם ≡ המקור נכנסים לבדיקה (קובץ-חסר/סחוף היה מפיל את קומפילציית כל הבדיקה ⇒ 0/57); הסחופים מדווחים ✗ בלי לייבא
 const live = screens.filter((s) => !drift.includes(s.file));

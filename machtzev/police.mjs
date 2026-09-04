@@ -147,6 +147,7 @@ gate('coredart', 'generator/core-dart.mjs', ['--gate']);
 gate('fragops', 'generator/frag-ops.mjs', ['--gate']);
 gate('goldenharness', 'generator/golden-harness.mjs', ['--gate'], FAST);
 gate('genverify', 'generator/gen-verify.mjs', ['--gate'], FAST);
+gate('appgen', 'generator/app-from-sentences.mjs', ['--gate', '--test'], FAST);
 gate('index-complete', 'index-check.mjs');
 gate('atom-count', 'atom-count-check.mjs');
 gate('learn', 'learn-check.mjs');

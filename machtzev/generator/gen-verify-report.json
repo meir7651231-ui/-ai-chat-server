@@ -1,10 +1,10 @@
 {
- "rendered": 37,
- "screens": 75,
+ "rendered": 39,
+ "screens": 77,
  "atoms": 37,
- "passed": 37,
+ "passed": 39,
  "failed": 37,
- "taps": 126,
+ "taps": 132,
  "tapErrors": 0,
  "coreSeen": 0,
  "report": [
@@ -24,7 +24,7 @@
     "DsEmpty",
     "DsPrimaryButton"
    ],
-   "taps": null,
+   "taps": 0,
    "tapErrors": 0,
    "coreSeen": false,
    "coreExpected": false
@@ -48,7 +48,7 @@
     "DsEmpty",
     "DsPrimaryButton"
    ],
-   "taps": null,
+   "taps": 0,
    "tapErrors": 0,
    "coreSeen": false,
    "coreExpected": false
@@ -69,7 +69,7 @@
     "DsEmpty",
     "DsPrimaryButton"
    ],
-   "taps": null,
+   "taps": 0,
    "tapErrors": 0,
    "coreSeen": false,
    "coreExpected": false
@@ -91,7 +91,7 @@
     "DsEmpty",
     "DsPrimaryButton"
    ],
-   "taps": null,
+   "taps": 0,
    "tapErrors": 0,
    "coreSeen": false,
    "coreExpected": false
@@ -113,7 +113,7 @@
     "DsEmpty",
     "DsPrimaryButton"
    ],
-   "taps": null,
+   "taps": 0,
    "tapErrors": 0,
    "coreSeen": false,
    "coreExpected": false
@@ -134,7 +134,7 @@
     "DsEmpty",
     "DsPrimaryButton"
    ],
-   "taps": null,
+   "taps": 0,
    "tapErrors": 0,
    "coreSeen": false,
    "coreExpected": false
@@ -150,7 +150,23 @@
     "DsScaffold",
     "DsNavTile"
    ],
-   "taps": null,
+   "taps": 0,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
+  },
+  {
+   "file": "gen_app_kehila.dart",
+   "screen": "KehilaHubScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 2,
+   "widgets": 510,
+   "atomList": [
+    "DsScaffold",
+    "DsNavTile"
+   ],
+   "taps": 0,
    "tapErrors": 0,
    "coreSeen": false,
    "coreExpected": false
@@ -1088,6 +1104,33 @@
    "tapErrors": 0,
    "coreSeen": false,
    "coreExpected": true
+  },
+  {
+   "file": "gen_retarget_volunteer_from_fee.dart",
+   "screen": "VolunteerScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 13,
+   "widgets": 2048,
+   "atomList": [
+    "DsScaffold",
+    "SegmentedSwitch",
+    "DsSearch",
+    "SoftButton",
+    "FilterChipPill",
+    "GradientCard",
+    "StatHero",
+    "StatRow",
+    "BareStat",
+    "AlertBanner",
+    "DsSection",
+    "MediaRow",
+    "StatusChip"
+   ],
+   "taps": 6,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
   },
   {
    "file": "gen_retarget_volunteer_from_rm.dart",
