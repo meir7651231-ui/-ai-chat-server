@@ -54,9 +54,14 @@ export function resolveSkin(skin) {
     dateField:   { need: 'control', fam: ['input', 'composite'], desc: 'DsDateField ⇒ forge+control' },
     search:      { need: 'control', fam: ['input', 'composite'], desc: 'DsSearch ⇒ forge+control' },
     pageHeader:  { need: 'text2',   fam: ['header'],             desc: 'DsScaffold(title,subtitle) ⇒ כותרת-forge בראש המסך (header:false ב-DS)' },
+    // G13d · טבלה · בארים
+    table: { need: 'table',  fam: ['spatial', 'list'], desc: 'DsTable(labels,rows) ⇒ טבלת-forge (columns + items[i][j])' },
+    bars:  { need: 'values', fam: ['dataviz'],          desc: 'NeonBars/DsBars(labels,values) ⇒ גרף-forge (values ⇒ גובה-בארים)' },
   };
+  const toneMap = (skin && skin.toneMap) || {};   // G13d · גשר-טונים מוצהר: תפקיד ⇒ [טוקן-וריאנט לכל טון-DS 0..3]
   const out = {};
   for (const [role, cls] of Object.entries(skin)) {
+    if (role === 'toneMap') continue;
     const R = ROLES[role]; if (!R) throw new Error(`skin: תפקיד לא-מוכר "${role}" (${Object.keys(ROLES).join('/')})`);
     const a = (m.atoms || []).find((x) => x.cls === cls); if (!a) throw new Error(`skin.${role}: אין אטום-forge בשם ${cls}`);
     const numIdx = a.fieldDemo.map((t, i) => (isNumDemo(t) ? i : -1)).filter((i) => i >= 0);
@@ -69,6 +74,14 @@ export function resolveSkin(skin) {
       if (!a.child) throw new Error(`skin.${role}: ${cls} בלי תפר-child`);
       const ti = textIdxOf(); if (R.need === 'child+text1' && !ti.length) throw new Error(`skin.${role}: ${cls} — נדרש חריץ-טקסט לכותרת`);
       out[role] = Object.assign(base, { titleIdx: ti[0] ?? 0, subIdx: ti[1] ?? -1 }); continue;
+    }
+    if (R.need === 'table') {
+      if (!a.items || !a.items.cells || !a.columns) throw new Error(`skin.${role}: ${cls} — נדרשת טבלה: שורות עם תבנית-תא (items.cells) + כותרות-עמודות (columns) — ${JSON.stringify({ items: a.items, columns: a.columns })}`);
+      out[role] = base; continue;
+    }
+    if (R.need === 'values') {
+      if (!(a.values >= 3)) throw new Error(`skin.${role}: ${cls} — נדרשת סדרת-בארים (values≥3, יש ${a.values || 0})`);
+      const ti = textIdxOf(); out[role] = Object.assign(base, { titleIdx: ti[0] ?? -1, values: a.values }); continue;
     }
     if (R.need === 'control') {
       if (!a.control) throw new Error(`skin.${role}: ${cls} בלי תפר-control (אין <input> בציור)`);
@@ -98,7 +111,13 @@ export function resolveSkin(skin) {
       // כותרת ⇒ החריץ הראשון שתוכן-העיצוב שלו אינו כותרת-קטגוריה (כולו אותיות-גדולות/סימנים = "FLAT"/"ELEVATED" — תג-סוג של הגלריה), משנה ⇒ הבא אחריו
       const textIdx = a.fieldDemo.map((t, i) => (/[a-z֐-׿]/.test(t) ? i : -1)).filter((i) => i >= 0);
       const titleIdx = textIdx[0] ?? 0, subIdx = textIdx[1] ?? (titleIdx + 1 < a.fieldSlots ? titleIdx + 1 : -1);
-      out[role] = { role, cls: a.cls, family: a.family, slots: a.fieldSlots, titleIdx, subIdx, demo: a.fieldDemo, barrel: `../dart-forge-bs/${a.family}/${a.family}.dart` };
+      out[role] = { role, cls: a.cls, family: a.family, slots: a.fieldSlots, titleIdx, subIdx, demo: a.fieldDemo, barrel: `../dart-forge-bs/${a.family}/${a.family}.dart`, bare: !!a.bare };
+      // G13d · אטום-וריאנטים (items.variants, פריט-יחיד) ⇒ הטקסט כפריט; toneMap[role] ממפה טון-DS ⇒ אינדקס-וריאנט (לפי variantIds); חסר ⇒ הראשון
+      if (a.items && a.items.variants && a.items.slots >= 1) {
+        const ids = a.items.variants; const tm = toneMap[role];
+        if (tm) { const bad = tm.filter((t) => !ids.includes(t)); if (bad.length) throw new Error(`skin.toneMap.${role}: ${bad.join(',')} אינם וריאנטים של ${cls} (${ids.join('/')})`); }
+        out[role].variantMap = (tm || [ids[0], ids[0], ids[0], ids[0]]).map((t) => ids.indexOf(t));
+      }
     }
   }
   return out;
@@ -108,7 +127,7 @@ const textFields = (sk, titleExpr, subExpr) => `[${Array.from({ length: sk.slots
 export function buildApp({ name, sentences, skin }) {
   const N = pascal(name), mods = [], skipped = [];
   const skins = resolveSkin(skin) || {}; const sk = skins.kpi || null, skNav = skins.navTile || null, skEmpty = skins.empty || null;
-  const MOD_ROLES = ['stat', 'hero', 'button', 'statusChip', 'banner', 'emptyState', 'mediaRow', 'section', 'frame', 'segmented', 'chip', 'meter', 'glass', 'timeline', 'field', 'enumField', 'numberField', 'dateField', 'search', 'pageHeader'];   // G13b · G13c
+  const MOD_ROLES = ['stat', 'hero', 'button', 'statusChip', 'banner', 'emptyState', 'mediaRow', 'section', 'frame', 'segmented', 'chip', 'meter', 'glass', 'timeline', 'field', 'enumField', 'numberField', 'dateField', 'search', 'pageHeader', 'table', 'bars'];   // G13b · G13c · G13d
   const modSkin = MOD_ROLES.some((r) => skins[r]) ? Object.fromEntries(MOD_ROLES.map((r) => [r, skins[r] || null])) : null;
   for (const text of sentences) {
     const r = fromSentence(text, modSkin);

@@ -15,7 +15,7 @@
   "stat": "ForgeStatPlain",
   "hero": "ForgeStatPlain",
   "button": "ForgeSoftButton",
-  "statusChip": "ForgeIntelPill",
+  "statusChip": "ForgeStatusChip",
   "banner": "ForgeSectionPill",
   "emptyState": "ForgeSearchEmptyState",
   "mediaRow": "ForgeContactTile",
@@ -31,6 +31,16 @@
   "numberField": "ForgeDsNumberField",
   "dateField": "ForgeDsDateFieldInput",
   "search": "ForgeDsSearch",
-  "pageHeader": "ForgeCenteredPageHeader"
+  "pageHeader": "ForgeCenteredPageHeader",
+  "table": "ForgeDataGrid",
+  "bars": "ForgeBarChart",
+  "toneMap": {
+   "statusChip": [
+    "tone-info",
+    "tone-ok",
+    "tone-err",
+    "tone-warn"
+   ]
+  }
  }
 }

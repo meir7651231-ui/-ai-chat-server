@@ -99,7 +99,7 @@ export function mapKeys(keys, entity, locked = new Set()) {
   return { map, unusedFields: fields.filter((f) => !used.has(f.n)).map((f) => f.n) };
 }
 // G12c · מעבר-עור במודול: קריאות DS (BareStat/StatHero) ⇒ אטום-forge עם fields לפי תפקידי-החריצים (ערך⇒חריץ-מספרי · תווית⇒טקסט-ראשון). פרסר-ארגומנטים מאוזן (סוגריים · מחרוזות · אינטרפולציה).
-function callArgs(src, open) {   // src[open] === '(' ⇒ { end, args: [{name, expr}] } (end = index of ')')
+export function callArgs(src, open) {   // src[open] === '(' ⇒ { end, args: [{name, expr}] } (end = index of ')')
   let i = open + 1, depth = 0, cur = '', args = [], inStr = null, brace = [];
   const push = () => { const t = cur.trim(); if (t) { const m = /^([a-zA-Z_]\w*):\s*([\s\S]*)$/.exec(t); args.push(m ? { name: m[1], expr: m[2] } : { name: null, expr: t }); } cur = ''; };
   for (; i < src.length; i++) {
@@ -133,12 +133,31 @@ function parentWidget(code, idx) {
 function balancedClose(s, open) { let d = 0; for (let k = open; k < s.length; k++) { if (s[k] === '(') d++; else if (s[k] === ')') { d--; if (d === 0) return k; } } return -1; }
 function chipHelpers(code) {
   const out = {}; const re = /Widget\s+(\w+)\(([^)]*)\)\s*=>\s*FilterChipPill\(/g; let m;
+  const paramsOf = (ps) => ps.split(',').map((x) => x.trim()).filter(Boolean).map((x) => x.split(/\s+/).pop());
   while ((m = re.exec(code))) {
     const c = callArgs(code, m.index + m[0].length - 1); if (!c) continue;
     const by = Object.fromEntries(c.args.filter((a) => a.name).map((a) => [a.name, a.expr]));
     if (!by.label || !by.selected || !by.onTap) continue;
-    const params = m[2].split(',').map((x) => x.trim()).filter(Boolean).map((x) => x.split(/\s+/).pop());
-    out[m[1]] = { params, label: by.label, selected: by.selected, onTap: by.onTap };
+    out[m[1]] = { params: paramsOf(m[2]), label: by.label, selected: by.selected, onTap: by.onTap };
+  }
+  // G13d · גוף-בלוק: `Widget NAME(params) { final x = …; … return FilterChipPill(…); }` ⇒ המקומיים מוחלפים בביטוייהם
+  const reB = /Widget\s+(\w+)\(([^)]*)\)\s*\{([\s\S]*?)\n  \}/g;
+  while ((m = reB.exec(code))) {
+    const body = m[3]; const r = body.indexOf('return FilterChipPill('); if (r < 0 || out[m[1]]) continue;
+    const c = callArgs(body, r + 'return FilterChipPill'.length); if (!c) continue;
+    const by = Object.fromEntries(c.args.filter((a) => a.name).map((a) => [a.name, a.expr]));
+    if (!by.label || !by.selected || !by.onTap) continue;
+    const locals = [...body.slice(0, r).matchAll(/final\s+(?:\w+\s+)?(\w+)\s*=\s*([^;]+);/g)].map((x) => [x[1], x[2].trim()]);
+    if (/\b(if|for|while|switch)\b/.test(body.slice(0, r).replace(/final[^;]+;/g, ''))) continue;   // זרימת-בקרה בגוף ⇒ לא פותרים (אין ניחוש)
+    const subL = (e) => locals.reduceRight((acc, [n, v]) => acc.replace(new RegExp(`(?<![\\w.$])${n}(?![\\w])`, 'g'), `(${v})`), e);
+    out[m[1]] = { params: paramsOf(m[2]), label: subL(by.label), selected: subL(by.selected), onTap: subL(by.onTap) };
+  }
+  // G13d · האצלה: `Widget NAME(params) => OTHER(args)` כאשר OTHER helper-צ׳יפ פתור ⇒ הרכבה
+  const reD = /Widget\s+(\w+)\(([^)]*)\)\s*=>\s*(\w+)\(/g;
+  for (let pass = 0; pass < 2; pass++) while ((m = reD.exec(code))) {
+    if (out[m[1]] || !out[m[3]]) continue;
+    const rec = chipRecord(code.slice(m.index + m[0].length - m[3].length - 1, balancedClose(code, m.index + m[0].length - 1) + 1), out);
+    if (rec) out[m[1]] = { params: paramsOf(m[2]), ...rec };
   }
   return out;
 }
@@ -160,6 +179,7 @@ export function skinPass(code, skin) {
     for (;;) {
       const m = /\b(Wrap|Row)\(/g; m.lastIndex = i; const hit = m.exec(code); if (!hit) { out += code.slice(i); break; }
       const j = hit.index; const c = callArgs(code, j + hit[1].length); if (!c) { out += code.slice(i, j + 1); i = j + 1; continue; }
+      const cm0 = /const\s+$/.exec(code.slice(i, j)); const j0 = cm0 ? j - cm0[0].length : j;   // const Wrap(…) ⇒ Builder אינו קבוע
       const ch = c.args.find((a) => a.name === 'children');
       const list = ch && /^\[[\s\S]*\]$/.test(ch.expr.trim()) ? ch.expr.trim().slice(1, -1) : null;
       let ok = false, recs = [];
@@ -180,14 +200,15 @@ export function skinPass(code, skin) {
       }
       if (!ok) { out += code.slice(i, j + 1); i = j + 1; continue; }
       // רשומות (label, selected, onTap) — גם מ-for — ⇒ אטום-אוסף אחד; Builder כדי להחזיק את הרשימה כביטוי
-      out += code.slice(i, j) + `Builder(builder: (_) { final chips = <(String, bool, VoidCallback)>[${recs.join(', ')}]; return ${sk.cls}(${sk.bare ? 'bare: true, ' : ''}items: [for (final ch in chips) [ch.$1]], selected: <int>{for (final (k, ch) in chips.indexed) if (ch.$2) k}, onSelect: (k) => chips[k].$3()); })`; i = c.end + 1;
+      out += code.slice(i, j0) + `Builder(builder: (_) { final chips = <(String, bool, VoidCallback)>[${recs.join(', ')}]; return ${sk.cls}(${sk.bare ? 'bare: true, ' : ''}items: [for (final ch in chips) [ch.$1]], selected: <int>{for (final (k, ch) in chips.indexed) if (ch.$2) k}, onSelect: (k) => chips[k].$3()); })`; i = c.end + 1;
       stats.chipRow = (stats.chipRow || 0) + 1; stats.chip = (stats.chip || 0) + recs.length; barrels.add(sk.barrel);
     }
     code = out;
   }
   for (const [ds, role] of [['BareStat', 'stat'], ['StatHero', 'hero'], ['KpiTile', 'kpi'], ['DsNavTile', 'navTile'], ['SoftButton', 'button'], ['StatusChip', 'statusChip'], ['AlertBanner', 'banner'], ['EmptyState', 'emptyState'], ['MediaRow', 'mediaRow'],
     ['DsSection', 'section'], ['SegmentedSwitch', 'segmented'], ['StatRow', 'meter'], ['GlassCard', 'glass'], ['GradientCard', 'frame'], ['TimelineItem', 'timeline'], ['FilterChipPill', 'chip'],
-    ['DsField', 'field'], ['DsEnumField', 'enumField'], ['DsNumberField', 'numberField'], ['DsDateField', 'dateField'], ['DsSearch', 'search'], ['DsScaffold', 'pageHeader']]) {   // G13c · שדות-חיים בחריץ-control + כותרת-המסך   // G13b · מיכלים/בוררים/מדדים דרך תפרי-G13a (child · items/selected/onSelect · values)
+    ['DsField', 'field'], ['DsEnumField', 'enumField'], ['DsNumberField', 'numberField'], ['DsDateField', 'dateField'], ['DsSearch', 'search'], ['DsScaffold', 'pageHeader'],
+    ['DsTable', 'table'], ['NeonBars', 'bars'], ['DsBars', 'bars']]) {   // G13c · שדות-חיים בחריץ-control + כותרת-המסך · G13d · טבלה (columns+items[i][j]) · בארים (values)   // G13b · מיכלים/בוררים/מדדים דרך תפרי-G13a (child · items/selected/onSelect · values)
     const sk = skin && skin[role]; if (!sk) continue;
     let out = '', i = 0;
     for (;;) {
@@ -195,10 +216,12 @@ export function skinPass(code, skin) {
       if (/[\w.]/.test(code[j - 1] || '')) { out += code.slice(i, j + ds.length + 1); i = j + ds.length + 1; continue; }   // חלק משם-אחר / member
       const c = callArgs(code, j + ds.length); if (!c) { out += code.slice(i, j + ds.length + 1); i = j + ds.length + 1; continue; }
       const byName = Object.fromEntries(c.args.filter((a) => a.name).map((a) => [a.name, a.expr]));
+      // G13d · `const Ds…(…)` ⇒ ההחלפה אינה קבועה (אינדקס-וריאנט/רשומות) ⇒ מסירים את ה-const שלפני הקריאה (124 invalid_constant)
+      const cm = /const\s+$/.exec(code.slice(i, j)); const j0 = cm ? j - cm[0].length : j;
       // G12e · עלי-טקסט פנימיים: תפקידי text1/text2 — הטקסט הראשי ⇒ חריץ-הכותרת, משני ⇒ חריץ-המשנה, השאר ''. onTap (כפתור) נשמר ב-GestureDetector; tone/glyph של ה-DS לא מועברים (האטום לובש את החריץ)
       // G13b · תפקידי-תפר (child · items/selected/onSelect · values) — ההתנהגות (onSelect/onTap/children) נשמרת, הציור מהספרייה
       const skip = () => { out += code.slice(i, c.end + 1); i = c.end + 1; };
-      const done = (w) => { out += code.slice(i, j) + w; i = c.end + 1; stats[role] = (stats[role] || 0) + 1; barrels.add(sk.barrel); };
+      const done = (w) => { out += code.slice(i, j0) + w; i = c.end + 1; stats[role] = (stats[role] || 0) + 1; barrels.add(sk.barrel); };
       const blank = (n) => Array.from({ length: n }, () => "''");
       const parentW = () => parentWidget(code, j);
       const flexIfRow = (w) => (parentW() === 'Row' ? `Flexible(child: ${w})` : w);
@@ -219,7 +242,7 @@ export function skinPass(code, skin) {
       }
       if (role === 'glass') {   // GlassCard(title, sub, height, radius, colors…) ⇒ כרטיס-forge (כותרת+משנה); הצבעים/הגובה של ה-DS לא מועברים (האטום לובש את החריץ)
         if (byName.child && !byName.title && skin.frame) {   // GlassCard(child) של הזהב (מיכל-KPI/כרטיס-רשומה) = מסגרת ⇒ תפקיד frame
-          const fr = skin.frame; out += code.slice(i, j) + `${fr.cls}(${fr.slots ? `fields: [${blank(fr.slots).join(', ')}], ` : ''}child: ${byName.child})`; i = c.end + 1; stats.frame = (stats.frame || 0) + 1; barrels.add(fr.barrel); continue;
+          const fr = skin.frame; out += code.slice(i, j0) + `${fr.cls}(${fr.slots ? `fields: [${blank(fr.slots).join(', ')}], ` : ''}child: ${byName.child})`; i = c.end + 1; stats.frame = (stats.frame || 0) + 1; barrels.add(fr.barrel); continue;
         }
         if (!byName.title || !byName.sub) { skip(); continue; }
         const f = blank(sk.slots); f[sk.titleIdx] = byName.title; if (sk.subIdx >= 0) f[sk.subIdx] = byName.sub;
@@ -243,6 +266,15 @@ export function skinPass(code, skin) {
         const st = sk.stateIds && sk.stateIds.includes('empty') && sk.stateIds.includes('filled') && byName.value ? `state: (${byName.value}).toString().trim().isEmpty ? ${sk.cls}State.empty : ${sk.cls}State.filled, ` : '';
         done(`${sk.cls}(${st}${f}control: ${inner})`); continue;
       }
+      if (role === 'table') {   // DsTable(labels, rows) ⇒ טבלת-forge: columns=labels · items=rows (כל מספר-עמודות · תבנית-תא)
+        if (!byName.labels || !byName.rows) { skip(); continue; }
+        done(`${sk.cls}(${sk.bare ? 'bare: true, ' : ''}columns: ${byName.labels}, items: ${byName.rows})`); continue;
+      }
+      if (role === 'bars') {   // NeonBars/DsBars(labels, values, title?) ⇒ גרף-forge: values מנורמלים לגבוה (0..1); הבארים בעיצוב = ${sk.values} — עודף מדולג, חסר ⇒ 0
+        if (!byName.values) { skip(); continue; }
+        const f = sk.slots ? `fields: [${Array.from({ length: sk.slots }, (_, k) => (k === sk.titleIdx && byName.title ? byName.title : "''")).join(', ')}], ` : '';
+        done(`${sk.cls}(${f}values: (() { final _vs = ${byName.values}; final _m = _vs.fold<double>(0.0, (a, b) => a > b ? a : b); return [for (final v in _vs) _m == 0 ? 0.0 : v / _m]; })())`); continue;
+      }
       if (role === 'pageHeader') {   // DsScaffold(title, subtitle, icon, children, bottomBar) ⇒ header:false + כותרת-forge כילד-ראשון
         if (!byName.title || !byName.subtitle || !byName.children || byName.header) { skip(); continue; }
         const f = Array.from({ length: sk.slots }, (_, k) => (k === sk.titleIdx ? byName.title : k === sk.subIdx ? byName.subtitle : "''"));
@@ -256,16 +288,19 @@ export function skinPass(code, skin) {
         const [mainK, subK, tap] = textRole;
         if (!byName[mainK]) { out += code.slice(i, c.end + 1); i = c.end + 1; continue; }
         const f = Array.from({ length: sk.slots }, (_, k) => (k === sk.titleIdx ? byName[mainK] : (k === sk.subIdx && subK && byName[subK]) ? byName[subK] : "''"));
-        const forgedT = `${sk.cls}(fields: [${f.join(', ')}])`;
+        // G13d · אטום-וריאנטים (tone-*): הטקסט כפריט-יחיד, הטון של ה-DS (int) ⇒ אינדקס-וריאנט דרך toneMap של העור (גשר-אוצר-מילים מוצהר, לא מילון-דומייני)
+        const forgedT = sk.variantMap && byName.tone != null
+          ? `${sk.cls}(${sk.bare ? 'bare: true, ' : ''}items: [[${byName[mainK]}]], variants: ${/^\d+$/.test(byName.tone.trim()) ? `const <int>[${sk.variantMap[(+byName.tone) % sk.variantMap.length]}]` : `[const <int>[${sk.variantMap.join(', ')}][(${byName.tone}) % ${sk.variantMap.length}]]`})`   // טון-ליטרלי ⇒ אינדקס בזמן-חילול (נשאר const-תקין בתוך const Align(…))
+          : sk.variantMap ? `${sk.cls}(${sk.bare ? 'bare: true, ' : ''}items: [[${byName[mainK]}]])` : `${sk.cls}(fields: [${f.join(', ')}])`;
         const parentT = parentWidget(code, j);
         const inner = tap ? `GestureDetector(behavior: HitTestBehavior.opaque, onTap: ${byName.onTap || 'null'}, child: ${forgedT})` : forgedT;
         const boxed = parentT === 'Row' ? `Flexible(child: ${inner})` : inner;   // ב-Row: חולק רוחב (טקסט-forge אלסטי) ולא גולש · Flexible חייב להיות ילד-ישיר של ה-Row (מעל ה-GestureDetector, לא מתחתיו — ParentData)
-        out += code.slice(i, j) + boxed; i = c.end + 1; stats[role] = (stats[role] || 0) + 1; barrels.add(sk.barrel); continue;
+        out += code.slice(i, j0) + boxed; i = c.end + 1; stats[role] = (stats[role] || 0) + 1; barrels.add(sk.barrel); continue;
       }
       if (role === 'navTile') {   // DsNavTile(glyph, title, sub, onTap) ⇒ אריח-forge (text2) עטוף GestureDetector עם אותו onTap — ההתנהגות נשמרת, הציור מהספרייה
         if (!byName.title || !byName.sub || !byName.onTap) { out += code.slice(i, c.end + 1); i = c.end + 1; continue; }
         const f2 = Array.from({ length: sk.slots }, (_, k) => (k === sk.titleIdx ? byName.title : k === sk.subIdx ? byName.sub : "''"));
-        out += code.slice(i, j) + `GestureDetector(behavior: HitTestBehavior.opaque, onTap: ${byName.onTap}, child: ${sk.cls}(fields: [${f2.join(', ')}]))`; i = c.end + 1; stats[role] = (stats[role] || 0) + 1; barrels.add(sk.barrel); continue;
+        out += code.slice(i, j0) + `GestureDetector(behavior: HitTestBehavior.opaque, onTap: ${byName.onTap}, child: ${sk.cls}(fields: [${f2.join(', ')}]))`; i = c.end + 1; stats[role] = (stats[role] || 0) + 1; barrels.add(sk.barrel); continue;
       }
       if (!byName.value || !byName.label) { out += code.slice(i, c.end + 1); i = c.end + 1; continue; }
       const fields = Array.from({ length: sk.slots }, (_, k) => (k === sk.valueIdx ? byName.value : k === sk.labelIdx ? byName.label : "''"));
@@ -273,8 +308,8 @@ export function skinPass(code, skin) {
       const forged = `${sk.cls}(fields: [${fields.join(', ')}])`;
       // stat ב-Row (רצועת-KPI בעלת-מספר-קבוע, ~4 באותה שורה) — אריח-forge ברוחב-עיצוב לא נכנס ⇒ נשאר BareStat של ה-DS (מדווח); ב-Wrap ⇒ אריח-forge ברוחב-אריח של הזהב (168)
       const parent = parentWidget(code, j);
-      if (role === 'stat' && parent === 'Row') { out += code.slice(i, j) + `Expanded(child: ${forged})`; i = c.end + 1; stats.statRow = (stats.statRow || 0) + 1; barrels.add(sk.barrel); continue; }   // G12e · ברצועת-Row: חלוקת-רוחב שווה (Expanded) — הטקסט הפנימי אלסטי (Flexible+ellipsis במנוע-החישול)
-      out += code.slice(i, j) + (role === 'stat' ? `SizedBox(width: 168, child: ${forged})` : role === 'kpi' ? forged : `ConstrainedBox(constraints: const BoxConstraints(maxWidth: 420), child: ${forged})`); i = c.end + 1; stats[role] = (stats[role] || 0) + 1; barrels.add(sk.barrel);
+      if (role === 'stat' && parent === 'Row') { out += code.slice(i, j0) + `Expanded(child: ${forged})`; i = c.end + 1; stats.statRow = (stats.statRow || 0) + 1; barrels.add(sk.barrel); continue; }   // G12e · ברצועת-Row: חלוקת-רוחב שווה (Expanded) — הטקסט הפנימי אלסטי (Flexible+ellipsis במנוע-החישול)
+      out += code.slice(i, j0) + (role === 'stat' ? `SizedBox(width: 168, child: ${forged})` : role === 'kpi' ? forged : `ConstrainedBox(constraints: const BoxConstraints(maxWidth: 420), child: ${forged})`); i = c.end + 1; stats[role] = (stats[role] || 0) + 1; barrels.add(sk.barrel);
     }
     code = out;
   }
