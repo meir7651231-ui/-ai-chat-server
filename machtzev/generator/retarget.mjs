@@ -176,31 +176,41 @@ export function skinPass(code, skin) {
   if (skin && skin.chip) {
     const sk = skin.chip; let out = '', i = 0;
     const helpers = chipHelpers(code);
+    // G13e · helpers-עטיפה: `Widget NAME(List<Widget> kids) => Wrap(` ⇒ NAME([...]) נסרק כמו Wrap
+    const wrapHelpers = {}; for (const mm of code.matchAll(/Widget\s+(\w+)\(List<Widget>\s+\w+\)\s*=>\s*Wrap\(/g)) wrapHelpers[mm[1]] = true;
+    const wrapRe = new RegExp(`\\b(Wrap|Row${Object.keys(wrapHelpers).map((k) => '|' + k).join('')})\\(`, 'g');
     for (;;) {
-      const m = /\b(Wrap|Row)\(/g; m.lastIndex = i; const hit = m.exec(code); if (!hit) { out += code.slice(i); break; }
+      const m = wrapRe; m.lastIndex = i; const hit = m.exec(code); if (!hit) { out += code.slice(i); break; }
       const j = hit.index; const c = callArgs(code, j + hit[1].length); if (!c) { out += code.slice(i, j + 1); i = j + 1; continue; }
+      const isHelper = !!wrapHelpers[hit[1]];   // G13e · helper-עטיפה מודולרי `_wrap([...])` ⇒ הרשימה היא הארגומנט-הפוזיציוני
       const cm0 = /const\s+$/.exec(code.slice(i, j)); const j0 = cm0 ? j - cm0[0].length : j;   // const Wrap(…) ⇒ Builder אינו קבוע
-      const ch = c.args.find((a) => a.name === 'children');
+      const ch = isHelper ? c.args.find((a) => !a.name) : c.args.find((a) => a.name === 'children');
       const list = ch && /^\[[\s\S]*\]$/.test(ch.expr.trim()) ? ch.expr.trim().slice(1, -1) : null;
-      let ok = false, recs = [];
+      let ok = false, recs = [], others = [];
       if (list) {   // פירוק הרשימה (מאוזן-סוגריים): כל פריט = FilterChipPill(...) · או קריאה ל-helper שגופו => FilterChipPill (G13c: _fchip(...)) · או for (...) <אחד מהם>
         let k = 0, depth = 0, start = 0, parts = [];
         for (; k < list.length; k++) { const chr = list[k]; if (chr === '(' || chr === '[' || chr === '{') depth++; else if (chr === ')' || chr === ']' || chr === '}') depth--; else if (chr === ',' && depth === 0) { parts.push(list.slice(start, k)); start = k + 1; } }
         if (list.slice(start).trim()) parts.push(list.slice(start));
         parts = parts.map((p) => p.trim()).filter(Boolean);
-        ok = parts.length >= 2;
-        for (const p of parts) {
-          if (!ok) break;
-          let head = '', call = p;
-          if (/^for\s*\(/.test(p)) { const o = p.indexOf('('); const e = balancedClose(p, o); if (e < 0) { ok = false; break; } head = p.slice(0, e + 1) + ' '; call = p.slice(e + 1).trim(); }
-          const rec = chipRecord(call, helpers);   // {label, selected, onTap} או null
-          if (!rec) { ok = false; break; }
-          recs.push(`${head}(${rec.label}, ${rec.selected}, ${rec.onTap})`);
-        }
+        ok = true;
+        // G13e · פריט ⇒ רשומה: שרשרת for/if · `...[a, b]` (spread) רקורסיבי · קריאה ל-FilterChipPill/helper
+        const toRec = (p) => {
+          let head = '', call = p.trim();
+          while (/^(for|if)\s*\(/.test(call)) { const o = call.indexOf('('); const e = balancedClose(call, o); if (e < 0) return null; head += call.slice(0, e + 1) + ' '; call = call.slice(e + 1).trim(); }
+          if (/^\.\.\.\[/.test(call) && call.endsWith(']')) { const inner = splitTopArgs(call.slice(4, -1)).map(toRec); if (inner.some((x) => x == null)) return null; return `${head}...[${inner.join(', ')}]`; }
+          const rec = chipRecord(call, helpers); if (!rec) return null;
+          return `${head}(${rec.label}, ${rec.selected}, ${rec.onTap})`;
+        };
+        for (const p of parts) { const r = toRec(p); if (r == null) others.push(p); else recs.push(r); }   // G13e · ילדים-לא-צ׳יפים (כפתור-ניקוי בתוך ה-Wrap) נשארים כפי-שהם לצד אטום-הצ׳יפים
+        ok = recs.length >= 2 || (recs.length === 1 && /^(for|if)\s*\(|\.\.\./.test(recs[0]));
       }
-      if (!ok) { out += code.slice(i, j + 1); i = j + 1; continue; }
+      if (!ok) { if (process.env.SKIN_DEBUG && list && /_fchip|FilterChipPill|_bchip|_vchip/.test(list)) console.error('chipRow-skip:', list.replace(/\s+/g, ' ').slice(0, 220)); out += code.slice(i, j + 1); i = j + 1; continue; }
       // רשומות (label, selected, onTap) — גם מ-for — ⇒ אטום-אוסף אחד; Builder כדי להחזיק את הרשימה כביטוי
-      out += code.slice(i, j0) + `Builder(builder: (_) { final chips = <(String, bool, VoidCallback)>[${recs.join(', ')}]; return ${sk.cls}(${sk.bare ? 'bare: true, ' : ''}items: [for (final ch in chips) [ch.$1]], selected: <int>{for (final (k, ch) in chips.indexed) if (ch.$2) k}, onSelect: (k) => chips[k].$3()); })`; i = c.end + 1;
+      const chipsW = `Builder(builder: (_) { final chips = <(String, bool, VoidCallback)>[${recs.join(', ')}]; return ${sk.cls}(${sk.bare ? 'bare: true, ' : ''}items: [for (final ch in chips) [ch.$1]], selected: <int>{for (final (k, ch) in chips.indexed) if (ch.$2) k}, onSelect: (k) => chips[k].$3()); })`;
+      if (!others.length) out += code.slice(i, j0) + chipsW;
+      else if (isHelper) out += code.slice(i, j0) + `${hit[1]}([${chipsW}, ${others.join(', ')}])`;
+      else out += code.slice(i, j0) + `${hit[1]}(${c.args.filter((a) => a.name !== 'children').map((a) => `${a.name}: ${a.expr}`).join(', ')}${c.args.length > 1 ? ', ' : ''}children: [${chipsW}, ${others.join(', ')}])`;
+      i = c.end + 1;
       stats.chipRow = (stats.chipRow || 0) + 1; stats.chip = (stats.chip || 0) + recs.length; barrels.add(sk.barrel);
     }
     code = out;
@@ -208,7 +218,7 @@ export function skinPass(code, skin) {
   for (const [ds, role] of [['BareStat', 'stat'], ['StatHero', 'hero'], ['KpiTile', 'kpi'], ['DsNavTile', 'navTile'], ['SoftButton', 'button'], ['StatusChip', 'statusChip'], ['AlertBanner', 'banner'], ['EmptyState', 'emptyState'], ['MediaRow', 'mediaRow'],
     ['DsSection', 'section'], ['SegmentedSwitch', 'segmented'], ['StatRow', 'meter'], ['GlassCard', 'glass'], ['GradientCard', 'frame'], ['TimelineItem', 'timeline'], ['FilterChipPill', 'chip'],
     ['DsField', 'field'], ['DsEnumField', 'enumField'], ['DsNumberField', 'numberField'], ['DsDateField', 'dateField'], ['DsSearch', 'search'], ['DsScaffold', 'pageHeader'],
-    ['DsTable', 'table'], ['NeonBars', 'bars'], ['DsBars', 'bars']]) {   // G13c · שדות-חיים בחריץ-control + כותרת-המסך · G13d · טבלה (columns+items[i][j]) · בארים (values)   // G13b · מיכלים/בוררים/מדדים דרך תפרי-G13a (child · items/selected/onSelect · values)
+    ['DsTable', 'table'], ['NeonBars', 'bars'], ['DsBars', 'bars'], ['DsChip', 'statusChip'], ['DsPrimaryButton', 'button']]) {   // G13e · זנב: DsChip(label,tone) כתג · DsPrimaryButton(label,onTap) ככפתור   // G13c · שדות-חיים בחריץ-control + כותרת-המסך · G13d · טבלה (columns+items[i][j]) · בארים (values)   // G13b · מיכלים/בוררים/מדדים דרך תפרי-G13a (child · items/selected/onSelect · values)
     const sk = skin && skin[role]; if (!sk) continue;
     let out = '', i = 0;
     for (;;) {

@@ -1040,12 +1040,11 @@
    "screen": "DonationScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 3,
-   "widgets": 1784,
+   "atoms": 2,
+   "widgets": 1636,
    "atomList": [
     "DsScaffold",
-    "DsSearch",
-    "FilterChipPill"
+    "DsSearch"
    ],
    "taps": 2,
    "tapErrors": 0,
@@ -1151,12 +1150,11 @@
    "screen": "ShopAssignmentScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 3,
-   "widgets": 1837,
+   "atoms": 2,
+   "widgets": 1534,
    "atomList": [
     "DsScaffold",
-    "DsSearch",
-    "FilterChipPill"
+    "DsSearch"
    ],
    "taps": 0,
    "tapErrors": 0,
@@ -1544,12 +1542,11 @@
    "screen": "AttendanceScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 4,
-   "widgets": 1738,
+   "atoms": 3,
+   "widgets": 1575,
    "atomList": [
     "DsScaffold",
     "DsSearch",
-    "FilterChipPill",
     "ProgressRing"
    ],
    "taps": 0,
@@ -1595,12 +1592,11 @@
    "screen": "FeesScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 3,
-   "widgets": 1784,
+   "atoms": 2,
+   "widgets": 1636,
    "atomList": [
     "DsScaffold",
-    "DsSearch",
-    "FilterChipPill"
+    "DsSearch"
    ],
    "taps": 2,
    "tapErrors": 0,
@@ -1612,12 +1608,11 @@
    "screen": "ParentsScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 4,
-   "widgets": 1850,
+   "atoms": 3,
+   "widgets": 1702,
    "atomList": [
     "DsScaffold",
     "DsSearch",
-    "FilterChipPill",
     "DsEnumField"
    ],
    "taps": 0,
@@ -1630,12 +1625,11 @@
    "screen": "RoomsScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 3,
-   "widgets": 1853,
+   "atoms": 2,
+   "widgets": 1526,
    "atomList": [
     "DsScaffold",
-    "DsSearch",
-    "FilterChipPill"
+    "DsSearch"
    ],
    "taps": 0,
    "tapErrors": 0,
@@ -1663,12 +1657,11 @@
    "screen": "TeachersScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 4,
-   "widgets": 2000,
+   "atoms": 3,
+   "widgets": 1764,
    "atomList": [
     "DsScaffold",
     "DsSearch",
-    "FilterChipPill",
     "PremiumAvatar"
    ],
    "taps": 0,
