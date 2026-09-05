@@ -25,7 +25,7 @@ if (!screens.length) { console.log('⚪ genverify: אין פלטי-מחולל ע
 // המראה חייב להיות ≡ המקור (סחף-מראה = כשל, כמו ברתמת-הזהב)
 const drift = screens.filter((s) => { const m = path.join(BS, 'lib/genesis/dart-gen-bs', s.file); return !fs.existsSync(m) || fs.readFileSync(m, 'utf8') !== fs.readFileSync(path.join(DIR, s.file), 'utf8'); }).map((s) => s.file);
 // קפדני = פלטי G4–G9 שלנו (חייבים לעבוד): לפי שם-משפחה, ורכזות-אפליקציה רק לפי חותמת-המחולל בכותרת (L64: 'app_\\w+' לבדו תפס גם gen_app_rec1..6 הישנים של render-ds ⇒ שער אדום שלא נראה)
-const STRICT_NAME = /^gen_(?:\w+_subset|composite_\w+|retarget_\w+|core_\w+|opsseed_\w+)\.dart$/;
+const STRICT_NAME = /^gen_(?:\w+_subset|composite_\w+|retarget_\w+|core_\w+|opsseed_\w+|schoolos\w*_forge)\.dart$/;   // G12d: בית-הספר בעור-forge — קפדני
 const _stampCache = new Map();
 const isStrict = (file) => { if (STRICT_NAME.test(file)) return true; if (!/^gen_app_\w+\.dart$/.test(file)) return false; if (!_stampCache.has(file)) { const f = path.join(DIR, file); _stampCache.set(file, fs.existsSync(f) && /app-from-sentences\.mjs/.test(fs.readFileSync(f, 'utf8').split('\n').slice(0, 3).join('\n'))); } return _stampCache.get(file); };
 const testPath = path.join(BS, 'test/genesis_gen_verify_test.dart');

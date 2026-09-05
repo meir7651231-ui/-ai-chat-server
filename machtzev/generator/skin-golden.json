@@ -1,0 +1,9 @@
+{
+ "name": "SchoolOS-forge",
+ "skin": {
+  "kpi": "ForgeStatBlock",
+  "navTile": "ForgeHubTile",
+  "stat": "ForgeMetricTile",
+  "hero": "ForgeStatBlock"
+ }
+}
