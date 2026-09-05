@@ -39,14 +39,43 @@ export function resolveSkin(skin) {
     banner:     { need: 'text2', fam: ['feedback', 'status'], desc: 'AlertBanner(message) ⇒ באנר-forge' },
     emptyState: { need: 'text2', fam: ['feedback'],           desc: 'EmptyState(message) במודול ⇒ forge' },
     mediaRow:   { need: 'text2', fam: ['card', 'list'],       desc: 'MediaRow(title,subtitle) ⇒ שורת-forge' },
+    // G13b · מיכלים/בוררים/מדדים דרך תפרי-G13a
+    section:   { need: 'child+text1',  fam: ['header', 'card', 'composite'],            desc: 'DsSection(title,children) ⇒ מקטע-forge עם התוכן בתוך המסגרת' },
+    frame:     { need: 'child',        fam: ['card', 'header', 'composite'],            desc: 'GradientCard(child) ⇒ מסגרת-forge' },
+    segmented: { need: 'select',       fam: ['selection', 'nav', 'action', 'composite'], desc: 'SegmentedSwitch(items,selected,onSelect) ⇒ בורר-forge' },
+    chip:      { need: 'select',       fam: ['selection', 'composite', 'status'],       desc: 'FilterChipPill(label,selected,onTap) ⇒ צ׳יפ-forge' },
+    meter:     { need: 'value+values', fam: ['status', 'dataviz', 'card', 'list'],      desc: 'StatRow(label,value,fraction) ⇒ מדד-forge עם מילוי' },
+    glass:     { need: 'text2',        fam: ['card'],                                   desc: 'GlassCard(title,sub) ⇒ כרטיס-forge' },
+    timeline:  { need: 'items2',       fam: ['list', 'chat', 'card'],                   desc: 'TimelineItem(title,time,body) ⇒ שורת-רשימה-forge' },
   };
   const out = {};
   for (const [role, cls] of Object.entries(skin)) {
     const R = ROLES[role]; if (!R) throw new Error(`skin: תפקיד לא-מוכר "${role}" (${Object.keys(ROLES).join('/')})`);
     const a = (m.atoms || []).find((x) => x.cls === cls); if (!a) throw new Error(`skin.${role}: אין אטום-forge בשם ${cls}`);
     const numIdx = a.fieldDemo.map((t, i) => (isNumDemo(t) ? i : -1)).filter((i) => i >= 0);
-    if (a.seam !== 'fields' || a.states) throw new Error(`skin.${role}: ${cls} אינו seam:fields חד-מצבי`);
+    if (a.states) throw new Error(`skin.${role}: ${cls} רב-מצבי (theater) — לא נכנס לעור`);
+    const textIdxOf = () => a.fieldDemo.map((t, i) => (/[a-z֐-׿]/.test(t) ? i : -1)).filter((i) => i >= 0);
+    const base = { role, cls: a.cls, family: a.family, slots: a.fieldSlots, demo: a.fieldDemo, barrel: `../dart-forge-bs/${a.family}/${a.family}.dart`, itemSlots: a.items ? a.items.slots : 0, bare: !!a.bare };
     if (R.fam && !R.fam.includes(a.family)) throw new Error(`skin.${role}: ${cls} ממשפחת ${a.family} — נדרש ${R.fam.join('/')}`);
+    // G13b · תפרי-G13a (מאומתים מול forge-manifest.atoms: child · items · values)
+    if (R.need === 'child' || R.need === 'child+text1') {
+      if (!a.child) throw new Error(`skin.${role}: ${cls} בלי תפר-child`);
+      const ti = textIdxOf(); if (R.need === 'child+text1' && !ti.length) throw new Error(`skin.${role}: ${cls} — נדרש חריץ-טקסט לכותרת`);
+      out[role] = Object.assign(base, { titleIdx: ti[0] ?? 0, subIdx: ti[1] ?? -1 }); continue;
+    }
+    if (R.need === 'select') {
+      if (!a.items || !a.items.selectable || !a.items.selected || a.items.slots < 1) throw new Error(`skin.${role}: ${cls} — נדרשת קבוצת-פריטים לחיצה עם selected (${JSON.stringify(a.items)})`);
+      out[role] = base; continue;
+    }
+    if (R.need === 'items2') {
+      if (!a.items || a.items.slots < 2) throw new Error(`skin.${role}: ${cls} — נדרשת קבוצת-פריטים עם ≥2 חריצים (${JSON.stringify(a.items)})`);
+      out[role] = base; continue;
+    }
+    if (R.need === 'value+values') {
+      if (!(a.values >= 1) || a.fieldSlots < 2 || numIdx.length < 1 || numIdx.length >= a.fieldSlots) throw new Error(`skin.${role}: ${cls} — נדרש מילוי (values≥1) + חריץ-מספרי + חריץ-טקסט (values=${a.values} · slots=${a.fieldSlots})`);
+      out[role] = Object.assign(base, { valueIdx: numIdx[0], labelIdx: a.fieldDemo.findIndex((t, i) => i !== numIdx[0]) }); continue;
+    }
+    if (a.seam !== 'fields') throw new Error(`skin.${role}: ${cls} אינו seam:fields`);
     if (R.need === 'value+label') {
       if (a.fieldSlots < 2 || numIdx.length < 1 || numIdx.length >= a.fieldSlots) throw new Error(`skin.${role}: ${cls} — נדרש ≥2 חריצים, לפחות חריץ-מספרי אחד ולפחות חריץ-טקסט אחד (יש ${a.fieldSlots} · מספריים ${numIdx.length})`);   // ערך ⇒ החריץ-המספרי הראשון; חריץ-מספרי נוסף (דלתא) נשאר '' — מקום-שמור, לא דמו
       const valueIdx = numIdx[0], labelIdx = a.fieldDemo.findIndex((t, i) => i !== valueIdx);
@@ -67,7 +96,7 @@ const textFields = (sk, titleExpr, subExpr) => `[${Array.from({ length: sk.slots
 export function buildApp({ name, sentences, skin }) {
   const N = pascal(name), mods = [], skipped = [];
   const skins = resolveSkin(skin) || {}; const sk = skins.kpi || null, skNav = skins.navTile || null, skEmpty = skins.empty || null;
-  const MOD_ROLES = ['stat', 'hero', 'button', 'statusChip', 'banner', 'emptyState', 'mediaRow'];
+  const MOD_ROLES = ['stat', 'hero', 'button', 'statusChip', 'banner', 'emptyState', 'mediaRow', 'section', 'frame', 'segmented', 'chip', 'meter', 'glass', 'timeline'];   // G13b
   const modSkin = MOD_ROLES.some((r) => skins[r]) ? Object.fromEntries(MOD_ROLES.map((r) => [r, skins[r] || null])) : null;
   for (const text of sentences) {
     const r = fromSentence(text, modSkin);

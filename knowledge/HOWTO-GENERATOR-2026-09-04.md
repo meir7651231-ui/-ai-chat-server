@@ -42,6 +42,9 @@ cd /home/user/-ai-chat-server && node machtzev/tools/site-shot.mjs <name> <Title
 ```
 `--no-web-resources-cdn` חובה לאתר עצמאי (CanvasKit מקומי); הגופן-המצורף (`DsTokens.fontBody`) מונע היעלמות-טקסט בלי רשת (L69).
 
+## 4½ · עור-forge (G12–G13)
+`app-golden*.json` / `skin-golden.json` מצהירים `skin: { kpi, hero, stat, navTile, button, statusChip, banner, emptyState, mediaRow, section, frame, segmented, chip, meter, glass, timeline }` ⇒ אטום-forge לכל תפקיד. המנוע מאמת מבנית (חריצים · child · items · values) ומסרב לאטום לא-מתאים. אטומי-forge מחוללים מ-Pure (`node machtzev/ds-forge.mjs` — תמיד מלא) עם 6 תפרים: `fields` · `items/selected/onSelect` · `values` · `control` · `onAction` · `child`; null ⇒ תוכן-העיצוב ביט-זהה. גופני-Pure (Fraunces · Space Grotesk · Frank Ruhl Libre · Heebo) ב-pubspec של בנייה-חכמה.
+
 ## 5 · מה יש היום (אמת, 4.9.2026)
 | מדד | ערך |
 |---|---|
@@ -58,4 +61,4 @@ cd /home/user/-ai-chat-server && node machtzev/tools/site-shot.mjs <name> <Title
 - מודולים מ-fees/dashboard: אין מדד בצורת-where ⇒ hero=count, בלי קפיצה/סינון.
 - הכרעות-בעלים פתוחות: policy-config · student⇒Member · פערי-זרע/סכמה · מונחי-רבים · מונחים ל-4 ישויות-הגרעין.
 
-הכול מתועד: `knowledge/PLAN-GENERATOR-MAX-2026-09-04.md` §7 (מצב-חי) · `knowledge/CLOSED-GENMAX-G*.md` (דוח פר-שלב) · `machtzev/LEARNINGS.md` L51–L69.
+הכול מתועד: `knowledge/PLAN-GENERATOR-MAX-2026-09-04.md` §7 (מצב-חי) · `knowledge/CLOSED-GENMAX-G*.md` (דוח פר-שלב) · `machtzev/LEARNINGS.md` L51–L74.

@@ -7,11 +7,11 @@
 - **🏁 זהב-מורכב-מחדש (GENMAX·G4 · render-module compose):** 9/9 מודולים · 87/87 בדיקות
 - **🔎 פלטי-מחולל שרונדרו-בפועל (GENMAX·G5b · gen-verify):** 63/100 מסכים רונדרו-בפועל · 39 אטומי-תצוגה על המסך
 - **🔌 מחווטים-למחולל בפועל:** 53 (3.0%) · 1703 מפורקים-אך-לא-מחווטים
-- **  ↳ מול כשירים-לחיווט (eligible):** 53/813 (6.5%) · כשירים: תצוגה 718 (fields∧str≥1 ∪ collection ∪ series) + לוגיקה 95 (wireable)
+- **  ↳ מול כשירים-לחיווט (eligible):** 53/881 (6.0%) · כשירים: תצוגה 786 (fields∧str≥1 ∪ collection ∪ series) + לוגיקה 95 (wireable)
 - **  ↳ חיווט-תצוגה:** 45/908 (5.0%)
 - **  ↳ חיווט-לוגיקה:** 8/848 (0.9%)
 - **תצוגה · atom-index (widgets · הכרעה C):** 908
-- **  ↳ seam:** {"fields":492,"collection":161,"zero":100,"series":155}
+- **  ↳ seam:** {"fields":500,"collection":216,"zero":24,"series":168}
 - **  ↳ נגישים-בהרכבה (selectVaried×400):** 45
 - **  ↳ פר-היבט:** {"kpi":16,"board":1,"nav":21,"tbl":1,"trend":2,"prog":2,"card":2}
 - **לוגיקה · logic-census:** 848
@@ -26,7 +26,7 @@
 - **machtzev/ תת-תיקיות:** 14
 - **generator/ קנוני:** 33
 - **generator/legacy/:** 5
-- **knowledge/ פעיל:** 75
+- **knowledge/ פעיל:** 76
 - **knowledge/archive/:** 11
 - **שערי-משטרה (gates.tsv):** 45
 - **שערי-משטרה (police gate()):** 45

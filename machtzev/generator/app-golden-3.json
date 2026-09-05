@@ -18,6 +18,13 @@
   "statusChip": "ForgeIntelPill",
   "banner": "ForgeSectionPill",
   "emptyState": "ForgeSearchEmptyState",
-  "mediaRow": "ForgeContactTile"
+  "mediaRow": "ForgeContactTile",
+  "section": "ForgeTitledSection",
+  "frame": "ForgeStripPanelFrame",
+  "segmented": "ForgeSegmentedPillToggleSelection",
+  "chip": "ForgeFacetChip",
+  "meter": "ForgeLinearProgressStatus",
+  "glass": "ForgeGlassCard",
+  "timeline": "ForgeNotifRow"
  }
 }

@@ -319,8 +319,36 @@ const dq = s => '"' + String(s).replace(/\\/g,'\\\\').replace(/"/g,'\\"').replac
 
 // ───────────────────────── DOM ⇒ Flutter ─────────────────────────
 // ───── תפר-דאטה (G12a): חריצי-טקסט של אטום seam:fields ⇒ _f(i, "תוכן-העיצוב"). null ⇒ תוכן-העיצוב (ביקורת-פיקסל ביט-זהה); רשימה ⇒ fields[i] או '' — לעולם לא תוכן-דמו (§20-ג)
-let CUR = null;   // { n, slots } בזמן חישול-תא אחד; null ⇒ ללא חריצים (seam:series/אחר)
-const slot = (shown) => { if (!CUR) return dq(shown); const i = CUR.n++; CUR.slots.push(shown); return `_f(${i}, ${dq(shown)})`; };
+// G13a · תפרי-המחולל (הכרעת-בעלים 5.9 "תשפר את המנוע"): כל אטום מקבל — fields (חריצי-טקסט, כל seam) · child (תוכן-נוסף מתחת) ·
+// control (שדה-חי במקום ציור-ה-input) · onAction(k) (כפתור/קישור k) · items/selected/onSelect (קבוצת-אחים-זהים ⇒ תבנית-פריט) · values (מילוי-אחוז).
+// הכול נגזר מצורת-ה-DOM של Pure (אחים-זהים · aria-pressed/selected/checked · style="width:N%" · <input>) — אפס מילון (§20-ד). null ⇒ תוכן-העיצוב ביט-זהה.
+let CUR = null;   // { n, slots, vn, actions, control, items, itemMode } בזמן חישול-תא אחד
+const freshCur = () => ({ n: 0, slots: [], vn: 0, actions: 0, control: false, items: null, itemMode: null });
+const slot = (shown) => {
+  if (!CUR) return dq(shown);
+  if (CUR.itemMode) { const j = CUR.itemMode.j++; return `_it(items![i], ${j}, ${dq(shown)})`; }   // תבנית-פריט: חריץ j של הפריט i
+  const i = CUR.n++; CUR.slots.push(shown); return `_f(${i}, ${dq(shown)})`;
+};
+// מילוי-אחוז (width/height:N%) ⇒ values[k] (0..1). בתבנית-פריט ⇒ values[i] (הפריט); אחרת לפי סדר-ההופעה.
+const vexpr = (x) => !CUR ? x : CUR.itemMode ? `_v(i, ${x})` : `_v(${CUR.vn++}, ${x})`;
+// סמני-מצב של פריט (נבחר/פעיל) — תכונות-ARIA וקלאסים קצרים-מוסכמים ב-Pure; מוסרים מהמפתח כדי שאחים "זהים" יזוהו
+const ITEM_MARK_CLS = /^(?:sel|on|active|cur|current|checked|open|is-[a-z-]+)$/;
+const isActiveItem = (c) => { const a = c.attrs || {}; return ['aria-pressed', 'aria-selected', 'aria-checked', 'aria-current'].some(k => a[k] === 'true') || (c.classes || []).some(x => ITEM_MARK_CLS.test(x)); };
+const itemKey = (c) => c.tag + '.' + (c.classes || []).filter(x => !ITEM_MARK_CLS.test(x)).sort().join('.');
+// G13a · צומת-המסגרת של האטום: יורדים מהשורש-הסינתטי דרך שרשרת ילדים-יחידים בלי-עיטור עד הקופסה המעוצבת הראשונה (.surf/.ctl/.card) — שם נכנס child (בתוך העיטור, לא מעליו)
+function frameNode(dom, map) {
+  let n = dom, anc = [];
+  for (let g = 0; g < 8; g++) {
+    const kids = elemChildren(n); if (kids.length !== 1) break;
+    if (n !== dom) { const st0 = styleOf(n, map, anc); const st = {}; for (const k in st0) st[k] = resolveVars(st0[k], {}); if (decoration(st) || edge(st, 'padding')) break; anc = anc.concat([n.classes || []]); }
+    n = kids[0];
+  }
+  return n === dom ? (elemChildren(dom)[0] || dom) : n;
+}
+// G13b · מסגרת-גלריה של Pure (אוצר-המילים של הגלריה, לא של הדומיין): .ctl · .body · .stage עוטפות בקרה/תוכן לתצוגה בתא. bare=true ⇒ ליבת-הבקרה בלי המסגרת (ברירת-מחדל: עם, ביט-זהה)
+const GALLERY_FRAMES = new Set(['ctl', 'body', 'stage']);
+function coreNode(dom) { const first = elemChildren(dom)[0]; if (!first || !(first.classes || []).some(k => GALLERY_FRAMES.has(k))) return null; const kids = elemChildren(first); return kids.length === 1 ? kids[0] : null; }
+const isSelectable = (c) => { const a = c.attrs || {}; return c.tag === 'button' || c.tag === 'a' || 'aria-pressed' in a || 'aria-selected' in a || 'aria-checked' in a || 'role' in a || 'tabindex' in a; };
 function textOf(node) { return node.children.filter(c => c.text != null).map(c => c.text).join('').trim(); }
 function elemChildren(node) { return node.children.filter(c => c.tag && c.tag !== 'br'); }
 // ילד עם margin אנכי-auto (‏margin:auto / margin:auto 0) בטור-flex ⇒ מרכוז-אנכי בתוך min-height (‏.ctl segment).
@@ -598,7 +626,9 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     const ta2 = resolveVars(ist['text-align'] || '', {});
     const alignH = ta2 === 'center' ? 'center' : ta2 === 'left' ? 'centerLeft' : 'centerRight';
     const t = `Align(alignment: Alignment.${alignH}, child: Text(${dq(ph)}, style: TextStyle(color: ${filled ? 'skin.ink' : 'skin.faint'}, fontFamily: fonts.he, fontSize: 13)))`;
-    return wrapBox(Object.assign({ 'min-height': '44px' }, ist), t, node);
+    const drawn = wrapBox(Object.assign({ 'min-height': '44px' }, ist), t, node);
+    if (CUR) { CUR.control = true; return `(control ?? ${drawn})`; }   // G13a · שדה-חי במקום ציור-ה-input (self)
+    return drawn;
   }
   const st0 = styleOf(node, map, ancestors);
   // custom-properties: אוסף עצמי + מורש (יורש כמו ב-CSS); מרחיב var(--X) בכל ערכי-הסגנון.
@@ -642,7 +672,11 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
       const st2 = Object.assign({}, st, { background: undefined, 'background-clip': undefined, '-webkit-background-clip': undefined, color: undefined });
       return wrapBox(st2, masked, node, false, parentFlex, noVMargin);
     }
-    return wrapBox(st, `Text(${slot(shown)}${taExpr}, style: TextStyle(${textStyleC(effText, inherit).join(', ')}))`, node, false, parentFlex, noVMargin);   // parentFlex ⇒ פריט-flex-עלה שומר width (blockification), למשל .sevrow .lb width:64px
+    // G13a · עלה-קופסה (תג/פיל/כפתור-טקסט) עם חריץ-ריק ⇒ נעלם (_hide) ולא משאיר קופסה ריקה; עלה-Text חשוף נשאר (TextSpan בזרימת-inline). דמו (fields=null) ⇒ לא-ריק ⇒ ביט-זהה.
+    const sl = slot(shown);
+    const leaf = wrapBox(st, `Text(${sl}${taExpr}, style: TextStyle(${textStyleC(effText, inherit).join(', ')}))`, node, false, parentFlex, noVMargin);
+    if (CUR && /^_(?:f|it)\(/.test(sl) && !/^(?:Text\(|Directionality\(textDirection: TextDirection\.\w+, child: Text\()/.test(leaf.trim())) return `_hide(${sl}, ${leaf})`;
+    return leaf;   // parentFlex ⇒ פריט-flex-עלה שומר width (blockification), למשל .sevrow .lb width:64px
   }
   // בונה ילדים (מפריד אבסולוטיים ל-Stack) · מעביר צבע-יורש
   const childAnc = ancestors.concat([node.classes || []]);
@@ -671,6 +705,18 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   const pColAny = /flex/.test(st['display'] || '') && /column/.test(st['flex-direction'] || '');   // אב flex-column (ל-align-self)
   const zOf = s => { const v = s['z-index']; return /^-?\d+$/.test((v || '').trim()) ? +v : 0; };   // z-index מספרי (ברירת 0)
   let flowMaxZ = 0;   // z-index-מרבי בזרימה — אם גבוה מ-abs, הזרימה נצבעת אחריהם (av מעל .gap ב-story ring)
+  // G13a · קבוצת-אחים-זהים (אותו tag+classes בלי סמני-מצב, ≥2 רצופים) ⇒ תבנית-פריט (items). קבוצה אחת לאטום — הארוכה-ביותר.
+  let grp = null;
+  if (CUR && !CUR.items && !CUR.itemMode && !/grid/.test(st['display'] || '')) {
+    const els = allKids.filter(c => c.tag && c.tag !== 'br');
+    let best = null;
+    for (let a = 0; a < els.length;) { let b = a + 1; while (b < els.length && itemKey(els[b]) === itemKey(els[a])) b++; if (b - a >= 2 && (!best || b - a > best.len)) best = { a, len: b - a }; a = b; }
+    if (best) {
+      const members = els.slice(best.a, best.a + best.len);
+      const inlineAll = members.every(c => { const cs = styleOf(c, map, childAnc); return cs['display'] ? /^inline/.test(cs['display']) : INLINE_TAGS.has(c.tag); });
+      if (/flex/.test(st['display'] || '') || !inlineAll) grp = { set: new Set(members), members, active: members.find(isActiveItem) || null, inactive: members.find(c => !isActiveItem(c)) || members[0], selectable: members.some(isSelectable), tplA: null, tplI: null, demo: [], idx: [] };
+    }
+  }
   for (const c of allKids) {
     // טקסט-חופשי בתוך אלמנט יורש את סגנון-ההורה (גודל/משקל/צבע/פונט) — CSS inheritance.
     // רווחי-גבול בין-אלמנטים משמעותיים ב-CSS (inline) — משמרים רווח-בודד (לא trim מלא ⇒
@@ -687,6 +733,17 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     // ילד-בלוק במיכל-בלוק ⇒ מסירים שוליים-אנכיים (ייבנו-מחדש מקוריסים ברמת-ה-Column). לא ל-abs/inline/flex.
     const collapseChild = parentBlock && !cInline && !posAbsC;
     let e = emit(c, map, childAnc, depth + 1, myColor, selfFlexGrid, nextInh, nextVars, elemIdx++, selfWrap, sibOv, collapseChild, pFlexRow);
+    const eRaw = e;
+    const isMember = !!(grp && grp.set.has(c));
+    // G13a · תבנית-פריט: המופע-הראשון (לא-פעיל) והמופע-הפעיל-הראשון נחצבים שוב במצב-פריט (חריצים ⇒ items![i][j] · אחוזים ⇒ values[i])
+    let tplRaw = null;
+    if (isMember && ((c === grp.inactive && !grp.tplI) || (c === grp.active && !grp.tplA))) {
+      const saved = CUR.itemMode; CUR.itemMode = { j: 0 };
+      try { tplRaw = emit(c, map, childAnc, depth + 1, myColor, selfFlexGrid, nextInh, nextVars, elemIdx - 1, selfWrap, sibOv, collapseChild, pFlexRow); } catch { tplRaw = null; }
+      const jmax = CUR.itemMode.j; CUR.itemMode = saved; grp.slots = Math.max(grp.slots || 0, jmax);
+    }
+    // G13a · כפתור/קישור מחוץ לקבוצת-פריטים ⇒ onAction(k) (סדר-הופעה). בתוך תבנית-פריט ההקשה היא onSelect(i).
+    if (CUR && !CUR.itemMode && !isMember && (c.tag === 'button' || c.tag === 'a')) { const k = CUR.actions++; e = `GestureDetector(behavior: HitTestBehavior.opaque, onTap: onAction == null ? null : () => onAction!(${k}), child: ${e})`; }
     if (cst['position'] === 'absolute') { abs.push({ e, st: cst, z: zOf(cst) }); continue; }
     { const cz = zOf(cst); if (cz > flowMaxZ) flowMaxZ = cz; }   // ילד-זרימה בעל z-index גבוה
     // ילד-טקסט בעל-יישור-עצמי בטור-stretch, בלי רוחב-קבוע ⇒ ממלא-רוחב כדי שיישורו-הפנימי יחול (kpi "92"
@@ -719,7 +776,7 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
       }
       // אחוז-רוחב חלקי בשורת-flex (‏.z{width:40%}) ⇒ Expanded(flex=אחוז) פרופורציונלי. ‏FractionallySizedBox(widthFactor)
       // ב-Row קורס (הציר-הראשי לא-חסום). מסירים את העטיפה שה-wrapBox יצר ומחליפים ב-Expanded משוקלל.
-      else if (cpct && +cpct > 0 && +cpct < 1) { e = e.replace(/^FractionallySizedBox\(widthFactor: [\d.]+, alignment: Alignment\.\w+, child: ([\s\S]*)\)$/, '$1'); e = `Expanded(flex: ${Math.max(1, Math.round(+cpct * 100))}, child: ${e})`; }
+      else if (cpct && +cpct > 0 && +cpct < 1) { e = e.replace(/^FractionallySizedBox\(widthFactor: [^,]+, alignment: Alignment\.\w+, child: ([\s\S]*)\)$/, '$1'); e = `Expanded(flex: ${Math.max(1, Math.round(+cpct * 100))}, child: ${e})`; }
     }
     // מטא לזיהוי שורת-חפיפה: margin-inline-start/left שלילי (‏.av{-14px}) + רוחב-קבוע ⇒ מיקום ב-Stack.
     // פותרים var() של הילד (‏.av.s{--sz:34px} ⇒ width:var(--sz)) לפני px — אחרת width לא-פתור ⇒ הענף מוחמץ.
@@ -729,7 +786,30 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     let negMS = 0; if (msRaw) { const mv = px(msRaw); if (mv != null && +mv < 0) negMS = +mv; }
     const cwm = px(rv('width')), chm = px(rv('height'));
     flowMeta.push({ negMS, w: cwm != null ? +cwm : null, h: chm != null ? +chm : null });
+    if (isMember) {
+      grp.idx.push(flow.length); grp.demo.push(e);
+      if (tplRaw != null) {   // העטיפות (Expanded/Flexible/Align) הן קידומת+סיומת סביב הגולמי ⇒ מוחלות גם על התבנית; לא-נמצא ⇒ תבנית גולמית
+        // ההקשה (onSelect) עוטפת את הגולמי *בתוך* העטיפות (Expanded/SizedBox-אינסופי) — GestureDetector מחוץ ל-Expanded = ParentData/רוחב-אינסופי
+        const tapped = grp.selectable ? `GestureDetector(behavior: HitTestBehavior.opaque, onTap: onSelect == null ? null : () => onSelect!(i), child: ${tplRaw})` : tplRaw;
+        const at = e.indexOf(eRaw); const t = at >= 0 ? e.slice(0, at) + tapped + e.slice(at + eRaw.length) : tapped;
+        if (c === grp.active && !grp.tplA) grp.tplA = t; else if (!grp.tplI) grp.tplI = t;
+      }
+    }
     flow.push(e); flowVM.push(collapseChild ? vMarginOf(cst) : null);
+  }
+  // G13a · הרכבת-הקבוצה: items==null ⇒ ילדי-הדמו ביט-זהה; אחרת List.generate על התבנית (פעיל/לא-פעיל לפי selected). לא בזרימת-טקסט/גריד/חפיפה.
+  if (grp && grp.idx.length >= 2 && grp.tplI && !grp.idx.some(k => flowMeta[k] && flowMeta[k].negMS < 0) && !(!/flex/.test(st['display'] || '') && flowInline)) {
+    let tpl = grp.tplA ? `((selected?.contains(i) ?? false) ? ${grp.tplA} : ${grp.tplI})` : grp.tplI;
+    // L71-ב · פריטי-אמת בשורת-flex (בורר/טאבים) רחבים מפריטי-הגלריה ⇒ RenderFlex overflow (נתפס ב-Studio: 4 תצוגות בעברית). Flexible(loose) מאפשר להם להתכווץ; הדמו נשאר ביט-זהה.
+    const rowFlex = /flex/.test(st['display'] || '') && !/column/.test(st['flex-direction'] || '') && !(/wrap/.test(st['flex-wrap'] || '') && !/nowrap/.test(st['flex-wrap'] || ''));
+    if (rowFlex && !/^(?:Expanded|Flexible)\(/.test(grp.tplI)) tpl = `Flexible(child: ${tpl})`;
+    const entry = `...(items == null ? <Widget>[${grp.demo.join(', ')}] : List<Widget>.generate(items!.length, (i) => ${tpl}))`;
+    const first = grp.idx[0];
+    flow[first] = entry;
+    for (const k of grp.idx.slice(1).reverse()) { flow.splice(k, 1); flowVM.splice(k, 1); flowMeta.splice(k, 1); }
+    // spread אינו widget: מיכל-בלוק עם ילד-יחיד (מסלול flow[0] ישיר) ⇒ Column כמו שהיה לילדים-הרבים (ציר-חוצה של המקור, לא stretch — בתוך Row = רוחב-אינסופי). מיכל-flex ⇒ Row/Column הרגילים פורסים את ה-spread.
+    if (flow.length === 1 && !/flex/.test(st['display'] || '')) flow[0] = `Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.${ALIGN[st['align-items']] || 'start'}, children: [${entry}])`;
+    CUR.items = { slots: grp.slots || 0, demo: grp.demo.length, selectable: grp.selectable, active: !!grp.tplA };
   }
   let inner;
   const disp = st['display'] || '', fd = st['flex-direction'] || '';
@@ -860,7 +940,12 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     if (!parentFlex && !st['width'] && !/^inline/.test(st['display'] || '')) inner = `SizedBox(width: double.infinity, child: ${inner})`;
     noPad = true;                                       // ה-padding כבר בתוך ה-Stack
   }
-  return wrapBox(st, inner, node, noPad, parentFlex, noVMargin);
+  // G13a · child = תוכן-נוסף *בתוך* מסגרת-השורש (מקטע/כרטיס ⇒ תוכן-המודול בתוך הקופסה המעוצבת), אחרי זרימת-העיצוב. null ⇒ ביט-זהה.
+  // child==null ⇒ הביטוי-המקורי עצמו (בלי Column-stretch שמשנה מידות-תוכן — 14 בדיקות-Studio קרסו על רוחב-אינסופי); _withChild מכריע בזמן-ריצה, אפס-שכפול-קוד
+  if (CUR && !CUR.itemMode && node === CUR.rootNode) inner = inner ? `_withChild(${inner}, child)` : '(child ?? const SizedBox.shrink())';
+  const res = wrapBox(st, inner, node, noPad, parentFlex, noVMargin);
+  if (CUR && !CUR.itemMode && node === CUR.coreNode) CUR.coreExpr = res;   // G13b · ליבת-הבקרה (בלי מסגרת-הגלריה) — ל-bare
+  return res;
 }
 
 // עוטף ביטוי ב-Container (רקע/מסגרת/צל/מידות/שוליים) + Opacity, לפי הסגנון
@@ -946,7 +1031,7 @@ function wrapBox(st, inner, node, noPad, parentFlex = false, noVMargin = false) 
   // 100% מדלגים — הוא ממילא ממלא (עטיפה תשבש מרכוז grid/place-items).
   const wp = pct(st['width']), hp = pct(st['height']);
   const wpct = wp && +wp < 1 ? wp : null, hpct = hp && +hp < 1 ? hp : null;
-  if (wpct || hpct) out = `FractionallySizedBox(${wpct ? `widthFactor: ${wpct}, ` : ''}${hpct ? `heightFactor: ${hpct}, ` : ''}alignment: Alignment.centerRight, child: ${out})`;
+  if (wpct || hpct) out = `FractionallySizedBox(${wpct ? `widthFactor: ${vexpr(wpct)}, ` : ''}${hpct ? `heightFactor: ${vexpr(hpct)}, ` : ''}alignment: Alignment.centerRight, child: ${out})`;   // G13a · אחוז ⇒ values[k]
   // width:100% ⇒ מילוי-רוחב-מלא גם בטור-ממורכז (align-items:center לא מותח) — SizedBox אינסופי, לא FractionallySizedBox
   else if (wp === '1.000' && !w) out = `SizedBox(width: double.infinity, child: ${out})`;
   // אלמנט-בלוק (track) עם ילד-אחוז ישיר (FractionallySizedBox) וללא רוחב מפורש ⇒ מילוי-רוחב-מלא,
@@ -1129,23 +1214,29 @@ function forgeFamily(fam) {
     // המופע הראשון (סדר-משפחות אלפביתי) שומר את השם הפשוט; מופע מאוחר מקבל סיומת-משפחה בקובץ ובמחלקה (Forge<Name><Family>). נרשם ב-manifest.renamed.
     if (EMITTED.has(file)) { const fam0 = EMITTED.get(file); file = file.replace(/\.dart$/, `_${fam}.dart`); cls = cls + pascal(fam); RENAMED.push({ name: c.name, family: fam, first: fam0, file, cls }); }
     EMITTED.set(file, fam);
-    CUR = c.seam === 'fields' ? { n: 0, slots: [] } : null;   // G12a · חריצי-טקסט רק לאטומי seam:fields
+    CUR = freshCur();   // G12a חריצי-טקסט · G13a לכל seam + child/control/onAction/items/values
     // מצבים (theater) ⇒ enum + switch; אחרת ⇒ אטום-יחיד
     const states = theaterStates(c.body);
     let bodyExpr, enumBlock = '', stateField = '', ctorState = '';
     if (states) {
       const ids = []; const seenId = new Set();
+      let bestArm = null;
       const arms = states.map((s, i) => {
         let id = enumId(s.label, i); while (seenId.has(id)) id += i; seenId.add(id); ids.push(id);
-        let e; try { e = emit(parseDOM(s.html), map); } catch { e = 'const SizedBox.shrink()'; }
+        const acc = CUR; CUR = Object.assign(freshCur(), { items: acc.items });   // כל זרוע: חריצים 0..k משלה (G13a); המקסימום = חוזה-האטום
+        let e; try { const d = parseDOM(s.html); CUR.rootNode = frameNode(d, map); e = emit(d, map); } catch { e = 'const SizedBox.shrink()'; }
+        if (!bestArm || CUR.n > bestArm.n) bestArm = { n: CUR.n, slots: CUR.slots.slice() };
+        acc.vn = Math.max(acc.vn, CUR.vn); acc.actions = Math.max(acc.actions, CUR.actions); acc.control = acc.control || CUR.control; acc.items = CUR.items || acc.items; CUR = acc;
         return { id, e };
       });
+      if (bestArm) { CUR.n = bestArm.n; CUR.slots = bestArm.slots; }
       enumBlock = `enum ${cls}State { ${ids.join(', ')} }\n\n`;
       stateField = `  final ${cls}State state;\n`;
       ctorState = `this.state = ${cls}State.${ids[0]}`;
       bodyExpr = `switch (state) {\n${arms.map(a => `      ${cls}State.${a.id} => ${a.e},`).join('\n')}\n    }`;
     } else {
       const dom = parseDOM(c.body);
+      CUR.rootNode = frameNode(dom, map); CUR.coreNode = coreNode(dom);
       try { bodyExpr = emit(dom, map); } catch { bodyExpr = 'const SizedBox.shrink()'; }
     }
     // הכרז רק על מה שבשימוש (למניעת unused_local_variable / unused_element)
@@ -1159,6 +1250,24 @@ function forgeFamily(fam) {
       useFonts && '    final fonts = DsSeam.fontsOf(context);  // פונט',
     ].filter(Boolean).join('\n');
     const slotsN = CUR ? CUR.n : 0, slotDemo = CUR ? CUR.slots.slice() : [];
+    // G13b · bare: הגוף = `core` (ליבת-הבקרה) או המסגרת-סביבה. core מופיע פעם-אחת בגוף ⇒ מוחלף במשתנה, אפס-שכפול
+    let coreBlock = '', useBare = false;
+    if (!states && CUR && CUR.coreExpr && bodyExpr.split(CUR.coreExpr).length === 2) { useBare = true; coreBlock = `    final Widget core = ${CUR.coreExpr};\n`; bodyExpr = bodyExpr.replace(CUR.coreExpr, 'core'); }
+    const allExpr = coreBlock + bodyExpr;   // הדגלים נבדקים על הגוף+הליבה (הליבה הוצאה למשתנה)
+    const useHide = /\b_hide\(/.test(allExpr), useChild = /\bchild\b/.test(allExpr), useWith = /\b_withChild\(/.test(allExpr);
+    const useV = /\b_v\(/.test(allExpr), useAct = /\bonAction\b/.test(allExpr), useCtl = /\bcontrol\b/.test(allExpr), useItems = /\bitems!\[i\]|\bitems == null\b/.test(allExpr), useSel = /\bselected\?/.test(allExpr), useOnSel = /\bonSelect\b/.test(allExpr);
+    const it = CUR && CUR.items ? CUR.items : { slots: 0, demo: 0, selectable: false, active: false };
+    const seamsBlock = [
+      '  /// G13a · תוכן-נוסף בתוך מסגרת-האטום, אחרי זרימת-העיצוב (מקטע/כרטיס ⇒ תוכן-המודול). null ⇒ האטום לבדו.\n  final Widget? child;',
+      useWith && '  // G13a · תוכן-נוסף בתוך המסגרת; null ⇒ ביט-זהה. גובה-חסום (Expanded/SizedBox סביב המסגרת) ⇒ התוכן ממלא (Expanded — רשימות/גלילה חיות, כמו GlassCard(child) של הזהב); גובה-חופשי ⇒ Column מכווץ-לתוכן.\n  static Widget _withChild(Widget w, Widget? c) => c == null ? w : LayoutBuilder(builder: (ctx, cns) => cns.hasBoundedHeight\n      ? Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [w, Expanded(child: c)])\n      : Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [w, c]));',
+      useHide && '  static Widget _hide(String s, Widget w) => s.isEmpty ? const SizedBox.shrink() : w;   // G13a · חריץ-ריק ⇒ הקופסה נעלמת',
+      useBare && '  /// G13b · bare=true ⇒ ליבת-הבקרה בלי מסגרת-הגלריה של Pure (.ctl/.body/.stage); child נכנס לליבה. false ⇒ ביט-זהה לגלריה.\n  final bool bare;',
+      useCtl && '  /// G13a · שדה-חי (TextField וכו׳) במקום ציור-ה-input של הגלריה. null ⇒ הציור.\n  final Widget? control;',
+      useAct && `  /// G13a · הקשה על כפתור/קישור k (סדר-הופעה, ${CUR.actions} פעולות).\n  final void Function(int)? onAction;\n  static const int actionSlots = ${CUR.actions};`,
+      useItems && `  /// G13a · קבוצת-פריטים: items[i] = חריצי-הטקסט של פריט i (${it.slots} חריצים · ${it.demo} בדמו${it.selectable ? ' · לחיץ: onSelect(i)' : ''}${it.active ? ' · selected = הפריטים-הפעילים' : ''}). null ⇒ פריטי-העיצוב.\n  final List<List<String>>? items;${useSel ? '\n  final Set<int>? selected;' : ''}${useOnSel ? '\n  final void Function(int)? onSelect;' : ''}\n  static const int itemSlots = ${it.slots};\n  static const int itemDemo = ${it.demo};\n  String _it(List<String> r, int j, String d) => items == null ? d : (j < r.length ? r[j] : '');`,
+      useV && `  /// G13a · מילויי-אחוז (0..1) לפי סדר-הופעה/פריט (${CUR.vn} בדמו). null ⇒ ערכי-העיצוב; חסר ⇒ 0 (אין המצאה).\n  final List<double>? values;\n  double _v(int i, double d) => values == null ? d : (i < values!.length ? values![i].clamp(0.0, 1.0) : 0.0);`,
+    ].filter(Boolean).join('\n') + '\n';
+    const ctorExtra = ', this.child' + (useBare ? ', this.bare = false' : '') + (useCtl ? ', this.control' : '') + (useAct ? ', this.onAction' : '') + (useItems ? ', this.items' + (useSel ? ', this.selected' : '') + (useOnSel ? ', this.onSelect' : '') : '') + (useV ? ', this.values' : '');
     const fieldsBlock = slotsN ? `  /// תפר-דאטה (G12a): ${slotsN} חריצי-טקסט. null ⇒ תוכן-העיצוב (כמו ב-Pure); רשימה ⇒ fields[i] או '' — אין תוכן-דמו בייצור (§20-ג)
   final List<String>? fields;
   static const int fieldSlots = ${slotsN};
@@ -1168,16 +1277,17 @@ function forgeFamily(fam) {
     const src = HEADER(fam, useSkin || useTheme || useFonts || useIcon || useSvg, useUi) + (useIcon ? ICON : '') + (useSvg ? SVGHELPER : '') + `
 /// ${c.name} — seam:${c.seam}${states ? ' · מצבים חיים' : ''}${slotsN ? ` · ${slotsN} חריצים` : ''}
 ${enumBlock}class ${cls} extends StatelessWidget {
-${stateField}${fieldsBlock}  const ${cls}({super.key${ctorState ? ', ' + ctorState : ''}${slotsN ? ', this.fields' : ''}});
+${stateField}${fieldsBlock}${seamsBlock}  const ${cls}({super.key${ctorState ? ', ' + ctorState : ''}${slotsN ? ', this.fields' : ''}${ctorExtra}});
   @override
   Widget build(BuildContext context) {
-${decls}${decls ? '\n' : ''}    return ${bodyExpr};
+${decls}${decls ? '\n' : ''}${coreBlock}    final Widget body = ${useBare ? `bare ? _withChild(core, child) : ${bodyExpr}` : bodyExpr};
+    return ${useChild ? 'body' : 'child == null ? body : Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [body, child!])'};
   }
 }
 `;
     fs.writeFileSync(path.join(dir, file), src);
     made.push({ cls, file });
-    ATOMS.push({ family: fam, cls, file, seam: c.seam, states: !!states, fieldSlots: slotsN, fieldDemo: slotDemo });
+    ATOMS.push({ family: fam, cls, file, seam: c.seam, states: !!states, fieldSlots: slotsN, fieldDemo: slotDemo, child: true, bare: useBare, control: !!useCtl, actions: useAct ? CUR.actions : 0, items: useItems ? { slots: it.slots, demo: it.demo, selectable: !!useOnSel, selected: !!useSel } : null, values: useV ? CUR.vn : 0 });
   }
   // barrel
   fs.writeFileSync(path.join(dir, `${fam}.dart`), made.map(a => `export '${a.file}';`).join('\n') + '\n');

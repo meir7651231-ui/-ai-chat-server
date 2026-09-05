@@ -130,8 +130,35 @@ function parentWidget(code, idx) {
   return null;
 }
 export function skinPass(code, skin) {
-  const stats = { stat: 0, hero: 0 }, barrels = new Set();
-  for (const [ds, role] of [['BareStat', 'stat'], ['StatHero', 'hero'], ['KpiTile', 'kpi'], ['DsNavTile', 'navTile'], ['SoftButton', 'button'], ['StatusChip', 'statusChip'], ['AlertBanner', 'banner'], ['EmptyState', 'emptyState'], ['MediaRow', 'mediaRow']]) {
+  const stats = { stat: 0, hero: 0 }, barrels = new Set();   // G13b: גם section/segmented/meter/glass/frame/timeline/chip
+  // G13b · שורת-צ׳יפים: Wrap/Row שכל ילדיו FilterChipPill(label, selected, onTap) ⇒ אטום-אוסף אחד (items · selected={i אם התנאי} · onSelect⇒onTap[i]) — צ׳יפ-בודד באטום-קבוצה נראה כקופסה ריקה (נתפס בצילום)
+  if (skin && skin.chip) {
+    const sk = skin.chip; let out = '', i = 0;
+    for (;;) {
+      const m = /\b(Wrap|Row)\(/g; m.lastIndex = i; const hit = m.exec(code); if (!hit) { out += code.slice(i); break; }
+      const j = hit.index; const c = callArgs(code, j + hit[1].length); if (!c) { out += code.slice(i, j + 1); i = j + 1; continue; }
+      const ch = c.args.find((a) => a.name === 'children');
+      const list = ch && /^\[[\s\S]*\]$/.test(ch.expr.trim()) ? ch.expr.trim().slice(1, -1) : null;
+      let ok = false, chips = [];
+      if (list) {   // פירוק הרשימה לקריאות-FilterChipPill בלבד (מאוזן-סוגריים)
+        let k = 0, depth = 0, start = 0, parts = [];
+        for (; k < list.length; k++) { const chr = list[k]; if (chr === '(' || chr === '[' || chr === '{') depth++; else if (chr === ')' || chr === ']' || chr === '}') depth--; else if (chr === ',' && depth === 0) { parts.push(list.slice(start, k)); start = k + 1; } }
+        if (list.slice(start).trim()) parts.push(list.slice(start));
+        parts = parts.map((p) => p.trim()).filter(Boolean);
+        ok = parts.length >= 2 && parts.every((p) => /^FilterChipPill\(/.test(p));
+        if (ok) for (const p of parts) { const cc = callArgs(p, 'FilterChipPill'.length); const by = cc ? Object.fromEntries(cc.args.filter((a) => a.name).map((a) => [a.name, a.expr])) : {}; if (!by.label || !by.selected || !by.onTap) { ok = false; break; } chips.push(by); }
+      }
+      if (!ok) { out += code.slice(i, j + 1); i = j + 1; continue; }
+      const items = `[${chips.map((b) => `[${b.label}]`).join(', ')}]`;
+      const sel = `{${chips.map((b, k) => `if (${b.selected}) ${k}`).join(', ')}}`;
+      const taps = `[${chips.map((b) => `() { (${b.onTap})(); }`).join(', ')}]`;
+      out += code.slice(i, j) + `${sk.cls}(${sk.bare ? 'bare: true, ' : ''}items: ${items}, selected: <int>${sel}, onSelect: (k) => (${taps} as List<void Function()>)[k]())`; i = c.end + 1;
+      stats.chipRow = (stats.chipRow || 0) + 1; stats.chip = (stats.chip || 0) + chips.length; barrels.add(sk.barrel);
+    }
+    code = out;
+  }
+  for (const [ds, role] of [['BareStat', 'stat'], ['StatHero', 'hero'], ['KpiTile', 'kpi'], ['DsNavTile', 'navTile'], ['SoftButton', 'button'], ['StatusChip', 'statusChip'], ['AlertBanner', 'banner'], ['EmptyState', 'emptyState'], ['MediaRow', 'mediaRow'],
+    ['DsSection', 'section'], ['SegmentedSwitch', 'segmented'], ['StatRow', 'meter'], ['GlassCard', 'glass'], ['GradientCard', 'frame'], ['TimelineItem', 'timeline'], ['FilterChipPill', 'chip']]) {   // G13b · מיכלים/בוררים/מדדים דרך תפרי-G13a (child · items/selected/onSelect · values)
     const sk = skin && skin[role]; if (!sk) continue;
     let out = '', i = 0;
     for (;;) {
@@ -140,6 +167,45 @@ export function skinPass(code, skin) {
       const c = callArgs(code, j + ds.length); if (!c) { out += code.slice(i, j + ds.length + 1); i = j + ds.length + 1; continue; }
       const byName = Object.fromEntries(c.args.filter((a) => a.name).map((a) => [a.name, a.expr]));
       // G12e · עלי-טקסט פנימיים: תפקידי text1/text2 — הטקסט הראשי ⇒ חריץ-הכותרת, משני ⇒ חריץ-המשנה, השאר ''. onTap (כפתור) נשמר ב-GestureDetector; tone/glyph של ה-DS לא מועברים (האטום לובש את החריץ)
+      // G13b · תפקידי-תפר (child · items/selected/onSelect · values) — ההתנהגות (onSelect/onTap/children) נשמרת, הציור מהספרייה
+      const skip = () => { out += code.slice(i, c.end + 1); i = c.end + 1; };
+      const done = (w) => { out += code.slice(i, j) + w; i = c.end + 1; stats[role] = (stats[role] || 0) + 1; barrels.add(sk.barrel); };
+      const blank = (n) => Array.from({ length: n }, () => "''");
+      const parentW = () => parentWidget(code, j);
+      const flexIfRow = (w) => (parentW() === 'Row' ? `Flexible(child: ${w})` : w);
+      if (role === 'section') {   // DsSection(title, children, trailing?, tone?) ⇒ מקטע-forge: כותרת בחריץ, הילדים בתוך המסגרת (child), trailing כשורה-ראשונה
+        if (!byName.title || !byName.children) { skip(); continue; }
+        const f = blank(sk.slots); f[sk.titleIdx] = byName.title;
+        const kids = `[${byName.trailing ? `Align(alignment: Alignment.centerLeft, child: ${byName.trailing}), ` : ''}...${byName.children}]`;
+        done(`${sk.cls}(fields: [${f.join(', ')}], child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: ${kids}))`); continue;
+      }
+      if (role === 'segmented') {   // SegmentedSwitch(items, selected, onSelect) ⇒ בורר-forge: פריט-לכל-מחרוזת, selected={i}, אותו onSelect
+        if (!byName.items || !byName.selected || !byName.onSelect) { skip(); continue; }
+        done(flexIfRow(`${sk.cls}(${sk.bare ? 'bare: true, ' : ''}items: [for (final s in ${byName.items}) [s]], selected: {${byName.selected}}, onSelect: ${byName.onSelect})`)); continue;   // bare: הבורר בלי כרטיס-הגלריה
+      }
+      if (role === 'meter') {   // StatRow(label, value, fraction) ⇒ מדד-forge: תווית+ערך בחריצים, המילוי מ-values
+        if (!byName.label || !byName.value || !byName.fraction) { skip(); continue; }
+        const f = blank(sk.slots); f[sk.labelIdx] = byName.label; f[sk.valueIdx] = byName.value;
+        done(`${sk.cls}(fields: [${f.join(', ')}], values: [${byName.fraction}])`); continue;
+      }
+      if (role === 'glass') {   // GlassCard(title, sub, height, radius, colors…) ⇒ כרטיס-forge (כותרת+משנה); הצבעים/הגובה של ה-DS לא מועברים (האטום לובש את החריץ)
+        if (byName.child && !byName.title && skin.frame) {   // GlassCard(child) של הזהב (מיכל-KPI/כרטיס-רשומה) = מסגרת ⇒ תפקיד frame
+          const fr = skin.frame; out += code.slice(i, j) + `${fr.cls}(${fr.slots ? `fields: [${blank(fr.slots).join(', ')}], ` : ''}child: ${byName.child})`; i = c.end + 1; stats.frame = (stats.frame || 0) + 1; barrels.add(fr.barrel); continue;
+        }
+        if (!byName.title || !byName.sub) { skip(); continue; }
+        const f = blank(sk.slots); f[sk.titleIdx] = byName.title; if (sk.subIdx >= 0) f[sk.subIdx] = byName.sub;
+        done(flexIfRow(`${sk.cls}(fields: [${f.join(', ')}])`)); continue;
+      }
+      if (role === 'frame') {   // GradientCard(child) ⇒ מסגרת-forge: כל חריצי-הטקסט ריקים (נעלמים ב-_hide), התוכן בתוך המסגרת
+        if (!byName.child) { skip(); continue; }
+        done(`${sk.cls}(${sk.slots ? `fields: [${blank(sk.slots).join(', ')}], ` : ''}child: ${byName.child})`); continue;
+      }
+      if (role === 'timeline') {   // TimelineItem(title, time, body?) ⇒ שורת-רשימה-forge כפריט-יחיד: [title, time, body]
+        if (!byName.title || !byName.time) { skip(); continue; }
+        const cells = [byName.title, byName.time, byName.body ? `(${byName.body}) ?? ''` : null].filter(Boolean).slice(0, sk.itemSlots);
+        done(`${sk.cls}(items: [[${cells.join(', ')}]])`); continue;
+      }
+      if (role === 'chip') { skip(); continue; }   // צ׳יפ-בודד נשאר DS — אטום-הקבוצה נראה כקופסה ריקה סביב צ׳יפ-אחד; שורות-צ׳יפים הוחלפו למעלה
       const textRole = { button: ['label', null, true], statusChip: ['label', null, false], banner: ['message', null, false], emptyState: ['message', null, false], mediaRow: ['title', 'subtitle', false] }[role];
       if (textRole) {
         const [mainK, subK, tap] = textRole;

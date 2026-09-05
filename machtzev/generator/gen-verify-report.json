@@ -993,19 +993,16 @@
    "coreExpected": false
   },
   {
-   "file": "gen_retarget_course_from_crs_skcfded2.dart",
+   "file": "gen_retarget_course_from_crs_skd8baa1.dart",
    "screen": "CourseScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 6,
-   "widgets": 1692,
+   "atoms": 3,
+   "widgets": 1403,
    "atomList": [
     "DsScaffold",
-    "SegmentedSwitch",
     "DsSearch",
-    "FilterChipPill",
-    "GradientCard",
-    "DsSection"
+    "FilterChipPill"
    ],
    "taps": 0,
    "tapErrors": 0,
@@ -1040,20 +1037,16 @@
    "coreExpected": false
   },
   {
-   "file": "gen_retarget_donation_from_fee_skcfded2.dart",
+   "file": "gen_retarget_donation_from_fee_skd8baa1.dart",
    "screen": "DonationScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 7,
-   "widgets": 1989,
+   "atoms": 3,
+   "widgets": 1730,
    "atomList": [
     "DsScaffold",
-    "SegmentedSwitch",
     "DsSearch",
-    "FilterChipPill",
-    "GradientCard",
-    "StatRow",
-    "DsSection"
+    "FilterChipPill"
    ],
    "taps": 2,
    "tapErrors": 0,
@@ -1115,20 +1108,16 @@
    "coreExpected": true
   },
   {
-   "file": "gen_retarget_member_from_stu_skcfded2.dart",
+   "file": "gen_retarget_member_from_stu_skd8baa1.dart",
    "screen": "MemberScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 7,
-   "widgets": 2019,
+   "atoms": 3,
+   "widgets": 1632,
    "atomList": [
     "DsScaffold",
-    "SegmentedSwitch",
     "DsSearch",
-    "FilterChipPill",
-    "GradientCard",
-    "DsSection",
-    "StatRow"
+    "FilterChipPill"
    ],
    "taps": 1,
    "tapErrors": 0,
@@ -1160,17 +1149,14 @@
    "coreExpected": false
   },
   {
-   "file": "gen_retarget_shopassignment_from_tch_skcfded2.dart",
+   "file": "gen_retarget_shopassignment_from_tch_skd8baa1.dart",
    "screen": "ShopAssignmentScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 6,
-   "widgets": 2166,
+   "atoms": 3,
+   "widgets": 1907,
    "atomList": [
     "DsScaffold",
-    "DsSection",
-    "SegmentedSwitch",
-    "GradientCard",
     "DsSearch",
     "FilterChipPill"
    ],
@@ -1180,19 +1166,16 @@
    "coreExpected": true
   },
   {
-   "file": "gen_retarget_shopcriterion_from_crs_skcfded2.dart",
+   "file": "gen_retarget_shopcriterion_from_crs_skd8baa1.dart",
    "screen": "ShopCriterionScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 6,
-   "widgets": 1692,
+   "atoms": 3,
+   "widgets": 1403,
    "atomList": [
     "DsScaffold",
-    "SegmentedSwitch",
     "DsSearch",
-    "FilterChipPill",
-    "GradientCard",
-    "DsSection"
+    "FilterChipPill"
    ],
    "taps": 0,
    "tapErrors": 0,
@@ -1358,20 +1341,16 @@
    "coreExpected": false
   },
   {
-   "file": "gen_retarget_teacher_from_stu_skcfded2.dart",
+   "file": "gen_retarget_teacher_from_stu_skd8baa1.dart",
    "screen": "TeacherScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 7,
-   "widgets": 2019,
+   "atoms": 3,
+   "widgets": 1632,
    "atomList": [
     "DsScaffold",
-    "SegmentedSwitch",
     "DsSearch",
-    "FilterChipPill",
-    "GradientCard",
-    "DsSection",
-    "StatRow"
+    "FilterChipPill"
    ],
    "taps": 1,
    "tapErrors": 0,
@@ -1569,14 +1548,12 @@
    "screen": "AttendanceScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 6,
-   "widgets": 2045,
+   "atoms": 4,
+   "widgets": 2347,
    "atomList": [
     "DsScaffold",
-    "SegmentedSwitch",
     "DsSearch",
     "FilterChipPill",
-    "GradientCard",
     "ProgressRing"
    ],
    "taps": 0,
@@ -1589,15 +1566,12 @@
    "screen": "CoursesScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 6,
-   "widgets": 1692,
+   "atoms": 3,
+   "widgets": 1403,
    "atomList": [
     "DsScaffold",
-    "SegmentedSwitch",
     "DsSearch",
-    "FilterChipPill",
-    "GradientCard",
-    "DsSection"
+    "FilterChipPill"
    ],
    "taps": 0,
    "tapErrors": 0,
@@ -1609,15 +1583,12 @@
    "screen": "DashboardScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 6,
-   "widgets": 1956,
+   "atoms": 3,
+   "widgets": 1834,
    "atomList": [
     "DsScaffold",
-    "SegmentedSwitch",
     "DsSearch",
-    "FilterChipPill",
-    "GradientCard",
-    "StatRow"
+    "FilterChipPill"
    ],
    "taps": 0,
    "tapErrors": 0,
@@ -1629,16 +1600,12 @@
    "screen": "FeesScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 7,
-   "widgets": 1989,
+   "atoms": 3,
+   "widgets": 1730,
    "atomList": [
     "DsScaffold",
-    "SegmentedSwitch",
     "DsSearch",
-    "FilterChipPill",
-    "GradientCard",
-    "StatRow",
-    "DsSection"
+    "FilterChipPill"
    ],
    "taps": 2,
    "tapErrors": 0,
@@ -1650,16 +1617,13 @@
    "screen": "ParentsScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 7,
-   "widgets": 1881,
+   "atoms": 4,
+   "widgets": 1815,
    "atomList": [
     "DsScaffold",
-    "SegmentedSwitch",
     "DsSearch",
     "FilterChipPill",
-    "DsEnumField",
-    "GradientCard",
-    "StatRow"
+    "DsEnumField"
    ],
    "taps": 0,
    "tapErrors": 0,
@@ -1671,13 +1635,12 @@
    "screen": "RoomsScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 4,
-   "widgets": 1145,
+   "atoms": 3,
+   "widgets": 1856,
    "atomList": [
     "DsScaffold",
-    "GradientCard",
-    "SegmentedSwitch",
-    "DsSection"
+    "DsSearch",
+    "FilterChipPill"
    ],
    "taps": 0,
    "tapErrors": 0,
@@ -1689,16 +1652,12 @@
    "screen": "StudentsScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 7,
-   "widgets": 2019,
+   "atoms": 3,
+   "widgets": 1632,
    "atomList": [
     "DsScaffold",
-    "SegmentedSwitch",
     "DsSearch",
-    "FilterChipPill",
-    "GradientCard",
-    "DsSection",
-    "StatRow"
+    "FilterChipPill"
    ],
    "taps": 1,
    "tapErrors": 0,
@@ -1710,17 +1669,13 @@
    "screen": "TeachersScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 8,
-   "widgets": 2505,
+   "atoms": 4,
+   "widgets": 2081,
    "atomList": [
     "DsScaffold",
-    "SegmentedSwitch",
-    "GradientCard",
     "DsSearch",
     "FilterChipPill",
-    "DsSection",
-    "PremiumAvatar",
-    "StatRow"
+    "PremiumAvatar"
    ],
    "taps": 0,
    "tapErrors": 0,
