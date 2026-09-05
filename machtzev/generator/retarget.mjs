@@ -129,36 +129,65 @@ function parentWidget(code, idx) {
   let d = 0; for (let j = i - 1; j >= 0; j--) { const ch = code[j]; if (ch === "'" || ch === '"') { j = skipStrBack(j); continue; } if (ch === ')' || ch === ']') d++; else if (ch === '(' || ch === '[') { if (d === 0) { const m = /(\w+)\s*$/.exec(code.slice(Math.max(0, j - 40), j)); return m ? m[1] : null; } d--; } }
   return null;
 }
+// G13c · helper-צ׳יפ מודולרי: `Widget NAME(params) => FilterChipPill(label: …, selected: …, onTap: …, …)` ⇒ {params, label, selected, onTap}. גוף-בלוק/האצלה ⇒ לא נפתר (נשאר DS, מדווח)
+function balancedClose(s, open) { let d = 0; for (let k = open; k < s.length; k++) { if (s[k] === '(') d++; else if (s[k] === ')') { d--; if (d === 0) return k; } } return -1; }
+function chipHelpers(code) {
+  const out = {}; const re = /Widget\s+(\w+)\(([^)]*)\)\s*=>\s*FilterChipPill\(/g; let m;
+  while ((m = re.exec(code))) {
+    const c = callArgs(code, m.index + m[0].length - 1); if (!c) continue;
+    const by = Object.fromEntries(c.args.filter((a) => a.name).map((a) => [a.name, a.expr]));
+    if (!by.label || !by.selected || !by.onTap) continue;
+    const params = m[2].split(',').map((x) => x.trim()).filter(Boolean).map((x) => x.split(/\s+/).pop());
+    out[m[1]] = { params, label: by.label, selected: by.selected, onTap: by.onTap };
+  }
+  return out;
+}
+function splitTopArgs(s) { const parts = []; let d = 0, start = 0; for (let k = 0; k < s.length; k++) { const ch = s[k]; if ('([{'.includes(ch)) d++; else if (')]}'.includes(ch)) d--; else if (ch === ',' && d === 0) { parts.push(s.slice(start, k)); start = k + 1; } } if (s.slice(start).trim()) parts.push(s.slice(start)); return parts.map((x) => x.trim()); }
+function chipRecord(call, helpers) {
+  if (/^FilterChipPill\(/.test(call)) { const cc = callArgs(call, 'FilterChipPill'.length); const by = cc ? Object.fromEntries(cc.args.filter((a) => a.name).map((a) => [a.name, a.expr])) : {}; return by.label && by.selected && by.onTap ? { label: by.label, selected: by.selected, onTap: by.onTap } : null; }
+  const m = /^(\w+)\(/.exec(call); const h = m && helpers[m[1]]; if (!h) return null;
+  const close = balancedClose(call, m[0].length - 1); if (close !== call.length - 1) return null;
+  const args = splitTopArgs(call.slice(m[0].length, close)); if (args.length !== h.params.length) return null;
+  const sub = (expr) => h.params.reduce((acc, pn, k) => acc.replace(new RegExp(`(?<![\\w.$])${pn}(?![\\w])`, 'g'), `(${args[k]})`), expr);   // החלפת-פרמטר במחרוזת-הארגומנט (גבולות-מילה, לא אחרי '.')
+  return { label: sub(h.label), selected: sub(h.selected), onTap: sub(h.onTap) };
+}
 export function skinPass(code, skin) {
   const stats = { stat: 0, hero: 0 }, barrels = new Set();   // G13b: גם section/segmented/meter/glass/frame/timeline/chip
   // G13b · שורת-צ׳יפים: Wrap/Row שכל ילדיו FilterChipPill(label, selected, onTap) ⇒ אטום-אוסף אחד (items · selected={i אם התנאי} · onSelect⇒onTap[i]) — צ׳יפ-בודד באטום-קבוצה נראה כקופסה ריקה (נתפס בצילום)
   if (skin && skin.chip) {
     const sk = skin.chip; let out = '', i = 0;
+    const helpers = chipHelpers(code);
     for (;;) {
       const m = /\b(Wrap|Row)\(/g; m.lastIndex = i; const hit = m.exec(code); if (!hit) { out += code.slice(i); break; }
       const j = hit.index; const c = callArgs(code, j + hit[1].length); if (!c) { out += code.slice(i, j + 1); i = j + 1; continue; }
       const ch = c.args.find((a) => a.name === 'children');
       const list = ch && /^\[[\s\S]*\]$/.test(ch.expr.trim()) ? ch.expr.trim().slice(1, -1) : null;
-      let ok = false, chips = [];
-      if (list) {   // פירוק הרשימה לקריאות-FilterChipPill בלבד (מאוזן-סוגריים)
+      let ok = false, recs = [];
+      if (list) {   // פירוק הרשימה (מאוזן-סוגריים): כל פריט = FilterChipPill(...) · או קריאה ל-helper שגופו => FilterChipPill (G13c: _fchip(...)) · או for (...) <אחד מהם>
         let k = 0, depth = 0, start = 0, parts = [];
         for (; k < list.length; k++) { const chr = list[k]; if (chr === '(' || chr === '[' || chr === '{') depth++; else if (chr === ')' || chr === ']' || chr === '}') depth--; else if (chr === ',' && depth === 0) { parts.push(list.slice(start, k)); start = k + 1; } }
         if (list.slice(start).trim()) parts.push(list.slice(start));
         parts = parts.map((p) => p.trim()).filter(Boolean);
-        ok = parts.length >= 2 && parts.every((p) => /^FilterChipPill\(/.test(p));
-        if (ok) for (const p of parts) { const cc = callArgs(p, 'FilterChipPill'.length); const by = cc ? Object.fromEntries(cc.args.filter((a) => a.name).map((a) => [a.name, a.expr])) : {}; if (!by.label || !by.selected || !by.onTap) { ok = false; break; } chips.push(by); }
+        ok = parts.length >= 2;
+        for (const p of parts) {
+          if (!ok) break;
+          let head = '', call = p;
+          if (/^for\s*\(/.test(p)) { const o = p.indexOf('('); const e = balancedClose(p, o); if (e < 0) { ok = false; break; } head = p.slice(0, e + 1) + ' '; call = p.slice(e + 1).trim(); }
+          const rec = chipRecord(call, helpers);   // {label, selected, onTap} או null
+          if (!rec) { ok = false; break; }
+          recs.push(`${head}(${rec.label}, ${rec.selected}, ${rec.onTap})`);
+        }
       }
       if (!ok) { out += code.slice(i, j + 1); i = j + 1; continue; }
-      const items = `[${chips.map((b) => `[${b.label}]`).join(', ')}]`;
-      const sel = `{${chips.map((b, k) => `if (${b.selected}) ${k}`).join(', ')}}`;
-      const taps = `[${chips.map((b) => `() { (${b.onTap})(); }`).join(', ')}]`;
-      out += code.slice(i, j) + `${sk.cls}(${sk.bare ? 'bare: true, ' : ''}items: ${items}, selected: <int>${sel}, onSelect: (k) => (${taps} as List<void Function()>)[k]())`; i = c.end + 1;
-      stats.chipRow = (stats.chipRow || 0) + 1; stats.chip = (stats.chip || 0) + chips.length; barrels.add(sk.barrel);
+      // רשומות (label, selected, onTap) — גם מ-for — ⇒ אטום-אוסף אחד; Builder כדי להחזיק את הרשימה כביטוי
+      out += code.slice(i, j) + `Builder(builder: (_) { final chips = <(String, bool, VoidCallback)>[${recs.join(', ')}]; return ${sk.cls}(${sk.bare ? 'bare: true, ' : ''}items: [for (final ch in chips) [ch.$1]], selected: <int>{for (final (k, ch) in chips.indexed) if (ch.$2) k}, onSelect: (k) => chips[k].$3()); })`; i = c.end + 1;
+      stats.chipRow = (stats.chipRow || 0) + 1; stats.chip = (stats.chip || 0) + recs.length; barrels.add(sk.barrel);
     }
     code = out;
   }
   for (const [ds, role] of [['BareStat', 'stat'], ['StatHero', 'hero'], ['KpiTile', 'kpi'], ['DsNavTile', 'navTile'], ['SoftButton', 'button'], ['StatusChip', 'statusChip'], ['AlertBanner', 'banner'], ['EmptyState', 'emptyState'], ['MediaRow', 'mediaRow'],
-    ['DsSection', 'section'], ['SegmentedSwitch', 'segmented'], ['StatRow', 'meter'], ['GlassCard', 'glass'], ['GradientCard', 'frame'], ['TimelineItem', 'timeline'], ['FilterChipPill', 'chip']]) {   // G13b · מיכלים/בוררים/מדדים דרך תפרי-G13a (child · items/selected/onSelect · values)
+    ['DsSection', 'section'], ['SegmentedSwitch', 'segmented'], ['StatRow', 'meter'], ['GlassCard', 'glass'], ['GradientCard', 'frame'], ['TimelineItem', 'timeline'], ['FilterChipPill', 'chip'],
+    ['DsField', 'field'], ['DsEnumField', 'enumField'], ['DsNumberField', 'numberField'], ['DsDateField', 'dateField'], ['DsSearch', 'search'], ['DsScaffold', 'pageHeader']]) {   // G13c · שדות-חיים בחריץ-control + כותרת-המסך   // G13b · מיכלים/בוררים/מדדים דרך תפרי-G13a (child · items/selected/onSelect · values)
     const sk = skin && skin[role]; if (!sk) continue;
     let out = '', i = 0;
     for (;;) {
@@ -204,6 +233,22 @@ export function skinPass(code, skin) {
         if (!byName.title || !byName.time) { skip(); continue; }
         const cells = [byName.title, byName.time, byName.body ? `(${byName.body}) ?? ''` : null].filter(Boolean).slice(0, sk.itemSlots);
         done(`${sk.cls}(items: [[${cells.join(', ')}]])`); continue;
+      }
+      // G13c · שדה-DS ⇒ אטום-forge שמצייר תווית+מסגרת, והשדה-החי (אותו DS, bare:true) בחריץ-ה-control. ההתנהגות (value/onChanged) זהה, הציור מהספרייה.
+      if (['field', 'enumField', 'numberField', 'dateField', 'search'].includes(role)) {
+        if (!byName.onChanged || (role !== 'search' && !byName.label)) { skip(); continue; }
+        if (code.slice(c.end + 1, c.end + 20).includes('bare: true')) { skip(); continue; }
+        const inner = code.slice(j, c.end + 1).replace(/\)$/, ', bare: true)');
+        const f = sk.slots ? `fields: [${Array.from({ length: sk.slots }, (_, k) => (k === sk.titleIdx && byName.label ? byName.label : "''")).join(', ')}], ` : '';
+        const st = sk.stateIds && sk.stateIds.includes('empty') && sk.stateIds.includes('filled') && byName.value ? `state: (${byName.value}).toString().trim().isEmpty ? ${sk.cls}State.empty : ${sk.cls}State.filled, ` : '';
+        done(`${sk.cls}(${st}${f}control: ${inner})`); continue;
+      }
+      if (role === 'pageHeader') {   // DsScaffold(title, subtitle, icon, children, bottomBar) ⇒ header:false + כותרת-forge כילד-ראשון
+        if (!byName.title || !byName.subtitle || !byName.children || byName.header) { skip(); continue; }
+        const f = Array.from({ length: sk.slots }, (_, k) => (k === sk.titleIdx ? byName.title : k === sk.subIdx ? byName.subtitle : "''"));
+        const hdr = `${sk.cls}(fields: [${f.join(', ')}]${sk.hasItems ? ', items: const <List<String>>[]' : ''})`;
+        const rest = c.args.filter((a) => a.name !== 'children').map((a) => (a.name ? `${a.name}: ${a.expr}` : a.expr));
+        done(`DsScaffold(${rest.join(', ')}, header: false, children: [${hdr}, ...${byName.children}])`); continue;
       }
       if (role === 'chip') { skip(); continue; }   // צ׳יפ-בודד נשאר DS — אטום-הקבוצה נראה כקופסה ריקה סביב צ׳יפ-אחד; שורות-צ׳יפים הוחלפו למעלה
       const textRole = { button: ['label', null, true], statusChip: ['label', null, false], banner: ['message', null, false], emptyState: ['message', null, false], mediaRow: ['title', 'subtitle', false] }[role];

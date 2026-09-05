@@ -40,9 +40,8 @@
 - ראיה: `machtzev/audit/goals/gen_app_studentsforge_web.png` (build web + site-shot).
 
 ## מה עדיין DS (כנות)
-`DsField/DsEnumField/DsNumberField/DsDateField` (46) · `DsSearch` (9) · `DsTable` (11) · `DsScaffold` (11) · `DraggableScrollableSheet` (23) · `NeonBars/DsBars` (21) · `FilterChipPill` דרך `_fchip` (4 מודולים).
+~~שדות (55)~~ הוחלפו ב-G13c · `DsTable` (11) · `DsScaffold` (4/11) · `DraggableScrollableSheet` (23) · `NeonBars/DsBars` (21) · צ׳יפים ב-6/8 מודולים (helper בגוף-בלוק/האצלה).
 - **מסגרות-גלריה:** נפתר ב-`bare` (32 אטומים); הצילום-הקודם הראה בורר בתוך כרטיס.
-- שדות/חיפוש: תפר `control` קיים, אבל `ForgeDsField(control: DsField(...))` = מסגרת-כפולה (ל-DS יש מסגרת משלו). צריך וריאנט-DS חשוף (TextField בלבד) — שינוי ב-DS, לא במנוע.
 - טבלה: `ForgeDataTable` = גריד-דמו קבוע (4 עמודות); טבלת-אמת דורשת תבנית-עמודות (items דו-ממדי) — G13c.
 - גרפים: הבארים של Pure הם SVG-paths, לא `%` ⇒ `values` לא תופס; דורש מחולל-path פרמטרי (series) — G13c.
 - `DsScaffold`/גיליון-נגרר: שלד-מסך; מסגרת-forge לכותרת-העמוד (`ForgePageHeader` עם `child`) אפשרית, לא נעשתה.
@@ -50,5 +49,12 @@
 ## תקלות בדרך ⇒ L74
 Column-stretch בשורש שינה מידות (14 בדיקות-Studio) ⇒ `_withChild` בזמן-ריצה · `_withChild` על השורש-הסינתטי שם את התוכן **מתחת** לכרטיס (צילום: מסגרת ריקה + KPI בחוץ) ⇒ `frameNode` · צ׳יפ-בודד ⇒ קופסת-קבוצה ריקה ×13 (צילום) ⇒ שורת-צׁיפים כאוסף, בודד נשאר DS · GestureDetector מחוץ ל-Expanded ⇒ ParentData ⇒ ההקשה בתוך העטיפות · פריטי-אמת בבורר גלשו (RenderFlex) ⇒ Flexible לפריטים בשורת-flex · ListView בתוך מסגרת ⇒ גובה-לא-חסום ⇒ LayoutBuilder(Expanded) · `flutter` מתיקייה לא-נכונה נראה כמו "0 errors" (3 פעמים) · `git add -A` קלט שני קבצי-לגאסי שבורים (gen_forge_gallery · gen_donors_app) — הוסרו משני הריפו.
 
-## הבא (G13c)
-צ׳יפים דרך helper (פתירת `_fchip` ⇒ items) · טבלה-forge עם תבנית-עמודות · series ⇒ path פרמטרי לגרפים · וריאנט-שדה-חשוף ב-DS ⇒ `control` · כותרת-מסך (`DsScaffold`) ⇒ `ForgePageHeader(child)` · צבעי-מצב (danger/ok) לאטומי-forge עם states · הכרעות-בעלים פתוחות (G12f).
+## G13c · שדות-חיים · כותרת-מסך · צ׳יפים-דרך-helper (5.9.2026, המשך "תמשיך לשפר את המנוע")
+- **שדות:** `bare` ב-DS (`DsField/DsEnumField/DsNumberField/DsDateField/DsSearch` — רק השדה-החי, בלי תווית/מסגרת/ריפוד; false ⇒ ביט-זהה) ⇒ skinPass מציב `Forge<X>(fields:[label], control: Ds<X>(…, bare: true))`; `ForgeDsField` מקבל גם `state: empty/filled` לפי הערך (מצבי-Pure חיים). המנוע נותן ל-control את ריפוד-ה-input של העיצוב (הצילום הראה טקסט מתחת לאייקון-החיפוש). **ספירה ב-9 מודולים: field×19 · enumField×24 · numberField×3 · dateField×4 · search×9.**
+- **כותרת-מסך:** `DsScaffold(header:false)` (כפתור-חזרה נשמר) + `ForgeCenteredPageHeader(fields:['', title, subtitle])` כילד-ראשון — **7/11** (4 מסכים בצורת-קריאה שה-parser לא פותר: אינטרפולציה מרובת-שורות).
+- **צ׳יפים דרך helper:** `chipHelpers` פותר `Widget NAME(params) => FilterChipPill(label, selected, onTap)` ומחליף פרמטרים בארגומנטים (גבולות-מילה); שורת-Wrap של קריאות/`for` ⇒ `Builder` עם `List<(String,bool,VoidCallback)>` ⇒ `ForgeFacetChip(bare, items, selected:{k|sel}, onSelect⇒tap)`. **2/8 מודולים** (students · fees); גוף-בלוק (courses), האצלה (teachers) ו-Wrap עם ילדים-לא-צ׳יפים — נשארים DS.
+- ROLES חדשים: `field/enumField/numberField/dateField/search` (need `control`) · `pageHeader` (text2, header). בדיקת-ה-seam הוסרה (חריצי-טקסט קיימים בכל seam). `stateIds` במניפסט.
+- אמת: analyze 0 · 56/56 · gen-verify 63/100 · 189 טאפים · 0 חריגות · Studio ⇒ `_skeb49ef`.
+
+## הבא (G13d)
+צ׳יפים: גוף-בלוק/האצלה · DsScaffold ×4 (parser) (פתירת `_fchip` ⇒ items) · טבלה-forge עם תבנית-עמודות · series ⇒ path פרמטרי לגרפים · וריאנט-שדה-חשוף ב-DS ⇒ `control` · כותרת-מסך (`DsScaffold`) ⇒ `ForgePageHeader(child)` · צבעי-מצב (danger/ok) לאטומי-forge עם states · הכרעות-בעלים פתוחות (G12f).

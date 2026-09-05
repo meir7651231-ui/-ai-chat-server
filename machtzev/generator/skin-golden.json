@@ -16,6 +16,12 @@
   "chip": "ForgeFacetChip",
   "meter": "ForgeLinearProgressStatus",
   "glass": "ForgeGlassCard",
-  "timeline": "ForgeNotifRow"
+  "timeline": "ForgeNotifRow",
+  "field": "ForgeDsField",
+  "enumField": "ForgeDsEnumField",
+  "numberField": "ForgeDsNumberField",
+  "dateField": "ForgeDsDateFieldInput",
+  "search": "ForgeDsSearch",
+  "pageHeader": "ForgeCenteredPageHeader"
  }
 }

@@ -627,7 +627,11 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     const alignH = ta2 === 'center' ? 'center' : ta2 === 'left' ? 'centerLeft' : 'centerRight';
     const t = `Align(alignment: Alignment.${alignH}, child: Text(${dq(ph)}, style: TextStyle(color: ${filled ? 'skin.ink' : 'skin.faint'}, fontFamily: fonts.he, fontSize: 13)))`;
     const drawn = wrapBox(Object.assign({ 'min-height': '44px' }, ist), t, node);
-    if (CUR) { CUR.control = true; return `(control ?? ${drawn})`; }   // G13a · שדה-חי במקום ציור-ה-input (self)
+    if (CUR) {   // G13a · שדה-חי במקום ציור-ה-input (self). G13c: השדה-החי מקבל את ריפוד-ה-input של העיצוב (כולל דריסת-אח `.lic ~ .inp` שמפנה מקום לאייקון) — בלעדיו הטקסט נכנס מתחת לאייקון (צילום)
+      CUR.control = true;
+      const ipad = edge(ist, 'padding');
+      return `(control == null ? ${drawn} : ${ipad ? `Padding(padding: ${ipad}, child: control!)` : 'control!'})`;
+    }
     return drawn;
   }
   const st0 = styleOf(node, map, ancestors);
@@ -1217,7 +1221,7 @@ function forgeFamily(fam) {
     CUR = freshCur();   // G12a חריצי-טקסט · G13a לכל seam + child/control/onAction/items/values
     // מצבים (theater) ⇒ enum + switch; אחרת ⇒ אטום-יחיד
     const states = theaterStates(c.body);
-    let bodyExpr, enumBlock = '', stateField = '', ctorState = '';
+    let bodyExpr, enumBlock = '', stateField = '', ctorState = '', stateIds = null;
     if (states) {
       const ids = []; const seenId = new Set();
       let bestArm = null;
@@ -1230,7 +1234,7 @@ function forgeFamily(fam) {
         return { id, e };
       });
       if (bestArm) { CUR.n = bestArm.n; CUR.slots = bestArm.slots; }
-      enumBlock = `enum ${cls}State { ${ids.join(', ')} }\n\n`;
+      enumBlock = `enum ${cls}State { ${ids.join(', ')} }\n\n`; stateIds = ids;
       stateField = `  final ${cls}State state;\n`;
       ctorState = `this.state = ${cls}State.${ids[0]}`;
       bodyExpr = `switch (state) {\n${arms.map(a => `      ${cls}State.${a.id} => ${a.e},`).join('\n')}\n    }`;
@@ -1287,7 +1291,7 @@ ${decls}${decls ? '\n' : ''}${coreBlock}    final Widget body = ${useBare ? `bar
 `;
     fs.writeFileSync(path.join(dir, file), src);
     made.push({ cls, file });
-    ATOMS.push({ family: fam, cls, file, seam: c.seam, states: !!states, fieldSlots: slotsN, fieldDemo: slotDemo, child: true, bare: useBare, control: !!useCtl, actions: useAct ? CUR.actions : 0, items: useItems ? { slots: it.slots, demo: it.demo, selectable: !!useOnSel, selected: !!useSel } : null, values: useV ? CUR.vn : 0 });
+    ATOMS.push({ family: fam, cls, file, seam: c.seam, states: !!states, stateIds, fieldSlots: slotsN, fieldDemo: slotDemo, child: true, bare: useBare, control: !!useCtl, actions: useAct ? CUR.actions : 0, items: useItems ? { slots: it.slots, demo: it.demo, selectable: !!useOnSel, selected: !!useSel } : null, values: useV ? CUR.vn : 0 });
   }
   // barrel
   fs.writeFileSync(path.join(dir, `${fam}.dart`), made.map(a => `export '${a.file}';`).join('\n') + '\n');

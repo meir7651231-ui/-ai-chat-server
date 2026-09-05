@@ -993,12 +993,12 @@
    "coreExpected": false
   },
   {
-   "file": "gen_retarget_course_from_crs_skd8baa1.dart",
+   "file": "gen_retarget_course_from_crs_skeb49ef.dart",
    "screen": "CourseScreen",
    "rendered": true,
    "drift": false,
    "atoms": 3,
-   "widgets": 1403,
+   "widgets": 1422,
    "atomList": [
     "DsScaffold",
     "DsSearch",
@@ -1037,12 +1037,12 @@
    "coreExpected": false
   },
   {
-   "file": "gen_retarget_donation_from_fee_skd8baa1.dart",
+   "file": "gen_retarget_donation_from_fee_skeb49ef.dart",
    "screen": "DonationScreen",
    "rendered": true,
    "drift": false,
    "atoms": 3,
-   "widgets": 1730,
+   "widgets": 1749,
    "atomList": [
     "DsScaffold",
     "DsSearch",
@@ -1108,16 +1108,15 @@
    "coreExpected": true
   },
   {
-   "file": "gen_retarget_member_from_stu_skd8baa1.dart",
+   "file": "gen_retarget_member_from_stu_skeb49ef.dart",
    "screen": "MemberScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 3,
-   "widgets": 1632,
+   "atoms": 2,
+   "widgets": 1448,
    "atomList": [
     "DsScaffold",
-    "DsSearch",
-    "FilterChipPill"
+    "DsSearch"
    ],
    "taps": 1,
    "tapErrors": 0,
@@ -1149,12 +1148,12 @@
    "coreExpected": false
   },
   {
-   "file": "gen_retarget_shopassignment_from_tch_skd8baa1.dart",
+   "file": "gen_retarget_shopassignment_from_tch_skeb49ef.dart",
    "screen": "ShopAssignmentScreen",
    "rendered": true,
    "drift": false,
    "atoms": 3,
-   "widgets": 1907,
+   "widgets": 1916,
    "atomList": [
     "DsScaffold",
     "DsSearch",
@@ -1166,12 +1165,12 @@
    "coreExpected": true
   },
   {
-   "file": "gen_retarget_shopcriterion_from_crs_skd8baa1.dart",
+   "file": "gen_retarget_shopcriterion_from_crs_skeb49ef.dart",
    "screen": "ShopCriterionScreen",
    "rendered": true,
    "drift": false,
    "atoms": 3,
-   "widgets": 1403,
+   "widgets": 1422,
    "atomList": [
     "DsScaffold",
     "DsSearch",
@@ -1341,16 +1340,15 @@
    "coreExpected": false
   },
   {
-   "file": "gen_retarget_teacher_from_stu_skd8baa1.dart",
+   "file": "gen_retarget_teacher_from_stu_skeb49ef.dart",
    "screen": "TeacherScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 3,
-   "widgets": 1632,
+   "atoms": 2,
+   "widgets": 1448,
    "atomList": [
     "DsScaffold",
-    "DsSearch",
-    "FilterChipPill"
+    "DsSearch"
    ],
    "taps": 1,
    "tapErrors": 0,
@@ -1549,7 +1547,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 4,
-   "widgets": 2347,
+   "widgets": 1741,
    "atomList": [
     "DsScaffold",
     "DsSearch",
@@ -1567,7 +1565,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 3,
-   "widgets": 1403,
+   "widgets": 1422,
    "atomList": [
     "DsScaffold",
     "DsSearch",
@@ -1584,7 +1582,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 3,
-   "widgets": 1834,
+   "widgets": 1827,
    "atomList": [
     "DsScaffold",
     "DsSearch",
@@ -1601,7 +1599,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 3,
-   "widgets": 1730,
+   "widgets": 1749,
    "atomList": [
     "DsScaffold",
     "DsSearch",
@@ -1618,7 +1616,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 4,
-   "widgets": 1815,
+   "widgets": 1852,
    "atomList": [
     "DsScaffold",
     "DsSearch",
@@ -1636,7 +1634,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 3,
-   "widgets": 1856,
+   "widgets": 1865,
    "atomList": [
     "DsScaffold",
     "DsSearch",
@@ -1652,12 +1650,11 @@
    "screen": "StudentsScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 3,
-   "widgets": 1632,
+   "atoms": 2,
+   "widgets": 1448,
    "atomList": [
     "DsScaffold",
-    "DsSearch",
-    "FilterChipPill"
+    "DsSearch"
    ],
    "taps": 1,
    "tapErrors": 0,
@@ -1670,7 +1667,7 @@
    "rendered": true,
    "drift": false,
    "atoms": 4,
-   "widgets": 2081,
+   "widgets": 2090,
    "atomList": [
     "DsScaffold",
     "DsSearch",
