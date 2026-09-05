@@ -131,7 +131,7 @@ function parentWidget(code, idx) {
 }
 export function skinPass(code, skin) {
   const stats = { stat: 0, hero: 0 }, barrels = new Set();
-  for (const [ds, role] of [['BareStat', 'stat'], ['StatHero', 'hero'], ['KpiTile', 'kpi'], ['DsNavTile', 'navTile']]) {
+  for (const [ds, role] of [['BareStat', 'stat'], ['StatHero', 'hero'], ['KpiTile', 'kpi'], ['DsNavTile', 'navTile'], ['SoftButton', 'button'], ['StatusChip', 'statusChip'], ['AlertBanner', 'banner'], ['EmptyState', 'emptyState'], ['MediaRow', 'mediaRow']]) {
     const sk = skin && skin[role]; if (!sk) continue;
     let out = '', i = 0;
     for (;;) {
@@ -139,6 +139,18 @@ export function skinPass(code, skin) {
       if (/[\w.]/.test(code[j - 1] || '')) { out += code.slice(i, j + ds.length + 1); i = j + ds.length + 1; continue; }   // חלק משם-אחר / member
       const c = callArgs(code, j + ds.length); if (!c) { out += code.slice(i, j + ds.length + 1); i = j + ds.length + 1; continue; }
       const byName = Object.fromEntries(c.args.filter((a) => a.name).map((a) => [a.name, a.expr]));
+      // G12e · עלי-טקסט פנימיים: תפקידי text1/text2 — הטקסט הראשי ⇒ חריץ-הכותרת, משני ⇒ חריץ-המשנה, השאר ''. onTap (כפתור) נשמר ב-GestureDetector; tone/glyph של ה-DS לא מועברים (האטום לובש את החריץ)
+      const textRole = { button: ['label', null, true], statusChip: ['label', null, false], banner: ['message', null, false], emptyState: ['message', null, false], mediaRow: ['title', 'subtitle', false] }[role];
+      if (textRole) {
+        const [mainK, subK, tap] = textRole;
+        if (!byName[mainK]) { out += code.slice(i, c.end + 1); i = c.end + 1; continue; }
+        const f = Array.from({ length: sk.slots }, (_, k) => (k === sk.titleIdx ? byName[mainK] : (k === sk.subIdx && subK && byName[subK]) ? byName[subK] : "''"));
+        const forgedT = `${sk.cls}(fields: [${f.join(', ')}])`;
+        const parentT = parentWidget(code, j);
+        const inner = tap ? `GestureDetector(behavior: HitTestBehavior.opaque, onTap: ${byName.onTap || 'null'}, child: ${forgedT})` : forgedT;
+        const boxed = parentT === 'Row' ? `Flexible(child: ${inner})` : inner;   // ב-Row: חולק רוחב (טקסט-forge אלסטי) ולא גולש · Flexible חייב להיות ילד-ישיר של ה-Row (מעל ה-GestureDetector, לא מתחתיו — ParentData)
+        out += code.slice(i, j) + boxed; i = c.end + 1; stats[role] = (stats[role] || 0) + 1; barrels.add(sk.barrel); continue;
+      }
       if (role === 'navTile') {   // DsNavTile(glyph, title, sub, onTap) ⇒ אריח-forge (text2) עטוף GestureDetector עם אותו onTap — ההתנהגות נשמרת, הציור מהספרייה
         if (!byName.title || !byName.sub || !byName.onTap) { out += code.slice(i, c.end + 1); i = c.end + 1; continue; }
         const f2 = Array.from({ length: sk.slots }, (_, k) => (k === sk.titleIdx ? byName.title : k === sk.subIdx ? byName.sub : "''"));
@@ -150,7 +162,7 @@ export function skinPass(code, skin) {
       const forged = `${sk.cls}(fields: [${fields.join(', ')}])`;
       // stat ב-Row (רצועת-KPI בעלת-מספר-קבוע, ~4 באותה שורה) — אריח-forge ברוחב-עיצוב לא נכנס ⇒ נשאר BareStat של ה-DS (מדווח); ב-Wrap ⇒ אריח-forge ברוחב-אריח של הזהב (168)
       const parent = parentWidget(code, j);
-      if (role === 'stat' && parent === 'Row') { out += code.slice(i, c.end + 1); i = c.end + 1; stats.keptRow = (stats.keptRow || 0) + 1; continue; }
+      if (role === 'stat' && parent === 'Row') { out += code.slice(i, j) + `Expanded(child: ${forged})`; i = c.end + 1; stats.statRow = (stats.statRow || 0) + 1; barrels.add(sk.barrel); continue; }   // G12e · ברצועת-Row: חלוקת-רוחב שווה (Expanded) — הטקסט הפנימי אלסטי (Flexible+ellipsis במנוע-החישול)
       out += code.slice(i, j) + (role === 'stat' ? `SizedBox(width: 168, child: ${forged})` : role === 'kpi' ? forged : `ConstrainedBox(constraints: const BoxConstraints(maxWidth: 420), child: ${forged})`); i = c.end + 1; stats[role] = (stats[role] || 0) + 1; barrels.add(sk.barrel);
     }
     code = out;
@@ -411,7 +423,7 @@ export function retarget({ module, entity, skin = null }) {
   const header = [`// 🎯 ${E}Screen — retarget של ${module} לישות ${entity} (GENMAX·G5c/G5d · הכרעה-24) · מחולל דטרמיניסטי: retarget.mjs --module ${module} --entity ${entity}`,
     `//   זרע-ראשי: ${pk.name} (מועמדים: ${(pk.candidates || []).join(' ')}) · מיפוי שם ${n('name')} · ערוץ ${n('chan')} · טיפוס-יחיד ${n('unique')} · מקום-שמור ${n('reserved')} · חוזה-מנוע (לא משתנה) ${n('engine-contract')}`,
     `//   ${map.map((x) => `${x.src}⇒${x.dst || '∅'}(${x.how})`).join(' · ')}`,
-    ...(skinned ? [`//   עור-forge (G12c): BareStat⇒${skin.stat ? `${skin.stat.cls} ×${skinned.stats.stat || 0} (ב-Wrap) · נשארו BareStat ב-Row ×${skinned.stats.keptRow || 0}` : '—'} · StatHero⇒${skin.hero ? `${skin.hero.cls} ×${skinned.stats.hero || 0}` : '—'} · KpiTile⇒${skin.kpi ? `${skin.kpi.cls} ×${skinned.stats.kpi || 0}` : '—'} · DsNavTile⇒${skin.navTile ? `${skin.navTile.cls} ×${skinned.stats.navTile || 0}` : '—'} — fields לפי תפקידי-חריצים; צבעי-מצב-DS לא מועברים`] : []),
+    ...(skinned ? [`//   עור-forge (G12c/e): BareStat⇒${skin.stat ? `${skin.stat.cls} ×${skinned.stats.stat || 0} (ב-Wrap) · ×${skinned.stats.statRow || 0} (ב-Row, Expanded)` : '—'} · פנימיים: ${['button', 'statusChip', 'banner', 'emptyState', 'mediaRow'].map((r) => `${r}×${skinned.stats[r] || 0}`).join(' ')} · StatHero⇒${skin.hero ? `${skin.hero.cls} ×${skinned.stats.hero || 0}` : '—'} · KpiTile⇒${skin.kpi ? `${skin.kpi.cls} ×${skinned.stats.kpi || 0}` : '—'} · DsNavTile⇒${skin.navTile ? `${skin.navTile.cls} ×${skinned.stats.navTile || 0}` : '—'} — fields לפי תפקידי-חריצים; צבעי-מצב-DS לא מועברים`] : []),
     `//   תפר-עובדות (G9b): ${facts.cls} · count=${facts.count ? `${facts.count.list}.length (${facts.count.how})` : '∅'} · מדדים ${facts.metrics.length} · hero=${facts.heroKey} · שורות-מדד (G10a) ${facts.rowsOf.length ? facts.rowsOf.join('/') : '∅'} · תפר-כניסה ${facts.entrySeam || '∅'} · תפר-סינון-מדד ${facts.metricSeam ? 'initialMetric' : '∅'} · תפר-הזרקה ${facts.seedSeam ? `db (${facts.seedSeam.list}${facts.seedSeam.rowList ? '/' + facts.seedSeam.rowList : ''} · ${facts.seedSeam.reserved.length} עמודות-שמורות)` : '∅'}`,
     `//   שדות-${entity} בלי מקור (מקום-שמור, יאירו כשיוזרם נתון): ${unusedFields.join(', ') || '—'} · תוויות: ${dstT && srcT ? `מונחי ${srcE} (${srcT.singular}/${srcT.plural || '—'}) ⇒ ${entity} (${dstT.singular}/${dstT.plural || '—'}) · ${sw.swaps} החלפות` : `אין מונח ל-${entity} ב-TERM_DEFS — תוויות של המקור (הצבה)`} · הזרע = זרע-הצבה של המקור, לא ערך-אמת של ${entity}`];
   code = header.join('\n') + '\n' + code;

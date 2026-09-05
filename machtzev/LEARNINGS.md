@@ -2,6 +2,24 @@
 > כל לקח נרשם כאן ומוחל על **כל** האטומים, לא רק על זה שחשף אותו. חדש-ראשון.
 > (הפורמט נלמד מ-atom-engine/LEARNINGS.md של buildsmart.)
 
+## L2026-09-05-police-0bc036 · אטום-stat מהגלריה עם קישוט-מגמה (StatBlock/MetricTile) כ-KPI בלי נתון-דלתא = אות-שקר — הצילום תפס, הבדיקות לא (5.9, GENMAX·G12d⇒G12e · L73)
+GATE: police
+ref: 0bc036590c0fe7fb5dca725ae18679310b87aecc:new/dart-gen-bs/gen_schoolos_students_forge.dart
+ANTIPATTERN: (kpi|hero|stat)=Forge(StatBlock|MetricTile)\b
+RULE: תפקיד-עור של ערך-בודד (kpi/hero/stat) לא מקבל אטום שמצייר מגמה (חץ/דלתא/ספארק) כשאין למודול נתון-מגמה — רק אטום חשוף (`ForgeStatPlain`); אטום-עשיר נכנס רק עם נתון אמיתי בחריץ (§20-ג חל גם על קישוטים).
+מה נכשל: מסך-התלמידים בעור-G12d (ref) הצהיר `kpi=ForgeStatBlock · stat=ForgeMetricTile · hero=ForgeStatBlock` — 21 אריחי-KPI עם חץ-SVG אדום ודלתא ריקה, ו-hero עם חץ ירוק. 49/49 בדיקות ירוקות (בודקות ערך+תווית), ורק צילום-האתר (site-shot) חשף את הזיוף. התיקון במקור-Pure (`StatPlain`) ⇒ regen ⇒ העור; אותו commit נחסם פעם-אחת גם על `learn` (L72/L73 בלי שורת GATE:) — 11 טיוטות-M4 נולדו מניסיון-אחד, אוחדו לזו.
+refs-נוספים מאותו ניסיון-commit (אותו כשל, קבצים-אחים של אותו regen — לא לקח נפרד):
+ref: 06a72dd7e51e93ccd6b81b53e046ae82ba08b121:new/dart-forge-bs/card/card.dart
+ref: 623bb33fcf573c0054fa458aff54e88728421467:new/dart-gen-bs/gen_app_studio.dart
+ref: 82f759b59c93a106647145b30805a2dc7b77ce23:new/dart-gen-bs/gen_schoolos_attendance_forge.dart
+ref: 2dcbbf3ceb05046e5743d5a50e1732567f73ce4f:new/dart-gen-bs/gen_schoolos_courses_forge.dart
+ref: b1d1c3ca9d31e8b537d95aead0d4e416a0cae0b4:new/dart-gen-bs/gen_schoolos_dashboard_forge.dart
+ref: e93def97255e1b78b698f1b93d5c6117bf99bbd5:new/dart-gen-bs/gen_schoolos_fees_forge.dart
+ref: 545396d42f114b722c210be9fe457e218c855f0c:new/dart-gen-bs/gen_schoolos_forge.dart
+ref: 09174e8f22026c08bda3578a1cb9749be3d7c58b:new/dart-gen-bs/gen_schoolos_parents_forge.dart
+ref: 4c61dae5f97b5a158b16fddbfee500b0846b5b13:new/dart-gen-bs/gen_schoolos_rooms_forge.dart
+ref: fb7eb6463c9eb7e1052e0f5148f231fe2db4a014:new/dart-gen-bs/gen_schoolos_teachers_forge.dart
+
 ## L2026-09-04-truth-1f9f90 · אותו כשל-truth על קובץ-retarget שני — מיפוי-לפי-סדר (`role⇒phone`) הוא הצורה שנפסלה; דוח-רקע אחרי truth --write מפיל truth-fresh (4.9, GENMAX·G5c⇒G5d)
 GATE: truth
 ref: 1f9f909a0b6f71c03444a47071df0ad2be7a6977:new/dart-gen-bs/gen_retarget_supporter_from_tch.dart
@@ -649,3 +667,14 @@ GATE: none
 GATE: appgen
 (א) `gen_retarget_teacher_from_stu.dart` משמש גם את Tzedaka (בלי עור) וגם את Studio (עם עור). המחולל כתב אותו פעמיים — האחרון ניצח — ו-Tzedaka נכשלה (3 בדיקות) על קובץ שלא היה שלה. תוקן: מודול-מעורר-עור מקבל קובץ נפרד `…_sk<hash6>.dart` (תג דטרמיניסטי מתפקידי-העור). (ב) אטומי-forge נחשלו מגלריה עם טקסטים קצרים ("Label", "Meta") ורוחב-מסגור 438px: עם כותרות עבריות אמיתיות וברוחב-אריח 168 — `RenderFlex overflowed` (12 מתוך 16 בדיקות). תוקן במנוע: טקסט-עלה בשורת-flex ⇒ `Flexible` + ellipsis (זהה-פיקסל לגלריה, אלסטי לדאטה); ורצועות-KPI של הזהב הן `Row` בעלות 4 אטומים ⇒ אריח-forge לא נכנס — `stat` מוחלף רק ב-`Wrap` (זיהוי-אב בסריקה-לאחור), ב-`Row` נשאר ה-DS ומדווח.
 **לקח:** (א) שם-קובץ של פלט-מחולל = כל הקלטים שמשפיעים על תוכנו (ישות · מודול · **עור**) — אחרת שתי אפליקציות דורסות זו את זו בשקט. (ב) "פיקסל-נאמן לגלריה" ≠ "עובד עם דאטה": כל אטום-תצוגה שמקבל fields נבדק עם טקסט ארוך-מהדמו ובמיכל צר-מהגלריה לפני שהוא נכנס לעור. ANTIPATTERN: `Text(` ישיר כילד-Row בפלט-מחולל בלי `Flexible`.
+
+## L72 · עור-פנימה: שינוי במנוע-העור משנה *כל* פלט-מעורר — regen חלקי נתפס בשער; ו-Flexible הוא ילד-ישיר-של-Row בלבד (5.9, GENMAX·G12e)
+GATE: appgen
+**מה קרה:** (א) הרחבת `skinPass` (תפקידים חדשים) ⇒ כל קובץ `_sk*` בכל אפליקציה משתנה. חוללו מחדש רק 9 מודולי-בית-הספר; ה-commit עבר pre-commit (--fast) אך **push נדחה** ע"י שער `appgen` (determinism): קבצי-Studio `_sk139238` ≠ מחולל-טרי. (ב) עטיפת-הקשה לתפקיד-טקסט ב-Row נכתבה `GestureDetector(child: Flexible(...))` ⇒ `Incorrect use of ParentDataWidget` ב-12 בדיקות — Flexible/Expanded תקפים רק כילד-ישיר של Flex. (ג) צילום-golden מ-`flutter test` מרנדר Ahem (קוביות) — לא ראיה-לבעלים.
+**לקח:** (א) אחרי כל שינוי במנוע-העור/ה-retarget: `node machtzev/generator/app-from-sentences.mjs && node machtzev/generator/skin-golden.mjs` (הכול) + מראה ל-buildsmart — **לפני** commit; השערים `appgen`/`skingolden` הם הרשת, לא הנוהל. (ב) סדר-עטיפה בפלט-מחולל: `Flexible/Expanded` חיצוני-ביותר תחת Row, ואז GestureDetector/ConstrainedBox/האטום. (ג) ראיה-חזותית = `flutter build web` + `tools/site-shot.mjs` (גופן-אמת), לעולם לא golden של widget-test.
+
+## L73 · אטום-גלריה יפה ≠ אטום-אמת: קישוט-מגמה עם חריץ-ריק הוא אות-שקר; ומנוע-החישול הוא גלובלי — ריצה-חלקית דורסת (5.9, GENMAX·G12e)
+GATE: genverify
+**מה קרה:** (א) הצילום-הראשון של מסך-התלמידים בעור-forge הראה תחת כל KPI **חץ-אדום** (SVG "ירידה") עם דלתא ריקה — כל אטומי-ה-stat בגלריית-Pure נושאים קישוט-מגמה, ואין ביניהם stat חשוף. הבדיקות היו ירוקות (הן בודקות ערך+תווית, לא קישוט). (ב) `ForgeSnackToast` כבאנר צייר 236px של שלד-תוכן-דמה (הגלריה מציגה toast "מעל תוכן"). (ג) `node machtzev/ds-forge.mjs card` (משפחה אחת) כתב `forge-manifest.json` עם 32 אטומים בלבד ובלי סיומות-דדופ (הרישום `EMITTED` ריק). (ד) `gen-verify` דולג בשקט כש-`BUILDSMART` הצביע לשורש-הריפו ולא ל-`app_flutter`.
+**לקח:** (א) §20-ג חל גם על **קישוטים**: אטום שמצייר סמנטיקה (חץ/צבע-מצב/פס-התקדמות) בלי נתון מאחוריה = זיוף. הפתרון = וריאנט חשוף במקור-Pure (`StatPlain`) ⇒ regen — לא עריכת-Dart, לא הסתרה בקוד-המחולל. אטום-עשיר חוזר רק כשיש לו נתון (מגמה = היסטוריה). (ב) אטום מגלריית-"הקשר" (toast-over-content, modal-over-scrim) מביא את ההקשר איתו — לא לעור. (ג) שמות ומניפסט של forge הם גלובליים ⇒ המנוע מסרב לריצה-חלקית (`--partial-unsafe` רק לניפוי); regen מלא = שניות. (ד) כל צילום-אמת נבדק בעין לפני שמדווחים "התחלף" — הבדיקות מוכיחות התנהגות, לא מראה.
+

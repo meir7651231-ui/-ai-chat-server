@@ -33,6 +33,12 @@ export function resolveSkin(skin) {
     stat:    { need: 'value+label', fam: null,                    desc: 'BareStat במודול' },
     navTile: { need: 'text2',       fam: ['card', 'nav', 'list'], desc: 'אריח-ניווט ברכזת (כותרת+משנה)' },
     empty:   { need: 'text2',       fam: ['feedback'],            desc: 'אין-תוצאות ברכזת' },
+    // G12e · הפנימי של המודולים (עלים בעלי-טקסט בלבד; מיכלים/טבלאות/קלט נשארים DS)
+    button:     { need: 'text1', fam: ['action'],             desc: 'SoftButton(label,onTap) ⇒ כפתור-forge עטוף GestureDetector' },
+    statusChip: { need: 'text1', fam: ['status'],             desc: 'StatusChip(label) ⇒ תג-forge' },
+    banner:     { need: 'text2', fam: ['feedback', 'status'], desc: 'AlertBanner(message) ⇒ באנר-forge' },
+    emptyState: { need: 'text2', fam: ['feedback'],           desc: 'EmptyState(message) במודול ⇒ forge' },
+    mediaRow:   { need: 'text2', fam: ['card', 'list'],       desc: 'MediaRow(title,subtitle) ⇒ שורת-forge' },
   };
   const out = {};
   for (const [role, cls] of Object.entries(skin)) {
@@ -46,7 +52,8 @@ export function resolveSkin(skin) {
       const valueIdx = numIdx[0], labelIdx = a.fieldDemo.findIndex((t, i) => i !== valueIdx);
       out[role] = { role, cls: a.cls, family: a.family, slots: a.fieldSlots, valueIdx, labelIdx, demo: a.fieldDemo, barrel: `../dart-forge-bs/${a.family}/${a.family}.dart` };
     } else {
-      if (a.fieldSlots < 2 || numIdx.length) throw new Error(`skin.${role}: ${cls} — נדרש ≥2 חריצי-טקסט ואפס מספריים (יש ${a.fieldSlots} · מספריים ${numIdx.length})`);
+      const minSlots = R.need === 'text1' ? 1 : 2;
+      if (a.fieldSlots < minSlots || numIdx.length) throw new Error(`skin.${role}: ${cls} — נדרש ≥${minSlots} חריצי-טקסט ואפס מספריים (יש ${a.fieldSlots} · מספריים ${numIdx.length})`);
       // כותרת ⇒ החריץ הראשון שתוכן-העיצוב שלו אינו כותרת-קטגוריה (כולו אותיות-גדולות/סימנים = "FLAT"/"ELEVATED" — תג-סוג של הגלריה), משנה ⇒ הבא אחריו
       const textIdx = a.fieldDemo.map((t, i) => (/[a-z֐-׿]/.test(t) ? i : -1)).filter((i) => i >= 0);
       const titleIdx = textIdx[0] ?? 0, subIdx = textIdx[1] ?? (titleIdx + 1 < a.fieldSlots ? titleIdx + 1 : -1);
@@ -60,7 +67,8 @@ const textFields = (sk, titleExpr, subExpr) => `[${Array.from({ length: sk.slots
 export function buildApp({ name, sentences, skin }) {
   const N = pascal(name), mods = [], skipped = [];
   const skins = resolveSkin(skin) || {}; const sk = skins.kpi || null, skNav = skins.navTile || null, skEmpty = skins.empty || null;
-  const modSkin = (skins.stat || skins.hero) ? { stat: skins.stat || null, hero: skins.hero || null } : null;
+  const MOD_ROLES = ['stat', 'hero', 'button', 'statusChip', 'banner', 'emptyState', 'mediaRow'];
+  const modSkin = MOD_ROLES.some((r) => skins[r]) ? Object.fromEntries(MOD_ROLES.map((r) => [r, skins[r] || null])) : null;
   for (const text of sentences) {
     const r = fromSentence(text, modSkin);
     if (!r.entity) { skipped.push({ text, reason: r.reason }); continue; }

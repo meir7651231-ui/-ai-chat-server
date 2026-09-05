@@ -39,5 +39,42 @@
 - ביקורת-הפיקסל (machtzev/audit) לא הורצה מחדש כאן (דורשת Playwright+Chromium מול Pure); ברירת-המחדל ביט-זהה מבנית (fields=null ⇒ אותו ליטרל), והמיזוג הביא את ה-baseline שלה כפי-שהוא. שמות-קבצים של 54 וריאנטים השתנו ⇒ `shots/index.json` של הביקורת ידרוש regen בריצה הבאה.
 - גופני-Pure החסרים (Fraunces · Space Grotesk) = הכרעת-בעלים/נכסים.
 
-## הבא (G12d)
+## הבא (G12d) — בוצע
 series ⇒ שקע-מספרי לגרפים · אלסטיות-טקסט גם לטקסט-עטוף (Container/Padding בשורת-flex) · רצועות-KPI: אטום-forge צפוף (או Wrap במקום Row — שינוי-זהב) · גופני-Pure · הכרעות-בעלים.
+
+---
+
+# G12e · העור פנימה — כל סוגי-האטומים בתוך המודולים (5.9.2026)
+
+**השאלה של הבעלים:** "כל הפנימיים לא התחלפו" — עד G12d העור החליף רק KPI · אריח-ניווט · hero · BareStat-ב-Wrap; כפתורים, תגי-מצב, באנרים, מסכי-ריק, שורות-מדיה ורצועות-ה-KPI (Row של 4) נשארו DS.
+
+## מה נבנה (מנוע, לא יד)
+- `retarget.mjs skinPass`: **9 תפקידי-עור** — `[BareStat⇒stat] [StatHero⇒hero] [KpiTile⇒kpi] [DsNavTile⇒navTile] [SoftButton⇒button] [StatusChip⇒statusChip] [AlertBanner⇒banner] [EmptyState⇒emptyState] [MediaRow⇒mediaRow]`. תפקידי-טקסט ממופים דרך `textRole` (label/message/title+subtitle · tap-wrapper לכפתור).
+- **הקשר-Row:** `stat` ב-Row ⇒ `Expanded(child: forged)` (רצועת-KPI של הזהב עכשיו forge, לא רק Wrap) · תפקידי-טקסט ב-Row ⇒ `Flexible(child: GestureDetector(...))` (Flexible חייב להיות ילד-ישיר של Row — L72) · hero ⇒ `ConstrainedBox(maxWidth: 420)` · stat ב-Wrap ⇒ `SizedBox(width: 168)`.
+- `app-from-sentences.mjs resolveSkin`: טבלת-ROLES מורחבת (button=action · statusChip=status · banner=feedback/status · emptyState=feedback · mediaRow=card/list) עם `text1` (≥1 חריץ-טקסט) · `MOD_ROLES` מועבר לכל `fromSentence` ⇒ מודולי-האפליקציה מעוררים פנימה.
+- עורים: `skin-golden.json` (בית-הספר) + `app-golden-3.json` (Studio) — `kpi/hero/stat=ForgeStatPlain · navTile=ForgeHubTile · button=ForgeSoftButton · statusChip=ForgeIntelPill · banner=ForgeSectionPill · emptyState=ForgeSearchEmptyState · mediaRow=ForgeContactTile`.
+- **הצילום-הראשון חשף שני זיופים (§20-ג):** (א) כל אטומי-ה-stat בגלריה נושאים **חץ-מגמה דקורטיבי** (SVG אדום/ירוק) — עם חריץ-דלתא ריק זה אות-שקר ("ירידה" בלי ערך). אין בגלריה stat חשוף ⇒ נוסף **וריאנט ל-Pure** (`card-family.html`: `StatPlain · value+label, no trend`) ⇒ regen ds-forge ⇒ `ForgeStatPlain` (354 אטומים) — לפי כלל-הבעלים "אטום חסר ⇒ מקור-Pure ⇒ regen", לא עריכת-Dart. (ב) `ForgeSnackToast` כבאנר צייר את **שלד-התוכן-הדמה** של הגלריה (236px של פסים) מעל כל הודעה ⇒ הוחלף ב-`ForgeSectionPill` (status, קומפקטי).
+- מנוע-החישול: **ריצה-חלקית (`ds-forge.mjs card`) דרסה את `forge-manifest.json` ל-32 אטומים** ושיבשה את הדדופ-חוצה-המשפחות (רישום-השמות גלובלי) ⇒ המנוע מסרב עכשיו לריצה-חלקית (L73).
+
+## מה נמדד (אמת)
+| מדד | ערך |
+|---|---|
+| החלפות במודול-התלמידים (כותרת-הקובץ, מחוללת) | hero×1 · statRow×21 · button×34 · statusChip×25 · banner×16 · emptyState×11 · mediaRow×5 |
+| `flutter analyze lib/genesis` | 0 errors |
+| בדיקות-אפליקציה | Kehila 13/13 · Tzedaka 17/17 · Studio 16/16 (Studio ⇒ `_skad5142`) |
+| `gen-verify --gate` | **63/100** רונדרו · 39 אטומי-תצוגה · 189 טאפים · 0 חריגות · exit 0 (baseline 62⇒63) |
+| ראיה-חזותית | `machtzev/audit/goals/gen_app_studentsforge_web.png` — מסך-התלמידים בעור-forge כאתר (build web + site-shot; צילום-widget-test = Ahem, לא ראיה): hero+10 אריחי-KPI `StatPlain` · 5 באנרים-פיל · 5 כפתורי-forge · בורר-תצוגה · כרטיס-תלמיד `ContactTile` |
+
+## מה נשאר DS (כנות — לא "הכול התחלף")
+- **חיפוש · פילטרים · טבלאות · שדות-קלט** — אטומי-הקלט של forge הם *ציור* של שדה (Pure), לא שדה חי; לטבלה אין אטום-forge. נשאר `DsSearch`/`DsTable`.
+- **צבעי-מצב של ה-DS** (סכנה/תקין) לא מועברים לאטום-forge — האטום לובש את החריץ בעיצובו.
+- **באנר = `ForgeSectionPill`** (החריץ השני ריק ⇒ עיגול-ריק בקצה); אין בגלריית-Pure אטום-באנר-יחיד (`AlertBanner` של Pure = 4 באנרים מוערמים) — הוספת וריאנט ל-Pure = הכרעת-עיצוב של הבעלים. **KPI/hero = `StatPlain`** (בלי מגמה) — עד שיהיה נתון-מגמה אמיתי (היסטוריה) אין מה להציג; החזרה ל-`StatBlock` = שורה ב-JSON.
+- כותרת-הקובץ עדיין מתייגת `G12d` (תבנית skin-golden) — התוכן הוא G12e; שינוי-התג = regen בלבד.
+
+## תקלות בדרך (נלמד ⇒ L72)
+- push של G12d **נדחה** ע"י שער `appgen`: הרחבת skinPass שינתה את כל הפלטים-המעוררים אך רק בית-הספר חולל מחדש ⇒ קבצי-Studio `_sk139238` ישנים ≠ טרי. תוקן: regen כל האפליקציות, `_sk139238` הוסרו, `_skad5142` נוצרו.
+- `Flexible` מתחת ל-`GestureDetector` ⇒ `ParentDataWidget` error ב-12 בדיקות ⇒ Flexible עוטף את GestureDetector.
+- `ForgeMetricTile` נפסל כ-stat (דרש ≥2 מספריים) ⇒ אימות `stat` = ≥2 חריצים · ≥1 מספרי · ≥1 טקסט.
+
+## הבא (G12f)
+מגמה-אמיתית לאריחי-KPI (דורש היסטוריה ⇒ אז `StatTile`/`StatBlock` עם דלתא-אמת) · series ⇒ שקע-מספרי לגרפי-forge · העברת-צבעי-מצב (danger/ok) לאטום-forge כשיש לו states · הכרעות-בעלים (banner=Toast/Pill · גופני-Pure ב-pubspec · policy-config · student⇒Member · מונחים ל-4 ישויות-גרעין).

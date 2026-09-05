@@ -1195,6 +1195,8 @@ const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPat
 if (isMain) {
   const all = familiesOf();
   const wanted = process.argv.slice(2).filter(a => !a.startsWith('-'));
+  // L73: ריצה-חלקית (משפחה אחת) דרסה את forge-manifest.json ל-32 אטומים ושיבשה את הדדופ-חוצה-המשפחות (EMITTED ריק ⇒ אין סיומות). השמות והמניפסט גלובליים ⇒ regen תמיד מלא (שניות). 
+  if (wanted.length && !process.argv.includes('--partial-unsafe')) { console.error(`🔴 ds-forge: ריצה-חלקית (${wanted.join(' ')}) אסורה — המניפסט והדדופ-חוצה-המשפחות גלובליים (L73). הרץ בלי ארגומנטים (כל ${all.length} המשפחות).`); process.exit(1); }
   const fams = wanted.length ? wanted : all;
   fs.mkdirSync(OUT, { recursive: true });
   const manifest = { families: {}, total: 0, generatedBy: 'machtzev/ds-forge.mjs' };

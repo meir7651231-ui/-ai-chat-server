@@ -1,0 +1,2 @@
+// דוגמה מורעלת: עור-KPI עם אטום-מגמה בלי נתון-דלתא
+// עור: hero=ForgeStatBlock · stat=ForgeMetricTile (חץ אדום, דלתא ריקה)

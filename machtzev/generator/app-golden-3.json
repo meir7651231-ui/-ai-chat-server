@@ -9,10 +9,15 @@
   "נדבות לפי חודש"
  ],
  "skin": {
-  "kpi": "ForgeStatBlock",
+  "kpi": "ForgeStatPlain",
   "navTile": "ForgeHubTile",
   "empty": "ForgeSearchEmptyState",
-  "stat": "ForgeMetricTile",
-  "hero": "ForgeStatBlock"
+  "stat": "ForgeStatPlain",
+  "hero": "ForgeStatPlain",
+  "button": "ForgeSoftButton",
+  "statusChip": "ForgeIntelPill",
+  "banner": "ForgeSectionPill",
+  "emptyState": "ForgeSearchEmptyState",
+  "mediaRow": "ForgeContactTile"
  }
 }
