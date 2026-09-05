@@ -23,7 +23,8 @@ const walk = (d) => { let o = []; for (const e of fs.readdirSync(d, { withFileTy
 
 export function atomIndex() {
   const out = []; const seen = new Set();
-  for (const abs of walk(path.join(ROOT, 'dart-ui-bs')).sort()) {
+  // §21 · כל אטומי-התצוגה: המדף (dart-ui-bs) + ספריית-החישול (dart-forge-bs, G12 — 353 אטומים פיקסל-נאמנים ל-Pure)
+  for (const abs of [...walk(path.join(ROOT, 'dart-ui-bs')), ...(fs.existsSync(path.join(ROOT, 'dart-forge-bs')) ? walk(path.join(ROOT, 'dart-forge-bs')) : [])].sort()) {
     const src = fs.readFileSync(abs, 'utf8');
     const rel = path.relative(ROOT, abs);
     const origin = (src.match(/מוצא:\s*(screens__[a-z0-9_]+)/) || [])[1] || null;

@@ -1,10 +1,10 @@
 {
- "rendered": 52,
- "screens": 90,
+ "rendered": 54,
+ "screens": 92,
  "atoms": 38,
- "passed": 52,
+ "passed": 54,
  "failed": 37,
- "taps": 211,
+ "taps": 226,
  "tapErrors": 0,
  "coreSeen": 0,
  "report": [
@@ -257,14 +257,12 @@
    "screen": "StudioHubScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 5,
-   "widgets": 825,
+   "atoms": 3,
+   "widgets": 713,
    "atomList": [
     "DsScaffold",
     "DsSearch",
-    "KpiTile",
-    "DsSection",
-    "DsNavTile"
+    "DsSection"
    ],
    "taps": 0,
    "tapErrors": 0,
@@ -991,12 +989,12 @@
    "coreExpected": false
   },
   {
-   "file": "gen_retarget_course_from_crs.dart",
+   "file": "gen_retarget_course_from_crs_sk139238.dart",
    "screen": "CourseScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 11,
-   "widgets": 2120,
+   "atoms": 10,
+   "widgets": 2134,
    "atomList": [
     "DsScaffold",
     "SegmentedSwitch",
@@ -1005,7 +1003,6 @@
     "DsSearch",
     "FilterChipPill",
     "GradientCard",
-    "StatHero",
     "BareStat",
     "DsSection",
     "AlertBanner"
@@ -1030,6 +1027,32 @@
     "FilterChipPill",
     "GradientCard",
     "StatHero",
+    "StatRow",
+    "BareStat",
+    "AlertBanner",
+    "DsSection",
+    "MediaRow",
+    "StatusChip"
+   ],
+   "taps": 6,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
+  },
+  {
+   "file": "gen_retarget_donation_from_fee_sk139238.dart",
+   "screen": "DonationScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 12,
+   "widgets": 2062,
+   "atomList": [
+    "DsScaffold",
+    "SegmentedSwitch",
+    "DsSearch",
+    "SoftButton",
+    "FilterChipPill",
+    "GradientCard",
     "StatRow",
     "BareStat",
     "AlertBanner",
@@ -1097,12 +1120,12 @@
    "coreExpected": true
   },
   {
-   "file": "gen_retarget_member_from_stu.dart",
+   "file": "gen_retarget_member_from_stu_sk139238.dart",
    "screen": "MemberScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 13,
-   "widgets": 1925,
+   "atoms": 12,
+   "widgets": 1939,
    "atomList": [
     "DsScaffold",
     "SegmentedSwitch",
@@ -1111,7 +1134,6 @@
     "SoftButton",
     "FilterChipPill",
     "GradientCard",
-    "StatHero",
     "BareStat",
     "AlertBanner",
     "DsSection",
@@ -1148,12 +1170,12 @@
    "coreExpected": false
   },
   {
-   "file": "gen_retarget_shopassignment_from_tch.dart",
+   "file": "gen_retarget_shopassignment_from_tch_sk139238.dart",
    "screen": "ShopAssignmentScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 11,
-   "widgets": 2305,
+   "atoms": 10,
+   "widgets": 2319,
    "atomList": [
     "DsScaffold",
     "DsSection",
@@ -1161,7 +1183,6 @@
     "AlertBanner",
     "SegmentedSwitch",
     "GradientCard",
-    "StatHero",
     "BareStat",
     "DsSearch",
     "SoftButton",
@@ -1173,12 +1194,12 @@
    "coreExpected": true
   },
   {
-   "file": "gen_retarget_shopcriterion_from_crs.dart",
+   "file": "gen_retarget_shopcriterion_from_crs_sk139238.dart",
    "screen": "ShopCriterionScreen",
    "rendered": true,
    "drift": false,
-   "atoms": 11,
-   "widgets": 2120,
+   "atoms": 10,
+   "widgets": 2134,
    "atomList": [
     "DsScaffold",
     "SegmentedSwitch",
@@ -1187,7 +1208,6 @@
     "DsSearch",
     "FilterChipPill",
     "GradientCard",
-    "StatHero",
     "BareStat",
     "DsSection",
     "AlertBanner"
@@ -1344,6 +1364,32 @@
     "FilterChipPill",
     "GradientCard",
     "StatHero",
+    "BareStat",
+    "AlertBanner",
+    "DsSection",
+    "MediaRow",
+    "StatRow"
+   ],
+   "taps": 9,
+   "tapErrors": 0,
+   "coreSeen": false,
+   "coreExpected": false
+  },
+  {
+   "file": "gen_retarget_teacher_from_stu_sk139238.dart",
+   "screen": "TeacherScreen",
+   "rendered": true,
+   "drift": false,
+   "atoms": 12,
+   "widgets": 1939,
+   "atomList": [
+    "DsScaffold",
+    "SegmentedSwitch",
+    "StatusChip",
+    "DsSearch",
+    "SoftButton",
+    "FilterChipPill",
+    "GradientCard",
     "BareStat",
     "AlertBanner",
     "DsSection",

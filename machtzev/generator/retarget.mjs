@@ -98,7 +98,66 @@ export function mapKeys(keys, entity, locked = new Set()) {
   }
   return { map, unusedFields: fields.filter((f) => !used.has(f.n)).map((f) => f.n) };
 }
-export function retarget({ module, entity }) {
+// G12c · מעבר-עור במודול: קריאות DS (BareStat/StatHero) ⇒ אטום-forge עם fields לפי תפקידי-החריצים (ערך⇒חריץ-מספרי · תווית⇒טקסט-ראשון). פרסר-ארגומנטים מאוזן (סוגריים · מחרוזות · אינטרפולציה).
+function callArgs(src, open) {   // src[open] === '(' ⇒ { end, args: [{name, expr}] } (end = index of ')')
+  let i = open + 1, depth = 0, cur = '', args = [], inStr = null, brace = [];
+  const push = () => { const t = cur.trim(); if (t) { const m = /^([a-zA-Z_]\w*):\s*([\s\S]*)$/.exec(t); args.push(m ? { name: m[1], expr: m[2] } : { name: null, expr: t }); } cur = ''; };
+  for (; i < src.length; i++) {
+    const ch = src[i];
+    if (inStr) { cur += ch; if (ch === '\\') { cur += src[++i]; continue; } if (ch === '$' && src[i + 1] === '{') { brace.push(0); cur += src[++i]; continue; } if (brace.length) { if (ch === '{') brace[brace.length - 1]++; else if (ch === '}') { if (brace[brace.length - 1] === 0) brace.pop(); else brace[brace.length - 1]--; } continue; } if (ch === inStr) inStr = null; continue; }
+    if (ch === "'" || ch === '"') { inStr = ch; cur += ch; continue; }
+    if (ch === '(' || ch === '[' || ch === '{') { depth++; cur += ch; continue; }
+    if (ch === ')' || ch === ']' || ch === '}') { if (depth === 0 && ch === ')') { push(); return { end: i, args }; } depth--; cur += ch; continue; }
+    if (ch === ',' && depth === 0) { push(); continue; }
+    cur += ch;
+  }
+  return null;
+}
+// הווידג׳ט-האב של קריאה: סריקה-לאחור עד ה-'[' הפתוח (רשימת-children), ואז שם-הווידג׳ט שלפני ה-'(' הפתוח של אותה רשימת-ארגומנטים. מחרוזות מדולגות.
+function parentWidget(code, idx) {
+  let depthB = 0, depthP = 0, i = idx - 1;
+  const skipStrBack = (k) => { const q = code[k]; for (let j = k - 1; j >= 0; j--) { if (code[j] === q && code[j - 1] !== '\\') return j; } return 0; };
+  for (; i >= 0; i--) {
+    const ch = code[i];
+    if (ch === "'" || ch === '"') { i = skipStrBack(i); continue; }
+    if (ch === ']') depthB++; else if (ch === '[') { if (depthB === 0) break; depthB--; }
+    else if (ch === ')') depthP++; else if (ch === '(') { if (depthP === 0) return null; depthP--; }
+  }
+  if (i < 0) return null;
+  if (!/children:\s*$/.test(code.slice(Math.max(0, i - 40), i))) return null;
+  // ה-'(' הפתוח של רשימת-הארגומנטים שמכילה את children
+  let d = 0; for (let j = i - 1; j >= 0; j--) { const ch = code[j]; if (ch === "'" || ch === '"') { j = skipStrBack(j); continue; } if (ch === ')' || ch === ']') d++; else if (ch === '(' || ch === '[') { if (d === 0) { const m = /(\w+)\s*$/.exec(code.slice(Math.max(0, j - 40), j)); return m ? m[1] : null; } d--; } }
+  return null;
+}
+function skinPass(code, skin) {
+  const stats = { stat: 0, hero: 0 }, barrels = new Set();
+  for (const [ds, role] of [['BareStat', 'stat'], ['StatHero', 'hero']]) {
+    const sk = skin && skin[role]; if (!sk) continue;
+    let out = '', i = 0;
+    for (;;) {
+      const j = code.indexOf(ds + '(', i); if (j < 0) { out += code.slice(i); break; }
+      if (/[\w.]/.test(code[j - 1] || '')) { out += code.slice(i, j + ds.length + 1); i = j + ds.length + 1; continue; }   // חלק משם-אחר / member
+      const c = callArgs(code, j + ds.length); if (!c) { out += code.slice(i, j + ds.length + 1); i = j + ds.length + 1; continue; }
+      const byName = Object.fromEntries(c.args.filter((a) => a.name).map((a) => [a.name, a.expr]));
+      if (!byName.value || !byName.label) { out += code.slice(i, c.end + 1); i = c.end + 1; continue; }
+      const fields = Array.from({ length: sk.slots }, (_, k) => (k === sk.valueIdx ? byName.value : k === sk.labelIdx ? byName.label : "''"));
+      // אטומי-forge נמתחים ל-double.infinity (SizedBox של הגלריה) ⇒ ב-Row/Wrap = אילוצים אינסופיים (נתפס בבדיקות). stat: רוחב-אריח של הזהב (168, _Home של schoolos) · hero: תקרת-רוחב
+      const forged = `${sk.cls}(fields: [${fields.join(', ')}])`;
+      // stat ב-Row (רצועת-KPI בעלת-מספר-קבוע, ~4 באותה שורה) — אריח-forge ברוחב-עיצוב לא נכנס ⇒ נשאר BareStat של ה-DS (מדווח); ב-Wrap ⇒ אריח-forge ברוחב-אריח של הזהב (168)
+      const parent = parentWidget(code, j);
+      if (role === 'stat' && parent === 'Row') { out += code.slice(i, c.end + 1); i = c.end + 1; stats.keptRow = (stats.keptRow || 0) + 1; continue; }
+      out += code.slice(i, j) + (role === 'stat' ? `SizedBox(width: 168, child: ${forged})` : `ConstrainedBox(constraints: const BoxConstraints(maxWidth: 420), child: ${forged})`); i = c.end + 1; stats[role]++; barrels.add(sk.barrel);
+    }
+    code = out;
+  }
+  if (barrels.size) {
+    const lines = code.split('\n'); const li = lines.reduce((a, l, k) => (/^import '/.test(l) ? k : a), -1);
+    lines.splice(li + 1, 0, ...[...barrels].map((b) => `import '${b}'; // G12c · עור-forge במודול (skin.stat/hero) — אטומי-DS הוחלפו באטומי-forge עם fields; צבעי-מצב של ה-DS (סכנה/תקין) לא מועברים (האטום לובש את החריץ)`));
+    code = lines.join('\n');
+  }
+  return { code, stats };
+}
+export function retarget({ module, entity, skin = null }) {
   const src = fs.readFileSync(path.join(DIR, module), 'utf8');
   const pk = primaryKeys(src, module);
   const { map, unusedFields } = mapKeys(pk.keys, entity, engineKeys(module));
@@ -342,10 +401,12 @@ export function retarget({ module, entity }) {
     code = code.replace(/\n*$/, '\n') + out.join('\n');
     facts = { cls: F, label, count: countExpr ? { expr: countExpr, how: countHow, list: pn } : null, metrics: metrics.map(({ key, label, tone }) => ({ key, label, tone })), heroKey: hero ? hero.key : 'count', heroHow, rowsOf: rowsOfKeys.map((x) => x.key), entrySeam, metricSeam, coreWired, seedSeam: seedSeam ? { list: seedSeam.list, rowList: seedSeam.rowList, reserved: reservedKeys, tableLabel: seedSeam.tableLabel } : null };
   }
+  const skinned = skin ? skinPass(code, skin) : null; if (skinned) code = skinned.code;   // G12c
   const n = (how) => map.filter((x) => x.how.startsWith(how)).length;
   const header = [`// 🎯 ${E}Screen — retarget של ${module} לישות ${entity} (GENMAX·G5c/G5d · הכרעה-24) · מחולל דטרמיניסטי: retarget.mjs --module ${module} --entity ${entity}`,
     `//   זרע-ראשי: ${pk.name} (מועמדים: ${(pk.candidates || []).join(' ')}) · מיפוי שם ${n('name')} · ערוץ ${n('chan')} · טיפוס-יחיד ${n('unique')} · מקום-שמור ${n('reserved')} · חוזה-מנוע (לא משתנה) ${n('engine-contract')}`,
     `//   ${map.map((x) => `${x.src}⇒${x.dst || '∅'}(${x.how})`).join(' · ')}`,
+    ...(skinned ? [`//   עור-forge (G12c): BareStat⇒${skin.stat ? `${skin.stat.cls} ×${skinned.stats.stat} (ב-Wrap) · נשארו BareStat ב-Row ×${skinned.stats.keptRow || 0}` : '—'} · StatHero⇒${skin.hero ? `${skin.hero.cls} ×${skinned.stats.hero}` : '—'} — fields לפי תפקידי-חריצים; צבעי-מצב-DS לא מועברים`] : []),
     `//   תפר-עובדות (G9b): ${facts.cls} · count=${facts.count ? `${facts.count.list}.length (${facts.count.how})` : '∅'} · מדדים ${facts.metrics.length} · hero=${facts.heroKey} · שורות-מדד (G10a) ${facts.rowsOf.length ? facts.rowsOf.join('/') : '∅'} · תפר-כניסה ${facts.entrySeam || '∅'} · תפר-סינון-מדד ${facts.metricSeam ? 'initialMetric' : '∅'} · תפר-הזרקה ${facts.seedSeam ? `db (${facts.seedSeam.list}${facts.seedSeam.rowList ? '/' + facts.seedSeam.rowList : ''} · ${facts.seedSeam.reserved.length} עמודות-שמורות)` : '∅'}`,
     `//   שדות-${entity} בלי מקור (מקום-שמור, יאירו כשיוזרם נתון): ${unusedFields.join(', ') || '—'} · תוויות: ${dstT && srcT ? `מונחי ${srcE} (${srcT.singular}/${srcT.plural || '—'}) ⇒ ${entity} (${dstT.singular}/${dstT.plural || '—'}) · ${sw.swaps} החלפות` : `אין מונח ל-${entity} ב-TERM_DEFS — תוויות של המקור (הצבה)`} · הזרע = זרע-הצבה של המקור, לא ערך-אמת של ${entity}`];
   code = header.join('\n') + '\n' + code;

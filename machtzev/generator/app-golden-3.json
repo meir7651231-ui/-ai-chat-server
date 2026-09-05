@@ -7,5 +7,12 @@
   "שיוכים פתוחים",
   "קריטריון זכאות להנחה",
   "נדבות לפי חודש"
- ]
+ ],
+ "skin": {
+  "kpi": "ForgeStatBlock",
+  "navTile": "ForgeHubTile",
+  "empty": "ForgeSearchEmptyState",
+  "stat": "ForgeMetricTile",
+  "hero": "ForgeStatBlock"
+ }
 }

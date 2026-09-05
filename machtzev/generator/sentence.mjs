@@ -12,6 +12,8 @@ import * as R from '../root.mjs';
 import { normSearch } from '../../new/atoms/norm-search.mjs';          // L65 · נרמול-חיפוש עברי מהמדף (סופיות⇒רגילות) — לא טבלת-אותיות משלנו
 import { NORM_SEARCH_T } from '../../new/atoms/norm-search-strings.mjs'; // אטום-הדאטה התאום של norm-search (מקור ה-Dart)
 import { pickModule, retarget } from './retarget.mjs';
+import { createHash } from 'node:crypto';
+const skinTag = (skin) => createHash('sha1').update(JSON.stringify(Object.fromEntries(Object.entries(skin).filter(([, v]) => v).map(([k, v]) => [k, v.cls])))).digest('hex').slice(0, 6);   // תג-עור דטרמיניסטי מתפקידי-העור
 
 const ROOT = R.ROOT, GEN = path.join(ROOT, 'machtzev/generator'), DIR = path.join(ROOT, 'new/dart-gen-bs');
 const TERMS = JSON.parse(fs.readFileSync(path.join(GEN, 'entity-terms.data.json'), 'utf8')).terms.filter((t) => t.entity);
@@ -41,12 +43,12 @@ export function resolve(text) {
   const ranked = [...votes.entries()].map(([e, v]) => [e, v.score, v.len]).sort((a, b) => b[1] - a[1] || b[2] - a[2] || TERMS.findIndex((t) => t.entity === a[0]) - TERMS.findIndex((t) => t.entity === b[0])).map(([e, sc]) => [e, sc]);
   return { text, words, entity: ranked.length ? ranked[0][0] : null, score: ranked.length ? ranked[0][1] : 0, ranked: ranked.slice(0, 4) };
 }
-export function fromSentence(text) {
+export function fromSentence(text, skin = null) {
   const r = resolve(text);
   if (!r.entity) return { ...r, module: null, out: null, reason: 'אין מונח-ישות במשפט — מקום-שמור (אין המצאה)' };
   const p = pickModule(r.entity);
-  const g = retarget({ module: p.module, entity: r.entity });
-  const out = path.join(DIR, `gen_retarget_${r.entity.toLowerCase()}_from_${{ 'schoolos.dart': 'inv', schoolos_students: 'stu', schoolos_attendance: 'att', schoolos_courses: 'crs', schoolos_teachers: 'tch', schoolos_rooms: 'rm', schoolos_fees: 'fee', schoolos_parents: 'par', schoolos_dashboard: 'dash' }[p.module.replace(/\.dart$/, '')] || 'x'}.dart`);
+  const g = retarget({ module: p.module, entity: r.entity, skin });
+  const out = path.join(DIR, `gen_retarget_${r.entity.toLowerCase()}_from_${{ 'schoolos.dart': 'inv', schoolos_students: 'stu', schoolos_attendance: 'att', schoolos_courses: 'crs', schoolos_teachers: 'tch', schoolos_rooms: 'rm', schoolos_fees: 'fee', schoolos_parents: 'par', schoolos_dashboard: 'dash' }[p.module.replace(/\.dart$/, '')] || 'x'}${skin ? '_sk' + skinTag(skin) : ''}.dart`);   // G12c: מודול-מעורר-עור מקבל קובץ נפרד — אותו מודול בלי-עור משמש אפליקציה אחרת (התנגשות-קבצים חוצת-אפליקציות נתפסה בבדיקות)
   return { ...r, pick: p, module: p.module, out, code: g.code, counts: g.counts, facts: g.facts };
 }
 // G8d · שדות-המשפט ⇒ פעולות-יסוד: "עם טלפון, אזור, תאריך הצטרפות" ⇒ interpret(text).schema (טיפוס מרמזי-השפה + rule מהמדף) ⇒ fieldOps (G2) ⇒ ops מבוקשים ⇒ זריעה ממוקדת (assembleByOps)

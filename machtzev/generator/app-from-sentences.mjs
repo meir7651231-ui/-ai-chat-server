@@ -18,10 +18,51 @@ const BS = process.env.BUILDSMART || path.resolve(ROOT, '../buildsmart/app_flutt
 const FLUTTER = process.env.FLUTTER || (fs.existsSync('/home/user/flutter/bin/flutter') ? '/home/user/flutter/bin/flutter' : 'flutter');
 const pascal = (s) => s.replace(/[^A-Za-z0-9]+(.)?/g, (_, c) => (c ? c.toUpperCase() : '')).replace(/^./, (c) => c.toUpperCase());
 const q = (s) => `'${String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\$/g, '\\$')}'`;
-export function buildApp({ name, sentences }) {
+// G12b · עור-forge (חוק-7: דגל-הפיך): הספק מצהיר איזה אטום-forge משחק "אריח-KPI" (הצבה עיצובית של הבעלים); המנוע מאמת מבנית מול forge-manifest.json
+//   (seam:fields · ≥2 חריצים · חריץ-מספרי יחיד בתוכן-העיצוב) וממלא: ערך ⇒ החריץ-המספרי · תווית ⇒ חריץ-הטקסט הראשון · שאר החריצים '' (מקום-שמור, לא דמו — §20-ג). בלי skin ⇒ אטומי-DS (ביט-זהה).
+const FORGE_MANIFEST = path.join(ROOT, 'new/dart-forge-bs/forge-manifest.json');
+const isNumDemo = (t) => /^[\d.,%+\-\s]+$/.test(t) && /\d/.test(t);
+export function resolveSkin(skin) {
+  if (!skin || !Object.keys(skin).length) return null;
+  if (!fs.existsSync(FORGE_MANIFEST)) throw new Error('skin: אין forge-manifest.json — הרץ node machtzev/ds-forge.mjs');
+  const m = JSON.parse(fs.readFileSync(FORGE_MANIFEST, 'utf8'));
+  // תפקידים והדרישה המבנית של כל אחד (אין מילון: רק צורת-החריצים בתוכן-העיצוב + משפחה)
+  const ROLES = {
+    kpi:     { need: 'value+label', fam: null,                    desc: 'אריח-KPI ברכזת' },
+    hero:    { need: 'value+label', fam: null,                    desc: 'StatHero במודול' },
+    stat:    { need: 'value+label', fam: null,                    desc: 'BareStat במודול' },
+    navTile: { need: 'text2',       fam: ['card', 'nav', 'list'], desc: 'אריח-ניווט ברכזת (כותרת+משנה)' },
+    empty:   { need: 'text2',       fam: ['feedback'],            desc: 'אין-תוצאות ברכזת' },
+  };
+  const out = {};
+  for (const [role, cls] of Object.entries(skin)) {
+    const R = ROLES[role]; if (!R) throw new Error(`skin: תפקיד לא-מוכר "${role}" (${Object.keys(ROLES).join('/')})`);
+    const a = (m.atoms || []).find((x) => x.cls === cls); if (!a) throw new Error(`skin.${role}: אין אטום-forge בשם ${cls}`);
+    const numIdx = a.fieldDemo.map((t, i) => (isNumDemo(t) ? i : -1)).filter((i) => i >= 0);
+    if (a.seam !== 'fields' || a.states) throw new Error(`skin.${role}: ${cls} אינו seam:fields חד-מצבי`);
+    if (R.fam && !R.fam.includes(a.family)) throw new Error(`skin.${role}: ${cls} ממשפחת ${a.family} — נדרש ${R.fam.join('/')}`);
+    if (R.need === 'value+label') {
+      if (a.fieldSlots < 2 || numIdx.length < 1 || numIdx.length >= a.fieldSlots) throw new Error(`skin.${role}: ${cls} — נדרש ≥2 חריצים, לפחות חריץ-מספרי אחד ולפחות חריץ-טקסט אחד (יש ${a.fieldSlots} · מספריים ${numIdx.length})`);   // ערך ⇒ החריץ-המספרי הראשון; חריץ-מספרי נוסף (דלתא) נשאר '' — מקום-שמור, לא דמו
+      const valueIdx = numIdx[0], labelIdx = a.fieldDemo.findIndex((t, i) => i !== valueIdx);
+      out[role] = { role, cls: a.cls, family: a.family, slots: a.fieldSlots, valueIdx, labelIdx, demo: a.fieldDemo, barrel: `../dart-forge-bs/${a.family}/${a.family}.dart` };
+    } else {
+      if (a.fieldSlots < 2 || numIdx.length) throw new Error(`skin.${role}: ${cls} — נדרש ≥2 חריצי-טקסט ואפס מספריים (יש ${a.fieldSlots} · מספריים ${numIdx.length})`);
+      // כותרת ⇒ החריץ הראשון שתוכן-העיצוב שלו אינו כותרת-קטגוריה (כולו אותיות-גדולות/סימנים = "FLAT"/"ELEVATED" — תג-סוג של הגלריה), משנה ⇒ הבא אחריו
+      const textIdx = a.fieldDemo.map((t, i) => (/[a-z֐-׿]/.test(t) ? i : -1)).filter((i) => i >= 0);
+      const titleIdx = textIdx[0] ?? 0, subIdx = textIdx[1] ?? (titleIdx + 1 < a.fieldSlots ? titleIdx + 1 : -1);
+      out[role] = { role, cls: a.cls, family: a.family, slots: a.fieldSlots, titleIdx, subIdx, demo: a.fieldDemo, barrel: `../dart-forge-bs/${a.family}/${a.family}.dart` };
+    }
+  }
+  return out;
+}
+const kpiFields = (sk, valueExpr, labelExpr) => `[${Array.from({ length: sk.slots }, (_, i) => (i === sk.valueIdx ? valueExpr : i === sk.labelIdx ? labelExpr : "''")).join(', ')}]`;
+const textFields = (sk, titleExpr, subExpr) => `[${Array.from({ length: sk.slots }, (_, i) => (i === sk.titleIdx ? titleExpr : i === sk.subIdx ? subExpr : "''")).join(', ')}]`;
+export function buildApp({ name, sentences, skin }) {
   const N = pascal(name), mods = [], skipped = [];
+  const skins = resolveSkin(skin) || {}; const sk = skins.kpi || null, skNav = skins.navTile || null, skEmpty = skins.empty || null;
+  const modSkin = (skins.stat || skins.hero) ? { stat: skins.stat || null, hero: skins.hero || null } : null;
   for (const text of sentences) {
-    const r = fromSentence(text);
+    const r = fromSentence(text, modSkin);
     if (!r.entity) { skipped.push({ text, reason: r.reason }); continue; }
     if (mods.some((m) => m.entity === r.entity)) { skipped.push({ text, reason: `ישות חוזרת (${r.entity})` }); continue; }
     const t = termsFor(r.entity);
@@ -31,10 +72,12 @@ export function buildApp({ name, sentences }) {
     ...mods.map((m) => `//   "${m.text}" ⇒ ${m.entity} ⇐ ${m.module} (${m.pick.strength} · שמות ${m.pick.names}/${m.pick.fields})`),
     ...skipped.map((s) => `//   ⚪ "${s.text}" ⇒ ${s.reason}`),
     `//   G10b-ב · תפר-הזרקה (db) ⇒ בדיקה שמזריקה שדה-סכמה שמור על רשומת-המסך ורואה את העמודה מאירה: ${mods.map((m) => `${m.entity}:${m.facts.seedSeam ? `${m.facts.seedSeam.reserved.length} עמודות` : '∅'}`).join(' · ')}`,
+    `//   G12c · תפקידי-עור: ${Object.values(skins).map((x) => `${x.role}=${x.cls}`).join(' · ') || 'DS'}`,
+    `//   G12b · עור: ${sk ? `forge — אריח-KPI = ${sk.cls} (${sk.family} · ${sk.slots} חריצים · תוכן-העיצוב ${JSON.stringify(sk.demo)} ⇒ ערך בחריץ ${sk.valueIdx}, תווית בחריץ ${sk.labelIdx}, השאר '') — הצבה של הבעלים ב-app-golden, מאומתת מבנית` : 'DS (KpiTile) — ברירת-מחדל, ביט-זהה'}`,
     `//   G10b · עם הקפיצה נשלח גם initialMetric=heroKey ⇒ הטבלה במודול מסוננת לשורות-המדד (באנר + ביטול): ${mods.map((m) => `${m.entity}:${m.facts.metricSeam ? 'initialMetric' : '∅'}`).join(' · ')}`,
     `//   G10a · אריח-hero ⇒ טאפ פותח את המודול על הרשומה-הראשונה של המדד (<E>Facts.heroFirstId ⇒ <E>Screen(initialPanelId)) — תפר-כניסה חצוב מצורת initialPanel של זהב-המורים: ${mods.map((m) => `${m.entity}:${m.facts.entrySeam || '∅'}`).join(' · ')}`,
     `//   G9b · KPI-רכזת נגזר: כל אריח = ${'<E>'}Facts של המודול (count חי של הזרע · hero = המדד שהזהב הכריז/צבע-סכנה) — אפס ערך מומצא: ${mods.map((m) => `${m.facts.cls}.${m.facts.heroKey}`).join(' · ')}`,
-    `import 'package:flutter/material.dart';`, `import '../dart-ui-bs/ds/ds.dart';`, `import '../dart-ui-bs/premium/dataviz/kpi_tile.dart';`,
+    `import 'package:flutter/material.dart';`, `import '../dart-ui-bs/ds/ds.dart';`, ...[...new Set([sk, skNav, skEmpty].filter(Boolean).map((x) => x.barrel))].map((b) => `import '${b}'; // G12b/c · עור-forge`), ...(sk ? [] : [`import '../dart-ui-bs/premium/dataviz/kpi_tile.dart';`]),
     `import '../dart-ui-bs/ds/ds_search.dart'; // איתור: חיפוש-מבוקר (value+onChanged)`, `import '../dart-ui-bs/premium/feedback/empty_state.dart'; // אין-תוצאות`,
     `import '../dart-maor/smart-filter.dart'; // איתור: סינון+מיון-לפי-ציון (מדף)`, `import '../dart-maor/smart-score.dart'; // איתור: ניקוד רב-מילתי AND (מדף)`,
     `import '../dart-maor/norm-search.dart'; // איתור: נרמול-חיפוש עברי (מדף)`, `import '../dart-data-maor/norm-search-strings.dart'; // NORM_SEARCH_T (אטום-דאטה)`,
@@ -64,22 +107,25 @@ export function buildApp({ name, sentences }) {
     `      DsSearch(value: _q, onChanged: (v) => setState(() => _q = v)),`,
     `      const SizedBox(height: 8),`,
     `      Wrap(spacing: 12, runSpacing: 12, children: [ // KPI-רכזת (G9b): עובדות-אמת בלבד — כמו _Home של הזהב (מסכים-מחוברים + הדחוף של כל מודול)`,
-    `        SizedBox(width: 168, child: KpiTile(glyph: '🧬', value: '${'$'}{vis.length}/${'$'}{modules.length}', label: 'מסכים מחוברים')),`,
+    sk ? `        SizedBox(width: 168, child: ${sk.cls}(fields: ${kpiFields(sk, "'${vis.length}/${modules.length}'", "'מסכים מחוברים'")})),` : `        SizedBox(width: 168, child: KpiTile(glyph: '🧬', value: '${'$'}{vis.length}/${'$'}{modules.length}', label: 'מסכים מחוברים')),`,
     ...mods.map((m, i) => m.facts.entrySeam
-      ? `        if (vis.contains(${i})) GestureDetector(key: const ValueKey('hero-${m.entity}'), onTap: () { final id = ${m.facts.cls}.heroFirstId; _go(context, id == null ? const ${m.screen}() : ${m.screen}(${m.facts.entrySeam}: id${m.facts.metricSeam ? `, initialMetric: ${m.facts.cls}.heroKey` : ''})); }, child: SizedBox(width: 168, child: KpiTile(glyph: '🧬', value: ${m.facts.cls}.hero, label: ${m.facts.cls}.heroLabel))), // ${m.entity} · ${m.facts.heroHow} · טאפ ⇒ המודול פתוח על רשומת-ה-hero הראשונה (G10a)`
-      : `        if (vis.contains(${i})) SizedBox(key: const ValueKey('hero-${m.entity}'), width: 168, child: KpiTile(glyph: '🧬', value: ${m.facts.cls}.hero, label: ${m.facts.cls}.heroLabel)), // ${m.entity} · ${m.facts.heroHow} · אין תפר-כניסה (אין זרע/פאנל)`),
+      ? `        if (vis.contains(${i})) GestureDetector(key: const ValueKey('hero-${m.entity}'), onTap: () { final id = ${m.facts.cls}.heroFirstId; _go(context, id == null ? const ${m.screen}() : ${m.screen}(${m.facts.entrySeam}: id${m.facts.metricSeam ? `, initialMetric: ${m.facts.cls}.heroKey` : ''})); }, child: SizedBox(width: 168, child: ${sk ? `${sk.cls}(fields: ${kpiFields(sk, `${m.facts.cls}.hero`, `${m.facts.cls}.heroLabel`)})` : `KpiTile(glyph: '🧬', value: ${m.facts.cls}.hero, label: ${m.facts.cls}.heroLabel)`})), // ${m.entity} · ${m.facts.heroHow} · טאפ ⇒ המודול פתוח על רשומת-ה-hero הראשונה (G10a)`
+      : `        if (vis.contains(${i})) SizedBox(key: const ValueKey('hero-${m.entity}'), width: 168, child: ${sk ? `${sk.cls}(fields: ${kpiFields(sk, `${m.facts.cls}.hero`, `${m.facts.cls}.heroLabel`)})` : `KpiTile(glyph: '🧬', value: ${m.facts.cls}.hero, label: ${m.facts.cls}.heroLabel)`}), // ${m.entity} · ${m.facts.heroHow} · אין תפר-כניסה (אין זרע/פאנל)`),
     '      ]),', '      const SizedBox(height: 8),',
-    `      if (vis.isEmpty) const EmptyState(glyph: '🔍', message: 'אין מודול שתואם לחיפוש') else DsSection(title: 'כלים · ${'$'}{vis.length}', children: [`,
-    ...mods.map((m, i) => `        if (vis.contains(${i})) DsNavTile(glyph: '🧬', title: ${q(m.title)}, sub: ${m.facts.count ? `'${'$'}{${m.facts.cls}.count} ${'$'}{${m.facts.cls}.label} · ${q(m.text).slice(1, -1)}'` : q(m.text)}, onTap: () => _go(context, const ${m.screen}())),`),
+    `      if (vis.isEmpty) ${skEmpty ? `${skEmpty.cls}(fields: ${textFields(skEmpty, "'אין מודול שתואם לחיפוש'", "'נסה מילה אחרת'")})` : "const EmptyState(glyph: '🔍', message: 'אין מודול שתואם לחיפוש')"} else DsSection(title: 'כלים · ${'$'}{vis.length}', children: [`,
+    ...mods.map((m, i) => { const subE = m.facts.count ? `'${'$'}{${m.facts.cls}.count} ${'$'}{${m.facts.cls}.label} · ${q(m.text).slice(1, -1)}'` : q(m.text); return skNav
+      ? `        if (vis.contains(${i})) GestureDetector(key: const ValueKey('nav-${m.entity}'), behavior: HitTestBehavior.opaque, onTap: () => _go(context, const ${m.screen}()), child: ${skNav.cls}(fields: ${textFields(skNav, q(m.title), subE)})), // אריח-ניווט forge (G12c)`
+      : `        if (vis.contains(${i})) DsNavTile(glyph: '🧬', title: ${q(m.title)}, sub: ${subE}, onTap: () => _go(context, const ${m.screen}())),`; }),
     '      ]),', '    ]);', '  }', '}', ''].join('\n');
+  const tileType = skNav ? skNav.cls : 'DsNavTile', emptyType = skEmpty ? skEmpty.cls : 'EmptyState';
   const test = [`// מחולל ע"י machtzev/generator/app-from-sentences.mjs — בדיקת-ניווט של ${N}App: בית ⇒ כל מודול מרונדר וחוזר, אפס-חריגות`,
     `import 'package:buildsmart/genesis/dart-gen-bs/gen_app_${name.toLowerCase()}.dart';`, ...mods.map((m) => `import 'package:buildsmart/genesis/dart-gen-bs/${m.file}' show ${m.screen}, ${m.facts.cls};`),
-    `import 'package:buildsmart/genesis/dart-ui-bs/ds/ds.dart';`, `import 'package:buildsmart/genesis/dart-ui-bs/premium/feedback/empty_state.dart';`, `import 'package:flutter/material.dart';`, `import 'package:flutter_test/flutter_test.dart';`, '',
+    `import 'package:buildsmart/genesis/dart-ui-bs/ds/ds.dart';`, `import 'package:buildsmart/genesis/dart-ui-bs/premium/feedback/empty_state.dart';`, ...[...new Set([skNav, skEmpty].filter(Boolean).map((x) => x.barrel.replace('../', 'package:buildsmart/genesis/')))].map((b) => `import '${b}';`), `import 'package:flutter/material.dart';`, `import 'package:flutter_test/flutter_test.dart';`, '',
     'void main() {',
     `  testWidgets('${N}App · בית: ${mods.length} אריחים', (tester) async {`,
     `    tester.view.physicalSize = const Size(800, 2400); tester.view.devicePixelRatio = 1.0; addTearDown(tester.view.reset);`,
     `    await tester.pumpWidget(const ${N}App()); await tester.pump(const Duration(milliseconds: 300));`,
-    `    expect(find.byType(DsNavTile), findsNWidgets(${mods.length})); expect(tester.takeException(), isNull);`,
+    `    expect(find.byType(${tileType}), findsNWidgets(${mods.length})); expect(tester.takeException(), isNull);`,
     `    expect(find.text('${mods.length}/${mods.length}'), findsWidgets); // KPI מסכים-מחוברים = עובדה (נראים/כולם)`,
     ...mods.flatMap((m) => [
       `    expect(${m.facts.cls}.metricDefs.length, ${m.facts.cls}.metrics.length); expect(${m.facts.cls}.heroKey == 'count' || ${m.facts.cls}.metrics.containsKey(${m.facts.cls}.heroKey), isTrue); // ${m.entity}: תפר-העובדות עקבי`,
@@ -95,11 +141,11 @@ export function buildApp({ name, sentences }) {
         `    tester.view.physicalSize = const Size(800, 2400); tester.view.devicePixelRatio = 1.0; addTearDown(tester.view.reset);`,
         `    await tester.pumpWidget(const ${N}App()); await tester.pump(const Duration(milliseconds: 300));`,
         `    await tester.enterText(find.byType(TextField).first, ${q(probe)}); await tester.pump(const Duration(milliseconds: 300));`,
-        `    expect(find.byType(DsNavTile), findsNWidgets(${expectN})); expect(find.text('${expectN}/${mods.length}'), findsWidgets); expect(tester.takeException(), isNull);`,
+        `    expect(find.byType(${tileType}), findsNWidgets(${expectN})); expect(find.text('${expectN}/${mods.length}'), findsWidgets); expect(tester.takeException(), isNull);`,
         `    await tester.enterText(find.byType(TextField).first, 'zzqqxx'); await tester.pump(const Duration(milliseconds: 300));`,
-        `    expect(find.byType(DsNavTile), findsNothing); expect(find.byType(EmptyState), findsOneWidget); expect(find.text('0/${mods.length}'), findsWidgets);`,
+        `    expect(find.byType(${tileType}), findsNothing); expect(find.byType(${emptyType}), findsOneWidget); expect(find.text('0/${mods.length}'), findsWidgets);`,
         `    await tester.enterText(find.byType(TextField).first, ''); await tester.pump(const Duration(milliseconds: 300));`,
-        `    expect(find.byType(DsNavTile), findsNWidgets(${mods.length})); expect(find.byType(EmptyState), findsNothing); expect(tester.takeException(), isNull);`,
+        `    expect(find.byType(${tileType}), findsNWidgets(${mods.length})); expect(find.byType(${emptyType}), findsNothing); expect(tester.takeException(), isNull);`,
         '  });'];
     })(),
     ...mods.filter((m) => m.facts.seedSeam && m.facts.seedSeam.reserved.length).flatMap((m) => [ // G10b-ב · G5h מאומת-בפועל: עמודת-מקום-שמור מאירה רק כשהנתון מוזרם (הזרקה על רשומת-המסך — L66)
@@ -133,7 +179,7 @@ export function buildApp({ name, sentences }) {
       `    await tester.pumpWidget(const ${N}App()); await tester.pump(const Duration(milliseconds: 300));`,
       `    await tester.tap(find.text(${q(m.title)}).last); await tester.pump(); await tester.pump(const Duration(milliseconds: 600));`,
       `    expect(find.byType(${m.screen}), findsOneWidget); expect(tester.takeException(), isNull);`,
-      `    tester.state<NavigatorState>(find.byType(Navigator).first).pop(); await tester.pump(); await tester.pump(const Duration(milliseconds: 600)); expect(find.byType(DsNavTile), findsNWidgets(${mods.length})); // DsScaffold ללא AppBar ⇒ pop דרך ה-Navigator, לא pageBack`,
+      `    tester.state<NavigatorState>(find.byType(Navigator).first).pop(); await tester.pump(); await tester.pump(const Duration(milliseconds: 600)); expect(find.byType(${tileType}), findsNWidgets(${mods.length})); // DsScaffold ללא AppBar ⇒ pop דרך ה-Navigator, לא pageBack`,
       '  });']),
     '}', ''].join('\n');
   // G11b · נקודת-כניסה לאתר/אפליקציה (§22 "אפליקציה+אתר"): קובץ main נפרד ⇒ `flutter build web -t <file>` בונה את האפליקציה-המחוללת כאתר עצמאי; אין main() ברכזת (הרכזת נשארת ווידג׳ט לבדיקות)

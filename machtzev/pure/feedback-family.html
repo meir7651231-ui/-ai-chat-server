@@ -85,7 +85,7 @@
   @keyframes sh{0%{background-position:100% 0}100%{background-position:-100% 0}}
   /* --- progress --- */
   .pg{display:flex;flex-direction:column;gap:9px;align-items:center}
-  .bar2{width:100%;height:8px;border-radius:999px;background:var(--raised2);overflow:hidden}.bar2 .f{height:100%;width:62%;border-radius:999px;background:linear-gradient(90deg,var(--a-hi),var(--a));box-shadow:0 0 12px var(--gl)}
+  .bar2{width:100%;height:8px;border-radius:999px;background:var(--raised2);overflow:hidden}.bar2 .f{display:block;height:100%;width:62%;border-radius:999px;background:linear-gradient(90deg,var(--a-hi),var(--a));box-shadow:0 0 12px var(--gl)}
   .ring{width:56px;height:56px;transform:rotate(-90deg)}.ring circle{fill:none;stroke-width:6}.ring .bg{stroke:var(--raised2)}.ring .fg{stroke:var(--a);stroke-linecap:round;stroke-dasharray:151;stroke-dashoffset:52;filter:drop-shadow(0 0 4px var(--gl))}
   .story{width:56px;height:56px;border-radius:50%;padding:3px;background:conic-gradient(var(--c2),var(--a),var(--c3),var(--a-hi),var(--c2))}.story i{display:block;width:100%;height:100%;border-radius:50%;background:var(--sunken);border:2px solid var(--canvas)}
   .dots{display:flex;gap:7px}.dots i{width:10px;height:10px;border-radius:50%;background:var(--a);animation:bounce 1.2s ease infinite}.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}@keyframes bounce{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(-7px);opacity:1}}
