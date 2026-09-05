@@ -45,6 +45,13 @@ cd /home/user/-ai-chat-server && node machtzev/tools/site-shot.mjs <name> <Title
 ## 4½ · עור-forge (G12–G13)
 `app-golden*.json` / `skin-golden.json` מצהירים `skin: { kpi, hero, stat, navTile, button, statusChip, banner, emptyState, mediaRow, section, frame, segmented, chip, meter, glass, timeline }` ⇒ אטום-forge לכל תפקיד. המנוע מאמת מבנית (חריצים · child · items · values) ומסרב לאטום לא-מתאים. אטומי-forge מחוללים מ-Pure (`node machtzev/ds-forge.mjs` — תמיד מלא) עם התפרים: `fields` · `items/selected/onSelect` (+ תאים `items[i][j]` · `columns` · `variants`) · `values` (אחוזים ובארי-SVG) · `control` · `onAction` · `child` · `bare`; null ⇒ תוכן-העיצוב ביט-זהה. תפקידי-skin: kpi·hero·stat·navTile·button·statusChip(+toneMap)·banner·emptyState·mediaRow·section·frame·segmented·chip·meter·glass·timeline·field·enumField·numberField·dateField·search·pageHeader·table·bars. גופני-Pure (Fraunces · Space Grotesk · Frank Ruhl Libre · Heebo) ב-pubspec של בנייה-חכמה.
 
+## 4¾ · הפקודה האחת (G13f)
+```bash
+cd /home/user/-ai-chat-server
+SESSION_URL=<קישור-סשן> node machtzev/generator/ship.mjs --msg "גל G… · …" --lesson L77   # regen ⇒ מראה ⇒ אימות ⇒ שערים ⇒ בנייה ⇒ צילום ⇒ gh-pages ⇒ commit×2 ⇒ push
+```
+כל מה שבסעיפים 2–4 נעשה ידנית — עכשיו פקודה אחת בסדר קבוע. `--full-verify` מוסיף gen-verify; `--no-build --no-deploy --no-commit --no-push` לשלבים.
+
 ## 5 · מה יש היום (אמת, 4.9.2026)
 | מדד | ערך |
 |---|---|
