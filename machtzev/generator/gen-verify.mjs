@@ -14,6 +14,9 @@ const FLUTTER = process.env.FLUTTER || (fs.existsSync('/home/user/flutter/bin/fl
 const BASE = path.join(GEN, 'gen-verify-baseline.json');
 const MAP = JSON.parse(fs.readFileSync(path.join(GEN, 'ops-map.json'), 'utf8'));
 const DISPLAY = new Set(MAP.filter((a) => a.layer === 'display' || a.kind === 'display' || /dart-ui-bs/.test(a.file || a.path || '')).map((a) => a.id.split('@')[0]));
+// G15b · L82: אטומי-forge (dart-forge-bs, שכבת-תצוגה באינדקס-האמת) נספרים כאטומי-תצוגה — אחרת החלפת DS⇒forge נראית כ"נסיגה" (KpiTile ירד מהמסך כי StatPlain עלה במקומו)
+const IDX_FULL = path.join(GEN, 'atom-index-full.json');
+if (fs.existsSync(IDX_FULL)) for (const a of JSON.parse(fs.readFileSync(IDX_FULL, 'utf8'))) if (a.layer === 'display' && /dart-forge-bs/.test(a.file || '')) DISPLAY.add(a.id.split('@')[0]);
 const gate = process.argv.includes('--gate');
 const only = (() => { const i = process.argv.indexOf('--only'); return i > -1 ? process.argv[i + 1].split(',') : null; })();
 if (!fs.existsSync(path.join(BS, 'pubspec.yaml'))) { console.log(`⚪ genverify: אין buildsmart ב-${BS} — מדולג`); process.exit(0); }
