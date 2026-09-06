@@ -110,6 +110,9 @@
   .faceseg button:focus-visible{outline:2px solid var(--a-hi);outline-offset:2px}
   :root[data-face="grotesk"]{--serifHe:"Space Grotesk",ui-monospace,monospace;--serif:"Space Grotesk",ui-monospace,monospace}
   @media(max-width:820px){.faceseg button{padding:8px 11px}}
+.tone-info{--tone:var(--a-hi)}.tone-ok{--tone:var(--ok)}.tone-warn{--tone:var(--warn)}.tone-err{--tone:var(--err)}
+.row{display:flex;gap:9px;flex-wrap:wrap}
+.btn.tn{background:color-mix(in oklab,var(--tone) 15%,transparent);color:var(--tone);border:1px solid color-mix(in oklab,var(--tone) 30%,transparent);box-shadow:none;padding:0 14px}
 </style>
 
 <div class="bar"><div class="in">
@@ -178,6 +181,7 @@
       <div class="cell"><button class="btn out">Action</button><div class="foot"><span class="nm">OutlinedActionButton</span><span class="seam">fields</span></div></div>
       <div class="cell"><button class="btn link">Action →</button><div class="foot"><span class="nm">LinkBtn</span><span class="seam">fields</span></div></div>
       <div class="cell"><button class="btn soft">Action</button><div class="foot"><span class="nm">SoftButton</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="row"><button class="btn tn tone-info">Action</button><button class="btn tn tone-ok">Action</button><button class="btn tn tone-warn">Action</button><button class="btn tn tone-err">Action</button></div><div class="foot"><span class="nm">ToneButton · soft button per tone</span><span class="seam">collection</span></div></div>
     </div>
   </section>
 

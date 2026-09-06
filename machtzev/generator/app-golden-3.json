@@ -14,9 +14,9 @@
   "empty": "ForgeSearchEmptyState",
   "stat": "ForgeStatPlain",
   "hero": "ForgeStatPlain",
-  "button": "ForgeSoftButton",
+  "button": "ForgeToneButton",
   "statusChip": "ForgeStatusChip",
-  "banner": "ForgeSectionPill",
+  "banner": "ForgeToneBanner",
   "emptyState": "ForgeSearchEmptyState",
   "mediaRow": "ForgeContactTile",
   "section": "ForgeTitledSection",
@@ -40,7 +40,20 @@
     "tone-ok",
     "tone-err",
     "tone-warn"
+   ],
+   "banner": [
+    "tone-info",
+    "tone-ok",
+    "tone-err",
+    "tone-warn"
+   ],
+   "button": [
+    "tone-info",
+    "tone-ok",
+    "tone-err",
+    "tone-warn"
    ]
-  }
+  },
+  "calendar": "ForgeEventCalendar"
  }
 }

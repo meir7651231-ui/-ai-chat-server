@@ -108,6 +108,13 @@
   @keyframes roll{to{transform:translateX(50%)}}
   @media(max-width:820px){.bar .mk small{display:none}.cell.wide{grid-column:auto}.faceseg button{padding:8px 11px}}
   @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.dowf{display:flex;gap:3px;margin-bottom:5px}
+.wd{flex:1;text-align:center;font-family:var(--grotesk);font-size:10px;color:var(--faint);font-weight:700}
+.evgrid{display:flex;flex-wrap:wrap;gap:3px}
+.evd{width:13.2%;height:34px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:9px;font-family:var(--grotesk);font-size:12.5px;color:var(--mut);direction:ltr}
+.evd.has{background:color-mix(in oklab,var(--a) 20%,transparent);color:var(--a-hi);font-weight:700}
+.evd.has i{font-style:normal;font-size:9px;font-weight:600}
+.evd.today{border:1.5px solid var(--a-hi);color:var(--a-hi)}
 </style>
 
 <div class="bar"><div class="in">
@@ -144,6 +151,7 @@
       <div class="dow"><span>א</span><span>ב</span><span>ג</span><span>ד</span><span>ה</span><span>ו</span><span>ש</span></div>
       <div class="cal" id="cal"></div>
     </div><div class="foot"><span class="nm">MiniCalendar · month grid</span><span class="seam">fields</span></div></div>
+      <div class="cell"><div class="body"><div class="calhd"><button class="navb" aria-label="Previous month"><svg viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M9 6l6 6-6 6"/></svg></button><span class="mo">Label</span><button class="navb" aria-label="Next month"><svg viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M15 6l-6 6 6 6"/></svg></button></div><div class="dowf"><span class="wd">א</span><span class="wd">ב</span><span class="wd">ג</span><span class="wd">ד</span><span class="wd">ה</span><span class="wd">ו</span><span class="wd">ש</span></div><div class="evgrid"><span class="evd pad"></span><span class="evd pad"></span><span class="evd">1</span><span class="evd">2</span><span class="evd">3</span><span class="evd">4</span><span class="evd has"><b>5</b><i>2</i></span><span class="evd">6</span><span class="evd">7</span><span class="evd">8</span><span class="evd">9</span><span class="evd">10</span><span class="evd">11</span><span class="evd today">12</span><span class="evd">13</span><span class="evd">14</span><span class="evd">15</span><span class="evd">16</span><span class="evd">17</span><span class="evd">18</span><span class="evd has"><b>19</b><i>1</i></span><span class="evd">20</span><span class="evd">21</span><span class="evd">22</span><span class="evd">23</span><span class="evd">24</span><span class="evd">25</span><span class="evd">26</span><span class="evd">27</span><span class="evd">28</span><span class="evd">29</span><span class="evd">30</span></div></div><div class="foot"><span class="nm">EventCalendar · month grid with per-day counts (data atom)</span><span class="seam">collection</span></div></div>
 
     <div class="cell"><div class="body">
       <div class="dow"><span>א</span><span>ב</span><span>ג</span><span>ד</span><span>ה</span><span>ו</span><span>ש</span></div>

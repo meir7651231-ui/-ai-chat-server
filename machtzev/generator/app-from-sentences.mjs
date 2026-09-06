@@ -57,6 +57,8 @@ export function resolveSkin(skin) {
     // G13d · טבלה · בארים
     table: { need: 'table',  fam: ['spatial', 'list'], desc: 'DsTable(labels,rows) ⇒ טבלת-forge (columns + items[i][j])' },
     bars:  { need: 'values', fam: ['dataviz'],          desc: 'NeonBars/DsBars(labels,values) ⇒ גרף-forge (values ⇒ גובה-בארים)' },
+    // G14 · לוח-שנה כאטום-דאטה
+    calendar: { need: 'calendar', fam: ['temporal', 'spatial'], desc: 'DsCalendar(records,dateOf) ⇒ לוח-forge: כותרת-חודש · 7 עמודות · ימים כפריטים עם וריאנטים (pad/has/today) · onAction ◀▶' },
   };
   const toneMap = (skin && skin.toneMap) || {};   // G13d · גשר-טונים מוצהר: תפקיד ⇒ [טוקן-וריאנט לכל טון-DS 0..3]
   const out = {};
@@ -67,13 +69,18 @@ export function resolveSkin(skin) {
     const numIdx = a.fieldDemo.map((t, i) => (isNumDemo(t) ? i : -1)).filter((i) => i >= 0);
     if (a.states && R.need !== 'control') throw new Error(`skin.${role}: ${cls} רב-מצבי (theater) — לא נכנס לעור`);
     const textIdxOf = () => a.fieldDemo.map((t, i) => (/[a-z֐-׿]/.test(t) ? i : -1)).filter((i) => i >= 0);
-    const base = { role, cls: a.cls, family: a.family, slots: a.fieldSlots, demo: a.fieldDemo, barrel: `../dart-forge-bs/${a.family}/${a.family}.dart`, itemSlots: a.items ? a.items.slots : 0, bare: !!a.bare, hasItems: !!a.items, stateIds: a.stateIds || null };
+    const base = { role, cls: a.cls, family: a.family, slots: a.fieldSlots, demo: a.fieldDemo, barrel: `../dart-forge-bs/${a.family}/${a.family}.dart`, itemSlots: a.items ? a.items.slots : 0, bare: !!a.bare, hasItems: !!a.items, stateIds: a.stateIds || null, variantIds: a.items && a.items.variants ? a.items.variants : null };
     if (R.fam && !R.fam.includes(a.family)) throw new Error(`skin.${role}: ${cls} ממשפחת ${a.family} — נדרש ${R.fam.join('/')}`);
     // G13b · תפרי-G13a (מאומתים מול forge-manifest.atoms: child · items · values)
     if (R.need === 'child' || R.need === 'child+text1') {
       if (!a.child) throw new Error(`skin.${role}: ${cls} בלי תפר-child`);
       const ti = textIdxOf(); if (R.need === 'child+text1' && !ti.length) throw new Error(`skin.${role}: ${cls} — נדרש חריץ-טקסט לכותרת`);
       out[role] = Object.assign(base, { titleIdx: ti[0] ?? 0, subIdx: ti[1] ?? -1 }); continue;
+    }
+    if (R.need === 'calendar') {
+      const v = a.items && a.items.variants || [];
+      if (!a.items || !a.columns || !(a.actions >= 2) || !['pad', 'has', 'today'].every((t) => v.includes(t))) throw new Error(`skin.${role}: ${cls} — נדרש לוח: פריטי-ימים עם וריאנטים pad/has/today · columns (ימי-שבוע) · ≥2 פעולות (◀▶) — ${JSON.stringify({ items: a.items, columns: a.columns, actions: a.actions })}`);
+      const ti = textIdxOf(); out[role] = Object.assign(base, { titleIdx: ti[0] ?? 0 }); continue;
     }
     if (R.need === 'table') {
       if (!a.items || !a.items.cells || !a.columns) throw new Error(`skin.${role}: ${cls} — נדרשת טבלה: שורות עם תבנית-תא (items.cells) + כותרות-עמודות (columns) — ${JSON.stringify({ items: a.items, columns: a.columns })}`);
@@ -127,7 +134,7 @@ const textFields = (sk, titleExpr, subExpr) => `[${Array.from({ length: sk.slots
 export function buildApp({ name, sentences, skin }) {
   const N = pascal(name), mods = [], skipped = [];
   const skins = resolveSkin(skin) || {}; const sk = skins.kpi || null, skNav = skins.navTile || null, skEmpty = skins.empty || null;
-  const MOD_ROLES = ['stat', 'hero', 'button', 'statusChip', 'banner', 'emptyState', 'mediaRow', 'section', 'frame', 'segmented', 'chip', 'meter', 'glass', 'timeline', 'field', 'enumField', 'numberField', 'dateField', 'search', 'pageHeader', 'table', 'bars'];   // G13b · G13c · G13d
+  const MOD_ROLES = ['stat', 'hero', 'button', 'statusChip', 'banner', 'emptyState', 'mediaRow', 'section', 'frame', 'segmented', 'chip', 'meter', 'glass', 'timeline', 'field', 'enumField', 'numberField', 'dateField', 'search', 'pageHeader', 'table', 'bars', 'calendar'];   // G13b · G13c · G13d · G14
   const modSkin = MOD_ROLES.some((r) => skins[r]) ? Object.fromEntries(MOD_ROLES.map((r) => [r, skins[r] || null])) : null;
   for (const text of sentences) {
     const r = fromSentence(text, modSkin);
