@@ -2,7 +2,7 @@
  "summary": {
   "ops": 30,
   "confirmed": 26,
-  "swapsProposed": 0,
+  "swapsProposed": 4,
   "swapsProven": 0
  },
  "ops": {
@@ -10,12 +10,12 @@
    "declared": "smartFilter",
    "declaredFile": "dart-maor/smart-filter.dart",
    "pick": "smartFilter",
-   "candidates": 34,
+   "candidates": 793,
    "declaredRank": 0,
    "top3": [
     "smartFilter:32.14≡",
     "supScore:10.27",
-    "runAudit:7.49"
+    "filterItems:9.86"
    ],
    "swap": null
   },
@@ -23,12 +23,12 @@
    "declared": "finderMatches",
    "declaredFile": "dart-maor/finder-matches.dart",
    "pick": "finderMatches",
-   "candidates": 12,
+   "candidates": 56,
    "declaredRank": 0,
    "top3": [
     "finderMatches:24.35≡",
     "startCampaign:6.75",
-    "sup12m:3.11"
+    "coursesOfTeacher:4.75"
    ],
    "swap": null
   },
@@ -36,12 +36,12 @@
    "declared": "toCsv",
    "declaredFile": "dart-maor/to-csv.dart",
    "pick": "toCsv",
-   "candidates": 233,
+   "candidates": 442,
    "declaredRank": 0,
    "top3": [
     "toCsv:13.94≡",
     "cockpitCsvRows:13.94",
-    "minToHM:10.71"
+    "intakeLog:11.94"
    ],
    "swap": null
   },
@@ -49,7 +49,7 @@
    "declared": "roleOf",
    "declaredFile": "dart-maor/role-of.dart",
    "pick": "roleOf",
-   "candidates": 87,
+   "candidates": 170,
    "declaredRank": 0,
    "top3": [
     "roleOf:25.75≡",
@@ -62,12 +62,12 @@
    "declared": "canGrantedAction",
    "declaredFile": "dart-maor/can-granted-action.dart",
    "pick": "canGrantedAction",
-   "candidates": 5,
+   "candidates": 77,
    "declaredRank": 0,
    "top3": [
     "canGrantedAction:21.7≡",
     "taskStatsFor:6.82",
-    "courseFitsMember:1"
+    "moduleOn:4.05"
    ],
    "swap": null
   },
@@ -75,12 +75,12 @@
    "declared": "expiringIntakes",
    "declaredFile": "dart-maor/expiring-intakes.dart",
    "pick": "expiringIntakes",
-   "candidates": 5,
+   "candidates": 59,
    "declaredRank": 0,
    "top3": [
     "expiringIntakes:16.29≡",
     "spotlightBox:10.71",
-    "stepScale:0"
+    "sup12m:1.7"
    ],
    "swap": null
   },
@@ -101,12 +101,12 @@
    "declared": "cockpitQueue",
    "declaredFile": "dart-maor/cockpit-queue.dart",
    "pick": "cockpitQueue",
-   "candidates": 3,
+   "candidates": 65,
    "declaredRank": 0,
    "top3": [
     "cockpitQueue:68.09≡",
-    "smartFilter:4.34",
-    "waPaymentText:4.34"
+    "sup12m:10.8",
+    "smartFilter:4.34"
    ],
    "swap": null
   },
@@ -114,7 +114,7 @@
    "declared": "cockpitProgress",
    "declaredFile": "dart-maor/cockpit-progress.dart",
    "pick": "cockpitProgress",
-   "candidates": 24,
+   "candidates": 46,
    "declaredRank": 0,
    "top3": [
     "cockpitProgress:55.69≡",
@@ -127,7 +127,7 @@
    "declared": "sheetSummary",
    "declaredFile": "dart-maor/sheet-summary.dart",
    "pick": "sheetSummary",
-   "candidates": 233,
+   "candidates": 442,
    "declaredRank": 0,
    "top3": [
     "sheetSummary:21≡",
@@ -140,20 +140,35 @@
    "declared": "pendingMakeups",
    "declaredFile": "dart-maor/pending-makeups.dart",
    "pick": "pendingMakeups",
-   "candidates": 20,
+   "candidates": 40,
    "declaredRank": 1,
    "top3": [
     "sheetSummary:11.4",
     "pendingMakeups:4.5≡",
     "supportUnread:2.61"
    ],
-   "swap": null
+   "swap": {
+    "to": "sheetSummary",
+    "file": "dart-maor/sheet-summary.dart",
+    "mode": "adapter",
+    "adapter": "// G19 · עטיפת-חתימה (מנוע-לפי-ייעוד): pendingMakeups(List<dynamic> enrollments, [String? courseId]) ⇒ sheetSummary(dynamic roster, dynamic dateIso)\nList<Map<String, Object?>> pendingMakeups(List<dynamic> enrollments, [String? courseId]) => sheetSummary(enrollments, courseId) as List<Map<String, Object?>>;",
+    "proof": {
+     "modules": [
+      "schoolos_attendance.dart"
+     ],
+     "sensitivity": "0/5",
+     "sensitive": true,
+     "tests": "0/5",
+     "proven": false,
+     "verdict": "נכשל-בבדיקות-הזהב"
+    }
+   }
   },
   "balance": {
    "declared": "payBal",
    "declaredFile": "dart-maor/pay-bal.dart",
    "pick": "payBal",
-   "candidates": 21,
+   "candidates": 48,
    "declaredRank": 0,
    "top3": [
     "payBal:34.69≡",
@@ -166,12 +181,12 @@
    "declared": "enrollmentPaidStatus",
    "declaredFile": "dart-maor/enrollment-paid-status.dart",
    "pick": "enrollmentPaidStatus",
-   "candidates": 11,
+   "candidates": 59,
    "declaredRank": 0,
    "top3": [
     "enrollmentPaidStatus:4≡",
     "sup12m:3.11",
-    "ruleTypo:0"
+    "sanitizeSupportText:1.11"
    ],
    "swap": null
   },
@@ -179,12 +194,12 @@
    "declared": "hokDue",
    "declaredFile": "dart-maor/hok-due.dart",
    "pick": "hokDue",
-   "candidates": 5,
+   "candidates": 54,
    "declaredRank": 0,
    "top3": [
     "hokDue:23.27≡",
     "supAvgDon:8.25",
-    "spotlightBox:0"
+    "waitlistFor:7.86"
    ],
    "swap": null
   },
@@ -192,12 +207,12 @@
    "declared": "scheduleClashText",
    "declaredFile": "dart-maor/schedule-clash-text.dart",
    "pick": "scheduleClashText",
-   "candidates": 6,
+   "candidates": 765,
    "declaredRank": 0,
    "top3": [
     "scheduleClashText:56.21≡",
-    "waPaymentText:16.31",
-    "distributionListLines:1"
+    "roomsNow:29.52",
+    "waPaymentText:16.31"
    ],
    "swap": null
   },
@@ -205,10 +220,12 @@
    "declared": "buildSlots",
    "declaredFile": "dart-maor/build-slots.dart",
    "pick": "buildSlots",
-   "candidates": 1,
+   "candidates": 62,
    "declaredRank": 0,
    "top3": [
-    "buildSlots:75.85≡"
+    "buildSlots:75.85≡",
+    "waPaymentText:-0.89",
+    "staleBoxes:-6.05"
    ],
    "swap": null
   },
@@ -216,12 +233,12 @@
    "declared": "blockReason",
    "declaredFile": "dart-maor/block-reason.dart",
    "pick": "blockReason",
-   "candidates": 3,
+   "candidates": 68,
    "declaredRank": 0,
    "top3": [
     "blockReason:49.85≡",
-    "smartFilter:0",
-    "waPaymentText:0"
+    "sheetSummary:8.34",
+    "staleBoxes:4.43"
    ],
    "swap": null
   },
@@ -229,12 +246,12 @@
    "declared": "holidayOf",
    "declaredFile": "dart-maor/holiday-of.dart",
    "pick": "holidayOf",
-   "candidates": 4,
+   "candidates": 66,
    "declaredRank": 0,
    "top3": [
     "holidayOf:27.35≡",
-    "staleBoxes:6.43",
-    "smartScore:0"
+    "hebMonthHeWired:13.17",
+    "sheetSummary:10.34"
    ],
    "swap": null
   },
@@ -242,12 +259,12 @@
    "declared": "weeklyRoomSessions",
    "declaredFile": "dart-maor/weekly-room-sessions.dart",
    "pick": "weeklyRoomSessions",
-   "candidates": 6,
+   "candidates": 63,
    "declaredRank": 0,
    "top3": [
     "weeklyRoomSessions:33.15≡",
-    "spotlightBox:3.75",
-    "lessonsInTerm:1"
+    "sessionsOf:5.29",
+    "spotlightBox:3.75"
    ],
    "swap": null
   },
@@ -268,7 +285,7 @@
    "declared": "enrollCount",
    "declaredFile": "dart-maor/enroll-count.dart",
    "pick": "enrollCount",
-   "candidates": 40,
+   "candidates": 75,
    "declaredRank": 0,
    "top3": [
     "enrollCount:11.21≡",
@@ -281,7 +298,7 @@
    "declared": "waitlistFor",
    "declaredFile": "dart-maor/waitlist-for.dart",
    "pick": "waitlistFor",
-   "candidates": 233,
+   "candidates": 442,
    "declaredRank": 0,
    "top3": [
     "waitlistFor:16.46≡",
@@ -294,7 +311,7 @@
    "declared": "coursesOfTeacher",
    "declaredFile": "dart-maor/courses-of-teacher.dart",
    "pick": "coursesOfTeacher",
-   "candidates": 233,
+   "candidates": 442,
    "declaredRank": 0,
    "top3": [
     "coursesOfTeacher:19.78≡",
@@ -307,20 +324,36 @@
    "declared": "teacherIdOf",
    "declaredFile": "dart-maor/teacher-id-of.dart",
    "pick": "teacherIdOf",
-   "candidates": 233,
-   "declaredRank": 3,
+   "candidates": 442,
+   "declaredRank": 4,
    "top3": [
     "isAdminUser:27.43",
     "coursesOfTeacher:19.31≡",
     "cockpitCsvRows:15.76"
    ],
-   "swap": null
+   "swap": {
+    "to": "isAdminUser",
+    "file": "dart-maor/is-admin-user.dart",
+    "mode": "adapter",
+    "adapter": "// G19 · עטיפת-חתימה (מנוע-לפי-ייעוד): teacherIdOf(dynamic config, dynamic email) ⇒ isAdminUser(Map<String, dynamic> config, String? email)\ndynamic teacherIdOf(dynamic config, dynamic email) => isAdminUser(config as Map<String, dynamic>, email as String?);",
+    "proof": {
+     "modules": [
+      "schoolos_courses.dart",
+      "schoolos_teachers.dart"
+     ],
+     "sensitivity": "0/28",
+     "sensitive": true,
+     "tests": "0/28",
+     "proven": false,
+     "verdict": "נכשל-בבדיקות-הזהב"
+    }
+   }
   },
   "cert": {
    "declared": "certExpiryStatus",
    "declaredFile": "dart/cert_expiry_status.dart",
    "pick": "certExpiryStatus",
-   "candidates": 20,
+   "candidates": 40,
    "declaredRank": 0,
    "top3": [
     "certExpiryStatus:16.19≡",
@@ -333,25 +366,42 @@
    "declared": "waLink",
    "declaredFile": "dart-maor/wa-link.dart",
    "pick": "waLink",
-   "candidates": 146,
-   "declaredRank": 2,
+   "candidates": 588,
+   "declaredRank": 8,
    "top3": [
+    "isSendableSupportText:16.99",
     "importableContacts:16.8",
-    "setAuditContext:9.09≡",
-    "waLink:8.88≡"
+    "cockpitWorkListText:14.39"
    ],
-   "swap": null
+   "swap": {
+    "to": "isSendableSupportText",
+    "file": "dart-maor/is-sendable-support-text.dart",
+    "mode": "adapter",
+    "adapter": "// G19 · עטיפת-חתימה (מנוע-לפי-ייעוד): waLink(dynamic phone, dynamic text, dynamic waDigits) ⇒ isSendableSupportText(Object? raw, String Function(Object? raw) sanitizeSupportText,)\ndynamic waLink(dynamic phone, dynamic text, dynamic waDigits) => isSendableSupportText(phone as Object?, text as String Function(Object? raw));",
+    "proof": {
+     "modules": [
+      "schoolos_courses.dart",
+      "schoolos_parents.dart",
+      "schoolos_students.dart"
+     ],
+     "sensitivity": "24/29",
+     "sensitive": true,
+     "tests": "24/29",
+     "proven": false,
+     "verdict": "נכשל-בבדיקות-הזהב"
+    }
+   }
   },
   "recipients": {
    "declared": "bulkWaRecipients",
    "declaredFile": "dart-maor/bulk-wa-recipients.dart",
    "pick": "bulkWaRecipients",
-   "candidates": 20,
+   "candidates": 41,
    "declaredRank": 0,
    "top3": [
     "bulkWaRecipients:16.44≡",
-    "sitePalette:5.85",
-    "coursesOfTeacher:5.11"
+    "round2:7.9",
+    "sitePalette:5.85"
    ],
    "swap": null
   },
@@ -359,12 +409,12 @@
    "declared": "renderTemplate",
    "declaredFile": "dart-maor/render-template.dart",
    "pick": "renderTemplate",
-   "candidates": 5,
+   "candidates": 63,
    "declaredRank": 0,
    "top3": [
     "renderTemplate:16.09≡",
-    "spotlightBox:0",
-    "stepScale:0"
+    "resolveLocalized:4.71",
+    "sanitizeSupportText:3.71"
    ],
    "swap": null
   },
@@ -379,7 +429,22 @@
     "parseCsv:2≡",
     "monthLabel:0"
    ],
-   "swap": null
+   "swap": {
+    "to": "supUsd",
+    "file": "dart-maor/sup-usd.dart",
+    "mode": "adapter",
+    "adapter": "// G19 · עטיפת-חתימה (מנוע-לפי-ייעוד): parseCsv(String text) ⇒ supUsd(dynamic sp)\nList<List<String>> parseCsv(String text) => supUsd(text) as List<List<String>>;",
+    "proof": {
+     "modules": [
+      "schoolos_students.dart"
+     ],
+     "sensitivity": "5/6",
+     "sensitive": true,
+     "tests": "5/6",
+     "proven": false,
+     "verdict": "נכשל-בבדיקות-הזהב"
+    }
+   }
   },
   "trendengine": {
    "declared": "trendFromScan",
