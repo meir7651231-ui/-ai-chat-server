@@ -236,6 +236,38 @@
     "כמות"
    ],
    "label": "מונה הפריט"
+  },
+  {
+   "key": "entity.delivery",
+   "entity": "Delivery",
+   "forms": [
+    "מסירה"
+   ],
+   "label": "מסירה (חלוקה, יחיד)"
+  },
+  {
+   "key": "entity.callEntry",
+   "entity": "CallEntry",
+   "forms": [
+    "שיחה"
+   ],
+   "label": "כרטיס-שיחה (יחיד)"
+  },
+  {
+   "key": "entity.dialLogEntry",
+   "entity": "DialLogEntry",
+   "forms": [
+    "חיוג"
+   ],
+   "label": "רשומת-חיוג (יחיד)"
+  },
+  {
+   "key": "entity.ayinCase",
+   "entity": "AyinCase",
+   "forms": [
+    "תיק"
+   ],
+   "label": "תיק מעקב-טיפול (יחיד)"
   }
  ]
 }

@@ -26,12 +26,12 @@
 | TimeEntry | — | 4 | — | — | recorded | 3 | — |
 | MatEntry | — | 3 | — | — | — | 3 | — |
 | AyinLog | — | 3 | — | — | recorded | 2 | — |
-| AyinCase | — | 15 | — | stage:new→lead→eyes→answer→done [next-stage] | — | 8 | — |
+| AyinCase | תיק | 15 | — | stage:new→lead→eyes→answer→done [next-stage] | — | 8 | — |
 | Hok | — | 8 | — | — | started | 8 | — |
 | Supporter | תורם | 24 | nextEventId⇒OrgEvent | — | next | 16 | phone email |
 | QuoteTemplate | — | 3 | — | — | — | 3 | — |
-| DialLogEntry | — | 4 | — | outcome:donated→noanswer→refused→callback→done→skip | — | 4 | — |
-| CallEntry | — | 2 | — | outcome:donated→noanswer→refused→callback→done→skip | at | 3 | — |
+| DialLogEntry | חיוג | 4 | — | outcome:donated→noanswer→refused→callback→done→skip | — | 4 | — |
+| CallEntry | שיחה | 2 | — | outcome:donated→noanswer→refused→callback→done→skip | at | 3 | — |
 | DialerCampaign | — | 5 | — | — | — | 3 | — |
 | TzScoreEntry | — | 3 | — | — | recorded | 3 | — |
 | TzCoordinator | רכז | 10 | famId⇒Family memberId⇒Member | — | start | 11 | phone |
@@ -50,6 +50,6 @@
 | ShopEvent | — | 10 | assignmentId⇒ShopAssignment roomId⇒Room mainEventId⇒OrgEvent | — | recorded | 12 | — |
 | Volunteer | מתנדב | 8 | — | — | created | 6 | phone |
 | WorkTask | — | 10 | — | — | — | 7 | — |
-| Delivery | — | 9 | dayId⇒DistributionDay assignmentId⇒ShopAssignment volunteerId⇒Volunteer familyId⇒Family | status:pickup→enroute→delivered [advance-status] | delivered | 12 | — |
+| Delivery | מסירה | 9 | dayId⇒DistributionDay assignmentId⇒ShopAssignment volunteerId⇒Volunteer familyId⇒Family | status:pickup→enroute→delivered [advance-status] | delivered | 12 | — |
 | DistributionDay | — | 6 | — | — | recorded created | 6 | — |
 | AuditEntry | — | 4 | — | — | — | 4 | — |

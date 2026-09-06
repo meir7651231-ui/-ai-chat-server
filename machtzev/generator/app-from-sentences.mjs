@@ -136,13 +136,13 @@ export function resolveSkin(skin) {
 }
 const kpiFields = (sk, valueExpr, labelExpr) => `[${Array.from({ length: sk.slots }, (_, i) => (i === sk.valueIdx ? valueExpr : i === sk.labelIdx ? labelExpr : "''")).join(', ')}]`;
 const textFields = (sk, titleExpr, subExpr) => `[${Array.from({ length: sk.slots }, (_, i) => (i === sk.titleIdx ? titleExpr : i === sk.subIdx ? subExpr : "''")).join(', ')}]`;
-export function buildApp({ name, sentences, skin }) {
+export function buildApp({ name, sentences, skin, aliases = null }) {   // G15 · aliases: כינויי-ישות מוצהרים לפי-אפליקציה (entity.student ⇒ Member)
   const N = pascal(name), mods = [], skipped = [];
   const skins = resolveSkin(skin) || {}; const sk = skins.kpi || null, skNav = skins.navTile || null, skEmpty = skins.empty || null;
   const MOD_ROLES = ['stat', 'hero', 'button', 'statusChip', 'banner', 'emptyState', 'mediaRow', 'section', 'frame', 'segmented', 'chip', 'meter', 'glass', 'timeline', 'field', 'enumField', 'numberField', 'dateField', 'search', 'pageHeader', 'table', 'bars', 'calendar', 'board'];   // G13b · G13c · G13d · G14
   const modSkin = MOD_ROLES.some((r) => skins[r]) ? Object.fromEntries(MOD_ROLES.map((r) => [r, skins[r] || null])) : null;
   for (const text of sentences) {
-    const r = fromSentence(text, modSkin);
+    const r = fromSentence(text, modSkin, aliases);
     if (!r.entity) { skipped.push({ text, reason: r.reason }); continue; }
     if (mods.some((m) => m.entity === r.entity)) { skipped.push({ text, reason: `ישות חוזרת (${r.entity})` }); continue; }
     const t = termsFor(r.entity);

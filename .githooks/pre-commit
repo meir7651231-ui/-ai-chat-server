@@ -112,7 +112,8 @@ if [ -n "$CODE" ]; then
     *) echo "$POUT" | grep -E '^failed |🚨|🔴' | head -8; err police "$PSUM";;
   esac
   FAILED_GATES=$( { echo "$POUT"; cat "$LEDGER"; } | grep -oE '^failed [a-z-]+' | cut -d' ' -f2 | grep -vxE 'police|learn' | sort -u | tr '\n' ',')   # R3-5.7: גם שערי-hook; police=מצרף, learn=מטא — לא נרשמים כלקח
-  [ $PRC -eq 0 ] || FAILED_GATES="${FAILED_GATES:-police}"   # R3-5.3: אדום בלי שום failed-line ספציפי ⇒ fallback 'police' (לא בנוסף)
+  ANY_FAILED=$( { echo "$POUT"; cat "$LEDGER"; } | grep -cE '^failed [a-z-]+')
+  [ $PRC -eq 0 ] || [ "$ANY_FAILED" -gt 0 ] || FAILED_GATES="${FAILED_GATES:-police}"   # R3-5.3: אדום בלי שום failed-line ⇒ fallback 'police'; L81: כשל-מטא-בלבד (learn) ⇒ אין רשומה — אחרת לולאה (טיוטה⇒learn-אדום⇒טיוטה)
   node machtzev/learn-draft.mjs --record "$FAILED_GATES" --stage "$(echo "$STAGED" | tr '\n' ',')" >/dev/null 2>&1 && [ -f "$RETRY" ] && git add -- "$RETRY"
 else skipg police "commit-תיעוד בלבד (allowlist) — המשטרה מדולגת"; fi
 

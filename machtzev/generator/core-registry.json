@@ -1360,7 +1360,7 @@
   },
   {
    "entity": "AyinCase",
-   "term": null,
+   "term": "תיק",
    "fields": 15,
    "id": false,
    "relations": [],
@@ -1616,7 +1616,7 @@
   },
   {
    "entity": "DialLogEntry",
-   "term": null,
+   "term": "חיוג",
    "fields": 4,
    "id": true,
    "relations": [],
@@ -1672,7 +1672,7 @@
   },
   {
    "entity": "CallEntry",
-   "term": null,
+   "term": "שיחה",
    "fields": 2,
    "id": false,
    "relations": [],
@@ -2863,7 +2863,7 @@
   },
   {
    "entity": "Delivery",
-   "term": null,
+   "term": "מסירה",
    "fields": 9,
    "id": true,
    "relations": [

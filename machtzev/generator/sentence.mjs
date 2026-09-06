@@ -16,15 +16,22 @@ import { createHash } from 'node:crypto';
 const skinTag = (skin) => createHash('sha1').update(JSON.stringify(Object.fromEntries(Object.entries(skin).filter(([, v]) => v).map(([k, v]) => [k, v.cls])))).digest('hex').slice(0, 6);   // תג-עור דטרמיניסטי מתפקידי-העור
 
 const ROOT = R.ROOT, GEN = path.join(ROOT, 'machtzev/generator'), DIR = path.join(ROOT, 'new/dart-gen-bs');
-const TERMS = JSON.parse(fs.readFileSync(path.join(GEN, 'entity-terms.data.json'), 'utf8')).terms.filter((t) => t.entity);
+const ALL_TERMS = JSON.parse(fs.readFileSync(path.join(GEN, 'entity-terms.data.json'), 'utf8')).terms;
+const TERMS = ALL_TERMS.filter((t) => t.entity);
+// G15 · כינויי-ישות מוצהרים (spec.aliases: 'entity.student' ⇒ 'Member'): מונח-TERM_DEFS בלי ישות-סכמה מקבל ישות מהבעלים — הכרעת-דומיין בהצהרה, לא במנוע
+const termsWith = (aliases) => aliases && Object.keys(aliases).length ? ALL_TERMS.map((t) => (t.entity ? t : aliases[t.key] ? { ...t, entity: aliases[t.key] } : null)).filter(Boolean) : TERMS;
 const heWords = (s) => [...(s || '').matchAll(/[֐-׿][֐-׿״׳\-\/]*/g)].map((m) => m[0]);
 const nz = (w) => normSearch(w, NORM_SEARCH_T); // L65: 'תורם'+'ים' = 'תורםים' ≠ 'תורמים' — הריבוי חייב אות-רגילה; normSearch של המדף עושה בדיוק את זה
 const PREFIX = /^[הולבמשכ]/;
 // מורפולוגיה מינימלית (כלל-שפה, לא דומיין): ריבוי ־ים · ריבוי ־ה⇒־ות · ־ות — צורות-נגזרות מצורת-המונח (כמו match.stem)
 const variants = (fw) => new Set([fw, nz(fw + 'ים'), nz(fw.endsWith('ה') ? fw.slice(0, -1) + 'ות' : fw + 'ות')]); // הצורות-הנגזרות מנורמלות גם הן (L65: 'רכז'+'ים' מסתיים ב-ם סופית, המילה המנורמלת לא)
 const strip = (w) => PREFIX.test(w) ? w.slice(1) : w;
-export function resolve(text) {
-  const words = heWords(text).map(nz);
+// G15 · כלל-שפה (לא דומיין): במשפט-רשימה "X לפי Y" / "X עם Y" — הנושא הוא לפני מילת-היחס; מילים אחריה הן לוואי ומשקלן 0.6 ("מסירות לפי מתנדב" ⇒ Delivery, לא Volunteer)
+const PREPS = new Set(['לפי', 'עם', 'של', 'על', 'עבור', 'מול', 'אל', 'בתוך', 'ללא', 'בלי']);
+export function resolve(text, aliases = null) {
+  const TERMS = termsWith(aliases);
+  const rawWords = heWords(text); const words = rawWords.map(nz);
+  const firstPrep = rawWords.findIndex((w) => PREPS.has(w)); const isMod = (k) => firstPrep >= 0 && k > firstPrep;
   const votes = new Map();
   // ניקוד פר-צורה: הטוב-ביותר לכל מילת-הצורה, משוקלל בשלמות-הצורה (צורה דו-מילתית 'בן/בת משפחה' שרק חציה תאם ≠ 'משפחה' שלמה); לישות — המקסימום על צורותיה
   // צורה עם '/' בתוך מילה = חלופות ("בן/בת משפחה" ⇒ "בן משפחה" · "בת משפחה") — כלל-פורמט של TERM_DEFS, לא מילון (L68)
@@ -34,7 +41,7 @@ export function resolve(text) {
     let sum = 0, hit = 0;
     for (const fw of fws) {
       const vs = variants(fw); let best = 0;
-      for (const w of words) { let s = 0; if (w === fw) s = 3; else if (vs.has(w) || vs.has(strip(w))) s = 2; else if (fw.length >= 3 && w.includes(fw)) s = 1; if (s > best) best = s; }
+      words.forEach((w, k) => { let s = 0; if (w === fw) s = 3; else if (vs.has(w) || vs.has(strip(w))) s = 2; else if (fw.length >= 3 && w.includes(fw)) s = 1; if (isMod(k)) s *= 0.6; if (s > best) best = s; });
       if (best) { sum += best; hit++; }
     }
     // ספציפיות (L68): בשוויון-ציון, הצורה הארוכה-יותר שתאמה במלואה מנצחת ("בני משפחה" ⇒ Member, לא "משפחה" ⇒ Family)
@@ -43,8 +50,8 @@ export function resolve(text) {
   const ranked = [...votes.entries()].map(([e, v]) => [e, v.score, v.len]).sort((a, b) => b[1] - a[1] || b[2] - a[2] || TERMS.findIndex((t) => t.entity === a[0]) - TERMS.findIndex((t) => t.entity === b[0])).map(([e, sc]) => [e, sc]);
   return { text, words, entity: ranked.length ? ranked[0][0] : null, score: ranked.length ? ranked[0][1] : 0, ranked: ranked.slice(0, 4) };
 }
-export function fromSentence(text, skin = null) {
-  const r = resolve(text);
+export function fromSentence(text, skin = null, aliases = null) {
+  const r = resolve(text, aliases);
   if (!r.entity) return { ...r, module: null, out: null, reason: 'אין מונח-ישות במשפט — מקום-שמור (אין המצאה)' };
   const p = pickModule(r.entity);
   const g = retarget({ module: p.module, entity: r.entity, skin });

@@ -1,0 +1,3 @@
+// fixture L80 — regen שקופץ מעל מחוללי-הגרעין (הכללה, לא העתק)
+node('machtzev/generator/skin-golden.mjs');   // עור
+  node('machtzev/generator/app-from-sentences.mjs'); // אפליקציות — בלי core-from-shape/core-dart ביניהם

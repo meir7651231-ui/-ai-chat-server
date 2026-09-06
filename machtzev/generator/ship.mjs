@@ -34,9 +34,11 @@ function run(cmd, args, cwd = ROOT, { quiet = false, allowFail = false } = {}) {
 const node = (rel, args = [], o) => run('node', [path.join(ROOT, rel), ...args], ROOT, o);
 
 // ── 1 · regen (המחוללים, בסדר) ──
-log('regen · ds-forge (מלא) ⇒ skin-golden ⇒ app-from-sentences');
+log('regen · ds-forge (מלא) ⇒ skin-golden ⇒ core-from-shape ⇒ core-dart ⇒ app-from-sentences');
 node('machtzev/ds-forge.mjs');
 node('machtzev/generator/skin-golden.mjs');
+node('machtzev/generator/core-from-shape.mjs');   // הגרעין מהסכמה+מונחים (שער core) — L80: מונח חדש ⇒ הרישום נגזר מחדש כאן, לא ביד
+node('machtzev/generator/core-dart.mjs');          // gen_core_<entity>.dart ≡ הרישום (שער coredart)
 node('machtzev/generator/app-from-sentences.mjs');
 
 // ── 2 · מראה ל-buildsmart (forge: ניקוי+העתקה · gen_*: יתומים מוסרים · ds/: קבצים קיימים בלבד) ──
