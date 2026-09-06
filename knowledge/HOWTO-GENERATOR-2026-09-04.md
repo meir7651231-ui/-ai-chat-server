@@ -52,20 +52,20 @@ SESSION_URL=<קישור-סשן> node machtzev/generator/ship.mjs --msg "גל G�
 ```
 כל מה שבסעיפים 2–4 נעשה ידנית — עכשיו פקודה אחת בסדר קבוע. `--full-verify` מוסיף gen-verify; `--no-build --no-deploy --no-commit --no-push` לשלבים.
 
-## 5 · מה יש היום (אמת, 4.9.2026)
+## 5 · מה יש היום (אמת, 6.9.2026)
 | מדד | ערך |
 |---|---|
-| אפליקציות מ-`app-golden*.json` | 3 (Kehila 5 · Tzedaka 7 · Studio 6) — 18 מודולים · 15 ישויות · 7 מודולי-זהב כמקור |
-| בדיקות מחוללות | 13/13 · 17/17 · 16/16 |
-| רנדר-בפועל (gen-verify) | 52/90 פלטי-מחולל · 211 טאפים · 0 חריגות (ה-37 שלא רונדרו = פלטי-מנוע-ישן, לא STRICT) |
+| אפליקציות מ-`app-golden*.json` | 3 (Audit 0 · Bind1 0 · Bind2 0 · Bind3 0 · Bind4 0 · Bind5 0 · Bind6 0 · Ent1 0 · Ent2 0 · Ent3 0 · Ent4 0 · Ent5 0 · Ent6 0 · Flags 0 · Hub 0 · Kehila 6 · Main 0 · Over1 0 · Over2 0 · Over3 0 · Rec1 0 · Rec2 0 · Rec3 0 · Rec4 0 · Rec5 0 · Rec6 0 · Scr7 0 · Settings 0 · Studio 6 · Tzedaka 7) — 19 מודולים · 16 ישויות · 9 מודולי-זהב כמקור · **כולן בעור-forge מוצהר** (`skin` בספק) |
+| בדיקות מחוללות + forge/seams | 156/156 (17 קבצי `genesis_*`, מורצות ב-`ship`) |
+| רנדר-בפועל (gen-verify) | 63/100 פלטי-מחולל · 39 אטומי-תצוגה · 0 חריגות |
 | רתמת-הזהב | 9/9 מודולים · 87/87 בדיקות |
-| אתרים | 3/3 נבנים ומאותחלים (ראיות ב-`machtzev/audit/goals/gen_app_*_web.png`) |
+| אתרים | 4 אתרי-דמו ב-gh-pages (`/schoolos/ /studio/ /kehila/ /tzedaka/`) ≡ הבנייה המקומית · ראיית-תלמידים `machtzev/audit/goals/gen_app_studentsforge_web.png` |
 
 ## 6 · גבולות (כנות)
 - **הבחירה `ישות ⇐ מודול-זהב` מבנית** (שמות-שדה+טיפוסים): Teacher ⇐ students, ShopProduct ⇐ rooms — עובד, מוצהר בכותרת; המשמעות = הצבה, לא טענת-אמת.
 - **הזרע = זרע-ההצבה של הזהב** (לא נתוני-הארגון). דאטה אמיתית נכנסת דרך תפרי-ההזרקה (`db` — כיום רק במודולים-מבוססי-תלמידים) — הרחבה = חלון-בעלים.
 - **תוויות** במונחי-המקור כשאין מונח-יעד ב-TERM_DEFS (למשל רבים חסר).
 - מודולים מ-fees/dashboard: אין מדד בצורת-where ⇒ hero=count, בלי קפיצה/סינון.
-- הכרעות-בעלים פתוחות: policy-config · student⇒Member · פערי-זרע/סכמה · מונחי-רבים · מונחים ל-4 ישויות-הגרעין.
+- הכרעות-בעלים פתוחות: policy-config · מגמת-KPI (היסטוריה) · פערי-זרע/סכמה · מונחי-רבים. (~~student⇒Member~~ ו~~4 ישויות-הגרעין~~ נסגרו בהצהרה — G15.)
 
-הכול מתועד: `knowledge/PLAN-GENERATOR-MAX-2026-09-04.md` §7 (מצב-חי) · `knowledge/CLOSED-GENMAX-G*.md` (דוח פר-שלב) · `machtzev/LEARNINGS.md` L51–L74.
+הכול מתועד: `knowledge/PLAN-GENERATOR-MAX-2026-09-04.md` §7 (מצב-חי) · `knowledge/CLOSED-GENMAX-G*.md` (דוח פר-שלב) · `machtzev/LEARNINGS.md` L51–L82.

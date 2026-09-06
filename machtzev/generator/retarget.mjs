@@ -177,7 +177,12 @@ export function skinPass(code, skin) {
     const sk = skin.chip; let out = '', i = 0;
     const helpers = chipHelpers(code);
     // G13e · helpers-עטיפה: `Widget NAME(List<Widget> kids) => Wrap(` ⇒ NAME([...]) נסרק כמו Wrap
-    const wrapHelpers = {}; for (const mm of code.matchAll(/Widget\s+(\w+)\(List<Widget>\s+\w+\)\s*=>\s*Wrap\(/g)) wrapHelpers[mm[1]] = true;
+    // G15b · גם `_wrap(List<Widget> kids, {double top = 6}) => Padding(…, child: Wrap(…children: kids))` — הגוף (עד ה-; ברמה-0) חייב להכיל Wrap( עם children: <הפרמטר>
+    const wrapHelpers = {}; for (const mm of code.matchAll(/Widget\s+(\w+)\(List<Widget>\s+(\w+)(?:,\s*\{[^}]*\})?\)\s*=>/g)) {
+      let k = mm.index + mm[0].length, d = 0; for (; k < code.length; k++) { const ch = code[k]; if ('([{'.includes(ch)) d++; else if (')]}'.includes(ch)) d--; else if (ch === ';' && d === 0) break; }
+      const body = code.slice(mm.index + mm[0].length, k);
+      if (/\bWrap\(/.test(body) && new RegExp(`children:\\s*${mm[2]}\\b`).test(body)) wrapHelpers[mm[1]] = true;
+    }
     const wrapRe = new RegExp(`\\b(Wrap|Row${Object.keys(wrapHelpers).map((k) => '|' + k).join('')})\\(`, 'g');
     for (;;) {
       const m = wrapRe; m.lastIndex = i; const hit = m.exec(code); if (!hit) { out += code.slice(i); break; }
@@ -207,8 +212,9 @@ export function skinPass(code, skin) {
       if (!ok) { if (process.env.SKIN_DEBUG && list && /_fchip|FilterChipPill|_bchip|_vchip/.test(list)) console.error('chipRow-skip:', list.replace(/\s+/g, ' ').slice(0, 220)); out += code.slice(i, j + 1); i = j + 1; continue; }
       // רשומות (label, selected, onTap) — גם מ-for — ⇒ אטום-אוסף אחד; Builder כדי להחזיק את הרשימה כביטוי
       const chipsW = `Builder(builder: (_) { final chips = <(String, bool, VoidCallback)>[${recs.join(', ')}]; return ${sk.cls}(${sk.bare ? 'bare: true, ' : ''}items: [for (final ch in chips) [ch.$1]], selected: <int>{for (final (k, ch) in chips.indexed) if (ch.$2) k}, onSelect: (k) => chips[k].$3()); })`;
-      if (!others.length) out += code.slice(i, j0) + chipsW;
-      else if (isHelper) out += code.slice(i, j0) + `${hit[1]}([${chipsW}, ${others.join(', ')}])`;
+      const named = isHelper ? c.args.filter((a) => a.name).map((a) => `, ${a.name}: ${a.expr}`).join('') : '';   // G15b · `_wrap([...], top: 0)` — הארגומנטים-הנקובים של helper-העטיפה נשמרים
+      if (isHelper) out += code.slice(i, j0) + `${hit[1]}([${chipsW}${others.length ? ', ' + others.join(', ') : ''}]${named})`;   // helper-העטיפה נשאר (ריפוד/ריווח שלו = פריסה, לא צ׳יפ)
+      else if (!others.length) out += code.slice(i, j0) + chipsW;
       else out += code.slice(i, j0) + `${hit[1]}(${c.args.filter((a) => a.name !== 'children').map((a) => `${a.name}: ${a.expr}`).join(', ')}${c.args.length > 1 ? ', ' : ''}children: [${chipsW}, ${others.join(', ')}])`;
       i = c.end + 1;
       stats.chipRow = (stats.chipRow || 0) + 1; stats.chip = (stats.chip || 0) + recs.length; barrels.add(sk.barrel);

@@ -305,5 +305,12 @@ if (isMain) {
   }
   console.log(`✓ ${app.N}App ⇒ ${app.hubFile} · ${app.mods.length} מודולים: ${app.mods.map((m) => `${m.title}(${m.entity}⇐${m.module.replace('schoolos_', '').replace('.dart', '')})`).join(' · ')} · בדיקה: test/${app.testFile}${app.skipped.length ? ' · ⚪ ' + app.skipped.map((s) => `"${s.text}": ${s.reason}`).join(' · ') : ''}`);
   }
+  // G15b · יתומי-עור: מודול-מעורר (_sk<tag>) שאף gen_app_*.dart לא מייבא = שריד של עור-קודם ⇒ נמחק (רק בכתיבה על כל הספקים; המראה ב-ship מסירה יתומים ב-buildsmart)
+  if (!arg('--spec') && !arg('--name') && !process.argv.includes('--gate')) {
+    const apps = fs.readdirSync(DIR).filter((f) => /^gen_app_\w+\.dart$/.test(f)).map((f) => fs.readFileSync(path.join(DIR, f), 'utf8')).join('\n');
+    const orphans = fs.readdirSync(DIR).filter((f) => /^gen_retarget_\w+_sk[0-9a-f]+\.dart$/.test(f) && !apps.includes(`'${f}'`));
+    for (const f of orphans) fs.unlinkSync(path.join(DIR, f));
+    if (orphans.length) console.log(`🧹 appgen: ${orphans.length} מודולי-עור יתומים הוסרו (${[...new Set(orphans.map((f) => f.replace(/.*_sk/, 'sk').replace('.dart', '')))].join(' · ')})`);
+  }
   if (process.argv.includes('--gate')) { console.log(`✓ appgen: ${results.map((a) => `${a.N}App ${a.mods.length} מודולים${a.tested != null ? ` · flutter test ${a.tested}/${a.tested}` : ''}${a.web ? ` · אתר ${a.web.out} (${(a.web.bytes / 1048576).toFixed(1)} MB)` : ''}`).join(' · ')} — רכזות+מודולים ≡ מחולל-טרי${process.argv.includes('--test') ? ' · ניווט+חיפוש-רכזת עוברים בפועל' : ''} (${results.reduce((n, a) => n + a.skipped.length, 0)} משפטים בלי-ישות מדווחים)`); process.exit(0); }
 }

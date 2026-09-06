@@ -58,3 +58,41 @@ Column-stretch בשורש שינה מידות (14 בדיקות-Studio) ⇒ `_wit
 
 ## הבא (G13d)
 צ׳יפים: גוף-בלוק/האצלה · DsScaffold ×4 (parser) (פתירת `_fchip` ⇒ items) · טבלה-forge עם תבנית-עמודות · series ⇒ path פרמטרי לגרפים · וריאנט-שדה-חשוף ב-DS ⇒ `control` · כותרת-מסך (`DsScaffold`) ⇒ `ForgePageHeader(child)` · צבעי-מצב (danger/ok) לאטומי-forge עם states · הכרעות-בעלים פתוחות (G12f).
+
+---
+
+## G13d · טבלה · גרפים · וריאנטי-צבע · צ׳יפים-בלוק (5.9.2026)
+**מנוע (`ds-forge.mjs`):** `primaryGroup` — הקבוצה-הראשית נבחרת על **כל** עץ-האטום (הריצה הגדולה ביותר; שוויון ⇒ מיכלים לפני עלים), לא בצומת-הראשון שנפגש (L76) · **תאים** `items[i][j]` (קבוצה בתוך תבנית-הפריט; `j0` = חריצי-כותרת שנצרכו לפני התא-הראשון; `onCell(i,j)`/`onCellLong(i,j)`) · **columns** (ריצה עלית מחוץ לקבוצה-הראשית) · **variants**/`variantIds` (טוקן-קלאס עודף יחיד, למשל `tone-*`) · **rect-series ⇒ values** (≥3 `<rect>` באותו רוחב+בסיס ⇒ `_v(k, frac)`) · `_hide` למיכל-חריץ-יחיד ריק · וריאנט-Pure `DataGrid` (`.theadf/.trowf/.tcf` אחידים).
+**עור (`skinPass`):** table×11 (`DsTable`⇒`ForgeDataGrid`: columns+items) · bars×20 (`NeonBars`/`DsBars`⇒`ForgeBarChart`, ערכים מנורמלים למקסימום) · statusChip+`toneMap`×139 (טון-DS 0..3 ⇒ `tone-info/ok/err/warn`) · helper-צ׳יפ בגוף-בלוק/האצלה · הסרת `const` לפני קריאה-מוחלפת + אינדקס-קבוע לטון-ליטרלי (124 `invalid_constant` נעלמו).
+**מדדים:** analyze 0 · 61/61 · gen-verify 63/100 רונדרו · 39 אטומים · 189 טאפים · 0 חריגות.
+
+## G13e · הזנב (5.9.2026)
+שורות-צ׳יפים 15/15: `for`-יחיד · שרשרת `for/if` · spread-`if` · helper-עטיפה `_wrap([...])` · ילדים-לא-צ׳יפים (כפתור-ניקוי) נשארים לצד אטום-הצ׳יפים. `DsChip`⇒statusChip (טון⇒וריאנט) · `DsPrimaryButton`⇒button. **נשאר DS אחרי G13e:** `DsCalendar`·`DsBoard` בלבד (לא היה אטום-דאטה ב-Pure ⇒ G14).
+
+## G13f · ship — "הכל מנוע" (5.9.2026, L77)
+`machtzev/generator/ship.mjs`: regen (ds-forge⇒skin-golden⇒core⇒app-from-sentences) ⇒ מראה ל-buildsmart (forge: ניקוי+העתקה · gen_*: יתומים מוסרים) ⇒ `flutter analyze` 0 ⇒ `flutter test test/genesis_*` ⇒ שערים (retarget·skingolden·appgen) ⇒ אינדקס+אמת ⇒ build (ראיית-תלמידים + 4 אתרי-דמו) ⇒ site-shot ⇒ gh-pages (worktree) ⇒ commit buildsmart (נתיבים-מוגדרים) ⇒ pins + commit genesis עם `Allow:` אוטומטי ⇒ push buildsmart ⇒ push genesis (pre-push: המשטרה המלאה). דגלים: `--msg` · `--lesson` · `--no-build/--no-deploy/--no-commit/--no-push` · `--full-verify`. סחף-מראה בלתי-אפשרי כי המראה והדחיפה באותו סדר-קבוע (L74: `cd` מפורש לשורש-האפליקציה — "0 errors" מזויף כשה-cwd שגוי).
+
+## G14 · אטומי-דאטה ב-Pure + שימור-דמו (6.9.2026, L78)
+- **EventCalendar** (`temporal-family.html`: `.calhd/.navb/.mo/.dowf/.wd/.evgrid/.evd pad|has|today`) — columns (ימי-שבוע) · items (ימים) · variants (pad/has/today) · onAction (ניווט) + `DsCalendar.grid(records, dateOf, off)`/`DsMonthOffset` ב-DS (ההתנהגות נשארת ב-DS, הציור עובר ל-forge) ⇒ `DsCalendar` מוחלף עם שימור-התנהגות.
+- **ToneBanner** (`feedback-family.html`) · **ToneButton** (`action-family.html`, `.row{display:flex}` כדי שהריצה תזוהה) ⇒ צבעי-מצב לבאנר/כפתור דרך `toneMap`.
+- **`deploy.yml` של buildsmart** — שלב "Keep genesis demo folders": `git archive origin/gh-pages` של `/schoolos/ /schoolos-classic/ /studio/ /kehila/ /tzedaka/` אל `app/dist` לפני הדחיפה-הכופה ⇒ האתר-החי לא מושפע, הדמו לא נמחק.
+- **G14-ב · הקנבן** (אישור-בעלים "תחליף גם את הקנבן"): `KanbanBoard` ב-Pure (`spatial-family.html`: `.kb/.kcol/.kh/.kt/.kn/.kc/.kct`) — עמודות כפריטים · כרטיסים כתאים-מיכלים · `onCell`/`onCellLong` · `j0` אחרי חריצי-הכותרת ⇒ `DsBoard` מוחלף: הקשה=קידום · הקשה-ארוכה=החזרה דרך אותו `onMove`. **רשימת-ה-DS של בית-הספר ריקה** (נשארו רק שלד: `DsScaffold`, `DraggableScrollableSheet`, שדות-DS *בתוך* `control:` של אטומי-forge — זה התפר, לא שריד).
+- **מדדים:** 359 אטומים · analyze 0 · 153/153.
+
+## G15 · סגירת-הכרעות בהצהרה (6.9.2026, L79)
+- **4 מונחי-גרעין ב-TERM_DEFS של מאור** (`entity.delivery` מסירה · `entity.callEntry` שיחה · `entity.dialLogEntry` חיוג · `entity.ayinCase` תיק) + חשיפה באשף (`sections.ts`) + `termFallbacks` מחולל-מחדש; 2499/2499 · נדחף ל-`claude/hei-rxv1v1` של מאור. `entity-terms.data.json` 32 מונחים + 4 משפטי-זהב (מסירות לפי מתנדב⇒Delivery · שיחות עם תורמים⇒CallEntry · יומן חיוג⇒DialLogEntry · תיקי מעקב-טיפול פתוחים⇒AyinCase).
+- **תלמיד⇒Member** — לא במילון-מנוע (§20-ד) אלא **`aliases` מוצהרים בספק** (`app-golden.json`: `{"entity.student": "Member"}`). Kehila קיבלה "תלמידים לפי גיל" ⇒ Member.
+- **כלל-שפה:** הנושא של משפט-רשימה הוא **לפני** מילת-היחס (לפי/עם/של/על/עבור/מול/אל/בתוך/ללא/בלי — מונחים אחריה ×0.6) ⇒ "מסירות לפי מתנדב" ⇒ Delivery (לא Volunteer). 16/16 משפטי-זהב.
+- **שני תיקוני-מנוע שנחשפו בעת ה-ship:** (1) שער `core` חסם — המונחים שינו את `core-registry.json` ו-4 `gen_core_*` אך `ship.regen` לא הריץ `core-from-shape`+`core-dart` ⇒ נוספו (**L80**). (2) לולאת-מטא ב-pre-commit — כשל `learn` בלבד גרר fallback-`police` ⇒ רשומות-retry מזויפות ⇒ טיוטות-M4 ⇒ learn אדום שוב; ה-fallback הוגבל ל"אין שום failed-line" (**L81**).
+- **מדדים:** 156/156 · analyze 0 · המשטרה המלאה ב-pre-push · 4 אתרי-דמו ב-gh-pages ≡ הבנייה המקומית (sha).
+
+## G15b · "הכל forge" נבדק ברמת-הספק, לא ברמת-המודול (6.9.2026, L82)
+כתיבת הדוח חשפה ששלוש טענות "הכל forge" היו אמת רק לבית-הספר:
+1. **Kehila ו-Tzedaka לא הצהירו `skin`** ⇒ נבנו ב-DS ("תפקידי-עור: DS") ועלו כך לדמו. תוקן בהצהרה: אותו `skin` של `skin-golden.json` ב-`app-golden.json`/`app-golden-2.json` ⇒ 3/3 אפליקציות בעור-forge, מודולים משותפים לפי תג-עור (`_sk1fce5c` — אותו עור ⇒ אותו קובץ, חוצה-אפליקציות).
+2. **12 מודולי-עור יתומים** (`_skad8ea8`·`_skc9ebba` — עורות קודמים שאף `gen_app_*.dart` לא מייבא) שכבו ב-`new/dart-gen-bs` ובמראה ⇒ `app-from-sentences.mjs` מנקה יתומי-`_sk*` בכל כתיבה-מלאה (🧹 בפלט).
+3. **הדשבורד:** 10 צ׳יפי-DS חיים ב-3 שורות — helper-העטיפה שם הוא `_wrap(List<Widget> kids, {double top = 6}) => Padding(…, child: Wrap(…children: kids))` והזיהוי דרש `(List<Widget> x) => Wrap(` בדיוק ⇒ הזיהוי עבר לצורת-הגוף (מכיל `Wrap(` עם `children: <הפרמטר>`; פרמטרים-נקובים מותרים), וקריאת-ה-helper נשמרת עם הארגומנטים-הנקובים שלה (`_wrap([<אטום-צ׳יפים>], top: 0)` — הריפוד הוא פריסה, לא צ׳יפ). דשבורד: 3 שורות `ForgeFacetChip`, נשארה רק הגדרת-helper מתה.
+**שריד-DS אמיתי בקבצים-המעוררים (קריאות, לא הגדרות/הערות): 0.** מדדים: analyze 0 · 156/156 · שערים ✓ · 359 אטומים · 26 תפקידי-עור · 19 מודולים · 16 ישויות (Audit 0 · Bind1 0 · Bind2 0 · Bind3 0 · Bind4 0 · Bind5 0 · Bind6 0 · Ent1 0 · Ent2 0 · Ent3 0 · Ent4 0 · Ent5 0 · Ent6 0 · Flags 0 · Hub 0 · Kehila 6 · Main 0 · Over1 0 · Over2 0 · Over3 0 · Rec1 0 · Rec2 0 · Rec3 0 · Rec4 0 · Rec5 0 · Rec6 0 · Scr7 0 · Settings 0 · Studio 6 · Tzedaka 7).
+
+## מה נשאר — אצל הבעלים בלבד (G16)
+- **מגמת-KPI**: דורשת היסטוריה (נתון-דלתא) — עד אז `StatPlain` (§20-ג: אין חץ בלי נתון).
+- **policy-config של הגרעין (G6)**: שבת/כשרות/הרשאות — הכרעות-תוכן, שקע מוצהר ריק.
