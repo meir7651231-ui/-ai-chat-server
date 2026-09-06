@@ -137,17 +137,20 @@ export function resolveSkin(skin) {
 }
 const kpiFields = (sk, valueExpr, labelExpr) => `[${Array.from({ length: sk.slots }, (_, i) => (i === sk.valueIdx ? valueExpr : i === sk.labelIdx ? labelExpr : "''")).join(', ')}]`;
 const textFields = (sk, titleExpr, subExpr) => `[${Array.from({ length: sk.slots }, (_, i) => (i === sk.titleIdx ? titleExpr : i === sk.subIdx ? subExpr : "''")).join(', ')}]`;
-export function buildApp({ name, sentences, skin, aliases = null }) {   // G15 · aliases: כינויי-ישות מוצהרים לפי-אפליקציה (entity.student ⇒ Member)
+export function buildApp({ name, sentences = [], modules = null, goal = null, skin, aliases = null }) {   // G17c · הכרעה-25: `modules[{sentence, goal, ops}]` — אדם כותב מטרה+פעולות-יסוד; המנוע בוחר חלקיקים/אטומים
+  const items = modules ? modules.map((m) => (typeof m === 'string' ? { sentence: m } : m)) : sentences.map((t) => ({ sentence: t }));   // G15 · aliases: כינויי-ישות מוצהרים לפי-אפליקציה (entity.student ⇒ Member)
   const N = pascal(name), mods = [], skipped = [];
   // G17b · הכרעה-25: בורר-לפי-ייעוד מכל הקטלוג; `skin` בספק = דריסה בלבד
   const skins = resolveSkin(autoSkin(skin || {}).skin) || {}; const sk = skins.kpi || null, skNav = skins.navTile || null, skEmpty = skins.empty || null;
   const MOD_ROLES = ['stat', 'hero', 'button', 'statusChip', 'banner', 'emptyState', 'mediaRow', 'section', 'frame', 'segmented', 'chip', 'meter', 'glass', 'timeline', 'field', 'enumField', 'numberField', 'dateField', 'search', 'pageHeader', 'table', 'bars', 'calendar', 'board'];   // G13b · G13c · G13d · G14
   const modSkin = MOD_ROLES.some((r) => skins[r]) ? Object.fromEntries(MOD_ROLES.map((r) => [r, skins[r] || null])) : null;
-  for (const text of sentences) {
-    const r = fromSentence(text, modSkin, aliases);
+  for (const it of items) {
+    const text = it.sentence;
+    const r = fromSentence(text, modSkin, aliases, it.ops || null);
     if (!r.entity) { skipped.push({ text, reason: r.reason }); continue; }
     if (mods.some((m) => m.entity === r.entity)) { skipped.push({ text, reason: `ישות חוזרת (${r.entity})` }); continue; }
     const t = termsFor(r.entity);
+    if (it.goal || it.ops) r.code = r.code.replace(/\n(import )/, `\n// G17c · מטרה (צעד 1, אדם): ${it.goal || '—'} · פעולות-יסוד (צעד 2, אדם): ${(it.ops || []).join(' · ') || '—'} ⇒ חלקיקים (המנוע): ${(r.particles || []).join(' · ') || 'כולם'}\n$1`);
     mods.push({ text, entity: r.entity, module: r.module, file: path.basename(r.out), screen: `${r.entity.replace(/[^A-Za-z0-9]/g, '')}Screen`, title: t ? (t.plural || t.singular) : r.entity, code: r.code, pick: r.pick, facts: r.facts });
   }
   const hub = [`// 🏗️ ${N}App — אפליקציה ממשפטים (GENMAX·G9 · §22): ${mods.length} מודולים · מחולל דטרמיניסטי: app-from-sentences.mjs (sentence⇒entity⇒pickModule⇒retarget) — כל מודול חצוב מהזהב, לא נכתב`,
@@ -230,7 +233,7 @@ export function buildApp({ name, sentences, skin, aliases = null }) {   // G15 �
         `    expect(find.byType(${tileType}), findsNWidgets(${mods.length})); expect(find.byType(${emptyType}), findsNothing); expect(tester.takeException(), isNull);`,
         '  });'];
     })(),
-    ...mods.filter((m) => m.facts.seedSeam && m.facts.seedSeam.reserved.length).flatMap((m) => [ // G10b-ב · G5h מאומת-בפועל: עמודת-מקום-שמור מאירה רק כשהנתון מוזרם (הזרקה על רשומת-המסך — L66)
+    ...mods.filter((m) => m.facts.seedSeam && m.facts.seedSeam.reserved.length && /ForgeDataGrid\(|DsTable\(/.test(m.code)).flatMap((m) => [   // G17c · מודול שצומצם בלי טבלה (פעולות-היסוד לא כללו אותה) — אין עמודה שתאיר // G10b-ב · G5h מאומת-בפועל: עמודת-מקום-שמור מאירה רק כשהנתון מוזרם (הזרקה על רשומת-המסך — L66)
       `  testWidgets('${N}App · הזרקת-שורה ⇒ עמודת-מקום-שמור "${m.facts.seedSeam.reserved[0]}" של ${m.entity} מאירה (G5h)', (tester) async {`,
       `    tester.view.physicalSize = const Size(1400, 2400); tester.view.devicePixelRatio = 1.0; addTearDown(tester.view.reset);`,
       `    final key = ${m.facts.cls}.reservedColumns.first;`,

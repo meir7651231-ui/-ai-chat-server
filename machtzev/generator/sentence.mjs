@@ -13,6 +13,7 @@ import { normSearch } from '../../new/atoms/norm-search.mjs';          // L65 ·
 import { NORM_SEARCH_T } from '../../new/atoms/norm-search-strings.mjs'; // אטום-הדאטה התאום של norm-search (מקור ה-Dart)
 import { pickModule, retarget } from './retarget.mjs';
 import { createHash } from 'node:crypto';
+import { PARTICLE_IDS, PARTICLE_NAMES, TAG } from './render-module.mjs';   // G17c · אוצר-פעולות-היסוד = קטלוג-החלקיקים
 const skinTag = (skin) => createHash('sha1').update(JSON.stringify(Object.fromEntries(Object.entries(skin).filter(([, v]) => v).map(([k, v]) => [k, v.cls])))).digest('hex').slice(0, 6);   // תג-עור דטרמיניסטי מתפקידי-העור
 
 const ROOT = R.ROOT, GEN = path.join(ROOT, 'machtzev/generator'), DIR = path.join(ROOT, 'new/dart-gen-bs');
@@ -50,13 +51,29 @@ export function resolve(text, aliases = null) {
   const ranked = [...votes.entries()].map(([e, v]) => [e, v.score, v.len]).sort((a, b) => b[1] - a[1] || b[2] - a[2] || TERMS.findIndex((t) => t.entity === a[0]) - TERMS.findIndex((t) => t.entity === b[0])).map(([e, sc]) => [e, sc]);
   return { text, words, entity: ranked.length ? ranked[0][0] : null, score: ranked.length ? ranked[0][1] : 0, ranked: ranked.slice(0, 4) };
 }
-export function fromSentence(text, skin = null, aliases = null) {
+// G17c · פעולות-היסוד (צעד 2, נכתבות ע"י אדם) ⇒ מזהי-חלקיקים של מודול-הזהב שנבחר. אוצר-המילים = קטלוג-החלקיקים (PARTICLE_NAMES), לא מילון-מנוע.
+//   התאמה: מזהה מלא (stu.locate) · שם מלא (תלמידים·איתור) · הזנב אחרי '·' או '.' (איתור). לא-נמצא ⇒ שגיאה עם הזמינים (חיפוש-לפני-"אין").
+export function particlesForOps(module, ops) {
+  const k = module.replace(/\.dart$/, ''), tag = TAG[k] && TAG[k] !== 'inv' ? TAG[k] : null;
+  const avail = PARTICLE_IDS.filter((id) => (tag ? id.startsWith(tag + '.') : !id.includes('.')));
+  const norm = (x) => String(x).trim().replace(/\s+/g, ' ');
+  const out = [], missing = [];
+  for (const op0 of ops) {
+    const op = norm(op0);
+    const hit = avail.find((id) => id === op || PARTICLE_NAMES[id] === op || id.split('.').pop() === op || (PARTICLE_NAMES[id] || '').split('·').pop() === op);
+    if (hit) { if (!out.includes(hit)) out.push(hit); } else missing.push(op);
+  }
+  if (missing.length) throw new Error(`ops: [${missing.join(', ')}] אינן פעולות-יסוד של ${module} — הזמינות: ${avail.map((id) => `${PARTICLE_NAMES[id]} (${id})`).join(' · ')}`);
+  return out;
+}
+export function fromSentence(text, skin = null, aliases = null, ops = null) {
   const r = resolve(text, aliases);
   if (!r.entity) return { ...r, module: null, out: null, reason: 'אין מונח-ישות במשפט — מקום-שמור (אין המצאה)' };
   const p = pickModule(r.entity);
-  const g = retarget({ module: p.module, entity: r.entity, skin });
-  const out = path.join(DIR, `gen_retarget_${r.entity.toLowerCase()}_from_${{ 'schoolos.dart': 'inv', schoolos_students: 'stu', schoolos_attendance: 'att', schoolos_courses: 'crs', schoolos_teachers: 'tch', schoolos_rooms: 'rm', schoolos_fees: 'fee', schoolos_parents: 'par', schoolos_dashboard: 'dash' }[p.module.replace(/\.dart$/, '')] || 'x'}${skin ? '_sk' + skinTag(skin) : ''}.dart`);   // G12c: מודול-מעורר-עור מקבל קובץ נפרד — אותו מודול בלי-עור משמש אפליקציה אחרת (התנגשות-קבצים חוצת-אפליקציות נתפסה בבדיקות)
-  return { ...r, pick: p, module: p.module, out, code: g.code, counts: g.counts, facts: g.facts };
+  const particles = ops && ops.length ? particlesForOps(p.module, ops) : null;
+  const g = retarget({ module: p.module, entity: r.entity, skin, particles });
+  const out = path.join(DIR, `gen_retarget_${r.entity.toLowerCase()}_from_${{ 'schoolos.dart': 'inv', schoolos_students: 'stu', schoolos_attendance: 'att', schoolos_courses: 'crs', schoolos_teachers: 'tch', schoolos_rooms: 'rm', schoolos_fees: 'fee', schoolos_parents: 'par', schoolos_dashboard: 'dash' }[p.module.replace(/\.dart$/, '')] || 'x'}${particles ? '_p' + createHash('sha1').update(particles.join(',')).digest('hex').slice(0, 6) : ''}${skin ? '_sk' + skinTag(skin) : ''}.dart`);   // G12c: מודול-מעורר-עור מקבל קובץ נפרד — אותו מודול בלי-עור משמש אפליקציה אחרת (התנגשות-קבצים חוצת-אפליקציות נתפסה בבדיקות)
+  return { ...r, pick: p, module: p.module, out, code: g.code, counts: g.counts, facts: g.facts, particles };
 }
 // G8d · שדות-המשפט ⇒ פעולות-יסוד: "עם טלפון, אזור, תאריך הצטרפות" ⇒ interpret(text).schema (טיפוס מרמזי-השפה + rule מהמדף) ⇒ fieldOps (G2) ⇒ ops מבוקשים ⇒ זריעה ממוקדת (assembleByOps)
 const T2 = { date: 'IsoDate', num: 'number', bool: 'boolean', text: 'string', multiline: 'string' };

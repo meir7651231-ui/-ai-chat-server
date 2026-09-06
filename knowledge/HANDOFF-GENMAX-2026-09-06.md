@@ -19,7 +19,7 @@ analyze 0 · 156/156 (17 קבצי `genesis_*`) · gen-verify **74/111 · 52 אט
 3. `machtzev/generator/core-from-shape.mjs` ⇒ `core-registry.json` · `core-dart.mjs` ⇒ `gen_core_<entity>.dart`.
 4. `machtzev/generator/sentence.mjs` — משפט-בעברית ⇒ ישות (TERM_DEFS + `aliases` מהספק; נושא לפני מילת-יחס) ⇒ מודול-זהב מוסב (`retarget.mjs`) ⇒ `gen_retarget_<entity>_from_<tag>[_sk<tag>].dart`.
 5. `machtzev/generator/retarget.mjs` — הסבה + `skinPass` (26 תפקידי-עור, שורות-צ׳יפים דרך helpers, טבלה/גרפים/לוח/קנבן).
-6. `machtzev/generator/app-from-sentences.mjs` — `app-golden*.json` ({name, sentences[], skin, aliases}) ⇒ `gen_app_<name>.dart` + מודולים + בדיקה מחוללת; מנקה יתומי-`_sk*`.
+6. `machtzev/generator/app-from-sentences.mjs` — `app-golden*.json` ({name, goal, modules:[{sentence, goal, ops}] | sentences[], aliases, skin=דריסה}) ⇒ `gen_app_<name>.dart` + מודולים + בדיקה מחוללת; מנקה יתומי-`_sk*`. **G17c:** `ops` = שמות-חלקיקים (`PARTICLE_NAMES`) ⇒ הרכבה-מינימלית של החלקיקים האלה (`_p<hash>`).
 7. `machtzev/generator/gen-verify.mjs` — כל `gen_*.dart` נטען ב-flutter test מחולל; ראצ׳ט רק-עולה (`gen-verify-baseline.json`).
 8. **`machtzev/generator/ship.mjs`** — הפקודה האחת.
 
@@ -32,7 +32,7 @@ SESSION_URL=<url-של-הסשן> node machtzev/generator/ship.mjs --msg "גל …
 ## 3 · הוספת יכולת — הדרך
 - **אטום חסר / וריאנט חסר** ⇒ תא חדש ב-`machtzev/pure/<family>-family.html` ⇒ `ship` (ds-forge חוצב, auto-skin מדרג; אם האטום החדש הכי-טוב לתפקיד — הוא ייבחר לבד).
 - **מונח/ישות חדשים** ⇒ `TERM_DEFS` במאור (`src/types/features.ts` + `sections.ts` + `termFallbacks`) ⇒ `node machtzev/generator/entity-terms.mjs` ⇒ משפט-זהב ב-`sentence-golden.json`. הכרעת-דומיין = `aliases` בספק, לא קוד-מנוע (§20-ד, L79).
-- **אפליקציה חדשה** ⇒ `app-golden-<n>.json` (name+sentences; העור נבחר לבד — הכרעה-25) ⇒ `ship`.
+- **אפליקציה חדשה** ⇒ `app-golden-<n>.json`: `goal` + `modules[{sentence, goal, ops}]` (אדם כותב צעדים 1–2; `ops` מהקטלוג — שגיאה מונה את הזמינות) ⇒ `ship`. העור נבחר לבד (הכרעה-25).
 - **שער חדש** ⇒ שורה ב-`machtzev/gates.tsv` **וגם** שורה ב-`ship.regen` באותו commit (L80).
 
 ## 4 · מלכודות שנקנו ביוקר (קרא לפני שנוגעים)

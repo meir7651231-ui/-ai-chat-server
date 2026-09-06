@@ -29,6 +29,7 @@ const KIND_OPS = Object.fromEntries([...CE.matchAll(/if \(f\.kind === '([^']+)'\
 const PARTICLES = Object.fromEntries([...CE.matchAll(/\{ id: '([^']+)',\s*name: '(?:[^'\\]|\\.)*',\s*f: \{ kind: '([^']+)'/g)].map((m) => [m[1], m[2]]));
 const pascal = (s) => s.replace(/(^|_)([a-z0-9])/g, (_, __, c) => c.toUpperCase());
 export const PARTICLE_IDS = Object.keys(PARTICLES);
+export const PARTICLE_NAMES = Object.fromEntries([...CE.matchAll(/\{ id: '([^']+)',\s*name: '((?:[^'\\]|\\.)*)'/g)].map((m) => [m[1], m[2].replace(/\\'/g, "'")]));   // G17c · שם-עברי של כל חלקיק (אוצר-פעולות-היסוד שאדם כותב בספק)
 export const atomsOfParticle = (id) => (KIND_OPS[PARTICLES[id]] || []).map((op) => ATOM[op]).filter(Boolean).map((a) => (/^[a-z]/.test(a) && /_/.test(a) ? pascal(a) : a));
 
 const idsIn = (code) => new Set([...code.matchAll(/\b([A-Za-z_][A-Za-z0-9_]*)\b/g)].map((m) => m[1]));

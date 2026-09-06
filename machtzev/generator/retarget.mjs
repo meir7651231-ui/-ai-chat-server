@@ -346,13 +346,13 @@ export function skinPass(code, skin) {
   }
   return { code, stats };
 }
-export function retarget({ module, entity, skin = null }) {
+export function retarget({ module, entity, skin = null, particles = null }) {   // G17c · particles: פעולות-היסוד שכתב אדם (הכרעה-25 · צעד 2) ⇒ הרכבה-מינימלית של החלקיקים האלה בלבד
   const src = fs.readFileSync(path.join(DIR, module), 'utf8');
   const pk = primaryKeys(src, module);
   const { map, unusedFields } = mapKeys(pk.keys, entity, engineKeys(module));
   const tag = tagOf(module), k = module.replace(/\.dart$/, '');
   const ids = PARTICLE_IDS.filter((id) => (TAG[k] && TAG[k] !== 'inv' ? id.startsWith(tag + '.') : !id.includes('.')));
-  const res = assemble({ module, particles: ids, mode: 'compose', declared: true });
+  const res = particles ? assemble({ module, particles, mode: 'minimal' }) : assemble({ module, particles: ids, mode: 'compose', declared: true });   // G17c · צמצום לפי פעולות-היסוד = מצב-minimal (compose גורר הכל דרך build)
   let code = res.code;
   const ren = map.filter((x) => x.dst && x.dst !== x.src);
   const E = entity.replace(/[^A-Za-z0-9]/g, ''), eLower = E.toLowerCase();
