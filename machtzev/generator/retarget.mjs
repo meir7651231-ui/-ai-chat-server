@@ -12,6 +12,7 @@ import { fileURLToPath } from 'node:url';
 import * as R from '../root.mjs';
 import { assemble, PARTICLE_IDS, TAG } from './render-module.mjs';
 import { FIELDS } from '../../new/atoms/schema-fields.mjs';
+import { logicPass } from './auto-logic.mjs';   // G18
 
 const ROOT = R.ROOT, DIR = path.join(ROOT, 'new/dart-gen-bs');
 // G5g · מונחי-ישות (אטום-דאטה חצוב מ-TERM_DEFS — entity-terms.mjs): ישות ⇒ {יחיד, רבים, נרדפות}; ישות בלי מונח ⇒ null (תוויות נשארות של המקור, מדווח)
@@ -353,7 +354,7 @@ export function retarget({ module, entity, skin = null, particles = null }) {   
   const tag = tagOf(module), k = module.replace(/\.dart$/, '');
   const ids = PARTICLE_IDS.filter((id) => (TAG[k] && TAG[k] !== 'inv' ? id.startsWith(tag + '.') : !id.includes('.')));
   const res = particles ? assemble({ module, particles, mode: 'minimal' }) : assemble({ module, particles: ids, mode: 'compose', declared: true });   // G17c · צמצום לפי פעולות-היסוד = מצב-minimal (compose גורר הכל דרך build)
-  let code = res.code;
+  let code = logicPass(res.code).code;   // G18 · מנוע-לוגיקה-לפי-ייעוד: החלפות מוכחות בלבד (auto-logic.json)
   const ren = map.filter((x) => x.dst && x.dst !== x.src);
   const E = entity.replace(/[^A-Za-z0-9]/g, ''), eLower = E.toLowerCase();
   const stemSing = stemOf(module).replace(/s$/, '').toLowerCase();

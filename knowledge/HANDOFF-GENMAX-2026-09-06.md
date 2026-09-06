@@ -15,7 +15,7 @@ analyze 0 · 156/156 (17 קבצי `genesis_*`) · gen-verify **74/111 · 52 אט
 
 ## 2 · המנועים — בסדר הריצה של `ship`
 1. `machtzev/ds-forge.mjs` — Pure HTML (`machtzev/pure/<family>-family.html`) ⇒ `new/dart-forge-bs/` + `forge-manifest.json`. 8 תפרים נגזרי-DOM: fields · items[+תאים·columns·variants] · values · control · onAction · child · bare. **אסור לערוך `dart-forge-bs` ביד** — תיקון = ב-Pure/במנוע ⇒ regen.
-2. `machtzev/generator/auto-skin.mjs` ⇒ `auto-skin.json` — **בורר-אטום-לפי-ייעוד** (הכרעה-25): לכל תפקיד-עור המנוע מדרג את כל אטומי-forge לפי אותות-צורה; `skin` בספק = דריסה בלבד. אחריו `skin-golden.mjs` — 9 מודולי-SchoolOS בעור-forge (`gen_schoolos_*_forge.dart`). הזהב (`schoolos*.dart`) לא נגע (חוק-7).
+2. `machtzev/generator/auto-skin.mjs` ⇒ `auto-skin.json` — **בורר-אטום-לפי-ייעוד** (הכרעה-25): לכל תפקיד-עור המנוע מדרג את כל אטומי-forge לפי אותות-צורה; `skin` בספק = דריסה בלבד. אחריו `auto-logic.mjs` ⇒ `auto-logic.json` — **בורר-מנוע-לוגיקה-לפי-ייעוד** (G18): 30 פעולות × 848 מנועים; החלפה מיושמת רק אחרי הוכחה בבדיקות-הזהב (`--prove`). אחריו `skin-golden.mjs` — 9 מודולי-SchoolOS בעור-forge (`gen_schoolos_*_forge.dart`). הזהב (`schoolos*.dart`) לא נגע (חוק-7).
 3. `machtzev/generator/core-from-shape.mjs` ⇒ `core-registry.json` · `core-dart.mjs` ⇒ `gen_core_<entity>.dart`.
 4. `machtzev/generator/sentence.mjs` — משפט-בעברית ⇒ ישות (TERM_DEFS + `aliases` מהספק; נושא לפני מילת-יחס) ⇒ מודול-זהב מוסב (`retarget.mjs`) ⇒ `gen_retarget_<entity>_from_<tag>[_sk<tag>].dart`.
 5. `machtzev/generator/retarget.mjs` — הסבה + `skinPass` (26 תפקידי-עור, שורות-צ׳יפים דרך helpers, טבלה/גרפים/לוח/קנבן).

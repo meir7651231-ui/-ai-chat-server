@@ -1,0 +1,398 @@
+{
+ "summary": {
+  "ops": 30,
+  "confirmed": 26,
+  "swapsProposed": 0,
+  "swapsProven": 0
+ },
+ "ops": {
+  "match": {
+   "declared": "smartFilter",
+   "declaredFile": "dart-maor/smart-filter.dart",
+   "pick": "smartFilter",
+   "candidates": 34,
+   "declaredRank": 0,
+   "top3": [
+    "smartFilter:32.14≡",
+    "supScore:10.27",
+    "runAudit:7.49"
+   ],
+   "swap": null
+  },
+  "predicate": {
+   "declared": "finderMatches",
+   "declaredFile": "dart-maor/finder-matches.dart",
+   "pick": "finderMatches",
+   "candidates": 12,
+   "declaredRank": 0,
+   "top3": [
+    "finderMatches:24.35≡",
+    "startCampaign:6.75",
+    "sup12m:3.11"
+   ],
+   "swap": null
+  },
+  "serialize": {
+   "declared": "toCsv",
+   "declaredFile": "dart-maor/to-csv.dart",
+   "pick": "toCsv",
+   "candidates": 233,
+   "declaredRank": 0,
+   "top3": [
+    "toCsv:13.94≡",
+    "cockpitCsvRows:13.94",
+    "minToHM:10.71"
+   ],
+   "swap": null
+  },
+  "role": {
+   "declared": "roleOf",
+   "declaredFile": "dart-maor/role-of.dart",
+   "pick": "roleOf",
+   "candidates": 87,
+   "declaredRank": 0,
+   "top3": [
+    "roleOf:25.75≡",
+    "matchAssistantCategory:16.42",
+    "teacherIdOf:10.5"
+   ],
+   "swap": null
+  },
+  "grant": {
+   "declared": "canGrantedAction",
+   "declaredFile": "dart-maor/can-granted-action.dart",
+   "pick": "canGrantedAction",
+   "candidates": 5,
+   "declaredRank": 0,
+   "top3": [
+    "canGrantedAction:21.7≡",
+    "taskStatsFor:6.82",
+    "courseFitsMember:1"
+   ],
+   "swap": null
+  },
+  "expiry": {
+   "declared": "expiringIntakes",
+   "declaredFile": "dart-maor/expiring-intakes.dart",
+   "pick": "expiringIntakes",
+   "candidates": 5,
+   "declaredRank": 0,
+   "top3": [
+    "expiringIntakes:16.29≡",
+    "spotlightBox:10.71",
+    "stepScale:0"
+   ],
+   "swap": null
+  },
+  "capital": {
+   "declared": "warehouseValue",
+   "declaredFile": "dart-maor/warehouse-value.dart",
+   "pick": "warehouseValue",
+   "candidates": 29,
+   "declaredRank": 0,
+   "top3": [
+    "warehouseValue:30.88≡",
+    "setAllowedPurposes:3.01",
+    "paidOf:2.83"
+   ],
+   "swap": null
+  },
+  "queue": {
+   "declared": "cockpitQueue",
+   "declaredFile": "dart-maor/cockpit-queue.dart",
+   "pick": "cockpitQueue",
+   "candidates": 3,
+   "declaredRank": 0,
+   "top3": [
+    "cockpitQueue:68.09≡",
+    "smartFilter:4.34",
+    "waPaymentText:4.34"
+   ],
+   "swap": null
+  },
+  "progress": {
+   "declared": "cockpitProgress",
+   "declaredFile": "dart-maor/cockpit-progress.dart",
+   "pick": "cockpitProgress",
+   "candidates": 24,
+   "declaredRank": 0,
+   "top3": [
+    "cockpitProgress:55.69≡",
+    "ruleSkeleton:8.69",
+    "supportPreview:4.44"
+   ],
+   "swap": null
+  },
+  "sheet": {
+   "declared": "sheetSummary",
+   "declaredFile": "dart-maor/sheet-summary.dart",
+   "pick": "sheetSummary",
+   "candidates": 233,
+   "declaredRank": 0,
+   "top3": [
+    "sheetSummary:21≡",
+    "sheetRoster:21",
+    "presentsInMonth:11.4"
+   ],
+   "swap": null
+  },
+  "makeup": {
+   "declared": "pendingMakeups",
+   "declaredFile": "dart-maor/pending-makeups.dart",
+   "pick": "pendingMakeups",
+   "candidates": 20,
+   "declaredRank": 1,
+   "top3": [
+    "sheetSummary:11.4",
+    "pendingMakeups:4.5≡",
+    "supportUnread:2.61"
+   ],
+   "swap": null
+  },
+  "balance": {
+   "declared": "payBal",
+   "declaredFile": "dart-maor/pay-bal.dart",
+   "pick": "payBal",
+   "candidates": 21,
+   "declaredRank": 0,
+   "top3": [
+    "payBal:34.69≡",
+    "sanitizeSupportText:3.11",
+    "waitlistFor:3.11"
+   ],
+   "swap": null
+  },
+  "paidstatus": {
+   "declared": "enrollmentPaidStatus",
+   "declaredFile": "dart-maor/enrollment-paid-status.dart",
+   "pick": "enrollmentPaidStatus",
+   "candidates": 11,
+   "declaredRank": 0,
+   "top3": [
+    "enrollmentPaidStatus:4≡",
+    "sup12m:3.11",
+    "ruleTypo:0"
+   ],
+   "swap": null
+  },
+  "hok": {
+   "declared": "hokDue",
+   "declaredFile": "dart-maor/hok-due.dart",
+   "pick": "hokDue",
+   "candidates": 5,
+   "declaredRank": 0,
+   "top3": [
+    "hokDue:23.27≡",
+    "supAvgDon:8.25",
+    "spotlightBox:0"
+   ],
+   "swap": null
+  },
+  "clash": {
+   "declared": "scheduleClashText",
+   "declaredFile": "dart-maor/schedule-clash-text.dart",
+   "pick": "scheduleClashText",
+   "candidates": 6,
+   "declaredRank": 0,
+   "top3": [
+    "scheduleClashText:56.21≡",
+    "waPaymentText:16.31",
+    "distributionListLines:1"
+   ],
+   "swap": null
+  },
+  "slots": {
+   "declared": "buildSlots",
+   "declaredFile": "dart-maor/build-slots.dart",
+   "pick": "buildSlots",
+   "candidates": 1,
+   "declaredRank": 0,
+   "top3": [
+    "buildSlots:75.85≡"
+   ],
+   "swap": null
+  },
+  "block": {
+   "declared": "blockReason",
+   "declaredFile": "dart-maor/block-reason.dart",
+   "pick": "blockReason",
+   "candidates": 3,
+   "declaredRank": 0,
+   "top3": [
+    "blockReason:49.85≡",
+    "smartFilter:0",
+    "waPaymentText:0"
+   ],
+   "swap": null
+  },
+  "holiday": {
+   "declared": "holidayOf",
+   "declaredFile": "dart-maor/holiday-of.dart",
+   "pick": "holidayOf",
+   "candidates": 4,
+   "declaredRank": 0,
+   "top3": [
+    "holidayOf:27.35≡",
+    "staleBoxes:6.43",
+    "smartScore:0"
+   ],
+   "swap": null
+  },
+  "weekly": {
+   "declared": "weeklyRoomSessions",
+   "declaredFile": "dart-maor/weekly-room-sessions.dart",
+   "pick": "weeklyRoomSessions",
+   "candidates": 6,
+   "declaredRank": 0,
+   "top3": [
+    "weeklyRoomSessions:33.15≡",
+    "spotlightBox:3.75",
+    "lessonsInTerm:1"
+   ],
+   "swap": null
+  },
+  "sessions": {
+   "declared": "sessionsOf",
+   "declaredFile": "dart-maor/sessions-of.dart",
+   "pick": "sessionsOf",
+   "candidates": 209,
+   "declaredRank": 0,
+   "top3": [
+    "sessionsOf:34.71≡",
+    "defaultPrices:10.53",
+    "defaultCourseDates:9.1"
+   ],
+   "swap": null
+  },
+  "enrol": {
+   "declared": "enrollCount",
+   "declaredFile": "dart-maor/enroll-count.dart",
+   "pick": "enrollCount",
+   "candidates": 40,
+   "declaredRank": 0,
+   "top3": [
+    "enrollCount:11.21≡",
+    "waitlistFor:10.7",
+    "coursesOfTeacher:9.59"
+   ],
+   "swap": null
+  },
+  "wait": {
+   "declared": "waitlistFor",
+   "declaredFile": "dart-maor/waitlist-for.dart",
+   "pick": "waitlistFor",
+   "candidates": 233,
+   "declaredRank": 0,
+   "top3": [
+    "waitlistFor:16.46≡",
+    "coursesOfTeacher:16.2≡",
+    "isSizeToken:7.49"
+   ],
+   "swap": null
+  },
+  "byteacher": {
+   "declared": "coursesOfTeacher",
+   "declaredFile": "dart-maor/courses-of-teacher.dart",
+   "pick": "coursesOfTeacher",
+   "candidates": 233,
+   "declaredRank": 0,
+   "top3": [
+    "coursesOfTeacher:19.78≡",
+    "cockpitCsvRows:11.72",
+    "cockpitWorkListText:8.69"
+   ],
+   "swap": null
+  },
+  "whoami": {
+   "declared": "teacherIdOf",
+   "declaredFile": "dart-maor/teacher-id-of.dart",
+   "pick": "teacherIdOf",
+   "candidates": 233,
+   "declaredRank": 3,
+   "top3": [
+    "isAdminUser:27.43",
+    "coursesOfTeacher:19.31≡",
+    "cockpitCsvRows:15.76"
+   ],
+   "swap": null
+  },
+  "cert": {
+   "declared": "certExpiryStatus",
+   "declaredFile": "dart/cert_expiry_status.dart",
+   "pick": "certExpiryStatus",
+   "candidates": 20,
+   "declaredRank": 0,
+   "top3": [
+    "certExpiryStatus:16.19≡",
+    "coursesOfTeacher:0",
+    "nameIndex:0"
+   ],
+   "swap": null
+  },
+  "contact": {
+   "declared": "waLink",
+   "declaredFile": "dart-maor/wa-link.dart",
+   "pick": "waLink",
+   "candidates": 146,
+   "declaredRank": 2,
+   "top3": [
+    "importableContacts:16.8",
+    "setAuditContext:9.09≡",
+    "waLink:8.88≡"
+   ],
+   "swap": null
+  },
+  "recipients": {
+   "declared": "bulkWaRecipients",
+   "declaredFile": "dart-maor/bulk-wa-recipients.dart",
+   "pick": "bulkWaRecipients",
+   "candidates": 20,
+   "declaredRank": 0,
+   "top3": [
+    "bulkWaRecipients:16.44≡",
+    "sitePalette:5.85",
+    "coursesOfTeacher:5.11"
+   ],
+   "swap": null
+  },
+  "template": {
+   "declared": "renderTemplate",
+   "declaredFile": "dart-maor/render-template.dart",
+   "pick": "renderTemplate",
+   "candidates": 5,
+   "declaredRank": 0,
+   "top3": [
+    "renderTemplate:16.09≡",
+    "spotlightBox:0",
+    "stepScale:0"
+   ],
+   "swap": null
+  },
+  "parse": {
+   "declared": "parseCsv",
+   "declaredFile": "dart-maor/parse-csv.dart",
+   "pick": "parseCsv",
+   "candidates": 21,
+   "declaredRank": 1,
+   "top3": [
+    "supUsd:6.97",
+    "parseCsv:2≡",
+    "monthLabel:0"
+   ],
+   "swap": null
+  },
+  "trendengine": {
+   "declared": "trendFromScan",
+   "declaredFile": "dart-maor/intel-trend-from-scan.dart",
+   "pick": "trendFromScan",
+   "candidates": 24,
+   "declaredRank": 0,
+   "top3": [
+    "trendFromScan:94.21≡",
+    "sortSupportThreads:7.49",
+    "orgSlugFromUrl:3.11"
+   ],
+   "swap": null
+  }
+ }
+}

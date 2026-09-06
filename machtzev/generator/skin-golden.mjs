@@ -10,7 +10,8 @@ import * as R from '../root.mjs';
 import { assemble, PARTICLE_IDS, TAG } from './render-module.mjs';
 import { skinPass, MODULES } from './retarget.mjs';
 import { resolveSkin } from './app-from-sentences.mjs';
-import { autoSkin } from './auto-skin.mjs';   // G17b · הכרעה-25: העור נבחר מבנית מכל הקטלוג; skin-golden.json = דריסות בלבד
+import { autoSkin } from './auto-skin.mjs';
+import { logicPass } from './auto-logic.mjs';   // G18   // G17b · הכרעה-25: העור נבחר מבנית מכל הקטלוג; skin-golden.json = דריסות בלבד
 
 const ROOT = R.ROOT, GEN = path.join(ROOT, 'machtzev/generator'), DIR = path.join(ROOT, 'new/dart-gen-bs');
 const SPEC = path.join(GEN, 'skin-golden.json');
@@ -25,6 +26,7 @@ export function skinGolden(spec) {
     let code = assemble({ module, particles: ids, mode: 'compose', declared: true }).code;
     // ייבואי-אחים ⇒ העותקים-המעוררים (הרכזת מייבאת את 8 המודולים)
     for (const m of MODULES) if (m !== module) code = code.replace(new RegExp(`import '${m.replace('.', '\\.')}'`, 'g'), `import '${outName(m)}'`);
+    code = logicPass(code).code;   // G18 · מנוע-לוגיקה-לפי-ייעוד (החלפות מוכחות בלבד)
     const { code: skinned, stats } = skinPass(code, skins);
     const header = [`// 🎨 ${module} בעור-forge (GENMAX·G12d) — מחולל דטרמיניסטי: skin-golden.mjs · הזהב לא נגע (טעינה-לצד, חוק-7) · עור: ${Object.values(skins).map((x) => `${x.role}=${x.cls}`).join(' · ')}`,
       `//   החלפות: ${Object.entries(stats).map(([r, n]) => `${r}×${n}`).join(' · ') || '—'} · BareStat ב-Row נשאר DS (רצועת-4) · צבעי-מצב-DS לא מועברים · חיפוש/טבלאות/פילטרים = DS (אטומי-forge של קלט הם ציור, לא שדה)`];
