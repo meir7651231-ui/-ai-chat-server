@@ -58,6 +58,7 @@ export function resolveSkin(skin) {
     table: { need: 'table',  fam: ['spatial', 'list'], desc: 'DsTable(labels,rows) ⇒ טבלת-forge (columns + items[i][j])' },
     bars:  { need: 'values', fam: ['dataviz'],          desc: 'NeonBars/DsBars(labels,values) ⇒ גרף-forge (values ⇒ גובה-בארים)' },
     // G14 · לוח-שנה כאטום-דאטה
+    board:    { need: 'board',    fam: ['spatial'],             desc: 'DsBoard(stages,records,stageOf,titleOf,onMove) ⇒ קנבן-forge: עמודות כפריטים, כרטיסים כתאים; הקשה=קידום · הקשה-ארוכה=החזרה' },
     calendar: { need: 'calendar', fam: ['temporal', 'spatial'], desc: 'DsCalendar(records,dateOf) ⇒ לוח-forge: כותרת-חודש · 7 עמודות · ימים כפריטים עם וריאנטים (pad/has/today) · onAction ◀▶' },
   };
   const toneMap = (skin && skin.toneMap) || {};   // G13d · גשר-טונים מוצהר: תפקיד ⇒ [טוקן-וריאנט לכל טון-DS 0..3]
@@ -76,6 +77,10 @@ export function resolveSkin(skin) {
       if (!a.child) throw new Error(`skin.${role}: ${cls} בלי תפר-child`);
       const ti = textIdxOf(); if (R.need === 'child+text1' && !ti.length) throw new Error(`skin.${role}: ${cls} — נדרש חריץ-טקסט לכותרת`);
       out[role] = Object.assign(base, { titleIdx: ti[0] ?? 0, subIdx: ti[1] ?? -1 }); continue;
+    }
+    if (R.need === 'board') {
+      if (!a.items || !a.items.cells || a.items.slots < 2) throw new Error(`skin.${role}: ${cls} — נדרש קנבן: עמודות כפריטים (≥2 חריצי-כותרת) עם כרטיסים כתאים — ${JSON.stringify(a.items)}`);
+      out[role] = base; continue;
     }
     if (R.need === 'calendar') {
       const v = a.items && a.items.variants || [];
@@ -134,7 +139,7 @@ const textFields = (sk, titleExpr, subExpr) => `[${Array.from({ length: sk.slots
 export function buildApp({ name, sentences, skin }) {
   const N = pascal(name), mods = [], skipped = [];
   const skins = resolveSkin(skin) || {}; const sk = skins.kpi || null, skNav = skins.navTile || null, skEmpty = skins.empty || null;
-  const MOD_ROLES = ['stat', 'hero', 'button', 'statusChip', 'banner', 'emptyState', 'mediaRow', 'section', 'frame', 'segmented', 'chip', 'meter', 'glass', 'timeline', 'field', 'enumField', 'numberField', 'dateField', 'search', 'pageHeader', 'table', 'bars', 'calendar'];   // G13b · G13c · G13d · G14
+  const MOD_ROLES = ['stat', 'hero', 'button', 'statusChip', 'banner', 'emptyState', 'mediaRow', 'section', 'frame', 'segmented', 'chip', 'meter', 'glass', 'timeline', 'field', 'enumField', 'numberField', 'dateField', 'search', 'pageHeader', 'table', 'bars', 'calendar', 'board'];   // G13b · G13c · G13d · G14
   const modSkin = MOD_ROLES.some((r) => skins[r]) ? Object.fromEntries(MOD_ROLES.map((r) => [r, skins[r] || null])) : null;
   for (const text of sentences) {
     const r = fromSentence(text, modSkin);

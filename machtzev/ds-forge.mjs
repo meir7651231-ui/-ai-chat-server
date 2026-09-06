@@ -328,7 +328,7 @@ const slot = (shown) => {
   if (!CUR) return dq(shown);
   let e;
   if (CUR.colMode) e = `(j < columns!.length ? columns![j] : ${dq(shown)})`;                                  // G13d · תבנית-עמודה: כותרת j
-  else if (CUR.itemMode && CUR.itemMode.cellMode) e = `_it(items![i], j, ${dq(shown)})`;                     // G13d · תבנית-תא: תא j של הפריט i
+  else if (CUR.itemMode && CUR.itemMode.cellMode) e = `_it(items![i], j + ${CUR.itemMode.j0 || 0}, ${dq(shown)})`;   // G13d · תבנית-תא: תא j של הפריט i (אחרי חריצי-הכותרת של הפריט — G14)
   else if (CUR.itemMode) { const j = CUR.itemMode.j++; e = `_it(items![i], ${j}, ${dq(shown)})`; }         // תבנית-פריט: חריץ j של הפריט i
   else { const i = CUR.n++; CUR.slots.push(shown); e = `_f(${i}, ${dq(shown)})`; }
   CUR.lastSlot = e; CUR.slotCount = (CUR.slotCount || 0) + 1;
@@ -765,11 +765,11 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     else if (CUR.itemMode && !CUR.itemMode.cellMode && !CUR.itemMode.cells) grpKind = 'cells';
     else if (!CUR.itemMode && !CUR.colMode && !CUR.columns && CUR.primary && CUR.primary.parent !== node) grpKind = 'columns';   // קבוצת-עלים נוספת (כותרות-עמודות) — גם לפני שורות-הפריטים בסדר-המסמך
     if (grpKind) {
-      const runs = siblingRuns(els).filter(r => grpKind === 'items' ? r.members === (CUR.primary.run.members) || (r.start === CUR.primary.run.start && r.members.length === CUR.primary.run.members.length) : r.leafy);
+      const runs = siblingRuns(els).filter(r => grpKind === 'items' ? r.members === (CUR.primary.run.members) || (r.start === CUR.primary.run.start && r.members.length === CUR.primary.run.members.length) : grpKind === 'cells' ? true : r.leafy);   // G14 · תאים גם כמיכלים (כרטיסי-קנבן)
       const r = runs.sort((p, q) => q.members.length - p.members.length)[0];
       if (r) {
         const inlineAll = r.members.every(c => { const cs = styleOf(c, map, childAnc); return cs['display'] ? /^inline/.test(cs['display']) : INLINE_TAGS.has(c.tag); });
-        if (/flex/.test(st['display'] || '') || !inlineAll || grpKind !== 'items') grp = { kind: grpKind, set: new Set(r.members), members: r.members, variants: r.variants, variantOf: r.variantOf, active: r.variants.length === 1 ? (r.members.find(isActiveItem) || null) : null, inactive: r.members.find(c => !isActiveItem(c)) || r.members[0], selectable: r.members.some(isSelectable), tplA: null, tplI: null, tplV: {}, demo: [], idx: [] };
+        if (/flex/.test(st['display'] || '') || !inlineAll || grpKind !== 'items') grp = { kind: grpKind, j0: null, set: new Set(r.members), members: r.members, variants: r.variants, variantOf: r.variantOf, active: r.variants.length === 1 ? (r.members.find(isActiveItem) || null) : null, inactive: r.members.find(c => !isActiveItem(c)) || r.members[0], selectable: r.members.some(isSelectable), tplA: null, tplI: null, tplV: {}, demo: [], idx: [] };
       }
     }
   }
@@ -788,6 +788,7 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     const posAbsC = /^(?:absolute|fixed)$/.test((cst['position'] || '').trim());
     // ילד-בלוק במיכל-בלוק ⇒ מסירים שוליים-אנכיים (ייבנו-מחדש מקוריסים ברמת-ה-Column). לא ל-abs/inline/flex.
     const collapseChild = parentBlock && !cInline && !posAbsC;
+    if (grp && grp.kind === 'cells' && grp.j0 == null && grp.set.has(c)) grp.j0 = CUR.itemMode.j || 0;   // G14 · חריצי-הכותרת שנצרכו לפני התא-הראשון (לפני פליטת-הדמו שלו)
     let e = emit(c, map, childAnc, depth + 1, myColor, selfFlexGrid, nextInh, nextVars, elemIdx++, selfWrap, sibOv, collapseChild, pFlexRow);
     const eRaw = e;
     const isMember = !!(grp && grp.set.has(c));
@@ -798,7 +799,7 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
       if (v != null ? !(v in grp.tplV) : ((c === grp.inactive && !grp.tplI) || (c === grp.active && !grp.tplA))) {
         tplKey = v != null ? v : (c === grp.active ? 'A' : 'I');
         const saved = { itemMode: CUR.itemMode, colMode: CUR.colMode };
-        if (grp.kind === 'items') CUR.itemMode = { j: 0 }; else if (grp.kind === 'cells') CUR.itemMode = Object.assign({}, CUR.itemMode, { cellMode: true }); else CUR.colMode = true;
+        if (grp.kind === 'items') CUR.itemMode = { j: 0 }; else if (grp.kind === 'cells') CUR.itemMode = Object.assign({}, CUR.itemMode, { cellMode: true, j0: grp.j0 || 0 }); else CUR.colMode = true;   // j0 = חריצי-הכותרת לפני קבוצת-התאים (נקבע בזיהוי, לפני פליטת-הדמו של התאים)
         try { tplRaw = emit(c, map, childAnc, depth + 1, myColor, selfFlexGrid, nextInh, nextVars, elemIdx - 1, selfWrap, sibOv, collapseChild, pFlexRow); } catch { tplRaw = null; }
         if (grp.kind === 'items') grp.slots = Math.max(grp.slots || 0, CUR.itemMode.j);
         CUR.itemMode = saved.itemMode; CUR.colMode = saved.colMode;
@@ -852,7 +853,9 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
       grp.idx.push(flow.length); grp.demo.push(e);
       if (tplRaw != null && tplKey != null) {   // העטיפות (Expanded/Flexible/Align) הן קידומת+סיומת סביב הגולמי ⇒ מוחלות גם על התבנית; לא-נמצא ⇒ תבנית גולמית
         // ההקשה (onSelect) עוטפת את הגולמי *בתוך* העטיפות (Expanded/SizedBox-אינסופי) — GestureDetector מחוץ ל-Expanded = ParentData/רוחב-אינסופי
-        const tapped = grp.selectable && grp.kind === 'items' ? `GestureDetector(behavior: HitTestBehavior.opaque, onTap: onSelect == null ? null : () => onSelect!(i), child: ${tplRaw})` : tplRaw;
+        const tapped = grp.selectable && grp.kind === 'items' ? `GestureDetector(behavior: HitTestBehavior.opaque, onTap: onSelect == null ? null : () => onSelect!(i), child: ${tplRaw})`
+          : grp.kind === 'cells' ? `GestureDetector(behavior: HitTestBehavior.opaque, onTap: onCell == null ? null : () => onCell!(i, j), onLongPress: onCellLong == null ? null : () => onCellLong!(i, j), child: ${tplRaw})`   // G14 · הקשה על תא — בתוך Expanded/Flexible (ParentData)
+          : tplRaw;
         const at = e.indexOf(eRaw); const t = at >= 0 ? e.slice(0, at) + tapped + e.slice(at + eRaw.length) : tapped;
         if (tplKey === 'A') grp.tplA = t; else if (tplKey === 'I') grp.tplI = t; else grp.tplV[tplKey] = t;
       }
@@ -873,8 +876,8 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
       entry = `...(items == null ? <Widget>[${grp.demo.join(', ')}] : List<Widget>.generate(items!.length, (i) => ${flexIt(tpl)}))`;
       CUR.items = { slots: grp.slots || 0, demo: grp.demo.length, selectable: grp.selectable, active: !!grp.tplA, variants: grp.variantIds || null };
     } else if (grp.kind === 'cells') {
-      const tpl = grp.tplI || Object.values(grp.tplV)[0];
-      entry = `...List<Widget>.generate(items![i].length, (j) => ${flexIt(tpl)})`;
+      const tpl = grp.tplI || Object.values(grp.tplV)[0];   // ההקשה (onCell/onCellLong) כבר בתוך עטיפות-ה-flex של התבנית
+      entry = `...List<Widget>.generate(items![i].length - ${grp.j0 || 0}, (j) => ${flexIt(tpl)})`;   // j0 = חריצי-כותרת-הפריט
       CUR.itemMode.cells = grp.demo.length; CUR.cells = grp.demo.length;
     } else {
       const tpl = grp.tplI || Object.values(grp.tplV)[0];
@@ -1332,7 +1335,7 @@ function forgeFamily(fam) {
     if (!states && CUR && CUR.coreExpr && bodyExpr.split(CUR.coreExpr).length === 2) { useBare = true; coreBlock = `    final Widget core = ${CUR.coreExpr};\n`; bodyExpr = bodyExpr.replace(CUR.coreExpr, 'core'); }
     const allExpr = coreBlock + bodyExpr;   // הדגלים נבדקים על הגוף+הליבה (הליבה הוצאה למשתנה)
     const useHide = /\b_hide\(/.test(allExpr), useChild = /\bchild\b/.test(allExpr), useWith = /\b_withChild\(/.test(allExpr);
-    const useV = /\b_v\(/.test(allExpr), useAct = /\bonAction\b/.test(allExpr), useCtl = /\bcontrol\b/.test(allExpr), useItems = /\bitems!\[i\]|\bitems == null\b/.test(allExpr), useSel = /\bselected\?/.test(allExpr), useOnSel = /\bonSelect\b/.test(allExpr), useCols = /\bcolumns[!=]/.test(allExpr), useVar = /\bvariants[!=]/.test(allExpr);
+    const useV = /\b_v\(/.test(allExpr), useAct = /\bonAction\b/.test(allExpr), useCtl = /\bcontrol\b/.test(allExpr), useItems = /\bitems!\[i\]|\bitems == null\b/.test(allExpr), useSel = /\bselected\?/.test(allExpr), useOnSel = /\bonSelect\b/.test(allExpr), useCols = /\bcolumns[!=]/.test(allExpr), useVar = /\bvariants[!=]/.test(allExpr), useCell = /\bonCell\b/.test(allExpr);
     const it = CUR && CUR.items ? CUR.items : { slots: 0, demo: 0, selectable: false, active: false, variants: null };
     const seamsBlock = [
       '  /// G13a · תוכן-נוסף בתוך מסגרת-האטום, אחרי זרימת-העיצוב (מקטע/כרטיס ⇒ תוכן-המודול). null ⇒ האטום לבדו.\n  final Widget? child;',
@@ -1341,12 +1344,13 @@ function forgeFamily(fam) {
       useBare && '  /// G13b · bare=true ⇒ ליבת-הבקרה בלי מסגרת-הגלריה של Pure (.ctl/.body/.stage); child נכנס לליבה. false ⇒ ביט-זהה לגלריה.\n  final bool bare;',
       useCtl && '  /// G13a · שדה-חי (TextField וכו׳) במקום ציור-ה-input של הגלריה. null ⇒ הציור.\n  final Widget? control;',
       useAct && `  /// G13a · הקשה על כפתור/קישור k (סדר-הופעה, ${CUR.actions} פעולות).\n  final void Function(int)? onAction;\n  static const int actionSlots = ${CUR.actions};`,
+      useCell && '  /// G14 · תא (items[i][j], אחרי חריצי-הכותרת) — הקשה/הקשה-ארוכה על תא j של פריט i.\n  final void Function(int i, int j)? onCell;\n  final void Function(int i, int j)? onCellLong;',
       useCols && `  /// G13d · כותרות-עמודות: columns[j] ⇒ תבנית-הכותרת (${CUR.columns ? CUR.columns.demo : 0} בדמו). null ⇒ כותרות-העיצוב.\n  final List<String>? columns;`,
       useVar && `  /// G13d · וריאנט-פריט (טוקן-עיצוב: ${JSON.stringify(it.variants || [])}) — variants[i] = אינדקס-הוריאנט של פריט i; null ⇒ הראשון.\n  final List<int>? variants;\n  static const List<String> variantIds = <String>[${(it.variants || []).map(dq).join(', ')}];`,
       useItems && `  /// G13a · קבוצת-פריטים: items[i] = חריצי-הטקסט של פריט i (${it.slots} חריצים · ${it.demo} בדמו${it.selectable ? ' · לחיץ: onSelect(i)' : ''}${it.active ? ' · selected = הפריטים-הפעילים' : ''}${CUR.cells ? ` · תאים: items[i].length (${CUR.cells} בדמו)` : ''}). null ⇒ פריטי-העיצוב.\n  final List<List<String>>? items;${useSel ? '\n  final Set<int>? selected;' : ''}${useOnSel ? '\n  final void Function(int)? onSelect;' : ''}\n  static const int itemSlots = ${it.slots};\n  static const int itemDemo = ${it.demo};\n  String _it(List<String> r, int j, String d) => items == null ? d : (j < r.length ? r[j] : '');`,
       useV && `  /// G13a · מילויי-אחוז (0..1) לפי סדר-הופעה/פריט (${CUR.vn} בדמו). null ⇒ ערכי-העיצוב; חסר ⇒ 0 (אין המצאה).\n  final List<double>? values;\n  double _v(int i, double d) => values == null ? d : (i < values!.length ? values![i].clamp(0.0, 1.0) : 0.0);`,
     ].filter(Boolean).join('\n') + '\n';
-    const ctorExtra = ', this.child' + (useBare ? ', this.bare = false' : '') + (useCtl ? ', this.control' : '') + (useAct ? ', this.onAction' : '') + (useItems ? ', this.items' + (useSel ? ', this.selected' : '') + (useOnSel ? ', this.onSelect' : '') + (useVar ? ', this.variants' : '') : '') + (useCols ? ', this.columns' : '') + (useV ? ', this.values' : '');
+    const ctorExtra = ', this.child' + (useBare ? ', this.bare = false' : '') + (useCtl ? ', this.control' : '') + (useAct ? ', this.onAction' : '') + (useItems ? ', this.items' + (useSel ? ', this.selected' : '') + (useOnSel ? ', this.onSelect' : '') + (useVar ? ', this.variants' : '') : '') + (useCols ? ', this.columns' : '') + (useCell ? ', this.onCell, this.onCellLong' : '') + (useV ? ', this.values' : '');
     const fieldsBlock = slotsN ? `  /// תפר-דאטה (G12a): ${slotsN} חריצי-טקסט. null ⇒ תוכן-העיצוב (כמו ב-Pure); רשימה ⇒ fields[i] או '' — אין תוכן-דמו בייצור (§20-ג)
   final List<String>? fields;
   static const int fieldSlots = ${slotsN};

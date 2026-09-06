@@ -54,6 +54,7 @@
     "tone-warn"
    ]
   },
-  "calendar": "ForgeEventCalendar"
+  "calendar": "ForgeEventCalendar",
+  "board": "ForgeKanbanBoard"
  }
 }

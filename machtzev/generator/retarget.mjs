@@ -218,7 +218,7 @@ export function skinPass(code, skin) {
   for (const [ds, role] of [['BareStat', 'stat'], ['StatHero', 'hero'], ['KpiTile', 'kpi'], ['DsNavTile', 'navTile'], ['SoftButton', 'button'], ['StatusChip', 'statusChip'], ['AlertBanner', 'banner'], ['EmptyState', 'emptyState'], ['MediaRow', 'mediaRow'],
     ['DsSection', 'section'], ['SegmentedSwitch', 'segmented'], ['StatRow', 'meter'], ['GlassCard', 'glass'], ['GradientCard', 'frame'], ['TimelineItem', 'timeline'], ['FilterChipPill', 'chip'],
     ['DsField', 'field'], ['DsEnumField', 'enumField'], ['DsNumberField', 'numberField'], ['DsDateField', 'dateField'], ['DsSearch', 'search'], ['DsScaffold', 'pageHeader'],
-    ['DsTable', 'table'], ['NeonBars', 'bars'], ['DsBars', 'bars'], ['DsChip', 'statusChip'], ['DsPrimaryButton', 'button'], ['DsCalendar', 'calendar']]) {   // G14 · לוח-שנה   // G13e · זנב: DsChip(label,tone) כתג · DsPrimaryButton(label,onTap) ככפתור   // G13c · שדות-חיים בחריץ-control + כותרת-המסך · G13d · טבלה (columns+items[i][j]) · בארים (values)   // G13b · מיכלים/בוררים/מדדים דרך תפרי-G13a (child · items/selected/onSelect · values)
+    ['DsTable', 'table'], ['NeonBars', 'bars'], ['DsBars', 'bars'], ['DsChip', 'statusChip'], ['DsPrimaryButton', 'button'], ['DsCalendar', 'calendar'], ['DsBoard', 'board']]) {   // G14 · לוח-שנה · קנבן   // G13e · זנב: DsChip(label,tone) כתג · DsPrimaryButton(label,onTap) ככפתור   // G13c · שדות-חיים בחריץ-control + כותרת-המסך · G13d · טבלה (columns+items[i][j]) · בארים (values)   // G13b · מיכלים/בוררים/מדדים דרך תפרי-G13a (child · items/selected/onSelect · values)
     const sk = skin && skin[role]; if (!sk) continue;
     let out = '', i = 0;
     for (;;) {
@@ -275,6 +275,10 @@ export function skinPass(code, skin) {
         const f = sk.slots ? `fields: [${Array.from({ length: sk.slots }, (_, k) => (k === sk.titleIdx && byName.label ? byName.label : "''")).join(', ')}], ` : '';
         const st = sk.stateIds && sk.stateIds.includes('empty') && sk.stateIds.includes('filled') && byName.value ? `state: (${byName.value}).toString().trim().isEmpty ? ${sk.cls}State.empty : ${sk.cls}State.filled, ` : '';
         done(`${sk.cls}(${st}${f}control: ${inner})`); continue;
+      }
+      if (role === 'board') {   // DsBoard(stages, records, stageOf, titleOf, onMove) ⇒ קנבן-forge: עמודות=פריטים [שלב, מונה, ...כרטיסים]; הקשה על כרטיס=קידום (onMove col+1) · הקשה-ארוכה=החזרה (col-1) — אותו onMove
+        if (!byName.stages || !byName.records || !byName.stageOf || !byName.titleOf || !byName.onMove) { skip(); continue; }
+        done(`Builder(builder: (_) { final kS = ${byName.stages}; final kR = ${byName.records}; final kF = ${byName.stageOf}; final kT = ${byName.titleOf}; final kM = ${byName.onMove}; final kCols = [for (var c = 0; c < kS.length; c++) [for (final r in kR) if (kF(r).clamp(0, kS.length - 1) == c) r]]; return ${sk.cls}(${sk.bare ? 'bare: true, ' : ''}items: [for (var c = 0; c < kS.length; c++) [kS[c], '\${kCols[c].length}', for (final r in kCols[c]) kT(r).isEmpty ? (r['__id'] ?? '') : kT(r)]], onCell: (i, j) { if (i < kS.length - 1 && j < kCols[i].length) kM(kCols[i][j]['__id'] ?? '', i + 1); }, onCellLong: (i, j) { if (i > 0 && j < kCols[i].length) kM(kCols[i][j]['__id'] ?? '', i - 1); }); })`); continue;
       }
       if (role === 'calendar') {   // DsCalendar(records, dateOf, titleOf) ⇒ לוח-forge: DsCalendar.grid (אותו חישוב-חודש) ⇒ items/variants/columns; ◀▶ דרך DsMonthOffset
         if (!byName.records || !byName.dateOf) { skip(); continue; }
