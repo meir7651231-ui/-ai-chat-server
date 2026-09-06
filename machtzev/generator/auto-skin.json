@@ -1,0 +1,182 @@
+{
+ "skin": {
+  "kpi": "ForgeStatPlain",
+  "hero": "ForgeStatPlain",
+  "stat": "ForgeStatPlain",
+  "navTile": "ForgeGridHubCard",
+  "empty": "ForgeAnimatedEmpty",
+  "button": "ForgeToneButton",
+  "statusChip": "ForgeStatusChip",
+  "banner": "ForgeToneBanner",
+  "emptyState": "ForgeAnimatedEmpty",
+  "mediaRow": "ForgeContactTile",
+  "section": "ForgeTitledSection",
+  "frame": "ForgeStripPanelFrame",
+  "segmented": "ForgeSegPickerSelection",
+  "chip": "ForgeFacetChip",
+  "meter": "ForgeLinearProgressStatus",
+  "glass": "ForgeStripPanelFrame",
+  "timeline": "ForgeNotifRow",
+  "field": "ForgeDsField",
+  "enumField": "ForgeDsEnumField",
+  "numberField": "ForgeDsNumberField",
+  "dateField": "ForgeDsDateFieldInput",
+  "search": "ForgeDsSearch",
+  "pageHeader": "ForgeCenteredPageHeader",
+  "table": "ForgeDataGrid",
+  "bars": "ForgeBarChart",
+  "board": "ForgeKanbanBoard",
+  "calendar": "ForgeEventCalendar",
+  "toneMap": {
+   "button": [
+    "tone-info",
+    "tone-ok",
+    "tone-err",
+    "tone-warn"
+   ],
+   "statusChip": [
+    "tone-info",
+    "tone-ok",
+    "tone-err",
+    "tone-warn"
+   ],
+   "banner": [
+    "tone-info",
+    "tone-ok",
+    "tone-err",
+    "tone-warn"
+   ]
+  }
+ },
+ "top3": {
+  "kpi": [
+   "ForgeStatPlain:6.46",
+   "ForgeRadialGaugeStatus:-0.5800000000000001",
+   "ForgeSummaryStatStrip:-1.2000000000000002"
+  ],
+  "hero": [
+   "ForgeStatPlain:6.46",
+   "ForgeRadialGaugeStatus:-0.5800000000000001",
+   "ForgeSummaryStatStrip:-1.2000000000000002"
+  ],
+  "stat": [
+   "ForgeStatPlain:6.46",
+   "ForgeRadialGaugeStatus:-0.5800000000000001",
+   "ForgeSummaryStatStrip:-1.2000000000000002"
+  ],
+  "navTile": [
+   "ForgeGridHubCard:7",
+   "ForgeHubTile:7",
+   "ForgeContactTile:5"
+  ],
+  "empty": [
+   "ForgeAnimatedEmpty:2",
+   "ForgeSearchEmptyState:2",
+   "Forge10Atoms:-1"
+  ],
+  "button": [
+   "ForgeToneButton:12",
+   "ForgeActionButton:0",
+   "ForgeAddTradeButton:0"
+  ],
+  "statusChip": [
+   "ForgeStatusChip:13",
+   "ForgeStatusDotChip:11",
+   "ForgeTintedBadgeRow:11"
+  ],
+  "banner": [
+   "ForgeToneBanner:13",
+   "ForgeStatusChip:12",
+   "ForgeSeverityChip:11"
+  ],
+  "emptyState": [
+   "ForgeAnimatedEmpty:2",
+   "ForgeSearchEmptyState:2",
+   "Forge10Atoms:-1"
+  ],
+  "mediaRow": [
+   "ForgeContactTile:6",
+   "Forge6Atoms:3",
+   "ForgeAccordionSectionCard:3"
+  ],
+  "section": [
+   "ForgeTitledSection:11.333333333333332",
+   "ForgeProfileCardHeader:9",
+   "ForgeProfileHeaderRow:9"
+  ],
+  "frame": [
+   "ForgeStripPanelFrame:-8",
+   "ForgeBrandListRow:-8",
+   "ForgeDatePills:-8"
+  ],
+  "segmented": [
+   "ForgeSegPickerSelection:3",
+   "ForgeSegmentedPillToggleSelection:3",
+   "ForgeUnitSegmentToggleSelection:3"
+  ],
+  "chip": [
+   "ForgeFacetChip:7",
+   "ForgeMustChip:5",
+   "ForgeSegPickerSelection:5"
+  ],
+  "meter": [
+   "ForgeLinearProgressStatus:0",
+   "ForgeMeter:0",
+   "ForgeLinearProgress:-8"
+  ],
+  "glass": [
+   "ForgeStripPanelFrame:0",
+   "ForgeFlatCard:-2",
+   "ForgeGlassCard:-2"
+  ],
+  "timeline": [
+   "ForgeNotifRow:5",
+   "ForgeAccordionPanel:2",
+   "ForgeBubbleStates:0"
+  ],
+  "field": [
+   "ForgeDsField:0",
+   "ForgeField:0",
+   "ForgeFieldRow:0"
+  ],
+  "enumField": [
+   "ForgeDsEnumField:7",
+   "ForgePremiumField:2",
+   "ForgeDsField:0"
+  ],
+  "numberField": [
+   "ForgeDsNumberField:6",
+   "ForgeGlowSlider:6",
+   "ForgeDsField:0"
+  ],
+  "dateField": [
+   "ForgeDsDateFieldInput:7",
+   "ForgeDsEnumField:1",
+   "ForgePremiumField:1"
+  ],
+  "search": [
+   "ForgeDsSearch:8",
+   "ForgeInputBar:8",
+   "ForgeReplyComposer:8"
+  ],
+  "pageHeader": [
+   "ForgeCenteredPageHeader:4",
+   "ForgeDetailHeader:4",
+   "ForgeSmartProjectHero:4"
+  ],
+  "table": [
+   "ForgeDataGrid:8"
+  ],
+  "bars": [
+   "ForgeBarChart:4",
+   "ForgeStackedBarGroup:2",
+   "ForgeWaveformBars:2"
+  ],
+  "board": [
+   "ForgeKanbanBoard:6"
+  ],
+  "calendar": [
+   "ForgeEventCalendar:0"
+  ]
+ }
+}

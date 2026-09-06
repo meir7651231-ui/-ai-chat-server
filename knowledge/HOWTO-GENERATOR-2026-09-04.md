@@ -42,7 +42,8 @@ cd /home/user/-ai-chat-server && node machtzev/tools/site-shot.mjs <name> <Title
 ```
 `--no-web-resources-cdn` חובה לאתר עצמאי (CanvasKit מקומי); הגופן-המצורף (`DsTokens.fontBody`) מונע היעלמות-טקסט בלי רשת (L69).
 
-## 4½ · עור-forge (G12–G13)
+## 4½ · עור-forge (G12–G13 · G17: נבחר ע"י המנוע)
+**מהיום (הכרעה-25) אין הצהרת-עור:** `node machtzev/generator/auto-skin.mjs` בוחר לכל תפקיד את האטום הכי-טוב-לייעוד מכל הקטלוג לפי צורה (`auto-skin.json`). מפתח `skin` בספק = דריסה של תפקיד יחיד, לא חובה.
 `app-golden*.json` / `skin-golden.json` מצהירים `skin: { kpi, hero, stat, navTile, button, statusChip, banner, emptyState, mediaRow, section, frame, segmented, chip, meter, glass, timeline }` ⇒ אטום-forge לכל תפקיד. המנוע מאמת מבנית (חריצים · child · items · values) ומסרב לאטום לא-מתאים. אטומי-forge מחוללים מ-Pure (`node machtzev/ds-forge.mjs` — תמיד מלא) עם התפרים: `fields` · `items/selected/onSelect` (+ תאים `items[i][j]` · `columns` · `variants`) · `values` (אחוזים ובארי-SVG) · `control` · `onAction` · `child` · `bare`; null ⇒ תוכן-העיצוב ביט-זהה. תפקידי-skin: kpi·hero·stat·navTile·button·statusChip(+toneMap)·banner·emptyState·mediaRow·section·frame·segmented·chip·meter·glass·timeline·field·enumField·numberField·dateField·search·pageHeader·table·bars. גופני-Pure (Fraunces · Space Grotesk · Frank Ruhl Libre · Heebo) ב-pubspec של בנייה-חכמה.
 
 ## 4¾ · הפקודה האחת (G13f)

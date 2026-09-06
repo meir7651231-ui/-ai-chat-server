@@ -10,12 +10,13 @@ import * as R from '../root.mjs';
 import { assemble, PARTICLE_IDS, TAG } from './render-module.mjs';
 import { skinPass, MODULES } from './retarget.mjs';
 import { resolveSkin } from './app-from-sentences.mjs';
+import { autoSkin } from './auto-skin.mjs';   // G17b · הכרעה-25: העור נבחר מבנית מכל הקטלוג; skin-golden.json = דריסות בלבד
 
 const ROOT = R.ROOT, GEN = path.join(ROOT, 'machtzev/generator'), DIR = path.join(ROOT, 'new/dart-gen-bs');
 const SPEC = path.join(GEN, 'skin-golden.json');
 const outName = (m) => `gen_${m.replace(/\.dart$/, '')}_forge.dart`;   // schoolos.dart ⇒ gen_schoolos_forge.dart · schoolos_students.dart ⇒ gen_schoolos_students_forge.dart
 export function skinGolden(spec) {
-  const skins = resolveSkin(spec.skin);
+  const skins = resolveSkin(autoSkin(spec.skin || {}).skin);
   if (!skins) throw new Error('skin-golden: skin ריק');
   const outs = [];
   for (const module of MODULES) {

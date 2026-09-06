@@ -22,6 +22,7 @@ const q = (s) => `'${String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").repla
 //   (seam:fields · ≥2 חריצים · חריץ-מספרי יחיד בתוכן-העיצוב) וממלא: ערך ⇒ החריץ-המספרי · תווית ⇒ חריץ-הטקסט הראשון · שאר החריצים '' (מקום-שמור, לא דמו — §20-ג). בלי skin ⇒ אטומי-DS (ביט-זהה).
 const FORGE_MANIFEST = path.join(ROOT, 'new/dart-forge-bs/forge-manifest.json');
 const isNumDemo = (t) => /^[\d.,%+\-\s]+$/.test(t) && /\d/.test(t);
+import { autoSkin } from './auto-skin.mjs';
 export function resolveSkin(skin) {
   if (!skin || !Object.keys(skin).length) return null;
   if (!fs.existsSync(FORGE_MANIFEST)) throw new Error('skin: אין forge-manifest.json — הרץ node machtzev/ds-forge.mjs');
@@ -138,7 +139,8 @@ const kpiFields = (sk, valueExpr, labelExpr) => `[${Array.from({ length: sk.slot
 const textFields = (sk, titleExpr, subExpr) => `[${Array.from({ length: sk.slots }, (_, i) => (i === sk.titleIdx ? titleExpr : i === sk.subIdx ? subExpr : "''")).join(', ')}]`;
 export function buildApp({ name, sentences, skin, aliases = null }) {   // G15 · aliases: כינויי-ישות מוצהרים לפי-אפליקציה (entity.student ⇒ Member)
   const N = pascal(name), mods = [], skipped = [];
-  const skins = resolveSkin(skin) || {}; const sk = skins.kpi || null, skNav = skins.navTile || null, skEmpty = skins.empty || null;
+  // G17b · הכרעה-25: בורר-לפי-ייעוד מכל הקטלוג; `skin` בספק = דריסה בלבד
+  const skins = resolveSkin(autoSkin(skin || {}).skin) || {}; const sk = skins.kpi || null, skNav = skins.navTile || null, skEmpty = skins.empty || null;
   const MOD_ROLES = ['stat', 'hero', 'button', 'statusChip', 'banner', 'emptyState', 'mediaRow', 'section', 'frame', 'segmented', 'chip', 'meter', 'glass', 'timeline', 'field', 'enumField', 'numberField', 'dateField', 'search', 'pageHeader', 'table', 'bars', 'calendar', 'board'];   // G13b · G13c · G13d · G14
   const modSkin = MOD_ROLES.some((r) => skins[r]) ? Object.fromEntries(MOD_ROLES.map((r) => [r, skins[r] || null])) : null;
   for (const text of sentences) {

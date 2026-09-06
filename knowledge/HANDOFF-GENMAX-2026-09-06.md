@@ -15,7 +15,7 @@ analyze 0 · 156/156 (17 קבצי `genesis_*`) · gen-verify **74/111 · 52 אט
 
 ## 2 · המנועים — בסדר הריצה של `ship`
 1. `machtzev/ds-forge.mjs` — Pure HTML (`machtzev/pure/<family>-family.html`) ⇒ `new/dart-forge-bs/` + `forge-manifest.json`. 8 תפרים נגזרי-DOM: fields · items[+תאים·columns·variants] · values · control · onAction · child · bare. **אסור לערוך `dart-forge-bs` ביד** — תיקון = ב-Pure/במנוע ⇒ regen.
-2. `machtzev/generator/skin-golden.mjs` + `skin-golden.json` — 9 מודולי-SchoolOS בעור-forge (`gen_schoolos_*_forge.dart`). הזהב (`schoolos*.dart`) לא נגע (חוק-7).
+2. `machtzev/generator/auto-skin.mjs` ⇒ `auto-skin.json` — **בורר-אטום-לפי-ייעוד** (הכרעה-25): לכל תפקיד-עור המנוע מדרג את כל אטומי-forge לפי אותות-צורה; `skin` בספק = דריסה בלבד. אחריו `skin-golden.mjs` — 9 מודולי-SchoolOS בעור-forge (`gen_schoolos_*_forge.dart`). הזהב (`schoolos*.dart`) לא נגע (חוק-7).
 3. `machtzev/generator/core-from-shape.mjs` ⇒ `core-registry.json` · `core-dart.mjs` ⇒ `gen_core_<entity>.dart`.
 4. `machtzev/generator/sentence.mjs` — משפט-בעברית ⇒ ישות (TERM_DEFS + `aliases` מהספק; נושא לפני מילת-יחס) ⇒ מודול-זהב מוסב (`retarget.mjs`) ⇒ `gen_retarget_<entity>_from_<tag>[_sk<tag>].dart`.
 5. `machtzev/generator/retarget.mjs` — הסבה + `skinPass` (26 תפקידי-עור, שורות-צ׳יפים דרך helpers, טבלה/גרפים/לוח/קנבן).
@@ -30,9 +30,9 @@ SESSION_URL=<url-של-הסשן> node machtzev/generator/ship.mjs --msg "גל …
 ```
 
 ## 3 · הוספת יכולת — הדרך
-- **אטום חסר / וריאנט חסר** ⇒ תא חדש ב-`machtzev/pure/<family>-family.html` ⇒ `node machtzev/ds-forge.mjs` ⇒ תפקיד ב-`skin-golden.json` (+`app-golden*.json`) ⇒ `resolveSkin` מאמת מבנית ⇒ `ship`.
+- **אטום חסר / וריאנט חסר** ⇒ תא חדש ב-`machtzev/pure/<family>-family.html` ⇒ `ship` (ds-forge חוצב, auto-skin מדרג; אם האטום החדש הכי-טוב לתפקיד — הוא ייבחר לבד).
 - **מונח/ישות חדשים** ⇒ `TERM_DEFS` במאור (`src/types/features.ts` + `sections.ts` + `termFallbacks`) ⇒ `node machtzev/generator/entity-terms.mjs` ⇒ משפט-זהב ב-`sentence-golden.json`. הכרעת-דומיין = `aliases` בספק, לא קוד-מנוע (§20-ד, L79).
-- **אפליקציה חדשה** ⇒ `app-golden-<n>.json` עם `skin` (בלי `skin` = DS בשתיקה — L82) ⇒ `ship`.
+- **אפליקציה חדשה** ⇒ `app-golden-<n>.json` (name+sentences; העור נבחר לבד — הכרעה-25) ⇒ `ship`.
 - **שער חדש** ⇒ שורה ב-`machtzev/gates.tsv` **וגם** שורה ב-`ship.regen` באותו commit (L80).
 
 ## 4 · מלכודות שנקנו ביוקר (קרא לפני שנוגעים)

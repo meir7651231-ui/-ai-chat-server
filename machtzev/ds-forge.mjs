@@ -323,14 +323,16 @@ const dq = s => '"' + String(s).replace(/\\/g,'\\\\').replace(/"/g,'\\"').replac
 // control (שדה-חי במקום ציור-ה-input) · onAction(k) (כפתור/קישור k) · items/selected/onSelect (קבוצת-אחים-זהים ⇒ תבנית-פריט) · values (מילוי-אחוז).
 // הכול נגזר מצורת-ה-DOM של Pure (אחים-זהים · aria-pressed/selected/checked · style="width:N%" · <input>) — אפס מילון (§20-ד). null ⇒ תוכן-העיצוב ביט-זהה.
 let CUR = null;   // { n, slots, vn, actions, control, items, itemMode } בזמן חישול-תא אחד
-const freshCur = () => ({ n: 0, slots: [], vn: 0, actions: 0, control: false, items: null, itemMode: null, colMode: false, columns: null, cells: 0, primary: null, slotCount: 0, lastSlot: null });
-const slot = (shown) => {
+const freshCur = () => ({ n: 0, slots: [], sig: [], svg: false, vn: 0, actions: 0, control: false, items: null, itemMode: null, colMode: false, columns: null, cells: 0, primary: null, slotCount: 0, lastSlot: null });
+// G17a · אות-צורה פר-חריץ (fs=font-size px · fw=weight · inBtn=בתוך button/a) — חומר-הגלם של בורר-האטום-לפי-ייעוד (auto-skin), נגזר מ-CSS בלבד (§20-ד)
+const slotSig = (st) => ({ fs: +(px((st || {})['font-size']) || 16), fw: +((st || {})['font-weight'] || 400) || 400, inBtn: false });
+const slot = (shown, sig = null) => {
   if (!CUR) return dq(shown);
   let e;
   if (CUR.colMode) e = `(j < columns!.length ? columns![j] : ${dq(shown)})`;                                  // G13d · תבנית-עמודה: כותרת j
   else if (CUR.itemMode && CUR.itemMode.cellMode) e = `_it(items![i], j + ${CUR.itemMode.j0 || 0}, ${dq(shown)})`;   // G13d · תבנית-תא: תא j של הפריט i (אחרי חריצי-הכותרת של הפריט — G14)
   else if (CUR.itemMode) { const j = CUR.itemMode.j++; e = `_it(items![i], ${j}, ${dq(shown)})`; }         // תבנית-פריט: חריץ j של הפריט i
-  else { const i = CUR.n++; CUR.slots.push(shown); e = `_f(${i}, ${dq(shown)})`; }
+  else { const i = CUR.n++; CUR.slots.push(shown); CUR.sig.push(sig || slotSig(null)); e = `_f(${i}, ${dq(shown)})`; }
   CUR.lastSlot = e; CUR.slotCount = (CUR.slotCount || 0) + 1;
   return e;
 };
@@ -549,7 +551,7 @@ function svgScene(node, map, anc, inherit) {
   if (CUR) {
     const rects = []; (function w(n) { for (const ch of n.children) { if (!ch.tag) continue; if (ch.tag === 'rect') rects.push(ch); else w(ch); } })(node);
     const byKey = {}; for (const r of rects) { const a = r.attrs, key = `${+a.width || 0}|${(+a.y || 0) + (+a.height || 0)}`; (byKey[key] ||= []).push(r); }
-    for (const g of Object.values(byKey)) if (g.length >= 3) { const hmax = Math.max(...g.map(r => +r.attrs.height || 0)); for (const r of g) rectSeries.set(r, { k: CUR.vn++, frac: +((+r.attrs.height || 0) / (hmax || 1)).toFixed(4), base: (+r.attrs.y || 0) + (+r.attrs.height || 0), hmax }); }
+    for (const g of Object.values(byKey)) if (g.length >= 3) { CUR.series = (CUR.series || 0) + 1; CUR.fills = Math.max(CUR.fills || 0, new Set(g.map(r => r.attrs.fill || r.attrs.class || '')).size); const hmax = Math.max(...g.map(r => +r.attrs.height || 0)); for (const r of g) rectSeries.set(r, { k: CUR.vn++, frac: +((+r.attrs.height || 0) / (hmax || 1)).toFixed(4), base: (+r.attrs.y || 0) + (+r.attrs.height || 0), hmax }); }
   }
   // תכונות-הצגה של SVG יורדות מ-<g> אל הילדים (fill/stroke/… ירושה כמו-CSS). בלי זה, 12 עמודות בתוך
   // <g fill="…"> נופלות לברירת-קו-ink במקום מילוי-האקסנט (waveform_bars). מיזוג: תכונת-הילד גוברת על הירושה.
@@ -637,6 +639,7 @@ function toRichSpan(w) {
 function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parentFlex = false, inhFont = {}, inhVars = {}, sibIdx = 0, parentWrap = false, styleOverride = null, noVMargin = false, parentFlexRow = false) {
   if (depth > 16) return 'const SizedBox.shrink()';
   if (node.tag === 'svg') {
+    if (CUR) CUR.svg = true;   // G17a · אייקון/ציור-וקטורי באטום
     const st0r = styleOf(node, map, ancestors);
     const st0 = {}; for (const k in st0r) st0[k] = resolveVars(st0r[k], inhVars);   // פתירת var(--faint) וכו'
     const svgCol = colorExpr(st0['color']) || inherit;   // צבע-svg עצמי (.ph svg{color:var(--faint)}) גובר על היורש
@@ -674,6 +677,7 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     const alignH = ta2 === 'center' ? 'center' : ta2 === 'left' ? 'centerLeft' : 'centerRight';
     const t = `Align(alignment: Alignment.${alignH}, child: Text(${dq(ph)}, style: TextStyle(color: ${filled ? 'skin.ink' : 'skin.faint'}, fontFamily: fonts.he, fontSize: 13)))`;
     const drawn = wrapBox(Object.assign({ 'min-height': '44px' }, ist), t, node);
+    if (CUR) { const pv = String(node.attrs.placeholder || node.attrs.value || '').trim(); CUR.input = { type: node.attrs.type || 'text', ph: !!node.attrs.placeholder, readonly: 'readonly' in node.attrs, numPh: /^[\d,.%₪$+\-–]+$/.test(pv), datePh: /^\d{1,4}\s*[./·\-]\s*\d{1,2}\s*[./·\-]\s*\d{1,4}$/.test(pv) }; }   // G17a · אות-קלט (type/placeholder) לבורר-השדות
     if (CUR) {   // G13a · שדה-חי במקום ציור-ה-input (self). G13c: השדה-החי מקבל את ריפוד-ה-input של העיצוב (כולל דריסת-אח `.lic ~ .inp` שמפנה מקום לאייקון) — בלעדיו הטקסט נכנס מתחת לאייקון (צילום)
       CUR.control = true;
       const ipad = edge(ist, 'padding');
@@ -718,13 +722,13 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     const grad = clipText ? gradientExpr(st['background'] || '') : null;
     if (grad) {
       const ef2 = Object.assign({}, effText); delete ef2['color'];
-      const tw = `Text(${slot(shown)}${taExpr}, style: TextStyle(${textStyleC(ef2, 'const Color(0xFFFFFFFF)').join(', ')}))`;
+      const tw = `Text(${slot(shown, slotSig(effText))}${taExpr}, style: TextStyle(${textStyleC(ef2, 'const Color(0xFFFFFFFF)').join(', ')}))`;
       const masked = `ShaderMask(shaderCallback: (b) => ${grad}.createShader(b), blendMode: BlendMode.srcIn, child: ${tw})`;
       const st2 = Object.assign({}, st, { background: undefined, 'background-clip': undefined, '-webkit-background-clip': undefined, color: undefined });
       return wrapBox(st2, masked, node, false, parentFlex, noVMargin);
     }
     // G13a · עלה-קופסה (תג/פיל/כפתור-טקסט) עם חריץ-ריק ⇒ נעלם (_hide) ולא משאיר קופסה ריקה; עלה-Text חשוף נשאר (TextSpan בזרימת-inline). דמו (fields=null) ⇒ לא-ריק ⇒ ביט-זהה.
-    const sl = slot(shown);
+    const sl = slot(shown, slotSig(effText));
     const leaf = wrapBox(st, `Text(${sl}${taExpr}, style: TextStyle(${textStyleC(effText, inherit).join(', ')}))`, node, false, parentFlex, noVMargin);
     if (CUR && /^_(?:f|it)\(/.test(sl) && !/^(?:Text\(|Directionality\(textDirection: TextDirection\.\w+, child: Text\()/.test(leaf.trim())) return `_hide(${sl}, ${leaf})`;
     return leaf;   // parentFlex ⇒ פריט-flex-עלה שומר width (blockification), למשל .sevrow .lb width:64px
@@ -774,10 +778,11 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     }
   }
   for (const c of allKids) {
+    const nB = CUR ? CUR.n : 0;   // G17a · חריצים שייווצרו בילד זה (לסימון inBtn)
     // טקסט-חופשי בתוך אלמנט יורש את סגנון-ההורה (גודל/משקל/צבע/פונט) — CSS inheritance.
     // רווחי-גבול בין-אלמנטים משמעותיים ב-CSS (inline) — משמרים רווח-בודד (לא trim מלא ⇒
     // "בדגש נושא" נשמר, לא "בדגשנושא"); דילוג רק על רווח-טהור.
-    if (c.text != null) { const raw = c.text.replace(/\s+/g, ' '); if (raw.trim()) { const tt = effText['text-transform']; const shown = tt === 'uppercase' ? raw.toUpperCase() : tt === 'lowercase' ? raw.toLowerCase() : tt === 'capitalize' ? raw.replace(/\b\w/g, ch => ch.toUpperCase()) : raw; flow.push(`Text(${slot(shown)}, style: TextStyle(${textStyleC(effText, myColor).join(', ')}))`); flowVM.push(null); } continue; }   // text-transform חל גם על טקסט-בזרימה (‏.kt SECTION עם ::before-קו)
+    if (c.text != null) { const raw = c.text.replace(/\s+/g, ' '); if (raw.trim()) { const tt = effText['text-transform']; const shown = tt === 'uppercase' ? raw.toUpperCase() : tt === 'lowercase' ? raw.toLowerCase() : tt === 'capitalize' ? raw.replace(/\b\w/g, ch => ch.toUpperCase()) : raw; flow.push(`Text(${slot(shown, slotSig(effText))}, style: TextStyle(${textStyleC(effText, myColor).join(', ')}))`); flowVM.push(null); } continue; }   // text-transform חל גם על טקסט-בזרימה (‏.kt SECTION עם ::before-קו)
     if (c.tag === 'br') { flow.push(`Text("\\n", style: TextStyle(${textStyleC(effText, myColor).join(', ')}))`); flowVM.push(null); continue; }   // <br> ⇒ שבירת-שורה (נשמרת ב-Text.rich)
     const cst = styleOf(c, map, childAnc);
     let sibOv = null;
@@ -806,6 +811,7 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
       }
     }
     // G13a · כפתור/קישור מחוץ לקבוצת-פריטים ⇒ onAction(k) (סדר-הופעה). בתוך תבנית-פריט ההקשה היא onSelect(i).
+    if (CUR && (c.tag === 'button' || c.tag === 'a')) for (let q = nB; q < CUR.n; q++) if (CUR.sig[q]) CUR.sig[q].inBtn = true;   // G17a
     if (CUR && !CUR.itemMode && !isMember && (c.tag === 'button' || c.tag === 'a')) { const k = CUR.actions++; e = `GestureDetector(behavior: HitTestBehavior.opaque, onTap: onAction == null ? null : () => onAction!(${k}), child: ${e})`; }
     if (cst['position'] === 'absolute') { abs.push({ e, st: cst, z: zOf(cst) }); continue; }
     { const cz = zOf(cst); if (cz > flowMaxZ) flowMaxZ = cz; }   // ילד-זרימה בעל z-index גבוה
@@ -1305,11 +1311,13 @@ function forgeFamily(fam) {
         let id = enumId(s.label, i); while (seenId.has(id)) id += i; seenId.add(id); ids.push(id);
         const acc = CUR; CUR = Object.assign(freshCur(), { items: acc.items });   // כל זרוע: חריצים 0..k משלה (G13a); המקסימום = חוזה-האטום
         let e; try { const d = parseDOM(s.html); CUR.rootNode = frameNode(d, map); CUR.primary = primaryGroup(d); e = emit(d, map); } catch { e = 'const SizedBox.shrink()'; }
-        if (!bestArm || CUR.n > bestArm.n) bestArm = { n: CUR.n, slots: CUR.slots.slice() };
-        acc.vn = Math.max(acc.vn, CUR.vn); acc.actions = Math.max(acc.actions, CUR.actions); acc.control = acc.control || CUR.control; acc.items = CUR.items || acc.items; CUR = acc;
+        if (!bestArm || CUR.n > bestArm.n) bestArm = { n: CUR.n, slots: CUR.slots.slice(), sig: CUR.sig.slice() };
+        acc.vn = Math.max(acc.vn, CUR.vn); acc.actions = Math.max(acc.actions, CUR.actions); acc.control = acc.control || CUR.control; acc.items = CUR.items || acc.items;
+        acc.svg = acc.svg || CUR.svg; acc.input = acc.input || CUR.input; acc.rootNode = acc.rootNode || CUR.rootNode;   // G17a · אותות-צורה גם לאטום-מצבים (theater)
+        CUR = acc;
         return { id, e };
       });
-      if (bestArm) { CUR.n = bestArm.n; CUR.slots = bestArm.slots; }
+      if (bestArm) { CUR.n = bestArm.n; CUR.slots = bestArm.slots; CUR.sig = bestArm.sig; }
       enumBlock = `enum ${cls}State { ${ids.join(', ')} }\n\n`; stateIds = ids;
       stateField = `  final ${cls}State state;\n`;
       ctorState = `this.state = ${cls}State.${ids[0]}`;
@@ -1370,7 +1378,15 @@ ${decls}${decls ? '\n' : ''}${coreBlock}    final Widget body = ${useBare ? `bar
 `;
     fs.writeFileSync(path.join(dir, file), src);
     made.push({ cls, file });
-    ATOMS.push({ family: fam, cls, file, seam: c.seam, states: !!states, stateIds, fieldSlots: slotsN, fieldDemo: slotDemo, child: true, bare: useBare, control: !!useCtl, actions: useAct ? CUR.actions : 0, items: useItems ? { slots: it.slots, demo: it.demo, selectable: !!useOnSel, selected: !!useSel, cells: CUR.cells || 0, variants: it.variants || null } : null, columns: useCols ? (CUR.columns ? CUR.columns.demo : 0) : 0, values: useV ? CUR.vn : 0 });
+    // G17a · אותות-צורה לבורר-לפי-ייעוד: שורש (תג · מעוטר · אינטראקטיבי) · svg · חריצים (fs/fw/inBtn) · הדגשת-המספר (fs-מספרי-מקסימלי / fs-טקסט-מקסימלי)
+    const rootN = CUR && (CUR.coreNode || CUR.rootNode) || null;
+    const rootSt = rootN ? (() => { try { const st0 = styleOf(rootN, map, []); const st = {}; for (const k in st0) st[k] = resolveVars(st0[k], {}); return st; } catch { return {}; } })() : {};
+    const isNumD = (t) => /^[\d,.%₪$+\-–]+$/.test(String(t).trim());
+    const numFs = slotDemo.map((t, i) => (isNumD(t) ? (CUR.sig[i] || {}).fs || 16 : 0)), txtFs = slotDemo.map((t, i) => (isNumD(t) ? 0 : (CUR.sig[i] || {}).fs || 16));
+    const numEmph = Math.max(0, ...numFs) && Math.max(0, ...txtFs) ? +(Math.max(...numFs) / Math.max(...txtFs)).toFixed(2) : 0;
+    const rootDir = rootN ? (/flex|grid/.test(rootSt['display'] || '') ? (/column/.test(rootSt['flex-direction'] || '') ? 'column' : 'row') : 'block') : null;
+    const sig = { root: { tag: rootN ? rootN.tag : null, decorated: !!(rootN && decoration(rootSt)), interactive: !!(rootN && isSelectable(rootN)), dir: rootDir }, svg: !!(CUR && CUR.svg), input: CUR && CUR.input || null, series: CUR && CUR.series || 0, fills: CUR && CUR.fills || 0, slots: CUR ? CUR.sig.slice(0, slotsN) : [], numEmph };
+    ATOMS.push({ family: fam, cls, file, seam: c.seam, states: !!states, stateIds, fieldSlots: slotsN, fieldDemo: slotDemo, sig, child: true, bare: useBare, control: !!useCtl, actions: useAct ? CUR.actions : 0, items: useItems ? { slots: it.slots, demo: it.demo, selectable: !!useOnSel, selected: !!useSel, cells: CUR.cells || 0, variants: it.variants || null } : null, columns: useCols ? (CUR.columns ? CUR.columns.demo : 0) : 0, values: useV ? CUR.vn : 0 });
   }
   // barrel
   fs.writeFileSync(path.join(dir, `${fam}.dart`), made.map(a => `export '${a.file}';`).join('\n') + '\n');
