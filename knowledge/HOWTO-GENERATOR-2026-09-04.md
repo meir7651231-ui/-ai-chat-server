@@ -69,3 +69,5 @@ SESSION_URL=<קישור-סשן> node machtzev/generator/ship.mjs --msg "גל G�
 - הכרעות-בעלים פתוחות: policy-config · מגמת-KPI (היסטוריה) · פערי-זרע/סכמה · מונחי-רבים. (~~student⇒Member~~ ו~~4 ישויות-הגרעין~~ נסגרו בהצהרה — G15.)
 
 הכול מתועד: `knowledge/PLAN-GENERATOR-MAX-2026-09-04.md` §7 (מצב-חי) · `knowledge/CLOSED-GENMAX-G*.md` (דוח פר-שלב) · `machtzev/LEARNINGS.md` L51–L82.
+
+מסירה מרוכזת לסשן חדש: `knowledge/HANDOFF-GENMAX-2026-09-06.md`.
