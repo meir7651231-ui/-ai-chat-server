@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { interpret as entInterpret } from './entity.mjs';
 import { renderEntity, renderDashboard, renderHub, renderSystem, renderMain, renderScreenBind, renderCompose, renderRecordDetail, SCREEN_REGISTRY, makeConsts, write } from './render-ds.mjs';
-import { PARTICLE_RE, CONTENT_RE, REPORT_RE, parseParticleLines, parseContentLines, parseReportLines, planParticles, planReports, renderParticles, renderReport, planReport, reportsMd } from './particles.mjs';   // G23 · הכרעה-27
+import { PARTICLE_RE, CONTENT_RE, REPORT_RE, parseParticleLines, parseContentLines, parseReportLines, planParticles, planReports, renderParticles, renderReport, renderReportTest, planReport, reportsMd } from './particles.mjs';   // G23 · הכרעה-27
 import { nlToSpec } from './nl-spec.mjs';
 import { L, T } from './chrome.mjs';
 import * as R from '../root.mjs';
@@ -224,7 +224,7 @@ export function buildApp(specText) {
       particleScreens.push({ slug: pslug, cls: r.cls, kind: 'entity', name: `🧩 ${T('particlesTitle', { ent: e.name })}`, icon: '🧩', sub: `${r.count} ${L.particlesLive}${r.notes.length ? ` · ${r.notes.length} ${L.particlesUnres}` : ''}` });
     }
     const gen = R.GEN_DIR; const nsName = NS || 'app';
-    fs.writeFileSync(path.join(gen, `particle-plan-${nsName}.json`), JSON.stringify(plan.map((p) => ({ entity: p.entity, name: p.name, expr: p.expr, ok: p.ok, why: p.why || null, shape: p.shape ? p.shape.kind : null, ops: p.ops || [], picks: (p.picks || []).map((k) => ({ op: k.op, atoms: k.atoms, alts: k.alts.slice(0, 3) })), wired: p.wired || [] })), null, 1) + '\n');
+    fs.writeFileSync(path.join(R.GEN_DIR, `particle-plan-${nsName}.json`), JSON.stringify(plan.map((p) => ({ entity: p.entity, name: p.name, expr: p.expr, ok: p.ok, why: p.why || null, shape: p.shape ? p.shape.kind : null, ops: p.ops || [], picks: (p.picks || []).map((k) => ({ op: k.op, atoms: k.atoms, alts: k.alts.slice(0, 3) })), wired: p.wired || [] })), null, 1) + '\n');
     const reports = planReports({ reports: parseReportLines(reportLines), plan, entities: pents, content });
     let ri = 0;
     for (const rp of reports) {
@@ -232,10 +232,14 @@ export function buildApp(specText) {
       const rslug = `${P}rp${++ri}`; const { k, dump } = makeConsts(rslug);
       const r = renderReport({ slug: rslug, report: rp, k });
       write(rslug, r.code, dump());
+      if (r.exported) {   // G25 · בדיקה מחוללת לסריאליזציית-הדוח — ל-buildsmart/test (כמו app-from-sentences), רק כשיש pubspec
+        const bsTest = path.join(R.ROOT, '..', 'buildsmart', 'app_flutter', 'test');
+        if (fs.existsSync(path.join(bsTest, '..', 'pubspec.yaml'))) fs.writeFileSync(path.join(bsTest, `genesis_gen_${rslug}_report_test.dart`), renderReportTest({ ns: nsName, slug: rslug, report: rp, textFn: r.textFn }));
+      }
       reportScreens.push({ slug: rslug, cls: r.cls, kind: 'entity', name: `📄 ${T('reportTitle', { ent: rp.entity })}`, icon: '📄', sub: `${r.count} ${L.reportSections}${r.notes.length ? ` · ${r.notes.length} ${L.reportUnres}` : ''}` });
     }
     fs.writeFileSync(path.join(gen, `particle-plan-${nsName}.md`), planReport(plan) + (reports.length ? reportsMd(reports) : ''));
-    if (reportLines.length) fs.writeFileSync(path.join(gen, `report-plan-${nsName}.json`), JSON.stringify(reports.map((r) => ({ entity: r.entity, ok: r.ok, unresolved: r.unresolved, sections: r.sections.map((s) => ({ name: s.name, refs: s.refs.map((x) => ({ raw: x.raw, mode: x.mode || null, why: x.why || null, wired: x.p && x.p.wired ? x.p.wired : [] })) })) })), null, 1));
+    if (reportLines.length) fs.writeFileSync(path.join(gen, `report-plan-${nsName}.json`), JSON.stringify(reports.map((r) => ({ entity: r.entity, ok: r.ok, unresolved: r.unresolved, export: r.export ? { label: r.export.label, toField: r.export.toField, ok: r.export.ok, action: (r.export.action.atoms[0] || null), link: r.export.link ? r.export.link.name : null } : null, sections: r.sections.map((s) => ({ name: s.name, refs: s.refs.map((x) => ({ raw: x.raw, mode: x.mode || null, why: x.why || null, wired: x.p && x.p.wired ? x.p.wired : [] })) })) })), null, 1));
     console.log(`🧩 ${L.particlesLog}: ${plan.filter((p) => p.wired && p.wired.length).length}/${plan.length} ${L.particlesFound} · ${particleScreens.length} ${L.particleScreens}${content.length ? ` · ${content.length} ${L.contentItems}` : ''}${reports.length ? ` · ${reportScreens.length} ${L.reportScreens}` : ''}`);
   }
   // מסכי-מערכת (kind='system' — גלויים רק לתפקיד 'הכל')

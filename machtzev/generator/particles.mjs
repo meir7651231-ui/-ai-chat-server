@@ -22,7 +22,7 @@ export const CONTENT_RE = new RegExp('^\\s*' + G.contentWord + '\\s+');   // G24
 export const REPORT_RE = new RegExp('^\\s*' + G.reportWord + '\\s+');     // G24 · חלקיק-דוח: `דוח <ישות>: <חלק> = ref, ref…`
 const heW = (s) => [...String(s || '').matchAll(/[֐-׿][֐-׿״׳]*/g)].map((m) => m[0]);
 const clean = (s) => heW(s).join(' ').trim();
-const q = (s) => "'" + String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'") + "'";
+const q = (s) => "'" + String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n') + "'";   // G25: גם שורה-חדשה (טקסט-תוכן רב-שורתי)
 
 // ── 1 · פירוק שורות-חלקיק ──
 export function parseParticleLines(lines) {
@@ -54,6 +54,7 @@ export function parseContentLines(lines) {
 }
 // ── 1ג · חלקיק-דוח (G24): מסך-אחד-לרשומה במבנה-קבוע. `דוח <ישות>: <חלק> = ref, ref…`; ref = שדה/חלקיק של השורש · ישות.שדה/חלקיק · [תוכן קבוצה] ──
 const CONTENT_REF = new RegExp('^\\[\\s*' + alt(G.pContent) + '\\s+([^\\]]+)\\]\\s*$');
+const EXPORT_HEAD = new RegExp('^\\[\\s*' + alt(G.pExport) + '\\s*\\]\\s*(.*)$');   // G25 · `דוח <ישות>: [ייצוא] <תווית> = <שדה-יעד>, <מילות-מטרה>`
 export function parseReportLines(lines) {
   const out = [];
   for (const line of lines) {
@@ -61,7 +62,14 @@ export function parseReportLines(lines) {
     const body = line.replace(REPORT_RE, '');
     const ci = body.indexOf(':'); if (ci < 0) continue;
     const entity = clean(body.slice(0, ci));
-    const rest = body.slice(ci + 1).trim(); const eq = rest.indexOf(' = '); if (eq < 0) continue;
+    const rest = body.slice(ci + 1).trim();
+    let xm;
+    if ((xm = rest.match(EXPORT_HEAD))) {   // G25 · ייצוא-הדוח: תווית + מטרה (שדה-יעד + מילים בעברית שמנחות את חיפוש-מנוע-הקישור)
+      const eqx = xm[2].indexOf(' = ');
+      const label = (eqx > 0 ? xm[2].slice(0, eqx) : xm[2]).trim(); const goal = eqx > 0 ? xm[2].slice(eqx + 3).trim() : '';
+      out.push({ entity, export: { label, goal }, line }); continue;
+    }
+    const eq = rest.indexOf(' = '); if (eq < 0) continue;
     const section = clean(rest.slice(0, eq)) || rest.slice(0, eq).trim();
     const refs = rest.slice(eq + 3).split(',').map((x) => x.trim()).filter(Boolean).map((raw) => {
       let m;
@@ -170,6 +178,23 @@ export function wireAtom(cls, ctx) {
   return { cls, file: w.file, call: `${cls}(${args.join(', ')})` };
 }
 
+// ── 4ב · חיווט-מנוע (G25): פרמטרים לפי שם-השקע (טלפון/טקסט) · פרמטר-בשם-מנוע-אח = שקע-פונקציה (ho) ⇒ ייבוא המנוע-האח. שקע בלי ערך ⇒ null ──
+const LSOCK = { phone: /phone|tel|mobile|number/i, text: /^(text|msg|message|body|content|note)$/i };
+export function wireLogic(name, ctx) {
+  const fn = atlas().functions.find((f) => f.name === name); if (!fn) return null;
+  const args = []; const deps = [fn];
+  for (const prm of fn.params || []) {
+    let e = null;
+    if (LSOCK.phone.test(prm.name) && ctx.phone) e = ctx.phone;
+    else if (LSOCK.text.test(prm.name) && ctx.text) e = ctx.text;
+    else { const dep = atlas().functions.find((f) => f.name === prm.name); if (dep) { deps.push(dep); e = prm.name; } }
+    if (e == null) return null;
+    args.push(e);
+  }
+  const fileOf = (d) => `${String(d.shelf || 'new/dart-maor').replace(/^new\//, '')}/${d.file}`;
+  return { name, call: `${name}(${args.join(', ')})`, files: [...new Set(deps.map(fileOf))], ret: fn.ret };
+}
+
 // ── 5 · תכנון: לכל חלקיק — צורה ⇒ פעולות ⇒ אטומים (חיפוש) ⇒ חיווט; מועמד שלא מתחווט ⇒ הבא (alts) ──
 export function planParticles({ particles, entities, content = [], single = false }) {
   const plan = [];
@@ -273,6 +298,48 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null }) 
   }
   return { imports, widgets, notes, firstWired };
 }
+// ── 6ב · סריאליזציה (G25): לכל חלקיק ביטוי-Dart שמחזיר טקסט (וואטסאפ: *כותרת* · "- שורה" · "שדה: ערך"); צורות-פעולה/טבלה/ריק אינן טקסט ──
+const descFieldOf = (entity, p) => {
+  const textish = entity.schema.filter((f) => !f.formula && !(f.enumVals && f.enumVals.length) && !(f.members && f.members.length) && !/^(num|date|bool)$/.test(f.type || '') && !(p.entNames || []).includes(f.label));
+  return textish.slice().sort((a, b) => (b.type === 'multiline') - (a.type === 'multiline') || b.label.split(/\s+/).length - a.label.split(/\s+/).length)[0] || entity.schema[0];
+};
+export function particleText({ entity, plan, k, recs: recsOverride = null }) {
+  const scoped = !!recsOverride;
+  const recs = recsOverride || `appStore.records('${entity.slug}')`;
+  const numOf = (lbl) => `(num.tryParse(r[${k(lbl)}] ?? '') ?? 0)`;
+  const strOf = (lbl) => `(r[${k(lbl)}] ?? '')`;
+  const exprs = [];
+  for (const p of plan) {
+    if (!p.ok) continue;
+    const s = p.shape; const lbl = k(p.name);
+    if (/^(count|sum|avg)$/.test(s.kind)) {
+      const foldSum = `${recs}.fold(0.0, (a, r) => a + (num.tryParse(r[${k(s.field)}] ?? '') ?? 0))`;
+      const expr = s.kind === 'count' ? (s.field ? `${recs}.where((r) => (r[${k(s.field)}] ?? '') == ${k(s.value || '')}).length.toDouble()` : scoped ? `${recs}.length.toDouble()` : `appStore.count('${entity.slug}').toDouble()`)
+        : s.kind === 'sum' ? (scoped ? foldSum : `appStore.sum('${entity.slug}', ${k(s.field)})`) : (scoped ? `(${recs}.isEmpty ? 0.0 : ${foldSum} / ${recs}.length)` : `appStore.avg('${entity.slug}', ${k(s.field)})`);
+      exprs.push(`${lbl} + ': ' + ${expr}.toStringAsFixed(${s.kind === 'avg' ? 1 : 0})`); continue;
+    }
+    if (s.kind === '/' || s.kind === '−' || s.kind === '×' || s.kind === 'vs') {
+      const a = numOf(s.a), b = numOf(s.b);
+      const val = s.kind === '/' ? `(${b} == 0 ? 0.0 : ${a} / ${b})` : `(${a} - ${b})`.replace(' - ', s.kind === '×' ? ' * ' : ' - ');
+      exprs.push(`[for (final r in ${recs}) ${lbl} + ': ' + ${val}.toStringAsFixed(${s.kind === '/' ? 2 : 0})].join('\\n')`); continue;
+    }
+    if (s.kind === 'partition') {
+      const desc = descFieldOf(entity, p);
+      const bands = s.bands.map((band) => { const inBand = `${recs}.where((r) => (r[${k(s.field)}] ?? '') == ${k(band)}).toList()`; return `'*' + ${k(band)} + ' · ' + ${inBand}.length.toString() + '*' + [for (final r in ${inBand}) '\\n- ' + ${strOf(desc.label)}].join()`; });
+      exprs.push(`[${bands.join(', ')}].join('\\n')`); continue;
+    }
+    if (s.kind === 'raw') {
+      const shown = p.labelled ? `${k(s.field)} + ': ' + ${strOf(s.field)}` : strOf(s.field);
+      exprs.push(`[for (final r in ${recs}.where((r) => (r[${k(s.field)}] ?? '').toString().trim().isNotEmpty)) ${shown}].join('\\n')`); continue;
+    }
+    if (s.kind === 'content') {
+      if (s.tagged) { const tags = [...new Set(s.items.map((it) => it.tag || ''))]; exprs.push(k(tags.map((tag) => `*${tag}*\n` + s.items.filter((it) => (it.tag || '') === tag).map((it) => '- ' + it.text).join('\n')).join('\n'))); }
+      else exprs.push(k(s.items.map((it) => '- ' + it.text).join('\n')));
+      continue;
+    }
+  }
+  return exprs;
+}
 const clsOf = (slug) => 'Gen' + slug.replace(/(^|_)([a-z0-9])/g, (_, __, c) => c.toUpperCase()) + 'Screen';
 export function renderParticles({ slug, entity, plan, k }) {
   const { imports, widgets, notes } = particleWidgets({ entity, plan, k });
@@ -302,6 +369,20 @@ export function planReports({ reports, plan, entities, content = [] }) {
   const byEnt = new Map();
   for (const r of reports) {
     const root = entities.find((e) => e.name === r.entity);
+    if (root && r.export) {   // G25 · ייצוא-הדוח: אטום-פעולה (חיפוש) + מנוע-קישור (חיפוש-לוגיקה לפי מילות-המטרה של האדם) + שדה-היעד (טלפון)
+      const rep = byEnt.get(r.entity) || byEnt.set(r.entity, { entity: r.entity, root, sections: [], unresolved: [] }).get(r.entity);
+      const toks = r.export.goal.split(',').map((x) => x.trim()).filter(Boolean);
+      const toField = toks.map((t) => root.schema.find((f) => f.label === clean(t))).find(Boolean) || null;
+      const goalWords = toks.filter((t) => !root.schema.some((f) => f.label === clean(t))).join(' ');
+      const action = searchOp('action', `${r.export.label} ${root.name}`);
+      const link = searchOp('serialize', `${r.export.label} ${goalWords} ${root.name}`);
+      const cands = [...link.atoms, ...link.alts].map((x) => x.split('@')[0]);
+      let wiredLink = null;
+      for (const cnd of cands) { const w = wireLogic(cnd, { phone: toField ? `(r0[__K(${JSON.stringify(toField.label)})] ?? '')` : null, text: 'text' }); if (w) { wiredLink = w; break; } }
+      rep.export = { label: r.export.label, goal: r.export.goal, toField: toField ? toField.label : null, action, link: wiredLink, linkCands: cands.slice(0, 4), ok: !!wiredLink };
+      if (!wiredLink) rep.unresolved.push(`${r.export.label}: ${L.exportNoLink} (${cands.slice(0, 3).join('/')})`);
+      continue;
+    }
     if (!root) { (byEnt.get(r.entity) || byEnt.set(r.entity, { entity: r.entity, root: null, sections: [], unresolved: [`אין ישות "${r.entity}" בספק`] }).get(r.entity)).sections.push({ name: r.section, refs: [] }); continue; }
     const rep = byEnt.get(r.entity) || byEnt.set(r.entity, { entity: r.entity, root, sections: [], unresolved: [] }).get(r.entity);
     const refs = r.refs.map((ref) => {
@@ -334,9 +415,10 @@ export function renderReport({ slug, report, k }) {
   const goal = `${G.reportWord} ${root.name}`;
   const picker = firstWired(searchOp('switch', goal), { items: `[for (final o in appStore.options('${rootSlug}')) o.value]`, selected: '_i', onSelect: '(i) => setState(() => _i = i)', label: k(root.name), glyph: k('🧩') });
   const empty = firstWired(searchOp('empty', goal), { message: k(T('reportEmpty', { ent: root.name })), label: k(root.name), glyph: k('🧩') });
-  const used = [];
+  const used = []; const texts = [];
   for (const sec of report.sections) {
     const children = [];
+    texts.push(k('*' + sec.name + '*'));
     for (const ref of sec.refs) {
       if (ref.why) continue;
       const recs = ref.mode === 'childParticle' ? `appStore.referencing('${ref.ent.slug}', ${k(ref.link)}, id0)` : ref.mode === 'content' ? `[r0]` : `[r0]`;
@@ -345,12 +427,43 @@ export function renderReport({ slug, report, k }) {
       for (const i of w.imports) imports.add(i);
       for (const n of w.notes) notes.push(`${sec.name} › ${ref.raw}: ${n}`);
       children.push(...w.widgets); if (ref.p.wired) used.push(`${ref.raw}⇒${ref.p.wired.join('+')}`);
+      texts.push(...particleText({ entity: ent, plan: [ref.mode === 'particle' && ref.p.shape.kind === 'raw' ? { ...ref.p, labelled: true } : ref.p], k, recs }));
     }
     if (!children.length) continue;
     const g = firstWired(searchOp('group', goal), { label: k(sec.name), children, sub: k(sec.name), glyph: k('🧩'), tone: 0 });
     sections.push(g ? (/children:/.test(g.call) ? g.call : `Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [${g.call}, ${children.join(', ')}])`) : `Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [${children.join(', ')}])`);
   }
   const cls = clsOf(slug);
+  // G25 · ייצוא: הטקסט = סריאליזציית-הדוח (פונקציה-עליונה, נבדקת); הקישור = המנוע שנמצא (waLink וכד׳) עם שדה-היעד; נפילה = שיתוף-מערכת
+  const ex = report.export && report.export.ok ? report.export : null;
+  let exportBtn = '', exportFns = '';
+  if (ex) {
+    const btn = firstWired(ex.action, { label: k(ex.label), nav: '() => _send(context, r0, id0)', glyph: k('📤') });
+    if (!btn) notes.push(`${ex.label}: ${L.exportNoAction}`);
+    else {
+      for (const f of ex.link.files) imports.add(`import '../${f}';`);
+      imports.add(`import 'package:share_plus/share_plus.dart';`); imports.add(`import 'package:url_launcher/url_launcher.dart';`);
+      const linkCall = ex.link.call.replace(/__K\(("[^"]*")\)/g, (_, j) => k(JSON.parse(j)));
+      exportBtn = `      Padding(padding: const EdgeInsets.only(top: 4, bottom: 12), child: ${btn.call}),`;
+      exportFns = `
+  Future<void> _send(BuildContext context, Map<String, String> r0, String id0) async {
+    final text = reportText${cls}(r0, id0);
+    final dynamic url = ${linkCall};
+    if (url is String && url.isNotEmpty) { await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication); return; }
+    await Share.share(text);
+  }`;
+      used.push(`${ex.label}⇒${btn.cand}+${ex.link.name}`);
+    }
+  }
+  const textFn = `
+/// 📤 סריאליזציית-הדוח לטקסט (G25): *חלק* · שורות; נבדקת ב-test/genesis_gen_app_<ns>_report_test.dart
+String reportText${cls}(Map<String, String> r0, String id0) {
+  final b = <String>[
+${texts.map((t) => `    ${t},`).join('\n')}
+  ];
+  return b.where((s) => s.trim().isNotEmpty).join('\\n');
+}
+`;
   const title = k(T('reportTitle', { ent: root.name })); const sub = k(T('reportSub', { n: sections.length }));
   const code = `// 📄 חולל ע"י חלקיק-הדוח (particles · G24 · הכרעה-27): מבנה-קבוע-לרשומה; כל חלק מורכב מחלקיקים שנמצאו בחיפוש-פתוח. אל תערוך ידנית.
 ${report.sections.map((s) => `//   ${s.name} = ${s.refs.map((r) => r.raw + (r.why ? ' ⚪' : '')).join(', ')}`).join('\n')}
@@ -361,7 +474,7 @@ import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 ${[...imports].sort().join('\n')}
 import 'package:flutter/material.dart';
-
+${textFn}
 class ${cls} extends StatefulWidget {
   const ${cls}({super.key});
   @override
@@ -369,7 +482,7 @@ class ${cls} extends StatefulWidget {
 }
 
 class _${cls}State extends State<${cls}> {
-  int _i = 0;
+  int _i = 0;${exportFns}
   @override
   Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, __) {
     final rs = appStore.records('${rootSlug}');
@@ -379,17 +492,48 @@ class _${cls}State extends State<${cls}> {
     return DsScaffold(title: ${title}, subtitle: ${sub}, icon: ${k('📄')}, children: [
       ${picker ? `Padding(padding: const EdgeInsets.only(bottom: 12), child: ${picker.call}),` : ''}
 ${sections.map((w) => `      Padding(padding: const EdgeInsets.only(bottom: 12), child: ${w}),`).join('\n')}
+${exportBtn}
     ]);
   });
 }
 `;
-  return { cls, code, notes, count: sections.length, picker: picker ? picker.cand : null };
+  return { cls, code, notes, count: sections.length, picker: picker ? picker.cand : null, exported: !!exportBtn, textFn: `reportText${cls}` };
 }
 
 export function reportsMd(reports) {
   let md = `\n# תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)\n\n| דוח | חלק | ref | פתרון | אטומים |\n|---|---|---|---|---|\n`;
+  for (const r of reports) if (r.export) md += `| ${r.entity} | [ייצוא] ${r.export.label} | ${r.export.goal} | ${r.export.ok ? 'action+link' : '⚪'} | ${(r.export.action.atoms[0] || '—').split('@')[0]} + ${r.export.link ? r.export.link.name : r.export.linkCands.join('/')} |\n`;
   for (const r of reports) for (const s of r.sections) for (const x of s.refs) md += `| ${r.entity} | ${s.name} | ${x.raw} | ${x.why ? '⚪ ' + x.why : x.mode + (x.synthetic ? ' (שדה)' : '')} | ${x.p && x.p.wired ? x.p.wired.join(' + ') : x.p && x.p.picks ? x.p.picks.map((pk) => (pk.atoms[0] || '—').split('@')[0]).join(' · ') : '—'} |\n`;
   return md;
+}
+
+// ── 8 · בדיקה מחוללת לסריאליזציה (G25): זורעת רשומה-לפי-הסכמה (ערכי-צורה, לא דומיין) ומוכיחה שהטקסט מכיל כל *חלק* וכל "שדה: " של השורש ──
+export function renderReportTest({ ns, slug, report, textFn }) {
+  const root = report.root;
+  const val = (f, i) => f.enumVals && f.enumVals.length ? f.enumVals[0] : f.type === 'num' ? String(i + 1) : f.type === 'date' ? '2026-01-01' : f.type === 'bool' ? 'כן' : `${f.label}-${i + 1}`;
+  const rootRec = root.schema.filter((f) => !(f.members && f.members.length)).map((f, i) => `${q(f.label)}: ${q(val(f, i))}`).join(', ');   // גם שדות-נוסחה: הטופס מתמיד אותם מחושבים ⇒ בזריעה ערך-צורה
+  const children = [...new Set(report.sections.flatMap((s) => s.refs.filter((x) => x.mode === 'childParticle' && x.ent).map((x) => JSON.stringify([x.ent.slug, x.link]))))].map((j) => JSON.parse(j));
+  const childEnt = (slugC) => report.sections.flatMap((s) => s.refs).find((x) => x.ent && x.ent.slug === slugC).ent;
+  const seeds = children.map(([cs, link]) => { const e = childEnt(cs); const rec = e.schema.filter((f) => !(f.members && f.members.length)).map((f, i) => `${q(f.label)}: ${f.label === link ? 'id0' : q(val(f, i))}`).join(', '); return `  appStore.add('${cs}', {${rec}});`; }).join('\n');
+  const expectSections = report.sections.map((s) => `  expect(t, contains('*${s.name.replace(/'/g, "\\'")}*'));`).join('\n');
+  const labelled = [...new Set(report.sections.flatMap((s) => s.refs.filter((x) => x.mode === 'particle' && x.p && x.p.shape && x.p.shape.kind === 'raw').map((x) => x.p.shape.field)))];
+  const expectFields = labelled.map((f) => `  expect(t, contains(${q(f + ': ')}));`).join('\n');
+  return `// 🧪 ${T('exportTest')} · ${ns} — הטקסט של הדוח (G25) מכיל כל *חלק* וכל "שדה: ערך" של השורש; הרשומות נזרעות מהסכמה (ערכי-צורה).
+import 'package:flutter_test/flutter_test.dart';
+import 'package:buildsmart/genesis/dart-ui-bs/ds/ds_store.dart';
+import 'package:buildsmart/genesis/dart-gen-bs/gen_${slug}.dart';
+
+void main() {
+  test('${textFn}: *חלקים* + עובדות-השורש', () {
+  final id0 = appStore.add('${root.slug}', {${rootRec}});
+${seeds}
+  final r0 = appStore.byId('${root.slug}', id0)!;
+  final t = ${textFn}(r0, id0);
+${expectSections}
+${expectFields}
+  });
+}
+`;
 }
 
 export function planReport(plan) {

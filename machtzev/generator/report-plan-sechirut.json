@@ -3,6 +3,13 @@
   "entity": "תיק",
   "ok": true,
   "unresolved": [],
+  "export": {
+   "label": "שליחה בוואטסאפ",
+   "toField": "טלפון",
+   "ok": true,
+   "action": "DsPrimaryButton",
+   "link": "waLink"
+  },
   "sections": [
    {
     "name": "כרטיס עסקה",
