@@ -3,20 +3,22 @@
 > `--gate` נכשל אם הקובץ הזה סטה מהמדידה החיה. ריענון: `node machtzev/truth.mjs --write`.
 
 ## 3 השכבות של §21 (תצוגה · לוגיקה · דאטה)
-- **🔢 סה"כ אטומים מאונדקסים (תצוגה+לוגיקה):** 1762
+- **🔢 סה"כ אטומים מאונדקסים (תצוגה+לוגיקה):** 1764
 - **🏁 זהב-מורכב-מחדש (GENMAX·G4 · render-module compose):** 9/9 מודולים · 87/87 בדיקות
 - **🔎 פלטי-מחולל שרונדרו-בפועל (GENMAX·G5b · gen-verify):** 74/111 מסכים רונדרו-בפועל · 52 אטומי-תצוגה על המסך
-- **🔌 מחווטים-למחולל בפועל:** 106 (6.0%) · 1656 מפורקים-אך-לא-מחווטים
-- **  ↳ מול כשירים-לחיווט (eligible):** 106/1639 (6.5%) · כשירים: תצוגה 791 (fields∧str≥1 ∪ collection ∪ series) + לוגיקה 848 (חתימה נקראת; wireable-כשדה-מחושב 102)
-- **  ↳ נגישים-לבוררים-הנוכחיים (reach · auto-skin fits ∪ auto-logic compat):** 1036/1639 (63.2%) · תצוגה 242 · לוגיקה 794
-- **  ↳ ממופים-לפעולת-יסוד (G1 ops-map · תצוגה+לוגיקה):** 1410/1762
+- **🔌 מחווטים-למחולל בפועל:** 106 (6.0%) · 1658 מפורקים-אך-לא-מחווטים
+- **  ↳ מול כשירים-לחיווט (eligible):** 106/1717 (6.2%) · כשירים: תצוגה 867 (תפר≠zero ∧ לא-מזייף) + לוגיקה 850 (חתימה נקראת; wireable-כשדה-מחושב 102)
+- **  ↳ נגישים-לבוררים-הנוכחיים (reach · auto-skin ∪ auto-logic ∪ cover(ops-map) ∪ קופסאות):** 1717/1717 (100.0%) · תצוגה 867 · לוגיקה 850
+- **  ↳ ממופים-לפעולת-יסוד (G1 ops-map · תצוגה+לוגיקה, כולל לא-באורקל):** 1772/1772
+- **  ↳ לא-כשירים-במכוון (§20-ג · אין-שקע-דאטה/מזייף — נספרים, לא נעלמים):** 47 תצוגה: AuroraBg · BarcodeReticle · Dot · DotGridBg · DotsLoader · DsCalendar · DsMonthOffset · DualRange · FabAction · FabMenu · ForgeDsToggleTile · ForgeFabAction · ForgeFabMenu · ForgedChat · ForgedComposite · ForgedFeedback · ForgedHeader · ForgedInput · ForgedList · ForgedMotion · ForgedNav · ForgedSelection · ForgedSpatial · ForgedStatus · ForgedTemporal · ForgedText · GlowBg · Grip · LinearProgress · LipskeyProductSheetDivider · LiveDot · MeshBg · MiniCalendar · OrbitSpinner · PinPad · ProgressRing · RadialGauge · ReportTable · SelectionBand · SheetHandle · SkeletonBlock · SkeletonCard · StatusDot · StoryRing · ThumbPlaceholder · Typing · WaveBg
+- **  ↳ כשירים-שאף-בורר-לא-רואה (הפער האמיתי):** 0 — אין
 - **  ↳ חיווט-תצוגה (נבחרו: DS-selectVaried ∪ auto-skin):** 68/914 (7.4%)
-- **  ↳ חיווט-לוגיקה (נבחרו: MAP_ENGINES ∪ auto-logic):** 38/848 (4.5%)
+- **  ↳ חיווט-לוגיקה (נבחרו: MAP_ENGINES ∪ auto-logic):** 38/850 (4.5%)
 - **תצוגה · atom-index (widgets · הכרעה C):** 914
 - **  ↳ seam:** {"fields":500,"collection":203,"zero":25,"series":186}
 - **  ↳ נגישים-בהרכבה (selectVaried×400):** 45
 - **  ↳ פר-היבט:** {"kpi":16,"board":1,"nav":21,"tbl":1,"trend":2,"prog":2,"card":2}
-- **לוגיקה · logic-census:** 848
+- **לוגיקה · logic-census:** 850
 - **  ↳ wireable:** 102
 - **  ↳ מחוברים-למחולל (MAP_ENGINES):** 8
 - **דאטה · new/dart-data-maor:** 548
@@ -29,10 +31,10 @@
 - **generator/ קנוני:** 39
 - **generator/legacy/:** 5
 - **knowledge/ פעיל:** 80
-- **knowledge/archive/:** 11
+- **knowledge/archive/:** 12
 - **שערי-משטרה (gates.tsv):** 48
 - **שערי-משטרה (police gate()):** 48
 
 ## אזהרת-אמת (הלקח שנקנה ביוקר)
 "סידור-הענף" = פריסת-קבצים. "כמה/מה-מחובר" = **מדידה חוצת-3-שכבות**. אל תסיק תקרה משכבה-אחת.
-המחולל מחובר: נבחרו-בפועל תצוגה=68 · לוגיקה=38 · נגישים-לבוררים 1036/1639 · ממופים-לפעולה 1410/1762. "נבחר" ≠ "נגיש": בורר בוחר אחד לתפקיד (L91) — מה שלא נבחר עדיין נגיש למשפט הבא.
+המחולל מחובר: נבחרו-בפועל תצוגה=68 · לוגיקה=38 · נגישים-לבוררים 1717/1717 · ממופים-לפעולה 1772/1772. "נבחר" ≠ "נגיש": בורר בוחר אחד לתפקיד (L91) — מה שלא נבחר עדיין נגיש למשפט הבא.

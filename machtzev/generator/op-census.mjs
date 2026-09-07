@@ -61,7 +61,34 @@ const DISPLAY_RULES = [
   ['panel',    (S, D) => anyOf(S, 'child', 'children', 'body', 'content')],
   ['text',     (S, D) => anyOf(S, 'text', 'value', 'name', 'label')],
 ];
+// ── forge (dart-forge-bs): הבנאי הוא תמיד {fields, child} ⇒ שקעי-`this.` אינם צורה (הכול היה 'panel'). הצורה חיה במניפסט של ds-forge
+//    (תפר · items · columns · values · control · actions · sig.input/series/numEmph/root.interactive) — אותות-DOM, אפס-מילון (L92).
+const FORGE = (() => { try { return new Map(JSON.parse(fs.readFileSync(path.join(ROOT, 'new/dart-forge-bs/forge-manifest.json'), 'utf8')).atoms.map((m) => [m.cls, m])); } catch { return new Map(); } })();
+const FORGE_RULES = [
+  ['zero',     (m, s) => m.seam === 'zero'],
+  ['table',    (m, s) => !!(m.items && m.columns)],
+  ['bars',     (m, s) => m.seam === 'series' || !!m.values || !!s.series],
+  ['ratio',    (m, s) => m.seam === 'progress' || (s.input && s.input.type === 'range')],
+  ['switch',   (m, s) => !!(m.items && (m.control || /^(state|choice|exclusive|group|value)$/.test(m.seam)))],
+  ['field',    (m, s) => !!(m.control || s.input || /^(value)$/.test(m.seam))],
+  ['action',   (m, s) => !!(m.actions && (s.root && s.root.interactive || /^(title|mark|sticky|nav|divider)$/.test(m.seam) || m.seam === 'self'))],
+  ['identity', (m, s) => /^(avatar|mark)$/.test(m.seam)],
+  ['timeline', (m, s) => m.seam === 'date' && !!m.items],
+  ['group',    (m, s) => /^(collection|title|token|group)$/.test(m.seam) || !!(m.items && m.seam === 'fields')],
+  ['stat',     (m, s) => m.seam === 'fields' && (s.numEmph || 0) > 1],
+  ['action',   (m, s) => !!m.actions],
+  ['fact',     (m, s) => /^(fields|date|state)$/.test(m.seam) && (m.fieldSlots || 0) <= 2],
+  ['text',     (m, s) => m.seam === 'fields'],
+  ['panel',    (m, s) => true],
+];
+function classifyForge(a, m) {
+  const s = m.sig || {};
+  const D = [m.fieldSlots ? 'fields' : null, m.items ? 'items' : null, m.columns ? 'columns' : null, m.values ? 'values' : null, m.control || s.input ? 'onChanged' : null, m.actions ? 'onTap' : null, m.child ? 'child' : null].filter(Boolean);
+  for (const [op, test] of FORGE_RULES) if (test(m, s)) return { op, sockets: D, why: 'צורת-מניפסט-forge' };
+  return { op: 'panel', sockets: D, why: 'forge ללא צורה' };
+}
 function classifyDisplay(a) {
+  const fm = /^dart-forge-bs\//.test(a.file) ? FORGE.get(a.id) : null; if (fm) return classifyForge(a, fm);
   const all = sockets(a.file, a.id);
   const data = all.filter((x) => !isStyle(x));
   const structural = all.filter((x) => /^(child|children|body|content)$/.test(x));
@@ -131,7 +158,7 @@ function unindexedDisplay() {
 const out = [];
 for (const a of IDX) {
   const c = a.layer === 'display' ? classifyDisplay(a) : classifyLogic(a);
-  out.push({ id: a.id, layer: a.layer, file: a.file, purpose: a.purpose, ...c });
+  out.push({ id: a.id, layer: a.layer, file: a.file, ...c });   // L92 · purpose חי באינדקס (atom-index-full) — כפילות ניפחה את ops-map ל->1MB (שער nobinary) ואף צרכן לא קרא אותה מכאן
 }
 out.push(...unindexedDisplay());
 out.push(...dataAtoms());

@@ -76,6 +76,8 @@ if (flag('--full-verify')) { log('gen-verify --gate (רנדר-בפועל של כ
 node('machtzev/census/logic-census.mjs', [], { quiet: true });   // G20 · חתימות-הלוגיקה (מהודקות) לפני האורקל
 node('machtzev/census/atom-index.mjs', [], { quiet: true });
 node('machtzev/census/oracle.mjs', ['--write'], { quiet: true });
+node('machtzev/generator/quarry-golden.mjs', [], { quiet: true });   // L92 · קטלוג-שברי-הזהב מהמודולים הטריים (שער goldquarry) — קובץ-מחולל שנקרא ע"י שער = ב-regen
+node('machtzev/generator/op-census.mjs', [], { quiet: true });   // L92 · ops-map.json מהאינדקס הטרי (היה מחוץ ל-regen ⇒ 372 אטומי-forge חסרו לבורר-הכיסוי)
 node('machtzev/truth.mjs', ['--write'], { quiet: true });
 
 // ── 4 · בנייה (אתרים + ראיית-מסך-פנימי) ──

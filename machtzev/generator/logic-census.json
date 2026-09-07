@@ -3914,6 +3914,18 @@
   "wireable": false
  },
  {
+  "file": "dart/group_of.dart",
+  "name": "groupOf",
+  "ret": "String",
+  "params": [
+   "LipskeyCatalogProduct",
+   "String Function(String) term",
+   "Map<String, dynamic>"
+  ],
+  "argc": 3,
+  "wireable": false
+ },
+ {
   "file": "dart-maor/group-options-of.dart",
   "name": "groupOptionsOf",
   "ret": "List<dynamic>",
@@ -8023,6 +8035,19 @@
    "int"
   ],
   "argc": 7,
+  "wireable": false
+ },
+ {
+  "file": "dart/screen_label_he.dart",
+  "name": "screenLabelHe",
+  "ret": "String",
+  "params": [
+   "String",
+   "String Function(String) normalizeScreen",
+   "String Function(String) humanize",
+   "Map<String, dynamic>"
+  ],
+  "argc": 4,
   "wireable": false
  },
  {
