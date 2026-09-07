@@ -47,6 +47,10 @@ const genDst = path.join(LIB, 'dart-gen-bs'); fs.mkdirSync(genDst, { recursive: 
 for (const f of fs.readdirSync(genDst)) if (/^gen_.*\.dart$/.test(f) && !fs.existsSync(path.join(GEN, f))) fs.unlinkSync(path.join(genDst, f));
 for (const f of fs.readdirSync(GEN)) if (/^gen_.*\.dart$/.test(f)) fs.copyFileSync(path.join(GEN, f), path.join(genDst, f));
 for (const f of fs.readdirSync(DS)) if (f.endsWith('.dart')) fs.copyFileSync(path.join(DS, f), path.join(LIB, 'dart-ui-bs/ds', f));
+// G21/G22 · המראה ≡ גנסיס גם לאטומי-DS בשורש (retrofit-תפר) ולקובצי-התוכן של מסכי-הגלריה: קובץ שקיים בשני הצדדים מסונכרן (כמו dart-maor)
+const syncExisting = (srcDir, dstDir, re = /\.dart$/) => { if (!fs.existsSync(dstDir) || !fs.existsSync(srcDir)) return; for (const f of fs.readdirSync(dstDir)) if (re.test(f) && fs.existsSync(path.join(srcDir, f))) { const a = fs.readFileSync(path.join(srcDir, f)); if (!fs.existsSync(path.join(dstDir, f)) || !a.equals(fs.readFileSync(path.join(dstDir, f)))) fs.writeFileSync(path.join(dstDir, f), a); } };
+syncExisting(path.join(ROOT, 'new/dart-ui-bs'), path.join(LIB, 'dart-ui-bs'));
+syncExisting(path.join(ROOT, 'new/dart-data-bs/auto'), path.join(LIB, 'dart-data-bs/auto'), /^gen_.*_content\.dart$/);
 const DMIR = path.join(LIB, 'dart-maor'); if (fs.existsSync(DMIR)) for (const f of fs.readdirSync(DMIR)) if (f.endsWith('.dart') && fs.existsSync(path.join(ROOT, 'new/dart-maor', f))) fs.copyFileSync(path.join(ROOT, 'new/dart-maor', f), path.join(DMIR, f));   // G20 · מנועי-maor: קבצים קיימים-במראה בלבד (חתימות מהודקות)
 for (const f of fs.readdirSync(genDst)) if (/^zz_shot_/.test(f)) fs.unlinkSync(path.join(genDst, f));   // שאריות-ראיה
 
@@ -109,7 +113,7 @@ if (!flag('--no-commit')) {
   const trailer = `\n\n${AUTHOR}${SESSION ? '\nClaude-Session: ' + SESSION : ''}`;
   // buildsmart — רק מה שהמחולל/המראה כותבים (L74-ז: לא add -A)
   const genTests = fs.readdirSync(path.join(APP, 'test')).filter((f) => /^genesis_.*_test\.dart$/.test(f)).map((f) => 'app_flutter/test/' + f);
-  run('git', ['add', 'app_flutter/lib/genesis/dart-forge-bs', 'app_flutter/lib/genesis/dart-gen-bs', 'app_flutter/lib/genesis/dart-ui-bs/ds', 'app_flutter/lib/genesis/dart-maor', 'app_flutter/pubspec.yaml', 'app_flutter/assets/fonts', ...genTests], BS, { quiet: true, allowFail: true });
+  run('git', ['add', 'app_flutter/lib/genesis/dart-forge-bs', 'app_flutter/lib/genesis/dart-gen-bs', 'app_flutter/lib/genesis/dart-ui-bs', 'app_flutter/lib/genesis/dart-data-bs/auto', 'app_flutter/lib/genesis/dart-maor', 'app_flutter/pubspec.yaml', 'app_flutter/assets/fonts', ...genTests], BS, { quiet: true, allowFail: true });
   let bsCommitted = false;
   if (run('git', ['diff', '--cached', '--name-only'], BS, { quiet: true }).stdout.trim()) { log('commit · buildsmart'); commitWith(BS, `genesis-mirror · ${MSG}${trailer}`); bsCommitted = true; } else log('commit · buildsmart ללא שינוי');
   // genesis — pins ⇒ add -A ⇒ Allow trailers לקבצים נעולים (CLAUDE.md=הכרעה-24 · אחרים=--lesson)
