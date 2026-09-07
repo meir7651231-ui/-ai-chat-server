@@ -1,0 +1,199 @@
+<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><title>בלגן · יעד</title>
+<style>
+@font-face{font-family:Heebo;src:url(../../../buildsmart/app_flutter/assets/fonts/Heebo-Regular.ttf);font-weight:400}
+@font-face{font-family:Heebo;src:url(../../../buildsmart/app_flutter/assets/fonts/Heebo-SemiBold.ttf);font-weight:600}
+@font-face{font-family:Heebo;src:url(../../../buildsmart/app_flutter/assets/fonts/Heebo-Bold.ttf);font-weight:700}
+:root{--bg:#fff;--bg2:#F7F6F3;--tx:#37352F;--tx2:rgba(55,53,47,.6);--tx3:rgba(55,53,47,.38);--ln:rgba(0,0,0,.08);--ac:#2F6FED;--acbg:rgba(47,111,237,.08);--ok:#1B8A4C;--warn:#C98A00;--bad:#C8321E}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#ECEBE7;font-family:Heebo,system-ui,sans-serif;color:var(--tx);font-size:16px;line-height:1.5;padding:40px;font-variant-numeric:tabular-nums}
+.row{display:flex;gap:28px;align-items:flex-start}
+.phone{width:390px;height:844px;background:var(--bg);border-radius:36px;box-shadow:0 2px 0 rgba(0,0,0,.06),0 24px 48px rgba(0,0,0,.12);overflow:hidden;position:relative;display:flex;flex-direction:column}
+.status{height:44px;display:flex;justify-content:space-between;align-items:flex-end;padding:0 28px 6px;font-size:13px;color:var(--tx2)}
+.body{flex:1;overflow:hidden;padding:0 20px}
+h1{font-size:22px;font-weight:600;line-height:1.3}
+.back{color:var(--tx2);font-size:20px;margin-inline-end:4px}
+.hello{font-size:15px;color:var(--tx2);margin-top:8px}
+.one{font-size:30px;font-weight:600;line-height:1.2;margin:4px 0 16px;letter-spacing:-.01em}
+.meta{font-size:13px;color:var(--tx2)}
+.sec{font-size:13px;font-weight:600;color:var(--tx2);margin:24px 0 4px;letter-spacing:.02em;display:flex;justify-content:space-between;align-items:center}
+.sec .lnk{font-weight:400;color:var(--ac)}
+.line{display:flex;align-items:center;gap:12px;min-height:48px;border-bottom:1px solid var(--ln);padding:6px 0}
+.line .t{flex:1;min-width:0}
+.line .t small{display:block;font-size:13px;color:var(--tx2)}
+.btn{font:inherit;font-size:14px;font-weight:600;padding:7px 14px;border-radius:9px;border:1px solid var(--ln);background:var(--bg);color:var(--tx);white-space:nowrap}
+.btn.p{background:var(--ac);color:#fff;border-color:var(--ac)}
+.btn.big{font-size:16px;padding:13px 16px;border-radius:12px;width:100%;text-align:center}
+.btn.q{border:0;color:var(--tx2);font-weight:400;padding:0 4px;font-size:13px}
+.hero{background:var(--bg2);border-radius:16px;padding:14px 16px 16px}
+.hero .h{font-size:17px;font-weight:600}
+.hero .m{font-size:13px;color:var(--tx2);margin-bottom:10px}
+.chips{display:flex;gap:8px;margin:6px 0 12px;flex-wrap:wrap}
+.chip{font-size:13px;padding:5px 12px;border-radius:999px;border:1px solid var(--ln);color:var(--tx2);background:var(--bg)}
+.chip.on{background:var(--tx);color:#fff;border-color:var(--tx)}
+.hero .acts{display:flex;gap:8px;align-items:center}
+.hero .acts .btn.p{flex:1;padding:11px;border-radius:10px;font-size:15px}
+.did{color:var(--tx2);font-size:14px}
+.did b{color:var(--tx);font-weight:400;font-size:15px}
+.chk{width:18px;height:18px;border-radius:50%;background:rgba(27,138,76,.12);color:var(--ok);font-size:11px;display:flex;align-items:center;justify-content:center;flex:none}
+.quiet{color:var(--tx2);font-size:14px;line-height:1.7}
+.nav{height:76px;border-top:1px solid var(--ln);display:flex;justify-content:space-around;align-items:flex-start;padding-top:10px;font-size:12px;color:var(--tx2);background:var(--bg)}
+.nav div{display:flex;flex-direction:column;align-items:center;gap:4px;width:80px}
+.nav svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav .on{color:var(--ac);font-weight:600}
+.pageh{width:390px;text-align:center;font-size:13.5px;color:var(--tx2);margin-top:14px;line-height:1.45}
+.pageh b{color:var(--tx);font-weight:600}
+.caption{font-size:20px;font-weight:600;margin-bottom:6px}
+.cap2{font-size:14px;color:var(--tx2);margin-bottom:28px}
+/* lock */
+.lock{background:linear-gradient(180deg,#F7F6F3,#ECEBE7)}
+.lock .time{font-size:72px;font-weight:300;text-align:center;margin-top:36px;line-height:1}
+.lock .date{text-align:center;color:var(--tx2);font-size:15px;margin-top:6px}
+.note{background:rgba(255,255,255,.94);border-radius:18px;padding:13px 16px;margin:0 14px 10px;box-shadow:0 1px 0 rgba(0,0,0,.04)}
+.note .h{display:flex;justify-content:space-between;font-size:12px;color:var(--tx2);margin-bottom:4px}
+.note .h b{color:var(--tx);font-weight:600}
+.note p{font-size:15px;line-height:1.45}
+.note .acts{display:flex;gap:8px;margin-top:10px}
+.note.small p{font-size:14px;color:var(--tx2)}
+/* scan */
+.scan{background:var(--tx);border-radius:14px;height:200px;position:relative;overflow:hidden;margin-top:10px}
+.scan .doc{position:absolute;inset:18px 34px;background:#fff;border-radius:4px;opacity:.9}
+.scan .doc i{display:block;height:6px;background:rgba(0,0,0,.12);margin:12px 14px 0;border-radius:3px}
+.scan .doc i:nth-child(1){width:55%;height:9px;margin-top:16px}
+.scan .doc i:nth-child(odd){width:80%}
+.scan .ok{position:absolute;bottom:12px;inset-inline-start:12px;background:rgba(255,255,255,.95);border-radius:999px;padding:4px 12px;font-size:13px;color:var(--ok);font-weight:600}
+.read{display:flex;align-items:center;gap:10px;min-height:44px;border-bottom:1px solid var(--ln);font-size:15px}
+.read .k{width:96px;color:var(--tx2);font-size:14px;flex:none}
+.read .v{flex:1}
+.read .v.b{color:var(--bad);font-weight:600}
+.read .c{color:var(--tx3);font-size:12px}
+/* diff */
+.diff{display:flex;align-items:center;gap:10px;min-height:44px;border-bottom:1px solid var(--ln);font-size:15px}
+.diff .k{width:78px;color:var(--tx2);flex:none;font-size:14px}
+.diff .v{flex:1}
+.diff .v small{display:block;font-size:12.5px;color:var(--tx2)}
+.diff .old{color:var(--tx3);text-decoration:line-through;margin-inline-end:8px}
+.tag{font-size:12px;font-weight:600;padding:1px 8px;border-radius:999px;flex:none}
+.tag.b{background:rgba(200,50,30,.1);color:var(--bad)}.tag.w{background:rgba(201,138,0,.12);color:var(--warn)}.tag.g{background:rgba(27,138,76,.1);color:var(--ok)}
+.sum{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0 0;font-size:14px;color:var(--tx2)}
+.sum b{font-size:17px;color:var(--bad);font-weight:600}
+.num{font-size:44px;font-weight:600;line-height:1;margin:4px 0 2px;letter-spacing:-.02em}
+.num small{font-size:18px;font-weight:400;color:var(--tx2);margin-inline-start:4px}
+.say{background:var(--bg2);border-radius:10px;padding:10px 14px;font-size:14px;line-height:1.5;position:relative}
+.say .ed{position:absolute;bottom:8px;inset-inline-end:12px;font-size:12px;color:var(--ac)}
+.stage{display:flex;justify-content:space-between;font-size:13px;color:var(--tx2);margin:6px 0 2px}
+.stage b{color:var(--ok);font-weight:600}
+.disc{font-size:12px;color:var(--tx3);margin-top:10px}
+/* timeline */
+.tl{position:relative;padding-inline-start:26px;margin-top:4px}
+.tl:before{content:"";position:absolute;inset-inline-start:7px;top:8px;bottom:8px;width:1.5px;background:var(--ln)}
+.ev{position:relative;padding:6px 0 12px}
+.ev:before{content:"";position:absolute;inset-inline-start:-23px;top:13px;width:9px;height:9px;border-radius:50%;background:#fff;border:1.5px solid var(--tx2)}
+.ev.on:before{background:var(--ac);border-color:var(--ac)}
+.ev.done:before{background:var(--ok);border-color:var(--ok)}
+.ev .d{font-size:13px;color:var(--tx2)}
+.ev .w{font-size:15px}
+.ev .w small{display:block;font-size:13px;color:var(--tx2)}
+.chain{background:var(--bg2);border-radius:12px;padding:12px 14px;margin-top:6px;font-size:14px;line-height:1.5}
+.chain b{font-weight:600}
+.toggle{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:var(--tx2);margin-top:14px}
+.sw{width:40px;height:22px;border-radius:11px;background:var(--ok);position:relative}.sw:after{content:"";position:absolute;top:2px;inset-inline-end:2px;width:18px;height:18px;border-radius:50%;background:#fff}
+</style></head><body>
+<div class="caption">בלגן · היעד. היא עושה, אתה מאשר. ≤2 הקשות לכל פעולה, אפס הקלדה.</div>
+<div class="cap2">צילום ⇒ קריאה ⇒ אישור · הדבר-האחד עם 3 נוסחים ואישור מהמסך הראשי · דיף עם משמעות-כסף · המספר · השרשרת מתוזמנת עם מתג-עצירה</div>
+<div class="row">
+
+<!-- א · מסך נעול -->
+<div><div class="phone lock">
+ <div class="status"><span>07:40</span><span>●●● ᯤ ▮</span></div>
+ <div class="time">07:40</div><div class="date">יום ב׳ · 8 בספטמבר</div>
+ <div style="height:112px"></div>
+ <div class="note"><div class="h"><b>בלגן</b><span>עכשיו</span></div>
+  <p>המשכיר שלח טיוטה חדשה בוואטסאפ. קראתי אותה לפניך: 7,200 ← 8,000 (+11%), נוסף שטר-חוב. <b>יש לך 6 שבועות. אין לחץ.</b></p>
+  <div class="acts"><button class="btn p">שלח «7,500 באותם תנאים»</button><button class="btn">אחר כך</button></div></div>
+ <div class="note small"><div class="h"><b>בלגן</b><span>07:10</span></div>
+  <p>הפגישה שלך ב-15:00 התארכה. הזזתי את רופא הילדים של ליאור ל-17:00.</p>
+  <div class="acts"><button class="btn q">החזר</button></div></div>
+ <div class="note small"><div class="h"><b>בלגן</b><span>06:30</span></div>
+  <p>חשבון החשמל 412 ₪ הגיע. רגיל לעונה. אין מה לעשות.</p></div>
+</div><div class="pageh"><b>א · לפני שפתח</b><br>היא קראה, הזיזה, סיננה. התשובה נשלחת בהקשה אחת מההתראה.</div></div>
+
+<!-- ב · צלם ⇒ קראתי -->
+<div><div class="phone">
+ <div class="status"><span>9:41</span><span>●●● ᯤ ▮</span></div>
+ <div class="body">
+  <h1 style="margin-top:8px"><span class="back">‹</span> צילמת · קראתי</h1>
+  <div class="scan"><div class="doc"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="ok">✓ 2 עמודים · 4 שניות</span></div>
+  <div class="sec">מה הבנתי <span class="lnk">תקן</span></div>
+  <div class="read"><span class="k">מה זה</span><span class="v">טיוטת חידוש · דירה</span></div>
+  <div class="read"><span class="k">משכיר</span><span class="v">א. פרץ · 052-…</span></div>
+  <div class="read"><span class="k">שכ״ד</span><span class="v">8,000 ₪ <span class="c">(היה 7,200)</span></span></div>
+  <div class="read"><span class="k">סיום נוכחי</span><span class="v">31.10.2026</span></div>
+  <div class="read"><span class="k">תשובה עד</span><span class="v">יום רביעי 10.9</span></div>
+  <div class="read" style="border:0"><span class="k">בטוחות</span><span class="v b">14,400 + שטר-חוב פתוח</span></div>
+  <div style="margin-top:18px"><button class="btn p big">נכון — מה עכשיו?</button></div>
+  <div class="meta" style="text-align:center;margin-top:8px">אם משהו לא נכון, גע בשורה ותקן. בלי טפסים.</div>
+ </div>
+</div><div class="pageh"><b>ב · צלם ⇒ קראתי</b><br>הצילום מחליף את הטופס. 14 שדות ⇒ 6 שורות לאישור, הקשה אחת.</div></div>
+
+<!-- ג · היום -->
+<div><div class="phone">
+ <div class="status"><span>9:41</span><span>●●● ᯤ ▮</span></div>
+ <div class="body">
+  <div class="hello">בוקר טוב, דוד.</div>
+  <div class="one">דבר אחד ממך היום.</div>
+  <div class="hero"><div class="h">התשובה למשכיר</div><div class="m">בחר נוסח, שלח. דקה.</div>
+   <div class="chips"><span class="chip on">7,500 · אותם תנאים</span><span class="chip">8,000 · בלי שטר</span><span class="chip">יוצאים 31.10</span></div>
+   <div class="acts"><button class="btn p">שלח בוואטסאפ</button><button class="btn">ראה הכל</button></div></div>
+  <div class="sec">עשיתי לבד הבוקר · 3 <span class="lnk">בטל הכל</span></div>
+  <div class="line"><span class="chk">✓</span><div class="t did"><b>פתחתי «חידוש חוזה»</b> מהטיוטה שהמשכיר שלח</div></div>
+  <div class="line"><span class="chk">✓</span><div class="t did"><b>הזזתי את רופא הילדים ל-17:00</b> · הפגישה התארכה</div><button class="btn q">החזר</button></div>
+  <div class="line"><span class="chk">✓</span><div class="t did"><b>בדקתי חשבון חשמל</b> · 412 ₪, רגיל</div></div>
+  <div class="sec">השאר מסודר</div>
+  <div class="quiet">17:00 רופא ילדים · ליאור<br>20:00 פנוי.</div>
+ </div>
+ <div class="nav"><div class="on"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>היום</div><div><svg viewBox="0 0 24 24"><path d="M3 12l3-7h12l3 7v7H3z"/><path d="M3 12h5l2 3h4l2-3h5"/></svg>תיבה</div><div><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>עוד</div></div>
+</div><div class="pageh"><b>ג · «היום»</b><br>הנוסחים כאן, לא בעומק. בחר + שלח = 2 הקשות. בלי לפתוח תיק.</div></div>
+
+<!-- ד · תיק -->
+<div><div class="phone">
+ <div class="status"><span>9:41</span><span>●●● ᯤ ▮</span></div>
+ <div class="body">
+  <h1 style="margin-top:8px"><span class="back">‹</span> חידוש חוזה · א. פרץ</h1>
+  <div class="stage"><span><b>יש זמן</b> · 6 שבועות</span><span>להשיב עד: רביעי</span></div>
+  <div class="sec">מה באמת השתנה</div>
+  <div class="diff"><span class="k">שכ״ד</span><span class="v"><span class="old">7,200</span>8,000<small>+9,600 ₪ בשנה</small></span><span class="tag w">+11%</span></div>
+  <div class="diff"><span class="k">מדד</span><span class="v">נוסף, בלי תקרה<small>≈ +250 ₪ בשנה, ועולה</small></span><span class="tag b">חדש</span></div>
+  <div class="diff"><span class="k">שטר-חוב</span><span class="v">פתוח, להורים<small>חשיפה בלי סכום</small></span><span class="tag b">חדש</span></div>
+  <div class="diff"><span class="k">תיקונים</span><span class="v">«כל תקלה על השוכר»<small>הרטיבות עליך</small></span><span class="tag b">הורע</span></div>
+  <div class="diff"><span class="k">אופציה</span><span class="v">נמחקה</span><span class="tag w">חסר</span></div>
+  <div class="sum"><span>עולה לך מהחדש, בשנה</span><b>≈ 9,850 ₪ + סיכון פתוח</b></div>
+  <div class="sec">המספר שלך</div>
+  <div class="num">7,500<small>₪</small></div>
+  <div class="meta">בלי מדד, בלי שטר, אותם סעיפים. או 8,000 רק אם מתקנים רטיבות ומוחקים סעיף 14.</div>
+  <div class="sec">ההודעה <span class="lnk">3 נוסחים</span></div>
+  <div class="say">קיבלתי את הטיוטה. מוכן 7,500 באותם תנאים, או 8,000 אחרי תיקון הרטיבות ובלי שטר. תשובה עד רביעי.<span class="ed">ערוך</span></div>
+  <div style="margin-top:10px"><button class="btn p big">שלח בוואטסאפ</button></div>
+  <div class="disc">לא ייעוץ משפטי. אם כבר נשלחה הודעת פינוי — עו״ד.</div>
+ </div>
+</div><div class="pageh"><b>ד · «תיק»</b><br>כל שינוי עם משמעות-כסף. שורת-סיכום. המספר. הודעה. הקשה אחת.</div></div>
+
+<!-- ה · מה יקרה לבד -->
+<div><div class="phone">
+ <div class="status"><span>9:41</span><span>●●● ᯤ ▮</span></div>
+ <div class="body">
+  <h1 style="margin-top:8px"><span class="back">‹</span> מה יקרה לבד</h1>
+  <div class="meta" style="margin-bottom:4px">חידוש חוזה · אתה לא צריך לזכור כלום מזה</div>
+  <div class="tl">
+   <div class="ev done"><div class="d">היום 09:52</div><div class="w">נשלחה התשובה למשכיר<small>7,500 באותם תנאים · עד רביעי</small></div></div>
+   <div class="ev on"><div class="d">רביעי 10.9</div><div class="w">אם לא ענה — אזכיר לו בשמך<small>תאשר לפני שאשלח</small></div></div>
+   <div class="ev"><div class="d">25.9 · 29.9 · 30.9 08:00</div><div class="w">שלוש תזכורות לפני המועד הרשמי<small>60 יום לפני 31.10 — לא להיתקע, לא להפר</small></div></div>
+   <div class="ev"><div class="d">אם חותמים</div><div class="w">אפתח «פיקדון» ואבדוק מול התקרה<small>14,400 + שטר ⇒ מעל 19,200? אעצור אותך</small></div></div>
+   <div class="ev"><div class="d">אם לא</div><div class="w">1.10 אפתח «פיקדון ביציאה»<small>צילומי מצב-הדירה · מכתב דרישה · 30 יום</small></div></div>
+  </div>
+  <div class="chain"><b>עוד משהו מהתיק:</b> רטיבות פתוחה מהשנה שעברה. אם החידוש נחתם — אעקוב שתוקנה עד 15.10.</div>
+  <div class="toggle"><span>לפעול לבד בתיק הזה (תמיד לשאול לפני שליחה)</span><span class="sw"></span></div>
+ </div>
+ <div class="nav"><div><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>היום</div><div><svg viewBox="0 0 24 24"><path d="M3 12l3-7h12l3 7v7H3z"/><path d="M3 12h5l2 3h4l2-3h5"/></svg>תיבה</div><div><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>עוד</div></div>
+</div><div class="pageh"><b>ה · «מה יקרה לבד»</b><br>השרשרת מתוזמנת. מתג אחד לעצור. שליחה החוצה תמיד באישור.</div></div>
+
+</div></body></html>

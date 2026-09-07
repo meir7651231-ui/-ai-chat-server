@@ -1,0 +1,109 @@
+<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><title>בלגן · מוקאפ</title>
+<style>
+@font-face{font-family:Heebo;src:url(../../../buildsmart/app_flutter/assets/fonts/Heebo-Regular.ttf);font-weight:400}
+@font-face{font-family:Heebo;src:url(../../../buildsmart/app_flutter/assets/fonts/Heebo-SemiBold.ttf);font-weight:600}
+@font-face{font-family:Heebo;src:url(../../../buildsmart/app_flutter/assets/fonts/Heebo-Bold.ttf);font-weight:700}
+:root{--bg:#fff;--bg2:#F7F6F3;--tx:#37352F;--tx2:rgba(55,53,47,.6);--ln:rgba(0,0,0,.08);--ac:#2F6FED;--ok:#1B8A4C;--warn:#C98A00;--bad:#C8321E}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#ECEBE7;font-family:Heebo,system-ui,sans-serif;color:var(--tx);font-size:16px;line-height:1.5;padding:40px;font-variant-numeric:tabular-nums}
+.row{display:flex;gap:40px;align-items:flex-start}
+.phone{width:390px;height:844px;background:var(--bg);border-radius:36px;box-shadow:0 2px 0 rgba(0,0,0,.06),0 24px 48px rgba(0,0,0,.12);overflow:hidden;position:relative;display:flex;flex-direction:column}
+.status{height:44px;display:flex;justify-content:space-between;align-items:flex-end;padding:0 28px 6px;font-size:13px;color:var(--tx2)}
+.top{padding:8px 16px 4px;display:flex;align-items:baseline;justify-content:space-between}
+h1{font-size:22px;font-weight:600;line-height:1.3}
+.meta{font-size:13px;color:var(--tx2)}
+.body{flex:1;overflow:hidden;padding:0 16px}
+.sec{font-size:15px;font-weight:700;margin:24px 0 4px}
+.sec.bad{color:var(--bad)}
+.line{display:flex;align-items:center;gap:12px;min-height:52px;border-bottom:1px solid var(--ln)}
+.line .t{flex:1;min-width:0}
+.line .t small{display:block;font-size:13px;color:var(--tx2)}
+.dot{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--tx2);flex:none}
+.dot.f{background:var(--ac);border-color:var(--ac)}
+.chev{color:var(--tx2);font-size:18px}
+.btn{font:inherit;font-size:14px;font-weight:600;padding:6px 12px;border-radius:8px;border:1px solid var(--ln);background:var(--bg);color:var(--tx);white-space:nowrap}
+.btn.p{background:var(--ac);color:#fff;border-color:var(--ac)}
+.btn.big{font-size:16px;padding:12px 16px;border-radius:10px;flex:1;text-align:center}
+.load{display:flex;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--ln)}
+.bars{display:flex;gap:3px}.bars i{width:12px;height:18px;border-radius:2px;background:var(--ln)}.bars i.on{background:var(--ok)}
+.pill{font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;color:#fff;background:var(--ok);margin-inline-start:auto}
+.card{background:var(--bg2);border-radius:12px;padding:14px;margin-top:8px}
+.card .q{margin-bottom:10px}
+.card .acts{display:flex;gap:8px}
+.fold{display:flex;gap:16px;font-size:14px;color:var(--tx2);margin-top:20px}
+.fab{position:absolute;bottom:92px;inset-inline-start:20px;height:48px;padding:0 20px;border-radius:24px;background:var(--ac);color:#fff;display:flex;align-items:center;gap:8px;font-weight:600;box-shadow:0 6px 16px rgba(47,111,237,.35)}
+.nav{height:76px;border-top:1px solid var(--ln);display:flex;justify-content:space-around;align-items:flex-start;padding-top:10px;font-size:12px;color:var(--tx2);background:var(--bg)}
+.nav div{display:flex;flex-direction:column;align-items:center;gap:4px;width:80px}
+.nav svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav .on{color:var(--ac);font-weight:600}
+.stage{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--tx2);padding:10px 0 4px}
+.stage b{color:var(--tx);font-weight:600}
+.steps{display:flex;align-items:center;gap:0}.steps i{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--tx2)}.steps i.on{background:var(--ac);border-color:var(--ac)}.steps s{width:14px;height:1.5px;background:var(--ln);display:block}
+.say{background:var(--bg2);border-radius:10px;padding:12px 14px;font-size:15px;line-height:1.55}
+.acts2{display:flex;gap:10px;margin-top:20px}
+.disc{font-size:13px;color:var(--tx2);margin-top:16px}
+.lbl{display:block;font-size:13px;color:var(--tx2);margin-bottom:4px}
+.pageh{width:390px;text-align:center;font-size:14px;color:var(--tx2);margin-top:14px}
+.src{font-size:13px;color:var(--tx2);margin-top:2px}
+.tint{color:var(--bad);font-weight:600}.tw{color:var(--warn);font-weight:600}
+.ic{width:22px;height:22px;stroke:var(--tx2);fill:none;stroke-width:1.8;flex:none}
+.caption{font-size:18px;font-weight:600;margin-bottom:12px}
+.cap2{font-size:14px;color:var(--tx2);margin-bottom:28px}
+</style></head><body>
+<div class="caption">בלגן · כך זה צריך להיראות — 3 מסכים על תיק-השכירות של דוד כהן</div>
+<div class="cap2">לבן · גופן אחד · צבע אחד · שורה-לא-כרטיס · מסך = שאלה אחת · כפתור = פעולה אחת (PLAN-BALAGAN §3 + §5)</div>
+<div class="row">
+
+<!-- מסך 1 · היום -->
+<div><div class="phone">
+ <div class="status"><span>9:41</span><span>●●● ᯤ ▮</span></div>
+ <div class="top"><h1>היום</h1><span class="meta">יום ב׳ · 8.9</span></div>
+ <div class="body">
+  <div class="load"><div class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div><span>4 דברים · ~1:20 שעות</span><span class="pill">רגוע</span></div>
+  <div class="sec bad">באיחור</div>
+  <div class="line"><span class="dot"></span><div class="t">חשבון חשמל<small>היה אתמול</small></div><button class="btn">דחה ▾</button><button class="btn">✓</button></div>
+  <div class="sec">היום</div>
+  <div class="line"><span class="dot f"></span><div class="t">לחתום על שכירות מחר<small>08:00 · 3 דברים לפני החתימה</small></div><span class="chev">‹</span></div>
+  <div class="line"><span class="dot"></span><div class="t">רופא ילדים · ליאור<small>16:30 · קופת חולים רמות</small></div><span class="chev">‹</span></div>
+  <div class="sec">ממתין לאישורך <span class="meta">(1)</span></div>
+  <div class="card"><div class="q">להזכיר לך על החזר הפיקדון ב-1.10?</div><div class="src">מתוך: תיק דוד כהן · יציאה 1.9</div><div class="acts" style="margin-top:10px"><button class="btn p">אשר</button><button class="btn">דחה</button></div></div>
+  <div class="fold"><span>▸ מחר (2)</span></div>
+ </div>
+ <div class="fab"><svg class="ic" style="stroke:#fff" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>צלם</div>
+ <div class="nav"><div class="on"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>היום</div><div><svg viewBox="0 0 24 24"><path d="M3 12l3-7h12l3 7v7H3z"/><path d="M3 12h5l2 3h4l2-3h5"/></svg>תיבה</div><div><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>עוד</div></div>
+</div><div class="pageh">1 · «היום» — עונה על: מה עכשיו?</div></div>
+
+<!-- מסך 2 · תיק -->
+<div><div class="phone">
+ <div class="status"><span>9:41</span><span>●●● ᯤ ▮</span></div>
+ <div class="top"><h1><span class="meta" style="font-size:20px">‹</span> דוד כהן · חוזה שכירות</h1></div>
+ <div class="body">
+  <div class="stage"><span class="steps"><i class="on"></i><s></s><i class="on"></i><s></s><i></i><s></s><i></i></span><span>בבדיקה</span><span style="margin-inline-start:auto">חותם: <b>מחר</b></span></div>
+  <div class="sec">עכשיו</div>
+  <p>אל תחתום הלילה כמו שזה.<br>הבטוחות <span class="tint">32,000 ₪</span> מעל התקרה 19,200 ₪.</p>
+  <div class="sec">לא לעשות</div>
+  <p>לא לחתום על שטר-חוב פתוח בלי סכום.</p>
+  <div class="sec">להגיד</div>
+  <div class="say">«הבטוחות לא יעלו על 19,200 ₪ במצטבר. שטר-החוב יוגבל לסכום הזה או יימחק. אחרי זה אני חותם.»</div>
+  <div class="acts2"><button class="btn p big">שלח למשכיר</button><button class="btn big">הזכר לי ▾</button></div>
+  <div class="fold"><span>▸ פרטים (12)</span><span>▸ ממצאים (4)</span><span>▸ חישוב</span></div>
+  <div class="disc">זו קריאת סיכונים, לא ייעוץ משפטי.</div>
+ </div>
+ <div class="nav"><div><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>היום</div><div><svg viewBox="0 0 24 24"><path d="M3 12l3-7h12l3 7v7H3z"/><path d="M3 12h5l2 3h4l2-3h5"/></svg>תיבה</div><div><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>עוד</div></div>
+</div><div class="pageh">2 · «תיק» — עונה על: מה לעשות עם זה? (3 דברים, השאר מקופל)</div></div>
+
+<!-- מסך 3 · תיבה -->
+<div><div class="phone">
+ <div class="status"><span>9:41</span><span>●●● ᯤ ▮</span></div>
+ <div class="top"><h1>תיבה</h1><span class="meta">2 חדשים</span></div>
+ <div class="body">
+  <div class="line" style="align-items:flex-start;padding:12px 0"><svg class="ic" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg><div class="t"><div>חוזה_שכירות.pdf <small style="display:inline">· צולם היום 21:14</small></div><small>זיהיתי: חוזה שכירות · דירה · לפני חתימה</small><div class="acts" style="margin-top:10px;display:flex;gap:8px"><button class="btn p">פתח תיק</button><button class="btn">לא זה</button></div></div></div>
+  <div class="line" style="align-items:flex-start;padding:12px 0"><svg class="ic" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0112 0v5l2 2H4z"/><path d="M10 20a2 2 0 004 0"/></svg><div class="t"><div>ליצור תזכורת «החזר פיקדון» ל-1.10?</div><small>מתוך: תיק דוד כהן · יציאה 1.9</small><div class="acts" style="margin-top:10px;display:flex;gap:8px"><button class="btn p">אשר</button><button class="btn">דחה</button><button class="btn">תמיד אשר</button></div></div></div>
+  <div class="sec" style="color:var(--tx2);font-weight:600">טופל השבוע <span class="meta">(5)</span></div>
+  <div class="line"><div class="t" style="color:var(--tx2)">מכתב מבית הספר · ליאור<small>הפך לתיק · ועדת שילוב 24.9</small></div><span class="chev">‹</span></div>
+  <div class="line"><div class="t" style="color:var(--tx2)">שובר ארנונה 4,200 ₪<small>הפך לתיק · פנייה נשלחה</small></div><span class="chev">‹</span></div>
+ </div>
+ <div class="nav"><div><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>היום</div><div class="on"><svg viewBox="0 0 24 24"><path d="M3 12l3-7h12l3 7v7H3z"/><path d="M3 12h5l2 3h4l2-3h5"/></svg>תיבה</div><div><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>עוד</div></div>
+</div><div class="pageh">3 · «תיבה» — עונה על: מה הגיע ומה היא מציעה? (אשר / דחה)</div></div>
+
+</div></body></html>
