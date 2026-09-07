@@ -7,7 +7,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { interpret as entInterpret } from './entity.mjs';
-import { renderEntity, renderDashboard, renderHub, renderSystem, renderMain, renderScreenBind, renderCompose, renderRecordDetail, SCREEN_REGISTRY } from './render-ds.mjs';
+import { renderEntity, renderDashboard, renderHub, renderSystem, renderMain, renderScreenBind, renderCompose, renderRecordDetail, SCREEN_REGISTRY, makeConsts, write } from './render-ds.mjs';
+import { PARTICLE_RE, parseParticleLines, planParticles, renderParticles, planReport } from './particles.mjs';   // G23 · הכרעה-27
 import { nlToSpec } from './nl-spec.mjs';
 import { L, T } from './chrome.mjs';
 import * as R from '../root.mjs';
@@ -51,7 +52,7 @@ function parseRole(line) {
 export function buildApp(specText) {
   // 🗣️ צפן §22: קלט חסר-מבנה לגמרי (אף ישות/דשבורד/תפקיד) ⇒ עברית-חופשית ⇒ nlToSpec.
   // מבנה קיים ⇒ ביט-זהה (לא נוגעים). כך אותה דלת מקבלת גם משפט-חופשי וגם אפיון-מדויק.
-  const raw = specText.split(/\n+/).map((l) => l.trim()).filter((l) => l.length > 2);
+  const raw = specText.split(/\n+/).map((l) => l.trim()).filter((l) => l.length > 2 && !PARTICLE_RE.test(l));
   // חסר ישות-מפורשת ⇒ עברית-חופשית לשורות-שאינן-תפקיד (שורות-תפקיד נשמרות כמות-שהן ומצורפות
   // בחזרה). באג-שנתפס: קלט מעורב (משפט-ישויות-חופשי + 'תפקיד ...') דילג על nlToSpec כי שורת-
   // תפקיד קיימת ⇒ 0 ישויות, אפליקציה מנוונת. עכשיו רק ישות-מפורשת ⇒ ביט-זהה; אחרת החופשי מתפרש.
@@ -61,7 +62,9 @@ export function buildApp(specText) {
     const nl = nlToSpec(freeLines.join('\n'));
     if (nl.trim()) specText = [nl, ...roleLines].join('\n');   // חסר-מבנה ⇒ עברית-חופשית + תפקידים
   }
-  const all = specText.split(/\n+/).map((l) => l.trim()).filter((l) => l.length > 2);
+  const all0 = specText.split(/\n+/).map((l) => l.trim()).filter((l) => l.length > 2);
+  const particleLines = all0.filter((l) => PARTICLE_RE.test(l));   // G23 · חלקיקים (צעד 2) — לא ישויות
+  const all = all0.filter((l) => !PARTICLE_RE.test(l));
   const roles = all.filter((l) => ROLE_RE.test(l)).map(parseRole);
   const lines = all.filter((l) => !ROLE_RE.test(l));
   const info = lines.map((line, idx) => ({ line, i: idx + 1, isEnt: ENTITY_RE.test(line) }));
@@ -123,7 +126,7 @@ export function buildApp(specText) {
 
   // ניקוי פלט-app קודם
   // L95: ניקוי רק בתוך מרחב-השמות — בלי --name היה מוחק גם gen_app_kehila/tzedaka/… של app-from-sentences (אותה מחלה כמו genesis-gen, L93)
-  const own = NS ? new RegExp(`^gen_${P}(ent|scr|bind|rec|over|audit|flags|settings|hub|main|relations)\\d*(_content)?\\.dart$`) : /^gen_app_(ent|scr|bind|rec|over|audit|flags|settings|hub|main|relations)\d*(_content)?\.dart$/;
+  const own = NS ? new RegExp(`^gen_${P}(ent|px|scr|bind|rec|over|audit|flags|settings|hub|main|relations)\\d*(_content)?\\.dart$`) : /^gen_app_(ent|px|scr|bind|rec|over|audit|flags|settings|hub|main|relations)\d*(_content)?\.dart$/;
   for (const f of fs.readdirSync(OUT)) if (own.test(f)) fs.unlinkSync(path.join(OUT, f));
   for (const f of fs.readdirSync(DATA)) if (own.test(f)) fs.unlinkSync(path.join(DATA, f));
 
@@ -204,6 +207,24 @@ export function buildApp(specText) {
     else overN--;
   }
 
+  // 🧩 G23 · הכרעה-27: מסך-חלקיקים לכל ישות שיש לה חלקיקים — כל חלקיק נמצא בחיפוש בכל הקטלוג ומורכב מחדש
+  const particleScreens = [];
+  if (particleLines.length) {
+    const pents = entMeta.map((e) => { const li = info.find((x) => x.isEnt && `${P}ent${x.i}` === e.slug); const r = li ? entRes[li.i] : null; const sc = screens.find((x) => x.slug === e.slug); return { name: e.name, slug: e.slug, cls: sc ? sc.cls : 'Gen' + e.slug, schema: r ? r.schema : [] }; });
+    const plan = planParticles({ particles: parseParticleLines(particleLines), entities: pents });
+    let pi = 0;
+    for (const e of pents) {
+      const mine = plan.filter((p) => p.entSlug === e.slug); if (!mine.length) continue;
+      const pslug = `${P}px${++pi}`; const { k, dump } = makeConsts(pslug);
+      const r = renderParticles({ slug: pslug, entity: e, plan: mine, k });
+      write(pslug, r.code, dump());
+      particleScreens.push({ slug: pslug, cls: r.cls, kind: 'entity', name: `🧩 ${T('particlesTitle', { ent: e.name })}`, icon: '🧩', sub: `${r.count} ${L.particlesLive}${r.notes.length ? ` · ${r.notes.length} ${L.particlesUnres}` : ''}` });
+    }
+    const gen = R.GEN_DIR; const nsName = NS || 'app';
+    fs.writeFileSync(path.join(gen, `particle-plan-${nsName}.json`), JSON.stringify(plan.map((p) => ({ entity: p.entity, name: p.name, expr: p.expr, ok: p.ok, why: p.why || null, shape: p.shape ? p.shape.kind : null, ops: p.ops || [], picks: (p.picks || []).map((k) => ({ op: k.op, atoms: k.atoms, alts: k.alts.slice(0, 3) })), wired: p.wired || [] })), null, 1) + '\n');
+    fs.writeFileSync(path.join(gen, `particle-plan-${nsName}.md`), planReport(plan));
+    console.log(`🧩 ${L.particlesLog}: ${plan.filter((p) => p.wired && p.wired.length).length}/${plan.length} ${L.particlesFound} · ${particleScreens.length} ${L.particleScreens}`);
+  }
   // מסכי-מערכת (kind='system' — גלויים רק לתפקיד 'הכל')
   const sys = [];
   const a = renderSystem(`${P}audit`, { title: L.auditTitle, icon: '🧾', sectionTitle: L.auditSection, kind: 'empty', items: [L.auditEmpty] });
@@ -216,7 +237,7 @@ export function buildApp(specText) {
   // RLS · שדות-היקף ייחודיים (slug+שדה) — למילוי בורר-"מי-אני" בלוח.
   const scopeFields = [];
   for (const role of roles) for (const sc of (role.scope || [])) { const sl = nameToSlug[sc.ent]; if (sl && !scopeFields.some((x) => x.slug === sl && x.field === sc.field)) scopeFields.push({ slug: sl, field: sc.field }); }
-  const hub = renderHub(`${P}hub`, { title: L.appTitle, icon: '🏗️', screens: [...screens, ...composeScreens, ...detailScreens, ...bindScreens, ...sys], roles, scopeFields });
+  const hub = renderHub(`${P}hub`, { title: L.appTitle, icon: '🏗️', screens: [...screens, ...particleScreens, ...composeScreens, ...detailScreens, ...bindScreens, ...sys], roles, scopeFields });
   // שורש-האפליקציה: main + MaterialApp ⇒ אפליקציה עצמאית שרצה בלי entry-זמני.
   renderMain(`${P}main`, { title: L.appTitle, hubSlug: `${P}hub`, hubCls: hub.cls, edges });
 
@@ -229,6 +250,17 @@ if (import.meta.url === 'file://' + process.argv[1]) {
   else spec = process.argv.slice(2).join('\n');
   if (!spec.trim()) { console.error('שימוש: node app-ds.mjs -f spec.txt'); process.exit(1); }
   const { screens, sys } = buildApp(spec);
+  // G23 · --skin: אותו בורר-עור של מסלול-א׳ (auto-skin ⇒ skinPass) על מסכי מסלול-ב׳ — ישות-חדשה בעיצוב-החדש (היה: DS ישן בלבד)
+  if (process.argv.includes('--skin')) {
+    const [{ skinPass }, { resolveSkin }, { autoSkin }] = await Promise.all([import('./retarget.mjs'), import('./app-from-sentences.mjs'), import('./auto-skin.mjs')]);
+    const sk = resolveSkin(autoSkin().skin); const tot = {};
+    for (const f of fs.readdirSync(OUT)) {
+      if (!new RegExp(`^gen_${P}(ent|px|scr|bind|rec|over|audit|flags|settings|hub|main)\\d*\\.dart$`).test(f)) continue;
+      const fp = path.join(OUT, f); const { code, stats } = skinPass(fs.readFileSync(fp, 'utf8'), sk);
+      fs.writeFileSync(fp, code); for (const [k, v] of Object.entries(stats)) tot[k] = (tot[k] || 0) + v;
+    }
+    console.log(`🎨 ${L.skinLog}: ${Object.entries(tot).filter(([, v]) => v).map(([k, v]) => `${k}×${v}`).join(' · ') || '—'}`);
+  }
   const ents = screens.filter((s) => s.icon === '🗂️');
   console.log(`\n✨ אפליקציה (מערכת-עיצוב) חוללה — ${screens.length + sys.length + 1} מסכים`);
   console.log(`   ${ents.length} ישויות · ${screens.length - ents.length} דשבורדים · ${sys.length} מערכת · 1 לוח`);

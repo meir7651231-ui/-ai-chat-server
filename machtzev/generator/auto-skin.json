@@ -24,7 +24,7 @@
   "search": "ForgeDsSearch",
   "pageHeader": "ForgeCenteredPageHeader",
   "table": "ForgeDataGrid",
-  "bars": "ForgeBarChart",
+  "bars": "ForgeWaveformBars",
   "board": "ForgeKanbanBoard",
   "calendar": "ForgeEventCalendar",
   "toneMap": {
@@ -168,9 +168,9 @@
    "ForgeDataGrid:8"
   ],
   "bars": [
-   "ForgeBarChart:4",
-   "ForgeStackedBarGroup:2",
-   "ForgeWaveformBars:2"
+   "ForgeWaveformBars:2",
+   "ForgeBarChart:-4",
+   "ForgeStackedBarGroup:-4"
   ],
   "board": [
    "ForgeKanbanBoard:6"
@@ -277,6 +277,7 @@
   "ForgeLiveStatusPillStatus",
   "ForgeMagneticButton",
   "ForgeManageRow",
+  "ForgeMarkerStates",
   "ForgeMenuRow",
   "ForgeMessageThread",
   "ForgeMeter",
@@ -306,7 +307,6 @@
   "ForgeQuickActionButton",
   "ForgeQuickAddForm",
   "ForgeRadialGaugeStatus",
-  "ForgeRatingBars",
   "ForgeRegressionPanelCheckRow",
   "ForgeReplyComposer",
   "ForgeRequestComposer",

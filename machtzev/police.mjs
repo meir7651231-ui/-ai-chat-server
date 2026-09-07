@@ -136,6 +136,7 @@ gate('compose-determinism', 'compose-engine.mjs', ['--gate']);
 gate('opcensus', 'generator/op-census.mjs', ['--gate']);
 gate('shapeops', 'generator/shape-ops.mjs', ['--gate']);
 gate('cover', 'generator/cover.mjs', ['--gate']);
+gate('particles', 'generator/particles.mjs', ['--gate']);
 gate('goldquarry', 'generator/quarry-golden.mjs', ['--gate']);
 gate('rendermodule', 'generator/render-module.mjs', ['--gate']);
 gate('retarget', 'generator/retarget.mjs', ['--gate']);

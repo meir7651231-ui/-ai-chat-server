@@ -107,10 +107,12 @@ function parseAtomTable() {
   }
   return rows;
 }
-const OPFAM = { magnitude: 'stat', headline: 'stat', hero: 'stat', ratio: 'ratio', compare: 'bars', diff: 'stat', fact: 'fact', group: 'group', identity: 'identity', action: 'action', search: 'field', filter: 'filter', switch: 'switch', alert: 'alert', table: 'table', panel: 'panel', timeline: 'timeline', empty: 'empty', trend: 'trend', ring: 'stat', gauge: 'stat', bars: 'bars', avatar: 'identity', expand: 'expand', field: 'field', enumfield: 'field', board: 'board', primary: 'action',
+export const OPFAM = { magnitude: 'stat', headline: 'stat', hero: 'stat', ratio: 'ratio', compare: 'bars', diff: 'stat', fact: 'fact', group: 'group', identity: 'identity', action: 'action', search: 'field', filter: 'filter', switch: 'switch', alert: 'alert', table: 'table', panel: 'panel', timeline: 'timeline', empty: 'empty', trend: 'trend', ring: 'stat', gauge: 'stat', bars: 'bars', avatar: 'identity', expand: 'expand', field: 'field', enumfield: 'field', board: 'board', primary: 'action',
   match: 'transform', predicate: 'predicate', serialize: 'transform', role: 'format', grant: 'predicate', expiry: 'collection', capital: 'measure', queue: 'collection', progress: 'summary', sheet: 'transform', makeup: 'collection', balance: 'measure', paidstatus: 'format', hok: 'collection', clash: 'format', slots: 'collection', block: 'format', holiday: 'format', weekly: 'collection', sessions: 'collection', enrol: 'measure', wait: 'collection', byteacher: 'collection', whoami: 'format', cert: 'format', contact: 'format', recipients: 'collection', template: 'format', parse: 'collection', trendengine: 'summary' };
 
-if (process.argv.includes('--gate') || process.argv.includes('--report')) {
+import { fileURLToPath as __fu } from 'node:url';
+const __isMain = process.argv[1] && path.resolve(process.argv[1]) === __fu(import.meta.url);   // הכרעה-27: cover מיובא ע"י particles.mjs — השער רץ רק בהרצה ישירה
+if (__isMain && (process.argv.includes('--gate') || process.argv.includes('--report'))) {
   const rows = parseAtomTable();
   const res = rows.map((r) => {
     const fam = OPFAM[r.op] || r.op;

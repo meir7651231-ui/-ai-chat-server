@@ -3142,7 +3142,7 @@
   "id": "ForgeDonutChart",
   "layer": "display",
   "file": "dart-forge-bs/dataviz/donut_chart.dart",
-  "op": "fact",
+  "op": "text",
   "sockets": [
    "fields",
    "child"
@@ -4180,6 +4180,7 @@
   "file": "dart-forge-bs/spatial/map_surface.dart",
   "op": "fact",
   "sockets": [
+   "fields",
    "child"
   ],
   "why": "צורת-מניפסט-forge"
@@ -4965,7 +4966,7 @@
   "id": "ForgeRadialGauge",
   "layer": "display",
   "file": "dart-forge-bs/dataviz/radial_gauge.dart",
-  "op": "fact",
+  "op": "stat",
   "sockets": [
    "fields",
    "child"

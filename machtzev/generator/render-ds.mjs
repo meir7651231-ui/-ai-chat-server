@@ -21,6 +21,7 @@ const pascal = (slug) => 'GenApp' + slug.replace(/^app_/, '').replace(/(^|[_-])(
 // (ה-he שלהם, בקובץ-האטום). המנוע אוחז את סוג-הנתון לפי חפיפת-משמעות בין תווית-השדה
 // לתיאור-העצמי — אפס regex, אפס רשימת-מילים במנוע. מבחן-קונכייה: מחליף אטום ⇒ לומד מחדש.
 import { readAtlas } from './atlas.mjs';
+import { searchOp, wireAtom } from './particles.mjs';   // הכרעה-27 · חיפוש-פתוח לאריחי-אגרגט
 const atlas = readAtlas();   // L93: atlas.json + atlas-data.json
 const heToks = (s) => [...String(s || '').matchAll(/[֐-׿]{2,}/g)].map((m) => stem(m[0])).filter((t) => t.length > 1);
 // מילים-עבריות שלמות (לא-גזומות) — לאימות-חפיפה מול הגזם (הגזם מקבץ, המילה מאשרת).
@@ -134,7 +135,7 @@ function pickXform(label, ftype) {
 }
 
 // מחולל-תוכן: אוסף מחרוזות-עברית ⇒ const; מחזיר את שם-הקבוע לשיבוץ בקוד.
-function makeConsts(slug) {
+export function makeConsts(slug) {
   const consts = [];
   const k = (s) => {
     const name = `gen_${slug}_c${consts.length}`;
@@ -145,7 +146,7 @@ function makeConsts(slug) {
   return { k, dump };
 }
 
-const write = (slug, code, content) => {
+export const write = (slug, code, content) => {
   fs.mkdirSync(OUT, { recursive: true });
   fs.mkdirSync(DATA, { recursive: true });
   fs.writeFileSync(path.join(OUT, `gen_${slug}.dart`), code);
@@ -763,7 +764,13 @@ export function renderDashboard(slug, { title, icon = '📊', entities, metrics 
       : a.kind === L.avg ? `appStore.avg('${a.slug}', ${cf})`
       : `appStore.count('${a.slug}').toDouble()`;
     const disp = a.kind === L.avg ? `${num}.toStringAsFixed(1)` : `${num}.toStringAsFixed(0)`;
-    tiles.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => PremiumStat(label: ${lbl}, value: ${num}, glyph: ${g}${nav(a.slug)}))`);
+    // הכרעה-27 · אריח-אגרגט = חלקיק 'headline': האטום נמצא בחיפוש בכל הקטלוג (cover) ומתחווט מהדאטה — לא PremiumStat קבוע (שהיה גם trend בלי נתון-מגמה, L73)
+    const pk = searchOp('headline', `${a.filtered ? a.value : (a.field || a.entityName)} ${a.entityName}`);
+    const wired = [...pk.atoms, ...pk.alts].map((c) => wireAtom(c.split('@')[0], { label: lbl, value: { str: disp, num }, glyph: g, sub: sub, nav: a.slug ? `() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${pascal(a.slug)}()))` : null })).find(Boolean);
+    if (!wired) throw new Error(`particles: ${L.headlineNoAtom} ${a.entityName}`);
+    if (a.slug) imports.add(`import 'gen_${a.slug}.dart';`);
+    imports.add(`import '../${wired.file.startsWith('dart-') ? wired.file : 'dart-ui-bs/' + wired.file}';`);
+    tiles.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${wired.call})`);
     barLabels.push(lbl); barVals.push(num);
   }
   for (const e of shown) {

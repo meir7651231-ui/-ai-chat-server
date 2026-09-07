@@ -6,7 +6,7 @@
 
 // ── טבלת-הברירה: סוג-פעולת-הצגה → אטום-אמיתי הכי-טוב-לייעוד (selectAtom) ──
 // כל ערך מאומת נושא-ערך (file:line של שקע-הדאטה). מזייפים לא נכנסים לטבלה.
-const ATOM = {
+export const ATOM = {
   magnitude: { atom: 'BareStat',   seam: 'bare_stat.dart:6 required this.value' },     // ערך+תווית inline
   headline:  { atom: 'KpiTile',    seam: 'premium/dataviz/kpi_tile.dart value/label' }, // מדד-כותרת
   hero:      { atom: 'stat_hero',  seam: 'premium/surfaces/stat_hero.dart:5 required this.value' }, // מספר-ענק
@@ -74,11 +74,11 @@ const ATOM = {
 // חוצה-הריפו (בעלות-המחולל), והוספה תגרור חוב-מחולל קיים; שדרוג-הרשימה = הכרעת בעל-המחולל.
 // למסך-המלאי אין צורך: אף אחד מ-6 החלקיקים החדשים לא ממפה למזייף (הטבלה=DsTable, התנועות=TimelineItem — התחליפים).
 // הכרעה-26 (7.9): חמשת המזייפים קיבלו שקע-דאטה אמיתי (G21 — values/pct; sparkline כבר קיבל values) ⇒ אינם מזייפים. הרשימה ריקה אך נשארת ה-SSOT: אטום שממציא ערך נכנס לכאן.
-const FAKERS = new Set([]);
+export const FAKERS = new Set([]);
 
 // ── גוזר-הפעולות: מנוסחת-החלקיק → רשימת פעולות-הצגה (deterministic) ──
 // אופרטורים בנוסחה: '−' הפרש · '/' יחס · '×' מכפלה · 'vs' השוואה · 'count' · 'Σ' · 'partition' · 'raw' · 'name' · 'act'
-function ops(formula) {
+export function ops(formula) {
   const f = formula;
   if (f.kind === 'raw')       return [{ op: 'fact', why: 'ערך-גלם, אין תת-פעולה ⇒ עובדה עוצרת' }];
   if (f.kind === 'name')      return [{ op: 'identity', why: 'זהות = שם+אייקון+תמצית' }];
@@ -140,7 +140,7 @@ function ops(formula) {
 }
 
 // ── החלקיקים כצורות-דאטה (25 מלאי + 35 SchoolOS) (לא הרכבות — המנוע מרכיב) ──
-const PARTICLES = [
+export const PARTICLES = [
   { id: 'runway',     name: 'ריצה',        f: { kind: 'raw',       expr: 'daysLeft=cur/rate' } },
   { id: 'comparison', name: 'השוואה',      f: { kind: 'vs',        expr: 'daysLeft vs lead' } },
   { id: 'stock',      name: 'מלאי',        f: { kind: '/',         expr: 'cur / target' } },
@@ -205,7 +205,7 @@ const PARTICLES = [
   { id: 'par.perm',      name: 'הורים·הרשאות',     f: { kind: 'perm',        expr: 'מחנך/הנהלה/הורה ⇒ show/hide' } },
 ];
 
-function compose(p) {
+export function compose(p) {
   const list = ops(p.f);
   const atoms = list.map(o => {
     const pick = ATOM[o.op];
@@ -217,7 +217,11 @@ function compose(p) {
   return { ...p, atoms, insight };
 }
 
-// ── דו"ח ──
+import { writeFileSync, readFileSync, existsSync } from 'fs';
+// ── דו"ח (רק בהרצה ישירה — הכרעה-27: המודול מיובא ע"י particles.mjs, ייבוא לא כותב קבצים) ──
+import { fileURLToPath as __fu } from 'node:url';
+const __isMain = process.argv[1] && __fu(import.meta.url) === (await import('node:path')).default.resolve(process.argv[1]);
+if (__isMain) {
 const out = PARTICLES.map(compose);
 let md = `# מנוע-ההרכבה — פלט על ${PARTICLES.length} החלקיקים\n\n`;
 md += '| # | חלקיק | נוסחה | סוג | אטומים (הכי-טוב-לייעוד) |\n|---|---|---|---|---|\n';
@@ -232,7 +236,6 @@ out.forEach(p => p.atoms.forEach(a => { if (!seen.has(a.atom)) { seen.add(a.atom
 md += `\n**מזייפים חסומים במנוע (בחירה בהם ⇒ throw):** ${[...FAKERS].join(' · ')}\n`;
 md += `\n**סיכום:** ${out.filter(p => p.insight).length} תובנות (מרובות-אטומים) · ${out.filter(p => !p.insight).length} עובדות (אטום-יחיד). המנוע דטרמיניסטי — אותה נוסחה תיתן תמיד אותה הרכבה, ואף פעם לא מזייף.\n`;
 
-import { writeFileSync, readFileSync, existsSync } from 'fs';
 // --gate (שער compose-determinism · 23-ג): המנוע על 15 החלקיקים ≡ הדוח המחויב. שינוי בטבלת-ATOM/PARTICLES = אירוע-ראצ׳ט מוצהר ⇒ הרץ בלי --gate וקבֵּע.
 const REPORT = new URL('./compose-engine-report.md', import.meta.url);
 if (process.argv.includes('--gate')) {
@@ -242,3 +245,4 @@ if (process.argv.includes('--gate')) {
 }
 writeFileSync(REPORT, md);
 process.stdout.write(md);
+}

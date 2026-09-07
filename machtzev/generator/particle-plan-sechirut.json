@@ -1,0 +1,299 @@
+[
+ {
+  "entity": "בטוחה",
+  "name": "חורג",
+  "expr": "סך בטוחות / תקרה לפי 3 חודשים",
+  "ok": true,
+  "why": null,
+  "shape": "/",
+  "ops": [
+   "ratio"
+  ],
+  "picks": [
+   {
+    "op": "ratio",
+    "atoms": [
+     "StatRow"
+    ],
+    "alts": [
+     "StatRow",
+     "ProgressStatRow",
+     "ManagerDashboardCreditBar"
+    ]
+   }
+  ],
+  "wired": [
+   "StatRow"
+  ]
+ },
+ {
+  "entity": "בטוחה",
+  "name": "מעל התקרה",
+  "expr": "מונה(חורג מול 3 חודשים=חורג)",
+  "ok": true,
+  "why": null,
+  "shape": "count",
+  "ops": [
+   "headline"
+  ],
+  "picks": [
+   {
+    "op": "headline",
+    "atoms": [
+     "KpiTile"
+    ],
+    "alts": [
+     "KpiTile",
+     "ProgressRing",
+     "StatHero"
+    ]
+   }
+  ],
+  "wired": [
+   "KpiTile"
+  ]
+ },
+ {
+  "entity": "ממצא",
+  "name": "אדומים",
+  "expr": "מונה(צבע=אדום)",
+  "ok": true,
+  "why": null,
+  "shape": "count",
+  "ops": [
+   "headline"
+  ],
+  "picks": [
+   {
+    "op": "headline",
+    "atoms": [
+     "KpiTile"
+    ],
+    "alts": [
+     "KpiTile",
+     "ProgressRing",
+     "StatHero"
+    ]
+   }
+  ],
+  "wired": [
+   "KpiTile"
+  ]
+ },
+ {
+  "entity": "ממצא",
+  "name": "צבע",
+  "expr": "צבע",
+  "ok": true,
+  "why": null,
+  "shape": "partition",
+  "ops": [
+   "group"
+  ],
+  "picks": [
+   {
+    "op": "group",
+    "atoms": [
+     "AnimatedEmpty"
+    ],
+    "alts": [
+     "AnimatedEmpty",
+     "DsSection",
+     "SectionHeader"
+    ]
+   }
+  ],
+  "wired": [
+   "SectionHeader"
+  ]
+ },
+ {
+  "entity": "ממצא",
+  "name": "מה לבקש",
+  "expr": "מה לבקש",
+  "ok": true,
+  "why": null,
+  "shape": "raw",
+  "ops": [
+   "fact"
+  ],
+  "picks": [
+   {
+    "op": "fact",
+    "atoms": [
+     "DsChip"
+    ],
+    "alts": [
+     "DsChip",
+     "DsEmpty",
+     "StatusChip@premium/feedback"
+    ]
+   }
+  ],
+  "wired": [
+   "DsChip"
+  ]
+ },
+ {
+  "entity": "תשלום",
+  "name": "הכנסה",
+  "expr": "סכום(סכום)",
+  "ok": true,
+  "why": null,
+  "shape": "sum",
+  "ops": [
+   "headline"
+  ],
+  "picks": [
+   {
+    "op": "headline",
+    "atoms": [
+     "KpiTile"
+    ],
+    "alts": [
+     "KpiTile",
+     "ProgressRing",
+     "StatHero"
+    ]
+   }
+  ],
+  "wired": [
+   "KpiTile"
+  ]
+ },
+ {
+  "entity": "תשלום",
+  "name": "לא שולם",
+  "expr": "מונה(שולם=לא)",
+  "ok": true,
+  "why": null,
+  "shape": "count",
+  "ops": [
+   "headline"
+  ],
+  "picks": [
+   {
+    "op": "headline",
+    "atoms": [
+     "KpiTile"
+    ],
+    "alts": [
+     "KpiTile",
+     "ProgressRing",
+     "StatHero"
+    ]
+   }
+  ],
+  "wired": [
+   "KpiTile"
+  ]
+ },
+ {
+  "entity": "תיק",
+  "name": "שכירות לשנה",
+  "expr": "שכירות לשנה",
+  "ok": true,
+  "why": null,
+  "shape": "raw",
+  "ops": [
+   "fact"
+  ],
+  "picks": [
+   {
+    "op": "fact",
+    "atoms": [
+     "NumberStepper"
+    ],
+    "alts": [
+     "NumberStepper",
+     "DsChip",
+     "DsEmpty"
+    ]
+   }
+  ],
+  "wired": [
+   "DsChip"
+  ]
+ },
+ {
+  "entity": "תיק",
+  "name": "טבלה",
+  "expr": "[טבלה]",
+  "ok": true,
+  "why": null,
+  "shape": "table",
+  "ops": [
+   "table"
+  ],
+  "picks": [
+   {
+    "op": "table",
+    "atoms": [
+     "DsTable"
+    ],
+    "alts": [
+     "DsTable",
+     "ForgeDataGrid",
+     "ForgeSplitControl"
+    ]
+   }
+  ],
+  "wired": [
+   "DsTable"
+  ]
+ },
+ {
+  "entity": "תיק",
+  "name": "פעולה פתח תיק",
+  "expr": "[פעולה] פתח תיק",
+  "ok": true,
+  "why": null,
+  "shape": "act",
+  "ops": [
+   "action"
+  ],
+  "picks": [
+   {
+    "op": "action",
+    "atoms": [
+     "DsPrimaryButton"
+    ],
+    "alts": [
+     "DsPrimaryButton",
+     "GlassButton",
+     "GradButton"
+    ]
+   }
+  ],
+  "wired": [
+   "DsPrimaryButton"
+  ]
+ },
+ {
+  "entity": "ממצא",
+  "name": "ריק אין ממצאים עדיין",
+  "expr": "[ריק] אין ממצאים עדיין",
+  "ok": true,
+  "why": null,
+  "shape": "empty",
+  "ops": [
+   "empty"
+  ],
+  "picks": [
+   {
+    "op": "empty",
+    "atoms": [
+     "EmptyStateCard"
+    ],
+    "alts": [
+     "EmptyStateCard",
+     "EmptyState@premium/feedback",
+     "SearchEmptyState"
+    ]
+   }
+  ],
+  "wired": [
+   "EmptyState@premium/feedback"
+  ]
+ }
+]

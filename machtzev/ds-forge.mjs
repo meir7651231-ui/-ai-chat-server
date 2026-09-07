@@ -590,7 +590,7 @@ function svgScene(node, map, anc, inherit) {
       else if (ch.tag === 'path' && a.d) ops.push(`_Op.path(${dq(a.d)}, ${col}, ${filled}, ${sw}${gArgs(gd)})`);
       else if (ch.tag === 'text') {
         const s = allText(ch).replace(/\s+/g, ' ').trim();
-        if (s) { const anchr = { middle: 1, end: 2 }[a['text-anchor'] || est['text-anchor']] || 0; const size = px(est['font-size']) || 9; const tc = colorExpr(est['fill'] || est['color']) || inherit; const ff = fontExpr(est['font-family']) || 'fonts.grotesk'; ops.push(`_Op.text(${dq(decode(s))}, ${+a.x || 0}, ${+a.y || 0}, ${size}, ${tc}, ${anchr}, ${ff})`); }
+        if (s) { const anchr = { middle: 1, end: 2 }[a['text-anchor'] || est['text-anchor']] || 0; const size = px(est['font-size']) || 9; const tc = colorExpr(est['fill'] || est['color']) || inherit; const ff = fontExpr(est['font-family']) || 'fonts.grotesk'; ops.push(`_Op.text(${slot(decode(s))}, ${+a.x || 0}, ${+a.y || 0}, ${size}, ${tc}, ${anchr}, ${ff})`); }   // G23a · טקסט-SVG = חריץ (היה ליטרל-עיצוב צרוב: '86','01' דלפו למסך כדאטה — §20-ג)
       }
       else if ((ch.tag === 'polyline' || ch.tag === 'polygon') && a.points) {
         const pts = a.points.trim().split(/[\s,]+/); let d = 'M ' + pts[0] + ' ' + pts[1];
