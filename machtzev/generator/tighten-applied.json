@@ -1,15 +1,4 @@
 {
- "ayin-active": {
-  "fn": "ayinActive",
-  "before": {
-   "ret": "bool",
-   "raw": "dynamic a"
-  },
-  "after": {
-   "ret": "bool",
-   "raw": "String a"
-  }
- },
  "ayin-advance-label": {
   "fn": "ayinAdvanceLabel",
   "before": {
@@ -43,17 +32,6 @@
    "raw": "\n  Map<String, dynamic> db,\n  Map<String, dynamic> room,\n  String iso,\n  String? blocked,\n  Map<String, dynamic> config,\n  num Function(dynamic t) timeToMin,\n  String Function(dynamic min) minToHM,\n  List<dynamic> Function(dynamic c) sessionsOf,\n  bool Function(dynamic c, dynamic iso) courseOnDate,\n  String Function(dynamic cfg, dynamic key, dynamic fb) termOf, Map<String, dynamic> T, [\n  bool cleaningOn = true,\n]"
   }
  },
- "call-stats": {
-  "fn": "callStats",
-  "before": {
-   "ret": "Map<String, dynamic>",
-   "raw": "dynamic calls"
-  },
-  "after": {
-   "ret": "Map<String, dynamic>",
-   "raw": "String calls"
-  }
- },
  "caller-kind-label": {
   "fn": "callerKindLabel",
   "before": {
@@ -63,17 +41,6 @@
   "after": {
    "ret": "String?",
    "raw": "Map<String, dynamic> cfg,\n  String kind,\n  String Function(dynamic cfg, String key, String fb) termOf, Map<String, String> T"
-  }
- },
- "campaign-total": {
-  "fn": "campaignTotal",
-  "before": {
-   "ret": "num",
-   "raw": "dynamic boxes, dynamic campaignId"
-  },
-  "after": {
-   "ret": "num",
-   "raw": "List<dynamic> boxes, String campaignId"
   }
  },
  "collection-score-delta": {
@@ -219,17 +186,6 @@
    "raw": "\n  Map c,\n  Map e,\n  dynamic Function(Map, Map) weightedQuote,\n"
   }
  },
- "env-path": {
-  "fn": "envPath",
-  "before": {
-   "ret": "String",
-   "raw": "dynamic slug, dynamic cloudRoot"
-  },
-  "after": {
-   "ret": "String",
-   "raw": "String slug, String cloudRoot"
-  }
- },
  "events-csv-rows": {
   "fn": "eventsCsvRows",
   "before": {
@@ -283,17 +239,6 @@
   "after": {
    "ret": "List<Map<String, dynamic>>",
    "raw": "\n  List<Map<String, dynamic>> items,\n  String q,\n  String? status,\n  String? stage,\n  String Function(dynamic) normSearch,\n"
-  }
- },
- "filter-products": {
-  "fn": "filterProducts",
-  "before": {
-   "ret": "dynamic",
-   "raw": "\n  List products,\n  Object? q,\n  Object? onlyActive,\n  dynamic Function(Object? q, List base, List Function(dynamic p) getTerms) smartFilter,\n"
-  },
-  "after": {
-   "ret": "List<Map<String, dynamic>>",
-   "raw": "\n  List products,\n  Object? q,\n  Object? onlyActive,\n  dynamic Function(Object? q, List base, List Function(dynamic p) getTerms) smartFilter,\n"
   }
  },
  "find-all-open-plans": {
@@ -384,17 +329,6 @@
    "raw": "\n    Map<String, dynamic> db, String todayIso, Map<String, dynamic>? config, dynamic suggestions"
   }
  },
- "merge-family-import": {
-  "fn": "mergeFamilyImport",
-  "before": {
-   "ret": "Map<String, dynamic>",
-   "raw": "dynamic f, dynamic obj"
-  },
-  "after": {
-   "ret": "Map<String, dynamic>",
-   "raw": "String f, String obj"
-  }
- },
  "merge-supporters-group": {
   "fn": "mergeSupportersGroup",
   "before": {
@@ -404,17 +338,6 @@
   "after": {
    "ret": "Map<String, dynamic>",
    "raw": "\n  Map<String, dynamic> keeper,\n  List losers,\n  dynamic Function(dynamic acc, dynamic loser) mergeSupporterInto,\n"
-  }
- },
- "meta-path": {
-  "fn": "metaPath",
-  "before": {
-   "ret": "String",
-   "raw": "dynamic slug, dynamic cloudRoot"
-  },
-  "after": {
-   "ret": "String",
-   "raw": "String slug, String cloudRoot"
   }
  },
  "migrate-supporters-to-keyed": {
@@ -459,17 +382,6 @@
   "after": {
    "ret": "String",
    "raw": "String en, List<List<String>> MONTHS"
-  }
- },
- "month-label": {
-  "fn": "monthLabel",
-  "before": {
-   "ret": "dynamic",
-   "raw": "dynamic key"
-  },
-  "after": {
-   "ret": "String",
-   "raw": "String key"
   }
  },
  "name-index": {
@@ -593,17 +505,6 @@
    "raw": "\n  Map diff,\n  String? dek,\n  Map<String, dynamic> db,\n  String Function() scopedDonations,\n  dynamic fs,\n  Future<Map> Function(Map, dynamic)? encryptDoc,\n"
   }
  },
- "read-ics-feed-token": {
-  "fn": "readIcsFeedToken",
-  "before": {
-   "ret": "Future<String?>",
-   "raw": "\n  String slug,\n  dynamic db,\n  DocFn doc,\n  GetDocFn getDoc,\n"
-  },
-  "after": {
-   "ret": "Future<String?>",
-   "raw": "\n  String slug,\n  Map<String, dynamic> db,\n  DocFn doc,\n  GetDocFn getDoc,\n"
-  }
- },
  "receipt-fmt-of": {
   "fn": "receiptFmtOf",
   "before": {
@@ -624,17 +525,6 @@
   "after": {
    "ret": "Future<Map<String, dynamic>>",
    "raw": "\n  Map<String, dynamic> env,\n  String dek,\n  String json,\n  AesEnc aesEnc,\n"
-  }
- },
- "reenroll-counts": {
-  "fn": "reenrollCounts",
-  "before": {
-   "ret": "Map<String, int>",
-   "raw": "dynamic rows"
-  },
-  "after": {
-   "ret": "Map<String, int>",
-   "raw": "String rows"
   }
  },
  "resolve-localized": {
@@ -723,17 +613,6 @@
   "after": {
    "ret": "num?",
    "raw": "String nq, String nt, dynamic distance"
-  }
- },
- "safe-https-url": {
-  "fn": "safeHttpsUrl",
-  "before": {
-   "ret": "String?",
-   "raw": "dynamic raw"
-  },
-  "after": {
-   "ret": "String?",
-   "raw": "String raw"
   }
  },
  "same-loc": {
@@ -835,17 +714,6 @@
    "raw": "Map<String, dynamic>? c, num nowMs"
   }
  },
- "site-donate-url": {
-  "fn": "siteDonateUrl",
-  "before": {
-   "ret": "dynamic",
-   "raw": "dynamic config"
-  },
-  "after": {
-   "ret": "String?",
-   "raw": "Map<String, dynamic> config"
-  }
- },
  "site-palette": {
   "fn": "sitePalette",
   "before": {
@@ -901,39 +769,6 @@
    "raw": "String email"
   }
  },
- "sort-support-threads": {
-  "fn": "sortSupportThreads",
-  "before": {
-   "ret": "dynamic",
-   "raw": "dynamic threads"
-  },
-  "after": {
-   "ret": "List<dynamic>",
-   "raw": "dynamic threads"
-  }
- },
- "sort-team-msgs": {
-  "fn": "sortTeamMsgs",
-  "before": {
-   "ret": "List<dynamic>",
-   "raw": "dynamic msgs"
-  },
-  "after": {
-   "ret": "List<dynamic>",
-   "raw": "String msgs"
-  }
- },
- "spotlight-box": {
-  "fn": "spotlightBox",
-  "before": {
-   "ret": "dynamic",
-   "raw": "dynamic rect, dynamic vw, dynamic vh, [dynamic pad = 10]"
-  },
-  "after": {
-   "ret": "Map<String, dynamic>?",
-   "raw": "Map<String, dynamic>? rect, num vw, num vh, [num? pad = 10]"
-  }
- },
  "stage-index": {
   "fn": "stageIndex",
   "before": {
@@ -943,17 +778,6 @@
   "after": {
    "ret": "int",
    "raw": "String stage"
-  }
- },
- "stage-label": {
-  "fn": "stageLabel",
-  "before": {
-   "ret": "dynamic",
-   "raw": "dynamic cfg, dynamic stage, dynamic termOf, {required Map<String, dynamic> stageFallback}"
-  },
-  "after": {
-   "ret": "String",
-   "raw": "Map<String, dynamic> cfg, String stage, dynamic termOf, {required Map<String, dynamic> stageFallback}"
   }
  },
  "start-campaign": {
@@ -1033,17 +857,6 @@
    "raw": "Map<String, dynamic> sp, Map<String, String> T2, [dynamic Function(String key, String fallback)? term]"
   }
  },
- "sup-dup-field-value": {
-  "fn": "supDupFieldValue",
-  "before": {
-   "ret": "dynamic",
-   "raw": "dynamic sups, dynamic def, dynamic pick, dynamic edit"
-  },
-  "after": {
-   "ret": "String",
-   "raw": "List<Map<String, dynamic>> sups, Map<String, dynamic> def, Map<String, dynamic> pick, Map<String, dynamic> edit"
-  }
- },
  "sup-enforce-on": {
   "fn": "supEnforceOn",
   "before": {
@@ -1099,17 +912,6 @@
    "raw": "Map<String, dynamic> sp, num? year, num? month, dynamic supLast"
   }
  },
- "sup-tier": {
-  "fn": "supTier",
-  "before": {
-   "ret": "Map<String, String>",
-   "raw": "dynamic sc, Map<String, dynamic> T"
-  },
-  "after": {
-   "ret": "Map<String, String>",
-   "raw": "String sc, Map<String, dynamic> T"
-  }
- },
  "sup12m": {
   "fn": "sup12m",
   "before": {
@@ -1121,39 +923,6 @@
    "raw": "List<dynamic> supporters, String todayIso, dynamic supLast"
   }
  },
- "support-day-label": {
-  "fn": "supportDayLabel",
-  "before": {
-   "ret": "dynamic",
-   "raw": "dynamic at, dynamic todayIso, Map<String, dynamic> T"
-  },
-  "after": {
-   "ret": "String",
-   "raw": "String at, String todayIso, Map<String, dynamic> T"
-  }
- },
- "support-msg-time": {
-  "fn": "supportMsgTime",
-  "before": {
-   "ret": "dynamic",
-   "raw": "dynamic at"
-  },
-  "after": {
-   "ret": "String",
-   "raw": "String at"
-  }
- },
- "support-preview": {
-  "fn": "supportPreview",
-  "before": {
-   "ret": "dynamic",
-   "raw": "dynamic text, [dynamic max = 40]"
-  },
-  "after": {
-   "ret": "String",
-   "raw": "String text, [dynamic max = 40]"
-  }
- },
  "supporter-aggregates": {
   "fn": "supporterAggregates",
   "before": {
@@ -1163,28 +932,6 @@
   "after": {
    "ret": "Map<String, dynamic>",
    "raw": "Map<String, dynamic> sp"
-  }
- },
- "supporter-visible-for-designations": {
-  "fn": "supporterVisibleForDesignations",
-  "before": {
-   "ret": "bool",
-   "raw": "dynamic sup, dynamic allowed"
-  },
-  "after": {
-   "ret": "bool",
-   "raw": "String sup, String allowed"
-  }
- },
- "task-identity": {
-  "fn": "taskIdentity",
-  "before": {
-   "ret": "String",
-   "raw": "dynamic email, Map<String, String> T"
-  },
-  "after": {
-   "ret": "String",
-   "raw": "String email, Map<String, String> T"
   }
  },
  "task-stats-for": {
@@ -1253,17 +1000,6 @@
    "raw": "String term, num? months, List<Map<String, dynamic>> terms, Map<String, String> T"
   }
  },
- "term-of": {
-  "fn": "termOf",
-  "before": {
-   "ret": "dynamic",
-   "raw": "dynamic cfg, dynamic key, dynamic fallback"
-  },
-  "after": {
-   "ret": "String",
-   "raw": "Map<String, dynamic> cfg, String key, String fallback"
-  }
- },
  "thanks-prompt": {
   "fn": "thanksPrompt",
   "before": {
@@ -1273,17 +1009,6 @@
   "after": {
    "ret": "String",
    "raw": "Map<String, dynamic> inp, Map<String, String> T"
-  }
- },
- "to-tenant-id": {
-  "fn": "toTenantId",
-  "before": {
-   "ret": "dynamic",
-   "raw": "dynamic slug, dynamic orgName"
-  },
-  "after": {
-   "ret": "String",
-   "raw": "String slug, String orgName"
   }
  },
  "total-label": {
@@ -1297,28 +1022,6 @@
    "raw": "Map<String, dynamic> sp, dynamic supIls, dynamic supUsd"
   }
  },
- "tour-advance": {
-  "fn": "tourAdvance",
-  "before": {
-   "ret": "num?",
-   "raw": "dynamic index, dynamic delta, dynamic length"
-  },
-  "after": {
-   "ret": "num?",
-   "raw": "num index, num delta, num length"
-  }
- },
- "tour-steps": {
-  "fn": "tourSteps",
-  "before": {
-   "ret": "List<dynamic>",
-   "raw": "\n    List<dynamic> steps, dynamic isModuleOn, dynamic termOf, Map<String, String> T2, [dynamic config]"
-  },
-  "after": {
-   "ret": "List<dynamic>",
-   "raw": "\n    List<dynamic> steps, dynamic isModuleOn, dynamic termOf, Map<String, String> T2, [Map<String, dynamic>? config]"
-  }
- },
  "trust-report": {
   "fn": "trustReport",
   "before": {
@@ -1328,28 +1031,6 @@
   "after": {
    "ret": "Map<String, dynamic>",
    "raw": "Map<String, dynamic> bundle, Map<String, dynamic> T, [dynamic opt = const <String, dynamic>{},\n    dynamic eng = const <String, dynamic>{}]"
-  }
- },
- "undo-last": {
-  "fn": "undoLast",
-  "before": {
-   "ret": "dynamic",
-   "raw": "dynamic c, dynamic requeueOutcomes"
-  },
-  "after": {
-   "ret": "Map<String, dynamic>",
-   "raw": "Map<String, dynamic> c, List<String> requeueOutcomes"
-  }
- },
- "unit-label": {
-  "fn": "unitLabel",
-  "before": {
-   "ret": "dynamic",
-   "raw": "dynamic cfg, dynamic Function(dynamic, String, String) termOf, Map<String, String> T"
-  },
-  "after": {
-   "ret": "String",
-   "raw": "Map<String, dynamic> cfg, dynamic Function(dynamic, String, String) termOf, Map<String, String> T"
   }
  },
  "visible-events-for-designations": {
@@ -1449,17 +1130,6 @@
   "after": {
    "ret": "Map<String, dynamic>",
    "raw": "\n    Map<String, dynamic> c, Map<String, dynamic> opts, dynamic lessonPriceForTier, dynamic lessonsInTerm"
-  }
- },
- "wheel-index-under-pointer": {
-  "fn": "wheelIndexUnderPointer",
-  "before": {
-   "ret": "dynamic",
-   "raw": "dynamic rot, dynamic n"
-  },
-  "after": {
-   "ret": "num",
-   "raw": "String rot, String n"
   }
  },
  "wizard-step-error": {

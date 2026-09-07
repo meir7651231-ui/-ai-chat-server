@@ -206,5 +206,125 @@
  "weekly-room-sessions": {
   "key": "[[\"Map<String, List<dynamic>>\",\"String\",\"String\",\"Function/1\"],\"int\"]",
   "why": "file gen_courses_subset.dart — The argument type 'Null' can't be assigned to the parameter type 'Map<String, dy"
+ },
+ "term-of": {
+  "key": "[[\"Map<String, dynamic>\",\"String\",\"String\",\"Map<String, String>\"],\"String\"]",
+  "why": "box ayin — The argument type 'Object?' can't be assigned to the parameter type 'Map<String, dynamic>'"
+ },
+ "meta-path": {
+  "key": "[[\"String\",\"String\",\"Map<String, String>\"],\"String\"]",
+  "why": "box cloud-diff — type 'bool' is not a subtype of type 'String'"
+ },
+ "safe-https-url": {
+  "key": "[[\"String\",\"Map<String, String>\"],\"String?\"]",
+  "why": "box config — The argument type 'String? Function(String)' can't be assigned to the parameter type 'Stri"
+ },
+ "sup-tier": {
+  "key": "[[\"String\",\"Map<String, dynamic>\"],\"Map<String, String>\"]",
+  "why": "box custom-export — The argument type 'num' can't be assigned to the parameter type 'String'."
+ },
+ "sup-dup-field-value": {
+  "key": "[[\"List<Map<String, dynamic>>\",\"Map<String, dynamic>\",\"Map<String, dynamic>\",\"Map<String, dynamic>\"],\"String\"]",
+  "why": "box dedup — type '_Map<dynamic, dynamic>' is not a subtype of type 'Map<String, dynamic>'"
+ },
+ "undo-last": {
+  "key": "[[\"Map<String, List<dynamic>>\",\"List<String>\"],\"Map<String, List<dynamic>>\"]",
+  "why": "box dialer — type '_Map<dynamic, dynamic>' is not a subtype of type 'Map<String, dynamic>'"
+ },
+ "read-ics-feed-token": {
+  "key": "[[\"String\",\"Map<String, dynamic>\",\"Map<String, String>\"],\"Map<String, ?>\"]",
+  "why": "box ics-feed — type 'String' is not a subtype of type 'Map<String, dynamic>'"
+ },
+ "site-donate-url": {
+  "key": "[[\"Map<String, dynamic>\",\"Map<String, String>\"],\"String?\"]",
+  "why": "box public-site — type '_Map<dynamic, dynamic>' is not a subtype of type 'Map<String, dynamic>'"
+ },
+ "reenroll-counts": {
+  "key": "[[\"String\",\"Map<String, String>\"],\"Map<String, int>\"]",
+  "why": "box reenroll — type 'List<Map<String, Object?>>' is not a subtype of type 'String'"
+ },
+ "filter-products": {
+  "key": "[[\"List<Map<String, dynamic>>\",\"String\",\"bool\",\"Function/3\"],\"List<Map<String, dynamic>>\"]",
+  "why": "box shop — type 'List<dynamic>' is not a subtype of type 'List<Map<String, dynamic>>'"
+ },
+ "support-preview": {
+  "key": "[[\"String\",\"null\",\"Map<String, int>\"],\"String\"]",
+  "why": "box support-chat — type 'Null' is not a subtype of type 'String'"
+ },
+ "supporter-visible-for-designations": {
+  "key": "[[\"String\",\"String\"],\"bool\"]",
+  "why": "box supporters — The argument type 'List<dynamic>' can't be assigned to the parameter type 'String'."
+ },
+ "tour-steps": {
+  "key": "[[\"List<Map<String, String>>\",\"Function/?\",\"Function/3\",\"Map<String, Map<String, String>>?\",\"Map<String, String>\"],\"List<Map<String, dynamic>>\"]",
+  "why": "box tour — Operator '[]' cannot be called on 'Map<String, dynamic>?' because it is potentially null."
+ },
+ "tour-advance": {
+  "key": "[[\"int\",\"int\",\"int\"],\"int?\"]",
+  "why": "box tour — Operator '[]' cannot be called on 'Map<String, dynamic>?' because it is potentially null."
+ },
+ "spotlight-box": {
+  "key": "[[\"Map<String, int>?\",\"int\",\"int\",\"int?\",\"Map<String, int>\"],\"Map<String, int>?\"]",
+  "why": "box tour — Operator '[]' cannot be called on 'Map<String, dynamic>?' because it is potentially null."
+ },
+ "campaign-total": {
+  "key": "[[\"List<dynamic>\",\"String\"],\"int\"]",
+  "why": "box tzedaka — The argument type 'num Function(List<dynamic>, String)' can't be assigned to the parameter"
+ },
+ "task-identity": {
+  "key": "[[\"String\",\"Map<String, String>\"],\"String\"]",
+  "why": "box worktasks — The argument type 'Object?' can't be assigned to the parameter type 'String'."
+ },
+ "stage-label": {
+  "key": "[[\"Map<String, dynamic>\",\"String\",\"Function/?\",\"Map<String, String>\"],\"String\"]",
+  "why": "box ayin — type '_Map<dynamic, dynamic>' is not a subtype of type 'Map<String, dynamic>'"
+ },
+ "env-path": {
+  "key": "[[\"String\",\"String\",\"Map<String, String>\"],\"String\"]",
+  "why": "box cloud-diff — type 'bool' is not a subtype of type 'String'"
+ },
+ "call-stats": {
+  "key": "[[\"String\",\"Map<String, String>\"],\"Map<String, dynamic>\"]",
+  "why": "box dialer — type 'List<Map<String, String>>' is not a subtype of type 'String'"
+ },
+ "sort-team-msgs": {
+  "key": "[[\"String\"],\"List<dynamic>\"]",
+  "why": "box support-chat — type 'List<Map<String, String>>' is not a subtype of type 'String'"
+ },
+ "unit-label": {
+  "key": "[[\"Map<String, dynamic>\",\"Function/?\",\"Map<String, String>\"],\"String\"]",
+  "why": "box ayin — type '_Map<dynamic, dynamic>' is not a subtype of type 'Map<String, dynamic>'"
+ },
+ "ayin-active": {
+  "key": "[[\"String\",\"Map<String, String>\"],\"bool\"]",
+  "why": "box ayin — type 'Null' is not a subtype of type 'String'"
+ },
+ "merge-family-import": {
+  "key": "[[\"String\",\"String\"],\"Map<String, dynamic>\"]",
+  "why": "probe-evidence (L89)"
+ },
+ "month-label": {
+  "key": "[[\"String\"],\"String\"]",
+  "why": "probe-evidence (L89)"
+ },
+ "sort-support-threads": {
+  "key": "[[\"dynamic\",\"Map<String, String>\"],\"List<dynamic>\"]",
+  "why": "probe-evidence (L89)"
+ },
+ "support-day-label": {
+  "key": "[[\"String\",\"String\",\"Map<String, dynamic>\"],\"String\"]",
+  "why": "probe-evidence (L89)"
+ },
+ "support-msg-time": {
+  "key": "[[\"String\",\"Map<String, String>\"],\"String\"]",
+  "why": "probe-evidence (L89)"
+ },
+ "to-tenant-id": {
+  "key": "[[\"String\",\"String\",\"Map<String, dynamic>\"],\"String\"]",
+  "why": "probe-evidence (L89)"
+ },
+ "wheel-index-under-pointer": {
+  "key": "[[\"String\",\"String\",\"Map<String, int>\"],\"num\"]",
+  "why": "probe-evidence (L89)"
  }
 }

@@ -531,10 +531,10 @@
   "name": "ayinActive",
   "ret": "bool",
   "params": [
-   "String"
+   "dynamic"
   ],
   "argc": 1,
-  "wireable": true
+  "wireable": false
  },
  {
   "file": "dart-maor/ayin-advance-label.dart",
@@ -1007,7 +1007,7 @@
   "name": "callStats",
   "ret": "Map<String, dynamic>",
   "params": [
-   "String"
+   "dynamic"
   ],
   "argc": 1,
   "wireable": false
@@ -1042,8 +1042,8 @@
   "name": "campaignTotal",
   "ret": "num",
   "params": [
-   "List<dynamic>",
-   "String"
+   "dynamic",
+   "dynamic"
   ],
   "argc": 2,
   "wireable": false
@@ -2839,11 +2839,11 @@
   "name": "envPath",
   "ret": "String",
   "params": [
-   "String",
-   "String"
+   "dynamic",
+   "dynamic"
   ],
   "argc": 2,
-  "wireable": true
+  "wireable": false
  },
  {
   "file": "dart-maor/receipt-html.dart",
@@ -3271,7 +3271,7 @@
  {
   "file": "dart-maor/filter-products.dart",
   "name": "filterProducts",
-  "ret": "List<Map<String, dynamic>>",
+  "ret": "dynamic",
   "params": [
    "List",
    "Object?",
@@ -5498,8 +5498,8 @@
   "name": "mergeFamilyImport",
   "ret": "Map<String, dynamic>",
   "params": [
-   "String",
-   "String"
+   "dynamic",
+   "dynamic"
   ],
   "argc": 2,
   "wireable": false
@@ -5583,11 +5583,11 @@
   "name": "metaPath",
   "ret": "String",
   "params": [
-   "String",
-   "String"
+   "dynamic",
+   "dynamic"
   ],
   "argc": 2,
-  "wireable": true
+  "wireable": false
  },
  {
   "file": "dart/method_he.dart",
@@ -5746,12 +5746,12 @@
  {
   "file": "dart-maor/month-label.dart",
   "name": "monthLabel",
-  "ret": "String",
+  "ret": "dynamic",
   "params": [
-   "String"
+   "dynamic"
   ],
   "argc": 1,
-  "wireable": true
+  "wireable": false
  },
  {
   "file": "dart-maor/name-index.dart",
@@ -7324,7 +7324,7 @@
   "ret": "Future<String?>",
   "params": [
    "String",
-   "Map<String, dynamic>",
+   "dynamic",
    "DocFn",
    "GetDocFn"
   ],
@@ -7470,7 +7470,7 @@
   "name": "reenrollCounts",
   "ret": "Map<String, int>",
   "params": [
-   "String"
+   "dynamic"
   ],
   "argc": 1,
   "wireable": false
@@ -7850,10 +7850,10 @@
   "name": "safeHttpsUrl",
   "ret": "String?",
   "params": [
-   "String"
+   "dynamic"
   ],
   "argc": 1,
-  "wireable": true
+  "wireable": false
  },
  {
   "file": "dart/safe_prop.dart",
@@ -8228,9 +8228,9 @@
  {
   "file": "dart-maor/site-donate-url.dart",
   "name": "siteDonateUrl",
-  "ret": "String?",
+  "ret": "dynamic",
   "params": [
-   "Map<String, dynamic>"
+   "dynamic"
   ],
   "argc": 1,
   "wireable": false
@@ -8488,7 +8488,7 @@
  {
   "file": "dart-maor/sort-support-threads.dart",
   "name": "sortSupportThreads",
-  "ret": "List<dynamic>",
+  "ret": "dynamic",
   "params": [
    "dynamic"
   ],
@@ -8500,7 +8500,7 @@
   "name": "sortTeamMsgs",
   "ret": "List<dynamic>",
   "params": [
-   "String"
+   "dynamic"
   ],
   "argc": 1,
   "wireable": false
@@ -8532,12 +8532,12 @@
  {
   "file": "dart-maor/spotlight-box.dart",
   "name": "spotlightBox",
-  "ret": "Map<String, dynamic>?",
+  "ret": "dynamic",
   "params": [
-   "Map<String, dynamic>?",
-   "num",
-   "num",
-   "num?"
+   "dynamic",
+   "dynamic",
+   "dynamic",
+   "dynamic"
   ],
   "argc": 4,
   "wireable": false
@@ -8565,10 +8565,10 @@
  {
   "file": "dart-maor/stage-label.dart",
   "name": "stageLabel",
-  "ret": "String",
+  "ret": "dynamic",
   "params": [
-   "Map<String, dynamic>",
-   "String",
+   "dynamic",
+   "dynamic",
    "dynamic",
    "Map<String, dynamic>"
   ],
@@ -8895,12 +8895,12 @@
  {
   "file": "dart-maor/sup-dup-field-value.dart",
   "name": "supDupFieldValue",
-  "ret": "String",
+  "ret": "dynamic",
   "params": [
-   "List<Map<String, dynamic>>",
-   "Map<String, dynamic>",
-   "Map<String, dynamic>",
-   "Map<String, dynamic>"
+   "dynamic",
+   "dynamic",
+   "dynamic",
+   "dynamic"
   ],
   "argc": 4,
   "wireable": false
@@ -8995,10 +8995,10 @@
  {
   "file": "dart-maor/support-day-label.dart",
   "name": "supportDayLabel",
-  "ret": "String",
+  "ret": "dynamic",
   "params": [
-   "String",
-   "String",
+   "dynamic",
+   "dynamic",
    "Map<String, dynamic> T"
   ],
   "argc": 3,
@@ -9040,28 +9040,28 @@
   "name": "supporterVisibleForDesignations",
   "ret": "bool",
   "params": [
-   "String",
-   "String"
+   "dynamic",
+   "dynamic"
   ],
   "argc": 2,
-  "wireable": true
+  "wireable": false
  },
  {
   "file": "dart-maor/support-msg-time.dart",
   "name": "supportMsgTime",
-  "ret": "String",
+  "ret": "dynamic",
   "params": [
-   "String"
+   "dynamic"
   ],
   "argc": 1,
-  "wireable": true
+  "wireable": false
  },
  {
   "file": "dart-maor/support-preview.dart",
   "name": "supportPreview",
-  "ret": "String",
+  "ret": "dynamic",
   "params": [
-   "String",
+   "dynamic",
    "dynamic"
   ],
   "argc": 2,
@@ -9110,7 +9110,7 @@
   "name": "supTier",
   "ret": "Map<String, String>",
   "params": [
-   "String",
+   "dynamic",
    "Map<String, dynamic> T"
   ],
   "argc": 2,
@@ -9203,7 +9203,7 @@
   "name": "taskIdentity",
   "ret": "String",
   "params": [
-   "String",
+   "dynamic",
    "Map<String, String> T"
   ],
   "argc": 2,
@@ -9328,11 +9328,11 @@
  {
   "file": "dart-maor/term-of.dart",
   "name": "termOf",
-  "ret": "String",
+  "ret": "dynamic",
   "params": [
-   "Map<String, dynamic>",
-   "String",
-   "String"
+   "dynamic",
+   "dynamic",
+   "dynamic"
   ],
   "argc": 3,
   "wireable": false
@@ -9464,25 +9464,25 @@
  {
   "file": "dart-maor/to-tenant-id.dart",
   "name": "toTenantId",
-  "ret": "String",
+  "ret": "dynamic",
   "params": [
-   "String",
-   "String"
+   "dynamic",
+   "dynamic"
   ],
   "argc": 2,
-  "wireable": true
+  "wireable": false
  },
  {
   "file": "dart-maor/tour-advance.dart",
   "name": "tourAdvance",
   "ret": "num?",
   "params": [
-   "num",
-   "num",
-   "num"
+   "dynamic",
+   "dynamic",
+   "dynamic"
   ],
   "argc": 3,
-  "wireable": true
+  "wireable": false
  },
  {
   "file": "dart-maor/tour-steps.dart",
@@ -9493,7 +9493,7 @@
    "dynamic",
    "dynamic",
    "Map<String, String> T2",
-   "Map<String, dynamic>?"
+   "dynamic"
   ],
   "argc": 5,
   "wireable": false
@@ -9557,10 +9557,10 @@
  {
   "file": "dart-maor/undo-last.dart",
   "name": "undoLast",
-  "ret": "Map<String, dynamic>",
+  "ret": "dynamic",
   "params": [
-   "Map<String, dynamic>",
-   "List<String>"
+   "dynamic",
+   "dynamic"
   ],
   "argc": 2,
   "wireable": false
@@ -9568,9 +9568,9 @@
  {
   "file": "dart-maor/unit-label.dart",
   "name": "unitLabel",
-  "ret": "String",
+  "ret": "dynamic",
   "params": [
-   "Map<String, dynamic>",
+   "dynamic",
    "dynamic Function(dynamic, String, String) termOf",
    "Map<String, String> T"
   ],
@@ -10063,13 +10063,13 @@
  {
   "file": "dart-maor/wheel-index-under-pointer.dart",
   "name": "wheelIndexUnderPointer",
-  "ret": "num",
+  "ret": "dynamic",
   "params": [
-   "String",
-   "String"
+   "dynamic",
+   "dynamic"
   ],
   "argc": 2,
-  "wireable": true
+  "wireable": false
  },
  {
   "file": "dart-maor/with-nedarim-hok.dart",

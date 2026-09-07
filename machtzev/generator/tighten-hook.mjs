@@ -1,6 +1,10 @@
 // G20 · מקליט-צורות: נטען ב---import לפני בדיקת-JS של אטום; רושם צורת-ריצה של כל ארגומנט/החזרה של הפונקציה-המיוצאת ⇒ TT_OUT (JSON)
 import { register } from 'node:module';
 import fs from 'node:fs';
+import { POOL } from '../tools/probe-pool.mjs';
+const POOL_SER = new Set(POOL.map((v) => { try { return JSON.stringify(v === undefined ? null : v); } catch { return ''; } }));
+// L89 · קריאה-מגישוש: כל ארגומנט הוא איבר-סל (Golden-מאפיון של promote-auto) ⇒ הצורה משקפת גישוש, לא חוזה-קורא
+const isProbe = (args) => args.length > 0 && args.every((a) => { try { return POOL_SER.has(JSON.stringify(a === undefined ? null : a)); } catch { return false; } });
 const OUT = process.env.TT_OUT;
 const calls = [];
 const shape = (v, depth = 0) => {
@@ -35,7 +39,7 @@ export function unify(shapes) {
 }
 globalThis.__ttUnify = unify;
 globalThis.__ttRec = (name, fn) => function (...args) {
-  const rec = { name, args: args.map((a) => shape(a)), argc: args.length };
+  const rec = { name, args: args.map((a) => shape(a)), argc: args.length, probe: isProbe(args) };
   try { const r = fn.apply(this, args); rec.ret = shape(r); calls.push(rec); return r; }
   catch (e) { rec.ret = '__THROW__'; calls.push(rec); throw e; }
 };

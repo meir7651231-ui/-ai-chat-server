@@ -16,11 +16,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
+import { requireDart } from './dart-bin.mjs';
 const ROOT = new URL('..', import.meta.url).pathname;
 const BOXES = path.join(ROOT, 'new/dart-boxes');
 const DM = path.join(ROOT, 'new/dart-maor');
 const DD = path.join(ROOT, 'new/dart-data-maor');
-const DART = process.env.DART_BIN || '/tmp/claude-0/-home-user/2d086046-4b60-52a1-9aee-58e2962b1958/scratchpad/dart-sdk/bin/dart';
+const DART = requireDart('rethread-boxes');   // c2: פותר-Dart משותף (היה: נתיב-סקרצ'פד קשיח של סשן אחר ⇒ 'כשל-ריצה' ריק לכל קופסה)
 const ONLY = (() => { const i = process.argv.indexOf('--only'); return i > 0 ? process.argv[i + 1] : null; })();
 const DRY = process.argv.includes('--dry');
 
