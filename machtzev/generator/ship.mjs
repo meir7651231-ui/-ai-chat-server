@@ -8,6 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { REGEN, INDEX, runRegen, label } from './regen.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '../..');
@@ -33,17 +34,9 @@ function run(cmd, args, cwd = ROOT, { quiet = false, allowFail = false } = {}) {
 }
 const node = (rel, args = [], o) => run('node', [path.join(ROOT, rel), ...args], ROOT, o);
 
-// ── 1 · regen (המחוללים, בסדר) ──
-log('regen · ds-forge (מלא) ⇒ auto-skin ⇒ tighten-types ⇒ index ⇒ auto-logic ⇒ skin-golden ⇒ core-from-shape ⇒ core-dart ⇒ app-from-sentences');
-node('machtzev/ds-forge.mjs');
-node('machtzev/generator/auto-skin.mjs');           // G17b · בורר-אטום-לפי-ייעוד ⇒ auto-skin.json (שער autoskin)
-node('machtzev/generator/tighten-types.mjs', ['--record', '--apply']);   // G20 · הידוק-טיפוסים במנועי-maor מראיית-בדיקות-ה-JS (אידמפוטנטי; שער tighten)
-node('machtzev/census/logic-census.mjs', [], { quiet: true }); node('machtzev/census/oracle.mjs', ['--write'], { quiet: true });   // G20 · אינדקס-האמת עם החתימות המהודקות — לפני הבורר (השער מדרג מול האינדקס הטרי)
-node('machtzev/generator/auto-logic.mjs');          // G18 · בורר-מנוע-לוגיקה-לפי-ייעוד ⇒ auto-logic.json (שער autologic)
-node('machtzev/generator/skin-golden.mjs');
-node('machtzev/generator/core-from-shape.mjs');   // הגרעין מהסכמה+מונחים (שער core) — L80: מונח חדש ⇒ הרישום נגזר מחדש כאן, לא ביד
-node('machtzev/generator/core-dart.mjs');          // gen_core_<entity>.dart ≡ הרישום (שער coredart)
-node('machtzev/generator/app-from-sentences.mjs');
+// ── 1 · regen (המחוללים, בסדר) — הרשימה חיה ב-regen.mjs (G22: אותה רשימה ב-one.mjs) ──
+log('regen · ' + label(REGEN));
+runRegen(node, REGEN);
 
 // ── 2 · מראה ל-buildsmart (forge: ניקוי+העתקה · gen_*: יתומים מוסרים · ds/: קבצים קיימים בלבד) ──
 log('mirror ⇒ ' + LIB);
@@ -73,12 +66,7 @@ node('machtzev/generator/retarget.mjs', ['--gate'], { quiet: true });
 node('machtzev/generator/skin-golden.mjs', ['--gate'], { quiet: true });
 node('machtzev/generator/app-from-sentences.mjs', ['--gate'], { quiet: true });
 if (flag('--full-verify')) { log('gen-verify --gate (רנדר-בפועל של כל הפלטים)'); node('machtzev/generator/gen-verify.mjs', ['--gate']); }
-node('machtzev/census/logic-census.mjs', [], { quiet: true });   // G20 · חתימות-הלוגיקה (מהודקות) לפני האורקל
-node('machtzev/census/atom-index.mjs', [], { quiet: true });
-node('machtzev/census/oracle.mjs', ['--write'], { quiet: true });
-node('machtzev/generator/quarry-golden.mjs', [], { quiet: true });   // L92 · קטלוג-שברי-הזהב מהמודולים הטריים (שער goldquarry) — קובץ-מחולל שנקרא ע"י שער = ב-regen
-node('machtzev/generator/op-census.mjs', [], { quiet: true });   // L92 · ops-map.json מהאינדקס הטרי (היה מחוץ ל-regen ⇒ 372 אטומי-forge חסרו לבורר-הכיסוי)
-node('machtzev/truth.mjs', ['--write'], { quiet: true });
+runRegen(node, INDEX);   // אינדקס+אמת — הרשימה ב-regen.mjs (G22)
 
 // ── 4 · בנייה (אתרים + ראיית-מסך-פנימי) ──
 let built = [];

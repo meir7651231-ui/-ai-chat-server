@@ -831,13 +831,13 @@ const [slugArg, specArg] = process.argv.slice(2);
 // G21 · --only a,b ⇒ חילול-נקודתי: רק הסלאגים הנקובים, בלי מחיקת-OUT/תוכן של מחוללים אחרים (app-from-sentences · retarget · schoolos)
 // ובלי שכתוב-ספקים (improv/goal/showcase/entry) — הריצה-המלאה מוחקת 116 קובצי-תוכן של GENMAX (L93).
 const onlyI = process.argv.indexOf('--only'); const ONLY = onlyI > 0 ? new Set((process.argv[onlyI + 1] || '').split(',').filter(Boolean)) : null;
-if (!ONLY) {
-  if (slugArg && specArg && !slugArg.startsWith('--')) fs.writeFileSync(path.join(SPECS, slugArg + '.txt'), specArg + '\n');
-  fs.rmSync(OUT, { recursive: true, force: true });
-  for (const f of fs.readdirSync(DATA)) if (/^gen_.*_content\.dart$/.test(f)) fs.unlinkSync(path.join(DATA, f));
-} else for (const sl of ONLY) { for (const f of [path.join(OUT, `gen_${sl}.dart`), path.join(DATA, `gen_${sl}_content.dart`)]) if (fs.existsSync(f)) fs.unlinkSync(f); }
+if (!ONLY && slugArg && specArg && !slugArg.startsWith('--')) fs.writeFileSync(path.join(SPECS, slugArg + '.txt'), specArg + '\n');
+// G22 · לעולם לא rmSync(OUT)/מחיקת-כל-התוכן: המחולל מוחק רק את התוצרים-שלו-עצמו לספק שהוא מעבד (gen_<slug>.dart + gen_<slug>_content.dart) —
+//        dart-gen-bs משותף עם app-from-sentences/retarget/schoolos (הריצה-הישנה מחקה 116 קובצי-תוכן, L93).
+const SLUGS = fs.readdirSync(SPECS).filter(f => f.endsWith('.txt') && (!ONLY || ONLY.has(f.replace('.txt', '')))).sort();
+for (const f of SLUGS) { const sl = f.replace('.txt', ''); for (const g of [path.join(OUT, `gen_${sl}.dart`), path.join(DATA, `gen_${sl}_content.dart`)]) if (fs.existsSync(g)) fs.unlinkSync(g); }
 let n = 0;
-for (const f of fs.readdirSync(SPECS).filter(f => f.endsWith('.txt') && (!ONLY || ONLY.has(f.replace('.txt', '')))).sort()) {
+for (const f of SLUGS) {
   const spec = fs.readFileSync(path.join(SPECS, f), 'utf8').trim();
   if (spec && generate(f.replace('.txt', ''), spec)) n++;
 }

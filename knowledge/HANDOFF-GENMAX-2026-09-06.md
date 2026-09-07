@@ -22,7 +22,7 @@ analyze 0 · 156/156 (17 קבצי `genesis_*`) · gen-verify **74/111 · 52 אט
 5. `machtzev/generator/retarget.mjs` — הסבה + `skinPass` (26 תפקידי-עור, שורות-צ׳יפים דרך helpers, טבלה/גרפים/לוח/קנבן).
 6. `machtzev/generator/app-from-sentences.mjs` — `app-golden*.json` ({name, goal, modules:[{sentence, goal, ops}] | sentences[], aliases, skin=דריסה}) ⇒ `gen_app_<name>.dart` + מודולים + בדיקה מחוללת; מנקה יתומי-`_sk*`. **G17c:** `ops` = שמות-חלקיקים (`PARTICLE_NAMES`) ⇒ הרכבה-מינימלית של החלקיקים האלה (`_p<hash>`).
 7. `machtzev/generator/gen-verify.mjs` — כל `gen_*.dart` נטען ב-flutter test מחולל; ראצ׳ט רק-עולה (`gen-verify-baseline.json`).
-8. **`machtzev/generator/ship.mjs`** — הפקודה האחת.
+8. **`machtzev/generator/ship.mjs`** — הפקודה האחת. **G22:** סדר-הריצה חי ב-`generator/regen.mjs` (REGEN·INDEX) ו-`one.mjs` מריץ את אותה רשימה (`node machtzev/one.mjs --genmax` = רק צנרת-המחולל). ⚠️ `genesis-gen` מלא = drift; רק `--only <slugs>`.
 
 ```bash
 # regen ⇒ מראה ⇒ analyze ⇒ test ⇒ שערים ⇒ אינדקס+אמת ⇒ build ⇒ צילום ⇒ gh-pages ⇒ commit×2 (Allow אוטומטי) ⇒ push×2

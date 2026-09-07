@@ -3,19 +3,22 @@
  *  פקודה-אחת ⇒ הצנרת המלאה: רענון-מקורות → פירוק-מסכים (מיפוי+חילוץ+דדופ+מונחים)
  *  → דדופ-אטומים → ביקורת-הרכבה → טוהר-דאטה → מכונת-הטיהור (הכרעה 19) → משטרה → לוח-מצב-מאוחד.
  *  כל שלב = מנוע-קיים (חוק-2: המשמעות בקופסה — כאן רק חיווט, אפס-לוגיקה-חדשה).
- *  שימוש: node machtzev/one.mjs [--full]   (--full מוסיף משטרה-מלאה selftest+mutation) */
+ *  שימוש: node machtzev/one.mjs [--full] [--genmax]   (--full מוסיף משטרה-מלאה selftest+mutation · --genmax = רק צנרת-המחולל + לוח-מצב, G22) */
 import { execFileSync, execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { REGEN, INDEX, label } from './generator/regen.mjs';
 const ROOT = new URL('../', import.meta.url).pathname;
 const FULL = process.argv.includes('--full');
+const GENMAX_ONLY = process.argv.includes('--genmax');   // G22 · כניסה-מהירה: רק צנרת-המחולל
 const SCRATCH = '/tmp/genesis-all-screens';
 const BS = '/home/user/buildsmart';
 const t0 = Date.now();
 const rows = [];
 let failed = 0;
 
-function stage(name, fn, { optional = false } = {}) {
+function stage(name, fn, { optional = false, genmax = false } = {}) {
+  if (GENMAX_ONLY && !genmax) return;   // --genmax: רק שלבי-המחולל
   const s = Date.now();
   try {
     const info = fn() ?? '';
@@ -136,7 +139,21 @@ stage('מנוע-ds-forge (Pure→Dart · אטומי-forge)', () => {
   return `${n} אטומי-forge חוללו${fs.existsSync(DST) ? ' + מוראו ל-buildsmart' : ''}`;
 }, { optional: true });
 
-stage('המחולל (genesis-gen · הכרעה 17)', () => run('machtzev/generator/genesis-gen.mjs').split('\n').find(l => l.includes('המחולל'))?.trim());
+// G22 · genesis-gen רק לספקים שאין להם עדיין מסך (חילול-נקודתי, --only): הריצה-המלאה משכתבת ~100 מסכי-גלריה עם הבורר-הנוכחי
+//        (drift של 84 קבצים) ומחקה תוצרי-GENMAX (L93). מסך קיים מתחדש רק כשהספק שלו משתנה — ביד, ב---only.
+stage('המחולל (genesis-gen · הכרעה 17 · ספקים-חדשים בלבד)', () => {
+  const SP = path.join(ROOT, 'machtzev/generator/specs'), OUTD = path.join(ROOT, 'new/dart-gen-bs');
+  const missing = fs.readdirSync(SP).filter(f => f.endsWith('.txt')).map(f => f.replace(/\.txt$/, '')).filter(sl => !fs.existsSync(path.join(OUTD, `gen_${sl}.dart`)));
+  if (!missing.length) return 'אין ספק חדש — 0 חוללו (קיימים מתחדשים ב---only)';
+  return last(run('machtzev/generator/genesis-gen.mjs', ['--only', missing.join(',')])) + ` · ${missing.length} חדשים`;
+});
+// G22 · צנרת-המחולל (GENMAX) — אותה רשימה כמו ship.mjs (regen.mjs = מקור-אמת יחיד לסדר-הריצה): forge ⇒ auto-skin ⇒ tighten ⇒
+//        index ⇒ auto-logic ⇒ skin-golden ⇒ core ⇒ app-from-sentences, ואז אינדקס+quarry+op-census+truth. "כל המנועים במנוע האחד" (הכרעה-26).
+stage('צנרת-המחולל (GENMAX · regen.mjs ≡ ship)', () => {
+  const nodeRun = (rel, args = []) => run(rel, args);
+  for (const st of [...REGEN, ...INDEX]) nodeRun(st.rel, st.args);
+  return `${REGEN.length + INDEX.length} מנועים · ` + label(REGEN);
+}, { genmax: true });
 stage('מחולל-הלוחות (board-gen)', () => run('machtzev/assemble/board-gen.mjs', [SCRATCH]).split('\n').find(l => l.includes('לוחות'))?.trim());
 // שער-איכות-העיצוב: design-judge מזוקק על פלט-המחולל (חוב-עיצוב רק-יורד)
 stage('שער-איכות-העיצוב (ds-critic)', () => last(run('machtzev/ds-critic.mjs', ['--gate'])), { optional: true });
