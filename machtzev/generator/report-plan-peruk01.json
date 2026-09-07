@@ -1,0 +1,124 @@
+[
+ {
+  "entity": "תיק",
+  "ok": true,
+  "unresolved": [],
+  "export": {
+   "label": "שליחה בוואטסאפ",
+   "toField": "טלפון",
+   "ok": true,
+   "action": "DsPrimaryButton",
+   "link": "waLink"
+  },
+  "sections": [
+   {
+    "name": "כרטיס עסקה ב־ שורות",
+    "refs": [
+     {
+      "raw": "[תוכן כרטיס עסקה ב־ שורות]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "אדום צהוב ירוק",
+    "refs": [
+     {
+      "raw": "ממצא.צבע",
+      "mode": "childParticle",
+      "why": null,
+      "wired": [
+       "DsSection",
+       "ToastCard"
+      ]
+     },
+     {
+      "raw": "[תוכן אדום צהוב ירוק]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "חישוב בטוחות",
+    "refs": [
+     {
+      "raw": "[תוכן חישוב בטוחות]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "בקשות לשינוי",
+    "refs": [
+     {
+      "raw": "מתווך",
+      "mode": "particle",
+      "why": null,
+      "wired": [
+       "DsChip"
+      ]
+     },
+     {
+      "raw": "[תוכן בקשות לשינוי]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "החלטה",
+    "refs": [
+     {
+      "raw": "החלטה",
+      "mode": "particle",
+      "why": null,
+      "wired": [
+       "DsChip"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "מה לא בדקנו",
+    "refs": [
+     {
+      "raw": "[תוכן מה לא בדקנו]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "הסתייגות",
+    "refs": [
+     {
+      "raw": "[תוכן הסתייגות]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

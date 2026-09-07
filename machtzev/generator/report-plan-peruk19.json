@@ -1,0 +1,94 @@
+[
+ {
+  "entity": "תיק",
+  "ok": true,
+  "unresolved": [],
+  "export": {
+   "label": "שליחה בוואטסאפ",
+   "toField": "טלפון",
+   "ok": true,
+   "action": "DsPrimaryButton",
+   "link": "waLink"
+  },
+  "sections": [
+   {
+    "name": "כרטיס",
+    "refs": [
+     {
+      "raw": "[תוכן כרטיס]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "רשימת מסמכים להנחה השגה",
+    "refs": [
+     {
+      "raw": "[תוכן רשימת מסמכים להנחה השגה]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "טיוטת פנייה קצרה",
+    "refs": [
+     {
+      "raw": "[תוכן טיוטת פנייה קצרה]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "מה לשלם בינתיים שלא",
+    "refs": [
+     {
+      "raw": "[תוכן מה לשלם בינתיים שלא]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "מתי אין מה לערער",
+    "refs": [
+     {
+      "raw": "[תוכן מתי אין מה לערער]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "הסתייגות",
+    "refs": [
+     {
+      "raw": "[תוכן הסתייגות]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

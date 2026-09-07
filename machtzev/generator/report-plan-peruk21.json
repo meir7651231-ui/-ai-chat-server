@@ -1,0 +1,94 @@
+[
+ {
+  "entity": "תיק",
+  "ok": true,
+  "unresolved": [],
+  "export": {
+   "label": "שליחה בוואטסאפ",
+   "toField": "טלפון",
+   "ok": true,
+   "action": "DsPrimaryButton",
+   "link": "waLink"
+  },
+  "sections": [
+   {
+    "name": "כרטיס בעברית פשוטה",
+    "refs": [
+     {
+      "raw": "[תוכן כרטיס בעברית פשוטה]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "רשימת הגשה",
+    "refs": [
+     {
+      "raw": "[תוכן רשימת הגשה]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "טיוטת תשובה קצרה למחנכת",
+    "refs": [
+     {
+      "raw": "[תוכן טיוטת תשובה קצרה למחנכת]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "שאלות לפגישה",
+    "refs": [
+     {
+      "raw": "[תוכן שאלות לפגישה]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "מה לא לכתוב בקבוצת",
+    "refs": [
+     {
+      "raw": "[תוכן מה לא לכתוב בקבוצת]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "הסתייגות",
+    "refs": [
+     {
+      "raw": "[תוכן הסתייגות]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

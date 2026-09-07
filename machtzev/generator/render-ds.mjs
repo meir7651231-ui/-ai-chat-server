@@ -142,7 +142,7 @@ export function makeConsts(slug) {
     consts.push([name, String(s)]);
     return name;
   };
-  const dump = () => consts.map(([n, v]) => `const String ${n} = '${v.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}';`).join('\n') + '\n';
+  const dump = () => consts.map(([n, v]) => `const String ${n} = '${v.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\$/g, '\\$').replace(/\n/g, '\\n').replace(/\r/g, '\\r')}';`).join('\n') + '\n';   // G27: גם $ ושורה-חדשה (תוכן-רב-שורתי מהפירוקים)
   return { k, dump };
 }
 

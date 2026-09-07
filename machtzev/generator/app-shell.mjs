@@ -15,6 +15,7 @@ const impOf = (w) => `import '../${w.file.startsWith('dart-') ? w.file : 'dart-u
 export function pickRoot(entMeta, backRefs) {
   let best = null;
   for (const e of entMeta) { const n = (backRefs[e.name] || []).length; if (n > 0 && (!best || n > best.n)) best = { e, n }; }
+  if (!best && entMeta.length === 1) return entMeta[0];   // G27 · ישות יחידה = השורש (אין מצביעים, אבל יש מרכז-כובד אחד)
   return best ? best.e : null;
 }
 

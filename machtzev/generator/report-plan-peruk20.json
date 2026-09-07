@@ -1,0 +1,94 @@
+[
+ {
+  "entity": "תיק",
+  "ok": true,
+  "unresolved": [],
+  "export": {
+   "label": "שליחה בוואטסאפ",
+   "toField": "טלפון",
+   "ok": true,
+   "action": "DsPrimaryButton",
+   "link": "waLink"
+  },
+  "sections": [
+   {
+    "name": "כרטיס",
+    "refs": [
+     {
+      "raw": "[תוכן כרטיס]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "רשימת השלמה",
+    "refs": [
+     {
+      "raw": "[תוכן רשימת השלמה]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "נוסח פנייה ללשכה פנייה",
+    "refs": [
+     {
+      "raw": "[תוכן נוסח פנייה ללשכה פנייה]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "האם בכלל שייך דחוף",
+    "refs": [
+     {
+      "raw": "[תוכן האם בכלל שייך דחוף]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "מה לא",
+    "refs": [
+     {
+      "raw": "[תוכן מה לא]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "הסתייגות",
+    "refs": [
+     {
+      "raw": "[תוכן הסתייגות]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

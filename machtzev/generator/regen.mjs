@@ -15,6 +15,7 @@ export const REGEN = [
   { rel: 'machtzev/generator/core-dart.mjs', args: [], note: 'gen_core_<entity>.dart (שער coredart)' },
   { rel: 'machtzev/generator/app-from-sentences.mjs', args: [], note: 'משפט ⇒ אפליקציה (שער appgen)' },
   // G23a · מסלול-ב׳ (ישויות-מהמשפט): כל ספק ב-machtzev/generator/specs-ds/*.txt ⇒ app-ds --name <stem> -f <spec> --skin (עיצוב-forge). נגזר מהתיקייה — לא רשימה (הכרעה-27)
+  { rel: 'machtzev/generator/peruk.mjs', args: ['--all'], note: 'G27 · פירוקי-הבעלים ⇒ ספקי specs-ds (לפני app-ds)' },
   ...dsSpecs(),
 ];
 function dsSpecs() {

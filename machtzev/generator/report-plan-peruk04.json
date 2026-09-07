@@ -1,0 +1,102 @@
+[
+ {
+  "entity": "תיק",
+  "ok": true,
+  "unresolved": [],
+  "export": {
+   "label": "שליחה בוואטסאפ",
+   "toField": "טלפון",
+   "ok": true,
+   "action": "DsPrimaryButton",
+   "link": "waLink"
+  },
+  "sections": [
+   {
+    "name": "כרטיס",
+    "refs": [
+     {
+      "raw": "[תוכן כרטיס]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "דיף סעיפים",
+    "refs": [
+     {
+      "raw": "[תוכן דיף סעיפים]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "מספר מיקוח אחד",
+    "refs": [
+     {
+      "raw": "[תוכן מספר מיקוח אחד]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "הודעת תשובה אחת",
+    "refs": [
+     {
+      "raw": "הודעת תשובה אחת",
+      "mode": "particle",
+      "why": null,
+      "wired": [
+       "DsChip"
+      ]
+     },
+     {
+      "raw": "[תוכן הודעת תשובה אחת]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "לוח",
+    "refs": [
+     {
+      "raw": "[תוכן לוח]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "הסתייגות",
+    "refs": [
+     {
+      "raw": "[תוכן הסתייגות]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "ToastCard"
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

@@ -1,0 +1,125 @@
+{
+ "_": "אוצר-המילים של קורא-הפירוקים (G27 · §19: המנוע עיוור; כל עברית כאן). שלד-הפירוק של הבעלים: כותרת · הרגע · מסגרת · בלוקים · סיווג · המוצר (שולחים/חוזר) · דוגמה · מחיר · אסור · חובה · שרשרת",
+ "titleRe": "^#\\s*פירוק\\s*(\\d+)\\s*[:：]\\s*(.+)$",
+ "momentKey": "הרגע",
+ "categoryKey": "קטגוריה",
+ "notLine": "^לא\\s",
+ "sections": {
+  "problem": [
+   "הבעיה"
+  ],
+  "frame": [
+   "מסגרת",
+   "החוק",
+   "רקע"
+  ],
+  "blocks": [
+   "פירוק ל",
+   "פירוק החוזה",
+   "רשימת בדיקה",
+   "בלוקים"
+  ],
+  "classify": [
+   "סיווג",
+   "אדום"
+  ],
+  "product": [
+   "המוצר"
+  ],
+  "example": [
+   "דוגמ"
+  ],
+  "price": [
+   "מחיר"
+  ],
+  "forbidden": [
+   "אסור"
+  ],
+  "ai": [
+   "בינה"
+  ],
+  "chain": [
+   "שרשרת",
+   "הבא",
+   "עד כאן",
+   "התחלה",
+   "הקשר לפירוק",
+   "פירוקים"
+  ],
+  "ops": [
+   "תפעול"
+  ],
+  "customers": [
+   "לקוחות"
+  ],
+  "notin": [
+   "מה לא נכנס"
+  ],
+  "kill": [
+   "קריטריון"
+  ]
+ },
+ "inputsHead": [
+  "מה שולחים",
+  "מה הלקוח שולח"
+ ],
+ "outputsHead": [
+  "מה חוזר"
+ ],
+ "requiredKey": "חובה",
+ "optionalKey": "רשות",
+ "mustKey": "חובה",
+ "orWord": "או",
+ "severity": [
+  "אדום",
+  "צהוב",
+  "ירוק"
+ ],
+ "severityField": "צבע",
+ "classifyField": "סיווג",
+ "rootNoun": "תיק",
+ "personFields": [
+  "לקוח*",
+  "טלפון"
+ ],
+ "findingNoun": "ממצא",
+ "findingFields": [
+  "תיק*",
+  "סעיף",
+  "מה כתוב",
+  "מה לבקש"
+ ],
+ "stages": [
+  "התקבל",
+  "שולם",
+  "בבדיקה",
+  "נמסר",
+  "סגור"
+ ],
+ "groups": {
+  "frame": "מסגרת",
+  "blocks": "בלוקים",
+  "check": "בדיקה",
+  "classify": "סיווג",
+  "forbidden": "אסור",
+  "disclaimer": "הסתייגות",
+  "example": "דוגמה",
+  "notin": "לא נכנס",
+  "chain": "שרשרת"
+ },
+ "reportDisclaimer": "הסתייגות",
+ "severitySection": "אדום צהוב ירוק",
+ "exportLabel": "שליחה בוואטסאפ",
+ "exportGoal": "קישור לפתיחת שיחה",
+ "openAction": "פתח תיק",
+ "emptyText": "אין תיקים עדיין",
+ "dashboardCount": "מונה",
+ "roleAll": "בודק: הכל",
+ "decisionMinOptions": 2,
+ "decisionMaxOptions": 5,
+ "decisionMaxWords": 7,
+ "fieldMaxWords": 4,
+ "appPrefix": "",
+ "dashWord": "לוח בקרה",
+ "roleWord": "תפקיד"
+}
