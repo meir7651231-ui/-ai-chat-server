@@ -24,7 +24,7 @@ const MSG = opt('--msg'), LESSON = opt('--lesson') || 'הכרעה-24', SESSION =
 const AUTHOR = 'Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>';
 const env = { ...process.env, PATH: `${process.env.FLUTTER || '/home/user/flutter/bin'}:${process.env.PATH}`, BUILDSMART: APP };
 // אתרי-הדמו: תיקייה ב-gh-pages ⇒ נקודת-כניסה (הכרעת-בעלים 5.9: רק תיקיות-דמו חדשות, האתר-החי לא נגע)
-const SITES = [['schoolos', 'gen_schoolos_forge.dart'], ['studio', 'gen_main_studio.dart'], ['kehila', 'gen_main_kehila.dart'], ['tzedaka', 'gen_main_tzedaka.dart']];
+const SITES = [['schoolos', 'gen_schoolos_forge.dart'], ['studio', 'gen_main_studio.dart'], ['kehila', 'gen_main_kehila.dart'], ['tzedaka', 'gen_main_tzedaka.dart'], ['sechirut', 'gen_main_sechirut.dart']];   // app-golden-5: בדיקת חוזה שכירות (7.9)
 const t0 = Date.now();
 const log = (s) => console.log(`🚢 [${((Date.now() - t0) / 1000).toFixed(0)}s] ${s}`);
 function run(cmd, args, cwd = ROOT, { quiet = false, allowFail = false } = {}) {
