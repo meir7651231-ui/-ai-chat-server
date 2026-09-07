@@ -73,7 +73,8 @@ const ATOM = {
 // ראה knowledge/COMPOSE-INVENTORY-2026-09-03.md). לא נוספו כאן במכוון — FAKERS = SSOT לשער no-fakers
 // חוצה-הריפו (בעלות-המחולל), והוספה תגרור חוב-מחולל קיים; שדרוג-הרשימה = הכרעת בעל-המחולל.
 // למסך-המלאי אין צורך: אף אחד מ-6 החלקיקים החדשים לא ממפה למזייף (הטבלה=DsTable, התנועות=TimelineItem — התחליפים).
-const FAKERS = new Set(['stat_block', 'linear_progress', 'radial_gauge', 'bar_chart', 'sparkline']);
+// הכרעה-26 (7.9): חמשת המזייפים קיבלו שקע-דאטה אמיתי (G21 — values/pct; sparkline כבר קיבל values) ⇒ אינם מזייפים. הרשימה ריקה אך נשארת ה-SSOT: אטום שממציא ערך נכנס לכאן.
+const FAKERS = new Set([]);
 
 // ── גוזר-הפעולות: מנוסחת-החלקיק → רשימת פעולות-הצגה (deterministic) ──
 // אופרטורים בנוסחה: '−' הפרש · '/' יחס · '×' מכפלה · 'vs' השוואה · 'count' · 'Σ' · 'partition' · 'raw' · 'name' · 'act'

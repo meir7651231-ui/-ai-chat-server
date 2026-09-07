@@ -12,7 +12,7 @@ import * as R from '../root.mjs';
 const HERE = R.GEN_DIR;
 const readJson = (p, d) => { try { return JSON.parse(fs.readFileSync(path.join(HERE, p), 'utf8')); } catch { return d; } };
 
-const atlas = readJson('atlas.json', { widgets: [] });
+const atlas = (() => { const a = readJson('atlas.json', { widgets: [], functions: [] }); if (!a.data) { const d = readJson('atlas-data.json', { data: [] }); a.data = d.data || []; } return a; })();   // L93: פיצול-האטלס
 
 // stemming עברי קליל (מנגנון-שפה טהור): נרמול-אות-סופית (ך/ם/ן/ף/ץ⇒כ/מ/נ/פ/צ) +
 // קידומת-חיבור (ב/ל/ה/ו/מ/ש/כ) + סיומת (ים/ות/יות/ת/ה/י). הנרמול-הסופי אחרון ⇒

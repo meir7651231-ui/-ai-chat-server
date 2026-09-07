@@ -97,7 +97,7 @@ function parsePart(txt) {
 }
 
 // ── בחירה: האטום-הוויזואלי המנוקד-הכי-גבוה שכל ה-required שלו ניתנים-למילוי ──
-const FILLABLE = /^(String|bool|int|double|Color|IconData|TextEditingController|VoidCallback|void Function\(\)|ValueChanged<(bool|int|String|TimeOfDay)>|void Function\((bool|int|String|TimeOfDay)( \w+)?\)|List<String>|EdgeInsets(Geometry)?|FontWeight|TimeOfDay|Key|Object|Future<void> Function\(\)|List<[A-Z]\w*>|List<\([^)]*\)>|\(\{[^}]*\}\))/;
+import { FILLABLE } from './fillable.mjs';   // SSOT (L93)
 const INTERACTIVE = new Set(['textfield', 'number', 'switch', 'radio', 'chip', 'button', 'slider']);
 function pickAtom(part) {
   if (part.pin) return atlas.widgets.find(a => a.cls === part.pin) || null;
@@ -106,6 +106,8 @@ function pickAtom(part) {
     const role = roleOf(a.cls);
     let score = role === part.role ? 5 : role === 'row' ? 1 : 0;
     if (score === 0) continue;
+    // G21 · §20-ג: אטום בלי שום שקע (types ריק — למשל ForgedHeader, קומפוזיט-דמו מחושל) אינו מועמד: אין לו איפה לקבל את תוכן-החלק
+    if (!a.types.size && !a.positional.length) continue;
     // תפקיד-אינטראקטיבי ⇒ האטום חייב יכולת-תגובה (on*) — תווית-דוממת לא משמשת שדה/מתג
     if (INTERACTIVE.has(part.role) && ![...a.types.keys()].some(n => /^on[A-Z]/.test(n))) continue;
     // עוגן-דאטה ⇒ חובה prop-אופציות List<String> (התוכן החי חייב משטח-הצגה)
@@ -121,6 +123,10 @@ function pickAtom(part) {
     if (part.options?.length && [...a.types.entries()].some(([n, t]) => /^(options|items)$/.test(n) && /^List</.test(t))) score += 2;
     if (part.hero && /Hero/.test(a.cls)) score += 4;
     if (part.sub && a.types.has('sub')) score += 2;
+    // G21 · התאמת-מספרים: המשפט נושא N מספרים; אטום ששקעיו-הסקלריים (גובה/ערך/ספירה, לא radius) צורכים אותם = הכי-טוב-לייעוד (§20-א).
+    //       בלי זה, אטום-פרימיום עם שקע-רשימה-יחיד בולע "170 5" (גובה+פרוסות) כערכים — סמנטיקה שגויה.
+    const numsN = (part.values || []).length;
+    if (numsN) { const scalars = [...a.types.entries()].filter(([n, t]) => /^(int|double|num)$/.test(t.replace(/\?$/, '')) && !/radius/i.test(n) && (a.required.has(n) || a.positional.includes(n))).length; score += Math.min(scalars, numsN); }
     if (a.dirty) score -= 3;                                          // חוב-טוהר ⇒ מעדיפים אטום נקי
     score -= widgetFills + 0.05 * (a.required.size + a.positional.length);
     if (score > bestScore) { bestScore = score; best = a; }
@@ -304,6 +310,14 @@ function generate(slug, specText) {
     if (t === 'bool') return { expr: 'false' };
     if (t === 'int' && /^(value|selectedIndex|activeIndex|selected|currentIndex|currentTab|activeTab|tabIndex|pageIndex|current|qty|count)$/.test(name)) { if (!shared.i) { shared.i = '_n' + (++sIdx); stateDecls.push(`int ${shared.i} = 0;`); } return { expr: shared.i }; }
     if (t === 'int') { const nv = nextNum(part); return { expr: nv !== undefined ? String(parseInt(nv.replace(/[^0-9]/g, '')) || 0) : '0' }; }
+    // G21 · שקעי-דאטה מספריים (§20-ג): הערכים מהמשפט עצמו; אין מספר ⇒ null (האטום לא יזויף עם 16/0)
+    if (/^(pct|low|high|value|amount|total)$/.test(name) && (t === 'double' || t === 'num')) { const nv = nextNum(part); return nv !== undefined ? { expr: String(parseFloat(nv.replace(/[^0-9.]/g, '')) || 0) } : null; }
+    if (/^(List|Set)<(double|num|int)>$/.test(t)) {
+      const rest = []; for (let nv = nextNum(part); nv !== undefined; nv = nextNum(part)) rest.push(nv.replace(/[^0-9.]/g, ''));
+      if (!rest.length) return null;
+      const inner = t.match(/<(\w+)>/)[1]; const lit = rest.map((x) => inner === 'int' ? String(parseInt(x) || 0) : String(parseFloat(x) || 0));
+      return { expr: `const <${inner}>${t.startsWith('Set') ? '{' : '['}${lit.join(', ')}${t.startsWith('Set') ? '}' : ']'}` };
+    }
     if (t === 'double') {
       if (/radius/i.test(name)) return { expr: '12' };
       const nv = nextNum(part);
@@ -812,16 +826,18 @@ async function writeGoalSpecs() {
 
 // ── CLI ──
 fs.mkdirSync(SPECS, { recursive: true });
-await writeImprovSpec();
-await writeGoalSpecs();
-writeShowcaseSpec();
-writeSelfEntry();
+if (!process.argv.includes('--only')) { await writeImprovSpec(); await writeGoalSpecs(); writeShowcaseSpec(); writeSelfEntry(); }
 const [slugArg, specArg] = process.argv.slice(2);
-if (slugArg && specArg) fs.writeFileSync(path.join(SPECS, slugArg + '.txt'), specArg + '\n');
-fs.rmSync(OUT, { recursive: true, force: true });
-for (const f of fs.readdirSync(DATA)) if (/^gen_.*_content\.dart$/.test(f)) fs.unlinkSync(path.join(DATA, f));
+// G21 · --only a,b ⇒ חילול-נקודתי: רק הסלאגים הנקובים, בלי מחיקת-OUT/תוכן של מחוללים אחרים (app-from-sentences · retarget · schoolos)
+// ובלי שכתוב-ספקים (improv/goal/showcase/entry) — הריצה-המלאה מוחקת 116 קובצי-תוכן של GENMAX (L93).
+const onlyI = process.argv.indexOf('--only'); const ONLY = onlyI > 0 ? new Set((process.argv[onlyI + 1] || '').split(',').filter(Boolean)) : null;
+if (!ONLY) {
+  if (slugArg && specArg && !slugArg.startsWith('--')) fs.writeFileSync(path.join(SPECS, slugArg + '.txt'), specArg + '\n');
+  fs.rmSync(OUT, { recursive: true, force: true });
+  for (const f of fs.readdirSync(DATA)) if (/^gen_.*_content\.dart$/.test(f)) fs.unlinkSync(path.join(DATA, f));
+} else for (const sl of ONLY) { for (const f of [path.join(OUT, `gen_${sl}.dart`), path.join(DATA, `gen_${sl}_content.dart`)]) if (fs.existsSync(f)) fs.unlinkSync(f); }
 let n = 0;
-for (const f of fs.readdirSync(SPECS).filter(f => f.endsWith('.txt')).sort()) {
+for (const f of fs.readdirSync(SPECS).filter(f => f.endsWith('.txt') && (!ONLY || ONLY.has(f.replace('.txt', '')))).sort()) {
   const spec = fs.readFileSync(path.join(SPECS, f), 'utf8').trim();
   if (spec && generate(f.replace('.txt', ''), spec)) n++;
 }

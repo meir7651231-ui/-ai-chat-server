@@ -12,6 +12,7 @@ const m = src.match(/const FAKERS = new Set\(\[([^\]]*)\]\)/);
 if (!m) { console.log('🔴 no-fakers: לא נמצא FAKERS ב-compose-engine.mjs (SSOT)'); process.exit(1); }
 const fakers = [...m[1].matchAll(/'([a-z_]+)'/g)].map((x) => x[1]);
 const classes = fakers.map((f) => f.split('_').map((s) => s[0].toUpperCase() + s.slice(1)).join(''));
+if (!classes.length) { console.log('✓ no-fakers: 0 מזייפים ב-SSOT (הכרעה-26 — כל אטום שמציג ערך קיבל שקע) · השער עומד לחוב עתידי'); process.exit(0); }   // רשימה ריקה ≠ regex ריק (שתפס הכל)
 const re = new RegExp(`\\b(${classes.join('|')})\\s*(\\.\\w+\\s*)?\\(`);   // R3-3.10: StatBlock.named( · StatBlock (
 const dirs = [R.outDir(), path.join(R.NEW, 'dart-boards-bs'), path.join(R.NEW, 'dart-screens-bs')].filter((d) => fs.existsSync(d));
 const hits = [];

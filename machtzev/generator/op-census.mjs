@@ -93,7 +93,7 @@ function classifyDisplay(a) {
   const data = all.filter((x) => !isStyle(x));
   const structural = all.filter((x) => /^(child|children|body|content)$/.test(x));
   // zero = אין שקע-דאטה ואין שקע-מבני (child) — או שהאורקל סימן תפר-אפס. מיכל-עם-child = panel (הרכבה), לא מזייף.
-  if (a.seam === 'zero' || (data.length === 0 && structural.length === 0)) return { op: 'zero', sockets: all, why: 'אין שקע-דאטה ⇒ מזייף (§20-ג)' };
+  if (data.length === 0 && structural.length === 0) return { op: 'zero', sockets: all, why: 'אין שקע-דאטה ⇒ מזייף (§20-ג)' };   // G21: תפר-האינדקס לא דורס שקעים-אמיתיים (ReportTable.rows · DsCalendar.records היו 'zero')
   // חוקי-הצורה רואים את **כל** השקעים (tone/glyph הם ראיה-לצורה); בדיקות-גודל על שקעי-הדאטה.
   const S = new Set(all), D = new Set(data.length ? data : structural);
   for (const [op, test] of DISPLAY_RULES) if (test(S, D)) return { op, sockets: [...D], why: 'צורת-שקעים' };

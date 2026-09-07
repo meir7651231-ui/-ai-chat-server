@@ -14,7 +14,7 @@ const ROOT = R.ROOT;
 const BASE = path.join(HERE, 'coverage-baseline.json');
 
 const atlas = buildAtlas();
-const FILLABLE = /^(String|bool|int|double|Color|IconData|TextEditingController|VoidCallback|void Function\(\)|ValueChanged<(bool|int|String|TimeOfDay)>|void Function\((bool|int|String|TimeOfDay)( \w+)?\)|List<String>|EdgeInsets(Geometry)?|FontWeight|TimeOfDay|Key|Object|Future<void> Function\(\)|List<[A-Z]\w*>|List<\([^)]*\)>|\(\{[^}]*\}\))/;
+import { FILLABLE } from './generator/fillable.mjs';   // SSOT עם genesis-gen (L93 — שני עותקים סטו)
 let fillable = 0;
 for (const w of atlas.widgets) {
   let ok = true;

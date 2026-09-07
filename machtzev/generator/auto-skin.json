@@ -238,6 +238,8 @@
   "ForgeEmptyHint",
   "ForgeEmptyState",
   "ForgeEventCalendar",
+  "ForgeFabAction",
+  "ForgeFabMenu",
   "ForgeFacetChip",
   "ForgeField",
   "ForgeFieldRow",

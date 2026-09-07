@@ -6,21 +6,21 @@
 - **🔢 סה"כ אטומים מאונדקסים (תצוגה+לוגיקה):** 1764
 - **🏁 זהב-מורכב-מחדש (GENMAX·G4 · render-module compose):** 9/9 מודולים · 87/87 בדיקות
 - **🔎 פלטי-מחולל שרונדרו-בפועל (GENMAX·G5b · gen-verify):** 74/111 מסכים רונדרו-בפועל · 52 אטומי-תצוגה על המסך
-- **🔌 מחווטים-למחולל בפועל:** 106 (6.0%) · 1658 מפורקים-אך-לא-מחווטים
-- **  ↳ מול כשירים-לחיווט (eligible):** 106/1717 (6.2%) · כשירים: תצוגה 867 (תפר≠zero ∧ לא-מזייף) + לוגיקה 850 (חתימה נקראת; wireable-כשדה-מחושב 102)
-- **  ↳ נגישים-לבוררים-הנוכחיים (reach · auto-skin ∪ auto-logic ∪ cover(ops-map) ∪ קופסאות):** 1717/1717 (100.0%) · תצוגה 867 · לוגיקה 850
+- **🔌 מחווטים-למחולל בפועל:** 108 (6.1%) · 1656 מפורקים-אך-לא-מחווטים
+- **  ↳ מול כשירים-לחיווט (eligible):** 108/1732 (6.2%) · כשירים: תצוגה 882 (תפר≠zero ∧ לא-מזייף) + לוגיקה 850 (חתימה נקראת; wireable-כשדה-מחושב 102)
+- **  ↳ נגישים-לבוררים-הנוכחיים (reach · auto-skin ∪ auto-logic ∪ cover(ops-map) ∪ קופסאות):** 1732/1732 (100.0%) · תצוגה 882 · לוגיקה 850
 - **  ↳ ממופים-לפעולת-יסוד (G1 ops-map · תצוגה+לוגיקה, כולל לא-באורקל):** 1772/1772
-- **  ↳ לא-כשירים-במכוון (§20-ג · אין-שקע-דאטה/מזייף — נספרים, לא נעלמים):** 47 תצוגה: AuroraBg · BarcodeReticle · Dot · DotGridBg · DotsLoader · DsCalendar · DsMonthOffset · DualRange · FabAction · FabMenu · ForgeDsToggleTile · ForgeFabAction · ForgeFabMenu · ForgedChat · ForgedComposite · ForgedFeedback · ForgedHeader · ForgedInput · ForgedList · ForgedMotion · ForgedNav · ForgedSelection · ForgedSpatial · ForgedStatus · ForgedTemporal · ForgedText · GlowBg · Grip · LinearProgress · LipskeyProductSheetDivider · LiveDot · MeshBg · MiniCalendar · OrbitSpinner · PinPad · ProgressRing · RadialGauge · ReportTable · SelectionBand · SheetHandle · SkeletonBlock · SkeletonCard · StatusDot · StoryRing · ThumbPlaceholder · Typing · WaveBg
+- **  ↳ לא-כשירים-במכוון (§20-ג · אין-שקע-דאטה/מזייף — נספרים, לא נעלמים):** 32 תצוגה: AuroraBg · BarcodeReticle · Dot · DotGridBg · DotsLoader · ForgedChat · ForgedComposite · ForgedFeedback · ForgedHeader · ForgedInput · ForgedList · ForgedMotion · ForgedNav · ForgedSelection · ForgedSpatial · ForgedStatus · ForgedTemporal · ForgedText · GlowBg · Grip · LipskeyProductSheetDivider · LiveDot · MeshBg · OrbitSpinner · SelectionBand · SheetHandle · SkeletonBlock · SkeletonCard · StatusDot · ThumbPlaceholder · Typing · WaveBg
 - **  ↳ כשירים-שאף-בורר-לא-רואה (הפער האמיתי):** 0 — אין
 - **  ↳ חיווט-תצוגה (נבחרו: DS-selectVaried ∪ auto-skin):** 68/914 (7.4%)
-- **  ↳ חיווט-לוגיקה (נבחרו: MAP_ENGINES ∪ auto-logic):** 38/850 (4.5%)
+- **  ↳ חיווט-לוגיקה (נבחרו: MAP_ENGINES ∪ auto-logic):** 40/850 (4.7%)
 - **תצוגה · atom-index (widgets · הכרעה C):** 914
-- **  ↳ seam:** {"fields":500,"collection":203,"zero":25,"series":186}
+- **  ↳ seam:** {"fields":498,"collection":203,"series":188,"zero":25}
 - **  ↳ נגישים-בהרכבה (selectVaried×400):** 45
 - **  ↳ פר-היבט:** {"kpi":16,"board":1,"nav":21,"tbl":1,"trend":2,"prog":2,"card":2}
 - **לוגיקה · logic-census:** 850
 - **  ↳ wireable:** 102
-- **  ↳ מחוברים-למחולל (MAP_ENGINES):** 8
+- **  ↳ מחוברים-למחולל (MAP_ENGINES):** 10
 - **דאטה · new/dart-data-maor:** 548
 - **מקור-JS · new/atoms:** 1160
 - **המרה · new/dart-maor:** 665
@@ -28,13 +28,13 @@
 ## מבנה הענף
 - **machtzev/ שורש (.mjs):** 57
 - **machtzev/ תת-תיקיות:** 14
-- **generator/ קנוני:** 39
+- **generator/ קנוני:** 40
 - **generator/legacy/:** 5
-- **knowledge/ פעיל:** 80
+- **knowledge/ פעיל:** 81
 - **knowledge/archive/:** 12
 - **שערי-משטרה (gates.tsv):** 48
 - **שערי-משטרה (police gate()):** 48
 
 ## אזהרת-אמת (הלקח שנקנה ביוקר)
 "סידור-הענף" = פריסת-קבצים. "כמה/מה-מחובר" = **מדידה חוצת-3-שכבות**. אל תסיק תקרה משכבה-אחת.
-המחולל מחובר: נבחרו-בפועל תצוגה=68 · לוגיקה=38 · נגישים-לבוררים 1717/1717 · ממופים-לפעולה 1772/1772. "נבחר" ≠ "נגיש": בורר בוחר אחד לתפקיד (L91) — מה שלא נבחר עדיין נגיש למשפט הבא.
+המחולל מחובר: נבחרו-בפועל תצוגה=68 · לוגיקה=40 · נגישים-לבוררים 1732/1732 · ממופים-לפעולה 1772/1772. "נבחר" ≠ "נגיש": בורר בוחר אחד לתפקיד (L91) — מה שלא נבחר עדיין נגיש למשפט הבא.

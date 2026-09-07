@@ -46,7 +46,7 @@ const fakers = (() => { const m = rd('machtzev/compose-engine.mjs').match(/const
 //       הם רקעים/ספינרים/שלדים/FAB בלי שקע-דאטה — §20-ג: אין מה להזין ⇒ מזייף ⇒ לא-כשיר. מזייפים-מוצהרים (FAKERS) לא-כשירים תמיד.
 const opsArr = Array.isArray(opsMap) ? opsMap : Object.values(opsMap.atoms || opsMap || {});
 const opOfCls = new Map(opsArr.filter((a) => a.layer === 'display').map((a) => [String(a.id).split('@')[0], a.op]));
-const ineligibleDisp = census.filter((a) => a.seam === 'zero' || fakers.has(a.cls) || opOfCls.get(a.cls) === 'zero');
+const ineligibleDisp = census.filter((a) => fakers.has(a.cls) || (opOfCls.has(a.cls) ? opOfCls.get(a.cls) === 'zero' : a.seam === 'zero'));   // G21: op-census מכריע (רואה שקעים אמיתיים גם כשתפר-האינדקס אמר zero — ReportTable.rows); האינדקס רק כשאין שורת-op
 const eligibleDisp = census.length - ineligibleDisp.length;   // L92 · כשיר = יש תפר-דאטה כלשהו ואינו מזייף-מוצהר (§20-ג); היה: fields∧str≥1 ∪ collection ∪ series (מדד-DS ישן)
 const eligibleLogic = logic.filter((x) => Array.isArray(x.params)).length;   // L91 · G18/G19: כל מנוע עם חתימה נקראת כשיר (compat + adapter); `wireable`=102 היה קריטריון "שדה-מחושב" בלבד (ישן, נשמר כתת-שורה)
 const eligible = eligibleDisp + eligibleLogic;

@@ -114,13 +114,22 @@ export function buildAtlas() {
   return { widgets, functions, data };
 }
 
+// L93 · האטלס נכתב בשני קבצים קומפקטיים: atlas.json (widgets+functions) · atlas-data.json (data, 2.1K אטומי-דאטה) —
+//       קובץ-אחד עבר 1MB (שער nobinary). הקוראים לא נוגעים בקבצים: readAtlas() מאחד.
 export function writeAtlas(atlas) {
   fs.writeFileSync(path.join(ROOT, 'machtzev/generator/atlas.json'), JSON.stringify({
     counts: { widgets: atlas.widgets.length, functions: atlas.functions.length, data: atlas.data.length },
     widgets: atlas.widgets.map(a => ({ cls: a.cls, file: a.file, props: [...a.types.keys()], required: [...a.required], positional: a.positional, he: a.he })),
     functions: atlas.functions,
-    data: atlas.data,
-  }, null, 1));
+  }));
+  fs.writeFileSync(path.join(ROOT, 'machtzev/generator/atlas-data.json'), JSON.stringify({ data: atlas.data }));
+}
+export function readAtlas() {
+  const G = path.join(ROOT, 'machtzev/generator');
+  const a = JSON.parse(fs.readFileSync(path.join(G, 'atlas.json'), 'utf8'));
+  const dp = path.join(G, 'atlas-data.json');
+  if (!a.data) a.data = fs.existsSync(dp) ? JSON.parse(fs.readFileSync(dp, 'utf8')).data : [];
+  return a;
 }
 
 if (import.meta.url === 'file://' + process.argv[1]) {

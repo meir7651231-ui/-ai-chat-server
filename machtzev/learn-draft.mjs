@@ -29,7 +29,7 @@ if (argv.includes('--record')) {
     // L87-ו · תקרה: 3 קבצים לשער לניסיון — commit רחב (158 קבצים) הציף 270 טיוטות על כשל-אחד; טיוטה אחת לשער מספיקה כראיה, השאר רעש
     // L90 · שער-פרוטוקול (נושאו machtzev/ — INDEX.md, מרשם, pins — לעולם לא קוד ב-new/) ⇒ שורת path:null (נספרת ל-stuck-loop) בלי טיוטת-קוד:
     //        index-complete שנכשל על tools/probe-pool.mjs ייחס 3 טיוטות-M4 ריקות לאטומי-dart-maor שבמקרה היו staged — לקח-שקר בלתי-ניתן-למילוי
-    const PROTOCOL_GATES = /^(index-complete|pins|wiring-fresh|truth-fresh|ratchet-down)$/;
+    const PROTOCOL_GATES = /^(index-complete|pins|wiring-fresh|truth-fresh|ratchet-down|nobinary|no-registry|gitignore-guard)$/;   // L93: גודל-קובץ/רישום אינם לקח-קוד
     for (const g of gates) {
       const content = !PROTOCOL_GATES.test(g);
       if (content) for (const p of changed.slice(0, 3)) rows.push({ ts: attempt, attempt, gate: g, path: p, sha, blob_before: git('rev-parse', `HEAD:${p}`), resolved: false });

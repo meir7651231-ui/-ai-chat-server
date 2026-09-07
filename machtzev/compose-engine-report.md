@@ -122,6 +122,6 @@
 - `renderTemplate` ← dart-maor/render-template.dart (Map?, String, Map, List) (לוגיקה §21)
 - `ExpandableTile` ← premium/lists/expandable_tile.dart:10-11 title+body
 
-**מזייפים חסומים במנוע (בחירה בהם ⇒ throw):** stat_block · linear_progress · radial_gauge · bar_chart · sparkline
+**מזייפים חסומים במנוע (בחירה בהם ⇒ throw):** 
 
 **סיכום:** 44 תובנות (מרובות-אטומים) · 16 עובדות (אטום-יחיד). המנוע דטרמיניסטי — אותה נוסחה תיתן תמיד אותה הרכבה, ואף פעם לא מזייף.

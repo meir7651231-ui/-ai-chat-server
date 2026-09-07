@@ -1,0 +1,3 @@
+// 🧬 fillable — SSOT יחיד לשאלה "איזה טיפוס-prop המחולל יודע למלא ממשפט" (G21 · L93): genesis-gen (בורר+מילוי) ו-coverage-gate (מד-לבנים-ברות-מילוי)
+//   קראו שני עותקים שסטו (552<554) — עותק אחד, שני קוראים. הרחבה = כאן + כלל-מילוי ב-fillProp באותו commit.
+export const FILLABLE = /^(String|bool|int|double|num|(List|Set)<(double|num|int)>|Color|IconData|TextEditingController|VoidCallback|void Function\(\)|ValueChanged<(bool|int|String|TimeOfDay)>|void Function\((bool|int|String|TimeOfDay)( \w+)?\)|List<String>|EdgeInsets(Geometry)?|FontWeight|TimeOfDay|Key|Object|Future<void> Function\(\)|List<[A-Z]\w*>|List<\([^)]*\)>|\(\{[^}]*\}\))/;
