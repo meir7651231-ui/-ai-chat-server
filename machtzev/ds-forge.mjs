@@ -999,6 +999,14 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
         const lr = [l != null ? `left: ${l}` : '', r != null ? `right: ${r}` : ''].filter(Boolean).join(', ');
         return `Positioned(${lr ? lr + ', ' : ''}top: 0, bottom: 0, child: Align(alignment: Alignment.center, child: ${a.e}))`;
       }
+      // G24 · מחוון-מחליק (SegPicker .mind/.sgi): abs עם top/bottom + left:0 בלי width/right, שה-CSS שלו מעביר transform/width
+      // (ב-Pure ה-JS ממקם אותו על הכפתור-הלחוץ). בלי חוק: Positioned(left:0) ברוחב-אפס ⇒ הטקסט-הנבחר (ink על הפס) נעלם.
+      // החוק: המחוון = תא-הפריט-הנבחר — רוחב (maxWidth − ריפוד-אופקי)/n, היסט start = ריפוד-start + idx·w; n/idx מהתפרים items/selected.
+      { const aw2 = pxe(a.st['width']), amw2 = pxe(a.st['min-width']);
+        if (CUR.items && CUR.items.selectable && t != null && b != null && l != null && r == null && aw2 == null && amw2 == null && /transform|width/.test(a.st['transition'] || '')) {
+          const pp = String(st['padding'] || '0').trim().split(/\s+/).map(v => +(px(v) || 0)); const [pt, pr, pb, pl] = pp.length === 1 ? [pp[0], pp[0], pp[0], pp[0]] : pp.length === 2 ? [pp[0], pp[1], pp[0], pp[1]] : pp.length === 3 ? [pp[0], pp[1], pp[2], pp[1]] : pp;
+          return `Positioned(top: ${t}, bottom: ${b}, left: 0, right: 0, child: LayoutBuilder(builder: (context, bc) { final n = items?.length ?? ${CUR.items.demo || 1}; final idx = ((selected?.isEmpty ?? true) ? 0 : selected!.first).clamp(0, n - 1); final w = (bc.maxWidth - ${pl + pr}) / n; return Align(alignment: AlignmentDirectional.centerStart, child: Padding(padding: EdgeInsetsDirectional.only(start: ${isLtr ? pl : pr} + idx * w), child: SizedBox(width: w, child: ${a.e}))); }))`;
+        } }
       return p.length ? `Positioned(${p.join(', ')}, child: ${a.e})` : `Positioned.fill(child: ${a.e})`;
     });
     const pad = edge(st, 'padding');

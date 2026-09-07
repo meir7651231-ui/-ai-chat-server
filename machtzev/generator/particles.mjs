@@ -18,6 +18,8 @@ const GEN = R.GEN_DIR;
 const G = JSON.parse(fs.readFileSync(R.GEN_DIR + 'spec-lang.data.json', 'utf8'));   // §19-ד: דקדוק-החלקיקים מהדאטה
 const alt = (a) => '(' + a.join('|') + ')';
 export const PARTICLE_RE = new RegExp('^\\s*' + G.particleWord + '\\s+');
+export const CONTENT_RE = new RegExp('^\\s*' + G.contentWord + '\\s+');   // G24 · אטומי-תוכן: `תוכן <קבוצה> [תג]: טקסט`
+export const REPORT_RE = new RegExp('^\\s*' + G.reportWord + '\\s+');     // G24 · חלקיק-דוח: `דוח <ישות>: <חלק> = ref, ref…`
 const heW = (s) => [...String(s || '').matchAll(/[֐-׿][֐-׿״׳]*/g)].map((m) => m[0]);
 const clean = (s) => heW(s).join(' ').trim();
 const q = (s) => "'" + String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'") + "'";
@@ -39,11 +41,50 @@ export function parseParticleLines(lines) {
   return out;
 }
 
+// ── 1ב · אטומי-תוכן (G24): טקסט מילה-במילה מהמסמך של האדם — דאטה, לא קוד. `תוכן <קבוצה> [תג]: <טקסט>` ──
+export function parseContentLines(lines) {
+  const out = [];
+  for (const line of lines) {
+    if (!CONTENT_RE.test(line)) continue;
+    const m = line.replace(CONTENT_RE, '').match(/^([^\[:]+?)\s*(?:\[([^\]]+)\])?\s*:\s*(.+)$/);
+    if (!m) continue;
+    out.push({ group: clean(m[1]), tag: m[2] ? clean(m[2]) : null, text: m[3].trim(), line });
+  }
+  return out;
+}
+// ── 1ג · חלקיק-דוח (G24): מסך-אחד-לרשומה במבנה-קבוע. `דוח <ישות>: <חלק> = ref, ref…`; ref = שדה/חלקיק של השורש · ישות.שדה/חלקיק · [תוכן קבוצה] ──
+const CONTENT_REF = new RegExp('^\\[\\s*' + alt(G.pContent) + '\\s+([^\\]]+)\\]\\s*$');
+export function parseReportLines(lines) {
+  const out = [];
+  for (const line of lines) {
+    if (!REPORT_RE.test(line)) continue;
+    const body = line.replace(REPORT_RE, '');
+    const ci = body.indexOf(':'); if (ci < 0) continue;
+    const entity = clean(body.slice(0, ci));
+    const rest = body.slice(ci + 1).trim(); const eq = rest.indexOf(' = '); if (eq < 0) continue;
+    const section = clean(rest.slice(0, eq)) || rest.slice(0, eq).trim();
+    const refs = rest.slice(eq + 3).split(',').map((x) => x.trim()).filter(Boolean).map((raw) => {
+      let m;
+      if ((m = raw.match(CONTENT_REF))) return { raw, kind: 'content', group: clean(m[2]) };
+      const di = raw.indexOf('.');
+      if (di > 0) return { raw, kind: 'child', entity: clean(raw.slice(0, di)), name: clean(raw.slice(di + 1)) };
+      return { raw, kind: 'own', name: clean(raw) };
+    });
+    out.push({ entity, section, refs, line });
+  }
+  return out;
+}
+
 // ── 2 · צורה מבנית (אפס-מילון: אופרטורים, סוגריים, סוג-השדה מהסכמה) ──
-export function shapeOf(expr, schema) {
+export function shapeOf(expr, schema, content = [], opts = {}) {
   const F = (label) => schema.find((s) => s.label === clean(label)) || null;
   const e = expr.trim();
   let m;
+  if ((m = e.match(CONTENT_REF))) {   // G24 · [תוכן קבוצה] ⇒ צורה=רשימת-טקסטים (מתויגים או לא) מאטומי-התוכן של הספק
+    const group = clean(m[2]); const items = content.filter((c) => c.group === group);
+    if (!items.length) return { kind: null, why: `אין אטומי-תוכן לקבוצה "${group}"` };
+    return { kind: 'content', group, items, tagged: items.some((c) => c.tag) };
+  }
   if ((m = e.match(new RegExp('^\\[' + alt(G.pTable) + '\\]')))) return { kind: 'table' };
   if ((m = e.match(new RegExp('^\\[' + alt(G.pSearch) + '\\]')))) return { kind: 'search' };
   if ((m = e.match(new RegExp('^\\[' + alt(G.pFilter) + '\\]')))) return { kind: 'filter' };
@@ -53,6 +94,9 @@ export function shapeOf(expr, schema) {
   if ((m = e.match(new RegExp('^' + alt(G.pCount) + '\\s*\\(\\s*([^)=]*?)\\s*(?:=\\s*([^)]+))?\\)$')))) return { kind: 'count', field: clean(m[2]) || null, value: m[3] ? clean(m[3]) : null };
   if ((m = e.match(new RegExp('^' + alt(G.pSum) + '\\s*\\(\\s*([^)]+)\\)$')))) return { kind: 'sum', field: clean(m[2]), f: F(m[2]) };
   if ((m = e.match(new RegExp('^' + alt(G.pAvg) + '\\s*\\(\\s*([^)]+)\\)$')))) return { kind: 'avg', field: clean(m[2]), f: F(m[2]) };
+  const f0 = F(e);   // G24 · שדה-מדויק קודם לאופרטורים: תווית כמו "חורג מול חודשים" היא שדה, לא השוואה (L98)
+  if (f0 && f0.enumVals && f0.enumVals.length && !opts.single) return { kind: 'partition', field: f0.label, bands: f0.enumVals };
+  if (f0) return { kind: 'raw', field: f0.label, computed: !!f0.formula, date: f0.type === 'date', num: f0.type === 'num', enumv: !!(f0.enumVals && f0.enumVals.length) };
   if ((m = e.match(/^(.+?)\s*\/\s*(.+)$/))) return { kind: '/', a: clean(m[1]), b: clean(m[2]) };
   if ((m = e.match(/^(.+?)\s*[−-]\s*(.+)$/)) && F(m[1]) && F(m[2])) return { kind: '−', a: clean(m[1]), b: clean(m[2]) };
   if ((m = e.match(/^(.+?)\s*[×*]\s*(.+)$/))) return { kind: '×', a: clean(m[1]), b: clean(m[2]) };
@@ -78,6 +122,8 @@ const NEED = {
 };
 const LOGIC = new Set(['match', 'predicate', 'serialize', 'role', 'grant', 'expiry', 'capital', 'queue', 'progress', 'sheet', 'makeup', 'balance', 'paidstatus', 'hok', 'clash', 'slots', 'block', 'holiday', 'weekly', 'sessions', 'enrol', 'wait', 'byteacher', 'whoami', 'cert', 'contact', 'recipients', 'template', 'parse', 'trendengine']);
 export function opsOf(shape) {
+  if (shape.kind === 'content') return shape.tagged ? ['group', 'alert'] : ['alert'];   // רשימת-טקסטים: קבוצה-פר-תג (אם יש) + הודעה-פר-שורה
+  if (shape.kind === 'partition') return ['group', 'alert'];   // חלוקה-למצבים: קבוצה-פר-ערך + שורה-פר-רשומה (G24: השורה דרך אטום, לא Text חשוף)
   const f = { kind: shape.kind, headline: shape.headline };
   try { return opsOfKind(f).map((o) => o.op); } catch { return null; }
 }
@@ -95,6 +141,7 @@ const SOCK = {
   value: /^(value|val|amount|total|count|num)$/, label: /^(label|title|caption|name|text)$/, sub: /^(sub|subtitle|desc|body|note)$/,
   glyph: /^(glyph|emoji|icon)$/, fraction: /^(fraction|pct|percent|progress)$/, tap: /^(onTap|onPressed)$/, tone: /^(tone|severity|level)$/,
   labels: /^(labels|cols|columns|headers)$/, rows: /^(rows|data)$/, message: /^(message)$/,
+  items: /^(items|options)$/, selected: /^(selected|activeIndex|index)$/, onSelect: /^(onSelect|onChanged)$/, children: /^(children)$/,   // G24: בורר/מיכל
 };
 // ctx: { label, value:{expr,type}, sub, fraction:{expr}, labels:[expr], rows:expr, glyph, nav:expr, message }
 export function wireAtom(cls, ctx) {
@@ -113,6 +160,10 @@ export function wireAtom(cls, ctx) {
     else if (SOCK.rows.test(name) && /^List<List<String>>/.test(t) && ctx.rows) e = ctx.rows;
     else if (SOCK.message.test(name) && t === 'String') e = ctx.message || ctx.label || null;
     else if (SOCK.tone.test(name) && t === 'int') e = ctx.tone != null ? String(ctx.tone) : null;
+    else if (SOCK.items.test(name) && /^List<String>/.test(t) && ctx.items) e = ctx.items;
+    else if (SOCK.selected.test(name) && t === 'int' && ctx.selected != null) e = ctx.selected;
+    else if (SOCK.onSelect.test(name) && /ValueChanged<int>|void Function\(int\)/.test(t) && ctx.onSelect) e = ctx.onSelect;
+    else if (SOCK.children.test(name) && /^List<Widget>/.test(t) && ctx.children) e = `[${ctx.children.join(', ')}]`;
     if (e == null) { if (req) return null; continue; }   // שקע-חובה בלי דאטה ⇒ האטום נפסל (§20-ג: אין ערך-מומצא)
     args.push(w.positional.includes(name) ? e : `${name}: ${e}`);
   }
@@ -120,12 +171,12 @@ export function wireAtom(cls, ctx) {
 }
 
 // ── 5 · תכנון: לכל חלקיק — צורה ⇒ פעולות ⇒ אטומים (חיפוש) ⇒ חיווט; מועמד שלא מתחווט ⇒ הבא (alts) ──
-export function planParticles({ particles, entities }) {
+export function planParticles({ particles, entities, content = [], single = false }) {
   const plan = [];
   for (const p of particles) {
     const ent = entities.find((e) => e.name === p.entity);
     if (!ent) { plan.push({ ...p, ok: false, why: `אין ישות "${p.entity}" בספק` }); continue; }
-    const shape = shapeOf(p.expr, ent.schema);
+    const shape = shapeOf(p.expr, ent.schema, content, { single });
     if (!shape.kind) { plan.push({ ...p, ok: false, why: shape.why }); continue; }
     const ops = opsOf(shape);
     if (!ops) { plan.push({ ...p, ok: false, shape, why: `אין אלגברת-הרכבה לצורה ${shape.kind}` }); continue; }
@@ -137,8 +188,9 @@ export function planParticles({ particles, entities }) {
 }
 
 // ── 6 · פליטה: מסך-חלקיקים לישות (AnimatedBuilder על appStore; אגרגטים למעלה, פר-רשומה בשורות) ──
-export function renderParticles({ slug, entity, plan, k }) {
-  const recs = `appStore.records('${entity.slug}')`;
+export function particleWidgets({ entity, plan, k, recs: recsOverride = null }) {
+  const scoped = !!recsOverride;   // G24 · דוח: הרשומות מוגבלות לרשומת-השורש ⇒ אגרגטים inline על הרשימה (לא על appStore כולו)
+  const recs = recsOverride || `appStore.records('${entity.slug}')`;
   const numOf = (lbl) => `(num.tryParse(r[${k(lbl)}] ?? '') ?? 0)`;
   const strOf = (lbl) => `(r[${k(lbl)}] ?? '')`;
   const imports = new Set(); const widgets = []; const notes = [];
@@ -150,8 +202,9 @@ export function renderParticles({ slug, entity, plan, k }) {
     const agg = /^(count|sum|avg)$/.test(s.kind);
     const kd = p.ops.map((op, i) => [op, p.picks[i]]);
     if (agg) {
-      const expr = s.kind === 'count' ? (s.field ? `${recs}.where((r) => (r[${k(s.field)}] ?? '') == ${k(s.value || '')}).length.toDouble()` : `appStore.count('${entity.slug}').toDouble()`)
-        : s.kind === 'sum' ? `appStore.sum('${entity.slug}', ${k(s.field)})` : `appStore.avg('${entity.slug}', ${k(s.field)})`;
+      const foldSum = `${recs}.fold(0.0, (a, r) => a + (num.tryParse(r[${k(s.field)}] ?? '') ?? 0))`;
+      const expr = s.kind === 'count' ? (s.field ? `${recs}.where((r) => (r[${k(s.field)}] ?? '') == ${k(s.value || '')}).length.toDouble()` : scoped ? `${recs}.length.toDouble()` : `appStore.count('${entity.slug}').toDouble()`)
+        : s.kind === 'sum' ? (scoped ? foldSum : `appStore.sum('${entity.slug}', ${k(s.field)})`) : (scoped ? `(${recs}.isEmpty ? 0.0 : ${foldSum} / ${recs}.length)` : `appStore.avg('${entity.slug}', ${k(s.field)})`);
       const ctx = { label: lbl, value: { str: `${expr}.toStringAsFixed(${s.kind === 'avg' ? 1 : 0})`, num: expr }, glyph: k('🧩'), sub: k(p.expr) };
       const w = firstWired(kd[0][1], ctx);
       if (!w) { notes.push(`⚪ ${p.name}: אף אטום מ-${kd[0][1].atoms.concat(kd[0][1].alts).join('/')} לא מתחווט לשקעי ${kd[0][0]}`); continue; }
@@ -165,20 +218,24 @@ export function renderParticles({ slug, entity, plan, k }) {
       const ctx = { label: lbl, value: { str: `${val}.toStringAsFixed(s.kind === '/' ? 2 : 0)`.replace("s.kind === '/' ? 2 : 0", s.kind === '/' ? '2' : '0'), num: val }, fraction: s.kind === '/' ? `${val}.clamp(0.0, 1.0).toDouble()` : null, sub: k(p.expr), glyph: k('🧩') };
       const w = firstWired(kd[0][1], ctx); if (!w) { notes.push(`⚪ ${p.name}: אין אטום מתחווט ל-${kd[0][0]}`); continue; }
       rowOf = w; p.wired = [w.cand];
-    } else if (s.kind === 'partition') {   // חלוקה-למצבים: קבוצה פר-ערך-enum (כותרת = ערך · מונה) — אטום-group מחווט-מחדש פר-קבוצה דרך שקע-הכותרת (לא regex על הקריאה — אטומים פוזיציונליים נפלו)
-      const probe = firstWired(kd[0][1], { label: k(p.name), value: { str: "''", num: '0' }, sub: k(p.expr), glyph: k('🧩'), tone: 0 });
-      if (!probe) { notes.push(`⚪ ${p.name}: אין אטום-קבוצה מתחווט ל-${kd[0][0]}`); continue; }
-      // השדה-המתאר של הרשומה בקבוצה: שדה-טקסט חופשי (לא נוסחה/enum/מקונן/מספר/תאריך/מצביע-לישות) — הראשון בסכמה; נפילה לשדה-הראשון.
+    } else if (s.kind === 'partition') {   // חלוקה-למצבים: קבוצה פר-ערך-enum (כותרת = ערך · מונה, children = שורות-רשומה דרך אטום-הודעה) — הכול בחיפוש
+      // השדה-המתאר של הרשומה בקבוצה: שדה-טקסט חופשי (לא נוסחה/enum/מקונן/מספר/תאריך/מצביע-לישות); רב-שורתי > תווית-רב-מילים > ראשון; מיון יציב
       const textish = entity.schema.filter((f) => !f.formula && !(f.enumVals && f.enumVals.length) && !(f.members && f.members.length) && !/^(num|date|bool)$/.test(f.type || '') && !(p.entNames || []).includes(f.label));
-      const desc = textish.slice().sort((a, b) => (b.type === 'multiline') - (a.type === 'multiline') || b.label.split(/\s+/).length - a.label.split(/\s+/).length)[0] || entity.schema[0];   // מתאר = רב-שורתי > תווית-רב-מילים ("מה כתוב") > ראשון; מיון יציב
+      const desc = textish.slice().sort((a, b) => (b.type === 'multiline') - (a.type === 'multiline') || b.label.split(/\s+/).length - a.label.split(/\s+/).length)[0] || entity.schema[0];
+      const row = firstWired(kd[1][1], { message: strOf(desc.label), label: strOf(desc.label), sub: k(p.expr), tone: 0 });
+      if (!row) { notes.push(`⚪ ${p.name}: אין אטום-שורה מתחווט ל-${kd[1][0]}`); continue; }
       const groups = s.bands.map((band) => {
         const inBand = `${recs}.where((r) => (r[${k(s.field)}] ?? '') == ${k(band)}).toList()`;
-        const g = firstWired(kd[0][1], { label: `${k(band)} + ' · ' + ${inBand}.length.toString()`, value: { str: `${inBand}.length.toString()`, num: `${inBand}.length.toDouble()` }, sub: k(p.expr), glyph: k('🧩'), tone: 0 }) || probe;
-        return `${g.call}, ...[for (final r in ${inBand}) Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: Text(${strOf(desc.label)}))]`;
+        const rowsExpr = `for (final r in ${inBand}) ${row.call}`;
+        const g = firstWired(kd[0][1], { label: `${k(band)} + ' · ' + ${inBand}.length.toString()`, children: [rowsExpr], value: { str: `${inBand}.length.toString()`, num: `${inBand}.length.toDouble()` }, sub: k(p.expr), glyph: k('🧩'), tone: 0 });
+        if (!g) return null;
+        return /children:/.test(g.call) ? g.call : `Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [${g.call}, ${rowsExpr}])`;
       });
-      widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [${groups.join(', ')}]))`); p.wired = [probe.cand]; continue;
+      if (groups.some((g) => !g)) { notes.push(`⚪ ${p.name}: אין אטום-קבוצה מתחווט ל-${kd[0][0]}`); continue; }
+      widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [${groups.join(', ')}]))`); p.wired = [groups[0].match(/^([A-Za-z0-9_]+)\(/)[1], row.cand]; continue;
     } else if (s.kind === 'raw') {
-      const ctx = { label: strOf(s.field), value: { str: strOf(s.field), num: numOf(s.field) }, sub: lbl, glyph: k('🧩'), tone: 0, message: strOf(s.field) };
+      const shown = p.labelled ? `${k(s.field)} + ': ' + ${strOf(s.field)}` : strOf(s.field);   // G24 · בדוח: "שדה: ערך" (עובדה בכרטיס); במסך-חלקיקים: הערך לבדו
+      const ctx = { label: shown, value: { str: strOf(s.field), num: numOf(s.field) }, sub: lbl, glyph: k('🧩'), tone: 0, message: shown };
       const w = firstWired(kd[0][1], ctx); if (!w) { notes.push(`⚪ ${p.name}: אין אטום מתחווט ל-${kd[0][0]}`); continue; }
       rowOf = w; p.wired = [w.cand]; rowSrc = `${recs}.where((r) => (r[${k(s.field)}] ?? '').toString().trim().isNotEmpty)`;   // ערך-ריק ⇒ אין שבב-ריק (§20-ג)
     } else if (s.kind === 'act') {
@@ -193,10 +250,33 @@ export function renderParticles({ slug, entity, plan, k }) {
     } else if (s.kind === 'empty') {
       const w = firstWired(kd[0][1], { message: k(s.text || p.name), label: lbl, glyph: k('🧩') }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-ריק מתחווט`); continue; }
       widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${recs}.isEmpty ? ${w.call} : const SizedBox.shrink())`); p.wired = [w.cand]; continue;
+    } else if (s.kind === 'content') {   // G24 · אטומי-תוכן: קבוצה-פר-תג (group עם children ⇒ מיכל; בלעדיו כותרת+שורות) + הודעה-פר-שורה (alert)
+      const linePick = s.tagged ? kd[1][1] : kd[0][1];
+      const lineOf = (it) => firstWired(linePick, { message: k(it.text), label: k(it.text), sub: k(it.tag || ''), tone: 0 });
+      const rows = s.items.map(lineOf);
+      if (rows.some((w) => !w)) { notes.push(`⚪ ${p.name}: אין אטום-הודעה מתחווט ל-${s.tagged ? kd[1][0] : kd[0][0]}`); continue; }
+      let out;
+      if (s.tagged) {
+        const tags = [...new Set(s.items.map((it) => it.tag || ''))];
+        const groups = tags.map((tag) => {
+          const mine = s.items.map((it, i) => [it, rows[i]]).filter(([it]) => (it.tag || '') === tag).map(([, w]) => w.call);
+          const g = firstWired(kd[0][1], { label: k(`${tag} · ${mine.length}`), children: mine, sub: k(p.expr), glyph: k('🧩'), tone: 0 });
+          if (!g) return null;
+          return /children:/.test(g.call) ? g.call : `Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [${g.call}, ${mine.join(', ')}])`;
+        });
+        if (groups.some((g) => !g)) { notes.push(`⚪ ${p.name}: אין אטום-קבוצה מתחווט ל-${kd[0][0]}`); continue; }
+        out = `Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [${groups.join(', ')}])`;
+      } else out = `Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [${rows.map((w) => w.call).join(', ')}])`;
+      widgets.push(out); p.wired = [rows[0].cand]; continue;
     } else { notes.push(`⚪ ${p.name}: צורה ${s.kind} — פליטה טרם נבנתה (חיפוש בוצע: ${kd.map(([o, pk]) => o + '⇒' + (pk.atoms[0] || '—')).join(' · ')})`); continue; }
     widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [for (final r in ${rowSrc}) Padding(padding: const EdgeInsets.only(bottom: 8), child: ${rowOf.call})]))`);
   }
-  const cls = 'Gen' + slug.replace(/(^|_)([a-z0-9])/g, (_, __, c) => c.toUpperCase()) + 'Screen';
+  return { imports, widgets, notes, firstWired };
+}
+const clsOf = (slug) => 'Gen' + slug.replace(/(^|_)([a-z0-9])/g, (_, __, c) => c.toUpperCase()) + 'Screen';
+export function renderParticles({ slug, entity, plan, k }) {
+  const { imports, widgets, notes } = particleWidgets({ entity, plan, k });
+  const cls = clsOf(slug);
   const code = `// 🧩 חולל ע"י מפרק-החלקיקים הפתוח (particles · הכרעה-27): כל חלקיק נמצא בכל הקטלוג ומורכב מחדש. אל תערוך ידנית.
 ${plan.filter((p) => p.ok).map((p) => `//   ${p.name} = ${p.expr} ⇒ ${p.shape.kind} ⇒ [${p.ops.join(', ')}] ⇒ ${(p.wired || ['—']).join(' + ')}`).join('\n')}
 ${notes.map((n) => '//   ' + n).join('\n')}
@@ -215,6 +295,101 @@ ${widgets.map((w) => `    Padding(padding: const EdgeInsets.only(bottom: 10), ch
 }
 `;
   return { cls, code, notes, count: widgets.length };
+}
+
+// ── 7 · חלקיק-דוח (G24): מבנה-קבוע-לרשומה — כל חלק = רשימת-refs; כל ref נפתר לחלקיק-קיים / שדה (חלקיק-סינתטי) / אטומי-תוכן, ומורכב באותו חיפוש-פתוח ──
+export function planReports({ reports, plan, entities, content = [] }) {
+  const byEnt = new Map();
+  for (const r of reports) {
+    const root = entities.find((e) => e.name === r.entity);
+    if (!root) { (byEnt.get(r.entity) || byEnt.set(r.entity, { entity: r.entity, root: null, sections: [], unresolved: [`אין ישות "${r.entity}" בספק`] }).get(r.entity)).sections.push({ name: r.section, refs: [] }); continue; }
+    const rep = byEnt.get(r.entity) || byEnt.set(r.entity, { entity: r.entity, root, sections: [], unresolved: [] }).get(r.entity);
+    const refs = r.refs.map((ref) => {
+      if (ref.kind === 'content') {
+        const [pp] = planParticles({ particles: [{ entity: root.name, name: ref.group, expr: `[${G.pContent[0]} ${ref.group}]` }], entities, content });
+        return pp.ok ? { ...ref, mode: 'content', p: pp } : { ...ref, why: pp.why };
+      }
+      const ent = ref.kind === 'child' ? entities.find((e) => e.name === ref.entity) : root;
+      if (!ent) return { ...ref, why: `אין ישות "${ref.entity}"` };
+      const link = ref.kind === 'child' ? (ent.schema.find((f) => f.label === root.name) || null) : null;
+      if (ref.kind === 'child' && !link) return { ...ref, why: `ל-"${ent.name}" אין שדה-קשר אל "${root.name}"` };
+      const existing = plan.find((p) => p.ok && p.entSlug === ent.slug && p.name === ref.name && !(ref.kind === 'own' && p.shape.kind === 'partition'));   // רשומה-אחת ⇒ ערך, לא חלוקה
+      if (existing) return { ...ref, mode: ref.kind === 'child' ? 'childParticle' : 'particle', p: existing, ent, link: link ? link.label : null };
+      const field = ent.schema.find((f) => f.label === ref.name);
+      if (!field) return { ...ref, why: `"${ref.name}" אינו חלקיק ולא שדה של "${ent.name}"` };
+      const [pp] = planParticles({ particles: [{ entity: ent.name, name: field.label, expr: field.label, labelled: true }], entities, content, single: ref.kind !== 'child' });   // שדה-השורש = רשומה-אחת ⇒ enum כערך, לא חלוקה
+      return pp.ok ? { ...ref, mode: ref.kind === 'child' ? 'childParticle' : 'particle', p: pp, ent, link: link ? link.label : null, synthetic: true } : { ...ref, why: pp.why };
+    });
+    rep.sections.push({ name: r.section, refs });
+    for (const x of refs) if (x.why) rep.unresolved.push(`${r.section} › ${x.raw}: ${x.why}`);
+  }
+  return [...byEnt.values()].map((r) => ({ ...r, ok: !!r.root && r.unresolved.length === 0 }));
+}
+
+export function renderReport({ slug, report, k }) {
+  const root = report.root; const rootSlug = root.slug;
+  const imports = new Set(); const notes = [...report.unresolved]; const sections = [];
+  const wired = (cls, ctx) => { const w = wireAtom(cls, ctx); if (w) imports.add(`import '../${w.file.startsWith('dart-') ? w.file : 'dart-ui-bs/' + w.file}';`); return w; };
+  const firstWired = (pick, ctx) => { for (const cand of [...pick.atoms, ...pick.alts]) { const w = wired(cand.split('@')[0], ctx); if (w) return { ...w, cand }; } return null; };
+  const goal = `${G.reportWord} ${root.name}`;
+  const picker = firstWired(searchOp('switch', goal), { items: `[for (final o in appStore.options('${rootSlug}')) o.value]`, selected: '_i', onSelect: '(i) => setState(() => _i = i)', label: k(root.name), glyph: k('🧩') });
+  const empty = firstWired(searchOp('empty', goal), { message: k(T('reportEmpty', { ent: root.name })), label: k(root.name), glyph: k('🧩') });
+  const used = [];
+  for (const sec of report.sections) {
+    const children = [];
+    for (const ref of sec.refs) {
+      if (ref.why) continue;
+      const recs = ref.mode === 'childParticle' ? `appStore.referencing('${ref.ent.slug}', ${k(ref.link)}, id0)` : ref.mode === 'content' ? `[r0]` : `[r0]`;
+      const ent = ref.mode === 'content' ? root : ref.ent;
+      const w = particleWidgets({ entity: ent, plan: [ref.mode === 'particle' && ref.p.shape.kind === 'raw' && !ref.p.labelled ? { ...ref.p, labelled: true } : ref.p], k, recs });   // עובדה-של-השורש בדוח = "שדה: ערך" גם כשהחלקיק קיים (עותק; ה-wired כבר על המקור)
+      for (const i of w.imports) imports.add(i);
+      for (const n of w.notes) notes.push(`${sec.name} › ${ref.raw}: ${n}`);
+      children.push(...w.widgets); if (ref.p.wired) used.push(`${ref.raw}⇒${ref.p.wired.join('+')}`);
+    }
+    if (!children.length) continue;
+    const g = firstWired(searchOp('group', goal), { label: k(sec.name), children, sub: k(sec.name), glyph: k('🧩'), tone: 0 });
+    sections.push(g ? (/children:/.test(g.call) ? g.call : `Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [${g.call}, ${children.join(', ')}])`) : `Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [${children.join(', ')}])`);
+  }
+  const cls = clsOf(slug);
+  const title = k(T('reportTitle', { ent: root.name })); const sub = k(T('reportSub', { n: sections.length }));
+  const code = `// 📄 חולל ע"י חלקיק-הדוח (particles · G24 · הכרעה-27): מבנה-קבוע-לרשומה; כל חלק מורכב מחלקיקים שנמצאו בחיפוש-פתוח. אל תערוך ידנית.
+${report.sections.map((s) => `//   ${s.name} = ${s.refs.map((r) => r.raw + (r.why ? ' ⚪' : '')).join(', ')}`).join('\n')}
+${used.map((u) => '//   ' + u).join('\n')}
+${notes.map((n) => '//   ⚪ ' + n).join('\n')}
+import '../dart-data-bs/auto/gen_${slug}_content.dart';
+import '../dart-ui-bs/ds/ds.dart';
+import '../dart-ui-bs/ds/ds_store.dart';
+${[...imports].sort().join('\n')}
+import 'package:flutter/material.dart';
+
+class ${cls} extends StatefulWidget {
+  const ${cls}({super.key});
+  @override
+  State<${cls}> createState() => _${cls}State();
+}
+
+class _${cls}State extends State<${cls}> {
+  int _i = 0;
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, __) {
+    final rs = appStore.records('${rootSlug}');
+    if (rs.isEmpty) return DsScaffold(title: ${title}, subtitle: ${sub}, icon: ${k('📄')}, children: [${empty ? empty.call : 'const SizedBox.shrink()'}]);
+    final r0 = rs[_i.clamp(0, rs.length - 1)];
+    final id0 = r0[AppStore.idKey] ?? '';
+    return DsScaffold(title: ${title}, subtitle: ${sub}, icon: ${k('📄')}, children: [
+      ${picker ? `Padding(padding: const EdgeInsets.only(bottom: 12), child: ${picker.call}),` : ''}
+${sections.map((w) => `      Padding(padding: const EdgeInsets.only(bottom: 12), child: ${w}),`).join('\n')}
+    ]);
+  });
+}
+`;
+  return { cls, code, notes, count: sections.length, picker: picker ? picker.cand : null };
+}
+
+export function reportsMd(reports) {
+  let md = `\n# תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)\n\n| דוח | חלק | ref | פתרון | אטומים |\n|---|---|---|---|---|\n`;
+  for (const r of reports) for (const s of r.sections) for (const x of s.refs) md += `| ${r.entity} | ${s.name} | ${x.raw} | ${x.why ? '⚪ ' + x.why : x.mode + (x.synthetic ? ' (שדה)' : '')} | ${x.p && x.p.wired ? x.p.wired.join(' + ') : x.p && x.p.picks ? x.p.picks.map((pk) => (pk.atoms[0] || '—').split('@')[0]).join(' · ') : '—'} |\n`;
+  return md;
 }
 
 export function planReport(plan) {
@@ -240,6 +415,14 @@ if (isMain && process.argv.includes('--gate')) {
     tot += stored.length; n++;
     const unres = stored.filter((p) => !p.ok || !(p.wired && p.wired.length));
     if (unres.length) { console.log(`🔴 particles (${ns}): ${unres.length} חלקיקים לא-פתורים/לא-מחווטים: ${unres.map((p) => p.name + (p.why ? ' (' + p.why + ')' : '')).join(' · ')}`); bad++; }
+    const rpPath = path.join(GEN, `report-plan-${ns}.json`);   // G24 · דוחות: כל ref פתור
+    const spec = fs.readFileSync(path.join(dir, f), 'utf8').split('\n');
+    if (parseReportLines(spec).length) {
+      if (!fs.existsSync(rpPath)) { console.log(`🔴 particles: אין report-plan-${ns}.json — הרץ app-ds`); bad++; continue; }
+      const rp = JSON.parse(fs.readFileSync(rpPath, 'utf8')); const badR = rp.filter((r) => !r.ok);
+      if (badR.length) { console.log(`🔴 particles (${ns}): דוחות לא-פתורים: ${badR.flatMap((r) => r.unresolved).join(' · ')}`); bad++; }
+      tot += rp.reduce((a, r) => a + r.sections.reduce((b, s) => b + s.refs.length, 0), 0);
+    }
   }
   if (bad) process.exit(1);
   console.log(`✓ particles: ${tot} חלקיקים ב-${n} ספקים — כולם נמצאו בחיפוש-פתוח ומחווטים (הכרעה-27)`); process.exit(0);

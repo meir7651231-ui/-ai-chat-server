@@ -67,5 +67,15 @@
  "particleScreens": "מסכי-חלקיקים",
  "headlineNoAtom": "אף אטום-headline לא מתחווט לאריח",
  "skinLog": "עור-forge על מסלול-ב׳",
- "particlesTitle": "{ent} · חלקיקים"
+ "particlesTitle": "{ent} · חלקיקים",
+ "reportTag": "דוח",
+ "reportTitle": "{ent} · דוח",
+ "reportLog": "דוחות (הכרעה-27)",
+ "reportSections": "חלקים",
+ "reportUnres": "לא-פתורים",
+ "reportScreens": "מסכי-דוח",
+ "reportEmpty": "אין {ent} עדיין — הדוח מתמלא מהרשומה",
+ "contentLog": "אטומי-תוכן",
+ "contentItems": "פריטי-תוכן",
+ "reportSub": "{n} חלקים · דוח-לרשומה"
 }

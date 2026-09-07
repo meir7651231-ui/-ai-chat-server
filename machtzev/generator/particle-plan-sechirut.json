@@ -88,7 +88,8 @@
   "why": null,
   "shape": "partition",
   "ops": [
-   "group"
+   "group",
+   "alert"
   ],
   "picks": [
    {
@@ -101,10 +102,21 @@
      "DsSection",
      "SectionHeader"
     ]
+   },
+   {
+    "op": "alert",
+    "atoms": [
+     "AlertBanner@premium/feedback"
+    ],
+    "alts": [
+     "AlertBanner@premium/feedback",
+     "ToastCard"
+    ]
    }
   ],
   "wired": [
-   "SectionHeader"
+   "DsSection",
+   "ToastCard"
   ]
  },
  {
@@ -294,6 +306,161 @@
   ],
   "wired": [
    "EmptyState@premium/feedback"
+  ]
+ },
+ {
+  "entity": "תיק",
+  "name": "החלטה",
+  "expr": "החלטה",
+  "ok": true,
+  "why": null,
+  "shape": "partition",
+  "ops": [
+   "group",
+   "alert"
+  ],
+  "picks": [
+   {
+    "op": "group",
+    "atoms": [
+     "DsSection"
+    ],
+    "alts": [
+     "DsSection",
+     "SectionHeader",
+     "AnimatedEmpty"
+    ]
+   },
+   {
+    "op": "alert",
+    "atoms": [
+     "ToastCard"
+    ],
+    "alts": [
+     "ToastCard",
+     "AlertBanner@premium/feedback"
+    ]
+   }
+  ],
+  "wired": [
+   "DsSection",
+   "ToastCard"
+  ]
+ },
+ {
+  "entity": "ממצא",
+  "name": "רשימת בדיקה",
+  "expr": "[תוכן בדיקה]",
+  "ok": true,
+  "why": null,
+  "shape": "content",
+  "ops": [
+   "group",
+   "alert"
+  ],
+  "picks": [
+   {
+    "op": "group",
+    "atoms": [
+     "DsSection"
+    ],
+    "alts": [
+     "DsSection",
+     "SectionHeader",
+     "AnimatedEmpty"
+    ]
+   },
+   {
+    "op": "alert",
+    "atoms": [
+     "ToastCard"
+    ],
+    "alts": [
+     "ToastCard",
+     "AlertBanner@premium/feedback"
+    ]
+   }
+  ],
+  "wired": [
+   "ToastCard"
+  ]
+ },
+ {
+  "entity": "בטוחה",
+  "name": "מה החוק קובע",
+  "expr": "[תוכן חוק]",
+  "ok": true,
+  "why": null,
+  "shape": "content",
+  "ops": [
+   "alert"
+  ],
+  "picks": [
+   {
+    "op": "alert",
+    "atoms": [
+     "ToastCard"
+    ],
+    "alts": [
+     "ToastCard",
+     "AlertBanner@premium/feedback"
+    ]
+   }
+  ],
+  "wired": [
+   "ToastCard"
+  ]
+ },
+ {
+  "entity": "ממצא",
+  "name": "נוסחים לוואטסאפ",
+  "expr": "[תוכן בקשה]",
+  "ok": true,
+  "why": null,
+  "shape": "content",
+  "ops": [
+   "alert"
+  ],
+  "picks": [
+   {
+    "op": "alert",
+    "atoms": [
+     "ToastCard"
+    ],
+    "alts": [
+     "ToastCard",
+     "AlertBanner@premium/feedback"
+    ]
+   }
+  ],
+  "wired": [
+   "ToastCard"
+  ]
+ },
+ {
+  "entity": "תיק",
+  "name": "אסור בפלט",
+  "expr": "[תוכן אסור]",
+  "ok": true,
+  "why": null,
+  "shape": "content",
+  "ops": [
+   "alert"
+  ],
+  "picks": [
+   {
+    "op": "alert",
+    "atoms": [
+     "ToastCard"
+    ],
+    "alts": [
+     "ToastCard",
+     "AlertBanner@premium/feedback"
+    ]
+   }
+  ],
+  "wired": [
+   "ToastCard"
   ]
  }
 ]

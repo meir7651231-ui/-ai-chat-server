@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { interpret as entInterpret } from './entity.mjs';
 import { renderEntity, renderDashboard, renderHub, renderSystem, renderMain, renderScreenBind, renderCompose, renderRecordDetail, SCREEN_REGISTRY, makeConsts, write } from './render-ds.mjs';
-import { PARTICLE_RE, parseParticleLines, planParticles, renderParticles, planReport } from './particles.mjs';   // G23 · הכרעה-27
+import { PARTICLE_RE, CONTENT_RE, REPORT_RE, parseParticleLines, parseContentLines, parseReportLines, planParticles, planReports, renderParticles, renderReport, planReport, reportsMd } from './particles.mjs';   // G23 · הכרעה-27
 import { nlToSpec } from './nl-spec.mjs';
 import { L, T } from './chrome.mjs';
 import * as R from '../root.mjs';
@@ -64,7 +64,9 @@ export function buildApp(specText) {
   }
   const all0 = specText.split(/\n+/).map((l) => l.trim()).filter((l) => l.length > 2);
   const particleLines = all0.filter((l) => PARTICLE_RE.test(l));   // G23 · חלקיקים (צעד 2) — לא ישויות
-  const all = all0.filter((l) => !PARTICLE_RE.test(l));
+  const contentLines = all0.filter((l) => CONTENT_RE.test(l));     // G24 · אטומי-תוכן (מילה-במילה מהמסמך)
+  const reportLines = all0.filter((l) => REPORT_RE.test(l));       // G24 · חלקיקי-דוח
+  const all = all0.filter((l) => !PARTICLE_RE.test(l) && !CONTENT_RE.test(l) && !REPORT_RE.test(l));
   const roles = all.filter((l) => ROLE_RE.test(l)).map(parseRole);
   const lines = all.filter((l) => !ROLE_RE.test(l));
   const info = lines.map((line, idx) => ({ line, i: idx + 1, isEnt: ENTITY_RE.test(line) }));
@@ -126,7 +128,7 @@ export function buildApp(specText) {
 
   // ניקוי פלט-app קודם
   // L95: ניקוי רק בתוך מרחב-השמות — בלי --name היה מוחק גם gen_app_kehila/tzedaka/… של app-from-sentences (אותה מחלה כמו genesis-gen, L93)
-  const own = NS ? new RegExp(`^gen_${P}(ent|px|scr|bind|rec|over|audit|flags|settings|hub|main|relations)\\d*(_content)?\\.dart$`) : /^gen_app_(ent|px|scr|bind|rec|over|audit|flags|settings|hub|main|relations)\d*(_content)?\.dart$/;
+  const own = NS ? new RegExp(`^gen_${P}(ent|px|rp|scr|bind|rec|over|audit|flags|settings|hub|main|relations)\\d*(_content)?\\.dart$`) : /^gen_app_(ent|px|rp|scr|bind|rec|over|audit|flags|settings|hub|main|relations)\d*(_content)?\.dart$/;
   for (const f of fs.readdirSync(OUT)) if (own.test(f)) fs.unlinkSync(path.join(OUT, f));
   for (const f of fs.readdirSync(DATA)) if (own.test(f)) fs.unlinkSync(path.join(DATA, f));
 
@@ -208,10 +210,11 @@ export function buildApp(specText) {
   }
 
   // 🧩 G23 · הכרעה-27: מסך-חלקיקים לכל ישות שיש לה חלקיקים — כל חלקיק נמצא בחיפוש בכל הקטלוג ומורכב מחדש
-  const particleScreens = [];
-  if (particleLines.length) {
+  const particleScreens = []; const reportScreens = [];
+  if (particleLines.length || reportLines.length) {
+    const content = parseContentLines(contentLines);
     const pents = entMeta.map((e) => { const li = info.find((x) => x.isEnt && `${P}ent${x.i}` === e.slug); const r = li ? entRes[li.i] : null; const sc = screens.find((x) => x.slug === e.slug); return { name: e.name, slug: e.slug, cls: sc ? sc.cls : 'Gen' + e.slug, schema: r ? r.schema : [] }; });
-    const plan = planParticles({ particles: parseParticleLines(particleLines), entities: pents });
+    const plan = planParticles({ particles: parseParticleLines(particleLines), entities: pents, content });
     let pi = 0;
     for (const e of pents) {
       const mine = plan.filter((p) => p.entSlug === e.slug); if (!mine.length) continue;
@@ -222,8 +225,18 @@ export function buildApp(specText) {
     }
     const gen = R.GEN_DIR; const nsName = NS || 'app';
     fs.writeFileSync(path.join(gen, `particle-plan-${nsName}.json`), JSON.stringify(plan.map((p) => ({ entity: p.entity, name: p.name, expr: p.expr, ok: p.ok, why: p.why || null, shape: p.shape ? p.shape.kind : null, ops: p.ops || [], picks: (p.picks || []).map((k) => ({ op: k.op, atoms: k.atoms, alts: k.alts.slice(0, 3) })), wired: p.wired || [] })), null, 1) + '\n');
-    fs.writeFileSync(path.join(gen, `particle-plan-${nsName}.md`), planReport(plan));
-    console.log(`🧩 ${L.particlesLog}: ${plan.filter((p) => p.wired && p.wired.length).length}/${plan.length} ${L.particlesFound} · ${particleScreens.length} ${L.particleScreens}`);
+    const reports = planReports({ reports: parseReportLines(reportLines), plan, entities: pents, content });
+    let ri = 0;
+    for (const rp of reports) {
+      if (!rp.root) continue;
+      const rslug = `${P}rp${++ri}`; const { k, dump } = makeConsts(rslug);
+      const r = renderReport({ slug: rslug, report: rp, k });
+      write(rslug, r.code, dump());
+      reportScreens.push({ slug: rslug, cls: r.cls, kind: 'entity', name: `📄 ${T('reportTitle', { ent: rp.entity })}`, icon: '📄', sub: `${r.count} ${L.reportSections}${r.notes.length ? ` · ${r.notes.length} ${L.reportUnres}` : ''}` });
+    }
+    fs.writeFileSync(path.join(gen, `particle-plan-${nsName}.md`), planReport(plan) + (reports.length ? reportsMd(reports) : ''));
+    if (reportLines.length) fs.writeFileSync(path.join(gen, `report-plan-${nsName}.json`), JSON.stringify(reports.map((r) => ({ entity: r.entity, ok: r.ok, unresolved: r.unresolved, sections: r.sections.map((s) => ({ name: s.name, refs: s.refs.map((x) => ({ raw: x.raw, mode: x.mode || null, why: x.why || null, wired: x.p && x.p.wired ? x.p.wired : [] })) })) })), null, 1));
+    console.log(`🧩 ${L.particlesLog}: ${plan.filter((p) => p.wired && p.wired.length).length}/${plan.length} ${L.particlesFound} · ${particleScreens.length} ${L.particleScreens}${content.length ? ` · ${content.length} ${L.contentItems}` : ''}${reports.length ? ` · ${reportScreens.length} ${L.reportScreens}` : ''}`);
   }
   // מסכי-מערכת (kind='system' — גלויים רק לתפקיד 'הכל')
   const sys = [];
@@ -237,7 +250,7 @@ export function buildApp(specText) {
   // RLS · שדות-היקף ייחודיים (slug+שדה) — למילוי בורר-"מי-אני" בלוח.
   const scopeFields = [];
   for (const role of roles) for (const sc of (role.scope || [])) { const sl = nameToSlug[sc.ent]; if (sl && !scopeFields.some((x) => x.slug === sl && x.field === sc.field)) scopeFields.push({ slug: sl, field: sc.field }); }
-  const hub = renderHub(`${P}hub`, { title: L.appTitle, icon: '🏗️', screens: [...screens, ...particleScreens, ...composeScreens, ...detailScreens, ...bindScreens, ...sys], roles, scopeFields });
+  const hub = renderHub(`${P}hub`, { title: L.appTitle, icon: '🏗️', screens: [...screens, ...reportScreens, ...particleScreens, ...composeScreens, ...detailScreens, ...bindScreens, ...sys], roles, scopeFields });
   // שורש-האפליקציה: main + MaterialApp ⇒ אפליקציה עצמאית שרצה בלי entry-זמני.
   renderMain(`${P}main`, { title: L.appTitle, hubSlug: `${P}hub`, hubCls: hub.cls, edges });
 
@@ -255,7 +268,7 @@ if (import.meta.url === 'file://' + process.argv[1]) {
     const [{ skinPass }, { resolveSkin }, { autoSkin }] = await Promise.all([import('./retarget.mjs'), import('./app-from-sentences.mjs'), import('./auto-skin.mjs')]);
     const sk = resolveSkin(autoSkin().skin); const tot = {};
     for (const f of fs.readdirSync(OUT)) {
-      if (!new RegExp(`^gen_${P}(ent|px|scr|bind|rec|over|audit|flags|settings|hub|main)\\d*\\.dart$`).test(f)) continue;
+      if (!new RegExp(`^gen_${P}(ent|px|rp|scr|bind|rec|over|audit|flags|settings|hub|main)\\d*\\.dart$`).test(f)) continue;
       const fp = path.join(OUT, f); const { code, stats } = skinPass(fs.readFileSync(fp, 'utf8'), sk);
       fs.writeFileSync(fp, code); for (const [k, v] of Object.entries(stats)) tot[k] = (tot[k] || 0) + v;
     }
