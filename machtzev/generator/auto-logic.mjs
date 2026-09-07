@@ -90,13 +90,14 @@ export function rankAll() {
   const byId = new Map(rows.map((r) => [r.id, r]));
   const gold = fs.readdirSync(path.join(NEW, 'dart-gen-bs')).filter((f) => /^schoolos.*\.dart$/.test(f)).map((f) => fs.readFileSync(path.join(NEW, 'dart-gen-bs', f), 'utf8')).join('\n');
   const impCom = {}; for (const m of gold.matchAll(/^import '\.\.\/(dart-maor|dart)\/([^']+)';\s*\/\/\s*(.+)$/gm)) { const k = m[1] + '/' + m[2]; (impCom[k] ||= []).push(...heTok(m[3])); }
-  const out = {};
+  const out = {}; const reach = new Set();   // L91 · reach = כל מנוע שכשיר-בחתימה לפעולה כלשהי — מה שהבורר באמת שוקל
   for (const [op, atom] of Object.entries(ATOM)) {
     const d = byId.get(atom); if (!d) continue;   // אטום-תצוגה — לא כאן (auto-skin)
     const demand = bag([...(impCom[d.file] || []), ...particlesOf(op).flatMap(heTok)]);
     const score = (c) => { let s = 0; for (const t of c.titleTok) if (demand.has(t)) s += 2 * idf(t); for (const t of c.bodyTok) if (demand.has(t) && !c.titleTok.has(t)) s += idf(t); return s + agree(c, d) + (d.origin && c.origin === d.origin ? 1.5 : 0); };
     const cands = rows.filter((c) => compat(c, d)).map((c) => ({ id: c.id, file: c.file, score: +(score(c) - (d.argc - c.argc) * 2).toFixed(2), ident: ident(c, d), argc: c.argc, params: c.params, ret: c.ret }))   // פרמטר שנשמט = ייעוד חלקי (-2 לכל אחד)
       .sort((x, y) => y.score - x.score || (x.id === atom ? -1 : y.id === atom ? 1 : 0) || (x.id < y.id ? -1 : 1));
+    for (const c of cands) reach.add(c.id);
     const top = cands[0]; const declaredRank = cands.findIndex((c) => c.id === atom);
     let swap = null;
     if (top && top.id !== atom && top.score > (cands[declaredRank] ? cands[declaredRank].score : 0)) {
@@ -105,6 +106,7 @@ export function rankAll() {
     }
     out[op] = { declared: atom, declaredFile: d.file, pick: swap ? top.id : atom, candidates: cands.length, declaredRank, top3: cands.slice(0, 3).map((c) => `${c.id}:${c.score}${c.ident ? '≡' : ''}`), swap };
   }
+  Object.defineProperty(out, 'reach', { value: [...reach].sort(), enumerable: false });   // לא נכנס ל-ops ב-JSON; נכתב בנפרד
   return out;
 }
 // הוכחה: מודול-זהב שמשתמש במנוע המוחלף ⇒ העתק עם ההחלפה למראה ⇒ בדיקות-הזהב ⇒ שחזור. ירוק = ההחלפה מוכחת-לייעוד.
@@ -163,7 +165,7 @@ if (isMain) {
   if (process.argv.includes('--prove')) ops = prove(ops);
   for (const r of Object.values(ops)) if (r.swap && !r.swap.proof) r.pick = r.declared;   // החלפה שטרם הוכחה אינה מיושמת
   const n = Object.keys(ops).length, confirmed = Object.values(ops).filter((r) => r.declaredRank === 0).length, swaps = Object.values(ops).filter((r) => r.swap).length, proven = Object.values(ops).filter((r) => r.swap && r.swap.proof && r.swap.proof.proven).length;
-  const fresh = JSON.stringify({ summary: { ops: n, confirmed, swapsProposed: swaps, swapsProven: proven }, ops }, null, 1) + '\n';
+  const fresh = JSON.stringify({ summary: { ops: n, confirmed, swapsProposed: swaps, swapsProven: proven, reach: (ops.reach || []).length }, ops, reach: ops.reach || [] }, null, 1) + '\n';   // reach ⇒ truth.mjs (L91)
   if (process.argv.includes('--gate')) {
     if (!fs.existsSync(OUT) || fs.readFileSync(OUT, 'utf8') !== fresh) { console.log('🔴 autologic: auto-logic.json ≠ בורר-טרי (הרץ node machtzev/generator/auto-logic.mjs)'); process.exit(1); }
     console.log(`✓ autologic: ${n} פעולות-לוגיקה × ${catalog().N} מנועים · הזהב מאושר-כטוב-ביותר ${confirmed}/${n} · החלפות מוצעות ${swaps} · מוכחות ${proven}`); process.exit(0);

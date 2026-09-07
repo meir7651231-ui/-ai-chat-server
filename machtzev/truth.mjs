@@ -41,14 +41,25 @@ const wireable = logic.filter((x) => x.wireable).length;
 const engines = listMapEngines();
 // c3ג · מכנה כן (הכרעה N): לא כל אטום ניתן-לחיווט. תצוגה: fields עם ≥1 שקע-String, collection, series; לוגיקה: wireable.
 const eligibleDisp = census.filter((a) => (a.seam === 'fields' && (a.str || 0) >= 1) || a.seam === 'collection' || a.seam === 'series').length;
-const eligible = eligibleDisp + wireable;
+const eligibleLogic = logic.filter((x) => Array.isArray(x.params)).length;   // L91 · G18/G19: כל מנוע עם חתימה נקראת כשיר (compat + adapter); `wireable`=102 היה קריטריון "שדה-מחושב" בלבד (ישן, נשמר כתת-שורה)
+const eligible = eligibleDisp + eligibleLogic;
 
 // ── מבנה + שערים ──
 const gatesTsv = rd('machtzev/gates.tsv').split('\n').filter((l) => l && !l.startsWith('#')).length;
 const gateCalls = (rd('machtzev/police.mjs').match(/^\s*gate(Dirty)?\(/gm) || []).length;
 
 const totalAtoms = census.length + logic.length;
-const wiredTotal = dispAll.size + engines.length;
+// L91 · הבוררים-הנוכחיים (G17 auto-skin · G18 auto-logic · G1 ops-map) — מדידה דרך המסלול הישן בלבד (selectVaried+MAP_ENGINES) שיקרה בהשמטה: "53 מחווטים" כשהבורר כבר מדרג 359+848.
+const askin = rj('auto-skin.json'), alogic = rj('auto-logic.json'), opsMap = rj('ops-map.json');
+const skinPicks = new Set(Object.entries(askin.skin || {}).filter(([k]) => k !== 'toneMap').map(([, v]) => v));
+const skinReach = new Set(askin.reach || []);
+const logicPicks = new Set(Object.values(alogic.ops || {}).map((r) => r.pick).filter(Boolean));
+const logicReach = new Set(alogic.reach || []);
+const chosenDisp = new Set([...dispAll, ...skinPicks]), chosenLogic = new Set([...engines, ...logicPicks]);
+const reachDisp = new Set([...chosenDisp, ...skinReach]), reachLogic = new Set([...chosenLogic, ...logicReach]);
+const opsMapped = (Array.isArray(opsMap) ? opsMap : Object.values(opsMap.atoms || opsMap || {})).filter((a) => a && a.layer !== 'data' && a.op).length;
+const wiredTotal = chosenDisp.size + chosenLogic.size;   // נבחרו-בפועל ע"י בורר כלשהו (מסלול-DS ∪ auto-skin ∪ MAP_ENGINES ∪ auto-logic)
+const reachTotal = reachDisp.size + reachLogic.size;     // כשירים-לבורר (fits / compat) — מה שהמנוע באמת שוקל
 const wiredPct = (wiredTotal / totalAtoms * 100).toFixed(1);
 // GENMAX·G4 — רתמת-הזהב (golden-harness.mjs): מודולי-זהב שהמנוע מרכיב-מחדש מהקטלוג ועוברים את בדיקותיהם המקוריות
 const gh = (() => { try { return JSON.parse(rd('machtzev/generator/golden-harness-report.json')); } catch { return null; } })();
@@ -60,9 +71,11 @@ const layers = {
   '🏁 זהב-מורכב-מחדש (GENMAX·G4 · render-module compose)': goldenLine,
   '🔎 פלטי-מחולל שרונדרו-בפועל (GENMAX·G5b · gen-verify)': genverifyLine,
   '🔌 מחווטים-למחולל בפועל': `${wiredTotal} (${wiredPct}%) · ${totalAtoms - wiredTotal} מפורקים-אך-לא-מחווטים`,
-  '  ↳ מול כשירים-לחיווט (eligible)': `${wiredTotal}/${eligible} (${(wiredTotal / (eligible || 1) * 100).toFixed(1)}%) · כשירים: תצוגה ${eligibleDisp} (fields∧str≥1 ∪ collection ∪ series) + לוגיקה ${wireable} (wireable)`,
-  '  ↳ חיווט-תצוגה': `${dispAll.size}/${census.length} (${(dispAll.size / census.length * 100).toFixed(1)}%)`,
-  '  ↳ חיווט-לוגיקה': `${engines.length}/${logic.length} (${(engines.length / logic.length * 100).toFixed(1)}%)`,
+  '  ↳ מול כשירים-לחיווט (eligible)': `${wiredTotal}/${eligible} (${(wiredTotal / (eligible || 1) * 100).toFixed(1)}%) · כשירים: תצוגה ${eligibleDisp} (fields∧str≥1 ∪ collection ∪ series) + לוגיקה ${eligibleLogic} (חתימה נקראת; wireable-כשדה-מחושב ${wireable})`,
+  '  ↳ נגישים-לבוררים-הנוכחיים (reach · auto-skin fits ∪ auto-logic compat)': `${reachTotal}/${eligible} (${(reachTotal / (eligible || 1) * 100).toFixed(1)}%) · תצוגה ${reachDisp.size} · לוגיקה ${reachLogic.size}`,
+  '  ↳ ממופים-לפעולת-יסוד (G1 ops-map · תצוגה+לוגיקה)': `${opsMapped}/${totalAtoms}`,
+  '  ↳ חיווט-תצוגה (נבחרו: DS-selectVaried ∪ auto-skin)': `${chosenDisp.size}/${census.length} (${(chosenDisp.size / census.length * 100).toFixed(1)}%)`,
+  '  ↳ חיווט-לוגיקה (נבחרו: MAP_ENGINES ∪ auto-logic)': `${chosenLogic.size}/${logic.length} (${(chosenLogic.size / logic.length * 100).toFixed(1)}%)`,
   'תצוגה · atom-index (widgets · הכרעה C)': census.length,
   '  ↳ seam': JSON.stringify(seam),
   '  ↳ נגישים-בהרכבה (selectVaried×400)': dispAll.size,
@@ -98,7 +111,7 @@ ${stamp(structure)}
 
 ## אזהרת-אמת (הלקח שנקנה ביוקר)
 "סידור-הענף" = פריסת-קבצים. "כמה/מה-מחובר" = **מדידה חוצת-3-שכבות**. אל תסיק תקרה משכבה-אחת.
-המחולל מחובר: תצוגה=${dispAll.size} נגישים · לוגיקה=${engines.length} מנועים · מתוך מאגר גדול בהרבה שנחסם ע"י §20-ג (אל-תזייף).
+המחולל מחובר: נבחרו-בפועל תצוגה=${chosenDisp.size} · לוגיקה=${chosenLogic.size} · נגישים-לבוררים ${reachTotal}/${eligible} · ממופים-לפעולה ${opsMapped}/${totalAtoms}. "נבחר" ≠ "נגיש": בורר בוחר אחד לתפקיד (L91) — מה שלא נבחר עדיין נגיש למשפט הבא.
 `;
 
 // 🔒 רַצֶ'ט-אי-נסיגה: חיווט רק-עולה. floor נשמר; --gate נכשל אם ירד מתחתיו (מונע חזרה-אחורה למטרה).
@@ -113,7 +126,7 @@ if (process.argv.includes('--write')) {
     const gatesN = (rd('machtzev/gates.tsv').split('\n').filter((l) => l && !l.startsWith('#'))).length;
     const pinsN = (rd('machtzev/pins.sha256').split('\n').filter(Boolean)).length;
     const block = `<!-- truth:begin · מחולל ע"י node machtzev/truth.mjs --write · אל תערוך ידנית -->\n` +
-      `‏**${totalAtoms}** אטומים מאונדקסים (תצוגה **${census.length}** · לוגיקה **${logic.length}**) · מחווטים-למחולל **${wiredTotal}** מתוך **${eligible}** כשירים (${(wiredTotal / (eligible || 1) * 100).toFixed(1)}%) · ` +
+      `‏**${totalAtoms}** אטומים מאונדקסים (תצוגה **${census.length}** · לוגיקה **${logic.length}**) · נבחרו-בפועל-ע"י-הבוררים **${wiredTotal}** · נגישים-לבוררים **${reachTotal}** מתוך **${eligible}** כשירים (${(reachTotal / (eligible || 1) * 100).toFixed(1)}%) · ממופים-לפעולה **${opsMapped}**/${totalAtoms} · ` +
       `‏**${gatesN}** שערי-משטרה (gates.tsv) · **${pinsN}** קבצים נעולי-חתימה (pins.sha256) · זהב-מורכב-מחדש-מהקטלוג (G4) **${goldenLine}** · פלטי-מחולל שרונדרו-בפועל (G5b) **${genverifyLine}**\n<!-- truth:end -->`;
     const re = /<!-- truth:begin[^]*?<!-- truth:end -->/;
     if (re.test(cur)) { const next = cur.replace(re, block); if (next !== cur) { if (process.argv.includes('--gate')) { console.log('🔴 בלוק-האמת ב-CLAUDE.md סטה מהמחולל (R3-4.9) — node machtzev/truth.mjs --write'); process.exit(1); } fs.writeFileSync(cf, next); console.log('📐 CLAUDE.md truth-block עודכן'); } }

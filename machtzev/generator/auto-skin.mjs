@@ -133,21 +133,21 @@ export function toneMapOf(a) {
 }
 export function autoSkin(overrides = {}) {
   const atoms = JSON.parse(fs.readFileSync(MANIFEST, 'utf8')).atoms;
-  const skin = {}, toneMap = {}, report = {};
+  const skin = {}, toneMap = {}, report = {}; const reach = new Set();   // L91 · reach = כל אטום שכשיר (fits) לתפקיד כלשהו — מה שהבורר באמת רואה, לא רק מה שנבחר
   for (const role of Object.keys(ROLES)) {
-    const r = rank(role, atoms); report[role] = r.slice(0, 3);
+    const r = rank(role, atoms); report[role] = r.slice(0, 3); for (const x of r) reach.add(x.cls);
     const cls = overrides[role] || (r[0] && r[0].cls); if (!cls) continue;
     skin[role] = cls;
     const a = atoms.find((x) => x.cls === cls); const tm = a && toneMapOf(a); if (tm) toneMap[role] = tm;
   }
   if (overrides.toneMap) Object.assign(toneMap, overrides.toneMap);
   if (Object.keys(toneMap).length) skin.toneMap = toneMap;
-  return { skin, report };
+  return { skin, report, reach: [...reach].sort() };
 }
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isMain) {
-  const { skin, report } = autoSkin();
-  const fresh = JSON.stringify({ skin, top3: Object.fromEntries(Object.entries(report).map(([r, v]) => [r, v.map((x) => `${x.cls}:${x.score}`)])) }, null, 1) + '\n';
+  const { skin, report, reach } = autoSkin();
+  const fresh = JSON.stringify({ skin, top3: Object.fromEntries(Object.entries(report).map(([r, v]) => [r, v.map((x) => `${x.cls}:${x.score}`)])), reach }, null, 1) + '\n';   // reach ⇒ truth.mjs (L91)
   if (process.argv.includes('--gate')) {
     if (!fs.existsSync(OUT) || fs.readFileSync(OUT, 'utf8') !== fresh) { console.log('🔴 autoskin: auto-skin.json ≠ בורר-טרי (הרץ node machtzev/generator/auto-skin.mjs)'); process.exit(1); }
     const bad = ['kpi', 'hero', 'stat'].filter((r) => /StatBlock|MetricTile/.test(skin[r] || ''));
