@@ -14,6 +14,9 @@ import * as R from '../root.mjs';
 
 const ROOT = R.ROOT;
 const OUT = R.outDir();
+// מרחב-שמות (L95): --name X ⇒ קבצי gen_app_X_* בלבד (ניקוי-פלט רק בתוך המרחב); בלי --name ⇒ app_ (ביט-זהה לאפליקציית-הקבלה)
+const NS = (() => { const i = process.argv.indexOf('--name'); return i > 0 ? String(process.argv[i + 1] || '').toLowerCase().replace(/[^a-z0-9]/g, '') : ''; })();
+const P = NS ? `app_${NS}_` : 'app_';
 const DATA = R.dataOutDir();
 const ENTITY_RE = /^\s*(צור\s+)?(ישות|טופס|טבלת)(\s|$)/;
 const ROLE_RE = /^\s*(תפקיד|הרשאת)\s+/;
@@ -70,7 +73,7 @@ export function buildApp(specText) {
   const nameToSlug = {};
   for (const li of info) if (li.isEnt) {
     const r = entRes[li.i];
-    const eslug = `app_ent${li.i}`;
+    const eslug = `${P}ent${li.i}`;
     entMeta.push({ name: r.entity, slug: eslug, fields: r.schema.length, stages: (r.stages || []).length, stageLabels: r.stages || [], icon: '🗂️', numFields: r.schema.filter((s) => s.type === 'num').map((s) => s.label), labels: r.schema.map((s) => s.label) });
     if (!(r.entity in nameToSlug)) nameToSlug[r.entity] = eslug;   // שם ⇒ slug-היעד לקשרים
   }
@@ -102,7 +105,7 @@ export function buildApp(specText) {
   const edges = [];
   const delGuardByName = {};
   for (const li of info) if (li.isEnt) {
-    const F = entRes[li.i]; const fslug = `app_ent${li.i}`;
+    const F = entRes[li.i]; const fslug = `${P}ent${li.i}`;
     const dp = F.delPolicy || [];
     for (const s of F.schema) {
       // רק שדות שמתרנדרים כקשר: לא נוסחה/צבירה, לא enum, לא מקונן (משקף את קדימות render-ds).
@@ -119,14 +122,16 @@ export function buildApp(specText) {
   }
 
   // ניקוי פלט-app קודם
-  for (const f of fs.readdirSync(OUT)) if (/^gen_app_.*\.dart$/.test(f)) fs.unlinkSync(path.join(OUT, f));
-  for (const f of fs.readdirSync(DATA)) if (/^gen_app_.*_content\.dart$/.test(f)) fs.unlinkSync(path.join(DATA, f));
+  // L95: ניקוי רק בתוך מרחב-השמות — בלי --name היה מוחק גם gen_app_kehila/tzedaka/… של app-from-sentences (אותה מחלה כמו genesis-gen, L93)
+  const own = NS ? new RegExp(`^gen_${P}(ent|scr|bind|rec|over|audit|flags|settings|hub|main|relations)\\d*(_content)?\\.dart$`) : /^gen_app_(ent|scr|bind|rec|over|audit|flags|settings|hub|main|relations)\d*(_content)?\.dart$/;
+  for (const f of fs.readdirSync(OUT)) if (own.test(f)) fs.unlinkSync(path.join(OUT, f));
+  for (const f of fs.readdirSync(DATA)) if (own.test(f)) fs.unlinkSync(path.join(DATA, f));
 
   const screens = [];
   for (const li of info) {
     if (li.isEnt) {
       const r = entRes[li.i];
-      const slug = `app_ent${li.i}`;
+      const slug = `${P}ent${li.i}`;
       const authz = roles.length ? {
         scope: roles.map((role) => { const sc = (role.scope || []).find((x) => x.ent === r.entity); return sc ? sc.field : ''; }),
         hidden: roles.map((role) => r.schema.map((s, i) => (role.hide || []).some((h) => h.ent === r.entity && h.field === s.label) ? i : -1).filter((i) => i >= 0)),
@@ -135,7 +140,7 @@ export function buildApp(specText) {
       const { cls } = renderEntity(slug, { name: r.entity, icon: '🗂️', schema: r.schema, stages: r.stages || [], entityNames, nameToSlug, backRefs: backRefs[r.entity] || [], vrules: r.vrules || [], delGuard: delGuardByName[r.entity], guards: r.guards || [], authz });
       screens.push({ slug, cls, kind: 'entity', name: r.entity, icon: '🗂️', sub: `${r.schema.length} ${L.fieldsWord}${(r.stages || []).length ? ` · ${r.stages.length} ${L.stagesWord}` : ''}` });
     } else {
-      const slug = `app_scr${li.i}`;
+      const slug = `${P}scr${li.i}`;
       const title = (li.line.split(/\s+עם\s+/)[0] || li.line).trim();     // כותרת = לפני 'עם'
       // פיצול-מדדים מודע-עומק: רווח/פסיק מפרידים רק ברמה-0 — רווח בתוך '(...)' (מונה-מסונן
       // 'מונה(מערכת: סטטוס=קריטי)') אינו מפריד. באג-קודם: split גלובלי שבר אגרגט-עם-רווח.
@@ -169,7 +174,7 @@ export function buildApp(specText) {
   for (let bi = 0; bi < bindN; bi++) {
     const ent = entMeta[bi];
     const spec = SCREEN_REGISTRY[bi % SCREEN_REGISTRY.length];
-    const bslug = `app_bind${bi + 1}`;
+    const bslug = `${P}bind${bi + 1}`;
     const { cls } = renderScreenBind(bslug, { entitySlug: ent.slug, spec, scopeField: scopeByEnt[ent.slug] || null });
     bindScreens.push({ slug: bslug, cls, kind: 'entity', name: `🖥 ${ent.name} · ${L.screenTag}`, icon: '🖥', sub: T('realScreenSub', { cls: spec.cls.replace('Composed', '') }) });
   }
@@ -182,7 +187,7 @@ export function buildApp(specText) {
   let detN = 0;
   for (const e of entMeta) {
     const rels = (backRefs[e.name] || []).map((b) => ({ childSlug: b.fslug, childField: b.ffield, childName: b.fname }));
-    const d = renderRecordDetail(`app_rec${++detN}`, { entitySlug: e.slug, entityName: e.name, fields: e.labels || [], relations: rels, scopeField: scopeByEnt[e.slug] || null });
+    const d = renderRecordDetail(`${P}rec${++detN}`, { entitySlug: e.slug, entityName: e.name, fields: e.labels || [], relations: rels, scopeField: scopeByEnt[e.slug] || null });
     if (d) { detailScreens.push({ slug: d.slug, cls: d.cls, kind: 'entity', name: `🔎 ${e.name} · ${L.cardTag}`, icon: '🔎', sub: rels.length ? T('recordRels', { n: rels.length }) : L.singleRecord }); detailByEnt[e.slug] = { cls: d.cls, slug: d.slug }; }
     else detN--;
   }
@@ -194,26 +199,26 @@ export function buildApp(specText) {
   let overN = 0;
   for (const e of entMeta) {
     if (!(e.stageLabels || []).length && !(e.numFields || []).length) continue;   // אין מה להרכיב מעבר ללי מסך-הישות
-    const c = renderCompose(`app_over${++overN}`, { entitySlug: e.slug, entityName: e.name, fields: e.labels || [], numFields: e.numFields || [], stages: e.stageLabels || [], detail: detailByEnt[e.slug] || null, scopeField: scopeByEnt[e.slug] || null });
+    const c = renderCompose(`${P}over${++overN}`, { entitySlug: e.slug, entityName: e.name, fields: e.labels || [], numFields: e.numFields || [], stages: e.stageLabels || [], detail: detailByEnt[e.slug] || null, scopeField: scopeByEnt[e.slug] || null });
     if (c) composeScreens.push({ slug: c.slug, cls: c.cls, kind: 'entity', name: `🧩 ${e.name} · ${L.overviewTag}`, icon: '🧩', sub: L.composedSub });
     else overN--;
   }
 
   // מסכי-מערכת (kind='system' — גלויים רק לתפקיד 'הכל')
   const sys = [];
-  const a = renderSystem('app_audit', { title: L.auditTitle, icon: '🧾', sectionTitle: L.auditSection, kind: 'empty', items: [L.auditEmpty] });
+  const a = renderSystem(`${P}audit`, { title: L.auditTitle, icon: '🧾', sectionTitle: L.auditSection, kind: 'empty', items: [L.auditEmpty] });
   sys.push({ ...a, kind: 'system', name: L.auditTitle, icon: '🧾', sub: L.auditSub });
-  const fl = renderSystem('app_flags', { title: L.flagsTitle, icon: '🎚️', sectionTitle: L.flagsSection, kind: 'toggles', items: entMeta.slice(0, 12).map((e) => e.name) });
+  const fl = renderSystem(`${P}flags`, { title: L.flagsTitle, icon: '🎚️', sectionTitle: L.flagsSection, kind: 'toggles', items: entMeta.slice(0, 12).map((e) => e.name) });
   sys.push({ ...fl, kind: 'system', name: L.flagsTitle, icon: '🎚️', sub: L.flagsSub });
-  const st = renderSystem('app_settings', { title: L.settingsTitle, icon: '⚙️', sectionTitle: L.settingsSection, kind: 'toggles', items: [L.settingsItem1, L.settingsItem2, L.settingsItem3] });
+  const st = renderSystem(`${P}settings`, { title: L.settingsTitle, icon: '⚙️', sectionTitle: L.settingsSection, kind: 'toggles', items: [L.settingsItem1, L.settingsItem2, L.settingsItem3] });
   sys.push({ ...st, kind: 'system', name: L.settingsTitle, icon: '⚙️', sub: L.settingsSub });
 
   // RLS · שדות-היקף ייחודיים (slug+שדה) — למילוי בורר-"מי-אני" בלוח.
   const scopeFields = [];
   for (const role of roles) for (const sc of (role.scope || [])) { const sl = nameToSlug[sc.ent]; if (sl && !scopeFields.some((x) => x.slug === sl && x.field === sc.field)) scopeFields.push({ slug: sl, field: sc.field }); }
-  const hub = renderHub('app_hub', { title: L.appTitle, icon: '🏗️', screens: [...screens, ...composeScreens, ...detailScreens, ...bindScreens, ...sys], roles, scopeFields });
+  const hub = renderHub(`${P}hub`, { title: L.appTitle, icon: '🏗️', screens: [...screens, ...composeScreens, ...detailScreens, ...bindScreens, ...sys], roles, scopeFields });
   // שורש-האפליקציה: main + MaterialApp ⇒ אפליקציה עצמאית שרצה בלי entry-זמני.
-  renderMain('app_main', { title: L.appTitle, hubSlug: 'app_hub', hubCls: hub.cls, edges });
+  renderMain(`${P}main`, { title: L.appTitle, hubSlug: `${P}hub`, hubCls: hub.cls, edges });
 
   return { screens, sys, roles };
 }

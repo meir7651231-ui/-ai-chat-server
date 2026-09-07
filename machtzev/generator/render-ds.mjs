@@ -923,20 +923,21 @@ export function renderMain(slug, { title, hubSlug, hubCls, edges = [] }) {
   // 🗑 קובץ-רישום-קשרים (רק אם יש קשתות-שלמות מוכרזות) — נטען פעם-אחת ב-main.
   // אין קשתות ⇒ אין קובץ, אין import, אין קריאה ⇒ main ביט-זהה לאפליקציה בלי '| מחיקה:'.
   const hasEdges = edges.length > 0;
+  const relSlug = slug.replace(/main$/, '') + 'relations';   // L95: מרחב-שמות — app_main ⇒ app_relations (ביט-זהה) · app_X_main ⇒ app_X_relations
   if (hasEdges) {
-    const { k: rk, dump: rdump } = makeConsts('app_relations');
+    const { k: rk, dump: rdump } = makeConsts(relSlug);
     const regs = edges.map((e) => `  s.registerRelation('${e.childSlug}', ${rk(e.field)}, '${e.parentSlug}', ${e.policy}, multi: ${e.multi});`).join('\n');
     const relCode = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — רישום גרף-הקשרים לשלמות-מחיקה. אל תערוך ידנית.
-import '../dart-data-bs/auto/gen_app_relations_content.dart';
+import '../dart-data-bs/auto/gen_${relSlug}_content.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 
 void registerAppRelations(AppStore s) {
 ${regs}
 }
 `;
-    write('app_relations', relCode, rdump());
+    write(relSlug, relCode, rdump());
   }
-  const relImport = hasEdges ? "import 'gen_app_relations.dart';\nimport '../dart-ui-bs/ds/ds_store.dart';\n" : '';
+  const relImport = hasEdges ? `import 'gen_${relSlug}.dart';\nimport '../dart-ui-bs/ds/ds_store.dart';\n` : '';
   const mainLine = hasEdges ? `void main() { registerAppRelations(appStore); runApp(const ${cls}()); }` : `void main() => runApp(const ${cls}());`;
   const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — שורש-האפליקציה (main + MaterialApp + theme + RTL). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
