@@ -1,0 +1,1487 @@
+{
+ "ayin-active": {
+  "fn": "ayinActive",
+  "before": {
+   "ret": "bool",
+   "raw": "dynamic a"
+  },
+  "after": {
+   "ret": "bool",
+   "raw": "String a"
+  }
+ },
+ "ayin-advance-label": {
+  "fn": "ayinAdvanceLabel",
+  "before": {
+   "ret": "String",
+   "raw": "\n  dynamic cfg,\n  Map<String, dynamic> a,\n  String Function(dynamic cfg, String st) stageLabel,\n {required String Function(String) term}"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "\n  Map<String, dynamic> cfg,\n  Map<String, dynamic> a,\n  String Function(dynamic cfg, String st) stageLabel,\n {required String Function(String) term}"
+  }
+ },
+ "build-custom-export": {
+  "fn": "buildCustomExport",
+  "before": {
+   "ret": "List<List<String>>",
+   "raw": "dynamic cfg,\n  Map db,\n  String target,\n  Map range,\n  List<String> selectedKeys,\n  ExportSockets s, Map<String, dynamic> T"
+  },
+  "after": {
+   "ret": "List<List<String>>",
+   "raw": "Map<String, dynamic> cfg,\n  Map db,\n  String target,\n  Map range,\n  List<String> selectedKeys,\n  ExportSockets s, Map<String, dynamic> T"
+  }
+ },
+ "build-slots": {
+  "fn": "buildSlots",
+  "before": {
+   "ret": "List<Map<String, dynamic>>",
+   "raw": "\n  Map<String, dynamic> db,\n  Map<String, dynamic> room,\n  String iso,\n  dynamic blocked,\n  Map<String, dynamic> config,\n  num Function(dynamic t) timeToMin,\n  String Function(dynamic min) minToHM,\n  List<dynamic> Function(dynamic c) sessionsOf,\n  bool Function(dynamic c, dynamic iso) courseOnDate,\n  String Function(dynamic cfg, dynamic key, dynamic fb) termOf, Map<String, dynamic> T, [\n  bool cleaningOn = true,\n]"
+  },
+  "after": {
+   "ret": "List<Map<String, dynamic>>",
+   "raw": "\n  Map<String, dynamic> db,\n  Map<String, dynamic> room,\n  String iso,\n  String? blocked,\n  Map<String, dynamic> config,\n  num Function(dynamic t) timeToMin,\n  String Function(dynamic min) minToHM,\n  List<dynamic> Function(dynamic c) sessionsOf,\n  bool Function(dynamic c, dynamic iso) courseOnDate,\n  String Function(dynamic cfg, dynamic key, dynamic fb) termOf, Map<String, dynamic> T, [\n  bool cleaningOn = true,\n]"
+  }
+ },
+ "call-stats": {
+  "fn": "callStats",
+  "before": {
+   "ret": "Map<String, dynamic>",
+   "raw": "dynamic calls"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "String calls"
+  }
+ },
+ "caller-kind-label": {
+  "fn": "callerKindLabel",
+  "before": {
+   "ret": "String?",
+   "raw": "dynamic cfg,\n  String kind,\n  String Function(dynamic cfg, String key, String fb) termOf, Map<String, String> T"
+  },
+  "after": {
+   "ret": "String?",
+   "raw": "Map<String, dynamic> cfg,\n  String kind,\n  String Function(dynamic cfg, String key, String fb) termOf, Map<String, String> T"
+  }
+ },
+ "campaign-total": {
+  "fn": "campaignTotal",
+  "before": {
+   "ret": "num",
+   "raw": "dynamic boxes, dynamic campaignId"
+  },
+  "after": {
+   "ret": "num",
+   "raw": "List<dynamic> boxes, String campaignId"
+  }
+ },
+ "collection-score-delta": {
+  "fn": "collectionScoreDelta",
+  "before": {
+   "ret": "num",
+   "raw": "\n  dynamic box,\n  String date,\n  num amount,\n  String Function(dynamic) lastCollectionIso, [\n  Map<String, num>? rules,\n]"
+  },
+  "after": {
+   "ret": "num",
+   "raw": "\n  Map<String, dynamic> box,\n  String date,\n  num amount,\n  String Function(dynamic) lastCollectionIso, [\n  Map<String, num>? rules,\n]"
+  }
+ },
+ "coordinator-total": {
+  "fn": "coordinatorTotal",
+  "before": {
+   "ret": "num",
+   "raw": "\n  dynamic boxes,\n  Object? coordId,\n  Iterable Function(dynamic boxes, Object? coordId) coordinatorBoxes,\n  num Function(dynamic box) boxTotal,\n"
+  },
+  "after": {
+   "ret": "num",
+   "raw": "\n  List<dynamic> boxes,\n  Object? coordId,\n  Iterable Function(dynamic boxes, Object? coordId) coordinatorBoxes,\n  num Function(dynamic box) boxTotal,\n"
+  }
+ },
+ "create-cloud-key": {
+  "fn": "createCloudKey",
+  "before": {
+   "ret": "Future<Map<String, dynamic>>",
+   "raw": "dynamic password,\n  dynamic recoveryKey,\n  EncryptDb encryptDb,\n  OpenDek openDek, Map<String, String> T"
+  },
+  "after": {
+   "ret": "Future<Map<String, dynamic>>",
+   "raw": "String password,\n  String recoveryKey,\n  EncryptDb encryptDb,\n  OpenDek openDek, Map<String, String> T"
+  }
+ },
+ "decrypt-db": {
+  "fn": "decryptDb",
+  "before": {
+   "ret": "Future<String>",
+   "raw": "dynamic env, dynamic dek, AesDec aesDec"
+  },
+  "after": {
+   "ret": "Future<String>",
+   "raw": "Map<String, dynamic> env, Map<String, dynamic>? dek, AesDec aesDec"
+  }
+ },
+ "deliver-receipt": {
+  "fn": "deliverReceipt",
+  "before": {
+   "ret": "void",
+   "raw": "\n  dynamic o,\n  dynamic fmt,\n  void Function(dynamic) printReceipt,\n  void Function(dynamic) downloadReceipt,\n"
+  },
+  "after": {
+   "ret": "void",
+   "raw": "\n  Map<String, dynamic> o,\n  String? fmt,\n  void Function(dynamic) printReceipt,\n  void Function(dynamic) downloadReceipt,\n"
+  }
+ },
+ "deliveries-csv-rows": {
+  "fn": "deliveriesCsvRows",
+  "before": {
+   "ret": "List<List<String>>",
+   "raw": "\n  Map<String, dynamic> db,\n  dynamic config,\n  String Function(dynamic config, String key, String fallback) termOf,\n  String Function(dynamic status) statusLabel,\n {required String Function(String) term}"
+  },
+  "after": {
+   "ret": "List<List<String>>",
+   "raw": "\n  Map<String, dynamic> db,\n  Map<String, dynamic>? config,\n  String Function(dynamic config, String key, String fallback) termOf,\n  String Function(dynamic status) statusLabel,\n {required String Function(String) term}"
+  }
+ },
+ "deliveries-of-day": {
+  "fn": "deliveriesOfDay",
+  "before": {
+   "ret": "List<dynamic>",
+   "raw": "Map<String, dynamic> db, dynamic dayId"
+  },
+  "after": {
+   "ret": "List<dynamic>",
+   "raw": "Map<String, dynamic> db, String dayId"
+  }
+ },
+ "deliveries-of-volunteer": {
+  "fn": "deliveriesOfVolunteer",
+  "before": {
+   "ret": "List<Map<String, dynamic>>",
+   "raw": "\n    Map<String, dynamic> db, dynamic volId,\n    [dynamic dayId]"
+  },
+  "after": {
+   "ret": "List<Map<String, dynamic>>",
+   "raw": "\n    Map<String, dynamic> db, String volId,\n    [String? dayId]"
+  }
+ },
+ "dup-field-value": {
+  "fn": "dupFieldValue",
+  "before": {
+   "ret": "dynamic",
+   "raw": "List fams, Map def, Map pick, Map edit"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "List fams, Map def, Map pick, Map edit"
+  }
+ },
+ "eligible-assignments-for-day": {
+  "fn": "eligibleAssignmentsForDay",
+  "before": {
+   "ret": "List",
+   "raw": "Map db, dynamic dayId"
+  },
+  "after": {
+   "ret": "List",
+   "raw": "Map db, String dayId"
+  }
+ },
+ "eligible-families": {
+  "fn": "eligibleFamilies",
+  "before": {
+   "ret": "List<Map<String, dynamic>>",
+   "raw": "\n    Map db, List criterionIds, dynamic excludeProductId"
+  },
+  "after": {
+   "ret": "List<Map<String, dynamic>>",
+   "raw": "\n    Map db, List criterionIds, String excludeProductId"
+  }
+ },
+ "encrypt-existing-cloud": {
+  "fn": "encryptExistingCloud",
+  "before": {
+   "ret": "Future<void>",
+   "raw": "\n  dynamic db,\n  dynamic dek,\n  PushDiff pushDiff,\n  FullDbDiff fullDbDiff,\n  SupKeyMapOf supKeyMapOf,\n"
+  },
+  "after": {
+   "ret": "Future<void>",
+   "raw": "\n  Map<String, dynamic> db,\n  Map<String, dynamic> dek,\n  PushDiff pushDiff,\n  FullDbDiff fullDbDiff,\n  SupKeyMapOf supKeyMapOf,\n"
+  }
+ },
+ "enrollment-quote": {
+  "fn": "enrollmentQuote",
+  "before": {
+   "ret": "dynamic",
+   "raw": "\n  Map c,\n  Map e,\n  dynamic Function(Map, Map) weightedQuote,\n"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>?",
+   "raw": "\n  Map c,\n  Map e,\n  dynamic Function(Map, Map) weightedQuote,\n"
+  }
+ },
+ "env-path": {
+  "fn": "envPath",
+  "before": {
+   "ret": "String",
+   "raw": "dynamic slug, dynamic cloudRoot"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "String slug, String cloudRoot"
+  }
+ },
+ "events-csv-rows": {
+  "fn": "eventsCsvRows",
+  "before": {
+   "ret": "List<List<dynamic>>",
+   "raw": "dynamic db,\n  dynamic config,\n  dynamic termOf,\n  dynamic hebDateFull,\n  dynamic evMeta, Map<String, String> T2"
+  },
+  "after": {
+   "ret": "List<List<dynamic>>",
+   "raw": "Map<String, dynamic> db,\n  Map<String, dynamic>? config,\n  dynamic termOf,\n  dynamic hebDateFull,\n  Map<String, dynamic> evMeta, Map<String, String> T2"
+  }
+ },
+ "explain-call": {
+  "fn": "explainCall",
+  "before": {
+   "ret": "Map<String, dynamic>",
+   "raw": "dynamic tenant,\n  Map<String, dynamic> call,\n  Map<String, dynamic> opts,\n  Map<String, dynamic> Function(dynamic tenant, Map<String, dynamic> call, Map<String, dynamic> opts) simulateCall,\n  bool Function(dynamic tenant, String key) featureOn, List<String> DOW_HE, Map<String, String> T"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "Map<String, dynamic> tenant,\n  Map<String, dynamic> call,\n  Map<String, dynamic> opts,\n  Map<String, dynamic> Function(dynamic tenant, Map<String, dynamic> call, Map<String, dynamic> opts) simulateCall,\n  bool Function(dynamic tenant, String key) featureOn, List<String> DOW_HE, Map<String, String> T"
+  }
+ },
+ "explain-one": {
+  "fn": "explainOne",
+  "before": {
+   "ret": "Map<String, dynamic>",
+   "raw": "\n  dynamic tc,\n  dynamic orgName,\n  dynamic tenantId,\n  dynamic call,\n  dynamic telephonyToTenant,\n  dynamic validateTenant,\n  dynamic explainCall,\n  dynamic anchorToday,\n {required String Function(String) term}"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "\n  Map<String, dynamic> tc,\n  String orgName,\n  String tenantId,\n  Map<String, dynamic> call,\n  dynamic telephonyToTenant,\n  dynamic validateTenant,\n  dynamic explainCall,\n  dynamic anchorToday,\n {required String Function(String) term}"
+  }
+ },
+ "fam-live-enrollments": {
+  "fn": "famLiveEnrollments",
+  "before": {
+   "ret": "List<Map<String, dynamic>>",
+   "raw": "\n  dynamic db,\n  dynamic fam,\n  List<Map<String, dynamic>> Function(dynamic db, dynamic fam) famEnrollments,\n"
+  },
+  "after": {
+   "ret": "List<Map<String, dynamic>>",
+   "raw": "\n  Map<String, dynamic> db,\n  Map<String, dynamic> fam,\n  List<Map<String, dynamic>> Function(dynamic db, dynamic fam) famEnrollments,\n"
+  }
+ },
+ "filter-ayin-board": {
+  "fn": "filterAyinBoard",
+  "before": {
+   "ret": "List<Map<String, dynamic>>",
+   "raw": "\n  List<Map<String, dynamic>> items,\n  dynamic q,\n  dynamic status,\n  dynamic stage,\n  String Function(dynamic) normSearch,\n"
+  },
+  "after": {
+   "ret": "List<Map<String, dynamic>>",
+   "raw": "\n  List<Map<String, dynamic>> items,\n  String q,\n  String? status,\n  String? stage,\n  String Function(dynamic) normSearch,\n"
+  }
+ },
+ "filter-products": {
+  "fn": "filterProducts",
+  "before": {
+   "ret": "dynamic",
+   "raw": "\n  List products,\n  Object? q,\n  Object? onlyActive,\n  dynamic Function(Object? q, List base, List Function(dynamic p) getTerms) smartFilter,\n"
+  },
+  "after": {
+   "ret": "List<Map<String, dynamic>>",
+   "raw": "\n  List products,\n  Object? q,\n  Object? onlyActive,\n  dynamic Function(Object? q, List base, List Function(dynamic p) getTerms) smartFilter,\n"
+  }
+ },
+ "find-all-open-plans": {
+  "fn": "findAllOpenPlans",
+  "before": {
+   "ret": "List<dynamic>",
+   "raw": "dynamic db"
+  },
+  "after": {
+   "ret": "List<dynamic>",
+   "raw": "Map<String, dynamic> db"
+  }
+ },
+ "finder-axis-value": {
+  "fn": "finderAxisValue",
+  "before": {
+   "ret": "String",
+   "raw": "\n  dynamic db,\n  Map<String, dynamic> f,\n  String axis,\n  dynamic config, {\n  required String Function(dynamic config, String key, String fallback) termOf,\n  required Map<String, dynamic> Function(num score) tierOf,\n  required List<dynamic> Function(dynamic db, Map<String, dynamic> f)\n      famLiveEnrollments,\n  required Map<String, dynamic> STATUS_META, required Map<String, dynamic> T2}"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "\n  Map<String, dynamic> db,\n  Map<String, dynamic> f,\n  String axis,\n  Map<String, dynamic>? config, {\n  required String Function(dynamic config, String key, String fallback) termOf,\n  required Map<String, dynamic> Function(num score) tierOf,\n  required List<dynamic> Function(dynamic db, Map<String, dynamic> f)\n      famLiveEnrollments,\n  required Map<String, dynamic> STATUS_META, required Map<String, dynamic> T2}"
+  }
+ },
+ "fix-phone": {
+  "fn": "fixPhone",
+  "before": {
+   "ret": "String",
+   "raw": "dynamic p, String Function(dynamic) formatIsraeliPhone"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "String p, String Function(dynamic) formatIsraeliPhone"
+  }
+ },
+ "group-options-of": {
+  "fn": "groupOptionsOf",
+  "before": {
+   "ret": "List<dynamic>",
+   "raw": "dynamic c,\n  dynamic Function(dynamic) sessionsOf,\n  dynamic Function(dynamic, int) groupLabelOf,\n  List<dynamic> dayNames, Map<String, String> T"
+  },
+  "after": {
+   "ret": "List<dynamic>",
+   "raw": "Map<String, dynamic> c,\n  dynamic Function(dynamic) sessionsOf,\n  dynamic Function(dynamic, int) groupLabelOf,\n  List<dynamic> dayNames, Map<String, String> T"
+  }
+ },
+ "importable-contacts": {
+  "fn": "importableContacts",
+  "before": {
+   "ret": "List<dynamic>",
+   "raw": "\n  dynamic text,\n  dynamic Function(dynamic) parseVcards,\n  dynamic Function(dynamic) isJunkContact,\n"
+  },
+  "after": {
+   "ret": "List<dynamic>",
+   "raw": "\n  String text,\n  dynamic Function(dynamic) parseVcards,\n  dynamic Function(dynamic) isJunkContact,\n"
+  }
+ },
+ "integration-setting": {
+  "fn": "integrationSetting",
+  "before": {
+   "ret": "String",
+   "raw": "dynamic cfg, String key, String field"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "Map<String, dynamic> cfg, String key, String field"
+  }
+ },
+ "lessons-in-term": {
+  "fn": "lessonsInTerm",
+  "before": {
+   "ret": "num",
+   "raw": "dynamic freq, dynamic unit, dynamic term, [dynamic months = 1]"
+  },
+  "after": {
+   "ret": "num",
+   "raw": "num freq, String unit, String term, [num? months = 1]"
+  }
+ },
+ "live-suggestions": {
+  "fn": "liveSuggestions",
+  "before": {
+   "ret": "List<dynamic>",
+   "raw": "\n    dynamic db, dynamic todayIso, dynamic config, dynamic suggestions"
+  },
+  "after": {
+   "ret": "List<dynamic>",
+   "raw": "\n    Map<String, dynamic> db, String todayIso, Map<String, dynamic>? config, dynamic suggestions"
+  }
+ },
+ "merge-family-import": {
+  "fn": "mergeFamilyImport",
+  "before": {
+   "ret": "Map<String, dynamic>",
+   "raw": "dynamic f, dynamic obj"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "String f, String obj"
+  }
+ },
+ "merge-supporters-group": {
+  "fn": "mergeSupportersGroup",
+  "before": {
+   "ret": "dynamic",
+   "raw": "\n  dynamic keeper,\n  List losers,\n  dynamic Function(dynamic acc, dynamic loser) mergeSupporterInto,\n"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "\n  Map<String, dynamic> keeper,\n  List losers,\n  dynamic Function(dynamic acc, dynamic loser) mergeSupporterInto,\n"
+  }
+ },
+ "meta-path": {
+  "fn": "metaPath",
+  "before": {
+   "ret": "String",
+   "raw": "dynamic slug, dynamic cloudRoot"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "String slug, String cloudRoot"
+  }
+ },
+ "migrate-supporters-to-keyed": {
+  "fn": "migrateSupportersToKeyed",
+  "before": {
+   "ret": "Future<int>",
+   "raw": "\n  List<dynamic> supporters,\n  List<dynamic> events,\n  dynamic dek,\n  MigrateIo io,\n"
+  },
+  "after": {
+   "ret": "Future<int>",
+   "raw": "\n  List<dynamic> supporters,\n  List<dynamic> events,\n  Map<String, dynamic>? dek,\n  MigrateIo io,\n"
+  }
+ },
+ "model-meta": {
+  "fn": "modelMeta",
+  "before": {
+   "ret": "Map<String, dynamic>",
+   "raw": "dynamic c, Map<String, String> T"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "Map<String, dynamic> c, Map<String, String> T"
+  }
+ },
+ "month-en-of": {
+  "fn": "monthEnOf",
+  "before": {
+   "ret": "String?",
+   "raw": "dynamic he, {required List<dynamic> months}"
+  },
+  "after": {
+   "ret": "String?",
+   "raw": "String he, {required List<dynamic> months}"
+  }
+ },
+ "month-he-of": {
+  "fn": "monthHeOf",
+  "before": {
+   "ret": "String",
+   "raw": "dynamic en, List<List<String>> MONTHS"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "String en, List<List<String>> MONTHS"
+  }
+ },
+ "month-label": {
+  "fn": "monthLabel",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic key"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "String key"
+  }
+ },
+ "name-index": {
+  "fn": "nameIndex",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic db, dynamic allMembers"
+  },
+  "after": {
+   "ret": "dynamic",
+   "raw": "Map<String, dynamic> db, dynamic allMembers"
+  }
+ },
+ "needs-care-shop": {
+  "fn": "needsCare",
+  "before": {
+   "ret": "List<Map<String, dynamic>>",
+   "raw": "Map<String, dynamic> db,\n  String todayIso,\n  dynamic config,\n  List<dynamic> Function(String todayIso, int dueDays) upcomingHolidays,\n  int? Function(Map<String, dynamic> db, dynamic itemId) itemRemaining,\n  int? Function(dynamic compId, dynamic productId, dynamic assignments, dynamic stock)\n      componentRemaining,\n  String Function(Map<String, dynamic> db, dynamic a, dynamic config) beneficiaryLabel,\n  dynamic Function(Map<String, dynamic> db, dynamic comp) itemOf,\n  bool Function(dynamic ri, dynamic name) holidayAllowed,\n  bool Function(dynamic a, dynamic componentId, [dynamic holiday]) assignmentRedeemed,\n  String Function(dynamic a, dynamic ri) couponExpiry,\n  bool Function(dynamic config, String key) featureOn,\n  List<dynamic> Function(Map<String, dynamic> db, String todayIso) expiringIntakes,\n  int shopHolidayDueDays, Map<String, String> T"
+  },
+  "after": {
+   "ret": "List<Map<String, dynamic>>",
+   "raw": "Map<String, dynamic> db,\n  String todayIso,\n  Map<String, dynamic>? config,\n  List<dynamic> Function(String todayIso, int dueDays) upcomingHolidays,\n  int? Function(Map<String, dynamic> db, dynamic itemId) itemRemaining,\n  int? Function(dynamic compId, dynamic productId, dynamic assignments, dynamic stock)\n      componentRemaining,\n  String Function(Map<String, dynamic> db, dynamic a, dynamic config) beneficiaryLabel,\n  dynamic Function(Map<String, dynamic> db, dynamic comp) itemOf,\n  bool Function(dynamic ri, dynamic name) holidayAllowed,\n  bool Function(dynamic a, dynamic componentId, [dynamic holiday]) assignmentRedeemed,\n  String Function(dynamic a, dynamic ri) couponExpiry,\n  bool Function(dynamic config, String key) featureOn,\n  List<dynamic> Function(Map<String, dynamic> db, String todayIso) expiringIntakes,\n  int shopHolidayDueDays, Map<String, String> T"
+  }
+ },
+ "new-supporter-from-row": {
+  "fn": "newSupporterFromRow",
+  "before": {
+   "ret": "Map<String, dynamic>",
+   "raw": "\n  dynamic id,\n  Map<String, dynamic> row,\n  String Function(String) fixPhone,\n  List Function(List existing, List incoming) mergeHist,\n"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "\n  String id,\n  Map<String, dynamic> row,\n  String Function(String) fixPhone,\n  List Function(List existing, List incoming) mergeHist,\n"
+  }
+ },
+ "open-cloud-key": {
+  "fn": "openCloudKey",
+  "before": {
+   "ret": "dynamic",
+   "raw": "\n  Object? env,\n  Object? secret,\n  Object? via,\n  dynamic Function(Object? env, Object? secret, Object? via) openDek,\n"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "\n  Object? env,\n  Object? secret,\n  Object? via,\n  dynamic Function(Object? env, Object? secret, Object? via) openDek,\n"
+  }
+ },
+ "open-tasks-for": {
+  "fn": "openTasksFor",
+  "before": {
+   "ret": "List<Map<String, dynamic>>",
+   "raw": "\n  List<Map<String, dynamic>> tasks,\n  dynamic identity,\n  String Function(dynamic) taskIdentity,\n"
+  },
+  "after": {
+   "ret": "List<Map<String, dynamic>>",
+   "raw": "\n  List<Map<String, dynamic>> tasks,\n  String identity,\n  String Function(dynamic) taskIdentity,\n"
+  }
+ },
+ "org-slug-from-url": {
+  "fn": "orgSlugFromUrl",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic search"
+  },
+  "after": {
+   "ret": "String?",
+   "raw": "String? search"
+  }
+ },
+ "parse-acc": {
+  "fn": "parseAcc",
+  "before": {
+   "ret": "Map<String, bool>",
+   "raw": "dynamic raw"
+  },
+  "after": {
+   "ret": "Map<String, bool>",
+   "raw": "String? raw"
+  }
+ },
+ "public-site-on": {
+  "fn": "publicSiteOn",
+  "before": {
+   "ret": "bool",
+   "raw": "\n  dynamic cfg,\n  bool Function(dynamic cfg, String key) featureOn,\n"
+  },
+  "after": {
+   "ret": "bool",
+   "raw": "\n  Map<String, dynamic> cfg,\n  bool Function(dynamic cfg, String key) featureOn,\n"
+  }
+ },
+ "publish-ics-feed": {
+  "fn": "publishIcsFeed",
+  "before": {
+   "ret": "Future<dynamic>",
+   "raw": "\n  dynamic slug,\n  dynamic ics,\n  dynamic opts, {\n  required ReadToken readToken,\n  required MintToken mintToken,\n  required WriteFeed writeFeed,\n  NowIso? nowIso, required Map<String, dynamic> T}"
+  },
+  "after": {
+   "ret": "Future<dynamic>",
+   "raw": "\n  String slug,\n  String ics,\n  Map<String, dynamic>? opts, {\n  required ReadToken readToken,\n  required MintToken mintToken,\n  required WriteFeed writeFeed,\n  NowIso? nowIso, required Map<String, dynamic> T}"
+  }
+ },
+ "push-diff": {
+  "fn": "pushDiff",
+  "before": {
+   "ret": "Future<void>",
+   "raw": "\n  Map<dynamic, dynamic> diff,\n  dynamic dek,\n  Map<dynamic, dynamic> supKeyBySpId,\n  dynamic db,\n  ScopedCol scopedCol,\n  PushDiffFs fs,\n  EncryptDoc encryptDoc,\n  PushMeta pushMeta, [\n  SupEnforce sup = const SupEnforce(),\n]"
+  },
+  "after": {
+   "ret": "Future<void>",
+   "raw": "\n  Map<dynamic, dynamic> diff,\n  String? dek,\n  Map<dynamic, dynamic> supKeyBySpId,\n  Map<String, dynamic> db,\n  ScopedCol scopedCol,\n  PushDiffFs fs,\n  EncryptDoc encryptDoc,\n  PushMeta pushMeta, [\n  SupEnforce sup = const SupEnforce(),\n]"
+  }
+ },
+ "push-donations": {
+  "fn": "pushDonations",
+  "before": {
+   "ret": "Future<void>",
+   "raw": "\n  Map diff,\n  dynamic dek,\n  dynamic db,\n  String Function() scopedDonations,\n  dynamic fs,\n  Future<Map> Function(Map, dynamic)? encryptDoc,\n"
+  },
+  "after": {
+   "ret": "Future<void>",
+   "raw": "\n  Map diff,\n  String? dek,\n  Map<String, dynamic> db,\n  String Function() scopedDonations,\n  dynamic fs,\n  Future<Map> Function(Map, dynamic)? encryptDoc,\n"
+  }
+ },
+ "read-ics-feed-token": {
+  "fn": "readIcsFeedToken",
+  "before": {
+   "ret": "Future<String?>",
+   "raw": "\n  String slug,\n  dynamic db,\n  DocFn doc,\n  GetDocFn getDoc,\n"
+  },
+  "after": {
+   "ret": "Future<String?>",
+   "raw": "\n  String slug,\n  Map<String, dynamic> db,\n  DocFn doc,\n  GetDocFn getDoc,\n"
+  }
+ },
+ "receipt-fmt-of": {
+  "fn": "receiptFmtOf",
+  "before": {
+   "ret": "dynamic",
+   "raw": "\n  dynamic config,\n  Map ui,\n  bool Function(dynamic config, String key) featureOn,\n"
+  },
+  "after": {
+   "ret": "String?",
+   "raw": "\n  Map<String, dynamic> config,\n  Map ui,\n  bool Function(dynamic config, String key) featureOn,\n"
+  }
+ },
+ "reencrypt-db": {
+  "fn": "reencryptDb",
+  "before": {
+   "ret": "Future<Map<String, dynamic>>",
+   "raw": "\n  dynamic env,\n  dynamic dek,\n  String json,\n  AesEnc aesEnc,\n"
+  },
+  "after": {
+   "ret": "Future<Map<String, dynamic>>",
+   "raw": "\n  Map<String, dynamic> env,\n  String dek,\n  String json,\n  AesEnc aesEnc,\n"
+  }
+ },
+ "reenroll-counts": {
+  "fn": "reenrollCounts",
+  "before": {
+   "ret": "Map<String, int>",
+   "raw": "dynamic rows"
+  },
+  "after": {
+   "ret": "Map<String, int>",
+   "raw": "String rows"
+  }
+ },
+ "resolve-localized": {
+  "fn": "resolveLocalized",
+  "before": {
+   "ret": "String",
+   "raw": "dynamic t, dynamic lang"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "dynamic t, String lang"
+  }
+ },
+ "resolve-org-config": {
+  "fn": "resolveOrgConfig",
+  "before": {
+   "ret": "dynamic",
+   "raw": "\n  dynamic staticCfg,\n  dynamic cloudRaw,\n  dynamic Function(dynamic) normalizeConfig,\n"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "\n  Map<String, dynamic> staticCfg,\n  dynamic cloudRaw,\n  dynamic Function(dynamic) normalizeConfig,\n"
+  }
+ },
+ "revert-patch": {
+  "fn": "revertPatch",
+  "before": {
+   "ret": "Map<String, dynamic>",
+   "raw": "dynamic stage, dynamic stageIndex"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "String stage, dynamic stageIndex"
+  }
+ },
+ "rooms-now": {
+  "fn": "roomsNow",
+  "before": {
+   "ret": "List<dynamic>",
+   "raw": "dynamic db, DateTime now, dynamic sessionsOf"
+  },
+  "after": {
+   "ret": "List<dynamic>",
+   "raw": "Map<String, dynamic> db, DateTime now, dynamic sessionsOf"
+  }
+ },
+ "round2": {
+  "fn": "round2",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic x"
+  },
+  "after": {
+   "ret": "num",
+   "raw": "num x"
+  }
+ },
+ "rule-exact": {
+  "fn": "ruleExact",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic nq, dynamic nt"
+  },
+  "after": {
+   "ret": "num?",
+   "raw": "String nq, String nt"
+  }
+ },
+ "rule-skeleton": {
+  "fn": "ruleSkeleton",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic nq, dynamic nt"
+  },
+  "after": {
+   "ret": "num?",
+   "raw": "String nq, String nt"
+  }
+ },
+ "rule-typo": {
+  "fn": "ruleTypo",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic nq, dynamic nt, dynamic distance"
+  },
+  "after": {
+   "ret": "num?",
+   "raw": "String nq, String nt, dynamic distance"
+  }
+ },
+ "safe-https-url": {
+  "fn": "safeHttpsUrl",
+  "before": {
+   "ret": "String?",
+   "raw": "dynamic raw"
+  },
+  "after": {
+   "ret": "String?",
+   "raw": "String raw"
+  }
+ },
+ "same-loc": {
+  "fn": "sameLoc",
+  "before": {
+   "ret": "bool",
+   "raw": "dynamic a, dynamic b"
+  },
+  "after": {
+   "ret": "bool",
+   "raw": "Map<String, dynamic> a, Map<String, dynamic> b"
+  }
+ },
+ "sanitize-photos": {
+  "fn": "sanitizePhotos",
+  "before": {
+   "ret": "List<dynamic>",
+   "raw": "dynamic raw, dynamic isDataImage,\n    [dynamic photoMaxLen = 460000, dynamic photoMax = 5]"
+  },
+  "after": {
+   "ret": "List<dynamic>",
+   "raw": "dynamic raw, dynamic isDataImage,\n    [num? photoMaxLen = 460000, dynamic photoMax = 5]"
+  }
+ },
+ "segments-match-segment": {
+  "fn": "matchSegment",
+  "before": {
+   "ret": "bool",
+   "raw": "\n  dynamic sp,\n  String key,\n  List supporters,\n  String todayIso, {\n  dynamic rate = 3.7,\n  required List Function(List, String) cockpitAtRisk,\n  required num Function(dynamic) supIls,\n  required num Function(dynamic) supUsd,\n  required dynamic Function(dynamic) supLast,\n  required num Function(dynamic, String) daysSince,\n}"
+  },
+  "after": {
+   "ret": "bool",
+   "raw": "\n  Map<String, dynamic> sp,\n  String key,\n  List supporters,\n  String todayIso, {\n  dynamic rate = 3.7,\n  required List Function(List, String) cockpitAtRisk,\n  required num Function(dynamic) supIls,\n  required num Function(dynamic) supUsd,\n  required dynamic Function(dynamic) supLast,\n  required num Function(dynamic, String) daysSince,\n}"
+  }
+ },
+ "segula-title": {
+  "fn": "segulaTitle",
+  "before": {
+   "ret": "String",
+   "raw": "dynamic name, dynamic r, dynamic target, {required String Function(String) term}"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "String? name, Map<String, dynamic> r, num target, {required String Function(String) term}"
+  }
+ },
+ "set-audit-context": {
+  "fn": "setAuditContext",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic uid, dynamic email, dynamic canRead"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "String uid, String email, bool canRead"
+  }
+ },
+ "set-cloud-scope": {
+  "fn": "setCloudScope",
+  "before": {
+   "ret": "Map<String, dynamic>",
+   "raw": "dynamic slug, dynamic cloudRoot"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "String slug, bool cloudRoot"
+  }
+ },
+ "set-employee-override": {
+  "fn": "setEmployeeOverride",
+  "before": {
+   "ret": "Map<String, dynamic>",
+   "raw": "\n  Map org,\n  String email,\n  dynamic override,\n  String Function(String) normEmail,\n"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "\n  Map org,\n  String email,\n  Map<String, dynamic> override,\n  String Function(String) normEmail,\n"
+  }
+ },
+ "set-export-blocked": {
+  "fn": "setExportBlocked",
+  "before": {
+   "ret": "Map<String, dynamic>",
+   "raw": "dynamic isBlocked, [dynamic onBlocked]"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "bool isBlocked, [dynamic onBlocked]"
+  }
+ },
+ "site-campaign-progress": {
+  "fn": "campaignProgress",
+  "before": {
+   "ret": "Map<String, dynamic>",
+   "raw": "dynamic c, dynamic nowMs"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "Map<String, dynamic>? c, num nowMs"
+  }
+ },
+ "site-donate-url": {
+  "fn": "siteDonateUrl",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic config"
+  },
+  "after": {
+   "ret": "String?",
+   "raw": "Map<String, dynamic> config"
+  }
+ },
+ "site-palette": {
+  "fn": "sitePalette",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic accent, dynamic fallbackPalette"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "String? accent, Map<String, dynamic> fallbackPalette"
+  }
+ },
+ "site-ui": {
+  "fn": "siteUi",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic lang, dynamic key, dynamic uiLabels"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "String lang, String key, Map<String, dynamic> uiLabels"
+  }
+ },
+ "site-vocab": {
+  "fn": "siteVocab",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic commercial, dynamic lang, {required String Function(String) term}"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "bool commercial, String lang, {required String Function(String) term}"
+  }
+ },
+ "slugify": {
+  "fn": "slugify",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic orgName, dynamic taken, {required Map<String, dynamic> heb2lat}"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "String orgName, List<dynamic> taken, {required Map<String, dynamic> heb2lat}"
+  }
+ },
+ "smtp-host-for": {
+  "fn": "smtpHostFor",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic email"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "String email"
+  }
+ },
+ "sort-support-threads": {
+  "fn": "sortSupportThreads",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic threads"
+  },
+  "after": {
+   "ret": "List<dynamic>",
+   "raw": "dynamic threads"
+  }
+ },
+ "sort-team-msgs": {
+  "fn": "sortTeamMsgs",
+  "before": {
+   "ret": "List<dynamic>",
+   "raw": "dynamic msgs"
+  },
+  "after": {
+   "ret": "List<dynamic>",
+   "raw": "String msgs"
+  }
+ },
+ "spotlight-box": {
+  "fn": "spotlightBox",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic rect, dynamic vw, dynamic vh, [dynamic pad = 10]"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>?",
+   "raw": "Map<String, dynamic>? rect, num vw, num vh, [num? pad = 10]"
+  }
+ },
+ "stage-index": {
+  "fn": "stageIndex",
+  "before": {
+   "ret": "int",
+   "raw": "dynamic stage"
+  },
+  "after": {
+   "ret": "int",
+   "raw": "String stage"
+  }
+ },
+ "stage-label": {
+  "fn": "stageLabel",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic cfg, dynamic stage, dynamic termOf, {required Map<String, dynamic> stageFallback}"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "Map<String, dynamic> cfg, String stage, dynamic termOf, {required Map<String, dynamic> stageFallback}"
+  }
+ },
+ "start-campaign": {
+  "fn": "startCampaign",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic name, dynamic ids, dynamic iso"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "String name, List<dynamic> ids, String iso"
+  }
+ },
+ "step-scale": {
+  "fn": "stepScale",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic v, dynamic dir, dynamic clampScale,\n    [dynamic step = 0.1]"
+  },
+  "after": {
+   "ret": "num",
+   "raw": "num v, num dir, dynamic clampScale,\n    [dynamic step = 0.1]"
+  }
+ },
+ "strip-supporter-donations": {
+  "fn": "stripSupporterDonations",
+  "before": {
+   "ret": "Map<dynamic, dynamic>",
+   "raw": "dynamic diff"
+  },
+  "after": {
+   "ret": "Map<dynamic, dynamic>",
+   "raw": "Map<String, dynamic> diff"
+  }
+ },
+ "subsidy-total": {
+  "fn": "subsidyTotal",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic assignments, dynamic givenValue, dynamic collectedPaid"
+  },
+  "after": {
+   "ret": "num",
+   "raw": "List<dynamic> assignments, dynamic givenValue, dynamic collectedPaid"
+  }
+ },
+ "suggestions": {
+  "fn": "suggestions",
+  "before": {
+   "ret": "List<dynamic>",
+   "raw": "dynamic db,\n  dynamic todayIso,\n  dynamic config,\n  Map<String, dynamic> sockets, Map<String, dynamic> T2"
+  },
+  "after": {
+   "ret": "List<dynamic>",
+   "raw": "Map<String, dynamic> db,\n  String todayIso,\n  Map<String, dynamic>? config,\n  Map<String, dynamic> sockets, Map<String, dynamic> T2"
+  }
+ },
+ "sup-allowed-keys": {
+  "fn": "supAllowedKeys",
+  "before": {
+   "ret": "List<dynamic>",
+   "raw": "dynamic allowed, dynamic sharedKey"
+  },
+  "after": {
+   "ret": "List<dynamic>",
+   "raw": "List<dynamic> allowed, String sharedKey"
+  }
+ },
+ "sup-don-events": {
+  "fn": "supDonEvents",
+  "before": {
+   "ret": "List<Map<String, dynamic>>",
+   "raw": "dynamic sp, Map<String, String> T2, [dynamic Function(String key, String fallback)? term]"
+  },
+  "after": {
+   "ret": "List<Map<String, dynamic>>",
+   "raw": "Map<String, dynamic> sp, Map<String, String> T2, [dynamic Function(String key, String fallback)? term]"
+  }
+ },
+ "sup-dup-field-value": {
+  "fn": "supDupFieldValue",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic sups, dynamic def, dynamic pick, dynamic edit"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "List<Map<String, dynamic>> sups, Map<String, dynamic> def, Map<String, dynamic> pick, Map<String, dynamic> edit"
+  }
+ },
+ "sup-enforce-on": {
+  "fn": "supEnforceOn",
+  "before": {
+   "ret": "bool",
+   "raw": "dynamic cfg"
+  },
+  "after": {
+   "ret": "bool",
+   "raw": "Map<String, dynamic> cfg"
+  }
+ },
+ "sup-has-region": {
+  "fn": "supHasRegion",
+  "before": {
+   "ret": "bool",
+   "raw": "dynamic sp, dynamic region, dynamic allSupPhones"
+  },
+  "after": {
+   "ret": "bool",
+   "raw": "Map<String, dynamic> sp, String region, dynamic allSupPhones"
+  }
+ },
+ "sup-key-map-of": {
+  "fn": "supKeyMapOf",
+  "before": {
+   "ret": "Map<dynamic, dynamic>",
+   "raw": "\n  dynamic supporters,\n  dynamic Function(dynamic) supKeyOf,\n"
+  },
+  "after": {
+   "ret": "Map<dynamic, dynamic>",
+   "raw": "\n  List<dynamic> supporters,\n  dynamic Function(dynamic) supKeyOf,\n"
+  }
+ },
+ "sup-key-of": {
+  "fn": "supKeyOf",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic sp, dynamic sharedSupKey"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "Map<String, dynamic> sp, String sharedSupKey"
+  }
+ },
+ "sup-last-in-period": {
+  "fn": "supLastInPeriod",
+  "before": {
+   "ret": "bool",
+   "raw": "dynamic sp, dynamic year, dynamic month, dynamic supLast"
+  },
+  "after": {
+   "ret": "bool",
+   "raw": "Map<String, dynamic> sp, num? year, num? month, dynamic supLast"
+  }
+ },
+ "sup-tier": {
+  "fn": "supTier",
+  "before": {
+   "ret": "Map<String, String>",
+   "raw": "dynamic sc, Map<String, dynamic> T"
+  },
+  "after": {
+   "ret": "Map<String, String>",
+   "raw": "String sc, Map<String, dynamic> T"
+  }
+ },
+ "sup12m": {
+  "fn": "sup12m",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic supporters, dynamic todayIso, dynamic supLast"
+  },
+  "after": {
+   "ret": "num",
+   "raw": "List<dynamic> supporters, String todayIso, dynamic supLast"
+  }
+ },
+ "support-day-label": {
+  "fn": "supportDayLabel",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic at, dynamic todayIso, Map<String, dynamic> T"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "String at, String todayIso, Map<String, dynamic> T"
+  }
+ },
+ "support-msg-time": {
+  "fn": "supportMsgTime",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic at"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "String at"
+  }
+ },
+ "support-preview": {
+  "fn": "supportPreview",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic text, [dynamic max = 40]"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "String text, [dynamic max = 40]"
+  }
+ },
+ "supporter-aggregates": {
+  "fn": "supporterAggregates",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic sp"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "Map<String, dynamic> sp"
+  }
+ },
+ "supporter-visible-for-designations": {
+  "fn": "supporterVisibleForDesignations",
+  "before": {
+   "ret": "bool",
+   "raw": "dynamic sup, dynamic allowed"
+  },
+  "after": {
+   "ret": "bool",
+   "raw": "String sup, String allowed"
+  }
+ },
+ "task-identity": {
+  "fn": "taskIdentity",
+  "before": {
+   "ret": "String",
+   "raw": "dynamic email, Map<String, String> T"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "String email, Map<String, String> T"
+  }
+ },
+ "task-stats-for": {
+  "fn": "taskStatsFor",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic tasks, dynamic identity, dynamic todayIso,\n    dynamic taskIdentity, dynamic taskOverdue"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "List<dynamic> tasks, String identity, String todayIso,\n    dynamic taskIdentity, dynamic taskOverdue"
+  }
+ },
+ "telephony-on": {
+  "fn": "telephonyOn",
+  "before": {
+   "ret": "bool",
+   "raw": "dynamic cfg"
+  },
+  "after": {
+   "ret": "bool",
+   "raw": "Map<String, dynamic> cfg"
+  }
+ },
+ "telephony-to-tenant": {
+  "fn": "telephonyToTenant",
+  "before": {
+   "ret": "Map<String, dynamic>",
+   "raw": "dynamic tc, dynamic orgName, dynamic tenantId, Map<String, dynamic> T"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "Map<String, dynamic> tc, String orgName, String tenantId, Map<String, dynamic> T"
+  }
+ },
+ "template-keys": {
+  "fn": "templateKeys",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic defs"
+  },
+  "after": {
+   "ret": "List<dynamic>",
+   "raw": "List<dynamic> defs"
+  }
+ },
+ "template-lines-to-names": {
+  "fn": "templateLinesToNames",
+  "before": {
+   "ret": "List<dynamic>",
+   "raw": "dynamic lines, dynamic nextId"
+  },
+  "after": {
+   "ret": "List<dynamic>",
+   "raw": "List<Map<String, dynamic>> lines, dynamic nextId"
+  }
+ },
+ "term-label": {
+  "fn": "termLabel",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic term, dynamic months, dynamic terms, Map<String, String> T"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "String term, num? months, List<Map<String, dynamic>> terms, Map<String, String> T"
+  }
+ },
+ "term-of": {
+  "fn": "termOf",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic cfg, dynamic key, dynamic fallback"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "Map<String, dynamic> cfg, String key, String fallback"
+  }
+ },
+ "thanks-prompt": {
+  "fn": "thanksPrompt",
+  "before": {
+   "ret": "String",
+   "raw": "dynamic inp, Map<String, String> T"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "Map<String, dynamic> inp, Map<String, String> T"
+  }
+ },
+ "to-tenant-id": {
+  "fn": "toTenantId",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic slug, dynamic orgName"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "String slug, String orgName"
+  }
+ },
+ "total-label": {
+  "fn": "totalLabel",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic sp, dynamic supIls, dynamic supUsd"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "Map<String, dynamic> sp, dynamic supIls, dynamic supUsd"
+  }
+ },
+ "tour-advance": {
+  "fn": "tourAdvance",
+  "before": {
+   "ret": "num?",
+   "raw": "dynamic index, dynamic delta, dynamic length"
+  },
+  "after": {
+   "ret": "num?",
+   "raw": "num index, num delta, num length"
+  }
+ },
+ "tour-steps": {
+  "fn": "tourSteps",
+  "before": {
+   "ret": "List<dynamic>",
+   "raw": "\n    List<dynamic> steps, dynamic isModuleOn, dynamic termOf, Map<String, String> T2, [dynamic config]"
+  },
+  "after": {
+   "ret": "List<dynamic>",
+   "raw": "\n    List<dynamic> steps, dynamic isModuleOn, dynamic termOf, Map<String, String> T2, [Map<String, dynamic>? config]"
+  }
+ },
+ "trust-report": {
+  "fn": "trustReport",
+  "before": {
+   "ret": "Map<String, dynamic>",
+   "raw": "dynamic bundle, Map<String, dynamic> T, [dynamic opt = const <String, dynamic>{},\n    dynamic eng = const <String, dynamic>{}]"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "Map<String, dynamic> bundle, Map<String, dynamic> T, [dynamic opt = const <String, dynamic>{},\n    dynamic eng = const <String, dynamic>{}]"
+  }
+ },
+ "undo-last": {
+  "fn": "undoLast",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic c, dynamic requeueOutcomes"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "Map<String, dynamic> c, List<String> requeueOutcomes"
+  }
+ },
+ "unit-label": {
+  "fn": "unitLabel",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic cfg, dynamic Function(dynamic, String, String) termOf, Map<String, String> T"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "Map<String, dynamic> cfg, dynamic Function(dynamic, String, String) termOf, Map<String, String> T"
+  }
+ },
+ "visible-events-for-designations": {
+  "fn": "visibleEventsForDesignations",
+  "before": {
+   "ret": "List<dynamic>",
+   "raw": "List<dynamic> events, List<dynamic> supporters,\n    dynamic allowed, bool Function(dynamic, dynamic) isSupVisible"
+  },
+  "after": {
+   "ret": "List<dynamic>",
+   "raw": "List<dynamic> events, List<dynamic> supporters,\n    List<dynamic>? allowed, bool Function(dynamic, dynamic) isSupVisible"
+  }
+ },
+ "volunteer-load-hint": {
+  "fn": "volunteerLoadHint",
+  "before": {
+   "ret": "Map<String, dynamic>",
+   "raw": "dynamic db, dynamic vol, dynamic dayId,\n    List<dynamic> Function(dynamic, dynamic, dynamic) deliveriesOfVolunteer"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "Map<String, dynamic> db, Map<String, dynamic> vol, String dayId,\n    List<dynamic> Function(dynamic, dynamic, dynamic) deliveriesOfVolunteer"
+  }
+ },
+ "volunteer-route-stops": {
+  "fn": "volunteerRouteStops",
+  "before": {
+   "ret": "List<String>",
+   "raw": "dynamic db, dynamic dayId, dynamic volunteerId"
+  },
+  "after": {
+   "ret": "List<String>",
+   "raw": "Map<String, dynamic> db, String dayId, String volunteerId"
+  }
+ },
+ "wa-app-link": {
+  "fn": "waAppLink",
+  "before": {
+   "ret": "String?",
+   "raw": "dynamic phone, dynamic text, dynamic Function(dynamic) waDigits"
+  },
+  "after": {
+   "ret": "String?",
+   "raw": "String phone, String text, dynamic Function(dynamic) waDigits"
+  }
+ },
+ "wa-birthday-text": {
+  "fn": "waBirthdayText",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic orgName, dynamic firstName, dynamic cfg,\n    dynamic Function(dynamic, String, Map<String, dynamic>) renderTemplate,\n    dynamic Function(dynamic) orgOf"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "String orgName, String firstName, Map<String, dynamic>? cfg,\n    dynamic Function(dynamic, String, Map<String, dynamic>) renderTemplate,\n    dynamic Function(dynamic) orgOf"
+  }
+ },
+ "wa-delivery-text": {
+  "fn": "waDeliveryText",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic orgName, dynamic famName, dynamic cfg,\n    dynamic renderTemplate, dynamic orgOf, Map<String, String> T"
+  },
+  "after": {
+   "ret": "String",
+   "raw": "String orgName, String famName, Map<String, dynamic>? cfg,\n    dynamic renderTemplate, dynamic orgOf, Map<String, String> T"
+  }
+ },
+ "wa-href": {
+  "fn": "waHref",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic phone, dynamic text, dynamic appScheme,\n    dynamic Function(dynamic, dynamic) waAppLink,\n    dynamic Function(dynamic, dynamic) waLink"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>?",
+   "raw": "String phone, String text, bool appScheme,\n    dynamic Function(dynamic, dynamic) waAppLink,\n    dynamic Function(dynamic, dynamic) waLink"
+  }
+ },
+ "warehouse-value": {
+  "fn": "warehouseValue",
+  "before": {
+   "ret": "num",
+   "raw": "dynamic warehouse"
+  },
+  "after": {
+   "ret": "num",
+   "raw": "List<dynamic> warehouse"
+  }
+ },
+ "weighted-quote": {
+  "fn": "weightedQuote",
+  "before": {
+   "ret": "Map<String, dynamic>",
+   "raw": "\n    dynamic c, dynamic opts, dynamic lessonPriceForTier, dynamic lessonsInTerm"
+  },
+  "after": {
+   "ret": "Map<String, dynamic>",
+   "raw": "\n    Map<String, dynamic> c, Map<String, dynamic> opts, dynamic lessonPriceForTier, dynamic lessonsInTerm"
+  }
+ },
+ "wheel-index-under-pointer": {
+  "fn": "wheelIndexUnderPointer",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic rot, dynamic n"
+  },
+  "after": {
+   "ret": "num",
+   "raw": "String rot, String n"
+  }
+ },
+ "wizard-step-error": {
+  "fn": "wizardStepError",
+  "before": {
+   "ret": "dynamic",
+   "raw": "dynamic step, dynamic s, dynamic Function(dynamic, dynamic, dynamic, dynamic, dynamic, dynamic) signUpError, Map<String, String> T"
+  },
+  "after": {
+   "ret": "String?",
+   "raw": "num step, Map<String, dynamic> s, dynamic Function(dynamic, dynamic, dynamic, dynamic, dynamic, dynamic) signUpError, Map<String, String> T"
+  }
+ },
+ "xlat": {
+  "fn": "expandQuery",
+  "before": {
+   "ret": "List<dynamic>",
+   "raw": "dynamic q, dynamic Function(dynamic) norm, {required Map<String, dynamic> xlatTable}"
+  },
+  "after": {
+   "ret": "List<dynamic>",
+   "raw": "String q, dynamic Function(dynamic) norm, {required Map<String, dynamic> xlatTable}"
+  }
+ }
+}

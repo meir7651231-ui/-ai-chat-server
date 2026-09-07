@@ -23,12 +23,12 @@
    "declared": "finderMatches",
    "declaredFile": "dart-maor/finder-matches.dart",
    "pick": "finderMatches",
-   "candidates": 56,
+   "candidates": 26,
    "declaredRank": 0,
    "top3": [
     "finderMatches:24.35≡",
-    "startCampaign:6.75",
-    "coursesOfTeacher:4.75"
+    "coursesOfTeacher:4.75",
+    "visibleSupportersForDesignations:4.75"
    ],
    "swap": null
   },
@@ -49,7 +49,7 @@
    "declared": "roleOf",
    "declaredFile": "dart-maor/role-of.dart",
    "pick": "roleOf",
-   "candidates": 170,
+   "candidates": 161,
    "declaredRank": 0,
    "top3": [
     "roleOf:25.75≡",
@@ -62,12 +62,12 @@
    "declared": "canGrantedAction",
    "declaredFile": "dart-maor/can-granted-action.dart",
    "pick": "canGrantedAction",
-   "candidates": 77,
+   "candidates": 44,
    "declaredRank": 0,
    "top3": [
     "canGrantedAction:21.7≡",
-    "taskStatsFor:6.82",
-    "moduleOn:4.05"
+    "moduleOn:4.05",
+    "courseFitsMember:1"
    ],
    "swap": null
   },
@@ -75,12 +75,12 @@
    "declared": "expiringIntakes",
    "declaredFile": "dart-maor/expiring-intakes.dart",
    "pick": "expiringIntakes",
-   "candidates": 59,
+   "candidates": 29,
    "declaredRank": 0,
    "top3": [
     "expiringIntakes:16.29≡",
-    "spotlightBox:10.71",
-    "sup12m:1.7"
+    "supAvgDon:0",
+    "deliveriesOfFamily:-1"
    ],
    "swap": null
   },
@@ -88,12 +88,12 @@
    "declared": "warehouseValue",
    "declaredFile": "dart-maor/warehouse-value.dart",
    "pick": "warehouseValue",
-   "candidates": 29,
+   "candidates": 12,
    "declaredRank": 0,
    "top3": [
-    "warehouseValue:30.88≡",
+    "warehouseValue:31.88≡",
     "setAllowedPurposes:3.01",
-    "paidOf:2.83"
+    "supIls:0.92"
    ],
    "swap": null
   },
@@ -101,12 +101,12 @@
    "declared": "cockpitQueue",
    "declaredFile": "dart-maor/cockpit-queue.dart",
    "pick": "cockpitQueue",
-   "candidates": 65,
+   "candidates": 29,
    "declaredRank": 0,
    "top3": [
     "cockpitQueue:68.09≡",
-    "sup12m:10.8",
-    "smartFilter:4.34"
+    "smartFilter:4.34",
+    "waPaymentText:4.34"
    ],
    "swap": null
   },
@@ -114,12 +114,12 @@
    "declared": "cockpitProgress",
    "declaredFile": "dart-maor/cockpit-progress.dart",
    "pick": "cockpitProgress",
-   "candidates": 46,
+   "candidates": 23,
    "declaredRank": 0,
    "top3": [
     "cockpitProgress:55.69≡",
-    "ruleSkeleton:8.69",
-    "supportPreview:4.44"
+    "coursesOfTeacher:0",
+    "sanitizeSupportText:0"
    ],
    "swap": null
   },
@@ -140,7 +140,7 @@
    "declared": "pendingMakeups",
    "declaredFile": "dart-maor/pending-makeups.dart",
    "pick": "pendingMakeups",
-   "candidates": 40,
+   "candidates": 22,
    "declaredRank": 1,
    "top3": [
     "sheetSummary:11.4",
@@ -151,24 +151,14 @@
     "to": "sheetSummary",
     "file": "dart-maor/sheet-summary.dart",
     "mode": "adapter",
-    "adapter": "// G19 · עטיפת-חתימה (מנוע-לפי-ייעוד): pendingMakeups(List<dynamic> enrollments, [String? courseId]) ⇒ sheetSummary(dynamic roster, dynamic dateIso)\nList<Map<String, Object?>> pendingMakeups(List<dynamic> enrollments, [String? courseId]) => sheetSummary(enrollments, courseId) as List<Map<String, Object?>>;",
-    "proof": {
-     "modules": [
-      "schoolos_attendance.dart"
-     ],
-     "sensitivity": "0/5",
-     "sensitive": true,
-     "tests": "0/5",
-     "proven": false,
-     "verdict": "נכשל-בבדיקות-הזהב"
-    }
+    "adapter": "// G19 · עטיפת-חתימה (מנוע-לפי-ייעוד): pendingMakeups(List<dynamic> enrollments, [String? courseId]) ⇒ sheetSummary(dynamic roster, dynamic dateIso)\nList<Map<String, Object?>> pendingMakeups(List<dynamic> enrollments, [String? courseId]) => sheetSummary(enrollments, courseId) as List<Map<String, Object?>>;"
    }
   },
   "balance": {
    "declared": "payBal",
    "declaredFile": "dart-maor/pay-bal.dart",
    "pick": "payBal",
-   "candidates": 48,
+   "candidates": 28,
    "declaredRank": 0,
    "top3": [
     "payBal:34.69≡",
@@ -181,11 +171,11 @@
    "declared": "enrollmentPaidStatus",
    "declaredFile": "dart-maor/enrollment-paid-status.dart",
    "pick": "enrollmentPaidStatus",
-   "candidates": 59,
+   "candidates": 32,
    "declaredRank": 0,
    "top3": [
     "enrollmentPaidStatus:4≡",
-    "sup12m:3.11",
+    "totalLabel:2",
     "sanitizeSupportText:1.11"
    ],
    "swap": null
@@ -194,7 +184,7 @@
    "declared": "hokDue",
    "declaredFile": "dart-maor/hok-due.dart",
    "pick": "hokDue",
-   "candidates": 54,
+   "candidates": 25,
    "declaredRank": 0,
    "top3": [
     "hokDue:23.27≡",
@@ -220,10 +210,10 @@
    "declared": "buildSlots",
    "declaredFile": "dart-maor/build-slots.dart",
    "pick": "buildSlots",
-   "candidates": 62,
+   "candidates": 30,
    "declaredRank": 0,
    "top3": [
-    "buildSlots:75.85≡",
+    "buildSlots:76.85≡",
     "waPaymentText:-0.89",
     "staleBoxes:-6.05"
    ],
@@ -233,7 +223,7 @@
    "declared": "blockReason",
    "declaredFile": "dart-maor/block-reason.dart",
    "pick": "blockReason",
-   "candidates": 68,
+   "candidates": 34,
    "declaredRank": 0,
    "top3": [
     "blockReason:49.85≡",
@@ -246,7 +236,7 @@
    "declared": "holidayOf",
    "declaredFile": "dart-maor/holiday-of.dart",
    "pick": "holidayOf",
-   "candidates": 66,
+   "candidates": 32,
    "declaredRank": 0,
    "top3": [
     "holidayOf:27.35≡",
@@ -259,12 +249,12 @@
    "declared": "weeklyRoomSessions",
    "declaredFile": "dart-maor/weekly-room-sessions.dart",
    "pick": "weeklyRoomSessions",
-   "candidates": 63,
+   "candidates": 31,
    "declaredRank": 0,
    "top3": [
     "weeklyRoomSessions:33.15≡",
     "sessionsOf:5.29",
-    "spotlightBox:3.75"
+    "supAvgDon:0"
    ],
    "swap": null
   },
@@ -285,7 +275,7 @@
    "declared": "enrollCount",
    "declaredFile": "dart-maor/enroll-count.dart",
    "pick": "enrollCount",
-   "candidates": 75,
+   "candidates": 58,
    "declaredRank": 0,
    "top3": [
     "enrollCount:11.21≡",
@@ -335,30 +325,19 @@
     "to": "isAdminUser",
     "file": "dart-maor/is-admin-user.dart",
     "mode": "adapter",
-    "adapter": "// G19 · עטיפת-חתימה (מנוע-לפי-ייעוד): teacherIdOf(dynamic config, dynamic email) ⇒ isAdminUser(Map<String, dynamic> config, String? email)\ndynamic teacherIdOf(dynamic config, dynamic email) => isAdminUser(config as Map<String, dynamic>, email as String?);",
-    "proof": {
-     "modules": [
-      "schoolos_courses.dart",
-      "schoolos_teachers.dart"
-     ],
-     "sensitivity": "0/28",
-     "sensitive": true,
-     "tests": "0/28",
-     "proven": false,
-     "verdict": "נכשל-בבדיקות-הזהב"
-    }
+    "adapter": "// G19 · עטיפת-חתימה (מנוע-לפי-ייעוד): teacherIdOf(dynamic config, dynamic email) ⇒ isAdminUser(Map<String, dynamic> config, String? email)\ndynamic teacherIdOf(dynamic config, dynamic email) => isAdminUser(config as Map<String, dynamic>, email as String?);"
    }
   },
   "cert": {
    "declared": "certExpiryStatus",
    "declaredFile": "dart/cert_expiry_status.dart",
    "pick": "certExpiryStatus",
-   "candidates": 40,
+   "candidates": 22,
    "declaredRank": 0,
    "top3": [
     "certExpiryStatus:16.19≡",
     "coursesOfTeacher:0",
-    "nameIndex:0"
+    "sanitizeSupportText:0"
    ],
    "swap": null
   },
@@ -377,31 +356,19 @@
     "to": "isSendableSupportText",
     "file": "dart-maor/is-sendable-support-text.dart",
     "mode": "adapter",
-    "adapter": "// G19 · עטיפת-חתימה (מנוע-לפי-ייעוד): waLink(dynamic phone, dynamic text, dynamic waDigits) ⇒ isSendableSupportText(Object? raw, String Function(Object? raw) sanitizeSupportText,)\ndynamic waLink(dynamic phone, dynamic text, dynamic waDigits) => isSendableSupportText(phone as Object?, text as String Function(Object? raw));",
-    "proof": {
-     "modules": [
-      "schoolos_courses.dart",
-      "schoolos_parents.dart",
-      "schoolos_students.dart"
-     ],
-     "sensitivity": "24/29",
-     "sensitive": true,
-     "tests": "24/29",
-     "proven": false,
-     "verdict": "נכשל-בבדיקות-הזהב"
-    }
+    "adapter": "// G19 · עטיפת-חתימה (מנוע-לפי-ייעוד): waLink(dynamic phone, dynamic text, dynamic waDigits) ⇒ isSendableSupportText(Object? raw, String Function(Object? raw) sanitizeSupportText,)\ndynamic waLink(dynamic phone, dynamic text, dynamic waDigits) => isSendableSupportText(phone as Object?, text as String Function(Object? raw));"
    }
   },
   "recipients": {
    "declared": "bulkWaRecipients",
    "declaredFile": "dart-maor/bulk-wa-recipients.dart",
    "pick": "bulkWaRecipients",
-   "candidates": 41,
+   "candidates": 23,
    "declaredRank": 0,
    "top3": [
     "bulkWaRecipients:16.44≡",
-    "round2:7.9",
-    "sitePalette:5.85"
+    "coursesOfTeacher:5.11",
+    "visibleSupportersForDesignations:5.11"
    ],
    "swap": null
   },
@@ -409,11 +376,11 @@
    "declared": "renderTemplate",
    "declaredFile": "dart-maor/render-template.dart",
    "pick": "renderTemplate",
-   "candidates": 63,
+   "candidates": 35,
    "declaredRank": 0,
    "top3": [
     "renderTemplate:16.09≡",
-    "resolveLocalized:4.71",
+    "resolveLocalized:5.71",
     "sanitizeSupportText:3.71"
    ],
    "swap": null
@@ -422,12 +389,12 @@
    "declared": "parseCsv",
    "declaredFile": "dart-maor/parse-csv.dart",
    "pick": "parseCsv",
-   "candidates": 21,
+   "candidates": 12,
    "declaredRank": 1,
    "top3": [
     "supUsd:6.97",
     "parseCsv:2≡",
-    "monthLabel:0"
+    "popCall:0"
    ],
    "swap": {
     "to": "supUsd",
@@ -450,12 +417,12 @@
    "declared": "trendFromScan",
    "declaredFile": "dart-maor/intel-trend-from-scan.dart",
    "pick": "trendFromScan",
-   "candidates": 24,
+   "candidates": 15,
    "declaredRank": 0,
    "top3": [
     "trendFromScan:94.21≡",
-    "sortSupportThreads:7.49",
-    "orgSlugFromUrl:3.11"
+    "supUsd:3.11",
+    "decodeFields:2≡"
    ],
    "swap": null
   }

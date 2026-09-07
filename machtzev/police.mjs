@@ -149,7 +149,8 @@ gate('goldenharness', 'generator/golden-harness.mjs', ['--gate'], FAST);
 gate('genverify', 'generator/gen-verify.mjs', ['--gate'], FAST);
 gate('appgen', 'generator/app-from-sentences.mjs', ['--gate', '--test'], FAST);
 gate('autoskin', 'generator/auto-skin.mjs', ['--gate']);
-gate('autologic', 'generator/auto-logic.mjs', ['--gate']);   // G18 · הכרעה-25: מנוע-לוגיקה-לפי-ייעוד ≡ טרי; החלפה רק מוכחת   // G17b · הכרעה-25: בורר-לפי-ייעוד ≡ טרי + L73 (אין אטום-מגמה ל-KPI)
+gate('autologic', 'generator/auto-logic.mjs', ['--gate']);
+gate('tighten', 'generator/tighten-types.mjs', ['--gate'], FAST);   // G20 · ראיית-טיפוסים ≡ טרייה + אין חתימה שניתן להדק ונותרה dynamic (טבעת-push)   // G18 · הכרעה-25: מנוע-לוגיקה-לפי-ייעוד ≡ טרי; החלפה רק מוכחת   // G17b · הכרעה-25: בורר-לפי-ייעוד ≡ טרי + L73 (אין אטום-מגמה ל-KPI)
 gate('skingolden', 'generator/skin-golden.mjs', ['--gate']);   // G12d · SchoolOS בעור-forge ≡ טרי (שניות)
 gate('index-complete', 'index-check.mjs');
 gate('atom-count', 'atom-count-check.mjs');

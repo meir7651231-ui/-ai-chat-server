@@ -1,0 +1,2638 @@
+{
+ "amount-in-words": {
+  "fn": "amountInWords",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "String",
+   "null",
+   "List<String>",
+   "List<String>",
+   "List<String>",
+   "List<String>",
+   "List<String>",
+   "List<String>",
+   "Map<String, String>",
+   "Map<String, dynamic>"
+  ],
+  "ret": "String"
+ },
+ "annual-all-lines": {
+  "fn": "annualAllLines",
+  "calls": 3,
+  "testOk": true,
+  "params": [
+   "String",
+   "String?",
+   "String",
+   "List<Map<String, dynamic>>",
+   "null",
+   "Function/2",
+   "Function/1",
+   "Map<String, String>"
+  ],
+  "ret": "List<String>"
+ },
+ "annual-report-lines": {
+  "fn": "annualReportLines",
+  "calls": 2,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "Function/2",
+   "Function/2",
+   "Map<String, dynamic>"
+  ],
+  "ret": "List<String>"
+ },
+ "apply-config": {
+  "fn": "applyConfig",
+  "calls": 4,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "Function/0",
+   "Function/0"
+  ],
+  "ret": "null"
+ },
+ "ayin-active": {
+  "fn": "ayinActive",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "String",
+   "Map<String, String>"
+  ],
+  "ret": "bool"
+ },
+ "ayin-advance-label": {
+  "fn": "ayinAdvanceLabel",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, ?>",
+   "Map<String, dynamic>",
+   "Function/2",
+   "Map<String, String>"
+  ],
+  "ret": "String"
+ },
+ "build-custom-export": {
+  "fn": "buildCustomExport",
+  "calls": 9,
+  "testOk": true,
+  "params": [
+   "Map<String, Map<String, dynamic>>",
+   "Map<String, dynamic>",
+   "String",
+   "Map<String, String>",
+   "List<dynamic>",
+   "Map<String, dynamic>",
+   "Map<String, dynamic>",
+   "int"
+  ],
+  "ret": "List<List<dynamic>>"
+ },
+ "build-slots": {
+  "fn": "buildSlots",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, List<dynamic>>",
+   "Map<String, dynamic>",
+   "String",
+   "String?",
+   "Map<String, dynamic>",
+   "Map<String, Function/?>",
+   "bool?",
+   "Map<String, dynamic>"
+  ],
+  "ret": "List<Map<String, dynamic>>"
+ },
+ "build-tenant": {
+  "fn": "buildTenant",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "Map<String, dynamic>",
+   "Function/?",
+   "Function/0",
+   "Function/?"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "build-tz-grid": {
+  "fn": "buildTzGrid",
+  "calls": 3,
+  "testOk": true,
+  "params": [
+   "List<dynamic>",
+   "String",
+   "bool",
+   "Function/?"
+  ],
+  "ret": "Map<String, dynamic>?"
+ },
+ "bulk-wa-recipients": {
+  "fn": "bulkWaRecipients",
+  "calls": 2,
+  "testOk": true,
+  "params": [
+   "List<dynamic>",
+   "Function/1"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "call-stats": {
+  "fn": "callStats",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "String",
+   "Map<String, String>"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "caller-kind-label": {
+  "fn": "callerKindLabel",
+  "calls": 8,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "String",
+   "Function/3",
+   "Map<String, String>"
+  ],
+  "ret": "String?"
+ },
+ "campaign-total": {
+  "fn": "campaignTotal",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "List<dynamic>",
+   "String"
+  ],
+  "ret": "int"
+ },
+ "clamp-scale": {
+  "fn": "clampScale",
+  "calls": 8,
+  "testOk": true,
+  "params": [
+   "dynamic",
+   "int?",
+   "int?"
+  ],
+  "ret": "num"
+ },
+ "collection-score-delta": {
+  "fn": "collectionScoreDelta",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, List<dynamic>>",
+   "String",
+   "int",
+   "Function/1",
+   "Map<String, int>?",
+   "Map<String, int>"
+  ],
+  "ret": "int"
+ },
+ "coordinator-total": {
+  "fn": "coordinatorTotal",
+  "calls": 4,
+  "testOk": true,
+  "params": [
+   "List<dynamic>",
+   "String",
+   "Function/2",
+   "Function/1"
+  ],
+  "ret": "int"
+ },
+ "course-fits-member": {
+  "fn": "courseFitsMember",
+  "calls": 10,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "String?",
+   "int?",
+   "String?",
+   "Function/?",
+   "Map<String, String>"
+  ],
+  "ret": "bool"
+ },
+ "courses-of-teacher": {
+  "fn": "coursesOfTeacher",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "String",
+   "dynamic"
+  ],
+  "ret": "String"
+ },
+ "create-cloud-key": {
+  "fn": "createCloudKey",
+  "calls": 3,
+  "testOk": true,
+  "params": [
+   "String",
+   "String",
+   "Function/?",
+   "Function/?",
+   "Map<String, String>"
+  ],
+  "ret": "Map<String, ?>"
+ },
+ "decrypt-db": {
+  "fn": "decryptDb",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "Map<String, String>",
+   "Map<String, dynamic>?",
+   "Function/?"
+  ],
+  "ret": "Map<String, ?>"
+ },
+ "deliver-receipt": {
+  "fn": "deliverReceipt",
+  "calls": 4,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "String?",
+   "Function/1",
+   "Function/1",
+   "Map<String, String>"
+  ],
+  "ret": "null"
+ },
+ "deliveries-csv-rows": {
+  "fn": "deliveriesCsvRows",
+  "calls": 3,
+  "testOk": true,
+  "params": [
+   "Map<String, List<dynamic>>",
+   "Map<String, Map<String, String>>?",
+   "Function/?",
+   "Function/1",
+   "Map<String, String>"
+  ],
+  "ret": "List<List<String>>"
+ },
+ "deliveries-of-day": {
+  "fn": "deliveriesOfDay",
+  "calls": 4,
+  "testOk": true,
+  "params": [
+   "Map<String, List<dynamic>>",
+   "String"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "deliveries-of-volunteer": {
+  "fn": "deliveriesOfVolunteer",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "Map<String, List<Map<String, String>>>",
+   "String",
+   "String?"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "diff-db": {
+  "fn": "diffDb",
+  "calls": 3,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "Map<String, dynamic>",
+   "List<String>",
+   "List<String>",
+   "Function/2",
+   "Function/1"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "distribution-list-lines": {
+  "fn": "distributionListLines",
+  "calls": 3,
+  "testOk": true,
+  "params": [
+   "Map<String, List<Map<String, dynamic>>>",
+   "String",
+   "null",
+   "Function/2",
+   "Function/2",
+   "Map<String, dynamic>"
+  ],
+  "ret": "List<String>"
+ },
+ "dup-field-value": {
+  "fn": "dupFieldValue",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "List<Map<String, dynamic>>",
+   "Map<String, dynamic>",
+   "Map<String, dynamic>",
+   "Map<String, dynamic>"
+  ],
+  "ret": "String"
+ },
+ "eligible-assignments-for-day": {
+  "fn": "eligibleAssignmentsForDay",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "Map<String, List<dynamic>>",
+   "String",
+   "Map<String, String>"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "eligible-families": {
+  "fn": "eligibleFamilies",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "Map<String, List<Map<String, dynamic>>>",
+   "List<dynamic>",
+   "String",
+   "Map<String, String>"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "encrypt-existing-cloud": {
+  "fn": "encryptExistingCloud",
+  "calls": 3,
+  "testOk": true,
+  "params": [
+   "Map<String, List<dynamic>>",
+   "Map<String, bool>",
+   "Function/0",
+   "Function/?",
+   "Function/?"
+  ],
+  "ret": "Map<String, ?>"
+ },
+ "enroll-count": {
+  "fn": "enrollCount",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "Map<String, List<dynamic>>",
+   "String",
+   "Map<String, String>"
+  ],
+  "ret": "int"
+ },
+ "enroll-new-family": {
+  "fn": "normSearch",
+  "calls": 0,
+  "testOk": true
+ },
+ "enroll-summary": {
+  "fn": "enrollSummary",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "Function/1",
+   "Function/1",
+   "Map<String, String>"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "enrollment-quote": {
+  "fn": "enrollmentQuote",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "Map<String, dynamic>",
+   "Function/2"
+  ],
+  "ret": "Map<String, int>?"
+ },
+ "env-path": {
+  "fn": "envPath",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "String",
+   "String",
+   "Map<String, String>"
+  ],
+  "ret": "String"
+ },
+ "events-csv-rows": {
+  "fn": "eventsCsvRows",
+  "calls": 3,
+  "testOk": true,
+  "params": [
+   "Map<String, List<dynamic>>",
+   "Map<String, Map<String, String>>?",
+   "Function/3",
+   "Function/1",
+   "Map<String, Map<String, String>>",
+   "Map<String, String>"
+  ],
+  "ret": "List<List<String>>"
+ },
+ "explain-call": {
+  "fn": "explainCall",
+  "calls": 11,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "Map<String, dynamic>",
+   "Map<String, ?>",
+   "Map<String, Function/?>",
+   "List<String>",
+   "Map<String, String>"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "explain-one": {
+  "fn": "explainOne",
+  "calls": 2,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "String",
+   "String",
+   "Map<String, String>",
+   "Function/?",
+   "Function/?",
+   "Function/?",
+   "Function/0",
+   "Map<String, dynamic>"
+  ],
+  "ret": "Map<String, String>"
+ },
+ "export-allowed": {
+  "fn": "exportAllowed",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "dynamic"
+  ],
+  "ret": "bool"
+ },
+ "fam-history-of": {
+  "fn": "famHistoryOf",
+  "calls": 8,
+  "testOk": true,
+  "params": [
+   "Map<String, List<dynamic>>",
+   "Map<String, dynamic>",
+   "Map<String, dynamic>",
+   "Function/3",
+   "Map<String, dynamic>"
+  ],
+  "ret": "List<Map<String, String>>"
+ },
+ "fam-live-enrollments": {
+  "fn": "famLiveEnrollments",
+  "calls": 4,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "Map<String, dynamic>",
+   "Function/?",
+   "Map<String, String>"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "filter-ayin-board": {
+  "fn": "filterAyinBoard",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "List<Map<String, dynamic>>",
+   "String",
+   "String?",
+   "String?",
+   "Function/1",
+   "Map<String, String>"
+  ],
+  "ret": "List<Map<String, dynamic>>"
+ },
+ "filter-coordinators": {
+  "fn": "filterCoordinators",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "List<Map<String, dynamic>>",
+   "List<?>",
+   "String",
+   "bool",
+   "String",
+   "Function/3",
+   "Function/2",
+   "Function/2"
+  ],
+  "ret": "List<Map<String, dynamic>>"
+ },
+ "filter-deliveries": {
+  "fn": "filterDeliveries",
+  "calls": 13,
+  "testOk": true,
+  "params": [
+   "dynamic",
+   "String",
+   "Function/3?",
+   "Map<String, String>"
+  ],
+  "ret": "dynamic"
+ },
+ "filter-products": {
+  "fn": "filterProducts",
+  "calls": 3,
+  "testOk": true,
+  "params": [
+   "List<Map<String, dynamic>>",
+   "String",
+   "bool",
+   "Function/3"
+  ],
+  "ret": "List<Map<String, dynamic>>"
+ },
+ "filter-volunteers": {
+  "fn": "filterVolunteers",
+  "calls": 13,
+  "testOk": true,
+  "params": [
+   "dynamic",
+   "String",
+   "Function/3?"
+  ],
+  "ret": "dynamic"
+ },
+ "find-all-open-plans": {
+  "fn": "findAllOpenPlans",
+  "calls": 1,
+  "testOk": true,
+  "params": [
+   "Map<String, List<Map<String, dynamic>>>",
+   "Map<String, String>"
+  ],
+  "ret": "List<Map<String, dynamic>>"
+ },
+ "finder-axis-value": {
+  "fn": "finderAxisValue",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "Map<String, ?>",
+   "Map<String, dynamic>",
+   "String",
+   "Map<String, ?>?",
+   "Map<String, dynamic>",
+   "Map<String, dynamic>"
+  ],
+  "ret": "String"
+ },
+ "finder-matches": {
+  "fn": "finderMatches",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "Map<String, List<Map<String, dynamic>>>",
+   "Map<String, dynamic>",
+   "Function/3"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "fix-phone": {
+  "fn": "fixPhone",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "String",
+   "Function/1"
+  ],
+  "ret": "String"
+ },
+ "format-israeli-phone": {
+  "fn": "formatIsraeliPhone",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "String",
+   "Map<String, int>"
+  ],
+  "ret": "String"
+ },
+ "full-db-diff": {
+  "fn": "fullDbDiff",
+  "calls": 2,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "List<String>",
+   "Function/1"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "group-options-of": {
+  "fn": "groupOptionsOf",
+  "calls": 4,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "Function/1",
+   "Function/2",
+   "List<String>",
+   "Map<String, String>"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "importable-contacts": {
+  "fn": "importableContacts",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "String",
+   "Function/?",
+   "Function/?"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "inactive-room-courses": {
+  "fn": "inactiveRoomCourses",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, List<Map<String, dynamic>>>",
+   "String",
+   "Map<String, Map<String, dynamic>>",
+   "Function/3",
+   "Map<String, String>"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "integration-setting": {
+  "fn": "integrationSetting",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "String",
+   "String",
+   "Map<String, String>"
+  ],
+  "ret": "String"
+ },
+ "is-data-image": {
+  "fn": "isDataImage",
+  "calls": 11,
+  "testOk": true,
+  "params": [
+   "dynamic",
+   "Map<String, String>"
+  ],
+  "ret": "bool"
+ },
+ "is-enc-doc": {
+  "fn": "isEncDoc",
+  "calls": 10,
+  "testOk": true,
+  "params": [
+   "dynamic",
+   "Map<String, String>"
+  ],
+  "ret": "bool"
+ },
+ "is-encrypted": {
+  "fn": "isEncrypted",
+  "calls": 7,
+  "testOk": true,
+  "params": [
+   "dynamic",
+   "Map<String, String>"
+  ],
+  "ret": "bool"
+ },
+ "is-junk-contact": {
+  "fn": "isJunkContact",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "Function/1"
+  ],
+  "ret": "bool"
+ },
+ "is-valid-pin": {
+  "fn": "isValidPin",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "dynamic"
+  ],
+  "ret": "bool"
+ },
+ "leaderboard": {
+  "fn": "leaderboard",
+  "calls": 2,
+  "testOk": true,
+  "params": [
+   "List<dynamic>",
+   "List<?>",
+   "Function/2",
+   "Function/2"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "lessons-in-term": {
+  "fn": "lessonsInTerm",
+  "calls": 10,
+  "testOk": true,
+  "params": [
+   "num",
+   "String",
+   "String",
+   "int?",
+   "Map<String, String>"
+  ],
+  "ret": "num"
+ },
+ "live-suggestions": {
+  "fn": "liveSuggestions",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "String",
+   "Map<String, Map<String, ?>>?",
+   "Function/?"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "merge-family-import": {
+  "fn": "mergeFamilyImport",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "String",
+   "String"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "merge-supporter-into": {
+  "fn": "mergeSupporterInto",
+  "calls": 10,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "Map<String, dynamic>",
+   "Function/2",
+   "int"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "merge-supporters-by-fields": {
+  "fn": "mergeSupportersByFields",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "List<Map<String, dynamic>>",
+   "Map<String, dynamic>",
+   "Map<String, dynamic>",
+   "Function/2",
+   "Function/4",
+   "List<Map<String, dynamic>>",
+   "Map<String, String>"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "merge-supporters-group": {
+  "fn": "mergeSupportersGroup",
+  "calls": 3,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "List<dynamic>",
+   "Function/2"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "meta-path": {
+  "fn": "metaPath",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "String",
+   "String",
+   "Map<String, String>"
+  ],
+  "ret": "String"
+ },
+ "migrate-supporters-to-keyed": {
+  "fn": "migrateSupportersToKeyed",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "List<dynamic>",
+   "List<dynamic>",
+   "Map<String, bool>?",
+   "Map<String, Function/?>",
+   "Map<String, dynamic>"
+  ],
+  "ret": "Map<String, ?>"
+ },
+ "model-meta": {
+  "fn": "modelMeta",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "Map<String, String>"
+  ],
+  "ret": "Map<String, String>"
+ },
+ "month-en-of": {
+  "fn": "monthEnOf",
+  "calls": 8,
+  "testOk": true,
+  "params": [
+   "String",
+   "List<List<String>>"
+  ],
+  "ret": "String?"
+ },
+ "month-he-of": {
+  "fn": "monthHeOf",
+  "calls": 8,
+  "testOk": true,
+  "params": [
+   "String",
+   "List<List<String>>"
+  ],
+  "ret": "String"
+ },
+ "month-label": {
+  "fn": "monthLabel",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "String"
+  ],
+  "ret": "String"
+ },
+ "name-index": {
+  "fn": "nameIndex",
+  "calls": 3,
+  "testOk": true,
+  "params": [
+   "Map<String, bool>",
+   "Function/?"
+  ],
+  "ret": "Map<dynamic, dynamic>"
+ },
+ "name-sort-key": {
+  "fn": "nameSortKey",
+  "calls": 10,
+  "testOk": true,
+  "params": [
+   "String",
+   "Function/1",
+   "Set<String>"
+  ],
+  "ret": "String"
+ },
+ "needs-care-shop": {
+  "fn": "needsCare",
+  "calls": 11,
+  "testOk": true,
+  "params": [
+   "Map<String, List<dynamic>>",
+   "String",
+   "Map<String, Map<String, ?>>?",
+   "Map<String, dynamic>",
+   "Map<String, String>"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "new-supporter-from-row": {
+  "fn": "newSupporterFromRow",
+  "calls": 4,
+  "testOk": true,
+  "params": [
+   "String",
+   "Map<String, dynamic>",
+   "Function/1",
+   "Function/2"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "next-session-date": {
+  "fn": "nextSessionDate",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, List<dynamic>>",
+   "DateTime",
+   "Function/1"
+  ],
+  "ret": "DateTime?"
+ },
+ "norm-name": {
+  "fn": "normName",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "String",
+   "Function/1"
+  ],
+  "ret": "String"
+ },
+ "norm-search": {
+  "fn": "normSearch",
+  "calls": 7,
+  "testOk": true,
+  "params": [
+   "String?",
+   "Map<String, String>"
+  ],
+  "ret": "String"
+ },
+ "normalize-prices": {
+  "fn": "normalizePrices",
+  "calls": 7,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>?",
+   "List<String>",
+   "Map<String, dynamic>",
+   "Map<String, int>",
+   "Map<String, String>"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "normalize-telephony": {
+  "fn": "normalizeTelephony",
+  "calls": 15,
+  "testOk": true,
+  "params": [
+   "dynamic",
+   "Function/2",
+   "Function/2",
+   "List<String>",
+   "Map<String, dynamic>"
+  ],
+  "ret": "Map<String, dynamic>?"
+ },
+ "num-match": {
+  "fn": "numMatch",
+  "calls": 11,
+  "testOk": true,
+  "params": [
+   "String?",
+   "int"
+  ],
+  "ret": "bool"
+ },
+ "open-cloud-key": {
+  "fn": "openCloudKey",
+  "calls": 3,
+  "testOk": true,
+  "params": [
+   "Map<String, int>",
+   "String",
+   "String",
+   "Function/0"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "open-tasks-for": {
+  "fn": "openTasksFor",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "List<Map<String, dynamic>>",
+   "String",
+   "Function/1"
+  ],
+  "ret": "List<Map<String, dynamic>>"
+ },
+ "org-slug-from-url": {
+  "fn": "orgSlugFromUrl",
+  "calls": 8,
+  "testOk": true,
+  "params": [
+   "String?",
+   "Map<String, String>"
+  ],
+  "ret": "String?"
+ },
+ "pad2": {
+  "fn": "pad2",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "String"
+  ],
+  "ret": "String"
+ },
+ "parse-acc": {
+  "fn": "parseAcc",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "String?"
+  ],
+  "ret": "Map<String, bool>"
+ },
+ "parse-xlsx-sheet": {
+  "fn": "parseXlsxSheet",
+  "calls": 3,
+  "testOk": true,
+  "params": [
+   "dynamic",
+   "Function/1",
+   "Function/1",
+   "Function/1",
+   "Function/1",
+   "Function/1",
+   "Map<String, String>"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "plan-add-name": {
+  "fn": "planAddName",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "Map<String, List<Map<String, dynamic>>>",
+   "String",
+   "dynamic",
+   "String",
+   "Function/1",
+   "Function/0",
+   "Map<String, String>"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "plan-supporter-import": {
+  "fn": "planSupporterImport",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "List<Map<String, dynamic>>",
+   "List<dynamic>",
+   "Function/1",
+   "Function/2"
+  ],
+  "ret": "Map<String, List<dynamic>>"
+ },
+ "pop-call": {
+  "fn": "popCall",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "String"
+  ],
+  "ret": "String"
+ },
+ "preview-telephony": {
+  "fn": "previewTelephony",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, List<dynamic>>",
+   "String",
+   "String",
+   "Function/3",
+   "Function/0",
+   "Function/0",
+   "Function/?",
+   "Function/3",
+   "Function/0",
+   "Map<String, dynamic>",
+   "String"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "public-site-on": {
+  "fn": "publicSiteOn",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, Map<String, dynamic>>",
+   "Function/2",
+   "Map<String, String>"
+  ],
+  "ret": "bool"
+ },
+ "publish-ics-feed": {
+  "fn": "publishIcsFeed",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "String",
+   "String",
+   "Map<String, bool>?",
+   "Map<String, Function/?>",
+   "Map<String, dynamic>"
+  ],
+  "ret": "Map<String, ?>"
+ },
+ "pull-audit-ring": {
+  "fn": "pullAuditRing",
+  "calls": 7,
+  "testOk": true,
+  "params": [
+   "String?",
+   "bool",
+   "Map<String, bool>",
+   "Function/1",
+   "Map<String, Function/0>",
+   "Function/??",
+   "Map<String, dynamic>"
+  ],
+  "ret": "Map<String, ?>"
+ },
+ "push-audit-ring": {
+  "fn": "pushAuditRing",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "List<Map<String, dynamic>>",
+   "String?",
+   "String",
+   "Map<String, bool>",
+   "Function/1",
+   "Map<String, Function/?>",
+   "Function/??",
+   "Map<String, dynamic>"
+  ],
+  "ret": "Map<String, ?>"
+ },
+ "push-diff": {
+  "fn": "pushDiff",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "String?",
+   "Map<dynamic, dynamic>",
+   "Map<String, String>",
+   "Function/1",
+   "Map<String, Function/?>",
+   "Function/?",
+   "Function/?",
+   "Map<String, dynamic>?",
+   "Map<String, int>"
+  ],
+  "ret": "Map<String, ?>"
+ },
+ "push-donations": {
+  "fn": "pushDonations",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "Map<String, List<dynamic>>",
+   "String?",
+   "Map<String, String>",
+   "Function/0",
+   "Map<String, Function/?>",
+   "Function/??",
+   "Map<String, int>"
+  ],
+  "ret": "Map<String, ?>"
+ },
+ "read-cloud-envelope": {
+  "fn": "readCloudEnvelope",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, String>",
+   "Function/0",
+   "Map<String, Function/?>",
+   "Map<String, String>"
+  ],
+  "ret": "Map<String, ?>"
+ },
+ "read-ics-feed-token": {
+  "fn": "readIcsFeedToken",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "String",
+   "Map<String, dynamic>",
+   "Map<String, String>"
+  ],
+  "ret": "Map<String, ?>"
+ },
+ "receipt-fmt-of": {
+  "fn": "receiptFmtOf",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "Map<String, Map<String, ?>>",
+   "Map<String, dynamic>",
+   "Function/0",
+   "Map<String, String>"
+  ],
+  "ret": "String?"
+ },
+ "receipt-lines": {
+  "fn": "receiptLines",
+  "calls": 4,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "Function/1",
+   "Function/0",
+   "Function/0",
+   "Function/0",
+   "Map<String, dynamic>"
+  ],
+  "ret": "List<String>"
+ },
+ "redemptions-csv-rows": {
+  "fn": "redemptionsCsvRows",
+  "calls": 2,
+  "testOk": true,
+  "params": [
+   "Map<String, List<dynamic>>",
+   "null",
+   "Function/2",
+   "Function/2",
+   "Map<String, String>"
+  ],
+  "ret": "List<List<dynamic>>"
+ },
+ "reencrypt-db": {
+  "fn": "reencryptDb",
+  "calls": 2,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "String",
+   "String",
+   "Function/2"
+  ],
+  "ret": "Map<String, ?>"
+ },
+ "reenroll-counts": {
+  "fn": "reenrollCounts",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "String",
+   "Map<String, String>"
+  ],
+  "ret": "Map<String, int>"
+ },
+ "repair-cards-from-rows": {
+  "fn": "repairCardsFromRows",
+  "calls": 7,
+  "testOk": true,
+  "params": [
+   "List<Map<String, dynamic>>",
+   "List<Map<String, String>>",
+   "String",
+   "Function/2"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "resolve-localized": {
+  "fn": "resolveLocalized",
+  "calls": 8,
+  "testOk": true,
+  "params": [
+   "dynamic",
+   "String",
+   "Map<String, String>"
+  ],
+  "ret": "String"
+ },
+ "resolve-org-config": {
+  "fn": "resolveOrgConfig",
+  "calls": 4,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "dynamic",
+   "Function/1"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "revert-patch": {
+  "fn": "revertPatch",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "String",
+   "Function/1",
+   "Map<String, String>"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "role-of": {
+  "fn": "roleOf",
+  "calls": 8,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "String?",
+   "Map<String, String>"
+  ],
+  "ret": "String"
+ },
+ "room-info-label": {
+  "fn": "roomInfoLabel",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "Map<String, String>"
+  ],
+  "ret": "String"
+ },
+ "rooms-now": {
+  "fn": "roomsNow",
+  "calls": 4,
+  "testOk": true,
+  "params": [
+   "Map<String, List<Map<String, dynamic>>>",
+   "DateTime",
+   "Function/1",
+   "Map<String, int>"
+  ],
+  "ret": "List<Map<String, Map<String, dynamic>>>"
+ },
+ "round2": {
+  "fn": "round2",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "num",
+   "Map<String, int>"
+  ],
+  "ret": "num"
+ },
+ "rule-exact": {
+  "fn": "ruleExact",
+  "calls": 2,
+  "testOk": true,
+  "params": [
+   "String",
+   "String",
+   "Map<String, int>"
+  ],
+  "ret": "int?"
+ },
+ "rule-skeleton": {
+  "fn": "ruleSkeleton",
+  "calls": 3,
+  "testOk": true,
+  "params": [
+   "String",
+   "String",
+   "Map<String, int>"
+  ],
+  "ret": "int?"
+ },
+ "rule-typo": {
+  "fn": "ruleTypo",
+  "calls": 3,
+  "testOk": true,
+  "params": [
+   "String",
+   "String",
+   "Function/2",
+   "Map<String, int>"
+  ],
+  "ret": "int?"
+ },
+ "run-audit": {
+  "fn": "runAudit",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "Map<String, List<dynamic>>",
+   "String",
+   "bool",
+   "Map<String, ?>?",
+   "Map<String, Function/?>",
+   "Map<String, dynamic>"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "safe-https-url": {
+  "fn": "safeHttpsUrl",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "String",
+   "Map<String, String>"
+  ],
+  "ret": "String?"
+ },
+ "same-loc": {
+  "fn": "sameLoc",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "Map<String, dynamic>"
+  ],
+  "ret": "bool"
+ },
+ "sanitize-photos": {
+  "fn": "sanitizePhotos",
+  "calls": 10,
+  "testOk": true,
+  "params": [
+   "dynamic",
+   "Function/1",
+   "int?",
+   "null",
+   "Map<String, int>"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "sanitize-support-text": {
+  "fn": "sanitizeSupportText",
+  "calls": 9,
+  "testOk": true,
+  "params": [
+   "String?",
+   "int?",
+   "Map<String, int>"
+  ],
+  "ret": "String"
+ },
+ "schedule-clash-text": {
+  "fn": "scheduleClashText",
+  "calls": 8,
+  "testOk": true,
+  "params": [
+   "Map<String, List<dynamic>>",
+   "String",
+   "Map<String, dynamic>",
+   "Function/1",
+   "List<String>",
+   "Map<String, String>"
+  ],
+  "ret": "String?"
+ },
+ "segments-match-segment": {
+  "fn": "matchSegment",
+  "calls": 3,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "String",
+   "List<Map<String, dynamic>>",
+   "String",
+   "double",
+   "Map<String, Function/?>",
+   "Map<String, dynamic>"
+  ],
+  "ret": "bool"
+ },
+ "segments-segment-counts": {
+  "fn": "segmentCounts",
+  "calls": 1,
+  "testOk": true,
+  "params": [
+   "List<Map<String, dynamic>>",
+   "String",
+   "double",
+   "Map<String, Function/?>",
+   "Map<String, dynamic>"
+  ],
+  "ret": "List<Map<String, dynamic>>"
+ },
+ "segula-reminders": {
+  "fn": "segulaReminders",
+  "calls": 2,
+  "testOk": true,
+  "params": [
+   "String",
+   "List<int>?"
+  ],
+  "ret": "List<Map<String, dynamic>>"
+ },
+ "segula-title": {
+  "fn": "segulaTitle",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "String?",
+   "Map<String, dynamic>",
+   "int",
+   "Map<String, String>"
+  ],
+  "ret": "String"
+ },
+ "sessions-of": {
+  "fn": "sessionsOf",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>"
+  ],
+  "ret": "List<Map<String, dynamic>>"
+ },
+ "set-allowed-purposes": {
+  "fn": "setAllowedPurposes",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "List<dynamic>?"
+  ],
+  "ret": "List<String>?"
+ },
+ "set-audit-context": {
+  "fn": "setAuditContext",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "String",
+   "String",
+   "bool"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "set-cloud-scope": {
+  "fn": "setCloudScope",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "String",
+   "bool"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "set-employee-override": {
+  "fn": "setEmployeeOverride",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "String",
+   "Map<String, dynamic>",
+   "Function/1"
+  ],
+  "ret": "Map<String, Map<String, Map<String, dynamic>>>"
+ },
+ "set-export-blocked": {
+  "fn": "setExportBlocked",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "bool",
+   "Function/0?"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "sheet-roster": {
+  "fn": "sheetRoster",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "List<dynamic>",
+   "String",
+   "Map<String, String>"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "sheet-summary": {
+  "fn": "sheetSummary",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "List<dynamic>",
+   "String"
+  ],
+  "ret": "Map<String, int>"
+ },
+ "site-campaign-progress": {
+  "fn": "campaignProgress",
+  "calls": 11,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>?",
+   "int",
+   "Map<String, dynamic>"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "site-donate-url": {
+  "fn": "siteDonateUrl",
+  "calls": 7,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "Map<String, String>"
+  ],
+  "ret": "String?"
+ },
+ "site-langs": {
+  "fn": "siteLangs",
+  "calls": 7,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>?",
+   "List<String>"
+  ],
+  "ret": "List<String>"
+ },
+ "site-palette": {
+  "fn": "sitePalette",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "String?",
+   "Map<String, String>",
+   "Map<String, int>"
+  ],
+  "ret": "Map<String, String>"
+ },
+ "site-ui": {
+  "fn": "siteUi",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "String",
+   "String",
+   "Map<String, Map<String, dynamic>>"
+  ],
+  "ret": "String"
+ },
+ "site-vocab": {
+  "fn": "siteVocab",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "bool",
+   "String",
+   "Map<String, String>"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "slugify": {
+  "fn": "slugify",
+  "calls": 7,
+  "testOk": true,
+  "params": [
+   "String",
+   "List<dynamic>",
+   "Map<String, String>",
+   "Map<String, String>"
+  ],
+  "ret": "String"
+ },
+ "smart-filter": {
+  "fn": "smartFilter",
+  "calls": 3,
+  "testOk": true,
+  "params": [
+   "String",
+   "List<Map<String, dynamic>>",
+   "Function/1",
+   "Function/1",
+   "Function/2",
+   "int?"
+  ],
+  "ret": "List<Map<String, dynamic>>"
+ },
+ "smart-score": {
+  "fn": "smartScore",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "String",
+   "List<String>",
+   "Function/1",
+   "Function/2",
+   "Function/2",
+   "Map<String, int>"
+  ],
+  "ret": "int"
+ },
+ "smtp-host-for": {
+  "fn": "smtpHostFor",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "String",
+   "Map<String, String>"
+  ],
+  "ret": "String"
+ },
+ "sort-support-msgs": {
+  "fn": "sortSupportMsgs",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "String"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "sort-support-threads": {
+  "fn": "sortSupportThreads",
+  "calls": 4,
+  "testOk": true,
+  "params": [
+   "dynamic",
+   "Map<String, String>"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "sort-team-msgs": {
+  "fn": "sortTeamMsgs",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "String"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "spotlight-box": {
+  "fn": "spotlightBox",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, int>?",
+   "int",
+   "int",
+   "int?",
+   "Map<String, int>"
+  ],
+  "ret": "Map<String, int>?"
+ },
+ "stage-index": {
+  "fn": "stageIndex",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "String",
+   "List<String>"
+  ],
+  "ret": "int"
+ },
+ "stage-label": {
+  "fn": "stageLabel",
+  "calls": 7,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "String",
+   "Function/?",
+   "Map<String, String>"
+  ],
+  "ret": "String"
+ },
+ "stale-boxes": {
+  "fn": "staleBoxes",
+  "calls": 2,
+  "testOk": true,
+  "params": [
+   "List<Map<String, dynamic>>",
+   "String",
+   "int",
+   "Function/1",
+   "Function/1",
+   "Map<String, dynamic>"
+  ],
+  "ret": "List<Map<String, dynamic>>"
+ },
+ "start-campaign": {
+  "fn": "startCampaign",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "String",
+   "List<dynamic>",
+   "String"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "step-scale": {
+  "fn": "stepScale",
+  "calls": 7,
+  "testOk": true,
+  "params": [
+   "num",
+   "int",
+   "Function/1",
+   "null",
+   "Map<String, int>"
+  ],
+  "ret": "double"
+ },
+ "strip-audit-meta": {
+  "fn": "stripAuditMeta",
+  "calls": 8,
+  "testOk": true,
+  "params": [
+   "dynamic",
+   "Map<String, String>"
+  ],
+  "ret": "dynamic"
+ },
+ "strip-sup-key": {
+  "fn": "stripSupKey",
+  "calls": 8,
+  "testOk": true,
+  "params": [
+   "dynamic",
+   "Map<String, String>"
+  ],
+  "ret": "dynamic"
+ },
+ "strip-supporter-donations": {
+  "fn": "stripSupporterDonations",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "Map<String, String>"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "strong-match-for-charge": {
+  "fn": "strongMatchForCharge",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "List<Map<String, String>>",
+   "Function/1",
+   "Map<String, String>"
+  ],
+  "ret": "Map<String, String>?"
+ },
+ "subsidy-total": {
+  "fn": "subsidyTotal",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "List<dynamic>",
+   "Function/?",
+   "Function/?"
+  ],
+  "ret": "num"
+ },
+ "suggestions": {
+  "fn": "suggestions",
+  "calls": 9,
+  "testOk": true,
+  "params": [
+   "Map<String, List<dynamic>>",
+   "String",
+   "Map<String, String>?",
+   "Map<String, Function/?>",
+   "Map<String, dynamic>"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "sup-allowed-keys": {
+  "fn": "supAllowedKeys",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "List<dynamic>",
+   "String",
+   "Map<String, int>"
+  ],
+  "ret": "List<String>"
+ },
+ "sup-avg-don": {
+  "fn": "supAvgDon",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "List<Map<String, int>>",
+   "num?",
+   "Function/2",
+   "Function/1"
+  ],
+  "ret": "int?"
+ },
+ "sup-count": {
+  "fn": "supCount",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>"
+  ],
+  "ret": "int"
+ },
+ "sup-don-events": {
+  "fn": "supDonEvents",
+  "calls": 7,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "Function/2?",
+   "Map<String, String>"
+  ],
+  "ret": "List<Map<String, dynamic>>"
+ },
+ "sup-dup-field-value": {
+  "fn": "supDupFieldValue",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "List<Map<String, dynamic>>",
+   "Map<String, dynamic>",
+   "Map<String, dynamic>",
+   "Map<String, dynamic>"
+  ],
+  "ret": "String"
+ },
+ "sup-enforce-on": {
+  "fn": "supEnforceOn",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>"
+  ],
+  "ret": "bool"
+ },
+ "sup-has-region": {
+  "fn": "supHasRegion",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, List<dynamic>>",
+   "String",
+   "Function/1"
+  ],
+  "ret": "bool"
+ },
+ "sup-ils": {
+  "fn": "supIls",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>"
+  ],
+  "ret": "int"
+ },
+ "sup-key-map-of": {
+  "fn": "supKeyMapOf",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "List<dynamic>",
+   "Function/1"
+  ],
+  "ret": "Map<dynamic, dynamic>"
+ },
+ "sup-key-of": {
+  "fn": "supKeyOf",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "String"
+  ],
+  "ret": "String"
+ },
+ "sup-last": {
+  "fn": "supLast",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>"
+  ],
+  "ret": "String"
+ },
+ "sup-last-in-period": {
+  "fn": "supLastInPeriod",
+  "calls": 8,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "int?",
+   "int?",
+   "Function/1"
+  ],
+  "ret": "bool"
+ },
+ "sup-score": {
+  "fn": "supScore",
+  "calls": 7,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "int?",
+   "int",
+   "Function/2",
+   "Function/1",
+   "Function/1",
+   "Map<String, int>"
+  ],
+  "ret": "int"
+ },
+ "sup-score-bins": {
+  "fn": "supScoreBins",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "List<dynamic>",
+   "num?",
+   "Function/?",
+   "Map<String, int>"
+  ],
+  "ret": "List<int>"
+ },
+ "sup-tier": {
+  "fn": "supTier",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "String",
+   "Map<String, dynamic>"
+  ],
+  "ret": "Map<String, String>"
+ },
+ "sup-total-ils": {
+  "fn": "supTotalIls",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "num?",
+   "Function/1",
+   "Function/1"
+  ],
+  "ret": "num"
+ },
+ "sup-usd": {
+  "fn": "supUsd",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>"
+  ],
+  "ret": "int"
+ },
+ "sup12m": {
+  "fn": "sup12m",
+  "calls": 7,
+  "testOk": true,
+  "params": [
+   "List<dynamic>",
+   "String",
+   "Function/1",
+   "Map<String, int>"
+  ],
+  "ret": "int"
+ },
+ "support-day-label": {
+  "fn": "supportDayLabel",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "String",
+   "String",
+   "Map<String, dynamic>"
+  ],
+  "ret": "String"
+ },
+ "support-msg-time": {
+  "fn": "supportMsgTime",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "String",
+   "Map<String, String>"
+  ],
+  "ret": "String"
+ },
+ "support-preview": {
+  "fn": "supportPreview",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "String",
+   "null",
+   "Map<String, int>"
+  ],
+  "ret": "String"
+ },
+ "support-unread": {
+  "fn": "supportUnread",
+  "calls": 7,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>?",
+   "String",
+   "Map<String, String>"
+  ],
+  "ret": "int"
+ },
+ "supporter-aggregates": {
+  "fn": "supporterAggregates",
+  "calls": 7,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "supporter-visible-for-designations": {
+  "fn": "supporterVisibleForDesignations",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "String",
+   "String"
+  ],
+  "ret": "bool"
+ },
+ "task-identity": {
+  "fn": "taskIdentity",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "String",
+   "Map<String, String>"
+  ],
+  "ret": "String"
+ },
+ "task-overdue": {
+  "fn": "taskOverdue",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "String"
+  ],
+  "ret": "bool"
+ },
+ "task-stats-for": {
+  "fn": "taskStatsFor",
+  "calls": 7,
+  "testOk": true,
+  "params": [
+   "List<dynamic>",
+   "String",
+   "String",
+   "Function/1",
+   "Function/2",
+   "Map<String, int>"
+  ],
+  "ret": "Map<String, int>"
+ },
+ "teacher-id-of": {
+  "fn": "teacherIdOf",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "String?"
+  ],
+  "ret": "String?"
+ },
+ "tel-href": {
+  "fn": "telHref",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "String?",
+   "Map<String, String>"
+  ],
+  "ret": "String?"
+ },
+ "telephony-on": {
+  "fn": "telephonyOn",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>"
+  ],
+  "ret": "bool"
+ },
+ "telephony-to-tenant": {
+  "fn": "telephonyToTenant",
+  "calls": 4,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "String",
+   "String",
+   "Map<String, dynamic>"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "template-keys": {
+  "fn": "templateKeys",
+  "calls": 4,
+  "testOk": true,
+  "params": [
+   "List<dynamic>"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "template-lines-to-names": {
+  "fn": "templateLinesToNames",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "List<Map<String, dynamic>>",
+   "Function/1"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "term-label": {
+  "fn": "termLabel",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "String",
+   "int?",
+   "List<Map<String, String>>",
+   "Map<String, String>"
+  ],
+  "ret": "String"
+ },
+ "term-of": {
+  "fn": "termOf",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "String",
+   "String",
+   "Map<String, String>"
+  ],
+  "ret": "String"
+ },
+ "thanks-prompt": {
+  "fn": "thanksPrompt",
+  "calls": 4,
+  "testOk": true,
+  "params": [
+   "Map<String, String>",
+   "Map<String, String>"
+  ],
+  "ret": "String"
+ },
+ "tier-of": {
+  "fn": "tierOf",
+  "calls": 7,
+  "testOk": true,
+  "params": [
+   "int",
+   "int",
+   "Map<String, dynamic>"
+  ],
+  "ret": "Map<String, String>"
+ },
+ "time-to-min": {
+  "fn": "timeToMin",
+  "calls": 8,
+  "testOk": true,
+  "params": [
+   "String?",
+   "Map<String, int>"
+  ],
+  "ret": "num"
+ },
+ "to-csv": {
+  "fn": "toCsv",
+  "calls": 3,
+  "testOk": true,
+  "params": [
+   "List<dynamic>",
+   "Function/1"
+  ],
+  "ret": "String"
+ },
+ "to-tenant-id": {
+  "fn": "toTenantId",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "String",
+   "String",
+   "Map<String, dynamic>"
+  ],
+  "ret": "String"
+ },
+ "total-label": {
+  "fn": "totalLabel",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "Map<String, int>",
+   "Function/1",
+   "Function/1"
+  ],
+  "ret": "String"
+ },
+ "tour-advance": {
+  "fn": "tourAdvance",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "int",
+   "int",
+   "int"
+  ],
+  "ret": "int?"
+ },
+ "tour-steps": {
+  "fn": "tourSteps",
+  "calls": 3,
+  "testOk": true,
+  "params": [
+   "List<Map<String, String>>",
+   "Function/?",
+   "Function/3",
+   "Map<String, Map<String, String>>?",
+   "Map<String, String>"
+  ],
+  "ret": "List<Map<String, dynamic>>"
+ },
+ "trust-report": {
+  "fn": "trustReport",
+  "calls": 7,
+  "testOk": true,
+  "params": [
+   "Map<String, Map<String, dynamic>>",
+   "Map<String, dynamic>",
+   "Map<String, Function/?>",
+   "Map<String, dynamic>"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "undo-last": {
+  "fn": "undoLast",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, List<dynamic>>",
+   "List<String>"
+  ],
+  "ret": "Map<String, List<dynamic>>"
+ },
+ "unit-label": {
+  "fn": "unitLabel",
+  "calls": 3,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "Function/?",
+   "Map<String, String>"
+  ],
+  "ret": "String"
+ },
+ "upcoming-holidays": {
+  "fn": "upcomingHolidays",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "String",
+   "int",
+   "Function/?",
+   "Function/1",
+   "Map<String, int>"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "valid-israeli-id": {
+  "fn": "validIsraeliId",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "dynamic",
+   "Map<String, int>"
+  ],
+  "ret": "bool"
+ },
+ "visible-events-for-designations": {
+  "fn": "visibleEventsForDesignations",
+  "calls": 7,
+  "testOk": true,
+  "params": [
+   "List<Map<String, String>>",
+   "List<Map<String, String>>",
+   "List<dynamic>?",
+   "Function/2"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "visible-supporters-for-designations": {
+  "fn": "visibleSupportersForDesignations",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "String",
+   "dynamic"
+  ],
+  "ret": "String"
+ },
+ "volunteer-load-hint": {
+  "fn": "volunteerLoadHint",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "Map<String, List<Map<String, String>>>",
+   "Map<String, dynamic>",
+   "String",
+   "Function/3"
+  ],
+  "ret": "Map<String, dynamic>"
+ },
+ "volunteer-route-stops": {
+  "fn": "volunteerRouteStops",
+  "calls": 4,
+  "testOk": true,
+  "params": [
+   "Map<String, List<Map<String, String>>>",
+   "String",
+   "String"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "wa-app-link": {
+  "fn": "waAppLink",
+  "calls": 4,
+  "testOk": true,
+  "params": [
+   "String",
+   "String",
+   "Function/1",
+   "Map<String, String>"
+  ],
+  "ret": "String?"
+ },
+ "wa-birthday-text": {
+  "fn": "waBirthdayText",
+  "calls": 4,
+  "testOk": true,
+  "params": [
+   "String",
+   "String",
+   "Map<String, Map<String, String>>?",
+   "Function/3",
+   "Function/1",
+   "Map<String, String>"
+  ],
+  "ret": "String"
+ },
+ "wa-delivery-text": {
+  "fn": "waDeliveryText",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "String",
+   "String",
+   "Map<String, Map<String, String>>?",
+   "Function/3",
+   "Function/1",
+   "Map<String, String>"
+  ],
+  "ret": "String"
+ },
+ "wa-digits": {
+  "fn": "waDigits",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "String",
+   "Map<String, int>"
+  ],
+  "ret": "String?"
+ },
+ "wa-href": {
+  "fn": "waHref",
+  "calls": 4,
+  "testOk": true,
+  "params": [
+   "String",
+   "String",
+   "bool",
+   "Function/2",
+   "Function/2"
+  ],
+  "ret": "Map<String, dynamic>?"
+ },
+ "wa-link": {
+  "fn": "waLink",
+  "calls": 7,
+  "testOk": true,
+  "params": [
+   "String",
+   "String",
+   "Function/1",
+   "Map<String, String>"
+  ],
+  "ret": "String?"
+ },
+ "wa-payment-text": {
+  "fn": "waPaymentText",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "String",
+   "String",
+   "num",
+   "Map<String, Map<String, String>>?",
+   "Function/3",
+   "Function/1",
+   "Map<String, String>"
+  ],
+  "ret": "String"
+ },
+ "waitlist-for": {
+  "fn": "waitlistFor",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "List<dynamic>",
+   "String",
+   "Map<String, String>"
+  ],
+  "ret": "List<dynamic>"
+ },
+ "warehouse-value": {
+  "fn": "warehouseValue",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "List<dynamic>"
+  ],
+  "ret": "int"
+ },
+ "weekly-room-sessions": {
+  "fn": "weeklyRoomSessions",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "Map<String, List<dynamic>>",
+   "String",
+   "String",
+   "Function/1"
+  ],
+  "ret": "int"
+ },
+ "weighted-quote": {
+  "fn": "weightedQuote",
+  "calls": 5,
+  "testOk": true,
+  "params": [
+   "Map<String, dynamic>",
+   "Map<String, dynamic>",
+   "Function/0",
+   "Function/0"
+  ],
+  "ret": "Map<String, num>"
+ },
+ "wheel-index-under-pointer": {
+  "fn": "wheelIndexUnderPointer",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "String",
+   "String",
+   "Map<String, int>"
+  ],
+  "ret": "num"
+ },
+ "wizard-step-error": {
+  "fn": "wizardStepError",
+  "calls": 12,
+  "testOk": true,
+  "params": [
+   "int",
+   "Map<String, dynamic>",
+   "Function/0",
+   "Map<String, String>"
+  ],
+  "ret": "String?"
+ },
+ "xlat": {
+  "fn": "expandQuery",
+  "calls": 6,
+  "testOk": true,
+  "params": [
+   "String",
+   "Function/1",
+   "Map<String, String>"
+  ],
+  "ret": "List<String>"
+ }
+}

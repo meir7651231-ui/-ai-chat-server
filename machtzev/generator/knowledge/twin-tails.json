@@ -29,6 +29,14 @@
   ],
   "simple": true
  },
+ "ageOf": {
+  "tail": [
+   {
+    "k1": 10
+   }
+  ],
+  "simple": true
+ },
  "allOffConfig": {
   "tail": [
    "מאור",
@@ -41,6 +49,11 @@
    }
   ],
   "simple": true
+ },
+ "allSupPhones": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "allowedDesignationsFor": {
   "tail": [],
@@ -73,6 +86,14 @@
     "k13": "דוח-ריכוז זה אינו קבלה — הקבלות המקוריות צוינו לצד כל תרומה.",
     "k14": 46,
     "k15": 12
+   }
+  ],
+  "simple": true
+ },
+ "appendCall": {
+  "tail": [
+   {
+    "k1": "skip"
    }
   ],
   "simple": true
@@ -153,6 +174,11 @@
   ],
   "simple": false
  },
+ "approveMember": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "attachChargeTo": {
   "tail": [],
   "simple": false,
@@ -172,6 +198,11 @@
    }
   ],
   "simple": true
+ },
+ "autoMatchCharges": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "ayinActionVisible": {
   "tail": [
@@ -201,6 +232,59 @@
     "k5": "answer",
     "k6": "done",
     "k7": "📞 דחיפה ללוח"
+   }
+  ],
+  "simple": true
+ },
+ "ayinAllRows": {
+  "tail": [
+   {
+    "k1": "תורם/ת",
+    "k2": "טלפון",
+    "k3": "שם",
+    "k4": "הערה",
+    "k5": "סטטוס",
+    "k6": "שלב",
+    "k7": "טופל ✓",
+    "k8": "ממתין"
+   }
+  ],
+  "simple": true
+ },
+ "ayinBoardItems": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "ayinDailyRows": {
+  "tail": [
+   {
+    "k1": "שם",
+    "k2": "טלפון",
+    "k3": "שלב",
+    "k4": "מתי לדבר שוב",
+    "k5": "הערה",
+    "k6": " היום"
+   }
+  ],
+  "simple": true
+ },
+ "ayinSheetRows": {
+  "tail": [
+   {
+    "k1": "תומכת",
+    "k2": "טלפון",
+    "k3": "שם למסירה",
+    "k4": "כמה עיניים",
+    "k5": "נמסר (כן/לא)",
+    "k6": "שולם (כן/לא)",
+    "k7": "תשובה/הערה",
+    "k8": "עופרת בוצעה (כן/לא)",
+    "k9": "eyes",
+    "k10": "answer",
+    "k11": "done",
+    "k12": "כן",
+    "k13": "לא"
    }
   ],
   "simple": true
@@ -267,6 +351,33 @@
   ],
   "simple": true
  },
+ "buildCustomExport": {
+  "tail": [
+   {
+    "k1": "courses",
+    "k2": "יום ",
+    "k3": "punch",
+    "k4": "כרטיסייה",
+    "k5": "half_year",
+    "k6": "מנוי חצי-שנתי",
+    "k7": "year",
+    "k8": "מנוי שנתי",
+    "k9": "מנוי חודשי",
+    "k10": " · יתרה ₪",
+    "k11": " תשלומים · ₪",
+    "k12": " חיסורים",
+    "k13": "events",
+    "k14": "כן",
+    "k15": "לא",
+    "k16": "supporters.ayin",
+    "k17": "entity.donations",
+    "k18": "תרומות",
+    "k19": 86400000
+   },
+   4000
+  ],
+  "simple": true
+ },
  "buildIcs": {
   "tail": [
    {
@@ -306,7 +417,57 @@
   ],
   "simple": true
  },
+ "buildReenrollRows": {
+  "tail": [
+   {
+    "k1": "undecided"
+   }
+  ],
+  "simple": true
+ },
+ "buildSlots": {
+  "tail": [
+   {
+    "k1": "clean",
+    "k2": "cleaning",
+    "k3": "ניקיון יומי (15:00–16:00)",
+    "k4": "#eceae2",
+    "k5": "course",
+    "k6": "entity.course",
+    "k7": "חוג",
+    "k8": "#fdf1d4",
+    "k9": "event",
+    "k10": "אירוע: ",
+    "k11": "#e7edf5",
+    "k12": "blk",
+    "k13": "blocked",
+    "k14": "חסום — ",
+    "k15": "#fdeaea",
+    "k16": "free",
+    "k17": "פנוי",
+    "k18": " · מחוץ לשעות הפעילות של החדר",
+    "k19": "crs|",
+    "k20": "out|",
+    "k21": 60,
+    "k22": 20,
+    "k23": 96,
+    "k24": 900,
+    "k25": 960
+   }
+  ],
+  "simple": true
+ },
  "buildTzGrid": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "bulkMailRecipients": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "bulkWaRecipients": {
   "tail": [],
   "simple": false,
   "live": true
@@ -341,6 +502,17 @@
   ],
   "simple": true
  },
+ "campaignCsvRows": {
+  "tail": [
+   {
+    "k1": "שם",
+    "k2": "תוצאה",
+    "k3": "הערה",
+    "k4": "מתי"
+   }
+  ],
+  "simple": true
+ },
  "campaignProgress": {
   "tail": [
    {
@@ -359,6 +531,14 @@
   "tail": [],
   "simple": false,
   "live": true
+ },
+ "candidateSupportersForCharge": {
+  "tail": [
+   {
+    "k1": "ext:"
+   }
+  ],
+  "simple": true
  },
  "changePassword": {
   "tail": [
@@ -403,6 +583,11 @@
   ],
   "simple": true
  },
+ "cleanSupPhones": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "cloudCfgCacheKey": {
   "tail": [
    {
@@ -427,6 +612,27 @@
   ],
   "simple": true
  },
+ "cockpitCalls": {
+  "tail": [
+   {
+    "k1": "תורם/ת מרכזי/ת",
+    "k2": "תורם/ת מהותי/ת",
+    "k3": "תורם/ת",
+    "k4": "call:",
+    "k5": "call",
+    "k6": "יעד-קשר להיום",
+    "k7": "יעד-קשר עבר לפני ",
+    "k8": " יום",
+    "k9": "due",
+    "k10": " · שקט/ה ",
+    "k11": "risk",
+    "k12": 5000,
+    "k13": 1000,
+    "k14": 1000000
+   }
+  ],
+  "simple": true
+ },
  "cockpitCsvRows": {
   "tail": [
    {
@@ -445,6 +651,34 @@
   "tail": [
    {
     "k1": 86400000
+   }
+  ],
+  "simple": true
+ },
+ "cockpitHokTasks": {
+  "tail": [
+   {
+    "k1": "hok:",
+    "k2": "hok",
+    "k3": "הו״ק ",
+    "k4": " · יום ",
+    "k5": " — טרם נרשם החודש",
+    "k6": "due",
+    "k7": 100
+   }
+  ],
+  "simple": true
+ },
+ "cockpitThanks": {
+  "tail": [
+   {
+    "k1": "thanks:",
+    "k2": "thanks",
+    "k3": "תרם/ה ",
+    "k4": "היום",
+    "k5": "לפני ",
+    "k6": " יום",
+    "k7": "warm"
    }
   ],
   "simple": true
@@ -484,6 +718,75 @@
   ],
   "simple": true
  },
+ "collectionsCsvRows": {
+  "tail": [
+   {
+    "k1": "תאריך",
+    "k2": "רכז",
+    "k3": "קופה",
+    "k4": "entity.family",
+    "k5": "משפחה",
+    "k6": "סכום",
+    "k7": "מבצע"
+   }
+  ],
+  "simple": true
+ },
+ "buildCommands": {
+  "tail": [
+   {
+    "k1": "cmd:add",
+    "k2": "add",
+    "k3": "➕ הוספת ",
+    "k4": "פעולה",
+    "k5": "הוספה חדש חדשה תורם add new",
+    "k6": "cmd:work",
+    "k7": "work",
+    "k8": "🎯 חלון העבודה",
+    "k9": "ניווט",
+    "k10": "קוקפיט משימות עבודה היום cockpit",
+    "k11": "cmd:data",
+    "k12": "data",
+    "k13": "☰ מסך הנתונים",
+    "k14": "טבלה נתונים רשימה סינון data",
+    "k15": "cmd:import",
+    "k16": "import",
+    "k17": "⬆ ייבוא מקובץ CSV",
+    "k18": "ייבוא csv excel קובץ import",
+    "k19": "cmd:customreport",
+    "k20": "customreport",
+    "k21": "📊 דו״ח מותאם",
+    "k22": "דוח מותאם ייצוא טווח report export",
+    "k23": "cmd:dedup",
+    "k24": "dedup",
+    "k25": "🔗 איחוד כפולים · ",
+    "k26": "כפולים מיזוג איחוד dedup merge",
+    "k27": "cmd:incoming",
+    "k28": "incoming",
+    "k29": "💰 תשלומים נכנסים",
+    "k30": "תשלומים נכנסים סליקה payments",
+    "k31": "cmd:nedarim",
+    "k32": "nedarim",
+    "k33": "🔄 סנכרון מנדרים",
+    "k34": "נדרים סנכרון nedarim sync",
+    "k35": "donor:",
+    "k36": "openDonor",
+    "k37": "ללא שם",
+    "k38": "פתיחת כרטיס",
+    "k39": "תורם"
+   }
+  ],
+  "simple": true
+ },
+ "filterCommands": {
+  "tail": [
+   {
+    "k1": "openDonor",
+    "k2": 12
+   }
+  ],
+  "simple": true
+ },
  "componentRedeemedNow": {
   "tail": [
    {
@@ -491,6 +794,11 @@
    }
   ],
   "simple": true
+ },
+ "componentRemaining": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "composeSmtpUrl": {
   "tail": [
@@ -513,6 +821,28 @@
   ],
   "simple": true
  },
+ "donorConstellation": {
+  "tail": [
+   {
+    "זהב": "gold",
+    "כסף": "silver",
+    "ארד": "bronze",
+    "רדומה": "dormant"
+   },
+   {
+    "k1": "dormant",
+    "k2": 2166136261,
+    "k3": 16777619,
+    "k4": 30,
+    "k5": 90,
+    "k6": 180,
+    "k7": 365,
+    "k8": 60,
+    "k9": 12
+   }
+  ],
+  "simple": true
+ },
  "cooldownForFails": {
   "tail": [
    {
@@ -520,6 +850,12 @@
     "k2": 15000,
     "k3": 5000
    }
+  ],
+  "simple": true
+ },
+ "coordinatorBoxes": {
+  "tail": [
+   "c1"
   ],
   "simple": true
  },
@@ -541,6 +877,11 @@
   "simple": true
  },
  "coordinatorTotal": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "countBy": {
   "tail": [],
   "simple": false,
   "live": true
@@ -573,6 +914,15 @@
   "tail": [],
   "simple": false,
   "live": true
+ },
+ "createCloudKey": {
+  "tail": [
+   {
+    "k1": "pass",
+    "k2": "יצירת מפתח-הצפנה נכשלה"
+   }
+  ],
+  "simple": true
  },
  "cycleCarry": {
   "tail": [
@@ -676,8 +1026,35 @@
   ],
   "simple": true
  },
+ "deliveriesCsvRows": {
+  "tail": [
+   {
+    "k1": "תאריך",
+    "k2": "entity.family",
+    "k3": "משפחה",
+    "k4": "כתובת",
+    "k5": "מתנדב",
+    "k6": "סטטוס",
+    "k7": "הערה"
+   }
+  ],
+  "simple": true
+ },
  "deliveriesOfDay": {
   "tail": [
+   "A"
+  ],
+  "simple": true
+ },
+ "deliveriesOfFamily": {
+  "tail": [
+   "f1"
+  ],
+  "simple": true
+ },
+ "deliveriesOfVolunteer": {
+  "tail": [
+   "v1",
    "A"
   ],
   "simple": true
@@ -758,6 +1135,12 @@
   "simple": false,
   "live": true
  },
+ "donationsOfYear": {
+  "tail": [
+   "${y}"
+  ],
+  "simple": true
+ },
  "donationsPath": {
   "tail": [],
   "simple": false,
@@ -798,6 +1181,14 @@
   "simple": true
  },
  "eligibleAssignmentsForDay": {
+  "tail": [
+   {
+    "k1": "active"
+   }
+  ],
+  "simple": true
+ },
+ "eligibleFamilies": {
   "tail": [
    {
     "k1": "active"
@@ -873,6 +1264,11 @@
   "simple": false,
   "live": true
  },
+ "enrollmentsForSession": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "envPath": {
   "tail": [
    {
@@ -891,6 +1287,28 @@
   ],
   "simple": true
  },
+ "eventsCsvRows": {
+  "tail": [
+   {
+    "k1": "רגיל (ירוק)",
+    "k2": "בינוני (כתום)",
+    "k3": "דחוף (אדום)",
+    "k4": "כותרת",
+    "k5": "סוג אירוע",
+    "k6": "תאריך עברי",
+    "k7": "תאריך לועזי",
+    "k8": "שעה",
+    "k9": "entity.family",
+    "k10": "משפחה",
+    "k11": "עדיפות",
+    "k12": "הערות",
+    "k13": "בוצע",
+    "k14": "כן",
+    "k15": "לא"
+   }
+  ],
+  "simple": true
+ },
  "excelSerialToIso": {
   "tail": [
    {
@@ -905,6 +1323,11 @@
   "simple": false,
   "live": true
  },
+ "expiringIntakes": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "explainOne": {
   "tail": [
    {
@@ -914,6 +1337,11 @@
    }
   ],
   "simple": true
+ },
+ "explodeSupporter": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "famEnrollments": {
   "tail": [
@@ -929,6 +1357,72 @@
    }
   ],
   "simple": false
+ },
+ "famHistoryOf": {
+  "tail": [
+   {
+    "k1": "הצטרפות",
+    "k2": "#e7edf5",
+    "k3": "ה",
+    "k4": "entity.family",
+    "k5": "משפחה",
+    "k6": " הצטרפה",
+    "k7": "אירוע",
+    "k8": "#efe7f3",
+    "k9": "#7c3aed",
+    "k10": " · ✓ בוצע",
+    "k11": "entity.cred",
+    "k12": "אמינות",
+    "k13": "#f6ead1",
+    "k14": " נק׳)",
+    "k15": "מסמך",
+    "k16": "#eceae2",
+    "k17": "מסמך נוסף: ",
+    "k18": "entity.enrollment",
+    "k19": "שיבוץ",
+    "k20": "#eef7e6",
+    "k21": "נרשמ/ה ",
+    "k22": " ל",
+    "k23": "wait",
+    "k24": " · ברשימת-המתנה",
+    "k25": "תשלום",
+    "k26": "תשלום ₪",
+    "k27": "No-Show",
+    "k28": "היעדרות",
+    "k29": "#fdeaea",
+    "k30": "היעדרות — ",
+    "k31": " · זכאי/ת השלמה",
+    "k32": 40
+   }
+  ],
+  "simple": true
+ },
+ "famLiveEnrollments": {
+  "tail": [
+   {
+    "k1": "ended",
+    "k2": "wait"
+   }
+  ],
+  "simple": true
+ },
+ "familiesImportFormatRows": {
+  "tail": [
+   {
+    "k1": "שם",
+    "k2": "ת\"ז אב",
+    "k3": "טלפון",
+    "k4": "שם האם",
+    "k5": "ת\"ז אם",
+    "k6": "טלפון 2",
+    "k7": "עיר",
+    "k8": "כתובת",
+    "k9": "אלמן",
+    "k10": "קהילה",
+    "k11": "הערות"
+   }
+  ],
+  "simple": true
  },
  "familyContext": {
   "tail": [
@@ -968,6 +1462,20 @@
   "simple": false,
   "live": true
  },
+ "filterAyinBoard": {
+  "tail": [
+   {
+    "k1": "wait",
+    "k2": "done"
+   }
+  ],
+  "simple": true
+ },
+ "filterCollections": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "filterRedemptions": {
   "tail": [],
   "simple": false,
@@ -995,6 +1503,44 @@
     "k7": "shop7",
     "k8": "coordinator",
     "k9": "tzedaka"
+   }
+  ],
+  "simple": true
+ },
+ "findDuplicateGroups": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "findSupporterDupGroups": {
+  "tail": [
+   {}
+  ],
+  "simple": false
+ },
+ "finderAxes": {
+  "tail": [
+   {
+    "k1": "city",
+    "k2": "עיר",
+    "k3": "comm",
+    "k4": "קהילה",
+    "k5": "marital",
+    "k6": "מצב משפחתי",
+    "k7": "status",
+    "k8": "סטטוס",
+    "k9": "cred",
+    "k10": "entity.cred",
+    "k11": "אמינות",
+    "k12": "kids",
+    "k13": "ילדים",
+    "k14": "enrolled",
+    "k15": "nav.courses",
+    "k16": "חוגים",
+    "k17": "sefach",
+    "k18": "ספח מלא",
+    "k19": "lang",
+    "k20": "שפה"
    }
   ],
   "simple": true
@@ -1223,10 +1769,56 @@
   ],
   "simple": true
  },
+ "groupPaletteResults": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
+ "groupsHintFromAudience": {
+  "tail": [
+   {
+    "k1": 10,
+    "k2": 12
+   }
+  ],
+  "simple": true
+ },
  "guardExport": {
   "tail": [],
   "simple": false,
   "live": true
+ },
+ "guideSections": {
+  "tail": [
+   {
+    "k1": "כרטיס משפחה",
+    "k2": "כרטיס ",
+    "k3": "entity.family",
+    "k4": "משפחה",
+    "k5": "חדרים חיים",
+    "k6": "entity.rooms",
+    "k7": "חדרים",
+    "k8": " חיים",
+    "k9": "על חדר",
+    "k10": "על ",
+    "k11": "entity.room",
+    "k12": "חדר",
+    "k13": "בתוך חוג",
+    "k14": "בתוך ",
+    "k15": "entity.course",
+    "k16": "חוג",
+    "k17": "תדפיס למורה",
+    "k18": "תדפיס ל",
+    "k19": "entity.teacher",
+    "k20": "מורה",
+    "k21": "＋ תרומה",
+    "k22": "entity.donation",
+    "k23": "תרומה",
+    "k24": "שיוך למשפחה",
+    "k25": "שיוך ל"
+   }
+  ],
+  "simple": true
  },
  "hebAnnualEq": {
   "tail": [
@@ -1313,6 +1905,11 @@
    null
   ],
   "simple": true
+ },
+ "hokDue": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "hokEffectivelyActive": {
   "tail": [
@@ -1404,6 +2001,16 @@
   "tail": [],
   "simple": false,
   "live": true
+ },
+ "inactiveRoomCourses": {
+  "tail": [
+   {
+    "k1": "entity.room",
+    "k2": "חדר",
+    "k3": " לא קיים"
+   }
+  ],
+  "simple": true
  },
  "industryLabel": {
   "tail": [
@@ -1644,6 +2251,11 @@
   ],
   "simple": true
  },
+ "itemRemaining": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "kitProgress": {
   "tail": [
    {
@@ -1652,9 +2264,25 @@
   ],
   "simple": true
  },
+ "leaderboard": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "lessonPriceForTier": {
   "tail": [
    "1"
+  ],
+  "simple": true
+ },
+ "lessonTierOptions": {
+  "tail": [
+   {
+    "k1": "מחיר מלא · ₪",
+    "k2": "הנחה 1",
+    "k3": "הנחה 2",
+    "k4": "הנחה 3"
+   }
   ],
   "simple": true
  },
@@ -1718,6 +2346,11 @@
    }
   ],
   "simple": true
+ },
+ "matchAll": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "matchIncomingToPlanned": {
   "tail": [
@@ -2059,6 +2692,48 @@
   ],
   "simple": false
  },
+ "needsCare": {
+  "tail": [
+   {
+    "k1": "stockOut",
+    "k2": " — המלאי אזל",
+    "k3": "לחדש מלאי או לעדכן את הפריט",
+    "k4": "restock",
+    "k5": " — המלאי נמוך",
+    "k6": "להצטייד: נותרו ",
+    "k7": " מתחת ל-",
+    "k8": "waitingRestocked",
+    "k9": " ממתינים ל",
+    "k10": "המלאי חזר — אפשר לחלק לרשימת ההמתנה",
+    "k11": ") — המלאי אזל",
+    "k12": "לחדש מלאי או לעדכן את הרכיב במוצר",
+    "k13": "active",
+    "k14": "holidayGift",
+    "k15": "holidayDue",
+    "k16": " ב-",
+    "k17": " — טרם נמסרה",
+    "k18": "meeting",
+    "k19": "meetingPending",
+    "k20": "פגישת ליווי טרם התקיימה",
+    "k21": "coupon",
+    "k22": "couponExpired",
+    "k23": "הקופון פג בתוקף ב-",
+    "k24": " וטרם מומש",
+    "k25": "couponPending",
+    "k26": "קופון טרם מומש · בתוקף עד ",
+    "k27": "קופון טרם מומש",
+    "k28": "shop.expiry",
+    "k29": "expiring",
+    "k30": " — פג תוקף",
+    "k31": " — עומד לפוג",
+    "k32": "פג ב-",
+    "k33": "בתוקף עד ",
+    "k34": " · אצווה ",
+    "k35": " יח׳"
+   }
+  ],
+  "simple": true
+ },
  "netCheckScript": {
   "tail": [
    {
@@ -2152,6 +2827,11 @@
   "simple": false,
   "live": true
  },
+ "openTasksFor": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "orbitTheme": {
   "tail": [
    {
@@ -2178,6 +2858,20 @@
    }
   ],
   "simple": true
+ },
+ "orgCalEntries": {
+  "tail": [
+   {
+    "k1": "📞 תשובה: ",
+    "k2": "🔁 לדבר שוב"
+   }
+  ],
+  "simple": true
+ },
+ "orgEnabledFeatures": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "orgEnabledModules": {
   "tail": [
@@ -2215,6 +2909,15 @@
   "tail": [
    {
     "k1": "org"
+   }
+  ],
+  "simple": true
+ },
+ "overdueContactTaskDrafts": {
+  "tail": [
+   {
+    "k1": "supporter",
+    "k2": "📞 להתקשר — "
    }
   ],
   "simple": true
@@ -2307,6 +3010,64 @@
   "simple": false,
   "live": true
  },
+ "parseSupporterGrid": {
+  "tail": [
+   {
+    "k1": "טלפון",
+    "k2": "נייד",
+    "k3": "אימייל",
+    "k4": "מייל",
+    "k5": "email",
+    "k6": "ת\"ז",
+    "k7": "תז",
+    "k8": "זהות",
+    "k9": "כתובת",
+    "k10": "קטגוריה",
+    "k11": "עבור",
+    "k12": "ייעוד",
+    "k13": "סכום",
+    "k14": "תאריך",
+    "k15": "מטבע",
+    "k16": "אסמכתא",
+    "k17": "מספר עסקה",
+    "k18": "מספר קבלה",
+    "k19": "מותג",
+    "k20": "4 ספרות",
+    "k21": "ספרות",
+    "k22": "חברה סולקת",
+    "k23": "סולק",
+    "k24": "תשלומים",
+    "k25": "סטטוס",
+    "k26": "נדרים",
+    "k27": 15,
+    "k28": 100
+   }
+  ],
+  "simple": true
+ },
+ "parseVcards": {
+  "tail": [
+   {
+    "k1": "TEL",
+    "k2": "EMAIL",
+    "k3": "ORG",
+    "k4": "null",
+    "k5": "TITLE",
+    "k6": "ADR",
+    "k7": "NOTE"
+   }
+  ],
+  "simple": true
+ },
+ "parseXlsxSheet": {
+  "tail": [
+   {
+    "k1": "xl/sharedStrings.xml",
+    "k2": "inlineStr"
+   }
+  ],
+  "simple": true
+ },
  "payBal": {
   "tail": [],
   "simple": false,
@@ -2327,6 +3088,33 @@
     "k5": "amount",
     "k6": "name",
     "k7": 100
+   }
+  ],
+  "simple": true
+ },
+ "pendingDeliveriesToday": {
+  "tail": [
+   {
+    "k1": "delivered"
+   }
+  ],
+  "simple": true
+ },
+ "pendingMakeups": {
+  "tail": [
+   {
+    "k1": "ended",
+    "k2": "wait"
+   }
+  ],
+  "simple": true
+ },
+ "personalCalEntries": {
+  "tail": [
+   {
+    "k1": "🎯 תאריך יעד לקשר הבא",
+    "k2": "📞 תשובה: ",
+    "k3": "🔁 לדבר שוב"
    }
   ],
   "simple": true
@@ -2496,6 +3284,21 @@
   ],
   "simple": true
  },
+ "tierTrendCounts": {
+  "tail": [
+   [
+    "זהב",
+    "כסף",
+    "ארד",
+    "רדומה"
+   ],
+   {
+    "k1": "down",
+    "k2": 12
+   }
+  ],
+  "simple": true
+ },
  "presentsInMonth": {
   "tail": [
    {
@@ -2531,6 +3334,12 @@
   ],
   "simple": true
  },
+ "productAssignments": {
+  "tail": [
+   "p1"
+  ],
+  "simple": true
+ },
  "progress": {
   "tail": [
    [
@@ -2562,6 +3371,15 @@
    {
     "k1": "לוח-השנה גדול מדי לפרסום כפיד — פנו לתמיכה",
     "tbl1": 900000
+   }
+  ],
+  "simple": true
+ },
+ "pullAuditRing": {
+  "tail": [
+   {
+    "k1": "auditlog",
+    "tbl1": 500
    }
   ],
   "simple": true
@@ -2642,6 +3460,14 @@
    {
     "k1": "icsFeeds",
     "k2": "string"
+   }
+  ],
+  "simple": true
+ },
+ "readOrgSecretsMeta": {
+  "tail": [
+   {
+    "k1": "orgSecretsMeta"
    }
   ],
   "simple": true
@@ -2762,11 +3588,57 @@
   ],
   "simple": true
  },
+ "redemptionsCsvRows": {
+  "tail": [
+   {
+    "k1": "תאריך",
+    "k2": "מוטב",
+    "k3": "פריט",
+    "k4": "חבילה",
+    "k5": "שולם",
+    "k6": "שווי",
+    "k7": "אישור",
+    "k8": "מבוטל",
+    "k9": "בוטל ב-"
+   }
+  ],
+  "simple": true
+ },
+ "reencryptDb": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "reenrollCounts": {
   "tail": [
    {
     "k1": "yes",
     "k2": "hold"
+   }
+  ],
+  "simple": true
+ },
+ "reenrollCsvRows": {
+  "tail": [
+   [
+    "תלמיד/ה",
+    "משפחה",
+    "חוג",
+    "נוכחות",
+    "חיסורים",
+    "יתרה ₪",
+    "סטטוס",
+    "החלטה",
+    "נרשם לשנה הבאה",
+    "הערה"
+   ],
+   {
+    "k1": "yes",
+    "k2": "ממשיך",
+    "k3": "לא ממשיך",
+    "k4": "hold",
+    "k5": "בהמתנה",
+    "k6": "כן"
    }
   ],
   "simple": true
@@ -2906,10 +3778,36 @@
   ],
   "simple": true
  },
+ "ruleContains": {
+  "tail": [
+   {
+    "k1": 62
+   }
+  ],
+  "simple": true
+ },
  "ruleExact": {
   "tail": [
    {
     "k1": 100
+   }
+  ],
+  "simple": true
+ },
+ "rulePlural": {
+  "tail": [
+   {
+    "k1": "ימ",
+    "k2": "ות",
+    "k3": 70
+   }
+  ],
+  "simple": true
+ },
+ "rulePrefix": {
+  "tail": [
+   {
+    "k1": 80
    }
   ],
   "simple": true
@@ -3014,6 +3912,26 @@
     "k6": 5000,
     "k7": 60,
     "k8": 365
+   }
+  ],
+  "simple": true
+ },
+ "segmentCounts": {
+  "tail": [
+   {
+    "k1": "atrisk",
+    "k2": "בסיכון נטישה",
+    "k3": "goldsilent",
+    "k4": "זהב · שקטים 60+ יום",
+    "k5": "hok",
+    "k6": "הו״ק פעילות",
+    "k7": "gave12m",
+    "k8": "תרמו ב-12 החודשים",
+    "k9": "noemail",
+    "k10": "ללא אימייל",
+    "k11": 5000,
+    "k12": 60,
+    "k13": 365
    }
   ],
   "simple": true
@@ -3352,6 +4270,11 @@
   ],
   "simple": true
  },
+ "studentHistory": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "subsidyTotal": {
   "tail": [],
   "simple": false,
@@ -3397,6 +4320,22 @@
   "tail": [
    {
     "k1": 29
+   }
+  ],
+  "simple": true
+ },
+ "supDonEvents": {
+  "tail": [
+   {
+    "k1": "קבלה ",
+    "k2": "עסקה ",
+    "k3": "אסמכתא ",
+    "k4": " תשלומים",
+    "k5": "entity.donation",
+    "k6": "תרומה",
+    "k7": "מהקובץ ההיסטורי",
+    "k8": " ראשונה (מהקובץ)",
+    "k9": " אחרונה (מהקובץ)"
    }
   ],
   "simple": true
@@ -3501,6 +4440,20 @@
   "tail": [],
   "simple": false,
   "live": true
+ },
+ "supportersImportFormatRows": {
+  "tail": [
+   {
+    "k1": "שם",
+    "k2": "טלפון",
+    "k3": "אימייל",
+    "k4": "ת\"ז",
+    "k5": "כתובת",
+    "k6": "קטגוריה",
+    "k7": "עבור"
+   }
+  ],
+  "simple": true
  },
  "taskIdentity": {
   "tail": [
@@ -3642,6 +4595,11 @@
   "simple": false,
   "live": true
  },
+ "tourAdvance": {
+  "tail": [],
+  "simple": false,
+  "live": true
+ },
  "tourSteps": {
   "tail": [
    {
@@ -3676,6 +4634,22 @@
    {
     "k1": "entity.ayinUnit",
     "k2": "כמות"
+   }
+  ],
+  "simple": true
+ },
+ "upcomingHolidays": {
+  "tail": [
+   {
+    "k1": 45
+   }
+  ],
+  "simple": true
+ },
+ "upcomingMeetings": {
+  "tail": [
+   {
+    "k1": "meeting"
    }
   ],
   "simple": true
@@ -3764,6 +4738,11 @@
    }
   ],
   "simple": true
+ },
+ "warehouseOverview": {
+  "tail": [],
+  "simple": false,
+  "live": true
  },
  "weeklyRoomSessions": {
   "tail": [],

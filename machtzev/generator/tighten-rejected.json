@@ -1,0 +1,210 @@
+{
+ "amount-in-words": {
+  "key": "[[\"String\",\"null\",\"List<String>\",\"List<String>\",\"List<String>\",\"List<String>\",\"List<String>\",\"List<String>\",\"Map<String, String>\",\"Map<String, dynamic>\"],\"String\"]",
+  "why": "mirror-analyze: A value of type 'String' can't be assigned to a variable of type 'Map<String, dy"
+ },
+ "courses-of-teacher": {
+  "key": "[[\"String\",\"dynamic\"],\"String\"]",
+  "why": "mirror-analyze: A value of type 'Object' can't be returned from the function 'coursesOfTeacher' "
+ },
+ "normalize-prices": {
+  "key": "[[\"Map<String, dynamic>?\",\"List<String>\",\"Map<String, dynamic>\",\"Map<String, int>\",\"Map<String, String>\"],\"Map<String, dynamic>\"]",
+  "why": "mirror-analyze: The method '[]' can't be unconditionally invoked because the receiver can be 'nu"
+ },
+ "pop-call": {
+  "key": "[[\"String\"],\"String\"]",
+  "why": "mirror-analyze: The method 'sublist' isn't defined for the type 'String'"
+ },
+ "run-audit": {
+  "key": "[[\"Map<String, List<dynamic>>\",\"String\",\"bool\",\"Map<String, ?>?\",\"Map<String, Function/?>\",\"Map<String, dynamic>\"],\"List<dynamic>\"]",
+  "why": "mirror-analyze: A value of type 'String' can't be assigned to a variable of type 'bool'"
+ },
+ "sessions-of": {
+  "key": "[[\"Map<String, dynamic>\"],\"List<Map<String, dynamic>>\"]",
+  "why": "mirror-analyze: A value of type 'List<dynamic>' can't be returned from the function 'sessionsOf'"
+ },
+ "set-allowed-purposes": {
+  "key": "[[\"List<dynamic>?\"],\"List<String>?\"]",
+  "why": "mirror-analyze: A value of type 'List<dynamic>?' can't be returned from the function 'setAllowed"
+ },
+ "site-langs": {
+  "key": "[[\"Map<String, dynamic>?\",\"List<String>\"],\"List<String>\"]",
+  "why": "mirror-analyze: The method '[]' can't be unconditionally invoked because the receiver can be 'nu"
+ },
+ "smart-filter": {
+  "key": "[[\"String\",\"List<Map<String, dynamic>>\",\"Function/1\",\"Function/1\",\"Function/2\",\"int?\"],\"List<Map<String, dynamic>>\"]",
+  "why": "mirror-analyze: A value of type '_Undefined' can't be assigned to a variable of type 'num?'"
+ },
+ "stale-boxes": {
+  "key": "[[\"List<Map<String, dynamic>>\",\"String\",\"int\",\"Function/1\",\"Function/1\",\"Map<String, dynamic>\"],\"List<Map<String, dynamic>>\"]",
+  "why": "mirror-analyze: A value of type '_Undefined' can't be assigned to a variable of type 'num'"
+ },
+ "sup-avg-don": {
+  "key": "[[\"List<Map<String, int>>\",\"num?\",\"Function/2\",\"Function/1\"],\"int?\"]",
+  "why": "mirror-analyze: The function can't be unconditionally invoked because it can be 'null'"
+ },
+ "support-unread": {
+  "key": "[[\"Map<String, dynamic>?\",\"String\",\"Map<String, String>\"],\"int\"]",
+  "why": "mirror-analyze: The method '[]' can't be unconditionally invoked because the receiver can be 'nu"
+ },
+ "visible-supporters-for-designations": {
+  "key": "[[\"String\",\"dynamic\"],\"String\"]",
+  "why": "mirror-analyze: A value of type 'List<dynamic>' can't be returned from the function 'visibleSupp"
+ },
+ "sup-ils": {
+  "key": "[[\"Map<String, dynamic>\"],\"int\"]",
+  "why": "caller gen_fees_subset.dart:387 — נמסר כערך-פונקציה: num Function(Map<String, dynamic>) ⇏ dynamic Function(dynamic) (קונטרה-וריאנטיות)"
+ },
+ "sup-usd": {
+  "key": "[[\"Map<String, dynamic>\"],\"int\"]",
+  "why": "caller gen_fees_subset.dart:387 — נמסר כערך-פונקציה (קונטרה-וריאנטיות)"
+ },
+ "sup-count": {
+  "key": "[[\"Map<String, dynamic>\"],\"int\"]",
+  "why": "caller gen_fees_subset.dart:388 — נמסר כערך-פונקציה (קונטרה-וריאנטיות)"
+ },
+ "inactive-room-courses": {
+  "key": "[[\"Map<String, List<Map<String, dynamic>>>\",\"String\",\"Map<String, Map<String, dynamic>>\",\"Function/3\",\"Map<String, String>\"],\"List<dynamic>\"]",
+  "why": "caller gen_courses_subset.dart:304 — Null ⇏ Map<String, dynamic>"
+ },
+ "sup-total-ils": {
+  "key": "[[\"Map<String, dynamic>\",\"num?\",\"Function/1\",\"Function/1\"],\"num\"]",
+  "why": "caller gen_composite_att_fee.dart:968 — The argument type 'num Function(Map<String, dynamic>)' can't be assigned to the "
+ },
+ "sup-last": {
+  "key": "[[\"Map<String, dynamic>\"],\"String\"]",
+  "why": "caller gen_composite_att_fee.dart:969 — The argument type 'num Function(Map<String, dynamic>)' can't be assigned to the "
+ },
+ "pad2": {
+  "key": "[[\"String\"],\"String\"]",
+  "why": "caller gen_opsseed_volunteer_from_rm.dart:190 — The argument type 'String Function(String)' can't be assigned to the parameter t"
+ },
+ "wa-digits": {
+  "key": "[[\"String\",\"Map<String, int>\"],\"String?\"]",
+  "why": "caller gen_parents_subset.dart:262 — The argument type 'String?' can't be assigned to the parameter type 'String'. "
+ },
+ "sort-support-msgs": {
+  "key": "[[\"String\"],\"List<dynamic>\"]",
+  "why": "caller gen_parents_subset.dart:288 — The argument type 'List<Map<String, dynamic>>' can't be assigned to the paramete"
+ },
+ "sanitize-support-text": {
+  "key": "[[\"String?\",\"int?\",\"Map<String, int>\"],\"String\"]",
+  "why": "caller gen_parents_subset.dart:413 — The argument type 'Object?' can't be assigned to the parameter type 'String?'. "
+ },
+ "format-israeli-phone": {
+  "key": "[[\"String\",\"Map<String, int>\"],\"String\"]",
+  "why": "caller gen_parents_subset.dart:1445 — The argument type 'String?' can't be assigned to the parameter type 'String'. "
+ },
+ "norm-search": {
+  "key": "[[\"String?\",\"Map<String, String>\"],\"String\"]",
+  "why": "file gen_composite_att_fee.dart — The argument type 'num Function(Map<String, dynamic>)' can't be assigned to the "
+ },
+ "pull-audit-ring": {
+  "key": "[[\"String?\",\"bool\",\"Map<String, bool>\",\"Function/1\",\"Map<String, Function/0>\",\"Function/??\",\"Map<String, dynamic>\"],\"Map<String, ?>\"]",
+  "why": "file gen_composite_att_fee.dart — The argument type 'num Function(Map<String, dynamic>)' can't be assigned to the "
+ },
+ "push-audit-ring": {
+  "key": "[[\"List<Map<String, dynamic>>\",\"String?\",\"String\",\"Map<String, bool>\",\"Function/1\",\"Map<String, Function/?>\",\"Function/??\",\"Map<String, dynamic>\"],\"Map<String, ?>\"]",
+  "why": "file gen_composite_att_fee.dart — The argument type 'num Function(Map<String, dynamic>)' can't be assigned to the "
+ },
+ "role-of": {
+  "key": "[[\"Map<String, dynamic>\",\"String?\",\"Map<String, String>\"],\"String\"]",
+  "why": "file gen_composite_att_fee.dart — The argument type 'num Function(Map<String, dynamic>)' can't be assigned to the "
+ },
+ "segula-reminders": {
+  "key": "[[\"String\",\"List<int>?\"],\"List<Map<String, dynamic>>\"]",
+  "why": "file gen_composite_att_fee.dart — The argument type 'num Function(Map<String, dynamic>)' can't be assigned to the "
+ },
+ "sheet-roster": {
+  "key": "[[\"List<dynamic>\",\"String\",\"Map<String, String>\"],\"List<dynamic>\"]",
+  "why": "file gen_composite_att_fee.dart — The argument type 'num Function(Map<String, dynamic>)' can't be assigned to the "
+ },
+ "sheet-summary": {
+  "key": "[[\"List<dynamic>\",\"String\"],\"Map<String, int>\"]",
+  "why": "file gen_composite_att_fee.dart — The argument type 'num Function(Map<String, dynamic>)' can't be assigned to the "
+ },
+ "smart-score": {
+  "key": "[[\"String\",\"List<String>\",\"Function/1\",\"Function/2\",\"Function/2\",\"Map<String, int>\"],\"int\"]",
+  "why": "file gen_composite_att_fee.dart — The argument type 'num Function(Map<String, dynamic>)' can't be assigned to the "
+ },
+ "strong-match-for-charge": {
+  "key": "[[\"Map<String, dynamic>\",\"List<Map<String, String>>\",\"Function/1\",\"Map<String, String>\"],\"Map<String, String>?\"]",
+  "why": "file gen_composite_att_fee.dart — The argument type 'num Function(Map<String, dynamic>)' can't be assigned to the "
+ },
+ "sup-score": {
+  "key": "[[\"Map<String, dynamic>\",\"int?\",\"int\",\"Function/2\",\"Function/1\",\"Function/1\",\"Map<String, int>\"],\"int\"]",
+  "why": "file gen_composite_att_fee.dart — The argument type 'num Function(Map<String, dynamic>)' can't be assigned to the "
+ },
+ "tier-of": {
+  "key": "[[\"int\",\"int\",\"Map<String, dynamic>\"],\"Map<String, String>\"]",
+  "why": "file gen_composite_att_fee.dart — The argument type 'num Function(Map<String, dynamic>)' can't be assigned to the "
+ },
+ "time-to-min": {
+  "key": "[[\"String?\",\"Map<String, int>\"],\"num\"]",
+  "why": "file gen_composite_att_fee.dart — The argument type 'num Function(Map<String, dynamic>)' can't be assigned to the "
+ },
+ "to-csv": {
+  "key": "[[\"List<dynamic>\",\"Function/1\"],\"String\"]",
+  "why": "file gen_composite_att_fee.dart — The argument type 'num Function(Map<String, dynamic>)' can't be assigned to the "
+ },
+ "wa-payment-text": {
+  "key": "[[\"String\",\"String\",\"num\",\"Map<String, Map<String, String>>?\",\"Function/3\",\"Function/1\",\"Map<String, String>\"],\"String\"]",
+  "why": "file gen_composite_att_fee.dart — The argument type 'num Function(Map<String, dynamic>)' can't be assigned to the "
+ },
+ "name-sort-key": {
+  "key": "[[\"String\",\"Function/1\",\"Set<String>\"],\"String\"]",
+  "why": "file gen_composite_stu_att_fee.dart — The argument type 'num Function(Map<String, dynamic>)' can't be assigned to the "
+ },
+ "norm-name": {
+  "key": "[[\"String\",\"Function/1\"],\"String\"]",
+  "why": "file gen_composite_stu_att_fee.dart — The argument type 'num Function(Map<String, dynamic>)' can't be assigned to the "
+ },
+ "num-match": {
+  "key": "[[\"String?\",\"int\"],\"bool\"]",
+  "why": "file gen_composite_stu_att_fee.dart — The argument type 'num Function(Map<String, dynamic>)' can't be assigned to the "
+ },
+ "task-overdue": {
+  "key": "[[\"Map<String, dynamic>\",\"String\"],\"bool\"]",
+  "why": "file gen_composite_stu_att_fee.dart — The argument type 'num Function(Map<String, dynamic>)' can't be assigned to the "
+ },
+ "tel-href": {
+  "key": "[[\"String?\",\"Map<String, String>\"],\"String?\"]",
+  "why": "file gen_composite_stu_att_fee.dart — The argument type 'num Function(Map<String, dynamic>)' can't be assigned to the "
+ },
+ "wa-link": {
+  "key": "[[\"String\",\"String\",\"Function/1\",\"Map<String, String>\"],\"String?\"]",
+  "why": "file gen_composite_stu_att_fee.dart — The argument type 'num Function(Map<String, dynamic>)' can't be assigned to the "
+ },
+ "course-fits-member": {
+  "key": "[[\"Map<String, dynamic>\",\"String?\",\"int?\",\"String?\",\"Function/?\",\"Map<String, String>\"],\"bool\"]",
+  "why": "file gen_courses_subset.dart — The argument type 'Null' can't be assigned to the parameter type 'Map<String, dy"
+ },
+ "enroll-count": {
+  "key": "[[\"Map<String, List<dynamic>>\",\"String\",\"Map<String, String>\"],\"int\"]",
+  "why": "file gen_courses_subset.dart — The argument type 'Null' can't be assigned to the parameter type 'Map<String, dy"
+ },
+ "next-session-date": {
+  "key": "[[\"Map<String, List<dynamic>>\",\"DateTime\",\"Function/1\"],\"DateTime?\"]",
+  "why": "file gen_courses_subset.dart — The argument type 'Null' can't be assigned to the parameter type 'Map<String, dy"
+ },
+ "room-info-label": {
+  "key": "[[\"Map<String, dynamic>\",\"Map<String, String>\"],\"String\"]",
+  "why": "file gen_courses_subset.dart — The argument type 'Null' can't be assigned to the parameter type 'Map<String, dy"
+ },
+ "schedule-clash-text": {
+  "key": "[[\"Map<String, List<dynamic>>\",\"String\",\"Map<String, dynamic>\",\"Function/1\",\"List<String>\",\"Map<String, String>\"],\"String?\"]",
+  "why": "file gen_courses_subset.dart — The argument type 'Null' can't be assigned to the parameter type 'Map<String, dy"
+ },
+ "teacher-id-of": {
+  "key": "[[\"Map<String, dynamic>\",\"String?\"],\"String?\"]",
+  "why": "file gen_courses_subset.dart — The argument type 'Null' can't be assigned to the parameter type 'Map<String, dy"
+ },
+ "waitlist-for": {
+  "key": "[[\"List<dynamic>\",\"String\",\"Map<String, String>\"],\"List<dynamic>\"]",
+  "why": "file gen_courses_subset.dart — The argument type 'Null' can't be assigned to the parameter type 'Map<String, dy"
+ },
+ "weekly-room-sessions": {
+  "key": "[[\"Map<String, List<dynamic>>\",\"String\",\"String\",\"Function/1\"],\"int\"]",
+  "why": "file gen_courses_subset.dart — The argument type 'Null' can't be assigned to the parameter type 'Map<String, dy"
+ }
+}

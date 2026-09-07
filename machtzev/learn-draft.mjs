@@ -26,7 +26,8 @@ if (argv.includes('--record')) {
     const attempt = Math.floor(Date.now() / 1000);
     // R3-5.2: שורה רק לקובץ שבאמת השתנה מול HEAD (blob-לפני ≠ תוכן-נוכחי); אחרת הטיוטה בלתי-ניתנת-לסיפוק
     const changed = inNew.filter((p) => { const b = git('rev-parse', `HEAD:${p}`); if (!b) return true; try { return git('hash-object', p) !== b; } catch { return true; } });
-    for (const g of gates) for (const p of changed) rows.push({ ts: attempt, attempt, gate: g, path: p, sha, blob_before: git('rev-parse', `HEAD:${p}`), resolved: false });
+    // L87-ו · תקרה: 3 קבצים לשער לניסיון — commit רחב (158 קבצים) הציף 270 טיוטות על כשל-אחד; טיוטה אחת לשער מספיקה כראיה, השאר רעש
+    for (const g of gates) for (const p of changed.slice(0, 3)) rows.push({ ts: attempt, attempt, gate: g, path: p, sha, blob_before: git('rev-parse', `HEAD:${p}`), resolved: false });
     if (gates.length && !changed.length) for (const g of gates) rows.push({ ts: attempt, attempt, gate: g, path: null, sha, blob_before: null, resolved: false });
   } else {
     for (const r of rows) if (!r.resolved && (r.path === null || staged.includes(r.path))) r.resolved = true;

@@ -34,9 +34,11 @@ function run(cmd, args, cwd = ROOT, { quiet = false, allowFail = false } = {}) {
 const node = (rel, args = [], o) => run('node', [path.join(ROOT, rel), ...args], ROOT, o);
 
 // ── 1 · regen (המחוללים, בסדר) ──
-log('regen · ds-forge (מלא) ⇒ auto-skin ⇒ auto-logic ⇒ skin-golden ⇒ core-from-shape ⇒ core-dart ⇒ app-from-sentences');
+log('regen · ds-forge (מלא) ⇒ auto-skin ⇒ tighten-types ⇒ index ⇒ auto-logic ⇒ skin-golden ⇒ core-from-shape ⇒ core-dart ⇒ app-from-sentences');
 node('machtzev/ds-forge.mjs');
 node('machtzev/generator/auto-skin.mjs');           // G17b · בורר-אטום-לפי-ייעוד ⇒ auto-skin.json (שער autoskin)
+node('machtzev/generator/tighten-types.mjs', ['--record', '--apply']);   // G20 · הידוק-טיפוסים במנועי-maor מראיית-בדיקות-ה-JS (אידמפוטנטי; שער tighten)
+node('machtzev/census/logic-census.mjs', [], { quiet: true }); node('machtzev/census/oracle.mjs', ['--write'], { quiet: true });   // G20 · אינדקס-האמת עם החתימות המהודקות — לפני הבורר (השער מדרג מול האינדקס הטרי)
 node('machtzev/generator/auto-logic.mjs');          // G18 · בורר-מנוע-לוגיקה-לפי-ייעוד ⇒ auto-logic.json (שער autologic)
 node('machtzev/generator/skin-golden.mjs');
 node('machtzev/generator/core-from-shape.mjs');   // הגרעין מהסכמה+מונחים (שער core) — L80: מונח חדש ⇒ הרישום נגזר מחדש כאן, לא ביד
@@ -52,6 +54,7 @@ const genDst = path.join(LIB, 'dart-gen-bs'); fs.mkdirSync(genDst, { recursive: 
 for (const f of fs.readdirSync(genDst)) if (/^gen_.*\.dart$/.test(f) && !fs.existsSync(path.join(GEN, f))) fs.unlinkSync(path.join(genDst, f));
 for (const f of fs.readdirSync(GEN)) if (/^gen_.*\.dart$/.test(f)) fs.copyFileSync(path.join(GEN, f), path.join(genDst, f));
 for (const f of fs.readdirSync(DS)) if (f.endsWith('.dart')) fs.copyFileSync(path.join(DS, f), path.join(LIB, 'dart-ui-bs/ds', f));
+const DMIR = path.join(LIB, 'dart-maor'); if (fs.existsSync(DMIR)) for (const f of fs.readdirSync(DMIR)) if (f.endsWith('.dart') && fs.existsSync(path.join(ROOT, 'new/dart-maor', f))) fs.copyFileSync(path.join(ROOT, 'new/dart-maor', f), path.join(DMIR, f));   // G20 · מנועי-maor: קבצים קיימים-במראה בלבד (חתימות מהודקות)
 for (const f of fs.readdirSync(genDst)) if (/^zz_shot_/.test(f)) fs.unlinkSync(path.join(genDst, f));   // שאריות-ראיה
 
 // ── 3 · אימות: analyze 0 · flutter test genesis_* · שערי-המחולל · אינדקס+אמת ──
@@ -70,6 +73,7 @@ node('machtzev/generator/retarget.mjs', ['--gate'], { quiet: true });
 node('machtzev/generator/skin-golden.mjs', ['--gate'], { quiet: true });
 node('machtzev/generator/app-from-sentences.mjs', ['--gate'], { quiet: true });
 if (flag('--full-verify')) { log('gen-verify --gate (רנדר-בפועל של כל הפלטים)'); node('machtzev/generator/gen-verify.mjs', ['--gate']); }
+node('machtzev/census/logic-census.mjs', [], { quiet: true });   // G20 · חתימות-הלוגיקה (מהודקות) לפני האורקל
 node('machtzev/census/atom-index.mjs', [], { quiet: true });
 node('machtzev/census/oracle.mjs', ['--write'], { quiet: true });
 node('machtzev/truth.mjs', ['--write'], { quiet: true });
@@ -115,7 +119,7 @@ if (!flag('--no-commit')) {
   const trailer = `\n\n${AUTHOR}${SESSION ? '\nClaude-Session: ' + SESSION : ''}`;
   // buildsmart — רק מה שהמחולל/המראה כותבים (L74-ז: לא add -A)
   const genTests = fs.readdirSync(path.join(APP, 'test')).filter((f) => /^genesis_.*_test\.dart$/.test(f)).map((f) => 'app_flutter/test/' + f);
-  run('git', ['add', 'app_flutter/lib/genesis/dart-forge-bs', 'app_flutter/lib/genesis/dart-gen-bs', 'app_flutter/lib/genesis/dart-ui-bs/ds', 'app_flutter/pubspec.yaml', 'app_flutter/assets/fonts', ...genTests], BS, { quiet: true, allowFail: true });
+  run('git', ['add', 'app_flutter/lib/genesis/dart-forge-bs', 'app_flutter/lib/genesis/dart-gen-bs', 'app_flutter/lib/genesis/dart-ui-bs/ds', 'app_flutter/lib/genesis/dart-maor', 'app_flutter/pubspec.yaml', 'app_flutter/assets/fonts', ...genTests], BS, { quiet: true, allowFail: true });
   let bsCommitted = false;
   if (run('git', ['diff', '--cached', '--name-only'], BS, { quiet: true }).stdout.trim()) { log('commit · buildsmart'); commitWith(BS, `genesis-mirror · ${MSG}${trailer}`); bsCommitted = true; } else log('commit · buildsmart ללא שינוי');
   // genesis — pins ⇒ add -A ⇒ Allow trailers לקבצים נעולים (CLAUDE.md=הכרעה-24 · אחרים=--lesson)

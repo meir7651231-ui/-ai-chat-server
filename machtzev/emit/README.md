@@ -15,6 +15,10 @@
 נשארים ניטיביים פר-מטרה. להשלמה מלאה = הבשלת-כללים (class/record/is) — יום-יומיים.
 לא מהדר-כללי; מנוע-פליטה לניב-מוגבל עם רשת-זהב.
 
+## G20 (6.9.2026) · חתימות מוקלדות במנוע-ה-AST — הכרעה-25
+`ast-js-to-dart.mjs` כבר לא פולט `dynamic` לכל חתימה: **הסקה סטטית** מצורת-ה-JS (ברירות-מחדל · שימוש בגוף · null) + **ראיית-בדיקות** (`--types machtzev/generator/type-evidence.json`) ⇒ `String toCsv(List<dynamic> rows, dynamic escape)`. פרמטר-Map ⇒ `m['k']`; פרמטר-nullable בשימוש-ישיר ⇒ `p!`; פרמטר מוקלד בהקשר-בוליאני ⇒ `_truthy(p)`.
+**`emitVerified`** = מצב-הייצור: מקלידים רק מה שהאנלייזר מקבל (הורדה מונחית-שגיאה, לעולם לא גרוע מהבסיס). מדידה: `node machtzev/emit/parity-ast.mjs 200 [--dynamic|--evidence|--verified|--diag]`.
+
 ## מנוע הפוך · JS→Dart (js-to-dart.mjs) — החלפת-שפת-מאור
 הכיוון הקשה (חסר-טיפוס→מטופס). טיפוסים נפתרים ב-`dynamic`; **האתגר האמיתי = ספריות-
 התקן השונות** (‏JS `.filter/.push/toLocaleString` מול Dart `.where/.add/intl`). טבלת-
