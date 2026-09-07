@@ -135,10 +135,10 @@ export function opsOf(shape) {
   const f = { kind: shape.kind, headline: shape.headline };
   try { return opsOfKind(f).map((o) => o.op); } catch { return null; }
 }
-export function searchOp(op, goal) {
+export function searchOp(op, goal, need = null, k = 3) {   // need: דריסת-צורך (G26: fact עם label+value ⇒ שורת מפתח-ערך)
   const fam = OPFAM[op] || op;
   if (LOGIC.has(op)) { const c = coverLogic({ op: fam, need: [], goal }); return { op, fam, logic: true, atoms: c.atoms || [], alts: c.alts || [] }; }
-  const c = cover({ op: fam, need: NEED[op] || [], goal });
+  const c = cover({ op: fam, need: need || NEED[op] || [], goal, k });
   return { op, fam, logic: false, atoms: c.atoms || [], alts: c.alts || [], missing: c.missing || [] };
 }
 
@@ -154,7 +154,7 @@ const SOCK = {
 // ctx: { label, value:{expr,type}, sub, fraction:{expr}, labels:[expr], rows:expr, glyph, nav:expr, message }
 export function wireAtom(cls, ctx) {
   const w = widgetOf(cls); if (!w) return null;
-  const args = [];
+  const args = []; const filled = [];
   for (const [name, t0] of w.types) {
     const t = t0.replace(/\?$/, ''); const req = w.required.has(name) || w.positional.includes(name);
     let e = null;
@@ -173,9 +173,10 @@ export function wireAtom(cls, ctx) {
     else if (SOCK.onSelect.test(name) && /ValueChanged<int>|void Function\(int\)/.test(t) && ctx.onSelect) e = ctx.onSelect;
     else if (SOCK.children.test(name) && /^List<Widget>/.test(t) && ctx.children) e = `[${ctx.children.join(', ')}]`;
     if (e == null) { if (req) return null; continue; }   // שקע-חובה בלי דאטה ⇒ האטום נפסל (§20-ג: אין ערך-מומצא)
-    args.push(w.positional.includes(name) ? e : `${name}: ${e}`);
+    args.push(w.positional.includes(name) ? e : `${name}: ${e}`); filled.push(name);
   }
-  return { cls, file: w.file, call: `${cls}(${args.join(', ')})` };
+  for (const m of ctx.must || []) if (!filled.some((n) => SOCK[m] && SOCK[m].test(n))) return null;   // G26 · שקע-נדרש-מהקורא (עובדה ⇒ value) לא קיים באטום ⇒ נפסל
+  return { cls, file: w.file, call: `${cls}(${args.join(', ')})`, filled };
 }
 
 // ── 4ב · חיווט-מנוע (G25): פרמטרים לפי שם-השקע (טלפון/טקסט) · פרמטר-בשם-מנוע-אח = שקע-פונקציה (ho) ⇒ ייבוא המנוע-האח. שקע בלי ערך ⇒ null ──
@@ -413,7 +414,7 @@ export function renderReport({ slug, report, k }) {
   const wired = (cls, ctx) => { const w = wireAtom(cls, ctx); if (w) imports.add(`import '../${w.file.startsWith('dart-') ? w.file : 'dart-ui-bs/' + w.file}';`); return w; };
   const firstWired = (pick, ctx) => { for (const cand of [...pick.atoms, ...pick.alts]) { const w = wired(cand.split('@')[0], ctx); if (w) return { ...w, cand }; } return null; };
   const goal = `${G.reportWord} ${root.name}`;
-  const picker = firstWired(searchOp('switch', goal), { items: `[for (final o in appStore.options('${rootSlug}')) o.value]`, selected: '_i', onSelect: '(i) => setState(() => _i = i)', label: k(root.name), glyph: k('🧩') });
+  const picker = firstWired(searchOp('switch', goal), { items: `[for (final o in appStore.options('${rootSlug}')) o.value]`, selected: 'i', onSelect: '(v) => setState(() => _sel = v)', label: k(root.name), glyph: k('🧩') });
   const empty = firstWired(searchOp('empty', goal), { message: k(T('reportEmpty', { ent: root.name })), label: k(root.name), glyph: k('🧩') });
   const used = []; const texts = [];
   for (const sec of report.sections) {
@@ -476,18 +477,21 @@ ${[...imports].sort().join('\n')}
 import 'package:flutter/material.dart';
 ${textFn}
 class ${cls} extends StatefulWidget {
-  const ${cls}({super.key});
+  const ${cls}({this.initialId, super.key});
+  final String? initialId;   // G26 · פתיחה מעמוד-השורש: הדוח של הרשומה הזו
   @override
   State<${cls}> createState() => _${cls}State();
 }
 
 class _${cls}State extends State<${cls}> {
-  int _i = 0;${exportFns}
+  int? _sel;${exportFns}
   @override
   Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, __) {
     final rs = appStore.records('${rootSlug}');
     if (rs.isEmpty) return DsScaffold(title: ${title}, subtitle: ${sub}, icon: ${k('📄')}, children: [${empty ? empty.call : 'const SizedBox.shrink()'}]);
-    final r0 = rs[_i.clamp(0, rs.length - 1)];
+    final i0 = _sel ?? (widget.initialId != null ? rs.indexWhere((r) => r[AppStore.idKey] == widget.initialId) : 0);
+    final i = (i0 < 0 ? 0 : i0).clamp(0, rs.length - 1);
+    final r0 = rs[i];
     final id0 = r0[AppStore.idKey] ?? '';
     return DsScaffold(title: ${title}, subtitle: ${sub}, icon: ${k('📄')}, children: [
       ${picker ? `Padding(padding: const EdgeInsets.only(bottom: 12), child: ${picker.call}),` : ''}

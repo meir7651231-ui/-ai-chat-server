@@ -970,6 +970,7 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
   if (abs.length) {
     const emBase = +(px(effText['font-size']) || 14);
     const pxe = v => { if (v == null) return null; if (/^0(px)?$/.test(String(v).trim())) return '0'; const p = px(v); if (p != null) return p; const em = /(-?\d*\.?\d+)em/.exec(v); return em ? (parseFloat(em[1]) * emBase).toFixed(2) : null; };
+    let indicatorHere = false;
     const pos = abs.map(a => {
       const p = [];
       // inset-block = top+bottom (קיצור), inset-block-start/end = top/bottom. בלי זה פס-אקצנט
@@ -1005,7 +1006,8 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
       { const aw2 = pxe(a.st['width']), amw2 = pxe(a.st['min-width']);
         if (CUR.items && CUR.items.selectable && t != null && b != null && l != null && r == null && aw2 == null && amw2 == null && /transform|width/.test(a.st['transition'] || '')) {
           const pp = String(st['padding'] || '0').trim().split(/\s+/).map(v => +(px(v) || 0)); const [pt, pr, pb, pl] = pp.length === 1 ? [pp[0], pp[0], pp[0], pp[0]] : pp.length === 2 ? [pp[0], pp[1], pp[0], pp[1]] : pp.length === 3 ? [pp[0], pp[1], pp[2], pp[1]] : pp;
-          return `Positioned(top: ${t}, bottom: ${b}, left: 0, right: 0, child: LayoutBuilder(builder: (context, bc) { final n = items?.length ?? ${CUR.items.demo || 1}; final idx = ((selected?.isEmpty ?? true) ? 0 : selected!.first).clamp(0, n - 1); final w = (bc.maxWidth - ${pl + pr}) / n; return Align(alignment: AlignmentDirectional.centerStart, child: Padding(padding: EdgeInsetsDirectional.only(start: ${isLtr ? pl : pr} + idx * w), child: SizedBox(width: w, child: ${a.e}))); }))`;
+          indicatorHere = true;   // G26: ה-Stack יתכווץ לרוחב-שורת-הפריטים (IntrinsicWidth) — אחרת הפס נמדד מרוחב-ההורה (סרגל-תחתון) ומכסה את כל הפריטים
+          return `Positioned(top: ${t}, bottom: ${b}, left: ${pl}, right: ${pr}, child: Builder(builder: (context) { final n = items?.length ?? ${CUR.items.demo || 1}; final idx = ((selected?.isEmpty ?? true) ? 0 : selected!.first).clamp(0, n - 1); return Align(alignment: AlignmentDirectional(n > 1 ? -1 + 2 * idx / (n - 1) : 0, 0), child: FractionallySizedBox(widthFactor: 1 / n, heightFactor: 1, child: ${a.e})); }))`;   // בלי LayoutBuilder — IntrinsicWidth (רוחב-שורת-הפריטים) אינו תומך ב-intrinsics של LayoutBuilder
         } }
       return p.length ? `Positioned(${p.join(', ')}, child: ${a.e})` : `Positioned.fill(child: ${a.e})`;
     });
@@ -1027,6 +1029,7 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     zItems.forEach((it, i) => (it.i = i));
     zItems.sort((a, b) => a.z - b.z || a.i - b.i);
     inner = `Stack(clipBehavior: Clip.none${stackAlign ? `, alignment: ${stackAlign}` : ''}, children: [${zItems.map(it => it.w).join(', ')}])`;
+    if (indicatorHere) inner = `IntrinsicWidth(child: ${inner})`;   // G26 · מחוון-מחליק: רוחב-ה-Stack = רוחב-שורת-הפריטים
     // בלוק-במסגרת-בלוק (לא פריט-flex) בלי רוחב-מפורש = מילוי-רוחב-הורה (CSS block) ⇒ Positioned right:0
     // מתיישר לקצה-המיכל (li ברשימה: המספר/הנקודה בשוליים), לא לקצה-הטקסט. פריט-flex (avw) נשאר גודל-תוכן.
     if (!parentFlex && !st['width'] && !/^inline/.test(st['display'] || '')) inner = `SizedBox(width: double.infinity, child: ${inner})`;

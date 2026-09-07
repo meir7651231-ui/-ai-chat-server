@@ -33,7 +33,7 @@ function scoreDisplay(a, need, goalRank) {
   return hit * 10 - extra * 1.5 + (gr != null ? Math.max(0, 6 - gr) : 0) + tier(a.file) - (a.unindexed ? 0.1 : 0);
 }
 
-export function cover({ op, need = [], goal = '' }) {
+export function cover({ op, need = [], goal = '', k = 3 }) {   // k: עומק-החלופות (G26: קורא עם must צולל עמוק יותר)
   if (LOGIC_OPS.has(op)) return coverLogic({ op, need, goal });
   const goalRank = new Map();
   if (goal) retrieve(goal, 12).forEach((r, i) => goalRank.set(r.cls, i));
@@ -49,7 +49,7 @@ export function cover({ op, need = [], goal = '' }) {
     if (chosen.length >= 4) break;                                   // עומק-הרכבה מקסימלי (כמו synth)
   }
   const missing = need.filter((n) => !covered.has(n));
-  return { op, need, atoms: chosen, alts: ranked.slice(0, 3).map((x) => x.a.id), composed: chosen.length > 1, missing, ok: chosen.length > 0 && missing.length === 0 };
+  return { op, need, atoms: chosen, alts: ranked.slice(0, k).map((x) => x.a.id), composed: chosen.length > 1, missing, ok: chosen.length > 0 && missing.length === 0 };
 }
 
 // ── אינדקס-מטרה למנועי-לוגיקה: העברית מכותרת-הקובץ של האטום עצמו (הצהרת-האטום, לא מילון) + atlas.he אם קיים.

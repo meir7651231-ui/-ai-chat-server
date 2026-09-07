@@ -10,6 +10,9 @@ import { interpret as entInterpret } from './entity.mjs';
 import { renderEntity, renderDashboard, renderHub, renderSystem, renderMain, renderScreenBind, renderCompose, renderRecordDetail, SCREEN_REGISTRY, makeConsts, write } from './render-ds.mjs';
 import { PARTICLE_RE, CONTENT_RE, REPORT_RE, parseParticleLines, parseContentLines, parseReportLines, planParticles, planReports, renderParticles, renderReport, renderReportTest, planReport, reportsMd } from './particles.mjs';   // G23 · הכרעה-27
 import { nlToSpec } from './nl-spec.mjs';
+import { pickRoot, renderRootPage, renderShell } from './app-shell.mjs';
+import fs0 from 'node:fs';
+const SL = JSON.parse(fs0.readFileSync(new URL('./spec-lang.data.json', import.meta.url), 'utf8'));
 import { L, T } from './chrome.mjs';
 import * as R from '../root.mjs';
 
@@ -66,7 +69,9 @@ export function buildApp(specText) {
   const particleLines = all0.filter((l) => PARTICLE_RE.test(l));   // G23 · חלקיקים (צעד 2) — לא ישויות
   const contentLines = all0.filter((l) => CONTENT_RE.test(l));     // G24 · אטומי-תוכן (מילה-במילה מהמסמך)
   const reportLines = all0.filter((l) => REPORT_RE.test(l));       // G24 · חלקיקי-דוח
-  const all = all0.filter((l) => !PARTICLE_RE.test(l) && !CONTENT_RE.test(l) && !REPORT_RE.test(l));
+  const APP_RE = new RegExp('^\\s*' + SL.appWord + '\\s*:\\s*(.+)$');   // G26 · `אפליקציה: <שם>` — שם-המוצר על המסך (במקום כרום-המנוע)
+  const appLine = all0.map((l) => l.match(APP_RE)).find(Boolean); const appName = appLine ? appLine[1].trim() : null;
+  const all = all0.filter((l) => !PARTICLE_RE.test(l) && !CONTENT_RE.test(l) && !REPORT_RE.test(l) && !APP_RE.test(l));
   const roles = all.filter((l) => ROLE_RE.test(l)).map(parseRole);
   const lines = all.filter((l) => !ROLE_RE.test(l));
   const info = lines.map((line, idx) => ({ line, i: idx + 1, isEnt: ENTITY_RE.test(line) }));
@@ -128,7 +133,7 @@ export function buildApp(specText) {
 
   // ניקוי פלט-app קודם
   // L95: ניקוי רק בתוך מרחב-השמות — בלי --name היה מוחק גם gen_app_kehila/tzedaka/… של app-from-sentences (אותה מחלה כמו genesis-gen, L93)
-  const own = NS ? new RegExp(`^gen_${P}(ent|px|rp|scr|bind|rec|over|audit|flags|settings|hub|main|relations)\\d*(_content)?\\.dart$`) : /^gen_app_(ent|px|rp|scr|bind|rec|over|audit|flags|settings|hub|main|relations)\d*(_content)?\.dart$/;
+  const own = NS ? new RegExp(`^gen_${P}(ent|px|rp|scr|bind|rec|over|audit|flags|settings|hub|main|relations|shell|root)\\d*(_content)?\\.dart$`) : /^gen_app_(ent|px|rp|scr|bind|rec|over|audit|flags|settings|hub|main|relations|shell|root)\d*(_content)?\.dart$/;
   for (const f of fs.readdirSync(OUT)) if (own.test(f)) fs.unlinkSync(path.join(OUT, f));
   for (const f of fs.readdirSync(DATA)) if (own.test(f)) fs.unlinkSync(path.join(DATA, f));
 
@@ -210,7 +215,7 @@ export function buildApp(specText) {
   }
 
   // 🧩 G23 · הכרעה-27: מסך-חלקיקים לכל ישות שיש לה חלקיקים — כל חלקיק נמצא בחיפוש בכל הקטלוג ומורכב מחדש
-  const particleScreens = []; const reportScreens = [];
+  const particleScreens = []; const reportScreens = []; const reportByEnt = {};
   if (particleLines.length || reportLines.length) {
     const content = parseContentLines(contentLines);
     const pents = entMeta.map((e) => { const li = info.find((x) => x.isEnt && `${P}ent${x.i}` === e.slug); const r = li ? entRes[li.i] : null; const sc = screens.find((x) => x.slug === e.slug); return { name: e.name, slug: e.slug, cls: sc ? sc.cls : 'Gen' + e.slug, schema: r ? r.schema : [] }; });
@@ -237,6 +242,7 @@ export function buildApp(specText) {
         if (fs.existsSync(path.join(bsTest, '..', 'pubspec.yaml'))) fs.writeFileSync(path.join(bsTest, `genesis_gen_${rslug}_report_test.dart`), renderReportTest({ ns: nsName, slug: rslug, report: rp, textFn: r.textFn }));
       }
       reportScreens.push({ slug: rslug, cls: r.cls, kind: 'entity', name: `📄 ${T('reportTitle', { ent: rp.entity })}`, icon: '📄', sub: `${r.count} ${L.reportSections}${r.notes.length ? ` · ${r.notes.length} ${L.reportUnres}` : ''}` });
+      reportByEnt[rp.entity] = { slug: rslug, cls: r.cls };
     }
     fs.writeFileSync(path.join(gen, `particle-plan-${nsName}.md`), planReport(plan) + (reports.length ? reportsMd(reports) : ''));
     if (reportLines.length) fs.writeFileSync(path.join(gen, `report-plan-${nsName}.json`), JSON.stringify(reports.map((r) => ({ entity: r.entity, ok: r.ok, unresolved: r.unresolved, export: r.export ? { label: r.export.label, toField: r.export.toField, ok: r.export.ok, action: (r.export.action.atoms[0] || null), link: r.export.link ? r.export.link.name : null } : null, sections: r.sections.map((s) => ({ name: s.name, refs: s.refs.map((x) => ({ raw: x.raw, mode: x.mode || null, why: x.why || null, wired: x.p && x.p.wired ? x.p.wired : [] })) })) })), null, 1));
@@ -254,9 +260,25 @@ export function buildApp(specText) {
   // RLS · שדות-היקף ייחודיים (slug+שדה) — למילוי בורר-"מי-אני" בלוח.
   const scopeFields = [];
   for (const role of roles) for (const sc of (role.scope || [])) { const sl = nameToSlug[sc.ent]; if (sl && !scopeFields.some((x) => x.slug === sl && x.field === sc.field)) scopeFields.push({ slug: sl, field: sc.field }); }
-  const hub = renderHub(`${P}hub`, { title: L.appTitle, icon: '🏗️', screens: [...screens, ...reportScreens, ...particleScreens, ...composeScreens, ...detailScreens, ...bindScreens, ...sys], roles, scopeFields });
+  const appTitle = appName || L.appTitle;
+  const hub = renderHub(`${P}hub`, { title: appTitle, icon: '🏗️', screens: [...screens, ...reportScreens, ...particleScreens, ...composeScreens, ...detailScreens, ...bindScreens, ...sys], roles, scopeFields });
+  // 🧭 G26 · ניווט-מקשרים: השורש = הישות עם הכי-הרבה מצביעים (backRefs); יש שורש ⇒ שלד (בית · שורש · עוד) הוא הבית, הרכזת = "עוד" (ביט-זהה)
+  const rootMeta = pickRoot(entMeta, backRefs);
+  let home = { slug: `${P}hub`, cls: hub.cls };
+  if (rootMeta) {
+    const entOf = (name) => { const sc = screens.find((x) => x.kind === 'entity' && x.name === name); const li = info.find((x) => x.isEnt && entRes[x.i] && entRes[x.i].entity === name); const r = li ? entRes[li.i] : null; return { name, slug: nameToSlug[name], cls: sc ? sc.cls : null, schema: r ? r.schema : [], stages: r ? (r.stages || []) : [], icon: '🗂️' }; };
+    const descRank = (f) => f.type === 'multiline' ? 0 : (f.enumVals && f.enumVals.length) ? 3 : f.type === 'num' ? 4 : f.type === 'date' ? 5 : f.type === 'bool' ? 6 : f.label.split(/\s+/).length > 1 ? 1 : 2;   // מתאר-רשומה לפי צורה: רב-שורתי > תווית-רב-מילים > טקסט > enum > מספר > תאריך
+    const descOf = (e, skip = []) => { const t = e.schema.filter((f) => !f.formula && !(f.members && f.members.length) && !skip.includes(f.label) && !entMeta.some((x) => x.name === f.label)).map((f, i) => [descRank(f), i, f]).sort((a, b) => a[0] - b[0] || a[1] - b[1]); return t.length ? t[0][2].label : null; };
+    const rootE = entOf(rootMeta.name); rootE.descField = descOf(rootE); rootE.subField = (rootE.schema.find((f) => f.label !== rootE.descField && !(f.members && f.members.length) && !entMeta.some((x) => x.name === f.label)) || {}).label || null;
+    const kids = (backRefs[rootMeta.name] || []).map((b) => { const e = entOf(b.fname); e.link = b.ffield; e.descField = descOf(e, [b.ffield]); e.subField = (e.schema.find((f) => f.label !== e.descField && f.label !== b.ffield && !(f.members && f.members.length)) || {}).label || null; return e; }).filter((e) => e.cls);
+    const rootPage = renderRootPage(`${P}root`, { root: rootE, children: kids, report: reportByEnt[rootMeta.name] || null, title: appTitle });
+    const dash = screens.find((x) => x.kind === 'dashboard') || null;
+    const shell = renderShell(`${P}shell`, { title: appTitle, root: rootE, rootPage, dashboard: dash, hub: { slug: `${P}hub`, cls: hub.cls } });
+    home = { slug: `${P}shell`, cls: shell.cls };
+    console.log(`🧭 ${L.shellLog}: ${L.shellRootWord} ${rootMeta.name} · ${kids.length} ${L.shellChildrenWord} · ${shell.nav || '—'}${[...rootPage.notes, ...shell.notes].length ? ' · ⚪ ' + [...rootPage.notes, ...shell.notes].join(' · ') : ''}`);
+  }
   // שורש-האפליקציה: main + MaterialApp ⇒ אפליקציה עצמאית שרצה בלי entry-זמני.
-  renderMain(`${P}main`, { title: L.appTitle, hubSlug: `${P}hub`, hubCls: hub.cls, edges });
+  renderMain(`${P}main`, { title: appTitle, hubSlug: home.slug, hubCls: home.cls, edges });
 
   return { screens, sys, roles };
 }
@@ -272,7 +294,7 @@ if (import.meta.url === 'file://' + process.argv[1]) {
     const [{ skinPass }, { resolveSkin }, { autoSkin }] = await Promise.all([import('./retarget.mjs'), import('./app-from-sentences.mjs'), import('./auto-skin.mjs')]);
     const sk = resolveSkin(autoSkin().skin); const tot = {};
     for (const f of fs.readdirSync(OUT)) {
-      if (!new RegExp(`^gen_${P}(ent|px|rp|scr|bind|rec|over|audit|flags|settings|hub|main)\\d*\\.dart$`).test(f)) continue;
+      if (!new RegExp(`^gen_${P}(ent|px|rp|scr|bind|rec|over|audit|flags|settings|hub|main|shell|root)\\d*\\.dart$`).test(f)) continue;
       const fp = path.join(OUT, f); const { code, stats } = skinPass(fs.readFileSync(fp, 'utf8'), sk);
       fs.writeFileSync(fp, code); for (const [k, v] of Object.entries(stats)) tot[k] = (tot[k] || 0) + v;
     }

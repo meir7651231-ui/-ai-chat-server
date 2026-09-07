@@ -81,5 +81,17 @@
  "exportLog": "ייצוא-דוח",
  "exportTest": "בדיקת-ייצוא מחוללת",
  "exportNoLink": "אף מנוע-קישור לא מתחווט (טלפון+טקסט)",
- "exportNoAction": "אף אטום-פעולה לא מתחווט לכפתור-הייצוא"
+ "exportNoAction": "אף אטום-פעולה לא מתחווט לכפתור-הייצוא",
+ "shellHome": "בית",
+ "shellMore": "עוד",
+ "shellNoNav": "אף אטום-בורר לא מתחווט לסרגל-התחתון",
+ "rootFacts": "פרטים",
+ "rootAdd": "הוספת {ent}",
+ "rootReport": "דוח",
+ "rootMissing": "הרשומה לא נמצאה",
+ "rootNoFact": "אף אטום-עובדה (label+value) לא מתחווט",
+ "rootNoAction": "אף אטום-פעולה לא מתחווט",
+ "shellLog": "ניווט-מקשרים (G26)",
+ "shellRootWord": "שורש",
+ "shellChildrenWord": "ישויות-בנות"
 }

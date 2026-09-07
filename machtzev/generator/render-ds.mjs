@@ -529,7 +529,8 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   // נגזרת טהורה מהחנות (count/sum), מגיבה לכל שינוי. אוניברסלי (כל ישות מקבלת מונה).
   const kpiNumTiles = numFields.slice(0, 2).map((fc) => `const SizedBox(width: 10), Expanded(child: DsStat(label: ${fc}, value: appStore.sum(${SK}, ${fc}).toStringAsFixed(0), sub: ${k(L.sum)}, glyph: ${k('🧮')}))`).join(', ');
   const kpiStrip = `AnimatedBuilder(animation: appStore, builder: (context, _) => Padding(padding: const EdgeInsets.only(bottom: 12), child: Row(children: [Expanded(child: DsStat(label: ${cTitle}, value: appStore.count(${SK}).toString(), sub: ${k(L.totalRecords)}, glyph: ${k('🗂️')}))${kpiNumTiles ? ', ' + kpiNumTiles : ''}]))),`;
-  const listRead = hasScope ? `appStore.scoped(${SK}, _rlsScope[_rlsRole])` : `appStore.records(${SK})`;
+  const listRead0 = hasScope ? `appStore.scoped(${SK}, _rlsScope[_rlsRole])` : `appStore.records(${SK})`;
+  const listRead = `(widget.scopeId == null ? ${listRead0} : ${listRead0}.where((r) => (r[widget.scopeField ?? ''] ?? '') == widget.scopeId).toList())`;   // G26 · היקף-הורה
   const cardSig = rlsActive ? 'Widget _card(Map<String, String> r, Set<int> hidden) {' : 'Widget _card(Map<String, String> r) {';
   const cardHiddenArg = rlsActive ? ', hidden: hidden' : '';
   const cardCall = rlsActive ? '_card(rs[i], _rlsHiddenSet)' : '_card(rs[i])';
@@ -589,15 +590,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class ${cls} extends StatefulWidget {
-  const ${cls}({super.key});
+  const ${cls}({this.scopeField, this.scopeId, super.key});
+
+  final String? scopeField;   // G26 · היקף-הורה (ניווט-מקשרים): שדה-הקשר + מזהה ⇒ הרשימה מסוננת לרשומת-ההורה והטופס ממולא-מראש
+  final String? scopeId;
 
   @override
   State<${cls}> createState() => _${cls}State();
 }
 
 class _${cls}State extends State<${cls}> {
+  static const List<String> _labelsAll = [${labelConst.join(', ')}];
   Map<int, String> _v = ${defInit};
   String? _editId;   // ריק = הוספה · מזהה = עריכת-רשומה קיימת
+  void _prefill() { if (widget.scopeId != null) { final i = _labelsAll.indexOf(widget.scopeField ?? ''); if (i >= 0) _v[i] = widget.scopeId!; } }
+  @override
+  void initState() { super.initState(); _prefill(); }
   String _q = '';    // מחרוזת-חיפוש (סינון-רשומות חי)
 ${viewField}${hasVal ? '  String? _err;      // שגיאת-ולידציה (שדות-חובה חסרים)\n' : ''}
 
@@ -614,7 +622,7 @@ ${hasVal ? `    final miss = <String>[];
     } else {
       appStore.add(${SK}, <String, String>{...map${hasStages ? `, '__stage': '0'` : ''}});
     }
-    setState(() { _v = ${defInit}; _editId = null;${hasVal ? ' _err = null;' : ''} });
+    setState(() { _v = ${defInit}; _editId = null;${hasVal ? ' _err = null;' : ''} _prefill(); });
   }
 
   void _edit(Map<String, String> r) {
