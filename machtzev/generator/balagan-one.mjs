@@ -119,6 +119,9 @@ if (!/if \(empty\) Padding\(padding: const EdgeInsets\.only\(top: 6\), child: Wr
 if (!/balaganWaStrip\(/.test(moments) || !/balaganWaSender\(/.test(moments) || !/balaganStripGrammar\(balaganWaStrip\(text\)\)/.test(moments)) fails.push('balaganFacts/Identify בלי קילוף כותרת-וואטסאפ');
 { const kc = rd(path.join(R.dataOutDir(), 'gen_balagan_keys_content.dart')); if (!/הוסף למסך הבית/.test(kc)) fails.push('«חיבורים» בלי תזכורת-התקנה'); }
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganWaStrip\(/.test(ft)) fails.push('בדיקת ייצוא-וואטסאפ חסרה'); }
+// גל ב׳-כ · מצב-ערב (מחר פתוח מהשעה שנקבעה) · «בוצע … · החזר» ליד העין
+if (!/appStore\.setting\('eveningHour', '18'\)/.test(home) || !/DsFold\(open: evening/.test(home) || !/showUndo/.test(home)) fails.push('«היום» בלי מצב-ערב / החזר-מיידי');
+if (!/appStore\.setting\('eveningHour'/.test(behavior)) fails.push('«התנהגות» בלי שעת-ערב');
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);
