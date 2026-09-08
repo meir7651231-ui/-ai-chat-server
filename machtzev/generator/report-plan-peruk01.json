@@ -107,6 +107,19 @@
     ]
    },
    {
+    "name": "לוח",
+    "refs": [
+     {
+      "raw": "לוח",
+      "mode": "particle",
+      "why": null,
+      "wired": [
+       "KvLine"
+      ]
+     }
+    ]
+   },
+   {
     "name": "הסתייגות",
     "refs": [
      {

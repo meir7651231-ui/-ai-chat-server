@@ -10,6 +10,7 @@
 | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
 | לא נכנס | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
 | צבע | ממצא | partition | group⇒AnimatedEmpty (AnimatedEmpty/DsSection) · alert⇒AlertBanner (AlertBanner/ToastCard) | DsSection + DsNote |
+| לוח | תיק | dates | magnitude⇒KpiTile (KpiTile/ProgressRing) | KvLine |
 
 # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
 
@@ -24,4 +25,5 @@
 | תיק | בקשות לשינוי | [תוכן בקשות לשינוי] | content | DsNote |
 | תיק | החלטה | החלטה | particle (שדה) | DsChip |
 | תיק | מה לא בדקנו | [תוכן מה לא בדקנו] | content | DsNote |
+| תיק | לוח | לוח | particle | KvLine |
 | תיק | הסתייגות | [תוכן הסתייגות] | content | DsNote |

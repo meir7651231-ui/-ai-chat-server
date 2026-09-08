@@ -58,7 +58,7 @@
    "לא מציאת דירה",
    "לא מו״מ על כל השוק"
   ],
-  "fields": 8,
+  "fields": 12,
   "outputs": [
    "כרטיס",
    "דיף סעיפים",
@@ -97,7 +97,7 @@
   ],
   "forbidden": 4,
   "disclaimer": true,
-  "content": 61
+  "content": 57
  },
  {
   "id": 19,

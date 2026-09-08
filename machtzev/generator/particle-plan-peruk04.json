@@ -239,5 +239,112 @@
    "DsSection",
    "DsNote"
   ]
+ },
+ {
+  "entity": "תיק",
+  "name": "דיף סעיפים",
+  "expr": "[דיף] שכ״ד ישן ← שכ״ד חדש × 12; בטוחות ישנות ← בטוחות חדשות",
+  "ok": true,
+  "why": null,
+  "shape": "diff",
+  "ops": [
+   "trend",
+   "magnitude"
+  ],
+  "picks": [
+   {
+    "op": "trend",
+    "atoms": [
+     "TrendStat"
+    ],
+    "alts": [
+     "TrendStat",
+     "DsDiffRow",
+     "PremiumStat"
+    ]
+   },
+   {
+    "op": "magnitude",
+    "atoms": [
+     "KpiTile"
+    ],
+    "alts": [
+     "KpiTile",
+     "ProgressRing",
+     "StatHero"
+    ]
+   }
+  ],
+  "wired": [
+   "DsDiffRow",
+   "KvLine"
+  ]
+ },
+ {
+  "entity": "תיק",
+  "name": "הודעת תשובה אחת",
+  "expr": "[הודעה] הודעת תשובה אחת = [תוכן הודעה]",
+  "ok": true,
+  "why": null,
+  "shape": "message",
+  "ops": [
+   "switch",
+   "alert"
+  ],
+  "picks": [
+   {
+    "op": "switch",
+    "atoms": [
+     "SegmentedSwitch"
+    ],
+    "alts": [
+     "SegmentedSwitch",
+     "ForgeCheckPop",
+     "ForgePickerOptionsPanelSelection"
+    ]
+   },
+   {
+    "op": "alert",
+    "atoms": [
+     "ToastCard"
+    ],
+    "alts": [
+     "ToastCard",
+     "AlertBanner@premium/feedback",
+     "DsNote"
+    ]
+   }
+  ],
+  "wired": [
+   "ForgeMustChip",
+   "DsNote"
+  ]
+ },
+ {
+  "entity": "תיק",
+  "name": "לוח",
+  "expr": "[לוח]",
+  "ok": true,
+  "why": null,
+  "shape": "dates",
+  "ops": [
+   "magnitude"
+  ],
+  "picks": [
+   {
+    "op": "magnitude",
+    "atoms": [
+     "KpiTile"
+    ],
+    "alts": [
+     "KpiTile",
+     "ProgressRing",
+     "StatHero"
+    ]
+   }
+  ],
+  "wired": [
+   "KvLine"
+  ]
  }
 ]

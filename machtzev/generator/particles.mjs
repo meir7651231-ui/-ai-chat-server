@@ -94,6 +94,31 @@ export function shapeOf(expr, schema, content = [], opts = {}) {
     if (!items.length) return { kind: null, why: `אין אטומי-תוכן לקבוצה "${group}"` };
     return { kind: 'content', group, items, tagged: items.some((c) => c.tag) };
   }
+  // G29 · צורות-הפלט של «מה חוזר» (הכרעה-28): דיף · מספר-אחד · הודעה×נוסחים · לוח-תאריכים — הכל מהסכמה ומאטומי-התוכן, אפס-פרוזה
+  if ((m = e.match(new RegExp('^\\[' + alt(G.pDiff) + '\\]\\s*(.+)$')))) {
+    const pairs = []; const arrow = new RegExp('\\s*(?:' + G.pairArrow.map((a) => a.replace(/[-]/g, '\\-')).join('|') + ')\\s*');
+    for (const seg of m[2].split(/[;؛]/).map((x) => x.trim()).filter(Boolean)) {
+      const fm = seg.match(/^(.+?)\s*[×*]\s*(\d+)\s*$/); const body = fm ? fm[1] : seg; const factor = fm ? +fm[2] : 0;
+      const ab = body.split(arrow).map((x) => clean(x)); if (ab.length !== 2) return { kind: null, why: `דיף: צפוי «ישן ← חדש»: ${seg}` };
+      if (!F(ab[0]) || !F(ab[1])) return { kind: null, why: `דיף: שדה לא בסכמה: ${!F(ab[0]) ? ab[0] : ab[1]}` };
+      pairs.push({ a: ab[0], b: ab[1], factor });
+    }
+    if (!pairs.length) return { kind: null, why: 'דיף בלי זוגות' };
+    return { kind: 'diff', pairs };
+  }
+  if ((m = e.match(new RegExp('^\\[' + alt(G.pNumber) + '\\]\\s*([^:：]+?)\\s*(?:[:：]\\s*(.+))?$')))) { const f = F(m[2]); if (!f) return { kind: null, why: `מספר: שדה לא בסכמה: ${m[2]}` }; return { kind: 'number', field: f.label, note: m[3] ? m[3].trim() : '' }; }
+  if ((m = e.match(new RegExp('^\\[' + alt(G.pMessage) + '\\]\\s*(.+?)\\s*=\\s*(.+)$')))) {
+    const f = F(m[2]); if (!f || !(f.enumVals && f.enumVals.length)) return { kind: null, why: `הודעה: «${m[2]}» אינו שדה-בחירה` };
+    const cm = m[3].trim().match(CONTENT_REF); if (!cm) return { kind: null, why: 'הודעה: צפוי [תוכן קבוצה]' };
+    const group = clean(cm[2]); const items = content.filter((c) => c.group === group); if (!items.length) return { kind: null, why: `הודעה: אין תוכן לקבוצה "${group}"` };
+    return { kind: 'message', field: f.label, values: f.enumVals, items, group };
+  }
+  if ((m = e.match(new RegExp('^\\[' + alt(G.pDates) + '\\]\\s*(.*)$')))) {
+    const listed = m[2].split(/[,،]/).map((x) => clean(x)).filter(Boolean);
+    const fields = listed.length ? listed.map((l) => F(l)).filter((f) => f && f.type === 'date') : schema.filter((f) => f.type === 'date');
+    if (!fields.length) return { kind: null, why: 'לוח: אין שדות-תאריך' };
+    return { kind: 'dates', fields: fields.map((f) => f.label) };
+  }
   if ((m = e.match(new RegExp('^\\[' + alt(G.pTable) + '\\]')))) return { kind: 'table' };
   if ((m = e.match(new RegExp('^\\[' + alt(G.pSearch) + '\\]')))) return { kind: 'search' };
   if ((m = e.match(new RegExp('^\\[' + alt(G.pFilter) + '\\]')))) return { kind: 'filter' };
@@ -132,6 +157,10 @@ const NEED = {
 const LOGIC = new Set(['match', 'predicate', 'serialize', 'role', 'grant', 'expiry', 'capital', 'queue', 'progress', 'sheet', 'makeup', 'balance', 'paidstatus', 'hok', 'clash', 'slots', 'block', 'holiday', 'weekly', 'sessions', 'enrol', 'wait', 'byteacher', 'whoami', 'cert', 'contact', 'recipients', 'template', 'parse', 'trendengine']);
 export function opsOf(shape) {
   if (shape.kind === 'content') return shape.tagged ? ['group', 'alert'] : ['alert'];   // רשימת-טקסטים: קבוצה-פר-תג (אם יש) + הודעה-פר-שורה
+  if (shape.kind === 'diff') return ['trend', 'magnitude'];      // G29 · שורה-פר-שינוי (ערך+Δ) + שורת-סיכום (משמעות-כסף בשנה)
+  if (shape.kind === 'number') return ['hero'];                 // G29 · המספר-שלך: ערך גדול + תווית + הערה
+  if (shape.kind === 'message') return ['switch', 'alert'];     // G29 · נוסחים (בורר) + טקסט-ההודעה (הודעה)
+  if (shape.kind === 'dates') return ['magnitude'];             // G29 · לוח: שורת תווית+ערך (כמו עובדות-השורש), ממוינת
   if (shape.kind === 'partition') return ['group', 'alert'];   // חלוקה-למצבים: קבוצה-פר-ערך + שורה-פר-רשומה (G24: השורה דרך אטום, לא Text חשוף)
   const f = { kind: shape.kind, headline: shape.headline };
   try { return opsOfKind(f).map((o) => o.op); } catch { return null; }
@@ -152,6 +181,7 @@ const SOCK = {
   glyph: /^(glyph|emoji|icon)$/, fraction: /^(fraction|pct|percent|progress)$/, tap: /^(onTap|onPressed)$/, tone: /^(tone|severity|level)$/,
   labels: /^(labels|cols|columns|headers)$/, rows: /^(rows|data)$/, message: /^(message)$/,
   items: /^(items|options)$/, selected: /^(selected|activeIndex|index)$/, onSelect: /^(onSelect|onChanged)$/, children: /^(children)$/,   // G24: בורר/מיכל
+  delta: /^(delta|change|diff)$/,   // G29: שינוי (דיף)
 };
 // ctx: { label, value:{expr,type}, sub, fraction:{expr}, labels:[expr], rows:expr, glyph, nav:expr, message }
 export function wireAtom(cls, ctx) {
@@ -179,6 +209,7 @@ export function wireAtom(cls, ctx) {
     else if (name === 'bare' && t === 'bool' && ctx.bare) e = 'true';   // G28 · forge: bare = בלי כרטיס-העטיפה (סרגל-ניווט/בורר בתוך מסך)
     else if (SOCK.onSelect.test(name) && /ValueChanged<int>|void Function\(int\)/.test(t) && ctx.onSelect) e = ctx.onSelect;
     else if (SOCK.children.test(name) && /^List<Widget>/.test(t) && ctx.children) e = `[${ctx.children.join(', ')}]`;
+    else if (SOCK.delta.test(name) && t === 'String' && ctx.delta) e = ctx.delta;   // G29
     if (e == null) { if (req) return null; continue; }   // שקע-חובה בלי דאטה ⇒ האטום נפסל (§20-ג: אין ערך-מומצא)
     args.push(w.positional.includes(name) ? e : `${name}: ${e}`); filled.push(name);
   }
@@ -224,11 +255,40 @@ export function planParticles({ particles, entities, content = [], single = fals
     const ops = opsOf(shape);
     if (!ops) { plan.push({ ...p, ok: false, shape, why: `אין אלגברת-הרכבה לצורה ${shape.kind}` }); continue; }
     const goal = `${p.name} ${p.expr} ${ent.name}`;
-    const picks = ops.map((op) => searchOp(op, goal));
-    plan.push({ ...p, ok: picks.every((k) => k.atoms.length || k.logic), shape, ops, picks, entSlug: ent.slug, entNames: entities.map((e) => e.name) });
+    const NEED_BY_KIND = { dates: ['label', 'value'], number: ['value', 'label', 'sub'], diff: ['value', 'delta', 'label'] };   // G29 · הצורך המפורש של הצורה (כמו עובדות-השורש ב-G26) — הדירוג לפי כיסוי-השקעים
+    const picks = ops.map((op, i) => searchOp(op, goal, i === 0 && NEED_BY_KIND[shape.kind] ? NEED_BY_KIND[shape.kind] : null, NEED_BY_KIND[shape.kind] ? 12 : 3));
+    const children = entities.filter((e) => e !== ent && e.schema.some((f) => f.label === ent.name)).map((e) => ({ name: e.name, slug: e.slug, link: ent.name, schema: e.schema }));   // G29 · בנות (מצביעות לישות) — למקומות-שמורים {ישות.שדה}
+    plan.push({ ...p, ok: picks.every((k) => k.atoms.length || k.logic), shape, ops, picks, entSlug: ent.slug, entNames: entities.map((e) => e.name), children });
   }
   return plan;
 }
+
+// G29 · הודעה: תבנית-תוכן ⇒ ביטוי-Dart של טקסט; {ערך}=ערך-הבחירה · {שדה}=שדה-הרשומה · {ישות.שדה}=שדות-הבנות מצורפים ב-", "
+//   נוסח = פריט-תוכן שתגו = ערך-הבחירה; בלי תג = ברירת-מחדל לכל הערכים. אפס-פרוזה: הטקסט מהספק, הערכים מהרשומה.
+function messageExpr(s, p, k, entity, rid) {
+  const strOf = (lbl) => `(r[${k(lbl)}] ?? '')`;
+  const tpl = (text) => {
+    const parts = []; let last = 0;
+    for (const m of text.matchAll(/\{([^}]+)\}/g)) {
+      if (m.index > last) parts.push(k(text.slice(last, m.index)));
+      const ph = m[1].trim();
+      if (ph === G.pValueWord) parts.push(strOf(s.field));
+      else if (ph.includes('.')) { const [en, fl] = ph.split('.').map((x) => x.trim()); const c = (p.children || []).find((x) => x.name === en); parts.push(c ? `appStore.referencing('${c.slug}', ${k(c.link)}, ${rid}).map((c) => c[${k(fl)}] ?? '').where((x) => x.trim().isNotEmpty).join(', ')` : k('')); }
+      else if (entity.schema.some((f) => f.label === clean(ph))) parts.push(strOf(clean(ph)));   // clean: אותו נרמול-תווית כמו בסכמה (ספרות/סימנים)
+      else parts.push(k(''));
+      last = m.index + m[0].length;
+    }
+    if (last < text.length) parts.push(k(text.slice(last)));
+    return parts.length ? parts.join(' + ') : k('');
+  };
+  const def = s.items.find((it) => !it.tag); let expr = def ? tpl(def.text) : k('');
+  for (const v of s.values) { const it = s.items.find((x) => x.tag === v); if (it) expr = `(${strOf(s.field)} == ${k(v)} ? (${tpl(it.text)}) : (${expr}))`; }
+  return expr;
+}
+const numFmt = (e) => `${e}.toStringAsFixed(0)`;
+const diffRows = (s, k, numOf) => s.pairs.map((pr) => { const a = numOf(pr.a), b = numOf(pr.b); return { fa: pr.a, fb: pr.b, factor: pr.factor, a, b, d: `(${b} - ${a})`, pct: `(${a} == 0 ? 0.0 : (${b} - ${a}) / ${a} * 100)`, yr: pr.factor ? `((${b} - ${a}) * ${pr.factor})` : null }; });
+// ערך-הדיף: «חדש (היה ישן)» — בלי גליף-חץ (Heebo בלי חיצים ⇒ tofu)
+const diffVal = (r0, k) => `${numFmt(r0.b)} + ' ' + ${k(T('diffWas', { old: '' }).replace('()', '('))} + ${numFmt(r0.a)} + ')'`;
 
 // ── 6 · פליטה: מסך-חלקיקים לישות (AnimatedBuilder על appStore; אגרגטים למעלה, פר-רשומה בשורות) ──
 export function particleWidgets({ entity, plan, k, recs: recsOverride = null }) {
@@ -276,6 +336,34 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null }) 
       });
       if (groups.some((g) => !g)) { notes.push(`⚪ ${p.name}: אין אטום-קבוצה מתחווט ל-${kd[0][0]}`); continue; }
       widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [${groups.join(', ')}]))`); p.wired = [groups[0].match(/^([A-Za-z0-9_]+)\(/)[1], row.cand]; continue;
+    } else if (s.kind === 'diff') {   // G29 · רק מה-שהשתנה: שורה-פר-זוג עם Δ ו-% (+לשנה כשיש מכפיל) · שורת-סיכום = סך-לשנה
+      const rows = diffRows(s, k, numOf);
+      const rowW = firstWired(kd[0][1], { label: k(rows[0].fb), value: { str: diffVal(rows[0], k), num: rows[0].d }, delta: `(${rows[0].d} >= 0 ? '+' : '') + ${numFmt(rows[0].d)} + ' · ' + (${rows[0].pct} >= 0 ? '+' : '') + ${rows[0].pct}.toStringAsFixed(0) + '%'`, sub: rows[0].yr ? `${k(L.diffPerYear)} + ': ' + ${numFmt(rows[0].yr)}` : k(''), tone: 0, must: ['value', 'delta'] });
+      if (!rowW) { notes.push(`⚪ ${p.name}: אין אטום-דיף מתחווט ל-${kd[0][0]}`); continue; }
+      const rowCalls = rows.map((r0) => { const w = firstWired(kd[0][1], { label: k(r0.fb), value: { str: diffVal(r0, k), num: r0.d }, delta: `(${r0.d} >= 0 ? '+' : '') + ${numFmt(r0.d)} + ' · ' + (${r0.pct} >= 0 ? '+' : '') + ${r0.pct}.toStringAsFixed(0) + '%'`, sub: r0.yr ? `${k(L.diffPerYear)} + ': ' + ${numFmt(r0.yr)}` : k(''), tone: 0, must: ['value', 'delta'] }); return w ? `if (${r0.d} != 0) ${w.call}` : null; }).filter(Boolean);
+      const yrs = rows.filter((r0) => r0.yr).map((r0) => r0.yr);
+      const sumW = yrs.length ? firstWired(kd[1][1], { label: k(L.diffSum), value: { str: numFmt(`(${yrs.join(' + ')})`), num: `(${yrs.join(' + ')})` }, sub: k(''), tone: 0, must: ['value'] }) : null;
+      widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [for (final r in ${recs}) ...[${rowCalls.join(', ')}${sumW ? `, ${sumW.call}` : ''}]]))`);
+      p.wired = [rowW.cand, ...(sumW ? [sumW.cand] : [])]; continue;
+    } else if (s.kind === 'number') {   // G29 · המספר-שלך: ערך-גדול + תווית + הערת-התנאים
+      const w = firstWired(kd[0][1], { label: lbl, value: { str: numFmt(numOf(s.field)), num: numOf(s.field) }, sub: k(s.note || ''), glyph: k(''), tone: 0, must: ['value'] });
+      if (!w) { notes.push(`⚪ ${p.name}: אין אטום-מספר מתחווט ל-${kd[0][0]}`); continue; }
+      rowOf = w; p.wired = [w.cand];
+    } else if (s.kind === 'message') {   // G29 · נוסחים: בורר ערכי-הבחירה (כותב לרשומה — הקשה אחת) + טקסט-ההודעה המורכב מהרשומה
+      const rid = `(r[AppStore.idKey] ?? '')`;
+      const sel = `${s.values.map((v, i) => `(r[${k(s.field)}] ?? '') == ${k(v)} ? ${i} : `).join('')}0`;
+      const sw = firstWired(kd[0][1], { items: `[${s.values.map((v) => k(v)).join(', ')}]`, selected: `(${sel})`, onSelect: `(i) => appStore.update('${entity.slug}', ${rid}, {${k(s.field)}: [${s.values.map((v) => k(v)).join(', ')}][i]})`, label: lbl, bare: true, must: ['items', 'selected', 'onSelect'] });
+      const txt = messageExpr(s, p, k, entity, rid);
+      const note = firstWired(kd[1][1], { message: txt, label: k(''), sub: k(''), tone: 0, must: ['message'] });
+      if (!note) { notes.push(`⚪ ${p.name}: אין אטום-הודעה מתחווט ל-${kd[1][0]}`); continue; }
+      if (!sw) notes.push(`⚪ ${p.name}: אין בורר-נוסחים מתחווט ל-${kd[0][0]} (הטקסט מוצג בלי בורר)`);
+      rowOf = { call: `Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [${sw ? `Padding(padding: const EdgeInsets.only(bottom: 8), child: ${sw.call}), ` : ''}${note.call}])`, cand: note.cand };
+      p.wired = [...(sw ? [sw.cand] : []), note.cand];
+    } else if (s.kind === 'dates') {   // G29 · לוח: תווית+תאריך לכל שדה-תאריך מלא, ממוין
+      const w = firstWired(kd[0][1], { label: 'e[0]', value: { str: 'e[1]', num: '0' }, sub: k(''), tone: 0, must: ['label', 'value'] });
+      if (!w) { notes.push(`⚪ ${p.name}: אין אטום-לוח מתחווט ל-${kd[0][0]}`); continue; }
+      const list = `(<List<String>>[${s.fields.map((f) => `[${k(f)}, ${strOf(f)}]`).join(', ')}].where((e) => e[1].trim().isNotEmpty).toList()..sort((a, b) => a[1].compareTo(b[1])))`;
+      rowOf = { call: `Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [for (final e in ${list}) ${w.call}])`, cand: w.cand }; p.wired = [w.cand];
     } else if (s.kind === 'raw') {
       const shown = p.labelled ? `${k(s.field)} + ': ' + ${strOf(s.field)}` : strOf(s.field);   // G24 · בדוח: "שדה: ערך" (עובדה בכרטיס); במסך-חלקיקים: הערך לבדו
       const ctx = { label: shown, value: { str: strOf(s.field), num: numOf(s.field) }, sub: lbl, glyph: k('🧩'), tone: 0, message: shown };
@@ -295,7 +383,7 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null }) 
       widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${recs}.isEmpty ? ${w.call} : const SizedBox.shrink())`); p.wired = [w.cand]; continue;
     } else if (s.kind === 'content') {   // G24 · אטומי-תוכן: קבוצה-פר-תג (group עם children ⇒ מיכל; בלעדיו כותרת+שורות) + הודעה-פר-שורה (alert)
       const linePick = s.tagged ? kd[1][1] : kd[0][1];
-      const lineOf = (it) => firstWired(linePick, { message: k(it.text), label: k(it.text), sub: k(it.tag || ''), tone: 0 });
+      const lineOf = (it) => firstWired(linePick, { message: k(it.text), label: isPaper() ? k('') : k(it.text), sub: k(it.tag || ''), tone: 0 });   // G29 · נייר: פסקה = הטקסט פעם אחת (הכותרת = הקבוצה/התג)
       const rows = s.items.map(lineOf);
       if (rows.some((w) => !w)) { notes.push(`⚪ ${p.name}: אין אטום-הודעה מתחווט ל-${s.tagged ? kd[1][0] : kd[0][0]}`); continue; }
       let out;
@@ -341,6 +429,15 @@ export function particleText({ entity, plan, k, recs: recsOverride = null }) {
       const val = s.kind === '/' ? `(${b} == 0 ? 0.0 : ${a} / ${b})` : `(${a} - ${b})`.replace(' - ', s.kind === '×' ? ' * ' : ' - ');
       exprs.push(`[for (final r in ${recs}) ${lbl} + ': ' + ${val}.toStringAsFixed(${s.kind === '/' ? 2 : 0})].join('\\n')`); continue;
     }
+    if (s.kind === 'diff') {   // G29 · טקסט: "שדה: ישן ← חדש (+Δ · +x%)" רק כשהשתנה + סיכום-לשנה
+      const rows = diffRows(s, k, numOf);
+      const lines = rows.map((r0) => `if (${r0.d} != 0) ${k(r0.fb)} + ': ' + ${diffVal(r0, k)} + ' (' + (${r0.d} >= 0 ? '+' : '') + ${numFmt(r0.d)} + ' · ' + ${r0.pct}.toStringAsFixed(0) + '%)'${r0.yr ? ` + ' · ' + ${k(L.diffPerYear)} + ' ' + ${numFmt(r0.yr)}` : ''}`);
+      const yrs = rows.filter((r0) => r0.yr).map((r0) => r0.yr);
+      exprs.push(`[for (final r in ${recs}) ...[${lines.join(', ')}${yrs.length ? `, ${k(L.diffSum)} + ': ' + ${numFmt(`(${yrs.join(' + ')})`)}` : ''}]].join('\\n')`); continue;
+    }
+    if (s.kind === 'number') { exprs.push(`[for (final r in ${recs}) ${lbl} + ': ' + ${numFmt(numOf(s.field))}${s.note ? ` + ' — ' + ${k(s.note)}` : ''}].join('\\n')`); continue; }
+    if (s.kind === 'message') { exprs.push(`[for (final r in ${recs}) ${messageExpr(s, p, k, entity, `(r[AppStore.idKey] ?? '')`)}].join('\\n')`); continue; }
+    if (s.kind === 'dates') { exprs.push(`[for (final r in ${recs}) ...[${s.fields.map((f) => `if (${strOf(f)}.trim().isNotEmpty) ${k(f)} + ': ' + ${strOf(f)}`).join(', ')}]].join('\\n')`); continue; }
     if (s.kind === 'partition') {
       const desc = descFieldOf(entity, p);
       const bands = s.bands.map((band) => { const inBand = `${recs}.where((r) => (r[${k(s.field)}] ?? '') == ${k(band)}).toList()`; return `'*' + ${k(band)} + ' · ' + ${inBand}.length.toString() + '*' + [for (final r in ${inBand}) '\\n- ' + ${strOf(desc.label)}].join()`; });

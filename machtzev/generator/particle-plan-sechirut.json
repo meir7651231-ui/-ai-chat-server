@@ -350,6 +350,100 @@
   ]
  },
  {
+  "entity": "תיק",
+  "name": "המספר שלך",
+  "expr": "[מספר] תקרה לפי 3 חודשים: הבטוחות לא יעלו על הסכום הזה במצטבר",
+  "ok": true,
+  "why": null,
+  "shape": "number",
+  "ops": [
+   "hero"
+  ],
+  "picks": [
+   {
+    "op": "hero",
+    "atoms": [
+     "KpiTile"
+    ],
+    "alts": [
+     "KpiTile",
+     "ProgressRing",
+     "StatHero"
+    ]
+   }
+  ],
+  "wired": [
+   "KvLine"
+  ]
+ },
+ {
+  "entity": "תיק",
+  "name": "התשובה",
+  "expr": "[הודעה] החלטה = [תוכן הודעה]",
+  "ok": true,
+  "why": null,
+  "shape": "message",
+  "ops": [
+   "switch",
+   "alert"
+  ],
+  "picks": [
+   {
+    "op": "switch",
+    "atoms": [
+     "SegmentedSwitch"
+    ],
+    "alts": [
+     "SegmentedSwitch",
+     "ForgeCheckPop",
+     "ForgePickerOptionsPanelSelection"
+    ]
+   },
+   {
+    "op": "alert",
+    "atoms": [
+     "AlertBanner@premium/feedback"
+    ],
+    "alts": [
+     "AlertBanner@premium/feedback",
+     "ToastCard",
+     "DsNote"
+    ]
+   }
+  ],
+  "wired": [
+   "ForgeMustChip",
+   "DsNote"
+  ]
+ },
+ {
+  "entity": "תיק",
+  "name": "לוח",
+  "expr": "[לוח]",
+  "ok": true,
+  "why": null,
+  "shape": "dates",
+  "ops": [
+   "magnitude"
+  ],
+  "picks": [
+   {
+    "op": "magnitude",
+    "atoms": [
+     "KpiTile"
+    ],
+    "alts": [
+     "KpiTile",
+     "ProgressRing",
+     "StatHero"
+    ]
+   }
+  ],
+  "wired": [
+   "KvLine"
+  ]
+ },
+ {
   "entity": "ממצא",
   "name": "רשימת בדיקה",
   "expr": "[תוכן בדיקה]",

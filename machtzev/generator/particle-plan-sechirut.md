@@ -14,6 +14,9 @@
 | פעולה פתח תיק | תיק | act | action⇒DsPrimaryButton (DsPrimaryButton/GlassButton) | DsPrimaryButton |
 | ריק אין ממצאים עדיין | ממצא | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
 | החלטה | תיק | partition | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsSection + DsNote |
+| המספר שלך | תיק | number | hero⇒KpiTile (KpiTile/ProgressRing) | KvLine |
+| התשובה | תיק | message | switch⇒SegmentedSwitch (SegmentedSwitch/ForgeCheckPop) · alert⇒AlertBanner (AlertBanner/ToastCard) | ForgeMustChip + DsNote |
+| לוח | תיק | dates | magnitude⇒KpiTile (KpiTile/ProgressRing) | KvLine |
 | רשימת בדיקה | ממצא | content | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
 | מה החוק קובע | בטוחה | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
 | נוסחים לוואטסאפ | ממצא | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
@@ -24,18 +27,20 @@
 | דוח | חלק | ref | פתרון | אטומים |
 |---|---|---|---|---|
 | תיק | [ייצוא] שליחה בוואטסאפ | טלפון, קישור לפתיחת שיחה | action+link | DsPrimaryButton + waLink |
+| תיק | המספר שלך | המספר שלך | particle | KvLine |
+| תיק | אדום צהוב ירוק | ממצא.צבע | childParticle | DsSection + DsNote |
+| תיק | התשובה | התשובה | particle | ForgeMustChip + DsNote |
+| תיק | לוח | לוח | particle | KvLine |
 | תיק | כרטיס עסקה | לקוח | particle (שדה) | DsChip |
 | תיק | כרטיס עסקה | שכירות | particle (שדה) | DsChip |
 | תיק | כרטיס עסקה | חודשים | particle (שדה) | DsChip |
 | תיק | כרטיס עסקה | שכירות לשנה | particle | DsChip |
 | תיק | כרטיס עסקה | בטוחה.סך בטוחות | childParticle (שדה) | DsChip |
 | תיק | כרטיס עסקה | בטוחה.חורג מול 3 חודשים | childParticle (שדה) | DsChip |
-| תיק | אדום צהוב ירוק | ממצא.צבע | childParticle | DsSection + DsNote |
 | תיק | חישוב בטוחות | בטוחה.תקרה לפי 3 חודשים | childParticle (שדה) | DsChip |
 | תיק | חישוב בטוחות | בטוחה.תקרה לפי שליש | childParticle (שדה) | DsChip |
 | תיק | חישוב בטוחות | בטוחה.חורג | childParticle | ForgeGlowSlider |
 | תיק | חישוב בטוחות | בטוחה.מעל התקרה | childParticle | KvLine |
 | תיק | בקשות לשינוי | ממצא.מה לבקש | childParticle | DsChip |
-| תיק | החלטה | החלטה | particle (שדה) | DsChip |
 | תיק | מה לא בדקנו | [תוכן לא נבדק] | content | DsNote |
 | תיק | הסתייגות | [תוכן הסתייגות] | content | DsNote |

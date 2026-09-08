@@ -94,5 +94,11 @@
  "shellLog": "ניווט-מקשרים (G26)",
  "shellRootWord": "שורש",
  "shellChildrenWord": "ישויות-בנות",
- "foldLabel": "פרטים ({n})"
+ "foldLabel": "פרטים ({n})",
+ "diffSum": "עולה לך מהחדש, בשנה",
+ "diffNoChange": "ללא שינוי",
+ "diffPerYear": "לשנה",
+ "emptyCalm": "אין כלום כאן עדיין. {action} — וזהו.",
+ "messageVariant": "נוסח",
+ "diffWas": "(היה {old})"
 }

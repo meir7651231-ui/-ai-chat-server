@@ -12,6 +12,60 @@
   },
   "sections": [
    {
+    "name": "המספר שלך",
+    "refs": [
+     {
+      "raw": "המספר שלך",
+      "mode": "particle",
+      "why": null,
+      "wired": [
+       "KvLine"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "אדום צהוב ירוק",
+    "refs": [
+     {
+      "raw": "ממצא.צבע",
+      "mode": "childParticle",
+      "why": null,
+      "wired": [
+       "DsSection",
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "התשובה",
+    "refs": [
+     {
+      "raw": "התשובה",
+      "mode": "particle",
+      "why": null,
+      "wired": [
+       "ForgeMustChip",
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "לוח",
+    "refs": [
+     {
+      "raw": "לוח",
+      "mode": "particle",
+      "why": null,
+      "wired": [
+       "KvLine"
+      ]
+     }
+    ]
+   },
+   {
     "name": "כרטיס עסקה",
     "refs": [
      {
@@ -65,20 +119,6 @@
     ]
    },
    {
-    "name": "אדום צהוב ירוק",
-    "refs": [
-     {
-      "raw": "ממצא.צבע",
-      "mode": "childParticle",
-      "why": null,
-      "wired": [
-       "DsSection",
-       "DsNote"
-      ]
-     }
-    ]
-   },
-   {
     "name": "חישוב בטוחות",
     "refs": [
      {
@@ -121,19 +161,6 @@
      {
       "raw": "ממצא.מה לבקש",
       "mode": "childParticle",
-      "why": null,
-      "wired": [
-       "DsChip"
-      ]
-     }
-    ]
-   },
-   {
-    "name": "החלטה",
-    "refs": [
-     {
-      "raw": "החלטה",
-      "mode": "particle",
       "why": null,
       "wired": [
        "DsChip"

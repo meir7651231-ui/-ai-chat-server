@@ -1,6 +1,6 @@
 # סנסוס-פעולות-היסוד (op-census · G1)
 
-**2322** אטומים ממופים (תצוגה 924 · לוגיקה 850 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
+**2323** אטומים ממופים (תצוגה 925 · לוגיקה 850 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
 
 | op | # | דוגמאות |
 |---|---|---|
@@ -36,11 +36,11 @@
 | empty | 5 | EmptyStateCard · SavedVersionChip · SearchEmptyState · StoreSmartQtyStepper · EmptyState@premium/feedback |
 | effect | 5 | applyConfig · collect · deliverReceipt · walk · writeFilteredMode |
 | expand | 4 | DsFold · ExpandableTile · FeaturePanel · RegressionBody |
+| trend | 3 | DsDiffRow · PremiumStat · TrendStat |
 | alert | 3 | DsNote · ToastCard · AlertBanner@premium/feedback |
 | ring | 3 | GaugeMeter · RatingStars · SiteRow |
 | temporal | 3 | dayBucket · nextSessionDate · startOfWeekSunday |
 | timeline | 2 | ForgeDatePills · TimelineItem |
-| trend | 2 | PremiumStat · TrendStat |
 | board | 1 | DsBoard |
 
 ## zero (תפר-אפס ⇒ לא-נבחרים · §20-ג)

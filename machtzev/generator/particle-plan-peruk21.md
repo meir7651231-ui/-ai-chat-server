@@ -9,6 +9,7 @@
 | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
 | סיווג | תיק | content | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
 | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
+| לוח | תיק | dates | magnitude⇒KpiTile (KpiTile/ProgressRing) | KvLine |
 
 # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
 
@@ -20,4 +21,5 @@
 | תיק | טיוטת תשובה קצרה למחנכת | [תוכן טיוטת תשובה קצרה למחנכת] | content | DsNote |
 | תיק | שאלות לפגישה | [תוכן שאלות לפגישה] | content | DsNote |
 | תיק | מה לא לכתוב בקבוצת | [תוכן מה לא לכתוב בקבוצת] | content | DsNote |
+| תיק | לוח | לוח | particle | KvLine |
 | תיק | הסתייגות | [תוכן הסתייגות] | content | DsNote |

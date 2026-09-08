@@ -99,7 +99,7 @@ function contentOf(sec, group) {
   for (const s of sec.subs) { const tag = clean(s.head).split(' ').slice(0, 2).join(' '); const its = items(s.lines); (its.length ? its : prose(s.lines)).forEach((l) => add(tag, l)); }
   return out;
 }
-const q = (s) => String(s).replace(/[|{}\[\]=]/g, ' ').replace(/\s+/g, ' ').trim();   // טקסט-תוכן בספק: בלי סימני-הדקדוק
+const q = (s) => String(s).replace(/[|\[\]=]/g, ' ').replace(/\s+/g, ' ').trim();   // טקסט-תוכן בספק: בלי סימני-הדקדוק ({…} = מקום-שמור של הודעה, G29 — נשמר)
 
 // ── 5 · הצומת ⇒ ספק ──
 export function perukToSpec(md, ns) {
@@ -143,11 +143,17 @@ export function perukToSpec(md, ns) {
   const ex = S('example'); if (ex) content.push(...contentOf(ex, groups.example));
   const chainSec = S('chain'); const chain = chainSec ? items(chainSec.lines).map((x) => x.replace(/^\d+[.)]\s*/, '')) : [];
   const price = S('price'); const prices = price ? items(price.lines).concat(prose(price.lines)).map((l) => { const m = l.match(/(\d[\d,]*)\s*₪/); return m ? { label: l.split(/[:：]/)[0].trim(), ils: +m[1].replace(/,/g, '') } : null; }).filter(Boolean) : [];
+  // G29 · זוגות ישן/חדש מהבלוקים ("שכ״ד ישן מול חדש") ⇒ שני שדות-מספר + חלקיק-דיף; מכפיל-לשנה כשהבסיס חודשי (peruk-lang.monthlyWords)
+  const pairs = [];
+  const longest = (ws) => ws.slice().sort((a, b) => b.length - a.length).join('|');   // הארוך קודם — אחרת 'חדש' תופס לפני 'חדשות'
+  const pairRe = new RegExp('^(.+?)\\s+(' + longest(P.oldWords) + ')\\s+' + P.vsWord + '\\s+(' + longest(P.newWords) + ')');
+  for (const sec of [blocks].filter(Boolean)) for (const raw of allText(sec)) { const m = norm(raw).replace(/^\d+[.)]\s*/, '').match(pairRe); if (!m) continue; const base = heW(m[1].replace(/\(.*?\)/g, '')).slice(-2).join(' '); if (!base) continue; const monthly = P.monthlyWords.some((w) => base.includes(w)); pairs.push({ a: `${base} ${m[2]}`, b: `${base} ${m[3]}`, factor: monthly ? 12 : 0 }); }
+  for (const pr of pairs) for (const lbl of [pr.a, pr.b]) if (!fields.some((f) => f.label === lbl)) fields.push({ label: lbl, required: false, num: true });
   // החלטה: חלק-פלט עם אפשרויות קצרות ⇒ שדה-enum על השורש
   const decisions = outputs.filter((o) => o.options.length >= P.decisionMinOptions && o.options.length <= P.decisionMaxOptions).map((o) => ({ label: o.name, enumVals: o.options.map((x) => clean(x).split(' ').slice(0, 4).join(' ')).filter(Boolean) }));
   // ── ספק ──
   const root = P.rootNoun, fnd = P.findingNoun;
-  const fieldStr = (f) => `${f.label}${f.enumVals ? `{${f.enumVals.join('|')}}` : ''}${f.required ? '*' : ''}`;
+  const fieldStr = (f) => `${f.label}${f.enumVals ? `{${f.enumVals.join('|')}}` : ''}${f.num ? P.numRange : ''}${f.required ? '*' : ''}`;
   const rootFields = [...P.personFields, ...fields.map(fieldStr), ...decisions.map((dd) => `${dd.label}{${dd.enumVals.join('|')}}`), ...(classes.length ? [`${P.classifyField}{${classes.join('|')}}`] : [])];
   const lines = [];
   lines.push(`${G.appWord}: ${d.title || ns}`);
@@ -167,9 +173,22 @@ export function perukToSpec(md, ns) {
   const fieldLabels = rootFields.map((f) => f.replace(/[{*].*$/, '').trim());
   const stemOf = (w) => w.replace(/^[בלהומשכ](?=..)/, '').replace(/(יות|ים|ות|ה)$/, '');
   const matchField = (txt) => { const ws = heW(txt).map(stemOf); return fieldLabels.find((f) => { const fw = heW(f).map(stemOf); return fw.length && fw.every((w) => ws.includes(w)); }) || null; };
+  const kindOfOut = (name) => Object.entries(P.outputKinds).find(([, ws]) => ws.some((w) => name.includes(w)))?.[0] || null;
+  const dateFields = fieldLabels.filter((f) => G.typeDate.some((w) => f.includes(w)));
+  const extraParticles = [];
   for (const o of outputs) {
+    const kind = kindOfOut(o.name);
+    // G29 · צורות-פלט: דיף (יש זוגות) · מספר (שדה-מספרי תואם) · הודעה (יש החלטה) · לוח (יש תאריכים) — אחרת נופל לתוכן
+    if (kind === 'diff' && pairs.length) { extraParticles.push(`${G.particleWord} ${root}: ${o.name} = [${G.pDiff[0]}] ${pairs.map((pr) => `${pr.a} ${G.pairArrow[0]} ${pr.b}${pr.factor ? ` × ${pr.factor}` : ''}`).join('; ')}`); lines.push(`${G.reportWord} ${root}: ${o.name} = ${o.name}`); continue; }
+    if (kind === 'number') { const nf = fields.find((f) => f.num && matchField(f.label) && heW(o.name).map(stemOf).some((w) => heW(f.label).map(stemOf).includes(w))); if (nf) { extraParticles.push(`${G.particleWord} ${root}: ${o.name} = [${G.pNumber[0]}] ${nf.label}${o.detail.length ? `: ${q(o.detail[0])}` : ''}`); lines.push(`${G.reportWord} ${root}: ${o.name} = ${o.name}`); continue; } }
+    if (kind === 'message' && decisions.length) {
+      const dec = decisions[0]; const tpl = P.messageTemplate.replace(/\{([^}]+)\}/g, (m0, ph) => ph === G.pValueWord || ph.includes('.') ? m0 : (matchField(ph) ? `{${matchField(ph)}}` : ''));
+      content.push({ group: P.messageGroup, tag: null, text: tpl });
+      extraParticles.push(`${G.particleWord} ${root}: ${o.name} = [${G.pMessage[0]}] ${dec.label} = [${G.pContent[0]} ${P.messageGroup}]`); lines.push(`${G.reportWord} ${root}: ${o.name} = ${o.name}`); continue;
+    }
+    if (kind === 'dates' && dateFields.length) { extraParticles.push(`${G.particleWord} ${root}: ${o.name} = [${G.pDates[0]}]`); lines.push(`${G.reportWord} ${root}: ${o.name} = ${o.name}`); continue; }
     const refs = []; const rest = [];
-    for (const dline of o.detail) for (const part of dline.split(/[,،.]/).map((x) => x.trim()).filter(Boolean)) { const f = matchField(part); if (f && !refs.includes(f)) refs.push(f); else rest.push(part); }
+    for (const dline of o.detail) for (const part of dline.split(/(?<!\d)[,،.](?!\d)/).map((x) => x.trim()).filter(Boolean)) { const f = matchField(part); if (f && !refs.includes(f)) refs.push(f); else rest.push(part); }
     if (o.options.length) { const dec = decisions.find((dd) => dd.label === o.name); if (dec && !refs.includes(dec.label)) refs.push(dec.label); }
     if (severity && P.severity.some((c) => o.name.includes(c))) refs.push(`${fnd}.${P.severityField}`);
     const grp = o.name; const texts = rest.filter((t) => heW(t).length >= 2);
@@ -178,6 +197,8 @@ export function perukToSpec(md, ns) {
     if (!refs.length) { content.push({ group: grp, tag: null, text: o.name }); refs.push(`[${G.pContent[0]} ${grp}]`); }
     lines.push(`${G.reportWord} ${root}: ${o.name} = ${refs.join(', ')}`);
   }
+  if (dateFields.length && !outputs.some((o) => kindOfOut(o.name) === 'dates')) { extraParticles.push(`${G.particleWord} ${root}: ${P.datesLabel} = [${G.pDates[0]}]`); lines.push(`${G.reportWord} ${root}: ${P.datesLabel} = ${P.datesLabel}`); }   // G29 · לוח תמיד כשיש תאריכים
+  lines.push(...extraParticles);
   if (disclaimer) lines.push(`${G.reportWord} ${root}: ${P.reportDisclaimer} = [${G.pContent[0]} ${groups.disclaimer}]`);
   const phone = P.personFields.find((f) => /טלפון/.test(f));
   if (phone) lines.push(`${G.reportWord} ${root}: [${G.pExport[0]}] ${P.exportLabel} = ${phone.replace(/\*$/, '')}, ${P.exportGoal}`);

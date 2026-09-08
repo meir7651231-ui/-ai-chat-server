@@ -1518,6 +1518,19 @@
   "why": "צורת-שקעים"
  },
  {
+  "id": "DsDiffRow",
+  "layer": "display",
+  "file": "dart-ui-bs/ds/ds.dart",
+  "op": "trend",
+  "sockets": [
+   "delta",
+   "label",
+   "sub",
+   "value"
+  ],
+  "why": "צורת-שקעים"
+ },
+ {
   "id": "DsEmpty",
   "layer": "display",
   "file": "dart-ui-bs/ds/ds.dart",

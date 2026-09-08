@@ -10,6 +10,9 @@
 | בדיקה | ממצא | content | group⇒SectionHeader (SectionHeader/DsSection) · alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
 | אסור | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
 | צבע | ממצא | partition | group⇒AnimatedEmpty (AnimatedEmpty/DsSection) · alert⇒AlertBanner (AlertBanner/ToastCard) | DsSection + DsNote |
+| דיף סעיפים | תיק | diff | trend⇒TrendStat (TrendStat/DsDiffRow) · magnitude⇒KpiTile (KpiTile/ProgressRing) | DsDiffRow + KvLine |
+| הודעת תשובה אחת | תיק | message | switch⇒SegmentedSwitch (SegmentedSwitch/ForgeCheckPop) · alert⇒ToastCard (ToastCard/AlertBanner) | ForgeMustChip + DsNote |
+| לוח | תיק | dates | magnitude⇒KpiTile (KpiTile/ProgressRing) | KvLine |
 
 # תכנית-דוחות (G24 · חלקיק-דוח = מבנה-קבוע-לרשומה)
 
@@ -17,9 +20,8 @@
 |---|---|---|---|---|
 | תיק | [ייצוא] שליחה בוואטסאפ | טלפון, קישור לפתיחת שיחה | action+link | DsPrimaryButton + waLink |
 | תיק | כרטיס | [תוכן כרטיס] | content | DsNote |
-| תיק | דיף סעיפים | [תוכן דיף סעיפים] | content | DsNote |
+| תיק | דיף סעיפים | דיף סעיפים | particle | DsDiffRow + KvLine |
 | תיק | מספר מיקוח אחד | [תוכן מספר מיקוח אחד] | content | DsNote |
-| תיק | הודעת תשובה אחת | הודעת תשובה אחת | particle (שדה) | DsChip |
-| תיק | הודעת תשובה אחת | [תוכן הודעת תשובה אחת] | content | DsNote |
-| תיק | לוח | [תוכן לוח] | content | DsNote |
+| תיק | הודעת תשובה אחת | הודעת תשובה אחת | particle | ForgeMustChip + DsNote |
+| תיק | לוח | לוח | particle | KvLine |
 | תיק | הסתייגות | [תוכן הסתייגות] | content | DsNote |

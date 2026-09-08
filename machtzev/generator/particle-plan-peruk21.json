@@ -199,5 +199,32 @@
   "wired": [
    "DsNote"
   ]
+ },
+ {
+  "entity": "תיק",
+  "name": "לוח",
+  "expr": "[לוח]",
+  "ok": true,
+  "why": null,
+  "shape": "dates",
+  "ops": [
+   "magnitude"
+  ],
+  "picks": [
+   {
+    "op": "magnitude",
+    "atoms": [
+     "KpiTile"
+    ],
+    "alts": [
+     "KpiTile",
+     "ProgressRing",
+     "StatHero"
+    ]
+   }
+  ],
+  "wired": [
+   "KvLine"
+  ]
  }
 ]

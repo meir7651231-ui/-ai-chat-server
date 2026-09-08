@@ -28,11 +28,12 @@
     "name": "דיף סעיפים",
     "refs": [
      {
-      "raw": "[תוכן דיף סעיפים]",
-      "mode": "content",
+      "raw": "דיף סעיפים",
+      "mode": "particle",
       "why": null,
       "wired": [
-       "DsNote"
+       "DsDiffRow",
+       "KvLine"
       ]
      }
     ]
@@ -58,14 +59,7 @@
       "mode": "particle",
       "why": null,
       "wired": [
-       "DsChip"
-      ]
-     },
-     {
-      "raw": "[תוכן הודעת תשובה אחת]",
-      "mode": "content",
-      "why": null,
-      "wired": [
+       "ForgeMustChip",
        "DsNote"
       ]
      }
@@ -75,11 +69,11 @@
     "name": "לוח",
     "refs": [
      {
-      "raw": "[תוכן לוח]",
-      "mode": "content",
+      "raw": "לוח",
+      "mode": "particle",
       "why": null,
       "wired": [
-       "DsNote"
+       "KvLine"
       ]
      }
     ]
