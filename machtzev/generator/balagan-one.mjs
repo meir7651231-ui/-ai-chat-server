@@ -112,6 +112,9 @@ if (!/this\.initialText = ''/.test(ask) || !/Clipboard\.getData\('text\/plain'\)
 if (!/^String balaganDayText\(/m.test(home) || !/wa\.me\/\?text=/.test(home) || !/Clipboard\.setData/.test(home)) fails.push('«היום» בלי «שתף את היום»');
 { const withLoc = mods.filter((m) => m.root.fields.some((f) => /מקום|כתובת|מיקום/.test(f.label))); for (const m of withLoc) { const rp = rd(path.join(GEN, `gen_${m.rootPage.slug}.dart`)); if (!/maps\.google\.com\/\?q=/.test(rp)) { fails.push(`${m.ns}: תיק-עם-מקום בלי «ניווט»`); break; } } if (!withLoc.length) fails.push('אין מודול עם מקום (צפוי ≥1: יומן)'); }
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganDayText\(/.test(ft)) fails.push('בדיקת «שתף את היום» חסרה'); }
+// גל ב׳-יח · דוגמאות במסך-ריק · «אחרונים» ב«נושאים» · שורת-היום בלי «היום»
+if (!/if \(empty\) Padding\(padding: const EdgeInsets\.only\(top: 6\), child: Wrap/.test(home) || /it\.sub \+ ' · ' \+ it\.module/.test(home)) fails.push('«היום»: מסך-ריק בלי דוגמאות / שורה עם «·» מוביל');
+{ const topics2 = rd(path.join(GEN, 'gen_balagan_topics.dart')); if (!/recentTitle|אחרונים/.test(topics2) && !/for \(final e in appStore\.log\)/.test(topics2)) fails.push('«נושאים» בלי «אחרונים»'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);

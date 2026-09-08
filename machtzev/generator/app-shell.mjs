@@ -212,7 +212,7 @@ class ${cls}Today {
         for (final off in _offsets()) {
           if (off > 0 && !okRem) continue;
           final fire = _shift(d.subtract(Duration(days: off)), f.hard);
-          if (fire == today.add(Duration(days: dayDelta))) { out.add(_mk(_dates.length == 1 ? who : '\${f.label} · \$who', off == 0 ? ${k(L.remToday)} : ${k(L.remIn)}.replaceAll('{n}', off.toString()), rid, f.label, d, f.hard, false, today, off == 0 ? tm : '', rep)); break; }
+          if (fire == today.add(Duration(days: dayDelta))) { out.add(_mk(_dates.length == 1 ? who : '\${f.label} · \$who', off == 0 ? '' : ${k(L.remIn)}.replaceAll('{n}', off.toString()), rid, f.label, d, f.hard, false, today, off == 0 ? tm : '', rep)); break; }
         }
       }
     }
