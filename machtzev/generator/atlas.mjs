@@ -25,7 +25,9 @@ const dartFiles = (dir) => {
     .map(f => ({ shelf: dir, rel: f, abs: path.join(abs, f) }));
 };
 
-export function buildAtlas() {
+// G28 · forge=true ⇒ גם אטומי-forge (new/dart-forge-bs, 359 · לובשי-עור) נכנסים לאטלס-הווידג'טים כך ש-wireAtom מחווט אותם ישירות
+//   (עד כה הגיעו רק דרך skinPass). file = 'dart-forge-bs/<family>/x.dart' (יחסי ל-new/). ברירת-מחדל false ⇒ אטלס ביט-זהה (חוק-7).
+export function buildAtlas({ forge = false } = {}) {
   // תיאור-עצמי בעברית מכותרת-האטום (אותו עיקרון כמו ב-functions): המחולל לומד מהאטום מה הוא.
   const WSCAFFOLD = new Set(['חוט', 'תצוגה', 'אטום', 'חוק', 'מנוע', 'טהור', 'עם', 'של', 'ללא']);
   const heHead = (raw) => {
@@ -35,7 +37,7 @@ export function buildAtlas() {
   };
 
   const widgets = [];
-  for (const f of WIDGET_SHELVES.flatMap(dartFiles)) {
+  for (const f of [...WIDGET_SHELVES, ...(forge ? ['new/dart-forge-bs'] : [])].flatMap(dartFiles)) {
     const raw = fs.readFileSync(f.abs, 'utf8');
     const he = heHead(raw);
     const src = stripComments(raw);
@@ -54,7 +56,7 @@ export function buildAtlas() {
         const mm = pp.match(/this\.(\w+)/); if (mm) positional.push(mm[1]);
       }
       widgets.push({
-        cls, file: f.rel, shelf: f.shelf, types, positional, he,
+        cls, file: f.shelf === 'new/dart-forge-bs' ? 'dart-forge-bs/' + f.rel : f.rel, shelf: f.shelf, types, positional, he,
         required: new Set([...namedPart.matchAll(/required\s+this\.(\w+)/g)].map(x => x[1])),
         named: new Set([...namedPart.matchAll(/this\.(\w+)/g)].map(x => x[1])),
         flexRoot: /return\s+(?:Expanded|Flexible)\s*\(/.test(body),   // בנוי-ל-Row: חייב הורה-flex

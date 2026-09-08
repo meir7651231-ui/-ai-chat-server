@@ -13,6 +13,7 @@ import { ops as opsOfKind } from '../compose-engine.mjs';
 import { buildAtlas } from './atlas.mjs';
 import * as R from '../root.mjs';
 import { L, T } from './chrome.mjs';
+import { isPaper, skinWired } from './look.mjs';   // G28 · נייר: אטום שלא לובש עור נפסל
 
 const GEN = R.GEN_DIR;
 const G = JSON.parse(fs.readFileSync(R.GEN_DIR + 'spec-lang.data.json', 'utf8'));   // §19-ד: דקדוק-החלקיקים מהדאטה
@@ -136,6 +137,7 @@ export function opsOf(shape) {
   try { return opsOfKind(f).map((o) => o.op); } catch { return null; }
 }
 export function searchOp(op, goal, need = null, k = 3) {   // need: דריסת-צורך (G26: fact עם label+value ⇒ שורת מפתח-ערך)
+  if (isPaper()) k = Math.max(k, 12);   // G28 · נייר: אטומים בצבע-קשיח נפסלים ⇒ צוללים עמוק יותר עד הלובש-עור
   const fam = OPFAM[op] || op;
   if (LOGIC.has(op)) { const c = coverLogic({ op: fam, need: [], goal }); return { op, fam, logic: true, atoms: c.atoms || [], alts: c.alts || [] }; }
   const c = cover({ op: fam, need: need || NEED[op] || [], goal, k });
@@ -143,7 +145,7 @@ export function searchOp(op, goal, need = null, k = 3) {   // need: דריסת-�
 }
 
 // ── 4 · חיווט: שקעי-האטום ⇐ דאטה אמיתית. אין דאטה לשקע-חובה ⇒ null (האטום נפסל) ──
-let ATLAS = null; const atlas = () => (ATLAS ||= buildAtlas());
+let ATLAS = null; const atlas = () => (ATLAS ||= buildAtlas({ forge: isPaper() }));   // G28 · נייר: גם אטומי-forge (לובשי-עור) ברי-חיווט ישיר; כהה = אטלס ביט-זהה
 const widgetOf = (cls) => atlas().widgets.find((w) => w.cls === cls) || null;
 const SOCK = {
   value: /^(value|val|amount|total|count|num)$/, label: /^(label|title|caption|name|text)$/, sub: /^(sub|subtitle|desc|body|note)$/,
@@ -154,6 +156,8 @@ const SOCK = {
 // ctx: { label, value:{expr,type}, sub, fraction:{expr}, labels:[expr], rows:expr, glyph, nav:expr, message }
 export function wireAtom(cls, ctx) {
   const w = widgetOf(cls); if (!w) return null;
+  if (isPaper() && ctx.bare && !w.types.has('bare')) return null;   // G28 · נייר: הקורא ביקש בקרה חשופה (סרגל/בורר בתוך מסך) — אטום שאינו יודע להיות חשוף מצייר כרטיס/כותרת מיותרים ⇒ לא-מתאים
+  if (isPaper() && !skinWired(w.file)) return null;   // G28 · הכי-טוב-לייעוד (§20-א): באפליקציית-נייר אטום עם צבע-קשיח אינו מועמד — הבא בתור (forge/DS) לובש את העור
   const args = []; const filled = [];
   for (const [name, t0] of w.types) {
     const t = t0.replace(/\?$/, ''); const req = w.required.has(name) || w.positional.includes(name);
@@ -169,14 +173,27 @@ export function wireAtom(cls, ctx) {
     else if (SOCK.message.test(name) && t === 'String') e = ctx.message || ctx.label || null;
     else if (SOCK.tone.test(name) && t === 'int') e = ctx.tone != null ? String(ctx.tone) : null;
     else if (SOCK.items.test(name) && /^List<String>/.test(t) && ctx.items) e = ctx.items;
+    else if (SOCK.items.test(name) && /^List<List<String>>/.test(t) && ctx.items) e = `[for (final s in ${ctx.items}) [s]]`;   // G28 · forge: פריט = תא-שדות ⇒ [תווית]
     else if (SOCK.selected.test(name) && t === 'int' && ctx.selected != null) e = ctx.selected;
+    else if (SOCK.selected.test(name) && /^Set<int>/.test(t) && ctx.selected != null) e = `{${ctx.selected}}`;   // G28 · forge: בחירה = קבוצה
+    else if (name === 'bare' && t === 'bool' && ctx.bare) e = 'true';   // G28 · forge: bare = בלי כרטיס-העטיפה (סרגל-ניווט/בורר בתוך מסך)
     else if (SOCK.onSelect.test(name) && /ValueChanged<int>|void Function\(int\)/.test(t) && ctx.onSelect) e = ctx.onSelect;
     else if (SOCK.children.test(name) && /^List<Widget>/.test(t) && ctx.children) e = `[${ctx.children.join(', ')}]`;
     if (e == null) { if (req) return null; continue; }   // שקע-חובה בלי דאטה ⇒ האטום נפסל (§20-ג: אין ערך-מומצא)
     args.push(w.positional.includes(name) ? e : `${name}: ${e}`); filled.push(name);
   }
   for (const m of ctx.must || []) if (!filled.some((n) => SOCK[m] && SOCK[m].test(n))) return null;   // G26 · שקע-נדרש-מהקורא (עובדה ⇒ value) לא קיים באטום ⇒ נפסל
-  return { cls, file: w.file, call: `${cls}(${args.join(', ')})`, filled };
+  const sockets = [...w.types.keys()].filter((n) => !/^(key|child|children|bare)$/.test(n)).length;
+  return { cls, file: w.file, call: `${cls}(${args.join(', ')})`, filled, sockets };
+}
+
+// G28 · בחירה בין מועמדים שמתחווטים: כהה = הראשון (ביט-זהה) · נייר = הכי-טוב-לייעוד (§20-א): מלוא-השקעים המולא הגבוה ביותר
+//   (אטום עם שקע-טקסט ריק מצייר placeholder — לא "הכי-טוב"); שוויון ⇒ הקודם בדירוג. wire = (cls) ⇒ תוצאת-wireAtom|null.
+export function pickWired(cands, wire) {
+  if (!isPaper()) { for (const cand of cands) { const w = wire(cand.split('@')[0]); if (w) return { ...w, cand }; } return null; }
+  let best = null, bestScore = -1;
+  for (const cand of cands) { const w = wire(cand.split('@')[0]); if (!w) continue; const score = w.sockets ? w.filled.length / w.sockets : 0; if (score > bestScore) { best = { ...w, cand }; bestScore = score; } }
+  return best;
 }
 
 // ── 4ב · חיווט-מנוע (G25): פרמטרים לפי שם-השקע (טלפון/טקסט) · פרמטר-בשם-מנוע-אח = שקע-פונקציה (ho) ⇒ ייבוא המנוע-האח. שקע בלי ערך ⇒ null ──
@@ -221,7 +238,7 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null }) 
   const strOf = (lbl) => `(r[${k(lbl)}] ?? '')`;
   const imports = new Set(); const widgets = []; const notes = [];
   const wired = (cls, ctx) => { const w = wireAtom(cls, ctx); if (w) imports.add(`import '../${w.file.startsWith('dart-') ? w.file : 'dart-ui-bs/' + w.file}';`); return w; };
-  const firstWired = (pick, ctx) => { for (const cand of [...pick.atoms, ...pick.alts]) { const w = wired(cand.split('@')[0], ctx); if (w) return { ...w, cand }; } return null; };
+  const firstWired = (pick, ctx) => pickWired([...pick.atoms, ...pick.alts], (c) => wired(c, ctx));
   for (const p of plan) {
     if (!p.ok) { notes.push(`⚪ ${p.name}: ${p.why}`); continue; }
     const s = p.shape; const lbl = k(p.name);
@@ -408,13 +425,13 @@ export function planReports({ reports, plan, entities, content = [] }) {
   return [...byEnt.values()].map((r) => ({ ...r, ok: !!r.root && r.unresolved.length === 0 }));
 }
 
-export function renderReport({ slug, report, k }) {
+export function renderReport({ slug, report, k, question = null, visible = 3 }) {   // G28 · question = השאלה שהמסך עונה עליה · visible = חלקים גלויים (השאר ב-DsFold «פרטים (n)», PLAN §3.2)
   const root = report.root; const rootSlug = root.slug;
   const imports = new Set(); const notes = [...report.unresolved]; const sections = [];
   const wired = (cls, ctx) => { const w = wireAtom(cls, ctx); if (w) imports.add(`import '../${w.file.startsWith('dart-') ? w.file : 'dart-ui-bs/' + w.file}';`); return w; };
-  const firstWired = (pick, ctx) => { for (const cand of [...pick.atoms, ...pick.alts]) { const w = wired(cand.split('@')[0], ctx); if (w) return { ...w, cand }; } return null; };
+  const firstWired = (pick, ctx) => pickWired([...pick.atoms, ...pick.alts], (c) => wired(c, ctx));
   const goal = `${G.reportWord} ${root.name}`;
-  const picker = firstWired(searchOp('switch', goal), { items: `[for (final o in appStore.options('${rootSlug}')) o.value]`, selected: 'i', onSelect: '(v) => setState(() => _sel = v)', label: k(root.name), glyph: k('🧩') });
+  const picker = firstWired(searchOp('switch', goal), { items: `[for (final o in appStore.options('${rootSlug}')) o.value]`, selected: 'i', onSelect: '(v) => setState(() => _sel = v)', label: k(root.name), glyph: k('🧩'), bare: true });
   const empty = firstWired(searchOp('empty', goal), { message: k(T('reportEmpty', { ent: root.name })), label: k(root.name), glyph: k('🧩') });
   const used = []; const texts = [];
   for (const sec of report.sections) {
@@ -465,7 +482,11 @@ ${texts.map((t) => `    ${t},`).join('\n')}
   return b.where((s) => s.trim().isNotEmpty).join('\\n');
 }
 `;
-  const title = k(T('reportTitle', { ent: root.name })); const sub = k(T('reportSub', { n: sections.length }));
+  const title = k(question || T('reportTitle', { ent: root.name })); const sub = k(question ? T('reportTitle', { ent: root.name }) : T('reportSub', { n: sections.length }));
+  // G28 · 3-למעלה, השאר מקופל: מעבר ל-visible ⇒ DsFold (כרום-DS, op expand) — דטרמיניסטי, בלי מצב-קודם לשבור
+  const shown = sections.slice(0, visible), folded = sections.slice(visible);
+  const foldW = folded.length ? `DsFold(title: ${k(T('foldLabel', { n: folded.length }))}, details: [${folded.map((w) => `Padding(padding: const EdgeInsets.only(bottom: 12), child: ${w})`).join(', ')}])` : null;
+  const bodyRows = [...shown, ...(foldW ? [foldW] : [])];
   const code = `// 📄 חולל ע"י חלקיק-הדוח (particles · G24 · הכרעה-27): מבנה-קבוע-לרשומה; כל חלק מורכב מחלקיקים שנמצאו בחיפוש-פתוח. אל תערוך ידנית.
 ${report.sections.map((s) => `//   ${s.name} = ${s.refs.map((r) => r.raw + (r.why ? ' ⚪' : '')).join(', ')}`).join('\n')}
 ${used.map((u) => '//   ' + u).join('\n')}
@@ -495,7 +516,7 @@ class _${cls}State extends State<${cls}> {
     final id0 = r0[AppStore.idKey] ?? '';
     return DsScaffold(title: ${title}, subtitle: ${sub}, icon: ${k('📄')}, children: [
       ${picker ? `Padding(padding: const EdgeInsets.only(bottom: 12), child: ${picker.call}),` : ''}
-${sections.map((w) => `      Padding(padding: const EdgeInsets.only(bottom: 12), child: ${w}),`).join('\n')}
+${bodyRows.map((w) => `      Padding(padding: const EdgeInsets.only(bottom: 12), child: ${w}),`).join('\n')}
 ${exportBtn}
     ]);
   });

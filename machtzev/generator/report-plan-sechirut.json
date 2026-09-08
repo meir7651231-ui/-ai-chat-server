@@ -73,7 +73,7 @@
       "why": null,
       "wired": [
        "DsSection",
-       "ToastCard"
+       "DsNote"
       ]
      }
     ]
@@ -102,7 +102,7 @@
       "mode": "childParticle",
       "why": null,
       "wired": [
-       "StatRow"
+       "ForgeGlowSlider"
       ]
      },
      {
@@ -110,7 +110,7 @@
       "mode": "childParticle",
       "why": null,
       "wired": [
-       "KpiTile"
+       "KvLine"
       ]
      }
     ]
@@ -149,7 +149,7 @@
       "mode": "content",
       "why": null,
       "wired": [
-       "ToastCard"
+       "DsNote"
       ]
      }
     ]
@@ -162,7 +162,7 @@
       "mode": "content",
       "why": null,
       "wired": [
-       "ToastCard"
+       "DsNote"
       ]
      }
     ]

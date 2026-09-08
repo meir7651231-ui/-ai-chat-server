@@ -1556,6 +1556,18 @@
   "why": "צורת-שקעים"
  },
  {
+  "id": "DsFold",
+  "layer": "display",
+  "file": "dart-ui-bs/ds/ds.dart",
+  "op": "expand",
+  "sockets": [
+   "details",
+   "open",
+   "title"
+  ],
+  "why": "צורת-שקעים"
+ },
+ {
   "id": "DsMonthOffset",
   "layer": "display",
   "file": "dart-ui-bs/ds/ds_calendar.dart",
@@ -1587,6 +1599,17 @@
    "onTap",
    "sub",
    "title"
+  ],
+  "why": "צורת-שקעים"
+ },
+ {
+  "id": "DsNote",
+  "layer": "display",
+  "file": "dart-ui-bs/ds/ds.dart",
+  "op": "alert",
+  "sockets": [
+   "label",
+   "message"
   ],
   "why": "צורת-שקעים"
  },
@@ -2152,7 +2175,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "bare"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2165,7 +2189,8 @@
    "fields",
    "items",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2202,7 +2227,8 @@
    "fields",
    "items",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2226,7 +2252,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "bare"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2287,7 +2314,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "bare"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2371,7 +2399,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "bare"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2526,7 +2555,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2538,7 +2568,9 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2551,7 +2583,8 @@
    "fields",
    "items",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2563,7 +2596,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2575,7 +2609,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2598,7 +2633,9 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2609,7 +2646,8 @@
   "op": "action",
   "sockets": [
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2655,7 +2693,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2737,7 +2776,9 @@
    "fields",
    "items",
    "onTap",
-   "child"
+   "child",
+   "onAction",
+   "onSelect"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2770,7 +2811,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2782,7 +2824,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "bare"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2817,7 +2860,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2864,7 +2908,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2876,7 +2921,9 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2889,7 +2936,9 @@
    "fields",
    "items",
    "onTap",
-   "child"
+   "child",
+   "onAction",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2901,7 +2950,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onSelect"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2912,7 +2962,8 @@
   "op": "action",
   "sockets": [
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2924,7 +2975,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2947,7 +2999,10 @@
   "sockets": [
    "onChanged",
    "onTap",
-   "child"
+   "child",
+   "bare",
+   "control",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2970,7 +3025,9 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onSelect",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -2982,7 +3039,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3015,7 +3073,8 @@
   "op": "stat",
   "sockets": [
    "fields",
-   "child"
+   "child",
+   "bare"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3027,7 +3086,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3039,7 +3099,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3063,7 +3124,10 @@
    "fields",
    "items",
    "columns",
-   "child"
+   "child",
+   "bare",
+   "onCell",
+   "onCellLong"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3076,7 +3140,10 @@
    "fields",
    "items",
    "onTap",
-   "child"
+   "child",
+   "bare",
+   "onAction",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3110,7 +3177,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3122,7 +3190,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "bare"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3134,7 +3203,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3168,7 +3238,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3180,7 +3251,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3203,7 +3275,9 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "bare",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3215,7 +3289,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3227,7 +3302,8 @@
   "sockets": [
    "fields",
    "onChanged",
-   "child"
+   "child",
+   "control"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3239,7 +3315,8 @@
   "sockets": [
    "fields",
    "onChanged",
-   "child"
+   "child",
+   "control"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3251,7 +3328,9 @@
   "sockets": [
    "fields",
    "onChanged",
-   "child"
+   "child",
+   "control",
+   "state"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3263,7 +3342,9 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3275,7 +3356,8 @@
   "sockets": [
    "fields",
    "onChanged",
-   "child"
+   "child",
+   "control"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3299,7 +3381,9 @@
   "sockets": [
    "onChanged",
    "onTap",
-   "child"
+   "child",
+   "control",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3311,7 +3395,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3368,7 +3453,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3383,7 +3469,9 @@
    "columns",
    "values",
    "onTap",
-   "child"
+   "child",
+   "onAction",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3406,7 +3494,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3418,7 +3507,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3431,7 +3521,8 @@
    "fields",
    "items",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3454,7 +3545,10 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "bare",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3465,7 +3559,8 @@
   "op": "field",
   "sockets": [
    "onChanged",
-   "child"
+   "child",
+   "control"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3488,7 +3583,8 @@
   "sockets": [
    "fields",
    "onChanged",
-   "child"
+   "child",
+   "control"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3500,7 +3596,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3514,7 +3611,11 @@
    "items",
    "onChanged",
    "onTap",
-   "child"
+   "child",
+   "control",
+   "onAction",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3527,7 +3628,8 @@
    "fields",
    "columns",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3563,7 +3665,9 @@
    "columns",
    "onChanged",
    "onTap",
-   "child"
+   "child",
+   "control",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3574,7 +3678,8 @@
   "op": "action",
   "sockets": [
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3628,7 +3733,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3651,7 +3757,8 @@
   "sockets": [
    "fields",
    "onChanged",
-   "child"
+   "child",
+   "control"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3661,7 +3768,8 @@
   "file": "dart-forge-bs/motion/glow_pulse.dart",
   "op": "fact",
   "sockets": [
-   "child"
+   "child",
+   "bare"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3673,7 +3781,8 @@
   "sockets": [
    "fields",
    "onChanged",
-   "child"
+   "child",
+   "control"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3685,7 +3794,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3697,7 +3807,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3731,7 +3842,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3741,7 +3853,8 @@
   "file": "dart-forge-bs/motion/gradient_sweep.dart",
   "op": "fact",
   "sockets": [
-   "child"
+   "child",
+   "bare"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3753,7 +3866,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3808,7 +3922,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3832,7 +3947,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onSelect"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3844,7 +3960,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3866,7 +3983,8 @@
   "op": "group",
   "sockets": [
    "items",
-   "child"
+   "child",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3877,7 +3995,8 @@
   "op": "group",
   "sockets": [
    "items",
-   "child"
+   "child",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3899,7 +4018,9 @@
   "sockets": [
    "onChanged",
    "onTap",
-   "child"
+   "child",
+   "control",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3934,7 +4055,10 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "bare",
+   "onCell",
+   "onCellLong"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3971,7 +4095,8 @@
   "sockets": [
    "fields",
    "onChanged",
-   "child"
+   "child",
+   "control"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -3995,7 +4120,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4056,7 +4182,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4068,7 +4195,9 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4080,7 +4209,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4158,7 +4288,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4170,7 +4301,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4181,7 +4313,8 @@
   "op": "fact",
   "sockets": [
    "fields",
-   "child"
+   "child",
+   "bare"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4193,7 +4326,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "bare"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4237,7 +4371,9 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4249,7 +4385,9 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "bare",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4295,7 +4433,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4307,7 +4446,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4317,7 +4457,8 @@
   "file": "dart-forge-bs/spatial/minimap.dart",
   "op": "fact",
   "sockets": [
-   "child"
+   "child",
+   "bare"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4331,7 +4472,8 @@
    "items",
    "columns",
    "values",
-   "child"
+   "child",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4343,7 +4485,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4355,7 +4498,10 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "bare",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4367,7 +4513,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4391,7 +4538,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4427,7 +4575,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onSelect"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4439,7 +4588,9 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction",
+   "state"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4473,7 +4624,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4485,7 +4637,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4520,7 +4673,9 @@
    "fields",
    "items",
    "onTap",
-   "child"
+   "child",
+   "onAction",
+   "onSelect"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4530,7 +4685,8 @@
   "file": "dart-forge-bs/motion/parallax_tilt.dart",
   "op": "fact",
   "sockets": [
-   "child"
+   "child",
+   "bare"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4575,7 +4731,9 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4587,7 +4745,9 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onSelect",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4599,7 +4759,9 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4611,7 +4773,9 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4634,7 +4798,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4646,7 +4811,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4658,7 +4824,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4681,7 +4848,9 @@
   "sockets": [
    "fields",
    "onChanged",
-   "child"
+   "child",
+   "control",
+   "state"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4693,7 +4862,9 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction",
+   "state"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4705,7 +4876,10 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "bare",
+   "onSelect",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4717,7 +4891,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4729,7 +4904,9 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction",
+   "state"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4820,7 +4997,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onSelect"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4866,7 +5044,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4921,7 +5100,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4933,7 +5113,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4946,7 +5127,10 @@
    "fields",
    "items",
    "onChanged",
-   "child"
+   "child",
+   "control",
+   "onSelect",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -4958,7 +5142,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "bare"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5015,7 +5200,9 @@
    "fields",
    "items",
    "values",
-   "child"
+   "child",
+   "bare",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5027,7 +5214,9 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5040,7 +5229,9 @@
    "fields",
    "onChanged",
    "onTap",
-   "child"
+   "child",
+   "control",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5053,7 +5244,9 @@
    "fields",
    "items",
    "onTap",
-   "child"
+   "child",
+   "onAction",
+   "onSelect"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5076,7 +5269,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5088,7 +5282,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5100,7 +5295,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5136,7 +5332,9 @@
   "sockets": [
    "onChanged",
    "onTap",
-   "child"
+   "child",
+   "control",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5159,7 +5357,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5182,7 +5381,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5194,7 +5394,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5206,7 +5407,9 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5218,7 +5421,10 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "bare",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5230,7 +5436,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5242,7 +5449,9 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5254,7 +5463,9 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5266,7 +5477,10 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "bare",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5278,7 +5492,9 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5290,7 +5506,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5303,7 +5520,8 @@
    "fields",
    "items",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5315,7 +5533,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5339,7 +5558,10 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onCell",
+   "onCellLong",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5351,7 +5573,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5363,7 +5586,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5386,7 +5610,8 @@
   "op": "action",
   "sockets": [
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5400,7 +5625,9 @@
    "items",
    "onChanged",
    "onTap",
-   "child"
+   "child",
+   "control",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5437,7 +5664,9 @@
    "items",
    "values",
    "onTap",
-   "child"
+   "child",
+   "onAction",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5461,7 +5690,8 @@
    "fields",
    "items",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5474,7 +5704,8 @@
    "fields",
    "items",
    "values",
-   "child"
+   "child",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5486,7 +5717,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5498,7 +5730,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "bare"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5522,7 +5755,9 @@
    "fields",
    "items",
    "columns",
-   "child"
+   "child",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5568,7 +5803,10 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "bare",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5592,7 +5830,8 @@
    "fields",
    "items",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5637,7 +5876,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5661,7 +5901,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5696,7 +5937,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5709,7 +5951,8 @@
    "fields",
    "values",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5722,7 +5965,8 @@
    "fields",
    "items",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5734,7 +5978,9 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5746,7 +5992,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5769,7 +6016,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5804,7 +6052,8 @@
    "fields",
    "items",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5827,7 +6076,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5886,7 +6136,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5899,7 +6150,8 @@
    "fields",
    "items",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5924,7 +6176,8 @@
    "fields",
    "items",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5937,7 +6190,8 @@
    "fields",
    "items",
    "onChanged",
-   "child"
+   "child",
+   "control"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5951,7 +6205,10 @@
    "items",
    "onChanged",
    "onTap",
-   "child"
+   "child",
+   "bare",
+   "control",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5973,7 +6230,8 @@
   "op": "group",
   "sockets": [
    "items",
-   "child"
+   "child",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -5993,7 +6251,8 @@
   "file": "dart-forge-bs/temporal/time_slot.dart",
   "op": "fact",
   "sockets": [
-   "child"
+   "child",
+   "bare"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -6005,7 +6264,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -6018,7 +6278,9 @@
    "fields",
    "items",
    "onTap",
-   "child"
+   "child",
+   "bare",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -6030,7 +6292,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -6042,7 +6305,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -6054,7 +6318,9 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onSelect",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -6077,7 +6343,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -6090,7 +6357,10 @@
    "fields",
    "items",
    "onTap",
-   "child"
+   "child",
+   "bare",
+   "onAction",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -6124,7 +6394,8 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "variants"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -6169,7 +6440,8 @@
   "op": "panel",
   "sockets": [
    "fields",
-   "child"
+   "child",
+   "bare"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -6193,7 +6465,9 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -6205,7 +6479,10 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "bare",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -6251,7 +6528,8 @@
   "op": "panel",
   "sockets": [
    "items",
-   "child"
+   "child",
+   "onSelect"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -6265,7 +6543,9 @@
    "values",
    "onChanged",
    "onTap",
-   "child"
+   "child",
+   "control",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -6291,7 +6571,9 @@
    "fields",
    "onChanged",
    "onTap",
-   "child"
+   "child",
+   "control",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -6303,7 +6585,8 @@
   "sockets": [
    "fields",
    "onTap",
-   "child"
+   "child",
+   "onAction"
   ],
   "why": "צורת-מניפסט-forge"
  },
@@ -6315,7 +6598,9 @@
   "sockets": [
    "fields",
    "items",
-   "child"
+   "child",
+   "onSelect",
+   "selected"
   ],
   "why": "צורת-מניפסט-forge"
  },

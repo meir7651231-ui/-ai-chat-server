@@ -4,8 +4,8 @@
 //   הישויות-הבנות = חלקים בעמוד-השורש (רשימה מסוננת לפי הרשומה + הוספה עם מילוי-מראש); הדוח והשליחה = פעולות על רשומת-השורש;
 //   לוח-הבקרה = הבית; כל שאר תוצרי-המנוע (חלקיקים · סקירה · כרטיס · מסך-אמת · מערכת) = מגירת "עוד" (הרכזת הישנה, ביט-זהה).
 //   אפס מילון-דומייני: שמות מהספק, אטומים מחיפוש-פתוח (switch לסרגל · group לחלקים · fact(label+value) לעובדות · action לפעולות).
-import { makeConsts, write } from './render-ds.mjs';
-import { searchOp, wireAtom } from './particles.mjs';
+import { makeConsts, write, isPaper } from './render-ds.mjs';
+import { searchOp, wireAtom, pickWired } from './particles.mjs';
 import { L, T } from './chrome.mjs';
 
 const clsOf = (slug) => 'Gen' + slug.replace(/(^|_)([a-z0-9])/g, (_, __, c) => c.toUpperCase()) + 'Screen';
@@ -23,7 +23,7 @@ export function pickRoot(entMeta, backRefs) {
 export function renderRootPage(slug, { root, children, report, title }) {
   const { k, dump } = makeConsts(slug);
   const imports = new Set([`import 'gen_${root.slug}.dart';`]);
-  const firstWired = (pick, ctx) => { for (const cand of [...pick.atoms, ...pick.alts]) { const w = wireAtom(cand.split('@')[0], ctx); if (w) { imports.add(impOf(w)); return { ...w, cand }; } } return null; };
+  const firstWired = (pick, ctx) => { const w = pickWired([...pick.atoms, ...pick.alts], (c) => wireAtom(c, ctx)); if (w) imports.add(impOf(w)); return w; };
   const goal = `${root.name} ${title}`;
   const notes = [];
   // עובדות: שדות-השורש (בלי מקוננים) — אטום label+value (חיפוש fact עם צורך label+value ⇒ שורת מפתח-ערך, לא שבב)
@@ -34,7 +34,8 @@ export function renderRootPage(slug, { root, children, report, title }) {
   const factRows = factFields.map((f, i) => facts[i] ? `if ((r0[${k(f.label)}] ?? '').trim().isNotEmpty) ${facts[i].call}` : null).filter(Boolean);
   const sectionOf = (label, children) => { const g = firstWired(searchOp('group', goal), { label, children, sub: label, tone: 0 }); return g ? (/children:/.test(g.call) ? g.call : `Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [${g.call}, ${children.join(', ')}])`) : `Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [${children.join(', ')}])`; };
   const blocks = [];
-  if (factRows.length) blocks.push(sectionOf(k(L.rootFacts), factRows));
+  const paper = isPaper();   // G28 · נייר: העובדות מקופלות («פרטים (n)», PLAN §3.2) אחרי הבנות והדוח — המסך מציג מה-לעשות, לא טבלה
+  if (factRows.length && !paper) blocks.push(sectionOf(k(L.rootFacts), factRows));
   for (const c of children) {
     imports.add(`import 'gen_${c.slug}.dart';`);
     const recs = `appStore.referencing('${c.slug}', ${k(c.link)}, id)`;
@@ -51,6 +52,7 @@ export function renderRootPage(slug, { root, children, report, title }) {
     const rep = firstWired(searchOp('action', `${L.rootReport} ${goal}`), { label: k(L.rootReport), nav: `() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${report.cls}(initialId: id)))`, glyph: k('📄') });
     if (rep) blocks.push(rep.call); else notes.push(`${L.rootReport}: ${L.rootNoAction}`);
   }
+  if (factRows.length && paper) blocks.push(`DsFold(title: ${k(T('foldLabel', { n: factRows.length }))}, details: [${factRows.join(', ')}])`);
   const stageSub = root.stages && root.stages.length ? `const [${root.stages.map((s) => k(s)).join(', ')}][appStore.stageOf('${root.slug}', id).clamp(0, ${root.stages.length - 1})]` : k(root.name);
   const cls = clsOf(slug);
   const code = `// 🧭 חולל ע"י ניווט-מקשרים (app-shell · G26 · הכרעה-27) — עמוד-השורש: עובדות · ישויות-בנות (מסוננות לרשומה) · דוח. אל תערוך ידנית.
@@ -79,14 +81,14 @@ ${blocks.map((b) => `      Padding(padding: const EdgeInsets.only(bottom: 12), c
 }
 
 // ── השלד: סרגל-תחתון (בית · שורש · עוד) על IndexedStack — כל לשונית מסך שלם ──
-export function renderShell(slug, { title, root, rootPage, dashboard, hub }) {
+export function renderShell(slug, { title, root, rootPage, dashboard, hub, questions = {} }) {   // G28 · questions.list = השאלה שמסך-הרשימה עונה עליה (PLAN §1: מסך = שאלה אחת)
   const { k, dump } = makeConsts(slug);
   const imports = new Set([`import 'gen_${hub.slug}.dart';`, `import 'gen_${root.slug}.dart';`, `import 'gen_${rootPage.slug}.dart';`]);
   if (dashboard) imports.add(`import 'gen_${dashboard.slug}.dart';`);
-  const firstWired = (pick, ctx) => { for (const cand of [...pick.atoms, ...pick.alts]) { const w = wireAtom(cand.split('@')[0], ctx); if (w) { imports.add(impOf(w)); return { ...w, cand }; } } return null; };
+  const firstWired = (pick, ctx) => { const w = pickWired([...pick.atoms, ...pick.alts], (c) => wireAtom(c, ctx)); if (w) imports.add(impOf(w)); return w; };
   const notes = [];
   const labels = [dashboard ? L.shellHome : null, root.name, L.shellMore].filter(Boolean);
-  const nav = firstWired(searchOp('switch', `${title} ${labels.join(' ')}`), { items: `[${labels.map((l) => k(l)).join(', ')}]`, selected: '_t', onSelect: '(i) => setState(() => _t = i)', label: k(title) });
+  const nav = firstWired(searchOp('switch', `${title} ${labels.join(' ')}`, ['items', 'selected', 'onSelect']), { items: `[${labels.map((l) => k(l)).join(', ')}]`, selected: '_t', onSelect: '(i) => setState(() => _t = i)', label: k(title), bare: true, must: ['items', 'selected', 'onSelect'] });   // G28 · הצורך מפורש: פריטים+נבחר+בחירה — בורר שלא יודע לבחור אינו סרגל
   if (!nav) notes.push(L.shellNoNav);
   const add = firstWired(searchOp('action', `${root.name} ${title}`), { label: k(T('rootAdd', { ent: root.name })), nav: `() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${root.cls}()))`, glyph: k('➕') });
   const disp = root.descField ? `(r[${k(root.descField)}] ?? '')` : `appStore.displayOf('${root.slug}', r[AppStore.idKey] ?? '')`;
@@ -111,7 +113,7 @@ class _${cls}State extends State<${cls}> {
   int _t = 0;
   @override
   Widget build(BuildContext context) => Scaffold(
-    backgroundColor: DsTokens.bg,
+    backgroundColor: DsLook.of(context).bg,
     body: IndexedStack(index: _t.clamp(0, ${tabs.length - 1}), children: [${tabs.join(', ')}]),
     bottomNavigationBar: ${nav ? `SafeArea(child: Padding(padding: const EdgeInsets.fromLTRB(12, 6, 12, 10), child: Center(heightFactor: 1.0, child: ${nav.call})))` : 'null'},   // heightFactor: Center ללא-גובה מתפשט לכל הגובה שה-Scaffold מציע ⇒ הגוף נעלם
   );
@@ -121,7 +123,7 @@ class _RootTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, _) {
     final rs = appStore.records('${root.slug}');
-    return DsScaffold(title: ${k(root.name)}, subtitle: rs.length.toString() + ' ' + ${k(root.name)}, icon: ${k(root.icon || '🗂️')}, children: [
+    return DsScaffold(title: ${k(questions.list || root.name)}, subtitle: rs.length.toString() + ' ' + ${k(root.name)}, icon: ${k(root.icon || '🗂️')}, children: [
       ${add ? `Padding(padding: const EdgeInsets.only(bottom: 10), child: ${add.call}),` : ''}
       for (final r in rs) DsNavTile(glyph: ${k(root.icon || '🗂️')}, title: ${disp}, sub: ${sub}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${rootPage.cls}(id: r[AppStore.idKey] ?? '')))),
     ]);

@@ -17,7 +17,7 @@
     ],
     "alts": [
      "DsTable",
-     "ForgeDataGrid",
+     "ForgeModalDialog",
      "ForgeSplitControl"
     ]
    }
@@ -98,12 +98,13 @@
     ],
     "alts": [
      "ToastCard",
-     "AlertBanner@premium/feedback"
+     "AlertBanner@premium/feedback",
+     "DsNote"
     ]
    }
   ],
   "wired": [
-   "ToastCard"
+   "DsNote"
   ]
  },
  {
@@ -136,12 +137,13 @@
     ],
     "alts": [
      "ToastCard",
-     "AlertBanner@premium/feedback"
+     "AlertBanner@premium/feedback",
+     "DsNote"
     ]
    }
   ],
   "wired": [
-   "ToastCard"
+   "DsNote"
   ]
  },
  {
@@ -162,12 +164,13 @@
     ],
     "alts": [
      "ToastCard",
-     "AlertBanner@premium/feedback"
+     "AlertBanner@premium/feedback",
+     "DsNote"
     ]
    }
   ],
   "wired": [
-   "ToastCard"
+   "DsNote"
   ]
  },
  {
@@ -188,12 +191,13 @@
     ],
     "alts": [
      "ToastCard",
-     "AlertBanner@premium/feedback"
+     "AlertBanner@premium/feedback",
+     "DsNote"
     ]
    }
   ],
   "wired": [
-   "ToastCard"
+   "DsNote"
   ]
  },
  {
@@ -226,13 +230,14 @@
     ],
     "alts": [
      "AlertBanner@premium/feedback",
-     "ToastCard"
+     "ToastCard",
+     "DsNote"
     ]
    }
   ],
   "wired": [
    "DsSection",
-   "ToastCard"
+   "DsNote"
   ]
  }
 ]

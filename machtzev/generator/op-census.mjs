@@ -84,8 +84,11 @@ const FORGE_RULES = [
 function classifyForge(a, m) {
   const s = m.sig || {};
   const D = [m.fieldSlots ? 'fields' : null, m.items ? 'items' : null, m.columns ? 'columns' : null, m.values ? 'values' : null, m.control || s.input ? 'onChanged' : null, m.actions ? 'onTap' : null, m.child ? 'child' : null].filter(Boolean);
-  for (const [op, test] of FORGE_RULES) if (test(m, s)) return { op, sockets: D, why: 'צורת-מניפסט-forge' };
-  return { op: 'panel', sockets: D, why: 'forge ללא צורה' };
+  // G28 · שקעי-האמת: דגלי-המניפסט + הפרמטרים-הנקובים של הבנאי בפועל (selected · onSelect · bare · … — G21 נתן לאטומי-forge שקעי-דאטה
+  //   שהמניפסט לא מונה; בלי זה חיפוש-לפי-צורך לא מוצא בורר עם items+selected+onSelect). סדר: מניפסט קודם, ואז החדשים.
+  const real = sockets(a.file, a.id); const all = [...D, ...real.filter((x) => !D.includes(x))];
+  for (const [op, test] of FORGE_RULES) if (test(m, s)) return { op, sockets: all, why: 'צורת-מניפסט-forge' };
+  return { op: 'panel', sockets: all, why: 'forge ללא צורה' };
 }
 function classifyDisplay(a) {
   const fm = /^dart-forge-bs\//.test(a.file) ? FORGE.get(a.id) : null; if (fm) return classifyForge(a, fm);

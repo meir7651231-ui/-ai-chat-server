@@ -19,7 +19,7 @@
       "mode": "content",
       "why": null,
       "wired": [
-       "ToastCard"
+       "DsNote"
       ]
      }
     ]
@@ -33,7 +33,7 @@
       "why": null,
       "wired": [
        "DsSection",
-       "ToastCard"
+       "DsNote"
       ]
      },
      {
@@ -41,7 +41,7 @@
       "mode": "content",
       "why": null,
       "wired": [
-       "ToastCard"
+       "DsNote"
       ]
      }
     ]
@@ -54,7 +54,7 @@
       "mode": "content",
       "why": null,
       "wired": [
-       "ToastCard"
+       "DsNote"
       ]
      }
     ]
@@ -75,7 +75,7 @@
       "mode": "content",
       "why": null,
       "wired": [
-       "ToastCard"
+       "DsNote"
       ]
      }
     ]
@@ -101,7 +101,7 @@
       "mode": "content",
       "why": null,
       "wired": [
-       "ToastCard"
+       "DsNote"
       ]
      }
     ]
@@ -114,7 +114,7 @@
       "mode": "content",
       "why": null,
       "wired": [
-       "ToastCard"
+       "DsNote"
       ]
      }
     ]

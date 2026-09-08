@@ -41,6 +41,9 @@ const fontKeys = Object.keys(PURE_LOOK.fonts);
 const fontFields = fontKeys.map(k => `  final String ${k};`).join('\n');
 const fontCtor = fontKeys.map(k => `    required this.${k}`).join(',\n');
 const fontDefault = fontKeys.map(k => `${k}: ${JSON.stringify(PURE_LOOK.fonts[k])}`).join(', ');
+// ── G28 · עורות/חבילות-פונט נוספים (הפיכים): skins.<id> = מלוא נייטרל+סמנטי (חסר ⇒ ערך-Pure) · fontSets.<id> ──
+const skinsExtra = Object.entries(PURE_LOOK.skins || {}).map(([id, s]) => `'${id}': DsPureSkin(${[...Object.keys(PURE_LOOK.neutral), ...Object.keys(PURE_LOOK.semantic)].map(k => `${camel(k)}: ${color(s[k] ?? PURE_LOOK.neutral[k] ?? PURE_LOOK.semantic[k])}`).join(', ')})`).join(', ');
+const fontSetsExtra = Object.entries(PURE_LOOK.fontSets || {}).map(([id, f]) => `'${id}': DsPureFonts(${fontKeys.map(k => `${k}: ${JSON.stringify(f[k] ?? PURE_LOOK.fonts[k])}`).join(', ')})`).join(', ');
 
 const out = `// ✨ מאגר-העיצוב · שפת-Pure (Layer B · הטמעה) — **מחולל ע"י machtzev/ds-pure.mjs מ-new/atoms/pure-look.mjs.**
 // אל תערוך ידנית: שנה את הזרע (pure-look) והרץ את המנוע. נייטרל+סמנטי זורמים כ-DsPureSkin **הפיך**
@@ -111,6 +114,10 @@ ${themeConsts}
 
   static const String defaultTheme = '${PURE_LOOK.defaultTheme}';
   static const Map<String, DsPureTheme> themes = {${themeMap}};
+
+  // ── G28 · עורות נוספים (skins) וחבילות-פונט (fontSets) — הפיכים: מוזרקים ב-PureScope פר-אפליקציה (חוק-6/7); בלי הזרקה ⇒ skin/fonts ⇒ ביט-זהה ──
+  static const Map<String, DsPureSkin> skins = {${skinsExtra}};
+  static const Map<String, DsPureFonts> fontSets = {${fontSetsExtra}};
 
   /// resolver-הערכה (מקביל ל-pure-resolve בצד-ה-JS): id→ערכה, נפילה לברירת-המחדל.
   static DsPureTheme themeOf(String id) => themes[id] ?? themes[defaultTheme]!;

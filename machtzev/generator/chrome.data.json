@@ -93,5 +93,6 @@
  "rootNoAction": "אף אטום-פעולה לא מתחווט",
  "shellLog": "ניווט-מקשרים (G26)",
  "shellRootWord": "שורש",
- "shellChildrenWord": "ישויות-בנות"
+ "shellChildrenWord": "ישויות-בנות",
+ "foldLabel": "פרטים ({n})"
 }

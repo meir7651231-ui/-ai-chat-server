@@ -21,7 +21,8 @@ const pascal = (slug) => 'GenApp' + slug.replace(/^app_/, '').replace(/(^|[_-])(
 // (ה-he שלהם, בקובץ-האטום). המנוע אוחז את סוג-הנתון לפי חפיפת-משמעות בין תווית-השדה
 // לתיאור-העצמי — אפס regex, אפס רשימת-מילים במנוע. מבחן-קונכייה: מחליף אטום ⇒ לומד מחדש.
 import { readAtlas } from './atlas.mjs';
-import { searchOp, wireAtom } from './particles.mjs';   // הכרעה-27 · חיפוש-פתוח לאריחי-אגרגט
+import { searchOp, wireAtom, pickWired } from './particles.mjs';
+import { isPaper, stripGlyph } from './look.mjs';   // הכרעה-27 · חיפוש-פתוח לאריחי-אגרגט
 const atlas = readAtlas();   // L93: atlas.json + atlas-data.json
 const heToks = (s) => [...String(s || '').matchAll(/[֐-׿]{2,}/g)].map((m) => stem(m[0])).filter((t) => t.length > 1);
 // מילים-עבריות שלמות (לא-גזומות) — לאימות-חפיפה מול הגזם (הגזם מקבץ, המילה מאשרת).
@@ -135,11 +136,13 @@ function pickXform(label, ftype) {
 }
 
 // מחולל-תוכן: אוסף מחרוזות-עברית ⇒ const; מחזיר את שם-הקבוע לשיבוץ בקוד.
+// G28 · המראה (הכרעה-28): מצב-המראה חי ב-look.mjs (משותף ל-particles/app-shell בלי מעגל-ייבוא); כאן רק re-export + השימוש ב-k().
+export { setLook, getLook, isPaper, stripGlyph } from './look.mjs';
 export function makeConsts(slug) {
   const consts = [];
   const k = (s) => {
     const name = `gen_${slug}_c${consts.length}`;
-    consts.push([name, String(s)]);
+    consts.push([name, isPaper() ? stripGlyph(s) : String(s)]);
     return name;
   };
   const dump = () => consts.map(([n, v]) => `const String ${n} = '${v.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\$/g, '\\$').replace(/\n/g, '\\n').replace(/\r/g, '\\r')}';`).join('\n') + '\n';   // G27: גם $ ושורה-חדשה (תוכן-רב-שורתי מהפירוקים)
@@ -573,7 +576,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   if (hasCal) { viewIdx.cal = viewChips.length; viewChips.push(`'${L.calChip}'`); }
   if (hasTable) { viewIdx.table = viewChips.length; viewChips.push(`'${L.tableChip}'`); }
   const viewToggle = hasSwitch
-    ? `\n  Widget _viewBar(BuildContext context) {\n    const labels = [${viewChips.join(', ')}];\n    return Row(mainAxisSize: MainAxisSize.min, children: [\n      for (var i = 0; i < labels.length; i++)\n        Padding(\n          padding: const EdgeInsets.only(left: 6),\n          child: Material(\n            color: _view == i ? DsTokens.accentSoft : const Color(0xFFF1F5F9),\n            borderRadius: BorderRadius.circular(20),\n            child: InkWell(\n              borderRadius: BorderRadius.circular(20),\n              onTap: () => setState(() => _view = i),\n              child: Padding(\n                padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),\n                child: Text(labels[i], style: TextStyle(color: _view == i ? DsTokens.accentDark : DsTokens.muted, fontSize: 12, fontWeight: FontWeight.w700)),\n              ),\n            ),\n          ),\n        ),\n    ]);\n  }\n`
+    ? `\n  Widget _viewBar(BuildContext context) {\n    final lk = DsLook.of(context);\n    const labels = [${viewChips.join(', ')}];\n    return Row(mainAxisSize: MainAxisSize.min, children: [\n      for (var i = 0; i < labels.length; i++)\n        Padding(\n          padding: const EdgeInsets.only(left: 6),\n          child: Material(\n            color: _view == i ? lk.accentSoft : (lk.chipBg),\n            borderRadius: BorderRadius.circular(20),\n            child: InkWell(\n              borderRadius: BorderRadius.circular(20),\n              onTap: () => setState(() => _view = i),\n              child: Padding(\n                padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),\n                child: Text(labels[i], style: TextStyle(color: _view == i ? lk.accentDark : lk.muted, fontSize: 12, fontWeight: FontWeight.w700)),\n              ),\n            ),\n          ),\n        ),\n    ]);\n  }\n`
     : '';
   const recordsTrailing = hasSwitch ? 'Row(mainAxisSize: MainAxisSize.min, children: [_viewBar(context), const SizedBox(width: 8), _csvBtn(context)])' : '_csvBtn(context)';
   const boardBranch = (hasBoard ? `if (_view == ${viewIdx.board}) return DsBoard(stages: const ${stageList}, records: rs, stageOf: (r) => appStore.stageOf(${SK}, r['__id'] ?? ''), titleOf: (r) => r[${viewTitle}] ?? '', onMove: (id, to) => appStore.setStage(${SK}, id, to));\n              ` : '')
@@ -637,17 +640,17 @@ ${guardMethod}${rlsFields}${viewToggle}
     return DsRecordCard(labels: const [${labelsList}], values: [${recValues}], ${stageArgs}onEdit: () => _edit(r), onDelete: () => appStore.removeById(${SK}, rid)${backFooter}${delArgs}${cardHiddenArg});
   }
 ${backRefs.length ? `
-  Widget _backChip(String label, int n) => Container(
+  Widget _backChip(String label, int n) => Builder(builder: (context) { final lk = DsLook.of(context); return Container(
         padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-        decoration: BoxDecoration(color: const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(20)),
-        child: Text('\$label · \$n', style: const TextStyle(color: DsTokens.muted, fontSize: 11.5, fontWeight: FontWeight.w700)),
-      );
+        decoration: BoxDecoration(color: lk.chipBg, borderRadius: BorderRadius.circular(20)),
+        child: Text('\$label · \$n', style: TextStyle(color: lk.muted, fontSize: 11.5, fontWeight: FontWeight.w700)),
+      ); });
 ` : ''}
 
 ${csvMethod}
 
-  Widget _csvBtn(BuildContext context) => Material(
-        color: const Color(0xFFF1F5F9),
+  Widget _csvBtn(BuildContext context) { final lk = DsLook.of(context); return Material(
+        color: lk.chipBg,
         borderRadius: BorderRadius.circular(9),
         child: InkWell(
           borderRadius: BorderRadius.circular(9),
@@ -655,47 +658,48 @@ ${csvMethod}
             Clipboard.setData(ClipboardData(text: _csv()));
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('${L.copiedCsv}'), duration: Duration(seconds: 2)));
           },
-          child: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             child: Row(mainAxisSize: MainAxisSize.min, children: [
-              Icon(Icons.copy_all_outlined, size: 15, color: DsTokens.muted),
-              SizedBox(width: 5),
-              Text('CSV', style: TextStyle(color: DsTokens.muted, fontSize: 12, fontWeight: FontWeight.w700)),
+              Icon(Icons.copy_all_outlined, size: 15, color: lk.muted),
+              const SizedBox(width: 5),
+              Text('CSV', style: TextStyle(color: lk.muted, fontSize: 12, fontWeight: FontWeight.w700)),
             ]),
           ),
         ),
-      );
+      ); }
 
-${hasCalc ? `  Widget _calc(String label, num v) => Padding(
+${hasCalc ? `  Widget _calc(String label, num v) => Builder(builder: (context) { final lk = DsLook.of(context); return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Container(
           padding: const EdgeInsets.all(13),
-          decoration: BoxDecoration(color: DsTokens.successSoft, borderRadius: BorderRadius.circular(DsTokens.rSm)),
+          decoration: BoxDecoration(color: lk.successSoft, borderRadius: BorderRadius.circular(lk.rSm)),
           child: Row(children: [
-            const Icon(Icons.calculate_outlined, size: 16, color: DsTokens.success),
+            Icon(Icons.calculate_outlined, size: 16, color: lk.success),
             const SizedBox(width: 8),
-            Expanded(child: Text(label, style: const TextStyle(color: DsTokens.ink, fontSize: 13.5, fontWeight: FontWeight.w700))),
-            Text(v.toStringAsFixed(2), style: const TextStyle(color: DsTokens.success, fontSize: 15.5, fontWeight: FontWeight.w800)),
+            Expanded(child: Text(label, style: TextStyle(color: lk.ink, fontSize: 13.5, fontWeight: FontWeight.w700))),
+            Text(v.toStringAsFixed(2), style: TextStyle(color: lk.success, fontSize: 15.5, fontWeight: FontWeight.w800)),
           ]),
         ),
-      );
+      ); });
 
-` : ''}${hasLive ? `  Widget _live(String label, String out) => Padding(
+` : ''}${hasLive ? `  Widget _live(String label, String out) => Builder(builder: (context) { final lk = DsLook.of(context); return Padding(
         padding: const EdgeInsets.only(top: 2, bottom: 6),
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.all(11),
-          decoration: BoxDecoration(color: DsTokens.accentSoft, borderRadius: BorderRadius.circular(DsTokens.rSm)),
+          decoration: BoxDecoration(color: lk.accentSoft, borderRadius: BorderRadius.circular(lk.rSm)),
           child: Row(children: [
-            const Icon(Icons.bolt, size: 15, color: DsTokens.accentDark),
+            Icon(Icons.bolt, size: 15, color: lk.accentDark),
             const SizedBox(width: 7),
-            Expanded(child: Text('\$label · \$out', style: const TextStyle(color: DsTokens.accentDark, fontSize: 13, fontWeight: FontWeight.w700))),
+            Expanded(child: Text('\$label · \$out', style: TextStyle(color: lk.accentDark, fontSize: 13, fontWeight: FontWeight.w700))),
           ]),
         ),
-      );
+      ); });
 
 ` : ''}  @override
   Widget build(BuildContext context) {
+    final lk = DsLook.of(context);
     return DsScaffold(
       title: ${cTitle},
       subtitle: ${cSub},
@@ -706,8 +710,8 @@ ${hasCalc ? `  Widget _calc(String label, num v) => Padding(
 ${stepsDart}${hasVal ? `        if (_err != null) Container(
           margin: const EdgeInsets.only(bottom: 12),
           padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(color: const Color(0x14DC2626), borderRadius: BorderRadius.circular(DsTokens.rSm), border: Border.all(color: const Color(0x40DC2626))),
-          child: Row(children: [const Icon(Icons.error_outline, size: 16, color: Color(0xFFDC2626)), const SizedBox(width: 8), Expanded(child: Text(_err!, style: const TextStyle(color: Color(0xFFDC2626), fontSize: 13, fontWeight: FontWeight.w600)))]),
+          decoration: BoxDecoration(color: lk.dangerSoft, borderRadius: BorderRadius.circular(lk.rSm), border: Border.all(color: lk.dangerLine)),
+          child: Row(children: [Icon(Icons.error_outline, size: 16, color: lk.danger), const SizedBox(width: 8), Expanded(child: Text(_err!, style: TextStyle(color: lk.danger, fontSize: 13, fontWeight: FontWeight.w600)))]),
         ),
 ` : ''}        ${formSection}
         DsSection(title: ${cRecords}, trailing: ${recordsTrailing}, children: [
@@ -773,8 +777,8 @@ export function renderDashboard(slug, { title, icon = '📊', entities, metrics 
       : `appStore.count('${a.slug}').toDouble()`;
     const disp = a.kind === L.avg ? `${num}.toStringAsFixed(1)` : `${num}.toStringAsFixed(0)`;
     // הכרעה-27 · אריח-אגרגט = חלקיק 'headline': האטום נמצא בחיפוש בכל הקטלוג (cover) ומתחווט מהדאטה — לא PremiumStat קבוע (שהיה גם trend בלי נתון-מגמה, L73)
-    const pk = searchOp('headline', `${a.filtered ? a.value : (a.field || a.entityName)} ${a.entityName}`);
-    const wired = [...pk.atoms, ...pk.alts].map((c) => wireAtom(c.split('@')[0], { label: lbl, value: { str: disp, num }, glyph: g, sub: sub, nav: a.slug ? `() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${pascal(a.slug)}()))` : null })).find(Boolean);
+    const pk = searchOp('headline', `${a.filtered ? a.value : (a.field || a.entityName)} ${a.entityName}`, null, isPaper() ? 12 : 3);   // G28 · נייר: צלילה עמוקה יותר — אטום בצבע-קשיח נפסל, הבא-הלובש-עור נמצא
+    const wired = pickWired([...pk.atoms, ...pk.alts], (c) => wireAtom(c, { label: lbl, value: { str: disp, num }, glyph: g, sub: sub, nav: a.slug ? `() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${pascal(a.slug)}()))` : null }));
     if (!wired) throw new Error(`particles: ${L.headlineNoAtom} ${a.entityName}`);
     if (a.slug) imports.add(`import 'gen_${a.slug}.dart';`);
     imports.add(`import '../${wired.file.startsWith('dart-') ? wired.file : 'dart-ui-bs/' + wired.file}';`);
@@ -837,7 +841,7 @@ export function renderHub(slug, { title, icon = '🏗️', screens, roles = [], 
   const hasActor = scopeFields.length > 0;
   const actorUnion = scopeFields.map((sf) => `...appStore.distinctValues('${sf.slug}', ${k(sf.field)})`).join(', ');
   const actorMethod = hasActor
-    ? `\n  Widget _actorBar(BuildContext context) => AnimatedBuilder(\n    animation: appStore,\n    builder: (context, _) {\n      final opts = <String>{${actorUnion}}.toList()..sort();\n      return Container(\n        margin: const EdgeInsets.only(bottom: 8),\n        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),\n        decoration: BoxDecoration(color: const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(12)),\n        child: Row(children: [\n          const Text('${L.viewingAs}', style: TextStyle(fontSize: 12.5, color: DsTokens.muted, fontWeight: FontWeight.w700)),\n          const SizedBox(width: 8),\n          DropdownButton<String>(\n            value: appStore.actor,\n            underline: const SizedBox.shrink(),\n            items: [const DropdownMenuItem<String>(value: '', child: Text('${L.all}')), for (final o in opts) if (o.isNotEmpty) DropdownMenuItem<String>(value: o, child: Text(o))],\n            onChanged: (v) => setState(() => appStore.setActor(v ?? '')),\n          ),\n          const Spacer(),\n          const Text('${L.viewFilter}', style: TextStyle(fontSize: 11, color: DsTokens.faint)),\n        ]),\n      );\n    },\n  );\n`
+    ? `\n  Widget _actorBar(BuildContext context) => AnimatedBuilder(\n    animation: appStore,\n    builder: (context, _) {\n      final lk = DsLook.of(context);\n      final opts = <String>{${actorUnion}}.toList()..sort();\n      return Container(\n        margin: const EdgeInsets.only(bottom: 8),\n        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),\n        decoration: BoxDecoration(color: lk.chipBg, borderRadius: BorderRadius.circular(12)),\n        child: Row(children: [\n          Text('${L.viewingAs}', style: TextStyle(fontSize: 12.5, color: lk.muted, fontWeight: FontWeight.w700)),\n          const SizedBox(width: 8),\n          DropdownButton<String>(\n            value: appStore.actor,\n            underline: const SizedBox.shrink(),\n            items: [const DropdownMenuItem<String>(value: '', child: Text('${L.all}')), for (final o in opts) if (o.isNotEmpty) DropdownMenuItem<String>(value: o, child: Text(o))],\n            onChanged: (v) => setState(() => appStore.setActor(v ?? '')),\n          ),\n          const Spacer(),\n          Text('${L.viewFilter}', style: TextStyle(fontSize: 11, color: lk.faint)),\n        ]),\n      );\n    },\n  );\n`
     : '';
   const imports = new Set();
   const tiles = screens.map((s) => {
@@ -862,7 +866,7 @@ export function renderHub(slug, { title, icon = '🏗️', screens, roles = [], 
   });
   const showChips = effRoles.length >= 2;
   const visList = `[${roleVis.map((v) => `[${v.join(', ')}]`).join(', ')}]`;
-  const roleChips = effRoles.map((r, i) => `_roleChip(${i}, ${k(r.name || L.all)})`).join(', ');
+  const roleChips = effRoles.map((r, i) => `_roleChip(context, ${i}, ${k(r.name || L.all)})`).join(', ');
 
   const cls = pascal(slug);
   const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — לוח-ניווט + שער-הרשאות (בורר-תפקיד חי · נשמר). אל תערוך ידנית.
@@ -886,19 +890,20 @@ class _${cls}State extends State<${cls}> {
 ${tiles.join('\n')}
   ];
 ${actorMethod}${showChips ? `
-  Widget _roleChip(int i, String label) {
+  Widget _roleChip(BuildContext context, int i, String label) {
+    final lk = DsLook.of(context);
     final sel = appStore.role == i;
     return Padding(
       padding: const EdgeInsets.only(left: 8, bottom: 8),
       child: Material(
-        color: sel ? DsTokens.accent : const Color(0xFFF1F5F9),
+        color: sel ? lk.accent : (lk.chipBg),
         borderRadius: BorderRadius.circular(20),
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
           onTap: () => setState(() => appStore.setRole(i)),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-            child: Text(label, style: TextStyle(color: sel ? Colors.white : DsTokens.muted, fontSize: 13, fontWeight: FontWeight.w700)),
+            child: Text(label, style: TextStyle(color: sel ? Colors.white : lk.muted, fontSize: 13, fontWeight: FontWeight.w700)),
           ),
         ),
       ),
@@ -954,9 +959,11 @@ ${regs}
   }
   const relImport = hasEdges ? `import 'gen_${relSlug}.dart';\nimport '../dart-ui-bs/ds/ds_store.dart';\n` : '';
   const mainLine = hasEdges ? `void main() { registerAppRelations(appStore); runApp(const ${cls}()); }` : `void main() => runApp(const ${cls}());`;
-  const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — שורש-האפליקציה (main + MaterialApp + theme + RTL). אל תערוך ידנית.
+  const paper = isPaper();   // G28 · עור-הנייר מוזרק בשורש (חוק-6: הזהות בחיווט) — כל אטום-forge וכרום-DS קוראים אותו מהחריץ
+  const code = `// ✨ חולל ע"י מנוע-הרינדור (render-ds) — שורש-האפליקציה (main + MaterialApp + theme + RTL${paper ? ' + PureScope · עור-נייר (G28)' : ''}). אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
-import '../dart-ui-bs/ds/ds.dart';
+${paper ? `import '../dart-ui-bs/ds/ds_pure.dart';
+import '../dart-ui-bs/ds/ds_seam.dart';` : `import '../dart-ui-bs/ds/ds.dart';`}
 ${relImport}import 'gen_${hubSlug}.dart';
 import 'package:flutter/material.dart';
 
@@ -969,7 +976,19 @@ class ${cls} extends StatelessWidget {
   Widget build(BuildContext context) => MaterialApp(
         title: ${cTitle},
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
+${paper ? `        theme: ThemeData(
+          useMaterial3: true,
+          brightness: Brightness.light,
+          fontFamily: 'Heebo',
+          scaffoldBackgroundColor: DsPure.skins['paper']!.canvas,
+          colorScheme: ColorScheme.fromSeed(seedColor: DsPure.themes['t-balagan']!.a, brightness: Brightness.light),
+        ),
+        builder: (context, child) => PureScope(
+          theme: DsPure.themes['t-balagan']!,
+          skin: DsPure.skins['paper']!,
+          fonts: DsPure.fontSets['heebo']!,
+          child: Directionality(textDirection: TextDirection.rtl, child: child ?? const SizedBox.shrink()),
+        ),` : `        theme: ThemeData(
           useMaterial3: true,
           fontFamily: 'Heebo',
           scaffoldBackgroundColor: DsTokens.bg,
@@ -978,7 +997,7 @@ class ${cls} extends StatelessWidget {
         builder: (context, child) => Directionality(
           textDirection: TextDirection.rtl,
           child: child ?? const SizedBox.shrink(),
-        ),
+        ),`}
         home: const ${hubCls}(),
       );
 }

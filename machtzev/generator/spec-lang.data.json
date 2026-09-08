@@ -135,5 +135,16 @@
  "pContent": [
   "תוכן"
  ],
- "appWord": "אפליקציה"
+ "appWord": "אפליקציה",
+ "lookWord": "עיצוב",
+ "looks": {
+  "נייר": "paper",
+  "כהה": "dark"
+ },
+ "questionWord": "שאלה",
+ "questionTargets": {
+  "דוח": "report",
+  "רשימה": "list",
+  "בית": "home"
+ }
 }

@@ -1,6 +1,6 @@
 # סנסוס-פעולות-היסוד (op-census · G1)
 
-**2320** אטומים ממופים (תצוגה 922 · לוגיקה 850 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
+**2322** אטומים ממופים (תצוגה 924 · לוגיקה 850 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
 
 | op | # | דוגמאות |
 |---|---|---|
@@ -35,12 +35,12 @@
 | table | 5 | DsTable · ForgeDataGrid · ForgeEventCalendar · ForgeModalDialog · ForgeSplitControl |
 | empty | 5 | EmptyStateCard · SavedVersionChip · SearchEmptyState · StoreSmartQtyStepper · EmptyState@premium/feedback |
 | effect | 5 | applyConfig · collect · deliverReceipt · walk · writeFilteredMode |
-| expand | 3 | ExpandableTile · FeaturePanel · RegressionBody |
+| expand | 4 | DsFold · ExpandableTile · FeaturePanel · RegressionBody |
+| alert | 3 | DsNote · ToastCard · AlertBanner@premium/feedback |
 | ring | 3 | GaugeMeter · RatingStars · SiteRow |
 | temporal | 3 | dayBucket · nextSessionDate · startOfWeekSunday |
 | timeline | 2 | ForgeDatePills · TimelineItem |
 | trend | 2 | PremiumStat · TrendStat |
-| alert | 2 | ToastCard · AlertBanner@premium/feedback |
 | board | 1 | DsBoard |
 
 ## zero (תפר-אפס ⇒ לא-נבחרים · §20-ג)

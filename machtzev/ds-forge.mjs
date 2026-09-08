@@ -18,13 +18,34 @@ const OUT = path.join(ROOT, 'new/dart-forge-bs');
 // ───────────────────────── טוקנים ⇒ ביטוי-Dart (חריץ) ─────────────────────────
 // נייטרל+סמנטי ⇒ skin.<x> · אקצנט ⇒ theme.<x> · פונט ⇒ fonts.<x>
 const SKIN = { canvas:'canvas', sunken:'sunken', surface:'surface', raised:'raised', raised2:'raised2',
-  ink:'ink', mut:'mut', faint:'faint', hair:'hair', hair2:'hair2', ok:'ok', warn:'warn', err:'err', gold:'gold' };
+  ink:'ink', mut:'mut', faint:'faint', hair:'hair', hair2:'hair2', ok:'ok', warn:'warn', err:'err', gold:'gold', 'on-a':'onA', hi:'hi', shade:'shade' };
+// G28 (הכרעה-28) · ליטרלים שהיו צרובים ב-CSS של Pure ⇒ טוקן-עור (ערך-הכהה זהה ⇒ ביט-זהה; עור-נייר מחליף לבד):
+//   #0B0B0D = דיו-על-אקצנט (onA) · #FFF = הבהקה (hi) · #000 = בסיס-צל (shade) · וערכי-טוקן מדויקים (#0A0A0C=sunken …).
+const LIT_TOKEN = { '0b0b0d':'onA', 'ffffff':'hi', '000000':'shade', '0c0c0e':'canvas', '0a0a0c':'sunken', '151517':'surface', '1b1b1e':'raised', '212126':'raised2',
+  'ece9e2':'ink', '9b968c':'mut', '6e6a62':'faint', '43d08c':'ok', 'e6b84f':'warn', 'e0574e':'err', 'e6c766':'gold' };
+const RGB_TOKEN = { '11,11,13':'onA', '255,255,255':'hi', '0,0,0':'shade', '12,12,14':'canvas', '10,10,12':'sunken', '236,233,226':'ink' };
+function tokenLit(v) {
+  v = v.trim().toLowerCase();
+  const inner = v.match(/(#[0-9a-f]{3,6}\b|rgba?\([^)]*\))/); if (inner && inner[1] !== v) v = inner[1];   // "1px solid rgba(…)" ⇒ הצבע עצמו (כמו litColor הלא-מעוגן)
+  let m = v.match(/^#([0-9a-f]{6})$/); if (m && LIT_TOKEN[m[1]]) return `skin.${LIT_TOKEN[m[1]]}`;
+  m = v.match(/^#([0-9a-f]{3})$/); if (m) { const c = m[1]; const h = c[0]+c[0]+c[1]+c[1]+c[2]+c[2]; if (LIT_TOKEN[h]) return `skin.${LIT_TOKEN[h]}`; }
+  m = v.match(/^rgba?\(([^)]+)\)$/);
+  if (m) {
+    const [r,g,b,a='1'] = m[1].split(',').map(s => s.trim()); const key = `${+r},${+g},${+b}`; const tk = RGB_TOKEN[key];
+    if (!tk) return null;
+    const al = parseFloat(a);
+    if (tk === 'ink' && al === 0.09) return 'skin.hair'; if (tk === 'ink' && al === 0.05) return 'skin.hair2';   // hair/hair2 = ink-alpha ⇒ הטוקן עצמו
+    return al >= 1 ? `skin.${tk}` : `skin.${tk}.withValues(alpha: ${al})`;
+  }
+  return null;
+}
 const THEME = { 'a-hi':'aHi', 'a':'a', 'a-800':'a800', 'gl':'gl', 'c2':'c2', 'c3':'c3' };
 const FONT = { serif:'serif', serifHe:'serifHe', grotesk:'grotesk', he:'he' };
 
 const hx = n => Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, '0').toUpperCase();
 function litColor(v) {                       // #hex / rgba() ⇒ Color(0x…) קבוע (לא-טוקן, נדיר)
   v = v.trim();
+  const tk = tokenLit(v); if (tk) return tk;   // G28 · ליטרל שהוא טוקן-בתחפושת ⇒ הטוקן (העור מחליף לבד)
   if (/^#([0-9a-f]{6})$/i.test(v)) return `const Color(0xFF${v.slice(1).toUpperCase()})`;
   if (/^#([0-9a-f]{3})$/i.test(v)) { const c = v.slice(1); return `const Color(0xFF${(c[0]+c[0]+c[1]+c[1]+c[2]+c[2]).toUpperCase()})`; }
   const m = v.match(/rgba?\(([^)]+)\)/);
@@ -722,7 +743,7 @@ function emit(node, map, ancestors = [], depth = 0, inherit = 'skin.ink', parent
     const grad = clipText ? gradientExpr(st['background'] || '') : null;
     if (grad) {
       const ef2 = Object.assign({}, effText); delete ef2['color'];
-      const tw = `Text(${slot(shown, slotSig(effText))}${taExpr}, style: TextStyle(${textStyleC(ef2, 'const Color(0xFFFFFFFF)').join(', ')}))`;
+      const tw = `Text(${slot(shown, slotSig(effText))}${taExpr}, style: TextStyle(${textStyleC(ef2, 'skin.hi').join(', ')}))`;
       const masked = `ShaderMask(shaderCallback: (b) => ${grad}.createShader(b), blendMode: BlendMode.srcIn, child: ${tw})`;
       const st2 = Object.assign({}, st, { background: undefined, 'background-clip': undefined, '-webkit-background-clip': undefined, color: undefined });
       return wrapBox(st2, masked, node, false, parentFlex, noVMargin);
