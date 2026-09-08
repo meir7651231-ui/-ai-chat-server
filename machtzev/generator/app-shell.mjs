@@ -188,7 +188,7 @@ class ${cls}Today {
         appStore.logAction('add', ${k(L.repeatLog)}.replaceAll('{title}', appStore.displayOf('${root.slug}', nid) + ' · ' + next[field]!), entity: '${root.slug}', rid: nid);
       }
     }
-    else if (a == ${k(L.actSnooze)}) { final r = appStore.byId('${root.slug}', rid); if (r != null) { final prev = r[field] ?? ''; appStore.update('${root.slug}', rid, {field: _iso(due.add(const Duration(days: 1)))}); appStore.logAction('auto', ${k(L.actSnooze)} + ' · ' + field, entity: '${root.slug}', rid: rid, field: field, prev: prev); } }   // נגיעה-ידנית (P5) — נרשמת עם החזר
+    else if (a == ${k(L.actSnooze)}) { final r = appStore.byId('${root.slug}', rid); if (r != null) { final prev = r[field] ?? ''; appStore.update('${root.slug}', rid, {field: _iso(_shift(due.add(const Duration(days: 1)), false))}); /* «דחה למחר» לא נוחת בשבת (אותו _shift של תזכורת-רכה) */ appStore.logAction('auto', ${k(L.actSnooze)} + ' · ' + field, entity: '${root.slug}', rid: rid, field: field, prev: prev); } }   // נגיעה-ידנית (P5) — נרשמת עם החזר
     else if (a == ${k(L.actCal)}) {   // «ליומן»: עם שעה ⇒ אירוע בשעתו (אורך = בלוק-ההגדרה); בלי ⇒ יום-שלם
       final r = appStore.byId('${root.slug}', rid); final tm = r == null ? '' : _timeOf(r); final d = _iso(due).replaceAll('-', '');
       String z(DateTime x) => x.toIso8601String().substring(0, 16).replaceAll(RegExp(r'[-:]'), '') + '00';

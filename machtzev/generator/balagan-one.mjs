@@ -122,6 +122,10 @@ if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganWaStrip\(
 // גל ב׳-כ · מצב-ערב (מחר פתוח מהשעה שנקבעה) · «בוצע … · החזר» ליד העין
 if (!/appStore\.setting\('eveningHour', '18'\)/.test(home) || !/DsFold\(open: evening/.test(home) || !/showUndo/.test(home)) fails.push('«היום» בלי מצב-ערב / החזר-מיידי');
 if (!/appStore\.setting\('eveningHour'/.test(behavior)) fails.push('«התנהגות» בלי שעת-ערב');
+// גל ב׳-כא · «דבר» (זיהוי-דיבור של הדפדפן, web-only, סטאב אחרת) · «דחה למחר» לא בשבת
+if (!/voiceListen\('he-IL'\)/.test(ask) || !/voiceSupported/.test(ask)) fails.push('«מה קרה?» בלי «דבר»');
+{ const v = rd(path.join(R.ROOT, 'new/dart-ui-bs/ds/ds_voice.dart')); const vw = rd(path.join(R.ROOT, 'new/dart-ui-bs/ds/ds_voice_web.dart')); if (!/if \(dart\.library\.js_interop\)/.test(v) || !/SpeechRecognition/.test(vw) || /https?:\/\//.test(vw)) fails.push('שקע-הדיבור: אין ייבוא-מותנה / אין SpeechRecognition / יש כתובת-שרת'); }
+for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/_shift\(due\.add\(const Duration\(days: 1\)\), false\)/.test(h)) { fails.push(`${m.ns}: «דחה למחר» נוחת בשבת`); break; } }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);

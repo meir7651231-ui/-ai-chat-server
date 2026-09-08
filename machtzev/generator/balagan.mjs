@@ -735,6 +735,7 @@ import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_ai.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
+import '../dart-ui-bs/ds/ds_voice.dart';
 import 'gen_balagan_confirm.dart';
 import 'gen_balagan_moments.dart';
 ${mods.map((m) => `import 'gen_${m.root.slug}.dart';`).join('\n')}
@@ -762,6 +763,14 @@ class _${cls}State extends State<${cls}> {
   final _c = TextEditingController();
   @override
   void initState() { super.initState(); if (widget.initialText.trim().isNotEmpty) { _c.text = widget.initialText.trim(); _note = ${k(L.sharedNote)}; WidgetsBinding.instance.addPostFrameCallback((_) { if (mounted) _go(); }); } }   // הגיע משיתוף ⇒ אפס-הקשות עד טופס-האישור
+  Future<void> _voice() async {   // «דבר»: זיהוי-דיבור של הדפדפן (he-IL) ⇒ השדה ⇒ זיהוי — אפס-הקלדה; לא נתמך/לא שמע ⇒ הודעה כנה
+    if (!voiceSupported) { setState(() => _note = ${k(L.voiceUnsupported)}); return; }
+    setState(() { _busy = true; _note = ${k(L.voiceListening)}; });
+    final t = await voiceListen('he-IL');
+    if (!mounted) return;
+    setState(() { _busy = false; _note = (t == null || t.isEmpty) ? ${k(L.voiceNone)} : ''; });
+    if (t != null && t.isNotEmpty) { _c.text = t; _go(); }
+  }
   Future<void> _paste() async { final d = await Clipboard.getData('text/plain'); final t = (d?.text ?? '').trim(); if (t.isEmpty) { setState(() => _note = ${k(L.pasteEmpty)}); return; } _c.text = t; _go(); }   // «הדבק» = הקשה אחת מהודעה שהועתקה
   List<BalaganHit> _hits = const [];
   Map<String, String> _extra = const {};
@@ -804,6 +813,8 @@ class _${cls}State extends State<${cls}> {
       ),
       Padding(padding: const EdgeInsets.only(top: 10), child: Row(children: [
         Expanded(child: DsPrimaryButton(label: ${k(L.askGo)}, onTap: _busy ? null : _go)),
+        const SizedBox(width: 8),
+        DsChipButton(label: ${k(L.voiceLabel)}, onTap: _busy ? null : _voice),
         const SizedBox(width: 8),
         DsChipButton(label: ${k(L.pasteLabel)}, onTap: _busy ? null : _paste),
         const SizedBox(width: 8),
