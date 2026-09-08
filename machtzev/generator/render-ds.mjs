@@ -596,7 +596,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class ${cls} extends StatefulWidget {
-  const ${cls}({this.scopeField, this.scopeId, this.initial, super.key});
+  const ${cls}({this.scopeField, this.scopeId, this.initial, this.editId, super.key});
+  final String? editId;   // פתיחה ישר בעריכת-רשומה קיימת (מעמוד-התיק «ערוך»)
 
   final Map<String, String>? initial;   // G33 · מילוי-מראש מ«מה קרה?» (הכרעה-29): שדה ⇒ ערך, פעם אחת
   final String? scopeField;   // G26 · היקף-הורה (ניווט-מקשרים): שדה-הקשר + מזהה ⇒ הרשימה מסוננת לרשומת-ההורה והטופס ממולא-מראש
@@ -613,7 +614,7 @@ class _${cls}State extends State<${cls}> {
   bool _initialUsed = false;
   void _prefill() { if (widget.scopeId != null) { final i = _labelsAll.indexOf(widget.scopeField ?? ''); if (i >= 0) _v[i] = widget.scopeId!; } if (widget.initial != null && !_initialUsed) { _initialUsed = true; widget.initial!.forEach((f, v) { final i = _labelsAll.indexOf(f); if (i >= 0 && v.trim().isNotEmpty) _v[i] = v; }); } }
   @override
-  void initState() { super.initState(); _prefill(); }
+  void initState() { super.initState(); _prefill(); if (widget.editId != null) { final r = appStore.byId('${slug}', widget.editId!); if (r != null) WidgetsBinding.instance.addPostFrameCallback((_) { if (mounted) _edit(r); }); } }
   String _q = '';    // מחרוזת-חיפוש (סינון-רשומות חי)
 ${viewField}${hasVal ? '  String? _err;      // שגיאת-ולידציה (שדות-חובה חסרים)\n' : ''}
 

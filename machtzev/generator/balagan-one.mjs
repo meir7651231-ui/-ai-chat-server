@@ -132,6 +132,10 @@ if (!/voiceListen\('he-IL'\)/.test(home)) fails.push('«היום» בלי «דב
 if (!/בבוקר/.test(moments) || !/'בערב': '19:00'/.test(moments) || !/hasDate && hits\.first\.module\.dateFields\.isEmpty/.test(moments)) fails.push('balaganTimes בלי חלקי-יום / הזיהוי מתעלם מתאריך-בלי-שדה');
 { const noRep = mods.filter((m) => !m.report); for (const m of noRep) { const rp = rd(path.join(GEN, `gen_${m.rootPage.slug}.dart`)); if (!/wa\.me\/\?text=/.test(rp)) { fails.push(`${m.ns}: תיק-בלי-דוח בלי «שתף»`); break; } } if (!noRep.length) fails.push('אין מודול בלי דוח (צפוי: משימות/יומן)'); }
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/בבוקר/.test(ft)) fails.push('בדיקת חלקי-יום חסרה'); }
+// גל ב׳-כד · «ערוך» מעמוד-התיק (editId במסך-הישות) · «בעוד שעה» ⇒ שעה
+for (const m of mods) { const rp = rd(path.join(GEN, `gen_${m.rootPage.slug}.dart`)); const ent = rd(path.join(GEN, `gen_${m.root.slug}.dart`)); if (!/\(editId: id\)/.test(rp) || !/this\.editId/.test(ent)) { fails.push(`${m.ns}: תיק בלי «ערוך» / מסך-ישות בלי editId`); break; } }
+if (!/בעוד\\s\+\(שעה\|שעתיים/.test(moments) && !/'שעתיים'/.test(moments)) fails.push('balaganTimes בלי «בעוד שעה»');
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/בעוד שעה/.test(ft)) fails.push('בדיקת «בעוד שעה» חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);
