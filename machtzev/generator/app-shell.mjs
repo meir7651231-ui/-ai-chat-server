@@ -7,6 +7,9 @@
 import { makeConsts, write, isPaper } from './render-ds.mjs';
 import { searchOp, wireAtom, pickWired, particleWidgets } from './particles.mjs';
 import { L, T } from './chrome.mjs';
+import fs0 from 'node:fs';
+const SL0 = JSON.parse(fs0.readFileSync(new URL('./spec-lang.data.json', import.meta.url), 'utf8'));
+const isTimeLabel = (f) => !/^(num|date|bool|multiline)$/.test(f.type || '') && !(f.enumVals && f.enumVals.length) && String(f.label).split(/\s+/).some((w) => (SL0.typeTime || []).includes(w));   // שדה-שעה לפי דקדוק-האפיון
 
 const clsOf = (slug) => 'Gen' + slug.replace(/(^|_)([a-z0-9])/g, (_, __, c) => c.toUpperCase()) + 'Screen';
 const impOf = (w) => `import '../${w.file.startsWith('dart-') ? w.file : 'dart-ui-bs/' + w.file}';`;
@@ -116,6 +119,7 @@ export function renderHome(slug, { root, rootPage, report, message, title, chain
   const cls = clsOf(slug);
   // G32 · שדות-התאריך של השורש (חובה = hard-deadline, P8) · השלב האחרון · השרשרת
   const dateFields = root.schema.filter((f) => f.type === 'date').map((f) => ({ label: f.label, hard: !!f.required }));
+  const timeList = `[${root.schema.filter(isTimeLabel).map((f) => k(f.label)).join(', ')}]`;   // שדות-שעה ⇒ השעה על שורת-היום והתוכנית מקבעת אותה
   const lastStage = root.stages && root.stages.length ? root.stages.length - 1 : -1;
   const dispR = disp;
   const dateList = `[${dateFields.map((f) => `_D(${k(f.label)}, ${f.hard ? 'true' : 'false'})`).join(', ')}]`;
@@ -136,6 +140,8 @@ class _D { const _D(this.label, this.hard); final String label; final bool hard;
 class ${cls}Today {
   static const module = ${k(appTitle || title)};
   static const _dates = ${dateList};
+  static const List<String> _times = ${timeList};
+  static String _timeOf(Map<String, String> r) { for (final l in _times) { final v = (r[l] ?? '').trim(); if (RegExp(r'^\\d{1,2}:\\d{2}\$').hasMatch(v)) return v.padLeft(5, '0'); } return ''; }
   static DateTime _day(DateTime d) => DateTime(d.year, d.month, d.day);
   static DateTime? _parse(String s) { final t = s.trim(); if (t.isEmpty) return null; try { return _day(DateTime.parse(t.length == 10 ? '\${t}T12:00:00' : t)); } catch (_) { return null; } }
   static List<int> _offsets() => appStore.setting('offsets', '3,1,0').split(',').map((x) => int.tryParse(x.trim()) ?? 0).toList();
@@ -144,9 +150,9 @@ class ${cls}Today {
   static String _remKey(String rid, String field) => 'rem:\$rid:\$field';
   static List<Map<String, String>> open() => ${openRecs};${sendFn2}
 
-  static DsTodayItem _mk(String title, String sub, String rid, String field, DateTime d, bool hard, bool overdue, DateTime today) {
+  static DsTodayItem _mk(String title, String sub, String rid, String field, DateTime d, bool hard, bool overdue, DateTime today, [String time = '']) {
     final acts = overdue ? [${k(L.actDone)}, ${k(L.actSnooze)}, ${k(L.actIgnore)}] : (d == today ? [${k(L.actDone)}, ${k(L.actCal)}] : [${k(L.actDone)}, ${k(L.actSnooze)}, ${k(L.actCal)}]);   // P4 · ביום-ההכרעה אין דחייה · «ליומן» = קישור-יומן, אפס-מפתח
-    return DsTodayItem(title: title, sub: sub, rid: rid, field: field, due: d, hard: hard, overdue: overdue, module: module, actions: acts, act: (i) => _act(rid, field, d, acts, i));
+    return DsTodayItem(title: title, sub: time.isNotEmpty ? time + ' · ' + sub : sub, rid: rid, field: field, due: d, hard: hard, overdue: overdue, module: module, actions: acts, act: (i) => _act(rid, field, d, acts, i), time: time);
   }
   static void _act(String rid, String field, DateTime due, List<String> acts, int i) {
     final a = acts[i.clamp(0, acts.length - 1)];
@@ -160,15 +166,16 @@ class ${cls}Today {
   static List<DsTodayItem> items(DateTime today, {required int dayDelta}) {
     final out = <DsTodayItem>[];
     for (final r in open()) {
-      final rid = r[AppStore.idKey] ?? ''; final who = appStore.displayOf('${root.slug}', rid);
+      final rid = r[AppStore.idKey] ?? ''; final who = appStore.displayOf('${root.slug}', rid); final tm = _timeOf(r);
       for (final f in _dates) {
         final d = _parse(r[f.label] ?? ''); if (d == null) continue;
         if (appStore.decision('ign:\$rid:\${f.label}') == 'no') continue;
-        if (dayDelta == 0 && d.isBefore(today)) { out.add(_mk('\${f.label} · \$who', ${k(L.remWas)}.replaceAll('{date}', _iso(d)), rid, f.label, d, f.hard, true, today)); continue; }
-        if (appStore.decision(_remKey(rid, f.label)) != 'ok') continue;
+        if (dayDelta == 0 && d.isBefore(today)) { out.add(_mk('\${f.label} · \$who', ${k(L.remWas)}.replaceAll('{date}', _iso(d)), rid, f.label, d, f.hard, true, today, tm)); continue; }
+        final okRem = appStore.decision(_remKey(rid, f.label)) == 'ok';   // תזכורת-מוקדמת (−3/−1) = הצעה שדורשת אישור; יום-ההכרעה עצמו = עובדה — מוצג בלי אישור
         for (final off in _offsets()) {
+          if (off > 0 && !okRem) continue;
           final fire = _shift(d.subtract(Duration(days: off)), f.hard);
-          if (fire == today.add(Duration(days: dayDelta))) { out.add(_mk('\${f.label} · \$who', off == 0 ? ${k(L.remToday)} : ${k(L.remIn)}.replaceAll('{n}', off.toString()), rid, f.label, d, f.hard, false, today)); break; }
+          if (fire == today.add(Duration(days: dayDelta))) { out.add(_mk('\${f.label} · \$who', off == 0 ? ${k(L.remToday)} : ${k(L.remIn)}.replaceAll('{n}', off.toString()), rid, f.label, d, f.hard, false, today, off == 0 ? tm : '')); break; }
         }
       }
     }
@@ -183,7 +190,7 @@ class ${cls}Today {
     for (final r in open()) {
       final rid = r[AppStore.idKey] ?? ''; final who = appStore.displayOf('${root.slug}', rid);
       for (final f in _dates) {
-        final d = _parse(r[f.label] ?? ''); if (d == null || d.isBefore(today)) continue;
+        final d = _parse(r[f.label] ?? ''); if (d == null || d.isBefore(today) || d == today) continue;   // היום עצמו כבר ב«היום» — אין מה להציע
         if (appStore.decision(_remKey(rid, f.label)).isNotEmpty) continue;
         out.add(DsApproveCard(question: ${k(L.remAsk)}.replaceAll('{field}', f.label).replaceAll('{days}', days).replaceAll('{date}', _iso(d)), source: module + ' · ' + who, okLabel: ${k(L.actOk)}, noLabel: ${k(L.actNo)}, alwaysLabel: ${k(L.actAlways)},
           onOk: () => appStore.decide(_remKey(rid, f.label), 'ok'), onNo: () => appStore.decide(_remKey(rid, f.label), 'no'),

@@ -18,6 +18,11 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const APPS = path.join(HERE, 'apps'), PERUKS = path.join(HERE, 'peruks');
 const TOPICS = JSON.parse(fs.readFileSync(path.join(HERE, 'balagan-topics.data.json'), 'utf8')).topics;
 const TIME_WORDS = JSON.parse(fs.readFileSync(path.join(HERE, 'spec-lang.data.json'), 'utf8')).typeTime || [];   // דקדוק-האפיון: תווית-שדה-שעה (שפה, לא דומיין)
+const SLB = JSON.parse(fs.readFileSync(path.join(HERE, 'spec-lang.data.json'), 'utf8'));
+const labelIn = (f, words) => !/^(num|date|bool|multiline)$/.test(f.type || '') && !(f.enumVals && f.enumVals.length) && f.label.split(/\s+/).some((w) => words.includes(w));
+const isPhoneField = (f) => labelIn(f, SLB.typePhone || []);
+const isPersonField = (f) => labelIn(f, SLB.typePerson || []) || (SLB.typePerson || []).some((w) => w.includes(' ') && f.label.includes(w));
+const isPercentField = (f) => (f.type === 'num' || !f.type) && f.label.split(/\s+/).some((w) => (SLB.typePercent || []).includes(w));
 const isTimeField = (f) => !/^(num|date|bool|multiline)$/.test(f.type || '') && !(f.enumVals && f.enumVals.length) && f.label.split(/\s+/).some((w) => TIME_WORDS.includes(w));
 const clsOf = (slug) => 'Gen' + slug.replace(/(^|_)([a-z0-9])/g, (_, __, c) => c.toUpperCase()) + 'Screen';
 const impOf = (w) => `import '../${w.file.startsWith('dart-') ? w.file : 'dart-ui-bs/' + w.file}';`;
@@ -99,17 +104,18 @@ export function buildBalagan() {
     const code = `// 🧭 חולל ע"י balagan (G33 · הכרעה-29) — מזהה-הרגע: TF-IDF דטרמיניסטי מ-${mods.length} מסמכי-פירוק (כותרת+«הרגע» ×3). אפס-בינה, אפס-מילון. אל תערוך ידנית.
 class BalaganField { const BalaganField(this.label, this.type, this.required, this.options); final String label, type; final bool required; final List<String> options; }
 class BalaganModule {
-  const BalaganModule(this.index, this.ns, this.title, this.moment, this.topic, this.weights, this.dateFields, this.numFields, this.descField, this.longField, this.rootSlug, this.fields, this.stages, this.chain, {this.selfScore = 1, this.layer = '', this.required = 0, this.timeFields = const []});
+  const BalaganModule(this.index, this.ns, this.title, this.moment, this.topic, this.weights, this.dateFields, this.numFields, this.descField, this.longField, this.rootSlug, this.fields, this.stages, this.chain, {this.selfScore = 1, this.layer = '', this.required = 0, this.timeFields = const [], this.phoneFields = const [], this.personFields = const [], this.percentFields = const []});
   final int index; final String ns, title, moment, topic, rootSlug; final Map<String, double> weights; final List<String> dateFields, numFields; final String descField, longField; final List<BalaganField> fields; final int stages; final List<String> chain;
   final double selfScore;   // ציון הכותרת+הרגע של המודול עצמו — מכנה-הביטחון
   final String layer;       // 'base' = שכבת-הבסיס (משימות · יומן)
   final int required;       // מספר שדות-החובה — המודול הכללי-ביותר = הכי-פחות
   final List<String> timeFields;   // שדות-שעה (תווית מדקדוק-האפיון typeTime) — «ב-16:30» נכנס לכאן
+  final List<String> phoneFields, personFields, percentFields;   // טלפון · מי (עם/אצל/מול X) · אחוז — לפי דקדוק-האפיון
 }
 class BalaganHit { const BalaganHit(this.module, this.score); final BalaganModule module; final double score; }
 
 const List<BalaganModule> kBalaganModules = [
-${mods.map((m, i) => `  BalaganModule(${i}, '${m.ns}', ${dq(m.title)}, ${dq(m.moment)}, ${dq(m.topic)}, {${Object.entries(ident[i].weights).map(([v, s]) => `${dq(v)}: ${s}`).join(', ')}}, [${m.root.fields.filter((f) => f.type === 'date').map((f) => dq(f.label)).join(', ')}], [${m.root.fields.filter((f) => f.type === 'num').map((f) => dq(f.label)).join(', ')}], ${dq(m.root.descField || '')}, ${dq((m.root.fields.find((f) => f.type === 'multiline') || {}).label || '')}, '${m.root.slug}', [${m.root.fields.map((f) => `BalaganField(${dq(f.label)}, '${f.type}', ${f.required ? 'true' : 'false'}, [${(f.enumVals || []).map(dq).join(', ')}])`).join(', ')}], ${(m.root.stages || []).length}, [${(m.chain || []).map(dq).join(', ')}], selfScore: ${selfScores[i]}, layer: '${m.layer || ''}', required: ${m.root.fields.filter((f) => f.required).length}, timeFields: [${m.root.fields.filter(isTimeField).map((f) => dq(f.label)).join(', ')}]),`).join('\n')}
+${mods.map((m, i) => `  BalaganModule(${i}, '${m.ns}', ${dq(m.title)}, ${dq(m.moment)}, ${dq(m.topic)}, {${Object.entries(ident[i].weights).map(([v, s]) => `${dq(v)}: ${s}`).join(', ')}}, [${m.root.fields.filter((f) => f.type === 'date').map((f) => dq(f.label)).join(', ')}], [${m.root.fields.filter((f) => f.type === 'num').map((f) => dq(f.label)).join(', ')}], ${dq(m.root.descField || '')}, ${dq((m.root.fields.find((f) => f.type === 'multiline') || {}).label || '')}, '${m.root.slug}', [${m.root.fields.map((f) => `BalaganField(${dq(f.label)}, '${f.type}', ${f.required ? 'true' : 'false'}, [${(f.enumVals || []).map(dq).join(', ')}])`).join(', ')}], ${(m.root.stages || []).length}, [${(m.chain || []).map(dq).join(', ')}], selfScore: ${selfScores[i]}, layer: '${m.layer || ''}', required: ${m.root.fields.filter((f) => f.required).length}, timeFields: [${m.root.fields.filter(isTimeField).map((f) => dq(f.label)).join(', ')}], phoneFields: [${m.root.fields.filter(isPhoneField).map((f) => dq(f.label)).join(', ')}], personFields: [${m.root.fields.filter(isPersonField).map((f) => dq(f.label)).join(', ')}], percentFields: [${m.root.fields.filter(isPercentField).map((f) => dq(f.label)).join(', ')}]),`).join('\n')}
 ];
 /// סף-החולשה — נגזר מהנתונים (לא קבוע-קסם): חצי מביטחון-הכותרת-הנמוך-ביותר בין המודולים. מתחתיו הרגע «כללי» ⇒ שכבת-הבסיס ראשונה.
 const double kBalaganWeak = ${weak};
@@ -185,6 +191,12 @@ List<_DateAt> balaganTimes(String text) {
   out.sort((a, b) => a.start.compareTo(b.start));
   return out;
 }
+/// טלפון ישראלי: 052-1234567 · 0521234567 · 03-1234567 ⇒ ספרות בלבד. הטווח נצרך (לא סכום, לא מתאר).
+List<_DateAt> balaganPhones(String text) => [for (final x in RegExp(r'(?<![\\d-])0\\d{1,2}[- ]?\\d{3}[- ]?\\d{4}(?![\\d-])').allMatches(text)) _DateAt(x.start, x.end, x.group(0)!.replaceAll(RegExp(r'[- ]'), ''))];
+/// אחוז: 3.5% · 12 % ⇒ הערך; אינו סכום.
+List<_DateAt> balaganPercents(String text) => [for (final x in RegExp(r'(?<![\\d.,])(\\d+(?:[.,]\\d+)?)\\s*%').allMatches(text)) _DateAt(x.start, x.end, x.group(1)!.replaceAll(',', '.'))];
+/// מי: «עם דני» · «אצל הרו"ח» · «מול המשכיר» ⇒ המילה שאחרי מילת-היחס (≥3 אותיות, לא בתוך תאריך/שעה). דקדוק, לא רשימת-שמות.
+List<_DateAt> balaganPersons(String text, List<_DateAt> taken) => [for (final x in RegExp(r'(?<![\\u0590-\\u05FF])(?:עם|אצל|מול)\\s+([\\u0590-\\u05FF][\\u0590-\\u05FF"״׳\\u0027]{2,})').allMatches(text)) if (!taken.any((t) => x.start < t.end && x.end > t.start)) _DateAt(x.start, x.end, x.group(1)!)];
 /// שורה עם כמה רגעים («שילמתי ארנונה. מחר תור לרופא») ⇒ חלקים לפי שורה/נקודה-ורווח/נקודה-פסיק — כל חלק רגע משלו (טופס-אישור אחר טופס-אישור). חלק = ≥2 מילים.
 List<String> balaganSplit(String text) {
   final parts = text.split(RegExp(r'\\n|;|(?<=[\\u0590-\\u05FF\\d])\\.\\s+(?=[\\u0590-\\u05FF])')).map((p) => p.trim()).where((p) => p.split(RegExp(r'\\s+')).where((w) => w.isNotEmpty).length >= 2).toList();
@@ -210,7 +222,9 @@ Map<String, String> balaganFacts(String text, BalaganModule m, {DateTime? today}
   final out = <String, String>{};
   final t0 = today ?? DateTime.now();
   final dateMs = balaganDates(text, t0);
-  final numMs = balaganNums(text, dateMs);
+  final phoneMs = balaganPhones(text);
+  final pctMs = balaganPercents(text);
+  final numMs = balaganNums(text, [...dateMs, ...phoneMs, ...pctMs]);
   // קרבה למילות-השדה (מבני: המילים של תווית-השדה עצמה, לא מילון): «מהפיקדון של 8,000» ⇒ פיקדון ⇐ 8000. סדר-מילים: אחרי עדיף · לפני −20 · «מ» −10. אין קרבה ⇒ לפי סדר.
   int nearest(List<int> starts, String label) {
     final ws = <String>{}; for (final x in RegExp(r'[\\u0590-\\u05FF]{3,}').allMatches(label)) { final w = x.group(0)!; ws.add(w); if (w.length >= 4 && 'והבלמשכ'.contains(w[0])) ws.add(w.substring(1)); }
@@ -220,9 +234,19 @@ Map<String, String> balaganFacts(String text, BalaganModule m, {DateTime? today}
   }
   final nStarts = [for (final n in numMs) n.start];
   final usedN = <int>{};
-  for (final f in m.numFields) { final i = nearest(nStarts, f); if (i >= 0 && !usedN.contains(i)) { out[f] = numMs[i].value; usedN.add(i); } }
-  var ni = 0; for (final f in m.numFields) { if (out.containsKey(f)) continue; while (ni < numMs.length && usedN.contains(ni)) { ni++; } if (ni < numMs.length) { out[f] = numMs[ni].value; usedN.add(ni); } }
+  final numOnly = m.numFields.where((f) => !m.percentFields.contains(f)).toList();   // שדה-אחוז מקבל אחוז, לא סכום
+  for (final f in numOnly) { final i = nearest(nStarts, f); if (i >= 0 && !usedN.contains(i)) { out[f] = numMs[i].value; usedN.add(i); } }
+  var ni = 0; for (final f in numOnly) { if (out.containsKey(f)) continue; while (ni < numMs.length && usedN.contains(ni)) { ni++; } if (ni < numMs.length) { out[f] = numMs[ni].value; usedN.add(ni); } }
   final timeMs = balaganTimes(text);
+  final personMs = balaganPersons(text, [...dateMs, ...timeMs, ...phoneMs]);
+  void assign(List<String> fields, List<_DateAt> ms, Set<int> used) {
+    final st = [for (final x in ms) x.start];
+    for (final f in fields) { final i = nearest(st, f); if (i >= 0 && !used.contains(i)) { out[f] = ms[i].iso; used.add(i); } }
+    var j = 0; for (final f in fields) { if (out.containsKey(f)) continue; while (j < ms.length && used.contains(j)) { j++; } if (j < ms.length) { out[f] = ms[j].iso; used.add(j); } }
+  }
+  final usedP = <int>{}; assign(m.phoneFields, phoneMs, usedP);
+  final usedPc = <int>{}; assign(m.percentFields, pctMs, usedPc);
+  final usedPe = <int>{}; assign(m.personFields, personMs, usedPe);   // «עם דני» ⇒ שדה-האדם; לא מוסר מהמתאר (השם הוא חלק מהמשפט)
   final tStarts = [for (final t in timeMs) t.start];
   final usedT = <int>{};
   for (final f in m.timeFields) { final i = nearest(tStarts, f); if (i >= 0 && !usedT.contains(i)) { out[f] = timeMs[i].iso; usedT.add(i); } }
@@ -233,7 +257,7 @@ Map<String, String> balaganFacts(String text, BalaganModule m, {DateTime? today}
   var di = 0; for (final f in m.dateFields) { if (out.containsKey(f)) continue; while (di < dateMs.length && usedD.contains(di)) { di++; } if (di < dateMs.length) { out[f] = dateMs[di].iso; usedD.add(di); } }
   if (text.trim().isNotEmpty) out['__note'] = text.trim();   // הטקסט המקורי לעולם לא אובד (מוצג בתיק: «מה כתבת»)
   // המתאר = השורה בלי העובדות שכבר נקלטו לשדות («לשלם ארנונה מחר 350 ש"ח» ⇒ «לשלם ארנונה»): הסרת-הטווחים שנצרכו + ניקוי מילת-יחס תלויה. אינו מילון — טווחי-ההתאמה עצמם.
-  final spans = <List<int>>[for (final i in usedD) [dateMs[i].start, dateMs[i].end], for (final i in usedN) [numMs[i].start, numMs[i].end], for (final i in usedT) [timeMs[i].start, timeMs[i].end]]..sort((a, b) => a[0].compareTo(b[0]));
+  final spans = <List<int>>[for (final i in usedD) [dateMs[i].start, dateMs[i].end], for (final i in usedN) [numMs[i].start, numMs[i].end], for (final i in usedT) [timeMs[i].start, timeMs[i].end], for (final i in usedP) [phoneMs[i].start, phoneMs[i].end], for (final i in usedPc) [pctMs[i].start, pctMs[i].end]]..sort((a, b) => a[0].compareTo(b[0]));
   var cleaned = ''; var pos = 0; for (final sp in spans) { if (sp[0] > pos) cleaned += text.substring(pos, sp[0]); pos = sp[1] > pos ? sp[1] : pos; } cleaned += text.substring(pos);
   cleaned = cleaned.replaceAll(RegExp(r'\\s+'), ' ').replaceAll(RegExp(r'[\\s,\\-–—:]+\$'), '').replaceAll(RegExp(r'\\s[בלמוה]-?\$'), '').replaceAll(RegExp(r'^[\\s,\\-–—:]+'), '').trim();
   final rawLine = text.trim().split(RegExp(r'[\\n.]')).first.trim();
@@ -258,10 +282,12 @@ Map<String, String> balaganFacts(String text, BalaganModule m, {DateTime? today}
       ['ההמחאה ב-15 לחודש', ['מועד'], [], { 'מועד': '2026-09-15', 'מה': 'ההמחאה' }],
       ['בעוד שלושה ימים מגיע הטכנאי, 12.5 ₪ לדקה', ['מועד'], ['סכום'], { 'מועד': '2026-09-11', 'סכום': '12.5' }],
       ['החוזה נגמר 30.11', ['מועד'], [], { 'מועד': '2026-11-30' }],
-      ['ריבית 3.5% על 2,400', ['מועד'], ['סכום'], { 'סכום': '2400' }],
+      ['ריבית 3.5% על 2,400', ['מועד'], ['סכום', 'ריבית'], { 'סכום': '2400', 'ריבית': '3.5' }, { pc: ['ריבית'] }],
       ['יום ה׳ אצל הרופא', ['מועד'], [], { 'מועד': '2026-09-10' }],
-      ['פגישה עם רו"ח מחר ב-16:30', ['מועד'], [], { 'מועד': '2026-09-09', 'שעה': '16:30', 'מה': 'פגישה עם רו"ח' }, ['שעה']],
-      ['בשעה 9 אצל דני בשבוע הבא', ['מועד'], [], { 'מועד': '2026-09-15', 'שעה': '09:00', 'מה': 'אצל דני' }, ['שעה']],
+      ['פגישה עם רו"ח מחר ב-16:30', ['מועד'], [], { 'מועד': '2026-09-09', 'שעה': '16:30', 'מה': 'פגישה עם רו"ח' }, { tm: ['שעה'] }],
+      ['בשעה 9 אצל דני בשבוע הבא', ['מועד'], [], { 'מועד': '2026-09-15', 'שעה': '09:00', 'מה': 'אצל דני', 'לקוח': 'דני' }, { tm: ['שעה'], pe: ['לקוח'] }],
+      ['רות לוי 052-123-4567 פיקדון 8,000', [], ['סכום הפיקדון'], { 'טלפון': '0521234567', 'סכום הפיקדון': '8000', 'מה': 'רות לוי פיקדון' }, { ph: ['טלפון'] }],
+      ['לדבר עם המשכיר על התיקון', [], [], { 'לקוח': 'המשכיר' }, { pe: ['לקוח'] }],
     ];
     const dq = (x) => "'" + String(x).replace(/\\/g, '\\\\').replace(/'/g, "\\'") + "'";
     const code = `// 🧭 חולל ע"י balagan (G33 ב׳-ה · הכרעה-29) — הוכחת-עובדות: תאריכים-יחסיים בעברית · צורות-סכום · קרבה-למילת-השדה. היום מוזרק ⇒ דטרמיניסטי. אל תערוך ידנית.
@@ -270,9 +296,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   final today = DateTime(2026, 9, 8);   // יום שלישי
-  BalaganModule mod(List<String> dates, List<String> nums, [List<String> times = const []]) => BalaganModule(0, 't', 'בדיקה', 'בדיקה', '', const <String, double>{}, dates, nums, 'מה', '', 'x', const <BalaganField>[], 1, const <String>[], timeFields: times);
-${cases.map(([text, dates, nums, exp, times], i) => `  test('עובדות ${i + 1}: ${text.replace(/'/g, '’')}', () {
-    final f = balaganFacts(${dq(text)}, mod([${dates.map(dq).join(', ')}], [${nums.map(dq).join(', ')}]${times ? ', [' + times.map(dq).join(', ') + ']' : ''}), today: today);
+  BalaganModule mod(List<String> dates, List<String> nums, {List<String> tm = const [], List<String> ph = const [], List<String> pe = const [], List<String> pc = const []}) => BalaganModule(0, 't', 'בדיקה', 'בדיקה', '', const <String, double>{}, dates, nums, 'מה', '', 'x', const <BalaganField>[], 1, const <String>[], timeFields: tm, phoneFields: ph, personFields: pe, percentFields: pc);
+${cases.map(([text, dates, nums, exp, extra = {}], i) => `  test('עובדות ${i + 1}: ${text.replace(/'/g, '’')}', () {
+    final f = balaganFacts(${dq(text)}, mod([${dates.map(dq).join(', ')}], [${nums.map(dq).join(', ')}]${Object.entries(extra).map(([kk, v]) => `, ${kk}: [${v.map(dq).join(', ')}]`).join('')}), today: today);
 ${Object.entries(exp).map(([k, v]) => `    expect(f[${dq(k)}], ${dq(v)});`).join('\n')}
 ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}), isFalse);`).join('\n')}
     expect(f['__note'], ${dq(text)});
@@ -369,13 +395,23 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
     if (items.isEmpty) return const [];
     final out = <Widget>[]; var t = DateTime(today.year, today.month, today.day, start);
     String hm(DateTime d) => '\${d.hour.toString().padLeft(2, '0')}:\${d.minute.toString().padLeft(2, '0')}';
+    // רגע עם שעה קבועה (16:30) = בלוק מקובע; השאר ממלאים סביבו — לא דורסים אותו
+    final fixed = <List<dynamic>>[]; for (final it in items) { if (it.time.isEmpty) continue; final hh = int.tryParse(it.time.substring(0, 2)) ?? 0, mm = int.tryParse(it.time.substring(3, 5)) ?? 0; final a = DateTime(today.year, today.month, today.day, hh, mm); fixed.add([a, a.add(Duration(minutes: block)), it]); }
+    fixed.sort((x, y) => (x[0] as DateTime).compareTo(y[0] as DateTime));
+    DateTime free(DateTime from) { var x = from; var moved = true; while (moved) { moved = false; for (final f in fixed) { final a = f[0] as DateTime, e = f[1] as DateTime; if (x.isBefore(e) && x.add(Duration(minutes: block)).isAfter(a)) { x = e; moved = true; } } } return x; }
+    final rows = <List<dynamic>>[for (final f in fixed) [f[0], f[1], f[2]]];
     String cal(DateTime a, DateTime b, String title) { String z(DateTime d) => d.toIso8601String().substring(0, 16).replaceAll(RegExp(r'[-:]'), ''); return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + Uri.encodeComponent(title) + '&dates=' + z(a) + '00/' + z(b) + '00'; }
     var i = 0;
-    for (final it in items) {
-      if (i == 2 && items.length <= 4) { final e = t.add(const Duration(minutes: 60)); out.add(DsActionRow(title: ${k(L.planBlock)}.replaceAll('{time}', hm(t)).replaceAll('{title}', ${k(L.planFocus)}), sub: '', actions: [${k(L.planCal)}], onAct: (_) => launchUrl(Uri.parse(cal(t, e, ${k(L.planFocus)})), mode: LaunchMode.externalApplication))); t = e; }
-      final e = t.add(Duration(minutes: block)); final a = t;
-      out.add(DsActionRow(title: ${k(L.planBlock)}.replaceAll('{time}', hm(a)).replaceAll('{title}', it.title), sub: it.module, actions: [${k(L.planCal)}], onAct: (_) => launchUrl(Uri.parse(cal(a, e, it.title)), mode: LaunchMode.externalApplication)));
-      t = e; i++;
+    for (final it in items.where((x) => x.time.isEmpty)) {
+      if (i == 2 && items.length <= 4) { final a0 = free(t); final e = a0.add(const Duration(minutes: 60)); rows.add([a0, e, null]); t = e; }
+      final a = free(t); final e = a.add(Duration(minutes: block));
+      rows.add([a, e, it]); t = e; i++;
+    }
+    rows.sort((x, y) => (x[0] as DateTime).compareTo(y[0] as DateTime));
+    for (final r in rows) {
+      final a = r[0] as DateTime, e = r[1] as DateTime; final it = r[2] as DsTodayItem?;
+      final title = it == null ? ${k(L.planFocus)} : it.title;
+      out.add(DsActionRow(title: ${k(L.planBlock)}.replaceAll('{time}', hm(a)).replaceAll('{title}', title), sub: it == null ? '' : it.module, actions: [${k(L.planCal)}], onAct: (_) => launchUrl(Uri.parse(cal(a, e, title)), mode: LaunchMode.externalApplication)));
     }
     return out;
   }
@@ -432,7 +468,7 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
     final today = _day(DateTime.now());
     final all0 = <DsTodayItem>[for (final m in _mods) ...m.items(today, dayDelta: 0)]..sort((a, b) => a.due.compareTo(b.due));
     final overdue = all0.where((x) => x.overdue).toList();
-    final todayItems = all0.where((x) => !x.overdue).toList();
+    final todayItems = all0.where((x) => !x.overdue).toList()..sort((a, b) { final ta = a.time.isEmpty ? '99:99' : a.time, tb = b.time.isEmpty ? '99:99' : b.time; final c = ta.compareTo(tb); return c != 0 ? c : a.due.compareTo(b.due); });   // עם-שעה לפי השעה, בלי-שעה אחריהם
     final tomorrow = <DsTodayItem>[for (final m in _mods) ...m.items(today, dayDelta: 1)]..sort((a, b) => a.due.compareTo(b.due));
     final pending = <Widget>[..._inbox(context), ..._chain(context), for (final m in _mods) ...m.proposals(context, today, chain: false)];
     final cards = <Widget>[for (final m in _mods) for (final r in m.open()) m.card(context, r)];
@@ -518,7 +554,7 @@ class _${cls}State extends State<${cls}> {
   void _skip() { setState(() { _hits = _hits.length > 1 ? _hits.sublist(1) : const []; if (_hits.isEmpty) _note = ${k(L.askNone)}; }); }
   void _open(BuildContext context, BalaganHit h, [List<BalaganModule> alts = const []]) {
     final parts = balaganSplit(_c.text); final first = parts.first;
-    final facts = {...balaganFacts(first, h.module), ..._extra}..removeWhere((key, v) => v.trim().isEmpty || !(h.module.dateFields.contains(key) || h.module.numFields.contains(key) || h.module.timeFields.contains(key) || key == h.module.descField || key == h.module.longField));
+    final facts = {...balaganFacts(first, h.module), ..._extra}..removeWhere((key, v) => v.trim().isEmpty || !(h.module.dateFields.contains(key) || h.module.numFields.contains(key) || h.module.timeFields.contains(key) || h.module.phoneFields.contains(key) || h.module.personFields.contains(key) || h.module.percentFields.contains(key) || key == h.module.descField || key == h.module.longField));
     Navigator.of(context).push<bool>(MaterialPageRoute<bool>(builder: (_) => ${clsOf('balagan_confirm')}(module: h.module, facts: facts, doc: _doc, alternatives: alts, text: first, queue: parts.sublist(1)))).then((saved) { if (saved == true && mounted) setState(() { _c.clear(); _hits = const []; _extra = const {}; _doc = ''; _asked = false; _note = ${k(L.askSaved)}; }); });
   }
   Future<void> _photo() async {

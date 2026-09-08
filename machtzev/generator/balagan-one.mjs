@@ -65,6 +65,12 @@ if (!/balaganTimes\(/.test(moments) || !/balaganSplit\(/.test(moments) || !/time
 if (!/queue:/.test(confirm) || !/void _next\(\)/.test(confirm) || !/balaganSplit\(/.test(home) || !/balaganSplit\(/.test(ask)) fails.push('כמה-רגעים-בשורה: queue/_next בטופס-האישור או balaganSplit במסך-הראשון/«מה קרה?» חסרים');
 if (!mods.some((m) => m.layer === 'base' && m.root.fields.some((f) => /שעה/.test(f.label)))) fails.push('אין מודול-בסיס עם שדה-שעה (יומן)');
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/'שעה'/.test(ft) || !/balaganSplit\(/.test(ft)) fails.push('בדיקת-השעה/הפיצול המחוללת חסרה'); }
+// גל ב׳-ז · טלפון/מי/אחוז לפי דקדוק-האפיון · השעה על שורת-היום (DsTodayItem.time) · התוכנית מקבעת שעות
+if (!/balaganPhones\(/.test(moments) || !/balaganPersons\(/.test(moments) || !/balaganPercents\(/.test(moments) || !/phoneFields/.test(moments)) fails.push('balaganFacts בלי טלפון/מי/אחוז');
+{ const ds = rd(path.join(R.ROOT, 'new/dart-ui-bs/ds/ds.dart')); if (!/this\.time = ''/.test(ds)) fails.push('DsTodayItem בלי time'); }
+if (!/fixed\.sort\(/.test(home) || !/DateTime free\(/.test(home) || !/a\.time\.isEmpty \? '99:99'/.test(home)) fails.push('התוכנית-להיום אינה מקבעת שעות / שורות-היום לא לפי שעה');
+for (const m of mods.filter((x) => x.root.fields.some((f) => /שעה/.test(f.label)))) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/static const List<String> _times = \[gen_/.test(h) || !/_timeOf\(r\)/.test(h)) fails.push(`${m.ns}: ספק-היום בלי שדה-השעה`); }
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/'טלפון'/.test(ft) || !/'לקוח'/.test(ft) || !/'ריבית'/.test(ft)) fails.push('בדיקת טלפון/מי/אחוז המחוללת חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);
