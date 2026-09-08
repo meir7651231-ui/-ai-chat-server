@@ -91,6 +91,10 @@ if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/'1500'/.test(ft)
 if (!/balaganDuplicates\(/.test(moments) || !/balaganDuplicates\(m, _v\)/.test(confirm) || (confirm.match(/case 'app_[a-z0-9]+_ent\d+': return/g) || []).length !== mods.length) fails.push('טופס-האישור בלי שומר-כפילויות לכל המודולים');
 if (!/for \(var d = 2; d <= 7; d\+\+\)/.test(home) || !/soonFold|השבוע הקרוב/.test(home)) fails.push('«היום» בלי «השבוע הקרוב»');
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganDuplicates\(/.test(ft)) fails.push('בדיקת תיק-כפול חסרה'); }
+// גל ב׳-יב · «פתח את הקיים» = מיזוג עם החזר
+if (!/int balaganMerge\(/.test(moments) || !/balaganMerge\(m, id/.test(confirm)) fails.push('טופס-האישור בלי מיזוג-לתיק-הקיים');
+{ const st = rd(path.join(R.ROOT, 'new/dart-ui-bs/ds/ds_store.dart')); if (!/== 'merge'\)/.test(st)) fails.push('AppStore.undo בלי merge'); }
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganMerge\(/.test(ft)) fails.push('בדיקת המיזוג חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);
