@@ -43,6 +43,12 @@
     "enumVals": []
    },
    {
+    "label": "סכום",
+    "type": "num",
+    "required": false,
+    "enumVals": []
+   },
+   {
     "label": "הערה",
     "type": "multiline",
     "required": false,

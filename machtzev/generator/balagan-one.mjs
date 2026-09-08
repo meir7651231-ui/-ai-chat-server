@@ -7,7 +7,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { loadModules, buildIdentifier, selfTest } from './balagan.mjs';
+import { loadModules, buildIdentifier, selfTest, identify } from './balagan.mjs';
 import * as R from '../root.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -47,6 +47,19 @@ if (!/_chain\(context\)/.test(home) || !/\.done\(\)/.test(home) || !/bm\.chain\.
 if (!/appStore\.setting\('mail\.token'\)/.test(keys)) fails.push('«חיבורים» בלי טוקן-מייל');
 const mailSrc = rd(path.join(R.ROOT, 'new/dart-ui-bs/ds/ds_mail.dart')); if (/ya29\.[A-Za-z0-9_-]{20,}/.test(mailSrc + keys + home)) fails.push('טוקן ליטרלי בקוד');
 for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/calendar\.google\.com\/calendar\/render/.test(h)) fails.push(`${m.ns}: בלי «ליומן»`); if (m.chain && m.chain.length && m.root.stages && m.root.stages.length && !/static List<Map<String, String>> done\(\) => appStore\.records/.test(h)) fails.push(`${m.ns}: הצעד-הבא לא על רשומות-שנסגרו`); }
+// גל ב׳-ה · ×100: תאריכים-יחסיים בעברית + צורות-סכום ב-balaganFacts (היום מוזרק) · בדיקת-Dart מחוללת (רצה ב-ship) · «השבוע» = שמירת-זמן מהיומן · דקות-לפעולה עריכות
+const moments = rd(path.join(GEN, 'gen_balagan_moments.dart'));
+for (const w of ['מחרתיים', 'בעוד', 'ראשון|שני|שלישי', 'סוף\\s+החודש', 'לחודש', 'אלפיים', '₪']) if (!new RegExp(w).test(moments)) fails.push(`balaganFacts בלי «${w}»`);
+if (!/DateTime\? today/.test(moments) || !/balaganDates\(/.test(moments) || !/balaganNums\(/.test(moments)) fails.push('balaganFacts: היום אינו מוזרק / אין balaganDates+balaganNums');
+const factsTest = path.join(R.ROOT, '..', 'buildsmart', 'app_flutter', 'test', 'genesis_gen_balagan_facts_test.dart');
+if (fs.existsSync(path.join(R.ROOT, '..', 'buildsmart', 'app_flutter', 'pubspec.yaml'))) { const ft = fs.existsSync(factsTest) ? rd(factsTest) : ''; const nExp = (ft.match(/expect\(/g) || []).length; if (nExp < 20 || !/today: today/.test(ft) || !/מחר/.test(ft)) fails.push(`בדיקת-העובדות המחוללת: ${nExp} expect (נדרש ≥20 עם היום-מוזרק ו«מחר»)`); }
+if (!/weekStart/.test(home) || !/'minSend'/.test(home) || !/wSaved/.test(home)) fails.push('«היום» בלי «השבוע» (שמירת-זמן מהיומן)');
+const behavior = rd(path.join(GEN, 'gen_balagan_behavior.dart'));
+for (const key of ['minAdd', 'minSend', 'minAuto']) if (!behavior.includes(`appStore.setting('${key}'`)) fails.push(`«התנהגות» בלי ${key}`);
+// רגע-כללי ⇒ שכבת-הבסיס: סף-חולשה נגזר מהנתונים (kBalaganWeak) · הבסיס-הכללי-ביותר ראשון · המודולים-החלשים חלופות; בדיקת-Dart מחוללת מוכיחה (זיהוי ×3)
+if (!/const double kBalaganWeak = 0\.\d+;/.test(moments) || !/layer == 'base'/.test(moments) || !/a\.required\.compareTo\(b\.required\)/.test(moments)) fails.push('balaganIdentify בלי נפילה-לבסיס (kBalaganWeak · layer · required)');
+{ const ident = buildIdentifier(mods); const selfS = mods.map((m) => (identify(ident, m.title + ' ' + m.moment, 1)[0] || { score: 1 }).score); const weak = +(moments.match(/kBalaganWeak = ([\d.]+)/) || [0, 1])[1]; const gen = identify(ident, 'לשלם ארנונה מחר', 1)[0]; if (gen && gen.score / selfS[gen.i] >= weak) fails.push(`שורה-כללית «לשלם ארנונה מחר» מזוהה בביטחון ${(gen.score / selfS[gen.i]).toFixed(3)} ≥ סף ${weak} — הסף אינו נגזר נכון`); for (const [i, m] of mods.entries()) { const h = identify(ident, m.title, 1)[0]; if (!h || h.ns !== m.ns || h.score / selfS[i] < weak) fails.push(`כותרת «${m.title}» מתחת לסף-החולשה`); } }
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganIdentify\(/.test(ft) || !/layer, 'base'/.test(ft)) fails.push('בדיקת-הזיהוי המחוללת חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);

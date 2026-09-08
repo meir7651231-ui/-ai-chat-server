@@ -85,6 +85,9 @@ export function buildBalagan() {
   for (const d of [R.outDir(), R.dataOutDir()]) if (fs.existsSync(d)) for (const f of fs.readdirSync(d)) if (/^gen_balagan_[a-z]+(_content)?\.dart$/.test(f)) fs.unlinkSync(path.join(d, f));
   const ident = buildIdentifier(mods);
   const bad = selfTest(mods, ident);
+  const selfScores = mods.map((m) => (identify(ident, m.title + ' ' + m.moment, 1)[0] || { score: 1 }).score);   // מכנה-הביטחון פר-מודול
+  const titleConf = mods.map((m, i) => { const h = identify(ident, m.title, 1)[0]; return h && h.ns === m.ns ? h.score / selfScores[i] : 1; });
+  const weak = Math.round(Math.min(...titleConf) * 0.5 * 1000) / 1000;   // סף-החולשה = חצי מביטחון-הכותרת-הנמוך: כותרת-לבד תמיד מזוהה, שורה-כללית («לשלם ארנונה מחר») נופלת לבסיס
   mods.forEach((m) => { m.topic = topicOf(m); });
   const todayCls = (m) => `${m.home.cls}Today`;
 
@@ -94,15 +97,19 @@ export function buildBalagan() {
     const code = `// 🧭 חולל ע"י balagan (G33 · הכרעה-29) — מזהה-הרגע: TF-IDF דטרמיניסטי מ-${mods.length} מסמכי-פירוק (כותרת+«הרגע» ×3). אפס-בינה, אפס-מילון. אל תערוך ידנית.
 class BalaganField { const BalaganField(this.label, this.type, this.required, this.options); final String label, type; final bool required; final List<String> options; }
 class BalaganModule {
-  const BalaganModule(this.index, this.ns, this.title, this.moment, this.topic, this.weights, this.dateFields, this.numFields, this.descField, this.longField, this.rootSlug, this.fields, this.stages, this.chain);
+  const BalaganModule(this.index, this.ns, this.title, this.moment, this.topic, this.weights, this.dateFields, this.numFields, this.descField, this.longField, this.rootSlug, this.fields, this.stages, this.chain, {this.selfScore = 1, this.layer = '', this.required = 0});
   final int index; final String ns, title, moment, topic, rootSlug; final Map<String, double> weights; final List<String> dateFields, numFields; final String descField, longField; final List<BalaganField> fields; final int stages; final List<String> chain;
+  final double selfScore;   // ציון הכותרת+הרגע של המודול עצמו — מכנה-הביטחון
+  final String layer;       // 'base' = שכבת-הבסיס (משימות · יומן)
+  final int required;       // מספר שדות-החובה — המודול הכללי-ביותר = הכי-פחות
 }
 class BalaganHit { const BalaganHit(this.module, this.score); final BalaganModule module; final double score; }
-class _At { const _At(this.start); final int start; }
 
 const List<BalaganModule> kBalaganModules = [
-${mods.map((m, i) => `  BalaganModule(${i}, '${m.ns}', ${dq(m.title)}, ${dq(m.moment)}, ${dq(m.topic)}, {${Object.entries(ident[i].weights).map(([v, s]) => `${dq(v)}: ${s}`).join(', ')}}, [${m.root.fields.filter((f) => f.type === 'date').map((f) => dq(f.label)).join(', ')}], [${m.root.fields.filter((f) => f.type === 'num').map((f) => dq(f.label)).join(', ')}], ${dq(m.root.descField || '')}, ${dq((m.root.fields.find((f) => f.type === 'multiline') || {}).label || '')}, '${m.root.slug}', [${m.root.fields.map((f) => `BalaganField(${dq(f.label)}, '${f.type}', ${f.required ? 'true' : 'false'}, [${(f.enumVals || []).map(dq).join(', ')}])`).join(', ')}], ${(m.root.stages || []).length}, [${(m.chain || []).map(dq).join(', ')}]),`).join('\n')}
+${mods.map((m, i) => `  BalaganModule(${i}, '${m.ns}', ${dq(m.title)}, ${dq(m.moment)}, ${dq(m.topic)}, {${Object.entries(ident[i].weights).map(([v, s]) => `${dq(v)}: ${s}`).join(', ')}}, [${m.root.fields.filter((f) => f.type === 'date').map((f) => dq(f.label)).join(', ')}], [${m.root.fields.filter((f) => f.type === 'num').map((f) => dq(f.label)).join(', ')}], ${dq(m.root.descField || '')}, ${dq((m.root.fields.find((f) => f.type === 'multiline') || {}).label || '')}, '${m.root.slug}', [${m.root.fields.map((f) => `BalaganField(${dq(f.label)}, '${f.type}', ${f.required ? 'true' : 'false'}, [${(f.enumVals || []).map(dq).join(', ')}])`).join(', ')}], ${(m.root.stages || []).length}, [${(m.chain || []).map(dq).join(', ')}], selfScore: ${selfScores[i]}, layer: '${m.layer || ''}', required: ${m.root.fields.filter((f) => f.required).length}),`).join('\n')}
 ];
+/// סף-החולשה — נגזר מהנתונים (לא קבוע-קסם): חצי מביטחון-הכותרת-הנמוך-ביותר בין המודולים. מתחתיו הרגע «כללי» ⇒ שכבת-הבסיס ראשונה.
+const double kBalaganWeak = ${weak};
 
 String _definal(String w) => w.replaceAll(RegExp(r'ך\$'), 'כ').replaceAll(RegExp(r'ם\$'), 'מ').replaceAll(RegExp(r'ן\$'), 'נ').replaceAll(RegExp(r'ף\$'), 'פ').replaceAll(RegExp(r'ץ\$'), 'צ');
 Set<String> balaganTokens(String s) {
@@ -119,39 +126,149 @@ List<BalaganHit> balaganIdentify(String text, {int k = 3}) {
   final hits = <BalaganHit>[];
   for (final m in kBalaganModules) { var s = 0.0; for (final t in toks) { s += m.weights[t] ?? 0; } if (s > 0) hits.add(BalaganHit(m, s)); }
   hits.sort((a, b) { final c = b.score.compareTo(a.score); return c != 0 ? c : a.module.index.compareTo(b.module.index); });
+  // רגע כללי (אין מודול שמזהה אותו בביטחון) ⇒ שכבת-הבסיס ראשונה: הבסיס עם הציון-הגבוה, ואם אין — הכללי-ביותר (הכי-פחות שדות-חובה: משימה לפני פגישה). המודולים החלשים נשארים כחלופות («לא זה? אולי»).
+  final weak = hits.isEmpty || hits.first.score / hits.first.module.selfScore < kBalaganWeak;
+  if (weak) {
+    final base = kBalaganModules.where((m) => m.layer == 'base').toList();
+    if (base.isNotEmpty) {
+      double sc(BalaganModule m) { var s = 0.0; for (final t in toks) { s += m.weights[t] ?? 0; } return s; }
+      base.sort((a, b) { final c = sc(b).compareTo(sc(a)); if (c != 0) return c; final r = a.required.compareTo(b.required); return r != 0 ? r : a.index.compareTo(b.index); });
+      final b = base.first;
+      hits.removeWhere((h) => h.module.index == b.index);
+      hits.insert(0, BalaganHit(b, sc(b)));
+    }
+  }
   return hits.take(k).toList();
 }
-/// עובדות מהטקסט (תאריכים · סכומים · טלפון · שורה-ראשונה) ⇒ שדות-השורש לפי טיפוס. אפס-ניחוש-שמות: שדה-תאריך ראשון ⇐ תאריך ראשון, וכן הלאה.
-Map<String, String> balaganFacts(String text, BalaganModule m) {
+/// תאריך-יחסי בעברית — דקדוק-זמן, לא מילון-דומייני: היום · מחר · מחרתיים · אתמול · בעוד N ימים/שבועות/חודשים (גם במילים) · ביום ראשון…שבת / יום א׳ · בשבוע/בחודש הבא · בסוף החודש · ב-N לחודש · dd.mm
+class _DateAt { const _DateAt(this.start, this.end, this.iso); final int start, end; final String iso; }
+class _NumAt { const _NumAt(this.start, this.end, this.value); final int start, end; final String value; }
+int? _heNum(String w) { const m = {'אחד': 1, 'אחת': 1, 'שני': 2, 'שתי': 2, 'שניים': 2, 'שתיים': 2, 'שלושה': 3, 'שלוש': 3, 'ארבעה': 4, 'ארבע': 4, 'חמישה': 5, 'חמש': 5, 'שישה': 6, 'שש': 6, 'שבעה': 7, 'שבע': 7, 'שמונה': 8, 'תשעה': 9, 'תשע': 9, 'עשרה': 10, 'עשר': 10}; return m[w]; }
+String _isoOf(DateTime d) => d.toIso8601String().substring(0, 10);
+List<_DateAt> balaganDates(String text, DateTime today) {
+  final out = <_DateAt>[];
+  final t0 = DateTime(today.year, today.month, today.day);
+  DateTime add(int days) => DateTime(t0.year, t0.month, t0.day + days);
+  void put(RegExp re, DateTime? Function(RegExpMatch) f) { for (final x in re.allMatches(text)) { final d = f(x); if (d != null) out.add(_DateAt(x.start, x.end, _isoOf(d))); } }
+  put(RegExp(r'(\\d{4})-(\\d{2})-(\\d{2})'), (x) => DateTime(int.parse(x.group(1)!), int.parse(x.group(2)!), int.parse(x.group(3)!)));
+  put(RegExp(r'(?<![\\d.])(\\d{1,2})[./](\\d{1,2})[./](\\d{2,4})(?![\\d.])'), (x) { var y = int.parse(x.group(3)!); if (y < 100) y += 2000; final mo = int.parse(x.group(2)!), d = int.parse(x.group(1)!); return (mo >= 1 && mo <= 12 && d >= 1 && d <= 31) ? DateTime(y, mo, d) : null; });
+  put(RegExp(r'(?<![\\d.])(\\d{1,2})\\.(\\d{1,2})(?![\\d.%]|\\s*(?:אלף|%|₪))'), (x) { final mo = int.parse(x.group(2)!), d = int.parse(x.group(1)!); if (!(mo >= 1 && mo <= 12 && d >= 1 && d <= 31)) return null; var c = DateTime(t0.year, mo, d); if (c.isBefore(t0)) c = DateTime(t0.year + 1, mo, d); return c; });   // dd.mm בלי שנה: הקרוב-הבא
+  put(RegExp(r'(?<![\\u0590-\\u05FF])מחרתיים'), (_) => add(2));
+  put(RegExp(r'(?<![\\u0590-\\u05FF])מחר(?![\\u0590-\\u05FF])'), (_) => add(1));
+  put(RegExp(r'(?<![\\u0590-\\u05FF])היום(?![\\u0590-\\u05FF])'), (_) => add(0));
+  put(RegExp(r'(?<![\\u0590-\\u05FF])אתמול'), (_) => add(-1));
+  put(RegExp(r'(?<![\\u0590-\\u05FF])שלשום'), (_) => add(-2));
+  put(RegExp(r'בעוד\\s+(?:(\\d+|[\\u0590-\\u05FF]+)\\s+)?(ימים|יום|יומיים|שבועות|שבוע|שבועיים|חודשים|חודש|חודשיים)(?![\\u0590-\\u05FF])'), (x) { final q = x.group(1); final u = x.group(2)!; var n = q == null ? 1 : (int.tryParse(q) ?? _heNum(q) ?? 1); if (u == 'יומיים' || u == 'שבועיים' || u == 'חודשיים') n = 2; if (u.startsWith('שבוע')) return add(7 * n); if (u.startsWith('חודש')) return DateTime(t0.year, t0.month + n, t0.day); return add(n); });
+  put(RegExp(r'לפני\\s+(\\d+|[\\u0590-\\u05FF]+)\\s+(ימים|שבועות|חודשים)'), (x) { final q = x.group(1)!; final u = x.group(2)!; final n = int.tryParse(q) ?? _heNum(q) ?? 1; if (u == 'שבועות') return add(-7 * n); if (u == 'חודשים') return DateTime(t0.year, t0.month - n, t0.day); return add(-n); });
+  const wd = {'ראשון': 7, 'שני': 1, 'שלישי': 2, 'רביעי': 3, 'חמישי': 4, 'שישי': 5, 'שבת': 6, 'א': 7, 'ב': 1, 'ג': 2, 'ד': 3, 'ה': 4, 'ו': 5};
+  DateTime next(int w) { var d = (w - t0.weekday + 7) % 7; if (d == 0) d = 7; return add(d); }   // הבא, לא היום
+  put(RegExp(r'ב?יום\\s+(ראשון|שני|שלישי|רביעי|חמישי|שישי|שבת|[אבגדהו])(?:[׳\\u0027]|(?![\\u0590-\\u05FF]))'), (x) => next(wd[x.group(1)!]!));
+  put(RegExp(r'(?<![\\u0590-\\u05FF])ב?שבת(?![\\u0590-\\u05FF])'), (_) => next(6));
+  put(RegExp(r'בשבוע\\s+הבא'), (_) => add(7));
+  put(RegExp(r'בחודש\\s+הבא'), (_) => DateTime(t0.year, t0.month + 1, t0.day));
+  put(RegExp(r'ב?סוף\\s+החודש'), (_) => DateTime(t0.year, t0.month + 1, 0));
+  put(RegExp(r'ב?תחילת\\s+החודש'), (_) => DateTime(t0.year, t0.month + 1, 1));
+  put(RegExp(r'ב-?(\\d{1,2})\\s+[לב]חודש'), (x) { final d = int.parse(x.group(1)!); if (d < 1 || d > 31) return null; return d >= t0.day ? DateTime(t0.year, t0.month, d) : DateTime(t0.year, t0.month + 1, d); });
+  out.sort((a, b) => a.start.compareTo(b.start));
+  final res = <_DateAt>[]; for (final d in out) { if (res.any((r) => d.start < r.end && d.end > r.start)) continue; res.add(d); }   // חפיפה (יום ראשון ⊃ ראשון) ⇒ הראשון-שנמצא
+  return res;
+}
+/// סכומים: 8,000 · 8000 · 8 אלף · 8.5 אלף · 8k · אלפיים · 350 ש"ח / ₪350 (מספר קטן רק עם מטבע). לא חלק מתאריך/טלפון.
+List<_NumAt> balaganNums(String text, List<_DateAt> dates) {
+  final out = <_NumAt>[];
+  bool inDate(int s, int e) => dates.any((d) => s < d.end && e > d.start);
+  String fmt(double v) => v == v.roundToDouble() ? v.round().toString() : v.toString();
+  void put(RegExp re, String? Function(RegExpMatch) f) { for (final x in re.allMatches(text)) { if (inDate(x.start, x.end)) continue; final v = f(x); if (v != null) out.add(_NumAt(x.start, x.end, v)); } }
+  put(RegExp(r'(?<![\\d.,-])(\\d+(?:[.,]\\d{1,2})?)\\s*(?:אלף|א׳|[kK])(?![\\u0590-\\u05FFa-zA-Z])'), (x) { final v = double.tryParse(x.group(1)!.replaceAll(',', '.')); return v == null ? null : fmt(v * 1000); });
+  put(RegExp(r'(?<![\\u0590-\\u05FF])אלפיים(?![\\u0590-\\u05FF])'), (_) => '2000');
+  put(RegExp(r'(?<![\\d.,-])(\\d{1,3}(?:,\\d{3})+|\\d+(?:[.,]\\d{1,2})?)\\s*(?:₪|ש"ח|ש״ח|שח(?![\\u0590-\\u05FF])|שקל|שקלים|דולר|\\$|יורו|€)'), (x) { final g = x.group(1)!; return RegExp(r'^\\d{1,3}(,\\d{3})+\$').hasMatch(g) ? g.replaceAll(',', '') : g.replaceAll(',', '.'); });   // עם מטבע: הטווח כולל את המטבע (המתאר נשאר נקי)
+  put(RegExp(r'(?:₪|\\$|€)\\s*(\\d{1,3}(?:,\\d{3})+|\\d+(?:[.,]\\d{1,2})?)(?![\\d,])'), (x) { final g = x.group(1)!; return RegExp(r'^\\d{1,3}(,\\d{3})+\$').hasMatch(g) ? g.replaceAll(',', '') : g.replaceAll(',', '.'); });
+  put(RegExp(r'(?<![\\d-])(\\d{1,3}(?:,\\d{3})+|\\d{3,7})(?![\\d-])'), (x) => x.group(1)!.replaceAll(',', ''));
+  out.sort((a, b) => a.start.compareTo(b.start));
+  final res = <_NumAt>[]; for (final n in out) { if (res.any((r) => n.start < r.end && n.end > r.start)) continue; res.add(n); }   // «8 אלף» ⊃ «8»
+  return res;
+}
+/// עובדות מהטקסט (תאריכים — גם יחסיים · סכומים · שורה-ראשונה) ⇒ שדות-השורש לפי טיפוס + קרבה למילות-תווית-השדה. \`today\` מוזרק (דטרמיניסטי; ברירת-מחדל עכשיו).
+Map<String, String> balaganFacts(String text, BalaganModule m, {DateTime? today}) {
   final out = <String, String>{};
-  final dates = <String>[];
-  for (final d in RegExp(r'(\\d{4})-(\\d{2})-(\\d{2})').allMatches(text)) { dates.add(d.group(0)!); }
-  for (final d in RegExp(r'(\\d{1,2})[./](\\d{1,2})[./](\\d{2,4})').allMatches(text)) { var y = d.group(3)!; if (y.length == 2) y = '20\$y'; dates.add('\$y-\${d.group(2)!.padLeft(2, '0')}-\${d.group(1)!.padLeft(2, '0')}'); }
-  final nums = <String>[];
-  for (final n in RegExp(r'(?<![\\d-])(\\d{1,3}(?:,\\d{3})+|\\d{3,7})(?![\\d-])').allMatches(text)) { final v = n.group(1)!.replaceAll(',', ''); if (!dates.any((d) => d.contains(v))) nums.add(v); }
-  // קרבה למילות-השדה (מבני: המילים של תווית-השדה עצמה, לא מילון): «מהפיקדון של 8,000» ⇒ פיקדון ⇐ 8000. אין קרבה ⇒ לפי סדר.
-  int nearest(List<RegExpMatch> ms, String label) {
+  final t0 = today ?? DateTime.now();
+  final dateMs = balaganDates(text, t0);
+  final numMs = balaganNums(text, dateMs);
+  // קרבה למילות-השדה (מבני: המילים של תווית-השדה עצמה, לא מילון): «מהפיקדון של 8,000» ⇒ פיקדון ⇐ 8000. סדר-מילים: אחרי עדיף · לפני −20 · «מ» −10. אין קרבה ⇒ לפי סדר.
+  int nearest(List<int> starts, String label) {
     final ws = <String>{}; for (final x in RegExp(r'[\\u0590-\\u05FF]{3,}').allMatches(label)) { final w = x.group(0)!; ws.add(w); if (w.length >= 4 && 'והבלמשכ'.contains(w[0])) ws.add(w.substring(1)); }
     var best = -1; var bestD = 1 << 30;
-    for (var i = 0; i < ms.length; i++) { final a = ms[i].start; for (final w in ws) { var from = 0; while (true) { final at = text.indexOf(w, from); if (at < 0) break; from = at + 1; final wm = _At(at); var d = (wm.start - a).abs(); if (a < wm.start) d += 20; if (at > 0 && text[at - 1] == 'מ') d += 10; if (d < bestD && d <= 60) { bestD = d; best = i; } } } }
+    for (var i = 0; i < starts.length; i++) { final a = starts[i]; for (final w in ws) { var from = 0; while (true) { final at = text.indexOf(w, from); if (at < 0) break; from = at + 1; var d = (at - a).abs(); if (a < at) d += 20; if (at > 0 && text[at - 1] == 'מ') d += 10; if (d < bestD && d <= 60) { bestD = d; best = i; } } } }
     return best;
   }
-  final numMs = RegExp(r'(?<![\\d-])(\\d{1,3}(?:,\\d{3})+|\\d{3,7})(?![\\d-])').allMatches(text).where((n) => !dates.any((d) => d.contains(n.group(1)!.replaceAll(',', '')))).toList();
+  final nStarts = [for (final n in numMs) n.start];
   final usedN = <int>{};
-  for (final f in m.numFields) { final i = nearest(numMs, f); if (i >= 0 && !usedN.contains(i)) { out[f] = numMs[i].group(1)!.replaceAll(',', ''); usedN.add(i); } }
-  var ni = 0; for (final f in m.numFields) { if (out.containsKey(f)) continue; while (ni < numMs.length && usedN.contains(ni)) { ni++; } if (ni < numMs.length) { out[f] = numMs[ni].group(1)!.replaceAll(',', ''); usedN.add(ni); } }
-  final dateMs = [...RegExp(r'(\\d{4})-(\\d{2})-(\\d{2})').allMatches(text), ...RegExp(r'(\\d{1,2})[./](\\d{1,2})[./](\\d{2,4})').allMatches(text)];
+  for (final f in m.numFields) { final i = nearest(nStarts, f); if (i >= 0 && !usedN.contains(i)) { out[f] = numMs[i].value; usedN.add(i); } }
+  var ni = 0; for (final f in m.numFields) { if (out.containsKey(f)) continue; while (ni < numMs.length && usedN.contains(ni)) { ni++; } if (ni < numMs.length) { out[f] = numMs[ni].value; usedN.add(ni); } }
+  final dStarts = [for (final d in dateMs) d.start];
   final usedD = <int>{};
-  for (final f in m.dateFields) { final i = nearest(dateMs, f); if (i >= 0 && !usedD.contains(i) && i < dates.length) { out[f] = dates[i]; usedD.add(i); } }
-  var di = 0; for (final f in m.dateFields) { if (out.containsKey(f)) continue; while (di < dates.length && usedD.contains(di)) { di++; } if (di < dates.length) { out[f] = dates[di]; usedD.add(di); } }
+  for (final f in m.dateFields) { final i = nearest(dStarts, f); if (i >= 0 && !usedD.contains(i)) { out[f] = dateMs[i].iso; usedD.add(i); } }
+  var di = 0; for (final f in m.dateFields) { if (out.containsKey(f)) continue; while (di < dateMs.length && usedD.contains(di)) { di++; } if (di < dateMs.length) { out[f] = dateMs[di].iso; usedD.add(di); } }
   if (text.trim().isNotEmpty) out['__note'] = text.trim();   // הטקסט המקורי לעולם לא אובד (מוצג בתיק: «מה כתבת»)
-  final line = text.trim().split(RegExp(r'[\\n.]')).first.trim();
+  // המתאר = השורה בלי העובדות שכבר נקלטו לשדות («לשלם ארנונה מחר 350 ש"ח» ⇒ «לשלם ארנונה»): הסרת-הטווחים שנצרכו + ניקוי מילת-יחס תלויה. אינו מילון — טווחי-ההתאמה עצמם.
+  final spans = <List<int>>[for (final i in usedD) [dateMs[i].start, dateMs[i].end], for (final i in usedN) [numMs[i].start, numMs[i].end]]..sort((a, b) => a[0].compareTo(b[0]));
+  var cleaned = ''; var pos = 0; for (final sp in spans) { if (sp[0] > pos) cleaned += text.substring(pos, sp[0]); pos = sp[1] > pos ? sp[1] : pos; } cleaned += text.substring(pos);
+  cleaned = cleaned.replaceAll(RegExp(r'\\s+'), ' ').replaceAll(RegExp(r'[\\s,\\-–—:]+\$'), '').replaceAll(RegExp(r'\\s[בלמוה]-?\$'), '').replaceAll(RegExp(r'^[\\s,\\-–—:]+'), '').trim();
+  final rawLine = text.trim().split(RegExp(r'[\\n.]')).first.trim();
+  final line = (cleaned.length >= 2 ? cleaned.split(RegExp(r'[\\n]')).first.trim() : rawLine);
   if (m.descField.isNotEmpty && line.isNotEmpty && line.length <= 40 && !m.dateFields.contains(m.descField) && !m.numFields.contains(m.descField)) { out[m.descField] = line; }   // שורה קצרה = שם/מתאר; משפט ארוך אינו שם
   if (m.longField.isNotEmpty && text.trim().length > 40) { out[m.longField] = text.trim(); }   // הטקסט המלא ⇒ שדה-הטקסט-הארוך הראשון (multiline), אם יש
   return out;
 }
 `;
     write(slug, code, '');
+  }
+
+  // ── 1b · בדיקת-Dart מחוללת לעובדות: תאריכים-יחסיים · סכומים · קרבה-למילת-השדה — היום מוזרק (2026-09-08, יום ג׳) ⇒ דטרמיניסטי; רצה ב-ship (flutter test genesis_*) ──
+  {
+    const bsTest = path.join(R.ROOT, '..', 'buildsmart', 'app_flutter', 'test');
+    const cases = [
+      ['לשלם ארנונה מחר 350 ש"ח', ['תאריך תשלום'], ['סכום'], { 'תאריך תשלום': '2026-09-09', 'סכום': '350', 'מה': 'לשלם ארנונה' }],
+      ['המשכיר מקזז 6,200 מהפיקדון של 8,000, מסרתי מפתח ב-1.8.2026', ['תאריך מסירת מפתח'], ['סכום הפיקדון'], { 'תאריך מסירת מפתח': '2026-08-01', 'סכום הפיקדון': '8000' }],
+      ['פגישה עם הרו"ח בעוד שבועיים', ['מועד'], [], { 'מועד': '2026-09-22', 'מה': 'פגישה עם הרו"ח' }],
+      ['תשובה ביום ראשון', ['מועד'], [], { 'מועד': '2026-09-13' }],
+      ['לשלם בסוף החודש 8 אלף', ['מועד'], ['סכום'], { 'מועד': '2026-09-30', 'סכום': '8000' }],
+      ['ההמחאה ב-15 לחודש', ['מועד'], [], { 'מועד': '2026-09-15', 'מה': 'ההמחאה' }],
+      ['בעוד שלושה ימים מגיע הטכנאי, 12.5 ₪ לדקה', ['מועד'], ['סכום'], { 'מועד': '2026-09-11', 'סכום': '12.5' }],
+      ['החוזה נגמר 30.11', ['מועד'], [], { 'מועד': '2026-11-30' }],
+      ['ריבית 3.5% על 2,400', ['מועד'], ['סכום'], { 'סכום': '2400' }],
+      ['יום ה׳ אצל הרופא', ['מועד'], [], { 'מועד': '2026-09-10' }],
+    ];
+    const dq = (x) => "'" + String(x).replace(/\\/g, '\\\\').replace(/'/g, "\\'") + "'";
+    const code = `// 🧭 חולל ע"י balagan (G33 ב׳-ה · הכרעה-29) — הוכחת-עובדות: תאריכים-יחסיים בעברית · צורות-סכום · קרבה-למילת-השדה. היום מוזרק ⇒ דטרמיניסטי. אל תערוך ידנית.
+import 'package:buildsmart/genesis/dart-gen-bs/gen_balagan_moments.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+void main() {
+  final today = DateTime(2026, 9, 8);   // יום שלישי
+  BalaganModule mod(List<String> dates, List<String> nums) => BalaganModule(0, 't', 'בדיקה', 'בדיקה', '', const <String, double>{}, dates, nums, 'מה', '', 'x', const <BalaganField>[], 1, const <String>[]);
+${cases.map(([text, dates, nums, exp], i) => `  test('עובדות ${i + 1}: ${text.replace(/'/g, '’')}', () {
+    final f = balaganFacts(${dq(text)}, mod([${dates.map(dq).join(', ')}], [${nums.map(dq).join(', ')}]), today: today);
+${Object.entries(exp).map(([k, v]) => `    expect(f[${dq(k)}], ${dq(v)});`).join('\n')}
+${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}), isFalse);`).join('\n')}
+    expect(f['__note'], ${dq(text)});
+  });`).join('\n')}
+  test('זיהוי: רגע כללי ⇒ שכבת-הבסיס ראשונה, המודול-החלש חלופה', () {
+    final h = balaganIdentify('לשלם ארנונה מחר 350 ש"ח');
+    expect(h.first.module.layer, 'base');
+    expect(h.first.module.required, kBalaganModules.where((m) => m.layer == 'base').map((m) => m.required).reduce((a, b) => a < b ? a : b));
+  });
+  test('זיהוי: רגע מובהק ⇒ המודול שלו, לא הבסיס', () {
+    final h = balaganIdentify('המשכיר מקזז 6,200 מהפיקדון של 8,000, מסרתי מפתח');
+    expect(h.first.module.layer, isNot('base'));
+    expect(h.first.score / h.first.module.selfScore >= kBalaganWeak, isTrue);
+  });
+  test('זיהוי: כל כותרת-מודול ⇒ עצמו (הסף אינו בולע כותרות)', () {
+    for (final m in kBalaganModules) { expect(balaganIdentify(m.title).first.module.ns, m.ns, reason: m.title); }
+  });
+}
+`;
+    if (fs.existsSync(path.join(bsTest, '..', 'pubspec.yaml'))) fs.writeFileSync(path.join(bsTest, 'genesis_gen_balagan_facts_test.dart'), code);
   }
 
   // ── 2 · «היום» המאוחד ──
@@ -286,6 +403,13 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
     final pending = <Widget>[..._inbox(context), ..._chain(context), for (final m in _mods) ...m.proposals(context, today, chain: false)];
     final cards = <Widget>[for (final m in _mods) for (final r in m.open()) m.card(context, r)];
     final did = appStore.log.where((e) => (e['kind'] == 'decide' || e['kind'] == 'auto' || e['kind'] == 'next' || e['kind'] == 'add') && e['undone'] != '1').take(5).toList();
+    // «השבוע» — שמירת-זמן (§המוצר): נגזרת של היומן מיום-ראשון; הדקות-לפעולה = הגדרה עריכה, לא טענה
+    final weekStart = today.subtract(Duration(days: today.weekday % 7));
+    final wk = appStore.log.where((e) => e['undone'] != '1' && !(DateTime.tryParse(e['at'] ?? '') ?? DateTime(2000)).isBefore(weekStart)).toList();
+    int cnt(String kind) => wk.where((e) => e['kind'] == kind).length;
+    int mins(String key, String def) => int.tryParse(appStore.setting(key, def)) ?? int.parse(def);
+    final wAdd = cnt('add'), wSend = cnt('send'), wAuto = cnt('auto') + cnt('decide') + cnt('next');
+    final wSaved = wAdd * mins('minAdd', '4') + wSend * mins('minSend', '12') + wAuto * mins('minAuto', '3');
     final n = overdue.length + todayItems.length + pending.length;
     final lead = n == 0 && cards.isEmpty ? ${k(L.homeNone)} : n <= 1 ? ${k(L.homeOne)} : ${k(L.homeMany)}.replaceAll('{n}', n.toString());
     final first = overdue.isNotEmpty ? overdue.first : (todayItems.isNotEmpty ? todayItems.first : null);   // הדבר-האחד (הכרעה-29): הכותרת = מה שדחוף עכשיו, לא ספירה
@@ -308,6 +432,7 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
       if (_mailNote.isNotEmpty) DsNote(message: _mailNote, label: '', tone: 0),
       if (pending.isNotEmpty) DsSection(title: ${k(L.homePending)} + ' · ' + pending.length.toString(), children: pending),   // D5 · הגיע (מייל) · הצעד-הבא (שרשרת) · תזכורות
       if (did.isNotEmpty) DsSection(title: ${k(L.homeDid)} + ' · ' + did.length.toString(), children: [for (final e in did) DsLogRow(text: e['what'] ?? '', undoLabel: ${k(L.undo)}, onUndo: () => appStore.undo(e['id'] ?? ''))]),   // T2
+      if (wk.isNotEmpty) DsFold(title: ${k(L.weekFold)}.replaceAll('{n}', wk.length.toString()).replaceAll('{m}', wSaved.toString()), details: [if (wAdd > 0) DsActionRow(title: ${k(L.weekAdded)}.replaceAll('{n}', wAdd.toString())), if (wSend > 0) DsActionRow(title: ${k(L.weekSent)}.replaceAll('{n}', wSend.toString())), if (wAuto > 0) DsActionRow(title: ${k(L.weekAuto)}.replaceAll('{n}', wAuto.toString())), DsNote(message: ${k(L.weekNote)}, label: '', tone: 0)]),   // שמירת-זמן: מקופל, מוכח מהיומן
       if (tomorrow.isNotEmpty) DsFold(title: ${k(L.homeTomorrow)} + ' (' + tomorrow.length.toString() + ')', details: [for (final it in tomorrow) DsActionRow(title: it.title, sub: it.sub + ' · ' + it.module)]),   // D8
       if (!empty && overdue.isEmpty && todayItems.isEmpty && pending.isEmpty) Padding(padding: const EdgeInsets.only(top: 12), child: Text(${k(L.homeAll)}, style: TextStyle(color: lk.muted, fontSize: 14))),
       if (empty) DsNote(message: ${k(L.homeEmptyWay)}, label: '', tone: 0),
@@ -471,7 +596,7 @@ class _${cls}State extends State<${cls}> {
   }
 
   // ── 4 · «חיבורים» (מפתחות-הלקוח) · «נושאים» · «התנהגות» ──
-  const bh = renderBehavior('balagan_behavior');
+  const bh = renderBehavior('balagan_behavior', { extraFields: [['minAdd', '4', 'minAddLabel'], ['minSend', '12', 'minSendLabel'], ['minAuto', '3', 'minAutoLabel']] });   // שמירת-זמן (§המוצר): הדקות-לפעולה עריכות, לא קבועות
   {
     const slug = 'balagan_keys'; const { k, dump } = makeConsts(slug); const cls = clsOf(slug);
     const code = `// 🧭 חולל ע"י balagan (G33 · הכרעה-29 · חוק-6) — «חיבורים»: המפתחות של הלקוח, במכשיר בלבד. אל תערוך ידנית.

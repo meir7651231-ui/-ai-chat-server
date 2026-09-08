@@ -287,7 +287,7 @@ class _${cls}State extends State<${cls}> {
 }
 
 // ── G32 · «התנהגות» (עוד): שעת-התקציר · ימים-לפני · לפעול-לבד · יומן-הפעולות המלא עם החזר ──
-export function renderBehavior(slug) {
+export function renderBehavior(slug, { extraFields = [] } = {}) {   // extraFields = [[key, default, L-key]] — שדות-הגדרה נוספים (בלגן: דקות-שנחסכות), מרונדרים עם ה-k של המסך
   const { k, dump } = makeConsts(slug);
   const cls = clsOf(slug);
   const code = `// 🧭 חולל ע"י ניווט-מקשרים (app-shell · G32 · הכרעה-28) — התנהגות: הגדרות-הטריגרים ויומן-הפעולות. אל תערוך ידנית.
@@ -307,7 +307,7 @@ class ${cls} extends StatelessWidget {
     DsField(label: ${k(L.offsetsLabel)}, hint: '3,1,0', value: appStore.setting('offsets', '3,1,0'), onChanged: (v) => appStore.setSetting('offsets', v)),
     DsField(label: ${k(L.dayStartLabel)}, hint: '9', value: appStore.setting('dayStart', '9'), onChanged: (v) => appStore.setSetting('dayStart', v)),
     DsField(label: ${k(L.blockMinLabel)}, hint: '30', value: appStore.setting('blockMin', '30'), onChanged: (v) => appStore.setSetting('blockMin', v)),
-    DsToggleTile(label: ${k(L.autoLabel)}, value: appStore.setting('always:rem') == '1' ? 'true' : 'false', onChanged: (v) => appStore.setSetting('always:rem', v == 'true' ? '1' : '')),
+${extraFields.map(([key, def, lbl]) => `    DsField(label: ${k(L[lbl])}, hint: '${def}', value: appStore.setting('${key}', '${def}'), onChanged: (v) => appStore.setSetting('${key}', v)),\n`).join('')}    DsToggleTile(label: ${k(L.autoLabel)}, value: appStore.setting('always:rem') == '1' ? 'true' : 'false', onChanged: (v) => appStore.setSetting('always:rem', v == 'true' ? '1' : '')),
     DsSection(title: ${k(L.logTitle)}, children: [for (final e in appStore.log) DsLogRow(text: e['what'] ?? '', sub: _short(e['at'] ?? ''), undoLabel: e['undone'] == '1' ? '' : ${k(L.undo)}, onUndo: e['undone'] == '1' ? null : () => appStore.undo(e['id'] ?? ''))]),
   ]));
 }
