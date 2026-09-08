@@ -2,6 +2,7 @@
  "ns": "sechirut",
  "title": "בדיקת חוזה שכירות",
  "look": "paper",
+ "layer": null,
  "chain": [
   "פיקדון ביציאה",
   "ליקוי אחרי כניסה",

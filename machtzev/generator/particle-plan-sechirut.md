@@ -11,7 +11,7 @@
 | לא שולם | תשלום | count | headline⇒KpiTile (KpiTile/ProgressRing) | KvLine |
 | שכירות לשנה | תיק | raw | fact⇒NumberStepper (NumberStepper/DsChip) | DsChip |
 | טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
-| פעולה פתח תיק | תיק | act | action⇒DsPrimaryButton (DsPrimaryButton/GlassButton) | DsPrimaryButton |
+| פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
 | ריק אין ממצאים עדיין | ממצא | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
 | החלטה | תיק | partition | group⇒DsSection (DsSection/SectionHeader) · alert⇒ToastCard (ToastCard/AlertBanner) | DsSection + DsNote |
 | המספר שלך | תיק | number | hero⇒KpiTile (KpiTile/ProgressRing) | KvLine |
@@ -26,7 +26,7 @@
 
 | דוח | חלק | ref | פתרון | אטומים |
 |---|---|---|---|---|
-| תיק | [ייצוא] שליחה בוואטסאפ | טלפון, קישור לפתיחת שיחה | action+link | DsPrimaryButton + waLink |
+| תיק | [ייצוא] שליחה בוואטסאפ | טלפון, קישור לפתיחת שיחה | action+link | DsChipButton + waLink |
 | תיק | המספר שלך | המספר שלך | particle | KvLine |
 | תיק | אדום צהוב ירוק | ממצא.צבע | childParticle | DsSection + DsNote |
 | תיק | התשובה | התשובה | particle | ForgeMustChip + DsNote |

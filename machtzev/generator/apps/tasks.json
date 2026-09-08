@@ -1,0 +1,61 @@
+{
+ "ns": "tasks",
+ "title": "משימות",
+ "look": "paper",
+ "layer": "base",
+ "chain": [],
+ "questions": {
+  "home": "מה עכשיו?",
+  "list": "מה פתוח?"
+ },
+ "home": {
+  "slug": "app_tasks_home",
+  "cls": "GenAppTasksHomeScreen"
+ },
+ "shell": {
+  "slug": "app_tasks_shell",
+  "cls": "GenAppTasksShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_tasks_root",
+  "cls": "GenAppTasksRootScreen"
+ },
+ "root": {
+  "slug": "app_tasks_ent1",
+  "cls": "GenAppTasksEnt1Screen",
+  "name": "משימה",
+  "descField": "מה",
+  "stages": [
+   "פתוח",
+   "נעשה"
+  ],
+  "fields": [
+   {
+    "label": "מה",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "מועד",
+    "type": "date",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "הערה",
+    "type": "multiline",
+    "required": false,
+    "enumVals": []
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "משימה",
+   "slug": "app_tasks_ent1"
+  }
+ ],
+ "relations": false,
+ "report": null
+}

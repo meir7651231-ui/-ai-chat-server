@@ -65,6 +65,7 @@ function fieldsFrom(lines) {
     const l = l0.trim(); if (!l) continue;
     if (l.startsWith(P.requiredKey)) { req = true; continue; }
     if (l.startsWith(P.optionalKey)) { req = false; continue; }
+    if (/[:：]$/.test(l) && heW(l).length <= 5) { req = false; continue; }   // תת-כותרת אחרת («חזק מאוד אם יש:») = רשות; לא שדה
     const it = /^([-*•]|\d+[.)])\s/.test(l) ? strip(l) : norm(l);
     if (!heW(it).length) continue;
     // פריט-רשימה שהוא רשימת-פריטים קצרים ⇒ כמה שדות; פריט ארוך ⇒ שדה אחד (התיאור נשמט)

@@ -40,17 +40,17 @@
    {
     "op": "action",
     "atoms": [
-     "DsPrimaryButton"
+     "DsChipButton"
     ],
     "alts": [
+     "DsChipButton",
      "DsPrimaryButton",
-     "GlassButton",
-     "GradButton"
+     "GlassButton"
     ]
    }
   ],
   "wired": [
-   "DsPrimaryButton"
+   "DsChipButton"
   ]
  },
  {

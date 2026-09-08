@@ -1535,6 +1535,17 @@
   "why": "צורת-שקעים"
  },
  {
+  "id": "DsChipButton",
+  "layer": "display",
+  "file": "dart-ui-bs/ds/ds.dart",
+  "op": "action",
+  "sockets": [
+   "label",
+   "onTap"
+  ],
+  "why": "צורת-שקעים"
+ },
+ {
   "id": "DsDateField",
   "layer": "display",
   "file": "dart-ui-bs/ds/ds_date_field.dart",

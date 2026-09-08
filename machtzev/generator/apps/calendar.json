@@ -1,0 +1,73 @@
+{
+ "ns": "calendar",
+ "title": "יומן",
+ "look": "paper",
+ "layer": "base",
+ "chain": [],
+ "questions": {
+  "home": "מה עכשיו?",
+  "list": "מה קבוע?"
+ },
+ "home": {
+  "slug": "app_calendar_home",
+  "cls": "GenAppCalendarHomeScreen"
+ },
+ "shell": {
+  "slug": "app_calendar_shell",
+  "cls": "GenAppCalendarShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_calendar_root",
+  "cls": "GenAppCalendarRootScreen"
+ },
+ "root": {
+  "slug": "app_calendar_ent1",
+  "cls": "GenAppCalendarEnt1Screen",
+  "name": "פגישה",
+  "descField": "מה",
+  "stages": [
+   "קבוע",
+   "התקיים"
+  ],
+  "fields": [
+   {
+    "label": "מה",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "מועד",
+    "type": "date",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "שעה",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "מקום",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "הערה",
+    "type": "multiline",
+    "required": false,
+    "enumVals": []
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "פגישה",
+   "slug": "app_calendar_ent1"
+  }
+ ],
+ "relations": false,
+ "report": null
+}

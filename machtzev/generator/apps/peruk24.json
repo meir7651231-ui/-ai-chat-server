@@ -2,6 +2,7 @@
  "ns": "peruk24",
  "title": "הורים מבוגרים — אחרי נפילה / מכתב / בלבול כספים",
  "look": "paper",
+ "layer": null,
  "chain": [],
  "questions": {
   "report": "מה לעשות עם זה?",

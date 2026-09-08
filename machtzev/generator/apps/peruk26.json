@@ -2,6 +2,7 @@
  "ns": "peruk26",
  "title": "יוקר מחיה — ניקוי חודש אחרי מינוס / התייקרות",
  "look": "paper",
+ "layer": null,
  "chain": [],
  "questions": {
   "report": "מה לעשות עם זה?",

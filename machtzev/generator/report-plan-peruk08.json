@@ -7,7 +7,7 @@
    "label": "שליחה בוואטסאפ",
    "toField": "טלפון",
    "ok": true,
-   "action": "DsPrimaryButton",
+   "action": "DsChipButton",
    "link": "waLink"
   },
   "sections": [

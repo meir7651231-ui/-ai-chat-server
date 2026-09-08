@@ -2,6 +2,7 @@
  "ns": "peruk28",
  "title": "שכר תקוע במקום העבודה",
  "look": "paper",
+ "layer": null,
  "chain": [],
  "questions": {
   "report": "מה לעשות עם זה?",

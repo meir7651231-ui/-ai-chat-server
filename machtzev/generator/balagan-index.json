@@ -2,7 +2,28 @@
  "modules": [
   {
    "index": 0,
+   "ns": "calendar",
+   "layer": "base",
+   "title": "יומן",
+   "topic": "משימות ויומן",
+   "home": "GenAppCalendarHomeScreen",
+   "root": "GenAppCalendarEnt1Screen",
+   "dates": 1
+  },
+  {
+   "index": 1,
+   "ns": "tasks",
+   "layer": "base",
+   "title": "משימות",
+   "topic": "משימות ויומן",
+   "home": "GenAppTasksHomeScreen",
+   "root": "GenAppTasksEnt1Screen",
+   "dates": 1
+  },
+  {
+   "index": 2,
    "ns": "peruk01",
+   "layer": "peruk",
    "title": "חוזה שכירות למגורים — לפני חתימה",
    "topic": "דירה",
    "home": "GenAppPeruk01HomeScreen",
@@ -10,8 +31,9 @@
    "dates": 1
   },
   {
-   "index": 1,
+   "index": 3,
    "ns": "peruk02",
+   "layer": "peruk",
    "title": "פיקדון אחרי יציאה מדירה",
    "topic": "דירה",
    "home": "GenAppPeruk02HomeScreen",
@@ -19,8 +41,9 @@
    "dates": 1
   },
   {
-   "index": 2,
+   "index": 4,
    "ns": "peruk03",
+   "layer": "peruk",
    "title": "ליקויים אחרי כניסה לדירה שכורה",
    "topic": "דירה",
    "home": "GenAppPeruk03HomeScreen",
@@ -28,8 +51,9 @@
    "dates": 2
   },
   {
-   "index": 3,
+   "index": 5,
    "ns": "peruk04",
+   "layer": "peruk",
    "title": "חידוש חוזה שכירות",
    "topic": "דירה",
    "home": "GenAppPeruk04HomeScreen",
@@ -37,8 +61,9 @@
    "dates": 2
   },
   {
-   "index": 4,
+   "index": 6,
    "ns": "peruk05",
+   "layer": "peruk",
    "title": "ערבות הורים / שטר חוב בשכירות",
    "topic": "דירה",
    "home": "GenAppPeruk05HomeScreen",
@@ -46,8 +71,9 @@
    "dates": 0
   },
   {
-   "index": 5,
+   "index": 7,
    "ns": "peruk06",
+   "layer": "peruk",
    "title": "מקדמה לקבלן / בעל מקצוע שנעלם או דורש תוספת",
    "topic": "כסף",
    "home": "GenAppPeruk06HomeScreen",
@@ -55,8 +81,9 @@
    "dates": 0
   },
   {
-   "index": 6,
+   "index": 8,
    "ns": "peruk07",
+   "layer": "peruk",
    "title": "דחיית ביטוח",
    "topic": "כסף",
    "home": "GenAppPeruk07HomeScreen",
@@ -64,8 +91,9 @@
    "dates": 0
   },
   {
-   "index": 7,
+   "index": 9,
    "ns": "peruk08",
+   "layer": "peruk",
    "title": "חיוב אשראי / ביטול הזמנה / כסף שנעלם למוכר אונליין",
    "topic": "כסף",
    "home": "GenAppPeruk08HomeScreen",
@@ -73,8 +101,9 @@
    "dates": 0
   },
   {
-   "index": 8,
+   "index": 10,
    "ns": "peruk09",
+   "layer": "peruk",
    "title": "לקוח שקיבל עבודה ולא משלם",
    "topic": "עבודה",
    "home": "GenAppPeruk09HomeScreen",
@@ -82,8 +111,9 @@
    "dates": 0
   },
   {
-   "index": 9,
+   "index": 11,
    "ns": "peruk10",
+   "layer": "peruk",
    "title": "קנס שהתנפח / חוב רשות / עיקול שהופיע",
    "topic": "כסף",
    "home": "GenAppPeruk10HomeScreen",
@@ -91,8 +121,9 @@
    "dates": 0
   },
   {
-   "index": 10,
+   "index": 12,
    "ns": "peruk11",
+   "layer": "peruk",
    "title": "הצעת מוסך",
    "topic": "רכב",
    "home": "GenAppPeruk11HomeScreen",
@@ -100,8 +131,9 @@
    "dates": 0
   },
   {
-   "index": 11,
+   "index": 13,
    "ns": "peruk12",
+   "layer": "peruk",
    "title": "קניית רכב יד שנייה — לפני העברה",
    "topic": "רכב",
    "home": "GenAppPeruk12HomeScreen",
@@ -109,8 +141,9 @@
    "dates": 0
   },
   {
-   "index": 12,
+   "index": 14,
    "ns": "peruk13",
+   "layer": "peruk",
    "title": "בדיקה רפואית / מכתב מהקופה — להבין מה כתוב",
    "topic": "בריאות",
    "home": "GenAppPeruk13HomeScreen",
@@ -118,8 +151,9 @@
    "dates": 0
   },
   {
-   "index": 13,
+   "index": 15,
    "ns": "peruk14",
+   "layer": "peruk",
    "title": "דחיית תרופה / הפניה / אישור בקופה",
    "topic": "בריאות",
    "home": "GenAppPeruk14HomeScreen",
@@ -127,8 +161,9 @@
    "dates": 0
   },
   {
-   "index": 14,
+   "index": 16,
    "ns": "peruk15",
+   "layer": "peruk",
    "title": "חשבון אחרי מיון / אשפוז",
    "topic": "בריאות",
    "home": "GenAppPeruk15HomeScreen",
@@ -136,8 +171,9 @@
    "dates": 0
   },
   {
-   "index": 15,
+   "index": 17,
    "ns": "peruk16",
+   "layer": "peruk",
    "title": "תור בקופה / למומחה שבוטל",
    "topic": "בריאות",
    "home": "GenAppPeruk16HomeScreen",
@@ -145,8 +181,9 @@
    "dates": 0
   },
   {
-   "index": 16,
+   "index": 18,
    "ns": "peruk17",
+   "layer": "peruk",
    "title": "דחייה / השלמת מסמכים בביטוח לאומי",
    "topic": "כסף",
    "home": "GenAppPeruk17HomeScreen",
@@ -154,8 +191,9 @@
    "dates": 0
   },
   {
-   "index": 17,
+   "index": 19,
    "ns": "peruk18",
+   "layer": "peruk",
    "title": "מס הכנסה / מע״מ לעצמאי — מכתב, מקדמה, קנס, דדליין",
    "topic": "כסף",
    "home": "GenAppPeruk18HomeScreen",
@@ -163,8 +201,9 @@
    "dates": 0
   },
   {
-   "index": 18,
+   "index": 20,
    "ns": "peruk19",
+   "layer": "peruk",
    "title": "ארנונה / חוב עירייה / הנחה שנדחתה",
    "topic": "כסף",
    "home": "GenAppPeruk19HomeScreen",
@@ -172,8 +211,9 @@
    "dates": 1
   },
   {
-   "index": 19,
+   "index": 21,
    "ns": "peruk20",
+   "layer": "peruk",
    "title": "משרד הפנים / דרכון / תעודה / שינוי כתובת",
    "topic": "כסף",
    "home": "GenAppPeruk20HomeScreen",
@@ -181,8 +221,9 @@
    "dates": 1
   },
   {
-   "index": 20,
+   "index": 22,
    "ns": "peruk21",
+   "layer": "peruk",
    "title": "מכתב מבית ספר / ועדה / שילוב",
    "topic": "בית ספר",
    "home": "GenAppPeruk21HomeScreen",
@@ -190,8 +231,9 @@
    "dates": 1
   },
   {
-   "index": 21,
+   "index": 23,
    "ns": "peruk22",
+   "layer": "peruk",
    "title": "ילד חולה מול יום עבודה",
    "topic": "בית ספר",
    "home": "GenAppPeruk22HomeScreen",
@@ -199,8 +241,9 @@
    "dates": 0
   },
   {
-   "index": 22,
+   "index": 24,
    "ns": "peruk23",
+   "layer": "peruk",
    "title": "לפני מבחן — הסבר ותרגול, לא הגשה במקום הילד",
    "topic": "בית ספר",
    "home": "GenAppPeruk23HomeScreen",
@@ -208,8 +251,9 @@
    "dates": 0
   },
   {
-   "index": 23,
+   "index": 25,
    "ns": "peruk24",
+   "layer": "peruk",
    "title": "הורים מבוגרים — אחרי נפילה / מכתב / בלבול כספים",
    "topic": "הורים",
    "home": "GenAppPeruk24HomeScreen",
@@ -217,8 +261,9 @@
    "dates": 0
   },
   {
-   "index": 24,
+   "index": 26,
    "ns": "peruk25",
+   "layer": "peruk",
    "title": "פיטורים / סיום חוזה — השבוע שאחרי",
    "topic": "עבודה",
    "home": "GenAppPeruk25HomeScreen",
@@ -226,8 +271,9 @@
    "dates": 0
   },
   {
-   "index": 25,
+   "index": 27,
    "ns": "peruk26",
+   "layer": "peruk",
    "title": "יוקר מחיה — ניקוי חודש אחרי מינוס / התייקרות",
    "topic": "כסף",
    "home": "GenAppPeruk26HomeScreen",
@@ -235,8 +281,9 @@
    "dates": 0
   },
   {
-   "index": 26,
+   "index": 28,
    "ns": "peruk27",
+   "layer": "peruk",
    "title": "פרידה — השבוע הראשון (דירה, ילדים, כסף)",
    "topic": "פרידה",
    "home": "GenAppPeruk27HomeScreen",
@@ -244,8 +291,9 @@
    "dates": 0
   },
   {
-   "index": 27,
+   "index": 29,
    "ns": "peruk28",
+   "layer": "peruk",
    "title": "שכר תקוע במקום העבודה",
    "topic": "עבודה",
    "home": "GenAppPeruk28HomeScreen",

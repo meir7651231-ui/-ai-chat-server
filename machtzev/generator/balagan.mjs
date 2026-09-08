@@ -29,11 +29,16 @@ export const variants = (w) => { const out = [w]; if (w.length >= 4 && /^[והב
 export function loadModules() {
   const index = JSON.parse(fs.readFileSync(path.join(HERE, 'peruk-index.json'), 'utf8'));
   const mods = [];
+  // מודולי-הבסיס (שכבה: בסיס — משימות · יומן) קודם: הם היום-יום; אחריהם הפירוקים לפי סדרם
+  for (const f of fs.existsSync(APPS) ? fs.readdirSync(APPS).sort() : []) {
+    const m = JSON.parse(fs.readFileSync(path.join(APPS, f), 'utf8'));
+    if (m.layer === 'base' && m.home && m.look === 'paper') mods.push({ ...m, id: 0, moment: '', category: '', doc: `${m.title} ${m.root.name} ${m.root.fields.map((x) => x.label).join(' ')}` });
+  }
   for (const node of index) {
     const mp = path.join(APPS, `${node.ns}.json`); if (!fs.existsSync(mp)) continue;
     const m = JSON.parse(fs.readFileSync(mp, 'utf8')); if (!m.home || m.look !== 'paper') continue;
     const doc = fs.existsSync(path.join(PERUKS, `peruk-${String(node.id).padStart(2, '0')}.md`)) ? fs.readFileSync(path.join(PERUKS, `peruk-${String(node.id).padStart(2, '0')}.md`), 'utf8') : '';
-    mods.push({ ...m, id: node.id, moment: node.moment || '', category: node.category || '', doc });
+    mods.push({ ...m, id: node.id, moment: node.moment || '', category: node.category || '', doc, layer: m.layer || 'peruk' });
   }
   return mods;
 }
@@ -62,7 +67,7 @@ export function identify(ident, text, k = 3) {
 }
 export function selfTest(mods, ident) {
   const bad = [];
-  for (const m of mods) { for (const [what, q] of [['כותרת', m.title], ['הרגע', m.moment]]) { if (!q) continue; const h = identify(ident, q, 1); if (!h.length || h[0].ns !== m.ns) bad.push(`${m.ns} · ${what} ⇒ ${h.length ? h[0].ns : '—'}`); } }
+  for (const m of mods) { for (const [what, q] of [['כותרת', m.title], ['הרגע', m.moment]]) { if (!q || (m.layer === 'base' && what === 'הרגע')) continue; const h = identify(ident, q, 1); if (!h.length || h[0].ns !== m.ns) bad.push(`${m.ns} · ${what} ⇒ ${h.length ? h[0].ns : '—'}`); } }
   return bad;
 }
 const topicOf = (m) => {
@@ -87,14 +92,15 @@ export function buildBalagan() {
   {
     const slug = 'balagan_moments';
     const code = `// 🧭 חולל ע"י balagan (G33 · הכרעה-29) — מזהה-הרגע: TF-IDF דטרמיניסטי מ-${mods.length} מסמכי-פירוק (כותרת+«הרגע» ×3). אפס-בינה, אפס-מילון. אל תערוך ידנית.
+class BalaganField { const BalaganField(this.label, this.type, this.required, this.options); final String label, type; final bool required; final List<String> options; }
 class BalaganModule {
-  const BalaganModule(this.index, this.ns, this.title, this.moment, this.topic, this.weights, this.dateFields, this.numFields, this.descField, this.longField);
-  final int index; final String ns, title, moment, topic; final Map<String, double> weights; final List<String> dateFields, numFields; final String descField, longField;
+  const BalaganModule(this.index, this.ns, this.title, this.moment, this.topic, this.weights, this.dateFields, this.numFields, this.descField, this.longField, this.rootSlug, this.fields, this.stages);
+  final int index; final String ns, title, moment, topic, rootSlug; final Map<String, double> weights; final List<String> dateFields, numFields; final String descField, longField; final List<BalaganField> fields; final int stages;
 }
 class BalaganHit { const BalaganHit(this.module, this.score); final BalaganModule module; final double score; }
 
 const List<BalaganModule> kBalaganModules = [
-${mods.map((m, i) => `  BalaganModule(${i}, '${m.ns}', ${dq(m.title)}, ${dq(m.moment)}, ${dq(m.topic)}, {${Object.entries(ident[i].weights).map(([v, s]) => `${dq(v)}: ${s}`).join(', ')}}, [${m.root.fields.filter((f) => f.type === 'date').map((f) => dq(f.label)).join(', ')}], [${m.root.fields.filter((f) => f.type === 'num').map((f) => dq(f.label)).join(', ')}], ${dq(m.root.descField || '')}, ${dq((m.root.fields.find((f) => f.type === 'multiline') || {}).label || '')}),`).join('\n')}
+${mods.map((m, i) => `  BalaganModule(${i}, '${m.ns}', ${dq(m.title)}, ${dq(m.moment)}, ${dq(m.topic)}, {${Object.entries(ident[i].weights).map(([v, s]) => `${dq(v)}: ${s}`).join(', ')}}, [${m.root.fields.filter((f) => f.type === 'date').map((f) => dq(f.label)).join(', ')}], [${m.root.fields.filter((f) => f.type === 'num').map((f) => dq(f.label)).join(', ')}], ${dq(m.root.descField || '')}, ${dq((m.root.fields.find((f) => f.type === 'multiline') || {}).label || '')}, '${m.root.slug}', [${m.root.fields.map((f) => `BalaganField(${dq(f.label)}, '${f.type}', ${f.required ? 'true' : 'false'}, [${(f.enumVals || []).map(dq).join(', ')}])`).join(', ')}], ${(m.root.stages || []).length}),`).join('\n')}
 ];
 
 String _definal(String w) => w.replaceAll(RegExp(r'ך\$'), 'כ').replaceAll(RegExp(r'ם\$'), 'מ').replaceAll(RegExp(r'ן\$'), 'נ').replaceAll(RegExp(r'ף\$'), 'פ').replaceAll(RegExp(r'ץ\$'), 'צ');
@@ -225,6 +231,7 @@ import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_ai.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
+import 'gen_balagan_confirm.dart';
 import 'gen_balagan_moments.dart';
 ${mods.map((m) => `import 'gen_${m.root.slug}.dart';`).join('\n')}
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -255,7 +262,7 @@ class _${cls}State extends State<${cls}> {
   void _skip() { setState(() { _hits = _hits.length > 1 ? _hits.sublist(1) : const []; if (_hits.isEmpty) _note = ${k(L.askNone)}; }); }
   void _open(BuildContext context, BalaganHit h) {
     final facts = {...balaganFacts(_c.text, h.module), ..._extra}..removeWhere((key, v) => v.trim().isEmpty || !(h.module.dateFields.contains(key) || h.module.numFields.contains(key) || key == h.module.descField || key == h.module.longField));
-    Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => balaganOpen(h.module.index, facts)));
+    Navigator.of(context).push<bool>(MaterialPageRoute<bool>(builder: (_) => ${clsOf('balagan_confirm')}(module: h.module, facts: facts))).then((saved) { if (saved == true && mounted) setState(() { _c.clear(); _hits = const []; _extra = const {}; _asked = false; _note = ${k(L.askSaved)}; }); });
   }
   Future<void> _photo() async {
     final key = appStore.setting('ai.key');
@@ -299,6 +306,66 @@ class _${cls}State extends State<${cls}> {
     write(slug, code, dump());
   }
 
+  // ── 3b · «הבנתי כך?» — טופס-האישור: שדות-החובה + מה-שזוהה (≤6 שורות), השאר מקופל; זיכרון-חיים לפי תווית-שדה (הכרעה-29: לא מתחיל מאפס) ──
+  {
+    const slug = 'balagan_confirm'; const { k, dump } = makeConsts(slug); const cls = clsOf(slug);
+    const code = `// 🧭 חולל ע"י balagan (G33 · הכרעה-29) — «הבנתי כך?»: שורות-לאישור (חובה + זוהה) · «עוד פרטים» מקופל · שמירה ⇒ הרשומה ב«היום» · זיכרון לפי תווית (טלפון/עיר/… פעם אחת לכל המודולים). אל תערוך ידנית.
+import '../dart-data-bs/auto/gen_${slug}_content.dart';
+import '../dart-ui-bs/ds/ds.dart';
+import '../dart-ui-bs/ds/ds_date_field.dart';
+import '../dart-ui-bs/ds/ds_enum_field.dart';
+import '../dart-ui-bs/ds/ds_field.dart';
+import '../dart-ui-bs/ds/ds_number_field.dart';
+import '../dart-ui-bs/ds/ds_store.dart';
+import 'gen_balagan_moments.dart';
+import 'package:flutter/material.dart';
+
+/// זיכרון-חיים: שדה-טקסט קצר (≤30) נזכר לפי התווית שלו ומוצע בכל מודול עם אותה תווית. מקומי-למכשיר (AppStore.settings).
+String balaganRemember(String label) => appStore.setting('mem:' + label);
+void balaganLearn(BalaganField f, String v) { if (f.type == 'text' && f.options.isEmpty && v.trim().isNotEmpty && v.trim().length <= 30) appStore.setSetting('mem:' + f.label, v.trim()); }
+
+class ${cls} extends StatefulWidget {
+  const ${cls}({required this.module, required this.facts, super.key});
+  final BalaganModule module;
+  final Map<String, String> facts;
+  @override
+  State<${cls}> createState() => _${cls}State();
+}
+
+class _${cls}State extends State<${cls}> {
+  late final Map<String, String> _v = {for (final f in widget.module.fields) if (balaganRemember(f.label).isNotEmpty) f.label: balaganRemember(f.label), ...widget.facts};
+  Widget _field(BalaganField f) {
+    final v = _v[f.label] ?? '';
+    if (f.type == 'date') return DsDateField(label: f.label, value: v, onChanged: (x) => setState(() => _v[f.label] = x));
+    if (f.type == 'num') return DsNumberField(label: f.label, value: v, onChanged: (x) => setState(() => _v[f.label] = x));
+    if (f.options.isNotEmpty) return DsEnumField(label: f.label, options: f.options, value: v, onChanged: (x) => setState(() => _v[f.label] = x));
+    return DsField(label: f.label, hint: '', value: v, onChanged: (x) => _v[f.label] = x);
+  }
+  void _save() {
+    final map = <String, String>{for (final e in _v.entries) if (e.value.trim().isNotEmpty) e.key: e.value.trim()};
+    if (map.isEmpty) return;
+    for (final f in widget.module.fields) { if (map.containsKey(f.label)) balaganLearn(f, map[f.label]!); }
+    appStore.add(widget.module.rootSlug, {...map, if (widget.module.stages > 0) '__stage': '0'});
+    Navigator.of(context).pop(true);
+  }
+  @override
+  Widget build(BuildContext context) {
+    final m = widget.module;
+    // ≤6 שורות-לאישור (הכרעה-29 · מסך ב׳): מה-שזוהה תמיד; שדות-חובה עד המכסה; השאר מקופל
+    final shown = <BalaganField>[]; for (final f in m.fields) { if (widget.facts.containsKey(f.label)) shown.add(f); } for (final f in m.fields) { if (shown.length >= 6) break; if (f.required && !shown.contains(f)) shown.add(f); }
+    shown.sort((a, b) => m.fields.indexOf(a).compareTo(m.fields.indexOf(b)));
+    final rest = m.fields.where((f) => !shown.contains(f)).toList();
+    return DsScaffold(title: m.title, subtitle: ${k(L.confirmSub)}, icon: ${k('')}, children: [
+      for (final f in shown) _field(f),
+      if (rest.isNotEmpty) DsFold(title: ${k(L.confirmMore)}.replaceAll('{n}', rest.length.toString()), details: [for (final f in rest) _field(f)]),
+      Padding(padding: const EdgeInsets.only(top: 14), child: DsPrimaryButton(label: ${k(L.askSave)}, onTap: _save)),
+    ]);
+  }
+}
+`;
+    write(slug, code, dump());
+  }
+
   // ── 4 · «חיבורים» (מפתחות-הלקוח) · «נושאים» · «התנהגות» ──
   const bh = renderBehavior('balagan_behavior');
   {
@@ -325,7 +392,8 @@ class ${cls} extends StatelessWidget {
   }
   {
     const slug = 'balagan_topics'; const { k, dump } = makeConsts(slug); const cls = clsOf(slug);
-    const order = [...TOPICS.map((t) => t.name), L.topicOther].filter((t) => mods.some((m) => m.topic === t));
+    mods.forEach((m) => { if (m.layer === 'base') m.topic = L.topicsBase; });
+    const order = [L.topicsBase, ...TOPICS.map((t) => t.name), L.topicOther].filter((t) => mods.some((m) => m.topic === t));
     const code = `// 🧭 חולל ע"י balagan (G33 · הכרעה-29) — «נושאים»: ${order.length} נושאים (מסמך-המוצר §7) ⇒ ${mods.length} מודולים לפי חפיפת-מילים · חיבורים · התנהגות. אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
@@ -430,7 +498,7 @@ class ${cls} extends StatelessWidget {
 `;
     write(slug, code, dump());
   }
-  fs.writeFileSync(path.join(HERE, 'balagan-index.json'), JSON.stringify({ modules: mods.map((m, i) => ({ index: i, ns: m.ns, title: m.title, topic: m.topic, home: m.home.cls, root: m.root.cls, dates: m.root.fields.filter((f) => f.type === 'date').length })), selfTest: bad }, null, 1));
+  fs.writeFileSync(path.join(HERE, 'balagan-index.json'), JSON.stringify({ modules: mods.map((m, i) => ({ index: i, ns: m.ns, layer: m.layer || 'peruk', title: m.title, topic: m.topic, home: m.home.cls, root: m.root.cls, dates: m.root.fields.filter((f) => f.type === 'date').length })), selfTest: bad }, null, 1));
   console.log(`🧭 בלגן: ${mods.length} מודולים ⇒ אפליקציה אחת (היום · מה קרה? · נושאים ${[...new Set(mods.map((m) => m.topic))].length}) · מזהה-הרגע: ${bad.length ? '🔴 ' + bad.join(' · ') : '✓ כותרת+הרגע ⇒ עצמו ב-' + mods.length + '/' + mods.length}`);
   return { mods, bad };
 }

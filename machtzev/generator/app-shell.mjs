@@ -193,9 +193,9 @@ class ${cls}Today {
   }
 
   // כרטיס-הרשומה (G30): נוסחים · שלח · פתח — ≤2 הקשות
-  static Widget card(BuildContext context, Map<String, String> r) => DsSection(title: ${dispR} + ' · ' + ${stageSub}, children: [
+  static Widget card(BuildContext context, Map<String, String> r) => DsSection(title: ((${dispR}).trim().isEmpty ? ${k(root.name)} : ${dispR}) + ' · ' + ${stageSub}, children: [
         ${msgW ? `${msgW},` : ''}
-        Padding(padding: const EdgeInsets.only(top: 8), child: Row(children: [${sendBtn ? `Expanded(child: ${sendBtn}), const SizedBox(width: 8), ` : ''}${openBtn ? openBtn.call : 'const SizedBox.shrink()'}])),
+        Padding(padding: const EdgeInsets.only(top: 8), child: Row(children: [${isPaper() ? `${sendFn ? `Expanded(child: DsPrimaryButton(label: ${k(L.homeSend)}, onTap: () => send(context, r, r[AppStore.idKey] ?? ''))), const SizedBox(width: 8), ` : ''}DsChipButton(label: ${k(L.homeOpen)}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${rootPage.cls}(id: r[AppStore.idKey] ?? ''))))` : `${sendBtn ? `Expanded(child: ${sendBtn}), const SizedBox(width: 8), ` : ''}${openBtn ? openBtn.call : 'const SizedBox.shrink()'}`}])),
       ]);
 
   // «תמיד אשר» ⇒ לבד: הכרעות-תזכורת פתוחות נסגרות ונרשמות ביומן עם החזר (T2). אחרי הפריים, לא בתוך build. לעולם לא שולח (T5). P5: לא נוגע בתאריכים.

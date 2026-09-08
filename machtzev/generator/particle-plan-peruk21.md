@@ -3,7 +3,7 @@
 | חלקיק | ישות | צורה | פעולות ⇒ אטומים (חיפוש) | מחווט |
 |---|---|---|---|---|
 | טבלה | תיק | table | table⇒DsTable (DsTable/ForgeModalDialog) | DsTable |
-| פעולה פתח תיק | תיק | act | action⇒DsPrimaryButton (DsPrimaryButton/GlassButton) | DsPrimaryButton |
+| פעולה פתח תיק | תיק | act | action⇒DsChipButton (DsChipButton/DsPrimaryButton) | DsChipButton |
 | ריק אין תיקים עדיין | תיק | empty | empty⇒EmptyStateCard (EmptyStateCard/EmptyState) | EmptyState@premium/feedback |
 | מסגרת | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
 | בלוקים | תיק | content | alert⇒ToastCard (ToastCard/AlertBanner) | DsNote |
@@ -15,7 +15,7 @@
 
 | דוח | חלק | ref | פתרון | אטומים |
 |---|---|---|---|---|
-| תיק | [ייצוא] שליחה בוואטסאפ | טלפון, קישור לפתיחת שיחה | action+link | DsPrimaryButton + waLink |
+| תיק | [ייצוא] שליחה בוואטסאפ | טלפון, קישור לפתיחת שיחה | action+link | DsChipButton + waLink |
 | תיק | כרטיס בעברית פשוטה | [תוכן כרטיס בעברית פשוטה] | content | DsNote |
 | תיק | רשימת הגשה | [תוכן רשימת הגשה] | content | DsNote |
 | תיק | טיוטת תשובה קצרה למחנכת | [תוכן טיוטת תשובה קצרה למחנכת] | content | DsNote |

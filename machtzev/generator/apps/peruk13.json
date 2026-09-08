@@ -2,6 +2,7 @@
  "ns": "peruk13",
  "title": "בדיקה רפואית / מכתב מהקופה — להבין מה כתוב",
  "look": "paper",
+ "layer": null,
  "chain": [],
  "questions": {
   "report": "מה לעשות עם זה?",

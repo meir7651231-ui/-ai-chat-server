@@ -80,7 +80,9 @@ export function buildApp(specText) {
   const questions = {}; for (const l of all0) { const m = l.match(Q_RE); if (m && SL.questionTargets[m[1]]) questions[SL.questionTargets[m[1]]] = m[2].trim(); }
   const CHAIN_RE = new RegExp('^\\s*' + SL.chainWord + '\\s*:\\s*(.+)$');   // G32 · `שרשרת: א, ב, ג` — הצעד-הבא בשלב-האחרון (P14)
   const chainLine = all0.map((l) => l.match(CHAIN_RE)).find(Boolean); const chain = chainLine ? chainLine[1].split(/[,،]/).map((x) => x.trim()).filter(Boolean) : [];
-  const all = all0.filter((l) => !PARTICLE_RE.test(l) && !CONTENT_RE.test(l) && !REPORT_RE.test(l) && !APP_RE.test(l) && !LOOK_RE.test(l) && !Q_RE.test(l) && !CHAIN_RE.test(l));
+  const LAYER_RE = new RegExp('^\\s*' + SL.layerWord + '\\s*:\\s*(.+)$');   // G33 · `שכבה: בסיס` — מודול-בסיס של בלגן (משימות · יומן), לא פירוק
+  const layerLine = all0.map((l) => l.match(LAYER_RE)).find(Boolean); const layer = layerLine ? (SL.layers[layerLine[1].trim()] || null) : null;
+  const all = all0.filter((l) => !PARTICLE_RE.test(l) && !CONTENT_RE.test(l) && !REPORT_RE.test(l) && !APP_RE.test(l) && !LOOK_RE.test(l) && !Q_RE.test(l) && !CHAIN_RE.test(l) && !LAYER_RE.test(l));
   const roles = all.filter((l) => ROLE_RE.test(l)).map(parseRole);
   const lines = all.filter((l) => !ROLE_RE.test(l));
   const info = lines.map((line, idx) => ({ line, i: idx + 1, isEnt: ENTITY_RE.test(line) }));
@@ -260,6 +262,7 @@ export function buildApp(specText) {
     if (reportLines.length) fs.writeFileSync(path.join(gen, `report-plan-${nsName}.json`), JSON.stringify(reports.map((r) => ({ entity: r.entity, ok: r.ok, unresolved: r.unresolved, export: r.export ? { label: r.export.label, toField: r.export.toField, ok: r.export.ok, action: (r.export.action.atoms[0] || null), link: r.export.link ? r.export.link.name : null } : null, sections: r.sections.map((s) => ({ name: s.name, refs: s.refs.map((x) => ({ raw: x.raw, mode: x.mode || null, why: x.why || null, wired: x.p && x.p.wired ? x.p.wired : [] })) })) })), null, 1));
     console.log(`🧩 ${L.particlesLog}: ${plan.filter((p) => p.wired && p.wired.length).length}/${plan.length} ${L.particlesFound} · ${particleScreens.length} ${L.particleScreens}${content.length ? ` · ${content.length} ${L.contentItems}` : ''}${reports.length ? ` · ${reportScreens.length} ${L.reportScreens}` : ''}`);
   }
+  if (!particleLines.length && !reportLines.length && NS) { fs.writeFileSync(path.join(R.GEN_DIR, `particle-plan-${NS}.json`), '[]'); }   // G33 · ספק בלי חלקיקים (משימות/יומן) = תוכנית ריקה, מדווחת — לא חסרה
   // מסכי-מערכת (kind='system' — גלויים רק לתפקיד 'הכל')
   const sys = [];
   const a = renderSystem(`${P}audit`, { title: L.auditTitle, icon: '🧾', sectionTitle: L.auditSection, kind: 'empty', items: [L.auditEmpty] });
@@ -296,7 +299,7 @@ export function buildApp(specText) {
     const shell = renderShell(`${P}shell`, { title: appTitle, root: rootE, rootPage, dashboard: dash, hub: { slug: `${P}hub`, cls: hub.cls }, questions, home: homeScr });
     home = { slug: `${P}shell`, cls: shell.cls };
     // G33 · מניפסט-המודול (הכרעה-29): מה ש«בלגן» (האפליקציה-האחת) צריך כדי למזג את המודול — מסכים · שורש · שדות · שרשרת. נגזר, לא יד.
-    if (NS) { const APPS = path.join(R.GEN_DIR, 'apps'); fs.mkdirSync(APPS, { recursive: true }); fs.writeFileSync(path.join(APPS, `${NS}.json`), JSON.stringify({ ns: NS, title: appTitle, look: getLook(), chain, questions, home: homeScr ? { slug: homeScr.slug, cls: homeScr.cls } : null, shell: { slug: shell.slug, cls: shell.cls }, rootPage: { slug: rootPage.slug, cls: rootPage.cls }, root: { slug: rootE.slug, cls: rootE.cls, name: rootE.name, descField: rootE.descField || null, stages: rootE.stages || [], fields: rootE.schema.map((f) => ({ label: f.label, type: f.type || 'text', required: !!f.required, enumVals: f.enumVals || [] })) }, entities: entMeta.map((e) => ({ name: e.name, slug: e.slug })), relations: edges.length > 0, report: reportByEnt[rootMeta.name] ? { slug: reportByEnt[rootMeta.name].slug, cls: reportByEnt[rootMeta.name].cls } : null }, null, 1)); }
+    if (NS) { const APPS = path.join(R.GEN_DIR, 'apps'); fs.mkdirSync(APPS, { recursive: true }); fs.writeFileSync(path.join(APPS, `${NS}.json`), JSON.stringify({ ns: NS, title: appTitle, look: getLook(), layer, chain, questions, home: homeScr ? { slug: homeScr.slug, cls: homeScr.cls } : null, shell: { slug: shell.slug, cls: shell.cls }, rootPage: { slug: rootPage.slug, cls: rootPage.cls }, root: { slug: rootE.slug, cls: rootE.cls, name: rootE.name, descField: rootE.descField || null, stages: rootE.stages || [], fields: rootE.schema.map((f) => ({ label: f.label, type: f.type || 'text', required: !!f.required, enumVals: f.enumVals || [] })) }, entities: entMeta.map((e) => ({ name: e.name, slug: e.slug })), relations: edges.length > 0, report: reportByEnt[rootMeta.name] ? { slug: reportByEnt[rootMeta.name].slug, cls: reportByEnt[rootMeta.name].cls } : null }, null, 1)); }
     console.log(`🧭 ${L.shellLog}: ${L.shellRootWord} ${rootMeta.name} · ${kids.length} ${L.shellChildrenWord} · ${shell.nav || '—'}${[...rootPage.notes, ...shell.notes].length ? ' · ⚪ ' + [...rootPage.notes, ...shell.notes].join(' · ') : ''}`);
   }
   // שורש-האפליקציה: main + MaterialApp ⇒ אפליקציה עצמאית שרצה בלי entry-זמני.
@@ -315,7 +318,7 @@ if (import.meta.url === 'file://' + process.argv[1]) {
   if (process.argv.includes('--skin')) {
     const [{ skinPass }, { resolveSkin }, { autoSkin }] = await Promise.all([import('./retarget.mjs'), import('./app-from-sentences.mjs'), import('./auto-skin.mjs')]);
     const sk = resolveSkin(autoSkin().skin); const tot = {};
-    if (sk && getLook() === 'paper') { delete sk.navTile; delete sk.section; delete sk.pageHeader; }   // G28 · נייר: שורה-לא-כרטיס (DsNavTile 52px · קו) · חלק שטוח (DsSection: כותרת 15/700 + שורות, בלי כרטיס-בתוך-כרטיס) · כותרת-מסך של ה-DS (22/600 + קו) — כלל-13 של PLAN §5.3
+    if (sk && getLook() === 'paper') { delete sk.navTile; delete sk.section; delete sk.pageHeader; delete sk.button; }   // G28 · נייר: שורה-לא-כרטיס (DsNavTile 52px · קו) · חלק שטוח (DsSection: כותרת 15/700 + שורות, בלי כרטיס-בתוך-כרטיס) · כותרת-מסך של ה-DS (22/600 + קו) — כלל-13 של PLAN §5.3
     for (const f of fs.readdirSync(OUT)) {
       if (!new RegExp(`^gen_${P}(ent|px|rp|scr|bind|rec|over|audit|flags|settings|hub|main|shell|root|home|behavior)\\d*\\.dart$`).test(f)) continue;
       const fp = path.join(OUT, f); let { code, stats } = skinPass(fs.readFileSync(fp, 'utf8'), sk);

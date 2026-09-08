@@ -2,6 +2,7 @@
  "ns": "peruk06",
  "title": "מקדמה לקבלן / בעל מקצוע שנעלם או דורש תוספת",
  "look": "paper",
+ "layer": null,
  "chain": [],
  "questions": {
   "report": "מה לעשות עם זה?",

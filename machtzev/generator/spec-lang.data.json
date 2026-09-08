@@ -170,5 +170,9 @@
   "לשנה"
  ],
  "pValueWord": "ערך",
- "chainWord": "שרשרת"
+ "chainWord": "שרשרת",
+ "layerWord": "שכבה",
+ "layers": {
+  "בסיס": "base"
+ }
 }

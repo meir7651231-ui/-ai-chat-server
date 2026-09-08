@@ -2,6 +2,7 @@
  "ns": "peruk02",
  "title": "פיקדון אחרי יציאה מדירה",
  "look": "paper",
+ "layer": null,
  "chain": [],
  "questions": {
   "report": "מה לעשות עם זה?",
@@ -82,33 +83,27 @@
     "enumVals": []
    },
    {
-    "label": "חזק מאוד אם יש",
-    "type": "text",
-    "required": true,
-    "enumVals": []
-   },
-   {
     "label": "פרוטוקול כניסה יציאה",
     "type": "text",
-    "required": true,
+    "required": false,
     "enumVals": []
    },
    {
     "label": "תמונות כניסה ויציאה",
     "type": "text",
-    "required": true,
+    "required": false,
     "enumVals": []
    },
    {
     "label": "וואטסאפ מלא עם המשכיר",
     "type": "text",
-    "required": true,
+    "required": false,
     "enumVals": []
    },
    {
     "label": "קבלות על תיקונים שהוא",
     "type": "text",
-    "required": true,
+    "required": false,
     "enumVals": []
    }
   ]

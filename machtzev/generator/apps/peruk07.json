@@ -2,6 +2,7 @@
  "ns": "peruk07",
  "title": "דחיית ביטוח",
  "look": "paper",
+ "layer": null,
  "chain": [
   "מקדמה לקבלן",
   "דחיית ביטוח"
@@ -61,15 +62,9 @@
     "enumVals": []
    },
    {
-    "label": "חזק",
-    "type": "text",
-    "required": true,
-    "enumVals": []
-   },
-   {
     "label": "פוליסה או תנאים כלליים",
     "type": "text",
-    "required": true,
+    "required": false,
     "enumVals": [
      "פוליסה",
      "תנאים כלליים"
@@ -78,13 +73,13 @@
    {
     "label": "מה כבר הוגש",
     "type": "text",
-    "required": true,
+    "required": false,
     "enumVals": []
    },
    {
     "label": "קבלות",
     "type": "text",
-    "required": true,
+    "required": false,
     "enumVals": []
    },
    {
