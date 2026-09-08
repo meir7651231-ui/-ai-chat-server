@@ -82,6 +82,11 @@ if (!/balaganStripGrammar\(/.test(moments) || !/balaganTokens\(balaganStripGramm
 if (!/appStore\.exportJson\(\)/.test(keys) || !/appStore\.importJson\(/.test(keys) || !/appStore\.undoImport\(\)/.test(keys) || !/Clipboard\.setData/.test(keys)) fails.push('«חיבורים» בלי גיבוי/שחזור/ביטול');
 { const st = rd(path.join(R.ROOT, 'new/dart-ui-bs/ds/ds_store.dart')); if (!/String exportJson\(\)/.test(st) || !/int importJson\(String raw\)/.test(st) || !/\.prev'/.test(st) || !/List<List<String>> search\(String q\)/.test(st)) fails.push('AppStore בלי exportJson/importJson/prev/search'); }
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/exportJson\(\)/.test(ft) || !/\.search\(/.test(ft)) fails.push('בדיקת הגיבוי/החיפוש המחוללת חסרה'); }
+// גל ב׳-י · «סיים» = שורה-טופלה + שלב + החזר (kind done) · שמות-חודשים · סכום-במילים
+if (!/balaganNumberWords\(/.test(moments) || !/ספטמבר/.test(moments) || !/'done'/.test(home)) fails.push('חסר: סכום-במילים / שמות-חודשים / done ב«עשיתי לבד»');
+for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/logAction\('done'/.test(h) || !/prev: prevStage/.test(h)) { fails.push(`${m.ns}: «סיים» בלי החזר`); break; } }
+{ const st = rd(path.join(R.ROOT, 'new/dart-ui-bs/ds/ds_store.dart')); if (!/== 'done'\) \{ _decided\.remove/.test(st)) fails.push('AppStore.undo בלי done'); }
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/'1500'/.test(ft) || !/בספטמבר/.test(ft) || !/logAction\('done'/.test(ft)) fails.push('בדיקת סכום-במילים/חודשים/החזר-סיים חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);

@@ -169,6 +169,8 @@ List<_DateAt> balaganDates(String text, DateTime today) {
   put(RegExp(r'(\\d{4})-(\\d{2})-(\\d{2})'), (x) => DateTime(int.parse(x.group(1)!), int.parse(x.group(2)!), int.parse(x.group(3)!)));
   put(RegExp(r'(?<![\\d.])(\\d{1,2})[./](\\d{1,2})[./](\\d{2,4})(?![\\d.])'), (x) { var y = int.parse(x.group(3)!); if (y < 100) y += 2000; final mo = int.parse(x.group(2)!), d = int.parse(x.group(1)!); return (mo >= 1 && mo <= 12 && d >= 1 && d <= 31) ? DateTime(y, mo, d) : null; });
   put(RegExp(r'(?<![\\d.])(\\d{1,2})\\.(\\d{1,2})(?![\\d.%]|\\s*(?:אלף|%|₪))'), (x) { final mo = int.parse(x.group(2)!), d = int.parse(x.group(1)!); if (!(mo >= 1 && mo <= 12 && d >= 1 && d <= 31)) return null; var c = DateTime(t0.year, mo, d); if (c.isBefore(t0)) c = DateTime(t0.year + 1, mo, d); return c; });   // dd.mm בלי שנה: הקרוב-הבא
+  const months = {'ינואר': 1, 'פברואר': 2, 'מרץ': 3, 'מרס': 3, 'אפריל': 4, 'מאי': 5, 'יוני': 6, 'יולי': 7, 'אוגוסט': 8, 'ספטמבר': 9, 'אוקטובר': 10, 'נובמבר': 11, 'דצמבר': 12};
+  put(RegExp(r'(?<![\\d.])(\\d{1,2})\\s*ב?(ינואר|פברואר|מרץ|מרס|אפריל|מאי|יוני|יולי|אוגוסט|ספטמבר|אוקטובר|נובמבר|דצמבר)(?:\\s+(\\d{4}))?(?![\\u0590-\\u05FF])'), (x) { final d = int.parse(x.group(1)!); final mo = months[x.group(2)!]!; if (d < 1 || d > 31) return null; if (x.group(3) != null) return DateTime(int.parse(x.group(3)!), mo, d); var c = DateTime(t0.year, mo, d); if (c.isBefore(t0)) c = DateTime(t0.year + 1, mo, d); return c; });   // «15 בספטמבר» · «3 באוקטובר 2027»: שמות-חודשים = לוח, לא דומיין
   put(RegExp(r'(?<![\\u0590-\\u05FF])מחרתיים'), (_) => add(2));
   put(RegExp(r'(?<![\\u0590-\\u05FF])מחר(?![\\u0590-\\u05FF])'), (_) => add(1));
   put(RegExp(r'(?<![\\u0590-\\u05FF])היום(?![\\u0590-\\u05FF])'), (_) => add(0));
@@ -237,6 +239,31 @@ List<String> balaganSplit(String text) {
   final parts = text.split(RegExp(r'\\n|;|(?<=[\\u0590-\\u05FF\\d])\\.\\s+(?=[\\u0590-\\u05FF])')).map((p) => p.trim()).where((p) => p.split(RegExp(r'\\s+')).where((w) => w.isNotEmpty).length >= 2).toList();
   return parts.length >= 2 ? parts : [text.trim()];
 }
+/// סכום במילים: «מאתיים» · «שלוש מאות» · «אלף וחמש מאות» · «שלושת אלפים ומאתיים» · «עשרת אלפים» ⇒ מספר (דקדוק-מספרים, לא מילון-דומייני)
+List<_NumAt> balaganNumberWords(String text) {
+  const hundreds = {'מאה': 100, 'מאתיים': 200};
+  const hMul = {'שלוש': 3, 'ארבע': 4, 'חמש': 5, 'שש': 6, 'שבע': 7, 'שמונה': 8, 'תשע': 9};
+  const thousands = {'אלף': 1000, 'אלפיים': 2000};
+  const tMul = {'שלושת': 3, 'ארבעת': 4, 'חמשת': 5, 'ששת': 6, 'שבעת': 7, 'שמונת': 8, 'תשעת': 9, 'עשרת': 10};
+  final re = RegExp(r'(?<![\\u0590-\\u05FF])((?:(?:\\d+\\s+אלף|(?:שלושת|ארבעת|חמשת|ששת|שבעת|שמונת|תשעת|עשרת)\\s+אלפים|אלפיים|אלף)(?:\\s+ו?)?)?(?:(?:שלוש|ארבע|חמש|שש|שבע|שמונה|תשע)\\s+מאות|מאתיים|מאה)?)(?![\\u0590-\\u05FF])');
+  final out = <_NumAt>[];
+  for (final x in re.allMatches(text)) {
+    final g = x.group(1)!.trim(); if (g.isEmpty) continue;
+    var v = 0; final parts = g.split(RegExp(r'\\s+ו?\\s*|\\s+'));
+    for (var i = 0; i < parts.length; i++) {
+      final w = parts[i].replaceFirst(RegExp(r'^ו'), '');
+      if (thousands.containsKey(w)) { v += thousands[w]!; continue; }
+      if (hundreds.containsKey(w)) { v += hundreds[w]!; continue; }
+      if (int.tryParse(w) != null && i + 1 < parts.length && parts[i + 1] == 'אלף') { v += int.parse(w) * 1000; i++; continue; }
+      if (tMul.containsKey(w) && i + 1 < parts.length && parts[i + 1] == 'אלפים') { v += tMul[w]! * 1000; i++; continue; }
+      if (hMul.containsKey(w) && i + 1 < parts.length && parts[i + 1] == 'מאות') { v += hMul[w]! * 100; i++; continue; }
+      if (w == 'אלף' || w == 'אלפים' || w == 'מאות') continue;
+    }
+    var end = x.end; final tail = RegExp(r'^\\s*(?:₪|ש"ח|ש״ח|שקל|שקלים|שח(?![\\u0590-\\u05FF])|דולר|יורו|€)').firstMatch(text.substring(x.end)); if (tail != null) end += tail.end;   // המטבע נצרך עם המילים («אלף וחמש מאות שקל») — המתאר נשאר נקי
+    if (v > 0) out.add(_NumAt(x.start + (x.group(0)!.length - x.group(0)!.trimLeft().length), end, v.toString()));
+  }
+  return out;
+}
 /// סכומים: 8,000 · 8000 · 8 אלף · 8.5 אלף · 8k · אלפיים · 350 ש"ח / ₪350 (מספר קטן רק עם מטבע). לא חלק מתאריך/טלפון.
 List<_NumAt> balaganNums(String text, List<_DateAt> dates) {
   final out = <_NumAt>[];
@@ -244,7 +271,7 @@ List<_NumAt> balaganNums(String text, List<_DateAt> dates) {
   String fmt(double v) => v == v.roundToDouble() ? v.round().toString() : v.toString();
   void put(RegExp re, String? Function(RegExpMatch) f) { for (final x in re.allMatches(text)) { if (inDate(x.start, x.end)) continue; final v = f(x); if (v != null) out.add(_NumAt(x.start, x.end, v)); } }
   put(RegExp(r'(?<![\\d.,-])(\\d+(?:[.,]\\d{1,2})?)\\s*(?:אלף|א׳|[kK])(?![\\u0590-\\u05FFa-zA-Z])'), (x) { final v = double.tryParse(x.group(1)!.replaceAll(',', '.')); return v == null ? null : fmt(v * 1000); });
-  put(RegExp(r'(?<![\\u0590-\\u05FF])אלפיים(?![\\u0590-\\u05FF])'), (_) => '2000');
+  for (final w in balaganNumberWords(text)) { if (!inDate(w.start, w.end) && !out.any((o) => w.start < o.end && w.end > o.start)) out.add(w); }   // מילים לפני ספרות: «אלף וחמש מאות» טווח אחד
   put(RegExp(r'(?<![\\d.,-])(\\d{1,3}(?:,\\d{3})+|\\d+(?:[.,]\\d{1,2})?)\\s*(?:₪|ש"ח|ש״ח|שח(?![\\u0590-\\u05FF])|שקל|שקלים|דולר|\\$|יורו|€)'), (x) { final g = x.group(1)!; return RegExp(r'^\\d{1,3}(,\\d{3})+\$').hasMatch(g) ? g.replaceAll(',', '') : g.replaceAll(',', '.'); });   // עם מטבע: הטווח כולל את המטבע (המתאר נשאר נקי)
   put(RegExp(r'(?:₪|\\$|€)\\s*(\\d{1,3}(?:,\\d{3})+|\\d+(?:[.,]\\d{1,2})?)(?![\\d,])'), (x) { final g = x.group(1)!; return RegExp(r'^\\d{1,3}(,\\d{3})+\$').hasMatch(g) ? g.replaceAll(',', '') : g.replaceAll(',', '.'); });
   put(RegExp(r'(?<![\\d-])(\\d{1,3}(?:,\\d{3})+|\\d{3,7})(?![\\d-])'), (x) => x.group(1)!.replaceAll(',', ''));
@@ -332,6 +359,11 @@ Map<String, String> balaganFacts(String text, BalaganModule m, {DateTime? today}
       ['לשלם ארנונה כל חודשיים ב-15 לחודש 350 ש"ח', ['מועד'], ['סכום'], { 'מועד': '2026-09-15', 'סכום': '350', '__repeat': 'm2', 'מה': 'לשלם ארנונה' }],
       ['כל יום ראשון חוג ג׳ודו', ['מועד'], [], { 'מועד': '2026-09-13', '__repeat': 'w1', 'מה': 'חוג ג׳ודו' }],
       ['ריבית 3.5% מול הבנק', [], [], { 'הערה': '3.5%' }, { lf: 'הערה' }],
+      ['ההמחאה ב-15 בספטמבר', ['מועד'], [], { 'מועד': '2026-09-15', 'מה': 'ההמחאה' }],
+      ['החוזה נגמר 3 באוקטובר 2027', ['מועד'], [], { 'מועד': '2027-10-03' }],
+      ['שילמתי אלף וחמש מאות שקל לגנן', [], ['סכום'], { 'סכום': '1500', 'מה': 'שילמתי לגנן' }],
+      ['הפיקדון שלושת אלפים ומאתיים', [], ['סכום'], { 'סכום': '3200' }],
+      ['קנס של מאתיים', [], ['סכום'], { 'סכום': '200' }],
     ];
     const baseMod = mods.find((m) => m.layer === 'base') || mods[0]; const baseTodayCls = baseMod.home.cls + 'Today';
     const dq = (x) => "'" + String(x).replace(/\\/g, '\\\\').replace(/'/g, "\\'") + "'";
@@ -389,6 +421,15 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
     expect(st.search('052').first[1], id);
     expect(st.search('ארנונה').length, 1);
     expect(st.search('x'), isEmpty);
+  });
+  test('«סיים» עם החזר: השורה מוסתרת והשלב מתקדם; החזר מחזיר את שניהם', () {
+    final st = AppStore();
+    final id = st.add('e_ent', {'מה': 'x', 'מועד': '2026-09-08', '__stage': '0'});
+    st.advance('e_ent', id, 3); st.decide('ign:\$id:מועד', 'no');
+    final lid = st.logAction('done', 'סיים', entity: 'e_ent', rid: id, field: 'מועד', prev: '0');
+    expect(st.stageOf('e_ent', id), 1); expect(st.decision('ign:\$id:מועד'), 'no');
+    expect(st.undo(lid), isTrue);
+    expect(st.stageOf('e_ent', id), 0); expect(st.decision('ign:\$id:מועד'), '');
   });
   test('פיצול שורה לכמה רגעים', () {
     expect(balaganSplit('שילמתי ארנונה. מחר תור לרופא ב-9:00'), ['שילמתי ארנונה', 'מחר תור לרופא ב-9:00']);
@@ -544,13 +585,13 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
     final tomorrow = <DsTodayItem>[for (final m in _mods) ...m.items(today, dayDelta: 1)]..sort((a, b) => a.due.compareTo(b.due));
     final pending = <Widget>[..._inbox(context), ..._chain(context), for (final m in _mods) ...m.proposals(context, today, chain: false)];
     final cards = <Widget>[for (final m in _mods) for (final r in m.open()) m.card(context, r)];
-    final did = appStore.log.where((e) => (e['kind'] == 'decide' || e['kind'] == 'auto' || e['kind'] == 'next' || e['kind'] == 'add') && e['undone'] != '1').take(5).toList();
+    final did = appStore.log.where((e) => (e['kind'] == 'decide' || e['kind'] == 'auto' || e['kind'] == 'next' || e['kind'] == 'add' || e['kind'] == 'done') && e['undone'] != '1').take(5).toList();
     // «השבוע» — שמירת-זמן (§המוצר): נגזרת של היומן מיום-ראשון; הדקות-לפעולה = הגדרה עריכה, לא טענה
     final weekStart = today.subtract(Duration(days: today.weekday % 7));
     final wk = appStore.log.where((e) => e['undone'] != '1' && !(DateTime.tryParse(e['at'] ?? '') ?? DateTime(2000)).isBefore(weekStart)).toList();
     int cnt(String kind) => wk.where((e) => e['kind'] == kind).length;
     int mins(String key, String def) => int.tryParse(appStore.setting(key, def)) ?? int.parse(def);
-    final wAdd = cnt('add'), wSend = cnt('send'), wAuto = cnt('auto') + cnt('decide') + cnt('next');
+    final wAdd = cnt('add'), wSend = cnt('send'), wAuto = cnt('auto') + cnt('decide') + cnt('next') + cnt('done');
     final wSaved = wAdd * mins('minAdd', '4') + wSend * mins('minSend', '12') + wAuto * mins('minAuto', '3');
     final n = overdue.length + todayItems.length + pending.length;
     final lead = n == 0 && cards.isEmpty ? ${k(L.homeNone)} : n <= 1 ? ${k(L.homeOne)} : ${k(L.homeMany)}.replaceAll('{n}', n.toString());

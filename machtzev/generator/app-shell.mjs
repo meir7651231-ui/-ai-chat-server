@@ -169,7 +169,10 @@ class ${cls}Today {
     final a = acts[i.clamp(0, acts.length - 1)];
     if (a == ${k(L.actDone)}) {
       final r0 = appStore.byId('${root.slug}', rid); final rep = (r0 == null ? '' : (r0['__repeat'] ?? '')).trim();
-      ${lastStage >= 0 ? `appStore.advance('${root.slug}', rid, ${lastStage + 1});` : `appStore.decide('ign:\$rid:\$field', 'no');`}
+      final prevStage = r0 == null ? '' : (r0[AppStore.stageKey] ?? '0');
+      ${lastStage >= 0 ? `appStore.advance('${root.slug}', rid, ${lastStage + 1});` : ''}
+      appStore.decide('ign:\$rid:\$field', 'no');   // השורה של התאריך הזה טופלה — לא חוזרת מחר כ«באיחור»
+      appStore.logAction('done', ${k(L.doneLog)}.replaceAll('{what}', field + ' · ' + appStore.displayOf('${root.slug}', rid)), entity: '${root.slug}', rid: rid, field: field, prev: prevStage);   // «עשיתי» + החזר (השורה חוזרת, השלב חוזר)
       if (r0 != null && rep.isNotEmpty) {   // ↻ רגע חוזר: «סיים» יוצר את הבא לבד (המועד-הבא בשדה שנסגר), עם החזר
         final next = <String, String>{for (final e in r0.entries) if (!e.key.startsWith('__') || e.key == '__repeat' || e.key == '__note') e.key: e.value};
         next[field] = _iso(nextRepeat(due, rep)); ${lastStage >= 0 ? `next['__stage'] = '0';` : ''}
