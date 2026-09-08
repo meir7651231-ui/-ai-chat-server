@@ -60,6 +60,11 @@ for (const key of ['minAdd', 'minSend', 'minAuto']) if (!behavior.includes(`appS
 if (!/const double kBalaganWeak = 0\.\d+;/.test(moments) || !/layer == 'base'/.test(moments) || !/a\.required\.compareTo\(b\.required\)/.test(moments)) fails.push('balaganIdentify בלי נפילה-לבסיס (kBalaganWeak · layer · required)');
 { const ident = buildIdentifier(mods); const selfS = mods.map((m) => (identify(ident, m.title + ' ' + m.moment, 1)[0] || { score: 1 }).score); const weak = +(moments.match(/kBalaganWeak = ([\d.]+)/) || [0, 1])[1]; const gen = identify(ident, 'לשלם ארנונה מחר', 1)[0]; if (gen && gen.score / selfS[gen.i] >= weak) fails.push(`שורה-כללית «לשלם ארנונה מחר» מזוהה בביטחון ${(gen.score / selfS[gen.i]).toFixed(3)} ≥ סף ${weak} — הסף אינו נגזר נכון`); for (const [i, m] of mods.entries()) { const h = identify(ident, m.title, 1)[0]; if (!h || h.ns !== m.ns || h.score / selfS[i] < weak) fails.push(`כותרת «${m.title}» מתחת לסף-החולשה`); } }
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganIdentify\(/.test(ft) || !/layer, 'base'/.test(ft)) fails.push('בדיקת-הזיהוי המחוללת חסרה'); }
+// גל ב׳-ו · שעה («ב-16:30» ⇒ שדה-שעה מדקדוק-האפיון typeTime) · הבסיס-עם-שעה כשיש שעה · כמה רגעים בשורה ⇒ טופס אחר טופס (queue)
+if (!/balaganTimes\(/.test(moments) || !/balaganSplit\(/.test(moments) || !/timeFields/.test(moments) || !/hasTime/.test(moments)) fails.push('balaganFacts/Identify בלי שעה (balaganTimes · timeFields · hasTime) או בלי פיצול (balaganSplit)');
+if (!/queue:/.test(confirm) || !/void _next\(\)/.test(confirm) || !/balaganSplit\(/.test(home) || !/balaganSplit\(/.test(ask)) fails.push('כמה-רגעים-בשורה: queue/_next בטופס-האישור או balaganSplit במסך-הראשון/«מה קרה?» חסרים');
+if (!mods.some((m) => m.layer === 'base' && m.root.fields.some((f) => /שעה/.test(f.label)))) fails.push('אין מודול-בסיס עם שדה-שעה (יומן)');
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/'שעה'/.test(ft) || !/balaganSplit\(/.test(ft)) fails.push('בדיקת-השעה/הפיצול המחוללת חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);
