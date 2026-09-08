@@ -56,6 +56,8 @@ export function renderRootPage(slug, { root, children, report, title }) {
     if (rep) blocks.push(rep.call); else notes.push(`${L.rootReport}: ${L.rootNoAction}`);
   }
   if (factRows.length && paper) blocks.push(`DsFold(title: ${k(T('foldLabel', { n: factRows.length }))}, details: [${factRows.join(', ')}])`);
+  const phoneLabels = root.schema.filter((f) => !/^(num|date|bool|multiline)$/.test(f.type || '') && String(f.label).split(/\s+/).some((w) => (SL0.typePhone || []).includes(w))).map((f) => f.label);   // שדה-טלפון ⇒ «התקשר» · «וואטסאפ» (tel: · wa.me, אפס-מפתח)
+  if (paper && phoneLabels.length) blocks.push(`(() { final ph = [${phoneLabels.map((l) => `(r0[${k(l)}] ?? '')`).join(', ')}].map((x) => x.replaceAll(RegExp(r'[^0-9+]'), '')).firstWhere((x) => x.length >= 9, orElse: () => ''); if (ph.isEmpty) return const SizedBox.shrink(); final intl = ph.startsWith('+') ? ph.substring(1) : (ph.startsWith('0') ? '972' + ph.substring(1) : ph); return Padding(padding: const EdgeInsets.only(bottom: 10), child: Row(children: [DsChipButton(label: ${k(L.callLabel)}, onTap: () => launchUrl(Uri.parse('tel:' + ph), mode: LaunchMode.externalApplication)), const SizedBox(width: 8), DsChipButton(label: ${k(L.waLabel)}, onTap: () => launchUrl(Uri.parse('https://wa.me/' + intl), mode: LaunchMode.externalApplication))])); })()`);
   if (paper) blocks.push(`((r0['__note'] ?? '').trim().isNotEmpty ? DsFold(title: ${k(L.origText)}, details: [Text(r0['__note'] ?? '', style: TextStyle(color: DsLook.of(context).ink, fontSize: 15, height: 1.5))]) : const SizedBox.shrink())`);   // הטקסט המקורי
   if (paper) blocks.push(`((r0['__doc'] ?? '').startsWith('data:image') ? DsFold(title: ${k(L.docTitle)}, details: [ClipRRect(borderRadius: BorderRadius.circular(12), child: Image.memory(base64Decode((r0['__doc'] ?? '').split(',').last), fit: BoxFit.fitWidth))]) : const SizedBox.shrink())`);   // G33 · מחסנית-מסמכים: הצילום שנשמר עם הרשומה
   const stageSub = root.stages && root.stages.length ? `const [${root.stages.map((s) => k(s)).join(', ')}][appStore.stageOf('${root.slug}', id).clamp(0, ${root.stages.length - 1})]` : k(root.name);
@@ -67,6 +69,7 @@ import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 ${[...imports].sort().join('\n')}
 ${paper ? "import 'dart:convert';" : ''}
+${paper && phoneLabels.length ? "import 'package:url_launcher/url_launcher.dart';" : ''}
 import 'package:flutter/material.dart';
 
 class ${cls} extends StatelessWidget {

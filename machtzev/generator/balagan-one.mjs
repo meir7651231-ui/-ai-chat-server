@@ -98,6 +98,9 @@ if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganMerge\(/.
 // גל ב׳-יג · «ליומן» עם שעה · «לפני N ימים» · דוגמאות בהקשה-אחת ב«מה קרה?»
 for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/final tm = r == null \? '' : _timeOf\(r\); final d = _iso\(due\)/.test(h) || !/agoDays|לפני/.test(h)) { fails.push(`${m.ns}: «ליומן» בלי שעה / באיחור בלי «לפני N ימים»`); break; } }
 if (!/\.split\('\|'\)\) DsChipButton\(label: ex/.test(ask) || !/_c\.text = ex; _go\(\);/.test(ask)) fails.push('«מה קרה?» בלי דוגמאות-בהקשה-אחת');
+// גל ב׳-יד · «התקשר»/«וואטסאפ» בתיק עם טלפון · כרטיסים לפי דחיפות
+{ const withPhone = mods.filter((m) => m.root.fields.some((f) => /טלפון|נייד/.test(f.label))); for (const m of withPhone) { const rp = rd(path.join(GEN, `gen_${m.rootPage.slug}.dart`)); if (!/wa\.me\//.test(rp) || !/'tel:'/.test(rp)) { fails.push(`${m.ns}: תיק-עם-טלפון בלי התקשר/וואטסאפ`); break; } } if (!withPhone.length) fails.push('אין מודול עם טלפון (צפוי 28)'); }
+if (!/final dueOf = <String, DateTime>\{\}/.test(home) || !/cardRows\.sort/.test(home)) fails.push('«היום»: הכרטיסים לא לפי דחיפות');
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);
