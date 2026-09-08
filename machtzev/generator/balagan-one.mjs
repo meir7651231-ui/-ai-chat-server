@@ -87,6 +87,10 @@ if (!/balaganNumberWords\(/.test(moments) || !/ספטמבר/.test(moments) || !/
 for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/logAction\('done'/.test(h) || !/prev: prevStage/.test(h)) { fails.push(`${m.ns}: «סיים» בלי החזר`); break; } }
 { const st = rd(path.join(R.ROOT, 'new/dart-ui-bs/ds/ds_store.dart')); if (!/== 'done'\) \{ _decided\.remove/.test(st)) fails.push('AppStore.undo בלי done'); }
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/'1500'/.test(ft) || !/בספטמבר/.test(ft) || !/logAction\('done'/.test(ft)) fails.push('בדיקת סכום-במילים/חודשים/החזר-סיים חסרה'); }
+// גל ב׳-יא · תיק-כפול לפני «שמור» · «השבוע הקרוב» (ימים 2–7)
+if (!/balaganDuplicates\(/.test(moments) || !/balaganDuplicates\(m, _v\)/.test(confirm) || (confirm.match(/case 'app_[a-z0-9]+_ent\d+': return/g) || []).length !== mods.length) fails.push('טופס-האישור בלי שומר-כפילויות לכל המודולים');
+if (!/for \(var d = 2; d <= 7; d\+\+\)/.test(home) || !/soonFold|השבוע הקרוב/.test(home)) fails.push('«היום» בלי «השבוע הקרוב»');
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganDuplicates\(/.test(ft)) fails.push('בדיקת תיק-כפול חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);

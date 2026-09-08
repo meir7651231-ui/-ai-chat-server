@@ -102,6 +102,7 @@ export function buildBalagan() {
   {
     const slug = 'balagan_moments';
     const code = `// 🧭 חולל ע"י balagan (G33 · הכרעה-29) — מזהה-הרגע: TF-IDF דטרמיניסטי מ-${mods.length} מסמכי-פירוק (כותרת+«הרגע» ×3). אפס-בינה, אפס-מילון. אל תערוך ידנית.
+import '../dart-ui-bs/ds/ds_store.dart';
 class BalaganField { const BalaganField(this.label, this.type, this.required, this.options); final String label, type; final bool required; final List<String> options; }
 class BalaganModule {
   const BalaganModule(this.index, this.ns, this.title, this.moment, this.topic, this.weights, this.dateFields, this.numFields, this.descField, this.longField, this.rootSlug, this.fields, this.stages, this.chain, {this.selfScore = 1, this.layer = '', this.required = 0, this.timeFields = const [], this.phoneFields = const [], this.personFields = const [], this.percentFields = const []});
@@ -234,6 +235,13 @@ String balaganRepeatLabel(String code) {
   if (n == 2) return u == 'd' ? 'כל יומיים' : u == 'w' ? 'כל שבועיים' : u == 'm' ? 'כל חודשיים' : 'כל שנתיים';
   return 'כל \$n ' + (u == 'd' ? 'ימים' : u == 'w' ? 'שבועות' : u == 'm' ? 'חודשים' : 'שנים');
 }
+/// תיק כפול: רשומה פתוחה באותו מודול עם אותו מתאר/אדם (השוואה מנורמלת) — לפני «שמור» שואלים «זה אותו עניין?» במקום לפתוח תיק שני.
+List<Map<String, String>> balaganDuplicates(BalaganModule m, Map<String, String> v) {
+  String norm(String x) => x.trim().toLowerCase().replaceAll(RegExp(r'\\s+'), ' ');
+  final keys = [m.descField, ...m.personFields].where((f) => f.isNotEmpty && norm(v[f] ?? '').length >= 3).toList();
+  if (keys.isEmpty) return const [];
+  return appStore.records(m.rootSlug).where((r) { final st = int.tryParse(r['__stage'] ?? '0') ?? 0; if (m.stages > 0 && st >= m.stages - 1) return false; return keys.any((f) => norm(r[f] ?? '') == norm(v[f]!)); }).toList();
+}
 /// שורה עם כמה רגעים («שילמתי ארנונה. מחר תור לרופא») ⇒ חלקים לפי שורה/נקודה-ורווח/נקודה-פסיק — כל חלק רגע משלו (טופס-אישור אחר טופס-אישור). חלק = ≥2 מילים.
 List<String> balaganSplit(String text) {
   final parts = text.split(RegExp(r'\\n|;|(?<=[\\u0590-\\u05FF\\d])\\.\\s+(?=[\\u0590-\\u05FF])')).map((p) => p.trim()).where((p) => p.split(RegExp(r'\\s+')).where((w) => w.isNotEmpty).length >= 2).toList();
@@ -325,7 +333,7 @@ Map<String, String> balaganFacts(String text, BalaganModule m, {DateTime? today}
   cleaned = cleaned.replaceAll(RegExp(r'\\s+'), ' ').replaceAll(RegExp(r'[\\s,\\-–—:]+\$'), '').replaceAll(RegExp(r'\\s[בלמוה]-?\$'), '').replaceAll(RegExp(r'^[\\s,\\-–—:]+'), '').trim();
   final rawLine = text.trim().split(RegExp(r'[\\n.]')).first.trim();
   final line = (cleaned.length >= 2 ? cleaned.split(RegExp(r'[\\n]')).first.trim() : rawLine);
-  if (m.descField.isNotEmpty && line.isNotEmpty && line.length <= 40 && !m.dateFields.contains(m.descField) && !m.numFields.contains(m.descField)) { out[m.descField] = line; }   // שורה קצרה = שם/מתאר; משפט ארוך אינו שם
+  if (m.descField.isNotEmpty && !out.containsKey(m.descField) && line.isNotEmpty && line.length <= 40 && !m.dateFields.contains(m.descField) && !m.numFields.contains(m.descField)) { out[m.descField] = line; }   // מתאר שהוא גם שדה-אדם («לקוח») ושכבר קיבל שם — לא נדרס בשורה   // שורה קצרה = שם/מתאר; משפט ארוך אינו שם
   if (m.longField.isNotEmpty && text.trim().length > 40) { out[m.longField] = text.trim(); }
   // עובדה מטופסת בלי שדה-יעד (אחוז · טלפון · שעה) לא אובדת: נכנסת ל«הערה» (שדה-הטקסט-הארוך), אם הוא פנוי
   final left = <String>[for (var i = 0; i < pctMs.length; i++) if (!usedPc.contains(i)) pctMs[i].iso + '%', for (var i = 0; i < phoneMs.length; i++) if (!usedP.contains(i)) phoneMs[i].iso, for (var i = 0; i < timeMs.length; i++) if (!usedT.contains(i)) timeMs[i].iso];
@@ -364,6 +372,7 @@ Map<String, String> balaganFacts(String text, BalaganModule m, {DateTime? today}
       ['שילמתי אלף וחמש מאות שקל לגנן', [], ['סכום'], { 'סכום': '1500', 'מה': 'שילמתי לגנן' }],
       ['הפיקדון שלושת אלפים ומאתיים', [], ['סכום'], { 'סכום': '3200' }],
       ['קנס של מאתיים', [], ['סכום'], { 'סכום': '200' }],
+      ['רות לוי 052-123-4567 המשכיר עדיין לא החזיר', [], [], { 'לקוח': 'רות לוי', 'טלפון': '0521234567' }, { ph: ['טלפון'], pe: ['לקוח'], desc: 'לקוח' }],
     ];
     const baseMod = mods.find((m) => m.layer === 'base') || mods[0]; const baseTodayCls = baseMod.home.cls + 'Today';
     const dq = (x) => "'" + String(x).replace(/\\/g, '\\\\').replace(/'/g, "\\'") + "'";
@@ -375,7 +384,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   final today = DateTime(2026, 9, 8);   // יום שלישי
-  BalaganModule mod(List<String> dates, List<String> nums, {List<String> tm = const [], List<String> ph = const [], List<String> pe = const [], List<String> pc = const [], String lf = ''}) => BalaganModule(0, 't', 'בדיקה', 'בדיקה', '', const <String, double>{}, dates, nums, 'מה', lf, 'x', const <BalaganField>[], 1, const <String>[], timeFields: tm, phoneFields: ph, personFields: pe, percentFields: pc);
+  BalaganModule mod(List<String> dates, List<String> nums, {List<String> tm = const [], List<String> ph = const [], List<String> pe = const [], List<String> pc = const [], String lf = '', String desc = 'מה'}) => BalaganModule(0, 't', 'בדיקה', 'בדיקה', '', const <String, double>{}, dates, nums, desc, lf, 'x', const <BalaganField>[], 1, const <String>[], timeFields: tm, phoneFields: ph, personFields: pe, percentFields: pc);
 ${cases.map(([text, dates, nums, exp, extra = {}], i) => `  test('עובדות ${i + 1}: ${text.replace(/'/g, '’')}', () {
     final f = balaganFacts(${dq(text)}, mod([${dates.map(dq).join(', ')}], [${nums.map(dq).join(', ')}]${Object.entries(extra).map(([kk, v]) => Array.isArray(v) ? `, ${kk}: [${v.map(dq).join(', ')}]` : `, ${kk}: ${dq(v)}`).join('')}), today: today);
 ${Object.entries(exp).map(([k, v]) => `    expect(f[${dq(k)}], ${dq(v)});`).join('\n')}
@@ -431,6 +440,14 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
     expect(st.undo(lid), isTrue);
     expect(st.stageOf('e_ent', id), 0); expect(st.decision('ign:\$id:מועד'), '');
   });
+  test('תיק כפול: אותו אדם/מתאר במודול פתוח ⇒ נמצא; סגור ⇒ לא', () {
+    final m = BalaganModule(0, 't', 'בדיקה', 'בדיקה', '', const <String, double>{}, const [], const [], 'מה', '', 'dup_ent', const <BalaganField>[], 3, const <String>[], personFields: const ['לקוח']);
+    final a = appStore.add('dup_ent', {'מה': 'פיקדון', 'לקוח': 'רות לוי', '__stage': '0'});
+    appStore.add('dup_ent', {'מה': 'אחר', 'לקוח': 'דן כהן', '__stage': '2'});
+    expect(balaganDuplicates(m, {'לקוח': ' רות  לוי '}).map((r) => r['__id']), [a]);
+    expect(balaganDuplicates(m, {'לקוח': 'דן כהן'}), isEmpty);
+    expect(balaganDuplicates(m, {'מה': 'פי'}), isEmpty);
+  });
   test('פיצול שורה לכמה רגעים', () {
     expect(balaganSplit('שילמתי ארנונה. מחר תור לרופא ב-9:00'), ['שילמתי ארנונה', 'מחר תור לרופא ב-9:00']);
     expect(balaganSplit('מסרתי מפתח ב-1.8.2026 והמשכיר מקזז 6,200'), ['מסרתי מפתח ב-1.8.2026 והמשכיר מקזז 6,200']);
@@ -449,6 +466,7 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
     const slug = 'balagan_home'; const { k, dump } = makeConsts(slug); const cls = clsOf(slug);
     const code = `// 🧭 חולל ע"י balagan (G33 · הכרעה-29) — «היום» של בלגן: מיזוג ספקי-ה-Today של ${mods.length} מודולים — באיחור ראשון · היום · הרשומות הפתוחות (3 למעלה, השאר מקופל) · ממתין-לאישורך · עשיתי-לבד · מחר. אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
+import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_mail.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
@@ -583,6 +601,8 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
     final overdue = all0.where((x) => x.overdue).toList();
     final todayItems = all0.where((x) => !x.overdue).toList()..sort((a, b) { final ta = a.time.isEmpty ? '99:99' : a.time, tb = b.time.isEmpty ? '99:99' : b.time; final c = ta.compareTo(tb); return c != 0 ? c : a.due.compareTo(b.due); });   // עם-שעה לפי השעה, בלי-שעה אחריהם
     final tomorrow = <DsTodayItem>[for (final m in _mods) ...m.items(today, dayDelta: 1)]..sort((a, b) => a.due.compareTo(b.due));
+    final dayNames = ${k(L.dayNames)}.split(',');
+    final soon = <List<dynamic>>[for (var d = 2; d <= 7; d++) for (final m in _mods) for (final it in m.items(today, dayDelta: d)) [d, it]];   // השבוע הקרוב: ימים 2–7, לפי יום ⇒ הוא רואה מה בא, לא רק מחר
     final pending = <Widget>[..._inbox(context), ..._chain(context), for (final m in _mods) ...m.proposals(context, today, chain: false)];
     final cards = <Widget>[for (final m in _mods) for (final r in m.open()) m.card(context, r)];
     final did = appStore.log.where((e) => (e['kind'] == 'decide' || e['kind'] == 'auto' || e['kind'] == 'next' || e['kind'] == 'add' || e['kind'] == 'done') && e['undone'] != '1').take(5).toList();
@@ -616,6 +636,7 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
       if (pending.isNotEmpty) DsSection(title: ${k(L.homePending)} + ' · ' + pending.length.toString(), children: pending),   // D5 · הגיע (מייל) · הצעד-הבא (שרשרת) · תזכורות
       if (did.isNotEmpty) DsSection(title: ${k(L.homeDid)} + ' · ' + did.length.toString(), children: [for (final e in did) DsLogRow(text: e['what'] ?? '', undoLabel: ${k(L.undo)}, onUndo: () => appStore.undo(e['id'] ?? ''))]),   // T2
       if (wk.isNotEmpty) DsFold(title: ${k(L.weekFold)}.replaceAll('{n}', wk.length.toString()).replaceAll('{m}', wSaved.toString()), details: [if (wAdd > 0) DsActionRow(title: ${k(L.weekAdded)}.replaceAll('{n}', wAdd.toString())), if (wSend > 0) DsActionRow(title: ${k(L.weekSent)}.replaceAll('{n}', wSend.toString())), if (wAuto > 0) DsActionRow(title: ${k(L.weekAuto)}.replaceAll('{n}', wAuto.toString())), DsNote(message: ${k(L.weekNote)}, label: '', tone: 0)]),   // שמירת-זמן: מקופל, מוכח מהיומן
+      if (soon.isNotEmpty) DsFold(title: ${k(L.soonFold)}.replaceAll('{n}', soon.length.toString()), details: [for (final x in soon) DsActionRow(title: dayNames[today.add(Duration(days: x[0] as int)).weekday % 7] + ' · ' + (x[1] as DsTodayItem).title, sub: (x[1] as DsTodayItem).sub + ' · ' + (x[1] as DsTodayItem).module)]),
       if (tomorrow.isNotEmpty) DsFold(title: ${k(L.homeTomorrow)} + ' (' + tomorrow.length.toString() + ')', details: [for (final it in tomorrow) DsActionRow(title: it.title, sub: it.sub + ' · ' + it.module)]),   // D8
       if (!empty && overdue.isEmpty && todayItems.isEmpty && pending.isEmpty) Padding(padding: const EdgeInsets.only(top: 12), child: Text(${k(L.homeAll)}, style: TextStyle(color: lk.muted, fontSize: 14))),
       if (empty) DsNote(message: ${k(L.homeEmptyWay)}, label: '', tone: 0),
@@ -725,6 +746,7 @@ import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_number_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import 'gen_balagan_moments.dart';
+${mods.map((m) => `import 'gen_${m.rootPage.slug}.dart';`).join('\n')}
 import 'package:flutter/material.dart';
 
 /// זיכרון-חיים: שדה-טקסט קצר (≤30) נזכר לפי התווית שלו ומוצע בכל מודול עם אותה תווית. מקומי-למכשיר (AppStore.settings).
@@ -744,6 +766,13 @@ class ${cls} extends StatefulWidget {
 }
 
 class _${cls}State extends State<${cls}> {
+  bool _forceNew = false;
+  Widget _openRoot(String entity, String id) {
+    switch (entity) {
+${mods.map((m) => `      case '${m.root.slug}': return ${m.rootPage.cls}(id: id);`).join('\n')}
+      default: return const SizedBox.shrink();
+    }
+  }
   late final Map<String, String> _v = {for (final f in widget.module.fields) if (balaganRemember(f.label).isNotEmpty) f.label: balaganRemember(f.label), ...widget.facts};
   Widget _field(BalaganField f) {
     final v = _v[f.label] ?? '';
@@ -778,6 +807,7 @@ class _${cls}State extends State<${cls}> {
       if (widget.alternatives.isNotEmpty) DsFold(title: ${k(L.confirmNot)}.replaceAll('{n}', widget.alternatives.length.toString()), details: [for (final a in widget.alternatives) DsNavTile(glyph: '', title: a.title, sub: a.moment, onTap: () => Navigator.of(context).pushReplacement<bool, bool>(MaterialPageRoute<bool>(builder: (_) => ${clsOf('balagan_confirm')}(module: a, facts: balaganFacts(widget.text, a), doc: widget.doc, alternatives: [for (final x in [widget.module, ...widget.alternatives]) if (x.index != a.index) x], text: widget.text, queue: widget.queue))))]),
       if ((widget.facts['__repeat'] ?? '').isNotEmpty) Padding(padding: const EdgeInsets.only(bottom: 8), child: DsNote(message: ${k(L.confirmRepeat)}.replaceAll('{every}', balaganRepeatLabel(widget.facts['__repeat']!)), label: '', tone: 0)),
       if (widget.queue.isNotEmpty) Padding(padding: const EdgeInsets.only(bottom: 8), child: DsNote(message: ${k(L.confirmQueue)}.replaceAll('{n}', widget.queue.length.toString()), label: '', tone: 0)),
+      if (!_forceNew) for (final d in balaganDuplicates(m, _v).take(1)) DsApproveCard(question: ${k(L.dupAsk)}.replaceAll('{who}', appStore.displayOf(m.rootSlug, d['__id'] ?? '')), source: m.title, okLabel: ${k(L.dupOpen)}, noLabel: ${k(L.dupNew)}, onOk: () => Navigator.of(context).pushReplacement<bool, bool>(MaterialPageRoute<bool>(builder: (_) => _openRoot(m.rootSlug, d['__id'] ?? ''))), onNo: () => setState(() => _forceNew = true)),   // תיק כפול: «זה אותו עניין?» לפני שנפתח תיק שני
       for (final f in shown) _field(f),
       if (rest.isNotEmpty) DsFold(title: ${k(L.confirmMore)}.replaceAll('{n}', rest.length.toString()), details: [for (final f in rest) _field(f)]),
       Padding(padding: const EdgeInsets.only(top: 14), child: DsPrimaryButton(label: ${k(L.askSave)}, onTap: _save)),
