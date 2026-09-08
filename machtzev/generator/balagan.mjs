@@ -693,6 +693,7 @@ ${mods.map((m) => `import 'gen_${m.root.slug}.dart';`).join('\n')}
 import 'dart:convert';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 Widget balaganOpen(int index, Map<String, String> initial) {
@@ -703,13 +704,17 @@ ${mods.map((m, i) => `    case ${i}: return ${m.root.cls}(initial: initial);`).j
 }
 
 class ${cls} extends StatefulWidget {
-  const ${cls}({super.key});
+  const ${cls}({this.initialText = '', super.key});
+  final String initialText;   // שיתוף (share_target ?text=) / הדבקה ⇒ נכנס לשדה ומזוהה מיד
   @override
   State<${cls}> createState() => _${cls}State();
 }
 
 class _${cls}State extends State<${cls}> {
   final _c = TextEditingController();
+  @override
+  void initState() { super.initState(); if (widget.initialText.trim().isNotEmpty) { _c.text = widget.initialText.trim(); _note = ${k(L.sharedNote)}; WidgetsBinding.instance.addPostFrameCallback((_) { if (mounted) _go(); }); } }   // הגיע משיתוף ⇒ אפס-הקשות עד טופס-האישור
+  Future<void> _paste() async { final d = await Clipboard.getData('text/plain'); final t = (d?.text ?? '').trim(); if (t.isEmpty) { setState(() => _note = ${k(L.pasteEmpty)}); return; } _c.text = t; _go(); }   // «הדבק» = הקשה אחת מהודעה שהועתקה
   List<BalaganHit> _hits = const [];
   Map<String, String> _extra = const {};
   String _doc = '';   // data:URI של הצילום (מוקטן) — נשמר עם הרשומה (מחסנית-מסמכים)
@@ -751,6 +756,8 @@ class _${cls}State extends State<${cls}> {
       ),
       Padding(padding: const EdgeInsets.only(top: 10), child: Row(children: [
         Expanded(child: DsPrimaryButton(label: ${k(L.askGo)}, onTap: _busy ? null : _go)),
+        const SizedBox(width: 8),
+        DsChipButton(label: ${k(L.pasteLabel)}, onTap: _busy ? null : _paste),
         const SizedBox(width: 8),
         GestureDetector(onTap: _busy ? null : _photo, child: Container(padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9), decoration: BoxDecoration(border: Border.all(color: lk.line), borderRadius: BorderRadius.circular(9)), child: Text(${k(L.askPhoto)}, style: TextStyle(color: lk.ink, fontSize: 14, fontWeight: FontWeight.w600)))),
       ])),
@@ -974,7 +981,9 @@ class ${cls} extends StatefulWidget {
 }
 
 class _${cls}State extends State<${cls}> {
-  int _t = 0;
+  // שיתוף-מהמכשיר (share_target במניפסט ⇒ ?text=/?title=/?url=): נפתחים ישר ב«מה קרה?» עם הטקסט
+  static String _sharedText() { try { final q = Uri.base.queryParameters; return [q['text'] ?? '', q['title'] ?? '', q['url'] ?? ''].where((x) => x.trim().isNotEmpty).join(' '); } catch (_) { return ''; } }
+  late int _t = _sharedText().isEmpty ? 0 : 1;
   @override
   Widget build(BuildContext context) => CallbackShortcuts(
     bindings: <ShortcutActivator, VoidCallback>{
@@ -986,7 +995,7 @@ class _${cls}State extends State<${cls}> {
     },
     child: Focus(autofocus: true, child: Scaffold(
       backgroundColor: DsLook.of(context).bg,
-      body: IndexedStack(index: _t.clamp(0, 2), children: const [${clsOf('balagan_home')}(), ${clsOf('balagan_ask')}(), ${clsOf('balagan_topics')}()]),
+      body: IndexedStack(index: _t.clamp(0, 2), children: [const ${clsOf('balagan_home')}(), ${clsOf('balagan_ask')}(initialText: _sharedText()), const ${clsOf('balagan_topics')}()]),
       bottomNavigationBar: ${nav ? `SafeArea(child: Padding(padding: const EdgeInsets.fromLTRB(12, 6, 12, 10), child: Center(heightFactor: 1.0, child: ${nav.call})))` : 'null'},
     )));
 }

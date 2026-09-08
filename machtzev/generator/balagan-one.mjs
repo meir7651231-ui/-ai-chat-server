@@ -104,6 +104,10 @@ if (!/final dueOf = <String, DateTime>\{\}/.test(home) || !/cardRows\.sort/.test
 // גל ב׳-טו · סכום קריא (8,000) בתיק · שדה-תאריך יחיד ⇒ כותרת בלי תווית
 { const withNum = mods.filter((m) => m.root.fields.some((f) => f.type === 'num')); for (const m of withNum) { const rp = rd(path.join(GEN, `gen_${m.rootPage.slug}.dart`)); if (!/_fmtNum\(r0\[/.test(rp)) { fails.push(`${m.ns}: סכום בתיק בלי מפריד-אלפים`); break; } } }
 for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/_mk\(_dates\.length == 1 \? who :/.test(h)) { fails.push(`${m.ns}: כותרת-שורה עם תווית גם כשיש תאריך יחיד`); break; } }
+// גל ב׳-טז · שיתוף-מהמכשיר (share_target ⇒ ?text= ⇒ «מה קרה?» מזוהה) · «הדבק»
+if (!/this\.initialText = ''/.test(ask) || !/Clipboard\.getData\('text\/plain'\)/.test(ask) || !/_paste/.test(ask)) fails.push('«מה קרה?» בלי initialText/הדבק');
+{ const shell = rd(path.join(GEN, 'gen_balagan_shell.dart')); if (!/Uri\.base\.queryParameters/.test(shell) || !/initialText: _sharedText\(\)/.test(shell)) fails.push('השלד אינו פותח שיתוף ב«מה קרה?»'); }
+{ const mf = path.join(R.ROOT, '..', 'buildsmart', 'app_flutter', 'web', 'manifest.json'); if (fs.existsSync(mf)) { try { const m = JSON.parse(rd(mf)); if (!m.share_target || !m.share_target.params || m.share_target.params.text !== 'text') fails.push('manifest.json בלי share_target'); } catch { fails.push('manifest.json לא נקרא'); } } }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);
