@@ -76,7 +76,7 @@ if (!/balaganRepeat\(/.test(moments) || !/__repeat/.test(moments) || !/balaganRe
 for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/static DateTime nextRepeat\(/.test(h) || !/__repeat/.test(h) || !/repeatLog|↻/.test(h)) { fails.push(`${m.ns}: «סיים» אינו יוצר את הרגע-החוזר הבא`); break; } }
 if (!/confirmRepeat|__repeat/.test(confirm)) fails.push('טופס-האישור אינו מציג חזרה');
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/'__repeat'/.test(ft) || !/nextRepeat\(/.test(ft) || !/'רות לוי'/.test(ft)) fails.push('בדיקת החזרה/השם-לפני-טלפון המחוללת חסרה'); }
-if (!/balaganStripGrammar\(/.test(moments) || !/balaganTokens\(balaganStripGrammar\(text\)\)/.test(moments)) fails.push('הזיהוי אינו מסיר מילות-דקדוק (תאריך/חזרה/שעה/טלפון)');
+if (!/balaganStripGrammar\(/.test(moments) || !/balaganTokens\(balaganStripGrammar\((?:balaganWaStrip\()?text\)?\)\)/.test(moments)) fails.push('הזיהוי אינו מסיר מילות-דקדוק (תאריך/חזרה/שעה/טלפון)');
 // גל ב׳-ט · חיפוש בכל התיקים (מסך «נושאים») · גיבוי/שחזור/ביטול ב«חיבורים» (טקסט, אפס-שרת)
 { const topics2 = rd(path.join(GEN, 'gen_balagan_topics.dart')); if (!/appStore\.search\(_q\)/.test(topics2) || !/searchLabel|חיפוש/.test(topics2) || (topics2.match(/case 'app_[a-z0-9]+_ent\d+': return/g) || []).length !== mods.length) fails.push(`«נושאים» בלי חיפוש-בכל-התיקים לכל ${mods.length} המודולים`); }
 if (!/appStore\.exportJson\(\)/.test(keys) || !/appStore\.importJson\(/.test(keys) || !/appStore\.undoImport\(\)/.test(keys) || !/Clipboard\.setData/.test(keys)) fails.push('«חיבורים» בלי גיבוי/שחזור/ביטול');
@@ -115,6 +115,10 @@ if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganDayText\(
 // גל ב׳-יח · דוגמאות במסך-ריק · «אחרונים» ב«נושאים» · שורת-היום בלי «היום»
 if (!/if \(empty\) Padding\(padding: const EdgeInsets\.only\(top: 6\), child: Wrap/.test(home) || /it\.sub \+ ' · ' \+ it\.module/.test(home)) fails.push('«היום»: מסך-ריק בלי דוגמאות / שורה עם «·» מוביל');
 { const topics2 = rd(path.join(GEN, 'gen_balagan_topics.dart')); if (!/recentTitle|אחרונים/.test(topics2) && !/for \(final e in appStore\.log\)/.test(topics2)) fails.push('«נושאים» בלי «אחרונים»'); }
+// גל ב׳-יט · ייצוא-וואטסאפ: כותרת נקלפת · השולח = אדם · תזכורת-התקנה
+if (!/balaganWaStrip\(/.test(moments) || !/balaganWaSender\(/.test(moments) || !/balaganStripGrammar\(balaganWaStrip\(text\)\)/.test(moments)) fails.push('balaganFacts/Identify בלי קילוף כותרת-וואטסאפ');
+{ const kc = rd(path.join(R.dataOutDir(), 'gen_balagan_keys_content.dart')); if (!/הוסף למסך הבית/.test(kc)) fails.push('«חיבורים» בלי תזכורת-התקנה'); }
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganWaStrip\(/.test(ft)) fails.push('בדיקת ייצוא-וואטסאפ חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);

@@ -139,7 +139,7 @@ String balaganStripGrammar(String text) {
   return out;
 }
 List<BalaganHit> balaganIdentify(String text, {int k = 3}) {
-  final toks = balaganTokens(balaganStripGrammar(text));
+  final toks = balaganTokens(balaganStripGrammar(balaganWaStrip(text)));
   final hits = <BalaganHit>[];
   for (final m in kBalaganModules) { var s = 0.0; for (final t in toks) { s += m.weights[t] ?? 0; } if (s > 0) hits.add(BalaganHit(m, s)); }
   hits.sort((a, b) { final c = b.score.compareTo(a.score); return c != 0 ? c : a.module.index.compareTo(b.module.index); });
@@ -259,9 +259,13 @@ int balaganMerge(BalaganModule m, String id, Map<String, String> v, String logTe
   appStore.logAction('merge', logText.replaceAll('{n}', next.length.toString()), entity: m.rootSlug, rid: id, prev: jsonEncode(prev));
   return next.length;
 }
+/// שורת-ייצוא-וואטסאפ: «[8.9.2026, 16:30] דני: …» / «8.9.26, 16:30 - דני: …» ⇒ הטקסט בלי הכותרת + השולח (מבנה, לא מילון). חותמת-ההודעה אינה מועד.
+final RegExp _waHead = RegExp(r'^\\s*\\[?(\\d{1,2}[./]\\d{1,2}[./]\\d{2,4}),?\\s+(\\d{1,2}:\\d{2})(?::\\d{2})?\\]?\\s*-?\\s*([^:\\n]{2,30}):\\s+');
+String balaganWaStrip(String text) { final m = _waHead.firstMatch(text); return m == null ? text : text.substring(m.end); }
+String balaganWaSender(String text) { final m = _waHead.firstMatch(text); return m == null ? '' : m.group(3)!.trim(); }
 /// שורה עם כמה רגעים («שילמתי ארנונה. מחר תור לרופא») ⇒ חלקים לפי שורה/נקודה-ורווח/נקודה-פסיק — כל חלק רגע משלו (טופס-אישור אחר טופס-אישור). חלק = ≥2 מילים.
 List<String> balaganSplit(String text) {
-  final parts = text.split(RegExp(r'\\n|;|(?<=[\\u0590-\\u05FF\\d])\\.\\s+(?=[\\u0590-\\u05FF])')).map((p) => p.trim()).where((p) => p.split(RegExp(r'\\s+')).where((w) => w.isNotEmpty).length >= 2).toList();
+  final parts = text.split(RegExp(r'\\n|;|(?<=[\\u0590-\\u05FF\\d])\\.\\s+(?=[\\u0590-\\u05FF])')).map((p) => p.trim()).where((p) => balaganWaStrip(p).split(RegExp(r'\\s+')).where((w) => w.isNotEmpty).length >= 2).toList();   // חלק = ≥2 מילים אחרי הסרת כותרת-וואטסאפ
   return parts.length >= 2 ? parts : [text.trim()];
 }
 /// סכום במילים: «מאתיים» · «שלוש מאות» · «אלף וחמש מאות» · «שלושת אלפים ומאתיים» · «עשרת אלפים» ⇒ מספר (דקדוק-מספרים, לא מילון-דומייני)
@@ -305,9 +309,10 @@ List<_NumAt> balaganNums(String text, List<_DateAt> dates) {
   return res;
 }
 /// עובדות מהטקסט (תאריכים — גם יחסיים · סכומים · שורה-ראשונה) ⇒ שדות-השורש לפי טיפוס + קרבה למילות-תווית-השדה. \`today\` מוזרק (דטרמיניסטי; ברירת-מחדל עכשיו).
-Map<String, String> balaganFacts(String text, BalaganModule m, {DateTime? today}) {
+Map<String, String> balaganFacts(String text0, BalaganModule m, {DateTime? today}) {
   final out = <String, String>{};
   final t0 = today ?? DateTime.now();
+  final sender = balaganWaSender(text0); final text = balaganWaStrip(text0);   // כותרת-וואטסאפ: לא תאריך, לא שעה — השולח = אדם (רק כשלא נמצא אחר)
   final dateMs = balaganDates(text, t0);
   final phoneMs = balaganPhones(text);
   final pctMs = balaganPercents(text);
@@ -343,7 +348,8 @@ Map<String, String> balaganFacts(String text, BalaganModule m, {DateTime? today}
   final usedD = <int>{};
   for (final f in m.dateFields) { final i = nearest(dStarts, f); if (i >= 0 && !usedD.contains(i)) { out[f] = dateMs[i].iso; usedD.add(i); } }
   var di = 0; for (final f in m.dateFields) { if (out.containsKey(f)) continue; while (di < dateMs.length && usedD.contains(di)) { di++; } if (di < dateMs.length) { out[f] = dateMs[di].iso; usedD.add(di); } }
-  if (text.trim().isNotEmpty) out['__note'] = text.trim();   // הטקסט המקורי לעולם לא אובד (מוצג בתיק: «מה כתבת»)
+  if (text0.trim().isNotEmpty) out['__note'] = text0.trim();   // הטקסט המקורי לעולם לא אובד (מוצג בתיק: «מה כתבת»)
+  if (sender.isNotEmpty && m.personFields.isNotEmpty && !m.personFields.any((f) => out.containsKey(f))) out[m.personFields.first] = sender;
   // המתאר = השורה בלי העובדות שכבר נקלטו לשדות («לשלם ארנונה מחר 350 ש"ח» ⇒ «לשלם ארנונה»): הסרת-הטווחים שנצרכו + ניקוי מילת-יחס תלויה. אינו מילון — טווחי-ההתאמה עצמם.
   final spans = <List<int>>[for (final i in usedD) [dateMs[i].start, dateMs[i].end], for (final i in usedN) [numMs[i].start, numMs[i].end], for (final i in usedT) [timeMs[i].start, timeMs[i].end], for (final i in usedP) [phoneMs[i].start, phoneMs[i].end], for (final i in usedPc) [pctMs[i].start, pctMs[i].end], for (final x in repMs) [x.start, x.end]]..sort((a, b) => a[0].compareTo(b[0]));
   var cleaned = ''; var pos = 0; for (final sp in spans) { if (sp[0] > pos) cleaned += text.substring(pos, sp[0]); pos = sp[1] > pos ? sp[1] : pos; } cleaned += text.substring(pos);
@@ -390,6 +396,9 @@ Map<String, String> balaganFacts(String text, BalaganModule m, {DateTime? today}
       ['הפיקדון שלושת אלפים ומאתיים', [], ['סכום'], { 'סכום': '3200' }],
       ['קנס של מאתיים', [], ['סכום'], { 'סכום': '200' }],
       ['רות לוי 052-123-4567 המשכיר עדיין לא החזיר', [], [], { 'לקוח': 'רות לוי', 'טלפון': '0521234567' }, { ph: ['טלפון'], pe: ['לקוח'], desc: 'לקוח' }],
+      ['[8.9.2026, 16:30] דני: מחר ב-9:00 אצל הרופא', ['מועד'], [], { 'מועד': '2026-09-09', 'שעה': '09:00', 'לקוח': 'הרופא', 'מה': 'אצל הרופא' }, { tm: ['שעה'], pe: ['לקוח'] }],
+      ['[8.9.2026, 16:30] דני: מחר ב-9:00 פגישה', ['מועד'], [], { 'מועד': '2026-09-09', 'שעה': '09:00', 'לקוח': 'דני', 'מה': 'פגישה' }, { tm: ['שעה'], pe: ['לקוח'] }],
+      ['8.9.26, 16:30 - רות לוי: מסרתי מפתח ב-1.8.2026', ['תאריך מסירת מפתח'], [], { 'תאריך מסירת מפתח': '2026-08-01', 'לקוח': 'רות לוי' }, { pe: ['לקוח'] }],
     ];
     const baseMod = mods.find((m) => m.layer === 'base') || mods[0]; const baseTodayCls = baseMod.home.cls + 'Today';
     const dq = (x) => "'" + String(x).replace(/\\/g, '\\\\').replace(/'/g, "\\'") + "'";
@@ -483,6 +492,12 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
     final o = DsTodayItem(title: 'ארנונה', sub: '', due: DateTime(2026, 9, 5), hard: true, overdue: true, module: 'משימות', actions: const [], act: (_) {});
     final t = balaganDayText([o], [a], DateTime(2026, 9, 8));
     expect(t.contains('2026-09-08'), isTrue); expect(t.contains('• ארנונה (משימות)'), isTrue); expect(t.contains('• 09:30 רופא שיניים (יומן)'), isTrue);
+  });
+  test('ייצוא-וואטסאפ: הכותרת נקלפת, השולח = אדם, חותמת-ההודעה אינה מועד', () {
+    expect(balaganWaStrip('[8.9.2026, 16:30] דני: מחר ב-9:00'), 'מחר ב-9:00');
+    expect(balaganWaSender('8.9.26, 16:30 - רות לוי: שלום'), 'רות לוי');
+    expect(balaganWaSender('מחר ב-9:00'), '');
+    expect(balaganSplit('[8.9.2026, 16:30] דני: מחר אצל הרופא\\n[8.9.2026, 16:31] דני: ok').length, 1);
   });
   test('פיצול שורה לכמה רגעים', () {
     expect(balaganSplit('שילמתי ארנונה. מחר תור לרופא ב-9:00'), ['שילמתי ארנונה', 'מחר תור לרופא ב-9:00']);
@@ -916,6 +931,7 @@ class _${cls}State extends State<${cls}> {
       Padding(padding: const EdgeInsets.only(top: 8), child: Row(children: [DsChipButton(label: ${k(L.backupRestore)}, onTap: _restore), const SizedBox(width: 8), DsChipButton(label: ${k(L.backupUndo)}, onTap: _undo)])),
       if (_note.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 8), child: DsNote(message: _note, label: '', tone: 0)),
       Padding(padding: const EdgeInsets.only(top: 8), child: DsNote(message: ${k(L.backupNote)}, label: '', tone: 0)),
+      Padding(padding: const EdgeInsets.only(top: 8), child: DsNote(message: ${k(L.installNote)}, label: '', tone: 0)),
     ]),
     DsField(label: ${k(L.aiKeyLabel)}, hint: ${k(L.aiKeyHint)}, value: appStore.setting('ai.key'), onChanged: (v) => appStore.setSetting('ai.key', v.trim())),
     DsField(label: ${k(L.aiModelLabel)}, hint: ${k(L.aiModelHint)}, value: appStore.setting('ai.model'), onChanged: (v) => appStore.setSetting('ai.model', v.trim())),
