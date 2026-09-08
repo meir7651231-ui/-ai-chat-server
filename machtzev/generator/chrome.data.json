@@ -208,5 +208,11 @@
  "confirmIs": "הבנתי: «{title}» — {moment}",
  "confirmNot": "לא זה? אולי ({n})",
  "askNoHit": "לא זיהיתי. תוסיף עוד מילה אחת — או בחר נושא למטה.",
- "homeQuick": "קרה משהו? כתוב שורה ומקש Enter"
+ "homeQuick": "קרה משהו? כתוב שורה ומקש Enter",
+ "savedLog": "נשמר: {title}",
+ "staleAsk": "«{who}» עומד {n} ימים בלי תנועה. לסגור?",
+ "staleDid": "סגרתי «{who}» אחרי {n} ימים",
+ "origText": "מה כתבת",
+ "leadOne": "{title}",
+ "homeNext": "הבא: {title}"
 }

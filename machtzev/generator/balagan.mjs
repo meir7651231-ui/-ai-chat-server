@@ -98,6 +98,7 @@ class BalaganModule {
   final int index; final String ns, title, moment, topic, rootSlug; final Map<String, double> weights; final List<String> dateFields, numFields; final String descField, longField; final List<BalaganField> fields; final int stages; final List<String> chain;
 }
 class BalaganHit { const BalaganHit(this.module, this.score); final BalaganModule module; final double score; }
+class _At { const _At(this.start); final int start; }
 
 const List<BalaganModule> kBalaganModules = [
 ${mods.map((m, i) => `  BalaganModule(${i}, '${m.ns}', ${dq(m.title)}, ${dq(m.moment)}, ${dq(m.topic)}, {${Object.entries(ident[i].weights).map(([v, s]) => `${dq(v)}: ${s}`).join(', ')}}, [${m.root.fields.filter((f) => f.type === 'date').map((f) => dq(f.label)).join(', ')}], [${m.root.fields.filter((f) => f.type === 'num').map((f) => dq(f.label)).join(', ')}], ${dq(m.root.descField || '')}, ${dq((m.root.fields.find((f) => f.type === 'multiline') || {}).label || '')}, '${m.root.slug}', [${m.root.fields.map((f) => `BalaganField(${dq(f.label)}, '${f.type}', ${f.required ? 'true' : 'false'}, [${(f.enumVals || []).map(dq).join(', ')}])`).join(', ')}], ${(m.root.stages || []).length}, [${(m.chain || []).map(dq).join(', ')}]),`).join('\n')}
@@ -128,8 +129,22 @@ Map<String, String> balaganFacts(String text, BalaganModule m) {
   for (final d in RegExp(r'(\\d{1,2})[./](\\d{1,2})[./](\\d{2,4})').allMatches(text)) { var y = d.group(3)!; if (y.length == 2) y = '20\$y'; dates.add('\$y-\${d.group(2)!.padLeft(2, '0')}-\${d.group(1)!.padLeft(2, '0')}'); }
   final nums = <String>[];
   for (final n in RegExp(r'(?<![\\d-])(\\d{1,3}(?:,\\d{3})+|\\d{3,7})(?![\\d-])').allMatches(text)) { final v = n.group(1)!.replaceAll(',', ''); if (!dates.any((d) => d.contains(v))) nums.add(v); }
-  for (var i = 0; i < m.dateFields.length && i < dates.length; i++) { out[m.dateFields[i]] = dates[i]; }
-  for (var i = 0; i < m.numFields.length && i < nums.length; i++) { out[m.numFields[i]] = nums[i]; }
+  // קרבה למילות-השדה (מבני: המילים של תווית-השדה עצמה, לא מילון): «מהפיקדון של 8,000» ⇒ פיקדון ⇐ 8000. אין קרבה ⇒ לפי סדר.
+  int nearest(List<RegExpMatch> ms, String label) {
+    final ws = <String>{}; for (final x in RegExp(r'[\\u0590-\\u05FF]{3,}').allMatches(label)) { final w = x.group(0)!; ws.add(w); if (w.length >= 4 && 'והבלמשכ'.contains(w[0])) ws.add(w.substring(1)); }
+    var best = -1; var bestD = 1 << 30;
+    for (var i = 0; i < ms.length; i++) { final a = ms[i].start; for (final w in ws) { var from = 0; while (true) { final at = text.indexOf(w, from); if (at < 0) break; from = at + 1; final wm = _At(at); var d = (wm.start - a).abs(); if (a < wm.start) d += 20; if (at > 0 && text[at - 1] == 'מ') d += 10; if (d < bestD && d <= 60) { bestD = d; best = i; } } } }
+    return best;
+  }
+  final numMs = RegExp(r'(?<![\\d-])(\\d{1,3}(?:,\\d{3})+|\\d{3,7})(?![\\d-])').allMatches(text).where((n) => !dates.any((d) => d.contains(n.group(1)!.replaceAll(',', '')))).toList();
+  final usedN = <int>{};
+  for (final f in m.numFields) { final i = nearest(numMs, f); if (i >= 0 && !usedN.contains(i)) { out[f] = numMs[i].group(1)!.replaceAll(',', ''); usedN.add(i); } }
+  var ni = 0; for (final f in m.numFields) { if (out.containsKey(f)) continue; while (ni < numMs.length && usedN.contains(ni)) { ni++; } if (ni < numMs.length) { out[f] = numMs[ni].group(1)!.replaceAll(',', ''); usedN.add(ni); } }
+  final dateMs = [...RegExp(r'(\\d{4})-(\\d{2})-(\\d{2})').allMatches(text), ...RegExp(r'(\\d{1,2})[./](\\d{1,2})[./](\\d{2,4})').allMatches(text)];
+  final usedD = <int>{};
+  for (final f in m.dateFields) { final i = nearest(dateMs, f); if (i >= 0 && !usedD.contains(i) && i < dates.length) { out[f] = dates[i]; usedD.add(i); } }
+  var di = 0; for (final f in m.dateFields) { if (out.containsKey(f)) continue; while (di < dates.length && usedD.contains(di)) { di++; } if (di < dates.length) { out[f] = dates[di]; usedD.add(di); } }
+  if (text.trim().isNotEmpty) out['__note'] = text.trim();   // הטקסט המקורי לעולם לא אובד (מוצג בתיק: «מה כתבת»)
   final line = text.trim().split(RegExp(r'[\\n.]')).first.trim();
   if (m.descField.isNotEmpty && line.isNotEmpty && line.length <= 40 && !m.dateFields.contains(m.descField) && !m.numFields.contains(m.descField)) { out[m.descField] = line; }   // שורה קצרה = שם/מתאר; משפט ארוך אינו שם
   if (m.longField.isNotEmpty && text.trim().length > 40) { out[m.longField] = text.trim(); }   // הטקסט המלא ⇒ שדה-הטקסט-הארוך הראשון (multiline), אם יש
@@ -228,6 +243,20 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
   // שרשרת חוצת-מודולים: רשומה שנסגרה ⇒ הצעד-הבא (שם מהפירוק) מזוהה כמודול ⇒ «להתחיל עכשיו?» ⇒ טופס-האישור של המודול השני (הזיכרון ממלא)
   List<Widget> _chain(BuildContext context) {
     final out = <Widget>[];
+    // תיק שעומד: פתוח ≥7 ימים מאז יצירתו, בלי שום פעולה ביומן ⇒ «לסגור?» (סגירה = השלב-האחרון; דחייה = הכרעה נזכרת)
+    final today = DateTime.now();
+    for (final m in _mods) {
+      final bm = kBalaganModules[m.index]; if (bm.stages == 0) continue;
+      for (final r in m.open()) {
+        final rid = r[AppStore.idKey] ?? ''; final at = DateTime.tryParse(r['__at'] ?? ''); if (at == null) continue;
+        final days = today.difference(at).inDays; if (days < 7 || appStore.decision('stale:\$rid').isNotEmpty) continue;
+        if (appStore.log.any((e) => e['rid'] == rid && e['undone'] != '1' && e['kind'] != 'add')) continue;
+        final who = bm.title + ' · ' + appStore.displayOf(bm.rootSlug, rid);
+        out.add(DsApproveCard(question: ${k(L.staleAsk)}.replaceAll('{who}', who).replaceAll('{n}', days.toString()), source: who, okLabel: ${k(L.actOk)}, noLabel: ${k(L.actNo)},
+          onOk: () { final prev = appStore.stageOf(bm.rootSlug, rid).toString(); appStore.update(bm.rootSlug, rid, {AppStore.stageKey: (bm.stages - 1).toString()}); appStore.decide('stale:\$rid', 'ok'); appStore.logAction('auto', ${k(L.staleDid)}.replaceAll('{who}', who).replaceAll('{n}', days.toString()), entity: bm.rootSlug, rid: rid, field: AppStore.stageKey, prev: prev); },
+          onNo: () => appStore.decide('stale:\$rid', 'no')));
+      }
+    }
     for (final m in _mods) {
       final bm = kBalaganModules[m.index]; if (bm.chain.isEmpty) continue;
       for (final r in m.done()) {
@@ -256,9 +285,11 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
     final tomorrow = <DsTodayItem>[for (final m in _mods) ...m.items(today, dayDelta: 1)]..sort((a, b) => a.due.compareTo(b.due));
     final pending = <Widget>[..._inbox(context), ..._chain(context), for (final m in _mods) ...m.proposals(context, today, chain: false)];
     final cards = <Widget>[for (final m in _mods) for (final r in m.open()) m.card(context, r)];
-    final did = appStore.log.where((e) => (e['kind'] == 'decide' || e['kind'] == 'auto' || e['kind'] == 'next') && e['undone'] != '1').take(5).toList();
+    final did = appStore.log.where((e) => (e['kind'] == 'decide' || e['kind'] == 'auto' || e['kind'] == 'next' || e['kind'] == 'add') && e['undone'] != '1').take(5).toList();
     final n = overdue.length + todayItems.length + pending.length;
     final lead = n == 0 && cards.isEmpty ? ${k(L.homeNone)} : n <= 1 ? ${k(L.homeOne)} : ${k(L.homeMany)}.replaceAll('{n}', n.toString());
+    final first = overdue.isNotEmpty ? overdue.first : (todayItems.isNotEmpty ? todayItems.first : null);   // הדבר-האחד (הכרעה-29): הכותרת = מה שדחוף עכשיו, לא ספירה
+    final headline = first != null ? first.title : lead;
     final hardToday = todayItems.where((x) => x.hard && x.due == today).length;
     final plan = _plan(today, overdue, todayItems);
     WidgetsBinding.instance.addPostFrameCallback((_) { _digest(lead, hardToday); });
@@ -267,7 +298,8 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
     return DsScaffold(title: ${k(L.navToday)}, subtitle: empty ? ${k(L.askSub)} : lead, icon: ${k('')}, children: [
       DsQuickAdd(hint: ${k(L.homeQuick)}, autofocus: true, onSubmit: (s) { final hits = balaganIdentify(s); if (hits.isEmpty) { setState(() => _mailNote = ${k(L.askNoHit)}); return; } final m = hits.first.module; Navigator.of(context).push<bool>(MaterialPageRoute<bool>(builder: (_) => ${clsOf('balagan_confirm')}(module: m, facts: balaganFacts(s, m), alternatives: hits.skip(1).map((h) => h.module).toList(), text: s))); }),   // שורה אחת מהמסך-הראשון ⇒ זיהוי ⇒ טופס-אישור: אפס ניווט
       if (!empty) DsLoadMeter(count: n, label: ${k(L.loadOf)}.replaceAll('{n}', n.toString()), stateLabels: [${k(L.loadOk)}, ${k(L.loadWarn)}, ${k(L.loadBad)}]),
-      Padding(padding: const EdgeInsets.only(top: 16, bottom: 12), child: Text(lead, style: TextStyle(color: lk.ink, fontSize: 28, fontWeight: FontWeight.w600, height: 1.2))),
+      Padding(padding: const EdgeInsets.only(top: 16, bottom: 4), child: Text(headline, style: TextStyle(color: lk.ink, fontSize: 28, fontWeight: FontWeight.w600, height: 1.2))),
+      if (first != null) Padding(padding: const EdgeInsets.only(bottom: 12), child: Text((first.overdue ? ${k(L.homeOverdue)} : first.sub) + ' · ' + first.module + ' · ' + lead, style: TextStyle(color: lk.muted, fontSize: 14))),
       if (overdue.isNotEmpty) DsSection(title: ${k(L.homeOverdue)}, tone: 2, children: [for (final it in overdue) DsActionRow(title: it.title, sub: it.sub + ' · ' + it.module, tone: 2, actions: it.actions, onAct: it.act)]),   // D6/P6/P7 · באיחור ראשון
       if (todayItems.isNotEmpty) DsSection(title: ${k(L.homeToday)}, children: [for (final it in todayItems) DsActionRow(title: it.title, sub: it.sub + ' · ' + it.module, actions: it.actions, onAct: it.act)]),
       if (plan.isNotEmpty) DsFold(title: ${k(L.planFold)}.replaceAll('{n}', plan.length.toString()), details: plan),   // תזמון-אוטומטי: מקופל — הוא מסתכל כשהוא רוצה
@@ -414,7 +446,8 @@ class _${cls}State extends State<${cls}> {
     final map = <String, String>{for (final e in _v.entries) if (e.value.trim().isNotEmpty) e.key: e.value.trim()};
     if (map.isEmpty) return;
     for (final f in widget.module.fields) { if (map.containsKey(f.label)) balaganLearn(f, map[f.label]!); }
-    appStore.add(widget.module.rootSlug, {...map, if (widget.module.stages > 0) '__stage': '0', if (widget.doc.isNotEmpty) '__doc': widget.doc});
+    final id = appStore.add(widget.module.rootSlug, {...map, if (widget.module.stages > 0) '__stage': '0', if (widget.doc.isNotEmpty) '__doc': widget.doc});
+    appStore.logAction('add', ${k(L.savedLog)}.replaceAll('{title}', widget.module.title + ' · ' + appStore.displayOf(widget.module.rootSlug, id)), entity: widget.module.rootSlug, rid: id);   // «עשיתי» + החזר (מחיקה)
     Navigator.of(context).pop(true);
   }
   @override

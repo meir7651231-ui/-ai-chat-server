@@ -267,19 +267,28 @@ export function planParticles({ particles, entities, content = [], single = fals
 //   נוסח = פריט-תוכן שתגו = ערך-הבחירה; בלי תג = ברירת-מחדל לכל הערכים. אפס-פרוזה: הטקסט מהספק, הערכים מהרשומה.
 function messageExpr(s, p, k, entity, rid) {
   const strOf = (lbl) => `(r[${k(lbl)}] ?? '')`;
-  const tpl = (text) => {
-    const parts = []; let last = 0;
+  // משפט שבו מציין-מקום ריק — נשמט כולו («ההחלטה שלי: .» לא יוצא מהאפליקציה): לכל משפט-בתבנית ביטוי משלו + ערכיו; ריק ⇒ ''
+  const phExpr = (ph) => {
+    if (ph === G.pValueWord) return strOf(s.field);
+    if (ph.includes('.')) { const [en, fl] = ph.split('.').map((x) => x.trim()); const c = (p.children || []).find((x) => x.name === en); return c ? `appStore.referencing('${c.slug}', ${k(c.link)}, ${rid}).map((c) => (c[${k(fl)}] ?? '')).where((x) => x.trim().isNotEmpty).join(', ')` : k(''); }
+    if (entity.schema.some((f) => f.label === clean(ph))) return strOf(clean(ph));   // clean: אותו נרמול-תווית כמו בסכמה (ספרות/סימנים)
+    return k('');
+  };
+  const sentence = (text) => {
+    const parts = [], vals = []; let last = 0;
     for (const m of text.matchAll(/\{([^}]+)\}/g)) {
       if (m.index > last) parts.push(k(text.slice(last, m.index)));
-      const ph = m[1].trim();
-      if (ph === G.pValueWord) parts.push(strOf(s.field));
-      else if (ph.includes('.')) { const [en, fl] = ph.split('.').map((x) => x.trim()); const c = (p.children || []).find((x) => x.name === en); parts.push(c ? `appStore.referencing('${c.slug}', ${k(c.link)}, ${rid}).map((c) => c[${k(fl)}] ?? '').where((x) => x.trim().isNotEmpty).join(', ')` : k('')); }
-      else if (entity.schema.some((f) => f.label === clean(ph))) parts.push(strOf(clean(ph)));   // clean: אותו נרמול-תווית כמו בסכמה (ספרות/סימנים)
-      else parts.push(k(''));
+      const v = phExpr(m[1].trim()); parts.push(v); vals.push(v);
       last = m.index + m[0].length;
     }
     if (last < text.length) parts.push(k(text.slice(last)));
-    return parts.length ? parts.join(' + ') : k('');
+    const body = parts.length ? parts.join(' + ') : k('');
+    return vals.length ? `([${vals.join(', ')}].any((x) => x.trim().isEmpty) ? '' : (${body}))` : body;
+  };
+  const tpl = (text) => {
+    const sents = text.split(/(?<=[.!?])\s+/).filter((x) => x.trim());
+    if (sents.length <= 1) return sentence(text);
+    return `[${sents.map(sentence).join(', ')}].where((x) => x.trim().isNotEmpty).join(' ')`;
   };
   const def = s.items.find((it) => !it.tag); let expr = def ? tpl(def.text) : k('');
   for (const v of s.values) { const it = s.items.find((x) => x.tag === v); if (it) expr = `(${strOf(s.field)} == ${k(v)} ? (${tpl(it.text)}) : (${expr}))`; }

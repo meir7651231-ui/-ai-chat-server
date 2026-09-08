@@ -53,6 +53,7 @@ export function renderRootPage(slug, { root, children, report, title }) {
     if (rep) blocks.push(rep.call); else notes.push(`${L.rootReport}: ${L.rootNoAction}`);
   }
   if (factRows.length && paper) blocks.push(`DsFold(title: ${k(T('foldLabel', { n: factRows.length }))}, details: [${factRows.join(', ')}])`);
+  if (paper) blocks.push(`((r0['__note'] ?? '').trim().isNotEmpty ? DsFold(title: ${k(L.origText)}, details: [Text(r0['__note'] ?? '', style: TextStyle(color: DsLook.of(context).ink, fontSize: 15, height: 1.5))]) : const SizedBox.shrink())`);   // הטקסט המקורי
   if (paper) blocks.push(`((r0['__doc'] ?? '').startsWith('data:image') ? DsFold(title: ${k(L.docTitle)}, details: [ClipRRect(borderRadius: BorderRadius.circular(12), child: Image.memory(base64Decode((r0['__doc'] ?? '').split(',').last), fit: BoxFit.fitWidth))]) : const SizedBox.shrink())`);   // G33 · מחסנית-מסמכים: הצילום שנשמר עם הרשומה
   const stageSub = root.stages && root.stages.length ? `const [${root.stages.map((s) => k(s)).join(', ')}][appStore.stageOf('${root.slug}', id).clamp(0, ${root.stages.length - 1})]` : k(root.name);
   const cls = clsOf(slug);
@@ -201,7 +202,7 @@ class ${cls}Today {
   static List<Map<String, String>> done() => ${lastStage >= 0 ? `appStore.records('${root.slug}').where((r) => appStore.stageOf('${root.slug}', r[AppStore.idKey] ?? '') >= ${lastStage} && appStore.decision('next:\${r[AppStore.idKey] ?? ''}').isEmpty).toList()` : 'const []'};
 
   // כרטיס-הרשומה (G30): נוסחים · שלח · פתח — ≤2 הקשות
-  static Widget card(BuildContext context, Map<String, String> r) => DsSection(title: ((${dispR}).trim().isEmpty ? ${k(root.name)} : ${dispR}) + ' · ' + ${stageSub}, children: [
+  static Widget card(BuildContext context, Map<String, String> r) => DsSection(title: module + ' · ' + ((${dispR}).trim().isEmpty ? ${k(root.name)} : ${dispR}), trailing: Text(${stageSub}, style: TextStyle(color: DsLook.of(context).muted, fontSize: 13)), children: [
         ${msgW ? `${msgW},` : ''}
         Padding(padding: const EdgeInsets.only(top: 8), child: Row(children: [${isPaper() ? `${sendFn ? `Expanded(child: DsPrimaryButton(label: ${k(L.homeSend)}, onTap: () => send(context, r, r[AppStore.idKey] ?? ''))), const SizedBox(width: 8), ` : ''}DsChipButton(label: ${k(L.homeOpen)}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${rootPage.cls}(id: r[AppStore.idKey] ?? ''))))` : `${sendBtn ? `Expanded(child: ${sendBtn}), const SizedBox(width: 8), ` : ''}${openBtn ? openBtn.call : 'const SizedBox.shrink()'}`}])),
       ]);

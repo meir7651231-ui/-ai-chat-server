@@ -186,7 +186,8 @@ export function perukToSpec(md, ns) {
     if (kind === 'diff' && pairs.length) { extraParticles.push(`${G.particleWord} ${root}: ${o.name} = [${G.pDiff[0]}] ${pairs.map((pr) => `${pr.a} ${G.pairArrow[0]} ${pr.b}${pr.factor ? ` × ${pr.factor}` : ''}`).join('; ')}`); lines.push(`${G.reportWord} ${root}: ${o.name} = ${o.name}`); continue; }
     if (kind === 'number') { const nf = fields.find((f) => f.num && matchField(f.label) && heW(o.name).map(stemOf).some((w) => heW(f.label).map(stemOf).includes(w))); if (nf) { extraParticles.push(`${G.particleWord} ${root}: ${o.name} = [${G.pNumber[0]}] ${nf.label}${o.detail.length ? `: ${q(o.detail[0])}` : ''}`); lines.push(`${G.reportWord} ${root}: ${o.name} = ${o.name}`); continue; } }
     if (kind === 'message' && decisions.length) {
-      const dec = decisions[0]; const tpl = P.messageTemplate.replace(/\{([^}]+)\}/g, (m0, ph) => ph === G.pValueWord || ph.includes('.') ? m0 : (matchField(ph) ? `{${matchField(ph)}}` : ''));
+      // משפט שבו מציין-מקום ללא שדה-תואם נשמט כולו («תשובה עד .» לא ייכתב) — לא נשארת שארית-תבנית
+      const dec = decisions[0]; const tpl = P.messageTemplate.split(/(?<=[.!?])\s+/).map((sent) => { let bad = false; const s2 = sent.replace(/\{([^}]+)\}/g, (m0, ph) => { if (ph === G.pValueWord || ph.includes('.')) return m0; const f = matchField(ph); if (f) return `{${f}}`; bad = true; return ''; }); return bad ? '' : s2; }).filter(Boolean).join(' ');
       content.push({ group: P.messageGroup, tag: null, text: tpl });
       extraParticles.push(`${G.particleWord} ${root}: ${o.name} = [${G.pMessage[0]}] ${dec.label} = [${G.pContent[0]} ${P.messageGroup}]`); lines.push(`${G.reportWord} ${root}: ${o.name} = ${o.name}`); continue;
     }

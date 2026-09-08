@@ -41,9 +41,12 @@ try {
   await page.keyboard.insertText(SENTENCE); await page.waitForTimeout(300); await page.keyboard.press('Enter'); await page.waitForTimeout(1500);
   // «שמור» = הכפתור הראשי בתחתית הטופס: סורקים מלמטה למעלה עד שהרשומה מופיעה (אפס-ידע על מספר-השורות)
   const has = async () => page.evaluate(() => { try { const j = JSON.parse(localStorage.getItem('ds_app_v1') || '{}'); return Object.entries(j.rec || {}).some(([k, v]) => /^app_peruk\d+_ent1$/.test(k) && Array.isArray(v) && v.length > 0); } catch { return false; } });
+  // ההוכחה לעובדות: הפיקדון = 8,000 (הקרוב ל«פיקדון»), לא 6,200 (הראשון); תאריך המפתח = 2026-08-01; הטקסט המקורי נשמר
+  const rec = async () => page.evaluate(() => { try { const j = JSON.parse(localStorage.getItem('ds_app_v1') || '{}'); for (const [k, v] of Object.entries(j.rec || {})) if (/^app_peruk\d+_ent1$/.test(k) && Array.isArray(v) && v.length) return v[0]; } catch {} return null; });
   let saved = false;
   for (const y of [765, 790, 745, 830, 880]) { await page.mouse.click(240, y); await page.waitForTimeout(700); if (await has()) { saved = true; taps++; break; } }
   if (!saved) { res.notes.push('A: הרשומה לא נשמרה (כפתור «שמור» לא נמצא בסריקה)'); } else res.tapsSave = taps;
+  if (saved) { const r = await rec(); const amt = Object.entries(r || {}).find(([k]) => /פיקדון/.test(k) && !/תאריך/.test(k)); const dt = Object.entries(r || {}).find(([k]) => /תאריך/.test(k)); res.facts = { amount: amt ? amt[1] : null, date: dt ? dt[1] : null, note: !!(r && r.__note) }; if (!amt || amt[1] !== '8000') res.notes.push(`A: סכום-הפיקדון ${amt ? amt[1] : '—'} ≠ 8000 (קרבה למילת-השדה)`); if (!dt || dt[1] !== '2026-08-01') res.notes.push(`A: תאריך ${dt ? dt[1] : '—'} ≠ 2026-08-01`); if (!(r && r.__note)) res.notes.push('A: הטקסט המקורי לא נשמר'); }
   if (errs.length) res.notes.push('js: ' + errs.join(' | '));
   // ── B · שלח (רשומה זרועה עם דוח) ──
   const seed = { seq: 9, role: 0, actor: '', rec: { app_peruk02_ent1: [{ __id: '2', 'לקוח': 'רות לוי', 'טלפון': '0521234567', 'סכום הפיקדון': '8000', 'תאריך מסירת מפתח': '2026-09-11', '__stage': '0' }] }, log: [], decided: {}, settings: {} };
@@ -60,7 +63,7 @@ try {
   if (!sent && page2.context().pages().length > 1) sent = true;   // האירוע הוחמץ אבל הדף קיים
   if (process.env.BALAGAN_RUN_DEBUG) { await page2.screenshot({ path: process.env.BALAGAN_RUN_DEBUG }); console.log('B pages:', page2.context().pages().length); }
   if (sent) res.tapsSend = tapsB; else res.notes.push('B: לא נפתח חלון-שליחה');
-  res.ok = saved && sent;
+  res.ok = saved && sent && !res.notes.some((n) => /^A: (סכום|תאריך|הטקסט)/.test(n));
 } finally { await browser.close(); srv.kill(); }
 fs.writeFileSync(OUT, JSON.stringify(res, null, 1));
 const base = fs.existsSync(BASE) ? JSON.parse(fs.readFileSync(BASE, 'utf8')) : null;

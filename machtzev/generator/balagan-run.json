@@ -1,7 +1,12 @@
 {
  "tapsSave": 2,
  "tapsSend": 1,
- "ttiMs": 16070,
+ "ttiMs": 15940,
  "ok": true,
- "notes": []
+ "notes": [],
+ "facts": {
+  "amount": "8000",
+  "date": "2026-08-01",
+  "note": true
+ }
 }
