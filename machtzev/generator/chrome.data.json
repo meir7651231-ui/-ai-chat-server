@@ -225,5 +225,19 @@
  "minAutoLabel": "דקות שנחסכות בהכרעה (לבד / באישורך)",
  "confirmQueue": "אחרי זה: עוד {n} מאותה שורה.",
  "confirmRepeat": "חוזר: {every}. אחרי «סיים» ייווצר הבא לבד.",
- "repeatLog": "↻ נוצר הבא: {title}"
+ "repeatLog": "↻ נוצר הבא: {title}",
+ "searchLabel": "חיפוש בכל התיקים",
+ "searchHint": "שם · טלפון · מילה מהמסמך",
+ "searchTitle": "נמצא ({n})",
+ "searchNone": "לא נמצא. נסה מילה אחרת.",
+ "backupTitle": "גיבוי",
+ "backupCopy": "העתק גיבוי",
+ "backupCopied": "הועתק ({n} תווים). הדבק בהודעה לעצמך או בקובץ.",
+ "backupPasteLabel": "הדבק גיבוי לשחזור",
+ "backupRestore": "שחזר",
+ "backupRestored": "שוחזר: {n} תיקים. הקודם נשמר — «בטל שחזור».",
+ "backupBad": "זה לא גיבוי של בלגן.",
+ "backupUndo": "בטל שחזור",
+ "backupUndone": "חזרנו לנתונים שלפני השחזור.",
+ "backupNote": "הנתונים במכשיר בלבד. גיבוי = טקסט שאתה שומר איפה שנוח. שחזור מחליף הכל, עם ביטול."
 }

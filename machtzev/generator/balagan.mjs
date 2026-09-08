@@ -338,6 +338,7 @@ Map<String, String> balaganFacts(String text, BalaganModule m, {DateTime? today}
     const code = `// 🧭 חולל ע"י balagan (G33 ב׳-ה · הכרעה-29) — הוכחת-עובדות: תאריכים-יחסיים בעברית · צורות-סכום · קרבה-למילת-השדה. היום מוזרק ⇒ דטרמיניסטי. אל תערוך ידנית.
 import 'package:buildsmart/genesis/dart-gen-bs/gen_balagan_moments.dart';
 import 'package:buildsmart/genesis/dart-gen-bs/gen_${baseMod.home.slug}.dart' show ${baseTodayCls};
+import 'package:buildsmart/genesis/dart-ui-bs/ds/ds_store.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -375,6 +376,19 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
     expect(${baseTodayCls}.nextRepeat(DateTime(2026, 9, 8), 'd3'), DateTime(2026, 9, 11));
     expect(${baseTodayCls}.nextRepeat(DateTime(2028, 2, 29), 'y1'), DateTime(2029, 2, 28));
     expect(balaganRepeatLabel('m2'), 'כל חודשיים');
+  });
+  test('גיבוי: ייצוא ⇒ שחזור מחזיר את התיקים · טקסט זר נדחה · חיפוש מוצא בכל שדה', () {
+    final st = AppStore();
+    final id = st.add('x_ent', {'מה': 'לשלם ארנונה', 'טלפון': '0521234567'});
+    final dump = st.exportJson();
+    expect(st.importJson('לא גיבוי'), -1);
+    expect(st.records('x_ent').length, 1);
+    st.add('x_ent', {'מה': 'עוד אחד'});
+    expect(st.importJson(dump), 1);
+    expect(st.records('x_ent').first['מה'], 'לשלם ארנונה');
+    expect(st.search('052').first[1], id);
+    expect(st.search('ארנונה').length, 1);
+    expect(st.search('x'), isEmpty);
   });
   test('פיצול שורה לכמה רגעים', () {
     expect(balaganSplit('שילמתי ארנונה. מחר תור לרופא ב-9:00'), ['שילמתי ארנונה', 'מחר תור לרופא ב-9:00']);
@@ -743,11 +757,29 @@ import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class ${cls} extends StatelessWidget {
+class ${cls} extends StatefulWidget {
   const ${cls}({super.key});
   @override
+  State<${cls}> createState() => _${cls}State();
+}
+
+class _${cls}State extends State<${cls}> {
+  String _paste = '', _note = '';
+  // גיבוי = טקסט (אותו JSON של ההתמדה) שהלקוח שומר איפה שנוח; שחזור מחליף הכל ושומר את הקודם פעם אחת ⇒ «בטל שחזור». אפס-שרת (חוק-6).
+  Future<void> _copy() async { final t = appStore.exportJson(); await Clipboard.setData(ClipboardData(text: t)); setState(() => _note = ${k(L.backupCopied)}.replaceAll('{n}', t.length.toString())); }
+  void _restore() { final n = appStore.importJson(_paste); setState(() { _note = n < 0 ? ${k(L.backupBad)} : ${k(L.backupRestored)}.replaceAll('{n}', n.toString()); if (n >= 0) _paste = ''; }); }
+  void _undo() { final ok = appStore.undoImport(); setState(() => _note = ok ? ${k(L.backupUndone)} : ${k(L.backupBad)}); }
+  @override
   Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, _) => DsScaffold(title: ${k(L.keysTitle)}, subtitle: ${k(L.keysSub)}, icon: ${k('')}, children: [
+    DsSection(title: ${k(L.backupTitle)}, children: [
+      DsPrimaryButton(label: ${k(L.backupCopy)}, onTap: _copy),
+      Padding(padding: const EdgeInsets.only(top: 8), child: DsField(label: ${k(L.backupPasteLabel)}, hint: '{…}', value: _paste, onChanged: (v) => _paste = v)),
+      Padding(padding: const EdgeInsets.only(top: 8), child: Row(children: [DsChipButton(label: ${k(L.backupRestore)}, onTap: _restore), const SizedBox(width: 8), DsChipButton(label: ${k(L.backupUndo)}, onTap: _undo)])),
+      if (_note.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 8), child: DsNote(message: _note, label: '', tone: 0)),
+      Padding(padding: const EdgeInsets.only(top: 8), child: DsNote(message: ${k(L.backupNote)}, label: '', tone: 0)),
+    ]),
     DsField(label: ${k(L.aiKeyLabel)}, hint: ${k(L.aiKeyHint)}, value: appStore.setting('ai.key'), onChanged: (v) => appStore.setSetting('ai.key', v.trim())),
     DsField(label: ${k(L.aiModelLabel)}, hint: ${k(L.aiModelHint)}, value: appStore.setting('ai.model'), onChanged: (v) => appStore.setSetting('ai.model', v.trim())),
     Padding(padding: const EdgeInsets.only(top: 12), child: DsNote(message: ${k(L.keysNote)}, label: '', tone: 0)),
@@ -768,13 +800,34 @@ import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import 'gen_balagan_behavior.dart';
 import 'gen_balagan_keys.dart';
-${mods.map((m) => `import 'gen_${m.root.slug}.dart';`).join('\n')}
+import '../dart-ui-bs/ds/ds_field.dart';
+import '../dart-ui-bs/ds/ds_store.dart';
+${mods.map((m) => `import 'gen_${m.root.slug}.dart';\nimport 'gen_${m.rootPage.slug}.dart';`).join('\n')}
 import 'package:flutter/material.dart';
 
-class ${cls} extends StatelessWidget {
+class ${cls} extends StatefulWidget {
   const ${cls}({super.key});
   @override
-  Widget build(BuildContext context) => DsScaffold(title: ${k(L.topicsTitle)}, subtitle: ${k(L.topicsSub)}, icon: ${k('')}, children: [
+  State<${cls}> createState() => _${cls}State();
+}
+
+class _${cls}State extends State<${cls}> {
+  String _q = '';
+  // חיפוש בכל התיקים (30 מודולים, כל שדה, גם «מה כתבת») ⇒ פתיחת התיק. במכשיר-בלי-מקלדת אין ⌘K — זה המסך.
+  static const Map<String, String> _titleOf = {${mods.map((m) => `'${m.root.slug}': ${dq(m.title)}`).join(', ')}};
+  Widget _open(String entity, String id) {
+    switch (entity) {
+${mods.map((m) => `      case '${m.root.slug}': return ${m.rootPage.cls}(id: id);`).join('\n')}
+      default: return const SizedBox.shrink();
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+    final hits = appStore.search(_q);
+    return DsScaffold(title: ${k(L.topicsTitle)}, subtitle: ${k(L.topicsSub)}, icon: ${k('')}, children: [
+    DsField(label: ${k(L.searchLabel)}, hint: ${k(L.searchHint)}, value: _q, onChanged: (v) => setState(() => _q = v)),
+    if (_q.trim().length >= 2 && hits.isEmpty) Padding(padding: const EdgeInsets.only(top: 8), child: DsNote(message: ${k(L.searchNone)}, label: '', tone: 0)),
+    if (hits.isNotEmpty) DsSection(title: ${k(L.searchTitle)}.replaceAll('{n}', hits.length.toString()), children: [for (final h in hits.take(30)) DsNavTile(glyph: '', title: (_titleOf[h[0]] ?? h[0]) + ' · ' + appStore.displayOf(h[0], h[1]), sub: h[2].length > 60 ? h[2].substring(0, 60) + '…' : h[2], onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => _open(h[0], h[1]))))]),
 ${order.map((t) => `    DsSection(title: ${k(t)}, children: [
 ${mods.filter((m) => m.topic === t).map((m) => `      DsNavTile(glyph: '', title: ${k(m.title)}, sub: ${k(m.moment)}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${m.root.cls}()))),`).join('\n')}
     ]),`).join('\n')}
@@ -783,6 +836,7 @@ ${mods.filter((m) => m.topic === t).map((m) => `      DsNavTile(glyph: '', title
       DsNavTile(glyph: '', title: ${k(L.behaviorTitle)}, sub: ${k(L.behaviorSub)}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${bh.cls}()))),
     ]),
   ]);
+  }
 }
 `;
     write(slug, code, dump());

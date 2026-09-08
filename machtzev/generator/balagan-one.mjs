@@ -77,6 +77,11 @@ for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`));
 if (!/confirmRepeat|__repeat/.test(confirm)) fails.push('טופס-האישור אינו מציג חזרה');
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/'__repeat'/.test(ft) || !/nextRepeat\(/.test(ft) || !/'רות לוי'/.test(ft)) fails.push('בדיקת החזרה/השם-לפני-טלפון המחוללת חסרה'); }
 if (!/balaganStripGrammar\(/.test(moments) || !/balaganTokens\(balaganStripGrammar\(text\)\)/.test(moments)) fails.push('הזיהוי אינו מסיר מילות-דקדוק (תאריך/חזרה/שעה/טלפון)');
+// גל ב׳-ט · חיפוש בכל התיקים (מסך «נושאים») · גיבוי/שחזור/ביטול ב«חיבורים» (טקסט, אפס-שרת)
+{ const topics2 = rd(path.join(GEN, 'gen_balagan_topics.dart')); if (!/appStore\.search\(_q\)/.test(topics2) || !/searchLabel|חיפוש/.test(topics2) || (topics2.match(/case 'app_[a-z0-9]+_ent\d+': return/g) || []).length !== mods.length) fails.push(`«נושאים» בלי חיפוש-בכל-התיקים לכל ${mods.length} המודולים`); }
+if (!/appStore\.exportJson\(\)/.test(keys) || !/appStore\.importJson\(/.test(keys) || !/appStore\.undoImport\(\)/.test(keys) || !/Clipboard\.setData/.test(keys)) fails.push('«חיבורים» בלי גיבוי/שחזור/ביטול');
+{ const st = rd(path.join(R.ROOT, 'new/dart-ui-bs/ds/ds_store.dart')); if (!/String exportJson\(\)/.test(st) || !/int importJson\(String raw\)/.test(st) || !/\.prev'/.test(st) || !/List<List<String>> search\(String q\)/.test(st)) fails.push('AppStore בלי exportJson/importJson/prev/search'); }
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/exportJson\(\)/.test(ft) || !/\.search\(/.test(ft)) fails.push('בדיקת הגיבוי/החיפוש המחוללת חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);
