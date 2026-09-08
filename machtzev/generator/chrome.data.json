@@ -255,5 +255,12 @@
  "waLabel": "וואטסאפ",
  "pasteLabel": "הדבק",
  "sharedNote": "הגיע משיתוף — מזהה…",
- "pasteEmpty": "הלוח ריק."
+ "pasteEmpty": "הלוח ריק.",
+ "navLabel": "ניווט",
+ "shareDay": "שתף את היום",
+ "shareDayTitle": "היום שלי",
+ "shareDayOverdue": "באיחור",
+ "shareDayToday": "היום",
+ "shareDayPlan": "התוכנית",
+ "shareDayCopied": "הועתק. נפתח וואטסאפ לבחירת נמען."
 }

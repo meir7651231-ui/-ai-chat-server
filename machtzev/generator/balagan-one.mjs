@@ -108,6 +108,10 @@ for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`));
 if (!/this\.initialText = ''/.test(ask) || !/Clipboard\.getData\('text\/plain'\)/.test(ask) || !/_paste/.test(ask)) fails.push('«מה קרה?» בלי initialText/הדבק');
 { const shell = rd(path.join(GEN, 'gen_balagan_shell.dart')); if (!/Uri\.base\.queryParameters/.test(shell) || !/initialText: _sharedText\(\)/.test(shell)) fails.push('השלד אינו פותח שיתוף ב«מה קרה?»'); }
 { const mf = path.join(R.ROOT, '..', 'buildsmart', 'app_flutter', 'web', 'manifest.json'); if (fs.existsSync(mf)) { try { const m = JSON.parse(rd(mf)); if (!m.share_target || !m.share_target.params || m.share_target.params.text !== 'text') fails.push('manifest.json בלי share_target'); } catch { fails.push('manifest.json לא נקרא'); } } }
+// גל ב׳-יז · «שתף את היום» (טקסט ⇒ לוח+וואטסאפ) · «ניווט» בתיק-עם-מקום
+if (!/^String balaganDayText\(/m.test(home) || !/wa\.me\/\?text=/.test(home) || !/Clipboard\.setData/.test(home)) fails.push('«היום» בלי «שתף את היום»');
+{ const withLoc = mods.filter((m) => m.root.fields.some((f) => /מקום|כתובת|מיקום/.test(f.label))); for (const m of withLoc) { const rp = rd(path.join(GEN, `gen_${m.rootPage.slug}.dart`)); if (!/maps\.google\.com\/\?q=/.test(rp)) { fails.push(`${m.ns}: תיק-עם-מקום בלי «ניווט»`); break; } } if (!withLoc.length) fails.push('אין מודול עם מקום (צפוי ≥1: יומן)'); }
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganDayText\(/.test(ft)) fails.push('בדיקת «שתף את היום» חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);
