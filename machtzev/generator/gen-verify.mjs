@@ -23,7 +23,9 @@ if (!fs.existsSync(path.join(BS, 'pubspec.yaml'))) { console.log(`⚪ genverify:
 
 // פלטי-מחולל עם מסך ציבורי (subset/composite/retarget) — לא מסכי-הזהב הידניים
 const files = fs.readdirSync(DIR).filter((f) => /^gen_.*\.dart$/.test(f) && (!only || only.includes(f))).filter((f) => /^class \w+Screen extends StatefulWidget/m.test(fs.readFileSync(path.join(DIR, f), 'utf8')));
-const screens = files.map((f) => ({ file: f, cls: fs.readFileSync(path.join(DIR, f), 'utf8').match(/^class (\w+Screen) extends StatefulWidget/m)[1] }));
+// G33 · מסך שהבנאי שלו דורש פרמטר (required this.x, בלי ברירת-מחדל) אינו מסך-כניסה — הוא נרנדר דרך הורה (למשל gen_balagan_confirm: module+facts). לא מומצא ארגומנט; מדולג ומדווח.
+const needsArgs = (src, cls) => { const m = src.match(new RegExp('const ' + cls + '\\(\\{([^}]*)\\}')); return !!(m && /\brequired\b/.test(m[1])); };
+const screens = files.map((f) => { const src = fs.readFileSync(path.join(DIR, f), 'utf8'); const cls = src.match(/^class (\w+Screen) extends StatefulWidget/m)[1]; return { file: f, cls, args: needsArgs(src, cls) }; }).filter((s) => { if (s.args) console.log(`⚪ ${s.file}: ${s.cls} דורש פרמטרים — נרנדר דרך הורה, מדולג`); return !s.args; });
 if (!screens.length) { console.log('⚪ genverify: אין פלטי-מחולל עם מסך'); process.exit(0); }
 // המראה חייב להיות ≡ המקור (סחף-מראה = כשל, כמו ברתמת-הזהב)
 const drift = screens.filter((s) => { const m = path.join(BS, 'lib/genesis/dart-gen-bs', s.file); return !fs.existsSync(m) || fs.readFileSync(m, 'utf8') !== fs.readFileSync(path.join(DIR, s.file), 'utf8'); }).map((s) => s.file);
