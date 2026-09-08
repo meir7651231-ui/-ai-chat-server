@@ -101,6 +101,9 @@ if (!/\.split\('\|'\)\) DsChipButton\(label: ex/.test(ask) || !/_c\.text = ex; _
 // גל ב׳-יד · «התקשר»/«וואטסאפ» בתיק עם טלפון · כרטיסים לפי דחיפות
 { const withPhone = mods.filter((m) => m.root.fields.some((f) => /טלפון|נייד/.test(f.label))); for (const m of withPhone) { const rp = rd(path.join(GEN, `gen_${m.rootPage.slug}.dart`)); if (!/wa\.me\//.test(rp) || !/'tel:'/.test(rp)) { fails.push(`${m.ns}: תיק-עם-טלפון בלי התקשר/וואטסאפ`); break; } } if (!withPhone.length) fails.push('אין מודול עם טלפון (צפוי 28)'); }
 if (!/final dueOf = <String, DateTime>\{\}/.test(home) || !/cardRows\.sort/.test(home)) fails.push('«היום»: הכרטיסים לא לפי דחיפות');
+// גל ב׳-טו · סכום קריא (8,000) בתיק · שדה-תאריך יחיד ⇒ כותרת בלי תווית
+{ const withNum = mods.filter((m) => m.root.fields.some((f) => f.type === 'num')); for (const m of withNum) { const rp = rd(path.join(GEN, `gen_${m.rootPage.slug}.dart`)); if (!/_fmtNum\(r0\[/.test(rp)) { fails.push(`${m.ns}: סכום בתיק בלי מפריד-אלפים`); break; } } }
+for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/_mk\(_dates\.length == 1 \? who :/.test(h)) { fails.push(`${m.ns}: כותרת-שורה עם תווית גם כשיש תאריך יחיד`); break; } }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);
