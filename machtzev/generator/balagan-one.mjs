@@ -128,6 +128,10 @@ if (!/voiceListen\('he-IL'\)/.test(ask) || !/voiceSupported/.test(ask)) fails.pu
 for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/_shift\(due\.add\(const Duration\(days: 1\)\), false\)/.test(h)) { fails.push(`${m.ns}: «דחה למחר» נוחת בשבת`); break; } }
 // גל ב׳-כב · «דבר» גם במסך-הראשון
 if (!/voiceListen\('he-IL'\)/.test(home)) fails.push('«היום» בלי «דבר» ליד השורה-המהירה');
+// גל ב׳-כג · חלקי-יום (בבוקר/בערב ⇒ שעה) · «שתף» בתיק של מודול-בלי-דוח
+if (!/בבוקר/.test(moments) || !/'בערב': '19:00'/.test(moments) || !/hasDate && hits\.first\.module\.dateFields\.isEmpty/.test(moments)) fails.push('balaganTimes בלי חלקי-יום / הזיהוי מתעלם מתאריך-בלי-שדה');
+{ const noRep = mods.filter((m) => !m.report); for (const m of noRep) { const rp = rd(path.join(GEN, `gen_${m.rootPage.slug}.dart`)); if (!/wa\.me\/\?text=/.test(rp)) { fails.push(`${m.ns}: תיק-בלי-דוח בלי «שתף»`); break; } } if (!noRep.length) fails.push('אין מודול בלי דוח (צפוי: משימות/יומן)'); }
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/בבוקר/.test(ft)) fails.push('בדיקת חלקי-יום חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);

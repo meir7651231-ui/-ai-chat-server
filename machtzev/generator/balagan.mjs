@@ -144,7 +144,9 @@ List<BalaganHit> balaganIdentify(String text, {int k = 3}) {
   for (final m in kBalaganModules) { var s = 0.0; for (final t in toks) { s += m.weights[t] ?? 0; } if (s > 0) hits.add(BalaganHit(m, s)); }
   hits.sort((a, b) { final c = b.score.compareTo(a.score); return c != 0 ? c : a.module.index.compareTo(b.module.index); });
   // רגע כללי (אין מודול שמזהה אותו בביטחון) ⇒ שכבת-הבסיס ראשונה: הבסיס עם הציון-הגבוה, ואם אין — הכללי-ביותר (הכי-פחות שדות-חובה: משימה לפני פגישה). המודולים החלשים נשארים כחלופות («לא זה? אולי»).
-  final weak = hits.isEmpty || hits.first.score / hits.first.module.selfScore < kBalaganWeak;
+  // רגע עם תאריך שהמודול-שנבחר אינו יכול להחזיק (אין לו שדה-תאריך) — «מחר בבוקר תור לרופא» ⇒ יומן, לא «תור שבוטל»; המודול נשאר חלופה
+  final hasDate = balaganDates(balaganWaStrip(text), DateTime.now()).isNotEmpty;
+  final weak = hits.isEmpty || hits.first.score / hits.first.module.selfScore < kBalaganWeak || (hasDate && hits.first.module.dateFields.isEmpty);
   if (weak) {
     final base = kBalaganModules.where((m) => m.layer == 'base').toList();
     if (base.isNotEmpty) {
@@ -197,6 +199,9 @@ List<_DateAt> balaganDates(String text, DateTime today) {
 List<_DateAt> balaganTimes(String text) {
   final out = <_DateAt>[];
   for (final x in RegExp(r'(?:ב-?)?(?<![\\d:])(\\d{1,2}):(\\d{2})(?![\\d:])').allMatches(text)) { final h = int.parse(x.group(1)!), mi = int.parse(x.group(2)!); if (h > 23 || mi > 59) continue; out.add(_DateAt(x.start, x.end, '\${h.toString().padLeft(2, '0')}:\${mi.toString().padLeft(2, '0')}')); }
+  // חלקי-יום (שפה, לא דומיין): בבוקר 09:00 · בצהריים 13:00 · אחה"צ 16:00 · בערב 19:00 · בלילה 21:00 — רק כשאין שעה מפורשת באותו טווח
+  const dayParts = {'בבוקר': '09:00', 'בצהריים': '13:00', 'אחה"צ': '16:00', 'אחר הצהריים': '16:00', 'אחרי הצהריים': '16:00', 'בערב': '19:00', 'בלילה': '21:00'};
+  for (final x in RegExp(r'(?<![\\u0590-\\u05FF])(בבוקר|בצהריים|אחה"צ|אחר הצהריים|אחרי הצהריים|בערב|בלילה)(?![\\u0590-\\u05FF])').allMatches(text)) { if (out.any((o) => x.start < o.end && x.end > o.start)) continue; out.add(_DateAt(x.start, x.end, dayParts[x.group(1)!]!)); }
   for (final x in RegExp(r'בשעה\\s+(\\d{1,2})(?![\\d:])').allMatches(text)) { final h = int.parse(x.group(1)!); if (h > 23) continue; if (out.any((o) => x.start < o.end && x.end > o.start)) continue; out.add(_DateAt(x.start, x.end, '\${h.toString().padLeft(2, '0')}:00')); }
   out.sort((a, b) => a.start.compareTo(b.start));
   return out;
@@ -398,6 +403,8 @@ Map<String, String> balaganFacts(String text0, BalaganModule m, {DateTime? today
       ['רות לוי 052-123-4567 המשכיר עדיין לא החזיר', [], [], { 'לקוח': 'רות לוי', 'טלפון': '0521234567' }, { ph: ['טלפון'], pe: ['לקוח'], desc: 'לקוח' }],
       ['[8.9.2026, 16:30] דני: מחר ב-9:00 אצל הרופא', ['מועד'], [], { 'מועד': '2026-09-09', 'שעה': '09:00', 'לקוח': 'הרופא', 'מה': 'אצל הרופא' }, { tm: ['שעה'], pe: ['לקוח'] }],
       ['[8.9.2026, 16:30] דני: מחר ב-9:00 פגישה', ['מועד'], [], { 'מועד': '2026-09-09', 'שעה': '09:00', 'לקוח': 'דני', 'מה': 'פגישה' }, { tm: ['שעה'], pe: ['לקוח'] }],
+      ['מחר בבוקר תור לרופא', ['מועד'], [], { 'מועד': '2026-09-09', 'שעה': '09:00', 'מה': 'תור לרופא' }, { tm: ['שעה'] }],
+      ['בערב פגישה עם דני', ['מועד'], [], { 'שעה': '19:00', 'מה': 'פגישה עם דני' }, { tm: ['שעה'] }],
       ['8.9.26, 16:30 - רות לוי: מסרתי מפתח ב-1.8.2026', ['תאריך מסירת מפתח'], [], { 'תאריך מסירת מפתח': '2026-08-01', 'לקוח': 'רות לוי' }, { pe: ['לקוח'] }],
     ];
     const baseMod = mods.find((m) => m.layer === 'base') || mods[0]; const baseTodayCls = baseMod.home.cls + 'Today';
@@ -433,6 +440,10 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
     final h = balaganIdentify('המשכיר מקזז 6,200 מהפיקדון של 8,000, מסרתי מפתח');
     expect(h.first.module.layer, isNot('base'));
     expect(h.first.score / h.first.module.selfScore >= kBalaganWeak, isTrue);
+  });
+  test('תאריך שהמודול לא יכול להחזיק ⇒ הבסיס; בלי תאריך המודול נשאר', () {
+    final a = balaganIdentify('מחר בבוקר תור לרופא'); expect(a.first.module.layer, 'base'); expect(a.first.module.timeFields, isNotEmpty); expect(a.any((h) => h.module.layer != 'base'), isTrue);
+    final b = balaganIdentify('תור לרופא'); expect(b.first.module.layer, isNot('base'));
   });
   test('שעה + רגע כללי ⇒ הבסיס עם שדה-שעה (פגישה), לא משימה', () {
     final h = balaganIdentify('מחר ב-9:00 עם דני');

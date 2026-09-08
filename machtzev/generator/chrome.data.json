@@ -272,5 +272,6 @@
  "voiceLabel": "דבר",
  "voiceListening": "מקשיב… דבר עכשיו.",
  "voiceNone": "לא שמעתי. נסה שוב, או כתוב.",
- "voiceUnsupported": "הדפדפן הזה בלי זיהוי-דיבור. כתוב או הדבק."
+ "voiceUnsupported": "הדפדפן הזה בלי זיהוי-דיבור. כתוב או הדבק.",
+ "shareLabel": "שתף"
 }
