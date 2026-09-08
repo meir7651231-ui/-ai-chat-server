@@ -41,6 +41,12 @@ if (!/DsFold\(/.test(confirm) || !/appStore\.add\(widget\.module\.rootSlug/.test
 if (!/GenBalaganConfirmScreen\(module:/.test(ask)) fails.push('«מה קרה?» אינו פותח את טופס-האישור');
 const baseMods = mods.filter((m) => m.layer === 'base');
 if (baseMods.length < 2 || !baseMods.every((m) => m.root.fields.some((f) => f.type === 'date'))) fails.push(`שכבת-הבסיס: ${baseMods.length} מודולים (נדרש ≥2 עם תאריך: משימות · יומן)`);
+// גל ב׳-ב · «הגיע» (שקע-מייל בטוקן-הלקוח) · שרשרת חוצת-מודולים · «ליומן» (קישור, אפס-מפתח) · הצעד-הבא על רשומות-שנסגרו (לא רק open)
+if (!/dsMailRecent\(/.test(home) || !/decision\('mail:/.test(home) || !/balaganIdentify\(m\.subject/.test(home)) fails.push('«היום» בלי שקע-מייל (הגיע ⇒ זיהוי ⇒ הצעה)');
+if (!/_chain\(context\)/.test(home) || !/\.done\(\)/.test(home) || !/bm\.chain\.first/.test(home)) fails.push('«היום» בלי שרשרת חוצת-מודולים');
+if (!/appStore\.setting\('mail\.token'\)/.test(keys)) fails.push('«חיבורים» בלי טוקן-מייל');
+const mailSrc = rd(path.join(R.ROOT, 'new/dart-ui-bs/ds/ds_mail.dart')); if (/ya29\.[A-Za-z0-9_-]{20,}/.test(mailSrc + keys + home)) fails.push('טוקן ליטרלי בקוד');
+for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/calendar\.google\.com\/calendar\/render/.test(h)) fails.push(`${m.ns}: בלי «ליומן»`); if (m.chain && m.chain.length && m.root.stages && m.root.stages.length && !/static List<Map<String, String>> done\(\) => appStore\.records/.test(h)) fails.push(`${m.ns}: הצעד-הבא לא על רשומות-שנסגרו`); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);

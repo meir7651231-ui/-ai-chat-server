@@ -84,7 +84,7 @@ ${blocks.map((b) => `      Padding(padding: const EdgeInsets.only(bottom: 12), c
 //    ≤2 הקשות מהמסך-הראשי לפעולה-הראשית (בחר-נוסח + שלח), אפס-הקלדה. הכל מחלקיקים קיימים (message · export) — אין קוד-דומייני.
 export function renderHome(slug, { root, rootPage, report, message, title, chain = [], appTitle = '' }) {   // G33 · appTitle = שם-המודול ב«היום» המאוחד   // G32 · chain = השרשרת מהפירוק (צעד-הבא בשלב-האחרון)
   const { k, dump } = makeConsts(slug);
-  const imports = new Set([`import 'gen_${rootPage.slug}.dart';`, `import '../dart-data-bs/auto/gen_${slug}_content.dart';`, `import '../dart-ui-bs/ds/ds.dart';`, `import '../dart-ui-bs/ds/ds_store.dart';`]);   // G32 · קבוצה אחת ⇒ אין כפל-ייבוא
+  const imports = new Set([`import 'gen_${rootPage.slug}.dart';`, `import '../dart-data-bs/auto/gen_${slug}_content.dart';`, `import '../dart-ui-bs/ds/ds.dart';`, `import '../dart-ui-bs/ds/ds_store.dart';`, `import 'package:url_launcher/url_launcher.dart';`]);   // G32 · קבוצה אחת ⇒ אין כפל-ייבוא
   const firstWired = (pick, ctx) => { const w = pickWired([...pick.atoms, ...pick.alts], (c) => wireAtom(c, ctx)); if (w) imports.add(impOf(w)); return w; };
   const notes = [];
   const disp = root.descField ? `(r[${k(root.descField)}] ?? '')` : `appStore.displayOf('${root.slug}', r[AppStore.idKey] ?? '')`;
@@ -142,13 +142,14 @@ class ${cls}Today {
   static List<Map<String, String>> open() => ${openRecs};${sendFn2}
 
   static DsTodayItem _mk(String title, String sub, String rid, String field, DateTime d, bool hard, bool overdue, DateTime today) {
-    final acts = overdue ? [${k(L.actDone)}, ${k(L.actSnooze)}, ${k(L.actIgnore)}] : (d == today ? [${k(L.actDone)}] : [${k(L.actDone)}, ${k(L.actSnooze)}]);   // P4 · ביום-ההכרעה אין דחייה
+    final acts = overdue ? [${k(L.actDone)}, ${k(L.actSnooze)}, ${k(L.actIgnore)}] : (d == today ? [${k(L.actDone)}, ${k(L.actCal)}] : [${k(L.actDone)}, ${k(L.actSnooze)}, ${k(L.actCal)}]);   // P4 · ביום-ההכרעה אין דחייה · «ליומן» = קישור-יומן, אפס-מפתח
     return DsTodayItem(title: title, sub: sub, rid: rid, field: field, due: d, hard: hard, overdue: overdue, module: module, actions: acts, act: (i) => _act(rid, field, d, acts, i));
   }
   static void _act(String rid, String field, DateTime due, List<String> acts, int i) {
     final a = acts[i.clamp(0, acts.length - 1)];
     if (a == ${k(L.actDone)}) { ${lastStage >= 0 ? `appStore.advance('${root.slug}', rid, ${lastStage + 1});` : `appStore.decide('ign:\$rid:\$field', 'no');`} }
     else if (a == ${k(L.actSnooze)}) { final r = appStore.byId('${root.slug}', rid); if (r != null) { final prev = r[field] ?? ''; appStore.update('${root.slug}', rid, {field: _iso(due.add(const Duration(days: 1)))}); appStore.logAction('auto', ${k(L.actSnooze)} + ' · ' + field, entity: '${root.slug}', rid: rid, field: field, prev: prev); } }   // נגיעה-ידנית (P5) — נרשמת עם החזר
+    else if (a == ${k(L.actCal)}) { final d = _iso(due).replaceAll('-', ''); launchUrl(Uri.parse('https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + Uri.encodeComponent(field + ' · ' + appStore.displayOf('${root.slug}', rid)) + '&dates=' + d + '/' + d), mode: LaunchMode.externalApplication); }
     else { appStore.decide('ign:\$rid:\$field', 'no'); }
   }
 
@@ -173,7 +174,7 @@ class ${cls}Today {
   }
 
   // P11/P13 · הצעות: תזכורת לכל תאריך שטרם הוכרע · צעד-הבא בשלב-האחרון (P14) · תזכורת-אחרי-שליחה (P12) — הכל עם קטע-המקור
-  static List<Widget> proposals(BuildContext context, DateTime today) {
+  static List<Widget> proposals(BuildContext context, DateTime today, {bool chain = true}) {   // chain=false: «בלגן» מרנדר את כרטיס-הצעד-הבא בעצמו (חוצה-מודולים)
     final out = <Widget>[];
     final days = _offsets().map((o) => '−\$o').join('/');
     for (final r in open()) {
@@ -187,10 +188,15 @@ class ${cls}Today {
       }
       ${sendFn ? `final last = appStore.lastLog('send', rid);   // P12 · טיוטה, לא שליחה: אחרי 3 ימים בלי שינוי-שלב ⇒ הצעה; השליחה עצמה רק בהקשה (T5)
       if (last != null && appStore.decision('fu:\$rid:\${last['id']}').isEmpty) { final at = DateTime.tryParse(last['at'] ?? ''); final n = at == null ? 0 : today.difference(_day(at)).inDays; if (n >= 3 && (last['prev'] ?? '') == appStore.stageOf('${root.slug}', rid).toString()) out.add(DsApproveCard(question: ${k(L.followAsk)}.replaceAll('{n}', n.toString()), source: module + ' · ' + who, okLabel: ${k(L.homeSend)}, noLabel: ${k(L.actNo)}, onOk: () { appStore.decide('fu:\$rid:\${last['id']}', 'ok'); send(context, r, rid); }, onNo: () => appStore.decide('fu:\$rid:\${last['id']}', 'no'))); }` : ''}
-      ${nextName && lastStage >= 0 ? `if (appStore.stageOf('${root.slug}', rid) >= ${lastStage} && appStore.decision('next:\$rid').isEmpty) out.add(DsApproveCard(question: ${k(L.nextAsk)}.replaceAll('{next}', ${nextName}), source: module + ' · ' + who, okLabel: ${k(L.actOk)}, noLabel: ${k(L.actNo)}, onOk: () { appStore.decide('next:\$rid', 'ok'); appStore.logAction('next', ${k(L.nextDid)}.replaceAll('{next}', ${nextName}), entity: '${root.slug}', rid: rid, field: 'next:\$rid'); }, onNo: () => appStore.decide('next:\$rid', 'no')));` : ''}
     }
+    ${nextName && lastStage >= 0 ? `if (chain) for (final r in appStore.records('${root.slug}')) {   // P14 · הצעד-הבא: רשומה שהגיעה לשלב-האחרון (סגורה — לא ב-open) ובלי הכרעה
+      final rid = r[AppStore.idKey] ?? ''; final who = appStore.displayOf('${root.slug}', rid);
+      if (appStore.stageOf('${root.slug}', rid) >= ${lastStage} && appStore.decision('next:\$rid').isEmpty) out.add(DsApproveCard(question: ${k(L.nextAsk)}.replaceAll('{next}', ${nextName}), source: module + ' · ' + who, okLabel: ${k(L.actOk)}, noLabel: ${k(L.actNo)}, onOk: () { appStore.decide('next:\$rid', 'ok'); appStore.logAction('next', ${k(L.nextDid)}.replaceAll('{next}', ${nextName}), entity: '${root.slug}', rid: rid, field: 'next:\$rid'); }, onNo: () => appStore.decide('next:\$rid', 'no')));
+    }` : ''}
     return out;
   }
+  /// רשומות שהגיעו לשלב-האחרון ובלי הכרעת-צעד-הבא — ל«בלגן» (שרשרת חוצת-מודולים)
+  static List<Map<String, String>> done() => ${lastStage >= 0 ? `appStore.records('${root.slug}').where((r) => appStore.stageOf('${root.slug}', r[AppStore.idKey] ?? '') >= ${lastStage} && appStore.decision('next:\${r[AppStore.idKey] ?? ''}').isEmpty).toList()` : 'const []'};
 
   // כרטיס-הרשומה (G30): נוסחים · שלח · פתח — ≤2 הקשות
   static Widget card(BuildContext context, Map<String, String> r) => DsSection(title: ((${dispR}).trim().isEmpty ? ${k(root.name)} : ${dispR}) + ' · ' + ${stageSub}, children: [

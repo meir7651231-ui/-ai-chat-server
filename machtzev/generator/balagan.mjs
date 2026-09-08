@@ -94,13 +94,13 @@ export function buildBalagan() {
     const code = `// 🧭 חולל ע"י balagan (G33 · הכרעה-29) — מזהה-הרגע: TF-IDF דטרמיניסטי מ-${mods.length} מסמכי-פירוק (כותרת+«הרגע» ×3). אפס-בינה, אפס-מילון. אל תערוך ידנית.
 class BalaganField { const BalaganField(this.label, this.type, this.required, this.options); final String label, type; final bool required; final List<String> options; }
 class BalaganModule {
-  const BalaganModule(this.index, this.ns, this.title, this.moment, this.topic, this.weights, this.dateFields, this.numFields, this.descField, this.longField, this.rootSlug, this.fields, this.stages);
-  final int index; final String ns, title, moment, topic, rootSlug; final Map<String, double> weights; final List<String> dateFields, numFields; final String descField, longField; final List<BalaganField> fields; final int stages;
+  const BalaganModule(this.index, this.ns, this.title, this.moment, this.topic, this.weights, this.dateFields, this.numFields, this.descField, this.longField, this.rootSlug, this.fields, this.stages, this.chain);
+  final int index; final String ns, title, moment, topic, rootSlug; final Map<String, double> weights; final List<String> dateFields, numFields; final String descField, longField; final List<BalaganField> fields; final int stages; final List<String> chain;
 }
 class BalaganHit { const BalaganHit(this.module, this.score); final BalaganModule module; final double score; }
 
 const List<BalaganModule> kBalaganModules = [
-${mods.map((m, i) => `  BalaganModule(${i}, '${m.ns}', ${dq(m.title)}, ${dq(m.moment)}, ${dq(m.topic)}, {${Object.entries(ident[i].weights).map(([v, s]) => `${dq(v)}: ${s}`).join(', ')}}, [${m.root.fields.filter((f) => f.type === 'date').map((f) => dq(f.label)).join(', ')}], [${m.root.fields.filter((f) => f.type === 'num').map((f) => dq(f.label)).join(', ')}], ${dq(m.root.descField || '')}, ${dq((m.root.fields.find((f) => f.type === 'multiline') || {}).label || '')}, '${m.root.slug}', [${m.root.fields.map((f) => `BalaganField(${dq(f.label)}, '${f.type}', ${f.required ? 'true' : 'false'}, [${(f.enumVals || []).map(dq).join(', ')}])`).join(', ')}], ${(m.root.stages || []).length}),`).join('\n')}
+${mods.map((m, i) => `  BalaganModule(${i}, '${m.ns}', ${dq(m.title)}, ${dq(m.moment)}, ${dq(m.topic)}, {${Object.entries(ident[i].weights).map(([v, s]) => `${dq(v)}: ${s}`).join(', ')}}, [${m.root.fields.filter((f) => f.type === 'date').map((f) => dq(f.label)).join(', ')}], [${m.root.fields.filter((f) => f.type === 'num').map((f) => dq(f.label)).join(', ')}], ${dq(m.root.descField || '')}, ${dq((m.root.fields.find((f) => f.type === 'multiline') || {}).label || '')}, '${m.root.slug}', [${m.root.fields.map((f) => `BalaganField(${dq(f.label)}, '${f.type}', ${f.required ? 'true' : 'false'}, [${(f.enumVals || []).map(dq).join(', ')}])`).join(', ')}], ${(m.root.stages || []).length}, [${(m.chain || []).map(dq).join(', ')}]),`).join('\n')}
 ];
 
 String _definal(String w) => w.replaceAll(RegExp(r'ך\$'), 'כ').replaceAll(RegExp(r'ם\$'), 'מ').replaceAll(RegExp(r'ן\$'), 'נ').replaceAll(RegExp(r'ף\$'), 'פ').replaceAll(RegExp(r'ץ\$'), 'צ');
@@ -145,7 +145,10 @@ Map<String, String> balaganFacts(String text, BalaganModule m) {
     const code = `// 🧭 חולל ע"י balagan (G33 · הכרעה-29) — «היום» של בלגן: מיזוג ספקי-ה-Today של ${mods.length} מודולים — באיחור ראשון · היום · הרשומות הפתוחות (3 למעלה, השאר מקופל) · ממתין-לאישורך · עשיתי-לבד · מחר. אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
+import '../dart-ui-bs/ds/ds_mail.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
+import 'gen_balagan_confirm.dart';
+import 'gen_balagan_moments.dart';
 ${mods.map((m) => `import 'gen_${m.home.slug}.dart';`).join('\n')}
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -154,7 +157,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 typedef _Items = List<DsTodayItem> Function(DateTime today, {required int dayDelta});
 typedef _Props = List<Widget> Function(BuildContext context, DateTime today);
 typedef _Card = Widget Function(BuildContext context, Map<String, String> r);
-class _Mod { const _Mod(this.name, this.open, this.items, this.proposals, this.card, this.autopilot); final String name; final List<Map<String, String>> Function() open; final _Items items; final _Props proposals; final _Card card; final void Function() autopilot; }
+typedef _Props2 = List<Widget> Function(BuildContext context, DateTime today, {bool chain});
+class _Mod { const _Mod(this.name, this.open, this.items, this.proposals, this.card, this.autopilot, this.done, this.index); final String name; final List<Map<String, String>> Function() open; final _Items items; final _Props2 proposals; final _Card card; final void Function() autopilot; final List<Map<String, String>> Function() done; final int index; }
 
 class ${cls} extends StatefulWidget {
   const ${cls}({super.key});
@@ -164,7 +168,7 @@ class ${cls} extends StatefulWidget {
 
 class _${cls}State extends State<${cls}> {
   static const _mods = <_Mod>[
-${mods.map((m) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${todayCls(m)}.items, ${todayCls(m)}.proposals, ${todayCls(m)}.card, ${todayCls(m)}.autopilot),`).join('\n')}
+${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${todayCls(m)}.items, ${todayCls(m)}.proposals, ${todayCls(m)}.card, ${todayCls(m)}.autopilot, ${todayCls(m)}.done, ${i}),`).join('\n')}
   ];
   static DateTime _day(DateTime d) => DateTime(d.year, d.month, d.day);
   static String _iso(DateTime d) => d.toIso8601String().substring(0, 10);
@@ -182,8 +186,45 @@ ${mods.map((m) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${todayC
     } catch (_) {}
   }
   void _autopilotAll() { for (final m in _mods) { m.autopilot(); } }
+  // «הגיע» — שקע-המייל (טוקן-הלקוח, חוק-6): פעם בפתיחה; כל מכתב שטרם הוכרע ⇒ זיהוי-הרגע ⇒ הצעה. בלי טוקן ⇒ כלום. כשל ⇒ שורה אחת כנה.
+  List<DsMailItem> _mail = const []; bool _mailTried = false; String _mailNote = '';
+  Future<void> _fetchMail() async {
+    if (_mailTried) return; _mailTried = true;
+    final tok = appStore.setting('mail.token'); if (tok.isEmpty) return;
+    final r = await dsMailRecent(token: tok, query: appStore.setting('mail.query', 'newer_than:7d'));
+    if (!mounted) return;
+    setState(() { if (r == null) { _mailNote = ${k(L.mailFail)}; } else { _mail = r; } });
+  }
+  List<Widget> _inbox(BuildContext context) {
+    final out = <Widget>[];
+    for (final m in _mail) {
+      if (appStore.decision('mail:\${m.id}').isNotEmpty) continue;
+      final hits = balaganIdentify(m.subject + ' ' + m.snippet, k: 1); if (hits.isEmpty) continue;
+      final mod = hits.first.module;
+      out.add(DsApproveCard(question: ${k(L.inboxAsk)}.replaceAll('{subject}', m.subject).replaceAll('{module}', mod.title), source: ${k(L.inboxFrom)}.replaceAll('{from}', m.from).replaceAll('{date}', m.date), okLabel: ${k(L.askOpen)}, noLabel: ${k(L.actNo)},
+        onOk: () { appStore.decide('mail:\${m.id}', 'ok'); final facts = balaganFacts(m.subject + ' · ' + m.snippet, mod); Navigator.of(context).push<bool>(MaterialPageRoute<bool>(builder: (_) => ${clsOf('balagan_confirm')}(module: mod, facts: facts))); },
+        onNo: () => appStore.decide('mail:\${m.id}', 'no')));
+    }
+    return out;
+  }
+  // שרשרת חוצת-מודולים: רשומה שנסגרה ⇒ הצעד-הבא (שם מהפירוק) מזוהה כמודול ⇒ «להתחיל עכשיו?» ⇒ טופס-האישור של המודול השני (הזיכרון ממלא)
+  List<Widget> _chain(BuildContext context) {
+    final out = <Widget>[];
+    for (final m in _mods) {
+      final bm = kBalaganModules[m.index]; if (bm.chain.isEmpty) continue;
+      for (final r in m.done()) {
+        final rid = r[AppStore.idKey] ?? '';
+        final hits = balaganIdentify(bm.chain.first, k: 1); if (hits.isEmpty || hits.first.module.index == m.index) continue;
+        final to = hits.first.module;
+        out.add(DsApproveCard(question: ${k(L.chainAsk)}.replaceAll('{from}', bm.title).replaceAll('{to}', to.title), source: bm.title + ' · ' + appStore.displayOf(bm.rootSlug, rid), okLabel: ${k(L.actOk)}, noLabel: ${k(L.actNo)},
+          onOk: () { appStore.decide('next:\$rid', 'ok'); appStore.logAction('next', ${k(L.chainDid)}.replaceAll('{to}', to.title).replaceAll('{from}', bm.title), entity: bm.rootSlug, rid: rid, field: 'next:\$rid'); Navigator.of(context).push<bool>(MaterialPageRoute<bool>(builder: (_) => ${clsOf('balagan_confirm')}(module: to, facts: const {}))); },
+          onNo: () => appStore.decide('next:\$rid', 'no')));
+      }
+    }
+    return out;
+  }
   @override
-  void initState() { super.initState(); WidgetsBinding.instance.addPostFrameCallback((_) { _autopilotAll(); }); appStore.addListener(_onStore); }
+  void initState() { super.initState(); WidgetsBinding.instance.addPostFrameCallback((_) { _autopilotAll(); _fetchMail(); }); appStore.addListener(_onStore); }
   void _onStore() { WidgetsBinding.instance.addPostFrameCallback((_) { if (mounted) _autopilotAll(); }); }
   @override
   void dispose() { appStore.removeListener(_onStore); super.dispose(); }
@@ -195,7 +236,7 @@ ${mods.map((m) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${todayC
     final overdue = all0.where((x) => x.overdue).toList();
     final todayItems = all0.where((x) => !x.overdue).toList();
     final tomorrow = <DsTodayItem>[for (final m in _mods) ...m.items(today, dayDelta: 1)]..sort((a, b) => a.due.compareTo(b.due));
-    final pending = <Widget>[for (final m in _mods) ...m.proposals(context, today)];
+    final pending = <Widget>[..._inbox(context), ..._chain(context), for (final m in _mods) ...m.proposals(context, today, chain: false)];
     final cards = <Widget>[for (final m in _mods) for (final r in m.open()) m.card(context, r)];
     final did = appStore.log.where((e) => (e['kind'] == 'decide' || e['kind'] == 'auto' || e['kind'] == 'next') && e['undone'] != '1').take(5).toList();
     final n = overdue.length + todayItems.length + pending.length;
@@ -211,7 +252,8 @@ ${mods.map((m) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${todayC
       if (todayItems.isNotEmpty) DsSection(title: ${k(L.homeToday)}, children: [for (final it in todayItems) DsActionRow(title: it.title, sub: it.sub + ' · ' + it.module, actions: it.actions, onAct: it.act)]),
       ...cards.take(3),   // 3 למעלה
       if (cards.length > 3) DsFold(title: ${k(L.homeMore)}.replaceAll('{n}', (cards.length - 3).toString()), details: cards.skip(3).toList()),
-      if (pending.isNotEmpty) DsSection(title: ${k(L.homePending)} + ' · ' + pending.length.toString(), children: pending),   // D5
+      if (_mailNote.isNotEmpty) DsNote(message: _mailNote, label: '', tone: 0),
+      if (pending.isNotEmpty) DsSection(title: ${k(L.homePending)} + ' · ' + pending.length.toString(), children: pending),   // D5 · הגיע (מייל) · הצעד-הבא (שרשרת) · תזכורות
       if (did.isNotEmpty) DsSection(title: ${k(L.homeDid)} + ' · ' + did.length.toString(), children: [for (final e in did) DsLogRow(text: e['what'] ?? '', undoLabel: ${k(L.undo)}, onUndo: () => appStore.undo(e['id'] ?? ''))]),   // T2
       if (tomorrow.isNotEmpty) DsFold(title: ${k(L.homeTomorrow)} + ' (' + tomorrow.length.toString() + ')', details: [for (final it in tomorrow) DsActionRow(title: it.title, sub: it.sub + ' · ' + it.module)]),   // D8
       if (!empty && overdue.isEmpty && todayItems.isEmpty && pending.isEmpty) Padding(padding: const EdgeInsets.only(top: 12), child: Text(${k(L.homeAll)}, style: TextStyle(color: lk.muted, fontSize: 14))),
@@ -384,6 +426,8 @@ class ${cls} extends StatelessWidget {
     DsField(label: ${k(L.aiKeyLabel)}, hint: ${k(L.aiKeyHint)}, value: appStore.setting('ai.key'), onChanged: (v) => appStore.setSetting('ai.key', v.trim())),
     DsField(label: ${k(L.aiModelLabel)}, hint: ${k(L.aiModelHint)}, value: appStore.setting('ai.model'), onChanged: (v) => appStore.setSetting('ai.model', v.trim())),
     Padding(padding: const EdgeInsets.only(top: 12), child: DsNote(message: ${k(L.keysNote)}, label: '', tone: 0)),
+    DsField(label: ${k(L.mailTokenLabel)}, hint: ${k(L.mailTokenHint)}, value: appStore.setting('mail.token'), onChanged: (v) => appStore.setSetting('mail.token', v.trim())),
+    Padding(padding: const EdgeInsets.only(top: 8), child: DsNote(message: ${k(L.mailNote)}, label: '', tone: 0)),
     Padding(padding: const EdgeInsets.only(top: 8), child: DsNote(message: ${k(L.keysSoon)}, label: '', tone: 0)),
   ]));
 }
