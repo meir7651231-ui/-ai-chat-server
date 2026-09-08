@@ -1,0 +1,78 @@
+{
+ "ns": "peruk11",
+ "title": "הצעת מוסך",
+ "look": "paper",
+ "chain": [],
+ "questions": {
+  "report": "מה לעשות עם זה?",
+  "list": "מה פתוח עכשיו?",
+  "home": "מה עכשיו?"
+ },
+ "home": {
+  "slug": "app_peruk11_home",
+  "cls": "GenAppPeruk11HomeScreen"
+ },
+ "shell": {
+  "slug": "app_peruk11_shell",
+  "cls": "GenAppPeruk11ShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_peruk11_root",
+  "cls": "GenAppPeruk11RootScreen"
+ },
+ "root": {
+  "slug": "app_peruk11_ent1",
+  "cls": "GenAppPeruk11Ent1Screen",
+  "name": "תיק",
+  "descField": "לקוח",
+  "stages": [
+   "התקבל",
+   "שולם",
+   "בבדיקה",
+   "נמסר",
+   "סגור"
+  ],
+  "fields": [
+   {
+    "label": "לקוח",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "טלפון",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "הצעה",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "סיווג",
+    "type": "text",
+    "required": false,
+    "enumVals": [
+     "עכשיו בטיחות הרכב",
+     "יכול לחכות עם",
+     "לבדוק כפל פירוט",
+     "לא לאשר בטלפון"
+    ]
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "תיק",
+   "slug": "app_peruk11_ent1"
+  }
+ ],
+ "relations": false,
+ "report": {
+  "slug": "app_peruk11_rp1",
+  "cls": "GenAppPeruk11Rp1Screen"
+ }
+}

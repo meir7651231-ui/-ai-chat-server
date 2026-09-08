@@ -1,0 +1,162 @@
+{
+ "ns": "peruk01",
+ "title": "חוזה שכירות למגורים — לפני חתימה",
+ "look": "paper",
+ "chain": [
+  "חידוש חוזה (ישן מול חדש)",
+  "יציאה + פיקדון (ציר וואטסאפ + דוח יציאה + דרישה)"
+ ],
+ "questions": {
+  "report": "מה לעשות עם זה?",
+  "list": "מה פתוח עכשיו?",
+  "home": "מה עכשיו?"
+ },
+ "home": {
+  "slug": "app_peruk01_home",
+  "cls": "GenAppPeruk01HomeScreen"
+ },
+ "shell": {
+  "slug": "app_peruk01_shell",
+  "cls": "GenAppPeruk01ShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_peruk01_root",
+  "cls": "GenAppPeruk01RootScreen"
+ },
+ "root": {
+  "slug": "app_peruk01_ent1",
+  "cls": "GenAppPeruk01Ent1Screen",
+  "name": "תיק",
+  "descField": "לקוח",
+  "stages": [
+   "התקבל",
+   "שולם",
+   "בבדיקה",
+   "נמסר",
+   "סגור"
+  ],
+  "fields": [
+   {
+    "label": "לקוח",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "טלפון",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "קובץ החוזה",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "שכר דירה חודשי",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "תקופת החוזה",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "עיר",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "האם יש אופציה",
+    "type": "bool",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "פיקדון",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "ערבות",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "ערב",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "שטר חוב",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "מתווך",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "חוזה קודם",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "הודעות וואטסאפ עם המשכיר",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "מועד חתימה",
+    "type": "date",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "בלי החוזה המלא אין",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "החלטה",
+    "type": "text",
+    "required": false,
+    "enumVals": [
+     "לחתום כמו שזה",
+     "לחתום רק אחרי שינויים",
+     "לא לחתום לעורך דין"
+    ]
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "תיק",
+   "slug": "app_peruk01_ent1"
+  },
+  {
+   "name": "ממצא",
+   "slug": "app_peruk01_ent2"
+  }
+ ],
+ "relations": true,
+ "report": {
+  "slug": "app_peruk01_rp1",
+  "cls": "GenAppPeruk01Rp1Screen"
+ }
+}

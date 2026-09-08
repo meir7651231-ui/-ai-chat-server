@@ -1,0 +1,127 @@
+{
+ "ns": "peruk03",
+ "title": "ליקויים אחרי כניסה לדירה שכורה",
+ "look": "paper",
+ "chain": [
+  "לפני חתימה — לא להיכנס עיוור",
+  "יציאה + פיקדון — כסף תקוע",
+  "אחרי כניסה — פגם והמשכיר נעלם"
+ ],
+ "questions": {
+  "report": "מה לעשות עם זה?",
+  "list": "מה פתוח עכשיו?",
+  "home": "מה עכשיו?"
+ },
+ "home": {
+  "slug": "app_peruk03_home",
+  "cls": "GenAppPeruk03HomeScreen"
+ },
+ "shell": {
+  "slug": "app_peruk03_shell",
+  "cls": "GenAppPeruk03ShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_peruk03_root",
+  "cls": "GenAppPeruk03RootScreen"
+ },
+ "root": {
+  "slug": "app_peruk03_ent1",
+  "cls": "GenAppPeruk03Ent1Screen",
+  "name": "תיק",
+  "descField": "לקוח",
+  "stages": [
+   "התקבל",
+   "שולם",
+   "בבדיקה",
+   "נמסר",
+   "סגור"
+  ],
+  "fields": [
+   {
+    "label": "לקוח",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "טלפון",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "תיאור תמונות",
+    "type": "multiline",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "תאריך כניסה",
+    "type": "date",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "מתי הודיעו",
+    "type": "date",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "סעיף תיקונים בחוזה",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "פרוטוקול כניסה",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "תשובת המשכיר",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "הצעת טכנאי",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "אופציות אחרי השעון רק",
+    "type": "text",
+    "required": false,
+    "enumVals": [
+     "תיקון עצמי אחרי הודעה",
+     "בקשת הפחתה זמנית"
+    ]
+   },
+   {
+    "label": "סיווג",
+    "type": "text",
+    "required": false,
+    "enumVals": [
+     "דחוף שעון ימים",
+     "מהותי שעון יום",
+     "קטן לא המוצר",
+     "לא על המשכיר"
+    ]
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "תיק",
+   "slug": "app_peruk03_ent1"
+  }
+ ],
+ "relations": false,
+ "report": {
+  "slug": "app_peruk03_rp1",
+  "cls": "GenAppPeruk03Rp1Screen"
+ }
+}

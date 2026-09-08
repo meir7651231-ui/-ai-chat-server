@@ -1,0 +1,71 @@
+{
+ "ns": "peruk23",
+ "title": "לפני מבחן — הסבר ותרגול, לא הגשה במקום הילד",
+ "look": "paper",
+ "chain": [
+  "ועדה / מכתב",
+  "ילד חולה",
+  "לפני מבחן"
+ ],
+ "questions": {
+  "report": "מה לעשות עם זה?",
+  "list": "מה פתוח עכשיו?",
+  "home": "מה עכשיו?"
+ },
+ "home": {
+  "slug": "app_peruk23_home",
+  "cls": "GenAppPeruk23HomeScreen"
+ },
+ "shell": {
+  "slug": "app_peruk23_shell",
+  "cls": "GenAppPeruk23ShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_peruk23_root",
+  "cls": "GenAppPeruk23RootScreen"
+ },
+ "root": {
+  "slug": "app_peruk23_ent1",
+  "cls": "GenAppPeruk23Ent1Screen",
+  "name": "תיק",
+  "descField": "לקוח",
+  "stages": [
+   "התקבל",
+   "שולם",
+   "בבדיקה",
+   "נמסר",
+   "סגור"
+  ],
+  "fields": [
+   {
+    "label": "לקוח",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "טלפון",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "נושא",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "תיק",
+   "slug": "app_peruk23_ent1"
+  }
+ ],
+ "relations": false,
+ "report": {
+  "slug": "app_peruk23_rp1",
+  "cls": "GenAppPeruk23Rp1Screen"
+ }
+}

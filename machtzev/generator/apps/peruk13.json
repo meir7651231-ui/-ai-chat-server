@@ -1,0 +1,78 @@
+{
+ "ns": "peruk13",
+ "title": "בדיקה רפואית / מכתב מהקופה — להבין מה כתוב",
+ "look": "paper",
+ "chain": [],
+ "questions": {
+  "report": "מה לעשות עם זה?",
+  "list": "מה פתוח עכשיו?",
+  "home": "מה עכשיו?"
+ },
+ "home": {
+  "slug": "app_peruk13_home",
+  "cls": "GenAppPeruk13HomeScreen"
+ },
+ "shell": {
+  "slug": "app_peruk13_shell",
+  "cls": "GenAppPeruk13ShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_peruk13_root",
+  "cls": "GenAppPeruk13RootScreen"
+ },
+ "root": {
+  "slug": "app_peruk13_ent1",
+  "cls": "GenAppPeruk13Ent1Screen",
+  "name": "תיק",
+  "descField": "לקוח",
+  "stages": [
+   "התקבל",
+   "שולם",
+   "בבדיקה",
+   "נמסר",
+   "סגור"
+  ],
+  "fields": [
+   {
+    "label": "לקוח",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "טלפון",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "המסמך המלא",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "סיווג",
+    "type": "text",
+    "required": false,
+    "enumVals": [
+     "לקרוא עם רופא",
+     "להבין ולשאול בביקור",
+     "מסמך דחייה אישור",
+     "לא המוצר"
+    ]
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "תיק",
+   "slug": "app_peruk13_ent1"
+  }
+ ],
+ "relations": false,
+ "report": {
+  "slug": "app_peruk13_rp1",
+  "cls": "GenAppPeruk13Rp1Screen"
+ }
+}

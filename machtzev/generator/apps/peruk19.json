@@ -1,0 +1,104 @@
+{
+ "ns": "peruk19",
+ "title": "ארנונה / חוב עירייה / הנחה שנדחתה",
+ "look": "paper",
+ "chain": [
+  "ביטוח לאומי",
+  "מס / מע״מ",
+  "עירייה / ארנונה"
+ ],
+ "questions": {
+  "report": "מה לעשות עם זה?",
+  "list": "מה פתוח עכשיו?",
+  "home": "מה עכשיו?"
+ },
+ "home": {
+  "slug": "app_peruk19_home",
+  "cls": "GenAppPeruk19HomeScreen"
+ },
+ "shell": {
+  "slug": "app_peruk19_shell",
+  "cls": "GenAppPeruk19ShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_peruk19_root",
+  "cls": "GenAppPeruk19RootScreen"
+ },
+ "root": {
+  "slug": "app_peruk19_ent1",
+  "cls": "GenAppPeruk19Ent1Screen",
+  "name": "תיק",
+  "descField": "לקוח",
+  "stages": [
+   "התקבל",
+   "שולם",
+   "בבדיקה",
+   "נמסר",
+   "סגור"
+  ],
+  "fields": [
+   {
+    "label": "לקוח",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "טלפון",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "השובר",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "עיר",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "שוכר או בעלים",
+    "type": "text",
+    "required": false,
+    "enumVals": [
+     "שוכר",
+     "בעלים"
+    ]
+   },
+   {
+    "label": "תאריך כניסה",
+    "type": "date",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "סיווג",
+    "type": "text",
+    "required": false,
+    "enumVals": [
+     "הנחה שלא הוגשה",
+     "סיווג שטח",
+     "חוב דייר קודם",
+     "שובר נכון ופשוט",
+     "עיקול"
+    ]
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "תיק",
+   "slug": "app_peruk19_ent1"
+  }
+ ],
+ "relations": false,
+ "report": {
+  "slug": "app_peruk19_rp1",
+  "cls": "GenAppPeruk19Rp1Screen"
+ }
+}

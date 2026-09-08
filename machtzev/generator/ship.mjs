@@ -24,7 +24,7 @@ const MSG = opt('--msg'), LESSON = opt('--lesson') || 'הכרעה-24', SESSION =
 const AUTHOR = 'Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>';
 const env = { ...process.env, PATH: `${process.env.FLUTTER || '/home/user/flutter/bin'}:${process.env.PATH}`, BUILDSMART: APP };
 // אתרי-הדמו: תיקייה ב-gh-pages ⇒ נקודת-כניסה (הכרעת-בעלים 5.9: רק תיקיות-דמו חדשות, האתר-החי לא נגע)
-const SITES = [['schoolos', 'gen_schoolos_forge.dart'], ['studio', 'gen_main_studio.dart'], ['kehila', 'gen_main_kehila.dart'], ['tzedaka', 'gen_main_tzedaka.dart'], ['sechirut', 'gen_app_sechirut_main.dart'], ['peruk04', 'gen_app_peruk04_main.dart']];   // specs-ds/sechirut.txt · מסלול-ב׳ (ישויות מהמשפט): בדיקת חוזה שכירות (7.9)
+const SITES = [['schoolos', 'gen_schoolos_forge.dart'], ['studio', 'gen_main_studio.dart'], ['kehila', 'gen_main_kehila.dart'], ['tzedaka', 'gen_main_tzedaka.dart'], ['sechirut', 'gen_app_sechirut_main.dart'], ['peruk04', 'gen_app_peruk04_main.dart'], ['balagan', 'gen_balagan_main.dart']];   // specs-ds/sechirut.txt · מסלול-ב׳ (ישויות מהמשפט): בדיקת חוזה שכירות (7.9)
 const t0 = Date.now();
 const log = (s) => console.log(`🚢 [${((Date.now() - t0) / 1000).toFixed(0)}s] ${s}`);
 function run(cmd, args, cwd = ROOT, { quiet = false, allowFail = false } = {}) {
@@ -52,7 +52,7 @@ const syncExisting = (srcDir, dstDir, re = /\.dart$/) => { if (!fs.existsSync(ds
 syncExisting(path.join(ROOT, 'new/dart-ui-bs'), path.join(LIB, 'dart-ui-bs'));
 syncExisting(path.join(ROOT, 'new/dart-data-bs/auto'), path.join(LIB, 'dart-data-bs/auto'), /^gen_.*_content\.dart$/);
 // G32 · קובצי-תוכן של אפליקציות-app-ds (gen_app_*_content) = מראה מלאה: חדש נכנס, יתום יוצא (מסך חדש כמו «התנהגות» אינו דורש העתקה-ביד)
-{ const s = path.join(ROOT, 'new/dart-data-bs/auto'), d = path.join(LIB, 'dart-data-bs/auto'); if (fs.existsSync(s) && fs.existsSync(d)) { for (const f of fs.readdirSync(d)) if (/^gen_app_.*_content\.dart$/.test(f) && !fs.existsSync(path.join(s, f))) fs.unlinkSync(path.join(d, f)); for (const f of fs.readdirSync(s)) if (/^gen_app_.*_content\.dart$/.test(f)) fs.copyFileSync(path.join(s, f), path.join(d, f)); } }
+{ const s = path.join(ROOT, 'new/dart-data-bs/auto'), d = path.join(LIB, 'dart-data-bs/auto'); if (fs.existsSync(s) && fs.existsSync(d)) { for (const f of fs.readdirSync(d)) if (/^gen_(app|balagan)_.*_content\.dart$/.test(f) && !fs.existsSync(path.join(s, f))) fs.unlinkSync(path.join(d, f)); for (const f of fs.readdirSync(s)) if (/^gen_(app|balagan)_.*_content\.dart$/.test(f)) fs.copyFileSync(path.join(s, f), path.join(d, f)); } }
 const DMIR = path.join(LIB, 'dart-maor'); if (fs.existsSync(DMIR)) for (const f of fs.readdirSync(DMIR)) if (f.endsWith('.dart') && fs.existsSync(path.join(ROOT, 'new/dart-maor', f))) fs.copyFileSync(path.join(ROOT, 'new/dart-maor', f), path.join(DMIR, f));   // G20 · מנועי-maor: קבצים קיימים-במראה בלבד (חתימות מהודקות)
 for (const f of fs.readdirSync(genDst)) if (/^zz_shot_/.test(f)) fs.unlinkSync(path.join(genDst, f));   // שאריות-ראיה
 

@@ -1,0 +1,92 @@
+{
+ "ns": "peruk21",
+ "title": "מכתב מבית ספר / ועדה / שילוב",
+ "look": "paper",
+ "chain": [
+  "בית ספר / ועדה"
+ ],
+ "questions": {
+  "report": "מה לעשות עם זה?",
+  "list": "מה פתוח עכשיו?",
+  "home": "מה עכשיו?"
+ },
+ "home": {
+  "slug": "app_peruk21_home",
+  "cls": "GenAppPeruk21HomeScreen"
+ },
+ "shell": {
+  "slug": "app_peruk21_shell",
+  "cls": "GenAppPeruk21ShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_peruk21_root",
+  "cls": "GenAppPeruk21RootScreen"
+ },
+ "root": {
+  "slug": "app_peruk21_ent1",
+  "cls": "GenAppPeruk21Ent1Screen",
+  "name": "תיק",
+  "descField": "לקוח",
+  "stages": [
+   "התקבל",
+   "שולם",
+   "בבדיקה",
+   "נמסר",
+   "סגור"
+  ],
+  "fields": [
+   {
+    "label": "לקוח",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "טלפון",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "המכתב",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "מה כבר יש",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "עד מתי",
+    "type": "date",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "סיווג",
+    "type": "text",
+    "required": false,
+    "enumVals": [
+     "בקשת מסמך",
+     "הזמנה לוועדה",
+     "דחיית סיוע",
+     "הילד מפריע בלי"
+    ]
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "תיק",
+   "slug": "app_peruk21_ent1"
+  }
+ ],
+ "relations": false,
+ "report": {
+  "slug": "app_peruk21_rp1",
+  "cls": "GenAppPeruk21Rp1Screen"
+ }
+}

@@ -139,6 +139,7 @@ gate('cover', 'generator/cover.mjs', ['--gate']);
 gate('particles', 'generator/particles.mjs', ['--gate']);
 gate('peruk', 'generator/peruk.mjs', ['--gate']);
 gate('balagan', 'generator/balagan-look.mjs', ['--gate']);
+gate('balaganone', 'generator/balagan-one.mjs', ['--gate']);
 gate('goldquarry', 'generator/quarry-golden.mjs', ['--gate']);
 gate('rendermodule', 'generator/render-module.mjs', ['--gate']);
 gate('retarget', 'generator/retarget.mjs', ['--gate']);

@@ -1,0 +1,99 @@
+{
+ "ns": "peruk14",
+ "title": "דחיית תרופה / הפניה / אישור בקופה",
+ "look": "paper",
+ "chain": [
+  "הבנת בדיקה",
+  "דחיית קופה"
+ ],
+ "questions": {
+  "report": "מה לעשות עם זה?",
+  "list": "מה פתוח עכשיו?",
+  "home": "מה עכשיו?"
+ },
+ "home": {
+  "slug": "app_peruk14_home",
+  "cls": "GenAppPeruk14HomeScreen"
+ },
+ "shell": {
+  "slug": "app_peruk14_shell",
+  "cls": "GenAppPeruk14ShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_peruk14_root",
+  "cls": "GenAppPeruk14RootScreen"
+ },
+ "root": {
+  "slug": "app_peruk14_ent1",
+  "cls": "GenAppPeruk14Ent1Screen",
+  "name": "תיק",
+  "descField": "לקוח",
+  "stages": [
+   "התקבל",
+   "שולם",
+   "בבדיקה",
+   "נמסר",
+   "סגור"
+  ],
+  "fields": [
+   {
+    "label": "לקוח",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "טלפון",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "מכתב דחייה",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "מרשם",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "מה הרופא אמר",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "האם יש שב״ן",
+    "type": "bool",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "סיווג",
+    "type": "text",
+    "required": false,
+    "enumVals": [
+     "חסר מסמך",
+     "לא בסל לא",
+     "קוד סל שגוי",
+     "דחייה גורפת בלי"
+    ]
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "תיק",
+   "slug": "app_peruk14_ent1"
+  }
+ ],
+ "relations": false,
+ "report": {
+  "slug": "app_peruk14_rp1",
+  "cls": "GenAppPeruk14Rp1Screen"
+ }
+}

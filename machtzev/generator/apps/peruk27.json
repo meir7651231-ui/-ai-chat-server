@@ -1,0 +1,79 @@
+{
+ "ns": "peruk27",
+ "title": "פרידה — השבוע הראשון (דירה, ילדים, כסף)",
+ "look": "paper",
+ "chain": [],
+ "questions": {
+  "report": "מה לעשות עם זה?",
+  "list": "מה פתוח עכשיו?",
+  "home": "מה עכשיו?"
+ },
+ "home": {
+  "slug": "app_peruk27_home",
+  "cls": "GenAppPeruk27HomeScreen"
+ },
+ "shell": {
+  "slug": "app_peruk27_shell",
+  "cls": "GenAppPeruk27ShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_peruk27_root",
+  "cls": "GenAppPeruk27RootScreen"
+ },
+ "root": {
+  "slug": "app_peruk27_ent1",
+  "cls": "GenAppPeruk27Ent1Screen",
+  "name": "תיק",
+  "descField": "לקוח",
+  "stages": [
+   "התקבל",
+   "שולם",
+   "בבדיקה",
+   "נמסר",
+   "סגור"
+  ],
+  "fields": [
+   {
+    "label": "לקוח",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "טלפון",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "יש ילדים",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "סיווג",
+    "type": "text",
+    "required": false,
+    "enumVals": [
+     "ילדים בבית",
+     "דירה שכורה",
+     "דירה בבעלות",
+     "כסף משותף",
+     "כבר יש מכתב"
+    ]
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "תיק",
+   "slug": "app_peruk27_ent1"
+  }
+ ],
+ "relations": false,
+ "report": {
+  "slug": "app_peruk27_rp1",
+  "cls": "GenAppPeruk27Rp1Screen"
+ }
+}

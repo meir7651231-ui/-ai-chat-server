@@ -1,0 +1,94 @@
+{
+ "ns": "peruk22",
+ "title": "ילד חולה מול יום עבודה",
+ "look": "paper",
+ "chain": [
+  "בית ספר / ועדה",
+  "ילד חולה מול עבודה"
+ ],
+ "questions": {
+  "report": "מה לעשות עם זה?",
+  "list": "מה פתוח עכשיו?",
+  "home": "מה עכשיו?"
+ },
+ "home": {
+  "slug": "app_peruk22_home",
+  "cls": "GenAppPeruk22HomeScreen"
+ },
+ "shell": {
+  "slug": "app_peruk22_shell",
+  "cls": "GenAppPeruk22ShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_peruk22_root",
+  "cls": "GenAppPeruk22RootScreen"
+ },
+ "root": {
+  "slug": "app_peruk22_ent1",
+  "cls": "GenAppPeruk22Ent1Screen",
+  "name": "תיק",
+  "descField": "לקוח",
+  "stages": [
+   "התקבל",
+   "שולם",
+   "בבדיקה",
+   "נמסר",
+   "סגור"
+  ],
+  "fields": [
+   {
+    "label": "לקוח",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "טלפון",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "גיל",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "מה יש לילד",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "מה כתוב במעון",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "סוג עבודה",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "יש מישהו שני",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "תיק",
+   "slug": "app_peruk22_ent1"
+  }
+ ],
+ "relations": false,
+ "report": {
+  "slug": "app_peruk22_rp1",
+  "cls": "GenAppPeruk22Rp1Screen"
+ }
+}

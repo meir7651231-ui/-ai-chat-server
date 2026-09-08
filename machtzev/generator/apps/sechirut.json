@@ -1,0 +1,148 @@
+{
+ "ns": "sechirut",
+ "title": "בדיקת חוזה שכירות",
+ "look": "paper",
+ "chain": [
+  "פיקדון ביציאה",
+  "ליקוי אחרי כניסה",
+  "חידוש חוזה"
+ ],
+ "questions": {
+  "report": "מה לעשות עם זה?",
+  "list": "מה פתוח עכשיו?",
+  "home": "מה עכשיו?"
+ },
+ "home": {
+  "slug": "app_sechirut_home",
+  "cls": "GenAppSechirutHomeScreen"
+ },
+ "shell": {
+  "slug": "app_sechirut_shell",
+  "cls": "GenAppSechirutShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_sechirut_root",
+  "cls": "GenAppSechirutRootScreen"
+ },
+ "root": {
+  "slug": "app_sechirut_ent1",
+  "cls": "GenAppSechirutEnt1Screen",
+  "name": "תיק",
+  "descField": "לקוח",
+  "stages": [
+   "התקבל",
+   "שולם",
+   "בבדיקה",
+   "נמסר",
+   "תיקון",
+   "סגור"
+  ],
+  "fields": [
+   {
+    "label": "לקוח",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "טלפון",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "עיר",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "שכירות",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "חודשים",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "מועד חתימה",
+    "type": "date",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "מתווך",
+    "type": "text",
+    "required": false,
+    "enumVals": [
+     "כן",
+     "לא"
+    ]
+   },
+   {
+    "label": "אופציה",
+    "type": "text",
+    "required": false,
+    "enumVals": [
+     "כן",
+     "לא"
+    ]
+   },
+   {
+    "label": "החלטה",
+    "type": "text",
+    "required": false,
+    "enumVals": [
+     "לחתום כמו שזה",
+     "לחתום אחרי שינויים",
+     "לא לחתום"
+    ]
+   },
+   {
+    "label": "שכירות לשנה",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "תקרה לפי חודשים",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "תקרה לפי שליש",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "תיק",
+   "slug": "app_sechirut_ent1"
+  },
+  {
+   "name": "בטוחה",
+   "slug": "app_sechirut_ent2"
+  },
+  {
+   "name": "ממצא",
+   "slug": "app_sechirut_ent3"
+  },
+  {
+   "name": "תשלום",
+   "slug": "app_sechirut_ent4"
+  }
+ ],
+ "relations": true,
+ "report": {
+  "slug": "app_sechirut_rp1",
+  "cls": "GenAppSechirutRp1Screen"
+ }
+}

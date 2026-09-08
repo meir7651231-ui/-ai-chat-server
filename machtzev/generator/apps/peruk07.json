@@ -1,0 +1,115 @@
+{
+ "ns": "peruk07",
+ "title": "דחיית ביטוח",
+ "look": "paper",
+ "chain": [
+  "מקדמה לקבלן",
+  "דחיית ביטוח"
+ ],
+ "questions": {
+  "report": "מה לעשות עם זה?",
+  "list": "מה פתוח עכשיו?",
+  "home": "מה עכשיו?"
+ },
+ "home": {
+  "slug": "app_peruk07_home",
+  "cls": "GenAppPeruk07HomeScreen"
+ },
+ "shell": {
+  "slug": "app_peruk07_shell",
+  "cls": "GenAppPeruk07ShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_peruk07_root",
+  "cls": "GenAppPeruk07RootScreen"
+ },
+ "root": {
+  "slug": "app_peruk07_ent1",
+  "cls": "GenAppPeruk07Ent1Screen",
+  "name": "תיק",
+  "descField": "לקוח",
+  "stages": [
+   "התקבל",
+   "שולם",
+   "בבדיקה",
+   "נמסר",
+   "סגור"
+  ],
+  "fields": [
+   {
+    "label": "לקוח",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "טלפון",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "מכתב הדחייה",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "סוג הביטוח מה קרה",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "חזק",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "פוליסה או תנאים כלליים",
+    "type": "text",
+    "required": true,
+    "enumVals": [
+     "פוליסה",
+     "תנאים כלליים"
+    ]
+   },
+   {
+    "label": "מה כבר הוגש",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "קבלות",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "סיווג",
+    "type": "text",
+    "required": false,
+    "enumVals": [
+     "א חסר מסמך",
+     "ב חריג בפוליסה",
+     "ג אי־גילוי הצהרה",
+     "ד גובה נזק",
+     "ה איחור"
+    ]
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "תיק",
+   "slug": "app_peruk07_ent1"
+  }
+ ],
+ "relations": false,
+ "report": {
+  "slug": "app_peruk07_rp1",
+  "cls": "GenAppPeruk07Rp1Screen"
+ }
+}

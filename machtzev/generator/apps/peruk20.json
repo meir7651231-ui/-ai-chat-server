@@ -1,0 +1,95 @@
+{
+ "ns": "peruk20",
+ "title": "משרד הפנים / דרכון / תעודה / שינוי כתובת",
+ "look": "paper",
+ "chain": [
+  "ביטוח לאומי",
+  "מס / מע״מ",
+  "עירייה",
+  "פנים / דרכון"
+ ],
+ "questions": {
+  "report": "מה לעשות עם זה?",
+  "list": "מה פתוח עכשיו?",
+  "home": "מה עכשיו?"
+ },
+ "home": {
+  "slug": "app_peruk20_home",
+  "cls": "GenAppPeruk20HomeScreen"
+ },
+ "shell": {
+  "slug": "app_peruk20_shell",
+  "cls": "GenAppPeruk20ShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_peruk20_root",
+  "cls": "GenAppPeruk20RootScreen"
+ },
+ "root": {
+  "slug": "app_peruk20_ent1",
+  "cls": "GenAppPeruk20Ent1Screen",
+  "name": "תיק",
+  "descField": "לקוח",
+  "stages": [
+   "התקבל",
+   "שולם",
+   "בבדיקה",
+   "נמסר",
+   "סגור"
+  ],
+  "fields": [
+   {
+    "label": "לקוח",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "טלפון",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "צילום סטטוס",
+    "type": "bool",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "מה צריך",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "תאריך טיסה אם יש",
+    "type": "date",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "סיווג",
+    "type": "text",
+    "required": false,
+    "enumVals": [
+     "חסר מסמך",
+     "תור רחוק בלי",
+     "בקשה תקועה מעבר",
+     "דחייה לגופה שם"
+    ]
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "תיק",
+   "slug": "app_peruk20_ent1"
+  }
+ ],
+ "relations": false,
+ "report": {
+  "slug": "app_peruk20_rp1",
+  "cls": "GenAppPeruk20Rp1Screen"
+ }
+}

@@ -1,0 +1,102 @@
+{
+ "ns": "peruk28",
+ "title": "שכר תקוע במקום העבודה",
+ "look": "paper",
+ "chain": [],
+ "questions": {
+  "report": "מה לעשות עם זה?",
+  "list": "מה פתוח עכשיו?",
+  "home": "מה עכשיו?"
+ },
+ "home": {
+  "slug": "app_peruk28_home",
+  "cls": "GenAppPeruk28HomeScreen"
+ },
+ "shell": {
+  "slug": "app_peruk28_shell",
+  "cls": "GenAppPeruk28ShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_peruk28_root",
+  "cls": "GenAppPeruk28RootScreen"
+ },
+ "root": {
+  "slug": "app_peruk28_ent1",
+  "cls": "GenAppPeruk28Ent1Screen",
+  "name": "תיק",
+  "descField": "לקוח",
+  "stages": [
+   "התקבל",
+   "שולם",
+   "בבדיקה",
+   "נמסר",
+   "סגור"
+  ],
+  "fields": [
+   {
+    "label": "לקוח",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "טלפון",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "ותק",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "תפקיד",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "העלאה אחרונה",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "מה נוסף בתפקיד",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "מספר אם יש",
+    "type": "num",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "סיווג",
+    "type": "text",
+    "required": false,
+    "enumVals": [
+     "סבב העלאות קרוב",
+     "אין סבב שקט",
+     "כבר אמרו לא",
+     "שכר מתחת למינימום"
+    ]
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "תיק",
+   "slug": "app_peruk28_ent1"
+  }
+ ],
+ "relations": false,
+ "report": {
+  "slug": "app_peruk28_rp1",
+  "cls": "GenAppPeruk28Rp1Screen"
+ }
+}

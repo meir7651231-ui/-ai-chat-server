@@ -291,10 +291,12 @@ export function buildApp(specText) {
     if (getLook() === 'paper') {
       const rep = reportByEnt[rootMeta.name] || null;
       const msgP = planAll.find((x) => x.ok && x.entity === rootMeta.name && x.shape && x.shape.kind === 'message') || null;
-      homeScr = renderHome(`${P}home`, { root: rootE, rootPage, report: rep, message: msgP ? { entity: pentsAll.find((e) => e.name === rootMeta.name), p: msgP } : null, title: questions.home || L.shellHome, chain });
+      homeScr = renderHome(`${P}home`, { root: rootE, rootPage, report: rep, message: msgP ? { entity: pentsAll.find((e) => e.name === rootMeta.name), p: msgP } : null, title: questions.home || L.shellHome, chain, appTitle });
     }
     const shell = renderShell(`${P}shell`, { title: appTitle, root: rootE, rootPage, dashboard: dash, hub: { slug: `${P}hub`, cls: hub.cls }, questions, home: homeScr });
     home = { slug: `${P}shell`, cls: shell.cls };
+    // G33 · מניפסט-המודול (הכרעה-29): מה ש«בלגן» (האפליקציה-האחת) צריך כדי למזג את המודול — מסכים · שורש · שדות · שרשרת. נגזר, לא יד.
+    if (NS) { const APPS = path.join(R.GEN_DIR, 'apps'); fs.mkdirSync(APPS, { recursive: true }); fs.writeFileSync(path.join(APPS, `${NS}.json`), JSON.stringify({ ns: NS, title: appTitle, look: getLook(), chain, questions, home: homeScr ? { slug: homeScr.slug, cls: homeScr.cls } : null, shell: { slug: shell.slug, cls: shell.cls }, rootPage: { slug: rootPage.slug, cls: rootPage.cls }, root: { slug: rootE.slug, cls: rootE.cls, name: rootE.name, descField: rootE.descField || null, stages: rootE.stages || [], fields: rootE.schema.map((f) => ({ label: f.label, type: f.type || 'text', required: !!f.required, enumVals: f.enumVals || [] })) }, entities: entMeta.map((e) => ({ name: e.name, slug: e.slug })), relations: edges.length > 0, report: reportByEnt[rootMeta.name] ? { slug: reportByEnt[rootMeta.name].slug, cls: reportByEnt[rootMeta.name].cls } : null }, null, 1)); }
     console.log(`🧭 ${L.shellLog}: ${L.shellRootWord} ${rootMeta.name} · ${kids.length} ${L.shellChildrenWord} · ${shell.nav || '—'}${[...rootPage.notes, ...shell.notes].length ? ' · ⚪ ' + [...rootPage.notes, ...shell.notes].join(' · ') : ''}`);
   }
   // שורש-האפליקציה: main + MaterialApp ⇒ אפליקציה עצמאית שרצה בלי entry-זמני.

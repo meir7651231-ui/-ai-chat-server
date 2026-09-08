@@ -1,0 +1,95 @@
+{
+ "ns": "peruk09",
+ "title": "לקוח שקיבל עבודה ולא משלם",
+ "look": "paper",
+ "chain": [],
+ "questions": {
+  "report": "מה לעשות עם זה?",
+  "list": "מה פתוח עכשיו?",
+  "home": "מה עכשיו?"
+ },
+ "home": {
+  "slug": "app_peruk09_home",
+  "cls": "GenAppPeruk09HomeScreen"
+ },
+ "shell": {
+  "slug": "app_peruk09_shell",
+  "cls": "GenAppPeruk09ShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_peruk09_root",
+  "cls": "GenAppPeruk09RootScreen"
+ },
+ "root": {
+  "slug": "app_peruk09_ent1",
+  "cls": "GenAppPeruk09Ent1Screen",
+  "name": "תיק",
+  "descField": "לקוח",
+  "stages": [
+   "התקבל",
+   "שולם",
+   "בבדיקה",
+   "נמסר",
+   "סגור"
+  ],
+  "fields": [
+   {
+    "label": "לקוח",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "טלפון",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "הצעה",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "חשבונית",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "הוכחת מסירה",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "מה נשאר",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "מה הוא אמר",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "תיק",
+   "slug": "app_peruk09_ent1"
+  },
+  {
+   "name": "ממצא",
+   "slug": "app_peruk09_ent2"
+  }
+ ],
+ "relations": true,
+ "report": {
+  "slug": "app_peruk09_rp1",
+  "cls": "GenAppPeruk09Rp1Screen"
+ }
+}

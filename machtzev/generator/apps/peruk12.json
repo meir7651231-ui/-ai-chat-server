@@ -1,0 +1,88 @@
+{
+ "ns": "peruk12",
+ "title": "קניית רכב יד שנייה — לפני העברה",
+ "look": "paper",
+ "chain": [
+  "הצעת מוסך",
+  "יד 2 לפני קנייה"
+ ],
+ "questions": {
+  "report": "מה לעשות עם זה?",
+  "list": "מה פתוח עכשיו?",
+  "home": "מה עכשיו?"
+ },
+ "home": {
+  "slug": "app_peruk12_home",
+  "cls": "GenAppPeruk12HomeScreen"
+ },
+ "shell": {
+  "slug": "app_peruk12_shell",
+  "cls": "GenAppPeruk12ShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_peruk12_root",
+  "cls": "GenAppPeruk12RootScreen"
+ },
+ "root": {
+  "slug": "app_peruk12_ent1",
+  "cls": "GenAppPeruk12Ent1Screen",
+  "name": "תיק",
+  "descField": "לקוח",
+  "stages": [
+   "התקבל",
+   "שולם",
+   "בבדיקה",
+   "נמסר",
+   "סגור"
+  ],
+  "fields": [
+   {
+    "label": "לקוח",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "טלפון",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "קישור מודעה",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "מחיר",
+    "type": "num",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "מה המוכר אמר",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "האם נסעת",
+    "type": "bool",
+    "required": false,
+    "enumVals": []
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "תיק",
+   "slug": "app_peruk12_ent1"
+  }
+ ],
+ "relations": false,
+ "report": {
+  "slug": "app_peruk12_rp1",
+  "cls": "GenAppPeruk12Rp1Screen"
+ }
+}

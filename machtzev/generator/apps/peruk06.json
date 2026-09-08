@@ -1,0 +1,107 @@
+{
+ "ns": "peruk06",
+ "title": "מקדמה לקבלן / בעל מקצוע שנעלם או דורש תוספת",
+ "look": "paper",
+ "chain": [],
+ "questions": {
+  "report": "מה לעשות עם זה?",
+  "list": "מה פתוח עכשיו?",
+  "home": "מה עכשיו?"
+ },
+ "home": {
+  "slug": "app_peruk06_home",
+  "cls": "GenAppPeruk06HomeScreen"
+ },
+ "shell": {
+  "slug": "app_peruk06_shell",
+  "cls": "GenAppPeruk06ShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_peruk06_root",
+  "cls": "GenAppPeruk06RootScreen"
+ },
+ "root": {
+  "slug": "app_peruk06_ent1",
+  "cls": "GenAppPeruk06Ent1Screen",
+  "name": "תיק",
+  "descField": "לקוח",
+  "stages": [
+   "התקבל",
+   "שולם",
+   "בבדיקה",
+   "נמסר",
+   "סגור"
+  ],
+  "fields": [
+   {
+    "label": "לקוח",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "טלפון",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "כמה שולם ואיך",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "הצעה",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "מה המצב עכשיו",
+    "type": "bool",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "מה הוא אמר לאחרונה",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "הצעת השלמה ממישהו אחר",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "קבלות חומרים",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "שם מלא",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "תיק",
+   "slug": "app_peruk06_ent1"
+  },
+  {
+   "name": "ממצא",
+   "slug": "app_peruk06_ent2"
+  }
+ ],
+ "relations": true,
+ "report": {
+  "slug": "app_peruk06_rp1",
+  "cls": "GenAppPeruk06Rp1Screen"
+ }
+}

@@ -1,0 +1,131 @@
+{
+ "ns": "peruk02",
+ "title": "פיקדון אחרי יציאה מדירה",
+ "look": "paper",
+ "chain": [],
+ "questions": {
+  "report": "מה לעשות עם זה?",
+  "list": "מה פתוח עכשיו?",
+  "home": "מה עכשיו?"
+ },
+ "home": {
+  "slug": "app_peruk02_home",
+  "cls": "GenAppPeruk02HomeScreen"
+ },
+ "shell": {
+  "slug": "app_peruk02_shell",
+  "cls": "GenAppPeruk02ShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_peruk02_root",
+  "cls": "GenAppPeruk02RootScreen"
+ },
+ "root": {
+  "slug": "app_peruk02_ent1",
+  "cls": "GenAppPeruk02Ent1Screen",
+  "name": "תיק",
+  "descField": "לקוח",
+  "stages": [
+   "התקבל",
+   "שולם",
+   "בבדיקה",
+   "נמסר",
+   "סגור"
+  ],
+  "fields": [
+   {
+    "label": "לקוח",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "טלפון",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "סכום הפיקדון",
+    "type": "num",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "מה המשכיר אמר הודעה",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "תאריך מסירת מפתח",
+    "type": "date",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "חוזה לפחות סעיפי בטוחה",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "תיקונים",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "יציאה",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "חזק מאוד אם יש",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "פרוטוקול כניסה יציאה",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "תמונות כניסה ויציאה",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "וואטסאפ מלא עם המשכיר",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "קבלות על תיקונים שהוא",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "תיק",
+   "slug": "app_peruk02_ent1"
+  },
+  {
+   "name": "ממצא",
+   "slug": "app_peruk02_ent2"
+  }
+ ],
+ "relations": true,
+ "report": {
+  "slug": "app_peruk02_rp1",
+  "cls": "GenAppPeruk02Rp1Screen"
+ }
+}

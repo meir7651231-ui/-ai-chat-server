@@ -1,0 +1,90 @@
+{
+ "ns": "peruk26",
+ "title": "יוקר מחיה — ניקוי חודש אחרי מינוס / התייקרות",
+ "look": "paper",
+ "chain": [],
+ "questions": {
+  "report": "מה לעשות עם זה?",
+  "list": "מה פתוח עכשיו?",
+  "home": "מה עכשיו?"
+ },
+ "home": {
+  "slug": "app_peruk26_home",
+  "cls": "GenAppPeruk26HomeScreen"
+ },
+ "shell": {
+  "slug": "app_peruk26_shell",
+  "cls": "GenAppPeruk26ShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_peruk26_root",
+  "cls": "GenAppPeruk26RootScreen"
+ },
+ "root": {
+  "slug": "app_peruk26_ent1",
+  "cls": "GenAppPeruk26Ent1Screen",
+  "name": "תיק",
+  "descField": "לקוח",
+  "stages": [
+   "התקבל",
+   "שולם",
+   "בבדיקה",
+   "נמסר",
+   "סגור"
+  ],
+  "fields": [
+   {
+    "label": "לקוח",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "טלפון",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "צילום עו״ש",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "רשימת מנויים אם יש",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "ביטוחים",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "סיווג",
+    "type": "text",
+    "required": false,
+    "enumVals": [
+     "קבוע גדול",
+     "דליפה שקטה",
+     "קפיצה חד־פעמית",
+     "אין תמונה"
+    ]
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "תיק",
+   "slug": "app_peruk26_ent1"
+  }
+ ],
+ "relations": false,
+ "report": {
+  "slug": "app_peruk26_rp1",
+  "cls": "GenAppPeruk26Rp1Screen"
+ }
+}

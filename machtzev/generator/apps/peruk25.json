@@ -1,0 +1,90 @@
+{
+ "ns": "peruk25",
+ "title": "פיטורים / סיום חוזה — השבוע שאחרי",
+ "look": "paper",
+ "chain": [],
+ "questions": {
+  "report": "מה לעשות עם זה?",
+  "list": "מה פתוח עכשיו?",
+  "home": "מה עכשיו?"
+ },
+ "home": {
+  "slug": "app_peruk25_home",
+  "cls": "GenAppPeruk25HomeScreen"
+ },
+ "shell": {
+  "slug": "app_peruk25_shell",
+  "cls": "GenAppPeruk25ShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_peruk25_root",
+  "cls": "GenAppPeruk25RootScreen"
+ },
+ "root": {
+  "slug": "app_peruk25_ent1",
+  "cls": "GenAppPeruk25Ent1Screen",
+  "name": "תיק",
+  "descField": "לקוח",
+  "stages": [
+   "התקבל",
+   "שולם",
+   "בבדיקה",
+   "נמסר",
+   "סגור"
+  ],
+  "fields": [
+   {
+    "label": "לקוח",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "טלפון",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "מכתב פיטורים",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "ותק",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "האם חתמו על משהו",
+    "type": "bool",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "סיווג",
+    "type": "text",
+    "required": false,
+    "enumVals": [
+     "סיום רגיל מכתב",
+     "לחץ לחתום היום",
+     "דגל מוגן",
+     "עצמאי חוזה קבלן"
+    ]
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "תיק",
+   "slug": "app_peruk25_ent1"
+  }
+ ],
+ "relations": false,
+ "report": {
+  "slug": "app_peruk25_rp1",
+  "cls": "GenAppPeruk25Rp1Screen"
+ }
+}

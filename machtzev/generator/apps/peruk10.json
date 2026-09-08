@@ -1,0 +1,103 @@
+{
+ "ns": "peruk10",
+ "title": "קנס שהתנפח / חוב רשות / עיקול שהופיע",
+ "look": "paper",
+ "chain": [],
+ "questions": {
+  "report": "מה לעשות עם זה?",
+  "list": "מה פתוח עכשיו?",
+  "home": "מה עכשיו?"
+ },
+ "home": {
+  "slug": "app_peruk10_home",
+  "cls": "GenAppPeruk10HomeScreen"
+ },
+ "shell": {
+  "slug": "app_peruk10_shell",
+  "cls": "GenAppPeruk10ShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_peruk10_root",
+  "cls": "GenAppPeruk10RootScreen"
+ },
+ "root": {
+  "slug": "app_peruk10_ent1",
+  "cls": "GenAppPeruk10Ent1Screen",
+  "name": "תיק",
+  "descField": "לקוח",
+  "stages": [
+   "התקבל",
+   "שולם",
+   "בבדיקה",
+   "נמסר",
+   "סגור"
+  ],
+  "fields": [
+   {
+    "label": "לקוח",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "טלפון",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "צילום כל המכתב",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "כולל תאריכים וסכומים",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "אם יש מכתב ישן",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "תשלום חלקי",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "צילום בעלות",
+    "type": "num",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "סיווג",
+    "type": "text",
+    "required": false,
+    "enumVals": [
+     "עוד חלון",
+     "שעון מת חוב",
+     "עיקול פעיל",
+     "חוב לא שלך",
+     "ספאם מתחזה"
+    ]
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "תיק",
+   "slug": "app_peruk10_ent1"
+  }
+ ],
+ "relations": false,
+ "report": {
+  "slug": "app_peruk10_rp1",
+  "cls": "GenAppPeruk10Rp1Screen"
+ }
+}

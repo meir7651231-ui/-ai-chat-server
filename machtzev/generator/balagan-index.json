@@ -1,0 +1,257 @@
+{
+ "modules": [
+  {
+   "index": 0,
+   "ns": "peruk01",
+   "title": "חוזה שכירות למגורים — לפני חתימה",
+   "topic": "דירה",
+   "home": "GenAppPeruk01HomeScreen",
+   "root": "GenAppPeruk01Ent1Screen",
+   "dates": 1
+  },
+  {
+   "index": 1,
+   "ns": "peruk02",
+   "title": "פיקדון אחרי יציאה מדירה",
+   "topic": "דירה",
+   "home": "GenAppPeruk02HomeScreen",
+   "root": "GenAppPeruk02Ent1Screen",
+   "dates": 1
+  },
+  {
+   "index": 2,
+   "ns": "peruk03",
+   "title": "ליקויים אחרי כניסה לדירה שכורה",
+   "topic": "דירה",
+   "home": "GenAppPeruk03HomeScreen",
+   "root": "GenAppPeruk03Ent1Screen",
+   "dates": 2
+  },
+  {
+   "index": 3,
+   "ns": "peruk04",
+   "title": "חידוש חוזה שכירות",
+   "topic": "דירה",
+   "home": "GenAppPeruk04HomeScreen",
+   "root": "GenAppPeruk04Ent1Screen",
+   "dates": 2
+  },
+  {
+   "index": 4,
+   "ns": "peruk05",
+   "title": "ערבות הורים / שטר חוב בשכירות",
+   "topic": "דירה",
+   "home": "GenAppPeruk05HomeScreen",
+   "root": "GenAppPeruk05Ent1Screen",
+   "dates": 0
+  },
+  {
+   "index": 5,
+   "ns": "peruk06",
+   "title": "מקדמה לקבלן / בעל מקצוע שנעלם או דורש תוספת",
+   "topic": "כסף",
+   "home": "GenAppPeruk06HomeScreen",
+   "root": "GenAppPeruk06Ent1Screen",
+   "dates": 0
+  },
+  {
+   "index": 6,
+   "ns": "peruk07",
+   "title": "דחיית ביטוח",
+   "topic": "כסף",
+   "home": "GenAppPeruk07HomeScreen",
+   "root": "GenAppPeruk07Ent1Screen",
+   "dates": 0
+  },
+  {
+   "index": 7,
+   "ns": "peruk08",
+   "title": "חיוב אשראי / ביטול הזמנה / כסף שנעלם למוכר אונליין",
+   "topic": "כסף",
+   "home": "GenAppPeruk08HomeScreen",
+   "root": "GenAppPeruk08Ent1Screen",
+   "dates": 0
+  },
+  {
+   "index": 8,
+   "ns": "peruk09",
+   "title": "לקוח שקיבל עבודה ולא משלם",
+   "topic": "עבודה",
+   "home": "GenAppPeruk09HomeScreen",
+   "root": "GenAppPeruk09Ent1Screen",
+   "dates": 0
+  },
+  {
+   "index": 9,
+   "ns": "peruk10",
+   "title": "קנס שהתנפח / חוב רשות / עיקול שהופיע",
+   "topic": "כסף",
+   "home": "GenAppPeruk10HomeScreen",
+   "root": "GenAppPeruk10Ent1Screen",
+   "dates": 0
+  },
+  {
+   "index": 10,
+   "ns": "peruk11",
+   "title": "הצעת מוסך",
+   "topic": "רכב",
+   "home": "GenAppPeruk11HomeScreen",
+   "root": "GenAppPeruk11Ent1Screen",
+   "dates": 0
+  },
+  {
+   "index": 11,
+   "ns": "peruk12",
+   "title": "קניית רכב יד שנייה — לפני העברה",
+   "topic": "רכב",
+   "home": "GenAppPeruk12HomeScreen",
+   "root": "GenAppPeruk12Ent1Screen",
+   "dates": 0
+  },
+  {
+   "index": 12,
+   "ns": "peruk13",
+   "title": "בדיקה רפואית / מכתב מהקופה — להבין מה כתוב",
+   "topic": "בריאות",
+   "home": "GenAppPeruk13HomeScreen",
+   "root": "GenAppPeruk13Ent1Screen",
+   "dates": 0
+  },
+  {
+   "index": 13,
+   "ns": "peruk14",
+   "title": "דחיית תרופה / הפניה / אישור בקופה",
+   "topic": "בריאות",
+   "home": "GenAppPeruk14HomeScreen",
+   "root": "GenAppPeruk14Ent1Screen",
+   "dates": 0
+  },
+  {
+   "index": 14,
+   "ns": "peruk15",
+   "title": "חשבון אחרי מיון / אשפוז",
+   "topic": "בריאות",
+   "home": "GenAppPeruk15HomeScreen",
+   "root": "GenAppPeruk15Ent1Screen",
+   "dates": 0
+  },
+  {
+   "index": 15,
+   "ns": "peruk16",
+   "title": "תור בקופה / למומחה שבוטל",
+   "topic": "בריאות",
+   "home": "GenAppPeruk16HomeScreen",
+   "root": "GenAppPeruk16Ent1Screen",
+   "dates": 0
+  },
+  {
+   "index": 16,
+   "ns": "peruk17",
+   "title": "דחייה / השלמת מסמכים בביטוח לאומי",
+   "topic": "כסף",
+   "home": "GenAppPeruk17HomeScreen",
+   "root": "GenAppPeruk17Ent1Screen",
+   "dates": 0
+  },
+  {
+   "index": 17,
+   "ns": "peruk18",
+   "title": "מס הכנסה / מע״מ לעצמאי — מכתב, מקדמה, קנס, דדליין",
+   "topic": "כסף",
+   "home": "GenAppPeruk18HomeScreen",
+   "root": "GenAppPeruk18Ent1Screen",
+   "dates": 0
+  },
+  {
+   "index": 18,
+   "ns": "peruk19",
+   "title": "ארנונה / חוב עירייה / הנחה שנדחתה",
+   "topic": "כסף",
+   "home": "GenAppPeruk19HomeScreen",
+   "root": "GenAppPeruk19Ent1Screen",
+   "dates": 1
+  },
+  {
+   "index": 19,
+   "ns": "peruk20",
+   "title": "משרד הפנים / דרכון / תעודה / שינוי כתובת",
+   "topic": "כסף",
+   "home": "GenAppPeruk20HomeScreen",
+   "root": "GenAppPeruk20Ent1Screen",
+   "dates": 1
+  },
+  {
+   "index": 20,
+   "ns": "peruk21",
+   "title": "מכתב מבית ספר / ועדה / שילוב",
+   "topic": "בית ספר",
+   "home": "GenAppPeruk21HomeScreen",
+   "root": "GenAppPeruk21Ent1Screen",
+   "dates": 1
+  },
+  {
+   "index": 21,
+   "ns": "peruk22",
+   "title": "ילד חולה מול יום עבודה",
+   "topic": "בית ספר",
+   "home": "GenAppPeruk22HomeScreen",
+   "root": "GenAppPeruk22Ent1Screen",
+   "dates": 0
+  },
+  {
+   "index": 22,
+   "ns": "peruk23",
+   "title": "לפני מבחן — הסבר ותרגול, לא הגשה במקום הילד",
+   "topic": "בית ספר",
+   "home": "GenAppPeruk23HomeScreen",
+   "root": "GenAppPeruk23Ent1Screen",
+   "dates": 0
+  },
+  {
+   "index": 23,
+   "ns": "peruk24",
+   "title": "הורים מבוגרים — אחרי נפילה / מכתב / בלבול כספים",
+   "topic": "הורים",
+   "home": "GenAppPeruk24HomeScreen",
+   "root": "GenAppPeruk24Ent1Screen",
+   "dates": 0
+  },
+  {
+   "index": 24,
+   "ns": "peruk25",
+   "title": "פיטורים / סיום חוזה — השבוע שאחרי",
+   "topic": "עבודה",
+   "home": "GenAppPeruk25HomeScreen",
+   "root": "GenAppPeruk25Ent1Screen",
+   "dates": 0
+  },
+  {
+   "index": 25,
+   "ns": "peruk26",
+   "title": "יוקר מחיה — ניקוי חודש אחרי מינוס / התייקרות",
+   "topic": "כסף",
+   "home": "GenAppPeruk26HomeScreen",
+   "root": "GenAppPeruk26Ent1Screen",
+   "dates": 0
+  },
+  {
+   "index": 26,
+   "ns": "peruk27",
+   "title": "פרידה — השבוע הראשון (דירה, ילדים, כסף)",
+   "topic": "פרידה",
+   "home": "GenAppPeruk27HomeScreen",
+   "root": "GenAppPeruk27Ent1Screen",
+   "dates": 0
+  },
+  {
+   "index": 27,
+   "ns": "peruk28",
+   "title": "שכר תקוע במקום העבודה",
+   "topic": "עבודה",
+   "home": "GenAppPeruk28HomeScreen",
+   "root": "GenAppPeruk28Ent1Screen",
+   "dates": 0
+  }
+ ],
+ "selfTest": []
+}

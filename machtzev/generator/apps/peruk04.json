@@ -1,0 +1,152 @@
+{
+ "ns": "peruk04",
+ "title": "חידוש חוזה שכירות",
+ "look": "paper",
+ "chain": [
+  "לפני חתימה ראשונה",
+  "פיקדון ביציאה",
+  "ליקוי אחרי כניסה",
+  "חידוש"
+ ],
+ "questions": {
+  "report": "מה לעשות עם זה?",
+  "list": "מה פתוח עכשיו?",
+  "home": "מה עכשיו?"
+ },
+ "home": {
+  "slug": "app_peruk04_home",
+  "cls": "GenAppPeruk04HomeScreen"
+ },
+ "shell": {
+  "slug": "app_peruk04_shell",
+  "cls": "GenAppPeruk04ShellScreen"
+ },
+ "rootPage": {
+  "slug": "app_peruk04_root",
+  "cls": "GenAppPeruk04RootScreen"
+ },
+ "root": {
+  "slug": "app_peruk04_ent1",
+  "cls": "GenAppPeruk04Ent1Screen",
+  "name": "תיק",
+  "descField": "לקוח",
+  "stages": [
+   "התקבל",
+   "שולם",
+   "בבדיקה",
+   "נמסר",
+   "סגור"
+  ],
+  "fields": [
+   {
+    "label": "לקוח",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "טלפון",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "חוזה ישן",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "טיוטה חדשה",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "שכ״ד נוכחי",
+    "type": "text",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "תאריך סיום",
+    "type": "date",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "מתי ביקשו תשובה",
+    "type": "date",
+    "required": true,
+    "enumVals": []
+   },
+   {
+    "label": "ליקויים פתוחים",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "וואטסאפ",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "מה משלמים באזור",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "שכ״ד ישן",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "שכ״ד חדש",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "בטוחות ישנות",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "בטוחות חדשות",
+    "type": "text",
+    "required": false,
+    "enumVals": []
+   },
+   {
+    "label": "הודעת תשובה אחת",
+    "type": "text",
+    "required": false,
+    "enumVals": [
+     "כן עם תנאים",
+     "לא יוצאים בתאריך החוזה",
+     "הארכה חודשיים באותו מחיר"
+    ]
+   }
+  ]
+ },
+ "entities": [
+  {
+   "name": "תיק",
+   "slug": "app_peruk04_ent1"
+  },
+  {
+   "name": "ממצא",
+   "slug": "app_peruk04_ent2"
+  }
+ ],
+ "relations": true,
+ "report": {
+  "slug": "app_peruk04_rp1",
+  "cls": "GenAppPeruk04Rp1Screen"
+ }
+}
