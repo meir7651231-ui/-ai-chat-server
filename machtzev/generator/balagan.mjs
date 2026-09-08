@@ -153,6 +153,7 @@ ${mods.map((m) => `import 'gen_${m.home.slug}.dart';`).join('\n')}
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 typedef _Items = List<DsTodayItem> Function(DateTime today, {required int dayDelta});
 typedef _Props = List<Widget> Function(BuildContext context, DateTime today);
@@ -194,6 +195,23 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
     final r = await dsMailRecent(token: tok, query: appStore.setting('mail.query', 'newer_than:7d'));
     if (!mounted) return;
     setState(() { if (r == null) { _mailNote = ${k(L.mailFail)}; } else { _mail = r; } });
+  }
+  // התוכנית להיום (Motion/Reclaim בגרסת-בלגן): הדברים של היום מסודרים לבלוקים מתחילת-היום (עריך) — דחוף/קשיח ראשון, בלוק-מיקוד שמור אם יש ≤4 דברים. דטרמיניסטי; «ליומן» לכל בלוק.
+  List<Widget> _plan(DateTime today, List<DsTodayItem> overdue, List<DsTodayItem> todayItems) {
+    final start = (int.tryParse(appStore.setting('dayStart', '9')) ?? 9).clamp(0, 23); final block = (int.tryParse(appStore.setting('blockMin', '30')) ?? 30).clamp(5, 240);
+    final items = [...overdue.where((x) => x.hard), ...overdue.where((x) => !x.hard), ...todayItems.where((x) => x.hard), ...todayItems.where((x) => !x.hard)];
+    if (items.isEmpty) return const [];
+    final out = <Widget>[]; var t = DateTime(today.year, today.month, today.day, start);
+    String hm(DateTime d) => '\${d.hour.toString().padLeft(2, '0')}:\${d.minute.toString().padLeft(2, '0')}';
+    String cal(DateTime a, DateTime b, String title) { String z(DateTime d) => d.toIso8601String().substring(0, 16).replaceAll(RegExp(r'[-:]'), ''); return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + Uri.encodeComponent(title) + '&dates=' + z(a) + '00/' + z(b) + '00'; }
+    var i = 0;
+    for (final it in items) {
+      if (i == 2 && items.length <= 4) { final e = t.add(const Duration(minutes: 60)); out.add(DsActionRow(title: ${k(L.planBlock)}.replaceAll('{time}', hm(t)).replaceAll('{title}', ${k(L.planFocus)}), sub: '', actions: [${k(L.planCal)}], onAct: (_) => launchUrl(Uri.parse(cal(t, e, ${k(L.planFocus)})), mode: LaunchMode.externalApplication))); t = e; }
+      final e = t.add(Duration(minutes: block)); final a = t;
+      out.add(DsActionRow(title: ${k(L.planBlock)}.replaceAll('{time}', hm(a)).replaceAll('{title}', it.title), sub: it.module, actions: [${k(L.planCal)}], onAct: (_) => launchUrl(Uri.parse(cal(a, e, it.title)), mode: LaunchMode.externalApplication)));
+      t = e; i++;
+    }
+    return out;
   }
   List<Widget> _inbox(BuildContext context) {
     final out = <Widget>[];
@@ -242,14 +260,17 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
     final n = overdue.length + todayItems.length + pending.length;
     final lead = n == 0 && cards.isEmpty ? ${k(L.homeNone)} : n <= 1 ? ${k(L.homeOne)} : ${k(L.homeMany)}.replaceAll('{n}', n.toString());
     final hardToday = todayItems.where((x) => x.hard && x.due == today).length;
+    final plan = _plan(today, overdue, todayItems);
     WidgetsBinding.instance.addPostFrameCallback((_) { _digest(lead, hardToday); });
     final lk = DsLook.of(context);
     final empty = n == 0 && cards.isEmpty;
     return DsScaffold(title: ${k(L.navToday)}, subtitle: empty ? ${k(L.askSub)} : lead, icon: ${k('')}, children: [
+      DsQuickAdd(hint: ${k(L.homeQuick)}, autofocus: true, onSubmit: (s) { final hits = balaganIdentify(s); if (hits.isEmpty) { setState(() => _mailNote = ${k(L.askNoHit)}); return; } final m = hits.first.module; Navigator.of(context).push<bool>(MaterialPageRoute<bool>(builder: (_) => ${clsOf('balagan_confirm')}(module: m, facts: balaganFacts(s, m), alternatives: hits.skip(1).map((h) => h.module).toList(), text: s))); }),   // שורה אחת מהמסך-הראשון ⇒ זיהוי ⇒ טופס-אישור: אפס ניווט
       if (!empty) DsLoadMeter(count: n, label: ${k(L.loadOf)}.replaceAll('{n}', n.toString()), stateLabels: [${k(L.loadOk)}, ${k(L.loadWarn)}, ${k(L.loadBad)}]),
       Padding(padding: const EdgeInsets.only(top: 16, bottom: 12), child: Text(lead, style: TextStyle(color: lk.ink, fontSize: 28, fontWeight: FontWeight.w600, height: 1.2))),
       if (overdue.isNotEmpty) DsSection(title: ${k(L.homeOverdue)}, tone: 2, children: [for (final it in overdue) DsActionRow(title: it.title, sub: it.sub + ' · ' + it.module, tone: 2, actions: it.actions, onAct: it.act)]),   // D6/P6/P7 · באיחור ראשון
       if (todayItems.isNotEmpty) DsSection(title: ${k(L.homeToday)}, children: [for (final it in todayItems) DsActionRow(title: it.title, sub: it.sub + ' · ' + it.module, actions: it.actions, onAct: it.act)]),
+      if (plan.isNotEmpty) DsFold(title: ${k(L.planFold)}.replaceAll('{n}', plan.length.toString()), details: plan),   // תזמון-אוטומטי: מקופל — הוא מסתכל כשהוא רוצה
       ...cards.take(3),   // 3 למעלה
       if (cards.length > 3) DsFold(title: ${k(L.homeMore)}.replaceAll('{n}', (cards.length - 3).toString()), details: cards.skip(3).toList()),
       if (_mailNote.isNotEmpty) DsNote(message: _mailNote, label: '', tone: 0),
@@ -276,6 +297,7 @@ import '../dart-ui-bs/ds/ds_store.dart';
 import 'gen_balagan_confirm.dart';
 import 'gen_balagan_moments.dart';
 ${mods.map((m) => `import 'gen_${m.root.slug}.dart';`).join('\n')}
+import 'dart:convert';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -297,27 +319,29 @@ class _${cls}State extends State<${cls}> {
   final _c = TextEditingController();
   List<BalaganHit> _hits = const [];
   Map<String, String> _extra = const {};
+  String _doc = '';   // data:URI של הצילום (מוקטן) — נשמר עם הרשומה (מחסנית-מסמכים)
   bool _asked = false, _busy = false;
   String _note = '';
 
-  void _go() { setState(() { _asked = true; _hits = balaganIdentify(_c.text); _note = _hits.isEmpty ? ${k(L.askNone)} : ''; }); }
+  void _go() { final hits = balaganIdentify(_c.text); setState(() { _asked = true; _hits = hits; _note = hits.isEmpty ? ${k(L.askNoHit)} : ''; }); if (hits.isNotEmpty) _open(context, hits.first, hits.skip(1).map((h) => h.module).toList()); }   // הקשה אחת: זיהוי ⇒ ישר לטופס-האישור (החלופות בתוכו)
   void _skip() { setState(() { _hits = _hits.length > 1 ? _hits.sublist(1) : const []; if (_hits.isEmpty) _note = ${k(L.askNone)}; }); }
-  void _open(BuildContext context, BalaganHit h) {
+  void _open(BuildContext context, BalaganHit h, [List<BalaganModule> alts = const []]) {
     final facts = {...balaganFacts(_c.text, h.module), ..._extra}..removeWhere((key, v) => v.trim().isEmpty || !(h.module.dateFields.contains(key) || h.module.numFields.contains(key) || key == h.module.descField || key == h.module.longField));
-    Navigator.of(context).push<bool>(MaterialPageRoute<bool>(builder: (_) => ${clsOf('balagan_confirm')}(module: h.module, facts: facts))).then((saved) { if (saved == true && mounted) setState(() { _c.clear(); _hits = const []; _extra = const {}; _asked = false; _note = ${k(L.askSaved)}; }); });
+    Navigator.of(context).push<bool>(MaterialPageRoute<bool>(builder: (_) => ${clsOf('balagan_confirm')}(module: h.module, facts: facts, doc: _doc, alternatives: alts, text: _c.text))).then((saved) { if (saved == true && mounted) setState(() { _c.clear(); _hits = const []; _extra = const {}; _doc = ''; _asked = false; _note = ${k(L.askSaved)}; }); });
   }
   Future<void> _photo() async {
     final key = appStore.setting('ai.key');
     if (key.isEmpty) { setState(() => _note = ${k(L.askNoKey)}); return; }
-    final x = await ImagePicker().pickImage(source: kIsWeb ? ImageSource.gallery : ImageSource.camera, imageQuality: 85);
+    final x = await ImagePicker().pickImage(source: kIsWeb ? ImageSource.gallery : ImageSource.camera, imageQuality: 60, maxWidth: 900);
     if (x == null) return;
     setState(() { _busy = true; _note = ${k(L.askReading)}; });
     final bytes = await x.readAsBytes();
+    _doc = bytes.length <= 160000 ? 'data:' + (x.mimeType ?? 'image/jpeg') + ';base64,' + base64Encode(bytes) : '';   // ≤160KB במכשיר; גדול ⇒ רק התמלול (כנות במסך)
     final r = await dsAiExtract(apiKey: key, image: bytes, imageMime: x.mimeType ?? 'image/jpeg', fields: const ['תאריך', 'סכום', 'שם'], model: appStore.setting('ai.model', 'claude-sonnet-5'));
     if (!mounted) return;
     if (r == null) { setState(() { _busy = false; _note = ${k(L.askFailed)}; }); return; }
     final text = (r['_text'] ?? '').trim();
-    setState(() { _busy = false; _note = ''; if (text.isNotEmpty) _c.text = text; _extra = {for (final e in r.entries) if (e.key != '_text' && e.value.trim().isNotEmpty) e.key: e.value}; });
+    setState(() { _busy = false; _note = _doc.isEmpty ? ${k(L.docTooBig)} : ${k(L.docKept)}; if (text.isNotEmpty) _c.text = text; _extra = {for (final e in r.entries) if (e.key != '_text' && e.value.trim().isNotEmpty) e.key: e.value}; });
     _go();
   }
 
@@ -329,7 +353,7 @@ class _${cls}State extends State<${cls}> {
       Container(
         decoration: BoxDecoration(border: Border.all(color: lk.line), borderRadius: BorderRadius.circular(lk.r)),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        child: TextField(controller: _c, minLines: 3, maxLines: 8, autofocus: true, style: TextStyle(color: lk.ink, fontSize: 16, height: 1.5), decoration: InputDecoration(border: InputBorder.none, hintText: ${k(L.askHint)}, hintStyle: TextStyle(color: lk.faint)), onSubmitted: (_) => _go()),
+        child: TextField(controller: _c, minLines: 3, maxLines: 8, autofocus: true, textInputAction: TextInputAction.done, style: TextStyle(color: lk.ink, fontSize: 16, height: 1.5), decoration: InputDecoration(border: InputBorder.none, hintText: ${k(L.askHint)}, hintStyle: TextStyle(color: lk.faint)), onSubmitted: (_) => _go()),
       ),
       Padding(padding: const EdgeInsets.only(top: 10), child: Row(children: [
         Expanded(child: DsPrimaryButton(label: ${k(L.askGo)}, onTap: _busy ? null : _go)),
@@ -337,8 +361,8 @@ class _${cls}State extends State<${cls}> {
         GestureDetector(onTap: _busy ? null : _photo, child: Container(padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9), decoration: BoxDecoration(border: Border.all(color: lk.line), borderRadius: BorderRadius.circular(9)), child: Text(${k(L.askPhoto)}, style: TextStyle(color: lk.ink, fontSize: 14, fontWeight: FontWeight.w600)))),
       ])),
       if (_note.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 10), child: DsNote(message: _note, label: '', tone: 0)),
-      if (_asked && top != null) DsSection(title: ${k(L.askUnderstood)}, children: [
-        DsApproveCard(question: ${k(L.askIs)}.replaceAll('{title}', top.module.title).replaceAll('{moment}', top.module.moment), source: _c.text.length > 80 ? _c.text.substring(0, 80) : _c.text, okLabel: ${k(L.askOpen)}, noLabel: ${k(L.askNot)}, onOk: () => _open(context, top), onNo: _skip),
+      if (_asked && top != null) DsSection(title: ${k(L.askUnderstood)}, children: [   // חזר בלי לשמור ⇒ הזיהוי נשאר על המסך (הקשה אחת חוזרת)
+        DsApproveCard(question: ${k(L.askIs)}.replaceAll('{title}', top.module.title).replaceAll('{moment}', top.module.moment), source: _c.text.length > 80 ? _c.text.substring(0, 80) : _c.text, okLabel: ${k(L.askOpen)}, noLabel: ${k(L.askNot)}, onOk: () => _open(context, top, _hits.skip(1).map((h) => h.module).toList()), onNo: _skip),
         if (_hits.length > 1) DsFold(title: ${k(L.askAlso)} + ' (' + (_hits.length - 1).toString() + ')', details: [for (final h in _hits.skip(1)) DsNavTile(glyph: '', title: h.module.title, sub: h.module.moment, onTap: () => _open(context, h))]),
       ]),
     ]);
@@ -367,9 +391,12 @@ String balaganRemember(String label) => appStore.setting('mem:' + label);
 void balaganLearn(BalaganField f, String v) { if (f.type == 'text' && f.options.isEmpty && v.trim().isNotEmpty && v.trim().length <= 30) appStore.setSetting('mem:' + f.label, v.trim()); }
 
 class ${cls} extends StatefulWidget {
-  const ${cls}({required this.module, required this.facts, super.key});
+  const ${cls}({required this.module, required this.facts, this.doc = '', this.alternatives = const [], this.text = '', super.key});
   final BalaganModule module;
   final Map<String, String> facts;
+  final List<BalaganModule> alternatives;   // «לא זה? אולי» — החלפת-מודול בתוך הטופס (בלי לחזור)
+  final String text;
+  final String doc;   // מחסנית-מסמכים: data:URI של הצילום ⇒ נשמר ברשומה כ-'__doc'
   @override
   State<${cls}> createState() => _${cls}State();
 }
@@ -387,7 +414,7 @@ class _${cls}State extends State<${cls}> {
     final map = <String, String>{for (final e in _v.entries) if (e.value.trim().isNotEmpty) e.key: e.value.trim()};
     if (map.isEmpty) return;
     for (final f in widget.module.fields) { if (map.containsKey(f.label)) balaganLearn(f, map[f.label]!); }
-    appStore.add(widget.module.rootSlug, {...map, if (widget.module.stages > 0) '__stage': '0'});
+    appStore.add(widget.module.rootSlug, {...map, if (widget.module.stages > 0) '__stage': '0', if (widget.doc.isNotEmpty) '__doc': widget.doc});
     Navigator.of(context).pop(true);
   }
   @override
@@ -398,6 +425,8 @@ class _${cls}State extends State<${cls}> {
     shown.sort((a, b) => m.fields.indexOf(a).compareTo(m.fields.indexOf(b)));
     final rest = m.fields.where((f) => !shown.contains(f)).toList();
     return DsScaffold(title: m.title, subtitle: ${k(L.confirmSub)}, icon: ${k('')}, children: [
+      if (m.moment.isNotEmpty) Padding(padding: const EdgeInsets.only(bottom: 10), child: DsNote(message: ${k(L.confirmIs)}.replaceAll('{title}', m.title).replaceAll('{moment}', m.moment), label: '', tone: 0)),
+      if (widget.alternatives.isNotEmpty) DsFold(title: ${k(L.confirmNot)}.replaceAll('{n}', widget.alternatives.length.toString()), details: [for (final a in widget.alternatives) DsNavTile(glyph: '', title: a.title, sub: a.moment, onTap: () => Navigator.of(context).pushReplacement<bool, bool>(MaterialPageRoute<bool>(builder: (_) => ${clsOf('balagan_confirm')}(module: a, facts: balaganFacts(widget.text, a), doc: widget.doc, alternatives: [for (final x in [widget.module, ...widget.alternatives]) if (x.index != a.index) x], text: widget.text))))]),
       for (final f in shown) _field(f),
       if (rest.isNotEmpty) DsFold(title: ${k(L.confirmMore)}.replaceAll('{n}', rest.length.toString()), details: [for (final f in rest) _field(f)]),
       Padding(padding: const EdgeInsets.only(top: 14), child: DsPrimaryButton(label: ${k(L.askSave)}, onTap: _save)),
@@ -494,9 +523,9 @@ class _${cls}State extends State<${cls}> {
   @override
   Widget build(BuildContext context) => CallbackShortcuts(
     bindings: <ShortcutActivator, VoidCallback>{
-      const SingleActivator(LogicalKeyboardKey.keyT): () => setState(() => _t = 0),
-      const SingleActivator(LogicalKeyboardKey.keyA): () => setState(() => _t = 1),
-      const SingleActivator(LogicalKeyboardKey.keyN): () => setState(() => _t = 2),
+      const SingleActivator(LogicalKeyboardKey.keyT, alt: true): () => setState(() => _t = 0),
+      const SingleActivator(LogicalKeyboardKey.keyA, alt: true): () => setState(() => _t = 1),
+      const SingleActivator(LogicalKeyboardKey.keyN, alt: true): () => setState(() => _t = 2),
       const SingleActivator(LogicalKeyboardKey.keyK, control: true): () => DsPalette.show(context, hint: ${k(L.paletteHint)}, items: ${paletteItems}),
       const SingleActivator(LogicalKeyboardKey.keyK, meta: true): () => DsPalette.show(context, hint: ${k(L.paletteHint)}, items: ${paletteItems}),
     },

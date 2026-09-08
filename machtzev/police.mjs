@@ -140,6 +140,7 @@ gate('particles', 'generator/particles.mjs', ['--gate']);
 gate('peruk', 'generator/peruk.mjs', ['--gate']);
 gate('balagan', 'generator/balagan-look.mjs', ['--gate']);
 gate('balaganone', 'generator/balagan-one.mjs', ['--gate']);
+gate('balaganrun', 'generator/balagan-run.mjs', ['--gate'], FAST);   // במריצה — אתר בנוי + playwright (⚪ מדולג בלי אתר)
 gate('goldquarry', 'generator/quarry-golden.mjs', ['--gate']);
 gate('rendermodule', 'generator/render-module.mjs', ['--gate']);
 gate('retarget', 'generator/retarget.mjs', ['--gate']);

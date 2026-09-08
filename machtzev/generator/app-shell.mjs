@@ -53,6 +53,7 @@ export function renderRootPage(slug, { root, children, report, title }) {
     if (rep) blocks.push(rep.call); else notes.push(`${L.rootReport}: ${L.rootNoAction}`);
   }
   if (factRows.length && paper) blocks.push(`DsFold(title: ${k(T('foldLabel', { n: factRows.length }))}, details: [${factRows.join(', ')}])`);
+  if (paper) blocks.push(`((r0['__doc'] ?? '').startsWith('data:image') ? DsFold(title: ${k(L.docTitle)}, details: [ClipRRect(borderRadius: BorderRadius.circular(12), child: Image.memory(base64Decode((r0['__doc'] ?? '').split(',').last), fit: BoxFit.fitWidth))]) : const SizedBox.shrink())`);   // G33 · מחסנית-מסמכים: הצילום שנשמר עם הרשומה
   const stageSub = root.stages && root.stages.length ? `const [${root.stages.map((s) => k(s)).join(', ')}][appStore.stageOf('${root.slug}', id).clamp(0, ${root.stages.length - 1})]` : k(root.name);
   const cls = clsOf(slug);
   const code = `// 🧭 חולל ע"י ניווט-מקשרים (app-shell · G26 · הכרעה-27) — עמוד-השורש: עובדות · ישויות-בנות (מסוננות לרשומה) · דוח. אל תערוך ידנית.
@@ -61,11 +62,12 @@ import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 ${[...imports].sort().join('\n')}
+${paper ? "import 'dart:convert';" : ''}
 import 'package:flutter/material.dart';
 
 class ${cls} extends StatelessWidget {
   const ${cls}({required this.id, super.key});
-  final String id;
+  final String id;   // ignore: unused_element
   @override
   Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, _) {
     final r0 = appStore.byId('${root.slug}', id);
@@ -302,6 +304,8 @@ class ${cls} extends StatelessWidget {
   Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, _) => DsScaffold(title: ${k(L.behaviorTitle)}, subtitle: ${k(L.behaviorSub)}, icon: ${k('')}, children: [
     DsField(label: ${k(L.digestHourLabel)}, hint: '8', value: appStore.setting('digestHour', '8'), onChanged: (v) => appStore.setSetting('digestHour', v)),
     DsField(label: ${k(L.offsetsLabel)}, hint: '3,1,0', value: appStore.setting('offsets', '3,1,0'), onChanged: (v) => appStore.setSetting('offsets', v)),
+    DsField(label: ${k(L.dayStartLabel)}, hint: '9', value: appStore.setting('dayStart', '9'), onChanged: (v) => appStore.setSetting('dayStart', v)),
+    DsField(label: ${k(L.blockMinLabel)}, hint: '30', value: appStore.setting('blockMin', '30'), onChanged: (v) => appStore.setSetting('blockMin', v)),
     DsToggleTile(label: ${k(L.autoLabel)}, value: appStore.setting('always:rem') == '1' ? 'true' : 'false', onChanged: (v) => appStore.setSetting('always:rem', v == 'true' ? '1' : '')),
     DsSection(title: ${k(L.logTitle)}, children: [for (final e in appStore.log) DsLogRow(text: e['what'] ?? '', sub: _short(e['at'] ?? ''), undoLabel: e['undone'] == '1' ? '' : ${k(L.undo)}, onUndo: e['undone'] == '1' ? null : () => appStore.undo(e['id'] ?? ''))]),
   ]));

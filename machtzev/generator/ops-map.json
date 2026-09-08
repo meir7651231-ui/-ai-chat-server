@@ -1734,6 +1734,7 @@
   "file": "dart-ui-bs/ds/ds.dart",
   "op": "container",
   "sockets": [
+   "autofocus",
    "hint",
    "onSubmit"
   ],
