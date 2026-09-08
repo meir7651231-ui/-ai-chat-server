@@ -13,19 +13,25 @@
    "id": "D2",
    "group": "עיצוב",
    "text": "תיבת-קלט אחת עם תחביר-inline במקום טופס",
-   "wave": "wave:G30"
+   "check": [
+    "quickAdd"
+   ]
   },
   {
    "id": "D3",
    "group": "עיצוב",
    "text": "≤3 מקשים לכל פעולה (יצירה · השלמה · ניווט)",
-   "wave": "wave:G30"
+   "check": [
+    "keys"
+   ]
   },
   {
    "id": "D4",
    "group": "עיצוב",
    "text": "Cmd/Ctrl+K בכל מסך + ? = רשימת-קיצורים",
-   "wave": "wave:G30"
+   "check": [
+    "keys"
+   ]
   },
   {
    "id": "D5",
@@ -63,7 +69,9 @@
    "id": "D10",
    "group": "עיצוב",
    "text": "אפס-הגדרות לפני שימוש; ברירת-מחדל לכל שדה",
-   "wave": "wave:G30"
+   "check": [
+    "zeroSettings"
+   ]
   },
   {
    "id": "D11",
@@ -216,7 +224,10 @@
    "id": "T3",
    "group": "יעד",
    "text": "≤2 הקשות לכל פעולה, אפס-הקלדה",
-   "wave": "wave:G30"
+   "check": [
+    "homeTwoTaps",
+    "noTypingHome"
+   ]
   },
   {
    "id": "T4",

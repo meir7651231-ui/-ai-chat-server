@@ -619,7 +619,7 @@ ${exportBtn}
   });
 }
 `;
-  return { cls, code, notes, count: sections.length, picker: picker ? picker.cand : null, exported: !!exportBtn, textFn: `reportText${cls}` };
+  return { cls, code, notes, count: sections.length, picker: picker ? picker.cand : null, exported: !!exportBtn, textFn: `reportText${cls}`, export: exportBtn ? { files: ex.link.files, linkRaw: ex.link.call } : null };   // G30 · «היום» משתמש באותה שליחה
 }
 
 export function reportsMd(reports) {

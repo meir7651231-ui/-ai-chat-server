@@ -100,5 +100,14 @@
  "diffPerYear": "לשנה",
  "emptyCalm": "אין כלום כאן עדיין. {action} — וזהו.",
  "messageVariant": "נוסח",
- "diffWas": "(היה {old})"
+ "diffWas": "(היה {old})",
+ "homeOne": "דבר אחד ממך היום.",
+ "homeMany": "{n} דברים ממך היום.",
+ "homeNone": "אין כלום להיום. תנוח.",
+ "homeOpen": "פתח",
+ "homeSend": "שלח",
+ "quickAddHint": "{action} — כתוב ומקש Enter",
+ "paletteHint": "חיפוש או פעולה…",
+ "paletteTitle": "פקודה",
+ "keysHint": "A הוספה · T היום · I רשימה · Ctrl+K פקודה"
 }

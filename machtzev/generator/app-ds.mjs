@@ -10,7 +10,7 @@ import { interpret as entInterpret } from './entity.mjs';
 import { renderEntity, renderDashboard, renderHub, renderSystem, renderMain, renderScreenBind, renderCompose, renderRecordDetail, SCREEN_REGISTRY, makeConsts, write, setLook, getLook } from './render-ds.mjs';
 import { PARTICLE_RE, CONTENT_RE, REPORT_RE, parseParticleLines, parseContentLines, parseReportLines, planParticles, planReports, renderParticles, renderReport, renderReportTest, planReport, reportsMd } from './particles.mjs';   // G23 · הכרעה-27
 import { nlToSpec } from './nl-spec.mjs';
-import { pickRoot, renderRootPage, renderShell } from './app-shell.mjs';
+import { pickRoot, renderRootPage, renderShell, renderHome } from './app-shell.mjs';
 import fs0 from 'node:fs';
 const SL = JSON.parse(fs0.readFileSync(new URL('./spec-lang.data.json', import.meta.url), 'utf8'));
 import { L, T } from './chrome.mjs';
@@ -225,10 +225,11 @@ export function buildApp(specText) {
 
   // 🧩 G23 · הכרעה-27: מסך-חלקיקים לכל ישות שיש לה חלקיקים — כל חלקיק נמצא בחיפוש בכל הקטלוג ומורכב מחדש
   const particleScreens = []; const reportScreens = []; const reportByEnt = {};
+  let planAll = [], pentsAll = [];   // G30 · חשופים לשלד («היום» משתמש בחלקיק-ההודעה של השורש)
   if (particleLines.length || reportLines.length) {
     const content = parseContentLines(contentLines);
     const pents = entMeta.map((e) => { const li = info.find((x) => x.isEnt && `${P}ent${x.i}` === e.slug); const r = li ? entRes[li.i] : null; const sc = screens.find((x) => x.slug === e.slug); return { name: e.name, slug: e.slug, cls: sc ? sc.cls : 'Gen' + e.slug, schema: r ? r.schema : [] }; });
-    const plan = planParticles({ particles: parseParticleLines(particleLines), entities: pents, content });
+    const plan = planParticles({ particles: parseParticleLines(particleLines), entities: pents, content }); planAll = plan; pentsAll = pents;
     let pi = 0;
     for (const e of pents) {
       const mine = plan.filter((p) => p.entSlug === e.slug); if (!mine.length) continue;
@@ -251,7 +252,7 @@ export function buildApp(specText) {
         if (fs.existsSync(path.join(bsTest, '..', 'pubspec.yaml'))) fs.writeFileSync(path.join(bsTest, `genesis_gen_${rslug}_report_test.dart`), renderReportTest({ ns: nsName, slug: rslug, report: rp, textFn: r.textFn }));
       }
       reportScreens.push({ slug: rslug, cls: r.cls, kind: 'entity', name: `📄 ${T('reportTitle', { ent: rp.entity })}`, icon: '📄', sub: `${r.count} ${L.reportSections}${r.notes.length ? ` · ${r.notes.length} ${L.reportUnres}` : ''}` });
-      reportByEnt[rp.entity] = { slug: rslug, cls: r.cls };
+      reportByEnt[rp.entity] = { slug: rslug, cls: r.cls, textFn: r.textFn, export: r.export };
     }
     fs.writeFileSync(path.join(gen, `particle-plan-${nsName}.md`), planReport(plan) + (reports.length ? reportsMd(reports) : ''));
     if (reportLines.length) fs.writeFileSync(path.join(gen, `report-plan-${nsName}.json`), JSON.stringify(reports.map((r) => ({ entity: r.entity, ok: r.ok, unresolved: r.unresolved, export: r.export ? { label: r.export.label, toField: r.export.toField, ok: r.export.ok, action: (r.export.action.atoms[0] || null), link: r.export.link ? r.export.link.name : null } : null, sections: r.sections.map((s) => ({ name: s.name, refs: s.refs.map((x) => ({ raw: x.raw, mode: x.mode || null, why: x.why || null, wired: x.p && x.p.wired ? x.p.wired : [] })) })) })), null, 1));
@@ -282,7 +283,14 @@ export function buildApp(specText) {
     const kids = (backRefs[rootMeta.name] || []).map((b) => { const e = entOf(b.fname); e.link = b.ffield; e.descField = descOf(e, [b.ffield]); e.subField = (e.schema.find((f) => f.label !== e.descField && f.label !== b.ffield && !(f.members && f.members.length)) || {}).label || null; return e; }).filter((e) => e.cls);
     const rootPage = renderRootPage(`${P}root`, { root: rootE, children: kids, report: reportByEnt[rootMeta.name] || null, title: appTitle });
     const dash = screens.find((x) => x.kind === 'dashboard') || null;
-    const shell = renderShell(`${P}shell`, { title: appTitle, root: rootE, rootPage, dashboard: dash, hub: { slug: `${P}hub`, cls: hub.cls }, questions });
+    // G30 · נייר: «היום» = דבר-אחד לכל רשומה פתוחה (חלקיק-ההודעה של השורש + שליחת-הדוח) במקום לוח-הבקרה בלשונית-הבית
+    let homeScr = null;
+    if (getLook() === 'paper') {
+      const rep = reportByEnt[rootMeta.name] || null;
+      const msgP = planAll.find((x) => x.ok && x.entity === rootMeta.name && x.shape && x.shape.kind === 'message') || null;
+      homeScr = renderHome(`${P}home`, { root: rootE, rootPage, report: rep, message: msgP ? { entity: pentsAll.find((e) => e.name === rootMeta.name), p: msgP } : null, title: questions.home || L.shellHome });
+    }
+    const shell = renderShell(`${P}shell`, { title: appTitle, root: rootE, rootPage, dashboard: dash, hub: { slug: `${P}hub`, cls: hub.cls }, questions, home: homeScr });
     home = { slug: `${P}shell`, cls: shell.cls };
     console.log(`🧭 ${L.shellLog}: ${L.shellRootWord} ${rootMeta.name} · ${kids.length} ${L.shellChildrenWord} · ${shell.nav || '—'}${[...rootPage.notes, ...shell.notes].length ? ' · ⚪ ' + [...rootPage.notes, ...shell.notes].join(' · ') : ''}`);
   }
@@ -304,7 +312,7 @@ if (import.meta.url === 'file://' + process.argv[1]) {
     const sk = resolveSkin(autoSkin().skin); const tot = {};
     if (sk && getLook() === 'paper') { delete sk.navTile; delete sk.section; delete sk.pageHeader; }   // G28 · נייר: שורה-לא-כרטיס (DsNavTile 52px · קו) · חלק שטוח (DsSection: כותרת 15/700 + שורות, בלי כרטיס-בתוך-כרטיס) · כותרת-מסך של ה-DS (22/600 + קו) — כלל-13 של PLAN §5.3
     for (const f of fs.readdirSync(OUT)) {
-      if (!new RegExp(`^gen_${P}(ent|px|rp|scr|bind|rec|over|audit|flags|settings|hub|main|shell|root)\\d*\\.dart$`).test(f)) continue;
+      if (!new RegExp(`^gen_${P}(ent|px|rp|scr|bind|rec|over|audit|flags|settings|hub|main|shell|root|home)\\d*\\.dart$`).test(f)) continue;
       const fp = path.join(OUT, f); let { code, stats } = skinPass(fs.readFileSync(fp, 'utf8'), sk);
       if (getLook() === 'paper') code = code.replace(/^import '\.\.\/dart-ui-bs\/((?:premium|auto)\/[^']+)';\n/gm, (line, rel) => { const src = fs.readFileSync(path.join(R.ROOT, 'new/dart-ui-bs', rel), 'utf8'); const cls = (src.match(/^class ([A-Za-z0-9_]+)/m) || [])[1]; return cls && new RegExp('\\b' + cls + '\\(').test(code) ? line : ''; });   // G28 · נייר: ייבוא-אטום שהוחלף בעור ולא נותר בשימוש נגזם (אחרת האטום הקשיח "מיובא" למסך-נייר)
       fs.writeFileSync(fp, code); for (const [k, v] of Object.entries(stats)) tot[k] = (tot[k] || 0) + v;

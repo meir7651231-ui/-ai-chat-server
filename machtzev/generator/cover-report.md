@@ -1,6 +1,6 @@
 # כיסוי-שקעים (cover · G3) — שחזור טבלת-ATOM הידנית
 
-**top-1: 18/58** (תצוגה 13/28 · לוגיקה 5/30) · **top-3: 29/58** (תצוגה 19/28 · לוגיקה 10/30)
+**top-1: 19/58** (תצוגה 14/28 · לוגיקה 5/30) · **top-3: 28/58** (תצוגה 18/28 · לוגיקה 10/30)
 
 | op | ביד | המנוע (top-1) | top-3 | ✓ |
 |---|---|---|---|---|
@@ -8,35 +8,35 @@
 | headline→stat | KpiTile | KpiTile | KpiTile · ProgressRing · StatHero | ✓ |
 | hero→stat | stat_hero | StatHero | StatHero · KpiTile · ProgressRing | ✗ |
 | ratio→ratio | StatRow | StatRow | StatRow · CreditBar · ProgressStatRow | ✓ |
-| compare→bars | NeonBars | DsBars | DsBars · NeonBars · DonutChart | ≈ |
+| compare→bars | NeonBars | DsBars | DsBars · NeonBars · StatBlock | ≈ |
 | diff→stat | BareStat | KpiTile | KpiTile · ProgressRing · StatHero | ✗ |
 | fact→fact | StatusChip | DsChip | DsChip · DsEmpty · StatusChip | ≈ |
 | group→group | DsSection | DsSection | DsSection · SectionHeader · AnimatedEmpty | ✓ |
-| identity→identity | MediaRow | GlassListTile | GlassListTile · HeroHeader · MediaRow | ≈ |
+| identity→identity | MediaRow | DsScaffold | DsScaffold · GlassListTile · HeroHeader | ✗ |
 | action→action | SoftButton | DsPrimaryButton | DsPrimaryButton · GlassButton · GradButton | ✗ |
-| search→field | DsSearch | DsSearch | DsSearch · DsMultiSelect · DsDateField | ✓ |
-| match→transform | smartFilter | smartScore | smartScore · studentHistoryText · ruleExact | ✗ |
+| search→field | DsSearch | DsSearch | DsSearch · DsToggleTile · PremiumToggle | ✓ |
+| match→transform | smartFilter | smartScore | smartScore · studentHistoryText · candidateSupportersForCharge | ✗ |
 | filter→filter | FilterChipPill | FilterChipPill | FilterChipPill · PresetChip · SeverityChip | ✓ |
 | predicate→predicate | finderMatches | matchSegment | matchSegment · lockKey · makeupEligibility | ✗ |
-| serialize→transform | toCsv | csvEscape | csvEscape · visibleEventsForDesignations · receiptFmtOf | ✗ |
-| switch→switch | SegmentedSwitch | SegmentedSwitch | SegmentedSwitch · SegmentedPillToggle | ✓ |
+| serialize→transform | toCsv | csvEscape | csvEscape · visibleEventsForDesignations · assistantIntentPrompt | ✗ |
+| switch→switch | SegmentedSwitch | SegmentedSwitch | SegmentedSwitch · ForgeCheckPop · ForgePickerOptionsPanelSelection | ✓ |
 | role→format | roleOf | canGrantedAction | canGrantedAction · donCalMonthLine · norm | ✗ |
 | grant→predicate | canGrantedAction | canGrantedAction | canGrantedAction · kindPlural · docSkey | ✓ |
-| alert→alert | AlertBanner | ToastCard | ToastCard · AlertBanner | ≈ |
+| alert→alert | AlertBanner | AlertBanner | AlertBanner · ToastCard · DsNote | ✓ |
 | expiry→collection | expiringIntakes | isContiguousSubsequence | isContiguousSubsequence · nextClosure · spotlightBox | ✗ |
 | capital→measure | warehouseValue | assistantIntentPrompt | assistantIntentPrompt · connectionFailReason · isSizeToken | ✗ |
-| table→table | DsTable | DsTable | DsTable | ✓ |
+| table→table | DsTable | DsTable | DsTable · ForgeModalDialog · ForgeSplitControl | ✓ |
 | panel→panel | GlassCard | DsCardElevated | DsCardElevated · DsCardGlass · DsCardGradient | ✗ |
-| timeline→timeline | TimelineItem | TimelineItem | TimelineItem | ✓ |
+| timeline→timeline | TimelineItem | TimelineItem | TimelineItem · ForgeDatePills | ✓ |
 | empty→empty | EmptyState | EmptyStateCard | EmptyStateCard · SearchEmptyState · EmptyState | ≈ |
-| trend→trend | TrendStat | TrendStat | TrendStat · PremiumStat | ✓ |
+| trend→trend | TrendStat | TrendStat | TrendStat · DsDiffRow · PremiumStat | ✓ |
 | ring→stat | ProgressRing | KpiTile | KpiTile · ProgressRing · StatHero | ≈ |
 | gauge→stat | GaugeMeter | KpiTile | KpiTile · ProgressRing · StatHero | ✗ |
-| bars→bars | DsBars | DonutChart | DonutChart · LineSpark · NeonBars | ✗ |
+| bars→bars | DsBars | Sparkline | Sparkline · DonutChart · BarChart | ✗ |
 | avatar→identity | AvatarTile | AvatarTile | AvatarTile · GlassListTile · HeroHeader | ✓ |
 | expand→expand | ExpandableTile | ExpandableTile | ExpandableTile · FeaturePanel · RegressionBody | ✓ |
-| field→field | DsField | DsSearch | DsSearch · SearchField · DsDateField | ✗ |
-| enumfield→field | DsEnumField | DsSearch | DsSearch · SearchField · DsDateField | ✗ |
+| field→field | DsField | SearchField | SearchField · DsSearch · DsToggleTile | ✗ |
+| enumfield→field | DsEnumField | SearchField | SearchField · DsSearch · DsToggleTile | ✗ |
 | board→board | DsBoard | DsBoard | DsBoard | ✓ |
 | primary→action | DsPrimaryButton | DsPrimaryButton | DsPrimaryButton · GlassButton · GradButton | ✓ |
 | queue→collection | cockpitQueue | blockReason | blockReason · cockpitHokTasks · isDone | ✗ |

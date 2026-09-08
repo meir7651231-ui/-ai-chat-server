@@ -5,7 +5,7 @@
 //   לוח-הבקרה = הבית; כל שאר תוצרי-המנוע (חלקיקים · סקירה · כרטיס · מסך-אמת · מערכת) = מגירת "עוד" (הרכזת הישנה, ביט-זהה).
 //   אפס מילון-דומייני: שמות מהספק, אטומים מחיפוש-פתוח (switch לסרגל · group לחלקים · fact(label+value) לעובדות · action לפעולות).
 import { makeConsts, write, isPaper } from './render-ds.mjs';
-import { searchOp, wireAtom, pickWired } from './particles.mjs';
+import { searchOp, wireAtom, pickWired, particleWidgets } from './particles.mjs';
 import { L, T } from './chrome.mjs';
 
 const clsOf = (slug) => 'Gen' + slug.replace(/(^|_)([a-z0-9])/g, (_, __, c) => c.toUpperCase()) + 'Screen';
@@ -80,8 +80,67 @@ ${blocks.map((b) => `      Padding(padding: const EdgeInsets.only(bottom: 12), c
   return { slug, cls, notes };
 }
 
+// ── G30 · «היום» (נייר): הרשומות הפתוחות של השורש ⇒ כרטיס-אחד לכל אחת: משפט בגוף-ראשון · בורר-הנוסחים (חלקיק-ההודעה) · שלח · פתח.
+//    ≤2 הקשות מהמסך-הראשי לפעולה-הראשית (בחר-נוסח + שלח), אפס-הקלדה. הכל מחלקיקים קיימים (message · export) — אין קוד-דומייני.
+export function renderHome(slug, { root, rootPage, report, message, title }) {
+  const { k, dump } = makeConsts(slug);
+  const imports = new Set([`import 'gen_${rootPage.slug}.dart';`, `import 'gen_${root.slug}.dart';`]);
+  const firstWired = (pick, ctx) => { const w = pickWired([...pick.atoms, ...pick.alts], (c) => wireAtom(c, ctx)); if (w) imports.add(impOf(w)); return w; };
+  const notes = [];
+  const disp = root.descField ? `(r[${k(root.descField)}] ?? '')` : `appStore.displayOf('${root.slug}', r[AppStore.idKey] ?? '')`;
+  const openRecs = root.stages && root.stages.length ? `appStore.records('${root.slug}').where((r) => appStore.stageOf('${root.slug}', r[AppStore.idKey] ?? '') < ${root.stages.length - 1}).toList()` : `appStore.records('${root.slug}')`;
+  // חלקיק-ההודעה של הדוח (אם יש) — אותו חיווט, רשומה-אחת
+  let msgW = null, msgImports = new Set();
+  if (message) { const w = particleWidgets({ entity: message.entity, plan: [message.p], k, recs: '[r]' }); msgImports = w.imports; if (w.widgets.length) msgW = w.widgets[0]; else notes.push(...w.notes); }
+  for (const i of msgImports) imports.add(i);
+  // שליחה: הטקסט של הדוח + המנוע-המקשר (waLink…) — כמו הייצוא של הדוח
+  let sendFn = '', sendBtn = '';
+  if (report && report.export) {
+    imports.add(`import 'gen_${report.slug}.dart';`); for (const f of report.export.files) imports.add(`import '../${f}';`);
+    imports.add(`import 'package:share_plus/share_plus.dart';`); imports.add(`import 'package:url_launcher/url_launcher.dart';`);
+    sendFn = `
+  Future<void> _send(BuildContext context, Map<String, String> r0, String id0) async {
+    final text = ${report.textFn}(r0, id0);
+    final dynamic url = ${report.export.linkRaw.replace(/__K\(("[^"]*")\)/g, (_, j) => k(JSON.parse(j)))};
+    if (url is String && url.isNotEmpty) { await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication); return; }
+    await Share.share(text);
+  }`;
+    const b = firstWired(searchOp('action', `${L.homeSend} ${root.name}`), { label: k(L.homeSend), nav: `() => _send(context, r, r[AppStore.idKey] ?? '')`, glyph: k('') });
+    if (b) sendBtn = b.call; else notes.push(L.rootNoAction);
+  }
+  const openBtn = firstWired(searchOp('action', `${L.homeOpen} ${root.name}`), { label: k(L.homeOpen), nav: `() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${rootPage.cls}(id: r[AppStore.idKey] ?? '')))`, glyph: k('') });
+  const stageSub = root.stages && root.stages.length ? `const [${root.stages.map((s) => k(s)).join(', ')}][appStore.stageOf('${root.slug}', r[AppStore.idKey] ?? '').clamp(0, ${root.stages.length - 1})]` : k(root.name);
+  const cls = clsOf(slug);
+  const code = `// 🧭 חולל ע"י ניווט-מקשרים (app-shell · G30 · הכרעה-28) — «היום»: דבר-אחד לכל רשומה פתוחה — נוסח · שלח · פתח. ≤2 הקשות, אפס-הקלדה. אל תערוך ידנית.
+${notes.map((n) => '//   ⚪ ' + n).join('\n')}
+import '../dart-data-bs/auto/gen_${slug}_content.dart';
+import '../dart-ui-bs/ds/ds.dart';
+import '../dart-ui-bs/ds/ds_store.dart';
+${[...imports].sort().join('\n')}
+import 'package:flutter/material.dart';
+
+class ${cls} extends StatelessWidget {
+  const ${cls}({super.key});${sendFn}
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, _) {
+    final open = ${openRecs};
+    final lead = open.isEmpty ? ${k(L.homeNone)} : open.length == 1 ? ${k(L.homeOne)} : ${k(L.homeMany)}.replaceAll('{n}', open.length.toString());
+    return DsScaffold(title: ${k(title)}, subtitle: lead, icon: ${k('')}, children: [
+      Padding(padding: const EdgeInsets.only(bottom: 16), child: Text(lead, style: TextStyle(color: DsLook.of(context).ink, fontSize: 28, fontWeight: FontWeight.w600, height: 1.2))),
+      for (final r in open) DsSection(title: ${disp} + ' · ' + ${stageSub}, children: [
+        ${msgW ? `${msgW},` : ''}
+        Padding(padding: const EdgeInsets.only(top: 8), child: Row(children: [${sendBtn ? `Expanded(child: ${sendBtn}), const SizedBox(width: 8), ` : ''}${openBtn ? openBtn.call : 'const SizedBox.shrink()'}])),
+      ]),
+    ]);
+  });
+}
+`;
+  write(slug, code, dump());
+  return { slug, cls, notes };
+}
+
 // ── השלד: סרגל-תחתון (בית · שורש · עוד) על IndexedStack — כל לשונית מסך שלם ──
-export function renderShell(slug, { title, root, rootPage, dashboard, hub, questions = {} }) {   // G28 · questions.list = השאלה שמסך-הרשימה עונה עליה (PLAN §1: מסך = שאלה אחת)
+export function renderShell(slug, { title, root, rootPage, dashboard, hub, questions = {}, home = null }) {   // G30 · home = מסך «היום» (נייר) במקום לוח-הבקרה בלשונית-הבית   // G28 · questions.list = השאלה שמסך-הרשימה עונה עליה (PLAN §1: מסך = שאלה אחת)
   const { k, dump } = makeConsts(slug);
   const imports = new Set([`import 'gen_${hub.slug}.dart';`, `import 'gen_${root.slug}.dart';`, `import 'gen_${rootPage.slug}.dart';`]);
   if (dashboard) imports.add(`import 'gen_${dashboard.slug}.dart';`);
@@ -94,7 +153,11 @@ export function renderShell(slug, { title, root, rootPage, dashboard, hub, quest
   const empty = isPaper() ? firstWired(searchOp('empty', `${root.name} ${title}`), { message: k(T('emptyCalm', { action: T('rootAdd', { ent: root.name }) })), label: k(root.name), glyph: k('') }) : null;   // G29 · מצב-ריק מרגיע (T6): משפט + הפעולה הראשית
   const disp = root.descField ? `(r[${k(root.descField)}] ?? '')` : `appStore.displayOf('${root.slug}', r[AppStore.idKey] ?? '')`;
   const sub = root.subField ? `(r[${k(root.subField)}] ?? '')` : `''`;
-  const tabs = [dashboard ? `const ${dashboard.cls}()` : null, `_RootTab()`, `const ${hub.cls}()`].filter(Boolean);
+  if (home) imports.add(`import 'gen_${home.slug}.dart';`);
+  const tabs = [home ? `const ${home.cls}()` : dashboard ? `const ${dashboard.cls}()` : null, `_RootTab()`, `const ${hub.cls}()`].filter(Boolean);
+  const paper = isPaper();
+  const quick = paper && root.descField ? `DsQuickAdd(hint: ${k(T('quickAddHint', { action: T('rootAdd', { ent: root.name }) }))}, onSubmit: (s) => appStore.add('${root.slug}', {${k(root.descField)}: s}))` : null;   // G30 · D2: יצירה = טקסט בלבד
+  const paletteItems = `[DsPaletteItem(label: ${k(T('rootAdd', { ent: root.name }))}, sub: ${k(L.keysHint)}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${root.cls}()))), for (final r in appStore.records('${root.slug}')) DsPaletteItem(label: ${disp}, sub: ${sub}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${rootPage.cls}(id: r[AppStore.idKey] ?? ''))))]`;
   const cls = clsOf(slug);
   const code = `// 🧭 חולל ע"י ניווט-מקשרים (app-shell · G26 · הכרעה-27) — השלד: סרגל-תחתון בית · ${root.name} · עוד. השורש נגזר מגרף-הקשרים. אל תערוך ידנית.
 ${notes.map((n) => '//   ⚪ ' + n).join('\n')}
@@ -103,6 +166,7 @@ import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 ${[...imports].sort().join('\n')}
 import 'package:flutter/material.dart';
+${paper ? "import 'package:flutter/services.dart';" : ''}
 
 class ${cls} extends StatefulWidget {
   const ${cls}({super.key});
@@ -113,11 +177,19 @@ class ${cls} extends StatefulWidget {
 class _${cls}State extends State<${cls}> {
   int _t = 0;
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) => ${paper ? `CallbackShortcuts(   // G30 · D3/D4: ≤3 מקשים — T היום · I רשימה · A הוספה · Ctrl/Cmd+K פלטה
+    bindings: <ShortcutActivator, VoidCallback>{
+      const SingleActivator(LogicalKeyboardKey.keyT): () => setState(() => _t = 0),
+      const SingleActivator(LogicalKeyboardKey.keyI): () => setState(() => _t = ${tabs.length > 2 ? 1 : 0}),
+      const SingleActivator(LogicalKeyboardKey.keyA): () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${root.cls}())),
+      const SingleActivator(LogicalKeyboardKey.keyK, control: true): () => DsPalette.show(context, hint: ${k(L.paletteHint)}, items: ${paletteItems}),
+      const SingleActivator(LogicalKeyboardKey.keyK, meta: true): () => DsPalette.show(context, hint: ${k(L.paletteHint)}, items: ${paletteItems}),
+    },
+    child: Focus(autofocus: true, child: ` : ''}Scaffold(
     backgroundColor: DsLook.of(context).bg,
     body: IndexedStack(index: _t.clamp(0, ${tabs.length - 1}), children: [${tabs.join(', ')}]),
     bottomNavigationBar: ${nav ? `SafeArea(child: Padding(padding: const EdgeInsets.fromLTRB(12, 6, 12, 10), child: Center(heightFactor: 1.0, child: ${nav.call})))` : 'null'},   // heightFactor: Center ללא-גובה מתפשט לכל הגובה שה-Scaffold מציע ⇒ הגוף נעלם
-  );
+  )${paper ? '))' : ''};
 }
 
 class _RootTab extends StatelessWidget {
@@ -126,6 +198,7 @@ class _RootTab extends StatelessWidget {
     final rs = appStore.records('${root.slug}');
     return DsScaffold(title: ${k(questions.list || root.name)}, subtitle: rs.length.toString() + ' ' + ${k(root.name)}, icon: ${k(root.icon || '🗂️')}, children: [
       ${add ? `Padding(padding: const EdgeInsets.only(bottom: 10), child: ${add.call}),` : ''}
+      ${quick ? `Padding(padding: const EdgeInsets.only(bottom: 6), child: ${quick}),` : ''}
       ${empty ? `if (rs.isEmpty) ${empty.call},` : ''}
       for (final r in rs) DsNavTile(glyph: ${k(root.icon || '🗂️')}, title: ${disp}, sub: ${sub}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${rootPage.cls}(id: r[AppStore.idKey] ?? '')))),
     ]);

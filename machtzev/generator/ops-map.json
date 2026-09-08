@@ -1640,6 +1640,17 @@
   "why": "צורת-שקעים"
  },
  {
+  "id": "DsPalette",
+  "layer": "display",
+  "file": "dart-ui-bs/ds/ds.dart",
+  "op": "container",
+  "sockets": [
+   "hint",
+   "items"
+  ],
+  "why": "שקעי-דאטה ללא צורה-מוכרת"
+ },
+ {
   "id": "DsPrimaryButton",
   "layer": "display",
   "file": "dart-ui-bs/ds/ds.dart",
@@ -1649,6 +1660,17 @@
    "onTap"
   ],
   "why": "צורת-שקעים"
+ },
+ {
+  "id": "DsQuickAdd",
+  "layer": "display",
+  "file": "dart-ui-bs/ds/ds.dart",
+  "op": "container",
+  "sockets": [
+   "hint",
+   "onSubmit"
+  ],
+  "why": "שקעי-דאטה ללא צורה-מוכרת"
  },
  {
   "id": "DsRecordCard",

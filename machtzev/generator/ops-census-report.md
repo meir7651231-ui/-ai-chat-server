@@ -1,6 +1,6 @@
 # סנסוס-פעולות-היסוד (op-census · G1)
 
-**2323** אטומים ממופים (תצוגה 925 · לוגיקה 850 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
+**2325** אטומים ממופים (תצוגה 927 · לוגיקה 850 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
 
 | op | # | דוגמאות |
 |---|---|---|
@@ -12,7 +12,7 @@
 | summary | 135 | allOffConfig · applyAyinNames · applyAyinSheet · applyEntityPartial · applyMetaPartial |
 | text | 108 | AccessoryRow · AccessoryTile · AiCardSub · AiServerNote · AppSettingsBody |
 | transform | 107 | actionDescriptor · actionFromString · activeDriver · auditRows · brandById |
-| container | 104 | AccordionPanel · AdvanceButton · AnimatedTabs · AssignButton · AuroraField |
+| container | 106 | AccordionPanel · AdvanceButton · AnimatedTabs · AssignButton · AuroraField |
 | predicate | 99 | accessPasswordMatches · ayinActionVisible · ayinActive · canAddPhoto · canConnect |
 | fact | 85 | AlertBanner · AnimatedToggle · BadgePill · CaPill · CatalogCountBadge |
 | data:terms | 85 | absence-reason-chips-terms · annual-all-lines-terms · annual-report-terms · audit-cat-colors-terms · audit-report-lines-terms |
