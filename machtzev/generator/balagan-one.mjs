@@ -95,6 +95,9 @@ if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganDuplicate
 if (!/int balaganMerge\(/.test(moments) || !/balaganMerge\(m, id/.test(confirm)) fails.push('טופס-האישור בלי מיזוג-לתיק-הקיים');
 { const st = rd(path.join(R.ROOT, 'new/dart-ui-bs/ds/ds_store.dart')); if (!/== 'merge'\)/.test(st)) fails.push('AppStore.undo בלי merge'); }
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganMerge\(/.test(ft)) fails.push('בדיקת המיזוג חסרה'); }
+// גל ב׳-יג · «ליומן» עם שעה · «לפני N ימים» · דוגמאות בהקשה-אחת ב«מה קרה?»
+for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/final tm = r == null \? '' : _timeOf\(r\); final d = _iso\(due\)/.test(h) || !/agoDays|לפני/.test(h)) { fails.push(`${m.ns}: «ליומן» בלי שעה / באיחור בלי «לפני N ימים»`); break; } }
+if (!/\.split\('\|'\)\) DsChipButton\(label: ex/.test(ask) || !/_c\.text = ex; _go\(\);/.test(ask)) fails.push('«מה קרה?» בלי דוגמאות-בהקשה-אחת');
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);

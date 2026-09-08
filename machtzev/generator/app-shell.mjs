@@ -181,7 +181,13 @@ class ${cls}Today {
       }
     }
     else if (a == ${k(L.actSnooze)}) { final r = appStore.byId('${root.slug}', rid); if (r != null) { final prev = r[field] ?? ''; appStore.update('${root.slug}', rid, {field: _iso(due.add(const Duration(days: 1)))}); appStore.logAction('auto', ${k(L.actSnooze)} + ' · ' + field, entity: '${root.slug}', rid: rid, field: field, prev: prev); } }   // נגיעה-ידנית (P5) — נרשמת עם החזר
-    else if (a == ${k(L.actCal)}) { final d = _iso(due).replaceAll('-', ''); launchUrl(Uri.parse('https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + Uri.encodeComponent(field + ' · ' + appStore.displayOf('${root.slug}', rid)) + '&dates=' + d + '/' + d), mode: LaunchMode.externalApplication); }
+    else if (a == ${k(L.actCal)}) {   // «ליומן»: עם שעה ⇒ אירוע בשעתו (אורך = בלוק-ההגדרה); בלי ⇒ יום-שלם
+      final r = appStore.byId('${root.slug}', rid); final tm = r == null ? '' : _timeOf(r); final d = _iso(due).replaceAll('-', '');
+      String z(DateTime x) => x.toIso8601String().substring(0, 16).replaceAll(RegExp(r'[-:]'), '') + '00';
+      final block = (int.tryParse(appStore.setting('blockMin', '30')) ?? 30).clamp(5, 240);
+      final dates = tm.isEmpty ? d + '/' + d : () { final a0 = DateTime(due.year, due.month, due.day, int.parse(tm.substring(0, 2)), int.parse(tm.substring(3, 5))); return z(a0) + '/' + z(a0.add(Duration(minutes: block))); }();
+      launchUrl(Uri.parse('https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + Uri.encodeComponent(field + ' · ' + appStore.displayOf('${root.slug}', rid)) + '&dates=' + dates), mode: LaunchMode.externalApplication);
+    }
     else { appStore.decide('ign:\$rid:\$field', 'no'); }
   }
 
@@ -193,7 +199,7 @@ class ${cls}Today {
       for (final f in _dates) {
         final d = _parse(r[f.label] ?? ''); if (d == null) continue;
         if (appStore.decision('ign:\$rid:\${f.label}') == 'no') continue;
-        if (dayDelta == 0 && d.isBefore(today)) { out.add(_mk('\${f.label} · \$who', ${k(L.remWas)}.replaceAll('{date}', _iso(d)), rid, f.label, d, f.hard, true, today, tm, rep)); continue; }
+        if (dayDelta == 0 && d.isBefore(today)) { final ago = today.difference(d).inDays; out.add(_mk('\${f.label} · \$who', ${k(L.remWas)}.replaceAll('{date}', _iso(d)) + ' · ' + (ago == 1 ? ${k(L.agoOne)} : ${k(L.agoDays)}.replaceAll('{n}', ago.toString())), rid, f.label, d, f.hard, true, today, tm, rep)); continue; }
         final okRem = appStore.decision(_remKey(rid, f.label)) == 'ok';   // תזכורת-מוקדמת (−3/−1) = הצעה שדורשת אישור; יום-ההכרעה עצמו = עובדה — מוצג בלי אישור
         for (final off in _offsets()) {
           if (off > 0 && !okRem) continue;
