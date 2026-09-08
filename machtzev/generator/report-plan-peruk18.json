@@ -1,0 +1,94 @@
+[
+ {
+  "entity": "תיק",
+  "ok": true,
+  "unresolved": [],
+  "export": {
+   "label": "שליחה בוואטסאפ",
+   "toField": "טלפון",
+   "ok": true,
+   "action": "DsPrimaryButton",
+   "link": "waLink"
+  },
+  "sections": [
+   {
+    "name": "כרטיס",
+    "refs": [
+     {
+      "raw": "[תוכן כרטיס]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "דברים להוציא מהמגרה",
+    "refs": [
+     {
+      "raw": "[תוכן דברים להוציא מהמגרה]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "שאלות לרו״ח או תפתח",
+    "refs": [
+     {
+      "raw": "[תוכן שאלות לרו״ח או תפתח]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "טיוטה קצרה רק אם",
+    "refs": [
+     {
+      "raw": "[תוכן טיוטה קצרה רק אם]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "מה לא לשלם עיוור",
+    "refs": [
+     {
+      "raw": "[תוכן מה לא לשלם עיוור]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "הסתייגות",
+    "refs": [
+     {
+      "raw": "[תוכן הסתייגות]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

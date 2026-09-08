@@ -1,0 +1,164 @@
+[
+ {
+  "entity": "תיק",
+  "name": "טבלה",
+  "expr": "[טבלה]",
+  "ok": true,
+  "why": null,
+  "shape": "table",
+  "ops": [
+   "table"
+  ],
+  "picks": [
+   {
+    "op": "table",
+    "atoms": [
+     "DsTable"
+    ],
+    "alts": [
+     "DsTable",
+     "ForgeModalDialog",
+     "ForgeSplitControl"
+    ]
+   }
+  ],
+  "wired": [
+   "DsTable"
+  ]
+ },
+ {
+  "entity": "תיק",
+  "name": "פעולה פתח תיק",
+  "expr": "[פעולה] פתח תיק",
+  "ok": true,
+  "why": null,
+  "shape": "act",
+  "ops": [
+   "action"
+  ],
+  "picks": [
+   {
+    "op": "action",
+    "atoms": [
+     "DsPrimaryButton"
+    ],
+    "alts": [
+     "DsPrimaryButton",
+     "GlassButton",
+     "GradButton"
+    ]
+   }
+  ],
+  "wired": [
+   "DsPrimaryButton"
+  ]
+ },
+ {
+  "entity": "תיק",
+  "name": "ריק אין תיקים עדיין",
+  "expr": "[ריק] אין תיקים עדיין",
+  "ok": true,
+  "why": null,
+  "shape": "empty",
+  "ops": [
+   "empty"
+  ],
+  "picks": [
+   {
+    "op": "empty",
+    "atoms": [
+     "EmptyStateCard"
+    ],
+    "alts": [
+     "EmptyStateCard",
+     "EmptyState@premium/feedback",
+     "SearchEmptyState"
+    ]
+   }
+  ],
+  "wired": [
+   "EmptyState@premium/feedback"
+  ]
+ },
+ {
+  "entity": "תיק",
+  "name": "מסגרת",
+  "expr": "[תוכן מסגרת]",
+  "ok": true,
+  "why": null,
+  "shape": "content",
+  "ops": [
+   "alert"
+  ],
+  "picks": [
+   {
+    "op": "alert",
+    "atoms": [
+     "ToastCard"
+    ],
+    "alts": [
+     "ToastCard",
+     "AlertBanner@premium/feedback",
+     "DsNote"
+    ]
+   }
+  ],
+  "wired": [
+   "DsNote"
+  ]
+ },
+ {
+  "entity": "תיק",
+  "name": "בלוקים",
+  "expr": "[תוכן בלוקים]",
+  "ok": true,
+  "why": null,
+  "shape": "content",
+  "ops": [
+   "alert"
+  ],
+  "picks": [
+   {
+    "op": "alert",
+    "atoms": [
+     "ToastCard"
+    ],
+    "alts": [
+     "ToastCard",
+     "AlertBanner@premium/feedback",
+     "DsNote"
+    ]
+   }
+  ],
+  "wired": [
+   "DsNote"
+  ]
+ },
+ {
+  "entity": "תיק",
+  "name": "אסור",
+  "expr": "[תוכן אסור]",
+  "ok": true,
+  "why": null,
+  "shape": "content",
+  "ops": [
+   "alert"
+  ],
+  "picks": [
+   {
+    "op": "alert",
+    "atoms": [
+     "ToastCard"
+    ],
+    "alts": [
+     "ToastCard",
+     "AlertBanner@premium/feedback",
+     "DsNote"
+    ]
+   }
+  ],
+  "wired": [
+   "DsNote"
+  ]
+ }
+]

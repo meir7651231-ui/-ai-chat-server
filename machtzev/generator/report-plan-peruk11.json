@@ -1,0 +1,102 @@
+[
+ {
+  "entity": "תיק",
+  "ok": true,
+  "unresolved": [],
+  "export": {
+   "label": "שליחה בוואטסאפ",
+   "toField": "טלפון",
+   "ok": true,
+   "action": "DsPrimaryButton",
+   "link": "waLink"
+  },
+  "sections": [
+   {
+    "name": "כרטיס",
+    "refs": [
+     {
+      "raw": "[תוכן כרטיס]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "טבלה",
+    "refs": [
+     {
+      "raw": "[תוכן טבלה]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "שאלות למוסך",
+    "refs": [
+     {
+      "raw": "[תוכן שאלות למוסך]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "נוסח",
+    "refs": [
+     {
+      "raw": "הצעה",
+      "mode": "particle",
+      "why": null,
+      "wired": [
+       "DsChip"
+      ]
+     },
+     {
+      "raw": "[תוכן נוסח]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "מתי כן לקחת הצעה",
+    "refs": [
+     {
+      "raw": "[תוכן מתי כן לקחת הצעה]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "הסתייגות",
+    "refs": [
+     {
+      "raw": "[תוכן הסתייגות]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

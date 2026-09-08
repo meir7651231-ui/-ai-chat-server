@@ -1,0 +1,94 @@
+[
+ {
+  "entity": "תיק",
+  "ok": true,
+  "unresolved": [],
+  "export": {
+   "label": "שליחה בוואטסאפ",
+   "toField": "טלפון",
+   "ok": true,
+   "action": "DsPrimaryButton",
+   "link": "waLink"
+  },
+  "sections": [
+   {
+    "name": "כרטיס ימים",
+    "refs": [
+     {
+      "raw": "[תוכן כרטיס ימים]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "רשימת מסמכים מכתב תלושים",
+    "refs": [
+     {
+      "raw": "[תוכן רשימת מסמכים מכתב תלושים]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "מה לא לחתום הלילה",
+    "refs": [
+     {
+      "raw": "[תוכן מה לא לחתום הלילה]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "נוסח שאלה למעסיק על",
+    "refs": [
+     {
+      "raw": "[תוכן נוסח שאלה למעסיק על]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "רק אחר כך",
+    "refs": [
+     {
+      "raw": "[תוכן רק אחר כך]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "הסתייגות",
+    "refs": [
+     {
+      "raw": "[תוכן הסתייגות]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

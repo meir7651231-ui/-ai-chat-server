@@ -1,0 +1,107 @@
+[
+ {
+  "entity": "תיק",
+  "ok": true,
+  "unresolved": [],
+  "export": {
+   "label": "שליחה בוואטסאפ",
+   "toField": "טלפון",
+   "ok": true,
+   "action": "DsPrimaryButton",
+   "link": "waLink"
+  },
+  "sections": [
+   {
+    "name": "כרטיס",
+    "refs": [
+     {
+      "raw": "[תוכן כרטיס]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "מה במסמך מסומן חריג",
+    "refs": [
+     {
+      "raw": "[תוכן מה במסמך מסומן חריג]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "מה לא כתוב לא",
+    "refs": [
+     {
+      "raw": "[תוכן מה לא כתוב לא]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "שאלות לרופא",
+    "refs": [
+     {
+      "raw": "[תוכן שאלות לרופא]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "דחוף לא דחוף לפי",
+    "refs": [
+     {
+      "raw": "[תוכן דחוף לא דחוף לפי]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "הנחיה קשיחה",
+    "refs": [
+     {
+      "raw": "[תוכן הנחיה קשיחה]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "הסתייגות",
+    "refs": [
+     {
+      "raw": "[תוכן הסתייגות]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

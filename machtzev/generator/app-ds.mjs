@@ -10,7 +10,7 @@ import { interpret as entInterpret } from './entity.mjs';
 import { renderEntity, renderDashboard, renderHub, renderSystem, renderMain, renderScreenBind, renderCompose, renderRecordDetail, SCREEN_REGISTRY, makeConsts, write, setLook, getLook } from './render-ds.mjs';
 import { PARTICLE_RE, CONTENT_RE, REPORT_RE, parseParticleLines, parseContentLines, parseReportLines, planParticles, planReports, renderParticles, renderReport, renderReportTest, planReport, reportsMd } from './particles.mjs';   // G23 · הכרעה-27
 import { nlToSpec } from './nl-spec.mjs';
-import { pickRoot, renderRootPage, renderShell, renderHome } from './app-shell.mjs';
+import { pickRoot, renderRootPage, renderShell, renderHome, renderBehavior } from './app-shell.mjs';
 import fs0 from 'node:fs';
 const SL = JSON.parse(fs0.readFileSync(new URL('./spec-lang.data.json', import.meta.url), 'utf8'));
 import { L, T } from './chrome.mjs';
@@ -78,7 +78,9 @@ export function buildApp(specText) {
   setLook(look);
   const Q_RE = new RegExp('^\\s*' + SL.questionWord + '\\s+(\\S+)\\s*:\\s*(.+)$');
   const questions = {}; for (const l of all0) { const m = l.match(Q_RE); if (m && SL.questionTargets[m[1]]) questions[SL.questionTargets[m[1]]] = m[2].trim(); }
-  const all = all0.filter((l) => !PARTICLE_RE.test(l) && !CONTENT_RE.test(l) && !REPORT_RE.test(l) && !APP_RE.test(l) && !LOOK_RE.test(l) && !Q_RE.test(l));
+  const CHAIN_RE = new RegExp('^\\s*' + SL.chainWord + '\\s*:\\s*(.+)$');   // G32 · `שרשרת: א, ב, ג` — הצעד-הבא בשלב-האחרון (P14)
+  const chainLine = all0.map((l) => l.match(CHAIN_RE)).find(Boolean); const chain = chainLine ? chainLine[1].split(/[,،]/).map((x) => x.trim()).filter(Boolean) : [];
+  const all = all0.filter((l) => !PARTICLE_RE.test(l) && !CONTENT_RE.test(l) && !REPORT_RE.test(l) && !APP_RE.test(l) && !LOOK_RE.test(l) && !Q_RE.test(l) && !CHAIN_RE.test(l));
   const roles = all.filter((l) => ROLE_RE.test(l)).map(parseRole);
   const lines = all.filter((l) => !ROLE_RE.test(l));
   const info = lines.map((line, idx) => ({ line, i: idx + 1, isEnt: ENTITY_RE.test(line) }));
@@ -266,6 +268,7 @@ export function buildApp(specText) {
   sys.push({ ...fl, kind: 'system', name: L.flagsTitle, icon: '🎚️', sub: L.flagsSub });
   const st = renderSystem(`${P}settings`, { title: L.settingsTitle, icon: '⚙️', sectionTitle: L.settingsSection, kind: 'toggles', items: [L.settingsItem1, L.settingsItem2, L.settingsItem3] });
   sys.push({ ...st, kind: 'system', name: L.settingsTitle, icon: '⚙️', sub: L.settingsSub });
+  if (getLook() === 'paper') { const bh = renderBehavior(`${P}behavior`); sys.push({ ...bh, kind: 'system', name: L.behaviorTitle, icon: '', sub: L.behaviorSub }); }   // G32 · התנהגות (נייר)
 
   // RLS · שדות-היקף ייחודיים (slug+שדה) — למילוי בורר-"מי-אני" בלוח.
   const scopeFields = [];
@@ -288,7 +291,7 @@ export function buildApp(specText) {
     if (getLook() === 'paper') {
       const rep = reportByEnt[rootMeta.name] || null;
       const msgP = planAll.find((x) => x.ok && x.entity === rootMeta.name && x.shape && x.shape.kind === 'message') || null;
-      homeScr = renderHome(`${P}home`, { root: rootE, rootPage, report: rep, message: msgP ? { entity: pentsAll.find((e) => e.name === rootMeta.name), p: msgP } : null, title: questions.home || L.shellHome });
+      homeScr = renderHome(`${P}home`, { root: rootE, rootPage, report: rep, message: msgP ? { entity: pentsAll.find((e) => e.name === rootMeta.name), p: msgP } : null, title: questions.home || L.shellHome, chain });
     }
     const shell = renderShell(`${P}shell`, { title: appTitle, root: rootE, rootPage, dashboard: dash, hub: { slug: `${P}hub`, cls: hub.cls }, questions, home: homeScr });
     home = { slug: `${P}shell`, cls: shell.cls };
@@ -312,7 +315,7 @@ if (import.meta.url === 'file://' + process.argv[1]) {
     const sk = resolveSkin(autoSkin().skin); const tot = {};
     if (sk && getLook() === 'paper') { delete sk.navTile; delete sk.section; delete sk.pageHeader; }   // G28 · נייר: שורה-לא-כרטיס (DsNavTile 52px · קו) · חלק שטוח (DsSection: כותרת 15/700 + שורות, בלי כרטיס-בתוך-כרטיס) · כותרת-מסך של ה-DS (22/600 + קו) — כלל-13 של PLAN §5.3
     for (const f of fs.readdirSync(OUT)) {
-      if (!new RegExp(`^gen_${P}(ent|px|rp|scr|bind|rec|over|audit|flags|settings|hub|main|shell|root|home)\\d*\\.dart$`).test(f)) continue;
+      if (!new RegExp(`^gen_${P}(ent|px|rp|scr|bind|rec|over|audit|flags|settings|hub|main|shell|root|home|behavior)\\d*\\.dart$`).test(f)) continue;
       const fp = path.join(OUT, f); let { code, stats } = skinPass(fs.readFileSync(fp, 'utf8'), sk);
       if (getLook() === 'paper') code = code.replace(/^import '\.\.\/dart-ui-bs\/((?:premium|auto)\/[^']+)';\n/gm, (line, rel) => { const src = fs.readFileSync(path.join(R.ROOT, 'new/dart-ui-bs', rel), 'utf8'); const cls = (src.match(/^class ([A-Za-z0-9_]+)/m) || [])[1]; return cls && new RegExp('\\b' + cls + '\\(').test(code) ? line : ''; });   // G28 · נייר: ייבוא-אטום שהוחלף בעור ולא נותר בשימוש נגזם (אחרת האטום הקשיח "מיובא" למסך-נייר)
       fs.writeFileSync(fp, code); for (const [k, v] of Object.entries(stats)) tot[k] = (tot[k] || 0) + v;

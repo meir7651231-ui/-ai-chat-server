@@ -1,0 +1,94 @@
+[
+ {
+  "entity": "תיק",
+  "ok": true,
+  "unresolved": [],
+  "export": {
+   "label": "שליחה בוואטסאפ",
+   "toField": "טלפון",
+   "ok": true,
+   "action": "DsPrimaryButton",
+   "link": "waLink"
+  },
+  "sections": [
+   {
+    "name": "כרטיס",
+    "refs": [
+     {
+      "raw": "[תוכן כרטיס]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "רשימת שעות",
+    "refs": [
+     {
+      "raw": "[תוכן רשימת שעות]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "חלוקה לאחים אפילו אם",
+    "refs": [
+     {
+      "raw": "[תוכן חלוקה לאחים אפילו אם]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "טיוטת הודעה להורה בלי",
+    "refs": [
+     {
+      "raw": "[תוכן טיוטת הודעה להורה בלי]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "מתי סיעוד רופא גריאטר",
+    "refs": [
+     {
+      "raw": "[תוכן מתי סיעוד רופא גריאטר]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "הסתייגות",
+    "refs": [
+     {
+      "raw": "[תוכן הסתייגות]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

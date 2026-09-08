@@ -37,25 +37,33 @@
    "id": "D5",
    "group": "עיצוב",
    "text": "Inbox ≠ Today: חדש נכנס לתיבה; בלי-תאריך לא ב-היום",
-   "wave": "wave:G32"
+   "check": [
+    "inboxNotToday"
+   ]
   },
   {
    "id": "D6",
    "group": "עיצוב",
    "text": "Overdue ראשון + פעולה-אחת לפתרון",
-   "wave": "wave:G32"
+   "check": [
+    "overdueFirst"
+   ]
   },
   {
    "id": "D7",
    "group": "עיצוב",
    "text": "מונה-עומס בראש-היום, 3 מצבים בלבד",
-   "wave": "wave:G32"
+   "check": [
+    "loadMeter"
+   ]
   },
   {
    "id": "D8",
    "group": "עיצוב",
    "text": "יום-יחיד = ברירת-מחדל; שבוע במקש; מצב-Focus",
-   "wave": "wave:G32"
+   "check": [
+    "daySingle"
+   ]
   },
   {
    "id": "D9",
@@ -122,103 +130,135 @@
    "id": "P1",
    "group": "פרואקטיביות",
    "text": "תזכורת-מוקדמת לפי קטגוריה (due − offset, עריך)",
-   "wave": "wave:G32"
+   "check": [
+    "offsets"
+   ]
   },
   {
    "id": "P2",
    "group": "פרואקטיביות",
    "text": "מיון עדיפות × מועד",
-   "wave": "wave:G32"
+   "check": [
+    "sortDue"
+   ]
   },
   {
    "id": "P3",
    "group": "פרואקטיביות",
    "text": "תכנון-מחדש בכל שינוי, בשקט",
-   "wave": "wave:G32"
+   "check": [
+    "derived"
+   ]
   },
   {
    "id": "P4",
    "group": "פרואקטיביות",
    "text": "הגנה דו-שלבית Free ⇒ Busy",
-   "wave": "wave:G32"
+   "check": [
+    "noSnoozeToday"
+   ]
   },
   {
    "id": "P5",
    "group": "פרואקטיביות",
    "text": "נגיעה-ידנית = נעילה; Snooze מזיז בלי לנעול",
-   "wave": "wave:G32"
+   "check": [
+    "manualLock"
+   ]
   },
   {
    "id": "P6",
    "group": "פרואקטיביות",
    "text": "הוחמץ ⇒ overdue, לא נדחף-בשקט",
-   "wave": "wave:G32"
+   "check": [
+    "overdueFirst"
+   ]
   },
   {
    "id": "P7",
    "group": "פרואקטיביות",
    "text": "«לא נכנס» = הסלמה, לא זריקה",
-   "wave": "wave:G32"
+   "check": [
+    "overdueFirst"
+   ]
   },
   {
    "id": "P8",
    "group": "פרואקטיביות",
    "text": "דגל hard-deadline מתיר מחוץ לשעות; soft לא",
-   "wave": "wave:G32"
+   "check": [
+    "softShift"
+   ]
   },
   {
    "id": "P9",
    "group": "פרואקטיביות",
    "text": "תקציר-בוקר אחד + סקירת-ערב אחת בשעה עריכה",
-   "wave": "wave:G32"
+   "check": [
+    "digest"
+   ]
   },
   {
    "id": "P10",
    "group": "פרואקטיביות",
    "text": "הפרעה רק לפי-חוק-לבן; השאר לתקציר",
-   "wave": "wave:G32"
+   "check": [
+    "onlyByRule"
+   ]
   },
   {
    "id": "P11",
    "group": "פרואקטיביות",
    "text": "שאל-לפני-פעולה: כרטיס אשר / דחה / תמיד-אשר לכל כתיבה-החוצה",
-   "wave": "wave:G32"
+   "check": [
+    "approveCard"
+   ]
   },
   {
    "id": "P12",
    "group": "פרואקטיביות",
    "text": "טיוטה, לא שליחה: אחרי N ימים בלי תשובה ⇒ טיוטת-תזכורת",
-   "wave": "wave:G32"
+   "check": [
+    "followDraft"
+   ]
   },
   {
    "id": "P13",
    "group": "פרואקטיביות",
    "text": "הצע-ואשר למשימות-מחולצות עם קטע-המקור",
-   "wave": "wave:G32"
+   "check": [
+    "proposalSource"
+   ]
   },
   {
    "id": "P14",
    "group": "פרואקטיביות",
    "text": "צעד-הבא לפי שלב; צעדי-שלב-לא-פעיל = רפאים",
-   "wave": "wave:G32"
+   "check": [
+    "nextStep"
+   ]
   },
   {
    "id": "P15",
    "group": "פרואקטיביות",
    "text": "היגיינת-סנכרון (syncToken · הד · חד-כיווני)",
-   "wave": "wave:שרת (הכרעת-בעלים)"
+   "wave": "wave:שרת — סנכרון-יומן חיצוני (הכרעת-בעלים)"
   },
   {
    "id": "T1",
    "group": "יעד",
    "text": "המסך פותח במשפט על החיים שלו, בגוף-ראשון של המערכת",
-   "wave": "wave:G32"
+   "check": [
+    "firstPerson"
+   ]
   },
   {
    "id": "T2",
    "group": "יעד",
    "text": "כל מה-שנעשה-לבד גלוי עם החזר/בטל",
-   "wave": "wave:G32"
+   "check": [
+    "didUndo"
+   ]
   },
   {
    "id": "T3",
@@ -242,7 +282,9 @@
    "id": "T5",
    "group": "יעד",
    "text": "שליחה החוצה תמיד באישור, גם במתג «לפעול לבד»",
-   "wave": "wave:G32"
+   "check": [
+    "sendOnlyTap"
+   ]
   },
   {
    "id": "T6",

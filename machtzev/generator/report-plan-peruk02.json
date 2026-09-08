@@ -1,0 +1,128 @@
+[
+ {
+  "entity": "תיק",
+  "ok": true,
+  "unresolved": [],
+  "export": {
+   "label": "שליחה בוואטסאפ",
+   "toField": "טלפון",
+   "ok": true,
+   "action": "DsPrimaryButton",
+   "link": "waLink"
+  },
+  "sections": [
+   {
+    "name": "כרטיס",
+    "refs": [
+     {
+      "raw": "[תוכן כרטיס]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "טבלת שורות",
+    "refs": [
+     {
+      "raw": "[תוכן טבלת שורות]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "סכום יעד לדרישה",
+    "refs": [
+     {
+      "raw": "[תוכן סכום יעד לדרישה]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "הודעת וואטסאפ אחת",
+    "refs": [
+     {
+      "raw": "[תוכן הודעת וואטסאפ אחת]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "אם מתעלמים מדרגה הבאה",
+    "refs": [
+     {
+      "raw": "[תוכן אם מתעלמים מדרגה הבאה]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "מה חסר",
+    "refs": [
+     {
+      "raw": "יציאה",
+      "mode": "particle",
+      "why": null,
+      "wired": [
+       "DsChip"
+      ]
+     },
+     {
+      "raw": "[תוכן מה חסר]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "לוח",
+    "refs": [
+     {
+      "raw": "לוח",
+      "mode": "particle",
+      "why": null,
+      "wired": [
+       "KvLine"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "הסתייגות",
+    "refs": [
+     {
+      "raw": "[תוכן הסתייגות]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

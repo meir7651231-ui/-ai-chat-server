@@ -51,6 +51,8 @@ for (const f of fs.readdirSync(DS)) if (f.endsWith('.dart')) fs.copyFileSync(pat
 const syncExisting = (srcDir, dstDir, re = /\.dart$/) => { if (!fs.existsSync(dstDir) || !fs.existsSync(srcDir)) return; for (const f of fs.readdirSync(dstDir)) if (re.test(f) && fs.existsSync(path.join(srcDir, f))) { const a = fs.readFileSync(path.join(srcDir, f)); if (!fs.existsSync(path.join(dstDir, f)) || !a.equals(fs.readFileSync(path.join(dstDir, f)))) fs.writeFileSync(path.join(dstDir, f), a); } };
 syncExisting(path.join(ROOT, 'new/dart-ui-bs'), path.join(LIB, 'dart-ui-bs'));
 syncExisting(path.join(ROOT, 'new/dart-data-bs/auto'), path.join(LIB, 'dart-data-bs/auto'), /^gen_.*_content\.dart$/);
+// G32 · קובצי-תוכן של אפליקציות-app-ds (gen_app_*_content) = מראה מלאה: חדש נכנס, יתום יוצא (מסך חדש כמו «התנהגות» אינו דורש העתקה-ביד)
+{ const s = path.join(ROOT, 'new/dart-data-bs/auto'), d = path.join(LIB, 'dart-data-bs/auto'); if (fs.existsSync(s) && fs.existsSync(d)) { for (const f of fs.readdirSync(d)) if (/^gen_app_.*_content\.dart$/.test(f) && !fs.existsSync(path.join(s, f))) fs.unlinkSync(path.join(d, f)); for (const f of fs.readdirSync(s)) if (/^gen_app_.*_content\.dart$/.test(f)) fs.copyFileSync(path.join(s, f), path.join(d, f)); } }
 const DMIR = path.join(LIB, 'dart-maor'); if (fs.existsSync(DMIR)) for (const f of fs.readdirSync(DMIR)) if (f.endsWith('.dart') && fs.existsSync(path.join(ROOT, 'new/dart-maor', f))) fs.copyFileSync(path.join(ROOT, 'new/dart-maor', f), path.join(DMIR, f));   // G20 · מנועי-maor: קבצים קיימים-במראה בלבד (חתימות מהודקות)
 for (const f of fs.readdirSync(genDst)) if (/^zz_shot_/.test(f)) fs.unlinkSync(path.join(genDst, f));   // שאריות-ראיה
 

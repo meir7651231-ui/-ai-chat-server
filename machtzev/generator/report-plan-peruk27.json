@@ -1,0 +1,94 @@
+[
+ {
+  "entity": "תיק",
+  "ok": true,
+  "unresolved": [],
+  "export": {
+   "label": "שליחה בוואטסאפ",
+   "toField": "טלפון",
+   "ok": true,
+   "action": "DsPrimaryButton",
+   "link": "waLink"
+  },
+  "sections": [
+   {
+    "name": "כרטיס ימים לפי סדר",
+    "refs": [
+     {
+      "raw": "[תוכן כרטיס ימים לפי סדר]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "מה לא לחתום לא",
+    "refs": [
+     {
+      "raw": "[תוכן מה לא לחתום לא]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "רשימת ניירת לאסוף חוזה",
+    "refs": [
+     {
+      "raw": "[תוכן רשימת ניירת לאסוף חוזה]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "טיוטת הודעה עניינית לצד",
+    "refs": [
+     {
+      "raw": "[תוכן טיוטת הודעה עניינית לצד]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "מתי חובה עו״ד מחר",
+    "refs": [
+     {
+      "raw": "[תוכן מתי חובה עו״ד מחר]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "הסתייגות",
+    "refs": [
+     {
+      "raw": "[תוכן הסתייגות]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

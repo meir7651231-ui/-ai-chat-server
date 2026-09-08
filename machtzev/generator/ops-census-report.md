@@ -1,18 +1,18 @@
 # סנסוס-פעולות-היסוד (op-census · G1)
 
-**2325** אטומים ממופים (תצוגה 927 · לוגיקה 850 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
+**2329** אטומים ממופים (תצוגה 931 · לוגיקה 850 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
 
 | op | # | דוגמאות |
 |---|---|---|
 | data:strings | 349 | academic-year-label-strings · adar-norm-strings · add-org-member-strings · age-of-strings · amount-in-words-strings |
 | format | 223 | academicYearLabel · actionHe · actionIdOf · actionLabelHe · adarNorm |
 | action | 179 | AccordionSectionCard · ActionButton · ActionCard · ActionRow · AddTradeButton |
-| group | 170 | ActionChipRail · AiCardTop · AiMdHead · AnimatedEmpty · ApprovalTaskCard |
+| group | 171 | ActionChipRail · AiCardTop · AiMdHead · AnimatedEmpty · ApprovalTaskCard |
 | collection | 139 | activeByMonth · allSupPhones · allowedDesignationsFor · appendCall · attentionItems |
 | summary | 135 | allOffConfig · applyAyinNames · applyAyinSheet · applyEntityPartial · applyMetaPartial |
-| text | 108 | AccessoryRow · AccessoryTile · AiCardSub · AiServerNote · AppSettingsBody |
+| text | 110 | AccessoryRow · AccessoryTile · AiCardSub · AiServerNote · AppSettingsBody |
+| container | 107 | AccordionPanel · AdvanceButton · AnimatedTabs · AssignButton · AuroraField |
 | transform | 107 | actionDescriptor · actionFromString · activeDriver · auditRows · brandById |
-| container | 106 | AccordionPanel · AdvanceButton · AnimatedTabs · AssignButton · AuroraField |
 | predicate | 99 | accessPasswordMatches · ayinActionVisible · ayinActive · canAddPhoto · canConnect |
 | fact | 85 | AlertBanner · AnimatedToggle · BadgePill · CaPill · CatalogCountBadge |
 | data:terms | 85 | absence-reason-chips-terms · annual-all-lines-terms · annual-report-terms · audit-cat-colors-terms · audit-report-lines-terms |

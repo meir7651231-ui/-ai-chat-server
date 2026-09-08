@@ -152,6 +152,9 @@ export function makeConsts(slug) {
 export const write = (slug, code, content) => {
   fs.mkdirSync(OUT, { recursive: true });
   fs.mkdirSync(DATA, { recursive: true });
+  // הכרעה-29 · אפס-אזהרות: שורת-import כפולה (אותו נתיב מכמה מקורות — קובץ-הדוח, האטלס, הכרום) נכתבת פעם אחת; הסדר נשמר
+  const seenImp = new Set();
+  code = code.split('\n').filter((l) => { const m = l.match(/^import\s+'([^']+)'/); if (!m) return true; if (seenImp.has(m[1])) return false; seenImp.add(m[1]); return true; }).join('\n');
   fs.writeFileSync(path.join(OUT, `gen_${slug}.dart`), code);
   fs.writeFileSync(path.join(DATA, `gen_${slug}_content.dart`), '// 📦 תוכן-DS (render-ds) — verbatim מהבקשה. אל תערוך ידנית.\n' + content);
 };

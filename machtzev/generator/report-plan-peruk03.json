@@ -1,0 +1,143 @@
+[
+ {
+  "entity": "תיק",
+  "ok": true,
+  "unresolved": [],
+  "export": {
+   "label": "שליחה בוואטסאפ",
+   "toField": "טלפון",
+   "ok": true,
+   "action": "DsPrimaryButton",
+   "link": "waLink"
+  },
+  "sections": [
+   {
+    "name": "סיווג",
+    "refs": [
+     {
+      "raw": "[תוכן סיווג]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "שעון",
+    "refs": [
+     {
+      "raw": "[תוכן שעון]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "הודעה למשכיר וואטסאפ תיאור",
+    "refs": [
+     {
+      "raw": "הודעה למשכיר וואטסאפ תיאור",
+      "mode": "particle",
+      "why": null,
+      "wired": [
+       "ForgeMustChip",
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "הודעה אם אין תשובה",
+    "refs": [
+     {
+      "raw": "הודעה אם אין תשובה",
+      "mode": "particle",
+      "why": null,
+      "wired": [
+       "ForgeMustChip",
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "אסור",
+    "refs": [
+     {
+      "raw": "[תוכן אסור]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "אופציות אחרי השעון רק",
+    "refs": [
+     {
+      "raw": "אופציות אחרי השעון רק",
+      "mode": "particle",
+      "why": null,
+      "wired": [
+       "DsChip"
+      ]
+     },
+     {
+      "raw": "[תוכן אופציות אחרי השעון רק]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "מה לצלם היום כדי",
+    "refs": [
+     {
+      "raw": "[תוכן מה לצלם היום כדי]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "לוח",
+    "refs": [
+     {
+      "raw": "לוח",
+      "mode": "particle",
+      "why": null,
+      "wired": [
+       "KvLine"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "הסתייגות",
+    "refs": [
+     {
+      "raw": "[תוכן הסתייגות]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

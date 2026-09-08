@@ -1417,6 +1417,36 @@
   "why": "שקעי-דאטה ללא צורה-מוכרת"
  },
  {
+  "id": "DsActionRow",
+  "layer": "display",
+  "file": "dart-ui-bs/ds/ds.dart",
+  "op": "group",
+  "sockets": [
+   "actions",
+   "onAct",
+   "sub",
+   "title"
+  ],
+  "why": "צורת-שקעים"
+ },
+ {
+  "id": "DsApproveCard",
+  "layer": "display",
+  "file": "dart-ui-bs/ds/ds.dart",
+  "op": "container",
+  "sockets": [
+   "alwaysLabel",
+   "noLabel",
+   "okLabel",
+   "onAlways",
+   "onNo",
+   "onOk",
+   "question",
+   "source"
+  ],
+  "why": "שקעי-דאטה ללא צורה-מוכרת"
+ },
+ {
   "id": "DsBars",
   "layer": "display",
   "file": "dart-ui-bs/ds/ds_bars.dart",
@@ -1577,6 +1607,32 @@
    "details",
    "open",
    "title"
+  ],
+  "why": "צורת-שקעים"
+ },
+ {
+  "id": "DsLoadMeter",
+  "layer": "display",
+  "file": "dart-ui-bs/ds/ds.dart",
+  "op": "text",
+  "sockets": [
+   "count",
+   "label",
+   "stateLabels",
+   "threshold"
+  ],
+  "why": "צורת-שקעים"
+ },
+ {
+  "id": "DsLogRow",
+  "layer": "display",
+  "file": "dart-ui-bs/ds/ds.dart",
+  "op": "text",
+  "sockets": [
+   "onUndo",
+   "sub",
+   "text",
+   "undoLabel"
   ],
   "why": "צורת-שקעים"
  },

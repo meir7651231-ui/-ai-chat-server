@@ -1,0 +1,95 @@
+[
+ {
+  "entity": "תיק",
+  "ok": true,
+  "unresolved": [],
+  "export": {
+   "label": "שליחה בוואטסאפ",
+   "toField": "טלפון",
+   "ok": true,
+   "action": "DsPrimaryButton",
+   "link": "waLink"
+  },
+  "sections": [
+   {
+    "name": "מפת בטוחות",
+    "refs": [
+     {
+      "raw": "[תוכן מפת בטוחות]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "חשיפת ההורה במשפט אחד",
+    "refs": [
+     {
+      "raw": "[תוכן חשיפת ההורה במשפט אחד]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "בקשות לתיקון לפני חתימה",
+    "refs": [
+     {
+      "raw": "בקשות לתיקון לפני חתימה",
+      "mode": "particle",
+      "why": null,
+      "wired": [
+       "DsChip"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "הודעה למשכיר מתווך",
+    "refs": [
+     {
+      "raw": "הודעה למשכיר מתווך",
+      "mode": "particle",
+      "why": null,
+      "wired": [
+       "ForgeMustChip",
+       "DsNote"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "החלטה",
+    "refs": [
+     {
+      "raw": "השטר",
+      "mode": "particle",
+      "why": null,
+      "wired": [
+       "DsChip"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "הסתייגות",
+    "refs": [
+     {
+      "raw": "[תוכן הסתייגות]",
+      "mode": "content",
+      "why": null,
+      "wired": [
+       "DsNote"
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

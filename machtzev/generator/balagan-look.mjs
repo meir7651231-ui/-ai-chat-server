@@ -44,11 +44,32 @@ const CHECKS = {
   quickAdd: (ns) => { const sh = files(ns).find((x) => x.f.endsWith('_shell.dart')); return sh && sh.s.includes('DsQuickAdd(') ? null : 'רשימה בלי הוספה-מהירה בטקסט'; },
   keys: (ns) => { const sh = files(ns).find((x) => x.f.endsWith('_shell.dart')); if (!sh) return 'אין שלד'; for (const need of ['LogicalKeyboardKey.keyA', 'LogicalKeyboardKey.keyT', 'LogicalKeyboardKey.keyK, control: true', 'DsPalette.show(']) if (!sh.s.includes(need)) return `שלד בלי ${need}`; return null; },
   zeroSettings: (ns) => { const m = files(ns).find((x) => x.f.endsWith('_main.dart')); if (!m) return 'אין main'; return /home: const \w+ShellScreen\(\)/.test(m.s) ? null : 'main לא פותח בשלד (הגדרות/מסך-ביניים קודם)'; },
+  // ── G32 · טריגרים: בדיקות מבניות על «היום» (home) · החנות · השלד ──
+  _home: (ns) => files(ns).find((x) => x.f.endsWith('_home.dart')),
+  inboxNotToday: (ns) => { const h = CHECKS._home(ns); if (!h) return 'אין «היום»'; return h.s.includes('DsApproveCard(') && h.s.includes('DsActionRow(') && /homePending|ממתין/.test(h.s + contents(ns).map((c) => c.s).join('')) ? null : '«היום» בלי הפרדה תיבה/היום'; },
+  overdueFirst: (ns) => { const h = CHECKS._home(ns); if (!h) return 'אין «היום»'; const b = h.s.indexOf('Widget build'); const o = h.s.indexOf('D6/P6/P7', b), td = h.s.indexOf('todayItems.isNotEmpty', b); return o > 0 && td > 0 && o < td ? null : 'באיחור אינו ראשון'; },
+  loadMeter: (ns) => { const h = CHECKS._home(ns); return h && h.s.includes('DsLoadMeter(') ? null : 'אין מונה-עומס'; },
+  daySingle: (ns) => { const h = CHECKS._home(ns); return h && /DsFold\(title: \w+ \+ ' \(' \+ tomorrow/.test(h.s) && !/\bweek\b|Week/.test(h.s) ? null : 'מחר לא מקופל / תצוגת-שבוע'; },
+  offsets: (ns) => { const h = CHECKS._home(ns); return h && h.s.includes("setting('offsets', '3,1,0')") ? null : 'אין offsets עריך'; },
+  sortDue: (ns) => { const h = CHECKS._home(ns); return h && /out\.sort\(\(a, b\) => a\.due\.compareTo\(b\.due\)\)/.test(h.s) ? null : 'אין מיון לפי מועד'; },
+  derived: (ns) => { const h = CHECKS._home(ns); return h && /_items\(today, dayDelta: 0\)/.test(h.s) && !/persist|reminders\s*=/.test(h.s) ? null : 'תזכורות לא נגזרות ברינדור'; },
+  noSnoozeToday: (ns) => { const h = CHECKS._home(ns); return h && /it\.due == today \? \[/.test(h.s) ? null : 'דחייה מותרת ביום-ההכרעה'; },
+  manualLock: (ns) => { const h = CHECKS._home(ns); if (!h) return 'אין «היום»'; const ap = h.s.slice(h.s.indexOf('void _autopilot()'), h.s.indexOf('Future<void> _digest')); return /update\(|_send\(/.test(ap) ? 'הטייס-האוטומטי נוגע בתאריך/שולח' : null; },
+  softShift: (ns) => { const h = CHECKS._home(ns); return h && /DateTime\.saturday/.test(h.s) && /_shift\(/.test(h.s) ? null : 'אין הזזת-soft'; },
+  digest: (ns) => { const h = CHECKS._home(ns); const b = files(ns).find((x) => x.f.endsWith('_behavior.dart')); return h && h.s.includes('_digest(') && h.s.includes("setting('digestHour'") && b && b.s.includes("'digestHour'") ? null : 'אין תקציר-בוקר עריך'; },
+  onlyByRule: (ns) => { const h = CHECKS._home(ns); if (!h) return 'אין «היום»'; const n = (h.s.match(/\.show\(/g) || []).length; return n <= 2 ? null : `${n} סוגי-התראה (מותר 2)`; },
+  approveCard: (ns) => { const h = CHECKS._home(ns); return h && /DsApproveCard\([^;]*alwaysLabel:/.test(h.s) && /onAlways:/.test(h.s) ? null : 'אין כרטיס אשר/דחה/תמיד'; },
+  followDraft: (ns) => { const h = CHECKS._home(ns); const rp = files(ns).find((x) => /_rp1\.dart$/.test(x.f)); if (rp && !/_send\(context/.test(rp.s)) return null; return h && /lastLog\('send'/.test(h.s) && /n >= 3/.test(h.s) ? null : 'אין טיוטת-תזכורת אחרי שליחה'; },
+  proposalSource: (ns) => { const h = CHECKS._home(ns); if (!h) return 'אין «היום»'; const pb = h.s.slice(h.s.indexOf('_proposals('), h.s.indexOf('void _autopilot()')); const cards = pb.split('DsApproveCard(').slice(1); return cards.length && cards.every((c) => /source: /.test(c)) ? null : 'הצעה בלי קטע-מקור'; },
+  nextStep: (ns) => { const h = CHECKS._home(ns); const sh = files(ns).find((x) => x.f.endsWith('_shell.dart')); if (!h) return 'אין «היום»'; const spec = rd(path.join(SPECS, ns + '.txt')); const hasChain = new RegExp('^\\s*' + SL.chainWord + '\\s*:', 'm').test(spec); if (!hasChain) return null; return /decision\('next:/.test(h.s) ? null : 'שרשרת בספק בלי הצעת-צעד-הבא'; },
+  firstPerson: (ns) => { const h = CHECKS._home(ns); const c = contents(ns).find((x) => h && x.f === h.f.replace('.dart', '_content.dart')); return c && /ממך היום|תנוח/.test(c.s) ? null : 'אין משפט-פתיחה בגוף-ראשון'; },
+  didUndo: (ns) => { const h = CHECKS._home(ns); const st = rd(path.join(ROOT, 'new/dart-ui-bs/ds/ds_store.dart')); return h && h.s.includes('DsLogRow(') && /appStore\.undo\(/.test(h.s) && /bool undo\(String logId\)/.test(st) ? null : 'אין «עשיתי לבד» עם החזר'; },
+  sendOnlyTap: (ns) => { for (const x of files(ns)) { const ap = x.s.indexOf('void _autopilot()'); if (ap >= 0) { const body = x.s.slice(ap, x.s.indexOf('Future<void> _digest', ap)); if (/_send\(/.test(body)) return `${x.f}: שליחה אוטומטית`; } } return null; },
   widthCap: () => (ds.includes('maxWidth: 720') ? null : 'DsScaffold בלי רוחב-תוכן 720'),
   flatRows: () => (/class DsNavTile[\s\S]*?if \(lk\.paper\)[\s\S]*?minHeight: 52/.test(ds) ? null : 'DsNavTile בלי שורה-52 בנייר'),
   tokensOnly: () => (/class DsLook[\s\S]*?static DsLook of\(BuildContext context\)/.test(ds) ? null : 'אין DsLook'),
 };
-const run = (id) => { const c = CHECKS[id]; if (!c) return `בדיקה חסרה: ${id}`; const fails = []; if (c.length === 0) { const r = c(); if (r) fails.push(r); } else for (const a of apps) { const r = c(a.ns); if (r) fails.push(`${a.ns}: ${r}`); } return fails.length ? fails.join(' · ') : null; };
+const run = (id) => { const c = CHECKS[id]; if (!c || id.startsWith('_')) return `בדיקה חסרה: ${id}`; const fails = []; if (c.length === 0) { const r = c(); if (r) fails.push(r); } else for (const a of apps) { const r = c(a.ns); if (r) fails.push(`${a.ns}: ${r}`); } return fails.length ? fails.join(' · ') : null; };
 
 const reg = JSON.parse(rd(REG));
 let green = 0; const rows = [];

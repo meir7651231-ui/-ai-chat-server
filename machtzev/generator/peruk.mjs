@@ -132,12 +132,14 @@ export function perukToSpec(md, ns) {
       const t = norm(raw); if (!heW(t).length) { if (sec.kind !== 'forbidden') mode = null; continue; }
       if (forbRe.test(t) && /[:：]?$/.test(t) && heW(t).length <= 3) { mode = 'forb'; continue; }
       if (mustRe.test(t) && heW(t).length <= 3) { mode = 'must'; continue; }
-      if (mode === 'must' || (sec.kind === 'forbidden' && quoted(raw) && /ייעוץ|חוות/.test(t))) { if (quoted(raw) && !disclaimer) disclaimer = t; mode = sec.kind === 'forbidden' ? 'forb' : null; continue; }
+      if (mode === 'must' || (sec.kind === 'forbidden' && quoted(raw) && (/^לא\s/.test(t) || /ייעוץ|חוות/.test(t)))) { if (quoted(raw) && !disclaimer) disclaimer = t; mode = sec.kind === 'forbidden' ? 'forb' : null; continue; }
       if (mode === 'forb') forbidden.push(strip(t));
     }
   }
   if (!disclaimer) { for (const sec of d.sections) for (const raw of allText(sec)) { const t = norm(raw); if (quoted(raw) && /לא ייעוץ|לא חוות/.test(t)) { disclaimer = t; break; } if (disclaimer) break; } }
   forbidden.forEach((t) => content.push({ group: groups.forbidden, tag: null, text: t }));
+  let disclaimerDefault = false;
+  if (!disclaimer && P.defaultDisclaimer) { disclaimer = P.defaultDisclaimer; disclaimerDefault = true; }   // הכרעה-29 §11: חוקי-האחריות של המוצר = ברירת-מחדל כשהפירוק לא כתב הסתייגות — מדווח (⚠), לא מומצא
   if (disclaimer) content.push({ group: groups.disclaimer, tag: null, text: disclaimer });
   const notin = S('notin'); if (notin) content.push(...contentOf(notin, groups.notin));
   const ex = S('example'); if (ex) content.push(...contentOf(ex, groups.example));
@@ -158,6 +160,7 @@ export function perukToSpec(md, ns) {
   const lines = [];
   lines.push(`${G.appWord}: ${d.title || ns}`);
   lines.push(`${G.lookWord}: ${P.look}`);                                   // G28 · עור-הנייר של «בלגן»
+  if (chain.length) lines.push(`${G.chainWord}: ${chain.map((c) => c.replace(/[,،]/g, ' ')).join(', ')}`);   // G32 · הצעד-הבא (P14)
   for (const [tgt, q] of P.questions || []) lines.push(`${G.questionWord} ${tgt}: ${q}`);   // G28 · מסך = שאלה אחת
   lines.push(`${G.entityNouns[0]} ${root} ${G.withWord} ${rootFields.join(', ')} | ${G.stagePrefixes[0]} ${P.stages.join(', ')}`);
   if (severity) lines.push(`${G.entityNouns[0]} ${fnd} ${G.withWord} ${P.findingFields.map((f, i) => i === 0 ? f.replace(/\*$/, '') + '*' : f).join(', ')}, ${P.severityField}{${P.severity.join('|')}} | ${G.markDelete[0]}: ${root}=${Object.keys(G.delPolicies)[0]}`);
@@ -203,7 +206,7 @@ export function perukToSpec(md, ns) {
   const phone = P.personFields.find((f) => /טלפון/.test(f));
   if (phone) lines.push(`${G.reportWord} ${root}: [${G.pExport[0]}] ${P.exportLabel} = ${phone.replace(/\*$/, '')}, ${P.exportGoal}`);
   for (const c of content) lines.push(`${G.contentWord} ${c.group}${c.tag ? ` [${c.tag}]` : ''}: ${q(c.text)}`);
-  const node = { id: d.id, ns, title: d.title, moment: d.moment, category: d.category, not: d.not, fields: fields.length, outputs: outputs.map((o) => o.name), severity, classes, decisions: decisions.map((x) => x.label), prices, chain, forbidden: forbidden.length, disclaimer: !!disclaimer, content: content.length };
+  const node = { id: d.id, ns, title: d.title, moment: d.moment, category: d.category, not: d.not, fields: fields.length, outputs: outputs.map((o) => o.name), severity, classes, decisions: decisions.map((x) => x.label), prices, chain, forbidden: forbidden.length, disclaimer: disclaimerDefault ? 'default' : !!disclaimer, content: content.length };
   return { spec: lines.join('\n') + '\n', node, doc: d };
 }
 
@@ -221,6 +224,7 @@ if (isMain) {
     if (!node.fields) probs.push('אין שדות-קליטה (מה שולחים)');
     if (!node.outputs.length) probs.push('אין חלקי-פלט (מה חוזר)');
     if (!node.disclaimer) probs.push('אין הסתייגות (חובה: «לא ייעוץ…»)');
+    if (node.disclaimer === 'default') console.log(`⚠ ${f}: בלי הסתייגות כתובה — הסתייגות-המוצר (הכרעה-29 §11)`);
     if (!node.forbidden) probs.push('אין רשימת-אסור');
     if (gate) {
       const cur = fs.existsSync(specPath) ? fs.readFileSync(specPath, 'utf8') : null;
