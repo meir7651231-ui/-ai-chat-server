@@ -141,6 +141,17 @@ class ${cls}Today {
   static const module = ${k(appTitle || title)};
   static const _dates = ${dateList};
   static const List<String> _times = ${timeList};
+  /// חזרה («כל חודש» = m1 · «כל שבועיים» = w2 · «כל 3 ימים» = d3 · «כל שנה» = y1): המועד-הבא מהמועד שנסגר; חודש עם פחות ימים ⇒ היום-האחרון
+  static DateTime nextRepeat(DateTime d, String code) {
+    final n = int.tryParse(code.substring(1)) ?? 1;
+    switch (code.isEmpty ? '' : code[0]) {
+      case 'd': return DateTime(d.year, d.month, d.day + n);
+      case 'w': return DateTime(d.year, d.month, d.day + 7 * n);
+      case 'm': { final t = DateTime(d.year, d.month + n, 1); final last = DateTime(t.year, t.month + 1, 0).day; return DateTime(t.year, t.month, d.day > last ? last : d.day); }
+      case 'y': { final t = DateTime(d.year + n, d.month, 1); final last = DateTime(t.year, t.month + 1, 0).day; return DateTime(t.year, t.month, d.day > last ? last : d.day); }
+      default: return d;
+    }
+  }
   static String _timeOf(Map<String, String> r) { for (final l in _times) { final v = (r[l] ?? '').trim(); if (RegExp(r'^\\d{1,2}:\\d{2}\$').hasMatch(v)) return v.padLeft(5, '0'); } return ''; }
   static DateTime _day(DateTime d) => DateTime(d.year, d.month, d.day);
   static DateTime? _parse(String s) { final t = s.trim(); if (t.isEmpty) return null; try { return _day(DateTime.parse(t.length == 10 ? '\${t}T12:00:00' : t)); } catch (_) { return null; } }
@@ -150,13 +161,22 @@ class ${cls}Today {
   static String _remKey(String rid, String field) => 'rem:\$rid:\$field';
   static List<Map<String, String>> open() => ${openRecs};${sendFn2}
 
-  static DsTodayItem _mk(String title, String sub, String rid, String field, DateTime d, bool hard, bool overdue, DateTime today, [String time = '']) {
+  static DsTodayItem _mk(String title, String sub, String rid, String field, DateTime d, bool hard, bool overdue, DateTime today, [String time = '', bool rep = false]) {
     final acts = overdue ? [${k(L.actDone)}, ${k(L.actSnooze)}, ${k(L.actIgnore)}] : (d == today ? [${k(L.actDone)}, ${k(L.actCal)}] : [${k(L.actDone)}, ${k(L.actSnooze)}, ${k(L.actCal)}]);   // P4 · ביום-ההכרעה אין דחייה · «ליומן» = קישור-יומן, אפס-מפתח
-    return DsTodayItem(title: title, sub: time.isNotEmpty ? time + ' · ' + sub : sub, rid: rid, field: field, due: d, hard: hard, overdue: overdue, module: module, actions: acts, act: (i) => _act(rid, field, d, acts, i), time: time);
+    return DsTodayItem(title: (rep ? '↻ ' : '') + title, sub: time.isNotEmpty ? time + ' · ' + sub : sub, rid: rid, field: field, due: d, hard: hard, overdue: overdue, module: module, actions: acts, act: (i) => _act(rid, field, d, acts, i), time: time);
   }
   static void _act(String rid, String field, DateTime due, List<String> acts, int i) {
     final a = acts[i.clamp(0, acts.length - 1)];
-    if (a == ${k(L.actDone)}) { ${lastStage >= 0 ? `appStore.advance('${root.slug}', rid, ${lastStage + 1});` : `appStore.decide('ign:\$rid:\$field', 'no');`} }
+    if (a == ${k(L.actDone)}) {
+      final r0 = appStore.byId('${root.slug}', rid); final rep = (r0 == null ? '' : (r0['__repeat'] ?? '')).trim();
+      ${lastStage >= 0 ? `appStore.advance('${root.slug}', rid, ${lastStage + 1});` : `appStore.decide('ign:\$rid:\$field', 'no');`}
+      if (r0 != null && rep.isNotEmpty) {   // ↻ רגע חוזר: «סיים» יוצר את הבא לבד (המועד-הבא בשדה שנסגר), עם החזר
+        final next = <String, String>{for (final e in r0.entries) if (!e.key.startsWith('__') || e.key == '__repeat' || e.key == '__note') e.key: e.value};
+        next[field] = _iso(nextRepeat(due, rep)); ${lastStage >= 0 ? `next['__stage'] = '0';` : ''}
+        final nid = appStore.add('${root.slug}', next);
+        appStore.logAction('add', ${k(L.repeatLog)}.replaceAll('{title}', appStore.displayOf('${root.slug}', nid) + ' · ' + next[field]!), entity: '${root.slug}', rid: nid);
+      }
+    }
     else if (a == ${k(L.actSnooze)}) { final r = appStore.byId('${root.slug}', rid); if (r != null) { final prev = r[field] ?? ''; appStore.update('${root.slug}', rid, {field: _iso(due.add(const Duration(days: 1)))}); appStore.logAction('auto', ${k(L.actSnooze)} + ' · ' + field, entity: '${root.slug}', rid: rid, field: field, prev: prev); } }   // נגיעה-ידנית (P5) — נרשמת עם החזר
     else if (a == ${k(L.actCal)}) { final d = _iso(due).replaceAll('-', ''); launchUrl(Uri.parse('https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + Uri.encodeComponent(field + ' · ' + appStore.displayOf('${root.slug}', rid)) + '&dates=' + d + '/' + d), mode: LaunchMode.externalApplication); }
     else { appStore.decide('ign:\$rid:\$field', 'no'); }
@@ -166,16 +186,16 @@ class ${cls}Today {
   static List<DsTodayItem> items(DateTime today, {required int dayDelta}) {
     final out = <DsTodayItem>[];
     for (final r in open()) {
-      final rid = r[AppStore.idKey] ?? ''; final who = appStore.displayOf('${root.slug}', rid); final tm = _timeOf(r);
+      final rid = r[AppStore.idKey] ?? ''; final who = appStore.displayOf('${root.slug}', rid); final tm = _timeOf(r); final rep = (r['__repeat'] ?? '').trim().isNotEmpty;
       for (final f in _dates) {
         final d = _parse(r[f.label] ?? ''); if (d == null) continue;
         if (appStore.decision('ign:\$rid:\${f.label}') == 'no') continue;
-        if (dayDelta == 0 && d.isBefore(today)) { out.add(_mk('\${f.label} · \$who', ${k(L.remWas)}.replaceAll('{date}', _iso(d)), rid, f.label, d, f.hard, true, today, tm)); continue; }
+        if (dayDelta == 0 && d.isBefore(today)) { out.add(_mk('\${f.label} · \$who', ${k(L.remWas)}.replaceAll('{date}', _iso(d)), rid, f.label, d, f.hard, true, today, tm, rep)); continue; }
         final okRem = appStore.decision(_remKey(rid, f.label)) == 'ok';   // תזכורת-מוקדמת (−3/−1) = הצעה שדורשת אישור; יום-ההכרעה עצמו = עובדה — מוצג בלי אישור
         for (final off in _offsets()) {
           if (off > 0 && !okRem) continue;
           final fire = _shift(d.subtract(Duration(days: off)), f.hard);
-          if (fire == today.add(Duration(days: dayDelta))) { out.add(_mk('\${f.label} · \$who', off == 0 ? ${k(L.remToday)} : ${k(L.remIn)}.replaceAll('{n}', off.toString()), rid, f.label, d, f.hard, false, today, off == 0 ? tm : '')); break; }
+          if (fire == today.add(Duration(days: dayDelta))) { out.add(_mk('\${f.label} · \$who', off == 0 ? ${k(L.remToday)} : ${k(L.remIn)}.replaceAll('{n}', off.toString()), rid, f.label, d, f.hard, false, today, off == 0 ? tm : '', rep)); break; }
         }
       }
     }

@@ -71,6 +71,12 @@ if (!/balaganPhones\(/.test(moments) || !/balaganPersons\(/.test(moments) || !/b
 if (!/fixed\.sort\(/.test(home) || !/DateTime free\(/.test(home) || !/a\.time\.isEmpty \? '99:99'/.test(home)) fails.push('התוכנית-להיום אינה מקבעת שעות / שורות-היום לא לפי שעה');
 for (const m of mods.filter((x) => x.root.fields.some((f) => /שעה/.test(f.label)))) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/static const List<String> _times = \[gen_/.test(h) || !/_timeOf\(r\)/.test(h)) fails.push(`${m.ns}: ספק-היום בלי שדה-השעה`); }
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/'טלפון'/.test(ft) || !/'לקוח'/.test(ft) || !/'ריבית'/.test(ft)) fails.push('בדיקת טלפון/מי/אחוז המחוללת חסרה'); }
+// גל ב׳-ח · ↻ חזרה («כל חודש») — נשמרת ברשומה, «סיים» יוצר את הבא (nextRepeat, חודש-קצר ⇒ יום-אחרון) · שם לפני טלפון · עובדה-בלי-שדה ⇒ «הערה»
+if (!/balaganRepeat\(/.test(moments) || !/__repeat/.test(moments) || !/balaganRepeatLabel\(/.test(moments) || !/phones = const \[\]/.test(moments)) fails.push('balaganFacts בלי חזרה / שם-לפני-טלפון');
+for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/static DateTime nextRepeat\(/.test(h) || !/__repeat/.test(h) || !/repeatLog|↻/.test(h)) { fails.push(`${m.ns}: «סיים» אינו יוצר את הרגע-החוזר הבא`); break; } }
+if (!/confirmRepeat|__repeat/.test(confirm)) fails.push('טופס-האישור אינו מציג חזרה');
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/'__repeat'/.test(ft) || !/nextRepeat\(/.test(ft) || !/'רות לוי'/.test(ft)) fails.push('בדיקת החזרה/השם-לפני-טלפון המחוללת חסרה'); }
+if (!/balaganStripGrammar\(/.test(moments) || !/balaganTokens\(balaganStripGrammar\(text\)\)/.test(moments)) fails.push('הזיהוי אינו מסיר מילות-דקדוק (תאריך/חזרה/שעה/טלפון)');
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);
