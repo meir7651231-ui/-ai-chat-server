@@ -7,8 +7,6 @@
 import { makeConsts, write, isPaper } from './render-ds.mjs';
 import { searchOp, wireAtom, pickWired, particleWidgets } from './particles.mjs';
 import { L, T } from './chrome.mjs';
-import { pick as behaviorPick } from './behavior-plan.mjs';   // G34 · אטומי-התנהגות נבחרים-לפי-ייעוד (לא קוד-ידני)
-const A = (id) => behaviorPick(id).name;
 import fs0 from 'node:fs';
 const SL0 = JSON.parse(fs0.readFileSync(new URL('./spec-lang.data.json', import.meta.url), 'utf8'));
 const isTimeLabel = (f) => !/^(num|date|bool|multiline)$/.test(f.type || '') && !(f.enumVals && f.enumVals.length) && String(f.label).split(/\s+/).some((w) => (SL0.typeTime || []).includes(w));   // שדה-שעה לפי דקדוק-האפיון
@@ -27,7 +25,7 @@ export function pickRoot(entMeta, backRefs) {
 // ── עמוד-השורש (רשומה אחת): עובדות · חלק-לכל-ישות-בת (רשומות + הוספה) · דוח · (השליחה בתוך הדוח) ──
 export function renderRootPage(slug, { root, children, report, title }) {
   const { k, dump } = makeConsts(slug);
-  const imports = new Set([`import 'gen_${root.slug}.dart';`, ...['iso.daysSince', 'week.start', 'money.fmt'].map((id) => `import '../${behaviorPick(id).file}';`)]);   // G34
+  const imports = new Set([`import 'gen_${root.slug}.dart';`, "import 'gen_behaviors.dart';"]);   // G34ב · שכבת-ההרכבה
   const firstWired = (pick, ctx) => { const w = pickWired([...pick.atoms, ...pick.alts], (c) => wireAtom(c, ctx)); if (w) imports.add(impOf(w)); return w; };
   const goal = `${root.name} ${title}`;
   const notes = [];
@@ -85,10 +83,10 @@ import 'package:flutter/material.dart';
 
 /// 8000 ⇒ 8,000 · 12.5 ⇒ 12.5 — סכום קריא בתיק (רק תצוגה; הרשומה נשארת ספרות)
 /// ב׳-מג · תאריך בתיק כמו שאומרים: היום (9.9) · מחר (10.9) · יום שני 21.9 · 3.10.2027 — ISO נשאר בנתונים
-String _fmtDate(String s) { final t = s.trim(); final d = DateTime.tryParse(t.length == 10 ? '\${t}T12:00:00' : t); if (d == null) return t; final now = DateTime.now(); final iso = t.length >= 10 ? t.substring(0, 10) : t; final tIso = now.toIso8601String().substring(0, 10); final n = -${A('iso.daysSince')}(iso, tIso).toInt(); if (n == 0) return ${k(L.homeToday)}; if (n == 1) return ${k(L.homeTomorrow)}; if (n == -1) return ${k(L.dayYesterday)}; final dm = int.parse(iso.substring(8, 10)).toString() + '.' + int.parse(iso.substring(5, 7)).toString() + (d.year != now.year ? '.' + iso.substring(0, 4) : ''); return n.abs() <= 6 ? ${k(L.dayPrefix)}.replaceAll('{day}', ${k(L.dayNames)}.split(',')[${A('iso.daysSince')}(${A('week.start')}(d).toIso8601String().substring(0, 10), iso).toInt()]) + ' ' + dm : dm; }   // ב׳-מג · תאריך במילים בתיק · G34 · דבק על חלקיקים (ימים-מאז · יום-בשבוע · יום.חודש)
+String _fmtDate(String s) { final t = s.trim(); if (t.length < 10 || DateTime.tryParse(t.length == 10 ? '\${t}T12:00:00' : t) == null) return t; final p = bhDayLabelParts(t.substring(0, 10), bhIso(DateTime.now())); switch (p[0]) { case 'today': return ${k(L.homeToday)}; case 'tomorrow': return ${k(L.homeTomorrow)}; case 'yesterday': return ${k(L.dayYesterday)}; case 'weekday': return ${k(L.dayPrefix)}.replaceAll('{day}', ${k(L.dayNames)}.split(',')[int.parse(p[1])]) + ' ' + p[2]; default: return p[2]; } }   // ב׳-מג · תאריך במילים בתיק · G34ב · שכבת-ההרכבה
 /// ב׳-נד · שורות «מה קרה מאז?» — «2026-09-01 · טקסט» ⇒ «יום שלישי 1.9 · טקסט»
 String _noteText(String s) => s.split('\\n').map((l) { final m = RegExp(r'^(\\d{4}-\\d{2}-\\d{2}) · (.*)$').firstMatch(l); return m == null ? l : _fmtDate(m.group(1)!) + ' · ' + m.group(2)!; }).join('\\n');
-String _fmtNum(String s) { final t = s.trim(); final v = num.tryParse(t.replaceAll(',', '')); if (v == null) return t; final parts = t.replaceAll(',', '').split('.'); final ip = ${A('money.fmt')}(num.tryParse(parts[0]) ?? 0).replaceFirst('₪', ''); return parts.length > 1 ? ip + '.' + parts[1] : ip; }   // G34 · חלקיק fMoney (מפרידי-אלפים)
+String _fmtNum(String s) { final t = s.trim(); final v = num.tryParse(t.replaceAll(',', '')); if (v == null) return t; final parts = t.replaceAll(',', '').split('.'); final ip = bhThousands(num.tryParse(parts[0]) ?? 0); return parts.length > 1 ? ip + '.' + parts[1] : ip; }   // G34 · חלקיק fMoney (מפרידי-אלפים)
 
 class ${cls} extends StatelessWidget {
   const ${cls}({required this.id, super.key});
@@ -120,7 +118,7 @@ export function renderHome(slug, { root, rootPage, report, message, title, chain
   let msgW = null, msgImports = new Set();
   if (message) { const w = particleWidgets({ entity: message.entity, plan: [message.p], k, recs: '[r]' }); msgImports = w.imports; if (w.widgets.length) msgW = w.widgets[0]; else notes.push(...w.notes); }
   for (const i of msgImports) imports.add(i);
-  for (const id of ['iso.addDays', 'week.start', 'iso.daysSince', 'iso.inRange', 'task.overdue', 'money.fmt']) imports.add(`import '../${behaviorPick(id).file}';`);   // G34 · חלקיקי-יסוד
+  imports.add("import 'gen_behaviors.dart';");   // G34ב · שכבת-ההרכבה (bh*) — אפס ייבוא-חלקיק ישיר
   // שליחה: הטקסט של הדוח + המנוע-המקשר (waLink…) — כמו הייצוא של הדוח
   let sendFn = '', sendBtn = '';
   if (report && report.export) {
@@ -167,7 +165,7 @@ class ${cls}Today {
   static const List<String> _times = ${timeList};
   static const List<String> _phones = ${phoneList};
   static const List<String> _nums = ${numList};
-  static String _moneyOf(Map<String, String> r) { if (_nums.isEmpty) return ''; final v = double.tryParse((r[_nums.first] ?? '').replaceAll(',', '').trim()); if (v == null || v <= 0) return ''; return '₪ ' + ${A('money.fmt')}(v).replaceFirst('₪', ''); }   // ב׳-מ · הכסף של התיק, על השורה · G34 · חלקיק fMoney
+  static String _moneyOf(Map<String, String> r) { if (_nums.isEmpty) return ''; final v = double.tryParse((r[_nums.first] ?? '').replaceAll(',', '').trim()); if (v == null || v <= 0) return ''; return '₪ ' + bhThousands(v); }   // ב׳-מ · הכסף של התיק, על השורה · G34ב · bhThousands
   static String _phoneOf(Map<String, String> r) { for (final l in _phones) { final v = (r[l] ?? '').replaceAll(RegExp(r'[^0-9+]'), ''); if (v.length >= 9) return v; } return ''; }   // ב׳-לח · הטלפון של התיק (הראשון שנראה כמו טלפון)
   /// חזרה («כל חודש» = m1 · «כל שבועיים» = w2 · «כל 3 ימים» = d3 · «כל שנה» = y1): המועד-הבא מהמועד שנסגר; חודש עם פחות ימים ⇒ היום-האחרון
   static DateTime nextRepeat(DateTime d, String code) {
@@ -185,14 +183,12 @@ class ${cls}Today {
   static DateTime? _parse(String s) { final t = s.trim(); if (t.isEmpty) return null; try { return _day(DateTime.parse(t.length == 10 ? '\${t}T12:00:00' : t)); } catch (_) { return null; } }
   static List<int> _offsets() => [for (final x in appStore.setting('offsets', '3,1,0').split(',')) int.tryParse(x.trim()) ?? 0];
   /// ב׳-צא · ההיסטים שעוד יכולים לירות (יום-הירי ≥ היום) — הצעת-התזכורת אומרת רק אמת
-  static List<int> aheadOf(DateTime d, bool hard, DateTime today) => [for (final o in _offsets()) if (${A('iso.inRange')}(_iso(_shift(_plus(d, -o), hard)), (from: _iso(today), to: null))) o];   // G34 · דבק: הוספת-ימים · לא-בשבת · בטווח — חלקיקים
-  static DateTime _plus(DateTime d, int n) => _parse(${A('iso.addDays')}(_iso(d), n)) ?? d;
-  static int _wd(DateTime d) => ${A('iso.daysSince')}(_iso(${A('week.start')}(d)), _iso(d)).toInt();   // G34 · יום-בשבוע (0=ראשון) = הרכבה: תחילת-השבוע + ימים-מאז
-  static String _dm(String iso, bool y) => int.parse(iso.substring(8, 10)).toString() + '.' + int.parse(iso.substring(5, 7)).toString() + (y ? '.' + iso.substring(0, 4) : '');   // יום.חודש — דבק-שפה
-  static DateTime _shift(DateTime d, bool hard) => hard || _wd(d) != 6 ? d : _plus(d, 1);   // P8 · soft לא בשבת · G34 · דבק: יום-בשבוע + הוספת-יום
+  static List<int> aheadOf(DateTime d, bool hard, DateTime today) => bhAheadOffsets(_iso(d), hard, _iso(today), _offsets());   // G34ב · שכבת-ההרכבה
+  static DateTime _plus(DateTime d, int n) => _parse(bhPlusDays(_iso(d), n)) ?? d;
+  static DateTime _shift(DateTime d, bool hard) => _parse(bhSoftShift(_iso(d), hard)) ?? d;   // P8 · soft לא בשבת · G34ב · bhSoftShift
   static String _iso(DateTime d) => d.toIso8601String().substring(0, 10);
   /// ב׳-מא · תאריך כמו שאומרים אותו: היום · מחר · אתמול · יום שלישי 8.9 (עד שבוע) · 15.9 · 3.10.2027 (שנה אחרת)
-  static String _dayLabel(DateTime d, DateTime today) { final n = -${A('iso.daysSince')}(_iso(d), _iso(today)).toInt(); if (n == 0) return ${k(L.homeToday)}; if (n == 1) return ${k(L.homeTomorrow)}; if (n == -1) return ${k(L.dayYesterday)}; final dm = _dm(_iso(d), d.year != today.year); return n.abs() <= 6 ? ${k(L.dayPrefix)}.replaceAll('{day}', ${k(L.dayNames)}.split(',')[_wd(d)]) + ' ' + dm : dm; }   // G34 · דבק: ימים-מאז · תחילת-שבוע — חלקיקים; כאן רק מונחים
+  static String _dayLabel(DateTime d, DateTime today) { final p = bhDayLabelParts(_iso(d), _iso(today)); switch (p[0]) { case 'today': return ${k(L.homeToday)}; case 'tomorrow': return ${k(L.homeTomorrow)}; case 'yesterday': return ${k(L.dayYesterday)}; case 'weekday': return ${k(L.dayPrefix)}.replaceAll('{day}', ${k(L.dayNames)}.split(',')[int.parse(p[1])]) + ' ' + p[2]; default: return p[2]; } }   // G34ב · שכבת-ההרכבה מחזירה חלקים; כאן רק מונחים
   static String _remKey(String rid, String field) => 'rem:\$rid:\$field';
   static List<Map<String, String>> open() => ${openRecs};${sendFn2}
 
@@ -202,7 +198,7 @@ class ${cls}Today {
   }
   static void _act(String rid, String field, DateTime due0, List<String> acts, int i, [DateTime? today]) {
     final a = acts[i.clamp(0, acts.length - 1)];
-    final due = today == null ? due0 : (${A('task.overdue')}({'due': _iso(due0)}, _iso(today)) ? today : due0);   /* G34 · חלקיק taskOverdue · ב׳-פו · «דחה למחר» מבאיחור = מחר (לא יום-אחרי-המועד-שעבר, שנשאר באיחור) */
+    final due = today == null ? due0 : (_parse(bhDueBase(_iso(due0), _iso(today))) ?? due0);   /* G34ב · bhDueBase · ב׳-פו · «דחה למחר» מבאיחור = מחר (לא יום-אחרי-המועד-שעבר, שנשאר באיחור) */
     if (a == ${k(L.actDone)}) {
       final r0 = appStore.byId('${root.slug}', rid); final rep = (r0 == null ? '' : (r0['__repeat'] ?? '')).trim();
       final prevStage = r0 == null ? '' : (r0[AppStore.stageKey] ?? '0');
@@ -237,7 +233,7 @@ class ${cls}Today {
       for (final f in _dates) {
         final d = _parse(r[f.label] ?? ''); if (d == null) continue;
         if (appStore.decision('ign:\$rid:\${f.label}') == 'no') continue;
-        if (dayDelta == 0 && d.isBefore(today)) { final ago = ${A('iso.daysSince')}(_iso(d), _iso(today)).toInt(); out.add(_mk(_dates.length == 1 ? who : '\${f.label} · \$who', ${k(L.remWas)}.replaceAll('{date}', _dayLabel(d, today)) + (ago <= 1 ? '' : ' · ' + ${k(L.agoDays)}.replaceAll('{n}', ago.toString()))   /* ב׳-עז · «היה אתמול» כבר אומר הכל — בלי «· אתמול» כפול */, rid, f.label, d, f.hard, true, today, tm, rep, ph, mo)); continue; }
+        if (dayDelta == 0 && d.isBefore(today)) { final ago = bhDaysSince(_iso(d), _iso(today)); out.add(_mk(_dates.length == 1 ? who : '\${f.label} · \$who', ${k(L.remWas)}.replaceAll('{date}', _dayLabel(d, today)) + (ago <= 1 ? '' : ' · ' + ${k(L.agoDays)}.replaceAll('{n}', ago.toString()))   /* ב׳-עז · «היה אתמול» כבר אומר הכל — בלי «· אתמול» כפול */, rid, f.label, d, f.hard, true, today, tm, rep, ph, mo)); continue; }
         final okRem = appStore.decision(_remKey(rid, f.label)) == 'ok';   // תזכורת-מוקדמת (−3/−1) = הצעה שדורשת אישור; יום-ההכרעה עצמו = עובדה — מוצג בלי אישור
         for (final off in _offsets()) {
           if (off > 0 && !okRem) continue;
@@ -289,7 +285,7 @@ class ${cls}Today {
       for (final f in _dates) { final d = _parse(r[f.label] ?? ''); if (d == null) continue; any = true; if (!d.isBefore(today) || appStore.decision('ign:\$rid:\${f.label}') != 'no') { visible = true; break; } }
       if (!any && appStore.decision('undated:\$rid') != 'no') visible = true;
       if (visible) continue;
-      final t = _touched(r, rid); if (t == null) continue; final n = ${A('iso.daysSince')}(_iso(t), _iso(today)).toInt(); if (n < 14) continue;
+      final t = _touched(r, rid); if (t == null) continue; final n = bhDaysSince(_iso(t), _iso(today)); if (n < 14) continue;
       final acts = [${lastStage >= 0 ? `${k(L.closeLabel)}, ` : ''}${k(L.actSetTomorrow)}, ${k(L.actIgnore)}];
       out.add(DsTodayItem(title: appStore.displayOf('${root.slug}', rid), sub: [${k(L.staleSub)}.replaceAll('{n}', n.toString()), _moneyOf(r)].where((x) => x.isNotEmpty).join(' · '), rid: rid, field: '', due: t, hard: false, overdue: false, module: module, actions: acts, act: (i) => _staleAct(rid, today, acts, i)));
     }
@@ -333,7 +329,7 @@ class ${cls}Today {
           onAlways: () { appStore.setSetting('always:rem', '1'); appStore.decide(_remKey(rid, f.label), 'ok'); }));
       }
       ${sendFn ? `final last = appStore.lastLog('send', rid);   // P12 · טיוטה, לא שליחה: אחרי 3 ימים בלי שינוי-שלב ⇒ הצעה; השליחה עצמה רק בהקשה (T5)
-      if (last != null && appStore.decision('fu:\$rid:\${last['id']}').isEmpty) { final at = DateTime.tryParse(last['at'] ?? ''); final n = at == null ? 0 : ${A('iso.daysSince')}(_iso(_day(at)), _iso(today)).toInt(); if (n >= 3 && (last['prev'] ?? '') == appStore.stageOf('${root.slug}', rid).toString()) out.add(DsApproveCard(question: ${k(L.followAsk)}.replaceAll('{n}', n.toString()), source: module + ' · ' + who, okLabel: ${k(L.homeSend)}, noLabel: ${k(L.actNo)}, onOk: () { appStore.decide('fu:\$rid:\${last['id']}', 'ok'); send(context, r, rid); }, onNo: () => appStore.decide('fu:\$rid:\${last['id']}', 'no'))); }` : ''}
+      if (last != null && appStore.decision('fu:\$rid:\${last['id']}').isEmpty) { final at = DateTime.tryParse(last['at'] ?? ''); final n = at == null ? 0 : bhDaysSince(_iso(_day(at)), _iso(today)); if (n >= 3 && (last['prev'] ?? '') == appStore.stageOf('${root.slug}', rid).toString()) out.add(DsApproveCard(question: ${k(L.followAsk)}.replaceAll('{n}', n.toString()), source: module + ' · ' + who, okLabel: ${k(L.homeSend)}, noLabel: ${k(L.actNo)}, onOk: () { appStore.decide('fu:\$rid:\${last['id']}', 'ok'); send(context, r, rid); }, onNo: () => appStore.decide('fu:\$rid:\${last['id']}', 'no'))); }` : ''}
     }
     ${nextName && lastStage >= 0 ? `if (chain) for (final r in appStore.records('${root.slug}')) {   // P14 · הצעד-הבא: רשומה שהגיעה לשלב-האחרון (סגורה — לא ב-open) ובלי הכרעה
       final rid = r[AppStore.idKey] ?? ''; final who = appStore.displayOf('${root.slug}', rid);

@@ -1,7 +1,8 @@
 {
  "summary": {
   "ops": 30,
-  "confirmed": 25,
+  "confirmed": 30,
+  "textChallenged": 5,
   "swapsProposed": 5,
   "swapsProven": 0,
   "reach": 798

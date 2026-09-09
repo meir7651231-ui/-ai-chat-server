@@ -15,9 +15,10 @@ export const REGEN = [
   { rel: 'machtzev/generator/core-dart.mjs', args: [], note: 'gen_core_<entity>.dart (שער coredart)' },
   { rel: 'machtzev/generator/app-from-sentences.mjs', args: [], note: 'משפט ⇒ אפליקציה (שער appgen)' },
   // G23a · מסלול-ב׳ (ישויות-מהמשפט): כל ספק ב-machtzev/generator/specs-ds/*.txt ⇒ app-ds --name <stem> -f <spec> --skin (עיצוב-forge). נגזר מהתיקייה — לא רשימה (הכרעה-27)
+  { rel: 'machtzev/generator/behavior-plan.mjs', args: [], note: 'G34 · הכרעה-30: חלקיקי-היסוד נבחרים-בהוכחה-בריצה (לפני כל מודול)' },
+  { rel: 'machtzev/generator/behavior-compose.mjs', args: [], note: 'G34ב · שכבת-ההרכבה gen_behaviors.dart (bh*) — לפני app-ds/balagan' },
   { rel: 'machtzev/generator/peruk.mjs', args: ['--all'], note: 'G27 · פירוקי-הבעלים ⇒ ספקי specs-ds (לפני app-ds)' },
   ...dsSpecs(),
-  { rel: 'machtzev/generator/behavior-plan.mjs', args: [], note: 'G34 · הכרעה-30: חלקיקי-היסוד של בלגן נבחרים-בהוכחה-בריצה (לפני balagan)' },
   { rel: 'machtzev/generator/balagan.mjs', args: [], note: 'G33 · הכרעה-29: כל מודולי-הנייר ⇒ אפליקציה אחת «בלגן» (שער balaganone)' },
 ];
 function dsSpecs() {

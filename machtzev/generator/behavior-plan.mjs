@@ -9,9 +9,9 @@
 //   --gate: (א) כל צורך נפתר; (ב) הנבחר מיובא ונקרא בפועל בקבצי-בלגן המחוללים; (ג) המתאמים ב-Dart דקים (הלבשת-מונחים בלבד, אין מימוש-מחדש).
 import fs from 'node:fs';
 import path from 'node:path';
-import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { catalog } from './auto-logic.mjs';
+import { proveCandidates, isPure } from './logic-proof.mjs';
 import * as R from '../root.mjs';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.join(HERE, 'behavior-plan.json');
@@ -45,24 +45,10 @@ export function plan({ prove = true } = {}) {
   const out = {};
   const needsIds = Object.keys(NEEDS);
   // מועמדים לפי חתימה — רק אטומים טהורים (אפס import; חוק-1) שניתן להריץ בבידוד
-  const candsOf = (need) => rows.filter((c) => sigOk(c, need)).filter((c) => { try { return !/^import /m.test(fs.readFileSync(path.join(R.NEW, c.file), 'utf8')); } catch { return false; } });
+  const candsOf = (need) => rows.filter((c) => sigOk(c, need)).filter((c) => isPure(c.file));
   // הוכחה-בריצה: קובץ-מוכיח לכל צורך — כל המועמדים מיובאים עם קידומת, כל דוגמה נבדקת; פלט = "i:j:1/0"
   const proofs = {};
-  if (prove) {
-    const dir = path.join(HERE, '.prove'); fs.mkdirSync(dir, { recursive: true });
-    const DART = process.env.DART || (fs.existsSync('/home/user/flutter/bin/cache/dart-sdk/bin/dart') ? '/home/user/flutter/bin/cache/dart-sdk/bin/dart' : 'dart');
-    for (const id of needsIds) {
-      const need = NEEDS[id]; const cands = candsOf(need); if (!cands.length || !need.examples) continue;
-      const imps = cands.map((c, i) => `import '${path.relative(dir, path.join(R.NEW, c.file)).split(path.sep).join('/')}' as c${i};`).join('\n');
-      const body = cands.map((c, i) => need.examples.map((ex, j) => `  try { final dynamic r = c${i}.${c.id}(${ex[0]}); out.add('${i}:${j}:' + ((${ex[1]}) ? '1' : '0')); } catch (_) { out.add('${i}:${j}:0'); }`).join('\n')).join('\n');
-      const file = path.join(dir, id.replace(/\W/g, '_') + '.dart');
-      fs.writeFileSync(file, `// G34 · מוכיח-בחירה: ${id} — ${cands.length} מועמדים × ${need.examples.length} דוגמאות\n${imps}\nvoid main() {\n  final out = <String>[];\n${body}\n  print(out.join(','));\n}\n`);
-      const r = spawnSync(DART, ['run', file], { cwd: dir, encoding: 'utf8', timeout: 120000 });
-      const line = (r.stdout || '').trim().split('\n').pop() || '';
-      const pass = {}; for (const tok of line.split(',')) { const [i, j, ok] = tok.split(':'); if (i === undefined || ok === undefined) continue; (pass[cands[+i].id] ||= { ok: 0, total: need.examples.length }).ok += ok === '1' ? 1 : 0; }
-      if (!line.includes(':')) { proofs[id] = { error: (r.stderr || r.stdout || '').split('\n').filter((l) => /Error|error/.test(l)).slice(0, 2).join(' | ') }; continue; }
-      proofs[id] = pass;
-    }
+  if (prove) { for (const id of needsIds) { const need = NEEDS[id]; const cands = candsOf(need); if (!cands.length || !need.examples) continue; proofs[id] = proveCandidates(id, cands, need.examples); }
   } else if (fs.existsSync(OUT)) { const saved = JSON.parse(fs.readFileSync(OUT, 'utf8')); for (const id of needsIds) if (saved[id] && saved[id].proof) proofs[id] = saved[id].proof; }
   for (const id of needsIds) {
     const need = NEEDS[id]; const demand = bag(heTok(need.demand));
@@ -88,11 +74,15 @@ if (isMain) {
   for (const [id, p] of Object.entries(P)) if (!p.pick) fails.push(`צורך בלי אטום: ${id} (${p.candidates} מועמדים בחתימה)`);
   if (gate) {
     // (ב) הנבחר מיובא ונקרא בפועל · (ג) מתאמים דקים
-    const GEN = R.outDir(); const files = fs.readdirSync(GEN).filter((f) => /^gen_(balagan_|app_)/.test(f) && f.endsWith('.dart'));
+    const GEN = R.outDir(); const files = fs.readdirSync(GEN).filter((f) => /^gen_(balagan_|app_|behaviors)/.test(f) && f.endsWith('.dart'));
     const src = Object.fromEntries(files.map((f) => [f, fs.readFileSync(path.join(GEN, f), 'utf8')]));
     const all = Object.values(src).join('\n');
     const saved = fs.existsSync(OUT) ? readPlan() : {};
-    for (const [id, p] of Object.entries(P)) { if (!p.pick) continue; if (!saved[id] || saved[id].pick !== p.pick) fails.push(`התוכנית השמורה ≠ הבחירה החיה: ${id} (${saved[id] && saved[id].pick} ≠ ${p.pick}) — הרץ בלי --gate`); const imp = new RegExp(`^import '\\.\\./${p.file.replace(/[.\/]/g, '\\$&')}';`, 'm'); if (!imp.test(all)) fails.push(`${id}: ${p.pick} לא מיובא באף קובץ מחולל`); else if (!new RegExp(`\\b${p.pick}\\(`).test(all.replace(/^import .*$/gm, ''))) fails.push(`${id}: ${p.pick} מיובא אך לא נקרא`); }
+    const BH = 'gen_behaviors.dart'; const bh = src[BH] || ''; if (!bh) fails.push('אין שכבת-הרכבה gen_behaviors.dart (behavior-compose)');
+    for (const [id, p] of Object.entries(P)) { if (!p.pick) continue; if (!saved[id] || saved[id].pick !== p.pick) fails.push(`התוכנית השמורה ≠ הבחירה החיה: ${id} (${saved[id] && saved[id].pick} ≠ ${p.pick}) — הרץ בלי --gate`);
+      const imp = new RegExp(`^import '\\.\\./${p.file.replace(/[.\/]/g, '\\$&')}';`, 'm');
+      if (!imp.test(bh)) fails.push(`${id}: ${p.pick} לא מיובא בשכבת-ההרכבה`); else if (!new RegExp(`\\b${p.pick}\\(`).test(bh.replace(/^import .*$/gm, ''))) fails.push(`${id}: ${p.pick} מיובא בשכבת-ההרכבה אך לא נקרא`);
+      for (const [f, s] of Object.entries(src)) { if (f === BH || /^gen_app_[a-z0-9]+\.dart$/.test(f)) continue; /* אפליקציות-הזהב (app-from-sentences) מחווטות ע"י auto-logic — לא דרך שכבת-ההרכבה */ if (imp.test(s)) fails.push(`${f}: מייבא חלקיק ישירות (${p.pick}) — הרכבה רק ב-${BH} (ה)`); else if (new RegExp(`\\b${p.pick}\\(`).test(s.replace(/^import .*$/gm, ''))) fails.push(`${f}: קורא לחלקיק ${p.pick} ישירות — דרך bh* בלבד (ה)`); } }
     // (ג) חלקיק-קיים ⇒ הפרימיטיב שלו אסור בדבק המחולל (הכרעה-20ב: מרכיבים חלקיקים, לא ממציאים מחדש)
     for (const [id, need] of Object.entries(NEEDS)) { if (!need.forbid) continue; const re = new RegExp(need.forbid); for (const [f, s] of Object.entries(src)) { const m = s.split('\n').findIndex((l) => re.test(l)); if (m >= 0) fails.push(`${f}:${m + 1}: פרימיטיב במקום החלקיק ${P[id].pick} (${id})`); } }
     // (ד) כפילות-בכניסה: אטום שנוסף ב-G34 עם חתימה זהה + ≥2 מילות-ייעוד משותפות לאטום ותיק = מימוש-מחדש

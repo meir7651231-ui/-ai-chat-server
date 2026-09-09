@@ -6,6 +6,7 @@
 //   כותרת-ה-doc של המנוע (מהמקור, לא מילון) — משוקלל idf (טוקן נדיר שווה יותר) עם נרמול-מורפולוגי קל (ה/ו/ב/ל/מ/ש בראש) ·
 //   (ד) מוצא משותף (`מוצא: <קובץ-JS>`) = אחים מאותו מודול-מקור. שוויון ⇒ המנוע-של-הזהב (חוק-4: הקוד-החלוץ קדוש).
 //   החלפה מוצעת רק כשהמועמד ≡ בחתימה ומנצח בניקוד; היא **מיושמת** (logicPass) רק אחרי הוכחה: מודול-הזהב עם ההחלפה עובר את
+//   בדיקות-הזהב שלו (--prove). G34ב (הכרעה-30): **הוכחה קודמת לתיאור** — מאתגר-טקסט שלא הוכח בריצה אינו מדיח את הזהב (מאושר-כטוב-ביותר = אין מאתגר מוכח); המוכיח-המשותף logic-proof.mjs.
 //   בדיקות-הזהב שלו (--prove). G19: מועמד לא-זהה-בחתימה מקבל **עטיפת-חתימה** (adapter בשם-הזהב, cast פוזיציוני, עודף נשמט), ולפני ההוכחה
 //   **מוטציית-רגישות** (stub שזורק) — אם הבדיקות לא נופלות, הן לא מפעילות את המנוע ⇒ אין הוכחה. פלט: auto-logic.json · --gate: מחויב ≡ טרי.
 import fs from 'node:fs';
@@ -164,13 +165,13 @@ if (isMain) {
   for (const [op, r] of Object.entries(ops)) { const p = prev.ops && prev.ops[op]; if (r.swap && p && p.swap && p.swap.to === r.swap.to && p.swap.proof && !process.argv.includes('--prove')) { r.swap.proof = p.swap.proof; if (!p.swap.proof.proven) r.pick = r.declared; } }
   if (process.argv.includes('--prove')) ops = prove(ops);
   for (const r of Object.values(ops)) if (r.swap && !r.swap.proof) r.pick = r.declared;   // החלפה שטרם הוכחה אינה מיושמת
-  const n = Object.keys(ops).length, confirmed = Object.values(ops).filter((r) => r.declaredRank === 0).length, swaps = Object.values(ops).filter((r) => r.swap).length, proven = Object.values(ops).filter((r) => r.swap && r.swap.proof && r.swap.proof.proven).length;
-  const fresh = JSON.stringify({ summary: { ops: n, confirmed, swapsProposed: swaps, swapsProven: proven, reach: (ops.reach || []).length }, ops, reach: ops.reach || [] }, null, 1) + '\n';   // reach ⇒ truth.mjs (L91)
+  const n = Object.keys(ops).length, confirmed = Object.values(ops).filter((r) => r.declaredRank === 0 || (r.swap && !(r.swap.proof && r.swap.proof.proven))).length /* G34ב · הכרעה-30: מאתגר שלא הוכח בריצה אינו «טוב יותר» — רק הוכחה מדיחה זהב */, textChallenged = Object.values(ops).filter((r) => r.declaredRank !== 0 && r.swap && !(r.swap.proof && r.swap.proof.proven)).length, swaps = Object.values(ops).filter((r) => r.swap).length, proven = Object.values(ops).filter((r) => r.swap && r.swap.proof && r.swap.proof.proven).length;
+  const fresh = JSON.stringify({ summary: { ops: n, confirmed, textChallenged, swapsProposed: swaps, swapsProven: proven, reach: (ops.reach || []).length }, ops, reach: ops.reach || [] }, null, 1) + '\n';   // reach ⇒ truth.mjs (L91)
   if (process.argv.includes('--gate')) {
     if (!fs.existsSync(OUT) || fs.readFileSync(OUT, 'utf8') !== fresh) { console.log('🔴 autologic: auto-logic.json ≠ בורר-טרי (הרץ node machtzev/generator/auto-logic.mjs)'); process.exit(1); }
-    console.log(`✓ autologic: ${n} פעולות-לוגיקה × ${catalog().N} מנועים · הזהב מאושר-כטוב-ביותר ${confirmed}/${n} · החלפות מוצעות ${swaps} · מוכחות ${proven}`); process.exit(0);
+    console.log(`✓ autologic: ${n} פעולות-לוגיקה × ${catalog().N} מנועים · הזהב הכי-טוב-בהוכחה ${confirmed}/${n} (מאותגר-בטקסט-בלבד ${textChallenged}) · החלפות מוצעות ${swaps} · מוכחות ${proven}`); process.exit(0);
   }
   fs.writeFileSync(OUT, fresh);
   for (const [op, r] of Object.entries(ops)) console.log(`${op.padEnd(12)} ${r.declared.padEnd(22)} ${r.declaredRank === 0 ? '✓' : '✗ #' + (r.declaredRank + 1)} · ${r.candidates} מועמדים · ${r.top3.join(' · ')}${r.swap ? ` ⇒ swap ${r.swap.to} [${r.swap.mode}]${r.swap.proof ? ' ' + (r.swap.proof.proven ? '✓' : '✗') + r.swap.proof.verdict : r.swap.mode === 'unadaptable' ? ' (אין עטיפה כשרה)' : ' (טרם הוכח)'}` : ''}`);
-  console.log(`✍️ auto-logic.json · ${n} פעולות · מאושר ${confirmed}/${n} · החלפות ${swaps} (מוכחות ${proven})`);
+  console.log(`✍️ auto-logic.json · ${n} פעולות · הכי-טוב-בהוכחה ${confirmed}/${n} (מאותגר-בטקסט ${textChallenged}) · החלפות ${swaps} (מוכחות ${proven})`);
 }

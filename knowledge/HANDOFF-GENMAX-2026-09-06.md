@@ -19,6 +19,7 @@ analyze 0 · 156/156 (17 קבצי `genesis_*`) · gen-verify **74/111 · 52 אט
 - **מה השתנה:** ההתנהגויות של בלגן אינן קוד-ידני במחולל אלא הרכבה של חלקיקים מהקטלוג. `behavior-plan.mjs` = 16 צרכים (פעולת-יסוד · חתימה · דוגמאות) ⇒ `behavior-plan.json` (נבחר · מוכח · top3). `balagan.mjs`/`app-shell.mjs` קוראים `pick(id)`; צורך בלי חלקיק-שעובר ⇒ המחולל נופל (לא כותבים ביד).
 - **איך מוסיפים התנהגות:** מפרקים לפעולות-יסוד ⇒ לכל אחת צורך עם דוגמאות ⇒ `node machtzev/generator/behavior-plan.mjs` (מוכיח בריצה) ⇒ הדבק במחולל קורא לנבחר. אטום חדש למדף רק כשאף מועמד לא עובר — ואז `logic-census` + `oracle --write` + מראה ל-`lib/genesis/dart-maor`.
 - **שער `behavior`** (במשטרה): נפתר · מיובא+נקרא · פרימיטיב-אסור (`Duration(days` · `.inDays` · `.weekday` · `.inMinutes` · לולאת-אלפים…) · כפילות-בכניסה.
+- **G34ב · שכבת-ההרכבה:** `behavior-compose.mjs` ⇒ `gen_behaviors.dart` (`bh*`); התנהגות חדשה = צורך-חלקיק ב-`behavior-plan` (עם דוגמאות) + פונקציית `bh*` אחת ב-`behavior-compose` + קריאה מהמחולל. אסור לייבא חלקיק מחוץ ל-`gen_behaviors.dart` (שער ה). מוכיח-משותף: `logic-proof.mjs`.
 - **הוסרו:** 100 בדיקות-לפי-גל מ-`balagan-one.mjs` (ההיסטוריה ב-`CLOSED-GENMAX-G33`). דוח: `knowledge/CLOSED-GENMAX-G34-2026-09-09.md`.
 
 ## 2 · המנועים — בסדר הריצה של `ship`
