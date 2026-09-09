@@ -1529,13 +1529,18 @@
   "file": "dart-maor/name-matches.dart",
   "score": 59.95,
   "proven": true,
-  "candidates": 4,
+  "candidates": 6,
   "top3": [
    "nameMatches:4/4✓:59.95",
-   "strongMatchForCharge:0/4:3.28",
-   "termOf:0/4:0"
+   "accessPasswordMatches:0/4:4",
+   "strongMatchForCharge:0/4:3.28"
   ],
   "proof": {
+   "accessPasswordMatches": {
+    "ok": 0,
+    "total": 4,
+    "error": "name_matches__accessPasswordMatches.dart:5:51: Error: Too many positional arguments: 2 allowed, but 3 found. | name_matches__accessPasswordMatches.dart:6:51: Error: Too many positional arguments: 2 allowed, but 3 found."
+   },
    "nameMatches": {
     "ok": 4,
     "total": 4
@@ -1547,6 +1552,11 @@
    "termOf": {
     "ok": 0,
     "total": 4
+   },
+   "tierOf": {
+    "ok": 0,
+    "total": 4,
+    "error": "name_matches__tierOf.dart:5:36: Error: Too many positional arguments: 2 allowed, but 3 found. | name_matches__tierOf.dart:6:36: Error: Too many positional arguments: 2 allowed, but 3 found."
    },
    "waLink": {
     "ok": 0,
@@ -1657,6 +1667,244 @@
    "staleBoxes": {
     "ok": 0,
     "total": 2
+   }
+  }
+ },
+ "phone.key": {
+  "shape": "חיפוש",
+  "pick": "phoneKey",
+  "file": "dart-maor/phone-key.dart",
+  "score": 18.6,
+  "proven": true,
+  "candidates": 48,
+  "top3": [
+   "phoneKey:4/4✓:18.6",
+   "normPhone:1/4:19",
+   "normalizePhone:1/4:11.28"
+  ],
+  "proof": {
+   "adarNorm": {
+    "ok": 1,
+    "total": 4
+   },
+   "advanceStatus": {
+    "ok": 0,
+    "total": 4
+   },
+   "angleDigits": {
+    "ok": 1,
+    "total": 4
+   },
+   "basename": {
+    "ok": 1,
+    "total": 4
+   },
+   "cloudCfgCacheKey": {
+    "ok": 0,
+    "total": 4
+   },
+   "dataUrlMime": {
+    "ok": 0,
+    "total": 4
+   },
+   "decodeQuotedPrintable": {
+    "ok": 1,
+    "total": 4
+   },
+   "esc": {
+    "ok": 1,
+    "total": 4
+   },
+   "expandInchFractions": {
+    "ok": 1,
+    "total": 4
+   },
+   "faviconDataUri": {
+    "ok": 0,
+    "total": 4
+   },
+   "fmtDate": {
+    "ok": 0,
+    "total": 4
+   },
+   "formatIsraeliPhone": {
+    "ok": 1,
+    "total": 4
+   },
+   "genJoinCode": {
+    "ok": 0,
+    "total": 4
+   },
+   "icsEscape": {
+    "ok": 1,
+    "total": 4
+   },
+   "monthKey": {
+    "ok": 1,
+    "total": 4
+   },
+   "monthLabel": {
+    "ok": 0,
+    "total": 4
+   },
+   "namespaceOf": {
+    "ok": 1,
+    "total": 4
+   },
+   "normEmail": {
+    "ok": 1,
+    "total": 4
+   },
+   "normHeader": {
+    "ok": 1,
+    "total": 4
+   },
+   "normId": {
+    "ok": 1,
+    "total": 4
+   },
+   "normPhone": {
+    "ok": 1,
+    "total": 4
+   },
+   "normalizePhone": {
+    "ok": 1,
+    "total": 4
+   },
+   "p39ElbowModel": {
+    "ok": 0,
+    "total": 4
+   },
+   "p53AdapterModel": {
+    "ok": 0,
+    "total": 4
+   },
+   "p54AdapterModel": {
+    "ok": 0,
+    "total": 4
+   },
+   "p55AdapterModel": {
+    "ok": 0,
+    "total": 4
+   },
+   "pad2": {
+    "ok": 0,
+    "total": 4
+   },
+   "pdfSafe": {
+    "ok": 1,
+    "total": 4
+   },
+   "phoneKey": {
+    "ok": 4,
+    "total": 4
+   },
+   "phoneRegion": {
+    "ok": 0,
+    "total": 4
+   },
+   "popCall": {
+    "ok": 1,
+    "total": 4
+   },
+   "purposeKeyOf": {
+    "ok": 0,
+    "total": 4
+   },
+   "safeHttpsUrl": {
+    "ok": 0,
+    "total": 4
+   },
+   "sessionsOf": {
+    "ok": 0,
+    "total": 4
+   },
+   "setAllowedPurposes": {
+    "ok": 0,
+    "total": 4
+   },
+   "siteDonateUrl": {
+    "ok": 0,
+    "total": 4
+   },
+   "smtpHostFor": {
+    "ok": 1,
+    "total": 4
+   },
+   "sortSupportMsgs": {
+    "ok": 0,
+    "total": 4
+   },
+   "sortSupportThreads": {
+    "ok": 0,
+    "total": 4
+   },
+   "stripAuditMeta": {
+    "ok": 1,
+    "total": 4
+   },
+   "stripSupKey": {
+    "ok": 0,
+    "total": 4
+   },
+   "supCount": {
+    "ok": 0,
+    "total": 4
+   },
+   "supIls": {
+    "ok": 0,
+    "total": 4
+   },
+   "supUsd": {
+    "ok": 0,
+    "total": 4
+   },
+   "supportMsgTime": {
+    "ok": 1,
+    "total": 4
+   },
+   "timeToMin": {
+    "ok": 0,
+    "total": 4
+   },
+   "waDigits": {
+    "ok": 0,
+    "total": 4
+   },
+   "waMeDigits": {
+    "ok": 1,
+    "total": 4
+   }
+  }
+ },
+ "dup.groups": {
+  "shape": "חיפוש",
+  "pick": "findDuplicateGroups",
+  "file": "dart-maor/find-duplicate-groups.dart",
+  "score": 41.84,
+  "proven": true,
+  "candidates": 4,
+  "top3": [
+   "findDuplicateGroups:3/3✓:41.84",
+   "strongMatchForCharge:0/3:9.35",
+   "termOf:0/3:0"
+  ],
+  "proof": {
+   "findDuplicateGroups": {
+    "ok": 3,
+    "total": 3
+   },
+   "strongMatchForCharge": {
+    "ok": 0,
+    "total": 3
+   },
+   "termOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "waLink": {
+    "ok": 0,
+    "total": 3
    }
   }
  },

@@ -61,6 +61,16 @@ String bhHebDate(String iso) => ${N('heb.dateFull')}(iso, _bhGem, (y) => ${N('he
 List<int> bhAheadOffsetsUnion(List<String> dueIsos, bool hard, String todayIso, List<int> offsets) => [for (final o in offsets) if (dueIsos.any((d) => bhAheadOffsets(d, hard, todayIso, offsets).contains(o))) o];
 /// ב׳-קה · שורות-קבוצה: רשומות לפי מפתח-קבוצה (ריק = יחידה) ⇒ [[מפתח, n]…] בסדר-ההופעה (${N('count.by')})
 List<List<Object>> bhGroupRows(List<Map<String, String>> rows, String key) => ${N('count.by')}(rows, (r) => ((r as Map)[key] ?? '').toString());
+/// ב׳-קו · מפתח-טלפון קנוני (${N('phone.key')}): 052-123-4567 · +972521234567 · 00972… ⇒ 521234567
+String bhPhoneKey(String? ph) => ${N('phone.key')}(ph);
+/// ב׳-קט · טלפון ל-wa.me = 972 + המפתח-הקנוני; בלי ספרות ⇒ ''
+String bhWaPhone(String? ph) { final k = bhPhoneKey(ph); return k.isEmpty ? '' : '972' + k; }
+/// ב׳-קו · אותו-אדם בכמה שמות: קבוצות של שמות שחולקים טלפון (מפתח-קנוני) או שם-מנורמל (${N('dup.groups')} — רכיבי-קשירות)
+List<List<String>> bhPersonGroups(List<String> names, Map<String, List<String>> phonesOf) => ${N('dup.groups')}([for (final n in names) <String, dynamic>{'id': n, 'phones': phonesOf[n] ?? const <String>[]}], (f) => [for (final p in (f['phones'] as List)) if (bhPhoneKey(p.toString()).isNotEmpty) bhPhoneKey(p.toString())], (f) => bhNormName(f['id'] as String));
+/// ב׳-קז · «התכוונת ל…?» — המועמד הקרוב ביותר במרחק-עריכה ≤1 (≥5 אותיות: ≤2) על נרמול-חיפוש (${N('text.distance')}); אין ⇒ ''
+String bhClosest(String q, List<String> cands) { final nq = bhNormSearch(q); if (nq.length < 3) return ''; final lim = nq.length >= 5 ? 2 : 1; var best = ''; var bd = lim + 1; for (final c in cands) { final nc = bhNormSearch(c); if (nc.isEmpty) continue; for (final w in [nc, ...nc.split(' ')]) { if (w == nq) { bd = -1; break; } if (w.length < nq.length - lim || w.length > nq.length + lim) continue; final d = ${N('text.distance')}(nq, w); if (d < bd) { bd = d; best = c; } } if (bd < 0) return ''; } return best; }   // גם מילה-בתוך-הכותרת («ליקוים» ⇒ «ליקויים אחרי כניסה…»); שוויון-מלא = אין הצעה
+/// ב׳-קח · חלונות-פנויים בין בלוקים תפוסים ([['HH:MM','HH:MM']…] ממוינים) מ-fromHM עד toHM, רק ≥ minMin דק׳ (${N('time.toMin')})
+List<List<String>> bhFreeWindows(List<List<String>> busy, String fromHM, String toHM, int minMin) { int mn(String t) { final v = ${N('time.toMin')}(t); return v.isFinite ? v.toInt() : 0; } final out = <List<String>>[]; var cur = mn(fromHM); final end = mn(toHM); for (final b in busy) { final a = mn(b[0]), e = mn(b[1]); if (a - cur >= minMin) out.add([_hm(cur), _hm(a)]); if (e > cur) cur = e; } if (end - cur >= minMin) out.add([_hm(cur), _hm(end)]); return out; }
 /// מפרידי-אלפים בלי ₪ (${N('money.fmt')})
 String bhThousands(num v) => ${N('money.fmt')}(v).replaceFirst('₪', '');
 `;
@@ -95,6 +105,14 @@ void main() {
     expect(bhHebDate('2026-09-08'), 'כ״ו אלול תשפ״ו'); expect(bhHebDate(''), '');
     expect(bhAheadOffsetsUnion(['2026-09-09', '2026-09-12'], true, '2026-09-08', [3, 1, 0]), [3, 1, 0]); expect(bhAheadOffsetsUnion(['2026-09-09'], true, '2026-09-08', [3, 1, 0]), [1, 0]);
     expect(bhGroupRows([{'group': 'g1'}, {'group': 'g1'}, {}], 'group'), [['g1', 2], ['', 1]]);
+  });
+  test('G36 · מפתח-טלפון · wa · קבוצות-אדם · התכוונת · חלונות-פנויים', () {
+    expect(bhPhoneKey('052-123-4567'), '521234567'); expect(bhWaPhone('+972 52-123-4567'), '972521234567'); expect(bhWaPhone('abc'), '');
+    final g = bhPersonGroups(['רות לוי', 'רותי לוי', 'דן כהן', 'רות  לוי'], {'רות לוי': ['052-1234567'], 'רותי לוי': ['+972521234567'], 'דן כהן': ['03-5551234']});
+    expect(g.length, 1); expect(g.first.toSet(), {'רות לוי', 'רותי לוי', 'רות  לוי'});
+    expect(bhClosest('ארנונא', ['ארנונה', 'חשמל']), 'ארנונה'); expect(bhClosest('ליקוים', ['ליקויים אחרי כניסה לדירה', 'חשמל']), 'ליקויים אחרי כניסה לדירה'); expect(bhClosest('חשמל', ['חשמל']), ''); expect(bhClosest('זזזז', ['ארנונה']), ''); expect(bhClosest('אר', ['ארט']), '');
+    expect(bhFreeWindows([['10:00', '10:30'], ['12:00', '13:00']], '09:00', '18:00', 30), [['09:00', '10:00'], ['10:30', '12:00'], ['13:00', '18:00']]);
+    expect(bhFreeWindows([['09:00', '09:20']], '09:00', '09:40', 30), <List<String>>[]); expect(bhFreeWindows(const [], '09:00', '10:00', 30), [['09:00', '10:00']]);
   });
 }
 `;

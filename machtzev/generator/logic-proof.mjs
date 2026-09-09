@@ -13,8 +13,15 @@ const DART = process.env.DART || (fs.existsSync('/home/user/flutter/bin/cache/da
 export const isPure = (file) => { try { return !/^import /m.test(fs.readFileSync(path.join(R.NEW, file), 'utf8')); } catch { return false; } };
 /** @param id מזהה-הצורך · cands [{id,file}] · examples [[argsDart, checkDart]] ⇒ {candId: {ok,total}} | {error} */
 export function proveCandidates(id, cands, examples, extraImports = []) {   // extraImports: שקעים מהקטלוג (אטומי-דאטה/מנועים) שהדוגמאות קוראות להם בלי קידומת
-  const dir = path.join(HERE, '.prove'); fs.mkdirSync(dir, { recursive: true });
   const pure = cands.filter((c) => isPure(c.file)); if (!pure.length || !examples || !examples.length) return {};
+  const all = proveFile(id, pure, examples, extraImports);
+  if (!all.error) return all;
+  // G36 · מועמד אחד שאינו מתקמפל מול הדוגמאות (חתימה-בקטלוג ≠ גוף) לא מפיל את כולם: מוכיחים כל מועמד בקובץ-משלו; הנכשל-בקומפילציה = 0/total עם השגיאה
+  const out = {}; for (const c of pure) { const r = proveFile(id + '__' + c.id, [c], examples, extraImports); out[c.id] = r.error ? { ok: 0, total: examples.length, error: r.error } : (r[c.id] || { ok: 0, total: examples.length }); }
+  return out;
+}
+function proveFile(id, pure, examples, extraImports) {
+  const dir = path.join(HERE, '.prove'); fs.mkdirSync(dir, { recursive: true });
   const imps = [...extraImports.map((f) => `import '${path.relative(dir, path.join(R.NEW, f)).split(path.sep).join('/')}';`), ...pure.map((c, i) => `import '${path.relative(dir, path.join(R.NEW, c.file)).split(path.sep).join('/')}' as c${i};`)].join('\n');
   const body = pure.map((c, i) => examples.map((ex, j) => `  try { final dynamic r = c${i}.${c.id}(${ex[0]}); out.add('${i}:${j}:' + ((${ex[1]}) ? '1' : '0')); } catch (_) { out.add('${i}:${j}:0'); }`).join('\n')).join('\n');
   const file = path.join(dir, id.replace(/\W/g, '_') + '.dart');
