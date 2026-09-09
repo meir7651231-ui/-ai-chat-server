@@ -163,7 +163,7 @@ if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/\.stale\(today\)
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganDateChips\(today\)/.test(ft)) fails.push('בדיקת צ׳יפי-מועד חסרה'); }
 // גל ב׳-לב · «התעלם» עם החזר: שלוש ההתעלמויות (שורה · בלי-תאריך · נשכחים) נרשמות ביומן עם מפתח-ההכרעה
 for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/field: 'ign:\$rid:\$field'\)/.test(h) || !/field: 'undated:\$rid'\)/.test(h) || !/field: 'stale:\$rid'\)/.test(h)) { fails.push(`${m.ns}: «התעלם» בלי החזר`); break; } }
-if (!/lastAct\['kind'\] == 'decide'\)/.test(home)) fails.push('«בוצע · החזר» בלי decide');
+if (!/lastAct\['kind'\] == 'decide'[ )]/.test(home)) fails.push('«בוצע · החזר» בלי decide');
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/'ign:' \+ id \+ ':' \+ F/.test(ft)) fails.push('בדיקת «התעלם»-עם-החזר חסרה'); }
 // גל ב׳-לג · צ׳יפי-שעה (balaganTimes) + צ׳יפי-אנשים (מי שכבר בתיקים) בטופס-האישור
 { const cf = rd(path.join(GEN, 'gen_balagan_confirm.dart')); if (!/balaganTimes\(c, now: now\)\.take\(1\)/.test(cf) || !/shown\.add\(m\.fields\.firstWhere\(\(f\) => f\.label == m\.timeFields\.first\)\)/.test(cf) || !/List<String> balaganPeople\(/.test(cf) || !/_v\[m\.timeFields\.first\] = c\[1\]/.test(cf) || !/_v\[m\.personFields\.first\] = p/.test(cf)) fails.push('טופס-האישור בלי צ׳יפי-שעה/אנשים'); }
@@ -242,6 +242,10 @@ if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganIdentify\
 // גלים ב׳-סה..סח · «מה יש במחר?» מהקיפול · הכותרת פותחת תיק · «סיימת n» · תאריך בחיפוש ⇒ מסך-יום
 if (!/const BalaganDay\(delta: 1\)/.test(home) || !/onTap: first == null \? null : \(\) => _openItem\(context, first\)/.test(home) || !/cnt\('done'\) > 0\) DsActionRow/.test(home)) fails.push('«היום»: קיפול-מחר/כותרת/סיימת');
 if (!/dd\.first\.end == _q\.trim\(\)\.length/.test(topics)) fails.push('«נושאים» בלי תאריך ⇒ מסך-יום');
+// גלים ב׳-סט..עב · «עוד אחד כזה» · ₪ ב«עוד» · נגיעה-אחרונה מהיומן · החזר ל«צעד-הבא»
+for (const m of mods) { const rp = rd(path.join(GEN, `gen_${m.rootPage.slug}.dart`)); if (!/\(initial: \{for \(final e in r0\.entries\)/.test(rp)) { fails.push(`${m.ns}: תיק בלי «עוד אחד כזה»`); break; } }
+if (!/'₪ ' \+ balaganFmtMoney\(v\)\]\.join\(' · '\),   \/\* ב׳-ע/.test(home) || !/lastAct\['kind'\] == 'next'\)/.test(home)) fails.push('«היום»: עוד בלי ₪ / החזר בלי next');
+if (!/la\.compareTo\(last\) > 0\) last = la;/.test(topics)) fails.push('כרטיס-אדם: נגיעה-אחרונה בלי יומן');
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);

@@ -326,5 +326,6 @@
  "saveWhen": "שמור. יופיע ב{day}.",
  "shareDayFooter": "ועוד: {n} בלי מועד · {m} נשכחים",
  "openDay": "מה יש ב{day}?",
- "weekDone": "סיימת {n}"
+ "weekDone": "סיימת {n}",
+ "dupLabel": "עוד אחד כזה"
 }
