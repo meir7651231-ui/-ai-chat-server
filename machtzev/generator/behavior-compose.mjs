@@ -71,6 +71,13 @@ List<List<String>> bhPersonGroups(List<String> names, Map<String, List<String>> 
 String bhClosest(String q, List<String> cands) { final nq = bhNormSearch(q); if (nq.length < 3) return ''; final lim = nq.length >= 5 ? 2 : 1; var best = ''; var bd = lim + 1; for (final c in cands) { final nc = bhNormSearch(c); if (nc.isEmpty) continue; for (final w in [nc, ...nc.split(' ')]) { if (w == nq) { bd = -1; break; } if (w.length < nq.length - lim || w.length > nq.length + lim) continue; final d = ${N('text.distance')}(nq, w); if (d < bd) { bd = d; best = c; } } if (bd < 0) return ''; } return best; }   // גם מילה-בתוך-הכותרת («ליקוים» ⇒ «ליקויים אחרי כניסה…»); שוויון-מלא = אין הצעה
 /// ב׳-קח · חלונות-פנויים בין בלוקים תפוסים ([['HH:MM','HH:MM']…] ממוינים) מ-fromHM עד toHM, רק ≥ minMin דק׳ (${N('time.toMin')})
 List<List<String>> bhFreeWindows(List<List<String>> busy, String fromHM, String toHM, int minMin) { int mn(String t) { final v = ${N('time.toMin')}(t); return v.isFinite ? v.toInt() : 0; } final out = <List<String>>[]; var cur = mn(fromHM); final end = mn(toHM); for (final b in busy) { final a = mn(b[0]), e = mn(b[1]); if (a - cur >= minMin) out.add([_hm(cur), _hm(a)]); if (e > cur) cur = e; } if (end - cur >= minMin) out.add([_hm(cur), _hm(end)]); return out; }
+/// ב׳-קי · מפתח-חודש (${N('iso.monthKey')}) · אותו-חודש
+String bhMonthKey(String iso) => ${N('iso.monthKey')}(iso);
+bool bhSameMonth(String a, String b) => a.length >= 7 && b.length >= 7 && bhMonthKey(a) == bhMonthKey(b);
+/// ב׳-קיא · «נראה חוזר»: כל המרווחים בין המועדים הממוינים (bhDaysSince) באותו קצב ⇒ קוד-חזרה d1/w1/w2/m1/m2/y1; פחות מ-3 מועדים, מרווח-לא-מוכר או קצב-מעורב ⇒ ''
+String bhRecurCode(List<String> isos) { final s = [...isos]..sort(); if (s.length < 3) return ''; String code(int g) => g == 1 ? 'd1' : g >= 6 && g <= 8 ? 'w1' : g >= 13 && g <= 15 ? 'w2' : g >= 26 && g <= 35 ? 'm1' : g >= 55 && g <= 65 ? 'm2' : g >= 360 && g <= 370 ? 'y1' : ''; String? c; for (var i = 1; i < s.length; i++) { final k = code(bhDaysSince(s[i - 1], s[i])); if (k.isEmpty || (c != null && c != k)) return ''; c = k; } return c ?? ''; }   // כל המרווחים באותו קצב — אחרת אין הצעה
+/// ב׳-קיב · ימים בלי תשובה מאז שליחה (bhDaysSince): פעולה מאוחרת על אותו תיק ⇒ −1 (נענה/טופל)
+int bhSilentDays(String sentAt, String? laterAt, String todayIso) { if (sentAt.length < 10) return -1; if (laterAt != null && laterAt.length >= 10 && laterAt.compareTo(sentAt) > 0) return -1; return bhDaysSince(sentAt.substring(0, 10), todayIso); }
 /// מפרידי-אלפים בלי ₪ (${N('money.fmt')})
 String bhThousands(num v) => ${N('money.fmt')}(v).replaceFirst('₪', '');
 `;
@@ -113,6 +120,11 @@ void main() {
     expect(bhClosest('ארנונא', ['ארנונה', 'חשמל']), 'ארנונה'); expect(bhClosest('ליקוים', ['ליקויים אחרי כניסה לדירה', 'חשמל']), 'ליקויים אחרי כניסה לדירה'); expect(bhClosest('חשמל', ['חשמל']), ''); expect(bhClosest('זזזז', ['ארנונה']), ''); expect(bhClosest('אר', ['ארט']), '');
     expect(bhFreeWindows([['10:00', '10:30'], ['12:00', '13:00']], '09:00', '18:00', 30), [['09:00', '10:00'], ['10:30', '12:00'], ['13:00', '18:00']]);
     expect(bhFreeWindows([['09:00', '09:20']], '09:00', '09:40', 30), <List<String>>[]); expect(bhFreeWindows(const [], '09:00', '10:00', 30), [['09:00', '10:00']]);
+  });
+  test('G37 · מפתח-חודש · נראה-חוזר · ימים-בלי-תשובה', () {
+    expect(bhMonthKey('2026-09-08'), '2026-09'); expect(bhSameMonth('2026-09-08', '2026-09-30'), true); expect(bhSameMonth('2026-09-08', '2026-10-01'), false); expect(bhSameMonth('', '2026-10-01'), false);
+    expect(bhRecurCode(['2026-07-15', '2026-08-15', '2026-09-15']), 'm1'); expect(bhRecurCode(['2026-09-01', '2026-09-08', '2026-09-15', '2026-09-22']), 'w1'); expect(bhRecurCode(['2026-09-01', '2026-09-03', '2026-09-30']), ''); expect(bhRecurCode(['2026-09-01', '2026-10-01']), '');
+    expect(bhSilentDays('2026-09-05T10:00:00', null, '2026-09-08'), 3); expect(bhSilentDays('2026-09-05T10:00:00', '2026-09-06T09:00:00', '2026-09-08'), -1); expect(bhSilentDays('', null, '2026-09-08'), -1);
   });
 }
 `;
