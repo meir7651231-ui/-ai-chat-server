@@ -272,6 +272,10 @@ if (!/appStore\.grouped\(\(\) \{ for \(final it in overdue\)/.test(home)) fails.
 if (!/\+ ' · ' \+ overdue\.length\.toString\(\) \+ \(balaganMoney\(overdue\) > 0/.test(home) || !/todayItems\.length\.toString\(\) \+ \(balaganMoney\(todayItems\) > 0/.test(home)) fails.push('«היום»: כותרות-קטע בלי מונה+₪');
 if (!/String balaganSearchQuery\(String s\)/.test(home) || !/balaganSearchQuery\(s\)\]\) \{ if \(parts\.length == 1 && q\.isNotEmpty\)/.test(home)) fails.push('שורה-מהירה בלי חיפוש-ספרות/«איפה»');
 if (!/\[if \(first\.overdue\) /.test(home)) fails.push('כותרת-באיחור בלי מתי/כמה');
+// גלים ב׳-צח..קא · התוכנית מעכשיו · לשון-עבר ⇒ «סיימת אותו?» / נשמר-כבוצע · תווית-אמת למועד-שעבר
+if (!/var t = balaganPlanStart\(today, start, DateTime\.now\(\)\)/.test(home) || !/DateTime balaganPlanStart\(DateTime today, int startHour, DateTime now\)/.test(home)) fails.push('התוכנית אינה מתחילה מעכשיו');
+if (!/bool balaganIsPast\(String text\)/.test(rd(path.join(GEN, 'gen_balagan_moments.dart'))) || !/balaganPastMatches\(m, widget\.text\)\.take\(1\)/.test(confirm) || !/void balaganCloseFile\(BalaganModule m, String id\)/.test(confirm)) fails.push('טופס-האישור: לשון-עבר בלי «סיימת אותו?»');
+if (!/past \? \(widget\.module\.stages - 1\)\.toString\(\) : '0'/.test(confirm) || !/n < 0 \? /.test(confirm)) fails.push('טופס-האישור: בלי נשמר-כבוצע / תווית-מועד-שעבר');
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);
