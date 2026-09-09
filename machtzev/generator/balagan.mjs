@@ -674,7 +674,7 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
   test('הקשר לכרטיס-הכפול (מודול · מועד · ₪) · «n פתוחים» למודול', () {
     final m = kBalaganModules.firstWhere((x) => x.dateFields.isNotEmpty && x.numFields.any((f) => !x.percentFields.contains(f)));
     final nf = m.numFields.firstWhere((f) => !m.percentFields.contains(f));
-    expect(balaganDupSub(m, {m.dateFields.first: '2026-09-09', nf: '350'}, today), m.title + ' · מחר · ₪ 350');
+    expect(balaganDupSub(m, {m.dateFields.first: '2026-09-09', nf: '8000'}, today), m.title + ' · מחר · ₪ 8,000');
     expect(balaganDupSub(m, {}, today), m.title);
     final before = balaganOpenCount(m.rootSlug, m.stages);
     appStore.add(m.rootSlug, {nf: '1'}); if (m.stages > 0) appStore.add(m.rootSlug, {nf: '2', '__stage': (m.stages - 1).toString()});
@@ -1105,7 +1105,7 @@ ${mods.map((m) => `    case '${m.root.slug}': return ${m.rootPage.cls}(id: id);`
   }
 }
 /// ב׳-נ · הקשר לכרטיס-הכפול: המודול · המועד הקרוב של התיק הקיים · ₪ — כדי להכריע «אותו עניין?» בלי לפתוח
-String balaganDupSub(BalaganModule m, Map<String, String> d, DateTime today) { final parts = <String>[m.title]; for (final f in m.dateFields) { final dd = DateTime.tryParse((d[f] ?? '').trim()); if (dd != null) { parts.add(balaganDayLabel(dd, today)); break; } } for (final f in m.numFields.where((x) => !m.percentFields.contains(x)).take(1)) { final v = (d[f] ?? '').trim(); if (v.isNotEmpty) parts.add('₪ ' + v); } return parts.join(' · '); }
+String balaganDupSub(BalaganModule m, Map<String, String> d, DateTime today) { final parts = <String>[m.title]; for (final f in m.dateFields) { final dd = DateTime.tryParse((d[f] ?? '').trim()); if (dd != null) { parts.add(balaganDayLabel(dd, today)); break; } } for (final f in m.numFields.where((x) => !m.percentFields.contains(x)).take(1)) { final v = double.tryParse((d[f] ?? '').replaceAll(',', '').trim()); if (v != null && v > 0) parts.add('₪ ' + balaganFmtMoney(v)); } return parts.join(' · '); }
 List<List<String>> balaganDateChips(DateTime today) => [for (final c in ${k(L.dateChips)}.split('|')) for (final d in balaganDates(c, today).take(1)) [c, d.iso]];
 /// ב׳-לג · צ׳יפי-שעה: חלקי-יום דרך אותו balaganTimes של הרגעים (בבוקר 09:00 · בצהריים 13:00 · אחר הצהריים 16:00 · בערב 19:00)
 List<List<String>> balaganTimeChips(DateTime now) => [for (final c in ${k(L.timeChips)}.split('|')) for (final t in balaganTimes(c, now: now).take(1)) [c, t.iso]];
@@ -1242,6 +1242,7 @@ import '../dart-ui-bs/ds/ds_store.dart';
 ${mods.map((m) => `import 'gen_${m.root.slug}.dart';\nimport 'gen_${m.rootPage.slug}.dart';`).join('\n')}
 import 'gen_balagan_moments.dart';
 import 'gen_balagan_home.dart';
+import 'gen_balagan_confirm.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 
@@ -1300,8 +1301,8 @@ ${mods.map((m) => `      case '${m.root.slug}': return ${m.rootPage.cls}(id: id)
     ]),   // ב׳-לה · כרטיס-אדם: השם בחיפוש = אדם מהתיקים ⇒ סיכום + התקשר/וואטסאפ מעל התוצאות
     if (_q.trim().length >= 2 && hits.isEmpty) Padding(padding: const EdgeInsets.only(top: 8), child: DsNote(message: ${k(L.searchNone)}, label: '', tone: 0)),
     if (_q.trim().isEmpty) ...(() { final counts = <String, int>{}; for (final m in kBalaganModules) { if (m.personFields.isEmpty) continue; for (final r in appStore.records(m.rootSlug)) { for (final f in m.personFields) { final v = (r[f] ?? '').trim(); if (v.length >= 2) counts[v] = (counts[v] ?? 0) + 1; } } } final names = counts.keys.toList()..sort((a, b) => counts[b]!.compareTo(counts[a]!)); return names.isEmpty ? <Widget>[] : [DsSection(title: ${k(L.peopleTitle)}, children: [Wrap(spacing: 8, runSpacing: 8, children: [for (final n in names.take(12)) DsChipButton(label: n + ' · ' + counts[n].toString(), onTap: () => setState(() => _q = n))])])]; })(),   // «אנשים»: מי מופיע בתיקים (שדות-אדם מכל המודולים) ⇒ הקשה = חיפוש לפי השם
-    if (_q.trim().isEmpty) ...(() { final seen = <String>{}; final rows = <Widget>[]; for (final e in appStore.log) { if (rows.length >= 5) break; final ent = e['entity'] ?? '', rid = e['rid'] ?? ''; if (ent.isEmpty || rid.isEmpty || e['undone'] == '1' || !_titleOf.containsKey(ent) || !seen.add(ent + '|' + rid) || appStore.byId(ent, rid) == null) continue; rows.add(DsNavTile(glyph: '', title: (_titleOf[ent] ?? ent) + ' · ' + appStore.displayOf(ent, rid), sub: e['what'] ?? '', onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => _open(ent, rid))))); } return rows.isEmpty ? <Widget>[] : [DsSection(title: ${k(L.recentTitle)}, children: rows)]; })(),   // «איפה הייתי»: התיקים שנגעת בהם לאחרונה, מהיומן
-    if (hits.isNotEmpty) DsSection(title: ${k(L.searchTitle)}.replaceAll('{n}', hits.length.toString()), children: [for (final h in hits.take(30)) DsNavTile(glyph: '', title: (_titleOf[h[0]] ?? h[0]) + ' · ' + appStore.displayOf(h[0], h[1]), sub: h[2].length > 60 ? h[2].substring(0, 60) + '…' : h[2], onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => _open(h[0], h[1]))))]),
+    if (_q.trim().isEmpty) ...(() { final seen = <String>{}; final rows = <Widget>[]; for (final e in appStore.log) { if (rows.length >= 5) break; final ent = e['entity'] ?? '', rid = e['rid'] ?? ''; if (ent.isEmpty || rid.isEmpty || e['undone'] == '1' || !_titleOf.containsKey(ent) || !seen.add(ent + '|' + rid) || appStore.byId(ent, rid) == null) continue; rows.add(DsNavTile(glyph: '', title: (_titleOf[ent] ?? ent) + ' · ' + appStore.displayOf(ent, rid), sub: [(() { final at = DateTime.tryParse(e['at'] ?? ''); return at == null ? '' : balaganAgo(at, DateTime.now()); })(), e['what'] ?? ''].where((x) => x.isNotEmpty).join(' · '), onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => _open(ent, rid))))); } return rows.isEmpty ? <Widget>[] : [DsSection(title: ${k(L.recentTitle)}, children: rows)]; })(),   // «איפה הייתי»: התיקים שנגעת בהם לאחרונה, מהיומן
+    if (hits.isNotEmpty) DsSection(title: ${k(L.searchTitle)}.replaceAll('{n}', hits.length.toString()), children: [for (final h in hits.take(30)) DsNavTile(glyph: '', title: (_titleOf[h[0]] ?? h[0]) + ' · ' + appStore.displayOf(h[0], h[1]), sub: (() { final ms = kBalaganModules.where((m) => m.rootSlug == h[0]); final r = appStore.byId(h[0], h[1]); final ctx = ms.isEmpty || r == null ? '' : balaganDupSub(ms.first, r, DateTime.now()); final t = h[2].length > 60 ? h[2].substring(0, 60) + '…' : h[2]; return [ctx, t].where((x) => x.isNotEmpty).join(' · '); })(), onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => _open(h[0], h[1]))))]),
 ${order.map((t) => `    DsSection(title: ${k(t)}, children: [
 ${mods.filter((m) => m.topic === t).map((m) => `      DsNavTile(glyph: '', title: ${k(m.title)}, sub: [${k(m.moment)}, balaganOpenCount('${m.root.slug}', ${(m.root.stages || []).length})].where((x) => x.isNotEmpty).join(' · '), onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ${m.root.cls}()))),`).join('\n')}
     ]),`).join('\n')}

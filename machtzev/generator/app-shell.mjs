@@ -66,7 +66,7 @@ export function renderRootPage(slug, { root, children, report, title }) {
   if (paper) blocks.push(`Padding(padding: const EdgeInsets.only(bottom: 10), child: Row(children: [DsChipButton(label: ${k(L.deleteLabel)}, onTap: () { final snap = Map<String, String>.from(r0); appStore.removeById('${root.slug}', id); appStore.logAction('del', ${k(L.delLog)}.replaceAll('{who}', snap.values.take(2).join(' · ')), entity: '${root.slug}', rid: id, prev: jsonEncode(snap)); Navigator.of(context).pop(); })]))`);   // «מחק» עם החזר (הרשומה חוזרת כמו שהייתה) — «עשיתי לבד» מציג
   if (paper) blocks.push(`Padding(padding: const EdgeInsets.only(bottom: 10), child: Row(children: [DsChipButton(label: ${k(L.editLabel)}, onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${root.cls}(editId: id))))]))`);   // «ערוך» = מסך-הישות פתוח על הרשומה הזו (תיקון שדה בלי לחפש)
   if (paper && !report) blocks.push(`Padding(padding: const EdgeInsets.only(bottom: 10), child: Row(children: [DsChipButton(label: ${k(L.shareLabel)}, onTap: () { final lines = <String>[appStore.displayOf('${root.slug}', id)]; for (final e in r0.entries) { if (e.key.startsWith('__') || e.value.trim().isEmpty) continue; lines.add(e.key + ': ' + e.value.trim()); } launchUrl(Uri.parse('https://wa.me/?text=' + Uri.encodeComponent(lines.join('\\n'))), mode: LaunchMode.externalApplication); })]))`);   // מודול בלי דוח: «שתף» = הרשומה כטקסט (wa.me, הנמען נבחר שם)
-  if (paper) blocks.push(`((r0['__note'] ?? '').trim().isNotEmpty ? DsFold(title: ${k(L.origText)}, details: [Text(r0['__note'] ?? '', style: TextStyle(color: DsLook.of(context).ink, fontSize: 15, height: 1.5))]) : const SizedBox.shrink())`);   // הטקסט המקורי
+  if (paper) blocks.push(`((r0['__note'] ?? '').trim().isNotEmpty ? DsFold(title: ${k(L.origText)}, details: [Text(_noteText(r0['__note'] ?? ''), style: TextStyle(color: DsLook.of(context).ink, fontSize: 15, height: 1.5))]) : const SizedBox.shrink())`);   // הטקסט המקורי
   if (paper) blocks.push(`((r0['__doc'] ?? '').startsWith('data:image') ? DsFold(title: ${k(L.docTitle)}, details: [ClipRRect(borderRadius: BorderRadius.circular(12), child: Image.memory(base64Decode((r0['__doc'] ?? '').split(',').last), fit: BoxFit.fitWidth))]) : const SizedBox.shrink())`);   // G33 · מחסנית-מסמכים: הצילום שנשמר עם הרשומה
   const stageSub = root.stages && root.stages.length ? `const [${root.stages.map((s) => k(s)).join(', ')}][appStore.stageOf('${root.slug}', id).clamp(0, ${root.stages.length - 1})]` : k(root.name);
   const cls = clsOf(slug);
@@ -83,6 +83,8 @@ import 'package:flutter/material.dart';
 /// 8000 ⇒ 8,000 · 12.5 ⇒ 12.5 — סכום קריא בתיק (רק תצוגה; הרשומה נשארת ספרות)
 /// ב׳-מג · תאריך בתיק כמו שאומרים: היום (9.9) · מחר (10.9) · יום שני 21.9 · 3.10.2027 — ISO נשאר בנתונים
 String _fmtDate(String s) { final t = s.trim(); final d = DateTime.tryParse(t.length == 10 ? '\${t}T12:00:00' : t); if (d == null) return t; final now = DateTime.now(); final n = DateTime(d.year, d.month, d.day).difference(DateTime(now.year, now.month, now.day)).inDays; final dm = '\${d.day}.\${d.month}'; if (n == 0) return ${k(L.homeToday)} + ' (' + dm + ')'; if (n == 1) return ${k(L.homeTomorrow)} + ' (' + dm + ')'; if (n == -1) return ${k(L.dayYesterday)} + ' (' + dm + ')'; if (n.abs() <= 6) return ${k(L.dayPrefix)}.replaceAll('{day}', ${k(L.dayNames)}.split(',')[d.weekday % 7]) + ' ' + dm; return dm + '.\${d.year}'; }
+/// ב׳-נד · שורות «מה קרה מאז?» — «2026-09-01 · טקסט» ⇒ «יום שלישי 1.9 · טקסט»
+String _noteText(String s) => s.split('\\n').map((l) { final m = RegExp(r'^(\\d{4}-\\d{2}-\\d{2}) · (.*)$').firstMatch(l); return m == null ? l : _fmtDate(m.group(1)!) + ' · ' + m.group(2)!; }).join('\\n');
 String _fmtNum(String s) { final t = s.trim(); final v = num.tryParse(t.replaceAll(',', '')); if (v == null) return t; final parts = t.replaceAll(',', '').split('.'); final ip = parts[0].replaceAllMapped(RegExp(r'\\B(?=(\\d{3})+(?!\\d))'), (m) => ','); return parts.length > 1 ? ip + '.' + parts[1] : ip; }
 
 class ${cls} extends StatelessWidget {
@@ -248,7 +250,7 @@ class ${cls}Today {
       if (_dates.any((x) => _parse(r[x.label] ?? '') != null)) continue;
       if (appStore.decision('undated:\$rid') == 'no') continue;
       final acts = [${k(L.actSetTomorrow)}, ${k(L.actSetWeek)}, ${k(L.actIgnore)}];
-      out.add(DsTodayItem(title: appStore.displayOf('${root.slug}', rid), sub: f.label, rid: rid, field: f.label, due: today, hard: f.hard, overdue: false, module: module, actions: acts, act: (i) => _setDate(rid, f.label, today, acts, i)));
+      out.add(DsTodayItem(title: appStore.displayOf('${root.slug}', rid), sub: [f.label, _moneyOf(r)].where((x) => x.isNotEmpty).join(' · '), rid: rid, field: f.label, due: today, hard: f.hard, overdue: false, module: module, actions: acts, act: (i) => _setDate(rid, f.label, today, acts, i)));
     }
     return out;
   }
@@ -279,7 +281,7 @@ class ${cls}Today {
       if (visible) continue;
       final t = _touched(r, rid); if (t == null) continue; final n = today.difference(t).inDays; if (n < 14) continue;
       final acts = [${lastStage >= 0 ? `${k(L.closeLabel)}, ` : ''}${k(L.actSetTomorrow)}, ${k(L.actIgnore)}];
-      out.add(DsTodayItem(title: appStore.displayOf('${root.slug}', rid), sub: ${k(L.staleSub)}.replaceAll('{n}', n.toString()), rid: rid, field: '', due: t, hard: false, overdue: false, module: module, actions: acts, act: (i) => _staleAct(rid, today, acts, i)));
+      out.add(DsTodayItem(title: appStore.displayOf('${root.slug}', rid), sub: [${k(L.staleSub)}.replaceAll('{n}', n.toString()), _moneyOf(r)].where((x) => x.isNotEmpty).join(' · '), rid: rid, field: '', due: t, hard: false, overdue: false, module: module, actions: acts, act: (i) => _staleAct(rid, today, acts, i)));
     }
     out.sort((a, b) => a.due.compareTo(b.due));   // הישן ביותר ראשון
     return out;
