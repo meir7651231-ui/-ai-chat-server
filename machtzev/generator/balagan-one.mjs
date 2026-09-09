@@ -268,6 +268,10 @@ if (!/String balaganPersonOpenText\(String name, DateTime today\)/.test(topics) 
 { const bh = rd(path.join(GEN, `gen_${mods[0].home.slug}.dart`)); if (!/static List<int> aheadOffsets\(/.test(bh) || !/days\(ahead\)/.test(bh)) fails.push('הצעת-התזכורת אינה מסננת היסטים-שעברו'); }
 { const st = rd(path.join(HERE, '..', '..', 'new', 'dart-ui-bs', 'ds', 'ds_store.dart')); if (!/void grouped\(void Function\(\) body\)/.test(st) || !/final digits = /.test(st)) fails.push('AppStore בלי grouped / חיפוש-ספרות'); }
 if (!/appStore\.grouped\(\(\) \{ for \(final it in overdue\)/.test(home)) fails.push('«היום»: בלי «סיים הכל» grouped');
+// גלים ב׳-צד..צז · כותרות-קטע עם מונה+₪ · ספרות/«איפה X» בשורה-המהירה = חיפוש · כותרת-באיחור אומרת מתי וכמה
+if (!/\+ ' · ' \+ overdue\.length\.toString\(\) \+ \(balaganMoney\(overdue\) > 0/.test(home) || !/todayItems\.length\.toString\(\) \+ \(balaganMoney\(todayItems\) > 0/.test(home)) fails.push('«היום»: כותרות-קטע בלי מונה+₪');
+if (!/String balaganSearchQuery\(String s\)/.test(home) || !/balaganSearchQuery\(s\)\]\) \{ if \(parts\.length == 1 && q\.isNotEmpty\)/.test(home)) fails.push('שורה-מהירה בלי חיפוש-ספרות/«איפה»');
+if (!/\[if \(first\.overdue\) /.test(home)) fails.push('כותרת-באיחור בלי מתי/כמה');
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);
