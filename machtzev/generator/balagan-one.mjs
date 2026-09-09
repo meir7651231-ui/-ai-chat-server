@@ -158,6 +158,9 @@ if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganMoney\(\[
 for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/static List<DsTodayItem> stale\(DateTime today\)/.test(h) || !/decision\('stale:\$rid'\) == 'no'/.test(h)) { fails.push(`${m.ns}: בלי ספק-«נשכחים»`); break; } }
 if (!/final stale = <DsTodayItem>\[for \(final m in _mods\) for \(final it in m\.stale\(today\)\) if \(!_standing\.contains\(it\.rid\)\) it\]/.test(home) || !/_standing\.add\(rid\)/.test(home) || !/for \(final it in stale\) DsActionRow\(title: it\.title, [^\n]*?actions: it\.actions, onAct: it\.act\)/.test(home)) fails.push('«היום» בלי קיפול «נשכחים»');
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/\.stale\(today\)/.test(ft)) fails.push('בדיקת «נשכחים» חסרה'); }
+// גל ב׳-לא · צ׳יפי-מועד בטופס-האישור: תווית ⇒ תאריך דרך balaganDates · המועד תמיד בין השורות · בדיקה
+{ const cf = rd(path.join(GEN, 'gen_balagan_confirm.dart')); if (!/List<List<String>> balaganDateChips\(DateTime today\)/.test(cf) || !/balaganDates\(c, today\)\.take\(1\)/.test(cf) || !/setState\(\(\) => _v\[dateF\] = c\[1\]\)/.test(cf) || !/shown\.add\(m\.fields\.firstWhere\(\(f\) => f\.label == dateF\)\)/.test(cf)) fails.push('טופס-האישור בלי צ׳יפי-מועד'); }
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganDateChips\(today\)/.test(ft)) fails.push('בדיקת צ׳יפי-מועד חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);

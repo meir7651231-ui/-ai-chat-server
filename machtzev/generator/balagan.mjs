@@ -425,6 +425,7 @@ import 'dart:convert';
 import 'package:buildsmart/genesis/dart-ui-bs/ds/ds_store.dart';
 import 'package:buildsmart/genesis/dart-ui-bs/ds/ds.dart';
 import 'package:buildsmart/genesis/dart-gen-bs/gen_balagan_home.dart';
+import 'package:buildsmart/genesis/dart-gen-bs/gen_balagan_confirm.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -574,6 +575,11 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
     expect(appStore.byId(S, old)![F], '2026-09-09');
     expect(${baseTodayCls}.stale(today).any((x) => x.rid == old), isFalse);
     expect(${baseTodayCls}.items(today.add(const Duration(days: 1)), dayDelta: 0).any((x) => x.rid == old), isTrue);
+  });
+  test('צ׳יפי-מועד: כל תווית ⇒ תאריך דרך מנתח-הרגעים (היום · מחר · ביום ראשון · בעוד שבוע)', () {
+    final c = balaganDateChips(today);
+    expect(c.length, 4);
+    expect(c.map((x) => x[1]).toList(), ['2026-09-08', '2026-09-09', '2026-09-13', '2026-09-15']);
   });
   test('פיצול שורה לכמה רגעים', () {
     expect(balaganSplit('שילמתי ארנונה. מחר תור לרופא ב-9:00'), ['שילמתי ארנונה', 'מחר תור לרופא ב-9:00']);
@@ -952,6 +958,8 @@ import 'package:flutter/material.dart';
 /// זיכרון-חיים: שדה-טקסט קצר (≤30) נזכר לפי התווית שלו ומוצע בכל מודול עם אותה תווית. מקומי-למכשיר (AppStore.settings).
 String balaganRemember(String label) => appStore.setting('mem:' + label);
 void balaganLearn(BalaganField f, String v) { if (f.type == 'text' && f.options.isEmpty && v.trim().isNotEmpty && v.trim().length <= 30) appStore.setSetting('mem:' + f.label, v.trim()); }
+/// ב׳-לא · צ׳יפי-מועד: תווית ⇒ תאריך דרך אותו מנתח-התאריכים של הרגעים (אפס-כפל-לוגיקה) — «מתי?» בהקשה אחת, אפס-הקלדה; תווית שהמנתח לא מבין נופלת (לא מומצאת)
+List<List<String>> balaganDateChips(DateTime today) => [for (final c in ${k(L.dateChips)}.split('|')) for (final d in balaganDates(c, today).take(1)) [c, d.iso]];
 
 class ${cls} extends StatefulWidget {
   const ${cls}({required this.module, required this.facts, this.doc = '', this.alternatives = const [], this.text = '', this.queue = const <String>[], super.key});
@@ -998,8 +1006,10 @@ ${mods.map((m) => `      case '${m.root.slug}': return ${m.rootPage.cls}(id: id)
   @override
   Widget build(BuildContext context) {
     final m = widget.module;
+    final dateF = m.fields.every((f) => f.type != 'date') ? '' : m.fields.firstWhere((f) => f.type == 'date' && f.required, orElse: () => m.fields.firstWhere((f) => f.type == 'date')).label;   // ב׳-לא · שדה-המועד של «היום» (הקשה אם יש)
     // ≤6 שורות-לאישור (הכרעה-29 · מסך ב׳): מה-שזוהה תמיד; שדות-חובה עד המכסה; השאר מקופל
     final shown = <BalaganField>[]; for (final f in m.fields) { if (widget.facts.containsKey(f.label)) shown.add(f); } for (final f in m.fields) { if (shown.length >= 6) break; if (f.required && !shown.contains(f)) shown.add(f); }
+    if (dateF.isNotEmpty && shown.length < 6 && !shown.any((f) => f.label == dateF)) shown.add(m.fields.firstWhere((f) => f.label == dateF));   // ב׳-לא · המועד תמיד על השולחן — בלי מועד התיק נעלם מ«היום»
     shown.sort((a, b) => m.fields.indexOf(a).compareTo(m.fields.indexOf(b)));
     final rest = m.fields.where((f) => !shown.contains(f)).toList();
     return DsScaffold(title: m.title, subtitle: ${k(L.confirmSub)}, icon: ${k('')}, children: [
@@ -1008,7 +1018,7 @@ ${mods.map((m) => `      case '${m.root.slug}': return ${m.rootPage.cls}(id: id)
       if ((widget.facts['__repeat'] ?? '').isNotEmpty) Padding(padding: const EdgeInsets.only(bottom: 8), child: DsNote(message: ${k(L.confirmRepeat)}.replaceAll('{every}', balaganRepeatLabel(widget.facts['__repeat']!)), label: '', tone: 0)),
       if (widget.queue.isNotEmpty) Padding(padding: const EdgeInsets.only(bottom: 8), child: DsNote(message: ${k(L.confirmQueue)}.replaceAll('{n}', widget.queue.length.toString()), label: '', tone: 0)),
       if (!_forceNew) for (final d in balaganDuplicates(m, _v).take(1)) DsApproveCard(question: ${k(L.dupAsk)}.replaceAll('{who}', appStore.displayOf(m.rootSlug, d['__id'] ?? '')), source: m.title, okLabel: ${k(L.dupOpen)}, noLabel: ${k(L.dupNew)}, onOk: () { final id = d['__id'] ?? ''; final n = balaganMerge(m, id, {for (final e in _v.entries) if (e.value.trim().isNotEmpty) e.key: e.value, if (widget.doc.isNotEmpty) '__doc': widget.doc}, ${k(L.mergeLog)}.replaceAll('{who}', appStore.displayOf(m.rootSlug, id))); Navigator.of(context).pushReplacement<bool, bool>(MaterialPageRoute<bool>(builder: (_) => _openRoot(m.rootSlug, id))); if (n == 0) return; }, onNo: () => setState(() => _forceNew = true)),   // «פתח את הקיים» = המידע החדש נכנס לתיק הקיים (שדות ריקים + «מה כתבת» נצבר), עם החזר   // תיק כפול: «זה אותו עניין?» לפני שנפתח תיק שני
-      for (final f in shown) _field(f),
+      for (final f in shown) ...[_field(f), if (f.label == dateF && (_v[dateF] ?? '').trim().isEmpty) Padding(padding: const EdgeInsets.only(bottom: 10), child: Wrap(spacing: 8, runSpacing: 8, children: [for (final c in balaganDateChips(DateTime.now())) DsChipButton(label: c[0], onTap: () => setState(() => _v[dateF] = c[1]))]))],   // ב׳-לא · «מתי?» — הקשה אחת
       if (rest.isNotEmpty) DsFold(title: ${k(L.confirmMore)}.replaceAll('{n}', rest.length.toString()), details: [for (final f in rest) _field(f)]),
       Padding(padding: const EdgeInsets.only(top: 14), child: DsPrimaryButton(label: ${k(L.askSave)}, onTap: _save)),
     ]);
