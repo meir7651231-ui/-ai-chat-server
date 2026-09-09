@@ -97,6 +97,9 @@ String bhMonthEnd(String iso) { final mk = bhMonthKey(iso); final y = int.parse(
 String bhMedianHm(List<String> hms) { final ms = <int>[]; for (final h in hms) { if (h.length < 5) continue; final v = ${N('time.toMin')}(h); if (v.isFinite) ms.add(v.toInt()); } return ms.length < 2 ? '' : _hm(bhMedianInt(ms)); }
 /// ב׳-קמב · קובץ-ICS (RFC 5545) ממופעים [{uid,date,time?,title,notes?}] — ${N('ics.build')} עם ${N('ics.escape')} · ${N('ics.fold')}
 String bhIcs(List<Map<String, String?>> occ, String calName, DateTime now) => ${N('ics.build')}(occ, calName, now, (s) => ${N('ics.escape')}(s), (l) => ${N('ics.fold')}(l));
+/// ב׳-קמז · שורות ⇒ CSV (${N('csv.build')} עם ${N('csv.escape')}; BOM לאקסל-בעברית) · CSV ⇒ שורות (${N('csv.parse')})
+String bhCsv(List<List<Object?>> rows) => ${N('csv.build')}(rows, (v) => ${N('csv.escape')}(v)) as String;
+List<List<String>> bhCsvParse(String text) => ${N('csv.parse')}(text);
 /// מפרידי-אלפים בלי ₪ (${N('money.fmt')})
 String bhThousands(num v) => ${N('money.fmt')}(v).replaceFirst('₪', '');
 `;
@@ -148,6 +151,7 @@ void main() {
   test('G38 · סכום-לפי · חציון · רצף-ימים', () {
     expect(bhSumBy([{'t': 'דירה', 'n': '8,000'}, {'t': 'דירה', 'n': '3000'}, {'t': 'משימות', 'n': '1,250'}], 't', 'n'), [['דירה', 2, 11000.0], ['משימות', 1, 1250.0]]);
     expect(bhMedianInt([7, 1, 4]), 4); expect(bhMedianInt([]), 0); expect(bhMedianInt([2, 9]), 9);
+    expect(bhCsv([['a', 'b'], ['1', 'x,y']]).endsWith('a,b\\n1,"x,y"'), isTrue); expect(bhCsvParse('a,b\\n1,"x,y"')[1][1], 'x,y');
     final ics = bhIcs([{'uid': 'u1', 'date': '2026-09-15', 'title': 'ארנונה, 1250'}], 'בלגן', DateTime(2026, 9, 8, 10)); expect(ics.contains('DTSTART;VALUE=DATE:20260915'), isTrue); expect(ics.contains('SUMMARY:ארנונה\\\\, 1250'), isTrue); expect(ics.endsWith('END:VCALENDAR\\r\\n'), isTrue);
     expect(bhMedianHm(['16:30', '16:00', '17:00']), '16:30'); expect(bhMedianHm(['16:30']), ''); expect(bhMedianHm(['', 'x', '09:00', '10:00']), '10:00');
     expect(bhMonthEnd('2026-09-08'), '2026-09-30'); expect(bhMonthEnd('2026-12-05'), '2026-12-31'); expect(bhMonthEnd('2028-02-10'), '2028-02-29'); expect(bhMonthEnd('2027-02-01'), '2027-02-28');

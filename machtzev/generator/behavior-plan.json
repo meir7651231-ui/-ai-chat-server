@@ -2458,6 +2458,267 @@
    }
   }
  },
+ "csv.escape": {
+  "shape": "ייצוא",
+  "pick": "csvEscape",
+  "file": "dart-maor/csv-escape.dart",
+  "score": 60.35,
+  "proven": true,
+  "candidates": 24,
+  "top3": [
+   "csvEscape:4/4✓:60.35",
+   "stringField:2/4:2",
+   "formatIsraeliPhone:2/4:1"
+  ],
+  "proof": {
+   "csvEscape": {
+    "ok": 4,
+    "total": 4
+   },
+   "excelSerialToIso": {
+    "ok": 1,
+    "total": 4
+   },
+   "formatIsraeliPhone": {
+    "ok": 2,
+    "total": 4
+   },
+   "monthLabel": {
+    "ok": 0,
+    "total": 4
+   },
+   "nonEmptyString": {
+    "ok": 1,
+    "total": 4
+   },
+   "pad2": {
+    "ok": 0,
+    "total": 4
+   },
+   "parseAnyDate": {
+    "ok": 1,
+    "total": 4
+   },
+   "popCall": {
+    "ok": 0,
+    "total": 4
+   },
+   "safeHttpsUrl": {
+    "ok": 0,
+    "total": 4
+   },
+   "sessionsOf": {
+    "ok": 0,
+    "total": 4
+   },
+   "setAllowedPurposes": {
+    "ok": 1,
+    "total": 4
+   },
+   "shekel": {
+    "ok": 0,
+    "total": 4
+   },
+   "siteDonateUrl": {
+    "ok": 0,
+    "total": 4
+   },
+   "sortSupportMsgs": {
+    "ok": 0,
+    "total": 4
+   },
+   "sortSupportThreads": {
+    "ok": 0,
+    "total": 4
+   },
+   "stringField": {
+    "ok": 2,
+    "total": 4
+   },
+   "stripAuditMeta": {
+    "ok": 1,
+    "total": 4
+   },
+   "stripSupKey": {
+    "ok": 0,
+    "total": 4
+   },
+   "supCount": {
+    "ok": 0,
+    "total": 4
+   },
+   "supIls": {
+    "ok": 0,
+    "total": 4
+   },
+   "supUsd": {
+    "ok": 0,
+    "total": 4
+   },
+   "supportMsgTime": {
+    "ok": 0,
+    "total": 4
+   },
+   "timeToMin": {
+    "ok": 0,
+    "total": 4
+   },
+   "waDigits": {
+    "ok": 0,
+    "total": 4
+   }
+  }
+ },
+ "csv.build": {
+  "shape": "ייצוא",
+  "pick": "toCsv",
+  "file": "dart-maor/to-csv.dart",
+  "score": 17.57,
+  "proven": true,
+  "candidates": 14,
+  "top3": [
+   "toCsv:2/2✓:17.57",
+   "sanitizeSupportText:0/2:7.71",
+   "toTenantId:0/2:3.08"
+  ],
+  "proof": {
+   "coursesOfTeacher": {
+    "ok": 0,
+    "total": 2
+   },
+   "sanitizeSupportText": {
+    "ok": 0,
+    "total": 2
+   },
+   "segulaReminders": {
+    "ok": 0,
+    "total": 2
+   },
+   "sheetSummary": {
+    "ok": 0,
+    "total": 2
+   },
+   "siteLangs": {
+    "ok": 0,
+    "total": 2
+   },
+   "supportPreview": {
+    "ok": 0,
+    "total": 2
+   },
+   "supportUnread": {
+    "ok": 0,
+    "total": 2
+   },
+   "teacherIdOf": {
+    "ok": 0,
+    "total": 2
+   },
+   "toCsv": {
+    "ok": 2,
+    "total": 2
+   },
+   "toTenantId": {
+    "ok": 0,
+    "total": 2
+   },
+   "undoLast": {
+    "ok": 0,
+    "total": 2
+   },
+   "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 2
+   },
+   "waitlistFor": {
+    "ok": 0,
+    "total": 2
+   },
+   "wheelIndexUnderPointer": {
+    "ok": 0,
+    "total": 2
+   }
+  }
+ },
+ "csv.parse": {
+  "shape": "ייבוא",
+  "pick": "parseCsv",
+  "file": "dart-maor/parse-csv.dart",
+  "score": 2,
+  "proven": true,
+  "candidates": 16,
+  "top3": [
+   "parseCsv:2/2✓:2",
+   "supportMsgTime:1/2:4.67",
+   "popCall:1/2:0"
+  ],
+  "proof": {
+   "monthLabel": {
+    "ok": 0,
+    "total": 2
+   },
+   "parseCsv": {
+    "ok": 2,
+    "total": 2
+   },
+   "popCall": {
+    "ok": 1,
+    "total": 2
+   },
+   "sessionsOf": {
+    "ok": 0,
+    "total": 2
+   },
+   "setAllowedPurposes": {
+    "ok": 0,
+    "total": 2
+   },
+   "siteDonateUrl": {
+    "ok": 0,
+    "total": 2
+   },
+   "sortSupportMsgs": {
+    "ok": 1,
+    "total": 2
+   },
+   "sortSupportThreads": {
+    "ok": 1,
+    "total": 2
+   },
+   "stripAuditMeta": {
+    "ok": 1,
+    "total": 2
+   },
+   "stripSupKey": {
+    "ok": 0,
+    "total": 2
+   },
+   "supCount": {
+    "ok": 0,
+    "total": 2
+   },
+   "supIls": {
+    "ok": 0,
+    "total": 2
+   },
+   "supUsd": {
+    "ok": 0,
+    "total": 2
+   },
+   "supportMsgTime": {
+    "ok": 1,
+    "total": 2
+   },
+   "timeToMin": {
+    "ok": 0,
+    "total": 2
+   },
+   "waDigits": {
+    "ok": 0,
+    "total": 2
+   }
+  }
+ },
  "heb.gemYear": {
   "shape": "מועד",
   "pick": "gemYear",
