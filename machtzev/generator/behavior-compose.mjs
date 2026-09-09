@@ -91,6 +91,8 @@ List<String> bhWeekRange(String todayIso, int delta) { final s = bhPlusDays(bhWe
 bool bhInRange(String iso, String from, String to) => iso.length >= 10 && ${N('iso.inRange')}(iso.substring(0, 10), (from: from, to: to));
 /// ב׳-קכו · סכום-מטקסט: «1,250» · «₪ 8,000» · ריק ⇒ 0 (אין חלקיק-פרסור-סכום במדף — נסרק: (String)→num; ההיפוך של ${N('money.fmt')})
 double bhMoney(String? s) => double.tryParse((s ?? '').replaceAll(',', '').replaceAll('₪', '').trim()) ?? 0;
+/// ב׳-קלד · סוף-החודש של iso: היום שלפני ה-1 של החודש הבא (bhMonthKey · bhPlusDays) — פברואר/מעוברת דרך לוח-השנה, לא טבלה
+String bhMonthEnd(String iso) { final mk = bhMonthKey(iso); final y = int.parse(mk.substring(0, 4)), m = int.parse(mk.substring(5, 7)); final next = m == 12 ? (y + 1).toString() + '-01-01' : y.toString() + '-' + (m + 1).toString().padLeft(2, '0') + '-01'; return bhPlusDays(next, -1); }
 /// מפרידי-אלפים בלי ₪ (${N('money.fmt')})
 String bhThousands(num v) => ${N('money.fmt')}(v).replaceFirst('₪', '');
 `;
@@ -142,6 +144,7 @@ void main() {
   test('G38 · סכום-לפי · חציון · רצף-ימים', () {
     expect(bhSumBy([{'t': 'דירה', 'n': '8,000'}, {'t': 'דירה', 'n': '3000'}, {'t': 'משימות', 'n': '1,250'}], 't', 'n'), [['דירה', 2, 11000.0], ['משימות', 1, 1250.0]]);
     expect(bhMedianInt([7, 1, 4]), 4); expect(bhMedianInt([]), 0); expect(bhMedianInt([2, 9]), 9);
+    expect(bhMonthEnd('2026-09-08'), '2026-09-30'); expect(bhMonthEnd('2026-12-05'), '2026-12-31'); expect(bhMonthEnd('2028-02-10'), '2028-02-29'); expect(bhMonthEnd('2027-02-01'), '2027-02-28');
     expect(bhMoney('1,250'), 1250); expect(bhMoney('₪ 8,000'), 8000); expect(bhMoney(''), 0); expect(bhMoney(null), 0); expect(bhMoney('abc'), 0); expect(bhMoney(bhThousands(1650)), 1650);
     expect(bhWeekRange('2026-09-08', 0), ['2026-09-06', '2026-09-12']); expect(bhWeekRange('2026-09-08', 1), ['2026-09-13', '2026-09-19']); expect(bhInRange('2026-09-12', '2026-09-06', '2026-09-12'), true); expect(bhInRange('2026-09-13', '2026-09-06', '2026-09-12'), false); expect(bhInRange('', '2026-09-06', '2026-09-12'), false);
     expect(bhMinutesUntil('2026-09-08T10:05:00', '2026-09-08', '10:30'), 25); expect(bhMinutesUntil('2026-09-08T11:00:00', '2026-09-08', '10:30') < 0, isTrue); expect(bhMinutesUntil('', '2026-09-08', '10:30'), -1);
