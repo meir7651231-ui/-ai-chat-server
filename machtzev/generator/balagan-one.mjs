@@ -190,6 +190,11 @@ if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/\.remPending\(to
 for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/static const List<String> _phones = \[/.test(h) || !/if \(phone\.isNotEmpty\) /.test(h) || !/launchUrl\(Uri\.parse\('tel:' \+ ph\)/.test(h) || !/rep, ph\)\); continue; \}/.test(h)) { fails.push(`${m.ns}: בלי «התקשר» על שורת-היום`); break; } }
 if (!/BalaganPerson\? balaganPersonFor\(String q\)/.test(topics) || !/for \(final p in \[balaganPersonFor\(_q\)\]\)/.test(topics)) fails.push('«נושאים» בלי כרטיס-אדם מחיפוש-חלקי');
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganPersonFor\('שגב'\)/.test(ft)) fails.push('בדיקת חיפוש-חלקי חסרה'); }
+// גל ב׳-לט · הקשה על שורה ב«היום» ⇒ התיק (onOpen ב-DS · balaganOpenRoot · _openItem בכל השורות)
+{ const ds = rd(path.join(R.ROOT, 'new/dart-ui-bs/ds/ds.dart')); if (!/this\.onOpen,/.test(ds) || !/onTap: onOpen, child: Column/.test(ds)) fails.push('DsActionRow בלי onOpen'); }
+{ const cf = rd(path.join(GEN, 'gen_balagan_confirm.dart')); if (!/Widget balaganOpenRoot\(String entity, String id\)/.test(cf)) fails.push('בלי balaganOpenRoot'); }
+{ const n = (home.match(/onOpen: \(\) => _openItem\(context, it\)/g) || []).length; if (n < 5 || !/_openItem\(context, x\[1\] as DsTodayItem\)/.test(home)) fails.push(`«היום»: שורות בלי onOpen (${n}/5 + השבוע)`); }
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganOpenRoot\('nope'/.test(ft)) fails.push('בדיקת פותח-תיק חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);

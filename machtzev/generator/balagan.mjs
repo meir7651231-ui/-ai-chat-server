@@ -427,6 +427,7 @@ import 'package:buildsmart/genesis/dart-ui-bs/ds/ds.dart';
 import 'package:buildsmart/genesis/dart-gen-bs/gen_balagan_home.dart';
 import 'package:buildsmart/genesis/dart-gen-bs/gen_balagan_confirm.dart';
 import 'package:buildsmart/genesis/dart-gen-bs/gen_balagan_topics.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -644,6 +645,10 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
     expect(balaganPersonFor('ש'), isNull);
     expect(balaganPersonFor(' נועה לב ')!.files, 1);
   });
+  test('פותח-תיק: ישות מוכרת ⇒ עמוד-השורש שלה; לא מוכרת ⇒ ריק', () {
+    expect(balaganOpenRoot('nope', 'x') is SizedBox, isTrue);
+    for (final m in kBalaganModules) { expect(balaganOpenRoot(m.rootSlug, 'x') is SizedBox, isFalse, reason: m.rootSlug); }
+  });
   test('פיצול שורה לכמה רגעים', () {
     expect(balaganSplit('שילמתי ארנונה. מחר תור לרופא ב-9:00'), ['שילמתי ארנונה', 'מחר תור לרופא ב-9:00']);
     expect(balaganSplit('מסרתי מפתח ב-1.8.2026 והמשכיר מקזז 6,200'), ['מסרתי מפתח ב-1.8.2026 והמשכיר מקזז 6,200']);
@@ -722,6 +727,7 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
   ];
   static DateTime _day(DateTime d) => DateTime(d.year, d.month, d.day);
   static String _iso(DateTime d) => d.toIso8601String().substring(0, 10);
+  void _openItem(BuildContext context, DsTodayItem it) { final ms = kBalaganModules.where((m) => m.title == it.module); if (ms.isEmpty || it.rid.isEmpty) return; Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => balaganOpenRoot(ms.first.rootSlug, it.rid))); }   // ב׳-לט · הקשה על השורה ⇒ התיק
 
   Future<void> _digest(String lead, int hardToday) async {
     if (kIsWeb) return;
@@ -882,8 +888,8 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
       if (!empty) Padding(padding: const EdgeInsets.only(top: 6), child: Row(children: [DsChipButton(label: ${k(L.shareDay)}, onTap: () => _shareDay(overdue, todayItems, plan.length))])),   // היום כטקסט: ללוח + וואטסאפ (לעצמו / לבן-הזוג) — אפס-שרת
       Padding(padding: const EdgeInsets.only(top: 16, bottom: 4), child: Text(headline, style: TextStyle(color: lk.ink, fontSize: 28, fontWeight: FontWeight.w600, height: 1.2))),
       if (first != null) Padding(padding: const EdgeInsets.only(bottom: 12), child: Text((first.overdue ? ${k(L.homeOverdue)} : first.sub) + ' · ' + first.module + ' · ' + lead2, style: TextStyle(color: lk.muted, fontSize: 14))),
-      if (overdue.isNotEmpty) DsSection(title: ${k(L.homeOverdue)}, tone: 2, children: [for (final it in overdue) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), tone: 2, actions: it.actions, onAct: it.act)]),   // D6/P6/P7 · באיחור ראשון
-      if (todayItems.isNotEmpty) DsSection(title: ${k(L.homeToday)}, children: [for (final it in todayItems) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), actions: it.actions, onAct: it.act)]),
+      if (overdue.isNotEmpty) DsSection(title: ${k(L.homeOverdue)}, tone: 2, children: [for (final it in overdue) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), tone: 2, onOpen: () => _openItem(context, it), actions: it.actions, onAct: it.act)]),   // D6/P6/P7 · באיחור ראשון
+      if (todayItems.isNotEmpty) DsSection(title: ${k(L.homeToday)}, children: [for (final it in todayItems) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), onOpen: () => _openItem(context, it), actions: it.actions, onAct: it.act)]),
       if (plan.isNotEmpty) DsFold(title: ${k(L.planFold)}.replaceAll('{n}', plan.length.toString()), details: plan),   // תזמון-אוטומטי: מקופל — הוא מסתכל כשהוא רוצה
       ...cards.take(3),   // 3 למעלה
       if (cards.length > 3) DsFold(title: ${k(L.homeMore)}.replaceAll('{n}', (cards.length - 3).toString()), details: cards.skip(3).toList()),
@@ -891,10 +897,10 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
       if (pending.isNotEmpty) DsSection(title: ${k(L.homePending)} + ' · ' + pending.length.toString(), children: pending),   // D5 · הגיע (מייל) · הצעד-הבא (שרשרת) · תזכורות
       if (did.isNotEmpty) DsSection(title: ${k(L.homeDid)} + ' · ' + did.length.toString(), children: [for (final e in did) DsLogRow(text: e['what'] ?? '', undoLabel: ${k(L.undo)}, onUndo: () => appStore.undo(e['id'] ?? ''))]),   // T2
       if (wk.isNotEmpty) DsFold(title: ${k(L.weekFold)}.replaceAll('{n}', wk.length.toString()).replaceAll('{m}', wSaved.toString()), details: [if (wAdd > 0) DsActionRow(title: ${k(L.weekAdded)}.replaceAll('{n}', wAdd.toString())), if (wSend > 0) DsActionRow(title: ${k(L.weekSent)}.replaceAll('{n}', wSend.toString())), if (wAuto > 0) DsActionRow(title: ${k(L.weekAuto)}.replaceAll('{n}', wAuto.toString())), DsNote(message: ${k(L.weekNote)}, label: '', tone: 0)]),   // שמירת-זמן: מקופל, מוכח מהיומן
-      if (soon.isNotEmpty) DsFold(title: ${k(L.soonFold)}.replaceAll('{n}', soon.length.toString()) + (moneyWk > 0 ? ' · ' + ${k(L.moneyShort)}.replaceAll('{n}', balaganFmtMoney(moneyWk)) : ''), details: [for (final x in soon) DsActionRow(title: dayNames[today.add(Duration(days: x[0] as int)).weekday % 7] + ' · ' + (x[1] as DsTodayItem).title, sub: [(x[1] as DsTodayItem).sub, (x[1] as DsTodayItem).module].where((x) => x.isNotEmpty).join(' · '), actions: (x[1] as DsTodayItem).actions, onAct: (x[1] as DsTodayItem).act)]),   // ב׳-לד · גם השבוע עם פעולות
-      if (tomorrow.isNotEmpty) DsFold(open: evening, title: ${k(L.homeTomorrow)} + ' (' + tomorrow.length.toString() + ')' + (moneyTm > 0 ? ' · ' + ${k(L.moneyShort)}.replaceAll('{n}', balaganFmtMoney(moneyTm)) : ''), details: [for (final it in tomorrow) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), actions: it.actions, onAct: it.act)]),   // D8
-      if (undated.isNotEmpty) DsFold(title: ${k(L.undatedFold)}.replaceAll('{n}', undated.length.toString()), details: [DsNote(message: ${k(L.undatedNote)}, label: '', tone: 0), for (final it in undated) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), actions: it.actions, onAct: it.act)]),   // ב׳-כח · בלי תאריך
-      if (stale.isNotEmpty) DsFold(title: ${k(L.staleFold)}.replaceAll('{n}', stale.length.toString()), details: [DsNote(message: ${k(L.staleNote)}, label: '', tone: 0), for (final it in stale) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), actions: it.actions, onAct: it.act)]),   // ב׳-ל · נשכחים
+      if (soon.isNotEmpty) DsFold(title: ${k(L.soonFold)}.replaceAll('{n}', soon.length.toString()) + (moneyWk > 0 ? ' · ' + ${k(L.moneyShort)}.replaceAll('{n}', balaganFmtMoney(moneyWk)) : ''), details: [for (final x in soon) DsActionRow(title: dayNames[today.add(Duration(days: x[0] as int)).weekday % 7] + ' · ' + (x[1] as DsTodayItem).title, sub: [(x[1] as DsTodayItem).sub, (x[1] as DsTodayItem).module].where((x) => x.isNotEmpty).join(' · '), onOpen: () => _openItem(context, x[1] as DsTodayItem), actions: (x[1] as DsTodayItem).actions, onAct: (x[1] as DsTodayItem).act)]),   // ב׳-לד · גם השבוע עם פעולות
+      if (tomorrow.isNotEmpty) DsFold(open: evening, title: ${k(L.homeTomorrow)} + ' (' + tomorrow.length.toString() + ')' + (moneyTm > 0 ? ' · ' + ${k(L.moneyShort)}.replaceAll('{n}', balaganFmtMoney(moneyTm)) : ''), details: [for (final it in tomorrow) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), onOpen: () => _openItem(context, it), actions: it.actions, onAct: it.act)]),   // D8
+      if (undated.isNotEmpty) DsFold(title: ${k(L.undatedFold)}.replaceAll('{n}', undated.length.toString()), details: [DsNote(message: ${k(L.undatedNote)}, label: '', tone: 0), for (final it in undated) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), onOpen: () => _openItem(context, it), actions: it.actions, onAct: it.act)]),   // ב׳-כח · בלי תאריך
+      if (stale.isNotEmpty) DsFold(title: ${k(L.staleFold)}.replaceAll('{n}', stale.length.toString()), details: [DsNote(message: ${k(L.staleNote)}, label: '', tone: 0), for (final it in stale) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), onOpen: () => _openItem(context, it), actions: it.actions, onAct: it.act)]),   // ב׳-ל · נשכחים
       if (!empty && overdue.isEmpty && todayItems.isEmpty && pending.isEmpty) Padding(padding: const EdgeInsets.only(top: 12), child: Text(${k(L.homeAll)}, style: TextStyle(color: lk.muted, fontSize: 14))),
       if (empty) DsNote(message: ${k(L.homeEmptyWay)}, label: '', tone: 0),
       if (empty) Padding(padding: const EdgeInsets.only(top: 14), child: Text(${k(L.homeTry)}, style: TextStyle(color: lk.muted, fontSize: 13))),
@@ -1032,6 +1038,13 @@ import 'package:flutter/material.dart';
 String balaganRemember(String label) => appStore.setting('mem:' + label);
 void balaganLearn(BalaganField f, String v) { if (f.type == 'text' && f.options.isEmpty && v.trim().isNotEmpty && v.trim().length <= 30) appStore.setSetting('mem:' + f.label, v.trim()); }
 /// ב׳-לא · צ׳יפי-מועד: תווית ⇒ תאריך דרך אותו מנתח-התאריכים של הרגעים (אפס-כפל-לוגיקה) — «מתי?» בהקשה אחת, אפס-הקלדה; תווית שהמנתח לא מבין נופלת (לא מומצאת)
+/// ב׳-לט · פותח-תיק לפי ישות (כל 31 עמודי-השורש) — ל«היום»: הקשה על שורה ⇒ התיק
+Widget balaganOpenRoot(String entity, String id) {
+  switch (entity) {
+${mods.map((m) => `    case '${m.root.slug}': return ${m.rootPage.cls}(id: id);`).join('\n')}
+    default: return const SizedBox.shrink();
+  }
+}
 List<List<String>> balaganDateChips(DateTime today) => [for (final c in ${k(L.dateChips)}.split('|')) for (final d in balaganDates(c, today).take(1)) [c, d.iso]];
 /// ב׳-לג · צ׳יפי-שעה: חלקי-יום דרך אותו balaganTimes של הרגעים (בבוקר 09:00 · בצהריים 13:00 · אחר הצהריים 16:00 · בערב 19:00)
 List<List<String>> balaganTimeChips(DateTime now) => [for (final c in ${k(L.timeChips)}.split('|')) for (final t in balaganTimes(c, now: now).take(1)) [c, t.iso]];
@@ -1054,12 +1067,7 @@ class ${cls} extends StatefulWidget {
 
 class _${cls}State extends State<${cls}> {
   bool _forceNew = false;
-  Widget _openRoot(String entity, String id) {
-    switch (entity) {
-${mods.map((m) => `      case '${m.root.slug}': return ${m.rootPage.cls}(id: id);`).join('\n')}
-      default: return const SizedBox.shrink();
-    }
-  }
+  Widget _openRoot(String entity, String id) => balaganOpenRoot(entity, id);   // ב׳-לט · פותח-אחד לכולם
   late final Map<String, String> _v = {for (final f in widget.module.fields) if (balaganRemember(f.label).isNotEmpty) f.label: balaganRemember(f.label), ...widget.facts};
   Widget _field(BalaganField f) {
     final v = _v[f.label] ?? '';

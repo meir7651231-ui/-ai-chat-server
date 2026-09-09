@@ -1424,6 +1424,7 @@
   "sockets": [
    "actions",
    "onAct",
+   "onOpen",
    "sub",
    "title"
   ],
