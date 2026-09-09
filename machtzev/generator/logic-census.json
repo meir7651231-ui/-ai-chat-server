@@ -131,6 +131,17 @@
   "wireable": true
  },
  {
+  "file": "dart-maor/add-days-iso.dart",
+  "name": "addDaysIso",
+  "ret": "String",
+  "params": [
+   "String",
+   "int"
+  ],
+  "argc": 2,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/advance-status.dart",
   "name": "advanceStatus",
   "ret": "String",
@@ -5676,6 +5687,17 @@
   ],
   "argc": 2,
   "wireable": false
+ },
+ {
+  "file": "dart-maor/minutes-between-iso.dart",
+  "name": "minutesBetweenIso",
+  "ret": "int",
+  "params": [
+   "String",
+   "String"
+  ],
+  "argc": 2,
+  "wireable": true
  },
  {
   "file": "dart/mk2.dart",

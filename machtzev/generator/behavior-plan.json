@@ -1,0 +1,1245 @@
+{
+ "week.start": {
+  "shape": "מועד",
+  "pick": "startOfWeekSunday",
+  "file": "dart/start_of_week_sunday.dart",
+  "score": 5.91,
+  "proven": true,
+  "candidates": 16,
+  "top3": [
+   "startOfWeekSunday:3/3✓:5.91",
+   "popCall:1/3:0",
+   "stripAuditMeta:1/3:0"
+  ],
+  "proof": {
+   "monthLabel": {
+    "ok": 0,
+    "total": 3
+   },
+   "popCall": {
+    "ok": 1,
+    "total": 3
+   },
+   "sessionsOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "setAllowedPurposes": {
+    "ok": 0,
+    "total": 3
+   },
+   "siteDonateUrl": {
+    "ok": 0,
+    "total": 3
+   },
+   "sortSupportMsgs": {
+    "ok": 0,
+    "total": 3
+   },
+   "sortSupportThreads": {
+    "ok": 0,
+    "total": 3
+   },
+   "startOfWeekSunday": {
+    "ok": 3,
+    "total": 3
+   },
+   "stripAuditMeta": {
+    "ok": 1,
+    "total": 3
+   },
+   "stripSupKey": {
+    "ok": 0,
+    "total": 3
+   },
+   "supCount": {
+    "ok": 0,
+    "total": 3
+   },
+   "supIls": {
+    "ok": 0,
+    "total": 3
+   },
+   "supUsd": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportMsgTime": {
+    "ok": 0,
+    "total": 3
+   },
+   "timeToMin": {
+    "ok": 0,
+    "total": 3
+   },
+   "waDigits": {
+    "ok": 0,
+    "total": 3
+   }
+  }
+ },
+ "iso.addDays": {
+  "shape": "מועד",
+  "pick": "addDaysIso",
+  "file": "dart-maor/add-days-iso.dart",
+  "score": 63.9,
+  "proven": true,
+  "candidates": 18,
+  "top3": [
+   "addDaysIso:3/3✓:63.9",
+   "segulaReminders:0/3:7.83",
+   "envPath:0/3:1"
+  ],
+  "proof": {
+   "addDaysIso": {
+    "ok": 3,
+    "total": 3
+   },
+   "coursesOfTeacher": {
+    "ok": 0,
+    "total": 3
+   },
+   "envPath": {
+    "ok": 0,
+    "total": 3
+   },
+   "metaPath": {
+    "ok": 0,
+    "total": 3
+   },
+   "roleOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "sanitizeSupportText": {
+    "ok": 0,
+    "total": 3
+   },
+   "segulaReminders": {
+    "ok": 0,
+    "total": 3
+   },
+   "sheetSummary": {
+    "ok": 0,
+    "total": 3
+   },
+   "siteLangs": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportPreview": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportUnread": {
+    "ok": 0,
+    "total": 3
+   },
+   "teacherIdOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "toCsv": {
+    "ok": 0,
+    "total": 3
+   },
+   "toTenantId": {
+    "ok": 0,
+    "total": 3
+   },
+   "undoLast": {
+    "ok": 0,
+    "total": 3
+   },
+   "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 3
+   },
+   "waitlistFor": {
+    "ok": 0,
+    "total": 3
+   },
+   "wheelIndexUnderPointer": {
+    "ok": 0,
+    "total": 3
+   }
+  }
+ },
+ "iso.daysSince": {
+  "shape": "מועד",
+  "pick": "cockpitDaysSince",
+  "file": "dart-maor/cockpit-days-since.dart",
+  "score": 37.79,
+  "proven": true,
+  "candidates": 19,
+  "top3": [
+   "cockpitDaysSince:3/3✓:37.79",
+   "dayDiff:3/3✓:36.98",
+   "sheetSummary:0/3:17.68"
+  ],
+  "proof": {
+   "campaignTotal": {
+    "ok": 0,
+    "total": 3
+   },
+   "cockpitDaysSince": {
+    "ok": 3,
+    "total": 3
+   },
+   "coursesOfTeacher": {
+    "ok": 0,
+    "total": 3
+   },
+   "dayDiff": {
+    "ok": 3,
+    "total": 3
+   },
+   "ruleExact": {
+    "ok": 0,
+    "total": 3
+   },
+   "ruleSkeleton": {
+    "ok": 0,
+    "total": 3
+   },
+   "sanitizeSupportText": {
+    "ok": 0,
+    "total": 3
+   },
+   "segulaReminders": {
+    "ok": 0,
+    "total": 3
+   },
+   "sheetSummary": {
+    "ok": 0,
+    "total": 3
+   },
+   "siteLangs": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportPreview": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportUnread": {
+    "ok": 0,
+    "total": 3
+   },
+   "teacherIdOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "toCsv": {
+    "ok": 0,
+    "total": 3
+   },
+   "toTenantId": {
+    "ok": 0,
+    "total": 3
+   },
+   "undoLast": {
+    "ok": 0,
+    "total": 3
+   },
+   "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 3
+   },
+   "waitlistFor": {
+    "ok": 0,
+    "total": 3
+   },
+   "wheelIndexUnderPointer": {
+    "ok": 0,
+    "total": 3
+   }
+  }
+ },
+ "iso.inRange": {
+  "shape": "מועד",
+  "pick": "inRange",
+  "file": "dart-maor/in-range.dart",
+  "score": 70.72,
+  "proven": true,
+  "candidates": 17,
+  "top3": [
+   "inRange:3/3✓:70.72",
+   "supporterVisibleForDesignations:2/3:1",
+   "taskOverdue:1/3:9.89"
+  ],
+  "proof": {
+   "coursesOfTeacher": {
+    "ok": 0,
+    "total": 3
+   },
+   "inRange": {
+    "ok": 3,
+    "total": 3
+   },
+   "sanitizeSupportText": {
+    "ok": 0,
+    "total": 3
+   },
+   "segulaReminders": {
+    "ok": 0,
+    "total": 3
+   },
+   "sheetSummary": {
+    "ok": 0,
+    "total": 3
+   },
+   "siteLangs": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportPreview": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportUnread": {
+    "ok": 0,
+    "total": 3
+   },
+   "supporterVisibleForDesignations": {
+    "ok": 2,
+    "total": 3
+   },
+   "taskOverdue": {
+    "ok": 1,
+    "total": 3
+   },
+   "teacherIdOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "toCsv": {
+    "ok": 0,
+    "total": 3
+   },
+   "toTenantId": {
+    "ok": 0,
+    "total": 3
+   },
+   "undoLast": {
+    "ok": 0,
+    "total": 3
+   },
+   "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 3
+   },
+   "waitlistFor": {
+    "ok": 0,
+    "total": 3
+   },
+   "wheelIndexUnderPointer": {
+    "ok": 0,
+    "total": 3
+   }
+  }
+ },
+ "task.overdue": {
+  "shape": "מועד",
+  "pick": "taskOverdue",
+  "file": "dart-maor/task-overdue.dart",
+  "score": 77.82,
+  "proven": true,
+  "candidates": 16,
+  "top3": [
+   "taskOverdue:3/3✓:77.82",
+   "supporterVisibleForDesignations:2/3:1",
+   "wheelIndexUnderPointer:0/3:9.25"
+  ],
+  "proof": {
+   "coursesOfTeacher": {
+    "ok": 0,
+    "total": 3
+   },
+   "sanitizeSupportText": {
+    "ok": 0,
+    "total": 3
+   },
+   "segulaReminders": {
+    "ok": 0,
+    "total": 3
+   },
+   "sheetSummary": {
+    "ok": 0,
+    "total": 3
+   },
+   "siteLangs": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportPreview": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportUnread": {
+    "ok": 0,
+    "total": 3
+   },
+   "supporterVisibleForDesignations": {
+    "ok": 2,
+    "total": 3
+   },
+   "taskOverdue": {
+    "ok": 3,
+    "total": 3
+   },
+   "teacherIdOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "toCsv": {
+    "ok": 0,
+    "total": 3
+   },
+   "toTenantId": {
+    "ok": 0,
+    "total": 3
+   },
+   "undoLast": {
+    "ok": 0,
+    "total": 3
+   },
+   "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 3
+   },
+   "waitlistFor": {
+    "ok": 0,
+    "total": 3
+   },
+   "wheelIndexUnderPointer": {
+    "ok": 0,
+    "total": 3
+   }
+  }
+ },
+ "time.toMin": {
+  "shape": "שעה",
+  "pick": "timeToMin",
+  "file": "dart-maor/time-to-min.dart",
+  "score": 21.45,
+  "proven": true,
+  "candidates": 15,
+  "top3": [
+   "timeToMin:2/2✓:21.45",
+   "monthLabel:0/2:0",
+   "popCall:0/2:0"
+  ],
+  "proof": {
+   "monthLabel": {
+    "ok": 0,
+    "total": 2
+   },
+   "popCall": {
+    "ok": 0,
+    "total": 2
+   },
+   "sessionsOf": {
+    "ok": 0,
+    "total": 2
+   },
+   "setAllowedPurposes": {
+    "ok": 0,
+    "total": 2
+   },
+   "siteDonateUrl": {
+    "ok": 0,
+    "total": 2
+   },
+   "sortSupportMsgs": {
+    "ok": 0,
+    "total": 2
+   },
+   "sortSupportThreads": {
+    "ok": 0,
+    "total": 2
+   },
+   "stripAuditMeta": {
+    "ok": 0,
+    "total": 2
+   },
+   "stripSupKey": {
+    "ok": 0,
+    "total": 2
+   },
+   "supCount": {
+    "ok": 0,
+    "total": 2
+   },
+   "supIls": {
+    "ok": 0,
+    "total": 2
+   },
+   "supUsd": {
+    "ok": 0,
+    "total": 2
+   },
+   "supportMsgTime": {
+    "ok": 0,
+    "total": 2
+   },
+   "timeToMin": {
+    "ok": 2,
+    "total": 2
+   },
+   "waDigits": {
+    "ok": 0,
+    "total": 2
+   }
+  }
+ },
+ "time.minutesBetween": {
+  "shape": "יומן",
+  "pick": "minutesBetweenIso",
+  "file": "dart-maor/minutes-between-iso.dart",
+  "score": 39.75,
+  "proven": true,
+  "candidates": 20,
+  "top3": [
+   "minutesBetweenIso:2/2✓:39.75",
+   "levenshtein:0/2:11.08",
+   "wheelIndexUnderPointer:0/2:9.25"
+  ],
+  "proof": {
+   "coursesOfTeacher": {
+    "ok": 0,
+    "total": 2
+   },
+   "damerauLevenshtein": {
+    "ok": 0,
+    "total": 2
+   },
+   "enrollCount": {
+    "ok": 0,
+    "total": 2
+   },
+   "levenshtein": {
+    "ok": 0,
+    "total": 2
+   },
+   "minutesBetweenIso": {
+    "ok": 2,
+    "total": 2
+   },
+   "ruleContains": {
+    "ok": 0,
+    "total": 2
+   },
+   "rulePrefix": {
+    "ok": 0,
+    "total": 2
+   },
+   "sanitizeSupportText": {
+    "ok": 0,
+    "total": 2
+   },
+   "segulaReminders": {
+    "ok": 0,
+    "total": 2
+   },
+   "sheetSummary": {
+    "ok": 0,
+    "total": 2
+   },
+   "siteLangs": {
+    "ok": 0,
+    "total": 2
+   },
+   "supportPreview": {
+    "ok": 0,
+    "total": 2
+   },
+   "supportUnread": {
+    "ok": 0,
+    "total": 2
+   },
+   "teacherIdOf": {
+    "ok": 0,
+    "total": 2
+   },
+   "toCsv": {
+    "ok": 0,
+    "total": 2
+   },
+   "toTenantId": {
+    "ok": 0,
+    "total": 2
+   },
+   "undoLast": {
+    "ok": 0,
+    "total": 2
+   },
+   "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 2
+   },
+   "waitlistFor": {
+    "ok": 0,
+    "total": 2
+   },
+   "wheelIndexUnderPointer": {
+    "ok": 0,
+    "total": 2
+   }
+  }
+ },
+ "text.normSearch": {
+  "shape": "טקסט-חופשי",
+  "pick": "normSearch",
+  "file": "dart-maor/enroll-new-family.dart",
+  "score": 2,
+  "proven": true,
+  "candidates": 21,
+  "top3": [
+   "normSearch:4/4✓:2",
+   "normNameLocal:3/4:2",
+   "taskIdentity:3/4:2"
+  ],
+  "proof": {
+   "coursesOfTeacher": {
+    "ok": 0,
+    "total": 4
+   },
+   "envPath": {
+    "ok": 0,
+    "total": 4
+   },
+   "metaPath": {
+    "ok": 0,
+    "total": 4
+   },
+   "normNameLocal": {
+    "ok": 3,
+    "total": 4
+   },
+   "normSearch": {
+    "ok": 4,
+    "total": 4
+   },
+   "roleOf": {
+    "ok": 0,
+    "total": 4
+   },
+   "roomInfoLabel": {
+    "ok": 0,
+    "total": 4
+   },
+   "sanitizeSupportText": {
+    "ok": 0,
+    "total": 4
+   },
+   "segulaReminders": {
+    "ok": 0,
+    "total": 4
+   },
+   "sheetSummary": {
+    "ok": 0,
+    "total": 4
+   },
+   "siteLangs": {
+    "ok": 0,
+    "total": 4
+   },
+   "supportPreview": {
+    "ok": 0,
+    "total": 4
+   },
+   "supportUnread": {
+    "ok": 0,
+    "total": 4
+   },
+   "taskIdentity": {
+    "ok": 3,
+    "total": 4
+   },
+   "teacherIdOf": {
+    "ok": 0,
+    "total": 4
+   },
+   "toCsv": {
+    "ok": 0,
+    "total": 4
+   },
+   "toTenantId": {
+    "ok": 1,
+    "total": 4
+   },
+   "undoLast": {
+    "ok": 0,
+    "total": 4
+   },
+   "visibleSupportersForDesignations": {
+    "ok": 2,
+    "total": 4
+   },
+   "waitlistFor": {
+    "ok": 0,
+    "total": 4
+   },
+   "wheelIndexUnderPointer": {
+    "ok": 0,
+    "total": 4
+   }
+  }
+ },
+ "name.norm": {
+  "shape": "אדם",
+  "pick": "normName",
+  "file": "dart-maor/norm-name.dart",
+  "score": 8.56,
+  "proven": true,
+  "candidates": 18,
+  "top3": [
+   "normName:2/2✓:8.56",
+   "wheelIndexUnderPointer:0/2:5.36",
+   "envPath:0/2:1"
+  ],
+  "proof": {
+   "coursesOfTeacher": {
+    "ok": 0,
+    "total": 2
+   },
+   "envPath": {
+    "ok": 0,
+    "total": 2
+   },
+   "metaPath": {
+    "ok": 0,
+    "total": 2
+   },
+   "normName": {
+    "ok": 2,
+    "total": 2
+   },
+   "roleOf": {
+    "ok": 0,
+    "total": 2
+   },
+   "sanitizeSupportText": {
+    "ok": 0,
+    "total": 2
+   },
+   "segulaReminders": {
+    "ok": 0,
+    "total": 2
+   },
+   "sheetSummary": {
+    "ok": 0,
+    "total": 2
+   },
+   "siteLangs": {
+    "ok": 0,
+    "total": 2
+   },
+   "supportPreview": {
+    "ok": 0,
+    "total": 2
+   },
+   "supportUnread": {
+    "ok": 0,
+    "total": 2
+   },
+   "teacherIdOf": {
+    "ok": 0,
+    "total": 2
+   },
+   "toCsv": {
+    "ok": 0,
+    "total": 2
+   },
+   "toTenantId": {
+    "ok": 0,
+    "total": 2
+   },
+   "undoLast": {
+    "ok": 0,
+    "total": 2
+   },
+   "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 2
+   },
+   "waitlistFor": {
+    "ok": 0,
+    "total": 2
+   },
+   "wheelIndexUnderPointer": {
+    "ok": 0,
+    "total": 2
+   }
+  }
+ },
+ "phone.digits": {
+  "shape": "חיפוש",
+  "pick": "normPhone",
+  "file": "dart-maor/norm-phone.dart",
+  "score": 19.78,
+  "proven": true,
+  "candidates": 48,
+  "top3": [
+   "normPhone:3/3✓:19.78",
+   "normalizePhone:2/3:10.89",
+   "normId:1/3:10.89"
+  ],
+  "proof": {
+   "adarNorm": {
+    "ok": 0,
+    "total": 3
+   },
+   "advanceStatus": {
+    "ok": 0,
+    "total": 3
+   },
+   "angleDigits": {
+    "ok": 0,
+    "total": 3
+   },
+   "basename": {
+    "ok": 0,
+    "total": 3
+   },
+   "cloudCfgCacheKey": {
+    "ok": 0,
+    "total": 3
+   },
+   "dataUrlMime": {
+    "ok": 0,
+    "total": 3
+   },
+   "decodeQuotedPrintable": {
+    "ok": 0,
+    "total": 3
+   },
+   "esc": {
+    "ok": 0,
+    "total": 3
+   },
+   "expandInchFractions": {
+    "ok": 0,
+    "total": 3
+   },
+   "faviconDataUri": {
+    "ok": 0,
+    "total": 3
+   },
+   "fmtDate": {
+    "ok": 0,
+    "total": 3
+   },
+   "formatIsraeliPhone": {
+    "ok": 0,
+    "total": 3
+   },
+   "genJoinCode": {
+    "ok": 0,
+    "total": 3
+   },
+   "icsEscape": {
+    "ok": 0,
+    "total": 3
+   },
+   "monthKey": {
+    "ok": 0,
+    "total": 3
+   },
+   "monthLabel": {
+    "ok": 0,
+    "total": 3
+   },
+   "namespaceOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "normEmail": {
+    "ok": 0,
+    "total": 3
+   },
+   "normHeader": {
+    "ok": 0,
+    "total": 3
+   },
+   "normId": {
+    "ok": 1,
+    "total": 3
+   },
+   "normPhone": {
+    "ok": 3,
+    "total": 3
+   },
+   "normalizePhone": {
+    "ok": 2,
+    "total": 3
+   },
+   "p39ElbowModel": {
+    "ok": 0,
+    "total": 3
+   },
+   "p53AdapterModel": {
+    "ok": 0,
+    "total": 3
+   },
+   "p54AdapterModel": {
+    "ok": 0,
+    "total": 3
+   },
+   "p55AdapterModel": {
+    "ok": 0,
+    "total": 3
+   },
+   "pad2": {
+    "ok": 0,
+    "total": 3
+   },
+   "pdfSafe": {
+    "ok": 0,
+    "total": 3
+   },
+   "phoneKey": {
+    "ok": 1,
+    "total": 3
+   },
+   "phoneRegion": {
+    "ok": 0,
+    "total": 3
+   },
+   "popCall": {
+    "ok": 0,
+    "total": 3
+   },
+   "purposeKeyOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "safeHttpsUrl": {
+    "ok": 0,
+    "total": 3
+   },
+   "sessionsOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "setAllowedPurposes": {
+    "ok": 0,
+    "total": 3
+   },
+   "siteDonateUrl": {
+    "ok": 0,
+    "total": 3
+   },
+   "smtpHostFor": {
+    "ok": 0,
+    "total": 3
+   },
+   "sortSupportMsgs": {
+    "ok": 0,
+    "total": 3
+   },
+   "sortSupportThreads": {
+    "ok": 0,
+    "total": 3
+   },
+   "stripAuditMeta": {
+    "ok": 0,
+    "total": 3
+   },
+   "stripSupKey": {
+    "ok": 0,
+    "total": 3
+   },
+   "supCount": {
+    "ok": 0,
+    "total": 3
+   },
+   "supIls": {
+    "ok": 0,
+    "total": 3
+   },
+   "supUsd": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportMsgTime": {
+    "ok": 0,
+    "total": 3
+   },
+   "timeToMin": {
+    "ok": 0,
+    "total": 3
+   },
+   "waDigits": {
+    "ok": 0,
+    "total": 3
+   },
+   "waMeDigits": {
+    "ok": 1,
+    "total": 3
+   }
+  }
+ },
+ "count.by": {
+  "shape": "רשומות",
+  "pick": "countBy",
+  "file": "dart-maor/count-by.dart",
+  "score": 34.97,
+  "proven": true,
+  "candidates": 15,
+  "top3": [
+   "countBy:1/1✓:34.97",
+   "supportUnread:0/1:14.29",
+   "coursesOfTeacher:0/1:5.09"
+  ],
+  "proof": {
+   "countBy": {
+    "ok": 1,
+    "total": 1
+   },
+   "coursesOfTeacher": {
+    "ok": 0,
+    "total": 1
+   },
+   "sanitizeSupportText": {
+    "ok": 0,
+    "total": 1
+   },
+   "segulaReminders": {
+    "ok": 0,
+    "total": 1
+   },
+   "sheetSummary": {
+    "ok": 0,
+    "total": 1
+   },
+   "siteLangs": {
+    "ok": 0,
+    "total": 1
+   },
+   "supportPreview": {
+    "ok": 0,
+    "total": 1
+   },
+   "supportUnread": {
+    "ok": 0,
+    "total": 1
+   },
+   "teacherIdOf": {
+    "ok": 0,
+    "total": 1
+   },
+   "toCsv": {
+    "ok": 0,
+    "total": 1
+   },
+   "toTenantId": {
+    "ok": 0,
+    "total": 1
+   },
+   "undoLast": {
+    "ok": 0,
+    "total": 1
+   },
+   "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 1
+   },
+   "waitlistFor": {
+    "ok": 0,
+    "total": 1
+   },
+   "wheelIndexUnderPointer": {
+    "ok": 0,
+    "total": 1
+   }
+  }
+ },
+ "prefix.rule": {
+  "shape": "חיפוש",
+  "pick": "rulePrefix",
+  "file": "dart-maor/rule-prefix.dart",
+  "score": 26.96,
+  "proven": true,
+  "candidates": 20,
+  "top3": [
+   "rulePrefix:3/3✓:26.96",
+   "ruleContains:2/3:18.26",
+   "teacherIdOf:2/3:0"
+  ],
+  "proof": {
+   "coursesOfTeacher": {
+    "ok": 0,
+    "total": 3
+   },
+   "damerauLevenshtein": {
+    "ok": 1,
+    "total": 3
+   },
+   "enrollCount": {
+    "ok": 0,
+    "total": 3
+   },
+   "levenshtein": {
+    "ok": 1,
+    "total": 3
+   },
+   "minutesBetweenIso": {
+    "ok": 1,
+    "total": 3
+   },
+   "ruleContains": {
+    "ok": 2,
+    "total": 3
+   },
+   "rulePrefix": {
+    "ok": 3,
+    "total": 3
+   },
+   "sanitizeSupportText": {
+    "ok": 1,
+    "total": 3
+   },
+   "segulaReminders": {
+    "ok": 0,
+    "total": 3
+   },
+   "sheetSummary": {
+    "ok": 0,
+    "total": 3
+   },
+   "siteLangs": {
+    "ok": 1,
+    "total": 3
+   },
+   "supportPreview": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportUnread": {
+    "ok": 0,
+    "total": 3
+   },
+   "teacherIdOf": {
+    "ok": 2,
+    "total": 3
+   },
+   "toCsv": {
+    "ok": 0,
+    "total": 3
+   },
+   "toTenantId": {
+    "ok": 1,
+    "total": 3
+   },
+   "undoLast": {
+    "ok": 0,
+    "total": 3
+   },
+   "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 3
+   },
+   "waitlistFor": {
+    "ok": 0,
+    "total": 3
+   },
+   "wheelIndexUnderPointer": {
+    "ok": 1,
+    "total": 3
+   }
+  }
+ },
+ "money.fmt": {
+  "shape": "כסף",
+  "pick": "fMoney",
+  "file": "dart/f_money.dart",
+  "score": 2,
+  "proven": true,
+  "candidates": 19,
+  "top3": [
+   "fMoney:3/3✓:2",
+   "formatIsraeliPhone:1/3:1",
+   "pad2:1/3:1"
+  ],
+  "proof": {
+   "fMoney": {
+    "ok": 3,
+    "total": 3
+   },
+   "formatIsraeliPhone": {
+    "ok": 1,
+    "total": 3
+   },
+   "monthLabel": {
+    "ok": 0,
+    "total": 3
+   },
+   "pad2": {
+    "ok": 1,
+    "total": 3
+   },
+   "popCall": {
+    "ok": 0,
+    "total": 3
+   },
+   "safeHttpsUrl": {
+    "ok": 0,
+    "total": 3
+   },
+   "sessionsOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "setAllowedPurposes": {
+    "ok": 0,
+    "total": 3
+   },
+   "siteDonateUrl": {
+    "ok": 0,
+    "total": 3
+   },
+   "sortSupportMsgs": {
+    "ok": 0,
+    "total": 3
+   },
+   "sortSupportThreads": {
+    "ok": 0,
+    "total": 3
+   },
+   "stripAuditMeta": {
+    "ok": 0,
+    "total": 3
+   },
+   "stripSupKey": {
+    "ok": 0,
+    "total": 3
+   },
+   "supCount": {
+    "ok": 0,
+    "total": 3
+   },
+   "supIls": {
+    "ok": 0,
+    "total": 3
+   },
+   "supUsd": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportMsgTime": {
+    "ok": 0,
+    "total": 3
+   },
+   "timeToMin": {
+    "ok": 0,
+    "total": 3
+   },
+   "waDigits": {
+    "ok": 0,
+    "total": 3
+   }
+  }
+ }
+}

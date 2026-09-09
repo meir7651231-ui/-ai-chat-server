@@ -1,0 +1,310 @@
+{
+ "v": 1,
+ "ts": "2026-09-09T13:16:45.686Z",
+ "query": "minutes between iso דקות בין זמנים minutesBetweenIso",
+ "tokens": [
+  "minutes",
+  "between",
+  "iso",
+  "דקות",
+  "בין",
+  "זמנים"
+ ],
+ "oracle": {
+  "atomIndexSha": "1ce6e5f3574f13d02514b247e0c159eef7125cf5ce4046b642063f1e54e9bc2d",
+  "logicCensusSha": "00998cd2a1f9fbf248b6f37ba6f6ea32c3a30775d1814bb26768d4f15a5d6189",
+  "display": 1776,
+  "logic": 852
+ },
+ "candidates": [
+  {
+   "id": "minutesBetweenIso",
+   "layer": "logic",
+   "file": "dart-maor/minutes-between-iso.dart",
+   "score": 9,
+   "hits": [
+    "minutes",
+    "between",
+    "iso"
+   ]
+  },
+  {
+   "id": "addDaysIso",
+   "layer": "logic",
+   "file": "dart-maor/add-days-iso.dart",
+   "score": 3,
+   "hits": [
+    "iso"
+   ]
+  },
+  {
+   "id": "daysBetweenDst",
+   "layer": "logic",
+   "file": "dart/days_between_dst.dart",
+   "score": 3,
+   "hits": [
+    "between"
+   ]
+  },
+  {
+   "id": "excelSerialToIso",
+   "layer": "logic",
+   "file": "dart-maor/excel-serial-to-iso.dart",
+   "score": 3,
+   "hits": [
+    "iso"
+   ]
+  },
+  {
+   "id": "hebPartsOfIso",
+   "layer": "logic",
+   "file": "dart-maor/heb-parts-of-iso.dart",
+   "score": 3,
+   "hits": [
+    "iso"
+   ]
+  },
+  {
+   "id": "hebToIso",
+   "layer": "logic",
+   "file": "dart-maor/heb-to-iso.dart",
+   "score": 3,
+   "hits": [
+    "iso"
+   ]
+  },
+  {
+   "id": "isoDaysAgo",
+   "layer": "logic",
+   "file": "dart-maor/iso-days-ago.dart",
+   "score": 3,
+   "hits": [
+    "iso"
+   ]
+  },
+  {
+   "id": "isoLocal",
+   "layer": "logic",
+   "file": "dart-maor/iso-local.dart",
+   "score": 3,
+   "hits": [
+    "iso"
+   ]
+  },
+  {
+   "id": "isoToday",
+   "layer": "logic",
+   "file": "dart-maor/iso-today.dart",
+   "score": 3,
+   "hits": [
+    "iso"
+   ]
+  },
+  {
+   "id": "isoToHebParts",
+   "layer": "logic",
+   "file": "dart-maor/iso-to-heb-parts.dart",
+   "score": 3,
+   "hits": [
+    "iso"
+   ]
+  },
+  {
+   "id": "lastCollectionIso",
+   "layer": "logic",
+   "file": "dart-maor/last-collection-iso.dart",
+   "score": 3,
+   "hits": [
+    "iso"
+   ]
+  },
+  {
+   "id": "AnimatedToggle",
+   "layer": "display",
+   "file": "dart-ui-bs/animated_toggle.dart",
+   "score": 1,
+   "hits": [
+    "בין"
+   ]
+  },
+  {
+   "id": "AuroraField",
+   "layer": "display",
+   "file": "dart-ui-bs/aurora_field.dart",
+   "score": 1,
+   "hits": [
+    "בין"
+   ]
+  },
+  {
+   "id": "CaPill",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ca_pill.dart",
+   "score": 1,
+   "hits": [
+    "בין"
+   ]
+  },
+  {
+   "id": "CardDone",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/card_done.dart",
+   "score": 1,
+   "hits": [
+    "בין"
+   ]
+  },
+  {
+   "id": "CardTop",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/card_top.dart",
+   "score": 1,
+   "hits": [
+    "בין"
+   ]
+  },
+  {
+   "id": "CaSubTitle",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ca_sub_title.dart",
+   "score": 1,
+   "hits": [
+    "בין"
+   ]
+  },
+  {
+   "id": "Countdown",
+   "layer": "display",
+   "file": "dart-ui-bs/countdown_timer.dart",
+   "score": 1,
+   "hits": [
+    "דקות"
+   ]
+  },
+  {
+   "id": "FlipCard",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__lipskey_product_sheet/flip_card.dart",
+   "score": 1,
+   "hits": [
+    "בין"
+   ]
+  },
+  {
+   "id": "HubTile",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/hub_tile.dart",
+   "score": 1,
+   "hits": [
+    "בין"
+   ]
+  },
+  {
+   "id": "NotifSettingsSectionTile",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/notif_settings_section_tile.dart",
+   "score": 1,
+   "hits": [
+    "דקות"
+   ]
+  },
+  {
+   "id": "NotifSettingsSwitchRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/notif_settings_switch_row.dart",
+   "score": 1,
+   "hits": [
+    "דקות"
+   ]
+  },
+  {
+   "id": "QuickActionsSection",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/quick_actions_section.dart",
+   "score": 1,
+   "hits": [
+    "דקות"
+   ]
+  },
+  {
+   "id": "SiteHubCaCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/site_hub_ca_card.dart",
+   "score": 1,
+   "hits": [
+    "בין"
+   ]
+  },
+  {
+   "id": "SiteHubCaEmpty",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/site_hub_ca_empty.dart",
+   "score": 1,
+   "hits": [
+    "בין"
+   ]
+  },
+  {
+   "id": "SiteHubCaPrimary",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/site_hub_ca_primary.dart",
+   "score": 1,
+   "hits": [
+    "בין"
+   ]
+  },
+  {
+   "id": "SiteHubCardBtn",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/site_hub_card_btn.dart",
+   "score": 1,
+   "hits": [
+    "בין"
+   ]
+  },
+  {
+   "id": "SiteHubMdHead",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/site_hub_md_head.dart",
+   "score": 1,
+   "hits": [
+    "בין"
+   ]
+  },
+  {
+   "id": "SiteServerNote",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/site_server_note.dart",
+   "score": 1,
+   "hits": [
+    "בין"
+   ]
+  },
+  {
+   "id": "SnoozeSheet",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/snooze_sheet.dart",
+   "score": 1,
+   "hits": [
+    "דקות"
+   ]
+  }
+ ],
+ "strong": [
+  "minutesBetweenIso",
+  "addDaysIso",
+  "daysBetweenDst",
+  "excelSerialToIso",
+  "hebPartsOfIso",
+  "hebToIso",
+  "isoDaysAgo",
+  "isoLocal",
+  "isoToday",
+  "isoToHebParts",
+  "lastCollectionIso"
+ ],
+ "creates": "new/dart-maor/minutes-between-iso.dart",
+ "chosen": "none",
+ "why": "daysBetweenDst/cockpitDaysSince: ימים בין תאריכים, לא דקות; timeToMin/minToHM: HH:MM בתוך יום, לא בין שני זמנים; addDaysIso/isoDaysAgo/isoLocal/isoToday/hebToIso/isoToHebParts/hebPartsOfIso/excelSerialToIso/lastCollectionIso: המרות-תאריך, לא הפרש-דקות; planAddName: שם-תוכנית, לא זמן; minutesBetweenIso הוא האטום-הנוצר. הוכחה-בריצה (behavior-plan time.minutesBetween): 16 מועמדים בחתימה (String,String)→int — אף אחד לא עבר (levenshtein 0/2 · wheelIndexUnderPointer 0/2)",
+ "sig": "13522ab5adc9fbfe0fee35b33cc9c42822fa840123e419e7e3202bb09bf3d6bb"
+}

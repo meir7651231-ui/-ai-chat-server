@@ -1,0 +1,409 @@
+{
+ "v": 1,
+ "ts": "2026-09-09T13:16:45.583Z",
+ "query": "add days iso תאריך הוספת ימים addDaysIso",
+ "tokens": [
+  "add",
+  "days",
+  "iso",
+  "תאריך",
+  "וספת",
+  "ימים"
+ ],
+ "oracle": {
+  "atomIndexSha": "1ce6e5f3574f13d02514b247e0c159eef7125cf5ce4046b642063f1e54e9bc2d",
+  "logicCensusSha": "00998cd2a1f9fbf248b6f37ba6f6ea32c3a30775d1814bb26768d4f15a5d6189",
+  "display": 1776,
+  "logic": 852
+ },
+ "candidates": [
+  {
+   "id": "addDaysIso",
+   "layer": "logic",
+   "file": "dart-maor/add-days-iso.dart",
+   "score": 9,
+   "hits": [
+    "add",
+    "days",
+    "iso"
+   ]
+  },
+  {
+   "id": "isoDaysAgo",
+   "layer": "logic",
+   "file": "dart-maor/iso-days-ago.dart",
+   "score": 6,
+   "hits": [
+    "days",
+    "iso"
+   ]
+  },
+  {
+   "id": "AddTradeButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/add_trade_button.dart",
+   "score": 3,
+   "hits": [
+    "add"
+   ]
+  },
+  {
+   "id": "canAddPhoto",
+   "layer": "logic",
+   "file": "dart-maor/can-add-photo.dart",
+   "score": 3,
+   "hits": [
+    "add"
+   ]
+  },
+  {
+   "id": "cockpitDaysSince",
+   "layer": "logic",
+   "file": "dart-maor/cockpit-days-since.dart",
+   "score": 3,
+   "hits": [
+    "days"
+   ]
+  },
+  {
+   "id": "daysBetweenDst",
+   "layer": "logic",
+   "file": "dart/days_between_dst.dart",
+   "score": 3,
+   "hits": [
+    "days"
+   ]
+  },
+  {
+   "id": "DsQuickAdd",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds.dart",
+   "score": 3,
+   "hits": [
+    "add"
+   ]
+  },
+  {
+   "id": "excelSerialToIso",
+   "layer": "logic",
+   "file": "dart-maor/excel-serial-to-iso.dart",
+   "score": 3,
+   "hits": [
+    "iso"
+   ]
+  },
+  {
+   "id": "ForgeAddTradeButton",
+   "layer": "display",
+   "file": "dart-forge-bs/action/add_trade_button.dart",
+   "score": 3,
+   "hits": [
+    "add"
+   ]
+  },
+  {
+   "id": "ForgeQuickAddForm",
+   "layer": "display",
+   "file": "dart-forge-bs/composite/quick_add_form.dart",
+   "score": 3,
+   "hits": [
+    "add"
+   ]
+  },
+  {
+   "id": "hebPartsOfIso",
+   "layer": "logic",
+   "file": "dart-maor/heb-parts-of-iso.dart",
+   "score": 3,
+   "hits": [
+    "iso"
+   ]
+  },
+  {
+   "id": "hebToIso",
+   "layer": "logic",
+   "file": "dart-maor/heb-to-iso.dart",
+   "score": 3,
+   "hits": [
+    "iso"
+   ]
+  },
+  {
+   "id": "isoLocal",
+   "layer": "logic",
+   "file": "dart-maor/iso-local.dart",
+   "score": 3,
+   "hits": [
+    "iso"
+   ]
+  },
+  {
+   "id": "isoToday",
+   "layer": "logic",
+   "file": "dart-maor/iso-today.dart",
+   "score": 3,
+   "hits": [
+    "iso"
+   ]
+  },
+  {
+   "id": "isoToHebParts",
+   "layer": "logic",
+   "file": "dart-maor/iso-to-heb-parts.dart",
+   "score": 3,
+   "hits": [
+    "iso"
+   ]
+  },
+  {
+   "id": "lastCollectionIso",
+   "layer": "logic",
+   "file": "dart-maor/last-collection-iso.dart",
+   "score": 3,
+   "hits": [
+    "iso"
+   ]
+  },
+  {
+   "id": "minutesBetweenIso",
+   "layer": "logic",
+   "file": "dart-maor/minutes-between-iso.dart",
+   "score": 3,
+   "hits": [
+    "iso"
+   ]
+  },
+  {
+   "id": "planAddName",
+   "layer": "logic",
+   "file": "dart-maor/plan-add-name.dart",
+   "score": 3,
+   "hits": [
+    "add"
+   ]
+  },
+  {
+   "id": "DatePills",
+   "layer": "display",
+   "file": "dart-ui-bs/date_pills.dart",
+   "score": 2,
+   "hits": [
+    "תאריך",
+    "ימים"
+   ]
+  },
+  {
+   "id": "AiBar",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_bar.dart",
+   "score": 1,
+   "hits": [
+    "ימים"
+   ]
+  },
+  {
+   "id": "AiCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_card.dart",
+   "score": 1,
+   "hits": [
+    "ימים"
+   ]
+  },
+  {
+   "id": "AiCardBtn",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_card_btn.dart",
+   "score": 1,
+   "hits": [
+    "ימים"
+   ]
+  },
+  {
+   "id": "AiCardSub",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_card_sub.dart",
+   "score": 1,
+   "hits": [
+    "ימים"
+   ]
+  },
+  {
+   "id": "AiCardTop",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_card_top.dart",
+   "score": 1,
+   "hits": [
+    "ימים"
+   ]
+  },
+  {
+   "id": "AiFinTile",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_fin_tile.dart",
+   "score": 1,
+   "hits": [
+    "ימים"
+   ]
+  },
+  {
+   "id": "AiMdHead",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_md_head.dart",
+   "score": 1,
+   "hits": [
+    "ימים"
+   ]
+  },
+  {
+   "id": "AiPrimary",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_primary.dart",
+   "score": 1,
+   "hits": [
+    "ימים"
+   ]
+  },
+  {
+   "id": "AiServerNote",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/ai_server_note.dart",
+   "score": 1,
+   "hits": [
+    "ימים"
+   ]
+  },
+  {
+   "id": "CourierAttendanceSendReportButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/courier_attendance_send_report_button.dart",
+   "score": 1,
+   "hits": [
+    "ימים"
+   ]
+  },
+  {
+   "id": "CourierAttendanceTableRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/courier_attendance_table_row.dart",
+   "score": 1,
+   "hits": [
+    "ימים"
+   ]
+  },
+  {
+   "id": "CourierFormsPillButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/courier_forms_pill_button.dart",
+   "score": 1,
+   "hits": [
+    "תאריך"
+   ]
+  },
+  {
+   "id": "DsCalendar",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_calendar.dart",
+   "score": 1,
+   "hits": [
+    "תאריך"
+   ]
+  },
+  {
+   "id": "DsDateField",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_date_field.dart",
+   "score": 1,
+   "hits": [
+    "תאריך"
+   ]
+  },
+  {
+   "id": "DsMonthOffset",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_calendar.dart",
+   "score": 1,
+   "hits": [
+    "תאריך"
+   ]
+  },
+  {
+   "id": "EquipmentButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/equipment_button.dart",
+   "score": 1,
+   "hits": [
+    "ימים"
+   ]
+  },
+  {
+   "id": "FormCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/form_card.dart",
+   "score": 1,
+   "hits": [
+    "תאריך"
+   ]
+  },
+  {
+   "id": "KpiBox",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/kpi_box.dart",
+   "score": 1,
+   "hits": [
+    "ימים"
+   ]
+  },
+  {
+   "id": "KvLine",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/kv_line.dart",
+   "score": 1,
+   "hits": [
+    "ימים"
+   ]
+  },
+  {
+   "id": "KvRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/kv_row.dart",
+   "score": 1,
+   "hits": [
+    "ימים"
+   ]
+  },
+  {
+   "id": "LocationButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/location_button.dart",
+   "score": 1,
+   "hits": [
+    "ימים"
+   ]
+  }
+ ],
+ "strong": [
+  "addDaysIso",
+  "isoDaysAgo",
+  "AddTradeButton",
+  "canAddPhoto",
+  "cockpitDaysSince",
+  "daysBetweenDst",
+  "DsQuickAdd",
+  "excelSerialToIso",
+  "ForgeAddTradeButton",
+  "ForgeQuickAddForm",
+  "hebPartsOfIso",
+  "hebToIso",
+  "isoLocal",
+  "isoToday",
+  "isoToHebParts",
+  "lastCollectionIso",
+  "minutesBetweenIso",
+  "planAddName"
+ ],
+ "creates": "new/dart-maor/add-days-iso.dart",
+ "chosen": "none",
+ "why": "isoDaysAgo: רק מהיום-עכשיו אחורה (DateTime.now בפנים, לא מקבל תאריך); cockpitDaysSince/daysBetweenDst/minutesBetweenIso: הפרש-בין, לא הוספה; excelSerialToIso/hebToIso/isoLocal/isoToday/isoToHebParts/hebPartsOfIso/lastCollectionIso: המרות-תאריך אחרות, לא הוספת-ימים; canAddPhoto/AddTradeButton/ForgeAddTradeButton/DsQuickAdd/ForgeQuickAddForm/planAddName: 'add' של מסך/שם, לא תאריך; addDaysIso הוא האטום-הנוצר. הוכחה-בריצה (behavior-plan iso.addDays): 18 מועמדים בחתימה (String,int)→String — אף אחד לא עבר גלגול-חודש (segulaReminders 0/3 · envPath 0/3)",
+ "sig": "abe306c09729c11ec79f612bbfeec078021c5089638a95d77e75f3bdac9c49c8"
+}
