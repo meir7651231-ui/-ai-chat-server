@@ -210,6 +210,8 @@ if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganOffsetsLa
 // גל ב׳-מג · תאריכים במילים בתיק (_fmtDate) ובטופס-האישור
 for (const m of mods.filter((x) => x.root.fields.some((f) => f.type === 'date'))) { const rp = rd(path.join(GEN, `gen_${m.rootPage.slug}.dart`)); if (!/String _fmtDate\(String s\)/.test(rp) || !/_fmtDate\(r0\[/.test(rp)) { fails.push(`${m.ns}: תיק עם ISO`); break; } }
 { const cf = rd(path.join(GEN, 'gen_balagan_confirm.dart')); if (!/balaganDayLabel\(d, DateTime\.now\(\)\)/.test(cf)) fails.push('טופס-האישור בלי תאריך-במילים'); }
+// גל ב׳-מד · מסך-יום: תאריך לבד בשורה-המהירה ⇒ BalaganDay (שורות עם פעולות · הקשה ⇒ תיק · ₪)
+if (!/class BalaganDay extends StatelessWidget/.test(home) || !/BalaganDay\(delta: /.test(home) || !/dd\.first\.start == 0 && dd\.first\.end == s\.trim\(\)\.length/.test(home)) fails.push('«היום» בלי מסך-יום');
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);
