@@ -253,6 +253,11 @@ for (const m of mods.filter((x) => x.root.fields.some((f) => f.type === 'date'))
 // גלים ב׳-עח..פא · «שמור ועוד אחד» · מחר לפי שעה · «מה עשיתי אתמול?» · יום-שעבר = היומן
 { const cf = rd(path.join(GEN, 'gen_balagan_confirm.dart')); if (!/_save\(\{bool again = false\}\)/.test(cf) || !/_save\(again: true\)/.test(cf)) fails.push('טופס בלי «שמור ועוד אחד»'); }
 if (!/const BalaganDay\(delta: -1\)/.test(home) || !/if \(delta < 0\) for \(final past in/.test(home)) fails.push('«היום»: בלי אתמול / יומן-של-יום');
+// גלים ב׳-פב..פה · «מה מחר?» בערב · לאחרונה-עם-האדם · שיתוף-תיק גם ללוח · «נשמר לאחרונה» ב«מה קרה?»
+if (!/hint: evening \? /.test(home)) fails.push('«היום»: שורה-מהירה בלי מצב-ערב');
+if (!/p\.rids\.contains\(e\['rid'\]/.test(topics)) fails.push('כרטיס-אדם בלי לאחרונה');
+if (!/e\['kind'\] == 'add' && e\['undone'\] != '1'/.test(ask)) fails.push('«מה קרה?» בלי נשמר-לאחרונה');
+for (const m of mods) { const rp = rd(path.join(GEN, `gen_${m.rootPage.slug}.dart`)); if (/wa\.me\/\?text=/.test(rp) && !/Clipboard\.setData\(ClipboardData\(text: lines\.join/.test(rp)) { fails.push(`${m.ns}: שיתוף בלי לוח`); break; } }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);

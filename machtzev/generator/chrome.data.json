@@ -330,5 +330,8 @@
  "dupLabel": "עוד אחד כזה",
  "saveAgain": "שמור ועוד אחד",
  "yesterdayAsk": "מה עשיתי אתמול?",
- "dayLog": "מה קרה ביום הזה"
+ "dayLog": "מה קרה ביום הזה",
+ "homeQuickEvening": "מה מחר? כתוב שורה ומקש Enter",
+ "personRecent": "לאחרונה איתו",
+ "askRecent": "נשמר לאחרונה"
 }
