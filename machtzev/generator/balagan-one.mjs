@@ -173,7 +173,7 @@ if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganTimeChips
 if (!/actions: \(x\[1\] as DsTodayItem\)\.actions, onAct: \(x\[1\] as DsTodayItem\)\.act\)/.test(home)) fails.push('שורות-השבוע בלי פעולות');
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganRepeatChips\(\)/.test(ft)) fails.push('בדיקת צ׳יפי-חזרה חסרה'); }
 // גל ב׳-לה · כרטיס-אדם ב«נושאים» (balaganPerson · התקשר/וואטסאפ) · כסף בכותרות מחר/השבוע
-if (!/BalaganPerson\? balaganPerson\(String name\)/.test(topics) || !/wa\.me\/' \+ balaganIntl\(ph\)/.test(topics) || !/for \(final p in \[balaganPerson\(_q\)\]\) if \(p != null\) DsSection/.test(topics)) fails.push('«נושאים» בלי כרטיס-אדם');
+if (!/BalaganPerson\? balaganPerson\(String name\)/.test(topics) || !/wa\.me\/' \+ balaganIntl\(ph\)/.test(topics) || !/for \(final p in \[balaganPerson(?:For)?\(_q\)\]\) if \(p != null\) DsSection/.test(topics)) fails.push('«נושאים» בלי כרטיס-אדם');
 if (!/final moneyWk = balaganMoney\(\[for \(final x in soon\) x\[1\] as DsTodayItem\]\)/.test(home) || !/balaganFmtMoney\(moneyTm\)\) : ''\), details:/.test(home)) fails.push('כותרות מחר/השבוע בלי כסף');
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganPerson\('יעל ברק'\)/.test(ft)) fails.push('בדיקת כרטיס-אדם חסרה'); }
 // גל ב׳-לו · שם-אדם בשורה-המהירה ⇒ הכרטיס · תזכורת-גיבוי (מעולם/30 יום, ≥10 תיקים) · חותמת-גיבוי ב«חיבורים»
@@ -186,6 +186,10 @@ for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`));
 if (!/final groupRem = rems\.length > 3;/.test(home) || !/rem: !groupRem\)/.test(home) || !/prev: remKeys\.skip\(1\)\.join\(','\)/.test(home)) fails.push('«היום» בלי תזכורות-מרוכזות');
 { const st = rd(path.join(R.ROOT, 'new/dart-ui-bs/ds/ds_store.dart')); if (!/for \(final k in \(e\['prev'\] \?\? ''\)\.split\(','\)\) \{ if \(k\.isNotEmpty\) _decided\.remove\(k\); \}/.test(st)) fails.push('AppStore בלי החזר-מרוכז'); }
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/\.remPending\(today\)/.test(ft)) fails.push('בדיקת תזכורות-מרוכזות חסרה'); }
+// גל ב׳-לח · «התקשר» על שורת-היום (תיק עם טלפון) · כרטיס-אדם מחיפוש-חלקי
+for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/static const List<String> _phones = \[/.test(h) || !/if \(phone\.isNotEmpty\) /.test(h) || !/launchUrl\(Uri\.parse\('tel:' \+ ph\)/.test(h) || !/rep, ph\)\); continue; \}/.test(h)) { fails.push(`${m.ns}: בלי «התקשר» על שורת-היום`); break; } }
+if (!/BalaganPerson\? balaganPersonFor\(String q\)/.test(topics) || !/for \(final p in \[balaganPersonFor\(_q\)\]\)/.test(topics)) fails.push('«נושאים» בלי כרטיס-אדם מחיפוש-חלקי');
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganPersonFor\('שגב'\)/.test(ft)) fails.push('בדיקת חיפוש-חלקי חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);

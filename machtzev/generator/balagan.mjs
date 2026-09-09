@@ -636,6 +636,14 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
     expect(keys.every((k) => appStore.decision(k).isEmpty), isTrue);
     expect(ids.skip(1).every((id) => ${baseTodayCls}.remPending(today).any((x) => x.rid == id)), isTrue);
   });
+  test('כרטיס-אדם מחיפוש-חלקי: יחיד-שמכיל ⇒ הכרטיס · שניים ⇒ אין · קצר ⇒ אין', () {
+    final m = kBalaganModules.firstWhere((x) => x.personFields.isNotEmpty);
+    appStore.add(m.rootSlug, {m.personFields.first: 'נועה שגב'}); appStore.add(m.rootSlug, {m.personFields.first: 'נועה לב'});
+    expect(balaganPersonFor('שגב')!.name, 'נועה שגב');
+    expect(balaganPersonFor('נועה'), isNull);
+    expect(balaganPersonFor('ש'), isNull);
+    expect(balaganPersonFor(' נועה לב ')!.files, 1);
+  });
   test('פיצול שורה לכמה רגעים', () {
     expect(balaganSplit('שילמתי ארנונה. מחר תור לרופא ב-9:00'), ['שילמתי ארנונה', 'מחר תור לרופא ב-9:00']);
     expect(balaganSplit('מסרתי מפתח ב-1.8.2026 והמשכיר מקזז 6,200'), ['מסרתי מפתח ב-1.8.2026 והמשכיר מקזז 6,200']);
@@ -1185,6 +1193,9 @@ BalaganPerson? balaganPerson(String name) {
   return files == 0 ? null : BalaganPerson(name.trim(), files, open, money, phones.toList(), last);
 }
 /// טלפון ⇒ בינלאומי ל-wa.me (0… ⇒ 972…; + נופל) — אותו כלל של כרטיס-התיק
+/// ב׳-לח · כרטיס-אדם מחיפוש-חלקי: «שגב» ⇒ נועה שגב אם היא היחידה שמכילה; שניים ⇒ אין כרטיס (לא מנחשים)
+List<String> balaganPersonNames() { final out = <String>{}; for (final m in kBalaganModules) { for (final r in appStore.records(m.rootSlug)) { for (final f in m.personFields) { final v = (r[f] ?? '').trim(); if (v.length >= 2) out.add(v); } } } return out.toList(); }
+BalaganPerson? balaganPersonFor(String q) { final t = q.trim().toLowerCase(); if (t.length < 2) return null; final exact = balaganPerson(t); if (exact != null) return exact; final c = balaganPersonNames().where((n) => n.toLowerCase().contains(t)).toList(); return c.length == 1 ? balaganPerson(c.first) : null; }
 String balaganIntl(String ph) { final d = ph.replaceAll(RegExp(r'[^0-9+]'), ''); return d.startsWith('+') ? d.substring(1) : (d.startsWith('0') ? '972' + d.substring(1) : d); }
 
 class ${cls} extends StatefulWidget {
@@ -1209,7 +1220,7 @@ ${mods.map((m) => `      case '${m.root.slug}': return ${m.rootPage.cls}(id: id)
     final hits = appStore.search(_q);
     return DsScaffold(title: ${k(L.topicsTitle)}, subtitle: ${k(L.topicsSub)}, icon: ${k('')}, children: [
     DsField(label: ${k(L.searchLabel)}, hint: ${k(L.searchHint)}, value: _q, onChanged: (v) => setState(() => _q = v)),
-    for (final p in [balaganPerson(_q)]) if (p != null) DsSection(title: p.name, children: [
+    for (final p in [balaganPersonFor(_q)]) if (p != null) DsSection(title: p.name, children: [
       Text(${k(L.personLine)}.replaceAll('{n}', p.files.toString()).replaceAll('{open}', p.open.toString()) + (p.money > 0 ? ' · ' + ${k(L.personMoney)}.replaceAll('{n}', balaganFmtMoney(p.money)) : '') + (p.last.isNotEmpty ? ' · ' + ${k(L.personLast)}.replaceAll('{d}', p.last) : ''), style: TextStyle(color: DsLook.of(context).muted, fontSize: 13)),
       if (p.phones.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 8), child: Wrap(spacing: 8, runSpacing: 8, children: [for (final ph in p.phones.take(2)) ...[DsChipButton(label: ${k(L.callLabel)} + ' ' + ph, onTap: () => launchUrl(Uri.parse('tel:' + ph), mode: LaunchMode.externalApplication)), DsChipButton(label: ${k(L.waLabel)}, onTap: () => launchUrl(Uri.parse('https://wa.me/' + balaganIntl(ph)), mode: LaunchMode.externalApplication))]])),
     ]),   // ב׳-לה · כרטיס-אדם: השם בחיפוש = אדם מהתיקים ⇒ סיכום + התקשר/וואטסאפ מעל התוצאות
