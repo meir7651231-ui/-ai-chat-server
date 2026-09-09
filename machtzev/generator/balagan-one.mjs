@@ -172,6 +172,10 @@ if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganTimeChips
 { const cf = rd(path.join(GEN, 'gen_balagan_confirm.dart')); if (!/balaganRepeat\(c\)\.take\(1\)/.test(cf) || !/_v\['__repeat'\] = c\[1\]/.test(cf) || !/balaganRepeatLabel\(_v\['__repeat'\]!\)/.test(cf)) fails.push('טופס-האישור בלי צ׳יפי-חזרה'); }
 if (!/actions: \(x\[1\] as DsTodayItem\)\.actions, onAct: \(x\[1\] as DsTodayItem\)\.act\)/.test(home)) fails.push('שורות-השבוע בלי פעולות');
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganRepeatChips\(\)/.test(ft)) fails.push('בדיקת צ׳יפי-חזרה חסרה'); }
+// גל ב׳-לה · כרטיס-אדם ב«נושאים» (balaganPerson · התקשר/וואטסאפ) · כסף בכותרות מחר/השבוע
+if (!/BalaganPerson\? balaganPerson\(String name\)/.test(topics) || !/wa\.me\/' \+ balaganIntl\(ph\)/.test(topics) || !/for \(final p in \[balaganPerson\(_q\)\]\) if \(p != null\) DsSection/.test(topics)) fails.push('«נושאים» בלי כרטיס-אדם');
+if (!/final moneyWk = balaganMoney\(\[for \(final x in soon\) x\[1\] as DsTodayItem\]\)/.test(home) || !/balaganFmtMoney\(moneyTm\)\) : ''\), details:/.test(home)) fails.push('כותרות מחר/השבוע בלי כסף');
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganPerson\('יעל ברק'\)/.test(ft)) fails.push('בדיקת כרטיס-אדם חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);
