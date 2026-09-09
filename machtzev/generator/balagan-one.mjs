@@ -161,6 +161,10 @@ if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/\.stale\(today\)
 // גל ב׳-לא · צ׳יפי-מועד בטופס-האישור: תווית ⇒ תאריך דרך balaganDates · המועד תמיד בין השורות · בדיקה
 { const cf = rd(path.join(GEN, 'gen_balagan_confirm.dart')); if (!/List<List<String>> balaganDateChips\(DateTime today\)/.test(cf) || !/balaganDates\(c, today\)\.take\(1\)/.test(cf) || !/setState\(\(\) => _v\[dateF\] = c\[1\]\)/.test(cf) || !/shown\.add\(m\.fields\.firstWhere\(\(f\) => f\.label == dateF\)\)/.test(cf)) fails.push('טופס-האישור בלי צ׳יפי-מועד'); }
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganDateChips\(today\)/.test(ft)) fails.push('בדיקת צ׳יפי-מועד חסרה'); }
+// גל ב׳-לב · «התעלם» עם החזר: שלוש ההתעלמויות (שורה · בלי-תאריך · נשכחים) נרשמות ביומן עם מפתח-ההכרעה
+for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/field: 'ign:\$rid:\$field'\)/.test(h) || !/field: 'undated:\$rid'\)/.test(h) || !/field: 'stale:\$rid'\)/.test(h)) { fails.push(`${m.ns}: «התעלם» בלי החזר`); break; } }
+if (!/lastAct\['kind'\] == 'decide'\)/.test(home)) fails.push('«בוצע · החזר» בלי decide');
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/'ign:' \+ id \+ ':' \+ F/.test(ft)) fails.push('בדיקת «התעלם»-עם-החזר חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);

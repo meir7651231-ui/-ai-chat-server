@@ -203,7 +203,7 @@ class ${cls}Today {
       final dates = tm.isEmpty ? d + '/' + d : () { final a0 = DateTime(due.year, due.month, due.day, int.parse(tm.substring(0, 2)), int.parse(tm.substring(3, 5))); return z(a0) + '/' + z(a0.add(Duration(minutes: block))); }();
       launchUrl(Uri.parse('https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + Uri.encodeComponent(field + ' · ' + appStore.displayOf('${root.slug}', rid)) + '&dates=' + dates), mode: LaunchMode.externalApplication);
     }
-    else { appStore.decide('ign:\$rid:\$field', 'no'); }
+    else { appStore.decide('ign:\$rid:\$field', 'no'); appStore.logAction('decide', ${k(L.ignoredLog)}.replaceAll('{what}', field + ' · ' + appStore.displayOf('${root.slug}', rid)), entity: '${root.slug}', rid: rid, field: 'ign:\$rid:\$field'); }   /* ב׳-לב · «התעלם» נרשם ביומן ⇒ החזר (kind=decide: field = מפתח-ההכרעה) — שום דבר לא בלתי-הפיך */
   }
 
   // P3 · נגזרות-היום: לכל רשומה פתוחה × שדה-תאריך ⇒ באיחור (D < היום) · תזכורת (D − offset == היום/מחר, רק כשאושרה)
@@ -243,7 +243,7 @@ class ${cls}Today {
   }
   static void _setDate(String rid, String field, DateTime today, List<String> acts, int i) {
     final a = acts[i.clamp(0, acts.length - 1)];
-    if (a == ${k(L.actIgnore)}) { appStore.decide('undated:\$rid', 'no'); return; }
+    if (a == ${k(L.actIgnore)}) { appStore.decide('undated:\$rid', 'no'); appStore.logAction('decide', ${k(L.ignoredLog)}.replaceAll('{what}', appStore.displayOf('${root.slug}', rid)), entity: '${root.slug}', rid: rid, field: 'undated:\$rid'); return; }
     final r = appStore.byId('${root.slug}', rid); if (r == null) return;
     final prev = r[field] ?? '';
     appStore.update('${root.slug}', rid, {field: _iso(_shift(today.add(Duration(days: a == ${k(L.actSetWeek)} ? 7 : 1)), false))});   /* «קבע» לא נוחת בשבת */
@@ -278,7 +278,7 @@ class ${cls}Today {
     final r = appStore.byId('${root.slug}', rid); if (r == null) return;
     if (a == ${k(L.actSetTomorrow)}) { final f = _dates.firstWhere((x) => x.hard, orElse: () => _dates.first); appStore.decide('ign:\$rid:\${f.label}', ''); appStore.decide('undated:\$rid', ''); _setDate(rid, f.label, today, [a], 0); return; }   /* המועד החדש חוזר ל«היום» — ההתעלמות הישנה נמחקת */
     ${lastStage >= 0 ? `if (a == ${k(L.closeLabel)}) { final prev = r[AppStore.stageKey] ?? '0'; appStore.update('${root.slug}', rid, {AppStore.stageKey: '${lastStage}'}); appStore.logAction('auto', ${k(L.closeLog)}.replaceAll('{who}', appStore.displayOf('${root.slug}', rid)), entity: '${root.slug}', rid: rid, field: AppStore.stageKey, prev: prev); return; }` : ''}
-    appStore.decide('stale:\$rid', 'no');
+    appStore.decide('stale:\$rid', 'no'); appStore.logAction('decide', ${k(L.ignoredLog)}.replaceAll('{what}', appStore.displayOf('${root.slug}', rid)), entity: '${root.slug}', rid: rid, field: 'stale:\$rid');
   }
 
   // P11/P13 · הצעות: תזכורת לכל תאריך שטרם הוכרע · צעד-הבא בשלב-האחרון (P14) · תזכורת-אחרי-שליחה (P12) — הכל עם קטע-המקור

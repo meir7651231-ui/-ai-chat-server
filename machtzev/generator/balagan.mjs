@@ -581,6 +581,16 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
     expect(c.length, 4);
     expect(c.map((x) => x[1]).toList(), ['2026-09-08', '2026-09-09', '2026-09-13', '2026-09-15']);
   });
+  test('«התעלם» עם החזר: שורת-באיחור נעלמת, נרשמת ביומן, והחזר מחזיר אותה', () {
+    const S = '${baseMod.root.slug}'; const F = ${dq(baseMod.root.fields.find((f) => f.type === 'date').label)};
+    final id = appStore.add(S, {${dq(baseMod.root.descField || baseMod.root.fields[0].label)}: 'להתעלם', F: '2026-09-01'});
+    final it = ${baseTodayCls}.items(today, dayDelta: 0).firstWhere((x) => x.rid == id);
+    expect(it.overdue, isTrue); it.act(it.actions.length - 1);
+    expect(${baseTodayCls}.items(today, dayDelta: 0).any((x) => x.rid == id), isFalse);
+    expect(appStore.log.first['kind'], 'decide'); expect(appStore.log.first['field'], 'ign:' + id + ':' + F);
+    expect(appStore.undo(appStore.log.first['id']!), isTrue);
+    expect(${baseTodayCls}.items(today, dayDelta: 0).any((x) => x.rid == id), isTrue);
+  });
   test('פיצול שורה לכמה רגעים', () {
     expect(balaganSplit('שילמתי ארנונה. מחר תור לרופא ב-9:00'), ['שילמתי ארנונה', 'מחר תור לרופא ב-9:00']);
     expect(balaganSplit('מסרתי מפתח ב-1.8.2026 והמשכיר מקזז 6,200'), ['מסרתי מפתח ב-1.8.2026 והמשכיר מקזז 6,200']);
@@ -795,7 +805,7 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
     // הפעולה האחרונה (עד 90 שניות) עם «החזר» — «סיים» מעלים שורה, וההחזר צריך להיות איפה שהעין
     final lastAct = appStore.log.isNotEmpty ? appStore.log.first : null;
     final lastAt = lastAct == null ? null : DateTime.tryParse(lastAct['at'] ?? '');
-    final showUndo = lastAct != null && lastAt != null && lastAct['undone'] != '1' && DateTime.now().difference(lastAt).inSeconds <= 90 && (lastAct['kind'] == 'done' || lastAct['kind'] == 'auto' || lastAct['kind'] == 'add' || lastAct['kind'] == 'merge' || lastAct['kind'] == 'del');
+    final showUndo = lastAct != null && lastAt != null && lastAct['undone'] != '1' && DateTime.now().difference(lastAt).inSeconds <= 90 && (lastAct['kind'] == 'done' || lastAct['kind'] == 'auto' || lastAct['kind'] == 'add' || lastAct['kind'] == 'merge' || lastAct['kind'] == 'del' || lastAct['kind'] == 'decide');
     final hardToday = todayItems.where((x) => x.hard && x.due == today).length;
     final plan = _plan(today, overdue, todayItems);
     WidgetsBinding.instance.addPostFrameCallback((_) { _digest(lead, hardToday); });
