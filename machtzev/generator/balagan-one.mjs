@@ -143,6 +143,10 @@ if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/logAction\('del'
 // גל ב׳-כו · «אנשים» ב«נושאים» · «סגור תיק» בתיק עם שלבים
 { const topics2 = rd(path.join(GEN, 'gen_balagan_topics.dart')); if (!/m\.personFields/.test(topics2) || !/peopleTitle|אנשים/.test(topics2 + rd(path.join(R.dataOutDir(), 'gen_balagan_topics_content.dart')))) fails.push('«נושאים» בלי «אנשים»'); }
 for (const m of mods.filter((x) => x.root.stages && x.root.stages.length)) { const rp = rd(path.join(GEN, `gen_${m.rootPage.slug}.dart`)); if (!/AppStore\.stageKey: '\d+'/.test(rp) || !/field: AppStore\.stageKey, prev: prev/.test(rp)) { fails.push(`${m.ns}: תיק-עם-שלבים בלי «סגור תיק»-עם-החזר`); break; } }
+// גל ב׳-כז · «דחה לשבוע» בבאיחור · שורות-מחר עם פעולות · DsActionRow: >3 פעולות בשורה שנייה
+for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/Duration\(days: 7\)\), false\)/.test(h)) { fails.push(`${m.ns}: בלי «דחה לשבוע»`); break; } }
+if (!/for \(final it in tomorrow\) DsActionRow\(title: it\.title, [^\n]*?actions: it\.actions, onAct: it\.act\)/.test(home)) fails.push('שורות-מחר בלי פעולות');
+{ const ds = rd(path.join(R.ROOT, 'new/dart-ui-bs/ds/ds.dart')); if (!/if \(actions\.length > 3\) Padding/.test(ds)) fails.push('DsActionRow בלי שורה-שנייה ל->3 פעולות'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);

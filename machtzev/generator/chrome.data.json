@@ -282,5 +282,6 @@
  "peopleTitle": "אנשים",
  "peopleSub": "{n} תיקים",
  "closeLabel": "סגור תיק",
- "closeLog": "✓ נסגר: {who}"
+ "closeLog": "✓ נסגר: {who}",
+ "actSnoozeWeek": "דחה לשבוע"
 }
