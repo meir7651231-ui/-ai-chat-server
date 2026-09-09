@@ -176,6 +176,11 @@ if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganRepeatChi
 if (!/BalaganPerson\? balaganPerson\(String name\)/.test(topics) || !/wa\.me\/' \+ balaganIntl\(ph\)/.test(topics) || !/for \(final p in \[balaganPerson\(_q\)\]\) if \(p != null\) DsSection/.test(topics)) fails.push('«נושאים» בלי כרטיס-אדם');
 if (!/final moneyWk = balaganMoney\(\[for \(final x in soon\) x\[1\] as DsTodayItem\]\)/.test(home) || !/balaganFmtMoney\(moneyTm\)\) : ''\), details:/.test(home)) fails.push('כותרות מחר/השבוע בלי כסף');
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganPerson\('יעל ברק'\)/.test(ft)) fails.push('בדיקת כרטיס-אדם חסרה'); }
+// גל ב׳-לו · שם-אדם בשורה-המהירה ⇒ הכרטיס · תזכורת-גיבוי (מעולם/30 יום, ≥10 תיקים) · חותמת-גיבוי ב«חיבורים»
+if (!/bool balaganBackupDue\(int records, int age\)/.test(home) || !/balaganPerson\(s\) != null/.test(home) || !/initialQuery: s\.trim\(\)/.test(home) || !/setSetting\('backupAt', _iso\(today\)\)/.test(home)) fails.push('«היום» בלי קיצור-אדם / תזכורת-גיבוי');
+if (!/setSetting\('backupAt'/.test(keys)) fails.push('«חיבורים» בלי חותמת-גיבוי');
+if (!/late String _q = widget\.initialQuery/.test(topics)) fails.push('«נושאים» בלי initialQuery');
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganBackupDue\(10, 30\)/.test(ft)) fails.push('בדיקת גיבוי חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);

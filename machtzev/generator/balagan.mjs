@@ -617,6 +617,12 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
     expect(balaganIntl('050-123-4567'), '972501234567'); expect(balaganIntl('+972501234567'), '972501234567');
     expect(balaganPerson('אין כזה'), isNull);
   });
+  test('גיבוי: גיל בימים (מעולם = −1) · מזכירים רק מ-10 תיקים ורק מעולם/≥30 יום', () {
+    expect(balaganBackupAge('', today), -1); expect(balaganBackupAge('לא תאריך', today), -1);
+    expect(balaganBackupAge('2026-08-09', today), 30); expect(balaganBackupAge('2026-09-08', today), 0);
+    expect(balaganBackupDue(3, -1), isFalse); expect(balaganBackupDue(10, -1), isTrue);
+    expect(balaganBackupDue(10, 29), isFalse); expect(balaganBackupDue(10, 30), isTrue);
+  });
   test('פיצול שורה לכמה רגעים', () {
     expect(balaganSplit('שילמתי ארנונה. מחר תור לרופא ב-9:00'), ['שילמתי ארנונה', 'מחר תור לרופא ב-9:00']);
     expect(balaganSplit('מסרתי מפתח ב-1.8.2026 והמשכיר מקזז 6,200'), ['מסרתי מפתח ב-1.8.2026 והמשכיר מקזז 6,200']);
@@ -641,6 +647,7 @@ import '../dart-ui-bs/ds/ds_mail.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import 'gen_balagan_confirm.dart';
 import 'gen_balagan_moments.dart';
+import 'gen_balagan_topics.dart';
 ${mods.map((m) => `import 'gen_${m.home.slug}.dart';`).join('\n')}
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -678,6 +685,9 @@ double balaganMoney(List<DsTodayItem> items) {
   return total;
 }
 String balaganFmtMoney(double v) => v.round().toString().replaceAllMapped(RegExp(r'\\B(?=(\\d{3})+(?!\\d))'), (m) => ',');
+/// ב׳-לו · גיבוי: הכל במכשיר בלבד (חוק-6) ⇒ גיל-הגיבוי בימים (−1 = מעולם) ומתי מזכירים (≥10 תיקים · מעולם או ≥30 יום). היום מוזרק
+int balaganBackupAge(String backupAt, DateTime today) { final d = DateTime.tryParse(backupAt); return d == null ? -1 : DateTime(today.year, today.month, today.day).difference(DateTime(d.year, d.month, d.day)).inDays; }
+bool balaganBackupDue(int records, int age) => records >= 10 && (age < 0 || age >= 30);
 
 class ${cls} extends StatefulWidget {
   const ${cls}({super.key});
@@ -832,16 +842,18 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
     final lastAct = appStore.log.isNotEmpty ? appStore.log.first : null;
     final lastAt = lastAct == null ? null : DateTime.tryParse(lastAct['at'] ?? '');
     final showUndo = lastAct != null && lastAt != null && lastAct['undone'] != '1' && DateTime.now().difference(lastAt).inSeconds <= 90 && (lastAct['kind'] == 'done' || lastAct['kind'] == 'auto' || lastAct['kind'] == 'add' || lastAct['kind'] == 'merge' || lastAct['kind'] == 'del' || lastAct['kind'] == 'decide');
+    final nRec = [for (final m in kBalaganModules) ...appStore.records(m.rootSlug)].length; final bAge = balaganBackupAge(appStore.setting('backupAt'), today); final backupDue = balaganBackupDue(nRec, bAge);   // ב׳-לו
     final hardToday = todayItems.where((x) => x.hard && x.due == today).length;
     final plan = _plan(today, overdue, todayItems);
     WidgetsBinding.instance.addPostFrameCallback((_) { _digest(lead, hardToday); });
     final lk = DsLook.of(context);
     final empty = n == 0 && cards.isEmpty;
     return DsScaffold(title: ${k(L.navToday)}, subtitle: empty ? ${k(L.askSub)} : lead, icon: ${k('')}, children: [
-      Row(crossAxisAlignment: CrossAxisAlignment.center, children: [Expanded(child: DsQuickAdd(hint: ${k(L.homeQuick)}, autofocus: true, onSubmit: (s0) { final parts = balaganSplit(s0); final s = parts.first; final hits = balaganIdentify(s); if (hits.isEmpty) { setState(() => _mailNote = ${k(L.askNoHit)}); return; } final m = hits.first.module; Navigator.of(context).push<bool>(MaterialPageRoute<bool>(builder: (_) => ${clsOf('balagan_confirm')}(module: m, facts: balaganFacts(s, m), alternatives: hits.skip(1).map((h) => h.module).toList(), text: s, queue: parts.sublist(1)))); })), const SizedBox(width: 8), DsChipButton(label: ${k(L.voiceLabel)}, onTap: () async { if (!voiceSupported) { setState(() => _mailNote = ${k(L.voiceUnsupported)}); return; } setState(() => _mailNote = ${k(L.voiceListening)}); final t = await voiceListen('he-IL'); if (!mounted) return; setState(() => _mailNote = (t == null || t.isEmpty) ? ${k(L.voiceNone)} : ''); if (t == null || t.isEmpty) return; final parts = balaganSplit(t); final s = parts.first; final hits = balaganIdentify(s); if (hits.isEmpty) { setState(() => _mailNote = ${k(L.askNoHit)}); return; } Navigator.of(context).push<bool>(MaterialPageRoute<bool>(builder: (_) => ${clsOf('balagan_confirm')}(module: hits.first.module, facts: balaganFacts(s, hits.first.module), alternatives: hits.skip(1).map((h) => h.module).toList(), text: s, queue: parts.sublist(1)))); })]),   // שורה אחת / קול מהמסך-הראשון ⇒ זיהוי ⇒ טופס-אישור: אפס ניווט
+      Row(crossAxisAlignment: CrossAxisAlignment.center, children: [Expanded(child: DsQuickAdd(hint: ${k(L.homeQuick)}, autofocus: true, onSubmit: (s0) { final parts = balaganSplit(s0); final s = parts.first; if (parts.length == 1 && balaganPerson(s) != null) { Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${clsOf('balagan_topics')}(initialQuery: s.trim()))); return; } /* ב׳-לו · שם שכבר בתיקים ⇒ הכרטיס שלו */ final hits = balaganIdentify(s); if (hits.isEmpty) { setState(() => _mailNote = ${k(L.askNoHit)}); return; } final m = hits.first.module; Navigator.of(context).push<bool>(MaterialPageRoute<bool>(builder: (_) => ${clsOf('balagan_confirm')}(module: m, facts: balaganFacts(s, m), alternatives: hits.skip(1).map((h) => h.module).toList(), text: s, queue: parts.sublist(1)))); })), const SizedBox(width: 8), DsChipButton(label: ${k(L.voiceLabel)}, onTap: () async { if (!voiceSupported) { setState(() => _mailNote = ${k(L.voiceUnsupported)}); return; } setState(() => _mailNote = ${k(L.voiceListening)}); final t = await voiceListen('he-IL'); if (!mounted) return; setState(() => _mailNote = (t == null || t.isEmpty) ? ${k(L.voiceNone)} : ''); if (t == null || t.isEmpty) return; final parts = balaganSplit(t); final s = parts.first; final hits = balaganIdentify(s); if (hits.isEmpty) { setState(() => _mailNote = ${k(L.askNoHit)}); return; } Navigator.of(context).push<bool>(MaterialPageRoute<bool>(builder: (_) => ${clsOf('balagan_confirm')}(module: hits.first.module, facts: balaganFacts(s, hits.first.module), alternatives: hits.skip(1).map((h) => h.module).toList(), text: s, queue: parts.sublist(1)))); })]),   // שורה אחת / קול מהמסך-הראשון ⇒ זיהוי ⇒ טופס-אישור: אפס ניווט
       if (!empty) DsLoadMeter(count: n, label: ${k(L.loadOf)}.replaceAll('{n}', n.toString()), stateLabels: [${k(L.loadOk)}, ${k(L.loadWarn)}, ${k(L.loadBad)}]),
       if (money > 0 || moneyTm > 0) Padding(padding: const EdgeInsets.only(top: 6), child: Text([if (money > 0) ${k(L.moneyToday)}.replaceAll('{n}', balaganFmtMoney(money)), if (moneyTm > 0) ${k(L.moneyTomorrow)}.replaceAll('{n}', balaganFmtMoney(moneyTm))].join(' · '), style: TextStyle(color: lk.ink, fontSize: 15, fontWeight: FontWeight.w600))),   // ב׳-כט · כסף-במבט
       if (showUndo) Padding(padding: const EdgeInsets.only(top: 8), child: Row(children: [Expanded(child: DsNote(message: ${k(L.undoNow)}.replaceAll('{what}', lastAct['what'] ?? ''), label: '', tone: 0)), const SizedBox(width: 8), DsChipButton(label: ${k(L.undo)}, onTap: () => appStore.undo(lastAct['id'] ?? ''))])),
+      if (backupDue) Padding(padding: const EdgeInsets.only(top: 8), child: Row(children: [Expanded(child: DsNote(message: bAge < 0 ? ${k(L.backupNever)} : ${k(L.backupNudge)}.replaceAll('{n}', bAge.toString()), label: '', tone: 1)), const SizedBox(width: 8), DsChipButton(label: ${k(L.backupCopy)}, onTap: () async { final t = appStore.exportJson(); await Clipboard.setData(ClipboardData(text: t)); appStore.setSetting('backupAt', _iso(today)); setState(() => _mailNote = ${k(L.backupCopied)}.replaceAll('{n}', t.length.toString())); })])),   // ב׳-לו · גיבוי: מקומי-בלבד ⇒ תזכורת מעולם/30 יום, העתקה בהקשה
       if (!empty) Padding(padding: const EdgeInsets.only(top: 6), child: Row(children: [DsChipButton(label: ${k(L.shareDay)}, onTap: () => _shareDay(overdue, todayItems, plan.length))])),   // היום כטקסט: ללוח + וואטסאפ (לעצמו / לבן-הזוג) — אפס-שרת
       Padding(padding: const EdgeInsets.only(top: 16, bottom: 4), child: Text(headline, style: TextStyle(color: lk.ink, fontSize: 28, fontWeight: FontWeight.w600, height: 1.2))),
       if (first != null) Padding(padding: const EdgeInsets.only(bottom: 12), child: Text((first.overdue ? ${k(L.homeOverdue)} : first.sub) + ' · ' + first.module + ' · ' + lead2, style: TextStyle(color: lk.muted, fontSize: 14))),
@@ -1095,7 +1107,7 @@ class ${cls} extends StatefulWidget {
 class _${cls}State extends State<${cls}> {
   String _paste = '', _note = '';
   // גיבוי = טקסט (אותו JSON של ההתמדה) שהלקוח שומר איפה שנוח; שחזור מחליף הכל ושומר את הקודם פעם אחת ⇒ «בטל שחזור». אפס-שרת (חוק-6).
-  Future<void> _copy() async { final t = appStore.exportJson(); await Clipboard.setData(ClipboardData(text: t)); setState(() => _note = ${k(L.backupCopied)}.replaceAll('{n}', t.length.toString())); }
+  Future<void> _copy() async { final t = appStore.exportJson(); await Clipboard.setData(ClipboardData(text: t)); appStore.setSetting('backupAt', DateTime.now().toIso8601String().substring(0, 10)); setState(() => _note = ${k(L.backupCopied)}.replaceAll('{n}', t.length.toString())); }
   void _restore() { final n = appStore.importJson(_paste); setState(() { _note = n < 0 ? ${k(L.backupBad)} : ${k(L.backupRestored)}.replaceAll('{n}', n.toString()); if (n >= 0) _paste = ''; }); }
   void _undo() { final ok = appStore.undoImport(); setState(() => _note = ok ? ${k(L.backupUndone)} : ${k(L.backupBad)}); }
   @override
@@ -1159,13 +1171,14 @@ BalaganPerson? balaganPerson(String name) {
 String balaganIntl(String ph) { final d = ph.replaceAll(RegExp(r'[^0-9+]'), ''); return d.startsWith('+') ? d.substring(1) : (d.startsWith('0') ? '972' + d.substring(1) : d); }
 
 class ${cls} extends StatefulWidget {
-  const ${cls}({super.key});
+  const ${cls}({this.initialQuery = '', super.key});
+  final String initialQuery;   // ב׳-לו · «רות לוי» בשורה-המהירה ⇒ הכרטיס שלה, לא תיק חדש
   @override
   State<${cls}> createState() => _${cls}State();
 }
 
 class _${cls}State extends State<${cls}> {
-  String _q = '';
+  late String _q = widget.initialQuery;
   // חיפוש בכל התיקים (30 מודולים, כל שדה, גם «מה כתבת») ⇒ פתיחת התיק. במכשיר-בלי-מקלדת אין ⌘K — זה המסך.
   static const Map<String, String> _titleOf = {${mods.map((m) => `'${m.root.slug}': ${dq(m.title)}`).join(', ')}};
   Widget _open(String entity, String id) {

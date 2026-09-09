@@ -302,5 +302,7 @@
  "personLine": "{n} תיקים · {open} פתוחים",
  "personMoney": "₪ {n} פתוח",
  "personLast": "נגיעה אחרונה {d}",
- "moneyShort": "₪ {n}"
+ "moneyShort": "₪ {n}",
+ "backupNever": "עוד לא גיבית — הכל רק במכשיר הזה.",
+ "backupNudge": "לא גיבית {n} יום — הכל רק במכשיר הזה."
 }
