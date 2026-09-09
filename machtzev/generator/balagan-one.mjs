@@ -165,6 +165,9 @@ if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganDateChips
 for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/field: 'ign:\$rid:\$field'\)/.test(h) || !/field: 'undated:\$rid'\)/.test(h) || !/field: 'stale:\$rid'\)/.test(h)) { fails.push(`${m.ns}: «התעלם» בלי החזר`); break; } }
 if (!/lastAct\['kind'\] == 'decide'\)/.test(home)) fails.push('«בוצע · החזר» בלי decide');
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/'ign:' \+ id \+ ':' \+ F/.test(ft)) fails.push('בדיקת «התעלם»-עם-החזר חסרה'); }
+// גל ב׳-לג · צ׳יפי-שעה (balaganTimes) + צ׳יפי-אנשים (מי שכבר בתיקים) בטופס-האישור
+{ const cf = rd(path.join(GEN, 'gen_balagan_confirm.dart')); if (!/balaganTimes\(c, now: now\)\.take\(1\)/.test(cf) || !/shown\.add\(m\.fields\.firstWhere\(\(f\) => f\.label == m\.timeFields\.first\)\)/.test(cf) || !/List<String> balaganPeople\(/.test(cf) || !/_v\[m\.timeFields\.first\] = c\[1\]/.test(cf) || !/_v\[m\.personFields\.first\] = p/.test(cf)) fails.push('טופס-האישור בלי צ׳יפי-שעה/אנשים'); }
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganTimeChips\(/.test(ft) || !/balaganPeople\(\)/.test(ft)) fails.push('בדיקת צ׳יפי-שעה/אנשים חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);
