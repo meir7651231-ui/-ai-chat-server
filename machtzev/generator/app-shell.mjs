@@ -250,6 +250,37 @@ class ${cls}Today {
     appStore.logAction('auto', a + ' · ' + field, entity: '${root.slug}', rid: rid, field: field, prev: prev);
   }
 
+  // ב׳-ל · נשכחים: תיק פתוח ש«היום» הפסיק לדבר עליו (כל מועד עבר ונדחה-בהתעלם / בלי מועד והתעלמו) ו-14 יום בלי נגיעה — לא נעלם; מוצע: סגור · קבע למחר · התעלם. הכל בהקשה, אפס-אוטומטי
+  static DateTime? _touched(Map<String, String> r, String rid) {
+    final at = r['__at'] ?? ''; DateTime? t = _parse(at.length >= 10 ? at.substring(0, 10) : '');
+    for (final e in appStore.log) { if (e['rid'] != rid || e['undone'] == '1') continue; final a = DateTime.tryParse(e['at'] ?? ''); if (a != null && (t == null || a.isAfter(t))) t = _day(a); }
+    return t;
+  }
+  static List<DsTodayItem> stale(DateTime today) {
+    if (_dates.isEmpty) return const [];
+    final out = <DsTodayItem>[];
+    for (final r in open()) {
+      final rid = r[AppStore.idKey] ?? '';
+      if (appStore.decision('stale:\$rid') == 'no') continue;
+      var visible = false, any = false;
+      for (final f in _dates) { final d = _parse(r[f.label] ?? ''); if (d == null) continue; any = true; if (!d.isBefore(today) || appStore.decision('ign:\$rid:\${f.label}') != 'no') { visible = true; break; } }
+      if (!any && appStore.decision('undated:\$rid') != 'no') visible = true;
+      if (visible) continue;
+      final t = _touched(r, rid); if (t == null) continue; final n = today.difference(t).inDays; if (n < 14) continue;
+      final acts = [${lastStage >= 0 ? `${k(L.closeLabel)}, ` : ''}${k(L.actSetTomorrow)}, ${k(L.actIgnore)}];
+      out.add(DsTodayItem(title: appStore.displayOf('${root.slug}', rid), sub: ${k(L.staleSub)}.replaceAll('{n}', n.toString()), rid: rid, field: '', due: t, hard: false, overdue: false, module: module, actions: acts, act: (i) => _staleAct(rid, today, acts, i)));
+    }
+    out.sort((a, b) => a.due.compareTo(b.due));   // הישן ביותר ראשון
+    return out;
+  }
+  static void _staleAct(String rid, DateTime today, List<String> acts, int i) {
+    final a = acts[i.clamp(0, acts.length - 1)];
+    final r = appStore.byId('${root.slug}', rid); if (r == null) return;
+    if (a == ${k(L.actSetTomorrow)}) { final f = _dates.firstWhere((x) => x.hard, orElse: () => _dates.first); appStore.decide('ign:\$rid:\${f.label}', ''); appStore.decide('undated:\$rid', ''); _setDate(rid, f.label, today, [a], 0); return; }   /* המועד החדש חוזר ל«היום» — ההתעלמות הישנה נמחקת */
+    ${lastStage >= 0 ? `if (a == ${k(L.closeLabel)}) { final prev = r[AppStore.stageKey] ?? '0'; appStore.update('${root.slug}', rid, {AppStore.stageKey: '${lastStage}'}); appStore.logAction('auto', ${k(L.closeLog)}.replaceAll('{who}', appStore.displayOf('${root.slug}', rid)), entity: '${root.slug}', rid: rid, field: AppStore.stageKey, prev: prev); return; }` : ''}
+    appStore.decide('stale:\$rid', 'no');
+  }
+
   // P11/P13 · הצעות: תזכורת לכל תאריך שטרם הוכרע · צעד-הבא בשלב-האחרון (P14) · תזכורת-אחרי-שליחה (P12) — הכל עם קטע-המקור
   static List<Widget> proposals(BuildContext context, DateTime today, {bool chain = true}) {   // chain=false: «בלגן» מרנדר את כרטיס-הצעד-הבא בעצמו (חוצה-מודולים)
     final out = <Widget>[];

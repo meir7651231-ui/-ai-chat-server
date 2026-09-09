@@ -154,6 +154,10 @@ if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/\.undated\(today
 // גל ב׳-כט · כסף-במבט: balaganMoney נגזרת מהשורות · מוצג ב«היום» · בשיתוף · בבדיקה
 if (!/double balaganMoney\(List<DsTodayItem> items\)/.test(home) || !/final money = balaganMoney\(\[\.\.\.overdue, \.\.\.todayItems\]\); final moneyTm = balaganMoney\(tomorrow\);/.test(home) || !/balaganDayText\(overdue, todayItems, _day\(DateTime\.now\(\)\), money: balaganMoney/.test(home)) fails.push('«היום» בלי כסף-במבט');
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganMoney\(\[it\(a\), it\(a\)/.test(ft)) fails.push('בדיקת כסף-במבט חסרה'); }
+// גל ב׳-ל · «נשכחים»: ספק-stale בכל מודול · קיפול ב«היום» · בדיקה מחוללת
+for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/static List<DsTodayItem> stale\(DateTime today\)/.test(h) || !/decision\('stale:\$rid'\) == 'no'/.test(h)) { fails.push(`${m.ns}: בלי ספק-«נשכחים»`); break; } }
+if (!/final stale = <DsTodayItem>\[for \(final m in _mods\) for \(final it in m\.stale\(today\)\) if \(!_standing\.contains\(it\.rid\)\) it\]/.test(home) || !/_standing\.add\(rid\)/.test(home) || !/for \(final it in stale\) DsActionRow\(title: it\.title, [^\n]*?actions: it\.actions, onAct: it\.act\)/.test(home)) fails.push('«היום» בלי קיפול «נשכחים»');
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/\.stale\(today\)/.test(ft)) fails.push('בדיקת «נשכחים» חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);
