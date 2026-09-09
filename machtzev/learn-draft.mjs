@@ -32,7 +32,7 @@ if (argv.includes('--record')) {
     const PROTOCOL_GATES = /^(index-complete|pins|wiring-fresh|truth-fresh|ratchet-down|nobinary|no-registry|gitignore-guard)$/;   // L93: גודל-קובץ/רישום אינם לקח-קוד
     for (const g of gates) {
       const content = !PROTOCOL_GATES.test(g);
-      if (content) for (const p of changed.slice(0, 3)) rows.push({ ts: attempt, attempt, gate: g, path: p, sha, blob_before: git('rev-parse', `HEAD:${p}`), resolved: false });
+      if (content) for (const p of changed.filter((x) => !/\/__twinreplay_/.test(x)).slice(0, 3)) rows.push({ ts: attempt, attempt, gate: g, path: p, sha, blob_before: git('rev-parse', `HEAD:${p}`), resolved: false });   // G48 · קובץ-זמני של שער twin-replay אינו תוכן — לא נרשם (אחרת ניסיון-commit מקביל יוצר stuck-loop-רפאים על נתיב שלא יעלה לעולם)
       if (!content || !changed.length) rows.push({ ts: attempt, attempt, gate: g, path: null, sha, blob_before: null, resolved: false });
     }
   } else {

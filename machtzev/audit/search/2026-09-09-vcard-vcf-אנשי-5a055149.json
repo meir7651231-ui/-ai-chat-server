@@ -1,0 +1,254 @@
+{
+ "v": 1,
+ "ts": "2026-09-09T20:49:32.854Z",
+ "query": "vcard vcf אנשי-קשר",
+ "tokens": [
+  "vcard",
+  "vcf",
+  "אנשי",
+  "קשר"
+ ],
+ "oracle": {
+  "atomIndexSha": "a81d3644a039951ed890ee7b875ccfbded711dde41ac24aa2a7aeeca5e4e896a",
+  "logicCensusSha": "c2be971c0995aebe610be25fa876fa59699f7eb075a600262d6f0f7a5b0050a3",
+  "display": 1878,
+  "logic": 954
+ },
+ "candidates": [
+  {
+   "id": "parseVcards",
+   "layer": "logic",
+   "file": "dart-maor/parse-vcards.dart",
+   "score": 3,
+   "hits": [
+    "vcard"
+   ]
+  },
+  {
+   "id": "vcardImportRows",
+   "layer": "logic",
+   "file": "dart-boxes/vcard-import.dart",
+   "score": 3,
+   "hits": [
+    "vcard"
+   ]
+  },
+  {
+   "id": "ChatSettingsActionRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/chat_settings_action_row.dart",
+   "score": 2,
+   "hits": [
+    "אנשי",
+    "קשר"
+   ]
+  },
+  {
+   "id": "ChatSettingsSectionTile",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/chat_settings_section_tile.dart",
+   "score": 2,
+   "hits": [
+    "אנשי",
+    "קשר"
+   ]
+  },
+  {
+   "id": "ChatSettingsSwitchRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/chat_settings_switch_row.dart",
+   "score": 2,
+   "hits": [
+    "אנשי",
+    "קשר"
+   ]
+  },
+  {
+   "id": "ConfirmDialog",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/confirm_dialog.dart",
+   "score": 2,
+   "hits": [
+    "אנשי",
+    "קשר"
+   ]
+  },
+  {
+   "id": "InlineTextRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/inline_text_row.dart",
+   "score": 2,
+   "hits": [
+    "אנשי",
+    "קשר"
+   ]
+  },
+  {
+   "id": "QuickReplyBanner",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/quick_reply_banner.dart",
+   "score": 2,
+   "hits": [
+    "אנשי",
+    "קשר"
+   ]
+  },
+  {
+   "id": "SettingsActionRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_action_row.dart",
+   "score": 2,
+   "hits": [
+    "אנשי",
+    "קשר"
+   ]
+  },
+  {
+   "id": "SettingsInlineTextRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_inline_text_row.dart",
+   "score": 2,
+   "hits": [
+    "אנשי",
+    "קשר"
+   ]
+  },
+  {
+   "id": "SettingsSectionTile",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_section_tile.dart",
+   "score": 2,
+   "hits": [
+    "אנשי",
+    "קשר"
+   ]
+  },
+  {
+   "id": "SettingsSwitchRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_switch_row.dart",
+   "score": 2,
+   "hits": [
+    "אנשי",
+    "קשר"
+   ]
+  },
+  {
+   "id": "SettingsTimeRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_time_row.dart",
+   "score": 2,
+   "hits": [
+    "אנשי",
+    "קשר"
+   ]
+  },
+  {
+   "id": "AuroraField",
+   "layer": "display",
+   "file": "dart-ui-bs/aurora_field.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "DirectoryRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__home_shell/directory_row.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "DsMultiSelect",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_multi_select.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "DsSelect",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_select.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "HomeShellBadgedIcon",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/home_shell_badged_icon.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "HomeShellMenuRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/home_shell_menu_row.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "OrderRowCard",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__manager_dashboard_screen/order_row_card.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "SettingsScreenShell",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_screen_shell.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "SpecialtyDerivedRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/specialty_derived_row.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "StatsCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/stats_card.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "WorkerProfileStat",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/worker_profile_stat.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  }
+ ],
+ "strong": [
+  "parseVcards",
+  "vcardImportRows"
+ ],
+ "creates": "new/dart-boxes/vcard-import.dart",
+ "chosen": "none",
+ "why": "נסרקו: vcardImportRows parseVcards importableContacts isJunkContact contactToRow decodeQuotedPrintable — vcardImportRows = הרשומה-עצמה (נקודת-הכניסה החדשה בקופסת-vcard-import, G48); השאר = האטומים הקיימים שהיא מחווטת (לא מוחלפים); אין אטום-לוגיקה (String?)→List<Map<String,String>> ל-VCF מלבד הקופסה — המפקד לא כלל קופסאות עד G48",
+ "sig": "5a055149525085b63c5203c2f745436009d7aa62dad004d055495ccd323dc1f8"
+}

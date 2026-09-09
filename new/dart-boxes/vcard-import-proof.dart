@@ -18,6 +18,7 @@ void main() {
   // 1) QP — עברית אמיתית (עדשה-עוינת: המקור מטפל, האטום-הישן זרק HEX2)
   eq('QP קיר', V.decodeQuotedPrintable('=D7=A7=D7=99=D7=A8'), 'קיר');
   eq('QP ascii', V.decodeQuotedPrintable('Abc 123'), 'Abc 123');
+  eq('G48 rows', V.vcardImportRows('BEGIN:VCARD\nFN:אבי כהן\nTEL;CELL:050-1234567\nEND:VCARD\n').map((r) => r['name']! + '|' + r['phone']!).toList(), ['אבי כהן|050-1234567']);
 
   // 2) קובץ בן 3 כרטיסים (דוגמת-החוזה §3)
   final vcf = [

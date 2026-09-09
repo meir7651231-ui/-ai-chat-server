@@ -3,16 +3,32 @@
   "shape": "מועד",
   "pick": "startOfWeekSunday",
   "file": "dart/start_of_week_sunday.dart",
-  "score": 5.91,
+  "score": 5.86,
   "proven": true,
-  "candidates": 16,
+  "candidates": 20,
   "top3": [
-   "startOfWeekSunday:3/3✓:5.91",
+   "startOfWeekSunday:3/3✓:5.86",
    "popCall:1/3:0",
    "stripAuditMeta:1/3:0"
   ],
   "proof": {
+   "donateUrl": {
+    "ok": 0,
+    "total": 3
+   },
+   "expand": {
+    "ok": 0,
+    "total": 3
+   },
+   "langs": {
+    "ok": 0,
+    "total": 3
+   },
    "monthLabel": {
+    "ok": 0,
+    "total": 3
+   },
+   "palette": {
     "ok": 0,
     "total": 3
    },
@@ -82,12 +98,12 @@
   "shape": "מועד",
   "pick": "addDaysIso",
   "file": "dart-maor/add-days-iso.dart",
-  "score": 63.9,
+  "score": 64.93,
   "proven": true,
-  "candidates": 18,
+  "candidates": 22,
   "top3": [
-   "addDaysIso:3/3✓:63.9",
-   "segulaReminders:0/3:7.83",
+   "addDaysIso:3/3✓:64.93",
+   "segulaReminders:0/3:7.73",
    "envPath:0/3:1"
   ],
   "proof": {
@@ -103,6 +119,10 @@
     "ok": 0,
     "total": 3
    },
+   "localize": {
+    "ok": 0,
+    "total": 3
+   },
    "metaPath": {
     "ok": 0,
     "total": 3
@@ -112,6 +132,10 @@
     "total": 3
    },
    "sanitizeSupportText": {
+    "ok": 0,
+    "total": 3
+   },
+   "score": {
     "ok": 0,
     "total": 3
    },
@@ -147,11 +171,19 @@
     "ok": 0,
     "total": 3
    },
+   "ui": {
+    "ok": 0,
+    "total": 3
+   },
    "undoLast": {
     "ok": 0,
     "total": 3
    },
    "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 3
+   },
+   "vocab": {
     "ok": 0,
     "total": 3
    },
@@ -169,13 +201,13 @@
   "shape": "מועד",
   "pick": "cockpitDaysSince",
   "file": "dart-maor/cockpit-days-since.dart",
-  "score": 37.79,
+  "score": 38.69,
   "proven": true,
-  "candidates": 19,
+  "candidates": 22,
   "top3": [
-   "cockpitDaysSince:3/3✓:37.79",
-   "dayDiff:3/3✓:36.98",
-   "sheetSummary:0/3:17.68"
+   "cockpitDaysSince:3/3✓:38.69",
+   "dayDiff:3/3✓:37.88",
+   "sheetSummary:0/3:18.13"
   ],
   "proof": {
    "campaignTotal": {
@@ -206,6 +238,10 @@
     "ok": 0,
     "total": 3
    },
+   "score": {
+    "ok": 0,
+    "total": 3
+   },
    "segulaReminders": {
     "ok": 0,
     "total": 3
@@ -238,11 +274,19 @@
     "ok": 0,
     "total": 3
    },
+   "ui": {
+    "ok": 0,
+    "total": 3
+   },
    "undoLast": {
     "ok": 0,
     "total": 3
    },
    "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 3
+   },
+   "vocab": {
     "ok": 0,
     "total": 3
    },
@@ -260,13 +304,13 @@
   "shape": "מועד",
   "pick": "inRange",
   "file": "dart-maor/in-range.dart",
-  "score": 70.72,
+  "score": 71.98,
   "proven": true,
-  "candidates": 17,
+  "candidates": 22,
   "top3": [
-   "inRange:3/3✓:70.72",
+   "inRange:3/3✓:71.98",
    "supporterVisibleForDesignations:2/3:1",
-   "taskOverdue:1/3:9.89"
+   "taskOverdue:1/3:9.05"
   ],
   "proof": {
    "coursesOfTeacher": {
@@ -277,7 +321,19 @@
     "ok": 3,
     "total": 3
    },
+   "isOverdue": {
+    "ok": 1,
+    "total": 3
+   },
+   "sameJson": {
+    "ok": 0,
+    "total": 3
+   },
    "sanitizeSupportText": {
+    "ok": 0,
+    "total": 3
+   },
+   "score": {
     "ok": 0,
     "total": 3
    },
@@ -321,11 +377,19 @@
     "ok": 0,
     "total": 3
    },
+   "ui": {
+    "ok": 0,
+    "total": 3
+   },
    "undoLast": {
     "ok": 0,
     "total": 3
    },
    "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 3
+   },
+   "vocab": {
     "ok": 0,
     "total": 3
    },
@@ -343,20 +407,32 @@
   "shape": "מועד",
   "pick": "taskOverdue",
   "file": "dart-maor/task-overdue.dart",
-  "score": 77.82,
+  "score": 78.52,
   "proven": true,
-  "candidates": 16,
+  "candidates": 21,
   "top3": [
-   "taskOverdue:3/3✓:77.82",
-   "supporterVisibleForDesignations:2/3:1",
-   "wheelIndexUnderPointer:0/3:9.25"
+   "taskOverdue:3/3✓:78.52",
+   "isOverdue:3/3✓:1",
+   "sameJson:2/3:1"
   ],
   "proof": {
    "coursesOfTeacher": {
     "ok": 0,
     "total": 3
    },
+   "isOverdue": {
+    "ok": 3,
+    "total": 3
+   },
+   "sameJson": {
+    "ok": 2,
+    "total": 3
+   },
    "sanitizeSupportText": {
+    "ok": 0,
+    "total": 3
+   },
+   "score": {
     "ok": 0,
     "total": 3
    },
@@ -400,11 +476,19 @@
     "ok": 0,
     "total": 3
    },
+   "ui": {
+    "ok": 0,
+    "total": 3
+   },
    "undoLast": {
     "ok": 0,
     "total": 3
    },
    "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 3
+   },
+   "vocab": {
     "ok": 0,
     "total": 3
    },
@@ -422,16 +506,32 @@
   "shape": "שעה",
   "pick": "timeToMin",
   "file": "dart-maor/time-to-min.dart",
-  "score": 21.45,
+  "score": 21.9,
   "proven": true,
-  "candidates": 15,
+  "candidates": 19,
   "top3": [
-   "timeToMin:2/2✓:21.45",
-   "monthLabel:0/2:0",
-   "popCall:0/2:0"
+   "timeToMin:2/2✓:21.9",
+   "donateUrl:0/2:0",
+   "expand:0/2:0"
   ],
   "proof": {
+   "donateUrl": {
+    "ok": 0,
+    "total": 2
+   },
+   "expand": {
+    "ok": 0,
+    "total": 2
+   },
+   "langs": {
+    "ok": 0,
+    "total": 2
+   },
    "monthLabel": {
+    "ok": 0,
+    "total": 2
+   },
+   "palette": {
     "ok": 0,
     "total": 2
    },
@@ -497,13 +597,13 @@
   "shape": "יומן",
   "pick": "minutesBetweenIso",
   "file": "dart-maor/minutes-between-iso.dart",
-  "score": 39.75,
+  "score": 40.65,
   "proven": true,
-  "candidates": 20,
+  "candidates": 24,
   "top3": [
-   "minutesBetweenIso:2/2✓:39.75",
-   "levenshtein:0/2:11.08",
-   "wheelIndexUnderPointer:0/2:9.25"
+   "minutesBetweenIso:2/2✓:40.65",
+   "levenshtein:0/2:11.31",
+   "wheelIndexUnderPointer:0/2:8.81"
   ],
   "proof": {
    "coursesOfTeacher": {
@@ -526,6 +626,10 @@
     "ok": 2,
     "total": 2
    },
+   "monthsAgo": {
+    "ok": 0,
+    "total": 2
+   },
    "ruleContains": {
     "ok": 0,
     "total": 2
@@ -535,6 +639,10 @@
     "total": 2
    },
    "sanitizeSupportText": {
+    "ok": 0,
+    "total": 2
+   },
+   "score": {
     "ok": 0,
     "total": 2
    },
@@ -570,11 +678,19 @@
     "ok": 0,
     "total": 2
    },
+   "ui": {
+    "ok": 0,
+    "total": 2
+   },
    "undoLast": {
     "ok": 0,
     "total": 2
    },
    "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 2
+   },
+   "vocab": {
     "ok": 0,
     "total": 2
    },
@@ -594,7 +710,7 @@
   "file": "dart-maor/enroll-new-family.dart",
   "score": 2,
   "proven": true,
-  "candidates": 21,
+  "candidates": 25,
   "top3": [
    "normSearch:4/4✓:2",
    "normNameLocal:3/4:2",
@@ -606,6 +722,10 @@
     "total": 4
    },
    "envPath": {
+    "ok": 0,
+    "total": 4
+   },
+   "localize": {
     "ok": 0,
     "total": 4
    },
@@ -630,6 +750,10 @@
     "total": 4
    },
    "sanitizeSupportText": {
+    "ok": 0,
+    "total": 4
+   },
+   "score": {
     "ok": 0,
     "total": 4
    },
@@ -669,12 +793,20 @@
     "ok": 1,
     "total": 4
    },
+   "ui": {
+    "ok": 0,
+    "total": 4
+   },
    "undoLast": {
     "ok": 0,
     "total": 4
    },
    "visibleSupportersForDesignations": {
     "ok": 2,
+    "total": 4
+   },
+   "vocab": {
+    "ok": 0,
     "total": 4
    },
    "waitlistFor": {
@@ -691,12 +823,12 @@
   "shape": "אדם",
   "pick": "normName",
   "file": "dart-maor/norm-name.dart",
-  "score": 8.56,
+  "score": 8.79,
   "proven": true,
-  "candidates": 18,
+  "candidates": 22,
   "top3": [
-   "normName:2/2✓:8.56",
-   "wheelIndexUnderPointer:0/2:5.36",
+   "normName:2/2✓:8.79",
+   "wheelIndexUnderPointer:0/2:5.47",
    "envPath:0/2:1"
   ],
   "proof": {
@@ -705,6 +837,10 @@
     "total": 2
    },
    "envPath": {
+    "ok": 0,
+    "total": 2
+   },
+   "localize": {
     "ok": 0,
     "total": 2
    },
@@ -721,6 +857,10 @@
     "total": 2
    },
    "sanitizeSupportText": {
+    "ok": 0,
+    "total": 2
+   },
+   "score": {
     "ok": 0,
     "total": 2
    },
@@ -756,11 +896,19 @@
     "ok": 0,
     "total": 2
    },
+   "ui": {
+    "ok": 0,
+    "total": 2
+   },
    "undoLast": {
     "ok": 0,
     "total": 2
    },
    "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 2
+   },
+   "vocab": {
     "ok": 0,
     "total": 2
    },
@@ -778,13 +926,13 @@
   "shape": "חיפוש",
   "pick": "normPhone",
   "file": "dart-maor/norm-phone.dart",
-  "score": 19.78,
+  "score": 20.23,
   "proven": true,
-  "candidates": 48,
+  "candidates": 63,
   "top3": [
-   "normPhone:3/3✓:19.78",
-   "normalizePhone:2/3:10.89",
-   "normId:1/3:10.89"
+   "normPhone:3/3✓:20.23",
+   "normalizePhone:2/3:11.12",
+   "normId:1/3:11.12"
   ],
   "proof": {
    "adarNorm": {
@@ -796,6 +944,10 @@
     "total": 3
    },
    "angleDigits": {
+    "ok": 0,
+    "total": 3
+   },
+   "annualKey": {
     "ok": 0,
     "total": 3
    },
@@ -815,7 +967,19 @@
     "ok": 0,
     "total": 3
    },
+   "detectSmtpHost": {
+    "ok": 0,
+    "total": 3
+   },
+   "donateUrl": {
+    "ok": 0,
+    "total": 3
+   },
    "esc": {
+    "ok": 0,
+    "total": 3
+   },
+   "expand": {
     "ok": 0,
     "total": 3
    },
@@ -835,11 +999,23 @@
     "ok": 0,
     "total": 3
    },
+   "fullDate": {
+    "ok": 0,
+    "total": 3
+   },
    "genJoinCode": {
     "ok": 0,
     "total": 3
    },
    "icsEscape": {
+    "ok": 0,
+    "total": 3
+   },
+   "identityOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "langs": {
     "ok": 0,
     "total": 3
    },
@@ -875,6 +1051,10 @@
     "ok": 2,
     "total": 3
    },
+   "orgSlugFromUrl": {
+    "ok": 0,
+    "total": 3
+   },
    "p39ElbowModel": {
     "ok": 0,
     "total": 3
@@ -895,6 +1075,10 @@
     "ok": 0,
     "total": 3
    },
+   "palette": {
+    "ok": 0,
+    "total": 3
+   },
    "pdfSafe": {
     "ok": 0,
     "total": 3
@@ -908,6 +1092,10 @@
     "total": 3
    },
    "popCall": {
+    "ok": 0,
+    "total": 3
+   },
+   "priLabel": {
     "ok": 0,
     "total": 3
    },
@@ -943,6 +1131,10 @@
     "ok": 0,
     "total": 3
    },
+   "statusLabel": {
+    "ok": 0,
+    "total": 3
+   },
    "stripAuditMeta": {
     "ok": 0,
     "total": 3
@@ -971,6 +1163,26 @@
     "ok": 0,
     "total": 3
    },
+   "vFormatPhone": {
+    "ok": 0,
+    "total": 3,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "vNameSortKey": {
+    "ok": 0,
+    "total": 3,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "vNormName": {
+    "ok": 0,
+    "total": 3,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "vNormSearch": {
+    "ok": 0,
+    "total": 3,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
    "waDigits": {
     "ok": 0,
     "total": 3
@@ -985,13 +1197,13 @@
   "shape": "רשומות",
   "pick": "countBy",
   "file": "dart-maor/count-by.dart",
-  "score": 34.97,
+  "score": 35.87,
   "proven": true,
-  "candidates": 15,
+  "candidates": 18,
   "top3": [
-   "countBy:1/1✓:34.97",
-   "supportUnread:0/1:14.29",
-   "coursesOfTeacher:0/1:5.09"
+   "countBy:1/1✓:35.87",
+   "supportUnread:0/1:14.74",
+   "coursesOfTeacher:0/1:5.31"
   ],
   "proof": {
    "countBy": {
@@ -1003,6 +1215,10 @@
     "total": 1
    },
    "sanitizeSupportText": {
+    "ok": 0,
+    "total": 1
+   },
+   "score": {
     "ok": 0,
     "total": 1
    },
@@ -1038,11 +1254,19 @@
     "ok": 0,
     "total": 1
    },
+   "ui": {
+    "ok": 0,
+    "total": 1
+   },
    "undoLast": {
     "ok": 0,
     "total": 1
    },
    "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 1
+   },
+   "vocab": {
     "ok": 0,
     "total": 1
    },
@@ -1060,12 +1284,12 @@
   "shape": "חיפוש",
   "pick": "rulePrefix",
   "file": "dart-maor/rule-prefix.dart",
-  "score": 26.96,
+  "score": 27.58,
   "proven": true,
-  "candidates": 20,
+  "candidates": 24,
   "top3": [
-   "rulePrefix:3/3✓:26.96",
-   "ruleContains:2/3:18.26",
+   "rulePrefix:3/3✓:27.58",
+   "ruleContains:2/3:18.65",
    "teacherIdOf:2/3:0"
   ],
   "proof": {
@@ -1089,6 +1313,10 @@
     "ok": 1,
     "total": 3
    },
+   "monthsAgo": {
+    "ok": 1,
+    "total": 3
+   },
    "ruleContains": {
     "ok": 2,
     "total": 3
@@ -1099,6 +1327,10 @@
    },
    "sanitizeSupportText": {
     "ok": 1,
+    "total": 3
+   },
+   "score": {
+    "ok": 0,
     "total": 3
    },
    "segulaReminders": {
@@ -1133,11 +1365,19 @@
     "ok": 1,
     "total": 3
    },
+   "ui": {
+    "ok": 1,
+    "total": 3
+   },
    "undoLast": {
     "ok": 0,
     "total": 3
    },
    "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 3
+   },
+   "vocab": {
     "ok": 0,
     "total": 3
    },
@@ -1157,19 +1397,39 @@
   "file": "dart/f_money.dart",
   "score": 2,
   "proven": true,
-  "candidates": 19,
+  "candidates": 31,
   "top3": [
    "fMoney:3/3✓:2",
    "formatIsraeliPhone:1/3:1",
    "pad2:1/3:1"
   ],
   "proof": {
+   "detectSmtpHost": {
+    "ok": 0,
+    "total": 3
+   },
+   "donateUrl": {
+    "ok": 0,
+    "total": 3
+   },
+   "expand": {
+    "ok": 0,
+    "total": 3
+   },
    "fMoney": {
     "ok": 3,
     "total": 3
    },
    "formatIsraeliPhone": {
     "ok": 1,
+    "total": 3
+   },
+   "identityOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "langs": {
+    "ok": 0,
     "total": 3
    },
    "monthLabel": {
@@ -1180,7 +1440,15 @@
     "ok": 1,
     "total": 3
    },
+   "palette": {
+    "ok": 0,
+    "total": 3
+   },
    "popCall": {
+    "ok": 0,
+    "total": 3
+   },
+   "priLabel": {
     "ok": 0,
     "total": 3
    },
@@ -1208,6 +1476,10 @@
     "ok": 0,
     "total": 3
    },
+   "statusLabel": {
+    "ok": 0,
+    "total": 3
+   },
    "stripAuditMeta": {
     "ok": 0,
     "total": 3
@@ -1236,6 +1508,26 @@
     "ok": 0,
     "total": 3
    },
+   "vFormatPhone": {
+    "ok": 0,
+    "total": 3,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "vNameSortKey": {
+    "ok": 0,
+    "total": 3,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "vNormName": {
+    "ok": 0,
+    "total": 3,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "vNormSearch": {
+    "ok": 0,
+    "total": 3,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
    "waDigits": {
     "ok": 0,
     "total": 3
@@ -1246,12 +1538,12 @@
   "shape": "חיפוש",
   "pick": "ruleExact",
   "file": "dart-maor/rule-exact.dart",
-  "score": 64.87,
+  "score": 66.16,
   "proven": true,
-  "candidates": 19,
+  "candidates": 22,
   "top3": [
-   "ruleExact:2/2✓:64.87",
-   "ruleSkeleton:1/2:9.56",
+   "ruleExact:2/2✓:66.16",
+   "ruleSkeleton:1/2:9.73",
    "teacherIdOf:1/2:0"
   ],
   "proof": {
@@ -1283,6 +1575,10 @@
     "ok": 0,
     "total": 2
    },
+   "score": {
+    "ok": 0,
+    "total": 2
+   },
    "segulaReminders": {
     "ok": 0,
     "total": 2
@@ -1315,11 +1611,19 @@
     "ok": 0,
     "total": 2
    },
+   "ui": {
+    "ok": 0,
+    "total": 2
+   },
    "undoLast": {
     "ok": 0,
     "total": 2
    },
    "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 2
+   },
+   "vocab": {
     "ok": 0,
     "total": 2
    },
@@ -1337,12 +1641,12 @@
   "shape": "חיפוש",
   "pick": "ruleContains",
   "file": "dart-maor/rule-contains.dart",
-  "score": 42.48,
+  "score": 43.32,
   "proven": true,
-  "candidates": 20,
+  "candidates": 24,
   "top3": [
-   "ruleContains:3/3✓:42.48",
-   "rulePrefix:2/3:18.26",
+   "ruleContains:3/3✓:43.32",
+   "rulePrefix:2/3:18.65",
    "teacherIdOf:2/3:0"
   ],
   "proof": {
@@ -1366,6 +1670,10 @@
     "ok": 1,
     "total": 3
    },
+   "monthsAgo": {
+    "ok": 1,
+    "total": 3
+   },
    "ruleContains": {
     "ok": 3,
     "total": 3
@@ -1376,6 +1684,10 @@
    },
    "sanitizeSupportText": {
     "ok": 1,
+    "total": 3
+   },
+   "score": {
+    "ok": 0,
     "total": 3
    },
    "segulaReminders": {
@@ -1410,11 +1722,19 @@
     "ok": 1,
     "total": 3
    },
+   "ui": {
+    "ok": 1,
+    "total": 3
+   },
    "undoLast": {
     "ok": 0,
     "total": 3
    },
    "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 3
+   },
+   "vocab": {
     "ok": 0,
     "total": 3
    },
@@ -1432,13 +1752,13 @@
   "shape": "חיפוש",
   "pick": "damerauLevenshtein",
   "file": "dart/damerau_levenshtein.dart",
-  "score": 31.65,
+  "score": 32.33,
   "proven": true,
-  "candidates": 20,
+  "candidates": 24,
   "top3": [
-   "damerauLevenshtein:4/4✓:31.65",
-   "levenshtein:3/4:48.19",
-   "minutesBetweenIso:1/4:11.08"
+   "damerauLevenshtein:4/4✓:32.33",
+   "levenshtein:3/4:49.32",
+   "minutesBetweenIso:1/4:11.31"
   ],
   "proof": {
    "coursesOfTeacher": {
@@ -1461,6 +1781,10 @@
     "ok": 1,
     "total": 4
    },
+   "monthsAgo": {
+    "ok": 0,
+    "total": 4
+   },
    "ruleContains": {
     "ok": 0,
     "total": 4
@@ -1470,6 +1794,10 @@
     "total": 4
    },
    "sanitizeSupportText": {
+    "ok": 0,
+    "total": 4
+   },
+   "score": {
     "ok": 0,
     "total": 4
    },
@@ -1505,11 +1833,19 @@
     "ok": 0,
     "total": 4
    },
+   "ui": {
+    "ok": 0,
+    "total": 4
+   },
    "undoLast": {
     "ok": 0,
     "total": 4
    },
    "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 4
+   },
+   "vocab": {
     "ok": 0,
     "total": 4
    },
@@ -1527,19 +1863,23 @@
   "shape": "אדם",
   "pick": "nameMatches",
   "file": "dart-maor/name-matches.dart",
-  "score": 59.95,
+  "score": 57.18,
   "proven": true,
-  "candidates": 6,
+  "candidates": 7,
   "top3": [
-   "nameMatches:4/4✓:59.95",
+   "nameMatches:4/4✓:57.18",
    "accessPasswordMatches:0/4:4",
-   "strongMatchForCharge:0/4:3.28"
+   "strongMatchForCharge:0/4:3.39"
   ],
   "proof": {
    "accessPasswordMatches": {
     "ok": 0,
     "total": 4,
     "error": "name_matches__accessPasswordMatches.dart:5:51: Error: Too many positional arguments: 2 allowed, but 3 found. | name_matches__accessPasswordMatches.dart:6:51: Error: Too many positional arguments: 2 allowed, but 3 found."
+   },
+   "assignmentRedeemed": {
+    "ok": 0,
+    "total": 4
    },
    "nameMatches": {
     "ok": 4,
@@ -1568,20 +1908,36 @@
   "shape": "מועד",
   "pick": "hebParts",
   "file": "dart-maor/heb-parts.dart",
-  "score": 28.18,
+  "score": 28.17,
   "proven": true,
-  "candidates": 16,
+  "candidates": 20,
   "top3": [
-   "hebParts:2/2✓:28.18",
-   "monthLabel:0/2:14.59",
-   "supportMsgTime:0/2:3.91"
+   "hebParts:2/2✓:28.17",
+   "monthLabel:0/2:15.04",
+   "supportMsgTime:0/2:3.86"
   ],
   "proof": {
+   "donateUrl": {
+    "ok": 0,
+    "total": 2
+   },
+   "expand": {
+    "ok": 0,
+    "total": 2
+   },
    "hebParts": {
     "ok": 2,
     "total": 2
    },
+   "langs": {
+    "ok": 0,
+    "total": 2
+   },
    "monthLabel": {
+    "ok": 0,
+    "total": 2
+   },
+   "palette": {
     "ok": 0,
     "total": 2
    },
@@ -1647,11 +2003,11 @@
   "shape": "מועד",
   "pick": "gem",
   "file": "dart-maor/gematria.dart",
-  "score": 54.59,
+  "score": 55.72,
   "proven": true,
   "candidates": 3,
   "top3": [
-   "gem:2/2✓:54.59",
+   "gem:2/2✓:55.72",
    "smartScore:0/2:0",
    "staleBoxes:0/2:0"
   ],
@@ -1674,13 +2030,13 @@
   "shape": "חיפוש",
   "pick": "phoneKey",
   "file": "dart-maor/phone-key.dart",
-  "score": 18.6,
+  "score": 19.06,
   "proven": true,
-  "candidates": 48,
+  "candidates": 63,
   "top3": [
-   "phoneKey:4/4✓:18.6",
-   "normPhone:1/4:19",
-   "normalizePhone:1/4:11.28"
+   "phoneKey:4/4✓:19.06",
+   "normPhone:1/4:19.56",
+   "normalizePhone:1/4:11.62"
   ],
   "proof": {
    "adarNorm": {
@@ -1692,6 +2048,10 @@
     "total": 4
    },
    "angleDigits": {
+    "ok": 1,
+    "total": 4
+   },
+   "annualKey": {
     "ok": 1,
     "total": 4
    },
@@ -1711,8 +2071,20 @@
     "ok": 1,
     "total": 4
    },
+   "detectSmtpHost": {
+    "ok": 1,
+    "total": 4
+   },
+   "donateUrl": {
+    "ok": 0,
+    "total": 4
+   },
    "esc": {
     "ok": 1,
+    "total": 4
+   },
+   "expand": {
+    "ok": 0,
     "total": 4
    },
    "expandInchFractions": {
@@ -1731,12 +2103,24 @@
     "ok": 1,
     "total": 4
    },
+   "fullDate": {
+    "ok": 1,
+    "total": 4
+   },
    "genJoinCode": {
     "ok": 0,
     "total": 4
    },
    "icsEscape": {
     "ok": 1,
+    "total": 4
+   },
+   "identityOf": {
+    "ok": 0,
+    "total": 4
+   },
+   "langs": {
+    "ok": 0,
     "total": 4
    },
    "monthKey": {
@@ -1771,6 +2155,10 @@
     "ok": 1,
     "total": 4
    },
+   "orgSlugFromUrl": {
+    "ok": 0,
+    "total": 4
+   },
    "p39ElbowModel": {
     "ok": 0,
     "total": 4
@@ -1791,6 +2179,10 @@
     "ok": 0,
     "total": 4
    },
+   "palette": {
+    "ok": 0,
+    "total": 4
+   },
    "pdfSafe": {
     "ok": 1,
     "total": 4
@@ -1805,6 +2197,10 @@
    },
    "popCall": {
     "ok": 1,
+    "total": 4
+   },
+   "priLabel": {
+    "ok": 0,
     "total": 4
    },
    "purposeKeyOf": {
@@ -1839,6 +2235,10 @@
     "ok": 0,
     "total": 4
    },
+   "statusLabel": {
+    "ok": 0,
+    "total": 4
+   },
    "stripAuditMeta": {
     "ok": 1,
     "total": 4
@@ -1867,6 +2267,26 @@
     "ok": 0,
     "total": 4
    },
+   "vFormatPhone": {
+    "ok": 0,
+    "total": 4,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "vNameSortKey": {
+    "ok": 0,
+    "total": 4,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "vNormName": {
+    "ok": 0,
+    "total": 4,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "vNormSearch": {
+    "ok": 0,
+    "total": 4,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
    "waDigits": {
     "ok": 0,
     "total": 4
@@ -1881,12 +2301,12 @@
   "shape": "חיפוש",
   "pick": "findDuplicateGroups",
   "file": "dart-maor/find-duplicate-groups.dart",
-  "score": 41.84,
+  "score": 42.74,
   "proven": true,
   "candidates": 4,
   "top3": [
-   "findDuplicateGroups:3/3✓:41.84",
-   "strongMatchForCharge:0/3:9.35",
+   "findDuplicateGroups:3/3✓:42.74",
+   "strongMatchForCharge:0/3:9.69",
    "termOf:0/3:0"
   ],
   "proof": {
@@ -1912,12 +2332,12 @@
   "shape": "מועד",
   "pick": "monthKey",
   "file": "dart-maor/month-key.dart",
-  "score": 16.66,
+  "score": 17.12,
   "proven": true,
-  "candidates": 48,
+  "candidates": 63,
   "top3": [
-   "monthKey:3/3✓:16.66",
-   "purposeKeyOf:1/3:9.06",
+   "monthKey:3/3✓:17.12",
+   "purposeKeyOf:1/3:9.28",
    "adarNorm:1/3:2"
   ],
   "proof": {
@@ -1930,6 +2350,10 @@
     "total": 3
    },
    "angleDigits": {
+    "ok": 0,
+    "total": 3
+   },
+   "annualKey": {
     "ok": 0,
     "total": 3
    },
@@ -1949,8 +2373,20 @@
     "ok": 1,
     "total": 3
    },
+   "detectSmtpHost": {
+    "ok": 0,
+    "total": 3
+   },
+   "donateUrl": {
+    "ok": 0,
+    "total": 3
+   },
    "esc": {
     "ok": 1,
+    "total": 3
+   },
+   "expand": {
+    "ok": 0,
     "total": 3
    },
    "expandInchFractions": {
@@ -1969,12 +2405,24 @@
     "ok": 1,
     "total": 3
    },
+   "fullDate": {
+    "ok": 0,
+    "total": 3
+   },
    "genJoinCode": {
     "ok": 0,
     "total": 3
    },
    "icsEscape": {
     "ok": 1,
+    "total": 3
+   },
+   "identityOf": {
+    "ok": 1,
+    "total": 3
+   },
+   "langs": {
+    "ok": 0,
     "total": 3
    },
    "monthKey": {
@@ -2009,6 +2457,10 @@
     "ok": 0,
     "total": 3
    },
+   "orgSlugFromUrl": {
+    "ok": 0,
+    "total": 3
+   },
    "p39ElbowModel": {
     "ok": 0,
     "total": 3
@@ -2029,6 +2481,10 @@
     "ok": 1,
     "total": 3
    },
+   "palette": {
+    "ok": 0,
+    "total": 3
+   },
    "pdfSafe": {
     "ok": 1,
     "total": 3
@@ -2042,6 +2498,10 @@
     "total": 3
    },
    "popCall": {
+    "ok": 0,
+    "total": 3
+   },
+   "priLabel": {
     "ok": 0,
     "total": 3
    },
@@ -2077,6 +2537,10 @@
     "ok": 0,
     "total": 3
    },
+   "statusLabel": {
+    "ok": 0,
+    "total": 3
+   },
    "stripAuditMeta": {
     "ok": 1,
     "total": 3
@@ -2105,6 +2569,26 @@
     "ok": 0,
     "total": 3
    },
+   "vFormatPhone": {
+    "ok": 0,
+    "total": 3,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "vNameSortKey": {
+    "ok": 0,
+    "total": 3,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "vNormName": {
+    "ok": 0,
+    "total": 3,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "vNormSearch": {
+    "ok": 0,
+    "total": 3,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
    "waDigits": {
     "ok": 0,
     "total": 3
@@ -2119,13 +2603,13 @@
   "shape": "ייצוא",
   "pick": "icsEscape",
   "file": "dart-maor/ics-escape.dart",
-  "score": 24.39,
+  "score": 24.84,
   "proven": true,
-  "candidates": 48,
+  "candidates": 63,
   "top3": [
-   "icsEscape:3/3✓:24.39",
-   "normId:1/3:2",
-   "normPhone:1/3:2"
+   "icsEscape:3/3✓:24.84",
+   "fullDate:1/3:2",
+   "normId:1/3:2"
   ],
   "proof": {
    "adarNorm": {
@@ -2142,6 +2626,11 @@
     "ok": 0,
     "total": 3,
     "error": "ics_escape__angleDigits.dart:6:42: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   },
+   "annualKey": {
+    "ok": 0,
+    "total": 3,
+    "error": "ics_escape__annualKey.dart:6:40: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
    },
    "basename": {
     "ok": 0,
@@ -2162,10 +2651,22 @@
     "total": 3,
     "error": "ics_escape__decodeQuotedPrintable.dart:6:52: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
    },
+   "detectSmtpHost": {
+    "ok": 1,
+    "total": 3
+   },
+   "donateUrl": {
+    "ok": 0,
+    "total": 3
+   },
    "esc": {
     "ok": 0,
     "total": 3,
     "error": "ics_escape__esc.dart:6:34: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   },
+   "expand": {
+    "ok": 0,
+    "total": 3
    },
    "expandInchFractions": {
     "ok": 0,
@@ -2185,6 +2686,10 @@
     "ok": 1,
     "total": 3
    },
+   "fullDate": {
+    "ok": 1,
+    "total": 3
+   },
    "genJoinCode": {
     "ok": 0,
     "total": 3,
@@ -2192,6 +2697,14 @@
    },
    "icsEscape": {
     "ok": 3,
+    "total": 3
+   },
+   "identityOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "langs": {
+    "ok": 0,
     "total": 3
    },
    "monthKey": {
@@ -2231,6 +2744,10 @@
     "total": 3,
     "error": "ics_escape__normalizePhone.dart:6:45: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
    },
+   "orgSlugFromUrl": {
+    "ok": 0,
+    "total": 3
+   },
    "p39ElbowModel": {
     "ok": 0,
     "total": 3,
@@ -2255,6 +2772,10 @@
     "ok": 0,
     "total": 3
    },
+   "palette": {
+    "ok": 0,
+    "total": 3
+   },
    "pdfSafe": {
     "ok": 0,
     "total": 3,
@@ -2269,6 +2790,10 @@
     "total": 3
    },
    "popCall": {
+    "ok": 0,
+    "total": 3
+   },
+   "priLabel": {
     "ok": 0,
     "total": 3
    },
@@ -2305,6 +2830,10 @@
     "ok": 0,
     "total": 3
    },
+   "statusLabel": {
+    "ok": 0,
+    "total": 3
+   },
    "stripAuditMeta": {
     "ok": 0,
     "total": 3
@@ -2333,6 +2862,26 @@
     "ok": 0,
     "total": 3
    },
+   "vFormatPhone": {
+    "ok": 0,
+    "total": 3,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "vNameSortKey": {
+    "ok": 0,
+    "total": 3,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "vNormName": {
+    "ok": 0,
+    "total": 3,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "vNormSearch": {
+    "ok": 0,
+    "total": 3,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
    "waDigits": {
     "ok": 0,
     "total": 3
@@ -2348,20 +2897,36 @@
   "shape": "ייצוא",
   "pick": "foldIcsLine",
   "file": "dart-maor/fold-ics-line.dart",
-  "score": 33.53,
+  "score": 34.21,
   "proven": true,
-  "candidates": 18,
+  "candidates": 23,
   "top3": [
-   "foldIcsLine:2/2✓:33.53",
-   "splitCsvLine:1/2:11.31",
-   "tokens:1/2:2"
+   "foldIcsLine:2/2✓:34.21",
+   "splitCsvLine:1/2:11.53",
+   "sizeDiameterAtoms:1/2:2"
   ],
   "proof": {
+   "donateUrl": {
+    "ok": 0,
+    "total": 2
+   },
+   "expand": {
+    "ok": 1,
+    "total": 2
+   },
    "foldIcsLine": {
     "ok": 2,
     "total": 2
    },
+   "langs": {
+    "ok": 0,
+    "total": 2
+   },
    "monthLabel": {
+    "ok": 0,
+    "total": 2
+   },
+   "palette": {
     "ok": 0,
     "total": 2
    },
@@ -2379,6 +2944,10 @@
    },
    "siteDonateUrl": {
     "ok": 0,
+    "total": 2
+   },
+   "sizeDiameterAtoms": {
+    "ok": 1,
     "total": 2
    },
    "sortSupportMsgs": {
@@ -2435,11 +3004,11 @@
   "shape": "ייצוא",
   "pick": "buildIcs",
   "file": "dart-maor/build-ics.dart",
-  "score": 51.94,
+  "score": 53.07,
   "proven": true,
   "candidates": 3,
   "top3": [
-   "buildIcs:2/2✓:51.94",
+   "buildIcs:2/2✓:53.07",
    "smartScore:0/2:0",
    "staleBoxes:0/2:0"
   ],
@@ -2462,11 +3031,11 @@
   "shape": "ייצוא",
   "pick": "csvEscape",
   "file": "dart-maor/csv-escape.dart",
-  "score": 60.35,
+  "score": 61.48,
   "proven": true,
-  "candidates": 24,
+  "candidates": 36,
   "top3": [
-   "csvEscape:4/4✓:60.35",
+   "csvEscape:4/4✓:61.48",
    "stringField:2/4:2",
    "formatIsraeliPhone:2/4:1"
   ],
@@ -2475,12 +3044,32 @@
     "ok": 4,
     "total": 4
    },
+   "detectSmtpHost": {
+    "ok": 1,
+    "total": 4
+   },
+   "donateUrl": {
+    "ok": 0,
+    "total": 4
+   },
    "excelSerialToIso": {
     "ok": 1,
     "total": 4
    },
+   "expand": {
+    "ok": 0,
+    "total": 4
+   },
    "formatIsraeliPhone": {
     "ok": 2,
+    "total": 4
+   },
+   "identityOf": {
+    "ok": 1,
+    "total": 4
+   },
+   "langs": {
+    "ok": 0,
     "total": 4
    },
    "monthLabel": {
@@ -2495,11 +3084,19 @@
     "ok": 0,
     "total": 4
    },
+   "palette": {
+    "ok": 0,
+    "total": 4
+   },
    "parseAnyDate": {
     "ok": 1,
     "total": 4
    },
    "popCall": {
+    "ok": 0,
+    "total": 4
+   },
+   "priLabel": {
     "ok": 0,
     "total": 4
    },
@@ -2528,6 +3125,10 @@
     "total": 4
    },
    "sortSupportThreads": {
+    "ok": 0,
+    "total": 4
+   },
+   "statusLabel": {
     "ok": 0,
     "total": 4
    },
@@ -2563,6 +3164,26 @@
     "ok": 0,
     "total": 4
    },
+   "vFormatPhone": {
+    "ok": 0,
+    "total": 4,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "vNameSortKey": {
+    "ok": 0,
+    "total": 4,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "vNormName": {
+    "ok": 0,
+    "total": 4,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "vNormSearch": {
+    "ok": 0,
+    "total": 4,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
    "waDigits": {
     "ok": 0,
     "total": 4
@@ -2573,13 +3194,13 @@
   "shape": "ייצוא",
   "pick": "toCsv",
   "file": "dart-maor/to-csv.dart",
-  "score": 17.57,
+  "score": 18.01,
   "proven": true,
-  "candidates": 14,
+  "candidates": 17,
   "top3": [
-   "toCsv:2/2✓:17.57",
-   "sanitizeSupportText:0/2:7.71",
-   "toTenantId:0/2:3.08"
+   "toCsv:2/2✓:18.01",
+   "sanitizeSupportText:0/2:7.94",
+   "score:0/2:3.46"
   ],
   "proof": {
    "coursesOfTeacher": {
@@ -2587,6 +3208,10 @@
     "total": 2
    },
    "sanitizeSupportText": {
+    "ok": 0,
+    "total": 2
+   },
+   "score": {
     "ok": 0,
     "total": 2
    },
@@ -2622,11 +3247,19 @@
     "ok": 0,
     "total": 2
    },
+   "ui": {
+    "ok": 0,
+    "total": 2
+   },
    "undoLast": {
     "ok": 0,
     "total": 2
    },
    "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 2
+   },
+   "vocab": {
     "ok": 0,
     "total": 2
    },
@@ -2646,14 +3279,30 @@
   "file": "dart-maor/parse-csv.dart",
   "score": 2,
   "proven": true,
-  "candidates": 16,
+  "candidates": 20,
   "top3": [
    "parseCsv:2/2✓:2",
-   "supportMsgTime:1/2:4.67",
+   "supportMsgTime:1/2:4.78",
    "popCall:1/2:0"
   ],
   "proof": {
+   "donateUrl": {
+    "ok": 0,
+    "total": 2
+   },
+   "expand": {
+    "ok": 0,
+    "total": 2
+   },
+   "langs": {
+    "ok": 0,
+    "total": 2
+   },
    "monthLabel": {
+    "ok": 0,
+    "total": 2
+   },
+   "palette": {
     "ok": 0,
     "total": 2
    },
@@ -2719,17 +3368,112 @@
    }
   }
  },
+ "vcard.rows": {
+  "shape": "ייבוא",
+  "pick": "vcardImportRows",
+  "file": "dart-boxes/vcard-import.dart",
+  "score": 2,
+  "proven": true,
+  "candidates": 20,
+  "top3": [
+   "vcardImportRows:3/3✓:2",
+   "popCall:1/3:0",
+   "sortSupportMsgs:1/3:0"
+  ],
+  "proof": {
+   "donateUrl": {
+    "ok": 0,
+    "total": 3
+   },
+   "expand": {
+    "ok": 0,
+    "total": 3
+   },
+   "langs": {
+    "ok": 0,
+    "total": 3
+   },
+   "monthLabel": {
+    "ok": 0,
+    "total": 3
+   },
+   "palette": {
+    "ok": 0,
+    "total": 3
+   },
+   "popCall": {
+    "ok": 1,
+    "total": 3
+   },
+   "sessionsOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "setAllowedPurposes": {
+    "ok": 0,
+    "total": 3
+   },
+   "siteDonateUrl": {
+    "ok": 0,
+    "total": 3
+   },
+   "sortSupportMsgs": {
+    "ok": 1,
+    "total": 3
+   },
+   "sortSupportThreads": {
+    "ok": 1,
+    "total": 3
+   },
+   "stripAuditMeta": {
+    "ok": 1,
+    "total": 3
+   },
+   "stripSupKey": {
+    "ok": 0,
+    "total": 3
+   },
+   "supCount": {
+    "ok": 0,
+    "total": 3
+   },
+   "supIls": {
+    "ok": 0,
+    "total": 3
+   },
+   "supUsd": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportMsgTime": {
+    "ok": 1,
+    "total": 3
+   },
+   "timeToMin": {
+    "ok": 0,
+    "total": 3
+   },
+   "vcardImportRows": {
+    "ok": 3,
+    "total": 3
+   },
+   "waDigits": {
+    "ok": 0,
+    "total": 3
+   }
+  }
+ },
  "heb.gemYear": {
   "shape": "מועד",
   "pick": "gemYear",
   "file": "dart-maor/gem-year.dart",
-  "score": 28.26,
+  "score": 28.93,
   "proven": true,
-  "candidates": 18,
+  "candidates": 22,
   "top3": [
-   "gemYear:1/1✓:28.26",
+   "gemYear:1/1✓:28.93",
    "envPath:0/1:1",
-   "metaPath:0/1:1"
+   "localize:0/1:1"
   ],
   "proof": {
    "coursesOfTeacher": {
@@ -2744,6 +3488,10 @@
     "ok": 1,
     "total": 1
    },
+   "localize": {
+    "ok": 0,
+    "total": 1
+   },
    "metaPath": {
     "ok": 0,
     "total": 1
@@ -2753,6 +3501,10 @@
     "total": 1
    },
    "sanitizeSupportText": {
+    "ok": 0,
+    "total": 1
+   },
+   "score": {
     "ok": 0,
     "total": 1
    },
@@ -2788,11 +3540,19 @@
     "ok": 0,
     "total": 1
    },
+   "ui": {
+    "ok": 0,
+    "total": 1
+   },
    "undoLast": {
     "ok": 0,
     "total": 1
    },
    "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 1
+   },
+   "vocab": {
     "ok": 0,
     "total": 1
    },
@@ -2815,7 +3575,7 @@
   "candidates": 3,
   "top3": [
    "hebDateFull:2/2✓:6",
-   "staleBoxes:0/2:6.38",
+   "staleBoxes:0/2:6.61",
    "smartScore:0/2:0"
   ],
   "proof": {

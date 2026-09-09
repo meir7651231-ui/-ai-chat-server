@@ -2,22 +2,22 @@
  "summary": {
   "ops": 30,
   "confirmed": 30,
-  "textChallenged": 5,
-  "swapsProposed": 5,
+  "textChallenged": 9,
+  "swapsProposed": 9,
   "swapsProven": 0,
-  "reach": 798
+  "reach": 898
  },
  "ops": {
   "match": {
    "declared": "smartFilter",
    "declaredFile": "dart-maor/smart-filter.dart",
    "pick": "smartFilter",
-   "candidates": 797,
+   "candidates": 897,
    "declaredRank": 0,
    "top3": [
-    "smartFilter:32.15≡",
-    "supScore:10.28",
-    "filterItems:9.85"
+    "smartFilter:33.05≡",
+    "supScore:10.5",
+    "filterItems:10.3"
    ],
    "swap": null
   },
@@ -25,12 +25,12 @@
    "declared": "finderMatches",
    "declaredFile": "dart-maor/finder-matches.dart",
    "pick": "finderMatches",
-   "candidates": 35,
+   "candidates": 43,
    "declaredRank": 0,
    "top3": [
-    "finderMatches:24.37≡",
-    "coursesOfTeacher:4.76",
-    "visibleSupportersForDesignations:4.76"
+    "finderMatches:24.82≡",
+    "coursesOfTeacher:4.99",
+    "visibleSupportersForDesignations:4.99"
    ],
    "swap": null
   },
@@ -38,25 +38,30 @@
    "declared": "toCsv",
    "declaredFile": "dart-maor/to-csv.dart",
    "pick": "toCsv",
-   "candidates": 444,
-   "declaredRank": 0,
+   "candidates": 523,
+   "declaredRank": 9,
    "top3": [
-    "toCsv:13.96≡",
-    "cockpitCsvRows:13.96",
-    "intakeLog:11.96"
+    "monthsAgo:17.72",
+    "supFromCharge:17.72",
+    "curOf:15.72"
    ],
-   "swap": null
+   "swap": {
+    "to": "monthsAgo",
+    "file": "dart-boxes/lib-nedarim-sync.dart",
+    "mode": "adapter",
+    "adapter": "// G19 · עטיפת-חתימה (מנוע-לפי-ייעוד): toCsv(dynamic rows, dynamic escape) ⇒ monthsAgo(String dateIso, String todayIso)\ndynamic toCsv(dynamic rows, dynamic escape) => monthsAgo(rows as String, escape as String);"
+   }
   },
   "role": {
    "declared": "roleOf",
    "declaredFile": "dart-maor/role-of.dart",
    "pick": "roleOf",
-   "candidates": 165,
+   "candidates": 194,
    "declaredRank": 0,
    "top3": [
-    "roleOf:25.76≡",
-    "matchAssistantCategory:16.44",
-    "teacherIdOf:10.51"
+    "roleOf:26.37≡",
+    "renderAuditTrail:21.99",
+    "curOf:16.72"
    ],
    "swap": null
   },
@@ -64,12 +69,12 @@
    "declared": "canGrantedAction",
    "declaredFile": "dart-maor/can-granted-action.dart",
    "pick": "canGrantedAction",
-   "candidates": 57,
+   "candidates": 69,
    "declaredRank": 0,
    "top3": [
-    "canGrantedAction:21.72≡",
-    "moduleOn:4.06",
-    "spotlightBox:1.75"
+    "canGrantedAction:21.91≡",
+    "moduleOn:4.28",
+    "spotlightBox:1.49"
    ],
    "swap": null
   },
@@ -77,12 +82,12 @@
    "declared": "expiringIntakes",
    "declaredFile": "dart-maor/expiring-intakes.dart",
    "pick": "expiringIntakes",
-   "candidates": 40,
+   "candidates": 48,
    "declaredRank": 0,
    "top3": [
-    "expiringIntakes:16.3≡",
-    "spotlightBox:10.72",
-    "supAvgDon:0"
+    "expiringIntakes:16.52≡",
+    "spotlightBox:10.95",
+    "search:0"
    ],
    "swap": null
   },
@@ -90,12 +95,12 @@
    "declared": "warehouseValue",
    "declaredFile": "dart-maor/warehouse-value.dart",
    "pick": "warehouseValue",
-   "candidates": 16,
+   "candidates": 20,
    "declaredRank": 0,
    "top3": [
-    "warehouseValue:31.81≡",
-    "setAllowedPurposes:2.96",
-    "siteDonateUrl:0.91"
+    "warehouseValue:32.49≡",
+    "setAllowedPurposes:3.08",
+    "siteDonateUrl:1.01"
    ],
    "swap": null
   },
@@ -103,12 +108,12 @@
    "declared": "cockpitQueue",
    "declaredFile": "dart-maor/cockpit-queue.dart",
    "pick": "cockpitQueue",
-   "candidates": 42,
+   "candidates": 58,
    "declaredRank": 0,
    "top3": [
-    "cockpitQueue:68.14≡",
-    "smartFilter:4.35",
-    "waPaymentText:4.35"
+    "cockpitQueue:69.5≡",
+    "smartFilter:4.46",
+    "waPaymentText:4.09"
    ],
    "swap": null
   },
@@ -116,12 +121,12 @@
    "declared": "cockpitProgress",
    "declaredFile": "dart-maor/cockpit-progress.dart",
    "pick": "cockpitProgress",
-   "candidates": 33,
+   "candidates": 44,
    "declaredRank": 0,
    "top3": [
-    "cockpitProgress:55.6≡",
-    "supportPreview:4.45",
-    "wheelIndexUnderPointer:4.45"
+    "cockpitProgress:56.73≡",
+    "supportPreview:4.56",
+    "wheelIndexUnderPointer:4.56"
    ],
    "swap": null
   },
@@ -129,12 +134,12 @@
    "declared": "sheetSummary",
    "declaredFile": "dart-maor/sheet-summary.dart",
    "pick": "sheetSummary",
-   "candidates": 444,
+   "candidates": 523,
    "declaredRank": 1,
    "top3": [
-    "addDaysIso:25.99",
-    "sheetSummary:21.02≡",
-    "sheetRoster:21.02"
+    "addDaysIso:26.23",
+    "sheetSummary:21.47≡",
+    "sheetRoster:21.47"
    ],
    "swap": {
     "to": "addDaysIso",
@@ -147,12 +152,12 @@
    "declared": "pendingMakeups",
    "declaredFile": "dart-maor/pending-makeups.dart",
    "pick": "pendingMakeups",
-   "candidates": 30,
+   "candidates": 37,
    "declaredRank": 1,
    "top3": [
-    "sheetSummary:11.41",
+    "sheetSummary:11.64",
     "pendingMakeups:4.5≡",
-    "supportUnread:2.6"
+    "supportUnread:2.68"
    ],
    "swap": {
     "to": "sheetSummary",
@@ -165,12 +170,12 @@
    "declared": "payBal",
    "declaredFile": "dart-maor/pay-bal.dart",
    "pick": "payBal",
-   "candidates": 37,
+   "candidates": 44,
    "declaredRank": 0,
    "top3": [
-    "payBal:34.72≡",
-    "sanitizeSupportText:3.11",
-    "waitlistFor:3.11"
+    "payBal:35.4≡",
+    "sanitizeSupportText:1.99",
+    "ui:1.99"
    ],
    "swap": null
   },
@@ -178,25 +183,30 @@
    "declared": "enrollmentPaidStatus",
    "declaredFile": "dart-maor/enrollment-paid-status.dart",
    "pick": "enrollmentPaidStatus",
-   "candidates": 43,
-   "declaredRank": 0,
+   "candidates": 62,
+   "declaredRank": 2,
    "top3": [
-    "enrollmentPaidStatus:4≡",
-    "totalLabel:2",
-    "sanitizeSupportText:1.11"
+    "curOf:15.72",
+    "histDedupKey:15.72",
+    "enrollmentPaidStatus:4≡"
    ],
-   "swap": null
+   "swap": {
+    "to": "curOf",
+    "file": "dart-boxes/lib-nedarim-sync.dart",
+    "mode": "adapter",
+    "adapter": "// G19 · עטיפת-חתימה (מנוע-לפי-ייעוד): enrollmentPaidStatus(Map<String, dynamic> e, num Function(Map<String, dynamic>) payBal, num Function(Map<String, dynamic>) paidOf,) ⇒ curOf(Map<String, dynamic> charge)\nString enrollmentPaidStatus(Map<String, dynamic> e, num Function(Map<String, dynamic>) payBal, num Function(Map<String, dynamic>) paidOf,) => curOf(e);"
+   }
   },
   "hok": {
    "declared": "hokDue",
    "declaredFile": "dart-maor/hok-due.dart",
    "pick": "hokDue",
-   "candidates": 36,
+   "candidates": 44,
    "declaredRank": 0,
    "top3": [
-    "hokDue:23.25≡",
-    "supAvgDon:8.26",
-    "waitlistFor:7.85"
+    "hokDue:23.7≡",
+    "supAvgDon:8.49",
+    "waitlistFor:8.3"
    ],
    "swap": null
   },
@@ -204,12 +214,12 @@
    "declared": "scheduleClashText",
    "declaredFile": "dart-maor/schedule-clash-text.dart",
    "pick": "scheduleClashText",
-   "candidates": 769,
+   "candidates": 868,
    "declaredRank": 0,
    "top3": [
-    "scheduleClashText:56.23≡",
-    "roomsNow:29.55",
-    "waPaymentText:16.33"
+    "scheduleClashText:55.26≡",
+    "roomsNow:30.34",
+    "waPaymentText:15.54"
    ],
    "swap": null
   },
@@ -217,12 +227,12 @@
    "declared": "buildSlots",
    "declaredFile": "dart-maor/build-slots.dart",
    "pick": "buildSlots",
-   "candidates": 41,
+   "candidates": 49,
    "declaredRank": 0,
    "top3": [
-    "buildSlots:76.85≡",
-    "waPaymentText:-0.88",
-    "staleBoxes:-6.1"
+    "buildSlots:78.39≡",
+    "waPaymentText:-0.56",
+    "staleBoxes:-5.78"
    ],
    "swap": null
   },
@@ -230,12 +240,12 @@
    "declared": "blockReason",
    "declaredFile": "dart-maor/block-reason.dart",
    "pick": "blockReason",
-   "candidates": 48,
+   "candidates": 67,
    "declaredRank": 0,
    "top3": [
-    "blockReason:49.82≡",
-    "sheetSummary:8.3",
-    "staleBoxes:4.38"
+    "blockReason:50.73≡",
+    "sheetSummary:8.75",
+    "staleBoxes:4.61"
    ],
    "swap": null
   },
@@ -243,12 +253,12 @@
    "declared": "holidayOf",
    "declaredFile": "dart-maor/holiday-of.dart",
    "pick": "holidayOf",
-   "candidates": 46,
+   "candidates": 65,
    "declaredRank": 0,
    "top3": [
-    "holidayOf:27.25≡",
-    "hebMonthHeWired:13.19",
-    "sheetSummary:10.3"
+    "holidayOf:27.49≡",
+    "isoOf:20.62",
+    "hebMonthHeWired:13.28"
    ],
    "swap": null
   },
@@ -256,12 +266,12 @@
    "declared": "weeklyRoomSessions",
    "declaredFile": "dart-maor/weekly-room-sessions.dart",
    "pick": "weeklyRoomSessions",
-   "candidates": 44,
+   "candidates": 52,
    "declaredRank": 0,
    "top3": [
-    "weeklyRoomSessions:33.17≡",
-    "sessionsOf:5.3",
-    "spotlightBox:3.75"
+    "weeklyRoomSessions:33.73≡",
+    "sessionsOf:5.52",
+    "spotlightBox:3.49"
    ],
    "swap": null
   },
@@ -269,12 +279,12 @@
    "declared": "sessionsOf",
    "declaredFile": "dart-maor/sessions-of.dart",
    "pick": "sessionsOf",
-   "candidates": 209,
+   "candidates": 260,
    "declaredRank": 0,
    "top3": [
-    "sessionsOf:34.74≡",
-    "defaultPrices:10.54",
-    "defaultCourseDates:9.11"
+    "sessionsOf:35.6≡",
+    "curOf:17.72",
+    "histDedupKey:17.72"
    ],
    "swap": null
   },
@@ -282,38 +292,48 @@
    "declared": "enrollCount",
    "declaredFile": "dart-maor/enroll-count.dart",
    "pick": "enrollCount",
-   "candidates": 67,
-   "declaredRank": 0,
+   "candidates": 76,
+   "declaredRank": 1,
    "top3": [
-    "enrollCount:11.21≡",
-    "waitlistFor:10.72",
-    "coursesOfTeacher:9.6"
+    "monthsAgo:18.72",
+    "enrollCount:11.51≡",
+    "coursesOfTeacher:9.83"
    ],
-   "swap": null
+   "swap": {
+    "to": "monthsAgo",
+    "file": "dart-boxes/lib-nedarim-sync.dart",
+    "mode": "adapter",
+    "adapter": "// G19 · עטיפת-חתימה (מנוע-לפי-ייעוד): enrollCount(dynamic db, dynamic courseId) ⇒ monthsAgo(String dateIso, String todayIso)\nint enrollCount(dynamic db, dynamic courseId) => monthsAgo(db as String, courseId as String);"
+   }
   },
   "wait": {
    "declared": "waitlistFor",
    "declaredFile": "dart-maor/waitlist-for.dart",
    "pick": "waitlistFor",
-   "candidates": 444,
-   "declaredRank": 0,
+   "candidates": 523,
+   "declaredRank": 3,
    "top3": [
-    "waitlistFor:16.46≡",
-    "coursesOfTeacher:16.19≡",
-    "isSizeToken:7.5"
+    "monthsAgo:17.72",
+    "supFromCharge:17.72",
+    "coursesOfTeacher:16.64≡"
    ],
-   "swap": null
+   "swap": {
+    "to": "monthsAgo",
+    "file": "dart-boxes/lib-nedarim-sync.dart",
+    "mode": "adapter",
+    "adapter": "// G19 · עטיפת-חתימה (מנוע-לפי-ייעוד): waitlistFor(dynamic enrollments, dynamic courseId) ⇒ monthsAgo(String dateIso, String todayIso)\ndynamic waitlistFor(dynamic enrollments, dynamic courseId) => monthsAgo(enrollments as String, courseId as String);"
+   }
   },
   "byteacher": {
    "declared": "coursesOfTeacher",
    "declaredFile": "dart-maor/courses-of-teacher.dart",
    "pick": "coursesOfTeacher",
-   "candidates": 444,
+   "candidates": 523,
    "declaredRank": 0,
    "top3": [
-    "coursesOfTeacher:19.8≡",
-    "cockpitCsvRows:11.73",
-    "cockpitWorkListText:8.7"
+    "coursesOfTeacher:20.26≡",
+    "monthsAgo:17.72",
+    "supFromCharge:17.72"
    ],
    "swap": null
   },
@@ -321,12 +341,12 @@
    "declared": "teacherIdOf",
    "declaredFile": "dart-maor/teacher-id-of.dart",
    "pick": "teacherIdOf",
-   "candidates": 444,
-   "declaredRank": 4,
+   "candidates": 523,
+   "declaredRank": 17,
    "top3": [
-    "isAdminUser:27.46",
-    "coursesOfTeacher:19.34≡",
-    "cockpitCsvRows:15.79"
+    "isAdminUser:28.11",
+    "canPlace:22.99",
+    "auditTrail:20.99"
    ],
    "swap": {
     "to": "isAdminUser",
@@ -339,12 +359,12 @@
    "declared": "certExpiryStatus",
    "declaredFile": "dart/cert_expiry_status.dart",
    "pick": "certExpiryStatus",
-   "candidates": 30,
+   "candidates": 37,
    "declaredRank": 0,
    "top3": [
-    "certExpiryStatus:16.2≡",
-    "coursesOfTeacher:0",
-    "sanitizeSupportText:0"
+    "certExpiryStatus:16.43≡",
+    "score:2.3",
+    "ui:2.3"
    ],
    "swap": null
   },
@@ -352,12 +372,12 @@
    "declared": "waLink",
    "declaredFile": "dart-maor/wa-link.dart",
    "pick": "waLink",
-   "candidates": 591,
-   "declaredRank": 8,
+   "candidates": 686,
+   "declaredRank": 17,
    "top3": [
-    "isSendableSupportText:17.01",
-    "importableContacts:16.82",
-    "cockpitWorkListText:14.41"
+    "isSendableSupportText:17.46",
+    "importableContacts:17.27",
+    "monthsAgo:15.72"
    ],
    "swap": {
     "to": "isSendableSupportText",
@@ -370,12 +390,12 @@
    "declared": "bulkWaRecipients",
    "declaredFile": "dart-maor/bulk-wa-recipients.dart",
    "pick": "bulkWaRecipients",
-   "candidates": 31,
+   "candidates": 38,
    "declaredRank": 0,
    "top3": [
-    "bulkWaRecipients:16.44≡",
-    "coursesOfTeacher:5.09",
-    "visibleSupportersForDesignations:5.09"
+    "bulkWaRecipients:16.78≡",
+    "coursesOfTeacher:5.31",
+    "visibleSupportersForDesignations:5.31"
    ],
    "swap": null
   },
@@ -383,12 +403,12 @@
    "declared": "renderTemplate",
    "declaredFile": "dart-maor/render-template.dart",
    "pick": "renderTemplate",
-   "candidates": 48,
+   "candidates": 69,
    "declaredRank": 0,
    "top3": [
-    "renderTemplate:16.1≡",
-    "resolveLocalized:5.71",
-    "sanitizeSupportText:3.71"
+    "renderTemplate:16.33≡",
+    "resolveLocalized:5.94",
+    "sanitizeSupportText:3.94"
    ],
    "swap": null
   },
@@ -396,12 +416,12 @@
    "declared": "parseCsv",
    "declaredFile": "dart-maor/parse-csv.dart",
    "pick": "parseCsv",
-   "candidates": 16,
-   "declaredRank": 1,
+   "candidates": 20,
+   "declaredRank": 2,
    "top3": [
-    "supUsd:6.98",
-    "parseCsv:2≡",
-    "monthLabel:0"
+    "supUsd:7.1",
+    "expand:3.46",
+    "parseCsv:2≡"
    ],
    "swap": {
     "to": "supUsd",
@@ -414,12 +434,12 @@
    "declared": "trendFromScan",
    "declaredFile": "dart-maor/intel-trend-from-scan.dart",
    "pick": "trendFromScan",
-   "candidates": 20,
+   "candidates": 28,
    "declaredRank": 0,
    "top3": [
-    "trendFromScan:94.14≡",
-    "sortSupportThreads:7.5",
-    "supUsd:3.11"
+    "trendFromScan:95.95≡",
+    "supFromDonor:19.72≡",
+    "sortSupportThreads:7.73"
    ],
    "swap": null
   }
@@ -441,10 +461,14 @@
   "advanceStatus",
   "advisoryHe",
   "ageOf",
+  "allDonationPurposes",
+  "allLines",
   "allOffConfig",
   "allSupPhones",
   "allowedDesignationsFor",
+  "allowedValues",
   "angleDigits",
+  "annualKey",
   "annualReportLines",
   "appendCall",
   "applyAyinNames",
@@ -453,14 +477,17 @@
   "applyEntityPartial",
   "applyMetaPartial",
   "applyOutcome",
+  "applyPack",
   "applyVerticalPack",
   "approveMember",
+  "assignmentRedeemed",
   "assistantCategories",
   "attentionItems",
   "auditCatColors",
   "auditLine",
   "auditReportLines",
   "auditRows",
+  "auditTrail",
   "autoMatchCharges",
   "axisOf",
   "ayinActionVisible",
@@ -490,6 +517,7 @@
   "buildIcs",
   "buildReenrollRows",
   "buildSlots",
+  "buildSmtpAccount",
   "buildTasksGantt",
   "buildTenant",
   "buildTzGrid",
@@ -497,13 +525,16 @@
   "bulkWaRecipients",
   "callStats",
   "callerKindLabel",
+  "campaign",
   "campaignCsvRows",
   "campaignProgress",
   "campaignTotal",
   "canAddPhoto",
   "canConnect",
+  "canGoBack",
   "canGrantedAction",
   "canIssueReceipt",
+  "canPlace",
   "candidateSupportersForCharge",
   "catNodeProductCount",
   "catValueLabel",
@@ -519,6 +550,7 @@
   "cities",
   "clampScale",
   "classifyScope",
+  "cldrGuard",
   "clean",
   "cleanSub",
   "cleanSupPhones",
@@ -538,6 +570,7 @@
   "colPath",
   "colRefToIndex",
   "collect",
+  "collectedPaid",
   "collectionScoreDelta",
   "collectionsCsvRows",
   "colorHe",
@@ -550,10 +583,16 @@
   "componentRemaining",
   "componentTypeNames",
   "composeSmtpUrl",
+  "configOpEquals",
+  "configOpFromJson",
+  "configOpsFromJson",
+  "configOpsToJson",
   "connTypeId",
   "connectionFailReason",
+  "contactDrafts",
   "contactToRow",
   "contractorCredit",
+  "contractorCreditTier",
   "cooldownForFails",
   "coordinatorBoxes",
   "coordinatorTotal",
@@ -567,11 +606,14 @@
   "createCloudKey",
   "criticalBusinessKind",
   "criticalOpen",
+  "cssFor",
   "csvEscape",
   "csvHeaderIndex",
   "csvHeaderScore",
   "csvIsBlank",
   "csvIsComment",
+  "csvRows",
+  "curOf",
   "currentId",
   "cycleCarry",
   "cycleHit",
@@ -600,6 +642,7 @@
   "deliveriesOfVolunteer",
   "deliveryListLines",
   "deliveryNoteTitle",
+  "detectSmtpHost",
   "diffDb",
   "directionalContext",
   "distributionListLines",
@@ -607,14 +650,19 @@
   "docSkey",
   "donAllowedKeys",
   "donCalMonthLine",
+  "donateUrl",
   "donationPartitionDiff",
   "donationSplitOn",
   "donationYears",
   "donationsOfYear",
   "donationsPath",
   "donePercent",
+  "doneToday",
   "doneTodayFor",
   "donorScan",
+  "downloadAnnualReport",
+  "downloadIcs",
+  "downloadReceipt",
   "dupFieldValue",
   "duplicateCourse",
   "dynMap",
@@ -643,11 +691,14 @@
   "evLabel",
   "eventsCsvRows",
   "excelSerialToIso",
+  "expFieldDefs",
+  "expand",
   "expandInchFractions",
   "expandQuery",
   "expiringIntakes",
   "explodeSupporter",
   "exportAllowed",
+  "exportNames",
   "eyesTotal",
   "fMoney",
   "famEnrollments",
@@ -662,6 +713,7 @@
   "featureOn",
   "fewShotExample",
   "fieldLabelHe",
+  "fieldValue",
   "fillCardFromCharge",
   "filterAyinBoard",
   "filterCollections",
@@ -696,6 +748,7 @@
   "frictionFactor",
   "frozen",
   "frozenRegistrySnapshot",
+  "fullDate",
   "fullDbDiff",
   "fuzzyMatch",
   "fuzzyNameMatch",
@@ -708,6 +761,8 @@
   "genRecoveryKey",
   "generateCsvTemplate",
   "givenValue",
+  "goBack",
+  "goTo",
   "gradeFits",
   "gradeIndex",
   "grandTotal",
@@ -718,9 +773,11 @@
   "groupThousands",
   "groupsHintFromAudience",
   "guardExport",
+  "guideRecipes",
   "guideSections",
   "hasCoords",
   "hasPublicSite",
+  "hasSite",
   "heForOp",
   "headers",
   "hebAnnualEq",
@@ -731,7 +788,10 @@
   "hebParts",
   "hebPartsOfIso",
   "hebToIso",
+  "hebToIsoEn",
   "hebYearNow",
+  "histDedupKey",
+  "hokDayFromDate",
   "hokDue",
   "hokEffectivelyActive",
   "hokMethodLabel",
@@ -743,6 +803,8 @@
   "humanize",
   "icsEscape",
   "icsFeedUrl",
+  "identifyCaller",
+  "identityOf",
   "importableContacts",
   "inRange",
   "inactiveRoomCourses",
@@ -774,10 +836,12 @@
   "isMember",
   "isNavStructural",
   "isOrgManager",
+  "isOverdue",
   "isOwnerEmail",
   "isPipe",
   "isPipeProductE",
   "isRenewed",
+  "isRtl",
   "isRtlLang",
   "isSafeAccent",
   "isSendableSupportText",
@@ -790,16 +854,20 @@
   "isValidSlug",
   "isoDaysAgo",
   "isoLocal",
+  "isoOf",
   "isoToHebParts",
   "isoToday",
   "itemLabel",
   "itemOf",
   "itemRemaining",
   "kForType",
+  "keysOf",
   "kindEmoji",
+  "kindLabel",
   "kindPlural",
   "kitProgress",
   "label",
+  "langs",
   "lastClose",
   "lastCollectionIso",
   "leaderboard",
@@ -813,8 +881,12 @@
   "lipskeyAccFor",
   "lipskeyCategoryToId",
   "lipskeyStagesFor",
+  "listLines",
   "liveRedemptions",
   "liveSuggestions",
+  "loadHint",
+  "localIso",
+  "localize",
   "locationToAvailability",
   "lockKey",
   "looksTruncated",
@@ -826,6 +898,7 @@
   "managerMorningBriefPrompt",
   "mapsRouteUrl",
   "mapsSearchUrl",
+  "maritalChipStyle",
   "matCostTotal",
   "matchActionId",
   "matchAll",
@@ -841,6 +914,7 @@
   "matchElementId",
   "matchIncomingToPlanned",
   "matchPropKey",
+  "matchRecipeFromList",
   "matchRuleOp",
   "matchTriggerId",
   "materialOf",
@@ -866,6 +940,8 @@
   "minToHM",
   "minutesBetweenIso",
   "mk2",
+  "modeOf",
+  "modeStr",
   "modelMeta",
   "moduleOn",
   "money",
@@ -873,11 +949,13 @@
   "monthHeOf",
   "monthKey",
   "monthLabel",
+  "monthsAgo",
   "nameIndex",
   "nameMatches",
   "nameSortKey",
   "namesToTemplateLines",
   "namespaceOf",
+  "navStep",
   "needLabel",
   "netCheckScript",
   "newSupporterFromRow",
@@ -897,16 +975,23 @@
   "normNameLocal",
   "normPhone",
   "normSearch",
+  "normalize",
+  "normalizeConfig",
   "normalizePhone",
   "normalizePrices",
+  "normalizeSite",
   "normalizeTelephony",
   "numMap",
   "numMatch",
   "od2Of",
+  "ofYear",
   "offerNewFamily",
   "only",
   "opTag",
   "openCloudKey",
+  "openCourse",
+  "openFamily",
+  "openTasks",
   "openTasksFor",
   "orbitTheme",
   "orgCalEntries",
@@ -923,9 +1008,11 @@
   "p53AdapterModel",
   "p54AdapterModel",
   "p55AdapterModel",
+  "packOf",
   "pad2",
   "paidInRange",
   "paidOf",
+  "palette",
   "parseAcc",
   "parseAnyDate",
   "parseAssistantIntent",
@@ -934,9 +1021,11 @@
   "parseCsv",
   "parseFamiliesCsv",
   "parseJoinFullCode",
+  "parseSupporterCsv",
   "parseSupporterGrid",
   "parseVcards",
   "parseXlsxSheet",
+  "parts",
   "payBal",
   "payCredit",
   "payLink",
@@ -967,11 +1056,15 @@
   "presentsInMonth",
   "pressureDropToString",
   "pressureFromDims",
+  "priLabel",
   "priceSuffix",
+  "printReceipt",
   "productAssignments",
   "productDivisionSystems",
+  "productSuitableForTemp",
   "productsOfMaterial",
   "progress",
+  "progressOfDay",
   "projectQuoteText",
   "projectToScreen",
   "providerClearer",
@@ -982,6 +1075,7 @@
   "pushDonations",
   "pushNav",
   "pushRecent",
+  "quote",
   "quoteTextFor",
   "rangeLabel",
   "rank",
@@ -991,6 +1085,7 @@
   "readFilteredMode",
   "readIcsFeedToken",
   "readOrgSecretsMeta",
+  "readPrices",
   "reassembleDonations",
   "receiptFmtOf",
   "receiptHtml",
@@ -1006,10 +1101,13 @@
   "reenrollListText",
   "relabelHistByTxn",
   "removeMember",
+  "renderAuditTrail",
   "renderTemplate",
   "renewOf",
   "renewTargets",
   "repairCardsFromRows",
+  "reportLines",
+  "reportText",
   "resetPassword",
   "resolveCatTitle",
   "resolveEnrollFamily",
@@ -1035,6 +1133,7 @@
   "runAudit",
   "safeHttpsUrl",
   "safeProp",
+  "sameJson",
   "sameLoc",
   "sanitizeIncoming",
   "sanitizePhotos",
@@ -1045,7 +1144,10 @@
   "scopeLabel",
   "scopeTokenHe",
   "scopedPrefsKey",
+  "score",
   "screenLabelHe",
+  "screenPop",
+  "search",
   "seedPool",
   "segmentKeyOf",
   "segulaReminders",
@@ -1095,8 +1197,11 @@
   "staleBoxes",
   "startCampaign",
   "startOfWeekSunday",
+  "stats",
+  "statusLabel",
   "stepPostpone",
   "stepScale",
+  "steps",
   "stockMerkaz",
   "strList",
   "strListOrNull",
@@ -1122,6 +1227,8 @@
   "supDupFieldValue",
   "supEnforceActive",
   "supEnforceOn",
+  "supFromCharge",
+  "supFromDonor",
   "supHasRegion",
   "supIls",
   "supKeyMapOf",
@@ -1154,6 +1261,8 @@
   "telHref",
   "telephonyOn",
   "telephonyToTenant",
+  "templateFor",
+  "templateForName",
   "templateKeys",
   "templateLinesToNames",
   "termLabel",
@@ -1176,11 +1285,17 @@
   "triggerMatches",
   "trimEdges",
   "trustReport",
+  "ui",
   "undoLast",
   "unitLabel",
   "upcomingHolidays",
   "upcomingMeetings",
   "usableConnector",
+  "vFormatPhone",
+  "vNameSortKey",
+  "vNormName",
+  "vNormSearch",
+  "vValidId",
   "validBoardCode",
   "validBusinessId",
   "validDateRange",
@@ -1188,11 +1303,14 @@
   "validIsraeliId",
   "validIsraeliMobile",
   "validPositiveAmount",
+  "validateCondition",
   "validateHebMonthNames",
   "variantValue",
+  "vcardImportRows",
   "verifiedSpecToDoc",
   "visibleEventsForDesignations",
   "visibleSupportersForDesignations",
+  "vocab",
   "volunteerLoadHint",
   "volunteerRouteStops",
   "waAppLink",
@@ -1222,6 +1340,8 @@
   "wizardIndustries",
   "wizardStepError",
   "workerShortName",
-  "writeFilteredMode"
+  "writeFilteredMode",
+  "writePrices",
+  "years"
  ]
 }

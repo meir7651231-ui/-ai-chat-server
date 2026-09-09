@@ -10,7 +10,7 @@ import * as R from '../root.mjs';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const DART = process.env.DART || (fs.existsSync('/home/user/flutter/bin/cache/dart-sdk/bin/dart') ? '/home/user/flutter/bin/cache/dart-sdk/bin/dart' : 'dart');
 /** מועמד טהור = אטום בלי import (חוק-1) — ניתן להרצה בבידוד */
-export const isPure = (file) => { try { return !/^import /m.test(fs.readFileSync(path.join(R.NEW, file), 'utf8')); } catch { return false; } };
+export const isPure = (file) => { try { const src = fs.readFileSync(path.join(R.NEW, file), 'utf8'); return [...src.matchAll(/^import\s+'([^']+)'/gm)].every((m) => /^(\.\.?\/)/.test(m[1]) || /^dart:(convert|math|core|collection|typed_data)$/.test(m[1])); } catch { return false; } };   // G48 · טהור = אפס-import, או ייבוא-יחסי מהמדף / ספריית-dart טהורה (קופסאות); package:/dart:io/ui/html ⇒ לא
 /** @param id מזהה-הצורך · cands [{id,file}] · examples [[argsDart, checkDart]] ⇒ {candId: {ok,total}} | {error} */
 export function proveCandidates(id, cands, examples, extraImports = []) {   // extraImports: שקעים מהקטלוג (אטומי-דאטה/מנועים) שהדוגמאות קוראות להם בלי קידומת
   const pure = cands.filter((c) => isPure(c.file)); if (!pure.length || !examples || !examples.length) return {};

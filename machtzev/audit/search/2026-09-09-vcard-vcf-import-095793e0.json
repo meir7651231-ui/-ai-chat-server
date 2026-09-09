@@ -1,0 +1,731 @@
+{
+ "v": 1,
+ "ts": "2026-09-09T20:48:49.956Z",
+ "query": "vcard vcf import rows אנשי קשר ייבוא טלפון contact parse",
+ "tokens": [
+  "vcard",
+  "vcf",
+  "import",
+  "rows",
+  "אנשי",
+  "קשר",
+  "ייבוא",
+  "טלפון",
+  "contact",
+  "parse"
+ ],
+ "oracle": {
+  "atomIndexSha": "a81d3644a039951ed890ee7b875ccfbded711dde41ac24aa2a7aeeca5e4e896a",
+  "logicCensusSha": "c2be971c0995aebe610be25fa876fa59699f7eb075a600262d6f0f7a5b0050a3",
+  "display": 1878,
+  "logic": 954
+ },
+ "candidates": [
+  {
+   "id": "vcardImportRows",
+   "layer": "logic",
+   "file": "dart-boxes/vcard-import.dart",
+   "score": 9,
+   "hits": [
+    "vcard",
+    "import",
+    "rows"
+   ]
+  },
+  {
+   "id": "familiesImportFormatRows",
+   "layer": "logic",
+   "file": "dart-maor/families-import-format-rows.dart",
+   "score": 6,
+   "hits": [
+    "import",
+    "rows"
+   ]
+  },
+  {
+   "id": "importableContacts",
+   "layer": "logic",
+   "file": "dart-maor/importable-contacts.dart",
+   "score": 6,
+   "hits": [
+    "import",
+    "contact"
+   ]
+  },
+  {
+   "id": "parseVcards",
+   "layer": "logic",
+   "file": "dart-maor/parse-vcards.dart",
+   "score": 6,
+   "hits": [
+    "vcard",
+    "parse"
+   ]
+  },
+  {
+   "id": "supportersImportFormatRows",
+   "layer": "logic",
+   "file": "dart-maor/supporters-import-format-rows.dart",
+   "score": 6,
+   "hits": [
+    "import",
+    "rows"
+   ]
+  },
+  {
+   "id": "auditRows",
+   "layer": "logic",
+   "file": "dart/audit_rows.dart",
+   "score": 3,
+   "hits": [
+    "rows"
+   ]
+  },
+  {
+   "id": "ayinAllRows",
+   "layer": "logic",
+   "file": "dart-maor/ayin-all-rows.dart",
+   "score": 3,
+   "hits": [
+    "rows"
+   ]
+  },
+  {
+   "id": "ayinDailyRows",
+   "layer": "logic",
+   "file": "dart-maor/ayin-daily-rows.dart",
+   "score": 3,
+   "hits": [
+    "rows"
+   ]
+  },
+  {
+   "id": "ayinSheetRows",
+   "layer": "logic",
+   "file": "dart-maor/ayin-sheet-rows.dart",
+   "score": 3,
+   "hits": [
+    "rows"
+   ]
+  },
+  {
+   "id": "bomRows",
+   "layer": "logic",
+   "file": "dart/bom_rows.dart",
+   "score": 3,
+   "hits": [
+    "rows"
+   ]
+  },
+  {
+   "id": "buildCourseDailyRows",
+   "layer": "logic",
+   "file": "dart-maor/build-course-daily-rows.dart",
+   "score": 3,
+   "hits": [
+    "rows"
+   ]
+  },
+  {
+   "id": "buildReenrollRows",
+   "layer": "logic",
+   "file": "dart-maor/build-reenroll-rows.dart",
+   "score": 3,
+   "hits": [
+    "rows"
+   ]
+  },
+  {
+   "id": "campaignCsvRows",
+   "layer": "logic",
+   "file": "dart-maor/campaign-csv-rows.dart",
+   "score": 3,
+   "hits": [
+    "rows"
+   ]
+  },
+  {
+   "id": "cockpitCsvRows",
+   "layer": "logic",
+   "file": "dart-maor/cockpit-csv-rows.dart",
+   "score": 3,
+   "hits": [
+    "rows"
+   ]
+  },
+  {
+   "id": "collectionsCsvRows",
+   "layer": "logic",
+   "file": "dart-maor/collections-csv-rows.dart",
+   "score": 3,
+   "hits": [
+    "rows"
+   ]
+  },
+  {
+   "id": "CompanyCatalogImportCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/company_catalog_import_card.dart",
+   "score": 3,
+   "hits": [
+    "import"
+   ]
+  },
+  {
+   "id": "contactDrafts",
+   "layer": "logic",
+   "file": "dart-boxes/worktasks.dart",
+   "score": 3,
+   "hits": [
+    "contact"
+   ]
+  },
+  {
+   "id": "ContactTile",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__store_screen/contact_tile.dart",
+   "score": 3,
+   "hits": [
+    "contact"
+   ]
+  },
+  {
+   "id": "contactToRow",
+   "layer": "logic",
+   "file": "dart-maor/contact-to-row.dart",
+   "score": 3,
+   "hits": [
+    "contact"
+   ]
+  },
+  {
+   "id": "csvRows",
+   "layer": "logic",
+   "file": "dart-boxes/distribution.dart",
+   "score": 3,
+   "hits": [
+    "rows"
+   ]
+  },
+  {
+   "id": "deliveriesCsvRows",
+   "layer": "logic",
+   "file": "dart-maor/deliveries-csv-rows.dart",
+   "score": 3,
+   "hits": [
+    "rows"
+   ]
+  },
+  {
+   "id": "eventsCsvRows",
+   "layer": "logic",
+   "file": "dart-maor/events-csv-rows.dart",
+   "score": 3,
+   "hits": [
+    "rows"
+   ]
+  },
+  {
+   "id": "FinRows",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/fin_rows.dart",
+   "score": 3,
+   "hits": [
+    "rows"
+   ]
+  },
+  {
+   "id": "ForgeContactTile",
+   "layer": "display",
+   "file": "dart-forge-bs/card/contact_tile.dart",
+   "score": 3,
+   "hits": [
+    "contact"
+   ]
+  },
+  {
+   "id": "isJunkContact",
+   "layer": "logic",
+   "file": "dart-maor/is-junk-contact.dart",
+   "score": 3,
+   "hits": [
+    "contact"
+   ]
+  },
+  {
+   "id": "mergeFamilyImport",
+   "layer": "logic",
+   "file": "dart-maor/merge-family-import.dart",
+   "score": 3,
+   "hits": [
+    "import"
+   ]
+  },
+  {
+   "id": "overdueContactTaskDrafts",
+   "layer": "logic",
+   "file": "dart-maor/overdue-contact-task-drafts.dart",
+   "score": 3,
+   "hits": [
+    "contact"
+   ]
+  },
+  {
+   "id": "parseAcc",
+   "layer": "logic",
+   "file": "dart-maor/parse-acc.dart",
+   "score": 3,
+   "hits": [
+    "parse"
+   ]
+  },
+  {
+   "id": "parseAnyDate",
+   "layer": "logic",
+   "file": "dart-maor/parse-any-date.dart",
+   "score": 3,
+   "hits": [
+    "parse"
+   ]
+  },
+  {
+   "id": "parseAssistantIntent",
+   "layer": "logic",
+   "file": "dart/parse_assistant_intent.dart",
+   "score": 3,
+   "hits": [
+    "parse"
+   ]
+  },
+  {
+   "id": "parseAyinSheet",
+   "layer": "logic",
+   "file": "dart-maor/parse-ayin-sheet.dart",
+   "score": 3,
+   "hits": [
+    "parse"
+   ]
+  },
+  {
+   "id": "parseBore",
+   "layer": "logic",
+   "file": "dart/parse_bore.dart",
+   "score": 3,
+   "hits": [
+    "parse"
+   ]
+  },
+  {
+   "id": "parseChips",
+   "layer": "logic",
+   "file": "dart/parse_chips.dart",
+   "score": 3,
+   "hits": [
+    "parse"
+   ]
+  },
+  {
+   "id": "parseCsv",
+   "layer": "logic",
+   "file": "dart-maor/parse-csv.dart",
+   "score": 3,
+   "hits": [
+    "parse"
+   ]
+  },
+  {
+   "id": "parseFamiliesCsv",
+   "layer": "logic",
+   "file": "dart-maor/parse-families-csv.dart",
+   "score": 3,
+   "hits": [
+    "parse"
+   ]
+  },
+  {
+   "id": "parseJoinFullCode",
+   "layer": "logic",
+   "file": "dart-maor/parse-join-full-code.dart",
+   "score": 3,
+   "hits": [
+    "parse"
+   ]
+  },
+  {
+   "id": "parseSupporterCsv",
+   "layer": "logic",
+   "file": "dart-boxes/supporters.dart",
+   "score": 3,
+   "hits": [
+    "parse"
+   ]
+  },
+  {
+   "id": "parseSupporterGrid",
+   "layer": "logic",
+   "file": "dart-maor/parse-supporter-grid.dart",
+   "score": 3,
+   "hits": [
+    "parse"
+   ]
+  },
+  {
+   "id": "parseXlsxSheet",
+   "layer": "logic",
+   "file": "dart-maor/parse-xlsx-sheet.dart",
+   "score": 3,
+   "hits": [
+    "parse"
+   ]
+  },
+  {
+   "id": "planSupporterImport",
+   "layer": "logic",
+   "file": "dart-maor/plan-supporter-import.dart",
+   "score": 3,
+   "hits": [
+    "import"
+   ]
+  },
+  {
+   "id": "redemptionsCsvRows",
+   "layer": "logic",
+   "file": "dart-maor/redemptions-csv-rows.dart",
+   "score": 3,
+   "hits": [
+    "rows"
+   ]
+  },
+  {
+   "id": "reenrollCsvRows",
+   "layer": "logic",
+   "file": "dart-maor/reenroll-csv-rows.dart",
+   "score": 3,
+   "hits": [
+    "rows"
+   ]
+  },
+  {
+   "id": "repairCardsFromRows",
+   "layer": "logic",
+   "file": "dart-maor/repair-cards-from-rows.dart",
+   "score": 3,
+   "hits": [
+    "rows"
+   ]
+  },
+  {
+   "id": "wfDailyRows",
+   "layer": "logic",
+   "file": "dart/wf_daily_rows.dart",
+   "score": 3,
+   "hits": [
+    "rows"
+   ]
+  },
+  {
+   "id": "ChatSettingsActionRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/chat_settings_action_row.dart",
+   "score": 2,
+   "hits": [
+    "אנשי",
+    "קשר"
+   ]
+  },
+  {
+   "id": "ChatSettingsSectionTile",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/chat_settings_section_tile.dart",
+   "score": 2,
+   "hits": [
+    "אנשי",
+    "קשר"
+   ]
+  },
+  {
+   "id": "ChatSettingsSwitchRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/chat_settings_switch_row.dart",
+   "score": 2,
+   "hits": [
+    "אנשי",
+    "קשר"
+   ]
+  },
+  {
+   "id": "ConfirmDialog",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/confirm_dialog.dart",
+   "score": 2,
+   "hits": [
+    "אנשי",
+    "קשר"
+   ]
+  },
+  {
+   "id": "InlineTextRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/inline_text_row.dart",
+   "score": 2,
+   "hits": [
+    "אנשי",
+    "קשר"
+   ]
+  },
+  {
+   "id": "QuickReplyBanner",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/quick_reply_banner.dart",
+   "score": 2,
+   "hits": [
+    "אנשי",
+    "קשר"
+   ]
+  },
+  {
+   "id": "SettingsActionRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_action_row.dart",
+   "score": 2,
+   "hits": [
+    "אנשי",
+    "קשר"
+   ]
+  },
+  {
+   "id": "SettingsInlineTextRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_inline_text_row.dart",
+   "score": 2,
+   "hits": [
+    "אנשי",
+    "קשר"
+   ]
+  },
+  {
+   "id": "SettingsSectionTile",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_section_tile.dart",
+   "score": 2,
+   "hits": [
+    "אנשי",
+    "קשר"
+   ]
+  },
+  {
+   "id": "SettingsSwitchRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_switch_row.dart",
+   "score": 2,
+   "hits": [
+    "אנשי",
+    "קשר"
+   ]
+  },
+  {
+   "id": "SettingsTimeRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_time_row.dart",
+   "score": 2,
+   "hits": [
+    "אנשי",
+    "קשר"
+   ]
+  },
+  {
+   "id": "AssignButton",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/assign_button.dart",
+   "score": 1,
+   "hits": [
+    "טלפון"
+   ]
+  },
+  {
+   "id": "AuroraField",
+   "layer": "display",
+   "file": "dart-ui-bs/aurora_field.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "DirectoryRow",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__home_shell/directory_row.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "DsMultiSelect",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_multi_select.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "DsSelect",
+   "layer": "display",
+   "file": "dart-ui-bs/ds/ds_select.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "EmptyProducts",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/empty_products.dart",
+   "score": 1,
+   "hits": [
+    "ייבוא"
+   ]
+  },
+  {
+   "id": "HomeShellBadgedIcon",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/home_shell_badged_icon.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "HomeShellMenuRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/home_shell_menu_row.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "OrderRowCard",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__manager_dashboard_screen/order_row_card.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "OutlinedActionButton",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__manager_dashboard_screen/outlined_action_button.dart",
+   "score": 1,
+   "hits": [
+    "ייבוא"
+   ]
+  },
+  {
+   "id": "ProductTile",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/product_tile.dart",
+   "score": 1,
+   "hits": [
+    "ייבוא"
+   ]
+  },
+  {
+   "id": "SettingsScreenShell",
+   "layer": "display",
+   "file": "dart-ui-bs/screens__chat_settings_screen/settings_screen_shell.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "SpecialtyDerivedRow",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/specialty_derived_row.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "StatsCard",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/stats_card.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  },
+  {
+   "id": "TargetSubject",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/target_subject.dart",
+   "score": 1,
+   "hits": [
+    "טלפון"
+   ]
+  },
+  {
+   "id": "WorkerProfileStat",
+   "layer": "display",
+   "file": "dart-ui-bs/auto/worker_profile_stat.dart",
+   "score": 1,
+   "hits": [
+    "קשר"
+   ]
+  }
+ ],
+ "strong": [
+  "vcardImportRows",
+  "familiesImportFormatRows",
+  "importableContacts",
+  "parseVcards",
+  "supportersImportFormatRows",
+  "auditRows",
+  "ayinAllRows",
+  "ayinDailyRows",
+  "ayinSheetRows",
+  "bomRows",
+  "buildCourseDailyRows",
+  "buildReenrollRows",
+  "campaignCsvRows",
+  "cockpitCsvRows",
+  "collectionsCsvRows",
+  "CompanyCatalogImportCard",
+  "contactDrafts",
+  "ContactTile",
+  "contactToRow",
+  "csvRows",
+  "deliveriesCsvRows",
+  "eventsCsvRows",
+  "FinRows",
+  "ForgeContactTile",
+  "isJunkContact",
+  "mergeFamilyImport",
+  "overdueContactTaskDrafts",
+  "parseAcc",
+  "parseAnyDate",
+  "parseAssistantIntent",
+  "parseAyinSheet",
+  "parseBore",
+  "parseChips",
+  "parseCsv",
+  "parseFamiliesCsv",
+  "parseJoinFullCode",
+  "parseSupporterCsv",
+  "parseSupporterGrid",
+  "parseXlsxSheet",
+  "planSupporterImport",
+  "redemptionsCsvRows",
+  "reenrollCsvRows",
+  "repairCardsFromRows",
+  "wfDailyRows"
+ ],
+ "creates": "new/dart-boxes/vcard-import.dart",
+ "chosen": null,
+ "why": null,
+ "sig": "095793e05e091bb18fb8e08076a265102bec6bef48493c617f10060fcdd4826d"
+}

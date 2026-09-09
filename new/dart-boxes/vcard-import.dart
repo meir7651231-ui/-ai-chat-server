@@ -136,3 +136,5 @@ bool isJunkContact(Map c) => _wiredIsJunk(c);
 List<dynamic> importableContacts(dynamic text) => _wiredImportable(text);
 Map<String, String> contactToRow(Map<String, dynamic> c) => ctr.contactToRow(c);
 String decodeQuotedPrintable(String s) => dqp.decodeQuotedPrintable(s);
+/// G48 · נקודת-כניסה אחת לייבוא: טקסט-VCF ⇒ שורות-ייבוא ניטרליות (name · phone · phone2 · email · address · notes), בניכוי זבל.
+List<Map<String, String>> vcardImportRows(String? text) => [for (final c in _wiredImportable(text)) ctr.contactToRow(c as Map<String, dynamic>)];

@@ -10,7 +10,7 @@ import fs from 'node:fs'; import path from 'node:path';
 import * as R from '../root.mjs';
 const ROOT = R.NEW;
 const OUT = (R.GEN_DIR + 'logic-census.json');
-const SCAN = ['dart-maor', 'dart'];
+const SCAN = ['dart-maor', 'dart', 'dart-boxes'];   // G48 · קופסאות = הרכבות-חיווט על המדף (§21 רקורסיבי); שמות שכבר-באטומים מדולגים (הקופסה מייצאת-מחדש) — רק נקודות-כניסה ייחודיות נכנסות
 const PRIM = new Set(['String', 'int', 'double', 'num', 'bool']);
 
 // פיצול רשימת-פרמטרים ברמה-העליונה בלבד (מכבד <> ו-() של טיפוסי-פונקציה/גנריות).
@@ -37,7 +37,7 @@ const isDisplayable = (t) => { const x = t.replace(/\?$/, ''); return isPrim(x) 
 export function logicCensus() {
   const atoms = []; const seen = new Set();
   for (const dir of SCAN) {
-    let files; try { files = fs.readdirSync(path.join(ROOT, dir)).filter((f) => f.endsWith('.dart') && !f.endsWith('_test.dart')); } catch { continue; }
+    let files; try { files = fs.readdirSync(path.join(ROOT, dir)).filter((f) => f.endsWith('.dart') && !f.endsWith('_test.dart') && !f.endsWith('-proof.dart')); } catch { continue; }
     for (const f of files.sort()) {
       const src = fs.readFileSync(path.join(ROOT, dir, f), 'utf8');
       // פונקציה-עליונה (כולל רב-שורתית + named-params): <ret> <name>(<params>) { | => | async

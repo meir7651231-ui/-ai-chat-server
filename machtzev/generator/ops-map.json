@@ -11438,6 +11438,38 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "allDonationPurposes",
+  "layer": "logic",
+  "file": "dart-boxes/supporters.dart",
+  "op": "lines",
+  "sockets": [
+   "List"
+  ],
+  "ret": "List<String>",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "allLines",
+  "layer": "logic",
+  "file": "dart-boxes/annual-report.dart",
+  "op": "lines",
+  "sockets": [
+   "String",
+   "String?",
+   "String",
+   "List<Map<String, dynamic>>",
+   "dynamic"
+  ],
+  "ret": "List<String>",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "allOffConfig",
   "layer": "logic",
   "file": "dart-maor/all-off-config.dart",
@@ -11484,6 +11516,20 @@
   "flags": [
    "ho"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "allowedValues",
+  "layer": "logic",
+  "file": "dart-boxes/bs-config.dart",
+  "op": "selection",
+  "sockets": [
+   "String",
+   "String",
+   "Map<String, FieldDescriptor>"
+  ],
+  "ret": "Set<String>",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -11541,6 +11587,18 @@
    "ho",
    "listIn"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "annualKey",
+  "layer": "logic",
+  "file": "dart-boxes/hebrew-calendar.dart",
+  "op": "format",
+  "sockets": [
+   "String"
+  ],
+  "ret": "String",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -11683,6 +11741,19 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "applyPack",
+  "layer": "logic",
+  "file": "dart-boxes/vertical-packs.dart",
+  "op": "summary",
+  "sockets": [
+   "Map<String, dynamic>",
+   "String"
+  ],
+  "ret": "Map<String, dynamic>",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "applyVerticalPack",
   "layer": "logic",
   "file": "dart-maor/apply-vertical-pack.dart",
@@ -11712,6 +11783,20 @@
   "flags": [
    "ho"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "assignmentRedeemed",
+  "layer": "logic",
+  "file": "dart-boxes/shop.dart",
+  "op": "predicate",
+  "sockets": [
+   "dynamic",
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "bool",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -11869,6 +11954,20 @@
   "ret": "QualityReport",
   "flags": [
    "ho",
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "auditTrail",
+  "layer": "logic",
+  "file": "dart-boxes/bs-security.dart",
+  "op": "lines",
+  "sockets": [
+   "List<BlockedEntry>"
+  ],
+  "ret": "List<String>",
+  "flags": [
    "listIn"
   ],
   "why": "צורת-חתימה"
@@ -12439,6 +12538,20 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "buildSmtpAccount",
+  "layer": "logic",
+  "file": "dart-boxes/smtp-url.dart",
+  "op": "summary",
+  "sockets": [
+   "dynamic",
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "Map<String, dynamic>",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "buildTasksGantt",
   "layer": "logic",
   "file": "dart/build_tasks_gantt.dart",
@@ -12553,6 +12666,19 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "campaign",
+  "layer": "logic",
+  "file": "dart-boxes/public-site.dart",
+  "op": "summary",
+  "sockets": [
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "Map<String, dynamic>",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "campaignCsvRows",
   "layer": "logic",
   "file": "dart-maor/campaign-csv-rows.dart",
@@ -12631,6 +12757,20 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "canGoBack",
+  "layer": "logic",
+  "file": "dart-boxes/navhist.dart",
+  "op": "predicate",
+  "sockets": [
+   "List<dynamic>"
+  ],
+  "ret": "bool",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "canGrantedAction",
   "layer": "logic",
   "file": "dart-maor/can-granted-action.dart",
@@ -12658,6 +12798,19 @@
    "bool",
    "bool",
    "bool"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "canPlace",
+  "layer": "logic",
+  "file": "dart-boxes/bs-security.dart",
+  "op": "predicate",
+  "sockets": [
+   "String",
+   "String"
   ],
   "ret": "bool",
   "flags": [],
@@ -12899,6 +13052,21 @@
   "flags": [
    "ho",
    "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "cldrGuard",
+  "layer": "logic",
+  "file": "dart-boxes/hebdate.dart",
+  "op": "predicate",
+  "sockets": [
+   "Object?",
+   "void Function(String)? warn"
+  ],
+  "ret": "bool",
+  "flags": [
+   "ho"
   ],
   "why": "צורת-חתימה"
  },
@@ -13220,6 +13388,20 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "collectedPaid",
+  "layer": "logic",
+  "file": "dart-boxes/shop.dart",
+  "op": "aggregate",
+  "sockets": [
+   "List"
+  ],
+  "ret": "num",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "collectionScoreDelta",
   "layer": "logic",
   "file": "dart-maor/collection-score-delta.dart",
@@ -13446,6 +13628,57 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "configOpEquals",
+  "layer": "logic",
+  "file": "dart-boxes/bs-config.dart",
+  "op": "predicate",
+  "sockets": [
+   "ConfigOp",
+   "ConfigOp"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "configOpFromJson",
+  "layer": "logic",
+  "file": "dart-boxes/bs-config.dart",
+  "op": "transform",
+  "sockets": [
+   "Object?"
+  ],
+  "ret": "ConfigOp?",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "configOpsFromJson",
+  "layer": "logic",
+  "file": "dart-boxes/bs-config.dart",
+  "op": "collection",
+  "sockets": [
+   "Object?"
+  ],
+  "ret": "List<ConfigOp>",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "configOpsToJson",
+  "layer": "logic",
+  "file": "dart-boxes/bs-config.dart",
+  "op": "collection",
+  "sockets": [
+   "List<ConfigOp>"
+  ],
+  "ret": "List<Map<String, dynamic>>",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "connTypeId",
   "layer": "logic",
   "file": "dart/conn_type_id.dart",
@@ -13475,6 +13708,23 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "contactDrafts",
+  "layer": "logic",
+  "file": "dart-boxes/worktasks.dart",
+  "op": "collection",
+  "sockets": [
+   "List<Map<String, dynamic>>",
+   "List<Map<String, dynamic>>",
+   "dynamic",
+   "String"
+  ],
+  "ret": "List<Map<String, dynamic>>",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "contactToRow",
   "layer": "logic",
   "file": "dart-maor/contact-to-row.dart",
@@ -13490,6 +13740,18 @@
   "id": "contractorCredit",
   "layer": "logic",
   "file": "dart/contractor_credit.dart",
+  "op": "measure",
+  "sockets": [
+   "String"
+  ],
+  "ret": "int",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "contractorCreditTier",
+  "layer": "logic",
+  "file": "dart-boxes/bs-projects.dart",
   "op": "measure",
   "sockets": [
    "String"
@@ -13695,6 +13957,16 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "createExportGate",
+  "layer": "logic",
+  "file": "dart-boxes/export-gate.dart",
+  "op": "transform",
+  "sockets": [],
+  "ret": "ExportGate",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "criticalBusinessKind",
   "layer": "logic",
   "file": "dart/critical_business_kind.dart",
@@ -13725,6 +13997,19 @@
    "ho",
    "listIn"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "cssFor",
+  "layer": "logic",
+  "file": "dart-boxes/theme.dart",
+  "op": "format",
+  "sockets": [
+   "String",
+   "Map<String, String>"
+  ],
+  "ret": "String",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -13794,6 +14079,31 @@
   "flags": [
    "listIn"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "csvRows",
+  "layer": "logic",
+  "file": "dart-boxes/distribution.dart",
+  "op": "collection",
+  "sockets": [
+   "Map<String, dynamic>",
+   "dynamic"
+  ],
+  "ret": "List<List<String>>",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "curOf",
+  "layer": "logic",
+  "file": "dart-boxes/lib-nedarim-sync.dart",
+  "op": "format",
+  "sockets": [
+   "Map<String, dynamic>"
+  ],
+  "ret": "String",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -14222,6 +14532,18 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "detectSmtpHost",
+  "layer": "logic",
+  "file": "dart-boxes/smtp-url.dart",
+  "op": "format",
+  "sockets": [
+   "dynamic"
+  ],
+  "ret": "String",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "dictHe",
   "layer": "logic",
   "file": "dart-maor/dict-he.dart",
@@ -14352,6 +14674,18 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "donateUrl",
+  "layer": "logic",
+  "file": "dart-boxes/public-site.dart",
+  "op": "transform",
+  "sockets": [
+   "dynamic"
+  ],
+  "ret": "dynamic",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "donationPartitionDiff",
   "layer": "logic",
   "file": "dart-maor/donation-partition-diff.dart",
@@ -14443,6 +14777,22 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "doneToday",
+  "layer": "logic",
+  "file": "dart-boxes/worktasks.dart",
+  "op": "aggregate",
+  "sockets": [
+   "List<Map<String, dynamic>>",
+   "dynamic",
+   "String"
+  ],
+  "ret": "int",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "doneTodayFor",
   "layer": "logic",
   "file": "dart-maor/done-today-for.dart",
@@ -14519,6 +14869,49 @@
   ],
   "ret": "Map<String, dynamic>",
   "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "downloadAnnualReport",
+  "layer": "logic",
+  "file": "dart-boxes/annual-report.dart",
+  "op": "predicate",
+  "sockets": [
+   "Map<String, dynamic>",
+   "Map<String, dynamic>"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "downloadIcs",
+  "layer": "logic",
+  "file": "dart-boxes/lib-ics.dart",
+  "op": "effect",
+  "sockets": [
+   "String",
+   "String",
+   "IcsIo"
+  ],
+  "ret": "void",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "downloadReceipt",
+  "layer": "logic",
+  "file": "dart-boxes/receipt.dart",
+  "op": "effect",
+  "sockets": [
+   "Map<String, dynamic>",
+   "ReceiptIo",
+   "String Function(dynamic amount, dynamic sym)? amountInWords"
+  ],
+  "ret": "void",
+  "flags": [
+   "ho"
+  ],
   "why": "צורת-חתימה"
  },
  {
@@ -14702,6 +15095,16 @@
   "flags": [
    "ho"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "emptyAyin",
+  "layer": "logic",
+  "file": "dart-boxes/supporters.dart",
+  "op": "summary",
+  "sockets": [],
+  "ret": "Map<String, dynamic>",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -14962,6 +15365,31 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "expFieldDefs",
+  "layer": "logic",
+  "file": "dart-boxes/custom-export.dart",
+  "op": "collection",
+  "sockets": [
+   "dynamic",
+   "String"
+  ],
+  "ret": "List<Map<String, String>>",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "expand",
+  "layer": "logic",
+  "file": "dart-boxes/search.dart",
+  "op": "transform",
+  "sockets": [
+   "dynamic"
+  ],
+  "ret": "dynamic",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "expandInchFractions",
   "layer": "logic",
   "file": "dart/expand_inch_fractions.dart",
@@ -15098,6 +15526,20 @@
    "dynamic"
   ],
   "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "exportNames",
+  "layer": "logic",
+  "file": "dart-boxes/names-export.dart",
+  "op": "summary",
+  "sockets": [
+   "dynamic",
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "Map<String, dynamic>",
   "flags": [],
   "why": "צורת-חתימה"
  },
@@ -15307,6 +15749,22 @@
   "ret": "String",
   "flags": [
    "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "fieldValue",
+  "layer": "logic",
+  "file": "dart-boxes/bs-config.dart",
+  "op": "measure",
+  "sockets": [
+   "String",
+   "RuleOrder",
+   "DateTime"
+  ],
+  "ret": "num",
+  "flags": [
+   "temporal"
   ],
   "why": "צורת-חתימה"
  },
@@ -16041,6 +16499,18 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "fullDate",
+  "layer": "logic",
+  "file": "dart-boxes/hebrew-calendar.dart",
+  "op": "format",
+  "sockets": [
+   "String?"
+  ],
+  "ret": "String",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "fullDbDiff",
   "layer": "logic",
   "file": "dart-maor/full-db-diff.dart",
@@ -16232,6 +16702,36 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "goBack",
+  "layer": "logic",
+  "file": "dart-boxes/navhist.dart",
+  "op": "summary",
+  "sockets": [
+   "List<Map<String, dynamic>>"
+  ],
+  "ret": "Map<String, dynamic>?",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "goTo",
+  "layer": "logic",
+  "file": "dart-boxes/navhist.dart",
+  "op": "summary",
+  "sockets": [
+   "List<Map<String, dynamic>>",
+   "Map<String, dynamic>",
+   "String"
+  ],
+  "ret": "Map<String, dynamic>",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "gradeFits",
   "layer": "logic",
   "file": "dart-maor/grade-fits.dart",
@@ -16390,6 +16890,18 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "guideRecipes",
+  "layer": "logic",
+  "file": "dart-boxes/guide.dart",
+  "op": "format",
+  "sockets": [
+   "Map<String, dynamic>?"
+  ],
+  "ret": "String",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "guideSections",
   "layer": "logic",
   "file": "dart-maor/guide-sections-of.dart",
@@ -16426,6 +16938,18 @@
   "id": "hasPublicSite",
   "layer": "logic",
   "file": "dart-maor/has-public-site.dart",
+  "op": "predicate",
+  "sockets": [
+   "Map"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "hasSite",
+  "layer": "logic",
+  "file": "dart-boxes/public-site.dart",
   "op": "predicate",
   "sockets": [
    "Map"
@@ -16593,6 +17117,20 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "hebToIsoEn",
+  "layer": "logic",
+  "file": "dart-boxes/hebdate.dart",
+  "op": "format",
+  "sockets": [
+   "int",
+   "String",
+   "int"
+  ],
+  "ret": "String?",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "hebYearNow",
   "layer": "logic",
   "file": "dart-maor/heb-year-now.dart",
@@ -16606,6 +17144,30 @@
    "ho",
    "temporal"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "histDedupKey",
+  "layer": "logic",
+  "file": "dart-boxes/lib-nedarim-sync.dart",
+  "op": "format",
+  "sockets": [
+   "Map<String, dynamic>"
+  ],
+  "ret": "String",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "hokDayFromDate",
+  "layer": "logic",
+  "file": "dart-boxes/lib-nedarim-sync.dart",
+  "op": "measure",
+  "sockets": [
+   "String"
+  ],
+  "ret": "num",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -16771,6 +17333,31 @@
    "String",
    "String",
    "String"
+  ],
+  "ret": "String",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "identifyCaller",
+  "layer": "logic",
+  "file": "dart-boxes/caller-id.dart",
+  "op": "summary",
+  "sockets": [
+   "Map<String, Object?>",
+   "String"
+  ],
+  "ret": "Map<String, Object?>?",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "identityOf",
+  "layer": "logic",
+  "file": "dart-boxes/worktasks.dart",
+  "op": "format",
+  "sockets": [
+   "dynamic"
   ],
   "ret": "String",
   "flags": [],
@@ -17218,6 +17805,19 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "isOverdue",
+  "layer": "logic",
+  "file": "dart-boxes/worktasks.dart",
+  "op": "predicate",
+  "sockets": [
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "isOwnerEmail",
   "layer": "logic",
   "file": "dart/is_owner_email.dart",
@@ -17265,6 +17865,18 @@
   "op": "predicate",
   "sockets": [
    "Map<String, dynamic>"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "isRtl",
+  "layer": "logic",
+  "file": "dart-boxes/public-site.dart",
+  "op": "predicate",
+  "sockets": [
+   "String"
   ],
   "ret": "bool",
   "flags": [],
@@ -17436,6 +18048,20 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "isoOf",
+  "layer": "logic",
+  "file": "dart-boxes/hebdate.dart",
+  "op": "format",
+  "sockets": [
+   "DateTime"
+  ],
+  "ret": "String",
+  "flags": [
+   "temporal"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "isoToHebParts",
   "layer": "logic",
   "file": "dart-maor/iso-to-heb-parts.dart",
@@ -17528,6 +18154,18 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "keysOf",
+  "layer": "logic",
+  "file": "dart-boxes/lib-nedarim-sync.dart",
+  "op": "lines",
+  "sockets": [
+   "Map<String, dynamic>"
+  ],
+  "ret": "List<String>",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "kindEmoji",
   "layer": "logic",
   "file": "dart/kind_emoji.dart",
@@ -17536,6 +18174,19 @@
    "ConfigOpKind"
   ],
   "ret": "String",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "kindLabel",
+  "layer": "logic",
+  "file": "dart-boxes/caller-id.dart",
+  "op": "format",
+  "sockets": [
+   "dynamic",
+   "String"
+  ],
+  "ret": "String?",
   "flags": [],
   "why": "צורת-חתימה"
  },
@@ -17580,6 +18231,18 @@
   "flags": [
    "ho"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "langs",
+  "layer": "logic",
+  "file": "dart-boxes/public-site.dart",
+  "op": "transform",
+  "sockets": [
+   "dynamic"
+  ],
+  "ret": "dynamic",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -17785,6 +18448,20 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "listLines",
+  "layer": "logic",
+  "file": "dart-boxes/distribution.dart",
+  "op": "lines",
+  "sockets": [
+   "List<dynamic>"
+  ],
+  "ret": "List<String>",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "liveRedemptions",
   "layer": "logic",
   "file": "dart-maor/live-redemptions.dart",
@@ -17808,6 +18485,47 @@
    "dynamic"
   ],
   "ret": "List<dynamic>",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "loadHint",
+  "layer": "logic",
+  "file": "dart-boxes/distribution.dart",
+  "op": "summary",
+  "sockets": [
+   "dynamic",
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "Map<String, dynamic>",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "localIso",
+  "layer": "logic",
+  "file": "dart-boxes/diary.dart",
+  "op": "format",
+  "sockets": [
+   "DateTime"
+  ],
+  "ret": "String",
+  "flags": [
+   "temporal"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "localize",
+  "layer": "logic",
+  "file": "dart-boxes/public-site.dart",
+  "op": "format",
+  "sockets": [
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "String",
   "flags": [],
   "why": "צורת-חתימה"
  },
@@ -17955,6 +18673,18 @@
    "String"
   ],
   "ret": "String?",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "maritalChipStyle",
+  "layer": "logic",
+  "file": "dart-boxes/families.dart",
+  "op": "summary",
+  "sockets": [
+   "String"
+  ],
+  "ret": "Map<String, dynamic>",
   "flags": [],
   "why": "צורת-חתימה"
  },
@@ -18174,6 +18904,21 @@
   "ret": "String?",
   "flags": [
    "ho"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "matchRecipeFromList",
+  "layer": "logic",
+  "file": "dart-boxes/bs-assistant.dart",
+  "op": "format",
+  "sockets": [
+   "String",
+   "List<Recipe>"
+  ],
+  "ret": "String?",
+  "flags": [
+   "listIn"
   ],
   "why": "צורת-חתימה"
  },
@@ -18594,6 +19339,34 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "modeOf",
+  "layer": "logic",
+  "file": "dart-boxes/lib-nedarim-sync.dart",
+  "op": "aggregate",
+  "sockets": [
+   "List<num>"
+  ],
+  "ret": "num",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "modeStr",
+  "layer": "logic",
+  "file": "dart-boxes/lib-nedarim-sync.dart",
+  "op": "format",
+  "sockets": [
+   "List<String>"
+  ],
+  "ret": "String",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "modelMeta",
   "layer": "logic",
   "file": "dart-maor/model-meta.dart",
@@ -18686,6 +19459,19 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "monthsAgo",
+  "layer": "logic",
+  "file": "dart-boxes/lib-nedarim-sync.dart",
+  "op": "measure",
+  "sockets": [
+   "String",
+   "String"
+  ],
+  "ret": "int",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "nameIndex",
   "layer": "logic",
   "file": "dart-maor/name-index.dart",
@@ -18754,6 +19540,22 @@
   ],
   "ret": "String",
   "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "navStep",
+  "layer": "logic",
+  "file": "dart-boxes/navhist.dart",
+  "op": "collection",
+  "sockets": [
+   "List<Map<String, dynamic>>",
+   "Map<String, dynamic>",
+   "Map<String, dynamic>"
+  ],
+  "ret": "List<Map<String, dynamic>>",
+  "flags": [
+   "listIn"
+  ],
   "why": "צורת-חתימה"
  },
  {
@@ -19068,6 +19870,30 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "normalize",
+  "layer": "logic",
+  "file": "dart-boxes/pricing.dart",
+  "op": "summary",
+  "sockets": [
+   "dynamic"
+  ],
+  "ret": "Map<String, dynamic>",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "normalizeConfig",
+  "layer": "logic",
+  "file": "dart-boxes/config.dart",
+  "op": "summary",
+  "sockets": [
+   "dynamic"
+  ],
+  "ret": "Map<String, dynamic>?",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "normalizePhone",
   "layer": "logic",
   "file": "dart-maor/normalize-phone.dart",
@@ -19094,6 +19920,18 @@
   "flags": [
    "listIn"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "normalizeSite",
+  "layer": "logic",
+  "file": "dart-boxes/config.dart",
+  "op": "summary",
+  "sockets": [
+   "dynamic"
+  ],
+  "ret": "Map<String, dynamic>?",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -19153,6 +19991,21 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "ofYear",
+  "layer": "logic",
+  "file": "dart-boxes/annual-report.dart",
+  "op": "collection",
+  "sockets": [
+   "List<Map<String, dynamic>>",
+   "String"
+  ],
+  "ret": "List<Map<String, dynamic>>",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "offerNewFamily",
   "layer": "logic",
   "file": "dart-maor/offer-new-family.dart",
@@ -19208,6 +20061,54 @@
   "ret": "Map<String, dynamic>",
   "flags": [
    "ho"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "openCourse",
+  "layer": "logic",
+  "file": "dart-boxes/navhist.dart",
+  "op": "summary",
+  "sockets": [
+   "List<Map<String, dynamic>>",
+   "Map<String, dynamic>",
+   "String"
+  ],
+  "ret": "Map<String, dynamic>",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "openFamily",
+  "layer": "logic",
+  "file": "dart-boxes/navhist.dart",
+  "op": "summary",
+  "sockets": [
+   "List<Map<String, dynamic>>",
+   "List<String>",
+   "Map<String, dynamic>",
+   "String?"
+  ],
+  "ret": "Map<String, dynamic>",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "openTasks",
+  "layer": "logic",
+  "file": "dart-boxes/worktasks.dart",
+  "op": "collection",
+  "sockets": [
+   "List<Map<String, dynamic>>",
+   "dynamic"
+  ],
+  "ret": "List<Map<String, dynamic>>",
+  "flags": [
+   "listIn"
   ],
   "why": "צורת-חתימה"
  },
@@ -19446,6 +20347,18 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "packOf",
+  "layer": "logic",
+  "file": "dart-boxes/vertical-packs.dart",
+  "op": "summary",
+  "sockets": [
+   "String"
+  ],
+  "ret": "Map<String, dynamic>?",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "pad2",
   "layer": "logic",
   "file": "dart-maor/pad2.dart",
@@ -19482,6 +20395,18 @@
    "Map?"
   ],
   "ret": "num",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "palette",
+  "layer": "logic",
+  "file": "dart-boxes/public-site.dart",
+  "op": "transform",
+  "sockets": [
+   "dynamic"
+  ],
+  "ret": "dynamic",
   "flags": [],
   "why": "צורת-חתימה"
  },
@@ -19631,6 +20556,18 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "parseSupporterCsv",
+  "layer": "logic",
+  "file": "dart-boxes/supporters.dart",
+  "op": "collection",
+  "sockets": [
+   "String"
+  ],
+  "ret": "List<Map<String, dynamic>>",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "parseSupporterGrid",
   "layer": "logic",
   "file": "dart-maor/parse-supporter-grid.dart",
@@ -19687,6 +20624,18 @@
    "ho",
    "listIn"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "parts",
+  "layer": "logic",
+  "file": "dart-boxes/hebrew-calendar.dart",
+  "op": "summary",
+  "sockets": [
+   "String"
+  ],
+  "ret": "Map<String, Object>",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -20251,6 +21200,18 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "priLabel",
+  "layer": "logic",
+  "file": "dart-boxes/worktasks.dart",
+  "op": "format",
+  "sockets": [
+   "dynamic"
+  ],
+  "ret": "String?",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "priceSuffix",
   "layer": "logic",
   "file": "dart-maor/price-suffix.dart",
@@ -20260,6 +21221,22 @@
    "String Function(String) term"
   ],
   "ret": "String",
+  "flags": [
+   "ho"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "printReceipt",
+  "layer": "logic",
+  "file": "dart-boxes/receipt.dart",
+  "op": "effect",
+  "sockets": [
+   "Map<String, dynamic>",
+   "ReceiptIo",
+   "String Function(dynamic amount, dynamic sym)? amountInWords"
+  ],
+  "ret": "void",
   "flags": [
    "ho"
   ],
@@ -20294,6 +21271,19 @@
   "flags": [
    "ho"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "productSuitableForTemp",
+  "layer": "logic",
+  "file": "dart-boxes/bs-studio.dart",
+  "op": "predicate",
+  "sockets": [
+   "int",
+   "int?"
+  ],
+  "ret": "bool",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -20346,6 +21336,19 @@
   "flags": [
    "listIn"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "progressOfDay",
+  "layer": "logic",
+  "file": "dart-boxes/distribution.dart",
+  "op": "summary",
+  "sockets": [
+   "Map<String, dynamic>",
+   "dynamic"
+  ],
+  "ret": "Map<String, int>",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -20563,6 +21566,26 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "quote",
+  "layer": "logic",
+  "file": "dart-boxes/pricing.dart",
+  "op": "summary",
+  "sockets": [
+   "Map<String, dynamic>",
+   "String",
+   "Map<String, dynamic>",
+   "String Function(String) nameOf",
+   "List<Map<String, dynamic>>",
+   "String"
+  ],
+  "ret": "Map<String, dynamic>",
+  "flags": [
+   "ho",
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "quoteTextFor",
   "layer": "logic",
   "file": "dart/quote_text_for.dart",
@@ -20702,6 +21725,20 @@
   ],
   "ret": "Future<Map<String, dynamic>>",
   "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "readPrices",
+  "layer": "logic",
+  "file": "dart-boxes/pricing.dart",
+  "op": "summary",
+  "sockets": [
+   "String? Function(String) getItem"
+  ],
+  "ret": "Map<String, dynamic>",
+  "flags": [
+   "ho"
+  ],
   "why": "צורת-חתימה"
  },
  {
@@ -20939,6 +21976,20 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "renderAuditTrail",
+  "layer": "logic",
+  "file": "dart-boxes/bs-security.dart",
+  "op": "format",
+  "sockets": [
+   "List<BlockedEntry>"
+  ],
+  "ret": "String",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "renderTemplate",
   "layer": "logic",
   "file": "dart-maor/render-template.dart",
@@ -20995,6 +22046,32 @@
   "ret": "Map<String, dynamic>",
   "flags": [
    "ho",
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "reportLines",
+  "layer": "logic",
+  "file": "dart-boxes/annual-report.dart",
+  "op": "lines",
+  "sockets": [
+   "Map<String, dynamic>"
+  ],
+  "ret": "List<String>",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "reportText",
+  "layer": "logic",
+  "file": "dart-boxes/annual-report.dart",
+  "op": "format",
+  "sockets": [
+   "List<String>"
+  ],
+  "ret": "String",
+  "flags": [
    "listIn"
   ],
   "why": "צורת-חתימה"
@@ -21372,6 +22449,19 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "sameJson",
+  "layer": "logic",
+  "file": "dart-boxes/cloud-diff.dart",
+  "op": "predicate",
+  "sockets": [
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "sameLoc",
   "layer": "logic",
   "file": "dart-maor/same-loc.dart",
@@ -21544,6 +22634,19 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "score",
+  "layer": "logic",
+  "file": "dart-boxes/search.dart",
+  "op": "transform",
+  "sockets": [
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "dynamic",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "scoreCustomer",
   "layer": "logic",
   "file": "dart/score_customer.dart",
@@ -21576,6 +22679,35 @@
   "flags": [
    "ho"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "screenPop",
+  "layer": "logic",
+  "file": "dart-boxes/caller-id.dart",
+  "op": "summary",
+  "sockets": [
+   "Map<String, Object?>",
+   "dynamic",
+   "String"
+  ],
+  "ret": "Map<String, Object?>?",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "search",
+  "layer": "logic",
+  "file": "dart-boxes/search.dart",
+  "op": "transform",
+  "sockets": [
+   "dynamic",
+   "dynamic",
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "dynamic",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -22306,6 +23438,32 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "stats",
+  "layer": "logic",
+  "file": "dart-boxes/worktasks.dart",
+  "op": "summary",
+  "sockets": [
+   "dynamic",
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "Map<String, dynamic>",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "statusLabel",
+  "layer": "logic",
+  "file": "dart-boxes/distribution.dart",
+  "op": "format",
+  "sockets": [
+   "dynamic"
+  ],
+  "ret": "String",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "stepPostpone",
   "layer": "logic",
   "file": "dart-maor/step-postpone.dart",
@@ -22332,6 +23490,19 @@
    "dynamic"
   ],
   "ret": "num",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "steps",
+  "layer": "logic",
+  "file": "dart-boxes/tour.dart",
+  "op": "collection",
+  "sockets": [
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "List<dynamic>",
   "flags": [],
   "why": "צורת-חתימה"
  },
@@ -22695,6 +23866,31 @@
    "Map<String, dynamic>"
   ],
   "ret": "bool",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "supFromCharge",
+  "layer": "logic",
+  "file": "dart-boxes/lib-nedarim-sync.dart",
+  "op": "summary",
+  "sockets": [
+   "Map<String, dynamic>",
+   "int"
+  ],
+  "ret": "Map<String, dynamic>",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "supFromDonor",
+  "layer": "logic",
+  "file": "dart-boxes/lib-nedarim-sync.dart",
+  "op": "summary",
+  "sockets": [
+   "Map<String, dynamic>"
+  ],
+  "ret": "Map<String, dynamic>",
   "flags": [],
   "why": "צורת-חתימה"
  },
@@ -23149,6 +24345,36 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "templateFor",
+  "layer": "logic",
+  "file": "dart-boxes/bs-config.dart",
+  "op": "transform",
+  "sockets": [
+   "ComponentType",
+   "List<ComponentTemplate>?"
+  ],
+  "ret": "ComponentTemplate?",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "templateForName",
+  "layer": "logic",
+  "file": "dart-boxes/bs-config.dart",
+  "op": "transform",
+  "sockets": [
+   "String",
+   "List<ComponentTemplate>?"
+  ],
+  "ret": "ComponentTemplate?",
+  "flags": [
+   "listIn"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "templateKeys",
   "layer": "logic",
   "file": "dart-maor/template-keys.dart",
@@ -23475,6 +24701,19 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "ui",
+  "layer": "logic",
+  "file": "dart-boxes/public-site.dart",
+  "op": "transform",
+  "sockets": [
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "dynamic",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "undoLast",
   "layer": "logic",
   "file": "dart-maor/undo-last.dart",
@@ -23555,6 +24794,66 @@
   "flags": [
    "ho"
   ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "vFormatPhone",
+  "layer": "logic",
+  "file": "dart-boxes/validate.dart",
+  "op": "format",
+  "sockets": [
+   "dynamic"
+  ],
+  "ret": "String",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "vNameSortKey",
+  "layer": "logic",
+  "file": "dart-boxes/validate.dart",
+  "op": "format",
+  "sockets": [
+   "dynamic"
+  ],
+  "ret": "String",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "vNormName",
+  "layer": "logic",
+  "file": "dart-boxes/validate.dart",
+  "op": "format",
+  "sockets": [
+   "dynamic"
+  ],
+  "ret": "String",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "vNormSearch",
+  "layer": "logic",
+  "file": "dart-boxes/validate.dart",
+  "op": "format",
+  "sockets": [
+   "dynamic"
+  ],
+  "ret": "String",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "vValidId",
+  "layer": "logic",
+  "file": "dart-boxes/validate.dart",
+  "op": "predicate",
+  "sockets": [
+   "dynamic"
+  ],
+  "ret": "bool",
+  "flags": [],
   "why": "צורת-חתימה"
  },
  {
@@ -23645,6 +24944,18 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "validateCondition",
+  "layer": "logic",
+  "file": "dart-boxes/bs-security.dart",
+  "op": "transform",
+  "sockets": [
+   "Object?"
+  ],
+  "ret": "SecCondition?",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "validateHebMonthNames",
   "layer": "logic",
   "file": "dart-maor/validate-heb-month-names.dart",
@@ -23701,6 +25012,18 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "vcardImportRows",
+  "layer": "logic",
+  "file": "dart-boxes/vcard-import.dart",
+  "op": "collection",
+  "sockets": [
+   "String?"
+  ],
+  "ret": "List<Map<String, String>>",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "verifiedSpecToDoc",
   "layer": "logic",
   "file": "dart/verified_spec_to_doc.dart",
@@ -23734,6 +25057,19 @@
   "id": "visibleSupportersForDesignations",
   "layer": "logic",
   "file": "dart-maor/visible-supporters-for-designations.dart",
+  "op": "transform",
+  "sockets": [
+   "dynamic",
+   "dynamic"
+  ],
+  "ret": "dynamic",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "vocab",
+  "layer": "logic",
+  "file": "dart-boxes/public-site.dart",
   "op": "transform",
   "sockets": [
    "dynamic",
@@ -24198,6 +25534,35 @@
   ],
   "ret": "void",
   "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "writePrices",
+  "layer": "logic",
+  "file": "dart-boxes/pricing.dart",
+  "op": "effect",
+  "sockets": [
+   "void Function(String, String) setItem",
+   "Map<String, dynamic>"
+  ],
+  "ret": "void",
+  "flags": [
+   "ho"
+  ],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "years",
+  "layer": "logic",
+  "file": "dart-boxes/annual-report.dart",
+  "op": "lines",
+  "sockets": [
+   "List<Map<String, dynamic>>"
+  ],
+  "ret": "List<String>",
+  "flags": [
+   "listIn"
+  ],
   "why": "צורת-חתימה"
  },
  {
