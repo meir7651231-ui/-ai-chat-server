@@ -200,7 +200,7 @@ for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`));
 if ((home.match(/balaganPerson\(s\) != null/g) || []).length < 2 || !/onOpen: it == null \? null : \(\) => _openItem\(context, it\)/.test(home)) fails.push('«היום»: קול בלי כרטיס-אדם / תוכנית בלי הקשה');
 // גל ב׳-מא · תאריכים כמו שאומרים (היום/מחר/אתמול/יום+d.m) בשורות · בשיתוף · בכרטיס-האדם · מחר בשיתוף-ערב
 for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/static String _dayLabel\(DateTime d, DateTime today\)/.test(h) || !/replaceAll\('\{date\}', _dayLabel\(d, today\)\)/.test(h)) { fails.push(`${m.ns}: «היה» עם ISO במקום יום`); break; } }
-if (!/String balaganDayLabel\(DateTime d, DateTime today\)/.test(home) || !/tomorrow: tomorrow\)/.test(home) || !/evening \? tomorrow : const \[\]/.test(home)) fails.push('«היום» בלי תאריך-כמו-שאומרים / מחר-בשיתוף');
+if (!/String balaganDayLabel\(DateTime d, DateTime today\)/.test(home) || !/tomorrow: tomorrow[,)]/.test(home) || !/evening \? tomorrow : const \[\]/.test(home)) fails.push('«היום» בלי תאריך-כמו-שאומרים / מחר-בשיתוף');
 if (!/balaganDayLabel\(d, DateTime\.now\(\)\)/.test(topics)) fails.push('כרטיס-אדם עם ISO');
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganDayLabel\(DateTime\(2027, 10, 3\), today\)/.test(ft)) fails.push('בדיקת תאריך-כמו-שאומרים חסרה'); }
 // גל ב׳-מב · תזכורות כמו שאומרים: היסטים במילים · תאריך-ההצעה ביום · «יום ראשון» בשבוע-הקרוב
@@ -233,6 +233,12 @@ if (!/bool balaganKnownPerson\(String name\)/.test(moments) || !/dc\.isBefore\(t
 if (!/facts\[m\.personFields\.first\] = p\.name/.test(topics)) fails.push('כרטיס-אדם בלי שורה-מהירה');
 if (!/_c\.text = p \+ ': '/.test(ask)) fails.push('«מה קרה?» בלי צ׳יפי-אנשים');
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganFacts\('גלית בר: להתקשר מחר'/.test(ft)) fails.push('בדיקת «שם:» חסרה'); }
+// גלים ב׳-סא..סד · «שמור» אומר מתי · אין מבוי-סתום · שיתוף עם בלי-מועד/נשכחים · ₪ בצ׳יפי-אנשים
+if (!/return \[BalaganHit\(base\.first, 0\)\]/.test(moments)) fails.push('מזהה-הרגע עם מבוי-סתום');
+{ const cf = rd(path.join(GEN, 'gen_balagan_confirm.dart')); if (!/replaceAll\('\{day\}', balaganDayLabel\(d, t0\)\)/.test(cf)) fails.push('«שמור» לא אומר מתי'); }
+if (!/undated: undated, stale: stale/.test(home) || !/undated\.length, stale\.length\)/.test(home)) fails.push('שיתוף בלי בלי-מועד/נשכחים');
+if (!/p\.money > 0\) '₪ ' \+ balaganFmtMoney\(p\.money\)\]\.join/.test(topics)) fails.push('צ׳יפי-אנשים בלי ₪');
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganIdentify\('קסםקסם'\)/.test(ft)) fails.push('בדיקת מבוי-סתום חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);

@@ -322,5 +322,7 @@
  "agoHours": "לפני {n} שעות",
  "openCount": "{n} פתוחים",
  "dayQuick": "משהו ליום הזה? כתוב ומקש Enter",
- "personQuick": "משהו עם {who}? כתוב ומקש Enter"
+ "personQuick": "משהו עם {who}? כתוב ומקש Enter",
+ "saveWhen": "שמור. יופיע ב{day}.",
+ "shareDayFooter": "ועוד: {n} בלי מועד · {m} נשכחים"
 }

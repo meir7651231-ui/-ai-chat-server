@@ -158,6 +158,7 @@ List<BalaganHit> balaganIdentify(String text, {int k = 3}) {
       hits.insert(0, BalaganHit(b, sc(b)));
     }
   }
+  if (hits.isEmpty && text.trim().isNotEmpty) { final base = kBalaganModules.where((m) => m.layer == 'base' && m.dateFields.isNotEmpty); if (base.isNotEmpty) return [BalaganHit(base.first, 0)]; }   /* ב׳-סב · אין מבוי-סתום: מה שלא זוהה נשמר כמשימה (הבסיס), האדם מתקן בטופס */
   return hits.take(k).toList();
 }
 /// תאריך-יחסי בעברית — דקדוק-זמן, לא מילון-דומייני: היום · מחר · מחרתיים · אתמול · בעוד N ימים/שבועות/חודשים (גם במילים) · ביום ראשון…שבת / יום א׳ · בשבוע/בחודש הבא · בסוף החודש · ב-N לחודש · dd.mm
@@ -698,6 +699,11 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
     final id2 = appStore.add(m.rootSlug, {m.personFields.first: 'גלית בר', m.dateFields.first: '2020-01-01'});
     balaganMerge(m, id2, {m.dateFields.first: '2019-01-01'}, 'x'); expect(appStore.byId(m.rootSlug, id2)![m.dateFields.first], '2020-01-01');
   });
+  test('אין מבוי-סתום: טקסט שלא זוהה ⇒ הבסיס (משימות) · שיתוף עם בלי-מועד/נשכחים', () {
+    final h = balaganIdentify('קסםקסם'); expect(h, isNotEmpty); expect(h.first.module.layer, 'base'); expect(h.first.module.dateFields, isNotEmpty);
+    expect(balaganDayText(const [], const [], today, undated: 2, stale: 1).contains('2 בלי מועד · 1 נשכחים'), isTrue);
+    expect(balaganDayText(const [], const [], today).contains('בלי מועד'), isFalse);
+  });
   test('פיצול שורה לכמה רגעים', () {
     expect(balaganSplit('שילמתי ארנונה. מחר תור לרופא ב-9:00'), ['שילמתי ארנונה', 'מחר תור לרופא ב-9:00']);
     expect(balaganSplit('מסרתי מפתח ב-1.8.2026 והמשכיר מקזז 6,200'), ['מסרתי מפתח ב-1.8.2026 והמשכיר מקזז 6,200']);
@@ -745,12 +751,13 @@ String balaganOffsetsLabel(String offsets) => offsets.split(',').map((x) => int.
 /// ב׳-מח · מתי זה קרה, כמו שאומרים: עכשיו · לפני 5 דק׳ · לפני שעה · לפני 3 שעות · אתמול · יום שני 7.9
 String balaganAgo(DateTime at, DateTime now) { final m = now.difference(at).inMinutes; if (m < 1) return ${k(L.agoNow)}; if (m < 60) return ${k(L.agoMin)}.replaceAll('{n}', m.toString()); final h = now.difference(at).inHours; if (h < 2) return ${k(L.agoHour)}; if (at.year == now.year && at.month == now.month && at.day == now.day) return ${k(L.agoHours)}.replaceAll('{n}', h.toString()); return balaganDayLabel(at, now); }
 /// «שתף את היום»: טקסט קריא של באיחור/היום (עם שעות) — נגזרת של אותן שורות; ללוח + wa.me (הנמען נבחר בוואטסאפ)
-String balaganDayText(List<DsTodayItem> overdue, List<DsTodayItem> todayItems, DateTime today, {double money = 0, List<DsTodayItem> tomorrow = const []}) {
+String balaganDayText(List<DsTodayItem> overdue, List<DsTodayItem> todayItems, DateTime today, {double money = 0, List<DsTodayItem> tomorrow = const [], int undated = 0, int stale = 0}) {
   final b = StringBuffer(${k(L.shareDayTitle)} + ' · ' + ${k(L.dayNames)}.split(',')[today.weekday % 7] + ' ' + today.day.toString() + '.' + today.month.toString() + '\\n');   // ב׳-מא · תאריך כמו שאומרים
   if (overdue.isNotEmpty) { b.write(${k(L.shareDayOverdue)} + ':\\n'); for (final it in overdue) { b.write('• ' + it.title + ' (' + it.module + ')\\n'); } }
   if (todayItems.isNotEmpty) { b.write(${k(L.shareDayToday)} + ':\\n'); for (final it in todayItems) { b.write('• ' + (it.time.isNotEmpty ? it.time + ' ' : '') + it.title + ' (' + it.module + ')\\n'); } }
   if (money > 0) b.write(${k(L.shareDayMoney)}.replaceAll('{n}', balaganFmtMoney(money)) + '\\n');   // ב׳-כט · כסף-במבט גם בשיתוף
   if (tomorrow.isNotEmpty) { b.write(${k(L.homeTomorrow)} + ':\\n'); for (final it in tomorrow) { b.write('• ' + (it.time.isNotEmpty ? it.time + ' ' : '') + it.title + ' (' + it.module + ')\\n'); } }   // ב׳-מא · בערב משתפים גם את מחר
+  if (undated + stale > 0) b.write(${k(L.shareDayFooter)}.replaceAll('{n}', undated.toString()).replaceAll('{m}', stale.toString()) + '\\n');   // ב׳-סג · מה שלא על השולחן, בשורה אחת
   return b.toString().trim();
 }
 
@@ -808,8 +815,8 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
     setState(() { if (r == null) { _mailNote = ${k(L.mailFail)}; } else { _mail = r; } });
   }
   // התוכנית להיום (Motion/Reclaim בגרסת-בלגן): הדברים של היום מסודרים לבלוקים מתחילת-היום (עריך) — דחוף/קשיח ראשון, בלוק-מיקוד שמור אם יש ≤4 דברים. דטרמיניסטי; «ליומן» לכל בלוק.
-  Future<void> _shareDay(List<DsTodayItem> overdue, List<DsTodayItem> todayItems, int planN, [List<DsTodayItem> tomorrow = const []]) async {
-    final t = balaganDayText(overdue, todayItems, _day(DateTime.now()), money: balaganMoney([...overdue, ...todayItems]), tomorrow: tomorrow);
+  Future<void> _shareDay(List<DsTodayItem> overdue, List<DsTodayItem> todayItems, int planN, [List<DsTodayItem> tomorrow = const [], int undated = 0, int stale = 0]) async {
+    final t = balaganDayText(overdue, todayItems, _day(DateTime.now()), money: balaganMoney([...overdue, ...todayItems]), tomorrow: tomorrow, undated: undated, stale: stale);
     await Clipboard.setData(ClipboardData(text: t)); setState(() => _mailNote = ${k(L.shareDayCopied)});
     launchUrl(Uri.parse('https://wa.me/?text=' + Uri.encodeComponent(t)), mode: LaunchMode.externalApplication);
   }
@@ -940,7 +947,7 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
       if (money > 0 || moneyTm > 0) Padding(padding: const EdgeInsets.only(top: 6), child: Text([if (money > 0) ${k(L.moneyToday)}.replaceAll('{n}', balaganFmtMoney(money)), if (moneyTm > 0) ${k(L.moneyTomorrow)}.replaceAll('{n}', balaganFmtMoney(moneyTm))].join(' · '), style: TextStyle(color: lk.ink, fontSize: 15, fontWeight: FontWeight.w600))),   // ב׳-כט · כסף-במבט
       if (showUndo) Padding(padding: const EdgeInsets.only(top: 8), child: Row(children: [Expanded(child: DsNote(message: ${k(L.undoNow)}.replaceAll('{what}', lastAct['what'] ?? ''), label: '', tone: 0)), const SizedBox(width: 8), DsChipButton(label: ${k(L.undo)}, onTap: () => appStore.undo(lastAct['id'] ?? ''))])),
       if (backupDue) Padding(padding: const EdgeInsets.only(top: 8), child: Row(children: [Expanded(child: DsNote(message: bAge < 0 ? ${k(L.backupNever)} : ${k(L.backupNudge)}.replaceAll('{n}', bAge.toString()), label: '', tone: 1)), const SizedBox(width: 8), DsChipButton(label: ${k(L.backupCopy)}, onTap: () async { final t = appStore.exportJson(); await Clipboard.setData(ClipboardData(text: t)); appStore.setSetting('backupAt', _iso(today)); setState(() => _mailNote = ${k(L.backupCopied)}.replaceAll('{n}', t.length.toString())); })])),   // ב׳-לו · גיבוי: מקומי-בלבד ⇒ תזכורת מעולם/30 יום, העתקה בהקשה
-      if (!empty) Padding(padding: const EdgeInsets.only(top: 6), child: Row(children: [DsChipButton(label: ${k(L.shareDay)}, onTap: () => _shareDay(overdue, todayItems, plan.length, evening ? tomorrow : const []))])),   // היום כטקסט: ללוח + וואטסאפ (לעצמו / לבן-הזוג) — אפס-שרת
+      if (!empty) Padding(padding: const EdgeInsets.only(top: 6), child: Row(children: [DsChipButton(label: ${k(L.shareDay)}, onTap: () => _shareDay(overdue, todayItems, plan.length, evening ? tomorrow : const [], undated.length, stale.length))])),   // היום כטקסט: ללוח + וואטסאפ (לעצמו / לבן-הזוג) — אפס-שרת
       Padding(padding: const EdgeInsets.only(top: 16, bottom: 4), child: Text(headline, style: TextStyle(color: lk.ink, fontSize: 28, fontWeight: FontWeight.w600, height: 1.2))),
       if (first != null) Padding(padding: const EdgeInsets.only(bottom: 12), child: Text((first.overdue ? ${k(L.homeOverdue)} : first.sub) + ' · ' + first.module + ' · ' + lead2, style: TextStyle(color: lk.muted, fontSize: 14))),
       if (overdue.isNotEmpty) DsSection(title: ${k(L.homeOverdue)}, tone: 2, children: [for (final it in overdue) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), tone: 2, onOpen: () => _openItem(context, it), actions: it.actions, onAct: it.act)]),   // D6/P6/P7 · באיחור ראשון
@@ -1191,7 +1198,7 @@ class _${cls}State extends State<${cls}> {
         if (m.timeFields.isNotEmpty && f.label == m.timeFields.first && (_v[f.label] ?? '').trim().isEmpty) Padding(padding: const EdgeInsets.only(bottom: 10), child: Wrap(spacing: 8, runSpacing: 8, children: [for (final c in balaganTimeChips(DateTime.now())) DsChipButton(label: c[0], onTap: () => setState(() => _v[m.timeFields.first] = c[1]))])),   // ב׳-לג · «באיזו שעה?»
         if (m.personFields.isNotEmpty && f.label == m.personFields.first && (_v[f.label] ?? '').trim().isEmpty) for (final people in [balaganPeople()]) if (people.isNotEmpty) Padding(padding: const EdgeInsets.only(bottom: 10), child: Wrap(spacing: 8, runSpacing: 8, children: [for (final p in people) DsChipButton(label: p, onTap: () => setState(() => _v[m.personFields.first] = p))]))],   // ב׳-לג · «עם מי?» — מי שכבר בתיקים
       if (rest.isNotEmpty) DsFold(title: ${k(L.confirmMore)}.replaceAll('{n}', rest.length.toString()), details: [for (final f in rest) _field(f)]),
-      Padding(padding: const EdgeInsets.only(top: 14), child: DsPrimaryButton(label: ${k(L.askSave)}, onTap: _save)),
+      Padding(padding: const EdgeInsets.only(top: 14), child: DsPrimaryButton(label: (() { if (dateF.isEmpty) return ${k(L.askSave)}; final d = DateTime.tryParse((_v[dateF] ?? '').trim()); if (d == null) return ${k(L.askSave)}; final t0 = DateTime.now(); final n = DateTime(d.year, d.month, d.day).difference(DateTime(t0.year, t0.month, t0.day)).inDays; return n == 0 ? ${k(L.askSave)} : ${k(L.saveWhen)}.replaceAll('{day}', balaganDayLabel(d, t0)); })(), onTap: _save)   /* ב׳-סא · «יופיע במחר» — האדם יודע לאן זה הולך */),
     ]);
   }
 }
@@ -1319,7 +1326,7 @@ ${mods.map((m) => `      case '${m.root.slug}': return ${m.rootPage.cls}(id: id)
       Padding(padding: const EdgeInsets.only(top: 8), child: DsQuickAdd(hint: ${k(L.personQuick)}.replaceAll('{who}', p.name), autofocus: false, onSubmit: (s0) { final s = s0.trim(); if (s.isEmpty) return; final hits = balaganIdentify(s); if (hits.isEmpty) return; final m = hits.first.module; final facts = balaganFacts(s, m); if (m.personFields.isNotEmpty && !m.personFields.any((f) => (facts[f] ?? '').trim().isNotEmpty)) facts[m.personFields.first] = p.name; Navigator.of(context).push<bool>(MaterialPageRoute<bool>(builder: (_) => ${clsOf('balagan_confirm')}(module: m, facts: facts, alternatives: hits.skip(1).map((h) => h.module).toList(), text: s))); })),   // ב׳-נח · רגע עם האדם הזה: השם כבר בטופס
     ]),   // ב׳-לה · כרטיס-אדם: השם בחיפוש = אדם מהתיקים ⇒ סיכום + התקשר/וואטסאפ מעל התוצאות
     if (_q.trim().length >= 2 && hits.isEmpty) Padding(padding: const EdgeInsets.only(top: 8), child: DsNote(message: ${k(L.searchNone)}, label: '', tone: 0)),
-    if (_q.trim().isEmpty) ...(() { final counts = <String, int>{}; for (final m in kBalaganModules) { if (m.personFields.isEmpty) continue; for (final r in appStore.records(m.rootSlug)) { for (final f in m.personFields) { final v = (r[f] ?? '').trim(); if (v.length >= 2) counts[v] = (counts[v] ?? 0) + 1; } } } final names = counts.keys.toList()..sort((a, b) => counts[b]!.compareTo(counts[a]!)); return names.isEmpty ? <Widget>[] : [DsSection(title: ${k(L.peopleTitle)}, children: [Wrap(spacing: 8, runSpacing: 8, children: [for (final n in names.take(12)) DsChipButton(label: n + ' · ' + counts[n].toString(), onTap: () => setState(() => _q = n))])])]; })(),   // «אנשים»: מי מופיע בתיקים (שדות-אדם מכל המודולים) ⇒ הקשה = חיפוש לפי השם
+    if (_q.trim().isEmpty) ...(() { final counts = <String, int>{}; for (final m in kBalaganModules) { if (m.personFields.isEmpty) continue; for (final r in appStore.records(m.rootSlug)) { for (final f in m.personFields) { final v = (r[f] ?? '').trim(); if (v.length >= 2) counts[v] = (counts[v] ?? 0) + 1; } } } final names = counts.keys.toList()..sort((a, b) => counts[b]!.compareTo(counts[a]!)); return names.isEmpty ? <Widget>[] : [DsSection(title: ${k(L.peopleTitle)}, children: [Wrap(spacing: 8, runSpacing: 8, children: [for (final n in names.take(12)) DsChipButton(label: [n, counts[n].toString(), for (final p in [balaganPerson(n)]) if (p != null && p.money > 0) '₪ ' + balaganFmtMoney(p.money)].join(' · '), onTap: () => setState(() => _q = n))])])]; })(),   // «אנשים»: מי מופיע בתיקים (שדות-אדם מכל המודולים) ⇒ הקשה = חיפוש לפי השם
     if (_q.trim().isEmpty) ...(() { final seen = <String>{}; final rows = <Widget>[]; for (final e in appStore.log) { if (rows.length >= 5) break; final ent = e['entity'] ?? '', rid = e['rid'] ?? ''; if (ent.isEmpty || rid.isEmpty || e['undone'] == '1' || !_titleOf.containsKey(ent) || !seen.add(ent + '|' + rid) || appStore.byId(ent, rid) == null) continue; rows.add(DsNavTile(glyph: '', title: (_titleOf[ent] ?? ent) + ' · ' + appStore.displayOf(ent, rid), sub: [(() { final at = DateTime.tryParse(e['at'] ?? ''); return at == null ? '' : balaganAgo(at, DateTime.now()); })(), e['what'] ?? ''].where((x) => x.isNotEmpty).join(' · '), onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => _open(ent, rid))))); } return rows.isEmpty ? <Widget>[] : [DsSection(title: ${k(L.recentTitle)}, children: rows)]; })(),   // «איפה הייתי»: התיקים שנגעת בהם לאחרונה, מהיומן
     if (hits.isNotEmpty) DsSection(title: ${k(L.searchTitle)}.replaceAll('{n}', hits.length.toString()), children: [for (final h in hits.take(30)) DsNavTile(glyph: '', title: (_titleOf[h[0]] ?? h[0]) + ' · ' + appStore.displayOf(h[0], h[1]), sub: (() { final ms = kBalaganModules.where((m) => m.rootSlug == h[0]); final r = appStore.byId(h[0], h[1]); final ctx = ms.isEmpty || r == null ? '' : balaganDupSub(ms.first, r, DateTime.now()); final t = h[2].length > 60 ? h[2].substring(0, 60) + '…' : h[2]; return [ctx, t].where((x) => x.isNotEmpty).join(' · '); })(), onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => _open(h[0], h[1]))))]),
 ${order.map((t) => `    DsSection(title: ${k(t)}, children: [
