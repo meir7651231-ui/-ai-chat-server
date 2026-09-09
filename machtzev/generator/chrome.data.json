@@ -324,5 +324,7 @@
  "dayQuick": "משהו ליום הזה? כתוב ומקש Enter",
  "personQuick": "משהו עם {who}? כתוב ומקש Enter",
  "saveWhen": "שמור. יופיע ב{day}.",
- "shareDayFooter": "ועוד: {n} בלי מועד · {m} נשכחים"
+ "shareDayFooter": "ועוד: {n} בלי מועד · {m} נשכחים",
+ "openDay": "מה יש ב{day}?",
+ "weekDone": "סיימת {n}"
 }

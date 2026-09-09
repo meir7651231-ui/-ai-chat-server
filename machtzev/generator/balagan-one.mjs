@@ -239,6 +239,9 @@ if (!/return \[BalaganHit\(base\.first, 0\)\]/.test(moments)) fails.push('מזה
 if (!/undated: undated, stale: stale/.test(home) || !/undated\.length, stale\.length\)/.test(home)) fails.push('שיתוף בלי בלי-מועד/נשכחים');
 if (!/p\.money > 0\) '₪ ' \+ balaganFmtMoney\(p\.money\)\]\.join/.test(topics)) fails.push('צ׳יפי-אנשים בלי ₪');
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganIdentify\('קסםקסם'\)/.test(ft)) fails.push('בדיקת מבוי-סתום חסרה'); }
+// גלים ב׳-סה..סח · «מה יש במחר?» מהקיפול · הכותרת פותחת תיק · «סיימת n» · תאריך בחיפוש ⇒ מסך-יום
+if (!/const BalaganDay\(delta: 1\)/.test(home) || !/onTap: first == null \? null : \(\) => _openItem\(context, first\)/.test(home) || !/cnt\('done'\) > 0\) DsActionRow/.test(home)) fails.push('«היום»: קיפול-מחר/כותרת/סיימת');
+if (!/dd\.first\.end == _q\.trim\(\)\.length/.test(topics)) fails.push('«נושאים» בלי תאריך ⇒ מסך-יום');
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);
