@@ -228,6 +228,11 @@ if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganDupSub\(m
 for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if ((h.match(/_moneyOf\(r\)\]\.where/g) || []).length < 2) { fails.push(`${m.ns}: בלי ₪ בבלי-תאריך/נשכחים`); break; } }
 for (const m of mods.filter((x) => x.root.fields.some((f) => f.type === 'date'))) { const rp = rd(path.join(GEN, `gen_${m.rootPage.slug}.dart`)); if (!/String _noteText\(String s\)/.test(rp) || !/_noteText\(r0\['__note'\]/.test(rp)) { fails.push(`${m.ns}: הערות עם ISO`); break; } }
 if (!/balaganDupSub\(ms\.first, r, DateTime\.now\(\)\)/.test(topics) || !/balaganAgo\(at, DateTime\.now\(\)\)/.test(topics)) fails.push('«נושאים»: נמצא/אחרונים בלי הקשר/לפני');
+// גלים ב׳-נז..ס · «שם: רגע» · מיזוג מעדכן מועד-שעבר · שורה-מהירה בכרטיס-אדם · צ׳יפי-אנשים ב«מה קרה?»
+if (!/bool balaganKnownPerson\(String name\)/.test(moments) || !/dc\.isBefore\(t0\) && !dn\.isBefore\(t0\)/.test(moments)) fails.push('מזהה-הרגע בלי «שם:» / מיזוג בלי מועד-חדש');
+if (!/facts\[m\.personFields\.first\] = p\.name/.test(topics)) fails.push('כרטיס-אדם בלי שורה-מהירה');
+if (!/_c\.text = p \+ ': '/.test(ask)) fails.push('«מה קרה?» בלי צ׳יפי-אנשים');
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganFacts\('גלית בר: להתקשר מחר'/.test(ft)) fails.push('בדיקת «שם:» חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);

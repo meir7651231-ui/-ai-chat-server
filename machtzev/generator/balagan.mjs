@@ -263,7 +263,7 @@ int balaganMerge(BalaganModule m, String id, Map<String, String> v, String logTe
     final val = e.value.trim(); if (val.isEmpty || e.key == '__id' || e.key == '__at' || e.key == '__stage') continue;
     final cur = (r[e.key] ?? '').trim();
     if (e.key == '__note') { if (cur.contains(val)) continue; prev[e.key] = r[e.key] ?? ''; next[e.key] = cur.isEmpty ? val : cur + '\\n' + val; continue; }
-    if (cur.isNotEmpty) continue;
+    if (cur.isNotEmpty) { final isDate = m.dateFields.contains(e.key); final dc = isDate ? DateTime.tryParse(cur) : null; final dn = isDate ? DateTime.tryParse(val) : null; final now = DateTime.now(); final t0 = DateTime(now.year, now.month, now.day); if (!(dc != null && dn != null && dc.isBefore(t0) && !dn.isBefore(t0))) continue; }   /* ב׳-נז · מועד שכבר עבר ⇒ המועד החדש (הרגע הבא של אותו עניין) — עם החזר; כל השאר: מלא לא נדרס */
     prev[e.key] = r[e.key] ?? ''; next[e.key] = val;
   }
   if (next.isEmpty) return 0;
@@ -321,10 +321,14 @@ List<_NumAt> balaganNums(String text, List<_DateAt> dates) {
   return res;
 }
 /// עובדות מהטקסט (תאריכים — גם יחסיים · סכומים · שורה-ראשונה) ⇒ שדות-השורש לפי טיפוס + קרבה למילות-תווית-השדה. \`today\` מוזרק (דטרמיניסטי; ברירת-מחדל עכשיו).
+/// ב׳-נט · האם השם כבר בתיקים (שדות-האדם של כל המודולים) — «רות לוי: …» בתחילת שורה = האדם, רק לשם מוכר (אפס-ניחוש)
+bool balaganKnownPerson(String name) { final n = name.trim().toLowerCase(); if (n.length < 2) return false; for (final m in kBalaganModules) { for (final r in appStore.records(m.rootSlug)) { for (final f in m.personFields) { if ((r[f] ?? '').trim().toLowerCase() == n) return true; } } } return false; }
 Map<String, String> balaganFacts(String text0, BalaganModule m, {DateTime? today}) {
   final out = <String, String>{};
   final t0 = today ?? DateTime.now();
-  final sender = balaganWaSender(text0); final text = balaganWaStrip(text0);   // כותרת-וואטסאפ: לא תאריך, לא שעה — השולח = אדם (רק כשלא נמצא אחר)
+  final sender0 = balaganWaSender(text0); final textA = balaganWaStrip(text0);   // כותרת-וואטסאפ: לא תאריך, לא שעה — השולח = אדם (רק כשלא נמצא אחר)
+  final pm = sender0.isEmpty ? RegExp(r'^([^:\\n]{2,30}):\\s+(.+)$', dotAll: true).firstMatch(textA) : null; final known = pm != null && balaganKnownPerson(pm.group(1)!.trim());   /* ב׳-נט · «רות לוי: להתקשר מחר» — שם מוכר בתחילת השורה = האדם, והשורה ממשיכה בלעדיו */
+  final sender = known ? pm!.group(1)!.trim() : sender0; final text = known ? pm!.group(2)!.trim() : textA;
   final dateMs = balaganDates(text, t0);
   final phoneMs = balaganPhones(text);
   final pctMs = balaganPercents(text);
@@ -680,6 +684,19 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
     appStore.add(m.rootSlug, {nf: '1'}); if (m.stages > 0) appStore.add(m.rootSlug, {nf: '2', '__stage': (m.stages - 1).toString()});
     final after = balaganOpenCount(m.rootSlug, m.stages);
     expect(after, isNot(before)); expect(after.contains('פתוחים'), isTrue);
+  });
+  test('«שם: רגע» — שם מוכר בתחילת השורה = האדם, לא-מוכר = טקסט רגיל · מיזוג מעדכן מועד-שעבר בלבד', () {
+    final m = kBalaganModules.firstWhere((x) => x.personFields.isNotEmpty && x.dateFields.isNotEmpty);
+    appStore.add(m.rootSlug, {m.personFields.first: 'גלית בר'});
+    final f = balaganFacts('גלית בר: להתקשר מחר', m, today: today);
+    expect(f[m.personFields.first], 'גלית בר'); expect(f[m.dateFields.first], '2026-09-09');
+    final g = balaganFacts('הערה: להתקשר מחר', m, today: today);
+    expect(g[m.personFields.first], isNot('הערה'));
+    final id = appStore.add(m.rootSlug, {m.personFields.first: 'גלית בר', m.dateFields.first: '2020-01-01'});
+    balaganMerge(m, id, {m.dateFields.first: '2099-01-01'}, 'x'); expect(appStore.byId(m.rootSlug, id)![m.dateFields.first], '2099-01-01');
+    balaganMerge(m, id, {m.dateFields.first: '2098-01-01'}, 'x'); expect(appStore.byId(m.rootSlug, id)![m.dateFields.first], '2099-01-01');
+    final id2 = appStore.add(m.rootSlug, {m.personFields.first: 'גלית בר', m.dateFields.first: '2020-01-01'});
+    balaganMerge(m, id2, {m.dateFields.first: '2019-01-01'}, 'x'); expect(appStore.byId(m.rootSlug, id2)![m.dateFields.first], '2020-01-01');
   });
   test('פיצול שורה לכמה רגעים', () {
     expect(balaganSplit('שילמתי ארנונה. מחר תור לרופא ב-9:00'), ['שילמתי ארנונה', 'מחר תור לרופא ב-9:00']);
@@ -1065,6 +1082,7 @@ class _${cls}State extends State<${cls}> {
       ])),
       if (!_asked && _c.text.trim().isEmpty) Padding(padding: const EdgeInsets.only(top: 14), child: Text(${k(L.askExamplesTitle)}, style: TextStyle(color: lk.muted, fontSize: 13))),
       if (!_asked && _c.text.trim().isEmpty) Padding(padding: const EdgeInsets.only(top: 6), child: Wrap(spacing: 8, runSpacing: 8, children: [for (final ex in ${k(L.askExamples)}.split('|')) DsChipButton(label: ex, onTap: () { _c.text = ex; _go(); })])),   // אפס-הקלדה: דוגמה = הקשה אחת ⇒ טופס-האישור
+      if (!_asked && _c.text.trim().isEmpty) for (final people in [balaganPeople()]) if (people.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 6), child: Wrap(spacing: 8, runSpacing: 8, children: [for (final p in people) DsChipButton(label: p + ':', onTap: () => setState(() { _c.text = p + ': '; }))])),   // ב׳-ס · «רות לוי: » — השורה מתחילה מהאדם, בלי להקליד שם
       if (_note.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 10), child: DsNote(message: _note, label: '', tone: 0)),
       if (_asked && top != null) DsSection(title: ${k(L.askUnderstood)}, children: [   // חזר בלי לשמור ⇒ הזיהוי נשאר על המסך (הקשה אחת חוזרת)
         DsApproveCard(question: ${k(L.askIs)}.replaceAll('{title}', top.module.title).replaceAll('{moment}', top.module.moment), source: _c.text.length > 80 ? _c.text.substring(0, 80) : _c.text, okLabel: ${k(L.askOpen)}, noLabel: ${k(L.askNot)}, onOk: () => _open(context, top, _hits.skip(1).map((h) => h.module).toList()), onNo: _skip),
@@ -1298,6 +1316,7 @@ ${mods.map((m) => `      case '${m.root.slug}': return ${m.rootPage.cls}(id: id)
     for (final p in [balaganPersonFor(_q)]) if (p != null) DsSection(title: p.name, children: [
       Text(${k(L.personLine)}.replaceAll('{n}', p.files.toString()).replaceAll('{open}', p.open.toString()) + (p.money > 0 ? ' · ' + ${k(L.personMoney)}.replaceAll('{n}', balaganFmtMoney(p.money)) : '') + (p.last.isNotEmpty ? ' · ' + ${k(L.personLast)}.replaceAll('{d}', (() { final d = DateTime.tryParse(p.last); return d == null ? p.last : balaganDayLabel(d, DateTime.now()); })()) : ''), style: TextStyle(color: DsLook.of(context).muted, fontSize: 13)),
       if (p.phones.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 8), child: Wrap(spacing: 8, runSpacing: 8, children: [for (final ph in p.phones.take(2)) ...[DsChipButton(label: ${k(L.callLabel)} + ' ' + ph, onTap: () => launchUrl(Uri.parse('tel:' + ph), mode: LaunchMode.externalApplication)), DsChipButton(label: ${k(L.waLabel)}, onTap: () => launchUrl(Uri.parse('https://wa.me/' + balaganIntl(ph)), mode: LaunchMode.externalApplication))]])),
+      Padding(padding: const EdgeInsets.only(top: 8), child: DsQuickAdd(hint: ${k(L.personQuick)}.replaceAll('{who}', p.name), autofocus: false, onSubmit: (s0) { final s = s0.trim(); if (s.isEmpty) return; final hits = balaganIdentify(s); if (hits.isEmpty) return; final m = hits.first.module; final facts = balaganFacts(s, m); if (m.personFields.isNotEmpty && !m.personFields.any((f) => (facts[f] ?? '').trim().isNotEmpty)) facts[m.personFields.first] = p.name; Navigator.of(context).push<bool>(MaterialPageRoute<bool>(builder: (_) => ${clsOf('balagan_confirm')}(module: m, facts: facts, alternatives: hits.skip(1).map((h) => h.module).toList(), text: s))); })),   // ב׳-נח · רגע עם האדם הזה: השם כבר בטופס
     ]),   // ב׳-לה · כרטיס-אדם: השם בחיפוש = אדם מהתיקים ⇒ סיכום + התקשר/וואטסאפ מעל התוצאות
     if (_q.trim().length >= 2 && hits.isEmpty) Padding(padding: const EdgeInsets.only(top: 8), child: DsNote(message: ${k(L.searchNone)}, label: '', tone: 0)),
     if (_q.trim().isEmpty) ...(() { final counts = <String, int>{}; for (final m in kBalaganModules) { if (m.personFields.isEmpty) continue; for (final r in appStore.records(m.rootSlug)) { for (final f in m.personFields) { final v = (r[f] ?? '').trim(); if (v.length >= 2) counts[v] = (counts[v] ?? 0) + 1; } } } final names = counts.keys.toList()..sort((a, b) => counts[b]!.compareTo(counts[a]!)); return names.isEmpty ? <Widget>[] : [DsSection(title: ${k(L.peopleTitle)}, children: [Wrap(spacing: 8, runSpacing: 8, children: [for (final n in names.take(12)) DsChipButton(label: n + ' · ' + counts[n].toString(), onTap: () => setState(() => _q = n))])])]; })(),   // «אנשים»: מי מופיע בתיקים (שדות-אדם מכל המודולים) ⇒ הקשה = חיפוש לפי השם
