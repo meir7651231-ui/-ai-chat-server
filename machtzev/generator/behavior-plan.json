@@ -2115,6 +2115,349 @@
    }
   }
  },
+ "ics.escape": {
+  "shape": "ייצוא",
+  "pick": "icsEscape",
+  "file": "dart-maor/ics-escape.dart",
+  "score": 24.39,
+  "proven": true,
+  "candidates": 48,
+  "top3": [
+   "icsEscape:3/3✓:24.39",
+   "normId:1/3:2",
+   "normPhone:1/3:2"
+  ],
+  "proof": {
+   "adarNorm": {
+    "ok": 0,
+    "total": 3,
+    "error": "ics_escape__adarNorm.dart:6:39: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   },
+   "advanceStatus": {
+    "ok": 0,
+    "total": 3,
+    "error": "ics_escape__advanceStatus.dart:6:44: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   },
+   "angleDigits": {
+    "ok": 0,
+    "total": 3,
+    "error": "ics_escape__angleDigits.dart:6:42: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   },
+   "basename": {
+    "ok": 0,
+    "total": 3
+   },
+   "cloudCfgCacheKey": {
+    "ok": 0,
+    "total": 3,
+    "error": "ics_escape__cloudCfgCacheKey.dart:6:47: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   },
+   "dataUrlMime": {
+    "ok": 0,
+    "total": 3,
+    "error": "ics_escape__dataUrlMime.dart:6:42: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   },
+   "decodeQuotedPrintable": {
+    "ok": 0,
+    "total": 3,
+    "error": "ics_escape__decodeQuotedPrintable.dart:6:52: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   },
+   "esc": {
+    "ok": 0,
+    "total": 3,
+    "error": "ics_escape__esc.dart:6:34: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   },
+   "expandInchFractions": {
+    "ok": 0,
+    "total": 3,
+    "error": "ics_escape__expandInchFractions.dart:6:50: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   },
+   "faviconDataUri": {
+    "ok": 0,
+    "total": 3,
+    "error": "ics_escape__faviconDataUri.dart:6:45: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   },
+   "fmtDate": {
+    "ok": 0,
+    "total": 3
+   },
+   "formatIsraeliPhone": {
+    "ok": 1,
+    "total": 3
+   },
+   "genJoinCode": {
+    "ok": 0,
+    "total": 3,
+    "error": "ics_escape__genJoinCode.dart:6:42: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   },
+   "icsEscape": {
+    "ok": 3,
+    "total": 3
+   },
+   "monthKey": {
+    "ok": 0,
+    "total": 3,
+    "error": "ics_escape__monthKey.dart:6:39: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   },
+   "monthLabel": {
+    "ok": 0,
+    "total": 3
+   },
+   "namespaceOf": {
+    "ok": 0,
+    "total": 3,
+    "error": "ics_escape__namespaceOf.dart:6:42: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   },
+   "normEmail": {
+    "ok": 0,
+    "total": 3,
+    "error": "ics_escape__normEmail.dart:6:40: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   },
+   "normHeader": {
+    "ok": 0,
+    "total": 3,
+    "error": "ics_escape__normHeader.dart:6:41: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   },
+   "normId": {
+    "ok": 1,
+    "total": 3
+   },
+   "normPhone": {
+    "ok": 1,
+    "total": 3
+   },
+   "normalizePhone": {
+    "ok": 0,
+    "total": 3,
+    "error": "ics_escape__normalizePhone.dart:6:45: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   },
+   "p39ElbowModel": {
+    "ok": 0,
+    "total": 3,
+    "error": "ics_escape__p39ElbowModel.dart:6:44: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   },
+   "p53AdapterModel": {
+    "ok": 0,
+    "total": 3,
+    "error": "ics_escape__p53AdapterModel.dart:6:46: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   },
+   "p54AdapterModel": {
+    "ok": 0,
+    "total": 3,
+    "error": "ics_escape__p54AdapterModel.dart:6:46: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   },
+   "p55AdapterModel": {
+    "ok": 0,
+    "total": 3,
+    "error": "ics_escape__p55AdapterModel.dart:6:46: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   },
+   "pad2": {
+    "ok": 0,
+    "total": 3
+   },
+   "pdfSafe": {
+    "ok": 0,
+    "total": 3,
+    "error": "ics_escape__pdfSafe.dart:6:38: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   },
+   "phoneKey": {
+    "ok": 1,
+    "total": 3
+   },
+   "phoneRegion": {
+    "ok": 0,
+    "total": 3
+   },
+   "popCall": {
+    "ok": 0,
+    "total": 3
+   },
+   "purposeKeyOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "safeHttpsUrl": {
+    "ok": 0,
+    "total": 3
+   },
+   "sessionsOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "setAllowedPurposes": {
+    "ok": 0,
+    "total": 3
+   },
+   "siteDonateUrl": {
+    "ok": 0,
+    "total": 3
+   },
+   "smtpHostFor": {
+    "ok": 0,
+    "total": 3,
+    "error": "ics_escape__smtpHostFor.dart:6:42: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   },
+   "sortSupportMsgs": {
+    "ok": 0,
+    "total": 3
+   },
+   "sortSupportThreads": {
+    "ok": 0,
+    "total": 3
+   },
+   "stripAuditMeta": {
+    "ok": 0,
+    "total": 3
+   },
+   "stripSupKey": {
+    "ok": 0,
+    "total": 3
+   },
+   "supCount": {
+    "ok": 0,
+    "total": 3
+   },
+   "supIls": {
+    "ok": 0,
+    "total": 3
+   },
+   "supUsd": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportMsgTime": {
+    "ok": 0,
+    "total": 3
+   },
+   "timeToMin": {
+    "ok": 0,
+    "total": 3
+   },
+   "waDigits": {
+    "ok": 0,
+    "total": 3
+   },
+   "waMeDigits": {
+    "ok": 0,
+    "total": 3,
+    "error": "ics_escape__waMeDigits.dart:6:41: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   }
+  }
+ },
+ "ics.fold": {
+  "shape": "ייצוא",
+  "pick": "foldIcsLine",
+  "file": "dart-maor/fold-ics-line.dart",
+  "score": 33.53,
+  "proven": true,
+  "candidates": 18,
+  "top3": [
+   "foldIcsLine:2/2✓:33.53",
+   "splitCsvLine:1/2:11.31",
+   "tokens:1/2:2"
+  ],
+  "proof": {
+   "foldIcsLine": {
+    "ok": 2,
+    "total": 2
+   },
+   "monthLabel": {
+    "ok": 0,
+    "total": 2
+   },
+   "popCall": {
+    "ok": 0,
+    "total": 2
+   },
+   "sessionsOf": {
+    "ok": 0,
+    "total": 2
+   },
+   "setAllowedPurposes": {
+    "ok": 0,
+    "total": 2
+   },
+   "siteDonateUrl": {
+    "ok": 0,
+    "total": 2
+   },
+   "sortSupportMsgs": {
+    "ok": 0,
+    "total": 2
+   },
+   "sortSupportThreads": {
+    "ok": 0,
+    "total": 2
+   },
+   "splitCsvLine": {
+    "ok": 1,
+    "total": 2
+   },
+   "stripAuditMeta": {
+    "ok": 0,
+    "total": 2
+   },
+   "stripSupKey": {
+    "ok": 0,
+    "total": 2
+   },
+   "supCount": {
+    "ok": 0,
+    "total": 2
+   },
+   "supIls": {
+    "ok": 0,
+    "total": 2
+   },
+   "supUsd": {
+    "ok": 0,
+    "total": 2
+   },
+   "supportMsgTime": {
+    "ok": 0,
+    "total": 2
+   },
+   "timeToMin": {
+    "ok": 0,
+    "total": 2
+   },
+   "tokens": {
+    "ok": 1,
+    "total": 2
+   },
+   "waDigits": {
+    "ok": 0,
+    "total": 2
+   }
+  }
+ },
+ "ics.build": {
+  "shape": "ייצוא",
+  "pick": "buildIcs",
+  "file": "dart-maor/build-ics.dart",
+  "score": 51.94,
+  "proven": true,
+  "candidates": 3,
+  "top3": [
+   "buildIcs:2/2✓:51.94",
+   "smartScore:0/2:0",
+   "staleBoxes:0/2:0"
+  ],
+  "proof": {
+   "buildIcs": {
+    "ok": 2,
+    "total": 2
+   },
+   "smartScore": {
+    "ok": 0,
+    "total": 2
+   },
+   "staleBoxes": {
+    "ok": 0,
+    "total": 2
+   }
+  }
+ },
  "heb.gemYear": {
   "shape": "מועד",
   "pick": "gemYear",
