@@ -89,6 +89,8 @@ int bhMinutesUntil(String nowIsoT, String todayIso, String hm) { if (hm.length <
 /// ב׳-קכב · טווח-שבוע [ראשון, שבת] של השבוע delta מהיום (bhWeekStart · bhPlusDays) · האם iso בטווח (${N('iso.inRange')})
 List<String> bhWeekRange(String todayIso, int delta) { final s = bhPlusDays(bhWeekStart(todayIso), 7 * delta); return [s, bhPlusDays(s, 6)]; }
 bool bhInRange(String iso, String from, String to) => iso.length >= 10 && ${N('iso.inRange')}(iso.substring(0, 10), (from: from, to: to));
+/// ב׳-קכו · סכום-מטקסט: «1,250» · «₪ 8,000» · ריק ⇒ 0 (אין חלקיק-פרסור-סכום במדף — נסרק: (String)→num; ההיפוך של ${N('money.fmt')})
+double bhMoney(String? s) => double.tryParse((s ?? '').replaceAll(',', '').replaceAll('₪', '').trim()) ?? 0;
 /// מפרידי-אלפים בלי ₪ (${N('money.fmt')})
 String bhThousands(num v) => ${N('money.fmt')}(v).replaceFirst('₪', '');
 `;
@@ -140,6 +142,7 @@ void main() {
   test('G38 · סכום-לפי · חציון · רצף-ימים', () {
     expect(bhSumBy([{'t': 'דירה', 'n': '8,000'}, {'t': 'דירה', 'n': '3000'}, {'t': 'משימות', 'n': '1,250'}], 't', 'n'), [['דירה', 2, 11000.0], ['משימות', 1, 1250.0]]);
     expect(bhMedianInt([7, 1, 4]), 4); expect(bhMedianInt([]), 0); expect(bhMedianInt([2, 9]), 9);
+    expect(bhMoney('1,250'), 1250); expect(bhMoney('₪ 8,000'), 8000); expect(bhMoney(''), 0); expect(bhMoney(null), 0); expect(bhMoney('abc'), 0); expect(bhMoney(bhThousands(1650)), 1650);
     expect(bhWeekRange('2026-09-08', 0), ['2026-09-06', '2026-09-12']); expect(bhWeekRange('2026-09-08', 1), ['2026-09-13', '2026-09-19']); expect(bhInRange('2026-09-12', '2026-09-06', '2026-09-12'), true); expect(bhInRange('2026-09-13', '2026-09-06', '2026-09-12'), false); expect(bhInRange('', '2026-09-06', '2026-09-12'), false);
     expect(bhMinutesUntil('2026-09-08T10:05:00', '2026-09-08', '10:30'), 25); expect(bhMinutesUntil('2026-09-08T11:00:00', '2026-09-08', '10:30') < 0, isTrue); expect(bhMinutesUntil('', '2026-09-08', '10:30'), -1);
     expect(bhStreakDays(['2026-09-08', '2026-09-07', '2026-09-06', '2026-09-03'], '2026-09-08'), 3); expect(bhStreakDays(['2026-09-07', '2026-09-06'], '2026-09-08'), 2); expect(bhStreakDays(['2026-09-05'], '2026-09-08'), 0); expect(bhStreakDays(const [], '2026-09-08'), 0);
