@@ -335,5 +335,8 @@
  "personRecent": "לאחרונה איתו",
  "askRecent": "נשמר לאחרונה",
  "snoozeAll": "דחה הכל למחר",
- "amountLast": "₪ {n} כמו בפעם הקודמת"
+ "amountLast": "₪ {n} כמו בפעם הקודמת",
+ "personSend": "שלח לו את הפתוחים",
+ "personSendTitle": "{who}, מה שפתוח אצלנו:",
+ "doneAll": "סיים הכל"
 }

@@ -263,6 +263,11 @@ for (const m of mods) { const rp = rd(path.join(GEN, `gen_${m.rootPage.slug}.dar
 if (!/void _snoozeAll\(List<DsTodayItem> overdue, DateTime today\)/.test(home) || !/group: g\)/.test(home)) fails.push('«היום»: בלי «דחה הכל למחר» עם החזר-קבוצתי');
 if (!/String balaganPhoneOf\(String name\)/.test(confirm) || !/balaganPhoneOf\(p\)/.test(confirm)) fails.push('טופס-האישור: צ׳יפ-אדם בלי טלפון');
 if (!/String balaganLastAmount\(BalaganModule m, String person\)/.test(confirm) || !/balaganLastAmount\(m, /.test(confirm)) fails.push('טופס-האישור: בלי «כמו בפעם הקודמת»');
+// גלים ב׳-צ..צג · «שלח לו את הפתוחים» · תזכורת-בהצעה = רק מה שלפנינו · חיפוש-ספרות · «סיים הכל» grouped
+if (!/String balaganPersonOpenText\(String name, DateTime today\)/.test(topics) || !/balaganPersonOpenText\(p\.name/.test(topics)) fails.push('כרטיס-אדם בלי «שלח לו את הפתוחים»');
+{ const bh = rd(path.join(GEN, `gen_${mods[0].home.slug}.dart`)); if (!/static List<int> aheadOffsets\(/.test(bh) || !/days\(ahead\)/.test(bh)) fails.push('הצעת-התזכורת אינה מסננת היסטים-שעברו'); }
+{ const st = rd(path.join(HERE, '..', '..', 'new', 'dart-ui-bs', 'ds', 'ds_store.dart')); if (!/void grouped\(void Function\(\) body\)/.test(st) || !/final digits = /.test(st)) fails.push('AppStore בלי grouped / חיפוש-ספרות'); }
+if (!/appStore\.grouped\(\(\) \{ for \(final it in overdue\)/.test(home)) fails.push('«היום»: בלי «סיים הכל» grouped');
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);

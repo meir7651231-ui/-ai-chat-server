@@ -742,6 +742,36 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
     expect(balaganLastAmount(m, 'אבי כהן'), '2,000'); expect(balaganLastAmount(m, 'דנה לוי'), '300'); expect(balaganLastAmount(m, ''), '300');
     expect(balaganLastAmount(m, 'מישהו אחר'), '');
   });
+  test('ב׳-צ · «שלח לו את הפתוחים»: שורה לכל תיק פתוח עם האדם, סגור לא נכלל', () {
+    final m = kBalaganModules.firstWhere((x) => x.personFields.isNotEmpty && x.stages > 0);
+    expect(balaganPersonOpenText('גל רון', today), '');
+    appStore.add(m.rootSlug, {m.personFields.first: 'גל רון', if (m.descField.isNotEmpty && m.descField != m.personFields.first) m.descField: 'פתוח'});   // שדה-התיאור יכול להיות שדה-האדם עצמו
+    appStore.add(m.rootSlug, {m.personFields.first: 'גל רון', if (m.descField.isNotEmpty && m.descField != m.personFields.first) m.descField: 'סגור', '__stage': (m.stages - 1).toString()});
+    final t = balaganPersonOpenText('גל רון', today);
+    expect(t.startsWith('גל רון, מה שפתוח אצלנו:'), isTrue); expect(t.split('\\n').length, 2); expect(t.contains(m.title), isTrue);
+  });
+  test('ב׳-צא · הצעת-התזכורת אומרת רק מה שעוד לפנינו: מועד מחר ⇒ [1, 0], מועד בעוד 10 ימים ⇒ [3, 1, 0]', () {
+    expect(${baseTodayCls}.aheadOffsets(DateTime(2026, 9, 9), true, today), [1, 0]);
+    expect(${baseTodayCls}.aheadOffsets(DateTime(2026, 9, 18), true, today), [3, 1, 0]);
+    expect(${baseTodayCls}.aheadOffsets(DateTime(2026, 9, 8), true, today), [0]);
+  });
+  test('ב׳-צב · חיפוש-ספרות: «1250» מוצא «1,250» · «052-123» מוצא «0521234567» · טקסט רגיל לא נשבר', () {
+    const S = '${baseMod.root.slug}';
+    final id = appStore.add(S, {${dq(baseMod.root.descField || baseMod.root.fields[0].label)}: 'ארנונה 1,250 · 0521234567'});
+    expect(appStore.search('1250').any((h) => h[1] == id), isTrue); expect(appStore.search('052-123').any((h) => h[1] == id), isTrue);
+    expect(appStore.search('ארנונה').any((h) => h[1] == id), isTrue); expect(appStore.search('9999').any((h) => h[1] == id), isFalse);
+  });
+  test('ב׳-צג · grouped: «סיים» על שני תיקים-באיחור בתוך grouped ⇒ החזר אחד מחזיר את שניהם', () {
+    const S = '${baseMod.root.slug}'; const F = ${dq(baseMod.root.fields.find((f) => f.type === 'date').label)};
+    final a = appStore.add(S, {F: '2026-09-01'}); final b = appStore.add(S, {F: '2026-09-02'});
+    final its = ${baseTodayCls}.items(today, dayDelta: 0).where((x) => x.rid == a || x.rid == b).toList(); expect(its.length, 2);
+    appStore.grouped(() { for (final it in its) { it.act(it.actions.indexOf('סיים')); } });
+    expect(${baseTodayCls}.items(today, dayDelta: 0).any((x) => x.rid == a || x.rid == b), isFalse);
+    final g = appStore.log.first['group'] ?? ''; expect(g, isNotEmpty); expect(appStore.log.where((e) => e['group'] == g).length, 2);
+    expect(appStore.undo(appStore.log.first['id']!), isTrue);
+    expect(${baseTodayCls}.items(today, dayDelta: 0).where((x) => x.rid == a || x.rid == b).length, 2);
+    appStore.logAction('auto', 'בודד'); expect(appStore.log.first['group'], isNull);   // מחוץ ל-grouped אין group
+  });
 }
 `;
     if (fs.existsSync(path.join(bsTest, '..', 'pubspec.yaml'))) fs.writeFileSync(path.join(bsTest, 'genesis_gen_balagan_facts_test.dart'), code);
@@ -985,7 +1015,7 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
       if (!empty) Padding(padding: const EdgeInsets.only(top: 6), child: Row(children: [DsChipButton(label: ${k(L.shareDay)}, onTap: () => _shareDay(overdue, todayItems, plan.length, evening ? tomorrow : const [], undated.length, stale.length))])),   // היום כטקסט: ללוח + וואטסאפ (לעצמו / לבן-הזוג) — אפס-שרת
       Padding(padding: const EdgeInsets.only(top: 16, bottom: 4), child: GestureDetector(behavior: HitTestBehavior.opaque, onTap: first == null ? null : () => _openItem(context, first), child: Text(headline, style: TextStyle(color: lk.ink, fontSize: 28, fontWeight: FontWeight.w600, height: 1.2)))),   // ב׳-סו · הדבר-האחד: הקשה ⇒ התיק
       if (first != null) Padding(padding: const EdgeInsets.only(bottom: 12), child: Text((first.overdue ? ${k(L.homeOverdue)} : first.sub) + ' · ' + first.module + ' · ' + lead2, style: TextStyle(color: lk.muted, fontSize: 14))),
-      if (overdue.isNotEmpty) DsSection(title: ${k(L.homeOverdue)}, tone: 2, trailing: overdue.length < 2 ? null : DsChipButton(label: ${k(L.snoozeAll)}, onTap: () => _snoozeAll(overdue, today)), children: [for (final it in overdue) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), tone: 2, onOpen: () => _openItem(context, it), actions: it.actions, onAct: it.act)]),   // D6/P6/P7 · באיחור ראשון · ב׳-פז · «דחה הכל למחר» = הקשה אחת, החזר אחד
+      if (overdue.isNotEmpty) DsSection(title: ${k(L.homeOverdue)}, tone: 2, trailing: overdue.length < 2 ? null : Row(mainAxisSize: MainAxisSize.min, children: [DsChipButton(label: ${k(L.doneAll)}, onTap: () => appStore.grouped(() { for (final it in overdue) { final i = it.actions.indexOf(${k(L.actDone)}); if (i >= 0) it.act(i); } })), const SizedBox(width: 8), DsChipButton(label: ${k(L.snoozeAll)}, onTap: () => _snoozeAll(overdue, today))]), children: [for (final it in overdue) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), tone: 2, onOpen: () => _openItem(context, it), actions: it.actions, onAct: it.act)]),   // D6/P6/P7 · באיחור ראשון · ב׳-פז · «דחה הכל למחר» = הקשה אחת, החזר אחד
       if (todayItems.isNotEmpty) DsSection(title: ${k(L.homeToday)}, children: [for (final it in todayItems) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), onOpen: () => _openItem(context, it), actions: it.actions, onAct: it.act)]),
       if (plan.isNotEmpty) DsFold(title: ${k(L.planFold)}.replaceAll('{n}', plan.length.toString()), details: plan),   // תזמון-אוטומטי: מקופל — הוא מסתכל כשהוא רוצה
       ...cards.take(3),   // 3 למעלה
@@ -1314,6 +1344,7 @@ import '../dart-ui-bs/ds/ds_store.dart';
 ${mods.map((m) => `import 'gen_${m.root.slug}.dart';\nimport 'gen_${m.rootPage.slug}.dart';`).join('\n')}
 import 'gen_balagan_moments.dart';
 import 'gen_balagan_home.dart';
+import 'package:flutter/services.dart';
 import 'gen_balagan_confirm.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
@@ -1343,6 +1374,8 @@ List<String> balaganPersonNames() { final out = <String>{}; for (final m in kBal
 BalaganPerson? balaganPersonFor(String q) { final t = q.trim().toLowerCase(); if (t.length < 2) return null; final exact = balaganPerson(t); if (exact != null) return exact; final c = balaganPersonNames().where((n) => n.toLowerCase().contains(t)).toList(); return c.length == 1 ? balaganPerson(c.first) : null; }
 /// ב׳-נב · כמה תיקים פתוחים במודול (שלב < אחרון; בלי שלבים = הכל) — «דירה · 3 פתוחים»; 0 ⇒ ריק
 String balaganOpenCount(String slug, int stages) { final n = appStore.records(slug).where((r) => stages == 0 || appStore.stageOf(slug, r[AppStore.idKey] ?? '') < stages - 1).length; return n == 0 ? '' : ${k(L.openCount)}.replaceAll('{n}', n.toString()); }
+/// ב׳-צ · מה שפתוח עם אדם — שורה לכל תיק פתוח (כותרת · מודול · מועד · ₪), חוצה-מודולים, מהנתונים
+String balaganPersonOpenText(String name, DateTime today) { final n = name.trim().toLowerCase(); if (n.length < 2) return ''; final lines = <String>[]; for (final m in kBalaganModules) { if (m.personFields.isEmpty) continue; for (final r in appStore.records(m.rootSlug)) { if (!m.personFields.any((f) => (r[f] ?? '').trim().toLowerCase() == n)) continue; final rid = r[AppStore.idKey] ?? ''; if (m.stages > 0 && appStore.stageOf(m.rootSlug, rid) >= m.stages - 1) continue; lines.add('• ' + appStore.displayOf(m.rootSlug, rid) + ' · ' + balaganDupSub(m, r, today)); } } return lines.isEmpty ? '' : ${k(L.personSendTitle)}.replaceAll('{who}', name.trim()) + '\\n' + lines.join('\\n'); }
 String balaganIntl(String ph) { final d = ph.replaceAll(RegExp(r'[^0-9+]'), ''); return d.startsWith('+') ? d.substring(1) : (d.startsWith('0') ? '972' + d.substring(1) : d); }
 
 class ${cls} extends StatefulWidget {
@@ -1370,6 +1403,7 @@ ${mods.map((m) => `      case '${m.root.slug}': return ${m.rootPage.cls}(id: id)
     for (final dd in [balaganDates(_q.trim(), DateTime.now())]) if (_q.trim().isNotEmpty && dd.length == 1 && dd.first.start == 0 && dd.first.end == _q.trim().length) Padding(padding: const EdgeInsets.only(top: 8), child: Row(children: [DsChipButton(label: ${k(L.openDay)}.replaceAll('{day}', balaganDayLabel(DateTime.parse(dd.first.iso + 'T12:00:00'), DateTime.now())), onTap: () { final d = DateTime.parse(dd.first.iso + 'T12:00:00'); final n = DateTime.now(); Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => BalaganDay(delta: DateTime(d.year, d.month, d.day).difference(DateTime(n.year, n.month, n.day)).inDays))); })])),   // ב׳-סח · «מחר» בחיפוש ⇒ מסך-היום
     for (final p in [balaganPersonFor(_q)]) if (p != null) DsSection(title: p.name, children: [
       Text(${k(L.personLine)}.replaceAll('{n}', p.files.toString()).replaceAll('{open}', p.open.toString()) + (p.money > 0 ? ' · ' + ${k(L.personMoney)}.replaceAll('{n}', balaganFmtMoney(p.money)) : '') + (p.last.isNotEmpty ? ' · ' + ${k(L.personLast)}.replaceAll('{d}', (() { final d = DateTime.tryParse(p.last); return d == null ? p.last : balaganDayLabel(d, DateTime.now()); })()) : ''), style: TextStyle(color: DsLook.of(context).muted, fontSize: 13)),
+      if (p.open > 0) for (final t in [balaganPersonOpenText(p.name, DateTime.now())]) if (t.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 8), child: Row(children: [DsChipButton(label: ${k(L.personSend)}, onTap: () { Clipboard.setData(ClipboardData(text: t)); launchUrl(Uri.parse('https://wa.me/' + (p.phones.isEmpty ? '' : balaganIntl(p.phones.first)) + '?text=' + Uri.encodeComponent(t)), mode: LaunchMode.externalApplication); })])),   // ב׳-צ · «שלח לו את הפתוחים» — ההודעה מוכנה מהתיקים, ללוח + לוואטסאפ שלו
       if (p.phones.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 8), child: Wrap(spacing: 8, runSpacing: 8, children: [for (final ph in p.phones.take(2)) ...[DsChipButton(label: ${k(L.callLabel)} + ' ' + ph, onTap: () => launchUrl(Uri.parse('tel:' + ph), mode: LaunchMode.externalApplication)), DsChipButton(label: ${k(L.waLabel)}, onTap: () => launchUrl(Uri.parse('https://wa.me/' + balaganIntl(ph)), mode: LaunchMode.externalApplication))]])),
       for (final recent in [appStore.log.where((e) => e['undone'] != '1' && p.rids.contains(e['rid'] ?? '')).take(3).toList()]) if (recent.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 8), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(${k(L.personRecent)}, style: TextStyle(color: DsLook.of(context).muted, fontSize: 13)), for (final e in recent) DsLogRow(text: e['what'] ?? '', sub: (() { final at = DateTime.tryParse(e['at'] ?? ''); return at == null ? '' : balaganAgo(at, DateTime.now()); })(), undoLabel: '', onUndo: null)])),   // ב׳-פג · מה עשיתי איתו לאחרונה
       Padding(padding: const EdgeInsets.only(top: 8), child: DsQuickAdd(hint: ${k(L.personQuick)}.replaceAll('{who}', p.name), autofocus: false, onSubmit: (s0) { final s = s0.trim(); if (s.isEmpty) return; final hits = balaganIdentify(s); if (hits.isEmpty) return; final m = hits.first.module; final facts = balaganFacts(s, m); if (m.personFields.isNotEmpty && !m.personFields.any((f) => (facts[f] ?? '').trim().isNotEmpty)) facts[m.personFields.first] = p.name; Navigator.of(context).push<bool>(MaterialPageRoute<bool>(builder: (_) => ${clsOf('balagan_confirm')}(module: m, facts: facts, alternatives: hits.skip(1).map((h) => h.module).toList(), text: s))); })),   // ב׳-נח · רגע עם האדם הזה: השם כבר בטופס
