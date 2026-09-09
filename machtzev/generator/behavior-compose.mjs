@@ -78,6 +78,12 @@ bool bhSameMonth(String a, String b) => a.length >= 7 && b.length >= 7 && bhMont
 String bhRecurCode(List<String> isos) { final s = [...isos]..sort(); if (s.length < 3) return ''; String code(int g) => g == 1 ? 'd1' : g >= 6 && g <= 8 ? 'w1' : g >= 13 && g <= 15 ? 'w2' : g >= 26 && g <= 35 ? 'm1' : g >= 55 && g <= 65 ? 'm2' : g >= 360 && g <= 370 ? 'y1' : ''; String? c; for (var i = 1; i < s.length; i++) { final k = code(bhDaysSince(s[i - 1], s[i])); if (k.isEmpty || (c != null && c != k)) return ''; c = k; } return c ?? ''; }   // כל המרווחים באותו קצב — אחרת אין הצעה
 /// ב׳-קיב · ימים בלי תשובה מאז שליחה (bhDaysSince): פעולה מאוחרת על אותו תיק ⇒ −1 (נענה/טופל)
 int bhSilentDays(String sentAt, String? laterAt, String todayIso) { if (sentAt.length < 10) return -1; if (laterAt != null && laterAt.length >= 10 && laterAt.compareTo(sentAt) > 0) return -1; return bhDaysSince(sentAt.substring(0, 10), todayIso); }
+/// ב׳-קיד · סכום-לפי-מפתח: קבוצות (bhGroupRows ⇐ count.by) + צבירת שדה-מספר ⇒ [[מפתח, n, סכום]…] בסדר-המונה
+List<List<Object>> bhSumBy(List<Map<String, String>> rows, String key, String numKey) => [for (final g in bhGroupRows(rows, key)) [g[0], g[1], rows.where((r) => (r[key] ?? '') == g[0]).fold<double>(0, (a, r) => a + (double.tryParse((r[numKey] ?? '').replaceAll(',', '').trim()) ?? 0))]];
+/// ב׳-קטו · חציון-שלמים (ריק ⇒ 0)
+int bhMedianInt(List<int> xs) { if (xs.isEmpty) return 0; final s = [...xs]..sort(); return s[s.length ~/ 2]; }
+/// ב׳-קטז · רצף-ימים: כמה ימים רצופים (מהיום או מאתמול אחורה) יש בהם לפחות תאריך אחד (bhPlusDays)
+int bhStreakDays(List<String> dates, String todayIso) { final set = {for (final d in dates) if (d.length >= 10) d.substring(0, 10)}; var day = set.contains(todayIso) ? todayIso : bhPlusDays(todayIso, -1); var n = 0; while (set.contains(day)) { n++; day = bhPlusDays(day, -1); } return n; }
 /// מפרידי-אלפים בלי ₪ (${N('money.fmt')})
 String bhThousands(num v) => ${N('money.fmt')}(v).replaceFirst('₪', '');
 `;
@@ -125,6 +131,11 @@ void main() {
     expect(bhMonthKey('2026-09-08'), '2026-09'); expect(bhSameMonth('2026-09-08', '2026-09-30'), true); expect(bhSameMonth('2026-09-08', '2026-10-01'), false); expect(bhSameMonth('', '2026-10-01'), false);
     expect(bhRecurCode(['2026-07-15', '2026-08-15', '2026-09-15']), 'm1'); expect(bhRecurCode(['2026-09-01', '2026-09-08', '2026-09-15', '2026-09-22']), 'w1'); expect(bhRecurCode(['2026-09-01', '2026-09-03', '2026-09-30']), ''); expect(bhRecurCode(['2026-09-01', '2026-10-01']), '');
     expect(bhSilentDays('2026-09-05T10:00:00', null, '2026-09-08'), 3); expect(bhSilentDays('2026-09-05T10:00:00', '2026-09-06T09:00:00', '2026-09-08'), -1); expect(bhSilentDays('', null, '2026-09-08'), -1);
+  });
+  test('G38 · סכום-לפי · חציון · רצף-ימים', () {
+    expect(bhSumBy([{'t': 'דירה', 'n': '8,000'}, {'t': 'דירה', 'n': '3000'}, {'t': 'משימות', 'n': '1,250'}], 't', 'n'), [['דירה', 2, 11000.0], ['משימות', 1, 1250.0]]);
+    expect(bhMedianInt([7, 1, 4]), 4); expect(bhMedianInt([]), 0); expect(bhMedianInt([2, 9]), 9);
+    expect(bhStreakDays(['2026-09-08', '2026-09-07', '2026-09-06', '2026-09-03'], '2026-09-08'), 3); expect(bhStreakDays(['2026-09-07', '2026-09-06'], '2026-09-08'), 2); expect(bhStreakDays(['2026-09-05'], '2026-09-08'), 0); expect(bhStreakDays(const [], '2026-09-08'), 0);
   });
 }
 `;
