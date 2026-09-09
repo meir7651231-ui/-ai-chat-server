@@ -198,6 +198,11 @@ if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganOpenRoot\
 // גל ב׳-מ · ₪ על שורת-היום (שדה-ראשי) · קול ⇒ כרטיס-אדם · הקשה על שורת-התוכנית ⇒ התיק
 for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/static const List<String> _nums = \[/.test(h) || !/final mo = _moneyOf\(r\);/.test(h) || !/\[time, sub, money\]/.test(h)) { fails.push(`${m.ns}: בלי ₪ על השורה`); break; } }
 if ((home.match(/balaganPerson\(s\) != null/g) || []).length < 2 || !/onOpen: it == null \? null : \(\) => _openItem\(context, it\)/.test(home)) fails.push('«היום»: קול בלי כרטיס-אדם / תוכנית בלי הקשה');
+// גל ב׳-מא · תאריכים כמו שאומרים (היום/מחר/אתמול/יום+d.m) בשורות · בשיתוף · בכרטיס-האדם · מחר בשיתוף-ערב
+for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/static String _dayLabel\(DateTime d, DateTime today\)/.test(h) || !/replaceAll\('\{date\}', _dayLabel\(d, today\)\)/.test(h)) { fails.push(`${m.ns}: «היה» עם ISO במקום יום`); break; } }
+if (!/String balaganDayLabel\(DateTime d, DateTime today\)/.test(home) || !/tomorrow: tomorrow\)/.test(home) || !/evening \? tomorrow : const \[\]/.test(home)) fails.push('«היום» בלי תאריך-כמו-שאומרים / מחר-בשיתוף');
+if (!/balaganDayLabel\(d, DateTime\.now\(\)\)/.test(topics)) fails.push('כרטיס-אדם עם ISO');
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganDayLabel\(DateTime\(2027, 10, 3\), today\)/.test(ft)) fails.push('בדיקת תאריך-כמו-שאומרים חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);

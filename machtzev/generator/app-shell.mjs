@@ -178,6 +178,8 @@ class ${cls}Today {
   static List<int> _offsets() => appStore.setting('offsets', '3,1,0').split(',').map((x) => int.tryParse(x.trim()) ?? 0).toList();
   static DateTime _shift(DateTime d, bool hard) => hard ? d : (d.weekday == DateTime.saturday ? d.add(const Duration(days: 1)) : d);   // P8 · soft לא בשבת
   static String _iso(DateTime d) => d.toIso8601String().substring(0, 10);
+  /// ב׳-מא · תאריך כמו שאומרים אותו: היום · מחר · אתמול · יום שלישי 8.9 (עד שבוע) · 15.9 · 3.10.2027 (שנה אחרת)
+  static String _dayLabel(DateTime d, DateTime today) { final n = _day(d).difference(_day(today)).inDays; if (n == 0) return ${k(L.homeToday)}; if (n == 1) return ${k(L.homeTomorrow)}; if (n == -1) return ${k(L.dayYesterday)}; final dm = '\${d.day}.\${d.month}' + (d.year == today.year ? '' : '.\${d.year}'); return n.abs() <= 6 ? ${k(L.dayPrefix)}.replaceAll('{day}', ${k(L.dayNames)}.split(',')[d.weekday % 7]) + ' ' + dm : dm; }
   static String _remKey(String rid, String field) => 'rem:\$rid:\$field';
   static List<Map<String, String>> open() => ${openRecs};${sendFn2}
 
@@ -221,7 +223,7 @@ class ${cls}Today {
       for (final f in _dates) {
         final d = _parse(r[f.label] ?? ''); if (d == null) continue;
         if (appStore.decision('ign:\$rid:\${f.label}') == 'no') continue;
-        if (dayDelta == 0 && d.isBefore(today)) { final ago = today.difference(d).inDays; out.add(_mk(_dates.length == 1 ? who : '\${f.label} · \$who', ${k(L.remWas)}.replaceAll('{date}', _iso(d)) + ' · ' + (ago == 1 ? ${k(L.agoOne)} : ${k(L.agoDays)}.replaceAll('{n}', ago.toString())), rid, f.label, d, f.hard, true, today, tm, rep, ph, mo)); continue; }
+        if (dayDelta == 0 && d.isBefore(today)) { final ago = today.difference(d).inDays; out.add(_mk(_dates.length == 1 ? who : '\${f.label} · \$who', ${k(L.remWas)}.replaceAll('{date}', _dayLabel(d, today)) + ' · ' + (ago == 1 ? ${k(L.agoOne)} : ${k(L.agoDays)}.replaceAll('{n}', ago.toString())), rid, f.label, d, f.hard, true, today, tm, rep, ph, mo)); continue; }
         final okRem = appStore.decision(_remKey(rid, f.label)) == 'ok';   // תזכורת-מוקדמת (−3/−1) = הצעה שדורשת אישור; יום-ההכרעה עצמו = עובדה — מוצג בלי אישור
         for (final off in _offsets()) {
           if (off > 0 && !okRem) continue;

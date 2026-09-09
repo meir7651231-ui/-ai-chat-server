@@ -307,5 +307,7 @@
  "backupNudge": "לא גיבית {n} יום — הכל רק במכשיר הזה.",
  "remAskMany": "ליצור תזכורות ({days}) ל-{n} מועדים קרובים?",
  "remManySrc": "כל התיקים",
- "remManyDid": "תזכורות ל-{n} מועדים"
+ "remManyDid": "תזכורות ל-{n} מועדים",
+ "dayYesterday": "אתמול",
+ "dayPrefix": "יום {day}"
 }
