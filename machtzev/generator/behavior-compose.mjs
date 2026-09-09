@@ -84,6 +84,8 @@ List<List<Object>> bhSumBy(List<Map<String, String>> rows, String key, String nu
 int bhMedianInt(List<int> xs) { if (xs.isEmpty) return 0; final s = [...xs]..sort(); return s[s.length ~/ 2]; }
 /// ב׳-קטז · רצף-ימים: כמה ימים רצופים (מהיום או מאתמול אחורה) יש בהם לפחות תאריך אחד (bhPlusDays)
 int bhStreakDays(List<String> dates, String todayIso) { final set = {for (final d in dates) if (d.length >= 10) d.substring(0, 10)}; var day = set.contains(todayIso) ? todayIso : bhPlusDays(todayIso, -1); var n = 0; while (set.contains(day)) { n++; day = bhPlusDays(day, -1); } return n; }
+/// ב׳-קיח · דקות עד שעה 'HH:MM' של היום מרגע nowIsoT (${N('time.minutesBetween')}); שלילי = עבר
+int bhMinutesUntil(String nowIsoT, String todayIso, String hm) { if (hm.length < 5 || nowIsoT.length < 16) return -1; return ${N('time.minutesBetween')}(nowIsoT, todayIso + 'T' + hm + ':00'); }
 /// מפרידי-אלפים בלי ₪ (${N('money.fmt')})
 String bhThousands(num v) => ${N('money.fmt')}(v).replaceFirst('₪', '');
 `;
@@ -135,6 +137,7 @@ void main() {
   test('G38 · סכום-לפי · חציון · רצף-ימים', () {
     expect(bhSumBy([{'t': 'דירה', 'n': '8,000'}, {'t': 'דירה', 'n': '3000'}, {'t': 'משימות', 'n': '1,250'}], 't', 'n'), [['דירה', 2, 11000.0], ['משימות', 1, 1250.0]]);
     expect(bhMedianInt([7, 1, 4]), 4); expect(bhMedianInt([]), 0); expect(bhMedianInt([2, 9]), 9);
+    expect(bhMinutesUntil('2026-09-08T10:05:00', '2026-09-08', '10:30'), 25); expect(bhMinutesUntil('2026-09-08T11:00:00', '2026-09-08', '10:30') < 0, isTrue); expect(bhMinutesUntil('', '2026-09-08', '10:30'), -1);
     expect(bhStreakDays(['2026-09-08', '2026-09-07', '2026-09-06', '2026-09-03'], '2026-09-08'), 3); expect(bhStreakDays(['2026-09-07', '2026-09-06'], '2026-09-08'), 2); expect(bhStreakDays(['2026-09-05'], '2026-09-08'), 0); expect(bhStreakDays(const [], '2026-09-08'), 0);
   });
 }
