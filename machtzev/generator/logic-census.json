@@ -4488,6 +4488,39 @@
   "wireable": false
  },
  {
+  "file": "dart-boxes/hebrew.dart",
+  "name": "hebHolidayOn",
+  "ret": "String?",
+  "params": [
+   "String"
+  ],
+  "argc": 1,
+  "wireable": true
+ },
+ {
+  "file": "dart-boxes/hebrew.dart",
+  "name": "hebHolidaysAhead",
+  "ret": "List<Map<String, dynamic>>",
+  "params": [
+   "String",
+   "int"
+  ],
+  "argc": 2,
+  "wireable": false
+ },
+ {
+  "file": "dart-boxes/hebdate.dart",
+  "name": "hebInputToIso",
+  "ret": "String?",
+  "params": [
+   "int",
+   "String",
+   "int?"
+  ],
+  "argc": 3,
+  "wireable": true
+ },
+ {
   "file": "dart-maor/heb-month-he.dart",
   "name": "hebMonthHe",
   "ret": "String",

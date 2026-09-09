@@ -24,6 +24,7 @@ import '../dart-data-maor/heb-date-full-sockets.dart' as sk_hdf;
 import '../dart-maor/heb-date-full.dart' as hdf;
 import '../dart-maor/holidays.dart' as hol;
 import '../dart-maor/holiday-of.dart' as ho;
+import '../dart-maor/upcoming-holidays.dart' as uh;   // G49
 
 // ── חיווט: סריקת-שנה-עברית (מקור hebrew.ts:60-76 / hebrew.mjs) — הכרעות-הקופסה:
 //    חלון 440 ימים, עוגן 1-באוגוסט של (hebYear-3761) בצהריים, מטמון-Map פר-שנה.
@@ -87,3 +88,6 @@ const Map<String, String> HOLIDAYS = hol.HOLIDAYS; // ignore: constant_identifie
 
 /// שם החג/הצום בתאריך לועזי נתון, או null (דיני חנוכה-ח'/צום-נדחה/תענית-אסתר-מוקדמת).
 String? holidayOf(DateTime d) => ho.holidayOf(d, _hebPartsForHoliday, _scanForHoliday, hol.HOLIDAYS, term: (k)=>kTerms[k]!);
+/// G49 · נקודות-כניסה ייחודיות (המפקד מקטלג לפי-שם): חג/צום בתאריך-ISO · החגים ב-N הימים הבאים [{iso,name}]
+String? hebHolidayOn(String iso) => iso.length < 10 ? null : holidayOf(DateTime.parse(iso.substring(0, 10) + 'T12:00:00'));
+List<Map<String, dynamic>> hebHolidaysAhead(String isoFrom, int days) => uh.upcomingHolidays(isoFrom, holidayOf, (DateTime d) => d.toIso8601String().substring(0, 10), days);

@@ -62,6 +62,8 @@ List<String> hebMonthsOf(int hebYear) => hmo.hebMonthsOf(hebYear, isHebLeapYear,
 String? hebToIso(int day, String monthHe, int hebYear) =>
     hti.hebToIso(day, monthHe, hebYear, monthEnOf, hebToIsoEn);
 
+/// G49 · נקודת-כניסה ייחודית: קלט-עברי (יום · תווית-חודש · שנה או השנה-הנוכחית) ⇒ ISO | null
+String? hebInputToIso(int day, String monthHe, [int? hebYear]) => hebToIso(day, monthHe, hebYear ?? hebYearNow());
 /// לועזי→עברי: '2026-08-06' → {day:23, monthHe:'אב', year:5786} | null. (hebdate.ts:107-115)
 Map<String, dynamic>? isoToHebParts(String iso) =>
     ithp.isoToHebParts(iso, (DateTime d) => hp.hebParts(d), monthHeOf);

@@ -3,11 +3,11 @@
   "shape": "מועד",
   "pick": "startOfWeekSunday",
   "file": "dart/start_of_week_sunday.dart",
-  "score": 5.86,
+  "score": 5.82,
   "proven": true,
   "candidates": 20,
   "top3": [
-   "startOfWeekSunday:3/3✓:5.86",
+   "startOfWeekSunday:3/3✓:5.82",
    "popCall:1/3:0",
    "stripAuditMeta:1/3:0"
   ],
@@ -98,12 +98,12 @@
   "shape": "מועד",
   "pick": "addDaysIso",
   "file": "dart-maor/add-days-iso.dart",
-  "score": 64.93,
+  "score": 64.87,
   "proven": true,
   "candidates": 22,
   "top3": [
-   "addDaysIso:3/3✓:64.93",
-   "segulaReminders:0/3:7.73",
+   "addDaysIso:3/3✓:64.87",
+   "segulaReminders:0/3:7.64",
    "envPath:0/3:1"
   ],
   "proof": {
@@ -201,13 +201,13 @@
   "shape": "מועד",
   "pick": "cockpitDaysSince",
   "file": "dart-maor/cockpit-days-since.dart",
-  "score": 38.69,
+  "score": 38.72,
   "proven": true,
   "candidates": 22,
   "top3": [
-   "cockpitDaysSince:3/3✓:38.69",
-   "dayDiff:3/3✓:37.88",
-   "sheetSummary:0/3:18.13"
+   "cockpitDaysSince:3/3✓:38.72",
+   "dayDiff:3/3✓:37.91",
+   "sheetSummary:0/3:18.15"
   ],
   "proof": {
    "campaignTotal": {
@@ -304,13 +304,13 @@
   "shape": "מועד",
   "pick": "inRange",
   "file": "dart-maor/in-range.dart",
-  "score": 71.98,
+  "score": 71.93,
   "proven": true,
   "candidates": 22,
   "top3": [
-   "inRange:3/3✓:71.98",
+   "inRange:3/3✓:71.93",
    "supporterVisibleForDesignations:2/3:1",
-   "taskOverdue:1/3:9.05"
+   "taskOverdue:1/3:9.06"
   ],
   "proof": {
    "coursesOfTeacher": {
@@ -407,11 +407,11 @@
   "shape": "מועד",
   "pick": "taskOverdue",
   "file": "dart-maor/task-overdue.dart",
-  "score": 78.52,
+  "score": 78.57,
   "proven": true,
   "candidates": 21,
   "top3": [
-   "taskOverdue:3/3✓:78.52",
+   "taskOverdue:3/3✓:78.57",
    "isOverdue:3/3✓:1",
    "sameJson:2/3:1"
   ],
@@ -506,11 +506,11 @@
   "shape": "שעה",
   "pick": "timeToMin",
   "file": "dart-maor/time-to-min.dart",
-  "score": 21.9,
+  "score": 21.91,
   "proven": true,
   "candidates": 19,
   "top3": [
-   "timeToMin:2/2✓:21.9",
+   "timeToMin:2/2✓:21.91",
    "donateUrl:0/2:0",
    "expand:0/2:0"
   ],
@@ -597,11 +597,11 @@
   "shape": "יומן",
   "pick": "minutesBetweenIso",
   "file": "dart-maor/minutes-between-iso.dart",
-  "score": 40.65,
+  "score": 40.68,
   "proven": true,
   "candidates": 24,
   "top3": [
-   "minutesBetweenIso:2/2✓:40.65",
+   "minutesBetweenIso:2/2✓:40.68",
    "levenshtein:0/2:11.31",
    "wheelIndexUnderPointer:0/2:8.81"
   ],
@@ -823,12 +823,12 @@
   "shape": "אדם",
   "pick": "normName",
   "file": "dart-maor/norm-name.dart",
-  "score": 8.79,
+  "score": 8.8,
   "proven": true,
   "candidates": 22,
   "top3": [
-   "normName:2/2✓:8.79",
-   "wheelIndexUnderPointer:0/2:5.47",
+   "normName:2/2✓:8.8",
+   "wheelIndexUnderPointer:0/2:5.48",
    "envPath:0/2:1"
   ],
   "proof": {
@@ -926,11 +926,11 @@
   "shape": "חיפוש",
   "pick": "normPhone",
   "file": "dart-maor/norm-phone.dart",
-  "score": 20.23,
+  "score": 20.24,
   "proven": true,
-  "candidates": 63,
+  "candidates": 64,
   "top3": [
-   "normPhone:3/3✓:20.23",
+   "normPhone:3/3✓:20.24",
    "normalizePhone:2/3:11.12",
    "normId:1/3:11.12"
   ],
@@ -1004,6 +1004,10 @@
     "total": 3
    },
    "genJoinCode": {
+    "ok": 0,
+    "total": 3
+   },
+   "hebHolidayOn": {
     "ok": 0,
     "total": 3
    },
@@ -1197,13 +1201,13 @@
   "shape": "רשומות",
   "pick": "countBy",
   "file": "dart-maor/count-by.dart",
-  "score": 35.87,
+  "score": 35.9,
   "proven": true,
   "candidates": 18,
   "top3": [
-   "countBy:1/1✓:35.87",
-   "supportUnread:0/1:14.74",
-   "coursesOfTeacher:0/1:5.31"
+   "countBy:1/1✓:35.9",
+   "supportUnread:0/1:14.75",
+   "coursesOfTeacher:0/1:5.32"
   ],
   "proof": {
    "countBy": {
@@ -1284,12 +1288,12 @@
   "shape": "חיפוש",
   "pick": "rulePrefix",
   "file": "dart-maor/rule-prefix.dart",
-  "score": 27.58,
+  "score": 27.6,
   "proven": true,
   "candidates": 24,
   "top3": [
-   "rulePrefix:3/3✓:27.58",
-   "ruleContains:2/3:18.65",
+   "rulePrefix:3/3✓:27.6",
+   "ruleContains:2/3:18.67",
    "teacherIdOf:2/3:0"
   ],
   "proof": {
@@ -1538,11 +1542,11 @@
   "shape": "חיפוש",
   "pick": "ruleExact",
   "file": "dart-maor/rule-exact.dart",
-  "score": 66.16,
+  "score": 66.2,
   "proven": true,
   "candidates": 22,
   "top3": [
-   "ruleExact:2/2✓:66.16",
+   "ruleExact:2/2✓:66.2",
    "ruleSkeleton:1/2:9.73",
    "teacherIdOf:1/2:0"
   ],
@@ -1641,12 +1645,12 @@
   "shape": "חיפוש",
   "pick": "ruleContains",
   "file": "dart-maor/rule-contains.dart",
-  "score": 43.32,
+  "score": 43.35,
   "proven": true,
   "candidates": 24,
   "top3": [
-   "ruleContains:3/3✓:43.32",
-   "rulePrefix:2/3:18.65",
+   "ruleContains:3/3✓:43.35",
+   "rulePrefix:2/3:18.67",
    "teacherIdOf:2/3:0"
   ],
   "proof": {
@@ -1752,12 +1756,12 @@
   "shape": "חיפוש",
   "pick": "damerauLevenshtein",
   "file": "dart/damerau_levenshtein.dart",
-  "score": 32.33,
+  "score": 32.35,
   "proven": true,
   "candidates": 24,
   "top3": [
-   "damerauLevenshtein:4/4✓:32.33",
-   "levenshtein:3/4:49.32",
+   "damerauLevenshtein:4/4✓:32.35",
+   "levenshtein:3/4:49.35",
    "minutesBetweenIso:1/4:11.31"
   ],
   "proof": {
@@ -1863,13 +1867,13 @@
   "shape": "אדם",
   "pick": "nameMatches",
   "file": "dart-maor/name-matches.dart",
-  "score": 57.18,
+  "score": 57.17,
   "proven": true,
   "candidates": 7,
   "top3": [
-   "nameMatches:4/4✓:57.18",
+   "nameMatches:4/4✓:57.17",
    "accessPasswordMatches:0/4:4",
-   "strongMatchForCharge:0/4:3.39"
+   "strongMatchForCharge:0/4:3.4"
   ],
   "proof": {
    "accessPasswordMatches": {
@@ -1908,13 +1912,13 @@
   "shape": "מועד",
   "pick": "hebParts",
   "file": "dart-maor/heb-parts.dart",
-  "score": 28.17,
+  "score": 27.79,
   "proven": true,
   "candidates": 20,
   "top3": [
-   "hebParts:2/2✓:28.17",
-   "monthLabel:0/2:15.04",
-   "supportMsgTime:0/2:3.86"
+   "hebParts:2/2✓:27.79",
+   "monthLabel:0/2:15.05",
+   "supportMsgTime:0/2:3.82"
   ],
   "proof": {
    "donateUrl": {
@@ -2003,11 +2007,11 @@
   "shape": "מועד",
   "pick": "gem",
   "file": "dart-maor/gematria.dart",
-  "score": 55.72,
+  "score": 55.75,
   "proven": true,
   "candidates": 3,
   "top3": [
-   "gem:2/2✓:55.72",
+   "gem:2/2✓:55.75",
    "smartScore:0/2:0",
    "staleBoxes:0/2:0"
   ],
@@ -2030,12 +2034,12 @@
   "shape": "חיפוש",
   "pick": "phoneKey",
   "file": "dart-maor/phone-key.dart",
-  "score": 19.06,
+  "score": 19.07,
   "proven": true,
-  "candidates": 63,
+  "candidates": 64,
   "top3": [
-   "phoneKey:4/4✓:19.06",
-   "normPhone:1/4:19.56",
+   "phoneKey:4/4✓:19.07",
+   "normPhone:1/4:19.57",
    "normalizePhone:1/4:11.62"
   ],
   "proof": {
@@ -2108,6 +2112,10 @@
     "total": 4
    },
    "genJoinCode": {
+    "ok": 0,
+    "total": 4
+   },
+   "hebHolidayOn": {
     "ok": 0,
     "total": 4
    },
@@ -2301,12 +2309,12 @@
   "shape": "חיפוש",
   "pick": "findDuplicateGroups",
   "file": "dart-maor/find-duplicate-groups.dart",
-  "score": 42.74,
+  "score": 42.77,
   "proven": true,
   "candidates": 4,
   "top3": [
-   "findDuplicateGroups:3/3✓:42.74",
-   "strongMatchForCharge:0/3:9.69",
+   "findDuplicateGroups:3/3✓:42.77",
+   "strongMatchForCharge:0/3:9.7",
    "termOf:0/3:0"
   ],
   "proof": {
@@ -2332,12 +2340,12 @@
   "shape": "מועד",
   "pick": "monthKey",
   "file": "dart-maor/month-key.dart",
-  "score": 17.12,
+  "score": 17.13,
   "proven": true,
-  "candidates": 63,
+  "candidates": 64,
   "top3": [
-   "monthKey:3/3✓:17.12",
-   "purposeKeyOf:1/3:9.28",
+   "monthKey:3/3✓:17.13",
+   "purposeKeyOf:1/3:9.29",
    "adarNorm:1/3:2"
   ],
   "proof": {
@@ -2410,6 +2418,10 @@
     "total": 3
    },
    "genJoinCode": {
+    "ok": 0,
+    "total": 3
+   },
+   "hebHolidayOn": {
     "ok": 0,
     "total": 3
    },
@@ -2603,11 +2615,11 @@
   "shape": "ייצוא",
   "pick": "icsEscape",
   "file": "dart-maor/ics-escape.dart",
-  "score": 24.84,
+  "score": 24.85,
   "proven": true,
-  "candidates": 63,
+  "candidates": 64,
   "top3": [
-   "icsEscape:3/3✓:24.84",
+   "icsEscape:3/3✓:24.85",
    "fullDate:1/3:2",
    "normId:1/3:2"
   ],
@@ -2694,6 +2706,11 @@
     "ok": 0,
     "total": 3,
     "error": "ics_escape__genJoinCode.dart:6:42: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
+   },
+   "hebHolidayOn": {
+    "ok": 0,
+    "total": 3,
+    "error": "ics_escape__hebHolidayOn.dart:6:43: Error: The value 'null' can't be assigned to the parameter type 'String' because 'String' is not nullable."
    },
    "icsEscape": {
     "ok": 3,
@@ -2897,12 +2914,12 @@
   "shape": "ייצוא",
   "pick": "foldIcsLine",
   "file": "dart-maor/fold-ics-line.dart",
-  "score": 34.21,
+  "score": 34.23,
   "proven": true,
   "candidates": 23,
   "top3": [
-   "foldIcsLine:2/2✓:34.21",
-   "splitCsvLine:1/2:11.53",
+   "foldIcsLine:2/2✓:34.23",
+   "splitCsvLine:1/2:11.54",
    "sizeDiameterAtoms:1/2:2"
   ],
   "proof": {
@@ -3004,11 +3021,11 @@
   "shape": "ייצוא",
   "pick": "buildIcs",
   "file": "dart-maor/build-ics.dart",
-  "score": 53.07,
+  "score": 53.1,
   "proven": true,
   "candidates": 3,
   "top3": [
-   "buildIcs:2/2✓:53.07",
+   "buildIcs:2/2✓:53.1",
    "smartScore:0/2:0",
    "staleBoxes:0/2:0"
   ],
@@ -3031,11 +3048,11 @@
   "shape": "ייצוא",
   "pick": "csvEscape",
   "file": "dart-maor/csv-escape.dart",
-  "score": 61.48,
+  "score": 61.51,
   "proven": true,
   "candidates": 36,
   "top3": [
-   "csvEscape:4/4✓:61.48",
+   "csvEscape:4/4✓:61.51",
    "stringField:2/4:2",
    "formatIsraeliPhone:2/4:1"
   ],
@@ -3194,12 +3211,12 @@
   "shape": "ייצוא",
   "pick": "toCsv",
   "file": "dart-maor/to-csv.dart",
-  "score": 18.01,
+  "score": 18.03,
   "proven": true,
   "candidates": 17,
   "top3": [
-   "toCsv:2/2✓:18.01",
-   "sanitizeSupportText:0/2:7.94",
+   "toCsv:2/2✓:18.03",
+   "sanitizeSupportText:0/2:7.95",
    "score:0/2:3.46"
   ],
   "proof": {
@@ -3463,15 +3480,681 @@
    }
   }
  },
+ "heb.holidayOn": {
+  "shape": "מועד",
+  "pick": "hebHolidayOn",
+  "file": "dart-boxes/hebrew.dart",
+  "score": 17.37,
+  "proven": true,
+  "candidates": 64,
+  "top3": [
+   "hebHolidayOn:2/2✓:17.37",
+   "dataUrlMime:1/2:2",
+   "orgSlugFromUrl:1/2:2"
+  ],
+  "proof": {
+   "adarNorm": {
+    "ok": 0,
+    "total": 2
+   },
+   "advanceStatus": {
+    "ok": 0,
+    "total": 2
+   },
+   "angleDigits": {
+    "ok": 0,
+    "total": 2
+   },
+   "annualKey": {
+    "ok": 0,
+    "total": 2
+   },
+   "basename": {
+    "ok": 0,
+    "total": 2
+   },
+   "cloudCfgCacheKey": {
+    "ok": 0,
+    "total": 2
+   },
+   "dataUrlMime": {
+    "ok": 1,
+    "total": 2
+   },
+   "decodeQuotedPrintable": {
+    "ok": 0,
+    "total": 2
+   },
+   "detectSmtpHost": {
+    "ok": 0,
+    "total": 2
+   },
+   "donateUrl": {
+    "ok": 1,
+    "total": 2
+   },
+   "esc": {
+    "ok": 0,
+    "total": 2
+   },
+   "expand": {
+    "ok": 0,
+    "total": 2
+   },
+   "expandInchFractions": {
+    "ok": 0,
+    "total": 2
+   },
+   "faviconDataUri": {
+    "ok": 0,
+    "total": 2
+   },
+   "fmtDate": {
+    "ok": 0,
+    "total": 2
+   },
+   "formatIsraeliPhone": {
+    "ok": 0,
+    "total": 2
+   },
+   "fullDate": {
+    "ok": 0,
+    "total": 2
+   },
+   "genJoinCode": {
+    "ok": 0,
+    "total": 2
+   },
+   "hebHolidayOn": {
+    "ok": 2,
+    "total": 2
+   },
+   "icsEscape": {
+    "ok": 0,
+    "total": 2
+   },
+   "identityOf": {
+    "ok": 0,
+    "total": 2
+   },
+   "langs": {
+    "ok": 0,
+    "total": 2
+   },
+   "monthKey": {
+    "ok": 0,
+    "total": 2
+   },
+   "monthLabel": {
+    "ok": 0,
+    "total": 2
+   },
+   "namespaceOf": {
+    "ok": 0,
+    "total": 2
+   },
+   "normEmail": {
+    "ok": 0,
+    "total": 2
+   },
+   "normHeader": {
+    "ok": 0,
+    "total": 2
+   },
+   "normId": {
+    "ok": 0,
+    "total": 2
+   },
+   "normPhone": {
+    "ok": 0,
+    "total": 2
+   },
+   "normalizePhone": {
+    "ok": 0,
+    "total": 2
+   },
+   "orgSlugFromUrl": {
+    "ok": 1,
+    "total": 2
+   },
+   "p39ElbowModel": {
+    "ok": 0,
+    "total": 2
+   },
+   "p53AdapterModel": {
+    "ok": 0,
+    "total": 2
+   },
+   "p54AdapterModel": {
+    "ok": 0,
+    "total": 2
+   },
+   "p55AdapterModel": {
+    "ok": 0,
+    "total": 2
+   },
+   "pad2": {
+    "ok": 0,
+    "total": 2
+   },
+   "palette": {
+    "ok": 0,
+    "total": 2
+   },
+   "pdfSafe": {
+    "ok": 0,
+    "total": 2
+   },
+   "phoneKey": {
+    "ok": 0,
+    "total": 2
+   },
+   "phoneRegion": {
+    "ok": 0,
+    "total": 2
+   },
+   "popCall": {
+    "ok": 0,
+    "total": 2
+   },
+   "priLabel": {
+    "ok": 1,
+    "total": 2
+   },
+   "purposeKeyOf": {
+    "ok": 0,
+    "total": 2
+   },
+   "safeHttpsUrl": {
+    "ok": 1,
+    "total": 2
+   },
+   "sessionsOf": {
+    "ok": 0,
+    "total": 2
+   },
+   "setAllowedPurposes": {
+    "ok": 0,
+    "total": 2
+   },
+   "siteDonateUrl": {
+    "ok": 1,
+    "total": 2
+   },
+   "smtpHostFor": {
+    "ok": 0,
+    "total": 2
+   },
+   "sortSupportMsgs": {
+    "ok": 0,
+    "total": 2
+   },
+   "sortSupportThreads": {
+    "ok": 0,
+    "total": 2
+   },
+   "statusLabel": {
+    "ok": 0,
+    "total": 2
+   },
+   "stripAuditMeta": {
+    "ok": 0,
+    "total": 2
+   },
+   "stripSupKey": {
+    "ok": 0,
+    "total": 2
+   },
+   "supCount": {
+    "ok": 0,
+    "total": 2
+   },
+   "supIls": {
+    "ok": 0,
+    "total": 2
+   },
+   "supUsd": {
+    "ok": 0,
+    "total": 2
+   },
+   "supportMsgTime": {
+    "ok": 0,
+    "total": 2
+   },
+   "timeToMin": {
+    "ok": 0,
+    "total": 2
+   },
+   "vFormatPhone": {
+    "ok": 0,
+    "total": 2,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "vNameSortKey": {
+    "ok": 0,
+    "total": 2,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "vNormName": {
+    "ok": 0,
+    "total": 2,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "vNormSearch": {
+    "ok": 0,
+    "total": 2,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "waDigits": {
+    "ok": 0,
+    "total": 2
+   },
+   "waMeDigits": {
+    "ok": 0,
+    "total": 2
+   }
+  }
+ },
+ "heb.holidaysAhead": {
+  "shape": "מועד",
+  "pick": "hebHolidaysAhead",
+  "file": "dart-boxes/hebrew.dart",
+  "score": 3,
+  "proven": true,
+  "candidates": 18,
+  "top3": [
+   "hebHolidaysAhead:2/2✓:3",
+   "segulaReminders:0/2:7.64",
+   "coursesOfTeacher:0/2:0"
+  ],
+  "proof": {
+   "coursesOfTeacher": {
+    "ok": 0,
+    "total": 2
+   },
+   "hebHolidaysAhead": {
+    "ok": 2,
+    "total": 2
+   },
+   "sanitizeSupportText": {
+    "ok": 0,
+    "total": 2
+   },
+   "score": {
+    "ok": 0,
+    "total": 2
+   },
+   "segulaReminders": {
+    "ok": 0,
+    "total": 2
+   },
+   "sheetSummary": {
+    "ok": 0,
+    "total": 2
+   },
+   "siteLangs": {
+    "ok": 0,
+    "total": 2
+   },
+   "supportPreview": {
+    "ok": 0,
+    "total": 2
+   },
+   "supportUnread": {
+    "ok": 0,
+    "total": 2
+   },
+   "teacherIdOf": {
+    "ok": 0,
+    "total": 2
+   },
+   "toCsv": {
+    "ok": 0,
+    "total": 2
+   },
+   "toTenantId": {
+    "ok": 0,
+    "total": 2
+   },
+   "ui": {
+    "ok": 0,
+    "total": 2
+   },
+   "undoLast": {
+    "ok": 0,
+    "total": 2
+   },
+   "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 2
+   },
+   "vocab": {
+    "ok": 0,
+    "total": 2
+   },
+   "waitlistFor": {
+    "ok": 0,
+    "total": 2
+   },
+   "wheelIndexUnderPointer": {
+    "ok": 0,
+    "total": 2
+   }
+  }
+ },
+ "heb.inputToIso": {
+  "shape": "מועד",
+  "pick": "hebInputToIso",
+  "file": "dart-boxes/hebdate.dart",
+  "score": 26.82,
+  "proven": true,
+  "candidates": 5,
+  "top3": [
+   "hebInputToIso:2/2✓:26.82",
+   "hebToIsoEn:1/2:26.82",
+   "strongMatchForCharge:0/2:0"
+  ],
+  "proof": {
+   "hebInputToIso": {
+    "ok": 2,
+    "total": 2
+   },
+   "hebToIsoEn": {
+    "ok": 1,
+    "total": 2
+   },
+   "strongMatchForCharge": {
+    "ok": 0,
+    "total": 2
+   },
+   "termOf": {
+    "ok": 0,
+    "total": 2
+   },
+   "waLink": {
+    "ok": 0,
+    "total": 2
+   }
+  }
+ },
+ "heb.partsOfIso": {
+  "shape": "מועד",
+  "pick": "parts",
+  "file": "dart-boxes/hebrew-calendar.dart",
+  "score": 2,
+  "proven": true,
+  "candidates": 20,
+  "top3": [
+   "parts:1/1✓:2",
+   "monthLabel:0/1:15.05",
+   "supportMsgTime:0/1:3.82"
+  ],
+  "proof": {
+   "donateUrl": {
+    "ok": 0,
+    "total": 1
+   },
+   "expand": {
+    "ok": 0,
+    "total": 1
+   },
+   "langs": {
+    "ok": 0,
+    "total": 1
+   },
+   "monthLabel": {
+    "ok": 0,
+    "total": 1
+   },
+   "palette": {
+    "ok": 0,
+    "total": 1
+   },
+   "parts": {
+    "ok": 1,
+    "total": 1
+   },
+   "popCall": {
+    "ok": 0,
+    "total": 1
+   },
+   "sessionsOf": {
+    "ok": 0,
+    "total": 1
+   },
+   "setAllowedPurposes": {
+    "ok": 0,
+    "total": 1
+   },
+   "siteDonateUrl": {
+    "ok": 0,
+    "total": 1
+   },
+   "sortSupportMsgs": {
+    "ok": 0,
+    "total": 1
+   },
+   "sortSupportThreads": {
+    "ok": 0,
+    "total": 1
+   },
+   "stripAuditMeta": {
+    "ok": 0,
+    "total": 1
+   },
+   "stripSupKey": {
+    "ok": 0,
+    "total": 1
+   },
+   "supCount": {
+    "ok": 0,
+    "total": 1
+   },
+   "supIls": {
+    "ok": 0,
+    "total": 1
+   },
+   "supUsd": {
+    "ok": 0,
+    "total": 1
+   },
+   "supportMsgTime": {
+    "ok": 0,
+    "total": 1
+   },
+   "timeToMin": {
+    "ok": 0,
+    "total": 1
+   },
+   "waDigits": {
+    "ok": 0,
+    "total": 1
+   }
+  }
+ },
+ "heb.toIsoEn": {
+  "shape": "מועד",
+  "pick": "hebToIsoEn",
+  "file": "dart-boxes/hebdate.dart",
+  "score": 19.28,
+  "proven": true,
+  "candidates": 5,
+  "top3": [
+   "hebToIsoEn:2/2✓:19.28",
+   "hebInputToIso:1/2:19.28",
+   "strongMatchForCharge:0/2:0"
+  ],
+  "proof": {
+   "hebInputToIso": {
+    "ok": 1,
+    "total": 2
+   },
+   "hebToIsoEn": {
+    "ok": 2,
+    "total": 2
+   },
+   "strongMatchForCharge": {
+    "ok": 0,
+    "total": 2
+   },
+   "termOf": {
+    "ok": 0,
+    "total": 2
+   },
+   "waLink": {
+    "ok": 0,
+    "total": 2
+   }
+  }
+ },
+ "phone.format": {
+  "shape": "חיפוש",
+  "pick": "formatIsraeliPhone",
+  "file": "dart-maor/format-israeli-phone.dart",
+  "score": 32.61,
+  "proven": true,
+  "candidates": 30,
+  "top3": [
+   "formatIsraeliPhone:2/2✓:32.61",
+   "detectSmtpHost:1/2:1",
+   "identityOf:1/2:1"
+  ],
+  "proof": {
+   "detectSmtpHost": {
+    "ok": 1,
+    "total": 2
+   },
+   "donateUrl": {
+    "ok": 0,
+    "total": 2
+   },
+   "expand": {
+    "ok": 0,
+    "total": 2
+   },
+   "formatIsraeliPhone": {
+    "ok": 2,
+    "total": 2
+   },
+   "identityOf": {
+    "ok": 1,
+    "total": 2
+   },
+   "langs": {
+    "ok": 0,
+    "total": 2
+   },
+   "monthLabel": {
+    "ok": 1,
+    "total": 2
+   },
+   "pad2": {
+    "ok": 1,
+    "total": 2
+   },
+   "palette": {
+    "ok": 0,
+    "total": 2
+   },
+   "popCall": {
+    "ok": 1,
+    "total": 2
+   },
+   "priLabel": {
+    "ok": 0,
+    "total": 2
+   },
+   "safeHttpsUrl": {
+    "ok": 0,
+    "total": 2
+   },
+   "sessionsOf": {
+    "ok": 0,
+    "total": 2
+   },
+   "setAllowedPurposes": {
+    "ok": 0,
+    "total": 2
+   },
+   "siteDonateUrl": {
+    "ok": 0,
+    "total": 2
+   },
+   "sortSupportMsgs": {
+    "ok": 0,
+    "total": 2
+   },
+   "sortSupportThreads": {
+    "ok": 0,
+    "total": 2
+   },
+   "statusLabel": {
+    "ok": 1,
+    "total": 2
+   },
+   "stripAuditMeta": {
+    "ok": 1,
+    "total": 2
+   },
+   "stripSupKey": {
+    "ok": 0,
+    "total": 2
+   },
+   "supCount": {
+    "ok": 0,
+    "total": 2
+   },
+   "supIls": {
+    "ok": 0,
+    "total": 2
+   },
+   "supUsd": {
+    "ok": 0,
+    "total": 2
+   },
+   "supportMsgTime": {
+    "ok": 1,
+    "total": 2
+   },
+   "timeToMin": {
+    "ok": 0,
+    "total": 2
+   },
+   "vFormatPhone": {
+    "ok": 0,
+    "total": 2,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "vNameSortKey": {
+    "ok": 0,
+    "total": 2,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "vNormName": {
+    "ok": 0,
+    "total": 2,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "vNormSearch": {
+    "ok": 0,
+    "total": 2,
+    "error": "../../../new/dart-boxes/validate.dart:2:6: Error: Can't use '../../../new/dart-boxes/atoms.dart' as a part, because it has no 'part of' declaration. | ../../../new/dart-boxes/validate.dart:4:34: Error: Method not found: 'normSearch'."
+   },
+   "waDigits": {
+    "ok": 0,
+    "total": 2
+   }
+  }
+ },
  "heb.gemYear": {
   "shape": "מועד",
   "pick": "gemYear",
   "file": "dart-maor/gem-year.dart",
-  "score": 28.93,
+  "score": 28.95,
   "proven": true,
   "candidates": 22,
   "top3": [
-   "gemYear:1/1✓:28.93",
+   "gemYear:1/1✓:28.95",
    "envPath:0/1:1",
    "localize:0/1:1"
   ],
@@ -3575,7 +4258,7 @@
   "candidates": 3,
   "top3": [
    "hebDateFull:2/2✓:6",
-   "staleBoxes:0/2:6.61",
+   "staleBoxes:0/2:6.62",
    "smartScore:0/2:0"
   ],
   "proof": {

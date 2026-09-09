@@ -17024,6 +17024,45 @@
   "why": "צורת-חתימה"
  },
  {
+  "id": "hebHolidayOn",
+  "layer": "logic",
+  "file": "dart-boxes/hebrew.dart",
+  "op": "format",
+  "sockets": [
+   "String"
+  ],
+  "ret": "String?",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "hebHolidaysAhead",
+  "layer": "logic",
+  "file": "dart-boxes/hebrew.dart",
+  "op": "collection",
+  "sockets": [
+   "String",
+   "int"
+  ],
+  "ret": "List<Map<String, dynamic>>",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
+  "id": "hebInputToIso",
+  "layer": "logic",
+  "file": "dart-boxes/hebdate.dart",
+  "op": "format",
+  "sockets": [
+   "int",
+   "String",
+   "int?"
+  ],
+  "ret": "String?",
+  "flags": [],
+  "why": "צורת-חתימה"
+ },
+ {
   "id": "hebMonthHe",
   "layer": "logic",
   "file": "dart-maor/heb-month-he.dart",

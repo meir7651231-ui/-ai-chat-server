@@ -10,10 +10,13 @@ import { fileURLToPath } from 'node:url';
 import * as R from '../root.mjs';
 import { readPlan } from './behavior-plan.mjs';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const P = readPlan(); const N = (id) => { const p = P[id]; if (!p || !p.pick) throw new Error(`behavior-compose: אין חלקיק מוכח לצורך ${id}`); return p.pick; };
+const P = readPlan();
 const files = [...new Set(Object.values(P).filter((p) => p.pick).map((p) => p.file))].sort();
+// G49 · קופסה מייצאת-מחדש שמות-אטומים (gem · hebParts · …) ⇒ ייבוא-בקידומת `as bxN` והקריאה דרכה; אטומים (dart-maor/dart) נשארים בלי קידומת
+const isBox = (f) => /^dart-boxes\//.test(f); const boxPrefix = (f) => 'bx' + files.filter(isBox).indexOf(f);
+const N = (id) => { const p = P[id]; if (!p || !p.pick) throw new Error(`behavior-compose: אין חלקיק מוכח לצורך ${id}`); return isBox(p.file) ? boxPrefix(p.file) + '.' + p.pick : p.pick; };
 const code = `// 🧩 חולל ע"י behavior-compose (G34ב · הכרעה-30) — שכבת-ההרכבה: התנהגויות מחלקיקים מוכחים (behavior-plan.json), במקום אחד. אל תערוך ידנית.
-${files.map((f) => `import '../${f}';`).join('\n')}
+${files.map((f) => isBox(f) ? `import '../${f}' as ${boxPrefix(f)};` : `import '../${f}';`).join('\n')}
 import '../dart-data-maor/norm-search-sockets.dart';
 import '../dart-data-maor/gematria-sockets.dart';
 import '../dart-data-maor/heb-month-he-sockets.dart';
@@ -102,6 +105,17 @@ String bhCsv(List<List<Object?>> rows) => ${N('csv.build')}(rows, (v) => ${N('cs
 List<List<String>> bhCsvParse(String text) => ${N('csv.parse')}(text);
 /// ב׳-קנד · אנשי-קשר מ-VCF ⇒ שורות name/phone/phone2/email/address/notes (${N('vcard.rows')} — קופסת-vcard-import מהמדף, G48)
 List<Map<String, String>> bhVcardRows(String? text) => ${N('vcard.rows')}(text);
+/// ב׳-קנה · חגים: חג/צום היום (${N('heb.holidayOn')}) · החגים ב-days הימים הבאים [{iso,name}] (${N('heb.holidaysAhead')})
+String bhHolidayOn(String iso) => ${N('heb.holidayOn')}(iso) ?? '';
+List<Map<String, dynamic>> bhHolidaysAhead(String isoFrom, int days) => ${N('heb.holidaysAhead')}(isoFrom, days);
+/// ב׳-קנו · גימטריה ⇒ מספר (ההיפוך של ${N('heb.gem')}, מאותם שקעי-דאטה): «ט״ו» ⇒ 15 · «כ״ט» ⇒ 29 · ספרות ⇒ כמו-שהן; לא-מוכר ⇒ 0
+int bhGemToNum(String s) { final t = bhNormSearch(s.replaceAll(RegExp(r'[\\u05F3\\u05F4\\u0027\\u0022]'), '')).trim();   /* סופיות ⇒ בסיס (ם⇒מ) דרך נרמול-החיפוש */ if (t.isEmpty) return 0; final dig = int.tryParse(t); if (dig != null) return dig; var sum = 0; for (final ch in t.split('')) { var v = 0; for (var i = 1; i < gematria_U.length; i++) { if (gematria_U[i] == ch) v = i; } for (var i = 1; i < gematria_T.length; i++) { if (gematria_T[i] == ch) v = 10 * i; } for (var i = 1; i <= 4 && i < gematria_H.length; i++) { if (gematria_H[i] == ch) v = 100 * i; } if (v == 0) return 0; sum += v; } return sum; }
+/// ב׳-קנו · קלט-עברי «ט״ו אלול» ⇒ ISO בשנה העברית של היום (${N('heb.inputToIso')} · ${N('heb.partsOfIso')}); לא-קיים ⇒ ''
+String bhHebInputIso(String dayTok, String monthHe, String todayIso) { final d = bhGemToNum(dayTok); if (d < 1 || d > 30) return ''; final y = (${N('heb.partsOfIso')}(todayIso)['year'] as num).toInt(); return ${N('heb.inputToIso')}(d, monthHe, y) ?? ''; }
+/// ב׳-קנח · אותו תאריך עברי בשנה הבאה (${N('heb.partsOfIso')} ⇒ ${N('heb.toIsoEn')}); ל׳ בחודש-חסר ⇒ כ״ט
+String bhHebNextYear(String iso) { final p = ${N('heb.partsOfIso')}(iso); final d = (p['day'] as num).toInt(), y = (p['year'] as num).toInt(); final m = p['month'] as String; return ${N('heb.toIsoEn')}(d, m, y + 1) ?? ${N('heb.toIsoEn')}(d - 1, m, y + 1) ?? bhPlusDays(iso, 354); }
+/// ב׳-קנז · טלפון לתצוגה «050-123-4567» (${N('phone.format')})
+String bhPhoneFmt(String? ph) { final s = (ph ?? '').trim(); return s.isEmpty ? '' : ${N('phone.format')}(s); }
 /// מפרידי-אלפים בלי ₪ (${N('money.fmt')})
 String bhThousands(num v) => ${N('money.fmt')}(v).replaceFirst('₪', '');
 `;
@@ -153,6 +167,10 @@ void main() {
   test('G38 · סכום-לפי · חציון · רצף-ימים', () {
     expect(bhSumBy([{'t': 'דירה', 'n': '8,000'}, {'t': 'דירה', 'n': '3000'}, {'t': 'משימות', 'n': '1,250'}], 't', 'n'), [['דירה', 2, 11000.0], ['משימות', 1, 1250.0]]);
     expect(bhMedianInt([7, 1, 4]), 4); expect(bhMedianInt([]), 0); expect(bhMedianInt([2, 9]), 9);
+    expect(bhHolidayOn('2026-04-02'), 'פסח'); expect(bhHolidayOn('2026-08-24'), ''); expect(bhHolidaysAhead('2026-09-08', 10).any((h) => h['iso'] == '2026-09-12'), isTrue);
+    expect(bhGemToNum('ט״ו'), 15); expect(bhGemToNum('כ״ט'), 29); expect(bhGemToNum('א׳'), 1); expect(bhGemToNum('15'), 15); expect(bhGemToNum('שלום'), 376); expect(bhGemToNum('x'), 0);
+    expect(bhHebInputIso('ט״ו', 'אלול', '2026-08-01'), '2026-08-28'); expect(bhHebInputIso('ל', 'אלול', '2026-08-01'), ''); expect(bhHebNextYear('2026-08-28'), '2027-09-17');   // ט״ו אלול תשפ״ז — הקופסה סורקת את הלוח, לא ניחוש
+    expect(bhPhoneFmt('0501234567').contains('-'), isTrue); expect(bhPhoneFmt(''), '');
     final vc = bhVcardRows('BEGIN:VCARD\\nFN:אבי כהן\\nTEL;CELL:050-1234567\\nEND:VCARD\\n'); expect(vc.length, 1); expect(vc[0]['phone'], '050-1234567'); expect(bhVcardRows(''), isEmpty);
     expect(bhCsv([['a', 'b'], ['1', 'x,y']]).endsWith('a,b\\n1,"x,y"'), isTrue); expect(bhCsvParse('a,b\\n1,"x,y"')[1][1], 'x,y');
     final ics = bhIcs([{'uid': 'u1', 'date': '2026-09-15', 'title': 'ארנונה, 1250'}], 'בלגן', DateTime(2026, 9, 8, 10)); expect(ics.contains('DTSTART;VALUE=DATE:20260915'), isTrue); expect(ics.contains('SUMMARY:ארנונה\\\\, 1250'), isTrue); expect(ics.endsWith('END:VCALENDAR\\r\\n'), isTrue);

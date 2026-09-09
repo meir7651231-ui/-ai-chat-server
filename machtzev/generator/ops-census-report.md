@@ -1,15 +1,15 @@
 # סנסוס-פעולות-היסוד (op-census · G1)
 
-**2434** אטומים ממופים (תצוגה 932 · לוגיקה 954 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
+**2437** אטומים ממופים (תצוגה 932 · לוגיקה 957 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
 
 | op | # | דוגמאות |
 |---|---|---|
 | data:strings | 349 | academic-year-label-strings · adar-norm-strings · add-org-member-strings · age-of-strings · amount-in-words-strings |
-| format | 247 | academicYearLabel · actionHe · actionIdOf · actionLabelHe · adarNorm |
+| format | 249 | academicYearLabel · actionHe · actionIdOf · actionLabelHe · adarNorm |
 | action | 180 | AccordionSectionCard · ActionButton · ActionCard · ActionRow · AddTradeButton |
 | group | 171 | ActionChipRail · AiCardTop · AiMdHead · AnimatedEmpty · ApprovalTaskCard |
 | summary | 159 | allOffConfig · applyAyinNames · applyAyinSheet · applyEntityPartial · applyMetaPartial |
-| collection | 150 | activeByMonth · allSupPhones · allowedDesignationsFor · appendCall · attentionItems |
+| collection | 151 | activeByMonth · allSupPhones · allowedDesignationsFor · appendCall · attentionItems |
 | transform | 120 | actionDescriptor · actionFromString · activeDriver · auditRows · brandById |
 | predicate | 111 | accessPasswordMatches · assignmentRedeemed · ayinActionVisible · ayinActive · canAddPhoto |
 | text | 110 | AccessoryRow · AccessoryTile · AiCardSub · AiServerNote · AppSettingsBody |

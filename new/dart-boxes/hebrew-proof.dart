@@ -85,6 +85,8 @@ void main() {
   ok('י"ג אדר בשבת ⇒ null 2013-02-23', H.holidayOf(_noon('2013-02-23')) == null);
   ok('פסח 2026-04-02', H.holidayOf(_noon('2026-04-02')) == 'פסח');
   ok('יום רגיל ⇒ null 2026-08-24', H.holidayOf(_noon('2026-08-24')) == null);
+  ok('G49 hebHolidayOn פסח', H.hebHolidayOn('2026-04-02') == 'פסח');
+  ok('G49 hebHolidaysAhead ראש-השנה 2026-09-12', H.hebHolidaysAhead('2026-09-08', 10).any((h) => h['iso'] == '2026-09-12'));
   // מדולג: holidayOf(new Date('zzz')) — אין Invalid DateTime ב-Dart; הקופסה מקבלת DateTime לא-null.
 
   if (fails > 0) {

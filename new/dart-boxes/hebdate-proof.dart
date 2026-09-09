@@ -79,6 +79,8 @@ void main() {
   ok('cldrGuard שבור — הזהיר פעם',
       H.cldrGuard(null, (_) => warned++) == false && warned == 1);
 
+  ok('G49 hebInputToIso 15 אלול 5786', H.hebInputToIso(15, 'אלול', 5786) == '2026-08-28');
+  ok('G49 hebInputToIso חודש-זר ⇒ null', H.hebInputToIso(15, 'זזז', 5786) == null);
   if (fails > 0) {
     print('❌ קופסת-hebdate (Dart): $fails אי-התאמות מול golden ה-JS');
     throw StateError('hebdate dart proof failed');

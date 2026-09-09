@@ -56,7 +56,7 @@ syncExisting(path.join(ROOT, 'new/dart-data-bs/auto'), path.join(LIB, 'dart-data
 const DMIR = path.join(LIB, 'dart-maor'); if (fs.existsSync(DMIR)) for (const f of fs.readdirSync(DMIR)) if (f.endsWith('.dart') && fs.existsSync(path.join(ROOT, 'new/dart-maor', f))) fs.copyFileSync(path.join(ROOT, 'new/dart-maor', f), path.join(DMIR, f));   // G20 · מנועי-maor: קבצים קיימים-במראה בלבד (חתימות מהודקות)
 for (const f of fs.readdirSync(genDst)) if (/^zz_shot_/.test(f)) fs.unlinkSync(path.join(genDst, f));   // שאריות-ראיה
 // G48 · קופסאות שנבחרו-בהוכחה (gen_behaviors מייבא ../dart-boxes/…) ⇒ מראה נקודתית (רק הנבחרות; לא כל 62)
-{ const gb = path.join(GEN, 'gen_behaviors.dart'); if (fs.existsSync(gb)) { const boxes = [...fs.readFileSync(gb, 'utf8').matchAll(/^import '\.\.\/(dart-boxes\/[^']+)';/gm)].map((m) => m[1]); if (boxes.length) { fs.mkdirSync(path.join(LIB, 'dart-boxes'), { recursive: true }); for (const b of boxes) fs.copyFileSync(path.join(ROOT, 'new', b), path.join(LIB, b)); } } }
+{ const gb = path.join(GEN, 'gen_behaviors.dart'); if (fs.existsSync(gb)) { const boxes = [...fs.readFileSync(gb, 'utf8').matchAll(/^import '\.\.\/(dart-boxes\/[^']+)'(?: as \w+)?;/gm)].map((m) => m[1]); if (boxes.length) { fs.mkdirSync(path.join(LIB, 'dart-boxes'), { recursive: true }); for (const b of boxes) fs.copyFileSync(path.join(ROOT, 'new', b), path.join(LIB, b)); } } }
 
 // ── 3 · אימות: analyze 0 · flutter test genesis_* · שערי-המחולל · אינדקס+אמת ──
 log('verify · flutter analyze lib/genesis');
