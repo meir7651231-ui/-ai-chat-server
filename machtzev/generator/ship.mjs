@@ -108,7 +108,7 @@ if (!flag('--no-deploy') && built.length) {
 
 // ── 6 · קומיט + דחיפה: buildsmart ואז גנסיס (סדר קבוע; הדחיפה מתחילה רק כשהעץ נח — סחף-מראה אינו אפשרי) ──
 const commitWith = (cwd, msg) => { const f = path.join(cwd, '.git', 'SHIP_MSG'); fs.writeFileSync(f, msg); try { run('git', ['commit', '-q', '-F', f], cwd, { quiet: true }); } finally { fs.rmSync(f, { force: true }); } };
-const pushWith = (cwd, branch) => { for (let k = 0; k < 4; k++) { const r = run('git', ['push', '-u', 'origin', branch], cwd, { quiet: true, allowFail: true }); if (r.status === 0) return true; if (!/could not resolve|connection|timed out|RPC failed|reset/i.test(r.stderr)) { console.error(r.stderr.slice(-3000)); throw new Error(`✗ push ${cwd} ⇒ ${branch}`); } spawnSync('sleep', [String(2 ** (k + 1))]); } throw new Error(`✗ push ${cwd}: רשת`); };
+const pushWith = (cwd, branch) => { for (let k = 0; k < 6; k++) { const r = run('git', ['push', '-u', 'origin', branch], cwd, { quiet: true, allowFail: true }); if (r.status === 0) return true; if (!/could not resolve|connection|timed out|RPC failed|reset|couldn't connect|failed to connect|unable to access/i.test(r.stderr)) { console.error(r.stderr.slice(-3000)); throw new Error(`✗ push ${cwd} ⇒ ${branch}`); } spawnSync('sleep', [String(2 ** (k + 1))]); } throw new Error(`✗ push ${cwd}: רשת`); };
 const branchOf = (cwd) => run('git', ['rev-parse', '--abbrev-ref', 'HEAD'], cwd, { quiet: true }).stdout.trim();
 if (!flag('--no-commit')) {
   if (!MSG) throw new Error('✗ --msg נדרש לקומיט (או --no-commit)');

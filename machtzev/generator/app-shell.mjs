@@ -134,6 +134,7 @@ export function renderHome(slug, { root, rootPage, report, message, title, chain
   // G32 · שדות-התאריך של השורש (חובה = hard-deadline, P8) · השלב האחרון · השרשרת
   const dateFields = root.schema.filter((f) => f.type === 'date').map((f) => ({ label: f.label, hard: !!f.required }));
   const phoneList = `[${root.schema.filter((f) => !/^(num|date|bool|multiline)$/.test(f.type || '') && String(f.label).split(/\s+/).some((w) => (SL0.typePhone || []).includes(w))).map((f) => k(f.label)).join(', ')}]`;   // ב׳-לח · שדות-טלפון ⇒ «התקשר» על שורת-היום
+  const numList = `[${root.schema.filter((f) => f.type === 'num' && !String(f.label).split(/\s+/).some((w) => (SL0.typePercent || []).includes(w))).map((f) => k(f.label)).join(', ')}]`;   // ב׳-מ · שדה-הסכום הראשי (לא אחוז) ⇒ ₪ על השורה
   const timeList = `[${root.schema.filter(isTimeLabel).map((f) => k(f.label)).join(', ')}]`;   // שדות-שעה ⇒ השעה על שורת-היום והתוכנית מקבעת אותה
   const lastStage = root.stages && root.stages.length ? root.stages.length - 1 : -1;
   const dispR = disp;
@@ -157,6 +158,8 @@ class ${cls}Today {
   static const _dates = ${dateList};
   static const List<String> _times = ${timeList};
   static const List<String> _phones = ${phoneList};
+  static const List<String> _nums = ${numList};
+  static String _moneyOf(Map<String, String> r) { if (_nums.isEmpty) return ''; final v = double.tryParse((r[_nums.first] ?? '').replaceAll(',', '').trim()); if (v == null || v <= 0) return ''; final s = v.round().toString(); final b = StringBuffer(); for (var i = 0; i < s.length; i++) { if (i > 0 && (s.length - i) % 3 == 0) b.write(','); b.write(s[i]); } return '₪ ' + b.toString(); }   // ב׳-מ · הכסף של התיק, על השורה (אותו שדה-ראשי של כסף-במבט)
   static String _phoneOf(Map<String, String> r) { for (final l in _phones) { final v = (r[l] ?? '').replaceAll(RegExp(r'[^0-9+]'), ''); if (v.length >= 9) return v; } return ''; }   // ב׳-לח · הטלפון של התיק (הראשון שנראה כמו טלפון)
   /// חזרה («כל חודש» = m1 · «כל שבועיים» = w2 · «כל 3 ימים» = d3 · «כל שנה» = y1): המועד-הבא מהמועד שנסגר; חודש עם פחות ימים ⇒ היום-האחרון
   static DateTime nextRepeat(DateTime d, String code) {
@@ -178,9 +181,9 @@ class ${cls}Today {
   static String _remKey(String rid, String field) => 'rem:\$rid:\$field';
   static List<Map<String, String>> open() => ${openRecs};${sendFn2}
 
-  static DsTodayItem _mk(String title, String sub, String rid, String field, DateTime d, bool hard, bool overdue, DateTime today, [String time = '', bool rep = false, String phone = '']) {
+  static DsTodayItem _mk(String title, String sub, String rid, String field, DateTime d, bool hard, bool overdue, DateTime today, [String time = '', bool rep = false, String phone = '', String money = '']) {
     final acts = <String>[...(overdue ? [${k(L.actDone)}, ${k(L.actSnooze)}, ${k(L.actSnoozeWeek)}, ${k(L.actIgnore)}] : (d == today ? [${k(L.actDone)}, ${k(L.actCal)}] : [${k(L.actDone)}, ${k(L.actSnooze)}, ${k(L.actCal)}])), if (phone.isNotEmpty) ${k(L.callLabel)}];   /* ב׳-לח · תיק עם טלפון ⇒ «התקשר» מהשורה, הקשה אחת */   // P4 · ביום-ההכרעה אין דחייה · «ליומן» = קישור-יומן, אפס-מפתח
-    return DsTodayItem(title: (rep ? '↻ ' : '') + title, sub: [time, sub].where((x) => x.isNotEmpty).join(' · '), rid: rid, field: field, due: d, hard: hard, overdue: overdue, module: module, actions: acts, act: (i) => _act(rid, field, d, acts, i), time: time);
+    return DsTodayItem(title: (rep ? '↻ ' : '') + title, sub: [time, sub, money].where((x) => x.isNotEmpty).join(' · '), rid: rid, field: field, due: d, hard: hard, overdue: overdue, module: module, actions: acts, act: (i) => _act(rid, field, d, acts, i), time: time);   /* ב׳-מ · מה · מתי · כמה — באותה שורה */
   }
   static void _act(String rid, String field, DateTime due, List<String> acts, int i) {
     final a = acts[i.clamp(0, acts.length - 1)];
@@ -214,16 +217,16 @@ class ${cls}Today {
   static List<DsTodayItem> items(DateTime today, {required int dayDelta}) {
     final out = <DsTodayItem>[];
     for (final r in open()) {
-      final rid = r[AppStore.idKey] ?? ''; final who = appStore.displayOf('${root.slug}', rid); final tm = _timeOf(r); final rep = (r['__repeat'] ?? '').trim().isNotEmpty; final ph = _phoneOf(r);
+      final rid = r[AppStore.idKey] ?? ''; final who = appStore.displayOf('${root.slug}', rid); final tm = _timeOf(r); final rep = (r['__repeat'] ?? '').trim().isNotEmpty; final ph = _phoneOf(r); final mo = _moneyOf(r);
       for (final f in _dates) {
         final d = _parse(r[f.label] ?? ''); if (d == null) continue;
         if (appStore.decision('ign:\$rid:\${f.label}') == 'no') continue;
-        if (dayDelta == 0 && d.isBefore(today)) { final ago = today.difference(d).inDays; out.add(_mk(_dates.length == 1 ? who : '\${f.label} · \$who', ${k(L.remWas)}.replaceAll('{date}', _iso(d)) + ' · ' + (ago == 1 ? ${k(L.agoOne)} : ${k(L.agoDays)}.replaceAll('{n}', ago.toString())), rid, f.label, d, f.hard, true, today, tm, rep, ph)); continue; }
+        if (dayDelta == 0 && d.isBefore(today)) { final ago = today.difference(d).inDays; out.add(_mk(_dates.length == 1 ? who : '\${f.label} · \$who', ${k(L.remWas)}.replaceAll('{date}', _iso(d)) + ' · ' + (ago == 1 ? ${k(L.agoOne)} : ${k(L.agoDays)}.replaceAll('{n}', ago.toString())), rid, f.label, d, f.hard, true, today, tm, rep, ph, mo)); continue; }
         final okRem = appStore.decision(_remKey(rid, f.label)) == 'ok';   // תזכורת-מוקדמת (−3/−1) = הצעה שדורשת אישור; יום-ההכרעה עצמו = עובדה — מוצג בלי אישור
         for (final off in _offsets()) {
           if (off > 0 && !okRem) continue;
           final fire = _shift(d.subtract(Duration(days: off)), f.hard);
-          if (fire == today.add(Duration(days: dayDelta))) { out.add(_mk(_dates.length == 1 ? who : '\${f.label} · \$who', off == 0 ? '' : ${k(L.remIn)}.replaceAll('{n}', off.toString()), rid, f.label, d, f.hard, false, today, off == 0 ? tm : '', rep, ph)); break; }
+          if (fire == today.add(Duration(days: dayDelta))) { out.add(_mk(_dates.length == 1 ? who : '\${f.label} · \$who', off == 0 ? '' : ${k(L.remIn)}.replaceAll('{n}', off.toString()), rid, f.label, d, f.hard, false, today, off == 0 ? tm : '', rep, ph, mo)); break; }
         }
       }
     }
