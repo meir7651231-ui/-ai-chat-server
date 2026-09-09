@@ -96,7 +96,7 @@ if (!/int balaganMerge\(/.test(moments) || !/balaganMerge\(m, id/.test(confirm))
 { const st = rd(path.join(R.ROOT, 'new/dart-ui-bs/ds/ds_store.dart')); if (!/== 'merge'\)/.test(st)) fails.push('AppStore.undo בלי merge'); }
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganMerge\(/.test(ft)) fails.push('בדיקת המיזוג חסרה'); }
 // גל ב׳-יג · «ליומן» עם שעה · «לפני N ימים» · דוגמאות בהקשה-אחת ב«מה קרה?»
-for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/final tm = r == null \? '' : _timeOf\(r\); final d = _iso\(due\)/.test(h) || !/agoDays|לפני/.test(h)) { fails.push(`${m.ns}: «ליומן» בלי שעה / באיחור בלי «לפני N ימים»`); break; } }
+for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/final tm = r == null \? '' : _timeOf\(r\); final d = _iso\(due0?\)/.test(h) || !/agoDays|לפני/.test(h)) { fails.push(`${m.ns}: «ליומן» בלי שעה / באיחור בלי «לפני N ימים»`); break; } }
 if (!/\.split\('\|'\)\) DsChipButton\(label: ex/.test(ask) || !/_c\.text = ex; _go\(\);/.test(ask)) fails.push('«מה קרה?» בלי דוגמאות-בהקשה-אחת');
 // גל ב׳-יד · «התקשר»/«וואטסאפ» בתיק עם טלפון · כרטיסים לפי דחיפות
 { const withPhone = mods.filter((m) => m.root.fields.some((f) => /טלפון|נייד/.test(f.label))); for (const m of withPhone) { const rp = rd(path.join(GEN, `gen_${m.rootPage.slug}.dart`)); if (!/wa\.me\//.test(rp) || !/'tel:'/.test(rp)) { fails.push(`${m.ns}: תיק-עם-טלפון בלי התקשר/וואטסאפ`); break; } } if (!withPhone.length) fails.push('אין מודול עם טלפון (צפוי 28)'); }
@@ -258,6 +258,11 @@ if (!/hint: evening \? /.test(home)) fails.push('«היום»: שורה-מהיר
 if (!/p\.rids\.contains\(e\['rid'\]/.test(topics)) fails.push('כרטיס-אדם בלי לאחרונה');
 if (!/e\['kind'\] == 'add' && e\['undone'\] != '1'/.test(ask)) fails.push('«מה קרה?» בלי נשמר-לאחרונה');
 for (const m of mods) { const rp = rd(path.join(GEN, `gen_${m.rootPage.slug}.dart`)); if (/wa\.me\/\?text=/.test(rp) && !/Clipboard\.setData\(ClipboardData\(text: lines\.join/.test(rp)) { fails.push(`${m.ns}: שיתוף בלי לוח`); break; } }
+// גלים ב׳-פו..פט · «דחה למחר» מבאיחור = מחר · «דחה הכל למחר» עם החזר-אחד · טלפון מהאדם · «כמו בפעם הקודמת»
+{ const bh = rd(path.join(GEN, `gen_${mods[0].home.slug}.dart`)); if (!/final due = today != null && due0\.isBefore\(today\) \? today : due0;/.test(bh)) fails.push('«דחה למחר» מבאיחור אינו מחר'); }
+if (!/void _snoozeAll\(List<DsTodayItem> overdue, DateTime today\)/.test(home) || !/group: g\)/.test(home)) fails.push('«היום»: בלי «דחה הכל למחר» עם החזר-קבוצתי');
+if (!/String balaganPhoneOf\(String name\)/.test(confirm) || !/balaganPhoneOf\(p\)/.test(confirm)) fails.push('טופס-האישור: צ׳יפ-אדם בלי טלפון');
+if (!/String balaganLastAmount\(BalaganModule m, String person\)/.test(confirm) || !/balaganLastAmount\(m, /.test(confirm)) fails.push('טופס-האישור: בלי «כמו בפעם הקודמת»');
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);

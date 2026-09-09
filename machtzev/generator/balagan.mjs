@@ -712,6 +712,36 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
   test('זיהוי: כל כותרת-מודול ⇒ עצמו (הסף אינו בולע כותרות)', () {
     for (final m in kBalaganModules) { expect(balaganIdentify(m.title).first.module.ns, m.ns, reason: m.title); }
   });
+  test('ב׳-פו · «דחה למחר» מבאיחור = מחר (לא יום-אחרי-המועד-שעבר) · «דחה לשבוע» = בעוד שבוע · החזר', () {
+    const S = '${baseMod.root.slug}'; const F = ${dq(baseMod.root.fields.find((f) => f.type === 'date').label)};
+    final id = appStore.add(S, {${dq(baseMod.root.descField || baseMod.root.fields[0].label)}: 'ישן', F: '2026-09-01'});
+    final it = ${baseTodayCls}.items(today, dayDelta: 0).firstWhere((x) => x.rid == id); expect(it.overdue, isTrue);
+    it.act(it.actions.indexOf('דחה למחר')); expect(appStore.byId(S, id)![F], '2026-09-09');
+    expect(${baseTodayCls}.items(today, dayDelta: 0).any((x) => x.rid == id), isFalse); expect(${baseTodayCls}.items(today, dayDelta: 1).any((x) => x.rid == id), isTrue);
+    expect(appStore.undo(appStore.log.first['id']!), isTrue); expect(appStore.byId(S, id)![F], '2026-09-01');
+    final it2 = ${baseTodayCls}.items(today, dayDelta: 0).firstWhere((x) => x.rid == id); it2.act(it2.actions.indexOf('דחה לשבוע')); expect(appStore.byId(S, id)![F], '2026-09-15');
+  });
+  test('ב׳-פז · החזר-קבוצתי: כמה שורות-יומן עם group אחד ⇒ החזר של אחת מחזיר את כולן', () {
+    const S = '${baseMod.root.slug}'; const F = ${dq(baseMod.root.fields.find((f) => f.type === 'date').label)};
+    final a = appStore.add(S, {F: '2026-09-01'}); final b = appStore.add(S, {F: '2026-09-02'});
+    final ia = appStore.logAction('auto', 'א', entity: S, rid: a, field: F, prev: '2026-09-01', group: 'g1'); appStore.update(S, a, {F: '2026-09-09'});
+    appStore.logAction('auto', 'ב', entity: S, rid: b, field: F, prev: '2026-09-02', group: 'g1'); appStore.update(S, b, {F: '2026-09-09'});
+    expect(appStore.undo(ia), isTrue);
+    expect(appStore.byId(S, a)![F], '2026-09-01'); expect(appStore.byId(S, b)![F], '2026-09-02');
+    expect(appStore.log.where((e) => e['group'] == 'g1' && e['undone'] != '1'), isEmpty);
+  });
+  test('ב׳-פח/פט · טלפון מהאדם המוכר · «כמו בפעם הקודמת» = הסכום של התיק האחרון (אותו אדם כשיש)', () {
+    final ms = kBalaganModules.where((x) => x.personFields.isNotEmpty && x.phoneFields.isNotEmpty && x.numFields.any((f) => !x.percentFields.contains(f))).toList();
+    expect(ms, isNotEmpty);
+    final m = ms.first; final nf = m.numFields.firstWhere((f) => !m.percentFields.contains(f));
+    expect(balaganPhoneOf('אבי כהן'), ''); expect(balaganLastAmount(m, 'אבי כהן'), '');
+    appStore.add(m.rootSlug, {m.personFields.first: 'אבי כהן', m.phoneFields.first: '052-1234567', nf: '1,500'});
+    appStore.add(m.rootSlug, {m.personFields.first: 'אבי כהן', nf: '2,000'});
+    appStore.add(m.rootSlug, {m.personFields.first: 'דנה לוי', nf: '300'});
+    expect(balaganPhoneOf('אבי כהן'), '052-1234567'); expect(balaganPhoneOf('אבי'), '');
+    expect(balaganLastAmount(m, 'אבי כהן'), '2,000'); expect(balaganLastAmount(m, 'דנה לוי'), '300'); expect(balaganLastAmount(m, ''), '300');
+    expect(balaganLastAmount(m, 'מישהו אחר'), '');
+  });
 }
 `;
     if (fs.existsSync(path.join(bsTest, '..', 'pubspec.yaml'))) fs.writeFileSync(path.join(bsTest, 'genesis_gen_balagan_facts_test.dart'), code);
@@ -790,6 +820,11 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
   ];
   static DateTime _day(DateTime d) => DateTime(d.year, d.month, d.day);
   static String _iso(DateTime d) => d.toIso8601String().substring(0, 10);
+  /// ב׳-פז · כל הבאיחור ⇒ מחר (לא בשבת), שורת-יומן לכל תיק עם group אחד ⇒ «החזר» אחד מחזיר את כולם
+  void _snoozeAll(List<DsTodayItem> overdue, DateTime today) {
+    final g = 'g' + DateTime.now().microsecondsSinceEpoch.toString(); var d = today.add(const Duration(days: 1)); if (d.weekday == DateTime.saturday) d = d.add(const Duration(days: 1));
+    for (final it in overdue) { final ms = kBalaganModules.where((mm) => mm.title == it.module); if (ms.isEmpty || it.field.isEmpty) continue; final slug = ms.first.rootSlug; final r = appStore.byId(slug, it.rid); if (r == null) continue; appStore.logAction('auto', ${k(L.actSnooze)} + ' · ' + it.title, entity: slug, rid: it.rid, field: it.field, prev: r[it.field] ?? '', group: g); appStore.update(slug, it.rid, {it.field: _iso(d)}); }
+  }
   void _openItem(BuildContext context, DsTodayItem it) { final ms = kBalaganModules.where((m) => m.title == it.module); if (ms.isEmpty || it.rid.isEmpty) return; Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => balaganOpenRoot(ms.first.rootSlug, it.rid))); }   // ב׳-לט · הקשה על השורה ⇒ התיק
 
   Future<void> _digest(String lead, int hardToday) async {
@@ -950,7 +985,7 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
       if (!empty) Padding(padding: const EdgeInsets.only(top: 6), child: Row(children: [DsChipButton(label: ${k(L.shareDay)}, onTap: () => _shareDay(overdue, todayItems, plan.length, evening ? tomorrow : const [], undated.length, stale.length))])),   // היום כטקסט: ללוח + וואטסאפ (לעצמו / לבן-הזוג) — אפס-שרת
       Padding(padding: const EdgeInsets.only(top: 16, bottom: 4), child: GestureDetector(behavior: HitTestBehavior.opaque, onTap: first == null ? null : () => _openItem(context, first), child: Text(headline, style: TextStyle(color: lk.ink, fontSize: 28, fontWeight: FontWeight.w600, height: 1.2)))),   // ב׳-סו · הדבר-האחד: הקשה ⇒ התיק
       if (first != null) Padding(padding: const EdgeInsets.only(bottom: 12), child: Text((first.overdue ? ${k(L.homeOverdue)} : first.sub) + ' · ' + first.module + ' · ' + lead2, style: TextStyle(color: lk.muted, fontSize: 14))),
-      if (overdue.isNotEmpty) DsSection(title: ${k(L.homeOverdue)}, tone: 2, children: [for (final it in overdue) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), tone: 2, onOpen: () => _openItem(context, it), actions: it.actions, onAct: it.act)]),   // D6/P6/P7 · באיחור ראשון
+      if (overdue.isNotEmpty) DsSection(title: ${k(L.homeOverdue)}, tone: 2, trailing: overdue.length < 2 ? null : DsChipButton(label: ${k(L.snoozeAll)}, onTap: () => _snoozeAll(overdue, today)), children: [for (final it in overdue) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), tone: 2, onOpen: () => _openItem(context, it), actions: it.actions, onAct: it.act)]),   // D6/P6/P7 · באיחור ראשון · ב׳-פז · «דחה הכל למחר» = הקשה אחת, החזר אחד
       if (todayItems.isNotEmpty) DsSection(title: ${k(L.homeToday)}, children: [for (final it in todayItems) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), onOpen: () => _openItem(context, it), actions: it.actions, onAct: it.act)]),
       if (plan.isNotEmpty) DsFold(title: ${k(L.planFold)}.replaceAll('{n}', plan.length.toString()), details: plan),   // תזמון-אוטומטי: מקופל — הוא מסתכל כשהוא רוצה
       ...cards.take(3),   // 3 למעלה
@@ -1141,6 +1176,10 @@ List<List<String>> balaganTimeChips(DateTime now) => [for (final c in ${k(L.time
 /// ב׳-לד · צ׳יפי-חזרה: «כל שבוע» ⇒ קוד-חזרה דרך אותו balaganRepeat של הרגעים (d1 · w1 · m1 · y1) — רגע חוזר בהקשה, אפס-הקלדה
 List<List<String>> balaganRepeatChips() => [for (final c in ${k(L.repeatChips)}.split('|')) for (final r in balaganRepeat(c).take(1)) [c, r.iso]];
 /// ב׳-לג · צ׳יפי-אנשים: מי שכבר בתיקים (שדות-האדם של כל המודולים, לפי תדירות, עד 6) — «עם מי?» בהקשה; אפס-ניחוש: אין תיקים ⇒ אין צ׳יפים
+/// ב׳-פח · הטלפון של אדם מוכר — מהתיקים שכבר יש (שדה-אדם == השם · שדה-טלפון שנראה כמו טלפון)
+String balaganPhoneOf(String name) { final n = name.trim().toLowerCase(); if (n.length < 2) return ''; for (final m in kBalaganModules) { if (m.phoneFields.isEmpty || m.personFields.isEmpty) continue; for (final r in appStore.records(m.rootSlug)) { if (!m.personFields.any((f) => (r[f] ?? '').trim().toLowerCase() == n)) continue; for (final pf in m.phoneFields) { final v = (r[pf] ?? '').trim(); if (v.replaceAll(RegExp(r'[^0-9+]'), '').length >= 9) return v; } } } return ''; }
+/// ב׳-פט · «כמו בפעם הקודמת»: הסכום (שדה-הכסף הראשי) של התיק האחרון באותו מודול — עם אותו אדם כשיש; מהנתונים, לא ניחוש
+String balaganLastAmount(BalaganModule m, String person) { final nf = m.numFields.where((f) => !m.percentFields.contains(f)).toList(); if (nf.isEmpty) return ''; final p = person.trim().toLowerCase(); Map<String, String>? best; for (final r in appStore.records(m.rootSlug)) { if (p.isNotEmpty && m.personFields.isNotEmpty && !m.personFields.any((f) => (r[f] ?? '').trim().toLowerCase() == p)) continue; final v = (r[nf.first] ?? '').trim(); if (v.isEmpty || (double.tryParse(v.replaceAll(',', '')) ?? 0) <= 0) continue; if (best == null || (r['__at'] ?? '').compareTo(best['__at'] ?? '') >= 0) best = r; } return best == null ? '' : (best[nf.first] ?? '').trim(); }
 List<String> balaganPeople({int max = 6}) { final counts = <String, int>{}; for (final m in kBalaganModules) { for (final r in appStore.records(m.rootSlug)) { for (final f in m.personFields) { final v = (r[f] ?? '').trim(); if (v.length >= 2) counts[v] = (counts[v] ?? 0) + 1; } } } final names = counts.keys.toList()..sort((a, b) => counts[b]!.compareTo(counts[a]!)); return names.take(max).toList(); }
 
 class ${cls} extends StatefulWidget {
@@ -1202,7 +1241,8 @@ class _${cls}State extends State<${cls}> {
         if (f.label == dateF && (_v[dateF] ?? '').trim().isNotEmpty) for (final d in [DateTime.tryParse(_v[dateF]!.trim())]) if (d != null) Padding(padding: const EdgeInsets.only(bottom: 6), child: Text(balaganDayLabel(d, DateTime.now()), style: TextStyle(color: DsLook.of(context).muted, fontSize: 13))),   // ב׳-מג · «מחר» מתחת ל-2026-09-10
         if (f.label == dateF && (_v[dateF] ?? '').trim().isNotEmpty && (_v['__repeat'] ?? '').trim().isEmpty) Padding(padding: const EdgeInsets.only(bottom: 10), child: Wrap(spacing: 8, runSpacing: 8, crossAxisAlignment: WrapCrossAlignment.center, children: [Text(${k(L.repeatAsk)}, style: TextStyle(color: DsLook.of(context).muted, fontSize: 13)), for (final c in balaganRepeatChips()) DsChipButton(label: c[0], onTap: () => setState(() => _v['__repeat'] = c[1]))])),   // ב׳-לד · «חוזר?» — אחרי שיש מועד
         if (m.timeFields.isNotEmpty && f.label == m.timeFields.first && (_v[f.label] ?? '').trim().isEmpty) Padding(padding: const EdgeInsets.only(bottom: 10), child: Wrap(spacing: 8, runSpacing: 8, children: [for (final c in balaganTimeChips(DateTime.now())) DsChipButton(label: c[0], onTap: () => setState(() => _v[m.timeFields.first] = c[1]))])),   // ב׳-לג · «באיזו שעה?»
-        if (m.personFields.isNotEmpty && f.label == m.personFields.first && (_v[f.label] ?? '').trim().isEmpty) for (final people in [balaganPeople()]) if (people.isNotEmpty) Padding(padding: const EdgeInsets.only(bottom: 10), child: Wrap(spacing: 8, runSpacing: 8, children: [for (final p in people) DsChipButton(label: p, onTap: () => setState(() => _v[m.personFields.first] = p))]))],   // ב׳-לג · «עם מי?» — מי שכבר בתיקים
+        if (m.personFields.isNotEmpty && f.label == m.personFields.first && (_v[f.label] ?? '').trim().isEmpty) for (final people in [balaganPeople()]) if (people.isNotEmpty) Padding(padding: const EdgeInsets.only(bottom: 10), child: Wrap(spacing: 8, runSpacing: 8, children: [for (final p in people) DsChipButton(label: p, onTap: () => setState(() { _v[m.personFields.first] = p; if (m.phoneFields.isNotEmpty && (_v[m.phoneFields.first] ?? '').trim().isEmpty) { final ph = balaganPhoneOf(p); if (ph.isNotEmpty) _v[m.phoneFields.first] = ph; } }))])),   // ב׳-לג · «עם מי?» — מי שכבר בתיקים · ב׳-פח · והטלפון שלו כבר בתיקים ⇒ ממולא
+        if (m.numFields.isNotEmpty && f.type == 'num' && !m.percentFields.contains(f.label) && f.label == m.numFields.firstWhere((x) => !m.percentFields.contains(x), orElse: () => '') && (_v[f.label] ?? '').trim().isEmpty) for (final a in [balaganLastAmount(m, m.personFields.isEmpty ? '' : (_v[m.personFields.first] ?? ''))]) if (a.isNotEmpty) Padding(padding: const EdgeInsets.only(bottom: 10), child: Wrap(spacing: 8, runSpacing: 8, children: [DsChipButton(label: ${k(L.amountLast)}.replaceAll('{n}', a), onTap: () => setState(() => _v[f.label] = a))]))],   // ב׳-פט · «₪ 1,500 כמו בפעם הקודמת» — הסכום מהתיק האחרון (אותו אדם אם יש), מהנתונים
       if (rest.isNotEmpty) DsFold(title: ${k(L.confirmMore)}.replaceAll('{n}', rest.length.toString()), details: [for (final f in rest) _field(f)]),
       Padding(padding: const EdgeInsets.only(top: 10), child: Row(children: [DsChipButton(label: ${k(L.saveAgain)}, onTap: () => _save(again: true))])),   // ב׳-עח
       Padding(padding: const EdgeInsets.only(top: 14), child: DsPrimaryButton(label: (() { if (dateF.isEmpty) return ${k(L.askSave)}; final d = DateTime.tryParse((_v[dateF] ?? '').trim()); if (d == null) return ${k(L.askSave)}; final t0 = DateTime.now(); final n = DateTime(d.year, d.month, d.day).difference(DateTime(t0.year, t0.month, t0.day)).inDays; return n == 0 ? ${k(L.askSave)} : ${k(L.saveWhen)}.replaceAll('{day}', balaganDayLabel(d, t0)); })(), onTap: () => _save())   /* ב׳-סא · «יופיע במחר» — האדם יודע לאן זה הולך */),

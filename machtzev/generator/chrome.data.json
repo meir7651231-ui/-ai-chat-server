@@ -333,5 +333,7 @@
  "dayLog": "מה קרה ביום הזה",
  "homeQuickEvening": "מה מחר? כתוב שורה ומקש Enter",
  "personRecent": "לאחרונה איתו",
- "askRecent": "נשמר לאחרונה"
+ "askRecent": "נשמר לאחרונה",
+ "snoozeAll": "דחה הכל למחר",
+ "amountLast": "₪ {n} כמו בפעם הקודמת"
 }

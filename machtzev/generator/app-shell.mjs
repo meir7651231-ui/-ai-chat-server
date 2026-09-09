@@ -190,10 +190,11 @@ class ${cls}Today {
 
   static DsTodayItem _mk(String title, String sub, String rid, String field, DateTime d, bool hard, bool overdue, DateTime today, [String time = '', bool rep = false, String phone = '', String money = '']) {
     final acts = <String>[...(overdue ? [${k(L.actDone)}, ${k(L.actSnooze)}, ${k(L.actSnoozeWeek)}, ${k(L.actIgnore)}] : (d == today ? [${k(L.actDone)}, ${k(L.actCal)}] : [${k(L.actDone)}, ${k(L.actSnooze)}, ${k(L.actCal)}])), if (phone.isNotEmpty) ${k(L.callLabel)}];   /* ב׳-לח · תיק עם טלפון ⇒ «התקשר» מהשורה, הקשה אחת */   // P4 · ביום-ההכרעה אין דחייה · «ליומן» = קישור-יומן, אפס-מפתח
-    return DsTodayItem(title: (rep ? '↻ ' : '') + title, sub: [time, sub, money].where((x) => x.isNotEmpty).join(' · '), rid: rid, field: field, due: d, hard: hard, overdue: overdue, module: module, actions: acts, act: (i) => _act(rid, field, d, acts, i), time: time);   /* ב׳-מ · מה · מתי · כמה — באותה שורה */
+    return DsTodayItem(title: (rep ? '↻ ' : '') + title, sub: [time, sub, money].where((x) => x.isNotEmpty).join(' · '), rid: rid, field: field, due: d, hard: hard, overdue: overdue, module: module, actions: acts, act: (i) => _act(rid, field, d, acts, i, today), time: time);   /* ב׳-מ · מה · מתי · כמה — באותה שורה */
   }
-  static void _act(String rid, String field, DateTime due, List<String> acts, int i) {
+  static void _act(String rid, String field, DateTime due0, List<String> acts, int i, [DateTime? today]) {
     final a = acts[i.clamp(0, acts.length - 1)];
+    final due = today != null && due0.isBefore(today) ? today : due0;   /* ב׳-פו · «דחה למחר» מבאיחור = מחר (לא יום-אחרי-המועד-שעבר, שנשאר באיחור) */
     if (a == ${k(L.actDone)}) {
       final r0 = appStore.byId('${root.slug}', rid); final rep = (r0 == null ? '' : (r0['__repeat'] ?? '')).trim();
       final prevStage = r0 == null ? '' : (r0[AppStore.stageKey] ?? '0');
@@ -202,7 +203,7 @@ class ${cls}Today {
       appStore.logAction('done', ${k(L.doneLog)}.replaceAll('{what}', field + ' · ' + appStore.displayOf('${root.slug}', rid)), entity: '${root.slug}', rid: rid, field: field, prev: prevStage);   // «עשיתי» + החזר (השורה חוזרת, השלב חוזר)
       if (r0 != null && rep.isNotEmpty) {   // ↻ רגע חוזר: «סיים» יוצר את הבא לבד (המועד-הבא בשדה שנסגר), עם החזר
         final next = <String, String>{for (final e in r0.entries) if (!e.key.startsWith('__') || e.key == '__repeat' || e.key == '__note') e.key: e.value};
-        next[field] = _iso(nextRepeat(due, rep)); ${lastStage >= 0 ? `next['__stage'] = '0';` : ''}
+        next[field] = _iso(nextRepeat(due0, rep)); ${lastStage >= 0 ? `next['__stage'] = '0';` : ''}
         final nid = appStore.add('${root.slug}', next);
         appStore.logAction('add', ${k(L.repeatLog)}.replaceAll('{title}', appStore.displayOf('${root.slug}', nid) + ' · ' + next[field]!), entity: '${root.slug}', rid: nid);
       }
@@ -210,10 +211,10 @@ class ${cls}Today {
     else if (a == ${k(L.actSnooze)}) { final r = appStore.byId('${root.slug}', rid); if (r != null) { final prev = r[field] ?? ''; appStore.update('${root.slug}', rid, {field: _iso(_shift(due.add(const Duration(days: 1)), false))}); /* «דחה למחר» לא נוחת בשבת (אותו _shift של תזכורת-רכה) */ appStore.logAction('auto', ${k(L.actSnooze)} + ' · ' + field, entity: '${root.slug}', rid: rid, field: field, prev: prev); } }   // נגיעה-ידנית (P5) — נרשמת עם החזר
     else if (a == ${k(L.actSnoozeWeek)}) { final r = appStore.byId('${root.slug}', rid); if (r != null) { final prev = r[field] ?? ''; appStore.update('${root.slug}', rid, {field: _iso(_shift(due.add(const Duration(days: 7)), false))}); appStore.logAction('auto', ${k(L.actSnoozeWeek)} + ' · ' + field, entity: '${root.slug}', rid: rid, field: field, prev: prev); } }   /* «דחה לשבוע» — נגיעה-ידנית עם החזר, לא בשבת */
     else if (a == ${k(L.actCal)}) {   // «ליומן»: עם שעה ⇒ אירוע בשעתו (אורך = בלוק-ההגדרה); בלי ⇒ יום-שלם
-      final r = appStore.byId('${root.slug}', rid); final tm = r == null ? '' : _timeOf(r); final d = _iso(due).replaceAll('-', '');
+      final r = appStore.byId('${root.slug}', rid); final tm = r == null ? '' : _timeOf(r); final d = _iso(due0).replaceAll('-', '');
       String z(DateTime x) => x.toIso8601String().substring(0, 16).replaceAll(RegExp(r'[-:]'), '') + '00';
       final block = (int.tryParse(appStore.setting('blockMin', '30')) ?? 30).clamp(5, 240);
-      final dates = tm.isEmpty ? d + '/' + d : () { final a0 = DateTime(due.year, due.month, due.day, int.parse(tm.substring(0, 2)), int.parse(tm.substring(3, 5))); return z(a0) + '/' + z(a0.add(Duration(minutes: block))); }();
+      final dates = tm.isEmpty ? d + '/' + d : () { final a0 = DateTime(due0.year, due0.month, due0.day, int.parse(tm.substring(0, 2)), int.parse(tm.substring(3, 5))); return z(a0) + '/' + z(a0.add(Duration(minutes: block))); }();
       launchUrl(Uri.parse('https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + Uri.encodeComponent(field + ' · ' + appStore.displayOf('${root.slug}', rid)) + '&dates=' + dates), mode: LaunchMode.externalApplication);
     }
     else if (a == ${k(L.callLabel)}) { final r = appStore.byId('${root.slug}', rid); final ph = r == null ? '' : _phoneOf(r); if (ph.isNotEmpty) launchUrl(Uri.parse('tel:' + ph), mode: LaunchMode.externalApplication); }
