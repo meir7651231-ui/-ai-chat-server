@@ -181,6 +181,11 @@ if (!/bool balaganBackupDue\(int records, int age\)/.test(home) || !/balaganPers
 if (!/setSetting\('backupAt'/.test(keys)) fails.push('«חיבורים» בלי חותמת-גיבוי');
 if (!/late String _q = widget\.initialQuery/.test(topics)) fails.push('«נושאים» בלי initialQuery');
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganBackupDue\(10, 30\)/.test(ft)) fails.push('בדיקת גיבוי חסרה'); }
+// גל ב׳-לז · תזכורות-מרוכזות: remPending בכל מודול · rem=false · כרטיס-אחד ב«היום» · החזר-מרוכז ב-DS
+for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (!/static List<DsTodayItem> remPending\(DateTime today\)/.test(h) || !/bool rem = true\}/.test(h) || !/if \(rem\) for \(final f in _dates\)/.test(h)) { fails.push(`${m.ns}: בלי remPending / rem`); break; } }
+if (!/final groupRem = rems\.length > 3;/.test(home) || !/rem: !groupRem\)/.test(home) || !/prev: remKeys\.skip\(1\)\.join\(','\)/.test(home)) fails.push('«היום» בלי תזכורות-מרוכזות');
+{ const st = rd(path.join(R.ROOT, 'new/dart-ui-bs/ds/ds_store.dart')); if (!/for \(final k in \(e\['prev'\] \?\? ''\)\.split\(','\)\) \{ if \(k\.isNotEmpty\) _decided\.remove\(k\); \}/.test(st)) fails.push('AppStore בלי החזר-מרוכז'); }
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/\.remPending\(today\)/.test(ft)) fails.push('בדיקת תזכורות-מרוכזות חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);

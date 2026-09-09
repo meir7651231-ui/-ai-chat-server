@@ -623,6 +623,19 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
     expect(balaganBackupDue(3, -1), isFalse); expect(balaganBackupDue(10, -1), isTrue);
     expect(balaganBackupDue(10, 29), isFalse); expect(balaganBackupDue(10, 30), isTrue);
   });
+  test('תזכורות-מרוכזות: מועדים קרובים בלי הכרעה נמנים · שהוכרע יוצא · החזר-מרוכז מוחק את כל ההכרעות', () {
+    const S = '${baseMod.root.slug}'; const F = ${dq(baseMod.root.fields.find((f) => f.type === 'date').label)};
+    final ids = [for (var i = 1; i <= 4; i++) appStore.add(S, {${dq(baseMod.root.descField || baseMod.root.fields[0].label)}: 'תזכורת \$i', F: '2026-09-1\$i'})];
+    expect(ids.every((id) => ${baseTodayCls}.remPending(today).any((x) => x.rid == id)), isTrue);
+    appStore.decide('rem:' + ids[0] + ':' + F, 'ok');
+    expect(${baseTodayCls}.remPending(today).any((x) => x.rid == ids[0]), isFalse);
+    final keys = [for (final id in ids.skip(1)) 'rem:' + id + ':' + F];
+    for (final k in keys) { appStore.decide(k, 'ok'); }
+    final lid = appStore.logAction('decide', 'תזכורות', field: keys.first, prev: keys.skip(1).join(','));
+    expect(appStore.undo(lid), isTrue);
+    expect(keys.every((k) => appStore.decision(k).isEmpty), isTrue);
+    expect(ids.skip(1).every((id) => ${baseTodayCls}.remPending(today).any((x) => x.rid == id)), isTrue);
+  });
   test('פיצול שורה לכמה רגעים', () {
     expect(balaganSplit('שילמתי ארנונה. מחר תור לרופא ב-9:00'), ['שילמתי ארנונה', 'מחר תור לרופא ב-9:00']);
     expect(balaganSplit('מסרתי מפתח ב-1.8.2026 והמשכיר מקזז 6,200'), ['מסרתי מפתח ב-1.8.2026 והמשכיר מקזז 6,200']);
@@ -659,9 +672,9 @@ import 'package:url_launcher/url_launcher.dart';
 typedef _Items = List<DsTodayItem> Function(DateTime today, {required int dayDelta});
 typedef _Props = List<Widget> Function(BuildContext context, DateTime today);
 typedef _Card = Widget Function(BuildContext context, Map<String, String> r);
-typedef _Props2 = List<Widget> Function(BuildContext context, DateTime today, {bool chain});
+typedef _Props2 = List<Widget> Function(BuildContext context, DateTime today, {bool chain, bool rem});
 typedef _Undated = List<DsTodayItem> Function(DateTime today);
-class _Mod { const _Mod(this.name, this.open, this.items, this.proposals, this.card, this.autopilot, this.done, this.undated, this.stale, this.index); final String name; final List<Map<String, String>> Function() open; final _Items items; final _Props2 proposals; final _Card card; final void Function() autopilot; final List<Map<String, String>> Function() done; final _Undated undated; final _Undated stale; final int index; }
+class _Mod { const _Mod(this.name, this.open, this.items, this.proposals, this.card, this.autopilot, this.done, this.undated, this.stale, this.remPending, this.index); final String name; final List<Map<String, String>> Function() open; final _Items items; final _Props2 proposals; final _Card card; final void Function() autopilot; final List<Map<String, String>> Function() done; final _Undated undated; final _Undated stale; final _Undated remPending; final int index; }
 
 /// «שתף את היום»: טקסט קריא של באיחור/היום (עם שעות) — נגזרת של אותן שורות; ללוח + wa.me (הנמען נבחר בוואטסאפ)
 String balaganDayText(List<DsTodayItem> overdue, List<DsTodayItem> todayItems, DateTime today, {double money = 0}) {
@@ -697,7 +710,7 @@ class ${cls} extends StatefulWidget {
 
 class _${cls}State extends State<${cls}> {
   static const _mods = <_Mod>[
-${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${todayCls(m)}.items, ${todayCls(m)}.proposals, ${todayCls(m)}.card, ${todayCls(m)}.autopilot, ${todayCls(m)}.done, ${todayCls(m)}.undated, ${todayCls(m)}.stale, ${i}),`).join('\n')}
+${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${todayCls(m)}.items, ${todayCls(m)}.proposals, ${todayCls(m)}.card, ${todayCls(m)}.autopilot, ${todayCls(m)}.done, ${todayCls(m)}.undated, ${todayCls(m)}.stale, ${todayCls(m)}.remPending, ${i}),`).join('\n')}
   ];
   static DateTime _day(DateTime d) => DateTime(d.year, d.month, d.day);
   static String _iso(DateTime d) => d.toIso8601String().substring(0, 10);
@@ -814,7 +827,11 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
     final tomorrow = <DsTodayItem>[for (final m in _mods) ...m.items(today, dayDelta: 1)]..sort((a, b) => a.due.compareTo(b.due));
     final dayNames = ${k(L.dayNames)}.split(',');
     final soon = <List<dynamic>>[for (var d = 2; d <= 7; d++) for (final m in _mods) for (final it in m.items(today, dayDelta: d)) [d, it]];   // השבוע הקרוב: ימים 2–7, לפי יום ⇒ הוא רואה מה בא, לא רק מחר
-    final pending = <Widget>[..._inbox(context), ..._chain(context), for (final m in _mods) ...m.proposals(context, today, chain: false)];
+    // ב׳-לז · תזכורות-מרוכזות: יותר מ-3 מועדים קרובים בלי הכרעה ⇒ כרטיס אחד לכולם (הכרעה אחת · יומן אחד · החזר אחד) במקום n כרטיסים שמציפים את «ממתין» ואת מד-העומס
+    final rems = <DsTodayItem>[for (final m in _mods) ...m.remPending(today)]; final groupRem = rems.length > 3;
+    final remKeys = [for (final r in rems) 'rem:' + r.rid + ':' + r.field]; final remDays = appStore.setting('offsets', '3,1,0').split(',').map((x) => '−' + x.trim()).join('/');
+    void remAll(String v) { for (final k in remKeys) appStore.decide(k, v); appStore.logAction('decide', ${k(L.remManyDid)}.replaceAll('{n}', remKeys.length.toString()), field: remKeys.first, prev: remKeys.skip(1).join(',')); }
+    final pending = <Widget>[..._inbox(context), ..._chain(context), if (groupRem) DsApproveCard(question: ${k(L.remAskMany)}.replaceAll('{n}', rems.length.toString()).replaceAll('{days}', remDays), source: ${k(L.remManySrc)}, okLabel: ${k(L.actOk)}, noLabel: ${k(L.actNo)}, alwaysLabel: ${k(L.actAlways)}, onOk: () => remAll('ok'), onNo: () => remAll('no'), onAlways: () { appStore.setSetting('always:rem', '1'); remAll('ok'); }), for (final m in _mods) ...m.proposals(context, today, chain: false, rem: !groupRem)];
     final undated = <DsTodayItem>[for (final m in _mods) ...m.undated(today)];
     final stale = <DsTodayItem>[for (final m in _mods) for (final it in m.stale(today)) if (!_standing.contains(it.rid)) it];   // ב׳-ל · נשכחים: תיק פתוח ש«היום» הפסיק לדבר עליו — לא נעלם; מי שכבר ב«לסגור?» לא מוכפל
     final money = balaganMoney([...overdue, ...todayItems]); final moneyTm = balaganMoney(tomorrow); final moneyWk = balaganMoney([for (final x in soon) x[1] as DsTodayItem]);   // ב׳-כט · כסף-במבט: כמה כסף עומד היום/מחר — מהשורות עצמן   // ב׳-כח · תיקים בלי מועד: לא נעלמים — מקופלים עם «קבע למחר / לשבוע / התעלם»
