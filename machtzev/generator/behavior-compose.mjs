@@ -116,6 +116,15 @@ String bhHebInputIso(String dayTok, String monthHe, String todayIso) { final d =
 String bhHebNextYear(String iso) { final p = ${N('heb.partsOfIso')}(iso); final d = (p['day'] as num).toInt(), y = (p['year'] as num).toInt(); final m = p['month'] as String; return ${N('heb.toIsoEn')}(d, m, y + 1) ?? ${N('heb.toIsoEn')}(d - 1, m, y + 1) ?? bhPlusDays(iso, 354); }
 /// ב׳-קנז · טלפון לתצוגה «050-123-4567» (${N('phone.format')})
 String bhPhoneFmt(String? ph) { final s = (ph ?? '').trim(); return s.isEmpty ? '' : ${N('phone.format')}(s); }
+/// ב׳-קנט · השכיח (${N('stat.mode')}); ריק ⇒ 0
+double bhMode(List<num> xs) => xs.isEmpty ? 0 : ${N('stat.mode')}(xs).toDouble();
+/// ב׳-קס · חודשים מאז (${N('iso.monthsAgo')})
+int bhMonthsAgo(String iso, String todayIso) { final n = ${N('iso.monthsAgo')}(iso, todayIso); return n >= 999 ? 0 : n; }
+/// ב׳-קסא · גודל-טקסט: הגדרה ⇒ 0.8..1.6 (${N('a11y.clamp')}) · צעד ±0.1 (${N('a11y.step')})
+double bhTextScale(String setting) => ${N('a11y.clamp')}(double.tryParse(setting), 0.8, 1.6).toDouble();
+double bhTextScaleStep(double cur, int dir) => ${N('a11y.step')}(cur, dir, (v) => ${N('a11y.clamp')}(v, 0.8, 1.6), 0.1).toDouble();
+/// ב׳-קסב · יום-בחודש לחיוב חודשי (${N('iso.monthDay')}; 29–31 ⇒ 28)
+int bhMonthDay(String iso) => ${N('iso.monthDay')}(iso).toInt();
 /// מפרידי-אלפים בלי ₪ (${N('money.fmt')})
 String bhThousands(num v) => ${N('money.fmt')}(v).replaceFirst('₪', '');
 `;
@@ -167,6 +176,8 @@ void main() {
   test('G38 · סכום-לפי · חציון · רצף-ימים', () {
     expect(bhSumBy([{'t': 'דירה', 'n': '8,000'}, {'t': 'דירה', 'n': '3000'}, {'t': 'משימות', 'n': '1,250'}], 't', 'n'), [['דירה', 2, 11000.0], ['משימות', 1, 1250.0]]);
     expect(bhMedianInt([7, 1, 4]), 4); expect(bhMedianInt([]), 0); expect(bhMedianInt([2, 9]), 9);
+    expect(bhMode([350, 350, 400]), 350); expect(bhMode([]), 0); expect(bhMonthsAgo('2026-06-08', '2026-09-08'), 3); expect(bhMonthsAgo('', '2026-09-08'), 0);
+    expect(bhTextScale('1.9'), 1.6); expect(bhTextScale(''), 1.0); expect(bhTextScaleStep(1.0, 1), 1.1); expect(bhTextScaleStep(0.8, -1), 0.8); expect(bhMonthDay('2026-09-15'), 15); expect(bhMonthDay('2026-09-31'), 28);
     expect(bhHolidayOn('2026-04-02'), 'פסח'); expect(bhHolidayOn('2026-08-24'), ''); expect(bhHolidaysAhead('2026-09-08', 10).any((h) => h['iso'] == '2026-09-12'), isTrue);
     expect(bhGemToNum('ט״ו'), 15); expect(bhGemToNum('כ״ט'), 29); expect(bhGemToNum('א׳'), 1); expect(bhGemToNum('15'), 15); expect(bhGemToNum('שלום'), 376); expect(bhGemToNum('x'), 0);
     expect(bhHebInputIso('ט״ו', 'אלול', '2026-08-01'), '2026-08-28'); expect(bhHebInputIso('ל', 'אלול', '2026-08-01'), ''); expect(bhHebNextYear('2026-08-28'), '2027-09-17');   // ט״ו אלול תשפ״ז — הקופסה סורקת את הלוח, לא ניחוש

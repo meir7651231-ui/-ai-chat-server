@@ -4146,6 +4146,377 @@
    }
   }
  },
+ "stat.mode": {
+  "shape": "חיפוש",
+  "pick": "modeOf",
+  "file": "dart-boxes/lib-nedarim-sync.dart",
+  "score": 2,
+  "proven": true,
+  "candidates": 20,
+  "top3": [
+   "modeOf:3/3✓:2",
+   "setAllowedPurposes:0/3:15.55",
+   "donateUrl:0/3:0"
+  ],
+  "proof": {
+   "donateUrl": {
+    "ok": 0,
+    "total": 3
+   },
+   "expand": {
+    "ok": 0,
+    "total": 3
+   },
+   "langs": {
+    "ok": 0,
+    "total": 3
+   },
+   "modeOf": {
+    "ok": 3,
+    "total": 3
+   },
+   "monthLabel": {
+    "ok": 0,
+    "total": 3
+   },
+   "palette": {
+    "ok": 0,
+    "total": 3
+   },
+   "popCall": {
+    "ok": 0,
+    "total": 3
+   },
+   "sessionsOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "setAllowedPurposes": {
+    "ok": 0,
+    "total": 3
+   },
+   "siteDonateUrl": {
+    "ok": 0,
+    "total": 3
+   },
+   "sortSupportMsgs": {
+    "ok": 0,
+    "total": 3
+   },
+   "sortSupportThreads": {
+    "ok": 0,
+    "total": 3
+   },
+   "stripAuditMeta": {
+    "ok": 0,
+    "total": 3
+   },
+   "stripSupKey": {
+    "ok": 0,
+    "total": 3
+   },
+   "supCount": {
+    "ok": 0,
+    "total": 3
+   },
+   "supIls": {
+    "ok": 0,
+    "total": 3
+   },
+   "supUsd": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportMsgTime": {
+    "ok": 0,
+    "total": 3
+   },
+   "timeToMin": {
+    "ok": 0,
+    "total": 3
+   },
+   "waDigits": {
+    "ok": 0,
+    "total": 3
+   }
+  }
+ },
+ "iso.monthsAgo": {
+  "shape": "מועד",
+  "pick": "monthsAgo",
+  "file": "dart-boxes/lib-nedarim-sync.dart",
+  "score": 3,
+  "proven": true,
+  "candidates": 24,
+  "top3": [
+   "monthsAgo:3/3✓:3",
+   "levenshtein:0/3:11.31",
+   "minutesBetweenIso:0/3:11.31"
+  ],
+  "proof": {
+   "coursesOfTeacher": {
+    "ok": 0,
+    "total": 3
+   },
+   "damerauLevenshtein": {
+    "ok": 0,
+    "total": 3
+   },
+   "enrollCount": {
+    "ok": 0,
+    "total": 3
+   },
+   "levenshtein": {
+    "ok": 0,
+    "total": 3
+   },
+   "minutesBetweenIso": {
+    "ok": 0,
+    "total": 3
+   },
+   "monthsAgo": {
+    "ok": 3,
+    "total": 3
+   },
+   "ruleContains": {
+    "ok": 0,
+    "total": 3
+   },
+   "rulePrefix": {
+    "ok": 0,
+    "total": 3
+   },
+   "sanitizeSupportText": {
+    "ok": 0,
+    "total": 3
+   },
+   "score": {
+    "ok": 0,
+    "total": 3
+   },
+   "segulaReminders": {
+    "ok": 0,
+    "total": 3
+   },
+   "sheetSummary": {
+    "ok": 0,
+    "total": 3
+   },
+   "siteLangs": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportPreview": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportUnread": {
+    "ok": 0,
+    "total": 3
+   },
+   "teacherIdOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "toCsv": {
+    "ok": 0,
+    "total": 3
+   },
+   "toTenantId": {
+    "ok": 0,
+    "total": 3
+   },
+   "ui": {
+    "ok": 0,
+    "total": 3
+   },
+   "undoLast": {
+    "ok": 0,
+    "total": 3
+   },
+   "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 3
+   },
+   "vocab": {
+    "ok": 0,
+    "total": 3
+   },
+   "waitlistFor": {
+    "ok": 0,
+    "total": 3
+   },
+   "wheelIndexUnderPointer": {
+    "ok": 0,
+    "total": 3
+   }
+  }
+ },
+ "a11y.clamp": {
+  "shape": "תצוגה",
+  "pick": "clampScale",
+  "file": "dart-maor/clamp-scale.dart",
+  "score": 68.43,
+  "proven": true,
+  "candidates": 5,
+  "top3": [
+   "clampScale:3/3✓:68.43",
+   "termOf:1/3:0",
+   "tourAdvance:0/3:1"
+  ],
+  "proof": {
+   "clampScale": {
+    "ok": 3,
+    "total": 3
+   },
+   "strongMatchForCharge": {
+    "ok": 0,
+    "total": 3
+   },
+   "termOf": {
+    "ok": 1,
+    "total": 3
+   },
+   "tourAdvance": {
+    "ok": 0,
+    "total": 3
+   },
+   "waLink": {
+    "ok": 0,
+    "total": 3
+   }
+  }
+ },
+ "a11y.step": {
+  "shape": "תצוגה",
+  "pick": "stepScale",
+  "file": "dart-maor/step-scale.dart",
+  "score": 105.34,
+  "proven": true,
+  "candidates": 5,
+  "top3": [
+   "stepScale:2/2✓:105.34",
+   "search:0/2:0",
+   "spotlightBox:0/2:0"
+  ],
+  "proof": {
+   "search": {
+    "ok": 0,
+    "total": 2
+   },
+   "spotlightBox": {
+    "ok": 0,
+    "total": 2
+   },
+   "stepScale": {
+    "ok": 2,
+    "total": 2
+   },
+   "supAvgDon": {
+    "ok": 0,
+    "total": 2
+   },
+   "supDupFieldValue": {
+    "ok": 0,
+    "total": 2
+   }
+  }
+ },
+ "iso.monthDay": {
+  "shape": "מועד",
+  "pick": "hokDayFromDate",
+  "file": "dart-boxes/lib-nedarim-sync.dart",
+  "score": 2,
+  "proven": true,
+  "candidates": 20,
+  "top3": [
+   "hokDayFromDate:3/3✓:2",
+   "monthLabel:0/3:7.84",
+   "supportMsgTime:0/3:3.82"
+  ],
+  "proof": {
+   "donateUrl": {
+    "ok": 0,
+    "total": 3
+   },
+   "expand": {
+    "ok": 0,
+    "total": 3
+   },
+   "hokDayFromDate": {
+    "ok": 3,
+    "total": 3
+   },
+   "langs": {
+    "ok": 0,
+    "total": 3
+   },
+   "monthLabel": {
+    "ok": 0,
+    "total": 3
+   },
+   "palette": {
+    "ok": 0,
+    "total": 3
+   },
+   "popCall": {
+    "ok": 0,
+    "total": 3
+   },
+   "sessionsOf": {
+    "ok": 0,
+    "total": 3
+   },
+   "setAllowedPurposes": {
+    "ok": 0,
+    "total": 3
+   },
+   "siteDonateUrl": {
+    "ok": 0,
+    "total": 3
+   },
+   "sortSupportMsgs": {
+    "ok": 0,
+    "total": 3
+   },
+   "sortSupportThreads": {
+    "ok": 0,
+    "total": 3
+   },
+   "stripAuditMeta": {
+    "ok": 0,
+    "total": 3
+   },
+   "stripSupKey": {
+    "ok": 0,
+    "total": 3
+   },
+   "supCount": {
+    "ok": 0,
+    "total": 3
+   },
+   "supIls": {
+    "ok": 0,
+    "total": 3
+   },
+   "supUsd": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportMsgTime": {
+    "ok": 0,
+    "total": 3
+   },
+   "timeToMin": {
+    "ok": 0,
+    "total": 3
+   },
+   "waDigits": {
+    "ok": 0,
+    "total": 3
+   }
+  }
+ },
  "heb.gemYear": {
   "shape": "מועד",
   "pick": "gemYear",

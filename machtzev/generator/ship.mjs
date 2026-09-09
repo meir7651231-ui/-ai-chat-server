@@ -117,7 +117,7 @@ if (!flag('--no-commit')) {
   const trailer = `\n\n${AUTHOR}${SESSION ? '\nClaude-Session: ' + SESSION : ''}`;
   // buildsmart — רק מה שהמחולל/המראה כותבים (L74-ז: לא add -A)
   const genTests = fs.readdirSync(path.join(APP, 'test')).filter((f) => /^genesis_.*_test\.dart$/.test(f)).map((f) => 'app_flutter/test/' + f);
-  run('git', ['add', 'app_flutter/lib/genesis/dart-forge-bs', 'app_flutter/lib/genesis/dart-gen-bs', 'app_flutter/lib/genesis/dart-ui-bs', 'app_flutter/lib/genesis/dart-data-bs/auto', 'app_flutter/lib/genesis/dart-maor', 'app_flutter/pubspec.yaml', 'app_flutter/assets/fonts', ...genTests], BS, { quiet: true, allowFail: true });
+  run('git', ['add', 'app_flutter/lib/genesis/dart-forge-bs', 'app_flutter/lib/genesis/dart-gen-bs', 'app_flutter/lib/genesis/dart-ui-bs', 'app_flutter/lib/genesis/dart-boxes', 'app_flutter/lib/genesis/dart-data-bs/auto', 'app_flutter/lib/genesis/dart-maor', 'app_flutter/pubspec.yaml', 'app_flutter/assets/fonts', ...genTests], BS, { quiet: true, allowFail: true });
   let bsCommitted = false;
   if (run('git', ['diff', '--cached', '--name-only'], BS, { quiet: true }).stdout.trim()) { log('commit · buildsmart'); commitWith(BS, `genesis-mirror · ${MSG}${trailer}`); bsCommitted = true; } else log('commit · buildsmart ללא שינוי');
   // genesis — pins ⇒ add -A ⇒ Allow trailers לקבצים נעולים (CLAUDE.md=הכרעה-24 · אחרים=--lesson)
