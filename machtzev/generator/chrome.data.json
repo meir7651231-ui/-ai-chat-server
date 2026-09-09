@@ -327,5 +327,8 @@
  "shareDayFooter": "ועוד: {n} בלי מועד · {m} נשכחים",
  "openDay": "מה יש ב{day}?",
  "weekDone": "סיימת {n}",
- "dupLabel": "עוד אחד כזה"
+ "dupLabel": "עוד אחד כזה",
+ "saveAgain": "שמור ועוד אחד",
+ "yesterdayAsk": "מה עשיתי אתמול?",
+ "dayLog": "מה קרה ביום הזה"
 }

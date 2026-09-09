@@ -250,6 +250,9 @@ if (!/la\.compareTo\(last\) > 0\) last = la;/.test(topics)) fails.push('כרטי
 if (!/if \(it != null && i == 0\) \{ it\.act\(0\); return; \}/.test(home) || !/items\.length\.toString\(\)\), subtitle:/.test(home)) fails.push('«היום»: תוכנית בלי סיים / מסך-יום בלי מונה');
 { const cf = rd(path.join(GEN, 'gen_balagan_confirm.dart')); if (!/f\.label == m\.personFields\.first\)\);/.test(cf)) fails.push('טופס בלי האדם על השולחן'); }
 for (const m of mods.filter((x) => x.root.fields.some((f) => f.type === 'date'))) { const rp = rd(path.join(GEN, `gen_${m.rootPage.slug}.dart`)); if (/wa\.me\/\?text=/.test(rp) && !/contains\(e\.key\) \? _fmtDate\(e\.value\)/.test(rp)) { fails.push(`${m.ns}: שיתוף עם ISO`); break; } }
+// גלים ב׳-עח..פא · «שמור ועוד אחד» · מחר לפי שעה · «מה עשיתי אתמול?» · יום-שעבר = היומן
+{ const cf = rd(path.join(GEN, 'gen_balagan_confirm.dart')); if (!/_save\(\{bool again = false\}\)/.test(cf) || !/_save\(again: true\)/.test(cf)) fails.push('טופס בלי «שמור ועוד אחד»'); }
+if (!/const BalaganDay\(delta: -1\)/.test(home) || !/if \(delta < 0\) for \(final past in/.test(home)) fails.push('«היום»: בלי אתמול / יומן-של-יום');
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);
