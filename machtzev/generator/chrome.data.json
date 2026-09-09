@@ -274,5 +274,9 @@
  "voiceNone": "לא שמעתי. נסה שוב, או כתוב.",
  "voiceUnsupported": "הדפדפן הזה בלי זיהוי-דיבור. כתוב או הדבק.",
  "shareLabel": "שתף",
- "editLabel": "ערוך"
+ "editLabel": "ערוך",
+ "deleteLabel": "מחק",
+ "delLog": "🗑 נמחק: {who}",
+ "noteAddHint": "מה קרה מאז? כתוב ו-Enter",
+ "noteAddLog": "הערה נוספה: {who}"
 }

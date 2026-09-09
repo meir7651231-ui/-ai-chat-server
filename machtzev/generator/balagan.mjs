@@ -421,6 +421,7 @@ Map<String, String> balaganFacts(String text0, BalaganModule m, {DateTime? today
     const code = `// 🧭 חולל ע"י balagan (G33 ב׳-ה · הכרעה-29) — הוכחת-עובדות: תאריכים-יחסיים בעברית · צורות-סכום · קרבה-למילת-השדה. היום מוזרק ⇒ דטרמיניסטי. אל תערוך ידנית.
 import 'package:buildsmart/genesis/dart-gen-bs/gen_balagan_moments.dart';
 import 'package:buildsmart/genesis/dart-gen-bs/gen_${baseMod.home.slug}.dart' show ${baseTodayCls};
+import 'dart:convert';
 import 'package:buildsmart/genesis/dart-ui-bs/ds/ds_store.dart';
 import 'package:buildsmart/genesis/dart-ui-bs/ds/ds.dart';
 import 'package:buildsmart/genesis/dart-gen-bs/gen_balagan_home.dart';
@@ -518,6 +519,15 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
     expect(balaganWaSender('8.9.26, 16:30 - רות לוי: שלום'), 'רות לוי');
     expect(balaganWaSender('מחר ב-9:00'), '');
     expect(balaganSplit('[8.9.2026, 16:30] דני: מחר אצל הרופא\\n[8.9.2026, 16:31] דני: ok').length, 1);
+  });
+  test('מחיקה עם החזר: הרשומה חוזרת כמו שהייתה', () {
+    final st = AppStore();
+    final id = st.add('d_ent', {'מה': 'x', 'טלפון': '05', '__stage': '1'});
+    final snap = Map<String, String>.from(st.byId('d_ent', id)!);
+    st.removeById('d_ent', id); expect(st.byId('d_ent', id), isNull);
+    final lid = st.logAction('del', 'נמחק', entity: 'd_ent', rid: id, prev: jsonEncode(snap));
+    expect(st.undo(lid), isTrue);
+    expect(st.byId('d_ent', id)!['טלפון'], '05'); expect(st.byId('d_ent', id)!['__stage'], '1');
   });
   test('פיצול שורה לכמה רגעים', () {
     expect(balaganSplit('שילמתי ארנונה. מחר תור לרופא ב-9:00'), ['שילמתי ארנונה', 'מחר תור לרופא ב-9:00']);
@@ -695,7 +705,7 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
     final cardRows = <List<dynamic>>[for (final m in _mods) for (final r in m.open()) [dueOf[m.name + '|' + (r['__id'] ?? '')], r['__at'] ?? '', m.card(context, r)]];
     cardRows.sort((a, b) { final da = a[0] as DateTime?, db = b[0] as DateTime?; if (da != null && db != null) { final c = da.compareTo(db); if (c != 0) return c; } else if (da != null) { return -1; } else if (db != null) { return 1; } return (b[1] as String).compareTo(a[1] as String); });
     final cards = <Widget>[for (final x in cardRows) x[2] as Widget];
-    final did = appStore.log.where((e) => (e['kind'] == 'decide' || e['kind'] == 'auto' || e['kind'] == 'next' || e['kind'] == 'add' || e['kind'] == 'done') && e['undone'] != '1').take(5).toList();
+    final did = appStore.log.where((e) => (e['kind'] == 'decide' || e['kind'] == 'auto' || e['kind'] == 'next' || e['kind'] == 'add' || e['kind'] == 'done' || e['kind'] == 'del' || e['kind'] == 'merge') && e['undone'] != '1').take(5).toList();
     // «השבוע» — שמירת-זמן (§המוצר): נגזרת של היומן מיום-ראשון; הדקות-לפעולה = הגדרה עריכה, לא טענה
     final weekStart = today.subtract(Duration(days: today.weekday % 7));
     final wk = appStore.log.where((e) => e['undone'] != '1' && !(DateTime.tryParse(e['at'] ?? '') ?? DateTime(2000)).isBefore(weekStart)).toList();
@@ -713,7 +723,7 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
     // הפעולה האחרונה (עד 90 שניות) עם «החזר» — «סיים» מעלים שורה, וההחזר צריך להיות איפה שהעין
     final lastAct = appStore.log.isNotEmpty ? appStore.log.first : null;
     final lastAt = lastAct == null ? null : DateTime.tryParse(lastAct['at'] ?? '');
-    final showUndo = lastAct != null && lastAt != null && lastAct['undone'] != '1' && DateTime.now().difference(lastAt).inSeconds <= 90 && (lastAct['kind'] == 'done' || lastAct['kind'] == 'auto' || lastAct['kind'] == 'add' || lastAct['kind'] == 'merge');
+    final showUndo = lastAct != null && lastAt != null && lastAct['undone'] != '1' && DateTime.now().difference(lastAt).inSeconds <= 90 && (lastAct['kind'] == 'done' || lastAct['kind'] == 'auto' || lastAct['kind'] == 'add' || lastAct['kind'] == 'merge' || lastAct['kind'] == 'del');
     final hardToday = todayItems.where((x) => x.hard && x.due == today).length;
     final plan = _plan(today, overdue, todayItems);
     WidgetsBinding.instance.addPostFrameCallback((_) { _digest(lead, hardToday); });

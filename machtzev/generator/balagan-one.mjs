@@ -136,6 +136,10 @@ if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/בבוקר/.test
 for (const m of mods) { const rp = rd(path.join(GEN, `gen_${m.rootPage.slug}.dart`)); const ent = rd(path.join(GEN, `gen_${m.root.slug}.dart`)); if (!/\(editId: id\)/.test(rp) || !/this\.editId/.test(ent)) { fails.push(`${m.ns}: תיק בלי «ערוך» / מסך-ישות בלי editId`); break; } }
 if (!/בעוד\\s\+\(שעה\|שעתיים/.test(moments) && !/'שעתיים'/.test(moments)) fails.push('balaganTimes בלי «בעוד שעה»');
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/בעוד שעה/.test(ft)) fails.push('בדיקת «בעוד שעה» חסרה'); }
+// גל ב׳-כה · «מחק» עם החזר · «מה קרה מאז?» (הערה מתוארכת) בתיק
+for (const m of mods) { const rp = rd(path.join(GEN, `gen_${m.rootPage.slug}.dart`)); if (!/logAction\('del'/.test(rp) || !/'__note': \(prev\.isEmpty/.test(rp)) { fails.push(`${m.ns}: תיק בלי «מחק»-עם-החזר / הוספת-הערה`); break; } }
+{ const st = rd(path.join(R.ROOT, 'new/dart-ui-bs/ds/ds_store.dart')); if (!/void restore\(String entity/.test(st) || !/== 'del'\)/.test(st)) fails.push('AppStore בלי restore / undo del'); }
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/logAction\('del'/.test(ft)) fails.push('בדיקת מחיקה-עם-החזר חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);
