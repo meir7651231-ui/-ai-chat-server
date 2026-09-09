@@ -842,7 +842,7 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
     for (final r in rows) {
       final a = r[0] as DateTime, e = r[1] as DateTime; final it = r[2] as DsTodayItem?;
       final title = it == null ? ${k(L.planFocus)} : it.title;
-      out.add(DsActionRow(title: ${k(L.planBlock)}.replaceAll('{time}', hm(a)).replaceAll('{title}', title), sub: it == null ? '' : it.module, onOpen: it == null ? null : () => _openItem(context, it), actions: [${k(L.planCal)}], onAct: (_) => launchUrl(Uri.parse(cal(a, e, title)), mode: LaunchMode.externalApplication)));
+      out.add(DsActionRow(title: ${k(L.planBlock)}.replaceAll('{time}', hm(a)).replaceAll('{title}', title), sub: it == null ? '' : it.module, onOpen: it == null ? null : () => _openItem(context, it), actions: it == null ? [${k(L.planCal)}] : [${k(L.actDone)}, ${k(L.planCal)}], onAct: (i) { if (it != null && i == 0) { it.act(0); return; } launchUrl(Uri.parse(cal(a, e, title)), mode: LaunchMode.externalApplication); }));   /* ב׳-עג · «סיים» גם מהתוכנית */
     }
     return out;
   }
@@ -981,7 +981,7 @@ class BalaganDay extends StatelessWidget {
     final items = <DsTodayItem>[for (final m in _${cls}State._mods) ...m.items(t0, dayDelta: delta)]..sort((a, b) { final ta = a.time.isEmpty ? '99:99' : a.time, tb = b.time.isEmpty ? '99:99' : b.time; return ta.compareTo(tb); });
     final money = balaganMoney(items);
     void open(DsTodayItem it) { final ms = kBalaganModules.where((m) => m.title == it.module); if (ms.isEmpty || it.rid.isEmpty) return; Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => balaganOpenRoot(ms.first.rootSlug, it.rid))); }
-    return DsScaffold(title: balaganDayLabel(t0.add(Duration(days: delta)), t0), subtitle: ${k(L.daySub)}, icon: ${k('')}, children: [
+    return DsScaffold(title: balaganDayLabel(t0.add(Duration(days: delta)), t0) + (items.isEmpty ? '' : ' · ' + items.length.toString()), subtitle: ${k(L.daySub)}, icon: ${k('')}, children: [
       Padding(padding: const EdgeInsets.only(bottom: 10), child: Row(children: [DsChipButton(label: '‹ ' + balaganDayLabel(t0.add(Duration(days: delta - 1)), t0), onTap: () => Navigator.of(context).pushReplacement(MaterialPageRoute<void>(builder: (_) => BalaganDay(delta: delta - 1)))), const SizedBox(width: 8), DsChipButton(label: balaganDayLabel(t0.add(Duration(days: delta + 1)), t0) + ' ›', onTap: () => Navigator.of(context).pushReplacement(MaterialPageRoute<void>(builder: (_) => BalaganDay(delta: delta + 1))))])),   // ב׳-מה · דפדוף: יום קודם / יום הבא
       Padding(padding: const EdgeInsets.only(bottom: 8), child: Row(children: [Expanded(child: DsQuickAdd(hint: ${k(L.dayQuick)}, autofocus: false, onSubmit: (s0) { final s = s0.trim(); if (s.isEmpty) return; final hits = balaganIdentify(s); if (hits.isEmpty) return; final m = hits.first.module; final facts = balaganFacts(s, m); if (m.dateFields.isNotEmpty && !m.dateFields.any((f) => (facts[f] ?? '').trim().isNotEmpty)) { final hard = m.fields.where((f) => f.type == 'date' && f.required); facts[hard.isNotEmpty ? hard.first.label : m.dateFields.first] = _${cls}State._iso(t0.add(Duration(days: delta))); } Navigator.of(context).push<bool>(MaterialPageRoute<bool>(builder: (_) => ${clsOf('balagan_confirm')}(module: m, facts: facts, alternatives: hits.skip(1).map((h) => h.module).toList(), text: s))); })), const SizedBox(width: 8), DsChipButton(label: ${k(L.shareDay)}, onTap: () { final t = balaganDayText(const [], items, t0.add(Duration(days: delta)), money: money); Clipboard.setData(ClipboardData(text: t)); launchUrl(Uri.parse('https://wa.me/?text=' + Uri.encodeComponent(t)), mode: LaunchMode.externalApplication); })])),   // ב׳-מט · רגע ליום הזה: המועד כבר מוכן · ב׳-נא · «שתף» את היום ההוא
       if (items.isEmpty) DsNote(message: ${k(L.dayEmpty)}, label: '', tone: 0),
@@ -1184,6 +1184,7 @@ class _${cls}State extends State<${cls}> {
     final shown = <BalaganField>[]; for (final f in m.fields) { if (widget.facts.containsKey(f.label)) shown.add(f); } for (final f in m.fields) { if (shown.length >= 6) break; if (f.required && !shown.contains(f)) shown.add(f); }
     if (dateF.isNotEmpty && shown.length < 6 && !shown.any((f) => f.label == dateF)) shown.add(m.fields.firstWhere((f) => f.label == dateF));   // ב׳-לא · המועד תמיד על השולחן — בלי מועד התיק נעלם מ«היום»
     if (m.timeFields.isNotEmpty && shown.length < 6 && !shown.any((f) => f.label == m.timeFields.first)) shown.add(m.fields.firstWhere((f) => f.label == m.timeFields.first));   // ב׳-לג · השעה על השולחן (ביומן היא העיקר)
+    if (m.personFields.isNotEmpty && shown.length < 6 && !shown.any((f) => f.label == m.personFields.first)) shown.add(m.fields.firstWhere((f) => f.label == m.personFields.first));   // ב׳-עד · האדם על השולחן (צ׳יפי-אנשים)
     shown.sort((a, b) => m.fields.indexOf(a).compareTo(m.fields.indexOf(b)));
     final rest = m.fields.where((f) => !shown.contains(f)).toList();
     return DsScaffold(title: m.title, subtitle: ${k(L.confirmSub)}, icon: ${k('')}, children: [

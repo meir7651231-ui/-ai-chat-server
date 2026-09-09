@@ -246,6 +246,10 @@ if (!/dd\.first\.end == _q\.trim\(\)\.length/.test(topics)) fails.push('«נוש
 for (const m of mods) { const rp = rd(path.join(GEN, `gen_${m.rootPage.slug}.dart`)); if (!/\(initial: \{for \(final e in r0\.entries\)/.test(rp)) { fails.push(`${m.ns}: תיק בלי «עוד אחד כזה»`); break; } }
 if (!/'₪ ' \+ balaganFmtMoney\(v\)\]\.join\(' · '\),   \/\* ב׳-ע/.test(home) || !/lastAct\['kind'\] == 'next'\)/.test(home)) fails.push('«היום»: עוד בלי ₪ / החזר בלי next');
 if (!/la\.compareTo\(last\) > 0\) last = la;/.test(topics)) fails.push('כרטיס-אדם: נגיעה-אחרונה בלי יומן');
+// גלים ב׳-עג..עו · «סיים» בתוכנית · האדם על השולחן · «מחר · n» · שיתוף-תיק עם תאריכים במילים
+if (!/if \(it != null && i == 0\) \{ it\.act\(0\); return; \}/.test(home) || !/items\.length\.toString\(\)\), subtitle:/.test(home)) fails.push('«היום»: תוכנית בלי סיים / מסך-יום בלי מונה');
+{ const cf = rd(path.join(GEN, 'gen_balagan_confirm.dart')); if (!/f\.label == m\.personFields\.first\)\);/.test(cf)) fails.push('טופס בלי האדם על השולחן'); }
+for (const m of mods.filter((x) => x.root.fields.some((f) => f.type === 'date'))) { const rp = rd(path.join(GEN, `gen_${m.rootPage.slug}.dart`)); if (/wa\.me\/\?text=/.test(rp) && !/contains\(e\.key\) \? _fmtDate\(e\.value\)/.test(rp)) { fails.push(`${m.ns}: שיתוף עם ISO`); break; } }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);
