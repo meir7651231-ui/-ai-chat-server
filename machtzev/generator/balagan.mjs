@@ -659,6 +659,10 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
     expect(balaganDayLabel(DateTime(2027, 10, 3), today), '3.10.2027');
     expect(balaganDayText(const [], const [], today, tomorrow: [DsTodayItem(title: 'ביטוח', sub: '', due: DateTime(2026, 9, 9), hard: false, overdue: false, module: 'משימות', actions: const [], act: (_) {})]).contains('• ביטוח (משימות)'), isTrue);
   });
+  test('היסטי-תזכורת כמו שאומרים: 3,1,0 ⇒ «3 ימים לפני · יום לפני · ביום»', () {
+    expect(balaganOffsetsLabel('3,1,0'), '3 ימים לפני · יום לפני · ביום');
+    expect(balaganOffsetsLabel('7'), '7 ימים לפני');
+  });
   test('פיצול שורה לכמה רגעים', () {
     expect(balaganSplit('שילמתי ארנונה. מחר תור לרופא ב-9:00'), ['שילמתי ארנונה', 'מחר תור לרופא ב-9:00']);
     expect(balaganSplit('מסרתי מפתח ב-1.8.2026 והמשכיר מקזז 6,200'), ['מסרתי מפתח ב-1.8.2026 והמשכיר מקזז 6,200']);
@@ -701,6 +705,8 @@ class _Mod { const _Mod(this.name, this.open, this.items, this.proposals, this.c
 
 /// ב׳-מא · תאריך כמו שאומרים אותו (היום · מחר · אתמול · יום שלישי 8.9 · 15.9 · 3.10.2027) — ל«היום», לשיתוף ולכרטיס-האדם
 String balaganDayLabel(DateTime d, DateTime today) { DateTime day(DateTime x) => DateTime(x.year, x.month, x.day); final n = day(d).difference(day(today)).inDays; if (n == 0) return ${k(L.homeToday)}; if (n == 1) return ${k(L.homeTomorrow)}; if (n == -1) return ${k(L.dayYesterday)}; final dm = '\${d.day}.\${d.month}' + (d.year == today.year ? '' : '.\${d.year}'); return n.abs() <= 6 ? ${k(L.dayPrefix)}.replaceAll('{day}', ${k(L.dayNames)}.split(',')[d.weekday % 7]) + ' ' + dm : dm; }
+/// ב׳-מב · «3 ימים לפני · יום לפני · ביום» — תיאור-ההיסטים כמו שאומרים (ל«בלגן» ולכרטיס-המרוכז)
+String balaganOffsetsLabel(String offsets) => offsets.split(',').map((x) => int.tryParse(x.trim()) ?? 0).map((o) => o == 0 ? ${k(L.offDay)} : o == 1 ? ${k(L.offOne)} : ${k(L.offN)}.replaceAll('{n}', o.toString())).join(' · ');
 /// «שתף את היום»: טקסט קריא של באיחור/היום (עם שעות) — נגזרת של אותן שורות; ללוח + wa.me (הנמען נבחר בוואטסאפ)
 String balaganDayText(List<DsTodayItem> overdue, List<DsTodayItem> todayItems, DateTime today, {double money = 0, List<DsTodayItem> tomorrow = const []}) {
   final b = StringBuffer(${k(L.shareDayTitle)} + ' · ' + ${k(L.dayNames)}.split(',')[today.weekday % 7] + ' ' + today.day.toString() + '.' + today.month.toString() + '\\n');   // ב׳-מא · תאריך כמו שאומרים
@@ -852,11 +858,10 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
     final overdue = all0.where((x) => x.overdue).toList();
     final todayItems = all0.where((x) => !x.overdue).toList()..sort((a, b) { final ta = a.time.isEmpty ? '99:99' : a.time, tb = b.time.isEmpty ? '99:99' : b.time; final c = ta.compareTo(tb); return c != 0 ? c : a.due.compareTo(b.due); });   // עם-שעה לפי השעה, בלי-שעה אחריהם
     final tomorrow = <DsTodayItem>[for (final m in _mods) ...m.items(today, dayDelta: 1)]..sort((a, b) => a.due.compareTo(b.due));
-    final dayNames = ${k(L.dayNames)}.split(',');
     final soon = <List<dynamic>>[for (var d = 2; d <= 7; d++) for (final m in _mods) for (final it in m.items(today, dayDelta: d)) [d, it]];   // השבוע הקרוב: ימים 2–7, לפי יום ⇒ הוא רואה מה בא, לא רק מחר
     // ב׳-לז · תזכורות-מרוכזות: יותר מ-3 מועדים קרובים בלי הכרעה ⇒ כרטיס אחד לכולם (הכרעה אחת · יומן אחד · החזר אחד) במקום n כרטיסים שמציפים את «ממתין» ואת מד-העומס
     final rems = <DsTodayItem>[for (final m in _mods) ...m.remPending(today)]; final groupRem = rems.length > 3;
-    final remKeys = [for (final r in rems) 'rem:' + r.rid + ':' + r.field]; final remDays = appStore.setting('offsets', '3,1,0').split(',').map((x) => '−' + x.trim()).join('/');
+    final remKeys = [for (final r in rems) 'rem:' + r.rid + ':' + r.field]; final remDays = balaganOffsetsLabel(appStore.setting('offsets', '3,1,0'));
     void remAll(String v) { for (final k in remKeys) appStore.decide(k, v); appStore.logAction('decide', ${k(L.remManyDid)}.replaceAll('{n}', remKeys.length.toString()), field: remKeys.first, prev: remKeys.skip(1).join(',')); }
     final pending = <Widget>[..._inbox(context), ..._chain(context), if (groupRem) DsApproveCard(question: ${k(L.remAskMany)}.replaceAll('{n}', rems.length.toString()).replaceAll('{days}', remDays), source: ${k(L.remManySrc)}, okLabel: ${k(L.actOk)}, noLabel: ${k(L.actNo)}, alwaysLabel: ${k(L.actAlways)}, onOk: () => remAll('ok'), onNo: () => remAll('no'), onAlways: () { appStore.setSetting('always:rem', '1'); remAll('ok'); }), for (final m in _mods) ...m.proposals(context, today, chain: false, rem: !groupRem)];
     final undated = <DsTodayItem>[for (final m in _mods) ...m.undated(today)];
@@ -910,7 +915,7 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
       if (pending.isNotEmpty) DsSection(title: ${k(L.homePending)} + ' · ' + pending.length.toString(), children: pending),   // D5 · הגיע (מייל) · הצעד-הבא (שרשרת) · תזכורות
       if (did.isNotEmpty) DsSection(title: ${k(L.homeDid)} + ' · ' + did.length.toString(), children: [for (final e in did) DsLogRow(text: e['what'] ?? '', undoLabel: ${k(L.undo)}, onUndo: () => appStore.undo(e['id'] ?? ''))]),   // T2
       if (wk.isNotEmpty) DsFold(title: ${k(L.weekFold)}.replaceAll('{n}', wk.length.toString()).replaceAll('{m}', wSaved.toString()), details: [if (wAdd > 0) DsActionRow(title: ${k(L.weekAdded)}.replaceAll('{n}', wAdd.toString())), if (wSend > 0) DsActionRow(title: ${k(L.weekSent)}.replaceAll('{n}', wSend.toString())), if (wAuto > 0) DsActionRow(title: ${k(L.weekAuto)}.replaceAll('{n}', wAuto.toString())), DsNote(message: ${k(L.weekNote)}, label: '', tone: 0)]),   // שמירת-זמן: מקופל, מוכח מהיומן
-      if (soon.isNotEmpty) DsFold(title: ${k(L.soonFold)}.replaceAll('{n}', soon.length.toString()) + (moneyWk > 0 ? ' · ' + ${k(L.moneyShort)}.replaceAll('{n}', balaganFmtMoney(moneyWk)) : ''), details: [for (final x in soon) DsActionRow(title: dayNames[today.add(Duration(days: x[0] as int)).weekday % 7] + ' · ' + (x[1] as DsTodayItem).title, sub: [(x[1] as DsTodayItem).sub, (x[1] as DsTodayItem).module].where((x) => x.isNotEmpty).join(' · '), onOpen: () => _openItem(context, x[1] as DsTodayItem), actions: (x[1] as DsTodayItem).actions, onAct: (x[1] as DsTodayItem).act)]),   // ב׳-לד · גם השבוע עם פעולות
+      if (soon.isNotEmpty) DsFold(title: ${k(L.soonFold)}.replaceAll('{n}', soon.length.toString()) + (moneyWk > 0 ? ' · ' + ${k(L.moneyShort)}.replaceAll('{n}', balaganFmtMoney(moneyWk)) : ''), details: [for (final x in soon) DsActionRow(title: balaganDayLabel(today.add(Duration(days: x[0] as int)), today) + ' · ' + (x[1] as DsTodayItem).title, sub: [(x[1] as DsTodayItem).sub, (x[1] as DsTodayItem).module].where((x) => x.isNotEmpty).join(' · '), onOpen: () => _openItem(context, x[1] as DsTodayItem), actions: (x[1] as DsTodayItem).actions, onAct: (x[1] as DsTodayItem).act)]),   // ב׳-לד · גם השבוע עם פעולות
       if (tomorrow.isNotEmpty) DsFold(open: evening, title: ${k(L.homeTomorrow)} + ' (' + tomorrow.length.toString() + ')' + (moneyTm > 0 ? ' · ' + ${k(L.moneyShort)}.replaceAll('{n}', balaganFmtMoney(moneyTm)) : ''), details: [for (final it in tomorrow) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), onOpen: () => _openItem(context, it), actions: it.actions, onAct: it.act)]),   // D8
       if (undated.isNotEmpty) DsFold(title: ${k(L.undatedFold)}.replaceAll('{n}', undated.length.toString()), details: [DsNote(message: ${k(L.undatedNote)}, label: '', tone: 0), for (final it in undated) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), onOpen: () => _openItem(context, it), actions: it.actions, onAct: it.act)]),   // ב׳-כח · בלי תאריך
       if (stale.isNotEmpty) DsFold(title: ${k(L.staleFold)}.replaceAll('{n}', stale.length.toString()), details: [DsNote(message: ${k(L.staleNote)}, label: '', tone: 0), for (final it in stale) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), onOpen: () => _openItem(context, it), actions: it.actions, onAct: it.act)]),   // ב׳-ל · נשכחים

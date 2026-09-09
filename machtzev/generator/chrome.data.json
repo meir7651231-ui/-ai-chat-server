@@ -309,5 +309,8 @@
  "remManySrc": "כל התיקים",
  "remManyDid": "תזכורות ל-{n} מועדים",
  "dayYesterday": "אתמול",
- "dayPrefix": "יום {day}"
+ "dayPrefix": "יום {day}",
+ "offDay": "ביום",
+ "offOne": "יום לפני",
+ "offN": "{n} ימים לפני"
 }
