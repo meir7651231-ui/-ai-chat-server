@@ -168,6 +168,10 @@ if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/'ign:' \+ id \+ 
 // גל ב׳-לג · צ׳יפי-שעה (balaganTimes) + צ׳יפי-אנשים (מי שכבר בתיקים) בטופס-האישור
 { const cf = rd(path.join(GEN, 'gen_balagan_confirm.dart')); if (!/balaganTimes\(c, now: now\)\.take\(1\)/.test(cf) || !/shown\.add\(m\.fields\.firstWhere\(\(f\) => f\.label == m\.timeFields\.first\)\)/.test(cf) || !/List<String> balaganPeople\(/.test(cf) || !/_v\[m\.timeFields\.first\] = c\[1\]/.test(cf) || !/_v\[m\.personFields\.first\] = p/.test(cf)) fails.push('טופס-האישור בלי צ׳יפי-שעה/אנשים'); }
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganTimeChips\(/.test(ft) || !/balaganPeople\(\)/.test(ft)) fails.push('בדיקת צ׳יפי-שעה/אנשים חסרה'); }
+// גל ב׳-לד · צ׳יפי-חזרה (balaganRepeat) בטופס-האישור · שורות-השבוע-הקרוב עם פעולות
+{ const cf = rd(path.join(GEN, 'gen_balagan_confirm.dart')); if (!/balaganRepeat\(c\)\.take\(1\)/.test(cf) || !/_v\['__repeat'\] = c\[1\]/.test(cf) || !/balaganRepeatLabel\(_v\['__repeat'\]!\)/.test(cf)) fails.push('טופס-האישור בלי צ׳יפי-חזרה'); }
+if (!/actions: \(x\[1\] as DsTodayItem\)\.actions, onAct: \(x\[1\] as DsTodayItem\)\.act\)/.test(home)) fails.push('שורות-השבוע בלי פעולות');
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganRepeatChips\(\)/.test(ft)) fails.push('בדיקת צ׳יפי-חזרה חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);
