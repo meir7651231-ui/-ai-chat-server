@@ -283,5 +283,9 @@
  "peopleSub": "{n} תיקים",
  "closeLabel": "סגור תיק",
  "closeLog": "✓ נסגר: {who}",
- "actSnoozeWeek": "דחה לשבוע"
+ "actSnoozeWeek": "דחה לשבוע",
+ "undatedFold": "בלי תאריך ({n})",
+ "undatedNote": "תיקים שנשמרו בלי מועד נעלמים מ«היום». קבע מועד בהקשה — או התעלם.",
+ "actSetTomorrow": "קבע למחר",
+ "actSetWeek": "קבע לשבוע"
 }

@@ -227,6 +227,29 @@ class ${cls}Today {
     return out;
   }
 
+  // ב׳-כח · תיקים בלי שום מועד — נעלמים מ«היום»; «בלגן» מציע לקבוע (מחר / בעוד שבוע) או להתעלם. אפס-אוטומטי: רק בהקשה, עם החזר.
+  static List<DsTodayItem> undated(DateTime today) {
+    if (_dates.isEmpty) return const [];
+    final out = <DsTodayItem>[];
+    final f = _dates.firstWhere((x) => x.hard, orElse: () => _dates.first);   // השדה שנקבע = הקשה (חובה) אם יש, אחרת הראשון
+    for (final r in open()) {
+      final rid = r[AppStore.idKey] ?? '';
+      if (_dates.any((x) => _parse(r[x.label] ?? '') != null)) continue;
+      if (appStore.decision('undated:\$rid') == 'no') continue;
+      final acts = [${k(L.actSetTomorrow)}, ${k(L.actSetWeek)}, ${k(L.actIgnore)}];
+      out.add(DsTodayItem(title: appStore.displayOf('${root.slug}', rid), sub: f.label, rid: rid, field: f.label, due: today, hard: f.hard, overdue: false, module: module, actions: acts, act: (i) => _setDate(rid, f.label, today, acts, i)));
+    }
+    return out;
+  }
+  static void _setDate(String rid, String field, DateTime today, List<String> acts, int i) {
+    final a = acts[i.clamp(0, acts.length - 1)];
+    if (a == ${k(L.actIgnore)}) { appStore.decide('undated:\$rid', 'no'); return; }
+    final r = appStore.byId('${root.slug}', rid); if (r == null) return;
+    final prev = r[field] ?? '';
+    appStore.update('${root.slug}', rid, {field: _iso(_shift(today.add(Duration(days: a == ${k(L.actSetWeek)} ? 7 : 1)), false))});   /* «קבע» לא נוחת בשבת */
+    appStore.logAction('auto', a + ' · ' + field, entity: '${root.slug}', rid: rid, field: field, prev: prev);
+  }
+
   // P11/P13 · הצעות: תזכורת לכל תאריך שטרם הוכרע · צעד-הבא בשלב-האחרון (P14) · תזכורת-אחרי-שליחה (P12) — הכל עם קטע-המקור
   static List<Widget> proposals(BuildContext context, DateTime today, {bool chain = true}) {   // chain=false: «בלגן» מרנדר את כרטיס-הצעד-הבא בעצמו (חוצה-מודולים)
     final out = <Widget>[];

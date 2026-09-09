@@ -529,6 +529,23 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
     expect(st.undo(lid), isTrue);
     expect(st.byId('d_ent', id)!['טלפון'], '05'); expect(st.byId('d_ent', id)!['__stage'], '1');
   });
+  test('בלי תאריך: תיק בלי מועד לא נעלם — «קבע למחר»/«לשבוע» נותנים מועד עם החזר · «התעלם» מסתיר', () {
+    final id = appStore.add('${baseMod.root.slug}', {${dq(baseMod.root.descField || baseMod.root.fields[0].label)}: 'לתקן את הברז'});
+    final u = ${baseTodayCls}.undated(today);
+    expect(u.any((x) => x.rid == id), isTrue);
+    final it = u.firstWhere((x) => x.rid == id);
+    it.act(0);
+    expect(appStore.byId('${baseMod.root.slug}', id)![it.field], '2026-09-09');
+    expect(${baseTodayCls}.undated(today).any((x) => x.rid == id), isFalse);
+    expect(appStore.undo(appStore.log.first['id']!), isTrue);
+    expect(appStore.byId('${baseMod.root.slug}', id)![it.field], '');
+    ${baseTodayCls}.undated(today).firstWhere((x) => x.rid == id).act(1);
+    expect(appStore.byId('${baseMod.root.slug}', id)![it.field], '2026-09-15');
+    expect(appStore.undo(appStore.log.first['id']!), isTrue);
+    ${baseTodayCls}.undated(today).firstWhere((x) => x.rid == id).act(2);
+    expect(${baseTodayCls}.undated(today).any((x) => x.rid == id), isFalse);
+    expect(appStore.byId('${baseMod.root.slug}', id)![it.field], '');
+  });
   test('פיצול שורה לכמה רגעים', () {
     expect(balaganSplit('שילמתי ארנונה. מחר תור לרופא ב-9:00'), ['שילמתי ארנונה', 'מחר תור לרופא ב-9:00']);
     expect(balaganSplit('מסרתי מפתח ב-1.8.2026 והמשכיר מקזז 6,200'), ['מסרתי מפתח ב-1.8.2026 והמשכיר מקזז 6,200']);
@@ -565,7 +582,8 @@ typedef _Items = List<DsTodayItem> Function(DateTime today, {required int dayDel
 typedef _Props = List<Widget> Function(BuildContext context, DateTime today);
 typedef _Card = Widget Function(BuildContext context, Map<String, String> r);
 typedef _Props2 = List<Widget> Function(BuildContext context, DateTime today, {bool chain});
-class _Mod { const _Mod(this.name, this.open, this.items, this.proposals, this.card, this.autopilot, this.done, this.index); final String name; final List<Map<String, String>> Function() open; final _Items items; final _Props2 proposals; final _Card card; final void Function() autopilot; final List<Map<String, String>> Function() done; final int index; }
+typedef _Undated = List<DsTodayItem> Function(DateTime today);
+class _Mod { const _Mod(this.name, this.open, this.items, this.proposals, this.card, this.autopilot, this.done, this.undated, this.index); final String name; final List<Map<String, String>> Function() open; final _Items items; final _Props2 proposals; final _Card card; final void Function() autopilot; final List<Map<String, String>> Function() done; final _Undated undated; final int index; }
 
 /// «שתף את היום»: טקסט קריא של באיחור/היום (עם שעות) — נגזרת של אותן שורות; ללוח + wa.me (הנמען נבחר בוואטסאפ)
 String balaganDayText(List<DsTodayItem> overdue, List<DsTodayItem> todayItems, DateTime today) {
@@ -583,7 +601,7 @@ class ${cls} extends StatefulWidget {
 
 class _${cls}State extends State<${cls}> {
   static const _mods = <_Mod>[
-${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${todayCls(m)}.items, ${todayCls(m)}.proposals, ${todayCls(m)}.card, ${todayCls(m)}.autopilot, ${todayCls(m)}.done, ${i}),`).join('\n')}
+${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${todayCls(m)}.items, ${todayCls(m)}.proposals, ${todayCls(m)}.card, ${todayCls(m)}.autopilot, ${todayCls(m)}.done, ${todayCls(m)}.undated, ${i}),`).join('\n')}
   ];
   static DateTime _day(DateTime d) => DateTime(d.year, d.month, d.day);
   static String _iso(DateTime d) => d.toIso8601String().substring(0, 10);
@@ -700,6 +718,7 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
     final dayNames = ${k(L.dayNames)}.split(',');
     final soon = <List<dynamic>>[for (var d = 2; d <= 7; d++) for (final m in _mods) for (final it in m.items(today, dayDelta: d)) [d, it]];   // השבוע הקרוב: ימים 2–7, לפי יום ⇒ הוא רואה מה בא, לא רק מחר
     final pending = <Widget>[..._inbox(context), ..._chain(context), for (final m in _mods) ...m.proposals(context, today, chain: false)];
+    final undated = <DsTodayItem>[for (final m in _mods) ...m.undated(today)];   // ב׳-כח · תיקים בלי מועד: לא נעלמים — מקופלים עם «קבע למחר / לשבוע / התעלם»
     // סדר-הכרטיסים = דחיפות: מועד קרוב קודם (מהשורות של היום/מחר/השבוע), ואז החדש-ביותר (__at) — 3 למעלה שמשנים משהו
     final dueOf = <String, DateTime>{}; for (final it in [...all0, ...tomorrow, for (final x in soon) x[1] as DsTodayItem]) { final key = it.module + '|' + it.rid; if (!dueOf.containsKey(key) || it.due.isBefore(dueOf[key]!)) dueOf[key] = it.due; }
     final cardRows = <List<dynamic>>[for (final m in _mods) for (final r in m.open()) [dueOf[m.name + '|' + (r['__id'] ?? '')], r['__at'] ?? '', m.card(context, r)]];
@@ -747,6 +766,7 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
       if (wk.isNotEmpty) DsFold(title: ${k(L.weekFold)}.replaceAll('{n}', wk.length.toString()).replaceAll('{m}', wSaved.toString()), details: [if (wAdd > 0) DsActionRow(title: ${k(L.weekAdded)}.replaceAll('{n}', wAdd.toString())), if (wSend > 0) DsActionRow(title: ${k(L.weekSent)}.replaceAll('{n}', wSend.toString())), if (wAuto > 0) DsActionRow(title: ${k(L.weekAuto)}.replaceAll('{n}', wAuto.toString())), DsNote(message: ${k(L.weekNote)}, label: '', tone: 0)]),   // שמירת-זמן: מקופל, מוכח מהיומן
       if (soon.isNotEmpty) DsFold(title: ${k(L.soonFold)}.replaceAll('{n}', soon.length.toString()), details: [for (final x in soon) DsActionRow(title: dayNames[today.add(Duration(days: x[0] as int)).weekday % 7] + ' · ' + (x[1] as DsTodayItem).title, sub: [(x[1] as DsTodayItem).sub, (x[1] as DsTodayItem).module].where((x) => x.isNotEmpty).join(' · '))]),
       if (tomorrow.isNotEmpty) DsFold(open: evening, title: ${k(L.homeTomorrow)} + ' (' + tomorrow.length.toString() + ')', details: [for (final it in tomorrow) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), actions: it.actions, onAct: it.act)]),   // D8
+      if (undated.isNotEmpty) DsFold(title: ${k(L.undatedFold)}.replaceAll('{n}', undated.length.toString()), details: [DsNote(message: ${k(L.undatedNote)}, label: '', tone: 0), for (final it in undated) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), actions: it.actions, onAct: it.act)]),   // ב׳-כח · בלי תאריך
       if (!empty && overdue.isEmpty && todayItems.isEmpty && pending.isEmpty) Padding(padding: const EdgeInsets.only(top: 12), child: Text(${k(L.homeAll)}, style: TextStyle(color: lk.muted, fontSize: 14))),
       if (empty) DsNote(message: ${k(L.homeEmptyWay)}, label: '', tone: 0),
       if (empty) Padding(padding: const EdgeInsets.only(top: 14), child: Text(${k(L.homeTry)}, style: TextStyle(color: lk.muted, fontSize: 13))),
