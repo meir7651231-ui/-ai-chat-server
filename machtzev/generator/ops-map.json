@@ -13937,19 +13937,6 @@
   "why": "צורת-חתימה"
  },
  {
-  "id": "dayMonthOfIso",
-  "layer": "logic",
-  "file": "dart-maor/day-month-of-iso.dart",
-  "op": "format",
-  "sockets": [
-   "String",
-   "bool"
-  ],
-  "ret": "String",
-  "flags": [],
-  "why": "צורת-חתימה"
- },
- {
   "id": "dayNames",
   "layer": "logic",
   "file": "dart-maor/day-names.dart",
@@ -14261,21 +14248,6 @@
   "flags": [
    "ho",
    "listIn"
-  ],
-  "why": "צורת-חתימה"
- },
- {
-  "id": "digitsQuery",
-  "layer": "logic",
-  "file": "dart-maor/digits-query.dart",
-  "op": "format",
-  "sockets": [
-   "String",
-   "String Function(String?) normPhone"
-  ],
-  "ret": "String",
-  "flags": [
-   "ho"
   ],
   "why": "צורת-חתימה"
  },
@@ -21239,19 +21211,6 @@
   "why": "צורת-חתימה"
  },
  {
-  "id": "roundUpTo",
-  "layer": "logic",
-  "file": "dart-maor/round-up-to.dart",
-  "op": "measure",
-  "sockets": [
-   "int",
-   "int"
-  ],
-  "ret": "int",
-  "flags": [],
-  "why": "צורת-חתימה"
- },
- {
   "id": "ruleActionIsMutating",
   "layer": "logic",
   "file": "dart/rule_action_is_mutating.dart",
@@ -24007,18 +23966,6 @@
    "int"
   ],
   "ret": "String",
-  "flags": [],
-  "why": "צורת-חתימה"
- },
- {
-  "id": "weekdayOfIso",
-  "layer": "logic",
-  "file": "dart-maor/weekday-of-iso.dart",
-  "op": "measure",
-  "sockets": [
-   "String"
-  ],
-  "ret": "int",
   "flags": [],
   "why": "צורת-חתימה"
  },

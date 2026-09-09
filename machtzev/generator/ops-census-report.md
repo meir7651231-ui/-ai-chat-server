@@ -1,11 +1,11 @@
 # סנסוס-פעולות-היסוד (op-census · G1)
 
-**2336** אטומים ממופים (תצוגה 932 · לוגיקה 856 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
+**2332** אטומים ממופים (תצוגה 932 · לוגיקה 852 · דאטה 548) · לא-ממופים **0** · zero (מזייפים-אוטומטית) **33**
 
 | op | # | דוגמאות |
 |---|---|---|
 | data:strings | 349 | academic-year-label-strings · adar-norm-strings · add-org-member-strings · age-of-strings · amount-in-words-strings |
-| format | 226 | academicYearLabel · actionHe · actionIdOf · actionLabelHe · adarNorm |
+| format | 224 | academicYearLabel · actionHe · actionIdOf · actionLabelHe · adarNorm |
 | action | 180 | AccordionSectionCard · ActionButton · ActionCard · ActionRow · AddTradeButton |
 | group | 171 | ActionChipRail · AiCardTop · AiMdHead · AnimatedEmpty · ApprovalTaskCard |
 | collection | 139 | activeByMonth · allSupPhones · allowedDesignationsFor · appendCall · attentionItems |
@@ -16,8 +16,8 @@
 | predicate | 99 | accessPasswordMatches · ayinActionVisible · ayinActive · canAddPhoto · canConnect |
 | fact | 85 | AlertBanner · AnimatedToggle · BadgePill · CaPill · CatalogCountBadge |
 | data:terms | 85 | absence-reason-chips-terms · annual-all-lines-terms · annual-report-terms · audit-cat-colors-terms · audit-report-lines-terms |
-| measure | 74 | ageOf · balanceOf · band · boqLineAmount · boqTotal |
 | data:sockets | 74 | amount-in-words-sockets · annual-report-lines-sockets · block-reason-sockets · build-course-daily-rows-sockets · build-custom-export-sockets |
+| measure | 72 | ageOf · balanceOf · band · boqLineAmount · boqTotal |
 | stat | 42 | BareStat · Callout · FinCallout · FinRow · ForgeAreaChart |
 | panel | 41 | AiCard · CaCard · ChipScroll · DismissibleFavRow · DsCardElevated |
 | data:table | 40 | advance-status-data · amount-in-words-data · ayin-sheet-rows · block-reason-data · build-course-daily-rows-data |
