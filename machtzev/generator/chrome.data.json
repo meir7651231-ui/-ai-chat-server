@@ -115,6 +115,8 @@
  "homeTomorrow": "מחר",
  "homePending": "ממתין לאישורך",
  "homeDid": "עשיתי לבד",
+ "groupDid": "{n} יחד",
+ "snoozeRest": "העבר את מה שנשאר למחר",
  "homeRest": "השאר מסודר",
  "homeCalm": "תנוח.",
  "loadOf": "{n} דברים",

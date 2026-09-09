@@ -1241,5 +1241,537 @@
     "total": 3
    }
   }
+ },
+ "search.exact": {
+  "shape": "חיפוש",
+  "pick": "ruleExact",
+  "file": "dart-maor/rule-exact.dart",
+  "score": 64.87,
+  "proven": true,
+  "candidates": 19,
+  "top3": [
+   "ruleExact:2/2✓:64.87",
+   "ruleSkeleton:1/2:9.56",
+   "teacherIdOf:1/2:0"
+  ],
+  "proof": {
+   "campaignTotal": {
+    "ok": 0,
+    "total": 2
+   },
+   "cockpitDaysSince": {
+    "ok": 0,
+    "total": 2
+   },
+   "coursesOfTeacher": {
+    "ok": 0,
+    "total": 2
+   },
+   "dayDiff": {
+    "ok": 0,
+    "total": 2
+   },
+   "ruleExact": {
+    "ok": 2,
+    "total": 2
+   },
+   "ruleSkeleton": {
+    "ok": 1,
+    "total": 2
+   },
+   "sanitizeSupportText": {
+    "ok": 0,
+    "total": 2
+   },
+   "segulaReminders": {
+    "ok": 0,
+    "total": 2
+   },
+   "sheetSummary": {
+    "ok": 0,
+    "total": 2
+   },
+   "siteLangs": {
+    "ok": 0,
+    "total": 2
+   },
+   "supportPreview": {
+    "ok": 0,
+    "total": 2
+   },
+   "supportUnread": {
+    "ok": 0,
+    "total": 2
+   },
+   "teacherIdOf": {
+    "ok": 1,
+    "total": 2
+   },
+   "toCsv": {
+    "ok": 0,
+    "total": 2
+   },
+   "toTenantId": {
+    "ok": 0,
+    "total": 2
+   },
+   "undoLast": {
+    "ok": 0,
+    "total": 2
+   },
+   "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 2
+   },
+   "waitlistFor": {
+    "ok": 0,
+    "total": 2
+   },
+   "wheelIndexUnderPointer": {
+    "ok": 0,
+    "total": 2
+   }
+  }
+ },
+ "search.contains": {
+  "shape": "חיפוש",
+  "pick": "ruleContains",
+  "file": "dart-maor/rule-contains.dart",
+  "score": 42.48,
+  "proven": true,
+  "candidates": 20,
+  "top3": [
+   "ruleContains:3/3✓:42.48",
+   "rulePrefix:2/3:18.26",
+   "teacherIdOf:2/3:0"
+  ],
+  "proof": {
+   "coursesOfTeacher": {
+    "ok": 0,
+    "total": 3
+   },
+   "damerauLevenshtein": {
+    "ok": 1,
+    "total": 3
+   },
+   "enrollCount": {
+    "ok": 0,
+    "total": 3
+   },
+   "levenshtein": {
+    "ok": 1,
+    "total": 3
+   },
+   "minutesBetweenIso": {
+    "ok": 1,
+    "total": 3
+   },
+   "ruleContains": {
+    "ok": 3,
+    "total": 3
+   },
+   "rulePrefix": {
+    "ok": 2,
+    "total": 3
+   },
+   "sanitizeSupportText": {
+    "ok": 1,
+    "total": 3
+   },
+   "segulaReminders": {
+    "ok": 0,
+    "total": 3
+   },
+   "sheetSummary": {
+    "ok": 0,
+    "total": 3
+   },
+   "siteLangs": {
+    "ok": 1,
+    "total": 3
+   },
+   "supportPreview": {
+    "ok": 0,
+    "total": 3
+   },
+   "supportUnread": {
+    "ok": 0,
+    "total": 3
+   },
+   "teacherIdOf": {
+    "ok": 2,
+    "total": 3
+   },
+   "toCsv": {
+    "ok": 0,
+    "total": 3
+   },
+   "toTenantId": {
+    "ok": 1,
+    "total": 3
+   },
+   "undoLast": {
+    "ok": 0,
+    "total": 3
+   },
+   "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 3
+   },
+   "waitlistFor": {
+    "ok": 0,
+    "total": 3
+   },
+   "wheelIndexUnderPointer": {
+    "ok": 1,
+    "total": 3
+   }
+  }
+ },
+ "text.distance": {
+  "shape": "חיפוש",
+  "pick": "damerauLevenshtein",
+  "file": "dart/damerau_levenshtein.dart",
+  "score": 31.65,
+  "proven": true,
+  "candidates": 20,
+  "top3": [
+   "damerauLevenshtein:4/4✓:31.65",
+   "levenshtein:3/4:48.19",
+   "minutesBetweenIso:1/4:11.08"
+  ],
+  "proof": {
+   "coursesOfTeacher": {
+    "ok": 0,
+    "total": 4
+   },
+   "damerauLevenshtein": {
+    "ok": 4,
+    "total": 4
+   },
+   "enrollCount": {
+    "ok": 0,
+    "total": 4
+   },
+   "levenshtein": {
+    "ok": 3,
+    "total": 4
+   },
+   "minutesBetweenIso": {
+    "ok": 1,
+    "total": 4
+   },
+   "ruleContains": {
+    "ok": 0,
+    "total": 4
+   },
+   "rulePrefix": {
+    "ok": 0,
+    "total": 4
+   },
+   "sanitizeSupportText": {
+    "ok": 0,
+    "total": 4
+   },
+   "segulaReminders": {
+    "ok": 0,
+    "total": 4
+   },
+   "sheetSummary": {
+    "ok": 0,
+    "total": 4
+   },
+   "siteLangs": {
+    "ok": 0,
+    "total": 4
+   },
+   "supportPreview": {
+    "ok": 0,
+    "total": 4
+   },
+   "supportUnread": {
+    "ok": 0,
+    "total": 4
+   },
+   "teacherIdOf": {
+    "ok": 0,
+    "total": 4
+   },
+   "toCsv": {
+    "ok": 0,
+    "total": 4
+   },
+   "toTenantId": {
+    "ok": 0,
+    "total": 4
+   },
+   "undoLast": {
+    "ok": 0,
+    "total": 4
+   },
+   "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 4
+   },
+   "waitlistFor": {
+    "ok": 0,
+    "total": 4
+   },
+   "wheelIndexUnderPointer": {
+    "ok": 0,
+    "total": 4
+   }
+  }
+ },
+ "name.matches": {
+  "shape": "אדם",
+  "pick": "nameMatches",
+  "file": "dart-maor/name-matches.dart",
+  "score": 59.95,
+  "proven": true,
+  "candidates": 4,
+  "top3": [
+   "nameMatches:4/4✓:59.95",
+   "strongMatchForCharge:0/4:3.28",
+   "termOf:0/4:0"
+  ],
+  "proof": {
+   "nameMatches": {
+    "ok": 4,
+    "total": 4
+   },
+   "strongMatchForCharge": {
+    "ok": 0,
+    "total": 4
+   },
+   "termOf": {
+    "ok": 0,
+    "total": 4
+   },
+   "waLink": {
+    "ok": 0,
+    "total": 4
+   }
+  }
+ },
+ "heb.parts": {
+  "shape": "מועד",
+  "pick": "hebParts",
+  "file": "dart-maor/heb-parts.dart",
+  "score": 28.18,
+  "proven": true,
+  "candidates": 16,
+  "top3": [
+   "hebParts:2/2✓:28.18",
+   "monthLabel:0/2:14.59",
+   "supportMsgTime:0/2:3.91"
+  ],
+  "proof": {
+   "hebParts": {
+    "ok": 2,
+    "total": 2
+   },
+   "monthLabel": {
+    "ok": 0,
+    "total": 2
+   },
+   "popCall": {
+    "ok": 0,
+    "total": 2
+   },
+   "sessionsOf": {
+    "ok": 0,
+    "total": 2
+   },
+   "setAllowedPurposes": {
+    "ok": 0,
+    "total": 2
+   },
+   "siteDonateUrl": {
+    "ok": 0,
+    "total": 2
+   },
+   "sortSupportMsgs": {
+    "ok": 0,
+    "total": 2
+   },
+   "sortSupportThreads": {
+    "ok": 0,
+    "total": 2
+   },
+   "stripAuditMeta": {
+    "ok": 0,
+    "total": 2
+   },
+   "stripSupKey": {
+    "ok": 0,
+    "total": 2
+   },
+   "supCount": {
+    "ok": 0,
+    "total": 2
+   },
+   "supIls": {
+    "ok": 0,
+    "total": 2
+   },
+   "supUsd": {
+    "ok": 0,
+    "total": 2
+   },
+   "supportMsgTime": {
+    "ok": 0,
+    "total": 2
+   },
+   "timeToMin": {
+    "ok": 0,
+    "total": 2
+   },
+   "waDigits": {
+    "ok": 0,
+    "total": 2
+   }
+  }
+ },
+ "heb.gem": {
+  "shape": "מועד",
+  "pick": "gem",
+  "file": "dart-maor/gematria.dart",
+  "score": 54.59,
+  "proven": true,
+  "candidates": 3,
+  "top3": [
+   "gem:2/2✓:54.59",
+   "smartScore:0/2:0",
+   "staleBoxes:0/2:0"
+  ],
+  "proof": {
+   "gem": {
+    "ok": 2,
+    "total": 2
+   },
+   "smartScore": {
+    "ok": 0,
+    "total": 2
+   },
+   "staleBoxes": {
+    "ok": 0,
+    "total": 2
+   }
+  }
+ },
+ "heb.gemYear": {
+  "shape": "מועד",
+  "pick": "gemYear",
+  "file": "dart-maor/gem-year.dart",
+  "score": 28.26,
+  "proven": true,
+  "candidates": 18,
+  "top3": [
+   "gemYear:1/1✓:28.26",
+   "envPath:0/1:1",
+   "metaPath:0/1:1"
+  ],
+  "proof": {
+   "coursesOfTeacher": {
+    "ok": 0,
+    "total": 1
+   },
+   "envPath": {
+    "ok": 0,
+    "total": 1
+   },
+   "gemYear": {
+    "ok": 1,
+    "total": 1
+   },
+   "metaPath": {
+    "ok": 0,
+    "total": 1
+   },
+   "roleOf": {
+    "ok": 0,
+    "total": 1
+   },
+   "sanitizeSupportText": {
+    "ok": 0,
+    "total": 1
+   },
+   "segulaReminders": {
+    "ok": 0,
+    "total": 1
+   },
+   "sheetSummary": {
+    "ok": 0,
+    "total": 1
+   },
+   "siteLangs": {
+    "ok": 0,
+    "total": 1
+   },
+   "supportPreview": {
+    "ok": 0,
+    "total": 1
+   },
+   "supportUnread": {
+    "ok": 0,
+    "total": 1
+   },
+   "teacherIdOf": {
+    "ok": 0,
+    "total": 1
+   },
+   "toCsv": {
+    "ok": 0,
+    "total": 1
+   },
+   "toTenantId": {
+    "ok": 0,
+    "total": 1
+   },
+   "undoLast": {
+    "ok": 0,
+    "total": 1
+   },
+   "visibleSupportersForDesignations": {
+    "ok": 0,
+    "total": 1
+   },
+   "waitlistFor": {
+    "ok": 0,
+    "total": 1
+   },
+   "wheelIndexUnderPointer": {
+    "ok": 0,
+    "total": 1
+   }
+  }
+ },
+ "heb.dateFull": {
+  "shape": "מועד",
+  "pick": "hebDateFull",
+  "file": "dart-maor/heb-date-full.dart",
+  "score": 6,
+  "proven": true,
+  "candidates": 3,
+  "top3": [
+   "hebDateFull:2/2✓:6",
+   "staleBoxes:0/2:6.38",
+   "smartScore:0/2:0"
+  ],
+  "proof": {
+   "hebDateFull": {
+    "ok": 2,
+    "total": 2
+   },
+   "smartScore": {
+    "ok": 0,
+    "total": 2
+   },
+   "staleBoxes": {
+    "ok": 0,
+    "total": 2
+   }
+  }
  }
 }

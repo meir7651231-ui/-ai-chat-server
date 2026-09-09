@@ -15,6 +15,8 @@ const files = [...new Set(Object.values(P).filter((p) => p.pick).map((p) => p.fi
 const code = `// 🧩 חולל ע"י behavior-compose (G34ב · הכרעה-30) — שכבת-ההרכבה: התנהגויות מחלקיקים מוכחים (behavior-plan.json), במקום אחד. אל תערוך ידנית.
 ${files.map((f) => `import '../${f}';`).join('\n')}
 import '../dart-data-maor/norm-search-sockets.dart';
+import '../dart-data-maor/gematria-sockets.dart';
+import '../dart-data-maor/heb-month-he-sockets.dart';
 
 String bhIso(DateTime d) => d.toIso8601String().substring(0, 10);
 String bhIsoT(DateTime d) => d.toIso8601String().substring(0, 19);
@@ -48,6 +50,17 @@ String bhDigitsQuery(String q) { final t = q.trim(); return RegExp(r'^[0-9][0-9,
 String bhPrefixRest(String s, List<String> words) { final t = s.trim(); for (final w in words) { if (w.isNotEmpty && ${N('prefix.rule')}(w + ' ', t) != null && t.length > w.length + 2) return t.substring(w.length + 1).trim(); } return ''; }
 /// ב׳-נב · כמה פתוחים (שלב לפני האחרון; בלי שלבים = הכל) — ${N('count.by')}
 int bhOpenCount(List<Map<String, String>> records, int stages) { var n = 0; for (final e in ${N('count.by')}(records, (r) => stages == 0 || (int.tryParse(((r as Map)['__stage'] ?? '0').toString()) ?? 0) < stages - 1 ? 'open' : 'closed')) { if (e[0] == 'open') n = e[1] as int; } return n; }
+/// ב׳-קב · ציון-חיפוש סלחן: מדויק 100 (${N('search.exact')}) · קידומת 80 (${N('prefix.rule')}) · מכיל 62 (${N('search.contains')}) · מילה במרחק-עריכה ≤1 (≥5 אותיות: ≤2) ⇒ 50−d·10 (${N('text.distance')}); 0 = לא מתאים
+int bhSearchScore(String q, String text) { final nq = bhNormSearch(q), nt = bhNormSearch(text); if (nq.isEmpty || nt.isEmpty) return 0; final e = ${N('search.exact')}(nq, nt); if (e != null) return e.toInt(); final p = ${N('prefix.rule')}(nq, nt); if (p != null) return p; final c = ${N('search.contains')}(nq, nt); if (c != null) return c; if (nq.length < 3) return 0; final lim = nq.length >= 5 ? 2 : 1; var best = 0; for (final w in nt.split(' ')) { if (w.length < nq.length - lim || w.length > nq.length + lim) continue; final d = ${N('text.distance')}(nq, w); if (d <= lim && 50 - d * 10 > best) best = 50 - d * 10; } return best; }
+/// ב׳-קג · אותו-אדם? שמות דומים (${N('name.matches')} על נרמול-חיפוש שומר-רווחים): «רות לוי» ≈ «לוי רות» · «ר. לוי» ≠
+bool bhSameName(String a, String b) => ${N('name.matches')}(a, b, bhNormSearch);
+/// ב׳-קד · תאריך עברי מלא מ-ISO (${N('heb.dateFull')} ← ${N('heb.parts')} · ${N('heb.gem')} · ${N('heb.gemYear')} · שמות-חודשים); ריק/שבור ⇒ ''
+String _bhGem(num n) => ${N('heb.gem')}(n, gematria_U, gematria_T, gematria_H, gematria_T2);
+String bhHebDate(String iso) => ${N('heb.dateFull')}(iso, _bhGem, (y) => ${N('heb.gemYear')}(y, _bhGem), (d) => ${N('heb.parts')}(d), hebMonthHe_monthNames);
+/// ב׳-קה · איחוד היסטי-תזכורת של כמה מועדים — כל היסט שלפחות מועד-אחד שלו עוד לפנינו (דרך bhAheadOffsets)
+List<int> bhAheadOffsetsUnion(List<String> dueIsos, bool hard, String todayIso, List<int> offsets) => [for (final o in offsets) if (dueIsos.any((d) => bhAheadOffsets(d, hard, todayIso, offsets).contains(o))) o];
+/// ב׳-קה · שורות-קבוצה: רשומות לפי מפתח-קבוצה (ריק = יחידה) ⇒ [[מפתח, n]…] בסדר-ההופעה (${N('count.by')})
+List<List<Object>> bhGroupRows(List<Map<String, String>> rows, String key) => ${N('count.by')}(rows, (r) => ((r as Map)[key] ?? '').toString());
 /// מפרידי-אלפים בלי ₪ (${N('money.fmt')})
 String bhThousands(num v) => ${N('money.fmt')}(v).replaceFirst('₪', '');
 `;
@@ -74,6 +87,14 @@ void main() {
     expect(bhDigitsQuery('1,250'), '1,250'); expect(bhDigitsQuery('ארנונה 1250'), '');
     expect(bhPrefixRest('איפה הפיקדון', ['איפה', 'חפש']), 'הפיקדון'); expect(bhPrefixRest('הפיקדון איפה', ['איפה']), '');
     expect(bhOpenCount([{'__stage': '0'}, {'__stage': '2'}, {}], 3), 2); expect(bhThousands(1650), '1,650');
+  });
+  test('G35 · חיפוש-סלחן · אותו-שם · תאריך-עברי · איחוד-היסטים · שורות-קבוצה', () {
+    expect(bhSearchScore('ארנונה', 'ארנונה'), 100); expect(bhSearchScore('ארנ', 'ארנונה 1250'), 80); expect(bhSearchScore('1250', 'ארנונה 1250'), 62);
+    expect(bhSearchScore('ארנונא', 'ארנונה לעירייה'), 40); expect(bhSearchScore('ארנונא', 'חשמל'), 0); expect(bhSearchScore('אר', 'ארט'), 80); expect(bhSearchScore('קק', 'חשמל'), 0);
+    expect(bhSameName('רות לוי', 'לוי רות'), true); expect(bhSameName('רות לוי', 'רות כהן'), false); expect(bhSameName('נועה', 'נועה'), true); expect(bhSameName('', 'נועה'), false);
+    expect(bhHebDate('2026-09-08'), 'כ״ו אלול תשפ״ו'); expect(bhHebDate(''), '');
+    expect(bhAheadOffsetsUnion(['2026-09-09', '2026-09-12'], true, '2026-09-08', [3, 1, 0]), [3, 1, 0]); expect(bhAheadOffsetsUnion(['2026-09-09'], true, '2026-09-08', [3, 1, 0]), [1, 0]);
+    expect(bhGroupRows([{'group': 'g1'}, {'group': 'g1'}, {}], 'group'), [['g1', 2], ['', 1]]);
   });
 }
 `;

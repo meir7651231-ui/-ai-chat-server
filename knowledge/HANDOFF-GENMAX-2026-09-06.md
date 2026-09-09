@@ -20,6 +20,7 @@ analyze 0 · 156/156 (17 קבצי `genesis_*`) · gen-verify **74/111 · 52 אט
 - **איך מוסיפים התנהגות:** מפרקים לפעולות-יסוד ⇒ לכל אחת צורך עם דוגמאות ⇒ `node machtzev/generator/behavior-plan.mjs` (מוכיח בריצה) ⇒ הדבק במחולל קורא לנבחר. אטום חדש למדף רק כשאף מועמד לא עובר — ואז `logic-census` + `oracle --write` + מראה ל-`lib/genesis/dart-maor`.
 - **שער `behavior`** (במשטרה): נפתר · מיובא+נקרא · פרימיטיב-אסור (`Duration(days` · `.inDays` · `.weekday` · `.inMinutes` · לולאת-אלפים…) · כפילות-בכניסה.
 - **G34ב · שכבת-ההרכבה:** `behavior-compose.mjs` ⇒ `gen_behaviors.dart` (`bh*`); התנהגות חדשה = צורך-חלקיק ב-`behavior-plan` (עם דוגמאות) + פונקציית `bh*` אחת ב-`behavior-compose` + קריאה מהמחולל. אסור לייבא חלקיק מחוץ ל-`gen_behaviors.dart` (שער ה). מוכיח-משותף: `logic-proof.mjs`.
+- **G35 (9.9 לילה) · הדרך בפעולה:** מקבץ ב׳-קב…קה = 8 צרכים ⇒ 8 חלקיקים מהמדף (אפס חדש) ⇒ 5 `bh*` (חיפוש-סלחן · אותו-שם · תאריך-עברי · איחוד-היסטים · שורות-קבוצה). ⚠️ חתימת-צורך = חתימת-קטלוג כולל שמות-פרמטרים (`List<String> U`); `logic-proof` מקבל `extraImports` לשקעי-דאטה. דוח: `knowledge/CLOSED-GENMAX-G35-2026-09-09.md`.
 - **הוסרו:** 100 בדיקות-לפי-גל מ-`balagan-one.mjs` (ההיסטוריה ב-`CLOSED-GENMAX-G33`). דוח: `knowledge/CLOSED-GENMAX-G34-2026-09-09.md`.
 
 ## 2 · המנועים — בסדר הריצה של `ship`
