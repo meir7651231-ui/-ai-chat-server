@@ -219,6 +219,11 @@ if (!/for \(final x in cardRows\.skip\(3\)\)/.test(home) || /details: cards\.ski
 if (!/String balaganAgo\(DateTime at, DateTime now\)/.test(home) || !/balaganAgo\(at, DateTime\.now\(\)\)/.test(home)) fails.push('«עשיתי לבד» בלי «לפני n דק׳»');
 if (!/balaganDayLabel\(d, DateTime\.now\(\)\)/.test(keys)) fails.push('«חיבורים» בלי גיבוי-אחרון');
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganAgo\(DateTime\(2026, 9, 8, 11, 0\), now\)/.test(ft)) fails.push('בדיקת «לפני» חסרה'); }
+// גלים ב׳-מט..נב · שורה-מהירה+שתף במסך-היום · הקשר בכרטיס-הכפול · «n פתוחים» ב«נושאים»
+if (!/DsQuickAdd\(hint: [^\n]*?_iso\(t0\.add\(Duration\(days: delta\)\)\)/.test(home) || !/balaganDayText\(const \[\], items, t0\.add\(Duration\(days: delta\)\), money: money\)/.test(home)) fails.push('מסך-היום בלי שורה-מהירה/שתף');
+{ const cf = rd(path.join(GEN, 'gen_balagan_confirm.dart')); if (!/String balaganDupSub\(/.test(cf) || !/source: balaganDupSub\(m, d, DateTime\.now\(\)\)/.test(cf)) fails.push('כרטיס-הכפול בלי הקשר'); }
+if (!/String balaganOpenCount\(String slug, int stages\)/.test(topics) || (topics.match(/balaganOpenCount\('app_/g) || []).length < mods.length) fails.push('«נושאים» בלי «n פתוחים»');
+if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganDupSub\(m, \{\}, today\)/.test(ft)) fails.push('בדיקת הקשר/פתוחים חסרה'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);

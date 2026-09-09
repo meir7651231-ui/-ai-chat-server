@@ -319,5 +319,7 @@
  "agoNow": "עכשיו",
  "agoMin": "לפני {n} דק׳",
  "agoHour": "לפני שעה",
- "agoHours": "לפני {n} שעות"
+ "agoHours": "לפני {n} שעות",
+ "openCount": "{n} פתוחים",
+ "dayQuick": "משהו ליום הזה? כתוב ומקש Enter"
 }
