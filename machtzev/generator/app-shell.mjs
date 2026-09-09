@@ -32,7 +32,7 @@ export function renderRootPage(slug, { root, children, report, title }) {
   // עובדות: שדות-השורש (בלי מקוננים) — אטום label+value (חיפוש fact עם צורך label+value ⇒ שורת מפתח-ערך, לא שבב)
   const factFields = root.schema.filter((f) => !(f.members && f.members.length));
   // עובדה-בכרטיס = label+value בלי גליף (אריח-KPI דורש glyph ⇒ נפסל; נשאר שורת מפתח-ערך) — משפחת-stat, צלילה ל-12 חלופות
-  const facts = factFields.map((f) => firstWired(searchOp('magnitude', goal, ['label', 'value'], 12), { label: k(f.label), value: { str: f.type === 'num' ? `_fmtNum(r0[${k(f.label)}] ?? '')` : `(r0[${k(f.label)}] ?? '')`, num: `(num.tryParse(r0[${k(f.label)}] ?? '') ?? 0)` }, sub: k(''), tone: 0, must: ['value'] }));
+  const facts = factFields.map((f) => firstWired(searchOp('magnitude', goal, ['label', 'value'], 12), { label: k(f.label), value: { str: f.type === 'num' ? `_fmtNum(r0[${k(f.label)}] ?? '')` : f.type === 'date' ? `_fmtDate(r0[${k(f.label)}] ?? '')` : `(r0[${k(f.label)}] ?? '')`, num: `(num.tryParse(r0[${k(f.label)}] ?? '') ?? 0)` }, sub: k(''), tone: 0, must: ['value'] }));
   if (facts.some((w) => !w)) notes.push(L.rootNoFact);
   const factRows = factFields.map((f, i) => facts[i] ? `if ((r0[${k(f.label)}] ?? '').trim().isNotEmpty) ${facts[i].call}` : null).filter(Boolean);
   const sectionOf = (label, children) => { const g = firstWired(searchOp('group', goal), { label, children, sub: label, tone: 0 }); return g ? (/children:/.test(g.call) ? g.call : `Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [${g.call}, ${children.join(', ')}])`) : `Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [${children.join(', ')}])`; };
@@ -81,6 +81,8 @@ ${paper && (phoneLabels.length || locLabels.length || !report) ? "import 'packag
 import 'package:flutter/material.dart';
 
 /// 8000 ⇒ 8,000 · 12.5 ⇒ 12.5 — סכום קריא בתיק (רק תצוגה; הרשומה נשארת ספרות)
+/// ב׳-מג · תאריך בתיק כמו שאומרים: היום (9.9) · מחר (10.9) · יום שני 21.9 · 3.10.2027 — ISO נשאר בנתונים
+String _fmtDate(String s) { final t = s.trim(); final d = DateTime.tryParse(t.length == 10 ? '\${t}T12:00:00' : t); if (d == null) return t; final now = DateTime.now(); final n = DateTime(d.year, d.month, d.day).difference(DateTime(now.year, now.month, now.day)).inDays; final dm = '\${d.day}.\${d.month}'; if (n == 0) return ${k(L.homeToday)} + ' (' + dm + ')'; if (n == 1) return ${k(L.homeTomorrow)} + ' (' + dm + ')'; if (n == -1) return ${k(L.dayYesterday)} + ' (' + dm + ')'; if (n.abs() <= 6) return ${k(L.dayPrefix)}.replaceAll('{day}', ${k(L.dayNames)}.split(',')[d.weekday % 7]) + ' ' + dm; return dm + '.\${d.year}'; }
 String _fmtNum(String s) { final t = s.trim(); final v = num.tryParse(t.replaceAll(',', '')); if (v == null) return t; final parts = t.replaceAll(',', '').split('.'); final ip = parts[0].replaceAllMapped(RegExp(r'\\B(?=(\\d{3})+(?!\\d))'), (m) => ','); return parts.length > 1 ? ip + '.' + parts[1] : ip; }
 
 class ${cls} extends StatelessWidget {

@@ -207,6 +207,9 @@ if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganDayLabel\
 for (const m of mods) { const h = rd(path.join(GEN, `gen_${m.home.slug}.dart`)); if (/'−\$o'/.test(h) || !/replaceAll\('\{date\}', _dayLabel\(d, today\)\)/.test(h)) { fails.push(`${m.ns}: הצעת-תזכורת עם (−3/−1/−0) או ISO`); break; } }
 if (!/String balaganOffsetsLabel\(String offsets\)/.test(home) || !/remDays = balaganOffsetsLabel\(/.test(home) || !/title: balaganDayLabel\(today\.add\(Duration\(days: x\[0\] as int\)\), today\)/.test(home)) fails.push('«היום» עם היסטים/ימים טכניים');
 if (fs.existsSync(factsTest)) { const ft = rd(factsTest); if (!/balaganOffsetsLabel\('3,1,0'\)/.test(ft)) fails.push('בדיקת היסטים חסרה'); }
+// גל ב׳-מג · תאריכים במילים בתיק (_fmtDate) ובטופס-האישור
+for (const m of mods.filter((x) => x.root.fields.some((f) => f.type === 'date'))) { const rp = rd(path.join(GEN, `gen_${m.rootPage.slug}.dart`)); if (!/String _fmtDate\(String s\)/.test(rp) || !/_fmtDate\(r0\[/.test(rp)) { fails.push(`${m.ns}: תיק עם ISO`); break; } }
+{ const cf = rd(path.join(GEN, 'gen_balagan_confirm.dart')); if (!/balaganDayLabel\(d, DateTime\.now\(\)\)/.test(cf)) fails.push('טופס-האישור בלי תאריך-במילים'); }
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
 if (mods.length < base.modules) fails.push(`ratchet: מודולים ירדו ${base.modules}⇒${mods.length}`);
