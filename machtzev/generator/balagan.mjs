@@ -663,6 +663,14 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
     expect(balaganOffsetsLabel('3,1,0'), '3 ימים לפני · יום לפני · ביום');
     expect(balaganOffsetsLabel('7'), '7 ימים לפני');
   });
+  test('מתי זה קרה: עכשיו · לפני 5 דק׳ · לפני שעה · לפני 3 שעות · אתמול', () {
+    final now = DateTime(2026, 9, 8, 14, 0);
+    expect(balaganAgo(DateTime(2026, 9, 8, 13, 59, 40), now), 'עכשיו');
+    expect(balaganAgo(DateTime(2026, 9, 8, 13, 55), now), 'לפני 5 דק׳');
+    expect(balaganAgo(DateTime(2026, 9, 8, 12, 50), now), 'לפני שעה');
+    expect(balaganAgo(DateTime(2026, 9, 8, 11, 0), now), 'לפני 3 שעות');
+    expect(balaganAgo(DateTime(2026, 9, 7, 23, 0), now), 'אתמול');
+  });
   test('פיצול שורה לכמה רגעים', () {
     expect(balaganSplit('שילמתי ארנונה. מחר תור לרופא ב-9:00'), ['שילמתי ארנונה', 'מחר תור לרופא ב-9:00']);
     expect(balaganSplit('מסרתי מפתח ב-1.8.2026 והמשכיר מקזז 6,200'), ['מסרתי מפתח ב-1.8.2026 והמשכיר מקזז 6,200']);
@@ -707,6 +715,8 @@ class _Mod { const _Mod(this.name, this.open, this.items, this.proposals, this.c
 String balaganDayLabel(DateTime d, DateTime today) { DateTime day(DateTime x) => DateTime(x.year, x.month, x.day); final n = day(d).difference(day(today)).inDays; if (n == 0) return ${k(L.homeToday)}; if (n == 1) return ${k(L.homeTomorrow)}; if (n == -1) return ${k(L.dayYesterday)}; final dm = '\${d.day}.\${d.month}' + (d.year == today.year ? '' : '.\${d.year}'); return n.abs() <= 6 ? ${k(L.dayPrefix)}.replaceAll('{day}', ${k(L.dayNames)}.split(',')[d.weekday % 7]) + ' ' + dm : dm; }
 /// ב׳-מב · «3 ימים לפני · יום לפני · ביום» — תיאור-ההיסטים כמו שאומרים (ל«בלגן» ולכרטיס-המרוכז)
 String balaganOffsetsLabel(String offsets) => offsets.split(',').map((x) => int.tryParse(x.trim()) ?? 0).map((o) => o == 0 ? ${k(L.offDay)} : o == 1 ? ${k(L.offOne)} : ${k(L.offN)}.replaceAll('{n}', o.toString())).join(' · ');
+/// ב׳-מח · מתי זה קרה, כמו שאומרים: עכשיו · לפני 5 דק׳ · לפני שעה · לפני 3 שעות · אתמול · יום שני 7.9
+String balaganAgo(DateTime at, DateTime now) { final m = now.difference(at).inMinutes; if (m < 1) return ${k(L.agoNow)}; if (m < 60) return ${k(L.agoMin)}.replaceAll('{n}', m.toString()); final h = now.difference(at).inHours; if (h < 2) return ${k(L.agoHour)}; if (at.year == now.year && at.month == now.month && at.day == now.day) return ${k(L.agoHours)}.replaceAll('{n}', h.toString()); return balaganDayLabel(at, now); }
 /// «שתף את היום»: טקסט קריא של באיחור/היום (עם שעות) — נגזרת של אותן שורות; ללוח + wa.me (הנמען נבחר בוואטסאפ)
 String balaganDayText(List<DsTodayItem> overdue, List<DsTodayItem> todayItems, DateTime today, {double money = 0, List<DsTodayItem> tomorrow = const []}) {
   final b = StringBuffer(${k(L.shareDayTitle)} + ' · ' + ${k(L.dayNames)}.split(',')[today.weekday % 7] + ' ' + today.day.toString() + '.' + today.month.toString() + '\\n');   // ב׳-מא · תאריך כמו שאומרים
@@ -869,7 +879,7 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
     final money = balaganMoney([...overdue, ...todayItems]); final moneyTm = balaganMoney(tomorrow); final moneyWk = balaganMoney([for (final x in soon) x[1] as DsTodayItem]);   // ב׳-כט · כסף-במבט: כמה כסף עומד היום/מחר — מהשורות עצמן   // ב׳-כח · תיקים בלי מועד: לא נעלמים — מקופלים עם «קבע למחר / לשבוע / התעלם»
     // סדר-הכרטיסים = דחיפות: מועד קרוב קודם (מהשורות של היום/מחר/השבוע), ואז החדש-ביותר (__at) — 3 למעלה שמשנים משהו
     final dueOf = <String, DateTime>{}; for (final it in [...all0, ...tomorrow, for (final x in soon) x[1] as DsTodayItem]) { final key = it.module + '|' + it.rid; if (!dueOf.containsKey(key) || it.due.isBefore(dueOf[key]!)) dueOf[key] = it.due; }
-    final cardRows = <List<dynamic>>[for (final m in _mods) for (final r in m.open()) [dueOf[m.name + '|' + (r['__id'] ?? '')], r['__at'] ?? '', m.card(context, r)]];
+    final cardRows = <List<dynamic>>[for (final m in _mods) for (final r in m.open()) [dueOf[m.name + '|' + (r['__id'] ?? '')], r['__at'] ?? '', m.card(context, r), m.name, r['__id'] ?? '']];
     cardRows.sort((a, b) { final da = a[0] as DateTime?, db = b[0] as DateTime?; if (da != null && db != null) { final c = da.compareTo(db); if (c != 0) return c; } else if (da != null) { return -1; } else if (db != null) { return 1; } return (b[1] as String).compareTo(a[1] as String); });
     final cards = <Widget>[for (final x in cardRows) x[2] as Widget];
     final did = appStore.log.where((e) => (e['kind'] == 'decide' || e['kind'] == 'auto' || e['kind'] == 'next' || e['kind'] == 'add' || e['kind'] == 'done' || e['kind'] == 'del' || e['kind'] == 'merge') && e['undone'] != '1').take(5).toList();
@@ -910,12 +920,12 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
       if (todayItems.isNotEmpty) DsSection(title: ${k(L.homeToday)}, children: [for (final it in todayItems) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), onOpen: () => _openItem(context, it), actions: it.actions, onAct: it.act)]),
       if (plan.isNotEmpty) DsFold(title: ${k(L.planFold)}.replaceAll('{n}', plan.length.toString()), details: plan),   // תזמון-אוטומטי: מקופל — הוא מסתכל כשהוא רוצה
       ...cards.take(3),   // 3 למעלה
-      if (cards.length > 3) DsFold(title: ${k(L.homeMore)}.replaceAll('{n}', (cards.length - 3).toString()), details: cards.skip(3).toList()),
+      if (cards.length > 3) DsFold(title: ${k(L.homeMore)}.replaceAll('{n}', (cards.length - 3).toString()), details: [for (final x in cardRows.skip(3)) for (final ms in [kBalaganModules.where((mm) => mm.title == x[3])]) DsActionRow(title: ms.isEmpty ? (x[3] as String) : appStore.displayOf(ms.first.rootSlug, x[4] as String), sub: (x[3] as String) + ((x[0] as DateTime?) == null ? '' : ' · ' + balaganDayLabel(x[0] as DateTime, today)), onOpen: () { if (ms.isNotEmpty) Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => balaganOpenRoot(ms.first.rootSlug, x[4] as String))); })]),   // ב׳-מו · «עוד» = שורה לכל תיק (שם · מודול · המועד הקרוב), הקשה ⇒ התיק — לא כרטיס של 200px
       if (_mailNote.isNotEmpty) DsNote(message: _mailNote, label: '', tone: 0),
       if (pending.isNotEmpty) DsSection(title: ${k(L.homePending)} + ' · ' + pending.length.toString(), children: pending),   // D5 · הגיע (מייל) · הצעד-הבא (שרשרת) · תזכורות
-      if (did.isNotEmpty) DsSection(title: ${k(L.homeDid)} + ' · ' + did.length.toString(), children: [for (final e in did) DsLogRow(text: e['what'] ?? '', undoLabel: ${k(L.undo)}, onUndo: () => appStore.undo(e['id'] ?? ''))]),   // T2
+      if (did.isNotEmpty) DsSection(title: ${k(L.homeDid)} + ' · ' + did.length.toString(), children: [for (final e in did) DsLogRow(text: e['what'] ?? '', sub: (() { final at = DateTime.tryParse(e['at'] ?? ''); return at == null ? '' : balaganAgo(at, DateTime.now()); })(), undoLabel: ${k(L.undo)}, onUndo: () => appStore.undo(e['id'] ?? ''))]),   // T2
       if (wk.isNotEmpty) DsFold(title: ${k(L.weekFold)}.replaceAll('{n}', wk.length.toString()).replaceAll('{m}', wSaved.toString()), details: [if (wAdd > 0) DsActionRow(title: ${k(L.weekAdded)}.replaceAll('{n}', wAdd.toString())), if (wSend > 0) DsActionRow(title: ${k(L.weekSent)}.replaceAll('{n}', wSend.toString())), if (wAuto > 0) DsActionRow(title: ${k(L.weekAuto)}.replaceAll('{n}', wAuto.toString())), DsNote(message: ${k(L.weekNote)}, label: '', tone: 0)]),   // שמירת-זמן: מקופל, מוכח מהיומן
-      if (soon.isNotEmpty) DsFold(title: ${k(L.soonFold)}.replaceAll('{n}', soon.length.toString()) + (moneyWk > 0 ? ' · ' + ${k(L.moneyShort)}.replaceAll('{n}', balaganFmtMoney(moneyWk)) : ''), details: [for (final x in soon) DsActionRow(title: balaganDayLabel(today.add(Duration(days: x[0] as int)), today) + ' · ' + (x[1] as DsTodayItem).title, sub: [(x[1] as DsTodayItem).sub, (x[1] as DsTodayItem).module].where((x) => x.isNotEmpty).join(' · '), onOpen: () => _openItem(context, x[1] as DsTodayItem), actions: (x[1] as DsTodayItem).actions, onAct: (x[1] as DsTodayItem).act)]),   // ב׳-לד · גם השבוע עם פעולות
+      if (soon.isNotEmpty) DsFold(title: ${k(L.soonFold)}.replaceAll('{n}', soon.length.toString()) + (moneyWk > 0 ? ' · ' + ${k(L.moneyShort)}.replaceAll('{n}', balaganFmtMoney(moneyWk)) : ''), details: [Padding(padding: const EdgeInsets.only(bottom: 8), child: Wrap(spacing: 8, runSpacing: 8, children: [for (final d in soon.map((x) => x[0] as int).toSet().toList()) DsChipButton(label: balaganDayLabel(today.add(Duration(days: d)), today) + ' · ' + soon.where((x) => x[0] == d).length.toString(), onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => BalaganDay(delta: d))))])), /* ב׳-מה · יום ⇒ מסך-היום */ for (final x in soon) DsActionRow(title: balaganDayLabel(today.add(Duration(days: x[0] as int)), today) + ' · ' + (x[1] as DsTodayItem).title, sub: [(x[1] as DsTodayItem).sub, (x[1] as DsTodayItem).module].where((x) => x.isNotEmpty).join(' · '), onOpen: () => _openItem(context, x[1] as DsTodayItem), actions: (x[1] as DsTodayItem).actions, onAct: (x[1] as DsTodayItem).act)]),   // ב׳-לד · גם השבוע עם פעולות
       if (tomorrow.isNotEmpty) DsFold(open: evening, title: ${k(L.homeTomorrow)} + ' (' + tomorrow.length.toString() + ')' + (moneyTm > 0 ? ' · ' + ${k(L.moneyShort)}.replaceAll('{n}', balaganFmtMoney(moneyTm)) : ''), details: [for (final it in tomorrow) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), onOpen: () => _openItem(context, it), actions: it.actions, onAct: it.act)]),   // D8
       if (undated.isNotEmpty) DsFold(title: ${k(L.undatedFold)}.replaceAll('{n}', undated.length.toString()), details: [DsNote(message: ${k(L.undatedNote)}, label: '', tone: 0), for (final it in undated) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), onOpen: () => _openItem(context, it), actions: it.actions, onAct: it.act)]),   // ב׳-כח · בלי תאריך
       if (stale.isNotEmpty) DsFold(title: ${k(L.staleFold)}.replaceAll('{n}', stale.length.toString()), details: [DsNote(message: ${k(L.staleNote)}, label: '', tone: 0), for (final it in stale) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), onOpen: () => _openItem(context, it), actions: it.actions, onAct: it.act)]),   // ב׳-ל · נשכחים
@@ -938,6 +948,7 @@ class BalaganDay extends StatelessWidget {
     final money = balaganMoney(items);
     void open(DsTodayItem it) { final ms = kBalaganModules.where((m) => m.title == it.module); if (ms.isEmpty || it.rid.isEmpty) return; Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => balaganOpenRoot(ms.first.rootSlug, it.rid))); }
     return DsScaffold(title: balaganDayLabel(t0.add(Duration(days: delta)), t0), subtitle: ${k(L.daySub)}, icon: ${k('')}, children: [
+      Padding(padding: const EdgeInsets.only(bottom: 10), child: Row(children: [DsChipButton(label: '‹ ' + balaganDayLabel(t0.add(Duration(days: delta - 1)), t0), onTap: () => Navigator.of(context).pushReplacement(MaterialPageRoute<void>(builder: (_) => BalaganDay(delta: delta - 1)))), const SizedBox(width: 8), DsChipButton(label: balaganDayLabel(t0.add(Duration(days: delta + 1)), t0) + ' ›', onTap: () => Navigator.of(context).pushReplacement(MaterialPageRoute<void>(builder: (_) => BalaganDay(delta: delta + 1))))])),   // ב׳-מה · דפדוף: יום קודם / יום הבא
       if (items.isEmpty) DsNote(message: ${k(L.dayEmpty)}, label: '', tone: 0),
       if (money > 0) Padding(padding: const EdgeInsets.only(bottom: 8), child: Text(${k(L.moneyShort)}.replaceAll('{n}', balaganFmtMoney(money)), style: TextStyle(color: DsLook.of(context).ink, fontSize: 15, fontWeight: FontWeight.w600))),
       for (final it in items) DsActionRow(title: it.title, sub: [it.sub, it.module].where((x) => x.isNotEmpty).join(' · '), onOpen: () => open(it), actions: it.actions, onAct: it.act),
@@ -1163,6 +1174,7 @@ class _${cls}State extends State<${cls}> {
     const slug = 'balagan_keys'; const { k, dump } = makeConsts(slug); const cls = clsOf(slug);
     const code = `// 🧭 חולל ע"י balagan (G33 · הכרעה-29 · חוק-6) — «חיבורים»: המפתחות של הלקוח, במכשיר בלבד. אל תערוך ידנית.
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
+import 'gen_balagan_home.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
@@ -1184,6 +1196,7 @@ class _${cls}State extends State<${cls}> {
   @override
   Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, _) => DsScaffold(title: ${k(L.keysTitle)}, subtitle: ${k(L.keysSub)}, icon: ${k('')}, children: [
     DsSection(title: ${k(L.backupTitle)}, children: [
+      for (final d in [DateTime.tryParse(appStore.setting('backupAt'))]) Padding(padding: const EdgeInsets.only(bottom: 8), child: Text(d == null ? ${k(L.backupNever)} : ${k(L.backupLast)}.replaceAll('{d}', balaganDayLabel(d, DateTime.now())), style: TextStyle(color: DsLook.of(context).muted, fontSize: 13))),   // ב׳-מז · מתי גיבית לאחרונה
       DsPrimaryButton(label: ${k(L.backupCopy)}, onTap: _copy),
       Padding(padding: const EdgeInsets.only(top: 8), child: DsField(label: ${k(L.backupPasteLabel)}, hint: '{…}', value: _paste, onChanged: (v) => _paste = v)),
       Padding(padding: const EdgeInsets.only(top: 8), child: Row(children: [DsChipButton(label: ${k(L.backupRestore)}, onTap: _restore), const SizedBox(width: 8), DsChipButton(label: ${k(L.backupUndo)}, onTap: _undo)])),
