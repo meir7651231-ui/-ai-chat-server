@@ -278,5 +278,9 @@
  "deleteLabel": "מחק",
  "delLog": "🗑 נמחק: {who}",
  "noteAddHint": "מה קרה מאז? כתוב ו-Enter",
- "noteAddLog": "הערה נוספה: {who}"
+ "noteAddLog": "הערה נוספה: {who}",
+ "peopleTitle": "אנשים",
+ "peopleSub": "{n} תיקים",
+ "closeLabel": "סגור תיק",
+ "closeLog": "✓ נסגר: {who}"
 }
