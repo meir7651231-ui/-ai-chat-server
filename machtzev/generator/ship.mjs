@@ -21,7 +21,7 @@ const argv = process.argv.slice(2);
 const flag = (f) => argv.includes(f);
 const opt = (f) => { const i = argv.indexOf(f); return i >= 0 ? argv[i + 1] : null; };
 const MSG = opt('--msg'), LESSON = opt('--lesson') || 'הכרעה-24', SESSION = process.env.SESSION_URL || opt('--session');
-const AUTHOR = 'Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>';
+const AUTHOR = process.env.SHIP_AUTHOR || 'Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>';
 const env = { ...process.env, PATH: `${process.env.FLUTTER || '/home/user/flutter/bin'}:${process.env.PATH}`, BUILDSMART: APP };
 // אתרי-הדמו: תיקייה ב-gh-pages ⇒ נקודת-כניסה (הכרעת-בעלים 5.9: רק תיקיות-דמו חדשות, האתר-החי לא נגע)
 const SITES = [['schoolos', 'gen_schoolos_forge.dart'], ['studio', 'gen_main_studio.dart'], ['kehila', 'gen_main_kehila.dart'], ['tzedaka', 'gen_main_tzedaka.dart'], ['sechirut', 'gen_app_sechirut_main.dart'], ['peruk04', 'gen_app_peruk04_main.dart'], ['balagan', 'gen_balagan_main.dart']];   // specs-ds/sechirut.txt · מסלול-ב׳ (ישויות מהמשפט): בדיקת חוזה שכירות (7.9)
@@ -87,9 +87,13 @@ if (!flag('--no-build')) {
   for (const [name, entry] of SITES) {
     if (!fs.existsSync(path.join(GEN, entry))) { log(`build · ${name}: אין ${entry} — מדולג`); continue; }
     log(`build · ${name}`);
+    node('machtzev/generator/web-shell.mjs', ['--entry', entry], { quiet: true });   // G52 · שם/צבע/סמל/SW פר-אפליקציה, נגזרים מהקוד-המחולל
     run('flutter', ['build', 'web', '--release', '--no-web-resources-cdn', '--base-href', `/buildsmart/${name}/`, '-t', `lib/genesis/dart-gen-bs/${entry}`, '-o', `build/ghp-${name}`], APP, { quiet: true });
+    const pr = node('machtzev/generator/web-shell.mjs', ['--prune', path.join(APP, `build/ghp-${name}`)], { quiet: true });   // G52 · גופנים שאינם מוזכרים בפלט יוצאים
+    log(`build · ${name} ${(pr.stdout || '').trim()}`);
     built.push(name);
   }
+  node('machtzev/generator/web-shell.mjs', ['--restore'], { quiet: true });   // קליפת-הריפו (בנייה-חכמה) חוזרת — העץ נשאר נקי
   log('shot · site-shot studentsforge');
   const sh = node('machtzev/tools/site-shot.mjs', ['studentsforge', 'SchoolOS · תלמידים · forge', '8790'], { quiet: true, allowFail: true });
   log((sh.stdout || sh.stderr || '').trim().split('\n').pop().slice(0, 160));

@@ -1,7 +1,10 @@
 {
  "tapsSave": 2,
  "tapsSend": 1,
- "ttiMs": 15970,
+ "ttiMs": 2582,
+ "ext": [
+  "accounts.google.com"
+ ],
  "ok": true,
  "notes": [],
  "facts": {

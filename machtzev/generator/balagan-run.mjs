@@ -23,13 +23,15 @@ const srv = spawn('python3', ['-m', 'http.server', String(PORT), '--bind', '127.
 await new Promise((r) => setTimeout(r, 900));
 const SENTENCE = 'המשכיר מקזז 6,200 מהפיקדון של 8,000, מסרתי מפתח ב-1.8.2026';
 
-const res = { tapsSave: null, tapsSend: null, ttiMs: null, ok: false, notes: [] };
+const res = { tapsSave: null, tapsSend: null, ttiMs: null, ext: [], ok: false, notes: [] };
 const browser = await chromium.launch({ executablePath: exe, args: ['--no-sandbox', '--disable-gpu'] });
 try {
   // ── A · רגע חדש ──
   const page = await browser.newPage({ viewport: { width: 480, height: 1000 }, deviceScaleFactor: 1 });
   if (process.env.BALAGAN_RUN_CLOSE_A) { /* דיאגנוסטיקה */ }
   const errs = []; page.on('pageerror', (e) => errs.push(String(e.message).slice(0, 120)));
+  // G52 · «הכל אצל הלקוח» נמדד, לא מוצהר: כל מארח חיצוני שהדף פונה אליו נרשם (ratchet יורד-בלבד).
+  page.on('request', (r) => { const u = r.url(); if (/^https?:\/\//.test(u) && !u.includes(`127.0.0.1:${PORT}`)) { const h = new URL(u).host; if (!res.ext.includes(h)) res.ext.push(h); } });
   const t0 = Date.now();
   await page.goto(`http://127.0.0.1:${PORT}/`, { waitUntil: 'load', timeout: 60000 });
   await page.waitForFunction(() => document.title === 'בלגן', null, { timeout: 60000 });
@@ -73,7 +75,12 @@ if (!res.ok) fails.push(res.notes.join(' · ') || 'המסלול לא הושלם'
 if (res.tapsSave != null && res.tapsSave > FLOOR) fails.push(`רגע-חדש ${res.tapsSave} הקשות > רצפה ${FLOOR}`);
 if (res.tapsSend != null && res.tapsSend > 2) fails.push(`שלח ${res.tapsSend} הקשות > 2`);
 if (base && res.tapsSave != null && base.tapsSave != null && res.tapsSave > base.tapsSave) fails.push(`ratchet: רגע-חדש ${base.tapsSave}⇒${res.tapsSave}`);
+// G52 · תקרת-מסך-ראשון: לפני התיקון 13.8 שנ׳ — 12.6 מהן בקשת-Roboto ל-fonts.gstatic.com שנחסמה.
+//   התקרה נדיבה (רעש-מכונה), אבל חוזרת-לשם = אזעקה מיידית ולא «האתר קצת איטי».
+const TTI_MAX = 6000;
+if (res.ttiMs != null && res.ttiMs > TTI_MAX) fails.push(`מסך-ראשון ${res.ttiMs}ms > תקרה ${TTI_MAX}`);
+if (base && Array.isArray(base.ext) && res.ext.length > base.ext.length) fails.push(`ratchet: מארחים-חיצוניים ${base.ext.length}⇒${res.ext.length} (${res.ext.join(' · ')})`);
 if (gate && fails.length) { console.log(`🔴 balagan-run: ${fails.join(' · ')}`); process.exit(1); }
-if (process.argv.includes('--write') || !base) fs.writeFileSync(BASE, JSON.stringify({ tapsSave: res.tapsSave, tapsSend: res.tapsSend }));
-console.log(`${fails.length ? '🔴' : '✓'} balagan-run: רגע-חדש ${res.tapsSave ?? '—'} הקשות (רצפה <${FLOOR}) · שלח ${res.tapsSend ?? '—'} · מסך-ראשון ${res.ttiMs}ms${res.notes.length ? ' · ' + res.notes.join(' · ') : ''}`);
+if (process.argv.includes('--write') || !base) fs.writeFileSync(BASE, JSON.stringify({ tapsSave: res.tapsSave, tapsSend: res.tapsSend, ext: res.ext }));
+console.log(`${fails.length ? '🔴' : '✓'} balagan-run: רגע-חדש ${res.tapsSave ?? '—'} הקשות (רצפה <${FLOOR}) · שלח ${res.tapsSend ?? '—'} · מסך-ראשון ${res.ttiMs}ms (תקרה ${TTI_MAX}) · חיצוניים ${res.ext.length}${res.ext.length ? ' (' + res.ext.join(' · ') + ')' : ''}${res.notes.length ? ' · ' + res.notes.join(' · ') : ''}`);
 process.exit(fails.length ? 1 : 0);
