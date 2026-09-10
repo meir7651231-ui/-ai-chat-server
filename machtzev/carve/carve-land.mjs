@@ -7,7 +7,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 
-const ROOT = new URL('../../new/', import.meta.url).pathname;
+// יעד-הנחיתה: new/ כברירת-מחדל. CARVE_OUT מאפשר ריצת-ניסוי לתיקייה זמנית
+// בלי לגעת במדף — נחיתה למדף היא החלטה, לא תופעת-לוואי של הרצה.
+const ROOT = process.env.CARVE_OUT || new URL('../../new/', import.meta.url).pathname;
 const DART = process.env.DART_SDK_BIN || '/home/user/flutter/bin';
 const env = { ...process.env, PATH: `${DART}:${process.env.PATH}` };
 
@@ -47,9 +49,17 @@ function parseParams(fnSrc) {
   return raw.split(',').map(p => { const parts = p.trim().split(/\s+/); return { type: parts.slice(0, -1).join(' '), name: parts.at(-1) }; });
 }
 function atomFile(r, srcRef) {
-  const header = `// ⚛️ אטום-Dart (דרגת-חוזה) · ${r.name}\n// מוצא: ${srcRef} (חצב-AST · חוק-4 — התנהגות זהה, לא-משופרת).\n// טוהר: פונקציית top-level עצמאית, אפס-import (אומת ע"י פותר-המזהים).\n${r.inlineTypes.length ? `// טיפוסים מוטבעים (חוק-1, verbatim מהמקור): ${r.inlineTypes.join(', ')}.\n` : ''}`;
+  const imports = (r.imports || []);
+  const pure = imports.length
+    ? `// טוהר: פונקציית top-level עצמאית; הייבוא היחיד הוא ספריית-שפה טהורה (${imports.join(' ')}).\n`
+    : `// טוהר: פונקציית top-level עצמאית, אפס-import (אומת ע"י פותר-המזהים).\n`;
+  // חוק-3: קריאה-לשכן ⇒ פרמטר-שקע. הכותרת מצהירה על כל שקע שהוזרק אוטומטית.
+  const sock = (r.autoSocket && r.socketMeta && r.socketMeta.length)
+    ? `// שקעים (חוק-3 — הוזרקו אוטומטית מקריאות-שכן במקור): ${r.socketMeta.map(x => x.name).join(' · ')}.\n`
+    : '';
+  const header = `// ⚛️ אטום-Dart (דרגת-חוזה) · ${r.name}\n// מוצא: ${srcRef} (חצב-AST · חוק-4 — התנהגות זהה, לא-משופרת).\n${pure}${sock}${r.inlineTypes.length ? `// טיפוסים מוטבעים (חוק-1, verbatim מהמקור): ${r.inlineTypes.join(', ')}.\n` : ''}`;
   const types = r.copiedTypes.length ? r.copiedTypes.join('\n\n') + '\n\n' : '';
-  return header + '\n' + types + r.fnSource + '\n';
+  return header + '\n' + (imports.length ? imports.join('\n') + '\n\n' : '') + types + r.fnSource + '\n';
 }
 
 function landOne(r, seen) {
@@ -76,7 +86,10 @@ function landOne(r, seen) {
   fs.writeFileSync(atomAbs, atomFile(r, srcRef));
 
   const callArgs = combos.map(c => mkArgs(c));
-  const harness = `import 'dart:convert';\nimport '${kb}.dart';\nvoid main(){\n${callArgs.map((a, i) => `  try { print(jsonEncode([${i}, (${r.name}(${a})).toString()])); } catch(e){ print(jsonEncode([${i}, {"__t":1}])); }`).join('\n')}\n}\n`;
+  const sockSrc = (r.autoSocket && r.socketDecls && r.socketDecls.length)
+    ? '\n// --- מימוש-השקע verbatim מהמקור (לבדיקה בלבד; לא אטום מיובא) ---\n' + r.socketDecls.join('\n\n') + '\n'
+    : '';
+  const harness = `import 'dart:convert';\nimport '${kb}.dart';\n${(r.imports || []).join('\n')}${sockSrc}\nvoid main(){\n${callArgs.map((a, i) => `  try { print(jsonEncode([${i}, (${r.name}(${a})).toString()])); } catch(e){ print(jsonEncode([${i}, {"__t":1}])); }`).join('\n')}\n}\n`;
   const harnessAbs = path.join(ROOT, 'dart', `_carve_h_${kb}.dart`);
   fs.writeFileSync(harnessAbs, harness);
   let outs;
@@ -99,7 +112,7 @@ function landOne(r, seen) {
       ? `  { var threw=false; try{ ${call}; }catch(_){threw=true;} if(!threw) throw StateError('FAIL #${i}: expected throw'); n++; }`
       : `  _eq((${call}).toString(), '${esc(outs[i])}', '#${i}'); n++;`;
   }).join('\n');
-  const test = `// בדיקת-Golden · ${r.name} — אפיון-חצב (חוק-4). מייבאת רק את האטום.\nimport '${kb}.dart';\nvoid _eq(String got, String want, String lbl){ if(got!=want) throw StateError('FAIL [\$lbl]: got=\$got want=\$want'); }\nvoid main(){\n  var n=0;\n${asserts}\n  print('✓ ${r.name}: '+n.toString()+' Golden');\n}\n`;
+  const test = `// בדיקת-Golden · ${r.name} — אפיון-חצב (חוק-4). מייבאת רק את האטום.\nimport '${kb}.dart';\n${(r.imports || []).join('\n')}${sockSrc}\nvoid _eq(String got, String want, String lbl){ if(got!=want) throw StateError('FAIL [\$lbl]: got=\$got want=\$want'); }\nvoid main(){\n  var n=0;\n${asserts}\n  print('✓ ${r.name}: '+n.toString()+' Golden');\n}\n`;
   fs.writeFileSync(testAbs, test);
   try { execSync(`dart analyze ${testAbs}`, { cwd: ROOT, env, stdio: 'pipe' }); execSync(`dart run --enable-asserts ${testAbs}`, { cwd: ROOT, env, stdio: 'pipe' }); }
   catch (e) { fs.rmSync(atomAbs, { force: true }); fs.rmSync(testAbs, { force: true }); return { name: r.name, fail: 'golden: ' + String((e.stdout || e).toString()).slice(0, 100).replace(/\n/g, ' ') }; }

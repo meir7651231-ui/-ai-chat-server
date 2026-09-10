@@ -1,0 +1,8 @@
+# חבילת-הריצה של כלי-החציבה (ast_carve · ast_dehardcode) — הם מייבאים package:analyzer
+# ולכן דורשים package_config. אין כאן קוד: הכלים עצמם יושבים לצד הקובץ הזה.
+name: carve_tools
+description: כלי-החציבה של המחצבה — analyzer אמיתי, אפס-רשת בזמן-ריצה
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+dependencies:
+  analyzer: ^6.11.0

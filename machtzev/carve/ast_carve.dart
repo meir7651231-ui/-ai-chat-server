@@ -13,8 +13,10 @@ import 'package:analyzer/dart/ast/visitor.dart';
 const _core = {
   'String','int','double','num','bool','List','Map','Set','Iterable','Object','dynamic','void','Function','DateTime','Duration','RegExp','StringBuffer','Comparable','Pattern','Symbol','Type','Null','Never','Enum',
   'true','false','null','this','super','print','identical','assert',
-  'min','max','abs','sqrt','pow','pi','e',
 };
+
+// dart:math — נראה כמו core אך דורש ייבוא. הפרדה זו מונעת פליטת-אטום בלי `import 'dart:math';`.
+const _mathCore = {'min','max','sqrt','pow','pi','e','log','exp','sin','cos','tan','atan','atan2','Random'};
 
 // אוסף כל שם שמוצהר-מקומית בגוף (משתני-לולאה, final/var, catch, פונקציות-מקומיות)
 class _Locals extends RecursiveAstVisitor<void> {
@@ -52,6 +54,72 @@ class _FreeIds extends RecursiveAstVisitor<void> {
   }
   @override
   void visitTypeParameter(TypeParameter node){ bound.add(node.name.lexeme); super.visitTypeParameter(node); }
+
+  // analyzer 6: שם-הטיפוס ב-NamedType הוא Token (name2), ולכן אינו מגיע ל-visitSimpleIdentifier.
+  // בלי זה הערות-טיפוס וקריאות-בנאי אינן נראות והאטום נפלט בלי הגדרת-הטיפוס.
+  @override
+  void visitNamedType(NamedType node) {
+    final n = node.name2.lexeme;
+    if (!bound.contains(n) && !_core.contains(n)) typeNames.add(n);
+    super.visitNamedType(node);
+  }
+}
+
+String _helper(String n) => '_src_' + (n.startsWith('_') ? n.substring(1) : n);
+
+/// טיפוס-הפונקציה של שכן (`double Function(double)`), או null אם חתימתו אינה פוזיציונית.
+String? _fnType(FunctionDeclaration d) {
+  final ps = d.functionExpression.parameters;
+  if (ps == null) return null;
+  for (final p in ps.parameters) { if (p.isNamed || p.isOptionalPositional) return null; }
+  final ret = d.returnType?.toSource() ?? 'dynamic';
+  final types = ps.parameters
+      .map((p) => (p is SimpleFormalParameter) ? (p.type?.toSource() ?? 'dynamic') : 'dynamic')
+      .join(', ');
+  return '$ret Function($types)';
+}
+
+/// סגור-טרנזיטיבי של שכן: השכן **וכל מי שהוא קורא לו** נאספים יחד, ורק אם כולם
+/// טהורים (core/dart:math בלבד) — אחרת פסילה. השמות משוכתבים ל-`_src_<שם>` כדי
+/// שהבדיקה תוכל להטביע אותם verbatim בלי לייבא אף אטום (חוק-4).
+/// שכן לא-טהור אינו כשל של המכונה: הוא **חייב** להיות שקע, אך התחליף בבדיקה
+/// דורש שיפוט-אדם — והמצאתו ע"י מכונה היא זיוף-דאטה (§20-ג). לכן: דיווח, לא ניחוש.
+bool _collectPure(String src, Map<String, FunctionDeclaration> topFns, String root,
+    Map<String, String> out, Set<String> mathHit) {
+  final work = <String>[root];
+  final seen = <String>{};
+  while (work.isNotEmpty) {
+    final name = work.removeLast();
+    if (!seen.add(name)) continue;
+    final d = topFns[name];
+    if (d == null) return false;
+    final fe = d.functionExpression;
+    final ps = fe.parameters;
+    if (ps == null) return false;
+    final bound = <String>{name};
+    for (final p in ps.parameters) { final n = p.name?.lexeme; if (n != null) bound.add(n); }
+    final loc = _Locals(); fe.body.visitChildren(loc); bound.addAll(loc.names);
+    final fr = _FreeIds(bound); fe.body.visitChildren(fr); ps.accept(fr);
+    for (final id in fr.ids) {
+      if (_core.contains(id)) continue;
+      if (_mathCore.contains(id)) { mathHit.add('y'); continue; }
+      if (topFns.containsKey(id)) { work.add(id); continue; }
+      return false;   // תלות שאינה שכן-טהור ⇒ פסילה
+    }
+    for (final t in fr.typeNames) {
+      if (_core.contains(t)) continue;
+      if (_mathCore.contains(t)) { mathHit.add('y'); continue; }
+      return false;
+    }
+  }
+  for (final name in seen) {
+    var body = src.substring(topFns[name]!.offset, topFns[name]!.end);
+    for (final other in seen) {
+      body = body.replaceAll(RegExp('\\b' + RegExp.escape(other) + '\\b'), _helper(other));
+    }
+    out[name] = body;
+  }
+  return true;
 }
 
 String? _pub(String name) => name.startsWith('_') ? name.substring(1) : name;
@@ -128,12 +196,15 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
   final sockets = <String>[];   // שכן top-level (fn/var) ⇒ שקע
   final inlineTypes = <String>[]; // טיפוס מקומי ⇒ הטבעה verbatim
   final unresolved = <String>[];
+  var usesMath = false;
   for (final id in free.ids) {
     if (topFns.containsKey(id) || topVars.contains(id)) sockets.add(id);
+    else if (_mathCore.contains(id)) usesMath = true;
     else unresolved.add(id); // ערך-חופשי לא-מזוהה (אולי import) — חשוד
   }
   for (final t in free.typeNames) {
     if (topTypes.containsKey(t)) inlineTypes.add(t);
+    else if (_mathCore.contains(t)) usesMath = true;
     // טיפוס לא-מקומי שאינו core ⇒ יתכן import (unresolved-type)
     else if (!_core.contains(t)) unresolved.add('type:$t');
   }
@@ -145,8 +216,59 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
     final d = topTypes[t]!;
     copiedTypes.add(src.substring(d.offset, d.end));
   }
+  // ── שקע-אוטומטי (חוק-3): קריאה-לשכן ⇒ פרמטר-שקע מוזרק ──────────────────
+  // עד היום `sockets` היה תווית בלבד: אטום-עם-שכן סווג לא-טריוויאלי ונפל בשקט,
+  // בזמן שאותם מקרים בדיוק נחצבו ביד עם שקע (למשל accessPasswordMatches).
+  // כאן השכן הופך לפרמטר, בתנאים שמרניים בלבד — כל ספק ⇒ פסילה, לא ניחוש.
+  final socketMeta = <Map<String, String>>[];
+  final socketDecls = <String>[];
+  final socketTypes = <String>[];
+  final origParams = <Map<String, String>>[];
+  var autoSocket = false;
+  if (sockets.isNotEmpty && unresolved.isEmpty && params != null) {
+    final raw = src.substring(params.offset, params.end);
+    var ok = !raw.contains('{') && !raw.contains('[');   // חתימה פוזיציונית בלבד
+    if (ok) {
+      for (final p in params.parameters) {
+        final n = p.name?.lexeme;
+        if (n == null || n.isEmpty) { ok = false; break; }
+        final t = (p is SimpleFormalParameter) ? (p.type?.toSource() ?? 'dynamic') : 'dynamic';
+        origParams.add({'type': t, 'name': n});
+      }
+    }
+    if (ok) {
+      final emitted = <String, String>{};   // שם-מקורי ⇒ מקור-משוכתב (דדופ בין שקעים)
+      final mathHit = <String>{};
+      for (final sName in sockets) {
+        final d = topFns[sName];
+        if (d == null) { ok = false; break; }             // שקע-ערך (topVar) — לא ב-v1
+        final t = _fnType(d);
+        if (t == null) { ok = false; break; }
+        if (!_collectPure(src, topFns, sName, emitted, mathHit)) { ok = false; break; }
+        socketMeta.add({'name': _pub(sName)!, 'init': _helper(sName)});
+        socketTypes.add(t);
+      }
+      if (ok) { socketDecls.addAll(emitted.values); if (mathHit.isNotEmpty) usesMath = true; }
+    }
+    autoSocket = ok && socketMeta.length == sockets.length;
+  }
+
   // גוף-הפונקציה verbatim (כולל חתימה); שנה שם פרטי→ציבורי בכותרת בלבד
   var fnSrc = src.substring(declNode.offset, declNode.end);
+  if (autoSocket) {
+    // הזרקה לפני ה-')' של רשימת-הפרמטרים — מיקום מוחלט מה-AST, לא רגקס.
+    final rel = params!.end - declNode.offset;
+    final inject = List.generate(socketMeta.length,
+        (i) => 'required ${socketTypes[i]} ${socketMeta[i]['name']}').join(', ');
+    final sep = origParams.isEmpty ? '' : ', ';
+    fnSrc = fnSrc.substring(0, rel - 1) + sep + '{' + inject + '}' + fnSrc.substring(rel - 1);
+    // הגוף חייב לקרוא לשקע, לא לשכן: `_pow025(x)` ⇒ `pow025(x)`.
+    // בטוח אחרי ההזרקה — הטקסט המוזרק נושא כבר את השם-הציבורי.
+    for (var i = 0; i < sockets.length; i++) {
+      final from = sockets[i], to = socketMeta[i]['name']!;
+      if (from != to) fnSrc = fnSrc.replaceAll(RegExp('\\b' + RegExp.escape(from) + '\\b'), to);
+    }
+  }
   final pubName = _pub(target)!;
   if (target.startsWith('_')) {
     // החלף את המופע הראשון של השם בחתימה (שמור על גוף)
@@ -162,6 +284,11 @@ Map<String, dynamic> carve(String file, String fnName, int? startLine) {
     'unresolved': unresolved,
     'copiedTypes': copiedTypes,
     'fnSource': fnSrc,
+    'imports': usesMath ? ["import 'dart:math';"] : <String>[],
+    'autoSocket': autoSocket,
+    'socketMeta': socketMeta,
+    'socketDecls': socketDecls,
+    'origParams': origParams,
     'trivial': sockets.isEmpty && unresolved.isEmpty,
   };
 }
