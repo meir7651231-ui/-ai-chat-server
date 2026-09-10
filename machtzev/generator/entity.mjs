@@ -47,7 +47,7 @@ export function interpret(text) {
   // "ישות X עם <שדות> | שלבים: a,b | חוקים: תאריך יעד >= תאריך חיוב"
   const markers = [...text.matchAll(new RegExp('\\|\\s*' + alt(G.sectionMarkers), 'g'))];
   const main = markers.length ? text.slice(0, markers[0].index) : text;
-  let stagesPart = '', rulesPart = '', delPart = '', guardsPart = '';
+  let stagesPart = '', rulesPart = '', delPart = '', guardsPart = '', sortPart = '';
   markers.forEach((m, mi) => {
     const start = m.index + m[0].length;
     const end = mi + 1 < markers.length ? markers[mi + 1].index : text.length;
@@ -55,6 +55,7 @@ export function interpret(text) {
     if (G.markRules.includes(m[1])) rulesPart = content;
     else if (G.markDelete.includes(m[1])) delPart = content;
     else if (G.markGuards.includes(m[1])) guardsPart = content;
+    else if ((G.markSort || []).includes(m[1])) sortPart = content;   // L105 · מיון-הרשימה מהספק
     else stagesPart = content;
   });
   // שם-הישות + רשימת-השדות (בלי \b — לא עובד על עברית ב-JS)
@@ -100,7 +101,7 @@ export function interpret(text) {
     if (/!/.test(f)) { unique = true; f = f.replace(/!/g, ''); }                   // שדה! = ייחודי
     if (members) { required = false; unique = false; formula = null; enumVals = null; pattern = null; range = null; }   // מקונן: אין חובה/ייחודי/נוסחה/enum/תבנית/טווח (v1)
     const label = clean(f);
-    if (label.length > 1) annots.push({ label, required, unique, enumVals: enumVals && enumVals.length ? enumVals : null, formula, def, members, pattern, range });
+    if (label.length > 1) annots.push({ label, raw: f.trim(), required, unique, enumVals: enumVals && enumVals.length ? enumVals : null, formula, def, members, pattern, range });   // raw = הטקסט כפי שנכתב (ספרות כלולות) — לזיהוי בנוסחאות (L105)
   }
   const fields = annots.map((a) => a.label);
   // 🔄 שלבי-workflow (אם ניתנו): שרשרת-סטטוס. בלי '|' ⇒ אין workflow (לא ברירת-מחדל).
@@ -109,7 +110,7 @@ export function interpret(text) {
     ? stagesPart.replace(new RegExp('^\\s*' + alt(G.stagePrefixes) + '[:\\s]*'), '').split(/[,\n]|\s*→\s*/).map((s) => heWords(s).join(' ').trim()).filter((s) => s.length > 1).slice(0, 30)
     : [];
 
-  const schema = annots.map((a) => ({ label: a.label, type: inferType(a.label), required: a.required, unique: a.unique, enumVals: a.enumVals, formula: a.formula, def: a.def, members: a.members, pattern: a.pattern, range: a.range }));
+  const schema = annots.map((a) => ({ label: a.label, raw: a.raw, type: inferType(a.label), required: a.required, unique: a.unique, enumVals: a.enumVals, formula: a.formula, def: a.def, members: a.members, pattern: a.pattern, range: a.range }));
   const used = new Set();
   const lines = [`הירו 🗂️ ${entity} | ישות מורכבת — טופס + טבלה`];
   // 🔄 workflow: פס-שלבים מתוייג (BreadcrumbTrail labels) — מציג את מסע-הרשומה
@@ -155,7 +156,9 @@ export function interpret(text) {
   const guards = guardsPart
     ? guardsPart.split(/[,\n]/).map((e) => { const m = e.match(/^(.+?)\s*:\s*(.+)$/); return m ? { stage: heWords(m[1]).join(' ').trim(), cond: m[2].trim() } : null; }).filter((g) => g && g.stage.length > 1 && g.cond.length > 1)
     : [];
-  return { spec: lines.join('\n'), entity, schema, stages, rules: rules.map((r) => r.name), vrules, delPolicy, guards };
+  const sortWords = [...(G.sortDesc || []), ...(G.sortAsc || [])];
+  const sort = sortPart ? sortPart.split(/[,\n]/).map((e) => { const t = e.trim(); const dm = sortWords.length ? t.match(new RegExp('^(.+?)\\s+(' + sortWords.join('|') + ')$')) : null; const lab = heWords(dm ? dm[1] : t).join(' ').trim(); const f = schema.find((x) => x.label === lab); return f ? { field: f.label, desc: !!(dm && (G.sortDesc || []).includes(dm[2])) } : null; }).filter(Boolean) : [];
+  return { spec: lines.join('\n'), entity, schema, stages, rules: rules.map((r) => r.name), vrules, delPolicy, guards, sort };
 }
 
 // ── CLI (רץ רק בהרצה ישירה, לא ביבוא) ──

@@ -48,7 +48,8 @@
   "ולידציה",
   "מחיקה",
   "מעברים",
-  "שערים"
+  "שערים",
+  "מיון"
  ],
  "markRules": [
   "חוקים",
@@ -271,5 +272,29 @@
  "serverWord": "שרת",
  "servers": {
   "ענן": "cloud"
- }
+ },
+ "formulaFns": {
+  "sqrt": "math",
+  "min": "math",
+  "max": "math",
+  "pow": "math",
+  "abs": "method",
+  "round": "method",
+  "floor": "method",
+  "ceil": "method"
+ },
+ "pSort": [
+  "מיון"
+ ],
+ "sortDesc": [
+  "יורד",
+  "מהגבוה"
+ ],
+ "sortAsc": [
+  "עולה",
+  "מהנמוך"
+ ],
+ "markSort": [
+  "מיון"
+ ]
 }

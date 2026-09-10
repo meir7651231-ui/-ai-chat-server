@@ -21,6 +21,8 @@ const pascal = (slug) => 'GenApp' + slug.replace(/^app_/, '').replace(/(^|[_-])(
 // (ה-he שלהם, בקובץ-האטום). המנוע אוחז את סוג-הנתון לפי חפיפת-משמעות בין תווית-השדה
 // לתיאור-העצמי — אפס regex, אפס רשימת-מילים במנוע. מבחן-קונכייה: מחליף אטום ⇒ לומד מחדש.
 import { readAtlas } from './atlas.mjs';
+import { sortLambda } from './sort-cmp.mjs';   // L105 · מיון-הרשימה מהספק
+const G_FNS = JSON.parse(fs.readFileSync(HERE + 'spec-lang.data.json', 'utf8')).formulaFns || {};   // §19-ד: שמות-פונקציות-הנוסחה מהדאטה (math ⇒ dart:math עליונה · method ⇒ עוזר-מתודה מוזרק)
 import { searchOp, wireAtom, pickWired } from './particles.mjs';
 import { isPaper, stripGlyph } from './look.mjs';   // הכרעה-27 · חיפוש-פתוח לאריחי-אגרגט
 const atlas = readAtlas();   // L93: atlas.json + atlas-data.json
@@ -198,13 +200,17 @@ const ROLLUP_RE = new RegExp('^(' + [L.sum, L.avg, L.count].join('|') + ')\\(([^
 // 🧮 מהדר-נוסחה (שורש-4): 'סכום - הנחה - תשלום' ⇒ ביטוי-Dart מספרי מעל שדות-האחות.
 // שמות-שדה (הארוך-קודם) ⇒ קריאת-הערך; אופרטורים/מספרים/סוגריים עוברים. שארית לא-מזוהה ⇒ null
 // (השדה נשאר רגיל — כנות > קוד-שבור). דטרמיניסטי, קומפילציית-זמן, אפס-eval בזמן-ריצה.
-function compileFormula(formula, labels) {
+function compileFormula(formula, labels, used = null) {
   const sorted = labels.slice().sort((a, b) => b.label.length - a.label.length);
   let e = ' ' + formula + ' ';
-  for (const f of sorted) e = e.split(f.label).join(` @${f.idx}@ `);
-  const residue = e.replace(/@\d+@/g, ' ').replace(/[0-9.+\-*/()\s]/g, '');
+  const fns = Object.keys(G_FNS).sort((a, b) => b.length - a.length);
+  fns.forEach((fn, j) => { e = e.replace(new RegExp('(^|[^A-Za-z_@])' + fn + '\\s*\\(', 'g'), `$1@F${j}@(`); });   // שם-פונקציה מהדאטה ⇒ מציין-מקום (לפני תוויות)
+  const names = labels.flatMap((f) => (f.raw && f.raw !== f.label) ? [{ t: f.raw, idx: f.idx }, { t: f.label, idx: f.idx }] : [{ t: f.label, idx: f.idx }]).sort((a, b) => b.t.length - a.t.length);
+  for (const f of names) e = e.split(f.t).join(` @${f.idx}@ `);
+  const residue = e.replace(/@F\d+@/g, ' ').replace(/@\d+@/g, ' ').replace(/[0-9.+\-*/(),\s]/g, '');
   if (residue.trim().length) return null;                       // מילה לא-מזוהה ⇒ לא נוסחה-בטוחה
-  const dart = e.replace(/@(\d+)@/g, "(num.tryParse(_v[$1] ?? '') ?? 0)").trim();
+  let dart = e.replace(/@(\d+)@/g, "(num.tryParse(_v[$1] ?? '') ?? 0)");
+  dart = dart.replace(/@F(\d+)@\(/g, (_, j) => { const fn = fns[+j]; if (used) used.add(fn); return G_FNS[fn] === 'method' ? `_m_${fn}(` : `${fn}(`; }).trim();
   return /@|[֐-׿]/.test(dart) ? null : (dart || null);
 }
 
@@ -213,7 +219,7 @@ function compileFormula(formula, labels) {
 function compileRule(rule, labels) {
   const m = rule.match(/^(.+?)\s*(>=|<=|>|<)\s*(.+)$/);
   if (!m) return null;
-  const find = (name) => { const c = labels.find((l) => l.label === name.trim()); return c ? c.idx : -1; };
+  const find = (name) => { const n = name.trim(); const c = labels.find((l) => l.label === n || l.raw === n); return c ? c.idx : -1; };
   const li = find(m[1]), ri = find(m[3]);
   if (li < 0 || ri < 0 || li === ri) return null;
   return { li, ri, op: m[2], text: rule.trim() };
@@ -222,7 +228,7 @@ function compileRule(rule, labels) {
 // ⛔ מהדר-שער: תנאי-כניסה-לשלב מעל ההשוואה של compileRule + שתי הרחבות: אגף-ימני
 // מספר-ליטרלי ('סכום > 0'), ותווית-בודדת = "חייב-מלא" ('תיאור'). מילה-לא-מזוהה ⇒ null.
 function compileGuard(cond, labels) {
-  const find = (name) => { const c = labels.find((l) => l.label === name.trim()); return c ? c.idx : -1; };
+  const find = (name) => { const n = name.trim(); const c = labels.find((l) => l.label === n || l.raw === n); return c ? c.idx : -1; };
   const m = cond.match(/^(.+?)\s*(>=|<=|>|<)\s*(.+)$/);
   if (m) {
     const li = find(m[1]); if (li < 0) return null;
@@ -255,7 +261,7 @@ function compileCond(formula, labels) {
 }
 
 // ── ישות: מסך-חי מחווט — טופס→שמירה→חנות→טבלה→דשבורד, + קשרים(מזהה) + מסע + עריכה/מחיקה ──
-export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard, guards = [], authz = null }) {
+export function renderEntity(slug, { name, icon = '🗂️', schema, stages = [], entityNames = [], nameToSlug = {}, backRefs = [], vrules = [], delGuard, guards = [], authz = null, sort = [] }) {
   const { k, dump } = makeConsts(slug);
   const cTitle = k(name);
   const cSub = k(`${schema.length} ${L.fieldsWord}${stages.length ? ` · ${stages.length} ${L.stagesWord}` : ''}`);
@@ -270,6 +276,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
 
   const funcImports = new Set();
   const typedImports = new Set();
+  const usedFns = new Set();   // פונקציות-נוסחה בשימוש (מהדאטה) ⇒ ייבוא dart:math / עוזרי-מתודה
   const labelConst = [];
   const fieldBlocks = [];   // {i, expr, cond?} — expr בלי הזחה/פסיק (לעיטוף-גישה בטוח פר-תפקיד)
   // 🔩 עוזר-הוספה: שומר את ביטוי-הווידג'ט + אינדקס-השדה (+ תנאי-קיום ל-_live) ⇒ ניתן
@@ -287,7 +294,7 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   let hasLive = false, hasRel = false, hasEnum = false, hasCalc = false, hasMulti = false, usedField = false;
   let firstDateConst = null;   // תפר-לוח-שנה: הקבוע של שדה-התאריך הראשון (null ⇒ אין תאריך)
   const numFields = [];        // תפר-KPI: קבועי השדות-המספריים (לסכום/ממוצע חי)
-  const labelIdx = schema.map((s, i) => ({ label: s.label, idx: i }));
+  const labelIdx = schema.map((s, i) => ({ label: s.label, raw: s.raw || s.label, idx: i }));   // raw = כפי שנכתב (ספרות) — נוסחאות/תנאים מזהים גם אותו
   schema.forEach((s, i) => {
     const cl = k(s.label); labelConst.push(cl);
     const bind = `value: _v[${i}] ?? '', onChanged: (v) => setState(() => _v[${i}] = v)`;
@@ -351,12 +358,13 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
       const cd = compileCond(s.formula, labelIdx);
       if (cd) {
         hasLive = true;
-        const ce = `((${cd.bool}) ? ${k(cd.then)} : ${k(cd.els)})`;
+        const refOf = (t) => { const c = labelIdx.find((l) => l.label === t || l.raw === t); return c ? `(_v[${c.idx}] ?? '')` : k(t); };   // then/else שהם שם-שדה ⇒ ערך-השדה, אחרת טקסט (L105)
+        const ce = `((${cd.bool}) ? ${refOf(cd.then)} : ${refOf(cd.els)})`;
         addField(i, `_live(${cl}, ${ce})`, `true`);
         recValsR.push(ce); mapVals.push(`${cl}: ''`);   // נגזר — לא מאוחסן
         return;
       }
-      const expr = compileFormula(s.formula, labelIdx);
+      const expr = compileFormula(s.formula, labelIdx, usedFns);
       if (expr) {
         hasCalc = true;
         addField(i, `_calc(${cl}, ${expr})`);
@@ -572,6 +580,9 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
   const boardImport = hasBoard ? "import '../dart-ui-bs/ds/ds_board.dart';\n" : '';
   const calImport = hasCal ? "import '../dart-ui-bs/ds/ds_calendar.dart';\n" : '';
   const tableImport = hasTable ? "import '../dart-ui-bs/ds/ds_table.dart';\n" : '';
+  const sortLine = (sort && sort.length) ? `\n              rs.sort(${sortLambda(sort, k, schema)});` : '';   // L105 · ריק ⇒ אפס בייטים
+  const mathImport = [...usedFns].some((f) => G_FNS[f] === 'math') ? "import 'dart:math';\n" : '';
+  const mathHelpers = [...usedFns].filter((f) => G_FNS[f] === 'method').sort().map((f) => `\nnum _m_${f}(num x) => x.${f}();`).join('');   // ריק ⇒ אפס בייטים (בייט-זהות לכל אפליקציה שלא משתמשת)
   const viewField = hasSwitch ? "  int _view = 0;   // 0=רשימה · לוח · לוח-שנה · טבלה\n" : '';
   const viewChips = [`'${L.listChip}'`];   // list תמיד
   const viewIdx = { board: -1, cal: -1, table: -1 };
@@ -590,10 +601,10 @@ export function renderEntity(slug, { name, icon = '🗂️', schema, stages = []
 import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_search.dart';
-${usedField ? "import '../dart-ui-bs/ds/ds_field.dart';\n" : ''}${[...typedImports].sort().map((x) => x + '\n').join('')}${enumImport}${relImport}${multiImport}${boardImport}${calImport}${tableImport}import '../dart-ui-bs/ds/ds_store.dart';
+${usedField ? "import '../dart-ui-bs/ds/ds_field.dart';\n" : ''}${[...typedImports].sort().map((x) => x + '\n').join('')}${enumImport}${relImport}${multiImport}${boardImport}${calImport}${tableImport}${mathImport}import '../dart-ui-bs/ds/ds_store.dart';
 ${[...funcImports].sort().join('\n')}
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/services.dart';${mathHelpers}
 
 class ${cls} extends StatefulWidget {
   const ${cls}({this.scopeField, this.scopeId, this.initial, this.editId, super.key});
@@ -727,7 +738,7 @@ ${stepsDart}${hasVal ? `        if (_err != null) Container(
               final all = ${listRead};
               if (all.isEmpty) return const DsEmpty(label: ${cEmpty});
               final q = _q.trim().toLowerCase();
-              final rs = q.isEmpty ? all : all.where((r) => r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q))).toList();
+              final rs = q.isEmpty ? all : all.where((r) => r.entries.any((e) => !e.key.startsWith('__') && e.value.toLowerCase().contains(q))).toList();${sortLine}
               ${boardBranch}return Column(children: [
                 DsSearch(value: _q, onChanged: (v) => setState(() => _q = v)),
                 if (rs.isEmpty) const DsEmpty(label: ${cNoMatch}),

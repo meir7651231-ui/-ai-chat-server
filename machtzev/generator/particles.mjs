@@ -3,6 +3,7 @@
 //   קלט (צעדים 1–2, אדם): שורות `חלקיק <ישות>: <שם> = <צורה>` בספק של app-ds. הצורה = ביטוי מבני על שדות-הישות (אפס-מילון):
 //     A / B (יחס) · A - B (הפרש) · A * B (מכפלה) · A מול B (השוואה) · מונה(שדה=ערך) · מונה() · סכום(שדה) · ממוצע(שדה) ·
 //     שדה-enum (חלוקה-למצבים) · שדה-טקסט/תאריך (עובדה) · [טבלה] · [איתור] · [חריגה] · [ייצוא] · [פעולה] טקסט · [ריק] טקסט
+//     [טבלה] עמודה, עמודה | מיון: שדה עולה/יורד, שדה2 (L105: עמודות ומיון מהספק; מילים מ-spec-lang.data.json) · נוסחאות-ישות: sqrt/min/max/pow/abs/round (formulaFns בדאטה)
 //   המנוע: צורה ⇒ פעולות-הצגה (אלגברת compose-engine, אותו מקור-אמת של הזהב) ⇒ לכל פעולה חיפוש בכל ops-map (cover: פעולה+שקעים+ייעוד) ⇒
 //   חיווט-שקעים מהדאטה האמיתית (רשומות appStore; שקע שאין לו דאטה ⇒ האטום נפסל, הבא בתור — §20-ג) ⇒ מסך-חלקיקים לישות.
 //   פלט: plan (json/md, דטרמיניסטי) + קוד-Dart (renderParticles). שער `particles`: plan ≡ טרי · אפס חלקיק-לא-פתור בספקי specs-ds.
@@ -13,7 +14,8 @@ import { ops as opsOfKind } from '../compose-engine.mjs';
 import { buildAtlas } from './atlas.mjs';
 import * as R from '../root.mjs';
 import { L, T } from './chrome.mjs';
-import { isPaper, skinWired } from './look.mjs';   // G28 · נייר: אטום שלא לובש עור נפסל
+import { isPaper, skinWired } from './look.mjs';
+import { sortLambda, parseSortKeys } from './sort-cmp.mjs';   // L105 · משווה-מיון אחד לטבלאות ולרשימות   // G28 · נייר: אטום שלא לובש עור נפסל
 
 const GEN = R.GEN_DIR;
 const G = JSON.parse(fs.readFileSync(R.GEN_DIR + 'spec-lang.data.json', 'utf8'));   // §19-ד: דקדוק-החלקיקים מהדאטה
@@ -119,7 +121,22 @@ export function shapeOf(expr, schema, content = [], opts = {}) {
     if (!fields.length) return { kind: null, why: 'לוח: אין שדות-תאריך' };
     return { kind: 'dates', fields: fields.map((f) => f.label) };
   }
-  if ((m = e.match(new RegExp('^\\[' + alt(G.pTable) + '\\]')))) return { kind: 'table' };
+  if ((m = e.match(new RegExp('^\\[' + alt(G.pTable) + '\\]\\s*(.*)$')))) {
+    // [טבלה] (עמודות,…)? (| מיון: שדה (עולה|יורד), …)? — עמודות ומיון מהספק, מילים מהדאטה (§19-ד)
+    let columns = null; const sort = [];
+    for (const part of m[2].split('|').map((x) => x.trim()).filter(Boolean)) {
+      const sm = G.pSort && part.match(new RegExp('^' + alt(G.pSort) + '\\s*:\\s*(.+)$'));
+      if (sm) {
+        const r = parseSortKeys(sm[2], F, clean, G); if (r.error) return { kind: null, why: `טבלה: שדה-מיון לא בסכמה: ${r.error}` };
+        sort.push(...r.sort);
+      } else {
+        const cols = part.split(/[,،]/).map((x) => clean(x)).filter(Boolean).map((l) => F(l));
+        if (cols.some((f) => !f)) return { kind: null, why: `טבלה: עמודה לא בסכמה: ${part}` };
+        columns = cols.map((f) => f.label);
+      }
+    }
+    return { kind: 'table', columns, sort: sort.length ? sort : null };
+  }
   if ((m = e.match(new RegExp('^\\[' + alt(G.pSearch) + '\\]')))) return { kind: 'search' };
   if ((m = e.match(new RegExp('^\\[' + alt(G.pFilter) + '\\]')))) return { kind: 'filter' };
   if ((m = e.match(new RegExp('^\\[' + alt(G.pExport) + '\\]')))) return { kind: 'export' };
@@ -383,8 +400,11 @@ export function particleWidgets({ entity, plan, k, recs: recsOverride = null }) 
       const w = firstWired(kd[0][1], { label: k(s.label || p.name), nav, glyph: k('🧩') }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-פעולה מתחווט`); continue; }
       widgets.push(w.call); p.wired = [w.cand]; imports.add(`import 'gen_${entity.slug}.dart';`); continue;
     } else if (s.kind === 'table') {
-      const labels = entity.schema.map((f) => k(f.label));
-      const rows = `[for (final r in ${recs}) [${entity.schema.map((f) => strOf(f.label)).join(', ')}]]`;
+      const cols = s.columns ? entity.schema.filter((f) => s.columns.includes(f.label)) : entity.schema;
+      const labels = cols.map((f) => k(f.label));
+      // מיון מהספק: מספרי כשניתן, אחרת לקסיקלי; ריק ⇒ אחרון; מפתחות משורשרים; יורד ⇒ היפוך
+      const src = s.sort ? `(${recs}.toList()..sort(${sortLambda(s.sort, k, entity.schema)}))` : recs;
+      const rows = `[for (final r in ${src}) [${cols.map((f) => strOf(f.label)).join(', ')}]]`;
       const w = firstWired(kd[0][1], { labels, rows, label: lbl }); if (!w) { notes.push(`⚪ ${p.name}: אין אטום-טבלה מתחווט`); continue; }
       widgets.push(`AnimatedBuilder(animation: appStore, builder: (context, _) => ${w.call})`); p.wired = [w.cand]; continue;
     } else if (s.kind === 'empty') {

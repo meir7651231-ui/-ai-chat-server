@@ -137,6 +137,8 @@ gate('opcensus', 'generator/op-census.mjs', ['--gate']);
 gate('shapeops', 'generator/shape-ops.mjs', ['--gate']);
 gate('cover', 'generator/cover.mjs', ['--gate']);
 gate('particles', 'generator/particles.mjs', ['--gate']);
+gate('formulafns', 'generator/formula-fns.mjs', ['--gate']);
+gate('speclangdoc', 'generator/spec-lang-doc.mjs', ['--gate']);
 gate('peruk', 'generator/peruk.mjs', ['--gate']);
 gate('balagan', 'generator/balagan-look.mjs', ['--gate']);
 gate('balaganone', 'generator/balagan-one.mjs', ['--gate']);
