@@ -530,6 +530,21 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
     expect(${baseTodayCls}.nextRepeat(DateTime(2028, 2, 29), 'y1'), DateTime(2029, 2, 28));
     expect(balaganRepeatLabel('m2'), 'כל חודשיים');
   });
+  test('G51 · אמון: החזר-מחיקה מחזיר את תת-העץ (אב+בנות) · דגלי-אחסון נקיים בלידה', () {
+    final st = AppStore();
+    st.registerRelation('c_ent', 'אב', 'p_ent', 1);   // מפל: מחיקת-אב מוחקת בנות
+    final pid = st.add('p_ent', {'מה': 'תיק-אב'});
+    final c1 = st.add('c_ent', {'מה': 'תשלום א', 'אב': pid});
+    final c2 = st.add('c_ent', {'מה': 'תשלום ב', 'אב': pid});
+    final snap = st.snapshotSubtree('p_ent', pid);
+    expect(st.removeById('p_ent', pid), isTrue);
+    expect(st.records('p_ent'), isEmpty); expect(st.records('c_ent'), isEmpty);   // הבנות נמחקו במפל
+    expect(st.restoreSubtree(snap), isTrue);
+    expect(st.byId('p_ent', pid), isNotNull);
+    expect(st.byId('c_ent', c1), isNotNull); expect(st.byId('c_ent', c2), isNotNull);   // ⇐ הפער שהביקורת מצאה: קודם חזר רק האב
+    expect(st.restoreSubtree('{}'), isFalse);   // פורמט-ישן ⇒ נפילה לרשומה-בודדת בקורא
+    expect(st.storageOk, isTrue); expect(st.storageBlocked, isFalse);
+  });
   test('גיבוי: ייצוא ⇒ שחזור מחזיר את התיקים · טקסט זר נדחה · חיפוש מוצא בכל שדה', () {
     final st = AppStore();
     final id = st.add('x_ent', {'מה': 'לשלם ארנונה', 'טלפון': '0521234567'});
@@ -1226,6 +1241,8 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
     final lk = DsLook.of(context);
     final empty = n == 0 && cards.isEmpty;
     return DsScaffold(title: ${k(L.navToday)} + (bhHebDate(_isoD(today)).isEmpty ? '' : ' · ' + bhHebDate(_isoD(today))), subtitle: empty ? ${k(L.askSub)} : lead, icon: ${k('')}, children: [
+      if (appStore.storageBlocked) Padding(padding: const EdgeInsets.only(bottom: 10), child: Row(children: [Expanded(child: DsNote(message: ${k(L.storageBlocked)}, label: '', tone: 2)), const SizedBox(width: 8), DsChipButton(label: ${k(L.storageFresh)}, onTap: () => appStore.clearStorageBlock())])),   // G51 · בלוב שלא נקרא — לא דורסים אותו בשקט
+      if (!appStore.storageOk) Padding(padding: const EdgeInsets.only(bottom: 10), child: DsNote(message: ${k(L.storageFull)}, label: '', tone: 2)),   // G51 · כשל-שמירה נראה מיד, לא ברענון
       Row(crossAxisAlignment: CrossAxisAlignment.center, children: [Expanded(child: DsQuickAdd(hint: evening ? ${k(L.homeQuickEvening)} : ${k(L.homeQuick)}, autofocus: true, onSubmit: (s0) { final parts = balaganSplit(s0); final s = parts.first; if (parts.length == 1 && balaganPerson(s) != null) { Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${clsOf('balagan_topics')}(initialQuery: s.trim()))); return; } /* ב׳-לו · שם שכבר בתיקים ⇒ הכרטיס שלו */ for (final dd in [balaganDates(s.trim(), today)]) { if (parts.length == 1 && dd.length == 1 && dd.first.start == 0 && dd.first.end == s.trim().length) { Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => BalaganDay(delta: -bhDaysSince(dd.first.iso, _isoD(today))))); return; } } /* ב׳-מד · «מחר» / «יום ראשון» לבד ⇒ מסך-היום של אותו יום */ for (final mk in [balaganMonthOf(s, today)]) { if (parts.length == 1 && mk.isNotEmpty) { Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => BalaganMonth(monthKey: mk))); return; } } /* ב׳-קכא · «ספטמבר» לבד ⇒ מסך-החודש */ for (final wd in [balaganWeekOf(s)]) { if (parts.length == 1 && wd != null) { Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => BalaganWeek(delta: wd))); return; } } if (parts.length == 1 && balaganAmountFilter(s).isNotEmpty) { Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${clsOf('balagan_topics')}(initialQuery: s.trim()))); return; } /* ב׳-קכב/קכג · G40 · «שבוע הבא» ⇒ מסך-שבוע · «מעל 5000» ⇒ חיפוש-סכום */ for (final rg in [balaganRangeOf(s, today)]) { if (parts.length == 1 && rg.isNotEmpty) { Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => BalaganRange(from: rg[0], to: rg[1]))); return; } } /* ב׳-קל · G42 · «בין 1.9 ל-15.9» ⇒ מסך-טווח */ if (parts.length == 1 && balaganWhenOf(s).isNotEmpty) { Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${clsOf('balagan_topics')}(initialQuery: s.trim()))); return; } /* ב׳-קמד · G45 · «מתי X» ⇒ תשובה */ if (parts.length == 1 && balaganFieldOf(s).isNotEmpty && balaganFieldValue(balaganFieldOf(s)[0], balaganFieldOf(s)[1]).isNotEmpty) { Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${clsOf('balagan_topics')}(initialQuery: s.trim()))); return; } /* ב׳-קנג · G47 · «טלפון של רות» ⇒ תשובה (רק כשיש) */ for (final q in [balaganSearchQuery(s)]) { if (parts.length == 1 && q.isNotEmpty) { Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${clsOf('balagan_topics')}(initialQuery: q))); return; } } /* ב׳-צה · «1250» = חיפוש-סכום · ב׳-צז · «איפה הפיקדון» = חיפוש */ final hits = balaganIdentify(s); if (hits.isEmpty) { setState(() => _mailNote = ${k(L.askNoHit)}); return; } final m = hits.first.module; Navigator.of(context).push<bool>(MaterialPageRoute<bool>(builder: (_) => ${clsOf('balagan_confirm')}(module: m, facts: balaganFacts(s, m), alternatives: hits.skip(1).map((h) => h.module).toList(), text: s, queue: parts.sublist(1)))); })), const SizedBox(width: 8), DsChipButton(label: ${k(L.voiceLabel)}, onTap: () async { if (!voiceSupported) { setState(() => _mailNote = ${k(L.voiceUnsupported)}); return; } setState(() => _mailNote = ${k(L.voiceListening)}); final t = await voiceListen('he-IL'); if (!mounted) return; setState(() => _mailNote = (t == null || t.isEmpty) ? ${k(L.voiceNone)} : ''); if (t == null || t.isEmpty) return; final parts = balaganSplit(t); final s = parts.first; if (parts.length == 1 && balaganPerson(s) != null) { Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ${clsOf('balagan_topics')}(initialQuery: s.trim()))); return; } /* ב׳-מ · «רות לוי» בקול ⇒ הכרטיס */ final hits = balaganIdentify(s); if (hits.isEmpty) { setState(() => _mailNote = ${k(L.askNoHit)}); return; } Navigator.of(context).push<bool>(MaterialPageRoute<bool>(builder: (_) => ${clsOf('balagan_confirm')}(module: hits.first.module, facts: balaganFacts(s, hits.first.module), alternatives: hits.skip(1).map((h) => h.module).toList(), text: s, queue: parts.sublist(1)))); })]),   // שורה אחת / קול מהמסך-הראשון ⇒ זיהוי ⇒ טופס-אישור: אפס ניווט
       if (!empty) DsLoadMeter(count: n, label: ${k(L.loadOf)}.replaceAll('{n}', n.toString()), stateLabels: [${k(L.loadOk)}, ${k(L.loadWarn)}, ${k(L.loadBad)}]),
       if (money > 0 || moneyTm > 0 || monthSum[1] > 0 || balaganOpenSummary()[1] > 0) Padding(padding: const EdgeInsets.only(top: 6), child: Text([if (money > 0) ${k(L.moneyToday)}.replaceAll('{n}', balaganFmtMoney(money)), if (moneyTm > 0) ${k(L.moneyTomorrow)}.replaceAll('{n}', balaganFmtMoney(moneyTm)), if (monthSum[1] > 0) ${k(L.monthLine)}.replaceAll('{n}', balaganFmtMoney(monthSum[1].toDouble())).replaceAll('{m}', monthSum[0].toString()), for (final os in [balaganOpenSummary()]) if (os[1] > 0 && os[1] != monthSum[1]) ${k(L.openLine)}.replaceAll('{n}', balaganFmtMoney(os[1].toDouble())).replaceAll('{m}', os[0].toString()) /* ב׳-קכט · G41 */, if (monthSum[1] > 0) ${k(L.monthEndLine)}.replaceAll('{n}', bhDaysSince(_isoD(today), bhMonthEnd(_isoD(today))).toString()) /* ב׳-קלד · G43 */].join(' · '), style: TextStyle(color: lk.ink, fontSize: 15, fontWeight: FontWeight.w600))),   // ב׳-כט · כסף-במבט
@@ -1571,6 +1588,7 @@ import '../dart-data-bs/auto/gen_${slug}_content.dart';
 import 'gen_balagan_home.dart';
 import 'gen_balagan_moments.dart';   // G46 · balaganImportCsv
 import 'gen_behaviors.dart';   // G50 · bhTextScale
+import '../dart-ui-bs/ds/ds_download_stub.dart' if (dart.library.js_interop) '../dart-ui-bs/ds/ds_download_web.dart';   // G51 · גיבוי-לקובץ
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
@@ -1586,8 +1604,10 @@ class ${cls} extends StatefulWidget {
 class _${cls}State extends State<${cls}> {
   String _paste = '', _note = '';
   // גיבוי = טקסט (אותו JSON של ההתמדה) שהלקוח שומר איפה שנוח; שחזור מחליף הכל ושומר את הקודם פעם אחת ⇒ «בטל שחזור». אפס-שרת (חוק-6).
-  Future<void> _copy() async { final t = appStore.exportJson(); await Clipboard.setData(ClipboardData(text: t)); appStore.setSetting('backupAt', DateTime.now().toIso8601String().substring(0, 10)); setState(() => _note = ${k(L.backupCopied)}.replaceAll('{n}', t.length.toString())); }
-  void _restore() { final n = appStore.importJson(_paste); setState(() { _note = n < 0 ? ${k(L.backupBad)} : ${k(L.backupRestored)}.replaceAll('{n}', n.toString()); if (n >= 0) _paste = ''; }); }
+  Future<void> _copy() async { final t = appStore.exportJson(); await Clipboard.setData(ClipboardData(text: t)); setState(() => _note = ${k(L.backupCopied)}.replaceAll('{n}', t.length.toString())); }   // G51 · העתקה-ללוח אינה גיבוי ⇒ אינה חותמת
+  /// G51 · הגיבוי היחיד שנחשב: קובץ שירד בפועל. רק הוא חותם backupAt.
+  void _download() { final t = appStore.exportJson(); final ok = downloadText('balagan-' + DateTime.now().toIso8601String().substring(0, 10) + '.json', t); if (ok) appStore.setSetting('backupAt', DateTime.now().toIso8601String().substring(0, 10)); setState(() => _note = ok ? ${k(L.backupDownloaded)} : ${k(L.backupDownloadFail)}); }
+  void _restore() { final n = appStore.importJson(_paste); setState(() { _note = n == -2 ? ${k(L.restoreNoBack)} : n < 0 ? ${k(L.backupBad)} : ${k(L.backupRestored)}.replaceAll('{n}', n.toString()); if (n >= 0) _paste = ''; }); }   // G51 · -2 = אין דרך-חזרה ⇒ לא נגענו בכלום
   void _undo() { final ok = appStore.undoImport(); setState(() => _note = ok ? ${k(L.backupUndone)} : ${k(L.backupBad)}); }
   String _csv = '', _csvNote = '', _vcf = '', _vcfNote = '';
   void _importVcf() { final r = balaganImportVcf(_vcf); setState(() { _vcfNote = r[1] == 0 && r[0] == 0 ? ${k(L.vcfNone)} : ${k(L.vcfImported)}.replaceAll('{n}', r[0].toString()).replaceAll('{m}', r[1].toString()); if (r[0] > 0) _vcf = ''; }); }   // ב׳-קנד · G48
@@ -1596,7 +1616,8 @@ class _${cls}State extends State<${cls}> {
   Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, _) => DsScaffold(title: ${k(L.keysTitle)}, subtitle: ${k(L.keysSub)}, icon: ${k('')}, children: [
     DsSection(title: ${k(L.backupTitle)}, children: [
       for (final d in [DateTime.tryParse(appStore.setting('backupAt'))]) Padding(padding: const EdgeInsets.only(bottom: 8), child: Text(d == null ? ${k(L.backupNever)} : ${k(L.backupLast)}.replaceAll('{d}', balaganDayLabel(d, DateTime.now())), style: TextStyle(color: DsLook.of(context).muted, fontSize: 13))),   // ב׳-מז · מתי גיבית לאחרונה
-      DsPrimaryButton(label: ${k(L.backupCopy)}, onTap: _copy),
+      DsPrimaryButton(label: ${k(L.backupDownload)}, onTap: _download),
+      Padding(padding: const EdgeInsets.only(top: 8), child: Row(children: [DsChipButton(label: ${k(L.backupCopy)}, onTap: _copy)])),
       Padding(padding: const EdgeInsets.only(top: 8), child: Row(children: [DsChipButton(label: ${k(L.exportAll)}, onTap: () async { final t = balaganCsvAll(); await Clipboard.setData(ClipboardData(text: t)); setState(() => _note = ${k(L.exportAllDone)}.replaceAll('{n}', (t.split('\\n').length - 1).toString())); })])),   // ב׳-קנא · G47 · כל התיקים לאקסל
       Padding(padding: const EdgeInsets.only(top: 8), child: DsField(label: ${k(L.backupPasteLabel)}, hint: '{…}', value: _paste, onChanged: (v) => _paste = v)),
       Padding(padding: const EdgeInsets.only(top: 8), child: Row(children: [DsChipButton(label: ${k(L.backupRestore)}, onTap: _restore), const SizedBox(width: 8), DsChipButton(label: ${k(L.backupUndo)}, onTap: _undo)])),
