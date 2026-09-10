@@ -47,6 +47,15 @@ for (const d of dirs) {
   }
   // (4) המצבות נוסעות — בלי זה סנכרון מחייה מחוקים
   if (!/'dead'/.test(rules)) fails.push(`${d}: מצבות-המחיקה אינן חלק מהמסמך`);
+  // G59 · הפונקציה קיימת, טיפשה (לא מחשבת מועדים), ומנקה טוקן שפג
+  const fn = rd(path.join(OUT, d, 'functions/index.js'));
+  if (!fn) fails.push(`${d}: אין functions/index.js`);
+  else {
+    if (!/collectionGroup\('due'\)/.test(fn)) fails.push(`${d}: הפונקציה אינה קוראת מועדים שהלקוח כתב`);
+    if (/offsets|digestHour|weekday|Saturday/.test(fn)) fails.push(`${d}: השרת מחשב מתי להזכיר — מנוע כפול (הכרעה-31ב)`);
+    if (!/registration-token-not-registered/.test(fn)) fails.push(`${d}: טוקן שפג אינו נמחק`);
+    if (!/push\/\{token\}/.test(rules)) fails.push(`${d}: אין כללים לטוקני-המכשיר`);
+  }
 }
 
 // (5) יציבות-מזהים: `<ns>_ent<N>` נגזר ממספר-השורה בספק — שורה חדשה מעל הישות מזיזה אותו

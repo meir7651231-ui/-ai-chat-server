@@ -16,7 +16,10 @@ service cloud.firestore {
       allow write: if mine(uid) && stateOk(request.resource.data);
     }
     match /users/{uid}/due/{id} {
-      allow read, write: if mine(uid);
+      allow read, write: if mine(uid);   // הלקוח מחשב מועדים; הפונקציה קוראת כ-admin ומסמנת
+    }
+    match /users/{uid}/push/{token} {
+      allow read, write: if mine(uid);   // טוקן-מכשיר: מזהה מכשיר, לא אדם
     }
     match /users/{uid}/inbox/{id} {
       allow read, write: if mine(uid);   // כתיבה מבחוץ עוברת בפונקציה (admin), לא בכללים

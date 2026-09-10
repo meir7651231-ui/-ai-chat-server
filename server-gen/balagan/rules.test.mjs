@@ -23,7 +23,11 @@ await assertFails(setDoc(doc(a, 'users/a/state/app'), state({ not_declared_ent: 
 await assertFails(setDoc(doc(a, 'users/a/state/app'), { rec: {}, secret: 1 })); ok.push('שדה זר נדחה');
 await assertFails(setDoc(doc(a, 'users/a/state/app'), { rec: {}, settings: { 'ai.key': 'sk-x' } })); ok.push('מפתחות-הלקוח נדחים');
 await assertFails(setDoc(doc(a, 'other/x'), { a: 1 })); ok.push('נתיב מחוץ למגירה נדחה');
+await assertSucceeds(setDoc(doc(a, 'users/a/push/tok1'), { at: '2026-09-10' })); ok.push('טוקן-מכשיר נכתב');
+await assertFails(setDoc(doc(b, 'users/a/push/tok1'), { at: 'x' })); ok.push('טוקן של אחר נדחה');
+await assertSucceeds(setDoc(doc(a, 'users/a/due/d1'), { at: '2026-09-11T08:00', title: 'ארנונה' })); ok.push('מועד נכתב');
+await assertFails(getDoc(doc(b, 'users/a/due/d1'))); ok.push('מועד של אחר לא נקרא');
 
 await env.cleanup();
-console.log('✓ כללי-הגישה: ' + ok.length + '/9 · ' + ok.join(' · '));
-if (ok.length !== 9) process.exit(1);
+console.log('✓ כללי-הגישה: ' + ok.length + '/13 · ' + ok.join(' · '));
+if (ok.length !== 13) process.exit(1);

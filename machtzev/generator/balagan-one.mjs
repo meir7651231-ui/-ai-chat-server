@@ -76,6 +76,15 @@ if (baseMods.length < 2 || !baseMods.every((m) => m.root.fields.some((f) => f.ty
   if (!/appStore\.setting\('cloud\.config'\)/.test(keys)) fails.push('אין מקום להזין את הקונפיג');
   if (/"apiKey"\s*:\s*"[A-Za-z0-9_-]{10,}/.test(cloud + keys + mom)) fails.push('קונפיג-אמת ליטרלי בקוד');
 }
+// G59 · דחיפה כשהאפליקציה סגורה: הלקוח כותב מועדים ורושם מכשיר; אין מנוע-תזכורות שני.
+{
+  const push = rd(path.resolve(HERE, '../../new/dart-ui-bs/ds/ds_push.dart'));
+  if (!/cloudInit\(rawConfig\)/.test(push) || !/if \(app == null\) return null;/.test(push)) fails.push('הדחיפה אינה חסומה בלי קונפיג');
+  if (!/vapidKey:/.test(push)) fails.push('אין מפתח-VAPID בבקשת-הטוקן (בדפדפן אין טוקן בלעדיו)');
+  if (!/_pushDue\(/.test(home) || !/cloudPutDue\(rows\)/.test(home)) fails.push('«היום» אינו כותב מועדים לענן');
+  if (!/m\.items\(today, dayDelta: d\)/.test(home.slice(home.indexOf('Future<void> _pushDue(')))) fails.push('המועדים אינם נגזרים מאותו מנוע של «היום»');
+  if (!/appStore\.setting\('push\.vapid'\)/.test(keys)) fails.push('אין מקום להזין VAPID');
+}
 // G34 · בדיקות-לפי-גל (100 רגקסים של נוכחות-טקסט, ב׳-ב…ב׳-קא) הוסרו: ההתנהגויות הן אטומי-מדף (behavior-plan.mjs --gate בודק בחירה+ייבוא+קריאה+מתאם-דק); ההיסטוריה ב-knowledge/CLOSED-GENMAX-G33.
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };

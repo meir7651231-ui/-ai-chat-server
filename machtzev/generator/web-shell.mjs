@@ -6,7 +6,7 @@
 //   כאן: שם · צבע · רקע · סמל — כולם **נקראים מהקוד המחולל** (MaterialApp.title · DsPure theme/skin),
 //   אפס-ליטרל פר-אפליקציה. השימוש: web-shell --site <name> --entry <gen_x.dart> לפני כל build.
 //   ואחרי הבנייה: --prune <buildDir> מסיר משפחות-גופן שאינן מוזכרות ב-main.dart.js של אותה אפליקציה.
-import fs from 'fs'; import path from 'path'; import { fileURLToPath } from 'url';
+import fs from 'fs'; import path from 'path'; import vm from 'node:vm'; import { fileURLToPath } from 'url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const APP = process.env.BUILDSMART || '/home/user/buildsmart/app_flutter';
 const GEN = path.join(ROOT, 'new/dart-gen-bs'), DATA = path.join(ROOT, 'new/dart-data-bs/auto'), DS = path.join(ROOT, 'new/dart-ui-bs/ds');
@@ -54,7 +54,7 @@ const svgIcon = (emoji, accent) => `<svg xmlns="http://www.w3.org/2000/svg" view
 
 // הקליפה של «בנייה חכמה» עצמה היא קובץ-ריפו מקובע — הבנייה-פר-אפליקציה דורסת אותו זמנית,
 // ולכן צילום-מקור נשמר פעם-אחת ב-.dart_tool (מחוץ ל-git) ומוחזר ב---restore בסוף המסלול.
-const SHELL_FILES = ['index.html', 'manifest.json', 'flutter_bootstrap.js'];
+const SHELL_FILES = ['index.html', 'manifest.json', 'flutter_bootstrap.js', 'firebase-messaging-sw.js'];
 const ORIG = path.join(APP, '.dart_tool/web-shell-orig');
 function snapshot() {
   if (fs.existsSync(ORIG)) return; fs.mkdirSync(ORIG, { recursive: true });
@@ -114,6 +114,58 @@ function writeShell(id) {
 </body>
 </html>
 `);
+  // G59 · מקלט-הדחיפה: service worker נפרד שרץ **כשהאפליקציה סגורה**. הקונפיג אינו ידוע
+  //   בזמן-בנייה (הבעלים מדביק אותו בזמן-ריצה), ולכן הוא מגיע ב-query של הרישום —
+  //   ולא מוטבע בקוד כמו באפליקציה שיש לה פרויקט אחד קבוע. בלי query ⇒ ה-SW לא מאתחל כלום.
+  const swSrc = `// ☁️ חולל ע"י web-shell (G59 · הכרעה-31) — מקלט-דחיפה. אל תערוך ידנית.
+//   גרסאות מקובעות בכוונה: CDN לא-מקובע משנה את המקלט מתחת לפריסה שלא נגעה בו.
+importScripts('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js');
+
+const q = new URLSearchParams(self.location.search);
+const cfg = { apiKey: q.get('apiKey'), projectId: q.get('projectId'), appId: q.get('appId'), messagingSenderId: q.get('messagingSenderId') || '', authDomain: q.get('authDomain') || '' };
+if (cfg.apiKey && cfg.projectId && cfg.appId) {
+  firebase.initializeApp(cfg);
+  const messaging = firebase.messaging();
+  messaging.onBackgroundMessage((payload) => {
+    const n = payload.notification || {};
+    const d = payload.data || {};
+    self.registration.showNotification(n.title || ${JSON.stringify(id.title)}, {
+      body: n.body || '',
+      icon: 'icon.svg',
+      dir: 'rtl',
+      lang: 'he',
+      tag: d.rid ? 'due-' + d.rid : undefined,   // תזכורת אחת לתיק, לא ערימה
+      data: d,
+    });
+  });
+  self.addEventListener('notificationclick', (e) => {
+    e.notification.close();
+    e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((ws) => {
+      for (const w of ws) { if ('focus' in w) return w.focus(); }
+      return self.clients.openWindow(new URL('.', self.registration.scope).href);   // הורה-ה-scope = שורש-האפליקציה (בלי רגקס — נמלט-לרעה בתבנית)
+    }));
+  });
+}
+`;
+  // G59 · אימות-בזמן-פליטה: ה-SW הזה רץ **מחוץ** לאפליקציה, ואם הוא לא נפרס אין דחיפה בכלל
+  //   ואף אחד לא רואה שגיאה. תפסתי כך בייצור-הזה רגקס שאיבד לוכסן-נמלט בתבנית ⇒ קובץ שבור.
+  //   שתי בדיקות: הוא נפרס, ובלי query הוא **לא** מאתחל כלום (דורמנטיות).
+  new vm.Script(swSrc, { filename: 'firebase-messaging-sw.js' });
+  {
+    let inited = 0;
+    const ctx = { self: { location: { search: '' }, registration: {}, addEventListener() {}, clients: {} }, importScripts: () => {}, URL, URLSearchParams,
+      firebase: { initializeApp: () => { inited++; }, messaging: () => ({ onBackgroundMessage() {} }) } };
+    vm.createContext(ctx);
+    vm.runInContext(swSrc, ctx);
+    if (inited !== 0) throw new Error('✗ web-shell: מקלט-הדחיפה מאתחל בלי קונפיג — לא דורמנטי');
+    const ctx2 = { ...ctx, self: { location: { search: '?apiKey=a&projectId=p&appId=x' }, registration: {}, addEventListener() {}, clients: {} } };
+    vm.createContext(ctx2);
+    vm.runInContext(swSrc, ctx2);
+    if (inited !== 1) throw new Error('✗ web-shell: מקלט-הדחיפה לא מאתחל גם עם קונפיג');
+  }
+  fs.writeFileSync(path.join(web, 'firebase-messaging-sw.js'), swSrc);
+
   // G52 · רישום ה-service worker: הקובץ נוצר בכל בנייה אך לא נרשם ⇒ אפס-אופליין, אפס-PWA אמיתי.
   fs.writeFileSync(path.join(web, 'flutter_bootstrap.js'), `{{flutter_js}}
 {{flutter_build_config}}

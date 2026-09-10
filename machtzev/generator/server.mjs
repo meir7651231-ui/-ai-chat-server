@@ -69,7 +69,10 @@ service cloud.firestore {
       allow write: if mine(uid) && stateOk(request.resource.data);
     }
     match /users/{uid}/due/{id} {
-      allow read, write: if mine(uid);
+      allow read, write: if mine(uid);   // הלקוח מחשב מועדים; הפונקציה קוראת כ-admin ומסמנת
+    }
+    match /users/{uid}/push/{token} {
+      allow read, write: if mine(uid);   // טוקן-מכשיר: מזהה מכשיר, לא אדם
     }
     match /users/{uid}/inbox/{id} {
       allow read, write: if mine(uid);   // כתיבה מבחוץ עוברת בפונקציה (admin), לא בכללים
@@ -95,9 +98,18 @@ const ACTIVATE = (app, entities) => `# הפעלת-השרת של «${app}» — �
 1. פרויקט Firebase (חינם עד ההיקף של פונקציות; פונקציות דורשות Blaze).
 2. \`firebase login\` ואז \`firebase use <project>\` בתיקייה הזאת.
 3. \`firebase deploy --only firestore:rules\` — פרסום כללי-הגישה.
-**מה עוד לא קיים (כדי שלא תחפש):** מסך להדבקת-הקונפיג באפליקציה עדיין אינו קיים —
-הוא מגיע עם גל-הסנכרון. מה שכן מוכן היום: כללי-גישה שאפשר לפרסם, ומודל-נתונים
-שהלקוח כבר יודע לייצר (cloudJson) ולמזג (mergeJson, כולל מצבות-מחיקה).
+4. באפליקציה: «נושאים» ⇒ «חיבורים» ⇒ «ענן» ⇒ הדבק את קונפיג-האתר ⇒ מייל+סיסמה ⇒ «התחבר».
+   אותו חשבון במכשיר השני, וזהו. הקונפיג נשמר **במכשיר**, כמו כל מפתח.
+
+## התראה כשהאפליקציה סגורה (G59)
+5. ‏Firebase ⇒ Project settings ⇒ **Cloud Messaging** ⇒ Web Push certificates ⇒ **Generate key pair**.
+   העתק את המפתח הציבורי (מתחיל באות B) והדבק באפליקציה בשדה «מפתח VAPID», ואז «הפעל התראות במכשיר הזה».
+6. תוכנית **Blaze** (פונקציות דורשות אותה) ואז \`firebase deploy --only functions\`.
+   הפונקציה pushDue רצה כל 15 דקות, שולחת את מה שהגיע זמנו ומסמנת.
+
+**איך זה עובד, בשורה:** הלקוח מחשב מועדים וכותב אותם ל-users/{uid}/due;
+השרת רק שולח. אין מנוע-תזכורות שני שיסטה מהראשון (הכרעה-31ב).
+טוקן שפג נמחק אוטומטית, כדי שהתור לא יתמלא במכשירים שכבר לא קיימים.
 
 ## מה נבדק כאן, בלי פרויקט
 \`npm test\` מריץ את כללי-הגישה מול **אמולטור-Firestore** מקומי:
@@ -115,8 +127,60 @@ const PKG = (app) => JSON.stringify({
   devDependencies: { '@firebase/rules-unit-testing': '^3.0.4', firebase: '^10.14.1' },
 }, null, 2) + '\n';
 
+// G59 · הפונקציה היחידה, וטיפשה בכוונה (הכרעה-31ב): היא לא מחשבת מתי להזכיר —
+//   הלקוח כתב מועדים, והיא רק שולחת את מה שהגיע זמנו ומסמנת. כך אין שני מנועים שיסטו.
+const FUNCTIONS_INDEX = `// ☁️ חולל ע"י server.mjs (G59 · הכרעה-31) — אל תערוך ידנית.
+const { onSchedule } = require('firebase-functions/v2/scheduler');
+const { initializeApp } = require('firebase-admin/app');
+const { getFirestore, FieldValue } = require('firebase-admin/firestore');
+const { getMessaging } = require('firebase-admin/messaging');
+
+initializeApp();
+const db = getFirestore();
+
+/// כל 15 דקות: מועדים שהגיע זמנם ועוד לא נשלחו ⇒ דחיפה לכל מכשיר של אותו אדם.
+/// טוקן שפג (unregistered) נמחק — אחרת התור מתמלא במכשירים שכבר לא קיימים.
+exports.pushDue = onSchedule({ schedule: 'every 15 minutes', timeZone: 'Asia/Jerusalem', region: 'europe-west1' }, async () => {
+  const now = new Date().toISOString();
+  const snap = await db.collectionGroup('due').where('at', '<=', now).where('sent', '==', null).limit(500).get();
+  for (const doc of snap.docs) {
+    const uid = doc.ref.path.split('/')[1];
+    const d = doc.data() || {};
+    const toks = await db.collection('users/' + uid + '/push').get();
+    if (toks.empty) { await doc.ref.set({ sent: now, note: 'no-device' }, { merge: true }); continue; }
+    const message = {
+      notification: { title: d.title || '', body: d.body || '' },
+      data: { rid: String(d.rid || '') },
+      tokens: toks.docs.map((t) => t.id),
+    };
+    try {
+      const res = await getMessaging().sendEachForMulticast(message);
+      res.responses.forEach((r, i) => {
+        if (r.success) return;
+        const code = (r.error && r.error.code) || '';
+        if (code.includes('registration-token-not-registered') || code.includes('invalid-argument')) {
+          db.doc('users/' + uid + '/push/' + toks.docs[i].id).delete().catch(() => {});
+        }
+      });
+      await doc.ref.set({ sent: now, ok: res.successCount }, { merge: true });
+    } catch (e) {
+      await doc.ref.set({ tried: FieldValue.increment(1) }, { merge: true });   // כשל ⇒ ניסיון-חוזר בסבב הבא, לא בליעה
+    }
+  }
+});
+`;
+
+const FUNCTIONS_PKG = JSON.stringify({
+  name: 'functions',
+  private: true,
+  engines: { node: '22' },
+  main: 'index.js',
+  dependencies: { 'firebase-admin': '^13.0.0', 'firebase-functions': '^6.1.0' },
+}, null, 2) + '\n';
+
 const FIREBASE_JSON = JSON.stringify({
   firestore: { rules: 'firestore.rules' },
+  functions: [{ source: 'functions' }],
   emulators: { firestore: { port: 8181, host: '127.0.0.1' }, ui: { enabled: false }, singleProjectMode: true },
 }, null, 2) + '\n';
 
@@ -145,10 +209,14 @@ await assertFails(setDoc(doc(a, 'users/a/state/app'), state({ not_declared_ent: 
 await assertFails(setDoc(doc(a, 'users/a/state/app'), { rec: {}, secret: 1 })); ok.push('שדה זר נדחה');
 await assertFails(setDoc(doc(a, 'users/a/state/app'), { rec: {}, settings: { 'ai.key': 'sk-x' } })); ok.push('מפתחות-הלקוח נדחים');
 await assertFails(setDoc(doc(a, 'other/x'), { a: 1 })); ok.push('נתיב מחוץ למגירה נדחה');
+await assertSucceeds(setDoc(doc(a, 'users/a/push/tok1'), { at: '2026-09-10' })); ok.push('טוקן-מכשיר נכתב');
+await assertFails(setDoc(doc(b, 'users/a/push/tok1'), { at: 'x' })); ok.push('טוקן של אחר נדחה');
+await assertSucceeds(setDoc(doc(a, 'users/a/due/d1'), { at: '2026-09-11T08:00', title: 'ארנונה' })); ok.push('מועד נכתב');
+await assertFails(getDoc(doc(b, 'users/a/due/d1'))); ok.push('מועד של אחר לא נקרא');
 
 await env.cleanup();
-console.log('✓ כללי-הגישה: ' + ok.length + '/9 · ' + ok.join(' · '));
-if (ok.length !== 9) process.exit(1);
+console.log('✓ כללי-הגישה: ' + ok.length + '/13 · ' + ok.join(' · '));
+if (ok.length !== 13) process.exit(1);
 `;
 
 // ── CLI ───────────────────────────────────────────────────────────────────────
@@ -163,7 +231,10 @@ export function emitServer(app, nsList) {
   fs.writeFileSync(path.join(dir, 'package.json'), PKG(app));
   fs.writeFileSync(path.join(dir, 'rules.test.mjs'), RULES_TEST(entities, keys));
   fs.writeFileSync(path.join(dir, 'ACTIVATE.md'), ACTIVATE(app, entities));
-  fs.writeFileSync(path.join(dir, '.gitignore'), 'node_modules/\npackage-lock.json\nfirebase-debug.log\n');   // תלויות-בדיקה אינן תוצר-מנוע
+  fs.mkdirSync(path.join(dir, 'functions'), { recursive: true });
+  fs.writeFileSync(path.join(dir, 'functions/index.js'), FUNCTIONS_INDEX);
+  fs.writeFileSync(path.join(dir, 'functions/package.json'), FUNCTIONS_PKG);
+  fs.writeFileSync(path.join(dir, '.gitignore'), 'node_modules/\npackage-lock.json\nfirebase-debug.log\nfunctions/node_modules/\nfunctions/package-lock.json\n');   // תלויות-בדיקה אינן תוצר-מנוע
   return { dir, entities };
 }
 
