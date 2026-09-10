@@ -11,6 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { makeConsts, write, setLook } from './render-ds.mjs';
 import { searchOp, wireAtom, pickWired } from './particles.mjs';
 import { renderBehavior } from './app-shell.mjs';
+import { renderCloudSection } from './cloud-screen.mjs';
 import { L, T } from './chrome.mjs';
 import * as R from '../root.mjs';
 
@@ -1109,6 +1110,7 @@ import 'package:flutter/services.dart';
 import '../dart-ui-bs/ds/ds_voice.dart';
 import '../dart-ui-bs/ds/ds_notify.dart';   // G55 · התראת-דפדפן (אפס-שרת)
 import '../dart-ui-bs/ds/ds_cloud.dart';   // G59 · cloudPutDue
+import '../dart-ui-bs/ds/ds_oauth.dart';   // G60 · טוקן-מתחדש
 import 'package:url_launcher/url_launcher.dart';
 
 typedef _Items = List<DsTodayItem> Function(DateTime today, {required int dayDelta});
@@ -1238,7 +1240,10 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
   List<DsMailItem> _mail = const []; bool _mailTried = false; String _mailNote = '';
   Future<void> _fetchMail() async {
     if (_mailTried) return; _mailTried = true;
-    final tok = appStore.setting('mail.token'); if (tok.isEmpty) return;
+    // G60 · קודם טוקן-מתחדש מהשרת (הרענון יושב שם, לא כאן); אין ⇒ טוקן שהודבק ידנית,
+    //   כדי לא לשבור את מי שעובד ככה היום. אין שניהם ⇒ יוצאים בשקט.
+    final tok = (await oauthAccessToken(fnBase: appStore.setting('oauth.fnBase'))) ?? appStore.setting('mail.token');
+    if (tok.isEmpty) return;
     final r = await dsMailRecent(token: tok, query: appStore.setting('mail.query', 'newer_than:7d'));
     if (!mounted) return;
     setState(() { if (r == null) { _mailNote = ${k(L.mailFail)}; } else { _mail = r; } });
@@ -1827,6 +1832,8 @@ import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
 import '../dart-ui-bs/ds/ds_cloud.dart';   // G58 · החוט לענן
 import '../dart-ui-bs/ds/ds_push.dart';   // G59 · טוקן-דחיפה
+import '../dart-ui-bs/ds/ds_oauth.dart';   // G60 · חיבור-גוגל מתחדש
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -1859,6 +1866,16 @@ class _${cls}State extends State<${cls}> {
     if (!mounted) return;
     setState(() { _cloudBusy = false; _cloudNote = ok ? ${k(L.pushOk)} : ${k(L.pushNo)}; });
   }
+  // G60 · פותח את מסך-ההסכמה של גוגל. מכאן והלאה השרת מחזיק את טוקן-הרענון
+  //   והלקוח מקבל רק טוקן קצר — הטוקן במייל מפסיק למות אחרי שעה.
+  Future<void> _oauth() async {
+    final u = await oauthUrl(clientId: appStore.setting('oauth.clientId'), fnBase: appStore.setting('oauth.fnBase'));
+    if (!mounted) return;
+    if (u == null) { setState(() => _cloudNote = ${k(L.oauthNo)}); return; }
+    await launchUrl(Uri.parse(u), mode: LaunchMode.externalApplication);
+    if (mounted) setState(() => _cloudNote = ${k(L.oauthOpen)});
+  }
+  Future<void> _cloudOut() async { await cloudSignOut(); if (mounted) setState(() => _cloudNote = ''); }
   Future<void> _cloudSync() async {
     setState(() { _cloudBusy = true; });
     final st = await balaganCloudSync();
@@ -1891,27 +1908,7 @@ class _${cls}State extends State<${cls}> {
   @override
   Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, _) => DsScaffold(title: ${k(L.keysTitle)}, subtitle: ${k(L.keysSub)}, icon: ${k('')}, children: [
     // G58 · ענן — ראשון במסך: זה מה שמחבר את המכשירים. בלי הדבקת-קונפיג הוא רק אומר שהוא כבוי.
-    DsSection(title: ${k(L.cloudTitle)}, children: [
-      Padding(padding: const EdgeInsets.only(bottom: 8), child: Text(_cloudState(), style: TextStyle(color: DsLook.of(context).muted, fontSize: 13))),
-      DsField(label: ${k(L.cloudCfgLabel)}, hint: '{}', value: appStore.setting('cloud.config'), onChanged: (v) => appStore.setSetting('cloud.config', v)),
-      if (cloudOptions(appStore.setting('cloud.config')) != null && cloudUid().isEmpty) ...[
-        Padding(padding: const EdgeInsets.only(top: 8), child: DsField(label: ${k(L.cloudMail)}, hint: '', value: _mail, onChanged: (v) => _mail = v)),
-        Padding(padding: const EdgeInsets.only(top: 8), child: DsField(label: ${k(L.cloudPass)}, hint: '', value: _pass, onChanged: (v) => _pass = v)),
-        Padding(padding: const EdgeInsets.only(top: 8), child: DsPrimaryButton(label: ${k(L.cloudConnect)}, onTap: _cloudBusy ? null : _cloudConnect)),
-      ],
-      if (cloudUid().isNotEmpty) ...[
-        Padding(padding: const EdgeInsets.only(top: 8), child: DsField(label: ${k(L.pushVapid)}, hint: 'B', value: appStore.setting('push.vapid'), onChanged: (v) => appStore.setSetting('push.vapid', v))),
-        Padding(padding: const EdgeInsets.only(top: 8), child: DsNote(message: ${k(L.pushNeed)}, label: '', tone: 0)),
-        Padding(padding: const EdgeInsets.only(top: 8), child: DsChipButton(label: ${k(L.pushOn)}, onTap: _cloudBusy ? null : _pushOn)),
-      ],
-      if (cloudUid().isNotEmpty) Padding(padding: const EdgeInsets.only(top: 8), child: Row(children: [
-        DsChipButton(label: ${k(L.cloudSyncNow)}, onTap: _cloudBusy ? null : _cloudSync),
-        const SizedBox(width: 8),
-        DsChipButton(label: ${k(L.cloudOut)}, onTap: () async { await cloudSignOut(); if (mounted) setState(() => _cloudNote = ''); }),
-      ])),
-      if (_cloudNote.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 8), child: DsNote(message: _cloudNote, label: '', tone: 0)),
-      Padding(padding: const EdgeInsets.only(top: 8), child: DsNote(message: ${k(L.cloudNote)}, label: '', tone: 0)),
-    ]),
+    ${renderCloudSection(k, L)},
     DsSection(title: ${k(L.backupTitle)}, children: [
       for (final d in [DateTime.tryParse(appStore.setting('backupAt'))]) Padding(padding: const EdgeInsets.only(bottom: 8), child: Text(d == null ? ${k(L.backupNever)} : ${k(L.backupLast)}.replaceAll('{d}', balaganDayLabel(d, DateTime.now())), style: TextStyle(color: DsLook.of(context).muted, fontSize: 13))),   // ב׳-מז · מתי גיבית לאחרונה
       DsPrimaryButton(label: ${k(L.backupDownload)}, onTap: _download),

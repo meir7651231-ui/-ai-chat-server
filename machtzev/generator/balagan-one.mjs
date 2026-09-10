@@ -5,6 +5,7 @@
 //   (3) אפס-רשימה-סגורה: balagan.mjs אינו מכיל שם-מודול ליטרלי (perukNN) · (4) main רושם קשרים לכל מודול-עם-קשרים · (5) המפתח = הגדרה-במכשיר, לא ליטרל
 //   (6) ratchet: N רק-עולה (balagan-one-baseline.json). --gate בלבד (ריצה = balagan.mjs).
 import fs from 'node:fs';
+import { SOCKETS, cloudWidgetCount } from './cloud-screen.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadModules, buildIdentifier, selfTest, identify } from './balagan.mjs';
@@ -84,6 +85,22 @@ if (baseMods.length < 2 || !baseMods.every((m) => m.root.fields.some((f) => f.ty
   if (!/_pushDue\(/.test(home) || !/cloudPutDue\(rows\)/.test(home)) fails.push('«היום» אינו כותב מועדים לענן');
   if (!/m\.items\(today, dayDelta: d\)/.test(home.slice(home.indexOf('Future<void> _pushDue(')))) fails.push('המועדים אינם נגזרים מאותו מנוע של «היום»');
   if (!/appStore\.setting\('push\.vapid'\)/.test(keys)) fails.push('אין מקום להזין VAPID');
+}
+// G60 · מסך-החיבור **נגזר מדאטה**, לא נכתב ביד (הכרעה-30 «לא אחד-אחד ביד»).
+//   כל שקע שמוצהר ב-cloud-sockets.data.json מופיע במסך, וכל שקע שבמסך מוצהר — אחד לאחד.
+{
+  const sec = keys.slice(keys.indexOf('DsSection(title: ' + (keys.match(/DsSection\(title: (\w+), children: \[\s*\n\s*Padding[^\n]*_cloudState/) || [, ''])[1]));
+  const body = sec.slice(0, sec.indexOf('DsSection(', 10));
+  const widgets = (body.match(/Ds(Field|Note|ChipButton|PrimaryButton)\(/g) || []).length;
+  if (widgets !== cloudWidgetCount()) fails.push(`מסך-החיבור: ${widgets} ווידג׳טים מול ${cloudWidgetCount()} מוצהרים — נכתב ביד או שהדאטה לא מסונכרן`);
+  for (const s2 of SOCKETS.sockets) { const v = s2.kind === 'store' ? `appStore.setting('${s2.key}')` : s2.key; if (!body.includes(v)) fails.push(`שקע '${s2.key}' מוצהר ואינו במסך`); }
+  for (const a of SOCKETS.actions) if (!body.includes(a.call)) fails.push(`פעולה '${a.call}' מוצהרת ואינה במסך`);
+  // G60 · טוקן-הרענון לעולם לא בלקוח
+  //   הבדיקה על **קוד**, לא על הערות: המילה מופיעה שם בהסבר למה היא לא צריכה להיות שם.
+  const oa = rd(path.resolve(HERE, '../../new/dart-ui-bs/ds/ds_oauth.dart')).split('\n').filter((l) => !l.trim().startsWith('//')).join('\n');
+  if (/refresh_token|client_secret/.test(oa)) fails.push('טוקן-רענון/סוד-לקוח בקוד-הלקוח');
+  if (!/access_token/.test(oa)) fails.push('הלקוח אינו מבקש טוקן-גישה קצר');
+  if (!/oauthAccessToken\(fnBase:/.test(home)) fails.push('המייל אינו משתמש בטוקן-המתחדש');
 }
 // G34 · בדיקות-לפי-גל (100 רגקסים של נוכחות-טקסט, ב׳-ב…ב׳-קא) הוסרו: ההתנהגויות הן אטומי-מדף (behavior-plan.mjs --gate בודק בחירה+ייבוא+קריאה+מתאם-דק); ההיסטוריה ב-knowledge/CLOSED-GENMAX-G33.
 const BASE = path.join(HERE, 'balagan-one-baseline.json');

@@ -28,9 +28,9 @@
 ## מבנה הענף
 - **machtzev/ שורש (.mjs):** 57
 - **machtzev/ תת-תיקיות:** 14
-- **generator/ קנוני:** 55
+- **generator/ קנוני:** 56
 - **generator/legacy/:** 5
-- **knowledge/ פעיל:** 122
+- **knowledge/ פעיל:** 123
 - **knowledge/archive/:** 12
 - **שערי-משטרה (gates.tsv):** 55
 - **שערי-משטרה (police gate()):** 55

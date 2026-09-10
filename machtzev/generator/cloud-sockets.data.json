@@ -1,0 +1,94 @@
+{
+  "_": "☁️ שקעי-יכולת-השרת (G60 · הכרעה-31 + הכרעה-30). זו **דאטה, לא קוד**: כל שקע = מה היכולת צריכה מהבעלים, ומתי לשאול. מסך-החיבור נגזר מכאן — הוספת שקע = שורה כאן, לא ווידג׳ט ביד. אפליקציה שמצהירה `שרת: ענן` מקבלת את המסך הזה בלי שאיש יכתוב שורת-Dart.",
+  "gate": {
+    "config": "cloudOptions(appStore.setting('cloud.config')) != null && cloudUid().isEmpty",
+    "account": "cloudUid().isNotEmpty",
+    "always": ""
+  },
+  "sockets": [
+    {
+      "key": "cloud.config",
+      "need": "always",
+      "kind": "store",
+      "label": "cloudCfgLabel",
+      "hint": "{}"
+    },
+    {
+      "key": "_mail",
+      "need": "config",
+      "kind": "local",
+      "label": "cloudMail",
+      "hint": ""
+    },
+    {
+      "key": "_pass",
+      "need": "config",
+      "kind": "local",
+      "label": "cloudPass",
+      "hint": ""
+    },
+    {
+      "key": "push.vapid",
+      "need": "account",
+      "kind": "store",
+      "label": "pushVapid",
+      "hint": "B"
+    },
+    {
+      "key": "oauth.clientId",
+      "need": "account",
+      "kind": "store",
+      "label": "oauthClientId",
+      "hint": ""
+    },
+    {
+      "key": "oauth.fnBase",
+      "need": "account",
+      "kind": "store",
+      "label": "oauthFnBase",
+      "hint": "https://"
+    }
+  ],
+  "notes": [
+    {
+      "need": "account",
+      "label": "pushNeed"
+    },
+    {
+      "need": "account",
+      "label": "oauthNeed"
+    },
+    {
+      "need": "always",
+      "label": "cloudNote"
+    }
+  ],
+  "actions": [
+    {
+      "need": "config",
+      "call": "_cloudConnect",
+      "label": "cloudConnect",
+      "primary": true
+    },
+    {
+      "need": "account",
+      "call": "_pushOn",
+      "label": "pushOn"
+    },
+    {
+      "need": "account",
+      "call": "_oauth",
+      "label": "oauthConnect"
+    },
+    {
+      "need": "account",
+      "call": "_cloudSync",
+      "label": "cloudSyncNow"
+    },
+    {
+      "need": "account",
+      "call": "_cloudOut",
+      "label": "cloudOut"
+    }
+  ]
+}

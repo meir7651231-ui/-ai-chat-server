@@ -21,6 +21,11 @@ service cloud.firestore {
     match /users/{uid}/push/{token} {
       allow read, write: if mine(uid);   // טוקן-מכשיר: מזהה מכשיר, לא אדם
     }
+    // G60 · טוקן-הרענון של גוגל. **הלקוח לא קורא ולא כותב כאן, נקודה** —
+    //   רק הפונקציות (admin) נוגעות. טוקן-רענון שדולף = גישה קבועה לתיבה של האדם.
+    match /users/{uid}/secret/{id} {
+      allow read, write: if false;
+    }
     match /users/{uid}/inbox/{id} {
       allow read, write: if mine(uid);   // כתיבה מבחוץ עוברת בפונקציה (admin), לא בכללים
     }

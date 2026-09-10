@@ -27,7 +27,9 @@ await assertSucceeds(setDoc(doc(a, 'users/a/push/tok1'), { at: '2026-09-10' }));
 await assertFails(setDoc(doc(b, 'users/a/push/tok1'), { at: 'x' })); ok.push('טוקן של אחר נדחה');
 await assertSucceeds(setDoc(doc(a, 'users/a/due/d1'), { at: '2026-09-11T08:00', title: 'ארנונה' })); ok.push('מועד נכתב');
 await assertFails(getDoc(doc(b, 'users/a/due/d1'))); ok.push('מועד של אחר לא נקרא');
+await assertFails(getDoc(doc(a, 'users/a/secret/google'))); ok.push('טוקן-הרענון חסום גם לבעליו');
+await assertFails(setDoc(doc(a, 'users/a/secret/google'), { refresh: 'x' })); ok.push('הלקוח לא כותב טוקן-רענון');
 
 await env.cleanup();
-console.log('✓ כללי-הגישה: ' + ok.length + '/13 · ' + ok.join(' · '));
-if (ok.length !== 13) process.exit(1);
+console.log('✓ כללי-הגישה: ' + ok.length + '/15 · ' + ok.join(' · '));
+if (ok.length !== 15) process.exit(1);
