@@ -484,6 +484,7 @@ import 'package:buildsmart/genesis/dart-gen-bs/gen_${baseMod.home.slug}.dart' sh
 import 'dart:convert';
 import 'package:buildsmart/genesis/dart-ui-bs/ds/ds_store.dart';
 import 'package:buildsmart/genesis/dart-ui-bs/ds/ds.dart';
+import 'package:buildsmart/genesis/dart-ui-bs/ds/ds_mail.dart';   // G56 · dsMailPlain
 import 'package:buildsmart/genesis/dart-gen-bs/gen_balagan_home.dart';
 import 'package:buildsmart/genesis/dart-gen-bs/gen_balagan_confirm.dart';
 import 'package:buildsmart/genesis/dart-gen-bs/gen_balagan_topics.dart';
@@ -530,6 +531,25 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
     expect(${baseTodayCls}.nextRepeat(DateTime(2028, 2, 29), 'y1'), DateTime(2029, 2, 28));
     expect(balaganRepeatLabel('m2'), 'כל חודשיים');
   });
+  test('G56 · גוף-המכתב נקרא מעץ-החלקים (base64url · multipart · html-fallback)', () {
+    // Gmail מקודד base64url (בלי ריפוד, עם -_). «שלום» = D7pdedwsD7o... נבנה מהקידוד עצמו:
+    String enc(String t) => base64Url.encode(utf8.encode(t)).replaceAll('=', '');
+    expect(dsMailPlain({'mimeType': 'text/plain', 'body': {'data': enc('ארנונה 350 ש"ח')}}), 'ארנונה 350 ש"ח');
+    // multipart: החלק הראשון alternative/html, השני plain — ה-plain מנצח
+    final multi = {'mimeType': 'multipart/alternative', 'body': {}, 'parts': [
+      {'mimeType': 'text/html', 'body': {'data': enc('<b>לא זה</b>')}},
+      {'mimeType': 'text/plain', 'body': {'data': enc('זה הגוף')}},
+    ]};
+    expect(dsMailPlain(multi), 'זה הגוף');
+    // רק html ⇒ מנוקה מתגיות
+    expect(dsMailPlain({'mimeType': 'text/html', 'body': {'data': enc('<p>שורה <b>אחת</b></p>')}}).trim(), 'שורה אחת');
+    // אין גוף ⇒ ריק (ולא קריסה)
+    expect(dsMailPlain({'mimeType': 'text/plain', 'body': {}}), '');
+    // הטקסט לזיהוי: נושא+גוף; בלי גוף ⇒ snippet
+    expect(const DsMailItem(id: '1', subject: 'נושא', from: '', date: '', snippet: 'קצר', body: 'ארוך').text, 'נושא\\nארוך');
+    expect(const DsMailItem(id: '1', subject: 'נושא', from: '', date: '', snippet: 'קצר').text, 'נושא\\nקצר');
+  });
+
   test('G54 · שם-הרשומה = שדה-התיאור, לא סדר-ההכנסה במפה', () {
     final st = AppStore();
     // סדר-ההכנסה מציב את הסכום ראשון (כך נכתב טופס-האישור כשהעובדה שזוהתה היא הסכום)
@@ -1171,10 +1191,10 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
     final out = <Widget>[];
     for (final m in _mail) {
       if (appStore.decision('mail:\${m.id}').isNotEmpty) continue;
-      final hits = balaganIdentify(m.subject + ' ' + m.snippet, k: 1); if (hits.isEmpty) continue;
+      final hits = balaganIdentify(m.text, k: 1); if (hits.isEmpty) continue;   // G56 · נושא+גוף, לא שורת-פתיחה
       final mod = hits.first.module;
       out.add(DsApproveCard(question: ${k(L.inboxAsk)}.replaceAll('{subject}', m.subject).replaceAll('{module}', mod.title), source: ${k(L.inboxFrom)}.replaceAll('{from}', m.from).replaceAll('{date}', m.date), okLabel: ${k(L.askOpen)}, noLabel: ${k(L.actNo)},
-        onOk: () { appStore.decide('mail:\${m.id}', 'ok'); final facts = balaganFacts(m.subject + ' · ' + m.snippet, mod); Navigator.of(context).push<bool>(MaterialPageRoute<bool>(builder: (_) => ${clsOf('balagan_confirm')}(module: mod, facts: facts))); },
+        onOk: () { appStore.decide('mail:\${m.id}', 'ok'); final facts = balaganFacts(m.text, mod); Navigator.of(context).push<bool>(MaterialPageRoute<bool>(builder: (_) => ${clsOf('balagan_confirm')}(module: mod, facts: facts))); },
         onNo: () => appStore.decide('mail:\${m.id}', 'no')));
     }
     return out;
@@ -1520,7 +1540,7 @@ class _${cls}State extends State<${cls}> {
   Future<void> _photo() async {
     final key = appStore.setting('ai.key');
     if (key.isEmpty) { setState(() => _note = ${k(L.askNoKey)}); return; }
-    final x = await ImagePicker().pickImage(source: kIsWeb ? ImageSource.gallery : ImageSource.camera, imageQuality: 60, maxWidth: 900);
+    final x = await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 60, maxWidth: 900);   // G56 · §7 «צלם מסמך»: בדפדפן-נייד זה פותח את המצלמה (capture); בשולחני נופל לבורר-קבצים — לא מוותרים על המצלמה בכל הפלטפורמות בגלל השולחני
     if (x == null) return;
     setState(() { _busy = true; _note = ${k(L.askReading)}; });
     final bytes = await x.readAsBytes();
@@ -1529,7 +1549,17 @@ class _${cls}State extends State<${cls}> {
     if (!mounted) return;
     if (r == null) { setState(() { _busy = false; _note = ${k(L.askFailed)}; }); return; }
     final text = (r['_text'] ?? '').trim();
-    setState(() { _busy = false; _note = _doc.isEmpty ? ${k(L.docTooBig)} : ${k(L.docKept)}; if (text.isNotEmpty) _c.text = text; _extra = {for (final e in r.entries) if (e.key != '_text' && e.value.trim().isNotEmpty) e.key: e.value}; });
+    final extra = <String, String>{for (final e in r.entries) if (e.key != '_text' && e.value.trim().isNotEmpty) e.key: e.value};
+    // G56 · מעבר שני: אחרי שהמסמך זוהה — חילוץ מול **השדות האמיתיים של אותו מודול**.
+    //   בלעדיו הצילום מילא שלושה שדות גנריים (תאריך · סכום · שם) וטופס-האישור הגיע כמעט ריק.
+    final hits0 = text.isEmpty ? const <BalaganHit>[] : balaganIdentify(balaganSplit(text).first);
+    if (hits0.isNotEmpty) {
+      final labels = [for (final f in hits0.first.module.fields) f.label];
+      final r2 = await dsAiExtract(apiKey: key, image: bytes, imageMime: x.mimeType ?? 'image/jpeg', fields: labels, model: appStore.setting('ai.model', 'claude-sonnet-5'));
+      if (r2 != null) { for (final e in r2.entries) { if (e.key == '_text') continue; final v = e.value.trim(); if (v.isNotEmpty) extra[e.key] = v; } }
+    }
+    if (!mounted) return;
+    setState(() { _busy = false; _note = _doc.isEmpty ? ${k(L.docTooBig)} : ${k(L.docKept)}; if (text.isNotEmpty) _c.text = text; _extra = extra; });
     _go();
   }
 

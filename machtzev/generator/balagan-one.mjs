@@ -52,6 +52,17 @@ if (baseMods.length < 2 || !baseMods.every((m) => m.root.fields.some((f) => f.ty
   const beh = rd(path.join(GEN, 'gen_balagan_behavior.dart'));
   if (!/notifyAsk\(\)/.test(beh)) fails.push('אין מקום לאשר התראות (הרשות נדרשת ממחווה)');
 }
+// G56 · הצינור: המסמך שצולם נקרא מול השדות האמיתיים של המודול שזוהה, והמכתב נקרא בגופו.
+{
+  const mail = rd(path.resolve(HERE, '../../new/dart-ui-bs/ds/ds_mail.dart'));
+  if (!/format=full/.test(mail)) fails.push('המייל נקרא כמטא-בלבד (snippet ~100 תווים)');
+  if (!/String get text =>/.test(mail)) fails.push('אין גוף-מכתב לזיהוי');
+  if (!/m\.text/.test(home)) fails.push('«הגיע» מזהה לפי שורת-הפתיחה ולא לפי הגוף');
+  const ph = ask.slice(ask.indexOf('Future<void> _photo('), ask.indexOf('Widget build', ask.indexOf('Future<void> _photo(')));
+  if ((ph.match(/dsAiExtract\(/g) || []).length < 2) fails.push('הצילום בלי מעבר-שני מול שדות-המודול');
+  if (!/f\.label/.test(ph)) fails.push('המעבר-השני אינו משתמש בשדות-המודול');
+  if (/kIsWeb \? ImageSource\.gallery/.test(ask)) fails.push('אין מצלמה באתר (gallery תמיד)');
+}
 // G34 · בדיקות-לפי-גל (100 רגקסים של נוכחות-טקסט, ב׳-ב…ב׳-קא) הוסרו: ההתנהגויות הן אטומי-מדף (behavior-plan.mjs --gate בודק בחירה+ייבוא+קריאה+מתאם-דק); ההיסטוריה ב-knowledge/CLOSED-GENMAX-G33.
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };
