@@ -63,6 +63,19 @@ if (baseMods.length < 2 || !baseMods.every((m) => m.root.fields.some((f) => f.ty
   if (!/f\.label/.test(ph)) fails.push('המעבר-השני אינו משתמש בשדות-המודול');
   if (/kIsWeb \? ImageSource\.gallery/.test(ask)) fails.push('אין מצלמה באתר (gallery תמיד)');
 }
+// G58 · החוט לענן: קיים, עובר דרך מיזוג (לא דריסה), ודומם בלי קונפיג.
+{
+  const cloud = rd(path.resolve(HERE, '../../new/dart-ui-bs/ds/ds_cloud.dart'));
+  const mom = rd(path.join(GEN, 'gen_balagan_moments.dart'));
+  if (!/final o = cloudOptions\(rawConfig\);\s*\n\s*if \(o == null\) return null;/.test(cloud)) fails.push('אתחול-הענן אינו חסום בקונפיג פגום');
+  if (!/appStore\.mergeJson\(remote\)/.test(mom)) fails.push('הסנכרון אינו ממזג (mergeJson)');
+  if (/importJson\(/.test(mom)) fails.push('הסנכרון דורס במקום למזג');
+  if (!/cloudPush\(appStore\.cloudJson\(\)\)/.test(mom)) fails.push('מה שנדחף אינו cloudJson (מפתחות עלולים לעלות)');
+  if (!/cloudOptions\(cfg\) == null/.test(mom)) fails.push('הסנכרון אינו יוצא מיד בלי קונפיג');
+  if (!/balaganCloudSync\(\)/.test(home)) fails.push('«היום» אינו מסנכרן בפתיחה/בחזרה');
+  if (!/appStore\.setting\('cloud\.config'\)/.test(keys)) fails.push('אין מקום להזין את הקונפיג');
+  if (/"apiKey"\s*:\s*"[A-Za-z0-9_-]{10,}/.test(cloud + keys + mom)) fails.push('קונפיג-אמת ליטרלי בקוד');
+}
 // G34 · בדיקות-לפי-גל (100 רגקסים של נוכחות-טקסט, ב׳-ב…ב׳-קא) הוסרו: ההתנהגויות הן אטומי-מדף (behavior-plan.mjs --gate בודק בחירה+ייבוא+קריאה+מתאם-דק); ההיסטוריה ב-knowledge/CLOSED-GENMAX-G33.
 const BASE = path.join(HERE, 'balagan-one-baseline.json');
 const base = fs.existsSync(BASE) ? JSON.parse(rd(BASE)) : { modules: 0 };

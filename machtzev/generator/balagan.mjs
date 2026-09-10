@@ -104,7 +104,25 @@ export function buildBalagan() {
     const code = `// 🧭 חולל ע"י balagan (G33 · הכרעה-29) — מזהה-הרגע: TF-IDF דטרמיניסטי מ-${mods.length} מסמכי-פירוק (כותרת+«הרגע» ×3). אפס-בינה, אפס-מילון. אל תערוך ידנית.
 import 'dart:convert';
 import '../dart-ui-bs/ds/ds_store.dart';
+import '../dart-ui-bs/ds/ds_cloud.dart';   // G58 · החוט לענן (דורמנטי בלי קונפיג)
 import 'gen_behaviors.dart';
+
+// ── G58 · סנכרון: משיכה ⇒ **מיזוג** ⇒ דחיפה. הענן לא מכריע (הכרעה-31ד) —
+//   mergeJson מכבד מצבות-מחיקה ומעדיף את המאוחר לפי __at. בלי קונפיג/כניסה: אפס רשת.
+//   מחזיר קוד-מצב: '' = לא-מוגדר · 'off' = לא-מחובר · 'net' = כשל-רשת · 'ok:N' = מוזגו N.
+String balaganCloudStatus = '';
+Future<String> balaganCloudSync() async {
+  final cfg = appStore.setting('cloud.config');
+  if (cloudOptions(cfg) == null) { balaganCloudStatus = ''; return ''; }
+  if ((await cloudInit(cfg)) == null || cloudUid().isEmpty) { balaganCloudStatus = 'off'; return 'off'; }
+  final remote = await cloudPull();
+  var n = 0;
+  if (remote != null) { final r = appStore.mergeJson(remote); if (r > 0) n = r; }
+  final ok = await cloudPush(appStore.cloudJson());
+  balaganCloudStatus = ok ? 'ok:\$n' : 'net';
+  if (ok) appStore.setSetting('cloud.at', DateTime.now().toIso8601String());
+  return balaganCloudStatus;
+}
 class BalaganField { const BalaganField(this.label, this.type, this.required, this.options); final String label, type; final bool required; final List<String> options; }
 class BalaganModule {
   const BalaganModule(this.index, this.ns, this.title, this.moment, this.topic, this.weights, this.dateFields, this.numFields, this.descField, this.longField, this.rootSlug, this.fields, this.stages, this.chain, {this.selfScore = 1, this.layer = '', this.required = 0, this.timeFields = const [], this.phoneFields = const [], this.personFields = const [], this.percentFields = const []});
@@ -485,6 +503,7 @@ import 'dart:convert';
 import 'package:buildsmart/genesis/dart-ui-bs/ds/ds_store.dart';
 import 'package:buildsmart/genesis/dart-ui-bs/ds/ds.dart';
 import 'package:buildsmart/genesis/dart-ui-bs/ds/ds_mail.dart';   // G56 · dsMailPlain
+import 'package:buildsmart/genesis/dart-ui-bs/ds/ds_cloud.dart';   // G58 · cloudOptions
 import 'package:buildsmart/genesis/dart-gen-bs/gen_balagan_home.dart';
 import 'package:buildsmart/genesis/dart-gen-bs/gen_balagan_confirm.dart';
 import 'package:buildsmart/genesis/dart-gen-bs/gen_balagan_topics.dart';
@@ -531,6 +550,22 @@ ${dates.filter((d) => !(d in exp)).map((d) => `    expect(f.containsKey(${dq(d)}
     expect(${baseTodayCls}.nextRepeat(DateTime(2028, 2, 29), 'y1'), DateTime(2029, 2, 28));
     expect(balaganRepeatLabel('m2'), 'כל חודשיים');
   });
+  test('G58 · הענן דורמנטי בלי קונפיג · קונפיג חלקי נדחה · המסמך ≡ מה שהכללים מתירים', () async {
+    // קונפיג: רק שלושה שדות הופכים אותו לתקין. חלקי/פגום ⇒ null, ואז אין אתחול ואין רשת.
+    expect(cloudOptions(''), isNull);
+    expect(cloudOptions('לא json'), isNull);
+    expect(cloudOptions('{"apiKey":"a","projectId":"p"}'), isNull, reason: 'בלי appId');
+    final o = cloudOptions('{"apiKey":"a","projectId":"p","appId":"x"}');
+    expect(o, isNotNull);
+    expect(o!.projectId, 'p');
+    // בלי קונפיג הסנכרון חוזר מיד עם '' — לא 'net', לא ניסיון-רשת
+    appStore.setSetting('cloud.config', '');
+    expect(await balaganCloudSync(), '');
+    // המסמך שעולה = בדיוק המפתחות שכללי-הגישה מתירים (server-gen/balagan/firestore.rules)
+    final keys = (jsonDecode(appStore.cloudJson()) as Map).keys.toSet();
+    expect(keys, {'seq', 'role', 'actor', 'rec', 'log', 'decided', 'dead'});
+  });
+
   test('G57 · מיזוג-ענן: מה שנמחק לא קם לתחייה · המאוחר מנצח · מפתחות לא עולים', () {
     final st = AppStore();
     final a = st.add('app_tasks_ent1', {'מה': 'ארנונה', '__at': '2026-09-01T10:00'});
@@ -1263,7 +1298,7 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
     return out;
   }
   @override
-  void initState() { super.initState(); WidgetsBinding.instance.addObserver(this); WidgetsBinding.instance.addPostFrameCallback((_) { _autopilotAll(); _fetchMail(); }); appStore.addListener(_onStore); }
+  void initState() { super.initState(); WidgetsBinding.instance.addObserver(this); WidgetsBinding.instance.addPostFrameCallback((_) { _autopilotAll(); _fetchMail(); balaganCloudSync(); }); appStore.addListener(_onStore); }   // G58 · פתיחה ⇒ משיכה+מיזוג+דחיפה (אפס רשת בלי קונפיג)
   void _onStore() { WidgetsBinding.instance.addPostFrameCallback((_) { if (mounted) _autopilotAll(); }); }
   // G55 · חוזרים למסך אחרי שעות ⇒ המייל נטען מחדש והיום מחושב מחדש. בלי זה «פעם בפתיחה»
   //   פירושו «פעם בחיים» באפליקציה מותקנת שאף פעם לא נסגרת.
@@ -1272,6 +1307,7 @@ ${mods.map((m, i) => `    _Mod(${todayCls(m)}.module, ${todayCls(m)}.open, ${tod
     if (state != AppLifecycleState.resumed) return;
     _mailTried = false;
     _fetchMail();
+    balaganCloudSync().then((_) { if (mounted) setState(() {}); });   // G58 · חזרה למסך ⇒ מה שנכתב במכשיר אחר מגיע לכאן
     if (mounted) setState(() {});
   }
   @override
@@ -1766,6 +1802,7 @@ import '../dart-ui-bs/ds/ds_download_stub.dart' if (dart.library.js_interop) '..
 import '../dart-ui-bs/ds/ds.dart';
 import '../dart-ui-bs/ds/ds_field.dart';
 import '../dart-ui-bs/ds/ds_store.dart';
+import '../dart-ui-bs/ds/ds_cloud.dart';   // G58 · החוט לענן
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -1777,6 +1814,39 @@ class ${cls} extends StatefulWidget {
 
 class _${cls}State extends State<${cls}> {
   String _paste = '', _note = '';
+  // ── G58 · ענן (הכרעה-31): הקונפיג והחשבון של הבעלים, נשמרים **במכשיר**.
+  //   בלי קונפיג תקין: אין אתחול, אין רשת, אפס שינוי. הכפתורים כאן הם כל מה שמפעיל אותו.
+  String _mail = '', _pass = '', _cloudNote = '';
+  bool _cloudBusy = false;
+  Future<void> _cloudConnect() async {
+    setState(() { _cloudBusy = true; _cloudNote = ''; });
+    final r = await cloudSignIn(appStore.setting('cloud.config'), _mail, _pass);
+    if (!mounted) return;
+    if (!r.ok) { setState(() { _cloudBusy = false; _cloudNote = ${k(L.cloudFail)}.replaceAll('{code}', r.note); }); return; }
+    final st = await balaganCloudSync();
+    if (!mounted) return;
+    setState(() { _cloudBusy = false; _cloudNote = _syncNote(st); });
+  }
+  Future<void> _cloudSync() async {
+    setState(() { _cloudBusy = true; });
+    final st = await balaganCloudSync();
+    if (!mounted) return;
+    setState(() { _cloudBusy = false; _cloudNote = _syncNote(st); });
+  }
+  String _syncNote(String st) {
+    if (st.startsWith('ok:')) { final n = int.tryParse(st.substring(3)) ?? 0; return n > 0 ? ${k(L.cloudMerged)}.replaceAll('{n}', n.toString()) : ${k(L.cloudSame)}; }
+    if (st == 'net') return ${k(L.cloudNet)};
+    if (st == 'off') return ${k(L.cloudReady)};
+    return ${k(L.cloudOff)};
+  }
+  String _cloudState() {
+    final cfg = appStore.setting('cloud.config');
+    if (cfg.trim().isEmpty) return ${k(L.cloudOff)};
+    if (cloudOptions(cfg) == null) return ${k(L.cloudBad)};
+    if (cloudUid().isEmpty) return ${k(L.cloudReady)};
+    final at = appStore.setting('cloud.at');
+    return at.isEmpty ? ${k(L.cloudNever)} : ${k(L.cloudIn)}.replaceAll('{at}', at.replaceFirst('T', ' ').substring(0, 16));
+  }
   // גיבוי = טקסט (אותו JSON של ההתמדה) שהלקוח שומר איפה שנוח; שחזור מחליף הכל ושומר את הקודם פעם אחת ⇒ «בטל שחזור». אפס-שרת (חוק-6).
   Future<void> _copy() async { final t = appStore.exportJson(); await Clipboard.setData(ClipboardData(text: t)); setState(() => _note = ${k(L.backupCopied)}.replaceAll('{n}', t.length.toString())); }   // G51 · העתקה-ללוח אינה גיבוי ⇒ אינה חותמת
   /// G51 · הגיבוי היחיד שנחשב: קובץ שירד בפועל. רק הוא חותם backupAt.
@@ -1788,6 +1858,23 @@ class _${cls}State extends State<${cls}> {
   void _importCsv() { final r = balaganImportCsv(_csv); setState(() { _csvNote = (r[1] as int) == 0 ? ${k(L.csvNoMatch)} : ${k(L.csvImported)}.replaceAll('{n}', r[1].toString()).replaceAll('{module}', r[0] as String); if ((r[1] as int) > 0) _csv = ''; }); }   // ב׳-קמח · G46
   @override
   Widget build(BuildContext context) => AnimatedBuilder(animation: appStore, builder: (context, _) => DsScaffold(title: ${k(L.keysTitle)}, subtitle: ${k(L.keysSub)}, icon: ${k('')}, children: [
+    // G58 · ענן — ראשון במסך: זה מה שמחבר את המכשירים. בלי הדבקת-קונפיג הוא רק אומר שהוא כבוי.
+    DsSection(title: ${k(L.cloudTitle)}, children: [
+      Padding(padding: const EdgeInsets.only(bottom: 8), child: Text(_cloudState(), style: TextStyle(color: DsLook.of(context).muted, fontSize: 13))),
+      DsField(label: ${k(L.cloudCfgLabel)}, hint: '{}', value: appStore.setting('cloud.config'), onChanged: (v) => appStore.setSetting('cloud.config', v)),
+      if (cloudOptions(appStore.setting('cloud.config')) != null && cloudUid().isEmpty) ...[
+        Padding(padding: const EdgeInsets.only(top: 8), child: DsField(label: ${k(L.cloudMail)}, hint: '', value: _mail, onChanged: (v) => _mail = v)),
+        Padding(padding: const EdgeInsets.only(top: 8), child: DsField(label: ${k(L.cloudPass)}, hint: '', value: _pass, onChanged: (v) => _pass = v)),
+        Padding(padding: const EdgeInsets.only(top: 8), child: DsPrimaryButton(label: ${k(L.cloudConnect)}, onTap: _cloudBusy ? null : _cloudConnect)),
+      ],
+      if (cloudUid().isNotEmpty) Padding(padding: const EdgeInsets.only(top: 8), child: Row(children: [
+        DsChipButton(label: ${k(L.cloudSyncNow)}, onTap: _cloudBusy ? null : _cloudSync),
+        const SizedBox(width: 8),
+        DsChipButton(label: ${k(L.cloudOut)}, onTap: () async { await cloudSignOut(); if (mounted) setState(() => _cloudNote = ''); }),
+      ])),
+      if (_cloudNote.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 8), child: DsNote(message: _cloudNote, label: '', tone: 0)),
+      Padding(padding: const EdgeInsets.only(top: 8), child: DsNote(message: ${k(L.cloudNote)}, label: '', tone: 0)),
+    ]),
     DsSection(title: ${k(L.backupTitle)}, children: [
       for (final d in [DateTime.tryParse(appStore.setting('backupAt'))]) Padding(padding: const EdgeInsets.only(bottom: 8), child: Text(d == null ? ${k(L.backupNever)} : ${k(L.backupLast)}.replaceAll('{d}', balaganDayLabel(d, DateTime.now())), style: TextStyle(color: DsLook.of(context).muted, fontSize: 13))),   // ב׳-מז · מתי גיבית לאחרונה
       DsPrimaryButton(label: ${k(L.backupDownload)}, onTap: _download),
